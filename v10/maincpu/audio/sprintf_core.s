@@ -26,13 +26,13 @@ Sprintf_ParseFormatSpec:
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
 	ldw (xsp + 6), 0x0
-	sti16_24 0x03c220, 0x0020
+	stiw_da 0x03c220, 0x0020
 
 Sprintf_ReadFormatChar:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	ld wa, iz
 	cp iz, 0x30
@@ -62,9 +62,9 @@ Sprintf_ReadFormatChar:
 
 Sprintf_StarWidth_Positive:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	jr Sprintf_CheckPrecisionDot
 
@@ -85,7 +85,7 @@ Sprintf_Flag_Minus:
 	jr Sprintf_ReadFormatChar
 
 Sprintf_Flag_Zero:
-	sti16_24 0x03c220, 0x0030
+	stiw_da 0x03c220, 0x0030
 	jrl Sprintf_ReadFormatChar
 
 Sprintf_ParseWidthDigit:
@@ -96,13 +96,13 @@ Sprintf_ParseWidthDigit:
 	ld (xsp + 8), wa
 	add (xsp + 8), bc
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 
 Sprintf_CheckIfDigit:
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	extz wa
 	lda_24 xbc, CharMap_FullPermutation_0x660
 	bit_dri 2, 0x07, 0xe4, 0xe0
@@ -113,9 +113,9 @@ Sprintf_CheckPrecisionDot:
 	jr nz, Sprintf_CheckLengthH
 	setm 4, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	cp iz, 0x2a
 	jr nz, Sprintf_CheckPrecisionDigit
@@ -131,9 +131,9 @@ Sprintf_CheckPrecisionDot:
 
 Sprintf_StarPrecision_Applied:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	jr Sprintf_CheckLengthH
 
@@ -145,13 +145,13 @@ Sprintf_ParsePrecisionDigit:
 	ld (xsp + 10), wa
 	add (xsp + 10), bc
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 
 Sprintf_CheckPrecisionDigit:
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	extz wa
 	lda_24 xbc, CharMap_FullPermutation_0x660
 	bit_dri 2, 0x07, 0xe4, 0xe0
@@ -162,9 +162,9 @@ Sprintf_CheckLengthH:
 	jr nz, Sprintf_CheckLengthL
 	setm 5, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	jr Sprintf_DispatchType
 
@@ -173,9 +173,9 @@ Sprintf_CheckLengthL:
 	jr nz, Sprintf_CheckLengthLL
 	setm 6, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	jr Sprintf_DispatchType
 
@@ -184,9 +184,9 @@ Sprintf_CheckLengthLL:
 	jr nz, Sprintf_DispatchType
 	setm 7, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 
 Sprintf_DispatchType:
@@ -206,9 +206,9 @@ Sprintf_DispatchType:
 	jrl gt, Sprintf_MainLoop_ReadNext
 	add wa, wa
 	lda_24 xix, CharMap_FullPermutation_0x760
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, Sprintf_Format_Percent
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Sprintf_Format_Percent:
 	ld wa, (xsp + 6)
@@ -218,7 +218,7 @@ Sprintf_Format_Percent:
 
 Sprintf_Percent_PadLeft:
 	incm 1, (xsp + 4)
-	push_sd24w 0x20, 0xc2, 0x03
+	pushw_da 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -304,7 +304,7 @@ Sprintf_String_CheckLeftAlign:
 	jr Sprintf_String_OutputLoop
 
 Sprintf_String_PadLeftSpace:
-	push_sd24w 0x20, 0xc2, 0x03
+	pushw_da 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -318,7 +318,7 @@ Sprintf_String_PadLeftLoop:
 
 Sprintf_String_OutputChars:
 	ld xwa, (xsp + 16)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 16), xwa
 	exts bc
 	pushw bc
@@ -439,7 +439,7 @@ Sprintf_Decimal_FinalWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Decimal_OutputSign
-	cpdi16_24 0x3c220, 32
+	cpw_da 0x3c220, 32
 	jr z, Sprintf_Decimal_PadLeftLoop
 	bit 4, wa
 	jr nz, Sprintf_Decimal_PadLeftLoop
@@ -487,7 +487,7 @@ Sprintf_Decimal_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Decimal_PrecZeroLoop
-	cpdi16_24 0x3c220, 48
+	cpw_da 0x3c220, 48
 	jr z, Sprintf_Decimal_ZeroFillLoop
 	jr Sprintf_Decimal_PrecZeroLoop
 
@@ -521,7 +521,7 @@ Sprintf_Decimal_OutputDigits:
 	decm 1, (xsp + 12)
 	lda xbc, (xsp + 56)
 	ld wa, (xsp + 12)
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -621,7 +621,7 @@ Sprintf_Unsigned_FinalWidth:
 	jr Sprintf_Unsigned_PrecZeroLoop
 
 Sprintf_Unsigned_PadLeftSpace:
-	push_sd24w 0x20, 0xc2, 0x03
+	pushw_da 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -649,7 +649,7 @@ Sprintf_Unsigned_PrecZeroLoop:
 Sprintf_Unsigned_OutputDigits:
 	dec 1, iz
 	lda xwa, (xsp + 44)
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -738,16 +738,16 @@ Sprintf_Hex_SubtractLength:
 	sub (xsp + 10), wa
 
 Sprintf_Hex_CheckAltForm:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	ld wa, (xsp + 6)
 	bit 3, wa
 	jr z, Sprintf_Hex_AltFormPrefix
-	ldi_werp 0xfa, 2
+	ldiw_erp 0xfa, 2
 
 Sprintf_Hex_AltFormPrefix:
 	ld wa, (xsp + 18)
 	add wa, (xsp + 10)
-	add_werp WA, 0xfa
+	addw_erp WA, 0xfa
 	sub (xsp + 8), wa
 	jr ge, Sprintf_Hex_ComputeWidth
 	ldw (xsp + 8), 0x0
@@ -756,12 +756,12 @@ Sprintf_Hex_ComputeWidth:
 	ld wa, (xsp + 8)
 	add wa, (xsp + 18)
 	add wa, (xsp + 10)
-	add_werp WA, 0xfa
+	addw_erp WA, 0xfa
 	add (xsp + 4), wa
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Hex_EmitPrefix
-	cpdi16_24 0x3c220, 32
+	cpw_da 0x3c220, 32
 	jr z, Sprintf_Hex_PadLeftLoop
 	jr Sprintf_Hex_EmitPrefix
 
@@ -778,7 +778,7 @@ Sprintf_Hex_PadLeftLoop:
 	jr nz, Sprintf_Hex_PadLeftSpace
 
 Sprintf_Hex_EmitPrefix:
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr z, Sprintf_Hex_ZeroFill
 	cpw (xsp + 18), 0x0
 	jr z, Sprintf_Hex_ZeroFill
@@ -794,7 +794,7 @@ Sprintf_Hex_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Hex_PrecZeroLoop
-	cpdi16_24 0x3c220, 48
+	cpw_da 0x3c220, 48
 	jr z, Sprintf_Hex_ZeroFillLoop
 	jr Sprintf_Hex_PrecZeroLoop
 
@@ -828,7 +828,7 @@ Sprintf_Hex_OutputDigits:
 	decm 1, (xsp + 18)
 	lda xbc, (xsp + 32)
 	ld wa, (xsp + 18)
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -932,7 +932,7 @@ Sprintf_Octal_ComputeWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Octal_EmitPrefix
-	cpdi16_24 0x3c220, 32
+	cpw_da 0x3c220, 32
 	jr z, Sprintf_Octal_PadLeftLoop
 	jr Sprintf_Octal_EmitPrefix
 
@@ -962,7 +962,7 @@ Sprintf_Octal_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Octal_PrecZeroLoop
-	cpdi16_24 0x3c220, 48
+	cpw_da 0x3c220, 48
 	jr z, Sprintf_Octal_ZeroFillLoop
 	jr Sprintf_Octal_PrecZeroLoop
 
@@ -995,7 +995,7 @@ Sprintf_Octal_PrecZeroLoop:
 Sprintf_Octal_OutputDigits:
 	dec 1, iz
 	lda xwa, (xsp + 20)
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -1071,19 +1071,19 @@ Sprintf_FormatFloat_Dispatch:
 	push xwa
 	ld xwa, (xsp + 100)
 	push xwa
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	exts wa
 	pushw wa
 	calr Sprintf_FormatFloat
 	lda xsp, (xsp + 16)
-	ld16_24 xwa, 0x03c222
+	ldw_da xwa, 0x03c222
 	add (xsp + 4), wa
 
 Sprintf_MainLoop_ReadNext:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	exts iz
 	cps iz, 0
 	jrl nz, Sprintf_OutputLiteral
@@ -1099,7 +1099,7 @@ Sprintf_IntToStr:
 	cp xwa, 0x0
 	jr ge, Sprintf_IntToStr_Positive
 	cpl wa
-	cpl_werp 0xe2
+	cplw_erp 0xe2
 	inc 1, xwa
 
 Sprintf_IntToStr_Positive:
@@ -1107,7 +1107,7 @@ Sprintf_IntToStr_Positive:
 
 Sprintf_IntToStr_DivLoop:
 	ld xwa, (xsp + 12)
-	st_dpib A, 0xe0
+	stb_dpi A, 0xe0
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
@@ -1135,7 +1135,7 @@ Sprintf_UIntToStr:
 
 Sprintf_UIntToStr_DivLoop:
 	ld xwa, (xsp + 12)
-	st_dpib A, 0xe0
+	stb_dpi A, 0xe0
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
@@ -1168,7 +1168,7 @@ Sprintf_HexToStr_TableSelected:
 	ld xde, (xsp + 8)
 
 Sprintf_HexToStr_Loop:
-	st_dpib A, 0xec
+	stb_dpi A, 0xec
 	ld xwa, xde
 	and xwa, 0xf
 	add xwa, xix
@@ -1184,7 +1184,7 @@ Sprintf_OctalToStr:
 	ld xhl, (xsp + 4)
 
 Sprintf_OctalToStr_Loop:
-	st_dpib A, 0xec
+	stb_dpi A, 0xec
 	ld xwa, xde
 	and xwa, 0x7
 	add xwa, 0x30
@@ -1209,7 +1209,7 @@ Sprintf_FormatFloat:
 	push xwa
 	call Sprintf_FormatGGeneral
 	lda xsp, (xsp + 18)
-	sti16_24 0x03c222, 0x0000
+	stiw_da 0x03c222, 0x0000
 	lda xde, (xsp + 8)
 	ld xiy, xde
 	ld c, (xsp + 34)
@@ -1316,7 +1316,7 @@ Sprintf_FFixed_CheckLongDoubleLimit:
 	ld a, c
 	extz wa
 	lda_24 xde, CharMap_FullPermutation_0x660
-	st_dri3b B, 0x07, 0xe8, 0xe0
+	stb_dri B, 0x07, 0xe8, 0xe0
 	bitm 1, (xde)
 	jr z, Sprintf_FFixed_SpecNoUpperCase
 	ld a, c
@@ -1342,7 +1342,7 @@ Sprintf_FFixed_RoundCheck:
 	cp iz, wa
 	jr ge, Sprintf_FFixed_AfterRound
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xe0, 0xf8, 0x34
+	cpib_sri 0x07, 0xe0, 0xf8, 0x34
 	jr le, Sprintf_FFixed_AfterRound
 	cps iz, 0
 	jr ge, Sprintf_FFixed_RoundLoop
@@ -1350,7 +1350,7 @@ Sprintf_FFixed_RoundCheck:
 
 Sprintf_FFixed_RoundCarry:
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xe0, 0xf8, 0x30
+	stib_ind 0x07, 0xe0, 0xf8, 0x30
 
 Sprintf_FFixed_RoundLoop:
 	dec 1, iz
@@ -1358,7 +1358,7 @@ Sprintf_FFixed_RoundLoop:
 	inc_srib 1, 0x07, 0xe0, 0xf8
 	cps iz, 0
 	jr le, Sprintf_FFixed_AfterRound
-	cp_srib_im 0x07, 0xe0, 0xf8, 0x39
+	cpib_sri 0x07, 0xe0, 0xf8, 0x39
 	jr gt, Sprintf_FFixed_RoundCarry
 
 Sprintf_FFixed_AfterRound:
@@ -1400,7 +1400,7 @@ Sprintf_FFixed_StripZeroLoop:
 
 Sprintf_FFixed_StripZeroCheck:
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xe0, 0xf8, 0x30
+	cpib_sri 0x07, 0xe0, 0xf8, 0x30
 	jr z, Sprintf_FFixed_StripZeroLoop
 
 Sprintf_FFixed_ComputeOutputLen:
@@ -1442,7 +1442,7 @@ Sprintf_FFixed_PadLeftCheck:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_FFixed_EmitSign
-	cpdi16_24 0x3c220, 32
+	cpw_da 0x3c220, 32
 	jr z, Sprintf_FFixed_PadLeftLoop
 	jr Sprintf_FFixed_EmitSign
 
@@ -1488,7 +1488,7 @@ Sprintf_FFixed_ZeroFill:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_FFixed_LeadDigit
-	cpdi16_24 0x3c220, 48
+	cpw_da 0x3c220, 48
 	jr z, Sprintf_FFixed_ZeroFillLoop
 	jr Sprintf_FFixed_LeadDigit
 
@@ -1536,7 +1536,7 @@ Sprintf_FFixed_IntegerDigits:
 
 Sprintf_FFixed_IntDigitOutput:
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
@@ -1624,7 +1624,7 @@ Sprintf_FFixed_FracDigits:
 
 Sprintf_FFixed_FracDigitOutput:
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
@@ -1697,7 +1697,7 @@ Sprintf_ESci_ApplyDefaults:
 	ld a, (xsp + 10)
 	extz wa
 	lda_24 xbc, CharMap_FullPermutation_0x660
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	bitm 1, (xbc)
 	jr z, Sprintf_ESci_SpecNoUpperCase
 	ld a, (xsp + 10)
@@ -1717,7 +1717,7 @@ Sprintf_ESci_CheckSpecG:
 Sprintf_ESci_SetDigitCount:
 	ld wa, (xsp + 20)
 	inc 1, wa
-	ldfr_werp WA, 0xfa
+	ldw_erp WA, 0xfa
 	ld wa, (xsp + 16)
 	bit 7, wa
 	jr z, Sprintf_ESci_RoundCheck
@@ -1726,27 +1726,27 @@ Sprintf_ESci_SetDigitCount:
 Sprintf_ESci_RoundCheck:
 	ld de, (xsp + 4)
 	inc 1, de
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cp wa, de
 	jr ge, Sprintf_ESci_AfterRound
-	ldto_werp DE, 0xfa
-	dec1_werp 0xfa
+	stw_erp DE, 0xfa
+	dec1w_erp 0xfa
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xe0, 0xe8, 0x34
+	cpib_sri 0x07, 0xe0, 0xe8, 0x34
 	jr gt, Sprintf_ESci_RoundLoop
 	jr Sprintf_ESci_AfterRound
 
 Sprintf_ESci_RoundCarry:
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xe0, 0xfa, 0x30
-	dec1_werp 0xfa
+	stib_ind 0x07, 0xe0, 0xfa, 0x30
+	dec1w_erp 0xfa
 
 Sprintf_ESci_RoundLoop:
 	ld xwa, (xsp + 22)
 	inc_srib 1, 0x07, 0xe0, 0xfa
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, Sprintf_ESci_AfterRound
-	cp_srib_im 0x07, 0xe0, 0xfa, 0x39
+	cpib_sri 0x07, 0xe0, 0xfa, 0x39
 	jr gt, Sprintf_ESci_RoundCarry
 
 Sprintf_ESci_AfterRound:
@@ -1766,18 +1766,18 @@ Sprintf_ESci_StripTrailZeros:
 	bit 3, wa
 	jr nz, Sprintf_ESci_ComputeOutputLen
 	ld wa, (xsp + 20)
-	ldfr_werp WA, 0xfa
+	ldw_erp WA, 0xfa
 	jr Sprintf_ESci_StripCheck
 
 Sprintf_ESci_StripLoop:
-	dec1_werp 0xfa
+	dec1w_erp 0xfa
 	decm 1, (xsp + 20)
 
 Sprintf_ESci_StripCheck:
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, Sprintf_ESci_ComputeOutputLen
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xe0, 0xfa, 0x30
+	cpib_sri 0x07, 0xe0, 0xfa, 0x30
 	jr z, Sprintf_ESci_StripLoop
 
 Sprintf_ESci_ComputeOutputLen:
@@ -1812,7 +1812,7 @@ Sprintf_ESci_PadLeftCheck:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_ESci_EmitSign
-	cpdi16_24 0x3c220, 32
+	cpw_da 0x3c220, 32
 	jr z, Sprintf_ESci_PadLeftLoop
 	jr Sprintf_ESci_EmitSign
 
@@ -1857,7 +1857,7 @@ Sprintf_ESci_ZeroFill:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_ESci_LeadDigit
-	cpdi16_24 0x3c220, 48
+	cpw_da 0x3c220, 48
 	jr z, Sprintf_ESci_ZeroFillLoop
 	jr Sprintf_ESci_LeadDigit
 
@@ -1883,7 +1883,7 @@ Sprintf_ESci_LeadDigit:
 	inc 2, xsp
 	ld xwa, (xsp + 22)
 	ld (xwa), 0x30
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	incdi16_24 1, 0x3c222
 	cpw (xsp + 26), 0x0
 	jr ge, Sprintf_ESci_Overflow_DecExp
@@ -1903,7 +1903,7 @@ Sprintf_ESci_LeadDigitNormal:
 	call (xwa)
 	inc 2, xsp
 	incdi16_24 1, 0x3c222
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 
 Sprintf_ESci_DecimalPoint:
 	cpw (xsp + 20), 0x0
@@ -1943,26 +1943,26 @@ Sprintf_ESci_CheckGTrim:
 Sprintf_ESci_OutputMantissa:
 	ld bc, (xsp + 4)
 	inc 1, bc
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cp wa, bc
 	jr lt, Sprintf_ESci_MantDigitLoop
 	jr Sprintf_ESci_MantTrailLoop
 
 Sprintf_ESci_MantDigitOutput:
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xe0, 0xfa
+	ldb_sri A, 0x07, 0xe0, 0xfa
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
 	incdi16_24 1, 0x3c222
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 
 Sprintf_ESci_MantDigitLoop:
 	ld bc, (xsp + 4)
 	inc 1, bc
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cp wa, bc
 	jr ge, Sprintf_ESci_MantTrailLoop
 	ld wa, (xsp + 20)
@@ -2037,7 +2037,7 @@ Sprintf_ESci_EmitExpSign:
 	call (xwa)
 	inc 2, xsp
 	incdi16_24 1, 0x3c222
-	ldfr_werp IZ, 0xfa
+	ldw_erp IZ, 0xfa
 	jr Sprintf_ESci_ExpLeadZeroLoop
 
 Sprintf_ESci_ExpLeadZeros:
@@ -2048,8 +2048,8 @@ Sprintf_ESci_ExpLeadZeros:
 	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_ExpLeadZeroLoop:
-	ldto_werp WA, 0xfa
-	inc1_werp 0xfa
+	stw_erp WA, 0xfa
+	inc1w_erp 0xfa
 	cps wa, 3
 	jr lt, Sprintf_ESci_ExpLeadZeros
 	jr Sprintf_ESci_ExpDigitLoop
@@ -2057,7 +2057,7 @@ Sprintf_ESci_ExpLeadZeroLoop:
 Sprintf_ESci_ExpDigitOutput:
 	dec 1, iz
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
@@ -2102,16 +2102,16 @@ Sprintf_FormatGGeneral:
 	pushw 0xc224
 	call Memset
 	inc 8, xsp
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 Sprintf_GGen_ClearArrays:
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	add bc, bc
 	lda_24 xde, 0x03c284
 	lda_24 xwa, 0x03c244
-	stiw_dri 0x07, 0xe0, 0xe4, 0x00, 0x00
-	stiw_dri 0x07, 0xe8, 0xe4, 0x00, 0x00
-	inc1_werp 0xfa
+	stiw_ind 0x07, 0xe0, 0xe4, 0x00, 0x00
+	stiw_ind 0x07, 0xe8, 0xe4, 0x00, 0x00
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x20, 0x00
 	jr lt, Sprintf_GGen_ClearArrays
 	ld wa, (xsp + 32)
@@ -2121,7 +2121,7 @@ Sprintf_GGen_ClearArrays:
 	ldw (xsp + 8), 0xa
 
 Sprintf_GGen_CheckLongDouble:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	cpw (xsp + 8), 0x0
 	jr le, Sprintf_GGen_CheckSign
 
@@ -2129,13 +2129,13 @@ Sprintf_GGen_LoadDigits:
 	lda xwa, (xsp + 10)
 	ld bc, (xsp + 8)
 	dec 1, bc
-	sub_werp BC, 0xfa
+	subw_erp BC, 0xfa
 	extz xbc
 	add xbc, (xsp + 24)
 	ld c, (xbc)
-	lda_dri3 XHL, 0x07, 0xe0, 0xfa
-	inc1_werp 0xfa
-	ldto_werp WA, 0xfa
+	lda_dri XHL, 0x07, 0xe0, 0xfa
+	inc1w_erp 0xfa
+	stw_erp WA, 0xfa
 	cp wa, (xsp + 8)
 	jr lt, Sprintf_GGen_LoadDigits
 
@@ -2208,52 +2208,52 @@ Sprintf_GGen_AdjustNegExp:
 	ld wa, (xsp + 32)
 	bit 7, wa
 	jr z, Sprintf_GGen_NormalDigits
-	ldi_werp 0xfa, 2
+	ldiw_erp 0xfa, 2
 
 Sprintf_GGen_LongDoubleDigits:
 	lda xwa, (xsp + 10)
-	ld_srib3 A, 0x07, 0xe0, 0xfa
+	ldb_sri A, 0x07, 0xe0, 0xfa
 	and a, 0xff
-	ldto_werp DE, 0xfa
+	stw_erp DE, 0xfa
 	add de, de
 	lda_24 xbc, 0x03c240
 	extz wa
-	st_dri3w WA, 0x07, 0xe4, 0xe8
-	inc1_werp 0xfa
+	stw_dri WA, 0x07, 0xe4, 0xe8
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x0a, 0x00
 	jr lt, Sprintf_GGen_LongDoubleDigits
 	jr Sprintf_GGen_NormalizeArray
 
 Sprintf_GGen_NormalDigits:
 	lds ix, 0
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 Sprintf_GGen_FindLeadDigit:
 	lda xbc, (xsp + 10)
-	cp_srib_im 0x07, 0xe4, 0xfa, 0x00
+	cpib_sri 0x07, 0xe4, 0xfa, 0x00
 	jr z, Sprintf_GGen_FindLeadDone
 	lds ix, 1
 	jr Sprintf_GGen_LoadDigitPairs
 
 Sprintf_GGen_FindLeadDone:
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, Sprintf_GGen_FindLeadDigit
 
 Sprintf_GGen_LoadDigitPairs:
 	andmi8 (xbc + 1), 0xf
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 
 Sprintf_GGen_DigitPairLoop:
-	ld_srib3 A, 0x07, 0xe4, 0xfa
+	ldb_sri A, 0x07, 0xe4, 0xfa
 	and a, 0xff
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	add hl, hl
 	dec 2, hl
 	lda_24 xde, 0x03c244
 	extz wa
-	st_dri3w WA, 0x07, 0xe8, 0xec
-	inc1_werp 0xfa
+	stw_dri WA, 0x07, 0xe8, 0xec
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, Sprintf_GGen_DigitPairLoop
 	cps ix, 0
@@ -2266,7 +2266,7 @@ Sprintf_GGen_NormalizeArray:
 	pushw 0xc244
 	calr Sprintf_CountLeadingZeros
 	inc 6, xsp
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	cps iz, 0
 	jr le, Sprintf_GGen_NegativeExpCheck
 	cpw (xsp + 4), 0x0
@@ -2282,8 +2282,8 @@ Sprintf_GGen_MultiplyLoop:
 	calr Sprintf_CountLeadingZeros
 	lda xsp, (xsp + 10)
 	sub iz, hl
-	inc1_werp 0xfa
-	ldto_werp WA, 0xfa
+	inc1w_erp 0xfa
+	stw_erp WA, 0xfa
 	cp wa, (xsp + 4)
 	jr lt, Sprintf_GGen_MultiplyLoop
 
@@ -2305,13 +2305,13 @@ Sprintf_GGen_DivideLoop:
 	calr Sprintf_CountTrailingZeros
 	lda xsp, (xsp + 10)
 	add iz, hl
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 
 Sprintf_GGen_NegativeExpCheck:
 	ld de, (xsp + 4)
 	neg de
 	lda_24 xbc, 0x03c244
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cp wa, de
 	jr lt, Sprintf_GGen_DivideLoop
 	pushm (xsp + 6)
@@ -2323,17 +2323,17 @@ Sprintf_GGen_NegativeExpCheck:
 Sprintf_GGen_FinalShift:
 	calr Sprintf_ShiftDigitArray
 	inc 8, xsp
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 
 Sprintf_GGen_RoundLoop:
-	push_werp 0xfa
-	ldto_werp BC, 0xfa
+	pushw_erp 0xfa
+	stw_erp BC, 0xfa
 	add bc, bc
 	lda_24 xwa, 0x03c244
 	push_sriw 0x07, 0xe0, 0xe4
 	calr Sprintf_NormalizeDigits
 	inc 4, xsp
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x09, 0x00
 	jr lt, Sprintf_GGen_RoundLoop
 	lds de, 0
@@ -2354,29 +2354,29 @@ Sprintf_GGen_ExtractResult:
 	ld wa, (xbc)
 	extz xwa
 	div wa, 0xa
-	ldto_werp WA, 0xe2
-	lda_dri3 XBC, 0x07, 0xec, 0xf0
+	stw_erp WA, 0xe2
+	lda_dri XBC, 0x07, 0xec, 0xf0
 	incm 1, (xsp + 4)
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 	jr Sprintf_GGen_CopyLoop
 
 Sprintf_GGen_CopyDigits:
 	ld bc, de
 	inc 1, de
 	lda_24 xwa, 0x03c224
-	ld_srib3 A, 0x07, 0xe0, 0xfa
-	lda_dri3 XBC, 0x07, 0xec, 0xe4
-	inc1_werp 0xfa
+	ldb_sri A, 0x07, 0xe0, 0xfa
+	lda_dri XBC, 0x07, 0xec, 0xe4
+	inc1w_erp 0xfa
 
 Sprintf_GGen_CopyLoop:
 	ld bc, (xsp + 6)
 	inc 2, bc
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cp wa, bc
 	jr lt, Sprintf_GGen_CopyDigits
 	ld de, (xsp + 6)
 	inc 1, de
-	st_dri3b A, 0x07, 0xec, 0xe8
+	stb_dri A, 0x07, 0xec, 0xe8
 	cp (xbc), 0x5
 	jr c, Sprintf_GGen_HandleCarry
 	ld wa, (xsp + 6)
@@ -2385,33 +2385,33 @@ Sprintf_GGen_CopyLoop:
 Sprintf_GGen_HandleCarry:
 	ld (xbc), 0x0
 	ld wa, (xsp + 6)
-	ldfr_werp WA, 0xfa
+	ldw_erp WA, 0xfa
 	jr Sprintf_GGen_CarryCheck
 
 Sprintf_GGen_CarryLoop:
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	dec 1, bc
 	inc_srib 1, 0x07, 0xec, 0xe4
 	ld (xwa), 0x0
-	dec1_werp 0xfa
+	dec1w_erp 0xfa
 
 Sprintf_GGen_CarryCheck:
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr z, Sprintf_GGen_ConvertToAscii
-	st_dri3b W, 0x07, 0xec, 0xfa
+	stb_dri W, 0x07, 0xec, 0xfa
 	cp (xwa), 0x9
 	jr ugt, Sprintf_GGen_CarryLoop
 
 Sprintf_GGen_ConvertToAscii:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	jr Sprintf_GGen_AsciiDone
 
 Sprintf_GGen_AsciiLoop:
 	or_srib_im 0x07, 0xec, 0xfa, 0x30
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 
 Sprintf_GGen_AsciiDone:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cp wa, de
 	jr lt, Sprintf_GGen_AsciiLoop
 	ld xbc, (xsp + 34)
@@ -2541,7 +2541,7 @@ Sprintf_NormalizeDigits:
 	lda xbc, (xde + 18)
 
 Sprintf_Normalize_ClearLoop:
-	stiw_dpi 0xe1, 0x00, 0x00
+	stiw_dsp 0xe1, 0x00, 0x00
 	cp xwa, xbc
 	jr c, Sprintf_Normalize_ClearLoop
 	ld wa, (xsp + 6)
@@ -2579,7 +2579,7 @@ Sprintf_Normalize_ExtractDigit:
 	sub wa, (xsp + 8)
 	add wa, wa
 	lda_24 xbc, 0x03c284
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	cps wa, 0
 	jr z, Sprintf_Normalize_MultiplyTen
 	pushw iz
@@ -2590,7 +2590,7 @@ Sprintf_Normalize_ExtractDigit:
 	sub bc, (xsp + 8)
 	add bc, bc
 	lda_24 xwa, 0x03c284
-	stiw_dri 0x07, 0xe0, 0xe4, 0x00, 0x00
+	stiw_ind 0x07, 0xe0, 0xe4, 0x00, 0x00
 	cp iz, 0x20
 	jrl le, Sprintf_Normalize_MainLoop
 
@@ -2627,7 +2627,7 @@ Sprintf_InsertCarry_Propagate:
 	sub_srib_im 0x07, 0xe0, 0xe4, 0x0a
 
 Sprintf_InsertCarry_PropCheck:
-	cp_srib_im 0x07, 0xe0, 0xe8, 0x0a
+	cpib_sri 0x07, 0xe0, 0xe8, 0x0a
 	ret lt
 	cps de, 0
 	jr gt, Sprintf_InsertCarry_Propagate
@@ -2642,13 +2642,13 @@ Sprintf_DivByTen_Loop:
 	ld wa, (xbc)
 	extz xwa
 	div wa, 0xa
-	ldto_werp WA, 0xe2
+	stw_erp WA, 0xe2
 	sll wa, 8
 	add (xbc + 2), wa
 	ld wa, (xbc)
 	extz xwa
 	div wa, 0xa
-	st_dpiw WA, 0xe5
+	stw_dpi WA, 0xe5
 	cp xbc, xde
 	jr c, Sprintf_DivByTen_Loop
 	ret
@@ -2876,14 +2876,14 @@ Sprintf_DecimalExponent:
 	push xiz
 	ld wa, (xsp + 16)
 	exts xwa
-	ldada xbc, 301
+	lda_d16 xbc, 301
 	call Math_MultiplyAccumulate
 	ld xiz, xhl
 	cp xiz, 0x0
 	jr ge, Sprintf_DecExp_Positive
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xe2
+	cplw_erp 0xe2
 	inc 1, xwa
 	ld (xsp + 4), xwa
 	jr Sprintf_DecExp_ComputeQuotient
@@ -2894,11 +2894,11 @@ Sprintf_DecExp_Positive:
 Sprintf_DecExp_ComputeQuotient:
 	ld xiz, (xsp + 4)
 	ld xwa, xiz
-	ldada xbc, 1000
+	lda_d16 xbc, 1000
 	call Free_ClearByte2
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ldada xbc, 1000
+	lda_d16 xbc, 1000
 	call Math_DivideSigned32
 	ld xiz, xhl
 	ld xwa, (xsp + 8)
@@ -2921,7 +2921,7 @@ Sprintf_DecExp_ApplySign:
 	jr ge, Sprintf_DecExp_Positive_Return
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xe2
+	cplw_erp 0xe2
 	inc 1, xwa
 	ld xhl, xwa
 	jr Sprintf_DecExp_Return
@@ -3080,7 +3080,7 @@ Sprintf_StringLength:
 	inc 4, xsp
 	inc 1, hl
 	ld bc, hl
-	st_dri3b C, 0x07, 0xf8, 0xe4
+	stb_dri C, 0x07, 0xf8, 0xe4
 	cps bc, 0
 	jr z, Sprintf_StrLen_NotFound
 	ld wa, (xsp + 12)

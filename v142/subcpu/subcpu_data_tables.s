@@ -2371,7 +2371,7 @@ Audio_DSP_StateTable_Packed:
 	.byte 0xd6
 	ldio	0, 127
 	jp16	9
-	ld8_24	c, 2400
+	ldb_da	c, 2400
 	.byte 0xa9, 0x09, 0x00, 0xb3, 0xf3
 	push 0
 	.byte 0x83, 0x40
@@ -3227,7 +3227,7 @@ Audio_DSP_StateTable_Packed:
 	ldb	d, 64
 	popw de
 	.byte 0xaf, 0xbc, 0x9a
-	sti8_24	4094679, 0
+	stib_da	4094679, 0
 	nop
 	nop
 	nop
@@ -10586,7 +10586,7 @@ Audio_DMA_RingBuf_ReadLoop:
 	jr z, Audio_DMA_RingBuf_CheckSend
 	ld wa, iz
 	inc 1, iz
-	ldada xbc, 1536
+	lda_d16 xbc, 1536
 	extz xwa
 	add xwa, xbc
 	ld (xwa), l
@@ -10616,7 +10616,7 @@ Serial1_TX_LoopBody:
 	bitda 2, 4148
 	jr nz, Serial1_TX_ViaRingBuf
 	ld xwa, (xsp + 6)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 6), xwa
 	extz bc
 	ld wa, bc
@@ -10625,7 +10625,7 @@ Serial1_TX_LoopBody:
 
 Serial1_TX_ViaRingBuf:
 	ld xwa, (xsp + 6)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 6), xwa
 	extz bc
 	ld xwa, 0x1016

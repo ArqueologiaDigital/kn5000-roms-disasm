@@ -27,11 +27,11 @@
 	ld (xsp + 256), xwa
 	lda_24 xwa, \ParamB
 	ld (xsp + 4), xwa
-	ld16_24 xwa, \ParamC
+	ldw_da xwa, \ParamC
 	ld (xsp + 8), wa
 	lda_24 xwa, \ParamD
 	ld (xsp + 10), xwa
-	mrid2 0xb7, 0x30
+	mri_d2 0xb7, 0x30
 	ld xbc, xwa
 	.if \ParamE <= 7
 	lds wa, \ParamE
@@ -54,7 +54,7 @@
 	ldw (xsp + 8), \ParamC
 	lda_24 xwa, \ParamD
 	ld (xsp + 10), xwa
-	mrid2 0xb7, 0x30
+	mri_d2 0xb7, 0x30
 	ld xbc, xwa
 	.if \ParamE <= 7
 	lds wa, \ParamE
@@ -144,7 +144,7 @@ TestTitleFunc:
 	add xwa, FDTest_String_TestTitleFunc_0xD0
 	ld wa, (xwa)
 	lda_24 xix, TitleFunc_ActionDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; User action dispatch table (event 0x1c00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
@@ -176,7 +176,7 @@ TitleFunc_LifecycleDispatch:
 	add xwa, FDTest_String_TestTitleFunc_0xC0
 	ld wa, (xwa)
 	lda_24 xix, TitleFunc_LifecycleTable
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Title lifecycle dispatch table (event 0x1c00007, xde=0..6)
 ; 0=new: print+call 0xf97edb, 1=old: send event+call 0xfaa257
@@ -299,17 +299,17 @@ RunTestCounters_IncrNG:
 RunTestCounters_Display:
 	lda_24 xwa, FDTest_String_TestTitleFunc_0xEA
 	calr FDTest_PrintDiag
-	ld16_24 de, 0x03dcfe
+	ldw_da de, 0x03dcfe
 	exts xde
 	ld xwa, 0x00fc0001
 	ld xbc, 0x01c0000f
 	call ApPostEvent
-	ld16_24 de, 0x03dd00
+	ldw_da de, 0x03dd00
 	exts xde
 	ld xwa, 0x00fc0003
 	ld xbc, 0x01c0000f
 	call ApPostEvent
-	ld16_24 de, 0x03dd02
+	ldw_da de, 0x03dd02
 	exts xde
 	ld xwa, 0x00fc0002
 	ld xbc, 0x01c0000f
@@ -466,7 +466,7 @@ LoadExtROM_JumpEntry:
 	jp (xhl)
 
 GetAprStatus_Entry:
-	ld8_24 l, 0x03dd04
+	ldb_da l, 0x03dd04
 	ret
 
 LoadXaprInit_Entry:
@@ -479,7 +479,7 @@ LoadXaprInit_Entry:
 	add xsp, 0xa
 	cps hl, 0
 	ret nz
-	sti8_24 0x03dd04, 0x01
+	stib_da 0x03dd04, 0x01
 	ret
 
 HamaStub1_Entry:
@@ -492,7 +492,7 @@ HamaStub3_Entry:
 	ret
 
 CallExtIfActive_Entry:
-	cpi8_24 0x03dd04, 0x00
+	cpib_da 0x03dd04, 0x00
 	ret z
 	ld xhl, 0x280010
 	call (xhl)
@@ -508,14 +508,14 @@ LoadAndRunXapr_Entry:
 	add xsp, 0xa
 	cps hl, 0
 	jr nz, LoadAndRunXapr_ClearFlag
-	sti8_24 0x03dd04, 0x01
+	stib_da 0x03dd04, 0x01
 	jr LoadAndRunXapr_CallIfActive
 
 LoadAndRunXapr_ClearFlag:
-	sti8_24 0x03dd04, 0x00
+	stib_da 0x03dd04, 0x00
 
 LoadAndRunXapr_CallIfActive:
-	cpi8_24 0x03dd04, 0x00
+	cpib_da 0x03dd04, 0x00
 	ret z
 	ld xhl, 0x280008
 	lda_24 xwa, 0x027ed2

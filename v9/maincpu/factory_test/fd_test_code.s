@@ -88,7 +88,7 @@ FDTest_FillBuffer:
 	jr nc, FDTest_OpenForWrite
 
 FDTest_FillLoop:
-	st_dpiw BC, 0xe1
+	stw_dpi BC, 0xe1
 	inc 1, bc
 	cp bc, 0x400
 	jr c, FDTest_FillLoop
@@ -289,7 +289,7 @@ FDListDir_Return:
 ;   0x1e0008d  -> Format and display event parameter (xde) via 0xfa44d0,
 ;                 then send event 0x1e0008c via 0xfa9660.
 ;   0x1c00017..0x1C0001D (7 entries) -> Jump table at 0xe1ff34 (word offsets
-;                 added to xix base, dispatched via jp_dri).
+;                 added to xix base, dispatched via jp_ind).
 ;   All others -> Return 0 (unhandled).
 ; Args: xbc = event ID, xde = event parameter
 ; Returns: xhl = 0
@@ -309,7 +309,7 @@ FDTestDialogProc:
 	add xwa, FDTest_String_TestTitleFunc_0x1F6
 	ld wa, (xwa)
 	lda_24 xix, FDTestDlg_DefaultCase
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 FDTestDlg_DefaultCase:
 	lds32 xhl, 0
@@ -318,7 +318,7 @@ FDTestDlg_DefaultCase:
 FDTestDlg_FormatDisplay:
 	ld xwa, xde
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	.byte 0xbf, 0x00, 0x50	; ld (xsp + 0), wa
 	ld (xsp + 2), de
 	lda_24 xwa, FDTest_String_TestTitleFunc_0x1E0

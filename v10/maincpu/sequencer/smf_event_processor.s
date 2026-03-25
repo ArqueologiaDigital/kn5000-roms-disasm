@@ -39,7 +39,7 @@ ToneGen_StoreBlockAndLink:
 	ld (xhl + 3), ix
 	ld hl, ix
 	call ToneGen_ComputeBlockPtr
-	ldda16 xwa, 3308
+	ldw_d16 xwa, 3308
 	ldda32 xhl, 4349
 	ld (xhl + 1), wa
 	ldw (xhl + 3), 0xffff
@@ -54,14 +54,14 @@ ToneGen_DispatchAndLinkBlock:
 	push xiy
 	call DispatchHandler_JumpToSubHandler
 	ld wa, ix
-	ldda16 xhl, 0x28af
+	ldw_d16 xhl, 0x28af
 	call ToneGen_ComputeBlockPtr
 	ldda32 xhl, 4349
 	ld (xhl + 3), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	ldda32 xhl, 4349
-	ldda16 xbc, 0x28af
+	ldw_d16 xbc, 0x28af
 	ld (xhl + 1), bc
 	ldw (xhl + 3), 0xffff
 	stda16 0x28af, xwa
@@ -75,21 +75,21 @@ VoiceChannel_GetCombinedStatus:
 	jr z, VoiceChannel_GetStatusBank2First
 	push xix
 	ld xix, 0x10d3
-	lda_dri3 XBC, 0x07, 0xf0, 0xf4
+	lda_dri XBC, 0x07, 0xf0, 0xf4
 	pop xix
 	ld l, a
 	push xix
 	ld xix, 0x10c3
-	ld_srib3 A, 0x07, 0xf0, 0xf4
+	ldb_sri A, 0x07, 0xf0, 0xf4
 	pop xix
 	jr VoiceChannel_CombineStatusBits
 
 VoiceChannel_GetStatusBank2First:
 	push xix
 	ld xix, 0x10c3
-	lda_dri3 XBC, 0x07, 0xf0, 0xf4
+	lda_dri XBC, 0x07, 0xf0, 0xf4
 	ld xix, 0x10d3
-	ld_srib3 L, 0x07, 0xf0, 0xf4
+	ldb_sri L, 0x07, 0xf0, 0xf4
 	pop xix
 
 VoiceChannel_CombineStatusBits:
@@ -100,11 +100,11 @@ VoiceChannel_CombineStatusBits:
 	ret
 
 VoiceChannel_LookupParams:
-	ldda16 xiy, 4011
+	ldw_d16 xiy, 4011
 	and iy, 0xf
 	push xix
 	ld xix, 0x10b3
-	ld_srib3 L, 0x07, 0xf0, 0xf4
+	ldb_sri L, 0x07, 0xf0, 0xf4
 	pop xix
 	xor h, h
 	cp l, 0xff
@@ -115,8 +115,8 @@ VoiceChannel_LookupParams:
 	ld xix, VoiceSynth_DataEntry_PtrTable
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
-	ld_srib3 A, 0x07, 0xec, 0xf4
-	stda8 4234, a
+	ldb_sri A, 0x07, 0xec, 0xf4
+	stb_d8 4234, a
 	call SoundGen_PrepareAndBuildVoice
 
 VoiceChannel_LookupReturn:
@@ -138,7 +138,7 @@ VoiceChannel_MergePanBit:
 	ret
 
 VoiceChannel_UpdateWithPitch:
-	ldda16 xiy, 4011
+	ldw_d16 xiy, 4011
 	and iy, 0xf
 	extz xiy
 	push xiy
@@ -159,7 +159,7 @@ VoiceChannel_ApplyPitchFlags:
 	sla xiy, 1
 	push xix
 	ld xix, 0xfae
-	ld_sriw3 WA, 0x07, 0xf0, 0xf4
+	ldw_sri WA, 0x07, 0xf0, 0xf4
 	pop xix
 	srl xiy, 1
 	push xiy
@@ -177,27 +177,27 @@ VoiceChannel_ApplyPitchFlags:
 	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
 VoiceChannel_SelectChannelBank:
-	ld_srib3 A, 0x07, 0xf0, 0xf4
+	ldb_sri A, 0x07, 0xf0, 0xf4
 	pop xix
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet
-	ldda8 a, 4233
+	ldb_d8 a, 4233
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet
-	ldda8 a, 4234
+	ldb_d8 a, 4234
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet
-	ldda8 a, 4235
+	ldb_d8 a, 4235
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -212,7 +212,7 @@ VoiceChannel_NullRet:
 	ret
 
 SoundGen_ClampUpdateVoice:
-	ldda16 xiy, 4237
+	ldw_d16 xiy, 4237
 	call SoundGen_ClampVoiceIndexMin1
 	and iy, 0xf
 	push xiy
@@ -225,7 +225,7 @@ SoundGen_ClampUpdateVoice:
 	sla iy, 1
 	push xix
 	ld xix, 0xfae
-	ld_sriw3 WA, 0x07, 0xf0, 0xf4
+	ldw_sri WA, 0x07, 0xf0, 0xf4
 	pop xix
 	srl iy, 1
 	push xiy
@@ -236,26 +236,26 @@ SoundGen_ClampUpdateVoice:
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet2
-	ldda8 a, 4011
+	ldb_d8 a, 4011
 	and a, 0xf
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet2
-	ldda8 a, 4233
+	ldb_d8 a, 4233
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet2
-	ldda8 a, 4234
+	ldb_d8 a, 4234
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, VoiceChannel_NullRet2
-	ldda8 a, 4235
+	ldb_d8 a, 4235
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -270,7 +270,7 @@ VoiceChannel_NullRet2:
 
 VoiceChannel_SetParamByte7:
 	call VoiceChannel_GetParamBlock
-	ldda8 a, 4013
+	ldb_d8 a, 4013
 	ld w, (xiy + 7)
 	and w, 0x80
 	or w, a
@@ -279,7 +279,7 @@ VoiceChannel_SetParamByte7:
 
 VoiceChannel_MergeParamByte5:
 	call VoiceChannel_GetParamBlock
-	ldda8 a, 4013
+	ldb_d8 a, 4013
 	ld w, (xiy + 5)
 	and w, 0x80
 	or w, a
@@ -287,13 +287,13 @@ VoiceChannel_MergeParamByte5:
 	ret
 
 SoundGen_LookupChannelBankParams:
-	ldda16 xiy, 4011
+	ldw_d16 xiy, 4011
 	and iy, 0xf
 	push xix
 	ld xix, 0x1093
-	ld_srib3 A, 0x07, 0xf0, 0xf4
+	ldb_sri A, 0x07, 0xf0, 0xf4
 	ld xix, 0x10a3
-	ld_srib3 W, 0x07, 0xf0, 0xf4
+	ldb_sri W, 0x07, 0xf0, 0xf4
 	pop xix
 	cps a, 0
 	jr nz, ToneGen_StoreBadValue
@@ -303,7 +303,7 @@ SoundGen_LookupChannelBankParams:
 	jr ugt, ToneGen_StoreBadValue
 	push xix
 	ld xix, 0x10b3
-	lda_dri3 XWA, 0x07, 0xf0, 0xf4
+	lda_dri XWA, 0x07, 0xf0, 0xf4
 	pop xix
 	jr SoundGen_LookupReturn
 
@@ -311,7 +311,7 @@ ToneGen_StoreBadValue:
 	ldb a, 0xff
 	push xix
 	ld xix, 0x10b3
-	lda_dri3 XBC, 0x07, 0xf0, 0xf4
+	lda_dri XBC, 0x07, 0xf0, 0xf4
 	pop xix
 
 SoundGen_LookupReturn:
@@ -319,7 +319,7 @@ SoundGen_LookupReturn:
 
 VoiceChannel_GetParamBlock:
 	xor h, h
-	ldda8 l, 4011
+	ldb_d8 l, 4011
 	and l, 0xf
 	sla hl, 2
 	cpdi8 4600, 1
@@ -444,7 +444,7 @@ VoiceChannel_ParamTable1:
 	nop
 	nop
 	call	VoiceChannel_GetParamBlock
-	ldda8	a, 4013
+	ldb_d8	a, 4013
 	ld	(xiy+3), a
 	ret
 
@@ -454,7 +454,7 @@ SoundGen_PrepareAndBuildVoice:
 	jr z, SoundGen_CaptureAndBuildParams
 	cpdi16 3934, 2
 	jr c, SoundGen_CaptureAndBuildParams
-	ldda16 xiy, 4237
+	ldw_d16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
@@ -483,7 +483,7 @@ SoundGen_UpdateAndWriteChannel:
 	sla xiy, 1
 	push xix
 	ld xix, 0xfae
-	ld_sriw3 WA, 0x07, 0xf0, 0xf4
+	ldw_sri WA, 0x07, 0xf0, 0xf4
 	pop xix
 	srl xiy, 1
 	pushw bc
@@ -496,7 +496,7 @@ SoundGen_UpdateAndWriteChannel:
 	jrl nz, SoundGen_PopIyRet
 	ld l, c
 	xor h, h
-	ldda8 l, 4011
+	ldb_d8 l, 4011
 	and l, 0xf
 	xor h, h
 	cpdi16 3932, 0
@@ -513,7 +513,7 @@ SoundGen_SelectChannelTable:
 	ld xix, SeqTrack_ChannelMapIdentity
 
 SoundGen_SelectAltChannelTable:
-	ld_srib3 A, 0x07, 0xf0, 0xec
+	ldb_sri A, 0x07, 0xf0, 0xec
 
 SoundGen_ApplyChannelParam:
 	pushw bc
@@ -527,14 +527,14 @@ SoundGen_ApplyChannelParam:
 	push xiy
 	push xde
 	ld xde, SoundGen_VoiceParamData
-	ld_srib3 A, 0x03, 0xe8, 0xe4
+	ldb_sri A, 0x03, 0xe8, 0xe4
 	pop xde
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, SoundGen_PopIyRet
-	ldda8 a, 4234
+	ldb_d8 a, 4234
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -548,14 +548,14 @@ SoundGen_ApplyChannelParam:
 	cpdi8 4323, 0
 	jrl nz, SoundGen_PopIyRet
 	call ToneGen_SetSustainBit
-	ldda16 xiy, 4011
+	ldw_d16 xiy, 4011
 	and iy, 0xf
 	extz xiy
 	cpdi16 3932, 0
 	jr z, SoundGen_CommitChannelRegs
 	cpdi16 3934, 2
 	jr c, SoundGen_CommitChannelRegs
-	ldda16 xiy, 4237
+	ldw_d16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
@@ -620,7 +620,7 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_CaptureVoiceParams
 	pop xiy
-	ldda8 a, 6749
+	ldb_d8 a, 6749
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -628,12 +628,12 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	ldda8 a, 6750
+	ldb_d8 a, 6750
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	ld xde, SoundGen_InitVoiceData
-	ld_srib3 A, 0x07, 0xe8, 0xf4
+	ldb_sri A, 0x07, 0xe8, 0xf4
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -668,7 +668,7 @@ SndParam_LookupChannelVoice:
 	push xhl
 	cpdi8 4600, 2
 	jr nz, SndParam_LookupDefault
-	ldda8 a, 4011
+	ldb_d8 a, 4011
 	and a, 0xf
 	cp a, 0x9
 	jr nz, SndParam_LookupDefault
@@ -683,10 +683,10 @@ SndParam_LookupChannelVoice:
 	xor xde, xde
 	ld xix, 0x1a37
 	ldb a, 0x4
-	ld_sriw3 BC, 0x07, 0xf0, 0xec
+	ldw_sri BC, 0x07, 0xf0, 0xec
 	ld e, b
 	xor hl, hl
-	ldda8 l, 4012
+	ldb_d8 l, 4012
 	pushw hl
 	call SndParam_LookupByChannel
 	ld a, l
@@ -706,7 +706,7 @@ SndParam_LookupReturn:
 VoiceChannel_StoreVoiceIdx:
 	push xde
 	xor de, de
-	ldda8 e, 4011
+	ldb_d8 e, 4011
 	and e, 0xf
 	stda16 6751, xde
 	pop xde
@@ -715,12 +715,12 @@ VoiceChannel_StoreVoiceIdx:
 	ld xwa, 0x1a57
 	call SndParam_ApplyVoiceValue
 	ld xhl, 0x1a37
-	ldda16 xbc, 6751
+	ldw_d16 xbc, 6751
 	mul c, 0x2
 	add xhl, xbc
-	ldda8 a, 6746
+	ldb_d8 a, 6746
 	ld (xhl), a
-	ldda8 a, 6747
+	ldb_d8 a, 6747
 	ld (xhl + 1), a
 
 VoiceChannel_StoreVoiceReturn:
@@ -829,18 +829,18 @@ SysEx_ClearReturn:
 	ret
 
 SMF_LoadSoundBankAndPlay:
-	stda8 4599, a
-	stda8 6709, c
-	stda8 6710, e
+	stb_d8 4599, a
+	stb_d8 6709, c
+	stb_d8 6710, e
 	push xiz
 	push xix
 	push xde
 	call SetWall_LoadBankToToneGen
-	ldda8 a, 4599
+	ldb_d8 a, 4599
 	cpda8_24 a, 0xffe3
 	jr z, SMF_LoadBank_ClearAndPrepare
-	ldda8 a, 4599
-	st8_24 0x00ffe3, a
+	ldb_d8 a, 4599
+	stb_da 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
 
@@ -850,7 +850,7 @@ SMF_LoadBank_ClearAndPrepare:
 	pop xde
 	pop xix
 	pop xiz
-	ldda16 xhl, 6699
+	ldw_d16 xhl, 6699
 	bit 15, hl
 	jr nz, SMF_SeekAndPreparePlayback
 	cps hl, 2
@@ -888,7 +888,7 @@ SMF_Seek_WritePosition:
 SMF_RestoreTimerState:
 	bitda 0, 0x28a5
 	jr z, SMF_SeekReturn
-	ld16_24 xwa, 0x00ffec
+	ldw_da xwa, 0x00ffec
 	stda16 0xf19e, xwa
 	push xhl
 	call Audio_CheckSubsystemReady
@@ -928,15 +928,15 @@ SMF_InitPlaybackState:
 
 SMF_InitChannelState:
 	xor wa, wa
-	stda8 4236, a
+	stb_d8 4236, a
 	stda16 4347, xwa
-	stda8 4344, a
-	cpdi16_24 0xffec, 0
+	stb_d8 4344, a
+	cpw_da 0xffec, 0
 	jr z, SMF_SetStatusAndJump
 	xor c, c
 
 SMF_ScanChannelLoop:
-	ld16_24 xde, 0x00ffec
+	ldw_da xde, 0x00ffec
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -945,7 +945,7 @@ SMF_ScanChannelLoop:
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	cp_srib_im 0x07, 0xf0, 0xec, 0x10
+	cpib_sri 0x07, 0xf0, 0xec, 0x10
 	pop xix
 	jr z, SMF_LoopNextChannel
 	ld a, l
@@ -968,7 +968,7 @@ SMF_SetStatusAndJump:
 
 SMF_FoundActiveChannel:
 	call Vga_SetupMultiPlaneDisplay
-	ld16_24 xwa, 0x00ffec
+	ldw_da xwa, 0x00ffec
 	stda16 4325, xwa
 	stdi8 4324, 255
 	bitda 2, 0xfdad
@@ -982,8 +982,8 @@ SMF_InitChannelScan:
 	call SMF_ClearWorkArea
 	xor wa, wa
 	stda16 4347, xwa
-	stda8 4236, a
-	stda8 4344, a
+	stb_d8 4236, a
+	stb_d8 4344, a
 	xor hl, hl
 	xor bc, bc
 
@@ -1001,11 +1001,11 @@ SMF_FindFirstActiveChannel:
 	jrl SMF_Finalize_RestoreAndPlay
 
 SMF_SetupActiveChannel:
-	stda8 0x2877, c
+	stb_d8 0x2877, c
 	inc 1, hl
 	push xde
 	ld xde, 0xf250
-	ld_sriw3 HL, 0x07, 0xe8, 0xec
+	ldw_sri HL, 0x07, 0xe8, 0xec
 	pop xde
 	stda16 0x28af, xhl
 	stdi16 9830, 5
@@ -1020,10 +1020,10 @@ SMF_SetupActiveChannel:
 	stda16 4002, xwa
 	stda16 4004, xwa
 	stda32 6705, xix
-	ldda16 xwa, 4002
-	st_dpiw WA, 0xf1
-	ldda16 xwa, 4004
-	st_dpiw WA, 0xf1
+	ldw_d16 xwa, 4002
+	stw_dpi WA, 0xf1
+	ldw_d16 xwa, 4004
+	stw_dpi WA, 0xf1
 	stda32 4376, xix
 	ldda32 xix, 4376
 	ld xiy, SMF_HeaderConstants
@@ -1039,24 +1039,24 @@ SMF_SetupActiveChannel:
 	ldda32 xix, 4376
 
 SMF_WaitForReady:
-	ld_spib A, 0xf4
+	ldb_spi A, 0xf4
 	lda_dpi XBC, 0xf0
 	bit 7, a
 	jr nz, SMF_WaitForReady
 	ldw wa, 0x58ff
-	st_dpiw WA, 0xf1
+	stw_dpi WA, 0xf1
 	ldb a, 0x4
-	ldda8 w, 1075
-	st_dpiw WA, 0xf1
+	ldb_d8 w, 1075
+	stw_dpi WA, 0xf1
 	ldw wa, 0x1802
-	st_dpiw WA, 0xf1
+	stw_dpi WA, 0xf1
 	ldb a, 0x8
 	lda_dpi XBC, 0xf0
 	stda32 4376, xix
-	ldda8 l, 0xfc62
+	ldb_d8 l, 0xfc62
 	xor h, h
 	pushw bc
-	ldda8 b, 0xfc63
+	ldb_d8 b, 0xfc63
 	and b, 0x1
 	xor c, c
 	or hl, bc
@@ -1089,7 +1089,7 @@ SMF_Setup_SelectTablePtr:
 	ldw bc, 0x8
 
 SMF_WriteChannelDataLoop:
-	ld_spib A, 0xf4
+	ldb_spi A, 0xf4
 	lda_dpi XBC, 0xf0
 	pushw bc
 	push xiy
@@ -1125,22 +1125,22 @@ SMF_WriteChannel_Continue:
 SMF_ScanAndProcessChannel:
 	ld xiy, 0xf460
 	xor hl, hl
-	ldda8 l, 0x2877
+	ldb_d8 l, 0x2877
 	ld c, l
-	ldda16 xde, 4325
+	ldw_d16 xde, 4325
 	ld a, c
 	scf
 	xorcf_a_16 de
 	jrl c, SMF_AdvanceChannelScan
 	push xix
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	pop xix
 	ld b, l
 	sla l, 1
 	push xix
 	ld xix, SMF_HeaderConstants_0x1A
-	ld_sriw3 HL, 0x07, 0xf0, 0xec
+	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	cp hl, 0xffff
 	jrl z, SMF_AdvanceChannelScan
@@ -1158,42 +1158,42 @@ SMF_ScanChannel_PopAndWrite:
 	jrl SMF_FinishChannelAndGetNextEvent
 
 SMF_WriteChannelNoteData:
-	st_dri3b E, 0x07, 0xf4, 0xec
+	stb_dri E, 0x07, 0xf4, 0xec
 	ld c, (xiy + 256)
 	ld d, (xiy + 1)
 	ld b, (xiy + 3)
 	ld e, (xiy + 4)
 	ld a, (xiy + 5)
-	stda8 4359, a
+	stb_d8 4359, a
 	ld a, (xiy + 7)
-	stda8 4332, a
+	stb_d8 4332, a
 	anddi8 0x2877, 15
-	ldda8 l, 0x2877
+	ldb_d8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	pop xix
 	cpdi8 4324, 255
 	jrl nz, SMF_WriteNote_AltPath
 	call SMF_ResolveGlobalChannel
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xc0
 	ld l, c
-	stda8 6746, l
-	stda8 6747, d
+	stb_d8 6746, l
+	stb_d8 6747, d
 	ld l, (xiy - 2)
-	stda8 6748, l
+	stb_d8 6748, l
 	pushw bc
 	pushw de
 	ld xwa, 0x1a57
 	call SndParam_InitBufferConverge
 	popw de
 	popw bc
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xb0
 	xor w, w
-	ldda8 l, 6744
+	ldb_d8 l, 6744
 	pushw wa
 	pushw bc
 	pushw de
@@ -1218,7 +1218,7 @@ SMF_WriteNote_FileUnderflow1:
 
 SMF_WriteNote_BankSelect:
 	ldb w, 0x20
-	ldda8 l, 6743
+	ldb_d8 l, 6743
 	pushw bc
 	pushw de
 	call SMF_WriteByteLoop
@@ -1240,9 +1240,9 @@ SMF_WriteNote_FileUnderflow2:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_ProgramChange:
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xc0
-	ldda8 w, 6745
+	ldb_d8 w, 6745
 	and w, 0x7f
 	pushw bc
 	pushw de
@@ -1266,7 +1266,7 @@ SMF_WriteNote_FileUnderflow3:
 
 SMF_WriteNote_AltPath:
 	call SMF_ResolveGlobalChannel
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xb0
 	ldb w, 0x0
 	ld l, c
@@ -1293,7 +1293,7 @@ SMF_WriteNote_FileUnderflow4:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_BankSelectLSB:
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xb0
 	ldb w, 0x20
 	ld l, d
@@ -1320,7 +1320,7 @@ SMF_WriteNote_FileUnderflow5:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_ProgramNumber:
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xc0
 	ld w, c
 	and w, 0x7f
@@ -1345,7 +1345,7 @@ SMF_WriteNote_FileUnderflow6:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteChannelVolume:
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xb0
 	ldb w, 0x7
 	ld l, b
@@ -1371,7 +1371,7 @@ SMF_WriteVol_FileUnderflow1:
 
 SMF_WriteVol_Chorus:
 	ldb w, 0x5d
-	ldda8 l, 4359
+	ldb_d8 l, 4359
 	pushw wa
 	pushw de
 	call SMF_WriteByteLoop
@@ -1420,7 +1420,7 @@ SMF_WriteVol_FileUnderflow3:
 
 SMF_WriteVol_Reverb:
 	ldb w, 0x5b
-	ldda8 l, 4332
+	ldb_d8 l, 4332
 	and l, 0x7f
 	pushw wa
 	call SMF_WriteByteLoop
@@ -1441,11 +1441,11 @@ SMF_WriteVol_FileUnderflow4:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteVol_PanAndPitch:
-	ldda8 l, 0x2877
+	ldb_d8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	pop xix
 	cp l, 0xc
 	jrl z, SMF_AdvanceChannelScan
@@ -1454,16 +1454,16 @@ SMF_WriteVol_PanAndPitch:
 	sla l, 1
 	push xix
 	ld xix, SMF_HeaderConstants_0x1A
-	ld_sriw3 HL, 0x07, 0xf0, 0xec
+	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	cp hl, 0xffff
 	jrl z, SMF_AdvanceChannelScan
-	ldda8 a, 6881
+	ldb_d8 a, 6881
 	or a, 0xb0
 	ld c, l
 	ld xiy, 0xf460
 	ldfr_lerp XIY, 0x38
-	st_dri3b E, 0x07, 0xf4, 0xec
+	stb_dri E, 0x07, 0xf4, 0xec
 	ld l, (xiy + 8)
 	ldto_lerp XIY, 0x38
 	ldb w, 0xa
@@ -1530,17 +1530,17 @@ SMF_WriteRPN_FileUnderflow3:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_FineTune:
-	ldda8 l, 0x2877
+	ldb_d8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	sla hl, 1
 	ld xix, SMF_HeaderConstants_0x1A
-	ld_sriw3 HL, 0x07, 0xf0, 0xec
+	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
-	st_dri3b E, 0x07, 0xf4, 0xec
+	stb_dri E, 0x07, 0xf4, 0xec
 	ld l, (xiy + 10)
 	ld c, l
 	srl l, 1
@@ -1632,18 +1632,18 @@ SMF_WriteRPN_FileUnderflow7:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_CoarseTune:
-	ldda8 l, 0x2877
+	ldb_d8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	sla l, 1
 	ld xix, SMF_HeaderConstants_0x1A
-	ld_sriw3 HL, 0x07, 0xf0, 0xec
+	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
 	ldfr_lerp XIY, 0x38
-	st_dri3b E, 0x07, 0xf4, 0xec
+	stb_dri E, 0x07, 0xf4, 0xec
 	ld l, (xiy + 9)
 	ldto_lerp XIY, 0x38
 	ldb w, 0x6
@@ -1729,17 +1729,17 @@ SMF_WriteRPN_FileUnderflow11:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_Transpose:
-	ldda8 l, 0x2877
+	ldb_d8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	sla l, 1
 	ld xix, SMF_HeaderConstants_0x1A
-	ld_sriw3 HL, 0x07, 0xf0, 0xec
+	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
-	st_dri3b E, 0x07, 0xf4, 0xec
+	stb_dri E, 0x07, 0xf4, 0xec
 	ld l, (xiy + 11)
 	ldb w, 0x6
 	pushw wa
@@ -1804,7 +1804,7 @@ SMF_FinishChannelAndGetNextEvent:
 	call SMF_GetNextEvent
 	popw_dd16 0x66, 0x26
 	popw_dd16 0xaf, 0x28
-	stda8 3944, a
+	stb_d8 3944, a
 
 SMF_ResetEventTimers:
 	stdi16 3946, 0
@@ -1832,7 +1832,7 @@ SMF_ProcessEventLoop:
 SMF_EventLoop_ReadDataBytes:
 	push xde
 	ld xde, 0x1073
-	lda_dri3 XBC, 0x07, 0xe8, 0xec
+	lda_dri XBC, 0x07, 0xe8, 0xec
 	pop xde
 	push xhl
 	call SMF_AdvancePosition
@@ -1841,7 +1841,7 @@ SMF_EventLoop_ReadDataBytes:
 	inc 1, hl
 	bit 7, a
 	jr z, SMF_EventLoop_ReadDataBytes
-	ldda8 a, 4211
+	ldb_d8 a, 4211
 	cp a, 0x82
 	jrl z, SMF_IncrementPosition
 	cp a, 0x84
@@ -1882,10 +1882,10 @@ SMF_MetaTiming_GetNextLoop:
 	jr SMF_MetaTiming_GetNextLoop
 
 SMF_MetaTiming_ApplyMultiplier:
-	ldda16 xwa, 3946
+	ldw_d16 xwa, 3946
 	ldw de, 0x60
 	mul xwa, xde
-	ldto_werp DE, 0xe2
+	stw_erp DE, 0xe2
 	adddm16 3938, xwa
 	stda16 3940, xde
 	stdi16 3946, 0
@@ -1896,7 +1896,7 @@ SMF_PolyAftertouch_Dispatch:
 	jr z, SMF_PolyAftertouch_3Byte_CalcTime
 	cps hl, 4
 	jrl nz, SMF_ProcessEventLoop
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	push xwa
@@ -1915,7 +1915,7 @@ SMF_PolyAftertouch_4Byte_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_PolyAftertouch_4Byte_WriteOutput:
-	ldda16 xhl, 4213
+	ldw_d16 xhl, 4213
 	and l, 0x7f
 	and h, 0x1
 	rrc h
@@ -1923,7 +1923,7 @@ SMF_PolyAftertouch_4Byte_WriteOutput:
 	or l, h
 	xor h, h
 	pushw wa
-	ldda8 w, 4214
+	ldb_d8 w, 4214
 	and w, 0x2
 	srl w, 1
 	xor a, a
@@ -1934,7 +1934,7 @@ SMF_PolyAftertouch_4Byte_WriteOutput:
 	jrl SMF_ProcessEventLoop
 
 SMF_PolyAftertouch_3Byte_CalcTime:
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -1957,7 +1957,7 @@ SMF_PolyAftertouch_3Byte_Underflow:
 SMF_PolyAftertouch_3Byte_SendStatus:
 	and a, 0xf
 	or a, 0xd0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	xor l, l
 	call SMF_WriteByteLoop
 	push xwa
@@ -1981,7 +1981,7 @@ SMF_PolyAftertouch_3Byte_Done:
 SMF_ChannelPressure_Handler:
 	cps hl, 3
 	jrl nz, SMF_ProcessEventLoop
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2005,7 +2005,7 @@ SMF_ChannelPressure_WriteCC:
 	and a, 0xf
 	or a, 0xb0
 	ldb w, 0x1
-	ldda8 l, 4213
+	ldb_d8 l, 4213
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2028,7 +2028,7 @@ SMF_ChannelPressure_Done:
 SMF_PitchBend_Handler:
 	cps hl, 4
 	jrl nz, SMF_ProcessEventLoop
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2049,8 +2049,8 @@ SMF_PitchBend_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_PitchBend_WriteCC_MSB:
-	ldda8 w, 4213
-	ldda8 l, 4214
+	ldb_d8 w, 4213
+	ldb_d8 l, 4214
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2078,10 +2078,10 @@ SMF_SystemExclusive_Handler:
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	cp_srib_im 0x07, 0xf0, 0xec, 0x0f
+	cpib_sri 0x07, 0xf0, 0xec, 0x0f
 	pop xix
 	jrl z, SMF_ProcessEventLoop
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2105,7 +2105,7 @@ SMF_SystemExclusive_WriteCC_MSB:
 	and a, 0xf
 	or a, 0xb0
 	ldb w, 0xb
-	ldda8 l, 4213
+	ldb_d8 l, 4213
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2146,7 +2146,7 @@ SMF_NoteOn_FindVoiceSlot:
 	push xde
 	push xhl
 	push xiz
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	pop xiz
@@ -2161,7 +2161,7 @@ SMF_NoteOn_FindVoiceSlot:
 SMF_NoteOn_SlotFound:
 	ordi8 4236, 1
 	pushw hl
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	popw hl
@@ -2182,9 +2182,9 @@ SMF_NoteOn_SlotFound_Underflow:
 
 SMF_NoteOn_WriteEventBytes:
 	pushw hl
-	ldda8 a, 4211
-	ldda8 w, 4213
-	ldda8 l, 4214
+	ldb_d8 a, 4211
+	ldb_d8 w, 4213
+	ldb_d8 l, 4214
 	call SMF_WriteByteLoop
 	popw hl
 	push xwa
@@ -2204,20 +2204,20 @@ SMF_NoteOn_WriteEvent_Underflow:
 
 SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11f9
-	st_dri3b D, 0x07, 0xf0, 0xec
+	stb_dri D, 0x07, 0xf0, 0xec
 	ldb a, 0x80
 	lda_dpi XBC, 0xf0
-	ldda8 a, 4211
+	ldb_d8 a, 4211
 	lda_dpi XBC, 0xf0
-	ldda8 a, 4213
+	ldb_d8 a, 4213
 	lda_dpi XBC, 0xf0
-	ldda8 a, 4216
+	ldb_d8 a, 4216
 	ldb w, 0x60
 	muls8rr a, w
 	xor hl, hl
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	add wa, hl
-	st_dpiw WA, 0xf1
+	stw_dpi WA, 0xf1
 	jrl SMF_ProcessEventLoop
 
 SMF_ProgramChange_Handler:
@@ -2225,7 +2225,7 @@ SMF_ProgramChange_Handler:
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 4213, 127
 	jrl z, SMF_ProcessEventLoop
-	ldda8 a, 4214
+	ldb_d8 a, 4214
 	cps a, 0
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 6709, 0
@@ -2234,7 +2234,7 @@ SMF_ProgramChange_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_ProgramChange_CalcTime:
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2257,36 +2257,36 @@ SMF_ProgramChange_Underflow:
 SMF_ProgramChange_ProcessPatch:
 	cpdi8 4324, 0
 	jrl z, SMF_ProgramChange_DirectWrite
-	ldda8 l, 4211
+	ldb_d8 l, 4211
 	ld h, l
 	and l, 0x1
 	rrc l
-	ldda8 a, 4215
+	ldb_d8 a, 4215
 	or l, a
-	stda8 6746, l
-	ldda8 l, 4211
+	stb_d8 6746, l
+	ldb_d8 l, 4211
 	and l, 0x2
 	rrc_i_8 l, 2
-	ldda8 a, 4216
+	ldb_d8 a, 4216
 	and a, 0x7f
 	or a, l
-	stda8 6747, a
+	stb_d8 6747, a
 	push xix
 	xor hl, hl
-	ldda8 l, 4213
+	ldb_d8 l, 4213
 	ld xix, 0xf1a0
-	ld_srib3 L, 0x07, 0xf0, 0xec
+	ldb_sri L, 0x07, 0xf0, 0xec
 	ld xix, SMF_HeaderConstants_0x52
-	ld_srib3 L, 0x07, 0xf0, 0xec
-	stda8 6748, l
+	ldb_sri L, 0x07, 0xf0, 0xec
+	stb_d8 6748, l
 	pop xix
 	ld xwa, 0x1a57
 	call SndParam_InitBufferConverge
 	ldb a, 0xb0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	or a, w
 	xor w, w
-	ldda8 l, 6744
+	ldb_d8 l, 6744
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2309,7 +2309,7 @@ SMF_ProgramChange_WriteBankMSB_Data:
 	stdi16 4206, 0
 	stdi8 4208, 0
 	ldb w, 0x20
-	ldda8 l, 6743
+	ldb_d8 l, 6743
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2328,10 +2328,10 @@ SMF_ProgramChange_WriteBankLSB_Underflow:
 
 SMF_ProgramChange_WriteBankLSB_Data:
 	ldb a, 0xc0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
-	ldda8 w, 6745
+	ldb_d8 w, 6745
 	xor l, l
 	call SMF_WriteByteLoop
 	push xwa
@@ -2354,7 +2354,7 @@ SMF_ProgramChange_WriteVolume_Data:
 
 SMF_ProgramChange_DirectWrite:
 	ldb w, 0x0
-	ldda8 l, 4211
+	ldb_d8 l, 4211
 	and l, 0x1
 	call SMF_SendChannelConfig
 	push xwa
@@ -2376,15 +2376,15 @@ SMF_ProgramChange_SendConfig_Data:
 	stdi16 4206, 0
 	stdi8 4208, 0
 	ldb w, 0x20
-	ldda8 h, 4211
+	ldb_d8 h, 4211
 	and h, 0xc
-	ldda8 l, 4214
+	ldb_d8 l, 4214
 	srl l, 5
 	and l, 0x3
 	or l, h
 	sla l, 4
 	and l, 0x7f
-	ldda8 l, 4216
+	ldb_d8 l, 4216
 	and l, 0x7
 	sla l, 4
 	call SMF_SendChannelConfig
@@ -2405,10 +2405,10 @@ SMF_ProgramChange_WritePatch_Underflow:
 
 SMF_ProgramChange_WritePatchByte:
 	ldb a, 0xc0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
-	ldda8 w, 4215
+	ldb_d8 w, 4215
 	xor l, l
 	call SMF_WriteByteLoop
 	push xwa
@@ -2434,10 +2434,10 @@ SMF_ControlChange_Handler:
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 4213, 127
 	jrl z, SMF_ProcessEventLoop_Entry
-	ldda8 l, 4214
-	ldda8 a, 4213
+	ldb_d8 l, 4214
+	ldb_d8 a, 4213
 	jrl SMF_ControlChange_ValidateRange
-	ldda8 l, 4214
+	ldb_d8 l, 4214
 	cp l, 0x7f
 	jrl z, SMF_ProcessEventLoop_Entry
 	and l, 0x1f
@@ -2458,7 +2458,7 @@ SMF_ControlChange_ValidateRange:
 	cp l, 0xb
 	jrl ugt, SMF_ProcessEventLoop
 	ldb a, 0xb0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
 	ldb w, 0x7
@@ -2487,7 +2487,7 @@ SMF_CC_RPN_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_RPN_CalcTime:
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	push xhl
 	call SMF_CalcTimeDelta
@@ -2511,7 +2511,7 @@ SMF_CC_RPN_Underflow:
 
 SMF_CC_RPN_WriteCC101:
 	ldb a, 0xb0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
 	ldb w, 0x65
@@ -2558,8 +2558,8 @@ SMF_CC_RPN_WriteCC100_Underflow:
 
 SMF_CC_RPN_WriteCC6_DataEntry:
 	ldb w, 0x6
-	ldda8 l, 4215
-	ldda8 h, 4211
+	ldb_d8 l, 4215
+	ldb_d8 h, 4211
 	and h, 0x1
 	rrc_i_8 h, 2
 	srl l, 1
@@ -2584,7 +2584,7 @@ SMF_CC_RPN_WriteCC6_Underflow:
 
 SMF_CC_RPN_WriteCC38_DataEntryLSB:
 	ldb w, 0x26
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	and l, 0x1
 	rrc_i_8 l, 2
 	pushw wa
@@ -2615,7 +2615,7 @@ SMF_CC_PitchBendSens_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_PitchBendSens_CalcTime:
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	pushw hl
 	call SMF_CalcTimeDelta
@@ -2639,7 +2639,7 @@ SMF_CC_PitchBendSens_Underflow:
 
 SMF_CC_PitchBendSens_WriteCC101:
 	ldb a, 0xb0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
 	ldb w, 0x65
@@ -2686,7 +2686,7 @@ SMF_CC_PitchBendSens_WriteCC100_Underflow:
 
 SMF_CC_PitchBendSens_WriteCC6:
 	ldb w, 0x6
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2734,7 +2734,7 @@ SMF_CC_Modulation_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Modulation_CalcTime:
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	push xhl
 	call SMF_CalcTimeDelta
@@ -2758,7 +2758,7 @@ SMF_CC_Modulation_Underflow:
 
 SMF_CC_Modulation_WriteCC101:
 	ldb a, 0xb0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
 	ldb w, 0x65
@@ -2805,7 +2805,7 @@ SMF_CC_Modulation_WriteCC100_Underflow:
 
 SMF_CC_Modulation_WriteCC6:
 	ldb w, 0x6
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2853,7 +2853,7 @@ SMF_CC_Pan_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Pan_CalcTime:
-	ldda8 c, 4212
+	ldb_d8 c, 4212
 	pushw wa
 	push xhl
 	call SMF_CalcTimeDelta
@@ -2877,11 +2877,11 @@ SMF_CC_Pan_Underflow:
 
 SMF_CC_Pan_WriteCC10:
 	ldb a, 0xb0
-	ldda8 w, 4213
+	ldb_d8 w, 4213
 	and w, 0xf
 	or a, w
 	ldb w, 0xa
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2902,7 +2902,7 @@ SMF_CC_Pan_Done:
 	jrl SMF_ProcessEventLoop
 
 SMF_CC_Portamento_CheckBit3:
-	ldda16 xbc, 4215
+	ldw_d16 xbc, 4215
 	bit 3, b
 	jr nz, SMF_CC_Sustain_CheckBits
 	jrl SMF_ProcessEventLoop
@@ -2915,11 +2915,11 @@ SMF_CC_Reverb_Handler:
 
 SMF_CC_Reverb_SetupCC93:
 	ldb w, 0x5d
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	jr SMF_ProcessTimedEvent_Continue
 
 SMF_CC_Sustain_CheckBits:
-	ldda16 xbc, 4215
+	ldw_d16 xbc, 4215
 	bit 3, b
 	jrl z, SMF_ProcessEventLoop
 	cpdi8 6709, 0
@@ -2944,7 +2944,7 @@ SMF_CC_Chorus_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Chorus_SetupCC91:
-	ldda8 l, 4215
+	ldb_d8 l, 4215
 	and l, 0x7f
 	jr SMF_ProcessTimedEvent_Continue
 
@@ -2966,13 +2966,13 @@ FileOpen:
 	or xwa, xwa
 	jrl z, FileOpen_ErrorNoFile
 	lda_24 xwa, FileClose
-	st32_24 0x0210f6, xwa
+	stl_da 0x0210f6, xwa
 	ld (xsp + 4), 0x4
 	cp (xbc), 0x0
 	jr z, FileOpen_AllocBuffer
 
 FileOpen_ParseModeLoop:
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	exts wa
 	cp wa, 0x64
 	jr z, FileOpen_ModeD
@@ -3049,7 +3049,7 @@ FileOpen_NormalizeName:
 	ld a, (xwa)
 	extz wa
 	lda_24 xbc, CharMap_FullPermutation_0x660
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	bit 1, a
 	jr z, FileOpen_NormalizeNoUpper
 	ld xwa, (xsp + 16)
@@ -3060,14 +3060,14 @@ FileOpen_NormalizeName:
 
 FileOpen_ScanForColon:
 	ld xwa, (xsp + 16)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 16), xwa
 	cp c, 0x3a
 	jr nz, FileOpen_NormalizeName
 	lds32 xwa, 1
 	sub (xsp + 16), xwa
 	ld xwa, (xsp + 16)
-	stib_dpi 0xe0, 0x00
+	stib_dsp 0xe0, 0x00
 	ld (xsp + 16), xwa
 	jr FileOpen_MatchDevice
 
@@ -3134,7 +3134,7 @@ FileOpen_DeviceFound:
 	jr nz, FileOpen_CheckPermission
 
 FileOpen_ErrorNoFile:
-	sti16_24 0x01e53c, 0x0007
+	stiw_da 0x01e53c, 0x0007
 	lds32 xhl, 0
 	jrl FileOpen_Return
 
@@ -3148,7 +3148,7 @@ FileOpen_CheckPermission:
 	cpl wa
 	and a, c
 	jr z, FileOpen_FindFreeSlot
-	sti16_24 0x01e53c, 0x0002
+	stiw_da 0x01e53c, 0x0002
 	lds32 xhl, 0
 	jrl FileOpen_Return
 
@@ -3173,7 +3173,7 @@ FileOpen_SlotSearchLoop:
 FileOpen_SlotExhausted:
 	cp (xsp + 14), 0x10
 	jr nz, FileOpen_InitSlot
-	sti16_24 0x01e53c, 0x0004
+	stiw_da 0x01e53c, 0x0004
 	call SeqStep_FileNopB
 	lds32 xhl, 0
 	jrl FileOpen_Return
@@ -3185,7 +3185,7 @@ FileOpen_InitSlot:
 	sla bc, 2
 	lda_24 xde, 0x0210b4
 	ld xwa, 0xffffffff
-	st_dri3l XWA, 0x07, 0xe8, 0xe4
+	stl_dri XWA, 0x07, 0xe8, 0xe4
 	call SeqStep_FileNopB
 	pushw 0x4b
 	calr SeqStep_MemAllocWrapper
@@ -3201,7 +3201,7 @@ FileOpen_InitSlot:
 	sla bc, 2
 	lda_24 xde, 0x0210b4
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xe8, 0xe4
+	stl_dri XWA, 0x07, 0xe8, 0xe4
 	lds32 xhl, 0
 	jrl FileOpen_Return
 
@@ -3221,7 +3221,7 @@ FileOpen_PopulateStruct:
 	ld (xiz + 18), xwa
 	ld a, (xsp + 6)
 	ld (xiz), a
-	ld8_24 a, 0x03e2e2
+	ldb_da a, 0x03e2e2
 	ld (xiz + 1), a
 	ld (xiz + 2), 0xd
 	ld a, (xsp + 4)
@@ -3231,7 +3231,7 @@ FileOpen_PopulateStruct:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0x0210b4
-	st_dri3l XIZ, 0x07, 0xe4, 0xe0
+	stl_dri XIZ, 0x07, 0xe4, 0xe0
 	ei 6
 	ld xwa, (xsp + 16)
 	push xwa
@@ -3250,10 +3250,10 @@ FileOpen_PopulateStruct:
 	sla bc, 2
 	lda_24 xde, 0x0210b4
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xe8, 0xe4
+	stl_dri XWA, 0x07, 0xe8, 0xe4
 	ld a, l
 	exts wa
-	st16_24 0x01e53c, xwa
+	stw_da 0x01e53c, xwa
 	ld xwa, xiz
 	push xwa
 	call SeqStep_FreeMemory
@@ -3276,14 +3276,14 @@ FileRead:
 	jr nz, SeqStep_FileReadCheck
 
 SeqStep_FileReadSetup:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	lds hl, 0
 	ret
 
 SeqStep_FileReadCheck:
 	bitm 0, (xbc + 4)
 	jr nz, SeqStep_FileReadProcess
-	sti16_24 0x01e53c, 0x000d
+	stiw_da 0x01e53c, 0x000d
 	lds hl, 0
 	ret
 
@@ -3313,14 +3313,14 @@ FileWrite:
 	jr nz, SeqStep_FileReadLoop
 
 SeqStep_FileReadAdvance:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	lds hl, 0
 	ret
 
 SeqStep_FileReadLoop:
 	bitm 1, (xbc + 4)
 	jr nz, SeqStep_FileReadDone
-	sti16_24 0x01e53c, 0x000d
+	stiw_da 0x01e53c, 0x000d
 	lds hl, 0
 	ret
 
@@ -3351,14 +3351,14 @@ SeqStep_FileReadReturn:
 	jr nz, SeqStep_FileReadCleanup
 
 SeqStep_FileReadError:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	ldw hl, 0xffff
 	jr SeqStep_FileReadVtableReturn
 
 SeqStep_FileReadCleanup:
 	bitm 0, (xbc + 4)
 	jr nz, SeqStep_FileReadComplete
-	sti16_24 0x01e53c, 0x000d
+	stiw_da 0x01e53c, 0x000d
 	ldw hl, 0xffff
 	jr SeqStep_FileReadVtableReturn
 
@@ -3395,7 +3395,7 @@ SeqStep_ByteBlockEF56:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	0x1e53c, 17
+	stiw_da	0x1e53c, 17
 	lds32	xhl, 0
 	jr	53
 	.byte 0xb9, 0x04
@@ -3440,14 +3440,14 @@ SeqStep_FileWriteSetup:
 	jr nz, SeqStep_FileWriteCheckMode
 
 SeqStep_FileWriteNoHandle:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	ldw hl, 0xffff
 	jr SeqStep_FileWriteReturn
 
 SeqStep_FileWriteCheckMode:
 	bitm 1, (xbc + 4)
 	jr nz, SeqStep_FileWriteProcess
-	sti16_24 0x01e53c, 0x000d
+	stiw_da 0x01e53c, 0x000d
 	ldw hl, 0xffff
 	jr SeqStep_FileWriteReturn
 
@@ -3484,7 +3484,7 @@ SeqStep_ByteBlockF002:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	0x1e53c, 17
+	stiw_da	0x1e53c, 17
 	ldw	hl, 0xffff
 	ret
 	.byte 0xb9, 0x04
@@ -3541,11 +3541,11 @@ SeqStep_FileCloseInner:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0x0210b4
-	cp_sril_mr XIZ, 0x07, 0xe4, 0xe0
+	cpl_sri_mr XIZ, 0x07, 0xe4, 0xe0
 	jr z, SeqStep_FileCloseProcess
 
 SeqStep_FileCloseCheck:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	ldw hl, 0xffff
 	jrl SeqStep_FileCloseFinal
 
@@ -3561,7 +3561,7 @@ SeqStep_FileCloseProcess:
 	jr z, SeqStep_FileCloseReturn
 	ld wa, (xsp + 4)
 	exts wa
-	st16_24 0x01e53c, xwa
+	stw_da 0x01e53c, xwa
 
 SeqStep_FileCloseReturn:
 	incdi8_24 1, 0x210f4
@@ -3571,7 +3571,7 @@ SeqStep_FileCloseReturn:
 	sla bc, 2
 	lda_24 xde, 0x0210b4
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xe8, 0xe4
+	stl_dri XWA, 0x07, 0xe8, 0xe4
 	ld a, (xiz + 5)
 	extz wa
 	ld (xsp + 6), wa
@@ -3584,7 +3584,7 @@ SeqStep_FileCloseReturn:
 	jr z, SeqStep_FileCloseCleanup
 	cpw (xsp + 4), 0x0
 	jr nz, SeqStep_FileCloseCleanup
-	sti16_24 0x01e53c, 0x0026
+	stiw_da 0x01e53c, 0x0026
 
 SeqStep_FileCloseCleanup:
 	ld wa, (xsp + 6)
@@ -3631,7 +3631,7 @@ SeqStep_FileCloseExit:
 	call	(xwa)
 	lda	xsp, (xsp+10)
 	jrl	131
-	sti16_24	0x1e53c, 25
+	stiw_da	0x1e53c, 25
 	ldw	hl, 0xffff
 	jr	119
 	.byte 0xd7
@@ -3709,7 +3709,7 @@ SeqStep_FileCloseExit:
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
 	jr	nz, 11
-	sti16_24	0x1e53c, 17
+	stiw_da	0x1e53c, 17
 	ldw	hl, 0xffff
 	ret
 	lda	xwa, (xsp+8)
@@ -3777,9 +3777,9 @@ SeqStep_FileOpenSetupVtable:
 SeqStep_ByteBlockF245:
 	dec	2, xsp
 	push	xiz
-	ld16_24	wa, 0x1e53c
+	ldw_da	wa, 0x1e53c
 	ld	(xsp+4), wa
-	sti16_24	0x1e53c, 0
+	stiw_da	0x1e53c, 0
 	pushw	228
 	pushw	0x501a
 	ld	xwa, (xsp+14)
@@ -3792,7 +3792,7 @@ SeqStep_ByteBlockF245:
 	push	xiz
 	call	FileClose
 	inc	4, xsp
-	sti16_24	0x1e53c, 21
+	stiw_da	0x1e53c, 21
 	ldw	hl, 0xffff
 	jr	75
 	.byte 0xd2
@@ -3806,7 +3806,7 @@ SeqStep_ByteBlockF245:
 	jr	61
 	ld	wa, (xsp+4)
 	exts	wa
-	st16_24	0x1e53c, wa
+	stw_da	0x1e53c, wa
 	pushw	228
 	pushw	0x501c
 	ld	xwa, (xsp+14)
@@ -3838,7 +3838,7 @@ SeqStep_ByteBlockF245:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	0x1e53c, 17
+	stiw_da	0x1e53c, 17
 	ldw	hl, 17
 	ret
 	ld	xwa, (xde+18)
@@ -3851,7 +3851,7 @@ SeqStep_ByteBlockF245:
 	ld	(xbc), xwa
 	lds	hl, 0
 	ret
-	sti16_24	0x1e53c, 18
+	stiw_da	0x1e53c, 18
 	ldw	hl, 18
 	ret
 	ld	xbc, (xsp+4)
@@ -3861,7 +3861,7 @@ SeqStep_ByteBlockF245:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	0x1e53c, 17
+	stiw_da	0x1e53c, 17
 	ldw	hl, 17
 	ret
 	ld	xwa, (xsp+8)
@@ -3877,7 +3877,7 @@ SeqStep_ByteBlockF245:
 	ret	z
 	ld	a, l
 	exts	wa
-	st16_24	0x1e53c, wa
+	stw_da	0x1e53c, wa
 	ret
 
 SeqStep_FileSeekSetup:
@@ -3889,7 +3889,7 @@ SeqStep_FileSeekSetup:
 	jr nz, SeqStep_FileSeekProcess
 
 SeqStep_FileSeekNoHandle:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	ldw hl, 0x11
 	ret
 
@@ -3958,7 +3958,7 @@ SeqStep_FileSeekUpdate:
 	ret z
 	ld a, l
 	exts wa
-	st16_24 0x01e53c, xwa
+	stw_da 0x01e53c, xwa
 	ret
 
 SeqStep_FileSeekStore:
@@ -3969,7 +3969,7 @@ SeqStep_FileSeekStore:
 	jr nz, SeqStep_FileSeekFinal
 
 SeqStep_FileSeekComplete:
-	sti16_24 0x01e53c, 0x0011
+	stiw_da 0x01e53c, 0x0011
 	ld xhl, 0xffffffff
 	ret
 
@@ -3981,7 +3981,7 @@ SeqStep_FileSeekFinal:
 	ret
 
 SeqStep_FileSeekExit:
-	sti16_24 0x01e53c, 0x0012
+	stiw_da 0x01e53c, 0x0012
 	ld xhl, 0xffffffff
 	ret
 
@@ -4013,9 +4013,9 @@ SeqStep_FileSeekCleanup:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	jr nz, SeqStep_FileTellReturn
-	cpdi16_24 0x1e53c, 13
+	cpw_da 0x1e53c, 13
 	jr nz, SeqStep_FileTellSetup
-	sti16_24 0x01e53c, 0x0000
+	stiw_da 0x01e53c, 0x0000
 	pushw 0xe4
 	pushw 0x5022
 	ld xwa, (xsp + 18)
@@ -4026,7 +4026,7 @@ SeqStep_FileSeekCleanup:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	jr nz, SeqStep_FileTellReturn
-	cpdi16_24 0x1e53c, 13
+	cpw_da 0x1e53c, 13
 	jr nz, SeqStep_FileTellReturn
 	ldw hl, 0xffff
 	jrl SeqStep_FileTellExit
@@ -4051,12 +4051,12 @@ SeqStep_FileTellReturn:
 	push xiz
 	call FileClose
 	inc 8, xsp
-	sti16_24 0x01e53c, 0x0015
+	stiw_da 0x01e53c, 0x0015
 	ldw hl, 0xffff
 	jr SeqStep_FileTellExit
 
 SeqStep_FileTellProcess:
-	sti16_24 0x01e53c, 0x0000
+	stiw_da 0x01e53c, 0x0000
 	pushw 0xe4
 	pushw 0x5026
 	ld xwa, (xsp + 22)
@@ -4087,7 +4087,7 @@ SeqStep_FileTellDone:
 	push xwa
 	calr FileOpenDefault
 	lda xsp, (xsp + 12)
-	sti16_24 0x01e53c, 0x001a
+	stiw_da 0x01e53c, 0x001a
 	ldw hl, 0xffff
 	jr SeqStep_FileTellExit
 
@@ -4127,7 +4127,7 @@ SeqStep_FileTellFinal:
 	ld	xwa, (xiz+26)
 	or	xwa, xwa
 	jr	nz, 9
-	sti16_24	0x1e53c, 13
+	stiw_da	0x1e53c, 13
 	jr	64
 	pushw	0
 	ld	xwa, 64
@@ -4151,7 +4151,7 @@ SeqStep_FileTellFinal:
 	jr	z, 47
 	cp	(xsp+8), 229
 	jr	z, 19
-	sti16_24	0x1e53c, 27
+	stiw_da	0x1e53c, 27
 	push	xiz
 	call	FileClose
 	inc	4, xsp
@@ -4254,7 +4254,7 @@ SeqStep_FileIoReturn:
 	jr ge, SeqStep_FileIoUpdate
 
 SeqStep_FileIoError:
-	cpi8_24 0x03e3e0, 0x00
+	cpib_da 0x03e3e0, 0x00
 	jr z, SeqStep_FileIoCleanup
 	mrdw3 0x9c, 0x12, 0x7f
 
@@ -4286,19 +4286,19 @@ SeqStep_FileIoComplete:
 
 SeqStep_FileIoFinal:
 	incm 1, (xsp + 4)
-	st_dri3b D, 0xf1, 0x1a, 0x02
+	stb_dri D, 0xf1, 0x1a, 0x02
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileIoError
 
 SeqStep_FileIoUpdate:
-	sti8_24 0x03e3e0, 0x00
+	stib_da 0x03e3e0, 0x00
 	or xhl, xhl
 	jr z, SeqStep_FileIoValidate
-	addmi16 (xhl + 18), 0x14
+	addiw_da (xhl + 18), 0x14
 	ld wa, (xhl + 18)
 	bit 15, wa
 	jr z, SeqStep_FileIoStore
-	sti8_24 0x03e3e0, 0x01
+	stib_da 0x03e3e0, 0x01
 
 SeqStep_FileIoStore:
 	ld wa, (xsp + 22)
@@ -4424,7 +4424,7 @@ SeqStep_FileIoSetupResult:
 	ldw wa, 0x14
 	bit 15, wa
 	jr z, SeqStep_FileIoSetFlag
-	sti8_24 0x03e3e0, 0x01
+	stib_da 0x03e3e0, 0x01
 
 SeqStep_FileIoSetFlag:
 	ld xhl, xiz
@@ -4529,7 +4529,7 @@ SeqStep_FileBufferReturn:
 
 SeqStep_FileBufferError:
 	incm 1, (xsp + 4)
-	st_dri3b A, 0xe5, 0x1a, 0x02
+	stb_dri A, 0xe5, 0x1a, 0x02
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileBufferReturn
 
@@ -7168,7 +7168,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 17
 	ld	a, l
 	exts	wa
-	st16_24	0x1e53c, wa
+	stw_da	0x1e53c, wa
 	ld	(xiz+6), wa
 	lds	hl, 0
 	jrl	269
@@ -7389,7 +7389,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 26
 	ld	a, l
 	exts	wa
-	st16_24	0x1e53c, wa
+	stw_da	0x1e53c, wa
 	ld	hl, (xsp+2)
 	jrl	354
 	ld	xwa, (xsp+10)
@@ -7404,7 +7404,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+10)
 	.byte 0xa8
 	ex_ff
-	ldda8	w, 2735
+	ldb_d8	w, 2735
 	ld	xwa, (xwa+30)
 	ld	de, (xwa+38)
 	sub	de, bc
@@ -7459,7 +7459,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xwa+4)
 	cpl	wa
 	.byte 0xd7
-	ld32_24	xbc, 0x149f06
+	ldl_da	xbc, 0x149f06
 	extz	xbc
 	and	xbc, xwa
 	pushw	bc
@@ -7665,7 +7665,7 @@ SeqChan_InitChannelState:
 	jr	z, 15
 	ld	a, l
 	exts	wa
-	st16_24	0x1e53c, wa
+	stw_da	0x1e53c, wa
 	ld	hl, (xsp+2)
 	jrl	442
 	ld	xwa, (xsp+12)
@@ -7735,7 +7735,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xwa+4)
 	cpl	wa
 	.byte 0xd7
-	ld32_24	xbc, 0x169f06
+	ldl_da	xbc, 0x169f06
 	exts	xbc
 	and	xbc, xwa
 	pushw	bc
@@ -8218,15 +8218,15 @@ SeqChan_WriteExtendedPatch:
 	pop	sr
 	.byte 0xbf
 	jr	-19
-	sti16_24	0x1e53c, 18
+	stiw_da	0x1e53c, 18
 	ldw	hl, 0xffff
 	pop	xiz
 	ret
 
 SeqStep_CountValidSectors:
 	push xiz
-	ldi_werp 0xfa, 0
-	sti16_24 0x01e53c, 0x0000
+	ldiw_erp 0xfa, 0
+	stiw_da 0x01e53c, 0x0000
 	lds iz, 0
 	jr SeqStep_CountLoop_Compare
 
@@ -8238,17 +8238,17 @@ SeqStep_CountLoop_Body:
 	inc 6, xsp
 	cps hl, 0
 	jr nz, SeqStep_CountLoop_CheckEnd
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 
 SeqStep_CountLoop_CheckEnd:
-	cpdi16_24 0x1e53c, 0
+	cpw_da 0x1e53c, 0
 	jr nz, SeqStep_CountLoop_ResetWerp
 	ld xwa, (xsp + 8)
 	cpw (xwa + 6), 0x0
 	jr z, SeqStep_CountLoop_IncIz
 
 SeqStep_CountLoop_ResetWerp:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	jr SeqStep_CountLoop_Done
 
 SeqStep_CountLoop_IncIz:
@@ -8261,7 +8261,7 @@ SeqStep_CountLoop_Compare:
 	jr ule, SeqStep_CountLoop_Body
 
 SeqStep_CountLoop_Done:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	pop xiz
 	ret
 
@@ -8292,7 +8292,7 @@ SeqStep_SectorCompareBlock:
 	and	wa, 24
 	cp	wa, bc
 	jr	z, 11
-	sti16_24	0x1e53c, 13
+	stiw_da	0x1e53c, 13
 	ldw	hl, 0xffff
 	ret
 	ld	wa, (xsp+10)
@@ -8605,7 +8605,7 @@ SeqChan_ByteBlockD:
 SeqChan_ByteBlockE:
 	lda	xsp, (xsp-12)
 	pushw	iz
-	sti16_24	0x2271e, 0
+	stiw_da	0x2271e, 0
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa+26)
@@ -8736,7 +8736,7 @@ SeqChan_ByteBlockE:
 SeqChan_ByteBlockF:
 	lda	xsp, (xsp-12)
 	pushw	iz
-	sti16_24	0x2271e, 0
+	stiw_da	0x2271e, 0
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa+26)
@@ -8874,21 +8874,21 @@ FDC_ReturnAndPop:
 
 FDC_StoreDiskType:
 	ld a, (xsp + 4)
-	st8_24 0x03e3e4, a
-	sti16_24 0x03e3e6, 0x0001
-	sti8_24 0x03e3be, 0x00
+	stb_da 0x03e3e4, a
+	stiw_da 0x03e3e6, 0x0001
+	stib_da 0x03e3be, 0x00
 	ret
 
 FDC_ClearDiskChangeStatus:
-	sti16_24	0x3e3e6, 0
-	ld8_24	a, 0x3e3e4
-	st8_24	0x3e3e2, a
+	stiw_da	0x3e3e6, 0
+	ldb_da	a, 0x3e3e4
+	stb_da	0x3e3e2, a
 	ret
-	ld16_24	hl, 0x3e3e6
+	ldw_da	hl, 0x3e3e6
 	ret
 
 FDC_ReadDiskType:
-	ld8_24 l, 0x03e3e4
+	ldb_da l, 0x03e3e4
 	ret
 
 format_FD:
@@ -8925,38 +8925,38 @@ FDC_SetSectorLength:
 	jr z, FDC_SectorLen_0x21
 	cp wa, 0x2f
 	jr nz, FDC_SectorLen_0x24
-	sti16_24 0x01e53c, 0x001f
+	stiw_da 0x01e53c, 0x001f
 	ret
 
 FDC_SectorLen_0x21:
-	sti16_24 0x01e53c, 0x0021
+	stiw_da 0x01e53c, 0x0021
 	ret
 
 FDC_SectorLen_0x06:
-	sti16_24 0x01e53c, 0x0006
+	stiw_da 0x01e53c, 0x0006
 	ret
 
 FDC_SectorLen_0x20:
-	sti16_24 0x01e53c, 0x0020
+	stiw_da 0x01e53c, 0x0020
 	ret
 
 FDC_SectorLen_0x24:
-	sti16_24 0x01e53c, 0x0024
+	stiw_da 0x01e53c, 0x0024
 	ret
 
 FDC_Format2DD_Start:
 	lda xsp, (xsp - 20)
-	push_werp 0xfa
+	pushw_erp 0xfa
 	lds wa, 0
 	calr FDC_SetSectorLength
 	lda_24 xwa, Display_FontPalette_Table_0x21E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_Step2
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
@@ -8967,10 +8967,10 @@ FDC_Format2DD_Step2:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_AllocBuf
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
@@ -9011,10 +9011,10 @@ FDC_Format2DD_WriteBoot:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_WriteFAT1
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9048,10 +9048,10 @@ FDC_Format2DD_WriteFAT1:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_WriteFAT2
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9072,10 +9072,10 @@ FDC_Format2DD_WriteFAT2:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_WriteRoot
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9096,10 +9096,10 @@ FDC_Format2DD_WriteRoot:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_WriteDataSec1
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9133,10 +9133,10 @@ FDC_Format2DD_WriteDataSec1:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_WriteDataSec2
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9157,10 +9157,10 @@ FDC_Format2DD_WriteDataSec2:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_WriteDataSec3
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9181,10 +9181,10 @@ FDC_Format2DD_WriteDataSec3:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_InitTrackLoop
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9216,10 +9216,10 @@ FDC_Format2DD_TrackBody:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_TrackInc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9244,10 +9244,10 @@ FDC_Format2DD_Side1Body:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_Side1Inc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9275,10 +9275,10 @@ FDC_Format2DD_Side1Test:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_FinalTrack
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9300,40 +9300,40 @@ FDC_Format2DD_FinalTrack:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
-	ldfr_berp L, 0xfb
+	ldb_erp L, 0xfb
 	ld xwa, (xsp + 6)
 	push xwa
 	call Free
 	inc 8, xsp
-	cpi_berp 0xfb, 0
+	cpib_erp 0xfb, 0
 	jr nz, FDC_Format2DD_SetSectorAndRet
 	lds hl, 1
 	jr FDC_CmdFrame_Epilogue
 
 FDC_Format2DD_SetSectorAndRet:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
 
 FDC_CmdFrame_Epilogue:
-	pop_werp 0xfa
+	popw_erp 0xfa
 	lda xsp, (xsp + 20)
 	ret
 
 FDC_Format2HD_Start:
 	lda xsp, (xsp - 20)
-	push_werp 0xfa
+	pushw_erp 0xfa
 	lds wa, 0
 	calr FDC_SetSectorLength
 	lda_24 xwa, Display_FontPalette_Table_0x23E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_Step2
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
@@ -9344,10 +9344,10 @@ FDC_Format2HD_Step2:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_AllocBuf
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
@@ -9388,10 +9388,10 @@ FDC_Format2HD_WriteBoot:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_WriteFAT1
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9425,10 +9425,10 @@ FDC_Format2HD_WriteFAT1:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_InitTrackLoop
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9453,10 +9453,10 @@ FDC_Format2HD_TrackBody:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_TrackInc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9495,10 +9495,10 @@ FDC_Format2HD_TrackTest:
 	push xwa
 	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_WriteFAT2
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9523,10 +9523,10 @@ FDC_Format2HD_Side2Body:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_Side2Inc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9548,10 +9548,10 @@ FDC_Format2HD_Side2Test:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_InitSide1Loop
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9576,10 +9576,10 @@ FDC_Format2HD_Side1Body:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_Side1Inc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9607,10 +9607,10 @@ FDC_Format2HD_Side1Test:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldfr_berp L, 0xfb
-	cpi_berp 0xfb, 0
+	ldb_erp L, 0xfb
+	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_FinalTrack
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld xwa, (xsp + 2)
@@ -9632,30 +9632,30 @@ FDC_Format2HD_FinalTrack:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
-	ldfr_berp L, 0xfb
+	ldb_erp L, 0xfb
 	ld xwa, (xsp + 6)
 	push xwa
 	call Free
 	inc 8, xsp
-	cpi_berp 0xfb, 0
+	cpib_erp 0xfb, 0
 	jr nz, FDC_Format2HD_SetSectorAndRet
 	lds hl, 1
 	jr FdcOp_Epilogue20
 
 FDC_Format2HD_SetSectorAndRet:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
 
 FdcOp_Epilogue20:
-	pop_werp 0xfa
+	popw_erp 0xfa
 	lda xsp, (xsp + 20)
 	ret
 
 GetMediaType:
 	lda xsp, (xsp - 20)
-	push_werp 0xfa
+	pushw_erp 0xfa
 	call Reset_Floppy_Disk_Controller
 	pushw 0x400
 	call Malloc
@@ -9664,13 +9664,13 @@ GetMediaType:
 	ld xwa, xhl
 	or xwa, xwa
 	jr nz, GetMediaType_SetupReadCmd
-	ldi_berp 0xfb, 0
-	ldto_berp A, 0xfb
+	ldib_erp 0xfb, 0
+	stb_erp A, 0xfb
 	extz wa
 	pushw wa
 	calr FDC_StoreDiskType
 	inc 2, xsp
-	ldto_berp L, 0xfb
+	stb_erp L, 0xfb
 	jrl GetMediaType_ReturnAndCleanup
 
 GetMediaType_SetupReadCmd:
@@ -9683,11 +9683,11 @@ GetMediaType_SetupReadCmd:
 	ld xwa, (xsp + 2)
 	ld (xsp + 18), xwa
 	stdi16 0x8a10, 0xffff
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
 	jr nz, GetMediaType_TryRecalib
-	ldi_berp 0xfb, 1
+	ldib_erp 0xfb, 1
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryRecalib:
@@ -9697,7 +9697,7 @@ GetMediaType_TryRecalib:
 	inc 4, xsp
 	cps hl, 0
 	jr z, GetMediaType_TryFormat2HD
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryFormat2HD:
@@ -9707,7 +9707,7 @@ GetMediaType_TryFormat2HD:
 	inc 4, xsp
 	cps hl, 0
 	jr z, GetMediaType_ReadSector
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 	jrl GetMediaType_Epilogue
 
 GetMediaType_ReadSector:
@@ -9726,7 +9726,7 @@ GetMediaType_ReadSector:
 	ld xwa, (xsp + 2)
 	cp (xwa + 2), 0xff
 	jr nz, GetMediaType_Type3Check
-	ldi_berp 0xfb, 3
+	ldib_erp 0xfb, 3
 	jr GetMediaType_Epilogue
 
 GetMediaType_Type3Check:
@@ -9739,11 +9739,11 @@ GetMediaType_Type3Check:
 	ld xwa, (xsp + 2)
 	cp (xwa + 2), 0xff
 	jr nz, GetMediaType_Invalid
-	ldi_berp 0xfb, 3
+	ldib_erp 0xfb, 3
 	jr GetMediaType_Epilogue
 
 GetMediaType_Invalid:
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 	jr GetMediaType_Epilogue
 
 GetMediaType_Try2DDHeader:
@@ -9753,7 +9753,7 @@ GetMediaType_Try2DDHeader:
 	inc 4, xsp
 	cps hl, 0
 	jr z, GetMediaType_Read2DDSector
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 	jr GetMediaType_Epilogue
 
 GetMediaType_Read2DDSector:
@@ -9772,36 +9772,36 @@ GetMediaType_Read2DDSector:
 	ld xwa, (xsp + 2)
 	cp (xwa + 2), 0xff
 	jr nz, GetMediaType_F9Check
-	ldi_berp 0xfb, 6
+	ldib_erp 0xfb, 6
 	jr GetMediaType_Epilogue
 
 GetMediaType_F9Check:
 	ld xwa, (xsp + 2)
 	cp (xwa), 0xf9
 	jr nz, GetMediaType_CheckExtraFormat
-	ldi_berp 0xfb, 2
+	ldib_erp 0xfb, 2
 	jr GetMediaType_Epilogue
 
 GetMediaType_CheckExtraFormat:
 	call FDC_DetectDiskFormat
 	cps hl, 0
 	jr nz, GetMediaType_Epilogue
-	ldi_berp 0xfb, 5
+	ldib_erp 0xfb, 5
 
 GetMediaType_Epilogue:
 	stdi16 0x8a10, 0
 	ld xwa, (xsp + 2)
 	push xwa
 	call Free
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	pushw wa
 	calr FDC_StoreDiskType
 	inc 6, xsp
-	ldto_berp L, 0xfb
+	stb_erp L, 0xfb
 
 GetMediaType_ReturnAndCleanup:
-	pop_werp 0xfa
+	popw_erp 0xfa
 	lda xsp, (xsp + 20)
 	ret
 
@@ -9819,9 +9819,9 @@ GetDiskFreeSpace:
 	jr gt, FileIO_ReadFreeSpaceViaFAT
 	add wa, wa
 	lda_24 xix, Display_FontPalette_Table_0x2AC
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GetDiskFreeSpace_JumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GetDiskFreeSpace_JumpTable:
 	lds	hl, 0
@@ -9875,9 +9875,9 @@ GetVolumeLabel:
 	jr gt, FileIO_ReadVolumeLabelEntry
 	add wa, wa
 	lda_24 xix, Display_FontPalette_Table_0x2C0
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GetVolumeLabel_JumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GetVolumeLabel_JumpTable:
 	lds32	xhl, 0
@@ -9928,7 +9928,7 @@ GetVolumeLabel_ScanEntry:
 	lda_24 xwa, 0x022720
 	push xwa
 	call Mem_Copy
-	sti8_24 0x02272b, 0x00
+	stib_da 0x02272b, 0x00
 	push xiz
 	call FileClose
 	lda xsp, (xsp + 14)
@@ -10027,7 +10027,7 @@ FileIO_ParseLoop_CheckChar:
 	cp (xwa), 0x5c
 	jr nz, FileIO_ParseLoop_CopyChar
 	lda xwa, (xsp + 4)
-	stib_dri 0x07, 0xe0, 0xe8, 0x00
+	stib_ind 0x07, 0xe0, 0xe8, 0x00
 	ld xwa, (xsp + 18)
 	cp (xwa), 0x0
 	jr z, FileIO_ParseLoop_AppendSlash
@@ -10066,7 +10066,7 @@ FileIO_ParseLoop_CopyChar:
 	lda xbc, (xsp + 4)
 	ld xwa, (xiz)
 	ld a, (xwa)
-	lda_dri3 XBC, 0x07, 0xe4, 0xe8
+	lda_dri XBC, 0x07, 0xe4, 0xe8
 	inc 1, de
 	cp de, 0xc
 	jr le, FileIO_ParseLoop_Advance
@@ -10082,7 +10082,7 @@ _findfirst:
 	push xiz
 	ld (xsp + 16), xbc
 	ld (xsp + 20), xwa
-	cpi8_24 0x03e3e4, 0x05
+	cpib_da 0x03e3e4, 0x05
 	jr nz, FindFirst_AllocHandle
 	ld xwa, (xsp + 20)
 	ld xbc, (xsp + 16)
@@ -10206,7 +10206,7 @@ FdcFile_Epilogue20:
 _findclose:
 	push xiz
 	ld xiz, xwa
-	cpi8_24 0x03e3e4, 0x05
+	cpib_da 0x03e3e4, 0x05
 	jr nz, FindClose_CheckNull
 	ld xwa, xiz
 	calr FileIO_ValidateHandle
@@ -10242,7 +10242,7 @@ _findnext:
 	lda xsp, (xsp - 64)
 	push xiz
 	ld xiz, xbc
-	cpi8_24 0x03e3e4, 0x05
+	cpib_da 0x03e3e4, 0x05
 	jr nz, FindNext_CheckNull
 	ld xbc, xiz
 	calr FileIO_ReadNextDirEntry
@@ -10363,7 +10363,7 @@ WildMatch_ScanLoop:
 	jr WildMatch_CheckEnd
 
 WildMatch_CopyChar:
-	ld_spib A, 0xf8
+	ldb_spi A, 0xf8
 	lda_dpi XBC, 0xe4
 
 WildMatch_CheckEnd:
@@ -10377,14 +10377,14 @@ WildMatch_FillName:
 
 WildMatch_NameLoop:
 	lda xwa, (xsp + 4)
-	cp_srib_im 0x07, 0xe0, 0xe4, 0x2a
+	cpib_sri 0x07, 0xe0, 0xe4, 0x2a
 	jr nz, WildMatch_NameNext
 	cp bc, 0x8
 	jr ge, WildMatch_NameNext
 
 WildMatch_StarFillName:
 	lda xwa, (xsp + 4)
-	stib_dri 0x07, 0xe0, 0xe4, 0x3f
+	stib_ind 0x07, 0xe0, 0xe4, 0x3f
 	inc 1, bc
 	cp bc, 0x8
 	jr lt, WildMatch_StarFillName
@@ -10401,14 +10401,14 @@ WildMatch_FillExt:
 
 WildMatch_ExtLoop:
 	lda xwa, (xsp + 4)
-	cp_srib_im 0x07, 0xe0, 0xe4, 0x2a
+	cpib_sri 0x07, 0xe0, 0xe4, 0x2a
 	jr nz, WildMatch_ExtNext
 	cp bc, 0xb
 	jr ge, WildMatch_ExtNext
 
 WildMatch_StarFillExt:
 	lda xwa, (xsp + 4)
-	stib_dri 0x07, 0xe0, 0xe4, 0x3f
+	stib_ind 0x07, 0xe0, 0xe4, 0x3f
 	inc 1, bc
 	cp bc, 0xb
 	jr lt, WildMatch_StarFillExt
@@ -10450,7 +10450,7 @@ FindFirst_SndTable:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xbc
-	sti16_24 0x02272c, 0x0000
+	stiw_da 0x02272c, 0x0000
 	lda_24 xwa, 0x02272c
 	ld xiz, xwa
 	call FileIO_ReadAllDirEntries
@@ -10499,7 +10499,7 @@ FileIO_ReadDirEntry_Body:
 	ld wa, (xiz)
 	muls wa, 0x2c
 	lda_24 xbc, 0x0235a8
-	cp_sriw_im 0x07, 0xe4, 0xe0, 0xfe, 0xfe
+	cpiw_sri 0x07, 0xe4, 0xe0, 0xfe, 0xfe
 	jr z, FileIO_ReadDirEntry_End
 	pushw 0x14
 	ld wa, (xiz)
@@ -10518,7 +10518,7 @@ FileIO_ReadDirEntry_Body:
 	ld wa, (xiz)
 	muls wa, 0x2c
 	lda_24 xbc, 0x0235a6
-	ld_sriw3 BC, 0x07, 0xe4, 0xe0
+	ldw_sri BC, 0x07, 0xe4, 0xe0
 	extz xbc
 	ld xwa, (xsp + 4)
 	ld (xwa + 2), xbc
@@ -10541,7 +10541,7 @@ SndTable_ByteBlock_ReadOps:
 	push	xsp
 	nop
 	jr	nz, 48
-	ld32_24	xbc, 0x2357a
+	ldl_da	xbc, 0x2357a
 	push	xbc
 	pushw	1024
 	pushw	1
@@ -10552,7 +10552,7 @@ SndTable_ByteBlock_ReadOps:
 	jr	lt, 3
 	lds	hl, 0
 	ret
-	ld32_24	xwa, 0x2357a
+	ldl_da	xwa, 0x2357a
 	ld	wa, (xwa+6)
 	and	wa, 0x7fff
 	jr	nz, 3
@@ -10573,21 +10573,21 @@ SndTable_ByteBlock_ReadOps:
 	ret
 	dec	2, xsp
 	push	xiz
-	sti8_24	0x2357e, 1
-	ld32_24	xwa, 0x3e3e8
-	st32_24	0x2272e, xwa
-	ld32_24	xwa, 0x3e3ee
+	stib_da	0x2357e, 1
+	ldl_da	xwa, 0x3e3e8
+	stl_da	0x2272e, xwa
+	ldl_da	xwa, 0x3e3ee
 	ldw	(xwa+2), 0
-	ld32_24	xwa, 0x3e3ee
+	ldl_da	xwa, 0x3e3ee
 	.byte 0xf3, 0xe1
 	ei	4
 	push	sr
 	nop
 	nop
-	ld32_24	xbc, 0x3e3ee
+	ldl_da	xbc, 0x3e3ee
 	lds	wa, 2
 	call	TaskMsg_Send
-	ld32_24	xwa, 0x3e3ee
+	ldl_da	xwa, 0x3e3ee
 	lda	xwa, (xwa+1028)
 	ld	xbc, xwa
 	lds	wa, 2
@@ -10646,13 +10646,13 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0x04
 	ld	wa, (xsp+4)
 	extz	xwa
-	ld32_24	xbc, 0x2272e
+	ldl_da	xbc, 0x2272e
 	sub	xbc, xwa
 	cp	xbc, 1024
 	jr	ugt, 14
 	ld	wa, (xsp+4)
 	extz	xwa
-	ld32_24	xbc, 0x2272e
+	ldl_da	xbc, 0x2272e
 	sub	xbc, xwa
 	ld	(xiz), bc
 	.byte 0xbe
@@ -10675,7 +10675,7 @@ SndTable_ByteBlock_ReadOps:
 	ldb	l, 2
 	.byte 0xf0
 	jrl	ule, -134
-	sti8_24	0x2357e, 0
+	stib_da	0x2357e, 0
 	call	Show_ScreenGroup_Entry_0x7A
 	pop	xiz
 	inc	2, xsp
@@ -10692,53 +10692,53 @@ SndTable_ByteBlock_ReadOps:
 
 TaskBuf_ReadNextByte:
 	pushw iz
-	cpi8_24 0x02358a, 0x01
+	cpib_da 0x02358a, 0x01
 	jrl nz, TaskBuf_Error
-	cpdi16_24 0x23580, 0
+	cpw_da 0x23580, 0
 	jr nz, TaskBuf_CheckPendingData
 	lds wa, 3
 	call TaskMsg_Receive
-	st32_24 0x023582, xhl
+	stl_da 0x023582, xhl
 	ld wa, (xhl)
-	st16_24 0x023580, xwa
-	ld32_24 xwa, 0x023582
+	stw_da 0x023580, xwa
+	ldl_da xwa, 0x023582
 	inc 4, xwa
-	st32_24 0x023586, xwa
+	stl_da 0x023586, xwa
 
 TaskBuf_CheckPendingData:
-	ld32_24 xwa, 0x023582
+	ldl_da xwa, 0x023582
 	cpw (xwa + 2), 0x0
 	jr z, TaskBuf_EmptyAndReturn
-	sti8_24 0x02358a, 0x02
-	ld32_24 xwa, 0x023582
+	stib_da 0x02358a, 0x02
+	ldl_da xwa, 0x023582
 	ld hl, (xwa + 2)
 	jr TaskBuf_PopIzRet
 
 TaskBuf_EmptyAndReturn:
-	cpdi16_24 0x23580, 0
+	cpw_da 0x23580, 0
 	jr nz, TaskBuf_ReadAndDecrement
-	sti8_24 0x02358a, 0x02
+	stib_da 0x02358a, 0x02
 	ldw hl, 0xffff
 	jr TaskBuf_PopIzRet
 
 TaskBuf_ReadAndDecrement:
-	ld32_24 xbc, 0x023586
+	ldl_da xbc, 0x023586
 	lds32 xwa, 1
-	addm32_24 0x023586, xwa
+	addl_da 0x023586, xwa
 	ld a, (xbc)
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	subdi16_24 0x23580, 1
 	jr nz, TaskBuf_ReturnByte
-	ld32_24 xwa, 0x023582
+	ldl_da xwa, 0x023582
 	cpw (xwa), 0x400
 	jr z, TaskBuf_SendBufferFull
-	sti8_24 0x02358a, 0x02
+	stib_da 0x02358a, 0x02
 	ld hl, iz
 	jr TaskBuf_PopIzRet
 
 TaskBuf_SendBufferFull:
-	ld32_24 xbc, 0x023582
+	ldl_da xbc, 0x023582
 	lds wa, 2
 	call TaskMsg_Send
 
@@ -10766,20 +10766,20 @@ FDC_DrainQueue2_Loop:
 	jr nz, FDC_DrainQueue2_Loop
 
 FDC_DrainQueue2_Done:
-	ld32_24 xwa, 0x023582
+	ldl_da xwa, 0x023582
 	ldw (xwa + 2), 0xffff
-	ld32_24 xbc, 0x023582
+	ldl_da xbc, 0x023582
 	lds wa, 2
 	call TaskMsg_Send
-	cpi8_24 0x02357e, 0x00
+	cpib_da 0x02357e, 0x00
 	jr z, FDC_DrainQueue3_Start
 
 FDC_WaitQueueEmpty_Loop:
-	cpi8_24 0x02357e, 0x00
+	cpib_da 0x02357e, 0x00
 	jr nz, FDC_WaitQueueEmpty_Loop
 
 FDC_DrainQueue3_Start:
-	sti8_24 0x02358a, 0x02
+	stib_da 0x02358a, 0x02
 	lds wa, 3
 	call TaskMsg_TryReceive
 	or xhl, xhl
@@ -10804,37 +10804,37 @@ FDC_DrainQueue2B_Loop:
 	jr nz, FDC_DrainQueue2B_Loop
 
 FDC_DrainCloseFile:
-	cpi8_24 0x03e3ec, 0x00
+	cpib_da 0x03e3ec, 0x00
 	ret nz
-	ld32_24 xwa, 0x02357a
+	ldl_da xwa, 0x02357a
 	push xwa
 	call FileClose
 	inc 4, xsp
 	ret
 
 SndTable_LookupA:
-	sti8_24 0x03e3ec, 0x00
-	sti16_24 0x023580, 0x0000
-	sti8_24 0x02358a, 0x01
+	stib_da 0x03e3ec, 0x00
+	stiw_da 0x023580, 0x0000
+	stib_da 0x02358a, 0x01
 	lda_24 xbc, 0x022d72
-	st32_24 0x03e3ee, xbc
+	stl_da 0x03e3ee, xbc
 	pushw 0xe4
 	pushw 0x5132
 	push xwa
 	call FileOpen
 	inc 8, xsp
-	st32_24 0x02357a, xhl
-	ld32_24 xwa, 0x02357a
+	stl_da 0x02357a, xhl
+	ldl_da xwa, 0x02357a
 	or xwa, xwa
 	jr nz, SndTable_LookupA_GotFile
-	sti8_24 0x02358a, 0x02
+	stib_da 0x02358a, 0x02
 	ldw hl, 0xffff
 	ret
 
 SndTable_LookupA_GotFile:
-	ld32_24 xwa, 0x02357a
+	ldl_da xwa, 0x02357a
 	ld xwa, (xwa + 71)
-	st32_24 0x03e3e8, xwa
+	stl_da 0x03e3e8, xwa
 	lds wa, 2
 	call Show_ScreenGroup
 	lds hl, 0
@@ -10844,7 +10844,7 @@ SndTable_CalcSectorPosition:
 	ld hl, wa
 	extz xhl
 	div hl, 0x9
-	ldto_werp HL, 0xee
+	stw_erp HL, 0xee
 	inc 1, hl
 	ld (xbc), hl
 	ld bc, wa
@@ -10892,13 +10892,13 @@ FDC_ExecuteSectorCommand:
 FDC_SectorCmd_ByteBlock:
 	push	xiz
 	ld	xiz, xwa
-	ld16_24	wa, 0x2358c
+	ldw_da	wa, 0x2358c
 	ld	xbc, xiz
 	calr	65445
 	incdi16_24	1, 0x2358c
 	cps	hl, 0
 	jr	nz, 22
-	ld16_24	de, 0x2358c
+	ldw_da	de, 0x2358c
 	lda	xwa, (xiz+512)
 	ld	xbc, xwa
 	ld	wa, de
@@ -10912,37 +10912,37 @@ SndTable_LookupB:
 
 SndTable_LookupC:
 	calr FDC_DrainQueuesAndReset
-	sti8_24 0x03e3ec, 0x00
+	stib_da 0x03e3ec, 0x00
 	jrl FDC_RecalibrateCommand
 
 SndTable_LookupD_CalcAddr:
 	ld bc, wa
 	muls bc, 0x2c
 	lda_24 xde, 0x0235a8
-	ld_sriw3 BC, 0x07, 0xe8, 0xe4
-	st16_24 0x02358c, xbc
+	ldw_sri BC, 0x07, 0xe8, 0xe4
+	stw_da 0x02358c, xbc
 	muls wa, 0x2c
 	lda_24 xbc, 0x0235a6
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
-	st16_24 0x02474e, xwa
-	ld16_24 xwa, 0x02474e
+	ldw_sri WA, 0x07, 0xe4, 0xe0
+	stw_da 0x02474e, xwa
+	ldw_da xwa, 0x02474e
 	extz xwa
 	sll xwa, 9
-	st32_24 0x03e3e8, xwa
+	stl_da 0x03e3e8, xwa
 	lds hl, 0
 	ret
 
 SndTable_LookupD:
-	sti8_24 0x03e3ec, 0x01
-	sti16_24 0x023580, 0x0000
-	sti8_24 0x02358a, 0x01
+	stib_da 0x03e3ec, 0x01
+	stiw_da 0x023580, 0x0000
+	stib_da 0x02358a, 0x01
 	lda_24 xbc, 0x022d72
-	st32_24 0x03e3ee, xbc
+	stl_da 0x03e3ee, xbc
 	calr SndTable_LookupD_CalcAddr
 	cps l, 0
 	jr z, SndTable_LookupD_ShowScreen
-	sti8_24 0x02358a, 0x02
-	sti8_24 0x03e3ec, 0x00
+	stib_da 0x02358a, 0x02
+	stib_da 0x03e3ec, 0x00
 	ldw hl, 0xffff
 	ret
 
@@ -11062,11 +11062,11 @@ FileIO_ReadDir_SectorLoop:
 	ld xbc, xwa
 	ld wa, de
 	calr FDC_ExecuteSectorCommand
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	calr FDC_RecalibrateCommand
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr z, FileIO_ReadDir_NextSector
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	jrl FileIO_ReadDir_Return
 
 FileIO_ReadDir_NextSector:
@@ -11083,7 +11083,7 @@ FileIO_ReadDir_CopyLoop:
 	ld wa, iz
 	muls wa, 0x2c
 	lda_24 xbc, 0x0235a8
-	cp_sriw_im 0x07, 0xe4, 0xe0, 0xfe, 0xfe
+	cpiw_sri 0x07, 0xe4, 0xe0, 0xfe, 0xfe
 	jr z, FileIO_FillRemainingEntries
 	pushw 0x14
 	ld wa, iz
@@ -11105,7 +11105,7 @@ FileIO_ReadDir_CopyLoop:
 	jr lt, FileIO_ReadDir_CopyLoop
 
 FileIO_FillRemainingEntries:
-	st16_24 0x024750, xiz
+	stw_da 0x024750, xiz
 	cp iz, 0x50
 	jr ge, FileIO_ReadDir_GetRetVal
 
@@ -11125,7 +11125,7 @@ FileIO_FillRemaining_Loop:
 	jr lt, FileIO_FillRemaining_Loop
 
 FileIO_ReadDir_GetRetVal:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 FileIO_ReadDir_Return:
 	pop xiz
@@ -11221,7 +11221,7 @@ Seq_DispatcherTick_Process:
 	call Rhythm_CompareAndTrigger
 	anddi8 0x32f4, 159
 	call AccTick_Main
-	ldda8 a, 0x32f4
+	ldb_d8 a, 0x32f4
 	and a, 0x60
 	call Rhythm_SaveState
 	call Seq_RhythmProcessor
@@ -11234,22 +11234,22 @@ Seq_DispatcherTickReturn:
 	ret
 
 SeqTick_ReadControlState:
-	ldda8 a, 0xfc5a
-	stda8 0x32f5, a
-	ldda8 a, 0xfc5b
+	ldb_d8 a, 0xfc5a
+	stb_d8 0x32f5, a
+	ldb_d8 a, 0xfc5b
 	and a, 0x7f
 	and a, 0x7
-	stda8 0x32f7, a
+	stb_d8 0x32f7, a
 	calr VoiceParam_ClampAndStore
 	nop
 	nop
 	nop
 	nop
-	ldda8 a, 0xfc5d
+	ldb_d8 a, 0xfc5d
 	or a, 0xe0
 	srl a, 5
-	stda8 0x32f9, a
-	ldda8 w, 0xfc5f
+	stb_d8 0x32f9, a
+	ldb_d8 w, 0xfc5f
 	xor a, a
 	bit 6, w
 	jr z, SeqCtl_CheckBit6
@@ -11261,7 +11261,7 @@ SeqCtl_CheckBit6:
 	or a, 0x2
 
 SeqCtl_CheckBit7:
-	stda8 0x32fb, a
+	stb_d8 0x32fb, a
 	xor a, a
 	bit 4, w
 	jr z, SeqCtl_CheckBit4
@@ -11273,7 +11273,7 @@ SeqCtl_CheckBit4:
 	or a, 0x2
 
 SeqCtl_CheckBit5:
-	stda8 0x32fd, a
+	stb_d8 0x32fd, a
 	xor a, a
 	bit 2, w
 	jr z, SeqCtl_CheckBit2
@@ -11285,42 +11285,42 @@ SeqCtl_CheckBit2:
 	or a, 0x2
 
 SeqCtl_CheckBit3:
-	ldda8 w, 0xfc60
+	ldb_d8 w, 0xfc60
 	bit 2, w
 	jr z, SeqCtl_StorePedalFlags
 	or a, 0x4
 
 SeqCtl_StorePedalFlags:
-	stda8 0x32ff, a
-	ldda8 a, 0xfd99
+	stb_d8 0x32ff, a
+	ldb_d8 a, 0xfd99
 	and a, 0x1
-	stda8 0x3301, a
-	ldda8 a, 0xfc5e
+	stb_d8 0x3301, a
+	ldb_d8 a, 0xfc5e
 	and a, 0x10
 	srl a, 4
 	ldb a, 0x0
-	stda8 0x3303, a
-	ldda8 a, 0xfc61
+	stb_d8 0x3303, a
+	ldb_d8 a, 0xfc61
 	and a, 0x30
 	srl a, 4
-	stda8 0x3305, a
+	stb_d8 0x3305, a
 	xor a, a
 	bitda 2, 0xfdad
 	jr nz, SeqCtl_StoreKeyMask
 	or a, 0x3f
 
 SeqCtl_StoreKeyMask:
-	stda8 0x3307, a
+	stb_d8 0x3307, a
 	ret
 
 VoiceParam_ClampAndStore:
-	ldda8 l, 0x32f5
-	ldda8 h, 0x32f7
+	ldb_d8 l, 0x32f5
+	ldb_d8 h, 0x32f7
 	calr VoiceParam_ClampAndValidate
-	stda8 0x32f5, l
+	stb_d8 0x32f5, l
 	and h, 0x7f
 	and h, 0x7
-	stda8 0x32f7, h
+	stb_d8 0x32f7, h
 	ret
 
 VoiceParam_ClampAndValidate:
@@ -11349,7 +11349,7 @@ VoiceParam_Clamp_LookupTable:
 	sla l, 1
 	and h, 0x7f
 	and h, 0x7
-	ld_sriw3 HL, 0x07, 0xe0, 0xec
+	ldw_sri HL, 0x07, 0xe0, 0xec
 
 TableLoad_Return:
 	ret
@@ -11371,7 +11371,7 @@ Rhythm_QueuePartChangeEvent:
 
 Seq_ReadTempoLookup:
 	xor xhl, xhl
-	ldda16 xwa, 1033
+	ldw_d16 xwa, 1033
 	ld l, a
 	add xhl, Display_FontPalette_Table_0x1DBF
 	ld a, (xhl)
@@ -11379,14 +11379,14 @@ Seq_ReadTempoLookup:
 	ret
 
 Seq_ProcessAllInputState:
-	ldda8 a, 0x3283
+	ldb_d8 a, 0x3283
 	and a, 0xfe
 	bitda 2, 1054
 	jr z, Seq_InputState_StoreFlag
 	or a, 0x1
 
 Seq_InputState_StoreFlag:
-	stda8 0x3283, a
+	stb_d8 0x3283, a
 	calr AccKey_ScanAndSetDirty
 	calr AccState_ReadAccompParams
 	calr AudioMode_CheckAndUpdateStereo
@@ -11396,12 +11396,12 @@ Seq_InputState_StoreFlag:
 	calr AudioMode_CopyAccentFlags
 	calr AccPedal_SetFlag13155
 	xor xhl, xhl
-	ldda8 l, 0x3280
+	ldb_d8 l, 0x3280
 	sla l, 1
 	add xhl, Display_FontPalette_Table_0x1D46
 	ld bc, (xhl)
 	xor hl, hl
-	ldda8 l, 0x327f
+	ldb_d8 l, 0x327f
 	add bc, hl
 	stda16 0x327d, xbc
 	stdi8 0x32e9, 24
@@ -11462,30 +11462,30 @@ AccKey_ScanDone:
 	ret
 
 AccChord_ReadAndStoreKeys:
-	ldda8 a, 0xcee0
-	stda8 0x32d9, a
-	ldda8 a, 0xcedf
-	stda8 0x32d8, a
-	ldda8 a, 0xcee1
-	stda8 0x32da, a
-	ldda8 a, 0xcede
-	stda8 0x32d7, a
+	ldb_d8 a, 0xcee0
+	stb_d8 0x32d9, a
+	ldb_d8 a, 0xcedf
+	stb_d8 0x32d8, a
+	ldb_d8 a, 0xcee1
+	stb_d8 0x32da, a
+	ldb_d8 a, 0xcede
+	stb_d8 0x32d7, a
 	cpdi8 8968, 0
 	jr z, AccChord_CheckKeyOverride
-	ldda8 a, 8962
-	stda8 0x32d9, a
-	ldda8 a, 8960
-	stda8 0x32d8, a
-	ldda8 a, 8964
-	stda8 0x32da, a
-	ldda8 a, 8966
-	stda8 0x32d7, a
+	ldb_d8 a, 8962
+	stb_d8 0x32d9, a
+	ldb_d8 a, 8960
+	stb_d8 0x32d8, a
+	ldb_d8 a, 8964
+	stb_d8 0x32da, a
+	ldb_d8 a, 8966
+	stb_d8 0x32d7, a
 
 AccChord_CheckKeyOverride:
 	bitda 1, 0x32d7
 	jr nz, AccChord_CheckUIState
-	ldda8 a, 0x32d9
-	stda8 0x32da, a
+	ldb_d8 a, 0x32d9
+	stb_d8 0x32da, a
 
 AccChord_CheckUIState:
 	cpdi8 0x8d34, 14
@@ -11496,7 +11496,7 @@ AccChord_CheckUIState:
 	jr nz, AccChord_SetDefaultKeys
 
 AccChord_CheckKeyFlags:
-	ldda8 a, 1054
+	ldb_d8 a, 1054
 	and a, 0x18
 	jr nz, AccChord_CheckUIStateExit
 
@@ -11510,61 +11510,61 @@ AccChord_SetDefaultKeys:
 	stdi8 0x8d42, 5
 
 AccChord_ReadChannelKeys:
-	ldda8 a, 0x34e9
+	ldb_d8 a, 0x34e9
 	and a, 0xf
 	inc 1, a
-	stda8 0x32d9, a
-	stda8 0x8d40, a
-	stda8 0x32da, a
+	stb_d8 0x32d9, a
+	stb_d8 0x8d40, a
+	stb_d8 0x32da, a
 
 AccChord_CheckUIStateExit:
 	cpdi8 0x8d34, 14
 	jr z, AccChord_CheckModeAndUpdate
 	cpdi8 0x32f1, 14
 	jr nz, AccChord_CheckModeAndUpdate
-	ldda8 a, 0xcedf
-	stda8 0x8d42, a
-	ldda8 a, 0xcee0
-	stda8 0x8d40, a
+	ldb_d8 a, 0xcedf
+	stb_d8 0x8d42, a
+	ldb_d8 a, 0xcee0
+	stb_d8 0x8d40, a
 	calr AccDisplay_RefreshIfDiskActive
 
 AccChord_CheckModeAndUpdate:
-	ldda8 a, 0x3314
+	ldb_d8 a, 0x3314
 	orda8 a, 0x3315
 	and a, 0x3f
 	jrl z, AccChord_ReadKeysRet
-	ldda8 a, 0x32d8
+	ldb_d8 a, 0x32d8
 	cps a, 0
 	jr nz, AccChord_ReadKeysRet
-	ldda8 a, 0x32dc
+	ldb_d8 a, 0x32dc
 	cpda8 a, 0x32d8
 	jr z, AccChord_ReadKeysRet
-	stda8 0x32d8, a
-	stda8 0xcedf, a
-	stda8 0x8d42, a
-	stda8 8960, a
-	ldda8 a, 0x32dd
-	stda8 0x32d9, a
-	stda8 0xcee0, a
-	stda8 0x8d40, a
-	stda8 8962, a
-	ldda8 a, 0x32de
-	stda8 0x32da, a
-	stda8 0xcee1, a
-	stda8 0x8d44, a
-	stda8 8964, a
+	stb_d8 0x32d8, a
+	stb_d8 0xcedf, a
+	stb_d8 0x8d42, a
+	stb_d8 8960, a
+	ldb_d8 a, 0x32dd
+	stb_d8 0x32d9, a
+	stb_d8 0xcee0, a
+	stb_d8 0x8d40, a
+	stb_d8 8962, a
+	ldb_d8 a, 0x32de
+	stb_d8 0x32da, a
+	stb_d8 0xcee1, a
+	stb_d8 0x8d44, a
+	stb_d8 8964, a
 	cpda8 a, 0x32dd
 	jr nz, AccChord_CompareNoteC
 	stdi8 0x8d44, 0
 
 AccChord_CompareNoteC:
-	ldda8 a, 0x32db
-	stda8 0x32d7, a
-	stda8 0xcede, a
-	stda8 8966, a
+	ldb_d8 a, 0x32db
+	stb_d8 0x32d7, a
+	stb_d8 0xcede, a
+	stb_d8 8966, a
 	call Voice_InitSlotData
 	call Voice_FindAndAllocBestMatch
-	ldda8 a, 0xfc5d
+	ldb_d8 a, 0xfc5d
 	and a, 0x7
 	cps a, 0
 	jr z, AccChord_ReadKeysRet
@@ -11578,7 +11578,7 @@ AccChord_ReadKeysRet:
 
 AccDisplay_RefreshIfDiskActive:
 	push xwa
-	ldda8 a, 0xfc5d
+	ldb_d8 a, 0xfc5d
 	and a, 0x7
 	cps a, 0
 	jr z, AccDisplay_RefreshDone
@@ -11591,11 +11591,11 @@ AccDisplay_RefreshDone:
 AccState_ReadAccompParams:
 	ldb a, 0x0
 	ei 6
-	stda8 1124, a
-	ldda8 a, 1046
-	stda8 0x3280, a
-	ldda8 a, 1076
-	stda8 0x32b4, a
-	ldda8 a, 1077
-	stda8 0x32b3, a
-	ldda8 a, 1045
+	stb_d8 1124, a
+	ldb_d8 a, 1046
+	stb_d8 0x3280, a
+	ldb_d8 a, 1076
+	stb_d8 0x32b4, a
+	ldb_d8 a, 1077
+	stb_d8 0x32b3, a
+	ldb_d8 a, 1045

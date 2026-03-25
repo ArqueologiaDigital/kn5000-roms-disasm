@@ -38,27 +38,27 @@
 ; Exit: All handlers called if init flag was set
 ; -----------------------------------------------------------------------------
 Boot_CallInitHandlers:
-	push_werp 0xFA	; d7 fa 04
+	pushw_erp 0xFA	; d7 fa 04
 
 	; Compare init flag - encoding differs between ROMs
 	; IF INIT_FLAG_COMPARE_WORD (evaluated to true)
 	; table_data: CP (0xFFFEEE), 0xFFFF (7 bytes)
-	cpdi16_24	16776942, 65535
+	cpw_da	16776942, 65535
 	; ELSE
 	; ENDIF
 
 	jr nz, Boot_CallInitHandlers__done	; 6e xx (offset computed by assembler)
 
 	; LD QIZH, 0
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 Boot_CallInitHandlers__handler_loop:
 	; LD A, QIZH
-	ldto_berp a, 0xfb
+	stb_erp a, 0xfb
 	; EXTZ WA
 	extz	wa
 	; LD C, QIZH
-	ldto_berp c, 0xfb
+	stb_erp c, 0xfb
 	; EXTZ BC
 	extz	bc
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
@@ -72,14 +72,14 @@ Boot_CallInitHandlers__handler_loop:
 	call 0xFFFA75
 
 	; INC 1, QIZH
-	inc_berp 0xfb, 1
+	incb_erp 0xfb, 1
 	; CP QIZH, 4
-	cpi_berp 0xfb, 4
+	cpib_erp 0xfb, 4
 
 	jr c, Boot_CallInitHandlers__handler_loop	; 67 xx (offset computed by assembler)
 
 Boot_CallInitHandlers__done:
-	pop_werp 0xFA	; d7 fa 05
+	popw_erp 0xFA	; d7 fa 05
 	ret	; 0e
 
 ; End of shared Boot_CallInitHandlers

@@ -167,7 +167,7 @@ AudioLoop_CheckPeriodicReinit:
 	resda 1, 4158
 	call Cmd_Check_E2_Pending
 	call Audio_Process_Init
-	ldda16 xwa, 61458
+	ldw_d16 xwa, 61458
 	ld bc, wa
 	inc 1, wa
 	stda16 61458, xwa
@@ -194,10 +194,10 @@ Timer_AudioTick_Handler:
 	push xix
 	lds32 xwa, 1
 	adddm32 4160, xwa
-	ldda8 a, 61460
+	ldb_d8 a, 61460
 	ld c, a
 	inc 1, a
-	stda8 61460, a
+	stb_d8 61460, a
 	extz bc
 	cps bc, 0
 	jr mi, AudioTick_Done
@@ -205,9 +205,9 @@ Timer_AudioTick_Handler:
 	jr gt, AudioTick_Done
 	add bc, bc
 	lda_24 xix, 0x00f460
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ldw_sri BC, 0x07, 0xF0, 0xE4
 	lda_24 xix, 0x01fb76
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_ind 8, 0x07, 0xF0, 0xE4
 
 
 Audio_PlayNote_Variant_1:
@@ -239,9 +239,9 @@ AudioTick_StoreTick:
 AudioTick_Variant_6:
 	setda 2, 4158
 	stdi8 61460, 0
-	ldda8 a, 61462
+	ldb_d8 a, 61462
 	inc 1, a
-	stda8 61462, a
+	stb_d8 61462, a
 	cp a, 0x8
 	jr c, AudioTick_Done
 	setda 5, 4158
@@ -265,19 +265,19 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 
 PrevBank_RegHelper:
 	push qiz
-	cpi8_24	16776942, 255
+	cpib_da	16776942, 255
 	jr	nz, 36
-	ldi_berp	251, 0
-	ldto_berp	a, 251
+	ldib_erp	251, 0
+	stb_erp	a, 251
 	extz	wa
-	ldto_berp	c, 251
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
 	extz	xbc
 	add	xbc, 16776944
 	call	130270
-	inc_berp	251, 1
-	cpi_berp	251, 4
+	incb_erp	251, 1
+	cpib_erp	251, 4
 	jr	c, 16777183
 	pop qiz
 	ret
@@ -290,7 +290,7 @@ MUTE_AND_HALT:	; 01FBF4
 
 Timer_StatusHelper:
 	jr	t, 16777213
-	ldda8	l, 4154
+	ldb_d8	l, 4154
 	extz	hl
 	ret
 
@@ -302,14 +302,14 @@ MemClear_DRAM_And_ExtRAM:
 	srl xbc, 1
 	jr z, MemClear_DRAM_OddByte
 	ld xhl, xde
-	stiw_dpi 0xE9, 0x00, 0x00
+	stiw_dsp 0xE9, 0x00, 0x00
 	dec 1, xbc
 	or xbc, xbc
 	jr z, MemClear_DRAM_OddByte
 	ldirw93
-	cpi_werp 0xE6, 0
+	cpiw_erp 0xE6, 0
 	jr z, MemClear_DRAM_OddByte
-	ldto_werp WA, 0xE6
+	stw_erp WA, 0xE6
 
 MemClear_DRAM_BulkLoop:
 	ldirw93
@@ -327,14 +327,14 @@ MemClear_ExtRAM:
 	srl xbc, 1
 	jr z, MemClear_ExtRAM_OddByte
 	ld xhl, xde
-	stiw_dpi 0xE9, 0x00, 0x00
+	stiw_dsp 0xE9, 0x00, 0x00
 	dec 1, xbc
 	or xbc, xbc
 	jr z, MemClear_ExtRAM_OddByte
 	ldirw93
-	cpi_werp 0xE6, 0
+	cpiw_erp 0xE6, 0
 	jr z, MemClear_ExtRAM_OddByte
-	ldto_werp WA, 0xE6
+	stw_erp WA, 0xE6
 
 MemClear_ExtRAM_BulkLoop:
 	ldirw93
@@ -441,7 +441,7 @@ DSP_Write_Channel:	; 01FCDEh
 
 DSP_Write_Channel_Loop:
 	ld (xhl), a	; Write register address
-	ld_spib E, 0xE4	; Get next data byte
+	ldb_spi E, 0xE4	; Get next data byte
 	ld (xhl + 2), e	; Write data value
 	inc 1, a	; Next register
 	djnz8 d, DSP_Write_Channel_Loop
@@ -542,7 +542,7 @@ DSP_BlockCopyWords:
 ; Notes: ld (xwa+),bc stores BC then increments XWA
 ; ----------------------------------------------------------------------------
 DSP_FillMemWords:
-	st_dpiw	bc, 225
+	stw_dpi	bc, 225
 	djnz16 de, DSP_FillMemWords
 	ret
 
@@ -603,8 +603,8 @@ TaskSched_Init:
 
 TaskSched_Init_QueueHeaders:
 	ld ix, hl
-	st_dpiw IX, 0xED
-	st_dpiw IX, 0xED
+	stw_dpi IX, 0xED
+	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueHeaders
 	ldw ix, 0x1048
 	extz xix
@@ -637,8 +637,8 @@ TaskSched_Init_FreeList_A:
 
 TaskSched_Init_QueueGroup_B:
 	ld ix, hl
-	st_dpiw IX, 0xED
-	st_dpiw IX, 0xED
+	stw_dpi IX, 0xED
+	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueGroup_B
 	ld xhl, 0x1FDBE
 	ldw de, 0x1092
@@ -651,8 +651,8 @@ TaskSched_Init_QueueGroup_B:
 
 TaskSched_Init_QueueGroup_C:
 	ld ix, hl
-	st_dpiw IX, 0xED
-	st_dpiw IX, 0xED
+	stw_dpi IX, 0xED
+	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueGroup_C
 	ldw hl, 0x10A6
 	extz xhl
@@ -687,8 +687,8 @@ TaskSched_Init_LinkFreeNodes:
 
 TaskSched_Init_QueueGroup_D:
 	ld ix, hl
-	st_dpiw IX, 0xED
-	st_dpiw IX, 0xED
+	stw_dpi IX, 0xED
+	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueGroup_D
 	ldw hl, 0x109E
 	extz xhl
@@ -696,8 +696,8 @@ TaskSched_Init_QueueGroup_D:
 
 TaskSched_Init_QueueGroup_E:
 	ld ix, hl
-	st_dpiw IX, 0xED
-	st_dpiw IX, 0xED
+	stw_dpi IX, 0xED
+	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueGroup_E
 	ld xwa, 0x1FEDF
 	jr TaskSched_ConfigAndDispatch
@@ -732,13 +732,13 @@ TaskSched_HaltLoop:
 
 TaskSched_Dispatch:
 	stdi8 305, 0
-	ldda16 xwa, 4306
+	ldw_d16 xwa, 4306
 	or wa, wa
 	jr nz, TaskSched_ContextRestore
 	xor wa, wa
 	cpdm16 4166, xwa
 	jr z, TaskSched_Dispatch_ScanQueues
-	ldda16 xiy, 4166
+	ldw_d16 xiy, 4166
 	extz xiy
 	ld (xiy + 4), xsp
 	ld xsp, 0x40B1E
@@ -763,7 +763,7 @@ TaskSched_Dispatch_SwitchTo:
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
-	stda8 305, a
+	stb_d8 305, a
 	ld xsp, (xhl + 4)
 
 TaskSched_ContextRestore:
@@ -792,7 +792,7 @@ TaskList_Operations_Opaque:
 
 TaskSwitch_Countdown:
 	pushw wa
-	ldda16 xwa, 4306
+	ldw_d16 xwa, 4306
 	cps wa, 1
 	jr z, TaskSwitch_Expired
 	dec 1, wa
@@ -869,7 +869,7 @@ TaskSched_SpawnTask:
 	jrl TaskSched_Dispatch
 	ei 6
 	ld xsp, 0x40B1E
-	ldda16 xix, 4166
+	ldw_d16 xix, 4166
 	extz xix
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
@@ -883,11 +883,11 @@ TaskSched_SpawnTask:
 	ld (xhl + 256), wa
 	ld (xwa + 2), hl
 	jrl TaskSched_Dispatch
-	ldda16 xhl, 4306
+	ldw_d16 xhl, 4306
 	or hl, hl
 	jr nz, TaskSched_ReturnZero
 	push xix
-	ldda16 xix, 4166
+	ldw_d16 xix, 4166
 	extz xix
 	ld l, (xix + 11)
 	extz hl
@@ -1180,7 +1180,7 @@ TaskSched_Wait:
 	jrl TaskSched_ContextRestore
 
 TaskSched_Wait_Block:
-	ldda16 xix, 4166
+	ldw_d16 xix, 4166
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -1244,7 +1244,7 @@ TaskMsgQ_Send:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsgQ_Send_DirectDeliver
-	ldda16 xix, 4294
+	ldw_d16 xix, 4294
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -1319,7 +1319,7 @@ TaskMsgQ_Send_DirectDeliver:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsgQ_Send_Guard_DirectDeliver
-	ldda16 xix, 4294
+	ldw_d16 xix, 4294
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -1434,7 +1434,7 @@ TaskMsgQ_Receive:
 	jrl TaskSched_ContextRestore
 
 TaskMsgQ_Receive_Empty:
-	ldda16 xix, 4166
+	ldw_d16 xix, 4166
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -1723,8 +1723,8 @@ RingBuf_Init_512:
 ; Each routine saves/restores caller registers.
 AudioBuf_PtrUtils:
 	pushw	hl
-	ld16_24	hl, 266554
-	st16_24	266552, hl
+	ldw_da	hl, 266554
+	stw_da	266552, hl
 	popw	hl
 	ret
 	pushw	ix
@@ -1742,13 +1742,13 @@ AudioBuf_PtrUtils:
 	popw	ix
 	ret
 	pushw	hl
-	ld16_24	hl, 266556
-	st16_24	266554, hl
+	ldw_da	hl, 266556
+	stw_da	266554, hl
 	popw	hl
 	ret
 	pushw	hl
-	ld16_24	hl, 266558
-	st16_24	266556, hl
+	ldw_da	hl, 266558
+	stw_da	266556, hl
 	popw	hl
 	ret
 
@@ -1905,7 +1905,7 @@ DMA_Send_Loop:
 DMA_Send_Final:
 	ld a, (xsp + 6)
 	extz wa
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	extz bc
 	ld xde, (xsp + 2)
 	calr InterCPU_DMA_Send_Chunk
@@ -1938,7 +1938,7 @@ DMA_Chunk_Start:
 	dec 1, l
 	sll a, 5
 	or a, l
-	st8_24 0x120000, a
+	stb_da 0x120000, a
 	lds ix, 0
 
 DMA_Chunk_Transfer:
@@ -2030,16 +2030,16 @@ E1_Check_MSTAT1:
 	jrl z, E1_Timeout_Retry
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
 	stdi8 4328, 2
-	sti8_24 0x120000, 0xe1
+	stib_da 0x120000, 0xe1
 	lds iz, 0
 
 E1_Start_Transfer:
 	bit_dd8 4, 0x34	; MSTAT1 - wait for Main CPU to clear (header data ready)
 	jrl nz, E1_Busy_Wait
 	set_dd8 0, 0x34	; SSTAT0 - set to signal ready to receive DMA header
-	ldada xhl, 4368
+	lda_d16 xhl, 4368
 	ld (xhl), xwa
-	ldada xwa, 4318
+	lda_d16 xwa, 4318
 	ld (xwa), xde
 	ld (xhl + 4), bc
 	ld (xwa + 4), bc
@@ -2067,7 +2067,7 @@ E1_Delay1:
 	jr c, E1_Delay1
 
 E1_Phase2_Setup:
-	ldada xwa, 4368
+	lda_d16 xwa, 4368
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x08
 	ld wa, (xwa + 4)
@@ -2127,12 +2127,12 @@ INT0_HANDLER:	; 20E86
 	push xwa
 	bit_dd8 2, 0x34	; MSTAT0 - test if Main CPU is currently sending data
 	jr nz, INT0_Exit
-	ld8_24 a, 0x120000
-	stda8 4332, a
+	ldb_da a, 0x120000
+	stb_d8 4332, a
 	cp a, 0xE1
 	jr nz, INT0_Check_E2
 	stdi8 4330, 2	; E1 command - state 2
-	ldada xwa, 4374	; E1 data buffer
+	lda_d16 xwa, 4374	; E1 data buffer
 	stda32 4324, xwa	; Save DMA target
 	ldc_cr32 xwa, 0x20
 	lds wa, 6	; 6 bytes for E1
@@ -2143,7 +2143,7 @@ INT0_Check_E2:	; 020EB1h
 	cp a, 0xE2
 	jr nz, INT0_Check_E3
 	stdi8 4330, 3	; E2 command - state 3
-	ldada xwa, 4380	; E2 data buffer
+	lda_d16 xwa, 4380	; E2 data buffer
 	stda32 4324, xwa
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xA	; 10 bytes for E2
@@ -2158,10 +2158,10 @@ INT0_Check_E3:	; 020ECEh
 
 INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
 	stdi8 4330, 1	; State 1
-	ldada xwa, 4336	; Standard command buffer
+	lda_d16 xwa, 4336	; Standard command buffer
 	stda32 4324, xwa
 	ldc_cr32 xwa, 0x20
-	ldda8 a, 4332
+	ldb_d8 a, 4332
 	and a, 0x1F	; Bits 4-0 = length - 1
 	inc 1, a	; Add 1 for actual length
 	extz wa
@@ -2222,7 +2222,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	push xde
 	push xbc
 	push xwa
-	ldda8 a, 4330
+	ldb_d8 a, 4330
 	cps a, 4
 	jr z, CH0_State4_E1_Done
 	cps a, 3
@@ -2234,7 +2234,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	; State 1: Standard command processing
 	pushw 0x0
 	pushw 0x10F0	; Command buffer address
-	ldda8 c, 4332
+	ldb_d8 c, 4332
 	ld a, c
 	and a, 0x1F
 	inc 1, a	; Length = (byte & 0x1F) + 1
@@ -2253,7 +2253,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	jr CH0_Ack
 
 CH0_State2_E1:	; 020F6Dh - E1 command phase 1 complete, start phase 2
-	ldada xwa, 4374	; E1 data buffer
+	lda_d16 xwa, 4374	; E1 data buffer
 	ld xbc, (xwa)	; Get DMA destination address
 	ldc_cr32 xbc, 0x20
 	ld wa, (xwa + 4)	; Get DMA byte count
@@ -2302,12 +2302,12 @@ CH0_Exit:	; 020FB4h
 ; ----------------------------------------------------------------------------
 Cmd_Check_E2_Pending:	; 020FBCh
 	ei 6
-	ldada xwa, 4390
+	lda_d16 xwa, 4390
 	bitm 7, (xwa)	; Check E2 pending flag
 	jr z, Cmd_Check_DMA_Timeout
 	resm 7, (xwa)	; Clear pending flag
 	ei 0
-	ldada xde, 4380	; E2 data buffer
+	lda_d16 xde, 4380	; E2 data buffer
 	ld xwa, (xde)
 	ld bc, (xde + 8)
 	ld xde, (xde + 4)
@@ -2335,7 +2335,7 @@ Cmd_DMA_Idle:	; 020FFBh
 	stdi16 61466, 0
 
 Cmd_DMA_Check_Stuck:	; 021001h
-	ldda16 xwa, 61466
+	ldw_d16 xwa, 61466
 	cp wa, 0xA	; Stuck for 10 iterations?
 	ret ule
 	; Timeout recovery - abort stuck DMA
@@ -2357,8 +2357,8 @@ Cmd_DMA_Check_Stuck:	; 021001h
 ; ===========================================================================
 DAC_Write_Sample:
 	res_dd8 7, 0x18
-	st16_24 0x100000, xwa
-	ld16_24 xhl, 0x100000
+	stw_da 0x100000, xwa
+	ldw_da xhl, 0x100000
 	ret
 
 RingBuf_SetOffsetHi:
@@ -2366,7 +2366,7 @@ RingBuf_SetOffsetHi:
 	ret
 
 RingBuf_SetOffsetLo:
-	stda8 10214, a
+	stb_d8 10214, a
 	ret
 
 RingBuf_CheckOffset_ClearFlags:
@@ -2461,7 +2461,7 @@ VoiceState_SwapSlot_DE_BC:
 	ld e, a
 	extz de
 	muls de, 0xC
-	ldada xhl, 9446
+	lda_d16 xhl, 9446
 	exts xde
 	add xde, xhl
 	ld hl, ix
@@ -2475,7 +2475,7 @@ VoiceState_SwapSlot_DE_BC:
 	ld e, a
 	extz de
 	muls de, 0xC
-	ldada xhl, 9446
+	lda_d16 xhl, 9446
 	exts xde
 	add xde, xhl
 	ld hl, ix
@@ -2488,7 +2488,7 @@ VoiceState_SwapSlot_DE_BC:
 	ld e, w
 	extz de
 	muls de, 0xC
-	ldada xhl, 9446
+	lda_d16 xhl, 9446
 	exts xde
 	add xde, xhl
 	ld hl, ix
@@ -2502,7 +2502,7 @@ VoiceState_SwapSlot_DE_BC:
 	ld e, b
 	extz de
 	muls de, 0xC
-	ldada xhl, 9446
+	lda_d16 xhl, 9446
 	exts xde
 	add xde, xhl
 	ld hl, ix
@@ -2515,7 +2515,7 @@ VoiceState_SwapSlot_DE_BC:
 	ld e, a
 	extz de
 	muls de, 0xC
-	ldada xhl, 9446
+	lda_d16 xhl, 9446
 	exts xde
 	add xde, xhl
 	ld hl, ix
@@ -2528,7 +2528,7 @@ VoiceState_SwapSlot_DE_BC:
 	ld c, a
 	extz bc
 	muls bc, 0xC
-	ldada xde, 9446
+	lda_d16 xde, 9446
 	exts xbc
 	add xbc, xde
 	ld de, hl
@@ -2544,7 +2544,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, a
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2558,7 +2558,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, a
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2571,7 +2571,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, w
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2585,7 +2585,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, b
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2599,7 +2599,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, e
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2612,7 +2612,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, w
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2626,7 +2626,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, a
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2639,7 +2639,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld l, a
 	extz hl
 	muls hl, 0xC
-	ldada xix, 9446
+	lda_d16 xix, 9446
 	exts xhl
 	add xhl, xix
 	ld ix, iy
@@ -2652,7 +2652,7 @@ VoiceState_SwapSlot_HL_IY:
 	ld c, e
 	extz bc
 	muls bc, 0xC
-	ldada xde, 9446
+	lda_d16 xde, 9446
 	exts xbc
 	add xbc, xde
 	ld de, hl
@@ -2668,7 +2668,7 @@ VoiceState_SwapSlot_Guarded:
 	ld c, a
 	extz bc
 	muls bc, 0xC
-	ldada xde, 9446
+	lda_d16 xde, 9446
 	exts xbc
 	add xbc, xde
 	ld (xsp), xbc
@@ -2677,28 +2677,28 @@ VoiceState_SwapSlot_Guarded:
 	ld de, bc
 	inc 8, de
 	ld xbc, (xsp)
-	ld_srib3 E, 0x07, 0xE4, 0xE8
+	ldb_sri E, 0x07, 0xE4, 0xE8
 	ld c, e
 	cp c, 0xC0
 	jr nc, VoiceState_SwapSlot_Guarded_WriteDst
 	ld c, e
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8486
-	st_dri3b D, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8486
+	stb_dri D, 0x07, 0xE8, 0xE4
 	cp (xix + 4), a
 	jr nz, VoiceState_SwapSlot_Guarded_WriteDst
 	ld c, (xsp + 6)
 	ld e, c
 	extz de
 	ld xbc, (xsp)
-	cp_srib_mr A, 0x07, 0xE4, 0xE8
+	cpb_sri_mr A, 0x07, 0xE4, 0xE8
 	jr z, VoiceState_SwapSlot_Guarded_MarkInactive
 	ld c, (xsp + 6)
 	ld e, c
 	extz de
 	ld xbc, (xsp)
-	ld_srib3 C, 0x07, 0xE4, 0xE8
+	ldb_sri C, 0x07, 0xE4, 0xE8
 	ld (xix + 4), c
 	jr VoiceState_SwapSlot_Guarded_WriteDst
 
@@ -2709,8 +2709,8 @@ VoiceState_SwapSlot_Guarded_WriteDst:
 	ld c, (xsp + 4)
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8486
-	st_dri3b D, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8486
+	stb_dri D, 0x07, 0xE8, 0xE4
 	cp (xix + 4), 0x40
 	jr ule, VoiceState_SwapSlot_Guarded_UseHL_IY
 	ld (xix + 4), a
@@ -2742,7 +2742,7 @@ VoiceState_SwapSlot_Guarded_Return:
 	inc 8, de
 	ld xwa, (xsp)
 	ld c, (xsp + 4)
-	lda_dri3 XHL, 0x07, 0xE0, 0xE8
+	lda_dri XHL, 0x07, 0xE0, 0xE8
 	inc 8, xsp
 	ret
 
@@ -2750,80 +2750,80 @@ VoiceRow_FetchPair_WA_SP:
 	ld c, a
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8486
-	ld_srib3 W, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8486
+	ldb_sri W, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8487
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8487
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ld c, l
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8486
-	lda_dri3 XWA, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8486
+	lda_dri XWA, 0x07, 0xE8, 0xE4
 	ld c, w
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8487
-	lda_dri3 XSP, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8487
+	lda_dri XSP, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8486
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8486
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8487
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8487
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 VoiceRow_FetchPair_DE_WA:
 	ld e, a
 	extz de
 	muls de, 0x5
-	ldada xhl, 8486
-	ld_srib3 B, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8486
+	ldb_sri B, 0x07, 0xEC, 0xE8
 	ld e, a
 	extz de
 	muls de, 0x5
-	ldada xhl, 8487
-	ld_srib3 W, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8487
+	ldb_sri W, 0x07, 0xEC, 0xE8
 	ld e, w
 	extz de
 	muls de, 0x5
-	ldada xhl, 8486
-	lda_dri3 XDE, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8486
+	lda_dri XDE, 0x07, 0xEC, 0xE8
 	ld e, b
 	extz de
 	muls de, 0x5
-	ldada xhl, 8487
-	lda_dri3 XWA, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8487
+	lda_dri XWA, 0x07, 0xEC, 0xE8
 	ld e, c
 	extz de
 	muls de, 0x5
-	ldada xhl, 8487
-	ld_srib3 W, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8487
+	ldb_sri W, 0x07, 0xEC, 0xE8
 	ld e, w
 	extz de
 	muls de, 0x5
-	ldada xhl, 8486
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8486
+	lda_dri XBC, 0x07, 0xEC, 0xE8
 	ld e, a
 	extz de
 	muls de, 0x5
-	ldada xhl, 8487
-	lda_dri3 XWA, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8487
+	lda_dri XWA, 0x07, 0xEC, 0xE8
 	ld e, a
 	extz de
 	muls de, 0x5
-	ldada xhl, 8486
-	lda_dri3 XHL, 0x07, 0xEC, 0xE8
+	lda_d16 xhl, 8486
+	lda_dri XHL, 0x07, 0xEC, 0xE8
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8487
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8487
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 VoiceSlot_UpdateNoteSource:
@@ -2834,43 +2834,43 @@ VoiceSlot_UpdateNoteSource:
 	ld c, a
 	extz bc
 	muls bc, 0x5
-	ldada xde, 8486
-	st_dri3b H, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 8486
+	stb_dri H, 0x07, 0xE8, 0xE4
 	ld c, (xiz + 2)
 	extz bc
 	muls bc, 0x1B
-	ldada xde, 7757
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 7757
+	stb_dri C, 0x07, 0xE8, 0xE4
 	ld e, (xiz + 3)
 	ld c, e
 	extz bc
-	cp_srib_mr A, 0x07, 0xEC, 0xE4
+	cpb_sri_mr A, 0x07, 0xEC, 0xE4
 	jr nz, VoiceSlot_UpdateNoteSource_WriteCurrent
 	cp (xiz), a
 	jr z, VoiceSlot_UpdateNoteSource_MarkInactive
 	extz de
 	ld c, (xiz)
-	lda_dri3 XHL, 0x07, 0xEC, 0xE8
+	lda_dri XHL, 0x07, 0xEC, 0xE8
 	jr VoiceSlot_UpdateNoteSource_WriteCurrent
 
 VoiceSlot_UpdateNoteSource_MarkInactive:
 	ld c, e
 	extz bc
-	stib_dri 0x07, 0xEC, 0xE4, 0xFF
+	stib_ind 0x07, 0xEC, 0xE4, 0xFF
 
 VoiceSlot_UpdateNoteSource_WriteCurrent:
 	ld c, (xsp + 6)
 	extz bc
 	muls bc, 0x1B
-	ldada xde, 7757
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	lda_d16 xde, 7757
+	stb_dri C, 0x07, 0xE8, 0xE4
 	ld c, (xsp + 4)
 	extz bc
-	cp_srib_im 0x07, 0xEC, 0xE4, 0xC0
+	cpib_sri 0x07, 0xEC, 0xE4, 0xC0
 	jr ule, VoiceSlot_UpdateNoteSource_UseDE_WA
 	ld c, (xsp + 4)
 	extz bc
-	lda_dri3 XBC, 0x07, 0xEC, 0xE4
+	lda_dri XBC, 0x07, 0xEC, 0xE4
 	extz wa
 	calr VoiceRow_FetchPair_WA_SP
 	jr VoiceSlot_UpdateNoteSource_Return
@@ -2880,7 +2880,7 @@ VoiceSlot_UpdateNoteSource_UseDE_WA:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ld_srib3 A, 0x07, 0xEC, 0xE0
+	ldb_sri A, 0x07, 0xEC, 0xE0
 	ld c, a
 	extz bc
 	ld wa, de
@@ -2902,50 +2902,50 @@ Voice_ScanSlots_ReassignSources:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0xC
-	ldada xbc, 9446
+	lda_d16 xbc, 9446
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 4), xwa
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, Voice_ScanSlots_Return
 
 Voice_ScanSlots_LoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld bc, wa
 	inc 8, bc
 	ld xwa, (xsp + 4)
-	ld_srib3 L, 0x07, 0xE0, 0xE4
+	ldb_sri L, 0x07, 0xE0, 0xE4
 	ld a, l
 	cp a, 0xC0
 	jrl nc, Voice_ScanSlots_LoopNext
 	ld a, l
 	extz wa
 	muls wa, 0x5
-	ldada xbc, 8486
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 8486
+	stb_dri B, 0x07, 0xE4, 0xE0
 	ld a, (xde + 4)
 	cp a, (xsp + 8)
 	jr nz, Voice_ScanSlots_MarkSlotInactive
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld xwa, (xsp + 4)
-	ld_srib3 A, 0x07, 0xE0, 0xE4
+	ldb_sri A, 0x07, 0xE0, 0xE4
 	cp a, (xsp + 8)
 	jr z, Voice_ScanSlots_PromoteSource
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld xwa, (xsp + 4)
-	ld_srib3 A, 0x07, 0xE0, 0xE4
+	ldb_sri A, 0x07, 0xE0, 0xE4
 	ld (xde + 4), a
 	jr Voice_ScanSlots_MarkSlotInactive
 
 Voice_ScanSlots_PromoteSource:
 	ld (xde + 4), 0xFF
-	ldfr_berp L, 0xF8
+	ldb_erp L, 0xF8
 	extz iz
 	ld a, l
 	extz wa
@@ -2961,21 +2961,21 @@ Voice_ScanSlots_MarkSlotInactive:
 	ld a, (xsp + 8)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr VoiceState_SwapSlot_DE_BC
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld bc, wa
 	inc 8, bc
 	ld xwa, (xsp + 4)
-	stib_dri 0x07, 0xE0, 0xE4, 0xFF
+	stib_ind 0x07, 0xE0, 0xE4, 0xFF
 
 Voice_ScanSlots_LoopNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, Voice_ScanSlots_LoopBody
 
 Voice_ScanSlots_Return:
@@ -2985,7 +2985,7 @@ Voice_ScanSlots_Return:
 
 VoiceState_FullReset:
 	push xiz
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x40
 	jr nc, VoiceState_FullReset_Phase2
 
@@ -2999,10 +2999,10 @@ VoiceState_FullReset_Phase1_ColLoop:
 	extz wa
 	ld hl, wa
 	inc 8, hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0xC
-	ldada xde, 9446
+	lda_d16 xde, 9446
 	exts xwa
 	add xwa, xde
 	ld de, hl
@@ -3012,82 +3012,82 @@ VoiceState_FullReset_Phase1_ColLoop:
 	ld a, c
 	extz wa
 	ld hl, wa
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0xC
-	ldada xde, 9446
+	lda_d16 xde, 9446
 	exts xwa
 	add xwa, xde
 	ld de, hl
 	extz xde
 	add xde, xwa
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld (xde), a
 	ld a, c
 	extz wa
 	ld hl, wa
 	inc 4, hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0xC
-	ldada xde, 9446
+	lda_d16 xde, 9446
 	exts xwa
 	add xwa, xde
 	ld de, hl
 	extz xde
 	add xde, xwa
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld (xde), a
 	inc 1, c
 	cps c, 4
 	jr c, VoiceState_FullReset_Phase1_ColLoop
 
 VoiceState_FullReset_Phase1_Next:
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x40
 	jr c, VoiceState_FullReset_Phase1_SlotLoop
 
 VoiceState_FullReset_Phase2:
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0xC0
 	jr nc, VoiceState_FullReset_Phase3
 
 VoiceState_FullReset_Phase2_Body:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
 	ld bc, wa
-	ldada xde, 8486
-	ldto_berp A, 0xFB
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
-	ldto_berp A, 0xFB
+	lda_d16 xde, 8486
+	stb_erp A, 0xFB
+	lda_dri XBC, 0x07, 0xE8, 0xE4
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
 	ld bc, wa
-	ldada xde, 8487
-	ldto_berp A, 0xFB
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
-	ldto_berp A, 0xFB
+	lda_d16 xde, 8487
+	stb_erp A, 0xFB
+	lda_dri XBC, 0x07, 0xE8, 0xE4
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
-	ldada xbc, 8488
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
-	ldto_berp A, 0xFB
+	lda_d16 xbc, 8488
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
-	ldada xbc, 8489
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
-	ldto_berp A, 0xFB
+	lda_d16 xbc, 8489
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
-	ldada xbc, 8490
-	stib_dri 0x07, 0xE4, 0xE0, 0xFF
-	inc1_berp 0xFB
+	lda_d16 xbc, 8490
+	stib_ind 0x07, 0xE4, 0xE0, 0xFF
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0xC0
 	jr c, VoiceState_FullReset_Phase2_Body
 
 VoiceState_FullReset_Phase3:
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1B
 	jr nc, VoiceState_FullReset_Phase3_InitSlots
 
@@ -3100,10 +3100,10 @@ VoiceState_FullReset_Phase3_ClearInner:
 	ld a, c
 	extz wa
 	ld hl, wa
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x1B
-	ldada xde, 7757
+	lda_d16 xde, 7757
 	exts xwa
 	add xwa, xde
 	ld de, hl
@@ -3115,20 +3115,20 @@ VoiceState_FullReset_Phase3_ClearInner:
 	jr c, VoiceState_FullReset_Phase3_ClearInner
 
 VoiceState_FullReset_Phase3_ClearNext:
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1B
 	jr c, VoiceState_FullReset_Phase3_ClearLoop
 
 VoiceState_FullReset_Phase3_InitSlots:
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0xC0
 	jr nc, VoiceState_FullReset_Phase3_Return
 
 VoiceState_FullReset_Phase3_InitBody:
-	ldto_berp A, 0xFB
-	ldfr_berp A, 0xF8
+	stb_erp A, 0xFB
+	ldb_erp A, 0xF8
 	extz iz
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Quad_Decode_A_To_L
 	ld c, l
@@ -3137,7 +3137,7 @@ VoiceState_FullReset_Phase3_InitBody:
 	ld de, bc
 	ldw bc, 0x1A
 	calr VoiceSlot_UpdateNoteSource
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0xC0
 	jr c, VoiceState_FullReset_Phase3_InitBody
 
@@ -3146,7 +3146,7 @@ VoiceState_FullReset_Phase3_Return:
 	ret
 
 NoteSource_SelectRow:
-	ldada xbc, 8459
+	lda_d16 xbc, 8459
 	and wa, 0x3
 	cps wa, 3
 	jr z, NoteSource_SelectRow_Case3
@@ -3178,7 +3178,7 @@ NoteSource_SelectRow_Return:
 
 VoiceSlot_Assign:
 	dec 8, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 4), e
 	ld (xsp + 6), c
 	ld (xsp + 8), a
@@ -3201,40 +3201,40 @@ VoiceSlot_Assign_Search:
 	and a, 0x1F
 	extz wa
 	lda_24 xbc, 0x00f48c
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFA
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFA
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x00f4ac
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xsp + 2), a
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0xC
-	ldada xbc, 9446
-	st_dri3b A, 0x07, 0xE4, 0xE0
-	ldto_berp A, 0xFA
+	lda_d16 xbc, 9446
+	stb_dri A, 0x07, 0xE4, 0xE0
+	stb_erp A, 0xFA
 	extz wa
 	inc 8, wa
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0xC0
 	jr nc, VoiceSlot_Assign_FallbackFB
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
-	ldada xbc, 8486
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 8486
+	stb_dri A, 0x07, 0xE4, 0xE0
 	ld a, (xbc + 2)
 	cp a, (xsp + 8)
 	jr nz, VoiceSlot_Assign_FallbackFB
 	ld a, (xbc + 3)
 	cp a, (xsp + 2)
 	jr nz, VoiceSlot_Assign_FallbackFB
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
 	ld wa, de
@@ -3252,14 +3252,14 @@ VoiceSlot_Assign_Search:
 VoiceSlot_Assign_FallbackFB:
 	bitm 5, (xsp + 4)
 	jr z, VoiceSlot_Assign_TryNoteSourceTable
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	calr NoteSource_SelectRow
-	ldfr_berp L, 0xFB
-	ldto_berp A, 0xFB
+	ldb_erp L, 0xFB
+	stb_erp A, 0xFB
 	cp a, 0xC0
 	jr nc, VoiceSlot_Assign_FallbackFB_Inactive
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
 	ld a, (xsp + 8)
@@ -3273,18 +3273,18 @@ VoiceSlot_Assign_FallbackFB:
 	ld a, (xsp + 6)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld wa, hl
 	calr VoiceState_SwapSlot_Guarded
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
 	ld wa, de
@@ -3302,31 +3302,31 @@ VoiceSlot_Assign_TryNoteSourceTable:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x1B
-	ldada xbc, 7757
+	lda_d16 xbc, 7757
 	exts xwa
 	add xwa, xbc
 	ld bc, de
 	extz xbc
 	add xbc, xwa
 	ld a, (xbc)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0xC0
 	jr nc, VoiceSlot_Assign_FallbackFA
 	ld a, (xsp + 6)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld wa, hl
 	calr VoiceState_SwapSlot_Guarded
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
 	ld wa, de
@@ -3335,14 +3335,14 @@ VoiceSlot_Assign_TryNoteSourceTable:
 	jr VoiceSlot_Assign_PackResult
 
 VoiceSlot_Assign_FallbackFA:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	calr NoteSource_SelectRow
-	ldfr_berp L, 0xFB
-	ldto_berp A, 0xFB
+	ldb_erp L, 0xFB
+	stb_erp A, 0xFB
 	cp a, 0xC0
 	jr nc, VoiceSlot_Assign_FA_Inactive
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
 	ld a, (xsp + 8)
@@ -3356,18 +3356,18 @@ VoiceSlot_Assign_FallbackFA:
 	ld a, (xsp + 6)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld wa, hl
 	calr VoiceState_SwapSlot_Guarded
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
 	ld wa, de
@@ -3387,7 +3387,7 @@ VoiceSlot_Assign_PackResult:
 	or hl, bc
 
 VoiceSlot_Assign_Return:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 8, xsp
 	ret
 
@@ -3430,70 +3430,70 @@ VoiceState_OpaqueData1:
 
 Voice_BuildOutputList:
 	lda xsp, (xsp - 12)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	cpl e
 	ld (xsp + 8), e
 	and c, (xsp + 8)
 	ld (xsp + 6), c
 	extz wa
 	muls wa, 0x1B
-	ldada xbc, 7757
+	lda_d16 xbc, 7757
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 2), xwa
-	ldada xwa, 10217
+	lda_d16 xwa, 10217
 	ld (xsp + 10), xwa
-	ldi_berp 0xFA, 0
+	ldib_erp 0xFA, 0
 	cp_erpb 0xFA, 0x1B
 	jr nc, Voice_BuildOutputList_Return
 
 Voice_BuildOutputList_Loop:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld c, a
 	extz bc
 	ld xwa, (xsp + 2)
-	ld_srib3 E, 0x07, 0xE0, 0xE4
+	ldb_sri E, 0x07, 0xE0, 0xE4
 	ld a, e
 	cp a, 0xC0
 	jr nc, Voice_BuildOutputList_Next
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	lda_24 xbc, 0x00f4ec
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	and a, (xsp + 8)
 	cp a, (xsp + 6)
 	jr nz, Voice_BuildOutputList_Next
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	and a, 0x1F
 	extz wa
 	lda_24 xbc, 0x00f48c
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld a, e
 	extz wa
 	extz bc
 	calr SlotPair_Decode_C_To_L
 	ld c, l
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	sll wa, 8
 	ld de, wa
 	or de, bc
 	ld xwa, (xsp + 10)
-	st_dpiw DE, 0xE1
+	stw_dpi DE, 0xE1
 	ld (xsp + 10), xwa
 
 Voice_BuildOutputList_Next:
-	inc1_berp 0xFA
+	inc1b_erp 0xFA
 	cp_erpb 0xFA, 0x1B
 	jr c, Voice_BuildOutputList_Loop
 
 Voice_BuildOutputList_Return:
 	ld xwa, (xsp + 10)
 	ldw (xwa), 0xFFFF
-	ldada xhl, 10217
-	pop_werp 0xFA
+	lda_d16 xhl, 10217
+	popw_erp 0xFA
 	lda xsp, (xsp + 12)
 	ret
 
@@ -3529,34 +3529,34 @@ Voice_AdvanceSlotIterator:
 	mul8rr c, a
 	ld iz, bc
 	ld (xsp + 4), iz
-	addmi16 (xsp + 4), 0x30
+	addiw_da (xsp + 4), 0x30
 	cp iz, (xsp + 4)
 	jr nc, Voice_AdvanceSlotIterator_Return
 
 Voice_AdvanceSlotIterator_Loop:
 	ld wa, iz
 	mul wa, 0x5
-	ldada xbc, 8490
+	lda_d16 xbc, 8490
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x40
 	jr ule, Voice_AdvanceSlotIterator_Next
 	ld wa, iz
 	mul wa, 0x5
-	ldada xbc, 8488
+	lda_d16 xbc, 8488
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x1A
 	jr z, Voice_AdvanceSlotIterator_Next
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
-	ldfr_werp WA, 0xFA
-	ldto_berp A, 0xF8
+	ldw_erp WA, 0xFA
+	stb_erp A, 0xF8
 	extz wa
 	calr Quad_Decode_A_To_L
 	ld c, l
 	extz bc
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	ld de, bc
 	ldw bc, 0x1A
 	calr VoiceSlot_UpdateNoteSource
@@ -3604,7 +3604,7 @@ VoiceNode_PriorityList_Update:
 	extz wa
 	sla wa, 2
 	inc 2, wa
-	cp_sril_mr XIZ, 0x07, 0xE8, 0xE0
+	cpl_sri_mr XIZ, 0x07, 0xE8, 0xE0
 	jr nz, VoiceNode_PriorityList_InsertOrLink
 	cp (xiz), xiz
 	jr z, VoiceNode_PriorityList_SelfLink
@@ -3614,7 +3614,7 @@ VoiceNode_PriorityList_Update:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xiz)
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
+	stl_dri XWA, 0x07, 0xE8, 0xE4
 	jr VoiceNode_PriorityList_InsertOrLink
 
 VoiceNode_PriorityList_SelfLink:
@@ -3624,7 +3624,7 @@ VoiceNode_PriorityList_SelfLink:
 	ld bc, wa
 	inc 2, bc
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
+	stl_dri XWA, 0x07, 0xE8, 0xE4
 
 VoiceNode_PriorityList_InsertOrLink:
 	ld a, (xsp + 4)
@@ -3642,7 +3642,7 @@ VoiceNode_PriorityList_InsertOrLink:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 6)
-	st_dri3l XIZ, 0x07, 0xE0, 0xE4
+	stl_dri XIZ, 0x07, 0xE0, 0xE4
 	ld xwa, xiz
 	calr DList_Unlink_SelfLink
 	jr VoiceNode_PriorityList_Return
@@ -3700,7 +3700,7 @@ VoiceNode_SecondList_Update:
 	extz wa
 	sla wa, 2
 	inc 4, wa
-	cp_sril_mr XIZ, 0x07, 0xE8, 0xE0
+	cpl_sri_mr XIZ, 0x07, 0xE8, 0xE0
 	jr nz, VoiceNode_SecondList_InsertOrLink
 	cp (xiz + 8), xiz
 	jr z, VoiceNode_SecondList_SelfLink
@@ -3710,7 +3710,7 @@ VoiceNode_SecondList_Update:
 	ld bc, wa
 	inc 4, bc
 	ld xwa, (xiz + 8)
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
+	stl_dri XWA, 0x07, 0xE8, 0xE4
 	jr VoiceNode_SecondList_InsertOrLink
 
 VoiceNode_SecondList_SelfLink:
@@ -3720,7 +3720,7 @@ VoiceNode_SecondList_SelfLink:
 	ld bc, wa
 	inc 4, bc
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
+	stl_dri XWA, 0x07, 0xE8, 0xE4
 
 VoiceNode_SecondList_InsertOrLink:
 	ld a, (xsp + 4)
@@ -3738,7 +3738,7 @@ VoiceNode_SecondList_InsertOrLink:
 	ld bc, wa
 	inc 4, bc
 	ld xwa, (xsp + 6)
-	st_dri3l XIZ, 0x07, 0xE0, 0xE4
+	stl_dri XIZ, 0x07, 0xE0, 0xE4
 	ld xwa, xiz
 	calr DList_Unlink_SelfLink_Offsets8
 	jr VoiceNode_SecondList_Return
@@ -3796,12 +3796,12 @@ VoiceNode_Activate:
 	decm8 1, (xwa + 1)
 
 VoiceNode_Activate_InsertLists:
-	ldada xwa, 4907
+	lda_d16 xwa, 4907
 	ld xbc, xwa
 	ld xwa, xiz
 	lds de, 6
 	calr VoiceNode_PriorityList_Update
-	ldada xwa, 5249
+	lda_d16 xwa, 5249
 	ld xbc, xwa
 	ld xwa, xiz
 	lds de, 1
@@ -3867,8 +3867,8 @@ ToneGen_EmitCommandLoop_FindStart:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	ldada xbc, 10542
-	cp_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x00
+	lda_d16 xbc, 10542
+	cpiw_sri 0x07, 0xE4, 0xE0, 0x00, 0x00
 	jr nz, ToneGen_EmitCommandLoop_PhaseA
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x4
@@ -3886,10 +3886,10 @@ ToneGen_EmitCommandLoop_PhaseA_Body:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa200
+	stiw_da 0x100002, 0xa200
 	jr __jrt_nop_021F26
 __jrt_nop_021F26:
 
@@ -3901,10 +3901,10 @@ ToneGen_EmitCommandLoop_PhaseA_Nop:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa280
+	stiw_da 0x100002, 0xa280
 	jr __jrt_nop_021F47
 __jrt_nop_021F47:
 
@@ -3928,10 +3928,10 @@ ToneGen_EmitCommandLoop_PhaseB_Body:
 	ld a, (xsp + 4)
 	add a, 0xC0
 	extz wa
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x0000
+	stiw_da 0x100002, 0x0000
 	jr __jrt_nop_021F80
 __jrt_nop_021F80:
 
@@ -3942,10 +3942,10 @@ ToneGen_EmitCommandLoop_PhaseB_Nop:
 	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	extz wa
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x7e00
+	stiw_da 0x100002, 0x7e00
 	jr __jrt_nop_021F9D
 __jrt_nop_021F9D:
 
@@ -3969,12 +3969,12 @@ CmdTable_InitEntry_Loop:
 	extz wa
 	muls wa, 0x1E
 	ld de, wa
-	ldada xhl, 4397
+	lda_d16 xhl, 4397
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x00f507
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	lda_dri XBC, 0x07, 0xEC, 0xE8
 	jr CmdTable_InitEntry_ZeroFields
 
 CmdTable_InitEntry_AltPtr:
@@ -3982,19 +3982,19 @@ CmdTable_InitEntry_AltPtr:
 	extz wa
 	muls wa, 0x1E
 	ld de, wa
-	ldada xhl, 4397
+	lda_d16 xhl, 4397
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x00f519
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	lda_dri XBC, 0x07, 0xEC, 0xE8
 
 CmdTable_InitEntry_ZeroFields:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x1E
-	ldada xbc, 4398
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	lda_d16 xbc, 4398
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ldb e, 0x0
 	cps e, 7
 	jr nc, CmdTable_InitEntry_Next
@@ -4008,10 +4008,10 @@ CmdTable_InitEntry_ZeroLoop:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x1E
-	ldada xbc, 4397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 4397
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xE4, 0xEC
+	stl_dri XWA, 0x07, 0xE4, 0xEC
 	inc 1, e
 	cps e, 7
 	jr c, CmdTable_InitEntry_ZeroLoop
@@ -4033,13 +4033,13 @@ ChanStruct_Init_Entry:
 	extz wa
 	muls wa, 0xC
 	ld de, wa
-	ldada xhl, 4937
+	lda_d16 xhl, 4937
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0x00f52b
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
-	st_dri3l XWA, 0x07, 0xEC, 0xE8
+	stl_dri XWA, 0x07, 0xEC, 0xE8
 	jr ChanStruct_Init_ZeroSub
 
 ChanStruct_Init_Entry_AltPtr:
@@ -4047,13 +4047,13 @@ ChanStruct_Init_Entry_AltPtr:
 	extz wa
 	muls wa, 0xC
 	ld de, wa
-	ldada xhl, 4937
+	lda_d16 xhl, 4937
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0x00f597
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
-	st_dri3l XWA, 0x07, 0xEC, 0xE8
+	stl_dri XWA, 0x07, 0xEC, 0xE8
 
 ChanStruct_Init_ZeroSub:
 	ldb e, 0x0
@@ -4069,10 +4069,10 @@ ChanStruct_Init_ZeroLoop:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xC
-	ldada xbc, 4937
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 4937
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lds32 xwa, 0
-	st_dri3l XWA, 0x07, 0xE4, 0xEC
+	stl_dri XWA, 0x07, 0xE4, 0xEC
 	inc 1, e
 	cps e, 2
 	jr c, ChanStruct_Init_ZeroLoop
@@ -4091,8 +4091,8 @@ VoiceNode_Init_Body:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x27
-	ldada xbc, 5261
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 5261
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 4)
 	ld (xiz + 36), a
 	ld (xiz), xiz
@@ -4102,10 +4102,10 @@ VoiceNode_Init_Body:
 	ld (xiz + 16), xiz
 	ld (xiz + 20), xiz
 	ld (xiz + 34), 0x0
-	ldada xwa, 4937
+	lda_d16 xwa, 4937
 	ld (xiz + 24), xwa
 	ld (xiz + 28), 0x1
-	ldada xwa, 4397
+	lda_d16 xwa, 4397
 	ld (xiz + 29), xwa
 	ld (xiz + 33), 0x6
 	ld (xiz + 37), 0x0
@@ -4114,7 +4114,7 @@ VoiceNode_Init_Body:
 	jr c, VoiceNode_Init_Body
 
 VoiceNode_Activate_All:
-	ldada xiz, 5261
+	lda_d16 xiz, 5261
 	ld (xsp + 4), 0x0
 	cp (xsp + 4), 0x40
 	jr nc, IntMask_Clear_Loop
@@ -4136,13 +4136,13 @@ IntMask_Clear_Body:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	ldada xbc, 10542
-	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0x00
+	lda_d16 xbc, 10542
+	stiw_ind 0x07, 0xE4, 0xE0, 0x00, 0x00
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	ldada xbc, 10550
-	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0x00
+	lda_d16 xbc, 10550
+	stiw_ind 0x07, 0xE4, 0xE0, 0x00, 0x00
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x4
 	jr c, IntMask_Clear_Body
@@ -4158,41 +4158,41 @@ AudioTick_UpdateVoice:
 	push xiz
 	incdi8 1, 4392
 	anddi8 4392, 3
-	ldda8 a, 4392
+	ldb_d8 a, 4392
 	extz wa
 	calr DAC_Write_Sample
-	ldda8 a, 4392
+	ldb_d8 a, 4392
 	extz wa
 	add wa, wa
-	ldada xbc, 10550
-	ld_sriw3 DE, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 10550
+	ldw_sri DE, 0x07, 0xE4, 0xE0
 	or de, hl
-	ldda8 a, 4392
+	ldb_d8 a, 4392
 	extz wa
 	ld hl, wa
 	add hl, hl
-	ldada xix, 10542
-	ldda8 a, 4392
+	lda_d16 xix, 10542
+	ldb_d8 a, 4392
 	extz wa
 	add wa, wa
-	ldada xbc, 10542
+	lda_d16 xbc, 10542
 	ld (xsp + 4), de
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	xor (xsp + 4), wa
-	ld_sriw3 WA, 0x07, 0xF0, 0xEC
+	ldw_sri WA, 0x07, 0xF0, 0xEC
 	and (xsp + 4), wa
-	ldda8 a, 4392
+	ldb_d8 a, 4392
 	extz wa
 	add wa, wa
-	ldada xbc, 10542
-	st_dri3w DE, 0x07, 0xE4, 0xE0
-	ldda8 a, 4392
+	lda_d16 xbc, 10542
+	stw_dri DE, 0x07, 0xE4, 0xE0
+	ldb_d8 a, 4392
 	sll a, 4
 	ld (xsp + 8), a
 	extz wa
 	muls wa, 0x27
-	ldada xbc, 5261
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 5261
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ldw (xsp + 6), 0x1
 	cpw (xsp + 6), 0x0
 	jr z, AudioTick_UpdateVoice_Return
@@ -4240,7 +4240,7 @@ AudioTick_UpdateVoice_Next:
 	jr nz, AudioTick_UpdateVoice_SlotLoop
 
 AudioTick_UpdateVoice_Return:
-	ldda8 a, 4392
+	ldb_d8 a, 4392
 	extz wa
 	calr Voice_AdvanceSlotIterator
 	pop xiz
@@ -4255,8 +4255,8 @@ NoteChain_FindNode_A:
 	ret
 
 NoteChain_FindNode_A_Walk:
-	ldada xde, 4397
-	st_dri3b B, 0xE9, 0xE2, 0x01
+	lda_d16 xde, 4397
+	stb_dri B, 0xE9, 0xE2, 0x01
 	ld xwa, (xwa)
 	lda xhl, (xwa + 2)
 	cp (xbc), 0xFF
@@ -4267,13 +4267,13 @@ NoteChain_FindNode_A_Secondary:
 	jr z, NoteChain_FindNode_A_Primary
 	ld a, (xbc)
 	res 7, a
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
 	jr z, NoteChain_FindNode_A_Advance
-	ldto_berp A, 0xF0
+	stb_erp A, 0xF0
 	extz wa
 	sla wa, 2
 	ld_sril3 XHL, 0x07, 0xE8, 0xE0
@@ -4346,15 +4346,15 @@ NoteOn_Dispatch_SlotLoop:
 	ld wa, (xwa)
 	and wa, 0x1F00
 	srl wa, 8
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x1A
 	jrl nc, NoteOn_Dispatch_AllInactive
 	ld xwa, (xsp + 16)
 	calr RingBuf_CheckOffset_ClearFlags
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0xC
-	ldada xbc, 4937
+	lda_d16 xbc, 4937
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 4), xwa
@@ -4375,7 +4375,7 @@ NoteOn_Dispatch_ProcessSlot:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 16)
-	ld_srib3 A, 0x07, 0xE0, 0xE4
+	ldb_sri A, 0x07, 0xE0, 0xE4
 	and a, 0xF
 	extz wa
 	muls wa, 0x6
@@ -4427,7 +4427,7 @@ NoteOn_Dispatch_RetriggerActive:
 	srl a, 4
 	extz wa
 	add wa, wa
-	ldada xbc, 10550
+	lda_d16 xbc, 10550
 	or_sriw_mr DE, 0x07, 0xE4, 0xE0
 	jr NoteOn_Dispatch_UpdateLists
 
@@ -4448,7 +4448,7 @@ NoteOn_Dispatch_RetriggerMask:
 	srl a, 4
 	extz wa
 	add wa, wa
-	ldada xbc, 10550
+	lda_d16 xbc, 10550
 	and_sriw_mr DE, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 14)
 	and a, 0xF
@@ -4462,7 +4462,7 @@ NoteOn_Dispatch_RetriggerOrMask:
 	srl a, 4
 	extz wa
 	add wa, wa
-	ldada xbc, 10542
+	lda_d16 xbc, 10542
 	or_sriw_mr DE, 0x07, 0xE4, 0xE0
 
 NoteOn_Dispatch_UpdateLists:
@@ -4506,7 +4506,7 @@ NoteOn_Dispatch_WalkNext:
 	ld xwa, xiz
 	or xwa, xwa
 	jr z, NoteOn_Dispatch_WriteSlot
-	ldada xwa, 4877
+	lda_d16 xwa, 4877
 	ld xbc, xwa
 	ld a, (xiz + 33)
 	ld e, a
@@ -4527,7 +4527,7 @@ NoteOn_Dispatch_WriteSlot:
 	add de, 0xA
 	ld xwa, (xsp + 16)
 	ld c, (xsp + 14)
-	lda_dri3 XHL, 0x07, 0xE0, 0xE8
+	lda_dri XHL, 0x07, 0xE0, 0xE8
 	jr NoteOn_Dispatch_SlotNext
 
 NoteOn_Dispatch_SlotNoNode:
@@ -4536,7 +4536,7 @@ NoteOn_Dispatch_SlotNoNode:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 16)
-	stib_dri 0x07, 0xE0, 0xE4, 0xFF
+	stib_ind 0x07, 0xE0, 0xE4, 0xFF
 	jr NoteOn_Dispatch_SlotNext
 
 NoteOn_Dispatch_SlotInactive:
@@ -4545,7 +4545,7 @@ NoteOn_Dispatch_SlotInactive:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 16)
-	stib_dri 0x07, 0xE0, 0xE4, 0xFF
+	stib_ind 0x07, 0xE0, 0xE4, 0xFF
 
 NoteOn_Dispatch_SlotNext:
 	incm8 1, (xsp + 12)
@@ -4564,7 +4564,7 @@ NoteOn_Dispatch_AllInactive_Loop:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 16)
-	stib_dri 0x07, 0xE0, 0xE4, 0xFF
+	stib_ind 0x07, 0xE0, 0xE4, 0xFF
 	incm8 1, (xsp + 12)
 	cp (xsp + 12), 0x4
 	jr c, NoteOn_Dispatch_AllInactive_Loop
@@ -4579,7 +4579,7 @@ VoiceSlot_Release:
 	ld a, c
 	extz wa
 	muls wa, 0x27
-	ldada xde, 5295
+	lda_d16 xde, 5295
 	res_dri 7, 0x07, 0xE8, 0xE0
 	ld a, c
 	and a, 0xF
@@ -4596,12 +4596,12 @@ VoiceSlot_Release_ApplyMask:
 	srl a, 4
 	extz wa
 	add wa, wa
-	ldada xde, 10550
+	lda_d16 xde, 10550
 	and_sriw_mr HL, 0x07, 0xE8, 0xE0
 	ld a, c
 	extz wa
 	muls wa, 0x27
-	ldada xbc, 5261
+	lda_d16 xbc, 5261
 	exts xwa
 	add xwa, xbc
 	jrl VoiceNode_UpdateEnvState
@@ -4612,8 +4612,8 @@ VoiceSlot_NoteOff:
 	jr nc, VoiceSlot_NoteOff_Return
 	extz wa
 	muls wa, 0x27
-	ldada xbc, 5261
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 5261
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	ld xbc, (xiz + 24)
 	lds de, 1
@@ -4722,7 +4722,7 @@ NoteOn_RoutePacket:
 	ld bc, (xwa + 3)
 	and bc, 0x1F00
 	jr z, NoteOn_RoutePacket_Targeted
-	ldada xiz, 5261
+	lda_d16 xiz, 5261
 	ldb e, 0x0
 	cp e, 0x40
 	jr nc, NoteOn_RoutePacket_BroadcastDone
@@ -4754,14 +4754,14 @@ NoteOn_RoutePacket_Targeted:
 	ld l, c
 	extz bc
 	muls bc, 0xC
-	ldada xde, 4941
+	lda_d16 xde, 4941
 	exts xbc
 	add xbc, xde
 	ld (xsp + 4), xbc
 	ld c, l
 	extz bc
 	muls bc, 0xC
-	ldada xde, 4945
+	lda_d16 xde, 4945
 	exts xbc
 	add xbc, xde
 	ld (xsp + 8), xbc
@@ -4971,8 +4971,8 @@ Instrument_LookupProgram_HiNibble:
 	ld a, c
 	extz wa
 	lda_24 xbc, 0x011acf
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	lda_dri XBC, 0x07, 0xEC, 0xE8
 	ret
 
 Instrument_LookupProgram_LoNibble:
@@ -4990,8 +4990,8 @@ Instrument_LookupProgram_LoNibble:
 	ld a, c
 	extz wa
 	lda_24 xbc, 0x011acf
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	lda_dri XBC, 0x07, 0xEC, 0xE8
 	ret
 
 BitTest_Bit0_L:
@@ -5047,7 +5047,7 @@ BitTest_Mode2_L_v2_AllClear:
 	ret
 
 PitchBend_Process:
-	ld16_24 xde, 0x041343
+	ldw_da xde, 0x041343
 	bit 1, de
 	jr z, PitchBend_Process_Dispatch
 	lds hl, 0
@@ -5062,9 +5062,9 @@ PitchBend_Process_Dispatch:
 	jr gt, PitchBend_Process_Fallback
 	add wa, wa
 	lda_24 xix, 0x00f693
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x022982
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 PitchBend_Process_JumpTable:
 	.byte 0xdb
@@ -5077,7 +5077,7 @@ PitchBend_Process_Fallback:
 	ld a, c
 	extz wa
 	lda_24 xbc, 0x011acf
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	exts hl
 	sla hl, 8
 
@@ -5172,17 +5172,17 @@ PitchBend_AlignLoop_HiCheck:
 ChanBitField_ExtractHi7:
 	and bc, 0x7F00
 	sra bc, 8
-	ld_srib3 L, 0x07, 0xE0, 0xE4
+	ldb_sri L, 0x07, 0xE0, 0xE4
 	ret
 
 SlotParam_Write_Stride0F:
 	extz de
 	muls de, 0xF
-	st_dri3b A, 0x07, 0xE4, 0xE8
+	stb_dri A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x7000
 	ld wa, (xbc)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	ld wa, (xbc + 13)
 	stda16 10558, xwa
 	ret
@@ -5190,11 +5190,11 @@ SlotParam_Write_Stride0F:
 SlotParam_Write_Stride0C:
 	extz de
 	muls de, 0xC
-	st_dri3b A, 0x07, 0xE4, 0xE8
+	stb_dri A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x5000
 	ld wa, (xbc)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	ld wa, (xbc + 10)
 	stda16 10558, xwa
 	ret
@@ -5202,33 +5202,33 @@ SlotParam_Write_Stride0C:
 SlotParam_Write_Stride0D:
 	extz de
 	muls de, 0xD
-	st_dri3b A, 0x07, 0xE4, 0xE8
+	stb_dri A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x3000
 	ld wa, (xbc)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	stdi16 10558, 0
 	ret
 
 SlotParam_Write_Stride0A:
 	extz de
 	muls de, 0xA
-	st_dri3b A, 0x07, 0xE4, 0xE8
+	stb_dri A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x1000
 	ld wa, (xbc)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	stdi16 10558, 0
 	ret
 
 SlotParam_Write_Stride06:
 	extz de
 	muls de, 0x6
-	st_dri3b A, 0x07, 0xE4, 0xE8
+	stb_dri A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x4000
 	ld wa, (xbc)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	ld wa, (xbc + 4)
 	stda16 10558, xwa
 	ret
@@ -5236,10 +5236,10 @@ SlotParam_Write_Stride06:
 SlotParam_Write_Stride04_SLA:
 	extz de
 	sla de, 2
-	st_dri3b A, 0x07, 0xE4, 0xE8
+	stb_dri A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ld wa, (xbc)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	stdi16 10558, 0
 	ret
 
@@ -5280,18 +5280,18 @@ PitchBend_Scale:
 	jr ge, PitchBend_Scale_Multiply
 	extz bc
 	lda_24 xhl, 0x00fee4
-	ld_srib3 C, 0x07, 0xEC, 0xE4
+	ldb_sri C, 0x07, 0xEC, 0xE4
 	extz bc
 	cpl a
 	inc 1, a
 
 PitchBend_Scale_Multiply:
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	exts ix
 	ld a, c
 	extz wa
 	lda_24 xbc, 0x00ff64
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	exts hl
 	ld wa, hl
 	extpfx2 0xDC, 0x48
@@ -5314,7 +5314,7 @@ Detune_ScaleSymmetric:
 Detune_ScaleSymmetric_NegArm:
 	extz wa
 	lda_24 xbc, 0x0119c8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	cpl wa
 	inc 1, wa
@@ -5328,7 +5328,7 @@ Detune_ScaleSymmetric_PosArm:
 Detune_ScaleSymmetric_PosClamp:
 	extz wa
 	lda_24 xbc, 0x0119c8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 
 Detune_ScaleSymmetric_Return:
@@ -5338,7 +5338,7 @@ Detune_ScaleSymmetric_Return:
 Detune_ScaleUnsigned:
 	extz wa
 	lda_24 xbc, 0x0119c8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
 	ret
@@ -5404,11 +5404,11 @@ Portamento_CalcContrib_A:
 	extz de
 	and de, 0x7F
 	extz xde
-	st_dri3b B, 0x07, 0xE8, 0xF4
+	stb_dri B, 0x07, 0xE8, 0xF4
 	ld xiy, 0x11519
 	add xiy, xde
 	ld e, (xiy)
-	ldfr_berp E, 0xF4
+	ldb_erp E, 0xF4
 	exts iy
 	ld de, hl
 	extpfx2 0xDD, 0x4A
@@ -5472,7 +5472,7 @@ Portamento_CalcContrib_B:
 	extz wa
 	and wa, 0x7F
 	extz xwa
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld xde, 0x11519
 	add xde, xwa
 	ld a, (xde)
@@ -5526,7 +5526,7 @@ PitchBend_LookupCoeff:
 	ld xwa, 0x11A25
 	add xwa, xbc
 	ld a, (xwa)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld wa, de
 	extz xwa
@@ -5560,7 +5560,7 @@ PitchBend_LookupCoeff_SetA:
 	ld xwa, 0x119FB
 	add xwa, xbc
 	ld a, (xwa)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld wa, de
 	extz xwa
@@ -5607,7 +5607,7 @@ NoteState_ClearRecord:
 	lda_24 xbc, 0x04424e
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 1), 0x0
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x0
@@ -5655,7 +5655,7 @@ EGEnv_Compute_A:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010a64
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
 	ld xwa, (xsp + 4)
@@ -5693,7 +5693,7 @@ EGEnv_Compute_A_FormatBits:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011511
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	ld hl, bc
 	or hl, wa
@@ -5705,12 +5705,12 @@ EGEnv_Compute_A_Simple:
 	extz wa
 	muls wa, 0x1B
 	lda_24 xbc, 0x04424e
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	stb_dri B, 0x07, 0xE4, 0xE0
 	ld a, (xde + 3)
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010964
-	ld_sriw3 HL, 0x07, 0xE4, 0xE0
+	ldw_sri HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xde + 4)
 	lds32 xbc, 0
@@ -5747,7 +5747,7 @@ EGEnv_Compute_B:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010b64
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
 	ld xwa, (xsp + 4)
@@ -5785,7 +5785,7 @@ EGEnv_Compute_B_FormatBits:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011511
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	ld hl, bc
 	or hl, wa
@@ -5804,7 +5804,7 @@ EGEnv_Compute_B_Simple:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010964
-	ld_sriw3 HL, 0x07, 0xE4, 0xE0
+	ldw_sri HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xde + 4)
 	lds32 xbc, 0
@@ -5843,7 +5843,7 @@ Voice_Freq_WriteLeft:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010c64
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
 	ld xwa, (xsp + 4)
@@ -5881,10 +5881,10 @@ Voice_Freq_WriteLeft_Store:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011511
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	or bc, wa
-	st16_24 0x045204, xbc
+	stw_da 0x045204, xbc
 	jr Voice_Freq_WriteLeft_Return
 
 Voice_Freq_WriteLeft_HiRange:
@@ -5893,7 +5893,7 @@ Voice_Freq_WriteLeft_HiRange:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010c64
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
 	ld xwa, (xsp + 4)
@@ -5931,10 +5931,10 @@ Voice_Freq_WriteLeft_HiRange_Store:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011511
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	or bc, wa
-	st16_24 0x04520e, xbc
+	stw_da 0x04520e, xbc
 
 Voice_Freq_WriteLeft_Return:
 	pop xiz
@@ -5956,7 +5956,7 @@ Voice_Freq_WriteRight:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x010964
-	ld_sriw3 HL, 0x07, 0xE4, 0xE0
+	ldw_sri HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xiz + 4)
 	lds32 xbc, 0
@@ -5974,11 +5974,11 @@ Voice_Freq_WriteRight_FlagSet:
 	bitm 5, (xiz)
 	jr z, Voice_Freq_WriteRight_Store
 	set 15, hl
-	st16_24 0x045206, xhl
+	stw_da 0x045206, xhl
 	jr Voice_Freq_WriteRight_Return
 
 Voice_Freq_WriteRight_Store:
-	st16_24 0x045206, xhl
+	stw_da 0x045206, xhl
 	jr Voice_Freq_WriteRight_Return
 
 Voice_Freq_WriteRight_HiRange:
@@ -5987,7 +5987,7 @@ Voice_Freq_WriteRight_HiRange:
 	ld xhl, 0x3FFF
 
 Voice_Freq_WriteRight_HiRange_Store:
-	st16_24 0x04520a, xhl
+	stw_da 0x04520a, xhl
 
 Voice_Freq_WriteRight_Return:
 	pop xiz
@@ -6025,7 +6025,7 @@ Voice_Colour_LookupIndex:
 	sla wa, 8
 	add wa, de
 	lda_24 xbc, 0x00ffe4
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	extz hl
 	ret
 
@@ -6088,7 +6088,7 @@ Voice_Colour_Write:
 	ld bc, hl
 	add bc, bc
 	lda_24 xwa, 0x010764
-	ld_sriw3 WA, 0x07, 0xE0, 0xE4
+	ldw_sri WA, 0x07, 0xE0, 0xE4
 	add wa, wa
 	ld bc, wa
 	ld xwa, (xiz + 15)
@@ -6113,7 +6113,7 @@ Voice_Colour_Write_NoPanOverride:
 Voice_Colour_Write_Store:
 	or bc, wa
 	set 15, bc
-	st16_24 0x0451d0, xbc
+	stw_da 0x0451d0, xbc
 	pop xiz
 	ret
 
@@ -6159,7 +6159,7 @@ Voice_Env_UpdateVelocityCounters:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041486
-	stib_dri 0x07, 0xE8, 0xE4, 0x00
+	stib_ind 0x07, 0xE8, 0xE4, 0x00
 	jr Voice_Env_UpdateVelocity_Store
 
 Voice_Env_UpdateVelocity_SetPhase1:
@@ -6167,7 +6167,7 @@ Voice_Env_UpdateVelocity_SetPhase1:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041486
-	stib_dri 0x07, 0xE8, 0xE4, 0x10
+	stib_ind 0x07, 0xE8, 0xE4, 0x10
 	jr Voice_Env_UpdateVelocity_Store
 
 Voice_Env_UpdateVelocity_SetPhase2:
@@ -6175,7 +6175,7 @@ Voice_Env_UpdateVelocity_SetPhase2:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041486
-	stib_dri 0x07, 0xE8, 0xE4, 0x20
+	stib_ind 0x07, 0xE8, 0xE4, 0x20
 	jr Voice_Env_UpdateVelocity_Store
 
 Voice_Env_UpdateVelocity_Reset:
@@ -6183,12 +6183,12 @@ Voice_Env_UpdateVelocity_Reset:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041485
-	stib_dri 0x07, 0xE8, 0xE4, 0x00
+	stib_ind 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041486
-	stib_dri 0x07, 0xE8, 0xE4, 0x00
+	stib_ind 0x07, 0xE8, 0xE4, 0x00
 
 Voice_Env_UpdateVelocity_Store:
 	extz wa
@@ -6196,7 +6196,7 @@ Voice_Env_UpdateVelocity_Store:
 	ld bc, wa
 	lda_24 xde, 0x041481
 	ldda32 xwa, 4160
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
+	stl_dri XWA, 0x07, 0xE8, 0xE4
 	ret
 
 Voice_Env_ApplyVelocity_Type0:
@@ -6206,7 +6206,7 @@ Voice_Env_ApplyVelocity_Type0:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x0413d5
-	stib_dri 0x07, 0xE8, 0xE0, 0x00
+	stib_ind 0x07, 0xE8, 0xE0, 0x00
 	ld a, (xsp)
 	cps a, 2
 	jrl z, Voice_Env_ApplyVelocity_Type2
@@ -6230,7 +6230,7 @@ Voice_Env_VelocityDispatch_c1:
 	jrl Voice_Env_VelocityDispatch_Gate
 
 Voice_Env_VelocityDispatch_c0_NoBit3:
-	ld8_24 a, 0x04134b
+	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Bit0_L
 	jr Voice_Env_VelocityDispatch_Gate
@@ -6242,7 +6242,7 @@ Voice_Env_VelocityDispatch_c1_Bit1:
 	jr Voice_Env_VelocityDispatch_Gate
 
 Voice_Env_VelocityDispatch_c1_NoBit3:
-	ld8_24 a, 0x04134b
+	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Mode2_L
 	jr Voice_Env_VelocityDispatch_Gate
@@ -6262,7 +6262,7 @@ Voice_Env_VelocityDispatch_c2_Trigger:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04137f
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr BitTest_Bit0_L_v2
 	jr Voice_Env_VelocityDispatch_Gate
@@ -6282,7 +6282,7 @@ Voice_Env_VelocityDispatch_c3_Trigger:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04137f
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr BitTest_Mode2_L_v2
 	jr Voice_Env_VelocityDispatch_Gate
@@ -6313,7 +6313,7 @@ Voice_Env_ApplyVelocity_Type2:
 	jrl Voice_Env_Type2_Gate
 
 Voice_Env_Type2_c0_NoBit4:
-	ld8_24 a, 0x04134b
+	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Bit0_L
 	jr Voice_Env_Type2_Gate
@@ -6325,7 +6325,7 @@ Voice_Env_Type2_c1:
 	jr Voice_Env_Type2_Gate
 
 Voice_Env_Type2_c1_NoBit4:
-	ld8_24 a, 0x04134b
+	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Mode2_L
 	jr Voice_Env_Type2_Gate
@@ -6345,7 +6345,7 @@ Voice_Env_Type2_c2_Trigger:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04137f
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr BitTest_Bit0_L_v2
 	jr Voice_Env_Type2_Gate
@@ -6365,7 +6365,7 @@ Voice_Env_Type2_c3_Trigger:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04137f
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr BitTest_Mode2_L_v2
 	jr Voice_Env_Type2_Gate
@@ -6396,7 +6396,7 @@ Voice_Pitch_Compute:
 	ld (xsp + 6), a
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	sla iz, 8
 	and iz, 0x7F00
@@ -6433,7 +6433,7 @@ Voice_Pitch_Compute:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 8, wa
 	jrl z, Voice_Pitch_ApplyPortamento
 	call Voice_GetParam_04134D
@@ -6475,7 +6475,7 @@ Voice_Pitch_BendType_TableA:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00fce4
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jrl Voice_Pitch_ApplyPortamento
 
@@ -6486,7 +6486,7 @@ Voice_Pitch_BendType_TableB:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00fde4
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jrl Voice_Pitch_ApplyPortamento
 
@@ -6521,7 +6521,7 @@ Voice_Pitch_Inactive_BendType_TableA:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00fce4
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jr Voice_Pitch_ApplyPortamento
 
@@ -6532,7 +6532,7 @@ Voice_Pitch_Inactive_BendType_TableB:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00fde4
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jr Voice_Pitch_ApplyPortamento
 
@@ -6551,7 +6551,7 @@ Voice_Pitch_Inactive_BendType_Chromatic:
 	lda_24 xbc, 0x011b68
 	exts xwa
 	add xwa, xbc
-	ld_srib3 A, 0x07, 0xE0, 0xE8
+	ldb_sri A, 0x07, 0xE0, 0xE8
 	exts wa
 	add wa, wa
 	add iz, wa
@@ -6710,7 +6710,7 @@ Voice_Pitch_InterpDispatch:
 	ld bc, wa
 	inc 4, bc
 	ld xwa, (xsp + 4)
-	ld_srib3 E, 0x07, 0xE0, 0xE4
+	ldb_sri E, 0x07, 0xE0, 0xE4
 	bitm 6, (xiz)
 	jr z, Voice_Pitch_Interp_Bit7_NoB6
 	bitm 7, (xiz)
@@ -6830,7 +6830,7 @@ Voice_PitchEnv_Advance_RoutingTable:
 	ld bc, wa
 	add bc, 0x102
 	ld xwa, (xiz + 35)
-	ld_sriw3 HL, 0x07, 0xE0, 0xE4
+	ldw_sri HL, 0x07, 0xE0, 0xE4
 	ld wa, hl
 	extz xwa
 	ld xbc, xwa
@@ -6845,14 +6845,14 @@ Voice_PitchEnv_StoreOutputRegs:
 	ormi16 (xiz + 1), 0x4000
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
-	st16_24 0x0451ce, xwa
+	stw_da 0x0451ce, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 4)
 	stda16 10558, xwa
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 2, wa
 	jr z, Voice_PitchEnv_StoreOutputRegs_Return
-	ld16_24 xwa, 0x0451ce
+	ldw_da xwa, 0x0451ce
 	and wa, 0xF000
 	add wa, wa
 	anddi16_24 283086, 4095
@@ -6873,7 +6873,7 @@ Voice_Vol_ScaleVelocityWord:
 	exts wa
 	muls wa, 0xD
 	sra wa, 7
-	st16_24 0x041366, xwa
+	stw_da 0x041366, xwa
 	ret
 
 Voice_Pitch_WriteOutputReg_Portamento:
@@ -6933,7 +6933,7 @@ Voice_Pitch_Legato_StoreOutput:
 Voice_Pitch_Legato_StoreOutput_Return:
 	ld wa, de
 	calr SaturateS16_WA
-	st16_24 0x0451da, xhl
+	stw_da 0x0451da, xhl
 	ret
 
 Voice_Pitch_WriteOutputReg_Direct:
@@ -6964,7 +6964,7 @@ Voice_Pitch_Secondary_DetuneDown:
 Voice_Pitch_Secondary_StoreOutput:
 	ld wa, de
 	calr SaturateS16_WA
-	st16_24 0x0451da, xhl
+	stw_da 0x0451da, xhl
 	ret
 
 Voice_Level_ComputeTriplet:
@@ -7022,7 +7022,7 @@ Voice_Level_Triplet_ModByEnv:
 	ld a, (xiz + 9)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
 	ld (xsp + 10), wa
@@ -7032,7 +7032,7 @@ Voice_Level_Ch1_Unmodulated:
 	ld a, (xiz + 9)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 
@@ -7043,7 +7043,7 @@ Voice_Level_Ch2_Modulated:
 	ld a, (xiz + 11)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
 	ld (xsp + 12), wa
@@ -7053,7 +7053,7 @@ Voice_Level_Ch2_Unmodulated:
 	ld a, (xiz + 11)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
 
@@ -7063,7 +7063,7 @@ Voice_Level_Ch3_Modulated:
 	ld a, (xiz + 13)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, hl
 	ld (xsp + 14), wa
@@ -7073,7 +7073,7 @@ Voice_Level_Ch3_Unmodulated:
 	ld a, (xiz + 13)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 14), wa
 	jr Voice_Level_ApplyVelocityMod
@@ -7082,19 +7082,19 @@ Voice_Level_Triplet_Unmodulated:
 	ld a, (xiz + 9)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld a, (xiz + 11)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
 	ld a, (xiz + 13)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 14), wa
 
@@ -7128,7 +7128,7 @@ Voice_Level_PackAndStore:
 	ld bc, (xsp + 10)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451ec, xbc
+	stw_da 0x0451ec, xbc
 	cp (xiz + 21), 0x0
 	jr z, Voice_Level_PackAndStore_NoVelocityMod
 	ld a, (xiz + 19)
@@ -7181,13 +7181,13 @@ Voice_Level_PackSideChannels:
 	ld bc, (xsp + 12)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451ee, xbc
+	stw_da 0x0451ee, xbc
 	ld wa, (xsp + 8)
 	ldb w, 0x0
 	ld bc, (xsp + 14)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451f0, xbc
+	stw_da 0x0451f0, xbc
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -7206,7 +7206,7 @@ Voice_PitchPack_Mode1:
 	exts bc
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 77)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	add iz, bc
 	ld xwa, (xsp + 2)
@@ -7289,7 +7289,7 @@ Voice_PitchPack_Mode2:
 	exts bc
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 77)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	sub iz, bc
 	ld xwa, (xsp + 2)
@@ -7336,7 +7336,7 @@ Voice_PitchPack_Mode2_AltPath:
 	exts bc
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 77)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	add iz, bc
 	ld xwa, (xsp + 2)
@@ -7402,7 +7402,7 @@ Voice_PitchPack_Mode3:
 	exts bc
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 77)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	add iz, bc
 	ld xwa, (xsp + 2)
@@ -7448,7 +7448,7 @@ Voice_PitchPack_Mode3_AltPath:
 	exts bc
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 77)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	add iz, bc
 	ld xwa, (xsp + 2)
@@ -7639,9 +7639,9 @@ Voice_PitchPack_Dispatch:
 	jr gt, Voice_PitchPack_Dispatch_Table
 	add bc, bc
 	lda_24 xix, 0x00f6a7
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ldw_sri BC, 0x07, 0xF0, 0xE4
 	lda_24 xix, 0x02412b
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_ind 8, 0x07, 0xF0, 0xE4
 
 Voice_PitchPack_Dispatch_Table:
 	jrl NoteState_InitDefaults
@@ -7855,17 +7855,17 @@ Voice_PitchReg_WriteDispatch:
 	jr gt, Voice_PitchReg_WriteDispatch_Table
 	add wa, wa
 	lda_24 xix, 0x00f6b3
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x02432c
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 Voice_PitchReg_WriteDispatch_Table:
 	ld xwa, xiz
 	calr NoteState_InitDefaults
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	jr Voice_PitchReg_WriteDispatch_Return
 	ld xwa, xiz
 	calr Voice_PitchPack_RouteA
@@ -7920,16 +7920,16 @@ Voice_Pan_WriteWithDetune_Clamp:
 	ld wa, (xiz + 66)
 	and wa, 0xFF80
 	or wa, hl
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	jr Voice_Pan_WriteSecondary
 
 Voice_Pan_Write_AsIs:
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 
 Voice_Pan_WriteSecondary:
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	pop xiz
 	ret
 
@@ -7969,18 +7969,18 @@ Voice_Pan_WriteBoth_Clamp:
 	ld bc, (xiz + 66)
 	and bc, 0xFF80
 	or bc, wa
-	st16_24 0x0451d4, xbc
+	stw_da 0x0451d4, xbc
 	ld wa, (xiz + 68)
 	and wa, 0xFF80
 	or wa, hl
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	jr Voice_Pan_WriteBoth_Return
 
 Voice_Pan_WriteBoth_AsIs:
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 
 Voice_Pan_WriteBoth_Return:
 	pop xiz
@@ -8000,15 +8000,15 @@ Voice_PanReg_WriteDispatch:
 	jr gt, Voice_PanReg_WriteDispatch_Table
 	add wa, wa
 	lda_24 xix, 0x00f6bf
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x024472
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 Voice_PanReg_WriteDispatch_Table:
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	jrl Voice_PanReg_WriteDispatch_Return
 	ld xwa, xiz
 	calr Voice_Pan_WriteWithDetune
@@ -8074,20 +8074,20 @@ Voice_PanReg_Dispatch_Mode5_Finalize:
 	ld wa, (xiz + 66)
 	and wa, 0xFF80
 	or wa, hl
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xsp + 4)
 	calr ClampS8_0_to_78
 	ld wa, (xiz + 68)
 	and wa, 0xFF80
 	or wa, hl
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	jr Voice_PanReg_WriteDispatch_Return
 
 Voice_PanReg_Dispatch_Mode5_AsIs:
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 
 Voice_PanReg_WriteDispatch_Return:
 	pop xiz
@@ -8108,15 +8108,15 @@ Voice_PanReg_WriteDispatchB:
 	jr gt, Voice_PanReg_WriteDispatchB_Table
 	add wa, wa
 	lda_24 xix, 0x00f6cb
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x024582
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 Voice_PanReg_WriteDispatchB_Table:
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	jrl Voice_PanReg_WriteDispatchB_Return
 	ld xwa, xiz
 	calr Voice_Pan_WriteWithDetune
@@ -8182,20 +8182,20 @@ Voice_PanReg_DispatchB_Mode5_Finalize:
 	ld wa, (xiz + 66)
 	and wa, 0xFF80
 	or wa, hl
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xsp + 4)
 	calr ClampS8_0_to_78
 	ld wa, (xiz + 68)
 	and wa, 0xFF80
 	or wa, hl
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 	jr Voice_PanReg_WriteDispatchB_Return
 
 Voice_PanReg_DispatchB_Mode5_AsIs:
 	ld wa, (xiz + 66)
-	st16_24 0x0451d4, xwa
+	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	st16_24 0x0451d6, xwa
+	stw_da 0x0451d6, xwa
 
 Voice_PanReg_WriteDispatchB_Return:
 	pop xiz
@@ -8230,7 +8230,7 @@ Voice_StereoLevel_Compute:
 	ld a, (xwa + 63)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
 	ld (xsp + 6), wa
@@ -8241,7 +8241,7 @@ Voice_StereoLevel_Ch1_Unmodulated:
 	ld a, (xwa + 63)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 6), wa
 
@@ -8254,7 +8254,7 @@ Voice_StereoLevel_Ch2_Modulated:
 	ld a, (xwa + 65)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
 	ld (xsp + 8), wa
@@ -8265,7 +8265,7 @@ Voice_StereoLevel_Ch2_Unmodulated:
 	ld a, (xwa + 65)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 8), wa
 
@@ -8277,7 +8277,7 @@ Voice_StereoLevel_Ch3_Modulated:
 	ld a, (xwa + 67)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, hl
 	ld (xsp + 10), wa
@@ -8288,7 +8288,7 @@ Voice_StereoLevel_Ch3_Unmodulated:
 	ld a, (xwa + 67)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	jr Voice_StereoLevel_ApplyTremolo
@@ -8298,21 +8298,21 @@ Voice_StereoLevel_AllUnmodulated:
 	ld a, (xwa + 63)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 6), wa
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 65)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 8), wa
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 67)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 
@@ -8358,7 +8358,7 @@ Voice_StereoLevel_PackCh1:
 	ld wa, (xsp + 6)
 	sla wa, 8
 	or wa, hl
-	st16_24 0x0451f2, xwa
+	stw_da 0x0451f2, xwa
 	ld xwa, (xsp + 2)
 	cp (xwa + 75), 0x0
 	jr z, Voice_StereoLevel_ClampCh23_NoMod
@@ -8436,12 +8436,12 @@ Voice_StereoLevel_PackCh23:
 	ld bc, (xsp + 8)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451f4, xbc
+	stw_da 0x0451f4, xbc
 	ldb h, 0x0
 	ld wa, (xsp + 10)
 	sla wa, 8
 	or wa, hl
-	st16_24 0x0451f6, xwa
+	stw_da 0x0451f6, xwa
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
@@ -8525,7 +8525,7 @@ Voice_PortaLevel_ScaleAndPack:
 	ld wa, (xsp + 8)
 	sll wa, 8
 	or wa, bc
-	st16_24 0x0451e2, xwa
+	stw_da 0x0451e2, xwa
 	ld xwa, (xsp + 2)
 	ld c, (xwa + 61)
 	ld xwa, (xsp + 2)
@@ -8537,28 +8537,28 @@ Voice_PortaLevel_ScaleAndPack:
 	ld wa, (xsp + 6)
 	sll wa, 8
 	or wa, hl
-	st16_24 0x0451ea, xwa
+	stw_da 0x0451ea, xwa
 	popw iz
 	lda xsp, (xsp + 12)
 	ret
 
 Voice_Level_ClearAllOutputRegs:
 	ld xhl, (xwa + 23)
-	sti16_24 0x0451ea, 0x0000
-	sti16_24 0x0451e2, 0x0000
-	sti16_24 0x0451ec, 0x0000
-	sti16_24 0x0451ee, 0x0000
-	sti16_24 0x0451f0, 0x0000
-	sti16_24 0x0451f2, 0x0000
-	sti16_24 0x0451f4, 0x0000
-	sti16_24 0x0451f6, 0x0000
-	sti16_24 0x0451dc, 0x0000
-	sti16_24 0x0451de, 0x0000
+	stiw_da 0x0451ea, 0x0000
+	stiw_da 0x0451e2, 0x0000
+	stiw_da 0x0451ec, 0x0000
+	stiw_da 0x0451ee, 0x0000
+	stiw_da 0x0451f0, 0x0000
+	stiw_da 0x0451f2, 0x0000
+	stiw_da 0x0451f4, 0x0000
+	stiw_da 0x0451f6, 0x0000
+	stiw_da 0x0451dc, 0x0000
+	stiw_da 0x0451de, 0x0000
 	ld c, (xwa + 4)
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x04138e
-	cp_srib_im 0x07, 0xE8, 0xE4, 0x01
+	cpib_sri 0x07, 0xE8, 0xE4, 0x01
 	jr nz, Voice_Level_ClearAllOutputRegs_Check2
 	ldw (xwa + 43), 0x0
 	jr Voice_Level_ClearAllOutputRegs_Store
@@ -8568,7 +8568,7 @@ Voice_Level_ClearAllOutputRegs_Check2:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x04138e
-	cp_srib_im 0x07, 0xE8, 0xE4, 0x02
+	cpib_sri 0x07, 0xE8, 0xE4, 0x02
 	jr nz, Voice_Level_ClearAllOutputRegs_FromTable
 	ldw (xwa + 43), 0x7F
 	jr Voice_Level_ClearAllOutputRegs_Store
@@ -8580,8 +8580,8 @@ Voice_Level_ClearAllOutputRegs_FromTable:
 
 Voice_Level_ClearAllOutputRegs_Store:
 	ld wa, (xwa + 43)
-	st16_24 0x0451d8, xwa
-	sti16_24 0x0451e0, 0x0000
+	stw_da 0x0451d8, xwa
+	stiw_da 0x0451e0, 0x0000
 	ret
 
 Voice_OpSlot_WriteParams:
@@ -8603,7 +8603,7 @@ Voice_OpSlot_WriteParams:
 	muls bc, 0x11F
 	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
-	st_dri3b A, 0x07, 0xE4, 0xF4
+	stb_dri A, 0x07, 0xE4, 0xF4
 	ld (xsp + 4), xbc
 	ld xbc, 0x2B
 	add (xsp + 4), xbc
@@ -8617,7 +8617,7 @@ Voice_OpSlot_WriteParams:
 	lda_24 xix, 0x04424e
 	exts xbc
 	add xbc, xix
-	st_dri3b H, 0x07, 0xE4, 0xF4
+	stb_dri H, 0x07, 0xE4, 0xF4
 	ld c, e
 	extz bc
 	ld ix, bc
@@ -8632,7 +8632,7 @@ Voice_OpSlot_WriteParams:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xF4
+	stb_dri W, 0x07, 0xE0, 0xF4
 	ld (xsp + 8), xwa
 	ld xwa, 0x27
 	add (xsp + 8), xwa
@@ -8640,7 +8640,7 @@ Voice_OpSlot_WriteParams:
 	jr z, Voice_OpSlot_WriteParams_Direct
 	cps e, 0
 	jr nz, Voice_OpSlot_WriteParams_Direct
-	cpi8_24 0x0451a7, 0xf5
+	cpib_da 0x0451a7, 0xf5
 	jr z, Voice_OpSlot_WriteParams_Direct
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 104)
@@ -8749,8 +8749,8 @@ Voice_Chan_ComputeParams:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld (xsp + 22), xwa
-	sti16_24 0x0451dc, 0x0000
-	sti16_24 0x0451de, 0x0000
+	stiw_da 0x0451dc, 0x0000
+	stiw_da 0x0451de, 0x0000
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 35)
 	ld (xsp + 4), xwa
@@ -8776,7 +8776,7 @@ Voice_Chan_ComputeParams:
 	add bc, 0x2B
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 19)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	bitm 7, (xwa + 2)
 	jr z, Voice_Chan_ComputeParams_NoAlgoSelect
 	ld a, (xsp + 16)
@@ -8836,7 +8836,7 @@ Voice_Chan_ResolveSlot:
 	ld wa, (xwa + 26)
 	and wa, 0xC0
 	or wa, (xsp + 14)
-	st16_24 0x0451dc, xwa
+	stw_da 0x0451dc, xwa
 	ld wa, (xsp + 12)
 	bit 15, wa
 	jr z, Voice_Chan_WriteOpSlots
@@ -8862,7 +8862,7 @@ Voice_Chan_WriteOpSlots:
 	ld wa, (xsp + 14)
 	extz wa
 	calr EGEnv_Compute_A_Simple
-	st16_24 0x045208, xhl
+	stw_da 0x045208, xhl
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_56_Alt
@@ -8883,7 +8883,7 @@ Voice_Chan_PitchEnvGate_Trigger:
 	ld (xiz + 8), 0x0
 	andmi8 (xiz), 0xF3
 	setm 4, (xiz)
-	sti16_24 0x04520c, 0x0000
+	stiw_da 0x04520c, 0x0000
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_600
@@ -8903,7 +8903,7 @@ Voice_Chan_PitchEnvFreeRun_Trigger:
 	ld wa, (xsp + 14)
 	extz wa
 	calr EGEnv_Compute_A
-	st16_24 0x04520c, xhl
+	stw_da 0x04520c, xhl
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_600
@@ -8917,7 +8917,7 @@ Voice_Chan_ChokeGroup_Trigger:
 	ld wa, (xsp + 14)
 	extz wa
 	calr EGEnv_Compute_A
-	st16_24 0x04520c, xhl
+	stw_da 0x04520c, xhl
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_600
@@ -8965,7 +8965,7 @@ Voice_Chan_Fallback_NoWaveTable:
 	ld wa, (xsp + 12)
 	and wa, 0x7F
 	or wa, (xsp + 20)
-	st16_24 0x0451dc, xwa
+	stw_da 0x0451dc, xwa
 	ld wa, (xsp + 12)
 	bit 15, wa
 	jr z, Voice_Chan_Fallback_WritePrecomputed
@@ -8977,10 +8977,10 @@ Voice_Chan_Fallback_NoWaveTable:
 Voice_Chan_Fallback_WritePrecomputed:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 91)
-	st16_24 0x04520c, xwa
+	stw_da 0x04520c, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 93)
-	st16_24 0x045208, xwa
+	stw_da 0x045208, xwa
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_56
@@ -9021,7 +9021,7 @@ Voice_Chan_SecondaryPitch_Trigger:
 	jr nc, Voice_Chan_ComputeParams_Return
 	ld wa, (xsp + 14)
 	or wa, (xsp + 20)
-	st16_24 0x0451de, xwa
+	stw_da 0x0451de, xwa
 	ld a, (xsp + 16)
 	extz wa
 	call AlgoType_AB_Checker
@@ -9038,8 +9038,8 @@ Voice_Chan_SecondaryPitch_Trigger:
 Voice_Chan_SecondaryPitch_ComputeDelta:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 87)
-	st16_24 0x04520e, xwa
-	ld16_24 xiz, 0x04520e
+	stw_da 0x04520e, xwa
+	ldw_da xiz, 0x04520e
 	extz xiz
 	and xiz, 0x1FFF
 	ld xwa, (xsp + 22)
@@ -9056,7 +9056,7 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	ordm16_24 283150, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 89)
-	st16_24 0x04520a, xwa
+	stw_da 0x04520a, xwa
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_56b
@@ -9095,7 +9095,7 @@ Voice_SubVoice_ComputeAndTrigger:
 	add bc, 0x3B
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 19)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	bitm 7, (xwa + 2)
 	jr z, Voice_SubVoice_Compute_NoAlgoSelect
 	ld a, (xsp + 18)
@@ -9114,7 +9114,7 @@ Voice_SubVoice_ComputeAndTrigger:
 	call VoiceSlot_Assign
 	ld (xsp + 14), hl
 	ld iz, (xsp + 14)
-	ldi_berp 0xF9, 0
+	ldib_erp 0xF9, 0
 	ld wa, iz
 	call ToneGen_WriteExtParam_540_Mute
 	jr Voice_SubVoice_ResolveSlot
@@ -9136,7 +9136,7 @@ Voice_SubVoice_Compute_NoAlgoSelect:
 	call VoiceSlot_Assign
 	ld (xsp + 14), hl
 	ld iz, (xsp + 14)
-	ldi_berp 0xF9, 0
+	ldib_erp 0xF9, 0
 
 Voice_SubVoice_ResolveSlot:
 	ld wa, iz
@@ -9175,16 +9175,16 @@ Voice1_UpdatePitch_WritePBend:
 	ld e, a
 	extz de
 	pushw 0x1
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	pushw wa
 	ld wa, bc
 	ld xbc, (xsp + 6)
 	calr Voice_OpSlot_WriteParams
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr EGEnv_Compute_B_Simple
-	st16_24 0x045206, xhl
+	stw_da 0x045206, xhl
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_15_Alt
@@ -9210,7 +9210,7 @@ Voice1_UpdatePitch_DeactivateOsc:
 	andmi8 (xwa), 0xF3
 	ld xwa, (xsp + 10)
 	setm 4, (xwa)
-	sti16_24 0x045204, 0x0000
+	stiw_da 0x045204, 0x0000
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_1C0_Single
@@ -9229,10 +9229,10 @@ Voice1_UpdatePitch_CheckStateFlags:
 	ld a, (xwa)
 	and a, 0x38
 	jr nz, Voice1_UpdatePitch_WriteFreq
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr EGEnv_Compute_B
-	st16_24 0x045204, xhl
+	stw_da 0x045204, xhl
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_1C0_Single
@@ -9243,10 +9243,10 @@ Voice1_UpdatePitch_WriteFreq:
 	ld wa, (xwa)
 	and wa, 0xC
 	jrl z, Voice1_UpdatePitch_WriteStereoField
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr EGEnv_Compute_B
-	st16_24 0x045204, xhl
+	stw_da 0x045204, xhl
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_1C0_Single
@@ -9280,7 +9280,7 @@ Voice1_UpdatePitch_AltEntry:
 	and iz, 0xFF
 	cp iz, 0x40
 	jr nc, Voice1_UpdatePitch_WriteStereoField
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	ld bc, wa
 	lds wa, 1
@@ -9299,10 +9299,10 @@ Voice1_UpdatePitch_AltEntry:
 Voice1_UpdatePitch_WriteAltFreq:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 95)
-	st16_24 0x045204, xwa
+	stw_da 0x045204, xwa
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 97)
-	st16_24 0x045206, xwa
+	stw_da 0x045206, xwa
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_15
@@ -9313,7 +9313,7 @@ Voice1_UpdatePitch_WriteStereoField:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04138e
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x01
+	cpib_sri 0x07, 0xE4, 0xE0, 0x01
 	jr nz, Voice1_UpdatePitch_StereoPart2
 	ld bc, (xsp + 16)
 	ld xwa, (xsp + 22)
@@ -9326,7 +9326,7 @@ Voice1_UpdatePitch_StereoPart2:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04138e
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x02
+	cpib_sri 0x07, 0xE4, 0xE0, 0x02
 	jr nz, Voice1_UpdatePitch_StereoFallthrough
 	ld bc, (xsp + 16)
 	or bc, 0x7F
@@ -9346,7 +9346,7 @@ Voice1_UpdatePitch_StereoFallthrough:
 Voice1_UpdatePitch_StoreStereo:
 	ld xwa, (xsp + 22)
 	ld wa, (xwa + 43)
-	st16_24 0x0451d8, xwa
+	stw_da 0x0451d8, xwa
 	popw iz
 	lda xsp, (xsp + 24)
 	ret
@@ -9355,7 +9355,7 @@ Voice2_UpdatePitch:
 	lda xsp, (xsp - 22)
 	pushw iz
 	ld (xsp + 20), xwa
-	sti16_24 0x0451e0, 0x4400
+	stiw_da 0x0451e0, 0x4400
 	ld xwa, (xsp + 20)
 	ld xwa, (xwa + 35)
 	ld (xsp + 2), xwa
@@ -9378,7 +9378,7 @@ Voice2_UpdatePitch:
 	add bc, 0x4B
 	ld xwa, (xsp + 20)
 	ld xwa, (xwa + 19)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	bitm 7, (xwa + 2)
 	jr z, Voice2_UpdatePitch_NoOsc7Flag
 	ld a, (xsp + 16)
@@ -9397,7 +9397,7 @@ Voice2_UpdatePitch:
 	call VoiceSlot_Assign
 	ld (xsp + 14), hl
 	ld iz, (xsp + 14)
-	ldi_berp 0xF9, 0
+	ldib_erp 0xF9, 0
 	ld wa, iz
 	call ToneGen_WriteExtParam_Mute_TypeDispatch
 	jr Voice2_UpdatePitch_ChanEntry
@@ -9419,7 +9419,7 @@ Voice2_UpdatePitch_NoOsc7Flag:
 	call VoiceSlot_Assign
 	ld (xsp + 14), hl
 	ld iz, (xsp + 14)
-	ldi_berp 0xF9, 0
+	ldib_erp 0xF9, 0
 
 Voice2_UpdatePitch_ChanEntry:
 	ld wa, iz
@@ -9456,13 +9456,13 @@ Voice2_UpdatePitch_WritePBend:
 	ld e, a
 	extz de
 	pushw 0x2
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	pushw wa
 	ld wa, bc
 	ld xbc, (xsp + 6)
 	calr Voice_OpSlot_WriteParams
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr Voice_Freq_WriteRight
 	ld wa, iz
@@ -9490,8 +9490,8 @@ Voice2_UpdatePitch_DeactivateOsc:
 	andmi8 (xwa), 0xF3
 	ld xwa, (xsp + 10)
 	setm 4, (xwa)
-	sti16_24 0x045204, 0x0000
-	sti16_24 0x04520e, 0x0000
+	stiw_da 0x045204, 0x0000
+	stiw_da 0x04520e, 0x0000
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_TypeDispatch_Single
@@ -9510,7 +9510,7 @@ Voice2_UpdatePitch_CheckStateFlags:
 	ld a, (xwa)
 	and a, 0x38
 	jr nz, Voice2_UpdatePitch_WriteFreq
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr Voice_Freq_WriteLeft
 	ld wa, iz
@@ -9523,7 +9523,7 @@ Voice2_UpdatePitch_WriteFreq:
 	ld wa, (xwa)
 	and wa, 0xC
 	jr z, Voice2_UpdatePitch_Done
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr Voice_Freq_WriteLeft
 	ld wa, iz
@@ -9542,7 +9542,7 @@ Voice_ComputeExprPitchBend:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Voice_ComputeExprPitchBend_ZeroCoarse
-	ld8_24 c, 0x04134c
+	ldb_da c, 0x04134c
 	cps c, 6
 	jr nz, Voice_ComputeExprPitchBend_UseCoarse
 	lds de, 0
@@ -9589,7 +9589,7 @@ Voice_ComputeExprPitchBend_CheckExpr:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Voice_ComputeExprPitchBend_NoExpr
-	ld8_24 c, 0x04134c
+	ldb_da c, 0x04134c
 	cps c, 6
 	jr z, Voice_ComputeExprPitchBend_FullExpr
 	cps c, 5
@@ -9613,7 +9613,7 @@ Voice_ComputeExprPitchBend_NoExpr:
 	or de, wa
 
 Voice_ComputeExprPitchBend_Write:
-	st16_24 0x0451d2, xde
+	stw_da 0x0451d2, xde
 	ret
 
 Voice_ComputePitchBend2:
@@ -9624,7 +9624,7 @@ Voice_ComputePitchBend2:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Voice_ComputePitchBend2_ZeroCoarse
-	ld8_24 c, 0x04134c
+	ldb_da c, 0x04134c
 	cps c, 6
 	jr nz, Voice_ComputePitchBend2_UseCoarse
 	lds de, 0
@@ -9666,7 +9666,7 @@ Voice_ComputePitchBend2_CheckExpr:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Voice_ComputePitchBend2_NoExpr
-	ld8_24 c, 0x04134c
+	ldb_da c, 0x04134c
 	cps c, 6
 	jr z, Voice_ComputePitchBend2_FullExpr
 	cps c, 5
@@ -9690,7 +9690,7 @@ Voice_ComputePitchBend2_NoExpr:
 	or de, wa
 
 Voice_ComputePitchBend2_Write:
-	st16_24 0x0451d2, xde
+	stw_da 0x0451d2, xde
 	ret
 
 Voice_ApplyModeToPitchWord:
@@ -9698,7 +9698,7 @@ Voice_ApplyModeToPitchWord:
 	extz de
 	muls de, 0x11F
 	lda_24 xhl, 0x04138d
-	ld_srib3 E, 0x07, 0xEC, 0xE8
+	ldb_sri E, 0x07, 0xEC, 0xE8
 	and e, 0xF
 	cps e, 1
 	jr z, Voice_ApplyModeToPitchWord_HighNibble
@@ -9717,7 +9717,7 @@ Voice_ApplyModeToPitchWord_HighNibble:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04138d
-	ld_srib3 A, 0x07, 0xE8, 0xE0
+	ldb_sri A, 0x07, 0xE8, 0xE0
 	and a, 0xF0
 	cp a, 0x10
 	jr z, Voice_ApplyModeToPitchWord_Done
@@ -9755,7 +9755,7 @@ Voice_SetPitchWord_Muted_CheckExpr:
 	ld xwa, (xiz + 35)
 	cp (xwa + 18), 0x0
 	jr z, Voice_SetPitchWord_Muted_NoExpr
-	ld8_24 a, 0x04134c
+	ldb_da a, 0x04134c
 	cps a, 6
 	jr z, Voice_SetPitchWord_Muted_FullExpr
 	cps a, 5
@@ -9796,7 +9796,7 @@ Voice_SetPitchWord_Unmuted:
 	ld xwa, (xiz + 35)
 	cp (xwa + 18), 0x0
 	jr z, Voice_SetPitchWord_Unmuted_NoExpr
-	ld8_24 a, 0x04134c
+	ldb_da a, 0x04134c
 	cps a, 6
 	jr z, Voice_SetPitchWord_Unmuted_FullExpr
 	cps a, 5
@@ -9860,10 +9860,10 @@ Voice_ComputeAndWritePan_ApplyKeyTrack:
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	lda_24 xbc, 0x011899
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 4)
@@ -9903,10 +9903,10 @@ Voice_ComputeAndWritePan_ApplyKeyTrack:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, iz
 	add wa, (xsp + 8)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -9937,9 +9937,9 @@ Voice_ComputeAndWritePan_NoOscLFO:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, iz
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -9959,27 +9959,27 @@ Voice_ComputeAndWritePan_WriteDSP:
 	ld a, (xwa + 40)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
 	ld bc, iz
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e4, xbc
+	stw_da 0x0451e4, xbc
 	ld xwa, (xsp + 14)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 41)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 43)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
 	ld xwa, (xsp + 4)
@@ -10019,17 +10019,17 @@ Voice_ComputeAndWritePan_WriteDSP:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -10066,15 +10066,15 @@ Voice_ComputeAndWritePan_NoPanDepth2:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -10085,7 +10085,7 @@ Voice_ComputeAndWritePan_WriteChans:
 	ld a, (xwa + 42)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
 	lds wa, 4
@@ -10099,7 +10099,7 @@ Voice_ComputeAndWritePan_ClampDepth:
 	ld a, (xwa + 44)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
 	ld wa, hl
@@ -10198,7 +10198,7 @@ Voice_WriteChPanShift_ClampAndWrite:
 	jr z, Voice_WriteChPanShift_NoChanFlag
 	ld wa, iz
 	set 15, wa
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 	jr Voice_WriteChPanShift_WriteL
 
 Voice_WriteChPanShift_NoChanFlag:
@@ -10209,7 +10209,7 @@ Voice_WriteChPanShift_NoChanFlag:
 	ld wa, (xwa + 64)
 	ldb a, 0x0
 	or wa, bc
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 
 Voice_WriteChPanShift_WriteL:
 	ld wa, (xsp + 2)
@@ -10219,16 +10219,16 @@ Voice_WriteChPanShift_WriteL:
 	ld wa, (xwa + 62)
 	ldb a, 0x0
 	or wa, bc
-	st16_24 0x0451e6, xwa
+	stw_da 0x0451e6, xwa
 	jr Voice_WriteChPanShift_Done
 
 Voice_WriteChPanShift_Passthrough:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 62)
-	st16_24 0x0451e6, xwa
+	stw_da 0x0451e6, xwa
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 64)
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 
 Voice_WriteChPanShift_Done:
 	popw iz
@@ -10251,7 +10251,7 @@ Voice_UpdatePan_Simple:
 	ld a, (xwa + 8)
 	extz wa
 	lda_24 xbc, 0x011899
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 6)
@@ -10280,28 +10280,28 @@ Voice_UpdatePan_Simple_WritePan:
 	sla wa, 8
 	ld bc, wa
 	or bc, 0x7F
-	st16_24 0x0451e4, xbc
+	stw_da 0x0451e4, xbc
 	ld xwa, (xsp + 10)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 9)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 11)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 10)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld bc, wa
 	lds wa, 4
@@ -10324,7 +10324,7 @@ Voice_UpdatePan_Simple_WriteChans:
 	ld a, (xwa + 12)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
 	ld bc, de
@@ -10336,7 +10336,7 @@ Voice_UpdatePan_Simple_WriteChans:
 	ld a, (xwa + 13)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld c, a
 	ld xwa, (xsp + 10)
@@ -10434,7 +10434,7 @@ Voice_WriteChPanShift2_ClampAndWrite:
 	jr z, Voice_WriteChPanShift2_NoChanFlag
 	ld wa, iz
 	set 15, wa
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 	jr Voice_WriteChPanShift2_WriteL
 
 Voice_WriteChPanShift2_NoChanFlag:
@@ -10445,7 +10445,7 @@ Voice_WriteChPanShift2_NoChanFlag:
 	ld wa, (xwa + 64)
 	ldb a, 0x0
 	or wa, bc
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 
 Voice_WriteChPanShift2_WriteL:
 	ld wa, (xsp + 2)
@@ -10455,16 +10455,16 @@ Voice_WriteChPanShift2_WriteL:
 	ld wa, (xwa + 62)
 	ldb a, 0x0
 	or wa, bc
-	st16_24 0x0451e6, xwa
+	stw_da 0x0451e6, xwa
 	jr Voice_WriteChPanShift2_Done
 
 Voice_WriteChPanShift2_Passthrough:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 62)
-	st16_24 0x0451e6, xwa
+	stw_da 0x0451e6, xwa
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 64)
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 
 Voice_WriteChPanShift2_Done:
 	popw iz
@@ -10495,7 +10495,7 @@ Voice_UpdatePan_Full_CheckBit11:
 	ld wa, (xwa + 1)
 	bit 11, wa
 	jr z, Voice_UpdatePan_Full_OscTablePath
-	ld8_24 a, 0x0118b3
+	ldb_da a, 0x0118b3
 	extz wa
 	ld iz, wa
 	jrl Voice_UpdatePan_Full_CheckMax
@@ -10503,7 +10503,7 @@ Voice_UpdatePan_Full_CheckBit11:
 Voice_UpdatePan_Full_OscTablePath:
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 35)
-	ld_srib A, (xwa + 0x010c)
+	ldb_sri0 A, (xwa + 0x010c)
 	ld c, a
 	exts bc
 	ld xwa, (xsp + 4)
@@ -10514,10 +10514,10 @@ Voice_UpdatePan_Full_OscTablePath:
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	lda_24 xbc, 0x011899
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 4)
@@ -10557,10 +10557,10 @@ Voice_UpdatePan_Full_OscTablePath:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, iz
 	add wa, (xsp + 8)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -10591,9 +10591,9 @@ Voice_UpdatePan_Full_NoPanLFO:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, iz
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -10614,27 +10614,27 @@ Voice_UpdatePan_Full_WriteDSP:
 	ld a, (xwa + 40)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
 	ld bc, iz
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e4, xbc
+	stw_da 0x0451e4, xbc
 	ld xwa, (xsp + 14)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 41)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 43)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
 	ld xwa, (xsp + 4)
@@ -10674,17 +10674,17 @@ Voice_UpdatePan_Full_WriteDSP:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -10721,15 +10721,15 @@ Voice_UpdatePan_Full_NoPanDepth2:
 	ld wa, de
 	lds de, 4
 	calr PitchBend_Scale
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
-	add_werp WA, 0xFA
+	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
@@ -10740,7 +10740,7 @@ Voice_UpdatePan_Full_WriteChDepth:
 	ld a, (xwa + 42)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
 	lds wa, 4
@@ -10754,7 +10754,7 @@ Voice_UpdatePan_Full_WriteCh2:
 	ld a, (xwa + 44)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
 	ld wa, hl
@@ -10762,13 +10762,13 @@ Voice_UpdatePan_Full_WriteCh2:
 	ld bc, (xsp + 10)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e6, xbc
+	stw_da 0x0451e6, xbc
 	ld wa, de
 	ldb w, 0x0
 	ld bc, (xsp + 12)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e8, xbc
+	stw_da 0x0451e8, xbc
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
@@ -10797,9 +10797,9 @@ Voice_UpdatePan_Mono_ComputePan:
 	ld a, (xwa + 39)
 	extz wa
 	lda_24 xbc, 0x011899
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
-	ldfr_werp WA, 0xFA
+	ldw_erp WA, 0xFA
 	ld xwa, (xsp + 4)
 	cp (xwa + 51), 0x0
 	jrl z, Voice_UpdatePan_Mono_NoPanLFO
@@ -10838,22 +10838,22 @@ Voice_UpdatePan_Mono_ComputePan:
 	lds de, 4
 	calr PitchBend_Scale
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	add wa, (xsp + 8)
 	add wa, iz
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	jr Voice_UpdatePan_Mono_CheckMax
 
 Voice_UpdatePan_Mono_NoPanDepth:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	jr Voice_UpdatePan_Mono_CheckMax
 
 Voice_UpdatePan_Mono_NoPanLFO:
@@ -10872,40 +10872,40 @@ Voice_UpdatePan_Mono_NoPanLFO:
 	lds de, 4
 	calr PitchBend_Scale
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	add wa, iz
 	ldw bc, 0xFF
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 
 Voice_UpdatePan_Mono_CheckMax:
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 31)
 	bitm 0, (xwa)
 	jr z, Voice_UpdatePan_Mono_WriteDSP
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	cp wa, 0xFF
 	jr nz, Voice_UpdatePan_Mono_WriteDSP
-	dec1_werp 0xFA
+	dec1w_erp 0xFA
 
 Voice_UpdatePan_Mono_WriteDSP:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e4, xbc
+	stw_da 0x0451e4, xbc
 	ld xwa, (xsp + 14)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 35)
-	ld_srib A, (xwa + 0x010b)
+	ldb_sri0 A, (xwa + 0x010b)
 	ld c, a
 	exts bc
 	ld xwa, (xsp + 4)
@@ -10919,12 +10919,12 @@ Voice_UpdatePan_Mono_WriteDSP:
 	ld wa, (xsp + 10)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 35)
-	ld_srib A, (xwa + 0x010b)
+	ldb_sri0 A, (xwa + 0x010b)
 	ld c, a
 	exts bc
 	ld xwa, (xsp + 4)
@@ -10938,7 +10938,7 @@ Voice_UpdatePan_Mono_WriteDSP:
 	ld wa, (xsp + 12)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
 	ld xwa, (xsp + 4)
@@ -11044,7 +11044,7 @@ Voice_UpdatePan_Full2_WriteChDepth:
 	ld a, (xwa + 42)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
 	lds wa, 4
@@ -11058,7 +11058,7 @@ Voice_UpdatePan_Full2_WriteCh2:
 	ld a, (xwa + 44)
 	extz wa
 	lda_24 xbc, 0x011963
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
 	ld wa, hl
@@ -11066,13 +11066,13 @@ Voice_UpdatePan_Full2_WriteCh2:
 	ld bc, (xsp + 10)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e6, xbc
+	stw_da 0x0451e6, xbc
 	ld wa, de
 	ldb w, 0x0
 	ld bc, (xsp + 12)
 	sla bc, 8
 	or bc, wa
-	st16_24 0x0451e8, xbc
+	stw_da 0x0451e8, xbc
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
@@ -11238,7 +11238,7 @@ Voice_ComputePitch:
 
 Voice_ComputePitch_CheckSysExTune:
 	and bc, 0x7F
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 0, wa
 	jr nz, Voice_ComputePitch_SysExTable
 	ld xwa, (xsp + 2)
@@ -11257,7 +11257,7 @@ Voice_ComputePitch_SysExTable:
 	jrl Voice_ComputePitch_ApplyLFO
 
 Voice_ComputePitch_CheckAltTune:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 1, wa
 	jr z, Voice_ComputePitch_NormalTune
 	ld wa, bc
@@ -11357,7 +11357,7 @@ Voice_ComputePitch_ApplyLFO:
 	ld a, (xwa + 3)
 	exts wa
 	add iz, wa
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	add_sriw_rm IZ, 0xE1, 0xE0, 0x00
 	addda16 xiz, 10560
 	ld xwa, (xsp + 6)
@@ -11373,7 +11373,7 @@ Voice_ComputePitch_ApplyLFO:
 	jr z, Voice_ComputePitch_WriteDone
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
-	ld_srib A, (xwa + 0x011e)
+	ldb_sri0 A, (xwa + 0x011e)
 	extz wa
 	add iz, wa
 
@@ -11402,7 +11402,7 @@ Voice_ComputePitch_Mono:
 	ld e, a
 	extz de
 	and de, 0x7F
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 0, wa
 	jr nz, Voice_ComputePitch_Mono_SysExTable
 	cp (xiz + 7), 0xE0
@@ -11420,7 +11420,7 @@ Voice_ComputePitch_Mono_SysExTable:
 	jr Voice_ComputePitch_Mono_ApplyLFO
 
 Voice_ComputePitch_Mono_CheckAltTune:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 1, wa
 	jr z, Voice_ComputePitch_Mono_CheckPorta
 	ld wa, de
@@ -11491,7 +11491,7 @@ Voice_ComputePitch_Mono_ApplyLFO:
 	ld a, (xwa + 3)
 	exts wa
 	add hl, wa
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	add_sriw_rm HL, 0xE1, 0xE0, 0x00
 	addda16 xhl, 10560
 	ld xwa, (xsp + 4)
@@ -11522,7 +11522,7 @@ Voice_ApplyPortamento_ApplyDetune:
 	ld c, (xbc + 34)
 	exts bc
 	add de, bc
-	ld16_24 xbc, 0x041343
+	ldw_da xbc, 0x041343
 	bit 1, bc
 	jr z, Voice_ApplyPortamento_Done
 	cp (xwa + 4), 0x1
@@ -11554,7 +11554,7 @@ Voice_ApplyPortamento2_NoChanDetune:
 	sub de, 0x200
 
 Voice_ApplyPortamento2_ApplyDetune:
-	ld16_24 xbc, 0x041343
+	ldw_da xbc, 0x041343
 	bit 1, bc
 	jr z, Voice_ApplyPortamento2_Done
 	ld xbc, (xwa + 35)
@@ -11591,18 +11591,18 @@ Voice_WriteChPitchWithVib:
 	ld (xsp + 4), c
 	extz bc
 	lda_24 xde, 0x011ae8
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	sll bc, 8
 	set 7, bc
-	st16_24 0x0451f8, xbc
+	stw_da 0x0451f8, xbc
 	ld c, (xsp + 4)
 	extz bc
 	lda_24 xde, 0x011ae8
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	sll bc, 8
-	st16_24 0x0451fa, xbc
+	stw_da 0x0451fa, xbc
 	extz wa
 	call Voice_AllocateForFull
 	lda xwa, (xhl + 5)
@@ -11654,10 +11654,10 @@ Voice_ComputeAndWriteVolume1:
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 6)
@@ -11674,10 +11674,10 @@ Voice_ComputeAndWriteVolume1:
 	ld a, (xwa + 24)
 	extz wa
 	lda_24 xbc, 0x011adf
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	cp wa, iz
 	jr gt, Voice_ComputeAndWriteVolume1_ApplyLFO
@@ -11715,27 +11715,27 @@ Voice_ComputeAndWriteVolume1_WriteDSP:
 	ld wa, iz
 	sla wa, 8
 	set 7, wa
-	st16_24 0x0451f8, xwa
+	stw_da 0x0451f8, xwa
 	ld wa, iz
 	sla wa, 8
-	st16_24 0x0451fa, xwa
+	stw_da 0x0451fa, xwa
 	popw iz
 	inc 8, xsp
 	ret
 
 Voice_WritePan_Passthrough:
 	ld bc, (xwa + 62)
-	st16_24 0x0451e6, xbc
+	stw_da 0x0451e6, xbc
 	ld wa, (xwa + 64)
-	st16_24 0x0451e8, xwa
+	stw_da 0x0451e8, xwa
 	ret
 
 Voice_WriteVolume_SetFlag:
 	ld bc, (xwa + 64)
 	set 7, bc
-	st16_24 0x0451f8, xbc
+	stw_da 0x0451f8, xbc
 	ld wa, (xwa + 64)
-	st16_24 0x0451fa, xwa
+	stw_da 0x0451fa, xwa
 	ret
 
 Voice_ComputeVolume_CappedLFO:
@@ -11755,17 +11755,17 @@ Voice_ComputeVolume_CappedLFO:
 	ld a, (xwa + 24)
 	extz wa
 	lda_24 xbc, 0x011adf
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 45)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld bc, iz
 	cp bc, wa
@@ -11774,7 +11774,7 @@ Voice_ComputeVolume_CappedLFO:
 	ld a, (xwa + 45)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	jr Voice_ComputeVolume_CappedLFO_ApplyLFO
@@ -11782,7 +11782,7 @@ Voice_ComputeVolume_CappedLFO:
 Voice_ComputeVolume_CappedLFO_UseOscMax:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
-	ld_srib A, (xwa + 0x010d)
+	ldb_sri0 A, (xwa + 0x010d)
 	ld c, a
 	exts bc
 	ld xwa, (xsp + 2)
@@ -11793,10 +11793,10 @@ Voice_ComputeVolume_CappedLFO_UseOscMax:
 	lds de, 0
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 
@@ -11832,10 +11832,10 @@ Voice_ComputeVolume_CappedLFO_WriteDSP:
 	ld wa, iz
 	sla wa, 8
 	set 7, wa
-	st16_24 0x0451f8, xwa
+	stw_da 0x0451f8, xwa
 	ld wa, iz
 	sla wa, 8
-	st16_24 0x0451fa, xwa
+	stw_da 0x0451fa, xwa
 	popw iz
 	inc 8, xsp
 	ret
@@ -11850,7 +11850,7 @@ Voice_ComputeAndWriteVolume2:
 	ld a, (xwa + 15)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 6)
@@ -11863,10 +11863,10 @@ Voice_ComputeAndWriteVolume2:
 	ld a, (xwa + 24)
 	extz wa
 	lda_24 xbc, 0x011adf
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	cp wa, iz
 	jr gt, Voice_ComputeAndWriteVolume2_ApplyLFO
@@ -11965,8 +11965,8 @@ Voice_ComputeAndWriteVolume2_WriteResult:
 	ld wa, iz
 	sla wa, 8
 	or wa, hl
-	st16_24 0x0451fc, xwa
-	st16_24 0x0451fe, xwa
+	stw_da 0x0451fc, xwa
+	stw_da 0x0451fe, xwa
 	popw iz
 	inc 8, xsp
 	ret
@@ -11981,7 +11981,7 @@ Voice_ComputeAndWriteVolume3:
 	ld a, (xwa + 69)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 6)
@@ -11994,10 +11994,10 @@ Voice_ComputeAndWriteVolume3:
 	ld a, (xwa + 24)
 	extz wa
 	lda_24 xbc, 0x011adf
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	cp wa, iz
 	jr gt, Voice_ComputeAndWriteVolume3_ApplyLFO
@@ -12091,26 +12091,26 @@ Voice_ComputeAndWriteVolume3_WriteDSP:
 	ld wa, iz
 	sla wa, 8
 	or wa, hl
-	st16_24 0x045200, xwa
-	st16_24 0x045202, xwa
+	stw_da 0x045200, xwa
+	stw_da 0x045202, xwa
 	popw iz
 	inc 8, xsp
 	ret
 
 Voice_WriteVolume_Muted:
-	sti16_24 0x0451fc, 0x0000
-	sti16_24 0x0451fe, 0x0000
+	stiw_da 0x0451fc, 0x0000
+	stiw_da 0x0451fe, 0x0000
 	ld c, (xwa + 70)
 	extz bc
 	sll bc, 8
 	set 7, bc
-	st16_24 0x0451f8, xbc
+	stw_da 0x0451f8, xbc
 	ld a, (xwa + 70)
 	extz wa
 	sll wa, 8
-	st16_24 0x0451fa, xwa
-	sti16_24 0x045200, 0x0000
-	sti16_24 0x045202, 0x0000
+	stw_da 0x0451fa, xwa
+	stiw_da 0x045200, 0x0000
+	stiw_da 0x045202, 0x0000
 	ret
 
 Voice_WriteVolume_OrPan:
@@ -12121,17 +12121,17 @@ Voice_WriteVolume_OrPan:
 	ld a, (xwa + 13)
 	extz wa
 	lda_24 xbc, 0x0118fe
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	sll wa, 8
-	st16_24 0x0451fa, xwa
+	stw_da 0x0451fa, xwa
 	set 7, wa
-	st16_24 0x0451f8, xwa
+	stw_da 0x0451f8, xwa
 	ret
 
 Voice_WriteVolume_OrPan_Muted:
-	sti16_24 0x0451f8, 0x0080
-	sti16_24 0x0451fa, 0x0000
+	stiw_da 0x0451f8, 0x0080
+	stiw_da 0x0451fa, 0x0000
 	ret
 
 Voice_AdvanceLFOPhase:
@@ -12203,19 +12203,19 @@ Voice_UpdateAllLFO_Loop1:
 	jr z, Voice_UpdateAllLFO_NextSlot1
 	ld xwa, xbc
 	calr Voice_AdvanceLFOPhase
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldw_erp HL, 0xFA
+	cpiw_erp 0xFA, 0
 	jr z, Voice_UpdateAllLFO_NextSlot1
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr EGEnv_Compute_A
-	st16_24 0x04520c, xhl
+	stw_da 0x04520c, xhl
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, Voice_UpdateAllLFO_DispatchVoice1
-	ld16_24 xhl, 0x04520c
+	ldw_da xhl, 0x04520c
 	extz xhl
 	and xhl, 0x1FFF
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -12251,19 +12251,19 @@ Voice_UpdateAllLFO_Loop2_Body:
 	jr z, Voice_UpdateAllLFO_NextSlot2
 	ld xwa, xbc
 	calr Voice_AdvanceLFOPhase
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldw_erp HL, 0xFA
+	cpiw_erp 0xFA, 0
 	jr z, Voice_UpdateAllLFO_NextSlot2
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr EGEnv_Compute_B
-	st16_24 0x045204, xhl
+	stw_da 0x045204, xhl
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, Voice_UpdateAllLFO_DispatchVoice2
-	ld16_24 xhl, 0x045204
+	ldw_da xhl, 0x045204
 	extz xhl
 	and xhl, 0x1FFF
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -12299,20 +12299,20 @@ Voice_UpdateAllLFO_Loop3_Body:
 	jr z, Voice_UpdateAllLFO_NextSlot3
 	ld xwa, xbc
 	calr Voice_AdvanceLFOPhase
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldw_erp HL, 0xFA
+	cpiw_erp 0xFA, 0
 	jr z, Voice_UpdateAllLFO_NextSlot3
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	extz wa
 	calr Voice_Freq_WriteLeft
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, Voice_UpdateAllLFO_DispatchVoice3
 	cp iz, 0x40
 	jr nc, Voice_UpdateAllLFO_DispatchGroup3_High
-	ld16_24 xhl, 0x045204
+	ldw_da xhl, 0x045204
 	extz xhl
 	and xhl, 0x1FFF
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -12322,10 +12322,10 @@ Voice_UpdateAllLFO_Loop3_Body:
 	jr Voice_UpdateAllLFO_DispatchVoice3
 
 Voice_UpdateAllLFO_DispatchGroup3_High:
-	ld16_24 xhl, 0x04520e
+	ldw_da xhl, 0x04520e
 	extz xhl
 	and xhl, 0x1FFF
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -12415,7 +12415,7 @@ Voice_UpdatePortamento:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04138e
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x01
+	cpib_sri 0x07, 0xE4, 0xE0, 0x01
 	jr nz, Voice_UpdatePortamento_ModeCheck2
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -12431,7 +12431,7 @@ Voice_UpdatePortamento_ModeCheck2:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04138e
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x02
+	cpib_sri 0x07, 0xE4, 0xE0, 0x02
 	jr nz, Voice_UpdatePortamento_ModeDefault
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -12503,10 +12503,10 @@ Voice_UpdatePortamento_Ascend_Tick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_026FFD
 __jrt_nop_026FFD:
 
@@ -12519,10 +12519,10 @@ Voice_UpdatePortamento_Ascend_Tick2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_027020
 __jrt_nop_027020:
 
@@ -12557,10 +12557,10 @@ Voice_UpdatePortamento_Descend_Tick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_027079
 __jrt_nop_027079:
 
@@ -12573,10 +12573,10 @@ Voice_UpdatePortamento_Descend_Tick2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02709C
 __jrt_nop_02709C:
 
@@ -12617,10 +12617,10 @@ Voice_UpdatePortamento_Release_Tick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_027108
 __jrt_nop_027108:
 
@@ -12633,10 +12633,10 @@ Voice_UpdatePortamento_Release_Tick2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02712B
 __jrt_nop_02712B:
 
@@ -12670,10 +12670,10 @@ Voice_UpdatePortamento_ActiveCount:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa200
+	stiw_da 0x100002, 0xa200
 	jr __jrt_nop_027181
 __jrt_nop_027181:
 
@@ -12686,10 +12686,10 @@ Voice_UpdatePortamento_CountTick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa280
+	stiw_da 0x100002, 0xa280
 	jr __jrt_nop_0271A4
 __jrt_nop_0271A4:
 
@@ -12712,20 +12712,20 @@ Voice_UpdatePortamento_StoreDone:
 	ret
 
 Voice_ApplyTuningSysEx:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 11, wa
 	jr z, Voice_ApplyTuningSysEx_Bit12
 	incdi16_24 1, 267100
-	ld8_24 a, 0x011c7c
+	ldb_da a, 0x011c7c
 	exts wa
 	add wa, wa
-	st16_24 0x04135a, xwa
+	stw_da 0x04135a, xwa
 	anddi16_24 267075, 63487
 	ordi16_24 267075, 5120
 	ret
 
 Voice_ApplyTuningSysEx_Bit12:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 12, wa
 	jr z, Voice_ApplyTuningSysEx_Bit13Check
 	incdi16_24 1, 267100
@@ -12733,50 +12733,50 @@ Voice_ApplyTuningSysEx_Bit12:
 	ret
 
 Voice_ApplyTuningSysEx_Bit13Check:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 13, wa
 	jrl z, Voice_ApplyTuningSysEx_ClearMode
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 14, wa
 	jr z, Voice_ApplyTuningSysEx_Bit14Clear
 	incdi16_24 2, 267100
-	ld16_24 xwa, 0x04135c
+	ldw_da xwa, 0x04135c
 	extz xwa
 	ld xbc, 0x11C7C
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
 	add wa, wa
-	st16_24 0x04135a, xwa
+	stw_da 0x04135a, xwa
 	ordi16_24 267075, 1024
 	jr Voice_ApplyTuningSysEx_CheckCounter
 
 Voice_ApplyTuningSysEx_Bit14Clear:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	extz xwa
 	bit 15, wa
 	jr z, Voice_ApplyTuningSysEx_ZeroPitch
 	incdi16_24 1, 267100
-	ld16_24 xwa, 0x04135c
+	ldw_da xwa, 0x04135c
 	extz xwa
 	ld xbc, 0x11C7C
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
 	add wa, wa
-	st16_24 0x04135a, xwa
+	stw_da 0x04135a, xwa
 	ordi16_24 267075, 1024
 	jr Voice_ApplyTuningSysEx_CheckCounter
 
 Voice_ApplyTuningSysEx_ZeroPitch:
-	sti16_24 0x04135a, 0x0000
+	stiw_da 0x04135a, 0x0000
 	ordi16_24 267075, 1024
 
 Voice_ApplyTuningSysEx_CheckCounter:
-	cpdi16_24 267098, 0
+	cpw_da 267098, 0
 	ret nz
 	anddi16_24 267075, 8191
-	sti16_24 0x04135c, 0x0000
+	stiw_da 0x04135c, 0x0000
 	ordi16_24 267075, 1024
 	ret
 
@@ -12785,79 +12785,79 @@ Voice_ApplyTuningSysEx_ClearMode:
 	ret
 
 Voice_InitVoiceState:
-	sti16_24 0x0451ce, 0x0000
-	ld16_24 xbc, 0x041360
-	st16_24 0x0451da, xbc
-	sti16_24 0x0451ec, 0x0000
-	sti16_24 0x0451ee, 0x0000
-	sti16_24 0x0451f0, 0x0000
-	sti16_24 0x0451d4, 0x017f
-	sti16_24 0x0451d6, 0x7f7f
-	sti16_24 0x0451f2, 0x0000
-	sti16_24 0x0451f4, 0x0000
-	sti16_24 0x0451f6, 0x0000
-	sti16_24 0x0451e2, 0x0000
-	sti16_24 0x0451ea, 0x0000
-	sti16_24 0x0451dc, 0x0000
-	sti16_24 0x0451de, 0x0000
-	sti16_24 0x0451d8, 0x0040
-	sti16_24 0x0451e0, 0x0000
-	sti16_24 0x0451d2, 0x0000
-	sti16_24 0x0451e4, 0xff7f
-	ld16_24 xbc, 0x041362
-	st16_24 0x0451e6, xbc
-	ld16_24 xbc, 0x041362
-	st16_24 0x0451e8, xbc
-	ld16_24 xbc, 0x041364
+	stiw_da 0x0451ce, 0x0000
+	ldw_da xbc, 0x041360
+	stw_da 0x0451da, xbc
+	stiw_da 0x0451ec, 0x0000
+	stiw_da 0x0451ee, 0x0000
+	stiw_da 0x0451f0, 0x0000
+	stiw_da 0x0451d4, 0x017f
+	stiw_da 0x0451d6, 0x7f7f
+	stiw_da 0x0451f2, 0x0000
+	stiw_da 0x0451f4, 0x0000
+	stiw_da 0x0451f6, 0x0000
+	stiw_da 0x0451e2, 0x0000
+	stiw_da 0x0451ea, 0x0000
+	stiw_da 0x0451dc, 0x0000
+	stiw_da 0x0451de, 0x0000
+	stiw_da 0x0451d8, 0x0040
+	stiw_da 0x0451e0, 0x0000
+	stiw_da 0x0451d2, 0x0000
+	stiw_da 0x0451e4, 0xff7f
+	ldw_da xbc, 0x041362
+	stw_da 0x0451e6, xbc
+	ldw_da xbc, 0x041362
+	stw_da 0x0451e8, xbc
+	ldw_da xbc, 0x041364
 	add bc, bc
 	lda_24 xde, 0x010764
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	add bc, bc
-	st16_24 0x0451d0, xbc
+	stw_da 0x0451d0, xbc
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x0430bb
-	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xF0
+	stiw_ind 0x07, 0xE4, 0xE0, 0x00, 0xF0
 	ret
 
 Voice_TickNoteDecay:
 	lda xsp, (xsp - 14)
-	push_werp 0xFA
-	cpi8_24 0x04135e, 0x00
+	pushw_erp 0xFA
+	cpib_da 0x04135e, 0x00
 	jr z, Voice_TickNoteDecay_Done
 	decdi8_24 1, 267103
-	cpi8_24 0x04135f, 0x00
+	cpib_da 0x04135f, 0x00
 	jr nz, Voice_TickNoteDecay_Done
 	lda xwa, (xsp + 2)
 	call Voice_SetPanning
 	cp (xsp + 12), 0x40
 	jr nc, Voice_TickNoteDecay_Reload
 	ld a, (xsp + 12)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	extz wa
 	calr Voice_InitVoiceState
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteVoiceParams
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
 	lda_24 xde, 0x0430bb
 	ld wa, hl
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
 Voice_TickNoteDecay_Reload:
 	decdi8_24 1, 267102
-	sti8_24 0x04135f, 0x04
+	stib_da 0x04135f, 0x04
 
 Voice_TickNoteDecay_Done:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 14)
 	ret
 
@@ -12879,22 +12879,22 @@ Voice_LoadPitchTable_Ch:
 	srl xhl, 8
 	cp xhl, 0x2C
 	jr nc, Voice_LoadPitchTable_Ch_NoClamp
-	sti16_24 0x045208, 0x002c
+	stiw_da 0x045208, 0x002c
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c5
-	stiw_dri 0x07, 0xE4, 0xE0, 0x2C, 0x00
+	stiw_ind 0x07, 0xE4, 0xE0, 0x2C, 0x00
 	jr Voice_LoadPitchTable_Ch_ScanLoop
 
 Voice_LoadPitchTable_Ch_NoClamp:
 	ld wa, hl
-	st16_24 0x045208, xwa
+	stw_da 0x045208, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c5
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 
 Voice_LoadPitchTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
@@ -12905,19 +12905,19 @@ Voice_LoadPitchTable_Ch_ScanLoop:
 	ld a, (xsp + 6)
 	extz wa
 	lda_24 xbc, 0x010dce
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
 	srl xhl, 8
 	ld wa, hl
-	st16_24 0x04520c, xwa
+	stw_da 0x04520c, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c3
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 8)
 	extz wa
 	ldw bc, 0xD
@@ -12958,12 +12958,12 @@ Voice_LoadPitchTable_All:
 	extz wa
 	lds bc, 1
 	call DSP_AlgoType_Dispatch2
-	st16_24 0x045208, xhl
+	stw_da 0x045208, xhl
 	ld a, (xsp + 6)
 	extz wa
 	lds bc, 1
 	call DSP_AlgoType_Dispatch1
-	st16_24 0x04520c, xhl
+	stw_da 0x04520c, xhl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0xD
@@ -13014,22 +13014,22 @@ Voice_LoadFilterTable_Ch:
 	srl xhl, 8
 	cp xhl, 0x1C
 	jr nc, Voice_LoadFilterTable_Ch_NoClamp
-	sti16_24 0x04520a, 0x001c
+	stiw_da 0x04520a, 0x001c
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c1
-	stiw_dri 0x07, 0xE4, 0xE0, 0x1C, 0x00
+	stiw_ind 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr Voice_LoadFilterTable_Ch_ScanFilter
 
 Voice_LoadFilterTable_Ch_NoClamp:
 	ld wa, hl
-	st16_24 0x04520a, xwa
+	stw_da 0x04520a, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c1
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 
 Voice_LoadFilterTable_Ch_ScanFilter:
 	ld a, (xsp + 8)
@@ -13040,19 +13040,19 @@ Voice_LoadFilterTable_Ch_ScanFilter:
 	ld a, (xsp + 6)
 	extz wa
 	lda_24 xbc, 0x010ece
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
 	srl xhl, 8
 	ld wa, hl
-	st16_24 0x04520e, xwa
+	stw_da 0x04520e, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413bf
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 8)
 	extz wa
 	ldw bc, 0xC
@@ -13093,12 +13093,12 @@ Voice_LoadFilterTable_All:
 	extz wa
 	lds bc, 0
 	call DSP_AlgoType_Dispatch2
-	st16_24 0x04520a, xhl
+	stw_da 0x04520a, xhl
 	ld a, (xsp + 6)
 	extz wa
 	lds bc, 0
 	call DSP_AlgoType_Dispatch1
-	st16_24 0x04520e, xhl
+	stw_da 0x04520e, xhl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0xC
@@ -13147,22 +13147,22 @@ Voice_LoadToneTable_Ch:
 	srl xhl, 8
 	cp xhl, 0x1C
 	jr nc, Voice_LoadToneTable_Ch_NoClamp
-	sti16_24 0x045206, 0x001c
+	stiw_da 0x045206, 0x001c
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c9
-	stiw_dri 0x07, 0xE4, 0xE0, 0x1C, 0x00
+	stiw_ind 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr Voice_LoadToneTable_Ch_ScanLoop
 
 Voice_LoadToneTable_Ch_NoClamp:
 	ld wa, hl
-	st16_24 0x045206, xwa
+	stw_da 0x045206, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c9
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 
 Voice_LoadToneTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
@@ -13203,7 +13203,7 @@ Voice_LoadToneTable_All:
 	ld a, (xsp + 6)
 	extz wa
 	call DSP_ChanFreq_WritePacket2
-	st16_24 0x045206, xhl
+	stw_da 0x045206, xhl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0x10
@@ -13260,7 +13260,7 @@ Voice_ToneTableRamp_Up_Increment:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x010d64
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadPitchTable_Ch
 
@@ -13288,7 +13288,7 @@ Voice_ToneTableRamp_Up_FilterIncrement:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadFilterTable_Ch
 	ld a, (xsp + 6)
@@ -13297,7 +13297,7 @@ Voice_ToneTableRamp_Up_FilterIncrement:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadToneTable_Ch
 
@@ -13328,7 +13328,7 @@ Voice_ToneTableRamp_Down_Decrement:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadPitchTable_Ch
 
@@ -13347,7 +13347,7 @@ Voice_ToneTableRamp_Down_CheckFilter:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadFilterTable_Ch
 	ld a, (xsp + 6)
@@ -13356,7 +13356,7 @@ Voice_ToneTableRamp_Down_CheckFilter:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadToneTable_Ch
 
@@ -13367,7 +13367,7 @@ Voice_ToneTableRamp_Down_Done:
 
 Voice_ToneTableApply_Pitch:
 	dec 6, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), xbc
 	ld (xsp + 6), a
 	ld xwa, (xsp + 2)
@@ -13376,21 +13376,21 @@ Voice_ToneTableApply_Pitch:
 	ld a, (xwa + 100)
 	extz wa
 	lda_24 xbc, 0x010d64
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	ldi_erpb 0xFB, 0x19
 	jr Voice_ToneTableApply_Pitch_Loop
 
 Voice_ToneTableApply_Pitch_Decrement:
-	dec1_berp 0xFB
+	dec1b_erp 0xFB
 
 Voice_ToneTableApply_Pitch_Loop:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010db4
-	cp_srib_rm L, 0x07, 0xE4, 0xE0
+	cpb_sri_rm L, 0x07, 0xE4, 0xE0
 	jr c, Voice_ToneTableApply_Pitch_Decrement
 	ld xwa, (xsp + 2)
-	ldto_berp C, 0xFB
+	stb_erp C, 0xFB
 	ld (xwa + 100), c
 	ld a, (xsp + 6)
 	ld e, a
@@ -13398,7 +13398,7 @@ Voice_ToneTableApply_Pitch_Loop:
 	ld a, l
 	extz wa
 	lda_24 xbc, 0x010d64
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadPitchTable_Ch
 	ld xwa, (xsp + 2)
@@ -13407,7 +13407,7 @@ Voice_ToneTableApply_Pitch_Loop:
 	extz wa
 	div a, 0x6
 	ld l, a
-	ldfr_berp L, 0xFB
+	ldb_erp L, 0xFB
 	ld a, l
 	mul a, 0x5
 	ld l, a
@@ -13416,28 +13416,28 @@ Voice_ToneTableApply_Pitch_Loop:
 	ld a, (xsp + 6)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadFilterTable_Ch
 	ld a, (xsp + 6)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadToneTable_Ch
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 6, xsp
 	ret
 
 Voice_ToneTableApply_Filter:
 	dec 6, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), xbc
 	ld (xsp + 6), a
 	ld xwa, (xsp + 2)
@@ -13447,29 +13447,29 @@ Voice_ToneTableApply_Filter:
 	srl a, 1
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 E, 0x07, 0xE4, 0xE0
-	ldi_berp 0xFB, 0
+	ldb_sri E, 0x07, 0xE4, 0xE0
+	ldib_erp 0xFB, 0
 	jr Voice_ToneTableApply_Filter_Loop
 
 Voice_ToneTableApply_Filter_Increment:
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 
 Voice_ToneTableApply_Filter_Loop:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010d64
-	cp_srib_rm E, 0x07, 0xE4, 0xE0
+	cpb_sri_rm E, 0x07, 0xE4, 0xE0
 	jr ugt, Voice_ToneTableApply_Filter_Increment
 	ld xwa, (xsp + 2)
-	ldto_berp C, 0xFB
+	stb_erp C, 0xFB
 	ld (xwa + 100), c
 	ld a, (xsp + 6)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadPitchTable_Ch
 	ld xwa, (xsp + 2)
@@ -13478,7 +13478,7 @@ Voice_ToneTableApply_Filter_Loop:
 	extz wa
 	div a, 0x5
 	ld e, a
-	ldfr_berp E, 0xFB
+	ldb_erp E, 0xFB
 	ld a, e
 	mul a, 0x6
 	ld e, a
@@ -13487,22 +13487,22 @@ Voice_ToneTableApply_Filter_Loop:
 	ld a, (xsp + 6)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadFilterTable_Ch
 	ld a, (xsp + 6)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x010db4
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr Voice_LoadToneTable_Ch
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 6, xsp
 	ret
 
@@ -13522,7 +13522,7 @@ Voice_ScanAndCancelNoteOff_Loop:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 10)
 	extz xwa
@@ -13566,7 +13566,7 @@ Voice_UpdateAllNoteStates:
 	push xiz
 	calr Voice_TickNoteDecay
 	calr Voice_ApplyTuningSysEx
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 10, wa
 	jrl z, Voice_UpdateAllNoteStates_LoopB_Start
 	call Voice_AllocateForAny
@@ -13581,7 +13581,7 @@ Voice_UpdateAllNoteStates_LoopA:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld wa, (xiz + 1)
 	bit 10, wa
 	jr z, Voice_UpdateAllNoteStates_CheckPortaA
@@ -13664,7 +13664,7 @@ Voice_UpdateAllNoteStates_LoopB:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 10)
 	extz xwa
@@ -13722,16 +13722,16 @@ Voice_UpdateAllNoteStates_NextSlotB:
 	jrl c, Voice_UpdateAllNoteStates_LoopB
 
 Voice_UpdateAllNoteStates_ScanLFO:
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jr nc, Voice_UpdateAllNoteStates_Done
 
 Voice_UpdateAllNoteStates_LFOLoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	ld a, (xbc + 99)
 	bit 0, a
 	jr z, Voice_UpdateAllNoteStates_LFONextSlot
@@ -13741,14 +13741,14 @@ Voice_UpdateAllNoteStates_LFOLoopBody:
 	jr z, Voice_UpdateAllNoteStates_LFO_ApplyFilter
 	bit 3, a
 	jr nz, Voice_UpdateAllNoteStates_LFONextSlot
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_ToneTableRamp_Up
 	jr Voice_UpdateAllNoteStates_LFONextSlot
 
 Voice_UpdateAllNoteStates_LFO_ApplyFilter:
 	setm 2, (xbc + 99)
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_ToneTableApply_Filter
 	jr Voice_UpdateAllNoteStates_LFONextSlot
@@ -13758,19 +13758,19 @@ Voice_UpdateAllNoteStates_LFO_CheckRampDown:
 	jr nz, Voice_UpdateAllNoteStates_LFO_RampDown
 	bit 4, a
 	jr nz, Voice_UpdateAllNoteStates_LFONextSlot
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_ToneTableRamp_Down
 	jr Voice_UpdateAllNoteStates_LFONextSlot
 
 Voice_UpdateAllNoteStates_LFO_RampDown:
 	resm 2, (xbc + 99)
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_ToneTableApply_Pitch
 
 Voice_UpdateAllNoteStates_LFONextSlot:
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jr c, Voice_UpdateAllNoteStates_LFOLoopBody
 
@@ -13912,11 +13912,11 @@ DSP_WriteVoiceParam_Long:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x400
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_027F91
 __jrt_nop_027F91:
 
@@ -13932,12 +13932,12 @@ DSP_WriteVoiceParam_Short:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x80
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_027FB6
 __jrt_nop_027FB6:
 
@@ -13952,10 +13952,10 @@ DSP_WriteVoiceParam_Direct:
 	pushw iz
 	ld iz, bc
 	res_dd8 7, 0x18
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	st16_24 0x100002, xiz
+	stw_da 0x100002, xiz
 	jr __jrt_nop_027FD1
 __jrt_nop_027FD1:
 
@@ -13974,12 +13974,12 @@ DSP_WriteVoiceParam_6Words:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_027FFD
 __jrt_nop_027FFD:
 
@@ -13990,12 +13990,12 @@ DSP_WriteVoiceParam_6Words_Word2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02801F
 __jrt_nop_02801F:
 
@@ -14006,12 +14006,12 @@ ToneGen_WriteNote6ch_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_028041
 __jrt_nop_028041:
 
@@ -14022,12 +14022,12 @@ ToneGen_WriteNote6ch_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_028063
 __jrt_nop_028063:
 
@@ -14038,12 +14038,12 @@ ToneGen_WriteNote6ch_NopCont3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_028085
 __jrt_nop_028085:
 
@@ -14054,12 +14054,12 @@ ToneGen_WriteNote6ch_NopCont4:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_0280A7
 __jrt_nop_0280A7:
 
@@ -14079,12 +14079,12 @@ ToneGen_WriteNote2ch:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_0280D5
 __jrt_nop_0280D5:
 
@@ -14095,12 +14095,12 @@ ToneGen_WriteNote2ch_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_0280F7
 __jrt_nop_0280F7:
 
@@ -14352,7 +14352,7 @@ VoiceCC_DataTable_0280FE:
 Voice_CC_SetVolume:
 	cps c, 0
 	jr z, VoiceCC_SetVolume_Mute
-	ld16_24 xde, 0x041343
+	ldw_da xde, 0x041343
 	bit 0, de
 	jr z, VoiceCC_SetVolume_Bit1Set
 	extz wa
@@ -14363,12 +14363,12 @@ Voice_CC_SetVolume:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011d16
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	ldw_sri WA, 0x07, 0xE4, 0xE0
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
 VoiceCC_SetVolume_Bit1Set:
-	ld16_24 xde, 0x041343
+	ldw_da xde, 0x041343
 	bit 1, de
 	jr z, VoiceCC_SetVolume_RawSub
 	extz wa
@@ -14379,8 +14379,8 @@ VoiceCC_SetVolume_Bit1Set:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011d16
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	ldw_sri WA, 0x07, 0xE4, 0xE0
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
 VoiceCC_SetVolume_RawSub:
@@ -14391,14 +14391,14 @@ VoiceCC_SetVolume_RawSub:
 	ld a, c
 	extz wa
 	sub wa, 0x7F
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
 VoiceCC_SetVolume_Mute:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041374
-	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
+	stiw_ind 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
 ; Voice_CC_SetPan -- CC 0x0A: Store pan value at voice + 0x0E
@@ -14406,7 +14406,7 @@ Voice_CC_SetPan:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041376
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 ; Voice_CC_SetExpression -- CC 0x0B: Store expression via lookup table
@@ -14414,7 +14414,7 @@ Voice_CC_SetPan:
 Voice_CC_SetExpression:
 	cps c, 0
 	jr z, VoiceCC_SetExpression_Mute
-	ld16_24 xde, 0x041343
+	ldw_da xde, 0x041343
 	bit 0, de
 	jr z, VoiceCC_SetExpression_Bit1Set
 	extz wa
@@ -14425,12 +14425,12 @@ Voice_CC_SetExpression:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011d16
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	ldw_sri WA, 0x07, 0xE4, 0xE0
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
 VoiceCC_SetExpression_Bit1Set:
-	ld16_24 xde, 0x041343
+	ldw_da xde, 0x041343
 	bit 1, de
 	jr z, VoiceCC_SetExpression_RawSub
 	extz wa
@@ -14441,8 +14441,8 @@ VoiceCC_SetExpression_Bit1Set:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x011d16
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	ldw_sri WA, 0x07, 0xE4, 0xE0
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
 VoiceCC_SetExpression_RawSub:
@@ -14453,14 +14453,14 @@ VoiceCC_SetExpression_RawSub:
 	ld a, c
 	extz wa
 	sub wa, 0x7F
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
 VoiceCC_SetExpression_Mute:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041378
-	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
+	stiw_ind 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
 ; Voice_CC_SetSustain -- CC 0x40: Set/clear sustain bit 0 at voice+0x0A
@@ -14484,14 +14484,14 @@ Voice_CC_SetSostenuto:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041377
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 Voice_CC_SetSoftPedal:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04137a
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 Voice_CC_SetSostenutoFlag:
@@ -14514,7 +14514,7 @@ Voice_CC_SetPortamentoRate:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04137b
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 Voice_CC_SetPortamentoDepth:
@@ -14525,7 +14525,7 @@ Voice_CC_SetPortamentoDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04137c
-	st_dri3w DE, 0x07, 0xE4, 0xE0
+	stw_dri DE, 0x07, 0xE4, 0xE0
 	ret
 
 Voice_CC_SetPortamentoTime:
@@ -14534,7 +14534,7 @@ Voice_CC_SetPortamentoTime:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04137e
-	lda_dri3 XIY, 0x07, 0xE4, 0xE0
+	lda_dri XIY, 0x07, 0xE4, 0xE0
 	ret
 
 Voice_CC_SetModWheelRange:
@@ -14551,7 +14551,7 @@ Voice_CC_SetReverbDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04137f
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 ; Voice_CC_SetChorusEnable -- CC 0x95: Set/clear chorus bit 2 at voice+0x0A
@@ -14576,7 +14576,7 @@ Voice_CC_SetChorusDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041380
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 ; Voice_CC_SetDelayDepth -- CC 0x9B: Store delay depth at voice+0x25
@@ -14584,7 +14584,7 @@ Voice_CC_SetDelayDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04138d
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 ; Voice_CC_SetDelayEnable -- CC 0x9C: Set/clear delay bit 8 at voice+0x02
@@ -14609,11 +14609,11 @@ Voice_CC_SetDelayFeedback:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04138e
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 Voice_SetPolyphonyMode:
-	push_werp 0xFA
+	pushw_erp 0xFA
 	cps a, 1
 	jr nz, Voice_SetPolyphonyMode_Else
 	ordi16_24 267075, 1
@@ -14628,20 +14628,20 @@ Voice_SetPolyphonyMode_Else:
 
 Voice_SetPolyphonyMode_Apply:
 	call VoiceSlot_ClearAll
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x0F
 	jr ugt, Voice_SetPolyphonyMode_LoopExit
 
 Voice_SetPolyphonyMode_LoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_PerVoice_PortamentoPitchUpdate
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x0F
 	jr ule, Voice_SetPolyphonyMode_LoopBody
 
 Voice_SetPolyphonyMode_LoopExit:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	ret
 
 VoiceCC_Stub_Ret1:
@@ -14654,34 +14654,34 @@ Voice_SetMasterTune:
 	sub a, 0x40
 	add a, a
 	exts wa
-	st16_24 0x041347, xwa
+	stw_da 0x041347, xwa
 	ret
 
 Voice_SetPitchBendRange:
 	exts wa
 	sla wa, 8
-	st16_24 0x041349, xwa
+	stw_da 0x041349, xwa
 	ret
 
 Voice_SetKeyShiftEnable:
 	cps a, 0
 	jr z, Voice_SetKeyShiftRange
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 12, wa
 	ret nz
 	ordi16_24 267075, 2048
-	sti16_24 0x04135c, 0x0000
+	stiw_da 0x04135c, 0x0000
 	ret
 
 Voice_SetKeyShiftRange:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 12, wa
 	ret z
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	extz xwa
 	and xwa, 0xFFFF2FFF
 	set 13, wa
-	cpdi16_24 267100, 20
+	cpw_da 267100, 20
 	jr ule, Voice_SetKeyShiftRange_BranchA
 	set 15, wa
 	jr Voice_SetKeyShiftRange_BranchB
@@ -14690,44 +14690,44 @@ Voice_SetKeyShiftRange_BranchA:
 	set 14, wa
 
 Voice_SetKeyShiftRange_BranchB:
-	st16_24 0x041343, xwa
-	sti16_24 0x04135c, 0x0000
+	stw_da 0x041343, xwa
+	stiw_da 0x04135c, 0x0000
 	ret
 
 Voice_SetParam_04134D:
-	st8_24 0x04134d, a
+	stb_da 0x04134d, a
 	ret
 
 Voice_GetParam_04134D:
-	ld8_24 l, 0x04134d
+	ldb_da l, 0x04134d
 	ret
 
 Voice_SetRhythmMode:
 	bit 3, a
 	jr z, Voice_SetRhythmMode_BranchA
-	sti8_24 0x04135e, 0x03
+	stib_da 0x04135e, 0x03
 	jr Voice_SetRhythmMode_BranchB
 
 Voice_SetRhythmMode_BranchA:
-	sti8_24 0x04135e, 0x01
+	stib_da 0x04135e, 0x01
 
 Voice_SetRhythmMode_BranchB:
-	sti8_24 0x04135f, 0x01
+	stib_da 0x04135f, 0x01
 	ld c, a
 	and c, 0xF0
 	srl c, 4
 	extz bc
 	add bc, bc
 	lda_24 xde, 0x00f6f3
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	st16_24 0x041360, xbc
+	ldw_sri BC, 0x07, 0xE8, 0xE4
+	stw_da 0x041360, xbc
 	bit 2, a
 	jr z, Voice_SetRhythmMode_BranchC
-	sti16_24 0x041362, 0x8000
+	stiw_da 0x041362, 0x8000
 	jr Voice_SetRhythmMode_BranchD
 
 Voice_SetRhythmMode_BranchC:
-	sti16_24 0x041362, 0xa000
+	stiw_da 0x041362, 0xa000
 
 Voice_SetRhythmMode_BranchD:
 	and a, 0x3
@@ -14736,11 +14736,11 @@ Voice_SetRhythmMode_BranchD:
 	ldb a, 0xC8
 	sub a, c
 	extz wa
-	st16_24 0x041364, xwa
+	stw_da 0x041364, xwa
 	ret
 
 Voice_SetParam_04134B:
-	st8_24 0x04134b, a
+	stb_da 0x04134b, a
 	ret
 
 Voice_SetCCMaxFlag:
@@ -14758,21 +14758,21 @@ Voice_WriteChannelAssign:
 	add wa, 0xC
 	lda_24 xde, 0x041342
 	sub c, 0x80
-	lda_dri3 XHL, 0x07, 0xE8, 0xE0
+	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
 Voice_ReadChannelAssign:
 	extz wa
 	add wa, 0xC
 	lda_24 xbc, 0x041342
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	ret
 
 Voice_AllVoices_UpdateVelocity:
 	dec 2, xsp
 	push xiz
 	and a, 0xF
-	st8_24 0x04134c, a
+	stb_da 0x04134c, a
 	ld (xsp + 4), 0x0
 	cp (xsp + 4), 0x1A
 	jrl nc, Voice_AllVoices_UpdateVelocity_Exit
@@ -14782,7 +14782,7 @@ Voice_AllVoices_UpdateVelocity_LoopStart:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 1, wa
 	jrl z, Voice_AllVoices_UpdateVelocity_InnerStep
 	ld a, (xsp + 4)
@@ -14798,7 +14798,7 @@ Voice_AllVoices_UpdateVelocity_InnerLoop:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x043092
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xsp + 4), a
 	extz wa
 	muls wa, 0x11F
@@ -14877,7 +14877,7 @@ Voice_SetMonoMode_Clear:
 	ret
 
 Voice_GetMonoMode:
-	ld16_24 xhl, 0x041343
+	ldw_da xhl, 0x041343
 	and hl, 0x200
 	ret
 
@@ -15007,7 +15007,7 @@ Voice_AllNotes_SustainRetrigger_LoopBody:
 	muls wa, 0x47
 	ld bc, wa
 	ld xwa, (xsp + 4)
-	st_dri3b H, 0x07, 0xE0, 0xE4
+	stb_dri H, 0x07, 0xE0, 0xE4
 	ld wa, (xiz + 1)
 	and wa, 0x3C
 	cp wa, 0x10
@@ -15613,9 +15613,9 @@ AudioChannel_Dispatch:
 	ret gt
 	add hl, hl
 	lda_24 xix, 0x00f703
-	ld_sriw3 HL, 0x07, 0xF0, 0xEC
+	ldw_sri HL, 0x07, 0xF0, 0xEC
 	lda_24 xix, 0x029e5b
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_ind 8, 0x07, 0xF0, 0xEC
 ; --- AudioChannel_DispatchTable: 25 handler stubs for audio channel commands ---
 ; Entry: WA = command parameter, BC = secondary parameter
 ; Each stub: zero-extends WA/BC, pushes channel index (0-3),
@@ -15779,10 +15779,10 @@ Voice_ModWheel_Apply_StereoPath:
 
 Voice_ModWheel_Apply_PolyPath:
 	ld a, (xsp + 12)
-	ldfr_berp A, 0xF4
+	ldb_erp A, 0xF4
 	extz iy
 	ld a, (xsp + 10)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld a, (xsp + 12)
 	extz wa
@@ -15819,7 +15819,7 @@ Voice_ModWheel_Apply_StereoLoopA:
 
 Voice_ModWheel_Apply_StereoLoopB:
 	ld a, (xsp + 12)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld a, (xsp + 10)
 	ld l, a
@@ -15923,7 +15923,7 @@ Voice_Portamento_OnHandler_C0Mode:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413ce
-	lda_dri3 XSP, 0x07, 0xE4, 0xE0
+	lda_dri XSP, 0x07, 0xE4, 0xE0
 
 Voice_Portamento_OnHandler_Exit:
 	inc 4, xsp
@@ -15952,7 +15952,7 @@ Voice_PortamentoSlots_WriteHW_LoopBody:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308f
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	and wa, 0x3C
 	cp wa, 0x8
 	jr z, Voice_PortamentoSlots_WriteHW_BranchSkip
@@ -15969,10 +15969,10 @@ Voice_PortamentoSlots_WriteHW_NopCont1:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa200
+	stiw_da 0x100002, 0xa200
 	jr __jrt_nop_02A208
 __jrt_nop_02A208:
 
@@ -15985,10 +15985,10 @@ Voice_PortamentoSlots_WriteHW_NopCont2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa280
+	stiw_da 0x100002, 0xa280
 	jr __jrt_nop_02A22A
 __jrt_nop_02A22A:
 
@@ -16004,10 +16004,10 @@ Voice_PortamentoSlots_WriteHW_BranchSkip:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa200
+	stiw_da 0x100002, 0xa200
 	jr __jrt_nop_02A24E
 __jrt_nop_02A24E:
 
@@ -16020,10 +16020,10 @@ Voice_PortamentoSlots_WriteHW_NopCont4:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa280
+	stiw_da 0x100002, 0xa280
 	jr __jrt_nop_02A270
 __jrt_nop_02A270:
 
@@ -16098,9 +16098,9 @@ Voice_CtrlChange:
 	jrl gt, Voice_CC_Exit
 	add wa, wa
 	lda_24 xix, 0x00f739
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x02a306
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 Voice_CC_ModWheel:
 	ld a, (xiz + 1)
@@ -16329,7 +16329,7 @@ Voice_CC_Exit:
 
 Voice_ChanPressure:
 	lda xsp, (xsp - 10)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp (xwa + 1), 0x1A
@@ -16359,30 +16359,30 @@ Voice_ChanPressure_StereoLoopStart:
 	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 2), xwa
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 2
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 2
 	jrl nc, Voice_ChanPressure_Exit
 
 Voice_ChanPressure_StereoLoopBody:
 	ld a, (xsp + 6)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 3)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x3
 	ld bc, wa
 	add bc, 0x23
 	ld xwa, (xsp + 2)
-	st_dri3b B, 0x07, 0xE0, 0xE4
+	stb_dri B, 0x07, 0xE0, 0xE4
 	ld wa, ix
 	ld bc, hl
 	calr AudioChannel_Dispatch
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 2
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 2
 	jr c, Voice_ChanPressure_StereoLoopBody
 	jr Voice_ChanPressure_Exit
 
@@ -16393,34 +16393,34 @@ Voice_ChanPressure_MonoLoopStart:
 	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 2), xwa
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 2
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 2
 	jr nc, Voice_ChanPressure_Exit
 
 Voice_ChanPressure_MonoLoopBody:
 	ld a, (xsp + 6)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 3)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x3
 	ld bc, wa
 	add bc, 0x21
 	ld xwa, (xsp + 2)
-	st_dri3b B, 0x07, 0xE0, 0xE4
+	stb_dri B, 0x07, 0xE0, 0xE4
 	ld wa, ix
 	ld bc, hl
 	calr AudioChannel_Dispatch
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 2
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 2
 	jr c, Voice_ChanPressure_MonoLoopBody
 
 Voice_ChanPressure_Exit:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
@@ -16477,15 +16477,15 @@ Voice_PitchBend_BranchB:
 
 Voice_AllVoices_PortamentoReset:
 	push xiz
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jr nc, Voice_AllVoices_PortamentoReset_NopCont1
 
 Voice_AllVoices_PortamentoReset_LoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call Voice_NoteState_Clear
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jr c, Voice_AllVoices_PortamentoReset_LoopBody
 
@@ -16501,10 +16501,10 @@ Voice_AllVoices_PortamentoReset_NopCont2:
 	ld a, (xiz)
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa200
+	stiw_da 0x100002, 0xa200
 	jr __jrt_nop_02A6AF
 __jrt_nop_02A6AF:
 
@@ -16516,10 +16516,10 @@ Voice_AllVoices_PortamentoReset_NopCont3:
 	ld a, (xiz)
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa280
+	stiw_da 0x100002, 0xa280
 	jr __jrt_nop_02A6CF
 __jrt_nop_02A6CF:
 
@@ -16563,14 +16563,14 @@ Voice_PerVoice_PortamentoPitchUpdate:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041381
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xF0
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xF0
 	extz ix
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041382
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld e, a
 	extz de
 	ld wa, hl
@@ -16611,21 +16611,21 @@ Voice_PerVoice_PortamentoPitchUpdate_Exit:
 	ret
 
 Voice_AllVoices_PortamentoUpdate:
-	push_werp 0xFA
-	ldi_berp 0xFB, 0
+	pushw_erp 0xFA
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jr nc, Voice_AllVoices_PortamentoUpdate_Exit
 
 Voice_AllVoices_PortamentoUpdate_LoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_PerVoice_PortamentoPitchUpdate
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jr c, Voice_AllVoices_PortamentoUpdate_LoopBody
 
 Voice_AllVoices_PortamentoUpdate_Exit:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	ret
 
 Voice_SystemMsg:
@@ -16653,9 +16653,9 @@ Voice_SystemMsg:
 Voice_SystemMsg_DispatchJump:
 	add bc, bc
 	lda_24 xix, 0x00f74f
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ldw_sri BC, 0x07, 0xF0, 0xE4
 	lda_24 xix, 0x02a7fc
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_ind 8, 0x07, 0xF0, 0xE4
 
 Voice_SystemMsg_DispatchTable:
 	ld a, (xwa + 3)
@@ -16763,90 +16763,90 @@ Voice_SystemMsg_DispatchEntry2:
 	ret
 
 Voice_ResetAllControllers:
-	push_werp 0xFA
-	ldi_berp 0xFB, 0
+	pushw_erp 0xFA
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jrl nc, Voice_ResetAllControllers_PostLoop
 
 Voice_ResetAllControllers_LoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_ModWheel_Apply
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ldw bc, 0x7F
 	calr Voice_CC_SetVolume
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ldw bc, 0x40
 	calr Voice_CC_SetPan
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ldw bc, 0x7F
 	calr Voice_CC_SetExpression
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetSustain
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetSostenuto
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetSoftPedal
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_Portamento_OnHandler
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_PortamentoSlots_WriteHW
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call Voice_NoteState_Clear
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call Voice_SetLFO_ActiveFlag
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 2
 	calr Voice_CC_SetPortamentoRate
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ldw bc, 0x80
 	calr Voice_CC_SetPortamentoDepth
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ldw bc, 0x40
 	calr Voice_CC_SetPortamentoTime
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetReverbDepth
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetChorusEnable
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 6
 	calr Voice_CC_SetChorusDepth
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 1
 	calr Voice_CC_SetDelayDepth
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetDelayEnable
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_CC_SetDelayFeedback
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jrl c, Voice_ResetAllControllers_LoopBody
 
@@ -16873,16 +16873,16 @@ Voice_ResetAllControllers_PostLoop:
 	lds wa, 0
 	calr Voice_SetCCMaxFlag
 	calr Voice_AllVoices_PortamentoReset
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x0C
 	jr nc, Voice_ResetAllControllers_ChanModeExit
 
 Voice_ResetAllControllers_ChanModeLoop:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
 	calr Voice_WriteChannelAssign
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x0C
 	jr c, Voice_ResetAllControllers_ChanModeLoop
 
@@ -16891,19 +16891,19 @@ Voice_ResetAllControllers_ChanModeExit:
 	calr Voice_AllVoices_UpdateVelocity
 	lds wa, 0
 	calr Voice_SetMonoMode
-	pop_werp 0xFA
+	popw_erp 0xFA
 	ret
 
 Voice_PortamentoTargets_SetAll:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
-	ldi_werp 0xFA, 0
-	cpi_werp 0xFA, 4
+	ldiw_erp 0xFA, 0
+	cpiw_erp 0xFA, 4
 	jrl nc, Voice_PortamentoTargets_SetAll_Exit
 
 Voice_PortamentoTargets_SetAll_LoopBody:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -16917,9 +16917,9 @@ Voice_PortamentoTargets_SetAll_LoopBody:
 	add xwa, xhl
 	ld xwa, (xwa)
 	ld a, (xwa + 2)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -16936,7 +16936,7 @@ Voice_PortamentoTargets_SetAll_LoopBody:
 	extz wa
 	sll wa, 8
 	or iz, wa
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	add xwa, xwa
 	ld xde, xwa
@@ -16952,8 +16952,8 @@ Voice_PortamentoTargets_SetAll_LoopBody:
 	ld wa, iz
 	and wa, 0xFFF
 	ld (xbc), wa
-	inc1_werp 0xFA
-	cpi_werp 0xFA, 4
+	inc1w_erp 0xFA
+	cpiw_erp 0xFA, 4
 	jrl c, Voice_PortamentoTargets_SetAll_LoopBody
 
 Voice_PortamentoTargets_SetAll_Exit:
@@ -16971,7 +16971,7 @@ Voice_PortamentoTarget_SetSlot:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b A, 0x07, 0xE0, 0xE8
+	stb_dri A, 0x07, 0xE0, 0xE8
 	lda_24 xwa, 0x00f8b0
 	ld (xbc + 4), xwa
 	ret
@@ -16992,12 +16992,12 @@ Voice_PortamentoTarget_ComputePitch:
 	ld e, (xde + 3)
 	and e, 0x30
 	srl e, 4
-	ldfr_berp E, 0xF0
+	ldb_erp E, 0xF0
 	extz ix
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 112)
-	ld32_24 xde, 0x045314
-	ld_sriw DE, (xde + 0x00ec)
+	ldl_da xde, 0x045314
+	ldw_sri0 DE, (xde + 0x00ec)
 	extz bc
 	muls bc, 0x25
 	ld iy, bc
@@ -17007,7 +17007,7 @@ Voice_PortamentoTarget_ComputePitch:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b A, 0x07, 0xE0, 0xF4
+	stb_dri A, 0x07, 0xE0, 0xF4
 	ld wa, de
 	mul xwa, xix
 	add xwa, xhl
@@ -17020,8 +17020,8 @@ Voice_UpdateFlagsFromSlot:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041368
-	st_dri3b B, 0x07, 0xE8, 0xE4
-	st_dri3b B, 0xE9, 0x02, 0x01
+	stb_dri B, 0x07, 0xE8, 0xE4
+	stb_dri B, 0xE9, 0x02, 0x01
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
@@ -17069,31 +17069,31 @@ Voice_Selector_Unpack3Groups:
 	extz hl
 	muls hl, 0x3
 	lda_24 xix, 0x00f77d
-	ld_srib3 L, 0x07, 0xF0, 0xEC
-	ldfr_berp L, 0xF0
+	ldb_sri L, 0x07, 0xF0, 0xEC
+	ldb_erp L, 0xF0
 	extz ix
 	ld hl, bc
 	and hl, 0xF
-	lda_dri3 XSP, 0x07, 0xE0, 0xF0
+	lda_dri XSP, 0x07, 0xE0, 0xF0
 	srl bc, 4
 	ld l, e
 	extz hl
 	muls hl, 0x3
 	lda_24 xix, 0x00f77e
-	ld_srib3 L, 0x07, 0xF0, 0xEC
-	ldfr_berp L, 0xF0
+	ldb_sri L, 0x07, 0xF0, 0xEC
+	ldb_erp L, 0xF0
 	extz ix
 	ld hl, bc
 	and hl, 0xF
-	lda_dri3 XSP, 0x07, 0xE0, 0xF0
+	lda_dri XSP, 0x07, 0xE0, 0xF0
 	srl bc, 4
 	extz de
 	muls de, 0x3
 	lda_24 xhl, 0x00f77f
-	ld_srib3 E, 0x07, 0xEC, 0xE8
+	ldb_sri E, 0x07, 0xEC, 0xE8
 	extz de
 	and bc, 0xF
-	lda_dri3 XHL, 0x07, 0xE0, 0xE8
+	lda_dri XHL, 0x07, 0xE0, 0xE8
 	ret
 
 Voice_Selector_FindBestSlot:
@@ -17128,7 +17128,7 @@ Voice_Selector_FindBestSlot_InnerLoop:
 	ld a, d
 	extz wa
 	lda xbc, (xsp + 4)
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x00
+	cpib_sri 0x07, 0xE4, 0xE0, 0x00
 	jr z, Voice_Selector_FindBestSlot_SlotCheck
 	ld l, d
 
@@ -17136,7 +17136,7 @@ Voice_Selector_FindBestSlot_SlotCheck:
 	ld a, d
 	extz wa
 	lda xbc, (xsp + 4)
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x04
+	cpib_sri 0x07, 0xE4, 0xE0, 0x04
 	jr c, Voice_Selector_FindBestSlot_Update
 	ld xwa, (xsp + 18)
 	incm8 1, (xwa)
@@ -17158,7 +17158,7 @@ Voice_Selector_FindBestSlot_InnerStep:
 	extz wa
 	lda xbc, (xsp + 4)
 	ld xde, (xsp + 26)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xde), a
 	jr Voice_Selector_FindBestSlot_Exit
 
@@ -17169,7 +17169,7 @@ Voice_Selector_FindBestSlot_OuterStep:
 	extz wa
 	lda xbc, (xsp + 4)
 	ld xde, (xsp + 26)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xde), a
 
 Voice_Selector_FindBestSlot_Exit:
@@ -17184,7 +17184,7 @@ Voice_Selector_ComputeMixWeights:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04146a
-	st_dri3b C, 0x07, 0xE4, 0xE0
+	stb_dri C, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
@@ -17202,8 +17202,8 @@ Voice_Selector_ComputeMixWeights:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00f786
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	ldw_sri WA, 0x07, 0xE4, 0xE0
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
@@ -17213,13 +17213,13 @@ Voice_Selector_ComputeMixWeights:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00f79a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
-	st_dri3w WA, 0x07, 0xEC, 0xE8
+	ldw_sri WA, 0x07, 0xE4, 0xE0
+	stw_dri WA, 0x07, 0xEC, 0xE8
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x00f7d2
-	ld_sriw3 DE, 0x07, 0xE4, 0xE0
+	ldw_sri DE, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	add wa, wa
@@ -17234,7 +17234,7 @@ Voice_Selector_ComputeMixWeights:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041478
-	st_dri3w DE, 0x07, 0xE4, 0xE0
+	stw_dri DE, 0x07, 0xE4, 0xE0
 	inc 8, xsp
 	ret
 
@@ -17251,22 +17251,22 @@ Voice_InitFromSlot:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041472
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041473
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041474
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041475
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	inc 2, xsp
 	ret
 
@@ -17464,13 +17464,13 @@ Voice_Slot_CalcArticParams:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041474
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xsp + 6), a
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041475
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xsp + 8), a
 	ld a, (xsp + 10)
 	extz wa
@@ -17528,7 +17528,7 @@ Voice_Slot_CalcArticParams_Type3Branch:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041472
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld c, a
 	exts bc
 	pushw 0x0
@@ -17540,7 +17540,7 @@ Voice_Slot_CalcArticParams_Type3Branch:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041473
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld c, a
 	exts bc
 	pushw 0x0
@@ -17552,7 +17552,7 @@ Voice_Slot_CalcArticParams_Type3Branch:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041473
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld c, a
 	exts bc
 	pushw 0x0
@@ -17575,13 +17575,13 @@ Voice_Slot_CalcAmpNibble:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xhl, 0x041368
-	st_dri3b C, 0x07, 0xEC, 0xE0
-	st_dri3b C, 0xED, 0x02, 0x01
+	stb_dri C, 0x07, 0xEC, 0xE0
+	stb_dri C, 0xED, 0x02, 0x01
 	ld a, c
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x043094
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	srl wa, 8
 	add wa, 0xC
 	cp wa, 0x24
@@ -17589,19 +17589,19 @@ Voice_Slot_CalcAmpNibble:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 HL, 0x07, 0xEC, 0xE0
+	ldw_sri HL, 0x07, 0xEC, 0xE0
 	jr Voice_Slot_CalcAmpNibble_Exit
 
 Voice_Slot_CalcAmpNibble_BranchA:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 BC, 0x07, 0xEC, 0xE0
+	ldw_sri BC, 0x07, 0xEC, 0xE0
 	and bc, 0xF
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 WA, 0x07, 0xEC, 0xE0
+	ldw_sri WA, 0x07, 0xEC, 0xE0
 	srl wa, 4
 	and wa, 0xF
 	cp bc, wa
@@ -17609,7 +17609,7 @@ Voice_Slot_CalcAmpNibble_BranchA:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 HL, 0x07, 0xEC, 0xE0
+	ldw_sri HL, 0x07, 0xEC, 0xE0
 	and hl, 0xFF0
 	jr Voice_Slot_CalcAmpNibble_Exit
 
@@ -17618,7 +17618,7 @@ Voice_Slot_CalcAmpNibble_BranchB:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 HL, 0x07, 0xEC, 0xE0
+	ldw_sri HL, 0x07, 0xEC, 0xE0
 	and hl, 0xF00
 	or hl, bc
 
@@ -17629,14 +17629,14 @@ Voice_Slot_FindOctaveOffset:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xhl, 0x041368
-	st_dri3b D, 0x07, 0xEC, 0xE0
-	st_dri3b D, 0xF1, 0x02, 0x01
+	stb_dri D, 0x07, 0xEC, 0xE0
+	stb_dri D, 0xF1, 0x02, 0x01
 	ldb l, 0x0
 	ld a, c
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x043094
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	srl wa, 8
 	sub wa, 0xC
 	cp wa, 0x54
@@ -17654,7 +17654,7 @@ Voice_Slot_FindOctaveOffset_BranchB:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 HL, 0x07, 0xF0, 0xE0
+	ldw_sri HL, 0x07, 0xF0, 0xE0
 	jrl Voice_Slot_FindOctaveOffset_Exit
 
 Voice_Slot_FindOctaveOffset_BranchC:
@@ -17663,18 +17663,18 @@ Voice_Slot_FindOctaveOffset_BranchC:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 HL, 0x07, 0xF0, 0xE0
+	ldw_sri HL, 0x07, 0xF0, 0xE0
 	ldb h, 0x0
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 BC, 0x07, 0xF0, 0xE0
+	ldw_sri BC, 0x07, 0xF0, 0xE0
 	srl bc, 4
 	and bc, 0xF
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	srl wa, 8
 	and wa, 0xF
 	cp bc, wa
@@ -17688,18 +17688,18 @@ Voice_Slot_FindOctaveOffset_BranchD:
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 HL, 0x07, 0xF0, 0xE0
+	ldw_sri HL, 0x07, 0xF0, 0xE0
 	and hl, 0xF
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 BC, 0x07, 0xF0, 0xE0
+	ldw_sri BC, 0x07, 0xF0, 0xE0
 	srl bc, 4
 	and bc, 0xF
 	ld a, e
 	extz wa
 	add wa, wa
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	srl wa, 8
 	and wa, 0xF
 	cp hl, bc
@@ -17739,13 +17739,13 @@ Voice_KeyIndex_Pack3Nibbles:
 
 Voice_Slot_LoadPitchOffset_A:
 	ld xbc, (xwa + 35)
-	ld_sriw BC, (xbc + 0x010e)
+	ldw_sri0 BC, (xbc + 0x010e)
 	add (xwa + 13), bc
 	ret
 
 Voice_Slot_LoadPitchOffset_B:
 	ld xbc, (xwa + 35)
-	ld_sriw BC, (xbc + 0x0110)
+	ldw_sri0 BC, (xbc + 0x0110)
 	add (xwa + 13), bc
 	ret
 
@@ -17755,7 +17755,7 @@ Voice_Slot_ApplyPortamentoDelta:
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	ld xiz, (xwa + 35)
-	ld_srib A, (xiz + 0x010a)
+	ldb_sri0 A, (xiz + 0x010a)
 	ld c, a
 	exts bc
 	ld xwa, (xsp + 8)
@@ -17764,7 +17764,7 @@ Voice_Slot_ApplyPortamentoDelta:
 	jr z, Voice_Slot_ApplyPortamentoDelta_BranchA
 	ei 6
 	ldda32 xwa, 4160
-	st_dri3l XWA, 0xF9, 0x14, 0x01
+	stl_dri XWA, 0xF9, 0x14, 0x01
 	ei 0
 	jrl Voice_Slot_ApplyPortamentoDelta_Exit
 
@@ -17782,7 +17782,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchA:
 	ld (xsp + 4), xwa
 
 Voice_Slot_ApplyPortamentoDelta_BranchB:
-	ld_srib A, (xiz + 0x010b)
+	ldb_sri0 A, (xiz + 0x010b)
 	ld c, a
 	exts bc
 	ld xwa, (xsp + 8)
@@ -17807,7 +17807,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchD:
 	ld de, wa
 	add wa, wa
 	lda_24 xbc, 0x00f7e6
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	ld xbc, (xsp + 4)
 	call FP_MulAccum64
@@ -17859,7 +17859,7 @@ Voice_Slot_ComputePitch:
 	ld xwa, (xsp + 10)
 	ld a, (xwa + 5)
 	res 7, a
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	sla iz, 8
 	add iz, 0x80
@@ -17933,10 +17933,10 @@ ToneGen_WriteNoteKey:
 	ld a, (xsp)
 	add a, 0xC0
 	extz wa
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x0000
+	stiw_da 0x100002, 0x0000
 	jr __jrt_nop_02B4C1
 __jrt_nop_02B4C1:
 
@@ -17947,10 +17947,10 @@ ToneGen_WriteNoteKey_NopCont1:
 	res_dd8 7, 0x18
 	ld a, (xsp)
 	extz wa
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x7e00
+	stiw_da 0x100002, 0x7e00
 	jr __jrt_nop_02B4DD
 __jrt_nop_02B4DD:
 
@@ -17969,7 +17969,7 @@ Voice_Init_Type4:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call Voice_Pitch_InterpDispatch
 	ld xwa, xiz
@@ -18015,14 +18015,14 @@ Voice_Init_Type4:
 
 Voice_Allocate_Typed:
 	lda xsp, (xsp - 24)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 18), de
 	ld (xsp + 20), c
 	ld (xsp + 22), xwa
 	ld a, (xsp + 38)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
+	lda_d16 xbc, 10562
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 2), xwa
@@ -18055,7 +18055,7 @@ Voice_Allocate_Typed:
 	ld bc, wa
 	add bc, 0x10
 	ld xwa, (xsp + 6)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	ld (xsp + 10), xwa
 	ld a, (xsp + 38)
 	ld c, a
@@ -18074,12 +18074,12 @@ Voice_Allocate_Typed:
 	extz wa
 	ld xbc, (xsp + 14)
 	call VelocityQuantise_B
-	ldfr_berp L, 0xFB
-	ldto_berp A, 0xFB
+	ldb_erp L, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld xbc, (xsp + 14)
 	call VoiceParam_WriteWithOffset_Alt
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	sll a, 6
 	or a, 0x12
 	ld c, a
@@ -18103,7 +18103,7 @@ Voice_Allocate_Typed:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	ld xwa, (xsp + 2)
 	ld (xwa + 35), xbc
 	ld a, (xsp + 38)
@@ -18117,7 +18117,7 @@ Voice_Allocate_Typed:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b A, 0x07, 0xE0, 0xE8
+	stb_dri A, 0x07, 0xE0, 0xE8
 	ld xwa, (xsp + 2)
 	ld (xwa + 39), xbc
 	ld xwa, (xsp + 2)
@@ -18140,7 +18140,7 @@ Voice_Allocate_Typed:
 	ld e, (xsp + 32)
 	set 7, e
 	ld xwa, (xsp + 22)
-	lda_dri3 XIY, 0x07, 0xE0, 0xE4
+	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_Allocate_Typed_ExitB
 
 Voice_Allocate_Typed_ExitA:
@@ -18149,7 +18149,7 @@ Voice_Allocate_Typed_ExitA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
 Voice_Allocate_Typed_ExitB:
 	ld a, (xsp + 38)
@@ -18157,8 +18157,8 @@ Voice_Allocate_Typed_ExitB:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
-	pop_werp 0xFA
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
+	popw_erp 0xFA
 	lda xsp, (xsp + 24)
 	retd 0xA
 
@@ -18171,7 +18171,7 @@ Voice_Setup_Typed:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	and wa, de
 	jrl z, Voice_Setup_Typed_ExitA
 	ld a, (xsp + 36)
@@ -18185,7 +18185,7 @@ Voice_Setup_Typed:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld xwa, (xwa + 4)
 	ld (xsp + 8), xwa
 	ld a, (xsp + 32)
@@ -18220,7 +18220,7 @@ Voice_Setup_Typed:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld xwa, (xwa + 118)
 	ld (xsp + 12), xwa
 	ld a, (xsp + 38)
@@ -18234,7 +18234,7 @@ Voice_Setup_Typed:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xsp + 16), xwa
 	cp (xsp + 34), 0x78
 	jr c, Voice_Setup_Typed_BranchB
@@ -18270,21 +18270,21 @@ Voice_Setup_Typed_BranchA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	ld a, (xsp + 38)
 	extz wa
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	jrl Voice_Setup_Typed_ExitB
 
 Voice_Setup_Typed_BranchB:
 	ld a, (xsp + 38)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 10562
+	stb_dri H, 0x07, 0xE4, 0xE0
 	sll l, 6
 	set 2, l
 	ld a, l
@@ -18297,7 +18297,7 @@ Voice_Setup_Typed_BranchB:
 	ld a, (xsp + 34)
 	set 7, a
 	ld (xiz + 5), a
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 1, wa
 	jr z, Voice_Setup_Typed_BranchD
 	cp (xsp + 20), 0x0
@@ -18369,28 +18369,28 @@ Voice_Setup_Typed_BranchD:
 	ld a, (xwa + 94)
 	extz wa
 	lda_24 xbc, 0x012038
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xiz + 53), a
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 95)
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x012057
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld (xiz + 54), wa
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 96)
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x012095
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld (xiz + 58), wa
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 97)
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x012057
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld (xiz + 56), wa
 	ld a, (xsp + 38)
 	extz wa
@@ -18399,7 +18399,7 @@ Voice_Setup_Typed_BranchD:
 	ld e, (xsp + 30)
 	set 7, e
 	ld xwa, (xsp + 22)
-	lda_dri3 XIY, 0x07, 0xE0, 0xE4
+	lda_dri XIY, 0x07, 0xE0, 0xE4
 	cpw (xiz + 47), 0x0
 	jr nz, Voice_Setup_Typed_BranchE
 	cpw (xiz + 49), 0xFF
@@ -18416,7 +18416,7 @@ Voice_Setup_Typed_BranchE:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x80
+	stib_ind 0x07, 0xE0, 0xE4, 0x80
 	jr Voice_Setup_Typed_ExitB
 
 Voice_Setup_Typed_BranchF:
@@ -18425,7 +18425,7 @@ Voice_Setup_Typed_BranchF:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	jr Voice_Setup_Typed_ExitB
 
 Voice_Setup_Typed_ExitA:
@@ -18434,13 +18434,13 @@ Voice_Setup_Typed_ExitA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	ld a, (xsp + 38)
 	extz wa
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
 Voice_Setup_Typed_ExitB:
 	pop xiz
@@ -18468,7 +18468,7 @@ Voice_NoteOn_Type4:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jr z, Voice_NoteOn_Type4_BranchA
 	ld a, (xsp + 8)
@@ -18510,7 +18510,7 @@ Voice_NoteOn_Type4_BranchB:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
 	jr z, Voice_NoteOn_Type4_BranchC
@@ -18591,14 +18591,14 @@ Voice_NoteOn_Type4_SlotLoop:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 10)
-	cp_srib_im 0x07, 0xE0, 0xE4, 0x40
+	cpib_sri 0x07, 0xE0, 0xE4, 0x40
 	jrl nc, Voice_NoteOn_Type4_BranchK
 	ld a, (xsp + 4)
 	extz wa
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 10)
-	ld_srib3 E, 0x07, 0xE0, 0xE4
+	ldb_sri E, 0x07, 0xE0, 0xE4
 	cp (xsp + 6), 0x78
 	jr c, Voice_NoteOn_Type4_AltSlotPath
 	ld a, e
@@ -18609,9 +18609,9 @@ Voice_NoteOn_Type4_SlotLoop:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b E, 0x07, 0xE4, 0xE0
-	st_dri3b D, 0x07, 0xF8, 0xEC
+	lda_d16 xbc, 10562
+	stb_dri E, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xF8, 0xEC
 	ldw bc, 0x23
 	ldirw
 	ldi85
@@ -18626,9 +18626,9 @@ Voice_NoteOn_Type4_AltSlotPath:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b E, 0x07, 0xE4, 0xE0
-	st_dri3b D, 0x07, 0xF8, 0xEC
+	lda_d16 xbc, 10562
+	stb_dri E, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xF8, 0xEC
 	ldw bc, 0x23
 	ldirw
 	ldi85
@@ -18636,12 +18636,12 @@ Voice_NoteOn_Type4_AltSlotPath:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	lda_dri3 XIY, 0x07, 0xE4, 0xE0
+	lda_dri XIY, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10609
-	ld_sriw3 HL, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 10609
+	ldw_sri HL, 0x07, 0xE4, 0xE0
 	cps hl, 0
 	jr z, Voice_NoteOn_Type4_BranchE
 	ld wa, hl
@@ -18659,12 +18659,12 @@ Voice_NoteOn_Type4_BranchF:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x0430bd
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10611
-	ld_sriw3 HL, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 10611
+	ldw_sri HL, 0x07, 0xE4, 0xE0
 	cp hl, 0xFF
 	jr z, Voice_NoteOn_Type4_BranchG
 	or hl, 0xC000
@@ -18678,7 +18678,7 @@ Voice_NoteOn_Type4_BranchH:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x0430bf
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 
 Voice_NoteOn_Type4_BranchI:
 	ld a, e
@@ -18722,7 +18722,7 @@ Voice_Release_Type4:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call Voice_PitchEnv_Advance
 	ld xwa, xiz
@@ -18788,7 +18788,7 @@ Voice_NoteOn_Type3:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xhl, 0x04136a
-	ld_sriw3 WA, 0x07, 0xEC, 0xE0
+	ldw_sri WA, 0x07, 0xEC, 0xE0
 	and wa, de
 	jrl z, Voice_NoteOn_Type3_ExitA
 	ld a, (xsp + 22)
@@ -18802,7 +18802,7 @@ Voice_NoteOn_Type3:
 	lda_24 xde, 0x041368
 	exts xwa
 	add xwa, xde
-	st_dri3b W, 0x07, 0xE0, 0xEC
+	stb_dri W, 0x07, 0xE0, 0xEC
 	ld xwa, (xwa + 4)
 	ld (xsp + 4), xwa
 	ld a, (xsp + 22)
@@ -18828,7 +18828,7 @@ Voice_NoteOn_Type3:
 	lda_24 xhl, 0x041368
 	exts xwa
 	add xwa, xhl
-	st_dri3b W, 0x07, 0xE0, 0xF0
+	stb_dri W, 0x07, 0xE0, 0xF0
 	ld xhl, (xwa + 8)
 	ld a, (xsp + 22)
 	extz wa
@@ -18841,12 +18841,12 @@ Voice_NoteOn_Type3:
 	lda_24 xix, 0x041368
 	exts xwa
 	add xwa, xix
-	st_dri3b D, 0x07, 0xE0, 0xF4
+	stb_dri D, 0x07, 0xE0, 0xF4
 	ld a, (xsp + 22)
 	extz wa
 	muls wa, 0x47
-	ldada xiy, 10562
-	st_dri3b H, 0x07, 0xF4, 0xE0
+	lda_d16 xiy, 10562
+	stb_dri H, 0x07, 0xF4, 0xE0
 	ldw (xiz + 1), 0x8
 	bitm 7, (xsp + 18)
 	jr z, Voice_NoteOn_Type3_BranchA
@@ -18895,7 +18895,7 @@ Voice_NoteOn_Type3_BranchA:
 	ld e, (xsp + 16)
 	set 7, e
 	ld xwa, (xsp + 8)
-	lda_dri3 XIY, 0x07, 0xE0, 0xE4
+	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_NoteOn_Type3_ExitB
 
 Voice_NoteOn_Type3_ExitA:
@@ -18904,7 +18904,7 @@ Voice_NoteOn_Type3_ExitA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 8)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
 Voice_NoteOn_Type3_ExitB:
 	ld a, (xsp + 22)
@@ -18912,7 +18912,7 @@ Voice_NoteOn_Type3_ExitB:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 8)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	pop xiz
 	inc 8, xsp
 	retd 0x8
@@ -18927,7 +18927,7 @@ Voice_NoteOn_Type2:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 13, wa
 	jr z, Voice_NoteOn_Type2_BranchA
 	ld a, (xsp + 8)
@@ -19045,14 +19045,14 @@ Voice_NoteOn_Type2_BranchE:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 10)
-	cp_srib_im 0x07, 0xE0, 0xE4, 0x40
+	cpib_sri 0x07, 0xE0, 0xE4, 0x40
 	jr nc, Voice_NoteOn_Type2_LoopStep
 	ld a, e
 	extz wa
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 10)
-	ld_srib3 A, 0x07, 0xE0, 0xE4
+	ldb_sri A, 0x07, 0xE0, 0xE4
 	ld (xsp + 4), a
 	extz wa
 	muls wa, 0x47
@@ -19061,9 +19061,9 @@ Voice_NoteOn_Type2_BranchE:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b E, 0x07, 0xE4, 0xE0
-	st_dri3b D, 0x07, 0xF8, 0xEC
+	lda_d16 xbc, 10562
+	stb_dri E, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xF8, 0xEC
 	ldw bc, 0x23
 	ldirw
 	ldi85
@@ -19073,7 +19073,7 @@ Voice_NoteOn_Type2_BranchE:
 	ld bc, wa
 	lda_24 xhl, 0x04308e
 	ld a, (xsp + 4)
-	lda_dri3 XBC, 0x07, 0xEC, 0xE4
+	lda_dri XBC, 0x07, 0xEC, 0xE4
 
 Voice_NoteOn_Type2_LoopStep:
 	inc 1, e
@@ -19093,7 +19093,7 @@ Voice_Init_Type2:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call Voice_Pitch_InterpDispatch
 	ld xwa, xiz
@@ -19158,7 +19158,7 @@ Voice_Allocate_Type2:
 	ld bc, wa
 	add bc, 0x10
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	ld (xsp + 8), xwa
 	ld a, (xsp + 40)
 	ld c, a
@@ -19186,8 +19186,8 @@ Voice_Allocate_Type2:
 	ld a, (xsp + 40)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	lda_d16 xbc, 10562
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 20)
 	sll a, 6
 	set 4, a
@@ -19200,7 +19200,7 @@ Voice_Allocate_Type2:
 	ld a, (xsp + 38)
 	set 7, a
 	ld (xiz + 5), a
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 1, wa
 	jr z, Voice_Allocate_Type2_BranchA
 	ld a, (xsp + 36)
@@ -19232,7 +19232,7 @@ Voice_Allocate_Type2_BranchA:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xiz + 39), xwa
 	ld xwa, (xsp + 4)
 	ld (xiz + 19), xwa
@@ -19251,7 +19251,7 @@ Voice_Allocate_Type2_BranchA:
 	ld e, (xsp + 34)
 	set 7, e
 	ld xwa, (xsp + 26)
-	lda_dri3 XIY, 0x07, 0xE0, 0xE4
+	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_Allocate_Type2_ExitB
 
 Voice_Allocate_Type2_ExitA:
@@ -19260,7 +19260,7 @@ Voice_Allocate_Type2_ExitA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 26)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
 Voice_Allocate_Type2_ExitB:
 	ld a, (xsp + 40)
@@ -19268,7 +19268,7 @@ Voice_Allocate_Type2_ExitB:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 26)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	pop xiz
 	lda xsp, (xsp + 26)
 	retd 0x8
@@ -19338,14 +19338,14 @@ Voice_NoteOn_Type1_LoopBody:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 10)
-	cp_srib_im 0x07, 0xE0, 0xE4, 0x40
+	cpib_sri 0x07, 0xE0, 0xE4, 0x40
 	jr nc, Voice_NoteOn_Type1_LoopStep
 	ld a, e
 	extz wa
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 10)
-	ld_srib3 A, 0x07, 0xE0, 0xE4
+	ldb_sri A, 0x07, 0xE0, 0xE4
 	ld (xsp + 4), a
 	extz wa
 	muls wa, 0x47
@@ -19354,9 +19354,9 @@ Voice_NoteOn_Type1_LoopBody:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b E, 0x07, 0xE4, 0xE0
-	st_dri3b D, 0x07, 0xF8, 0xEC
+	lda_d16 xbc, 10562
+	stb_dri E, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xF8, 0xEC
 	ldw bc, 0x23
 	ldirw
 	ldi85
@@ -19366,7 +19366,7 @@ Voice_NoteOn_Type1_LoopBody:
 	ld bc, wa
 	lda_24 xhl, 0x04308e
 	ld a, (xsp + 4)
-	lda_dri3 XBC, 0x07, 0xEC, 0xE4
+	lda_dri XBC, 0x07, 0xEC, 0xE4
 
 Voice_NoteOn_Type1_LoopStep:
 	inc 1, e
@@ -19386,7 +19386,7 @@ Voice_Init_Type1:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call Voice_Pitch_InterpDispatch
 	lda_24 xwa, 0x0451ce
@@ -19426,12 +19426,12 @@ Voice_Init_Type1:
 
 Voice_Allocate_1of4:
 	lda xsp, (xsp - 24)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 18), de
 	ld (xsp + 20), c
 	ld (xsp + 22), xwa
-	ldi_berp 0xFB, 0
-	ldto_berp A, 0xFB
+	ldib_erp 0xFB, 0
+	stb_erp A, 0xFB
 	extz wa
 	ld bc, wa
 	sla bc, 2
@@ -19446,7 +19446,7 @@ Voice_Allocate_1of4:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld xwa, (xwa + 118)
 	ld (xsp + 14), xwa
 	ld bc, (xwa + 12)
@@ -19483,7 +19483,7 @@ Voice_Allocate_1of4:
 	ld bc, wa
 	add bc, 0x10
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	ld (xsp + 6), xwa
 	ld a, (xsp + 36)
 	ld c, a
@@ -19502,8 +19502,8 @@ Voice_Allocate_1of4:
 	extz wa
 	ld xbc, (xsp + 10)
 	call VelocityQuantise_B
-	ldfr_berp L, 0xFB
-	ldto_berp A, 0xFB
+	ldb_erp L, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld xbc, (xsp + 10)
 	call VoiceParam_WriteWithOffset_Alt
@@ -19511,9 +19511,9 @@ Voice_Allocate_1of4:
 	ld a, (xsp + 36)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b A, 0x07, 0xE4, 0xE0
-	ldto_berp A, 0xFB
+	lda_d16 xbc, 10562
+	stb_dri A, 0x07, 0xE4, 0xE0
+	stb_erp A, 0xFB
 	sll a, 6
 	or a, 0x12
 	extz wa
@@ -19551,7 +19551,7 @@ Voice_Allocate_1of4:
 	ld e, (xsp + 30)
 	set 7, e
 	ld xwa, (xsp + 22)
-	lda_dri3 XIY, 0x07, 0xE0, 0xE4
+	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_Allocate_1of4_ExitB
 
 Voice_Allocate_1of4_ExitA:
@@ -19560,10 +19560,10 @@ Voice_Allocate_1of4_ExitA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xE4, 0x00
+	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
 Voice_Allocate_1of4_ExitB:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 24)
 	retd 0x8
 
@@ -19572,7 +19572,7 @@ Voice_NoteOn_Rhythm:
 	push xiz
 	ld xiz, xwa
 	ld l, (xsp + 10)
-	ldfr_berp E, 0xF0
+	ldb_erp E, 0xF0
 	extz ix
 	ld a, c
 	extz wa
@@ -19633,12 +19633,12 @@ Voice_NoteOn_Rhythm_BranchB:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0xA
-	cp_srib_im 0x07, 0xF8, 0xE0, 0x40
+	cpib_sri 0x07, 0xF8, 0xE0, 0x40
 	jr nc, Voice_NoteOn_Rhythm_Exit
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0xA
-	ld_srib3 E, 0x07, 0xF8, 0xE0
+	ldb_sri E, 0x07, 0xF8, 0xE0
 	ld a, e
 	extz wa
 	muls wa, 0x47
@@ -19647,9 +19647,9 @@ Voice_NoteOn_Rhythm_BranchB:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada xbc, 10562
-	st_dri3b E, 0x07, 0xE4, 0xE0
-	st_dri3b D, 0x07, 0xF8, 0xEC
+	lda_d16 xbc, 10562
+	stb_dri E, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xF8, 0xEC
 	ldw bc, 0x23
 	ldirw
 	ldi85
@@ -19657,7 +19657,7 @@ Voice_NoteOn_Rhythm_BranchB:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	lda_dri3 XIY, 0x07, 0xE4, 0xE0
+	lda_dri XIY, 0x07, 0xE4, 0xE0
 
 Voice_NoteOn_Rhythm_Exit:
 	pop xiz
@@ -19666,7 +19666,7 @@ Voice_NoteOn_Rhythm_Exit:
 
 Voice_SetPitch:
 	lda xsp, (xsp - 20)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 16), e
 	ld (xsp + 18), c
 	ld (xsp + 20), a
@@ -19683,7 +19683,7 @@ Voice_SetPitch:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	and wa, 0x7
 	jrl z, Voice_SetPitch_Exit
 	bitm 7, (xsp + 16)
@@ -19713,17 +19713,17 @@ Voice_SetPitch:
 	ld xwa, xhl
 	calr Voice_NoteOn_Rhythm
 	ld a, (xsp + 12)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_SetPitch_Exit
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02C780
 __jrt_nop_02C780:
 
@@ -19732,13 +19732,13 @@ Voice_SetPitch_NopCont1:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02C7A1
 __jrt_nop_02C7A1:
 
@@ -19746,29 +19746,29 @@ Voice_SetPitch_NopCont2:
 	nop
 	nop
 	nop
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_Init_Type1
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
 	lda_24 xde, 0x0430bb
 	ld wa, hl
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
 Voice_SetPitch_Exit:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 20)
 	retd 0x2
 
 Voice_NoteOff:
 	lda xsp, (xsp - 20)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 16), e
 	ld (xsp + 18), c
 	ld (xsp + 20), a
@@ -19785,7 +19785,7 @@ Voice_NoteOff:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	and wa, 0x7
 	jrl z, Voice_NoteOff_Exit
 	ld a, (xsp + 20)
@@ -19813,17 +19813,17 @@ Voice_NoteOff:
 	ld xwa, xhl
 	calr Voice_NoteOn_Rhythm
 	ld a, (xsp + 13)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_NoteOff_Exit
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02C884
 __jrt_nop_02C884:
 
@@ -19832,13 +19832,13 @@ Voice_NoteOff_NopCont1:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02C8A5
 __jrt_nop_02C8A5:
 
@@ -19846,32 +19846,32 @@ Voice_NoteOff_NopCont2:
 	nop
 	nop
 	nop
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_Init_Type1
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
 	lda_24 xde, 0x0430bb
 	ld wa, hl
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call VoiceSlot_NoteOff
 
 Voice_NoteOff_Exit:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 20)
 	retd 0x2
 
 Voice_SetVelocity:
 	lda xsp, (xsp - 20)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 16), e
 	ld (xsp + 18), c
 	ld (xsp + 20), a
@@ -19915,27 +19915,27 @@ Voice_SetVelocity:
 	pushw wa
 	ld xwa, xhl
 	calr Voice_NoteOn_Type4
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 4
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 4
 	jrl nc, Voice_SetVelocity_Type0_Loop2Start
 
 Voice_SetVelocity_Type0_SlotLoop:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_SetVelocity_Type0_BranchB
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02C9A3
 __jrt_nop_02C9A3:
 
@@ -19944,13 +19944,13 @@ Voice_SetVelocity_Type0_NopCont1:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02C9C4
 __jrt_nop_02C9C4:
 
@@ -19958,73 +19958,73 @@ Voice_SetVelocity_Type0_NopCont2:
 	nop
 	nop
 	nop
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308f
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 1, wa
 	jr z, Voice_SetVelocity_Type0_BranchA
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_Init_Type2
 	jr Voice_SetVelocity_Type0_BranchB
 
 Voice_SetVelocity_Type0_BranchA:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_Init_Type4
 
 Voice_SetVelocity_Type0_BranchB:
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 4
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 4
 	jrl c, Voice_SetVelocity_Type0_SlotLoop
 
 Voice_SetVelocity_Type0_Loop2Start:
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 4
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 4
 	jr nc, Voice_SetVelocity_Type0_Loop2Exit
 
 Voice_SetVelocity_Type0_Loop2Body:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x40
+	cpib_sri 0x07, 0xE4, 0xE0, 0x40
 	jr nc, Voice_SetVelocity_Type0_Loop2Step
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x0430bd
-	cp_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x00
+	cpiw_sri 0x07, 0xE4, 0xE0, 0x00, 0x00
 	jr nz, Voice_SetVelocity_Type0_Loop2Step
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308f
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 8, wa
 	jr nz, Voice_SetVelocity_Type0_Loop2Step
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
 	lda_24 xde, 0x0430bb
 	ld wa, hl
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
 Voice_SetVelocity_Type0_Loop2Step:
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 4
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 4
 	jr c, Voice_SetVelocity_Type0_Loop2Body
 
 Voice_SetVelocity_Type0_Loop2Exit:
@@ -20058,27 +20058,27 @@ Voice_SetVelocity_Type40_Entry:
 	pushw wa
 	ld xwa, xhl
 	calr Voice_NoteOn_Type2
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 4
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 4
 	jr nc, Voice_SetVelocity_Type40_Loop2Start
 
 Voice_SetVelocity_Type40_SlotLoop:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_SetVelocity_Type40_LoopStep
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02CB07
 __jrt_nop_02CB07:
 
@@ -20087,13 +20087,13 @@ Voice_SetVelocity_Type40_NopCont1:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02CB28
 __jrt_nop_02CB28:
 
@@ -20101,44 +20101,44 @@ Voice_SetVelocity_Type40_NopCont2:
 	nop
 	nop
 	nop
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_Release_Type4
 
 Voice_SetVelocity_Type40_LoopStep:
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 4
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 4
 	jr c, Voice_SetVelocity_Type40_SlotLoop
 
 Voice_SetVelocity_Type40_Loop2Start:
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 4
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 4
 	jr nc, Voice_SetVelocity_Type40_Loop2Exit
 
 Voice_SetVelocity_Type40_Loop2Body:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_SetVelocity_Type40_Loop2Step
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
 	lda_24 xde, 0x0430bb
 	ld wa, hl
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
 Voice_SetVelocity_Type40_Loop2Step:
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 4
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 4
 	jr c, Voice_SetVelocity_Type40_Loop2Body
 
 Voice_SetVelocity_Type40_Loop2Exit:
@@ -20161,35 +20161,35 @@ Voice_SetVelocity_Type80_Entry:
 	pushw wa
 	ld xwa, xhl
 	calr Voice_NoteOn_Type1
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 2
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 2
 	jrl nc, Voice_SetVelocity_Type80_Loop2Start
 
 Voice_SetVelocity_Type80_SlotLoop:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_SetVelocity_Type80_LoopStep
 	ld a, (xsp + 20)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	call Voice_WriteChPitchWithVib
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02CC06
 __jrt_nop_02CC06:
 
@@ -20198,13 +20198,13 @@ Voice_SetVelocity_Type80_NopCont1:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02CC27
 __jrt_nop_02CC27:
 
@@ -20212,44 +20212,44 @@ Voice_SetVelocity_Type80_NopCont2:
 	nop
 	nop
 	nop
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_Init_Type2
 
 Voice_SetVelocity_Type80_LoopStep:
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 2
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 2
 	jr c, Voice_SetVelocity_Type80_SlotLoop
 
 Voice_SetVelocity_Type80_Loop2Start:
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 2
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 2
 	jr nc, Voice_SetVelocity_Type80_Loop2Exit
 
 Voice_SetVelocity_Type80_Loop2Body:
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	extz wa
 	add wa, 0xA
 	lda xbc, (xsp + 2)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x40
 	jr nc, Voice_SetVelocity_Type80_Loop2Step
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
 	lda_24 xde, 0x0430bb
 	ld wa, hl
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
 Voice_SetVelocity_Type80_Loop2Step:
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 2
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 2
 	jr c, Voice_SetVelocity_Type80_Loop2Body
 
 Voice_SetVelocity_Type80_Loop2Exit:
@@ -20263,13 +20263,13 @@ Voice_SetVelocity_Exit:
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xF3, 0xFF
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 20)
 	retd 0x2
 
 Voice_Allocate:
 	push xiz
-	ldada xiz, 10846
+	lda_d16 xiz, 10846
 	ld (xiz), 0x80
 	extz bc
 	extz wa
@@ -20286,7 +20286,7 @@ Voice_Allocate:
 
 Voice_AllocateForRelease:
 	push xiz
-	ldada xiz, 10846
+	lda_d16 xiz, 10846
 	ld (xiz), 0x80
 	extz wa
 	sll wa, 8
@@ -20301,7 +20301,7 @@ Voice_AllocateForRelease:
 
 Voice_AllocateForSustain:
 	push xiz
-	ldada xiz, 10846
+	lda_d16 xiz, 10846
 	ld (xiz), 0x40
 	extz wa
 	sll wa, 8
@@ -20322,7 +20322,7 @@ VoiceAllocate_DataTable_02CD14:
 
 Voice_AllocateForFull:
 	push xiz
-	ldada xiz, 10846
+	lda_d16 xiz, 10846
 	ld (xiz), 0x0
 	extz wa
 	sll wa, 8
@@ -20336,7 +20336,7 @@ Voice_AllocateForFull:
 
 Voice_AllocateForAny:
 	push xiz
-	ldada xiz, 10846
+	lda_d16 xiz, 10846
 	ld (xiz), 0x0
 	ldw (xiz + 1), 0x0
 	ldw (xiz + 3), 0x1FFF
@@ -20354,7 +20354,7 @@ Voice_Release:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	resm 7, (xiz + 5)
 	ld wa, (xiz + 1)
 	extz xwa
@@ -20439,7 +20439,7 @@ Voice_Cut:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld xwa, (xiz + 35)
 	ld (xsp + 4), xwa
 	resm 7, (xiz + 5)
@@ -20655,7 +20655,7 @@ Voice_NoteOn_Exit:
 Voice_SetPanning:
 	push xiz
 	ld xiz, xwa
-	ld16_24 xwa, 0x041360
+	ldw_da xwa, 0x041360
 	srl wa, 8
 	or wa, 0x1480
 	ld (xiz), wa
@@ -20672,10 +20672,10 @@ Voice_SetPanning:
 	extz wa
 	muls wa, 0x47
 	lda_24 xbc, 0x04308e
-	st_dri3b A, 0x07, 0xE4, 0xE0
-	ld16_24 xwa, 0x041360
+	stb_dri A, 0x07, 0xE4, 0xE0
+	ldw_da xwa, 0x041360
 	ld (xbc + 8), wa
-	ld16_24 xwa, 0x041360
+	ldw_da xwa, 0x041360
 	ld (xbc + 6), wa
 	ldw (xbc + 1), 0x1
 	lds32 xwa, 0
@@ -20690,7 +20690,7 @@ Voice_SetPanning:
 	ld (xbc + 39), xwa
 	ld (xbc + 12), 0x0
 	ld (xbc + 4), 0x14
-	ld16_24 xwa, 0x041360
+	ldw_da xwa, 0x041360
 	srl wa, 8
 	ld (xbc + 5), a
 	ld a, (xiz + 10)
@@ -20712,11 +20712,11 @@ ToneGen_WritePanReg:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x400
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D0D7
 __jrt_nop_02D0D7:
 
@@ -20743,12 +20743,12 @@ ToneGen_WriteVoiceParams:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x40
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 2)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D12A
 __jrt_nop_02D12A:
 
@@ -20759,13 +20759,13 @@ ToneGen_WriteVoiceParams_NopCont01:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	set 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D14F
 __jrt_nop_02D14F:
 
@@ -20776,12 +20776,12 @@ ToneGen_WriteVoiceParams_NopCont02:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D171
 __jrt_nop_02D171:
 
@@ -20792,12 +20792,12 @@ ToneGen_WriteVoiceParams_NopCont03:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x100
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 8)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D193
 __jrt_nop_02D193:
 
@@ -20808,12 +20808,12 @@ ToneGen_WriteVoiceParams_NopCont04:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x140
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D1B5
 __jrt_nop_02D1B5:
 
@@ -20824,12 +20824,12 @@ ToneGen_WriteVoiceParams_NopCont05:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x180
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D1D7
 __jrt_nop_02D1D7:
 
@@ -20840,12 +20840,12 @@ ToneGen_WriteVoiceParams_NopCont06:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x400
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 14)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D1F9
 __jrt_nop_02D1F9:
 
@@ -20856,12 +20856,12 @@ ToneGen_WriteVoiceParams_NopCont07:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x440
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 16)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D21B
 __jrt_nop_02D21B:
 
@@ -20872,12 +20872,12 @@ ToneGen_WriteVoiceParams_NopCont08:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x480
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 18)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D23D
 __jrt_nop_02D23D:
 
@@ -20888,12 +20888,12 @@ ToneGen_WriteVoiceParams_NopCont09:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x4C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 20)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D25F
 __jrt_nop_02D25F:
 
@@ -20904,12 +20904,12 @@ ToneGen_WriteVoiceParams_NopCont10:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x500
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 22)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D281
 __jrt_nop_02D281:
 
@@ -20920,12 +20920,12 @@ ToneGen_WriteVoiceParams_NopCont11:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 24)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D2A3
 __jrt_nop_02D2A3:
 
@@ -20935,10 +20935,10 @@ ToneGen_WriteVoiceParams_NopCont12:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02D2BD
 __jrt_nop_02D2BD:
 
@@ -20949,12 +20949,12 @@ ToneGen_WriteVoiceParams_NopCont13:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D2DF
 __jrt_nop_02D2DF:
 
@@ -20965,12 +20965,12 @@ ToneGen_WriteVoiceParams_NopCont14:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D301
 __jrt_nop_02D301:
 
@@ -20981,12 +20981,12 @@ ToneGen_WriteVoiceParams_NopCont15:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x8C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 30)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D323
 __jrt_nop_02D323:
 
@@ -20997,12 +20997,12 @@ ToneGen_WriteVoiceParams_NopCont16:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 32)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D345
 __jrt_nop_02D345:
 
@@ -21013,12 +21013,12 @@ ToneGen_WriteVoiceParams_NopCont17:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 34)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D367
 __jrt_nop_02D367:
 
@@ -21029,12 +21029,12 @@ ToneGen_WriteVoiceParams_NopCont18:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x980
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 36)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D389
 __jrt_nop_02D389:
 
@@ -21045,12 +21045,12 @@ ToneGen_WriteVoiceParams_NopCont19:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 38)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D3AB
 __jrt_nop_02D3AB:
 
@@ -21061,12 +21061,12 @@ ToneGen_WriteVoiceParams_NopCont20:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 40)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D3CD
 __jrt_nop_02D3CD:
 
@@ -21077,12 +21077,12 @@ ToneGen_WriteVoiceParams_NopCont21:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA40
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 42)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D3EF
 __jrt_nop_02D3EF:
 
@@ -21093,13 +21093,13 @@ ToneGen_WriteVoiceParams_NopCont22:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D414
 __jrt_nop_02D414:
 
@@ -21115,10 +21115,10 @@ ToneGen_WriteSingleReg:
 	pushw iz
 	ld iz, bc
 	res_dd8 7, 0x18
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	st16_24 0x100002, xiz
+	stw_da 0x100002, xiz
 	jr __jrt_nop_02D431
 __jrt_nop_02D431:
 
@@ -21137,12 +21137,12 @@ ToneGen_WriteNote:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D45D
 __jrt_nop_02D45D:
 
@@ -21153,12 +21153,12 @@ ToneGen_WriteNote_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D47F
 __jrt_nop_02D47F:
 
@@ -21169,12 +21169,12 @@ ToneGen_WriteNote_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D4A1
 __jrt_nop_02D4A1:
 
@@ -21185,12 +21185,12 @@ ToneGen_WriteNote_NopCont3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D4C3
 __jrt_nop_02D4C3:
 
@@ -21201,12 +21201,12 @@ ToneGen_WriteNote_NopCont4:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D4E5
 __jrt_nop_02D4E5:
 
@@ -21217,12 +21217,12 @@ ToneGen_WriteNote_NopCont5:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D507
 __jrt_nop_02D507:
 
@@ -21242,12 +21242,12 @@ ToneGen_WriteNote_2Regs:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D535
 __jrt_nop_02D535:
 
@@ -21258,12 +21258,12 @@ ToneGen_WriteNote_2Regs_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D557
 __jrt_nop_02D557:
 
@@ -21280,11 +21280,11 @@ ToneGen_NoteTable_02D55E:
 	ld	xiz, xbc
 	.byte 0xf0, 0x18, 0xb7
 	add	wa, 2112
-	st16_24	1048576, wa
+	stw_da	1048576, wa
 	nop
 	.byte 0xf0, 0x18, 0xbf
 	ld	wa, (xiz+46)
-	st16_24	1048578, wa
+	stw_da	1048578, wa
 	jr	t, 0
 	nop
 	nop
@@ -21298,12 +21298,12 @@ ToneGen_NoteTable_02D55E:
 	.byte 0xf0, 0x18, 0xb7
 	ld	wa, iz
 	add	wa, 256
-	st16_24	1048576, wa
+	stw_da	1048576, wa
 	nop
 	.byte 0xf0, 0x18, 0xbf
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
-	st16_24	1048578, wa
+	stw_da	1048578, wa
 	jr	t, 0
 	nop
 	nop
@@ -21311,12 +21311,12 @@ ToneGen_NoteTable_02D55E:
 	.byte 0xf0, 0x18, 0xb7
 	ld	wa, iz
 	add	wa, 320
-	st16_24	1048576, wa
+	stw_da	1048576, wa
 	nop
 	.byte 0xf0, 0x18, 0xbf
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
-	st16_24	1048578, wa
+	stw_da	1048578, wa
 	jr	t, 0
 	nop
 	nop
@@ -21333,12 +21333,12 @@ ToneGen_WriteNote_Stereo:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D5F7
 __jrt_nop_02D5F7:
 
@@ -21349,12 +21349,12 @@ ToneGen_WriteNote_Stereo_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D619
 __jrt_nop_02D619:
 
@@ -21374,12 +21374,12 @@ ToneGen_WriteNote_Hold:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D647
 __jrt_nop_02D647:
 
@@ -21390,12 +21390,12 @@ ToneGen_WriteNote_Hold_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D669
 __jrt_nop_02D669:
 
@@ -21412,10 +21412,10 @@ ToneGen_WriteSingleReg_180:
 	ld iz, bc
 	res_dd8 7, 0x18
 	add wa, 0x180
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	st16_24 0x100002, xiz
+	stw_da 0x100002, xiz
 	jr __jrt_nop_02D68A
 __jrt_nop_02D68A:
 
@@ -21435,12 +21435,12 @@ ToneGen_WriteVoiceParams_Ext:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D6B9
 __jrt_nop_02D6B9:
 
@@ -21450,10 +21450,10 @@ ToneGen_WriteVoiceParams_Ext_NopCont1:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02D6D3
 __jrt_nop_02D6D3:
 
@@ -21464,12 +21464,12 @@ ToneGen_WriteVoiceParams_Ext_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D6F5
 __jrt_nop_02D6F5:
 
@@ -21480,13 +21480,13 @@ ToneGen_WriteVoiceParams_Ext_NopCont3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 4)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D71A
 __jrt_nop_02D71A:
 
@@ -21496,12 +21496,12 @@ ToneGen_WriteVoiceParams_Ext_NopCont4:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D738
 __jrt_nop_02D738:
 
@@ -21521,12 +21521,12 @@ ToneGen_WriteVoiceParams_Ext2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D766
 __jrt_nop_02D766:
 
@@ -21536,10 +21536,10 @@ ToneGen_WriteVoiceParams_Ext2_NopCont1:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02D780
 __jrt_nop_02D780:
 
@@ -21550,12 +21550,12 @@ ToneGen_WriteVoiceParams_Ext2_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D7A2
 __jrt_nop_02D7A2:
 
@@ -21565,12 +21565,12 @@ ToneGen_WriteVoiceParams_Ext2_NopCont3:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D7C0
 __jrt_nop_02D7C0:
 
@@ -21585,7 +21585,7 @@ ToneGen_WriteVoiceParams_Ext2_NopCont4:
 ToneGen_WriteGlobalConfig:
 	push xiz
 	ld xiz, xwa
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 3, wa
 	jr z, ToneGen_WriteGlobalConfig_BranchA
 	andmi16 (xiz), 0xFFF7
@@ -21596,11 +21596,11 @@ ToneGen_WriteGlobalConfig_BranchA:
 
 ToneGen_WriteGlobalConfig_BranchB:
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0200
+	stiw_da 0x100000, 0x0200
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D7F5
 __jrt_nop_02D7F5:
 
@@ -21609,11 +21609,11 @@ ToneGen_WriteGlobalConfig_NopCont01:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0201
+	stiw_da 0x100000, 0x0201
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 2)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D810
 __jrt_nop_02D810:
 
@@ -21622,11 +21622,11 @@ ToneGen_WriteGlobalConfig_NopCont02:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0202
+	stiw_da 0x100000, 0x0202
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D82B
 __jrt_nop_02D82B:
 
@@ -21635,11 +21635,11 @@ ToneGen_WriteGlobalConfig_NopCont03:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0203
+	stiw_da 0x100000, 0x0203
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 6)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D846
 __jrt_nop_02D846:
 
@@ -21648,11 +21648,11 @@ ToneGen_WriteGlobalConfig_NopCont04:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0204
+	stiw_da 0x100000, 0x0204
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 8)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D861
 __jrt_nop_02D861:
 
@@ -21661,11 +21661,11 @@ ToneGen_WriteGlobalConfig_NopCont05:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0205
+	stiw_da 0x100000, 0x0205
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 10)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D87C
 __jrt_nop_02D87C:
 
@@ -21674,11 +21674,11 @@ ToneGen_WriteGlobalConfig_NopCont06:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0c00
+	stiw_da 0x100000, 0x0c00
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 12)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D897
 __jrt_nop_02D897:
 
@@ -21687,11 +21687,11 @@ ToneGen_WriteGlobalConfig_NopCont07:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0c01
+	stiw_da 0x100000, 0x0c01
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D8B2
 __jrt_nop_02D8B2:
 
@@ -21700,11 +21700,11 @@ ToneGen_WriteGlobalConfig_NopCont08:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0c02
+	stiw_da 0x100000, 0x0c02
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 16)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D8CD
 __jrt_nop_02D8CD:
 
@@ -21713,11 +21713,11 @@ ToneGen_WriteGlobalConfig_NopCont09:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0c03
+	stiw_da 0x100000, 0x0c03
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 18)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D8E8
 __jrt_nop_02D8E8:
 
@@ -21726,11 +21726,11 @@ ToneGen_WriteGlobalConfig_NopCont10:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0c04
+	stiw_da 0x100000, 0x0c04
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 20)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D903
 __jrt_nop_02D903:
 
@@ -21739,11 +21739,11 @@ ToneGen_WriteGlobalConfig_NopCont11:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0c05
+	stiw_da 0x100000, 0x0c05
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 22)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D91E
 __jrt_nop_02D91E:
 
@@ -21752,11 +21752,11 @@ ToneGen_WriteGlobalConfig_NopCont12:
 	nop
 	nop
 	res_dd8 7, 0x18
-	sti16_24 0x100000, 0x0e00
+	stiw_da 0x100000, 0x0e00
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 24)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02D939
 __jrt_nop_02D939:
 
@@ -21808,12 +21808,12 @@ ToneGen_WriteExtParams_56:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DA48
 __jrt_nop_02DA48:
 
@@ -21826,12 +21826,12 @@ ToneGen_WriteExtParams_56_BranchSkip:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x600
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 64)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DA6A
 __jrt_nop_02DA6A:
 
@@ -21842,13 +21842,13 @@ ToneGen_WriteExtParams_56_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DA8F
 __jrt_nop_02DA8F:
 
@@ -21865,11 +21865,11 @@ ToneGen_WriteExtParam_600:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x600
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 64)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DAB3
 __jrt_nop_02DAB3:
 
@@ -21892,12 +21892,12 @@ ToneGen_WriteExtParams_56_Alt:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DAEA
 __jrt_nop_02DAEA:
 
@@ -21910,13 +21910,13 @@ ToneGen_WriteExtParams_56_Alt_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DB0F
 __jrt_nop_02DB0F:
 
@@ -21931,10 +21931,10 @@ ToneGen_WriteExtParams_56_Alt_NopCont2:
 ToneGen_WriteExtParam_600_Mute:
 	res_dd8 7, 0x18
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02DB2F
 __jrt_nop_02DB2F:
 
@@ -21956,12 +21956,12 @@ ToneGen_WriteExtParams_56b:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DB65
 __jrt_nop_02DB65:
 
@@ -21974,12 +21974,12 @@ ToneGen_WriteExtParams_56b_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x640
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 66)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DB87
 __jrt_nop_02DB87:
 
@@ -21990,13 +21990,13 @@ ToneGen_WriteExtParams_56b_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DBAC
 __jrt_nop_02DBAC:
 
@@ -22042,12 +22042,12 @@ ToneGen_WriteExtParams_15:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DC82
 __jrt_nop_02DC82:
 
@@ -22060,12 +22060,12 @@ ToneGen_WriteExtParams_15_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x1C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 56)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DCA4
 __jrt_nop_02DCA4:
 
@@ -22076,13 +22076,13 @@ ToneGen_WriteExtParams_15_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DCC9
 __jrt_nop_02DCC9:
 
@@ -22099,11 +22099,11 @@ ToneGen_WriteExtParam_1C0_Single:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x1C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DCED
 __jrt_nop_02DCED:
 
@@ -22126,12 +22126,12 @@ ToneGen_WriteExtParams_15_Alt:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DD24
 __jrt_nop_02DD24:
 
@@ -22144,13 +22144,13 @@ ToneGen_WriteExtParams_15_Alt_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DD49
 __jrt_nop_02DD49:
 
@@ -22165,10 +22165,10 @@ ToneGen_WriteExtParams_15_Alt_NopCont2:
 ToneGen_WriteExtParam_540_Mute:
 	res_dd8 7, 0x18
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02DD69
 __jrt_nop_02DD69:
 
@@ -22219,11 +22219,11 @@ ToneGen_WriteExtParam_TypeDispatch_Single:
 	jr nc, ToneGen_WriteExtParam_TypeDispatch_Single_HiPath
 	res_dd8 7, 0x18
 	add wa, 0x1C0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DE8C
 __jrt_nop_02DE8C:
 
@@ -22236,11 +22236,11 @@ ToneGen_WriteExtParam_TypeDispatch_Single_NopCont1:
 ToneGen_WriteExtParam_TypeDispatch_Single_HiPath:
 	res_dd8 7, 0x18
 	add wa, 0x600
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 66)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DEAB
 __jrt_nop_02DEAB:
 
@@ -22267,12 +22267,12 @@ ToneGen_WriteExtParams_TypeDispatch:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DEE8
 __jrt_nop_02DEE8:
 
@@ -22285,13 +22285,13 @@ ToneGen_WriteExtParams_TypeDispatch_LoClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DF0D
 __jrt_nop_02DF0D:
 
@@ -22309,12 +22309,12 @@ ToneGen_WriteExtParams_TypeDispatch_HiPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DF3C
 __jrt_nop_02DF3C:
 
@@ -22327,13 +22327,13 @@ ToneGen_WriteExtParams_TypeDispatch_HiClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02DF61
 __jrt_nop_02DF61:
 
@@ -22352,10 +22352,10 @@ ToneGen_WriteExtParam_Mute_TypeDispatch:
 	jr nc, ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath
 	res_dd8 7, 0x18
 	add wa, 0x540
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02DF87
 __jrt_nop_02DF87:
 
@@ -22368,10 +22368,10 @@ ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont1:
 ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath:
 	res_dd8 7, 0x18
 	add wa, 0x580
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x8100
+	stiw_da 0x100002, 0x8100
 	jr __jrt_nop_02DFA4
 __jrt_nop_02DFA4:
 
@@ -22386,7 +22386,7 @@ DSP_Config_Init:
 	pushw iz
 	lda_24 xwa, 0x00f8bb
 	calr ToneGen_WriteGlobalConfig
-	ldada xwa, 10916
+	lda_d16 xwa, 10916
 	ld (xsp + 2), xwa
 	ld xiy, 0xF8D5
 	ld xix, xwa
@@ -22400,10 +22400,10 @@ ToneGen_Config_Init:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02DFEA
 __jrt_nop_02DFEA:
 
@@ -22414,10 +22414,10 @@ ToneGen_Config_Init_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02E008
 __jrt_nop_02E008:
 
@@ -22435,10 +22435,10 @@ ToneGen_ConfigInit_WriteVoiceRegs:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_02E038
 __jrt_nop_02E038:
 
@@ -22449,10 +22449,10 @@ ToneGen_ConfigInit_WriteAddr800:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_02E056
 __jrt_nop_02E056:
 
@@ -22463,10 +22463,10 @@ ToneGen_ConfigInit_WriteAddrC0:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x0000
+	stiw_da 0x100002, 0x0000
 	jr __jrt_nop_02E074
 __jrt_nop_02E074:
 
@@ -22476,10 +22476,10 @@ ToneGen_ConfigInit_WriteAddr00:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0x7e00
+	stiw_da 0x100002, 0x7e00
 	jr __jrt_nop_02E08E
 __jrt_nop_02E08E:
 
@@ -22542,12 +22542,12 @@ ToneGen_ReadPitch_AndScale:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 6)
-	st16_24 0x100002, xwa
+	stw_da 0x100002, xwa
 	jr __jrt_nop_02E1B4
 __jrt_nop_02E1B4:
 
@@ -22557,7 +22557,7 @@ ToneGen_ReadPitch_Compute:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, 0x100002
@@ -22647,7 +22647,7 @@ BlockCopy_Words_BC_to_HL:
 	ret nc
 
 BlockCopy_Words_BC_to_HL_Loop:
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	lda_dpi XHL, 0xEC
 	inc 1, ix
 	cp ix, de
@@ -22656,7 +22656,7 @@ BlockCopy_Words_BC_to_HL_Loop:
 
 VoiceStruct_BulkInit:
 	dec 2, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), a
 	ld a, (xsp + 2)
 	extz wa
@@ -22668,12 +22668,12 @@ VoiceStruct_BulkInit:
 	ld xwa, xde
 	ldw de, 0x66
 	calr BlockCopy_Words_BC_to_HL
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceStruct_BulkInit_Return
 
 VoiceStruct_BulkInit_SubSlotLoop:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -22685,7 +22685,7 @@ VoiceStruct_BulkInit_SubSlotLoop:
 	exts xwa
 	add xwa, xbc
 	ld_sril3 XDE, 0x07, 0xE0, 0xE8
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x51
 	add wa, 0x66
@@ -22696,12 +22696,12 @@ VoiceStruct_BulkInit_SubSlotLoop:
 	ld xwa, xde
 	ldw de, 0x51
 	calr BlockCopy_Words_BC_to_HL
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceStruct_BulkInit_SubSlotLoop
 
 VoiceStruct_BulkInit_Return:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 2, xsp
 	ret
 
@@ -22722,10 +22722,10 @@ VoiceStruct_BulkInit_AltData:
 	muls	wa, 80
 	ld	bc, wa
 	add	bc, 19111
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	lda_rr	xwa, xwa, bc
 	ld	xbc, xwa
-	ld32_24	xde, 283412
+	ldl_da	xde, 283412
 	ld	xwa, xhl
 	ld	de, (xde+238)
 	.byte 0x1e, 0x23, 0xff
@@ -22750,9 +22750,9 @@ VoiceSubSlot_Init:
 	exts xwa
 	add xwa, xbc
 	ld xbc, xwa
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xwa, xhl
-	ld_sriw DE, (xde + 0x00ea)
+	ldw_sri0 DE, (xde + 0x00ea)
 	calr BlockCopy_Words_BC_to_HL
 	inc 2, xsp
 	ret
@@ -22778,21 +22778,21 @@ VoiceParam_FullSetup:
 	ld a, (xsp + 4)
 	extz wa
 	calr VoiceStruct_BulkInit
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceParam_FullSetup_SetRoutingBit
 
 VoiceParam_FullSetup_SubSlotInitLoop:
 	ld a, (xsp + 4)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr VoiceSubSlot_Init
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceParam_FullSetup_SubSlotInitLoop
 
 VoiceParam_FullSetup_SetRoutingBit:
@@ -22800,7 +22800,7 @@ VoiceParam_FullSetup_SetRoutingBit:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
 	jr z, VoiceParam_FullSetup_ClearRoutingBit
@@ -22811,41 +22811,41 @@ VoiceParam_FullSetup_ClearRoutingBit:
 	resda_24 7, 282667
 
 VoiceParam_FullSetup_CopyLUT:
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x08
 	jr nc, VoiceParam_FullSetup_CountActive
 
 VoiceParam_FullSetup_CopyLUT_Body:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld de, wa
 	add de, 0x1D8
 	lda_24 xhl, 0x044fce
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x00f95d
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
-	inc1_berp 0xFB
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	lda_dri XBC, 0x07, 0xEC, 0xE8
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x08
 	jr c, VoiceParam_FullSetup_CopyLUT_Body
 
 VoiceParam_FullSetup_CountActive:
 	ldb c, 0x0
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceParam_FullSetup_CheckAllActive
 
 VoiceParam_FullSetup_CountActive_Loop:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x51
 	add wa, 0x66
 	lda_24 xde, 0x044fd4
-	ld_srib3 A, 0x07, 0xE8, 0xE0
+	ldb_sri A, 0x07, 0xE8, 0xE0
 	and a, 0xC0
 	jr nz, VoiceParam_FullSetup_CountActive_Next
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x51
 	add wa, 0x66
@@ -22855,22 +22855,22 @@ VoiceParam_FullSetup_CountActive_Loop:
 	inc 1, c
 
 VoiceParam_FullSetup_CountActive_Next:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceParam_FullSetup_CountActive_Loop
 
 VoiceParam_FullSetup_CheckAllActive:
 	cps c, 4
 	jr z, VoiceParam_FullSetup_CopySlotParams
-	sti8_24 0x0451a7, 0x00
+	stib_da 0x0451a7, 0x00
 
 VoiceParam_FullSetup_CopySlotParams:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, VoiceParam_FullSetup_Return
 
 VoiceParam_FullSetup_CopySlotParams_Body:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -22885,12 +22885,12 @@ VoiceParam_FullSetup_CopySlotParams_Body:
 	ld a, (xwa + 54)
 	and a, 0x7
 	ld e, a
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
 	add wa, 0x1E0
 	lda_24 xbc, 0x044fce
-	lda_dri3 XIY, 0x07, 0xE4, 0xE0
+	lda_dri XIY, 0x07, 0xE4, 0xE0
 	ldb c, 0x0
 	cps c, 4
 	jr nc, VoiceParam_FullSetup_CopySlotParams_OuterNext
@@ -22898,13 +22898,13 @@ VoiceParam_FullSetup_CopySlotParams_Body:
 VoiceParam_FullSetup_CopySlotParams_Inner:
 	ld l, c
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x5
 	ld de, wa
 	add de, hl
 	lda_24 xhl, 0x0451af
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld iy, wa
@@ -22913,21 +22913,21 @@ VoiceParam_FullSetup_CopySlotParams_Inner:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xix, 0x041368
-	st_dri3b D, 0x07, 0xF0, 0xE0
+	stb_dri D, 0x07, 0xF0, 0xE0
 	ld a, c
 	extz wa
 	ld iz, wa
 	add iz, 0x4D
 	ld_sril3 XWA, 0x07, 0xF0, 0xF4
-	ld_srib3 A, 0x07, 0xE0, 0xF8
-	lda_dri3 XBC, 0x07, 0xEC, 0xE8
+	ldb_sri A, 0x07, 0xE0, 0xF8
+	lda_dri XBC, 0x07, 0xEC, 0xE8
 	inc 1, c
 	cps c, 4
 	jr c, VoiceParam_FullSetup_CopySlotParams_Inner
 
 VoiceParam_FullSetup_CopySlotParams_OuterNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, VoiceParam_FullSetup_CopySlotParams_Body
 
 VoiceParam_FullSetup_Return:
@@ -22987,7 +22987,7 @@ VoiceParam_FullSetup_ExtData:
 	muls	wa, 287
 	lda_24	xbc, 267137
 	ld_rrb	a, xbc, wa
-	ldfr_berp	a, 240
+	ldb_erp	a, 240
 	extz	ix
 	ld	a, (xsp)
 	extz	wa
@@ -23044,13 +23044,13 @@ VoiceParam_FullSetup_ExtData:
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xwa, (xwa+80)
-	ld32_24	xhl, 283408
+	ldl_da	xhl, 283408
 	add	xhl, xwa
-	ldfr_berp	e, 251
+	ldb_erp	e, 251
 	.byte 0xc7, 0xfb, 0xcc, 0x0f
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 37
 	ld	ix, wa
@@ -23068,7 +23068,7 @@ VoiceParam_FullSetup_ExtData:
 	add	xwa, xhl
 	ld	a, (xwa+14)
 	ld	(xde+2), a
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 37
 	ld	ix, wa
@@ -23089,41 +23089,41 @@ VoiceParam_FullSetup_ExtData:
 	ld	a, (xsp+2)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
 	ld	wa, de
 	.byte 0x1e, 0xe4, 0xfb
-	ldi_berp	250, 0
-	cpi_berp	250, 4
+	ldib_erp	250, 0
+	cpib_erp	250, 4
 	jr	nc, 35
 	ld	a, (xsp+2)
 	ld	l, a
 	extz	hl
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
-	ldto_berp	a, 250
+	stb_erp	a, 250
 	ld	e, a
 	extz	de
 	ld	wa, hl
 	call	207074
-	inc_berp	250, 1
-	cpi_berp	250, 4
+	incb_erp	250, 1
+	cpib_erp	250, 4
 	jr	c, 16777181
 	pop qiz
 	inc	2, xsp
 	ret
-	ld32_24	xhl, 283412
+	ldl_da	xhl, 283412
 	ld	xhl, (xhl+100)
-	ld32_24	xix, 283408
+	ldl_da	xix, 283408
 	add	xix, xhl
-	ldfr_berp	e, 226
+	ldb_erp	e, 226
 	.byte 0xc7, 0xe2, 0xcc, 0x0f
 	and	e, 240
 	srl	e, 4
 	ld	w, e
-	ldto_berp	e, 226
+	stb_erp	e, 226
 	extz	de
 	muls	de, 37
 	ld	iy, de
@@ -23147,7 +23147,7 @@ VoiceParam_FullSetup_ExtData:
 	add	xde, xix
 	ld	e, (xde+14)
 	st_rrb	e, xhl, iy
-	ldto_berp	e, 226
+	stb_erp	e, 226
 	extz	de
 	muls	de, 37
 	ld	iy, de
@@ -23173,7 +23173,7 @@ VoiceParam_FullSetup_ExtData:
 	ld	(xde+1), c
 	ld	l, a
 	extz	hl
-	ldto_berp	a, 226
+	stb_erp	a, 226
 	ld	c, a
 	extz	bc
 	ld	e, w
@@ -23249,7 +23249,7 @@ VoiceParam_FullSetup_ExtData:
 	dec	2, xsp
 	push xiz
 	ld	(xsp+4), a
-	ld32_24	xbc, 283420
+	ldl_da	xbc, 283420
 	ld	a, (xsp+4)
 	ld	(xbc+29351), a
 	ld	qiz, 0
@@ -23303,19 +23303,19 @@ VoiceParam_FullSetup_ExtData:
 	.byte 0xbf, 0xf2, 0x37
 	push xiz
 	ld	(xsp+16), wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	(xsp+12), a
 	extz	wa
 	muls	wa, 80
 	ld	bc, wa
 	add	bc, 19111
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	lda_rr	xwa, xwa, bc
 	ld	(xsp+4), xwa
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xwa, (xwa+128)
-	ld32_24	xbc, 283408
+	ldl_da	xbc, 283408
 	add	xbc, xwa
 	ld	(xsp+8), xbc
 	ld	wa, (xsp+16)
@@ -23371,7 +23371,7 @@ VoiceParam_FullSetup_ExtData:
 	add	wa, wa
 	ld	de, wa
 	add	de, 18855
-	ld32_24	xbc, 283420
+	ldl_da	xbc, 283420
 	ld	wa, (xsp+16)
 	extz	xwa
 	sll	xwa, 4
@@ -23391,7 +23391,7 @@ VoiceParam_FullSetup_ExtData:
 	add	wa, wa
 	ld	bc, wa
 	add	bc, 18855
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	lda_rr	xwa, xwa, bc
 	ld	(xwa+1), e
 	pop xiz
@@ -23400,11 +23400,11 @@ VoiceParam_FullSetup_ExtData:
 	dec	6, xsp
 	push xiz
 	ld	(xsp+8), wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	e, (xwa+29351)
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xwa, (xwa+140)
-	ld32_24	xhl, 283408
+	ldl_da	xhl, 283408
 	add	xhl, xwa
 	ld	xiz, xhl
 	ld	l, c
@@ -23418,7 +23418,7 @@ VoiceParam_FullSetup_ExtData:
 	muls	wa, 80
 	ld	ix, wa
 	add	ix, bc
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	lda_rr	xwa, xwa, ix
 	ld	(xsp+4), xwa
 	ld	xwa, 19127
@@ -23430,7 +23430,7 @@ VoiceParam_FullSetup_ExtData:
 	sll	xwa, 4
 	add	xwa, xiz
 	ld	a, (xwa+14)
-	ldfr_berp	a, 240
+	ldb_erp	a, 240
 	extz	ix
 	ld	wa, (xsp+8)
 	extz	xwa
@@ -23467,11 +23467,11 @@ VoiceParam_FullSetup_ExtData:
 	pop xiz
 	inc	6, xsp
 	ret
-	ld32_24	xde, 283420
+	ldl_da	xde, 283420
 	ld	b, (xde+29351)
-	ld32_24	xde, 283412
+	ldl_da	xde, 283412
 	ld	xde, (xde+148)
-	ld32_24	xhl, 283408
+	ldl_da	xhl, 283408
 	add	xhl, xde
 	ld	e, c
 	and	e, 15
@@ -23483,12 +23483,12 @@ VoiceParam_FullSetup_ExtData:
 	muls	de, 80
 	ld	iy, de
 	add	iy, ix
-	ld32_24	xde, 283420
+	ldl_da	xde, 283420
 	lda_rr	xde, xde, iy
 	lda	xde, (xde+19169)
 	and	c, 240
 	srl	c, 4
-	ldfr_berp	c, 226
+	ldb_erp	c, 226
 	extz	bc
 	add	bc, bc
 	ld	ix, bc
@@ -23499,7 +23499,7 @@ VoiceParam_FullSetup_ExtData:
 	add	xbc, xhl
 	ld	c, (xbc+14)
 	st_rrb	c, xde, ix
-	ldto_berp	c, 226
+	stb_erp	c, 226
 	extz	bc
 	add	bc, bc
 	inc	3, bc
@@ -23515,7 +23515,7 @@ VoiceParam_FullSetup_ExtData:
 VoiceAlloc_CheckAndInit:
 	dec 2, xsp
 	ld (xsp), a
-	ld8_24 a, 0x0451a4
+	ldb_da a, 0x0451a4
 	cp a, (xsp)
 	jrl nz, VoiceAlloc_CheckAndInit_Return
 	cp (xsp), 0x2
@@ -23524,7 +23524,7 @@ VoiceAlloc_CheckAndInit:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	and wa, 0x3
 	cps wa, 3
 	jrl nz, VoiceAlloc_CheckAndInit_Return
@@ -23534,7 +23534,7 @@ VoiceAlloc_SetFlagBit0:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, VoiceAlloc_InitNewAllocation
 	ld a, (xsp)
@@ -23560,14 +23560,14 @@ VoiceAlloc_InitNewAllocation:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041381
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xF0
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xF0
 	extz ix
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041382
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld e, a
 	extz de
 	ld wa, hl
@@ -23628,7 +23628,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	muls	bc, 80
 	ld	de, bc
 	add	de, 19111
-	ld32_24	xbc, 283420
+	ldl_da	xbc, 283420
 	lda_rr	xbc, xbc, de
 	ld	xde, xbc
 	extz	wa
@@ -23797,10 +23797,10 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	e, (xiz+4)
 	ld	wa, hl
 	.byte 0x1e, 0x37, 0xf9, 0x78, 0xe8, 0x00
-	ld8_24	a, 283044
-	st8_24	283045, a
+	ldb_da	a, 283044
+	stb_da	283045, a
 	ld	a, (xiz+1)
-	st8_24	283044, a
+	stb_da	283044, a
 	jrl	t, 211
 	ld	a, (xiz+1)
 	extz	wa
@@ -23835,7 +23835,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	or	hl, bc
 	ld	wa, hl
 	.byte 0x1e, 0x18, 0xfa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	extz	wa
 	.byte 0x1e, 0x9c, 0xfd, 0x68, 0x64
@@ -23852,7 +23852,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, hl
 	.byte 0x1e, 0x05, 0xfb
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	extz	wa
 	.byte 0x1e, 0x6c, 0xfd, 0x68, 0x34
@@ -23869,7 +23869,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, hl
 	.byte 0x1e, 0x91, 0xfb
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	extz	wa
 	.byte 0x1e, 0x3c, 0xfd, 0x68, 0x04
@@ -24358,20 +24358,20 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	de, bc
 	lds	bc, 0
 	call	209109
-	ldi_berp	251, 0
-	cpi_berp	251, 4
+	ldib_erp	251, 0
+	cpib_erp	251, 4
 	jr	nc, 30
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
 	ld	wa, de
 	lds	de, 0
 	call	209854
-	inc_berp	251, 1
-	cpi_berp	251, 4
+	incb_erp	251, 1
+	cpib_erp	251, 4
 	jr	c, 16777186
 	ld	a, (xsp+12)
 	ld	e, a
@@ -24391,7 +24391,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	add	xwa, xwa
 	add	xwa, (xsp+4)
 	ld	iz, (xwa)
-	ldi_berp	249, 0
+	ldib_erp	249, 0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -24404,19 +24404,19 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	e, a
 	extz	de
 	pushw 0
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	pushw wa
 	ld	wa, hl
 	call	150105
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	call	142890
-	st16_24	283148, hl
-	ldto_berp	a, 248
+	stw_da	283148, hl
+	stb_erp	a, 248
 	extz	wa
 	call	143034
-	st16_24	283144, hl
+	stw_da	283144, hl
 	ld	wa, iz
 	lda_24	xbc, 283084
 	call	186902
@@ -24456,20 +24456,20 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	de, bc
 	lds	bc, 1
 	call	209109
-	ldi_berp	251, 0
-	cpi_berp	251, 4
+	ldib_erp	251, 0
+	cpib_erp	251, 4
 	jr	nc, 30
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
 	ld	wa, de
 	lds	de, 1
 	call	209854
-	inc_berp	251, 1
-	cpi_berp	251, 4
+	incb_erp	251, 1
+	cpib_erp	251, 4
 	jr	c, 16777186
 	ld	a, (xsp+10)
 	ld	e, a
@@ -24490,7 +24490,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	add	xwa, xwa
 	add	xwa, (xsp+4)
 	ld	iz, (xwa)
-	ldi_berp	249, 0
+	ldib_erp	249, 0
 	ld	a, (xsp+10)
 	ld	l, a
 	extz	hl
@@ -24503,19 +24503,19 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	e, a
 	extz	de
 	pushw 1
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	pushw wa
 	ld	wa, hl
 	call	150105
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	call	143164
-	st16_24	283140, hl
-	ldto_berp	a, 248
+	stw_da	283140, hl
+	stb_erp	a, 248
 	extz	wa
 	call	143308
-	st16_24	283142, hl
+	stw_da	283142, hl
 	ld	wa, iz
 	lda_24	xbc, 283084
 	call	187472
@@ -24555,20 +24555,20 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	de, bc
 	lds	bc, 2
 	call	209109
-	ldi_berp	251, 0
-	cpi_berp	251, 4
+	ldib_erp	251, 0
+	cpib_erp	251, 4
 	jr	nc, 30
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
 	ld	wa, de
 	lds	de, 2
 	call	209854
-	inc_berp	251, 1
-	cpi_berp	251, 4
+	incb_erp	251, 1
+	cpib_erp	251, 4
 	jr	c, 16777186
 	ld	a, (xsp+10)
 	ld	e, a
@@ -24589,7 +24589,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	add	xwa, xwa
 	add	xwa, (xsp+4)
 	ld	iz, (xwa)
-	ldi_berp	249, 0
+	ldib_erp	249, 0
 	ld	a, (xsp+10)
 	ld	l, a
 	extz	hl
@@ -24602,15 +24602,15 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	e, a
 	extz	de
 	pushw 2
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	pushw wa
 	ld	wa, hl
 	call	150105
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	call	143427
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	extz	wa
 	call	143711
 	ld	wa, iz
@@ -24633,7 +24633,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
-	ldfr_berp	a, 251
+	ldb_erp	a, 251
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+2)
 	extz	wa
@@ -24647,10 +24647,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 194671
 	jp_rr	8, xix, wa
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	l, a
 	extz	hl
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24660,10 +24660,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 258
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24675,10 +24675,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 214
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24690,10 +24690,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 170
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24705,10 +24705,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jr	t, 127
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24720,10 +24720,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jr	t, 84
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24735,10 +24735,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jr	t, 41
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24793,10 +24793,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	call	207646
 	jrl	t, 856
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24808,10 +24808,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 812
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24823,10 +24823,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 768
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24838,10 +24838,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 724
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24853,10 +24853,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 680
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24868,10 +24868,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 636
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -24883,10 +24883,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 592
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	e, a
 	extz	de
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267118
@@ -25339,7 +25339,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xsp+2)
 	ld	c, a
 	extz	bc
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	e, a
 	extz	de
 	ld	wa, hl
@@ -25362,7 +25362,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -25373,7 +25373,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -25408,7 +25408,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -25419,7 +25419,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -25467,7 +25467,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -25478,7 +25478,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	ld	e, a
 	extz	de
-	ldto_berp	a, 248
+	stb_erp	a, 248
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -25558,13 +25558,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	bc
 	muls	bc, 21
 	ld	de, bc
-	ld32_24	xbc, 283420
+	ldl_da	xbc, 283420
 	ld	c, (xbc+29351)
 	extz	bc
 	muls	bc, 80
 	ld	hl, bc
 	add	hl, de
-	ld32_24	xbc, 283420
+	ldl_da	xbc, 283420
 	lda_rr	xbc, xbc, hl
 	lda	xbc, (xbc+19127)
 	extz	wa
@@ -25691,13 +25691,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	muls	wa, 21
 	ld	de, wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	extz	wa
 	muls	wa, 80
 	ld	hl, wa
 	add	hl, de
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	lda_rr	xde, xwa, hl
 	lda	xde, (xde+19127)
 	ld	a, c
@@ -25736,7 +25736,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	muls	wa, 287
 	lda_24	xbc, 267118
 	ld_rrl	xhl, xbc, wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	c, a
 	extz	bc
@@ -25804,7 +25804,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	.byte 0x1e, 0xac, 0xfe
 	ld	xde, 1966080
 	ldw	bc, 58
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	extz	wa
 	muls	wa, 80
@@ -25826,7 +25826,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	muls	wa, 287
 	lda_24	xbc, 267118
 	ld_rrl	xhl, xbc, wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	c, a
 	extz	bc
@@ -25840,15 +25840,15 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+2)
 	and	a, 192
 	srl	a, 6
-	ldfr_berp	a, 251
+	ldb_erp	a, 251
 	extz	wa
 	muls	wa, 21
 	add	wa, 16
 	lda_rr	xhl, xhl, wa
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	e, a
 	extz	de
@@ -25869,11 +25869,11 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+4)
 	ld	(xhl), a
 	ld	xde, 1966080
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 11
 	ld	bc, wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	extz	wa
 	muls	wa, 80
@@ -25902,7 +25902,7 @@ DSP_EffectStateQuery:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041368
-	ld_sriw3 WA, 0x07, 0xE8, 0xE0
+	ldw_sri WA, 0x07, 0xE8, 0xE0
 	bit 0, wa
 	jr z, DSP_EffectStateQuery_WriteZero
 	ld (xbc), 0x1
@@ -25919,24 +25919,24 @@ DSP_AdjustVoiceParams:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), xwa
-	ld8_24 a, 0x0451a6
+	ldb_da a, 0x0451a6
 	sla a, 2
 	exts wa
 	ld (xsp + 4), wa
-	ld8_24 a, 0x0451ab
+	ldb_da a, 0x0451ab
 	sla a, 2
 	exts wa
 	ld (xsp + 6), wa
-	ld8_24 a, 0x0451ac
+	ldb_da a, 0x0451ac
 	sla a, 2
 	exts wa
 	ld (xsp + 8), wa
-	ldi_werp 0xFA, 0
-	cpi_werp 0xFA, 4
+	ldiw_erp 0xFA, 0
+	cpiw_erp 0xFA, 4
 	jrl nc, DSP_AdjustVoiceParams_Vibrato
 
 DSP_AdjustVoiceParams_SlotLoop:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -25957,7 +25957,7 @@ DSP_AdjustVoiceParams_SlotLoop:
 	jrl nz, DSP_AdjustVoiceParams_ReverbChorus
 
 DSP_AdjustVoiceParams_Type1to4:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -25969,19 +25969,19 @@ DSP_AdjustVoiceParams_Type1to4:
 	add wa, (xsp + 4)
 	call ClampS8_0_to_78
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
 	add xhl, 0x6E
 	add xhl, (xsp + 10)
 	ld xwa, (xhl)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 77), c
 	jrl DSP_AdjustVoiceParams_ReverbChorus
 
 DSP_AdjustVoiceParams_Type5:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -25993,16 +25993,16 @@ DSP_AdjustVoiceParams_Type5:
 	add wa, (xsp + 4)
 	call ClampS8_0_to_78
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
 	add xhl, 0x6E
 	add xhl, (xsp + 10)
 	ld xwa, (xhl)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 77), c
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -26014,18 +26014,18 @@ DSP_AdjustVoiceParams_Type5:
 	add wa, (xsp + 4)
 	call ClampS8_0_to_78
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
 	add xhl, 0x6E
 	add xhl, (xsp + 10)
 	ld xwa, (xhl)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 79), c
 
 DSP_AdjustVoiceParams_ReverbChorus:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -26039,16 +26039,16 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	lds de, 0
 	call ClampS16_WA_To_DEBC
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
 	add xhl, 0x6E
 	add xhl, (xsp + 10)
 	ld xwa, (xhl)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 39), c
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
@@ -26062,23 +26062,23 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	lds de, 0
 	call ClampS16_WA_To_DEBC
 	ld iz, hl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x25
 	call FP_MulAccum64
 	add xhl, 0x6E
 	add xhl, (xsp + 10)
 	ld xwa, (xhl)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 45), c
-	inc1_werp 0xFA
-	cpi_werp 0xFA, 4
+	inc1w_erp 0xFA
+	cpiw_erp 0xFA, 4
 	jrl c, DSP_AdjustVoiceParams_SlotLoop
 
 DSP_AdjustVoiceParams_Vibrato:
-	cpi8_24 0x0451a7, 0xf5
+	cpib_da 0x0451a7, 0xf5
 	jr z, DSP_AdjustVoiceParams_Filter
-	ld8_24 a, 0x0451a7
+	ldb_da a, 0x0451a7
 	sla a, 1
 	ld c, a
 	exts bc
@@ -26093,9 +26093,9 @@ DSP_AdjustVoiceParams_Vibrato:
 	ld iz, hl
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 43), c
-	ld8_24 a, 0x0451a7
+	ldb_da a, 0x0451a7
 	sla a, 1
 	ld c, a
 	exts bc
@@ -26110,11 +26110,11 @@ DSP_AdjustVoiceParams_Vibrato:
 	ld iz, hl
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 59), c
 
 DSP_AdjustVoiceParams_Filter:
-	ld8_24 a, 0x0451a8
+	ldb_da a, 0x0451a8
 	sla a, 1
 	ld c, a
 	exts bc
@@ -26129,9 +26129,9 @@ DSP_AdjustVoiceParams_Filter:
 	ld iz, hl
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 44), c
-	ld8_24 a, 0x0451a8
+	ldb_da a, 0x0451a8
 	sla a, 1
 	ld c, a
 	exts bc
@@ -26146,15 +26146,15 @@ DSP_AdjustVoiceParams_Filter:
 	ld iz, hl
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld (xwa + 60), c
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
 	ld a, (xwa + 46)
 	and a, 0x3F
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
-	ld8_24 a, 0x0451a9
+	ldb_da a, 0x0451a9
 	sla a, 1
 	exts wa
 	add wa, iz
@@ -26167,15 +26167,15 @@ DSP_AdjustVoiceParams_Filter:
 	andmi8 (xwa + 46), 0xC0
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	or (xwa + 46), c
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
 	ld a, (xwa + 62)
 	and a, 0x3F
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
-	ld8_24 a, 0x0451a9
+	ldb_da a, 0x0451a9
 	sla a, 1
 	exts wa
 	add wa, iz
@@ -26188,7 +26188,7 @@ DSP_AdjustVoiceParams_Filter:
 	andmi8 (xwa + 62), 0xC0
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 6)
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	or (xwa + 62), c
 	pop xiz
 	lda xsp, (xsp + 10)
@@ -26214,7 +26214,7 @@ DSP_AlgoSelect:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	ld wa, (xiz)
 	bit 0, wa
 	jr nz, DSP_AlgoSelect_AlreadyAllocated
@@ -26276,7 +26276,7 @@ DSP_MixSendConfig:
 	jr nc, DSP_MixSendConfig_Return
 
 DSP_MixSendConfig_CopyLoop:
-	ld_spib A, 0xE4
+	ldb_spi A, 0xE4
 	lda_dpi XBC, 0xF8
 	inc 1, de
 	cp de, hl
@@ -26515,24 +26515,24 @@ DSP_AlgoCoeffLookup:
 	jr	z, 14
 	cps	a, 0
 	jr	nz, 56
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xix, (xwa+84)
 	jr	t, 54
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xix, (xwa+104)
 	jr	t, 44
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xix, (xwa+132)
 	jr	t, 32
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xix, (xwa+144)
 	jr	t, 20
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xix, (xwa+152)
 	jr	t, 8
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xix, (xwa+84)
-	ld32_24	xwa, 283408
+	ldl_da	xwa, 283408
 	add	xwa, xix
 	ld	xix, xwa
 	ld	a, (xwa+2)
@@ -26714,13 +26714,13 @@ DSP_SetVoiceCoefficients:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041381
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	ld e, c
 	extz de
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041382
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld c, a
 	extz bc
 	ld wa, de
@@ -26729,7 +26729,7 @@ DSP_SetVoiceCoefficients:
 	extz wa
 	add wa, wa
 	add wa, 0x27
-	ld_srib3 A, 0x07, 0xEC, 0xE0
+	ldb_sri A, 0x07, 0xEC, 0xE0
 	ld c, a
 	extz bc
 	ld a, (xsp + 12)
@@ -26739,7 +26739,7 @@ DSP_SetVoiceCoefficients:
 	exts xwa
 	add xwa, xhl
 	ld a, (xwa + 1)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld wa, ix
 	and wa, 0x20
@@ -26762,7 +26762,7 @@ DSP_SetVoiceCoefficients:
 	jr nz, DSP_SetCoeff_ComputeIndex
 
 DSP_SetCoeff_LoadTableBase:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xwa, (xwa + 124)
 	ld (xsp + 4), xwa
 
@@ -26776,10 +26776,10 @@ DSP_SetCoeff_ComputeIndex:
 	addda32_24 xwa, 283408
 	ld xwa, (xwa)
 	ld bc, wa
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld_sril XWA, (xwa + 0x00b0)
 	ld (xsp + 4), xwa
-	ld32_24 xiz, 0x045310
+	ldl_da xiz, 0x045310
 	add xiz, (xsp + 4)
 	ld wa, bc
 	mul wa, 0xA
@@ -26803,7 +26803,7 @@ DSP_SetCoeff_CopyLoop:
 
 DSP_SetCoeff_CopyLoop_Body:
 	ld xwa, (xsp + 8)
-	ld_spib C, 0xF8
+	ldb_spi C, 0xF8
 	lda_dpi XHL, 0xE0
 	ld (xsp + 8), xwa
 	inc 1, de
@@ -26858,7 +26858,7 @@ DSP_SetCoeff_RouteComplex:
 	exts	xwa
 	add	xwa, xhl
 	ld	a, (xwa+1)
-	ldfr_berp	a, 244
+	ldb_erp	a, 244
 	extz	iy
 	and	iy, 31
 	ld	a, c
@@ -26868,10 +26868,10 @@ DSP_SetCoeff_RouteComplex:
 	exts	xwa
 	add	xwa, xhl
 	ld	a, (xwa+1)
-	ldfr_berp	a, 240
+	ldb_erp	a, 240
 	extz	ix
 	and	ix, 32
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xhl, (xwa+124)
 	ld	wa, iy
 	sll	wa, 7
@@ -26882,9 +26882,9 @@ DSP_SetCoeff_RouteComplex:
 	addda32_24	xwa, 283408
 	ld	xwa, (xwa)
 	ld	de, wa
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xhl, (xwa+128)
-	ld32_24	xwa, 283408
+	ldl_da	xwa, 283408
 	add	xwa, xhl
 	ld	(xsp+4), xwa
 	ldw	hl, 13
@@ -26923,7 +26923,7 @@ DSP_SetCoeff_RouteComplex:
 	muls	wa, 80
 	ld	iy, wa
 	add	iy, 19111
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	lda_rr	xiz, xwa, iy
 	ld	wa, ix
 	inc	6, wa
@@ -27041,7 +27041,7 @@ DSP_SetCoeff_FullPipeline:
 	push xiz
 	ld	(xsp+10), c
 	ld	(xsp+12), a
-	ldfr_berp	e, 251
+	ldb_erp	e, 251
 	.byte 0xc7, 0xfb, 0xcc, 0x0f
 	ld	a, e
 	and	a, 240
@@ -27060,12 +27060,12 @@ DSP_SetCoeff_FullPipeline:
 	extz	de
 	ld	xwa, xhl
 	call	207584
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	extz	wa
 	muls	wa, 21
 	add	wa, 16
 	lda_rr	xhl, xhl, wa
-	ldto_berp	a, 251
+	stb_erp	a, 251
 	ld	c, a
 	extz	bc
 	ld	a, (xsp+10)
@@ -27112,7 +27112,7 @@ DSP_SetCoeff_FullPipeline:
 	jr	z, 4
 	cps	wa, 0
 	jr	nz, 11
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xwa, (xwa+96)
 	ld	(xsp+4), xwa
 	ld	wa, de
@@ -27124,10 +27124,10 @@ DSP_SetCoeff_FullPipeline:
 	addda32_24	xwa, 283408
 	ld	xwa, (xwa)
 	ld	de, wa
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xwa, (xwa+148)
 	ld	(xsp+4), xwa
-	ld32_24	xix, 283408
+	ldl_da	xix, 283408
 	add	xix, (xsp+4)
 	ldw	hl, 13
 	lds	iy, 0
@@ -27203,7 +27203,7 @@ DSP_SetCoeff_WithDispatch:
 	jr	z, 4
 	cps	de, 0
 	jr	nz, 8
-	ld32_24	xde, 283412
+	ldl_da	xde, 283412
 	ld	xhl, (xde+76)
 	sll	bc, 7
 	add	bc, wa
@@ -27214,9 +27214,9 @@ DSP_SetCoeff_WithDispatch:
 	addda32_24	xwa, 283408
 	ld	xwa, (xwa)
 	ld	ix, wa
-	ld32_24	xwa, 283412
+	ldl_da	xwa, 283412
 	ld	xhl, (xwa+140)
-	ld32_24	xiy, 283408
+	ldl_da	xiy, 283408
 	add	xiy, xhl
 	ldw	hl, 13
 	lds	de, 0
@@ -27499,7 +27499,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	a, (xwa+1)
 	ld	l, a
 	extz	hl
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	c, a
 	extz	bc
@@ -27515,7 +27515,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	a, (xwa+1)
 	ld	l, a
 	extz	hl
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	c, a
 	extz	bc
@@ -27544,7 +27544,7 @@ DSP_ParamWrite_BlockCopy:
 	ret nc
 
 DSP_ParamWrite_BlockCopy_Loop:
-	ld_spib C, 0xEC
+	ldb_spi C, 0xEC
 	lda_dpi XHL, 0xE8
 	inc 1, ix
 	cp ix, wa
@@ -27568,9 +27568,9 @@ Voice_ParamFinalize:
 	jrl gt, VoiceParamFinalize_Return
 	add wa, wa
 	lda_24 xix, 0x00fb2e
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x031aa1
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 ; --- ToneCmd_Dispatcher: Route tone/MIDI commands by type and channel ---
 ; Entry: XIZ = pointer to command structure
@@ -27646,9 +27646,9 @@ VoiceParamFinalize_SecondaryDispatch:
 	jrl gt, VoiceParamFinalize_CopyToWorkArea
 	add wa, wa
 	lda_24 xix, 0x00fb1e
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x031b5b
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 VoiceParamFinalize_SecondaryBody:
 	.byte 0xee, 0x88, 0x1e, 0x35, 0xfc, 0x78, 0xca, 0x02
@@ -27811,7 +27811,7 @@ VoiceParamFinalize_SecondaryBody:
 	muls	wa, 287
 	lda_24	xbc, 267118
 	ld_rrl	xhl, xbc, wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	c, a
 	extz	bc
@@ -27840,7 +27840,7 @@ VoiceParamFinalize_SecondaryBody:
 	muls	wa, 287
 	lda_24	xbc, 267118
 	ld_rrl	xhl, xbc, wa
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	c, a
 	extz	bc
@@ -27858,7 +27858,7 @@ VoiceParamFinalize_SecondaryBody:
 	add	wa, 16
 	lda_rr	xhl, xhl, wa
 	extz	bc
-	ld32_24	xwa, 283420
+	ldl_da	xwa, 283420
 	ld	a, (xwa+29351)
 	ld	e, a
 	extz	de
@@ -28002,13 +28002,13 @@ DSP_ReadVoiceParam11:
 DSP_LookupVoiceBuffer_CoeffPath:
 	ld de, bc
 	extz xde
-	ld32_24 xbc, 0x045314
+	ldl_da xbc, 0x045314
 	ld xbc, (xbc + 108)
 	add xbc, xde
 	addda32_24 xbc, 283408
 	ld c, (xbc)
 	extz bc
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 108)
 	add xhl, 0x80
 	sll bc, 7
@@ -28019,7 +28019,7 @@ DSP_LookupVoiceBuffer_CoeffPath:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld bc, (xwa)
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xhl, (xwa + 8)
 	ld wa, bc
 	sll wa, 2
@@ -28027,7 +28027,7 @@ DSP_LookupVoiceBuffer_CoeffPath:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld xhl, (xwa)
-	ld32_24 xwa, 0x045310
+	ldl_da xwa, 0x045310
 	add xwa, xhl
 	ld xhl, xwa
 	ret
@@ -28045,13 +28045,13 @@ DSP_LookupVoiceBuffer_ParamPath:
 DSP_LookupVoiceBuffer_ParamPath_Valid:
 	ld de, bc
 	extz xde
-	ld32_24 xbc, 0x045314
+	ldl_da xbc, 0x045314
 	ld xbc, (xbc + 4)
 	add xbc, xde
 	addda32_24 xbc, 283408
 	ld c, (xbc)
 	extz bc
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 4)
 	add xhl, 0x80
 	sll bc, 7
@@ -28062,7 +28062,7 @@ DSP_LookupVoiceBuffer_ParamPath_Valid:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld bc, (xwa)
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xhl, (xwa + 8)
 	ld wa, bc
 	sll wa, 2
@@ -28070,7 +28070,7 @@ DSP_LookupVoiceBuffer_ParamPath_Valid:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld xhl, (xwa)
-	ld32_24 xwa, 0x045310
+	ldl_da xwa, 0x045310
 	add xwa, xhl
 	ld xhl, xwa
 	jrl VoiceBuf_TypeSelector_Epilogue
@@ -28098,8 +28098,8 @@ VoiceBuf_TypeCheck_0x15:
 VoiceBuf_TypeCheck_0x50:
 	cp bc, 0x50
 	jr nz, VoiceBuf_TypeCheck_0x55
-	ld32_24 xwa, 0x04531c
-	st_dri3b C, 0xE1, 0x80, 0x49
+	ldl_da xwa, 0x04531c
+	stb_dri C, 0xE1, 0x80, 0x49
 	jr VoiceBuf_TypeSelector_Epilogue
 
 VoiceBuf_TypeCheck_0x55:
@@ -28114,12 +28114,12 @@ VoiceBuf_TypeCheck_0x55:
 	jr VoiceBuf_TypeSelector_Epilogue
 
 VoiceBuf_TypeCheck_Default:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xhl, (xwa + 8)
-	ld32_24 xwa, 0x045310
+	ldl_da xwa, 0x045310
 	add xwa, xhl
 	ld xhl, (xwa)
-	ld32_24 xwa, 0x045310
+	ldl_da xwa, 0x045310
 	add xwa, xhl
 	ld xhl, xwa
 
@@ -28130,7 +28130,7 @@ VoiceBuf_TypeSelector_Epilogue:
 ; Checks flag at 0x041343 and dispatches to one of two lookup functions.
 ; Referenced 10 times throughout the DSP processing code.
 DSP_LookupVoiceBuffer:
-	ld16_24 xde, 0x041343
+	ldw_da xde, 0x041343
 	bit 0, de
 	jr z, VoiceBuf_TypeSelector_EFFMatch
 	calr DSP_LookupVoiceBuffer_CoeffPath
@@ -28147,7 +28147,7 @@ VoiceBuf_TypeSelector_MatchEpilogue:
 	extz de
 	muls de, 0x11F
 	lda_24 xhl, 0x041382
-	cp_srib_im 0x07, 0xEC, 0xE8, 0x10
+	cpib_sri 0x07, 0xEC, 0xE8, 0x10
 	jr c, VoiceChanScan_LoopBody
 	cps c, 0
 	jr nz, VoiceChanScan_Data
@@ -28211,13 +28211,13 @@ VoiceChanScan_Data:
 
 VoiceParam_Update:
 	dec 2, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), a
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xhl, 0x041368
-	ld_sriw3 WA, 0x07, 0xEC, 0xE0
+	ldw_sri WA, 0x07, 0xEC, 0xE0
 	bit 0, wa
 	jrl z, VoiceParam_Update_InactivePath
 	cp de, 0x40
@@ -28233,9 +28233,9 @@ VoiceParam_Update_ActivePath:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x04136e
-	ld32_24 xwa, 0x04531c
-	st_dri3b W, 0xE1, 0x80, 0x49
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
+	ldl_da xwa, 0x04531c
+	stb_dri W, 0xE1, 0x80, 0x49
+	stl_dri XWA, 0x07, 0xE8, 0xE4
 	jrl EFFSlotScan_Epilogue
 
 VoiceParam_Update_ActiveEFF:
@@ -28245,13 +28245,13 @@ VoiceParam_Update_ActiveEFF:
 	ld bc, wa
 	lda_24 xde, 0x04136e
 	lda_24 xwa, 0x044fce
-	st_dri3l XWA, 0x07, 0xE8, 0xE4
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	stl_dri XWA, 0x07, 0xE8, 0xE4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, EFFSlotScan_Epilogue
 
 VoiceParam_Update_ActiveMain:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -28260,22 +28260,22 @@ VoiceParam_Update_ActiveMain:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b C, 0x07, 0xE4, 0xE0
+	stb_dri C, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xix, 0x04136e
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x51
 	ld iy, wa
 	add iy, 0x66
 	ld_sril3 XWA, 0x07, 0xF0, 0xE4
-	st_dri3b W, 0x07, 0xE0, 0xF4
-	st_dri3l XWA, 0x07, 0xEC, 0xE8
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	stb_dri W, 0x07, 0xE0, 0xF4
+	stl_dri XWA, 0x07, 0xEC, 0xE8
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceParam_Update_ActiveMain
 	jrl EFFSlotScan_Epilogue
 
@@ -28284,7 +28284,7 @@ VoiceParam_Update_InactivePath:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xhl, 0x041368
-	ld_sriw3 WA, 0x07, 0xEC, 0xE0
+	ldw_sri WA, 0x07, 0xEC, 0xE0
 	bit 1, wa
 	jrl z, EFFSlotScan_AltLoopBody
 	cp (xsp + 2), 0xF
@@ -28296,7 +28296,7 @@ VoiceParam_Update_InactivePath:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136e
-	st_dri3l XHL, 0x07, 0xE4, 0xE0
+	stl_dri XHL, 0x07, 0xE4, 0xE0
 	jr VoiceParam_Update_InactiveEpilogue
 
 VoiceParam_Update_InactiveSub:
@@ -28307,25 +28307,25 @@ VoiceParam_Update_InactiveSub:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136e
-	st_dri3l XHL, 0x07, 0xE4, 0xE0
+	stl_dri XHL, 0x07, 0xE4, 0xE0
 
 VoiceParam_Update_InactiveEpilogue:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, EFFSlotScan_Epilogue
 
 EFFSlotScan_LoopBody:
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr VoiceBuf_TypeSelector_MatchEpilogue
 	cp l, 0xFF
 	jr nz, EFFSlotScan_AssignPath
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -28334,16 +28334,16 @@ EFFSlotScan_LoopBody:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b C, 0x07, 0xE4, 0xE0
-	ld32_24 xbc, 0x045310
-	ld32_24 xwa, 0x045314
+	stb_dri C, 0x07, 0xE4, 0xE0
+	ldl_da xbc, 0x045310
+	ldl_da xwa, 0x045314
 	ld_sril XWA, (xwa + 0x00ac)
 	add xwa, xbc
-	st_dri3l XWA, 0x07, 0xEC, 0xE8
+	stl_dri XWA, 0x07, 0xEC, 0xE8
 	jr EFFSlotScan_LoopNext
 
 EFFSlotScan_AssignPath:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -28352,7 +28352,7 @@ EFFSlotScan_AssignPath:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b D, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
@@ -28364,12 +28364,12 @@ EFFSlotScan_AssignPath:
 	ld hl, wa
 	add hl, 0x66
 	ld_sril3 XWA, 0x07, 0xF4, 0xE4
-	st_dri3b W, 0x07, 0xE0, 0xEC
-	st_dri3l XWA, 0x07, 0xF0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xEC
+	stl_dri XWA, 0x07, 0xF0, 0xE8
 
 EFFSlotScan_LoopNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, EFFSlotScan_LoopBody
 	jrl EFFSlotScan_Epilogue
 
@@ -28383,7 +28383,7 @@ EFFSlotScan_AltLoopBody:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136e
-	st_dri3l XHL, 0x07, 0xE4, 0xE0
+	stl_dri XHL, 0x07, 0xE4, 0xE0
 	jr EFFSlotScan_AltAssign
 
 EFFSlotScan_AltMatchPath:
@@ -28394,25 +28394,25 @@ EFFSlotScan_AltMatchPath:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136e
-	st_dri3l XHL, 0x07, 0xE4, 0xE0
+	stl_dri XHL, 0x07, 0xE4, 0xE0
 
 EFFSlotScan_AltAssign:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, EFFSlotScan_Epilogue
 
 EFFSlotScan_AltLoopNext:
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr VoiceBuf_TypeSelector_MatchEpilogue
 	cp l, 0xFF
 	jr nz, EFFSlotScan_AltEpilogue
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -28421,16 +28421,16 @@ EFFSlotScan_AltLoopNext:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b C, 0x07, 0xE4, 0xE0
-	ld32_24 xbc, 0x045310
-	ld32_24 xwa, 0x045314
+	stb_dri C, 0x07, 0xE4, 0xE0
+	ldl_da xbc, 0x045310
+	ldl_da xwa, 0x045314
 	ld_sril XWA, (xwa + 0x00ac)
 	add xwa, xbc
-	st_dri3l XWA, 0x07, 0xEC, 0xE8
+	stl_dri XWA, 0x07, 0xEC, 0xE8
 	jr EFFSlotScan_OuterNext
 
 EFFSlotScan_AltEpilogue:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -28439,7 +28439,7 @@ EFFSlotScan_AltEpilogue:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	st_dri3b D, 0x07, 0xE4, 0xE0
+	stb_dri D, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
@@ -28451,16 +28451,16 @@ EFFSlotScan_AltEpilogue:
 	ld hl, wa
 	add hl, 0x66
 	ld_sril3 XWA, 0x07, 0xF4, 0xE4
-	st_dri3b W, 0x07, 0xE0, 0xEC
-	st_dri3l XWA, 0x07, 0xF0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xEC
+	stl_dri XWA, 0x07, 0xF0, 0xE8
 
 EFFSlotScan_OuterNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, EFFSlotScan_AltLoopNext
 
 EFFSlotScan_Epilogue:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 2, xsp
 	ret
 
@@ -28473,39 +28473,39 @@ VoiceBufIdx_Decode:
 	jr z, VoiceBufIdx_TableA
 	cps de, 0
 	jr nz, VoiceBufIdx_TableD
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 12)
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xix, (xde + 24)
-	ld32_24 xde, 0x045314
-	ld_sriw IY, (xde + 0x00ea)
+	ldl_da xde, 0x045314
+	ldw_sri0 IY, (xde + 0x00ea)
 	jr VoiceBufIdx_TableD
 
 VoiceBufIdx_TableA:
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 20)
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xix, (xde + 32)
-	ld32_24 xde, 0x045314
-	ld_sriw IY, (xde + 0x00f0)
+	ldl_da xde, 0x045314
+	ldw_sri0 IY, (xde + 0x00f0)
 	jr VoiceBufIdx_TableD
 
 VoiceBufIdx_TableB:
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 16)
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xix, (xde + 28)
-	ld32_24 xde, 0x045314
-	ld_sriw IY, (xde + 0x00ea)
+	ldl_da xde, 0x045314
+	ldw_sri0 IY, (xde + 0x00ea)
 	jr VoiceBufIdx_TableD
 
 VoiceBufIdx_TableC:
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xhl, (xde + 12)
-	ld32_24 xde, 0x045314
+	ldl_da xde, 0x045314
 	ld xix, (xde + 24)
-	ld32_24 xde, 0x045314
-	ld_sriw IY, (xde + 0x00ea)
+	ldl_da xde, 0x045314
+	ldw_sri0 IY, (xde + 0x00ea)
 
 VoiceBufIdx_TableD:
 	sll bc, 7
@@ -28529,13 +28529,13 @@ SlotParam_WriteDispatch:
 	ld (xsp + 2), a
 	ld a, (xsp + 8)
 	ld w, (xsp + 10)
-	ldfr_berp C, 0xF8
+	ldb_erp C, 0xF8
 	extz iz
 	and iz, 0x7F
-	ldfr_berp E, 0xF4
+	ldb_erp E, 0xF4
 	extz iy
 	and iy, 0xF
-	ldfr_berp E, 0xF0
+	ldb_erp E, 0xF0
 	extz ix
 	and ix, 0xC0
 	ld c, e
@@ -28590,9 +28590,9 @@ SlotParam_WriteType3:
 	muls wa, 0x1D6
 	ld de, wa
 	add de, bc
-	ld32_24 xwa, 0x04531c
-	st_dri3b C, 0x07, 0xE0, 0xE8
-	st_dri3b C, 0xED, 0xBA, 0x01
+	ldl_da xwa, 0x04531c
+	stb_dri C, 0x07, 0xE0, 0xE8
+	stb_dri C, 0xED, 0xBA, 0x01
 	jrl SlotParam_WriteDispatch_Epilogue
 
 SlotParam_WriteType4:
@@ -28605,9 +28605,9 @@ SlotParam_WriteType4:
 	muls wa, 0x1D6
 	ld de, wa
 	add de, bc
-	ld32_24 xwa, 0x045318
-	st_dri3b C, 0x07, 0xE0, 0xE8
-	st_dri3b C, 0xED, 0xBA, 0x01
+	ldl_da xwa, 0x045318
+	stb_dri C, 0x07, 0xE0, 0xE8
+	stb_dri C, 0xED, 0xBA, 0x01
 	jrl SlotParam_WriteDispatch_Epilogue
 
 SlotParam_WriteType5:
@@ -28632,9 +28632,9 @@ SlotParam_WriteType6:
 	muls wa, 0x50
 	ld de, wa
 	add de, bc
-	ld32_24 xwa, 0x04531c
-	st_dri3b C, 0x07, 0xE0, 0xE8
-	st_dri3b C, 0xED, 0xE1, 0x4A
+	ldl_da xwa, 0x04531c
+	stb_dri C, 0x07, 0xE0, 0xE8
+	stb_dri C, 0xED, 0xE1, 0x4A
 	jr SlotParam_WriteDispatch_Epilogue
 
 SlotParam_WriteType7:
@@ -28645,19 +28645,19 @@ SlotParam_WriteType7:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041381
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	extz xwa
 	ld xbc, 0x2927
 	call FP_MulAccum64
-	st_dri3b W, 0x07, 0xEC, 0xF8
+	stb_dri W, 0x07, 0xEC, 0xF8
 	ld xbc, xwa
 	addda32_24 xbc, 283416
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0xB
 	add wa, 0x4AE1
-	st_dri3b C, 0x07, 0xE4, 0xE0
+	stb_dri C, 0x07, 0xE4, 0xE0
 
 SlotParam_WriteDispatch_Epilogue:
 	popw iz
@@ -28694,9 +28694,9 @@ VoiceChanCopy_Main:
 	ld_sril3 XDE, 0x07, 0xE8, 0xF4
 	ld e, (xde + 3)
 	extz de
-	ldfr_berp C, 0xF4
+	ldb_erp C, 0xF4
 	extz iy
-	ldfr_berp L, 0xF0
+	ldb_erp L, 0xF0
 	extz ix
 	ld c, e
 	ld l, c
@@ -28705,7 +28705,7 @@ VoiceChanCopy_Main:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041381
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	pushw bc
 	extz wa
@@ -28718,14 +28718,14 @@ VoiceChanCopy_Main:
 
 VoiceField_ExtractAndWrite:
 	ld l, (xbc + 1)
-	ldfr_berp L, 0xF4
+	ldb_erp L, 0xF4
 	extz iy
 	ld c, (xbc + 2)
 	ld l, c
 	extz hl
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
-	ldto_berp A, 0xF4
+	stb_erp A, 0xF4
 	ld c, a
 	extz bc
 	ld a, l
@@ -28749,7 +28749,7 @@ VoiceBufPtr_Update:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, VoiceBufPtr_Update_Path0
 	ld a, (xsp)
@@ -28795,7 +28795,7 @@ VoiceBufPtr_Update_Path0:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 4), xhl
 
 VoiceBufPtr_Update_Path1:
@@ -28823,60 +28823,60 @@ VoiceBufPtr_Update_Common:
 	jrl nz, VoiceSlotAddr_Multiply
 
 VoiceTablePtr_Select:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 2, wa
 	jr z, VoiceTablePtr_SelectA
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld_sril XIX, (xwa + 0x009c)
 	jr VoiceTablePtr_SelectB
 
 VoiceTablePtr_SelectA:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xix, (xwa + 36)
 
 VoiceTablePtr_SelectB:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xiy, (xwa + 48)
-	ld32_24 xwa, 0x045314
-	ld_sriw IZ, (xwa + 0x00ec)
+	ldl_da xwa, 0x045314
+	ldw_sri0 IZ, (xwa + 0x00ec)
 	jr VoiceSlotAddr_Multiply
 
 VoiceTablePtr_SelectC:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 2, wa
 	jr z, VoiceTablePtr_SelectD
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld_sril XIX, (xwa + 0x00a4)
 	jr VoiceTablePtr_Common
 
 VoiceTablePtr_SelectD:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xix, (xwa + 44)
 
 VoiceTablePtr_Common:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xiy, (xwa + 56)
-	ld32_24 xwa, 0x045314
-	ld_sriw IZ, (xwa + 0x00f2)
+	ldl_da xwa, 0x045314
+	ldw_sri0 IZ, (xwa + 0x00f2)
 	jr VoiceSlotAddr_Multiply
 
 VoiceTablePtr_Epilogue:
-	ld16_24 xwa, 0x041343
+	ldw_da xwa, 0x041343
 	bit 2, wa
 	jr z, VoiceTablePtr_Data
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld_sril XIX, (xwa + 0x00a0)
 	jr VoiceTablePtr_Select2
 
 VoiceTablePtr_Data:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xix, (xwa + 40)
 
 VoiceTablePtr_Select2:
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xiy, (xwa + 52)
-	ld32_24 xwa, 0x045314
-	ld_sriw IZ, (xwa + 0x00ec)
+	ldl_da xwa, 0x045314
+	ldw_sri0 IZ, (xwa + 0x00ec)
 
 VoiceSlotAddr_Multiply:
 	sll de, 7
@@ -28908,14 +28908,14 @@ VoiceParam_WriteWithOffset:
 	lda_24 xix, 0x041368
 	exts xhl
 	add xhl, xix
-	st_dri3b D, 0x07, 0xEC, 0xF4
+	stb_dri D, 0x07, 0xEC, 0xF4
 	ld l, e
 	extz hl
 	add hl, hl
 	ld iy, hl
 	inc 3, iy
 	ld xhl, (xix + 4)
-	ld_srib3 L, 0x07, 0xEC, 0xF4
+	ldb_sri L, 0x07, 0xEC, 0xF4
 	extz hl
 	extz bc
 	muls bc, 0x25
@@ -28926,14 +28926,14 @@ VoiceParam_WriteWithOffset:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b A, 0x07, 0xE0, 0xF0
+	stb_dri A, 0x07, 0xE0, 0xF0
 	ld a, e
 	extz wa
 	add wa, wa
 	ld de, wa
 	inc 3, de
 	ld xwa, (xbc + 4)
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld a, (xwa + 1)
 	extz wa
 	ld e, l
@@ -28948,7 +28948,7 @@ VoiceParam_WriteWithOffset_Alt:
 	extz de
 	add de, de
 	inc 3, de
-	ld_srib3 E, 0x07, 0xE4, 0xE8
+	ldb_sri E, 0x07, 0xE4, 0xE8
 	extz de
 	extz wa
 	add wa, wa
@@ -28996,14 +28996,14 @@ VoiceParam_WriteWithOffset_3Arg:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 118), xhl
 	inc 6, xsp
 	ret
 
 VoiceInit_Dispatcher:
 	dec 2, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), a
 	ld a, (xsp + 2)
 	extz wa
@@ -29025,55 +29025,55 @@ VoiceInit_Dispatcher:
 	jr z, VoiceInit_AltPath
 	cps a, 0
 	jrl nz, VoiceInit_Epilogue
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceInit_Epilogue
 
 VoiceInit_EFFScanLoop:
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr VoiceBufPtr_Update
-	ldi_berp 0xFA, 0
-	cpi_berp 0xFA, 4
+	ldib_erp 0xFA, 0
+	cpib_erp 0xFA, 4
 	jr nc, VoiceInit_EFFScanNext
 
 VoiceInit_EFFScanMatch:
 	ld a, (xsp + 2)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld e, a
 	extz de
 	ld wa, hl
 	calr VoiceParam_WriteWithOffset_3Arg
-	inc1_berp 0xFA
-	cpi_berp 0xFA, 4
+	inc1b_erp 0xFA
+	cpib_erp 0xFA, 4
 	jr c, VoiceInit_EFFScanMatch
 
 VoiceInit_EFFScanNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceInit_EFFScanLoop
 	jr VoiceInit_Epilogue
 
 VoiceInit_AltPath:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceInit_Epilogue
 
 VoiceInit_AltPath2:
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
@@ -29081,17 +29081,17 @@ VoiceInit_AltPath2:
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	call Voice_PortamentoTarget_ComputePitch
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceInit_AltPath2
 
 VoiceInit_Epilogue:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 2, xsp
 	ret
 
@@ -29108,12 +29108,12 @@ VoiceBuf_Lookup_0x20Flag:
 	jr z, VoiceBuf_Lookup_FlagSet
 	cps wa, 0
 	jrl nz, VoiceBuf_Lookup_Epilogue
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xde, (xwa + 116)
-	ld32_24 xwa, 0x045314
+	ldl_da xwa, 0x045314
 	ld xbc, (xwa + 120)
-	ld32_24 xwa, 0x045314
-	ld_sriw HL, (xwa + 0x00ee)
+	ldl_da xwa, 0x045314
+	ldw_sri0 HL, (xwa + 0x00ee)
 	ld wa, iz
 	sll wa, 7
 	add wa, iy
@@ -29148,8 +29148,8 @@ VoiceBuf_Lookup_FlagClear:
 	muls wa, 0x50
 	ld bc, wa
 	add bc, 0x4AA7
-	ld32_24 xwa, 0x04531c
-	st_dri3b D, 0x07, 0xE0, 0xE4
+	ldl_da xwa, 0x04531c
+	stb_dri D, 0x07, 0xE0, 0xE4
 	jr VoiceBuf_Lookup_Epilogue
 
 VoiceBuf_Lookup_Common:
@@ -29161,14 +29161,14 @@ VoiceBuf_Lookup_Common:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041381
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	extz xwa
 	ld xbc, 0x2927
 	call FP_MulAccum64
-	st_dri3b D, 0x07, 0xEC, 0xF8
+	stb_dri D, 0x07, 0xEC, 0xF8
 	addda32_24 xix, 283416
-	st_dri3b D, 0xF1, 0xA7, 0x4A
+	stb_dri D, 0xF1, 0xA7, 0x4A
 
 VoiceBuf_Lookup_Epilogue:
 	ld xhl, xix
@@ -29180,16 +29180,16 @@ VoiceParam_WriteDispatchHelper:
 	extz hl
 	add hl, hl
 	add hl, 0x27
-	ld_srib3 L, 0x07, 0xE0, 0xEC
-	ldfr_berp L, 0xF4
+	ldb_sri L, 0x07, 0xE0, 0xEC
+	ldb_erp L, 0xF4
 	extz iy
 	ld l, c
 	extz hl
 	add hl, hl
 	add hl, 0x27
-	st_dri3b W, 0x07, 0xE0, 0xEC
+	stb_dri W, 0x07, 0xE0, 0xEC
 	ld a, (xwa + 1)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld l, c
 	extz hl
@@ -29207,7 +29207,7 @@ VoiceFlags_Aggregate:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x04136a
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	and xbc, 0xFFFF3FF0
 	ld de, bc
@@ -29232,7 +29232,7 @@ VoiceFlags_Bit0Check:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xix, 0x041372
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ldw_sri BC, 0x07, 0xF0, 0xE4
 	extz xbc
 	bit 15, bc
 	jr z, VoiceFlags_Bit0Set
@@ -29291,7 +29291,7 @@ VoiceFlags_Bit2Check:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xix, 0x041372
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ldw_sri BC, 0x07, 0xF0, 0xE4
 	extz xbc
 	bit 15, bc
 	jr z, VoiceFlags_Bit2Set
@@ -29396,7 +29396,7 @@ VoiceFlags_Bit6Set:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136a
-	st_dri3w DE, 0x07, 0xE4, 0xE0
+	stw_dri DE, 0x07, 0xE4, 0xE0
 	ret
 
 SignedClamp_Zero:
@@ -29427,7 +29427,7 @@ AlgoType_TableLookup:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x04136a
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 14, bc
 	jr z, AlgoType_Table0
 	extz wa
@@ -29452,7 +29452,7 @@ AlgoType_Table1:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x04136a
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
 	jr z, AlgoType_Table2
@@ -29506,74 +29506,74 @@ EnvTranspose_UpdateLoop:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041376
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	sub a, 0x40
 	exts wa
 	ld (xsp + 8), wa
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, EnvTranspose_SubPath1
 
 EnvTranspose_ApplyPath:
 	ld a, (xsp + 18)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr AlgoType_TableLookup
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, wa
 	lda xbc, (xsp + 10)
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 	cp hl, 0x80
 	jr z, EnvTranspose_LoopNext
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, wa
 	lda xbc, (xsp + 10)
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	add wa, (xsp + 8)
 	calr SignedClamp_Zero
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, wa
 	lda xbc, (xsp + 10)
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 
 EnvTranspose_LoopNext:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, wa
 	lda xbc, (xsp + 10)
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld e, a
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld bc, wa
 	add bc, 0x6E
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	ld (xwa + 35), e
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, wa
 	lda xbc, (xsp + 10)
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	ld e, a
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld bc, wa
 	add bc, 0x6E
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	ld (xwa + 36), e
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, EnvTranspose_ApplyPath
 
 EnvTranspose_SubPath1:
@@ -29583,7 +29583,7 @@ EnvTranspose_SubPath1:
 	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 93)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 10)
 	extz xwa
@@ -29619,33 +29619,33 @@ EnvTranspose_SubPath2:
 	calr SignedClamp_Zero
 
 EnvTranspose_SubPath3:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	and a, 0xF
 	cp a, 0x9
 	jr nz, EnvTranspose_SubPath4
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld xwa, (xsp + 4)
-	lda_dri3 XHL, 0xE1, 0x91, 0x00
-	ldto_berp C, 0xF8
+	lda_dri XHL, 0xE1, 0x91, 0x00
+	stb_erp C, 0xF8
 	ld xwa, (xsp + 4)
-	lda_dri3 XHL, 0xE1, 0xB6, 0x00
+	lda_dri XHL, 0xE1, 0xB6, 0x00
 	ld c, l
 	ld xwa, (xsp + 4)
-	lda_dri3 XHL, 0xE1, 0x92, 0x00
+	lda_dri XHL, 0xE1, 0x92, 0x00
 	ld xwa, (xsp + 4)
-	lda_dri3 XSP, 0xE1, 0xB7, 0x00
+	lda_dri XSP, 0xE1, 0xB7, 0x00
 	jr EnvTranspose_Epilogue
 
 EnvTranspose_SubPath4:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	and a, 0xF
 	cp a, 0xA
 	jr nc, EnvTranspose_Epilogue
-	ldto_berp C, 0xF8
+	stb_erp C, 0xF8
 	ld xwa, (xsp + 4)
-	lda_dri3 XHL, 0xE1, 0x91, 0x00
+	lda_dri XHL, 0xE1, 0x91, 0x00
 	ld xwa, (xsp + 4)
-	lda_dri3 XSP, 0xE1, 0xB6, 0x00
+	lda_dri XSP, 0xE1, 0xB6, 0x00
 
 EnvTranspose_Epilogue:
 	pop xiz
@@ -29669,7 +29669,7 @@ AlgoFlag_Write:
 	lda_24 xix, 0x041368
 	exts xhl
 	add xhl, xix
-	st_dri3b D, 0x07, 0xEC, 0xF4
+	stb_dri D, 0x07, 0xEC, 0xF4
 	lda xix, (xix + 39)
 	ld l, a
 	extz hl
@@ -29780,7 +29780,7 @@ AlgoFlag_Write_Bit3:
 	lda_24 xix, 0x041368
 	exts xhl
 	add xhl, xix
-	st_dri3b D, 0x07, 0xEC, 0xF4
+	stb_dri D, 0x07, 0xEC, 0xF4
 	lda xix, (xix + 39)
 	ld l, a
 	extz hl
@@ -29880,13 +29880,13 @@ RoutingFlag_Encode:
 	ld (xsp + 4), xwa
 	ld a, (xsp + 12)
 	ld l, (xsp + 14)
-	ldfr_berp E, 0xF0
+	ldb_erp E, 0xF0
 	extz ix
 	ld iy, ix
 	add iy, iy
 	lda_24 xiz, 0x00fb56
 	ld w, (xbc + 1)
-	ldfr_berp W, 0xF0
+	ldb_erp W, 0xF0
 	extz ix
 	and_sriw_rm IX, 0x07, 0xF8, 0xF4
 	jrl z, RoutingFlag_Epilogue
@@ -29912,7 +29912,7 @@ RoutingFlag_Encode:
 	ld de, wa
 	or de, 0xC0
 	ld xwa, (xsp + 4)
-	st_dri3w DE, 0x07, 0xE0, 0xE4
+	stw_dri DE, 0x07, 0xE0, 0xE4
 	jrl RoutingFlag_Epilogue
 
 RoutingFlag_Chan0:
@@ -29924,7 +29924,7 @@ RoutingFlag_Chan0:
 	ld de, wa
 	or de, 0xC000
 	ld xwa, (xsp + 4)
-	st_dri3w DE, 0x07, 0xE0, 0xE4
+	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
 RoutingFlag_Chan1:
@@ -29936,7 +29936,7 @@ RoutingFlag_Chan1:
 	ld de, wa
 	or de, 0x3300
 	ld xwa, (xsp + 4)
-	st_dri3w DE, 0x07, 0xE0, 0xE4
+	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
 RoutingFlag_Chan2:
@@ -29955,7 +29955,7 @@ RoutingFlag_Chan2:
 	ld de, wa
 	set 6, de
 	ld xwa, (xsp + 4)
-	st_dri3w DE, 0x07, 0xE0, 0xE4
+	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
 RoutingFlag_Chan0B:
@@ -29967,7 +29967,7 @@ RoutingFlag_Chan0B:
 	ld de, wa
 	set 14, de
 	ld xwa, (xsp + 4)
-	st_dri3w DE, 0x07, 0xE0, 0xE4
+	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
 RoutingFlag_Chan1B:
@@ -29979,7 +29979,7 @@ RoutingFlag_Chan1B:
 	ld de, wa
 	or de, 0x1100
 	ld xwa, (xsp + 4)
-	st_dri3w DE, 0x07, 0xE0, 0xE4
+	stw_dri DE, 0x07, 0xE0, 0xE4
 
 RoutingFlag_Epilogue:
 	pop xiz
@@ -30004,7 +30004,7 @@ SlotRouting_WriteSingle:
 	ld c, e
 	extz bc
 	or bc, 0xC0
-	st_dri3w BC, 0x07, 0xE0, 0xEC
+	stw_dri BC, 0x07, 0xE0, 0xEC
 	jr SlotRouting_Chan1PreWrite
 
 SlotRouting_Chan0:
@@ -30015,7 +30015,7 @@ SlotRouting_Chan0:
 	ld c, e
 	extz bc
 	set 6, bc
-	st_dri3w BC, 0x07, 0xE0, 0xEC
+	stw_dri BC, 0x07, 0xE0, 0xEC
 
 SlotRouting_Chan1PreWrite:
 	retd 0x2
@@ -30038,7 +30038,7 @@ SlotRouting_Chan1:
 	ld c, e
 	extz bc
 	or bc, 0xC000
-	st_dri3w BC, 0x07, 0xE0, 0xEC
+	stw_dri BC, 0x07, 0xE0, 0xEC
 	jr SlotRouting_Chan3PreWrite
 
 SlotRouting_Chan2:
@@ -30049,7 +30049,7 @@ SlotRouting_Chan2:
 	ld c, e
 	extz bc
 	set 14, bc
-	st_dri3w BC, 0x07, 0xE0, 0xEC
+	stw_dri BC, 0x07, 0xE0, 0xEC
 
 SlotRouting_Chan3PreWrite:
 	retd 0x2
@@ -30072,7 +30072,7 @@ SlotRouting_Chan3:
 	ld c, e
 	extz bc
 	or bc, 0x3300
-	st_dri3w BC, 0x07, 0xE0, 0xEC
+	stw_dri BC, 0x07, 0xE0, 0xEC
 	jr SlotRouting_Epilogue
 
 SlotRouting_Chan4:
@@ -30083,14 +30083,14 @@ SlotRouting_Chan4:
 	ld c, e
 	extz bc
 	or bc, 0x1100
-	st_dri3w BC, 0x07, 0xE0, 0xEC
+	stw_dri BC, 0x07, 0xE0, 0xEC
 
 SlotRouting_Epilogue:
 	retd 0x2
 
 EFF_RoutingInit:
 	lda xsp, (xsp - 10)
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 6), e
 	ld (xsp + 8), c
 	ld (xsp + 10), a
@@ -30105,7 +30105,7 @@ EFF_RoutingInit:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xsp + 2), xwa
 	ld a, (xsp + 6)
 	extz wa
@@ -30113,13 +30113,13 @@ EFF_RoutingInit:
 	ld bc, wa
 	add bc, 0x1A
 	ld xwa, (xsp + 2)
-	stiw_dri 0x07, 0xE0, 0xE4, 0x00, 0x00
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	stiw_ind 0x07, 0xE0, 0xE4, 0x00, 0x00
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, EFF_RoutingInit_Epilogue
 
 EFF_RoutingInit_LoopBody:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld bc, wa
 	sla bc, 2
@@ -30134,7 +30134,7 @@ EFF_RoutingInit_LoopBody:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b A, 0x07, 0xE0, 0xE8
+	stb_dri A, 0x07, 0xE0, 0xE8
 	lda xbc, (xbc + 39)
 	ld a, (xbc)
 	and a, 0xA
@@ -30145,7 +30145,7 @@ EFF_RoutingInit_LoopBody:
 	ld a, (xsp + 6)
 	extz wa
 	pushw wa
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	pushw wa
 	ld xwa, (xsp + 6)
@@ -30166,7 +30166,7 @@ EFF_RoutingInit_SlotPath:
 	ld a, (xsp + 6)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld a, (xsp + 8)
@@ -30192,7 +30192,7 @@ EFF_RoutingInit_LoopNext:
 	ld a, (xsp + 6)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld a, (xsp + 8)
@@ -30218,7 +30218,7 @@ EFF_RoutingInit_SubLoop:
 	ld a, (xsp + 6)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld a, (xsp + 8)
@@ -30240,12 +30240,12 @@ EFF_RoutingInit_SubLoop:
 	calr SlotRouting_Chan3
 
 EFF_RoutingInit_SubLoopNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, EFF_RoutingInit_LoopBody
 
 EFF_RoutingInit_Epilogue:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
@@ -30273,24 +30273,24 @@ AlgoType_StateWrite:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jr z, AlgoType_StateWrite_Type7
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cb
-	stib_dri 0x07, 0xE4, 0xE0, 0x0F
+	stib_ind 0x07, 0xE4, 0xE0, 0x0F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cc
-	stib_dri 0x07, 0xE4, 0xE0, 0x4F
+	stib_ind 0x07, 0xE4, 0xE0, 0x4F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cd
-	stib_dri 0x07, 0xE4, 0xE0, 0x96
+	stib_ind 0x07, 0xE4, 0xE0, 0x96
 	jr AlgoType_StateWrite_NonType7
 
 AlgoType_StateWrite_Type7:
@@ -30298,17 +30298,17 @@ AlgoType_StateWrite_Type7:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cb
-	stib_dri 0x07, 0xE4, 0xE0, 0x01
+	stib_ind 0x07, 0xE4, 0xE0, 0x01
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cc
-	stib_dri 0x07, 0xE4, 0xE0, 0x01
+	stib_ind 0x07, 0xE4, 0xE0, 0x01
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cd
-	stib_dri 0x07, 0xE4, 0xE0, 0x01
+	stib_ind 0x07, 0xE4, 0xE0, 0x01
 
 AlgoType_StateWrite_NonType7:
 	ld a, (xsp + 2)
@@ -30340,7 +30340,7 @@ AlgoType_StateWrite_RefreshA:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jr z, AlgoType_StateWrite_RefreshB
 	ld a, (xsp + 2)
@@ -30375,7 +30375,7 @@ AlgoType_StateWrite_RefreshD:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jrl z, AlgoType_StateWrite_RefreshF
 	ld a, (xsp + 2)
@@ -30439,17 +30439,17 @@ AlgoType_StateWrite_RefreshG:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cb
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cc
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413cd
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 
 AlgoType_StateWrite_Epilogue:
 	inc 4, xsp
@@ -30472,9 +30472,9 @@ DSP_AlgoType_Dispatch1:
 	jrl gt, DSP_AlgoType_Dispatch1_Store
 	add de, de
 	lda_24 xix, 0x00fb66
-	ld_sriw3 DE, 0x07, 0xF0, 0xE8
+	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda_24 xix, 0x033812
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_ind 8, 0x07, 0xF0, 0xE8
 
 DSP_AlgoType_Dispatch1_TableData:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84
@@ -30534,7 +30534,7 @@ DSP_AlgoType_Dispatch1_Store:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3w HL, 0x07, 0xE0, 0xE8
+	stw_dri HL, 0x07, 0xE0, 0xE8
 	ret
 
 DSP_AlgoType_Dispatch2:
@@ -30554,9 +30554,9 @@ DSP_AlgoType_Dispatch2:
 	jrl gt, DSP_AlgoType_Dispatch2_Store
 	add de, de
 	lda_24 xix, 0x00fb7e
-	ld_sriw3 DE, 0x07, 0xF0, 0xE8
+	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda_24 xix, 0x0339de
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_ind 8, 0x07, 0xF0, 0xE8
 
 DSP_AlgoType_Dispatch2_TableData:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84
@@ -30612,7 +30612,7 @@ DSP_AlgoType_Dispatch2_Store:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 2), hl
 	ret
 
@@ -30658,7 +30658,7 @@ DSP_ChanFreq_WritePacket1:
 	extz bc
 	muls bc, 0x6
 	lda_24 xde, 0x010fd2
-	ld_srib3 W, 0x07, 0xE8, 0xE4
+	ldb_sri W, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x11F
@@ -30674,7 +30674,7 @@ DSP_ChanFreq_WritePacket1:
 	lda_24 xde, 0x011478
 	exts xbc
 	add xbc, xde
-	ld_sriw3 HL, 0x07, 0xE4, 0xEC
+	ldw_sri HL, 0x07, 0xE4, 0xEC
 	ld c, a
 	extz bc
 	muls bc, 0x11F
@@ -30692,12 +30692,12 @@ DSP_ChanFreq_WritePacket1_Algo7:
 	extz bc
 	muls bc, 0x6
 	lda_24 xde, 0x010fd2
-	ld_srib3 W, 0x07, 0xE8, 0xE4
+	ldb_sri W, 0x07, 0xE8, 0xE4
 	ld c, l
 	extz bc
 	muls bc, 0x27
 	lda_24 xde, 0x011e1c
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	ld hl, bc
 	add hl, hl
@@ -30707,7 +30707,7 @@ DSP_ChanFreq_WritePacket1_Algo7:
 	lda_24 xde, 0x011478
 	exts xbc
 	add xbc, xde
-	ld_sriw3 HL, 0x07, 0xE4, 0xEC
+	ldw_sri HL, 0x07, 0xE4, 0xEC
 	jr DSP_ChanFreq_WritePacket1_Epilogue
 
 DSP_ChanFreq_WritePacket1_Zero:
@@ -30717,7 +30717,7 @@ DSP_ChanFreq_WritePacket1_Epilogue:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c7
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 	ret
 
 DSP_ChanFreq_WritePacket2:
@@ -30739,7 +30739,7 @@ DSP_ChanFreq_WritePacket2_PathA:
 	extz bc
 	muls bc, 0x6
 	lda_24 xde, 0x010fd3
-	ld_srib3 W, 0x07, 0xE8, 0xE4
+	ldb_sri W, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x11F
@@ -30755,7 +30755,7 @@ DSP_ChanFreq_WritePacket2_PathA:
 	lda_24 xde, 0x011016
 	exts xbc
 	add xbc, xde
-	ld_sriw3 HL, 0x07, 0xE4, 0xEC
+	ldw_sri HL, 0x07, 0xE4, 0xEC
 	jr DSP_ChanFreq_WritePacket2_Epilogue
 
 DSP_ChanFreq_WritePacket2_PathB:
@@ -30765,7 +30765,7 @@ DSP_ChanFreq_WritePacket2_Epilogue:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413c9
-	st_dri3w HL, 0x07, 0xE4, 0xE0
+	stw_dri HL, 0x07, 0xE4, 0xE0
 	ret
 
 Voice_SecondaryParam_Fetch:
@@ -30773,7 +30773,7 @@ Voice_SecondaryParam_Fetch:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041372
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
 	jr z, Voice_SecondaryParam_FallbackB
@@ -30793,7 +30793,7 @@ Voice_SecondaryParam_Fetch:
 	ld a, (xwa + 94)
 	extz wa
 	lda_24 xbc, 0x012038
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	jr Voice_SecondaryParam_FallbackC
 
 Voice_SecondaryParam_FallbackA:
@@ -30812,7 +30812,7 @@ Voice_SecondaryParam_Fetch2:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041372
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
 	ret z
@@ -30840,7 +30840,7 @@ Voice_SecondaryParam_AlgoAB:
 	extz wa
 	muls wa, 0x27
 	lda_24 xbc, 0x011e24
-	ld_srib3 L, 0x07, 0xE4, 0xE0
+	ldb_sri L, 0x07, 0xE4, 0xE0
 	jr Voice_SecondaryParam_Path4
 
 Voice_SecondaryParam_Path2:
@@ -30867,7 +30867,7 @@ Voice_SecondaryParam_Epilogue:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041372
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
 	ret z
@@ -30880,7 +30880,7 @@ Voice_SecondaryParam_Epilogue:
 
 DSP_AlgoType_Dispatch3:
 	lds hl, 0
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	muls ix, 0x11F
 	lda_24 xiy, 0x04136e
@@ -30888,7 +30888,7 @@ DSP_AlgoType_Dispatch3:
 	ld w, (xix + 93)
 	and w, 0xF
 	ld b, w
-	ldfr_berp W, 0xF4
+	ldb_erp W, 0xF4
 	extz iy
 	cps iy, 0
 	ret mi
@@ -30896,9 +30896,9 @@ DSP_AlgoType_Dispatch3:
 	ret gt
 	add iy, iy
 	lda_24 xix, 0x00fb96
-	ld_sriw3 IY, 0x07, 0xF0, 0xF4
+	ldw_sri IY, 0x07, 0xF0, 0xF4
 	lda_24 xix, 0x033e44
-	jp_dri 8, 0x07, 0xF0, 0xF4
+	jp_ind 8, 0x07, 0xF0, 0xF4
 
 DSP_AlgoType_Dispatch3_TableData:
 	cps	e, 0
@@ -31066,7 +31066,7 @@ Algo_SubTable_DispatchA:
 	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
-	st_dri3b B, 0x07, 0xE8, 0xF0
+	stb_dri B, 0x07, 0xE8, 0xF0
 	ld l, (xde + 1)
 	ld e, w
 	cp e, 0x8
@@ -31100,7 +31100,7 @@ Algo_SubTable_DispatchB:
 	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
-	st_dri3b B, 0x07, 0xE8, 0xF0
+	stb_dri B, 0x07, 0xE8, 0xF0
 	ld l, (xde + 2)
 	ld e, w
 	extz de
@@ -31110,9 +31110,9 @@ Algo_SubTable_DispatchB:
 	ret gt
 	add de, de
 	lda_24 xix, 0x00fbae
-	ld_sriw3 DE, 0x07, 0xF0, 0xE8
+	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda_24 xix, 0x0340cc
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_ind 8, 0x07, 0xF0, 0xE8
 
 Algo_SubTable_JumpTable1:
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09
@@ -31134,7 +31134,7 @@ Algo_SubTable_JumpTable1:
 	.byte 0x27, 0x00, 0x68, 0x02, 0x27, 0x00, 0x0e
 
 Algo_SubTable_DispatchC:
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld e, a
 	extz de
 	muls de, 0x11F
@@ -31154,9 +31154,9 @@ Algo_SubTable_DispatchC:
 	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
-	st_dri3b B, 0x07, 0xE8, 0xF0
+	stb_dri B, 0x07, 0xE8, 0xF0
 	ld e, (xde + 3)
-	ldfr_berp E, 0xFB
+	ldb_erp E, 0xFB
 	ld e, w
 	extz de
 	cps de, 0
@@ -31165,9 +31165,9 @@ Algo_SubTable_DispatchC:
 	jr gt, Algo_SubTable_Epilogue
 	add de, de
 	lda_24 xix, 0x00fbc0
-	ld_sriw3 DE, 0x07, 0xF0, 0xE8
+	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda_24 xix, 0x0341be
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_ind 8, 0x07, 0xF0, 0xE8
 
 Algo_SubTable_JumpTable2:
 	.byte 0xcb, 0xd9, 0x6e, 0x1b, 0xc9, 0x8d, 0xda, 0x12
@@ -31184,8 +31184,8 @@ Algo_SubTable_JumpTable2:
 	.byte 0x99
 
 Algo_SubTable_Epilogue:
-	ldto_berp L, 0xFB
-	pop_werp 0xFA
+	stb_erp L, 0xFB
+	popw_erp 0xFA
 	ret
 
 Algo_SubTable_Bit15Dispatch:
@@ -31193,7 +31193,7 @@ Algo_SubTable_Bit15Dispatch:
 	extz de
 	muls de, 0x11F
 	lda_24 xhl, 0x041372
-	ld_sriw3 DE, 0x07, 0xEC, 0xE8
+	ldw_sri DE, 0x07, 0xEC, 0xE8
 	extz xde
 	bit 15, de
 	jrl z, Algo_SubTable_ZeroReturn
@@ -31216,7 +31216,7 @@ Algo_SubTable_Bit15Dispatch:
 	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
-	st_dri3b B, 0x07, 0xE8, 0xF0
+	stb_dri B, 0x07, 0xE8, 0xF0
 	ld l, (xde + 4)
 	ld e, w
 	extz de
@@ -31226,9 +31226,9 @@ Algo_SubTable_Bit15Dispatch:
 	ret gt
 	add de, de
 	lda_24 xix, 0x00fbd2
-	ld_sriw3 DE, 0x07, 0xF0, 0xE8
+	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda_24 xix, 0x03429d
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_ind 8, 0x07, 0xF0, 0xE8
 
 Algo_SubTable_JumpTable3:
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09
@@ -31252,30 +31252,30 @@ Algo_SubTable_ZeroReturn:
 
 VoiceNoteParam_UpdateLoop:
 	dec 2, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), a
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
 	jrl z, VoiceNoteParam_FallbackPath
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, VoiceNoteParam_Epilogue
 
 VoiceNoteParam_LoopBody:
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr Algo_SubTable_DispatchA
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -31286,17 +31286,17 @@ VoiceNoteParam_LoopBody:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 32), l
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr Algo_SubTable_DispatchB
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -31307,17 +31307,17 @@ VoiceNoteParam_LoopBody:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 33), l
 	ld a, (xsp + 2)
 	ld e, a
 	extz de
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld wa, de
 	calr Algo_SubTable_DispatchC
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -31328,20 +31328,20 @@ VoiceNoteParam_LoopBody:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 34), l
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, VoiceNoteParam_LoopBody
 	jrl VoiceNoteParam_Epilogue
 
 VoiceNoteParam_FallbackPath:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jrl nc, VoiceNoteParam_Epilogue
 
 VoiceNoteParam_LoopNext:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -31352,9 +31352,9 @@ VoiceNoteParam_LoopNext:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 32), 0x0
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -31365,9 +31365,9 @@ VoiceNoteParam_LoopNext:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 33), 0x0
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x25
 	ld de, wa
@@ -31378,14 +31378,14 @@ VoiceNoteParam_LoopNext:
 	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
-	st_dri3b W, 0x07, 0xE0, 0xE8
+	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 34), 0x0
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jrl c, VoiceNoteParam_LoopNext
 
 VoiceNoteParam_Epilogue:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 2, xsp
 	ret
 
@@ -31397,13 +31397,13 @@ Voice_ActiveFlag_CheckAndLoad:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041368
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, Voice_ActiveFlag_ActivePath
-	ld8_24 a, 0x0451a4
+	ldb_da a, 0x0451a4
 	cp a, (xsp + 2)
 	jr nz, Voice_ActiveFlag_ActivePath
-	ld8_24 a, 0x0451a6
+	ldb_da a, 0x0451a6
 	sla a, 2
 	ld (xsp), a
 
@@ -31412,7 +31412,7 @@ Voice_ActiveFlag_ActivePath:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
 	jr z, Voice_ActiveFlag_InactivePath
@@ -31428,7 +31428,7 @@ Voice_ActiveFlag_InactivePath:
 	ld bc, wa
 	lda_24 xde, 0x0413cf
 	ld a, (xsp)
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	inc 4, xsp
 	ret
 
@@ -31472,7 +31472,7 @@ DSP_SlotParam_Write_Slot0:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041368
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot0_Path
 	cpdm8_24 283044, a
@@ -31481,16 +31481,16 @@ DSP_SlotParam_Write_Slot0:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x0413d0
-	ld8_24 a, 0x0451a7
+	ldb_da a, 0x0451a7
 	sla a, 1
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 DSP_SlotParam_Write_Slot0_Path:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413d0
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 DSP_SlotParam_Write_Slot1:
@@ -31498,7 +31498,7 @@ DSP_SlotParam_Write_Slot1:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041368
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot1_Path
 	cpdm8_24 283044, a
@@ -31507,16 +31507,16 @@ DSP_SlotParam_Write_Slot1:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x0413d1
-	ld8_24 a, 0x0451a8
+	ldb_da a, 0x0451a8
 	sla a, 1
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 DSP_SlotParam_Write_Slot1_Path:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413d1
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 DSP_SlotParam_Write_Slot2:
@@ -31524,7 +31524,7 @@ DSP_SlotParam_Write_Slot2:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041368
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot2_Path
 	cpdm8_24 283044, a
@@ -31533,16 +31533,16 @@ DSP_SlotParam_Write_Slot2:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x0413d2
-	ld8_24 a, 0x0451a9
+	ldb_da a, 0x0451a9
 	sla a, 1
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 DSP_SlotParam_Write_Slot2_Path:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413d2
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 DSP_SlotParam_Write_Slot3:
@@ -31550,7 +31550,7 @@ DSP_SlotParam_Write_Slot3:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041368
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot3_Path
 	cpdm8_24 283044, a
@@ -31559,16 +31559,16 @@ DSP_SlotParam_Write_Slot3:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x0413d3
-	ld8_24 a, 0x0451ab
+	ldb_da a, 0x0451ab
 	sla a, 2
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 DSP_SlotParam_Write_Slot3_Path:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413d3
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 DSP_SlotParam_Write_Slot4:
@@ -31576,7 +31576,7 @@ DSP_SlotParam_Write_Slot4:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041368
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot4_Path
 	cpdm8_24 283044, a
@@ -31585,16 +31585,16 @@ DSP_SlotParam_Write_Slot4:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x0413d4
-	ld8_24 a, 0x0451ac
+	ldb_da a, 0x0451ac
 	sla a, 2
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
 DSP_SlotParam_Write_Slot4_Path:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x0413d4
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 Voice_ActiveFlag_Set:
@@ -31611,38 +31611,38 @@ Voice_ActiveFlag_Set:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136c
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 Voice_NoteState_Clear:
-	ld16_24 xbc, 0x041343
+	ldw_da xbc, 0x041343
 	bit 0, bc
 	ret nz
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041385
-	stiw_dri 0x07, 0xE8, 0xE4, 0x00, 0x00
+	stiw_ind 0x07, 0xE8, 0xE4, 0x00, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041387
-	stib_dri 0x07, 0xE8, 0xE4, 0x00
+	stib_ind 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041388
-	stib_dri 0x07, 0xE8, 0xE4, 0x00
+	stib_ind 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041383
-	stib_dri 0x07, 0xE8, 0xE4, 0x40
+	stib_ind 0x07, 0xE8, 0xE4, 0x40
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041384
-	stib_dri 0x07, 0xE8, 0xE4, 0x40
+	stib_ind 0x07, 0xE8, 0xE4, 0x40
 	lds ix, 0
 	cps ix, 4
 	ret nc
@@ -31745,7 +31745,7 @@ VoiceSlot_FullInit_Loop1Next:
 	ld wa, (xsp + 2)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	ld e, a
 	extz de
 	ld wa, hl
@@ -31756,7 +31756,7 @@ VoiceSlot_FullInit_Loop1Next:
 	ld wa, (xsp + 2)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	ld e, a
 	extz de
 	ld wa, hl
@@ -31774,7 +31774,7 @@ VoiceSlot_FullInit_Loop2Next:
 	ld a, (xsp + 4)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	ld c, a
 	extz bc
 	ld wa, (xsp + 2)
@@ -31801,7 +31801,7 @@ VoiceSlot_FullInit_Epilogue:
 
 VoiceSlot_AltInit:
 	dec 4, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 4), a
 	ld a, (xsp + 4)
 	extz wa
@@ -31836,8 +31836,8 @@ VoiceSlot_AltInit:
 	jr nc, VoiceSlot_AltInit_Epilogue
 
 VoiceSlot_AltInit_Loop1:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceSlot_AltInit_Loop2
 
 VoiceSlot_AltInit_Loop1Next:
@@ -31847,7 +31847,7 @@ VoiceSlot_AltInit_Loop1Next:
 	ld a, (xsp + 2)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld wa, hl
@@ -31858,25 +31858,25 @@ VoiceSlot_AltInit_Loop1Next:
 	ld a, (xsp + 2)
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld e, a
 	extz de
 	ld wa, hl
 	calr AlgoFlag_Write
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceSlot_AltInit_Loop1Next
 
 VoiceSlot_AltInit_Loop2:
-	ldi_berp 0xFB, 0
-	cpi_berp 0xFB, 4
+	ldib_erp 0xFB, 0
+	cpib_erp 0xFB, 4
 	jr nc, VoiceSlot_AltInit_Loop3
 
 VoiceSlot_AltInit_Loop2Next:
 	ld a, (xsp + 4)
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
 	ld a, (xsp + 2)
@@ -31884,8 +31884,8 @@ VoiceSlot_AltInit_Loop2Next:
 	extz de
 	ld wa, hl
 	calr EFF_RoutingInit
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1b_erp 0xFB
+	cpib_erp 0xFB, 4
 	jr c, VoiceSlot_AltInit_Loop2Next
 
 VoiceSlot_AltInit_Loop3:
@@ -31897,39 +31897,39 @@ VoiceSlot_AltInit_Epilogue:
 	ld a, (xsp + 4)
 	extz wa
 	calr VoiceNoteParam_UpdateLoop
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 4, xsp
 	ret
 
 Voice_ProgChange:
 	dec 4, xsp
-	push_werp 0xFA
+	pushw_erp 0xFA
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	cp (xwa + 1), 0x1A
 	jrl ge, Voice_ProgChange_InnerDispatch3
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 1)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x041381
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 2)
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
-	ldto_berp A, 0xFB
+	lda_dri XBC, 0x07, 0xE8, 0xE4
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x041382
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 3)
-	lda_dri3 XBC, 0x07, 0xE8, 0xE4
+	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ld xwa, (xsp + 2)
 	cp (xwa + 4), 0x0
 	jr z, Voice_ProgChange_Path1
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
@@ -31937,23 +31937,23 @@ Voice_ProgChange:
 	jr Voice_ProgChange_Path2
 
 Voice_ProgChange_Path1:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xBF
 
 Voice_ProgChange_Path2:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_ActiveFlag_Set
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr Voice_NoteState_Clear
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call Voice_SetLFO_ActiveFlag
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
 	ld xwa, (xsp + 2)
@@ -31962,7 +31962,7 @@ Voice_ProgChange_Path2:
 	ld e, (xwa + 3)
 	ld wa, hl
 	calr VoiceInit_Dispatcher
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136e
@@ -31979,21 +31979,21 @@ Voice_ProgChange_Path2:
 	jr nz, Voice_ProgChange_InnerDispatch3
 
 Voice_ProgChange_InnerDispatch1:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr VoiceSlot_FullInit
 	jr Voice_ProgChange_InnerDispatch3
 
 Voice_ProgChange_InnerDispatch2:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call Voice_PortamentoTargets_SetAll
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	calr VoiceSlot_AltInit
 
 Voice_ProgChange_InnerDispatch3:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	inc 4, xsp
 	ret
 
@@ -32048,7 +32048,7 @@ VoiceSlot_ClearAll_InnerLoop:
 	exts xwa
 	add xwa, xbc
 	add xwa, xhl
-	stiw_dri 0xE1, 0x88, 0x00, 0x00, 0x00
+	stiw_ind 0xE1, 0x88, 0x00, 0x00, 0x00
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x3
 	jr c, VoiceSlot_ClearAll_InnerLoop
@@ -32095,7 +32095,7 @@ VoiceSlot_ClearAll_SubLoop2:
 	jr c, VoiceSlot_ClearAll_SubLoop1
 
 VoiceSlot_ClearAll_Epilogue:
-	sti8_24 0x0451a4, 0xff
+	stib_da 0x0451a4, 0xff
 	pop xiz
 	inc 6, xsp
 	ret
@@ -32116,7 +32116,7 @@ DSP_System_Init:	; 034C45h
 	jr nc, DSP_System_Init_Clear2
 
 DSP_System_Init_Clear1:
-	stib_dpi 0xE0, 0x00	; Clear byte
+	stib_dsp 0xE0, 0x00	; Clear byte
 	inc 1, bc
 	cp bc, 0x26
 	jr c, DSP_System_Init_Clear1
@@ -32128,7 +32128,7 @@ DSP_System_Init_Clear2:
 	jr nc, DSP_System_Init_Vars
 
 DSP_System_Init_Clear2_Loop:
-	stib_dpi 0xE0, 0x00
+	stib_dsp 0xE0, 0x00
 	inc 1, bc
 	cp bc, 0x1D26
 	jr c, DSP_System_Init_Clear2_Loop
@@ -32148,24 +32148,24 @@ DSP_System_Init_SetBit:
 
 DSP_System_Init_Continue:
 	ld xwa, 0x50000
-	st32_24 0x045310, xwa
+	stl_da 0x045310, xwa
 	ld xwa, 0x50000
-	st32_24 0x045314, xwa
+	stl_da 0x045314, xwa
 	lda_24 xwa, 0x0a0000
-	st32_24 0x045318, xwa
+	stl_da 0x045318, xwa
 	call DSP_Config_Init
 	call DSP_Reset
 	lds wa, 0
 	call ToneGen_EmitCommandLoop
 	call DSP_ResetWriteBufferPtr
 	call VoiceSlot_ClearAll
-	sti8_24 0x041342, 0x00
+	stib_da 0x041342, 0x00
 	jp Voice_ResetAllControllers
 Audio_Process_Init_Data:
 	.byte 0x0e
 
 Audio_Process_Init:
-	cpi8_24 0x041342, 0x00
+	cpib_da 0x041342, 0x00
 	jr nz, Audio_Process_Init_BranchA
 	call Voice_ScanAndCancelNoteOff
 	call DSP_SlotState_DisplayRestore
@@ -32273,11 +32273,11 @@ Audio_CmdHandler_00_1F:
 	jr z, Audio_CmdHandler_00_1F_Done
 
 Audio_CmdHandler_00_1F_Loop:
-	ldada xwa, 11021
+	lda_d16 xwa, 11021
 	ld bc, (xwa)
 	incm 1, (xwa)
 	and bc, 0xFFF
-	ldada xwa, 11027
+	lda_d16 xwa, 11027
 	extz xbc
 	add xbc, xwa
 	ld xwa, (xsp + 6)
@@ -32310,7 +32310,7 @@ Audio_CmdHandler_00_1F_Done:
 ; ===========================================================================
 MIDI_Dispatch:
 	push xiz
-	ldada xiz, 11021
+	lda_d16 xiz, 11021
 	ld wa, (xiz + 4)
 	call RingBuf_SetOffsetHi
 	jrl MIDI_Dispatch_NextByte
@@ -32336,44 +32336,44 @@ MIDI_Dispatch_ParseStatus:
 	jr c, MIDI_Status_Incomplete
 	bit 3, hl
 	jr nz, MIDI_Status_NoteOn_Extended
-	stda8 10984, l
+	stb_d8 10984, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10985, l
+	stb_d8 10985, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10986, l
+	stb_d8 10986, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10987, l
+	stb_d8 10987, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10988, l
+	stb_d8 10988, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10989, l
-	ldada xwa, 10984
+	stb_d8 10989, l
+	lda_d16 xwa, 10984
 	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_NoteOn_Extended:
-	stda8 10990, l
+	stb_d8 10990, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10991, l
+	stb_d8 10991, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10992, l
+	stb_d8 10992, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10993, l
+	stb_d8 10993, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10994, l
+	stb_d8 10994, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10995, l
-	ldada xwa, 10990
+	stb_d8 10995, l
+	lda_d16 xwa, 10990
 	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
@@ -32385,25 +32385,25 @@ MIDI_Status_Incomplete:
 MIDI_Status_NoteOn:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_NoteOn_Skip
-	stda8 10996, l
+	stb_d8 10996, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10997, l
+	stb_d8 10997, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10998, l
+	stb_d8 10998, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 10999, l
-	ldda8 a, 10997
+	stb_d8 10999, l
+	ldb_d8 a, 10997
 	cp a, 0xF0
 	jr nc, MIDI_Status_NoteOn_Poly
-	ldada xwa, 10996
+	lda_d16 xwa, 10996
 	call Voice_NoteOn
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_NoteOn_Poly:
-	ldada xwa, 10996
+	lda_d16 xwa, 10996
 	call Voice_Poly_NoteOn
 	jrl MIDI_Dispatch_Exit
 
@@ -32415,17 +32415,17 @@ MIDI_Status_NoteOn_Skip:
 MIDI_Status_CtrlChange:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_CtrlChange_Skip
-	stda8 11000, l
+	stb_d8 11000, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11001, l
+	stb_d8 11001, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11002, l
+	stb_d8 11002, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11003, l
-	ldada xwa, 11000
+	stb_d8 11003, l
+	lda_d16 xwa, 11000
 	call Voice_CtrlChange
 	jrl MIDI_Dispatch_Exit
 
@@ -32437,20 +32437,20 @@ MIDI_Status_CtrlChange_Skip:
 MIDI_Status_ProgChange:
 	cpw (xiz + 4), 0x4
 	jr c, MIDI_Status_ProgChange_Skip
-	stda8 11004, l
+	stb_d8 11004, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11005, l
+	stb_d8 11005, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11006, l
+	stb_d8 11006, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11007, l
+	stb_d8 11007, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11008, l
-	ldada xwa, 11004
+	stb_d8 11008, l
+	lda_d16 xwa, 11004
 	call Voice_ProgChange
 	jrl MIDI_Dispatch_Exit
 
@@ -32462,17 +32462,17 @@ MIDI_Status_ProgChange_Skip:
 MIDI_Status_ChanPressure:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_ChanPressure_Skip
-	stda8 11009, l
+	stb_d8 11009, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11010, l
+	stb_d8 11010, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11011, l
+	stb_d8 11011, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11012, l
-	ldada xwa, 11009
+	stb_d8 11012, l
+	lda_d16 xwa, 11009
 	call Voice_ChanPressure
 	jrl MIDI_Dispatch_Exit
 
@@ -32484,17 +32484,17 @@ MIDI_Status_ChanPressure_Skip:
 MIDI_Status_PitchBend:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_PitchBend_Skip
-	stda8 11013, l
+	stb_d8 11013, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11014, l
+	stb_d8 11014, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11015, l
+	stb_d8 11015, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11016, l
-	ldada xwa, 11013
+	stb_d8 11016, l
+	lda_d16 xwa, 11013
 	call Voice_PitchBend
 	jr MIDI_Dispatch_Exit
 
@@ -32506,17 +32506,17 @@ MIDI_Status_PitchBend_Skip:
 MIDI_Status_System:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_System_Skip
-	stda8 11017, l
+	stb_d8 11017, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11018, l
+	stb_d8 11018, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11019, l
+	stb_d8 11019, l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stda8 11020, l
-	ldada xwa, 11017
+	stb_d8 11020, l
+	lda_d16 xwa, 11017
 	call Voice_SystemMsg
 	jr MIDI_Dispatch_Exit
 
@@ -32543,7 +32543,7 @@ MIDI_Dispatch_Exit:
 DSP_WriteCount_Compute:
 	ldw bc, 0x4970
 	srl bc, 1
-	ld32_24 xwa, 0x04531c
+	ldl_da xwa, 0x04531c
 	lda xwa, (xwa + 16)
 	lds de, 0
 	cps bc, 0
@@ -32657,10 +32657,10 @@ DSP_FlushAllSlots:
 	extz bc
 	call DSP_LookupVoiceBuffer
 	ld (xsp + 2), xhl
-	ld32_24 xde, 0x04531c
+	ldl_da xde, 0x04531c
 	ld xwa, (xsp + 2)
 	ld xiy, xwa
-	st_dri3b D, 0xE9, 0x80, 0x49
+	stb_dri D, 0xE9, 0x80, 0x49
 	ldw bc, 0x93
 	ldirw
 	ldi85
@@ -32790,13 +32790,13 @@ DSP_WriteAlgoBuffer_PathB:
 	muls bc, 0x1D6
 	ld iz, bc
 	add iz, 0x10
-	ld32_24 xhl, 0x04531c
+	ldl_da xhl, 0x04531c
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	lda_24 xix, 0x04136e
 	ld_sril3 XIY, 0x07, 0xF0, 0xE4
-	st_dri3b D, 0x07, 0xEC, 0xF8
+	stb_dri D, 0x07, 0xEC, 0xF8
 	ldw bc, 0xD5
 	ldirw
 	ldb l, 0x0
@@ -32813,8 +32813,8 @@ DSP_WriteAlgoBuffer_Loop:
 	muls bc, 0x1D6
 	ld iy, bc
 	add iy, ix
-	ld32_24 xbc, 0x04531c
-	st_dri3b H, 0x07, 0xE4, 0xF4
+	ldl_da xbc, 0x04531c
+	stb_dri H, 0x07, 0xE4, 0xF4
 	ld c, l
 	extz bc
 	muls bc, 0x25
@@ -32826,9 +32826,9 @@ DSP_WriteAlgoBuffer_Loop:
 	lda_24 xix, 0x041368
 	exts xbc
 	add xbc, xix
-	st_dri3b A, 0x07, 0xE4, 0xF4
+	stb_dri A, 0x07, 0xE4, 0xF4
 	ld xiy, (xbc + 4)
-	st_dri3b D, 0xF9, 0xBA, 0x01
+	stb_dri D, 0xF9, 0xBA, 0x01
 	lds bc, 5
 	ldirw
 	ldi85
@@ -32841,8 +32841,8 @@ DSP_WriteAlgoBuffer_Loop:
 	muls bc, 0x1D6
 	ld iy, bc
 	add iy, ix
-	ld32_24 xbc, 0x04531c
-	st_dri3b D, 0x07, 0xE4, 0xF4
+	ldl_da xbc, 0x04531c
+	stb_dri D, 0x07, 0xE4, 0xF4
 	lda xix, (xix + 121)
 	ld c, (xix)
 	and c, 0xC0
@@ -32858,8 +32858,8 @@ DSP_WriteAlgoBuffer_LoopNext:
 
 DSP_WriteAlgoBuffer_Epilogue:
 	calr DSP_WriteCount_Compute
-	ld32_24 xwa, 0x04531c
-	st_dri3w HL, 0xE1, 0xA8, 0x72
+	ldl_da xwa, 0x04531c
+	stw_dri HL, 0xE1, 0xA8, 0x72
 	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
@@ -32880,12 +32880,12 @@ DSP_Reinit_VoiceSlots:
 	extz bc
 	extz wa
 	mul wa, 0x14
-	ldfr_werp WA, 0xFA
+	ldw_erp WA, 0xFA
 	add wa, bc
-	ldfr_werp WA, 0xFA
+	ldw_erp WA, 0xFA
 	calr DSP1_ResolveStreamPtr
 	ld (xsp + 4), xhl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x1D6
 	call FP_MulAccum64
@@ -32899,23 +32899,23 @@ DSP_Reinit_VoiceSlots:
 	jr DSP_Reinit_VoiceSlots_Loop2
 
 DSP_Reinit_VoiceSlots_Loop1:
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	ld wa, iz
 	mul wa, 0x14
 	ld iz, wa
-	ldfr_werp IZ, 0xFA
+	ldw_erp IZ, 0xFA
 	ld bc, iz
 	add bc, 0x14
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	cp wa, bc
 	jr nc, DSP_Reinit_VoiceSlots_Loop2
 
 DSP_Reinit_VoiceSlots_Loop1Next:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	calr DSP1_ResolveStreamPtr
 	ld (xsp + 4), xhl
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	extz xwa
 	ld xbc, 0x1D6
 	call FP_MulAccum64
@@ -32926,17 +32926,17 @@ DSP_Reinit_VoiceSlots_Loop1Next:
 	ld xix, xhl
 	ldw bc, 0xD5
 	ldirw
-	inc1_werp 0xFA
+	inc1w_erp 0xFA
 	ld bc, iz
 	add bc, 0x14
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	cp wa, bc
 	jr c, DSP_Reinit_VoiceSlots_Loop1Next
 
 DSP_Reinit_VoiceSlots_Loop2:
 	calr DSP_WriteCount_Compute
-	ld32_24 xwa, 0x04531c
-	st_dri3w HL, 0xE1, 0xA8, 0x72
+	ldl_da xwa, 0x04531c
+	stw_dri HL, 0xE1, 0xA8, 0x72
 	jrl DSP_Reinit_VoiceSlots_DMAFlush
 
 DSP_Reinit_VoiceSlots_Loop2A:
@@ -32944,30 +32944,30 @@ DSP_Reinit_VoiceSlots_Loop2A:
 	jr z, DSP_Reinit_VoiceSlots_Loop3A
 	cp c, 0xFF
 	jr z, DSP_Reinit_VoiceSlots_Loop2B
-	ld32_24 xwa, 0x04531c
-	st_dri3b W, 0xE1, 0x80, 0x49
+	ldl_da xwa, 0x04531c
+	stb_dri W, 0xE1, 0x80, 0x49
 	extz bc
 	calr DSP_InitChannelSlot
 	jr DSP_Reinit_VoiceSlots_Loop3
 
 DSP_Reinit_VoiceSlots_Loop2B:
-	ldfr_werp IZ, 0xFA
+	ldw_erp IZ, 0xFA
 	cp_erpw 0xFA, 0x80, 0x00
 	jr nc, DSP_Reinit_VoiceSlots_Loop3
 
 DSP_Reinit_VoiceSlots_Loop2Next:
-	ld32_24 xwa, 0x04531c
-	st_dri3b W, 0xE1, 0x80, 0x49
-	ldto_werp BC, 0xFA
+	ldl_da xwa, 0x04531c
+	stb_dri W, 0xE1, 0x80, 0x49
+	stw_erp BC, 0xFA
 	calr DSP_InitChannelSlot
-	inc1_werp 0xFA
+	inc1w_erp 0xFA
 	cp_erpw 0xFA, 0x80, 0x00
 	jr c, DSP_Reinit_VoiceSlots_Loop2Next
 
 DSP_Reinit_VoiceSlots_Loop3:
 	calr DSP_WriteCount_Compute
-	ld32_24 xwa, 0x04531c
-	st_dri3w HL, 0xE1, 0xA8, 0x72
+	ldl_da xwa, 0x04531c
+	stw_dri HL, 0xE1, 0xA8, 0x72
 	jr DSP_Reinit_VoiceSlots_DMAFlush
 
 DSP_Reinit_VoiceSlots_Loop3A:
@@ -33000,8 +33000,8 @@ DSP_Reinit_VoiceSlots_OuterNext:
 	ldw bc, 0x40
 	calr DSP_FlushAllSlots
 	calr DSP_WriteCount_Compute
-	ld32_24 xwa, 0x04531c
-	st_dri3w HL, 0xE1, 0xA8, 0x72
+	ldl_da xwa, 0x04531c
+	stw_dri HL, 0xE1, 0xA8, 0x72
 
 DSP_Reinit_VoiceSlots_DMAFlush:
 	lda_24 xwa, 0x007800
@@ -33013,47 +33013,47 @@ DSP_Reinit_VoiceSlots_DMAFlush:
 	ret
 
 DSP_VoiceState_Dispatch:
-	push_werp 0xFA
-	ldi_berp 0xFB, 0
+	pushw_erp 0xFA
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jrl nc, DSP_VoiceState_Dispatch_Epilogue
 
 DSP_VoiceState_Dispatch_Scan:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041382
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x10
+	cpib_sri 0x07, 0xE4, 0xE0, 0x10
 	jr z, DSP_VoiceState_Dispatch_ActiveVoice
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041382
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x50
+	cpib_sri 0x07, 0xE4, 0xE0, 0x50
 	jrl nz, DSP_VoiceState_Dispatch_LoopNext
 
 DSP_VoiceState_Dispatch_ActiveVoice:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041381
-	ld_srib3 A, 0x07, 0xE4, 0xE0
-	ldfr_berp A, 0xF0
+	ldb_sri A, 0x07, 0xE4, 0xE0
+	ldb_erp A, 0xF0
 	extz ix
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x041382
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld e, a
 	extz de
 	ld wa, hl
 	ld bc, ix
 	call VoiceInit_Dispatcher
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	muls wa, 0x11F
 	lda_24 xbc, 0x04136e
@@ -33070,33 +33070,33 @@ DSP_VoiceState_Dispatch_ActiveVoice:
 	jr nz, DSP_VoiceState_Dispatch_LoopNext
 
 DSP_VoiceState_Dispatch_SubPathA:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call VoiceSlot_FullInit
 	jr DSP_VoiceState_Dispatch_LoopNext
 
 DSP_VoiceState_Dispatch_SubPathB:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call Voice_PortamentoTargets_SetAll
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	call VoiceSlot_AltInit
 
 DSP_VoiceState_Dispatch_LoopNext:
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jrl c, DSP_VoiceState_Dispatch_Scan
 
 DSP_VoiceState_Dispatch_Epilogue:
-	pop_werp 0xFA
+	popw_erp 0xFA
 	ret
 
 DSP_ResetWriteBufferPtr:
 	lda_24 xwa, 0x007800
-	st32_24 0x045320, xwa
+	stl_da 0x045320, xwa
 	lda_24 xwa, 0x007800
-	st32_24 0x04531c, xwa
+	stl_da 0x04531c, xwa
 	ret
 
 DSP_Stub_RetA:
@@ -33118,17 +33118,17 @@ DSP_VelocityToVolume:
 
 DSP_GetEffectRouting:
 	lds hl, 0
-	cpi8_24 0x041377, 0x00
+	cpib_da 0x041377, 0x00
 	jr z, DSP_GetEffectRouting_Path
-	ld8_24 a, 0x041377
+	ldb_da a, 0x041377
 	extz wa
 	sll wa, 8
 	or hl, wa
 
 DSP_GetEffectRouting_Path:
-	cpi8_24 0x04137a, 0x00
+	cpib_da 0x04137a, 0x00
 	ret z
-	ld8_24 a, 0x041377
+	ldb_da a, 0x041377
 	extz wa
 	or hl, wa
 	ret
@@ -33145,7 +33145,7 @@ ToneGen_SetupPolyVoice:
 	ld a, e
 	extz wa
 	lda_24 xbc, 0x012171
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	add a, (xsp)
 	ld (xsp), a
 	resm 7, (xsp)
@@ -33157,12 +33157,12 @@ ToneGen_SetupPolyVoice:
 	ld a, e
 	extz wa
 	lda_24 xbc, 0x012177
-	cp_srib_im 0x07, 0xE4, 0xE0, 0x00
+	cpib_sri 0x07, 0xE4, 0xE0, 0x00
 	jr z, ToneGen_SetupPolyVoice_Path
 	ld a, e
 	extz wa
 	lda_24 xbc, 0x012177
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xsp + 8), a
 
 ToneGen_SetupPolyVoice_Path:
@@ -33179,15 +33179,15 @@ ToneGen_SetupPolyVoice_Path:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x01217d
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	stda16 15134, xwa
 	ld a, (xsp + 2)
 	extz wa
-	ldada xbc, 15132
+	lda_d16 xbc, 15132
 	call ToneGen_WriteVoiceParams
 	ld a, (xsp + 2)
 	extz wa
-	ldda16 xbc, 15132
+	ldw_d16 xbc, 15132
 	call ToneGen_WriteSingleReg
 	inc 4, xsp
 	retd 0x2
@@ -33213,20 +33213,20 @@ ToneGen_SetupPercussionVoice:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0x012195
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ldw_sri WA, 0x07, 0xE4, 0xE0
 	orddm16 15132, xwa
 	calr DSP_GetEffectRouting
 	orddm16 15138, xhl
 	ordi16 15136, 4095
-	ld16_24 xwa, 0x01217d
+	ldw_da xwa, 0x01217d
 	stda16 15134, xwa
 	ld a, (xsp)
 	extz wa
-	ldada xbc, 15132
+	lda_d16 xbc, 15132
 	call ToneGen_WriteVoiceParams
 	ld a, (xsp)
 	extz wa
-	ldda16 xbc, 15132
+	ldw_d16 xbc, 15132
 	call ToneGen_WriteSingleReg
 	inc 2, xsp
 	retd 0x2
@@ -33236,34 +33236,34 @@ Voice_Poly_NoteOn:
 	ld e, (xwa + 1)
 	ld c, e
 	and c, 0xF
-	ldfr_berp C, 0xFB
+	ldb_erp C, 0xFB
 	cp e, 0xF0
 	jrl c, Voice_Poly_NoteOn_Epilogue
-	cpi_berp 0xFB, 5
+	cpib_erp 0xFB, 5
 	jr ule, Voice_Poly_NoteOn_RoundRobin
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 
 Voice_Poly_NoteOn_RoundRobin:
-	ldda8 c, 15123
+	ldb_d8 c, 15123
 	inc 1, c
 	and c, 0x7
-	stda8 15123, c
+	stb_d8 15123, c
 	ld c, (xwa + 3)
 	res 7, c
-	ldfr_berp C, 0xF9
+	ldb_erp C, 0xF9
 	ld a, (xwa + 2)
 	res 7, a
-	ldfr_berp A, 0xFA
-	cpi_berp 0xF9, 0
+	ldb_erp A, 0xFA
+	cpib_erp 0xF9, 0
 	jrl z, Voice_Poly_NoteOn_ReleasePath
 	res_dd8 7, 0x18
-	ldda8 a, 15123
+	ldb_d8 a, 15123
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff00
+	stiw_da 0x100002, 0xff00
 	jr __jrt_nop_035727
 __jrt_nop_035727:
 
@@ -33272,13 +33272,13 @@ Voice_Poly_NoteOn_SlotSearch:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldda8 a, 15123
+	ldb_d8 a, 15123
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xff80
+	stiw_da 0x100002, 0xff80
 	jr __jrt_nop_035749
 __jrt_nop_035749:
 
@@ -33286,20 +33286,20 @@ Voice_Poly_NoteOn_SlotFound:
 	nop
 	nop
 	nop
-	ldda8 a, 15123
+	ldb_d8 a, 15123
 	ld l, a
 	extz hl
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	ld c, a
 	extz bc
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	ld e, a
 	extz de
-	ldto_berp A, 0xF9
+	stb_erp A, 0xF9
 	extz wa
 	pushw wa
 	ld wa, hl
-	ldto_berp L, 0xFB
+	stb_erp L, 0xFB
 	extz hl
 	sla hl, 2
 	lda_24 xix, 0x012159
@@ -33307,40 +33307,40 @@ Voice_Poly_NoteOn_SlotFound:
 	add xhl, xix
 	ld xhl, (xhl)
 	call (xhl)
-	ldda8 a, 15123
+	ldb_d8 a, 15123
 	extz wa
-	ldada xbc, 15124
+	lda_d16 xbc, 15124
 	ld de, wa
 	extz xde
 	add xde, xbc
-	ldto_berp A, 0xFA
+	stb_erp A, 0xFA
 	set 7, a
 	ld (xde), a
 	jr Voice_Poly_NoteOn_Epilogue
 
 Voice_Poly_NoteOn_ReleasePath:
 	set_erpb 0xFA, 0x07
-	ldi_berp 0xFB, 0
+	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x08
 	jr nc, Voice_Poly_NoteOn_Epilogue
 
 Voice_Poly_NoteOn_ReleaseCheck:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
-	ldada xbc, 15124
+	lda_d16 xbc, 15124
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	cp_berp A, 0xFA
+	cpb_erp A, 0xFA
 	jr nz, Voice_Poly_NoteOn_AssignSlot
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa200
+	stiw_da 0x100002, 0xa200
 	jr __jrt_nop_0357D8
 __jrt_nop_0357D8:
 
@@ -33349,13 +33349,13 @@ Voice_Poly_NoteOn_ReleaseNext:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	st16_24 0x100000, xwa
+	stw_da 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	sti16_24 0x100002, 0xa280
+	stiw_da 0x100002, 0xa280
 	jr __jrt_nop_0357F9
 __jrt_nop_0357F9:
 
@@ -33363,16 +33363,16 @@ Voice_Poly_NoteOn_ReleaseDone:
 	nop
 	nop
 	nop
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
-	ldada xbc, 15124
+	lda_d16 xbc, 15124
 	extz xwa
 	add xwa, xbc
 	resm 7, (xwa)
 	jr Voice_Poly_NoteOn_Epilogue
 
 Voice_Poly_NoteOn_AssignSlot:
-	inc1_berp 0xFB
+	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x08
 	jr c, Voice_Poly_NoteOn_ReleaseCheck
 
@@ -33477,7 +33477,7 @@ Audio_CmdHandler_60_7F:
 	lds ix, 0
 
 CmdHandler60_StreamSizeA:
-	ldda16 xwa, 17546
+	ldw_d16 xwa, 17546
 	add wa, de
 	cpda16 xwa, 17544
 	jr nc, CmdHandler60_StreamSizeB
@@ -33517,14 +33517,14 @@ DSP_EnqueueOrReturn:
 	jr nc, DSP_Enqueue_ReturnOK
 
 DSP_RingBuf_Enqueue:
-	ldada xwa, 15200
+	lda_d16 xwa, 15200
 	ld bc, (xwa)
 	incm 1, (xwa)
 	and bc, 0x7FF
-	ldada xwa, 15206
+	lda_d16 xwa, 15206
 	extz xbc
 	add xbc, xwa
-	ld_spib A, 0xEC
+	ldb_spi A, 0xEC
 	ld (xbc), a
 	incdi16 1, 15204
 	inc 1, ix
@@ -33591,25 +33591,25 @@ DSP_Cmd_DequeueHeader:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17257, l
+	stb_d8 17257, l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17258, l
+	stb_d8 17258, l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17259, l
+	stb_d8 17259, l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17260, l
+	stb_d8 17260, l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17261, l
+	stb_d8 17261, l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17262, l
+	stb_d8 17262, l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stda8 17263, l
+	stb_d8 17263, l
 	pop xiz
 	ret
 
@@ -33617,11 +33617,11 @@ DSP_Cmd_LoadEffectPreset:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), xwa
-	ldda8 a, 17261
+	ldb_d8 a, 17261
 	extz wa
 	ld bc, wa
 	sll bc, 7
-	ldda8 a, 17262
+	ldb_d8 a, 17262
 	extz wa
 	add wa, bc
 	cp wa, 0x122
@@ -33645,12 +33645,12 @@ DSP_LoadEffPreset_Loop1:
 
 DSP_LoadEffPreset_Loop1Next:
 	ldw (xsp + 4), 0x38
-	ldi_werp 0xFA, 0
+	ldiw_erp 0xFA, 0
 	cpi3_erpw 5, 0xFA
 	jr nc, DSP_LoadEffPreset_Loop3A
 
 DSP_LoadEffPreset_Loop2:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	call EFF_GetSlotBuffer
 	ld (xsp + 6), xhl
 	lds iz, 0
@@ -33668,7 +33668,7 @@ DSP_LoadEffPreset_Loop2Next:
 	jr c, DSP_LoadEffPreset_Loop2Next
 
 DSP_LoadEffPreset_Loop3:
-	inc1_werp 0xFA
+	inc1w_erp 0xFA
 	cpi3_erpw 5, 0xFA
 	jr c, DSP_LoadEffPreset_Loop2
 
@@ -33704,7 +33704,7 @@ DSP_RingBuf_Compare_Loop:
 	ld xwa, (xsp + 4)
 	cp (xwa), l
 	jr z, DSP_RingBuf_Compare_MatchPath
-	inc1_werp 0xFA
+	inc1w_erp 0xFA
 
 DSP_RingBuf_Compare_MatchPath:
 	ld xwa, (xsp + 4)
@@ -33713,7 +33713,7 @@ DSP_RingBuf_Compare_MatchPath:
 	inc 1, iz
 
 DSP_RingBuf_Compare_MismatchPath:
-	ldda8 a, 17262
+	ldb_d8 a, 17262
 	extz wa
 	cp iz, wa
 	jr c, DSP_RingBuf_Compare_Loop
@@ -33723,7 +33723,7 @@ DSP_RingBuf_Compare_MismatchPath:
 	jr c, DSP_RingBuf_Compare_FoundPath
 
 DSP_RingBuf_Compare_LoopNext:
-	ldda8 l, 17263
+	ldb_d8 l, 17263
 	jr DSP_RingBuf_Compare_Epilogue
 
 DSP_RingBuf_Compare_FoundPath:
@@ -33760,7 +33760,7 @@ DSP_RingBuf_Compare_Epilogue:
 Audio_Process_DSP:
 	lda xsp, (xsp - 10)
 	push xiz
-	ldada xwa, 15200
+	lda_d16 xwa, 15200
 	ld (xsp + 4), xwa
 	ld wa, (xwa + 4)
 	calr DSP_StoreBufferCount
@@ -33793,32 +33793,32 @@ Audio_Process_DSP_MsgSizeCheck:
 	ld xwa, (xsp + 4)
 	calr DSP_Cmd_DequeueHeader
 	ld wa, (xsp + 12)
-	stda8 17256, a
+	stb_d8 17256, a
 	cp a, 0x2D
 	jrl z, DSP_CmdHandler_2D
 	cp a, 0x2C
 	jrl z, DSP_CmdHandler_2C
 	cp a, 0x2B
 	jrl nz, DSP_Cmd_DefaultSkip
-	ldada xwa, 17264
+	lda_d16 xwa, 17264
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
-	ldda8 a, 17257
-	ldfr_berp A, 0xFB
+	ldb_d8 a, 17257
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x30
 	jrl c, DSP_Cmd2B_SkipAndContinue
 	cp_erpb 0xFB, 0x3F
 	jrl ugt, DSP_Cmd2B_SkipAndContinue
 	cpdi8 17258, 127
 	jrl nz, DSP_Cmd2B_VoiceParamWrite
-	ldto_berp A, 0xFB
-	ldfr_berp A, 0xF8
+	stb_erp A, 0xFB
+	ldb_erp A, 0xF8
 	extz iz
 	and iz, 0xF
-	ldada xwa, 17264
+	lda_d16 xwa, 17264
 	ld (xsp + 10), xwa
-	ldda8 a, 17259
+	ldb_d8 a, 17259
 	cp a, 0x30
 	jrl z, DSP_Cmd2B_Noop
 	cp a, 0x27
@@ -33841,9 +33841,9 @@ Audio_Process_DSP_MsgSizeCheck:
 	jrl gt, DSP_Cmd2B_UnknownSkip
 	add wa, wa
 	lda_24 xix, 0x0121db
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x035bc6
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 DSP_Cmd2B_AlgoSelect:
 	ld wa, iz
@@ -33854,10 +33854,10 @@ DSP_Cmd2B_AlgoSelect:
 	call Voice_Slot_CalcArticParams
 
 DSP_Cmd2B_AlgoSelect_Continue:
-	ldto_berp A, 0xF8
+	stb_erp A, 0xF8
 	ld e, a
 	extz de
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld c, a
 	extz bc
 	ld wa, de
@@ -33930,10 +33930,10 @@ DSP_Cmd2B_StateControl:
 	jrl DSP_Cmd2B_PostProcess
 
 DSP_Cmd2B_MixSendConfig:
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld e, a
 	extz de
-	ldda8 a, 17265
+	ldb_d8 a, 17265
 	ld c, a
 	extz bc
 	ld wa, de
@@ -33942,10 +33942,10 @@ DSP_Cmd2B_MixSendConfig:
 	jrl DSP_Cmd2B_PostProcess
 
 DSP_Cmd2B_ReadParam5D:
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld e, a
 	extz de
-	ldda8 a, 17265
+	ldb_d8 a, 17265
 	ld c, a
 	extz bc
 	ld wa, de
@@ -33954,10 +33954,10 @@ DSP_Cmd2B_ReadParam5D:
 	jr DSP_Cmd2B_PostProcess
 
 DSP_Cmd2B_SetParam:
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld e, a
 	extz de
-	ldda8 a, 17265
+	ldb_d8 a, 17265
 	ld c, a
 	extz bc
 	ld wa, de
@@ -33966,10 +33966,10 @@ DSP_Cmd2B_SetParam:
 	jr DSP_Cmd2B_PostProcess
 
 DSP_Cmd2B_ReadParam11:
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld e, a
 	extz de
-	ldda8 a, 17265
+	ldb_d8 a, 17265
 	ld c, a
 	extz bc
 	ld wa, de
@@ -33988,19 +33988,19 @@ DSP_Cmd2B_UnknownSkip:
 	jr DSP_Cmd2B_PostProcess
 
 DSP_Cmd2B_VoiceParamWrite:
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	extz wa
 	ld iz, wa
 	and iz, 0xF
-	ldada xwa, 17256
+	lda_d16 xwa, 17256
 	calr Extract_14Bit_VoiceParam
-	ldfr_werp HL, 0xFA
-	ldada xwa, 17256
+	ldw_erp HL, 0xFA
+	lda_d16 xwa, 17256
 	calr Extract_14Bit_PayloadSize
-	ldada xwa, 17264
+	lda_d16 xwa, 17264
 	push xwa
 	ld wa, iz
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	ld de, hl
 	call DSP_WriteVoiceParam
 
@@ -34008,7 +34008,7 @@ DSP_Cmd2B_PostProcess:
 	cps hl, 0
 	jrl z, DSP_Process_ReadNext
 	inc 8, hl
-	ldada xde, 17256
+	lda_d16 xde, 17256
 	ld bc, hl
 	lds wa, 3
 	call InterCPU_DMA_Send
@@ -34027,17 +34027,17 @@ DSP_Cmd2B_SkipPath:
 	jrl DSP_Process_ReadNext
 
 DSP_CmdHandler_2C:
-	ldada xwa, 17264
+	lda_d16 xwa, 17264
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
-	ldda8 a, 17257
-	ldfr_berp A, 0xFB
-	cpi_berp 0xFB, 0
+	ldb_d8 a, 17257
+	ldb_erp A, 0xFB
+	cpib_erp 0xFB, 0
 	jrl nz, CmdHandler2C_SubCmd1
 	cpdi8 17258, 8
 	jrl nz, DSP_Process_ReadNext
-	ldda8 a, 17259
+	ldb_d8 a, 17259
 	extz wa
 	cps wa, 0
 	jrl mi, CmdHandler2C_SubCmd0
@@ -34052,9 +34052,9 @@ DSP_CmdHandler_2C:
 CmdHandler2C_JumpDispatch:
 	add wa, wa
 	lda_24 xix, 0x0121bd
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x035dd2
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 CmdHandler2C_TableData:
 	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x13, 0x1d, 0x23
 	.byte 0x8b, 0x02, 0x78, 0x54, 0x02, 0xc1, 0x70, 0x43
@@ -34091,13 +34091,13 @@ CmdHandler2C_SubCmd1:
 	jrl ugt, CmdHandler2C_SubCmd6
 	cpdi8 17258, 127
 	jrl nz, DSP_Process_ReadNext
-	ldto_berp A, 0xFB
-	ldfr_berp A, 0xF8
+	stb_erp A, 0xFB
+	ldb_erp A, 0xF8
 	extz iz
 	and iz, 0xF
-	ldada xwa, 17264
+	lda_d16 xwa, 17264
 	ld (xsp + 10), xwa
-	ldda8 a, 17259
+	ldb_d8 a, 17259
 	cp a, 0x8
 	jr z, CmdHandler2C_SubCmd5
 	cps a, 6
@@ -34117,10 +34117,10 @@ CmdHandler2C_SubCmd2:
 	jrl DSP_Process_ReadNext
 
 CmdHandler2C_SubCmd3:
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld e, a
 	extz de
-	ldda8 a, 17265
+	ldb_d8 a, 17265
 	ld c, a
 	extz bc
 	ld wa, de
@@ -34131,10 +34131,10 @@ CmdHandler2C_SubCmd3:
 	jrl DSP_Process_ReadNext
 
 CmdHandler2C_SubCmd4:
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	ld e, a
 	extz de
-	ldda8 a, 17265
+	ldb_d8 a, 17265
 	ld c, a
 	extz bc
 	ld wa, de
@@ -34158,12 +34158,12 @@ CmdHandler2C_Epilogue:
 	jrl DSP_Process_ReadNext
 
 DSP_CmdHandler_2D:
-	ldda8 a, 17257
-	ldfr_berp A, 0xFB
-	cpi_berp 0xFB, 0
+	ldb_d8 a, 17257
+	ldb_erp A, 0xFB
+	cpib_erp 0xFB, 0
 	jrl nz, CmdHandler2D_PathD
-	ldda8 a, 17258
-	ldfr_berp A, 0xFB
+	ldb_d8 a, 17258
+	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x09
 	jr nz, CmdHandler2D_PathA
 	ld xwa, (xsp + 4)
@@ -34180,7 +34180,7 @@ CmdHandler2D_PathA:
 	jr c, CmdHandler2D_PathC
 	cp_erpb 0xFB, 0x0E
 	jr ugt, CmdHandler2D_PathC
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	sub a, 0xA
 	extz wa
 	call EFF_GetSlotBuffer
@@ -34188,7 +34188,7 @@ CmdHandler2D_PathA:
 	ld xwa, (xsp + 10)
 	cp xwa, 0xFFFFFFFF
 	jrl z, DSP_Process_ReadNext
-	ldda8 a, 17262
+	ldb_d8 a, 17262
 	ld c, a
 	extz bc
 	ld xwa, (xsp + 4)
@@ -34197,11 +34197,11 @@ CmdHandler2D_PathA:
 	ld xwa, (xsp + 4)
 	ld xbc, (xsp + 10)
 	calr DSP_RingBuf_ReadAndCompare
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	sub a, 0xA
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
-	ldada xwa, 17264
+	lda_d16 xwa, 17264
 	ld xbc, xwa
 	ld e, l
 	extz de
@@ -34224,16 +34224,16 @@ CmdHandler2D_PathD:
 	jr c, CmdHandler2D_EnqueueOrReturn
 	cp_erpb 0xFB, 0x3F
 	jr ugt, CmdHandler2D_EnqueueOrReturn
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
 	cpdi8 17258, 127
 	jr z, CmdHandler2D_MsgSizeMatch
-	ldto_berp A, 0xFB
+	stb_erp A, 0xFB
 	sub a, 0x30
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	jr DSP_Process_ReadNext
 
@@ -34245,7 +34245,7 @@ CmdHandler2D_MsgSizeMatch:
 CmdHandler2D_EnqueueOrReturn:
 	cp_erpb 0xFB, 0x40
 	jr nz, CmdHandler2D_QueuedPath
-	ldda8 a, 17264
+	ldb_d8 a, 17264
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, (xsp + 4)
@@ -34316,7 +34316,7 @@ DSP_ApplyAlgoForVoiceType:
 
 DSP_ApplyAlgoForVoiceType_TypeF:
 	ldmm16 17588, 17840	; LDW_16_16 (044b4h), (045b0h)
-	ldada xwa, 17550
+	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
 	ret
 
@@ -34328,26 +34328,26 @@ DSP_Reset:
 	stdi16 17846, 0
 	stdi16 17848, 0
 	stdi16 17850, 0
-	ldda16 xwa, 17842
-	ldda16 xbc, 17844
-	ldda16 xde, 17846
+	ldw_d16 xwa, 17842
+	ldw_d16 xbc, 17844
+	ldw_d16 xde, 17846
 	call DSP_MixerCoeff_Compute
 	ld xiy, 0xF01E
 	ld xix, 0x448E
 	ldw bc, 0x91
 	ldirw
-	ldada xwa, 17550
+	lda_d16 xwa, 17550
 	call DSP_State_LoadAndApplyAll
 	stdi16 17554, 0
 	call DSP_State_DmaLoadPresets
-	ldda16 xiz, 61478
+	ldw_d16 xiz, 61478
 	ld wa, iz
 	calr DSP_WriteAlgoInitPreset
 	ld wa, iz
 	calr DSP_ApplyAlgoForVoiceType
-	ldda16 xwa, 17842
-	ldda16 xbc, 17844
-	ldda16 xde, 17846
+	ldw_d16 xwa, 17842
+	ldw_d16 xbc, 17844
+	ldw_d16 xde, 17846
 	call DSP_MixerCoeff_Compute
 	popw iz
 	ret
@@ -34408,36 +34408,36 @@ DSP_ApplyConfig_InactivePath:
 	jr z, DSP_ApplyConfig_BufSelectA
 	cps a, 0
 	ret nz
-	ldada xwa, 17550
+	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
-	ldda16 xwa, 17558
+	ldw_d16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
 DSP_ApplyConfig_BufSelectA:
-	ldada xwa, 17550
+	lda_d16 xwa, 17550
 	jp DSP_State_ApplyBuf
 
 DSP_ApplyConfig_BufSelectB:
-	ldada xbc, 17738
+	lda_d16 xbc, 17738
 	lds wa, 0
 	cpdi16 17850, 0
 	jr z, DSP_ApplyConfig_Epilogue
-	ldda16 xwa, 17848
+	ldw_d16 xwa, 17848
 
 DSP_ApplyConfig_Epilogue:
 	ld (xbc), wa
-	ldada xwa, 17550
+	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
 	ret
 
 DSP_ReconfigAndStatus:
-	ldada xwa, 17550
+	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
-	ldda16 xwa, 17558
+	ldw_d16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
 DSP_GetConfigBuffer:
-	ldada xhl, 17550
+	lda_d16 xhl, 17550
 	ret
 
 EFF_GetSlotBuffer:
@@ -34455,7 +34455,7 @@ EFF_GetSlotBuffer:
 
 EFF_GetSlotBuffer_NoSlot:
 	mul wa, 0x38
-	ldada xbc, 17558
+	lda_d16 xbc, 17558
 	extz xwa
 	add xwa, xbc
 	ld xhl, xwa
@@ -35588,7 +35588,7 @@ DSP2_Send_Command:
 	calr DSP_WakeAudioTask
 	ei 6
 	ld a, (xsp + 8)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	ld wa, (xsp + 6)
 	call DSP_Select_Chip
 	calr DSP2_SPI_ClockPulseHigh
@@ -36164,7 +36164,7 @@ DSP2_Send_Data:
 	ldw (xsp + 4), 0x0
 	ei 6
 	ld a, (xsp + 8)
-	ldfr_berp A, 0xFB
+	ldb_erp A, 0xFB
 	ld wa, (xsp + 6)
 	call DSP_Select_Chip
 	ldw iz, 0x8
@@ -36725,7 +36725,7 @@ DSP_SlotParam_DiffAndFlag:
 DSP_SlotParam_DiffLoop:
 	ld bc, hl
 	mul bc, 0x38
-	ldada xde, 17874
+	lda_d16 xde, 17874
 	ld ix, bc
 	extz xix
 	add xix, xde
@@ -36742,7 +36742,7 @@ DSP_SlotParam_DiffLoop:
 	jr z, DSP_SlotParam_DiffMatch
 	ld bc, hl
 	mul bc, 0x32
-	ldada xde, 18752
+	lda_d16 xde, 18752
 	extz xbc
 	add xbc, xde
 	ldw (xbc), 0x1
@@ -36751,7 +36751,7 @@ DSP_SlotParam_DiffLoop:
 DSP_SlotParam_DiffMatch:
 	ld bc, hl
 	mul bc, 0x32
-	ldada xde, 18752
+	lda_d16 xde, 18752
 	extz xbc
 	add xbc, xde
 	ldw (xbc), 0x0
@@ -36772,7 +36772,7 @@ DSP_EFFParam_DiffOuter:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18784
+	lda_d16 xhl, 18784
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -36786,7 +36786,7 @@ DSP_EFFParam_DiffMid:
 	ld bc, de
 	mul bc, 0x38
 	add bc, ix
-	ldada xix, 17876
+	lda_d16 xix, 17876
 	ld iz, bc
 	extz xiz
 	add xiz, xix
@@ -36810,14 +36810,14 @@ DSP_EFFParam_DiffMid:
 	ld bc, de
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18754
+	lda_d16 xix, 18754
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18784
+	lda_d16 xix, 18784
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
@@ -36829,7 +36829,7 @@ DSP_EFFParam_DiffMidMatch:
 	ld bc, de
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18754
+	lda_d16 xix, 18754
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x0
@@ -36850,7 +36850,7 @@ DSP_EFFParam_DiffInnerBody:
 	ld bc, de
 	mul bc, 0x38
 	add bc, ix
-	ldada xix, 17878
+	lda_d16 xix, 17878
 	ld iz, bc
 	extz xiz
 	add xiz, xix
@@ -36874,14 +36874,14 @@ DSP_EFFParam_DiffInnerBody:
 	ld bc, de
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18756
+	lda_d16 xix, 18756
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18784
+	lda_d16 xix, 18784
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
@@ -36893,7 +36893,7 @@ DSP_EFFParam_DiffInnerMatch:
 	ld bc, de
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18756
+	lda_d16 xix, 18756
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x0
@@ -36914,7 +36914,7 @@ DSP_EFFParam_DiffLevel4Body:
 	ld bc, de
 	mul bc, 0x38
 	add bc, ix
-	ldada xix, 17914
+	lda_d16 xix, 17914
 	ld iz, bc
 	extz xiz
 	add xiz, xix
@@ -36938,14 +36938,14 @@ DSP_EFFParam_DiffLevel4Body:
 	ld bc, de
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18790
+	lda_d16 xix, 18790
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18784
+	lda_d16 xix, 18784
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
@@ -36957,7 +36957,7 @@ DSP_EFFParam_DiffLevel4Match:
 	ld bc, de
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18790
+	lda_d16 xix, 18790
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x0
@@ -36971,7 +36971,7 @@ DSP_EFFParam_DiffAlgoSection:
 	ld bc, de
 	mul bc, 0x38
 	inc 8, bc
-	ldada xhl, 17920
+	lda_d16 xhl, 17920
 	ld ix, bc
 	extz xix
 	add xix, xhl
@@ -36989,14 +36989,14 @@ DSP_EFFParam_DiffAlgoSection:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18782
+	lda_d16 xhl, 18782
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18784
+	lda_d16 xhl, 18784
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37006,7 +37006,7 @@ DSP_EFFParam_AlgoChangePath:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18782
+	lda_d16 xhl, 18782
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37015,21 +37015,21 @@ DSP_EFFParam_DiffOuterNext:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18776
+	lda_d16 xhl, 18776
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18778
+	lda_d16 xhl, 18778
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18780
+	lda_d16 xhl, 18780
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37107,12 +37107,12 @@ DSP_Config_ClampData:
 DSP_SlotMuteState_ReadAndClear:
 	ld bc, wa
 	add bc, bc
-	ldada xde, 17852
+	lda_d16 xde, 17852
 	extz xbc
 	add xbc, xde
 	ld hl, (xbc)
 	add wa, wa
-	ldada xbc, 17852
+	lda_d16 xbc, 17852
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0x0
@@ -37155,7 +37155,7 @@ DSP_State_ApplyAll:
 	calr DSP_State_Dispatcher
 	ld xwa, xiz
 	calr DSP_StateTable_Reset
-	ldda16 xhl, 17864
+	ldw_d16 xhl, 17864
 	pop xiz
 	ret
 
@@ -37170,7 +37170,7 @@ EFF_SlotActive_UpdateFlags:
 EFF_SlotActive_CheckSlot:
 	ld wa, hl
 	add wa, wa
-	ldada xbc, 18736
+	lda_d16 xbc, 18736
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0x1
@@ -37209,7 +37209,7 @@ EFF_SlotActive_VoiceCheck:
 EFF_SlotActive_VoiceInactive:
 	ld bc, hl
 	mul bc, 0x32
-	ldada xix, 18752
+	lda_d16 xix, 18752
 	extz xbc
 	add xbc, xix
 	cpw (xbc), 0x1
@@ -37219,7 +37219,7 @@ EFF_SlotActive_VoiceInactive:
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18784
+	lda_d16 xix, 18784
 	extz xbc
 	add xbc, xix
 	cpw (xbc), 0x1
@@ -37229,7 +37229,7 @@ EFF_SlotActive_AlgoCheck:
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18784
+	lda_d16 xix, 18784
 	extz xbc
 	add xbc, xix
 	cpw (xbc), 0x1
@@ -37240,7 +37240,7 @@ EFF_SlotActive_AlgoCheck:
 EFF_SlotActive_LoopNext:
 	ld bc, hl
 	add bc, bc
-	ldada xix, 18736
+	lda_d16 xix, 18736
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
@@ -37257,28 +37257,28 @@ EFF_SlotActive_LoopNext:
 	ld bc, hl
 	mul bc, 0x32
 	add bc, ix
-	ldada xix, 18756
+	lda_d16 xix, 18756
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18778
+	lda_d16 xix, 18778
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18780
+	lda_d16 xix, 18780
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18784
+	lda_d16 xix, 18784
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
@@ -37295,7 +37295,7 @@ EFF_SlotActive_LoopNext:
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xix, 18776
+	lda_d16 xix, 18776
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
@@ -37304,7 +37304,7 @@ EFF_SlotActive_LoopNext:
 EFF_SlotActive_InnerLoopNext:
 	ld bc, hl
 	add bc, bc
-	ldada xix, 18736
+	lda_d16 xix, 18736
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x0
@@ -37326,7 +37326,7 @@ EFF_DSPLink_ResetFlags:
 EFF_DSPLink_ResetFlags_ZeroPath:
 	ld wa, de
 	add wa, wa
-	ldada xbc, 18746
+	lda_d16 xbc, 18746
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0x0
@@ -37343,7 +37343,7 @@ EFF_DSPLink_ResetFlags_LoopNext:
 EFF_DSPLink_ResetFlags_InnerBody:
 	ld wa, de
 	add wa, wa
-	ldada xbc, 18746
+	lda_d16 xbc, 18746
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0x0
@@ -37362,7 +37362,7 @@ EFF_DspChannel_Init_AlgoCheck:
 	jr nz, EFF_DspChannel_Init_SlotNext
 	ld bc, de
 	mul bc, 0x32
-	ldada xhl, 18752
+	lda_d16 xhl, 18752
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37370,7 +37370,7 @@ EFF_DspChannel_Init_AlgoCheck:
 EFF_DspChannel_Init_SlotNext:
 	ld bc, de
 	mul bc, 0x32
-	ldada xhl, 18752
+	lda_d16 xhl, 18752
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37385,7 +37385,7 @@ EFF_DspChannel_Init_FreqLoop:
 	ld bc, de
 	mul bc, 0x32
 	add bc, hl
-	ldada xhl, 18756
+	lda_d16 xhl, 18756
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37404,7 +37404,7 @@ EFF_DspChannel_Init_CoeffNext:
 	ld bc, de
 	mul bc, 0x32
 	add bc, hl
-	ldada xhl, 18754
+	lda_d16 xhl, 18754
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37423,7 +37423,7 @@ EFF_DspChannel_Init_Coeff2Next:
 	ld bc, de
 	mul bc, 0x32
 	add bc, hl
-	ldada xhl, 18790
+	lda_d16 xhl, 18790
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37435,35 +37435,35 @@ EFF_DspChannel_Init_MultiTableDirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18776
+	lda_d16 xhl, 18776
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18778
+	lda_d16 xhl, 18778
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18780
+	lda_d16 xhl, 18780
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18782
+	lda_d16 xhl, 18782
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18784
+	lda_d16 xhl, 18784
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37478,7 +37478,7 @@ EFF_DspChannel_Init_MultiTableDirty:
 	jr z, EFF_DspChannel_Init_AlgoTypePath
 	add bc, bc
 	add bc, 0x14
-	ldada xhl, 18736
+	lda_d16 xhl, 18736
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37488,7 +37488,7 @@ EFF_DspChannel_Init_AlgoTypePath:
 	inc 1, bc
 	add bc, bc
 	add bc, 0x14
-	ldada xhl, 18736
+	lda_d16 xhl, 18736
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37507,7 +37507,7 @@ EFF_DspChannel_Init_OuterNext:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18740
+	lda_d16 xhl, 18740
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37515,7 +37515,7 @@ EFF_DspChannel_Init_OuterNext:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18742
+	lda_d16 xhl, 18742
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37523,7 +37523,7 @@ EFF_DspChannel_Init_OuterNext:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18744
+	lda_d16 xhl, 18744
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37533,21 +37533,21 @@ EFF_DspChanInit_AlgoType0_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18740
+	lda_d16 xhl, 18740
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18742
+	lda_d16 xhl, 18742
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18744
+	lda_d16 xhl, 18744
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37556,7 +37556,7 @@ EFF_DspChanInit_AlgoType1_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18746
+	lda_d16 xhl, 18746
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37564,7 +37564,7 @@ EFF_DspChanInit_AlgoType1_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18748
+	lda_d16 xhl, 18748
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37572,7 +37572,7 @@ EFF_DspChanInit_AlgoType1_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18750
+	lda_d16 xhl, 18750
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37582,21 +37582,21 @@ EFF_DspChanInit_AlgoType2_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18746
+	lda_d16 xhl, 18746
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18748
+	lda_d16 xhl, 18748
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18750
+	lda_d16 xhl, 18750
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37605,7 +37605,7 @@ EFF_DspChanInit_AlgoType3_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18752
+	lda_d16 xhl, 18752
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37613,7 +37613,7 @@ EFF_DspChanInit_AlgoType3_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18754
+	lda_d16 xhl, 18754
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37621,7 +37621,7 @@ EFF_DspChanInit_AlgoType3_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18756
+	lda_d16 xhl, 18756
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37631,21 +37631,21 @@ EFF_DspChanInit_AlgoType4_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18752
+	lda_d16 xhl, 18752
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18754
+	lda_d16 xhl, 18754
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18756
+	lda_d16 xhl, 18756
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37654,7 +37654,7 @@ EFF_DspChanInit_AlgoType5_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18758
+	lda_d16 xhl, 18758
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37662,7 +37662,7 @@ EFF_DspChanInit_AlgoType5_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18760
+	lda_d16 xhl, 18760
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37670,7 +37670,7 @@ EFF_DspChanInit_AlgoType5_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18762
+	lda_d16 xhl, 18762
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37680,21 +37680,21 @@ EFF_DspChanInit_AlgoType6_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18758
+	lda_d16 xhl, 18758
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18760
+	lda_d16 xhl, 18760
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18762
+	lda_d16 xhl, 18762
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37703,7 +37703,7 @@ EFF_DspChanInit_AlgoType7_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18764
+	lda_d16 xhl, 18764
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37711,7 +37711,7 @@ EFF_DspChanInit_AlgoType7_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18766
+	lda_d16 xhl, 18766
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37719,7 +37719,7 @@ EFF_DspChanInit_AlgoType7_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18768
+	lda_d16 xhl, 18768
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37729,21 +37729,21 @@ EFF_DspChanInit_AlgoType8_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18764
+	lda_d16 xhl, 18764
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18766
+	lda_d16 xhl, 18766
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18768
+	lda_d16 xhl, 18768
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37762,7 +37762,7 @@ EFF_DspChanInit_AlgoType9_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18742
+	lda_d16 xhl, 18742
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37770,14 +37770,14 @@ EFF_DspChanInit_AlgoType9_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18740
+	lda_d16 xhl, 18740
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18742
+	lda_d16 xhl, 18742
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37786,7 +37786,7 @@ EFF_DspChanInit_AlgoType4F_SubA:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18746
+	lda_d16 xhl, 18746
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37794,14 +37794,14 @@ EFF_DspChanInit_AlgoType4F_SubA:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18744
+	lda_d16 xhl, 18744
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18746
+	lda_d16 xhl, 18746
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37810,7 +37810,7 @@ EFF_DspChanInit_AlgoType4F_SubB:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18750
+	lda_d16 xhl, 18750
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37818,14 +37818,14 @@ EFF_DspChanInit_AlgoType4F_SubB:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18748
+	lda_d16 xhl, 18748
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18750
+	lda_d16 xhl, 18750
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37834,7 +37834,7 @@ EFF_DspChanInit_AlgoType4F_SubC:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18754
+	lda_d16 xhl, 18754
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37842,14 +37842,14 @@ EFF_DspChanInit_AlgoType4F_SubC:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18752
+	lda_d16 xhl, 18752
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18754
+	lda_d16 xhl, 18754
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
@@ -37880,7 +37880,7 @@ EFF_DspChanInit_AlgoType35_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18766
+	lda_d16 xhl, 18766
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37898,28 +37898,28 @@ EFF_DspChanInit_AlgoType35_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18746
+	lda_d16 xhl, 18746
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18756
+	lda_d16 xhl, 18756
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18750
+	lda_d16 xhl, 18750
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18760
+	lda_d16 xhl, 18760
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37929,28 +37929,28 @@ EFF_DspChanInit_AlgoType35_SubA:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18748
+	lda_d16 xhl, 18748
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18758
+	lda_d16 xhl, 18758
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18752
+	lda_d16 xhl, 18752
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18762
+	lda_d16 xhl, 18762
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37959,7 +37959,7 @@ EFF_DspChanInit_AlgoType35_SubB:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18784
+	lda_d16 xhl, 18784
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -37979,7 +37979,7 @@ EFF_DspChanInit_AlgoType35_SubC:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18742
+	lda_d16 xhl, 18742
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37987,7 +37987,7 @@ EFF_DspChanInit_AlgoType35_SubC:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18744
+	lda_d16 xhl, 18744
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -37997,7 +37997,7 @@ EFF_DspChanInit_AlgoType35_SubD:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18740
+	lda_d16 xhl, 18740
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -38006,7 +38006,7 @@ EFF_DspChanInit_AlgoType35_SubE:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18784
+	lda_d16 xhl, 18784
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -38015,7 +38015,7 @@ EFF_DspChanInit_AlgoType35_SubF:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
-	ldada xhl, 18782
+	lda_d16 xhl, 18782
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
@@ -38033,7 +38033,7 @@ EFF_DspChanInit_AlgoType35_SubF:
 	ld bc, de
 	mul bc, 0x32
 	add bc, hl
-	ldada xhl, 18756
+	lda_d16 xhl, 18756
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
@@ -38065,21 +38065,21 @@ EFF_MuteLoop:
 EFF_MuteLoop_SlotBody:
 	ld wa, iz
 	add wa, wa
-	ldada xbc, 18736
+	lda_d16 xbc, 18736
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
 	jr nz, EFF_MuteLoop_SlotNext
 	ld wa, iz
 	mul wa, 0x32
-	ldada xbc, 18752
+	lda_d16 xbc, 18752
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
 	jr nz, EFF_MuteLoop_NoMute
 	ld wa, iz
 	mul wa, 0x38
-	ldada xbc, 17874
+	lda_d16 xbc, 17874
 	extz xwa
 	add xwa, xbc
 	ld wa, (xwa)
@@ -38090,7 +38090,7 @@ EFF_MuteLoop_SlotBody:
 	jr z, EFF_MuteLoop_NoMute
 	ld wa, iz
 	add wa, wa
-	ldada xbc, 17852
+	lda_d16 xbc, 17852
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0x1
@@ -38141,7 +38141,7 @@ DSP_MuteLoop:
 DSP_MuteLoop_Body:
 	ld wa, iz
 	add wa, wa
-	ldada xbc, 18746
+	lda_d16 xbc, 18746
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38167,7 +38167,7 @@ DSP_UnmuteLoop:
 DSP_UnmuteLoop_Body:
 	ld wa, iz
 	add wa, wa
-	ldada xbc, 18746
+	lda_d16 xbc, 18746
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38226,14 +38226,14 @@ EFF_ParamIterator_Process:
 	inc 8, xbc
 	add xbc, (xsp + 4)
 	ld wa, (xbc + 44)
-	ldfr_werp WA, 0xFA
+	ldw_erp WA, 0xFA
 	cp_erpw 0xFA, 0x11, 0x00
 	jr ule, EFF_ParamIter_CountClamp
 	ldi_erpw 0xFA, 0x11, 0x00
 
 EFF_ParamIter_CountClamp:
 	lds iz, 0
-	cp_werp IZ, 0xFA
+	cpw_erp IZ, 0xFA
 	jrl nc, EFF_ParamIter_Epilogue
 
 EFF_ParamIter_StdLoop:
@@ -38242,7 +38242,7 @@ EFF_ParamIter_StdLoop:
 	ld wa, (xsp + 8)
 	mul wa, 0x32
 	add wa, bc
-	ldada xbc, 18756
+	lda_d16 xbc, 18756
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38274,7 +38274,7 @@ EFF_ParamIter_StdLoop:
 
 EFF_ParamIter_StdLoopNext:
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cpw_erp IZ, 0xFA
 	jr c, EFF_ParamIter_StdLoop
 	jr EFF_ParamIter_Epilogue
 
@@ -38291,7 +38291,7 @@ EFF_ParamIter_SpecialAlgoPath:
 	and wa, 0x1
 	muls wa, 0xB
 	lda_24 xbc, 0x0122a6
-	st_dri3b H, 0x07, 0xE4, 0xE0
+	stb_dri H, 0x07, 0xE4, 0xE0
 	cp (xiz), 0xC
 	jr z, EFF_ParamIter_Epilogue
 
@@ -38303,7 +38303,7 @@ EFF_ParamIter_SpecialLoop:
 	ld wa, (xsp + 8)
 	mul wa, 0x32
 	add bc, wa
-	ldada xwa, 18756
+	lda_d16 xwa, 18756
 	extz xbc
 	add xbc, xwa
 	cpw (xbc), 0x1
@@ -38339,7 +38339,7 @@ EFF_VolumeChange_Check:
 	ld de, wa
 	mul de, 0x32
 	add de, 0x10
-	ldada xhl, 18784
+	lda_d16 xhl, 18784
 	extz xde
 	add xde, xhl
 	cpw (xde), 0x1
@@ -38354,7 +38354,7 @@ EFF_Change_Handler:
 	ld iz, wa
 	ld wa, iz
 	mul wa, 0x32
-	ldada xbc, 18752
+	lda_d16 xbc, 18752
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38440,7 +38440,7 @@ EFF_HeaderChangeDataLoop:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	ldi_werp 0xFA, 0
+	ldiw_erp 0xFA, 0
 	lds iz, 4
 	cp iz, 0xFFFF
 	jr le, EFF_HeaderChangeLoop_Epilogue
@@ -38460,7 +38460,7 @@ EFF_HeaderChangeLoop_CallAlgo:
 EFF_HeaderChangeLoop_PostAlgo:
 	ld wa, iz
 	mul wa, 0x32
-	ldada xbc, 18752
+	lda_d16 xbc, 18752
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38471,12 +38471,12 @@ EFF_HeaderChangeLoop_PostAlgo:
 
 EFF_HeaderChangeLoop_ActiveSlot:
 	lda_24 xwa, 0x01ed72
-	ld_srib3 A, 0x07, 0xE0, 0xF8
+	ldb_sri A, 0x07, 0xE0, 0xF8
 	ld c, a
 	extz bc
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	calr Unsigned_Max_Select
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 
 EFF_HeaderChangeLoop_CallChange:
 	ld wa, iz
@@ -38487,9 +38487,9 @@ EFF_HeaderChangeLoop_CallChange:
 	jr gt, EFF_HeaderChangeLoop_Body
 
 EFF_HeaderChangeLoop_Epilogue:
-	cpi_werp 0xFA, 0
+	cpiw_erp 0xFA, 0
 	jr z, EFF_HeaderChangeLoop_SkipApply
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	call DSP_ScheduleDelay
 
 EFF_HeaderChangeLoop_SkipApply:
@@ -38509,7 +38509,7 @@ EFF_LinkLoop_Body:
 	ld wa, iz
 	mul wa, 0x32
 	add wa, 0x10
-	ldada xbc, 18782
+	lda_d16 xbc, 18782
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38519,7 +38519,7 @@ EFF_LinkLoop_Body:
 	ld bc, wa
 	inc 8, bc
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	cpw (xwa + 54), 0x1
 	jr nz, EFF_LinkLoop_Next
 	ld wa, iz
@@ -38542,25 +38542,25 @@ EFF_SecondaryLinkPath:
 	push xiz
 	ld (xsp + 4), xwa
 	lds iz, 0
-	ldi_werp 0xFA, 4
+	ldiw_erp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr le, EFF_SecLinkPath_Pass1Epilogue
 
 EFF_SecLinkPath_Pass1Body:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	mul wa, 0x32
 	add wa, 0x10
-	ldada xbc, 18782
+	lda_d16 xbc, 18782
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
 	jr nz, EFF_SecLinkPath_Pass1Next
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	muls wa, 0x38
 	ld bc, wa
 	inc 8, bc
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	cpw (xwa + 54), 0x0
 	jr nz, EFF_SecLinkPath_Pass1Next
 	ld wa, iz
@@ -38569,7 +38569,7 @@ EFF_SecLinkPath_Pass1Body:
 	ld iz, hl
 
 EFF_SecLinkPath_Pass1Next:
-	dec1_werp 0xFA
+	dec1w_erp 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr gt, EFF_SecLinkPath_Pass1Body
 
@@ -38581,32 +38581,32 @@ EFF_SecLinkPath_Pass1Epilogue:
 
 EFF_SecLinkPath_Pass2Start:
 	lds iz, 0
-	ldi_werp 0xFA, 4
+	ldiw_erp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr le, EFF_SecLinkPath_Pass2Epilogue
 
 EFF_SecLinkPath_Pass2Body:
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	mul wa, 0x32
 	add wa, 0x10
-	ldada xbc, 18782
+	lda_d16 xbc, 18782
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
 	jr nz, EFF_SecLinkPath_Pass2Next
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	muls wa, 0x38
 	ld bc, wa
 	inc 8, bc
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	stb_dri W, 0x07, 0xE0, 0xE4
 	cpw (xwa + 54), 0x0
 	jr nz, EFF_SecLinkPath_Pass2Next
-	cpi_werp 0xFA, 3
+	cpiw_erp 0xFA, 3
 	jr z, EFF_SecLinkPath_Pass2MaxVol
 	cpi3_erpw 2, 0xFA
 	jr z, EFF_SecLinkPath_Pass2MaxVol
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	ld xbc, (xsp + 4)
 	ld bc, (xbc + 6)
 	call EFF_Disconnect
@@ -38614,7 +38614,7 @@ EFF_SecLinkPath_Pass2Body:
 EFF_SecLinkPath_Pass2MaxVol:
 	ld de, iz
 	lda_24 xwa, 0x01ed72
-	ld_srib3 A, 0x07, 0xE0, 0xFA
+	ldb_sri A, 0x07, 0xE0, 0xFA
 	ld c, a
 	extz bc
 	ld wa, de
@@ -38622,7 +38622,7 @@ EFF_SecLinkPath_Pass2MaxVol:
 	ld iz, hl
 
 EFF_SecLinkPath_Pass2Next:
-	dec1_werp 0xFA
+	dec1w_erp 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr gt, EFF_SecLinkPath_Pass2Body
 
@@ -38659,7 +38659,7 @@ EFF_VolumeLoop_Body:
 	ld wa, iz
 	mul wa, 0x32
 	add wa, bc
-	ldada xbc, 18756
+	lda_d16 xbc, 18756
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38702,7 +38702,7 @@ EFF_VolumeLoop_Body:
 	add xbc, (xsp + 2)
 	lda_24 xhl, 0x0122c4
 	ld wa, (xbc + 6)
-	ld_srib3 A, 0x07, 0xEC, 0xE0
+	ldb_sri A, 0x07, 0xEC, 0xE0
 	extz wa
 	ld hl, (xix + 4)
 	sub hl, wa
@@ -38833,10 +38833,10 @@ DSP_StateDispatcher_AlgoLoop:
 	ld wa, de
 	muls wa, 0x38
 	inc 8, wa
-	ld_sriw3 IX, 0x07, 0xF8, 0xE0
+	ldw_sri IX, 0x07, 0xF8, 0xE0
 	ld wa, de
 	mul wa, 0x32
-	ldada xbc, 18752
+	lda_d16 xbc, 18752
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
@@ -38849,7 +38849,7 @@ DSP_StateDispatcher_AlgoLoop:
 	jr z, DSP_StateDispatcher_AlgoClear
 	ld wa, de
 	add wa, wa
-	ldada xbc, 17852
+	lda_d16 xbc, 17852
 	ld hl, wa
 	extz xhl
 	add xhl, xbc
@@ -38866,7 +38866,7 @@ DSP_StateDispatcher_AlgoLoop:
 DSP_StateDispatcher_AlgoClear:
 	ld wa, de
 	add wa, wa
-	ldada xbc, 17852
+	lda_d16 xbc, 17852
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0x0
@@ -39435,7 +39435,7 @@ Debug_Print_Word:	; 038375h
 	extz wa
 	call 0xFFFE86
 	lds wa, 0
-	ldto_berp A, 0xF8	; Get low byte
+	stb_erp A, 0xF8	; Get low byte
 	extz wa
 	call 0xFFFE86
 	lds wa, 0
@@ -39821,7 +39821,7 @@ DSP_WriteLUTParamSet:
 	ld xwa, (xsp + 16)
 	ld xwa, (xwa)
 	ld (xsp + 6), xwa
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 6), xwa
 	cps c, 1
 	jr z, DSP_WriteLUT_AlgoC1
@@ -40546,7 +40546,7 @@ DSP_State_ApplyBuf_DoCopy:
 	ldw bc, 0x91
 	ldirw
 	ldda32 xwa, 19002
-	stiw_dri 0xE1, 0x20, 0x01, 0x01, 0x00
+	stiw_ind 0xE1, 0x20, 0x01, 0x01, 0x00
 	ldda32 xbc, 19002
 	lds wa, 2
 	call TaskMsgQ_Send
@@ -40561,11 +40561,11 @@ DSP_State_LoadAndApplyAll:
 	ldw bc, 0x91
 	ldirw
 	ldda32 xwa, 19006
-	stiw_dri 0xE1, 0x20, 0x01, 0x01, 0x00
+	stiw_ind 0xE1, 0x20, 0x01, 0x01, 0x00
 	ldda32 xwa, 19006
 	call DSP_State_ApplyAll
 	ldda32 xwa, 19006
-	stiw_dri 0xE1, 0x20, 0x01, 0x00, 0x00
+	stiw_ind 0xE1, 0x20, 0x01, 0x00, 0x00
 	ret
 
 DSP_State_LoadAndApply_InlineData:
@@ -40627,7 +40627,7 @@ DSP_AlgoParam_Decode:
 	add xwa, xbc
 	ld xwa, (xwa)
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 	ld (xsp + 20), xwa
 	lda xbc, (xsp + 20)
@@ -40709,7 +40709,7 @@ DSP_VolumeParam_Scale:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
-	ld_spib A, 0xF8
+	ldb_spi A, 0xF8
 	cps a, 2
 	jrl z, DSP_VolScale_Algo2_Seg1
 	cps a, 1
@@ -41509,7 +41509,7 @@ DSP_DetuneCurve_SignedFP:
 DSP_DetuneCurve_NegateInput:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 
 DSP_DetuneCurve_CheckMagnitude:
@@ -41523,7 +41523,7 @@ DSP_DetuneCurve_CheckMagnitude:
 DSP_DetuneCurve_Range1_NegArm:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 	ld (xsp + 60), xwa
 
@@ -41546,7 +41546,7 @@ DSP_DetuneCurve_CheckRange2:
 DSP_DetuneCurve_Range2_NegArm:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 
 DSP_DetuneCurve_CheckRange2Limit:
@@ -41560,7 +41560,7 @@ DSP_DetuneCurve_CheckRange2Limit:
 DSP_DetuneCurve_Range2_NegStore:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 	ld (xsp + 56), xwa
 
@@ -41587,7 +41587,7 @@ DSP_DetuneCurve_CheckRange3:
 DSP_DetuneCurve_Range3_NegArm:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 
 DSP_DetuneCurve_CheckRange3Limit:
@@ -41601,7 +41601,7 @@ DSP_DetuneCurve_CheckRange3Limit:
 DSP_DetuneCurve_Range3_NegStore:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 	ld (xsp + 52), xwa
 
@@ -41628,7 +41628,7 @@ DSP_DetuneCurve_Range4_CheckSign:
 DSP_DetuneCurve_Range4_NegStore:
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 	ld (xsp + 48), xwa
 
@@ -41705,7 +41705,7 @@ DSP_BiquadWarp_FP:
 	ld xwa, (xsp + 86)
 	ld xwa, (xwa)
 	ld (xsp + 2), xwa
-	ld_spib L, 0xE0
+	ldb_spi L, 0xE0
 	ld (xsp + 2), xwa
 	and l, 0xF0
 	jr nz, DSP_BiquadWarp_ReadPrevEntry
@@ -42372,7 +42372,7 @@ DSP_VolScale_B:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
-	ld_spib A, 0xF8
+	ldb_spi A, 0xF8
 	cps a, 2
 	jrl z, DSP_VolScale_B_Algo2_Seg1
 	cps a, 1
@@ -42573,7 +42573,7 @@ DSP_ParamInterp_MultiStep:
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 20)
 	ld xiz, (xwa)
-	ld_spib A, 0xF8
+	ldb_spi A, 0xF8
 	and a, 0xF0
 	cp a, 0x20
 	jr z, DSP_ParamInterp_MultiStep_Mode0x20
@@ -42732,7 +42732,7 @@ DSP_FilterLUT_Fetch:
 	extz wa
 	ld (xsp + 2), wa
 	ld xwa, (xsp + 56)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 56), xwa
 	and c, 0xF0
 	extz bc
@@ -42757,7 +42757,7 @@ DSP_FilterLUT_Fetch:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42768,7 +42768,7 @@ DSP_FilterLUT_Fetch:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012403
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 36)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42804,7 +42804,7 @@ DSP_FilterLUT_Mode0x10:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42814,7 +42814,7 @@ DSP_FilterLUT_Mode0x10:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012403
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 36)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42850,7 +42850,7 @@ DSP_FilterLUT_Mode0x20:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42861,7 +42861,7 @@ DSP_FilterLUT_Mode0x20:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012403
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 36)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42897,7 +42897,7 @@ DSP_FilterLUT_ModeType1:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
 	jrl DSP_FilterLUT_StoreResults
@@ -42917,7 +42917,7 @@ DSP_FilterLUT_ModeType2:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42953,7 +42953,7 @@ DSP_FilterLUT_ModeType2_SubMode:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -42997,30 +42997,30 @@ DSP_FilterLUT_StoreResults:
 	retd 0x10
 
 DSP_BiquadCoeff_Compute:
-	st_dri3b L, 0xFD, 0x14, 0xFF
+	stb_dri L, 0xFD, 0x14, 0xFF
 	pushw iz
-	st_dri3w WA, 0xFD, 0xEC, 0x00
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stw_dri WA, 0xFD, 0xEC, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	push xwa
-	st_dri3b W, 0xFD, 0xEE, 0x00
+	stb_dri W, 0xFD, 0xEE, 0x00
 	push xwa
 	ld_sril XWA, (xsp + 0x0100)
 	push xwa
 	ld_sril XWA, (xsp + 0x010a)
 	push xwa
 	ld wa, de
-	st_dri3b A, 0xFD, 0xF6, 0x00
-	st_dri3b B, 0xFD, 0xF2, 0x00
+	stb_dri A, 0xFD, 0xF6, 0x00
+	stb_dri B, 0xFD, 0xF2, 0x00
 	calr DSP_FilterLUT_Fetch
-	st_dri3l XHL, 0xFD, 0xFE, 0x00
-	ld_sriw WA, (xsp + 0x00ea)
+	stl_dri XHL, 0xFD, 0xFE, 0x00
+	ldw_sri0 WA, (xsp + 0x00ea)
 	cps wa, 2
 	jrl z, DSP_BiquadCoeff_Algo2
 	cps wa, 1
 	jrl z, DSP_BiquadCoeff_Algo1
 	cps wa, 0
 	jrl nz, DSP_BiquadCoeff_Epilogue
-	st_dri3b A, 0xFD, 0xE6, 0x00
+	stb_dri A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 78)
@@ -43032,61 +43032,61 @@ DSP_BiquadCoeff_Compute:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0x9E, 0x00
+	stb_dri W, 0xFD, 0x9E, 0x00
 	push xwa
 	call VoiceFloat_MulAddDispatch
 	lda xsp, (xsp + 12)
-	st_dri3b A, 0xFD, 0x96, 0x00
-	st_dri3b W, 0xFD, 0xDA, 0x00
+	stb_dri A, 0xFD, 0x96, 0x00
+	stb_dri W, 0xFD, 0xDA, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xDA, 0x00
-	st_dri3b B, 0xFD, 0xE2, 0x00
-	st_dri3b W, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
+	stb_dri B, 0xFD, 0xE2, 0x00
+	stb_dri W, 0xFD, 0xAA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xDA, 0x00
-	st_dri3b B, 0xFD, 0xDA, 0x00
-	st_dri3b W, 0xFD, 0xA6, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
+	stb_dri B, 0xFD, 0xDA, 0x00
+	stb_dri W, 0xFD, 0xA6, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xAA, 0x00
-	st_dri3b B, 0xFD, 0xA6, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
+	stb_dri B, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_Mul
 	lda xbc, (xsp + 86)
 	lda_24 xde, 0x012f5f
-	st_dri3b W, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xD6, 0x00
 	call FP_SP_Mul
 	lda_24 xbc, 0x012f63
-	st_dri3b B, 0xFD, 0xA6, 0x00
+	stb_dri B, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_Sub
 	lda xbc, (xsp + 86)
 	lda_24 xde, 0x012f67
-	st_dri3b W, 0xFD, 0xD2, 0x00
+	stb_dri W, 0xFD, 0xD2, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xA6, 0x00
-	st_dri3b B, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xA6, 0x00
+	stb_dri B, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_Sub
 	lda xbc, (xsp + 86)
 	lda_24 xde, 0x012f6b
-	st_dri3b W, 0xFD, 0xCE, 0x00
+	stb_dri W, 0xFD, 0xCE, 0x00
 	call FP_SP_Mul
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
 	jr nz, DSP_BiquadCoeff_Algo0_SignZero
 	ld_sril XWA, (xsp + 0x00de)
-	st_dri3l XWA, 0xFD, 0x8A, 0x00
+	stl_dri XWA, 0xFD, 0x8A, 0x00
 	jr DSP_BiquadCoeff_Algo0_AfterSign
 
 DSP_BiquadCoeff_Algo0_SignZero:
-	st_dri3b A, 0xFD, 0xDE, 0x00
-	st_dri3b W, 0xFD, 0x8A, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
+	stb_dri W, 0xFD, 0x8A, 0x00
 	call FP_SP_CopyOrNegate4
 
 DSP_BiquadCoeff_Algo0_AfterSign:
-	st_dri3b A, 0xFD, 0x8A, 0x00
+	stb_dri A, 0xFD, 0x8A, 0x00
 	lda_24 xde, 0x012f6f
 	lda xwa, (xsp + 86)
 	call VoiceFloat_SubSP
@@ -43103,22 +43103,22 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0x9E, 0x00
+	stb_dri W, 0xFD, 0x9E, 0x00
 	push xwa
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
-	st_dri3b A, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 78)
-	st_dri3b B, 0xFD, 0x8E, 0x00
+	stb_dri B, 0xFD, 0x8E, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 78)
 	lda_24 xde, 0x012f7b
 	lda xwa, (xsp + 78)
 	call FP_DP_Mul
-	st_dri3b A, 0xFD, 0xA6, 0x00
+	stb_dri A, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
@@ -43126,11 +43126,11 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	lda xwa, (xsp + 118)
 	call FP_DP_Mul
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call FP_DP_NormalizeMantissa
 	ld_sril XWA, (xsp + 0x00d2)
-	st_dri3l XWA, 0xFD, 0xC6, 0x00
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stl_dri XWA, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
@@ -43140,7 +43140,7 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	jr DSP_BiquadCoeff_Algo0_AfterSign2
 
 DSP_BiquadCoeff_Algo0_Sign2Zero:
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 126)
 	call FP_SP_CopyOrNegate4
 
@@ -43162,22 +43162,22 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0x92, 0x00
+	stb_dri W, 0xFD, 0x92, 0x00
 	push xwa
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
-	st_dri3b A, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
-	st_dri3b B, 0xFD, 0x82, 0x00
+	stb_dri B, 0xFD, 0x82, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_Add_Outer
 	lda_24 xbc, 0x012f8f
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call FP_DP_Sub
-	st_dri3b A, 0xFD, 0xA6, 0x00
+	stb_dri A, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 78)
@@ -43185,125 +43185,125 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda xwa, (xsp + 118)
 	call FP_DP_Mul
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xC2, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
 	jr nz, DSP_BiquadCoeff_Algo0_NegBranch
-	st_dri3b A, 0xFD, 0xCA, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC6, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC2, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xC2, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCE, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xAE, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
 	jr DSP_BiquadCoeff_Algo0_Assembly
 
 DSP_BiquadCoeff_Algo0_NegBranch:
-	st_dri3b A, 0xFD, 0xD6, 0x00
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xD6, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xD2, 0x00
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCE, 0x00
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC2, 0x00
+	stb_dri A, 0xFD, 0xC2, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xAE, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
 
 DSP_BiquadCoeff_Algo0_Assembly:
-	st_dri3b A, 0xFD, 0xBE, 0x00
-	st_dri3b B, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
+	stb_dri B, 0xFD, 0xBA, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_Mul
 	lda xbc, (xsp + 86)
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_Mul
 	lda_24 xbc, 0x012f97
-	st_dri3b B, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xAE, 0x00
+	stb_dri B, 0xFD, 0xAE, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
 	lda xde, (xsp + 86)
-	st_dri3b W, 0xFD, 0x9E, 0x00
+	stb_dri W, 0xFD, 0x9E, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b W, 0xFD, 0x9E, 0x00
+	stb_dri W, 0xFD, 0x9E, 0x00
 	lda_24 xbc, 0x012f9b
 	lds de, 0
 	call ToneGen_Compare_Voice_32
 	cps hl, 0
 	jr nz, DSP_BiquadCoeff_Algo0_Fixup
 	ld xwa, 0x3F800000
-	st_dri3l XWA, 0xFD, 0x9E, 0x00
+	stl_dri XWA, 0xFD, 0x9E, 0x00
 
 DSP_BiquadCoeff_Algo0_Fixup:
-	st_dri3b A, 0xFD, 0x9E, 0x00
-	st_dri3b B, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0x9E, 0x00
+	stb_dri B, 0xFD, 0xBE, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x012f9f
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0x9E, 0x00
-	st_dri3b B, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0x9E, 0x00
+	stb_dri B, 0xFD, 0xBA, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x012fa3
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0x9E, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0x9E, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x012fa7
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x012fab
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43311,12 +43311,12 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 114)
 	call FP_SP_Decode_ReadSign
 	push_sriw 0xFD, 0xF6, 0x00
-	ld_sriw WA, (xsp + 0x00fe)
+	ldw_sri0 WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 116)
-	ld_sriw DE, (xsp + 0x00ee)
+	ldw_sri0 DE, (xsp + 0x00ee)
 	call DSP_WriteOscParam
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x012faf
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43324,11 +43324,11 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 110)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 110)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB6, 0x00
 	lda_24 xde, 0x012fb3
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43336,11 +43336,11 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 106)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 106)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xB2, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
 	lda_24 xde, 0x012fb7
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43348,11 +43348,11 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 102)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 102)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xAE, 0x00
+	stb_dri A, 0xFD, 0xAE, 0x00
 	lda_24 xde, 0x012fbb
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43360,14 +43360,14 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 98)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 98)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	jrl DSP_BiquadCoeff_Epilogue
 
 DSP_BiquadCoeff_Algo1:
-	st_dri3b A, 0xFD, 0xE6, 0x00
+	stb_dri A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
@@ -43384,64 +43384,64 @@ DSP_BiquadCoeff_Algo1:
 	call VoiceFloat_MulAddDispatch
 	lda xsp, (xsp + 12)
 	lda xbc, (xsp + 90)
-	st_dri3b W, 0xFD, 0xDA, 0x00
+	stb_dri W, 0xFD, 0xDA, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xDA, 0x00
-	st_dri3b B, 0xFD, 0xE2, 0x00
-	st_dri3b W, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
+	stb_dri B, 0xFD, 0xE2, 0x00
+	stb_dri W, 0xFD, 0xAA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xDA, 0x00
-	st_dri3b B, 0xFD, 0xDA, 0x00
-	st_dri3b W, 0xFD, 0xA6, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
+	stb_dri B, 0xFD, 0xDA, 0x00
+	stb_dri W, 0xFD, 0xA6, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xAA, 0x00
-	st_dri3b B, 0xFD, 0xA6, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
+	stb_dri B, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Mul
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x012fc7
-	st_dri3b W, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xD6, 0x00
 	call FP_SP_Mul
 	lda_24 xbc, 0x012fcb
-	st_dri3b B, 0xFD, 0xA6, 0x00
+	stb_dri B, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x012fcf
-	st_dri3b W, 0xFD, 0xD2, 0x00
+	stb_dri W, 0xFD, 0xD2, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xA6, 0x00
-	st_dri3b B, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xA6, 0x00
+	stb_dri B, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x012fd3
-	st_dri3b W, 0xFD, 0xCE, 0x00
+	stb_dri W, 0xFD, 0xCE, 0x00
 	call FP_SP_Mul
-	st_dri3b A, 0xFD, 0xAA, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
 	lds32 xwa, 0
-	st_dri3l XWA, 0xFD, 0xBA, 0x00
-	st_dri3b A, 0xFD, 0xBE, 0x00
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stl_dri XWA, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call FP_SP_CopyOrNegate4
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCE, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xAE, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x012fd7
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43449,12 +43449,12 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 74)
 	call FP_SP_Decode_ReadSign
 	push_sriw 0xFD, 0xF6, 0x00
-	ld_sriw WA, (xsp + 0x00fe)
+	ldw_sri0 WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 76)
-	ld_sriw DE, (xsp + 0x00ee)
+	ldw_sri0 DE, (xsp + 0x00ee)
 	call DSP_WriteOscParam
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x012fdb
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43462,11 +43462,11 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 70)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 70)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB6, 0x00
 	lda_24 xde, 0x012fdf
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43474,11 +43474,11 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 66)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 66)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xB2, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
 	lda_24 xde, 0x012fe3
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43486,11 +43486,11 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 62)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 62)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xAE, 0x00
+	stb_dri A, 0xFD, 0xAE, 0x00
 	lda_24 xde, 0x012fe7
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43498,14 +43498,14 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 58)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 58)
-	ld_sriw BC, (xsp + 0x00ec)
-	ld_sriw DE, (xsp + 0x00f6)
+	ldw_sri0 BC, (xsp + 0x00ec)
+	ldw_sri0 DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	jrl DSP_BiquadCoeff_Epilogue
 
 DSP_BiquadCoeff_Algo2:
-	st_dri3b A, 0xFD, 0xE6, 0x00
+	stb_dri A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
@@ -43526,10 +43526,10 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xDA, 0x00
+	stb_dri W, 0xFD, 0xDA, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xDA, 0x00
-	st_dri3b B, 0xFD, 0xE2, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
+	stb_dri B, 0xFD, 0xE2, 0x00
 	lda xwa, (xsp + 2)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 2)
@@ -43540,16 +43540,16 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xAA, 0x00
+	stb_dri W, 0xFD, 0xAA, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xDA, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
 	lda_24 xde, 0x013003
 	lda xwa, (xsp + 118)
 	call FP_DP_Add_Outer
-	st_dri3b A, 0xFD, 0xDA, 0x00
+	stb_dri A, 0xFD, 0xDA, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 78)
@@ -43561,33 +43561,33 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xA2, 0x00
+	stb_dri W, 0xFD, 0xA2, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xAA, 0x00
-	st_dri3b B, 0xFD, 0xA2, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
+	stb_dri B, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Mul
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x013013
-	st_dri3b W, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xD6, 0x00
 	call FP_SP_Mul
 	lda_24 xbc, 0x013017
-	st_dri3b B, 0xFD, 0xA2, 0x00
+	stb_dri B, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x01301b
-	st_dri3b W, 0xFD, 0xD2, 0x00
+	stb_dri W, 0xFD, 0xD2, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xA2, 0x00
-	st_dri3b B, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xA2, 0x00
+	stb_dri B, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
 	lda_24 xde, 0x01301f
-	st_dri3b W, 0xFD, 0xCE, 0x00
+	stb_dri W, 0xFD, 0xCE, 0x00
 	call FP_SP_Mul
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
@@ -43597,7 +43597,7 @@ DSP_BiquadCoeff_Algo2:
 	jr DSP_BiquadCoeff_Algo2_AfterSign1
 
 DSP_BiquadCoeff_Algo2_Sign1Zero:
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 38)
 	call FP_SP_CopyOrNegate4
 
@@ -43623,7 +43623,7 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	push xwa
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
-	st_dri3b A, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
@@ -43634,7 +43634,7 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda_24 xde, 0x01302f
 	lda xwa, (xsp + 118)
 	call FP_DP_Mul
-	st_dri3b A, 0xFD, 0xA2, 0x00
+	stb_dri A, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 78)
@@ -43642,11 +43642,11 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda xwa, (xsp + 118)
 	call FP_DP_Mul
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call FP_DP_NormalizeMantissa
 	ld_sril XWA, (xsp + 0x00d2)
-	st_dri3l XWA, 0xFD, 0xC6, 0x00
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stl_dri XWA, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
@@ -43656,7 +43656,7 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	jr DSP_BiquadCoeff_Algo2_AfterSign2
 
 DSP_BiquadCoeff_Algo2_Sign2Zero:
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 26)
 	call FP_SP_CopyOrNegate4
 
@@ -43682,7 +43682,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	push xwa
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
-	st_dri3b A, 0xFD, 0xAA, 0x00
+	stb_dri A, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 118)
@@ -43693,7 +43693,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call FP_DP_Sub
-	st_dri3b A, 0xFD, 0xA2, 0x00
+	stb_dri A, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 78)
@@ -43701,71 +43701,71 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xwa, (xsp + 118)
 	call FP_DP_Mul
 	lda xbc, (xsp + 118)
-	st_dri3b W, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xC2, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b W, 0xFD, 0xDE, 0x00
+	stb_dri W, 0xFD, 0xDE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
 	jr nz, DSP_BiquadCoeff_Algo2_NegBranch
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCE, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xAE, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCA, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC6, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC2, 0x00
-	st_dri3b B, 0xFD, 0xD6, 0x00
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xC2, 0x00
+	stb_dri B, 0xFD, 0xD6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
 	jr DSP_BiquadCoeff_Algo2_WriteParams
 
 DSP_BiquadCoeff_Algo2_NegBranch:
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xC2, 0x00
+	stb_dri A, 0xFD, 0xC2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xAE, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xD6, 0x00
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xD6, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xD2, 0x00
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCE, 0x00
-	st_dri3b B, 0xFD, 0xCA, 0x00
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
 
 DSP_BiquadCoeff_Algo2_WriteParams:
-	st_dri3b A, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x01304b
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43773,12 +43773,12 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda xwa, (xsp + 22)
 	call FP_SP_Decode_ReadSign
 	push_sriw 0xFD, 0xF6, 0x00
-	ld_sriw WA, (xsp + 0x00fe)
+	ldw_sri0 WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 24)
-	ld_sriw DE, (xsp + 0x00ee)
+	ldw_sri0 DE, (xsp + 0x00ee)
 	call DSP_WriteOscParam
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB6, 0x00
 	lda_24 xde, 0x01304f
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43786,10 +43786,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda xwa, (xsp + 18)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 18)
-	ld_sriw BC, (xsp + 0x00ec)
+	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xAE, 0x00
+	stb_dri A, 0xFD, 0xAE, 0x00
 	lda_24 xde, 0x013053
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43797,10 +43797,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda xwa, (xsp + 14)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 14)
-	ld_sriw BC, (xsp + 0x00ec)
+	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x013057
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43808,10 +43808,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda xwa, (xsp + 10)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 10)
-	ld_sriw BC, (xsp + 0x00ec)
+	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
 	ld iz, hl
-	st_dri3b A, 0xFD, 0xB2, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
 	lda_24 xde, 0x01305b
 	lda xwa, (xsp + 2)
 	call FP_SP_Add_Outer
@@ -43819,7 +43819,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda xwa, (xsp + 6)
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 6)
-	ld_sriw BC, (xsp + 0x00ec)
+	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
 	ld iz, hl
 
@@ -43828,7 +43828,7 @@ DSP_BiquadCoeff_Epilogue:
 	ld (xwa), iz
 	ld_sril XHL, (xsp + 0x00fe)
 	popw iz
-	st_dri3b L, 0xFD, 0xEC, 0x00
+	stb_dri L, 0xFD, 0xEC, 0x00
 	retd 0x10
 
 DSP_SOS_LUT_Fetch:
@@ -43843,7 +43843,7 @@ DSP_SOS_LUT_Fetch:
 	extz wa
 	ld (xsp + 2), wa
 	ld xwa, (xsp + 40)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 40), xwa
 	and c, 0xF0
 	ld a, c
@@ -43856,7 +43856,7 @@ DSP_SOS_LUT_Fetch:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 24)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -43892,7 +43892,7 @@ DSP_SOS_LUT_Mode0x10:
 	ld wa, (xwa)
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 24)
 	call FP_SP_Raw4Copy
 	ld wa, iz
@@ -43922,14 +43922,14 @@ DSP_SOS_LUT_CheckType2:
 	cps wa, 2
 	jr nz, DSP_SOS_LUT_StoreResults
 	ld xwa, (xsp + 40)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 40), xwa
 	and c, 0x1F
 	ld a, c
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0x012397
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	stb_dri A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 24)
 	call FP_SP_Raw4Copy
 
@@ -43949,28 +43949,28 @@ DSP_SOS_LUT_StoreResults:
 	retd 0xC
 
 DSP_SOS_Coeff_Compute:
-	st_dri3b L, 0xFD, 0x2E, 0xFF
+	stb_dri L, 0xFD, 0x2E, 0xFF
 	push xiz
 	ld iz, wa
-	st_dri3b W, 0xFD, 0xB0, 0x00
+	stb_dri W, 0xFD, 0xB0, 0x00
 	push xwa
 	ld_sril XWA, (xsp + 0x00e4)
 	push xwa
 	ld_sril XWA, (xsp + 0x00ee)
 	push xwa
 	ld wa, de
-	st_dri3b A, 0xFD, 0xDE, 0x00
-	st_dri3b B, 0xFD, 0xDA, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
+	stb_dri B, 0xFD, 0xDA, 0x00
 	calr DSP_SOS_LUT_Fetch
-	st_dri3l XHL, 0xFD, 0xE6, 0x00
-	ld_sriw WA, (xsp + 0x00b0)
+	stl_dri XHL, 0xFD, 0xE6, 0x00
+	ldw_sri0 WA, (xsp + 0x00b0)
 	cps wa, 2
 	jrl z, DSP_SOS_Algo2
 	cps wa, 1
 	jrl z, DSP_SOS_Algo1
 	cps wa, 0
 	jrl nz, DSP_SOS_Coeff_Epilogue
-	st_dri3b A, 0xFD, 0xCE, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x01307f
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
@@ -43987,19 +43987,19 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0xB8, 0x00
+	stb_dri W, 0xFD, 0xB8, 0x00
 	push xwa
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
-	st_dri3b A, 0xFD, 0xA8, 0x00
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri A, 0xFD, 0xA8, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b W, 0xFD, 0xCE, 0x00
+	stb_dri W, 0xFD, 0xCE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
 	jrl nz, DSP_SOS_Algo0_NonzeroCoeff
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 72)
@@ -44011,10 +44011,10 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0xA8, 0x00
+	stb_dri W, 0xFD, 0xA8, 0x00
 	push xwa
 	call VoiceFloat_DispatchMulAdd
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 84)
@@ -44026,43 +44026,43 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0xAC, 0x00
+	stb_dri W, 0xFD, 0xAC, 0x00
 	push xwa
 	call VoiceFloat_MulAddVariant2
 	lda xsp, (xsp + 24)
-	st_dri3b A, 0xFD, 0x98, 0x00
+	stb_dri A, 0xFD, 0x98, 0x00
 	lda_24 xde, 0x01309b
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
-	st_dri3b B, 0xFD, 0xA0, 0x00
+	stb_dri B, 0xFD, 0xA0, 0x00
 	lda xwa, (xsp + 72)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 72)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_24 xbc, 0x0130a3
-	st_dri3b B, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
-	st_dri3b A, 0xFD, 0xCA, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x0130a7
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
 	lda_24 xbc, 0x0130ab
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 56)
@@ -44071,12 +44071,12 @@ DSP_SOS_Coeff_Compute:
 	call FP_SP_Mul
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
-	st_dri3b W, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xC6, 0x00
 	call VoiceFloat_SubSP
 	jrl DSP_SOS_Algo0_FinalChain
 
 DSP_SOS_Algo0_NonzeroCoeff:
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 72)
@@ -44088,10 +44088,10 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0x98, 0x00
+	stb_dri W, 0xFD, 0x98, 0x00
 	push xwa
 	call VoiceFloat_DispatchMulAdd
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 84)
@@ -44103,43 +44103,43 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0x9C, 0x00
+	stb_dri W, 0xFD, 0x9C, 0x00
 	push xwa
 	call VoiceFloat_MulAddVariant2
 	lda xsp, (xsp + 24)
-	st_dri3b A, 0xFD, 0x88, 0x00
+	stb_dri A, 0xFD, 0x88, 0x00
 	lda_24 xde, 0x0130c3
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
-	st_dri3b B, 0xFD, 0x90, 0x00
+	stb_dri B, 0xFD, 0x90, 0x00
 	lda xwa, (xsp + 72)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 72)
-	st_dri3b W, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xC6, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda_24 xde, 0x0130cb
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
 	lda_24 xbc, 0x0130cf
-	st_dri3b B, 0xFD, 0xC6, 0x00
+	stb_dri B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 120)
 	lda_24 xde, 0x0130d3
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 56)
@@ -44148,54 +44148,54 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
 DSP_SOS_Algo0_FinalChain:
 	lda_24 xbc, 0x0130db
-	st_dri3b B, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
 	lda_24 xbc, 0x0130df
-	st_dri3b B, 0xFD, 0xC6, 0x00
+	stb_dri B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xC2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCA, 0x00
-	st_dri3b B, 0xFD, 0xC2, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xC6, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
-	st_dri3b A, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x0130e3
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
 	lda xbc, (xsp + 120)
-	st_dri3b W, 0xFD, 0x84, 0x00
+	stb_dri W, 0xFD, 0x84, 0x00
 	call FP_SP_Decode_ReadSign
 	push_sriw 0xFD, 0xDA, 0x00
-	ld_sriw WA, (xsp + 0x00e6)
+	ldw_sri0 WA, (xsp + 0x00e6)
 	ld_sril XBC, (xsp + 0x0086)
 	ld de, iz
 	call DSP_WriteOscParam
-	ldfr_werp HL, 0xFA
-	st_dri3b A, 0xFD, 0xBA, 0x00
+	ldw_erp HL, 0xFA
+	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x0130e7
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
 	lda xbc, (xsp + 120)
-	st_dri3b W, 0xFD, 0x80, 0x00
+	stb_dri W, 0xFD, 0x80, 0x00
 	call FP_SP_Decode_ReadSign
 	ld_sril XWA, (xsp + 0x0080)
 	ld bc, iz
 	call DSP_WriteParamWord
-	ldfr_werp HL, 0xFA
-	st_dri3b A, 0xFD, 0xC2, 0x00
+	ldw_erp HL, 0xFA
+	stb_dri A, 0xFD, 0xC2, 0x00
 	lda_24 xde, 0x0130eb
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44205,11 +44205,11 @@ DSP_SOS_Algo0_FinalChain:
 	ld xwa, (xsp + 124)
 	ld bc, iz
 	call DSP_WriteParamWord
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	jrl DSP_SOS_Coeff_Epilogue
 
 DSP_SOS_Algo1:
-	st_dri3b A, 0xFD, 0xCE, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x0130ef
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
@@ -44226,19 +44226,19 @@ DSP_SOS_Algo1:
 	push xix
 	ld xix, (xiy)
 	push xix
-	st_dri3b W, 0xFD, 0x80, 0x00
+	stb_dri W, 0xFD, 0x80, 0x00
 	push xwa
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 112)
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b W, 0xFD, 0xCE, 0x00
+	stb_dri W, 0xFD, 0xCE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
 	jrl nz, DSP_SOS_Algo1_NonzeroCoeff
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 72)
@@ -44253,7 +44253,7 @@ DSP_SOS_Algo1:
 	lda xwa, (xsp + 112)
 	push xwa
 	call VoiceFloat_DispatchMulAdd
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 84)
@@ -44278,30 +44278,30 @@ DSP_SOS_Algo1:
 	lda xwa, (xsp + 72)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 72)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xCA, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x013113
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
 	lda_24 xbc, 0x013117
-	st_dri3b B, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 120)
 	lda_24 xde, 0x01311b
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 56)
@@ -44310,12 +44310,12 @@ DSP_SOS_Algo1:
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xC6, 0x00
 	call VoiceFloat_SubSP
 	jrl DSP_SOS_Algo1_FinalChain
 
 DSP_SOS_Algo1_NonzeroCoeff:
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 72)
@@ -44330,7 +44330,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xwa, (xsp + 96)
 	push xwa
 	call VoiceFloat_DispatchMulAdd
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 84)
@@ -44355,30 +44355,30 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xwa, (xsp + 72)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 72)
-	st_dri3b W, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xC6, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_24 xbc, 0x01313b
-	st_dri3b B, 0xFD, 0xC6, 0x00
+	stb_dri B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda_24 xde, 0x01313f
 	lda xwa, (xsp + 56)
 	call FP_SP_Mul
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
 	lda_24 xbc, 0x013143
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 56)
@@ -44387,30 +44387,30 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	call FP_SP_Mul
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
 DSP_SOS_Algo1_FinalChain:
-	st_dri3b A, 0xFD, 0xCA, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x01314b
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda_24 xde, 0x01314f
 	lda xwa, (xsp + 56)
 	call FP_SP_Mul
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xC2, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xCA, 0x00
-	st_dri3b B, 0xFD, 0xC2, 0x00
-	st_dri3b W, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xBE, 0x00
 	call FP_SP_Add_Outer
-	st_dri3b A, 0xFD, 0xC6, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
-	st_dri3b A, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x013153
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44418,12 +44418,12 @@ DSP_SOS_Algo1_FinalChain:
 	lda xwa, (xsp + 68)
 	call FP_SP_Decode_ReadSign
 	push_sriw 0xFD, 0xDA, 0x00
-	ld_sriw WA, (xsp + 0x00e6)
+	ldw_sri0 WA, (xsp + 0x00e6)
 	ld xbc, (xsp + 70)
 	ld de, iz
 	call DSP_WriteOscParam
-	ldfr_werp HL, 0xFA
-	st_dri3b A, 0xFD, 0xBA, 0x00
+	ldw_erp HL, 0xFA
+	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x013157
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44433,8 +44433,8 @@ DSP_SOS_Algo1_FinalChain:
 	ld xwa, (xsp + 64)
 	ld bc, iz
 	call DSP_WriteParamWord
-	ldfr_werp HL, 0xFA
-	st_dri3b A, 0xFD, 0xC2, 0x00
+	ldw_erp HL, 0xFA
+	stb_dri A, 0xFD, 0xC2, 0x00
 	lda_24 xde, 0x01315b
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44444,11 +44444,11 @@ DSP_SOS_Algo1_FinalChain:
 	ld xwa, (xsp + 60)
 	ld bc, iz
 	call DSP_WriteParamWord
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	jrl DSP_SOS_Coeff_Epilogue
 
 DSP_SOS_Algo2:
-	st_dri3b A, 0xFD, 0xCE, 0x00
+	stb_dri A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x01315f
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
@@ -44470,14 +44470,14 @@ DSP_SOS_Algo2:
 	call VoiceFloat_CompareAndConvert
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 48)
-	st_dri3b W, 0xFD, 0xB2, 0x00
+	stb_dri W, 0xFD, 0xB2, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b W, 0xFD, 0xCE, 0x00
+	stb_dri W, 0xFD, 0xCE, 0x00
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
 	jrl nz, DSP_SOS_Algo2_NonzeroCoeff
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 72)
@@ -44492,7 +44492,7 @@ DSP_SOS_Algo2:
 	lda xwa, (xsp + 48)
 	push xwa
 	call VoiceFloat_DispatchMulAdd
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 84)
@@ -44517,30 +44517,30 @@ DSP_SOS_Algo2:
 	lda xwa, (xsp + 72)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 72)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call FP_DP_NormalizeMantissa
-	st_dri3b A, 0xFD, 0xCA, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x013183
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
 	lda_24 xbc, 0x013187
-	st_dri3b B, 0xFD, 0xCA, 0x00
+	stb_dri B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 120)
 	lda_24 xde, 0x01318b
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 56)
@@ -44549,12 +44549,12 @@ DSP_SOS_Algo2:
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xC6, 0x00
 	call VoiceFloat_SubSP
 	jrl DSP_SOS_Algo2_FinalChain
 
 DSP_SOS_Algo2_NonzeroCoeff:
-	st_dri3b A, 0xFD, 0xD2, 0x00
+	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 72)
@@ -44569,7 +44569,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xwa, (xsp + 32)
 	push xwa
 	call VoiceFloat_DispatchMulAdd
-	st_dri3b A, 0xFD, 0xDE, 0x00
+	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_NegMantissaLS
 	lda xbc, (xsp + 84)
@@ -44594,30 +44594,30 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xwa, (xsp + 72)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 72)
-	st_dri3b W, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xC6, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_24 xbc, 0x0131ab
-	st_dri3b B, 0xFD, 0xC6, 0x00
+	stb_dri B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda_24 xde, 0x0131af
 	lda xwa, (xsp + 56)
 	call FP_SP_Mul
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xB6, 0x00
+	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call VoiceFloat_SubSP
 	lda_24 xbc, 0x0131b3
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
-	st_dri3b A, 0xFD, 0xB2, 0x00
-	st_dri3b B, 0xFD, 0xB6, 0x00
+	stb_dri A, 0xFD, 0xB2, 0x00
+	stb_dri B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
 	call VoiceFloat_SubSP
 	lda xbc, (xsp + 56)
@@ -44626,28 +44626,28 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	call FP_SP_Mul
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
-	st_dri3b W, 0xFD, 0xCA, 0x00
+	stb_dri W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
 DSP_SOS_Algo2_FinalChain:
-	st_dri3b A, 0xFD, 0xCA, 0x00
+	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x0131bb
 	lda xwa, (xsp + 120)
 	call FP_SP_Mul
-	st_dri3b A, 0xFD, 0xC6, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
 	lda_24 xde, 0x0131bf
 	lda xwa, (xsp + 56)
 	call FP_SP_Mul
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
-	st_dri3b W, 0xFD, 0xC2, 0x00
+	stb_dri W, 0xFD, 0xC2, 0x00
 	call VoiceFloat_SubSP
 	ld_sril XWA, (xsp + 0x00ca)
-	st_dri3l XWA, 0xFD, 0xBE, 0x00
-	st_dri3b A, 0xFD, 0xC6, 0x00
-	st_dri3b W, 0xFD, 0xBA, 0x00
+	stl_dri XWA, 0xFD, 0xBE, 0x00
+	stb_dri A, 0xFD, 0xC6, 0x00
+	stb_dri W, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
-	st_dri3b A, 0xFD, 0xBA, 0x00
+	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x0131c3
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44655,12 +44655,12 @@ DSP_SOS_Algo2_FinalChain:
 	lda xwa, (xsp + 12)
 	call FP_SP_Decode_ReadSign
 	push_sriw 0xFD, 0xDA, 0x00
-	ld_sriw WA, (xsp + 0x00e6)
+	ldw_sri0 WA, (xsp + 0x00e6)
 	ld xbc, (xsp + 14)
 	ld de, iz
 	call DSP_WriteOscParam
-	ldfr_werp HL, 0xFA
-	st_dri3b A, 0xFD, 0xC2, 0x00
+	ldw_erp HL, 0xFA
+	stb_dri A, 0xFD, 0xC2, 0x00
 	lda_24 xde, 0x0131c7
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44669,10 +44669,10 @@ DSP_SOS_Algo2_FinalChain:
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 8)
 	ld bc, iz
-	ld_sriw DE, (xsp + 0x00da)
+	ldw_sri0 DE, (xsp + 0x00da)
 	call DSP_WriteCoeffData_5B_Direct
-	ldfr_werp HL, 0xFA
-	st_dri3b A, 0xFD, 0xBE, 0x00
+	ldw_erp HL, 0xFA
+	stb_dri A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x0131cb
 	lda xwa, (xsp + 120)
 	call FP_SP_Add_Outer
@@ -44681,17 +44681,17 @@ DSP_SOS_Algo2_FinalChain:
 	call FP_SP_Decode_ReadSign
 	ld xwa, (xsp + 4)
 	ld bc, iz
-	ld_sriw DE, (xsp + 0x00da)
+	ldw_sri0 DE, (xsp + 0x00da)
 	call DSP_WriteCoeffData_5B_Direct
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 
 DSP_SOS_Coeff_Epilogue:
 	ld_sril XBC, (xsp + 0x00dc)
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	ld (xbc), wa
 	ld_sril XHL, (xsp + 0x00e6)
 	pop xiz
-	st_dri3b L, 0xFD, 0xD2, 0x00
+	stb_dri L, 0xFD, 0xD2, 0x00
 	retd 0x10
 
 DSP_MixerCoeff_Compute:
@@ -44708,7 +44708,7 @@ DSP_MixerCoeff_Compute:
 	srl xde, 15
 	ld wa, (xsp + 22)
 	sll wa, 2
-	ldada xbc, 61760
+	lda_d16 xbc, 61760
 	extz xwa
 	add xwa, xbc
 	ld xwa, (xwa)
@@ -44718,7 +44718,7 @@ DSP_MixerCoeff_Compute:
 	srl xhl, 0
 	ld wa, (xsp + 20)
 	sll wa, 2
-	ldada xbc, 61760
+	lda_d16 xbc, 61760
 	extz xwa
 	add xwa, xbc
 	ld xwa, (xwa)
@@ -44728,7 +44728,7 @@ DSP_MixerCoeff_Compute:
 	ld (xsp + 8), xhl
 	ld wa, (xsp + 22)
 	sll wa, 2
-	ldada xbc, 61760
+	lda_d16 xbc, 61760
 	ld iz, wa
 	extz xiz
 	add xiz, xbc
@@ -44978,9 +44978,9 @@ DSP_BytecodeInterpreter_Loop:
 	jrl ugt, DSP_BytecodeInterpreter_CheckEnd
 	add wa, wa
 	lda_24 xix, 0x014739
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x03c32e
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 
 
 // DSP_Bytecode_Programs: 1613 bytes of native TLCS-900 code implementing
@@ -45221,13 +45221,13 @@ DSP_Bytecode_Op0D_StateChange:
 
 DSP_Bytecode_Op0E_SendCommand:
 	ld xwa, (xsp + 26)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 26), xwa
 	ld a, c
 	extz wa
 	ld bc, (xsp + 20)
 	call DSP_DispatchCommand
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	ldw (xsp + 4), 0x1
 	ld wa, (xsp + 6)
 	dec 1, wa
@@ -45236,13 +45236,13 @@ DSP_Bytecode_Op0E_SendCommand:
 
 DSP_Bytecode_Op0E_DataLoop:
 	ld xwa, (xsp + 26)
-	ld_spib C, 0xE0
+	ldb_spi C, 0xE0
 	ld (xsp + 26), xwa
 	ld a, c
 	extz wa
 	ld bc, (xsp + 20)
 	call DSP_DispatchData
-	ldfr_werp HL, 0xFA
+	ldw_erp HL, 0xFA
 	incm 1, (xsp + 4)
 	ld wa, (xsp + 6)
 	dec 1, wa
@@ -45255,7 +45255,7 @@ DSP_BytecodeInterpreter_CheckEnd:
 	and a, 0xF0
 	cp a, 0xF0
 	jrl nz, DSP_BytecodeInterpreter_Loop
-	ldto_werp HL, 0xFA
+	stw_erp HL, 0xFA
 	pop xiz
 	lda xsp, (xsp + 18)
 	retd 0x4
@@ -45402,12 +45402,12 @@ DSP_Translator_ReadOpcode:
 	lda xwa, (xsp + 14)
 	push xwa
 	ld xwa, (xsp + 42)
-	ldto_werp BC, 0xFA
+	stw_erp BC, 0xFA
 	calr DSP_TableWalk_Search
 	cpw (xsp + 14), 0x0
 	jrl nz, DSP_Translator_Return
 	ld a, (xhl)
-	ldfr_berp A, 0xF8
+	ldb_erp A, 0xF8
 	extz iz
 	ld wa, (xsp + 16)
 	extz xwa
@@ -45415,7 +45415,7 @@ DSP_Translator_ReadOpcode:
 	add xwa, (xsp + 34)
 	ld de, (xwa)
 	exts xde
-	ldto_werp WA, 0xFA
+	stw_erp WA, 0xFA
 	cp wa, 0x21
 	jrl z, DSP_Op_0x21_Interp2Point
 	cp wa, 0x24
@@ -45429,9 +45429,9 @@ DSP_Translator_ReadOpcode:
 	jrl ugt, DSP_Op_Unknown_Error
 	add wa, wa
 	lda_24 xix, 0x014745
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x03cb8e
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_ind 8, 0x07, 0xF0, 0xE0
 DSP_Translator_JumpTable:
 	.byte 0xbf, 0x2a, 0x30, 0xea, 0x89, 0x1d, 0x9f, 0x8e
 	.byte 0x03, 0x9f, 0x04, 0x04, 0xde, 0x88, 0xeb, 0x89
@@ -45450,7 +45450,7 @@ DSP_Translator_CheckEnd:
 	add (xsp + 42), xwa
 	ld a, (xbc)
 	extz wa
-	ldfr_werp WA, 0xFA
+	ldw_erp WA, 0xFA
 	cp wa, 0x7A
 	jrl nz, DSP_Translator_ReadOpcode
 
@@ -45756,7 +45756,7 @@ DSP_Op_Unknown_Error:
 
 DSP_StreamDecode_3ByteWord:
 	ld xde, xwa
-	st_dpib W, 0xE8
+	stb_dpi W, 0xE8
 	ld a, (xwa)
 	exts wa
 	exts xwa
@@ -45764,14 +45764,14 @@ DSP_StreamDecode_3ByteWord:
 	sla xwa, 0
 	and xwa, 0xFF000000
 	ld xhl, xwa
-	st_dpib W, 0xE8
+	stb_dpi W, 0xE8
 	ld a, (xwa)
 	exts wa
 	exts xwa
 	ld xix, xwa
 	sla xix, 0
 	and xix, 0xFF0000
-	st_dpib W, 0xE8
+	stb_dpi W, 0xE8
 	ld a, (xwa)
 	exts wa
 	exts xwa
@@ -45816,7 +45816,7 @@ DSP_TableWalk_SkipEntry:
 
 DSP_TableWalk_ReadHeader:
 	ld a, (xhl + 1)
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
 	ld a, (xhl)
 	extz wa
@@ -45858,7 +45858,7 @@ DSP_TableWalk_State_Advance:
 
 DSP_TableWalk_State_ReadHeader:
 	ld e, (xwa + 1)
-	ldfr_berp E, 0xF0
+	ldb_erp E, 0xF0
 	extz ix
 	ld e, (xwa)
 	extz de
@@ -45933,15 +45933,15 @@ ToneGen_Note_Loop:	; 03D02Eh
 	jr z, ToneGen_Note_Off_Slot
 	ld a, (xsp + 256)	; Get note number
 	extz wa
-	ldada xbc, 19020	; Voice slot table
+	lda_d16 xbc, 19020	; Voice slot table
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xFF	; Mark slot as note-on
 	stdi8 19010, 144	; DMA command: note on
 	ld a, (xsp + 256)
-	stda8 19011, a	; Store note number
+	stb_d8 19011, a	; Store note number
 	ld a, (xsp + 1)
-	stda8 19012, a	; Store velocity
+	stb_d8 19012, a	; Store velocity
 	cpdi8 19018, 1	; Check if DMA enabled
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
@@ -45953,22 +45953,22 @@ ToneGen_Note_Loop:	; 03D02Eh
 ToneGen_Note_Off_Slot:	; 03D06Dh
 	ld a, (xsp + 256)
 	extz wa
-	ldada xbc, 19020
+	lda_d16 xbc, 19020
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xFF	; Check if slot was active
 	jr nz, ToneGen_Note_Continue
 	ld a, (xsp + 256)
 	extz wa
-	ldada xbc, 19020
+	lda_d16 xbc, 19020
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0	; Clear slot
 	stdi8 19010, 144	; DMA command: note off
 	ld a, (xsp + 256)
-	stda8 19011, a
+	stb_d8 19011, a
 	ld a, (xsp + 1)
-	stda8 19012, a
+	stb_d8 19012, a
 	cpdi8 19018, 1
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
@@ -45999,12 +45999,12 @@ ToneGen_Read_Voice_Data:	; 03D0C5h
 	ld xiz, xwa
 	set_dd8 7, 0x18	; Assert A23 for status read
 	nop
-	ld16_24 xbc, 0x110002                 ; Read status register
+	ldw_da xbc, 0x110002                 ; Read status register
 	bit 0, bc	; Check data ready bit
 	jr z, ToneGen_Read_Not_Ready
 	res_dd8 7, 0x18	; Deassert A23 for data read
 	nop
-	ld16_24 xwa, 0x110000                 ; Read voice data (16-bit)
+	ldw_da xwa, 0x110000                 ; Read voice data (16-bit)
 	ld l, a	; L = note byte (low)
 	and l, 0xFF
 	srl wa, 8
@@ -46060,29 +46060,29 @@ ToneGen_Calc_Pitch:	; 03D11Fh
 	ld c, e
 	extz bc
 	lda_24 xde, 0x01f43e
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	extz xbc
 	ld xde, xbc
-	ld16_24 xbc, 0x01f418
+	ldw_da xbc, 0x01f418
 	ld hl, de
 	sub hl, bc
-	ldda8 c, 19016
+	ldb_d8 c, 19016
 	extz bc
 	muls bc, 0x3
 	lda_24 xde, 0x01f420
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	muls xbc, xhl
-	ld16_24 xde, 0x01f41a
+	ldw_da xde, 0x01f41a
 	exts xbc
 	divs xbc, xde
 	ld hl, bc
-	ldda8 c, 19016
+	ldb_d8 c, 19016
 	extz bc
 	muls bc, 0x3
 	lda_24 xde, 0x01f421
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	add bc, hl
 	ld de, bc
@@ -46103,11 +46103,11 @@ ToneGen_Calc_Pitch:	; 03D11Fh
 	jr nz, ToneGen_Pitch_Clamp
 
 ToneGen_Pitch_Adjust:	; 03D1AAh - apply mode-specific pitch offset
-	ldda8 c, 19016	; Get tone gen mode
+	ldb_d8 c, 19016	; Get tone gen mode
 	extz bc
 	muls bc, 0x3	; mode * 3 for table index
 	lda_24 xhl, 0x01f422                  ; Pitch offset table
-	ld_srib3 C, 0x07, 0xEC, 0xE4
+	ldb_sri C, 0x07, 0xEC, 0xE4
 	extz bc
 	extz xbc
 	sub xde, xbc	; Apply offset
@@ -46130,7 +46130,7 @@ ToneGen_Pitch_ClampLo:	; 03D1E1h
 	ld c, e
 	extz bc
 	lda_24 xde, 0x01f53e                  ; Velocity lookup table
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ldb_sri C, 0x07, 0xE8, 0xE4
 	ld (xwa + 1), c	; Store velocity
 	ret
 
@@ -46186,10 +46186,10 @@ ToneGen_Poll_Delay:	; 03D227h
 ToneGen_Poll_Read:	; 03D230h
 	set_dd8 7, 0x18	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	nop
-	ld16_24 xwa, 0x110002
+	ldw_da xwa, 0x110002
 	res_dd8 7, 0x18
 	nop
-	ld16_24 xwa, 0x110000
+	ldw_da xwa, 0x110000
 	ld c, a
 	and c, 0xFF
 	srl wa, 8
@@ -46204,9 +46204,9 @@ ToneGen_Poll_Read:	; 03D230h
 	bit 7, c	; Check note-on flag
 	jr z, ToneGen_Poll_NoteOff
 	ld a, e	; Note ON - set voice bit
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
-	ld32_24 xbc, 0x01f41c                 ; Voice status buffer
+	ldl_da xbc, 0x01f41c                 ; Voice status buffer
 	lds de, 1
 	ld a, w
 	and a, 0xF
@@ -46219,9 +46219,9 @@ ToneGen_Poll_SetBit:	; 03D27Ah
 
 ToneGen_Poll_NoteOff:	; 03D281h - Note OFF - clear voice bit
 	ld a, e
-	ldfr_berp A, 0xF0
+	ldb_erp A, 0xF0
 	extz ix
-	ld32_24 xbc, 0x01f41c
+	ldl_da xbc, 0x01f41c
 	lds de, 1
 	ld a, w
 	and a, 0xF
@@ -46257,7 +46257,7 @@ ToneGen_Compare_Voice:	; 03D2ACh
 	cp xiy, (xbc)
 	jr nz, ToneGen_Compare_Result
 	lda_24 xix, 0x03d978                  ; Exact match - lookup result
-	ld_srib3 L, 0x07, 0xF0, 0xE8
+	ldb_sri L, 0x07, 0xF0, 0xE8
 	ldb h, 0x0
 	ret
 
@@ -46308,7 +46308,7 @@ ToneGen_Compare_Voice_32:	; 03D306h
 	cp xwa, xbc
 	jr nz, ToneGen_Cmp32_NotEqual
 	lda_24 xix, 0x03d978                  ; Equal - lookup result
-	ld_srib3 L, 0x07, 0xF0, 0xE8
+	ldb_sri L, 0x07, 0xF0, 0xE8
 	ret
 
 ToneGen_Cmp32_NotEqual:	; 03D31Bh

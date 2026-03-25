@@ -43,7 +43,7 @@ FmmWallpaperLoadFunc:
 	calr SignalProgressUpdate
 
 WPLoad_DispatchState:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 1
 	jrl z, WPLoad_HandleSuccess
 	cps wa, 0
@@ -133,17 +133,17 @@ WPLoad_HandleSelection:
 	stdi16 0x81b4, 0
 
 WPLoad_Selection_Positive:
-	ldda16 xwa, 0x81b4
+	ldw_d16 xwa, 0x81b4
 	exts xwa
 	divs wa, 0xa
-	ldto_werp DE, 0xe2
+	stw_erp DE, 0xe2
 	exts xde
 	ldda32 xwa, 0x81b0
 	ld xbc, 0x1e50002
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleShow:
-	ldda16 xbc, 0x81b4
+	ldw_d16 xbc, 0x81b4
 	exts xbc
 	divs bc, 0xa
 	muls bc, 0xa
@@ -154,7 +154,7 @@ WPLoad_HandleScroll:
 	ld xbc, 0x1c50001
 	lds32 xde, 1
 	call ApPostEvent
-	ldda16 xhl, 0x81b4
+	ldw_d16 xhl, 0x81b4
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
@@ -192,7 +192,7 @@ WPLoad_PageDown:
 	jr nz, WPLoad_OpLoad
 	ld wa, hl
 	add wa, 0xa
-	ldda16 xde, 0x850a
+	ldw_d16 xde, 0x850a
 	cp wa, de
 	jr ge, WPLoad_PageDown_Boundary
 	add hl, 0xa
@@ -214,7 +214,7 @@ WPLoad_PageDown_Boundary:
 	jrl ge, WPLoad_GetSelection
 	exts xde
 	divs de, 0xa
-	ldto_werp WA, 0xea
+	stw_erp WA, 0xea
 	cps wa, 0
 	jr z, WPLoad_GetSelection
 	stda16 0x81b4, xbc
@@ -234,7 +234,7 @@ WPLoad_OpLoad:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -254,22 +254,22 @@ WPLoad_OpLoad:
 	call SoundCtrl_SendCommand
 
 WPLoad_GetSelection:
-	ldda16 xbc, 0x81b4
+	ldw_d16 xbc, 0x81b4
 
 WPLoad_UpdateDisplay:
 	cp (xsp + 4), bc
 	jrl z, WPLoad_SendState
 	ld wa, bc
 	call FileIO_SelectWallpaperByIndex
-	ldda16 xwa, 0x81b4
+	ldw_d16 xwa, 0x81b4
 	exts xwa
 	divs wa, 0xa
-	ldto_werp DE, 0xe2
+	stw_erp DE, 0xe2
 	exts xde
 	ldda32 xwa, 0x81b0
 	ld xbc, 0x1e50002
 	call ApPostEvent
-	ldda16 xbc, 0x81b4
+	ldw_d16 xbc, 0x81b4
 	exts xbc
 	divs bc, 0xa
 	ld de, (xsp + 4)
@@ -281,20 +281,20 @@ WPLoad_UpdateDisplay:
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xa
-	ldto_werp BC, 0xe6
+	stw_erp BC, 0xe6
 	sll bc, 5
-	ldada xhl, 0x850c
+	lda_d16 xhl, 0x850c
 	ld de, bc
 	extz xde
 	add xde, xhl
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldda16 xwa, 0x81b4
+	ldw_d16 xwa, 0x81b4
 	exts xwa
 	divs wa, 0xa
-	ldto_werp WA, 0xe2
+	stw_erp WA, 0xe2
 	sll wa, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -324,7 +324,7 @@ WPLoad_Return:
 WP_ScanAvailability:
 	push xiz
 	call CheckFileSystemStatus
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	stdi16 0x89f6, 0
 	lds iz, 0
 
@@ -341,7 +341,7 @@ WPScan_LoopBody:
 	slla de
 
 WPScan_CheckAvail:
-	and_werp DE, 0xfa
+	andw_erp DE, 0xfa
 	jrl z, WPScan_LoopContinue
 	cps c, 3
 	jr nz, WPScan_TypeNotThree
@@ -410,8 +410,8 @@ WPScan_Generic_Mark:
 	jr c, WPScan_LoopContinue
 
 WPScan_LimitReached:
-	ldto_berp A, 0xf8
-	stda8 0x89f8, a
+	stb_erp A, 0xf8
+	stb_d8 0x89f8, a
 
 WPScan_LoopContinue:
 	inc 1, iz
@@ -422,19 +422,19 @@ WPScan_LoopContinue:
 
 WP_FindNextSlot:
 	pushw iz
-	ldda8 a, 0x89f8
+	ldb_d8 a, 0x89f8
 	cps a, 4
 	jr nc, WPFind_NotFound
-	ldda16 xbc, 0x89f6
+	ldw_d16 xbc, 0x89f6
 	cps bc, 0
 	jr z, WPFind_NotFound
 	lds iz, 1
 	extz wa
-	ldfr_werp WA, 0xe6
+	ldw_erp WA, 0xe6
 	lda_24 xde, Str_SmfConvert_GmToGm_0x2A
 
 WPFind_SearchLoop:
-	ldto_werp HL, 0xe6
+	stw_erp HL, 0xe6
 	add hl, iz
 	and hl, 0x3
 	ld wa, hl
@@ -450,7 +450,7 @@ WPFind_SearchLoop:
 WPFind_CheckSlot:
 	and iy, bc
 	jr z, WPFind_NextSlot
-	stda8 0x89f8, l
+	stb_d8 0x89f8, l
 	ldb l, 0x1
 	jr WPFind_Return
 
@@ -511,7 +511,7 @@ WP_GetNameByOffset:
 	ld xix, xwa
 	mul xhl, xbc	; Calculate offset
 	add xix, xhl
-	st_dri3b A, 0xf1, 0xb2, 0x00	; Offset to name field
+	stb_dri A, 0xf1, 0xb2, 0x00	; Offset to name field
 	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10
@@ -560,7 +560,7 @@ WP_GetBankMemName:
 	push xiz
 	ld hl, bc
 	ld xiz, xwa
-	st_dpib A, 0xf8	; LDA XBC, XIZ+
+	stb_dpi A, 0xf8	; LDA XBC, XIZ+
 	ld wa, (xsp + 8)
 	ld (xbc), a	; Store type marker
 	cps de, 4
@@ -659,7 +659,7 @@ WP_GetUserName3:
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
 	lda_dpi XIY, 0xf8
-	stib_dpi 0xf8, 0x20	; Space character
+	stib_dsp 0xf8, 0x20	; Space character
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0xd	; Copy 13 bytes

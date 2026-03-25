@@ -15,7 +15,7 @@ SysEx_ClampVoiceIndex8:
 SysEx_ClampVoiceIndex8_DoLookup:
 	extz wa
 	lda_24 xbc, MidiPkt_EventType_Table_0x358
-	ld_srib3 L, 0x07, 0xe4, 0xe0
+	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 SysEx_ApplyToSlot4B_Data:
@@ -75,7 +75,7 @@ SysEx_ClampVoiceIndex128:
 SysEx_ClampVoiceIndex128_DoLookup:
 	extz wa
 	lda_24 xbc, MidiPkt_EventType_Table_0x360
-	ld_srib3 L, 0x07, 0xe4, 0xe0
+	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 SysEx_ApplyToSlot49_Data:
@@ -140,7 +140,7 @@ SysEx_ClampVoiceIndex8_49:
 SysEx_ClampVoiceIndex8_49_DoLookup:
 	extz wa
 	lda_24 xbc, MidiPkt_EventType_Table_0x3E0
-	ld_srib3 L, 0x07, 0xe4, 0xe0
+	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 SysEx_ApplyToSlot49_Format_Data:
@@ -200,7 +200,7 @@ SysEx_ClampVoiceIndex128_49:
 SysEx_ClampVoiceIndex128_49_DoLookup:
 	extz wa
 	lda_24 xbc, MidiPkt_EventType_Table_0x3E8
-	ld_srib3 L, 0x07, 0xe4, 0xe0
+	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 SysEx_DispatchByChannel:
@@ -215,9 +215,9 @@ SysEx_DispatchByChannel:
 	ret gt
 	add wa, wa
 	lda_24 xix, MidiPkt_EventType_Table_0x4D4
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SysEx_ChannelHandler_4B_Data
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SysEx_ChannelHandler_4B_Data:
 	cps	c, 5
@@ -268,9 +268,9 @@ SysEx_DispatchByChannel_49:
 	ret gt
 	add wa, wa
 	lda_24 xix, MidiPkt_EventType_Table_0x538
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SysEx_ChannelHandler_49_Data
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SysEx_ChannelHandler_49_Data:
 	cps	c, 5
@@ -343,7 +343,7 @@ SysEx_ValidateRolandHeader_NonZeroChan:
 	add xbc, 0x2e0
 
 SysEx_ValidateRolandHeader_Dispatch:
-	ld_spib E, 0xe0
+	ldb_spi E, 0xe0
 	cp e, 0x3a
 	jr z, SysEx_ValidateRolandHeader_Cmd3A
 	cp e, 0x38
@@ -377,7 +377,7 @@ SysEx_ApplyVoiceParam_4B:
 	push xiz
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ldada xwa, 0xfc8e
+	lda_d16 xwa, 0xfc8e
 	sub xwa, 0xf980
 	add (xsp + 6), xwa
 	ld a, (xsp + 10)
@@ -390,7 +390,7 @@ SysEx_ApplyVoiceParam_4B:
 	call DSPCfg_WriteParamSimple
 	cps hl, 0
 	jr lt, SysEx_ApplyVoiceParam_4B_Return
-	ldada xwa, 0xfc8e
+	lda_d16 xwa, 0xfc8e
 	cp xwa, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_4B_ReadSubParams
 	ld a, (xwa)
@@ -398,15 +398,15 @@ SysEx_ApplyVoiceParam_4B:
 	ld a, (xsp + 10)
 	extz wa
 	calr SysEx_ClampVoiceIndex8
-	stda8 0xfc8e, l
+	stb_d8 0xfc8e, l
 
 SysEx_ApplyVoiceParam_4B_ReadSubParams:
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_4B_IterateSlots
-	ldada xbc, 0xfc8e
+	lda_d16 xbc, 0xfc8e
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_4B_SkipRestore
 	ld a, (xsp + 4)
@@ -417,13 +417,13 @@ SysEx_ApplyVoiceParam_4B_SkipRestore:
 
 SysEx_ApplyVoiceParam_4B_IterateSlots:
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_4B_RestoreSlotId
 
 SysEx_ApplyVoiceParam_4B_SlotLoop:
 	ld a, (xsp + 10)
 	extz wa
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	calr SysEx_DispatchByChannel_49
 	ld bc, hl
@@ -437,11 +437,11 @@ SysEx_ApplyVoiceParam_4B_SlotLoop:
 
 SysEx_ApplyVoiceParam_4B_SlotNext:
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, SysEx_ApplyVoiceParam_4B_SlotLoop
 
 SysEx_ApplyVoiceParam_4B_RestoreSlotId:
-	ldada xbc, 0xfc8e
+	lda_d16 xbc, 0xfc8e
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_4B_Return
 	ld a, (xsp + 4)
@@ -457,14 +457,14 @@ SysEx_ApplyVoiceParam_4B_128:
 	push xiz
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ldada xwa, 0xfc8e
+	lda_d16 xwa, 0xfc8e
 	sub xwa, 0xf980
 	add (xsp + 6), xwa
 	ld a, (xsp + 10)
 	extz wa
 	calr SysEx_ClampVoiceIndex128
 	ld (xsp + 10), l
-	ldada xbc, 0xfc8e
+	lda_d16 xbc, 0xfc8e
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_4B_128_ReadSub
 	ld a, (xbc)
@@ -476,10 +476,10 @@ SysEx_ApplyVoiceParam_4B_128:
 SysEx_ApplyVoiceParam_4B_128_ReadSub:
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_4B_128_IterateSlots
-	ldada xbc, 0xfc8e
+	lda_d16 xbc, 0xfc8e
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_4B_128_SkipRestore
 	ld a, (xsp + 4)
@@ -490,7 +490,7 @@ SysEx_ApplyVoiceParam_4B_128_SkipRestore:
 
 SysEx_ApplyVoiceParam_4B_128_IterateSlots:
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_4B_128_RestoreSlotId
 
 SysEx_ApplyVoiceParam_4B_128_SlotLoop:
@@ -515,11 +515,11 @@ SysEx_ApplyVoiceParam_4B_128_WriteSlot:
 
 SysEx_ApplyVoiceParam_4B_128_SlotNext:
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, SysEx_ApplyVoiceParam_4B_128_SlotLoop
 
 SysEx_ApplyVoiceParam_4B_128_RestoreSlotId:
-	ldada xbc, 0xfc8e
+	lda_d16 xbc, 0xfc8e
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_4B_128_Return
 	ld a, (xsp + 4)
@@ -535,7 +535,7 @@ SysEx_ApplyVoiceParam_49:
 	push xiz
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ldada xwa, 0xfc74
+	lda_d16 xwa, 0xfc74
 	sub xwa, 0xf980
 	add (xsp + 6), xwa
 	ld a, (xsp + 10)
@@ -548,7 +548,7 @@ SysEx_ApplyVoiceParam_49:
 	call DSPCfg_WriteParamSimple
 	cps hl, 0
 	jr lt, SysEx_ApplyVoiceParam_49_Return
-	ldada xwa, 0xfc74
+	lda_d16 xwa, 0xfc74
 	cp xwa, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_49_ReadSubParams
 	ld a, (xwa)
@@ -556,15 +556,15 @@ SysEx_ApplyVoiceParam_49:
 	ld a, (xsp + 10)
 	extz wa
 	calr SysEx_ClampVoiceIndex8_49
-	stda8 0xfc74, l
+	stb_d8 0xfc74, l
 
 SysEx_ApplyVoiceParam_49_ReadSubParams:
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_49_IterateSlots
-	ldada xbc, 0xfc74
+	lda_d16 xbc, 0xfc74
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_49_SkipRestore
 	ld a, (xsp + 4)
@@ -575,13 +575,13 @@ SysEx_ApplyVoiceParam_49_SkipRestore:
 
 SysEx_ApplyVoiceParam_49_IterateSlots:
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_49_RestoreSlotId
 
 SysEx_ApplyVoiceParam_49_SlotLoop:
 	ld a, (xsp + 10)
 	extz wa
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	calr SysEx_DispatchByChannel
 	ld bc, hl
@@ -595,11 +595,11 @@ SysEx_ApplyVoiceParam_49_SlotLoop:
 
 SysEx_ApplyVoiceParam_49_SlotNext:
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, SysEx_ApplyVoiceParam_49_SlotLoop
 
 SysEx_ApplyVoiceParam_49_RestoreSlotId:
-	ldada xbc, 0xfc74
+	lda_d16 xbc, 0xfc74
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_49_Return
 	ld a, (xsp + 4)
@@ -615,14 +615,14 @@ SysEx_ApplyVoiceParam_49_128:
 	push xiz
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ldada xwa, 0xfc74
+	lda_d16 xwa, 0xfc74
 	sub xwa, 0xf980
 	add (xsp + 6), xwa
 	ld a, (xsp + 10)
 	extz wa
 	calr SysEx_ClampVoiceIndex128_49
 	ld (xsp + 10), l
-	ldada xbc, 0xfc74
+	lda_d16 xbc, 0xfc74
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_49_128_ReadSub
 	ld a, (xbc)
@@ -634,10 +634,10 @@ SysEx_ApplyVoiceParam_49_128:
 SysEx_ApplyVoiceParam_49_128_ReadSub:
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_49_128_IterateSlots
-	ldada xbc, 0xfc74
+	lda_d16 xbc, 0xfc74
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_49_128_SkipRestore
 	ld a, (xsp + 4)
@@ -648,7 +648,7 @@ SysEx_ApplyVoiceParam_49_128_SkipRestore:
 
 SysEx_ApplyVoiceParam_49_128_IterateSlots:
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_49_128_RestoreSlotId
 
 SysEx_ApplyVoiceParam_49_128_SlotLoop:
@@ -673,11 +673,11 @@ SysEx_ApplyVoiceParam_49_128_WriteSlot:
 
 SysEx_ApplyVoiceParam_49_128_SlotNext:
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, SysEx_ApplyVoiceParam_49_128_SlotLoop
 
 SysEx_ApplyVoiceParam_49_128_RestoreSlotId:
-	ldada xbc, 0xfc74
+	lda_d16 xbc, 0xfc74
 	cp xbc, (xsp + 6)
 	jr z, SysEx_ApplyVoiceParam_49_128_Return
 	ld a, (xsp + 4)
@@ -706,11 +706,11 @@ SysEx_ApplyAndReloadPreset_Type61:
 	jrl lt, AssswbWr_ReturnFail
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jrl lt, AssswbWr_ReturnFail
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jrl le, AssswbWr_ReturnFail
 
 SysEx_ApplyAndReloadPreset_Type61_Loop:
@@ -725,7 +725,7 @@ SysEx_ApplyAndReloadPreset_Type61_Loop:
 	ld xde, 0xfc74
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, SysEx_ApplyAndReloadPreset_Type61_Loop
 	jr AssswbWr_ReturnFail
 
@@ -737,11 +737,11 @@ SysEx_ApplyAndReloadPreset_Type63:
 	jr lt, AssswbWr_ReturnFail
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr lt, AssswbWr_ReturnFail
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, AssswbWr_ReturnFail
 
 SysEx_ApplyAndReloadPreset_Type63_Loop:
@@ -756,7 +756,7 @@ SysEx_ApplyAndReloadPreset_Type63_Loop:
 	ld xde, 0xfc8e
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, SysEx_ApplyAndReloadPreset_Type63_Loop
 
 AssswbWr_ReturnFail:
@@ -766,10 +766,10 @@ AssswbWr_Return:
 	pop xiz
 	ret
 AssswbWr:
-	ldda16 xhl, 0x90de
+	ldw_d16 xhl, 0x90de
 	cp hl, 0x1fc
 	jr nc, AssswbWr_BufferFull
-	ldada xix, 0xbd3c
+	lda_d16 xix, 0xbd3c
 	extz xhl
 	add xhl, xix
 	lda_dpi XBC, 0xec
@@ -778,7 +778,7 @@ AssswbWr:
 	ld a, (xsp + 4)
 	lda_dpi XBC, 0xec
 	ld (xhl), 0xff
-	ldda16 xwa, 0x90de
+	ldw_d16 xwa, 0x90de
 	inc 4, wa
 	stda16 0x90de, xwa
 
@@ -786,10 +786,10 @@ AssswbWr_BufferFull:
 	retd 0x2
 
 AddswbWr:
-	ldda16 xhl, 0x90e2
+	ldw_d16 xhl, 0x90e2
 	cp hl, 0xfc
 	jr nc, AddswbWr_BufferFull
-	ldada xix, 0xbf39
+	lda_d16 xix, 0xbf39
 	extz xhl
 	add xhl, xix
 	lda_dpi XBC, 0xec
@@ -798,7 +798,7 @@ AddswbWr:
 	ld a, (xsp + 4)
 	lda_dpi XBC, 0xec
 	ld (xhl), 0xff
-	ldda16 xwa, 0x90e2
+	ldw_d16 xwa, 0x90e2
 	inc 4, wa
 	stda16 0x90e2, xwa
 
@@ -806,7 +806,7 @@ AddswbWr_BufferFull:
 	retd 0x2
 
 SwbtWr:
-	ldada xix, 0xc039
+	lda_d16 xix, 0xc039
 	ld xiy, xix
 	lda xhl, (xix + 60)
 	cp (xix), 0xff
@@ -844,7 +844,7 @@ SwbtWr_SoundBankParamTable:
 SwbtWr_ProcessAll:
 	ld xiy, 0xbf39
 	ld xix, 0xbd3c
-	ldda16 xbc, 0x90e2
+	ldw_d16 xbc, 0x90e2
 	srl bc, 1
 	cps bc, 0
 	jr z, SwbtWr_ProcessAll_CompactDone
@@ -899,7 +899,7 @@ SwbtWr_DispatchLoop:
 	ldda32 xix, 0xc081
 	xor hl, hl
 	ld l, (xiy)
-	stda8 0xc080, l
+	stb_d8 0xc080, l
 	cp l, 0xbf
 	jr ugt, SwbtWr_DispatchLoop_NextEvent
 	sla hl, 2
@@ -915,7 +915,7 @@ SwbtWr_DispatchLoop_ScanCallbacks:
 
 SwbtWr_DispatchLoop_ExecuteCallback:
 	stda16 0xc07d, xwa
-	stda8 0xc07f, c
+	stb_d8 0xc07f, c
 	push_sd16w 0x7b, 0xc0
 	push_sd16w 0x81, 0xc0
 	push_sd16w 0x83, 0xc0
@@ -1009,7 +1009,7 @@ PreLswLoad:
 PostLswLoad:
 	cps wa, 0
 	jp_24 lt, Voice_CopyFromScratch
-	cpi8_24 0x0340f6, 0x00
+	cpib_da 0x0340f6, 0x00
 	call_24 z, VoiceParam_RestoreReverbChorus
 	call ToneGen_DispatchByMode
 	call SwbtWr_NullRet
@@ -1078,13 +1078,13 @@ PostMidiSave:
 
 VoiceParam_SaveReverbChorus:
 	dec 4, xsp
-	push_werp 0xfa
-	ldada xwa, 0xc08e
+	pushw_erp 0xfa
+	lda_d16 xwa, 0xc08e
 	ld (xsp + 2), xwa
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 VoiceParam_SaveReverbChorus_Loop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	call VoiceData_LookupPtrByIndex
 	lda xbc, (xhl + 12)
@@ -1097,7 +1097,7 @@ VoiceParam_SaveReverbChorus_Loop:
 	ld c, (xde)
 	lda_dpi XHL, 0xe0
 	ld (xsp + 2), xwa
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x19
 	jr c, VoiceParam_SaveReverbChorus_Loop
 	pushw 0xe
@@ -1107,19 +1107,19 @@ VoiceParam_SaveReverbChorus_Loop:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	pop_werp 0xfa
+	popw_erp 0xfa
 	inc 4, xsp
 	ret
 
 VoiceParam_RestoreReverbChorus:
 	dec 4, xsp
-	push_werp 0xfa
-	ldada xwa, 0xc08e
+	pushw_erp 0xfa
+	lda_d16 xwa, 0xc08e
 	ld (xsp + 2), xwa
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 VoiceParam_RestoreReverbChorus_Loop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	call VoiceData_LookupPtrByIndex
 	lda xde, (xhl + 12)
@@ -1127,15 +1127,15 @@ VoiceParam_RestoreReverbChorus_Loop:
 	inc 1, xhl
 	andmi8 (xde), 0xf8
 	ld xwa, (xsp + 2)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xsp + 2), xwa
 	and c, 0x7
 	or (xde), c
 	ld xwa, (xsp + 2)
-	ld_spib C, 0xe0
+	ldb_spi C, 0xe0
 	ld (xhl), c
 	ld (xsp + 2), xwa
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x19
 	jr c, VoiceParam_RestoreReverbChorus_Loop
 	pushw 0xe
@@ -1145,13 +1145,13 @@ VoiceParam_RestoreReverbChorus_Loop:
 	pushw 0xfd50
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	pop_werp 0xfa
+	popw_erp 0xfa
 	inc 4, xsp
 	ret
 
 BitMapOut_ComputeRegionDelta:
-	ldada xwa, 0xfda2
-	ldada xbc, 0xf980
+	lda_d16 xwa, 0xfda2
+	lda_d16 xbc, 0xf980
 	sub xwa, xbc
 	pushw wa
 	push xbc
@@ -1176,13 +1176,13 @@ BitMapOut_RenderDisplay:
 	lds wa, 2
 	call BitMapOut_GetRenderMode_CheckBit3
 	call BitMapOut_SaveDisplayToROM
-	ldada xbc, 0xfc5a
+	lda_d16 xbc, 0xfc5a
 	ld a, (xbc + 8)
-	ldfr_berp A, 0xf9
+	ldb_erp A, 0xf9
 	ld a, (xbc + 9)
-	ldfr_berp A, 0xfb
+	ldb_erp A, 0xfb
 	ldmi16 (xsp + 4), 0x8d3a
-	ldada xbc, 0xfd96
+	lda_d16 xbc, 0xfd96
 	ld a, (xbc + 1)
 	ld (xsp + 6), a
 	ld a, (xbc + 11)
@@ -1201,10 +1201,10 @@ BitMapOut_RenderDisplay:
 	call Mem_Copy
 	lda xsp, (xsp + 20)
 	calr VoiceParam_SaveReverbChorus
-	ldada xix, 0xf460
-	ldada xbc, 0xf980
+	lda_d16 xix, 0xf460
+	lda_d16 xbc, 0xf980
 	ld xhl, xbc
-	ldada xwa, 0xfd5e
+	lda_d16 xwa, 0xfd5e
 	sub xwa, xbc
 	ld de, wa
 	srl de, 1
@@ -1214,7 +1214,7 @@ BitMapOut_RenderDisplay:
 
 BitMapOut_CopyRegion_Loop:
 	ld_spiw WA, 0xf1
-	st_dpiw WA, 0xed
+	stw_dpi WA, 0xed
 	inc 1, bc
 	ld wa, bc
 	cp wa, de
@@ -1236,28 +1236,28 @@ BitMapOut_CopyRegion_Done:
 	lda xsp, (xsp + 20)
 	cpdi8 4596, 1
 	jr nz, BitMapOut_SkipRestore
-	cpi8_24 0x0340f7, 0x00
+	cpib_da 0x0340f7, 0x00
 	jr nz, BitMapOut_MergeOutputFields
 
 BitMapOut_SkipRestore:
 	calr VoiceParam_RestoreReverbChorus
 
 BitMapOut_MergeOutputFields:
-	ldada xix, 0xfd96
+	lda_d16 xix, 0xfd96
 	lda xbc, (xix + 1)
-	ldada xhl, 0xf980
+	lda_d16 xhl, 0xf980
 	ld xwa, xbc
 	sub xwa, xhl
-	ldada xde, 0xf460
+	lda_d16 xde, 0xf460
 	ld xiy, xde
 	add xiy, xwa
 	ld w, (xiy)
 	res 7, w
 	ld a, (xbc)
 	and a, 0x80
-	ldfr_berp A, 0xe2
+	ldb_erp A, 0xe2
 	ld a, w
-	or_berp A, 0xe2
+	orb_erp A, 0xe2
 	ld w, a
 	ld (xbc), w
 	lda xbc, (xix + 11)
@@ -1268,17 +1268,17 @@ BitMapOut_MergeOutputFields:
 	and w, 0xc0
 	ld a, (xbc)
 	and a, 0x3f
-	ldfr_berp A, 0xe2
-	or_berp W, 0xe2
+	ldb_erp A, 0xe2
+	orb_erp W, 0xe2
 	ld (xbc), w
-	ldada xbc, 0xfc5a
+	lda_d16 xbc, 0xfc5a
 	ld a, (xbc + 5)
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	ld a, (xbc + 6)
-	ldfr_berp A, 0xfa
-	ldto_berp A, 0xf9
+	ldb_erp A, 0xfa
+	stb_erp A, 0xf9
 	ld (xbc + 8), a
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	ld (xbc + 9), a
 	mrdb5 0x8f, 0x04, 0x19, 0x3a, 0x8d
 	call ToneGen_InitAllChannelEntries_Skip
@@ -1301,7 +1301,7 @@ BitMapOut_MergeOutputFields:
 	call AddswbWr
 	ld w, (xsp + 6)
 	and w, 0x80
-	ldada xbc, 0xfd97
+	lda_d16 xbc, 0xfd97
 	ld a, (xbc)
 	res 7, a
 	ld (xbc), a
@@ -1313,7 +1313,7 @@ BitMapOut_MergeOutputFields:
 	ldw wa, 0x98
 	lds bc, 1
 	call AddswbWr
-	ldda8 e, 0xfda1
+	ldb_d8 e, 0xfda1
 	ld c, e
 	and c, 0xc0
 	ld a, (xsp + 8)
@@ -1325,11 +1325,11 @@ BitMapOut_MergeOutputFields:
 	ldw wa, 0x98
 	ldw bc, 0xb
 	call AddswbWr
-	ldada xbc, 0xfc5a
-	ldto_berp A, 0xf8
+	lda_d16 xbc, 0xfc5a
+	stb_erp A, 0xf8
 	and a, 0x3f
 	ld (xbc + 5), a
-	ldto_berp A, 0xfa
+	stb_erp A, 0xfa
 	and a, 0x3c
 	ld (xbc + 6), a
 	call PartSelect_UpdateDisplayState
@@ -1383,7 +1383,7 @@ SeqOut_WriteTimedBytes:
 	pushw iz
 	call SeqBuf_MidiOut_WriteBytes
 	inc 6, xsp
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	call MIDI_SC0_ENABLE_TX
 	jr MIDI_SeqProcess_DisableIntReturn
 
@@ -1392,7 +1392,7 @@ SeqOut_WriteTimedBytes_BufferFull:
 	jr MIDI_SeqProcess_DisableIntReturn
 
 SeqOut_WriteTimedBytes_CompIface:
-	ldda8 a, 0xc1e4
+	ldb_d8 a, 0xc1e4
 	cps a, 2
 	jr z, SeqOut_WriteTimedBytes_PC2Timing
 	cps a, 1
@@ -1409,17 +1409,17 @@ SeqOut_WriteTimedBytes_SerialWrite:
 	pushw iz
 	call SeqBuf3_WriteBytes
 	inc 6, xsp
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	calr SeqBuf3_EnableTx_Stub
 	jr MIDI_SeqProcess_DisableIntReturn
 
 SeqOut_WriteTimedBytes_PC2Timing:
 	call SeqBuf3_GetTimingValue
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 
 MIDI_SeqProcess_DisableIntReturn:
 	ei 0
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	pop xiz
 	ret
 
@@ -1438,7 +1438,7 @@ MidiSeq_ReceiveAndForward:
 	jr MidiSeq_ReceiveAndForward_Exit
 
 MidiSeq_ReceiveAndForward_CompIface:
-	ldda8 a, 0xc1e4
+	ldb_d8 a, 0xc1e4
 	cps a, 2
 	jr z, MidiSeq_ReceiveAndForward_PC2Forward
 	cps a, 1
@@ -1482,7 +1482,7 @@ MidiSeq_SendMultiByteWithTiming:
 	jrl MidiSeq_SendMultiByte_Exit
 
 MidiSeq_SendMultiByte_CompIface:
-	ldda8 a, 0xc1e4
+	ldb_d8 a, 0xc1e4
 	ld iz, (xsp + 8)
 	cps a, 1
 	jr z, MidiSeq_SendMultiByte_SerialCountInit
@@ -1644,16 +1644,16 @@ MidiSysEx_BuildAndSend_Exit:
 
 MIDI_BroadcastControlChange:
 	dec 8, xsp
-	push_werp 0xfa
+	pushw_erp 0xfa
 	ld xiy, WidgetParam_SelfRef_Table_0x19E
 	lda xix, (xsp + 2)
 	lds bc, 3
 	ldirw
 	ldi85
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 MIDI_BroadcastCC_MidiOutLoop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	or a, 0xb0
 	ld (xsp + 2), a
 	ei 6
@@ -1664,29 +1664,29 @@ MIDI_BroadcastCC_MidiOutLoop:
 	inc 6, xsp
 	ei 0
 	call MIDI_SC0_ENABLE_TX
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0f
 	jr ule, MIDI_BroadcastCC_MidiOutLoop
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 MIDI_BroadcastCC_CommLoop:
 	lda xde, (xsp + 2)
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	or a, 0xb0
 	ld (xde), a
 	lds wa, 4
 	lds bc, 7
 	call sendCOMM
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0f
 	jr ule, MIDI_BroadcastCC_CommLoop
 	stdi8 1060, 0
-	pop_werp 0xfa
+	popw_erp 0xfa
 	inc 8, xsp
 	ret
 
 CompIface_SendActiveSensing:
-	ldda8 a, 0xb7e0
+	ldb_d8 a, 0xb7e0
 	cps a, 0	; MIDI
 	ret z
 	cps a, 3	;  PC2
@@ -1724,12 +1724,12 @@ MidiOut_RealtimeDispatch_Data:
 	jrl	pl, 16320
 	ret
 	ret	nz
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 3
 	ret	z
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 3
-	stda8	0xc1e4, a
+	stb_d8	0xc1e4, a
 	ret
 
 MidiOut_SerializeAndSend:
@@ -1742,7 +1742,7 @@ MidiOut_SerializeRealtimeLoop:
 	cp iz, 0x108
 	jrl nc, MidiOut_FlushBuffer
 	resda 4, 1065
-	ldda8 a, 1065
+	ldb_d8 a, 1065
 	and a, 0x1f
 	jr z, MidiOut_ReadSysExByte
 	bitda 0, 1065
@@ -1752,14 +1752,14 @@ MidiOut_SerializeRealtimeLoop:
 	jr nz, MidiOut_SerializeRealtimeLoop
 	ld wa, iz
 	inc 1, iz
-	ldada xbc, 0xc0d2
+	lda_d16 xbc, 0xc0d2
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xf8
 	jr MidiOut_SerializeRealtimeLoop
 
 MidiOut_CheckStart:
-	ldada xwa, 0xc0d2
+	lda_d16 xwa, 0xc0d2
 	bitda 1, 1065
 	jr z, MidiOut_CheckContinue
 	resda 1, 1065
@@ -1804,7 +1804,7 @@ MidiOut_ReadSysExByte:
 	jr z, MidiOut_FlushBuffer
 	ld wa, iz
 	inc 1, iz
-	ldada xbc, 0xc0d2
+	lda_d16 xbc, 0xc0d2
 	extz xwa
 	add xwa, xbc
 	ld (xwa), l
@@ -1833,7 +1833,7 @@ MidiThru_Enable:
 	ret
 
 GET_COMPUTER_INTERFACE_SELECTION:
-	ldda8 l, 0xb7e0
+	ldb_d8 l, 0xb7e0
 	ret
 
 CompIface_ProcessInput:
@@ -1905,7 +1905,7 @@ CompIface_PostProcess:
 	call AccompSeq_StopSequence
 	bitda 6, 0xc1f0
 	ret z
-	ldda16 xwa, 1033
+	ldw_d16 xwa, 1033
 	subda16 xwa, 0xc1ea
 	cpda16 xwa, 0xc1fc
 	ret ule
@@ -1919,7 +1919,7 @@ CompIface_PostProcess:
 	ret
 
 CompIface_RampControl:
-	ldda16 xwa, 1033
+	ldw_d16 xwa, 1033
 	ld bc, wa
 	subda16 xbc, 0xc1ea
 	bitda 0, 0xc1f0
@@ -1927,9 +1927,9 @@ CompIface_RampControl:
 	cp bc, 0xf
 	ret c
 	stda16 0xc1ea, xwa
-	ldda16 xbc, 0xc1ee
+	ldw_d16 xbc, 0xc1ee
 	extz xbc
-	ldda16 xwa, 0xc1f8
+	ldw_d16 xwa, 0xc1f8
 	extz xwa
 	add xbc, xwa
 	cp xbc, 0x7f00
@@ -1939,7 +1939,7 @@ CompIface_RampControl:
 CompIface_RampUp_Clamp:
 	stda16 0xc1ee, xbc
 	srl bc, 8
-	stda8 0xc1ec, c
+	stb_d8 0xc1ec, c
 	extz bc
 	ld xwa, 0x4005
 	lds de, 1
@@ -1959,9 +1959,9 @@ CompIface_RampDown_Apply:
 	cp bc, 0xf
 	ret c
 	stda16 0xc1ea, xwa
-	ldda16 xbc, 0xc1ee
+	ldw_d16 xbc, 0xc1ee
 	extz xbc
-	ldda16 xwa, 0xc1fa
+	ldw_d16 xwa, 0xc1fa
 	extz xwa
 	sub xbc, xwa
 	jr ge, CompIface_RampDown_Clamp
@@ -1970,7 +1970,7 @@ CompIface_RampDown_Apply:
 CompIface_RampDown_Clamp:
 	stda16 0xc1ee, xbc
 	srl bc, 8
-	stda8 0xc1ec, c
+	stb_d8 0xc1ec, c
 	extz bc
 	ld xwa, 0x4005
 	lds de, 1
@@ -2041,10 +2041,10 @@ CompIface_ScaleAndNormalize:
 	ret
 
 CompIface_WriteVolume:
-	ldda8 c, 0xc1ec
+	ldb_d8 c, 0xc1ec
 	cp c, a
 	ret z
-	stda8 0xc1ec, a
+	stb_d8 0xc1ec, a
 	ld c, a
 	extz bc
 	sll bc, 8
@@ -2074,11 +2074,11 @@ Audio_ConfigureDSP:
 	ldw wa, 0x7f
 	jr CompIface_WriteVolume
 DSPCfg_ProcessInput:
-	ldda8 c, 0xc080
-	ldda8 e, 0xc07d
+	ldb_d8 c, 0xc080
+	ldb_d8 e, 0xc07d
 	cp c, 0x48
 	jrl z, DSPCfg_ScaleFactor_Dispatch
-	ldda8 a, 0xc07f
+	ldb_d8 a, 0xc07f
 	cp c, 0x70
 	jrl z, DSPCfg_CompressorDispatch
 	cp c, 0x98
@@ -2191,7 +2191,7 @@ DSPCfg_SetFadeBit:
 	setda 1, 0xc1f0
 
 DSPCfg_UpdateOutputVolume:
-	ldda8 a, 0xc1f0
+	ldb_d8 a, 0xc1f0
 	and a, 0x3
 	jr nz, DSPCfg_CheckChorusMuted
 	ldw wa, 0x7f
@@ -2217,9 +2217,9 @@ DSPCfg_CompressorDispatch:
 	ret z
 	ld xwa, 0x2a00
 	call SndParam_LookupReadOnly
-	stda8 0xc1f2, l
+	stb_d8 0xc1f2, l
 	extz hl
-	ldda16 xbc, 0xc1f6
+	ldw_d16 xbc, 0xc1f6
 	ld wa, hl
 	calr CompIface_ScaleAndNormalize
 	stda16 0xc1f8, xhl
@@ -2230,13 +2230,13 @@ DSPCfg_CompParam_SubType6:
 	ret z
 	ld xwa, 0x2a01
 	call SndParam_LookupReadOnly
-	stda8 0xc1f4, l
+	stb_d8 0xc1f4, l
 	extz hl
-	ldda16 xbc, 0xc1f6
+	ldw_d16 xbc, 0xc1f6
 	ld wa, hl
 	calr CompIface_ScaleAndNormalize
 	stda16 0xc1fa, xhl
-	ldda16 xbc, 0xc1f6
+	ldw_d16 xbc, 0xc1f6
 	lds wa, 1
 	jrl DSPCfg_ScaleFactor_StoreResult
 
@@ -2281,17 +2281,17 @@ DSPCfg_ScaleFactor_Update:
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
 	stda16 0xc1f6, xhl
-	ldda8 a, 0xc1f2
+	ldb_d8 a, 0xc1f2
 	extz wa
 	ld bc, hl
 	calr CompIface_ScaleAndNormalize
 	stda16 0xc1f8, xhl
-	ldda8 a, 0xc1f4
+	ldb_d8 a, 0xc1f4
 	extz wa
-	ldda16 xbc, 0xc1f6
+	ldw_d16 xbc, 0xc1f6
 	calr CompIface_ScaleAndNormalize
 	stda16 0xc1fa, xhl
-	ldda16 xbc, 0xc1f6
+	ldw_d16 xbc, 0xc1f6
 	lds wa, 1
 
 DSPCfg_ScaleFactor_StoreResult:
@@ -2312,7 +2312,7 @@ DSPCfg_ExtractFieldPair:
 	ld w, (xix + 4)
 	ld a, w
 	and a, 0xf0
-	ldfr_berp A, 0xf4
+	ldb_erp A, 0xf4
 	extz iy
 	and w, 0xf
 	ld a, w
@@ -2331,7 +2331,7 @@ DSPCfg_ExtractFieldSingle:
 	ld l, (xde + 4)
 	ld e, l
 	and e, 0xf0
-	ldfr_berp E, 0xf0
+	ldb_erp E, 0xf0
 	extz ix
 	and l, 0xf
 	extz hl
@@ -2349,7 +2349,7 @@ DSPCfg_WriteParam:
 	ld wa, (xwa)
 	ld (xsp + 4), wa
 	ld a, (xde + 2)
-	ldfr_berp A, 0xe6
+	ldb_erp A, 0xe6
 	lda xwa, (xsp + 10)
 	ld bc, (xsp + 12)
 	ld hl, bc
@@ -2512,7 +2512,7 @@ DSPCfg_ReadField:
 	ld (xsp + 12), xde
 	ld xde, xbc
 	ld xbc, xwa
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	ld l, (xbc + 1)
 	extz hl
 	ld a, (xbc)
@@ -2524,7 +2524,7 @@ DSPCfg_ReadField:
 	ld wa, (xwa)
 	ld (xsp + 4), wa
 	ld a, (xde + 2)
-	ldfr_berp A, 0xee
+	ldb_erp A, 0xee
 	lda xwa, (xsp + 10)
 	cp_erpb 0xee, 0x76
 	jr z, DSPCfg_ReadField_Type76
@@ -2541,11 +2541,11 @@ DSPCfg_ReadField:
 	exts hl
 
 DSPCfg_ReadField_SetWidth1:
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 
 DSPCfg_ReadField_StoreAndReturn:
 	ld xwa, (xsp + 12)
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	ld (xwa), bc
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 4)
@@ -2588,7 +2588,7 @@ DSPCfg_ReadField_Type70_Width32:
 	and hl, 0x3f
 
 DSPCfg_ReadField_SetWidth2:
-	ldi_werp 0xfa, 2
+	ldiw_erp 0xfa, 2
 	jr DSPCfg_ReadField_StoreAndReturn
 
 DSPCfg_ReadField_Type76:
@@ -2793,7 +2793,7 @@ DSPCfg_ExtractPairFromStruct:
 	ld xhl, xbc
 	ld c, (xwa + 1)
 	and c, 0xff
-	ldfr_berp C, 0xf4
+	ldb_erp C, 0xf4
 	extz iy
 	ld c, (xwa)
 	exts bc
@@ -2813,7 +2813,7 @@ DSPCfg_ExtractPairFromStruct:
 	ld xwa, xbc
 	inc 1, xwa
 	ld c, (xbc)
-	ldfr_berp C, 0xf4
+	ldb_erp C, 0xf4
 	ld c, (xwa)
 	exts bc
 	ld (xhl), ix
@@ -2821,7 +2821,7 @@ DSPCfg_ExtractPairFromStruct:
 	ld xwa, (xsp + 10)
 	ld (xwa), bc
 	ld xbc, (xsp + 6)
-	ldto_berp A, 0xf4
+	stb_erp A, 0xf4
 	ld (xbc), a
 	popw iz
 	retd 0x8
@@ -2876,7 +2876,7 @@ DSPCfg_FindSlot63:
 	ldw (xsp + 4), 0xffff
 	ld wa, iz
 	calr DSPCfg_GetSlotCount
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	ld wa, iz
 	exts xwa
 	sll xwa, 2
@@ -2884,7 +2884,7 @@ DSPCfg_FindSlot63:
 	add xbc, xwa
 	ld xwa, (xbc)
 	lds iz, 0
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr le, DSPCfg_FindSlot63_Return
 
 DSPCfg_FindSlot63_Loop:
@@ -2896,7 +2896,7 @@ DSPCfg_FindSlot63_Next:
 	calr DSPCfg_PackAddress
 	ld xwa, xhl
 	inc 1, iz
-	cp_werp IZ, 0xfa
+	cpw_erp IZ, 0xfa
 	jr lt, DSPCfg_FindSlot63_Loop
 
 DSPCfg_FindSlot63_Return:
@@ -3692,13 +3692,13 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	ld wa, iz
 	ld xbc, (xsp + 8)
 	calr DSPCfg_ReadViaTableLookup
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	lda xwa, (xsp + 14)
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
 	ld wa, iz
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	ld xde, (xsp + 24)
 	calr DSPCfg_WriteViaTableLookup
 	ld wa, (xsp + 20)
@@ -3710,7 +3710,7 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	ld c, (xsp + 14)
 	inc 1, c
 	extz bc
-	ldto_werp DE, 0xfa
+	stw_erp DE, 0xfa
 	ldb d, 0x0
 	extz de
 	ld l, (xsp + 12)
@@ -3736,7 +3736,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	push xiz
 	ld (xsp + 16), xbc
 	ld (xsp + 20), wa
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	ld xwa, (xsp + 16)
 	calr DSPCfg_GetParamCount
 	ld (xsp + 4), hl
@@ -3797,7 +3797,7 @@ DSPCfg_WriteAllSlots_Clamped_CheckCount:
 	calr DSPCfg_GetSlotCount
 	cp iz, hl
 	jr c, DSPCfg_WriteAllSlots_Clamped_Loop
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
@@ -3810,19 +3810,19 @@ DSPCfg_WriteAllSlots_Combined:
 	ld wa, iz
 	ld xbc, (xsp + 4)
 	calr DSPCfg_WriteAllSlots_Direct
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	ld wa, iz
 	ld xbc, (xsp + 4)
 	calr DSPCfg_WriteAllSlots_Clamped
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	add wa, hl
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	cps wa, 0
 	jr z, DSPCfg_WriteAllSlots_Combined_Done
 	ldi_erpw 0xfa, 0xff, 0xff
 
 DSPCfg_WriteAllSlots_Combined_Done:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	pop xiz
 	inc 4, xsp
 	ret
@@ -4118,7 +4118,7 @@ DSPCfg_ReadFieldSimple:
 	ld (xsp + 10), xde
 	ld xde, xbc
 	ld xbc, xwa
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	ld l, (xbc + 1)
 	extz hl
 	ld a, (xbc)
@@ -4138,11 +4138,11 @@ DSPCfg_ReadFieldSimple:
 	jr z, DSPCfg_ReadFieldSimple_Type64_67
 	ld l, (xbc)
 	exts hl
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 
 DSPCfg_ReadFieldSimple_StoreReturn:
 	ld xwa, (xsp + 10)
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	ld (xwa), bc
 	ld xwa, (xsp + 18)
 	ld bc, (xsp + 4)
@@ -4169,7 +4169,7 @@ DSPCfg_ReadFieldSimple_Type70:
 	jr nz, DSPCfg_ReadFieldSimple_StoreReturn
 
 DSPCfg_ReadFieldSimple_SetWidth2:
-	ldi_werp 0xfa, 2
+	ldiw_erp 0xfa, 2
 	jr DSPCfg_ReadFieldSimple_StoreReturn
 
 DSPCfg_ApplyParamStruct:
@@ -4182,7 +4182,7 @@ DSPCfg_ApplyParamStruct:
 	ld (xsp + 4), wa
 	lda_24 xbc, ToneKit_ParamBlock_116_0x18
 	ld wa, (xsp + 4)
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	ld (xsp + 6), wa
 	ld wa, (xsp + 4)
@@ -4356,7 +4356,7 @@ DSPCfg_ApplyParamStructFull:
 	lda xsp, (xsp - 68)
 	push xiz
 	ldw (xsp + 4), 0x0
-	ld_spib E, 0xe0
+	ldb_spi E, 0xe0
 	extz de
 	ld (xsp + 30), de
 	lda xbc, (xwa - 1)
@@ -4433,9 +4433,9 @@ DSPCfg_ApplyParamStructFull_RangeCheck:
 DspConfig_EventDispatch:
 	add bc, bc
 	lda_24 xix, ToneKit_VoiceDispatch_Table_0x348
-	ld_sriw3 BC, 0x07, 0xf0, 0xe4
+	ldw_sri BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, AssSwb_SwapEntriesAndDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AssSwb_SwapEntriesAndDispatch:
 	ldw (xsp + 4), 0xffff
@@ -4503,33 +4503,33 @@ AssSwb_SwapEntriesAndDispatch:
 	ld d, (xbc)
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	ld xbc, (xsp + 60)
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xbc, (xsp + 56)
 	ld c, (xbc)
-	ldfr_berp C, 0xf0
+	ldb_erp C, 0xf0
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldfr_berp C, 0xf4
+	ldb_erp C, 0xf4
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	ld (xwa), d
-	ldto_berp A, 0xea
+	stb_erp A, 0xea
 	ld (xhl), a
 	ld xbc, (xsp + 68)
-	ldto_berp A, 0xeb
+	stb_erp A, 0xeb
 	ld (xbc), a
 	ld xbc, (xsp + 64)
-	ldto_berp A, 0xf0
+	stb_erp A, 0xf0
 	ld (xbc), a
 	ld xbc, (xsp + 60)
-	ldto_berp A, 0xf4
+	stb_erp A, 0xf4
 	ld (xbc), a
 	ld xbc, (xsp + 56)
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	ld (xbc), a
 	ld xwa, (xsp + 52)
 	ld (xwa), 0x5b
@@ -4716,7 +4716,7 @@ DSPCfg_EventType35:
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
 	ld c, (xix)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	ld xbc, (xsp + 68)
 	ld h, (xbc)
 	ld xbc, (xsp + 64)
@@ -4727,13 +4727,13 @@ DSPCfg_EventType35:
 	ld e, (xiz)
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xbc, (xsp + 44)
 	ld b, (xbc)
-	ldto_berp C, 0xeb
+	stb_erp C, 0xeb
 	ld (xwa), c
 	ld (xix), b
 	ld xwa, (xsp + 68)
@@ -4749,14 +4749,14 @@ DSPCfg_EventType35:
 	ld xwa, (xsp + 44)
 	ld (xwa), e
 	ld xbc, (xsp + 40)
-	ldto_berp A, 0xee
+	stb_erp A, 0xee
 	ld (xbc), a
 	ld xwa, (xsp + 36)
 	ld (xwa), 0x48
 	ld xwa, (xsp + 32)
 	ld (xwa), 0x4f
 	ld xwa, (xsp + 60)
-	ldto_berp C, 0xea
+	stb_erp C, 0xea
 	ld (xwa), c
 	ld xwa, (xsp + 16)
 	ld c, (xsp + 6)
@@ -4809,33 +4809,33 @@ DSPCfg_EventType36_StoreTail:
 	ld d, (xbc)
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	ld xbc, (xsp + 60)
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xbc, (xsp + 56)
 	ld c, (xbc)
-	ldfr_berp C, 0xf0
+	ldb_erp C, 0xf0
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldfr_berp C, 0xf4
+	ldb_erp C, 0xf4
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldfr_berp C, 0xf8
+	ldb_erp C, 0xf8
 	ld (xwa), d
-	ldto_berp A, 0xea
+	stb_erp A, 0xea
 	ld (xhl), a
 	ld xbc, (xsp + 68)
-	ldto_berp A, 0xeb
+	stb_erp A, 0xeb
 	ld (xbc), a
 	ld xbc, (xsp + 64)
-	ldto_berp A, 0xf0
+	stb_erp A, 0xf0
 	ld (xbc), a
 	ld xbc, (xsp + 60)
-	ldto_berp A, 0xf4
+	stb_erp A, 0xf4
 	ld (xbc), a
 	ld xbc, (xsp + 56)
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	ld (xbc), a
 	ld xwa, (xsp + 52)
 	ld (xwa), 0x12
@@ -4852,13 +4852,13 @@ DSPCfg_EventType40:
 	lda xbc, (xwa + 1)
 	ld (xsp + 56), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldfr_berp C, 0xe6
+	ldb_erp C, 0xe6
 	lda xix, (xwa + 4)
 	ld h, (xix)
 	lda xiy, (xwa + 5)
@@ -4871,17 +4871,17 @@ DSPCfg_EventType40:
 	ld e, (xiz)
 	ld xiz, (xsp + 40)
 	ld c, (xiz)
-	ldfr_berp C, 0xe7
+	ldb_erp C, 0xe7
 	ld xiz, (xsp + 36)
 	ld c, (xiz)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xiz, (xsp + 32)
 	ld c, (xiz)
-	ldfr_berp C, 0xef
-	ldto_berp C, 0xee
+	ldb_erp C, 0xef
+	stb_erp C, 0xee
 	ld (xwa), c
 	ld xiz, (xsp + 56)
-	ldto_berp A, 0xe6
+	stb_erp A, 0xe6
 	ld (xiz), a
 	ld xiz, (xsp + 68)
 	ld (xiz), h
@@ -4892,13 +4892,13 @@ DSPCfg_EventType40:
 	ld xwa, (xsp + 52)
 	ld (xwa), e
 	ld xwa, (xsp + 48)
-	ldto_berp C, 0xe7
+	stb_erp C, 0xe7
 	ld (xwa), c
 	ld xwa, (xsp + 44)
-	ldto_berp C, 0xeb
+	stb_erp C, 0xeb
 	ld (xwa), c
 	ld xwa, (xsp + 40)
-	ldto_berp C, 0xef
+	stb_erp C, 0xef
 	ld (xwa), c
 	ld xwa, (xsp + 36)
 	ld (xwa), 0x0
@@ -4906,7 +4906,7 @@ DSPCfg_EventType40:
 	ld c, (xsp + 6)
 	ld (xwa), c
 	ld xwa, (xsp + 60)
-	ldto_berp C, 0xea
+	stb_erp C, 0xea
 	ld (xwa), c
 	jrl DSPCfg_Epilogue
 
@@ -4927,55 +4927,55 @@ DSPCfg_EventType42:
 	lda xbc, (xwa + 5)
 	ld (xsp + 24), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xbc, (xsp + 44)
 	ld h, (xbc)
 	lda xbc, (xwa + 9)
 	ld (xsp + 20), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xef
+	ldb_erp C, 0xef
 	ld xbc, (xsp + 36)
 	ld c, (xbc)
-	ldfr_berp C, 0xf0
+	ldb_erp C, 0xf0
 	ld xbc, (xsp + 32)
 	ld b, (xbc)
 	ld xiy, (xsp + 60)
 	ld c, (xiy)
-	ldfr_berp C, 0xe6
+	ldb_erp C, 0xe6
 	ld (xwa), e
 	ld xwa, (xsp + 40)
 	ld (xwa), l
 	ld xiy, (xsp + 68)
 	ld (xiy), d
 	ld xiy, (xsp + 64)
-	ldto_berp A, 0xea
+	stb_erp A, 0xea
 	ld (xiy), a
 	ld xiy, (xsp + 28)
-	ldto_berp A, 0xee
+	stb_erp A, 0xee
 	ld (xiy), a
-	ldto_berp C, 0xeb
+	stb_erp C, 0xeb
 	ld xwa, (xsp + 24)
 	ld (xwa), c
 	ld xwa, (xsp + 52)
 	ld (xwa), h
 	ld xwa, (xsp + 48)
-	ldto_berp C, 0xef
+	stb_erp C, 0xef
 	ld (xwa), c
 	ld xwa, (xsp + 44)
 	ld (xwa), 0x50
-	ldto_berp C, 0xf0
+	stb_erp C, 0xf0
 	ld xwa, (xsp + 20)
 	ld (xwa), c
 	ld xwa, (xsp + 36)
 	ld (xwa), b
 	ld xwa, (xsp + 32)
-	ldto_berp C, 0xe6
+	stb_erp C, 0xe6
 	ld (xwa), c
 	ld xwa, (xsp + 60)
 	ld (xwa), 0x5a
@@ -4998,7 +4998,7 @@ DSPCfg_EventType44:
 	ld (xsp + 58), c
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	ld xbc, (xsp + 64)
 	ld h, (xbc)
 	lda xbc, (xwa + 4)
@@ -5011,24 +5011,24 @@ DSPCfg_EventType44:
 	ld e, (xbc)
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	ld xbc, (xsp + 44)
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	lda xbc, (xwa + 9)
 	ld (xsp + 24), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xef
+	ldb_erp C, 0xef
 	ld xbc, (xsp + 36)
 	ld c, (xbc)
-	ldfr_berp C, 0xf0
+	ldb_erp C, 0xf0
 	lda xbc, (xwa + 11)
 	ld (xsp + 20), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xf4
+	ldb_erp C, 0xf4
 	ld xbc, (xsp + 60)
 	ld b, (xbc)
-	ldto_berp C, 0xea
+	stb_erp C, 0xea
 	ld (xwa), c
 	ld xwa, (xsp + 40)
 	ld (xwa), h
@@ -5039,21 +5039,21 @@ DSPCfg_EventType44:
 	ld xwa, (xsp + 32)
 	ld (xwa), e
 	ld xiz, (xsp + 28)
-	ldto_berp A, 0xee
+	stb_erp A, 0xee
 	ld (xiz), a
 	ld xiz, (xsp + 52)
-	ldto_berp A, 0xeb
+	stb_erp A, 0xeb
 	ld (xiz), a
 	ld xwa, (xsp + 48)
-	ldto_berp C, 0xef
+	stb_erp C, 0xef
 	ld (xwa), c
 	ld xwa, (xsp + 44)
 	ld (xwa), 0x50
-	ldto_berp C, 0xf0
+	stb_erp C, 0xf0
 	ld xwa, (xsp + 24)
 	ld (xwa), c
 	ld xwa, (xsp + 36)
-	ldto_berp C, 0xf4
+	stb_erp C, 0xf4
 	ld (xwa), c
 	ld xwa, (xsp + 20)
 	ld (xwa), b
@@ -5077,10 +5077,10 @@ DSPCfg_EventType46:
 	ld e, (xbc)
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	lda xix, (xwa + 4)
 	ld h, (xix)
 	lda xiy, (xwa + 5)
@@ -5089,19 +5089,19 @@ DSPCfg_EventType46:
 	ld l, (xbc)
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xbc, (xsp + 44)
 	ld c, (xbc)
-	ldfr_berp C, 0xef
+	ldb_erp C, 0xef
 	ld (xwa), 0x2
 	ld xbc, (xsp + 60)
 	ld (xbc), 0x0
 	ld xbc, (xsp + 68)
 	ld (xbc), 0x63
 	ld xiz, (xsp + 64)
-	ldto_berp C, 0xee
+	stb_erp C, 0xee
 	ld (xiz), c
-	ldto_berp C, 0xea
+	stb_erp C, 0xea
 	ld (xix), c
 	ld (xiy), h
 	ld xbc, (xsp + 52)
@@ -5109,9 +5109,9 @@ DSPCfg_EventType46:
 	ld xbc, (xsp + 48)
 	ld (xbc), l
 	ld xix, (xsp + 44)
-	ldto_berp C, 0xeb
+	stb_erp C, 0xeb
 	ld (xix), c
-	ldto_berp C, 0xef
+	stb_erp C, 0xef
 	ld (xwa + 9), c
 	ld xhl, (xsp + 36)
 	ld c, (xsp + 6)
@@ -5150,21 +5150,21 @@ DSPCfg_EventType50:
 	lda xbc, (xwa + 1)
 	ld (xsp + 44), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xe7
+	ldb_erp C, 0xe7
 	ld xde, (xsp + 68)
 	ld c, (xde)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	ld xhl, (xsp + 64)
 	ld c, (xhl)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	lda xix, (xwa + 4)
 	ld (xsp + 40), xix
 	ld c, (xix)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	lda xix, (xwa + 5)
 	ld (xsp + 32), xix
 	ld c, (xix)
-	ldfr_berp C, 0xe6
+	ldb_erp C, 0xe6
 	ld xix, (xsp + 52)
 	ld h, (xix)
 	ld xix, (xsp + 48)
@@ -5181,16 +5181,16 @@ DSPCfg_EventType50:
 	ld xiz, (xsp + 44)
 	ld (xiz), 0x98
 	ld xiz, (xsp + 68)
-	ldto_berp C, 0xeb
+	stb_erp C, 0xeb
 	ld (xiz), c
 	ld xiz, (xsp + 64)
-	ldto_berp C, 0xee
+	stb_erp C, 0xee
 	ld (xiz), c
 	ld xiz, (xsp + 40)
-	ldto_berp C, 0xea
+	stb_erp C, 0xea
 	ld (xiz), c
 	ld xiz, (xsp + 32)
-	ldto_berp C, 0xe6
+	stb_erp C, 0xe6
 	ld (xiz), c
 	ld xiz, (xsp + 52)
 	ld (xiz), h
@@ -5203,7 +5203,7 @@ DSPCfg_EventType50:
 	ld c, (xsp + 6)
 	ld (xwa + 11), c
 	ld xwa, (xsp + 60)
-	ldto_berp C, 0xe7
+	stb_erp C, 0xe7
 	ld (xwa), c
 	ld xwa, (xsp + 16)
 	ld (xwa), 0x0
@@ -5217,7 +5217,7 @@ DSPCfg_EventType51:
 	ld l, (xbc)
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldfr_berp C, 0xea
+	ldb_erp C, 0xea
 	lda xbc, (xwa + 3)
 	ld (xsp + 48), xbc
 	ld h, (xbc)
@@ -5227,20 +5227,20 @@ DSPCfg_EventType51:
 	lda xbc, (xwa + 5)
 	ld (xsp + 40), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xee
+	ldb_erp C, 0xee
 	ld xbc, (xsp + 52)
 	ld e, (xbc)
 	lda xbc, (xwa + 7)
 	ld (xsp + 32), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xeb
+	ldb_erp C, 0xeb
 	lda xbc, (xwa + 8)
 	ld (xsp + 28), xbc
 	ld c, (xbc)
-	ldfr_berp C, 0xe7
+	ldb_erp C, 0xe7
 	lda xix, (xwa + 9)
 	ld c, (xix)
-	ldfr_berp C, 0xe6
+	ldb_erp C, 0xe6
 	ld xiy, (xsp + 36)
 	ld b, (xiy)
 	ld xiy, (xsp + 56)
@@ -5249,24 +5249,24 @@ DSPCfg_EventType51:
 	ld xiy, (xsp + 64)
 	ld (xiy), 0x98
 	ld xiy, (xsp + 68)
-	ldto_berp C, 0xea
+	stb_erp C, 0xea
 	ld (xiy), c
 	ld xiy, (xsp + 48)
 	ld (xiy), h
 	ld xiy, (xsp + 44)
 	ld (xiy), d
 	ld xiy, (xsp + 40)
-	ldto_berp C, 0xee
+	stb_erp C, 0xee
 	ld (xiy), c
 	ld xiy, (xsp + 52)
 	ld (xiy), e
 	ld xiy, (xsp + 32)
-	ldto_berp C, 0xeb
+	stb_erp C, 0xeb
 	ld (xiy), c
-	ldto_berp C, 0xe7
+	stb_erp C, 0xe7
 	ld xde, (xsp + 28)
 	ld (xde), c
-	ldto_berp C, 0xe6
+	stb_erp C, 0xe6
 	ld (xix), c
 	ld xde, (xsp + 36)
 	ld (xde), b
@@ -5300,14 +5300,14 @@ DSPCfg_ReturnValueTable:
 	.include "boot/screen_group_dispatch.s"
 
 AudioInit_ProcessModeChange:
-	ldda16 xwa, 0xc594
+	ldw_d16 xwa, 0xc594
 	bit 2, wa
 	ret z
 	call Audio_CheckInitStatus
 	anddi16 0xc594, 0xfffb
 	bitda 1, 0xfc67
 	jr z, AudioModeChange_Handler
-	ldda16 xwa, 0xc594
+	ldw_d16 xwa, 0xc594
 	bit 4, wa
 	jr nz, AudioModeChange_ClearVoiceFlags
 	setda 2, 0xc1fe
@@ -5324,7 +5324,7 @@ AudioModeChange_Handler:
 	stdi8 0xc200, 255
 	stdi8 0xc201, 255
 	ordi16 0xc59c, 257
-	ldda8 a, 0x8d34
+	ldb_d8 a, 0x8d34
 	extz wa
 	sla wa, 2
 	lda_24 xbc, SystemConfig_PointerTable_0x76
@@ -5344,12 +5344,12 @@ AudioModeChange_Handler:
 
 Audio_CheckSubsystemReady:
 	call Audio_CheckInitStatus
-	ldda16 xwa, 0xc598
+	ldw_d16 xwa, 0xc598
 	and wa, 0x60
 	call_24 z, AudioInit_RefreshToneBank
 	bitda 1, 0xfc67
 	jr z, AudioSubsystem_Callback
-	ldda16 xwa, 0xc594
+	ldw_d16 xwa, 0xc594
 	bit 4, wa
 	jr nz, AudioSubsystem_ClearVoiceFlags
 	setda 2, 0xc1fe
@@ -5366,7 +5366,7 @@ AudioSubsystem_Callback:
 	stdi8 0xc200, 255
 	stdi8 0xc201, 255
 	ordi16 0xc59c, 257
-	ldda8 a, 0x8d34
+	ldb_d8 a, 0x8d34
 	extz wa
 	sla wa, 2
 	lda_24 xbc, SystemConfig_PointerTable_0x76
@@ -5395,7 +5395,7 @@ AudioInit_CheckMIDIAndDispatch:
 Audio_InitDispatchReturn:
 	cps a, 0
 	jr z, AudioDispatch_ClearAccFlags
-	ldda16 xwa, 0xc598
+	ldw_d16 xwa, 0xc598
 	bit 2, wa
 	jr z, AudioDispatch_SetAccMode
 	bitda 0, 0x28b2
@@ -5411,7 +5411,7 @@ AudioDispatch_ClearAccFlags:
 AudioDispatch_SetAccMode:
 	ordi16 0xc596, 512
 	call AccAutoPlay_PeriodicCheck
-	ldda16 xwa, 0xc596
+	ldw_d16 xwa, 0xc596
 	and wa, 0x7
 	jr z, AudioDispatch_SetTimerBase
 	stdi8 0xc5a0, 31
@@ -5423,7 +5423,7 @@ AudioDispatch_SetTimerBase:
 AudioDispatch_CheckStereoMode:
 	bitda 1, 0xfc67
 	jr z, AudioVoice_Callback
-	ldda16 xwa, 0xc594
+	ldw_d16 xwa, 0xc594
 	bit 4, wa
 	jr nz, AudioDispatch_ClearVoiceFlags
 	setda 2, 0xc1fe
@@ -5437,7 +5437,7 @@ AudioDispatch_SetBusyFlag:
 
 ; Audio voice callback dispatch
 AudioVoice_Callback:
-	ldda8 a, 0x8d34
+	ldb_d8 a, 0x8d34
 	extz wa
 	sla wa, 2
 	lda_24 xbc, SystemConfig_PointerTable_0x76
@@ -5464,7 +5464,7 @@ AudioMode_SetStereoFlags:
 AudioMode_ResetVoiceState:
 	bitda 1, 0xfc67
 	jr z, AudioVoiceReset_Handler
-	ldda16 xwa, 0xc594
+	ldw_d16 xwa, 0xc594
 	bit 4, wa
 	jr nz, AudioVoiceReset_ClearFlags
 	setda 2, 0xc1fe
@@ -5482,7 +5482,7 @@ AudioVoiceReset_Handler:
 	stdi8 0xc201, 255
 	ordi16 0xc59c, 257
 	anddi16 0xc594, 0xfffd
-	ldda8 a, 0x8d34
+	ldb_d8 a, 0x8d34
 	extz wa
 	sla wa, 2
 	lda_24 xbc, SystemConfig_PointerTable_0x76
@@ -5526,13 +5526,13 @@ AudioMode_ConfigExternal_CheckStereo:
 
 AudioMode_ConfigExternal_NoStereo:
 	anddi16 0xc596, 0xffdf
-	ldda16 xwa, 0xc596
+	ldw_d16 xwa, 0xc596
 	and wa, 0x7
 	call_24 z, AudioInit_RefreshToneBank
 
 AudioMode_ConfigExternal_MergeFlags:
 	resda 2, 0xc1fe
-	ldda8 a, 0xfc67
+	ldb_d8 a, 0xfc67
 	and a, 0x2
 	ld c, a
 	add a, c
@@ -5552,10 +5552,10 @@ AudioMode_ConfigExternal_Apply:
 UIState_ProcessMidiEvent:
 	cpdi8 0xc080, 24
 	ret ugt
-	ldda8 l, 0xc080
-	ldda8 h, 0xc07d
-	ldda8 e, 0xc07f
-	ldda8 d, 0xc07e
+	ldb_d8 l, 0xc080
+	ldb_d8 h, 0xc07d
+	ldb_d8 e, 0xc07f
+	ldb_d8 d, 0xc07e
 	ld a, l
 	extz wa
 	sla wa, 2
@@ -5583,17 +5583,17 @@ UIStateEvt_PartRouting:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	add wa, wa
 	ld hl, wa
 	add hl, 0x124
-	ldada xix, 0xc1fe
+	lda_d16 xix, 0xc1fe
 	ld a, d
 	and a, 0x7
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0x11C
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	and a, 0x7
 	sla a, 1
 	and_srib_im 0x07, 0xf0, 0xec, 0xf1
@@ -5610,9 +5610,9 @@ UIStateEvt_VoiceAssign:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	ldada xbc, 0xc222
+	lda_d16 xbc, 0xc222
 	ld ix, wa
 	extz xix
 	add xix, xbc
@@ -5625,9 +5625,9 @@ UIStateEvt_VoiceAssign_Reset:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	ldada xbc, 0xc222
+	lda_d16 xbc, 0xc222
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xff
@@ -5644,9 +5644,9 @@ UIStateEvt_ToneChange:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	ldada xbc, 0xc202
+	lda_d16 xbc, 0xc202
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xff
@@ -5659,16 +5659,16 @@ UIStateEvt_ToneChange_Set:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	ldada xbc, 0xc202
+	lda_d16 xbc, 0xc202
 	ld ix, wa
 	extz xix
 	add xix, xbc
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xix), a
 	cp l, 0x13
 	jr nz, Tone_WriteEndMarker
@@ -5686,9 +5686,9 @@ UIStateEvt_DrumAssign:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	ldada xbc, 0xc222
+	lda_d16 xbc, 0xc222
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xff
@@ -5698,9 +5698,9 @@ UIStateEvt_DrumAssign_Set:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	ldada xbc, 0xc222
+	lda_d16 xbc, 0xc222
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -5726,28 +5726,28 @@ UIStateEvt_TransposeUpdate:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	add wa, wa
 	ld bc, wa
 	add bc, 0xe4
-	ldada xde, 0xc1ff
-	ldda8 a, 0xfc6a
+	lda_d16 xde, 0xc1ff
+	ldb_d8 a, 0xfc6a
 	and a, 0xff
 	sub a, 0x40
-	lda_dri3 XBC, 0x07, 0xe8, 0xe4
+	lda_dri XBC, 0x07, 0xe8, 0xe4
 	jr UIStateEvt_TransposeUpdate_Apply
 
 UIStateEvt_TransposeUpdate_Clear:
 	ld a, l
 	extz wa
 	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	add wa, wa
 	add wa, 0xe4
-	ldada xbc, 0xc1ff
-	stib_dri 0x07, 0xe4, 0xe0, 0x00
+	lda_d16 xbc, 0xc1ff
+	stib_ind 0x07, 0xe4, 0xe0, 0x00
 
 UIStateEvt_TransposeUpdate_Apply:
 	ordi16 0xc594, 4
@@ -5755,7 +5755,7 @@ UIStateEvt_TransposeUpdate_Apply:
 
 UIStateEvt_ParamEdit_Data:
 	pushw	iz
-	ldda8	a, 0xc07d
+	ldb_d8	a, 0xc07d
 	extz	wa
 	cps	wa, 0
 	jrl	mi, 606
@@ -5775,10 +5775,10 @@ UIStateEvt_ParamEdit_Data:
 	jrl	nc, 8640
 	and	a, 7
 	jrl	z, 183
-	ldda16	wa, 0xc598
+	ldw_d16	wa, 0xc598
 	bit	6, wa
 	jr	z, 44
-	ldda8	a, 0xfc5e
+	ldb_d8	a, 0xfc5e
 	and	a, 7
 	extz	wa
 	add	wa, wa
@@ -5798,12 +5798,12 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	60
-	ldda16	wa, 0xc598
+	ldw_d16	wa, 0xc598
 	and	wa, 34
 	cp	wa, 32
 	jr	nz, 25
 	lds	iz, 2
-	ldda8	a, 0xfc5d
+	ldb_d8	a, 0xfc5d
 	and	a, 8
 	extz	wa
 	add	wa, wa
@@ -5812,7 +5812,7 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	21
-	ldda8	a, 0xfc5d
+	ldb_d8	a, 0xfc5d
 	and	a, 15
 	extz	wa
 	add	wa, wa
@@ -5829,7 +5829,7 @@ UIStateEvt_ParamEdit_Data:
 	ld	wa, iz
 	and	wa, 6
 	jr	z, 10
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	and	wa, 7
 	jr	nz, 4
 	call	AudioInit_RefreshToneBank
@@ -5843,7 +5843,7 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	and	wa, 7
 	jr	z, 7
 	stdi8	0xc5a0, 31
@@ -5916,13 +5916,13 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 7
 	jrl	z, 258
-	ldda16	wa, 0xc598
+	ldw_d16	wa, 0xc598
 	bit	6, wa
 	jr	z, 44
-	ldda8	a, 0xfc5e
+	ldb_d8	a, 0xfc5e
 	and	a, 7
 	extz	wa
 	add	wa, wa
@@ -5942,11 +5942,11 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	55
-	ldda16	wa, 0xc598
+	ldw_d16	wa, 0xc598
 	bit	5, wa
 	jr	z, 25
 	lds	iz, 2
-	ldda8	a, 0xfc5d
+	ldb_d8	a, 0xfc5d
 	and	a, 8
 	extz	wa
 	add	wa, wa
@@ -5955,7 +5955,7 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	21
-	ldda8	a, 0xfc5d
+	ldb_d8	a, 0xfc5d
 	and	a, 15
 	extz	wa
 	add	wa, wa
@@ -5974,23 +5974,23 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	and	wa, 7
 	jr	z, 7
 	stdi8	0xc5a0, 31
 	jr	117
 	stdi8	0xc5a0, 16
 	jr	110
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 252
 	jr	z, 30
 	.byte 0xf1, 0x84
 	ldw	de, 0x6ec8
 	ccf
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	bit	9, wa
 	jr	z, 9
-	ldda8	a, 0xfc5f
+	ldb_d8	a, 0xfc5f
 	and	a, 252
 	jr	nz, 0
 	.byte 0xd1, 0x94, 0xc5
@@ -6005,7 +6005,7 @@ UIStateEvt_ParamEdit_Data:
 	swi	4
 	inc	6, a
 	incf
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	bit	9, wa
 	.byte 0xf2, 0xf5, 0xf5
 	swi	5
@@ -6014,16 +6014,16 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0x04
 	nop
 	jr	39
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 252
 	jr	z, 30
 	.byte 0xf1, 0x84
 	ldw	de, 0x6ec8
 	ccf
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	bit	9, wa
 	jr	z, 9
-	ldda8	a, 0xfc5f
+	ldb_d8	a, 0xfc5f
 	and	a, 252
 	jr	nz, 0
 	.byte 0xd1, 0x94, 0xc5
@@ -6033,7 +6033,7 @@ UIStateEvt_ParamEdit_Data:
 	popw	iz
 	ret
 UIStateEvt_VolumeMixer_Data:
-	ldda8	a, 0xc07d
+	ldb_d8	a, 0xc07d
 	extz	wa
 	cps	wa, 0
 	ret	mi
@@ -6064,7 +6064,7 @@ UIStateEvt_VolumeMixer_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldda16	wa, 0xc594
+	ldw_d16	wa, 0xc594
 	bit	4, wa
 	ret	z
 	stdi8	0xc1fe, 0
@@ -6073,7 +6073,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 31
 	jr	z, 58
 	.byte 0xf1
@@ -6087,14 +6087,14 @@ UIStateEvt_VolumeMixer_Data:
 	push	xix
 	.byte 0xdf
 	swi	7
-	ldda16	wa, 0xc596
+	ldw_d16	wa, 0xc596
 	and	wa, 7
 	.byte 0xf2, 0xf5, 0xf5
 	swi	5
 	.byte 0xe6, 0xf1
 	swi	6
 	.byte 0xc1, 0xb2
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 2
 	ld	c, a
 	add	a, c
@@ -6103,7 +6103,7 @@ UIStateEvt_VolumeMixer_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldda16	wa, 0xc594
+	ldw_d16	wa, 0xc594
 	bit	4, wa
 	ret	z
 	stdi8	0xc1fe, 0
@@ -6148,7 +6148,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 255
 	ret	z
 	lds	de, 0
@@ -6166,11 +6166,11 @@ UIStateEvt_VolumeMixer_Data:
 	ldb	w, 218
 	add	w, (xwa-40)
 	add	wa, 228
-	ldada	xbc, 0xc1ff
+	lda_d16	xbc, 0xc1ff
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
@@ -6178,7 +6178,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 228
-	ldada	xbc, 0xc1ff
+	lda_d16	xbc, 0xc1ff
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 0
@@ -6190,7 +6190,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 255
 	ret	z
 	.byte 0xd1, 0x94, 0xc5
@@ -6200,7 +6200,7 @@ UIStateEvt_VolumeMixer_Data:
 	ret
 	ret
 UIStateEvt_EffectSelect_Data:
-	ldda8	a, 0xc07d
+	ldb_d8	a, 0xc07d
 	cps	a, 4
 	jrl	z, 270
 	cps	a, 3
@@ -6211,10 +6211,10 @@ UIStateEvt_EffectSelect_Data:
 	jr	z, 99
 	cps	a, 0
 	ret	nz
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 3
 	jr	z, 79
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 3
 	cps	a, 3
 	jr	z, 57
@@ -6224,9 +6224,9 @@ UIStateEvt_EffectSelect_Data:
 	jr	z, 23
 	cps	a, 0
 	jr	nz, 56
-	ldda8	a, 0xfd03
+	ldb_d8	a, 0xfd03
 	res	7, a
-	stda8	0xc5a2, a
+	stb_d8	0xc5a2, a
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6253,16 +6253,16 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	res	7, a
 	cps	a, 0
 	ret	z
-	ldda8	a, 0xfd02
+	ldb_d8	a, 0xfd02
 	and	a, 3
 	jr	nz, 11
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	res	7, a
-	stda8	0xc5a2, a
+	stb_d8	0xc5a2, a
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6271,14 +6271,14 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 255
 	ret	z
 	.byte 0xf1, 0x50
 	swi	5
 	sbc	w, e
 	.byte 0xf6
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 255
 	extz	wa
 	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x124
@@ -6293,7 +6293,7 @@ UIStateEvt_EffectSelect_Data:
 	ld	wa, hl
 	add	wa, wa
 	add	wa, 292
-	ldada	xbc, 0xc1ff
+	lda_d16	xbc, 0xc1ff
 	extz	xwa
 	add	xwa, xbc
 	ld	c, e
@@ -6310,23 +6310,23 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 255
 	ret	z
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 255
-	stda8	0xe9c0, a
+	stb_d8	0xe9c0, a
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
 	nop
 	ret
-	ldda8	a, 0xc07f
+	ldb_d8	a, 0xc07f
 	and	a, 15
 	ret	z
-	ldda8	a, 0xc07e
+	ldb_d8	a, 0xc07e
 	and	a, 15
-	stda8	0xe9be, a
+	stb_d8	0xe9be, a
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6358,7 +6358,7 @@ UIStateEvt_PlayModeGuard_ClearBit:
 
 
 UIStateEvt_ChannelConfig_Data:
-	ldda8	a, 0xc07d
+	ldb_d8	a, 0xc07d
 	cp	a, 11
 	jrl	z, 326
 	cp	a, 12
@@ -6395,11 +6395,11 @@ UIStateEvt_ChannelConfig_Data:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 292
-	ldada	xbc, 0xc1ff
+	lda_d16	xbc, 0xc1ff
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ldda8	a, 0xfd04
+	ldb_d8	a, 0xfd04
 	and	a, 255
 	extz	wa
 	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x124
@@ -6422,7 +6422,7 @@ UIStateEvt_ChannelConfig_Data:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 292
-	ldada	xbc, 0xc1ff
+	lda_d16	xbc, 0xc1ff
 	extz	xwa
 	add	xwa, xbc
 	.byte 0x80
@@ -6526,19 +6526,19 @@ UIStateEvt_ChannelConfig_Data:
 	ret
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
-	stda8	0xc362, l
+	stb_d8	0xc362, l
 	stdi8	0xc363, 255
 	ret
 	stdi8	0xc362, 0
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
-	stda8	0xc363, l
+	stb_d8	0xc363, l
 	ret
 UIStateEvt_StubReturn:
 	ret
 	ret
 UIStateEvt_MuteToggle_Data:
-	ldda8	a, 0xc07d
+	ldb_d8	a, 0xc07d
 	cp	a, 16
 	ret	nz
 	bitda	0, 0xc07f

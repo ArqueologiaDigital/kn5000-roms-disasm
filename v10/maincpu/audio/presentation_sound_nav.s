@@ -43,9 +43,9 @@ GroupBoxProc_StartSSFPresentation:
 	lda xwa, (xsp + 14)
 	ld c, (xbc)
 	ld (xwa + 3), c
-	ld_spib C, 0xe8
+	ldb_spi C, 0xe8
 	ld (xwa + 2), c
-	ld_spib C, 0xe8
+	ldb_spi C, 0xe8
 	ld (xwa + 1), c
 	ld c, (xde)
 	ld (xwa), c
@@ -267,7 +267,7 @@ GroupBox_NavUpDown:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	st32_24 0x03ef6a, xwa
+	stl_da 0x03ef6a, xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1e000b4
@@ -345,43 +345,43 @@ GroupBox_Epilogue:
 	ret
 
 SetDialEnable:
-	st16_24 0x03ef50, xwa
+	stw_da 0x03ef50, xwa
 	ret
 
 GetDialEnableState:
-	ld16_24 xhl, 0x03ef50
+	ldw_da xhl, 0x03ef50
 	ret
 
 SetDialFocus:
 	ld xde, xwa
 	cpdm32_24 0x03ef6a, xde
 	ret z
-	st32_24 0x03ef6a, xde
+	stl_da 0x03ef6a, xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0002c
 	call SendEvent
 	ret
 
 GetDialFocus:
-	cpdi16_24 0x03ef50, 0
+	cpw_da 0x03ef50, 0
 	jr nz, GetDialFocus_Active
 	ld xhl, 0xffffffff
 	ret
 
 GetDialFocus_Active:
-	ld32_24 xhl, 0x03ef6a
+	ldl_da xhl, 0x03ef6a
 	ret
 
 SetDialUp:
-	st32_24 0x03ef52, xwa
-	st32_24 0x03ef5a, xbc
-	st32_24 0x03ef62, xde
+	stl_da 0x03ef52, xwa
+	stl_da 0x03ef5a, xbc
+	stl_da 0x03ef62, xde
 	jr SetDialFocus
 
 SetDialDown:
-	st32_24 0x03ef56, xwa
-	st32_24 0x03ef5e, xbc
-	st32_24 0x03ef66, xde
+	stl_da 0x03ef56, xwa
+	stl_da 0x03ef5e, xbc
+	stl_da 0x03ef66, xde
 	jr SetDialFocus
 
 SetAutoIncDefault:
@@ -739,9 +739,9 @@ GetEditSwPoint:
 	jrl ugt, EditSwParam_Default
 	add hl, hl
 	lda_24 xix, DiskWarning_ConfirmStrings_0xE70
-	ld_sriw3 HL, 0x07, 0xf0, 0xec
+	ldw_sri HL, 0x07, 0xf0, 0xec
 	lda_24 xix, EditSwParam_Mode0
-	jp_dri 8, 0x07, 0xf0, 0xec
+	jp_ind 8, 0x07, 0xf0, 0xec
 
 ; GetEditSwPoint handler: mode 0 (value=0x2b)
 EditSwParam_Mode0:
@@ -833,23 +833,23 @@ SetWallPaper:
 	jr gt, SetWallPaper_Default
 	add wa, wa
 	lda_24 xix, DiskWarning_ConfirmStrings_0xE8A
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SetWallPaper_DispatchData
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
-	cpdi16_24	0x0340fe, 0
+	cpw_da	0x0340fe, 0
 	jr	nz, 28
 
 SetWallPaper_Default:
 	lds wa, 0
 	jp ChangeWall
 SetWallPaper_CaseData:
-	cpdi16_24	0x0340fa, 0
+	cpw_da	0x0340fa, 0
 	jr	nz, 13
 	lds	wa, 1
 	jr	-17
-	cpdi16_24	0x0340fc, 0
+	cpw_da	0x0340fc, 0
 	jr	z, -13
 	lds	wa, 2
 	jr	t, 0xe2
@@ -1128,7 +1128,7 @@ IvDirmdScreenProc:
 	add xbc, DiskWarning_ConfirmStrings_0xE96
 	ld bc, (xbc)
 	lda_24 xix, DirmdEmu_CaseB
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; DirmdEmulator dispatch case B
 DirmdEmu_CaseB:
@@ -1155,9 +1155,9 @@ DirmdEmu_CaseC:
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
-	sti16_24 0x0276c4, 0x0000
+	stiw_da 0x0276c4, 0x0000
 	jrl TaskWake_ZeroReturn
-	sti16_24 0x0276c4, 0x0001
+	stiw_da 0x0276c4, 0x0001
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1169,7 +1169,7 @@ DirmdEmu_CaseC:
 	lds wa, 2
 	call ChangePalette
 	jr TaskWake_ZeroReturn
-	sti16_24 0x0276c4, 0x0001
+	stiw_da 0x0276c4, 0x0001
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
@@ -1252,7 +1252,7 @@ IvDirmd_Epilogue:
 PostTitle_Function:
 
 GetDirmdFlag:
-	ld16_24 xhl, 0x0276c4
+	ldw_da xhl, 0x0276c4
 	ret
 
 DirmdTitleFunc:
@@ -1270,7 +1270,7 @@ DirmdTitleFunc:
 
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
-	ldda8	a, 0x8d38
+	ldb_d8	a, 0x8d38
 	cpda8	a, 0x8d39
 	jr	z, 25
 	ldw	wa, 255
@@ -1322,7 +1322,7 @@ DirmdEmulator:
 	add xbc, DiskWarning_ConfirmStrings_0xF12
 	ld bc, (xbc)
 	lda_24 xix, DirmdEmulator_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 DirmdEmulator_Dispatch:	.ascii ":;<>"
 	ld	xwa, (xiz+4)
 	call	(xwa)
@@ -1350,21 +1350,21 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 DirmdEmu_DefaultCase:
 	bitda 1, 0xe3de
 	jr z, DirmdEmu_CheckModeChange
-	ldda8 a, 0xe3dc
+	ldb_d8 a, 0xe3dc
 	extz wa
 	call UI_PostPartChangeEvent
 
 DirmdEmu_CheckModeChange:
 	bitda 7, 0xe3de
 	jr z, DirmdEmu_CheckSoundCtrl
-	ldda8 a, 0xe3dc
+	ldb_d8 a, 0xe3dc
 	extz wa
 	call UI_PostModeChangeEvent
 
 DirmdEmu_CheckSoundCtrl:
 	bitda 6, 0xe3de
 	jr z, DirmdEmu_CheckBit4
-	ldda8 a, 0xe3dc
+	ldb_d8 a, 0xe3dc
 	extz wa
 	call SoundCtrl_SendCommand
 
@@ -1430,7 +1430,7 @@ WindowProc:
 	add xbc, DiskWarning_ConfirmStrings_0xF32
 	ld bc, (xbc)
 	lda_24 xix, WindowProc_EventDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ; WindowProc event dispatch
 WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)
@@ -1806,37 +1806,37 @@ AcNamingWindowProc:
 	jrl nz, WndScroll_InitWindowProc
 
 AcNaming_CheckDefaultWidget:
-	ld32_24 xwa, 0x0274d2
+	ldl_da xwa, 0x0274d2
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
-	st32_24 0x0274d2, xwa
+	stl_da 0x0274d2, xwa
 
 AcNaming_InitScrollState:
-	sti16_24 0x0274d8, 0x0000
-	sti16_24 0x0274da, 0x0000
-	ld32_24 xwa, 0x0274d2
+	stiw_da 0x0274d8, 0x0000
+	stiw_da 0x0274da, 0x0000
+	ldl_da xwa, 0x0274d2
 	ld xbc, 0x1e0007c
 	lds32 xde, 0
 	call ApFuncCall
-	st16_24 0x0274d6, xhl
+	stw_da 0x0274d6, xhl
 	cp hl, 0x20
 	jr ule, AcNaming_QueryCharSet
-	sti16_24 0x0274d6, 0x0020
+	stiw_da 0x0274d6, 0x0020
 
 AcNaming_QueryCharSet:
-	ld32_24 xwa, 0x0274d2
+	ldl_da xwa, 0x0274d2
 	ld xbc, 0x1e00084
 	lds32 xde, 0
 	call ApFuncCall
-	st16_24 0x0274e2, xhl
+	stw_da 0x0274e2, xhl
 	ld wa, hl
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout_0x18
 	add xbc, xwa
 	ld xwa, (xbc)
-	st32_24 0x0274e4, xwa
+	stl_da 0x0274e4, xwa
 	cps hl, 0
 	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17
@@ -1862,7 +1862,7 @@ AcNaming_ShowNavButtons:
 AcNaming_SetVisibleAndInit:
 	call SetVisible
 	lds iz, 0
-	cpdi16_24 0x0274d6, 0
+	cpw_da 0x0274d6, 0
 	jr ule, WndScroll_InitBuffer
 
 ; --- UI Window Procs, Graphics & Mode Screens ---

@@ -8,7 +8,7 @@
 ; =============================================================================
 
 UIStateEvt_VoiceParamHandler:
-	ldda8	a, 0x8d36
+	ldb_d8	a, 0x8d36
 	cp	a, 142
 	jr	z, 19
 	cp	a, 100
@@ -20,14 +20,14 @@ UIStateEvt_VoiceParamHandler:
 	jp	UIStateEvt_VoiceParamHandler_0x24
 	stdi8	4330, 0
 	jrl	164
-	ldda8	a, 0xc07d
+	ldb_d8	a, 0xc07d
 	cps	a, 3
 	.byte 0xf2, 0xb4
 	pop	sr
 	.byte 0xf2
 	and	bc, iz
 	jrl	nz, 8640
-	ldda8	w, 0xc07f
+	ldb_d8	w, 0xc07f
 	cp	w, 255
 	jr	nz, 8
 	.byte 0xc1, 0xea
@@ -102,7 +102,7 @@ UIStateEvt_VoiceParamHandler:
 	sub	wa, bc
 	ld	c, a
 	ld	b, a
-	ldda16	iz, 0xf19e
+	ldw_d16	iz, 0xf19e
 	ld	a, c
 	scf
 	.byte 0xde
@@ -126,7 +126,7 @@ UIStateEvt_VoiceParamHandler:
 	jr	20
 	inc	1, a
 	ld	w, a
-	stda8	3414, w
+	stb_d8	3414, w
 	.byte 0xc1, 0x54
 	decf
 	push	xiz
@@ -145,13 +145,13 @@ UIStateEvt_VoiceParamHandler:
 	ret
 
 SeqPlay_RestoreVoiceState_Return:
-	ldda8 a, 0x2878
+	ldb_d8 a, 0x2878
 	pushw wa
-	ld8_24 a, 0x00ffe3
-	stda8 0x2878, a
+	ldb_da a, 0x00ffe3
+	stb_d8 0x2878, a
 	call SeqVoice_InitEntry
 	popw wa
-	stda8 0x2878, a
+	stb_d8 0x2878, a
 	ret
 
 SeqTimer_PostTempoUpdate:
@@ -173,7 +173,7 @@ PlayMode_NullRet:
 	ret
 PlayMode_SetupAndDispatch:
 	; --- Setup: load/store/call/set flag ---
-	ldda16	wa, 0xf19e
+	ldw_d16	wa, 0xf19e
 	stda16	0x2875, wa
 	stdi8	3424, 0
 	call AccWrap_PlayModeDispatch
@@ -181,7 +181,7 @@ PlayMode_SetupAndDispatch:
 	ret
 PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
-	ldda16	wa, 0x2875
+	ldw_d16	wa, 0x2875
 	stda16	0xf19e, wa
 	anddi8	0x28a7, 251
 	ordi8	0x28b3, 16
@@ -276,9 +276,9 @@ Part_LookupParam:
 	ld iy, bc
 	ld e, c
 	ld_rrb	a, xhl, iy
-	stda8	3423, a
+	stb_d8	3423, a
 	inc 1, e
-	stda8	3424, e
+	stb_d8	3424, e
 	ret
 Part_ValidateAndActivate:
 	; --- Validation: check range, optionally call ---
@@ -405,7 +405,7 @@ SongBank_ScanActiveVoices:
 	add xhl, 0xab0d0
 	ld xiy, xhl
 	ldb b, 0x10
-	cp_sriw_im 0xf5, 0x4e, 0xff, 0x00, 0x00
+	cpiw_sri 0xf5, 0x4e, 0xff, 0x00, 0x00
 	jr z, ScanVoice_NoneFound
 
 ScanVoice_LoopCheckBit7:
@@ -494,7 +494,7 @@ SeqRestart_CheckAndDispatch:
 	bitda 2, 0x28ac
 	jr z, SeqRestart_Return
 	ld iz, wa
-	ldda8 a, 0xfc5f
+	ldb_d8 a, 0xfc5f
 	and a, 0x30
 	ld wa, iz
 	jr nz, SeqRestart_Return
@@ -541,7 +541,7 @@ SeqNotify_Return:
 
 Medley_GetPlaybackStatus:
 	xor hl, hl
-	ldda8 l, 4437
+	ldb_d8 l, 4437
 	ret
 
 SongMode_InitFlagBlock:
@@ -845,7 +845,7 @@ CDlikeSwitch_NullRet:
 	ret
 
 CDlikeSwitch_PlaybackTimer:
-	ldda8 w, 4420
+	ldb_d8 w, 4420
 	cps w, 0
 	jr z, CDlikeTimer_Return
 	dec 1, w
@@ -906,7 +906,7 @@ CDlikeTimer_InitResetState:
 	popw wa
 
 CDlikeSwTtl_StorePlaybackMode:
-	stda8 4420, w
+	stb_d8 4420, w
 
 CDlikeTimer_Return:
 	ret
@@ -915,9 +915,9 @@ CDlike_ResetPlaybackState:
 	ei 6
 	xor wa, wa
 	stda16 1052, xwa
-	stda8 1051, a
+	stb_d8 1051, a
 	stda16 1048, xwa
-	stda8 1047, a
+	stb_d8 1047, a
 	bitda 1, 0x28a7
 	jr z, CDlikeReset_SetTimerFlags
 	stdi8 1054, 1
@@ -934,8 +934,8 @@ CDlikeReset_SetTimerFlags:
 
 CDlike_InitModeAndLoadBank:
 	ordi8 0xb7e2, 64
-	ldda8 a, 0xfdad
-	stda8 3394, a
+	ldb_d8 a, 0xfdad
+	stb_d8 3394, a
 	stdi8 3380, 0
 	stdi8 4420, 0
 	call CDlike_LoadSongBankData
@@ -948,7 +948,7 @@ CDlike_InitModeAndLoadBank:
 	cpdi8 0x8d36, 122
 	jr z, CDlikeSw_NullRet
 	call SqTrAs_InitWall
-	ldda16 xwa, 0xf19e
+	ldw_d16 xwa, 0xf19e
 	stda16 0x2875, xwa
 	stdi16 0xf19e, 0
 	stdi16 8980, 0
@@ -967,12 +967,12 @@ CDlike_LoadSongBankData:
 	stdi8 6882, 1
 
 CDlikeBankLoad_CheckSavedState:
-	ld16_24 xwa, 0x00ffec
+	ldw_da xwa, 0x00ffec
 	stda16 0xf19e, xwa
 	ld xiy, 0xf180
 	ld xix, 0xab000
 	xor xwa, xwa
-	ld8_24 a, 0x00ffe3
+	ldb_da a, 0x00ffe3
 	sla xwa, 11
 	add xix, xwa
 	ldw bc, 0x800
@@ -1007,7 +1007,7 @@ CDlikeExit_CheckPlaybackType:
 	call SeqTimer_UpdateTempoReg
 	call SwbtWr_ResetAllChannels
 	call SqTrAs_Setup
-	ldda16 xwa, 0x2875
+	ldw_d16 xwa, 0x2875
 	stda16 0xf19e, xwa
 
 PlayMode_ResetAndSchedule:
@@ -1016,15 +1016,15 @@ PlayMode_ResetAndSchedule:
 	ret
 
 SongBank_SwitchAndUpdateTempo:
-	st8_24 0x00ffe3, a
+	stb_da 0x00ffe3, a
 	call SongBank_SaveAndReload
 	call SeqTimer_PostTempoUpdate
 	ret
 
 SongBank_SaveAndReload:
-	ldda16 xwa, 0xf22f
+	ldw_d16 xwa, 0xf22f
 	stda16 0x286f, xwa
-	ldda16 xwa, 0xf231
+	ldw_d16 xwa, 0xf231
 	stda16 0x2871, xwa
 	call SongBank_LoadToWorkArea
 	call SongBank_CheckAccompanimentMode
@@ -1033,18 +1033,18 @@ SongBank_SaveAndReload:
 
 SongBank_LoadToWorkArea:
 	xor xwa, xwa
-	ld8_24 a, 0x00ffe3
+	ldb_da a, 0x00ffe3
 	sla xwa, 11
 	ld xiy, 0xab000
 	add xiy, xwa
 	ld xix, 0xf180
 	ldw bc, 0x800
 	ldir85
-	ldda16 xwa, 0xf19e
-	st16_24 0x00ffec, xwa
-	ldda16 xwa, 0x286f
+	ldw_d16 xwa, 0xf19e
+	stw_da 0x00ffec, xwa
+	ldw_d16 xwa, 0x286f
 	stda16 0xf22f, xwa
-	ldda16 xwa, 0x2871
+	ldw_d16 xwa, 0x2871
 	stda16 0xf231, xwa
 	ret
 
@@ -1131,7 +1131,7 @@ SqSngSelTtlFunc:
 	add xde, SepaOut_Config_0_0x14
 	ld de, (xde)
 	lda_24 xix, SqTrAs_CondCheck
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 
 ; SqTrAs conditional voice check
 SqTrAs_CondCheck:
@@ -1165,7 +1165,7 @@ SqSngNameTtlFunc:
 	add xde, SepaOut_Config_0_0x20
 	ld de, (xde)
 	lda_24 xix, SQTR_DISPATCH_TABLE_1
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 
 ; Sequencer track dispatch table 1 - Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
 SQTR_DISPATCH_TABLE_1:
@@ -1207,7 +1207,7 @@ SqTrAsTtlFunc:
 	add xde, SepaOut_Config_0_0x2C
 	ld de, (xde)
 	lda_24 xix, SQTR_DISPATCH_TABLE_2
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; Sequencer track dispatch table 2 - SqTrAsTtlFunc handler
 ; 6 dispatch cases (XDE 0-5)
 SQTR_DISPATCH_TABLE_2:
@@ -1354,7 +1354,7 @@ SqTrAsPsTtlFunc:
 	add xde, SepaOut_Config_0_0x38
 	ld de, (xde)
 	lda_24 xix, SqTrAsPsTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	call	SetWall_DataBlock1
 	pop	xiz
@@ -1435,7 +1435,7 @@ SetWall_ReturnZero:
 
 ; SqTrAsPsTtl case F
 SqTrAsPsTtl_CaseF:
-	ldda8	a, 0x8d36
+	ldb_d8	a, 0x8d36
 	extz	wa
 	sub	wa, 108
 	cps	wa, 0
@@ -1484,7 +1484,7 @@ SqMdlyPlyTtlFunc:
 	add xde, SepaOut_Config_0_0x56
 	ld de, (xde)
 	lda_24 xix, SqMdlyPlyTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 SqMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	call	PlayMode_InitFlagBlock
 	.ascii "^\\[ZhL:;<>"
@@ -1551,7 +1551,7 @@ DkMdlyPlyTtlFunc:
 	add xde, SepaOut_Config_0_0x62
 	ld de, (xde)
 	lda_24 xix, DkMdlyPlyTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	call	PlayMode_InitFlagBlock
 	.ascii "^\\[ZhL:;<>"
@@ -1610,7 +1610,7 @@ DkMdlyPly_SendAudioCmd:
 DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
 	add bc, bc
-	ld_sriw3 BC, 0x07, 0xe8, 0xe4
+	ldw_sri BC, 0x07, 0xe8, 0xe4
 	and bc, wa
 	ret nz
 	inc 1, hl
@@ -1623,7 +1623,7 @@ DkMdlyPly_CheckState:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), wa
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	cp a, 0x6f
 	jr z, Snd_ParamLookupSetupWerp
 	cp a, 0x72
@@ -1634,14 +1634,14 @@ DkMdlyPly_CheckState:
 	jr nz, DkMdlyPly_Finalize
 
 Snd_ParamLookupSetupWerp:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 ; DkMdlyPly handle result
 DkMdlyPly_HandleResult:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	add wa, wa
 	lda_24 xbc, SepaOut_Config_0_0x8E
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ldw bc, 0x401
 	call SndParam_LookupViaEncode
 	ld iz, hl
@@ -1649,11 +1649,11 @@ DkMdlyPly_HandleResult:
 	calr DkMdlyPly_SendAudioCmd
 	cp hl, iz
 	jr nz, DkMdlyPly_ExtendedCheck
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	add wa, wa
 	lda_24 xbc, SepaOut_Config_0_0x8E
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
-	stda8 0x8d3a, a
+	ldw_sri WA, 0x07, 0xe4, 0xe0
+	stb_d8 0x8d3a, a
 	ld e, a
 	extz de
 	pushw 0xff
@@ -1665,7 +1665,7 @@ DkMdlyPly_HandleResult:
 
 ; DkMdlyPly extended check
 DkMdlyPly_ExtendedCheck:
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x20, 0x00
 	jr lt, DkMdlyPly_HandleResult
 
@@ -1676,7 +1676,7 @@ DkMdlyPly_Finalize:
 	ret
 
 DisplayMode_DispatchEvents:
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	extz wa
 	sub wa, 0x6f
 	cps wa, 0
@@ -1685,9 +1685,9 @@ DisplayMode_DispatchEvents:
 	ret gt
 	add wa, wa
 	lda_24 xix, SepaOut_Config_0_0xCE
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, DisplayMode_BatchEventSend
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; --- DisplayMode_BatchEventSend: Dispatch events for display mode transitions ---
 ; Multiple entry points, each dispatching 2-3 events for a specific mode.
@@ -1746,9 +1746,9 @@ DisplayMode_BatchEventSend:
 	ret
 
 DisplayMode_RefreshState:
-	ld16_24 xwa, 0x021086
+	ldw_da xwa, 0x021086
 	calr DkMdlyPly_CheckState
-	ld16_24 xwa, 0x021086
+	ldw_da xwa, 0x021086
 	jp FileIO_ReadChunk
 
 DpMdlyDocTtlFunc:
@@ -1765,10 +1765,10 @@ DpMdlyDocTtlFunc:
 	add xde, SepaOut_Config_0_0xDC
 	ld de, (xde)
 	lda_24 xix, DpMdlyDocTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlyDocTtlFunc title dispatch
 DpMdlyDocTtl_Dispatch:
-	sti16_24	0x021086, 0
+	stiw_da	0x021086, 0
 	calr	65452
 	calr	65224
 	push	xde
@@ -1853,10 +1853,10 @@ DpMdlyPdTtlFunc:
 	add xde, SepaOut_Config_0_0xE8
 	ld de, (xde)
 	lda_24 xix, DpMdlyPdTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlyPdTtlFunc title dispatch
 DpMdlyPdTtl_Dispatch:
-	sti16_24	0x021086, 0
+	stiw_da	0x021086, 0
 	calr	65276
 	calr	65048
 	push	xde
@@ -1941,13 +1941,13 @@ DpMdlySmfTtlFunc:
 	add xde, SepaOut_Config_0_0xF4
 	ld de, (xde)
 	lda_24 xix, DpMdlySmfTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfTtlFunc title dispatch
 DpMdlySmfTtl_Dispatch:
 	cpdi8	0x8d37, 118
 	jr	z, 19
-	sti8_24	0x021088, 0
-	sti16_24	0x021086, 0
+	stib_da	0x021088, 0
+	stiw_da	0x021086, 0
 	calr	65087
 	calr	64859
 	push	xde
@@ -2029,16 +2029,16 @@ DpMdlySmfLyrTtlFunc:
 	add xde, SepaOut_Config_0_0x100
 	ld de, (xde)
 	lda_24 xix, DpMdlySmfLyrTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfLyrTtlFunc title dispatch
 DpMdlySmfLyrTtl_Dispatch:
-	ldda8	a, 0x8d37
+	ldb_d8	a, 0x8d37
 	cp	a, 108
 	jr	nz, 38
 	cp	a, 118
 	jr	z, 19
-	sti8_24	0x021088, 0
-	sti16_24	0x021086, 0
+	stib_da	0x021088, 0
+	stiw_da	0x021086, 0
 	calr	64890
 	calr	64662
 	push	xde
@@ -2126,7 +2126,7 @@ NameGetFuncCall:
 	add xbc, SepaOut_Config_0_0x13A
 	ld bc, (xbc)
 	lda_24 xix, NameGetFuncCall_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ; NameGetFuncCall dispatch
 NameGetFuncCall_Dispatch:
 	pushw	16
@@ -2135,10 +2135,10 @@ NameGetFuncCall_Dispatch:
 	pushw	0
 	pushw	6888
 	call	Strncpy
-	ldada	xwa, 6888
+	lda_d16	xwa, 6888
 	ld	(xwa+16), 0
 	push	xwa
-	ld8_24	a, 0xffe3
+	ldb_da	a, 0xffe3
 	inc	1, a
 	extz	wa
 	pushw	wa
@@ -2183,7 +2183,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7284
 	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
-	ldada	xwa, 7284
+	lda_d16	xwa, 7284
 	ld	(xwa+16), 0
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
@@ -2199,7 +2199,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7304
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	ldada	xwa, 7304
+	lda_d16	xwa, 7304
 	ld	(xwa+20), 0
 	ldw	de, 19
 	.byte 0xf3
@@ -2240,7 +2240,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7326
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	ldada	xwa, 7326
+	lda_d16	xwa, 7326
 	ld	(xwa+12), 0
 	ldw	de, 11
 	.byte 0xf3
@@ -2280,7 +2280,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7340
 	call	Strcpy
 	inc	8, xsp
-	ldada	xwa, 7340
+	lda_d16	xwa, 7340
 	ld	(xwa+20), 0
 	ldw	de, 19
 	.byte 0xf3
@@ -2351,7 +2351,7 @@ NameGetFuncCall_Dispatch:
 	push	xwa
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	sti8_24	0x021080, 0
+	stib_da	0x021080, 0
 	jr	3
 	ld	(xwa), 0
 	ld	xwa, 0x021064
@@ -2401,7 +2401,7 @@ CDlikeSwTtl_ShowSongTitle:
 	pushw 0x1c1e
 	call Strncpy
 	lda xsp, (xsp + 10)
-	ldada xbc, 7198
+	lda_d16 xbc, 7198
 	ld (xbc + 12), 0x0
 	lds wa, 1
 	call Acc_LoadAndStartPlayback
@@ -2425,7 +2425,7 @@ CDlikeSwTtl_ShowDocTitle:
 	pushw 0x1c2c
 	call Strncpy
 	lda xsp, (xsp + 10)
-	ldada xbc, 7212
+	lda_d16 xbc, 7212
 	ld (xbc + 12), 0x0
 	lds wa, 2
 	call Acc_LoadAndStartPlayback
@@ -2449,7 +2449,7 @@ CDlikeSwTtl_ShowPdTitle:
 	pushw 0x1c3a
 	call Strncpy
 	lda xsp, (xsp + 10)
-	ldada xbc, 7226
+	lda_d16 xbc, 7226
 	ld (xbc + 20), 0x0
 	lds wa, 4
 	call Acc_LoadAndStartPlayback
@@ -2531,7 +2531,7 @@ CDlikeSwTtl_SongConfirmJump:
 	jp Acc_StartFillIn
 
 CDlikeSwTtl_SongConfirmDispatch:
-	ldda8 a, 7498
+	ldb_d8 a, 7498
 	cps a, 2
 	jr z, CDlikeSwTtl_SongConfirmState2
 	cps a, 1
@@ -2604,8 +2604,8 @@ CDlikeSwTtl_SongNavDispatch:
 	call ApPostEvent
 	ld wa, iz
 	call NavigateSongList
-	sti8_24 0x021088, 0x00
-	sti16_24 0x021086, 0x0000
+	stib_da 0x021088, 0x00
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2636,8 +2636,8 @@ CDlikeSwTtl_SongNavBit0:
 	call ApPostEvent
 	ld wa, iz
 	call NavigateSongList
-	sti8_24 0x021088, 0x00
-	sti16_24 0x021086, 0x0000
+	stib_da 0x021088, 0x00
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2664,8 +2664,8 @@ CDlikeSwTtl_SongNavFinishNames:
 CDlikeSwTtl_SongNavNoRedraw:
 	ld wa, iz
 	call NavigateSongList
-	sti8_24 0x021088, 0x00
-	sti16_24 0x021086, 0x0000
+	stib_da 0x021088, 0x00
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2698,7 +2698,7 @@ CDlikeSwTtl_DocNavDispatch:
 	call Song_AbortPlayback
 	ld wa, iz
 	call NavigateDocList
-	sti16_24 0x021086, 0x0000
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2717,7 +2717,7 @@ CDlikeSwTtl_DocNavBit0:
 	call Song_AbortPlayback
 	ld wa, iz
 	call NavigateDocList
-	sti16_24 0x021086, 0x0000
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2736,7 +2736,7 @@ CDlikeSwTtl_DocNavFinishNames:
 CDlikeSwTtl_DocNavNoRedraw:
 	ld wa, iz
 	call NavigateDocList
-	sti16_24 0x021086, 0x0000
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2761,7 +2761,7 @@ CDlikeSwTtl_PdNavDispatch:
 	call Song_AbortPlayback
 	ld wa, iz
 	call NavigatePdList
-	sti16_24 0x021086, 0x0000
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2780,7 +2780,7 @@ CDlikeSwTtl_PdNavBit0:
 	call Song_AbortPlayback
 	ld wa, iz
 	call NavigatePdList
-	sti16_24 0x021086, 0x0000
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2799,7 +2799,7 @@ CDlikeSwTtl_PdNavFinishNames:
 CDlikeSwTtl_PdNavNoRedraw:
 	ld wa, iz
 	call NavigatePdList
-	sti16_24 0x021086, 0x0000
+	stiw_da 0x021086, 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2833,10 +2833,10 @@ DpDocTtlFunc:
 	add xde, SepaOut_Config_0_0x16A
 	ld de, (xde)
 	lda_24 xix, DpDocTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpDocTtlFunc title dispatch
 DpDocTtl_Dispatch:
-	sti16_24	0x021086, 0
+	stiw_da	0x021086, 0
 	calr	62678
 	calr	62450
 	calr	64337
@@ -2869,7 +2869,7 @@ DpDoc_CaseA:
 	add xwa, SepaOut_Config_0_0x156
 	ld wa, (xwa)
 	lda_24 xix, DpDoc_CaseB
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DpDocTtl case B
 DpDoc_CaseB:
@@ -2959,10 +2959,10 @@ DpPdTtlFunc:
 	add xde, SepaOut_Config_0_0x18A
 	ld de, (xde)
 	lda_24 xix, DpPdTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpPdTtlFunc title dispatch
 DpPdTtl_Dispatch:
-	sti16_24	0x021086, 0
+	stiw_da	0x021086, 0
 	calr	62375
 	calr	62147
 	calr	64102
@@ -2995,7 +2995,7 @@ DpPd_CaseA:
 	add xwa, SepaOut_Config_0_0x176
 	ld wa, (xwa)
 	lda_24 xix, DpPd_CaseB
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DpPdTtl case B
 DpPd_CaseB:
@@ -3085,13 +3085,13 @@ DpSmfTtlFunc:
 	add xde, SepaOut_Config_0_0x1AA
 	ld de, (xde)
 	lda_24 xix, DpSmfTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
 	cpdi8	0x8d37, 114
 	jrl	z, 255
-	sti8_24	0x021088, 0
-	sti16_24	0x021086, 0
+	stib_da	0x021088, 0
+	stiw_da	0x021086, 0
 	calr	62057
 	calr	61829
 	calr	63632
@@ -3130,7 +3130,7 @@ DpSmf_CaseA:
 	add xwa, SepaOut_Config_0_0x196
 	ld wa, (xwa)
 	lda_24 xix, DpSmf_CaseB
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DpSmfTtl case B
 DpSmf_CaseB:
@@ -3220,7 +3220,7 @@ DpSmfLyrTtlFunc:
 	add xde, SepaOut_Config_0_0x1B6
 	ld de, (xde)
 	lda_24 xix, DpSmfLyrTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpSmfLyrTtlFunc title dispatch
 DpSmfLyrTtl_Dispatch:
 	ld	xwa, 0x6f0026
@@ -3363,7 +3363,7 @@ SqTrSelTtlFunc:
 	add xde, SepaOut_Config_0_0x1C2
 	ld de, (xde)
 	lda_24 xix, SqTrSelTtl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 SqTrSelTtl_Dispatch:	.ascii ":;<>"
 	call	PlayMode_SetupAndDispatch
 	.ascii "^\\[Zh"

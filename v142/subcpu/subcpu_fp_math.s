@@ -69,17 +69,17 @@ FP_DP_CmpZero64:
 	cp xiy, xde
 	jr nz, FP_DP_CmpZero64_Greater
 	lda_24 xde, 0x03d978
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 FP_DP_CmpZero64_Less:
 	lda_24 xde, 0x03d97e
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 FP_DP_CmpZero64_Greater:
 	lda_24 xde, 0x03d984
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 FP_SP_CmpZero32:
@@ -89,17 +89,17 @@ FP_SP_CmpZero32:
 	jr lt, FP_SP_CmpZero32_Less
 	jr gt, FP_SP_CmpZero32_Greater
 	lda_24 xde, 0x03d978
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 FP_SP_CmpZero32_Less:
 	lda_24 xde, 0x03d97e
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 FP_SP_CmpZero32_Greater:
 	lda_24 xde, 0x03d984
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 VoiceFloat_MulAddDispatch:
@@ -110,7 +110,7 @@ VoiceFloat_MulAddDispatch:
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, VoiceFloat_MulAddDispatch_InRange
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ld xwa, xiz
 	lda_24 xbc, 0x01f63e
 	call FP_DP_Raw8Copy
@@ -186,7 +186,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
-	sti16_24 0x040c22, 0x0021
+	stiw_da 0x040c22, 0x0021
 	ld xwa, (xsp + 62)
 	lda_24 xbc, 0x01f656
 	call FP_DP_Raw8Copy
@@ -203,7 +203,7 @@ VoiceFloat_CompareAndConvert_AltPath:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
-	sti16_24 0x040c22, 0x0021
+	stiw_da 0x040c22, 0x0021
 	ld xwa, (xsp + 62)
 	lda_24 xbc, 0x01f65e
 	call FP_DP_Raw8Copy
@@ -224,7 +224,7 @@ VoiceFloat_CompareAndConvert_AltPath2:
 	jr ge, VoiceFloat_SignedDelta_Positive
 	ld xwa, (xsp + 54)
 	cpl wa
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	inc 1, xwa
 	ld (xsp + 54), xwa
 
@@ -255,7 +255,7 @@ VoiceFloat_IterationLoop:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceFloat_IterationLoop_LessPath
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
@@ -286,7 +286,7 @@ VoiceFloat_IterationLoop_LargeStep:
 	lda xde, (xsp + 66)
 	cp wa, 0x400
 	jr le, VoiceFloat_IterationLoop_SmallStep
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ld xwa, xde
 	lds bc, 2
 	call FP_DP_CmpZero64
@@ -347,8 +347,8 @@ VoiceFloat_IterationLoop_DifferentPath:
 	jrl VoiceFloat_CompareAndConvert_Epilog
 
 VoiceFloat_ConvergenceLoop:
-	ld16_24 xiz, 0x040c22
-	sti16_24 0x040c22, 0x0000
+	ldw_da xiz, 0x040c22
+	stiw_da 0x040c22, 0x0000
 	lda xiy, (xsp + 66)
 	ld xix, (xiy + 4)
 	push xix
@@ -358,7 +358,7 @@ VoiceFloat_ConvergenceLoop:
 	push xwa
 	call VoiceAmp_ConvergeEngine
 	lda xsp, (xsp + 12)
-	cpdi16_24 265250, 33
+	cpw_da 265250, 33
 	jr nz, VoiceFloat_ConvergenceLoop_Body
 	ld xwa, (xsp + 62)
 	lda_24 xbc, 0x01f67e
@@ -366,7 +366,7 @@ VoiceFloat_ConvergenceLoop:
 	jrl VoiceFloat_CompareAndConvert_Epilog
 
 VoiceFloat_ConvergenceLoop_Body:
-	st16_24 0x040c22, xiz
+	stw_da 0x040c22, xiz
 	lda xwa, (xsp + 36)
 	push xwa
 	lda xiy, (xsp + 70)
@@ -411,7 +411,7 @@ VoiceFloat_ConvergenceLoop_SumCheck:
 VoiceFloat_ConvergenceLoop_RangeCheck:
 	cp iz, 0x400
 	jr le, VoiceFloat_ConvergenceLoop_Clamp
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
@@ -434,7 +434,7 @@ VoiceFloat_ConvergenceLoop_StoreResult:
 VoiceFloat_ConvergenceLoop_Clamp:
 	cp iz, 0xFC03
 	jr ge, VoiceFloat_ConvergenceLoop_CrossZero
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ld xwa, (xsp + 62)
 	lda_24 xbc, 0x01f686
 	call FP_DP_Raw8Copy
@@ -521,12 +521,12 @@ VoiceFloat_MulAddVariant2_Epilog:
 	ret
 
 FP_MulAccum64:
-	ldto_werp HL, 0xE2
+	stw_erp HL, 0xE2
 	mul xhl, xbc
-	ldto_werp DE, 0xE6
+	stw_erp DE, 0xE6
 	mul xde, xwa
 	add xhl, xde
-	ldfr_werp HL, 0xEE
+	ldw_erp HL, 0xEE
 	lds hl, 0
 	mul xwa, xbc
 	add xhl, xwa
@@ -623,11 +623,11 @@ ToneGen_Compare_Tables:	; 03D977h
 VoiceFloat_BlendAndMerge:
 	lda xsp, (xsp - 128)
 	push xiz
-	ld_sriw WA, (xsp + 0x0092)
+	ldw_sri0 WA, (xsp + 0x0092)
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, VoiceFloat_BlendAndMerge_InRange
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ld_sril XWA, (xsp + 0x0088)
 	lda_24 xbc, 0x01f68e
 	call FP_DP_Raw8Copy
@@ -637,7 +637,7 @@ VoiceFloat_BlendAndMerge_InRange:
 	lda xwa, (xsp + 116)
 	push xwa
 	lda_24 xde, 0x00f396
-	st_dri3b A, 0xFD, 0x98, 0x00
+	stb_dri A, 0xFD, 0x98, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_Add_Outer
 	lda xiy, (xsp + 72)
@@ -667,12 +667,12 @@ VoiceFloat_BlendAndMerge_Phase2:
 	ld xwa, (xsp + 64)
 	bit 0, wa
 	jr z, VoiceFloat_BlendAndMerge_Phase3
-	cp_sriw_im 0xFD, 0x9C, 0x00, 0x00, 0x00
+	cpiw_sri 0xFD, 0x9C, 0x00, 0x00, 0x00
 	scc16 z, wa
-	st_dri3w WA, 0xFD, 0x9C, 0x00
+	stw_dri WA, 0xFD, 0x9C, 0x00
 
 VoiceFloat_BlendAndMerge_Phase3:
-	st_dri3b E, 0xFD, 0x8C, 0x00
+	stb_dri E, 0xFD, 0x8C, 0x00
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -682,7 +682,7 @@ VoiceFloat_BlendAndMerge_Phase3:
 	call FP_DP_CmpAndCopy
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 92)
-	st_dri3b A, 0xFD, 0x94, 0x00
+	stb_dri A, 0xFD, 0x94, 0x00
 	lds de, 4
 	call ToneGen_Compare_Voice
 	cps hl, 0
@@ -693,9 +693,9 @@ VoiceFloat_BlendAndMerge_Phase3:
 	call FP_DP_Sub
 
 VoiceFloat_BlendAndMerge_Phase4:
-	st_dri3b W, 0xFD, 0x8C, 0x00
+	stb_dri W, 0xFD, 0x8C, 0x00
 	push xwa
-	st_dri3b E, 0xFD, 0x90, 0x00
+	stb_dri E, 0xFD, 0x90, 0x00
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -713,10 +713,10 @@ VoiceFloat_BlendAndMerge_Phase4:
 	push xwa
 	call DSP_VoiceBlend
 	lda_24 xde, 0x00f39e
-	st_dri3b A, 0xFD, 0x84, 0x00
+	stb_dri A, 0xFD, 0x84, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_Add_Outer
-	st_dri3b A, 0xFD, 0x9C, 0x00
+	stb_dri A, 0xFD, 0x9C, 0x00
 	lda xwa, (xsp + 84)
 	ld xde, xwa
 	call FP_DP_Sub
@@ -729,13 +729,13 @@ VoiceFloat_BlendAndMerge_Phase4:
 	call FP_DP_CopyOrNegate8
 	lda xwa, (xsp + 72)
 	ld xbc, xwa
-	st_dri3b B, 0xFD, 0x84, 0x00
+	stb_dri B, 0xFD, 0x84, 0x00
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 84)
 	lda xde, (xsp + 72)
-	st_dri3b W, 0xFD, 0x8C, 0x00
+	stb_dri W, 0xFD, 0x8C, 0x00
 	call FP_DP_Sub
-	st_dri3b E, 0xFD, 0x8C, 0x00
+	stb_dri E, 0xFD, 0x8C, 0x00
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -826,7 +826,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	call FP_DP_Mul
 
 VoiceFloat_BlendAndMerge_FinalCheck:
-	cp_sriw_im 0xFD, 0x9C, 0x00, 0x00, 0x00
+	cpiw_sri 0xFD, 0x9C, 0x00, 0x00, 0x00
 	jr z, VoiceFloat_BlendAndMerge_FinalCopy
 	lda xwa, (xsp + 124)
 	ld xbc, xwa
@@ -839,7 +839,7 @@ VoiceFloat_BlendAndMerge_FinalCopy:
 
 VoiceFloat_BlendAndMerge_Epilog:
 	pop xiz
-	st_dri3b L, 0xFD, 0x80, 0x00
+	stb_dri L, 0xFD, 0x80, 0x00
 	ret
 
 Int_SignedDiv:
@@ -847,7 +847,7 @@ Int_SignedDiv:
 	bit_erpw 0xE2, 0x0F
 	jr z, Int_SignedDiv_AfterSignA
 	ldb e, 0x1
-	cpl_werp 0xE2
+	cplw_erp 0xE2
 	cpl wa
 	inc 1, xwa
 
@@ -855,7 +855,7 @@ Int_SignedDiv_AfterSignA:
 	bit_erpw 0xE6, 0x0F
 	jr z, Int_SignedDiv_CallUnsigned
 	or e, 0x2
-	cpl_werp 0xE6
+	cplw_erp 0xE6
 	cpl bc
 	inc 1, xbc
 
@@ -879,7 +879,7 @@ Int_SignedDiv_NegResult:
 	ret z
 	cps a, 0
 	ret z
-	cpl_werp 0xEE
+	cplw_erp 0xEE
 	cpl hl
 	inc 1, xhl
 	ret
@@ -900,7 +900,7 @@ FP_UnsignedDiv:
 	jr c, FP_UnsignedDiv_Zero
 	cp xwa, xbc
 	jr ule, FP_UnsignedDiv_SmallDividend
-	cpi_werp 0xE6, 0
+	cpiw_erp 0xE6, 0
 	jr nz, FP_UnsignedDiv_General
 	ld xde, xwa
 	div xwa, xbc
@@ -908,18 +908,18 @@ FP_UnsignedDiv:
 	lds32 xhl, 0
 	ld xde, xhl
 	ld hl, wa
-	ldto_werp DE, 0xE2
+	stw_erp DE, 0xE2
 	ret
 
 FP_UnsignedDiv_Overflow:
-	ldto_werp WA, 0xEA
+	stw_erp WA, 0xEA
 	extz xwa
 	div xwa, xbc
-	ldfr_werp WA, 0xEE
+	ldw_erp WA, 0xEE
 	ld wa, de
 	div xwa, xbc
 	ld hl, wa
-	ldto_werp DE, 0xE2
+	stw_erp DE, 0xE2
 	extz xde
 	ret
 
@@ -1150,7 +1150,7 @@ FP_DP_Normalize:
 	ldcf_erpw 0xE6, 0x0F
 	extpfx3 0xCD, 0x24, 0x07
 	jr nc, FP_DP_Normalize_StoreSign
-	cpl_werp 0xE6
+	cplw_erp 0xE6
 	cpl bc
 	inc 1, xbc
 
@@ -1195,7 +1195,7 @@ FP_DP_NormCore_ShiftLeft:
 	sub a, l
 	cp a, 0x10
 	jr lt, FP_DP_NormCore_ShiftLeftLoop
-	ldfr_werp BC, 0xE6
+	ldw_erp BC, 0xE6
 	lds bc, 0
 	sub a, 0x10
 	jr z, FP_DP_NormCore_StoreResult
@@ -1216,7 +1216,7 @@ FP_DP_ShiftDecode_Pad:
 
 FP_DP_ShiftDecode:
 	ld xde, (xwa)
-	cpi_berp 0xEA, 0
+	cpib_erp 0xEA, 0
 	jr nz, FP_DP_ShiftDecode_Zero
 	cps de, 0
 	jr lt, FP_DP_ShiftDecode_Underflow
@@ -1236,7 +1236,7 @@ FP_DP_ShiftDecode_ShiftRight:
 	sub a, e
 	cp a, 0x10
 	jr lt, FP_DP_ShiftDecode_ShiftRightLoop
-	ldto_werp IX, 0xF2
+	stw_erp IX, 0xF2
 	extz xix
 	sub a, 0x10
 	jr z, FP_DP_ShiftDecode_SignCorrect
@@ -1245,9 +1245,9 @@ FP_DP_ShiftDecode_ShiftRightLoop:
 	srla xix
 
 FP_DP_ShiftDecode_SignCorrect:
-	cpi_berp 0xEB, 0
+	cpib_erp 0xEB, 0
 	jr z, FP_DP_ShiftDecode_Return
-	cpl_werp 0xF2
+	cplw_erp 0xF2
 	cpl ix
 	inc 1, xix
 
@@ -1264,7 +1264,7 @@ FP_DP_ShiftDecode_Overflow:
 	dec 1, xhl
 
 FP_DP_ShiftDecode_SetError:
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ret
 
 FP_DP_ShiftDecode_Zero:
@@ -1322,7 +1322,7 @@ FP_DP_Decode:
 	lds32 xhl, 0
 	ld xde, (xbc)
 	ld xbc, (xbc + 4)
-	ldto_werp HL, 0xE6
+	stw_erp HL, 0xE6
 	and_erpw 0xE6, 0x0F, 0x00
 	extpfx3 0xDB, 0x23, 0x0F
 	stcf_erpw 0xEE, 0x0F
@@ -1332,7 +1332,7 @@ FP_DP_Decode:
 	sub hl, 0x3FF
 	set_erpw 0xE6, 0x04
 	ld (xwa), xhl
-	ldto_berp L, 0xEE
+	stb_erp L, 0xEE
 	ld (xwa + 4), xde
 	ld (xwa + 8), xbc
 	ret
@@ -1346,7 +1346,7 @@ FP_DP_Decode_Zero:
 FP_SP_Decode:
 	lds32 xhl, 0
 	ld xix, (xbc)
-	ldto_werp DE, 0xF2
+	stw_erp DE, 0xF2
 	extpfx3 0xDA, 0x23, 0x0F
 	stcf_erpw 0xEE, 0x0F
 	ld hl, de
@@ -1357,18 +1357,18 @@ FP_SP_Decode:
 	jr z, FP_SP_Decode_Zero
 	and de, 0x7F
 	set 7, de
-	ldfr_werp DE, 0xF2
+	ldw_erp DE, 0xF2
 	sub hl, 0x7F
 
 FP_SP_Decode_Store:
 	ld (xwa), xhl
 	ld (xwa + 4), xix
-	ldto_berp L, 0xEE
+	stb_erp L, 0xEE
 	ret
 
 FP_SP_Decode_Zero:
 	lds32 xix, 0
-	ldi_berp 0xEE, 1
+	ldib_erp 0xEE, 1
 	jr FP_SP_Decode_Store
 	swi 7
 
@@ -1377,7 +1377,7 @@ FP_SP_Normalize:
 	ldcf_erpw 0xE6, 0x0F
 	extpfx3 0xCD, 0x24, 0x07
 	jr nc, FP_SP_Normalize_StoreSign
-	cpl_werp 0xE6
+	cplw_erp 0xE6
 	cpl bc
 	inc 1, xbc
 
@@ -1421,7 +1421,7 @@ FP_SP_NormCore_ShiftLeft:
 	sub a, l
 	cp a, 0x10
 	jr lt, FP_SP_NormCore_ShiftLeftLoop
-	ldfr_werp BC, 0xE6
+	ldw_erp BC, 0xE6
 	lds bc, 0
 	sub a, 0x10
 	jr z, FP_SP_NormCore_StoreResult
@@ -1440,7 +1440,7 @@ FP_SP_NormCore_Zero:
 
 FP_DP_Encode:
 	ld xhl, (xbc)
-	cpi_berp 0xEE, 0
+	cpib_erp 0xEE, 0
 	jr nz, FP_DP_Encode_NaN
 	ld xix, (xbc + 8)
 	ld xiy, (xbc + 4)
@@ -1453,7 +1453,7 @@ FP_DP_Encode:
 	sll hl, 4
 	or_erpb_rr H, 0xEF
 	or_erpw_rr HL, 0xF2
-	ldfr_werp HL, 0xF2
+	ldw_erp HL, 0xF2
 
 FP_DP_Encode_Store:
 	ld (xwa), xiy
@@ -1470,22 +1470,22 @@ FP_DP_Encode_NaN:
 	jr nz, FP_DP_Encode_Zero
 
 FP_DP_Encode_Overflow:
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	lds32 xde, 0
 	dec 1, xde
 	ld (xwa), xde
 	ld xde, 0x7FEFFFFF
-	ldto_berp C, 0xEF
-	or_berp C, 0xEB
-	ldfr_berp C, 0xEB
+	stb_erp C, 0xEF
+	orb_erp C, 0xEB
+	ldb_erp C, 0xEB
 	ld (xwa + 4), xde
 	jr __jrt_nop_03E0A5
 __jrt_nop_03E0A5:
 
 FP_DP_Encode_NormCheck:
-	ld32_24 xbc, 0x00f428
+	ldl_da xbc, 0x00f428
 	or xbc, xbc
-	mrid2 0xB1, 0xEE
+	mri_d2 0xB1, 0xEE
 	ret
 
 FP_SP_Encode_Pad:
@@ -1493,7 +1493,7 @@ FP_SP_Encode_Pad:
 
 FP_SP_Encode:
 	ld xhl, (xbc)
-	cpi_berp 0xEE, 0
+	cpib_erp 0xEE, 0
 	jr nz, FP_SP_Encode_NaN
 	ld xde, (xbc + 4)
 	cp hl, 0x7F
@@ -1501,17 +1501,17 @@ FP_SP_Encode:
 	cp hl, 0xFF82
 	jr lt, FP_SP_Encode_Zero
 	add hl, 0x7F
-	ldto_werp BC, 0xEA
+	stw_erp BC, 0xEA
 	res 7, bc
 	sll hl, 7
 	or_erpb_rr H, 0xEF
 	or hl, bc
-	ldfr_werp HL, 0xEA
+	ldw_erp HL, 0xEA
 	ld (xwa), xde
 	ret
 
 FP_SP_Encode_NaN:
-	ldto_berp E, 0xEE
+	stb_erp E, 0xEE
 	cp e, 0x8
 	jr nz, FP_SP_Encode_Zero
 	lds32 xde, 0
@@ -1526,14 +1526,14 @@ FP_SP_Encode_Overflow:
 	ldw de, 0xFFFF
 	ldw bc, 0x7F7F
 	or_erpb_rr B, 0xEF
-	ldfr_werp BC, 0xEA
+	ldw_erp BC, 0xEA
 
 FP_SP_Encode_Overflow_Store:
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ld (xwa), xde
-	ld32_24 xbc, 0x00f428
+	ldl_da xbc, 0x00f428
 	or xbc, xbc
-	mrid2 0xB1, 0xEE
+	mri_d2 0xB1, 0xEE
 	ret
 
 FP_DP_Mul:
@@ -1805,10 +1805,10 @@ FP_DP_AlignMantissa_Shift:
 FP_DP_AlignMantissa_Shift16:
 	cp ix, 0x10
 	jr lt, FP_DP_AlignMantissa_Shift8
-	ldto_werp DE, 0xEA
-	ldfr_werp HL, 0xEA
-	ldto_werp HL, 0xEE
-	ldi_werp 0xEE, 0
+	stw_erp DE, 0xEA
+	ldw_erp HL, 0xEA
+	stw_erp HL, 0xEE
+	ldiw_erp 0xEE, 0
 	sub ix, 0x10
 	jr z, FP_DP_AlignMantissa_Round
 
@@ -1816,7 +1816,7 @@ FP_DP_AlignMantissa_Shift8:
 	cp ix, 0x8
 	jr lt, FP_DP_AlignMantissa_ShiftBit
 	srl xde, 8
-	ldfr_berp L, 0xEB
+	ldb_erp L, 0xEB
 	srl xhl, 8
 	sub ix, 0x8
 	jr z, FP_DP_AlignMantissa_Round
@@ -1830,7 +1830,7 @@ FP_DP_AlignMantissa_ShiftBit:
 FP_DP_AlignMantissa_Round:
 	ld c, e
 	srl xde, 8
-	ldfr_berp L, 0xEB
+	ldb_erp L, 0xEB
 	srl xhl, 8
 	cp c, 0x80
 	jr c, FP_DP_AlignMantissa_Store
@@ -1900,7 +1900,7 @@ FP_SP_AlignMantissa_Store:
 FP_SP_AlignMantissa_MaxShift:
 	lds32 xix, 0
 	ld (xbc + 4), xix
-	ldi_berp 0xF2, 1
+	ldib_erp 0xF2, 1
 	ld (xbc), xix
 	ret
 
@@ -1925,7 +1925,7 @@ FP_DP_MulMantissaCore:
 	ld xiy, (xwa + 8)
 	ld xix, (xwa + 4)
 	ldb c, 0x8
-	ldto_berp B, 0xEF
+	stb_erp B, 0xEF
 	lds32 xiz, 0
 	call FP_Div_Step_Bit3
 	ld (xsp), xiz
@@ -1946,8 +1946,8 @@ FP_DP_MulMantissaCore_Round:
 	ld bc, ix
 	srl bc, 3
 	srl xix, 8
-	ldto_berp E, 0xF4
-	ldfr_berp E, 0xF3
+	stb_erp E, 0xF4
+	ldb_erp E, 0xF3
 	srl xiy, 8
 	srl xiy, 1
 	extpfx3 0xDC, 0x24, 0x00
@@ -2095,9 +2095,9 @@ FP_DP_SubMantissa_Normalize:
 FP_DP_SubMantissa_NormLoop:
 	bs1b_erpw 0xEE
 	jr nov, FP_DP_SubMantissa_Shift
-	ldfr_werp HL, 0xEE
-	ldto_werp HL, 0xEA
-	ldfr_werp DE, 0xEA
+	ldw_erp HL, 0xEE
+	stw_erp HL, 0xEA
+	ldw_erp DE, 0xEA
 	lds de, 0
 	sub ix, 0x10
 	jr FP_DP_SubMantissa_NormLoop
@@ -2111,7 +2111,7 @@ FP_DP_SubMantissa_Shift:
 	cp a, 0x8
 	jr lt, FP_DP_SubMantissa_ShiftBit
 	srl xde, 8
-	ldfr_berp L, 0xEB
+	ldb_erp L, 0xEB
 	srl xhl, 8
 	dec 8, a
 	jr z, FP_DP_SubMantissa_StoreExp
@@ -2156,13 +2156,13 @@ FP_SP_SubMantissa:
 	ldb b, 0x0
 	jr z, FP_SP_SubMantissa_Zero
 	jr nc, FP_SP_SubMantissa_Normalize
-	cpl_werp 0xF2
+	cplw_erp 0xF2
 	cpl ix
 	inc 1, xix
 	ldb b, 0x80
 
 FP_SP_SubMantissa_Normalize:
-	cpi_werp 0xF2, 0
+	cpiw_erp 0xF2, 0
 	jr nz, FP_SP_SubMantissa_AlignBits
 	sll xix, 8
 	dec 8, de
@@ -2186,7 +2186,7 @@ FP_SP_SubMantissa_Store:
 
 FP_SP_SubMantissa_Zero:
 	ld (xiy + 4), xix
-	ldi_berp 0xF2, 1
+	ldib_erp 0xF2, 1
 	ld (xiy), xix
 	ret
 
@@ -2216,7 +2216,7 @@ VoicePitch_SlideEngine_NonZero:
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoicePitch_SlideEngine_LessPath
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ld xwa, (xsp + 54)
 	lda_24 xbc, 0x00f420
 	call FP_DP_Raw8Copy
@@ -2287,7 +2287,7 @@ VoiceAmp_ConvergeEngine:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceAmp_ConvergeEngine_InRange
-	sti16_24 0x040c22, 0x0021
+	stiw_da 0x040c22, 0x0021
 	ld xwa, (xsp + 110)
 	lda_24 xbc, 0x01f6de
 	call FP_DP_Raw8Copy
@@ -2485,7 +2485,7 @@ DSP_VoiceRegUpdate_BlendLoop:
 	divs iy, 0x8
 	exts xwa
 	divs wa, 0x8
-	ldto_werp WA, 0xE2
+	stw_erp WA, 0xE2
 	ld (xsp + 6), wa
 	lda xhl, (xsp + 16)
 	lda xix, (xsp + 8)
@@ -2512,13 +2512,13 @@ DSP_VoiceRegUpdate_ForwardScan:
 	jr ge, DSP_VoiceRegUpdate_BackScan
 
 DSP_VoiceRegUpdate_FillPad:
-	stib_dri 0x07, 0xF0, 0xE0, 0x00
+	stib_ind 0x07, 0xF0, 0xE0, 0x00
 	dec 1, wa
 	cp wa, iy
 	jr gt, DSP_VoiceRegUpdate_FillPad
 
 DSP_VoiceRegUpdate_BackScan:
-	st_dri3b B, 0x07, 0xF0, 0xF4
+	stb_dri B, 0x07, 0xF0, 0xF4
 	cpw (xsp + 6), 0x0
 	jr z, DSP_VoiceRegUpdate_ZeroLow
 	ldw wa, 0x8
@@ -2607,7 +2607,7 @@ FP_SP_DecodeToInt_Pad:
 
 FP_SP_DecodeToInt:
 	ld xde, (xwa)
-	cpi_berp 0xEA, 0
+	cpib_erp 0xEA, 0
 	jr nz, FP_SP_DecodeToInt_NaN
 	cps de, 0
 	jr lt, FP_SP_DecodeToInt_Underflow
@@ -2632,7 +2632,7 @@ FP_SP_DecodeToInt_ShiftRight:
 	sub a, e
 	cp a, 0x10
 	jr lt, FP_SP_DecodeToInt_ShiftRightLoop
-	ldto_werp IY, 0xF6
+	stw_erp IY, 0xF6
 	extz xiy
 	sub a, 0x10
 	jr z, FP_SP_DecodeToInt_SignCorrect
@@ -2641,9 +2641,9 @@ FP_SP_DecodeToInt_ShiftRightLoop:
 	srla xiy
 
 FP_SP_DecodeToInt_SignCorrect:
-	cpi_berp 0xEB, 0
+	cpib_erp 0xEB, 0
 	jr z, FP_SP_DecodeToInt_Return
-	cpl_werp 0xF6
+	cplw_erp 0xF6
 	cpl iy
 	inc 1, xiy
 
@@ -2660,7 +2660,7 @@ FP_SP_DecodeToInt_Overflow:
 	dec 1, xhl
 
 FP_SP_DecodeToInt_SetError:
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	ret
 
 FP_SP_DecodeToInt_NaN:
@@ -2690,7 +2690,7 @@ VoiceFreq_EnvelopeStep_InRange:
 	lda xhl, (xwa + 7)
 	cp bc, 0x7FF
 	jr le, VoiceFreq_EnvelopeStep_ClampLow
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	lda_24 xbc, 0x00f420
 	bitm 7, (xhl)
 	jr z, VoiceFreq_EnvelopeStep_ClampHigh
@@ -2716,7 +2716,7 @@ VoiceFreq_EnvelopeStep_NibbleAdjust:
 	inc 6, xwa
 	ld (xsp + 6), xwa
 	ld a, (xwa)
-	ldfr_berp A, 0xE2
+	ldb_erp A, 0xE2
 	and a, 0xF0
 	extz wa
 	ld iy, wa
@@ -2740,7 +2740,7 @@ VoiceFreq_EnvelopeStep_IncLoop:
 	inc 1, wa
 	cp wa, 0x7FF
 	jr c, VoiceFreq_EnvelopeStep_IncStep
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	lda_24 xbc, 0x00f420
 	ld a, (xix)
 	bit 7, a
@@ -2769,7 +2769,7 @@ VoiceFreq_EnvelopeStep_DecLoop:
 	ld wa, iy
 	sub wa, 0x1
 	jr nz, VoiceFreq_EnvelopeStep_DecStep
-	sti16_24 0x040c22, 0x0022
+	stiw_da 0x040c22, 0x0022
 	lda_24 xbc, 0x01f72e
 	ld xwa, xde
 	call FP_DP_Raw8Copy
@@ -2783,7 +2783,7 @@ VoiceFreq_EnvelopeStep_DecStep:
 
 VoiceFreq_EnvelopeStep_StoreResult:
 	sll iy, 4
-	ldto_berp C, 0xE2
+	stb_erp C, 0xE2
 	and c, 0xF
 	extz bc
 	ld wa, iy
@@ -2817,7 +2817,7 @@ FP_DP_MulAdd:
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
 	add (xwa + 256), hl
-	ldto_berp L, 0xEF
+	stb_erp L, 0xEF
 	xor (xwa + 3), l
 	ld xhl, (xwa + 4)
 	ld xiy, (xbc + 4)
@@ -2862,8 +2862,8 @@ FP_DP_MulAdd_Sum2:
 	rrc ix
 
 FP_DP_MulAdd_Round:
-	ldto_berp C, 0xF1
-	ldto_berp B, 0xEB
+	stb_erp C, 0xF1
+	stb_erp B, 0xEB
 	srl c, 4
 	srl b, 4
 	sll xhl, 4
@@ -2897,13 +2897,13 @@ FP_SP_MulAdd:
 	ld xiz, xwa
 	ld xhl, (xbc)
 	add (xwa + 256), hl
-	ldto_berp L, 0xEF
+	stb_erp L, 0xEF
 	xor (xwa + 3), l
 	ld xwa, (xwa + 4)
 	ld xbc, (xbc + 4)
-	ldto_werp DE, 0xE2
+	stw_erp DE, 0xE2
 	ld hl, de
-	ldto_werp IX, 0xE6
+	stw_erp IX, 0xE6
 	mul xde, xix
 	mul xhl, xbc
 	mul xix, xwa
@@ -2911,7 +2911,7 @@ FP_SP_MulAdd:
 	add xhl, xix
 	ex_erpw_rr DE, 0xEA
 	add xde, xhl
-	ldto_werp HL, 0xE2
+	stw_erp HL, 0xE2
 	extz xhl
 	add xde, xhl
 	bit_erpw 0xEA, 0x0F
@@ -2940,9 +2940,9 @@ FP_SP_MulAdd_Store:
 	ret
 
 FP_MulMantissa64x64:
-	ldto_werp DE, 0xEE
+	stw_erp DE, 0xEE
 	ld ix, de
-	ldto_werp IZ, 0xF6
+	stw_erp IZ, 0xF6
 	mul xde, xiz
 	mul xix, xiy
 	mul xiz, xhl

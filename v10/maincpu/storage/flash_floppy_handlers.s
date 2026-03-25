@@ -1450,10 +1450,10 @@ NAKA_InitDataBlock:
 	jrl	5626
 
 NoteEvent_LoadSoundGenParams:
-	st_dri3b L, 0xfd, 0x94, 0xfe
+	stb_dri L, 0xfd, 0x94, 0xfe
 	push xiz
 	ld xiy, NAKA_UIObjectTable_0x26D2
-	st_dri3b D, 0xfd, 0x10, 0x01
+	stb_dri D, 0xfd, 0x10, 0x01
 	ldw bc, 0x30
 	ldirw
 	ld xiy, NAKA_UIObjectTable_0x25D2
@@ -1466,14 +1466,14 @@ NoteEvent_LoadSoundGenParams:
 	ldirw
 	ldda32 xwa, 3186
 	ld xiy, MSP_Default_VoiceEnable
-	st_dri3b D, 0xe1, 0xc0, 0x13
+	stb_dri D, 0xe1, 0xc0, 0x13
 	ldw bc, 0x20
 	ldirw
 	ldda32 xbc, 3186
 	ld xwa, 0xba0
 	add xbc, xwa
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0x80, 0x00
+	stb_dri B, 0xe5, 0x80, 0x00
 
 NoteEvent_CopyVoiceParamsLoop:
 	ld xiy, MSP_Default_SoundReserved_0x30
@@ -1484,14 +1484,14 @@ NoteEvent_CopyVoiceParamsLoop:
 	cp xwa, xde
 	jr ule, NoteEvent_CopyVoiceParamsLoop
 	ldda32 xwa, 3186
-	st_dri3b W, 0xe1, 0x40, 0x0c
+	stb_dri W, 0xe1, 0x40, 0x0c
 	ld xde, xwa
-	st_dri3b W, 0xe1, 0xe0, 0x06
+	stb_dri W, 0xe1, 0xe0, 0x06
 	ld (xsp + 12), xwa
 
 NoteEvent_CopyExtParamsOuter:
 	ld xwa, xde
-	st_dri3b C, 0xe9, 0x80, 0x00
+	stb_dri C, 0xe9, 0x80, 0x00
 
 NoteEvent_CopyExtParamsInner:
 	ld xiy, MSP_Default_SoundReserved_0x50
@@ -1501,10 +1501,10 @@ NoteEvent_CopyExtParamsInner:
 	lda xwa, (xwa + 32)
 	cp xwa, xhl
 	jr ule, NoteEvent_CopyExtParamsInner
-	st_dri3b B, 0xe9, 0xa0, 0x00
+	stb_dri B, 0xe9, 0xa0, 0x00
 	cp xde, (xsp + 12)
 	jr ule, NoteEvent_CopyExtParamsOuter
-	st_dri3b W, 0xfd, 0x10, 0x01
+	stb_dri W, 0xfd, 0x10, 0x01
 	ld (xsp + 4), xwa
 	lda xbc, (xwa + 4)
 	ld (xsp + 8), xbc
@@ -1533,7 +1533,7 @@ NoteEvent_WriteRegOffsets_Loop:
 	ld xbc, (xsp + 12)
 	ld (xbc), ix
 	ld (xhl), de
-	st_dri3b E, 0xfd, 0x10, 0x01
+	stb_dri E, 0xfd, 0x10, 0x01
 	ld xix, xwa
 	ldw bc, 0x30
 	ldirw
@@ -1560,7 +1560,7 @@ NoteEvent_CopySlotData_Body:
 	cp de, 0x153
 	jr ule, NoteEvent_CopySlotData_Loop
 	pop xiz
-	st_dri3b L, 0xfd, 0x6c, 0x01
+	stb_dri L, 0xfd, 0x6c, 0x01
 	ret
 
 Flash_InitExtMemAddrs:
@@ -1693,7 +1693,7 @@ Flash_InitBytecodeBlock:
 	.byte 0xad
 	push	xbc
 	call	DualVoice_ParamLoadDone
-	ldda8	a, 0x35b0
+	ldb_d8	a, 0x35b0
 	extz	wa
 	bit	0, wa
 	jr	z, 6
@@ -1709,7 +1709,7 @@ Flash_InitBytecodeBlock:
 	.byte 0x8f
 	ldio	63, 0
 	jrl	nz, 128
-	ldada	xwa, 1748
+	lda_d16	xwa, 1748
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -1725,7 +1725,7 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+4)
 	extz	wa
 	calr	1449
-	ldada	xwa, 1850
+	lda_d16	xwa, 1850
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -1849,7 +1849,7 @@ Flash_InitBytecodeBlock:
 	.byte 0xad
 	push	xbc
 	call	DualVoice_ParamLoadDone
-	ldda8	a, 0x35b0
+	ldb_d8	a, 0x35b0
 	extz	wa
 	bit	0, wa
 	jr	z, 24
@@ -1871,7 +1871,7 @@ Flash_InitBytecodeBlock:
 	add	(xix), xsp
 	ldio	63, 0
 	jrl	nz, -229
-	ldada	xwa, 1748
+	lda_d16	xwa, 1748
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -1927,9 +1927,9 @@ Flash_InitBytecodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	64710
-	ldda8	l, 3176
-	ldda8	c, 3178
-	ldda8	e, 3180
+	ldb_d8	l, 3176
+	ldb_d8	c, 3178
+	ldb_d8	e, 3180
 	.byte 0x87
 	push	xsp
 	push	sr
@@ -1953,9 +1953,9 @@ Flash_InitBytecodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	64655
-	ldda8	a, 3176
-	ldda8	c, 3178
-	ldda8	e, 3180
+	ldb_d8	a, 3176
+	ldb_d8	c, 3178
+	ldb_d8	e, 3180
 	.byte 0x87
 	push	xsp
 	push	sr
@@ -1992,9 +1992,9 @@ PartGrid_ColumnDispatch:
 	jr gt, PartGrid_CopyHLtoBC
 	add wa, wa
 	lda_24 xix, MSP_Default_GroupOffsetA
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, PartGrid_ColumnJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PartGrid_ColumnJumpTable:
 	ldda32	xhl, 3190
@@ -2047,7 +2047,7 @@ FrameSetup_ComputeGridIndex:
 	muls wa, 0x3
 	add wa, bc
 	lda_24 xbc, MSP_Default_ChannelMap
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld e, (xsp + 4)
 	cp (xsp + 4), 0x4
 	jr z, FrameSetup_SpecialCase4
@@ -2095,7 +2095,7 @@ FrameSetup_SpecialCase4:
 	ld bc, wa
 	add bc, 0x60
 	ld xwa, (xsp)
-	st_dri3b W, 0x07, 0xe0, 0xe4
+	stb_dri W, 0x07, 0xe0, 0xe4
 	ld l, (xwa + 56)
 	ld a, (xwa + 57)
 
@@ -2201,10 +2201,10 @@ PartGrid_ColumnDispatch_Default:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 PartGrid_DefaultLoop_Outer:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	extz xwa
 	ld xbc, xwa
 	add xbc, xbc
@@ -2217,7 +2217,7 @@ PartGrid_DefaultLoop_Outer:
 	extz bc
 	calr Pack12BitValueWithBank
 	ld wa, hl
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	extz xbc
 	ld xde, xbc
 	add xde, xde
@@ -2232,7 +2232,7 @@ PartGrid_DefaultLoop_Inner:
 	ld bc, iz
 	extz xbc
 	add xbc, xbc
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	extz xwa
 	ld xde, xwa
 	add xde, xde
@@ -2248,7 +2248,7 @@ PartGrid_DefaultLoop_Inner:
 	ld de, iz
 	extz xde
 	add xde, xde
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	extz xbc
 	ld xhl, xbc
 	add xhl, xhl
@@ -2260,14 +2260,14 @@ PartGrid_DefaultLoop_Inner:
 	inc 1, iz
 	cps iz, 5
 	jr ule, PartGrid_DefaultLoop_Inner
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x1d, 0x00
 	jrl ule, PartGrid_DefaultLoop_Outer
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 ; NoteEventBuffer CopyToSlot dispatch (7-entry, table 0xe16128)
 NoteEvent_CopyToSlot:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	extz xwa
 	sll xwa, 8
 	add xwa, 0x1400
@@ -2277,7 +2277,7 @@ NoteEvent_CopyToSlot:
 	extz bc
 	calr Pack12BitValueWithBank
 	ld wa, hl
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	extz xbc
 	sll xbc, 8
 	add xbc, 0x1400
@@ -2290,13 +2290,13 @@ NoteEvent_CopyToSlot:
 	extz bc
 	calr Pack12BitValueWithBank
 	ld wa, hl
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	extz xbc
 	sll xbc, 8
 	add xbc, 0x1400
 	addda32 xbc, 3186
 	ld (xbc + 3), wa
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x53, 0x01
 	jr ule, NoteEvent_CopyToSlot
 	pop xiz
@@ -2317,7 +2317,7 @@ Pack12BitValueWithBank:
 NoteEvent_Store:
 	extz wa
 	lda_24 xbc, MSP_Default_ChannelMap_0x1E
-	ld_srib3 L, 0x07, 0xe4, 0xe0
+	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 NoteEventBuffer_CopyToSlot:
@@ -2331,9 +2331,9 @@ NoteEventBuffer_CopyToSlot:
 	jr gt, NoteEvent_CopyCommon
 	add bc, bc
 	lda_24 xix, MSP_Default_GroupOffsetB
-	ld_sriw3 BC, 0x07, 0xf0, 0xe4
+	ldw_sri BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, NOTE_EVENT_DISPATCH_1
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Note event buffer copy dispatch - 7 cases (BC 0-6)
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
 ; Offset table at 0xe16128
@@ -2378,9 +2378,9 @@ NoteEventBuffer_Store:
 	jrl gt, NoteEvent_StoreCommon
 	add wa, wa
 	lda_24 xix, MSP_Default_VarSize
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, NOTE_EVENT_DISPATCH_2
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xe16136
 NOTE_EVENT_DISPATCH_2:
@@ -2393,15 +2393,15 @@ NOTE_EVENT_DISPATCH_2b:
 
 Flash_SectorWriteExecute:
 	ld xwa, (xsp)
-	st_dri3b A, 0xe1, 0x00, 0x68
+	stb_dri A, 0xe1, 0x00, 0x68
 	ld xwa, (xsp + 4)
-	st_dri3b B, 0xe1, 0x00, 0x68
+	stb_dri B, 0xe1, 0x00, 0x68
 	lds wa, 1
 	call Flash_EraseSectorAndWrite
 	ld xiy, (xsp + 4)
 	sub xiy, 0x9800
 	ld xwa, (xsp)
-	st_dri3b B, 0xe1, 0x00, 0x68
+	stb_dri B, 0xe1, 0x00, 0x68
 	ld xix, xde
 	ldw bc, 0x8000
 	ldirw
@@ -2410,12 +2410,12 @@ Flash_SectorWriteExecute:
 Flash_CopyMirrorLoop:
 	ld xhl, xbc
 	add xhl, 0x10000
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	ld (xhl), a
 	cp xbc, xde
 	jr c, Flash_CopyMirrorLoop
 	ld xwa, (xsp)
-	st_dri3b A, 0xe1, 0x00, 0x68
+	stb_dri A, 0xe1, 0x00, 0x68
 	ld xde, (xsp + 4)
 	sub xde, 0x9800
 	lds wa, 1
@@ -2455,12 +2455,12 @@ Flash_WriteSectorWithMirrorCopy:
 	ld xwa, (xsp)
 	add xwa, 0x10000
 	ld xbc, xwa
-	st_dri3b B, 0xe1, 0x00, 0x68
+	stb_dri B, 0xe1, 0x00, 0x68
 
 Flash_CopyReverseMirrorLoop:
 	ld xhl, xbc
 	add xhl, 0xffff0000
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	ld (xhl), a
 	cp xbc, xde
 	jr c, Flash_CopyReverseMirrorLoop
@@ -2569,7 +2569,7 @@ Flash_ExtendedOpsBlock:
 	ld	xbc, 0x2e6aef0e
 	ld	(xsp+2), a
 	calr	3601
-	ldada	xix, 1748
+	lda_d16	xix, 1748
 	.byte 0x94
 	push	xsp
 	swi	7
@@ -2590,7 +2590,7 @@ Flash_ExtendedOpsBlock:
 	push	sr
 	.byte 0xf1
 	jr	nz, 19
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	ld	wa, (xix)
 	ld	(xbc), wa
 	extz	hl
@@ -2637,7 +2637,7 @@ Flash_ExtendedOpsBlock:
 	sla	de, 2
 	ld	iz, de
 	inc	4, iz
-	ldada	xiy, 1952
+	lda_d16	xiy, 1952
 	ld	wa, (xbc)
 	.byte 0xf3
 	reti
@@ -2667,13 +2667,13 @@ Flash_ExtendedOpsBlock:
 	dec	6, xsp
 	ld	(xsp+4), a
 	calr	3406
-	ldada	xwa, 1748
+	lda_d16	xwa, 1748
 	.byte 0x90
 	push	xsp
 	swi	7
 	swi	7
 	jr	z, 13
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	ld	wa, (xwa)
 	ld	(xbc), wa
 	.byte 0xb9
@@ -2690,7 +2690,7 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	ldada	xbc, 1748
+	lda_d16	xbc, 1748
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -2706,20 +2706,20 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	ldada	xix, 3074
+	lda_d16	xix, 3074
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
 	ldw	de, 8338
 	.byte 0xc7
-	ld32_24	xbc, 0x28f99
+	ldl_da	xbc, 0x28f99
 	extz	wa
 	.byte 0xc7
-	ld32_24	xiz, 0x6effcf
+	ldl_da	xiz, 0x6effcf
 	sla	wa, 2
 	ld	iy, wa
 	inc	4, iy
-	ldada	xix, 1952
+	lda_d16	xix, 1952
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xf4, 0x51
@@ -2757,7 +2757,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	iy, wa
 	inc	4, iy
-	ldada	xix, 1952
+	lda_d16	xix, 1952
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xf4, 0x51
@@ -2808,7 +2808,7 @@ Flash_ExtendedOpsBlock:
 	extz	bc
 	lds	de, 0
 	calr	63721
-	ldada	xwa, 1952
+	lda_d16	xwa, 1952
 	.byte 0x90, 0xf3
 	jr	nz, 19
 	ld	hl, (xwa+2)
@@ -2834,7 +2834,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0x8b
 	extz	bc
 	sla	bc, 2
-	ldada	xwa, 1956
+	lda_d16	xwa, 1956
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe4
@@ -2867,7 +2867,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	.byte 0xd3
 	reti
 	.byte 0xe4
@@ -2905,7 +2905,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	.byte 0xd3
 	reti
 	.byte 0xe4
@@ -2943,7 +2943,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	.byte 0xd3
 	reti
 	.byte 0xe4
@@ -2981,7 +2981,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	.byte 0xd3
 	reti
 	.byte 0xe4
@@ -3024,7 +3024,7 @@ Flash_ExtendedOpsBlock:
 	ldw	bc, 0x8000
 	.byte 0x95
 	scf
-	ldada	xhl, 1952
+	lda_d16	xhl, 1952
 	ld	bc, (xhl+2)
 	cp	bc, 0xffff
 	jr	z, 69
@@ -3074,7 +3074,7 @@ Flash_ExtendedOpsBlock:
 	jr	c, -30
 	ldb	w, 0
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xhl
+	addl_da	0xe2c7a8, xhl
 	extz	bc
 	sla	bc, 2
 	inc	6, bc
@@ -3129,7 +3129,7 @@ Flash_ExtendedOpsBlock:
 	ldw	bc, 0x8000
 	.byte 0x95
 	scf
-	ldada	xwa, 1952
+	lda_d16	xwa, 1952
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -3186,7 +3186,7 @@ Flash_ExtendedOpsBlock:
 	sla	bc, 2
 	ld	wa, bc
 	inc	4, wa
-	ldada	xde, 1952
+	lda_d16	xde, 1952
 	.byte 0xd3
 	reti
 	or	xwa, xwa
@@ -3261,7 +3261,7 @@ Flash_ExtendedOpsBlock:
 	ret
 	lda	xsp, (xsp-12)
 	push	xiz
-	ldada	xwa, 1952
+	lda_d16	xwa, 1952
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -3317,7 +3317,7 @@ Flash_ExtendedOpsBlock:
 	sla	bc, 2
 	ld	wa, bc
 	inc	4, wa
-	ldada	xde, 1952
+	lda_d16	xde, 1952
 	.byte 0xd3
 	reti
 	or	xwa, xwa
@@ -3412,14 +3412,14 @@ Flash_ExtendedOpsBlock:
 	inc	1, ix
 	cps	c, 4
 	jr	c, -27
-	ldada	xhl, 1952
-	ldda16	wa, 1748
+	lda_d16	xhl, 1952
+	ldw_d16	wa, 1748
 	ld	(xhl), wa
 	ld	a, d
 	extz	wa
 	or	wa, 1280
 	ld	(xhl+2), wa
-	ldada	xde, 2156
+	lda_d16	xde, 2156
 	ld	(xde), wa
 	ld	c, b
 	extz	bc
@@ -3436,7 +3436,7 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	ldada	xhl, 1748
+	lda_d16	xhl, 1748
 	.byte 0xf3
 	reti
 	or	xwa, xix
@@ -3467,7 +3467,7 @@ Flash_ExtendedOpsBlock:
 	sla	ix, 2
 	ld	iz, ix
 	inc	4, iz
-	ldada	xiy, 1952
+	lda_d16	xiy, 1952
 	ld	wa, (xhl)
 	.byte 0xf3
 	reti
@@ -3500,7 +3500,7 @@ Flash_ExtendedOpsBlock:
 	ld	iy, wa
 	add	iy, iy
 	inc	2, iy
-	ldada	xix, 2972
+	lda_d16	xix, 2972
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xf4
@@ -3550,7 +3550,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	iz, wa
 	inc	4, iz
-	ldada	xiy, 2156
+	lda_d16	xiy, 2156
 	.byte 0xf3
 	reti
 	.byte 0xf4
@@ -3584,7 +3584,7 @@ Flash_ExtendedOpsBlock:
 	inc	8, xsp
 	ret
 	push	xiz
-	ldada	xbc, 0x3a4f
+	lda_d16	xbc, 0x3a4f
 	ld	xwa, xbc
 	lda	xbc, (xbc+29)
 	.byte 0xf5, 0xe0
@@ -3595,7 +3595,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
-	ldada	xwa, 2156
+	lda_d16	xwa, 2156
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -3614,7 +3614,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0x89
 	extz	wa
 	calr	298
-	ldada	xbc, 0x3a4f
+	lda_d16	xbc, 0x3a4f
 	ld	(xbc), 35
 	ld	(xbc+1), l
 	.byte 0xc7
@@ -3637,7 +3637,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
-	ldada	xbc, 2156
+	lda_d16	xbc, 2156
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe8
@@ -3683,7 +3683,7 @@ Flash_ExtendedOpsBlock:
 	swi	3
 	.byte 0x89
 	extz	wa
-	ldada	xbc, 0x3a4f
+	lda_d16	xbc, 0x3a4f
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 35
@@ -3786,7 +3786,7 @@ Flash_ExtendedOpsBlock:
 	ldb	l, 51
 	ret
 	push	xiz
-	ldada	xde, 0x3a4f
+	lda_d16	xde, 0x3a4f
 	ld	xwa, xde
 	lda	xbc, (xde+29)
 	.byte 0xf5, 0xe0
@@ -3819,7 +3819,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0x89
 	extz	wa
 	sla	wa, 2
-	ldada	xbc, 1958
+	lda_d16	xbc, 1958
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -3861,7 +3861,7 @@ Flash_ExtendedOpsBlock:
 	swi	0
 	.byte 0x89
 	extz	wa
-	ldada	xbc, 0x3a4f
+	lda_d16	xbc, 0x3a4f
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 35
@@ -3924,13 +3924,13 @@ Flash_ExtendedOpsBlock:
 	pop	xiz
 	ret
 	calr	953
-	ldada	xhl, 2156
+	lda_d16	xhl, 2156
 	.byte 0x93
 	push	xsp
 	swi	7
 	swi	7
 	jr	z, 19
-	ldada	xbc, 2360
+	lda_d16	xbc, 2360
 	ld	wa, (xhl+2)
 	ld	(xbc), wa
 	ld	wa, (xhl)
@@ -3942,7 +3942,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xc7
 	lds32	xde, 0
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xiy
+	addl_da	0xe2c7a8, xiy
 	extz	de
 	sla	de, 2
 	ld	wa, de
@@ -3960,7 +3960,7 @@ Flash_ExtendedOpsBlock:
 	add	wa, wa
 	ld	iy, wa
 	inc	6, iy
-	ldada	xix, 2360
+	lda_d16	xix, 2360
 	inc	6, de
 	.byte 0xd3
 	reti
@@ -3992,13 +3992,13 @@ Flash_ExtendedOpsBlock:
 	sub32_24	xde, 0x6732cf
 	ret
 	calr	881
-	ldada	xbc, 1748
+	lda_d16	xbc, 1748
 	.byte 0x91
 	push	xsp
 	swi	7
 	swi	7
 	jr	z, 14
-	ldada	xde, 2666
+	lda_d16	xde, 2666
 	ld	wa, (xbc)
 	ld	(xde+2), wa
 	.byte 0xba, 0x04
@@ -4024,7 +4024,7 @@ Flash_ExtendedOpsBlock:
 	sla	wa, 2
 	ld	ix, wa
 	add	ix, 106
-	ldada	xde, 2666
+	lda_d16	xde, 2666
 	.byte 0xf3
 	reti
 	cp	xwa, xwa
@@ -4122,20 +4122,20 @@ VoiceParam_AddOffset:
 	extz de
 	add hl, de
 	ldda32 xwa, 3222
-	lda_dri3 XHL, 0x07, 0xe0, 0xec
+	lda_dri XHL, 0x07, 0xe0, 0xec
 	ret
 
 DualVoice_ScanAllColumns:
 	dec 2, xsp
-	push_werp 0xfa
+	pushw_erp 0xfa
 	ld (xsp + 2), a
 	calr SlotTable_InitBank1748
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 DualVoice_ScanColumnLoop:
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 0
 	calr Util_FrameSetup10
@@ -4153,7 +4153,7 @@ DualVoice_StoreBankMatch:
 DualVoice_ScanRow1:
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 1
 	calr Util_FrameSetup10
@@ -4164,7 +4164,7 @@ DualVoice_ScanRow1:
 	call_24 nc, SlotTable_Insert1748
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 2
 	calr Util_FrameSetup10
@@ -4175,7 +4175,7 @@ DualVoice_ScanRow1:
 	call_24 nc, SlotTable_Insert1748
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 3
 	calr Util_FrameSetup10
@@ -4186,7 +4186,7 @@ DualVoice_ScanRow1:
 	call_24 nc, SlotTable_Insert1748
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 4
 	calr Util_FrameSetup10
@@ -4195,24 +4195,24 @@ DualVoice_ScanRow1:
 	and bc, 0xff
 	cp bc, 0x80
 	call_24 nc, SlotTable_Insert1748
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jrl c, DualVoice_ScanColumnLoop
-	pop_werp 0xfa
+	popw_erp 0xfa
 	inc 2, xsp
 	ret
 
 DualVoice_ScanAllColumnsAlt:
 	dec 2, xsp
-	push_werp 0xfa
+	pushw_erp 0xfa
 	ld (xsp + 2), a
 	calr SlotTable_InitBank1850
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 DualVoice_ScanColumnLoopAlt:
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 0
 	calr Util_FrameSetup10
@@ -4230,7 +4230,7 @@ DualVoice_StoreBankMatchAlt:
 DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 1
 	calr Util_FrameSetup10
@@ -4241,7 +4241,7 @@ DualVoice_ScanRow1Alt:
 	call_24 nc, SlotTable_Insert1850
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 2
 	calr Util_FrameSetup10
@@ -4252,7 +4252,7 @@ DualVoice_ScanRow1Alt:
 	call_24 nc, SlotTable_Insert1850
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 3
 	calr Util_FrameSetup10
@@ -4263,7 +4263,7 @@ DualVoice_ScanRow1Alt:
 	call_24 nc, SlotTable_Insert1850
 	ld a, (xsp + 2)
 	extz wa
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	lds de, 4
 	calr Util_FrameSetup10
@@ -4272,15 +4272,15 @@ DualVoice_ScanRow1Alt:
 	and bc, 0xff
 	cp bc, 0x80
 	call_24 nc, SlotTable_Insert1850
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jrl c, DualVoice_ScanColumnLoopAlt
-	pop_werp 0xfa
+	popw_erp 0xfa
 	inc 2, xsp
 	ret
 
 SlotTable_InitBank1748:
-	ldada xbc, 1748
+	lda_d16 xbc, 1748
 	ldw (xbc), 0xffff
 	ldb l, 0x0
 	lds wa, 0
@@ -4288,7 +4288,7 @@ SlotTable_InitBank1748:
 SlotTable_InitBank1748_Loop:
 	ld de, wa
 	inc 2, de
-	stiw_dri 0x07, 0xe4, 0xe8, 0xff, 0xff
+	stiw_ind 0x07, 0xe4, 0xe8, 0xff, 0xff
 	inc 1, l
 	inc 2, wa
 	cp l, 0x32
@@ -4296,7 +4296,7 @@ SlotTable_InitBank1748_Loop:
 	ret
 
 SlotTable_InitBank1850:
-	ldada xbc, 1850
+	lda_d16 xbc, 1850
 	ldw (xbc), 0xffff
 	ldb l, 0x0
 	lds wa, 0
@@ -4304,7 +4304,7 @@ SlotTable_InitBank1850:
 SlotTable_InitBank1850_Loop:
 	ld de, wa
 	inc 2, de
-	stiw_dri 0x07, 0xe4, 0xe8, 0xff, 0xff
+	stiw_ind 0x07, 0xe4, 0xe8, 0xff, 0xff
 	inc 1, l
 	inc 2, wa
 	cp l, 0x32
@@ -4312,7 +4312,7 @@ SlotTable_InitBank1850_Loop:
 	ret
 
 SlotTable_ExtendedOpsBlock:
-	ldada	xde, 1952
+	lda_d16	xde, 1952
 	.byte 0xb2
 	push	sr
 	swi	7
@@ -4338,7 +4338,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -14
 	ret
-	ldada	xde, 2156
+	lda_d16	xde, 2156
 	.byte 0xb2
 	push	sr
 	swi	7
@@ -4364,7 +4364,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -14
 	ret
-	ldada	xix, 2360
+	lda_d16	xix, 2360
 	.byte 0xb4
 	push	sr
 	swi	7
@@ -4404,7 +4404,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -27
 	ret
-	ldada	xix, 2666
+	lda_d16	xix, 2666
 	.byte 0xb4
 	push	sr
 	swi	7
@@ -4443,7 +4443,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -27
 	ret
-	ldada	xbc, 3074
+	lda_d16	xbc, 3074
 	.byte 0xb1
 	push	sr
 	swi	7
@@ -4463,7 +4463,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	l, 50
 	jr	c, -20
 	ret
-	ldada	xbc, 2972
+	lda_d16	xbc, 2972
 	.byte 0xb1
 	push	sr
 	swi	7
@@ -4485,15 +4485,15 @@ SlotTable_ExtendedOpsBlock:
 	ret
 
 SlotTable_Insert1748:
-	ldi_berp 0xe2, 0
-	ldada xhl, 1748
+	ldib_erp 0xe2, 0
+	lda_d16 xhl, 1748
 
 SlotTable_Insert1748_Loop:
-	ldto_berp C, 0xe2
+	stb_erp C, 0xe2
 	extz bc
 	add bc, bc
 	inc 2, bc
-	st_dri3b B, 0x07, 0xec, 0xe4
+	stb_dri B, 0x07, 0xec, 0xe4
 	ld bc, (xde)
 	cp bc, wa
 	ret z
@@ -4503,21 +4503,21 @@ SlotTable_Insert1748_Loop:
 	ret
 
 SlotTable_Insert1748_Next:
-	inc1_berp 0xe2
+	inc1b_erp 0xe2
 	cp_erpb 0xe2, 0x32
 	jr c, SlotTable_Insert1748_Loop
 	ret
 
 SlotTable_Insert1850:
-	ldi_berp 0xe2, 0
-	ldada xhl, 1850
+	ldib_erp 0xe2, 0
+	lda_d16 xhl, 1850
 
 SlotTable_Insert1850_Loop:
-	ldto_berp C, 0xe2
+	stb_erp C, 0xe2
 	extz bc
 	add bc, bc
 	inc 2, bc
-	st_dri3b B, 0x07, 0xec, 0xe4
+	stb_dri B, 0x07, 0xec, 0xe4
 	ld bc, (xde)
 	cp bc, wa
 	ret z
@@ -4527,18 +4527,18 @@ SlotTable_Insert1850_Loop:
 	ret
 
 SlotTable_Insert1850_Next:
-	inc1_berp 0xe2
+	inc1b_erp 0xe2
 	cp_erpb 0xe2, 0x32
 	jr c, SlotTable_Insert1850_Loop
 	ret
 
 Flash_WriteBackSlotTable:
-	push_werp 0xfa
+	pushw_erp 0xfa
 	ldda32 xix, 3222
 	ldda32 xiy, 3218
 	ldw bc, 0x8000
 	ldirw
-	ldada xwa, 1850
+	lda_d16 xwa, 1850
 	cpw (xwa), 0xffff
 	jr z, Flash_WriteBackSlot_StartLoop
 	ld wa, (xwa)
@@ -4549,22 +4549,22 @@ Flash_WriteBackSlotTable:
 	calr VoiceParam_ComputeOffset
 
 Flash_WriteBackSlot_StartLoop:
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 Flash_WriteBackSlot_Loop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	add wa, wa
 	inc 2, wa
-	ldada xbc, 1850
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	lda_d16 xbc, 1850
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	cp wa, 0xffff
 	jr z, Flash_WriteBackSlot_Erase
 	and wa, 0x7f
 	extz wa
 	lds bc, 0
 	calr VoiceParam_ComputeOffset
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x32
 	jr c, Flash_WriteBackSlot_Loop
 
@@ -4573,7 +4573,7 @@ Flash_WriteBackSlot_Erase:
 	ldda32 xde, 3218
 	lds wa, 1
 	call Flash_EraseSectorAndWrite
-	pop_werp 0xfa
+	popw_erp 0xfa
 	ret
 
 Flash_SlotUpdateOpsBlock:
@@ -4606,7 +4606,7 @@ Flash_SlotUpdateOpsBlock:
 	lds	wa, 0
 	calr	64439
 	ldb	e, 0
-	ldada	xbc, 1748
+	lda_d16	xbc, 1748
 	ld	a, e
 	extz	wa
 	add	wa, wa
@@ -4694,7 +4694,7 @@ Flash_SlotUpdateOpsBlock:
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	ldada	xbc, 3074
+	lda_d16	xbc, 3074
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -4733,7 +4733,7 @@ Flash_SlotUpdateOpsBlock:
 	calr	62001
 	calr	62246
 	call	TmFlash_CopyToExtMem
-	ldada	xwa, 2360
+	lda_d16	xwa, 2360
 	.byte 0x98
 	push	sr
 	push	xsp
@@ -4749,8 +4749,8 @@ Flash_SlotUpdateOpsBlock:
 	extz	wa
 	calr	60524
 	calr	64734
-	ldada	xbc, 1952
-	ldda16	wa, 2362
+	lda_d16	xbc, 1952
+	ldw_d16	wa, 2362
 	ld	(xbc), wa
 	.byte 0xb9
 	push	sr
@@ -4781,7 +4781,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	de, wa
 	sla	de, 2
 	add	de, 106
-	ldada	xbc, 2360
+	lda_d16	xbc, 2360
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe8
@@ -4802,11 +4802,11 @@ Flash_SlotUpdateOpsBlock:
 	extz	wa
 	calr	60410
 	calr	64620
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	ld	e, (xsp+2)
 	extz	de
 	sla	de, 2
-	ldada	xwa, 2466
+	lda_d16	xwa, 2466
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
@@ -4839,16 +4839,16 @@ Flash_SlotUpdateOpsBlock:
 	ld	(xsp), e
 	ld	(xsp+2), c
 	calr	64540
-	ldada	xhl, 2666
+	lda_d16	xhl, 2666
 	ld	wa, (xhl+2)
 	cp	wa, 0xffff
 	jr	z, 12
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	ld	(xbc), wa
 	ld	wa, (xhl+4)
 	ld	(xbc+2), wa
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xhl
+	addl_da	0xe2c7a8, xhl
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -4863,7 +4863,7 @@ Flash_SlotUpdateOpsBlock:
 	jr	z, 40
 	ld	ix, bc
 	inc	4, ix
-	ldada	xde, 1952
+	lda_d16	xde, 1952
 	.byte 0xf3
 	reti
 	cp	xwa, xwa
@@ -4891,7 +4891,7 @@ Flash_SlotUpdateOpsBlock:
 	extz	hl
 	ld	wa, hl
 	calr	60301
-	ldada	xwa, 1850
+	lda_d16	xwa, 1850
 	.byte 0x90
 	push	xsp
 	swi	7
@@ -4919,16 +4919,16 @@ Flash_SlotUpdateOpsBlock:
 	dec	2, xsp
 	ld	(xsp), e
 	calr	64365
-	ldada	xhl, 2666
+	lda_d16	xhl, 2666
 	ld	wa, (xhl+2)
 	cp	wa, 0xffff
 	jr	z, 12
-	ldada	xbc, 1952
+	lda_d16	xbc, 1952
 	ld	(xbc), wa
 	ld	wa, (xhl+4)
 	ld	(xbc+2), wa
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xhl
+	addl_da	0xe2c7a8, xhl
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -4943,7 +4943,7 @@ Flash_SlotUpdateOpsBlock:
 	jr	z, 40
 	ld	ix, bc
 	inc	4, ix
-	ldada	xde, 1952
+	lda_d16	xde, 1952
 	.byte 0xf3
 	reti
 	cp	xwa, xwa
@@ -5336,10 +5336,10 @@ Flash_SlotUpdateOpsBlock:
 
 ; Floppy disk load and store note events via dispatch
 FloppyDisk_LoadNoteEvents:
-	st_dri3b L, 0xfd, 0xf8, 0xfb
+	stb_dri L, 0xfd, 0xf8, 0xfb
 	pushw iz
-	st_dri3l XBC, 0xfd, 0x02, 0x04
-	st_dri3l XWA, 0xfd, 0x06, 0x04
+	stl_dri XBC, 0xfd, 0x02, 0x04
+	stl_dri XWA, 0xfd, 0x06, 0x04
 	calr Flash_InitExtMemAddrs
 	lda xwa, (xsp + 2)
 	ld_sril XIX, (xsp + 0x0406)
@@ -5469,16 +5469,16 @@ Floppy_SetHLFF9A_RetZero:
 
 FloppyCtrl_PopIzStoreHL:
 	popw iz
-	st_dri3b L, 0xfd, 0x08, 0x04
+	stb_dri L, 0xfd, 0x08, 0x04
 	ret
 
 ; Floppy disk compute tone parameters and validate
 FloppyDisk_ComputeToneParams:
-	st_dri3b L, 0xfd, 0xe8, 0xfb
+	stb_dri L, 0xfd, 0xe8, 0xfb
 	push xiz
-	st_dri3l XDE, 0xfd, 0x10, 0x04
-	st_dri3l XBC, 0xfd, 0x14, 0x04
-	st_dri3l XWA, 0xfd, 0x18, 0x04
+	stl_dri XDE, 0xfd, 0x10, 0x04
+	stl_dri XBC, 0xfd, 0x14, 0x04
+	stl_dri XWA, 0xfd, 0x18, 0x04
 	calr Flash_InitExtMemAddrs
 	ld xiy, MSP_Default_Signature3
 	lda xix, (xsp + 16)
@@ -5489,7 +5489,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xbc + 46)
 	ld a, (xbc + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	lda xbc, (xsp + 16)
 	lda xwa, (xbc + 68)
 	ld (xsp + 12), xwa
@@ -5503,7 +5503,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xde + 46)
 	ld a, (xde + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	lda xwa, (xbc + 72)
 	ld (xsp + 8), xwa
 	sll xix, 8
@@ -5516,7 +5516,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xde + 46)
 	ld a, (xde + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	lda xwa, (xbc + 76)
 	ld (xsp + 4), xwa
 	sll xix, 8
@@ -5529,7 +5529,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xde + 46)
 	ld a, (xde + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	lda xde, (xbc + 80)
 	sll xix, 8
 	add xix, xhl
@@ -5540,7 +5540,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xix + 46)
 	ld a, (xix + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	lda xiy, (xbc + 84)
 	sll xix, 8
 	add xix, xhl
@@ -5551,7 +5551,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xix + 46)
 	ld a, (xix + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	lda xiz, (xbc + 88)
 	sll xix, 8
 	add xix, xhl
@@ -5562,7 +5562,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xix + 46)
 	ld a, (xix + 47)
 	lds32 xix, 0
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	sll xix, 8
 	add xix, xhl
 	ld xhl, xix
@@ -5729,7 +5729,7 @@ FloppyDisk_CopyNoteBuffers:
 
 FloppyCtrl_PopIzStoreRet:
 	pop xiz
-	st_dri3b L, 0xfd, 0x18, 0x04
+	stb_dri L, 0xfd, 0x18, 0x04
 	ret
 
 ToneParam_ExtendedOpsBlock:
@@ -5861,8 +5861,8 @@ ToneParam_ExtendedOpsBlock:
 	lds32	xwa, 0
 	ld	(xsp), xwa
 	ld	xwa, (xsp)
-	stda8	0x39ac, a
-	stda8	0x39ad, a
+	stb_d8	0x39ac, a
+	stb_d8	0x39ad, a
 	calr	387
 	cps	hl, 0
 	jr	z, 3
@@ -5989,7 +5989,7 @@ ToneParam_ExtendedOpsBlock:
 	lda	xiy, (xwa)
 	.byte 0xb0
 	call	DualVoice_ParamLoadDone
-	ldda8	a, 0x35b0
+	ldb_d8	a, 0x35b0
 	extz	wa
 	bit	0, wa
 	jr	z, 29
@@ -6045,14 +6045,14 @@ ToneParam_ExtendedOpsBlock:
 	ret
 	push	xiz
 	ld	hl, wa
-	ldda8	c, 0x34ed
+	ldb_d8	c, 0x34ed
 	.byte 0xc7
 	swi	3
 	or	(xhl-63), iz
 	ldw	ix, 0xc723
 	swi	2
 	.byte 0x9b
-	ldda8	c, 0x34ef
+	ldb_d8	c, 0x34ef
 	.byte 0xc7
 	swi	1
 	decm	6, (xhl-31)
@@ -6214,16 +6214,16 @@ DualVoice_LoadAndScan:
 	ld a, (xsp + 12)
 	extz wa
 	lda_24 xbc, MSP_Default_GroupIndexPad
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), a
 	ldda32 xwa, 3186
 	stda32 0x39ae, xwa
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 DualVoice_AccPatchLoop:
 	ld c, (xsp + 8)
 	extz bc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	muls wa, 0x3
 	ld de, wa
@@ -6231,7 +6231,7 @@ DualVoice_AccPatchLoop:
 	lda_24 xwa, MSP_Default_ChannelMap
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jr c, DualVoice_AccPatchLoop
 	ldda32 xwa, 3182
@@ -6239,12 +6239,12 @@ DualVoice_AccPatchLoop:
 	ldda32 xwa, 3186
 	stda32 0x39b2, xwa
 	resda 0, 0x35b0
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 DualVoice_ParamCompareLoop:
 	ld e, (xsp + 14)
 	extz de
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	muls wa, 0x3
 	ld bc, wa
@@ -6256,7 +6256,7 @@ DualVoice_ParamCompareLoop:
 	add bc, wa
 	ldmm_srib 0x07, 0xe8, 0xe4, 0xad, 0x39
 	call DualVoice_ParamLoadDone
-	ldda8 a, 0x35b0
+	ldb_d8 a, 0x35b0
 	extz wa
 	bit 0, wa
 	jr z, DualVoice_LoopCheckNext
@@ -6272,7 +6272,7 @@ DualVoice_LoadDoneRetVal:
 	ret
 
 DualVoice_LoopCheckNext:
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jr c, DualVoice_ParamCompareLoop
 	cp (xsp + 10), 0x0
@@ -6281,7 +6281,7 @@ DualVoice_LoopCheckNext:
 	ld a, (xsp + 6)
 	extz wa
 	calr NoteEventBuffer_Store
-	ldada xwa, 1850
+	lda_d16 xwa, 1850
 	cpw (xwa), 0xffff
 	jr nz, DualVoice_WriteBackSlots
 	cpw (xwa + 2), 0xffff
@@ -6336,13 +6336,13 @@ FileHdr_CheckMKB:
 	ret nz
 
 FileHdr_SignatureMatch:
-	st_dri3b W, 0xe1, 0xff, 0x27
+	stb_dri W, 0xe1, 0xff, 0x27
 	ld xbc, xwa
-	st_dri3b B, 0xe1, 0x01, 0xd9
+	stb_dri B, 0xe1, 0x01, 0xd9
 
 FileHdr_CopyDataLoop:
 	ld a, (xbc)
-	lda_dri3 XBC, 0xe5, 0x00, 0x02
+	lda_dri XBC, 0xe5, 0x00, 0x02
 	dec 1, xbc
 	cp xbc, xde
 	jr nc, FileHdr_CopyDataLoop
@@ -6356,12 +6356,12 @@ FileHdr_InitBasePointer:
 
 ToneData_SetupCopyPointers:
 	ldda32 xbc, 3226
-	st_dri3b A, 0xe5, 0x00, 0x01
+	stb_dri A, 0xe5, 0x00, 0x01
 	ld xwa, xbc
-	st_dri3b A, 0xe5, 0x00, 0x02
+	stb_dri A, 0xe5, 0x00, 0x02
 
 ToneData_ZeroFillLoop:
-	stib_dpi 0xe0, 0x00
+	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
 	jr c, ToneData_ZeroFillLoop
 
@@ -6371,7 +6371,7 @@ ToneData_ZeroFillLoop:
 	lda xhl, (xwa + 6)
 
 ToneData_CopyBlock1_Loop:
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
@@ -6382,40 +6382,40 @@ ToneData_CopyBlock1_Loop:
 	lda xhl, (xhl + 16)
 
 ToneData_CopyBlock2_Loop:
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock2_Loop
 	lda_24 xhl, MSP_Default_PartBankMap
 	ld xbc, xhl
 	ldda32 xwa, 3226
-	st_dri3b B, 0xe1, 0x00, 0x02
+	stb_dri B, 0xe1, 0x00, 0x02
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock3_Loop:
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
 	lda_24 xhl, Composer_SettingsBlock_0x80
 	ld xbc, xhl
 	ldda32 xwa, 3226
-	st_dri3b B, 0xe1, 0x40, 0x02
+	stb_dri B, 0xe1, 0x40, 0x02
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock4_Loop:
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
 	lda_24 xhl, Composer_SettingsBlock_0xC0
 	ld xbc, xhl
 	ldda32 xwa, 3226
-	st_dri3b B, 0xe1, 0x80, 0x02
+	stb_dri B, 0xe1, 0x80, 0x02
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock5_Loop:
-	ld_spib A, 0xe4
+	ldb_spi A, 0xe4
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock5_Loop
@@ -6435,7 +6435,7 @@ ToneData_ScanRegionLoop:
 	lda xiy, (xiy + 16)
 
 ToneData_CopyRegion_Inner:
-	ld_spib A, 0xec
+	ldb_spi A, 0xec
 	lda_dpi XBC, 0xf0
 	cp xhl, xiy
 	jr c, ToneData_CopyRegion_Inner
@@ -6682,7 +6682,7 @@ CmpSetP1_TtlDispatch:
 	ld xwa, xiz
 	call GetViewInstance
 	ld a, (xhl + 50)
-	st8_24 0x094810, a
+	stb_da 0x094810, a
 
 GridBoxProc_Return:
 	lds32 xhl, 0
@@ -6719,7 +6719,7 @@ AcCmpSetGridBoxProc:
 	add xbc, NoteStepDisplayData_0x5C
 	ld bc, (xbc)
 	lda_24 xix, CmpSetP1_DialGrid
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; CmpSetP1 dial grid dispatch (7-entry, table 0xe1ce3a)
 CmpSetP1_DialGrid:
@@ -6739,7 +6739,7 @@ CmpSetP1_DialGrid:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -6750,7 +6750,7 @@ CmpSetP1_DialGrid:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -6776,7 +6776,7 @@ CmpSetP1_DialGrid:
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, NoteStepDisplayData_0x38
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -6834,7 +6834,7 @@ CmpSetP1_SendAndApplyFunc:
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, NoteStepDisplayData_0x4A
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -6942,7 +6942,7 @@ CmpSetP1GridCheck:
 	add xwa, StrTimeSig_1_2_0x20
 	ld wa, (xwa)
 	lda_24 xix, CmpSetP1_GridCheck_EventEnc
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; CmpSetP1 grid check event encoding dispatch
 CmpSetP1_GridCheck_EventEnc:
@@ -6991,7 +6991,7 @@ CmpSetP1_GridCheck_Return:
 	lda xbc, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
 	ld (xwa), de
@@ -7006,13 +7006,13 @@ CmpSetP1_GridCheck_Return:
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
 	lda_24 xix, StrTimeSig_1_2_0x10
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, UI_COMPONENT_DISPATCH
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
 UI_COMPONENT_DISPATCH:
-	ldda8 a, 0x34d7	; Load byte from UI state
+	ldb_d8 a, 0x34d7	; Load byte from UI state
 	inc 1, a	; Increment by 1
 	extz wa	; Zero-extend A to WA
 	pushw wa	; Push WA as parameter
@@ -7023,14 +7023,14 @@ UI_COMPONENT_DISPATCH:
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
 	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE1:
-	ldda8 a, 0x34ce	; Load byte from UI state
+	ldb_d8 a, 0x34ce	; Load byte from UI state
 	srl a, 7	; Shift right logical by 7
 	extz wa	; Zero-extend A to WA
 	sla wa, 2	; Shift left by 2 (multiply by 4)
 	lda_24 xbc, 0x03d9f6                  ; Load table address
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0	; Load entry from table
 	push xwa	; Push parameter
-	ldda8 a, 0x34d8	; Load byte from UI state
+	ldb_d8 a, 0x34d8	; Load byte from UI state
 	extz wa	; Zero-extend A to WA
 	sla wa, 2	; Shift left by 2 (multiply by 4)
 	lda_24 xbc, 0x03da0e                  ; Load table address
@@ -7043,11 +7043,11 @@ UI_COMPONENT_DISPATCH_CASE1:
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
 	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE2:
-	ldda8 c, 0x34e9	; Load byte from UI state
+	ldb_d8 c, 0x34e9	; Load byte from UI state
 	ld xwa, 0x3d9c6	; Load table address
 	jr UI_COMPONENT_DISPATCH_CASE2_COMMON	; Jump to common code
 UI_COMPONENT_DISPATCH_CASE3:
-	ldda8 a, 0x34ea	; Load byte from UI state
+	ldb_d8 a, 0x34ea	; Load byte from UI state
 	srl a, 4	; Shift right logical by 4
 	and a, 0x1	; Mask to get bit 4
 	ld c, a	; Copy to C
@@ -7064,7 +7064,7 @@ UI_COMPONENT_DISPATCH_CASE4:
 UI_COMPONENT_DISPATCH_CASE5:
 	lds wa, 5	; Load 5
 UI_COMPONENT_DISPATCH_CASE5_COMMON:
-	ldda8 c, 0x34ea	; Load byte from UI state
+	ldb_d8 c, 0x34ea	; Load byte from UI state
 	and a, 0xf	; Mask lower nibble
 	jr z, UI_COMPONENT_DISPATCH_CASE5_SKIP	; Skip shift if zero
 	srla c	; Shift A right by C
@@ -7108,7 +7108,7 @@ CmpSetGridCheck:
 	add xwa, StrPanLeft64_0xA
 	ld wa, (xwa)
 	lda_24 xix, GridCheck_Handler0
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; =============================================================================
 ; GridCheck_Handler0 - Grid/Check widget handler for cases 0 and 2
@@ -7125,7 +7125,7 @@ GridCheck_Handler0:
 	lda xwa, (xsp + 14)	; Get local var pointer
 	ld xbc, xde	; Copy result to XBC
 	srl xbc, 0	; SRL 0, XBC (clear carry)
-	ldi_werp 0xe6, 0	; LD QBC, 0 (clear high bits)
+	ldiw_erp 0xe6, 0	; LD QBC, 0 (clear high bits)
 	ld (xwa), bc	; Store low word
 	ld (xwa + 2), de	; Store high word
 	ld wa, (xwa)	; Load state value
@@ -7157,7 +7157,7 @@ GridCheck_Handler1:
 	lda xwa, (xsp + 14)	; Get local var pointer
 	ld xbc, xde	; Copy result to XBC
 	srl xbc, 0	; SRL 0, XBC (clear carry)
-	ldi_werp 0xe6, 0	; LD QBC, 0 (clear high bits)
+	ldiw_erp 0xe6, 0	; LD QBC, 0 (clear high bits)
 	ld (xwa), bc	; Store low word
 	ld (xwa + 2), de	; Store high word
 	ld wa, (xwa)	; Load state value
@@ -7187,7 +7187,7 @@ CmpSet_GridCheck_Dispatch:
 	lda xbc, (xsp + 14)
 	ld xwa, xde
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
 	ld (xwa), de
@@ -7233,7 +7233,7 @@ GridCheck_ReturnZero:
 	ret
 
 GridCheck_LookupSndParam:
-	ldda8 e, 0x34d6
+	ldb_d8 e, 0x34d6
 	extz de
 	sla de, 2
 	lda_24 xhl, RhythmTiming_OffsetTable
@@ -7518,7 +7518,7 @@ AcApcMdBox_HandleLswUpdate:
 	cp xwa, 0x28080
 	jr nz, AcS2cMem_ReturnZeroJmp
 	ld a, (xhl + 50)
-	ldfr_berp A, 0xf0
+	ldb_erp A, 0xf0
 	extz ix
 	lda xde, (xhl + 46)
 	ld xbc, (xde)
@@ -7549,7 +7549,7 @@ AcApcMdBox_HandleTitleDisp:
 	ld xwa, xiz
 	call GetViewInstance
 	ld a, (xhl + 50)
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	ld xwa, 0x28080
 	call SndParam_LookupReadOnly
@@ -7580,7 +7580,7 @@ AcApcMdBox_PopReturn:
 AcApcMdBox_End:
 
 AcS2cMemNoBoxProc:
-	st_dri3b L, 0xfd, 0x00, 0xff
+	stb_dri L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -7609,7 +7609,7 @@ S2cMemNoBox_CallInherited:
 S2cMemNoBox_HandleScroll:
 	ld xwa, xiz
 	call InheritedProc
-	ldda8 a, 0x398f
+	ldb_d8 a, 0x398f
 	extz wa
 	sla wa, 2
 	lda_24 xbc, StrPanLeft64_0x18
@@ -7629,14 +7629,14 @@ S2cMemNoBox_ReturnZero:
 
 S2cMemNoBox_PopReturn:
 	pop xiz
-	st_dri3b L, 0xfd, 0x00, 0x01
+	stb_dri L, 0xfd, 0x00, 0x01
 	ret
 S2cMemNoBox_End:
 
 PsS2cFmeasBoxProc:
-	st_dri3b L, 0xfd, 0xfc, 0xfe
+	stb_dri L, 0xfd, 0xfc, 0xfe
 	push xiz
-	st_dri3l XWA, 0xfd, 0x04, 0x01
+	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c0000c
 	jr z, PsS2cFmeas_HandleScroll
 	cp xbc, 0x1c0000b
@@ -7683,14 +7683,14 @@ PsS2cFmeas_SendUpdateEvents:
 
 PsS2cFmeas_PopReturn:
 	pop xiz
-	st_dri3b L, 0xfd, 0x04, 0x01
+	stb_dri L, 0xfd, 0x04, 0x01
 	ret
 PsS2cFmeas_End:
 
 PsS2cLmeasBoxProc:
-	st_dri3b L, 0xfd, 0xfc, 0xfe
+	stb_dri L, 0xfd, 0xfc, 0xfe
 	push xiz
-	st_dri3l XWA, 0xfd, 0x04, 0x01
+	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c0000c
 	jr z, PsS2cLmeas_HandleScroll
 	cp xbc, 0x1c0000b
@@ -7737,12 +7737,12 @@ PsS2cLmeas_SendUpdateEvents:
 
 PsS2cLmeas_PopReturn:
 	pop xiz
-	st_dri3b L, 0xfd, 0x04, 0x01
+	stb_dri L, 0xfd, 0x04, 0x01
 	ret
 PsS2cLmeas_End:
 
 PsSeqSongNoBoxProc:
-	st_dri3b L, 0xfd, 0x00, 0xff
+	stb_dri L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -7756,7 +7756,7 @@ PsSeqSongNoBoxProc:
 PsSeqSongNo_HandleScroll:
 	ld xwa, xiz
 	call InheritedProc
-	ld8_24 a, 0x00ffe3
+	ldb_da a, 0x00ffe3
 	inc 1, a
 	extz wa
 	pushw wa
@@ -7774,14 +7774,14 @@ PsSeqSongNo_HandleScroll:
 
 PsSeqSongNo_PopReturn:
 	pop xiz
-	st_dri3b L, 0xfd, 0x00, 0x01
+	stb_dri L, 0xfd, 0x00, 0x01
 	ret
 PsSeqSongNo_End:
 
 PsS2cTransBoxProc:
-	st_dri3b L, 0xfd, 0xfc, 0xfe
+	stb_dri L, 0xfd, 0xfc, 0xfe
 	push xiz
-	st_dri3l XWA, 0xfd, 0x04, 0x01
+	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c0000c
 	jr z, PsS2cTrans_HandleScroll
 	cp xbc, 0x1c0000b
@@ -7796,7 +7796,7 @@ PsS2cTrans_HandleScroll:
 	ld_sril XWA, (xsp + 0x0104)
 	call GetViewInstance
 	ld xiz, xhl
-	ldda8 a, 0x398e
+	ldb_d8 a, 0x398e
 	extz wa
 	sla wa, 2
 	lda_24 xbc, PtrTbl_TransposeStrs
@@ -7834,7 +7834,7 @@ SndArg_GridBnk_Case1:
 ; SndArgGridBnk case 2
 SndArg_GridBnk_Case2:
 	pop xiz
-	st_dri3b L, 0xfd, 0x04, 0x01
+	stb_dri L, 0xfd, 0x04, 0x01
 	ret
 ; SndArgGridBnk case 3
 SndArg_GridBnk_Case3:
@@ -7864,7 +7864,7 @@ S2cGridBoxProc:
 	add xwa, StrTranspose_Minus25_0x4
 	ld wa, (xwa)
 	lda_24 xix, FdcFormat_DialGrid
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; FdcFormat dial grid dispatch (7-entry, table 0xe1d728)
 FdcFormat_DialGrid:
@@ -7886,7 +7886,7 @@ FdcFormat_DialGrid:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -7897,7 +7897,7 @@ FdcFormat_DialGrid:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde

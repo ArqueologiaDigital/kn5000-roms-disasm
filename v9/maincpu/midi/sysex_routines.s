@@ -73,7 +73,7 @@ ExcDotFunc:
 	add xbc, NakaInst_DIRECT_E7FCE4_0xA6
 	ld bc, (xbc)
 	lda_24 xix, ExcDotFunc_HandlerJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcDotFunc_HandlerJumpTable:
 	.byte 0xaa, 0x12, 0x24, 0xaa, 0x0e, 0x21, 0xcb, 0x8f
 	.byte 0xda, 0xa8, 0xc2, 0x5c, 0x47, 0x02, 0x23, 0xd9
@@ -103,7 +103,7 @@ ExcPmemFunc:
 	add xbc, FileTransfer_BlankStatus_0xA
 	ld bc, (xbc)
 	lda_24 xix, ExcPmemFunc_HandlerJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -143,7 +143,7 @@ ExcSmemFunc:
 	add xbc, FileTransfer_BlankStatus_0x1E
 	ld bc, (xbc)
 	lda_24 xix, ExcSmemFunc_HandlerJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -183,7 +183,7 @@ ExcCompFunc:
 	add xbc, FileTransfer_BlankStatus_0x32
 	ld bc, (xbc)
 	lda_24 xix, ExcCompFunc_HandlerJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -223,7 +223,7 @@ ExcSeqFunc:
 	add xbc, FileTransfer_BlankStatus_0x46
 	ld bc, (xbc)
 	lda_24 xix, ExcSeqFunc_HandlerJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -263,7 +263,7 @@ ExcMspFunc:
 	add xbc, FileTransfer_BlankStatus_0x5A
 	ld bc, (xbc)
 	lda_24 xix, ExcMspFunc_HandlerJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2

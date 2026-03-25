@@ -13,11 +13,11 @@ ParaLoadOpt_AudioFlagCheck:
 	ld (xsp), e
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	ldda8 a, 0xbd36
+	ldb_d8 a, 0xbd36
 	bit 0, a
 	jr z, ParaLoadOpt_CaseA
 	res 0, a
-	stda8 0xbd36, a
+	stb_d8 0xbd36, a
 	ld xwa, 0x570006
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -25,11 +25,11 @@ ParaLoadOpt_AudioFlagCheck:
 
 ; ParaLoadOpt case A
 ParaLoadOpt_CaseA:
-	ld8_24 a, 0x02475c
+	ldb_da a, 0x02475c
 	cp a, (xsp + 2)
 	jr z, ParaLoadOpt_CaseB
 	ld a, (xsp + 2)
-	st8_24 0x02475c, a
+	stb_da 0x02475c, a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -37,11 +37,11 @@ ParaLoadOpt_CaseA:
 
 ; ParaLoadOpt case B
 ParaLoadOpt_CaseB:
-	ld8_24 a, 0x02475e
+	ldb_da a, 0x02475e
 	cp a, (xsp)
 	jr z, ParaLoadOpt_CaseC
 	ld a, (xsp)
-	st8_24 0x02475e, a
+	stb_da 0x02475e, a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -49,11 +49,11 @@ ParaLoadOpt_CaseB:
 
 ; ParaLoadOpt case C
 ParaLoadOpt_CaseC:
-	ld8_24 a, 0x02475a
+	ldb_da a, 0x02475a
 	cp a, (xsp + 4)
 	jrl z, MidiFunc_SendEvtReturnAlt
 	ld a, (xsp + 4)
-	st8_24 0x02475a, a
+	stb_da 0x02475a, a
 	ld a, (xsp + 4)
 	extz wa
 	cps wa, 0
@@ -62,66 +62,66 @@ ParaLoadOpt_CaseC:
 	jrl gt, MidiFunc_SendEvtReturnAlt
 	add wa, wa
 	lda_24 xix, FileTransfer_BlankStatus_0x6E
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, ParaLoadOpt_DispatchTable_A
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_A:
-	sti8_24	0x024760, 0
-	sti8_24	0x024762, 0
-	sti8_24	0x024764, 0
-	sti8_24	0x024766, 0
-	sti8_24	0x024768, 0
+	stib_da	0x024760, 0
+	stib_da	0x024762, 0
+	stib_da	0x024764, 0
+	stib_da	0x024766, 0
+	stib_da	0x024768, 0
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
-	sti8_24	0x024760, 1
+	stib_da	0x024760, 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
-	sti8_24	0x024760, 3
+	stib_da	0x024760, 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
-	sti8_24	0x024762, 1
+	stib_da	0x024762, 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
-	sti8_24	0x024762, 3
+	stib_da	0x024762, 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
-	sti8_24	0x024764, 1
+	stib_da	0x024764, 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
-	sti8_24	0x024764, 3
+	stib_da	0x024764, 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
-	sti8_24	0x024766, 1
+	stib_da	0x024766, 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
-	sti8_24	0x024766, 3
+	stib_da	0x024766, 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
-	sti8_24	0x024768, 1
+	stib_da	0x024768, 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
-	sti8_24	0x024768, 3
+	stib_da	0x024768, 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
@@ -136,11 +136,11 @@ ParaLoadOpt_AudioFlagCheck_B:
 	ld (xsp), e
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	ldda8 a, 0xbd36
+	ldb_d8 a, 0xbd36
 	bit 1, a
 	jr z, ParaLoadOpt_CaseD
 	res 1, a
-	stda8 0xbd36, a
+	stb_d8 0xbd36, a
 	ld xwa, 0x570011
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -148,13 +148,13 @@ ParaLoadOpt_AudioFlagCheck_B:
 
 ; ParaLoadOpt case D
 ParaLoadOpt_CaseD:
-	ldda8 a, 0xbd10
+	ldb_d8 a, 0xbd10
 	bit 7, a
 	jr z, ParaLoadOpt_CaseE
 	res 7, a
-	stda8 0xbd10, a
+	stb_d8 0xbd10, a
 	ld a, (xsp + 2)
-	st8_24 0x02475c, a
+	stb_da 0x02475c, a
 	ld xwa, 0x57001b
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -162,13 +162,13 @@ ParaLoadOpt_CaseD:
 
 ; ParaLoadOpt case E
 ParaLoadOpt_CaseE:
-	ldda8 a, 0xbd14
+	ldb_d8 a, 0xbd14
 	bit 7, a
 	jr z, ParaLoadOpt_CaseF
 	res 7, a
-	stda8 0xbd14, a
+	stb_d8 0xbd14, a
 	ld a, (xsp)
-	st8_24 0x02475e, a
+	stb_da 0x02475e, a
 	ld xwa, 0x57001b
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -176,11 +176,11 @@ ParaLoadOpt_CaseE:
 
 ; ParaLoadOpt case F
 ParaLoadOpt_CaseF:
-	ldda8 a, 0xbd0c
+	ldb_d8 a, 0xbd0c
 	bit 7, a
 	jrl z, MidiFunc_SendEventReturn
 	res 7, a
-	stda8 0xbd0c, a
+	stb_d8 0xbd0c, a
 	ld a, (xsp + 4)
 	extz wa
 	cps wa, 0
@@ -189,66 +189,66 @@ ParaLoadOpt_CaseF:
 	jrl gt, MidiFunc_SendEventReturn
 	add wa, wa
 	lda_24 xix, FileTransfer_BlankStatus_0x88
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, ParaLoadOpt_DispatchTable_B
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_B:
-	sti8_24	0x024760, 0
-	sti8_24	0x024762, 0
-	sti8_24	0x024764, 0
-	sti8_24	0x024766, 0
-	sti8_24	0x024768, 0
+	stib_da	0x024760, 0
+	stib_da	0x024762, 0
+	stib_da	0x024764, 0
+	stib_da	0x024766, 0
+	stib_da	0x024768, 0
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
-	sti8_24	0x024760, 2
+	stib_da	0x024760, 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
-	sti8_24	0x024760, 3
+	stib_da	0x024760, 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
-	sti8_24	0x024762, 2
+	stib_da	0x024762, 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
-	sti8_24	0x024762, 3
+	stib_da	0x024762, 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
-	sti8_24	0x024764, 2
+	stib_da	0x024764, 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
-	sti8_24	0x024764, 3
+	stib_da	0x024764, 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
-	sti8_24	0x024766, 2
+	stib_da	0x024766, 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
-	sti8_24	0x024766, 3
+	stib_da	0x024766, 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
-	sti8_24	0x024768, 2
+	stib_da	0x024768, 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
-	sti8_24	0x024768, 3
+	stib_da	0x024768, 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
@@ -317,7 +317,7 @@ AcParaLoadOptGridBoxProc:
 	add xbc, FileTransfer_BlankStatus_0xC6
 	ld bc, (xbc)
 	lda_24 xix, ParaLoadOpt_GridHandler
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; ParaLoadOpt grid handler
 ParaLoadOpt_GridHandler:
@@ -337,7 +337,7 @@ ParaLoadOpt_GridHandler:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -348,7 +348,7 @@ ParaLoadOpt_GridHandler:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -406,7 +406,7 @@ ParaLoadOpt_GridReturn:
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, FileTransfer_BlankStatus_0xA2
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -464,7 +464,7 @@ ParaLoadOpt_GridDelegateProc:
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, FileTransfer_BlankStatus_0xB4
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -601,7 +601,7 @@ ParaLoadOptGridCheck:
 	add xde, NakaInst_INITIAL_0x1A
 	ld de, (xde)
 	lda_24 xix, ParaLoadOpt_GridDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 ; ParaLoadOptGridCheck dispatch
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
@@ -829,7 +829,7 @@ ParaLoadOpt_GridDispatch:
 VoiceUI_MiscHandler:
 	ld xde, xhl
 	srl xde, 0
-	ldi_werp 0xea, 0
+	ldiw_erp 0xea, 0
 	ld (xiy), de
 	ld xde, xwa
 	ld (xwa), hl

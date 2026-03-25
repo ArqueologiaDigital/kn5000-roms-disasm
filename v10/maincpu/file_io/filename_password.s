@@ -16,7 +16,7 @@ FmmPasswordFunc:
 	ld wa, iz
 	cp xbc, 0x1e50010
 	jrl z, Password_HandleLoadEvent
-	ldada xde, 0x8a0c
+	lda_d16 xde, 0x8a0c
 	cp xbc, 0x1e5000f
 	jrl z, Password_HandleSaveEvent
 	cp xbc, 0x1e5000e
@@ -41,7 +41,7 @@ Password_ClearAndSetSlot:
 	call ClearAllSongSlots
 	ld wa, iz
 	call SetCurrentSlotIndex
-	ldada xwa, 0x8a0d
+	lda_d16 xwa, 0x8a0d
 	setm 7, (xwa)
 	setm 6, (xwa)
 	jrl Password_Return
@@ -56,7 +56,7 @@ Password_HandleDeleteEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_Delete_CheckLoadOnly
-	ldada xwa, 0x8a0d
+	lda_d16 xwa, 0x8a0d
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
@@ -108,7 +108,7 @@ Password_HandleSaveEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_Save_CheckLoadOnly
-	ldada xwa, 0x8a0d
+	lda_d16 xwa, 0x8a0d
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
@@ -176,8 +176,8 @@ Password_Return:
 
 SelectPasswordMode:
 	push xiz
-	ldi_berp 0xfb, 0
-	ldi_berp 0xfa, 0
+	ldib_erp 0xfb, 0
+	ldib_erp 0xfa, 0
 	lds wa, 2
 	call FileIO_FormatName_Return
 	cps l, 0
@@ -187,7 +187,7 @@ SelectPasswordMode:
 	jr z, SelectMode_CheckSaveAvail
 	bitda 7, 0x8a0d
 	jr nz, SelectMode_CheckSaveAvail
-	ldi_berp 0xfa, 1
+	ldib_erp 0xfa, 1
 
 SelectMode_CheckSaveAvail:
 	lds wa, 3
@@ -199,12 +199,12 @@ SelectMode_CheckSaveAvail:
 	jr z, SelectMode_DetermineMode
 	bitda 6, 0x8a0d
 	jr nz, SelectMode_DetermineMode
-	ldi_berp 0xfb, 1
+	ldib_erp 0xfb, 1
 
 SelectMode_DetermineMode:
-	cpi_berp 0xfa, 0
+	cpib_erp 0xfa, 0
 	jr z, SelectMode_SingleMode
-	cpi_berp 0xfb, 0
+	cpib_erp 0xfb, 0
 	jr z, SelectMode_SingleMode
 	call GetCurrentSlotIndex
 	ld iz, hl
@@ -215,19 +215,19 @@ SelectMode_DetermineMode:
 	ldb a, 0x3
 
 SelectMode_SetBothMode:
-	stda8 0x8a0c, a
+	stb_d8 0x8a0c, a
 	jr SelectMode_Return
 
 SelectMode_SingleMode:
-	ldada xbc, 0x8a0c
-	cpi_berp 0xfa, 0
+	lda_d16 xbc, 0x8a0c
+	cpib_erp 0xfa, 0
 	jr z, SelectMode_CheckSaveOnlyMode
 	ld (xbc), 0x1
 	jr SelectMode_Return
 
 SelectMode_CheckSaveOnlyMode:
 	ldb a, 0x0
-	cpi_berp 0xfb, 0
+	cpib_erp 0xfb, 0
 	jr z, SelectMode_StoreMode
 	ldb a, 0x2
 
@@ -235,7 +235,7 @@ SelectMode_StoreMode:
 	ld (xbc), a
 
 SelectMode_Return:
-	ldda8 l, 0x8a0c
+	ldb_d8 l, 0x8a0c
 	extz hl
 	pop xiz
 	ret
@@ -287,7 +287,7 @@ FileName_DrawItemLoop:
 	ld wa, (xsp + 6)
 	ld hl, wa
 	sll hl, 5
-	ldada xde, 0x850c
+	lda_d16 xde, 0x850c
 	extz xhl
 	add xhl, xde
 	ld bc, (xsp + 6)
@@ -299,7 +299,7 @@ FileName_DrawItemLoop:
 	sll wa, 5
 	lds hl, 1
 	add hl, wa
-	ldada xix, 0x850c
+	lda_d16 xix, 0x850c
 	extz xhl
 	add xhl, xix
 	inc 1, de
@@ -309,7 +309,7 @@ FileName_DrawItemLoop:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, (xsp + 6)
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 0x7f72
@@ -357,7 +357,7 @@ FileName_PageDown:
 	add wa, 0xa
 	cp wa, 0x13
 	jrl gt, FileName_GetSelection
-	addmi16 (xsp + 6), 0xa
+	addiw_da (xsp + 6), 0xa
 
 FileName_ScrollApply:
 	mrdw5 0x9f, 0x06, 0x19, 0x7a, 0x7f
@@ -377,7 +377,7 @@ FileName_OpSave:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	ldda16 xwa, 0x7f7a
+	ldw_d16 xwa, 0x7f7a
 	extz wa
 	calr FileIO_MidiOutSendByte
 	lds wa, 0
@@ -386,7 +386,7 @@ FileName_OpSave:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -437,7 +437,7 @@ FileName_OpLoad:
 	cps hl, 0
 	jr z, FileName_OpLoad_NoPwd
 	lds32 xde, 0
-	ldda8 e, 0x8a0c
+	ldb_d8 e, 0x8a0c
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
 	jrl FileName_OpDispatch
@@ -446,7 +446,7 @@ FileName_OpLoad_NoPwd:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, FileName_OpLoad_Execute
-	cpi8_24 0x0340ea, 0x00
+	cpib_da 0x0340ea, 0x00
 	jr z, FileName_OpLoad_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -468,7 +468,7 @@ FileName_OpLoad_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -504,7 +504,7 @@ FileName_OpFormat:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -533,7 +533,7 @@ FileName_OpDelete:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, FileName_OpFormatVariant
-	cpi8_24 0x0340ea, 0x00
+	cpib_da 0x0340ea, 0x00
 	jr z, FileName_OpDelete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -558,7 +558,7 @@ FileName_OpDelete_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -584,7 +584,7 @@ FileName_OpFormatVariant:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -604,7 +604,7 @@ FileName_OpNavigate:
 	cps hl, 0
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
-	ldda16 xwa, 0x7f7a
+	ldw_d16 xwa, 0x7f7a
 	cp xbc, 0x1c00018
 	jr nz, FileName_Navigate_ScrollUp
 	ld bc, wa
@@ -633,12 +633,12 @@ FileName_Navigate_CheckChanged:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldda16 xwa, 0x7f7a
+	ldw_d16 xwa, 0x7f7a
 	call ReadDualFileEx
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
 	stda16 0x8502, xhl
@@ -652,29 +652,29 @@ FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 FileName_GetSelection:
-	ldda16 xwa, 0x7f7a
+	ldw_d16 xwa, 0x7f7a
 
 FileName_UpdateDisplay:
 	cp (xsp + 4), wa
 	jrl z, FileName_Return
 	call NotifyUIOfSelectionChange
 	stdi8 0x89f8, 4
-	ldda16 xde, 0x7f7a
+	ldw_d16 xde, 0x7f7a
 	exts xde
 	ldda32 xwa, 0x7f72
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 4)
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 0x7f72
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldda16 xde, 0x7f7a
+	ldw_d16 xde, 0x7f7a
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 0x7f72

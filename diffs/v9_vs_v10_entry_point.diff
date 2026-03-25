@@ -1,11 +1,11 @@
---- v9/maincpu/kn5000_v9_program.s	2026-03-25 00:03:21.409072993 +0000
-+++ v10/maincpu/kn5000_v10_program.s	2026-03-25 00:03:21.410988732 +0000
+--- v9/maincpu/kn5000_v9_program.s	2026-03-25 08:56:58.942537061 +0000
++++ v10/maincpu/kn5000_v10_program.s	2026-03-25 08:56:59.632593064 +0000
 @@ -315,7 +315,7 @@
  ; ===========================================================================
  SubCPU_Send_Payload:
  	push xiz
--	cpi8_24 0xfffeef, 0xff
-+	cpi8_24 ROM_PaddingFF_0x4, 0xff
+-	cpib_da 0xfffeef, 0xff
++	cpib_da ROM_PaddingFF_0x4, 0xff
  	jrl nz, SubCPU_Payload_Done
  	lds32 xiz, 0
  
@@ -13,8 +13,8 @@
  	ld xde, 0x90000
  	call InterCPU_E1_Bulk_Transfer
  	ld xiz, 0x800000
--	cpi8_24 0xfffeed, 0xff
-+	cpi8_24 ROM_PaddingFF_0x2, 0xff
+-	cpib_da 0xfffeed, 0xff
++	cpib_da ROM_PaddingFF_0x2, 0xff
  	jr nz, SubCPU_Payload_TransferPart2
  	ld xiz, 0x50000
  	ld xwa, 0x3e0000

@@ -292,7 +292,7 @@ MidiPkt_BuildFromConstant:
 	ld (xde), c
 	ld c, (xwa + 7)
 	ld (xde + 1), c
-	ldda8 c, 0x8ee4
+	ldb_d8 c, 0x8ee4
 	ld (xde + 2), c
 	ld c, (xwa + 8)
 	ld (xde + 3), c
@@ -330,8 +330,8 @@ MidiPkt_ProcessEventQueue:
 	jr z, MidiPkt_ProcessEventQueue_Done
 	bitda 0, 0xb7e7
 	jr nz, MidiPkt_ProcessEventQueue_Done
-	ldada xbc, 0xbd3c
-	ldda16 xwa, 0x90e0
+	lda_d16 xbc, 0xbd3c
+	ldw_d16 xwa, 0x90e0
 	ld iz, wa
 	extz xiz
 	add xiz, xbc
@@ -341,7 +341,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	call SeqVoice_StoreEntry
 	inc 4, xsp
 	stda32 0xbd22, xhl
-	ldada xwa, 0xbd22
+	lda_d16 xwa, 0xbd22
 	cp (xwa), 0xff
 	jr z, MidiPkt_ProcessEventQueue_Done
 	cp (xwa), 0xc0
@@ -696,7 +696,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	bc, (xbc+4)
 	.byte 0x98
 	push	sr
-	ldda8	w, 1198
+	ldb_d8	w, 1198
 	ld	a, (xwa+11)
 	and	a, 15
 	jr	z, 2
@@ -950,7 +950,7 @@ MidiPkt_EnqueueControl_3364:
 	and a, (xbc + 2)
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3364_FormatData
-	ldda8 c, 0xfc61
+	ldb_d8 c, 0xfc61
 	and c, 0x30
 	ld a, (xde + 11)
 	and a, 0xf
@@ -1001,7 +1001,7 @@ MidiPkt_EnqueueControl_3368:
 	ld xwa, MidiPkt_EventType_Table_0x590
 	lds bc, 6
 	call ArpQueue_Enqueue
-	ldda8 a, 0xfd99
+	ldb_d8 a, 0xfd99
 	and a, 0x1
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
@@ -1131,7 +1131,7 @@ MidiPkt_CheckGateCondition:
 	extz bc
 	muls bc, 0x6
 	lda_24 xde, ToneKit_FrequencyTable_0x3E2
-	st_dri3b B, 0x07, 0xe8, 0xe4
+	stb_dri B, 0x07, 0xe8, 0xe4
 	ld xhl, (xde)
 	ld c, (xde + 4)
 	and c, (xhl)
@@ -1145,7 +1145,7 @@ MidiPkt_CheckGateCondition_Second:
 	extz wa
 	muls wa, 0x6
 	lda_24 xbc, ToneKit_FrequencyTable_0x3F4
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	ld xde, (xbc)
 	ld a, (xbc + 4)
 	and a, (xde)
@@ -1211,10 +1211,10 @@ MidiPkt_DispatchData_Chan6:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldda8	a, 0xbcfc
+	ldb_d8	a, 0xbcfc
 	extz	wa
 	jp	SysEx_InitiateSend
-	ldda8	a, 0x8d36
+	ldb_d8	a, 0x8d36
 	cp	a, 87
 	jr	z, 11
 	cpdi8	0x8d34, 1
@@ -1251,7 +1251,7 @@ MidiPkt_SendBankSelect_Send:
 	ret
 
 MidiPkt_SysExValidator_Data:
-	ldda8	a, 0x8d36
+	ldb_d8	a, 0x8d36
 	cp	a, 108
 	jr	c, 5
 	cp	a, 118
@@ -1267,7 +1267,7 @@ MidiPkt_SysExValidator_Data:
 	.byte 0xf1
 	swi	1
 	.byte 0x90, 0xbf
-	ldada	xbc, 0xfdad
+	lda_d16	xbc, 0xfdad
 	ld	e, (xbc)
 	set	2, e
 	ld	(xbc), e
@@ -1281,7 +1281,7 @@ MidiPkt_SysExValidator_Data:
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
-	ldda8	a, 0x8d36
+	ldb_d8	a, 0x8d36
 	cp	a, 108
 	jr	c, 5
 	cp	a, 118
@@ -1294,7 +1294,7 @@ MidiPkt_SysExProcessor_Data:
 	jr	ugt, 5
 	cp	a, 148
 	ret	nc
-	ldada	xbc, 0xfdad
+	lda_d16	xbc, 0xfdad
 	ld	a, (xbc)
 	bit	2, a
 	ret	z
@@ -1342,7 +1342,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jrl	641
 	calr	776
 	ret
-	ldada	xde, 0x9644
+	lda_d16	xde, 0x9644
 	ld	c, (xwa)
 	ld	(xde), c
 	ld	c, (xwa+1)
@@ -1359,7 +1359,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pop	xhl
 	pop	xde
 	ret
-	ldada	xde, 0x9644
+	lda_d16	xde, 0x9644
 	ld	c, (xwa)
 	ld	(xde), c
 	ld	c, (xwa+1)

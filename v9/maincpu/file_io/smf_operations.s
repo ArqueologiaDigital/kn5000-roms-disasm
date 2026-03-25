@@ -39,7 +39,7 @@ FmmSmfLoadTitleFunc:
 	calr SignalProgressUpdate
 
 SmfLoad_DispatchState:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 1
 	jrl z, SmfLoad_Success
 	cps wa, 0
@@ -84,7 +84,7 @@ SmfLoad_AbortPartial:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x808a
+	ldb_d8 a, 0x808a
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -113,7 +113,7 @@ SmfLoad_Success:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x808a
+	ldb_d8 a, 0x808a
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -202,14 +202,14 @@ SmfSave_Return:
 
 RenderSmfFilename:
 	extz bc
-	stib_dri 0x07, 0xe0, 0xe4, 0x00
+	stib_ind 0x07, 0xe0, 0xe4, 0x00
 	lds ix, 0
 	lda_24 xhl, CharMap_FullPermutation_0x660
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:
 	extz bc
-	ld_srib3 C, 0x07, 0xec, 0xe4
+	ldb_sri C, 0x07, 0xec, 0xe4
 	and c, 0x7
 	jr nz, RenderSmf_IncIndex
 	ld (xde), 0x5f
@@ -220,7 +220,7 @@ RenderSmf_IncIndex:
 RenderSmf_LoopCheck:
 	cp ix, 0x8
 	jr ge, RenderSmf_PadCheck
-	st_dri3b B, 0x07, 0xe0, 0xf0
+	stb_dri B, 0x07, 0xe0, 0xf0
 	ld c, (xde)
 	cps c, 0
 	jr nz, RenderSmf_CheckSeparator
@@ -230,7 +230,7 @@ RenderSmf_PadCheck:
 	ret ge
 
 RenderSmf_PadLoop:
-	stib_dri 0x07, 0xe0, 0xf0, 0x5f
+	stib_ind 0x07, 0xe0, 0xf0, 0x5f
 	inc 1, ix
 	cp ix, 0x8
 	jr lt, RenderSmf_PadLoop
@@ -240,7 +240,7 @@ SaveFileNameSmfFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	ldada xwa, 0x8850
+	lda_d16 xwa, 0x8850
 	cp xbc, 0x1e00086
 	jr z, SaveFN_HandleApply
 	cp xbc, 0x1e0003a
@@ -260,7 +260,7 @@ SaveFN_HandleActivate:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
-	ldada xwa, 0x8851
+	lda_d16 xwa, 0x8851
 	call FileIO_GetRecordType_Extended
 	ldda32 xwa, 0x808c
 	ld xbc, 0x1c0000f
@@ -313,12 +313,12 @@ SmfSeqToSongNumFunc:
 	jr SeqToSong_Return
 
 SeqToSong_BuildEntry:
-	ldada xwa, 0x8094
-	stib_dpi 0xe0, 0x00
+	lda_d16 xwa, 0x8094
+	stib_dsp 0xe0, 0x00
 	ld xbc, DiskOp_ChannelCfgTable_0xD0
 	call FileIO_CopyString
-	ldada xiz, 0x8095
-	ldda8 a, 0x8948
+	lda_d16 xiz, 0x8095
+	ldb_d8 a, 0x8948
 	inc 1, a
 	extz wa
 	lds bc, 2
@@ -346,12 +346,12 @@ SmfSeqFromSongNumFunc:
 	jr SeqFromSong_Return
 
 SeqFromSong_BuildEntry:
-	ldada xwa, 0x8118
-	stib_dpi 0xe0, 0x00
+	lda_d16 xwa, 0x8118
+	stib_dsp 0xe0, 0x00
 	ld xbc, DiskOp_ChannelCfgTable_0xDC
 	call FileIO_CopyString
-	ldada xiz, 0x8119
-	ldda8 a, 0x8948
+	lda_d16 xiz, 0x8119
+	ldb_d8 a, 0x8948
 	inc 1, a
 	extz wa
 	lds bc, 2
@@ -378,7 +378,7 @@ SmfSeqSongNameFunc:
 	jr SeqSongName_Return
 
 SeqSongName_BuildEntry:
-	ldda8 a, 0x8948
+	ldb_d8 a, 0x8948
 	extz wa
 	lds bc, 0
 	lds de, 0
@@ -401,7 +401,7 @@ SmfLoadAsFunc:
 	jr SmfLoadAs_Return
 
 SmfLoadAs_Apply:
-	ldda8 a, 0x8946
+	ldb_d8 a, 0x8946
 	extz wa
 	sla wa, 2
 	lda_24 xbc, DiskOp_ChannelCfgTable_0xE8
@@ -451,7 +451,7 @@ TrimPad_PadCheck:
 	jr nc, TrimPad_NullTerminate
 
 TrimPad_PadLoop:
-	stib_dpi 0xe0, 0x20
+	stib_dsp 0xe0, 0x20
 	inc 1, ix
 	cp ix, bc
 	jr c, TrimPad_PadLoop
@@ -472,10 +472,10 @@ DisplaySmfFileList:
 DispFileList_LoopBody:
 	ld de, iz
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -485,7 +485,7 @@ DispFileList_LoopBody:
 	sll wa, 5
 	lds de, 1
 	add de, wa
-	ldada xhl, 0x850c
+	lda_d16 xhl, 0x850c
 	ld wa, de
 	extz xwa
 	add xwa, xhl
@@ -497,7 +497,7 @@ DispFileList_LoopBody:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
 	ld xwa, (xsp + 4)
@@ -526,7 +526,7 @@ ValidateFN_AdvancePointer:
 	inc 1, hl
 
 ValidateFN_LoopHead:
-	ld_srib3 E, 0x07, 0xe0, 0xf4
+	ldb_sri E, 0x07, 0xe0, 0xf4
 	cps e, 0
 	jr z, ValidateFN_ReturnValid
 	cp hl, bc
@@ -561,7 +561,7 @@ FmmSmfFileNameFunc:
 	add xde, Str_SmfConvert_GmToGm_0x1E
 	ld de, (xde)
 	lda_24 xix, SmfFN_JumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe8
+	jp_ind 8, 0x07, 0xf0, 0xe8
 SmfFN_JumpTable:
 	stda32	0x81a0, xbc
 	lds32	xwa, 0
@@ -575,13 +575,13 @@ SmfFN_JumpTable:
 	jr	ge, 26
 	stdi16	0x81ac, 0
 	jr	18
-	ldda16	wa, 0x8504
+	ldw_d16	wa, 0x8504
 	stda16	0x81ac, wa
 	cps	wa, 0
 	jr	le, 2
 	dec	1, wa
 	call	NavigateToFileIndex
-	ldda16	wa, 0x81ac
+	ldw_d16	wa, 0x81ac
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -591,7 +591,7 @@ SmfFN_JumpTable:
 	jrl	1929
 
 SmfFN_HandleActivate:
-	ldda16 xbc, 0x81ac
+	ldw_d16 xbc, 0x81ac
 	exts xbc
 	divs bc, 0xa
 	muls bc, 0xa
@@ -605,7 +605,7 @@ SmfFN_NavSetup:
 	ld xbc, 0x1c50001
 	lds32 xde, 1
 	call ApPostEvent
-	ldda16 xix, 0x81ac
+	ldw_d16 xix, 0x81ac
 	ld (xsp + 4), ix
 	or xiz, xiz
 	jr nz, SmfFN_PageUp
@@ -623,7 +623,7 @@ SmfFN_NavSetup:
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_NavDown_WrapCheck:
-	ldda16 xwa, 0x8504
+	ldw_d16 xwa, 0x8504
 	inc 1, wa
 	cp bc, wa
 	jrl ge, SmfFN_UpdateDisplay
@@ -657,7 +657,7 @@ SmfFN_PageDown:
 	jr nz, SmfFN_HandleSave
 	ld iy, ix
 	add iy, 0xa
-	ldda16 xbc, 0x8504
+	ldw_d16 xbc, 0x8504
 	ld de, ix
 	exts xde
 	divs de, 0xa
@@ -675,7 +675,7 @@ SmfFN_PageDown:
 	jrl ge, SmfFN_UpdateDisplay
 	exts xhl
 	divs hl, 0xa
-	ldto_werp WA, 0xee
+	stw_erp WA, 0xee
 	cps wa, 0
 	jrl z, SmfFN_UpdateDisplay
 	stda16 0x81ac, xbc
@@ -704,7 +704,7 @@ SmfFN_PageDown_ClampCheck:
 	jrl ge, SmfFN_UpdateDisplay
 	exts xbc
 	divs bc, 0xa
-	ldto_werp WA, 0xe6
+	stw_erp WA, 0xe6
 	cps wa, 0
 	jrl z, SmfFN_UpdateDisplay
 	stda16 0x81ac, xhl
@@ -719,16 +719,16 @@ SmfFN_HandleSave:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldda8 a, 0x8948
+	ldb_d8 a, 0x8948
 	extz wa
-	ldda8 c, 0x8946
+	ldb_d8 c, 0x8946
 	extz bc
 	call LoadFileSMF
 	ld (xsp + 6), hl
 	calr SignalProgressUpdate
 	cpw (xsp + 6), 0x0
 	jr lt, SmfFN_Save_Finish
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	call GetFileEntryByIndex
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
@@ -739,7 +739,7 @@ SmfFN_HandleSave:
 	calr ValidateSmfFilename
 	cps l, 0
 	jr z, SmfFN_Save_WriteSlot
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	call GetRecordPtrForFile
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
@@ -752,18 +752,18 @@ SmfFN_Save_WriteSlot:
 	calr TrimAndPadSmfFilename
 	lda_24 xwa, 0x0ab000
 	lds32 xbc, 0
-	ldda8 c, 0x8948
+	ldb_d8 c, 0x8948
 	sll xbc, 11
 	add xwa, xbc
-	st_dri3b W, 0xe1, 0x00, 0x01
+	stb_dri W, 0xe1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
-	ld8_24 a, 0x00ffe3
+	ldb_da a, 0x00ffe3
 	cpda8 a, 0x8948
 	jr nz, SmfFN_Save_Finish
 	lda_24 xwa, 0x00f180
-	st_dri3b W, 0xe1, 0x00, 0x01
+	stb_dri W, 0xe1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -790,7 +790,7 @@ SmfFN_Save_CallResult:
 	ld wa, (xsp + 6)
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
@@ -810,7 +810,7 @@ SmfFN_HandleOpen:
 	call FileIO_CheckFileExists
 	cps l, 0
 	jr z, SmfFN_Open_Execute
-	cpi8_24 0x0340ea, 0x00
+	cpib_da 0x0340ea, 0x00
 	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -828,17 +828,17 @@ SmfFN_HandleOpen:
 SmfFN_Open_Execute:
 	lds wa, 0
 	calr InitializeOperationState
-	ldda8 a, 0x8948
+	ldb_d8 a, 0x8948
 	extz wa
-	ldda8 c, 0x894a
+	ldb_d8 c, 0x894a
 	extz bc
-	ldda8 e, 0x894c
+	ldb_d8 e, 0x894c
 	extz de
 	call LoadFileVariant
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
@@ -870,17 +870,17 @@ SmfFN_HandleOpen2:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldda8 a, 0x8948
+	ldb_d8 a, 0x8948
 	extz wa
-	ldda8 c, 0x894a
+	ldb_d8 c, 0x894a
 	extz bc
-	ldda8 e, 0x894c
+	ldb_d8 e, 0x894c
 	extz de
 	call LoadFileVariant
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
@@ -906,7 +906,7 @@ SmfFN_HandleOpen2:
 SmfFN_HandleDelete:
 	cp xiz, 0x5
 	jrl nz, SmfFN_HandleDelete2
-	cpi8_24 0x0340ea, 0x00
+	cpib_da 0x0340ea, 0x00
 	jr z, SmfFN_Delete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -928,7 +928,7 @@ SmfFN_Delete_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -938,7 +938,7 @@ SmfFN_Delete_Execute:
 	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_Delete_AdjustIndex
 	cps wa, 0
@@ -964,7 +964,7 @@ SmfFN_HandleDelete2:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stda8 0x7f42, l
+	stb_d8 0x7f42, l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -974,7 +974,7 @@ SmfFN_HandleDelete2:
 	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_Delete2_AdjustIndex
 	cps wa, 0
@@ -1016,13 +1016,13 @@ SmfFN_SetScrollDir0:
 SmfFN_HandleScrollFlag1:
 	cp xiz, 0x15
 	jr nz, SmfFN_HandleScrollFlag2
-	ldda8 c, 0x8946
+	ldb_d8 c, 0x8946
 	ld a, c
 	inc 1, a
 	cps a, 3
 	jr nc, SmfFN_LoadAs_Wrap
 	inc 1, c
-	stda8 0x8946, c
+	stb_d8 0x8946, c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1077,7 +1077,7 @@ SmfFN_SetFlag35140_0:
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleSeqSongNum:
-	ldda8 c, 0x8948
+	ldb_d8 c, 0x8948
 	ld a, c
 	inc 1, a
 	cp xiz, 0x1e
@@ -1085,7 +1085,7 @@ SmfFN_HandleSeqSongNum:
 	cp a, 0xa
 	jr nc, SmfFN_SeqToSong_Wrap
 	inc 1, c
-	stda8 0x8948, c
+	stb_d8 0x8948, c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1112,7 +1112,7 @@ SmfFN_HandleSeqFromSong:
 	cp a, 0xa
 	jr nc, SmfFN_SeqFromSong_Wrap
 	inc 1, c
-	stda8 0x8948, c
+	stb_d8 0x8948, c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1151,22 +1151,22 @@ SmfFN_DispatchEvent:
 	call ApPostEvent
 
 SmfFN_UpdateDisplay:
-	ldda16 xhl, 0x81ac
+	ldw_d16 xhl, 0x81ac
 
 SmfFN_RefreshIfChanged:
 	cp (xsp + 4), hl
 	jrl z, SmfFN_SendOkState
 	ld wa, hl
 	call NavigateToFileIndex
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	exts xwa
 	divs wa, 0xa
-	ldto_werp DE, 0xe2
+	stw_erp DE, 0xe2
 	exts xde
 	ldda32 xwa, 0x81a0
 	ld xbc, 0x1e50002
 	call ApPostEvent
-	ldda16 xbc, 0x81ac
+	ldw_d16 xbc, 0x81ac
 	exts xbc
 	divs bc, 0xa
 	ld de, (xsp + 4)
@@ -1178,20 +1178,20 @@ SmfFN_RefreshIfChanged:
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xa
-	ldto_werp BC, 0xe6
+	stw_erp BC, 0xe6
 	sll bc, 5
-	ldada xhl, 0x850c
+	lda_d16 xhl, 0x850c
 	ld de, bc
 	extz xde
 	add xde, xhl
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	exts xwa
 	divs wa, 0xa
-	ldto_werp WA, 0xe2
+	stw_erp WA, 0xe2
 	sll wa, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -1213,8 +1213,8 @@ SmfFN_RedrawPage:
 SmfFN_UpdateFilenameField:
 	cpdi8 0x8d36, 107
 	jr nz, SmfFN_SendOkState
-	ldada xiz, 0x8850
-	ldda16 xwa, 0x81ac
+	lda_d16 xiz, 0x8850
+	ldw_d16 xwa, 0x81ac
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_FetchFilename
 	cps wa, 0
@@ -1256,10 +1256,10 @@ SmfFN_SendOkState:
 	ld wa, iz
 	stda16 0x81ac, xwa
 	call NavigateToFileIndex
-	ldda16 xwa, 0x81ac
+	ldw_d16 xwa, 0x81ac
 	exts xwa
 	divs wa, 0xa
-	ldto_werp DE, 0xe2
+	stw_erp DE, 0xe2
 	exts xde
 	ldda32 xwa, 0x81a0
 	ld xbc, 0x1e50002
@@ -1267,7 +1267,7 @@ SmfFN_SendOkState:
 SmfFN_DispatchFinalEvent:
 	call ApPostEvent
 	jrl SmfFN_ReturnZero
-	ldda16 xhl, 0x81ac
+	ldw_d16 xhl, 0x81ac
 	exts xhl
 
 SmfFN_Return:
@@ -1287,10 +1287,10 @@ DisplaySmfSequenceList:
 DispSeqList_LoopBody:
 	ld de, iz
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -1300,7 +1300,7 @@ DispSeqList_LoopBody:
 	sll wa, 5
 	lds de, 1
 	add de, wa
-	ldada xhl, 0x850c
+	lda_d16 xhl, 0x850c
 	ld wa, de
 	extz xwa
 	add xwa, xhl
@@ -1312,7 +1312,7 @@ DispSeqList_LoopBody:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
-	ldada xbc, 0x850c
+	lda_d16 xbc, 0x850c
 	extz xde
 	add xde, xbc
 	ld xwa, (xsp + 4)

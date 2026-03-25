@@ -8,15 +8,15 @@
 ; =============================================================================
 
 BmDrEdit_AdvanceStreamPos:
-	ld16_24 xwa, 0x0210a6
+	ldw_da xwa, 0x0210a6
 	cp wa, 0xff
 	jr nc, BmDrEdit_AdvanceStreamWrap
 	inc 1, wa
-	st16_24 0x0210a6, xwa
+	stw_da 0x0210a6, xwa
 	ret
 
 BmDrEdit_AdvanceStreamWrap:
-	ld16_24 xbc, 0x0210a4
+	ldw_da xbc, 0x0210a4
 	dec 1, bc
 	extz xbc
 	sll xbc, 8
@@ -32,19 +32,19 @@ BmDrEdit_AdvanceStreamWrap:
 	ld a, (xde)
 	extz wa
 	add wa, hl
-	st16_24 0x0210a4, xwa
-	sti16_24 0x0210a6, 0x0005
+	stw_da 0x0210a4, xwa
+	stiw_da 0x0210a6, 0x0005
 	ret
 
 BmDrEdit_ScanForwardInit:
 	pushw iz
-	ldda16 xwa, 0x27fe
+	ldw_d16 xwa, 0x27fe
 	stda16 0x27f6, xwa
-	ldda16 xwa, 0x2800
+	ldw_d16 xwa, 0x2800
 	stda16 0x27f8, xwa
-	ldda16 xwa, 0x2802
+	ldw_d16 xwa, 0x2802
 	stda16 0x27fa, xwa
-	ldda16 xwa, 0x2804
+	ldw_d16 xwa, 0x2804
 	stda16 0x27fc, xwa
 	ldmmw_dd24 0xa0, 0x10, 0x02, 0xfe, 0x27
 	ldmmw_dd24 0xa2, 0x10, 0x02, 0x00, 0x28
@@ -53,15 +53,15 @@ BmDrEdit_ScanForwardInit:
 	ldmmb_dd24 0xa8, 0x10, 0x02, 0x22, 0x28
 	ldmmb_dd24 0xaa, 0x10, 0x02, 0x24, 0x28
 	lds iz, 0
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	cps wa, 0
 	jrl ule, BmDrEdit_ScanForward_Done
 
 BmDrEdit_ScanForwardLoop:
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -84,9 +84,9 @@ BmDrEdit_ScanForward_CheckNote:
 	cp a, 0x90
 	jr nz, BmDrEdit_ScanForward_NextByte
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -95,11 +95,11 @@ BmDrEdit_ScanForward_CheckNote:
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
-	st16_24 0x0210a2, xwa
+	stw_da 0x0210a2, xwa
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -107,7 +107,7 @@ BmDrEdit_ScanForward_CheckNote:
 	ld xbc, 0xb0000
 	add xbc, xwa
 	ld a, (xbc)
-	stda8 0x2806, a
+	stb_d8 0x2806, a
 	cpda8_24 a, 0x0210a8
 	jr c, BmDrEdit_ScanForward_NextByte
 	cpda8_24 a, 0x0210aa
@@ -115,9 +115,9 @@ BmDrEdit_ScanForward_CheckNote:
 
 BmDrEdit_ScanForward_NextByte:
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -127,7 +127,7 @@ BmDrEdit_ScanForward_NextByte:
 	ld a, (xbc)
 	bit 7, a
 	jr z, BmDrEdit_ScanForward_NextByte
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	cp iz, wa
 	jrl c, BmDrEdit_ScanForwardLoop
@@ -149,15 +149,15 @@ BmDrEdit_ScanBackwardInit:
 	ldmmb_dd24 0xa8, 0x10, 0x02, 0x22, 0x28
 	ldmmb_dd24 0xaa, 0x10, 0x02, 0x24, 0x28
 	lds iz, 0
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	cps wa, 0
 	jrl ule, BmDrEdit_ScanBackward_Done
 
 BmDrEdit_ScanBackwardLoop:
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -179,18 +179,18 @@ BmDrEdit_ScanBackward_CheckNote:
 	and a, 0xf0
 	cp a, 0x90
 	jr nz, BmDrEdit_ScanBackward_NextByte
-	ldda16 xwa, 0x2802
+	ldw_d16 xwa, 0x2802
 	cpda16 xwa, 0x2766
 	jr nz, BmDrEdit_ScanBackward_ReadNoteParams
-	ldda16 xwa, 0x2804
+	ldw_d16 xwa, 0x2804
 	cpda16 xwa, 0x2768
 	jr z, BmDrEdit_ScanBackward_NextByte
 
 BmDrEdit_ScanBackward_ReadNoteParams:
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -201,9 +201,9 @@ BmDrEdit_ScanBackward_ReadNoteParams:
 	extz wa
 	stda16 0x2800, xwa
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -211,7 +211,7 @@ BmDrEdit_ScanBackward_ReadNoteParams:
 	ld xbc, 0xb0000
 	add xbc, xwa
 	ld a, (xbc)
-	stda8 0x2806, a
+	stb_d8 0x2806, a
 	cpda8_24 a, 0x0210a8
 	jr c, BmDrEdit_ScanBackward_NextByte
 	cpda8_24 a, 0x0210aa
@@ -219,9 +219,9 @@ BmDrEdit_ScanBackward_ReadNoteParams:
 
 BmDrEdit_ScanBackward_NextByte:
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -231,7 +231,7 @@ BmDrEdit_ScanBackward_NextByte:
 	ld a, (xbc)
 	bit 7, a
 	jr z, BmDrEdit_ScanBackward_NextByte
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	cp iz, wa
 	jrl c, BmDrEdit_ScanBackwardLoop
@@ -264,16 +264,16 @@ BmDrEdit_RenderNoteBlock_StoreCoords:
 	ret
 
 BmDrEdit_CalcNotePosition:
-	push_werp 0xfa
-	ld16_24 xbc, 0x0210a0
+	pushw_erp 0xfa
+	ldw_da xbc, 0x0210a0
 	mul bc, 0x60
 	addda16_24 xbc, 0x0210a2
-	ldda16 xwa, 0x27f6
+	ldw_d16 xwa, 0x27f6
 	mul wa, 0x60
 	addda16 xwa, 0x27f8
 	sub bc, wa
 	stda16 0x2808, xbc
-	ld8_24 a, 0x0210a8
+	ldb_da a, 0x0210a8
 	subdm8 0x2806, a
 	call GetTitleNow
 	cp xhl, 0x1a00095
@@ -286,14 +286,14 @@ BmDrEdit_CalcNotePosition:
 BmDrEdit_CalcNotePos_VerticalMode:
 	ldb a, 0xb
 	subda8 a, 0x2806
-	stda8 0x2806, a
+	stb_d8 0x2806, a
 
 BmDrEdit_CalcNotePos_ReadFields:
 	calr BmDrEdit_AdvanceStreamPos
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -301,11 +301,11 @@ BmDrEdit_CalcNotePos_ReadFields:
 	ld xbc, 0xb0000
 	add xbc, xwa
 	ld a, (xbc)
-	ldfr_berp A, 0xfb
+	ldb_erp A, 0xfb
 	calr BmDrEdit_AdvanceStreamPos
-	ld16_24 xbc, 0x0210a6
+	ldw_da xbc, 0x0210a6
 	extz xbc
-	ld16_24 xwa, 0x0210a4
+	ldw_da xwa, 0x0210a4
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -317,14 +317,14 @@ BmDrEdit_CalcNotePos_ReadFields:
 	res 7, c
 	extz bc
 	mul bc, 0x60
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	add bc, wa
 	stda16 0x280a, xbc
-	ldda8 l, 0x2774
+	ldb_d8 l, 0x2774
 	mul l, 0x60
 	dec 1, hl
-	ldda16 xwa, 0x2808
+	ldw_d16 xwa, 0x2808
 	ld de, wa
 	add de, bc
 	cp de, hl
@@ -333,43 +333,43 @@ BmDrEdit_CalcNotePos_ReadFields:
 	stda16 0x280a, xhl
 
 BmDrEdit_CalcNotePos_ClampSize:
-	pop_werp 0xfa
+	popw_erp 0xfa
 	ret
 
 BmDrEdit_RenderHorizontal:
-	ldda16 xwa, 0x2808
+	ldw_d16 xwa, 0x2808
 	srl wa, 2
 	add wa, 0x16
 	stda16 0x27ba, xwa
-	ldda16 xwa, 0x280a
+	ldw_d16 xwa, 0x280a
 	srl wa, 2
 	addda16 xwa, 0x27ba
 	stda16 0x27bc, xwa
-	ldda8 a, 0x2806
+	ldb_d8 a, 0x2806
 	extz wa
 	add wa, wa
 	lda_24 xbc, NakaInst_NO_OPERATION_0x19A
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
-	ldda16 xwa, 0x27be
+	ldw_d16 xwa, 0x27be
 	inc 3, wa
 	stda16 0x27c0, xwa
 	ret
 
 BmDrEdit_RenderVertical:
-	ldda16 xwa, 0x2808
+	ldw_d16 xwa, 0x2808
 	srl wa, 2
 	add wa, 0x5b
 	stda16 0x27ba, xwa
-	ldda16 xwa, 0x280a
+	ldw_d16 xwa, 0x280a
 	srl wa, 2
 	addda16 xwa, 0x27ba
 	stda16 0x27bc, xwa
-	ldda8 a, 0x2806
+	ldb_d8 a, 0x2806
 	extz wa
 	add wa, wa
 	lda_24 xbc, NakaInst_NO_OPERATION_0x1D4
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
-	ldda16 xwa, 0x27be
+	ldw_d16 xwa, 0x27be
 	inc 3, wa
 	stda16 0x27c0, xwa
 	ret
@@ -401,38 +401,38 @@ BmDrEdit_RenderSecondary_StoreCoords:
 	ret
 
 BmDrEdit_RenderSecondaryHoriz:
-	ldda16 xwa, 0x281e
+	ldw_d16 xwa, 0x281e
 	srl wa, 2
 	add wa, 0x16
 	stda16 0x27c2, xwa
-	ld16_24 xwa, 0x0210b2
+	ldw_da xwa, 0x0210b2
 	srl wa, 2
 	addda16 xwa, 0x27c2
 	stda16 0x27c4, xwa
-	ld8_24 a, 0x0210b0
+	ldb_da a, 0x0210b0
 	extz wa
 	add wa, wa
 	lda_24 xbc, NakaInst_NO_OPERATION_0x19A
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xc6, 0x27
-	ldda16 xwa, 0x27c6
+	ldw_d16 xwa, 0x27c6
 	inc 3, wa
 	stda16 0x27c8, xwa
 	ret
 
 BmDrEdit_RenderSecondaryVert:
-	ldda16 xwa, 0x281e
+	ldw_d16 xwa, 0x281e
 	srl wa, 2
 	add wa, 0x5b
 	stda16 0x27c2, xwa
-	ld16_24 xwa, 0x0210b2
+	ldw_da xwa, 0x0210b2
 	srl wa, 2
 	addda16 xwa, 0x27c2
 	stda16 0x27c4, xwa
-	ld8_24 a, 0x0210b0
+	ldb_da a, 0x0210b0
 	extz wa
 	add wa, wa
 	lda_24 xbc, NakaInst_NO_OPERATION_0x1D4
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	stda16 0x27c6, xwa
 	inc 3, wa
 	stda16 0x27c8, xwa
@@ -441,15 +441,15 @@ BmDrEdit_RenderSecondaryVert:
 	ret
 
 BmDrEdit_CalcSecondaryPosition:
-	ldda16 xbc, 0x2814
+	ldw_d16 xbc, 0x2814
 	mul bc, 0x60
 	addda16 xbc, 0x2816
-	ldda16 xwa, 0x280c
+	ldw_d16 xwa, 0x280c
 	mul wa, 0x60
 	addda16 xwa, 0x280e
 	sub bc, wa
 	stda16 0x281e, xbc
-	ldda8 a, 0x2826
+	ldb_d8 a, 0x2826
 	subdm8_24 0x0210b0, a
 	call GetTitleNow
 	cp xhl, 0x1a00095
@@ -462,19 +462,19 @@ BmDrEdit_CalcSecondaryPosition:
 BmDrEdit_CalcSecondaryPos_Vert:
 	ldb a, 0xb
 	subda8_24 a, 0x0210b0
-	st8_24 0x0210b0, a
+	stb_da 0x0210b0, a
 
 BmDrEdit_CalcSecondaryPos_ClampSize:
-	ldda8 e, 0x2774
+	ldb_d8 e, 0x2774
 	mul e, 0x60
 	dec 1, de
-	ldda16 xwa, 0x281e
+	ldw_d16 xwa, 0x281e
 	ld bc, wa
 	addda16_24 xbc, 0x0210b2
 	cp bc, de
 	ret ule
 	sub de, wa
-	st16_24 0x0210b2, xde
+	stw_da 0x0210b2, xde
 	ret
 
 BmDrEdit_InitDisplayParams:
@@ -488,11 +488,11 @@ BmDrEdit_InitDisplayParams:
 	ret
 
 BmDrEdit_TempoAnimTimer:
-	ldda8 a, 0xe372
+	ldb_d8 a, 0xe372
 	cp a, 0x1e
 	jr ule, BmDrEdit_TempoAnimTimer_Reset
 	inc 1, a
-	stda8 0xe372, a
+	stb_d8 0xe372, a
 	ret
 
 BmDrEdit_TempoAnimTimer_Reset:
@@ -508,7 +508,7 @@ BmDrEdit_CheckTempoData:
 	call TempoRingBuf_CheckEmpty
 	cps hl, 0
 	ret z
-	ldda8 a, 0x8d38
+	ldb_d8 a, 0x8d38
 	cp a, 0x95
 	jr z, BmDrEdit_CheckTempoData_ReadyToProcess
 	cp a, 0x98
@@ -532,9 +532,9 @@ BmDrEdit_ProcessTempoEvent:
 	jr nz, BmDrEdit_TempoEventLoop
 	call TempoRingBuf_ReadByte
 	call TempoRingBuf_ReadByte
-	stda8 0x2960, l
+	stb_d8 0x2960, l
 	call TempoRingBuf_ReadByte
-	stda8 0x2961, l
+	stb_d8 0x2961, l
 	call TempoRingBuf_ReadByte
 	cpdi8 0x2961, 0
 	jr z, BmDrEdit_ProcessTempoEvent_NoteOff
@@ -571,20 +571,20 @@ BmDrEdit_TempoEventLoop:
 	ret
 
 BmDrEdit_DecrementDelayA:
-	ldda8 a, 0x295c
+	ldb_d8 a, 0x295c
 	bit 7, a
 	ret z
 	cp a, 0x80
 	ret z
 	dec 1, a
-	stda8 0x295c, a
+	stb_d8 0x295c, a
 	ret
 
 BmDrEdit_DelayAExpired:
 	cpdi8 0x295c, 128
 	ret nz
 	stdi8 0x295c, 0
-	ldda8 a, 0x295d
+	ldb_d8 a, 0x295d
 	cps a, 5
 	jrl z, BmDrEdit_DelayAction_WalkAndUpdateAlt
 	cps a, 4
@@ -598,13 +598,13 @@ BmDrEdit_DelayAExpired:
 	jrl BmDrEdit_DelayAction_SetupAndWalk
 
 BmDrEdit_DecrementDelayB:
-	ldda8 a, 0x295e
+	ldb_d8 a, 0x295e
 	bit 7, a
 	ret z
 	cp a, 0x80
 	ret z
 	dec 1, a
-	stda8 0x295e, a
+	stb_d8 0x295e, a
 	ret
 
 BmDrEdit_DelayBExpired:
@@ -626,7 +626,7 @@ BmDrEdit_AllocateNote_Search:
 	lds iy, 0
 	cps ix, 0
 	ret ule
-	ldada xde, 0x2746
+	lda_d16 xde, 0x2746
 
 BmDrEdit_AllocateNote_Loop:
 	ld hl, iy
@@ -709,7 +709,7 @@ BmDrEdit_CheckScrollBusy:
 	ret
 
 BmDrEdit_ScrollRight:
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	cp wa, 0x3e7
 	jr nc, BmDrEdit_ScrollRight_Done
 	inc 1, wa
@@ -729,7 +729,7 @@ BmDrEdit_CheckScrollBusyAlt:
 	ret
 
 BmDrEdit_ScrollLeft:
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	cps wa, 1
 	jr ule, BmDrEdit_ScrollLeft_Done
 	dec 1, wa
@@ -756,11 +756,11 @@ BmDrEdit_PitchScrollUp_Check:
 	ret nz
 
 BmDrEdit_PitchScrollUp:
-	ldda8 a, 0x2784
+	ldb_d8 a, 0x2784
 	cp a, 0x5f
 	jrl nc, BmDrEdit_PitchScrollOverflow
 	inc 1, a
-	stda8 0x2784, a
+	stb_d8 0x2784, a
 	call NoteEditSy_SendScrollCmd2
 	calr NoteEditSy_CallFarRoutine
 	calr BmDrEdit_BuildVoice_NullReturn
@@ -773,11 +773,11 @@ BmDrEdit_PitchScrollDown_Check:
 	ret nz
 
 BmDrEdit_PitchScrollDown:
-	ldda8 a, 0x2784
+	ldb_d8 a, 0x2784
 	cps a, 0
 	jrl z, BmDrEdit_PitchWrapToEnd
 	dec 1, a
-	stda8 0x2784, a
+	stb_d8 0x2784, a
 	call NoteEditSy_SendScrollCmd2
 	calr NoteEditSy_CallFarRoutine
 	calr BmDrEdit_BuildVoice_NullReturn
@@ -810,11 +810,11 @@ BmDrEdit_VelocityDown_Dispatch:
 	jr BmDrEdit_DecrementVelocity
 
 BmDrEdit_IncrementVelocity:
-	ldda8 a, 0x2786
+	ldb_d8 a, 0x2786
 	cp a, 0x7f
 	ret nc
 	inc 1, a
-	stda8 0x2786, a
+	stb_d8 0x2786, a
 	bitda 0, 0x2742
 	call_24 nz, BmDrEdit_DrumVoiceUp
 	calr BmDrEdit_UpdateVelocityDisplay
@@ -825,11 +825,11 @@ BmDrEdit_IncrementVelocity:
 	ret
 
 BmDrEdit_DecrementVelocity:
-	ldda8 a, 0x2786
+	ldb_d8 a, 0x2786
 	cps a, 1
 	ret z
 	dec 1, a
-	stda8 0x2786, a
+	stb_d8 0x2786, a
 	bitda 0, 0x2742
 	call_24 nz, BmDrEdit_DrumVoiceDown
 	calr BmDrEdit_UpdateVelocityDisplay
@@ -860,37 +860,37 @@ BmDrEdit_GateOrVelocityDown:
 	ret
 
 BmDrEdit_IncrementGateTime:
-	ldda8 a, 0x2788
+	ldb_d8 a, 0x2788
 	cp a, 0x7f
 	ret nc
 	inc 1, a
-	stda8 0x2788, a
+	stb_d8 0x2788, a
 	call NoteEditSy_SendGateCmd
 	jrl BmDrEdit_UpdateGateDisplay
 
 BmDrEdit_DecrementGateTime:
-	ldda8 a, 0x2788
+	ldb_d8 a, 0x2788
 	cps a, 1
 	ret z
 	dec 1, a
-	stda8 0x2788, a
+	stb_d8 0x2788, a
 	call NoteEditSy_SendGateCmd
 	jrl BmDrEdit_UpdateGateDisplay
 
 BmDrEdit_IncrementVelocityValue:
-	ldda8 a, 0x278a
+	ldb_d8 a, 0x278a
 	cp a, 0x7f
 	ret nc
 	inc 1, a
-	stda8 0x278a, a
+	stb_d8 0x278a, a
 	jp NoteEditSy_SendVelocityCmd
 
 BmDrEdit_DecrementVelocityValue:
-	ldda8 a, 0x278a
+	ldb_d8 a, 0x278a
 	cps a, 1
 	ret z
 	dec 1, a
-	stda8 0x278a, a
+	stb_d8 0x278a, a
 	jp NoteEditSy_SendVelocityCmd
 
 BmDrEdit_DurationUp_Check:
@@ -914,7 +914,7 @@ BmDrEdit_DurationDown_Dispatch:
 BmDrEdit_IncrementDuration:
 	bitda 0, 0x295f
 	jr z, BmDrEdit_IncrementDuration_Global
-	ldda16 xwa, 0x278c
+	ldw_d16 xwa, 0x278c
 	cp wa, 0x2fff
 	ret nc
 	inc 1, wa
@@ -927,7 +927,7 @@ BmDrEdit_IncrementDuration:
 	ret
 
 BmDrEdit_IncrementDuration_Global:
-	ldda16 xwa, 0x278e
+	ldw_d16 xwa, 0x278e
 	cp wa, 0x2fff
 	ret nc
 	inc 1, wa
@@ -937,7 +937,7 @@ BmDrEdit_IncrementDuration_Global:
 BmDrEdit_DecrementDuration:
 	bitda 0, 0x295f
 	jr z, BmDrEdit_DecrementDuration_Global
-	ldda16 xwa, 0x278c
+	ldw_d16 xwa, 0x278c
 	cps wa, 0
 	jr nz, BmDrEdit_DecrementDuration_Clamp
 	stdi16 0x278c, 1
@@ -958,7 +958,7 @@ BmDrEdit_DecrementDuration_Update:
 	ret
 
 BmDrEdit_DecrementDuration_Global:
-	ldda16 xwa, 0x278e
+	ldw_d16 xwa, 0x278e
 	cps wa, 0
 	jr nz, BmDrEdit_DecrementDuration_GlobalClamp
 	stdi16 0x278e, 1
@@ -976,7 +976,7 @@ BmDrEdit_DecrementDuration_Send:
 BmDrEdit_ModeScrollUp:
 	bitda 7, 0x295c
 	ret nz
-	ldda16 xwa, 0x2792
+	ldw_d16 xwa, 0x2792
 	cp wa, 0x60
 	ret nc
 	inc 1, wa
@@ -986,7 +986,7 @@ BmDrEdit_ModeScrollUp:
 BmDrEdit_ModeScrollDown:
 	bitda 7, 0x295c
 	ret nz
-	ldda16 xwa, 0x2792
+	ldw_d16 xwa, 0x2792
 	cps wa, 0
 	jr nz, BmDrEdit_ModeScrollDown_Clamp
 	stdi16 0x2792, 48
@@ -1024,7 +1024,7 @@ BmDrEdit_ClearAndScanToEnd:
 	stdi8 0x287a, 0
 
 BmDrEdit_ScanToEnd_Loop:
-	ldda16 xwa, 9830
+	ldw_d16 xwa, 9830
 	cps wa, 5
 	jr ule, BmDrEdit_ScanToEnd_CheckNextSong
 	dec 1, wa
@@ -1032,7 +1032,7 @@ BmDrEdit_ScanToEnd_Loop:
 	jr BmDrEdit_ScanToEnd_CheckEndMark
 
 BmDrEdit_ScanToEnd_CheckNextSong:
-	ldda16 xwa, 0x28af
+	ldw_d16 xwa, 0x28af
 	call PartCtrl_ReadWord_Off1
 	cps hl, 0
 	jr nz, BmDrEdit_ScanToEnd_AdvanceSong
@@ -1053,7 +1053,7 @@ BmDrEdit_LoadAlternateState:
 	ldmm16 0x275e, 0x276a
 	ldmm8 0x2760, 0x276c
 	ldmm16 0x28af, 0x276e
-	ldda8 a, 0x2770
+	ldb_d8 a, 0x2770
 	extz wa
 	stda16 9830, xwa
 	ret
@@ -1070,10 +1070,10 @@ BmDrEdit_CountNotesLoop:
 	ret z
 	cp l, 0x81
 	jr nz, BmDrEdit_CountNotesLoop_Retry
-	ldda16 xbc, 0x2772
+	ldw_d16 xbc, 0x2772
 	inc 1, bc
 	stda16 0x2772, xbc
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	cp bc, wa
 	ret ugt
@@ -1084,7 +1084,7 @@ BmDrEdit_CountNotesLoop_Retry:
 
 BmDrEdit_CheckChannelActive:
 	ldb e, 0x0
-	ldada xbc, 0xf1a0
+	lda_d16 xbc, 0xf1a0
 
 BmDrEdit_CheckChannelActive_Loop:
 	ld a, e
@@ -1115,19 +1115,19 @@ BmDrEdit_CheckChannelActive_None:
 	ret
 
 BmDrEdit_SelectActiveChannel:
-	push_werp 0xfa
-	ldi_berp 0xfb, 0
-	ldada xbc, 0xf1a0
+	pushw_erp 0xfa
+	ldib_erp 0xfb, 0
+	lda_d16 xbc, 0xf1a0
 
 BmDrEdit_SelectChannel_Loop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x10
 	jr nz, BmDrEdit_SelectChannel_NextCh
 	lds bc, 1
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	and a, 0xf
 	jr z, BmDrEdit_SelectChannel_TestBit
 	slaa bc
@@ -1137,24 +1137,24 @@ BmDrEdit_SelectChannel_TestBit:
 	jr z, BmDrEdit_SelectChannel_NotFound
 	bitda 0, 0x2776
 	jr z, BmDrEdit_SelectChannel_NotFound
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	inc 1, c
 	extz bc
 	lds wa, 0
 	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, BmDrEdit_SelectChannel_NotFound
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	inc 1, a
-	stda8 3414, a
+	stb_d8 3414, a
 	setda 0, 3412
 	setda 2, 0x287b
-	ldto_berp L, 0xfb
+	stb_erp L, 0xfb
 	inc 1, l
 	jr BmDrEdit_SelectChannel_Done
 
 BmDrEdit_SelectChannel_NextCh:
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr c, BmDrEdit_SelectChannel_Loop
 
@@ -1164,15 +1164,15 @@ BmDrEdit_SelectChannel_NotFound:
 	ldb l, 0x0
 
 BmDrEdit_SelectChannel_Done:
-	pop_werp 0xfa
+	popw_erp 0xfa
 	ret
 
 BmDrEdit_AlignDisplayGrid:
 	lds de, 0
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	cps wa, 0
 	jr c, BmDrEdit_AlignGrid_Store
-	ldda16 xbc, 0x2792
+	ldw_d16 xbc, 0x2792
 
 BmDrEdit_AlignGrid_AccumLoop:
 	add de, bc
@@ -1187,14 +1187,14 @@ BmDrEdit_CompareVelocity:
 	push xiz
 	bitda 0, 0x2742
 	jr z, BmDrEdit_CompareVelocity_Equal
-	ldda16 xiz, 0x28af
-	ldda16 xwa, 9830
-	ldfr_werp WA, 0xfa
+	ldw_d16 xiz, 0x28af
+	ldw_d16 xwa, 9830
+	ldw_erp WA, 0xfa
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	stda16 0x28af, xiz
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	stda16 9830, xwa
 	cpda8 l, 0x2786
 	jr z, BmDrEdit_CompareVelocity_Equal
@@ -1209,15 +1209,15 @@ BmDrEdit_CompareVelocity_Return:
 	ret
 
 BmDrEdit_SaveSongPosition:
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
-	ldda16 xhl, 0x28af
-	ldda16 xde, 9830
+	ldw_d16 xhl, 0x28af
+	ldw_d16 xde, 9830
 	dec 1, a
 	extz wa
 	sla wa, 2
-	ldada xbc, 9184
+	lda_d16 xbc, 9184
 	exts xwa
 	add xwa, xbc
 	ld (xwa), hl
@@ -1226,14 +1226,14 @@ BmDrEdit_SaveSongPosition:
 
 BmDrEdit_ReadEventAtPosition:
 	push xiz
-	ldda16 xiz, 0x28af
-	ldda16 xwa, 9830
-	ldfr_werp WA, 0xfa
+	ldw_d16 xiz, 0x28af
+	ldw_d16 xwa, 9830
+	ldw_erp WA, 0xfa
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x2760, l
+	stb_d8 0x2760, l
 	stda16 0x28af, xiz
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	stda16 9830, xwa
 	pop xiz
 	ret
@@ -1249,10 +1249,10 @@ BmDrEdit_CheckNoteAtPosition:
 	jr BmDrEdit_ReadEventAtPosition
 
 BmDrEdit_WalkTrackForward:
-	ldda8 a, 0x295f
+	ldb_d8 a, 0x295f
 	res 1, a
 	res 4, a
-	stda8 0x295f, a
+	stb_d8 0x295f, a
 	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, BmDrEdit_WalkTrack_EndOfTrack
@@ -1260,10 +1260,10 @@ BmDrEdit_WalkTrackForward:
 	jr z, BmDrEdit_WalkTrack_EndOfTrack
 	cp l, 0x81
 	jr nz, BmDrEdit_WalkTrack_ProcessEvent
-	ldda16 xbc, 0x275e
+	ldw_d16 xbc, 0x275e
 	inc 1, bc
 	stda16 0x275e, xbc
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	subda16 xbc, 0x276a
 	cp bc, wa
@@ -1285,10 +1285,10 @@ BmDrEdit_WalkTrack_EndOfTrack:
 BmDrEdit_WalkTrack_CheckNoteCount:
 	cp l, 0x81
 	jr nz, BmDrEdit_WalkTrack_CheckNoteOn
-	ldda16 xbc, 0x275e
+	ldw_d16 xbc, 0x275e
 	inc 1, bc
 	stda16 0x275e, xbc
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	extz wa
 	subda16 xbc, 0x276a
 	cp bc, wa
@@ -1314,7 +1314,7 @@ BmDrEdit_SetupCoordinates:
 	ld wa, (xhl)
 	mul wa, 0x60
 	ld (xhl), wa
-	ldda8 a, 0x2760
+	ldb_d8 a, 0x2760
 	extz wa
 	add (xde), wa
 	ldmw2 (xbc), 0x276a
@@ -1322,14 +1322,14 @@ BmDrEdit_SetupCoordinates:
 	ld wa, (xde)
 	mul wa, 0x60
 	ld (xde), wa
-	ldda8 a, 0x276c
+	ldb_d8 a, 0x276c
 	extz wa
 	add (xbc), wa
 	ret
 
 BmDrEdit_SetupAndWalkToNote:
 	dec 4, xsp
-	push_werp 0xfa
+	pushw_erp 0xfa
 	resda 0, 0x295f
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 2)
@@ -1350,13 +1350,13 @@ BmDrEdit_SetupAndWalkToNote:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x2786, l
+	stb_d8 0x2786, l
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x2788, l
+	stb_d8 0x2788, l
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldfr_berp L, 0xfb
+	ldb_erp L, 0xfb
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	res 7, l
@@ -1365,7 +1365,7 @@ BmDrEdit_SetupAndWalkToNote:
 	ld bc, hl
 	mul bc, 0x60
 	ld hl, bc
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	add hl, wa
 	stda16 0x278c, xhl
@@ -1374,7 +1374,7 @@ BmDrEdit_SetupAndWalkToNote:
 	calr BmDrEdit_AdjustScrollToView
 
 BmDrEdit_SetupAndWalkDone:
-	pop_werp 0xfa
+	popw_erp 0xfa
 	inc 4, xsp
 	ret
 
@@ -1408,7 +1408,7 @@ BmDrEdit_FindNote_SkipNonNote:
 	jr BmDrEdit_FindNote_Loop
 
 BmDrEdit_ClearAllSlots:
-	ldada xbc, 0x2746
+	lda_d16 xbc, 0x2746
 	ld xwa, xbc
 	lda xbc, (xbc + 24)
 
@@ -1434,7 +1434,7 @@ BmDrEdit_FindNote_SetupLoop:
 	lds iz, 0
 	cps iy, 0
 	jr ule, BmDrEdit_FindNote_NotFound
-	ldada xix, 0x2746
+	lda_d16 xix, 0x2746
 
 BmDrEdit_FindNote_SlotLoop:
 	ld bc, iz
@@ -1471,7 +1471,7 @@ BmDrEdit_FindNote_Return:
 	ret
 
 BmDrEdit_ClearAllSlotsAlt:
-	ldada xbc, 0x2747
+	lda_d16 xbc, 0x2747
 	ld xwa, xbc
 	lda xbc, (xbc + 24)
 
@@ -1484,7 +1484,7 @@ BmDrEdit_ClearSlotsAlt_Loop:
 
 BmDrEdit_CheckSlotsAvailable:
 	lds de, 0
-	ldada xbc, 0x2746
+	lda_d16 xbc, 0x2746
 
 BmDrEdit_CheckSlots_Loop:
 	ld wa, de
@@ -1504,16 +1504,16 @@ BmDrEdit_CheckSlots_Next:
 	ret
 
 BmDrEdit_CalcBeatFromGridPos:
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	extz xwa
 	div wa, 0x60
-	ldto_werp WA, 0xe2
-	stda8 0x2760, a
-	ldda16 xwa, 0x279a
+	stw_erp WA, 0xe2
+	stb_d8 0x2760, a
+	ldw_d16 xwa, 0x279a
 	extz xwa
 	div wa, 0x60
 	stda16 0x275e, xwa
-	ldda16 xwa, 0x276a
+	ldw_d16 xwa, 0x276a
 	adddm16 0x275e, xwa
 	ret
 
@@ -1541,11 +1541,11 @@ BmDrEdit_ChordScrollUp_Check:
 	ret nz
 
 BmDrEdit_ChordScrollUp:
-	ldda8 a, 0x2798
+	ldb_d8 a, 0x2798
 	cp a, 0x9
 	ret nc
 	inc 1, a
-	stda8 0x2798, a
+	stb_d8 0x2798, a
 	call NoteEditSy_UpdateChordDisplay
 	stdi8 0x295c, 129
 	stdi8 0x295d, 4
@@ -1558,11 +1558,11 @@ BmDrEdit_ChordScrollDown_Check:
 	ret nz
 
 BmDrEdit_ChordScrollDown:
-	ldda8 a, 0x2798
+	ldb_d8 a, 0x2798
 	cps a, 0
 	ret z
 	dec 1, a
-	stda8 0x2798, a
+	stb_d8 0x2798, a
 	call NoteEditSy_UpdateChordDisplay
 	stdi8 0x295c, 129
 	stdi8 0x295d, 4
@@ -1572,17 +1572,17 @@ BmDrEdit_NullReturn:
 	ret
 
 BmDrEdit_PitchWrapToEnd:
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	cps wa, 0
 	jr z, BmDrEdit_PitchWrapPrevPage
 	stdi8 0x2784, 95
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	dec 1, wa
 	stda16 0x2782, xwa
 	jr BmDrEdit_PitchWrap_UpdateDisplay
 
 BmDrEdit_PitchWrapPrevPage:
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	cpda16 xwa, 0x27b2
 	jr z, BmDrEdit_PitchWrap_CheckEnd
 	calr BmDrEdit_CalcEventPosition
@@ -1615,15 +1615,15 @@ BmDrEdit_CalcDurationPosition:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
-	ldda16 xwa, 0x278c
+	ldw_d16 xwa, 0x278c
 	extz xwa
 	div wa, 0x60
-	ldto_werp WA, 0xe2
+	stw_erp WA, 0xe2
 	and wa, 0x7f
 	extz wa
 	call PartCtrl_WriteByte_Indexed
 	call SeqData_AdvancePosition
-	ldda16 xwa, 0x278c
+	ldw_d16 xwa, 0x278c
 	extz xwa
 	div wa, 0x60
 	and wa, 0x7f
@@ -1640,7 +1640,7 @@ BmDrEdit_UpdateGateDisplay:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
-	ldda8 l, 0x2788
+	ldb_d8 l, 0x2788
 	extz hl
 	ld wa, hl
 	call PartCtrl_WriteByte_Indexed
@@ -1655,7 +1655,7 @@ BmDrEdit_UpdateVelocityDisplay:
 	ret nz
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
-	ldda8 l, 0x2786
+	ldb_d8 l, 0x2786
 	extz hl
 	ld wa, hl
 	call PartCtrl_WriteByte_Indexed
@@ -1666,8 +1666,8 @@ BmDrEdit_InsertNoteEvent:
 	resda 0, 0x295f
 	calr BmDrEdit_CalcTrackPosition
 	ldmm8 0x2960, 0x2786
-	ldda8 a, 0x278a
-	stda8 0x2961, a
+	ldb_d8 a, 0x278a
+	stb_d8 0x2961, a
 	ldmm8 0x2788, 0x278a
 	calr BmDrEdit_PlayNoteAndSetDelay
 	calr BmDrEdit_WalkEventsOrSetError
@@ -1679,7 +1679,7 @@ BmDrEdit_SendWidgetCmd:
 	jp NoteEditSy_SendWidgetCmdE
 
 BmDrEdit_NavigatePrevPage:
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	cps wa, 1
 	ret ule
 	dec 1, wa
@@ -1708,7 +1708,7 @@ BmDrEdit_RefreshAfterInsert:
 	jrl BmDrEdit_RefreshDisplayState
 
 BmDrEdit_RefreshAfterInsert_CheckFull:
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	mul a, 0x60
 	cpdm16 0x279a, xwa
 	jrl nc, BmDrEdit_NavigateAndLoadPosition
@@ -1721,25 +1721,25 @@ BmDrEdit_SetupScrollRegion:
 	ld xde, xwa
 	bitda 0, 0x2742
 	jr z, BmDrEdit_SetupScrollRegion_MelodicMode
-	ldda16 xwa, 0x279e
+	ldw_d16 xwa, 0x279e
 	ld (xde), a
-	ldda16 xwa, 0x279e
+	ldw_d16 xwa, 0x279e
 	ld (xbc), a
 	addmi8 (xbc), 0xb
 	ret
 
 BmDrEdit_SetupScrollRegion_MelodicMode:
-	ldda8 a, 0x2798
+	ldb_d8 a, 0x2798
 	extz wa
 	add wa, wa
 	lda_24 xhl, WidgetData_DrawbarPositionTable
-	ld_srib3 A, 0x07, 0xec, 0xe0
+	ldb_sri A, 0x07, 0xec, 0xe0
 	ld (xde), a
-	ldda8 a, 0x2798
+	ldb_d8 a, 0x2798
 	extz wa
 	add wa, wa
 	inc 1, wa
-	ld_srib3 A, 0x07, 0xec, 0xe0
+	ldb_sri A, 0x07, 0xec, 0xe0
 	ld (xbc), a
 	ret
 
@@ -1780,10 +1780,10 @@ BmDrEdit_InitCommon:
 	stdi16 0x2792, 48
 
 BmDrEdit_InitCommon_CheckSongActive:
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	cpda8 a, 0x8d37
 	jr nz, BmDrEdit_InitCommon_SetupDisplay
-	ldda8 a, 0x8d38
+	ldb_d8 a, 0x8d38
 	cpda8 a, 0x8d39
 	jr z, BmDrEdit_InitCommon_SetupDisplay
 	bitda 4, 0x28ad
@@ -1800,10 +1800,10 @@ BmDrEdit_InitCommon_SetupDisplay:
 	call AccWrap_PlayModeDispatch
 	setda 2, 0x28a7
 	stdi8 0x295c, 0
-	ldda16 xwa, 0x2963
+	ldw_d16 xwa, 0x2963
 	stda16 3407, xwa
 	ldmm16 3409, 0x2963
-	ldda8 a, 0x8d39
+	ldb_d8 a, 0x8d39
 	cp a, 0x96
 	jr z, BmDrEdit_CopyStepCount
 	cp a, 0x99
@@ -1820,14 +1820,14 @@ BmDrEdit_SetRecordingFlag:
 BmDrEdit_CheckDrumModeEntry:
 	bitda 0, 0x2742
 	jrl z, BmDrEdit_FlagDisplayUpdate
-	ldda8 a, 0x295b
+	ldb_d8 a, 0x295b
 	bit 0, a
 	jrl z, BmDrEdit_FlagDisplayUpdate
 	res 0, a
-	stda8 0x295b, a
+	stb_d8 0x295b, a
 
 BmDrEdit_ReadVoiceBitAndCopy:
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
@@ -1854,25 +1854,25 @@ BmDrEdit_InitFirstStep:
 	ld wa, iz
 	ldw bc, 0xffff
 	call PartCtrl_WriteWord
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
 	lds de, 1
 	call Part_SetClearVoiceBit7
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
 	ld de, iz
 	call Part_WriteVoiceWord
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
 	ld de, iz
 	call Part_WriteWord_Indexed
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
@@ -1949,7 +1949,7 @@ BmDrEdit_SkipMelodicPartSelect:
 BmDrEdit_CleanupCommon:
 	resda 2, 0x28a7
 	stdi8 0x295c, 0
-	ldda16 xwa, 3407
+	ldw_d16 xwa, 3407
 	ordm16_24 0xffec, xwa
 	stdi16 3407, 0
 	stdi16 3409, 0
@@ -1976,13 +1976,13 @@ BmDrEdit_InsertNotesFromSlots_Loop:
 	mul de, 0x3
 	lds wa, 1
 	add wa, de
-	ldada xbc, 0x2746
+	lda_d16 xbc, 0x2746
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
 	cps a, 0
 	jr z, BmDrEdit_InsertNotesFromSlots_Next
-	stda8 0x2960, a
+	stb_d8 0x2960, a
 	lds wa, 2
 	add wa, de
 	extz xwa
@@ -2103,7 +2103,7 @@ BmDrEdit_ValidateSteps_InsertLoop:
 	calr BmDrEdit_InsertStepEntry
 	cpdi8 0x287a, 0
 	jr nz, BmDrEdit_ValidateSteps_RestoreState
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -2113,7 +2113,7 @@ BmDrEdit_ValidateSteps_RestoreState:
 	jrl BmDrEdit_RestoreEditState
 
 BmDrEdit_SeekToPartVoice:
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
@@ -2132,7 +2132,7 @@ BmDrEdit_SeekVoice_CountAndInsert:
 	calr BmDrEdit_InsertMultiSongSteps
 	cpdi8 0x287a, 0
 	jr nz, BmDrEdit_SeekVoice_RefreshDisplay
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	inc 2, wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -2148,7 +2148,7 @@ BmDrEdit_SeekVoice_RefreshDisplay:
 	jrl BmDrEdit_RefreshDisplayState
 
 BmDrEdit_SeekVoice_DecrementLoop:
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -2157,9 +2157,9 @@ BmDrEdit_SeekVoice_DecrementLoop:
 
 BmDrEdit_CalcTickPosition:
 	calr BmDrEdit_CheckAndAdvancePage
-	ldda16 xbc, 0x2782
+	ldw_d16 xbc, 0x2782
 	mul bc, 0x60
-	ldda8 a, 0x2784
+	ldb_d8 a, 0x2784
 	extz wa
 	add bc, wa
 	stda16 0x279a, xbc
@@ -2240,7 +2240,7 @@ BmDrEdit_NavigateAndDisplayNotes:
 
 BmDrEdit_SkipToEventByCount:
 	stdi8 0x287a, 0
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	cps wa, 0
 	ret z
 	stda16 0x2772, xwa
@@ -2266,7 +2266,7 @@ BmDrEdit_SkipToEvent_EndOfTrack:
 	ret
 
 BmDrEdit_NavigateToPrevAndDisplay:
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	cps wa, 1
 	ret ule
 	dec 1, wa
@@ -2287,13 +2287,13 @@ BmDrEdit_NavigateToPrevAndDisplay:
 	jrl NoteEdit_SendScrollCmds
 
 EditChannel_LoadVoiceParams:
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
 	call Part_ReadWord_Indexed
 	stda16 0x28af, xhl
-	ldda8 c, 0x2965
+	ldb_d8 c, 0x2965
 	inc 1, c
 	extz bc
 	lds wa, 0
@@ -2343,7 +2343,7 @@ BmDrEdit_DelayAction_UpdateScrollAlt:
 	jrl NoteEdit_UpdateScrollAndDisplay
 
 BmDrEdit_ReadNoteDataFields:
-	push_werp 0xfa
+	pushw_erp 0xfa
 	cpdi8 0x287a, 0
 	jr z, BmDrEdit_ReadNoteData_Advance
 	ldw wa, 0xb9
@@ -2356,19 +2356,19 @@ BmDrEdit_ReadNoteData_Advance:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldfr_berp L, 0xfb
+	ldb_erp L, 0xfb
 	cpdi8 0x287a, 0
 	jr z, BmDrEdit_ReadNoteData_StoreDuration
 	ldw wa, 0xba
 	call SeqData_SetErrorCode
 
 BmDrEdit_ReadNoteData_StoreDuration:
-	ldto_berp L, 0xfb
-	pop_werp 0xfa
+	stb_erp L, 0xfb
+	popw_erp 0xfa
 	ret
 
 BmDrEdit_PitchScrollOverflow:
-	ldda8 c, 0x2774
+	ldb_d8 c, 0x2774
 	ld a, c
 	extz wa
 	mul wa, 0x60
@@ -2389,7 +2389,7 @@ BmDrEdit_PitchOverflow_CheckNextPage:
 	cp l, 0xff
 	jr z, BmDrEdit_PitchOverflow_IncrementBeat
 	extz hl
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	cp wa, hl
 	jr nc, BmDrEdit_PitchOverflow_NextPage
 
@@ -2425,7 +2425,7 @@ BmDrEdit_AdjustViewAndInsert:
 	calr BmDrEdit_SaveEditState
 	ldmm16 0x279c, 0x279a
 	calr BmDrEdit_AlignDisplayGrid
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	mul a, 0x60
 	cpdm16 0x279a, xwa
 	call_24 c, BmDrEdit_CalcBeatMeasure
@@ -2455,7 +2455,7 @@ BmDrEdit_AdjustViewAndInsert:
 
 BmDrEdit_WalkTrackLoop:
 	calr BmDrEdit_WalkTrackForward
-	ldda8 a, 0x295f
+	ldb_d8 a, 0x295f
 	bit 4, a
 	jr nz, BmDrEdit_AdjustViewPath
 	bit 1, a
@@ -2472,7 +2472,7 @@ BmDrEdit_AdjustView_CheckCoords:
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupCoordinates
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	add (xsp), wa
 	ld wa, (xsp + 2)
 	cp wa, (xsp)
@@ -2534,7 +2534,7 @@ BmDrEdit_InitViewAndNavigate:
 	ld wa, (xsp + 2)
 	sub wa, (xsp)
 	stda16 0x279a, xwa
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	mul a, 0x60
 	cpdm16 0x279a, xwa
 	jr c, BmDrEdit_InitView_CalcAndWalk
@@ -2554,7 +2554,7 @@ BmDrEdit_InitView_Return:
 	ret
 
 BmDrEdit_AdjustViewToPosition:
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	mul a, 0x60
 	cpdm16 0x279a, xwa
 	jrl nc, BmDrEdit_NavigateAndLoadPosition
@@ -2611,23 +2611,23 @@ BmDrEdit_BuildNoteOnEvent_WithVelocity:
 	ret
 
 BmDrEdit_WriteNoteOffEntry:
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	jp SeqBuf_WriteNoteOffEntry
 
 BmDrEdit_InsertNoteSequence:
 	push xiz
-	ldda16 xwa, 0x28af
-	ldfr_werp WA, 0xfa
-	ldda16 xiz, 9830
+	ldw_d16 xwa, 0x28af
+	ldw_erp WA, 0xfa
+	ldw_d16 xiz, 9830
 	resda 2, 0x295f
 	calr BmDrEdit_LoadAlternateAndValidate
-	ldda16 xbc, 0x279a
+	ldw_d16 xbc, 0x279a
 	extz xbc
 	div bc, 0x60
 	inc 1, bc
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	cp bc, wa
 	jr c, BmDrEdit_InsertSeq_PopIzRet
 	inc 1, bc
@@ -2645,14 +2645,14 @@ BmDrEdit_InsertSeq_StepLoop:
 	jr BmDrEdit_SavePositionAndReturn
 
 BmDrEdit_InsertSeq_DecrementCount:
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
 	jr nz, BmDrEdit_InsertSeq_StepLoop
 
 BmDrEdit_SavePositionAndReturn:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	stda16 0x28af, xwa
 	stda16 9830, xiz
 
@@ -2706,13 +2706,13 @@ BmDrEdit_ScanAfterModify_Return:
 	ret
 
 BmDrEdit_AlignGridBackward:
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	cps wa, 0
 	ret z
 	lds de, 0
 	cps wa, 0
 	jr ule, BmDrEdit_AlignGridBackward_Store
-	ldda16 xbc, 0x2792
+	ldw_d16 xbc, 0x2792
 
 BmDrEdit_AlignGridBackward_AccumLoop:
 	add de, bc
@@ -2791,10 +2791,10 @@ BmDrEdit_GoToPrevPage:
 	jrl BmDrEdit_NavigateReturn
 
 BmDrEdit_NavEdit_CheckPosition:
-	ldda16 xwa, 0x276e
+	ldw_d16 xwa, 0x276e
 	cpda16 xwa, 0x28af
 	jr nz, BmDrEdit_CheckCurrentNoteMatch
-	ldda8 a, 0x2770
+	ldb_d8 a, 0x2770
 	extz wa
 	cpda16 xwa, 9830
 	jr nz, BmDrEdit_CheckCurrentNoteMatch
@@ -2839,7 +2839,7 @@ BmDrEdit_NavEdit_CalcCoords:
 	ld wa, (xsp + 2)
 	cp wa, (xsp)
 	jrl c, BmDrEdit_ResetToFirstEvent
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	add (xsp), wa
 	ld wa, (xsp + 2)
 	cp wa, (xsp)
@@ -2858,7 +2858,7 @@ BmDrEdit_WalkAndScanAfterEdit:
 	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, BmDrEdit_ScanSequenceEnd
-	ldda16 xwa, 0x275e
+	ldw_d16 xwa, 0x275e
 	cps wa, 0
 	jr z, BmDrEdit_CheckVelocityMatch
 	dec 1, wa
@@ -2882,7 +2882,7 @@ BmDrEdit_WalkScan_ReadNext:
 	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, BmDrEdit_WalkScan_CheckNoteOn
-	ldda16 xwa, 0x275e
+	ldw_d16 xwa, 0x275e
 	cps wa, 0
 	jr z, BmDrEdit_CheckVelocityMatch
 	dec 1, wa
@@ -2938,10 +2938,10 @@ BmDrEdit_DrumVoiceUp_ClearFlag:
 BmDrEdit_DrumVoiceUp:
 	bitda 7, 0x2746
 	ret nz
-	ldda16 xwa, 0x27a0
+	ldw_d16 xwa, 0x27a0
 	cp wa, 0xb
 	jr c, BmDrEdit_DrumVoiceUp_IncrementOctave
-	ldda16 xwa, 0x279e
+	ldw_d16 xwa, 0x279e
 	cp wa, 0x74
 	ret nc
 	inc 1, wa
@@ -2974,10 +2974,10 @@ BmDrEdit_DrumVoiceDown_ClearFlag:
 BmDrEdit_DrumVoiceDown:
 	bitda 7, 0x2746
 	ret nz
-	ldda16 xwa, 0x27a0
+	ldw_d16 xwa, 0x27a0
 	cps wa, 0
 	jr nz, BmDrEdit_DrumVoiceDown_DecrementOctave
-	ldda16 xwa, 0x279e
+	ldw_d16 xwa, 0x279e
 	cps wa, 1
 	ret z
 	dec 1, wa
@@ -3000,9 +3000,9 @@ BmDrEdit_DrumVoiceDown_UpdateDisplay:
 BmDrEdit_CalcTrackPosition:
 	bitda 0, 0x2742
 	ret z
-	ldda16 xwa, 0x279e
+	ldw_d16 xwa, 0x279e
 	addda16 xwa, 0x27a0
-	stda8 0x2786, a
+	stb_d8 0x2786, a
 	ret
 
 BmDrEdit_PostModeChange99:
@@ -3095,10 +3095,10 @@ BmDrEdit_VelChange_CopyLoop:
 	ld bc, (xsp + 6)
 	ld de, hl
 	calr PartCtrl_WriteByte_ZeroExtended
-	ldda16 xwa, 0x28af
+	ldw_d16 xwa, 0x28af
 	cp wa, (xsp + 12)
 	jr nz, BmDrEdit_VelChange_DecrementCounters
-	ldda16 xwa, 9830
+	ldw_d16 xwa, 9830
 	cp wa, (xsp + 10)
 	jr z, BmDrEdit_VelChange_WriteEventBytes
 
@@ -3216,7 +3216,7 @@ BmDrEdit_InsertStepEntry:
 	calr BmDrEdit_SaveSongPosition
 	stdi8 0x287a, 0
 	ld (xsp), 0x81
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	lda xbc, (xsp)
@@ -3228,26 +3228,26 @@ BmDrEdit_InsertStepEntry:
 BmDrEdit_PrepareAndInsertNote:
 	calr BmDrEdit_WalkToGridPosition
 	stdi8 0x2967, 144
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	extz xwa
 	div wa, 0x60
-	ldto_werp WA, 0xe2
-	stda8 0x2968, a
+	stw_erp WA, 0xe2
+	stb_d8 0x2968, a
 	ldmm8 0x2969, 0x2960
 	ldmm8 0x296a, 0x2961
-	ldda16 xwa, 0x278e
+	ldw_d16 xwa, 0x278e
 	extz xwa
 	div wa, 0x60
-	ldto_werp WA, 0xe2
+	stw_erp WA, 0xe2
 	res 7, a
-	stda8 0x296b, a
-	ldda16 xwa, 0x278e
+	stb_d8 0x296b, a
+	ldw_d16 xwa, 0x278e
 	extz xwa
 	div wa, 0x60
 	res 7, a
-	stda8 0x296c, a
+	stb_d8 0x296c, a
 	calr BmDrEdit_SaveSongPosition
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	ld xbc, 0x2967
@@ -3260,7 +3260,7 @@ BmDrEdit_ValidateAndProcessVoice:
 	ld (xsp + 6), xde
 	ld (xsp + 10), a
 	stdi8 0x287a, 0
-	stda8 0x288d, c
+	stb_d8 0x288d, c
 	call SeqVoice_SetDefaultParams
 	ld a, (xsp + 10)
 	extz wa
@@ -3271,12 +3271,12 @@ BmDrEdit_ValidateAndProcessVoice:
 	jr BmDrEdit_ValidateVoice_Epilog
 
 BmDrEdit_ValidateVoice_ProcessState:
-	ldda16 xiz, 0x28af
-	ldda16 xwa, 9830
-	ldfr_werp WA, 0xfa
+	ldw_d16 xiz, 0x28af
+	ldw_d16 xwa, 9830
+	ldw_erp WA, 0xfa
 	call SeqVoice_ValidateAndProcessState
 	stda16 0x28af, xiz
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	stda16 9830, xwa
 	ldw (xsp + 4), 0x1
 	ld xwa, (xsp + 6)
@@ -3285,7 +3285,7 @@ BmDrEdit_ValidateVoice_ProcessState:
 	jr z, BmDrEdit_TrackValidateRet
 
 BmDrEdit_ValidateVoice_SkipSections:
-	ldda8 a, 0x288e
+	ldb_d8 a, 0x288e
 	extz wa
 	ld xbc, (xsp + 6)
 	ld bc, (xbc)
@@ -3303,7 +3303,7 @@ BmDrEdit_ValidateVoice_SkipSections:
 	jr nz, BmDrEdit_ValidateVoice_SkipSections
 
 BmDrEdit_TrackValidateRet:
-	ldda8 l, 0x288e
+	ldb_d8 l, 0x288e
 
 BmDrEdit_ValidateVoice_Epilog:
 	pop xiz
@@ -3314,7 +3314,7 @@ BmDrEdit_SyncChannelAndGetPos:
 	dec 2, xsp
 	ldmm16 0x287f, 0x2744
 	calr BmDrEdit_CheckAndSelectChannel
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	extz hl
@@ -3333,8 +3333,8 @@ BmDrEdit_SelectChannelAndLoadPos:
 	stda16 0x276a, xhl
 	stdi8 0x276c, 0
 	ldmm16 0x276e, 0x28af
-	ldda16 xwa, 9830
-	stda8 0x2770, a
+	ldw_d16 xwa, 9830
+	stb_d8 0x2770, a
 	ret
 
 BmDrEdit_LoadAlternatePosition:
@@ -3348,11 +3348,11 @@ BmDrEdit_LoadAlternatePosition:
 
 BmDrEdit_CopyEventDataBetweenParts:
 	lda xsp, (xsp - 10)
-	push_werp 0xfa
+	pushw_erp 0xfa
 	ld (xsp + 10), a
 	calr BmDrEdit_SaveSongPosition
-	ldda16 xwa, 0x28af
-	ldda16 xbc, 9830
+	ldw_d16 xwa, 0x28af
+	ldw_d16 xbc, 9830
 	ld (xsp + 8), wa
 	ld (xsp + 6), bc
 	call SeqData_SkipToNextEvent
@@ -3363,8 +3363,8 @@ BmDrEdit_CopyEventLoop:
 	ld wa, (xsp + 4)
 	ld bc, (xsp + 2)
 	calr PartCtrl_ReadByteExtended
-	ldfr_berp L, 0xfb
-	ldto_berp E, 0xfb
+	ldb_erp L, 0xfb
+	stb_erp E, 0xfb
 	extz de
 	ld wa, (xsp + 8)
 	ld bc, (xsp + 6)
@@ -3402,7 +3402,7 @@ BmDrEdit_FinalizePartTransfer:
 	ldw bc, 0xffff
 	call PartCtrl_WriteWord
 	lds hl, 0
-	pop_werp 0xfa
+	popw_erp 0xfa
 	lda xsp, (xsp + 10)
 	ret
 
@@ -3412,7 +3412,7 @@ BmDrEdit_DeleteNoteAtCursor:
 	jr nz, BmDrEdit_DeleteNote_PopIzRet
 	bitda 0, 0x295f
 	jr z, BmDrEdit_DeleteNote_PopIzRet
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	calr BmDrEdit_CopyEventDataBetweenParts
@@ -3433,13 +3433,13 @@ BmDrEdit_DeleteNote_CheckStep:
 	jr NoteEdit_FinalizeAndRefreshDisplay
 
 BmDrEdit_DeleteNote_ReadNextEvent:
-	ldda16 xwa, 0x28af
-	ldfr_werp WA, 0xfa
-	ldda16 xiz, 9830
+	ldw_d16 xwa, 0x28af
+	ldw_erp WA, 0xfa
+	ldw_d16 xiz, 9830
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x2760, l
-	ldto_werp WA, 0xfa
+	stb_d8 0x2760, l
+	stw_erp WA, 0xfa
 	stda16 0x28af, xwa
 	stda16 9830, xiz
 
@@ -3457,7 +3457,7 @@ BmDrEdit_ScanChannelEvents:
 	dec 4, xsp
 	pushw iz
 	calr BmDrEdit_SaveEditState
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	stda16 0x27b2, xwa
 	ldmm16 0x287f, 0x2744
 	lds iz, 0
@@ -3465,7 +3465,7 @@ BmDrEdit_ScanChannelEvents:
 
 BmDrEdit_ScanChannel_SelectLoop:
 	calr BmDrEdit_CheckAndSelectChannel
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	bitda 2, 0x287b
 	jr z, BmDrEdit_ScanChannel_UseChannel
@@ -3477,17 +3477,17 @@ BmDrEdit_ScanChannel_UseChannel:
 	lda xde, (xsp + 4)
 	ld bc, hl
 	calr BmDrEdit_ValidateAndProcessVoice
-	ldada xwa, 0x27a4
+	lda_d16 xwa, 0x27a4
 	cpdi8 0x287a, 0
 	jr z, BmDrEdit_ScanChannel_StoreAndContinue
 	ld xbc, xwa
-	ldda8 a, 0x27a2
-	ldfr_berp A, 0xf0
+	ldb_d8 a, 0x27a2
+	ldb_erp A, 0xf0
 	extz ix
 	ld wa, (xsp + 2)
 
 BmDrEdit_ScanChannel_StoreEntry:
-	ldda8 l, 0x288e
+	ldb_d8 l, 0x288e
 	incm 1, (xsp + 2)
 	inc 1, a
 	ld iy, iz
@@ -3516,7 +3516,7 @@ BmDrEdit_ScanChannel_StoreAndContinue:
 	add xde, xwa
 	ld wa, (xsp + 2)
 	ld (xde), a
-	ldda8 e, 0x27a2
+	ldb_d8 e, 0x27a2
 	extz de
 
 BmDrEdit_ScanChannel_FillRemaining:
@@ -3546,13 +3546,13 @@ BmDrEdit_ScanChannel_ClearSlot:
 	jr BmDrEdit_ScanChannel_FillRemaining
 
 BmDrEdit_BuildVoiceList:
-	ldda16 xbc, 0x2744
+	ldw_d16 xbc, 0x2744
 	subda16 xbc, 0x27b2
 	inc 1, bc
 	ld h, c
 	lds ix, 0
 	ldb l, 0x0
-	ldada xde, 0x27a4
+	lda_d16 xde, 0x27a4
 	lds wa, 0
 	jr BmDrEdit_BuildVoice_SearchLoop
 
@@ -3567,10 +3567,10 @@ BmDrEdit_BuildVoice_SearchLoop:
 	add xbc, xde
 	cp (xbc), h
 	jr nz, BmDrEdit_BuildVoice_IncrementAndSearch
-	ldda16 xbc, 0x2782
+	ldw_d16 xbc, 0x2782
 	add bc, ix
 	mul bc, 0x60
-	ldda8 a, 0x2784
+	ldb_d8 a, 0x2784
 	extz wa
 	add bc, wa
 	stda16 0x279a, xbc
@@ -3580,11 +3580,11 @@ BmDrEdit_BuildVoice_NullReturn:
 	ret
 
 BmDrEdit_FindNextPageEntry:
-	ldda16 xhl, 0x2744
+	ldw_d16 xhl, 0x2744
 	subda16 xhl, 0x27b2
 	inc 1, l
 	ldb e, 0x0
-	ldada xbc, 0x27a4
+	lda_d16 xbc, 0x27a4
 
 BmDrEdit_FindNextPage_ScanLoop:
 	ld a, e
@@ -3639,15 +3639,15 @@ BmDrEdit_ScrollAdjustLoop:
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupScrollRegion
-	ldda8 c, 0x2962
-	ldda8 a, 0x2798
+	ldb_d8 c, 0x2962
+	ldb_d8 a, 0x2798
 	cp c, (xsp + 2)
 	jr nc, BmDrEdit_ScrollAdjust_CheckUpper
 	ld c, a
 	cps a, 0
 	jr z, NoteEditSy_ScrollComplete_Return
 	dec 1, c
-	stda8 0x2798, c
+	stb_d8 0x2798, c
 	jr BmDrEdit_ScrollAdjustLoop
 
 BmDrEdit_ScrollAdjust_CheckUpper:
@@ -3657,11 +3657,11 @@ BmDrEdit_ScrollAdjust_CheckUpper:
 	cp a, 0x9
 	jr nc, NoteEditSy_ScrollComplete_Return
 	inc 1, c
-	stda8 0x2798, c
+	stb_d8 0x2798, c
 	jr BmDrEdit_ScrollAdjustLoop
 
 BmDrEdit_ScrollAdjust_CompareAndUpdate:
-	ldda8 a, 0x27ca
+	ldb_d8 a, 0x27ca
 	cpda8 a, 0x2798
 	jr z, NoteEditSy_ScrollComplete_Return
 	call NoteEditSy_UpdateChordDisplay
@@ -3671,12 +3671,12 @@ NoteEditSy_ScrollComplete_Return:
 	ret
 
 BmDrEdit_CountMeasuresInit:
-	push_werp 0xfa
+	pushw_erp 0xfa
 	stdi8 0x287a, 0
 	calr BmDrEdit_SaveEditState
 	calr BmDrEdit_ReadNoteDataFields
-	ldfr_berp L, 0xfb
-	inc1_berp 0xfb
+	ldb_erp L, 0xfb
+	inc1b_erp 0xfb
 	cpdi8 0x287a, 0
 	jr z, BmDrEdit_CountInit_ValidateAndInsert
 	ldw wa, 0xb5
@@ -3684,16 +3684,16 @@ BmDrEdit_CountMeasuresInit:
 
 BmDrEdit_CountInit_ValidateAndInsert:
 	calr BmDrEdit_CountMeasuresAndValidate
-	inc1_berp 0xfb
-	ldto_berp A, 0xfb
+	inc1b_erp 0xfb
+	stb_erp A, 0xfb
 	extz wa
-	ldda16 xbc, 0x2772
+	ldw_d16 xbc, 0x2772
 	cp wa, bc
 	jr c, BmDrEdit_RestoreEditRet
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	sub a, c
 	inc 1, a
-	ldfr_berp A, 0xfb
+	ldb_erp A, 0xfb
 	extz wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -3710,7 +3710,7 @@ BmDrEdit_CountInit_InsertLoop:
 	jr BmDrEdit_RestoreEditRet
 
 BmDrEdit_CountInit_DecrementLoop:
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -3718,14 +3718,14 @@ BmDrEdit_CountInit_DecrementLoop:
 
 BmDrEdit_RestoreEditRet:
 	calr BmDrEdit_RestoreEditState
-	pop_werp 0xfa
+	popw_erp 0xfa
 	ret
 
 BmDrEdit_CheckAndAdvancePage:
-	ldda8 a, 0x27a2
+	ldb_d8 a, 0x27a2
 	dec 1, a
 	extz wa
-	ldada xbc, 0x27a4
+	lda_d16 xbc, 0x27a4
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x0
@@ -3738,11 +3738,11 @@ BmDrEdit_AdvancePage_IncrementBeat:
 	incdi16 1, 0x2782
 
 BmDrEdit_AdvancePage_CalcOffset:
-	ldda16 xbc, 0x279a
-	ldda8 a, 0x2774
+	ldw_d16 xbc, 0x279a
+	ldb_d8 a, 0x2774
 	mul a, 0x60
 	sub bc, wa
-	stda8 0x2784, c
+	stb_d8 0x2784, c
 	ret
 
 BmDrEdit_ProcessVoiceSection:
@@ -3754,30 +3754,30 @@ BmDrEdit_ProcessVoiceSection:
 	stdi8 0x287a, 0
 	bitda 2, 0x287b
 	jr nz, BmDrEdit_ProcessVoice_WithState
-	ldda8 c, 1075
+	ldb_d8 c, 1075
 	extz bc
-	ldda16 xwa, 3299
+	ldw_d16 xwa, 3299
 	extz xwa
 	div xwa, xbc
 	ld bc, wa
 	ld xde, (xsp + 4)
 	ld (xde), bc
-	ldda8 c, 1075
+	ldb_d8 c, 1075
 	extz bc
-	ldda16 xwa, 3299
+	ldw_d16 xwa, 3299
 	extz xwa
 	div xwa, xbc
-	ldto_werp BC, 0xe2
+	stw_erp BC, 0xe2
 	ld xwa, (xsp)
 	ld (xwa), bc
 	incm 1, (xde)
-	ldda8 l, 1075
+	ldb_d8 l, 1075
 	jr BmDrEdit_ProcessVoice_Epilog
 
 BmDrEdit_ProcessVoice_WithState:
 	mrdb5 0x8f, 0x08, 0x19, 0x8d, 0x28
 	call SeqVoice_ValidateAndProcessState
-	ldda8 l, 0x288e
+	ldb_d8 l, 0x288e
 	ld xwa, (xsp)
 	ldmw2 (xwa), 0xce3
 	ld xwa, (xsp + 4)
@@ -3790,7 +3790,7 @@ BmDrEdit_ProcessVoice_SubtractAndContinue:
 	ld xwa, (xsp + 4)
 	incm 1, (xwa)
 	call SeqTrack_ProcessControlBytes
-	ldda8 l, 0x288e
+	ldb_d8 l, 0x288e
 
 BmDrEdit_ProcessVoice_CompareAndLoop:
 	ld c, l
@@ -3815,7 +3815,7 @@ BmDrEdit_MultiSong_SelectAndProcess:
 	lda xde, (xsp)
 	ld wa, hl
 	calr BmDrEdit_ProcessVoiceSection
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	cp wa, (xsp + 2)
 	jr z, BmDrEdit_MultiSong_Return
 	cpw (xsp), 0x0
@@ -3833,7 +3833,7 @@ BmDrEdit_MultiSong_InsertLoop:
 	cpdi8 0x287a, 0
 	jr nz, BmDrEdit_MultiSong_Return
 	incdi16 1, 0x275e
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -3884,7 +3884,7 @@ BmDrEdit_SendScrollCmds_CommonDrumEnd:
 	jp NoteEditSy_SendModeScrollCmd
 
 NoteEdit_UpdateScrollAndDisplay:
-	ldda8 a, 0x2774
+	ldb_d8 a, 0x2774
 	mul a, 0x60
 	cpdm16 0x279a, xwa
 	ret nc
@@ -3894,16 +3894,16 @@ NoteEdit_UpdateScrollAndDisplay:
 	jr z, BmDrEdit_UpdateDisplay_MelodicOffset
 	ldb c, 0xb
 	sub c, a
-	stda8 0x27cc, c
+	stb_d8 0x27cc, c
 	ret
 
 BmDrEdit_UpdateDisplay_MelodicOffset:
 	ld c, a
-	stda8 0x27cc, a
+	stb_d8 0x27cc, a
 	cpdi8 0x2798, 0
 	ret nz
 	inc 3, c
-	stda8 0x27cc, c
+	stb_d8 0x27cc, c
 	ret
 
 BmDrEdit_ByteData_CompoundWidgetUpdate:
@@ -3937,18 +3937,18 @@ ReadSeqData_StoreParams:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x2969, l
+	stb_d8 0x2969, l
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x296a, l
+	stb_d8 0x296a, l
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x296b, l
+	stb_d8 0x296b, l
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x296c, l
+	stb_d8 0x296c, l
 	calr BmDrEdit_ClearAndScanToEnd
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	calr BmDrEdit_CopyEventDataBetweenParts
@@ -3958,7 +3958,7 @@ ReadSeqData_StoreParams:
 	stdi8 0x2967, 144
 	ldmm8 0x2968, 0x2784
 	calr BmDrEdit_SaveSongPosition
-	ldda8 a, 0x2965
+	ldb_d8 a, 0x2965
 	inc 1, a
 	extz wa
 	ld xbc, 0x2967
@@ -3973,7 +3973,7 @@ BmDrEdit_ReadSeqStoreParams_Error:
 	ret
 
 BmDrEdit_CalcBeatMeasure:
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	extz xwa
 	div wa, 0x60
 	stdi8 9688, 0
@@ -3982,7 +3982,7 @@ BmDrEdit_CalcBeatMeasure:
 	jr z, BmDrEdit_ComputeMeasureAndBeat
 	lds de, 1
 	stdi8 9688, 1
-	ldada xbc, 0x27a4
+	lda_d16 xbc, 0x27a4
 
 BmDrEdit_CalcBeatMeasure_ScanLoop:
 	ld wa, de
@@ -3994,7 +3994,7 @@ BmDrEdit_CalcBeatMeasure_ScanLoop:
 
 BmDrEdit_CalcBeatMeasure_IncrementCount:
 	inc 1, de
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
@@ -4003,18 +4003,18 @@ BmDrEdit_CalcBeatMeasure_IncrementCount:
 	jr BmDrEdit_CalcBeatMeasure_ScanLoop
 
 BmDrEdit_ComputeMeasureAndBeat:
-	ldda8 a, 9688
+	ldb_d8 a, 9688
 	extz wa
 	stda16 0x2782, xwa
-	ldda16 xwa, 0x279a
+	ldw_d16 xwa, 0x279a
 	extz xwa
 	div wa, 0x60
-	ldto_werp WA, 0xe2
-	stda8 0x2784, a
+	stw_erp WA, 0xe2
+	stb_d8 0x2784, a
 	jr BmDrEdit_CalcSongPosition
 
 BmDrEdit_CalcSongPosition:
-	ldda16 xbc, 0x279a
+	ldw_d16 xbc, 0x279a
 	extz xbc
 	div bc, 0x60
 	stdi8 9688, 0
@@ -4023,7 +4023,7 @@ BmDrEdit_CalcSongPosition:
 	jr z, BmDrEdit_CalcSongPos_Store
 	lds de, 1
 	stdi8 9688, 0
-	ldada xbc, 0x27a4
+	lda_d16 xbc, 0x27a4
 
 BmDrEdit_CalcSongPos_ScanLoop:
 	ld wa, de
@@ -4035,27 +4035,27 @@ BmDrEdit_CalcSongPos_ScanLoop:
 
 BmDrEdit_CalcSongPos_IncrementCount:
 	inc 1, de
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	dec 1, wa
 	stda16 0x2772, xwa
 	cps wa, 0
 	jr nz, BmDrEdit_CalcSongPos_ScanLoop
 
 BmDrEdit_CalcSongPos_Store:
-	ldda16 xbc, 0x27b2
-	ldda8 a, 9688
+	ldw_d16 xbc, 0x27b2
+	ldb_d8 a, 9688
 	extz wa
 	add bc, wa
 	stda16 0x2744, xbc
 	ret
 
 BmDrEdit_CalcEventPosition:
-	ldda16 xde, 0x2744
+	ldw_d16 xde, 0x2744
 	subda16 xde, 0x27b2
 	inc 1, de
 	lds hl, 0
-	ldada xbc, 0x27a4
-	ldda8 a, 0x27a2
+	lda_d16 xbc, 0x27a4
+	ldb_d8 a, 0x27a2
 	extz wa
 	jr BmDrEdit_CalcEventPos_CompareLoop
 
@@ -4065,13 +4065,13 @@ BmDrEdit_CalcEventPos_IncrementSearch:
 	jr ge, BmDrEdit_CalcEventPos_InitBackward
 
 BmDrEdit_CalcEventPos_CompareLoop:
-	cp_srib_rm E, 0x07, 0xe4, 0xec
+	cpb_sri_rm E, 0x07, 0xe4, 0xec
 	jr nz, BmDrEdit_CalcEventPos_IncrementSearch
 
 BmDrEdit_CalcEventPos_InitBackward:
 	lds de, 0
 	dec 1, hl
-	cp_srib_im 0x07, 0xe4, 0xec, 0x00
+	cpib_sri 0x07, 0xe4, 0xec, 0x00
 	jr z, BmDrEdit_CalcEventPos_CheckZero
 	jr BmDrEdit_StoreEventPositionAndReturn
 
@@ -4081,7 +4081,7 @@ BmDrEdit_CalcEventPos_BackwardLoop:
 	jr lt, BmDrEdit_StoreEventPositionAndReturn
 
 BmDrEdit_CalcEventPos_CheckZero:
-	cp_srib_im 0x07, 0xe4, 0xec, 0x00
+	cpib_sri 0x07, 0xe4, 0xec, 0x00
 	jr z, BmDrEdit_CalcEventPos_BackwardLoop
 
 BmDrEdit_StoreEventPositionAndReturn:
@@ -4101,7 +4101,7 @@ BmDrEdit_SyncSeekCheck:
 	ld iz, hl
 
 BmDrEdit_InitScanEventPositions:
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 	stda16 0x275e, xiz
 	stdi8 0x2760, 0
 	cpdi16 0x2782, 0
@@ -4121,11 +4121,11 @@ BmDrEdit_SyncSeek_EndOfTrack:
 	jr nz, BmDrEdit_SyncSeek_PopIzRet
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	ldi_berp 0xfb, 1
+	ldib_erp 0xfb, 1
 	jr BmDrEdit_InitScanEventPositions
 
 BmDrEdit_SyncSeek_CheckRetry:
-	cpi_berp 0xfb, 1
+	cpib_erp 0xfb, 1
 	jr z, BmDrEdit_InitScanEventPositions
 
 BmDrEdit_SyncSeek_SkipAndRead:
@@ -4147,7 +4147,7 @@ BmDrEdit_SyncSeek_EndOfTrackAlt:
 BmDrEdit_SyncSeek_CheckStep:
 	cp l, 0x81
 	jr nz, BmDrEdit_SyncSeek_SkipEvent
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	inc 1, wa
 	stda16 0x2772, xwa
 	cpda16 xwa, 0x2782
@@ -4160,11 +4160,11 @@ BmDrEdit_SyncSeek_SkipEvent:
 BmDrEdit_SyncSeek_ResyncChannel:
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	ldi_berp 0xfb, 1
+	ldib_erp 0xfb, 1
 	jrl BmDrEdit_InitScanEventPositions
 
 BmDrEdit_SyncSeek_CheckFlagAndClear:
-	cpi_berp 0xfb, 0
+	cpib_erp 0xfb, 0
 	jrl nz, BmDrEdit_InitScanEventPositions
 	calr BmDrEdit_ClearAndScanToEnd
 	jr BmDrEdit_SyncSeek_StorePosition
@@ -4174,7 +4174,7 @@ BmDrEdit_SyncSeek_CheckStepMark:
 	jr nz, BmDrEdit_SyncSeek_AdvanceAndCompare
 
 BmDrEdit_SyncSeek_StorePosition:
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	adddm16 0x275e, xwa
 	ldmm8 0x2760, 0x2784
 
@@ -4207,7 +4207,7 @@ BmDrEdit_SeekFwd_CheckStep:
 
 BmDrEdit_SeekFwd_InitCountLoop:
 	stdi16 0x2772, 0
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 BmDrEdit_SeekFwd_ReadLoop:
 	call SeqData_ReadNextByte
@@ -4223,7 +4223,7 @@ BmDrEdit_SeekFwd_EndOfTrack:
 	jrl BmDrEdit_PopIzRet
 
 BmDrEdit_SeekFwd_CheckRetryFlag:
-	cpi_berp 0xfb, 1
+	cpib_erp 0xfb, 1
 	jr z, BmDrEdit_StoreStreamPos
 
 BmDrEdit_AdvanceAndCheckBeat:
@@ -4247,7 +4247,7 @@ BmDrEdit_SeekFwd_EndOfTrackAlt:
 BmDrEdit_SeekFwd_CheckStepMark:
 	cp l, 0x81
 	jr nz, BmDrEdit_SkipEventAndContinue
-	ldda16 xwa, 0x2772
+	ldw_d16 xwa, 0x2772
 	inc 1, wa
 	stda16 0x2772, xwa
 	cpda16 xwa, 0x2782
@@ -4267,7 +4267,7 @@ BmDrEdit_SeekFwd_EndOfTrackResync:
 BmDrEdit_SeekFwd_ResyncChannel:
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	ldi_berp 0xfb, 1
+	ldib_erp 0xfb, 1
 	jr BmDrEdit_StoreStreamPos
 
 BmDrEdit_SeekFwd_CheckStepJump:
@@ -4309,7 +4309,7 @@ BmDrEdit_SeekFwd_ClearAndCalcStore:
 	calr BmDrEdit_ClearAndScanToEnd
 
 BmDrEdit_CalcStorePos:
-	ldda16 xwa, 0x2782
+	ldw_d16 xwa, 0x2782
 	adddm16 0x275e, xwa
 	ldmm8 0x2760, 0x2784
 
@@ -4324,15 +4324,15 @@ BmDrEdit_PrepareSecondaryNoteDisplay:
 	jrl z, BmDrEdit_SecondaryNote_PopIzReturn
 	calr BmDrEdit_SaveEditState
 	ldmm16 0x280c, 0x276a
-	ldda8 a, 0x276c
+	ldb_d8 a, 0x276c
 	extz wa
 	stda16 0x280e, xwa
 	ldmm16 0x2810, 0x276e
-	ldda8 a, 0x2770
+	ldb_d8 a, 0x2770
 	extz wa
 	stda16 0x2812, xwa
 	ldmm16 0x2814, 0x275e
-	ldda8 a, 0x2760
+	ldb_d8 a, 0x2760
 	extz wa
 	stda16 0x2816, xwa
 	ldmm16 0x2818, 0x28af
@@ -4347,11 +4347,11 @@ BmDrEdit_PrepareSecondaryNoteDisplay:
 	stda16 0x2816, xhl
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	stda8 0x281c, l
+	stb_d8 0x281c, l
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 2)
 	calr BmDrEdit_SetupScrollRegion
-	ldda8 a, 0x281c
+	ldb_d8 a, 0x281c
 	cp a, (xsp + 4)
 	jr c, BmDrEdit_RestoreReturn
 	cp a, (xsp + 2)
@@ -4361,7 +4361,7 @@ BmDrEdit_PrepareSecondaryNoteDisplay:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldfr_berp L, 0xf8
+	ldb_erp L, 0xf8
 	extz iz
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
@@ -4384,11 +4384,11 @@ BmDrEdit_SecondaryNote_PopIzReturn:
 	ret
 
 BmDrEdit_EnterPlayMode:
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	cpda8 a, 0x8d37
 	ret z
-	ldda8 a, 0x28b1
-	stda8 0x283c, a
+	ldb_d8 a, 0x28b1
+	stb_d8 0x283c, a
 	setda 0, 0x28b1
 	cpdi8 0x283a, 0
 	jr nz, BmDrEdit_EnterPlay_RestoreSettings
@@ -4400,7 +4400,7 @@ BmDrEdit_EnterPlay_RestoreSettings:
 
 BmDrEdit_EnterPlay_CheckAudio:
 	call Audio_CheckSubsystemReady
-	ldda16 xwa, 0x2744
+	ldw_d16 xwa, 0x2744
 	stda16 9500, xwa
 	cpda16 xwa, 9502
 	jr ule, BmDrEdit_EnterPlay_UpdateProgress
@@ -4416,14 +4416,14 @@ BmDrEdit_EnterPlay_AllocAndInit:
 	jp SeqPlay_AllocBuffersAndInit
 
 BmDrEdit_ExitPlayMode:
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	cpda8 a, 0x8d37
 	ret z
 	ldmm8 0x28b1, 0x283c
 	stdi16 0xf19e, 0
 	call Audio_CheckSubsystemReady
 	call AccWrap_PlayModeDispatch
-	ldda8 a, 0x8d38
+	ldb_d8 a, 0x8d38
 	cp a, 0x95
 	jr z, BmDrEdit_ExitPlay_RestoreSequencer
 	cp a, 0x98

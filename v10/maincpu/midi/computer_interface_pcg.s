@@ -58,7 +58,7 @@ AcPcgOutGridBoxProc:
 	add xbc, NakaInst_INITIAL_0x28
 	ld bc, (xbc)
 	lda_24 xix, PcgOutGridBoxEventDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 PcgOutGridBoxEventDispatch:
 	ld xwa, xiz
@@ -77,7 +77,7 @@ PcgOutGridBoxEventDispatch:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -88,7 +88,7 @@ PcgOutGridBoxEventDispatch:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -293,7 +293,7 @@ PcgOutGridCheck:
 	add xwa, UserMemory_FormatStrings_0xC0
 	ld wa, (xwa)
 	lda_24 xix, PcgOutGridCheckJumpTable
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PcgOutGridCheckJumpTable:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
@@ -469,7 +469,7 @@ PcgOutGridCheckJumpTable:
 PcgOutCheckGridDataStructure:
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	ld (xhl), wa
 	ld xwa, xbc
 	ld ix, iz
@@ -487,7 +487,7 @@ PcgOutCheckGridDataStructure:
 	jr z, PcgOutCheck_SendPreset1
 	cps de, 0
 	jrl nz, PcgOutGridCheckComplete
-	ld8_24 a, 0x02476a
+	ldb_da a, 0x02476a
 	inc 1, a
 	extz wa
 	pushw wa
@@ -503,7 +503,7 @@ PcgOutCheckGridDataStructure:
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset1:
-	ld8_24 a, 0x02476c
+	ldb_da a, 0x02476c
 	inc 1, a
 	extz wa
 	pushw wa
@@ -519,7 +519,7 @@ PcgOutCheck_SendPreset1:
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset2:
-	cpi8_24 0x024770, 0xff
+	cpib_da 0x024770, 0xff
 	jr nz, PcgOutCheck_SendPreset2Named
 	pushw 0xe7
 	pushw 0xffaa
@@ -545,7 +545,7 @@ PcgOutCheck_SendPreset2:
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset2Named:
-	ld8_24 a, 0x02476e
+	ldb_da a, 0x02476e
 	exts wa
 	pushw wa
 	pushw 0xe7
@@ -559,9 +559,9 @@ PcgOutCheck_SendPreset2Named:
 	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x4
-	ld8_24 c, 0x024770
+	ldb_da c, 0x024770
 	exts bc
-	ld8_24 a, 0x02476e
+	ldb_da a, 0x02476e
 	exts wa
 	sll wa, 7
 	add wa, bc
@@ -580,7 +580,7 @@ PcgOutCheck_SendPreset2Named:
 
 PcgOutCheck_SendPreset3:
 	ldw (xwa), 0x2
-	cpi8_24 0x024770, 0xff
+	cpib_da 0x024770, 0xff
 	jr nz, PcgOutCheck_SendPreset3Named
 	pushw 0xe7
 	pushw 0xffc6
@@ -618,7 +618,7 @@ PcgOutCheck_SendPreset3:
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset3Named:
-	ld8_24 a, 0x02476e
+	ldb_da a, 0x02476e
 	exts wa
 	pushw wa
 	pushw 0xe7
@@ -632,7 +632,7 @@ PcgOutCheck_SendPreset3Named:
 	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x3
-	ld8_24 a, 0x024770
+	ldb_da a, 0x024770
 	exts wa
 	pushw wa
 	pushw 0xe7
@@ -647,9 +647,9 @@ PcgOutCheck_SendPreset3Named:
 	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x4
-	ld8_24 c, 0x024770
+	ldb_da c, 0x024770
 	exts bc
-	ld8_24 a, 0x02476e
+	ldb_da a, 0x02476e
 	exts wa
 	sll wa, 7
 	add wa, bc
@@ -678,12 +678,12 @@ PcgOutSendFunc:
 	cp xbc, 0x1c00008
 	jr nz, PcgOutSendFunc_Exit
 	lda_24 xde, 0x024752
-	ld8_24 a, 0x02476a
+	ldb_da a, 0x02476a
 	ld (xde), a
-	ld8_24 a, 0x02476c
+	ldb_da a, 0x02476c
 	ld (xde + 1), a
 	lda xbc, (xde + 2)
-	ld8_24 l, 0x024770
+	ldb_da l, 0x024770
 	cp l, 0xff
 	jr nz, PcgOutSend_StoreBankIndex
 	ldw (xbc), 0xffff
@@ -691,7 +691,7 @@ PcgOutSendFunc:
 
 PcgOutSend_StoreBankIndex:
 	exts hl
-	ld8_24 a, 0x02476e
+	ldb_da a, 0x02476e
 	exts wa
 	sla wa, 7
 	add wa, hl

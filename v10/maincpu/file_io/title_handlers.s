@@ -106,7 +106,7 @@ FmmUtilityTitleFunc:
 	calr SignalProgressUpdate
 
 FmmUtility_DispatchState:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 1
 	jrl z, FmmUtility_HandleSuccess
 	cps wa, 0
@@ -151,7 +151,7 @@ FmmUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7f5c
+	ldb_d8 a, 0x7f5c
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -183,7 +183,7 @@ FmmUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7f5c
+	ldb_d8 a, 0x7f5c
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -238,7 +238,7 @@ FmmSmfUtilityTitleFunc:
 	calr SignalProgressUpdate
 
 FmmSmfUtility_DispatchState:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 1
 	jrl z, FmmSmfUtility_HandleSuccess
 	cps wa, 0
@@ -283,7 +283,7 @@ FmmSmfUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7f5e
+	ldb_d8 a, 0x7f5e
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -315,7 +315,7 @@ FmmSmfUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7f5e
+	ldb_d8 a, 0x7f5e
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff

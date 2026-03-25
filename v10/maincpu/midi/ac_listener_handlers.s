@@ -527,7 +527,7 @@ AcFadeSetGridBoxProc:
 	add xbc, NakaInst_OFF_WidgetTbl2_0x4E
 	ld bc, (xbc)
 	lda_24 xix, VoiceParam_ListHandler
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; Voice parameter list handler
 VoiceParam_ListHandler:
@@ -547,7 +547,7 @@ VoiceParam_ListHandler:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -558,7 +558,7 @@ VoiceParam_ListHandler:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -586,7 +586,7 @@ VoiceParam_ListHandler:
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x32
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -644,7 +644,7 @@ FadeGrid_CheckFadeOut:
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x40
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -782,7 +782,7 @@ FadeSetGridCheck:
 	add xwa, NakaInst_OFF_WidgetTbl2_0xBC
 	ld wa, (xwa)
 	lda_24 xix, Data_FadeSetGridDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
@@ -897,7 +897,7 @@ AcInOutGrid_Handler:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 28)
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	ld (xde), wa
 	lda xbc, (xde + 2)
 	ld xwa, (xsp + 28)
@@ -1011,7 +1011,7 @@ AcInOutGridBoxProc:
 	add xbc, NakaInst_OFF_WidgetTbl2_0x370
 	ld bc, (xbc)
 	lda_24 xix, AcInOutGrid_Init
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AcInOutGrid_Init:
 	ld xwa, (xsp + 16)
@@ -1030,7 +1030,7 @@ AcInOutGrid_Init:
 	ld bc, (xwa + 26)
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -1041,7 +1041,7 @@ AcInOutGrid_Init:
 	ld bc, (xwa + 26)
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -1072,7 +1072,7 @@ AcInOutGrid_Init:
 	cps hl, 0
 	jr nz, AcInOutGrid_ScrollUp_AltTable
 	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0xCA
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
 	ld de, bc
@@ -1084,7 +1084,7 @@ AcInOutGrid_Init:
 
 AcInOutGrid_ScrollUp_AltTable:
 	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0xDC
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
 	ld de, bc
@@ -1150,7 +1150,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	cps hl, 0
 	jr nz, AcInOutGrid_ScrollDown_AltTable
 	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0xEE
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, iz
 	ld de, wa
 	extz xde
@@ -1161,7 +1161,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 
 AcInOutGrid_ScrollDown_AltTable:
 	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x100
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, iz
 	ld de, wa
 	extz xde
@@ -1301,7 +1301,7 @@ InOutGridCheck:
 	add xwa, NakaInst_DIRECT_E7FCE4_0x8C
 	ld wa, (xwa)
 	lda_24 xix, Data_InOutGridDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_InOutGridDispatch:
 	call	GetFocusObject
@@ -1712,7 +1712,7 @@ ParaLoadOpt_Entry:
 	lda xde, (xsp + 4)
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xe2, 0
+	ldiw_erp 0xe2, 0
 	ld (xde), wa
 	lda xwa, (xde + 2)
 	ld hl, iz
@@ -1727,9 +1727,9 @@ ParaLoadOpt_Entry:
 	jrl gt, MdPreset_ReturnZero2
 	add wa, wa
 	lda_24 xix, NakaInst_DIRECT_E7FCE4_0x56
-	ld_sriw3 WA, 0x07, 0xf0, 0xe0
+	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, Data_ParaLoadOptDispatch
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
@@ -2052,7 +2052,7 @@ IvMpst_InheritAndCheck:
 	exts xwa
 	cp xwa, (xsp + 4)
 	jr nz, IvMpst_ReturnZero
-	cpi8_24 0x024756, 0x00
+	cpib_da 0x024756, 0x00
 	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00001
@@ -2079,9 +2079,9 @@ MdPresetWithoutFunc:
 	push xiz
 	cp xbc, 0x1c00007
 	jr nz, MdPresetWith_ReturnSuccess
-	cpi8_24 0x024756, 0x00
+	cpib_da 0x024756, 0x00
 	jr z, MdPresetWith_ReturnSuccess
-	sti8_24 0x024756, 0x00
+	stib_da 0x024756, 0x00
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2126,9 +2126,9 @@ MdPresetWithFunc:
 	push xiz
 	cp xbc, 0x1c00007
 	jr nz, MdPreset_ReturnSuccess
-	cpi8_24 0x024756, 0x01
+	cpib_da 0x024756, 0x01
 	jr z, MdPreset_ReturnSuccess
-	sti8_24 0x024756, 0x01
+	stib_da 0x024756, 0x01
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2181,7 +2181,7 @@ MdPresetOKFunc:
 	jrl z, MdPresetOK_Slot4Path
 	cps l, 3
 	jrl z, MdPresetOK_Slot3Path
-	ld8_24 a, 0x024756
+	ldb_da a, 0x024756
 	cps l, 2
 	jr z, MdPresetOK_CheckSlotB
 	cps l, 1
@@ -2263,7 +2263,7 @@ MdPresetOK_Slot4Path:
 	ld xbc, 0x1e0006b
 	lds32 xde, 0
 	call SendEvent
-	st8_24 0x024758, l
+	stb_da 0x024758, l
 	ld xwa, 0x560025
 	ld xbc, 0x1e00090
 	lds32 xde, 0
@@ -2289,7 +2289,7 @@ MainMpstFunc:
 	cp xbc, 0x1e30003
 	jr nz, MainMpst_ReturnZero
 	ld xwa, (xsp)
-	stda8 0xb7ec, a
+	stb_d8 0xb7ec, a
 	call SndParam_ApplyAndSync
 	stdi8 0x7f42, 35
 	ld xwa, 0xffffffff
@@ -2320,7 +2320,7 @@ MainMpst_ReturnZero:
 	ret
 
 MainMpst_ReadPresetIndex:
-	ld8_24 l, 0x024758
+	ldb_da l, 0x024758
 	ret
 
 TtMdExc:

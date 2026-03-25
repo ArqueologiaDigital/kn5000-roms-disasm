@@ -132,13 +132,13 @@ FDemo_DisplayResourceData:
 	.byte 0x37
 	ret
 	lda_24	xwa, 0xab000
-	st32_24	0x25b7e, xwa
+	stl_da	0x25b7e, xwa
 	ret
 	lda_24	xhl, 0xab000
 	lda_24	xbc, 0xfd800
 	sub	xbc, xhl
 	ld	xix, xbc
-	ld32_24	xde, 0x25b7e
+	ldl_da	xde, 0x25b7e
 	ld	xbc, xde
 	sub	xbc, xhl
 	add	xbc, xwa
@@ -146,7 +146,7 @@ FDemo_DisplayResourceData:
 	jr	nc, 11
 	ld	xhl, xde
 	add	xde, xwa
-	st32_24	0x25b7e, xde
+	stl_da	0x25b7e, xde
 	jr	2
 	lds32	xhl, 0
 	ret
@@ -161,10 +161,10 @@ MainPreControl:
 	add xbc, Presentation_TagStrTable_0x72
 	ld bc, (xbc)
 	lda_24 xix, MainPreControl_Dispatch
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 ; MainPreControl dispatch (11-entry, table 0xea007a)
 MainPreControl_Dispatch:
-	sti16_24	0x0251d8, 0
+	stiw_da	0x0251d8, 0
 
 MainPreControl_ReturnNull:
 	lds32 xhl, 0
@@ -201,11 +201,11 @@ FDemo_DispatchEventPost:
 	stdi8	0x28a4, 19
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
-	cpdi16_24	0x251d8, 0
+	cpw_da	0x251d8, 0
 	jr z, MainPreControl_Dispatch			; if zero, clear state
 	call Part_InitFromPreset			; process display state
 	jr MainPreControl_Dispatch
-	ld16_24	hl, 0x251d8
+	ldw_da	hl, 0x251d8
 	exts xhl
 	ret
 
@@ -236,7 +236,7 @@ ApPreControl:
 	add xwa, Presentation_TagStrTable_0x88
 	ld wa, (xwa)
 	lda_24 xix, Seq_PostMelodyEvent
-	jp_dri 8, 0x07, 0xf0, 0xe0
+	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Seq_PostMelodyEvent:
 	ld xwa, 0x1410000
@@ -253,14 +253,14 @@ Seq_StartWithFullInit:
 	ld xwa, xiz
 	calr Seq_InitializeAndStart
 	jr ApPreControl_ReturnNull
-	st16_24 0x025b7c, xde
+	stw_da 0x025b7c, xde
 	cps de, 0
 	jr lt, ApPreControl_ReturnNull
-	ld32_24 xwa, 0x0248c4
+	ldl_da xwa, 0x0248c4
 	lds bc, 0
 	calr FDemoText_ProcessTextMarkup
 	jr ApPreControl_ReturnNull
-	st16_24 0x025b7c, xde
+	stw_da 0x025b7c, xde
 	cps de, 0
 	jr lt, ApPreControl_ReturnNull
 	pushw 0x2
@@ -283,7 +283,7 @@ Seq_StartWithFullInit:
 	ld xbc, 0x1e00023
 	ld xde, xiz
 	jr Seq_DispatchMainFunc
-	st16_24 0x025b7c, xde
+	stw_da 0x025b7c, xde
 	cps de, 0
 	jr lt, ApPreControl_ReturnNull
 	ld xwa, 0x1410000
@@ -329,7 +329,7 @@ Seq_PostMelodyEventAlt:
 	jrl Seq_DispatchMainFunc
 
 Seq_ReadStartFlag:
-	ld16_24 xhl, 0x0251d8
+	ldw_da xhl, 0x0251d8
 	exts xhl
 	jr ApPreControl_Exit
 
@@ -367,7 +367,7 @@ FDemo_LinkedListSearch:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	ld32_24 xiz, 0x880008
+	ldl_da xiz, 0x880008
 	ld xwa, (xiz + 16)
 	or xwa, xwa
 	jr z, FDemo_LinkedListSearchFound
@@ -527,8 +527,8 @@ FDemo_FileOpen_Exit:
 DemoMode_Main_Operation:
 	resda 0, 0x28b1
 	call Voice_InitializeAll
-	ldada xbc, 0xf9a0
-	ldada xwa, 0xffbe
+	lda_d16 xbc, 0xf9a0
+	lda_d16 xwa, 0xffbe
 	sub xwa, xbc
 	inc 2, xwa
 	pushw wa
@@ -609,10 +609,10 @@ Demo_SelectionEntryHandler:
 	jrl Banner_Loop_Check
 	cpdi8 0xc07d, 32
 	ret nz
-	ldda8 a, 0xc07f
+	ldb_d8 a, 0xc07f
 	and a, 0x13
 	ret z
-	ldda8 a, 0xc07e
+	ldb_d8 a, 0xc07e
 	and a, 0x13
 	jr z, Demo_SelectEntry_NoNewButton
 	stdi8 3379, 16
@@ -626,8 +626,8 @@ Demo_SelectEntry_PreSaveCheck:
 	cpdi8 0x8d34, 19
 	jr nz, Demo_SelectEntry_CheckVoiceKeys
 	calr Voice_SavePreset
-	ldada xbc, 0xf9a0
-	ldada xwa, 0xffbe
+	lda_d16 xbc, 0xf9a0
+	lda_d16 xwa, 0xffbe
 	sub xwa, xbc
 	inc 2, xwa
 	pushw wa
@@ -639,7 +639,7 @@ Demo_SelectEntry_PreSaveCheck:
 	jr Demo_SelectEntry_ExitDispatch
 
 Demo_SelectEntry_CheckVoiceKeys:
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	cp a, 0x72
 	jr z, Demo_SelectEntry_SaveVoice
 	cp a, 0x70
@@ -659,10 +659,10 @@ Demo_SelectEntry_ExitDispatch:
 Demo_SelectEntry_ByteTable:
 	bitda	7, 0x2966
 	ret	nz
-	ldda8	a, 1057
+	ldb_d8	a, 1057
 	and	a, 3
 	ret	nz
-	ldda8	a, 1115
+	ldb_d8	a, 1115
 	and	a, 3
 	ret	nz
 	cpdi8	3375, 0
@@ -682,11 +682,11 @@ Demo_SelectEntry_ByteTable:
 	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
 	calr	827
 	calr	1008
-	sti16_24	0x25b84, 1
+	stiw_da	0x25b84, 1
 	stdi8	0x8f4e, 4
 	cpdi8	0x8d38, 228
 	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
-	ldda8	a, 0x28a4
+	ldb_d8	a, 0x28a4
 	extz	wa
 	jp	Seq_DispatchEventType6
 	setda	3, 0x28ad
@@ -703,7 +703,7 @@ Demo_SelectEntry_ProcessSongList:
 	jr z, Demo_SelectEntry_ToCountdown
 	bitda 3, 0x28ad
 	jr z, Demo_SelectEntry_ManualSelect
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	cpda8 a, 4439
 	ret nz
 	calr Demo_PreSetupAndScan
@@ -717,7 +717,7 @@ Demo_SelectEntry_ManualSelect:
 	calr Demo_PreSetupAndScan
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	cpda8 a, 4439
 	jr z, Demo_SelectEntry_StartAutoPlay
 	cpdi8 0x8d38, 228
@@ -730,29 +730,29 @@ Demo_SelectEntry_StartAutoPlay:
 	stdi8 0x8f4e, 4
 	cpdi8 0x8d38, 228
 	call_24 nz, SeqInit_FinalEvent
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	extz wa
 	call Seq_DispatchEventType6
 	ret
 
 Demo_SelectEntry_TimerTick:
 	calr Demo_SelectEntry_CheckCPanel
-	cpdi16_24 0x25b84, 0
+	cpw_da 0x25b84, 0
 	call_24 nz, Banner_Loop_Check
-	ldda8 a, 3375
+	ldb_d8 a, 3375
 	cps a, 0
 	ret z
 	dec 1, a
-	stda8 3375, a
+	stb_d8 3375, a
 	cp a, 0xa
 	jr nz, Demo_SelectEntry_CheckCountdown
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	extz wa
 	calr Demo_ParseSlideHeader
 	jrl Demo_SelectEntry_PlaySong
 
 Demo_SelectEntry_CheckCountdown:
-	ldda8 a, 3375
+	ldb_d8 a, 3375
 	cps a, 3
 	jrl z, Demo_SelectEntry_StartPlayback
 	cps a, 1
@@ -767,11 +767,11 @@ Demo_SelectEntry_CheckCPanel:
 	ret
 
 Demo_SelectEntry_Debounce:
-	ldda8 a, 3379
+	ldb_d8 a, 3379
 	cps a, 0
 	ret z
 	dec 1, a
-	stda8 3379, a
+	stb_d8 3379, a
 	cps a, 0
 	ret nz
 	setda 3, 0x28ad
@@ -787,7 +787,7 @@ Demo_SelectEntry_Debounce:
 Demo_SelectEntry_AfterSongLoad:
 	cpdi8 0x8d38, 228
 	call_24 nz, SeqInit_FinalEvent
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	extz wa
 	call Seq_DispatchEventType6
 	stdi8 0x8f4e, 4
@@ -823,7 +823,7 @@ Demo_SelectEntry_UpdateDisplay:
 	ret
 
 Demo_SelectEntry_LoadPattern:
-	ldda8 a, 4440
+	ldb_d8 a, 4440
 	extz wa
 	add wa, wa
 	lda_24 xbc, Presentation_TagStrTable_0xA4
@@ -835,18 +835,18 @@ Demo_SelectEntry_DrawSecondary:
 	ret z
 	cpdi8 0x8d38, 228
 	ret z
-	ldda8 a, 4440
+	ldb_d8 a, 4440
 	extz wa
 	add wa, wa
 	lda_24 xbc, Presentation_TagStrTable_0xA5
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	call UI_PostModeChangeEvent
 	ret
 
 Demo_SelectEntry_PlaySong:
 	cpdi8 0x8d34, 19
 	ret nz
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	extz wa
 	calr Demo_GetPresetBaseForPartAlt
 	ld xwa, xhl
@@ -867,7 +867,7 @@ Demo_SelectEntry_PlaySong:
 	pop xde
 	call SeqTimer_UpdateTempoReg
 	stdi8 0x8f4e, 6
-	ldda8 a, 0x28a4
+	ldb_d8 a, 0x28a4
 	extz wa
 	call Seq_DispatchEventType5
 	ret
@@ -885,7 +885,7 @@ Demo_SelectEntry_StartPlayback:
 
 Audio_WaitForReady:
 	ld xbc, 0xf000
-	ldda8 a, 1056
+	ldb_d8 a, 1056
 
 Audio_WaitForReady_PollLoop:
 	bit 2, a
@@ -911,7 +911,7 @@ Demo_ResetCountdownTimer:
 	ret
 
 Timer7_DisableInterrupt:
-	ldada xbc, 0xfd98
+	lda_d16 xbc, 0xfd98
 	ld e, (xbc)
 	res 7, e
 	ld (xbc), e
@@ -923,61 +923,61 @@ Timer7_DisableInterrupt:
 	ret
 
 Voice_LoadVoiceTable:
-	push_werp 0xfa
-	ldi_berp 0xfb, 0
+	pushw_erp 0xfa
+	ldib_erp 0xfb, 0
 
 Voice_LoadVoiceTable_Loop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
-	ldto_berp A, 0xfb
-	st8_24 0x025b86, a
+	stb_erp A, 0xfb
+	stb_da 0x025b86, a
 	and c, 0xf
-	st8_24 0x025b88, c
+	stb_da 0x025b88, c
 	push xde
 	push xhl
 	push xix
 	push xiz
-	ld8_24 w, 0x025b88
-	ld8_24 a, 0x025b86
+	ldb_da w, 0x025b88
+	ldb_da a, 0x025b86
 	call MidiStream_HandlePartSelect
 	pop xiz
 	pop xix
 	pop xhl
 	pop xde
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x16
 	jr ule, Voice_LoadVoiceTable_Loop
 	ldw wa, 0x19
 	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
-	sti8_24 0x025b86, 0x19
+	stib_da 0x025b86, 0x19
 	and c, 0xf
-	st8_24 0x025b88, c
+	stb_da 0x025b88, c
 	push xde
 	push xhl
 	push xix
 	push xiz
-	ld8_24 w, 0x025b88
-	ld8_24 a, 0x025b86
+	ldb_da w, 0x025b88
+	ldb_da a, 0x025b86
 	call MidiStream_HandlePartSelect
 	pop xiz
 	pop xix
 	pop xhl
 	pop xde
-	pop_werp 0xfa
+	popw_erp 0xfa
 	ret
 
 Banner_Loop_Check:
 	dec 4, xsp
-	push_werp 0xfa
-	ldi_berp 0xfb, 0
+	pushw_erp 0xfa
+	ldib_erp 0xfb, 0
 
 Banner_Loop_CheckEntry:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
-	ldada xbc, 0xf1a0
+	lda_d16 xbc, 0xf1a0
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -994,17 +994,17 @@ Banner_Loop_CheckEntry:
 	ld (xwa), 0xd3
 	ld (xwa + 1), 0x7e
 	ld (xwa + 2), 0x7f
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	ld (xwa + 3), c
 	lds bc, 4
 	call SeqBuf_WriteMidiEventDirect
 
 Banner_Loop_Exit:
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr c, Banner_Loop_CheckEntry
-	sti16_24 0x025b84, 0x0000
-	pop_werp 0xfa
+	stiw_da 0x025b84, 0x0000
+	popw_erp 0xfa
 	inc 4, xsp
 	ret
 
@@ -1021,7 +1021,7 @@ Demo_PreSetup:
 
 Demo_ScanActivePartChannels:
 	ldb l, 0x0
-	ldada xix, 0xf1a0
+	lda_d16 xix, 0xf1a0
 
 Demo_ScanPartLoop:
 	ld a, l
@@ -1035,16 +1035,16 @@ Demo_ScanPartLoop:
 	ld bc, wa
 	add bc, bc
 	lda_24 xde, Presentation_TagStrTable_0xD2
-	ld_sriw3 BC, 0x07, 0xe8, 0xe4
+	ldw_sri BC, 0x07, 0xe8, 0xe4
 	andda16 xbc, 0xf19e
 	jr z, Demo_ScanPartSkipToEnd
 	muls wa, 0x3
-	ldada xbc, 0xf250
+	lda_d16 xbc, 0xf250
 	bit_dri 7, 0x07, 0xe4, 0xe0
 	jr z, Demo_ScanPartSkipToEnd
 	ld a, l
 	inc 1, a
-	stda8 3414, a
+	stb_d8 3414, a
 	setda 0, 3412
 	setda 2, 0x287b
 	jr Demo_ScanPartDone
@@ -1120,7 +1120,7 @@ Demo_GetPresetBase_Default:
 	lda_24 xhl, 0x0ab000
 
 Demo_GetPresetBase_StoreAndRet:
-	st_dri3b C, 0xed, 0x00, 0x08
+	stb_dri C, 0xed, 0x00, 0x08
 	ret
 
 Demo_GetPresetBaseForPartAlt:
@@ -1138,7 +1138,7 @@ Demo_GetPresetBaseAlt_Default:
 	lda_24 xhl, 0x0ab000
 
 Demo_GetPresetBaseAlt_StoreAndRet:
-	st_dri3b C, 0xed, 0x00, 0x03
+	stb_dri C, 0xed, 0x00, 0x03
 	ret
 
 Demo_GetPresetBaseForPartExt:
@@ -1156,7 +1156,7 @@ Demo_GetPresetBaseExt_Default:
 	lda_24 xwa, 0x0ab000
 
 Demo_GetPresetBaseExt_StoreAndRet:
-	st_dri3b C, 0xe1, 0xd0, 0x00
+	stb_dri C, 0xe1, 0xd0, 0x00
 	ret
 
 Voice_GetPresetFieldWord:
@@ -1198,7 +1198,7 @@ Voice_GetPresetFieldAddr_Compute:
 
 Demo_ProcessRecordEntry:
 	lda xsp, (xsp - 14)
-	push_werp 0xfa
+	pushw_erp 0xfa
 	ld (xsp + 14), a
 	ld (xsp + 12), 0x0
 	ld a, (xsp + 14)
@@ -1213,13 +1213,13 @@ Demo_ProcessRecordEntry:
 	extz wa
 	calr Demo_GetPresetBaseForPartExt
 	ld (xsp + 8), xhl
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 Demo_RecordChainScanLoop:
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	extz bc
 	ld xwa, (xsp + 4)
-	ld_srib3 A, 0x07, 0xe0, 0xe4
+	ldb_sri A, 0x07, 0xe0, 0xe4
 	cp a, 0xd
 	jr z, Demo_VoiceTypeDispatch
 	cp a, 0x10
@@ -1232,10 +1232,10 @@ Demo_RecordChainScanLoop:
 Demo_VoiceTypeDispatch:
 	add bc, bc
 	lda_24 xwa, Presentation_TagStrTable_0xD2
-	ld_sriw3 WA, 0x07, 0xe0, 0xe4
+	ldw_sri WA, 0x07, 0xe0, 0xe4
 	and wa, (xsp + 2)
 	jrl z, Demo_RecordChainLoopExit
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	mul a, 0x3
 	ld c, a
 	extz bc
@@ -1246,13 +1246,13 @@ Demo_VoiceTypeDispatch:
 	extz wa
 	calr Demo_GetPresetBaseForPart
 	ld xwa, xhl
-	ldto_berp C, 0xfb
+	stb_erp C, 0xfb
 	mul c, 0x3
 	ld e, c
 	extz de
 	inc 1, de
 	ld xbc, (xsp + 8)
-	ld_sriw3 BC, 0x07, 0xe4, 0xe8
+	ldw_sri BC, 0x07, 0xe4, 0xe8
 	lds de, 0
 	calr Demo_StoreRecordChainParams
 	jr RecordChain_SkipToNext
@@ -1315,24 +1315,24 @@ RecordChain_ContinueLoop:
 	jr z, Demo_RecordChainReturn
 
 Demo_RecordChainLoopExit:
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jrl c, Demo_RecordChainScanLoop
 
 Demo_RecordChainReturn:
 	ld l, (xsp + 12)
-	pop_werp 0xfa
+	popw_erp 0xfa
 	lda xsp, (xsp + 14)
 	ret
 
 Demo_StoreRecordChainParams:
-	st32_24 0x025b8a, xwa
-	st16_24 0x03ec4e, xbc
-	st16_24 0x025b8e, xde
+	stl_da 0x025b8a, xwa
+	stw_da 0x03ec4e, xbc
+	stw_da 0x025b8e, xde
 	ret
 
 RecordChain_ReadNextByte:
-	ld16_24 xwa, 0x03ec4e
+	ldw_da xwa, 0x03ec4e
 	cp wa, 0xffff
 	jr nz, RecordChain_ReadAdvance
 	ldw hl, 0xffff
@@ -1344,7 +1344,7 @@ RecordChain_ReadAdvance:
 	ld de, wa
 	extz xde
 	addda32_24 xde, 0x25b8a
-	ld16_24 xwa, 0x025b8e
+	ldw_da xwa, 0x025b8e
 	ld bc, wa
 	extz xbc
 	inc 5, xbc
@@ -1352,12 +1352,12 @@ RecordChain_ReadAdvance:
 	ld l, (xbc)
 	extz hl
 	inc 1, wa
-	st16_24 0x025b8e, xwa
+	stw_da 0x025b8e, xwa
 	cp wa, 0xfa
 	ret ule
 	ld wa, (xde + 3)
-	st16_24 0x03ec4e, xwa
-	sti16_24 0x025b8e, 0x0000
+	stw_da 0x03ec4e, xwa
+	stiw_da 0x025b8e, 0x0000
 	ret
 
 RecordChain_SkipToStatusByte:
@@ -1393,11 +1393,11 @@ FileIO_CheckRegionSignature:
 	extz wa
 	sla wa, 3
 	lda_24 xbc, Presentation_TagStrTable_0x100
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	extz xwa
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
-	ldi_werp 0xfa, 1
+	ldiw_erp 0xfa, 1
 	lds iz, 0
 	jr FileIO_CheckSig_LoopTest
 
@@ -1410,12 +1410,12 @@ FileIO_CheckSig_ReadLoop:
 	sla wa, 3
 	lda_24 xbc, Presentation_TagStrTable_0xFC
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	cp l, a
 	jr z, FileIO_CheckSig_Match
 
 FileIO_CheckSig_Fail:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	jr FileIO_CheckSig_Return
 
 FileIO_CheckSig_Match:
@@ -1427,12 +1427,12 @@ FileIO_CheckSig_LoopTest:
 	sla wa, 3
 	lda_24 xbc, Presentation_TagStrTable_0x102
 	ld de, iz
-	cp_sriw_rm DE, 0x07, 0xe4, 0xe0
+	cpw_sri_rm DE, 0x07, 0xe4, 0xe0
 	jr c, FileIO_CheckSig_ReadLoop
 
 FileIO_CheckSig_Return:
 	call FileIO_SeekRead_ExtReturn
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	pop xiz
 	inc 2, xsp
 	ret
@@ -1441,7 +1441,7 @@ FileIO_ValidateFileSignature:
 	lda xsp, (xsp - 26)
 	push xiz
 	ld (xsp + 28), a
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	cps hl, 0
 	jr ge, FileIO_ValidateSig_Process
@@ -1450,7 +1450,7 @@ FileIO_ValidateFileSignature:
 
 FileIO_ValidateSig_Process:
 	ld a, l
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	ld wa, hl
 	call GetFileEntryPtr
@@ -1471,11 +1471,11 @@ FileIO_ValidateSig_Process:
 	ld a, (xsp + 28)
 	extz wa
 	calr FileIO_CheckRegionSignature
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	call FileIO_CloseHandle
 
 FileIO_ValidateSig_Done:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 FileIO_ValidateSig_Return:
 	pop xiz
@@ -1498,7 +1498,7 @@ FileIO_ReadValidateHdr_Loop:
 
 FileIO_ReadValidateHdr_Store:
 	lda xwa, (xsp + 2)
-	lda_dri3 XSP, 0x07, 0xe0, 0xf8
+	lda_dri XSP, 0x07, 0xe0, 0xf8
 	inc 1, iz
 	cps iz, 3
 	jr lt, FileIO_ReadValidateHdr_Loop
@@ -1535,7 +1535,7 @@ FileIO_ReadValidateHdr_Return:
 FileIO_ValidateAndOpenFile:
 	lda xsp, (xsp - 24)
 	push xiz
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	cps hl, 0
 	jr ge, FileIO_ValidateOpen_Process
@@ -1544,7 +1544,7 @@ FileIO_ValidateAndOpenFile:
 
 FileIO_ValidateOpen_Process:
 	ld a, l
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	ld wa, hl
 	call GetFileEntryPtr
@@ -1562,11 +1562,11 @@ FileIO_ValidateOpen_Process:
 	cps hl, 0
 	jr lt, FileIO_ValidateOpen_Done
 	calr FileIO_ReadAndValidateHeader
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	call FileIO_CloseHandle
 
 FileIO_ValidateOpen_Done:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 FileIO_ValidateOpen_Return:
 	pop xiz
@@ -1582,7 +1582,7 @@ FileIO_ReadHeaderAt4:
 	call FileIO_ReadByte
 	cps hl, 0
 	jr lt, FileIO_ReadHdr4_Fail
-	ld32_24 xwa, Presentation_TagTableEnd_0x47
+	ldl_da xwa, Presentation_TagTableEnd_0x47
 	ld a, (xwa)
 	cp l, a
 	jr z, FileIO_ReadHdr4_Success
@@ -1599,12 +1599,12 @@ FileIO_ReadHdr4_Success:
 FileIO_ValidateFileWithRegion:
 	lda xsp, (xsp - 24)
 	push xiz
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	cps hl, 0
 	jr lt, FileIO_ValidateRegion_NoFile
 	ld a, l
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	ld wa, hl
 	call GetFileEntryPtr
@@ -1632,11 +1632,11 @@ FileIO_ValidateRegion_CheckSig:
 	cps hl, 0
 	jr z, FileIO_ValidateRegion_Close
 	calr FileIO_ReadHeaderAt4
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 
 FileIO_ValidateRegion_Close:
 	call FileIO_CloseHandle
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 FileIO_ValidateRegion_Return:
 	pop xiz
@@ -1667,12 +1667,12 @@ FileIO_ReadHdrF_Success:
 FileIO_ValidateWithExtHeader:
 	lda xsp, (xsp - 24)
 	push xiz
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	cps hl, 0
 	jr lt, FileIO_ValidateExt_NoFile
 	ld a, l
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	ld wa, hl
 	call GetFileEntryPtr
@@ -1700,11 +1700,11 @@ FileIO_ValidateExt_CheckSig:
 	cps hl, 0
 	jr z, FileIO_ValidateExt_Close
 	calr FileIO_ReadHeaderAtF
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 
 FileIO_ValidateExt_Close:
 	call FileIO_CloseHandle
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 FileIO_ValidateExt_Return:
 	pop xiz
@@ -1743,8 +1743,8 @@ LoadRegion0_OpenSuccess:
 	cps hl, 0
 	jr z, LoadRegion0_AltPath			; mode not available, alt path
 	call PreLswLoad				; primary display setup
-	ldada	xwa, 0xf980
-	ldada	xbc, 0xffc0
+	lda_d16	xwa, 0xf980
+	lda_d16	xbc, 0xffc0
 	ld xde, xwa				; XDE = base (0xf980)
 	sub xbc, xde				; XBC = size (0xffc0-0xf980)
 	call FileIO_ReadBlock				; configure memory range
@@ -1994,7 +1994,7 @@ LoadSong8_ReadLoop:
 	cps hl, 0
 	jr lt, LoadSong8_ReadDone
 	lda xwa, (xsp + 4)
-	lda_dri3 XSP, 0x07, 0xe0, 0xf8
+	lda_dri XSP, 0x07, 0xe0, 0xf8
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, LoadSong8_ReadLoop
@@ -2046,7 +2046,7 @@ LoadSong8_PostProcess:
 	lds iz, 0
 
 LoadSong8_SlotLoop:
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	extz wa
 	call FileData_LoadFromSlot
 	inc 1, iz
@@ -2303,7 +2303,7 @@ LoadRegion4_Return:
 FileIO_ParseDirectoryEntry:
 	lda xsp, (xsp - 16)
 	push xiz
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	ld iz, hl
 	cps iz, 0
@@ -2315,7 +2315,7 @@ ParseDir_ValidIndex:
 	ld wa, iz
 	call GetFileEntryPtr
 	ld (xsp + 4), xhl
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	lda xwa, (xsp + 10)
 	ld xde, (xsp + 4)
@@ -2328,14 +2328,14 @@ FileDemo_RecordCallback:
 	ld wa, iz
 	muls wa, 0x6
 	lda_24 xbc, Presentation_TagTableEnd_0x81
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	call FileIO_WriteRecordName_Done
 	cps l, 0
 	jr z, FileIO_RecordLoop_Continue
 	ld wa, iz
 	muls wa, 0x6
 	lda_24 xbc, Presentation_TagTableEnd_0x81
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileIO_RecordLoop_Continue
@@ -2349,9 +2349,9 @@ FileDemo_RecordCallback:
 	call (xix)
 	cps hl, 0
 	jr ge, ParseDir_IncrementCount
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr lt, FileIO_RecordLoop_Continue
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	jr FileIO_RecordLoop_Continue
 
 ParseDir_IncrementCount:
@@ -2377,9 +2377,9 @@ FileIO_RecordLoop_Continue:
 	calr FileIO_LoadSongRegion8
 	cps hl, 0
 	jr ge, ParseDir_SongIncrCount
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr lt, FileIO_FinalizeRecordLookup
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	jr FileIO_FinalizeRecordLookup
 
 ParseDir_SongIncrCount:
@@ -2393,12 +2393,12 @@ FileIO_FinalizeRecordLookup:
 	jr ParseDir_GetResult
 
 ParseDir_NoRecords:
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr lt, ParseDir_GetResult
 	ldi_erpw 0xfa, 0x98, 0xff
 
 ParseDir_GetResult:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 ParseDir_Return:
 	pop xiz
@@ -2420,8 +2420,8 @@ FileIO_SaveRegion0_VRAM:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld (xsp + 22), xwa			; save arg
-	ldada	xbc, 0xffc0
-	ldada	xwa, 0xf980
+	lda_d16	xbc, 0xffc0
+	lda_d16	xwa, 0xf980
 	ld (xsp + 4), xbc			; save end address
 	sub (xsp + 4), xwa			; size = end - start
 	lda_24 xbc, 0x1e7800
@@ -2811,25 +2811,25 @@ SaveAll_GetEntryPtr:
 	ld wa, iz
 	call GetFileEntryPtr
 	ld xde, xhl
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	lda xwa, (xsp + 20)
 	call FileIO_FormatFileIndex
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 SaveAll_CheckRecordLoop:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	muls wa, 0x6
 	lda_24 xbc, Resource_Region3_Start_0x10
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, SaveAll_NextRecord
 	lda xbc, (xsp + 20)
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	muls wa, 0x6
 	lda_24 xde, Resource_Region3_Start_0x10
-	ld_srib3 E, 0x07, 0xe8, 0xe0
+	ldb_sri E, 0x07, 0xe8, 0xe0
 	lda xwa, (xsp + 6)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
@@ -2839,7 +2839,7 @@ SaveAll_CheckRecordLoop:
 	jrl lt, SaveAll_GetResult
 
 SaveAll_NextRecord:
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, SaveAll_CheckRecordLoop
 	lda xbc, (xsp + 20)
@@ -2856,23 +2856,23 @@ SaveAll_NextRecord:
 	call FileIO_OpenDefault
 	call FileIO_GetRecordByType
 	ld xde, xhl
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	lda xwa, (xsp + 20)
 	call FileIO_FormatFileIndex
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 ; File demo process callback dispatch
 FileDemo_ProcessCallback:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	muls wa, 0x6
 	lda_24 xbc, Resource_Region3_Start_0x10
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	call FileIO_FormatName_Return
 	cps l, 0
 	jr z, SaveAll_ProcessNextRecord
 	lda xwa, (xsp + 20)
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	muls bc, 0x6
 	lda_24 xde, Resource_Region3_Start_0x12
 	exts xbc
@@ -2884,35 +2884,35 @@ FileDemo_ProcessCallback:
 	jr lt, SaveAll_CheckSaveError
 
 SaveAll_ProcessNextRecord:
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, FileDemo_ProcessCallback
 
 SaveAll_CheckSaveError:
 	cpw (xsp + 4), 0x0
 	jr ge, SaveAll_GetResult
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 SaveAll_RollbackLoop:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	muls wa, 0x6
 	lda_24 xbc, Resource_Region3_Start_0x10
-	ld_srib3 A, 0x07, 0xe4, 0xe0
+	ldb_sri A, 0x07, 0xe4, 0xe0
 	call FileIO_FormatName_Return
 	cps l, 0
 	jr z, SaveAll_RollbackNext
 	lda xbc, (xsp + 20)
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	muls wa, 0x6
 	lda_24 xde, Resource_Region3_Start_0x10
-	ld_srib3 E, 0x07, 0xe8, 0xe0
+	ldb_sri E, 0x07, 0xe8, 0xe0
 	lda xwa, (xsp + 6)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
 	call FileIO_OpenDefault
 
 SaveAll_RollbackNext:
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, SaveAll_RollbackLoop
 
@@ -2981,7 +2981,7 @@ LoadFileVariant:
 	jr LoadVariant_Return
 
 LoadVariant_OpenAndProcess:
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	extz wa
 	ld c, (xsp + 8)
 	extz bc
@@ -3016,7 +3016,7 @@ LoadFileMultiPass:
 
 MultiPass_SetupEntry:
 	ld wa, (xsp + 4)
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	ld wa, (xsp + 4)
 	call GetFileEntryPtr
@@ -3028,19 +3028,19 @@ MultiPass_SetupEntry:
 
 MultiPass_RetryLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, MultiPass_LoopNext
 	lda xbc, (xsp + 20)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 6)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
 	call FileIO_OpenDefault
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr lt, MultiPass_StoreResult
 
 MultiPass_LoopNext:
@@ -3048,7 +3048,7 @@ MultiPass_LoopNext:
 	cp iz, 0xa
 	jr lt, MultiPass_RetryLoop
 	ld wa, (xsp + 4)
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	call FileIO_GetRecordByType
 	ld xde, xhl
@@ -3071,15 +3071,15 @@ MultiPass_Finalize:
 	ld wa, (xsp + 30)
 	extz wa
 	call SeqSave_PreparePartData
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	call FileIO_CloseHandle
-	cpi_werp 0xfa, 0
+	cpiw_erp 0xfa, 0
 	jr ge, MultiPass_StoreResult
 	lda xwa, (xsp + 6)
 	call FileIO_OpenDefault
 
 MultiPass_StoreResult:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 MultiPass_Return:
 	pop xiz
@@ -3123,7 +3123,7 @@ FileIO_ByteBlock_DemoProc1:
 	calr	61392
 	cps	hl, 0
 	jr	z, 110
-	ld16_24	wa, 0x1ed35d
+	ldw_da	wa, 0x1ed35d
 	extz	xwa
 	ld	(xsp+8), xwa
 	ld	wa, (xsp+38)
@@ -3224,7 +3224,7 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0xaf, 0x04, 0x80
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	ld16_24	wa, 0x1ed35d
+	ldw_da	wa, 0x1ed35d
 	extz	xwa
 	ld	(xsp+8), xwa
 	sll	xwa, 3
@@ -3607,7 +3607,7 @@ FileIO_ByteBlock_DemoProc1:
 ReadSingleFile:
 	lda xsp, (xsp - 24)
 	push xiz
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	ld iz, hl
 	cps iz, 0
@@ -3619,7 +3619,7 @@ ReadSingle_SetupEntry:
 	ld wa, iz
 	call GetFileEntryPtr
 	ld xde, xhl
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	lda xwa, (xsp + 18)
 	call FileIO_FormatFileIndex
@@ -3627,19 +3627,19 @@ ReadSingle_SetupEntry:
 
 ReadSingle_RetryLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, ReadSingle_LoopNext
 	lda xbc, (xsp + 18)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 4)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
 	call FileIO_OpenDefault
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr lt, ReadSingle_StoreResult
 
 ReadSingle_LoopNext:
@@ -3648,7 +3648,7 @@ ReadSingle_LoopNext:
 	jr lt, ReadSingle_RetryLoop
 
 ReadSingle_StoreResult:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 ReadSingle_Return:
 	pop xiz
@@ -3659,7 +3659,7 @@ ReadDualFile:
 	lda xsp, (xsp - 52)
 	push xiz
 	ld (xsp + 52), xwa
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	ld iz, hl
 	cps iz, 0
@@ -3671,11 +3671,11 @@ ReadDual_SetupEntries:
 	ld wa, iz
 	call GetFileEntryPtr
 	ld xde, xhl
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	lda xwa, (xsp + 32)
 	call FileIO_FormatFileIndex
-	ldto_berp C, 0xf8
+	stb_erp C, 0xf8
 	extz bc
 	lda xwa, (xsp + 42)
 	ld xde, (xsp + 52)
@@ -3684,25 +3684,25 @@ ReadDual_SetupEntries:
 
 ReadDual_RetryLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, ReadDual_LoopNext
 	lda xbc, (xsp + 32)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 4)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 18)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 18)
 	call FileIO_CopyAndOpen
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr lt, ReadDual_StoreResult
 
 ReadDual_LoopNext:
@@ -3711,7 +3711,7 @@ ReadDual_LoopNext:
 	jr lt, ReadDual_RetryLoop
 
 ReadDual_StoreResult:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 ReadDual_Return:
 	pop xiz
@@ -3722,7 +3722,7 @@ ReadDualFileEx:
 	lda xsp, (xsp - 60)
 	push xiz
 	ld (xsp + 62), wa
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	call GetCurrentFileIndex
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0x0
@@ -3751,26 +3751,26 @@ ReadDualEx_SetupPages:
 
 ReadDualEx_FirstLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 C, 0x07, 0xe0, 0xf8
+	ldb_sri C, 0x07, 0xe0, 0xf8
 	ld wa, (xsp + 62)
 	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr z, ReadDualEx_FirstLoopNext
 	lda xbc, (xsp + 52)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 28)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 14)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 28)
 	lda xbc, (xsp + 14)
 	call FileIO_CopyAndOpen
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jrl lt, ReadDualEx_StoreResult
 
 ReadDualEx_FirstLoopNext:
@@ -3793,25 +3793,25 @@ ReadDualEx_FirstLoopNext:
 
 ReadDualEx_SecondLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, ReadDualEx_SecondLoopNext
 	lda xbc, (xsp + 52)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 28)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 14)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 28)
 	lda xbc, (xsp + 14)
 	call FileIO_CopyAndOpen
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr lt, ReadDualEx_StoreResult
 
 ReadDualEx_SecondLoopNext:
@@ -3832,26 +3832,26 @@ ReadDualEx_SecondLoopNext:
 
 ReadDualEx_ThirdLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 C, 0x07, 0xe0, 0xf8
+	ldb_sri C, 0x07, 0xe0, 0xf8
 	ld wa, (xsp + 62)
 	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr z, ReadDualEx_ThirdLoopNext
 	lda xbc, (xsp + 52)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 28)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 14)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 28)
 	lda xbc, (xsp + 14)
 	call FileIO_CopyAndOpen
-	ldfr_werp HL, 0xfa
-	cpi_werp 0xfa, 0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
 	jr lt, ReadDualEx_StoreResult
 
 ReadDualEx_ThirdLoopNext:
@@ -3860,7 +3860,7 @@ ReadDualEx_ThirdLoopNext:
 	jr lt, ReadDualEx_ThirdLoop
 
 ReadDualEx_StoreResult:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 
 ReadDualEx_Return:
 	pop xiz
@@ -3886,13 +3886,13 @@ WriteVerify_InitCounters:
 
 WriteVerify_WriteLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, WriteVerify_WriteLoopNext
 	ld wa, (xsp + 4)
 	lda_24 xbc, Presentation_TagStrTable_0xF2
-	ld_srib3 C, 0x07, 0xe4, 0xf8
+	ldb_sri C, 0x07, 0xe4, 0xf8
 	call UpdateFileEntry
 	add (xsp + 8), xhl
 
@@ -3919,14 +3919,14 @@ WriteVerify_SetupReadback:
 
 WriteVerify_ReadbackLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 C, 0x07, 0xe0, 0xf8
+	ldb_sri C, 0x07, 0xe0, 0xf8
 	ld wa, (xsp + 60)
 	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr z, WriteVerify_ReadbackNext
 	lda xbc, (xsp + 50)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 26)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 26)
@@ -3958,18 +3958,18 @@ WriteVerify_ReadbackNext:
 
 WriteVerify_CrossVerifyLoop:
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, WriteVerify_CrossVerifyNext
 	lda xbc, (xsp + 50)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 26)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 40)
 	lda_24 xwa, Presentation_TagStrTable_0xF2
-	ld_srib3 E, 0x07, 0xe0, 0xf8
+	ldb_sri E, 0x07, 0xe0, 0xf8
 	lda xwa, (xsp + 12)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 12)
@@ -4006,9 +4006,9 @@ GetFirstRecord_GotPage:
 	jp FileIO_OpenDefault
 
 SearchAndOpen:
-	st_dri3b L, 0xfd, 0xf2, 0xfe
+	stb_dri L, 0xfd, 0xf2, 0xfe
 	pushw iz
-	st_dri3l XWA, 0xfd, 0x0c, 0x01
+	stl_dri XWA, 0xfd, 0x0c, 0x01
 	call GetFirstPageBase
 	ld iz, hl
 	cps iz, 0
@@ -4036,7 +4036,7 @@ SearchOpen_AlreadyExists:
 
 SearchOpen_Return:
 	popw iz
-	st_dri3b L, 0xfd, 0x0e, 0x01
+	stb_dri L, 0xfd, 0x0e, 0x01
 	ret
 
 LoadFromSecondaryPage:
@@ -4069,7 +4069,7 @@ LoadSecondary_Return:
 	ret
 
 FileIO_ReturnError:
-	ldda16 xhl, 0x7f48
+	ldw_d16 xhl, 0x7f48
 	ret
 
 FileIO_OpenWithMode:
@@ -4101,7 +4101,7 @@ FileIO_OpenWithMode:
 FileIO_OpenMode_CheckWrite:
 	cp (xiz), 0x77
 	jr nz, FileIO_OpenMode_UnknownMode
-	cpdi16_24 0x1e53c, 31
+	cpw_da 0x1e53c, 31
 	jr nz, FileIO_OpenMode_WriteMaxFiles
 	stdi16 0x7f48, 0xfff5
 	ldw hl, 0xfff5
@@ -4119,11 +4119,11 @@ FileIO_OpenMode_UnknownMode:
 
 FileIO_OpenMode_Success:
 	stdi16 0x7f48, 0
-	ldda16 xhl, 0x7f48
+	ldw_d16 xhl, 0x7f48
 
 FileIO_OpenMode_Return:
 	pop xiz
-	st_dri3b L, 0xfd, 0x80, 0x00
+	stb_dri L, 0xfd, 0x80, 0x00
 	ret
 
 FileIO_CloseHandle:
@@ -4203,7 +4203,7 @@ FileIO_CopyAndOpen:
 	jr FileIO_CopyOpen_Return
 
 FileIO_CopyOpen_CheckMaxFiles:
-	cpdi16_24 0x1e53c, 31
+	cpw_da 0x1e53c, 31
 	jr nz, FileIO_CopyOpen_OtherError
 	ldw hl, 0xfff5
 	jr FileIO_CopyOpen_Return
@@ -4237,7 +4237,7 @@ FileIO_ReadByte_CheckEOF:
 	ret ge
 
 FileIO_ReadByte_Return:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_ReadByte_Extended
 	ld wa, hl
@@ -4275,7 +4275,7 @@ FileIO_SeekAndRead_Error:
 	ldw iz, 0xff9c
 
 FileIO_SeekAndRead_Return:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_SeekToOffset
 	ld wa, iz
@@ -4351,7 +4351,7 @@ FileIO_WriteBlock_Error:
 	jr ge, FileIO_WriteByte
 
 FileIO_WriteBlock_Return:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_WriteWord
 	ld wa, (xsp + 4)
@@ -4433,7 +4433,7 @@ FileIO_FlushClose_Return:
 	jr ge, FileIO_CheckHandle
 
 FileIO_GetPosition:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_GetPosition_Return
 	ld wa, (xsp + 4)
@@ -4468,7 +4468,7 @@ FileIO_SeekRead_NoHandle:
 	ldw hl, 0xff9c
 
 FileIO_SeekRead_Return:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_SeekRead_Extended
 	ld wa, hl
@@ -4492,7 +4492,7 @@ FileIO_SeekWrite_NoHandle:
 	ldw iz, 0xff9c
 
 FileIO_SeekWrite_Return:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_SeekWriteBlock
 	ld wa, iz
@@ -4524,7 +4524,7 @@ FileIO_SeekWriteBlock_Error:
 	ret ge
 
 FileIO_SeekWriteBlock_Return:
-	ldda16 xwa, 0x7f48
+	ldw_d16 xwa, 0x7f48
 	cps wa, 0
 	jr lt, FileIO_SeekWriteBlock_Done
 	ld wa, hl
@@ -4560,7 +4560,7 @@ FileIO_CompareFiles:
 	ld xwa, (xsp + 6)
 	or xwa, xwa
 	jr nz, FileIO_Compare_Return
-	cpdi16_24 0x1e53c, 31
+	cpw_da 0x1e53c, 31
 	jr nz, FileIO_Compare_Mismatch
 	ldw hl, 0xfff5
 	jrl FileIO_ParseHeader_Error
@@ -4661,7 +4661,7 @@ FileIO_ValidateRecord_CheckSize:
 	ret
 
 FileIO_ValidateRecord_Fail:
-	cpdi16_24 0x1e53c, 31
+	cpw_da 0x1e53c, 31
 	jr nz, FileIO_ValidateRecord_Ok
 	ldw hl, 0xfff5
 	ret
@@ -4671,9 +4671,9 @@ FileIO_ValidateRecord_Ok:
 	ret
 
 FileIO_ValidateRecord_Return:
-	sti16_24 0x0272cc, 0x003f
-	sti16_24 0x0272ce, 0x003f
-	sti8_24 0x0272d0, 0x00
+	stiw_da 0x0272cc, 0x003f
+	stiw_da 0x0272ce, 0x003f
+	stib_da 0x0272d0, 0x00
 	ld xwa, 0x25eaa
 	ld xbc, Filename_TemplateArea_0x2
 	calr FileIO_CopyString
@@ -4687,7 +4687,7 @@ FileIO_CopyString:
 	jr z, FileIO_CopyString_Done
 
 FileIO_CopyString_Loop:
-	ld_spib C, 0xe8
+	ldb_spi C, 0xe8
 	lda_dpi XHL, 0xe0
 	cp (xde), 0x0
 	jr nz, FileIO_CopyString_Loop
@@ -4701,7 +4701,7 @@ FileIO_CopyString_WriteNull:
 	jr FileIO_CopyString_CheckEnd
 
 FileIO_CopyString_Advance:
-	ld_spib C, 0xec
+	ldb_spi C, 0xec
 	lda_dpi XHL, 0xe0
 	dec 1, de
 
@@ -4716,7 +4716,7 @@ FileIO_CopyString_StoreAndCont:
 	ret z
 
 FileIO_CopyString_Return:
-	stib_dpi 0xe0, 0x00
+	stib_dsp 0xe0, 0x00
 	djnz xde, FileIO_CopyString_Return
 	ret
 
@@ -4735,7 +4735,7 @@ FileIO_BuildPath_NullDir:
 	jr z, FileIO_BuildPath_Return
 
 FileIO_BuildPath_AddSep:
-	ld_spib C, 0xe8
+	ldb_spi C, 0xe8
 	lda_dpi XHL, 0xe0
 	cp (xde), 0x0
 	jr nz, FileIO_BuildPath_AddSep
@@ -4806,18 +4806,18 @@ FileIO_FormatFileIndex:
 	inc 1, c
 	cp c, 0xa
 	jr nc, FileIO_FormatIndex_TwoDigit
-	stib_dpi 0xe0, 0x30
+	stib_dsp 0xe0, 0x30
 	jr FileIO_FormatIndex_AddChar
 
 FileIO_FormatIndex_TwoDigit:
 	cp c, 0x14
 	jr nc, FileIO_FormatIndex_AddOnes
-	stib_dpi 0xe0, 0x31
+	stib_dsp 0xe0, 0x31
 	sub c, 0xa
 	jr FileIO_FormatIndex_AddChar
 
 FileIO_FormatIndex_AddOnes:
-	stib_dpi 0xe0, 0x32
+	stib_dsp 0xe0, 0x32
 	sub c, 0x14
 
 FileIO_FormatIndex_AddChar:
@@ -4851,14 +4851,14 @@ FileIO_ReadHeader_ParseLoop:
 	pushw iz
 	cp de, 0x64
 	jr c, FileIO_ReadHeader_Done
-	st_dpib D, 0xe0
+	stb_dpi D, 0xe0
 	ld hl, de
 	extz xhl
 	div hl, 0x64
 	add l, 0x30
 	ld (xix), l
 	sub de, 0x64
-	st_dpib D, 0xe0
+	stb_dpi D, 0xe0
 	ld hl, de
 	extz xhl
 	div hl, 0xa
@@ -4866,29 +4866,29 @@ FileIO_ReadHeader_ParseLoop:
 	ld (xix), l
 	extz xde
 	div de, 0xa
-	ldto_werp DE, 0xea
+	stw_erp DE, 0xea
 	add e, 0x30
 	ld (xwa), e
 	jr FileIO_ReadHeader_Field1
 
 FileIO_ReadHeader_Done:
-	st_dpib D, 0xe0
+	stb_dpi D, 0xe0
 	ld hl, de
 	extz xhl
 	div hl, 0xa
 	add l, 0x30
 	ld (xix), l
-	st_dpib C, 0xe0
+	stb_dpi C, 0xe0
 	extz xde
 	div de, 0xa
-	ldto_werp DE, 0xea
+	stw_erp DE, 0xea
 	add e, 0x30
 	ld (xhl), e
 	ld (xwa), 0x3a
 
 FileIO_ReadHeader_Field1:
 	inc 1, xwa
-	stib_dpi 0xe0, 0x20
+	stib_dsp 0xe0, 0x20
 	lds iy, 0
 	lds iz, 0
 	jr FileIO_ReadHeader_Return
@@ -4981,7 +4981,7 @@ FileIO_GetRecordByType_Lookup:
 	ld xwa, 0x25eaa
 	lds de, 6
 	calr FileIO_CopyString_WriteNull
-	sti8_24 0x025eb0, 0x00
+	stib_da 0x025eb0, 0x00
 	ret
 
 FileIO_GetRecordPtrAlt:
@@ -4993,15 +4993,15 @@ FileIO_WriteRecordName:
 	ld xwa, 0x271f2
 	ldw de, 0xc
 	calr FileIO_CopyString_WriteNull
-	sti8_24 0x0271fe, 0x00
+	stib_da 0x0271fe, 0x00
 	ret
 
 FileIO_WriteRecordName_Loop:
-	ld16_24 xhl, 0x0272cc
+	ldw_da xhl, 0x0272cc
 	ret
 
 FileIO_WriteRecordName_Done:
-	ld16_24 xbc, 0x025ea8
+	ldw_da xbc, 0x025ea8
 	cps bc, 0
 	jr lt, FileIO_WriteRecordName_Pad
 	cp bc, 0x14
@@ -5020,7 +5020,7 @@ FileIO_WriteRecordName_Return:
 	slla bc
 
 FileIO_FormatRecordName:
-	ld16_24 xwa, 0x0272cc
+	ldw_da xwa, 0x0272cc
 	and wa, bc
 	cp wa, bc
 	scc8 z, l
@@ -5052,11 +5052,11 @@ FileIO_FormatName_CopyLoop:
 	ret
 
 FileIO_FormatName_Done:
-	ld16_24 xhl, 0x0272ce
+	ldw_da xhl, 0x0272ce
 	ret
 
 FileIO_FormatName_Return:
-	ld16_24 xbc, 0x025ea8
+	ldw_da xbc, 0x025ea8
 	cps bc, 0
 	jr lt, FileIO_BuildRecordPath
 	cp bc, 0x14
@@ -5075,7 +5075,7 @@ FileIO_BuildRecordPath_Loop:
 	slla bc
 
 FileIO_BuildRecordPath_AddExt:
-	ld16_24 xwa, 0x0272ce
+	ldw_da xwa, 0x0272ce
 	and wa, bc
 	cp wa, bc
 	scc8 z, l
@@ -5107,7 +5107,7 @@ FileIO_GetRecordAttr:
 	ret
 
 FileIO_GetRecordAttr_Check:
-	ld16_24 xwa, 0x025ea8
+	ldw_da xwa, 0x025ea8
 	cps wa, 0
 	jr lt, FileIO_GetRecordAttr_Return
 	cp wa, 0x14
@@ -5118,19 +5118,19 @@ FileIO_GetRecordAttr_Return:
 	ret
 
 FileIO_GetRecordAttr_Default:
-	ld8_24 l, 0x0272d0
+	ldb_da l, 0x0272d0
 	ret
 
 FileIO_SetModeFlag_Writing:
-	sti8_24 0x0272d0, 0x01
+	stib_da 0x0272d0, 0x01
 	ret
 
 FileIO_SetModeFlag_Reading:
-	sti8_24 0x0272d0, 0x00
+	stib_da 0x0272d0, 0x00
 	ret
 
 FileIO_CheckRecordValid:
-	ld16_24 xbc, 0x025ea8
+	ldw_da xbc, 0x025ea8
 	cps bc, 0
 	jr lt, CheckRecord_ReturnFalse
 	cp bc, 0x14
@@ -5152,7 +5152,7 @@ CheckRecord_ShiftDone:
 	muls bc, 0xc
 	ld wa, bc
 	lda_24 xbc, 0x025db8
-	ld_sriw3 WA, 0x07, 0xe4, 0xe0
+	ldw_sri WA, 0x07, 0xe4, 0xe0
 	and wa, de
 	cp wa, de
 	scc8 z, l
@@ -5191,7 +5191,7 @@ CheckRecordByFile_ShiftDone:
 	ret
 
 CheckFileSystemStatus:
-	ld16_24 xwa, 0x025ea8
+	ldw_da xwa, 0x025ea8
 	cps wa, 0
 	jr lt, CheckFS_ReturnZero
 	cp wa, 0x14
@@ -5204,7 +5204,7 @@ CheckFS_ReturnZero:
 CheckFS_ValidIndex:
 	muls wa, 0xc
 	lda_24 xbc, 0x025db8
-	ld_sriw3 HL, 0x07, 0xe4, 0xe0
+	ldw_sri HL, 0x07, 0xe4, 0xe0
 	ret
 
 FileIO_GetRecordFlags:
@@ -5225,7 +5225,7 @@ GetRecordFlags_Valid:
 	ret
 
 FileIO_CheckFileExists:
-	st_dri3b L, 0xfd, 0xf6, 0xfe
+	stb_dri L, 0xfd, 0xf6, 0xfe
 	lda xbc, (xsp)
 	call _findfirst
 	ld xwa, xhl
@@ -5239,7 +5239,7 @@ CheckFileExists_NotFound:
 	ldb l, 0x0
 
 CheckFileExists_Done:
-	st_dri3b L, 0xfd, 0x0a, 0x01
+	stb_dri L, 0xfd, 0x0a, 0x01
 	ret
 
 FileIO_InitRecordTable:
@@ -5249,7 +5249,7 @@ FileIO_InitRecordTable:
 	ldirw
 	lda_24 xbc, 0x025db8
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0xf0, 0x00
+	stb_dri B, 0xe5, 0xf0, 0x00
 
 InitRecordTable_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x50
@@ -5261,7 +5261,7 @@ InitRecordTable_CopyLoop:
 	jr c, InitRecordTable_CopyLoop
 	lda_24 xbc, 0x025eb2
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0x38, 0x13
+	stb_dri B, 0xe5, 0x38, 0x13
 
 InitRecordTable_ExtLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -5271,57 +5271,57 @@ InitRecordTable_ExtLoop:
 	lda xwa, (xwa + 82)
 	cp xwa, xde
 	jr c, InitRecordTable_ExtLoop
-	sti16_24 0x025ea8, 0x0000
-	sti16_24 0x0271ea, 0x0000
-	sti16_24 0x0271ec, 0x0000
-	sti16_24 0x0271ee, 0x0000
-	sti16_24 0x0271f0, 0x0000
-	sti16_24 0x0272c8, 0x0000
-	sti16_24 0x0272ca, 0x0000
+	stiw_da 0x025ea8, 0x0000
+	stiw_da 0x0271ea, 0x0000
+	stiw_da 0x0271ec, 0x0000
+	stiw_da 0x0271ee, 0x0000
+	stiw_da 0x0271f0, 0x0000
+	stiw_da 0x0272c8, 0x0000
+	stiw_da 0x0272ca, 0x0000
 	ret
 
 GetDiskSizeInfo:
-	ld8_24 a, SeqFileTypeCode_Lsw_0x4E
+	ldb_da a, SeqFileTypeCode_Lsw_0x4E
 	cpda8_24 a, 0x25db6
 	jr nz, GetDiskSize_Return
 	call GetMediaType
-	st8_24 0x025db6, l
+	stb_da 0x025db6, l
 
 GetDiskSize_Return:
-	ld8_24 l, 0x025db6
+	ldb_da l, 0x025db6
 	ret
 
 GetEncodedFreeSpaceData:
 	lda_24 xwa, 0x025d6c
-	ld32_24 xbc, SeqFileTypeCode_Lsw_0x4
+	ldl_da xbc, SeqFileTypeCode_Lsw_0x4
 	cp xbc, (xwa)
 	jr nz, GetEncoded_Return
 	lda xbc, (xwa + 4)
 	call GetDiskFreeSpace
 
 GetEncoded_Return:
-	ld32_24 xhl, 0x025d6c
+	ldl_da xhl, 0x025d6c
 	ret
 
 FileIO_GetDiskFreeSpace:
 	lda_24 xwa, 0x025d6c
 	lda xbc, (xwa + 4)
 	call GetDiskFreeSpace
-	ld32_24 xhl, 0x025d6c
+	ldl_da xhl, 0x025d6c
 	ret
 
 FileIO_ResetCurrentRecord:
-	ld32_24 xwa, SeqFileTypeCode_Lsw_0x4
-	st32_24 0x025d6c, xwa
+	ldl_da xwa, SeqFileTypeCode_Lsw_0x4
+	stl_da 0x025d6c, xwa
 	ret
 
 FileIO_GetDiskRecordPtr:
 	lda_24 xwa, 0x025d6c
 	lda xbc, (xwa + 4)
-	ld32_24 xde, SeqFileTypeCode_Lsw_0x8
+	ldl_da xde, SeqFileTypeCode_Lsw_0x8
 	cp xde, (xbc)
 	call_24 z, GetDiskFreeSpace
-	ld32_24 xhl, 0x025d70
+	ldl_da xhl, 0x025d70
 	ret
 
 FileIO_SearchAndLoadFile:
@@ -5355,7 +5355,7 @@ SearchLoad_Return:
 	ret
 
 ValidateFileSelectionIndex:
-	ld8_24 c, 0x025db6
+	ldb_da c, 0x025db6
 	cps c, 2
 	jr z, ValidateSelection_CheckRange
 	cps c, 3
@@ -5378,7 +5378,7 @@ ValidateSelection_Ok:
 	ret
 
 GetCurrentFileIndex:
-	ld16_24 xwa, 0x025ea8
+	ldw_da xwa, 0x025ea8
 	calr ValidateFileSelectionIndex
 	cps hl, 0
 	jr z, GetCurrentFile_ReturnIndex
@@ -5386,7 +5386,7 @@ GetCurrentFileIndex:
 	ret
 
 GetCurrentFile_ReturnIndex:
-	ld16_24 xhl, 0x025ea8
+	ldw_da xhl, 0x025ea8
 	ret
 
 NotifyUIOfSelectionChange:
@@ -5396,12 +5396,12 @@ NotifyUIOfSelectionChange:
 	calr ValidateFileSelectionIndex
 	cp hl, 0xffff
 	jr nz, NotifyUI_StoreIndex
-	ld16_24 xhl, 0x025ea8
+	ldw_da xhl, 0x025ea8
 	jr NotifyUI_Return
 
 NotifyUI_StoreIndex:
 	ld hl, iz
-	st16_24 0x025ea8, xhl
+	stw_da 0x025ea8, xhl
 
 NotifyUI_Return:
 	popw iz
@@ -5432,7 +5432,7 @@ GetFileEntryPtr_Return:
 	ret
 
 GetCurrentFileType:
-	ld16_24 xwa, 0x025ea8
+	ldw_da xwa, 0x025ea8
 	calr ValidateFileSelectionIndex
 	cps hl, 0
 	jr z, GetCurrentFileType_Lookup
@@ -5440,16 +5440,16 @@ GetCurrentFileType:
 	ret
 
 GetCurrentFileType_Lookup:
-	ld16_24 xwa, 0x025ea8
+	ldw_da xwa, 0x025ea8
 	muls wa, 0xc
 	lda_24 xbc, 0x025dc2
-	ld_srib3 L, 0x07, 0xe4, 0xe0
+	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 UpdateFileEntry:
-	st_dri3b L, 0xfd, 0xd4, 0xfe
+	stb_dri L, 0xfd, 0xd4, 0xfe
 	push xiz
-	lda_dri3 XHL, 0xfd, 0x2e, 0x01
+	lda_dri XHL, 0xfd, 0x2e, 0x01
 	ld iz, wa
 	ld xiy, Filename_TemplateArea_0x26
 	lda xix, (xsp + 20)
@@ -5463,17 +5463,17 @@ UpdateFileEntry:
 	calr ValidateFileSelectionIndex
 	cps hl, 0
 	jr nz, UpdateFileEntry_Error
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	extz wa
-	ldfr_werp WA, 0xfa
+	ldw_erp WA, 0xfa
 	ld wa, iz
 	calr GetFileEntryPtr
 	ld xde, xhl
 	lda xwa, (xsp + 20)
-	ldto_werp BC, 0xfa
+	stw_erp BC, 0xfa
 	calr FileIO_FormatFileIndex
 	lda xbc, (xsp + 20)
-	ld_srib E, (xsp + 0x012e)
+	ldb_sri0 E, (xsp + 0x012e)
 	extz de
 	lda xwa, (xsp + 4)
 	calr FileIO_ReadHeader
@@ -5494,7 +5494,7 @@ UpdateFileEntry_Commit:
 
 UpdateFileEntry_Return:
 	pop xiz
-	st_dri3b L, 0xfd, 0x2c, 0x01
+	stb_dri L, 0xfd, 0x2c, 0x01
 	ret
 
 ParseFileExtension:
@@ -5522,10 +5522,10 @@ ParseFileExt_DotFound:
 	cp iz, 0xa
 	jr nc, ParseFileExt_NoMatch
 	inc 1, iz
-	ldi_berp 0xfb, 0
+	ldib_erp 0xfb, 0
 
 ParseFileExt_MatchLoop:
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	extz wa
 	sla wa, 2
 	lda_24 xbc, SeqFileType_CodeTable
@@ -5536,7 +5536,7 @@ ParseFileExt_MatchLoop:
 	calr FileIO_SearchFile
 	cps hl, 0
 	jr z, ParseFileExt_MatchCheck
-	inc1_berp 0xfb
+	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jr c, ParseFileExt_MatchLoop
 
@@ -5558,14 +5558,14 @@ ParseFileExt_StoreResult:
 	ld xde, 0x25db8
 	add xde, xbc
 	lds bc, 1
-	ldto_berp A, 0xfb
+	stb_erp A, 0xfb
 	and a, 0xf
 	jr z, ParseFileExt_SetFlag
 	slla bc
 
 ParseFileExt_SetFlag:
 	or (xde), bc
-	ldto_berp L, 0xfb
+	stb_erp L, 0xfb
 	extz hl
 
 ParseFileExt_Return:
@@ -5611,7 +5611,7 @@ HandleFilenameChange:
 	ld bc, iz
 	muls bc, 0xc
 	lda_24 xwa, 0x025db8
-	st_dri3b W, 0x07, 0xe0, 0xe4
+	stb_dri W, 0x07, 0xe0, 0xe4
 	cp (xwa + 2), 0x0
 	jr nz, HandleFilenameChange_ExistingEntry
 	ld wa, iz
@@ -5623,14 +5623,14 @@ HandleFilenameChange:
 	ld bc, iz
 	muls bc, 0xc
 	lda_24 xwa, 0x025dba
-	st_dri3b W, 0x07, 0xe0, 0xe4
+	stb_dri W, 0x07, 0xe0, 0xe4
 	ld xbc, (xsp + 10)
 	inc 2, xbc
 	lds de, 6
 	calr FileIO_CopyString_WriteNull
 	muls iz, 0xc
 	lda_24 xwa, 0x025db8
-	st_dri3b W, 0x07, 0xe0, 0xf8
+	stb_dri W, 0x07, 0xe0, 0xf8
 	ld (xwa + 8), 0x0
 	cpw (xsp + 4), 0x0
 	jr nz, HandleFilenameChange_ReturnOK
@@ -5663,7 +5663,7 @@ HandleFilenameChange_ExistingEntry:
 	jr nz, HandleFilenameChange_ReturnFail
 	lda_24 xbc, 0x025dc2
 	muls iz, 0xc
-	st_dri3b A, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1388
 	jr ule, HandleFilenameChange_SmallFile
@@ -5682,11 +5682,11 @@ HandleFilenameChange_Return:
 	ret
 
 GetEncodedFileSizeData:
-	st_dri3b L, 0xfd, 0xee, 0xfe
+	stb_dri L, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, 0x025db8
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0xf0, 0x00
+	stb_dri B, 0xe5, 0xf0, 0x00
 
 GetEncFileSize_CopyRecordLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x50
@@ -5748,7 +5748,7 @@ GetEncFileSize_ReleaseHandle:
 GetEncFileSize_Return:
 	ld hl, iz
 	popw iz
-	st_dri3b L, 0xfd, 0x12, 0x01
+	stb_dri L, 0xfd, 0x12, 0x01
 	ret
 
 ; =============================================================================
@@ -5898,7 +5898,7 @@ IdxRecLookup_Return:
 
 
 ValidateFileRange:
-	ld8_24 c, 0x025db6
+	ldb_da c, 0x025db6
 	cps c, 2
 	jr z, ValidateFileRange_CheckLower
 	cps c, 3
@@ -5917,7 +5917,7 @@ ValidateFileRange_Invalid:
 	ret
 
 ValidateFileRange_InRange:
-	ld16_24 xbc, 0x0271ee
+	ldw_da xbc, 0x0271ee
 	cp wa, bc
 	jr lt, ValidateFileRange_FirstPage
 	cpda16_24 xwa, 0x271f0
@@ -5931,7 +5931,7 @@ ValidateFileRange_SecondPage:
 	sub wa, bc
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
-	cp_srib_im 0x07, 0xe4, 0xe0, 0x00
+	cpib_sri 0x07, 0xe4, 0xe0, 0x00
 	jr nz, ValidateFileRange_Found
 	lds hl, 2
 	ret
@@ -5941,7 +5941,7 @@ ValidateFileRange_Found:
 	ret
 
 GetFirstPageBase:
-	ld16_24 xwa, 0x0271ea
+	ldw_da xwa, 0x0271ea
 	calr ValidateFileRange
 	cps hl, 0
 	jr z, GetFirstPageBase_Valid
@@ -5949,15 +5949,15 @@ GetFirstPageBase:
 	ret
 
 GetFirstPageBase_Valid:
-	ld16_24 xhl, 0x0271ea
+	ldw_da xhl, 0x0271ea
 	ret
 
 BuildSecondPageRecords:
-	st_dri3b L, 0xfd, 0xee, 0xfe
+	stb_dri L, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, 0x025eb2
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0x38, 0x13
+	stb_dri B, 0xe5, 0x38, 0x13
 
 BuildSecondPage_CopyRecordLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -5977,10 +5977,10 @@ BuildSecondPage_CopyRecordLoop:
 	jr lt, BuildSecondPage_Return
 	lda xwa, (xsp + 16)
 	ld (xsp + 6), xwa
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cps wa, 0
 	jr gt, BuildSecondPage_IterStart
-	cpdi16_24 0x271f0, 0
+	cpw_da 0x271f0, 0
 	jr lt, BuildSecondPage_IterStart
 	neg wa
 	muls wa, 0x52
@@ -5999,7 +5999,7 @@ BuildSecondPage_IterStart:
 	jr nz, BuildSecondPage_ReleaseHandle
 
 BuildSecondPage_IterBody:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cp iz, wa
 	jr lt, BuildSecondPage_IterNext
 	cpda16_24 xiz, 0x271f0
@@ -6029,7 +6029,7 @@ BuildSecondPage_ReleaseHandle:
 BuildSecondPage_Return:
 	ld hl, iz
 	popw iz
-	st_dri3b L, 0xfd, 0x12, 0x01
+	stb_dri L, 0xfd, 0x12, 0x01
 	ret
 
 NavigateToFileIndex:
@@ -6039,7 +6039,7 @@ NavigateToFileIndex:
 	calr ValidateFileRange
 	cp hl, 0xffff
 	jr nz, NavToFileIdx_InSecondPage
-	ld16_24 xhl, 0x0271ea
+	ldw_da xhl, 0x0271ea
 	jr NavToFileIdx_Return
 
 NavToFileIdx_InSecondPage:
@@ -6050,20 +6050,20 @@ NavToFileIdx_InSecondPage:
 	div wa, 0x3c
 	mul wa, 0x3c
 	ld bc, wa
-	st16_24 0x0271ee, xbc
+	stw_da 0x0271ee, xbc
 	add bc, 0x3b
-	ld16_24 xwa, 0x0271ec
+	ldw_da xwa, 0x0271ec
 	cp bc, wa
 	jr ge, NavToFileIdx_ClampEnd
 	ld wa, bc
 
 NavToFileIdx_ClampEnd:
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	calr BuildSecondPageRecords
 
 NavToFileIdx_StoreIndex:
 	ld hl, iz
-	st16_24 0x0271ea, xhl
+	stw_da 0x0271ea, xhl
 
 NavToFileIdx_Return:
 	popw iz
@@ -6080,7 +6080,7 @@ GetRecordPtrForFile:
 	jr GetRecordPtr_Return
 
 GetRecordPtr_InRange:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -6132,8 +6132,8 @@ ValidateAndSearch_Return:
 
 
 GetFileCountEncoded:
-	sti16_24 0x0271ee, 0x0000
-	sti16_24 0x0271f0, 0x003b
+	stiw_da 0x0271ee, 0x0000
+	stiw_da 0x0271f0, 0x003b
 	calr BuildSecondPageRecords
 	lds wa, 0
 	cps hl, 0
@@ -6142,10 +6142,10 @@ GetFileCountEncoded:
 	dec 1, wa
 
 GetFileCount_StoreAndClamp:
-	st16_24 0x0271ec, xwa
+	stw_da 0x0271ec, xwa
 	cpdm16_24 0x271f0, xwa
 	ret le
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	ret
 
 ReadVariableLengthInt:
@@ -6202,7 +6202,7 @@ ReadField_ShortLoop:
 
 ReadField_StoreByte:
 	ld xwa, (xsp + 4)
-	lda_dri3 XSP, 0x07, 0xe0, 0xf8
+	lda_dri XSP, 0x07, 0xe0, 0xf8
 	decm 1, (xsp + 8)
 	inc 1, iz
 	cpw (xsp + 8), 0x0
@@ -6218,7 +6218,7 @@ ReadField_LongLoop:
 	jr lt, ReadField_DiscardExtra
 	ld c, l
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xe0, 0xf8
+	stb_dri W, 0x07, 0xe0, 0xf8
 	cpw (xsp + 2), 0x0
 	jr z, ReadField_Long_CheckSpace
 	cp hl, 0x20
@@ -6246,7 +6246,7 @@ ReadField_DiscardLoop:
 
 ReadField_Terminate:
 	ld xwa, (xsp + 4)
-	stib_dri 0x07, 0xe0, 0xf8, 0x00
+	stib_ind 0x07, 0xe0, 0xf8, 0x00
 	jr ReadField_TrimLoop
 
 ReadField_TrimSpace:
@@ -6255,7 +6255,7 @@ ReadField_TrimSpace:
 ReadField_TrimLoop:
 	dec 1, iz
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xe0, 0xf8
+	stb_dri W, 0x07, 0xe0, 0xf8
 	cp (xwa), 0x20
 	jr nz, ReadField_Return
 	cps iz, 0
@@ -6269,8 +6269,8 @@ ReadField_Return:
 ParseSMFTrackName:
 	push xiz
 	lds iz, 0
-	sti8_24 0x025b90, 0x00
-	ldi_werp 0xfa, 0
+	stib_da 0x025b90, 0x00
+	ldiw_erp 0xfa, 0
 	calr ReadVariableLengthInt
 	cps hl, 0
 	jrl nz, ParseSMF_ReturnNamePtr
@@ -6280,10 +6280,10 @@ ParseSMF_ReadEvent:
 	cp hl, 0xff
 	jr nz, ParseSMF_CheckSysex
 	call FileIO_ReadByte
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	calr ReadVariableLengthInt
 	ld iz, hl
-	cpi_werp 0xfa, 3
+	cpiw_erp 0xfa, 3
 	jr nz, ParseSMF_ResetRunning
 	ld wa, iz
 	ld xbc, 0x25b90
@@ -6302,7 +6302,7 @@ ParseSMF_SysexReadLen:
 	ld iz, hl
 
 ParseSMF_ResetRunning:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 
 ParseSMF_SkipDataBytes:
 	cps iz, 0
@@ -6337,7 +6337,7 @@ ParseSMF_Check3ByteMsg:
 	lds iz, 3
 
 ParseSMF_SetRunningStatus:
-	ldfr_werp HL, 0xfa
+	ldw_erp HL, 0xfa
 	jr ParseSMF_SkipDataBytes
 
 ParseSMF_CheckDataByte:
@@ -6370,7 +6370,7 @@ ProcessFileRecord:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 10), wa
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	sub (xsp + 10), wa
 	ld wa, (xsp + 10)
 	extz xwa
@@ -6603,7 +6603,7 @@ GetFileEntryByIndex:
 	jr GetEntry_Return
 
 GetEntry_ComputeOffset:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -6620,7 +6620,7 @@ GetEntry_ComputeOffset:
 	calr ProcessFileRecord
 
 FileEntry_ComputeOffset:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -6693,7 +6693,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25bd2
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	sti8_24	0x25be2, 0
+	stib_da	0x25be2, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25bd2
 	popw	iz
@@ -6744,7 +6744,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25be8
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	sti8_24	0x25bf8, 0
+	stib_da	0x25bf8, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25be8
 	pop	xiz
@@ -6787,7 +6787,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25bfe
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	sti8_24	0x25c0e, 0
+	stib_da	0x25c0e, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25bfe
 	popw	iz
@@ -6834,7 +6834,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25c14
 	ld	xbc, 13
 	call	FileIO_ReadBlock
-	sti8_24	0x25c21, 0
+	stib_da	0x25c21, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25c14
 	popw	iz
@@ -6878,7 +6878,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25c2a
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	sti8_24	0x25c3a, 0
+	stib_da	0x25c3a, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25c2a
 	popw	iz
@@ -6918,7 +6918,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25c40
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	sti8_24	0x25c50, 0
+	stib_da	0x25c50, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25c40
 	popw	iz
@@ -6952,7 +6952,7 @@ FileIO_ByteBlock_DemoProc2:
 	jr	ge, 7
 	ld	xhl, Filename_TemplateArea
 	jr	54
-	sti8_24	0x25c56, 32
+	stib_da	0x25c56, 32
 	ld	wa, (xsp+26)
 	mul	wa, 80
 	add	wa, 0x4aa7
@@ -6962,7 +6962,7 @@ FileIO_ByteBlock_DemoProc2:
 	lda_24	xwa, 0x25c57
 	ld	xbc, 13
 	call	FileIO_ReadBlock
-	sti8_24	0x25c64, 0
+	stib_da	0x25c64, 0
 	call	FileIO_CloseHandle
 	lda_24	xhl, 0x25c56
 	popw	iz
@@ -6970,7 +6970,7 @@ FileIO_ByteBlock_DemoProc2:
 	ret
 
 ValidateFileRangeType5:
-	cpi8_24 0x025db6, 0x05
+	cpib_da 0x025db6, 0x05
 	jr nz, ValidateRange_OutOfRange
 	cps wa, 0
 	jr lt, ValidateRange_OutOfRange
@@ -6982,7 +6982,7 @@ ValidateRange_OutOfRange:
 	ret
 
 ValidateRange_CheckPage:
-	ld16_24 xbc, 0x0271ee
+	ldw_da xbc, 0x0271ee
 	cp wa, bc
 	jr lt, ValidateRange_NeedPageChange
 	cpda16_24 xwa, 0x271f0
@@ -6996,7 +6996,7 @@ ValidateRange_CheckEmpty:
 	sub wa, bc
 	muls wa, 0x52
 	lda_24 xbc, 0x025ec0
-	cp_srib_im 0x07, 0xe4, 0xe0, 0x00
+	cpib_sri 0x07, 0xe4, 0xe0, 0x00
 	jr nz, ValidateRange_IsValid
 	lds hl, 2
 	ret
@@ -7006,7 +7006,7 @@ ValidateRange_IsValid:
 	ret
 
 GetCurrentFileIndexAlt:
-	ld16_24 xwa, 0x0271ea
+	ldw_da xwa, 0x0271ea
 	calr ValidateFileRangeType5
 	cps hl, 0
 	jr z, GetCurrentIndex_Return
@@ -7014,15 +7014,15 @@ GetCurrentFileIndexAlt:
 	ret
 
 GetCurrentIndex_Return:
-	ld16_24 xhl, 0x0271ea
+	ldw_da xhl, 0x0271ea
 	ret
 
 BuildPageRecords:
-	st_dri3b L, 0xfd, 0xee, 0xfe
+	stb_dri L, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, 0x025eb2
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0x38, 0x13
+	stb_dri B, 0xe5, 0x38, 0x13
 
 BuildRecords_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -7042,10 +7042,10 @@ BuildRecords_CopyLoop:
 	jr lt, BuildRecords_Return
 	lda xwa, (xsp + 16)
 	ld (xsp + 6), xwa
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cps wa, 0
 	jr gt, BuildRecords_SearchDone
-	cpdi16_24 0x271f0, 0
+	cpw_da 0x271f0, 0
 	jr lt, BuildRecords_SearchDone
 	neg wa
 	muls wa, 0x52
@@ -7064,7 +7064,7 @@ BuildRecords_SearchDone:
 	jr nz, BuildRecords_Cleanup
 
 BuildRecords_UpdateLoop:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cp iz, wa
 	jr lt, BuildRecords_UpdateNext
 	cpda16_24 xiz, 0x271f0
@@ -7094,7 +7094,7 @@ BuildRecords_Cleanup:
 BuildRecords_Return:
 	ld hl, iz
 	popw iz
-	st_dri3b L, 0xfd, 0x12, 0x01
+	stb_dri L, 0xfd, 0x12, 0x01
 	ret
 
 SetCurrentFileIndex:
@@ -7104,7 +7104,7 @@ SetCurrentFileIndex:
 	calr ValidateFileRangeType5
 	cp hl, 0xffff
 	jr nz, SetIndex_InvalidWrap
-	ld16_24 xhl, 0x0271ea
+	ldw_da xhl, 0x0271ea
 	jr SetIndex_Return
 
 SetIndex_InvalidWrap:
@@ -7115,20 +7115,20 @@ SetIndex_InvalidWrap:
 	div wa, 0x3c
 	mul wa, 0x3c
 	ld bc, wa
-	st16_24 0x0271ee, xbc
+	stw_da 0x0271ee, xbc
 	add bc, 0x3b
-	ld16_24 xwa, 0x0271ec
+	ldw_da xwa, 0x0271ec
 	cp bc, wa
 	jr ge, SetIndex_UpdatePageEnd
 	ld wa, bc
 
 SetIndex_UpdatePageEnd:
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	calr BuildPageRecords
 
 SetIndex_StoreIndex:
 	ld hl, iz
-	st16_24 0x0271ea, xhl
+	stw_da 0x0271ea, xhl
 
 SetIndex_Return:
 	popw iz
@@ -7145,7 +7145,7 @@ GetFileRecordPtr:
 	jr GetRecordPtrAlt_Return
 
 GetRecordPtr_ComputeOffset:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -7161,8 +7161,8 @@ GetRecordPtrAlt_Return:
 	ret
 
 BuildPageRecordsAlt:
-	sti16_24 0x0271ee, 0x0000
-	sti16_24 0x0271f0, 0x003b
+	stiw_da 0x0271ee, 0x0000
+	stiw_da 0x0271f0, 0x003b
 	calr BuildPageRecords
 	lds wa, 0
 	cps hl, 0
@@ -7171,23 +7171,23 @@ BuildPageRecordsAlt:
 	dec 1, wa
 
 BuildRecordsAlt_StoreCount:
-	st16_24 0x0271ec, xwa
+	stw_da 0x0271ec, xwa
 	cpdm16_24 0x271f0, xwa
 	ret le
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	ret
 
 TrimAndFormatFilename:
 	lda xsp, (xsp - 128)
 	push xiz
 	ld xiz, xbc
-	stib_dri 0x07, 0xf8, 0xe0, 0x00
+	stib_ind 0x07, 0xf8, 0xe0, 0x00
 	lds ix, 0
 	cps wa, 0
 	jr le, TrimFormat_TrimTrailing
 
 TrimFormat_ScanLoop:
-	st_dri3b C, 0x07, 0xf8, 0xf0
+	stb_dri C, 0x07, 0xf8, 0xf0
 	ld c, (xhl)
 	cp c, 0x20
 	jr nc, TrimFormat_CheckSeparator
@@ -7203,7 +7203,7 @@ TrimFormat_TrimTrailing:
 	jr lt, TrimFormat_CheckLeading
 
 TrimFormat_TrimLoop:
-	st_dri3b W, 0x07, 0xf8, 0xf0
+	stb_dri W, 0x07, 0xf8, 0xf0
 	cp (xwa), 0x20
 	jr nz, TrimFormat_CheckLeading
 	ld (xwa), 0x0
@@ -7230,7 +7230,7 @@ TrimFormat_SkipSpaces:
 	inc 1, ix
 
 TrimFormat_SkipLoop:
-	st_dri3b A, 0x07, 0xe0, 0xf0
+	stb_dri A, 0x07, 0xe0, 0xf0
 	cp (xbc), 0x20
 	jr z, TrimFormat_SkipSpaces
 	ld xwa, xiz
@@ -7239,11 +7239,11 @@ TrimFormat_SkipLoop:
 TrimFormat_Done:
 	lds hl, 0
 	pop xiz
-	st_dri3b L, 0xfd, 0x80, 0x00
+	stb_dri L, 0xfd, 0x80, 0x00
 	ret
 
 DetectFileType:
-	ld8_24 l, 0x025db6
+	ldb_da l, 0x025db6
 	cps l, 6
 	jr z, DetectType_KnownType
 	cps l, 7
@@ -7261,7 +7261,7 @@ DetectType_TryOpen:
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jr lt, DetectType_TryExtended
-	sti8_24 0x025db6, 0x06
+	stib_da 0x025db6, 0x06
 	ld xwa, 0x10
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -7281,7 +7281,7 @@ DetectType_TryOpen:
 
 DetectType_TrimAndReturn:
 	calr TrimAndFormatFilename
-	ld8_24 l, 0x025db6
+	ldb_da l, 0x025db6
 	extz hl
 	ret
 
@@ -7291,7 +7291,7 @@ DetectType_TryExtended:
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jr lt, DetectType_NotFound
-	sti8_24 0x025db6, 0x07
+	stib_da 0x025db6, 0x07
 	ld xwa, 0x12d8
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -7309,7 +7309,7 @@ DetectType_NotFound:
 	ret
 
 ValidateFileRangeAlt:
-	ld8_24 c, 0x025db6
+	ldb_da c, 0x025db6
 	cps c, 6
 	jr z, ValidateRangeAlt_CheckType
 	cps c, 7
@@ -7326,7 +7326,7 @@ ValidateRangeAlt_OutOfRange:
 	ret
 
 ValidateRangeAlt_CheckPage:
-	ld16_24 xbc, 0x0271ee
+	ldw_da xbc, 0x0271ee
 	cp wa, bc
 	jr lt, ValidateRangeAlt_NeedPageChange
 	cpda16_24 xwa, 0x271f0
@@ -7340,7 +7340,7 @@ ValidateRangeAlt_CheckEmpty:
 	sub wa, bc
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
-	cp_srib_im 0x07, 0xe4, 0xe0, 0x00
+	cpib_sri 0x07, 0xe4, 0xe0, 0x00
 	jr nz, ValidateRangeAlt_IsValid
 	lds hl, 2
 	ret
@@ -7350,7 +7350,7 @@ ValidateRangeAlt_IsValid:
 	ret
 
 FileIO_GetCurrentFileIndex_Alt:
-	ld16_24 xwa, 0x0271ea
+	ldw_da xwa, 0x0271ea
 	calr ValidateFileRangeAlt
 	cps hl, 0
 	jr z, GetCurrentFileAlt_ReturnIndex
@@ -7358,7 +7358,7 @@ FileIO_GetCurrentFileIndex_Alt:
 	ret
 
 GetCurrentFileAlt_ReturnIndex:
-	ld16_24 xhl, 0x0271ea
+	ldw_da xhl, 0x0271ea
 	ret
 
 FileIO_BuildFileExtName:
@@ -7366,7 +7366,7 @@ FileIO_BuildFileExtName:
 	push xiz
 	ld xiz, xwa
 	lda xwa, (xsp + 4)
-	stib_dpi 0xe0, 0x2e
+	stib_dsp 0xe0, 0x2e
 	ld (xiz + 12), 0x0
 	lda xbc, (xiz + 8)
 	calr FileIO_CopyString
@@ -7382,7 +7382,7 @@ FileIO_InitDirScan:
 	push xiz
 	lda_24 xbc, 0x025eb2
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0x38, 0x13
+	stb_dri B, 0xe5, 0x38, 0x13
 
 InitDirScan_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -7392,8 +7392,8 @@ InitDirScan_CopyLoop:
 	lda xwa, (xwa + 82)
 	cp xwa, xde
 	jr c, InitDirScan_CopyLoop
-	ldi_werp 0xfa, 0
-	cpi8_24 0x025db6, 0x06
+	ldiw_erp 0xfa, 0
+	cpib_da 0x025db6, 0x06
 	jrl nz, DirScan_AltMediaPath
 	ld xwa, FileOp_StubAndDirNames_0x42
 	ld xbc, FileOp_StubAndDirNames_0x3E
@@ -7404,14 +7404,14 @@ InitDirScan_CopyLoop:
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
 	call FileIO_ReadByte
-	ldfr_werp HL, 0xfa
-	ld16_24 xiz, 0x0271ee
+	ldw_erp HL, 0xfa
+	ldw_da xiz, 0x0271ee
 	cpda16_24 xiz, 0x271f0
 	jr gt, FileIO_DirScanDone
 
 DirScan_ProcessEntry:
 	lda_24 xwa, 0x027200
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	mul wa, 0x30
 	add wa, 0xa0
@@ -7441,7 +7441,7 @@ FileIO_DirScanDone:
 	call FileIO_CloseHandle
 
 DirScan_ReturnResult:
-	ldto_werp HL, 0xfa
+	stw_erp HL, 0xfa
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -7466,14 +7466,14 @@ DirScan_AltReadLoop:
 	lda xbc, (xsp + 4)
 	cp (xbc), 0x20
 	jr lt, FileIO_DirScanDone
-	ld16_24 xde, 0x0271ee
-	ldto_werp WA, 0xfa
+	ldw_da xde, 0x0271ee
+	stw_erp WA, 0xfa
 	cp wa, de
 	jr lt, DirScan_AltNextEntry
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	cpda16_24 xwa, 0x271f0
 	jr gt, DirScan_AltNextEntry
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	sub wa, de
 	muls wa, 0x52
 	lda_24 xde, 0x025eb2
@@ -7481,7 +7481,7 @@ DirScan_AltReadLoop:
 	add xwa, xde
 	ldw de, 0xb
 	calr FileIO_CopyString_WriteNull
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	subda16_24 xwa, 0x271ee
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
@@ -7490,7 +7490,7 @@ DirScan_AltReadLoop:
 	calr FileIO_BuildFileExtName
 
 DirScan_AltNextEntry:
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	ld xwa, 0x45
 	lds bc, 1
 	jr DirScan_AltReadLoop
@@ -7502,7 +7502,7 @@ FileIO_SelectFileByIndex:
 	calr ValidateFileRangeAlt
 	cp hl, 0xffff
 	jr nz, SelectFile_CheckPageBound
-	ld16_24 xhl, 0x0271ea
+	ldw_da xhl, 0x0271ea
 	jr SelectFile_Return
 
 SelectFile_CheckPageBound:
@@ -7513,20 +7513,20 @@ SelectFile_CheckPageBound:
 	div wa, 0x3c
 	mul wa, 0x3c
 	ld bc, wa
-	st16_24 0x0271ee, xbc
+	stw_da 0x0271ee, xbc
 	add bc, 0x3b
-	ld16_24 xwa, 0x0271ec
+	ldw_da xwa, 0x0271ec
 	cp bc, wa
 	jr ge, SelectFile_ClampEnd
 	ld wa, bc
 
 SelectFile_ClampEnd:
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	calr FileIO_InitDirScan
 
 SelectFile_StoreIndex:
 	ld hl, iz
-	st16_24 0x0271ea, xhl
+	stw_da 0x0271ea, xhl
 
 SelectFile_Return:
 	popw iz
@@ -7543,7 +7543,7 @@ FileIO_GetFileEntryByIndex:
 	jr GetFileEntry_Return
 
 GetFileEntry_ComputeOffset:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -7559,8 +7559,8 @@ GetFileEntry_Return:
 	ret
 
 FileIO_InitFileNavigation:
-	sti16_24 0x0271ee, 0x0000
-	sti16_24 0x0271f0, 0x003b
+	stiw_da 0x0271ee, 0x0000
+	stiw_da 0x0271f0, 0x003b
 	calr FileIO_InitDirScan
 	lds wa, 0
 	cps hl, 0
@@ -7569,20 +7569,20 @@ FileIO_InitFileNavigation:
 	dec 1, wa
 
 InitFileNav_ClampEnd:
-	st16_24 0x0271ec, xwa
+	stw_da 0x0271ec, xwa
 	cpdm16_24 0x271f0, xwa
 	ret le
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	ret
 
 FileIO_RefreshFileNames:
 	push xiz
-	cpi8_24 0x025db6, 0x06
+	cpib_da 0x025db6, 0x06
 	jrl nz, RefreshNames_AltMediaPath
 	ld xwa, FileOp_StubAndDirNames_0x62
 	ld xbc, FileOp_StubAndDirNames_0x5E
 	call FileIO_OpenWithMode
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld iz, wa
 	cps hl, 0
 	jr ge, RefreshNames_CheckEnd
@@ -7594,7 +7594,7 @@ RefreshNames_FallbackLoop:
 	subda16_24 xwa, 0x271ee
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 	inc 1, iz
@@ -7608,11 +7608,11 @@ RefreshNames_CheckEnd:
 
 RefreshNames_ReadLoop:
 	lda_24 xwa, 0x027200
-	ld_srib3 A, 0x07, 0xe0, 0xf8
+	ldb_sri A, 0x07, 0xe0, 0xf8
 	exts wa
 	mul wa, 0x30
 	add wa, 0xa0
-	ldfr_werp WA, 0xfa
+	ldw_erp WA, 0xfa
 	exts xwa
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -7621,7 +7621,7 @@ RefreshNames_ReadLoop:
 	muls wa, 0x52
 	ld bc, wa
 	lda_24 xwa, 0x025ec0
-	st_dri3b W, 0x07, 0xe0, 0xe4
+	stb_dri W, 0x07, 0xe0, 0xe4
 	ld xbc, 0x30
 	call FileIO_ReadBlock
 	ld wa, iz
@@ -7640,7 +7640,7 @@ RefreshNames_ReadLoop:
 	subda16_24 xwa, 0x271ee
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
@@ -7654,7 +7654,7 @@ RefreshNames_AltMediaPath:
 	ld xwa, FileOp_StubAndDirNames_0x70
 	ld xbc, FileOp_StubAndDirNames_0x6C
 	call FileIO_OpenWithMode
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cps hl, 0
 	jr ge, RefreshNames_AltOpenSuccess
 	ld iz, wa
@@ -7666,7 +7666,7 @@ RefreshNames_AltFallbackLoop:
 	subda16_24 xwa, 0x271ee
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 	inc 1, iz
@@ -7681,7 +7681,7 @@ RefreshNames_AltOpenSuccess:
 	jr gt, FileIO_ScanDone
 
 RefreshNames_AltReadLoop:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	exts xwa
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -7690,7 +7690,7 @@ RefreshNames_AltReadLoop:
 	muls wa, 0x52
 	ld bc, wa
 	lda_24 xwa, 0x025ec0
-	st_dri3b W, 0x07, 0xe0, 0xe4
+	stb_dri W, 0x07, 0xe0, 0xe4
 	ld xbc, 0x10
 	call FileIO_ReadBlock
 	ld wa, iz
@@ -7709,7 +7709,7 @@ RefreshNames_AltReadLoop:
 	subda16_24 xwa, 0x271ee
 	muls wa, 0x52
 	lda_24 xbc, 0x025eb2
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
@@ -7738,7 +7738,7 @@ FileIO_GetFileEntryWithRefresh:
 	jr GetEntryRefresh_Return
 
 GetEntryRefresh_ComputeOffset:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -7749,7 +7749,7 @@ GetEntryRefresh_ComputeOffset:
 	add xwa, xhl
 	cp (xwa), 0x0
 	call_24 z, FileIO_RefreshFileNames
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -7778,9 +7778,9 @@ CheckMediaWritable_Ok:
 	ret
 
 FileIO_OpenWithBuiltPath:
-	st_dri3b L, 0xfd, 0x70, 0xff
+	stb_dri L, 0xfd, 0x70, 0xff
 	push xiz
-	st_dri3l XBC, 0xfd, 0x90, 0x00
+	stl_dri XBC, 0xfd, 0x90, 0x00
 	ld xiz, xwa
 	lda xwa, (xsp + 4)
 	ld xbc, 0x272d2
@@ -7795,46 +7795,46 @@ FileIO_OpenWithBuiltPath:
 	ld_sril XBC, (xsp + 0x0090)
 	call FileIO_OpenWithMode
 	pop xiz
-	st_dri3b L, 0xfd, 0x90, 0x00
+	stb_dri L, 0xfd, 0x90, 0x00
 	ret
 
 FileIO_BuildFileIndex:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	sti8_24 0x027412, 0x00
-	sti8_24 0x027414, 0x00
+	stib_da 0x027412, 0x00
+	stib_da 0x027414, 0x00
 	lds iz, 0
 
 BuildIndex_ScanLoop:
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xe0, 0xf8
+	stb_dri W, 0x07, 0xe0, 0xf8
 	ld xbc, FileOp_StubAndDirNames_0x7E
 	lds de, 3
 	calr FileIO_Search_SkipEntry
 	cps hl, 0
 	jr z, BuildIndex_Return
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	jr BuildIndex_CheckComma
 
 BuildIndex_CheckSubEntry:
-	ld8_24 c, 0x027412
+	ldb_da c, 0x027412
 	exts bc
 	sla bc, 5
-	add_werp BC, 0xfa
+	addw_erp BC, 0xfa
 	lda_24 xhl, 0x027312
-	lda_dri3 XIY, 0x07, 0xec, 0xe4
+	lda_dri XIY, 0x07, 0xec, 0xe4
 	ld xbc, FileOp_StubAndDirNames_0x82
 	lds de, 3
 	calr FileIO_Search_SkipEntry
 	cps hl, 0
 	jr z, FileIO_StoreIndexedEntry
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 	inc 1, iz
 
 BuildIndex_CheckComma:
 	ld xwa, (xsp + 4)
-	st_dri3b W, 0x07, 0xe0, 0xf8
+	stb_dri W, 0x07, 0xe0, 0xf8
 	ld e, (xwa)
 	cp e, 0x2c
 	jr z, FileIO_StoreIndexedEntry
@@ -7844,12 +7844,12 @@ BuildIndex_CheckComma:
 	jr lt, BuildIndex_CheckSubEntry
 
 FileIO_StoreIndexedEntry:
-	ld8_24 a, 0x027412
+	ldb_da a, 0x027412
 	exts wa
 	sla wa, 5
-	add_werp WA, 0xfa
+	addw_erp WA, 0xfa
 	lda_24 xbc, 0x027312
-	stib_dri 0x07, 0xe4, 0xe0, 0x00
+	stib_ind 0x07, 0xe4, 0xe0, 0x00
 	incdi8_24 1, 0x27412
 	inc 1, iz
 	cp iz, 0x80
@@ -7886,8 +7886,8 @@ ControlState_ProcessCommand:
 	push xiz
 	ld xiz, xwa
 	ld xwa, 0xffffffff
-	st32_24 0x027416, xwa
-	sti8_24 0x027414, 0x00
+	stl_da 0x027416, xwa
+	stib_da 0x027414, 0x00
 	cp (xiz), 0x2
 	jr nz, CtrlCmd_Return
 	ld e, (xiz + 1)
@@ -7901,7 +7901,7 @@ ControlState_ProcessCommand:
 	jr z, CtrlCmd_SetPathAndBuild
 	cps e, 0
 	jr nz, CtrlCmd_Return
-	sti8_24 0x0272d2, 0x00
+	stib_da 0x0272d2, 0x00
 	ld (xbc), 0x0
 	jr ControlState_ProcessNext
 
@@ -7909,7 +7909,7 @@ CtrlCmd_SetPathAndBuild:
 	ld (xbc), 0x0
 	calr FileIO_FindPathSeparator
 	inc 3, hl
-	st_dri3b W, 0x07, 0xf8, 0xec
+	stb_dri W, 0x07, 0xf8, 0xec
 
 ControlState_ProcessNext:
 	calr FileIO_BuildFileIndex
@@ -7919,19 +7919,19 @@ CtrlCmd_Return:
 	ret
 
 FileIO_FindFirstMatch:
-	st_dri3b L, 0xfd, 0xec, 0xfe
+	stb_dri L, 0xfd, 0xec, 0xfe
 	push xiz
-	st_dri3l XBC, 0xfd, 0x10, 0x01
-	st_dri3l XWA, 0xfd, 0x14, 0x01
+	stl_dri XBC, 0xfd, 0x10, 0x01
+	stl_dri XWA, 0xfd, 0x14, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	ld (xwa), 0x0
 	ld_sril XWA, (xsp + 0x0110)
 	lds32 xbc, 0
 	ld (xwa), xbc
-	ld8_24 a, 0x027414
+	ldb_da a, 0x027414
 	exts wa
 	ld (xsp + 4), wa
-	ld8_24 a, 0x027412
+	ldb_da a, 0x027412
 	exts wa
 	cp (xsp + 4), wa
 	jrl ge, FindFirst_NotFound
@@ -7949,7 +7949,7 @@ FindFirst_BuildPathLoop:
 	ld wa, (xsp + 4)
 	sla wa, 5
 	lda_24 xbc, 0x027312
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	ld xwa, 0x25c6c
 	calr FileIO_BuildFilePath
 	lda xbc, (xsp + 6)
@@ -7975,35 +7975,35 @@ FindFirst_StoreFileSize:
 	ld (xwa), xbc
 
 FindFirst_StoreResult:
-	st32_24 0x027416, xiz
+	stl_da 0x027416, xiz
 	ld wa, (xsp + 4)
-	st8_24 0x027414, a
+	stb_da 0x027414, a
 	lds hl, 0
 	jr FindFirst_Return
 
 FindFirst_NextIndex:
 	incm 1, (xsp + 4)
-	ld8_24 a, 0x027412
+	ldb_da a, 0x027412
 	exts wa
 	cp (xsp + 4), wa
 	jrl lt, FindFirst_BuildPathLoop
 
 FindFirst_NotFound:
 	ld xwa, 0xffffffff
-	st32_24 0x027416, xwa
+	stl_da 0x027416, xwa
 	ldw hl, 0xffff
 
 FindFirst_Return:
 	pop xiz
-	st_dri3b L, 0xfd, 0x14, 0x01
+	stb_dri L, 0xfd, 0x14, 0x01
 	ret
 
 FileIO_FindNextMatch:
-	st_dri3b L, 0xfd, 0xf2, 0xfe
+	stb_dri L, 0xfd, 0xf2, 0xfe
 	push xiz
-	st_dri3l XBC, 0xfd, 0x0e, 0x01
+	stl_dri XBC, 0xfd, 0x0e, 0x01
 	ld xiz, xwa
-	ld32_24 xwa, 0x027416
+	ldl_da xwa, 0x027416
 	lda xbc, (xsp + 4)
 	call _findnext
 	cps hl, 0
@@ -8012,10 +8012,10 @@ FileIO_FindNextMatch:
 	ld_sril XWA, (xsp + 0x010e)
 	lds32 xbc, 0
 	ld (xwa), xbc
-	ld32_24 xwa, 0x027416
+	ldl_da xwa, 0x027416
 	call _findclose
 	ld xwa, 0xffffffff
-	st32_24 0x027416, xwa
+	stl_da 0x027416, xwa
 	ldw hl, 0xffff
 	jr FindNext_Return
 
@@ -8041,7 +8041,7 @@ FindNext_Ok:
 
 FindNext_Return:
 	pop xiz
-	st_dri3b L, 0xfd, 0x0e, 0x01
+	stb_dri L, 0xfd, 0x0e, 0x01
 	ret
 
 FileIO_SearchStringMatch:
@@ -8050,7 +8050,7 @@ FileIO_SearchStringMatch:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	ldw hl, 0xffff
-	ld32_24 xwa, 0x027416
+	ldl_da xwa, 0x027416
 	cp xwa, 0x0
 	jr ge, SearchMatch_HasHandle
 	ld xwa, xiz
@@ -8058,7 +8058,7 @@ FileIO_SearchStringMatch:
 	jr SearchMatch_FirstSearch
 
 SearchMatch_HasHandle:
-	ld8_24 a, 0x027414
+	ldb_da a, 0x027414
 	cpda8_24 a, 0x27412
 	jr ge, SearchMatch_Return
 	ld xwa, xiz
@@ -8081,41 +8081,41 @@ SearchMatch_Return:
 FileIO_ExtractBasename:
 	lda_24 xhl, 0x025cec
 	ld (xhl), 0x0
-	ld32_24 xwa, 0x027416
+	ldl_da xwa, 0x027416
 	cp xwa, 0x0
 	ret lt
-	ld8_24 c, 0x027412
+	ldb_da c, 0x027412
 	cps c, 0
 	ret le
-	ld8_24 a, 0x027414
+	ldb_da a, 0x027414
 	cp a, c
 	ret ge
 	exts wa
 	sla wa, 5
 	lda_24 xbc, 0x027312
-	st_dri3b A, 0x07, 0xe4, 0xe0
+	stb_dri A, 0x07, 0xe4, 0xe0
 	ldw de, 0xffff
 	lds ix, 0
 	cp (xbc), 0x0
 	jr z, ExtractBase_TruncatePath
 
 ExtractBase_ScanLoop:
-	ld_srib3 A, 0x07, 0xe4, 0xf0
-	lda_dri3 XBC, 0x07, 0xec, 0xf0
+	ldb_sri A, 0x07, 0xe4, 0xf0
+	lda_dri XBC, 0x07, 0xec, 0xf0
 	cp a, 0x5c
 	jr nz, ExtractBase_TrackSep
 	ld de, ix
 
 ExtractBase_TrackSep:
 	inc 1, ix
-	cp_srib_im 0x07, 0xe4, 0xf0, 0x00
+	cpib_sri 0x07, 0xe4, 0xf0, 0x00
 	jr nz, ExtractBase_ScanLoop
 
 ExtractBase_TruncatePath:
 	cps de, 0
 	jr le, ExtractBase_ClearAll
 	inc 1, de
-	stib_dri 0x07, 0xec, 0xe8, 0x00
+	stib_ind 0x07, 0xec, 0xe8, 0x00
 	jr ExtractBase_Done
 
 ExtractBase_ClearAll:
@@ -8127,7 +8127,7 @@ ExtractBase_Done:
 FileIO_NormalizePath:
 	cp (xwa), 0x5c
 	scc16 z, de
-	st_dri3b A, 0x07, 0xe0, 0xe8
+	stb_dri A, 0x07, 0xe0, 0xe8
 	ld xwa, 0x272f2
 	calr FileIO_CopyString
 	lds de, 0
@@ -8138,7 +8138,7 @@ NormalizePath_NextChar:
 	inc 1, de
 
 NormalizePath_CheckLoop:
-	st_dri3b W, 0x07, 0xe4, 0xe8
+	stb_dri W, 0x07, 0xe4, 0xe8
 	cp (xwa), 0x0
 	jr nz, NormalizePath_NextChar
 	cp de, 0x20
@@ -8146,13 +8146,13 @@ NormalizePath_CheckLoop:
 	cps de, 0
 	ret le
 	dec 1, de
-	cp_srib_im 0x07, 0xe4, 0xe8, 0x5c
+	cpib_sri 0x07, 0xe4, 0xe8, 0x5c
 	ret z
 	ld (xwa), 0x5c
 	ret
 
 FileIO_ValidateModeAndRange:
-	ld8_24 c, 0x025db6
+	ldb_da c, 0x025db6
 	cps c, 2
 	jr z, ValidateMode_CheckRange
 	cps c, 3
@@ -8171,7 +8171,7 @@ ValidateMode_Error:
 	ret
 
 ValidateMode_InRange:
-	ld16_24 xbc, 0x0271ee
+	ldw_da xbc, 0x0271ee
 	cp wa, bc
 	jr lt, ValidateMode_OutOfPage
 	cpda16_24 xwa, 0x271f0
@@ -8185,7 +8185,7 @@ ValidateMode_InPage:
 	sub wa, bc
 	muls wa, 0xe
 	lda_24 xbc, 0x02723c
-	cp_srib_im 0x07, 0xe4, 0xe0, 0x00
+	cpib_sri 0x07, 0xe4, 0xe0, 0x00
 	jr nz, ValidateMode_Valid
 	lds hl, 2
 	ret
@@ -8195,7 +8195,7 @@ ValidateMode_Valid:
 	ret
 
 FileIO_GetCurrentWallpaperIndex:
-	ld16_24 xwa, 0x0272c8
+	ldw_da xwa, 0x0272c8
 	calr FileIO_ValidateModeAndRange
 	cps hl, 0
 	jr z, GetWallpaper_ReturnIndex
@@ -8203,15 +8203,15 @@ FileIO_GetCurrentWallpaperIndex:
 	ret
 
 GetWallpaper_ReturnIndex:
-	ld16_24 xhl, 0x0272c8
+	ldw_da xhl, 0x0272c8
 	ret
 
 FileIO_ScanDirEntries:
-	st_dri3b L, 0xfd, 0xee, 0xfe
+	stb_dri L, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, 0x02723c
 	ld xwa, xbc
-	st_dri3b B, 0xe5, 0x8c, 0x00
+	stb_dri B, 0xe5, 0x8c, 0x00
 
 ScanDir_CopyEntryLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0xAE
@@ -8231,10 +8231,10 @@ ScanDir_CopyEntryLoop:
 	jr lt, ScanDir_Return
 	lda xwa, (xsp + 16)
 	ld (xsp + 6), xwa
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cps wa, 0
 	jr gt, ScanDir_FirstEntryDone
-	cpdi16_24 0x271f0, 0
+	cpw_da 0x271f0, 0
 	jr lt, ScanDir_FirstEntryDone
 	neg wa
 	muls wa, 0xe
@@ -8253,7 +8253,7 @@ ScanDir_FirstEntryDone:
 	jr nz, ScanDir_CloseFindHandle
 
 ScanDir_NextEntryCheck:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	cp iz, wa
 	jr lt, ScanDir_IterateNext
 	cpda16_24 xiz, 0x271f0
@@ -8283,7 +8283,7 @@ ScanDir_CloseFindHandle:
 ScanDir_Return:
 	ld hl, iz
 	popw iz
-	st_dri3b L, 0xfd, 0x12, 0x01
+	stb_dri L, 0xfd, 0x12, 0x01
 	ret
 
 FileIO_SelectWallpaperByIndex:
@@ -8293,7 +8293,7 @@ FileIO_SelectWallpaperByIndex:
 	calr FileIO_ValidateModeAndRange
 	cp hl, 0xffff
 	jr nz, SelectWP_CheckPageBound
-	ld16_24 xhl, 0x0272c8
+	ldw_da xhl, 0x0272c8
 	jr SelectWP_Return
 
 SelectWP_CheckPageBound:
@@ -8304,20 +8304,20 @@ SelectWP_CheckPageBound:
 	div wa, 0xa
 	mul wa, 0xa
 	ld bc, wa
-	st16_24 0x0271ee, xbc
+	stw_da 0x0271ee, xbc
 	add bc, 0x9
-	ld16_24 xwa, 0x0272ca
+	ldw_da xwa, 0x0272ca
 	cp bc, wa
 	jr ge, SelectWP_ClampEnd
 	ld wa, bc
 
 SelectWP_ClampEnd:
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	calr FileIO_ScanDirEntries
 
 SelectWP_StoreIndex:
 	ld hl, iz
-	st16_24 0x0272c8, xhl
+	stw_da 0x0272c8, xhl
 
 SelectWP_Return:
 	popw iz
@@ -8334,7 +8334,7 @@ FileIO_GetWallpaperEntry:
 	jr GetWPEntry_Return
 
 GetWPEntry_ComputeOffset:
-	ld16_24 xwa, 0x0271ee
+	ldw_da xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
 	ld wa, bc
@@ -8351,8 +8351,8 @@ GetWPEntry_Return:
 	ret
 
 FileIO_InitWallpaperNav:
-	sti16_24 0x0271ee, 0x0000
-	sti16_24 0x0271f0, 0x0009
+	stiw_da 0x0271ee, 0x0000
+	stiw_da 0x0271f0, 0x0009
 	calr FileIO_ScanDirEntries
 	lds wa, 0
 	cps hl, 0
@@ -8361,10 +8361,10 @@ FileIO_InitWallpaperNav:
 	dec 1, wa
 
 InitWPNav_ClampEnd:
-	st16_24 0x0272ca, xwa
+	stw_da 0x0272ca, xwa
 	cpdm16_24 0x271f0, xwa
 	ret le
-	st16_24 0x0271f0, xwa
+	stw_da 0x0271f0, xwa
 	ret
 
 ResetProgressIndication:
@@ -8428,11 +8428,11 @@ InitOp_SkipSetFlag:
 	ret
 
 CancelOperationCleanup:
-	ldda8 a, 0x28a7
+	ldb_d8 a, 0x28a7
 	bit 2, a
 	jr z, CancelOp_ClearSeq
 	res 2, a
-	stda8 0x28a7, a
+	stb_d8 0x28a7, a
 
 CancelOp_ClearSeq:
 	resda 3, 0x28a7
@@ -8445,11 +8445,11 @@ SignalProgressUpdate:
 
 SeqPhase_OperationStateCheck:
 	pushw iz
-	ldda8 a, 1068
+	ldb_d8 a, 1068
 	bit 7, a
 	jrl z, SeqPhase_PopIzRet
 	res 7, a
-	stda8 1068, a
+	stb_d8 1068, a
 	bitda 2, 1056
 	jrl nz, SeqPhase_PopIzRet
 	bitda 2, 1055
@@ -8464,7 +8464,7 @@ SeqPhase_OperationStateCheck:
 	calr SignalProgressUpdate
 
 SeqPhase_CheckMediaType:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 2
 	jr z, SeqPhase_MediaIsValid
 	cps wa, 3
@@ -8482,9 +8482,9 @@ SeqPhase_MediaIsValid:
 SeqPhase_CheckEncodedData:
 	cpdi16 0x8502, 0
 	jr z, SeqPhase_PopIzRet
-	ldda8 a, 1068
+	ldb_d8 a, 1068
 	res 7, a
-	ldfr_berp A, 0xf8
+	ldb_erp A, 0xf8
 	extz iz
 	cp iz, 0x13
 	jr gt, SeqPhase_PopIzRet
@@ -8496,7 +8496,7 @@ SeqPhase_CheckEncodedData:
 	lds iz, 0
 
 SeqPhase_FormatNameLoop:
-	ldto_berp A, 0xf8
+	stb_erp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Loop
 	inc 1, iz
@@ -8561,7 +8561,7 @@ FileIO_DiskEventDispatch:
 	stda16 0x8500, xhl
 
 DiskEvt_CheckMediaType:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 1
 	jr z, DiskEvt_TypeIsCard
 	cps wa, 0
@@ -8617,7 +8617,7 @@ FileIO_DetectFileTypeAndPost:
 	stda16 0x8500, xhl
 
 DetectType_CheckMediaType:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 1
 	jr z, DetectType_IsCardReset
 	cps wa, 0
@@ -8669,7 +8669,7 @@ FileIO_GetDiskCapacity:
 	stda16 0x8500, xhl
 
 DiskCap_CheckMediaType:
-	ldda16 xwa, 0x8500
+	ldw_d16 xwa, 0x8500
 	cps wa, 3
 	jr z, DiskCap_TypeIsFloppyOrHD
 	cps wa, 2
@@ -8729,7 +8729,7 @@ ValidateSigned_NextEntry:
 	inc 4, de
 
 ValidateSigned_ScanLoop:
-	st_dri3b C, 0x07, 0xf0, 0xe8
+	stb_dri C, 0x07, 0xf0, 0xe8
 	cp wa, (xhl)
 	jr z, ValidateSigned_FoundMatch
 	cpw (xhl), 0x0
@@ -8756,7 +8756,7 @@ FileIO_ErrorCodeByteBlock:
 	.byte 0xc0
 	sbc	w, w
 	.byte 0xf6
-	ldda8	c, 0x8d36
+	ldb_d8	c, 0x8d36
 	cp	c, 16
 	jr	c, 5
 	cp	c, 22
@@ -8791,7 +8791,7 @@ FileIO_ErrorCodeByteBlock:
 	call	UI_PostModeChangeEvent
 	calr	64612
 	ret
-	ld8_24	a, 0x340f2
+	ldb_da	a, 0x340f2
 	.byte 0xc1
 	ldw	ix, 0x3f8d
 	.byte 0x01
@@ -8810,7 +8810,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	nc
 	lds	wa, 6
 	call	UI_PostPartChangeEvent
-	ld8_24	a, 0x340f2
+	ldb_da	a, 0x340f2
 	extz	wa
 	lda_24	xbc, FileOp_StubAndDirNames_0x90
 	.byte 0xc3
@@ -8866,7 +8866,7 @@ FileIO_ErrorCodeByteBlock:
 	call	GetDiskSizeInfo
 	extz	hl
 	stda16	0x8500, hl
-	ldda16	wa, 0x8500
+	ldw_d16	wa, 0x8500
 	cps	wa, 1
 	jrl	z, -190
 	cps	wa, 0
@@ -8884,7 +8884,7 @@ FileIO_ErrorCodeByteBlock:
 	jp	FDemo_LoadRegsAndPostEvent
 
 FileIO_MedleyDispatchByMode:
-	ldda8 a, 0x8d36
+	ldb_d8 a, 0x8d36
 	cp a, 0x79
 	jr nz, MedleyDisp_ModeSmf
 	lds32 xwa, 0
@@ -8938,7 +8938,7 @@ NumToAscii_ClampMin:
 	jr ule, NumToAscii_StartDigits
 
 NumToAscii_PadLeading:
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 
 NumToAscii_PadLoop:
 	ld hl, ix
@@ -8959,10 +8959,10 @@ NumToAscii_StartDigits:
 	div iy, 0x2710
 	ld iz, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xiz
 	add xiz, xde
-	ldto_berp E, 0xf4
+	stb_erp E, 0xf4
 	add e, 0x30
 	ld (xiz), e
 	mul iy, 0x2710
@@ -8974,7 +8974,7 @@ NumToAscii_NoTenThousands:
 	jr c, NumToAscii_ThousandsDigit
 	ld hl, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xhl
 	add xhl, xde
 	ld (xhl), 0x20
@@ -8988,10 +8988,10 @@ NumToAscii_ThousandsDigit:
 	div iy, 0x3e8
 	ld iz, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xiz
 	add xiz, xde
-	ldto_berp E, 0xf4
+	stb_erp E, 0xf4
 	add e, 0x30
 	ld (xiz), e
 	mul iy, 0x3e8
@@ -9003,7 +9003,7 @@ NumToAscii_NoThousands:
 	jr z, NumToAscii_PadThousands
 	ld iy, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xiy
 	add xiy, xde
 	ld (xiy), 0x30
@@ -9014,7 +9014,7 @@ NumToAscii_PadThousands:
 	jr c, NumToAscii_HundredsDigit
 	ld hl, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xhl
 	add xhl, xde
 	ld (xhl), 0x20
@@ -9028,10 +9028,10 @@ NumToAscii_HundredsDigit:
 	div iy, 0x64
 	ld iz, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xiz
 	add xiz, xde
-	ldto_berp E, 0xf4
+	stb_erp E, 0xf4
 	add e, 0x30
 	ld (xiz), e
 	mul iy, 0x64
@@ -9043,7 +9043,7 @@ NumToAscii_NoHundreds:
 	jr z, NumToAscii_PadHundreds
 	ld iy, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xiy
 	add xiy, xde
 	ld (xiy), 0x30
@@ -9054,7 +9054,7 @@ NumToAscii_PadHundreds:
 	jr c, NumToAscii_TensDigit
 	ld hl, ix
 	inc 1, ix
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	extz xhl
 	add xhl, xde
 	ld (xhl), 0x20
@@ -9068,10 +9068,10 @@ NumToAscii_TensDigit:
 	div iy, 0xa
 	ld de, ix
 	inc 1, ix
-	ldada xbc, 0x7f4a
+	lda_d16 xbc, 0x7f4a
 	extz xde
 	add xde, xbc
-	ldto_berp C, 0xf4
+	stb_erp C, 0xf4
 	add c, 0x30
 	ld (xde), c
 	mul iy, 0xa
@@ -9079,7 +9079,7 @@ NumToAscii_TensDigit:
 	jr NumToAscii_OnesDigitAndFinish
 
 NumToAscii_NoTens:
-	ldada xde, 0x7f4a
+	lda_d16 xde, 0x7f4a
 	cp ix, hl
 	jr z, NumToAscii_PadTens
 	ld bc, ix
@@ -9101,7 +9101,7 @@ NumToAscii_PadTens:
 NumToAscii_OnesDigitAndFinish:
 	ld bc, ix
 	inc 1, ix
-	ldada xhl, 0x7f4a
+	lda_d16 xhl, 0x7f4a
 	extz xbc
 	add xbc, xhl
 	add a, 0x30

@@ -25,7 +25,7 @@ JumpInsertFunc:
 	add xbc, DiskWarning_ConfirmStrings_0xA38
 	ld bc, (xbc)
 	lda_24 xix, JumpInsert_DispatchBody
-	jp_dri 8, 0x07, 0xf0, 0xe4
+	jp_ind 8, 0x07, 0xf0, 0xe4
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -418,8 +418,8 @@ DrawStr_LoopBody:
 	ld hl, bc
 	extz xhl
 	ld xwa, (xsp + 10)
-	st_dri3b D, 0x07, 0xe0, 0xe8
-	st_dri3b W, 0x07, 0xec, 0xe8
+	stb_dri D, 0x07, 0xe0, 0xe8
+	stb_dri W, 0x07, 0xec, 0xe8
 	add xwa, (xsp + 6)
 	cp iz, iy
 	jr nc, DrawStr_WrapAround
@@ -442,7 +442,7 @@ DrawStr_LoopCheck:
 
 DrawStr_Epilogue:
 	ld xwa, (xsp + 10)
-	stib_dri 0x07, 0xe0, 0xe8, 0x00
+	stib_ind 0x07, 0xe0, 0xe8, 0x00
 	lds hl, 0
 	ld de, (xsp + 2)
 	inc 1, bc
@@ -464,12 +464,12 @@ WaitingFunc:
 	cp xbc, 0x1c00001
 	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
-	st16_24 0x02748a, xwa
-	sti16_24 0x02748c, 0x0000
+	stw_da 0x02748a, xwa
+	stiw_da 0x02748c, 0x0000
 	jr WaitingFunc_Return
 
 WaitingFunc_DrawMessage:
-	ld8_24 a, 0x0340e4
+	ldb_da a, 0x0340e4
 	extz wa
 	sla wa, 2
 	lda_24 xbc, DiskWarning_ConfirmStrings_0xA6C
@@ -478,12 +478,12 @@ WaitingFunc_DrawMessage:
 	call Strlen
 	inc 4, xsp
 	srl hl, 1
-	push_sd24w 0x8c, 0x74, 0x02
+	pushw_da 0x8c, 0x74, 0x02
 	lda xwa, (xsp + 6)
 	ld xbc, xiz
 	ld de, hl
 	calr DrawString_Centered
-	st16_24 0x02748c, xhl
+	stw_da 0x02748c, xhl
 	ld xwa, (xsp + 68)
 	lda xde, (xsp + 4)
 	ld xbc, 0x1c0000f
@@ -510,11 +510,11 @@ DiskMedley_Return:
 	ret
 
 PsFileNameBoxProc:
-	st_dri3b L, 0xfd, 0x56, 0xff
+	stb_dri L, 0xfd, 0x56, 0xff
 	push xiz
-	st_dri3l XDE, 0xfd, 0xa2, 0x00
-	st_dri3l XBC, 0xfd, 0xa6, 0x00
-	st_dri3l XWA, 0xfd, 0xaa, 0x00
+	stl_dri XDE, 0xfd, 0xa2, 0x00
+	stl_dri XBC, 0xfd, 0xa6, 0x00
+	stl_dri XWA, 0xfd, 0xaa, 0x00
 	ld_sril XWA, (xsp + 0x00a6)
 	cp xwa, 0x1c50001
 	jrl z, PsFileNameBox_HandleOkState
@@ -600,10 +600,10 @@ PsFileNameBox_HandleShow:
 	ld xwa, (xsp + 14)
 	cpw (xwa + 38), 0x2
 	jr lt, PsFileNameBox_CheckScrollButtons
-	st_dri3b A, 0xfd, 0x92, 0x00
+	stb_dri A, 0xfd, 0x92, 0x00
 	ld_sril XWA, (xsp + 0x00aa)
 	call GetClientBox
-	st_dri3b B, 0xfd, 0x92, 0x00
+	stb_dri B, 0xfd, 0x92, 0x00
 	ld bc, (xde + 4)
 	sub bc, (xde)
 	exts xbc
@@ -612,22 +612,22 @@ PsFileNameBox_HandleShow:
 	ld (xsp + 8), bc
 	ld wa, (xde + 2)
 	inc 1, wa
-	st_dri3w WA, 0xfd, 0xa0, 0x00
+	stw_dri WA, 0xfd, 0xa0, 0x00
 	ld wa, (xde + 6)
 	dec 1, wa
-	st_dri3w WA, 0xfd, 0x9c, 0x00
+	stw_dri WA, 0xfd, 0x9c, 0x00
 	ldw (xsp + 12), 0x1
 	jr PsFileNameBox_DrawItem_Check
 
 PsFileNameBox_DrawItem_Body:
 	ld wa, (xsp + 8)
 	mrdw3 0x9f, 0x0c, 0x40
-	ld_sriw BC, (xsp + 0x0092)
+	ldw_sri0 BC, (xsp + 0x0092)
 	add bc, wa
 	dec 1, bc
-	st_dri3b W, 0xfd, 0x9e, 0x00
+	stb_dri W, 0xfd, 0x9e, 0x00
 	ld (xwa), bc
-	st_dri3b A, 0xfd, 0x9a, 0x00
+	stb_dri A, 0xfd, 0x9a, 0x00
 	ld de, (xwa)
 	ld (xbc), de
 	lds de, 7
@@ -691,15 +691,15 @@ PsFileNameBox_HandleConfirm:
 	ld xwa, (xsp + 10)
 	lda xhl, (xwa + 38)
 	ld de, (xwa + 40)
-	st_dri3b A, 0xfd, 0x92, 0x00
+	stb_dri A, 0xfd, 0x92, 0x00
 	cps de, 1
 	jrl nz, PsFileNameBox_Confirm_MultiItem
 	cpw (xhl), 0x1
 	jr nz, PsFileNameBox_Confirm_MultiItem
 	ld_sril XWA, (xsp + 0x00aa)
 	call GetClientBox
-	st_dri3b W, 0xfd, 0x92, 0x00
-	st_dri3b A, 0xfd, 0x9e, 0x00
+	stb_dri W, 0xfd, 0x92, 0x00
+	stb_dri A, 0xfd, 0x9e, 0x00
 	call GetBoxCenter
 	ld_sril XWA, (xsp + 0x00a2)
 	inc 1, xwa
@@ -717,8 +717,8 @@ PsFileNameBox_HandleConfirm:
 	lda xhl, (xhl + 28)
 	cpw (xbc), 0x0
 	jr nz, PsFileNameBox_Confirm_Existing
-	st_dri3b W, 0xfd, 0x92, 0x00
-	st_dri3b A, 0xfd, 0x9e, 0x00
+	stb_dri W, 0xfd, 0x92, 0x00
+	stb_dri A, 0xfd, 0x9e, 0x00
 	ld xhl, (xhl)
 	push xhl
 	pushm (xiy)
@@ -728,8 +728,8 @@ PsFileNameBox_HandleConfirm:
 	jr PsFileNameBox_Confirm_Execute
 
 PsFileNameBox_Confirm_Existing:
-	st_dri3b W, 0xfd, 0x92, 0x00
-	st_dri3b A, 0xfd, 0x9e, 0x00
+	stb_dri W, 0xfd, 0x92, 0x00
+	stb_dri A, 0xfd, 0x9e, 0x00
 	ld xhl, (xhl)
 	push xhl
 	pushm (xiy)
@@ -752,7 +752,7 @@ PsFileNameBox_Confirm_MultiItem:
 	jrl ge, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00aa)
 	call GetClientBox
-	st_dri3b A, 0xfd, 0x92, 0x00
+	stb_dri A, 0xfd, 0x92, 0x00
 	lda xwa, (xbc + 4)
 	ld (xsp + 14), xwa
 	ld de, (xwa)
@@ -775,8 +775,8 @@ PsFileNameBox_Confirm_MultiItem:
 	exts wa
 	exts xwa
 	divs xwa, xde
-	ldto_werp WA, 0xe2
-	ldfr_werp WA, 0xea
+	stw_erp WA, 0xe2
+	ldw_erp WA, 0xea
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
 	exts wa
@@ -784,7 +784,7 @@ PsFileNameBox_Confirm_MultiItem:
 	divs xwa, xde
 	ld de, wa
 	ld wa, iz
-	mul_werp WA, 0xea
+	mulw_erp WA, 0xea
 	inc 2, wa
 	add hl, wa
 	ld (xix), hl
@@ -798,7 +798,7 @@ PsFileNameBox_Confirm_MultiItem:
 	add de, (xsp + 8)
 	ld xwa, (xsp + 14)
 	ld (xwa), de
-	st_dri3b B, 0xfd, 0x9e, 0x00
+	stb_dri B, 0xfd, 0x9e, 0x00
 	ld wa, (xbc)
 	ld (xde), wa
 	ld wa, (xix)
@@ -814,15 +814,15 @@ PsFileNameBox_Confirm_MultiItem:
 	ld xix, (xwa + 42)
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
-	ldfr_berp A, 0xf4
+	ldb_erp A, 0xf4
 	exts iy
 	ld xwa, (xsp + 4)
 	lda xhl, (xwa + 28)
-	st_dri3b A, 0xfd, 0x9e, 0x00
+	stb_dri A, 0xfd, 0x9e, 0x00
 	lda xde, (xsp + 18)
 	cp iy, (xix)
 	jr nz, PsFileNameBox_Confirm_NewItem
-	st_dri3b W, 0xfd, 0x92, 0x00
+	stb_dri W, 0xfd, 0x92, 0x00
 	ld xhl, (xhl)
 	push xhl
 	pushw 0x0
@@ -830,7 +830,7 @@ PsFileNameBox_Confirm_MultiItem:
 	jr PsFileNameBox_Confirm_Finish
 
 PsFileNameBox_Confirm_NewItem:
-	st_dri3b W, 0xfd, 0x92, 0x00
+	stb_dri W, 0xfd, 0x92, 0x00
 	ld xhl, (xhl)
 	push xhl
 	ld xhl, (xsp + 14)
@@ -975,6 +975,6 @@ PsFileNameBox_DispatchParent:
 
 PsFileNameBox_Return:
 	pop xiz
-	st_dri3b L, 0xfd, 0xaa, 0x00
+	stb_dri L, 0xfd, 0xaa, 0x00
 	ret
 

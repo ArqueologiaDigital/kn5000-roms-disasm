@@ -131,7 +131,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	xhl, xix
 	jr t, .LMCR_b005                       ; [68 08] jr T,0x29b005
 .LMCR_affd:
-	ld_spib a, 0xe8		; ld A,(XDE+)
+	ldb_spi a, 0xe8		; ld A,(XDE+)
 	lda_dpi xbc, 0xf0		; ld (XIX+),A
 	dec	1, bc
 .LMCR_b005:
@@ -142,7 +142,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b00e:
 	jr t, .LMCR_b016                       ; [68 06] jr T,0x29b016
 .LMCR_b010:
-	stib_dpi 0xf0, 0x00		; ld (XIX+),0x00
+	stib_dsp 0xf0, 0x00		; ld (XIX+),0x00
 	dec	1, bc
 .LMCR_b016:
 	cps	bc, 0
@@ -217,8 +217,8 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	add	bc, bc
 	lda_24 xde, 0x2394ea
 	lda_24 xwa, 0x2394aa
-	stiw_dri 0x07, 0xE0, 0xE4, 0x00, 0x00	; ld (XWA+BC),0x0000
-	stiw_dri 0x07, 0xE8, 0xE4, 0x00, 0x00	; ld (XDE+BC),0x0000
+	stiw_ind 0x07, 0xE0, 0xE4, 0x00, 0x00	; ld (XWA+BC),0x0000
+	stiw_ind 0x07, 0xE8, 0xE4, 0x00, 0x00	; ld (XDE+BC),0x0000
 	inc	1, qiz
 	cpw	qiz, 0x0020
 	jr lt, .LMCR_b09f                      ; [61 d9] jr LT,0x29b09f
@@ -239,7 +239,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	extz xbc                                ; extz XBC
 	add	xbc, (xsp+24)
 	ld	c, (xbc)
-	lda_dri3 xhl, 0x07, 0xE0, 0xFA	; ld (XWA+QIZ),C
+	lda_dri xhl, 0x07, 0xE0, 0xFA	; ld (XWA+QIZ),C
 	inc	1, qiz
 	ld	wa, qiz
 	cp	wa, (xsp+8)
@@ -307,13 +307,13 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	qiz, 2
 .LMCR_b17f:
 	lda	xwa, (xsp+10)
-	ld_srib3 a, 0x07, 0xE0, 0xFA	; ld A,(XWA+QIZ)
+	ldb_sri a, 0x07, 0xE0, 0xFA	; ld A,(XWA+QIZ)
 	and	a, 0xff
 	ld	de, qiz
 	add	de, de
 	lda_24 xbc, 0x2394a6
 	extz wa                                 ; extz WA
-	st_dri3w wa, 0x07, 0xE4, 0xE8	; ld (XBC+DE),WA
+	stw_dri wa, 0x07, 0xE4, 0xE8	; ld (XBC+DE),WA
 	inc	1, qiz
 	cpw	qiz, 0x000a
 	jr lt, .LMCR_b17f                      ; [61 da] jr LT,0x29b17f
@@ -323,7 +323,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	qiz, 0
 .LMCR_b1ac:
 	lda	xbc, (xsp+10)
-	cp_srib_im 0x07, 0xE4, 0xFA, 0x00	; cp (XBC+QIZ),0x00
+	cpib_sri 0x07, 0xE4, 0xFA, 0x00	; cp (XBC+QIZ),0x00
 	jr z, .LMCR_b1bb                       ; [66 04] jr Z,0x29b1bb
 	lds	ix, 1
 	jr t, .LMCR_b1c5                       ; [68 0a] jr T,0x29b1c5
@@ -335,14 +335,14 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	and8_imm_rid8 xbc, 0x01, 0x0f		; and (XBC+0x01),0x0f
 	ld	qiz, 1
 .LMCR_b1cc:
-	ld_srib3 a, 0x07, 0xE4, 0xFA	; ld A,(XBC+QIZ)
+	ldb_sri a, 0x07, 0xE4, 0xFA	; ld A,(XBC+QIZ)
 	and	a, 0xff
 	ld	hl, qiz
 	add	hl, hl
 	dec	2, hl
 	lda_24 xde, 0x2394aa
 	extz wa                                 ; extz WA
-	st_dri3w wa, 0x07, 0xE8, 0xEC	; ld (XDE+HL),WA
+	stw_dri wa, 0x07, 0xE8, 0xEC	; ld (XDE+HL),WA
 	inc	1, qiz
 	cpw	qiz, 0x0008
 	jr lt, .LMCR_b1cc                      ; [61 db] jr LT,0x29b1cc
@@ -437,7 +437,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	extz xwa
 	div wa, 0x000a
 	ld	wa, qwa
-	lda_dri3 xbc, 0x07, 0xEC, 0xF0	; ld (XHL+IX),A
+	lda_dri xbc, 0x07, 0xEC, 0xF0	; ld (XHL+IX),A
 	incm	1, (xsp+4)
 	ld	qiz, 1
 	jr t, .LMCR_b2f6                       ; [68 16] jr T,0x29b2f6
@@ -445,8 +445,8 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	bc, de
 	inc	1, de
 	lda_24 xwa, 0x23948a
-	ld_srib3 a, 0x07, 0xE0, 0xFA	; ld A,(XWA+QIZ)
-	lda_dri3 xbc, 0x07, 0xEC, 0xE4	; ld (XHL+BC),A
+	ldb_sri a, 0x07, 0xE0, 0xFA	; ld A,(XWA+QIZ)
+	lda_dri xbc, 0x07, 0xEC, 0xE4	; ld (XHL+BC),A
 	inc	1, qiz
 .LMCR_b2f6:
 	ld	bc, (xsp+6)
@@ -456,7 +456,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr lt, .LMCR_b2e0                      ; [61 de] jr LT,0x29b2e0
 	ld	de, (xsp+6)
 	inc	1, de
-	st_dri3b a, 0x07, 0xEC, 0xE8	; lda XBC,XHL+DE
+	stb_dri a, 0x07, 0xEC, 0xE8	; lda XBC,XHL+DE
 	cp	(xbc), 0x05
 	jr c, .LMCR_b319                       ; [67 08] jr C,0x29b319
 	ld	wa, (xsp+6)
@@ -475,7 +475,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b334:
 	cp	qiz, 0
 	jr z, .LMCR_b343                       ; [66 0a] jr Z,0x29b343
-	st_dri3b w, 0x07, 0xEC, 0xFA	; lda XWA,XHL+QIZ
+	stb_dri w, 0x07, 0xEC, 0xFA	; lda XWA,XHL+QIZ
 	cp	(xwa), 0x09
 	jr ugt, .LMCR_b324                     ; [6b e1] jr UGT,0x29b324
 .LMCR_b343:
@@ -601,7 +601,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	xwa, xde
 	lda	xbc, (xde+18)
 .LMCR_b439:
-	stiw_dpi 0xe1, 0x00, 0x00		; ld (XWA+),0x0000
+	stiw_dsp 0xe1, 0x00, 0x00		; ld (XWA+),0x0000
 	cp	xwa, xbc
 	jr c, .LMCR_b439                       ; [67 f7] jr C,0x29b439
 	ld	wa, (xsp+6)
@@ -636,7 +636,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	sub	wa, (xsp+8)
 	add	wa, wa
 	lda_24 xbc, 0x2394ea
-	ld_sriw3 wa, 0x07, 0xE4, 0xE0	; ld WA,(XBC+WA)
+	ldw_sri wa, 0x07, 0xE4, 0xE0	; ld WA,(XBC+WA)
 	cps	wa, 0
 	jr z, .LMCR_b48f                       ; [66 e5] jr Z,0x29b48f
 	pushw iz                                ; push IZ
@@ -647,7 +647,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	sub	bc, (xsp+8)
 	add	bc, bc
 	lda_24 xwa, 0x2394ea
-	stiw_dri 0x07, 0xE0, 0xE4, 0x00, 0x00	; ld (XWA+BC),0x0000
+	stiw_ind 0x07, 0xE0, 0xE4, 0x00, 0x00	; ld (XWA+BC),0x0000
 	cp	iz, 0x0020
 	jrl le, .LMCR_b44a                     ; [72 7e ff] jrl LE,0x29b44a
 .LMCR_b4cc:
@@ -677,7 +677,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	dec	1, de
 	sub_srib_im 0x07, 0xE0, 0xE4, 0x0A	; sub (XWA+BC),0x0a
 .LMCR_b508:
-	cp_srib_im 0x07, 0xE0, 0xE8, 0x0A	; cp (XWA+DE),0x0a
+	cpib_sri 0x07, 0xE0, 0xE8, 0x0A	; cp (XWA+DE),0x0a
 	ret lt                                  ; ret LT
 
 	cps	de, 0
@@ -697,7 +697,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	wa, (xbc)
 	extz xwa
 	div wa, 0x000a
-	st_dpiw wa, 0xe5		; ld (XBC+),WA
+	stw_dpi wa, 0xe5		; ld (XBC+),WA
 	cp	xbc, xde
 	jr c, .LMCR_b51d                       ; [67 e0] jr C,0x29b51d
 	ret
@@ -893,7 +893,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	push xiz
 	ld	wa, (xsp+16)
 	exts xwa                                ; exts XWA
-	ldada	xbc, 301
+	lda_d16	xbc, 301
 	call HDAE5000_Multiply
 	ld	xiz, xhl
 	cp	xiz, 0x00000000
@@ -909,11 +909,11 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b6d4:
 	ld xiz, (xsp + 0x04)                    ; ld XIZ,(XSP+0x04)
 	ld	xwa, xiz
-	ldada	xbc, 1000
+	lda_d16	xbc, 1000
 	call 0x29b8b7
 	ld (xsp + 0x08), xhl                    ; ld (XSP+0x08),XHL
 	ld	xwa, xiz
-	ldada	xbc, 1000
+	lda_d16	xbc, 1000
 	call 0x29b8bb
 	ld	xiz, xhl
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
@@ -980,16 +980,16 @@ HDAE5000_Multiply:	; 0x29B72D
 .LMUL_b76d:
 	ld (xwa), xhl                           ; ld (XWA),XHL
 	ld (xwa + 0x04), xix                    ; ld (XWA+0x04),XIX
-	ldto_berp l, 0xee		; ld L,QL
+	stb_erp l, 0xee		; ld L,QL
 	ret
 
 .LMUL_b776:
 	lds32	xix, 0
-	ldi_berp 0xee, 1		; ld QL,1
+	ldib_erp 0xee, 1		; ld QL,1
 	jr t, .LMUL_b76d                       ; [68 f0] jr T,0x29b76d
 	nop                                     ; nop
 	ld xhl, (xbc)                           ; ld XHL,(XBC)
-	cpi_berp 0xee, 0		; cp QL,0
+	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LMUL_b7ac                      ; [6e 27] jr NZ,0x29b7ac
 	ld xde, (xbc + 0x04)                    ; ld XDE,(XBC+0x04)
 	cp	hl, 0x007f
@@ -1000,14 +1000,14 @@ HDAE5000_Multiply:	; 0x29B72D
 	ld	bc, qde
 	res	0x07, bc
 	sll	hl, 0x07
-	or_berp h, 0xef		; or H,QH
+	orb_erp h, 0xef		; or H,QH
 	or	hl, bc
 	ld	qde, hl
 	ld (xwa), xde                           ; ld (XWA),XDE
 	ret
 
 .LMUL_b7ac:
-	ldto_berp e, 0xee		; ld E,QL
+	stb_erp e, 0xee		; ld E,QL
 	cp	e, 0x08
 	jr nz, .LMUL_b7b8                      ; [6e 04] jr NZ,0x29b7b8
 	lds32	xde, 0
@@ -1020,10 +1020,10 @@ HDAE5000_Multiply:	; 0x29B72D
 .LMUL_b7bd:
 	ldw	de, 0xffff
 	ldw	bc, 0x7f7f
-	or_berp b, 0xef		; or B,QH
+	orb_erp b, 0xef		; or B,QH
 	ld	qde, bc
 .LMUL_b7c9:
-	sti16_24	0x230ECA, 34
+	stiw_da	0x230ECA, 34
 	ld (xwa), xde                           ; ld (XWA),XDE
 	ld	xbc, (0x23a1a8)
 	or xbc, xbc                             ; or XBC,XBC
@@ -1232,7 +1232,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ret
 
 	ld xhl, (xbc)                           ; ld XHL,(XBC)
-	cpi_berp 0xee, 0		; cp QL,0
+	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LDIV_b97b                      ; [6e 32] jr NZ,0x29b97b
 	ld xix, (xbc + 0x08)                    ; ld XIX,(XBC+0x08)
 	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
@@ -1243,7 +1243,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	add	hl, 0x03ff
 	res	0x04, qix
 	sll	hl, 0x04
-	or_berp h, 0xef		; or H,QH
+	orb_erp h, 0xef		; or H,QH
 	or	hl, qix
 	ld	qix, hl
 .LDIV_b96f:
@@ -1259,14 +1259,14 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	bit_erpb 0xee, 0x00		; bit 0x00,QL
 	jr nz, .LDIV_b975                      ; [6e f4] jr NZ,0x29b975
 .LDIV_b981:
-	sti16_24	0x230ECA, 34
+	stiw_da	0x230ECA, 34
 	lds32	xde, 0
 	dec	1, xde
 	ld (xwa), xde                           ; ld (XWA),XDE
 	ld	xde, 0x7fefffff
-	ldto_berp c, 0xef		; ld C,QH
-	or_berp c, 0xeb		; or C,QD
-	ldfr_berp c, 0xeb		; ld QD,C
+	stb_erp c, 0xef		; ld C,QH
+	orb_erp c, 0xeb		; or C,QD
+	ldb_erp c, 0xeb		; ld QD,C
 	ld (xwa + 0x04), xde                    ; ld (XWA+0x04),XDE
 	jr t, .LDIV_b9a1                       ; [68 00] jr T,0x29b9a1
 .LDIV_b9a1:

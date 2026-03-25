@@ -2564,7 +2564,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 .include "ui_widgets/normal_mode_layout.s"
-	stib_dpi 0x00, 0x00
+	stib_dsp 0x00, 0x00
 	nop
 	nop
 	.byte 0x04, 0xf4
@@ -2936,7 +2936,7 @@ NakaInstTable8_NullTerm:
 	.byte 0x7f
 	nop
 	.long Naka_PresentationRootState
-	stib_dpi 0x00, 0x00
+	stib_dsp 0x00, 0x00
 	nop
 	nop
 	push_a

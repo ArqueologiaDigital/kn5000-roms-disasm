@@ -44,7 +44,7 @@ ScreenGroup_DispatchAlt:
 	call TmFlash_CopyToExtMem
 
 ScreenGroup_SetupWidgetPtr:
-	ldi_werp 0xfa, 0
+	ldiw_erp 0xfa, 0
 	jr ScreenGroup_WidgetLoop
 
 ; Voice initialization dispatch
@@ -53,7 +53,7 @@ VoiceInit_Dispatch:
 	ld de, iz
 	extz xde
 	sll xde, 2
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	extz xwa
 	sll xwa, 2
 	ld xbc, SystemConfig_PointerTable
@@ -63,10 +63,10 @@ VoiceInit_Dispatch:
 	ld xhl, (xwa)
 	call (xhl)
 	pop xiz
-	inc1_werp 0xfa
+	inc1w_erp 0xfa
 
 ScreenGroup_WidgetLoop:
-	ldto_werp WA, 0xfa
+	stw_erp WA, 0xfa
 	extz xwa
 	sll xwa, 2
 	ld xbc, SystemConfig_PointerTable
@@ -80,7 +80,7 @@ ScreenGroup_WidgetLoop:
 	ret
 
 ScreenGroup_InitState:
-	ldada xbc, 0xc1fe
+	lda_d16 xbc, 0xc1fe
 	ld (xbc), 0x1
 	ld (xbc + 1), 0xff
 	ld (xbc + 2), 0xff
@@ -112,19 +112,19 @@ ScreenGroup_InitState:
 ScreenGroup_InitVoiceLoop:
 	ld wa, de
 	inc 4, wa
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0x24
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0x44
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0x64
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0x64
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, wa
 	add wa, 0xe4
@@ -171,13 +171,13 @@ ScreenGroup_InitParams16:
 ScreenGroup_InitParam16Loop:
 	ld wa, de
 	add wa, 0x84
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0x94
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0xa4
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	inc 1, de
 	cp de, 0x10
 	jr lt, ScreenGroup_InitParam16Loop
@@ -190,10 +190,10 @@ ScreenGroup_InitParams8:
 ScreenGroup_InitParam8Loop:
 	ld wa, de
 	add wa, 0xb4
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	ld wa, de
 	add wa, 0xbc
-	stib_dri 0x07, 0xe4, 0xe0, 0xff
+	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	inc 1, de
 	cp de, 0x8
 	jr lt, ScreenGroup_InitParam8Loop
@@ -248,13 +248,13 @@ ScreenGroup_FinalInit:
 ScreenGroup_InitWordPairsLoop:
 	ld wa, de
 	add wa, wa
-	ldada xbc, 0xc62a
+	lda_d16 xbc, 0xc62a
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x10
 	ld wa, de
 	add wa, wa
-	ldada xbc, 0xc62b
+	lda_d16 xbc, 0xc62b
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0
