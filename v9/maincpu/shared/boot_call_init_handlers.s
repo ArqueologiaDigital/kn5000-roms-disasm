@@ -44,7 +44,7 @@ Boot_CallInitHandlers:
 	; IF INIT_FLAG_COMPARE_WORD (evaluated to false)
 	; ELSE
 	; maincpu: CP (0xfffeee), 0xff (6 bytes)
-	cpib_da	ROM_PaddingFF_0x3, 255
+	cpib_da	(ROM_PaddingFF_0x3), 255
 	; ENDIF
 
 	jr nz, Boot_CallInitHandlers__done	; 6e xx (offset computed by assembler)
@@ -64,7 +64,7 @@ Boot_CallInitHandlers__handler_loop:
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
 	sla	bc, 2
 	; LDA XDE, 0xfffef0 (init handler table)
-	lda_24	xde, System_TimestampPointers
+	lda_24	xde, (System_TimestampPointers)
 	; LD XBC, (XDE+BC) - load handler address from table
 	ld_sril3 xbc, 0x07, 0xe8, 0xe4
 

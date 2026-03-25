@@ -89,14 +89,14 @@ MainFlashFunc:
 	jr z, MainFlash_AudioDispatch
 	cp xbc, 0x1e30005
 	jr nz, MainFlash_ReturnZero
-	stdi8 0x7f42, 37
+	stdi8 (0x7f42), 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	lds wa, 7
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 0x7f42, 35
+	stdi8 (0x7f42), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -524,7 +524,7 @@ AcFileSfx_HandleSfxEvent:
 	ldw (xsp + 4), 0x1
 
 AcFileSfx_DrawLoop:
-	lda_24 xhl, DiskWarning_ConfirmStrings_0xB46
+	lda_24 xhl, (DiskWarning_ConfirmStrings_0xB46)
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
 	lda xwa, (xsp + 16)
@@ -1929,10 +1929,10 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
 	cps hl, 0				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
-	ldb_d8 a, 0x8d38				; Load current UI state ID
+	ldb_d8 a, (0x8d38); Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
-	lda_24 xbc, SSF_PresentationGateTable			; Base of state->key-map pointer table
+	lda_24 xbc, (SSF_PresentationGateTable); Base of state->key-map pointer table
 	ld_rrl	xix, xbc, wa
 	or xix, xix				; Test if pointer is null
 	ret z					; Return if no key map for this state
@@ -1941,18 +1941,18 @@ UIState_KeyScan_Dispatch:
 	; --- Pass-through path: broadcast any key press ---
 	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
 	lds32	xde, 0
-	ldb_d8 e, 0xc080				; chain byte
+	ldb_d8 e, (0xc080); chain byte
 	sll xde, 8				; shift up
 	lds32	xwa, 0
-	ldb_d8 a, 0xc07d				; param byte
+	ldb_d8 a, (0xc07d); param byte
 	add xde, xwa				; merge into XDE
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, 0xc07e				; additional key data
+	ldb_d8 a, (0xc07e); additional key data
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, 0xc07f				; additional key data
+	ldb_d8 a, (0xc07f); additional key data
 	add xde, xwa
 	ld xwa, 0xffffffff			; broadcast target (all handlers)
 	ld xbc, 0x01c00038			; key press event code
@@ -1961,10 +1961,10 @@ KeyScan_CheckEmptyMarker:
 	cpw (xix), 0xffff			; Check for EMPTY marker
 	ret z					; Return if no keys for this state
 	; --- Normal scan: search array for matching (chain<<8)|param ---
-	ldb_d8 a, 0xc07d				; param byte
+	ldb_d8 a, (0xc07d); param byte
 	ld l, a
 	extz hl
-	ldb_d8 e, 0xc080				; chain byte
+	ldb_d8 e, (0xc080); chain byte
 	ld c, e
 	extz bc
 	sll bc, 8				; BC = chain << 8
@@ -1981,11 +1981,11 @@ KeyScan_ScanLoop:
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, 0xc07e
+	ldb_d8 a, (0xc07e)
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, 0xc07f
+	ldb_d8 a, (0xc07f)
 	add xde, xwa
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, 0x01c00038			; key press event code
@@ -2004,33 +2004,33 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ldb_d8 a, 0xc07d				; param byte (key code low)
+	ldb_d8 a, (0xc07d); param byte (key code low)
 	cp a, 0x10				; Check for special key 0x10
 	jr z, CtrlPanel_HandleKey10			; Handle key 0x10
 	cps a, 0				; Check for key 0x00
 	ret nz					; Other keys: return
-	ldb_d8 a, 0xc07f				; additional key data
+	ldb_d8 a, (0xc07f); additional key data
 	and a, 0x03				; check bits 1:0
 	ret z					; return if both clear
-	ldb_d8 a, 0x26e2				; load activation state
+	ldb_d8 a, (0x26e2); load activation state
 	and a, 0x03				; check bits 1:0
 	ret nz					; return if already active
 	jr PartSelect_UpdateDisplayState				; activate
 CtrlPanel_HandleKey10:
 	call AudioMode_ResetVoiceState				; handler for key 0x10
 	lds32	xde, 0
-	ldb_d8 e, 0x8d3a				; load current state
+	ldb_d8 e, (0x8d3a); load current state
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, 0x01c0002f			; key event code (different from main handler)
 	call ApPostEvent				; dispatch event
 	ret
 
 PartSelect_UpdateDisplayState:
-	ldb_d8 a, 0xfc66
+	ldb_d8 a, (0xfc66)
 	and a, 0x1
 	cps a, 0
 	scc8 z, e
-	stb_d8 0x8d3a, e
+	stb_d8 (0x8d3a), e
 	extz de
 	pushw 0xff
 	ldw wa, 0x90
@@ -2129,16 +2129,16 @@ WakeUpApTask:
 	jrl MainTaskControl
 
 RefreshApTask:
-	stdi8 0xe3dc, 0
-	stdi8 0xe3de, 0
-	stdi8 0xe3e0, 0
-	stdi8 0xe3e2, 0
-	stdi8 0xe3e4, 255
-	stdi8 0xe3e6, 255
+	stdi8 (0xe3dc), 0
+	stdi8 (0xe3de), 0
+	stdi8 (0xe3e0), 0
+	stdi8 (0xe3e2), 0
+	stdi8 (0xe3e4), 255
+	stdi8 (0xe3e6), 255
 	lds32 xwa, 0
-	stl_da 0x02749a, xwa
-	stl_da 0x02749e, xwa
-	stl_da 0x0274a2, xwa
+	stl_da (0x02749a), xwa
+	stl_da (0x02749e), xwa
+	stl_da (0x0274a2), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2170,9 +2170,9 @@ RefreshApTask:
 
 RefreshSwEvent:
 	lds32 xwa, 0
-	stl_da 0x02749a, xwa
-	stl_da 0x02749e, xwa
-	stl_da 0x0274a2, xwa
+	stl_da (0x02749a), xwa
+	stl_da (0x02749e), xwa
+	stl_da (0x0274a2), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2188,11 +2188,11 @@ RefreshSwEvent:
 	jp ApPostEvent
 
 KeyScan_Enable:
-	stiw_da 0x03ef4e, 0x0001
+	stiw_da (0x03ef4e), 0x0001
 	ret
 
 KeyScan_Disable:
-	stiw_da 0x03ef4e, 0x0000
+	stiw_da (0x03ef4e), 0x0000
 	ret
 
 MainAutoFree:
@@ -2580,7 +2580,7 @@ MainPmanControl:
 	add xwa, xwa
 	add xwa, DiskWarning_ConfirmStrings_0xD4C
 	ld wa, (xwa)
-	lda_24 xix, MainPmanCtrl_DispatchTable
+	lda_24 xix, (MainPmanCtrl_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MainPmanCtrl_DispatchTable:
@@ -2628,7 +2628,7 @@ MainPmanCtrl_HandleA0:
 	jr nz, MainPmanCtrl_CheckSoundParam
 
 MainPmanCtrl_StorePartSelect:
-	stb_d8 0x8d3a, e
+	stb_d8 (0x8d3a), e
 	jr MainPmanCtrl_LoadPartSelect
 
 MainPmanCtrl_CheckSoundParam:
@@ -2640,15 +2640,15 @@ MainPmanCtrl_CheckSoundParam:
 	jr nz, MainPmanCtrl_SetPartSelectZero
 
 MainPmanCtrl_SetPartSelectOne:
-	stdi8 0x8d3a, 1
+	stdi8 (0x8d3a), 1
 	ldb e, 0x1
 	jr MainPmanCtrl_CompareAndUpdate
 
 MainPmanCtrl_SetPartSelectZero:
-	stdi8 0x8d3a, 0
+	stdi8 (0x8d3a), 0
 
 MainPmanCtrl_LoadPartSelect:
-	ldb_d8 e, 0x8d3a
+	ldb_d8 e, (0x8d3a)
 
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp + 6)
@@ -2675,7 +2675,7 @@ MainTitleControl:
 	jrl z, MainTitleCtrl_HandleBA
 	cp xbc, 0x1e000ab
 	jrl z, MainTitleCtrl_HandleAB
-	ldb_d8 a, 0x8d36
+	ldb_d8 a, (0x8d36)
 	cp xbc, 0x1c00013
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, 0x1c00028
@@ -2687,13 +2687,13 @@ MainTitleControl:
 	cp xbc, 0x1c00014
 	jrl nz, UIWidget_ReturnZero
 	ldmm8 0x8d35, 0x8d34
-	stb_d8 0x8d34, l
+	stb_d8 (0x8d34), l
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
-	stl_da 0x0274a2, xwa
-	stl_da 0x02749e, xwa
-	stl_da 0x02749a, xwa
+	stl_da (0x0274a2), xwa
+	stl_da (0x02749e), xwa
+	stl_da (0x02749a), xwa
 	jrl UIWidget_ReturnZero
 
 ; =============================================================================
@@ -2711,24 +2711,24 @@ MainTitleControl:
 ;   0x0274a8-0x0274ae - Additional transition parameters
 ; =============================================================================
 SeqState_TransitionMode:
-	stb_d8 0x8d37, a
+	stb_d8 (0x8d37), a
 	ldmm8 0x8d39, 0x8d38
-	stb_d8 0x8d36, l
-	stb_d8 0x8d38, l
+	stb_d8 (0x8d36), l
+	stb_d8 (0x8d38), l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
 	ldmm8 0x8d39, 0x8d38
-	stb_d8 0x8d38, l
+	stb_d8 (0x8d38), l
 	ldw wa, 0x61
 
 MainTitleCtrl_SetIndicatorAndClear:
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
-	stl_da 0x0274a2, xwa
-	stl_da 0x02749e, xwa
-	stl_da 0x02749a, xwa
+	stl_da (0x0274a2), xwa
+	stl_da (0x02749e), xwa
+	stl_da (0x02749a), xwa
 	call AudioMode_ResetVoiceState
 	jrl UIWidget_ReturnZero
 
@@ -2737,7 +2737,7 @@ SeqState_DemoModeHandler:
 	jrl nz, UIWidget_ReturnZero
 	cpdm8 0x8d38, a
 	jr nz, SeqDemo_SaveCurrentState
-	stb_d8 0x8d37, a
+	stb_d8 (0x8d37), a
 
 SeqDemo_SaveCurrentState:
 	ldmm8 0x8d39, 0x8d38
@@ -2745,35 +2745,35 @@ SeqDemo_SaveCurrentState:
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleAB:
-	stw_da 0x0274ac, xde
-	stiw_da 0x0274ae, 0x000a
+	stw_da (0x0274ac), xde
+	stiw_da (0x0274ae), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBA:
-	stw_da 0x0274a8, xde
-	stiw_da 0x0274aa, 0x000a
+	stw_da (0x0274a8), xde
+	stiw_da (0x0274aa), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBB:
-	ldw_da xwa, 0x0274aa
+	ldw_da xwa, (0x0274aa)
 	cps wa, 0
 	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
-	stw_da 0x0274aa, xwa
+	stw_da (0x0274aa), xwa
 	cps wa, 0
 	jr nz, MainTitleCtrl_CheckSecondTimer
-	ldw_da xwa, 0x0274a8
-	stw_da 0x0274a6, xwa
+	ldw_da xwa, (0x0274a8)
+	stw_da (0x0274a6), xwa
 
 MainTitleCtrl_CheckSecondTimer:
-	ldw_da xwa, 0x0274ae
+	ldw_da xwa, (0x0274ae)
 	cps wa, 0
 	jr z, UIWidget_ReturnZero
 	dec 1, wa
-	stw_da 0x0274ae, xwa
+	stw_da (0x0274ae), xwa
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
-	cpw_da 0x274ac, 0
+	cpw_da (0x274ac), 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
 	setda 0, 0x8f5c
 	jr MainTitleCtrl_SetIndicator60
@@ -2790,7 +2790,7 @@ UIWidget_ReturnZero:
 	ret
 
 CtrlPanel_GetSelectionState:
-	ldw_da xwa, 0x0274a6
+	ldw_da xwa, (0x0274a6)
 	bit 0, wa
 	jr z, CtrlPanel_CheckBit1
 	lds hl, 1
@@ -2809,12 +2809,12 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldb_d8 l, 0x8d3a
+	ldb_d8 l, (0x8d3a)
 	extz hl
 	ret
 
 GetCurrentPartSelect:
-	ldb_d8 l, 0x8d3a
+	ldb_d8 l, (0x8d3a)
 	ret
 
 UI_PostPartChangeEvent:
@@ -2888,7 +2888,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldb_d8 a, 0x8d36
+	ldb_d8 a, (0x8d36)
 	cpda8 a, 0x8d38
 	scc16 nz, hl
 	ret
@@ -3020,9 +3020,9 @@ GetClientBox2:
 
 CtrlPanel_DispatchByIndex:
 	add wa, wa
-	lda_24 xix, DiskWarning_ConfirmStrings_0xD58
+	lda_24 xix, (DiskWarning_ConfirmStrings_0xD58)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, CtrlPanel_FrameDispatchTable
+	lda_24 xix, (CtrlPanel_FrameDispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CtrlPanel_FrameDispatchTable:
@@ -3340,7 +3340,7 @@ CtrlPanel_FuncDispatch:
 	sll wa, 1
 	ld xix, DiskWarning_ConfirmStrings_0xE56
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, GroupBox_HandlePartChange
+	lda_24 xix, (GroupBox_HandlePartChange)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GroupBox_HandlePartChange:
@@ -3763,7 +3763,7 @@ GroupBox_HandleStateCompare:
 	ldiw_erp 0xee, 0
 	extz xhl
 	sll xhl, 2
-	lda_24 xwa, DiskWarning_ConfirmStrings_0xDAE
+	lda_24 xwa, (DiskWarning_ConfirmStrings_0xDAE)
 	ld xde, xwa
 	add xde, xhl
 	ld xbc, (xsp + 30)
@@ -3786,7 +3786,7 @@ GroupBox_StateCompare_Default:
 	jrl GroupBox_NavDispatch
 	ld xwa, (xsp + 38)
 	call SetCurrentTarget
-	stiw_da 0x03ef50, 0x0000
+	stiw_da (0x03ef50), 0x0000
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -3820,8 +3820,8 @@ GroupBox_Nav_SendEventAndUpdate:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da 0x03ef6a, xwa
-	lda_24 xde, 0x0274e8
+	stl_da (0x03ef6a), xwa
+	lda_24 xde, (0x0274e8)
 	lda xbc, (xde + 15)
 	ld xwa, xbc
 	inc 1, xde
@@ -3845,19 +3845,19 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
-	cpw_da 0x3ef50, 0
+	cpw_da (0x3ef50), 0
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive
-	ldl_da xwa, 0x03ef56
-	ldl_da xbc, 0x03ef5e
-	ldl_da xde, 0x03ef66
+	ldl_da xwa, (0x03ef56)
+	ldl_da xbc, (0x03ef5e)
+	ldl_da xde, (0x03ef66)
 	jr GroupBox_CursorNav_SendAndTitle
 
 GroupBox_CursorNav_LoadPositive:
-	ldl_da xwa, 0x03ef52
-	ldl_da xbc, 0x03ef5a
-	ldl_da xde, 0x03ef62
+	ldl_da xwa, (0x03ef52)
+	ldl_da xbc, (0x03ef5a)
+	ldl_da xde, (0x03ef62)
 
 GroupBox_CursorNav_SendAndTitle:
 	call SendEvent
@@ -4049,7 +4049,7 @@ GroupBox_HandleKeyRepeatTimer:
 	sub xde, xwa
 	sll xde, 2
 	add xde, xbc
-	lda_24 xwa, 0x0274e9
+	lda_24 xwa, (0x0274e9)
 	add xwa, xde
 	cp (xwa), 0x0
 	jrl z, GroupBox_ReturnZero

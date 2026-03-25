@@ -132,9 +132,9 @@ RESET_HANDLER:
 	and_sd8b_im 0xd3, 0xf0
 
 Boot_InitIOPorts:
-	stdi8 304, 255
-	stdi8 305, 255
-	stdi8 306, 3
+	stdi8 (304), 255
+	stdi8 (305), 255
+	stdi8 (306), 3
 	ldio 0x3a, 0x20
 	ld xsp, 0xc00
 	calr Boot_InitWorkRAM
@@ -157,25 +157,25 @@ We_seem_to_be_running_boot_ROM_code:
 Boot_PostSelfTest:
 	lds32 xwa, 0
 	stda32 1033, xwa
-	stdi8 1024, 2
+	stdi8 (1024), 2
 	call TaskSched_Init
-	stdi8 1024, 3
+	stdi8 (1024), 3
 Boot_InitPeripherals:
 	calr Boot_ClearConfigFlag7
-	lda_dd8l XBC, 0xe4
+	lda_dd8l XBC, (0xe4)
 	ld a, (xbc)
 	and a, 0x8f
 	or a, 0x30
 	ld (xbc), a
-	lda_dd8l XBC, 0xe6
+	lda_dd8l XBC, (0xe6)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x3
 	ld (xbc), a
 	calr Detect_Region_Code
-	cpw_da 65482, 23205
+	cpw_da (65482), 23205
 	jr z, Boot_FlashAndExtensions
-	lda_24 xde, 0x00066e
+	lda_24 xde, (0x00066e)
 	srl xde, 1
 	ld xwa, 0xf980
 	ld xbc, 0x1e8000
@@ -195,17 +195,17 @@ Boot_FlashAndExtensions:
 BootInit_SeqAndPanel:
 	call Seq_FullInit
 	ei 0
-	ldl_da xhl, CPanel_InitDispatchTable
+	ldl_da xhl, (CPanel_InitDispatchTable)
 	call (xhl)
 	call CPanel_ScanButtons
-	stb_d8 1026, l
+	stb_d8 (1026), l
 	call Get_Firmware_Version
 	cp l, 0xff
 	jr nz, User_didnt_request_flash_mem_update
 	call Check_for_Floppy_Disk_Change
 	cps hl, 0
 	jr z, User_didnt_request_flash_mem_update
-	cpdi8 1026, 4
+	cpdi8 (1026), 4
 	jr nz, User_didnt_request_flash_mem_update
 	call FLASH_MEM_UPDATE
 
@@ -238,10 +238,10 @@ Boot_MainSequence_Trampoline:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
 User_didnt_request_flash_mem_update:
-	ldb_d8 a, 1026		; Load boot combo code
+	ldb_d8 a, (1026); Load boot combo code
 	extz wa
 	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
-	stiw_da 0x00ffca, 0x0000
+	stiw_da (0x00ffca), 0x0000
 	set_dd8 0, 0x28	; Release Sub-CPU from reset
 	call SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
 	ei 0
@@ -263,12 +263,12 @@ Boot_PayloadError:
 
 Boot_DisplayScreen:
 	call ScreenGroup_Dispatch	; Display appropriate screen group
-	stdi8 1024, 6
+	stdi8 (1024), 6
 	lds wa, 3
 	call ScreenGroup_Dispatch
-	stdi8 1024, 128
-	stiw_da 0x00ffd4, 0x0000
-	ldb_d8 a, 1026		; Load boot combo code
+	stdi8 (1024), 128
+	stiw_da (0x00ffd4), 0x0000
+	ldb_d8 a, (1026); Load boot combo code
 	extz wa
 	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
 	lds wa, 4
@@ -277,7 +277,7 @@ Boot_DisplayScreen:
 	jp MainLoop
 
 Boot_GetButtonComboCode:
-	ldb_d8 l, 1026
+	ldb_d8 l, (1026)
 	ret
 
 Boot_ClearAllInterruptEnables:
@@ -315,7 +315,7 @@ Boot_ClearAllInterruptEnables:
 ; ===========================================================================
 SubCPU_Send_Payload:
 	push xiz
-	cpib_da ROM_PaddingFF_0x4, 0xff
+	cpib_da (ROM_PaddingFF_0x4), 0xff
 	jrl nz, SubCPU_Payload_Done
 	lds32 xiz, 0
 
@@ -344,7 +344,7 @@ SubCPU_Payload_DelayLoop_Short:
 	ld xde, 0x90000
 	call InterCPU_E1_Bulk_Transfer
 	ld xiz, 0x800000
-	cpib_da ROM_PaddingFF_0x2, 0xff
+	cpib_da (ROM_PaddingFF_0x2), 0xff
 	jr nz, SubCPU_Payload_TransferPart2
 	ld xiz, 0x50000
 	ld xwa, 0x3e0000
@@ -417,7 +417,7 @@ Boot_HandleComboDisplay:
 	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
 	and l, 0xf
 	extz hl
-	lda_24 xbc, LED_patterns_indicating_firmware_version		; LED_patterns_indicating_firmware_version table
+	lda_24 xbc, (LED_patterns_indicating_firmware_version); LED_patterns_indicating_firmware_version table
 	ldb_sri C, 0x07, 0xe4, 0xec	; Read LED pattern from table
 	extz bc
 	lds wa, 7
@@ -443,7 +443,7 @@ Boot_ParseTableDataTimestamp:
 	ret
 
 Boot_GetSystemPointer:
-	ldw_d16 xhl, 1028
+	ldw_d16 xhl, (1028)
 	ret
 
 Boot_ParseSubCPUTimestamp:
@@ -463,7 +463,7 @@ Boot_ParseSubCPUTimestamp:
 ; Otherwise returns immediately (normal boot continues).
 ; ===========================================================================
 Boot_HandleFactoryReset:
-	cpw_da 65482, 23205	; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
+	cpw_da (65482), 23205; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
 	ret z			; Yes -> checksums valid, skip reset
 	cps a, 1		; Combo code == 1 (Initial Setting)?
 	ret nz			; No -> not requesting reset, return
@@ -485,13 +485,13 @@ FactoryReset_ClearSRAM:
 	stl_dpi XWA, 0xe6
 	cp xbc, 0x200000
 	jr c, FactoryReset_ClearSRAM
-	stiw_da 0x00ffca, 0x5aa5
+	stiw_da (0x00ffca), 0x5aa5
 	jp Boot_InitIOPorts
 FactoryReset_TrailingByte:
 	ret
 
 Boot_ReadFDCStatus:
-	ldb_d8 l, 36458
+	ldb_d8 l, (36458)
 	ret
 
 ; =============================================================================
@@ -536,48 +536,48 @@ GetResouceInfo:
 	cp wa, 0x9
 	ret ugt
 	add wa, wa
-	lda_24 xix, RESOURCE_INFO_HANDLER_OFFSETS
+	lda_24 xix, (RESOURCE_INFO_HANDLER_OFFSETS)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, RESOURCE_INFO_HANDLERS
+	lda_24 xix, (RESOURCE_INFO_HANDLERS)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Resource info handlers - 10 handlers for different resource types
 RESOURCE_INFO_HANDLERS:
-	lda_d16 xwa, 63872
+	lda_d16 xwa, (63872)
 	ld (xbc), xwa
-	lda_d16 xwa, 65470
+	lda_d16 xwa, (65470)
 	ld xde, xwa
 	inc 2, xde
-	lda_d16 xwa, 63872
+	lda_d16 xwa, (63872)
 	sub xde, xwa
 	ld (xbc + 4), xde
 	ret
 
 ResInfo_GetSRAMBankRange:
-	lda_24 xwa, 0x1e7800
+	lda_24 xwa, (0x1e7800)
 	ld (xbc), xwa
-	lda_24 xwa, 0x1e7800
+	lda_24 xwa, (0x1e7800)
 	ld xde, xwa
-	lda_24 xwa, 0x1e8000
+	lda_24 xwa, (0x1e8000)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetUserAreaRange:
-	lda_24 xwa, 0x1ed350
+	lda_24 xwa, (0x1ed350)
 	ld (xbc), xwa
-	lda_24 xwa, 0x1ed350
+	lda_24 xwa, (0x1ed350)
 	ld xde, xwa
-	lda_24 xwa, 0x200000
+	lda_24 xwa, (0x200000)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetFlashBankRange:
-	lda_24 xwa, 0x1e0000
+	lda_24 xwa, (0x1e0000)
 	ld (xbc), xwa
-	lda_24 xwa, 0x1e0000
+	lda_24 xwa, (0x1e0000)
 	ld xde, xwa
-	lda_24 xwa, 0x1e7800
+	lda_24 xwa, (0x1e7800)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
@@ -590,44 +590,44 @@ ResInfo_GetTableDataInfo:
 	ret
 
 ResInfo_GetSndParamRange:
-	lda_24 xwa, 0x0ab000
+	lda_24 xwa, (0x0ab000)
 	ld (xbc), xwa
 	ld xwa, 0x5000
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetVoiceBankRange:
-	lda_24 xwa, 0x0b0000
+	lda_24 xwa, (0x0b0000)
 	ld (xbc), xwa
-	lda_24 xwa, 0x0b0000
+	lda_24 xwa, (0x0b0000)
 	ld xde, xwa
-	lda_24 xwa, 0x0fd800
+	lda_24 xwa, (0x0fd800)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetToneGenRange:
-	lda_24 xwa, 0x094800
+	lda_24 xwa, (0x094800)
 	ld (xbc), xwa
-	lda_24 xwa, 0x094800
+	lda_24 xwa, (0x094800)
 	ld xde, xwa
-	lda_24 xwa, 0x0ab000
+	lda_24 xwa, (0x0ab000)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetMspSettingsRange:
-	lda_24 xwa, 0x1e8800
+	lda_24 xwa, (0x1e8800)
 	ld (xbc), xwa
-	lda_24 xwa, 0x1e8800
+	lda_24 xwa, (0x1e8800)
 	ld xde, xwa
-	lda_24 xwa, 0x1ec400
+	lda_24 xwa, (0x1ec400)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetResourceListPtr:
-	lda_24 xwa, 0xe1ffcc
+	lda_24 xwa, (0xe1ffcc)
 	ld (xbc), xwa
 	lds32 xwa, 0
 	ld (xbc + 4), xwa
@@ -905,7 +905,7 @@ PlayHalt_SkipSetFlag:
 	ret
 
 PlayStandBy:
-	bitda 2, 10407
+	bitda 2, (10407)
 	jr z, PlayStandBy_SkipClearFlag
 	resda 2, 10407
 
@@ -937,23 +937,23 @@ midi_out_en_X:
 	jp MIDI_SC0_TX_DISPATCH
 
 GetAdr_sqbtof:
-	lda_d16 xhl, 1052
+	lda_d16 xhl, (1052)
 	ret
 
 GetAdr_sq_beadt:
-	lda_d16 xhl, 1051
+	lda_d16 xhl, (1051)
 	ret
 
 GetAdr_sqsrtc:
-	lda_d16 xhl, 1057
+	lda_d16 xhl, (1057)
 	ret
 
 GetAdr_rtmcfg:
-	lda_d16 xhl, 10407
+	lda_d16 xhl, (10407)
 	ret
 
 SetGlobalError:
-	stb_d8 32578, a
+	stb_d8 (32578), a
 	ret
 
 malloc_X:
@@ -1035,7 +1035,7 @@ Voice_InitBankTables_SlotLoop:
 	ldirw
 	dec 1, a
 	jr nz, Voice_InitBankTables_SlotLoop
-	stdi16 32280, 57
+	stdi16 (32280), 57
 	ret
 
 	.include "audio/voice_bank_defaults.s"
@@ -1126,7 +1126,7 @@ CountVoiceSlots_NotUsed:
 	jr CountVoiceSlots_Loop
 
 CountVoiceSlots_Done:
-	stda16 32280, xwa
+	stda16 (32280), xwa
 	ret
 
 Voice_GetSlotAddress:
@@ -1232,7 +1232,7 @@ Voice_FactoryPresetData:
 	jrl	206
 	cp	(xsp+24), 1
 	jrl	ugt, 196
-	ldb_da	l, 257962
+	ldb_da	l, (257962)
 	ld	xwa, (xsp+34)
 	ld	wa, (xwa)
 	exts	xwa
@@ -1251,7 +1251,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xix, 277504
+	lda_24	xix, (277504)
 	add	xix, xwa
 	cpw	(xsp+50), 245
 	jr	z, 30
@@ -1267,7 +1267,7 @@ Voice_FactoryPresetData:
 	cp	wa, de
 	jr	nz, 54
 	jr	105
-	ldl_da	xiy, 197714
+	ldl_da	xiy, (197714)
 	ld	de, (xhl)
 	exts	xde
 	ld	wa, (xhl+2)
@@ -1293,7 +1293,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xde, 277504
+	lda_24	xde, (277504)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, 4
@@ -1304,7 +1304,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xde, 277504
+	lda_24	xde, (277504)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, 4
@@ -1349,9 +1349,9 @@ Voice_FactoryPresetData:
 	calr	38931
 	cps	hl, 0
 	jr	z, 29
-	ldb_da	a, 257960
-	stb_da	257962, a
-	cpw_da	197710, 0
+	ldb_da	a, (257960)
+	stb_da	(257962), a
+	cpw_da	(197710), 0
 	jr	z, 51
 	ld	xwa, xiz
 	ld	bc, (xsp+4)
@@ -1360,7 +1360,7 @@ Voice_FactoryPresetData:
 	ldw	wa, 16
 	calr	38654
 	ld	xwa, xhl
-	lda_24	xbc, 16452973
+	lda_24	xbc, (16452973)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -1368,7 +1368,7 @@ Voice_FactoryPresetData:
 	ldirw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, 257960
+	ldb_da	c, (257960)
 	ld	(xwa+14), c
 	calr	38403
 	pop	xiz
@@ -1378,8 +1378,8 @@ Voice_FactoryPresetData:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	257962, c
-	cpw_da	197710, 0
+	stb_da	(257962), c
+	cpw_da	(197710), 0
 	ret	z
 	ld	bc, de
 	calr	1
@@ -1485,9 +1485,9 @@ DrawText_QueueOrDirect:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawText_QueueDeferred
-	ldb_da a, 0x03efa8
-	stb_da 0x03efaa, a
-	cpw_da 197710, 0
+	ldb_da a, (0x03efa8)
+	stb_da (0x03efaa), a
+	cpw_da (197710), 0
 	jrl z, DrawText_PopAndReturn
 	ld xwa, (xsp + 28)
 	push xwa
@@ -1511,7 +1511,7 @@ DrawText_QueueDeferred:
 	ldw wa, 0x1e
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda_24 xwa, DrawText_PopAndReturn_0x7
+	lda_24 xwa, (DrawText_PopAndReturn_0x7)
 	ld (xhl), xwa
 	ld xwa, (xsp + 16)
 	ld xiy, xwa
@@ -1536,7 +1536,7 @@ DrawText_QueueDeferred:
 	ld (xiz + 24), wa
 	ld wa, (xsp + 24)
 	ld (xiz + 26), wa
-	ldb_da a, 0x03efa8
+	ldb_da a, (0x03efa8)
 	ld (xiz + 28), a
 	ld xwa, xiz
 	calr DisplayCmd_DequeueAndExecute
@@ -1553,8 +1553,8 @@ DrawText_PopAndReturn:
 	ld ix, (xiz + 24)
 	ld de, (xiz + 26)
 	ld a, (xiz + 28)
-	stb_da 0x03efaa, a
-	cpw_da 197710, 0
+	stb_da (0x03efaa), a
+	cpw_da (197710), 0
 	jr z, DrawText_DeferredFreeAndReturn
 	push xiy
 	pushw ix
@@ -1776,7 +1776,7 @@ TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
-	lda_24 xde, 0xeab1b4
+	lda_24 xde, (0xeab1b4)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	ld (xhl), c
 	ld xbc, (xsp + 4)
@@ -1832,7 +1832,7 @@ TextRender_ScanLineLoop:
 	ldw (xsp + 24), 0x8
 
 TextRender_SelectDrawMode:
-	ldb_da a, 0x03efaa
+	ldb_da a, (0x03efaa)
 	cps a, 2
 	jrl z, TextRender_XorMode_Init
 	cps a, 1
@@ -1868,7 +1868,7 @@ TextRender_BitMask4_DrawPixel:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	lda_24 xix, 0x043c00
+	lda_24 xix, (0x043c00)
 	add xix, xwa
 	lds hl, 0
 	cpw (xsp + 24), 0x0
@@ -1957,7 +1957,7 @@ TextRender_BitMask5_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	lda_24 xiz, 0x043c00
+	lda_24 xiz, (0x043c00)
 	add xiz, xwa
 	lds hl, 0
 	cpw (xsp + 24), 0x0
@@ -2123,26 +2123,26 @@ MainChordPre:
 	call Malloc
 	ld xiz, xhl
 	ld (xiz), 0x0
-	ldb_d8 a, 36160
+	ldb_d8 a, (36160)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Naka_MemoryC_Screens
+	lda_24 xbc, (Naka_MemoryC_Screens)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xiz
 	call Strcat
-	ldb_d8 a, 36162
+	ldb_d8 a, (36162)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xecff6a
+	lda_24 xbc, (0xecff6a)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xiz
 	call Strcat
 	lda xsp, (xsp + 18)
-	cpdi8 36164, 0
+	cpdi8 (36164), 0
 	jr z, MainChordPre_EmptyChordStr
-	bitda 1, 52958
+	bitda 1, (52958)
 	jr z, MainChordPre_EmptyChordStr
 	ld xwa, 0xed1c96
 	jr MainChordPre_AppendChordSuffix
@@ -2154,16 +2154,16 @@ MainChordPre_AppendChordSuffix:
 	push xwa
 	push xiz
 	call Strcat
-	ldb_d8 a, 36162
+	ldb_d8 a, (36162)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0x03f2f8
+	lda_24 xbc, (0x03f2f8)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, 36160
+	ldb_d8 a, (36160)
 	extz wa
 	sla wa, 2
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, 36164
+	ldb_d8 a, (36164)
 	extz wa
 	sla wa, 2
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
@@ -2286,7 +2286,7 @@ EmptyRoutine_02:
 
 
 CPanel_RX_ProcessOrInit:
-	ldb_d8 a, 36236
+	ldb_d8 a, (36236)
 	and a, 0xc0
 	jr z, CPanel_RX_SkipToProcess
 				; if CP_Flags_A.76 != 0:
@@ -2295,8 +2295,8 @@ CPanel_RX_ProcessOrInit:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 	ei 6
-	stdi16 36253, 0
-	stdi16 36255, 0
+	stdi16 (36253), 0
+	stdi16 (36255), 0
 	ordi8 36242, 1	; CP_Flags_B.0 = 1
 	ei 0
 	jr CPanel_RX_Return
@@ -2458,7 +2458,7 @@ Debug_SWI_JumpTable:
 	ret
 
 Get_Firmware_Version:
-	ldb_da l, FIRMWARE_VERSION
+	ldb_da l, (FIRMWARE_VERSION)
 	ret
 
 ROM_PaddingFF:

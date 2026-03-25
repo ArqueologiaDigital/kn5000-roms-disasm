@@ -26,7 +26,7 @@ FmmComposerLoadFunc:
 	jrl z, CompLoad_HandleAbort
 	cp xde, 0x2
 	jrl nz, CompLoad_Return
-	stdi8 0x84fe, 0
+	stdi8 (0x84fe), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -37,11 +37,11 @@ FmmComposerLoadFunc:
 	jr ge, CompLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 0x8500, xhl
+	stda16 (0x8500), xhl
 	calr SignalProgressUpdate
 
 CompLoad_DispatchState:
-	ldw_d16 xwa, 0x8500
+	ldw_d16 xwa, (0x8500)
 	cps wa, 1
 	jrl z, CompLoad_HandleSuccess
 	cps wa, 0
@@ -51,7 +51,7 @@ CompLoad_DispatchState:
 	cpdi16 0x8502, 0
 	jr ge, CompLoad_ContinueWait
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -81,7 +81,7 @@ CompLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7f42, 0
+	stdi8 (0x7f42), 0
 	ldw wa, 0xee
 	jr CompLoad_CallStatusDisplay
 
@@ -110,7 +110,7 @@ CompLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7f42, 2
+	stdi8 (0x7f42), 2
 	ldw wa, 0xee
 
 CompLoad_CallStatusDisplay:
@@ -124,18 +124,18 @@ CompLoad_HandleAbort:
 CompLoad_HandleSelection:
 	stda32 0x7f7c, xde
 	call GetCurrentFileIndex
-	stda16 0x7f80, xhl
+	stda16 (0x7f80), xhl
 	cps hl, 0
 	jr lt, CompLoad_Selection_Negative
 	exts xhl
-	ldda32 xwa, 0x7f7c
+	ldda32 xwa, (0x7f7c)
 	ld xbc, 0x1e50002
 	ld xde, xhl
 	jrl CompLoad_DispatchWidget
 
 CompLoad_Selection_Negative:
-	stdi16 0x7f80, 0
-	ldda32 xwa, 0x7f7c
+	stdi16 (0x7f80), 0
+	ldda32 xwa, (0x7f7c)
 	ld xbc, 0x1e50002
 	lds32 xde, 0
 	jrl CompLoad_DispatchWidget
@@ -147,7 +147,7 @@ CompLoad_DrawItemLoop:
 	ld wa, iz
 	ld hl, wa
 	sll hl, 5
-	lda_d16 xde, 0x850c
+	lda_d16 xde, (0x850c)
 	extz xhl
 	add xhl, xde
 	stb_erp C, 0xf8
@@ -162,7 +162,7 @@ CompLoad_DrawItemLoop:
 	jr CompLoad_DrawItem_Continue
 
 CompLoad_DrawItem_Empty:
-	lda_24 xbc, DiskOp_ChannelCfgTable_0x80
+	lda_24 xbc, (DiskOp_ChannelCfgTable_0x80)
 
 CompLoad_DrawItem_Continue:
 	ld de, iz
@@ -170,7 +170,7 @@ CompLoad_DrawItem_Continue:
 	sll wa, 5
 	lds hl, 1
 	add hl, wa
-	lda_d16 xix, 0x850c
+	lda_d16 xix, (0x850c)
 	extz xhl
 	add xhl, xix
 	inc 1, de
@@ -180,10 +180,10 @@ CompLoad_DrawItem_Continue:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
-	lda_d16 xbc, 0x850c
+	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x7f7c
+	ldda32 xwa, (0x7f7c)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	inc 1, iz
@@ -192,7 +192,7 @@ CompLoad_DrawItem_Continue:
 	jrl CompLoad_Return
 
 CompLoad_HandleScroll:
-	ldw_d16 xwa, 0x7f80
+	ldw_d16 xwa, (0x7f80)
 	ld (xsp + 2), wa
 	or xde, xde
 	jr nz, CompLoad_PageScroll
@@ -229,7 +229,7 @@ CompLoad_PageDown:
 	add wa, 0xa
 
 CompLoad_StorePosition:
-	stda16 0x7f80, xwa
+	stda16 (0x7f80), xwa
 	jrl CompLoad_UpdateDisplay
 
 CompLoad_OpLoad:
@@ -259,7 +259,7 @@ CompLoad_HideButtons_Loop:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -279,31 +279,31 @@ CompLoad_HideButtons_Loop:
 	call SoundCtrl_SendCommand
 
 CompLoad_GetSelection:
-	ldw_d16 xwa, 0x7f80
+	ldw_d16 xwa, (0x7f80)
 
 CompLoad_UpdateDisplay:
 	cp (xsp + 2), wa
 	jr z, CompLoad_Return
 	call NotifyUIOfSelectionChange
-	ldw_d16 xde, 0x7f80
+	ldw_d16 xde, (0x7f80)
 	exts xde
-	ldda32 xwa, 0x7f7c
+	ldda32 xwa, (0x7f7c)
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 2)
 	sll de, 5
-	lda_d16 xbc, 0x850c
+	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x7f7c
+	ldda32 xwa, (0x7f7c)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xde, 0x7f80
+	ldw_d16 xde, (0x7f80)
 	sll de, 5
-	lda_d16 xbc, 0x850c
+	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x7f7c
+	ldda32 xwa, (0x7f7c)
 	ld xbc, 0x1c0000f
 
 CompLoad_DispatchWidget:
@@ -435,7 +435,7 @@ LoadFilter_HandleShow:
 LoadFilter_DrawLoop:
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, 0x7f86
+	lda_d16 xbc, (0x7f86)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -443,10 +443,10 @@ LoadFilter_DrawLoop:
 	calr RenderFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, 0x7f86
+	lda_d16 xbc, (0x7f86)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x7f82
+	ldda32 xwa, (0x7f82)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
@@ -515,16 +515,16 @@ LoadFilter_UpdateDisplay:
 	extz bc
 	ld wa, bc
 	sla wa, 4
-	lda_d16 xde, 0x7f86
+	lda_d16 xde, (0x7f86)
 	exts xwa
 	add xwa, xde
 	calr RenderFilterDisplay
 	ld xwa, (xsp + 2)
 	extz wa
 	sla wa, 4
-	lda_d16 xbc, 0x7f86
+	lda_d16 xbc, (0x7f86)
 	stb_dri B, 0x07, 0xe4, 0xe0
-	ldda32 xwa, 0x7f82
+	ldda32 xwa, (0x7f82)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jrl LoadFilter_Return
@@ -553,7 +553,7 @@ LoadFilter_OpLoad:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -656,7 +656,7 @@ SaveFilter_HandleShow:
 SaveFilter_DrawLoop:
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -664,10 +664,10 @@ SaveFilter_DrawLoop:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x8006
+	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
@@ -737,16 +737,16 @@ SaveFilter_UpdateDisplay:
 	extz bc
 	ld wa, bc
 	sla wa, 4
-	lda_d16 xde, 0x800a
+	lda_d16 xde, (0x800a)
 	exts xwa
 	add xwa, xde
 	calr RenderSaveFilterDisplay
 	ld xwa, (xsp + 2)
 	extz wa
 	sla wa, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	stb_dri B, 0x07, 0xe4, 0xe0
-	ldda32 xwa, 0x8006
+	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	jrl SaveFilter_DispatchWidget
 
@@ -771,7 +771,7 @@ SaveFilter_SelectAll_Unlock:
 SaveFilter_SelectAll_Update:
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -779,10 +779,10 @@ SaveFilter_SelectAll_Update:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x8006
+	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
@@ -803,7 +803,7 @@ SaveFilter_DeselectAll_Loop:
 	call FileIO_BuildRecordPath_Done
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -811,10 +811,10 @@ SaveFilter_DeselectAll_Loop:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x8006
+	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
@@ -833,7 +833,7 @@ SaveFilter_OpSave:
 	cps hl, 0
 	jr z, SaveFilter_Save_NoPwd
 	lds32 xde, 0
-	ldb_d8 e, 0x8a0c
+	ldb_d8 e, (0x8a0c)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
 	jr SaveFilter_DispatchWidget
@@ -842,7 +842,7 @@ SaveFilter_Save_NoPwd:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, SaveFilter_Save_Execute
-	cpib_da 0x0340ea, 0x00
+	cpib_da (0x0340ea), 0x00
 	jr z, SaveFilter_Save_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -867,11 +867,11 @@ SaveFilter_Save_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -904,11 +904,11 @@ SaveFilter_OpFormat:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -943,7 +943,7 @@ SaveFilter_ResetAll_Loop:
 	call FileIO_BuildRecordPath_Return
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -951,10 +951,10 @@ SaveFilter_ResetAll_Loop:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, 0x800a
+	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x8006
+	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)

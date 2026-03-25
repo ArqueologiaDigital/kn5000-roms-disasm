@@ -22,11 +22,11 @@
 ; =============================================================================
 
 	; === Watchdog Timer Disable ===
-	stdi8 272, 0
-	stdi8 273, 177
+	stdi8 (272), 0
+	stdi8 (273), 177
 
 	; === System Clock Setup ===
-	stdi8 266, 4
+	stdi8 (266), 4
 
 	; === Port F Setup (Control Panel / MIDI) ===
 	ldio 0x3C, 0x00
@@ -82,20 +82,20 @@
 	set_dd8 0, 0x9E
 
 	; === Memory Controller: Start Address Registers ===
-	stdi8 323, 30	; Block 0 @ 0x1E0000
-	stdi8 327, 16	; Block 1 @ 0x100000
-	stdi8 331, 192	; Block 2 @ 0xC00000
-	stdi8 335, 0	; Block 3 @ 0x000000
-	stdi8 339, 128	; Block 4 @ 0x800000 (Table Data)
-	stdi8 343, 0	; Block 5 @ 0x000000
+	stdi8 (323), 30; Block 0 @ 0x1E0000
+	stdi8 (327), 16; Block 1 @ 0x100000
+	stdi8 (331), 192; Block 2 @ 0xC00000
+	stdi8 (335), 0; Block 3 @ 0x000000
+	stdi8 (339), 128; Block 4 @ 0x800000 (Table Data)
+	stdi8 (343), 0; Block 5 @ 0x000000
 
 	; === Memory Controller: Address Mask Registers ===
-	stdi8 322, 15
-	stdi8 326, 63
-	stdi8 330, 127
-	stdi8 334, 31
-	stdi8 338, 255
-	stdi8 342, 255
+	stdi8 (322), 15
+	stdi8 (326), 63
+	stdi8 (330), 127
+	stdi8 (334), 31
+	stdi8 (338), 255
+	stdi8 (342), 255
 
 	; === Port 8 Setup (Chip Select) ===
 	ldio 0x20, 0x3B
@@ -106,32 +106,32 @@
 	ldw bc, 0x400
 Boot_Init__pause1:
 	djnz xbc, Boot_Init__pause1
-	stdi8 357, 129	; Enable DRAM refresh
+	stdi8 (357), 129; Enable DRAM refresh
 
 	; === DRAM Initialization Delay 2 ===
 	ldw bc, 0x2000
 Boot_Init__pause2:
 	djnz xbc, Boot_Init__pause2
-	stdi8 357, 113
-	stdi8 354, 139
-	stdi8 355, 88
+	stdi8 (357), 113
+	stdi8 (354), 139
+	stdi8 (355), 88
 	resda 4, 358
 
 	; === Block Chip Select Low Configuration ===
-	stdi8 320, 17
-	stdi8 324, 51
-	stdi8 328, 17
-	stdi8 332, 34
-	stdi8 336, 17
-	stdi8 340, 34
+	stdi8 (320), 17
+	stdi8 (324), 51
+	stdi8 (328), 17
+	stdi8 (332), 34
+	stdi8 (336), 17
+	stdi8 (340), 34
 
 	; === Block Chip Select High Configuration ===
-	stdi8 321, 128
-	stdi8 325, 129
-	stdi8 329, 194
-	stdi8 333, 138
-	stdi8 337, 130
-	stdi8 341, 129
+	stdi8 (321), 128
+	stdi8 (325), 129
+	stdi8 (329), 194
+	stdi8 (333), 138
+	stdi8 (337), 130
+	stdi8 (341), 129
 
 	; === Interrupt Mode Control ===
 	ldio 0xF6, 0x00

@@ -32,7 +32,7 @@ TtComputerConnection:
 	call GET_COMPUTER_INTERFACE_SELECTION
 	cps l, 0	;  MIDI
 	jr nz, ComputerConnectionTitleExit
-	stdi8 0x7f42, 70
+	stdi8 (0x7f42), 70
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -284,7 +284,7 @@ MdSetupLoadFunc:
 	add xhl, xhl
 	add xhl, NakaInst_OFF_WidgetTbl2_0x12
 	ld hl, (xhl)
-	lda_24 xix, SetupLoadOptionJumpTable
+	lda_24 xix, (SetupLoadOptionJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xec
 SetupLoadOptionJumpTable:
 	ld	xwa, (xde+14)
@@ -308,7 +308,7 @@ SetupLoadOptionJumpTable:
 SetupLoadInvalidIndex:
 	lds32 xhl, 0
 	jr MdSetupLoad_Epilogue
-	lda_24 xhl, 0x00ffc0
+	lda_24 xhl, (0x00ffc0)
 	jr MdSetupLoad_Epilogue
 	lds32 xhl, 1
 

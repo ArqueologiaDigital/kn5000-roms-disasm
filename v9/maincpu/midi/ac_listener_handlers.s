@@ -526,7 +526,7 @@ AcFadeSetGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_OFF_WidgetTbl2_0x4E
 	ld bc, (xbc)
-	lda_24 xix, VoiceParam_ListHandler
+	lda_24 xix, (VoiceParam_ListHandler)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; Voice parameter list handler
@@ -585,7 +585,7 @@ VoiceParam_ListHandler:
 	jrl le, AudioMix_ReturnZeroJmp3
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x32
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0x32)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -643,7 +643,7 @@ FadeGrid_CheckFadeOut:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x40
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0x40)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -781,7 +781,7 @@ FadeSetGridCheck:
 	add xwa, xwa
 	add xwa, NakaInst_OFF_WidgetTbl2_0xBC
 	ld wa, (xwa)
-	lda_24 xix, Data_FadeSetGridDispatch
+	lda_24 xix, (Data_FadeSetGridDispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_FadeSetGridDispatch:
@@ -801,7 +801,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, 463
 	sla	wa, 2
-	lda_24	xbc, NakaInst_OFF_WidgetTbl2_0x5C
+	lda_24	xbc, (NakaInst_OFF_WidgetTbl2_0x5C)
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 0xffffffff
 	jrl	z, 441
@@ -824,7 +824,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, 388
 	sla	wa, 2
-	lda_24	xbc, NakaInst_OFF_WidgetTbl2_0x5C
+	lda_24	xbc, (NakaInst_OFF_WidgetTbl2_0x5C)
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 0xffffffff
 	jrl	z, 366
@@ -836,7 +836,7 @@ Data_FadeSetGridDispatch:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda_24	xix, NakaInst_OFF_WidgetTbl2_0x5C
+	lda_24	xix, (NakaInst_OFF_WidgetTbl2_0x5C)
 	ld	xiz, (xsp+28)
 	jr	18
 	ld	iy, bc
@@ -908,7 +908,7 @@ AcInOutGrid_Handler:
 	jrl nz, SndParam_ReturnZero2
 	ld wa, (xbc)
 	sla wa, 2
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x5C
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0x5C)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld xwa, xbc
 	cp xbc, 0x2a12
@@ -1010,7 +1010,7 @@ AcInOutGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_OFF_WidgetTbl2_0x370
 	ld bc, (xbc)
-	lda_24 xix, AcInOutGrid_Init
+	lda_24 xix, (AcInOutGrid_Init)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AcInOutGrid_Init:
@@ -1071,7 +1071,7 @@ AcInOutGrid_Init:
 	add wa, wa
 	cps hl, 0
 	jr nz, AcInOutGrid_ScrollUp_AltTable
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0xCA
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0xCA)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
@@ -1083,7 +1083,7 @@ AcInOutGrid_Init:
 	jr AcInOutGrid_ScrollUp_Dispatch
 
 AcInOutGrid_ScrollUp_AltTable:
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0xDC
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0xDC)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
@@ -1149,7 +1149,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	add wa, wa
 	cps hl, 0
 	jr nz, AcInOutGrid_ScrollDown_AltTable
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0xEE
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0xEE)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, iz
 	ld de, wa
@@ -1160,7 +1160,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	jr AcInOutGrid_ScrollDown_Dispatch
 
 AcInOutGrid_ScrollDown_AltTable:
-	lda_24 xbc, NakaInst_OFF_WidgetTbl2_0x100
+	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0x100)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, iz
 	ld de, wa
@@ -1300,7 +1300,7 @@ InOutGridCheck:
 	add xwa, xwa
 	add xwa, NakaInst_DIRECT_E7FCE4_0x8C
 	ld wa, (xwa)
-	lda_24 xix, Data_InOutGridDispatch
+	lda_24 xix, (Data_InOutGridDispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_InOutGridDispatch:
@@ -1324,7 +1324,7 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, 1762
 	add	bc, bc
-	lda_24	xix, NakaInst_DIRECT_E7FCE4_0x7A
+	lda_24	xix, (NakaInst_DIRECT_E7FCE4_0x7A)
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe4
@@ -1399,7 +1399,7 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, 1558
 	add	bc, bc
-	lda_24	xix, NakaInst_DIRECT_E7FCE4_0x68
+	lda_24	xix, (NakaInst_DIRECT_E7FCE4_0x68)
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe4
@@ -1461,7 +1461,7 @@ Data_InOutGridDispatch:
 	ld	(xwa+4), xbc
 	ld	xix, (xiz)
 	lda	xbc, (xwa+2)
-	lda_24	xhl, NakaInst_OFF_WidgetTbl2_0x37E
+	lda_24	xhl, (NakaInst_OFF_WidgetTbl2_0x37E)
 	cp	xix, 8579
 	jrl	z, 612
 	cp	xix, 8578
@@ -1484,7 +1484,7 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 0
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda_24	xbc, NakaInst_OFF_E7FCA2_0x6
+	lda_24	xbc, (NakaInst_OFF_E7FCA2_0x6)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -1514,7 +1514,7 @@ Data_InOutGridDispatch:
 	jrl	1214
 	ld	xix, xwa
 	ld	wa, (xwa)
-	lda_24	xhl, ControlMode_Option_Table_0xA
+	lda_24	xhl, (ControlMode_Option_Table_0xA)
 	cps	wa, 2
 	jr	z, 121
 	cps	wa, 1
@@ -1726,16 +1726,16 @@ ParaLoadOpt_Entry:
 	cp wa, 0x8
 	jrl gt, MdPreset_ReturnZero2
 	add wa, wa
-	lda_24 xix, NakaInst_DIRECT_E7FCE4_0x56
+	lda_24 xix, (NakaInst_DIRECT_E7FCE4_0x56)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, Data_ParaLoadOptDispatch
+	lda_24 xix, (Data_ParaLoadOptDispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, NakaInst_OFF_E7FCA2_0x6
+	lda_24	xwa, (NakaInst_OFF_E7FCA2_0x6)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1752,7 +1752,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8449
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, NakaInst_OFF_WidgetTbl2_0x37E
+	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1769,7 +1769,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, ControlMode_Option_Table_0xA
+	lda_24	xwa, (ControlMode_Option_Table_0xA)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1886,7 +1886,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8577
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, NakaInst_OFF_WidgetTbl2_0x37E
+	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1903,7 +1903,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8580
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, NakaInst_OFF_WidgetTbl2_0x37E
+	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1920,7 +1920,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8578
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, NakaInst_OFF_WidgetTbl2_0x37E
+	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1937,7 +1937,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8579
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, NakaInst_OFF_WidgetTbl2_0x37E
+	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -2052,7 +2052,7 @@ IvMpst_InheritAndCheck:
 	exts xwa
 	cp xwa, (xsp + 4)
 	jr nz, IvMpst_ReturnZero
-	cpib_da 0x024756, 0x00
+	cpib_da (0x024756), 0x00
 	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00001
@@ -2079,9 +2079,9 @@ MdPresetWithoutFunc:
 	push xiz
 	cp xbc, 0x1c00007
 	jr nz, MdPresetWith_ReturnSuccess
-	cpib_da 0x024756, 0x00
+	cpib_da (0x024756), 0x00
 	jr z, MdPresetWith_ReturnSuccess
-	stib_da 0x024756, 0x00
+	stib_da (0x024756), 0x00
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2126,9 +2126,9 @@ MdPresetWithFunc:
 	push xiz
 	cp xbc, 0x1c00007
 	jr nz, MdPreset_ReturnSuccess
-	cpib_da 0x024756, 0x01
+	cpib_da (0x024756), 0x01
 	jr z, MdPreset_ReturnSuccess
-	stib_da 0x024756, 0x01
+	stib_da (0x024756), 0x01
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2181,7 +2181,7 @@ MdPresetOKFunc:
 	jrl z, MdPresetOK_Slot4Path
 	cps l, 3
 	jrl z, MdPresetOK_Slot3Path
-	ldb_da a, 0x024756
+	ldb_da a, (0x024756)
 	cps l, 2
 	jr z, MdPresetOK_CheckSlotB
 	cps l, 1
@@ -2263,7 +2263,7 @@ MdPresetOK_Slot4Path:
 	ld xbc, 0x1e0006b
 	lds32 xde, 0
 	call SendEvent
-	stb_da 0x024758, l
+	stb_da (0x024758), l
 	ld xwa, 0x560025
 	ld xbc, 0x1e00090
 	lds32 xde, 0
@@ -2289,16 +2289,16 @@ MainMpstFunc:
 	cp xbc, 0x1e30003
 	jr nz, MainMpst_ReturnZero
 	ld xwa, (xsp)
-	stb_d8 0xb7ec, a
+	stb_d8 (0xb7ec), a
 	call SndParam_ApplyAndSync
-	stdi8 0x7f42, 35
+	stdi8 (0x7f42), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	jr MainMpst_PostEvent
 
 MainMpst_HandlePresetCopy:
-	stdi8 0x7f42, 37
+	stdi8 (0x7f42), 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2306,7 +2306,7 @@ MainMpst_HandlePresetCopy:
 	ld xwa, (xsp)
 	extz wa
 	call SndParam_AllocAndCopyPreset
-	stdi8 0x7f42, 35
+	stdi8 (0x7f42), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2320,7 +2320,7 @@ MainMpst_ReturnZero:
 	ret
 
 MainMpst_ReadPresetIndex:
-	ldb_da l, 0x024758
+	ldb_da l, (0x024758)
 	ret
 
 TtMdExc:

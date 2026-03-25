@@ -8,8 +8,8 @@
 ; GridBox. The core UI rendering and event dispatch layer.
 ; =============================================================================
 
-	lda_24 xde, 0x0274b0
-	ldl_da xhl, 0x0274e4
+	lda_24 xde, (0x0274b0)
+	ldl_da xhl, (0x0274e4)
 	lds32 xbc, 0
 
 WndScroll_CopyLoop:
@@ -20,17 +20,17 @@ WndScroll_CopyLoop:
 	ld (xix), a
 	inc 1, iz
 	inc 1, xbc
-	cpda16_24 xiz, 0x0274d6
+	cpda16_24 xiz, (0x0274d6)
 	jr c, WndScroll_CopyLoop
 
 WndScroll_InitBuffer:
 	ld wa, iz
 	extz xwa
-	lda_24 xde, 0x0274b0
+	lda_24 xde, (0x0274b0)
 	ld xbc, xde
 	add xbc, xwa
 	ld (xbc), 0x0
-	ldl_da xwa, 0x0274d2
+	ldl_da xwa, (0x0274d2)
 	ld xbc, 0x1e0003a
 	call ApFuncCall
 
@@ -56,9 +56,9 @@ WndScroll_InitSelectionTrack:
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
 	calr WindowProc
-	stiw_da 0x0274dc, 0xffff
-	stiw_da 0x0274e0, 0xffff
-	ldw_da xde, 0x0274d8
+	stiw_da (0x0274dc), 0xffff
+	stiw_da (0x0274e0), 0xffff
+	ldw_da xde, (0x0274d8)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00080
@@ -72,19 +72,19 @@ WndScroll_BasicWindowProc:
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_HandleSelectionChange:
-	stw_da 0x0274de, xde
-	cpdm16_24 0x0274e0, xde
+	stw_da (0x0274de), xde
+	cpdm16_24 (0x0274e0), xde
 	jrl z, UIDialog_ReturnZeroJmp
 	ld xwa, (xsp + 50)
 	calr GetClientBox
-	ldw_da xwa, 0x0274da
+	ldw_da xwa, (0x0274da)
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
-	ldw_da xwa, 0x0274e0
+	ldw_da xwa, (0x0274e0)
 	cp wa, 0xffff
 	jr z, WndScroll_DrawCurrentItem
 	extz xwa
@@ -93,7 +93,7 @@ WndScroll_HandleSelectionChange:
 	lda xbc, (xsp + 12)
 	ld xwa, (xwa)
 	call ConvertStrings
-	ldw_da xwa, 0x0274e0
+	ldw_da xwa, (0x0274e0)
 	extz xwa
 	div wa, 0xd
 	mul wa, 0x18
@@ -104,7 +104,7 @@ WndScroll_HandleSelectionChange:
 	add wa, de
 	lda xde, (xsp + 26)
 	ld (xde + 2), wa
-	ldw_da xwa, 0x0274e0
+	ldw_da xwa, (0x0274e0)
 	extz xwa
 	div wa, 0xd
 	stw_erp HL, 0xe2
@@ -131,14 +131,14 @@ WndScroll_HandleSelectionChange:
 	call DrawFrame
 
 WndScroll_DrawCurrentItem:
-	ldw_da xwa, 0x0274de
+	ldw_da xwa, (0x0274de)
 	extz xwa
 	sll xwa, 2
 	add xwa, (xsp + 4)
 	lda xbc, (xsp + 12)
 	ld xwa, (xwa)
 	call ConvertStrings
-	ldw_da xwa, 0x0274de
+	ldw_da xwa, (0x0274de)
 	extz xwa
 	div wa, 0xd
 	mul wa, 0x18
@@ -149,7 +149,7 @@ WndScroll_DrawCurrentItem:
 	add wa, de
 	lda xde, (xsp + 26)
 	ld (xde + 2), wa
-	ldw_da xwa, 0x0274de
+	ldw_da xwa, (0x0274de)
 	extz xwa
 	div wa, 0xd
 	stw_erp HL, 0xe2
@@ -174,21 +174,21 @@ WndScroll_DrawCurrentItem:
 	ld (xwa + 6), bc
 	ldw bc, 0xf2
 	call DrawFrame
-	ldw_da xwa, 0x0274de
-	stw_da 0x0274e0, xwa
+	ldw_da xwa, (0x0274de)
+	stw_da (0x0274e0), xwa
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_RepaintAll:
-	ldw_da xwa, 0x0274dc
-	cpda16_24 xwa, 0x0274da
+	ldw_da xwa, (0x0274dc)
+	cpda16_24 xwa, (0x0274da)
 	jrl z, UIDialog_ReturnZeroJmp
-	stiw_da 0x0274e0, 0xffff
+	stiw_da (0x0274e0), 0xffff
 	ld xwa, (xsp + 50)
 	calr GetClientBox
 	lda xwa, (xsp + 34)
 	ldw bc, 0xf5
 	call DrawBox
-	ldw_da xwa, 0x0274da
+	ldw_da xwa, (0x0274da)
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout
@@ -232,9 +232,9 @@ WndScroll_DrawSingleItem:
 	inc 1, iz
 
 WndScroll_ItemCountCheck:
-	ldw_da xbc, 0x0274e2
+	ldw_da xbc, (0x0274e2)
 	mul bc, 0x3
-	ldw_da xwa, 0x0274da
+	ldw_da xwa, (0x0274da)
 	add bc, wa
 	extz xbc
 	add xbc, xbc
@@ -242,7 +242,7 @@ WndScroll_ItemCountCheck:
 	add xde, xbc
 	cp iz, (xde)
 	jr ule, WndScroll_DrawSingleItem
-	stw_da 0x0274dc, xwa
+	stw_da (0x0274dc), xwa
 	jrl UIDialog_ReturnZeroJmp
 
 WndEvt_DispatchByEventCode:
@@ -251,7 +251,7 @@ WndEvt_DispatchByEventCode:
 	ld xde, (xsp + 42)
 	calr WindowProc
 	ld xwa, (xsp + 42)
-	ldl_da xbc, 0x0274e4
+	ldl_da xbc, (0x0274e4)
 	dec 1, xwa
 	cp xwa, 0x0
 	jrl c, UIDialog_ReturnZeroJmp
@@ -260,16 +260,16 @@ WndEvt_DispatchByEventCode:
 	add xwa, xwa
 	add xwa, Data_SoundEditorCharsLayout_0x24
 	ld wa, (xwa)
-	lda_24 xix, WndEvt_EventCodeDispatch
+	lda_24 xix, (WndEvt_EventCodeDispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Window event dispatch by event code
 WndEvt_EventCodeDispatch:
-	ldw_da	wa, 0x0274d8
+	ldw_da	wa, (0x0274d8)
 	cps	wa, 0
 	jrl	z, 2252
 	dec	1, wa
-	stw_da	0x0274d8, wa
+	stw_da	(0x0274d8), wa
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -280,14 +280,14 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf
 	.ascii "*\"x6"
 	pop	sr
-	ldw_da	wa, 0x0274d8
+	ldw_da	wa, (0x0274d8)
 	ld	bc, wa
 	inc	1, bc
 	.byte 0xd2, 0xd6
 	jrl	ov, -3838
 	jrl	nc, 2200
 	inc	1, wa
-	stw_da	0x0274d8, wa
+	stw_da	(0x0274d8), wa
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -297,10 +297,10 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	770
-	ldw_da	bc, 0x0274de
+	ldw_da	bc, (0x0274de)
 	cps	bc, 0
 	jrl	z, 2155
-	ldw_da	wa, 0x0274da
+	ldw_da	wa, (0x0274da)
 	extz	xwa
 	sll	xwa, 2
 	ld	xde, Data_SoundEditorCharsLayout
@@ -308,7 +308,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
 	dec	1, bc
-	stw_da	0x0274de, bc
+	stw_da	(0x0274de), bc
 	extz	xbc
 	sll	xbc, 2
 	ld	xwa, xbc
@@ -316,9 +316,9 @@ WndEvt_EventCodeDispatch:
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
-	ldw_da	wa, 0x0274d8
+	ldw_da	wa, (0x0274d8)
 	extz	xwa
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	a, (xsp+12)
@@ -326,7 +326,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, 0x0274de
+	ldw_da	de, (0x0274de)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -335,7 +335,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	646
-	lda_24	xde, Data_SoundEditorCharsLayout
+	lda_24	xde, (Data_SoundEditorCharsLayout)
 	lda	xwa, (xsp+12)
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+46)
@@ -347,12 +347,12 @@ WndEvt_EventCodeDispatch:
 	jr	z, 9
 	cp	xwa, 0x01c00019
 	jrl	nz, 1992
-	ldw_da	bc, 0x0274de
+	ldw_da	bc, (0x0274de)
 	cp	bc, 13
 	jrl	c, 1980
 	sub	bc, 13
-	stw_da	0x0274de, bc
-	ldw_da	wa, 0x0274da
+	stw_da	(0x0274de), bc
+	ldw_da	wa, (0x0274da)
 	extz	xwa
 	sll	xwa, 2
 	add	xde, xwa
@@ -364,9 +364,9 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
-	ldw_da	wa, 0x0274d8
+	ldw_da	wa, (0x0274d8)
 	extz	xwa
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	a, (xsp+12)
@@ -374,7 +374,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, 0x0274de
+	ldw_da	de, (0x0274de)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -383,28 +383,28 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	476
-	ldw_da	wa, 0x0274da
+	ldw_da	wa, (0x0274da)
 	extz	xwa
 	sll	xwa, 2
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
-	ldw_da	wa, 0x0274de
+	ldw_da	wa, (0x0274de)
 	extz	xwa
 	sll	xwa, 2
 	.byte 0xaf, 0x04, 0x80
 	ld	xwa, (xwa)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
-	ldw_da	wa, 0x0274e2
+	ldw_da	wa, (0x0274e2)
 	mul	wa, 3
-	addda16_24	wa, 0x0274da
+	addda16_24	wa, (0x0274da)
 	extz	xwa
 	add	xwa, xwa
-	lda_24	xde, Data_SoundEditorCharsLayout_0xC
+	lda_24	xde, (Data_SoundEditorCharsLayout_0xC)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldw_da	wa, 0x0274de
+	ldw_da	wa, (0x0274de)
 	ld	hl, wa
 	add	hl, 12
 	.byte 0x91, 0xf3
@@ -415,23 +415,23 @@ WndEvt_EventCodeDispatch:
 	cp	c, 122
 	jr	nz, 7
 	dec	1, wa
-	stw_da	0x0274de, wa
-	ldw_da	bc, 0x0274e2
+	stw_da	(0x0274de), wa
+	ldw_da	bc, (0x0274e2)
 	mul	bc, 3
-	ldw_da	wa, 0x0274da
+	ldw_da	wa, (0x0274da)
 	add	bc, wa
 	extz	xbc
 	add	xbc, xbc
 	add	xde, xbc
-	ldw_da	wa, 0x0274de
+	ldw_da	wa, (0x0274de)
 	ld	bc, wa
 	add	bc, 13
 	.byte 0x92, 0xf1
 	jrl	ugt, 1732
 	ld	bc, wa
 	add	bc, 13
-	stw_da	0x0274de, bc
-	ldw_da	wa, 0x0274da
+	stw_da	(0x0274de), bc
+	ldw_da	wa, (0x0274da)
 	extz	xwa
 	sll	xwa, 2
 	.byte 0x42
@@ -448,22 +448,22 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	lda_24	xwa, 0x0274b0
+	lda_24	xwa, (0x0274b0)
 	cp	c, 83
 	jr	nz, 28
 	.byte 0x8a, 0x01
 	push	xsp
 	.byte 0x50
 	jr	nz, 22
-	ldw_da	bc, 0x0274d8
+	ldw_da	bc, (0x0274d8)
 	extz	xbc
 	ld	xde, xwa
 	add	xde, xbc
-	ldl_da	xwa, 0x0274e4
+	ldl_da	xwa, (0x0274e4)
 	ld	a, (xwa)
 	ld	(xde), a
 	jr	11
-	ldw_da	de, 0x0274d8
+	ldw_da	de, (0x0274d8)
 	extz	xde
 	add	xwa, xde
 	ld	(xwa), c
@@ -471,7 +471,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
 	call	SendEvent
-	ldw_da	de, 0x0274de
+	ldw_da	de, (0x0274de)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -480,7 +480,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	181
-	ldw_da	bc, 0x0274da
+	ldw_da	bc, (0x0274da)
 	ld	wa, bc
 	extz	xwa
 	sll	xwa, 2
@@ -488,20 +488,20 @@ WndEvt_EventCodeDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
-	ldw_da	wa, 0x0274e2
+	ldw_da	wa, (0x0274e2)
 	mul	wa, 3
 	add	wa, bc
 	extz	xwa
 	add	xwa, xwa
 	ld	xbc, Data_SoundEditorCharsLayout_0xC
 	add	xbc, xwa
-	ldw_da	wa, 0x0274de
+	ldw_da	wa, (0x0274de)
 	ld	de, wa
 	inc	1, de
 	.byte 0x91, 0xf2
 	jrl	ugt, 1516
 	inc	1, wa
-	stw_da	0x0274de, wa
+	stw_da	(0x0274de), wa
 	extz	xwa
 	sll	xwa, 2
 	.byte 0xaf, 0x04, 0x80
@@ -510,7 +510,7 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	ldw_da	wa, 0x0274d8
+	ldw_da	wa, (0x0274d8)
 	extz	xwa
 	cp	c, 83
 	jr	nz, 24
@@ -520,7 +520,7 @@ WndEvt_EventCodeDispatch:
 	jr	nz, 18
 	ld	xbc, 0x0274b0
 	add	xbc, xwa
-	ldl_da	xwa, 0x0274e4
+	ldl_da	xwa, (0x0274e4)
 	ld	a, (xwa)
 	ld	(xbc), a
 	jr	9
@@ -531,7 +531,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
 	call	SendEvent
-	ldw_da	de, 0x0274de
+	ldw_da	de, (0x0274de)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -541,14 +541,14 @@ WndEvt_EventCodeDispatch:
 	ld	xde, (xsp+42)
 	calr	59928
 	jrl	1389
-	ldw_da	iz, 0x0274d6
+	ldw_da	iz, (0x0274d6)
 	dec	1, iz
 	.byte 0xd2
 	scc16	ov, wa
 	push	sr
 	.byte 0xf6
 	jr	ule, 47
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, 0xffffffff
@@ -570,27 +570,27 @@ WndEvt_EventCodeDispatch:
 	push	sr
 	.byte 0xf6
 	jr	ugt, -31
-	ldw_da	wa, 0x0274d8
+	ldw_da	wa, (0x0274d8)
 	extz	xwa
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldl_da	xwa, 0x0274e4
+	ldl_da	xwa, (0x0274e4)
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, 0x0274d8
+	ldw_da	de, (0x0274d8)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
 	jrl	1267
-	ldw_da	iz, 0x0274d8
+	ldw_da	iz, (0x0274d8)
 	.byte 0xd2, 0xd6
 	jrl	ov, -2558
 	jr	nc, 47
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	bc, iz
 	extz	xbc
 	lds32	xwa, 1
@@ -610,19 +610,19 @@ WndEvt_EventCodeDispatch:
 	.byte 0xd2, 0xd6
 	jrl	ov, -2558
 	jr	c, -34
-	ldw_da	wa, 0x0274d6
+	ldw_da	wa, (0x0274d6)
 	dec	1, wa
 	extz	xwa
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldl_da	xwa, 0x0274e4
+	ldl_da	xwa, (0x0274e4)
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, 0x0274d8
+	ldw_da	de, (0x0274d8)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
@@ -630,10 +630,10 @@ WndEvt_EventCodeDispatch:
 	.byte 0xd7
 	swi	2
 	sub	(xwa-34), xwa
-	ldw_da	de, 0x0274d6
+	ldw_da	de, (0x0274d6)
 	cps	de, 0
 	jr	ule, 28
-	lda_24	xhl, 0x0274b0
+	lda_24	xhl, (0x0274b0)
 	ld	a, (xbc)
 	ld	bc, iz
 	extz	xbc
@@ -659,8 +659,8 @@ WndEvt_EventCodeDispatch:
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 37
-	lda_24	xbc, 0x0274b0
-	ldl_da	xwa, 0x0274e4
+	lda_24	xbc, (0x0274b0)
+	ldl_da	xwa, (0x0274e4)
 	ld	a, (xwa)
 	ld	hl, de
 	sub	hl, iz
@@ -695,7 +695,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Strcpy
-	ldw_da	wa, 0x0274d6
+	ldw_da	wa, (0x0274d6)
 	.byte 0xd7
 	swi	2
 	.byte 0xa0, 0x9f
@@ -724,8 +724,8 @@ WndEvt_EventCodeDispatch:
 	nop
 	nop
 	jr	ule, 31
-	lda_24	xde, 0x0274b0
-	ldl_da	xhl, 0x0274e4
+	lda_24	xde, (0x0274b0)
+	ldl_da	xhl, (0x0274e4)
 	lds32	xbc, 0
 	ld	xwa, xbc
 	ld	xix, xde
@@ -739,13 +739,13 @@ WndEvt_EventCodeDispatch:
 	.byte 0xd7
 	swi	2
 	.byte 0x89, 0x9f, 0x04, 0x81, 0x9f, 0x06, 0xa1
-	ldw_da	wa, 0x0274d6
+	ldw_da	wa, (0x0274d6)
 	ld	iz, wa
 	sub	iz, bc
 	cp	iz, wa
 	jr	nc, 35
-	lda_24	xde, 0x0274b0
-	ldl_da	xhl, 0x0274e4
+	lda_24	xde, (0x0274b0)
+	ldl_da	xhl, (0x0274e4)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, xbc
@@ -762,7 +762,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
 	call	SendEvent
-	ldw_da	de, 0x0274d8
+	ldw_da	de, (0x0274d8)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
@@ -773,7 +773,7 @@ WndEvt_EventCodeDispatch:
 	nop
 	nop
 	jr	ule, 30
-	lda_24	xde, 0x0274b0
+	lda_24	xde, (0x0274b0)
 	ld	xhl, xbc
 	lds32	xbc, 0
 	ld	xwa, xbc
@@ -822,13 +822,13 @@ WndScroll_CopyFromSource:
 
 WndScroll_StoreCallerPtr:
 	ld xwa, (xsp + 42)
-	stl_da 0x0274d2, xwa
+	stl_da (0x0274d2), xwa
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_HandleIndexChange:
 	ld wa, de
-	stw_da 0x0274da, xde
-	cpw_da 0x0274e2, 0
+	stw_da (0x0274da), xde
+	cpw_da (0x0274e2), 0
 	jr nz, WndScroll_SendSelectionEvents
 	ld de, wa
 	extz xde
@@ -837,12 +837,12 @@ WndScroll_HandleIndexChange:
 	call SendEvent
 
 WndScroll_SendSelectionEvents:
-	ldw_da xde, 0x0274da
+	ldw_da xde, (0x0274da)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c0000f
 	call SendEvent
-	ldw_da xwa, 0x0274da
+	ldw_da xwa, (0x0274da)
 	extz xwa
 	sll xwa, 2
 	ld xbc, DiskWarning_ConfirmStrings_0xF46
@@ -854,7 +854,7 @@ WndScroll_SendSelectionEvents:
 
 WndScroll_HandleCharInput:
 	ld xwa, (xsp + 42)
-	stw_da 0x0274d8, xwa
+	stw_da (0x0274d8), xwa
 	ld de, wa
 	extz xde
 	ld xwa, 0x16
@@ -864,75 +864,75 @@ WndScroll_HandleCharInput:
 	ld xbc, 0x1c0000f
 	ld xde, 0x274b0
 	call SendEvent
-	ldw_da xbc, 0x0274d8
+	ldw_da xbc, (0x0274d8)
 	extz xbc
-	lda_24 xde, 0x0274b0
+	lda_24 xde, (0x0274b0)
 	ld xwa, xde
 	add xwa, xbc
 	ld a, (xwa)
 	ld c, a
 	extz bc
-	lda_24 xhl, CharMap_FullPermutation_0x660
+	lda_24 xhl, (CharMap_FullPermutation_0x660)
 	ldb_sri C, 0x07, 0xec, 0xe4
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
-	stiw_da 0x0274da, 0x0000
+	stiw_da (0x0274da), 0x0000
 	ldb c, 0x41
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsUppercase:
 	bit 1, c
 	jr z, WndScroll_CharIsLowercase
-	stiw_da 0x0274da, 0x0001
+	stiw_da (0x0274da), 0x0001
 	ldb c, 0x61
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsLowercase:
 	bit 2, c
 	jr z, WndScroll_CharIsSpace
-	cpw_da 0x0274da, 2
+	cpw_da (0x0274da), 2
 	jr nz, WndScroll_SetCategoryZero
-	stiw_da 0x0274da, 0x0000
+	stiw_da (0x0274da), 0x0000
 
 WndScroll_SetCategoryZero:
 	ldb c, 0x15
 
 WndScroll_ComputeCharOffset:
-	ldw_da xwa, 0x0274d8
+	ldw_da xwa, (0x0274d8)
 	extz xwa
 	add xde, xwa
 	ld a, (xde)
 	sub a, c
 	extz wa
-	stw_da 0x0274de, xwa
+	stw_da (0x0274de), xwa
 	jrl WndScroll_SendPageEvents
 
 WndScroll_CharIsSpace:
 	cp a, 0x20
 	jr nz, WndScroll_CharIsUnderscore
-	cpw_da 0x0274e2, 0
+	cpw_da (0x0274e2), 0
 	jrl nz, WndScroll_SendPageEvents
-	cpw_da 0x0274da, 2
+	cpw_da (0x0274da), 2
 	jr nz, WndScroll_SetSpaceOffset
-	stiw_da 0x0274da, 0x0000
+	stiw_da (0x0274da), 0x0000
 
 WndScroll_SetSpaceOffset:
-	stiw_da 0x0274de, 0x0025
+	stiw_da (0x0274de), 0x0025
 	jr WndScroll_SendPageEvents
 
 WndScroll_CharIsUnderscore:
 	cp a, 0x5f
 	jr nz, WndScroll_SearchCharTable
-	cpw_da 0x0274da, 2
+	cpw_da (0x0274da), 2
 	jr nz, WndScroll_SetUnderscoreOffset
-	stiw_da 0x0274da, 0x0000
+	stiw_da (0x0274da), 0x0000
 
 WndScroll_SetUnderscoreOffset:
-	stiw_da 0x0274de, 0x001a
+	stiw_da (0x0274de), 0x001a
 	jr WndScroll_SendPageEvents
 
 WndScroll_SearchCharTable:
-	lda_24 xwa, DiskWarning_ConfirmStrings_0x1154
+	lda_24 xwa, (DiskWarning_ConfirmStrings_0x1154)
 	ld (xsp + 8), xwa
 	lds iz, 0
 	jr WndScroll_CheckTableEnd
@@ -945,21 +945,21 @@ WndScroll_CompareCharLoop:
 	lda xbc, (xsp + 12)
 	ld xwa, (xwa)
 	call ConvertStrings
-	ldw_da xwa, 0x0274d8
+	ldw_da xwa, (0x0274d8)
 	extz xwa
 	ld xbc, 0x274b0
 	add xbc, xwa
 	ld a, (xbc)
 	cp a, (xsp + 12)
 	jr nz, WndScroll_CharMismatch
-	stiw_da 0x0274da, 0x0002
-	stw_da 0x0274de, xiz
+	stiw_da (0x0274da), 0x0002
+	stw_da (0x0274de), xiz
 
 WndScroll_CharMismatch:
 	inc 1, iz
 
 WndScroll_CheckTableEnd:
-	ldw_da xwa, 0x0274e2
+	ldw_da xwa, (0x0274e2)
 	mul wa, 0x3
 	inc 2, wa
 	extz xwa
@@ -970,25 +970,25 @@ WndScroll_CheckTableEnd:
 	jr ule, WndScroll_CompareCharLoop
 
 WndScroll_SendPageEvents:
-	ldw_da xde, 0x0274da
+	ldw_da xde, (0x0274da)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e0007f
 	call SendEvent
-	ldw_da xde, 0x0274de
+	ldw_da xde, (0x0274de)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c0000e
 	jrl WndScroll_SendAndReturn
 
 WndScroll_HandleCharSet:
-	ldw_da xwa, 0x0274d8
+	ldw_da xwa, (0x0274d8)
 	extz xwa
 	ld xbc, 0x274b0
 	add xbc, xwa
 	ld xwa, (xsp + 42)
 	ld (xbc), a
-	ldw_da xde, 0x0274d8
+	ldw_da xde, (0x0274d8)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00080
@@ -1010,28 +1010,28 @@ WndScroll_HandleDialPage:
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e0007f
 	call SendEvent
-	ldw_da xwa, 0x0274e2
+	ldw_da xwa, (0x0274e2)
 	mul wa, 0x3
-	addda16_24 xwa, 0x0274da
+	addda16_24 xwa, (0x0274da)
 	ld bc, wa
 	extz xbc
 	add xbc, xbc
 	ld xwa, Data_SoundEditorCharsLayout_0xC
 	add xwa, xbc
 	ld wa, (xwa)
-	cpdm16_24 0x0274de, xwa
+	cpdm16_24 (0x0274de), xwa
 	jr ule, WndScroll_ClampPageCount
-	stw_da 0x0274de, xwa
+	stw_da (0x0274de), xwa
 
 WndScroll_ClampPageCount:
-	ldw_da xwa, 0x0274da
+	ldw_da xwa, (0x0274da)
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
-	ldw_da xwa, 0x0274de
+	ldw_da xwa, (0x0274de)
 	extz xwa
 	sll xwa, 2
 	add xwa, (xsp + 4)
@@ -1044,7 +1044,7 @@ WndScroll_ClampPageCount:
 	jr nz, WndScroll_CheckSPMarker
 	cp (xwa + 1), 0x50
 	jr nz, WndScroll_CheckSPMarker
-	ldl_da xwa, 0x0274e4
+	ldl_da xwa, (0x0274e4)
 	lds32 xde, 0
 	ld e, (xwa)
 	ld xwa, (xsp + 50)
@@ -1059,7 +1059,7 @@ WndScroll_CheckSPMarker:
 
 WndScroll_SendConfirmEvent:
 	call SendEvent
-	ldw_da xde, 0x0274de
+	ldw_da xde, (0x0274de)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c0000e
@@ -1533,7 +1533,7 @@ UserBitmapCheck:
 	ret
 
 UserBitmapCheck_ReturnTablePtr:
-	lda_24 xhl, Data_SoundEditorCharsLayout_0x4E
+	lda_24 xhl, (Data_SoundEditorCharsLayout_0x4E)
 	ret
 
 UserBitmapCheck_ReturnSize:
@@ -3924,7 +3924,7 @@ PsGridBoxProc:
 	add xbc, xbc
 	add xbc, Data_SoundEditorCharsLayout_0x376
 	ld bc, (xbc)
-	lda_24 xix, PsGridBox_Init
+	lda_24 xix, (PsGridBox_Init)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 	.include "ui/psgridbox_routines.s"
@@ -3985,7 +3985,7 @@ DrawDesignBox_ByteData:
 	calr	54020
 	cps	hl, 0
 	jr	z, 22
-	cpw_da	0x03044e, 0
+	cpw_da	(0x03044e), 0
 	jr	z, 58
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
@@ -3995,7 +3995,7 @@ DrawDesignBox_ByteData:
 	ldw	wa, 14
 	calr	53750
 	ld	xwa, xhl
-	lda_24	xbc, DrawDesignBox_ByteData_0x59
+	lda_24	xbc, (DrawDesignBox_ByteData_0x59)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -4015,7 +4015,7 @@ DrawDesignBox_ByteData:
 	lda	xhl, (xwa+4)
 	lda	xbc, (xwa+8)
 	ld	de, (xwa+12)
-	cpw_da	0x03044e, 0
+	cpw_da	(0x03044e), 0
 	ret	z
 	ld	xwa, xhl
 	calr	1
@@ -4289,7 +4289,7 @@ DrawDesignBox:	; SysData_FAD559
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawDesignBox_QueuedPath
-	cpw_da 0x03044e, 0
+	cpw_da (0x03044e), 0
 	jr z, DrawDesignBox_DirectEpilogue
 	ld xwa, xiz
 	ld bc, (xsp + 6)
@@ -4301,7 +4301,7 @@ DrawDesignBox_QueuedPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, DrawDesignBox_QueueCallback
+	lda_24 xbc, (DrawDesignBox_QueueCallback)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -4381,9 +4381,9 @@ DrawDesignBox_CheckStyle80:
 ; Draw dispatch by part type
 Draw_DispatchByPartType:
 	add wa, wa
-	lda_24 xix, Str_No_0xB00
+	lda_24 xix, (Str_No_0xB00)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, Draw_StyledBoxWithFrame
+	lda_24 xix, (Draw_StyledBoxWithFrame)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Draw_StyledBoxWithFrame:
@@ -4875,9 +4875,9 @@ DrawDesignBox_PartGroupStyle:
 ; DrawPartGroup dispatch by type
 DrawPartGroup_DispatchByType:
 	add wa, wa
-	lda_24 xix, Str_No_0xAE0
+	lda_24 xix, (Str_No_0xAE0)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, DrawPartGroup_TableJump_DefaultCase
+	lda_24 xix, (DrawPartGroup_TableJump_DefaultCase)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 DrawPartGroup_TableJump_DefaultCase:
@@ -6048,7 +6048,7 @@ DrawFunc_Epilogue74:
 Gfx_ImageDecodeByteData:
 	dec	4, xsp
 	push	xiz
-	ldl_da	xbc, 0x030452
+	ldl_da	xbc, (0x030452)
 	ld	(xsp+4), xbc
 	ld	ix, (xwa+2)
 	jr	59
@@ -6061,7 +6061,7 @@ Gfx_ImageDecodeByteData:
 	ld	bc, (xwa)
 	exts	xbc
 	add	xbc, xde
-	lda_24	xde, 0x043c00
+	lda_24	xde, (0x043c00)
 	ld	xiz, xde
 	add	xiz, xbc
 	ld	iy, (xwa)
@@ -6921,7 +6921,7 @@ CaptureLcd:
 	ld xwa, 0x100
 	ld (xbc + 32), xwa
 	ld (xbc + 36), xwa
-	ldl_da xwa, 0x03044a
+	ldl_da xwa, (0x03044a)
 	push xwa
 	pushw 0xea
 	pushw 0xae50
@@ -6949,7 +6949,7 @@ CaptureLcd:
 	cp xhl, 0x28
 	jrl nz, FileIO_ClosePath
 	lds iz, 0
-	ldl_da xwa, 0x03ef94
+	ldl_da xwa, (0x03ef94)
 	or xwa, xwa
 	jr z, CaptureLcd_WritePaletteNoOr94
 
@@ -7017,7 +7017,7 @@ CaptureLcd_WriteRowLoop:
 	sll xbc, 2
 	add xbc, xwa
 	sll xbc, 6
-	lda_24 xwa, 0x043c00
+	lda_24 xwa, (0x043c00)
 	add xwa, xbc
 	ld xbc, 0x140
 	call FileIO_WriteByte_Impl
@@ -7056,7 +7056,7 @@ ChangeWall_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, ChangeWall_QueueCallback
+	lda_24 xbc, (ChangeWall_QueueCallback)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7070,7 +7070,7 @@ ChangeWall_QueueCallback:
 	jr	0
 
 ChangeWall_Impl:
-	stw_da 0x03ef9c, xwa
+	stw_da (0x03ef9c), xwa
 	extz xwa
 	ld xbc, xwa
 	sll xbc, 2
@@ -7079,8 +7079,8 @@ ChangeWall_Impl:
 	ld xwa, Str_No_0xB4C
 	add xwa, xbc
 	ld xwa, (xwa)
-	stl_da 0x03ef98, xwa
-	stl_da 0x030452, xwa
+	stl_da (0x03ef98), xwa
+	stl_da (0x030452), xwa
 	ret
 
 ChangeWallPalette:
@@ -7097,7 +7097,7 @@ ChangeWallPalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, ChangeWallPalette_QueueCallback
+	lda_24 xbc, (ChangeWallPalette_QueueCallback)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7113,7 +7113,7 @@ ChangeWallPalette_QueueCallback:
 ChangeWallPalette_Impl:
 	push xiz
 	ld iz, wa
-	ldw_da xwa, 0x03ef9c
+	ldw_da xwa, (0x03ef9c)
 	cps wa, 2
 	jr z, WallPalette_Done
 	cps wa, 0
@@ -7134,7 +7134,7 @@ WallPalette_IterateEntries:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0xf0, 0x00
 	jr c, WallPalette_IterateEntries
-	stiw_da 0x030462, 0x0001
+	stiw_da (0x030462), 0x0001
 
 WallPalette_Done:
 	pop xiz
@@ -7174,7 +7174,7 @@ ChangePalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, ChangePalette_QueueCallback
+	lda_24 xbc, (ChangePalette_QueueCallback)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7196,10 +7196,10 @@ ChangePalette_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, Str_No_0xB50
+	lda_24 xwa, (Str_No_0xB50)
 	add xwa, xbc
 	ld xwa, (xwa)
-	stl_da 0x03ef94, xwa
+	stl_da (0x03ef94), xwa
 	ldi_erpw 0xfa, 0x20, 0x00
 
 UIRender_IterateCallbacks:
@@ -7207,14 +7207,14 @@ UIRender_IterateCallbacks:
 	stw_erp BC, 0xfa
 	extz xbc
 	sll xbc, 2
-	addda32_24 xbc, 0x03ef94
+	addda32_24 xbc, (0x03ef94)
 	ld xbc, (xbc)
 	call SetPaletteRGB
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0xe0, 0x00
 	jr c, UIRender_IterateCallbacks
-	stw_da 0x03ef9e, xiz
-	stiw_da 0x030460, 0x0001
+	stw_da (0x03ef9e), xiz
+	stiw_da (0x030460), 0x0001
 	pop xiz
 	ret
 
@@ -7251,14 +7251,14 @@ PaletteBankRotate:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, PaletteBankRotate_0x18
+	lda_24 xbc, (PaletteBankRotate_0x18)
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr PaletteBankRotate_Impl
 
 PaletteBankRotate_Impl:
 	push xiz
-	lda_24 xwa, 0x043c00
+	lda_24 xwa, (0x043c00)
 	ld xiz, xwa
 	pushw 0x9600
 	push xwa
@@ -7272,7 +7272,7 @@ PaletteBankRotate_Impl:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 20)
-	lda_24 xwa, 0x043c00
+	lda_24 xwa, (0x043c00)
 	ld xbc, xwa
 	lds de, 0
 
@@ -7329,7 +7329,7 @@ ClipBlit_Replace_Deferred:
 	ldw wa, 0x000a
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24	xbc, ClipBlit_Replace_ParamBlock
+	lda_24	xbc, (ClipBlit_Replace_ParamBlock)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7403,7 +7403,7 @@ ClipBlit_Replace_CalcVRAMAddr:
 	.byte 0xe4
 	swi	2
 	.byte 0x33
-	lda_24	xwa, 0x043c00
+	lda_24	xwa, (0x043c00)
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00056800
@@ -7423,7 +7423,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw bc
 	call Math_AbsInt16
 	add hl, hl
-	lda_24	xwa, Str_No_0xB7E
+	lda_24	xwa, (Str_No_0xB7E)
 	ld_rrw	de, xwa, hl
 	ldw bc, 0x001e
 	sub bc, de
@@ -7479,7 +7479,7 @@ ClipBlit_Direct_Deferred:
 	ldw wa, 0x000a
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24	xbc, ClipBlit_Direct_ParamBlock
+	lda_24	xbc, (ClipBlit_Direct_ParamBlock)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7546,7 +7546,7 @@ ClipBlit_Direct_CalcVRAMAddr:
 	sll xbc, 6
 	ld wa, (xsp + 2)
 	lda_rr	xhl, xbc, wa
-	lda_24	xwa, 0x043c00
+	lda_24	xwa, (0x043c00)
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00069800
@@ -7600,9 +7600,9 @@ ColorBlit:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, ColorBlit_Deferred
-	ldb_da a, 0x03efa8
-	stb_da 0x03efaa, a
-	cpw_da 0x03044e, 0
+	ldb_da a, (0x03efa8)
+	stb_da (0x03efaa), a
+	cpw_da (0x03044e), 0
 	jr z, ColorBlit_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -7613,7 +7613,7 @@ ColorBlit_Deferred:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, ColorBlit_CallbackBlock
+	lda_24 xbc, (ColorBlit_CallbackBlock)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7621,7 +7621,7 @@ ColorBlit_Deferred:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	ldb_da c, 0x03efa8
+	ldb_da c, (0x03efa8)
 	ld (xwa + 14), c
 	calr DisplayCmd_DequeueAndExecute
 
@@ -7635,7 +7635,7 @@ ColorBlit_CallbackBlock:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	0x03efaa, c
+	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -7681,7 +7681,7 @@ ColorBlit_ClampBottom:
 	ld ix, (xhl)
 	cp bc, 0xf7
 	jrl z, ColorBlit_PopReturn
-	ldb_da e, 0x03efaa
+	ldb_da e, (0x03efaa)
 	cps e, 2
 	jrl z, ColorBlit_Mode2_Entry
 	cps e, 1
@@ -7705,7 +7705,7 @@ ColorBlit_Mode0_RowLoop:
 	ld de, (xwa)
 	exts xde
 	add xde, xix
-	lda_24 xiz, 0x043c00
+	lda_24 xiz, (0x043c00)
 	add xiz, xde
 	ld ix, (xwa)
 	ld xde, (xsp + 8)
@@ -7755,13 +7755,13 @@ ColorBlit_ModeF5_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xiy, 0x043c00
+	lda_24 xiy, (0x043c00)
 	add xiy, xbc
 	ld bc, (xwa)
 	exts xbc
 	ld xiz, xde
 	add xiz, xbc
-	addda32_24 xiz, 0x030452
+	addda32_24 xiz, (0x030452)
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
 	cp ix, (xbc)
@@ -7811,7 +7811,7 @@ ColorBlit_Mode1_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xde, 0x043c00
+	lda_24 xde, (0x043c00)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -7857,7 +7857,7 @@ ColorBlit_Mode2_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xde, 0x043c00
+	lda_24 xde, (0x043c00)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -7902,9 +7902,9 @@ ColorBlit2:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, ColorBlit2_Deferred
-	ldb_da a, 0x03efa8
-	stb_da 0x03efaa, a
-	cpw_da 0x03044e, 0
+	ldb_da a, (0x03efa8)
+	stb_da (0x03efaa), a
+	cpw_da (0x03044e), 0
 	jr z, ColorBlit2_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -7915,7 +7915,7 @@ ColorBlit2_Deferred:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, ColorBlit2_CallbackBlock
+	lda_24 xbc, (ColorBlit2_CallbackBlock)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7923,7 +7923,7 @@ ColorBlit2_Deferred:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	ldb_da c, 0x03efa8
+	ldb_da c, (0x03efa8)
 	ld (xwa + 14), c
 	calr DisplayCmd_DequeueAndExecute
 
@@ -7937,7 +7937,7 @@ ColorBlit2_CallbackBlock:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	0x03efaa, c
+	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -7983,7 +7983,7 @@ ColorBlit2_ClampBottom:
 	ld ix, (xhl)
 	cp bc, 0xf7
 	jrl z, ColorBlit2_PopReturn
-	ldb_da e, 0x03efaa
+	ldb_da e, (0x03efaa)
 	cps e, 2
 	jrl z, ColorBlit2_Mode2_Entry
 	cps e, 1
@@ -8007,7 +8007,7 @@ ColorBlit2_Mode0_RowLoop:
 	ld de, (xwa)
 	exts xde
 	add xde, xix
-	lda_24 xiz, 0x043c00
+	lda_24 xiz, (0x043c00)
 	add xiz, xde
 	ld ix, (xwa)
 	ld xde, (xsp + 8)
@@ -8057,13 +8057,13 @@ ColorBlit2_ModeF5_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xiy, 0x043c00
+	lda_24 xiy, (0x043c00)
 	add xiy, xbc
 	ld bc, (xwa)
 	exts xbc
 	ld xiz, xde
 	add xiz, xbc
-	addda32_24 xiz, 0x030452
+	addda32_24 xiz, (0x030452)
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
 	cp ix, (xbc)
@@ -8110,7 +8110,7 @@ ColorBlit2_Mode1_RowLoop:
 	sll xde, 2
 	add xde, xbc
 	sll xde, 6
-	lda_24 xiy, 0x043c00
+	lda_24 xiy, (0x043c00)
 	add xiy, xde
 	ld bc, (xwa)
 	stb_dri E, 0x07, 0xf4, 0xe4
@@ -8155,7 +8155,7 @@ ColorBlit2_Mode2_Entry:
 	sub bc, (xwa)
 	cp bc, 0x13f
 	jr nz, ColorBlit2_Mode2_ClippedEntry
-	lda_24 xbc, 0x043c00
+	lda_24 xbc, (0x043c00)
 	lds32 xde, 0
 
 ColorBlit2_Mode2_FullscreenLoop:
@@ -8189,7 +8189,7 @@ ColorBlit2_Mode2_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xde, 0x043c00
+	lda_24 xde, (0x043c00)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -8235,8 +8235,8 @@ ColorBlit2_LargeCodeBlock:
 	calr	43484
 	cps	hl, 0
 	jr	z, 32
-	ldb_da	a, 0x03efa8
-	stb_da	0x03efaa, a
+	ldb_da	a, (0x03efa8)
+	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -8253,7 +8253,7 @@ ColorBlit2_LargeCodeBlock:
 	ldw	wa, 20
 	calr	43204
 	ld	xwa, xhl
-	lda_24	xbc, ColorBlit2_LargeCodeBlock_0x65
+	lda_24	xbc, (ColorBlit2_LargeCodeBlock_0x65)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -8264,7 +8264,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xwa+12), xbc
 	ld	bc, (xsp+4)
 	ld	(xwa+16), bc
-	ldb_da	c, 0x03efa8
+	ldb_da	c, (0x03efa8)
 	ld	(xwa+18), c
 	calr	42947
 	pop	xiz
@@ -8275,7 +8275,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xhl, (xbc+12)
 	ld	de, (xbc+16)
 	ld	c, (xbc+18)
-	stb_da	0x03efaa, c
+	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -8292,7 +8292,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+22), de
 	ld	(xsp+24), xbc
 	ld	(xsp+28), xwa
-	ldb_da	a, 0x03efaa
+	ldb_da	a, (0x03efaa)
 	cps	a, 2
 	jrl	z, 560
 	cps	a, 1
@@ -8327,7 +8327,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	a, (xwa)
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
-	ldl_da	xhl, 0x030452
+	ldl_da	xhl, (0x030452)
 	ld	xwa, (xsp+14)
 	ld	wa, (xwa)
 	exts	xwa
@@ -8335,7 +8335,7 @@ ColorBlit2_LargeCodeBlock:
 	sll	xde, 2
 	add	xde, xwa
 	sll	xde, 6
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	.byte 0xbf
 	push	sr
 	inc	6, l
@@ -8492,7 +8492,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	a, (xwa)
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
-	lda_24	xix, 0x043c00
+	lda_24	xix, (0x043c00)
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xbc, xwa
@@ -8582,7 +8582,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	add	xbc, xwa
 	.byte 0xb1
 	dec	6, l
@@ -8591,7 +8591,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	add	xbc, xwa
 	.byte 0xb1
 	inc	6, l
@@ -8634,8 +8634,8 @@ ColorBlit2_LargeCodeBlock:
 	calr	42583
 	cps	hl, 0
 	jr	z, 32
-	ldb_da	a, 0x03efa8
-	stb_da	0x03efaa, a
+	ldb_da	a, (0x03efa8)
+	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -8652,7 +8652,7 @@ ColorBlit2_LargeCodeBlock:
 	ldw	wa, 16
 	calr	42303
 	ld	xwa, xhl
-	lda_24	xbc, ColorBlit2_LargeCodeBlock_0x3F0
+	lda_24	xbc, (ColorBlit2_LargeCodeBlock_0x3F0)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -8669,7 +8669,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, 0x03efa8
+	ldb_da	c, (0x03efa8)
 	ld	(xwa+14), c
 	calr	42040
 	pop	xiz
@@ -8680,7 +8680,7 @@ ColorBlit2_LargeCodeBlock:
 	lda	xhl, (xbc+8)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	0x03efaa, c
+	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -8765,9 +8765,9 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	.byte 0x95
 	rcf
-	ldb_da	a, 0x03efaa
+	ldb_da	a, (0x03efaa)
 	ld	(xsp+20), a
-	lda_24	xwa, 0x043c00
+	lda_24	xwa, (0x043c00)
 	ld	(xsp+38), xwa
 	ld	(xsp+30), xwa
 	ld	xwa, (xsp+8)
@@ -8866,7 +8866,7 @@ ColorBlit2_LargeCodeBlock:
 	exts	xwa
 	ld	xix, xbc
 	add	xix, xwa
-	addda32_24	xix, 0x030452
+	addda32_24	xix, (0x030452)
 	lds32	xbc, 0
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
@@ -8952,7 +8952,7 @@ ColorBlit2_LargeCodeBlock:
 	exts	xwa
 	ld	xix, xbc
 	add	xix, xwa
-	addda32_24	xix, 0x030452
+	addda32_24	xix, (0x030452)
 	lds32	xbc, 0
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
@@ -9114,7 +9114,7 @@ ColorBlit2_LargeCodeBlock:
 	extz	wa
 	cp	wa, hl
 	.ascii "n6h7"
-	ldl_da	xiz, 0x030452
+	ldl_da	xiz, (0x030452)
 	ld	hl, (xix)
 	exts	xhl
 	ld	wa, (xix+2)
@@ -9483,8 +9483,8 @@ ColorBlit2_LargeCodeBlock:
 	calr	40558
 	cps	hl, 0
 	jr	z, 32
-	ldb_da	a, 0x03efa8
-	stb_da	0x03efaa, a
+	ldb_da	a, (0x03efa8)
+	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -9501,7 +9501,7 @@ ColorBlit2_LargeCodeBlock:
 	ldw	wa, 16
 	calr	40278
 	ld	xwa, xhl
-	lda_24	xbc, ColorBlit2_LargeCodeBlock_0xBD9
+	lda_24	xbc, (ColorBlit2_LargeCodeBlock_0xBD9)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -9518,7 +9518,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, 0x03efa8
+	ldb_da	c, (0x03efa8)
 	ld	(xwa+14), c
 	calr	40015
 	pop	xiz
@@ -9529,7 +9529,7 @@ ColorBlit2_LargeCodeBlock:
 	lda	xhl, (xbc+8)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	0x03efaa, c
+	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
@@ -9627,7 +9627,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xsp
 	.byte 0x01
 	jrl	ugt, 235
-	ldb_da	a, 0x03efaa
+	ldb_da	a, (0x03efaa)
 	cps	a, 2
 	jrl	z, 184
 	cps	a, 1
@@ -9646,7 +9646,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xhl, 0x043c00
+	lda_24	xhl, (0x043c00)
 	add	xhl, xwa
 	.byte 0x9f
 	ldw	de, 0xf53f
@@ -9667,7 +9667,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, bc
 	jr	nz, 55
 	jrl	141
-	ldl_da	xix, 0x030452
+	ldl_da	xix, (0x030452)
 	ld	bc, (xiy)
 	exts	xbc
 	ld	wa, (xiy+2)
@@ -9703,7 +9703,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	add	xbc, xwa
 	.byte 0xb1
 	inc	6, l
@@ -9721,7 +9721,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	add	xbc, xwa
 	.byte 0xb1
 	inc	6, l
@@ -9759,7 +9759,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xsp
 	.byte 0x01
 	jrl	ugt, 235
-	ldb_da	a, 0x03efaa
+	ldb_da	a, (0x03efaa)
 	cps	a, 2
 	jrl	z, 184
 	cps	a, 1
@@ -9778,7 +9778,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xhl, 0x043c00
+	lda_24	xhl, (0x043c00)
 	add	xhl, xwa
 	.byte 0x9f
 	ldw	de, 0xf53f
@@ -9799,7 +9799,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, bc
 	jr	nz, 55
 	jrl	141
-	ldl_da	xix, 0x030452
+	ldl_da	xix, (0x030452)
 	ld	bc, (xiy)
 	exts	xbc
 	ld	wa, (xiy+2)
@@ -9836,7 +9836,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	add	xbc, xwa
 	.byte 0xb1
 	inc	6, l
@@ -9854,7 +9854,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xbc, 0x043c00
+	lda_24	xbc, (0x043c00)
 	add	xbc, xwa
 	.byte 0xb1
 	inc	6, l
@@ -9910,7 +9910,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xsp
 	.byte 0x01
 	jrl	ugt, 192
-	ldb_da	a, 0x03efaa
+	ldb_da	a, (0x03efaa)
 	.byte 0xc7, 0xf0, 0x99
 	ld	wa, (xbc+2)
 	exts	xwa
@@ -9918,7 +9918,7 @@ ColorBlit2_LargeCodeBlock:
 	sll	xhl, 2
 	add	xhl, xwa
 	sll	xhl, 6
-	lda_24	xde, 0x043c00
+	lda_24	xde, (0x043c00)
 	.byte 0xc7, 0xf0
 	scc16	z, de
 	.byte 0x8c
@@ -9955,7 +9955,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, de
 	jr	nz, 54
 	jr	95
-	ldl_da	xiy, 0x030452
+	ldl_da	xiy, (0x030452)
 	ld	de, (xiz)
 	exts	xde
 	ld	wa, (xiz+2)

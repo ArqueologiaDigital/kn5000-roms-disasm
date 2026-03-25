@@ -645,7 +645,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	ldb	w, 0
 	.zero 8
 	.byte 0xf1, 0x01, 0xf1, 0x01
-	stdi8	0x5901, 101
+	stdi8	(0x5901), 101
 	.byte 0x01
 	pop	xbc
 	nop
@@ -1311,7 +1311,7 @@ VariationStr_V1:
 	nop
 	push	sr
 	nop
-	xorda8_24	e, 0x011600
+	xorda8_24	e, (0x011600)
 	nop
 ParamStr_Table_05:
 	.long TransposeNoteStr_C
@@ -2007,7 +2007,7 @@ NakaParam_AcMstStyleAlpGridBox:
 	.byte 0xe2
 	ldb	c, 237
 	nop
-	andda16_24	ix, 0xed23
+	andda16_24	ix, (0xed23)
 	ldb	c, 237
 	nop
 	.byte 0xc2
@@ -2375,7 +2375,7 @@ MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
 	xor	xhl, xix
 	swi	3
 	nop
-	stdi8	0xfbcd, 208
+	stdi8	(0xfbcd), 208
 	ld	(xbc-5), 187
 	cp	(xsp), xhl
 	nop
@@ -3767,10 +3767,10 @@ ErrorDialog_RecoveryLine3:
 	sub	(xde-85), xix
 	.byte 0xad, 0xae, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
 	.byte 0xb7, 0xb8, 0xba, 0xbc, 0xbe, 0xbf, 0xc0
-	anddm8_24	0xc6c4c3, w
+	anddm8_24	(0xc6c4c3), w
 	and	b, 205
 	xor	w, h
-	xordm16_24	0xd8d6d4, de
+	xordm16_24	(0xd8d6d4), de
 	cps	ix, 5
 	or	wa, iz
 	.byte 0xe2, 0xe4, 0xe6, 0xe8
@@ -7458,7 +7458,7 @@ MidiChParam_Entry_064:
 	sub	(xde-85), xix
 	.byte 0xad, 0xaf, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
 	.byte 0xb8, 0xb9, 0xba, 0xbb, 0xbd, 0xbe, 0xbf, 0xc0
-	andda8_24	l, 0xc6c4c3
+	andda8_24	l, (0xc6c4c3)
 	adc	w, 203
 	xor	d, 206
 	.byte 0xd0, 0xd1, 0xd2, 0xd4, 0xd5, 0xd6, 0xd7

@@ -12,7 +12,7 @@ FmmWallpaperLoadFunc:
 	push xiz
 	ld (xsp + 6), xde
 	ld xiz, xbc
-	ldda32 xwa, 0x81b0
+	ldda32 xwa, (0x81b0)
 	cp xiz, 0x1c00018
 	jrl z, WPLoad_HandleScroll
 	cp xiz, 0x1c00017
@@ -28,7 +28,7 @@ FmmWallpaperLoadFunc:
 	jrl z, WPLoad_HandleAbort
 	cp xwa, 0x2
 	jrl nz, WPLoad_Return
-	stdi8 0x84fe, 0
+	stdi8 (0x84fe), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -39,11 +39,11 @@ FmmWallpaperLoadFunc:
 	jr ge, WPLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 0x8500, xhl
+	stda16 (0x8500), xhl
 	calr SignalProgressUpdate
 
 WPLoad_DispatchState:
-	ldw_d16 xwa, 0x8500
+	ldw_d16 xwa, (0x8500)
 	cps wa, 1
 	jrl z, WPLoad_HandleSuccess
 	cps wa, 0
@@ -53,7 +53,7 @@ WPLoad_DispatchState:
 	cpdi16 0x850a, 0
 	jr ge, WPLoad_ContinueWait
 	call FileIO_InitWallpaperNav
-	stda16 0x850a, xhl
+	stda16 (0x850a), xhl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -83,7 +83,7 @@ WPLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7f42, 0
+	stdi8 (0x7f42), 0
 	ldw wa, 0xee
 	jr WPLoad_CallStatusDisplay
 
@@ -112,7 +112,7 @@ WPLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7f42, 2
+	stdi8 (0x7f42), 2
 	ldw wa, 0xee
 
 WPLoad_CallStatusDisplay:
@@ -127,23 +127,23 @@ WPLoad_HandleSelection:
 	ld xwa, (xsp + 6)
 	stda32 0x81b0, xwa
 	call FileIO_GetCurrentWallpaperIndex
-	stda16 0x81b4, xhl
+	stda16 (0x81b4), xhl
 	cps hl, 0
 	jr ge, WPLoad_Selection_Positive
-	stdi16 0x81b4, 0
+	stdi16 (0x81b4), 0
 
 WPLoad_Selection_Positive:
-	ldw_d16 xwa, 0x81b4
+	ldw_d16 xwa, (0x81b4)
 	exts xwa
 	divs wa, 0xa
 	stw_erp DE, 0xe2
 	exts xde
-	ldda32 xwa, 0x81b0
+	ldda32 xwa, (0x81b0)
 	ld xbc, 0x1e50002
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleShow:
-	ldw_d16 xbc, 0x81b4
+	ldw_d16 xbc, (0x81b4)
 	exts xbc
 	divs bc, 0xa
 	muls bc, 0xa
@@ -154,7 +154,7 @@ WPLoad_HandleScroll:
 	ld xbc, 0x1c50001
 	lds32 xde, 1
 	call ApPostEvent
-	ldw_d16 xhl, 0x81b4
+	ldw_d16 xhl, (0x81b4)
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
@@ -192,13 +192,13 @@ WPLoad_PageDown:
 	jr nz, WPLoad_OpLoad
 	ld wa, hl
 	add wa, 0xa
-	ldw_d16 xde, 0x850a
+	ldw_d16 xde, (0x850a)
 	cp wa, de
 	jr ge, WPLoad_PageDown_Boundary
 	add hl, 0xa
 
 WPLoad_StorePosition:
-	stda16 0x81b4, xhl
+	stda16 (0x81b4), xhl
 	ld bc, hl
 	jrl WPLoad_UpdateDisplay
 
@@ -217,7 +217,7 @@ WPLoad_PageDown_Boundary:
 	stw_erp WA, 0xea
 	cps wa, 0
 	jr z, WPLoad_GetSelection
-	stda16 0x81b4, xbc
+	stda16 (0x81b4), xbc
 	jr WPLoad_UpdateDisplay
 
 WPLoad_OpLoad:
@@ -234,7 +234,7 @@ WPLoad_OpLoad:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -254,28 +254,28 @@ WPLoad_OpLoad:
 	call SoundCtrl_SendCommand
 
 WPLoad_GetSelection:
-	ldw_d16 xbc, 0x81b4
+	ldw_d16 xbc, (0x81b4)
 
 WPLoad_UpdateDisplay:
 	cp (xsp + 4), bc
 	jrl z, WPLoad_SendState
 	ld wa, bc
 	call FileIO_SelectWallpaperByIndex
-	ldw_d16 xwa, 0x81b4
+	ldw_d16 xwa, (0x81b4)
 	exts xwa
 	divs wa, 0xa
 	stw_erp DE, 0xe2
 	exts xde
-	ldda32 xwa, 0x81b0
+	ldda32 xwa, (0x81b0)
 	ld xbc, 0x1e50002
 	call ApPostEvent
-	ldw_d16 xbc, 0x81b4
+	ldw_d16 xbc, (0x81b4)
 	exts xbc
 	divs bc, 0xa
 	ld de, (xsp + 4)
 	exts xde
 	divs de, 0xa
-	ldda32 xwa, 0x81b0
+	ldda32 xwa, (0x81b0)
 	cp de, bc
 	jr nz, WPLoad_RedrawPage
 	ld bc, (xsp + 4)
@@ -283,22 +283,22 @@ WPLoad_UpdateDisplay:
 	divs bc, 0xa
 	stw_erp BC, 0xe6
 	sll bc, 5
-	lda_d16 xhl, 0x850c
+	lda_d16 xhl, (0x850c)
 	ld de, bc
 	extz xde
 	add xde, xhl
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xwa, 0x81b4
+	ldw_d16 xwa, (0x81b4)
 	exts xwa
 	divs wa, 0xa
 	stw_erp WA, 0xe2
 	sll wa, 5
-	lda_d16 xbc, 0x850c
+	lda_d16 xbc, (0x850c)
 	ld de, wa
 	extz xde
 	add xde, xbc
-	ldda32 xwa, 0x81b0
+	ldda32 xwa, (0x81b0)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jr WPLoad_SendState
@@ -308,7 +308,7 @@ WPLoad_RedrawPage:
 	calr DisplaySmfSequenceList
 
 WPLoad_SendState:
-	ldda32 xwa, 0x81b0
+	ldda32 xwa, (0x81b0)
 	ld xbc, 0x1c50001
 	lds32 xde, 0
 
@@ -325,7 +325,7 @@ WP_ScanAvailability:
 	push xiz
 	call CheckFileSystemStatus
 	ldw_erp HL, 0xfa
-	stdi16 0x89f6, 0
+	stdi16 (0x89f6), 0
 	lds iz, 0
 
 WPScan_LoopBody:
@@ -360,7 +360,7 @@ WPScan_CheckAvail:
 
 WPScan_MarkAvailable:
 	orddm16 0x89f6, xde
-	cpdi8 0x89f8, 4
+	cpdi8 (0x89f8), 4
 	jr nc, WPScan_LimitReached
 	jr WPScan_LoopContinue
 
@@ -386,7 +386,7 @@ WPScan_TypeNotThree:
 
 WPScan_TypeTwo_Mark:
 	orddm16 0x89f6, xde
-	cpdi8 0x89f8, 4
+	cpdi8 (0x89f8), 4
 	jr nc, WPScan_LimitReached
 	jr WPScan_LoopContinue
 
@@ -406,12 +406,12 @@ WPScan_TypeGeneric:
 
 WPScan_Generic_Mark:
 	orddm16 0x89f6, xde
-	cpdi8 0x89f8, 4
+	cpdi8 (0x89f8), 4
 	jr c, WPScan_LoopContinue
 
 WPScan_LimitReached:
 	stb_erp A, 0xf8
-	stb_d8 0x89f8, a
+	stb_d8 (0x89f8), a
 
 WPScan_LoopContinue:
 	inc 1, iz
@@ -422,16 +422,16 @@ WPScan_LoopContinue:
 
 WP_FindNextSlot:
 	pushw iz
-	ldb_d8 a, 0x89f8
+	ldb_d8 a, (0x89f8)
 	cps a, 4
 	jr nc, WPFind_NotFound
-	ldw_d16 xbc, 0x89f6
+	ldw_d16 xbc, (0x89f6)
 	cps bc, 0
 	jr z, WPFind_NotFound
 	lds iz, 1
 	extz wa
 	ldw_erp WA, 0xe6
-	lda_24 xde, Str_SmfConvert_GmToGm_0x2A
+	lda_24 xde, (Str_SmfConvert_GmToGm_0x2A)
 
 WPFind_SearchLoop:
 	stw_erp HL, 0xe6
@@ -450,7 +450,7 @@ WPFind_SearchLoop:
 WPFind_CheckSlot:
 	and iy, bc
 	jr z, WPFind_NextSlot
-	stb_d8 0x89f8, l
+	stb_d8 (0x89f8), l
 	ldb l, 0x1
 	jr WPFind_Return
 
@@ -484,7 +484,7 @@ WPFind_Return:
 WP_GetConfigName:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, 0x1ed350                  ; Wallpaper config base address
+	lda_24 xhl, (0x1ed350); Wallpaper config base address
 	extz xbc
 	sll xbc, 4	; index * 16
 	add xhl, xbc
@@ -506,7 +506,7 @@ WP_GetConfigName:
 WP_GetNameByOffset:
 	push xiz
 	ld xiz, xwa
-	lda_24 xwa, 0x1ed350
+	lda_24 xwa, (0x1ed350)
 	ld hl, (xwa + 13)	; Get entry size from config
 	ld xix, xwa
 	mul xhl, xbc	; Calculate offset
@@ -566,7 +566,7 @@ WP_GetBankMemName:
 	cps de, 4
 	jr nc, WP_GetBankMemName_FromROM
 	; From RAM at 0x0948a0
-	lda_24 xbc, 0x0948a0
+	lda_24 xbc, (0x0948a0)
 	sll hl, 2
 	add hl, de
 	mul hl, 0x60	; Entry size = 96 bytes
@@ -616,7 +616,7 @@ WP_GetPresetName3:
 WP_GetUserName1:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, 0x1e0000
+	lda_24 xhl, (0x1e0000)
 	lda xhl, (xhl + 16)
 	mul bc, 0x1d6	; Entry stride
 	add xhl, xbc
@@ -638,7 +638,7 @@ WP_GetUserName2:
 	push xiz
 	ld de, bc
 	ld xiz, xwa
-	lda_24 xbc, 0x1e4980
+	lda_24 xbc, (0x1e4980)
 	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10
@@ -655,7 +655,7 @@ WP_GetUserName2:
 WP_GetUserName3:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, 0x1e4aa7
+	lda_24 xhl, (0x1e4aa7)
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
 	lda_dpi XIY, 0xf8

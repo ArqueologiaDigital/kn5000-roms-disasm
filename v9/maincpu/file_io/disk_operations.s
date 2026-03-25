@@ -28,37 +28,37 @@ FileCopyFunc:
 	jrl nz, FCopy_Return
 	stda32 0x7f60, xiz
 	call GetCurrentFileIndex
-	stda16 0x7f64, xhl
+	stda16 (0x7f64), xhl
 	cps hl, 0
 	jr lt, FCopy_ScrollNeg_Reset
 	cp hl, 0x13
 	jr ge, FCopy_ScrollDown_Clamp
 	inc 1, hl
-	stda16 0x7f66, xhl
+	stda16 (0x7f66), xhl
 	jrl FCopy_Return
 
 FCopy_ScrollDown_Clamp:
 	dec 1, hl
-	stda16 0x7f66, xhl
+	stda16 (0x7f66), xhl
 	jrl FCopy_Return
 
 FCopy_ScrollNeg_Reset:
-	stdi16 0x7f64, 0
-	stdi16 0x7f66, 1
+	stdi16 (0x7f64), 0
+	stdi16 (0x7f66), 1
 	jrl FCopy_Return
 
 FCopy_HandleExecute:
-	stdi8 0x850c, 0
-	ldw_d16 xwa, 0x7f66
+	stdi8 (0x850c), 0
+	ldw_d16 xwa, (0x7f66)
 	call GetFileEntryPtr
 	ld xbc, xhl
-	lda_d16 xwa, 0x850d
-	ldw_d16 xde, 0x7f66
+	lda_d16 xwa, (0x850d)
+	ldw_d16 xde, (0x7f66)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
-	ldda32 xwa, 0x7f60
+	ldda32 xwa, (0x7f60)
 	ld xbc, 0x1c0000f
 	ld xde, 0x850c
 	call ApPostEvent
@@ -67,45 +67,45 @@ FCopy_HandleExecute:
 FCopy_HandleScroll:
 	or xiz, xiz
 	jrl nz, FCopy_HandleCopyContext
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 	ld de, wa
 	cp xbc, 0x1c00018
 	jr nz, FCopy_ScrollUp_Adjust
 	cps wa, 0
 	jr le, FCopy_ScrollDown_CheckMin
 	dec 1, wa
-	stda16 0x7f66, xwa
+	stda16 (0x7f66), xwa
 
 FCopy_ScrollDown_CheckMin:
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 	cpda16 xwa, 0x7f64
 	jr nz, FCopy_ScrollDown_Reload
 	cps wa, 0
 	jr le, FCopy_ScrollDown_RestoreOld
 	dec 1, wa
-	stda16 0x7f66, xwa
+	stda16 (0x7f66), xwa
 	jr FCopy_Scroll_Apply
 
 FCopy_ScrollDown_RestoreOld:
-	stda16 0x7f66, xde
+	stda16 (0x7f66), xde
 
 FCopy_ScrollDown_Reload:
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 
 FCopy_Scroll_Apply:
 	cp wa, de
 	jrl z, FCopy_Return
-	stdi8 0x850c, 0
-	ldw_d16 xwa, 0x7f66
+	stdi8 (0x850c), 0
+	ldw_d16 xwa, (0x7f66)
 	call GetFileEntryPtr
 	ld xbc, xhl
-	lda_d16 xwa, 0x850d
-	ldw_d16 xde, 0x7f66
+	lda_d16 xwa, (0x850d)
+	ldw_d16 xde, (0x7f66)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
-	ldda32 xwa, 0x7f60
+	ldda32 xwa, (0x7f60)
 	ld xbc, 0x1c0000f
 	ld xde, 0x850c
 	jr FCopy_DispatchFA9D58
@@ -116,16 +116,16 @@ FCopy_ScrollUp_Adjust:
 	cp wa, 0x13
 	jr ge, FCopy_ScrollUp_CheckMax
 	inc 1, wa
-	stda16 0x7f66, xwa
+	stda16 (0x7f66), xwa
 
 FCopy_ScrollUp_CheckMax:
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 	cpda16 xwa, 0x7f64
 	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
 	jr ge, FCopy_ScrollDown_RestoreOld
 	inc 1, wa
-	stda16 0x7f66, xwa
+	stda16 (0x7f66), xwa
 	jr FCopy_Scroll_Apply
 
 FCopy_HandleCopyContext:
@@ -134,11 +134,11 @@ FCopy_HandleCopyContext:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, FCopy_CopyExecute
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 	call FileIO_GetRecordFlags
 	cps hl, 0
 	jr z, FCopy_CopyConfirm_Execute
-	cpib_da 0x0340ea, 0x00
+	cpib_da (0x0340ea), 0x00
 	jr z, FCopy_CopyConfirm_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -159,17 +159,17 @@ FCopy_CopyConfirm_Execute:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -196,17 +196,17 @@ FCopy_CopyExecute:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldw_d16 xwa, 0x7f66
+	ldw_d16 xwa, (0x7f66)
 	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -242,15 +242,15 @@ FileRenameFunc:
 	call GetCurrentFileIndex
 	cps hl, 0
 	jr lt, FRename_TextChange_Error
-	lda_d16 xiz, 0x8870
+	lda_d16 xiz, (0x8870)
 	ld wa, hl
 	call GetFileEntryPtr
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, CharMap_FullPermutation_0x660
-	lda_d16 xwa, 0x8870
+	lda_24 xix, (CharMap_FullPermutation_0x660)
+	lda_d16 xwa, (0x8870)
 	ld xhl, xwa
 	jr FRename_PadLoop_Cond
 
@@ -317,10 +317,10 @@ FRename_HandleApply:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -345,15 +345,15 @@ FileRenameSmfFunc:
 	call GetFirstPageBase
 	cps hl, 0
 	jr lt, FRenameSmf_TextChange_Error
-	lda_d16 xiz, 0x8870
+	lda_d16 xiz, (0x8870)
 	ld wa, hl
 	call GetRecordPtrForFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, CharMap_FullPermutation_0x660
-	lda_d16 xwa, 0x8870
+	lda_24 xix, (CharMap_FullPermutation_0x660)
+	lda_d16 xwa, (0x8870)
 	ld xhl, xwa
 	jr FRenameSmf_PadLoop_Cond
 
@@ -420,10 +420,10 @@ FRenameSmf_HandleApply:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	calr SignalProgressUpdate
 	call GetFileCountEncoded
-	stda16 0x8504, xhl
+	stda16 (0x8504), xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -454,23 +454,23 @@ FmmFormatFunc:
 	jr ge, FmmFmt_InitPhase_CheckDrive
 	call GetDiskSizeInfo
 	extz hl
-	stda16 0x8500, xhl
+	stda16 (0x8500), xhl
 	calr SignalProgressUpdate
 
 FmmFmt_InitPhase_CheckDrive:
-	ldw_d16 xwa, 0x8500
+	ldw_d16 xwa, (0x8500)
 	cps wa, 2
 	jr z, FmmFmt_InitPhase_DriveType23
 	cps wa, 3
 	jr nz, FmmFmt_InitPhase_OtherDrive
 
 FmmFmt_InitPhase_DriveType23:
-	stb_d8 0x7f68, a
+	stb_d8 (0x7f68), a
 	ld xwa, 0x7b0036
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x84fe, 0
+	stdi8 (0x84fe), 0
 	jr FmmFmt_InitPhase_SetActive
 
 FmmFmt_InitPhase_OtherDrive:
@@ -478,26 +478,26 @@ FmmFmt_InitPhase_OtherDrive:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x84fe, 2
+	stdi8 (0x84fe), 2
 
 FmmFmt_InitPhase_SetActive:
-	stdi8 0x7f6c, 1
+	stdi8 (0x7f6c), 1
 	jrl FmmFmt_Return
 
 FmmFmt_HandleCancel:
 	calr CancelOperationCleanup
-	stdi8 0x84fe, 0
-	stdi8 0x7f6c, 0
+	stdi8 (0x84fe), 0
+	stdi8 (0x7f6c), 0
 	jrl FmmFmt_Return
 
 FmmFmt_HandleProgress:
-	cpdi8 0x7f6c, 0
+	cpdi8 (0x7f6c), 0
 	jrl z, FmmFmt_Return
-	ldb_d8 a, 0x7f6a
+	ldb_d8 a, (0x7f6a)
 	extz wa
 	cp xde, 0xf
 	jrl z, FmmFmt_HandleAbortFinal
-	ldb_d8 c, 0x84fe
+	ldb_d8 c, (0x84fe)
 	cp xde, 0xb
 	jrl z, FmmFmt_HandleAbort
 	cp xde, 0xa
@@ -511,7 +511,7 @@ FmmFmt_HandleProgress:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldb_d8 a, 0x7f68
+	ldb_d8 a, (0x7f68)
 	extz wa
 	call FileIO_ValidateRecord_CheckSize
 	ld iz, hl
@@ -527,10 +527,10 @@ FmmFmt_HandleProgress:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, 0x7f6a
+	ldb_d8 a, (0x7f6a)
 	extz wa
 	call UI_PostModeChangeEvent
-	stdi8 0x7f6c, 0
+	stdi8 (0x7f6c), 0
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
@@ -538,7 +538,7 @@ FmmFmt_HandleProgress:
 	ld wa, iz
 	ldw bc, 0x8
 	calr FileIO_ValidateSignedValue
-	stb_d8 0x7f42, l
+	stb_d8 (0x7f42), l
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl FmmFmt_NotifyComplete
@@ -552,13 +552,13 @@ FmmFmt_FormatSuccess:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x84fe, 1
+	stdi8 (0x84fe), 1
 	jr FmmFmt_Return
 
 FmmFmt_ExecutePhase2:
 	cps a, 2
 	jr nz, FmmFmt_Return
-	stdi8 0x7f68, 3
+	stdi8 (0x7f68), 3
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -573,13 +573,13 @@ FmmFmt_HandleAbort:
 	cps c, 0
 	jr nz, FmmFmt_AbortPhase2
 	call UI_PostModeChangeEvent
-	stdi8 0x7f6c, 0
+	stdi8 (0x7f6c), 0
 	jr FmmFmt_Return
 
 FmmFmt_AbortPhase2:
 	cps e, 2
 	jr nz, FmmFmt_Return
-	stdi8 0x7f68, 2
+	stdi8 (0x7f68), 2
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -594,10 +594,10 @@ FmmFmt_DispatchAndNotify:
 
 FmmFmt_HandleAbortFinal:
 	call UI_PostModeChangeEvent
-	stdi8 0x7f6c, 0
+	stdi8 (0x7f6c), 0
 
 FmmFmt_NotifyComplete:
-	stdi8 0x84fe, 0
+	stdi8 (0x84fe), 0
 
 FmmFmt_Return:
 	lds32 xhl, 0
@@ -627,7 +627,7 @@ FmmLoadTitleFunc:
 	jrl z, FmmLoadTtl_HandleScrollNav
 	cp xde, 0x2
 	jrl nz, FmmLoadTtl_Return
-	stdi8 0x84fe, 0
+	stdi8 (0x84fe), 0
 	ldmm16 0x7f70, 0x8500
 	lds wa, 1
 	calr InitializeOperationState
@@ -640,11 +640,11 @@ FmmLoadTitleFunc:
 	jr ge, FmmLoadTtl_StateDispatch
 	call GetDiskSizeInfo
 	extz hl
-	stda16 0x8500, xhl
+	stda16 (0x8500), xhl
 	calr SignalProgressUpdate
 
 FmmLoadTtl_StateDispatch:
-	ldw_d16 xwa, 0x8500
+	ldw_d16 xwa, (0x8500)
 	cps wa, 1
 	jrl z, FmmLoadTtl_StateSuccess
 	cps wa, 0
@@ -654,7 +654,7 @@ FmmLoadTtl_StateDispatch:
 	cpdi16 0x8502, 0
 	jr ge, FmmLoadTtl_CheckFileHandle
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -665,13 +665,13 @@ FmmLoadTtl_CheckFileHandle:
 	cpdi16 0x8504, 0
 	jr ge, FmmLoadTtl_CheckSmfHandle
 	call GetFileCountEncoded
-	stda16 0x8504, xhl
+	stda16 (0x8504), xhl
 	calr SignalProgressUpdate
 
 FmmLoadTtl_CheckSmfHandle:
 	cpdi16 0x8504, 0
 	jrl le, FmmLoadTtl_LoadSlots
-	cpdi8 0x7f6e, 100
+	cpdi8 (0x7f6e), 100
 	jrl z, FmmLoadTtl_LoadSlots
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -689,14 +689,14 @@ FmmLoadTtl_StateCancelLoad:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, 0x7f6e
+	ldb_d8 a, (0x7f6e)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7f42, 0
+	stdi8 (0x7f42), 0
 	ldw wa, 0xee
 	jr FmmLoadTtl_NotifyComplete
 
@@ -718,14 +718,14 @@ FmmLoadTtl_StateSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, 0x7f6e
+	ldb_d8 a, (0x7f6e)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7f42, 2
+	stdi8 (0x7f42), 2
 	ldw wa, 0xee
 
 FmmLoadTtl_NotifyComplete:
@@ -741,13 +741,13 @@ FmmLoadTtl_LoadSlots:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x89fc, 0
-	stdi8 0x89fe, 0
-	stdi8 0x8a00, 0
-	stdi8 0x8a02, 0
-	stdi8 0x8a04, 0
-	stdi8 0x8a06, 0
-	stdi8 0x8a08, 0
+	stdi8 (0x89fc), 0
+	stdi8 (0x89fe), 0
+	stdi8 (0x8a00), 0
+	stdi8 (0x8a02), 0
+	stdi8 (0x8a04), 0
+	stdi8 (0x8a06), 0
+	stdi8 (0x8a08), 0
 	lds iz, 0
 
 FmmLoadTtl_SlotLoop:
@@ -757,7 +757,7 @@ FmmLoadTtl_SlotLoop:
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, FmmLoadTtl_SlotLoop
-	stdi8 0x89f8, 4
+	stdi8 (0x89f8), 4
 	jr FmmLoadTtl_Return
 
 FmmLoadTtl_HandleScrollNav:
@@ -785,7 +785,7 @@ FmmLoadTtl_HandleCancelOp:
 FmmLoadTtl_HandleOk:
 	cp xde, 0xf
 	jr nz, FmmLoadTtl_Return
-	cpdi8 0x8d34, 7
+	cpdi8 (0x8d34), 7
 	jr nz, FmmLoadTtl_Ok_DefaultSound
 	ldw wa, 0xd6
 	jr FmmLoadTtl_PlaySound
@@ -811,7 +811,7 @@ FmmSaveTitleFunc:
 	jrl z, FmmSaveTtl_HandleCancel
 	cp xde, 0x2
 	jrl nz, FmmSaveTtl_Return
-	stdi8 0x84fe, 0
+	stdi8 (0x84fe), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -821,13 +821,13 @@ FmmSaveTitleFunc:
 	cpdi16 0x8502, 0
 	jr ge, FmmSaveTtl_CheckFont
 	call GetEncodedFileSizeData
-	stda16 0x8502, xhl
+	stda16 (0x8502), xhl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 FmmSaveTtl_CheckFont:
-	cpdi8 0x8d37, 102
+	cpdi8 (0x8d37), 102
 	jr z, FmmSaveTtl_CommitSave
 	lds iz, 0
 
@@ -890,7 +890,7 @@ DiskNameFunc:
 	jrl nz, DiskName_Return
 	lds wa, 0
 	calr InitializeOperationState
-	lda_d16 xiz, 0x878c
+	lda_d16 xiz, (0x878c)
 	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
@@ -903,15 +903,15 @@ DiskNameFunc:
 DiskName_TextChange:
 	lds wa, 0
 	calr InitializeOperationState
-	lda_d16 xiz, 0x878c
+	lda_d16 xiz, (0x878c)
 	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_d16 xix, 0x8870
-	lda_24 xiz, CharMap_FullPermutation_0x660
-	lda_d16 xde, 0x878c
+	lda_d16 xix, (0x8870)
+	lda_24 xiz, (CharMap_FullPermutation_0x660)
+	lda_d16 xde, (0x878c)
 	ld xhl, xde
 	jr DiskName_PadLoop_Cond
 
@@ -984,10 +984,10 @@ DiskInfoFunc:
 	jr ge, DiskInfo_ReadDriveType
 	call GetDiskSizeInfo
 	extz hl
-	stda16 0x8500, xhl
+	stda16 (0x8500), xhl
 
 DiskInfo_ReadDriveType:
-	ldw_d16 xwa, 0x8500
+	ldw_d16 xwa, (0x8500)
 	cps wa, 1
 	jr z, DiskInfo_ResetCapacity
 	cps wa, 0
@@ -1041,16 +1041,16 @@ DiskInfo_RenderStrings:
 	ld (xsp + 4), xbc
 	sra xbc, 10
 	ld (xsp + 4), xbc
-	ldw_d16 xwa, 0x8500
+	ldw_d16 xwa, (0x8500)
 	sla wa, 2
-	lda_24 xbc, DiskType_CodeTable
+	lda_24 xbc, (DiskType_CodeTable)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld xwa, 0x87ce
 	call FileIO_CopyString
 	ld xwa, 0x87ce
 	ld xbc, DiskOp_ChannelCfgTable_0x6A
 	call FileIO_BuildFilePath
-	lda_d16 xwa, 0x87ce
+	lda_d16 xwa, (0x87ce)
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 4)
 	lds bc, 4
@@ -1061,7 +1061,7 @@ DiskInfo_RenderStrings:
 	ld xwa, 0x87ce
 	ld xbc, DiskOp_ChannelCfgTable_0x6E
 	call FileIO_BuildFilePath
-	lda_d16 xwa, 0x87ce
+	lda_d16 xwa, (0x87ce)
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	lds bc, 3
@@ -1095,14 +1095,14 @@ SongNameFunc:
 	jr lt, SongName_NoSlot
 	lds wa, 0
 	calr InitializeOperationState
-	lda_d16 xwa, 0x880e
+	lda_d16 xwa, (0x880e)
 	ld (xsp + 2), xwa
 	ld wa, iz
 	call GetFileEntryByIndex
 	ld xbc, xhl
 	ld xwa, (xsp + 2)
 	call FileIO_CopyString
-	lda_d16 xwa, 0x880e
+	lda_d16 xwa, (0x880e)
 	ld (xwa + 30), 0x0
 	lda xbc, (xwa + 29)
 	ld xde, xbc
@@ -1125,7 +1125,7 @@ SongName_TrimDone:
 	jr SongName_SendDisplay
 
 SongName_NoSlot:
-	stdi8 0x880e, 0
+	stdi8 (0x880e), 0
 
 SongName_SendDisplay:
 	ld xwa, (xsp + 6)
@@ -1160,7 +1160,7 @@ SaveFileNameNumFunc:
 	jr SaveFileNum_SendDisplay
 
 SaveFileNum_NoSlot:
-	stdi8 0x8850, 0
+	stdi8 (0x8850), 0
 
 SaveFileNum_SendDisplay:
 	ld xwa, (xsp + 2)
@@ -1184,7 +1184,7 @@ SaveFileNameFunc:
 	jr z, SaveFileName_TextChange
 	cp xbc, 0x1c0000b
 	jrl nz, SaveFileName_Return
-	lda_d16 xiz, 0x8850
+	lda_d16 xiz, (0x8850)
 	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld xwa, xiz
@@ -1197,14 +1197,14 @@ SaveFileNameFunc:
 	jr SaveFileName_Dispatch
 
 SaveFileName_TextChange:
-	lda_d16 xiz, 0x8850
+	lda_d16 xiz, (0x8850)
 	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, CharMap_FullPermutation_0x660
-	lda_d16 xde, 0x8850
+	lda_24 xix, (CharMap_FullPermutation_0x660)
+	lda_d16 xde, (0x8850)
 	ld xhl, xde
 	jr SaveFileName_PadLoop_Cond
 
@@ -1281,7 +1281,7 @@ CurFileNameFunc:
 	jr CurFileName_SendDisplay
 
 CurFileName_NoSlot:
-	stdi8 0x8870, 0
+	stdi8 (0x8870), 0
 
 CurFileName_SendDisplay:
 	ld xwa, (xsp + 2)

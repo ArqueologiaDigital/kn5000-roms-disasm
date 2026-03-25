@@ -81,7 +81,7 @@ DemoStyleTtlFunc:
 	add xde, xde
 	add xde, SepaOut_Config_0_0x1DE
 	ld de, (xde)
-	lda_24 xix, DemoStyle_DispatchTable
+	lda_24 xix, (DemoStyle_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoStyle_DispatchTable:
 	.ascii ":;<>"
@@ -112,7 +112,7 @@ DemoStyle_InputHandler:
 DemoStyle_EncoderHandler:
 	cpdi16 0x28b4, 0
 	jr nz, DemoStyleTtlFunc_Exit
-	cpdi8 3375, 0
+	cpdi8 (3375), 0
 	jr nz, DemoStyleTtlFunc_Exit
 	ldw wa, 0xe2
 	jr DemoStyle_PostEventCommon
@@ -120,7 +120,7 @@ DemoStyle_EncoderHandler:
 DemoStyle_DirectionHandler:
 	cpdi16 0x28b4, 0
 	jr nz, DemoStyleTtlFunc_Exit
-	cpdi8 3375, 0
+	cpdi8 (3375), 0
 	jr nz, DemoStyleTtlFunc_Exit
 	ldw wa, 0xe3
 
@@ -156,7 +156,7 @@ DemoSoundTtlFunc:
 	add xde, xde
 	add xde, SepaOut_Config_0_0x1EA
 	ld de, (xde)
-	lda_24 xix, DemoSound_DispatchTable
+	lda_24 xix, (DemoSound_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoSound_DispatchTable:
 	.ascii ":;<>"
@@ -186,7 +186,7 @@ DemoSound_InputHandler:
 DemoSound_EncoderHandler:
 	cpdi16 0x28b4, 0
 	jr nz, DemoSoundTtlFunc_Exit
-	cpdi8 3375, 0
+	cpdi8 (3375), 0
 	jr nz, DemoSoundTtlFunc_Exit
 	ldw wa, 0xe1
 	jr DemoSound_PostEventCommon
@@ -194,7 +194,7 @@ DemoSound_EncoderHandler:
 DemoSound_DirectionHandler:
 	cpdi16 0x28b4, 0
 	jr nz, DemoSoundTtlFunc_Exit
-	cpdi8 3375, 0
+	cpdi8 (3375), 0
 	jr nz, DemoSoundTtlFunc_Exit
 	ldw wa, 0xe3
 
@@ -230,7 +230,7 @@ DemoRhyTtlFunc:
 	add xde, xde
 	add xde, SepaOut_Config_0_0x1F6
 	ld de, (xde)
-	lda_24 xix, DemoRhythm_DispatchTable
+	lda_24 xix, (DemoRhythm_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoRhythm_DispatchTable:
 	.ascii ":;<>"
@@ -260,7 +260,7 @@ DemoRhythm_InputHandler:
 DemoRhythm_EncoderHandler:
 	cpdi16 0x28b4, 0
 	jr nz, DemoRhyTtlFunc_Exit
-	cpdi8 3375, 0
+	cpdi8 (3375), 0
 	jr nz, DemoRhyTtlFunc_Exit
 	ldw wa, 0xe1
 	jr DemoRhythm_PostEventCommon
@@ -268,7 +268,7 @@ DemoRhythm_EncoderHandler:
 DemoRhythm_DirectionHandler:
 	cpdi16 0x28b4, 0
 	jr nz, DemoRhyTtlFunc_Exit
-	cpdi8 3375, 0
+	cpdi8 (3375), 0
 	jr nz, DemoRhyTtlFunc_Exit
 	ldw wa, 0xe2
 

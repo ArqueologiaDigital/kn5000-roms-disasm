@@ -92,7 +92,7 @@ GroupBox_CancelBack:
 GroupBox_CancelBack_Loop:
 	ld ix, iz
 	extz xix
-	lda_24 xiy, 0x0274e8
+	lda_24 xiy, (0x0274e8)
 	ld xde, xix
 	sll xde, 3
 	sub xde, xix
@@ -267,7 +267,7 @@ GroupBox_NavUpDown:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da 0x03ef6a, xwa
+	stl_da (0x03ef6a), xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1e000b4
@@ -345,43 +345,43 @@ GroupBox_Epilogue:
 	ret
 
 SetDialEnable:
-	stw_da 0x03ef50, xwa
+	stw_da (0x03ef50), xwa
 	ret
 
 GetDialEnableState:
-	ldw_da xhl, 0x03ef50
+	ldw_da xhl, (0x03ef50)
 	ret
 
 SetDialFocus:
 	ld xde, xwa
-	cpdm32_24 0x03ef6a, xde
+	cpdm32_24 (0x03ef6a), xde
 	ret z
-	stl_da 0x03ef6a, xde
+	stl_da (0x03ef6a), xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0002c
 	call SendEvent
 	ret
 
 GetDialFocus:
-	cpw_da 0x03ef50, 0
+	cpw_da (0x03ef50), 0
 	jr nz, GetDialFocus_Active
 	ld xhl, 0xffffffff
 	ret
 
 GetDialFocus_Active:
-	ldl_da xhl, 0x03ef6a
+	ldl_da xhl, (0x03ef6a)
 	ret
 
 SetDialUp:
-	stl_da 0x03ef52, xwa
-	stl_da 0x03ef5a, xbc
-	stl_da 0x03ef62, xde
+	stl_da (0x03ef52), xwa
+	stl_da (0x03ef5a), xbc
+	stl_da (0x03ef62), xde
 	jr SetDialFocus
 
 SetDialDown:
-	stl_da 0x03ef56, xwa
-	stl_da 0x03ef5e, xbc
-	stl_da 0x03ef66, xde
+	stl_da (0x03ef56), xwa
+	stl_da (0x03ef5e), xbc
+	stl_da (0x03ef66), xde
 	jr SetDialFocus
 
 SetAutoIncDefault:
@@ -466,7 +466,7 @@ EventParam_FetchPoint:
 	sub xhl, xwa
 	sll xhl, 2
 	add xhl, xbc
-	lda_24 xwa, 0x0274e9
+	lda_24 xwa, (0x0274e9)
 	add xwa, xhl
 	ld (xwa), 0x1
 	ld xwa, 0x1c00026
@@ -738,9 +738,9 @@ GetEditSwPoint:
 	cp hl, 0xc
 	jrl ugt, EditSwParam_Default
 	add hl, hl
-	lda_24 xix, DiskWarning_ConfirmStrings_0xE70
+	lda_24 xix, (DiskWarning_ConfirmStrings_0xE70)
 	ldw_sri HL, 0x07, 0xf0, 0xec
-	lda_24 xix, EditSwParam_Mode0
+	lda_24 xix, (EditSwParam_Mode0)
 	jp_ind 8, 0x07, 0xf0, 0xec
 
 ; GetEditSwPoint handler: mode 0 (value=0x2b)
@@ -832,24 +832,24 @@ SetWallPaper:
 	cps wa, 5
 	jr gt, SetWallPaper_Default
 	add wa, wa
-	lda_24 xix, DiskWarning_ConfirmStrings_0xE8A
+	lda_24 xix, (DiskWarning_ConfirmStrings_0xE8A)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, SetWallPaper_DispatchData
+	lda_24 xix, (SetWallPaper_DispatchData)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
-	cpw_da	0x0340fe, 0
+	cpw_da	(0x0340fe), 0
 	jr	nz, 28
 
 SetWallPaper_Default:
 	lds wa, 0
 	jp ChangeWall
 SetWallPaper_CaseData:
-	cpw_da	0x0340fa, 0
+	cpw_da	(0x0340fa), 0
 	jr	nz, 13
 	lds	wa, 1
 	jr	-17
-	cpw_da	0x0340fc, 0
+	cpw_da	(0x0340fc), 0
 	jr	z, -13
 	lds	wa, 2
 	jr	t, 0xe2
@@ -1127,7 +1127,7 @@ IvDirmdScreenProc:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xE96
 	ld bc, (xbc)
-	lda_24 xix, DirmdEmu_CaseB
+	lda_24 xix, (DirmdEmu_CaseB)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; DirmdEmulator dispatch case B
@@ -1155,9 +1155,9 @@ DirmdEmu_CaseC:
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
-	stiw_da 0x0276c4, 0x0000
+	stiw_da (0x0276c4), 0x0000
 	jrl TaskWake_ZeroReturn
-	stiw_da 0x0276c4, 0x0001
+	stiw_da (0x0276c4), 0x0001
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1169,7 +1169,7 @@ DirmdEmu_CaseC:
 	lds wa, 2
 	call ChangePalette
 	jr TaskWake_ZeroReturn
-	stiw_da 0x0276c4, 0x0001
+	stiw_da (0x0276c4), 0x0001
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
@@ -1252,7 +1252,7 @@ IvDirmd_Epilogue:
 PostTitle_Function:
 
 GetDirmdFlag:
-	ldw_da xhl, 0x0276c4
+	ldw_da xhl, (0x0276c4)
 	ret
 
 DirmdTitleFunc:
@@ -1270,7 +1270,7 @@ DirmdTitleFunc:
 
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
-	ldb_d8	a, 0x8d38
+	ldb_d8	a, (0x8d38)
 	cpda8	a, 0x8d39
 	jr	z, 25
 	ldw	wa, 255
@@ -1321,7 +1321,7 @@ DirmdEmulator:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xF12
 	ld bc, (xbc)
-	lda_24 xix, DirmdEmulator_Dispatch
+	lda_24 xix, (DirmdEmulator_Dispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 DirmdEmulator_Dispatch:	.ascii ":;<>"
 	ld	xwa, (xiz+4)
@@ -1348,43 +1348,43 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 
 ; DirmdEmulator default/fallthrough case
 DirmdEmu_DefaultCase:
-	bitda 1, 0xe3de
+	bitda 1, (0xe3de)
 	jr z, DirmdEmu_CheckModeChange
-	ldb_d8 a, 0xe3dc
+	ldb_d8 a, (0xe3dc)
 	extz wa
 	call UI_PostPartChangeEvent
 
 DirmdEmu_CheckModeChange:
-	bitda 7, 0xe3de
+	bitda 7, (0xe3de)
 	jr z, DirmdEmu_CheckSoundCtrl
-	ldb_d8 a, 0xe3dc
+	ldb_d8 a, (0xe3dc)
 	extz wa
 	call UI_PostModeChangeEvent
 
 DirmdEmu_CheckSoundCtrl:
-	bitda 6, 0xe3de
+	bitda 6, (0xe3de)
 	jr z, DirmdEmu_CheckBit4
-	ldb_d8 a, 0xe3dc
+	ldb_d8 a, (0xe3dc)
 	extz wa
 	call SoundCtrl_SendCommand
 
 DirmdEmu_CheckBit4:
-	bitda 4, 0xe3de
+	bitda 4, (0xe3de)
 	call_24 nz, UI_PostRefreshEvent
-	bitda 4, 0xe3e0
+	bitda 4, (0xe3e0)
 	call_24 nz, UI_PostTimerResetEvent
-	bitda 3, 0xe3e2
+	bitda 3, (0xe3e2)
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
 	call UI_PostEvent_0x6E
 
 DirmdEmu_ClearAllFlags:
-	stdi8 0xe3de, 0
-	stdi8 0xe3dc, 0
-	stdi8 0xe3e0, 0
-	stdi8 0xe3e2, 0
-	stdi8 0xe3e4, 255
-	stdi8 0xe3e6, 255
+	stdi8 (0xe3de), 0
+	stdi8 (0xe3dc), 0
+	stdi8 (0xe3e0), 0
+	stdi8 (0xe3e2), 0
+	stdi8 (0xe3e4), 255
+	stdi8 (0xe3e6), 255
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -1429,7 +1429,7 @@ WindowProc:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xF32
 	ld bc, (xbc)
-	lda_24 xix, WindowProc_EventDispatch
+	lda_24 xix, (WindowProc_EventDispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; WindowProc event dispatch
 WindowProc_EventDispatch:
@@ -1806,37 +1806,37 @@ AcNamingWindowProc:
 	jrl nz, WndScroll_InitWindowProc
 
 AcNaming_CheckDefaultWidget:
-	ldl_da xwa, 0x0274d2
+	ldl_da xwa, (0x0274d2)
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
-	stl_da 0x0274d2, xwa
+	stl_da (0x0274d2), xwa
 
 AcNaming_InitScrollState:
-	stiw_da 0x0274d8, 0x0000
-	stiw_da 0x0274da, 0x0000
-	ldl_da xwa, 0x0274d2
+	stiw_da (0x0274d8), 0x0000
+	stiw_da (0x0274da), 0x0000
+	ldl_da xwa, (0x0274d2)
 	ld xbc, 0x1e0007c
 	lds32 xde, 0
 	call ApFuncCall
-	stw_da 0x0274d6, xhl
+	stw_da (0x0274d6), xhl
 	cp hl, 0x20
 	jr ule, AcNaming_QueryCharSet
-	stiw_da 0x0274d6, 0x0020
+	stiw_da (0x0274d6), 0x0020
 
 AcNaming_QueryCharSet:
-	ldl_da xwa, 0x0274d2
+	ldl_da xwa, (0x0274d2)
 	ld xbc, 0x1e00084
 	lds32 xde, 0
 	call ApFuncCall
-	stw_da 0x0274e2, xhl
+	stw_da (0x0274e2), xhl
 	ld wa, hl
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout_0x18
 	add xbc, xwa
 	ld xwa, (xbc)
-	stl_da 0x0274e4, xwa
+	stl_da (0x0274e4), xwa
 	cps hl, 0
 	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17
@@ -1862,7 +1862,7 @@ AcNaming_ShowNavButtons:
 AcNaming_SetVisibleAndInit:
 	call SetVisible
 	lds iz, 0
-	cpw_da 0x0274d6, 0
+	cpw_da (0x0274d6), 0
 	jr ule, WndScroll_InitBuffer
 
 ; --- UI Window Procs, Graphics & Mode Screens ---
