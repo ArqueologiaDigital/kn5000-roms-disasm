@@ -732,7 +732,7 @@ MTStr_CmpNameSet:	aligned_string "MT_CmpNameSet"
 
 ; PaintArrowProc dispatch entry (last entry in property descriptor tables)
 ; 18 bytes: dispatch fields (5) + zero padding (5) + two pointers (8)
-	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1	; dispatch fields
+	.byte 0x32, 0x00, 0x87, 0xdf, 0xf1	; dispatch fields
 	.zero 5					; zero padding
 	.long NakaStr_PaintArrowProc_Empty + 2	; -> "PaintArrowProc" name string
 	.long NakaStr_PaintArrowProc_Empty	; -> empty code string

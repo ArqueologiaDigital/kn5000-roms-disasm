@@ -138,4 +138,4 @@ NakaPropTbl_IvExitModeTrSel:
 NakaPropStr_IvExitModeTrSel_0:	aligned_string ""
 NakaPropTbl_IvExitModeTrSelEnd:
 	.long NakaPropStr_IvExitModeTrSelEnd_0
-NakaPropStr_IvExitModeTrSelEnd_0:	.byte 0x00, 0xff, 0x61, 0xbb, 0xf2, 0x00
+NakaPropStr_IvExitModeTrSelEnd_0:	.byte 0x00, 0xff, 0x37, 0xbb, 0xf2, 0x00

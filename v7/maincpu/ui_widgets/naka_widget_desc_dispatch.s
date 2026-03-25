@@ -90,7 +90,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	ld	xwa, 0x623600f7
 	.byte 0xf7
 	.byte 0x00			; padding
-	.byte 0xf5, 0x7d, 0xf7
+	.byte 0xf1, 0x79, 0xf7
 	.byte 0x00			; padding
 	rcf
 	ld	xsp, 0x4d8c00f7
@@ -121,7 +121,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	.byte 0xdc, 0x9a
 	ldx
 	.byte 0x00			; padding
-	.byte 0xf4, 0xa1, 0xf7
+	.byte 0xf0, 0x9d, 0xf7
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
