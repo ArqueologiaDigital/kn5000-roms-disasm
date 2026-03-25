@@ -27616,7 +27616,6 @@ HdaeRom_DataHandler:
 	calr SendPartDataBlock_InitVal4
 	lda_24 xbc, 0x1e0000
 	extz hl
-HdaeRom_DataHandler_0x22:
 	dec 1, hl
 	cps hl, 0
 	jrl lt, HdaeRom_DataDispatch_SetWord

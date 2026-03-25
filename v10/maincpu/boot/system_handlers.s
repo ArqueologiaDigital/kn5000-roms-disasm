@@ -6182,7 +6182,7 @@ Flash_EraseSector_UseBank1:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
-	ld xwa, SendPartDataBlock_Data2
+	ld xwa, 0xff0000
 	and (xsp + 4), xwa
 	call Get_Region_Code
 	cps l, 4
@@ -6406,7 +6406,7 @@ Flash_WriteFromMemory:
 	ld (xsp + 2), xde
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ld xwa, SendPartDataBlock_Data2
+	ld xwa, 0xff0000
 	and (xsp + 2), xwa
 	lds iz, 0
 

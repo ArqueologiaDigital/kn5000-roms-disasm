@@ -1,5 +1,5 @@
---- v9/maincpu/kn5000_v9_program.s	2026-03-24 18:05:56.779194064 +0000
-+++ v10/maincpu/kn5000_v10_program.s	2026-03-24 18:21:20.560893963 +0000
+--- v9/maincpu/kn5000_v9_program.s	2026-03-25 00:03:21.409072993 +0000
++++ v10/maincpu/kn5000_v10_program.s	2026-03-25 00:03:21.410988732 +0000
 @@ -315,7 +315,7 @@
  ; ===========================================================================
  SubCPU_Send_Payload:
@@ -27,13 +27,26 @@
  	ld (xhl), xwa
  	ld xwa, (xsp + 16)
  	ld xiy, xwa
-@@ -3127,7 +3127,8 @@
+@@ -3127,14 +3127,14 @@
  	.set SeqChan_UnhandledCmd_0x03, 0xfd8264
  	.set SeqChan_UnhandledCmd_0x12, 0xfd8273
  	.set AudioInit_PartConfig_Loop_0x26, 0xfe0053
 +	.set HdaeRom_DataHandler_0x22, 0xff0270
  	.set HdaeRom_DispatchOffsetTable, CharMap_PermutationPtrTable_B + 540
  	.set HdaeRom_AltDispatchOffsetTable, CharMap_PermutationPtrTable_B + 552
+-	.set HdaeRom_DataHandler_0x22, 0xff0270
+-	.set _addr24_Free, 0xff0ae4
+-	.set _addr24_Malloc, 0xff0e72
+-	.set _addr24_Math_MultiplyAccumulate, 0xff0a4e
+-	.set _addr24_SendPartDataBlock_Return5, 0xfef9a8
+-	.set _addr24_Sprintf_Locked, 0xff0a64
+-	.set _addr24_Strcpy, 0xff0f3f
 -	.set _addr24_Mem_Copy, 0xff0d8b
++	.set _addr24_Free, 0xff0af2
++	.set _addr24_Malloc, 0xff0e80
++	.set _addr24_Math_MultiplyAccumulate, 0xff0a5c
++	.set _addr24_SendPartDataBlock_Return5, 0xfef9b3
++	.set _addr24_Sprintf_Locked, 0xff0a72
++	.set _addr24_Strcpy, 0xff0f4d
 +	.set _addr24_Mem_Copy, 0xff0d99
  	.set NakaData_RomEnd, 0xffffff
