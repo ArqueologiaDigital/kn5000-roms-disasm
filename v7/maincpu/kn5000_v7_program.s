@@ -2466,6 +2466,31 @@ ROM_PaddingFF:
 
 	.include "boot/rom_end_structure.s"
 
+; v7-specific internal labels for UIStateEvt
+	.set AudioInit_ClearPartFlags_ByMode, UIStateEvt_TransposeUpdate + 3475
+
+	.set AudioInit_ChannelLoop_Body, UIStateEvt_TransposeUpdate + 3679
+	.set UIStateEvt_ParamEdit_Data, UIStateEvt_TransposeUpdate + 94
+	.set UIStateEvt_VolumeMixer_Data, UIStateEvt_TransposeUpdate + 714
+	.set UIStateEvt_EffectSelect_Data, UIStateEvt_TransposeUpdate + 1075
+	.set UIStateEvt_PlayModeGuard_Data, UIStateEvt_TransposeUpdate + 1387
+	.set UIStateEvt_ChannelConfig_Data, UIStateEvt_TransposeUpdate + 1441
+	.set UIStateEvt_StubReturn, UIStateEvt_TransposeUpdate + 1847
+	.set UIStateEvt_MuteToggle_Data, UIStateEvt_TransposeUpdate + 1849
+	.set AudioInit_ConfigStereoVoice, UIStateEvt_TransposeUpdate + 1892
+	.set AudioInit_ConfigureVoiceFromFlags, UIStateEvt_TransposeUpdate + 2107
+	.set AudioInit_SelectVoiceByType, UIStateEvt_TransposeUpdate + 2181
+	.set AudioInit_PushAndConfigVoice, UIStateEvt_TransposeUpdate + 2272
+	.set AudioInit_PushAndConfigVoiceAlt, UIStateEvt_TransposeUpdate + 2272
+	.set AudioInit_CheckSoundGroup, UIStateEvt_TransposeUpdate + 2344
+	.set AudioInit_CheckSoundGroup51, UIStateEvt_TransposeUpdate + 2487
+	.set AudioInit_MixFallbackDefault, UIStateEvt_TransposeUpdate + 2613
+	.set AudioInit_CheckMixMode, UIStateEvt_TransposeUpdate + 2623
+	.set AudioInit_DrumSaveReturn, UIStateEvt_TransposeUpdate + 2709
+	.set AudioInit_VoiceParamCtrl, UIStateEvt_TransposeUpdate + 2738
+	.set AudioInit_DrumRoutingCheck, UIStateEvt_TransposeUpdate + 2872
+	.set Audio_CheckInitStatus, UIStateEvt_TransposeUpdate + 3598
+
 ; v7-specific internal labels for .incbin-replaced blocks
 	.set SeqPlay_ConfigureVoiceChannels, SeqPlay_VoiceChannelCfg + 11
 	.set SeqPlay_ProcessChannelsAndDrum, SeqPlay_VoiceChannelCfg + 167
