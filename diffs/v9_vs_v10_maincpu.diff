@@ -1,231 +1,106 @@
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-25 08:56:59.373087513 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-25 08:57:00.081472686 +0000
-@@ -26655,9 +26655,14 @@
- 	ret
- 
- SendPartDataBlock_DoGetError:
-+	call	SubCPU_Payload_GetErrorFlag
-+	cp	hl, 0xffff
-+	ret	nz
- 	ldw	wa, 0xff
- 	ldw	bc, 0xff
--	jp	COMM_BuildAndSendPacket
-+	call	COMM_BuildAndSendPacket
-+	ret
-+
- SendPartDataBlock_Return5:
- 	ret
- 
-@@ -27754,6 +27759,7 @@
- 	pop	xiz
- 	lda	xsp, (xsp+440)
- 	ret
-+
- HdaeRom_DataDispatch_Block:
- 	lda_24	xde, 0x1e0000
- 	lda_24	xwa, CharMap_FullPermutation_0x454
-@@ -27765,7 +27771,10 @@
- 	lda_dpi	XBC, 0xe8
- 	cp	xbc, xhl
- 	jr	c, HdaeRom_DataDispatch_Block2
--	jrl	SendPartDataBlock_SetWord7
-+	calr SendPartDataBlock_SetWord7
-+	lds hl, 0
-+	ret
-+
- HdaeRom_DataDispatch_Block3:
- 	lda	xhl, (xwa+18833)
- 	.byte 0xf3, 0xe1, 0xa7
-@@ -27933,7 +27942,7 @@
- 	.byte 0x8f
- 	push	sr
- 	push	xsp
--	ld	xwa, 0xe91e376f
-+	ld	xwa, 0xe61e376f
- 	swi	4
- 	calr	HdaeRom_DataDispatch_Block
- 	ld	c, (xsp)
-@@ -28030,7 +28039,7 @@
- 	inc	1, iz
- 	cp	iz, 128
- 	jr	c, -21
--	calr	HdaeRom_DataDispatch_Block
-+	calr	64899
- 	lda_24	xwa, 0x1e4aa7
- 	ldw	bc, 0x2800
- 	.byte 0x42
-@@ -28193,7 +28202,7 @@
- 	reti
- 	.byte 0xf0, 0xec
- 	ldb	c, 242
--	.byte 0xed
-+	swi	3
- 	reti
- 	swi	7
- 	ldw	ix, 2035
-@@ -28266,7 +28275,7 @@
- 	reti
- 	.byte 0xf0, 0xec
- 	ldb	c, 242
--	.byte 0x9b, 0x08, 0xff
-+	cp	(xbc+8), xsp
- 	ldw	ix, 2035
- 	.byte 0xf0
- 	cps	xix, 0
-@@ -28537,7 +28546,7 @@
- 	inc 4, xwa
- 	ld (xsp + 2), xwa
- 	pushw 0xff
--	pushw 0xaca
-+	pushw 0xad8
- 	lda xwa, (xsp + 6)
- 	push xwa
- 	ld xwa, (xsp + 22)
-@@ -28558,7 +28567,7 @@
- 	ld	xwa, (xsp+4)
- 	ld	(xwa), 0
- 	pushw	255
--	pushw	2762
-+	pushw	2776
- 	lda	xwa, (xsp+16)
- 	push	xwa
- 	ld	xwa, (xsp+16)
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sound_editor_ui.s v10/maincpu/audio/sound_editor_ui.s
---- v9/maincpu/audio/sound_editor_ui.s	2026-03-25 08:56:59.324988935 +0000
-+++ v10/maincpu/audio/sound_editor_ui.s	2026-03-25 08:57:00.031601423 +0000
-@@ -11845,7 +11845,7 @@
- 	pushw	ix
- 	pushw	ix
- 	add	xhl, xsp
--	ld	xiz, 0xff182c
-+	ld	xiz, Sprintf_Octal_ZeroFill_0x7
- 	swi	7
- 	swi	7
- 	nop
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
---- v9/maincpu/audio/sprintf_core.s	2026-03-25 08:56:59.271599211 +0000
-+++ v10/maincpu/audio/sprintf_core.s	2026-03-25 08:56:59.972702270 +0000
-@@ -3100,4 +3100,4 @@
- Sprintf_FillToEnd:
- 	.fill 41912, 1, 0xff
- Sprintf_FillToVectors:
--	.fill 12710, 1, 0xff
-+	.fill 12696, 1, 0xff
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
---- v9/maincpu/boot/rom_end_structure.s	2026-03-23 11:56:45.202000468 +0000
-+++ v10/maincpu/boot/rom_end_structure.s	2026-03-23 11:56:56.727439921 +0000
-@@ -5,7 +5,7 @@
- ; Contains:
- ;   - System timestamp pointers (4 x .long)
- ;   - TMP94C241C interrupt vector table (42 vectors)
--;   - Firmware version byte (0x09 = v9)
-+;   - Firmware version byte (0x0a = v10)
- ;   - Reserved padding
- 
- System_TimestampPointers:
-@@ -80,7 +80,7 @@
- 	.fill 52, 1, 0xff
- 
- FIRMWARE_VERSION:
--	.byte 0x09
-+	.byte 0x0a
- 
- ; RESERVED:
- 	.fill 23, 1, 0xff
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
---- v9/maincpu/demo/file_demo_proc.s	2026-03-25 08:56:59.206760887 +0000
-+++ v10/maincpu/demo/file_demo_proc.s	2026-03-25 08:56:59.906791815 +0000
-@@ -37,7 +37,7 @@
- 	ccf
- 	.byte 0x01
- 	ldw	wa, 7480
--	.byte 0xe5
-+	.byte 0xf3
- 	incf
- 	swi	7
- 	lda	xwa, (xsp+278)
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
---- v9/maincpu/sequencer/smf_event_processor.s	2026-03-25 08:56:59.570174653 +0000
-+++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-25 08:57:00.301883679 +0000
-@@ -4680,7 +4680,7 @@
- 	add	(xde), xwa
- 	.byte 0xeb
- 	.long OscScope_RefreshLoop
--	.long (Sprintf_FillToVectors + 14)
-+	.long Sprintf_FillToVectors
- 	nop
- 	nop
- 	ld	(xix), a
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
---- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-25 08:56:59.396287002 +0000
-+++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-25 08:57:00.104481549 +0000
-@@ -120,7 +120,7 @@
- FlashRead_BlockData_Field6:
- 	nop
- 	.byte 0x0a
--	.long (TmFlashWrite_Block3 + 14)
-+	.long TmFlashWrite_Block3
- 	ldb	w, 196
- 	ex_ff
- 	push	sr
-@@ -141,7 +141,7 @@
- 	ldb	w, 12
- 	pushw 2
- 	.byte 0x0a
--	.long (TmFlashWrite_Block2 + 14)
-+	.long TmFlashWrite_Block2
- 	ldb	w, 100
- 	decf
- 	push	sr
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
---- v9/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-24 08:30:04.756988615 +0000
-+++ v10/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-24 08:30:05.528952273 +0000
-@@ -13462,7 +13462,7 @@
-         0x00000000,
-     },
- 
--    .field_0772 = 0x0549,
-+    .field_0772 = 0x054a,
- 
-     .ptrs_4 = {
-         NAKA_ADDR(VGA_Initialize),
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/widget_dispatch.s v10/maincpu/ui_widgets/widget_dispatch.s
---- v9/maincpu/ui_widgets/widget_dispatch.s	2026-03-25 08:39:42.832968870 +0000
-+++ v10/maincpu/ui_widgets/widget_dispatch.s	2026-03-25 08:39:42.644271496 +0000
-@@ -2659,7 +2659,7 @@
- 	.byte 0x13, 0x00, 0x00, 0x01, 0x98, 0x03, 0x70, 0x01
- 	.byte 0x03, 0x04, 0x01, 0x00, 0xff, 0x00, 0x00, 0x01
- 	.byte 0x01, 0xff, 0x00, 0x00, 0x20, 0x00, 0x00, 0x02
--	.long (SendPartDataBlock_Data3 + 11)
-+	.long SendPartDataBlock_Data3
- 	.byte 0x7f, 0x00, 0x01, 0x00
- 	.byte 0xff, 0x00, 0x00, 0x0a, 0x00, 0xff, 0x00, 0x00
- 	.byte 0x08, 0x00, 0x00, 0x01, 0x90, 0x04, 0xff, 0x28
-@@ -8167,7 +8167,7 @@
- 	.byte 0xff, 0xff, 0x1c, 0x00, 0x1a, 0x00, 0x00, 0x00
- 	.byte 0x7c, 0x00, 0xc8, 0x00, 0xa3, 0x00, 0xd7, 0x00
- 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
--	.long (SendPartDataBlock_Data2 + 11)
-+	.long SendPartDataBlock_Data2
- 	.byte 0x00, 0x00, 0x01, 0x08
- 	.byte 0x01, 0x00, 0x64, 0x01, 0x00, 0x00, 0xff, 0xff
- 	.byte 0x1d, 0x00, 0x1b, 0x00, 0x00, 0x00, 0xa4, 0x00
-@@ -8191,7 +8191,7 @@
- 	.byte 0xff, 0xff, 0x1f, 0x00, 0x1d, 0x00, 0x00, 0x00
- 	.byte 0x0c, 0x00, 0x4b, 0x00, 0x90, 0x00, 0x5e, 0x00
- 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
--	.long (SendPartDataBlock_Data2 + 11)
-+	.long SendPartDataBlock_Data2
- 	.byte 0x00, 0x00, 0x13, 0x00
- 	.byte 0x64, 0x01, 0x00, 0x00, 0xff, 0xff, 0x20, 0x00
- 	.byte 0x1e, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x73, 0x00
-@@ -8201,7 +8201,7 @@
- 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00
- 	.byte 0x66, 0x00, 0x93, 0x00, 0x81, 0x00, 0xa0, 0x00
- 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
--	.long (SendPartDataBlock_Data2 + 11)
-+	.long SendPartDataBlock_Data2
- 	.byte 0x00, 0x00, 0x06, 0x00
- 	.byte 0x64, 0x01, 0x00, 0x00, 0xff, 0xff, 0x1d, 0x00
- 	.byte 0x1b, 0x00, 0x00, 0x00, 0x37, 0x00, 0x76, 0x00
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
+26657a26658,26660
+> 	call	SubCPU_Payload_GetErrorFlag
+> 	cp	hl, 0xffff
+> 	ret	nz
+26660c26663,26665
+< 	jp	COMM_BuildAndSendPacket
+---
+> 	call	COMM_BuildAndSendPacket
+> 	ret
+> 
+27756a27762
+> 
+27768c27774,27777
+< 	jrl	SendPartDataBlock_SetWord7
+---
+> 	calr SendPartDataBlock_SetWord7
+> 	lds hl, 0
+> 	ret
+> 
+27936c27945
+< 	ld	xwa, 0xe91e376f
+---
+> 	ld	xwa, 0xe61e376f
+28033c28042
+< 	calr	HdaeRom_DataDispatch_Block
+---
+> 	calr	64899
+28196c28205
+< 	.byte 0xed
+---
+> 	swi	3
+28269c28278
+< 	.byte 0x9b, 0x08, 0xff
+---
+> 	cp	(xbc+8), xsp
+28540c28549
+< 	pushw 0xaca
+---
+> 	pushw 0xad8
+28561c28570
+< 	pushw	2762
+---
+> 	pushw	2776
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/sound_editor_ui.s v10/maincpu/audio/sound_editor_ui.s
+11848c11848
+< 	ld	xiz, 0xff182c
+---
+> 	ld	xiz, Sprintf_Octal_ZeroFill_0x7
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
+3103c3103
+< 	.fill 12710, 1, 0xff
+---
+> 	.fill 12696, 1, 0xff
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
+8c8
+< ;   - Firmware version byte (0x09 = v9)
+---
+> ;   - Firmware version byte (0x0a = v10)
+83c83
+< 	.byte 0x09
+---
+> 	.byte 0x0a
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
+40c40
+< 	.byte 0xe5
+---
+> 	.byte 0xf3
+Only in v10/maincpu/: kn5000_v10_program.s
+Only in v9/maincpu/: kn5000_v9_program.s
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
+4683c4683
+< 	.long (Sprintf_FillToVectors + 14)
+---
+> 	.long Sprintf_FillToVectors
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
+123c123
+< 	.long (TmFlashWrite_Block3 + 14)
+---
+> 	.long TmFlashWrite_Block3
+144c144
+< 	.long (TmFlashWrite_Block2 + 14)
+---
+> 	.long TmFlashWrite_Block2
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
+13465c13465
+<     .field_0772 = 0x0549,
+---
+>     .field_0772 = 0x054a,
+diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/ui_widgets/widget_dispatch.s v10/maincpu/ui_widgets/widget_dispatch.s
+2662c2662
+< 	.long (SendPartDataBlock_Data3 + 11)
+---
+> 	.long SendPartDataBlock_Data3
+8170c8170
+< 	.long (SendPartDataBlock_Data2 + 11)
+---
+> 	.long SendPartDataBlock_Data2
+8194c8194
+< 	.long (SendPartDataBlock_Data2 + 11)
+---
+> 	.long SendPartDataBlock_Data2
+8204c8204
+< 	.long (SendPartDataBlock_Data2 + 11)
+---
+> 	.long SendPartDataBlock_Data2
