@@ -27311,6 +27311,7 @@ SendPartDataBlock_Data:
 	ld	(xbc+46), a
 	ld	(xbc+47), 0
 SendPartDataBlock_Data2:
+	.set SendPartDataBlock_Data2_Ref, SendPartDataBlock_Data2 + 11
 	ld	a, (xde+13)
 	sll	a, 1
 	ld	(xbc+41), a
@@ -27320,6 +27321,7 @@ SendPartDataBlock_Data2:
 	ld	a, (xde+15)
 	.byte 0xc9, 0xee
 SendPartDataBlock_Data3:
+	.set SendPartDataBlock_Data3_Ref, SendPartDataBlock_Data3 + 11
 	.byte 0x01
 	ld	(xbc+43), a
 	ld	a, (xde+16)
@@ -28036,10 +28038,12 @@ TmFlashWrite_ValidateParams:
 	ldw	bc, 0x2800
 	.byte 0x42
 TmFlashWrite_Block2:
+	.set TmFlashWrite_Block2_Ref, TmFlashWrite_Block2 + 14
 	.byte 0xa7, 0xc2
 	nop
 	nop
 TmFlashWrite_Block3:
+	.set TmFlashWrite_Block3_Ref, TmFlashWrite_Block3 + 14
 	call	InterCPU_E1_Bulk_Transfer
 	ld	a, (xsp+4)
 	extz	wa
@@ -28538,7 +28542,8 @@ Sprintf_Locked:
 	inc 4, xwa
 	ld (xsp + 2), xwa
 	pushw 0xff		; Sprintf_OutputCallback >> 16
-	pushw 0xaca		; Sprintf_OutputCallback & 0xffff
+	.byte 0x0b		; pushw Sprintf_OutputCallback & 0xffff
+	.short Sprintf_OutputCallback
 	lda xwa, (xsp + 6)
 	push xwa
 	ld xwa, (xsp + 22)
@@ -28559,7 +28564,8 @@ Sprintf_Unlocked:
 	ld	xwa, (xsp+4)
 	ld	(xwa), 0
 	pushw	0xff		; Sprintf_OutputCallback >> 16
-	pushw	0xaca		; Sprintf_OutputCallback & 0xffff
+	.byte	0x0b		; pushw Sprintf_OutputCallback & 0xffff
+	.short	Sprintf_OutputCallback
 	lda	xwa, (xsp+16)
 	push	xwa
 	ld	xwa, (xsp+16)

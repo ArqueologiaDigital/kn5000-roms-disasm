@@ -9,47 +9,49 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 > 	call	COMM_BuildAndSendPacket
 > 	ret
 > 
-27769c27774,27777
+27314c27319
+< 	.set SendPartDataBlock_Data2_Ref, SendPartDataBlock_Data2 + 11
+---
+> 	.set SendPartDataBlock_Data2_Ref, SendPartDataBlock_Data2
+27324c27329
+< 	.set SendPartDataBlock_Data3_Ref, SendPartDataBlock_Data3 + 11
+---
+> 	.set SendPartDataBlock_Data3_Ref, SendPartDataBlock_Data3
+27771c27776,27779
 < 	jrl	SendPartDataBlock_SetWord7
 ---
 > 	calr SendPartDataBlock_SetWord7
 > 	lds hl, 0
 > 	ret
 > 
-27937c27945
+27939c27947
 < 	ld	xwa, 0xe91e376f
 ---
 > 	ld	xwa, 0xe61e376f
-28197c28205
+28041c28049
+< 	.set TmFlashWrite_Block2_Ref, TmFlashWrite_Block2 + 14
+---
+> 	.set TmFlashWrite_Block2_Ref, TmFlashWrite_Block2
+28046c28054
+< 	.set TmFlashWrite_Block3_Ref, TmFlashWrite_Block3 + 14
+---
+> 	.set TmFlashWrite_Block3_Ref, TmFlashWrite_Block3
+28201c28209
 < 	.byte 0xed
 ---
 > 	swi	3
-28270c28278
+28274c28282
 < 	.byte 0x9b, 0x08, 0xff	; cp (xhl+8), sp  [v10: cp (xbc+8), xsp]
 ---
 > 	cp	(xbc+8), xsp
-28541c28549
-< 	pushw 0xaca		; Sprintf_OutputCallback & 0xffff
----
-> 	pushw 0xad8		; Sprintf_OutputCallback & 0xffff
-28562c28570
-< 	pushw	0xaca		; Sprintf_OutputCallback & 0xffff
----
-> 	pushw	0xad8		; Sprintf_OutputCallback & 0xffff
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
-3103c3103
-< 	.fill 12710, 1, 0xff
----
-> 	.fill 12696, 1, 0xff
+3103d3102
+< 	.fill 14, 1, 0xff
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
-8c8
-< ;   - Firmware version byte (0x09 = v9)
+11c11
+< 	.set FW_VERSION_BYTE, 0x09
 ---
-> ;   - Firmware version byte (0x0a = v10)
-83c83
-< 	.byte 0x09
----
-> 	.byte 0x0a
+> 	.set FW_VERSION_BYTE, 0x0a
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
 40c40
 < 	.byte 0xe5
@@ -57,39 +59,8 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/demo/
 > 	.byte 0xf3
 Only in v10/maincpu/: kn5000_v10_program.s
 Only in v9/maincpu/: kn5000_v9_program.s
-diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
-4683c4683
-< 	.long (Sprintf_FillToVectors + 14)
----
-> 	.long Sprintf_FillToVectors
-diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
-123c123
-< 	.long (TmFlashWrite_Block3 + 14)
----
-> 	.long TmFlashWrite_Block3
-144c144
-< 	.long (TmFlashWrite_Block2 + 14)
----
-> 	.long TmFlashWrite_Block2
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
 13465c13465
 <     .field_0772 = 0x0549,
 ---
 >     .field_0772 = 0x054a,
-diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/ui_widgets/widget_dispatch.s v10/maincpu/ui_widgets/widget_dispatch.s
-2662c2662
-< 	.long (SendPartDataBlock_Data3 + 11)
----
-> 	.long SendPartDataBlock_Data3
-8170c8170
-< 	.long (SendPartDataBlock_Data2 + 11)
----
-> 	.long SendPartDataBlock_Data2
-8194c8194
-< 	.long (SendPartDataBlock_Data2 + 11)
----
-> 	.long SendPartDataBlock_Data2
-8204c8204
-< 	.long (SendPartDataBlock_Data2 + 11)
----
-> 	.long SendPartDataBlock_Data2

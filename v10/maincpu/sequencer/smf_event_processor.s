@@ -4680,7 +4680,7 @@ SeqStep_FileSectorDone:
 	add	(xde), xwa
 	.byte 0xeb
 	.long OscScope_RefreshLoop
-	.long Sprintf_FillToVectors
+	.long Sprintf_FillToVectors_Ref
 	nop
 	nop
 	ld	(xix), a
