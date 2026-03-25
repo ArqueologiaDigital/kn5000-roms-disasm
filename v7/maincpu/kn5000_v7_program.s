@@ -936,10 +936,7 @@ ToneGen_ParamTable:
 	.set NakaStr_CtrlParam9e9, 0xed013b
 	.set NakaStr_DataFile1of2, 0xe000c3
 	.set NakaStr_DataFilePck, 0xe00113
-	.set NakaStr_Gamelan, 0xe23c12
 	.set NakaStr_LyricsBox, 0xe20b7c
-	.set NakaStr_Organ, 0xe23d0a
-	.set NakaStr_PdMdlyOrcha, 0xe22322
 	.set NakaStr_Rhythm, 0xe2405e
 	.set NakaStr_Single, 0xea2d36
 	.set NakaStr_SoundPreset176, 0xec00c7
@@ -981,7 +978,6 @@ ToneGen_ParamTable:
 	.set Pad_NakaExternal_Block2, 0xe40031
 	.set Pad_NakaExternal_Block3, 0xe40046
 	.set Pad_NakaExternal_Block4, 0xe40081
-	.set Palette_8bit_RGBA, 0xeb37de
 	.set ParamStr08_font, 0xed2122
 	.set ParamStr08_fontcolor, 0xed211c
 	.set ParamStr08_func, 0xed212c
@@ -1076,57 +1072,20 @@ ToneGen_ParamTable:
 	.set Str_7f, 0xed46d2
 	.set Str_7f_4A82, 0xed4a82
 	.set Str_AFILE22, 0xe0007c
-	.set Str_AFTER_TOUCH_SETTING, 0xe2364a
 	.set Str_AL, 0xe8005f
-	.set Str_ALL_OFF, 0xea4082
 	.set Str_ATTENTION, 0xe3382c
 	.set Str_Apakahyakinakandihapus, 0xe338a6
-	.set Str_BACKUP, 0xea3d7a
 	.set Str_BeimEmpfangderSys, 0xe99edc
-	.set Str_BigBandMid, 0xe23f2c
-	.set Str_COMP, 0xea263a
-	.set Str_COMPOSER, 0xea2822
-	.set Str_COMP_3F6A, 0xea3f6a
-	.set Str_CUSTOM, 0xea26aa
-	.set Str_CUSTOM_3FDA, 0xea3fda
-	.set Str_DISK, 0xea2f0e
-	.set Str_DISKINSERTOPTION, 0xea66b6
-	.set Str_DISKNAME, 0xea1d7a
 	.set Str_DISPLAY_TYPE, 0xed4de2
 	.set Str_DiskErr12_French_0x5A, 0xe97114
 	.set Str_ENGLISH, 0xe2df54
 	.set Str_ENGLISH_0x10, 0xe2df64
 	.set Str_ENGLISH_0x52, 0xe2dfa6
 	.set Str_Err24APC_French_0x62, 0xe98676
-	.set Str_FILETYPEPRIORITY, 0xea6706
-	.set Str_FROM, 0xe1a224
-	.set Str_GospelRevival, 0xe23ea4
-	.set Str_HokieDance, 0xe23e62
-	.set Str_LOAD, 0xea2442
-	.set Str_LOAD_2952, 0xea2952
-	.set Str_LOAD_AS, 0xea2f3a
-	.set Str_MIDI, 0xea26d2
-	.set Str_MIDI_4002, 0xea4002
-	.set Str_NEXT, 0xea435a
-	.set Str_OFF, 0xea43bc
-	.set Str_ORCH, 0xe21ad2
-	.set Str_OrganCombo, 0xe23eea
 	.set Str_PANEL_MEMORY, 0xed477a
 	.set Str_PANEL_MEMORY_4922, 0xed4922
-	.set Str_PERFORM, 0xea3d2a
-	.set Str_PNL, 0xea3dca
-	.set Str_PREV, 0xea2e26
-	.set Str_PREV_471A, 0xea471a
 	.set Str_RHYTHM, 0xed4722
-	.set Str_RHYTHM_CUSTOM, 0xea27a2
 	.set Str_S2cGridBox, 0xe1708a
-	.set Str_SAVE, 0xea41d2
-	.set Str_SAVE_44A2, 0xea44a2
-	.set Str_SEQUENCER, 0xea3bb2
-	.set Str_SINGLE_LOAD, 0xea29a2
-	.set Str_SOUND_MEMORY, 0xea3b5a
-	.set Str_SaxBrass, 0xe23cca
-	.set Str_TEMPO, 0xe18d4c
 	.set Str_USER_INITIAL, 0xed5122
 	.set Str_VALUE, 0xed517a
 	.set Str_ableDATAFILEPCK, 0xe00111
@@ -1341,3 +1300,5 @@ ToneGen_ParamTable:
 	.set SendPartDataBlock_Return5, 0x00fef1d9
 	.set SeqByteBlock_DispatchJumpTable, 0x00f52e9d
 	.set Seq_InitFuncTable, 0x00ef120b
+
+; Additional code-section label fixes
