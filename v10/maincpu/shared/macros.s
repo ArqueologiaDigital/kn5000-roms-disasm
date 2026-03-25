@@ -124,9 +124,10 @@
 .endm
 
 ; addr24 - Emit a 24-bit little-endian address from a .set constant
-; Usage: addr24 _addr24_SymbolName
+; Usage: addr24 SymbolName
 ; Used for embedded addresses in bytecode/data tables where the
 ; assembler cannot emit 3-byte relocations for positional labels.
 .macro addr24 sym
-	.byte (\sym & 0xff), ((\sym >> 8) & 0xff), ((\sym >> 16) & 0xff)
+	.reloc ., R_TLCS900_24, \sym
+	.space 3
 .endm

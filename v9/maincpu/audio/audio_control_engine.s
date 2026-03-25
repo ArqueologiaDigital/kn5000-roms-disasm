@@ -3378,7 +3378,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xe0, 0xe4
 	ldw	wa, 4024
 	.byte 0x30, 0x38, 0x1d  ; bytecode param 0x1d38
-	addr24 _addr24_Mem_Copy  ; Mem_Copy
+	addr24 Mem_Copy  ; Mem_Copy
 	lda	xsp, (xsp+10)
 	.byte 0xc7
 	swi	3
@@ -3537,7 +3537,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xe1, 0xb0
 	pop	sr
 	.byte 0x30, 0x38, 0x1d  ; bytecode param 0x1d38
-	addr24 _addr24_Mem_Copy  ; Mem_Copy
+	addr24 Mem_Copy  ; Mem_Copy
 	lda	xsp, (xsp+10)
 	incm8	1, (xsp+2)
 	.byte 0x8f
