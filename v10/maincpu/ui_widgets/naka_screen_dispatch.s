@@ -8,16 +8,16 @@
 ; =============================================================================
 
 	xor	(xiz), wa
-	pop_sr
+	pop	sr
 	.byte 0x00			; padding
 	.byte 0xba, 0xd8, 0x03
 	.byte 0x00			; padding
 	.long NakaLabel_PatternCopy_MemoryLabel
 	.long NakaLabel_PatternCopy_PatMemLabel
 	cps	iz, 0
-	pop_sr
+	pop	sr
 	.byte 0x00			; padding
-	push_sr
+	push	sr
 	.byte 0xd9, 0x03, 0x00
 	.long NakaNode_PatternCopy_ProgressBar
 	.byte 0x00, 0x00, 0x00, 0x00

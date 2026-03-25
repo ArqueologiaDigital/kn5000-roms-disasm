@@ -1016,7 +1016,7 @@ AccompSeq_LargeCodeBlock1:
 	ldda8	h, 0x7e61
 	ldda8	a, 0x7e24
 	.byte 0xc0
-	pop_sr
+	pop	sr
 	decdi8	6, 0xd8c9
 	.byte 0x06
 	call	AccompSeq_InitPartFull
@@ -1117,11 +1117,11 @@ AccompSeq_LargeCodeBlock2:
 	add	xix, 16
 	sll	h, 1
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xed
 	ldb	l, 206
 	jr	lt, -61
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xed
 	ldb	h, 207
 	.byte 0xcf
@@ -1547,7 +1547,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	ldb	d, 126
 	push	xiz
 	decm8	8, (xwa)
-	pop_sr
+	pop	sr
 	calr	124
 	ret
 
@@ -1720,7 +1720,7 @@ AccompSeq_MidiFilterCodeBlock:
 	.ascii "y~! "
 	ldwio	200, 0xc981
 	inc	6, wa
-	push_sr
+	push	sr
 	dec	1, a
 	cp	a, e
 	jr	ule, 2
@@ -1736,15 +1736,15 @@ AccompSeq_MidiFilterCodeBlock:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
@@ -1752,15 +1752,15 @@ AccompSeq_MidiFilterCodeBlock:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
@@ -1768,15 +1768,15 @@ AccompSeq_MidiFilterCodeBlock:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
@@ -1784,15 +1784,15 @@ AccompSeq_MidiFilterCodeBlock:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
 	nop

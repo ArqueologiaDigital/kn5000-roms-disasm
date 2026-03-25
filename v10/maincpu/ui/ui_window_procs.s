@@ -279,7 +279,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	.byte 0xaf
 	.ascii "*\"x6"
-	pop_sr
+	pop	sr
 	ld16_24	wa, 0x0274d8
 	ld	bc, wa
 	inc	1, bc
@@ -545,7 +545,7 @@ WndEvt_EventCodeDispatch:
 	dec	1, iz
 	.byte 0xd2
 	scc16	ov, wa
-	push_sr
+	push	sr
 	.byte 0xf6
 	jr	ule, 47
 	lda_24	xde, 0x0274b0
@@ -567,7 +567,7 @@ WndEvt_EventCodeDispatch:
 	dec	1, xbc
 	.byte 0xd2
 	scc16	ov, wa
-	push_sr
+	push	sr
 	.byte 0xf6
 	jr	ugt, -31
 	ld16_24	wa, 0x0274d8
@@ -653,7 +653,7 @@ WndEvt_EventCodeDispatch:
 	cp	wa, de
 	jrl	z, 1103
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	lds	iz, 0
@@ -2004,7 +2004,7 @@ EditSw_ByteData:
 	nop
 	jr	nz, 12
 	.byte 0xb4
-	push_sr
+	push	sr
 	swi	6
 	swi	7
 	ld	de, (xbc+2)
@@ -2022,7 +2022,7 @@ EditSw_ByteData:
 	sub	de, wa
 	ld	(xix+2), de
 	.byte 0x99
-	push_sr
+	push	sr
 	push	xsp
 	.byte 0xef
 	nop
@@ -4325,7 +4325,7 @@ DrawDesignBox_QueueCallback:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -7639,7 +7639,7 @@ ColorBlit_CallbackBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -7941,7 +7941,7 @@ ColorBlit2_CallbackBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -8240,7 +8240,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -8279,7 +8279,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -8337,7 +8337,7 @@ ColorBlit2_LargeCodeBlock:
 	sll	xde, 6
 	lda_24	xbc, 0x043c00
 	.byte 0xbf
-	push_sr
+	push	sr
 	inc	6, l
 	jr	nov, -81
 	ldwio	37, 5791
@@ -8392,7 +8392,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	ugt, -81
 	ldwio	37, 0xa2d2
 	.byte 0xef
-	pop_sr
+	pop	sr
 	ldb	h, 175
 	ldwio	32, 8336
 	exts	xwa
@@ -8441,9 +8441,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x84
 	push	xiy
 	jr	f, -113
-	push_sr
+	push	sr
 	ldb	a, 143
-	push_sr
+	push	sr
 	.byte 0x89
 	ld	xwa, (xsp+10)
 	incm	1, (xwa)
@@ -8500,7 +8500,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xbc, xwa
 	sll	xbc, 6
 	.byte 0xbf
-	push_sr
+	push	sr
 	inc	6, l
 	rcf
 	ld	wa, (xde)
@@ -8576,7 +8576,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xbc, xwa
 	sll	xbc, 6
 	.byte 0xbf
-	push_sr
+	push	sr
 	inc	6, l
 	zcf
 	ld	wa, (xde)
@@ -8639,7 +8639,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -8684,7 +8684,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -8793,7 +8793,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_a
 	push	xsp
-	push_sr
+	push	sr
 	jrl	z, 1199
 	.byte 0x8f
 	push_a
@@ -8850,7 +8850,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ldb	w, 232
 	.byte 0xec
-	push_sr
+	push	sr
 	.byte 0xaf
 	rcf
 	or	(xwa), w
@@ -8889,7 +8889,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ldb	w, 232
 	.byte 0xec
-	push_sr
+	push	sr
 	.byte 0xaf
 	rcf
 	or	(xwa), w
@@ -9031,7 +9031,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, hl
 	.ascii "n6h7‚R"
 	.byte 0x04
-	pop_sr
+	pop	sr
 	ldb	h, 149
 	ldb	c, 235
 	zcf
@@ -9488,7 +9488,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -9533,7 +9533,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xd2
 	popw	iz
 	.byte 0x04
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	nop
@@ -9618,7 +9618,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_f
 	push	xsp
-	pop_sr
+	pop	sr
 	jr	ule, 7
 	ld	(xsp+24), 0
 	jrl	245
@@ -9750,7 +9750,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_f
 	push	xsp
-	pop_sr
+	pop	sr
 	jr	ule, 7
 	ld	(xsp+24), 0
 	jrl	245
@@ -9901,7 +9901,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_f
 	push	xsp
-	pop_sr
+	pop	sr
 	jr	ule, 7
 	ld	(xsp+24), 0
 	jrl	202

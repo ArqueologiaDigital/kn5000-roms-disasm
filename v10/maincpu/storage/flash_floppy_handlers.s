@@ -42,7 +42,7 @@ FlashWrite_BlockData_Type0:
 	nop
 	ldb	w, 100
 	decf
-	push_sr
+	push	sr
 	halt
 	pushw	1635
 	swi	7
@@ -54,13 +54,13 @@ FlashWrite_BlockData_Type0:
 	nop
 	ldb	w, 20
 	ccf
-	push_sr
+	push	sr
 	nop
 	ldwio	101, 0xff06
 	nop
 	ldb	w, 107
 	push_a
-	pop_sr
+	pop	sr
 FlashWrite_BlockData_Type1:
 	reti
 	pop	xbc
@@ -86,28 +86,28 @@ FlashWrite_BlockData_Type2:
 	nop
 	ldb	w, 12
 	.byte 0x0b
-	push_sr
+	push	sr
 FlashRead_BlockData_Field2:
 	nop
 	ldwio	98, 0xff06
 	nop
 	ldb	w, 100
 	decf
-	push_sr
+	push	sr
 FlashRead_BlockData_Field3:
 	nop
 	ldwio	99, 0xff06
 	nop
 	ldb	w, 188
 	.byte 0x0f
-	push_sr
+	push	sr
 FlashRead_BlockData_Field4:
 	nop
 	ldwio	100, 0xff06
 	nop
 	ldb	w, 20
 	ccf
-	push_sr
+	push	sr
 FlashRead_BlockData_Field5:
 	halt
 	pushw	1637
@@ -115,7 +115,7 @@ FlashRead_BlockData_Field5:
 	nop
 	ldb	w, 107
 	push_a
-	push_sr
+	push	sr
 	nop
 FlashRead_BlockData_Field6:
 	nop
@@ -123,7 +123,7 @@ FlashRead_BlockData_Field6:
 	.long TmFlashWrite_Block3
 	ldb	w, 196
 	ex_ff
-	push_sr
+	push	sr
 FlashRead_BlockHandler_Table:
 	.long FlashWrite_BlockData_Type2
 	.long FlashWrite_BlockData_Type2
@@ -144,13 +144,13 @@ FlashWrite_BlockData_Type3:
 	.long TmFlashWrite_Block2
 	ldb	w, 100
 	decf
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	retd	1635
 	retd	8192
 	ldw	iz, 0xf135
 	nop
-	pop_sr
+	pop	sr
 	nop
 	ld	(xhl+15), 10
 	jr	ov, 6
@@ -158,7 +158,7 @@ FlashWrite_BlockData_Type3:
 	nop
 	ldb	w, 19
 	ccf
-	pop_sr
+	pop	sr
 FlashWrite_BlockRef_Type3:
 	.byte 0xb3
 	pop	xbc
@@ -190,7 +190,7 @@ FlashWrite_BlockData_Type4:
 	nop
 	ldb	w, 100
 	decf
-	push_sr
+	push	sr
 	nop
 	ldwio	99, 0xff06
 	nop
@@ -200,7 +200,7 @@ FlashWrite_BlockData_Type4:
 	nop
 	ldb	w, 20
 	ccf
-	push_sr
+	push	sr
 FlashWrite_BlockRef_Type4:
 	.byte 0xf4
 	pop	xbc
@@ -231,7 +231,7 @@ FlashWrite_BlockData_Type5:
 	nop
 	ldb	w, 99
 	decf
-	push_sr
+	push	sr
 	nop
 	halt
 	pushw	1635
@@ -244,7 +244,7 @@ FlashWrite_BlockData_Type5:
 	nop
 	ldb	w, 19
 	ccf
-	pop_sr
+	pop	sr
 FlashWrite_BlockRef_Type5:
 	ldw	wa, 0xf15a
 	nop
@@ -259,7 +259,7 @@ FlashWrite_BlockRef_Type5:
 	.byte 0xf1
 	nop
 FlashWrite_BlockData_Type6:
-	push_sr
+	push	sr
 	retd	1633
 	.byte 0x01
 	nop
@@ -272,13 +272,13 @@ FlashWrite_BlockData_Type6:
 	nop
 	ldb	w, 100
 	decf
-	push_sr
+	push	sr
 	nop
 	ldwio	99, 0xff06
 	nop
 	ldb	w, 187
 	.byte 0x0f
-	pop_sr
+	pop	sr
 FlashWrite_BlockRef_Type6:
 	jr	nz, 90
 	.byte 0xf1
@@ -899,21 +899,21 @@ FlashWrite_BlockRef_Type6:
 	nop
 	ldw	iz, 0xe401
 	nop
-	push_sr
+	push	sr
 	ldwio	56, 0x5e00
 	nop
 	push	xwa
 	nop
 	.byte 0xaa
 	nop
-	push_sr
+	push	sr
 	ldwio	157, 0x5e00
 	nop
 	.byte 0x9d
 	nop
 	.byte 0xaa
 	nop
-	push_sr
+	push	sr
 	ldwio	25, 0x5e01
 	nop
 	pop_f
@@ -934,7 +934,7 @@ FlashWrite_BlockRef_Type6:
 	jrl	nc, 7168
 	jrl	le, -3781
 	nop
-	pop_sr
+	pop	sr
 	nop
 	push	xiy
 	nop
@@ -965,9 +965,9 @@ FlashWrite_BlockRef_Type6:
 	nop
 	nop
 	.byte 0x17
-	pop_sr
+	pop	sr
 	incf
-	push_sr
+	push	sr
 	nop
 	decf
 	nop
@@ -1015,7 +1015,7 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x17
 	zcf
 	incf
-	push_sr
+	push	sr
 	nop
 	decf
 	nop
@@ -1030,7 +1030,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0x98
 	nop
-	pop_sr
+	pop	sr
 	pushw	0x660d
 	.byte 0x06
 	swi	7
@@ -1039,7 +1039,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0x98
 	nop
-	push_sr
+	push	sr
 	nop
 	pushw	0x680d
 	.byte 0x06
@@ -1049,38 +1049,38 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0x98
 	nop
-	push_sr
+	push	sr
 	nop
 	push	12
 	jr	ugt, 6
 	jrl	nc, 5888
 	.byte 0x1c, 0x01, 0x89
 	nop
-	pop_sr
+	pop	sr
 	reti
 	scf
 	jr	nov, 6
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x17
 	pop	xwa
 	ld	xiz, 0x300f1
-	pop_sr
+	pop	sr
 	.byte 0x01
 	jrl	gt, 1792
 	scf
 	jr	nov, 6
 	incf
-	push_sr
+	push	sr
 	.byte 0x17
 	pop	xwa
 	ld	xiz, 0x300f1
-	pop_sr
+	pop	sr
 	.byte 0x01, 0x98
 	nop
-	pop_sr
+	pop	sr
 	pushw	1632
-	pop_sr
+	pop	sr
 	nop
 	halt
 	push	97
@@ -1097,7 +1097,7 @@ FlashWrite_BlockRef_Type6:
 	push	1
 	.byte 0x98
 	nop
-	push_sr
+	push	sr
 	decf
 	nop
 	jrl	lt, 6144
@@ -1716,7 +1716,7 @@ Flash_InitBytecodeBlock:
 	swi	7
 	jr	nz, 42
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -1732,7 +1732,7 @@ Flash_InitBytecodeBlock:
 	swi	7
 	jr	nz, 8
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -1878,7 +1878,7 @@ Flash_InitBytecodeBlock:
 	swi	7
 	jr	nz, 55
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -1889,9 +1889,9 @@ Flash_InitBytecodeBlock:
 	.byte 0x95
 	scf
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 15
 	.byte 0x8f
 	incf
@@ -1932,7 +1932,7 @@ Flash_InitBytecodeBlock:
 	ldda8	e, 3180
 	.byte 0x87
 	push	xsp
-	push_sr
+	push	sr
 	jr	z, 26
 	.byte 0x87
 	push	xsp
@@ -1958,7 +1958,7 @@ Flash_InitBytecodeBlock:
 	ldda8	e, 3180
 	.byte 0x87
 	push	xsp
-	push_sr
+	push	sr
 	jr	z, 14
 	.byte 0x87
 	push	xsp
@@ -2587,7 +2587,7 @@ Flash_ExtendedOpsBlock:
 	inc	6, wa
 	halt
 	.byte 0x8f
-	push_sr
+	push	sr
 	.byte 0xf1
 	jr	nz, 19
 	ldada	xbc, 1952
@@ -2629,7 +2629,7 @@ Flash_ExtendedOpsBlock:
 	inc	6, wa
 	halt
 	.byte 0x8f
-	push_sr
+	push	sr
 	.byte 0xf1
 	jr	nz, 46
 	ld	e, h
@@ -2677,8 +2677,8 @@ Flash_ExtendedOpsBlock:
 	ld	wa, (xwa)
 	ld	(xbc), wa
 	.byte 0xb9
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	.byte 0x06
 	ld	a, (xsp+4)
@@ -2731,8 +2731,8 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe4, 0x53, 0xb2
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	jr	76
 	inc	1, l
@@ -2769,8 +2769,8 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe4, 0x53, 0xb2
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	incm8	1, (xsp+2)
 	jr	7
@@ -3570,7 +3570,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	incm8	1, (xsp+6)
@@ -3628,7 +3628,7 @@ Flash_ExtendedOpsBlock:
 	ld	(xbc+7), 41
 	.byte 0xc7
 	swi	3
-	pop_sr
+	pop	sr
 	push	199
 	swi	2
 	cp	(xwa-57), xde
@@ -3812,7 +3812,7 @@ Flash_ExtendedOpsBlock:
 	ld	(xde+7), 109
 	.byte 0xc7
 	swi	0
-	pop_sr
+	pop	sr
 	push	199
 	swi	1
 	cp	(xwa-57), xbc
@@ -3936,7 +3936,7 @@ Flash_ExtendedOpsBlock:
 	ld	wa, (xhl)
 	ld	(xbc+2), wa
 	.byte 0xb9, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xc7
@@ -3982,7 +3982,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xc7
@@ -4002,7 +4002,7 @@ Flash_ExtendedOpsBlock:
 	ld	wa, (xbc)
 	ld	(xde+2), wa
 	.byte 0xba, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ldb	h, 0
@@ -4033,7 +4033,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	or	xwa, xwa
-	push_sr
+	push	sr
 	nop
 	nop
 	inc	1, h
@@ -4314,12 +4314,12 @@ SlotTable_InitBank1850_Loop:
 SlotTable_ExtendedOpsBlock:
 	ldada	xde, 1952
 	.byte 0xb2
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xba
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	7
 	swi	7
 	lda	xbc, (xde+6)
@@ -4328,11 +4328,11 @@ SlotTable_ExtendedOpsBlock:
 	.byte 0xf3, 0xe5, 0xc8
 	nop
 	ldw	bc, 0xeaf5
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xf5, 0xe2
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	cp	xwa, xbc
@@ -4340,12 +4340,12 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	ldada	xde, 2156
 	.byte 0xb2
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xba
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	7
 	swi	7
 	lda	xbc, (xde+6)
@@ -4354,11 +4354,11 @@ SlotTable_ExtendedOpsBlock:
 	.byte 0xf3, 0xe5, 0xc8
 	nop
 	ldw	bc, 0xeaf5
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xf5, 0xe2
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	cp	xwa, xbc
@@ -4366,16 +4366,16 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	ldada	xix, 2360
 	.byte 0xb4
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xbc
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xbc, 0x04
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	lda	xbc, (xix+108)
@@ -4389,15 +4389,15 @@ SlotTable_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xf4
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xf5, 0xea
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xf5, 0xe2
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	inc	2, hl
@@ -4406,16 +4406,16 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	ldada	xix, 2666
 	.byte 0xb4
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xbc
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xbc, 0x04
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	lda	xbc, (xix+108)
@@ -4428,15 +4428,15 @@ SlotTable_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xf4
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xf5, 0xea
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xf5, 0xe2
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	inc	2, hl
@@ -4445,7 +4445,7 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	ldada	xbc, 3074
 	.byte 0xb1
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	ldb	l, 0
@@ -4455,7 +4455,7 @@ SlotTable_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe8
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	inc	1, l
@@ -4465,7 +4465,7 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	ldada	xbc, 2972
 	.byte 0xb1
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	ldb	l, 0
@@ -4475,7 +4475,7 @@ SlotTable_ExtendedOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe8
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	inc	1, l
@@ -4593,7 +4593,7 @@ Flash_SlotUpdateOpsBlock:
 	cps	l, 0
 	jr	nz, 4
 	.byte 0xb7
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xd1, 0xd6, 0x06
@@ -4629,7 +4629,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	hl, (xsp)
 	sll	hl, 8
 	.byte 0x9f
-	push_sr
+	push	sr
 	or	(xhl), l
 	jr	z, 14
 	dec	4, xsp
@@ -4638,13 +4638,13 @@ Flash_SlotUpdateOpsBlock:
 	ldb	a, 30
 	ld	(xsp), 31
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 2
 	ldb	a, 32
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	.byte 0x01
 	jr	nz, 3
@@ -4698,7 +4698,7 @@ Flash_SlotUpdateOpsBlock:
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xc7
@@ -4735,7 +4735,7 @@ Flash_SlotUpdateOpsBlock:
 	call	TmFlash_CopyToExtMem
 	ldada	xwa, 2360
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -4753,8 +4753,8 @@ Flash_SlotUpdateOpsBlock:
 	ldda16	wa, 2362
 	ld	(xbc), wa
 	.byte 0xb9
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	nop
 	ld	a, (xsp)
@@ -4830,7 +4830,7 @@ Flash_SlotUpdateOpsBlock:
 	calr	60441
 	incm8	1, (xsp+2)
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	ldw	de, 0x8467
 	inc	8, xsp
@@ -4898,7 +4898,7 @@ Flash_SlotUpdateOpsBlock:
 	swi	7
 	jr	nz, 7
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -4995,7 +4995,7 @@ Flash_SlotUpdateOpsBlock:
 	nop
 	jrl	nz, 272
 	.byte 0x88
-	push_sr
+	push	sr
 	push	xsp
 	popw	hl
 	jrl	nz, 265
@@ -5831,7 +5831,7 @@ ToneParam_ExtendedOpsBlock:
 	ret
 	dec	6, xsp
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ldda32	xhl, 3182

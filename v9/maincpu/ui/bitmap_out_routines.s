@@ -145,7 +145,7 @@ BitMapOut_ByteData_RenderB:
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte 0xb8
-	push_sr
+	push	sr
 	push_a
 	push	xde
 	.byte 0x8d
@@ -205,7 +205,7 @@ BitMapOut_ByteData_RenderD:
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte 0xb8
-	push_sr
+	push	sr
 	push_a
 	push	xde
 	.byte 0x8d
@@ -3652,7 +3652,7 @@ BitMapOut_ByteData_RenderState:
 	jr	lt, -57
 	swi	3
 	muls	l, 98
-	pop_sr
+	pop	sr
 	.byte 0xc7
 	swi	3
 	cp	(xwa-57), xhl
@@ -3666,7 +3666,7 @@ BitMapOut_ByteData_RenderState:
 	jr	ge, 105
 	.byte 0x04, 0xc7
 	swi	3
-	pop_sr
+	pop	sr
 	push	199
 	swi	3
 	.byte 0x89

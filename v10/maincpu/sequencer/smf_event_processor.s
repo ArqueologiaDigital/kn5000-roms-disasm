@@ -385,7 +385,7 @@ VoiceChannel_ParamTable1:
 	cp	xiy, xwa
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0xf6
 	nop
 	nop
@@ -436,7 +436,7 @@ VoiceChannel_ParamTable1:
 	cp	xiy, xwa
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0xf6
 	nop
 	nop
@@ -3402,7 +3402,7 @@ SeqStep_ByteBlockEF56:
 	dec	6, w
 	pushw	0x3cf2
 	.byte 0xe5, 0x01
-	push_sr
+	push	sr
 	decf
 	nop
 	lds32	xhl, 0
@@ -3491,7 +3491,7 @@ SeqStep_ByteBlockF002:
 	dec	6, a
 	pushw	0x3cf2
 	.byte 0xe5, 0x01
-	push_sr
+	push	sr
 	decf
 	nop
 	ldw	hl, 0xffff
@@ -3644,7 +3644,7 @@ SeqStep_FileCloseExit:
 	.byte 0xd7
 	swi	2
 	or	(xwa-40), d
-	push_sr
+	push	sr
 	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
@@ -3655,7 +3655,7 @@ SeqStep_FileCloseExit:
 	.byte 0xd7
 	swi	2
 	or	(xwa-40), d
-	push_sr
+	push	sr
 	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
@@ -3673,7 +3673,7 @@ SeqStep_FileCloseExit:
 	.byte 0xd7
 	swi	2
 	or	(xwa-40), d
-	push_sr
+	push	sr
 	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
@@ -3682,7 +3682,7 @@ SeqStep_FileCloseExit:
 	.byte 0xd7
 	swi	2
 	or	(xwa-40), d
-	push_sr
+	push	sr
 	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
@@ -4545,7 +4545,7 @@ SeqStep_FileBufferFinal:
 	dec	4, xsp
 	push	xiz
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	lda_24	xwa, 0x2121a
@@ -5167,14 +5167,14 @@ SeqStep_FileSectorPopReturn:
 	jr	nz, 9
 	.byte 0xbe
 	pushw	ix
-	push_sr
+	push	sr
 	nop
 	nop
 	lds	hl, 0
 	jr	39
 	.byte 0xbe
 	pushw	ix
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	jr	13
@@ -5306,7 +5306,7 @@ SeqStep_FileSectorPopReturn:
 	ld	xwa, (xsp+20)
 	.byte 0xb8
 	pushw	ix
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	wa, (xsp+26)
@@ -5503,7 +5503,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xsp+38)
 	ld	xwa, (xwa+18)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xb9
 	ld	xwa, (xsp+38)
 	ld	xwa, (xwa+18)
@@ -5531,7 +5531,7 @@ SeqByteBlock_StyleBitmapRef:
 	ldw	de, 0xaf01
 	ldb	h, 32
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	scc8	z, h
 	pushw	bc
 	.byte 0x01
@@ -5543,7 +5543,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xwa+71), xbc
 	ld	xwa, (xsp+38)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	.byte 0xb1
 	ld	xwa, (xsp+38)
 	lds32	xbc, 0
@@ -5636,7 +5636,7 @@ SeqByteBlock_StyleBitmapRef:
 	add	(xsp+8), xwa
 	ldw	wa, 16
 	.byte 0x9f
-	push_sr
+	push	sr
 	push	xsp
 	rcf
 	nop
@@ -5652,7 +5652,7 @@ SeqByteBlock_StyleBitmapRef:
 	lds32	xbc, 1
 	add	(xwa), xbc
 	.byte 0x9f
-	push_sr
+	push	sr
 	push	xde
 	rcf
 	nop
@@ -5669,7 +5669,7 @@ SeqByteBlock_StyleBitmapRef:
 	jrl	559
 	.byte 0xbf
 	incf
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0x9f
@@ -5693,7 +5693,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	wa, (xwa+44)
 	ld	(xsp+2), wa
 	.byte 0x9f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	nop
@@ -5767,7 +5767,7 @@ SeqByteBlock_StyleBitmapRef:
 	jr	nz, 85
 	.byte 0xbf
 	incf
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, (xsp+8)
@@ -5854,8 +5854,8 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xsp+38)
 	ld	(xwa+26), xbc
 	.byte 0xbf
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	nop
 	jr	-80
@@ -5871,7 +5871,7 @@ SeqByteBlock_StyleBitmapRef:
 	jrl	nz, -546
 	ld	xwa, (xsp+38)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, h
 	ld	xiy, 0xb82026af
 	ld	xwa, 0x33056ecc
@@ -5916,7 +5916,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, 0xaf0d66c8
 	ldb	h, 32
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, a
 	halt
 	ldw	hl, 14
@@ -5996,12 +5996,12 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xiz+51), l
 	.byte 0xbe
 	pushw	de
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xbe
 	pushw	iz
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	(xiz+50), 0
@@ -6103,7 +6103,7 @@ SeqByteBlock_StyleBitmapRef:
 	add	xwa, xhl
 	ld	(xiz+26), xwa
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	jr	121
@@ -6274,7 +6274,7 @@ SeqByteBlock_StyleBitmapRef:
 	jr	ule, -47
 	ld	xwa, (xsp+8)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	dec	6, e
 	push_f
 	ld	xwa, (xsp+8)
@@ -6292,17 +6292,17 @@ SeqByteBlock_StyleBitmapRef:
 	push	xiz
 	.byte 0xbf
 	ccf
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xbf
 	push_a
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xbf
 	ex_ff
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xwa, 0
@@ -6319,7 +6319,7 @@ SeqByteBlock_StyleBitmapRef:
 	jr	f, -81
 	pushw	de
 	ldb	w, 184
-	push_sr
+	push	sr
 	.byte 0xb0
 	pushw	538
 	call	SeqStep_MemAllocWrapper
@@ -6349,7 +6349,7 @@ SeqByteBlock_StyleBitmapRef:
 	scc8	z, l
 	.byte 0x1f, 0x01, 0xbf
 	rcf
-	push_sr
+	push	sr
 	nop
 	nop
 	jrl	251
@@ -6371,7 +6371,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xsp+8)
 	.byte 0xc3, 0xe1
 	pop_f
-	push_sr
+	push	sr
 	push	xsp
 	.byte 0xaa
 	jr	z, 18
@@ -6757,7 +6757,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xwa+36), bc
 	ld	xwa, (xsp+42)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xb8
 	ld	xwa, (xsp+8)
 	push	xwa
@@ -6777,10 +6777,10 @@ SeqByteBlock_ChannelContainer:
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+2)
 	.byte 0xb8
-	push_sr
+	push	sr
 	dec	6, c
 	ldb	w, 175
-	push_sr
+	push	sr
 	ldb	w, 56
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+14)
@@ -6793,11 +6793,11 @@ SeqByteBlock_ChannelContainer:
 	jrl	190
 	ld	xwa, (xsp+2)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xbb
 	ld	xwa, (xsp+2)
 	.byte 0xb8
-	push_sr
+	push	sr
 	dec	6, w
 	push_a
 	ld	xwa, (xsp+2)
@@ -6813,7 +6813,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x98
 	ldb	h, 63
 	nop
-	push_sr
+	push	sr
 	jr	z, 5
 	lds	hl, 1
 	jrl	141
@@ -6822,7 +6822,7 @@ SeqByteBlock_ChannelContainer:
 	ld	(xwa+30), xbc
 	ld	xwa, (xsp+14)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, b
 	reti
 	ld	xwa, (xsp+14)
@@ -6836,7 +6836,7 @@ SeqByteBlock_ChannelContainer:
 	ld	iz, hl
 	ld	xwa, (xsp+14)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, l
 	ld	xhl, 0x1566d8de
 	cps	iz, 5
@@ -6851,7 +6851,7 @@ SeqByteBlock_ChannelContainer:
 	jr	42
 	ld	xwa, (xsp+14)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, c
 	pushw	3759
 	ldb	w, 232
@@ -6860,7 +6860,7 @@ SeqByteBlock_ChannelContainer:
 	ld	(xbc+22), xwa
 	ld	xwa, (xsp+14)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, d
 	retd	3759
 	ldb	w, 56
@@ -6868,7 +6868,7 @@ SeqByteBlock_ChannelContainer:
 	inc	4, xsp
 	ld	xwa, (xsp+14)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	.byte 0xbf
 	cps	iz, 0
 	jr	z, 4
@@ -6952,7 +6952,7 @@ SeqByteBlock_ChannelContainer:
 	jr	nz, 33
 	ld	xwa, (xsp+16)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, a
 	pop_f
 	.byte 0x9f
@@ -6990,7 +6990,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+16)
 	.byte 0xb8
 	pushw	iz
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, (xsp+16)
@@ -7018,7 +7018,7 @@ SeqByteBlock_ChannelContainer:
 	jr	ule, 36
 	ld	xwa, (xsp+16)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, a
 	.byte 0x17, 0x9f
 	push_a
@@ -7199,7 +7199,7 @@ SeqByteBlock_ChannelContainer:
 	ei	2
 	ldwio	0, 0x3cf2
 	.byte 0xe5, 0x01
-	push_sr
+	push	sr
 	ldwio	0, 0xa8db
 	jrl	202
 	ld	xbc, (xiz+34)
@@ -7291,7 +7291,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xiz+34)
 	.byte 0xb8
 	push_a
-	push_sr
+	push	sr
 	nop
 	nop
 	pop	xiz
@@ -7300,8 +7300,8 @@ SeqByteBlock_ChannelContainer:
 	dec	4, xsp
 	pushw	iz
 	.byte 0xbf
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+18)
@@ -7360,7 +7360,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 30
 	ld	xwa, (xsp+10)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	dec	6, b
 	ex_ff
 	.byte 0x9f
@@ -7416,7 +7416,7 @@ SeqByteBlock_ChannelContainer:
 	ldb	b, 129
 	ld	xwa, (xsp+10)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	scc8	nz, b
 	.byte 0x94
 	nop
@@ -7498,7 +7498,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 68
 	ld	xwa, (xsp+10)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, b
 	push	129
 	push	xsp
@@ -7525,7 +7525,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 7
 	.byte 0xbf
 	ccf
-	push_sr
+	push	sr
 	nop
 	nop
 	lds	iz, 1
@@ -7600,7 +7600,7 @@ SeqChan_InitChannelState:
 	jr	z, 12
 	ld	xwa, (xsp+12)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	.byte 0xbf
 	ld	xwa, (xsp+12)
 	.byte 0xb8
@@ -7628,7 +7628,7 @@ SeqChan_InitChannelState:
 	jr	z, 30
 	ld	xwa, (xsp+12)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	dec	6, b
 	ex_ff
 	cpw	(xsp+22), 0
@@ -7688,7 +7688,7 @@ SeqChan_InitChannelState:
 	.byte 0xe0, 0xe4
 	ldw	de, 3247
 	ldb	w, 184
-	pop_sr
+	pop	sr
 	scc8	nz, b
 	.byte 0x9d
 	nop
@@ -7718,7 +7718,7 @@ SeqChan_InitChannelState:
 	swi	0
 	ldw	wa, 4287
 	jr	f, -97
-	push_sr
+	push	sr
 	add	(xiz-34), a
 	exts	xbc
 	ld	xwa, (xsp+12)
@@ -7762,7 +7762,7 @@ SeqChan_InitChannelState:
 	swi	0
 	ldw	wa, 4287
 	jr	f, -97
-	push_sr
+	push	sr
 	add	(xiz-34), a
 	exts	xbc
 	ld	xwa, (xsp+12)
@@ -7778,7 +7778,7 @@ SeqChan_InitChannelState:
 	jrl	z, 144
 	ld	xwa, (xsp+12)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	inc	6, b
 	popw	sp
 	.byte 0x9f, 0x06
@@ -7800,7 +7800,7 @@ SeqChan_InitChannelState:
 	jr	z, 95
 	.byte 0xbf
 	push_a
-	push_sr
+	push	sr
 	nop
 	nop
 	lds	iz, 1
@@ -7826,7 +7826,7 @@ SeqChan_InitChannelState:
 	ld	xhl, 0x9f6010bf
 	push_a
 	jr	ge, -97
-	push_sr
+	push	sr
 	jr	lt, 104
 	pushw	de
 	ld	xwa, (xsp+16)
@@ -7835,11 +7835,11 @@ SeqChan_InitChannelState:
 	ld	xhl, 0x9f6010bf
 	push_a
 	jr	ge, -97
-	push_sr
+	push	sr
 	jr	lt, -81
 	incf
 	ldb	w, 136
-	push_sr
+	push	sr
 	ldb	a, 197
 	cp	xbc, xwa
 	jr	nz, 14
@@ -7851,7 +7851,7 @@ SeqChan_InitChannelState:
 	jr	z, 7
 	.byte 0xbf
 	push_a
-	push_sr
+	push	sr
 	nop
 	nop
 	lds	iz, 1
@@ -7930,14 +7930,14 @@ SeqChan_ValidateAndDispatch:
 	.byte 0xb8
 	ex_ff
 	.byte 0xb3, 0xc2, 0xe2, 0xe2
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	jr	nz, 4
 	lds	hl, 0
 	jr	31
 	.byte 0xbe
-	pop_sr
+	pop	sr
 	inc	6, l
 	ldwio	62, 0x331e
 	.byte 0xf1
@@ -7965,10 +7965,10 @@ SeqChan_TraverseAndProcess:
 	jr	nc, 116
 	ld	xwa, (xsp+12)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	dec	6, a
 	ldio	191, 6
-	push_sr
+	push	sr
 	push_a
 	nop
 	jrl	205
@@ -8010,7 +8010,7 @@ SeqChan_TraverseAndProcess:
 	ld	(xwa+71), xbc
 	ld	xwa, (xsp+12)
 	.byte 0xb8
-	pop_sr
+	pop	sr
 	.byte 0xbf
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
@@ -8031,7 +8031,7 @@ SeqChan_TraverseAndProcess:
 	lda_24	xwa, 0x2121a
 	ld	xiz, xwa
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0x9f, 0x04
@@ -8057,7 +8057,7 @@ SeqChan_TraverseAndProcess:
 	.byte 0xf3
 	swi	1
 	.byte 0x1a
-	push_sr
+	push	sr
 	ldw	iz, 1183
 	push	xsp
 	ldwio	0, 0xcf61
@@ -8136,7 +8136,7 @@ SeqChan_ReadNextFromLoop:
 	ld	(xiz+71), xwa
 	ld	(xiz+64), 16
 	.byte 0xbe
-	pop_sr
+	pop	sr
 	.byte 0xbf
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -8204,9 +8204,9 @@ SeqChan_WriteExtendedPatch:
 	ld	(xbc+71), xwa
 	ld	(xiz+52), 229
 	.byte 0xbe
-	pop_sr
+	pop	sr
 	.byte 0xbf, 0xb9
-	pop_sr
+	pop	sr
 	.byte 0xbf
 	lds	hl, 0
 	jr	25
@@ -8215,7 +8215,7 @@ SeqChan_WriteExtendedPatch:
 	inc	4, xsp
 	ld	(xiz+52), 229
 	.byte 0xbe
-	pop_sr
+	pop	sr
 	.byte 0xbf
 	jr	-19
 	sti16_24	0x1e53c, 18
@@ -8298,7 +8298,7 @@ SeqStep_SectorCompareBlock:
 	ld	wa, (xsp+10)
 	ld	(xde+64), a
 	.byte 0xba
-	pop_sr
+	pop	sr
 	ld	(xsp-118), w
 	ldb	l, 219
 	ccf
@@ -8480,7 +8480,7 @@ SeqChan_ByteBlockD:
 	ld	xiz, (xsp+14)
 	ld	xbc, (xsp+10)
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	cpw	(xbc), 0
@@ -8502,16 +8502,16 @@ SeqChan_ByteBlockD:
 	cp	wa, 47
 	jr	nz, 125
 	.byte 0xb1
-	push_sr
+	push	sr
 	.byte 0x1f
 	nop
 	lds	hl, 0
 	jrl	170
 	ld	xwa, (xiz)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xb3, 0xb1
-	push_sr
+	push	sr
 	ldb	a, 0
 	ld	xwa, (xiz)
 	push	xwa
@@ -8525,15 +8525,15 @@ SeqChan_ByteBlockD:
 	ld	(xiz+20), hl
 	jr	121
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	jr	114
 	ld	xwa, (xiz)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xb3, 0xb1
-	push_sr
+	push	sr
 	di
 	ld	xwa, (xiz)
 	ld	xwa, (xwa+26)
@@ -8546,15 +8546,15 @@ SeqChan_ByteBlockD:
 	ld	(xiz+20), hl
 	jr	82
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	jr	75
 	ld	xwa, (xiz)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xb3, 0xb1
-	push_sr
+	push	sr
 	ldb	w, 0
 	ld	xwa, (xiz)
 	push	xwa
@@ -8571,9 +8571,9 @@ SeqChan_ByteBlockD:
 	jr	54
 	ld	xwa, (xiz)
 	.byte 0xb8
-	push_sr
+	push	sr
 	.byte 0xb3, 0xb1
-	push_sr
+	push	sr
 	ldb	d, 0
 	ld	xwa, (xiz)
 	push	xwa
@@ -8587,7 +8587,7 @@ SeqChan_ByteBlockD:
 	ld	(xiz+20), hl
 	jr	5
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xd2
@@ -10537,7 +10537,7 @@ FileIO_ReadDirEntry_Return:
 SndTable_ByteBlock_ReadOps:
 	.byte 0xc2
 	or	xhl, xix
-	pop_sr
+	pop	sr
 	push	xsp
 	nop
 	jr	nz, 48
@@ -10562,7 +10562,7 @@ SndTable_ByteBlock_ReadOps:
 	ret
 	.byte 0xc2
 	or	xhl, xix
-	pop_sr
+	pop	sr
 	push	xsp
 	.byte 0x01
 	jr	nz, 6
@@ -10581,7 +10581,7 @@ SndTable_ByteBlock_ReadOps:
 	ld32_24	xwa, 0x3e3ee
 	.byte 0xf3, 0xe1
 	ei	4
-	push_sr
+	push	sr
 	nop
 	nop
 	ld32_24	xbc, 0x3e3ee
@@ -10593,7 +10593,7 @@ SndTable_ByteBlock_ReadOps:
 	lds	wa, 2
 	call	TaskMsg_Send
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+4)
@@ -10607,14 +10607,14 @@ SndTable_ByteBlock_ReadOps:
 	call	TaskMsg_Receive
 	ld	xiz, xhl
 	.byte 0x9e
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	nop
 	jr	z, 17
 	.byte 0xbe
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	6
 	swi	7
 	ld	xwa, xiz
@@ -10627,12 +10627,12 @@ SndTable_ByteBlock_ReadOps:
 	cps	hl, 0
 	jr	z, 21
 	.byte 0xb6
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xbe
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	6
 	swi	7
 	ld	xwa, xiz
@@ -10641,7 +10641,7 @@ SndTable_ByteBlock_ReadOps:
 	call	TaskMsg_Send
 	jr	71
 	.byte 0xb6
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	ld	wa, (xsp+4)
@@ -10656,8 +10656,8 @@ SndTable_ByteBlock_ReadOps:
 	sub	xbc, xwa
 	ld	(xiz), bc
 	.byte 0xbe
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	nop
 	ld	xwa, xiz

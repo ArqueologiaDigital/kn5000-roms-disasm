@@ -8131,7 +8131,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x24
 	.byte 0x99  ; ""
 	.asciz "#"
-	push_sr
+	push	sr
 	nop
 	.byte 0x0a, 0x00
 	pushw wa
@@ -8401,7 +8401,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "?"
 	.byte 0x1f
 	nop
-	pop_sr
+	pop	sr
 	nop
 	popw de
 	normal
@@ -8635,7 +8635,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	nop
 	.byte 0x1f
 	nop
-	push_sr
+	push	sr
 	nop
 	pushw de
 	normal
@@ -8665,7 +8665,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 8
 	pushw 1536
 	nop
-	push_sr
+	push	sr
 	nop
 	pushw de
 	normal
@@ -8712,7 +8712,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	push_sr
+	push	sr
 	nop
 	pushw de
 	normal
@@ -8842,7 +8842,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	nop
 	.byte 0x1f
 	nop
-	pop_sr
+	pop	sr
 	nop
 	pushw de
 	normal
@@ -9430,7 +9430,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 4
 	swi	7
 	nop
-	push_sr
+	push	sr
 	nop
 	max
 	nop
@@ -9504,7 +9504,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	nop
 	normal
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x8c, 0x00, 0x01
 	nop
@@ -9928,7 +9928,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 4
 	swi	7
 	nop
-	push_sr
+	push	sr
 	nop
 	rcf
 	nop
@@ -13522,7 +13522,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	swi	7
 	nop
-	push_sr
+	push	sr
 	nop
 	popw de
 	normal
@@ -15873,11 +15873,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc9  ; "É"
 	.byte 0x00
 	.zero 10
-	push_sr
+	push	sr
 	nop
 	max
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x1f
 	nop
@@ -21267,9 +21267,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "*"
-	push_sr
+	push	sr
 	pushw wa
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "d"
 	.byte 0x0c
@@ -21293,7 +21293,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	normal
 	ldb	l, 2
 	pushw hl
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii ")"
 	.byte 0x02, 0x08
@@ -21334,7 +21334,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	pushw de
-	push_sr
+	push	sr
 	.fill 6, 1, 0xff
 	.byte 0x08
 	.byte 0x00
@@ -21379,7 +21379,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	pushw ix
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "."
 	.byte 0x02
@@ -21396,7 +21396,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	pushw ix
-	push_sr
+	push	sr
 	.fill 4, 1, 0xff
 	.ascii "-"
 	.byte 0x02, 0x08
@@ -22084,7 +22084,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	normal
 	.byte 0x44, 0x02
 	popw bc
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "G"
 	.byte 0x02, 0x08
@@ -22112,7 +22112,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	popw wa
-	push_sr
+	push	sr
 	.fill 6, 1, 0xff
 	.byte 0x08
 	.byte 0x00
@@ -22155,7 +22155,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	popw de
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "L"
 	.byte 0x02
@@ -22173,12 +22173,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	popw de
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "M"
-	push_sr
+	push	sr
 	popw hl
-	push_sr
+	push	sr
 	ldio	0, 244
 	nop
 	.byte 0xd8, 0x00
@@ -22201,13 +22201,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	popw de
-	push_sr
+	push	sr
 	popw iz
-	push_sr
+	push	sr
 	.byte 0x50
-	push_sr
+	push	sr
 	popw ix
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "T"
@@ -22228,7 +22228,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	popw iy
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "O"
 	.byte 0x02
@@ -22259,7 +22259,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	popw iy
-	push_sr
+	push	sr
 	.fill 4, 1, 0xff
 	.ascii "N"
 	.byte 0x02, 0x08
@@ -22286,12 +22286,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	popw de
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "Q"
-	push_sr
+	push	sr
 	popw iy
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "^"
@@ -22313,7 +22313,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	popw de
-	push_sr
+	push	sr
 	.fill 4, 1, 0xff
 	.ascii "P"
 	.byte 0x02, 0x08
@@ -22522,9 +22522,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "Z"
-	push_sr
+	push	sr
 	pop xwa
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "z"
@@ -22551,9 +22551,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "["
-	push_sr
+	push	sr
 	pop xbc
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "'"
 	.asciz "^"
@@ -22624,7 +22624,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	normal
 	pop xix
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "^"
 	.byte 0x02
@@ -22651,12 +22651,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	pop xix
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "_"
-	push_sr
+	push	sr
 	pop xiy
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "z"
@@ -22680,12 +22680,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	pop xix
-	push_sr
+	push	sr
 	.fill 2, 1, 0xff
 	.ascii "`"
-	push_sr
+	push	sr
 	pop xiz
-	push_sr
+	push	sr
 	.byte 0x08, 0x00
 	.asciz "'"
 	.asciz "^"
@@ -22707,7 +22707,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	normal
 	pop xix
-	push_sr
+	push	sr
 	.fill 4, 1, 0xff
 	.ascii "_"
 	.byte 0x02, 0x08
@@ -26977,7 +26977,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 4
 	swi	7
 	nop
-	push_sr
+	push	sr
 	nop
 	max
 	nop
@@ -27041,7 +27041,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 4
 	swi	7
 	nop
-	push_sr
+	push	sr
 	nop
 	max
 	nop
@@ -27276,7 +27276,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	or	xsp, xwa
 	pushw bc                                ; push BC
 	nop                                     ; nop
-	push_sr
+	push	sr
 	.byte 0xe8, 0x29
 	nop                                     ; nop
 	ldw	ix, 0x29e8
@@ -27650,7 +27650,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	pushw de                                ; push DE
 	nop                                     ; nop
 	popw de                                 ; pop DE
-	push_sr
+	push	sr
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0x86, 0x02                       ; db
@@ -27662,11 +27662,11 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	pushw de                                ; push DE
 	nop                                     ; nop
 	push_a
-	pop_sr
+	pop	sr
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ld	xiz, 0x78002a03
-	pop_sr
+	pop	sr
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ld_s	(xix+3), xde
@@ -27674,7 +27674,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	.byte 0xd4, 0x03, 0x2a                 ; db
 	nop                                     ; nop
 	swi	2
-	pop_sr
+	pop	sr
 	pushw de                                ; push DE
 	nop                                     ; nop
 	push_a
@@ -28123,7 +28123,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	.byte 0xda, 0x22, 0x2a                 ; xorcf 0x2a,DE
 	nop                                     ; nop
-	push_sr
+	push	sr
 	ldb	c, 0x2a
 	nop                                     ; nop
 	pushw de                                ; push DE
@@ -28902,7 +28902,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	.byte 0x52                             ; db
 	pushw de                                ; push DE
 	nop                                     ; nop
-	push_sr
+	push	sr
 	.byte 0x53
 	pushw de                                ; push DE
 	nop                                     ; nop
@@ -30381,7 +30381,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	jrl	ugt, 0x002a
 	max
 	jrl	ugt, 0x002a
-	push_sr
+	push	sr
 	jrl	ugt, 0x002a
 	nop                                     ; nop
 	jrl	ugt, 0x002a
@@ -30667,7 +30667,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	nop                                     ; nop
 	max
 	jrl ge, .LGD2_73d6                     ; [79 2a 00] jrl GE,0x2a73d6
-	push_sr
+	push	sr
 	jrl ge, .LGD2_73da                     ; [79 2a 00] jrl GE,0x2a73da
 	nop                                     ; nop
 	jrl ge, .LGD2_73de                     ; [79 2a 00] jrl GE,0x2a73de
@@ -30855,7 +30855,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	nop                                     ; nop
 	max
 	jrl c, .LGD2_7516                      ; [77 2a 00] jrl C,0x2a7516
-	push_sr
+	push	sr
 	jrl c, .LGD2_751a                      ; [77 2a 00] jrl C,0x2a751a
 	nop                                     ; nop
 	jrl c, .LGD2_751e                      ; [77 2a 00] jrl C,0x2a751e
@@ -30970,7 +30970,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	jrl	z, 0x002a
 	max
 	jrl z, .LGD2_75d6                      ; [76 2a 00] jrl Z,0x2a75d6
-	push_sr
+	push	sr
 	jrl z, .LGD2_75da                      ; [76 2a 00] jrl Z,0x2a75da
 	nop                                     ; nop
 	jrl z, .LGD2_75de                      ; [76 2a 00] jrl Z,0x2a75de
@@ -33912,12 +33912,12 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.asciz "HDAE"
 	.zero 3
 	jrl	nc, 20992
-	push_sr
+	push	sr
 	jrl	nc, 22272
-	push_sr
+	push	sr
 	.byte 0x7f, 0x00
 	pop xix
-	push_sr
+	push	sr
 	.byte 0x7f, 0x00
 	.ascii "a"
 	.byte 0x02, 0x7f
@@ -35029,13 +35029,13 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	normal
 	normal
 	nop
-	push_sr
-	push_sr
-	push_sr
+	push	sr
+	push	sr
+	push	sr
 	nop
-	pop_sr
-	pop_sr
-	pop_sr
+	pop	sr
+	pop	sr
+	pop	sr
 	nop
 	max
 	max
@@ -36101,7 +36101,7 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	swi	7
 	normal
 	popw wa
-	push_sr
+	push	sr
 	.byte 0x91, 0x02, 0xda, 0x02
 	ldb	c, 3
 	.ascii "l"
@@ -36250,7 +36250,7 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	reti
 	.byte 0xa2, 0x05
 	pushw bc
-	push_sr
+	push	sr
 	.byte 0xc5, 0x02, 0x3b, 0x05
 	.asciz "rb"
 	.byte 0x00
@@ -36341,12 +36341,12 @@ HDAE5000_Display_Params:	; 0x2F8DCE
 	.asciz "/"
 	max
 	nop
-	push_sr
+	push	sr
 	nop
 	add	(xix), iz
 	.asciz "/"
 	.zero 2
-	push_sr
+	push	sr
 	nop
 	add	(xwa), iz
 	.asciz "/"

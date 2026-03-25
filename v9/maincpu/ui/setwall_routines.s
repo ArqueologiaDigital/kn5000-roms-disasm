@@ -63,7 +63,7 @@ SetWall_InlineCodeBlock:
 	call	SetWall_UpdateSlotIndex
 	ret
 	nop
-	push_sr
+	push	sr
 	nop
 	ldwio	3, 1284
 	.byte 0x06
@@ -75,13 +75,13 @@ SetWall_InlineCodeBlock:
 	ret
 	retd	4359
 	ccf
-	push_sr
+	push	sr
 	pushw	1025
 	halt
 	ei	7
 	scf
 	push	10
-	pop_sr
+	pop	sr
 	ldio	13, 14
 	retd	4112
 	ccf
@@ -670,7 +670,7 @@ SetWall_CrossTypeChange:
 
 SetWall_SlotTypeMap:
 	nop
-	push_sr
+	push	sr
 	.byte 0x01
 	reti
 	ldio	9, 10
@@ -2082,7 +2082,7 @@ SetWall_MiscDataAndCode:
 	.byte 0xe7
 	ldw	ix, 7428
 	.byte 0x04
-	push_sr
+	push	sr
 	.byte 0xf2, 0xe7
 	ldw	ix, 0xe105
 	swi	5
@@ -2094,7 +2094,7 @@ SetWall_MiscDataAndCode:
 	ldw	ix, 0xe761
 	ldw	ix, 7428
 	.byte 0x04
-	push_sr
+	push	sr
 	.byte 0xf2, 0xe7
 	ldw	ix, 0xe105
 	swi	5

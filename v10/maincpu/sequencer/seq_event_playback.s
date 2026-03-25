@@ -576,7 +576,7 @@ Voice_NoteChannelTable1:
 	reti
 	nop
 	reti
-	push_sr
+	push	sr
 	.zero 8
 	nop
 	nop
@@ -607,7 +607,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	reti
-	pop_sr
+	pop	sr
 	.zero 24
 	nop
 	nop
@@ -757,7 +757,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	halt
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -765,7 +765,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	halt
-	pop_sr
+	pop	sr
 	halt
 	.byte 0x04
 	nop
@@ -784,7 +784,7 @@ Voice_NoteChannelTable1:
 	incf
 	nop
 	incf
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -792,7 +792,7 @@ Voice_NoteChannelTable1:
 	.byte 0x04
 	halt
 	incf
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -832,7 +832,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	.byte 0x04
-	pop_sr
+	pop	sr
 	.byte 0x04, 0x04
 	.zero 16
 	nop
@@ -841,7 +841,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	.zero 16
 	nop
@@ -850,7 +850,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	halt
 	.zero 32
 	nop
@@ -859,49 +859,49 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0x04
 	nop
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	nop
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	nop
-	pop_sr
+	pop	sr
 	.byte 0x01
 	nop
 	nop
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	nop
 	nop
-	pop_sr
-	push_sr
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	pop_sr
-	pop_sr
+	pop	sr
+	push	sr
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	pop_sr
+	pop	sr
+	pop	sr
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	pop	sr
 	.byte 0x04
 	nop
 	nop
@@ -909,7 +909,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	pop_sr
+	pop	sr
 	halt
 	nop
 	nop
@@ -919,7 +919,7 @@ Voice_NoteChannelTable1:
 	nop
 	.zero 24
 	.byte 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	incf
@@ -956,7 +956,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	nop
 	.zero 8
@@ -982,7 +982,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	.byte 0x01
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -997,7 +997,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -1013,7 +1013,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	.byte 0x01
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -1031,9 +1031,9 @@ Voice_NoteChannelTable1:
 	decf
 	.byte 0x01
 	decf
-	push_sr
+	push	sr
 	decf
-	pop_sr
+	pop	sr
 	decf
 	.byte 0x04
 	decf
@@ -1043,9 +1043,9 @@ Voice_NoteChannelTable1:
 	ret
 	.byte 0x01
 	ret
-	push_sr
+	push	sr
 	ret
-	pop_sr
+	pop	sr
 	ret
 	.byte 0x04
 	ret
@@ -1090,7 +1090,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	.byte 0x50
-	push_sr
+	push	sr
 	pop	xbc
 	.byte 0x01
 	pop	xde
@@ -1098,25 +1098,25 @@ Voice_NoteChannelTable1:
 	pop	xhl
 	.byte 0x01
 	pop	xwa
-	push_sr
+	push	sr
 	.byte 0x53
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
 	nop
 	pop	xbc
-	pop_sr
+	pop	sr
 	pop	xde
-	pop_sr
+	pop	sr
 	pop	xhl
-	pop_sr
+	pop	sr
 	pop	xix
-	pop_sr
+	pop	sr
 	pop	xiy
-	pop_sr
+	pop	sr
 	pop	xiz
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -1127,7 +1127,7 @@ Voice_NoteChannelTable1:
 	popw	iy
 	.byte 0x01
 	popw	iy
-	push_sr
+	push	sr
 	ld	xiz, 1
 	nop
 	ld	xhl, 0x41014a02
@@ -1138,23 +1138,23 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	pop_sr
+	pop	sr
 	.byte 0x01
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	.byte 0x04
-	push_sr
+	push	sr
 	ldwio	1, 260
 	incf
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
 	nop
 	ldio	1, 3
-	pop_sr
+	pop	sr
 	ldio	2, 13
-	push_sr
+	push	sr
 	reti
 	.byte 0x01
 	pushw	2
@@ -1162,9 +1162,9 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	.byte 0x1a, 0x01, 0x1a
-	push_sr
+	push	sr
 	pop_f
-	push_sr
+	push	sr
 	jp	0x021b01
 	jp	3
 	nop
@@ -1178,9 +1178,9 @@ Voice_NoteChannelTable1:
 	scf
 	.byte 0x01
 	push_a
-	push_sr
+	push	sr
 	pop_a
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -1200,13 +1200,13 @@ Voice_NoteChannelTable1:
 	ldw	ix, 0x3002
 	.byte 0x01
 	ldw	iz, 0x3103
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
 	nop
 	ld	xiy, 0x46016301
-	push_sr
+	push	sr
 	ld	xiy, 0x48014702
 	.byte 0x01
 	nop
@@ -1654,7 +1654,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -1695,7 +1695,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -3910,7 +3910,7 @@ VocalistGrid_DispatchData:
 	jr	z, 7
 	.byte 0x93
 	push	xsp
-	push_sr
+	push	sr
 	nop
 	jrl	nz, 1501
 	ld	wa, (xhl)
@@ -3946,7 +3946,7 @@ VocalistGrid_DispatchData:
 	ld	(xsp+4), xbc
 	ld	xhl, xiy
 	.byte 0xb5
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xix, (xsp+8)
@@ -3954,7 +3954,7 @@ VocalistGrid_DispatchData:
 	ld	xiy, xde
 	jr	50
 	.byte 0xd7, 0xe6, 0x99, 0xd7, 0xe6, 0xec
-	pop_sr
+	pop	sr
 	ld	xwa, (xiz)
 	.byte 0xe3
 	reti

@@ -107,7 +107,7 @@ MidiSerial_HandleSysReset_Data:
 	.byte 0xf1, 0x52
 	swi	5
 	inc	6, b
-	pop_sr
+	pop	sr
 	set	7, w
 	stda8	1070, w
 	ret
@@ -116,7 +116,7 @@ MidiSerial_HandleSysCommon_Data:
 	.byte 0xf1, 0x51
 	swi	5
 	inc	6, c
-	pop_sr
+	pop	sr
 	set	7, a
 	stda8	1068, a
 	ret
@@ -131,7 +131,7 @@ MidiSerial_HandleDefault_Data:
 	and	a, 15
 	ld	xhl, 0x94f4
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	or	xwa, xix
 	ldb	a, 201
 	.byte 0xcf
@@ -140,7 +140,7 @@ MidiSerial_HandleDefault_Data:
 	stda8	0x9668, a
 	ld	xhl, 0x9514
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	or	xwa, xix
 	ldb	a, 201
 	inc	6, wa
@@ -194,7 +194,7 @@ MidiCC_Handler_CC3_TableLookup:
 	ld	xix, MidiCC_ChannelMappingData
 	ldda8	l, 0x9635
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	a, 241
 	.byte 0x57, 0x96
@@ -213,7 +213,7 @@ MidiCC_Handler_CC3_TableLookup:
 	jr	z, 14
 	ld	xix, 0xfd57
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe1
 	ldb	c, 201
 	.byte 0xc3
@@ -299,7 +299,7 @@ MidiCC_Handler_BitManipulation:
 	jr	ugt, 10
 	ld	xix, MidiCC_Handler_BitManipulation_0x45
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	e, 49
 	ld	ix, (xwa+11)
@@ -379,11 +379,11 @@ MidiCC_Handler_RangeCheck:
 	jr	ugt, 10
 	ld	xix, MidiCC_Handler_RangeCheck_0x3F
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	e, 49
 	popw	wa
-	pop_sr
+	pop	sr
 	ldb	d, 7
 	ldda8	a, 0x9637
 	stda8	0x9648, a
@@ -393,9 +393,9 @@ MidiCC_Handler_RangeCheck:
 	ret
 	swi	7
 	nop
-	push_sr
+	push	sr
 	.byte 0x01
-	pop_sr
+	pop	sr
 MidiCC_Handler_ChannelMapping:
 	ldda8	a, 0x966a
 	cp	a, 20
@@ -1004,7 +1004,7 @@ MidiCC_Handler_DirectStoreA:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xec
-	push_sr
+	push	sr
 	jrl	nc, 3711
 MidiCC_Handler_DirectStoreB:
 	ldda8	a, 0x9636
@@ -1027,7 +1027,7 @@ MidiCC_Handler_DirectStoreB:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xec
-	push_sr
+	push	sr
 	jrl	nc, 3711
 MidiCC_Handler_ParamDispatch:
 	ldda8	a, 0x966a
@@ -1036,7 +1036,7 @@ MidiCC_Handler_ParamDispatch:
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x6E0
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 203
 	.byte 0xcf
@@ -1103,7 +1103,7 @@ MidiCC_Handler_CC4_VoiceParam:
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x760
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 203
 	.byte 0xcf
@@ -1128,7 +1128,7 @@ MidiCC_Handler_CC6_VoiceParam:
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x7A0
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 203
 	.byte 0xcf
@@ -1153,7 +1153,7 @@ MidiCC_Handler_CC5_VoiceParam:
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x7E0
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 203
 	.byte 0xcf
@@ -1716,7 +1716,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	and	e, 7
 	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0x49
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe8
 	ldb	e, 32
 	rcf
@@ -1724,9 +1724,9 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	ret
 	swi	7
 	nop
-	push_sr
+	push	sr
 	.byte 0x01
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -1775,13 +1775,13 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	srl	e, 1
 	jr	nc, -7
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ldb	e, 30
 	sti8_24	3587, 0
-	pop_sr
+	pop	sr
 	reti
-	push_sr
+	push	sr
 	ei	1
 	halt
 	nop
@@ -1836,7 +1836,7 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	popw	iz
 	.byte 0x96
 	inc	6, l
-	push_sr
+	push	sr
 	ldb	e, 127
 	ldb	w, 7
 	calr	912
@@ -1902,14 +1902,14 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	srl	e, 6
 	ld	xiy, PanelEvt_Dispatch11_TableAndHandlers_0x5F
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe8
 	ldb	e, 32
 	ccf
 	calr	779
 	ret
 	nop
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 
@@ -2449,7 +2449,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	.byte 0x04
-	pop_sr
+	pop	sr
 	swi	7
 	swi	7
 	swi	7
@@ -2509,7 +2509,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	.byte 0x01, 0x01
-	push_sr
+	push	sr
 	.byte 0x01, 0x04, 0x01
 	ldio	1, 16
 	.byte 0x01
@@ -2517,15 +2517,15 @@ MidiCC_ChannelMappingData:
 	ldb	w, 1
 	ldb	w, 1
 	.byte 0x04
-	push_sr
-	push_sr
-	push_sr
+	push	sr
+	push	sr
+	push	sr
 	ld	xwa, 0x8028001
-	push_sr
+	push	sr
 	ldio	2, 16
-	push_sr
+	push	sr
 	rcf
-	push_sr
+	push	sr
 	ldb	w, 2
 	ld	xwa, 0xffffff02
 	swi	7
@@ -2539,7 +2539,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.byte 0x01
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	swi	7
@@ -2687,7 +2687,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	pop_sr
+	pop	sr
 	jrl	nc, 769
 	jrl	nc, 770
 	jrl	nc, 771
@@ -2712,7 +2712,7 @@ MidiCC_ChannelMappingData:
 	jrl	nc, -1
 	swi	7
 	.byte 0x17
-	pop_sr
+	pop	sr
 	.byte 0x7f
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -3076,7 +3076,7 @@ MidiCC_ChannelMappingData:
 	.byte 0xad
 	nop
 	sub	(xiy+1), xiy
-	push_sr
+	push	sr
 	sub	(xiy+3), xiy
 	.byte 0x04
 	sub	(xiy+5), xiy
@@ -3102,7 +3102,7 @@ MidiCC_ChannelMappingData:
 	.byte 0xae
 	nop
 	sub	(xiz+1), xiz
-	push_sr
+	push	sr
 	sub	(xiz+3), xiz
 	.byte 0x04
 	sub	(xiz+5), xiz
@@ -3129,9 +3129,9 @@ MidiCC_ChannelMappingData:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x04
 	nop
@@ -3169,9 +3169,9 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	ld	(xbc), 177
 	.byte 0x01, 0xb1
-	push_sr
+	push	sr
 	.byte 0xb1
-	pop_sr
+	pop	sr
 	.byte 0xb1, 0x04, 0xb1
 	halt
 	.byte 0xb1, 0x06, 0xb1
@@ -3206,9 +3206,9 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	ld	(xix), 180
 	.byte 0x01, 0xb4
-	push_sr
+	push	sr
 	.byte 0xb4
-	pop_sr
+	pop	sr
 	.byte 0xb4, 0x04, 0xb4
 	halt
 	.byte 0xb4, 0x06, 0xb4
@@ -3230,8 +3230,8 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
@@ -3245,9 +3245,9 @@ MidiCC_ChannelMappingData:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x04
 	nop
@@ -5916,7 +5916,7 @@ FileData_RawDataBlock:
 	ld	hl, iz
 	jrl	371
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+4)
@@ -5943,7 +5943,7 @@ FileData_RawDataBlock:
 	nop
 	jr	c, -56
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+4)
@@ -5957,7 +5957,7 @@ FileData_RawDataBlock:
 	.byte 0xaf
 	ldwio	128, 0xc8e9
 	.byte 0xa4
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xaf, 0x06, 0x81
@@ -5965,7 +5965,7 @@ FileData_RawDataBlock:
 	incm	1, (xsp+4)
 	.byte 0x9f, 0x04
 	push	xsp
-	pop_sr
+	pop	sr
 	nop
 	jr	c, -47
 	ld	xwa, (xsp+10)
@@ -5973,7 +5973,7 @@ FileData_RawDataBlock:
 	ld	xix, 0x6af3003
 	ldb	a, 243
 	.byte 0xe5, 0xd8
-	push_sr
+	push	sr
 	ldw	bc, 4382
 	ldio	175, 10
 	.byte 0x20
@@ -5984,15 +5984,15 @@ FileData_RawDataBlock:
 	ld	xwa, (xsp+10)
 	.byte 0xf3, 0xe1
 	pop	xix
-	pop_sr
+	pop	sr
 	ldw	wa, 1711
 	ldb	a, 243
 	.byte 0xe5, 0xec
-	push_sr
+	push	sr
 	ldw	bc, 0xe91e
 	push	191
 	.byte 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+4)
@@ -6015,16 +6015,16 @@ FileData_RawDataBlock:
 	incm	1, (xsp+4)
 	.byte 0x9f, 0x04
 	push	xsp
-	push_sr
+	push	sr
 	nop
 	jr	c, -56
 	ld	xwa, (xsp+10)
 	.byte 0xf3, 0xe1, 0xaa
-	pop_sr
+	pop	sr
 	ldw	wa, 1711
 	ldb	a, 243
 	.byte 0xe5, 0x80
-	pop_sr
+	pop	sr
 	ldw	bc, 8478
 	incf
 	ld	xwa, (xsp+10)
@@ -6032,7 +6032,7 @@ FileData_RawDataBlock:
 	lda	xwa, (xwa+3)
 	ld	xbc, (xsp+6)
 	.byte 0xf3, 0xe5, 0x8a
-	pop_sr
+	pop	sr
 	ldw	bc, 0x801e
 	incf
 	ld	xwa, (xsp+10)
@@ -6046,7 +6046,7 @@ FileData_RawDataBlock:
 	.byte 0x06
 	ldb	a, 243
 	.byte 0xe5, 0xaa
-	pop_sr
+	pop	sr
 	ldw	bc, 0x791e
 	decf
 	ld	xwa, (xsp+10)
@@ -6082,7 +6082,7 @@ FileData_RawDataBlock:
 	jr	nz, 122
 	.byte 0xbf
 	incf
-	push_sr
+	push	sr
 	ldwio	0, 0x901d
 	.byte 0xb4
 	swi	5
@@ -6131,7 +6131,7 @@ FileData_RawDataBlock:
 	jrl	412
 	.byte 0xbf
 	incf
-	push_sr
+	push	sr
 	push_f
 	nop
 	jr	-117
@@ -6186,7 +6186,7 @@ FileData_RawDataBlock:
 	ret
 	or	(xwa), a
 	add	d, w
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xaf, 0x04, 0x81
@@ -6245,7 +6245,7 @@ FileData_RawDataBlock:
 	calr	2562
 	ld	xwa, (xsp+14)
 	.byte 0xf3, 0xe1, 0xcc
-	push_sr
+	push	sr
 	ldw	wa, 1199
 	ldb	a, 243
 	.byte 0xe5
@@ -6258,20 +6258,20 @@ FileData_RawDataBlock:
 	calr	2813
 	ld	xwa, (xsp+14)
 	.byte 0xf3, 0xe1, 0xec
-	push_sr
+	push	sr
 	ldw	wa, 1199
 	ldb	a, 243
 	.byte 0xe5, 0x8a
-	pop_sr
+	pop	sr
 	ldw	bc, 0x5a1e
 	pushw	3759
 	ldb	w, 243
 	.byte 0xe1, 0xf2
-	push_sr
+	push	sr
 	ldw	wa, 1199
 	ldb	a, 243
 	.byte 0xe5, 0xae
-	pop_sr
+	pop	sr
 	ldw	bc, 0x541e
 	pushw	3759
 	ldb	w, 175
@@ -9106,9 +9106,9 @@ VoiceParam_CopyBitfields_LargeBlock:
 	.byte 0xdf
 	or	(xix), a
 	.byte 0xb3, 0x9e, 0xb4, 0xa6, 0xba
-	pop_sr
+	pop	sr
 	.byte 0x9b, 0xb9
-	pop_sr
+	pop	sr
 	.byte 0xa3
 	lda	xix, (xbc+4)
 	lda	xhl, (xde+4)
@@ -13367,7 +13367,7 @@ AssSwb_ProcessLoop_Data:
 	push	xiz
 	ld	xiz, xwa
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	a, (xiz)
@@ -13454,7 +13454,7 @@ AssSwb_ProcessLoop_Data:
 	call	AssswbWr
 	jr	5
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	ld	hl, (xsp+4)
@@ -16097,7 +16097,7 @@ MidiCtrl_ModeSwitch_Data:
 	swi	6
 	.byte 0xc1
 	jrl	pl, 0x3fc0
-	pop_sr
+	pop	sr
 	ret	nz
 	.byte 0xf1
 	jrl	nc, -13632
@@ -18055,7 +18055,7 @@ VoiceParam_MultiBlock_Epilogue_Data:
 	.byte 0x01
 	ld	xhl, 0x2ba2383
 	ld	xhl, 0xba230888
-	pop_sr
+	pop	sr
 	ld	xhl, 0x62b131b7
 	ld	(xbc+4), xwa
 	ld	xwa, xbc

@@ -55,7 +55,7 @@ FDemoText_ByteData_VoiceProbeA:
 	.byte 0xe4, 0xe0
 	ldb	a, 194
 	.byte 0xf2, 0x47
-	push_sr
+	push	sr
 	.byte 0xe9
 	ret
 FDemoText_ByteData_VoiceProbeB:
@@ -68,7 +68,7 @@ FDemoText_ByteData_VoiceProbeB:
 	cps	a, 0
 	ret	z
 	.byte 0xf2, 0xee, 0x47
-	push_sr
+	push	sr
 	.byte 0xbe
 	ret
 FDemoText_ByteData_VoiceProbeC:
@@ -121,7 +121,7 @@ FDemoText_ByteData_VoiceProbeC:
 	.byte 0xe0, 0xe8
 	ldb	a, 194
 	.byte 0xec, 0x47
-	push_sr
+	push	sr
 	.byte 0xe9
 	ret
 
@@ -915,10 +915,10 @@ FDemoText_ByteData_ProbeHelper:
 	lda	xbc, (xsp)
 	.byte 0xc5, 0xec
 	ldb	a, 185
-	pop_sr
+	pop	sr
 	ld	xbc, 0x04b92183
 	ld	xbc, 0xb921068f
-	push_sr
+	push	sr
 	ld	xbc, 0xea1d88e9
 	.byte 0xe7
 	swi	6
@@ -1901,7 +1901,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	lt, -41
 	swi	2
 	or	(xbc-39), d
-	push_sr
+	push	sr
 	lda_24	xwa, FileType_NameTable
 	.byte 0xe3
 	reti
@@ -2006,7 +2006,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x90
 	nop
 	.byte 0x50, 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	cpw	(xsp+144), 0
@@ -2066,7 +2066,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	lt, -41
 	swi	2
 	or	(xbc-39), d
-	push_sr
+	push	sr
 	lda_24	xwa, FileTypeName_Song_0x5A
 	.byte 0xe3
 	reti
@@ -2196,7 +2196,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x04
 	jr	f, -46
 	jr	f, 91
-	push_sr
+	push	sr
 	ldb	w, 216
 	.byte 0xec, 0x01
 	lda_24	xbc, 0x025b62
@@ -2266,7 +2266,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	lt, -41
 	swi	2
 	or	(xbc-39), d
-	push_sr
+	push	sr
 	lda_24	xwa, UIStr_No_0x4
 	.byte 0xe3
 	reti
@@ -2302,7 +2302,7 @@ FDemoText_ByteData_LayoutEngine:
 	or	xix, xwa
 	jr	f, -46
 	jr	f, 91
-	push_sr
+	push	sr
 	ldb	a, 217
 	.byte 0xec, 0x01
 	lda_24	xde, 0x025b62
@@ -2340,14 +2340,14 @@ FDemoText_ByteData_LayoutEngine:
 	or	xix, xwa
 	jr	f, -46
 	jr	f, 91
-	push_sr
+	push	sr
 	ldb	w, 216
 	.byte 0xec, 0x01
 	lda_24	xbc, 0x025b62
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
-	push_sr
+	push	sr
 	swi	7
 	nop
 	lds	hl, 0
@@ -2433,7 +2433,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	lt, -41
 	swi	2
 	or	(xbc-39), d
-	push_sr
+	push	sr
 	lda_24	xwa, ImgAttr_NameTable
 	.byte 0xe3
 	reti
@@ -2526,7 +2526,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	lt, -41
 	swi	2
 	or	(xbc-39), d
-	push_sr
+	push	sr
 	lda_24	xwa, ImgAttrName_Src_0x88
 	.byte 0xe3
 	reti
@@ -2595,7 +2595,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xf5
 	inc	8, xiz
 	.byte 0xf5, 0xe9
-	push_sr
+	push	sr
 	swi	7
 	nop
 	.byte 0xf5, 0xe4
@@ -2985,7 +2985,7 @@ FDemoText_ByteData_LayoutB:
 	ld	wa, (xbc)
 	add	wa, hl
 	.byte 0x9f
-	push_sr
+	push	sr
 	.byte 0xa0
 	ld	(xbc), wa
 	ld	xbc, (xsp+4)

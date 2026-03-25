@@ -791,7 +791,7 @@ AccVoice_LookupParamIndex:
 
 AccVoice_ParamIndexData:
 	nop
-	pop_sr
+	pop	sr
 	.byte 0x04
 	reti
 	add	hl, 994
@@ -808,7 +808,7 @@ AccVoice_ParamIndexData:
 	.byte 0xd7
 	ldw	wa, 0xd888
 	or	b, w
-	pop_sr
+	pop	sr
 	.byte 0xc3
 	reti
 	.byte 0xf4, 0xe0
@@ -817,13 +817,13 @@ AccVoice_ParamIndexData:
 	nop
 	.byte 0x01, 0x01
 	nop
-	push_sr
+	push	sr
 	.byte 0x01, 0x01
-	push_sr
+	push	sr
 	.byte 0x01, 0x01, 0x01, 0x01
 	nop
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
-	push_sr
+	push	sr
 	.byte 0x01, 0x01
 	nop
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01
@@ -831,18 +831,18 @@ AccVoice_ParamIndexData:
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
 	.byte 0x01, 0x01
 	nop
-	push_sr
+	push	sr
 	.zero 8
 	ldio	4, 12
 	nop
 	halt
 	ldwio	15, 6420
 	calr	53795
-	pop_sr
+	pop	sr
 	.byte 0xd4
-	pop_sr
+	pop	sr
 	.byte 0xd6
-	pop_sr
+	pop	sr
 	ld	wa, 2002
 	.byte 0xd4
 	reti
@@ -997,7 +997,7 @@ AccStyle_ByteDataBlock:
 	ld	xhl, AccStyle_ByteDataBlock_0x5C
 	sla	a, 1
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	or	xwa, xix
 	ldb	c, 235
 	ccf
@@ -1037,9 +1037,9 @@ AccStyle_ByteDataBlock:
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x04
 	nop
@@ -1067,9 +1067,9 @@ AccStyle_ByteDataBlock:
 	nop
 	nop
 	.byte 0x04, 0x01, 0x04
-	push_sr
+	push	sr
 	.byte 0x04
-	pop_sr
+	pop	sr
 	.byte 0x04, 0x04, 0x04
 	halt
 	.byte 0x04
@@ -1095,7 +1095,7 @@ AccStyle_ByteDataBlock:
 	.byte 0x04
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
@@ -1108,7 +1108,7 @@ AccStyle_ByteDataBlock:
 	nop
 	nop
 	.byte 0x04
-	push_sr
+	push	sr
 	.byte 0x04, 0x04, 0x04
 	ei	4
 	ldio	4, 10
@@ -4153,7 +4153,7 @@ AccTick_ByteData:
 	.byte 0xc1
 	push	51
 	push	xiz
-	push_sr
+	push	sr
 	calr	2118
 	ldda8	a, 0x330b
 	and	a, 3
@@ -4178,7 +4178,7 @@ AccTick_ByteData:
 	calr	100
 	.byte 0xf1, 0xf4
 	ldw	de, 0x6ece
-	pop_sr
+	pop	sr
 	calr	569
 	.byte 0xc1
 	pushw	ix
@@ -5643,7 +5643,7 @@ AccVoice_SetupByteData:
 	jr	-38
 	ret
 	.byte 0xc3, 0xf5, 0xd1
-	pop_sr
+	pop	sr
 	ldb	a, 241
 	.byte 0x85
 	ldw	de, 0xf141
@@ -11005,15 +11005,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11044,15 +11044,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11083,15 +11083,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11122,15 +11122,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11161,15 +11161,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11200,15 +11200,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11239,15 +11239,15 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	.byte 0x80
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0xe0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, 0xa0000003
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -11369,16 +11369,16 @@ AccVoice_CopyFromROM_DataBlock:
 	ret
 	nop
 	nop
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	nop
 	.byte 0x04
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x04, 0x04
 	nop
 	halt
-	push_sr
+	push	sr
 	nop
 	ei	4
 	nop
@@ -11387,7 +11387,7 @@ AccVoice_CopyFromROM_DataBlock:
 	pushw	3
 	pushw	4
 	decf
-	push_sr
+	push	sr
 	nop
 	decf
 	reti
@@ -11401,21 +11401,21 @@ AccVoice_CopyFromROM_DataBlock:
 	swi	7
 	swi	7
 	nop
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	nop
 	.byte 0x04
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	di
 	halt
-	push_sr
+	push	sr
 	nop
 	pushw	2
 	pushw	261
 	decf
-	push_sr
+	push	sr
 	nop
 	ret
 	reti
@@ -11744,7 +11744,7 @@ AccStyle_InlinedBlock:
 	nop
 	nop
 	.zero 8
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -12399,10 +12399,10 @@ Demo_StyleRhythmData:
 	nop
 	nop
 	.byte 0x01, 0x01, 0x01, 0x01
-	push_sr
-	push_sr
-	push_sr
-	push_sr
+	push	sr
+	push	sr
+	push	sr
+	push	sr
 	nop
 	cpd
 	jr	f, 0
@@ -12414,10 +12414,10 @@ Demo_StyleRhythmData:
 	.zero 48
 	.ascii "a-variation1    a-variation2    a-variation3    a-variation4    b-variation1    b-variation2    b-variation3    b-variation4    c-variation1    c-variation2    c-variation3    c-variation4     a-intro 1       a-intro 2       a-fill in 1     a-fill in 2     a-ending 1      a-ending 2      b-intro 1       b-intro 2       b-fill in 1     b-fill in 2     b-ending 1      b-ending 2      c-intro 1       c-intro 2       c-fill in 1     c-fill in 2     c-ending 1      c-ending 2     "
 	reti
-	pop_sr
+	pop	sr
 	ldb	w, 0
 	pop	xwa
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -12454,13 +12454,13 @@ Demo_StyleRhythmData:
 	swi	7
 	.zero 12
 	.ascii "chord map 2     "
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	swi	7
 	.zero 12
 	.ascii "chord map 3     "
-	pop_sr
+	pop	sr
 	swi	7
 	swi	7
 	swi	7
@@ -13909,8 +13909,8 @@ Not_sure_maybe_SOFT_VERSION_related:
 	.byte 0x83
 	ld	hl, (xix+3)
 	.byte 0xbc
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	swi	7
 	swi	7
 	cp	hl, 340
@@ -13921,12 +13921,12 @@ Not_sure_maybe_SOFT_VERSION_related:
 	jrl	nc, 924
 	ldb	c, 188
 	.byte 0x01
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xbc
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	swi	7
 	swi	7
 	jr	-27
@@ -14023,7 +14023,7 @@ AccPatch_SlotScanByteData:
 	.byte 0xf1
 	ex_ff
 	ldw	iz, 0x6ec8
-	push_sr
+	push	sr
 	jr	-28
 	push_a
 	call	AccPatch_AdvanceSeqIndex
@@ -14070,16 +14070,16 @@ AccPatch_SlotScanByteData:
 	sll	c, 2
 	ldda16	wa, 0x3612
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe4, 0x50
 	ldda16	wa, 0x3614
 	inc	2, c
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe4, 0x50
 	ret
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	nop
 	.byte 0x01
@@ -14541,7 +14541,7 @@ AccPatch_DefaultSlotData:
 	.byte 0x01
 	ldb	w, 128
 	pop	xwa
-	push_sr
+	push	sr
 	nop
 	nop
 	.zero 8
@@ -14944,7 +14944,7 @@ AccPatch_WriteRhythmParam_Done:
 AccPatch_RhythmParamDefaults:
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	ld	xwa, 0x40040003
 	halt
 	jrl	nc, 6
@@ -15793,7 +15793,7 @@ AccPatch_ComplexDataBlock:
 	popw	hl
 	jr	nz, 16
 	.byte 0x8d
-	push_sr
+	push	sr
 	push	xsp
 	ld	xiy, 0x151d0a6e
 	swi	4
@@ -15876,8 +15876,8 @@ AccPatch_ComplexDataBlock:
 	push	xiy
 	calr	61800
 	.byte 0xbc
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	swi	7
 	swi	7
 	pushw	hl
@@ -17604,7 +17604,7 @@ AccPatch_SlotCopyDataBlock:
 	rcf
 	ldw	iz, 7812
 	.byte 0x98
-	push_sr
+	push	sr
 	ldda16	wa, 0x3610
 	add	wa, 6
 	stda16	0x3610, wa
@@ -19019,7 +19019,7 @@ ToneGen_MapNoteToOctaveBitmask:
 	jr ToneGen_MapNote_OrMask
 	; Bit mask lookup table (powers of 2):
 	normal
-	push_sr
+	push	sr
 	max
 	ldio	16, 32
 	.byte 0x40, 0x80
@@ -21125,10 +21125,10 @@ __pad_F6288E:
 	ret
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0x53, 0x54
 	.ascii "UVWX_`aR"
-	pop_sr
+	pop	sr
 	.ascii "bcdefghPiQj'(*,.$%& "
 	.byte 0x1f
 	pushw	bc
@@ -21167,8 +21167,8 @@ __pad_F6288E:
 	ldwio	11, 3340
 	ret
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	reti
@@ -22597,17 +22597,17 @@ RhythmROM_LoadPattern:
 RhythmROM_PatternDisp_InitLoop:
 	neg	wa
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xd3
 	reti
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xd3
 	reti
 	.byte 0xd2
-	pop_sr
+	pop	sr
 	.byte 0xd2
-	pop_sr
+	pop	sr
 	ld	wa, 984
 	xordm16_24	0x07d207, wa
 	reti
@@ -22652,24 +22652,24 @@ RhythmROM_PatternDisp_ReadByte:
 
 RhythmROM_PatternDisp_CheckCmd:
 	popw	wa
-	push_sr
+	push	sr
 	jrl	ge, 18434
 	.byte 0x06
 	jrl	ge, 28166
-	pop_sr
+	pop	sr
 	jr	nz, 7
 	.byte 0x9f
-	pop_sr
+	pop	sr
 	.byte 0x9f
 	reti
 	incf
-	pop_sr
+	pop	sr
 	incf
-	pop_sr
+	pop	sr
 	push	xiy
-	pop_sr
+	pop	sr
 	push	xiy
-	pop_sr
+	pop	sr
 	incf
 	reti
 	incf
@@ -23524,15 +23524,15 @@ AccFill_AdvCheck_Done:
 __pad_F63EC6:
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0x04, 0x06
 	ldio	1, 2
-	pop_sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	1, 2
-	pop_sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
@@ -23654,7 +23654,7 @@ __pad_F63F8F:
 	reti
 	.byte 0x01
 	reti
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	swi	7
@@ -25155,7 +25155,7 @@ RhythmVariation_InlineCode:
 	ret
 	nop
 	ldio	1, 0
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -25189,7 +25189,7 @@ RhythmVariation_InlineCode:
 	calr	64306
 	ret
 	nop
-	push_sr
+	push	sr
 	.byte 0x04
 	nop
 	rcf
@@ -25295,7 +25295,7 @@ RhythmVariation_InlineCode:
 	ex_ff
 	.byte 0x37
 	push	xsp
-	pop_sr
+	pop	sr
 	jr	ule, 23
 	stdi8	0x3716, 3
 	jr	16
@@ -25352,7 +25352,7 @@ RhythmConfig_InlineCode2:
 	.byte 0xc1
 	ldw	iz, 0x3f8d
 	ld	(xix), xiz
-	pop_sr
+	pop	sr
 	calr	63651
 	ret
 
@@ -25710,7 +25710,7 @@ DrumVoice_Handler7:
 	and	a, 127
 	ld	xix, DrumVoice_Handler7_0xE2
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 241
 	pop	xde
@@ -25758,14 +25758,14 @@ DrumVoice_Handler7:
 	sll	a, 1
 	ld	xix, DrumVoice_Handler7_0x140
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	c, 29
 	ld	xbc, 0x0ef656
 	nop
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	push	xiz
 	call	DrumVoice_Handler7_0x14D
@@ -25791,7 +25791,7 @@ DrumVoice_Handler7:
 	sll	a, 1
 	ld	xix, DrumVoice_Handler7_0x186
 	.byte 0xd3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	c, 29
 	ld	xbc, 0x030ef656
@@ -25971,7 +25971,7 @@ DrumVoice_Handler7:
 	ldb	l, 0
 	ld	xix, 0xff92
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	h, 33
 	popw	wa
@@ -25994,7 +25994,7 @@ DrumVoice_Handler7:
 	.byte 0xf4, 0xec
 	ldb	w, 219
 	.byte 0xc8
-	push_sr
+	push	sr
 	nop
 	lds32	xde, 0
 	.byte 0xd3
@@ -26045,7 +26045,7 @@ DrumVoice_Handler7:
 	ld	h, a
 	ld	xwa, 0xff92
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xe0, 0xec
 	ld	xiz, 0xf6f14821
 	.byte 0x90
@@ -26115,7 +26115,7 @@ DrumVoice_NotifyEE:
 	ret
 
 TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
-	push_sr
+	push	sr
 	.ascii "(2/2)+0  "
 	.byte 0x04
 	.ascii "(3/2)+0  "
@@ -26127,9 +26127,9 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	.ascii "(1/4)+0  "
 	.byte 0x01
 	.ascii "(2/4)+0  "
-	push_sr
+	push	sr
 	.ascii "(3/4)+0  "
-	pop_sr
+	pop	sr
 	pushw	wa
 	.byte 0x34
 	.ascii "/4)+0  "
@@ -26147,9 +26147,9 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	.ascii "(2/8)+0  "
 	.byte 0x01
 	.ascii "(4/8)+0  "
-	push_sr
+	push	sr
 	.ascii "(6/8)+0  "
-	pop_sr
+	pop	sr
 	pushw	wa
 	push	xwa
 	.ascii "/8)+0  "
@@ -26213,7 +26213,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	a, l
 	ld	xix, 0xff92
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	h, 201
 	.byte 0x8f
@@ -26264,7 +26264,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	push	xix
 	ld	xix, TimeSig_DisplayStrings_0x21B
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	.ascii "!\\h*…a¡-"
 	ldw	ix, 0x63f1
@@ -26277,7 +26277,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	push	xix
 	ld	xix, TimeSig_DisplayStrings_0x227
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 92
 	jr	9
@@ -26288,7 +26288,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	h, a
 	ld	xwa, 0xff92
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xe0, 0xec
 	ld	xiz, 0xf6f14821
 	.byte 0x90
@@ -26412,7 +26412,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ldda8	a, 0x34d6
 	ld	xix, TimeSig_DisplayStrings_0x3C7
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 241
 	.byte 0xd6
@@ -26438,7 +26438,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ldda8	a, 0x34d6
 	ld	xix, TimeSig_DisplayStrings_0x3A6
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 241
 	.byte 0xd6
@@ -26489,7 +26489,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	jr	81
 	.byte 0xf1, 0xcd
 	ldw	ix, 0x66cc
-	push_sr
+	push	sr
 	jr	73
 	.byte 0xc1, 0xcd
 	ldw	ix, 0xcf3c
@@ -26685,7 +26685,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ldda8	a, 0x390c
 	ld	xiy, 0x390e
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ldb	c, 241
 	push	57
@@ -26696,7 +26696,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	nop
 	nop
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ldb	c, 241
 	ldio	57, 67
@@ -26768,7 +26768,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	xix, 0x390e
 	ldda8	c, 0x390b
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe4
 	ld	xbc, 0x390e44
 	nop
@@ -26811,7 +26811,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	calr	41
 	ret
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xed
 	ldb	l, 207
 	.byte 0xcf
@@ -26835,7 +26835,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	push	xwa
 	ld	xwa, TimeSig_DisplayStrings_0x745
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xe0, 0xed
 	ldb	a, 193
 	decf
@@ -26844,7 +26844,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	pop	xwa
 	ret
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x04
 	ldio	8, 8
 	ldio	8, 62
@@ -26884,21 +26884,21 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	swi	7
 	ldb	a, 1
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xde, 0xca390df1
 	jr	z, 9
 	ldb	b, 255
 	ldb	a, 2
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xde, 0xcb390df1
 	jr	z, 9
 	ldb	b, 255
 	ldb	a, 3
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xde, 0xe1ace90e
 	calr	9273
@@ -26922,7 +26922,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ldb	h, 241
 	.byte 0x9b, 0x37
 	nop
-	push_sr
+	push	sr
 	.byte 0xf1, 0xc9, 0x37
 	dec	6, e
 	jp	0x379bf1
@@ -26980,10 +26980,10 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	xix, TimeSig_DisplayStrings_0x8A0
 	ldda8	a, 0x39aa
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 195
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ldb	l, 200
 	ldw	hl, 0x6e07
@@ -26996,7 +26996,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	jr	z, 7
 	dec	1, l
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ld	xsp, 0x322a220e
 	push	xde
@@ -27010,10 +27010,10 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	xix, TimeSig_DisplayStrings_0x8DE
 	ldda8	a, 0x39aa
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	a, 195
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ldb	l, 200
 	ldw	hl, 0x6e07
@@ -27025,7 +27025,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	jr	z, 7
 	dec	1, l
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe0
 	ld	xsp, 0x352d250e
 	push	xiy
@@ -28683,14 +28683,14 @@ VoiceSlot_Dispatch_Return:
 	ld	xbc, 0xfc5a
 	ldb	a, 0
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ld	xsp, 0x03c30121
 	.byte 0xe4, 0xe0
 	ldb	h, 206
 	add	w, d
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ld	xiz, 0x21fc5ac1
 	ldb	w, 0
@@ -28719,7 +28719,7 @@ DrumParam_LookupChannelBit:
 
 PatIdx_Lookup_Return:
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x04
 	ldio	16, 32
 	.byte 0x40
@@ -28832,9 +28832,9 @@ MultiVoice_Setup_NextChan:
 MultiVoice_Setup_Done:
 	nop
 	.byte 0x01
-	push_sr
+	push	sr
 	nop
-	pop_sr
+	pop	sr
 	nop
 	nop
 	nop
@@ -28996,7 +28996,7 @@ __pad_F671E7:
 
 RegPreset_LoadVoiceData:
 	nop
-	pop_sr
+	pop	sr
 	.byte 0x04
 	reti
 	nop
@@ -29507,7 +29507,7 @@ ExtVoice_ProcessList:
 	ldio	241, 200
 	.byte 0x37
 	dec	6, b
-	push_sr
+	push	sr
 	jr	11
 	stdi8	0x37c9, 1
 	calr	4
@@ -29797,7 +29797,7 @@ AccVoice_SetupSlots_DataBlock:
 	push_a
 	ldw	iz, 0xd989
 	inc	6, wa
-	push_sr
+	push	sr
 	.byte 0x85
 	scf
 	jr	60
@@ -29807,7 +29807,7 @@ AccVoice_SetupSlots_DataBlock:
 	push_a
 	ldw	iz, 0xd989
 	inc	6, wa
-	push_sr
+	push	sr
 	.byte 0x85
 	scf
 	popw	bc
@@ -29828,7 +29828,7 @@ AccVoice_SetupSlots_DataBlock:
 	push_a
 	ldw	iz, 0xd989
 	inc	6, wa
-	push_sr
+	push	sr
 	.byte 0x85
 	scf
 	push	xiy
@@ -29900,21 +29900,21 @@ AccVoice_SetupSlots_DataBlock:
 	ldda8	w, 0x34d8
 	ldb	a, 12
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xwa, 0x2034d7c1
 	ldb	a, 13
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	.ascii "@  !"
 	ret
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xwa, 0x0f210020
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xwa, 0xc9f10121
 	.byte 0x37
@@ -29922,22 +29922,22 @@ AccVoice_SetupSlots_DataBlock:
 	pop	xix
 	ld	xiy, 0x38d2
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe4
 	ldb	w, 33
 	rcf
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xwa, 0x38d945
 	nop
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe4
 	ldb	w, 33
 	scf
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xwa, 0xf67a0245
 	nop
@@ -30095,7 +30095,7 @@ AccVoice_SetupSlots_DataBlock:
 	calr	62735
 	pop	xix
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe4
 	ldb	a, 14
 	push	l
@@ -30106,7 +30106,7 @@ AccVoice_SetupSlots_DataBlock:
 	ld	l, (xhl)
 	ret
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x04
 	ldio	16, 32
 	ld	xwa, 0xf4eb1e40
@@ -30144,7 +30144,7 @@ AccVoice_SetupSlots_DataBlock:
 	cps	a, 2
 	jr	gt, 42
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	h, 206
 	ldw	hl, 0x6607
@@ -30152,7 +30152,7 @@ AccVoice_SetupSlots_DataBlock:
 	inc	1, l
 	jr	26
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe0
 	ldb	w, 200
 	ldw	hl, 0x6607
@@ -30215,7 +30215,7 @@ AccVoice_SetupSlots_DataBlock:
 	add	xde, Display_FontPalette_Table_0x6E9A
 	pop_a
 	.byte 0xc3
-	pop_sr
+	pop	sr
 	or	xwa, xwa
 	ldb	c, 14
 	ld	a, (xix)
@@ -30585,7 +30585,7 @@ CmpRealTtl_Dispatch:
 	push	xiz
 	call	RhythmFillIn_PatternTable_0x8
 	.ascii "^\\[Zxó"
-	push_sr
+	push	sr
 
 ; CmpRealTtl major dispatch (5-way)
 CmpRealTtl_MajorDispatch:
@@ -34094,7 +34094,7 @@ AccScreen_DataBlock:
 	and	l, 31
 	sla	l, 2
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	d, 180
 	.byte 0xe8
@@ -34106,7 +34106,7 @@ AccScreen_DataBlock:
 	sla	e, 2
 	ld	xix, AccScreen_DataBlock_0x18C
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe8
 	ldb	b, 92
 	ret
@@ -34118,7 +34118,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -34144,7 +34144,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -34170,7 +34170,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -34196,7 +34196,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	push_sr
+	push	sr
 	nop
 	nop
 	nop
@@ -34267,7 +34267,7 @@ AccScreen_DataBlock:
 	pushw	iy
 	.byte 0x37
 	push	xiz
-	push_sr
+	push	sr
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
@@ -34322,7 +34322,7 @@ AccScreen_DataBlock:
 	ldio	193, 19
 	.byte 0x37
 	push	xiz
-	push_sr
+	push	sr
 	.byte 0xc1
 	zcf
 	.byte 0x37
@@ -34959,7 +34959,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xdf
 	nop
-	push_sr
+	push	sr
 	retd	0x39bb
 	swi	7
 	nop
@@ -34969,7 +34969,7 @@ AccScreen_UIDataBlock:
 	reti
 	nop
 	.byte 0x1a, 0x04
-	push_sr
+	push	sr
 	retd	0x39b8
 	reti
 	nop
@@ -34978,7 +34978,7 @@ AccScreen_UIDataBlock:
 	nop
 	ldio	0, 40
 	.byte 0x04
-	push_sr
+	push	sr
 	retd	0x39bc
 	retd	1536
 	sub	(xix), h
@@ -34987,7 +34987,7 @@ AccScreen_UIDataBlock:
 	.byte 0x01
 	nop
 	ldb	a, 8
-	push_sr
+	push	sr
 	retd	0x39bd
 	retd	1536
 	sub	(xix), h
@@ -34997,7 +34997,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xd1
 	incf
-	push_sr
+	push	sr
 	retd	0x39be
 	retd	1536
 	sub	(xix), h
@@ -35007,7 +35007,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x81
 	scf
-	push_sr
+	push	sr
 	retd	0x39bf
 	retd	1536
 	sub	(xix), h
@@ -35038,7 +35038,7 @@ AccScreen_UIDataBlock:
 	call	5151
 	pushw	wa
 	nop
-	push_sr
+	push	sr
 	retd	0x39bb
 	.byte 0x01
 	nop
@@ -35067,7 +35067,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x04
 	pushw	0x39b9
-	pop_sr
+	pop	sr
 	nop
 	ret
 	jrl	ule, -2388
@@ -35306,7 +35306,7 @@ AccScreen_UIDataBlock:
 	halt
 	.byte 0xd5, 0x06
 	pop_a
-	push_sr
+	push	sr
 	ldwio	7, 0x4500
 	nop
 	reti
@@ -35320,7 +35320,7 @@ AccScreen_UIDataBlock:
 	nop
 	popw	ix
 	nop
-	push_sr
+	push	sr
 	ldwio	72, 0x4500
 	nop
 	popw	wa
@@ -35334,7 +35334,7 @@ AccScreen_UIDataBlock:
 	nop
 	popw	ix
 	nop
-	push_sr
+	push	sr
 	ldwio	136, 0x4500
 	nop
 	.byte 0x88
@@ -35348,7 +35348,7 @@ AccScreen_UIDataBlock:
 	nop
 	popw	ix
 	nop
-	push_sr
+	push	sr
 	ldwio	200, 0x4500
 	nop
 	.byte 0xc8
@@ -35361,13 +35361,13 @@ AccScreen_UIDataBlock:
 	push	1
 	popw	ix
 	nop
-	push_sr
+	push	sr
 	ldwio	9, 0x4501
 	nop
 	push	1
 	popw	ix
 	nop
-	push_sr
+	push	sr
 	ldwio	7, 0x6300
 	nop
 	reti
@@ -35379,7 +35379,7 @@ AccScreen_UIDataBlock:
 	popw	wa
 	nop
 	jr	gt, 0
-	push_sr
+	push	sr
 	ldwio	72, 0x6300
 	nop
 	popw	wa
@@ -35391,7 +35391,7 @@ AccScreen_UIDataBlock:
 	.byte 0x88
 	nop
 	jr	gt, 0
-	push_sr
+	push	sr
 	ldwio	136, 0x6300
 	nop
 	.byte 0x88
@@ -35403,7 +35403,7 @@ AccScreen_UIDataBlock:
 	.byte 0xc8
 	nop
 	jr	gt, 0
-	push_sr
+	push	sr
 	ldwio	200, 0x6300
 	nop
 	.byte 0xc8
@@ -35414,12 +35414,12 @@ AccScreen_UIDataBlock:
 	nop
 	push	1
 	jr	gt, 0
-	push_sr
+	push	sr
 	ldwio	9, 0x6301
 	nop
 	push	1
 	jr	gt, 0
-	push_sr
+	push	sr
 	ldwio	7, 0x8100
 	nop
 	reti
@@ -35433,7 +35433,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x88
 	nop
-	push_sr
+	push	sr
 	ldwio	72, 0x8100
 	nop
 	popw	wa
@@ -35447,7 +35447,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x88
 	nop
-	push_sr
+	push	sr
 	ldwio	136, 0x8100
 	nop
 	.byte 0x88
@@ -35461,7 +35461,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x88
 	nop
-	push_sr
+	push	sr
 	ldwio	200, 0x8100
 	nop
 	.byte 0xc8
@@ -35474,13 +35474,13 @@ AccScreen_UIDataBlock:
 	push	1
 	.byte 0x88
 	nop
-	push_sr
+	push	sr
 	ldwio	9, 0x8101
 	nop
 	push	1
 	.byte 0x88
 	nop
-	push_sr
+	push	sr
 	ldwio	7, 0x9f00
 	nop
 	reti
@@ -35494,7 +35494,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xa6
 	nop
-	push_sr
+	push	sr
 	ldwio	72, 0x9f00
 	nop
 	popw	wa
@@ -35508,7 +35508,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xa6
 	nop
-	push_sr
+	push	sr
 	ldwio	136, 0x9f00
 	nop
 	.byte 0x88
@@ -35522,7 +35522,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xa6
 	nop
-	push_sr
+	push	sr
 	ldwio	200, 0x9f00
 	nop
 	.byte 0xc8
@@ -35535,7 +35535,7 @@ AccScreen_UIDataBlock:
 	push	1
 	.byte 0xa6
 	nop
-	push_sr
+	push	sr
 	ldwio	9, 0x9f01
 	nop
 	push	1
@@ -35657,8 +35657,8 @@ AccScreen_UIDataBlock:
 	ret
 	nop
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	incf
 	decf
 	ret
@@ -35921,12 +35921,12 @@ AccPatch_VoiceAssignDataBlock:
 	xor	xbc, xbc
 	ld	(xiy), 0
 	.byte 0xbd, 0x01
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	.byte 0xbd
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	swi	7
 	swi	7
 	ldb	c, 249
@@ -35948,7 +35948,7 @@ AccPatch_VoiceAssignDataBlock:
 	cp	(xiy+1), wa
 	jr	nz, 31
 	.byte 0x9d
-	pop_sr
+	pop	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -35996,7 +35996,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	(xix+1), de
 	stdi16	0x394c, 0
 	.byte 0x9c
-	pop_sr
+	pop	sr
 	push	xsp
 	swi	7
 	swi	7
@@ -36072,7 +36072,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0x04, 0xf1, 0x50
 	push	xbc
 	dec	6, l
-	push_sr
+	push	sr
 	jr	7
 	call	AccScreen_UIDataBlock_0x804
 	calr	112
@@ -36091,12 +36091,12 @@ AccPatch_VoiceAssignDataBlock:
 	popw	wa
 	jr	nz, 16
 	.byte 0x8b
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 10
 	.byte 0x8b
-	push_sr
+	push	sr
 	push	xsp
 	popw	hl
 	jr	nz, 4
@@ -36155,12 +36155,12 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xd1
 	jrl	gt, 16185
 	.byte 0xc0
-	pop_sr
+	pop	sr
 	jr	c, 26
 	.byte 0xd1
 	jrl	gt, 16185
 	.byte 0xc0
-	pop_sr
+	pop	sr
 	jr	z, 23
 	.byte 0xd1
 	jrl	gt, 16185
@@ -36642,8 +36642,8 @@ AccPatch_VoiceAssignDataBlock:
 	ld	(xiz+3), wa
 	jr	5
 	.byte 0xbe
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	swi	7
 	swi	7
 	stda16	0x3974, wa
@@ -36655,8 +36655,8 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xda
 	swi	1
 	.byte 0xbe
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	swi	7
 	swi	7
 	nop

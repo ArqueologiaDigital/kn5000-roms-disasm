@@ -2807,7 +2807,7 @@ TrAsGridChk_ByteData:
 	stda8	0x2873, l
 	.byte 0xf2, 0x82
 	rcf
-	push_sr
+	push	sr
 	push_a
 	.byte 0x73
 	pushw	wa
@@ -2911,7 +2911,7 @@ TrAsGridChk_ByteData:
 	stda8	0x2873, l
 	.byte 0xf2, 0x82
 	rcf
-	push_sr
+	push	sr
 	push_a
 	.byte 0x73
 	pushw	wa
@@ -5961,7 +5961,7 @@ NoteEditBox_EventDispatch2:
 	divs	wa, 2
 	add	bc, wa
 	.byte 0xbc
-	push_sr
+	push	sr
 	.long Str_42a03242322043
 	pushw	0x460c
 	lda	xwa, (xsp+40)
@@ -6095,8 +6095,8 @@ NoteEditBox_EventDispatch2:
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	ldb	w, 0
 	.byte 0xb8
 	ei	2
@@ -6129,8 +6129,8 @@ NoteEditBox_EventDispatch2:
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	ldb	a, 0
 	.byte 0xb8
 	ei	2
@@ -6215,10 +6215,10 @@ NoteEditBox_EventDispatch2:
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
 	.byte 0xb1
-	push_sr
+	push	sr
 	ldb	h, 0
 	.byte 0xb4
-	push_sr
+	push	sr
 	ldw	bc, 0xc700
 	swi	3
 	dec	6, wa
@@ -6243,11 +6243,11 @@ NoteEditBox_EventDispatch2:
 	lds32	xwa, 3
 	ld	(xsp+4), xwa
 	.byte 0xb1
-	push_sr
+	push	sr
 	pushw	wa
 	nop
 	.byte 0xb4
-	push_sr
+	push	sr
 	ldw	bc, 0x9f00
 	ldwio	4, 0xe30b
 	nop
@@ -6307,12 +6307,12 @@ NoteEditBox_EventDispatch2:
 	jrl	906
 	lda	xix, (xsp+28)
 	.byte 0xb4
-	push_sr
+	push	sr
 	halt
 	nop
 	lda	xbc, (xix+2)
 	.byte 0xb1
-	push_sr
+	push	sr
 	jr	ule, 0
 	lda	xde, (xix+4)
 	ld	wa, (xix)
@@ -6369,12 +6369,12 @@ NoteEditBox_EventDispatch2:
 	lda	xhl, (xsp+28)
 	lda	xbc, (xhl+2)
 	.byte 0xb1
-	push_sr
+	push	sr
 	.byte 0x9b
 	nop
 	lda	xde, (xhl+6)
 	.byte 0xb2
-	push_sr
+	push	sr
 	.byte 0xa1
 	nop
 	ld	wa, (xhl+4)
@@ -6434,8 +6434,8 @@ NoteEditBox_EventDispatch2:
 	sti8_24	0x021096, 0
 	lda	xix, (xsp+28)
 	.byte 0xb4
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	lda	xde, (xix+4)
 	ld	wa, (xix)
@@ -6493,7 +6493,7 @@ NoteEditBox_EventDispatch2:
 	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
 	.byte 0xb4
-	push_sr
+	push	sr
 	.byte 0x17
 	nop
 	lda	xde, (xix+4)
@@ -7604,7 +7604,7 @@ SndParam_Dispatch:
 	subdm32_24	0x50b1a8, xsp
 	push	xde
 	ldb	b, 185
-	push_sr
+	push	sr
 	.byte 0x52, 0x91
 	push	xsp
 	.byte 0x01
@@ -7629,7 +7629,7 @@ SndParam_Dispatch:
 	push	xiz
 	ldb	a, 218
 	.byte 0xec
-	push_sr
+	push	sr
 	cp	xbc, 0x01c00019
 	jr	nz, 16
 	lda_24	xbc, ExtDevice_ModeDispatch_Table_0x278
@@ -7670,7 +7670,7 @@ SndParam_Dispatch:
 	subdm32_24	0x50b1a8, xsp
 	push	xde
 	ldb	c, 185
-	push_sr
+	push	sr
 	.byte 0x53, 0x91
 	push	xsp
 	.byte 0x01
@@ -7694,7 +7694,7 @@ SndParam_Dispatch:
 	push	xiz
 	ldb	b, 219
 	.byte 0xec
-	push_sr
+	push	sr
 	lda_24	xwa, ExtDevice_ModeDispatch_Table_0x278
 	.byte 0xe3
 	reti
@@ -7725,12 +7725,12 @@ SndParam_Dispatch:
 	jrl	1034
 	lda	xhl, (xsp+40)
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lda	xde, (xhl+2)
 	.byte 0xb2
-	push_sr
+	push	sr
 	nop
 	nop
 	lda_24	xix, ExtDevice_ModeDispatch_Table_0x278
@@ -10645,12 +10645,12 @@ AccIll_Dispatch:
 	jrl	nz, 3047
 	lda	xiy, (xsp+58)
 	.byte 0xb5
-	push_sr
+	push	sr
 	ret
 	nop
 	lda	xde, (xiy+2)
 	.byte 0xb2
-	push_sr
+	push	sr
 	pop	xsp
 	nop
 	lda	xhl, (xiy+4)
@@ -10698,12 +10698,12 @@ AccIll_Dispatch:
 	jr	100
 	lda	xiy, (xsp+58)
 	.byte 0xb5
-	push_sr
+	push	sr
 	.byte 0xae
 	nop
 	lda	xde, (xiy+2)
 	.byte 0xb2
-	push_sr
+	push	sr
 	pop	xsp
 	nop
 	lda	xhl, (xiy+4)

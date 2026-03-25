@@ -261,7 +261,7 @@ FloppyIO_SwitchboardChannelPtrs:
 	cp	xiy, xwa
 	nop
 	nop
-	push_sr
+	push	sr
 	.byte 0xf6
 	nop
 	nop
@@ -1600,8 +1600,8 @@ SoundGen_ResetBitmapDone:
 SeqTrack_ChannelMapIdentity:
 	nop
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
@@ -1609,8 +1609,8 @@ SeqTrack_ChannelMapIdentity:
 	pushw	3340
 	ret
 	retd	256
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
@@ -4048,8 +4048,8 @@ VoiceParam_NullReturn:
 VoiceParam_ChannelMapRemapped:
 	nop
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
@@ -5270,7 +5270,7 @@ VoiceSynth_Algo_PitchModulated:
 	swi	0
 	scf
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 4
 	call	VoiceSynth_ConditionalUpdate_Helper
 	push	xiy
@@ -5401,7 +5401,7 @@ VoiceParam_ReadUpdate_7:
 	swi	0
 	scf
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 4
 	call	VoiceSynth_ConditionalUpdate_Helper
 	stda8	4234, a
@@ -5523,7 +5523,7 @@ VoiceParam_ReadUpdate_11:
 	swi	0
 	scf
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 4
 	call	VoiceSynth_ConditionalUpdate_Helper
 	push	xiy

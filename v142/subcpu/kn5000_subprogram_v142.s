@@ -774,7 +774,7 @@ TaskSched_ContextRestore:
 	pop xbc
 	pop xwa
 	pop xhl
-	pop_sr
+	pop	sr
 	ret
 
 TaskList_Operations_Opaque:
@@ -819,7 +819,7 @@ TaskSwitch_Expired:
 	jrl TaskSched_Dispatch
 
 TaskSched_SpawnTask:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -899,7 +899,7 @@ TaskSched_ReturnZero:
 	ret
 
 TaskSched_PreemptiveYield:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1048,7 +1048,7 @@ TaskQueue_Operations_Opaque:
 	.byte 0xb0, 0x03, 0x0e
 
 TaskSched_PreemptiveYield_INT:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1110,7 +1110,7 @@ TaskSched_PreemptiveYield_INT_Dequeue:
 	add wa, 0x107E
 	ld iy, wa
 	extz xiy
-	push_sr
+	push	sr
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
@@ -1124,7 +1124,7 @@ TaskSched_PreemptiveYield_INT_Dequeue:
 	ld (xhl), a
 
 TaskQueue_Dequeue_Guard_Empty:
-	pop_sr
+	pop	sr
 	pop xhl
 	pop xiy
 	pop xix
@@ -1153,7 +1153,7 @@ TaskQueue_Dequeue_Guard_Dequeue:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	pop_sr
+	pop	sr
 	pop xhl
 	pop xiy
 	pop xix
@@ -1161,7 +1161,7 @@ TaskQueue_Dequeue_Guard_Dequeue:
 	ret
 
 TaskSched_Wait:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1205,7 +1205,7 @@ TaskSched_Wait_Block:
 	extz wa
 	add wa, 0x1091
 	extz xwa
-	push_sr
+	push	sr
 	ei 6
 	cp (xwa), 0x0
 	jr z, TaskSem_TryDec_WouldBlock
@@ -1217,7 +1217,7 @@ TaskSem_TryDec_WouldBlock:
 	ldw hl, 0xFFFF
 
 TaskSem_TryDec_Return:
-	pop_sr
+	pop	sr
 	ret
 
 TaskSem_AddrCalc_Opaque:
@@ -1225,7 +1225,7 @@ TaskSem_AddrCalc_Opaque:
 	.byte 0x80, 0x27, 0xdb, 0x12, 0x0e
 
 TaskMsgQ_Send:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1314,7 +1314,7 @@ TaskMsgQ_Send_DirectDeliver:
 	add wa, 0x1092
 	ld iy, wa
 	extz xiy
-	push_sr
+	push	sr
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
@@ -1346,7 +1346,7 @@ TaskMsgQ_Send_DirectDeliver:
 	ld (xiy + 2), ix
 
 TaskMsgQ_Send_Guard_Return:
-	pop_sr
+	pop	sr
 	pop xbc
 	pop xhl
 	pop xiz
@@ -1383,7 +1383,7 @@ TaskMsgQ_Send_Guard_DirectDeliver:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	pop_sr
+	pop	sr
 	pop xbc
 	pop xhl
 	pop xiz
@@ -1393,7 +1393,7 @@ TaskMsgQ_Send_Guard_DirectDeliver:
 	ret
 
 TaskMsgQ_Receive:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1462,7 +1462,7 @@ TaskMsgQ_TryReceive:
 	extz wa
 	add wa, 0x109A
 	ld iy, wa
-	push_sr
+	push	sr
 	ei 6
 	extz xiy
 	ld ix, (xiy + 256)
@@ -1494,13 +1494,13 @@ TaskMsgQ_TryReceive_Empty:
 	xor xhl, xhl
 
 TaskMsgQ_TryReceive_Return:
-	pop_sr
+	pop	sr
 	pop xiz
 	pop xix
 	ret
 
 Task_ConfigTimer:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1521,7 +1521,7 @@ Task_ConfigTimer:
 	ld xwa, (xix + 4)
 	ld (xiy + 4), xwa
 	jrl TaskSched_Dispatch
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -1572,7 +1572,7 @@ Task_Reassign_NotRunning:
 	add wa, 0x103C
 	ld ix, wa
 	extz xix
-	push_sr
+	push	sr
 	ei 6
 	cp (xix + 9), 0x4
 	jr nz, Task_Reassign_Guard_NotRunning
@@ -1602,7 +1602,7 @@ Task_Reassign_Guard_NotRunning:
 	ld (xix + 8), e
 
 Task_Reassign_Guard_Return:
-	pop_sr
+	pop	sr
 	popw de
 	pop xhl
 	pop xiy

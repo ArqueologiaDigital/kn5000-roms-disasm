@@ -64,7 +64,7 @@ EffectMode_ByteData_Block1:
 EffectMode_ByteData_Block2:
 	.byte 0xc1
 	jrl	pl, 0x3fc0
-	push_sr
+	push	sr
 	ret	nz
 	ldda8	a, 0xc07e
 	andda8	a, 0xc07f
@@ -204,7 +204,7 @@ EffectMode_ByteData_Block3:
 EffectMode_ByteData_Block4:
 	.byte 0xc1
 	jrl	pl, 0x3fc0
-	pop_sr
+	pop	sr
 	jr	nz, 68
 	ldda8	a, 0xc07e
 	and	a, 7
@@ -6793,12 +6793,12 @@ TchSensGrid_EventDispatch:
 	jr	nz, 51
 	lda	xwa, (xsp+14)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	.byte 0x01
 	nop
 	lda	xbc, (xsp+4)
@@ -6819,12 +6819,12 @@ TchSensGrid_EventDispatch:
 	jr	nz, 59
 	lda	xwa, (xsp+14)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	.byte 0x04
 	nop
 	lda	xbc, (xsp+4)
@@ -6853,11 +6853,11 @@ TchSensGrid_EventDispatch:
 	cp	xwa, 258
 	jr	nz, 43
 	.byte 0xb5
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb1
-	push_sr
+	push	sr
 	halt
 	nop
 	ld	(xhl), xiz
@@ -6876,11 +6876,11 @@ TchSensGrid_EventDispatch:
 	cp	xwa, 259
 	jrl	nz, 297
 	.byte 0xb5
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb1
-	push_sr
+	push	sr
 	di
 	ld	(xhl), xiz
 	.byte 0x94, 0x04
@@ -7696,13 +7696,13 @@ FSWAssGrid_EventDispatch:
 	jr	nz, 76
 	lda	xwa, (xsp+260)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
-	push_sr
+	push	sr
+	push	sr
+	push	sr
 	nop
 	ld	(xwa+4), xiy
 	ld	wa, (xix)
@@ -7734,13 +7734,13 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x2888
 	jr	nz, 70
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xbb
-	push_sr
-	push_sr
-	pop_sr
+	push	sr
+	push	sr
+	pop	sr
 	nop
 	ld	(xbc), xiy
 	ld	wa, (xix)
@@ -7768,12 +7768,12 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x288a
 	jr	nz, 70
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xbb
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	.byte 0x04
 	nop
 	ld	(xbc), xiy
@@ -7802,12 +7802,12 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x288c
 	jr	nz, 70
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xbb
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	halt
 	nop
 	ld	(xbc), xiy
@@ -7837,11 +7837,11 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x288e
 	jr	nz, 69
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb6
-	push_sr
+	push	sr
 	di
 	ld	(xbc), xiy
 	ld	wa, (xix)
@@ -7873,11 +7873,11 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x2890
 	jr	nz, 69
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb6
-	push_sr
+	push	sr
 	reti
 	nop
 	ld	(xbc), xiy
@@ -7906,11 +7906,11 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x2880
 	jrl	nz, 655
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb6
-	push_sr
+	push	sr
 	ldio	0, 177
 	jr	mi, -108
 	ldb	w, 216
@@ -9433,7 +9433,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340e6
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xbc, 1
@@ -9451,7 +9451,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340e8
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xbc, 1
@@ -9472,7 +9472,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340ea
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xbc, 1
@@ -9493,7 +9493,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340ec
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xbc, 1
@@ -9514,7 +9514,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340ee
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xbc, 1
@@ -9535,7 +9535,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340f0
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lds32	xbc, 1
@@ -9569,7 +9569,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340e6
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xbc, 0xffffffff
@@ -9590,7 +9590,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340e8
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xbc, 0xffffffff
@@ -9611,7 +9611,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340ea
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xbc, 0xffffffff
@@ -9632,7 +9632,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 0x340ec
 	ld	(xwa), xbc
 	.byte 0xb8, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xbc, 0xffffffff
@@ -9657,7 +9657,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xiy, 0x340ee
 	ld	(xwa), xiy
 	.byte 0xb1
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xbc, 0xffffffff
@@ -9677,7 +9677,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xiy, 0x340f0
 	ld	(xwa), xiy
 	.byte 0xb1
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xbc, 0xffffffff
@@ -9694,13 +9694,13 @@ DispTimeSet_EventDispatch:
 	jr	nz, 64
 	lda	xwa, (xsp+40)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
-	push_sr
+	push	sr
+	push	sr
+	push	sr
 	nop
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
@@ -9725,13 +9725,13 @@ DispTimeSet_EventDispatch:
 	jr	nz, 64
 	lda	xwa, (xsp+40)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
-	pop_sr
+	push	sr
+	push	sr
+	pop	sr
 	nop
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
@@ -9758,12 +9758,12 @@ DispTimeSet_EventDispatch:
 	jr	nz, 62
 	lda	xwa, (xsp+40)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	.byte 0x04
 	nop
 	lda	xbc, (xsp+30)
@@ -9789,12 +9789,12 @@ DispTimeSet_EventDispatch:
 	jr	nz, 62
 	lda	xwa, (xsp+40)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	halt
 	nop
 	lda	xbc, (xsp+30)
@@ -9823,11 +9823,11 @@ DispTimeSet_EventDispatch:
 	.byte 0xa2, 0xf6
 	jr	nz, 54
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb0
-	push_sr
+	push	sr
 	di
 	ld	(xbc), xix
 	ld	xwa, (xiy)
@@ -9850,11 +9850,11 @@ DispTimeSet_EventDispatch:
 	.byte 0xa2, 0xf6
 	jrl	nz, 441
 	.byte 0xb3
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	.byte 0xb0
-	push_sr
+	push	sr
 	reti
 	nop
 	ld	(xbc), xix

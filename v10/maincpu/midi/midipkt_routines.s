@@ -695,7 +695,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xbc, xwa
 	ld	bc, (xbc+4)
 	.byte 0x98
-	push_sr
+	push	sr
 	ldda8	w, 1198
 	ld	a, (xwa+11)
 	and	a, 15
@@ -1100,7 +1100,7 @@ MidiPkt_EnqueueExtended2_Data:
 	ld	xde, (xiz+4)
 	ld	a, (xde+8)
 	.byte 0x89
-	push_sr
+	push	sr
 	adddm8	0x8bc9, b
 	pushw	0xc921
 	.byte 0xcc
@@ -1351,7 +1351,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	(xde+2), c
 	ld	a, (xwa+3)
 	.byte 0xba
-	pop_sr
+	pop	sr
 	ld	xbc, 0x3e3c3b3a
 	call	MidiStream_ExtendedDispatch_0x298
 	pop	xiz
@@ -1368,7 +1368,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	(xde+2), c
 	ld	a, (xwa+3)
 	.byte 0xba
-	pop_sr
+	pop	sr
 	ld	xbc, 0x3e3c3b3a
 	call	MidiStream_ExtendedDispatch_0x1
 	call	SwbtWr_ReinitOutputBank

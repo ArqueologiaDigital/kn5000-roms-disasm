@@ -512,7 +512,7 @@ SndParam_ResolveWidgetEx_Data:
 	ld	xde, xbc
 	ld	(xsp+14), xwa
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, (xsp+14)
@@ -607,7 +607,7 @@ SndParam_ResolveWidgetEx_Data:
 	ld	(xde), a
 	jr	5
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	ld	hl, (xsp+4)
@@ -1127,7 +1127,7 @@ SndParam_RegisterEntryAlt_Data:
 	reti
 	.byte 0xf0, 0xe0
 	ldb	w, 191
-	push_sr
+	push	sr
 	jr	f, -24
 	.byte 0xe0
 	jrl	z, 156
@@ -1263,7 +1263,7 @@ SndParam_RegisterMultiField_Data:
 	sla	a, 2
 	lda_24	xbc, Naka_SubDispatch_B_Table
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	a, 232
 	.byte 0xa9, 0x81
@@ -1371,7 +1371,7 @@ SndParam_RegisterBitfield_Data:
 	sla	c, 2
 	lda_24	xiy, Naka_SubDispatch_B_Table_0x4
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe4
 	ldb	e, 234
 	zcf
@@ -1571,10 +1571,10 @@ SndParam_RegisterLinked2_Data:
 	jr	z, 10
 	sla	a, 2
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	e, 104
-	push_sr
+	push	sr
 	ld	xiy, (xbc)
 	extz	hl
 	ld	xix, xiy
@@ -2030,7 +2030,7 @@ SndParam_RegisterComplex_Data:
 	sla	a, 2
 	lda_24	xbc, Naka_SubDispatch_B_Table
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	a, 159
 	ldwio	63, 0
@@ -2226,10 +2226,10 @@ SndParam_RegisterDual_Data:
 	jr	z, 10
 	sla	a, 2
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	e, 104
-	push_sr
+	push	sr
 	ld	xiy, (xbc)
 	ld	a, w
 	extz	wa
@@ -2551,7 +2551,7 @@ SndParam_EncodeFieldSub_Data:
 	sla	a, 2
 	lda_24	xde, Naka_SubDispatch_B_Table
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	or	xwa, xwa
 	ldb	b, 232
 	.byte 0xa9, 0x82
@@ -2623,7 +2623,7 @@ SndParam_DecodeFieldAlt_Data:
 	sla	a, 2
 	lda_24	xbc, Naka_SubDispatch_B_Table
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	a, 137
 	.byte 0x01
@@ -2692,7 +2692,7 @@ SndParam_WriteFieldSub_Data:
 	sla	a, 2
 	lda_24	xbc, Naka_SubDispatch_B_Table
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	a, 232
 	.byte 0xa9, 0x81

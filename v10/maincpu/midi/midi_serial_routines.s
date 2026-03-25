@@ -463,11 +463,11 @@ Transport_NoClockReturn:
 MIDI_START_PLAYBACK_REQUEST:
 	cpdi16 0xf19e, 0
 	jr z, StartPlay_Return
-	push_sr
+	push	sr
 	ei 6
 	calr MIDI_RESET_PLAYBACK_STATE
 	calr MIDI_APPLY_STARTUP_TIMING
-	pop_sr
+	pop	sr
 
 StartPlay_Return:
 	ret
@@ -659,7 +659,7 @@ MIDI_QUEUE_EVENT_PAIR:
 	jr nz, QueuePair_LinearBufWrite
 	cpdi16_24 0x01e751, 2
 	jr c, QueuePair_FifoFullReturn
-	push_sr
+	push	sr
 	ei 6
 	ld xix, 0x1e753
 	ld hl, (xix - 4)
@@ -670,7 +670,7 @@ MIDI_QUEUE_EVENT_PAIR:
 	minc1_16 hl, 0x7ff
 	ld (xix - 4), hl
 	decm 2, (xix - 2)
-	pop_sr
+	pop	sr
 
 QueuePair_FifoFullReturn:
 	stdi16 1141, 0
@@ -976,7 +976,7 @@ SC0TxDisp_RestoreAndReturn:
 	ret
 
 MIDI_SC0_ENABLE_TX:
-	push_sr
+	push	sr
 	ei 6
 	cpdi8 1140, 85
 	jr z, SC0TxEnable_MidiActivePath
@@ -988,7 +988,7 @@ SC0TxEnable_MidiActivePath:
 	stdi8 1065, 0
 
 SC0TxEnable_Return:
-	pop_sr
+	pop	sr
 	ret
 
 ; End of MIDI Serial routines

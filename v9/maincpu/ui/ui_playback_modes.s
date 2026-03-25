@@ -23,7 +23,7 @@ UIStateEvt_VoiceParamHandler:
 	ldda8	a, 0xc07d
 	cps	a, 3
 	.byte 0xf2, 0xb4
-	pop_sr
+	pop	sr
 	.byte 0xf2
 	and	bc, iz
 	jrl	nz, 8640
@@ -119,7 +119,7 @@ UIStateEvt_VoiceParamHandler:
 	reti
 	cp	xix, xix
 	inc	6, l
-	pop_sr
+	pop	sr
 	popw	wa
 	jr	3
 	popw	wa

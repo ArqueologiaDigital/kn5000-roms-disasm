@@ -487,7 +487,7 @@ SeqPlay_DataBlock_BBE:
 	ldio	209, 56
 	.byte 0xf2
 	push	xsp
-	push_sr
+	push	sr
 	nop
 	ret	ule
 	ldda16	wa, 0xf23f
@@ -514,7 +514,7 @@ SeqPlay_DataBlock_BBE:
 	ldio	209, 56
 	.byte 0xf2
 	push	xsp
-	push_sr
+	push	sr
 	nop
 	ret	ule
 	ldda16	wa, 0xf23f
@@ -16552,8 +16552,8 @@ PartCtrl_DataBlock_CE1:
 	jr	9
 	ld	(xiz), hl
 	.byte 0xbe
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	halt
 	nop
 	lds	hl, 0
@@ -16587,8 +16587,8 @@ PartCtrl_DataBlock_CE1:
 	jr	9
 	ld	(xiz), hl
 	.byte 0xbe
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	halt
 	nop
 	lds	hl, 0
@@ -17642,7 +17642,7 @@ PartCtrl_SwapAndRelinkBlock:
 	ldwio	22, 0xf22f
 	stda16	0xf22f, iz
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, iz
@@ -18453,8 +18453,8 @@ SeqEvt_ProcessBlock:
 	lda	xwa, (xsp+4)
 	ld	(xwa), hl
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	halt
 	nop
 	lda	xwa, (xsp+4)
@@ -18467,7 +18467,7 @@ SeqEvt_ProcessBlock:
 	jr	nz, 2
 	incm	1, (xsp)
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	.byte 0x01
 	jr	z, -29
@@ -18475,7 +18475,7 @@ SeqEvt_ProcessBlock:
 	lda	xsp, (xsp+10)
 	ret
 	.byte 0xb7
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	(xsp+2), 0
@@ -18483,7 +18483,7 @@ SeqEvt_ProcessBlock:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	.byte 0xb7
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	(xsp+2), 1
@@ -18508,8 +18508,8 @@ SeqEvt_ProcessBlock:
 	lda	xwa, (xsp+4)
 	ld	(xwa), hl
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	halt
 	nop
 	lda	xwa, (xsp+4)
@@ -18525,7 +18525,7 @@ SeqEvt_ProcessBlock:
 	cp	l, 129
 	jr	z, 20
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	.byte 0x01
 	jr	z, -37
@@ -23243,7 +23243,7 @@ SeqAccomp_SubHandlerA:
 	scc8	z, b
 	ldw	hl, 0x7802
 	.byte 0xa2
-	pop_sr
+	pop	sr
 
 ; SeqAccomp sub-handler chain
 SeqAccomp_SubChain:
@@ -23293,7 +23293,7 @@ SeqAccomp_SubHandlerB:
 	ldb	a, 4
 	scc8	nz, b
 	pushw	hl
-	pop_sr
+	pop	sr
 	.byte 0xf1, 0xb2
 	pushw	wa
 	scc8	nz, b
@@ -23320,7 +23320,7 @@ SeqAccomp_SubHandlerB:
 	ldb	a, 4
 	scc8	nz, b
 	.byte 0xdf
-	push_sr
+	push	sr
 	.byte 0xc1
 	ldw	iz, 0x3f8d
 	decm8	6, (xiz)
@@ -23352,7 +23352,7 @@ SeqAccomp_SubHandlerB:
 	ldb	a, 4
 	scc8	nz, b
 	.byte 0x9b
-	push_sr
+	push	sr
 	.byte 0xc1
 	ldw	iz, 0x3f8d
 	decm8	6, (xiz)
@@ -23410,7 +23410,7 @@ SeqAccomp_SubHandlerB:
 	ldb	a, 4
 	scc8	nz, b
 	.byte 0x1a
-	push_sr
+	push	sr
 	ld	xwa, (xsp+2)
 	cp	xwa, 10
 	jr	z, 28
@@ -24336,7 +24336,7 @@ NoteEditSy_DisplayUpdateData:
 	.byte 0xd1
 	jr	nz, 39
 	pop_f
-	push_sr
+	push	sr
 	pushw	wa
 	ldda8	a, 0x2770
 	extz	wa
@@ -24345,7 +24345,7 @@ NoteEditSy_DisplayUpdateData:
 	lda	xbc, (xsp)
 	call	BmDrEdit_SetupScrollRegion
 	.byte 0x8f
-	push_sr
+	push	sr
 	pop_f
 	ldb	b, 40
 	.byte 0x87
@@ -26007,7 +26007,7 @@ SeqLoad_ProcessDataBlock:
 	ld	(xsp+8), wa
 	ldda16	iz, 0xf22f
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0x9f
@@ -26511,7 +26511,7 @@ SeqBar_DataBlock:
 	jr	13
 	.byte 0x97
 	add	(xde), l
-	push_sr
+	push	sr
 	ldb	c, 217
 	ccf
 	lds	wa, 0
@@ -30638,7 +30638,7 @@ SeqPart_ByteBlockA207:
 	.byte 0x8b
 	pushw	wa
 	.byte 0xb8
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0x89
 	pushw	wa
@@ -30648,7 +30648,7 @@ SeqPart_ByteBlockA207:
 	.byte 0x87
 	pushw	wa
 	.byte 0xb8
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0x85
 	pushw	wa
@@ -30657,7 +30657,7 @@ SeqPart_ByteBlockA207:
 	ex_ff
 	pop	xix
 	ldb	h, 184
-	push_sr
+	push	sr
 	ex_ff
 	pop	xiz
 	ldb	h, 29
@@ -30678,8 +30678,8 @@ SeqPart_ByteBlockA207:
 	ldada	xwa, 0x2834
 	ld	(xwa), hl
 	.byte 0xb8
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	swi	7
 	nop
 	jr	4
@@ -31674,7 +31674,7 @@ SeqPart_ByteBlockAD92:
 	ex_ff
 	pop	xix
 	ldb	h, 184
-	push_sr
+	push	sr
 	ex_ff
 	pop	xiz
 	.byte 0x26
@@ -31683,7 +31683,7 @@ SeqPart_ByteBlockAD92:
 	ex_ff
 	.byte 0xac
 	ldb	h, 184
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0xae, 0x26
 	ldada	xwa, 0x2834
@@ -31692,7 +31692,7 @@ SeqPart_ByteBlockAD92:
 	.byte 0x87
 	pushw	wa
 	.byte 0xb8
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0x85
 	pushw	wa
@@ -31714,7 +31714,7 @@ SeqPart_ByteBlockAD92:
 	ex_ff
 	.byte 0xb0
 	ldb	h, 184
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0xb2, 0x26
 	ldada	xwa, 0x2830
@@ -31723,7 +31723,7 @@ SeqPart_ByteBlockAD92:
 	.byte 0x87
 	pushw	wa
 	.byte 0xb8
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0x85
 	pushw	wa
@@ -31732,7 +31732,7 @@ SeqPart_ByteBlockAD92:
 	ex_ff
 	.byte 0xa8
 	ldb	h, 184
-	push_sr
+	push	sr
 	ex_ff
 	.byte 0xaa, 0x26
 	call	SeqPart_CopyDataPrimary

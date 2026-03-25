@@ -4362,7 +4362,7 @@ AllocCheckNoteOn_Data:
 	ld	(xsp+4), xbc
 	ld	(xsp+8), xwa
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	pop_a
 	jr	nz, 126
@@ -4456,7 +4456,7 @@ AllocCheckNoteOn_Data:
 	.byte 0xaf, 0x04, 0x80
 	ld	a, (xwa)
 	.byte 0x8f
-	push_sr
+	push	sr
 	.byte 0xf1
 	jr	nz, 14
 	ld	a, (xsp+2)
@@ -4505,7 +4505,7 @@ AllocCheckNoteOn_Data:
 	.byte 0xaf, 0x04, 0x80
 	ld	a, (xwa)
 	.byte 0x8f
-	push_sr
+	push	sr
 	.byte 0xf1
 	jr	nz, 14
 	.byte 0xc7
@@ -15560,17 +15560,17 @@ VoiceSlot_StoreParams_LoadReg5:
 
 VoiceSlot_StoreParams_Data:
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x01, 0x01
-	push_sr
+	push	sr
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0x01, 0x01
-	push_sr
+	push	sr
 	halt
 	.byte 0x06
 
@@ -16776,92 +16776,92 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.ascii "$%&'()*+,!\"#"
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	268
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
 	ldio	9, 10
 	pushw	780
 	.byte 0x04, 0x04
-	pop_sr
-	pop_sr
+	pop	sr
+	pop	sr
 	.byte 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
-	pop_sr
+	pop	sr
 	.byte 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
-	pop_sr
+	pop	sr
 	.byte 0x04, 0x04
-	pop_sr
+	pop	sr
 	.fill 8, 1, 0x04
 	.fill 8, 1, 0x04
 	.byte 0x04, 0x04
@@ -16875,15 +16875,15 @@ VoiceSlot_CheckAndApply_Data:
 	ldwio	0, 1796
 	pushw	1024
 	ldio	0, 0
-	pop_sr
+	pop	sr
 	reti
 	nop
 	nop
-	pop_sr
+	pop	sr
 	reti
 	ldwio	0, 1539
 	push	0
-	pop_sr
+	pop	sr
 	.byte 0x06
 	ldwio	0, 1795
 	pushw	1280
@@ -16897,7 +16897,7 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.byte 0x04, 0x06
 	ldwio	4, 2567
-	push_sr
+	push	sr
 	.byte 0x04
 	reti
 	ldwio	1, 1796
@@ -16905,15 +16905,15 @@ VoiceSlot_CheckAndApply_Data:
 	reti
 	push	2
 	nop
-	pop_sr
+	pop	sr
 	reti
 	push	0
-	pop_sr
+	pop	sr
 	di
-	pop_sr
+	pop	sr
 	reti
 	ldwio	2, 2307
-	push_sr
+	push	sr
 	reti
 	nop
 	halt
@@ -16925,7 +16925,7 @@ VoiceSlot_CheckAndApply_Data:
 	.byte 0x06
 	pushw	1024
 	ldio	11, 0
-	pop_sr
+	pop	sr
 	.byte 0x06
 	pushw	1024
 	push	10
@@ -16950,15 +16950,15 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.byte 0x04
 	reti
-	push_sr
+	push	sr
 	nop
-	pop_sr
+	pop	sr
 	reti
-	push_sr
+	push	sr
 	nop
 	.byte 0x01
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	.byte 0x04
 	halt
 	ei	7
@@ -16981,12 +16981,12 @@ VoiceSlot_CheckAndApply_Data:
 	ld	xwa, 0x00008000
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
 	ldio	1, 0
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
@@ -16996,12 +16996,12 @@ VoiceSlot_CheckAndApply_Data:
 	ld	xwa, 0x8000
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
 	ldio	1, 0
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
@@ -17019,7 +17019,7 @@ VoiceSlot_CheckAndApply_LoadReg:
 VoiceSlot_CheckAndApply_Data2:
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
@@ -17029,7 +17029,7 @@ VoiceSlot_CheckAndApply_Data2:
 	ld	xwa, 0x8000
 	.byte 0x01
 	nop
-	push_sr
+	push	sr
 	nop
 	.byte 0x04
 	nop
@@ -17067,7 +17067,7 @@ VoiceSlot_CheckAndApply_Data2:
 	.byte 0xc2, 0xe5, 0xce
 	nop
 	push	xsp
-	push_sr
+	push	sr
 	jrl	ule, 135
 	calr	62522
 	cps	w, 0
@@ -17324,10 +17324,10 @@ UIState_ProcessKeyEvent:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	.byte 0x7f, 0xc0
 	ld	a, (xsp+1)
@@ -17400,7 +17400,7 @@ SndParam_ProcessEntry:
 	ld	xwa, xde
 	calr	1963
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, c
 	zcf
 	lda	xwa, (xsp)
@@ -17412,7 +17412,7 @@ SndParam_ProcessEntry:
 	ld	xwa, xde
 	calr	1939
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	scc8	z, h
 	.byte 0x1f, 0x01, 0x8f
 	nop
@@ -17515,7 +17515,7 @@ SndParam_ProcessEntry:
 	calr	1696
 	jr	48
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, c
 	zcf
 	lda	xwa, (xsp)
@@ -17527,7 +17527,7 @@ SndParam_ProcessEntry:
 	ld	xwa, xde
 	calr	1670
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, e
 	zcf
 	lda	xwa, (xsp)
@@ -17548,10 +17548,10 @@ HdaeRom_Entry:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17559,7 +17559,7 @@ HdaeRom_Entry:
 	dec	6, bc
 	popw	wa
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, l
 	zcf
 	lda	xwa, (xsp)
@@ -17571,7 +17571,7 @@ HdaeRom_Entry:
 	ld	xwa, xde
 	calr	1590
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, h
 	zcf
 	lda	xwa, (xsp)
@@ -17583,7 +17583,7 @@ HdaeRom_Entry:
 	ld	xwa, xde
 	calr	1566
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, e
 	zcf
 	lda	xwa, (xsp)
@@ -17604,10 +17604,10 @@ HdaeRom_ProcessBlock:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17640,10 +17640,10 @@ HdaeRom_ReadParam:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17675,10 +17675,10 @@ HdaeRom_WriteParam:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17710,10 +17710,10 @@ HdaeRom_CheckResult:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17745,10 +17745,10 @@ HdaeRom_FinishBlock:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17786,10 +17786,10 @@ HdaeRom_TableEntry2:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17816,7 +17816,7 @@ HdaeRom_TableEntry2:
 	lda	xbc, (xsp+2)
 	ldb	a, 0
 	.byte 0xbf
-	push_sr
+	push	sr
 	dec	6, l
 	.byte 0x06
 	ld	a, (xsp+2)
@@ -17866,10 +17866,10 @@ UIStateEvt_ProcessHandler:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17905,7 +17905,7 @@ UIStateEvt_ProcessHandler:
 	calr	927
 	jr	24
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, w
 	zcf
 	lda	xwa, (xsp)
@@ -17926,10 +17926,10 @@ HdaeRom_AltProcessBlock:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17955,7 +17955,7 @@ HdaeRom_AltProcessBlock:
 	ldw	bc, 15
 	calr	828
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, l
 	ccf
 	lda	xwa, (xsp)
@@ -17976,10 +17976,10 @@ HdaeRom_AltReadParam:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -17993,7 +17993,7 @@ HdaeRom_AltReadParam:
 	cps	a, 0
 	jr	nz, 53
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, b
 	ldw	wa, 0x30b7
 	ld	xde, xwa
@@ -18025,10 +18025,10 @@ HdaeRom_AltCheckResult:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	.byte 0x7f, 0xc0
 	ld	a, (xsp+1)
@@ -18041,7 +18041,7 @@ HdaeRom_AltCheckResult:
 	cps	a, 1
 	.ascii "fEhC"
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, l
 	push	xiz
 	lda	xwa, (xsp)
@@ -18059,7 +18059,7 @@ HdaeRom_AltCheckResult:
 	lda	xbc, (xsp+2)
 	ldb	a, 0
 	.byte 0xbf
-	push_sr
+	push	sr
 	dec	6, l
 	.byte 0x06
 	ld	a, (xsp+2)
@@ -18080,10 +18080,10 @@ HdaeRom_AltCheckResult:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -18114,7 +18114,7 @@ HdaeRom_AltCheckResult:
 	extz	de
 	ld	a, (xsp+3)
 	.byte 0x8f
-	push_sr
+	push	sr
 	xordm8	0x8bc9, a
 	ccf
 	ld	wa, de
@@ -18131,10 +18131,10 @@ HdaeRom_AltTableEntry0:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -18496
 	ldw	wa, 0x8ae8
@@ -18154,10 +18154,10 @@ HdaeRom_AltTableEntry1:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -18201,10 +18201,10 @@ HdaeRom_AltTableEntry2:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -18496
 	ldw	wa, 0x8ae8
@@ -18224,10 +18224,10 @@ HdaeRom_AltTableEntry3:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -18496
 	ldw	wa, 0x8ae8
@@ -18247,10 +18247,10 @@ HdaeRom_AltTableEntry4:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -18279,10 +18279,10 @@ HdaeRom_AltTableEntry5:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -18496
 	ldw	wa, 0x8ae8
@@ -18302,10 +18302,10 @@ HdaeRom_AltTableEntry6:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -18496
 	ldw	wa, 0x8ae8
@@ -18329,10 +18329,10 @@ HdaeRom_AltTableEntry9:
 	.byte 0x80, 0xc0, 0xbf, 0x01
 	push_a
 	jrl	pl, -16448
-	push_sr
+	push	sr
 	push_a
 	jrl	nz, -16448
-	pop_sr
+	pop	sr
 	push_a
 	jrl	nc, -28736
 	.byte 0x01
@@ -18341,7 +18341,7 @@ HdaeRom_AltTableEntry9:
 	calr	55497
 	jr	nz, 79
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, l
 	popw	de
 	lda	xwa, (xsp)
@@ -18366,7 +18366,7 @@ HdaeRom_AltTableEntry9:
 	ld	xwa, xde
 	calr	27
 	.byte 0xbf
-	pop_sr
+	pop	sr
 	inc	6, l
 	zcf
 	lda	xwa, (xsp)
@@ -25716,13 +25716,13 @@ Param_SignExtendRetu_Data:
 	call	sendCOMM
 	.byte 0xbf
 	ccf
-	push_sr
+	push	sr
 	nop
 	nop
 	jr	5
 	.byte 0xbf
 	ccf
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	hl, (xsp+18)
@@ -25862,12 +25862,12 @@ Param_SignExtendRetu_Data:
 	ld	xde, xiz
 	call	sendCOMM
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	jr	5
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	hl, (xsp+4)
@@ -26914,7 +26914,7 @@ SendPartDataBlock_Data:
 	ld	(xhl), e
 	.byte 0xb1
 	inc	6, a
-	push_sr
+	push	sr
 	.byte 0xb3, 0xbb
 	ld	c, (xwa+18)
 	and	c, 240
@@ -26952,7 +26952,7 @@ SendPartDataBlock_Data:
 	ldb	c, 199
 	.byte 0xf0
 	or	(xhl-53), iz
-	push_sr
+	push	sr
 	or	d, c
 	ld	(xwa+17), d
 	lda	xbc, (xwa+20)
@@ -27260,7 +27260,7 @@ SendPartDataBlock_Data:
 	jr	11
 	.byte 0x8f, 0x04
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 5
 	ld	xwa, (xsp+10)
 	.byte 0xb0, 0xbc
@@ -27435,7 +27435,7 @@ SendPartDataBlock_Data5:
 	lda	xde, (xde+34)
 	.byte 0x8f, 0x04
 	push	xsp
-	pop_sr
+	pop	sr
 	jrl	c, -474
 	pop	xiz
 	lda	xsp, (xsp+26)
@@ -27639,7 +27639,7 @@ HdaeRom_DataDispatch:
 	cp	(xsp+440), 255
 	jrl	nz, 298
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	pushw	wa
 	nop
 	lda	xwa, (xsp+14)
@@ -27681,7 +27681,7 @@ HdaeRom_DataDispatch:
 	cp	(xsp+440), 255
 	jr	nz, 82
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	ldb	d, 0
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
@@ -27737,7 +27737,7 @@ HdaeRom_DataDispatch:
 	.byte 0xaf, 0x06
 	or	(xhl), h
 	or	(xbc-23), h
-	pop_sr
+	pop	sr
 	add	xbc, xiz
 	sll	xbc, 4
 	add	xbc, 80
@@ -27940,7 +27940,7 @@ TmFlashWrite_Block1_Entry:
 	cps	de, 0
 	jr	lt, 123
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	ld	xwa, 0xe61e376f
 	swi	4
@@ -28214,7 +28214,7 @@ TmFlash_BulkTransferToSubCPU:
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	.byte 0xaf
-	push_sr
+	push	sr
 	decm8	8, (xhl)
 	.byte 0x1c
 	ld	xbc, xwa
@@ -28223,7 +28223,7 @@ TmFlash_BulkTransferToSubCPU:
 	sll	xbc, 4
 	add	xbc, 80
 	.byte 0xaf
-	push_sr
+	push	sr
 	or	(xbc), a
 	.byte 0x8b
 	jr	5
@@ -28246,7 +28246,7 @@ TmFlash_BulkTransferToSubCPU:
 	ld	(xiz), xwa
 	ld	xwa, (xsp+4)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0xd6, 0x01
 	lds	hl, 0
 	jr	3
@@ -28287,7 +28287,7 @@ TmFlash_BulkTransferToSubCPU:
 	sub	(xhl), l
 	.byte 0x06
 	sub	(xhl), xsp
-	push_sr
+	push	sr
 	ldb	w, 176
 	jr	ule, 48
 	.byte 0xd6, 0x01
@@ -28300,7 +28300,7 @@ TmFlash_BulkTransferToSubCPU:
 	sub	(xhl), l
 	.byte 0x06
 	sub	(xhl), xsp
-	push_sr
+	push	sr
 	ldb	w, 176
 	jr	ule, 48
 	ldb	a, 1
@@ -28315,7 +28315,7 @@ TmFlash_BulkTransferToSubCPU:
 	sub	(xhl), l
 	.byte 0x06
 	sub	(xhl), xsp
-	push_sr
+	push	sr
 	ldb	w, 176
 	jr	ule, 48
 	.byte 0x90

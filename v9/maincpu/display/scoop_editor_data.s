@@ -338,7 +338,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 16
@@ -365,7 +365,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 17
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 11
@@ -384,7 +384,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 17
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 11
@@ -403,7 +403,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -419,7 +419,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -455,7 +455,7 @@ Scoop_SoundEditorData:
 	extz	de
 	pushw	29
 	.byte 0xbf
-	push_sr
+	push	sr
 	.asciz "080,"
 	lds	bc, 3
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -1194,7 +1194,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 12
@@ -1223,7 +1223,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 25
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 19
@@ -1245,7 +1245,7 @@ Scoop_SoundEditorData:
 	nop
 	jr	z, 85
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -1290,7 +1290,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -1306,7 +1306,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -1395,7 +1395,7 @@ Scoop_SoundEditorData:
 	extz	de
 	pushw	52
 	.byte 0xbf
-	push_sr
+	push	sr
 	.asciz "080."
 	lds	bc, 6
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -1468,7 +1468,7 @@ Scoop_SoundEditorData:
 	.byte 0x8f
 	incf
 	push	xsp
-	push_sr
+	push	sr
 	jr	z, 21
 	ldw	wa, 9
 	lds	bc, 2
@@ -2288,7 +2288,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	pushw	wa
 	.byte 0xbf
-	push_sr
+	push	sr
 	.asciz "0800"
 	lds	bc, 4
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -2338,7 +2338,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	pushw	wa
 	.byte 0xbf
-	push_sr
+	push	sr
 	.asciz "0800"
 	lds	bc, 5
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -2355,7 +2355,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 16
@@ -2385,7 +2385,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 12
@@ -2417,11 +2417,11 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xix
 	swi	0
 	.byte 0xbf
-	push_sr
+	push	sr
 	.byte 0xb9
 	ld	a, (xsp+2)
 	extz	wa
@@ -2447,7 +2447,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 24
@@ -2473,7 +2473,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -2489,7 +2489,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -2551,13 +2551,13 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xix
 	swi	0
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xiz
-	pop_sr
+	pop	sr
 	ld	a, (xsp+2)
 	extz	wa
 	call	SeMenu_BitShiftMask_End_0x1C4
@@ -2584,7 +2584,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 14
@@ -2604,7 +2604,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -2647,7 +2647,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 16
@@ -2677,7 +2677,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 12
@@ -2709,11 +2709,11 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xix
 	swi	0
 	.byte 0xbf
-	push_sr
+	push	sr
 	.byte 0xba
 	ld	a, (xsp+2)
 	extz	wa
@@ -2743,7 +2743,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 25
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 19
@@ -2765,7 +2765,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -2781,7 +2781,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -2837,11 +2837,11 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xix
 	swi	0
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xiz
 	halt
 	ld	a, (xsp+2)
@@ -2874,7 +2874,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -2890,7 +2890,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -2949,7 +2949,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	pushw	wa
 	.byte 0xbf
-	push_sr
+	push	sr
 	.asciz "0804"
 	lds	bc, 2
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -3079,7 +3079,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 16
@@ -3109,7 +3109,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 12
@@ -3141,7 +3141,7 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xix
 	swi	0
 	ld	a, (xsp+2)
@@ -3172,7 +3172,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 25
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 19
@@ -3194,7 +3194,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -3210,7 +3210,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -3231,7 +3231,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 16
@@ -3261,7 +3261,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 12
@@ -3293,11 +3293,11 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xix
 	swi	0
 	.byte 0xbf
-	push_sr
+	push	sr
 	.byte 0xb8
 	ld	a, (xsp+2)
 	extz	wa
@@ -3327,7 +3327,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 25
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	z, 19
@@ -3349,7 +3349,7 @@ Scoop_SoundEditorData:
 	.byte 0x01
 	jr	z, 15
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 9
@@ -3365,7 +3365,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	nop
 	jr	nz, 21
@@ -3401,7 +3401,7 @@ Scoop_SoundEditorData:
 	extz	de
 	pushw	60
 	.byte 0xbf
-	push_sr
+	push	sr
 	.asciz "0806"
 	lds	bc, 3
 	call	SeMenu_TransferPartValues_EndData_0x169

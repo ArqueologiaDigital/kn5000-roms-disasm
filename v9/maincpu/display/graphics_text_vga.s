@@ -431,10 +431,10 @@ DrawText_LayoutAndRender_Variant1:
 	push	xbc
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	ld	xbc, (xsp+14)
 	calr	63234
@@ -512,10 +512,10 @@ DrawText_LayoutAndRender_Variant1:
 	push	xbc
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	ld	xbc, (xsp+14)
 	calr	63079
@@ -549,7 +549,7 @@ DrawText_LayoutAndRender_Variant1:
 	ldb	b, 175
 	.byte 0x06
 	ldb	a, 185
-	push_sr
+	push	sr
 	.byte 0x52
 	ld	de, (xwa+2)
 	ld	(xbc), de
@@ -588,10 +588,10 @@ DrawText_LayoutAndRender_Variant1:
 	push	xbc
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	ld	xbc, (xsp+14)
 	calr	62938
@@ -658,10 +658,10 @@ DrawText_LayoutAndRender_Variant1:
 	push	xbc
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	ld	xbc, (xsp+14)
 	calr	62797
@@ -733,10 +733,10 @@ DrawText_LayoutAndRender_Variant1:
 	push	xbc
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	ld	xbc, (xsp+14)
 	calr	62642
@@ -1065,7 +1065,7 @@ DrawText_LayoutAndRender_Variant1:
 	div	bc, 40
 	.byte 0xd7, 0xe6
 	or	(xbc-39), h
-	pop_sr
+	pop	sr
 	ld	(xhl), bc
 	ld	bc, (xde)
 	.byte 0x98
@@ -1096,7 +1096,7 @@ DrawText_LayoutAndRender_Variant1:
 	div	bc, 40
 	.byte 0xd7, 0xe6
 	or	(xbc-39), h
-	pop_sr
+	pop	sr
 	ld	(xhl), bc
 	ld	a, (xwa+2)
 	.byte 0xc7
@@ -1145,7 +1145,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	3
 	sub	(xbc-14), wa
 	.byte 0xef
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x01
 	ld16_24	de, 0x03efa4
@@ -1156,7 +1156,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	3
 	sub	(xbc-14), w
 	.byte 0xef
-	pop_sr
+	pop	sr
 	ld	xbc, 0xef05fad7
 	jr	f, 14
 
@@ -1558,10 +1558,10 @@ DrawFunc_Init_Variant1:
 	push	xhl
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	calr	60549
 	pop	xiz
@@ -1630,10 +1630,10 @@ DrawFunc_Init_Variant1:
 	ldw	bc, 1215
 	ldw	de, 0xd23b
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	calr	60387
 	pop	xiz
@@ -1707,10 +1707,10 @@ DrawFunc_Init_Variant1:
 	push	xhl
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	calr	60224
 	pop	xiz
@@ -1812,10 +1812,10 @@ DrawFunc_Init_Variant1:
 	push	xhl
 	.byte 0xd2
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	calr	59982
 	pop	xiz
@@ -1884,10 +1884,10 @@ DrawFunc_Init_Variant1:
 	ldw	bc, 1215
 	ldw	de, 0xd23b
 	or	(xix), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04, 0xd2
 	or	(xde), xsp
-	pop_sr
+	pop	sr
 	.byte 0x04
 	calr	59835
 	pop	xiz
@@ -1971,7 +1971,7 @@ ColorBlit_Variant_ByteData:
 	div	bc, 40
 	.byte 0xd7, 0xe6
 	or	(xbc-39), h
-	pop_sr
+	pop	sr
 	ld	(xwa), bc
 	ld	bc, (xde)
 	.byte 0x9b, 0x04, 0x81

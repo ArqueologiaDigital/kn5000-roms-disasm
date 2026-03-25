@@ -1608,8 +1608,8 @@ Data_InOutGridDispatch:
 	ld	xbc, 0x01e0008c
 	jrl	949
 	.byte 0xb1
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	nop
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
@@ -1635,7 +1635,7 @@ Data_InOutGridDispatch:
 	ld	xbc, 0x01e0008c
 	jrl	877
 	.byte 0xb1
-	push_sr
+	push	sr
 	halt
 	nop
 	ld	wa, (xwa)
@@ -1653,7 +1653,7 @@ Data_InOutGridDispatch:
 	ld	xbc, 0x01e0008c
 	jrl	838
 	.byte 0xb1
-	push_sr
+	push	sr
 	di
 	ld	wa, (xiz+4)
 	sla	wa, 2
@@ -1670,7 +1670,7 @@ Data_InOutGridDispatch:
 	ld	xbc, 0x01e0008c
 	jrl	798
 	.byte 0xb1
-	push_sr
+	push	sr
 	reti
 	nop
 	ld	wa, (xiz+4)
@@ -1688,12 +1688,12 @@ Data_InOutGridDispatch:
 	ld	xbc, 0x01e0008c
 	jrl	758
 	.byte 0xb1
-	push_sr
+	push	sr
 	ldio	0, 158
 	.byte 0x04
 	ldb	a, 217
 	.byte 0xec
-	push_sr
+	push	sr
 	.byte 0xe3
 	reti
 	or	xix, xix

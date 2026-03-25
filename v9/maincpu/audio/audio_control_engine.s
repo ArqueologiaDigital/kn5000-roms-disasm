@@ -616,7 +616,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	xiz, xwa
 	ld	a, (xiz+3)
 	.byte 0x8e
-	push_sr
+	push	sr
 	.byte 0xc1
 	jr	z, 64
 	.byte 0xf1
@@ -834,7 +834,7 @@ ExtDev_SndParam_DispatchComplex:
 	jr	z, 46
 	ld	a, (xiz+3)
 	.byte 0x8e
-	push_sr
+	push	sr
 	.byte 0xc1
 	jr	z, 38
 	.byte 0xf1
@@ -970,10 +970,10 @@ Encoder_ProcessUpdate:
 
 Encoder_IncrementAndDispatch:
 	call Audio_IncrementUpdateCounter
-	push_sr
+	push	sr
 	ei 6
 	call MidiOut_SerializeAndSend
-	pop_sr
+	pop	sr
 	jp CompIface_ProcessInput
 
 Audio_PeriodicUpdate:
@@ -2275,7 +2275,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	.byte 0xb6, 0xb0
 	ld	(xiz+1), 0
 	.byte 0x8e
-	push_sr
+	push	sr
 	push	xix
 	.byte 0x80
 	ld	xwa, 0x028000
@@ -2297,10 +2297,10 @@ ExtData_VoiceParam_DispatchBytecode:
 	call	CtrlPanel_LookupIndicatorEntry
 	res	7, l
 	.byte 0x8e
-	push_sr
+	push	sr
 	push	xix
 	add	(xwa), h
-	push_sr
+	push	sr
 	dec	8, xsp
 	pushw	de
 	.byte 0x80
@@ -2917,8 +2917,8 @@ UIState_ProcessExtendedMode:
 	push	xiz
 	.byte 0x8f
 	push	xiz
-	pop_sr
-	push_sr
+	pop	sr
+	push	sr
 	ret
 	.byte 0xd1
 	push	xiz
@@ -2945,7 +2945,7 @@ UIState_ProcessExtendedMode:
 	.byte 0x8f
 	push	xiz
 	nop
-	push_sr
+	push	sr
 	ret
 UIStateEvt_NullHandler:
 	ret
@@ -3291,7 +3291,7 @@ VoiceData_ExtendedParamSetup:
 	add	xhl, 20
 	ld	xbc, xhl
 	.byte 0xaf
-	push_sr
+	push	sr
 	add	(xbc), a
 	.byte 0x01
 	ldb	a, 216
@@ -3314,7 +3314,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xaf, 0x06
 	or	(xhl), c
 	and	(xwa+30), c
-	pop_sr
+	pop	sr
 	inc	1, iz
 	cp	iz, 24
 	jr	c, -83
@@ -3382,7 +3382,7 @@ VoiceData_ExtendedParamSetup:
 	lda	xsp, (xsp+10)
 	.byte 0xc7
 	swi	3
-	pop_sr
+	pop	sr
 	decf
 	ld	a, (xsp+2)
 	extz	wa
@@ -3417,7 +3417,7 @@ VoiceData_ExtendedParamSetup:
 	jr	ule, -59
 	incm8	1, (xsp+2)
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	push_f
 	jrl	c, -190
@@ -3450,7 +3450,7 @@ VoiceData_ExtendedParamSetup:
 	calr	843
 	incm8	1, (xsp+2)
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	ret
 	jr	c, -39
@@ -3530,18 +3530,18 @@ VoiceData_ExtendedParamSetup:
 	pushw	14
 	ld	xwa, (xsp+6)
 	.byte 0xf3, 0xe1, 0xb0
-	pop_sr
+	pop	sr
 	ldw	wa, 0xaf38
 	ret
 	ldb	w, 243
 	.byte 0xe1, 0xb0
-	pop_sr
+	pop	sr
 	.byte 0x30, 0x38, 0x1d  ; bytecode param 0x1d38
 	addr24 _addr24_Mem_Copy  ; Mem_Copy
 	lda	xsp, (xsp+10)
 	incm8	1, (xsp+2)
 	.byte 0x8f
-	push_sr
+	push	sr
 	push	xsp
 	.byte 0x50
 	jrl	c, -151
@@ -4044,7 +4044,7 @@ ExtData_ToneParam_DispatchHandler:
 	.byte 0x01
 	push_a
 	ldw	bc, 0xb891
-	push_sr
+	push	sr
 	push_a
 	ldb	l, 145
 	call	SndParam_ApplyProgramChange
@@ -4060,7 +4060,7 @@ ExtData_ToneParam_DispatchHandler:
 	jr	nz, 25
 	ld	a, (xhl)
 	.byte 0x8a
-	pop_sr
+	pop	sr
 	.byte 0xf1
 	jr	nz, 18
 	ld	a, (xhl+1)
@@ -4089,7 +4089,7 @@ ExtData_ToneParam_DispatchHandler:
 	calr	4197
 	stdi8	0x9128, 0
 	.byte 0x8f
-	pop_sr
+	pop	sr
 	pop_f
 	pushw	bc
 	.byte 0x91
@@ -4118,7 +4118,7 @@ ExtData_ToneParam_DispatchHandler:
 	jrl	z, 161
 	lda	xwa, (xsp)
 	.byte 0xb8
-	push_sr
+	push	sr
 	push_a
 	ldb	l, 145
 	ld	c, (xhl)
@@ -4304,7 +4304,7 @@ ExtData_ToneParam_AltBody:
 	.byte 0x01
 	push_a
 	ldw	bc, 0xb891
-	push_sr
+	push	sr
 	push_a
 	ldb	l, 145
 	call	Rhythm_LookupTempoVelocity_Wrap
@@ -4476,7 +4476,7 @@ ExtData_ToneParam_MultiChannel:
 	cps	a, 1
 	ret	nz
 	.byte 0xb9
-	pop_sr
+	pop	sr
 	dec	6, w
 	retd	0x2fc1
 	.byte 0x91
@@ -4654,7 +4654,7 @@ ExtData_Voice_UpdateFlags:
 	calr	2823
 	ldada	xbc, 0xfc66
 	.byte 0xb9
-	pop_sr
+	pop	sr
 	sbc	w, w
 	swi	6
 	ldda8	a, 0xfc5d
@@ -5197,7 +5197,7 @@ MidiCh_IterateExpression:
 	cps	a, 0
 	jr	z, 125
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	ldada	xbc, 0x90fb
@@ -5720,7 +5720,7 @@ UIState_CheckAndRenderBitmap:
 	pushw	iz
 	.byte 0xc1
 	jrl	pl, 16320
-	push_sr
+	push	sr
 	jr	nz, 67
 	ldda8	a, 0xc07f
 	and	a, 255
@@ -6471,7 +6471,7 @@ SndBuf_WriteParamEntries:
 	ld	c, (xde)
 	ld	(xwa+4), c
 	.byte 0xb8
-	push_sr
+	push	sr
 	push_a
 	ldx
 	.byte 0x90
@@ -6494,7 +6494,7 @@ SndBuf_WriteParamEntries:
 	ld	a, (xde)
 	ld	(xhl+1), a
 	.byte 0xbb
-	push_sr
+	push	sr
 	push_a
 	ldx
 	.byte 0x90
@@ -6630,7 +6630,7 @@ VoiceData_DistributeToChannels:
 	reti
 	or	xwa, xix
 	ldb	a, 191
-	push_sr
+	push	sr
 	ld	xbc, 0x6827028f
 	decf
 	.byte 0x8f, 0x06
@@ -9964,7 +9964,7 @@ MidiStream_DispatchData:
 	set	7, e
 	ld	xix, 0x94b2
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe4
 	ld	xiy, 0xf8f10d68
 	.byte 0x90
@@ -9985,7 +9985,7 @@ MidiStream_DispatchData:
 	set	7, e
 	ld	xix, 0x9432
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe5
 	ld	xiy, 0x05031e0e
 	ret
@@ -9995,7 +9995,7 @@ MidiStream_DispatchData:
 	ld	xix, 0x9472
 	sll	b, 1
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe5, 0x52
 	ret
 	calr	1257
@@ -10005,7 +10005,7 @@ MidiStream_DispatchData:
 	set	7, e
 	ld	xix, 0x9452
 	.byte 0xf3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xe5
 	ld	xiy, 0x04d21e0e
 	ret
@@ -10072,7 +10072,7 @@ MidiStream_DispatchData:
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xec
-	push_sr
+	push	sr
 	jrl	nc, 3711
 	calr	1015
 	ret
@@ -10302,7 +10302,7 @@ MidiStream_HandlePgmChange:
 	.byte 0xf0, 0xec
 	ldb	d, 202
 	.byte 0x8f, 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	e, 205
 	scc8	nc, d
@@ -10331,7 +10331,7 @@ MidiStream_HandleChanPressure:
 	.byte 0xf0, 0xec
 	ldb	d, 202
 	.byte 0x8f, 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	e, 204
 	muls8rr	w, d
@@ -10349,7 +10349,7 @@ MidiStream_HandleSysMsg:
 	.byte 0xf0, 0xec
 	ldb	d, 202
 	.byte 0x8f, 0xc3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	e, 29
 	swi	6
@@ -10550,7 +10550,7 @@ MidiStream_ExtendedDispatch:
 	sla	l, 2
 	ld	xix, MidiStream_ExtendedDispatch_0x73
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	d, 180
 	.byte 0xe8
@@ -10855,7 +10855,7 @@ MidiStream_ExtendedDispatch:
 	sll	b, 2
 	ld	xiy, MidiStream_ExtendedDispatch_0x307
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0xe5
 	ldb	e, 181
 	.byte 0xd8
@@ -10905,7 +10905,7 @@ MidiStream_HandleRunningStatus:
 	sll	hl, 2
 	ld	xix, MidiStream_HandleRunningStatus_0x21
 	.byte 0xe3
-	pop_sr
+	pop	sr
 	.byte 0xf0, 0xec
 	ldb	d, 180
 	.byte 0xd8

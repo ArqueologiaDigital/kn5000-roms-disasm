@@ -1697,23 +1697,23 @@ CompIface_SendActiveSensing:
 	ret nz
 
 CompIface_SendActiveSensing_PC1MAC:
-	push_sr
+	push	sr
 	ei 0
 	lds wa, 4
 	lds bc, 1
 	ld xde, WidgetParam_SelfRef_Table_0x1A8	;	PC1 or MAC (0F5h)
 	call sendCOMM
-	pop_sr
+	pop	sr
 	ret
 
 CompIface_SendActiveSensing_PC2:
-	push_sr
+	push	sr
 	ei 0
 	lds wa, 4
 	lds bc, 1
 	ld xde, WidgetParam_SelfRef_Table_0x1A6	;	PC2 (0F4h)
 	call sendCOMM
-	pop_sr
+	pop	sr
 	ret
 
 MidiOut_RealtimeDispatch_Data:
@@ -4001,7 +4001,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	a, (xsp+12)
 	cpl	a
 	.byte 0x8f
-	push_sr
+	push	sr
 	subdm8	0x8bc9, l
 	calr	45088
 	ld	xhl, 0xbf4e8bde
@@ -4013,7 +4013,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	(xsp+10), e
 	ld	(xsp+12), c
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	nop
 	nop
 	extz	wa
@@ -4054,7 +4054,7 @@ DSPCfg_Data_ParamDispatch:
 	lds	wa, 3
 	jr	5
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	cp	(xsp+12), 1
@@ -4082,7 +4082,7 @@ DSPCfg_Data_ParamDispatch:
 	cp	hl, 0xffff
 	jr	nz, 7
 	.byte 0xbf, 0x04
-	push_sr
+	push	sr
 	swi	7
 	swi	7
 	jr	8

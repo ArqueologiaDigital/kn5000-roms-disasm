@@ -670,8 +670,8 @@ PitchDetune_OffsetTable:
 	swi	7
 	nop
 	normal
-	push_sr
-	pop_sr
+	push	sr
+	pop	sr
 	max
 	halt
 	ei	6
@@ -1913,22 +1913,22 @@ Audio_DSP_StateTable_Packed:
 	nop
 	ld	xwa, 2248147395
 	.byte 0xe3, 0x01, 0x00, 0x1b, 0x06
-	push_sr
+	push	sr
 	nop
 	pushw bc
 	pushw hl
-	push_sr
+	push	sr
 	nop
 	div	xde, xiy
-	push_sr
+	push	sr
 	nop
 	jr	ge, 125
-	push_sr
+	push	sr
 	nop
 	swi	7
 	.byte 0xaa, 0x02, 0x00
 	cps	wa, 3
-	push_sr
+	push	sr
 	nop
 	ldw	wa, 784
 	nop
@@ -2021,7 +2021,7 @@ Audio_DSP_StateTable_Packed:
 	nop
 	ld	xhl, (xiy+43)
 	nop
-	push_sr
+	push	sr
 	.byte 0xd4, 0x24, 0x00, 0x56
 	ld	iz, (xwa)
 	nop
@@ -2203,7 +2203,7 @@ Audio_DSP_StateTable_Packed:
 	nop
 	jr	z, 16777213
 	ldb	c, 0
-	push_sr
+	push	sr
 	.byte 0xd4, 0x24, 0x00, 0x9d, 0xaf, 0x25
 	nop
 	.byte 0x56
@@ -2285,10 +2285,10 @@ Audio_DSP_StateTable_Packed:
 	nop
 	nop
 	.byte 0x83, 0x08
-	pop_sr
+	pop	sr
 	nop
 	.byte 0xec, 0x1f
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x0a, 0x38, 0x03, 0x00, 0xe2, 0x50, 0x03, 0x00
 	.byte 0x7a, 0x6a, 0x03
@@ -2299,7 +2299,7 @@ Audio_DSP_StateTable_Packed:
 	ld	(xhl+3), 205
 	ld	wa, 32000
 	.byte 0xf6
-	pop_sr
+	pop	sr
 	nop
 	zcf
 	pop_a
@@ -2653,9 +2653,9 @@ Audio_DSP_StateTable_Packed:
 	jrl	ule, 8211
 	nop
 	push xhl
-	pop_sr
+	pop	sr
 	ldb	a, 0
-	push_sr
+	push	sr
 	swi	2
 	ldb	a, 0
 	swi	7
@@ -2811,11 +2811,11 @@ Audio_DSP_StateTable_Packed:
 	nop
 	nop
 	rcf
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0x50
-	push_sr
+	push	sr
 	nop
 	nop
 	.byte 0x98, 0x02, 0x00
@@ -2824,7 +2824,7 @@ Audio_DSP_StateTable_Packed:
 	nop
 	nop
 	ld	xix, 2852126723
-	pop_sr
+	pop	sr
 	nop
 	nop
 	call	4
@@ -2850,7 +2850,7 @@ Audio_DSP_StateTable_Packed:
 	.byte 0x56
 	ldwio	0, 39168
 	pushw 0
-	pop_sr
+	pop	sr
 	decf
 	nop
 	nop
@@ -2933,13 +2933,13 @@ Audio_DSP_StateTable_Packed:
 	nop
 	.byte 0x53
 	ld	xiy, 2353135618
-	push_sr
+	push	sr
 	nop
 	cps	wa, 3
-	push_sr
+	push	sr
 	nop
 	ldb	e, 53
-	pop_sr
+	pop	sr
 	nop
 	.byte 0x57, 0x99, 0x03, 0x00
 	orda8_24	e, 1033
@@ -3811,14 +3811,14 @@ Audio_DSP_StateTable_Packed:
 	normal
 	ldb	w, 91
 	ld	xde, 2589536258
-	push_sr
+	push	sr
 	jr	po, 16777146
 	swi	7
-	push_sr
+	push	sr
 	push xix
 	.byte 0x88, 0x74, 0x03, 0x60, 0x1b
 	swi	3
-	pop_sr
+	pop	sr
 	nop
 	pushw wa
 	pushm	(xiz)
@@ -3892,9 +3892,9 @@ Audio_DSP_StateTable_Packed:
 	.byte 0x51
 	incf
 	.byte 0x1e, 0xa0, 0xc8
-	pop_sr
+	pop	sr
 	.byte 0x1f, 0x80, 0x35
-	pop_sr
+	pop	sr
 	ldb	w, 0
 	div	de, 49185
 	swi	1
@@ -3903,7 +3903,7 @@ Audio_DSP_StateTable_Packed:
 	and	d, (xwa)
 	.byte 0x55
 	ldb	d, 64
-	push_sr
+	push	sr
 	ld	e, (xbc)
 	ld	xwa, 2536928
 	.byte 0xae, 0xf4, 0x27
@@ -10537,10 +10537,10 @@ RingBuf_Write_Update:	; 01F7F8h
 ; Notes: Used to start transmission when data is queued
 ; ----------------------------------------------------------------------------
 Serial1_Enable_TX_Interrupt:	; 01F801h
-	push_sr
+	push	sr
 	ei 6
 	ldio 0xEB, 0xDD
-	pop_sr
+	pop	sr
 	ret
 
 Serial1_BaudRate_Config_Table:
@@ -10643,10 +10643,10 @@ Serial1_TX_Done:
 	ret
 
 Audio_Process_Final:
-	push_sr
+	push	sr
 	ei 6
 	calr Audio_DMA_RingBuffer_To_Maincpu
-	pop_sr
+	pop	sr
 	jrl Audio_CheckQueuedData_Send
 
 INIT_RING_BUFFERS:

@@ -401,7 +401,7 @@ INTT1_HANDLER:
 	inc 1, xhl
 	adddm32 1033, xhl
 	incdi16 1, 1037
-	push_sr
+	push	sr
 	ei 6
 	ldda8 a, 1063
 	ldda8 w, 1062
@@ -424,7 +424,7 @@ INTT1_NoOverflow:
 INTT1_StoreCounters:
 	stda8 1062, w
 	stda8 1063, a
-	pop_sr
+	pop	sr
 	ldda8 a, 1066
 	cp a, 0xf1
 	jr ugt, INTT1_CheckScanFlag
@@ -454,11 +454,11 @@ INTT1_CheckMidiSync:
 	jr z, UIState_DispatchBranch
 	bitda 2, 0xfd50
 	jr nz, UIState_DispatchBranch
-	push_sr
+	push	sr
 	ei 6
 	ordi8 1065, 8
 	call MIDI_SC0_TX_DISPATCH
-	pop_sr
+	pop	sr
 
 UIState_DispatchBranch:
 	jr UIStateMachine_DispatchEntry
@@ -482,11 +482,11 @@ INTT1_CheckAltSeqOverflow:
 INTT1_CheckMidiSyncGate:
 	cpdi8 0x8d34, 19
 	jr z, INTT1_SkipToDispatch
-	push_sr
+	push	sr
 	ei 6
 	ordi8 1065, 1
 	call MIDI_SC0_TX_DISPATCH
-	pop_sr
+	pop	sr
 
 INTT1_SkipToDispatch:
 	jr UIStateMachine_DispatchEntry
@@ -654,7 +654,7 @@ INTTR4_TickWrapped:
 INTTR4_CheckSyncEnable:
 	bitda 2, 1055
 	jr z, INTTR4_CheckMetroEnable
-	push_sr
+	push	sr
 	ei 6
 	ldda8 a, 1130
 	inc 1, a
@@ -672,12 +672,12 @@ INTTR4_SyncCounter2_NoWrap:
 	stda8 1130, a
 
 INTTR4_SyncCounter2_Done:
-	pop_sr
+	pop	sr
 
 INTTR4_CheckMetroEnable:
 	bitda 2, 1056
 	jr z, INTTR4_CheckSeqEnable
-	push_sr
+	push	sr
 	ei 6
 	ldda8 a, 1047
 	inc 1, a
@@ -688,7 +688,7 @@ INTTR4_CheckMetroEnable:
 
 INTTR4_MetroCounter_Store:
 	stda8 1047, a
-	pop_sr
+	pop	sr
 
 INTTR4_CheckSeqEnable:
 	bitda 2, 1054
@@ -767,11 +767,11 @@ INTTR4_SeqAutoStart:
 	jr z, INTTR4_SeqAutoStart_Skip
 	bitda 2, 0xfd50
 	jr nz, INTTR4_SeqAutoStart_Skip
-	push_sr
+	push	sr
 	ei 6
 	ordi8 1065, 2
 	call MIDI_SC0_TX_DISPATCH
-	pop_sr
+	pop	sr
 
 INTTR4_SeqAutoStart_Skip:
 	jr INTTR4_MetroBeat_Check
@@ -801,11 +801,11 @@ INTTR4_MetroBeat_OnBeat:
 	jr z, INTTR4_SeqBeat_Check
 	bitda 2, 0xfd50
 	jr nz, INTTR4_SeqBeat_Check
-	push_sr
+	push	sr
 	ei 6
 	ordi8 1065, 8
 	call MIDI_SC0_TX_DISPATCH
-	pop_sr
+	pop	sr
 
 INTTR4_SeqBeat_Check:
 	bitda 3, 1054
@@ -829,16 +829,16 @@ INTTR4_MetroQuarter_Check:
 	jr nz, INTTR4_SeqAccum_Update
 	cpdi8 0x8d34, 19
 	jr z, INTTR4_SeqAccum_Update
-	push_sr
+	push	sr
 	ei 6
 	ordi8 1065, 1
 	call MIDI_SC0_TX_DISPATCH
-	pop_sr
+	pop	sr
 
 INTTR4_SeqAccum_Update:
 	bitda 2, 1054
 	jr z, INTTR4_SeqAccum_Reset
-	push_sr
+	push	sr
 	ei 6
 	ldda8 a, 1045
 	ld w, a
@@ -862,7 +862,7 @@ INTTR4_SeqAccum_NoWrap:
 	stda16 1120, xwa
 
 INTTR4_SeqAccum_Done:
-	pop_sr
+	pop	sr
 	jr INTTR4_AltSeqAccum_Update
 
 INTTR4_SeqAccum_Reset:
@@ -908,7 +908,7 @@ INTTR4_FadeDelay_Check:
 INTTR4_SyncAccum_Update:
 	bitda 2, 1055
 	jr z, INTTR4_SyncAccum_Reset
-	push_sr
+	push	sr
 	ei 6
 	ldda8 a, 1130
 	ld w, a
@@ -932,7 +932,7 @@ INTTR4_SyncAccum_NoWrap:
 	stda16 1136, xwa
 
 INTTR4_SyncAccum_Done:
-	pop_sr
+	pop	sr
 	jr INTTR4_Return
 
 INTTR4_SyncAccum_Reset:
@@ -985,7 +985,7 @@ TempoRingBuf_WritePair:
 	jr nz, TempoRingBuf_WritePair_Enqueue
 	cpdi16_24 0x1e751, 2
 	jr c, TempoRingBuf_WritePair_ClearPending
-	push_sr
+	push	sr
 	ei 6
 	push xiy
 	lda_24 xiy, 0x01e753
@@ -999,7 +999,7 @@ TempoRingBuf_WritePair:
 	decm 1, (xiy - 2)
 	st16_24 0x01e74f, xhl
 	pop xiy
-	pop_sr
+	pop	sr
 
 TempoRingBuf_WritePair_ClearPending:
 	stdi16 1141, 0
@@ -2175,7 +2175,7 @@ TaskSched_ReturnToDispatch:
 	pop xbc
 	pop xwa
 	pop xhl
-	pop_sr
+	pop	sr
 	ret
 
 
@@ -2263,7 +2263,7 @@ INTT3_EnterScheduler:
 ; ===========================================================================
 Show_ScreenGroup:
 Show_ScreenGroup_Entry:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2345,7 +2345,7 @@ TaskSched_GetCurrentGroup_Nested:
 	ret
 
 TaskSched_YieldToQueue:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2416,7 +2416,7 @@ TaskSched_YieldToQueue_NoBlock_Return:
 	ret
 
 TaskSched_Resume:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2446,7 +2446,7 @@ TaskSched_Resume_DecrementWait:
 	jrl TaskSched_ReturnToDispatch
 
 TaskSched_WakeBySlotID:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2483,7 +2483,7 @@ TaskSched_WakeBySlotID_Pending:
 	push xwa
 	push xix
 	push xiy
-	push_sr
+	push	sr
 	ei 6
 	mul a, 0xc
 	add wa, 0x47d
@@ -2507,7 +2507,7 @@ TaskSched_WakeBySlotID_Pending:
 	ld (xiy + 2), ix
 
 TaskSched_WakeInline_Return:
-	pop_sr
+	pop	sr
 	pop xiy
 	pop xix
 	pop xwa
@@ -2516,7 +2516,7 @@ TaskSched_WakeInline_Return:
 TaskSched_WakeInline_Pending:
 	incm8 1, (xix + 10)
 	jr TaskSched_WakeInline_Return
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2534,7 +2534,7 @@ TaskSched_WakeInline_Pending:
 	jrl TaskSched_ReturnToDispatch
 
 TaskSched_SignalEvent:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2593,7 +2593,7 @@ TaskSched_SignalEvent_NoBlock:
 	add wa, 0x4cd
 	ld iy, wa
 	extz xiy
-	push_sr
+	push	sr
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
@@ -2602,7 +2602,7 @@ TaskSched_SignalEvent_NoBlock:
 	add hl, 0x4f8
 	extz xhl
 	setm 0, (xhl)
-	pop_sr
+	pop	sr
 	pop xhl
 	pop xiy
 	pop xix
@@ -2631,7 +2631,7 @@ TaskSched_SignalEvent_NoBlock_Unlink:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	pop_sr
+	pop	sr
 	pop xhl
 	pop xiy
 	pop xix
@@ -2639,7 +2639,7 @@ TaskSched_SignalEvent_NoBlock_Unlink:
 	ret
 
 TaskSched_WaitForEvent:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2683,10 +2683,10 @@ TaskSched_WaitForEvent_Block:
 	extz wa
 	add wa, 0x4f8
 	extz xwa
-	push_sr
+	push	sr
 	ei 6
 	resm 0, (xwa)
-	pop_sr
+	pop	sr
 	ret
 
 ; ===========================================================================
@@ -2699,7 +2699,7 @@ TaskSched_WaitForEvent_Block:
 ;        Must be paired with Audio_Lock_Acquire
 ; ===========================================================================
 Audio_Lock_Release:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2761,7 +2761,7 @@ AudioLock_Release_WakeWaiter:
 	add wa, 0x4ff
 	ld iy, wa
 	extz xiy
-	push_sr
+	push	sr
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
@@ -2775,7 +2775,7 @@ AudioLock_Release_WakeWaiter:
 	ld (xhl), a
 
 AudioLock_Release_NB_Saturated:
-	pop_sr
+	pop	sr
 	pop xhl
 	pop xiy
 	pop xix
@@ -2804,7 +2804,7 @@ AudioLock_Release_NB_WakeWaiter:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	pop_sr
+	pop	sr
 	pop xhl
 	pop xiy
 	pop xix
@@ -2822,7 +2822,7 @@ AudioLock_Release_NB_WakeWaiter:
 ;        Used by audio subsystem to serialize access to Sub-CPU communication
 ; ===========================================================================
 Audio_Lock_Acquire:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2868,7 +2868,7 @@ AudioLock_TryAcquire:
 	extz wa
 	add wa, 0x532
 	extz xwa
-	push_sr
+	push	sr
 	ei 6
 	cp (xwa), 0x0
 	jr z, AudioLock_TryAcquire_Fail
@@ -2880,7 +2880,7 @@ AudioLock_TryAcquire_Fail:
 	ldw hl, 0xffff
 
 AudioLock_TryAcquire_Return:
-	pop_sr
+	pop	sr
 	ret
 
 AudioLock_GetCount:
@@ -2892,7 +2892,7 @@ AudioLock_GetCount:
 	ret
 
 TaskMsg_Send:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -2981,7 +2981,7 @@ TaskMsg_Send_WakeReceiver:
 	add wa, 0x53b
 	ld iy, wa
 	extz xiy
-	push_sr
+	push	sr
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
@@ -3013,7 +3013,7 @@ TaskMsg_Send_WakeReceiver:
 	ld (xiy + 2), ix
 
 TaskMsg_Send_NB_Return:
-	pop_sr
+	pop	sr
 	pop xbc
 	pop xhl
 	pop xiz
@@ -3050,7 +3050,7 @@ TaskMsg_Send_NB_WakeReceiver:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	pop_sr
+	pop	sr
 	pop xbc
 	pop xhl
 	pop xiz
@@ -3060,7 +3060,7 @@ TaskMsg_Send_NB_WakeReceiver:
 	ret
 
 TaskMsg_Receive:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -3129,7 +3129,7 @@ TaskMsg_TryReceive:
 	extz wa
 	add wa, 0x54f
 	ld iy, wa
-	push_sr
+	push	sr
 	ei 6
 	extz xiy
 	ld ix, (xiy + 256)
@@ -3161,13 +3161,13 @@ TaskMsg_TryReceive_Empty:
 	xor xhl, xhl
 
 TaskMsg_TryReceive_Return:
-	pop_sr
+	pop	sr
 	pop xiz
 	pop xix
 	ret
 
 TaskTimer_Register:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -3190,7 +3190,7 @@ TaskTimer_Register:
 	jrl TaskSched_Dispatch
 
 TaskSched_ChangePriority:
-	push_sr
+	push	sr
 	ei 6
 	push xhl
 	push xwa
@@ -3243,7 +3243,7 @@ TaskSched_ChangePriority_Inline:
 	add wa, 0x47d
 	ld ix, wa
 	extz xix
-	push_sr
+	push	sr
 	ei 6
 	cp (xix + 9), 0x4
 	jr nz, TaskSched_ChangePriority_Inline_NotReady
@@ -3273,7 +3273,7 @@ TaskSched_ChangePriority_Inline_NotReady:
 	ld (xix + 8), e
 
 TaskSched_ChangePriority_Inline_Return:
-	pop_sr
+	pop	sr
 	popw de
 	pop xhl
 	pop xiy
@@ -4352,7 +4352,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ld16_24	hl, 0x200a9
 	.byte 0xd2, 0xa5
 	nop
-	push_sr
+	push	sr
 	.byte 0xf3
 	lds	hl, 0
 	jr	z, 3
@@ -4439,7 +4439,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	.byte 0xd2
 	pushw	sp
 	.byte 0x01
-	push_sr
+	push	sr
 	.byte 0xf3
 	lds	hl, 0
 	jr	z, 3
@@ -4632,8 +4632,8 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ret
 	ld16_24	hl, 0x202c7
 	.byte 0xd2, 0xc3
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	.byte 0xf3
 	lds	hl, 0
 	jr	z, 3
@@ -4881,7 +4881,7 @@ RingBuf_CopyPtr_Sub2:
 RingBuf_InitStructFields:
 	; --- Sub 3: init XDE struct fields at offsets -10..-2 (26 bytes) ---
 	.byte 0xba, 0xf6
-	push_sr
+	push	sr
 	nop
 	nop
 	ldw	(xde-8), 0
@@ -5142,7 +5142,7 @@ RingBuf1024_ReadAlt_ByteBlock:
 	ldb	l, 220
 	push	xwa
 	swi	7
-	pop_sr
+	pop	sr
 	ld	(xde-10), ix
 	ret
 
@@ -5958,7 +5958,7 @@ E1DMA_ISR_BytecodeBlock:
 	.byte 0xf1
 	ldb	w, 6
 	dec	6, l
-	pop_sr
+	pop	sr
 	lds	hl, 0
 	ret
 	ld	wa, de

@@ -1812,7 +1812,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	1327
 	ld	(xsp+4), xiz
 	.byte 0xb1
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	lda	xbc, (xsp+40)
@@ -1826,7 +1826,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	nz, 345
 	ld	xwa, (xsp+24)
 	.byte 0xb0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, (xsp+28)
@@ -1906,7 +1906,7 @@ TtMdCtlMsg_EventDispatch:
 	call	SendEvent
 	.byte 0xbf
 	ldb	b, 2
-	push_sr
+	push	sr
 	nop
 	ldada	xwa, 0xf9c7
 	sub	xwa, 0xf9a0
@@ -1956,7 +1956,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	nz, 336
 	ld	xwa, (xsp+24)
 	.byte 0xb0
-	push_sr
+	push	sr
 	nop
 	nop
 	lds32	xwa, 0
@@ -2033,7 +2033,7 @@ TtMdCtlMsg_EventDispatch:
 	call	SendEvent
 	.byte 0xbf
 	ldb	b, 2
-	push_sr
+	push	sr
 	nop
 	ldada	xwa, 0xf9c7
 	sub	xwa, 0xf9a0
@@ -2096,7 +2096,7 @@ TtMdCtlMsg_EventDispatch:
 	jr	nz, 68
 	ld	xwa, (xsp+24)
 	.byte 0xb0
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	xwa, (xiz+14)
@@ -2133,7 +2133,7 @@ TtMdCtlMsg_EventDispatch:
 	jr	nz, 44
 	ld	xwa, (xsp+24)
 	.byte 0xb0
-	push_sr
+	push	sr
 	.byte 0x01
 	nop
 	ld	xwa, (xde)
@@ -2160,8 +2160,8 @@ TtMdCtlMsg_EventDispatch:
 	jrl	nz, 381
 	ld	xwa, (xsp+24)
 	.byte 0xb0
-	push_sr
-	push_sr
+	push	sr
+	push	sr
 	nop
 	ld	xwa, (xde)
 	bit	7, wa
@@ -12239,7 +12239,7 @@ AudioCtrl_DataBlock:
 	call	DrawDesignBox
 	lda	xde, (xsp+12)
 	.byte 0xb2
-	push_sr
+	push	sr
 	pushw	iy
 	nop
 	lda	xbc, (xsp+16)
@@ -12248,7 +12248,7 @@ AudioCtrl_DataBlock:
 	ld	(xde+2), wa
 	lda	xde, (xsp+8)
 	.byte 0xb2
-	push_sr
+	push	sr
 	pushw	iy
 	nop
 	ld	wa, (xbc+6)
@@ -12380,10 +12380,10 @@ AudioCtrl_DataBlock:
 	.byte 0x9f, 0x06, 0xa0
 	ld	(xde), wa
 	.byte 0xb6
-	push_sr
+	push	sr
 	ldio	0, 190
 	.byte 0x04
-	push_sr
+	push	sr
 	.byte 0x37, 0x01
 	lda	xhl, (xiz+6)
 	ld	wa, (xbc)
@@ -12524,7 +12524,7 @@ AudioCtrl_DataBlock:
 	calr	65096
 	lda	xwa, (xsp+20)
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xwa
 	ldwio	0, 0xafd9
 	calr	64762
@@ -12537,7 +12537,7 @@ AudioCtrl_DataBlock:
 	calr	65062
 	lda	xwa, (xsp+20)
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xwa
 	ldwio	0, 4287
 	ldw	bc, 3743
@@ -12701,15 +12701,15 @@ AudioCtrl_DataBlock:
 	call	DrawStringCentered
 	lda	xbc, (xsp+16)
 	.byte 0x99
-	push_sr
+	push	sr
 	push	xwa
 	ldwio	0, 0x88f2
 	.byte 0xeb
-	pop_sr
+	pop	sr
 	ldw	wa, 3743
 	ldb	b, 218
 	.byte 0xec
-	push_sr
+	push	sr
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe8
@@ -13821,7 +13821,7 @@ AudioCtrl_DataBlock:
 	incf
 	nop
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xde
 	zcf
 	nop
@@ -14001,7 +14001,7 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+18)
 	incm	1, (xbc)
 	.byte 0x99
-	push_sr
+	push	sr
 	push	xwa
 	ccf
 	nop
@@ -14258,7 +14258,7 @@ AudioCtrl_DataBlock:
 	calr	60133
 	lda	xwa, (xsp+82)
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xde
 	ex_ff
 	nop
@@ -14288,10 +14288,10 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+66)
 	dec	2, bc
 	.byte 0x9b
-	push_sr
+	push	sr
 	xor	(xbc), a
 	jr	le, -72
-	push_sr
+	push	sr
 	.byte 0x51
 	lda	xbc, (xsp+70)
 	ld	de, (xwa)
@@ -14313,7 +14313,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+12), wa
 	.byte 0xbf
 	ccf
-	push_sr
+	push	sr
 	nop
 	nop
 	lda	xwa, (xsp+82)
@@ -14364,7 +14364,7 @@ AudioCtrl_DataBlock:
 	calr	59881
 	lda	xwa, (xsp+82)
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xde
 	ex_ff
 	nop
@@ -14395,7 +14395,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+10), wa
 	.byte 0xbf
 	ccf
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+10)
@@ -14420,7 +14420,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+12), wa
 	.byte 0xbf
 	push_a
-	push_sr
+	push	sr
 	nop
 	nop
 	ld	wa, (xsp+12)
@@ -14439,7 +14439,7 @@ AudioCtrl_DataBlock:
 	calr	59701
 	lda	xwa, (xsp+82)
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xde
 	ex_ff
 	nop
@@ -14567,7 +14567,7 @@ AudioCtrl_DataBlock:
 	calr	59369
 	lda	xwa, (xsp+52)
 	.byte 0x98
-	push_sr
+	push	sr
 	push	xde
 	ex_ff
 	nop
@@ -14597,10 +14597,10 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+36)
 	dec	2, bc
 	.byte 0x9b
-	push_sr
+	push	sr
 	xor	(xbc), a
 	jr	le, -72
-	push_sr
+	push	sr
 	.byte 0x51
 	lda	xbc, (xsp+40)
 	ld	de, (xwa)

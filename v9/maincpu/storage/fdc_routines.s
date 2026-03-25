@@ -57,7 +57,7 @@ FDC_WaitReady:
 	ldda16	iz, 1033
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	.byte 0x80
 	nop
 	cpw	qiz, 128
@@ -77,7 +77,7 @@ FDC_WaitReady:
 	jr	ule, 5
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	swi	7
 	swi	7
 	cpw	qiz, 128
@@ -94,7 +94,7 @@ FDC_WaitReady:
 	ldda16	iz, 1033
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	.byte 0x80
 	nop
 	cpw	qiz, 128
@@ -112,7 +112,7 @@ FDC_WaitReady:
 	jr	ule, 5
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	swi	7
 	swi	7
 	cpw	qiz, 128
@@ -246,7 +246,7 @@ FDC_WaitReady:
 	stdi16	0x8a22, 0
 	.byte 0xc7
 	swi	3
-	pop_sr
+	pop	sr
 	.byte 0xc0
 	lds	wa, 2
 	calr	65071
@@ -255,7 +255,7 @@ FDC_WaitReady:
 	stdi16	0x8a22, 0
 	.byte 0xc7
 	swi	3
-	pop_sr
+	pop	sr
 	ld	xwa, 0x191ea8d8
 	swi	6
 	jr	83
@@ -263,7 +263,7 @@ FDC_WaitReady:
 	stdi16	0x8a22, 0
 	.byte 0xc7
 	swi	3
-	pop_sr
+	pop	sr
 	ld	xwa, 0x031ea8d8
 	swi	6
 	jr	61
@@ -757,7 +757,7 @@ FDC_ResultPhase_Read:
 	push	4
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	.byte 0x80
 	nop
 	.byte 0xd7
@@ -801,7 +801,7 @@ FDC_ResultPhase_Read:
 	jr	ule, 5
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	swi	7
 	swi	7
 	.byte 0xd7
@@ -1054,7 +1054,7 @@ FDC_HardwareSetup:
 	ldio	102, 85
 	.byte 0x87
 	push	xsp
-	pop_sr
+	pop	sr
 	jr	nz, 5
 	calr	171
 	jr	75
@@ -1272,7 +1272,7 @@ FDC_HardwareSetup:
 	popw	wa
 	.byte 0x8a
 	push	xsp
-	push_sr
+	push	sr
 	nop
 	jr	z, 8
 	.byte 0xd1
@@ -1342,7 +1342,7 @@ FDC_ClearStatus_InitTimer:
 	push	xiz
 	.byte 0xd7
 	swi	2
-	pop_sr
+	pop	sr
 	.byte 0xf4, 0x01
 	ldda16	iz, 1033
 	lds	bc, 0
@@ -1530,7 +1530,7 @@ FDC_CMD_EXEC:
 	.byte 0xc1
 	jr	nov, -118
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 8
 	stdi16	0x8a1e, 1024
 	jr	6
@@ -1675,7 +1675,7 @@ FDC_CMD_EXEC:
 	.byte 0xc1
 	jr	nov, -118
 	push	xsp
-	push_sr
+	push	sr
 	jr	nz, 8
 	stdi16	0x8a1e, 1024
 	jr	6

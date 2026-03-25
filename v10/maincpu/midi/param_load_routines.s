@@ -806,11 +806,11 @@ ParaLoadOpt_GridDispatch:
 	.byte 0xa4, 0xf1
 	jrl	nz, 265
 	.byte 0xb0
-	push_sr
+	push	sr
 	ldio	0, 162
 	ldb	w, 232
 	.byte 0xee
-	push_sr
+	push	sr
 	ld	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)

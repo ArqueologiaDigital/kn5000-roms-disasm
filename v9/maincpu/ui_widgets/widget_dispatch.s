@@ -8035,7 +8035,7 @@ CharMap_FullPermutation:
 	nop
 	nop
 	ld	xde, 0x60000000
-	push_sr
+	push	sr
 	ld	xwa, 135
 	nop
 	.zero 232
