@@ -28266,7 +28266,7 @@ TmFlash_BulkTransferToSubCPU:
 	reti
 	.byte 0xf0, 0xec
 	ldb	c, 242
-	.byte 0x9b, 0x08, 0xff
+	.byte 0x9b, 0x08, 0xff	; cp (xhl+8), sp  [v10: cp (xbc+8), xsp]
 	ldw	ix, 2035
 	.byte 0xf0
 	cps	xix, 0

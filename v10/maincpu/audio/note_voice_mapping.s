@@ -28039,7 +28039,7 @@ TmFlashWrite_ValidateParams:
 	inc	1, iz
 	cp	iz, 128
 	jr	c, -21
-	calr	64899
+	calr	HdaeRom_DataDispatch_Block
 	lda_24	xwa, (0x1e4aa7)
 	ldw	bc, 0x2800
 	.byte 0x42

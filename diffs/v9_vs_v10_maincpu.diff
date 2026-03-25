@@ -22,16 +22,12 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 < 	ld	xwa, 0xe91e376f
 ---
 > 	ld	xwa, 0xe61e376f
-28033c28042
-< 	calr	HdaeRom_DataDispatch_Block
----
-> 	calr	64899
 28196c28205
 < 	.byte 0xed
 ---
 > 	swi	3
 28269c28278
-< 	.byte 0x9b, 0x08, 0xff
+< 	.byte 0x9b, 0x08, 0xff	; cp (xhl+8), sp  [v10: cp (xbc+8), xsp]
 ---
 > 	cp	(xbc+8), xsp
 28540c28549
