@@ -3100,5 +3100,4 @@ Sprintf_StrLen_Return:
 Sprintf_FillToEnd:
 	.fill 41912, 1, 0xff
 Sprintf_FillToVectors:
-Sprintf_FillToVectors_Ref:
 	.fill 12696, 1, 0xff

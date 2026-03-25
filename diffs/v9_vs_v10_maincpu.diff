@@ -9,44 +9,30 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 > 	call	COMM_BuildAndSendPacket
 > 	ret
 > 
-27314c27319
-< 	.set SendPartDataBlock_Data2_Ref, SendPartDataBlock_Data2 + 11
----
-> 	.set SendPartDataBlock_Data2_Ref, SendPartDataBlock_Data2
-27324c27329
-< 	.set SendPartDataBlock_Data3_Ref, SendPartDataBlock_Data3 + 11
----
-> 	.set SendPartDataBlock_Data3_Ref, SendPartDataBlock_Data3
-27771c27776,27779
+27769c27774,27777
 < 	jrl	SendPartDataBlock_SetWord7
 ---
 > 	calr SendPartDataBlock_SetWord7
 > 	lds hl, 0
 > 	ret
 > 
-27939c27947
+27937c27945
 < 	ld	xwa, 0xe91e376f
 ---
 > 	ld	xwa, 0xe61e376f
-28041c28049
-< 	.set TmFlashWrite_Block2_Ref, TmFlashWrite_Block2 + 14
----
-> 	.set TmFlashWrite_Block2_Ref, TmFlashWrite_Block2
-28046c28054
-< 	.set TmFlashWrite_Block3_Ref, TmFlashWrite_Block3 + 14
----
-> 	.set TmFlashWrite_Block3_Ref, TmFlashWrite_Block3
-28201c28209
+28197c28205
 < 	.byte 0xed
 ---
 > 	swi	3
-28274c28282
+28270c28278
 < 	.byte 0x9b, 0x08, 0xff	; cp (xhl+8), sp  [v10: cp (xbc+8), xsp]
 ---
 > 	cp	(xbc+8), xsp
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
-3103d3102
-< 	.fill 14, 1, 0xff
+3103c3103
+< 	.fill 12710, 1, 0xff
+---
+> 	.fill 12696, 1, 0xff
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
 11c11
 < 	.set FW_VERSION_BYTE, 0x09
