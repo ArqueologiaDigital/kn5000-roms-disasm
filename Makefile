@@ -576,7 +576,11 @@ rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- V7 Maincpu ---
-rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s original_ROMs/kn5000_v7_program.rom $(V7_C_DATA_BINS)
+# V7 bins are extracted from the v7 ROM, not compiled from C
+v7-extract-bins: rebuilt_ROMs/kn5000_v9_program.llvm.elf $(V7_C_DATA_BINS)
+	python3 scripts/build/extract_v7_bins.py
+
+rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s original_ROMs/kn5000_v7_program.rom v7-extract-bins
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o $@ $<
 
@@ -585,6 +589,7 @@ rebuilt_ROMs/kn5000_v7_program.llvm.elf: rebuilt_ROMs/kn5000_v7_program.llvm.o v
 
 rebuilt_ROMs/kn5000_v7_program.llvm.rom: rebuilt_ROMs/kn5000_v7_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
+	python3 scripts/build/patch_v7_data.py $@ original_ROMs/kn5000_v7_program.rom
 
 # --- Subcpu payload ---
 rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: v142/subcpu/kn5000_subprogram_v142.s
