@@ -121,7 +121,7 @@ ToneGen_ParamTable:
 
 ; Code-section labels with v7-specific addresses
 	.set AcApcMdBoxProc, 0x00f1abbc
-	.set AcApcMdBox_End, 0x00f1aceb
+	.set AcApcMdBox_End, 0x00f1b718
 	.set AcApcToggleProc, 0x00f1aa21
 	.set AcApcToggle_End, 0x00f1aa21
 	.set AcCmpMdBoxProc, 0x00f1a370
@@ -132,10 +132,10 @@ ToneGen_ParamTable:
 	.set AcCmpTempoBox_Entry, 0x00f1bdb7
 	.set AcCurSongNameBoxProc, 0x00f2cb45
 	.set AcCurSong_End, 0x00f2cb45
-	.set AcCurrentSongBoxProc, 0x00f2cad1
-	.set AcDemoMedleyDispBoxProc, 0x00f2cad1
+	.set AcCurrentSongBoxProc, 0x00f2d012
+	.set AcDemoMedleyDispBoxProc, 0x00f2d012
 	.set AcDemoSongBoxProc, 0x00f2ca32
-	.set AcDemoSong_End, 0x00f2cad1
+	.set AcDemoSong_End, 0x00f2d012
 	.set AcDiskFileNameBoxProc, 0x00f2b6a6
 	.set AcDiskFileName_End, 0x00f2b74d
 	.set AcDocFileNoBoxProc, 0x00f2b942
@@ -143,16 +143,16 @@ ToneGen_ParamTable:
 	.set AcDocSongNameBoxProc, 0x00f2b89b
 	.set AcDocSongName_End, 0x00f2b942
 	.set AcEasyCmpGridBoxProc, 0x00f1c017
-	.set AcMemNoBoxProc, 0x00f1b611
-	.set AcMemNoBox_Entry, 0x00f1b611
+	.set AcMemNoBoxProc, 0x00f1b99d
+	.set AcMemNoBox_Entry, 0x00f1b99d
 	.set AcModeSelBoxProc, 0x00f2c973
 	.set AcMspBnkSlBoxProc, 0x00f1ca12
 	.set AcMspBnkSlBox_Entry, 0x00f1ca12
-	.set AcMuteToggleBoxProc, 0x00f2cdb0
+	.set AcMuteToggleBoxProc, 0x00f2d1f0
 	.set AcPDFileNoBoxProc, 0x00f2ba90
 	.set AcPDSongNameBoxProc, 0x00f2b9e9
 	.set AcPDSongName_End, 0x00f2ba90
-	.set AcS2cMemNoBoxProc, 0x00f1aceb
+	.set AcS2cMemNoBoxProc, 0x00f1b718
 	.set AcSmfFileNameBoxProc, 0x00f2b74d
 	.set AcSmfFileName_End, 0x00f2b7f4
 	.set AcSmfSongNameBoxProc, 0x00f2b7f4
@@ -237,7 +237,7 @@ ToneGen_ParamTable:
 	.set CtrlPanel_SetResBit5_ViaLookup4C, 0x00fc7138
 	.set CtrlPanel_SetResBit6_ViaLookup, 0x00fc6f90
 	.set DSPCfg_ProcessInput, 0x00fdb5b8
-	.set DemoMedDsp_End, 0x00f2cdb0
+	.set DemoMedDsp_End, 0x00f2d1f0
 	.set Demo_SelectEntry_ByteTable, 0x00f866e5
 	.set EasyCmpGridCheck, 0x00f1c279
 	.set EasyCmp_TtlDefault, 0x00f1c017
@@ -298,7 +298,7 @@ ToneGen_ParamTable:
 	.set HdaeRom_TableEntry2, 0x00fea40a
 	.set HdaeRom_WriteParam, 0x00fea33a
 	.set HelpLang_DispatchDataBlock, 0x00f47659
-	.set IvExitModeTrSelProc, 0x00f2cdb0
+	.set IvExitModeTrSelProc, 0x00f2d1f0
 	.set IvNamingExitProc, 0x00f2bb37
 	.set IvNamingExit_ScreenData, 0x00f2bbcf
 	.set LoadFileSMF, 0x00f87bf8
@@ -371,7 +371,7 @@ ToneGen_ParamTable:
 	.set MspMenuTtlFunc, 0x00f69a1e
 	.set MspNameBnkFunc, 0x00f1c3d1
 	.set MspNameOkFunc, 0x00f1c4d6
-	.set MspNameOkFunc_End, 0x00f1cf9f
+	.set MspNameOkFunc_End, 0x00f1ce58
 	.set MspNameTtlFunc, 0x00f69aa5
 	.set MspNamingCheck, 0x00f1c48b
 	.set MspPlayModeFunc, 0x00f1d1a0
@@ -381,7 +381,7 @@ ToneGen_ParamTable:
 	.set MspRecModeFunc, 0x00f69b0b
 	.set MspRecTtlFunc, 0x00f69b27
 	.set MspRgpShowHideFunc, 0x00f1cf52
-	.set MspRgpShowHide_End, 0x00f1cf9f
+	.set MspRgpShowHide_End, 0x00f1ce58
 	.set Naka_PresentationRootState, 0x00ef013f
 	.set NormScreenProc, 0x00fbc597
 	.set NoteMap_SearchVoiceEntry, 0x00fe84c0
@@ -404,55 +404,55 @@ ToneGen_ParamTable:
 	.set PrePmSave, 0x00fdaccd
 	.set PreTmLoad, 0x00fefcc2
 	.set PreTmSave, 0x00fefd07
-	.set PsCmpCpFGrpBoxProc, 0x00f1b39e
-	.set PsCmpCpFGrpBox_Entry, 0x00f1b39e
-	.set PsCmpCpFPtnBoxProc, 0x00f1b611
-	.set PsCmpCpFPtnBox_Entry, 0x00f1b611
-	.set PsCmpCpFVariBoxProc, 0x00f1b39e
-	.set PsCmpCpFVariBox_Entry, 0x00f1b39e
-	.set PsCmpMeasBoxProc, 0x00f1bc3f
-	.set PsCmpMeasBox_Entry, 0x00f1bc3f
-	.set PsCmpMemBoxProc, 0x00f1bc3f
-	.set PsCmpMemBox_Entry, 0x00f1bc3f
-	.set PsCmpQtzBoxProc, 0x00f1b934
+	.set PsCmpCpFGrpBoxProc, 0x00f1b4cb
+	.set PsCmpCpFGrpBox_Entry, 0x00f1b4cb
+	.set PsCmpCpFPtnBoxProc, 0x00f1b99d
+	.set PsCmpCpFPtnBox_Entry, 0x00f1b99d
+	.set PsCmpCpFVariBoxProc, 0x00f1b4cb
+	.set PsCmpCpFVariBox_Entry, 0x00f1b4cb
+	.set PsCmpMeasBoxProc, 0x00f1bcfc
+	.set PsCmpMeasBox_Entry, 0x00f1bcfc
+	.set PsCmpMemBoxProc, 0x00f1bcfc
+	.set PsCmpMemBox_Entry, 0x00f1bcfc
+	.set PsCmpQtzBoxProc, 0x00f1bbc2
 	.set PsCmpQtzBox_Entry, 0x00f1c508
-	.set PsCstmCpBnkBoxProc, 0x00f1aceb
-	.set PsCstmCpBnkBox_Entry, 0x00f1b934
+	.set PsCstmCpBnkBoxProc, 0x00f1b718
+	.set PsCstmCpBnkBox_Entry, 0x00f1bbc2
 	.set PsCstmCpNameBoxProc, 0x00f1b837
 	.set PsCstmCpNameBox_Entry, 0x00f1b837
-	.set PsCstmCpSwBoxProc, 0x00f1aceb
+	.set PsCstmCpSwBoxProc, 0x00f1b718
 	.set PsCstmCpSwBox_Entry, 0x00f1b7a1
-	.set PsCtmAttStrBoxProc, 0x00f1b934
-	.set PsCtmAttStrBox_Entry, 0x00f1b934
+	.set PsCtmAttStrBoxProc, 0x00f1bbc2
+	.set PsCtmAttStrBox_Entry, 0x00f1bbc2
 	.set PsMspBnkNameBoxProc, 0x00f1cb74
-	.set PsMspMeasBoxProc, 0x00f1cf9f
-	.set PsMspMemBoxProc, 0x00f1cf9f
+	.set PsMspMeasBoxProc, 0x00f1ce58
+	.set PsMspMemBoxProc, 0x00f1ce58
 	.set PsMspNameBnkProc, 0x00f1c508
 	.set PsMspNameBnk_End, 0x00f1c57f
-	.set PsMspRecBnkBoxProc, 0x00f1cf9f
+	.set PsMspRecBnkBoxProc, 0x00f1ce58
 	.set PsMspRecPadBoxProc, 0x00f1d121
-	.set PsNameMemBoxProc, 0x00f1b611
+	.set PsNameMemBoxProc, 0x00f1b99d
 	.set PsNameMemBox_Entry, 0x00f1bf02
 	.set PsParaListBoxProc, 0x00f1d810
 	.set PsParaListBoxProc_Entry, 0x00f1d810
-	.set PsRgpSetBnkBoxProc, 0x00f1cf9f
+	.set PsRgpSetBnkBoxProc, 0x00f1ce58
 	.set PsRgpSetBnkBoxProc_Entry, 0x00f1d121
-	.set PsS2cFmeasBoxProc, 0x00f1ad62
-	.set PsS2cFmeas_End, 0x00f1ad62
-	.set PsS2cLmeasBoxProc, 0x00f1ad62
+	.set PsS2cFmeasBoxProc, 0x00f1adfa
+	.set PsS2cFmeas_End, 0x00f1adfa
+	.set PsS2cLmeasBoxProc, 0x00f1adfa
 	.set PsS2cLmeas_End, 0x00f1ae92
-	.set PsS2cTransBoxProc, 0x00f1ad62
-	.set PsSCTxtBox2Proc, 0x00f1dad5
-	.set PsSCTxtBox2Proc_Entry, 0x00f1dad5
+	.set PsS2cTransBoxProc, 0x00f1adfa
+	.set PsSCTxtBox2Proc, 0x00f1e0a5
+	.set PsSCTxtBox2Proc_Entry, 0x00f1e0a5
 	.set PsSCTxtBoxProc, 0x00f1da6c
 	.set PsSCTxtBoxProc_Entry, 0x00f1da6c
 	.set PsSeqSongNoBoxProc, 0x00f1ae92
 	.set PsSeqSongNo_End, 0x00f1aeea
-	.set PsStylCnvVerProc, 0x00f1dad5
-	.set PsStylCnvVerProc_Entry, 0x00f1dad5
+	.set PsStylCnvVerProc, 0x00f1e0a5
+	.set PsStylCnvVerProc_Entry, 0x00f1e0a5
 	.set S2cGridBoxProc, 0x00f1af8b
 	.set S2cGridCheck, 0x00f1b26a
-	.set S2cMemNoBox_End, 0x00f1ad62
+	.set S2cMemNoBox_End, 0x00f1adfa
 	.set S2cShowHideFunc, 0x00f1b23e
 	.set S2cTtlFunc, 0x00f689de
 	.set SeMenu_NameEditor_End, 0x00f0ecc6
@@ -494,7 +494,7 @@ ToneGen_ParamTable:
 	.set SeqData_FormatOutput_Dispatch, 0x00fd86b1
 	.set SeqLoadPost, 0x00f4784a
 	.set SeqLoadPre, 0x00f47842
-	.set SeqNameOK_End, 0x00f2cad1
+	.set SeqNameOK_End, 0x00f2d012
 	.set SeqSavePost, 0x00f47935
 	.set SeqSavePre, 0x00f47915
 	.set SeqVoice_ValidateState_StoreChannel, 0x00f400ed
@@ -573,7 +573,7 @@ ToneGen_ParamTable:
 	.set SoundFX_Handler_7, 0x00fe89a2
 	.set SoundFX_Handler_8, 0x00fe8a72
 	.set SoundFX_Handler_9, 0x00fe8b6e
-	.set SqAftSetFunc_End, 0x00f2cdb0
+	.set SqAftSetFunc_End, 0x00f2d1f0
 	.set StylCnvContTtlFunc, 0x00f6c726
 	.set StylCnvLangCheck, 0x00f1e083
 	.set StylCnvModlTtlFunc, 0x00f6be25
