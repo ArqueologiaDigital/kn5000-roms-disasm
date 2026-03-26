@@ -4136,10 +4136,5 @@ Memset_MaskBits:
 Memset_Block3:
 	.incbin "includes/generated/v7_transplant_Memset_Block3.bin"
 Math_AbsInt16:
-	ld hl, (xsp + 4)
-	cps hl, 0
-	ret ge
-	neg hl
-	ret
-
+	.incbin "includes/generated/v7_fix_math_absint16.bin"
 	.include "audio/sprintf_core.s"
