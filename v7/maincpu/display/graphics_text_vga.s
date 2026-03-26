@@ -1433,470 +1433,9 @@ DrawFunc_Init_FontTable0:
 	ld xwa, Str_No_0xE1E
 
 DrawFunc_Init_PushFontAndDraw:
-	push xwa
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	ld a, (xiz + 6)
-	and a, 0x3f
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (Str_No_0xCEE)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
-	stb_dri W, 0xfd, 0x08, 0x01
-	stb_dri A, 0xfd, 0x04, 0x01
-	lda xde, (xsp + 4)
-	push xhl
-	pushw_da 0xa4, 0xef, 0x03
-	pushw_da 0xa2, 0xef, 0x03
-	calr DrawText_QueueOrDirect
-	pop xiz
-	stb_dri L, 0xfd, 0x0c, 0x01
-	ret
-
+	.incbin "includes/generated/v7_transplant_DrawFunc_Init_PushFontAndDraw.bin"
 DrawFunc_Init_Variant1:
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
-	push	xiz
-	ld	xiz, xwa
-	ld	xiy, Str_No_0xE22
-	.byte 0xf3
-	swi	5
-	ldio	1, 52
-	lds	bc, 4
-	.byte 0x95
-	scf
-	ld	wa, (xiz+2)
-	extz	xwa
-	ld	e, (xiz+4)
-	ld	c, (xiz+5)
-	ld	a, (xwa)
-	and	a, e
-	ld	e, a
-	ld	a, c
-	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	7
-	ld	ix, (xiz+7)
-	ld	l, (xiz+9)
-	extz	hl
-	lda	xbc, (xsp+260)
-	ld	wa, ix
-	extz	xwa
-	div	wa, 40
-	ld	(xbc+2), wa
-	muls	wa, 40
-	sub	ix, wa
-	sll	ix, 3
-	ld	(xbc), ix
-	ld	a, (xiz+10)
-	cp	a, e
-	jr	z, 77
-	cp	a, 128
-	jr	nc, 10
-	cp	e, 128
-	jr	c, 5
-	ldb	a, 128
-	sub	e, 128
-	cp	e, a
-	jr	ule, 8
-	ld	(xsp+4), 43
-	sub	e, a
-	jr	8
-	ld	(xsp+4), 45
-	sub	a, e
-	ld	e, a
-	ld	c, e
-	extz	bc
-	lda	xde, (xsp+5)
-	cps	hl, 2
-	jr	z, 12
-	pushw	bc
-	cps	hl, 1
-	jr	nz, 17
-	ld	xwa, Str_No_0xE2A
-	jr	15
-	pushw	bc
-	pushw	234
-	pushw 0xb144
-	.ascii ":h,@H"
-	.byte 0xb1, 0xea
-	nop
-	.ascii "8:h#"
-	pushw	0
-	cps	hl, 2
-	jr	z, 11
-	cps	hl, 1
-	jr	nz, 14
-	ld	xwa, Str_No_0xE36
-	jr	12
-	ld	xwa, Str_No_0xE3A
-	jr	5
-	ld	xwa, Str_No_0xE3E
-	push	xwa
-	lda	xwa, (xsp+10)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	ld	a, (xiz+6)
-	and	a, 63
-	extz	wa
-	sla	wa, 2
-	lda_24	xbc, (Str_No_0xCEE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	c, 243
-	swi	5
-	ldio	1, 48
-	lda	xbc, (xsp+260)
-	lda	xde, (xsp+4)
-	push	xhl
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	.byte 0x04
-	calr	60549
-	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
-	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
-	push	xiz
-	ld	xiz, xwa
-	ld	xiy, Str_No_0xE42
-	.byte 0xf3
-	swi	5
-	ldio	1, 52
-	lds	bc, 4
-	.byte 0x95
-	scf
-	ld	ix, (xiz+2)
-	extz	xix
-	ld	de, (xiz+7)
-	ld	l, (xiz+9)
-	extz	hl
-	lda	xbc, (xsp+260)
-	ld	wa, de
-	extz	xwa
-	div	wa, 40
-	ld	(xbc+2), wa
-	muls	wa, 40
-	sub	de, wa
-	sll	de, 3
-	ld	(xbc), de
-	lda	xbc, (xsp+4)
-	cps	hl, 2
-	jr	z, 13
-	cps	hl, 1
-	jr	nz, 18
-	.byte 0x94, 0x04
-	ld	xwa, Str_No_0xE4A
-	jr	16
-	.byte 0x94, 0x04
-	ld	xwa, Str_No_0xE4E
-	jr	7
-	.byte 0x94, 0x04
-	ld	xwa, Str_No_0xE52
-	push	xwa
-	push	xbc
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	ld	a, (xiz+6)
-	and	a, 63
-	extz	wa
-	sla	wa, 2
-	lda_24	xbc, (Str_No_0xCEE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0, 0x23
-	lda	xwa, (xsp+264)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1215
-	ldw	de, 0xd23b
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	.byte 0x04
-	calr	60387
-	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
-	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
-	push	xiz
-	ld	xiz, xwa
-	ld	xiy, Str_No_0xE56
-	.byte 0xf3
-	swi	5
-	ldio	1, 52
-	lds	bc, 4
-	.byte 0x95
-	scf
-	ld	wa, (xiz+2)
-	extz	xwa
-	ld	e, (xiz+4)
-	ld	c, (xiz+5)
-	ld	a, (xwa)
-	and	a, e
-	ld	e, a
-	ld	a, c
-	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	7
-	ld	l, (xiz+11)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1950
-	ldb	w, 177
-	.byte 0x50
-	ld	wa, (xiz+9)
-	ld	(xbc+2), wa
-	extz	de
-	lda	xbc, (xsp+4)
-	pushw	de
-	cps	l, 2
-	jr	z, 11
-	cps	l, 1
-	jr	nz, 14
-	ld	xwa, Str_No_0xE5E
-	jr	12
-	ld	xwa, Str_No_0xE62
-	jr	5
-	ld	xwa, Str_No_0xE66
-	push	xwa
-	push	xbc
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	ld	a, (xiz+6)
-	and	a, 15
-	extz	wa
-	lda_24	xbc, (Str_No_0xDEE)
-	lds32	xhl, 0
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0, 0x27
-	lda	xwa, (xsp+264)
-	lda	xbc, (xsp+260)
-	lda	xde, (xsp+4)
-	push	xhl
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	.byte 0x04
-	calr	60224
-	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
-	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
-	push	xiz
-	ld	xiz, xwa
-	ld	xiy, Str_No_0xE6A
-	lda	xix, (xsp+264)
-	lds	bc, 4
-	.byte 0x95
-	scf
-	ld	wa, (xiz+2)
-	extz	xwa
-	ld	e, (xiz+4)
-	ld	c, (xiz+5)
-	ld	a, (xwa)
-	and	a, e
-	ld	e, a
-	ld	a, c
-	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	7
-	ld	l, (xiz+11)
-	lda	xbc, (xsp+260)
-	ld	wa, (xiz+7)
-	ld	(xbc), wa
-	ld	wa, (xiz+9)
-	ld	(xbc+2), wa
-	ld	a, (xiz+12)
-	cp	a, e
-	jr	z, 72
-	cp	a, 128
-	jr	nc, 10
-	cp	e, 128
-	jr	c, 5
-	ldb	a, 128
-	sub	e, 128
-	cp	e, a
-	jr	ule, 8
-	ld	(xsp+4), 43
-	sub	e, a
-	jr	8
-	ld	(xsp+4), 45
-	sub	a, e
-	ld	e, a
-	extz	de
-	lda	xbc, (xsp+5)
-	pushw	de
-	cps	l, 2
-	jr	z, 11
-	cps	l, 1
-	jr	nz, 14
-	ld	xwa, Str_No_0xE72
-	jr	12
-	.byte 0x40
-	.long FmtStr_pct2d
-	jr	5
-	ld	xwa, Str_No_0xE7A
-	.ascii "89h#¿"
-	.byte 0x04
-	ldw	bc, 11
-	nop
-	cps	l, 2
-	jr	z, 11
-	cps	l, 1
-	jr	nz, 14
-	ld	xwa, Str_No_0xE7E
-	jr	12
-	ld	xwa, Str_No_0xE82
-	jr	5
-	ld	xwa, Str_No_0xE86
-	push	xwa
-	push	xbc
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	ld	a, (xiz+6)
-	and	a, 15
-	extz	wa
-	lda_24	xbc, (Str_No_0xDEE)
-	lds32	xhl, 0
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	l, 243
-	swi	5
-	ldio	1, 48
-	lda	xbc, (xsp+260)
-	lda	xde, (xsp+4)
-	push	xhl
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	.byte 0x04
-	calr	59982
-	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
-	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
-	push	xiz
-	ld	xiz, xwa
-	.byte 0x45
-	.long Data_CharMapFormatBlock
-	.byte 0xf3
-	swi	5
-	ldio	1, 52
-	lds	bc, 4
-	.byte 0x95
-	scf
-	ld	de, (xiz+2)
-	extz	xde
-	ld	l, (xiz+11)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1950
-	ldb	w, 177
-	.byte 0x50
-	ld	wa, (xiz+9)
-	ld	(xbc+2), wa
-	lda	xbc, (xsp+4)
-	cps	l, 2
-	jr	z, 13
-	cps	l, 1
-	jr	nz, 20
-	.byte 0x92, 0x04
-	ld	xwa, Data_CharMapFormatBlock_0x8
-	jr	18
-	.byte 0x92, 0x04
-	pushw	234
-	pushw	0xb1ac
-	push	xbc
-	jr	9
-	.byte 0x92, 0x04
-	ld	xwa, Data_CharMapFormatBlock_0x10
-	push	xwa
-	push	xbc
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	ld	a, (xiz+6)
-	and	a, 15
-	extz	wa
-	lda_24	xbc, (Str_No_0xDEE)
-	lds32	xhl, 0
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0, 0x27
-	lda	xwa, (xsp+264)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1215
-	ldw	de, 0xd23b
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	.byte 0x04
-	calr	59835
-	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
-	ret
-
+	.incbin "includes/generated/v7_transplant_DrawFunc_Init_Variant1.bin"
 ColorBlit_WithPaletteSave:
 	dec 8, xsp
 	pushw_erp 0xfa
@@ -2202,36 +1741,7 @@ ConvertStringsEx_Advance:
 ;   HL = total width in pixels
 ; =============================================================================
 CalcTotalWidth:
-	lda xsp, (xsp - 12)
-	push xiz
-	ld (xsp + 12), xbc
-	ld xiz, xwa
-	push xiz
-	call Strlen
-	inc 1, hl
-	pushw hl
-	call Malloc
-	inc 6, xsp
-	ld (xsp + 8), xhl
-	ld xwa, (xsp + 8)
-	ld (xsp + 4), xwa
-	ld xwa, xiz
-	ld xbc, (xsp + 8)
-	calr ConvertStrings
-	ld xiz, (xsp + 12)
-	sll xiz, 4
-	add xiz, 0x945c00
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld xbc, (xiz + 12)
-	or xbc, xbc
-	jr nz, CalcTotalWidth_KerningLoop_Init
-	mriw2 0x96, 0x4b
-	ld iz, hl
-	jr CalcTotalWidth_FreeAndReturn
-
+	.incbin "includes/generated/v7_transplant_CalcTotalWidth.bin"
 CalcTotalWidth_KerningLoop_Init:
 	lds iz, 0
 	ld xix, xbc
@@ -2255,51 +1765,9 @@ CalcTotalWidth_KerningLoop:
 	jr lt, CalcTotalWidth_KerningLoop
 
 CalcTotalWidth_FreeAndReturn:
-	ld xwa, (xsp + 8)
-	push xwa
-	call Free
-	inc 4, xsp
-	ld hl, iz
-	pop xiz
-	lda xsp, (xsp + 12)
-	ret
-
-; =============================================================================
-; WordwrapStrings - Find word-wrap break point for text layout
-;
-; Scans a string to find the longest substring that fits within a specified
-; pixel width when rendered with the given font. Breaks at word boundaries
-; (spaces, 0x20). Used for multi-line text layout.
-;
-; Input:
-;   XWA = pointer to null-terminated string
-;   XBC = font_id
-;   DE  = maximum width in pixels
-;
-; Output:
-;   HL = character offset of the word-wrap break point
-; =============================================================================
+	.incbin "includes/generated/v7_transplant_CalcTotalWidth_FreeAndReturn.bin"
 WordwrapStrings:
-	lda xsp, (xsp - 22)
-	push xiz
-	ld (xsp + 16), de
-	ld (xsp + 18), xbc
-	ld (xsp + 22), xwa
-	ldw (xsp + 4), 0x0
-	ldw (xsp + 10), 0x0
-	ld xiz, (xsp + 22)
-	push xiz
-	call Strlen
-	inc 1, hl
-	pushw hl
-	call Malloc
-	inc 6, xsp
-	ld (xsp + 12), xhl
-	ld xwa, (xsp + 12)
-	ld (xsp + 6), xwa
-	cp (xiz), 0x0
-	jr z, Wordwrap_FreeAndReturn
-
+	.incbin "includes/generated/v7_transplant_WordwrapStrings.bin"
 Wordwrap_ScanWordStart:
 	cp (xiz), 0x0
 	jr z, Wordwrap_CheckSpaces
@@ -2325,40 +1793,13 @@ Wordwrap_SkipSpaces:
 	jr nz, Wordwrap_SkipSpaces
 
 Wordwrap_MeasureWidth:
-	ld xwa, (xsp + 22)
-	push xwa
-	ld xwa, (xsp + 10)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xwa, (xsp + 6)
-	ld bc, (xsp + 4)
-	stib_ind 0x07, 0xe0, 0xe4, 0x00
-	ld xwa, (xsp + 6)
-	ld xbc, (xsp + 18)
-	calr CalcTotalWidth
-	cp hl, (xsp + 16)
-	jr gt, Wordwrap_CheckEndOfString
-	ld wa, (xsp + 4)
-	ld (xsp + 10), wa
-
+	.incbin "includes/generated/v7_transplant_Wordwrap_MeasureWidth.bin"
 Wordwrap_CheckEndOfString:
 	cp (xiz), 0x0
 	jr nz, Wordwrap_ScanWordStart
 
 Wordwrap_FreeAndReturn:
-	ld xwa, (xsp + 12)
-	push xwa
-	call Free
-	inc 4, xsp
-	ld hl, (xsp + 10)
-	pop xiz
-	lda xsp, (xsp + 22)
-	ret
-
-; HexDigitToValue - Convert ASCII hex digit to 4-bit value
-; Input:  A = ASCII character ('0'-'9', 'a'-'f', 'A'-'F')
-; Output: L = 0x00-0x0f (value), or 0x00 if invalid
+	.incbin "includes/generated/v7_transplant_Wordwrap_FreeAndReturn.bin"
 HexCharToNibble:
 	cp a, 0x30		; '0'
 	jr c, HexCharToNibble_CheckLower
@@ -2683,24 +2124,7 @@ VGA_Init_FinalRegs:
 	ldw (xsp + 4), 0x0
 
 VGA_Palette_Loop:
-	ld wa, (xsp + 4)
-	sll wa, 2
-	lda_d16 xbc, (0xe3e8)
-	ld iz, wa
-	extz xiz
-	add xiz, xbc
-	bitm 3, (xiz)
-	jr z, VGA_Palette_LowNibble
-	cp (xiz), 0xf0
-	jr nc, VGA_Palette_HighNibble
-	ld a, (xiz)
-	srl a, 4
-	inc 1, a
-	ld c, a
-	extz bc
-	ldw wa, 0x3c9
-	jr VGA_Palette_WriteRed
-
+	.incbin "includes/generated/v7_transplant_VGA_Palette_Loop.bin"
 VGA_Palette_HighNibble:
 	ld c, (xiz)
 	srl c, 4
@@ -2784,19 +2208,7 @@ VGA_Stub_3:
 	ret
 
 VGA_ClearVRAM:
-	pushw 0x9600
-	pushw 0x0
-	pushw 0x1a
-	pushw 0x0
-	call Memset
-	pushw 0x9600
-	pushw 0x0
-	lda_24 xwa, (0x1a9600); Is this a second video page?
-	push xwa
-	call Memset
-	lda xsp, (xsp + 16)
-	ret
-
+	.incbin "includes/generated/v7_transplant_VGA_ClearVRAM.bin"
 _Write_VGA_Register:
 	lds de, 0
 
@@ -2818,21 +2230,7 @@ _Read_VGA_Register:
 	ret
 
 AllBOut:
-	pushw 0x9600
-	pushw 0x4
-	pushw 0x3c00
-	pushw 0x1a
-	pushw 0x0
-	call Mem_Copy
-	pushw 0x9600
-	lda_24 xwa, (0x04d200)
-	push xwa
-	lda_24 xwa, (0x1a9600); Is this a second video page?
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	ret
-
+	.incbin "includes/generated/v7_transplant_AllBOut.bin"
 DisplayBuffer_Process:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -2857,25 +2255,7 @@ DisplayBuffer_Process:
 	jr DisplayBuf_CheckEvenRowEnd
 
 DisplayBuf_CopyEvenRow:
-	ld xwa, (xsp + 4)
-	pushw wa
-	ld xwa, xiz
-	sll xwa, 2
-	add xwa, xiz
-	sll xwa, 6
-	add xwa, (xsp + 10)
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	srl xwa, 1
-	add xwa, xwa
-	ld xbc, 0x1a0000
-	add xbc, xwa
-	push xbc
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	inc 1, xiz
-
+	.incbin "includes/generated/v7_transplant_DisplayBuf_CopyEvenRow.bin"
 DisplayBuf_CheckEvenRowEnd:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 6)
@@ -2887,25 +2267,7 @@ DisplayBuf_CheckEvenRowEnd:
 	jr DisplayBuf_CheckOddRowEnd
 
 DisplayBuf_CopyOddRow:
-	ld xwa, (xsp + 4)
-	pushw wa
-	ld xwa, xiz
-	sll xwa, 2
-	add xwa, xiz
-	sll xwa, 6
-	add xwa, (xsp + 10)
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	srl xwa, 1
-	add xwa, xwa
-	ld xbc, 0x1a0000
-	add xbc, xwa
-	push xbc
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	inc 1, xiz
-
+	.incbin "includes/generated/v7_transplant_DisplayBuf_CopyOddRow.bin"
 DisplayBuf_CheckOddRowEnd:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 6)
@@ -3885,49 +3247,7 @@ PmBank_BankChanged_RightSide:
 	ldw (xwa), 0xbe
 
 PmBank_BankChanged_DrawSlot:
-	decm 8, (xbc)
-	ld_sril XWA, (xsp + 0x0114)
-	ld a, (xwa)
-	inc 1, a
-	extz wa
-	pushw wa
-	pushw 0xed
-	pushw 0x167a
-	lda xwa, (xsp + 14)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	stb_dri W, 0xfd, 0x0c, 0x01
-	stb_dri C, 0xfd, 0x08, 0x01
-	lda xde, (xsp + 8)
-	lds32 xbc, 3
-	push xbc
-	ld c, (xsp + 8)
-	extz bc
-	pushw bc
-	ld c, (xsp + 12)
-	extz bc
-	pushw bc
-	ld xbc, xhl
-	call DrawStringLeftJustify
-	stb_dri B, 0xfd, 0x08, 0x01
-	lda xbc, (xde + 2)
-	ld hl, (xbc)
-	add hl, 0xc
-	ld (xbc), hl
-	stb_dri W, 0xfd, 0x0c, 0x01
-	sub hl, 0xf
-	ld (xwa + 2), hl
-	ld bc, (xbc)
-	add bc, 0x10
-	ld (xwa + 6), bc
-	lda xbc, (xwa + 4)
-	cpw (xde), 0x0
-	jr nz, PmBank_BankChanged_SecondRight
-	ldw (xwa), 0x10
-	ldw (xbc), 0x9c
-	jr PmBank_BankChanged_DrawIndicator
-
+	.incbin "includes/generated/v7_transplant_PmBank_BankChanged_DrawSlot.bin"
 PmBank_BankChanged_SecondRight:
 	ldw (xwa), 0xab
 	ldw (xbc), 0x137
@@ -4143,53 +3463,7 @@ PmBank_OnBankChanged:
 	jrl PmBank_SendEventAndDone
 
 PmBank_DrawRegionInfo:
-	ldb_d8 a, (0x8d86)
-	extz wa
-	pushw wa
-	ldb_d8 c, (0x8d84)
-	ld a, c
-	extz wa
-	div a, 0xc
-	dec 2, a
-	extz wa
-	pushw wa
-	extz bc
-	div c, 0xc
-	ld a, b
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_05)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xed
-	pushw 0x1718
-	lda xwa, (xsp + 20)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-	stb_dri A, 0xfd, 0x08, 0x01
-	ldw (xbc), 0xe6
-	lda xhl, (xbc + 2)
-	ldw (xhl), 0xdc
-	stb_dri W, 0xfd, 0x0c, 0x01
-	ld de, (xbc)
-	ld (xwa), de
-	ld de, (xbc)
-	add de, 0x59
-	ld (xwa + 4), de
-	ld de, (xhl)
-	ld (xwa + 2), de
-	ld de, (xhl)
-	add de, 0x13
-	ld (xwa + 6), de
-	lda xde, (xsp + 8)
-	lds32 xhl, 0
-	push xhl
-	pushw 0xff
-	pushw 0xf5
-	call DrawString
-	jrl ToneGen_InitDone
-
+	.incbin "includes/generated/v7_transplant_PmBank_DrawRegionInfo.bin"
 PmBank_OnPaint:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -4585,33 +3859,7 @@ WallHomeEditCheck:
 
 ; WallHomeEditCheck event dispatch
 WallHomeEdit_EventDispatch:
-	ld xwa, (xsp + 4)
-	ld xde, xiz
-	call InheritedProc
-	or xiz, xiz
-	jr nz, WallHomeEditCheck_ReturnFalse
-	ldw wa, 0x8
-	call PanelDisplay_DispatchByMode
-	cps hl, 0
-	jr z, WallHomeEditCheck_ReturnFalse
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call SendEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call PostEvent
-	stdi8 (0x7f42), 72
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call PostEvent
-	ld xwa, 0x142000f
-	ld xbc, 0x1e20015
-	ld xde, xiz
-	call MainFuncCall
-
+	.incbin "includes/generated/v7_transplant_WallHomeEdit_EventDispatch.bin"
 WallHomeEditCheck_ReturnFalse:
 	lds32 xhl, 0
 	jr WallHome_PopIzSkip4Ret
@@ -4640,16 +3888,7 @@ WallHomeEdit_PushAddr:
 	push xbc
 
 WallHomeEdit_CallAudio:
-	call Sprintf_Locked
-	inc 8, xsp
-	ld xhl, (xsp + 4)
-	jr WallHome_PopIzSkip4Ret
-	lds32 xhl, 1
-	jr WallHome_PopIzSkip4Ret
-	lda_24 xhl, (0x0340fa)
-	jr WallHome_PopIzSkip4Ret
-	lds32 xhl, 2
-
+	.incbin "includes/generated/v7_transplant_WallHomeEdit_CallAudio.bin"
 WallHome_PopIzSkip4Ret:
 	pop xiz
 	inc 4, xsp
@@ -4674,30 +3913,7 @@ WallMenuEditCheck:
 
 ; WallMenuEditCheck event dispatch
 WallMenuEdit_EventDispatch:
-	ld	xwa, (xde+14)
-	ld	xbc, (xde+18)
-	cp	xwa, 1
-	jr	z, 11
-	or	xwa, xwa
-	jr	nz, 14
-	ld	xwa, TransposeNoteStr_C_0x1C6
-	jr	12
-	ld	xwa, TransposeNoteStr_C_0x1CE
-	jr	5
-	ld	xwa, TransposeNoteStr_C_0x1D6
-	push	xwa
-	push	xbc
-	call	Sprintf_Locked
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lda_24	xhl, (0x0340fc)
-	jr	6
-	lds32	xhl, 2
-	jr	2
-
+	.incbin "includes/generated/v7_transplant_WallMenuEdit_EventDispatch.bin"
 WallOthEditCheck_RetZero:
 	lds32 xhl, 0
 	pop xiz
@@ -4722,30 +3938,7 @@ WallOthEditCheck:
 
 ; WallOthEditCheck event dispatch
 WallOthEdit_EventDispatch:
-	ld	xwa, (xde+14)
-	ld	xbc, (xde+18)
-	cp	xwa, 1
-	jr	z, 11
-	or	xwa, xwa
-	jr	nz, 14
-	ld	xwa, TransposeNoteStr_C_0x1F2
-	jr	12
-	ld	xwa, TransposeNoteStr_C_0x1FA
-	jr	5
-	ld	xwa, TransposeNoteStr_C_0x202
-	push	xwa
-	push	xbc
-	call	Sprintf_Locked
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lda_24	xhl, (0x0340fe)
-	jr	6
-	lds32	xhl, 2
-	jr	2
-
+	.incbin "includes/generated/v7_transplant_WallOthEdit_EventDispatch.bin"
 WallOthCheckLoop_RetZero:
 	lds32 xhl, 0
 	pop xiz
@@ -4763,54 +3956,14 @@ WallSetOK_ReturnZero:
 	ret
 
 MainWallSetFlashFunc:
-	cp xbc, 0x1e20016
-	jr z, MainWallFlash_ClearAndRestore
-	cp xbc, 0x1e20015
-	jr z, MainWallFlash_DispatchAudio
-	cp xbc, 0x1e20014
-	jrl nz, MainWallFlash_ReturnZero
-	stdi8 (0x7f42), 40
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call ApPostEvent
-	ldw wa, 0x8
-	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	jr MainWallFlash_PostEvent
-
+	.incbin "includes/generated/v7_transplant_MainWallSetFlashFunc.bin"
 MainWallFlash_DispatchAudio:
 	ldw wa, 0x8
 	call Audio_DispatchCommand
 	jr MainWallFlash_ReturnZero
 
 MainWallFlash_ClearAndRestore:
-	stdi8 (0x7f42), 40
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call ApPostEvent
-	call Gfx_ClearFrameBuffers
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00048
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-
+	.incbin "includes/generated/v7_transplant_MainWallFlash_ClearAndRestore.bin"
 MainWallFlash_PostEvent:
 	call ApPostEvent
 
@@ -4866,180 +4019,35 @@ WallSureShowHideFunc:
 	ret
 
 WallUsrShowHideFunc:
-	push xiz
-	ld xiz, xde
-	cp xbc, 0x1c00002
-	jr nz, MainVariSet_ReturnZero
-	ld xde, xiz
-	call InheritedProc
-	or xiz, xiz
-	jr nz, MainVariSet_ReturnZero
-	ldw wa, 0x8
-	call PanelDisplay_DispatchByMode
-	cps hl, 0
-	jr z, MainVariSet_ReturnZero
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call SendEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call PostEvent
-	stdi8 (0x7f42), 72
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call PostEvent
-	ld xwa, 0x142000f
-	ld xbc, 0x1e20015
-	ld xde, xiz
-	call MainFuncCall
-
+	.incbin "includes/generated/v7_transplant_WallUsrShowHideFunc.bin"
 MainVariSet_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 MainVariSet:
-	push xiz
-	cp xbc, 0x1e20000
-	jr nz, MainVariSet_Done
-	ld xiz, xde
-	ld a, (xiz)
-	extz wa
-	ld c, (xiz + 2)
-	extz bc
-	ld e, (xiz + 3)
-	extz de
-	call MIDI_DistributeParamToChannels
-	ld a, (xiz)
-	extz wa
-	ld e, (xiz + 2)
-	extz de
-	ld c, (xiz + 3)
-	extz bc
-	pushw bc
-	lds bc, 0
-	call SwbtWr
-	lds wa, 1
-	call BitMapOut_StorePresetValue
-
+	.incbin "includes/generated/v7_transplant_MainVariSet.bin"
 MainVariSet_Done:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 MainSvariIni:
-	push xiz
-	cp xbc, 0x1e20001
-	jr nz, MainSvariIni_ReturnZero
-	pushw 0x6
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ldb_d8 a, (0x8d3a)
-	extz wa
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ld (xiz + 3), l
-	ldb_d8 a, (0x8d3a)
-	extz wa
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	ld (xiz + 4), l
-	ldmi16 (xiz + 2), 0x8d3a
-	ld xwa, xiz
-	call SndParam_FetchOscTableEntry
-	ld a, (xiz)
-	extz wa
-	call CharMap_ActivePreamb_Prologue2
-	ld (xiz + 3), l
-	ldmi16 (xiz + 4), 0x8d3a
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e20002
-	ld xde, xiz
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainSvariIni.bin"
 MainSvariIni_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 MainRvariIni:
-	push xiz
-	cp xbc, 0x1e20007
-	jr nz, MainRvariIni_ReturnZero
-	pushw 0x6
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, 0x28000
-	call SndParam_LookupReadOnly
-	ld (xiz + 3), l
-	ld xwa, 0x28001
-	call SndParam_LookupReadOnly
-	ld (xiz + 4), l
-	ld (xiz + 2), 0x48
-	ld xwa, xiz
-	call SndParam_ResolveVoiceEntry
-	ld a, (xiz)
-	extz wa
-	call AccVoice_GetChannelCount_Wrap
-	ld (xiz + 3), l
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e20008
-	ld xde, xiz
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainRvariIni.bin"
 MainRvariIni_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 MainGetSndGrpName:
-	dec 6, xsp
-	push xiz
-	cp xbc, 0x1e20004
-	jr nz, MainGetSndGrpName_ReturnZero
-	pushw 0x12
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ldb_d8 a, (0x8d3a)
-	extz wa
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ld (xsp + 7), l
-	ldb_d8 a, (0x8d3a)
-	extz wa
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	lda xwa, (xsp + 4)
-	ld (xwa + 4), l
-	ldmi16 (xwa + 2), 0x8d3a
-	call SndParam_FetchOscTableEntry
-	ld a, (xsp + 4)
-	extz wa
-	ld xbc, xiz
-	call StoreDRAMInit_LoadDRAM
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e20006
-	ld xde, xiz
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainGetSndGrpName.bin"
 MainGetSndGrpName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -5047,39 +4055,7 @@ MainGetSndGrpName_ReturnZero:
 	ret
 
 MainGetSndName:
-	dec 6, xsp
-	push xiz
-	ld xiz, xde
-	cp xbc, 0x1e20003
-	jr nz, MainGetSndName_ReturnZero
-	pushw 0x12
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 6), xhl
-	ld a, (xiz + 3)
-	ld (xsp + 4), a
-	ld xwa, xiz
-	call SndParam_ApplyProgramChange
-	ld a, (xiz + 3)
-	extz wa
-	ld c, (xiz + 4)
-	extz bc
-	ld xde, (xsp + 6)
-	inc 1, xde
-	call SndParam_ApplyProgramChangeAsync
-	ld xwa, (xsp + 6)
-	ld (xwa + 17), 0x0
-	ld c, (xsp + 4)
-	ld (xwa), c
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e20005
-	ld xde, (xsp + 6)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 6)
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainGetSndName.bin"
 MainGetSndName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -5087,42 +4063,7 @@ MainGetSndName_ReturnZero:
 	ret
 
 MainGetRhyGrpName:
-	dec 6, xsp
-	push xiz
-	cp xbc, 0x1e2000a
-	jr nz, MainGetRhyGrpName_ReturnZero
-	pushw 0x11
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, 0x28000
-	call SndParam_LookupReadOnly
-	ld (xsp + 7), l
-	ld xwa, 0x28001
-	call SndParam_LookupReadOnly
-	lda xwa, (xsp + 4)
-	ld (xwa + 4), l
-	ld (xwa + 2), 0x48
-	call SndParam_ResolveVoiceEntry
-	ld a, (xsp + 4)
-	extz wa
-	call AccVoice_CopyFromROM_Wrap
-	extz xhl
-	pushw 0x10
-	push xhl
-	push xiz
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld (xiz + 16), 0x0
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e2000c
-	ld xde, xiz
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainGetRhyGrpName.bin"
 MainGetRhyGrpName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -5130,44 +4071,7 @@ MainGetRhyGrpName_ReturnZero:
 	ret
 
 MainGetRhyName:
-	dec 6, xsp
-	push xiz
-	ld xiz, xde
-	cp xbc, 0x1e20009
-	jr nz, MainGetRhyName_ReturnZero
-	pushw 0xf
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 6), xhl
-	ld xbc, xiz
-	ld a, (xbc + 3)
-	ld (xsp + 4), a
-	ld a, (xbc)
-	extz wa
-	ld c, (xbc + 1)
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	ld xwa, (xsp + 12)
-	inc 1, xwa
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 6)
-	ld (xwa + 14), 0x0
-	ld c, (xsp + 4)
-	ld (xwa), c
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e2000b
-	ld xde, (xsp + 6)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 6)
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainGetRhyName.bin"
 MainGetRhyName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -5196,28 +4100,7 @@ MainPmGet:
 	jrl MainPmGet_PostEvent
 
 MainPmGet_HandleBankData:
-	pushw 0x12
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	ld xwa, (xsp + 6)
-	ldb_erp A, 0xfb
-	ld xde, (xsp + 2)
-	stb_erp C, 0xfb
-	ld (xde), c
-	stb_erp A, 0xfb
-	extz wa
-	lda xbc, (xde + 1)
-	call BitMapOut_UpdateWidget_PostDraw
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c20002
-	ld xde, (xsp + 2)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 2)
-	jr MainPmGet_PostEvent
-
+	.incbin "includes/generated/v7_transplant_MainPmGet_HandleBankData.bin"
 MainPmGet_HandleCheckBit2:
 	ld xwa, (xsp + 6)
 	ldb_erp A, 0xfb
@@ -5230,31 +4113,7 @@ MainPmGet_HandleCheckBit2:
 	jr MainPmGet_PostEvent
 
 MainPmGet_HandleBankDisplay:
-	pushw 0x13
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	ld xwa, (xsp + 6)
-	ldb_erp A, 0xfb
-	ld xwa, (xsp + 2)
-	stb_erp C, 0xfb
-	ld (xwa), c
-	ld xwa, 0x300
-	call SndParam_LookupReadOnly
-	ld xbc, (xsp + 2)
-	ld (xbc + 1), l
-	stb_erp A, 0xfb
-	extz wa
-	inc 2, xbc
-	call BitMapOut_UpdateDisplayWidget
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c20003
-	ld xde, (xsp + 2)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 2)
-
+	.incbin "includes/generated/v7_transplant_MainPmGet_HandleBankDisplay.bin"
 MainPmGet_PostEvent:
 	call ApPostEvent
 
@@ -5265,43 +4124,9 @@ MainPmGet_ReturnZero:
 	ret
 
 MainSysControl:
-	dec 4, xsp
-	pushw_erp 0xfa
-	ld (xsp + 2), xde
-	cp xbc, 0x1e20013
-	jr nz, MainSysControl_PostDispatchFinalize
-	stdi8 (0x7f42), 40
-	ldw wa, 0xee
-	call SoundCtrl_SendCommand
-	ld xwa, (xsp + 2)
-	ldb_erp A, 0xfb
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SubCPU_PayloadErrorStore
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	stb_erp A, 0xfb
-	extz wa
-	cps wa, 0
-	jr mi, MainSysControl_PostDispatchFinalize
-	cp wa, 0x8
-	jr gt, MainSysControl_PostDispatchFinalize
-	add wa, wa
-	lda_24 xix, (TransposeNoteStr_C_0x40E)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (MainSysCtrl_DispatchTable)
-	jp_ind 8, 0x07, 0xf0, 0xe0
-
-; MainSysControl dispatch table
+	.incbin "includes/generated/v7_transplant_MainSysControl.bin"
 MainSysCtrl_DispatchTable:
-	; --- Dispatch table: 9 call entries (54 bytes) ---
-	lds	wa, 2
-	call ScreenGroup_DispatchAlt
-	jr t, MainSysControl_PostDispatchFinalize
+	.incbin "includes/generated/v7_transplant_MainSysCtrl_DispatchTable.bin"
 MainSysCtrl_Entry1_AccDemo:
 	call AccDemo_InitDone
 	jr t, MainSysControl_PostDispatchFinalize
@@ -5309,8 +4134,7 @@ MainSysCtrl_Entry2_PartInit:
 	call Part_InitFromPreset
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry3_Misc:
-	call SendPartDataBlock_DoGetError
-	jr t, MainSysControl_PostDispatchFinalize
+	.incbin "includes/generated/v7_transplant_MainSysCtrl_Entry3_Misc.bin"
 MainSysCtrl_Entry4_CopyBitmaps:
 	call Display_CopyAndRenderBitmaps
 	jr t, MainSysControl_PostDispatchFinalize
@@ -5336,32 +4160,7 @@ MainSysCtrl_DelayOuter:
 	lds wa, 0
 
 MainSysCtrl_DelayInner:
-	inc 1, wa
-	cp wa, 0x100
-	jr c, MainSysCtrl_DelayInner
-	inc 1, bc
-	cp bc, 0x1000
-	jr c, MainSysCtrl_DelayOuter
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
-	ld xde, 0x1800001
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 35
-	ldw wa, 0xee
-	call SoundCtrl_SendCommand
-	lds32 xhl, 0
-	popw_erp 0xfa
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainSysCtrl_DelayInner.bin"
 CntIniFunc:
 	cp xbc, 0x1c00013
 	jr nz, CntIniFunc_ReturnZero
@@ -5385,18 +4184,9 @@ CntIniFunc_ReturnZero:
 	ret
 
 MainMssSetUp:
-	cp xbc, 0x1e20019
-	jr z, MainMssSetUp_ClearMode
-	cp xbc, 0x1e20018
-	jr nz, MainMssSetUp_ReturnZero
-	stda16 (0x8d56), xde
-	incdi16 1, (0x8d56)
-	stdi8 (0x8d4e), 7
-	jr MainMssSetUp_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_MainMssSetUp.bin"
 MainMssSetUp_ClearMode:
-	stdi8 (0x8d4e), 0
-
+	.incbin "includes/generated/v7_transplant_MainMssSetUp_ClearMode.bin"
 MainMssSetUp_ReturnZero:
 	lds32 xhl, 0
 	ret
@@ -5449,48 +4239,9 @@ AcFreeSplit_ShowHide:
 	jrl UI_AccChordBoxProc_Return
 
 AcFreeSplit_ValueChanged:
-	ld_sril XWA, (xsp + 0x0104)
-	ld xde, xiz
-	call InheritedProc
-	ld xwa, (xiz)
-	stl_da (0x0340c0), xwa
-	cp xwa, 0x4180
-	jr nz, AcFreeSplit_CheckSecondKey
-	cpw (xiz + 4), 0x0
-	jr z, AcFreeSplit_LookupNoteLabel
-	pushw 0xed
-	pushw 0x1bec
-	lda xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcFreeSplit_SendConfirmEvent
-
+	.incbin "includes/generated/v7_transplant_AcFreeSplit_ValueChanged.bin"
 AcFreeSplit_LookupNoteLabel:
-	ld xwa, 0x4181
-	call SndParam_LookupReadOnly
-	exts xhl
-	divs hl, 0xc
-	sla hl, 2
-	lda_24 xbc, (SplitNoteStr_C_0x4)
-	ld_sril3 XWA, 0x07, 0xe4, 0xec
-	push xwa
-	ld xwa, 0x4181
-	call SndParam_LookupReadOnly
-	exts xhl
-	divs hl, 0xc
-	stw_erp WA, 0xee
-	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_06)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xed
-	pushw 0x1bf8
-	lda xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_AcFreeSplit_LookupNoteLabel.bin"
 AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
@@ -5498,45 +4249,9 @@ AcFreeSplit_SendConfirmEvent:
 	jrl AcFreeSplit_SendEventAndReturn
 
 AcFreeSplit_CheckSecondKey:
-	cp xwa, 0x4181
-	jr nz, UI_AccChordBoxProc_Return
-	ld xwa, 0x4180
-	call SndParam_LookupReadOnly
-	cps hl, 0
-	jr z, AcFreeSplit_LookupSecondNote
-	pushw 0xed
-	pushw 0x1c04
-	lda xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcFreeSplit_SendSecondConfirm
-
+	.incbin "includes/generated/v7_transplant_AcFreeSplit_CheckSecondKey.bin"
 AcFreeSplit_LookupSecondNote:
-	ld xwa, 0x4181
-	call SndParam_LookupReadOnly
-	exts xhl
-	divs hl, 0xc
-	sla hl, 2
-	lda_24 xbc, (SplitNoteStr_C_0x4)
-	ld_sril3 XWA, 0x07, 0xe4, 0xec
-	push xwa
-	ld xwa, 0x4181
-	call SndParam_LookupReadOnly
-	exts xhl
-	divs hl, 0xc
-	stw_erp WA, 0xee
-	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_06)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xed
-	pushw 0x1c10
-	lda xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_AcFreeSplit_LookupSecondNote.bin"
 AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
@@ -5605,25 +4320,7 @@ AcTranspose_ShowHide:
 	jr UI_EventHandler_InitReturnZero
 
 AcTranspose_ValueChanged:
-	ld_sril XWA, (xsp + 0x0104)
-	ld xde, xiz
-	call InheritedProc
-	ld xwa, (xiz)
-	cp xwa, 0x3
-	jr nz, UI_EventHandler_InitReturnZero
-	lda xbc, (xsp + 4)
-	ld wa, (xiz + 4)
-	cps wa, 5
-	jr nz, AcTranspose_FormatLabel
-	cpdi8 (0x8d3c), 0
-	jr nz, AcTranspose_FormatLabel
-	pushw 0xed
-	pushw 0x1c86
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	jr ChordProc_SendRefreshEvent
-
+	.incbin "includes/generated/v7_transplant_AcTranspose_ValueChanged.bin"
 AcTranspose_FormatLabel:
 	sla wa, 2
 	lda_24 xde, (OctaveDigitStr_0B_0x32)

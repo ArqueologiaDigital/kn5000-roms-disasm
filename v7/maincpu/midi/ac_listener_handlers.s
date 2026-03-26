@@ -64,12 +64,7 @@ AcLswBox_PushDefaultStr:
 	pushw 0xf93c
 
 AcLswBox_StrcpyAndReturn:
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl AudioMix_ReturnZeroJmp2
-
+	.incbin "includes/generated/v7_transplant_AcLswBox_StrcpyAndReturn.bin"
 AcLswBox_HandlePut:
 	ld xwa, xiz
 	call GetViewInstance
@@ -293,12 +288,7 @@ AcLswEdit_PushDefaultStr:
 	pushw 0xf942
 
 AcLswEdit_StrcpyAndReturn:
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl AudioMix_ReturnZeroJmp
-
+	.incbin "includes/generated/v7_transplant_AcLswEdit_StrcpyAndReturn.bin"
 AcLswEdit_HandlePut:
 	ld xwa, xiz
 	call GetViewInstance
@@ -701,23 +691,7 @@ VoiceUI_GridCase1:
 	ld xiz, 0x42
 
 FadeGrid_GetViewAndStrcpy:
-	call GetViewInstance
-	add xhl, xiz
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AudioMix_ReturnZeroJmp3
-	ld xwa, xiz
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 16)
-	ld xde, (xsp + 12)
-	jr FadeGrid_ApFuncCallAndReturn
-
-; Voice UI grid case 2
+	.incbin "includes/generated/v7_transplant_FadeGrid_GetViewAndStrcpy.bin"
 VoiceUI_GridCase2:
 	ld xwa, xiz
 	call GetViewInstance
@@ -785,114 +759,7 @@ FadeSetGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_FadeSetGridDispatch:
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	(xsp+28), xhl
-	lda	xbc, (xsp+4)
-	ld	xwa, (xsp+28)
-	srl	xwa, 0
-	ld	qwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+28)
-	ld	(xbc+2), wa
-	cpw	(xbc), 1
-	jrl	nz, 463
-	sla	wa, 2
-	lda_24	xbc, (NakaInst_OFF_WidgetTbl2_0x5C)
-	ld_rrl	xwa, xbc, wa
-	cp	xwa, 0xffffffff
-	jrl	z, 441
-	lds	bc, 1
-	lds	de, 2
-	jr	74
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	(xsp+28), xhl
-	lda	xbc, (xsp+4)
-	ld	xwa, (xsp+28)
-	srl	xwa, 0
-	ld	qwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+28)
-	ld	(xbc+2), wa
-	cpw	(xbc), 1
-	jrl	nz, 388
-	sla	wa, 2
-	lda_24	xbc, (NakaInst_OFF_WidgetTbl2_0x5C)
-	ld_rrl	xwa, xbc, wa
-	cp	xwa, 0xffffffff
-	jrl	z, 366
-	ldw	bc, 0xffff
-	lds	de, 2
-	call	MainLswAdd
-	jrl	354
-	lda	xhl, (xsp+4)
-	ldw	(xhl), 1
-	lda	xde, (xhl+2)
-	ldw	(xde), 0
-	lda_24	xix, (NakaInst_OFF_WidgetTbl2_0x5C)
-	ld	xiz, (xsp+28)
-	jr	18
-	ld	iy, bc
-	sla	iy, 2
-	ld	xwa, (xiz)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xf4, 0xf0
-	jr	z, 10
-	inc	1, bc
-	ld	(xde), bc
-	ld	bc, (xde)
-	cps	bc, 7
-	jr	lt, -24
-	lda	xbc, (xsp+12)
-	ld	(xhl+4), xbc
-	ld	xwa, (xsp+28)
-	ld	xhl, (xwa)
-	lda	xde, (xwa+4)
-	cp	xhl, 0x2a12
-	jr	z, 66
-	cp	xhl, 0x2a11
-	jr	z, 58
-	cp	xhl, 0x2a10
-	jr	z, 50
-	cp	xhl, 0x2a01
-	jr	z, 9
-	cp	xhl, 0x2a00
-	jrl	nz, 251
-	pushm	(xde)
-	pushw 231
-	pushw 0xf99e
-	push	xbc
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	214
-	ld	xwa, NakaInst_OFF_WidgetTbl2_0x9C
-	cpw	(xde), 0
-	jr	z, 5
-	.byte 0x40
-	.long Data_AcGridParamTable
-	push	xwa
-	push	xbc
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	173
-
-; AcInOutGrid handler
+	.incbin "includes/generated/v7_transplant_Data_FadeSetGridDispatch.bin"
 AcInOutGrid_Handler:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 28)
@@ -923,38 +790,11 @@ AcInOutGrid_Handler:
 	jr nz, SndParam_ReturnZero2
 
 SndParam_LookupAndSendCmd:
-	call SndParam_LookupReadOnly
-	pushw hl
-	pushw 0xe7
-	pushw 0xf9b8
-	lda xwa, (xsp + 18)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 4)
-	ld xbc, 0x1e0008c
-	jr SndParam_SendEventAndReturn
-
+	.incbin "includes/generated/v7_transplant_SndParam_LookupAndSendCmd.bin"
 SndParam_FormatAndDisplay:
-	call SndParam_LookupReadOnly
-	lda xbc, (xsp + 12)
-	ld xwa, NakaInst_OFF_WidgetTbl2_0xB6
-	cps hl, 0
-	jr z, SndParam_PushStrAndCopy
-	ld xwa, NakaInst_OFF_WidgetTbl2_0xB0
-
+	.incbin "includes/generated/v7_transplant_SndParam_FormatAndDisplay.bin"
 SndParam_PushStrAndCopy:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 4)
-	ld xbc, 0x1e0008c
-
+	.incbin "includes/generated/v7_transplant_SndParam_PushStrAndCopy.bin"
 SndParam_SendEventAndReturn:
 	call SendEvent
 
@@ -1014,74 +854,7 @@ AcInOutGridBoxProc:
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AcInOutGrid_Init:
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	call InheritedProc
-	ld xwa, (xsp + 16)
-	call GetViewInstance
-	ld (xsp + 4), xhl
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
-	lds32 xde, 0
-	call SendEvent
-	ld xiz, xhl
-	ld xwa, (xsp + 4)
-	ld bc, (xwa + 26)
-	ld xwa, xiz
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	add wa, bc
-	ld de, wa
-	extz xde
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00017
-	call SetDialUp
-	ld xwa, (xsp + 4)
-	ld bc, (xwa + 26)
-	ld xwa, xiz
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	add wa, bc
-	ld de, wa
-	extz xde
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00018
-	call SetDialDown
-	lds wa, 1
-	jrl AcInOutGrid_SetScrollBounds
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	call InheritedProc
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00050
-	ld xde, (xsp + 8)
-	call SendEvent
-	or xhl, xhl
-	jr z, AcInOutGrid_ScrollUp_CheckAlt
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
-	lds32 xde, 0
-	call SendEvent
-	ld iz, hl
-	ld xwa, 0x5000
-	call SndParam_LookupReadOnly
-	ld wa, iz
-	add wa, wa
-	cps hl, 0
-	jr nz, AcInOutGrid_ScrollUp_AltTable
-	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0xCA)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
-	ld bc, iz
-	sub bc, wa
-	ld de, bc
-	extz xde
-	add xde, 0xffff0000
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
-	jr AcInOutGrid_ScrollUp_Dispatch
-
+	.incbin "includes/generated/v7_transplant_AcInOutGrid_Init.bin"
 AcInOutGrid_ScrollUp_AltTable:
 	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0xDC)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
@@ -1102,63 +875,7 @@ AcInOutGrid_ScrollUp_Dispatch:
 	jrl AcInOutGrid_ReturnZero
 
 AcInOutGrid_ScrollUp_CheckAlt:
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00091
-	ld xde, (xsp + 8)
-	call SendEvent
-	or xhl, xhl
-	jrl z, AcInOutGrid_ReturnZero
-	ld xwa, (xsp + 16)
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	call ApFuncCall
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	call SetAutoInc
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00017
-	ld xde, (xsp + 8)
-	call SetDialUp
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00018
-	ld xde, (xsp + 8)
-	call SetDialDown
-	lds wa, 1
-	jrl AcInOutGrid_SetScrollBounds
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	call InheritedProc
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00050
-	ld xde, (xsp + 8)
-	call SendEvent
-	or xhl, xhl
-	jr z, AcInOutGrid_ScrollDown_CheckAlt
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
-	lds32 xde, 0
-	call SendEvent
-	ld iz, hl
-	ld xwa, 0x5000
-	call SndParam_LookupReadOnly
-	ld wa, iz
-	add wa, wa
-	cps hl, 0
-	jr nz, AcInOutGrid_ScrollDown_AltTable
-	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0xEE)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
-	add wa, iz
-	ld de, wa
-	extz xde
-	add xde, 0xffff0000
-	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
-	jr AcInOutGrid_ScrollDown_Dispatch
-
+	.incbin "includes/generated/v7_transplant_AcInOutGrid_ScrollUp_CheckAlt.bin"
 AcInOutGrid_ScrollDown_AltTable:
 	lda_24 xbc, (NakaInst_OFF_WidgetTbl2_0x100)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
@@ -1216,17 +933,7 @@ AcInOutGrid_GetColText:
 	jr AcInOutGrid_Strcpy
 
 AcInOutGrid_GetRowText:
-	ld xwa, 0x5000
-	call SndParam_LookupReadOnly
-	cps hl, 2
-	jr z, AcInOutGrid_GetRowText_Src2
-	cps hl, 1
-	jr z, AcInOutGrid_GetRowText_Src1
-	cps hl, 0
-	jr nz, AcInOutGrid_ReturnZero
-	ld xwa, NakaInst_OFF_WidgetTbl2_0x112
-	jr AcInOutGrid_GetRowText_Push
-
+	.incbin "includes/generated/v7_transplant_AcInOutGrid_GetRowText.bin"
 AcInOutGrid_GetRowText_Src1:
 	ld xwa, NakaInst_OFF_WidgetTbl2_0x1CC
 	jr AcInOutGrid_GetRowText_Push
@@ -1238,18 +945,7 @@ AcInOutGrid_GetRowText_Push:
 	push xwa
 
 AcInOutGrid_Strcpy:
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcInOutGrid_ReturnZero
-	ld xwa, (xsp + 16)
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	jr AcInOutGrid_CellSelect_Call
-
+	.incbin "includes/generated/v7_transplant_AcInOutGrid_Strcpy.bin"
 AcInOutGrid_CellSelect:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -1304,410 +1000,7 @@ InOutGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_InOutGridDispatch:
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	xiz, xhl
-	lda	xwa, (xsp+4)
-	ld	xbc, xiz
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xwa), bc
-	ld	bc, iz
-	ld	(xwa+2), bc
-	cpw	(xwa), 1
-	jrl	nz, 1774
-	cps	bc, 0
-	jrl	mi, 1769
-	cp	bc, 8
-	jrl	gt, 1762
-	add	bc, bc
-	lda_24	xix, (NakaInst_DIRECT_E7FCE4_0x7A)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 242
-	pushw	ix
-	pop	xhl
-	ldx
-	ldw	ix, 2035
-	.byte 0xf0, 0xe4
-	mul	xwa, xwa
-	nop
-	ldb	a, 0
-	nop
-	lds	bc, 1
-	lds	de, 1
-	jrl	316
-	ld	xwa, 8449
-	lds	bc, 1
-	lds	de, 1
-	jrl	304
-	ld	xwa, 0x5000
-	lds	bc, 1
-	lds	de, 1
-	jrl	292
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	cps	hl, 2
-	jr	z, 17
-	cps	hl, 1
-	jrl	nz, 1686
-	ld	xwa, 0x5001
-	lds	bc, 1
-	lds	de, 1
-	jrl	262
-	ld	xwa, 0x5002
-	lds	bc, 1
-	lds	de, 1
-	jrl	250
-	ld	xwa, 8577
-	lds	bc, 1
-	lds	de, 1
-	jrl	238
-	ld	xwa, 8580
-	lds	bc, 1
-	.byte 0xda
-	.long Data_NakaPresetConfig
-	ld	xwa, 8578
-	lds	bc, 1
-	lds	de, 1
-	jrl	214
-	ld	xwa, 8579
-	lds	bc, 1
-	lds	de, 1
-	jrl	202
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	xiz, xhl
-	lda	xwa, (xsp+4)
-	ld	xbc, xiz
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xwa), bc
-	ld	bc, iz
-	ld	(xwa+2), bc
-	cpw	(xwa), 1
-	jrl	nz, 1570
-	cps	bc, 0
-	jrl	mi, 1565
-	cp	bc, 8
-	jrl	gt, 1558
-	add	bc, bc
-	lda_24	xix, (NakaInst_DIRECT_E7FCE4_0x68)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 242
-	swi	0
-	pop	xhl
-	ldx
-	ldw	ix, 2035
-	.byte 0xf0, 0xe4
-	mul	xwa, xwa
-	nop
-	ldb	a, 0
-	nop
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	112
-	ld	xwa, 8449
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	100
-	ld	xwa, 0x5000
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	88
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	cps	hl, 2
-	jr	z, 17
-	cps	hl, 1
-	jrl	nz, 1482
-	ld	xwa, 0x5001
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	58
-	ld	xwa, 0x5002
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	46
-	ld	xwa, 8577
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	34
-	ld	xwa, 8580
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	22
-	ld	xwa, 8578
-	ldw	bc, 0xffff
-	lds	de, 1
-	jr	10
-	ld	xwa, 8579
-	ldw	bc, 0xffff
-	lds	de, 1
-	call	MainLswAdd
-	jrl	1405
-	lda	xwa, (xsp+4)
-	ldw	(xwa), 1
-	ld	xde, xbc
-	ld	(xwa+4), xbc
-	ld	xix, (xiz)
-	lda	xbc, (xwa+2)
-	lda_24	xhl, (NakaInst_OFF_WidgetTbl2_0x37E)
-	cp	xix, 8579
-	jrl	z, 612
-	cp	xix, 8578
-	jrl	z, 563
-	cp	xix, 8580
-	jrl	z, 514
-	lda	xwa, (xiz+4)
-	cp	xix, 8577
-	jrl	z, 463
-	cp	xix, 0x5002
-	jrl	z, 382
-	cp	xix, 0x5001
-	jrl	z, 298
-	cp	xix, 0x5000
-	jr	z, 100
-	cp	xix, 8449
-	jr	z, 53
-	cp	xix, 8448
-	jrl	nz, 1301
-	ldw	(xbc), 0
-	ld	wa, (xwa)
-	sla	wa, 2
-	lda_24	xbc, (NakaInst_OFF_E7FCA2_0x6)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	1253
-	ldw	(xbc), 1
-	ld	wa, (xwa)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	1214
-	ld	xix, xwa
-	ld	wa, (xwa)
-	lda_24	xhl, (ControlMode_Option_Table_0xA)
-	cps	wa, 2
-	jr	z, 121
-	cps	wa, 1
-	jr	z, 61
-	cps	wa, 0
-	jrl	nz, 1196
-	ldw	(xbc), 2
-	ld	wa, (xix)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	call	SendEvent
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01c0000c
-	lds32	xde, 0
-	jrl	1136
-	ldw	(xbc), 2
-	ld	wa, (xix)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	call	SendEvent
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01c0000c
-	lds32	xde, 0
-	jrl	1080
-	ldw	(xbc), 2
-	ld	wa, (xix)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	call	SendEvent
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01c0000c
-	lds32	xde, 0
-	jrl	1024
-	ldw	(xbc), 3
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	nz, 25
-	ld	wa, (xiz+4)
-	exts	wa
-	pushw	wa
-	pushw	231
-	pushw	0xfcfe
-	lda	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	jr	16
-	pushw	231
-	pushw	0xfd04
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	949
-	.byte 0xb1
-	push	sr
-	pop	sr
-	nop
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	cps	hl, 2
-	jr	nz, 22
-	.byte 0x9e, 0x04, 0x04
-	pushw	231
-	pushw	0xfd0a
-	lda	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	jr	16
-	pushw	231
-	pushw	0xfd10
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	877
-	.byte 0xb1
-	push	sr
-	halt
-	nop
-	ld	wa, (xwa)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	838
-	.byte 0xb1
-	push	sr
-	di
-	ld	wa, (xiz+4)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	798
-	.byte 0xb1
-	push	sr
-	reti
-	nop
-	ld	wa, (xiz+4)
-	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	758
-	.byte 0xb1
-	push	sr
-	ldio	0, 158
-	.byte 0x04
-	ldb	a, 217
-	.byte 0xec
-	push	sr
-	.byte 0xe3
-	reti
-	or	xix, xix
-	ldb	w, 56
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	718
-
-; ParaLoadOpt entry handler
+	.incbin "includes/generated/v7_transplant_Data_InOutGridDispatch.bin"
 ParaLoadOpt_Entry:
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -1732,226 +1025,7 @@ ParaLoadOpt_Entry:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Data_ParaLoadOptDispatch:
-	ld	xwa, 8448
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (NakaInst_OFF_E7FCA2_0x6)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	602
-	ld	xwa, 8449
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	552
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (ControlMode_Option_Table_0xA)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	call	SendEvent
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	cps	hl, 2
-	jr	z, 99
-	lda	xwa, (xsp+6)
-	cps	hl, 1
-	jr	z, 42
-	cps	hl, 0
-	jrl	nz, 480
-	ldw	(xwa), 3
-	pushw	231
-	pushw	0xfd16
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	439
-	ldw	(xwa), 3
-	ld	xwa, 0x5001
-	call	SndParam_LookupReadOnly
-	exts	hl
-	pushw	hl
-	pushw	231
-	pushw	0xfd1c
-	lda	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	389
-	ldw	(xsp+6), 3
-	ld	xwa, 0x5002
-	call	SndParam_LookupReadOnly
-	pushw	hl
-	pushw	231
-	pushw	0xfd22
-	lda	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	340
-	ld	xwa, 0x5000
-	call	SndParam_LookupReadOnly
-	cps	hl, 2
-	jr	z, 88
-	cps	hl, 1
-	jr	z, 38
-	cps	hl, 0
-	jrl	nz, 322
-	pushw	231
-	pushw	0xfd28
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	285
-	ld	xwa, 0x5001
-	call	SndParam_LookupReadOnly
-	exts	hl
-	pushw	hl
-	pushw	231
-	pushw	0xfd2e
-	lda	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	239
-	ld	xwa, 0x5002
-	call	SndParam_LookupReadOnly
-	pushw	hl
-	pushw	231
-	pushw	0xfd34
-	lda	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	195
-	ld	xwa, 8577
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jrl	145
-	ld	xwa, 8580
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jr	96
-	ld	xwa, 8578
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	jr	47
-	ld	xwa, 8579
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
-	call	SendEvent
-
+	.incbin "includes/generated/v7_transplant_Data_ParaLoadOptDispatch.bin"
 MdPreset_ReturnZero2:
 	lds32 xhl, 0
 	pop xiz
@@ -2008,14 +1082,7 @@ IvMpst_HandleClose:
 	jrl IvMpst_SendEventEpilogue
 
 IvMpst_HandleGetName:
-	pushw 0xe7
-	pushw 0xfd7e
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl IvMpst_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_IvMpst_HandleGetName.bin"
 IvMpst_HandlePageSwitch:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -2282,35 +1349,9 @@ MdPreset_PostMainFunc:
 	ret
 
 MainMpstFunc:
-	dec 4, xsp
-	ld (xsp), xde
-	cp xbc, 0x1e30004
-	jr z, MainMpst_HandlePresetCopy
-	cp xbc, 0x1e30003
-	jr nz, MainMpst_ReturnZero
-	ld xwa, (xsp)
-	stb_d8 (0xb7ec), a
-	call SndParam_ApplyAndSync
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	jr MainMpst_PostEvent
-
+	.incbin "includes/generated/v7_transplant_MainMpstFunc.bin"
 MainMpst_HandlePresetCopy:
-	stdi8 (0x7f42), 37
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call ApPostEvent
-	ld xwa, (xsp)
-	extz wa
-	call SndParam_AllocAndCopyPreset
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-
+	.incbin "includes/generated/v7_transplant_MainMpst_HandlePresetCopy.bin"
 MainMpst_PostEvent:
 	call ApPostEvent
 
@@ -2324,28 +1365,9 @@ MainMpst_ReadPresetIndex:
 	ret
 
 TtMdExc:
-	cp xbc, 0x1c0000c
-	jr z, TtMdExc_ReturnZero
-	cp xbc, 0x1c0000b
-	jr z, TtMdExc_ReturnZero
-	cp xbc, 0x1c00002
-	jr z, TtMdExc_HandleClose
-	cp xbc, 0x1c00001
-	jr nz, TtMdExc_ReturnZero
-	or xde, xde
-	jr nz, TtMdExc_ReturnZero
-	setda 6, 0xb7e2
-	ld xwa, 0x570003
-	call GetViewInstance
-	ld xwa, (xhl + 38)
-	ldw (xwa), 0x0
-	jr TtMdExc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_TtMdExc.bin"
 TtMdExc_HandleClose:
-	or xde, xde
-	jr nz, TtMdExc_ReturnZero
-	resda 6, 0xb7e2
-
+	.incbin "includes/generated/v7_transplant_TtMdExc_HandleClose.bin"
 TtMdExc_ReturnZero:
 	lds32 xhl, 0
 	ret

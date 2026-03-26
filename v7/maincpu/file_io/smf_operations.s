@@ -15,86 +15,15 @@
 ; =============================================================================
 
 FmmSmfLoadTitleFunc:
-	cp xbc, 0x1c00007
-	jrl z, SmfLoad_HandleOk
-	cp xbc, 0x1c00013
-	jrl nz, SmfLoad_Return
-	cp xde, 0x3
-	jrl z, SmfLoad_CancelCleanup
-	cp xde, 0x2
-	jrl nz, SmfLoad_Return
-	stdi8 (0x84fe), 0
-	lds wa, 1
-	calr InitializeOperationState
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	ldmm8 0x808a, 0x8d37
-	cpdi16 0x8500, 0
-	jr ge, SmfLoad_DispatchState
-	call GetDiskSizeInfo
-	extz hl
-	stda16 (0x8500), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmSmfLoadTitleFunc.bin"
 SmfLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
-	cps wa, 1
-	jrl z, SmfLoad_Success
-	cps wa, 0
-	jrl z, SmfLoad_ErrorCancel
-	cps wa, 5
-	jr z, SmfLoad_AbortPartial
-	cpdi16 0x8504, 0
-	jr ge, SmfLoad_CheckFileCount
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	call FileIO_SearchAndLoadFile
-	call GetEncodedFreeSpaceData
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_SmfLoad_DispatchState.bin"
 SmfLoad_CheckFileCount:
-	cpdi16 0x8504, 0
-	jrl nz, SmfLoad_SendWait
-	cpdi16 0x8502, 0
-	jr ge, SmfLoad_CheckSlotCount
-	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_SmfLoad_CheckFileCount.bin"
 SmfLoad_CheckSlotCount:
-	cpdi16 0x8502, 0
-	jrl le, SmfLoad_SendWait
-	cpdi8 (0x808a), 97
-	jrl z, SmfLoad_SendWait
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ldw wa, 0x61
-	jrl SmfLoad_CallHandler
-
+	.incbin "includes/generated/v7_transplant_SmfLoad_CheckSlotCount.bin"
 SmfLoad_AbortPartial:
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldb_d8 a, (0x808a)
-	extz wa
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 0
-	ldw wa, 0xee
-	jr SmfLoad_CallStatusDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfLoad_AbortPartial.bin"
 SmfLoad_ErrorCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -104,25 +33,7 @@ SmfLoad_ErrorCancel:
 	jrl SmfLoad_CallHandler
 
 SmfLoad_Success:
-	calr ResetProgressIndication
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldb_d8 a, (0x808a)
-	extz wa
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 2
-	ldw wa, 0xee
-
+	.incbin "includes/generated/v7_transplant_SmfLoad_Success.bin"
 SmfLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 	jr SmfLoad_Return
@@ -143,13 +54,7 @@ SmfLoad_CancelCleanup:
 	jr SmfLoad_Return
 
 SmfLoad_HandleOk:
-	cp xde, 0xf
-	jr nz, SmfLoad_Return
-	cpdi8 (0x8d34), 7
-	jr nz, SmfLoad_OkReturnCode
-	ldw wa, 0xd6
-	jr SmfLoad_CallHandler
-
+	.incbin "includes/generated/v7_transplant_SmfLoad_HandleOk.bin"
 SmfLoad_OkReturnCode:
 	ldw wa, 0x60
 
@@ -161,27 +66,7 @@ SmfLoad_Return:
 	ret
 
 FmmSmfSaveTitleFunc:
-	cp xbc, 0x1c00013
-	jr nz, SmfSave_Return
-	cp xde, 0x3
-	jr z, SmfSave_CancelCleanup
-	cp xde, 0x2
-	jr nz, SmfSave_Return
-	stdi8 (0x84fe), 0
-	lds wa, 1
-	calr InitializeOperationState
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	cpdi16 0x8504, 0
-	jr ge, SmfSave_SendWait
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	call FileIO_SearchAndLoadFile
-	call GetEncodedFreeSpaceData
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmSmfSaveTitleFunc.bin"
 SmfSave_SendWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -237,66 +122,17 @@ RenderSmf_PadLoop:
 	ret
 
 SaveFileNameSmfFunc:
-	dec 4, xsp
-	push xiz
-	ld (xsp + 4), xde
-	lda_d16 xwa, (0x8850)
-	cp xbc, 0x1e00086
-	jr z, SaveFN_HandleApply
-	cp xbc, 0x1e0003a
-	jr z, SaveFN_HandleTextChange
-	cp xbc, 0x1c0000b
-	jr z, SaveFN_HandleActivate
-	cp xbc, 0x1e50004
-	jrl nz, SaveFN_Return
-	ld xwa, (xsp + 4)
-	stda32 0x808c, xwa
-	jrl SaveFN_Return
-
+	.incbin "includes/generated/v7_transplant_SaveFileNameSmfFunc.bin"
 SaveFN_HandleActivate:
-	ld (xwa), 0x0
-	lda xiz, (xwa + 1)
-	call FileIO_GetRecordPtrAlt
-	ld xbc, xhl
-	ld xwa, xiz
-	call FileIO_CopyString
-	lda_d16 xwa, (0x8851)
-	call FileIO_GetRecordType_Extended
-	ldda32 xwa, (0x808c)
-	ld xbc, 0x1c0000f
-	ld xde, 0x8850
-	jr SaveFN_SendEvent
-
+	.incbin "includes/generated/v7_transplant_SaveFN_HandleActivate.bin"
 SaveFN_HandleTextChange:
-	ld xiz, xwa
-	call FileIO_GetRecordPtrAlt
-	ld xbc, xhl
-	ld xwa, xiz
-	call FileIO_CopyString
-	ld xwa, 0x8850
-	ldw bc, 0x8
-	calr RenderSmfFilename
-	ld xwa, (xsp + 4)
-	ld xbc, 0x1e00086
-	ld xde, 0x8850
-
+	.incbin "includes/generated/v7_transplant_SaveFN_HandleTextChange.bin"
 SaveFN_SendEvent:
 	call ApPostEvent
 	jr SaveFN_Return
 
 SaveFN_HandleApply:
-	ld xbc, (xsp + 4)
-	ldw de, 0x8
-	call FileIO_CopyString_WriteNull
-	ld xwa, 0x8850
-	ldw bc, 0x8
-	calr RenderSmfFilename
-	ld xwa, 0x8850
-	ld xbc, DiskOp_ChannelCfgTable_0xCA
-	call FileIO_BuildFilePath
-	ld xwa, 0x8850
-	call FileIO_WriteRecordName
-
+	.incbin "includes/generated/v7_transplant_SaveFN_HandleApply.bin"
 SaveFN_Return:
 	lds32 xhl, 0
 	pop xiz
@@ -304,112 +140,35 @@ SaveFN_Return:
 	ret
 
 SmfSeqToSongNumFunc:
-	push xiz
-	cp xbc, 0x1c0000b
-	jr z, SeqToSong_BuildEntry
-	cp xbc, 0x1e50004
-	jr nz, SeqToSong_Return
-	stda32 0x8090, xde
-	jr SeqToSong_Return
-
+	.incbin "includes/generated/v7_transplant_SmfSeqToSongNumFunc.bin"
 SeqToSong_BuildEntry:
-	lda_d16 xwa, (0x8094)
-	stib_dsp 0xe0, 0x00
-	ld xbc, DiskOp_ChannelCfgTable_0xD0
-	call FileIO_CopyString
-	lda_d16 xiz, (0x8095)
-	ldb_d8 a, (0x8948)
-	inc 1, a
-	extz wa
-	lds bc, 2
-	calr NumToAscii_FormatNumber
-	ld xbc, xhl
-	ld xwa, xiz
-	call FileIO_BuildFilePath
-	ldda32 xwa, (0x8090)
-	ld xbc, 0x1c0000f
-	ld xde, 0x8094
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_SeqToSong_BuildEntry.bin"
 SeqToSong_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 SmfSeqFromSongNumFunc:
-	push xiz
-	cp xbc, 0x1c0000b
-	jr z, SeqFromSong_BuildEntry
-	cp xbc, 0x1e50004
-	jr nz, SeqFromSong_Return
-	stda32 0x8114, xde
-	jr SeqFromSong_Return
-
+	.incbin "includes/generated/v7_transplant_SmfSeqFromSongNumFunc.bin"
 SeqFromSong_BuildEntry:
-	lda_d16 xwa, (0x8118)
-	stib_dsp 0xe0, 0x00
-	ld xbc, DiskOp_ChannelCfgTable_0xDC
-	call FileIO_CopyString
-	lda_d16 xiz, (0x8119)
-	ldb_d8 a, (0x8948)
-	inc 1, a
-	extz wa
-	lds bc, 2
-	calr NumToAscii_FormatNumber
-	ld xbc, xhl
-	ld xwa, xiz
-	call FileIO_BuildFilePath
-	ldda32 xwa, (0x8114)
-	ld xbc, 0x1c0000f
-	ld xde, 0x8118
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_SeqFromSong_BuildEntry.bin"
 SeqFromSong_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 SmfSeqSongNameFunc:
-	cp xbc, 0x1c0000b
-	jr z, SeqSongName_BuildEntry
-	cp xbc, 0x1e50004
-	jr nz, SeqSongName_Return
-	stda32 0x8198, xde
-	jr SeqSongName_Return
-
+	.incbin "includes/generated/v7_transplant_SmfSeqSongNameFunc.bin"
 SeqSongName_BuildEntry:
-	ldb_d8 a, (0x8948)
-	extz wa
-	lds bc, 0
-	lds de, 0
-	calr BuildSlotLabel
-	ld xde, xhl
-	ldda32 xwa, (0x8198)
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_SeqSongName_BuildEntry.bin"
 SeqSongName_Return:
 	lds32 xhl, 0
 	ret
 
 SmfLoadAsFunc:
-	cp xbc, 0x1c0000b
-	jr z, SmfLoadAs_Apply
-	cp xbc, 0x1e50004
-	jr nz, SmfLoadAs_Return
-	stda32 0x819c, xde
-	jr SmfLoadAs_Return
-
+	.incbin "includes/generated/v7_transplant_SmfLoadAsFunc.bin"
 SmfLoadAs_Apply:
-	ldb_d8 a, (0x8946)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (DiskOp_ChannelCfgTable_0xE8)
-	ld_sril3 XDE, 0x07, 0xe4, 0xe0
-	ldda32 xwa, (0x819c)
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_SmfLoadAs_Apply.bin"
 SmfLoadAs_Return:
 	lds32 xhl, 0
 	ret
@@ -470,46 +229,7 @@ DisplaySmfFileList:
 	lds iz, 0
 
 DispFileList_LoopBody:
-	ld de, iz
-	sll de, 5
-	lda_d16 xbc, (0x850c)
-	extz xde
-	add xde, xbc
-	stb_erp A, 0xf8
-	ld (xde), a
-	ld wa, (xsp + 2)
-	add wa, iz
-	call GetRecordPtrForFile
-	ld xbc, xhl
-	ld wa, iz
-	sll wa, 5
-	lds de, 1
-	add de, wa
-	lda_d16 xhl, (0x850c)
-	ld wa, de
-	extz xwa
-	add xwa, xhl
-	ld de, (xsp + 2)
-	add de, iz
-	inc 1, de
-	pushw 0xc
-	pushw 0x1
-	call FileIO_ReadHeader_ParseLoop
-	ld de, iz
-	sll de, 5
-	lda_d16 xbc, (0x850c)
-	extz xde
-	add xde, xbc
-	ld xwa, (xsp + 4)
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-	inc 1, iz
-	cp iz, 0xa
-	jr lt, DispFileList_LoopBody
-	popw iz
-	inc 6, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_DispFileList_LoopBody.bin"
 ValidateSmfFilename:
 	lds iy, 0
 	lds hl, 0
@@ -537,97 +257,19 @@ ValidateFN_ReturnValid:
 	ret
 
 FmmSmfFileNameFunc:
-	lda xsp, (xsp - 32)
-	push xiz
-	ld xiz, xde
-	ld (xsp + 28), xbc
-	ld (xsp + 32), xwa
-	ld xde, (xsp + 28)
-	ldda32 xwa, (0x81a0)
-	ld xbc, (xsp + 28)
-	cp xbc, 0x1c00018
-	jrl z, SmfFN_NavSetup
-	cp xbc, 0x1c00017
-	jrl z, SmfFN_NavSetup
-	cp xbc, 0x1c0000b
-	jrl z, SmfFN_HandleActivate
-	ld xbc, xiz
-	sub xde, 0x1e50002
-	cp xde, 0x0
-	jrl lt, SmfFN_ReturnZero
-	cp xde, 0x5
-	jr gt, SmfFN_ReturnZero
-	add xde, xde
-	add xde, Str_SmfConvert_GmToGm_0x1E
-	ld de, (xde)
-	lda_24 xix, (SmfFN_JumpTable)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	.incbin "includes/generated/v7_transplant_FmmSmfFileNameFunc.bin"
 SmfFN_JumpTable:
-	stda32	0x81a0, xbc
-	lds32	xwa, 0
-	stda32	0x81a4, xwa
-	stda32	0x81a8, xwa
-	cpdi8	(0x8d36), 107
-	jr	z, 20
-	call	GetFirstPageBase
-	stda16	(0x81ac), hl
-	cps	hl, 0
-	jr	ge, 26
-	stdi16	(0x81ac), 0
-	jr	18
-	ldw_d16	wa, (0x8504)
-	stda16	(0x81ac), wa
-	cps	wa, 0
-	jr	le, 2
-	dec	1, wa
-	call	NavigateToFileIndex
-	ldw_d16	wa, (0x81ac)
-	exts	xwa
-	divs	wa, 10
-	ld	de, qwa
-	exts	xde
-	ldda32	xwa, (0x81a0)
-	ld	xbc, 0x01e50002
-	jrl	1929
-
+	.incbin "includes/generated/v7_transplant_SmfFN_JumpTable.bin"
 SmfFN_HandleActivate:
-	ldw_d16 xbc, (0x81ac)
-	exts xbc
-	divs bc, 0xa
-	muls bc, 0xa
-	calr DisplaySmfFileList
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleActivate.bin"
 SmfFN_ReturnZero:
 	lds32 xhl, 0
 	jrl SmfFN_Return
 
 SmfFN_NavSetup:
-	ld xbc, 0x1c50001
-	lds32 xde, 1
-	call ApPostEvent
-	ldw_d16 xix, (0x81ac)
-	ld (xsp + 4), ix
-	or xiz, xiz
-	jr nz, SmfFN_PageUp
-	cpdi8 (0x84fe), 0
-	jr nz, SmfFN_PageUp
-	ld xwa, (xsp + 28)
-	cp xwa, 0x1c00018
-	jr nz, SmfFN_NavUp
-	ld bc, ix
-	inc 1, bc
-	cpdi8 (0x8d36), 107
-	jr z, SmfFN_NavDown_WrapCheck
-	cpda16 xbc, 0x8504
-	jr lt, SmfFN_NavDown_Apply
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_NavSetup.bin"
 SmfFN_NavDown_WrapCheck:
-	ldw_d16 xwa, (0x8504)
-	inc 1, wa
-	cp bc, wa
-	jrl ge, SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_NavDown_WrapCheck.bin"
 SmfFN_NavDown_Apply:
 	inc 1, ix
 	jrl SmfFN_StoreIndex
@@ -641,47 +283,9 @@ SmfFN_NavUp:
 	jr SmfFN_StoreIndex
 
 SmfFN_PageUp:
-	cp xiz, 0x1
-	jr nz, SmfFN_PageDown
-	cpdi8 (0x84fe), 0
-	jr nz, SmfFN_PageDown
-	cp ix, 0xa
-	jrl lt, SmfFN_UpdateDisplay
-	sub ix, 0xa
-	jr SmfFN_StoreIndex
-
+	.incbin "includes/generated/v7_transplant_SmfFN_PageUp.bin"
 SmfFN_PageDown:
-	cp xiz, 0x2
-	jrl nz, SmfFN_HandleSave
-	cpdi8 (0x84fe), 0
-	jr nz, SmfFN_HandleSave
-	ld iy, ix
-	add iy, 0xa
-	ldw_d16 xbc, (0x8504)
-	ld de, ix
-	exts xde
-	divs de, 0xa
-	cpdi8 (0x8d36), 107
-	jr z, SmfFN_PageDown_WrapCheck
-	ld hl, bc
-	cp iy, bc
-	jr lt, SmfFN_PageDown_Add10
-	ld bc, hl
-	dec 1, bc
-	ld wa, bc
-	exts xwa
-	divs wa, 0xa
-	cp de, wa
-	jrl ge, SmfFN_UpdateDisplay
-	exts xhl
-	divs hl, 0xa
-	stw_erp WA, 0xee
-	cps wa, 0
-	jrl z, SmfFN_UpdateDisplay
-	stda16 (0x81ac), xbc
-	ld hl, bc
-	jrl SmfFN_RefreshIfChanged
-
+	.incbin "includes/generated/v7_transplant_SmfFN_PageDown.bin"
 SmfFN_PageDown_WrapCheck:
 	ld hl, bc
 	inc 1, bc
@@ -692,82 +296,13 @@ SmfFN_PageDown_Add10:
 	add ix, 0xa
 
 SmfFN_StoreIndex:
-	stda16 (0x81ac), xix
-	ld hl, ix
-	jrl SmfFN_RefreshIfChanged
-
+	.incbin "includes/generated/v7_transplant_SmfFN_StoreIndex.bin"
 SmfFN_PageDown_ClampCheck:
-	ld wa, hl
-	exts xwa
-	divs wa, 0xa
-	cp de, wa
-	jrl ge, SmfFN_UpdateDisplay
-	exts xbc
-	divs bc, 0xa
-	stw_erp WA, 0xe6
-	cps wa, 0
-	jrl z, SmfFN_UpdateDisplay
-	stda16 (0x81ac), xhl
-	jrl SmfFN_RefreshIfChanged
-
+	.incbin "includes/generated/v7_transplant_SmfFN_PageDown_ClampCheck.bin"
 SmfFN_HandleSave:
-	cp xiz, 0x3
-	jrl nz, SmfFN_HandleOpen
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	lds wa, 0
-	calr InitializeOperationState
-	ldb_d8 a, (0x8948)
-	extz wa
-	ldb_d8 c, (0x8946)
-	extz bc
-	call LoadFileSMF
-	ld (xsp + 6), hl
-	calr SignalProgressUpdate
-	cpw (xsp + 6), 0x0
-	jr lt, SmfFN_Save_Finish
-	ldw_d16 xwa, (0x81ac)
-	call GetFileEntryByIndex
-	ld xbc, xhl
-	lda xwa, (xsp + 8)
-	ldw de, 0x10
-	call FileIO_CopyString_WriteNull
-	lda xwa, (xsp + 8)
-	ldw bc, 0x10
-	calr ValidateSmfFilename
-	cps l, 0
-	jr z, SmfFN_Save_WriteSlot
-	ldw_d16 xwa, (0x81ac)
-	call GetRecordPtrForFile
-	ld xbc, xhl
-	lda xwa, (xsp + 8)
-	ldw de, 0x8
-	call FileIO_CopyString_WriteNull
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleSave.bin"
 SmfFN_Save_WriteSlot:
-	lda xwa, (xsp + 8)
-	ldw bc, 0x10
-	calr TrimAndPadSmfFilename
-	lda_24 xwa, (0x0ab000)
-	lds32 xbc, 0
-	ldb_d8 c, (0x8948)
-	sll xbc, 11
-	add xwa, xbc
-	stb_dri W, 0xe1, 0x00, 0x01
-	lda xbc, (xsp + 8)
-	ldw de, 0x10
-	call FileIO_CopyString_WriteNull
-	ldb_da a, (0x00ffe3)
-	cpda8 a, 0x8948
-	jr nz, SmfFN_Save_Finish
-	lda_24 xwa, (0x00f180)
-	stb_dri W, 0xe1, 0x00, 0x01
-	lda xbc, (xsp + 8)
-	ldw de, 0x10
-	call FileIO_CopyString_WriteNull
-
+	.incbin "includes/generated/v7_transplant_SmfFN_Save_WriteSlot.bin"
 SmfFN_Save_Finish:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -786,18 +321,7 @@ SmfFN_Save_NoAltSlot:
 	lds wa, 1
 
 SmfFN_Save_CallResult:
-	call UI_PostPartChangeEvent
-	ld wa, (xsp + 6)
-	lds bc, 1
-	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	ldw wa, 0xee
-	jrl SmfFN_CallStatusDisplayAndExit
-
+	.incbin "includes/generated/v7_transplant_SmfFN_Save_CallResult.bin"
 SmfFN_HandleOpen:
 	cp xiz, 0x4
 	jrl nz, SmfFN_HandleOpen2
@@ -826,83 +350,9 @@ SmfFN_HandleOpen:
 	jrl SmfFN_DispatchEvent
 
 SmfFN_Open_Execute:
-	lds wa, 0
-	calr InitializeOperationState
-	ldb_d8 a, (0x8948)
-	extz wa
-	ldb_d8 c, (0x894a)
-	extz bc
-	ldb_d8 e, (0x894c)
-	extz de
-	call LoadFileVariant
-	ld wa, hl
-	lds bc, 5
-	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
-	call FileIO_ResetCurrentRecord
-	call GetEncodedFreeSpaceData
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	calr SignalProgressUpdate
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	lds wa, 1
-	call UI_PostPartChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	ldw wa, 0xee
-	jrl SmfFN_CallStatusDisplayAndExit
-
+	.incbin "includes/generated/v7_transplant_SmfFN_Open_Execute.bin"
 SmfFN_HandleOpen2:
-	cp xiz, 0x32
-	jrl nz, SmfFN_HandleDelete
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	lds wa, 0
-	calr InitializeOperationState
-	ldb_d8 a, (0x8948)
-	extz wa
-	ldb_d8 c, (0x894a)
-	extz bc
-	ldb_d8 e, (0x894c)
-	extz de
-	call LoadFileVariant
-	ld wa, hl
-	lds bc, 5
-	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
-	call FileIO_ResetCurrentRecord
-	call GetEncodedFreeSpaceData
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	calr SignalProgressUpdate
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	lds wa, 1
-	call UI_PostPartChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	ldw wa, 0xee
-	jrl SmfFN_CallStatusDisplayAndExit
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleOpen2.bin"
 SmfFN_HandleDelete:
 	cp xiz, 0x5
 	jrl nz, SmfFN_HandleDelete2
@@ -918,71 +368,13 @@ SmfFN_HandleDelete:
 	jrl SmfFN_DispatchEvent
 
 SmfFN_Delete_Execute:
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	lds wa, 0
-	calr InitializeOperationState
-	call GetFirstRecordAndOpen
-	ld wa, hl
-	lds bc, 5
-	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
-	calr SignalProgressUpdate
-	call FileIO_ResetCurrentRecord
-	call GetEncodedFreeSpaceData
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ldw_d16 xwa, (0x81ac)
-	cpda16 xwa, 0x8504
-	jr lt, SmfFN_Delete_AdjustIndex
-	cps wa, 0
-	jr le, SmfFN_Delete_AdjustIndex
-	dec 1, wa
-	stda16 (0x81ac), xwa
-	ld (xsp + 4), wa
-
+	.incbin "includes/generated/v7_transplant_SmfFN_Delete_Execute.bin"
 SmfFN_Delete_AdjustIndex:
 	ldw wa, 0xee
 	jr SmfFN_CallStatusDisplayAndExit
 
 SmfFN_HandleDelete2:
-	cp xiz, 0x33
-	jr nz, SmfFN_IgnoredEvents
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	lds wa, 0
-	calr InitializeOperationState
-	call GetFirstRecordAndOpen
-	ld wa, hl
-	lds bc, 5
-	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
-	calr SignalProgressUpdate
-	call FileIO_ResetCurrentRecord
-	call GetEncodedFreeSpaceData
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ldw_d16 xwa, (0x81ac)
-	cpda16 xwa, 0x8504
-	jr lt, SmfFN_Delete2_AdjustIndex
-	cps wa, 0
-	jr le, SmfFN_Delete2_AdjustIndex
-	dec 1, wa
-	stda16 (0x81ac), xwa
-	ld (xsp + 4), wa
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleDelete2.bin"
 SmfFN_Delete2_AdjustIndex:
 	ldw wa, 0xee
 
@@ -991,285 +383,62 @@ SmfFN_CallStatusDisplayAndExit:
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_IgnoredEvents:
-	cp xiz, 0xa
-	jrl z, SmfFN_UpdateDisplay
-	cp xiz, 0xb
-	jrl z, SmfFN_UpdateDisplay
-	cp xiz, 0xc
-	jrl z, SmfFN_UpdateDisplay
-	cp xiz, 0xd
-	jrl z, SmfFN_UpdateDisplay
-	cp xiz, 0x14
-	jr nz, SmfFN_HandleScrollFlag1
-	cpdi8 (0x84fe), 0
-	jr nz, SmfFN_HandleScrollFlag1
-	ld xwa, (xsp + 28)
-	cp xwa, 0x1c00017
-	jr nz, SmfFN_SetScrollDir0
-	stdi8 (0x8942), 1
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_IgnoredEvents.bin"
 SmfFN_SetScrollDir0:
-	stdi8 (0x8942), 0
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SetScrollDir0.bin"
 SmfFN_HandleScrollFlag1:
-	cp xiz, 0x15
-	jr nz, SmfFN_HandleScrollFlag2
-	ldb_d8 c, (0x8946)
-	ld a, c
-	inc 1, a
-	cps a, 3
-	jr nc, SmfFN_LoadAs_Wrap
-	inc 1, c
-	stb_d8 (0x8946), c
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	jr SmfFN_LoadAs_Apply
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleScrollFlag1.bin"
 SmfFN_LoadAs_Wrap:
-	stdi8 (0x8946), 0
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-
+	.incbin "includes/generated/v7_transplant_SmfFN_LoadAs_Wrap.bin"
 SmfFN_LoadAs_Apply:
 	calr SmfLoadAsFunc
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleScrollFlag2:
-	cp xiz, 0x16
-	jr nz, SmfFN_HandleScrollFlag3
-	ld xwa, (xsp + 28)
-	cp xwa, 0x1c00017
-	jr nz, SmfFN_SetTrackFlag0
-	stdi8 (0x894a), 1
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleScrollFlag2.bin"
 SmfFN_SetTrackFlag0:
-	stdi8 (0x894a), 0
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SetTrackFlag0.bin"
 SmfFN_HandleScrollFlag3:
-	ld xwa, (xsp + 28)
-	cp xiz, 0x17
-	jr nz, SmfFN_HandleScrollFlag4
-	cp xwa, 0x1c00017
-	jr nz, SmfFN_SetTransposeFlag0
-	stdi8 (0x894c), 1
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleScrollFlag3.bin"
 SmfFN_SetTransposeFlag0:
-	stdi8 (0x894c), 0
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SetTransposeFlag0.bin"
 SmfFN_HandleScrollFlag4:
-	cp xiz, 0x18
-	jr nz, SmfFN_HandleSeqSongNum
-	cp xwa, 0x1c00017
-	jr nz, SmfFN_SetFlag35140_0
-	stdi8 (0x8944), 1
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleScrollFlag4.bin"
 SmfFN_SetFlag35140_0:
-	stdi8 (0x8944), 0
-	jrl SmfFN_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SetFlag35140_0.bin"
 SmfFN_HandleSeqSongNum:
-	ldb_d8 c, (0x8948)
-	ld a, c
-	inc 1, a
-	cp xiz, 0x1e
-	jr nz, SmfFN_HandleSeqFromSong
-	cp a, 0xa
-	jr nc, SmfFN_SeqToSong_Wrap
-	inc 1, c
-	stb_d8 (0x8948), c
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	calr SmfSeqToSongNumFunc
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	jr SmfFN_SeqSongName_Dispatch
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleSeqSongNum.bin"
 SmfFN_SeqToSong_Wrap:
-	stdi8 (0x8948), 0
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	calr SmfSeqToSongNumFunc
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	jr SmfFN_SeqSongName_Dispatch
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SeqToSong_Wrap.bin"
 SmfFN_HandleSeqFromSong:
-	cp xiz, 0x1f
-	jr nz, SmfFN_HandleMedleyConfirm
-	cp a, 0xa
-	jr nc, SmfFN_SeqFromSong_Wrap
-	inc 1, c
-	stb_d8 (0x8948), c
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	calr SmfSeqFromSongNumFunc
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	jr SmfFN_SeqSongName_Dispatch
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleSeqFromSong.bin"
 SmfFN_SeqFromSong_Wrap:
-	stdi8 (0x8948), 0
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	calr SmfSeqFromSongNumFunc
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SeqFromSong_Wrap.bin"
 SmfFN_SeqSongName_Dispatch:
 	calr SmfSeqSongNameFunc
 	jr SmfFN_UpdateDisplay
 
 SmfFN_HandleMedleyConfirm:
-	cp xiz, 0x28
-	jr nz, SmfFN_UpdateDisplay
-	cpdi16 0x81ae, 0
-	jr z, SmfFN_UpdateDisplay
-	ldda32 xwa, (0x81a4)
-	or xwa, xwa
-	jr z, SmfFN_UpdateDisplay
-	ld xbc, 0x1c0000a
-	lds32 xde, 0
-
+	.incbin "includes/generated/v7_transplant_SmfFN_HandleMedleyConfirm.bin"
 SmfFN_DispatchEvent:
 	call ApPostEvent
 
 SmfFN_UpdateDisplay:
-	ldw_d16 xhl, (0x81ac)
-
+	.incbin "includes/generated/v7_transplant_SmfFN_UpdateDisplay.bin"
 SmfFN_RefreshIfChanged:
-	cp (xsp + 4), hl
-	jrl z, SmfFN_SendOkState
-	ld wa, hl
-	call NavigateToFileIndex
-	ldw_d16 xwa, (0x81ac)
-	exts xwa
-	divs wa, 0xa
-	stw_erp DE, 0xe2
-	exts xde
-	ldda32 xwa, (0x81a0)
-	ld xbc, 0x1e50002
-	call ApPostEvent
-	ldw_d16 xbc, (0x81ac)
-	exts xbc
-	divs bc, 0xa
-	ld de, (xsp + 4)
-	exts xde
-	divs de, 0xa
-	ldda32 xwa, (0x81a0)
-	cp de, bc
-	jr nz, SmfFN_RedrawPage
-	ld bc, (xsp + 4)
-	exts xbc
-	divs bc, 0xa
-	stw_erp BC, 0xe6
-	sll bc, 5
-	lda_d16 xhl, (0x850c)
-	ld de, bc
-	extz xde
-	add xde, xhl
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-	ldw_d16 xwa, (0x81ac)
-	exts xwa
-	divs wa, 0xa
-	stw_erp WA, 0xe2
-	sll wa, 5
-	lda_d16 xbc, (0x850c)
-	ld de, wa
-	extz xde
-	add xde, xbc
-	ldda32 xwa, (0x81a0)
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-	jr SmfFN_UpdateFilenameField
-
+	.incbin "includes/generated/v7_transplant_SmfFN_RefreshIfChanged.bin"
 SmfFN_RedrawPage:
-	muls bc, 0xa
-	calr DisplaySmfFileList
-	cpdi8 (0x8d36), 108
-	jr nz, SmfFN_UpdateFilenameField
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	calr FmmSmfMedleyFunc
-
+	.incbin "includes/generated/v7_transplant_SmfFN_RedrawPage.bin"
 SmfFN_UpdateFilenameField:
-	cpdi8 (0x8d36), 107
-	jr nz, SmfFN_SendOkState
-	lda_d16 xiz, (0x8850)
-	ldw_d16 xwa, (0x81ac)
-	cpda16 xwa, 0x8504
-	jr lt, SmfFN_FetchFilename
-	cps wa, 0
-	jr le, SmfFN_FetchFilename
-	ld xwa, xiz
-	ld xbc, Str_SmfConvert_GmToGm_0x10
-	call FileIO_CopyString
-	jr SmfFN_WriteFilenameField
-
+	.incbin "includes/generated/v7_transplant_SmfFN_UpdateFilenameField.bin"
 SmfFN_FetchFilename:
-	call GetRecordPtrForFile
-	ld xbc, xhl
-	ld xwa, xiz
-	call FileIO_CopyString
-	ld xwa, 0x8850
-	call FileIO_GetRecordType_Extended
-
+	.incbin "includes/generated/v7_transplant_SmfFN_FetchFilename.bin"
 SmfFN_WriteFilenameField:
-	ld xwa, 0x8850
-	call FileIO_WriteRecordName
-	ld xwa, (xsp + 32)
-	ld xbc, 0x1c0000b
-	lds32 xde, 0
-	calr SaveFileNameSmfFunc
-
+	.incbin "includes/generated/v7_transplant_SmfFN_WriteFilenameField.bin"
 SmfFN_SendOkState:
-	ldda32 xwa, (0x81a0)
-	ld xbc, 0x1c50001
-	lds32 xde, 0
-	jr SmfFN_DispatchFinalEvent
-	stda32 0x81a4, xbc
-	jrl SmfFN_ReturnZero
-	stda32 0x81a8, xbc
-	jrl SmfFN_ReturnZero
-	stda16 (0x81ae), xiz
-	jrl SmfFN_ReturnZero
-	cpdi8 (0x84fe), 0
-	jrl z, SmfFN_ReturnZero
-	ld wa, iz
-	stda16 (0x81ac), xwa
-	call NavigateToFileIndex
-	ldw_d16 xwa, (0x81ac)
-	exts xwa
-	divs wa, 0xa
-	stw_erp DE, 0xe2
-	exts xde
-	ldda32 xwa, (0x81a0)
-	ld xbc, 0x1e50002
-
+	.incbin "includes/generated/v7_transplant_SmfFN_SendOkState.bin"
 SmfFN_DispatchFinalEvent:
-	call ApPostEvent
-	jrl SmfFN_ReturnZero
-	ldw_d16 xhl, (0x81ac)
-	exts xhl
-
+	.incbin "includes/generated/v7_transplant_SmfFN_DispatchFinalEvent.bin"
 SmfFN_Return:
 	pop xiz
 	lda xsp, (xsp + 32)

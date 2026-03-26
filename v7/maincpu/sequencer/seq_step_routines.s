@@ -559,25 +559,7 @@ SeqStep_DeletePopReturn:
 	ret
 
 SeqStep_TrackChange:
-	dec 4, xsp
-	push xiz
-	stdi8 (0x7f42), 35
-	ldb_d8 c, (9996)
-	cp c, 0x11
-	jr nz, SeqStep_TrackChangeCheck
-	ldb_d8 c, (9994)
-	cpda8 c, 9992
-	jrl z, SeqStep_TrackChangeExit
-	ldb_d8 a, (0x2878)
-	ldb_erp A, 0xfb
-	dec 1, c
-	stb_d8 (0x2878), c
-	call SeqVoice_InitAllChannelParams
-	stb_erp A, 0xfb
-	stb_d8 (0x2878), a
-	calr SeqStep_MultiTrackProcess
-	jrl SeqStep_TrackChangeExit
-
+	.incbin "includes/generated/v7_transplant_SeqStep_TrackChange.bin"
 SeqStep_TrackChangeCheck:
 	ldb_d8 e, (9992)
 	cpda8 e, 9994
@@ -676,9 +658,7 @@ SeqStep_TrackChangeNonDrum:
 	jr nz, SeqStep_TrackChangeLoopDone
 
 SeqStep_TrackChangeLoop:
-	stdi8 (0x7f42), 15
-	jrl SeqStep_TrackChangeValidate
-
+	.incbin "includes/generated/v7_transplant_SeqStep_TrackChangeLoop.bin"
 SeqStep_TrackChangeLoopCheck:
 	cp l, 0xd
 	jr nz, SeqStep_TrackChangeNext
@@ -774,16 +754,7 @@ SeqStep_TrackChangeComplete:
 	jr nz, SeqStep_TrackChangeFinal
 
 SeqStep_TrackChangeValidate:
-	ldb_d8 a, (9994)
-	dec 1, a
-	stb_d8 (0x2710), a
-	ldb_d8 a, (9998)
-	dec 1, a
-	stb_d8 (0x271a), a
-	calr SeqStep_BoundaryReturn
-	stdi8 (0x7f42), 15
-	jrl SeqStep_TrackChangeExit
-
+	.incbin "includes/generated/v7_transplant_SeqStep_TrackChangeValidate.bin"
 SeqStep_TrackChangeFinal:
 	call Part_ProcessAndDecrementVoice
 	ldw_erp HL, 0xfa
@@ -1034,17 +1005,7 @@ SeqStep_MultiTrackCopyCheck:
 	jr nz, SeqStep_PartCopy
 
 SeqStep_MultiTrackCleanup:
-	ldb_d8 a, (0x2878)
-	ldb_erp A, 0xfb
-	ldb_d8 a, (9994)
-	dec 1, a
-	stb_d8 (0x2878), a
-	call SeqVoice_InitAllChannelParams
-	stb_erp A, 0xfb
-	stb_d8 (0x2878), a
-	stdi8 (0x7f42), 15
-	jrl SeqStep_VoiceReassignFinalExit
-
+	.incbin "includes/generated/v7_transplant_SeqStep_MultiTrackCleanup.bin"
 SeqStep_PartCopy:
 	call Part_ProcessAndDecrementVoice
 	ldw_erp HL, 0xfa
@@ -2975,22 +2936,7 @@ SeqStep_RebuildReturn:
 	ret
 
 SeqStep_ByteBlockEA5F:
-	.byte 0xef, 0x6a, 0x3e, 0xc2, 0xe3, 0xff, 0x00, 0x19
-	.byte 0x47, 0xf2, 0xd2, 0xec, 0xff, 0x00, 0x19, 0x48
-	.byte 0xf2, 0xc2, 0xe3, 0xff, 0x00, 0x21, 0xd8, 0x12
-	.byte 0x1d, 0x0b, 0x14, 0xf4, 0x1e, 0x36, 0xfd, 0xd1
-	.byte 0xce, 0xf1, 0x20, 0xd7, 0xfa, 0x98, 0xd1, 0x31
-	.byte 0xf2, 0x26, 0xbf, 0x04, 0x16, 0x2f, 0xf2, 0xc2
-	.byte 0xe3, 0xff, 0x00, 0x21, 0xd8, 0x12, 0x1d, 0x26
-	.byte 0x14, 0xf4, 0xd7, 0xfa, 0x88, 0xf1, 0xce, 0xf1
-	.byte 0x50, 0xf1, 0x31, 0xf2, 0x56, 0x9f, 0x04, 0x19
-	.byte 0x2f, 0xf2, 0x5e, 0xef, 0x62, 0x0e, 0xc1, 0x47
-	.byte 0xf2, 0x21, 0xf2, 0xe3, 0xff, 0x00, 0x41, 0xf1
-	.byte 0x47, 0xf2, 0x00, 0x00, 0xd1, 0x48, 0xf2, 0x20
-	.byte 0xf2, 0xec, 0xff, 0x00, 0x50, 0xf1, 0x48, 0xf2
-	.byte 0x02, 0x00, 0x00, 0xf1, 0x68, 0x26, 0x02, 0x01
-	.byte 0x00, 0xf1, 0xa7, 0x28, 0xb3, 0x78, 0xd3, 0xfc
-
+	.incbin "includes/generated/v7_transplant_SeqStep_ByteBlockEA5F.bin"
 SeqStep_ReinitPartTable:
 	dec 6, xsp
 	push xiz
@@ -3040,24 +2986,7 @@ SeqStep_ReinitLoop:
 	ret
 
 SeqStep_MemAllocWrapper:
-	push xiz
-	ld wa, (xsp + 8)
-	exts xwa
-	push xwa
-	pushw 0x0
-	call SeqStep_MallocWrapper
-	inc 6, xsp
-	ld xiz, xhl
-	or xiz, xiz
-	jr z, SeqStep_MemAllocFail
-	ld wa, (xsp + 8)
-	pushw wa
-	pushw 0x0
-	push xiz
-	call Memset
-	inc 8, xsp
-	jr SeqStep_MemAllocReturn
-
+	.incbin "includes/generated/v7_transplant_SeqStep_MemAllocWrapper.bin"
 SeqStep_MemAllocFail:
 	stiw_da (0x01e53c), 0x0003
 

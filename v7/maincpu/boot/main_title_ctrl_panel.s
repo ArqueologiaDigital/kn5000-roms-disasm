@@ -38,9 +38,7 @@ MainTitle_InitGraphicsAndEvents:
 	jp PostEvent
 
 MainTitle_SetBootFlag:
-	stdi8 (0x7f42), 35
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainTitle_SetBootFlag.bin"
 MainTitle_TeardownAndLoop:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -92,41 +90,7 @@ MainTitle_EventLoopSkipInit:
 	jr MainTitle_UpdateAndRefresh
 
 MainTitle_PrepareAndDispatch:
-	call MainDispatchEvent
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000bb
-	lds32 xde, 0
-	jrl MainTitleControl
-	push xiz
-	ldb_d8 a, (0xc080)
-	ldb_d8 e, (0xc07d)
-	cp a, 0xaa
-	jrl z, CtrlPanel_EventType_AA
-	cp a, 0xa8
-	jrl z, CtrlPanel_EventType_A8
-	cp a, 0xa9
-	jrl nz, UIEvent_Epilogue
-	cp e, 0x10
-	jrl ugt, CtrlPanel_HandlePortCommands
-	lds32 xiz, 0
-	ldb_erp E, 0xf8
-	cp e, 0xe
-	jr nz, SndParam_SendDiskMenuEvents
-	ldb_d8 e, (0xc07f)
-	ld a, e
-	and a, 0x3
-	jr z, SndParam_SendDiskMenuEvents
-	ldb_d8 c, (0xc07e)
-	ld a, c
-	and a, 0x3
-	cps a, 3
-	jr nz, CtrlPanel_HandleSingleBit
-	lds32 xwa, 3
-	lds bc, 5
-	lds de, 4
-	call SoundParam_NotifyChange
-	jr SndParam_SendDiskMenuEvents
-
+	.incbin "includes/generated/v7_transplant_MainTitle_PrepareAndDispatch.bin"
 CtrlPanel_HandleSingleBit:
 	and e, c
 	bit 1, e
@@ -144,41 +108,9 @@ CtrlPanel_HandleBit1SndParam:
 	lds de, 4
 
 CtrlPanel_DispatchSndParamLookup:
-	call SndParam_LookupByKey
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_DispatchSndParamLookup.bin"
 SndParam_SendDiskMenuEvents:
-	ldb_d8 c, (0xc07f)
-	ldb_d8 a, (0xc07e)
-	and a, c
-	ld xde, xiz
-	bit 1, a
-	jr z, CtrlPanel_CheckDiskMenuRelease
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00008
-	call ApPostEvent
-	ld xde, xiz
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
-	call DeleteSpecificEvent
-	ld xde, xiz
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
-	call ApPostEvent
-	ld xde, xiz
-	ld xwa, xde
-	sll xwa, 2
-	ld xbc, DiskWarning_ConfirmStrings_0xCBA
-	add xbc, xwa
-	ld xwa, (xbc)
-	ordm32_24 (0x02749a), xwa
-	ld xwa, (xbc)
-	andda32_24 xwa, (0x02749e)
-	jr z, CtrlPanel_ProcessButtonPress
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00030
-	call ApPostEvent
-	jr CtrlPanel_ProcessButtonPress
-
+	.incbin "includes/generated/v7_transplant_SndParam_SendDiskMenuEvents.bin"
 CtrlPanel_CheckDiskMenuRelease:
 	bit 1, c
 	jr z, CtrlPanel_ProcessButtonPress
@@ -195,41 +127,7 @@ CtrlPanel_CheckDiskMenuRelease:
 	anddm32_24 (0x02749a), xwa
 
 CtrlPanel_ProcessButtonPress:
-	ldb_d8 c, (0xc07f)
-	ldb_d8 a, (0xc07e)
-	and a, c
-	ld xde, xiz
-	set 7, de
-	bit 0, a
-	jr z, CtrlPanel_CheckButtonRelease
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00008
-	call ApPostEvent
-	ld xde, xiz
-	set 7, de
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
-	call DeleteSpecificEvent
-	ld xde, xiz
-	set 7, de
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
-	call ApPostEvent
-	ld xde, xiz
-	ld xwa, xde
-	sll xwa, 2
-	ld xbc, DiskWarning_ConfirmStrings_0xCBA
-	add xbc, xwa
-	ld xwa, (xbc)
-	ordm32_24 (0x02749e), xwa
-	ld xwa, (xbc)
-	andda32_24 xwa, (0x02749a)
-	jr z, CtrlPanel_DispatchCombinedState
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00030
-	call ApPostEvent
-	jr CtrlPanel_DispatchCombinedState
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_ProcessButtonPress.bin"
 CtrlPanel_CheckButtonRelease:
 	bit 0, c
 	jr z, CtrlPanel_DispatchCombinedState
@@ -283,92 +181,18 @@ CtrlPanel_HandleFirmwareCheck:
 	call_24 z, CaptureLcd
 
 CtrlPanel_HandlePortCommands:
-	cpdi8 (0xc07d), 32
-	jr nz, CtrlPanel_HandleSerialPort
-	cpdi8 (0xc07e), 0
-	jr z, CtrlPanel_HandleSerialPort
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0003b
-	call DeleteEvent
-	lds32 xde, 0
-	ldb_d8 e, (0xc07e)
-	add xde, 0x1800000
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0003b
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_HandlePortCommands.bin"
 CtrlPanel_HandleSerialPort:
-	cpdi8 (0xc07d), 33
-	jrl nz, UIEvent_Epilogue
-	cpdi8 (0xc07e), 0
-	jrl z, UIEvent_Epilogue
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001f
-	call DeleteEvent
-	ldb_d8 a, (0xc07e)
-	add a, 0x10
-	exts wa
-	sla wa, 2
-	lda_24 xbc, (DiskWarning_ConfirmStrings_0xC36)
-	ld_sril3 XDE, 0x07, 0xe4, 0xe0
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001f
-	jrl UIEvent_DispatchAndReturn
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_HandleSerialPort.bin"
 CtrlPanel_EventType_A8:
-	cps e, 3
-	jrl nz, CtrlPanel_AA_Epilogue
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	bit 0, a
-	jr z, CtrlPanel_A8_CheckRelease
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009b
-	lds32 xde, 0
-	call ApPostEvent
-	lds32 xwa, 1
-	ordm32_24 (0x027490), xwa
-	jrl UIEvent_Epilogue
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_EventType_A8.bin"
 CtrlPanel_A8_CheckRelease:
 	bit 0, c
 	jr nz, CtrlPanel_ClearStateVar
 	jrl UIEvent_Epilogue
 
 CtrlPanel_EventType_AA:
-	cp e, 0x11
-	jrl z, CtrlPanel_AA_PanelEvent_11
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	cps e, 1
-	jrl z, CtrlPanel_AA_PanelEvent_01_Bit1
-	cp e, 0x15
-	jrl z, CtrlPanel_AA_PanelEvent_15
-	cps e, 4
-	jrl z, CtrlPanel_AA_PanelEvent_04_Bit4
-	cp e, 0xe
-	jrl z, CtrlPanel_AA_PanelEvent_0E_Bit3
-	cp e, 0x12
-	jr z, CtrlPanel_AA_PanelEvent_12
-	cp e, 0xf
-	jr z, CtrlPanel_AA_PanelEvent_0F
-	cps e, 5
-	jrl nz, UIEvent_Epilogue
-	ldb_d8 a, (0xc07f)
-	andda8 a, 0xc07e
-	bit 0, a
-	jrl z, UIEvent_Epilogue
-	bit 1, a
-	jrl z, UIEvent_Epilogue
-	ldl_da xwa, (0x027490)
-	cp xwa, 0x1
-	jrl nz, UIEvent_Epilogue
-	call Get_Firmware_Version
-	cp l, 0xff
-	call_24 z, CaptureLcd
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_EventType_AA.bin"
 CtrlPanel_ClearStateVar:
 	lds32 xwa, 0
 	stl_da (0x027490), xwa
@@ -427,16 +251,7 @@ CtrlPanel_AA_0E_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_0E_Bit2:
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	bit 2, a
-	jr z, CtrlPanel_AA_0E_Bit2Release
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
-	lds32 xde, 3
-	jr CtrlPanel_AA_0E_Bit2Post
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_AA_PanelEvent_0E_Bit2.bin"
 CtrlPanel_AA_0E_Bit2Release:
 	bit 2, c
 	jr z, CtrlPanel_AA_PanelEvent_0E_Bit4
@@ -448,16 +263,7 @@ CtrlPanel_AA_0E_Bit2Post:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_0E_Bit4:
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	bit 4, a
-	jr z, CtrlPanel_AA_0E_Bit4Release
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
-	ld xde, 0x9
-	jrl UIEvent_DispatchAndReturn
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_AA_PanelEvent_0E_Bit4.bin"
 CtrlPanel_AA_0E_Bit4Release:
 	bit 4, c
 	jrl z, UIEvent_Epilogue
@@ -485,16 +291,7 @@ CtrlPanel_AA_04_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_04_Bit5:
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	bit 5, a
-	jr z, CtrlPanel_AA_04_Bit5Release
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
-	lds32 xde, 5
-	jrl UIEvent_DispatchAndReturn
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_AA_PanelEvent_04_Bit5.bin"
 CtrlPanel_AA_04_Bit5Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
@@ -556,16 +353,7 @@ CtrlPanel_AA_01_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_01_Bit5:
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	bit 5, a
-	jr z, CtrlPanel_AA_01_Bit5Release
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
-	ld xde, 0x8
-	jr CtrlPanel_AA_01_Bit5Post
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_AA_PanelEvent_01_Bit5.bin"
 CtrlPanel_AA_01_Bit5Release:
 	bit 5, c
 	jr z, CtrlPanel_AA_PanelEvent_01_Bit6
@@ -577,16 +365,7 @@ CtrlPanel_AA_01_Bit5Post:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_01_Bit6:
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	bit 6, a
-	jr z, CtrlPanel_AA_01_Bit6Release
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
-	ld xde, 0x8
-	jr UIEvent_DispatchAndReturn
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_AA_PanelEvent_01_Bit6.bin"
 CtrlPanel_AA_01_Bit6Release:
 	bit 6, c
 	jr z, UIEvent_Epilogue
@@ -596,15 +375,7 @@ CtrlPanel_AA_01_Bit6Release:
 	jr UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_11:
-	ldb_d8 c, (0xc07f)
-	ld a, c
-	andda8 a, 0xc07e
-	jr z, CtrlPanel_AA_11_Release
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
-	ld xde, 0xa
-	jr UIEvent_DispatchAndReturn
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_AA_PanelEvent_11.bin"
 CtrlPanel_AA_11_Release:
 	cps c, 0
 	jr z, UIEvent_Epilogue

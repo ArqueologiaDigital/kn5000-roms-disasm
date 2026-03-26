@@ -211,19 +211,7 @@ SetWall_MatchedSameSlot:
 	jrl SetWall_CopySlotData
 
 SetWall_NewSlotSelected:
-	stdi8 (0x7f42), 26
-	stdi8 (3298), 0
-	ldb_d8 a, (0x2873)
-	cp a, 0x10
-	jr z, SetWall_DispatchSlotEvent
-	stdi8 (3298), 2
-	cp a, 0xf
-	jr z, SetWall_DispatchSlotEvent
-	stdi8 (3298), 3
-	cp a, 0xe
-	jr z, SetWall_DispatchSlotEvent
-	stdi8 (3298), 1
-
+	.incbin "includes/generated/v7_transplant_SetWall_NewSlotSelected.bin"
 SetWall_DispatchSlotEvent:
 	xor wa, wa
 	ldb a, 0xee
@@ -337,14 +325,7 @@ SetWall_SlotUpdate_Return:
 	ret
 
 SetWall_DataBlock1:
-	stdi8	(0x7f42), 0
-	ldb_da	a, (0xffe3)
-	stb_d8	(3391), a
-	ret
-	ret
-	ret
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_DataBlock1.bin"
 SetWall_ACSlotChange:
 	cpdi8 (3391), 10
 	jr z, SetWall_ACSlot_CheckPanel
@@ -436,32 +417,7 @@ SetWall_WriteSingleSlot:
 	ldb a, 0xff
 
 SetWall_WriteSingle_SetMode:
-	ld xix, 0xab000
-	xor xhl, xhl
-	ldb_d8 l, (3391)
-	sla xhl, 11
-	stb_dri D, 0x07, 0xf0, 0xec
-	ld xde, xix
-	ld xhl, 0xbd
-	add xde, xhl
-	ld (xde), a
-	pop xde
-	pop xhl
-	ld xix, 0xab000
-	xor xwa, xwa
-	ldb_d8 a, (3391)
-	sla xwa, 11
-	stb_dri D, 0x07, 0xf0, 0xe0
-	ld xwa, 0x110
-	add xix, xwa
-	ldw (xix), 0xffff
-	xor xwa, xwa
-	ldb_d8 a, (3391)
-	xor xbc, xbc
-	ldb_d8 c, (3390)
-	call SndParam_UpdateChannels
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_WriteSingle_SetMode.bin"
 SetWall_WriteSlotAndSync:
 	call SetWall_WriteSingleSlot
 	call SetWall_SyncToneGenToDRAM
@@ -503,27 +459,7 @@ SetWall_WriteAll_Loop:
 	ldb a, 0xff
 
 SetWall_WriteAll_ModeSet:
-	ld (xix), a
-	ld xix, 0xab000
-	xor xwa, xwa
-	stb_erp A, 0x34
-	sla xwa, 11
-	add xix, xwa
-	ld xwa, 0x110
-	add xix, xwa
-	ldw (xix), 0xffff
-	inc1b_erp 0x34
-	cp_erpb 0x34, 0x0a
-	jr c, SetWall_WriteAll_Loop
-	xor xwa, xwa
-	ldb_d8 a, (3391)
-	xor xbc, xbc
-	ldb_d8 c, (3390)
-	call SndParam_UpdateChannels
-	call SetWall_SyncToneGenToDRAM
-	call VoiceChannels_InitPanFromPreset
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_WriteAll_ModeSet.bin"
 SetWall_NopPadding:
 	.fill 6, 1, 0x0e
 
@@ -581,27 +517,7 @@ SetWall_LocalWriteAll_Loop:
 	ldb a, 0xff
 
 SetWall_LocalWriteAll_Mode:
-	ld (xix), a
-	ld xix, 0xab000
-	xor xwa, xwa
-	stb_erp A, 0x34
-	sla xwa, 11
-	add xix, xwa
-	ld xwa, 0x110
-	add xix, xwa
-	ldw (xix), 0xffff
-	inc1b_erp 0x34
-	cp_erpb 0x34, 0x0a
-	jr c, SetWall_LocalWriteAll_Loop
-	xor xwa, xwa
-	ldb_d8 a, (3391)
-	xor xbc, xbc
-	ldb_d8 c, (3390)
-	call SndParam_UpdateChannels
-	call SetWall_SyncToneGenToDRAM
-	call VoiceChannels_InitPanFromPreset
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_LocalWriteAll_Mode.bin"
 SetWall_ExternalSync:
 	call CDlikeSwTtl_SendEvent8C_0
 	ret
@@ -653,21 +569,7 @@ SetWall_InlineCodeBlock2:
 	ret
 
 SetWall_CrossTypeChange:
-	ld xhl, 0xf1a0
-	xor wa, wa
-	ldb_d8 a, (3295)
-	ld iy, wa
-	ldb_d8 a, (0x2873)
-	ldb_sri C, 0x07, 0xec, 0xf4
-	stb_d8 (0x2873), c
-	lda_dri XBC, 0x07, 0xec, 0xf4
-	stb_d8 (3386), a
-	ldb_d8 a, (3295)
-	stb_d8 (3301), a
-	call SetWall_CrossType_Validate
-	call Audio_CheckSubsystemReady
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_CrossTypeChange.bin"
 SetWall_SlotTypeMap:
 	nop
 	push	sr
@@ -1817,14 +1719,7 @@ SetWall_Replay_Done:
 	ret
 
 SetWall_SendPanelCtrl:
-	anddi8 (0xfdad), 254
-	xor a, a
-	ldb w, 0x1
-	ldb e, 0x91
-	ldb d, 0x3
-	call SwbtWr_QueuePostEvent
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_SendPanelCtrl.bin"
 SetWall_ResolveStreamPtr:
 	ld hl, iy
 	extz xhl
@@ -1984,142 +1879,7 @@ SetWall_RetStub1:
 SetWall_RetStub2:
 	ret
 SetWall_MiscDataAndCode:
-	ret
-	ret
-	ld	xix, 0xf280
-	ld	xiy, 4441
-	ldw	bc, 16
-	.byte 0x85
-	scf
-	xor	xwa, xwa
-	ldb_da	a, (0xffe3)
-	sla	xwa, 11
-	ld	xix, 0x0ab000
-	add	xix, xwa
-	ld	xwa, 256
-	add	xix, xwa
-	ld	xiy, 4441
-	ldw	bc, 16
-	.byte 0x85
-	scf
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0x8f
-	jr	z, 7
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0xa7
-	jr	z, 10
-	ldb	a, 142
-	call	UI_PostModeChangeEvent
-	jp	SetWall_MiscDataAndCode_0x51
-	ldb	a, 131
-	call	UI_PostModeChangeEvent
-	ret
-	ldda32	xwa, (4349)
-	push	xwa
-	xor	xwa, xwa
-	ldb_d8	a, (0x286b)
-	.byte 0xc2, 0xe3
-	swi	7
-	nop
-	stb_d8	(1902), d
-	.byte 0x50, 0xf2
-	nop
-	nop
-	jr	16
-	ld	xix, 0x0ab000
-	sla	xwa, 11
-	add	xix, xwa
-	add	xix, 208
-	xor	xbc, xbc
-	xor	de, de
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xe8
-	ldb	a, 201
-	ldw	hl, 0x6607
-	decf
-	push	xbc
-	push	xde
-	push	xix
-	call	SetWall_MiscDataAndCode_0xCB
-	pop	xix
-	pop	xde
-	pop	xbc
-	.byte 0xe7
-	ldw	ix, 0xda81
-	ld	w, 0
-	cp	de, 48
-	jr	c, -33
-	ld	xde, xbc
-	cp	xbc, 0
-	jr	z, 23
-	ld	xde, xbc
-	mul	bc, 100
-	ldw_d16	hl, (0x286d)
-	div	xbc, xhl
-	inc	1, bc
-	cp	bc, 100
-	jr	c, 3
-	ldw	bc, 99
-	.byte 0xf1
-	.ascii "l(CX"
-	stda32	4349, xwa
-	ret
-	.byte 0xe7
-	ldw	ix, 0xdaa8
-	incm8	1, (xwa-40)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	c, 219
-	.byte 0xcf
-	swi	7
-	swi	7
-	jr	z, 55
-	push	xhl
-	.byte 0xe7
-	ldw	ix, 7428
-	.byte 0x04
-	push	sr
-	.byte 0xf2, 0xe7
-	ldw	ix, 0xe105
-	swi	5
-	rcf
-	ldb	c, 179
-	divs8rr	c, l
-	jr	z, 35
-	.byte 0xe7
-	ldw	ix, 0xe761
-	ldw	ix, 7428
-	.byte 0x04
-	push	sr
-	.byte 0xf2, 0xe7
-	ldw	ix, 0xe105
-	swi	5
-	rcf
-	ldb	c, 179
-	inc	6, l
-	ret
-	ld	hl, (xhl+3)
-	cp	hl, 0xffff
-	jr	z, 5
-	.byte 0xe7
-	ldw	ix, 0x6861
-	.byte 0xe0
-	ret
-	push	xiy
-	ldda32	xiy, (7514)
-	extz	xhl
-	dec	1, xhl
-	sla	xhl, 8
-	add	xiy, xhl
-	stda32	4349, xiy
-	xor	xhl, xhl
-	pop	xiy
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_MiscDataAndCode.bin"
 SetWall_SyncToneGenToDRAM:
 	ldw_d16 xwa, (0xf22f)
 	stda16 (0x286f), xwa
@@ -2161,23 +1921,9 @@ SetWall_Sync_PanelOff:
 	ldb a, 0x4
 
 SetWall_Sync_PostEvent:
-	stdi8 (4330), 1
-	ldb e, 0x91
-	ldb d, 0x3
-	ldb w, 0x4
-	call SwbtWr_QueueMainEvent
-	call SwbtWr_ReinitBothBanks
-
+	.incbin "includes/generated/v7_transplant_SetWall_Sync_PostEvent.bin"
 SetWall_Sync_FinalUpdate:
-	stdi8 (4596), 1
-	call BitMapOut_RenderDisplay
-	stdi8 (4596), 1
-	anddi8 (0x28a7), 247
-	call SeqPlay_CheckStartConditions
-	anddi8 (0x28b1), 254
-	call Audio_CheckSubsystemReady
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetWall_Sync_FinalUpdate.bin"
 SetWall_LoadBankToToneGen:
 	ldw_da xwa, (0x00ffec)
 	stda16 (0xf19e), xwa

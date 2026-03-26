@@ -95,28 +95,7 @@
 ; Both titles use TestTitleFunc (0xf1e39a) as their lifecycle callback.
 ; Title handler (TestTitleFunc) pointer is stored at 0xe1fd2c in fd_test_data.s.
 InitializeHama:
-	lda xsp, (xsp - 14)
-
-	RegObjTableHama 0x1600004, 0xfa44e2, 0xe1f0bc, 0xe1f080, 0x169
-	RegObjTableHama 0x160000c, 0xfa58fb, 0xe1f0d4, 0xe1f0be, 0x1c9
-	RegObjTableHama 0x160000d, 0xfa5948, 0xe1f0ea, 0xe1f0d6, 0x1e9
-	RegObjTablHama 0x1600002, ApFunctionProc, 0x2, 0xe1f04a, 0x129
-	RegObjTablHama 0x1600002, ApFunctionProc, 0x2, 0xe1f056, 0x429
-	RegObjTablHama 0x1600001, FunctionProc, 0x4b, 0xe1f0ec, 0x109
-	RegObjTablHama 0x1600001, FunctionProc, 0x4b, Hama_ModeParam_Table, 0x409
-	RegObjTablHama 0x1600003, MainFunctionProc, 0x1, 0xe1fd2c, 0x149
-	RegObjTablHama 0x1600003, MainFunctionProc, 0x1, 0xe1fd34, 0x449
-	RegObjTablHama 0x1600010, ViewableProc, 0x0, 0xe1fbd0, 0x7f
-	RegObjTablHama 0x160000f, ResNameProc, 0x0, 0xe1fc40, 0x37f
-	RegObjTablHama 0x1600010, ViewableProc, 0x1a, 0xe1fbd4, 0xfc
-	RegObjTablHama 0x160000f, ResNameProc, 0x1a, FDTest_Config_Table, 0x3fc
-
-	RegTitleHama 0x9, 0xe1fd18, 0x7f, 0x1490000, 0xfc0000
-	RegTitleHama 0x9, 0xe1fd22, 0xfc, 0x1490000, 0xfc0000
-
-	lda xsp, (xsp + 14)
-	ret
-
+	.incbin "includes/generated/v7_transplant_InitializeHama.bin"
 FDTest_PrintDiag:
 	jp Debug_PrintString
 
@@ -449,17 +428,7 @@ CheckFDStatusLoad_Return:
 ; LoadExtensionROM -- Loads 4 bytes from extension ROM path at 0xe1ff9c
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
 LoadExtROM_Entry:
-	pushw 0x4
-	pushw 0xe1
-	pushw 0xff9c
-	ld xwa, 0x200000
-	push xwa
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr z, LoadExtROM_JumpEntry
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x264)
-	jrl SendEvent_Entry
+	.incbin "includes/generated/v7_transplant_LoadExtROM_Entry.bin"
 LoadExtROM_JumpEntry:
 	ld xhl, 0x200008
 	lda_24 xwa, (0x027ed2)
@@ -470,18 +439,7 @@ GetAprStatus_Entry:
 	ret
 
 LoadXaprInit_Entry:
-	pushw 0x4	; 4 bytes
-	pushw 0xe1
-	pushw 0xffb0	; "XAPR"
-	ld xwa, 0x280000
-	push xwa
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	ret nz
-	stib_da (0x03dd04), 0x01
-	ret
-
+	.incbin "includes/generated/v7_transplant_LoadXaprInit_Entry.bin"
 HamaStub1_Entry:
 	ret
 
@@ -499,18 +457,7 @@ CallExtIfActive_Entry:
 	ret
 
 LoadAndRunXapr_Entry:
-	pushw 0x4	; 4 bytes
-	pushw 0xe1
-	pushw 0xffc6	; "XAPR"
-	ld xwa, 0x280000
-	push xwa
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, LoadAndRunXapr_ClearFlag
-	stib_da (0x03dd04), 0x01
-	jr LoadAndRunXapr_CallIfActive
-
+	.incbin "includes/generated/v7_transplant_LoadAndRunXapr_Entry.bin"
 LoadAndRunXapr_ClearFlag:
 	stib_da (0x03dd04), 0x00
 

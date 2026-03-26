@@ -54,11 +54,7 @@ MainExcSend:
 	lds32 xde, 0
 
 MainExcSend_ClampIndexToRange:
-	ld xwa, NakaInst_DIRECT_E7FCE4_0xA0
-	add xwa, xde
-	ld a, (xwa)
-	call SysEx_InitiateSend
-
+	.incbin "includes/generated/v7_transplant_MainExcSend_ClampIndexToRange.bin"
 MainExcSend_UnexpectedMessageType_Exit:
 	lds32 xhl, 0
 	ret
@@ -105,23 +101,7 @@ ExcPmemFunc:
 	lda_24 xix, (ExcPmemFunc_HandlerJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcPmemFunc_HandlerJumpTable:
-	ld	xwa, (xde+14)
-	sll	xwa, 2
-	ld	xbc, FileTransfer_Status_Table
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lds32	xhl, 3
-	jr	9
-
+	.incbin "includes/generated/v7_transplant_ExcPmemFunc_HandlerJumpTable.bin"
 ExcPmemFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcPmemFunc_Return
@@ -145,23 +125,7 @@ ExcSmemFunc:
 	lda_24 xix, (ExcSmemFunc_HandlerJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcSmemFunc_HandlerJumpTable:
-	ld	xwa, (xde+14)
-	sll	xwa, 2
-	ld	xbc, FileTransfer_Status_Table
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lds32	xhl, 3
-	jr	9
-
+	.incbin "includes/generated/v7_transplant_ExcSmemFunc_HandlerJumpTable.bin"
 ExcSmemFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcSmemFunc_Return
@@ -185,23 +149,7 @@ ExcCompFunc:
 	lda_24 xix, (ExcCompFunc_HandlerJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcCompFunc_HandlerJumpTable:
-	ld	xwa, (xde+14)
-	sll	xwa, 2
-	ld	xbc, FileTransfer_Status_Table
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lds32	xhl, 3
-	jr	9
-
+	.incbin "includes/generated/v7_transplant_ExcCompFunc_HandlerJumpTable.bin"
 ExcCompFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcCompFunc_Return
@@ -225,23 +173,7 @@ ExcSeqFunc:
 	lda_24 xix, (ExcSeqFunc_HandlerJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcSeqFunc_HandlerJumpTable:
-	ld	xwa, (xde+14)
-	sll	xwa, 2
-	ld	xbc, FileTransfer_Status_Table
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lds32	xhl, 3
-	jr	9
-
+	.incbin "includes/generated/v7_transplant_ExcSeqFunc_HandlerJumpTable.bin"
 ExcSeqFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcSeqFunc_Return
@@ -265,23 +197,7 @@ ExcMspFunc:
 	lda_24 xix, (ExcMspFunc_HandlerJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcMspFunc_HandlerJumpTable:
-	ld	xwa, (xde+14)
-	sll	xwa, 2
-	ld	xbc, FileTransfer_Status_Table
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lds32	xhl, 3
-	jr	9
-
+	.incbin "includes/generated/v7_transplant_ExcMspFunc_HandlerJumpTable.bin"
 ExcMspFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcMspFunc_Return

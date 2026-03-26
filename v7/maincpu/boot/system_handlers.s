@@ -332,21 +332,7 @@ MemCopy_DataValidation:
 	ld (xde), 0x0
 
 Boot_InitWorkRAM_ZeroBlock1_Done:
-	ld xde, 0x400
-	ld xbc, 0xdf5d
-	ld ix, bc
-	srl xbc, 1
-	jr z, MemCopy_SetupAndDMA
-	ld xhl, xde
-	stiw_dsp 0xe9, 0x00, 0x00
-	dec 1, xbc
-	or xbc, xbc
-	jr z, MemCopy_SetupAndDMA
-	ldirw93
-	cpiw_erp 0xe6, 0
-	jr z, MemCopy_SetupAndDMA
-	stw_erp WA, 0xe6
-
+	.incbin "includes/generated/v7_transplant_Boot_InitWorkRAM_ZeroBlock1_Done.bin"
 Boot_InitWorkRAM_ZeroBlock2_Loop:
 	ldirw93
 	djnz xwa, Boot_InitWorkRAM_ZeroBlock2_Loop
@@ -372,16 +358,7 @@ Boot_InitWorkRAM_ROMCopy1_Loop:
 	djnz xwa, Boot_InitWorkRAM_ROMCopy1_Loop
 
 Boot_InitWorkRAM_ROMCopy2_Start:
-	ld xde, 0xe35e
-	ld xhl, Naka_DrawbarReg_Table_0x4DE
-	ld xbc, 0x95b
-	or xbc, xbc
-	jr z, Boot_InitWorkRAM_Done
-	ldir83
-	cpiw_erp 0xe6, 0
-	jr z, Boot_InitWorkRAM_Done
-	stw_erp WA, 0xe6
-
+	.incbin "includes/generated/v7_transplant_Boot_InitWorkRAM_ROMCopy2_Start.bin"
 Boot_InitWorkRAM_ROMCopy2_Loop:
 	ldir83
 	djnz xwa, Boot_InitWorkRAM_ROMCopy2_Loop
@@ -414,13 +391,7 @@ INTT1_HANDLER:
 	or a, 0x20
 
 INTT1_NoOverflow:
-	inc 1, w
-	cp w, 0x86
-	jr ule, INTT1_StoreCounters
-	ldb w, 0x0
-	ordi8 1065, 16
-	call MIDI_SC0_TX_DISPATCH
-
+	.incbin "includes/generated/v7_transplant_INTT1_NoOverflow.bin"
 INTT1_StoreCounters:
 	stb_d8 (1062), w
 	stb_d8 (1063), a
@@ -448,18 +419,7 @@ INTT1_CheckTickCount:
 	stdi8 (1056), 16
 
 INTT1_CheckMidiSync:
-	cpdi8 (0x8d34), 19
-	jr z, UIState_DispatchBranch
-	bitda 2, (0xfd52)
-	jr z, UIState_DispatchBranch
-	bitda 2, (0xfd50)
-	jr nz, UIState_DispatchBranch
-	push	sr
-	ei 6
-	ordi8 1065, 8
-	call MIDI_SC0_TX_DISPATCH
-	pop	sr
-
+	.incbin "includes/generated/v7_transplant_INTT1_CheckMidiSync.bin"
 UIState_DispatchBranch:
 	jr UIStateMachine_DispatchEntry
 
@@ -480,14 +440,7 @@ INTT1_CheckAltSeqOverflow:
 	resda 0, 1139
 
 INTT1_CheckMidiSyncGate:
-	cpdi8 (0x8d34), 19
-	jr z, INTT1_SkipToDispatch
-	push	sr
-	ei 6
-	ordi8 1065, 1
-	call MIDI_SC0_TX_DISPATCH
-	pop	sr
-
+	.incbin "includes/generated/v7_transplant_INTT1_CheckMidiSyncGate.bin"
 INTT1_SkipToDispatch:
 	jr UIStateMachine_DispatchEntry
 
@@ -652,22 +605,7 @@ INTTR4_TickWrapped:
 	jp INTTR4_SubTick_Mode
 
 INTTR4_CheckSyncEnable:
-	bitda 2, (1055)
-	jr z, INTTR4_CheckMetroEnable
-	push	sr
-	ei 6
-	ldb_d8 a, (1130)
-	inc 1, a
-	cp a, 0x60
-	jr c, INTTR4_SyncCounter2_NoWrap
-	xor a, a
-	incdi16 1, (1128)
-	stb_d8 (1130), a
-	cpdi8 (0x7f0b), 0
-	jr z, INTTR4_SyncCounter2_Done
-	calr TempoRingBuf_Write
-	jr INTTR4_SyncCounter2_Done
-
+	.incbin "includes/generated/v7_transplant_INTTR4_CheckSyncEnable.bin"
 INTTR4_SyncCounter2_NoWrap:
 	stb_d8 (1130), a
 
@@ -691,31 +629,9 @@ INTTR4_MetroCounter_Store:
 	pop	sr
 
 INTTR4_CheckSeqEnable:
-	bitda 2, (1054)
-	jr z, INTTR4_CheckAltSeqEnable
-	incdi8 1, (1045)
-	cpdi8 (1045), 96
-	jr c, INTTR4_CheckAltSeqEnable
-	stdi8 (1045), 0
-	incdi8 1, (1046)
-	cpdi8 (0x379b), 0
-	jr z, INTTR4_SeqTick_CheckBeat
-	calr TempoRingBuf_Write
-
+	.incbin "includes/generated/v7_transplant_INTTR4_CheckSeqEnable.bin"
 INTTR4_SeqTick_CheckBeat:
-	ldb_d8 a, (1046)
-	ldb_d8 w, (1075)
-	ex_sd16b W, 0x58, 0x04
-	cp a, w
-	jr c, INTTR4_CheckAltSeqEnable
-	stdi8 (1046), 0
-	incdi8 1, (1076)
-	incdi8 1, (1077)
-	ldb_d8 a, (1077)
-	cpda8 a, 0x34d7
-	jr ule, INTTR4_CheckAltSeqEnable
-	stdi8 (1077), 0
-
+	.incbin "includes/generated/v7_transplant_INTTR4_SeqTick_CheckBeat.bin"
 INTTR4_CheckAltSeqEnable:
 	bitda 2, (1057)
 	jr z, INTTR4_MetroPhaseSync
@@ -746,33 +662,7 @@ INTTR4_MetroSync_Done:
 	jr INTTR4_MetroBeat_Check
 
 INTTR4_SeqAutoStart:
-	bitda 7, (1054)
-	jr z, INTTR4_MetroBeat_Check
-	bitda 2, (1054)
-	jr z, INTTR4_SeqInit_SetEnable
-	cpdi8 (1045), 95
-	jr c, INTTR4_SeqAutoStart_Skip
-	cpdi8 (1076), 1
-	jr c, INTTR4_SeqAutoStart_Skip
-	ldb_d8 a, (1075)
-	dec 1, a
-	cpdm8 1046, a
-	jr c, INTTR4_SeqAutoStart_Skip
-	ldb a, 0x1
-	stb_d8 (1056), a
-	stb_d8 (1057), a
-	cpdi8 (0x8d34), 19
-	jr z, INTTR4_SeqAutoStart_Skip
-	bitda 2, (0xfd52)
-	jr z, INTTR4_SeqAutoStart_Skip
-	bitda 2, (0xfd50)
-	jr nz, INTTR4_SeqAutoStart_Skip
-	push	sr
-	ei 6
-	ordi8 1065, 2
-	call MIDI_SC0_TX_DISPATCH
-	pop	sr
-
+	.incbin "includes/generated/v7_transplant_INTTR4_SeqAutoStart.bin"
 INTTR4_SeqAutoStart_Skip:
 	jr INTTR4_MetroBeat_Check
 
@@ -794,19 +684,7 @@ INTTR4_MetroBeat_Check:
 	jr INTTR4_MetroQuarter_Check
 
 INTTR4_MetroBeat_OnBeat:
-	stdi8 (1056), 16
-	cpdi8 (0x8d34), 19
-	jr z, INTTR4_SeqBeat_Check
-	bitda 2, (0xfd52)
-	jr z, INTTR4_SeqBeat_Check
-	bitda 2, (0xfd50)
-	jr nz, INTTR4_SeqBeat_Check
-	push	sr
-	ei 6
-	ordi8 1065, 8
-	call MIDI_SC0_TX_DISPATCH
-	pop	sr
-
+	.incbin "includes/generated/v7_transplant_INTTR4_MetroBeat_OnBeat.bin"
 INTTR4_SeqBeat_Check:
 	bitda 3, (1054)
 	jr z, INTTR4_AltSeqBeat_Check
@@ -822,19 +700,7 @@ INTTR4_AltSeqBeat_Check:
 	stb_d8 (1079), a
 
 INTTR4_MetroQuarter_Check:
-	bitda 2, (1056)
-	jr z, INTTR4_SeqAccum_Update
-	ldb_d8 a, (1047)
-	and a, 0x3
-	jr nz, INTTR4_SeqAccum_Update
-	cpdi8 (0x8d34), 19
-	jr z, INTTR4_SeqAccum_Update
-	push	sr
-	ei 6
-	ordi8 1065, 1
-	call MIDI_SC0_TX_DISPATCH
-	pop	sr
-
+	.incbin "includes/generated/v7_transplant_INTTR4_MetroQuarter_Check.bin"
 INTTR4_SeqAccum_Update:
 	bitda 2, (1054)
 	jr z, INTTR4_SeqAccum_Reset
@@ -866,13 +732,7 @@ INTTR4_SeqAccum_Done:
 	jr INTTR4_AltSeqAccum_Update
 
 INTTR4_SeqAccum_Reset:
-	xor wa, wa
-	stda16 (1120), xwa
-	stda16 (0x3372), xwa
-	stb_d8 (1122), a
-	stb_d8 (0x3376), a
-	stb_d8 (1111), a
-
+	.incbin "includes/generated/v7_transplant_INTTR4_SeqAccum_Reset.bin"
 INTTR4_AltSeqAccum_Update:
 	bitda 2, (1057)
 	jr z, INTTR4_FadeDelay_Check
@@ -936,13 +796,7 @@ INTTR4_SyncAccum_Done:
 	jr INTTR4_Return
 
 INTTR4_SyncAccum_Reset:
-	xor wa, wa
-	stda16 (1136), xwa
-	stda16 (0x7dfe), xwa
-	stb_d8 (1133), a
-	stb_d8 (0x7dfc), a
-	stb_d8 (1138), a
-
+	.incbin "includes/generated/v7_transplant_INTTR4_SyncAccum_Reset.bin"
 INTTR4_Return:
 	pop xiy
 	pop xhl
@@ -1140,16 +994,7 @@ MainLoop_AfterInput:
 	calr Seq_TickWrapper
 
 MainLoop_AfterSeqTick:
-	ei 6
-	ldb_d8 a, (1063)
-	and a, 0x2c
-	jr z, MainLoop_AfterVoiceReset
-	call SeqMain_InitBuffer
-	anddi8 (1063), 211
-	ei 0
-	call Voice_InitializeAll
-	call MIDI_BroadcastPitchReset
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterSeqTick.bin"
 MainLoop_AfterVoiceReset:
 	ei 0
 	calr Seq_EventProcessingTick
@@ -1166,32 +1011,13 @@ MainLoop_AfterBit1Check:
 	jr nz, MainLoop_AfterBit3Check
 
 MainLoop_AfterBit3Check:
-	call SeqBuf_DspSysEx_CheckSongEnd
-	and hl, hl
-	jr z, MainLoop_AfterSeqBuf_DspSysEx
-	call SeqBuf_DspSysEx_DataReadLoop
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterBit3Check.bin"
 MainLoop_AfterSeqBuf_DspSysEx:
-	ldb_d8 a, (0x346d)
-	and a, 0x3
-	jr z, MainLoop_AfterAccWrap
-	ldb_d8 a, (0x3283)
-	and a, 0x3
-	jr nz, MainLoop_AfterAccWrap
-	call AccWrap_DeferredAction
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterSeqBuf_DspSysEx.bin"
 MainLoop_AfterAccWrap:
-	tset_dd16 0, 0x73, 0x04
-	jr nz, MainLoop_AfterPedalReset
-	call CompIface_ResetPedal
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterAccWrap.bin"
 MainLoop_AfterPedalReset:
-	calr Seq_EventProcessingTick
-	call Encoder_ValueScanAndSync
-	cpdi8 (0xbf39), 255
-	jr z, MainLoop_AfterSwbtWr
-	call SwbtWr_ProcessAll
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterPedalReset.bin"
 MainLoop_AfterSwbtWr:
 	call MainTitle_PrepareAndDispatch
 	calr MainLoop_ReinitSwbtWr
@@ -1224,18 +1050,9 @@ MainLoop_AfterMidiPoll:
 	call CDlikeSwitch_PlaybackTimer
 
 MainLoop_AfterDemoTick:
-	tset_dd16 6, 0x13, 0x04
-	jr nz, MainLoop_AfterMidiPoll2
-	call MIDI_ProcessChangedChannels
-	call CPanel_Poll
-	call CommPort_StatusCheckAndSend
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterDemoTick.bin"
 MainLoop_AfterMidiPoll2:
-	tset_dd16 7, 0x13, 0x04
-	jr nz, MainLoop_AfterBitmapTimer
-	call BitMapOut_DecrementTimer
-	call Periodic_TimestampCheck
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AfterMidiPoll2.bin"
 MainLoop_AfterBitmapTimer:
 	ei 0
 	bitda 7, (1068)
@@ -1254,13 +1071,7 @@ MainLoop_SequencerPhase:
 	jrl MainLoop
 
 Seq_TickWrapper:
-	lda_d16 xiy, (1115)
-	cp (xiy), 0x1
-	jr nz, SeqTick_CheckActive
-	cpdi8 (0xcedf), 0
-	jr z, SeqTick_CheckActive
-	ld (xiy), 0x0
-
+	.incbin "includes/generated/v7_transplant_Seq_TickWrapper.bin"
 SeqTick_CheckActive:
 	bitm 0, (xiy)
 	jr z, SeqTick_Dispatch
@@ -1275,18 +1086,9 @@ SeqTick_Return:
 	ret
 
 MainLoop_ReinitSwbtWr:
-	call SwbtWr_InitBank3
-	call Audio_MainPeriodicUpdate
-	stdi8 (0xc039), 255
-	calr SwbtWr_ReinitBothBanks
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainLoop_ReinitSwbtWr.bin"
 MainLoop_AudioPeriodicCheck:
-	call VoiceEvent_ResetAndInit
-	call Voice_UpdateNoteState
-	call SndParam_DispatchReturn
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainLoop_AudioPeriodicCheck.bin"
 Seq_ProcessMidiEvent:
 	lda_24 xhl, (0x01f37b)
 	ld iy, (xhl - 8)
@@ -1369,19 +1171,9 @@ MidiSerial_BufferWrap:
 	jr z, MidiSerial_ProcessAndReinit
 
 MidiEvt_ProcessNoteOn:
-	pushw iz
-	ld (xhl - 6), iy
-	call NoteOn_EntryPoint
-	jr MidiEvt_UpdateReadPosition
-
+	.incbin "includes/generated/v7_transplant_MidiEvt_ProcessNoteOn.bin"
 MidiSerial_ProcessAndReinit:
-	pushw iz
-	ld (xhl - 6), iy
-	call MidiSerial_ProcessInput
-	call Audio_ProcessAllMidiStreams
-	calr SwbtWr_ReinitBothBanks
-	jr MidiEvt_UpdateReadPosition
-
+	.incbin "includes/generated/v7_transplant_MidiSerial_ProcessAndReinit.bin"
 MidiEvt_UpdateReadPosition:
 	lda_24 xhl, (0x01f37b)
 	ld wa, (xhl - 6)
@@ -1395,20 +1187,9 @@ RhythmBuf_DispatchWrap:
 	ret
 
 Seq_EventProcessingTick:
-	call AccNoteOn_ProcessVoiceSetup
-	bitda 7, (1058)
-	jr nz, SeqEvtTick_ProcessTimers
-	calr SeqEvt_CheckExpiry
-
+	.incbin "includes/generated/v7_transplant_Seq_EventProcessingTick.bin"
 SeqEvtTick_ProcessTimers:
-	calr SeqEvt_ProcessTimedEvents
-	call RhythmBuf_ProcessEvents
-	call SeqEvt_ProcessBuffer
-	call MIDI_OutputFlush
-	call SysEx_ParseAndDispatch
-	cpdi8 (1140), 85
-	jr z, SeqEvtTick_Return
-
+	.incbin "includes/generated/v7_transplant_SeqEvtTick_ProcessTimers.bin"
 Seq_ProcessEventLoop:
 	call Seq_CheckSongEnd
 	and hl, hl
@@ -1423,27 +1204,14 @@ SeqEvtTick_Return:
 ; Calls SwbtWr_InitBank1 and SwbtWr_InitBank2 to reinitialize voice
 ; parameter transfers to the tone generator.
 SwbtWr_ReinitBothBanks:
-
-	cpdi8 (0xbd3c), 255
-	jr z, SwbtWr_ReinitBothBanks_Return
-	call SwbtWr_InitBank1
-	call SwbtWr_InitBank2
-	stdi8 (0xbd3c), 255
-	stdi16 (0x90de), 0
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_ReinitBothBanks.bin"
 SwbtWr_ReinitBothBanks_Return:
 	ret
 ; SwbtWr_ReinitOutputBank - Reinitialize the output tone generator bank
 ; Original Matsushita debug symbol: "assswb_out" (assign sound write bank - output)
 ; Calls only SwbtWr_InitBank2 (the output bank).
 SwbtWr_ReinitOutputBank:
-
-	cpdi8 (0xbd3c), 255
-	jr z, SwbtWr_ReinitOutputBank_Return
-	call SwbtWr_InitBank2
-	stdi8 (0xbd3c), 255
-	stdi16 (0x90de), 0
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_ReinitOutputBank.bin"
 SwbtWr_ReinitOutputBank_Return:
 	ret
 
@@ -1463,15 +1231,9 @@ RhythmBuf_ProcessLoop_Done:
 	ret
 
 RhythmBuf_DispatchEvent:
-	lda_24 xhl, (0x01ef5d)
-	calr RhythmBuf_ScanForNoteOn
-	jr c, RhythmBuf_Dispatch_NonNoteOn
-	call RhythmMidi_Dispatcher
-	jr RhythmBuf_Dispatch_UpdateReadPos
-
+	.incbin "includes/generated/v7_transplant_RhythmBuf_DispatchEvent.bin"
 RhythmBuf_Dispatch_NonNoteOn:
-	call SeqPart_EmitNoteOn_Full
-
+	.incbin "includes/generated/v7_transplant_RhythmBuf_Dispatch_NonNoteOn.bin"
 RhythmBuf_Dispatch_UpdateReadPos:
 	ldw_da xwa, (0x01ef57)
 	ldw_da xbc, (0x01ef55)
@@ -1546,17 +1308,9 @@ SeqEvt_ProcessBuffer_Main:
 	lda_24 xhl, (0x01f271)
 
 SeqEvt_ProcessLoop:
-	ld wa, (xhl - 4)
-	cp wa, (xhl - 8)
-	jr z, SeqEvt_ProcessDone
-	calr SeqEvt_ScanForNoteOn
-	jr c, SeqEvt_Dispatch_NonNoteOn
-	call RhythmMidi_SeqEvt
-	jr SeqEvt_UpdateReadPos
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_ProcessLoop.bin"
 SeqEvt_Dispatch_NonNoteOn:
-	call ProcessEventDispatch_Prologue
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_Dispatch_NonNoteOn.bin"
 SeqEvt_UpdateReadPos:
 	lda_24 xhl, (0x01f271)
 	ld wa, (xhl - 6)
@@ -1631,15 +1385,7 @@ SeqEvt_CallTimingHelper:
 	ret
 
 SeqEvt_ProcessTimedEvents:
-	bitda 5, (0x28ac)
-	jr z, SeqEvt_ProcessTimedEvents_Idle
-	call SeqEvent_CaseA
-	calr Seq_TickWrapper
-	call MIDI_START_PLAYBACK_REQUEST
-	call AccNoteOn_ProcessVoiceSetup
-	call RhythmBuf_ProcessEvents
-	ret
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_ProcessTimedEvents.bin"
 SeqEvt_ProcessTimedEvents_Idle:
 	call SeqPlay_HandleVoiceReassign
 	ret
@@ -1711,110 +1457,34 @@ TempoRingBuf_DequeueOne_Done:
 	ret
 
 SeqEvt_CheckExpiry:
-	anddi8 (1058), 127
-	ldb_d8 a, (0xe9bc)
-	and a, a
-	jr z, SeqEvt_CheckExpiry_Return
-	dec 1, a
-	stb_d8 (0xe9bc), a
-	jr nz, SeqEvt_CheckExpiry_Return
-	call NoteMap_FindBestMatch
-	cp l, 0xff
-	jr z, SeqEvt_CheckExpiry_Return
-	call VoiceEvent_DispatchTable
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_CheckExpiry.bin"
 SeqEvt_CheckExpiry_Return:
 	ret
 
 SeqTiming_Snapshot:
-	ei 6
-	ldw_d16 xwa, (1120)
-	ldb_d8 l, (1122)
-	stda16 (1118), xwa
-	stb_d8 (1117), l
-	cpda16 xwa, 0x3372
-	jr c, SeqTiming_Snapshot_CheckFrac
-	stdi16 (1120), 0
-
+	.incbin "includes/generated/v7_transplant_SeqTiming_Snapshot.bin"
 SeqTiming_Snapshot_CheckFrac:
-	cpda8 l, 0x3376
-	jr c, SeqTiming_Snapshot_PostSnap
-	stdi8 (1122), 0
-
+	.incbin "includes/generated/v7_transplant_SeqTiming_Snapshot_CheckFrac.bin"
 SeqTiming_Snapshot_PostSnap:
-	ei 0
-	cpda16 xwa, 0x3372
-	jr c, SeqTiming_Snapshot_CheckFracOverflow
-	push xhl
-	call AccTiming_InitAllParts
-	xor wa, wa
-	stda16 (1118), xwa
-	pop xhl
-
+	.incbin "includes/generated/v7_transplant_SeqTiming_Snapshot_PostSnap.bin"
 SeqTiming_Snapshot_CheckFracOverflow:
-	cpda8 l, 0x3376
-	jr c, SeqTiming_Snapshot_Return
-	call AccTiming_MasterTick
-
+	.incbin "includes/generated/v7_transplant_SeqTiming_Snapshot_CheckFracOverflow.bin"
 SeqTiming_Snapshot_Return:
 	ret
 
 SyncTiming_Snapshot:
-	ei 6
-	ldw_d16 xwa, (1136)
-	ldb_d8 l, (1133)
-	stda16 (1134), xwa
-	stb_d8 (1132), l
-	cpda16 xwa, 0x7dfe
-	jr c, SyncTiming_Snapshot_CheckFrac
-	stdi16 (1136), 0
-
+	.incbin "includes/generated/v7_transplant_SyncTiming_Snapshot.bin"
 SyncTiming_Snapshot_CheckFrac:
-	cpda8 l, 0x7dfc
-	jr c, SyncTiming_Snapshot_PostSnap
-	stdi8 (1133), 0
-
+	.incbin "includes/generated/v7_transplant_SyncTiming_Snapshot_CheckFrac.bin"
 SyncTiming_Snapshot_PostSnap:
-	ei 0
-	cpda16 xwa, 0x7dfe
-	jr c, SyncTiming_Snapshot_CheckFracOverflow
-	push xhl
-	call SeqEvt_EntryPoint2
-	xor wa, wa
-	stda16 (1134), xwa
-	pop xhl
-
+	.incbin "includes/generated/v7_transplant_SyncTiming_Snapshot_PostSnap.bin"
 SyncTiming_Snapshot_CheckFracOverflow:
-	cpda8 l, 0x7dfc
-	jr c, SyncTiming_Snapshot_Return
-	call SeqEvt_EntryPoint1
-
+	.incbin "includes/generated/v7_transplant_SyncTiming_Snapshot_CheckFracOverflow.bin"
 SyncTiming_Snapshot_Return:
 	ret
 
 Seq_FullInit:
-	ldb a, 0xff
-	stb_d8 (1043), a
-	stb_d8 (1058), a
-	stb_d8 (1139), a
-	call AudioMix_Init
-	call SeqBuf_Init
-	call TempoRingBuf_Init
-	call SeqMain_InitBuffer
-	call RhythmBuf_Init
-	call SeqBuf_MidiOut_Init
-	call SeqEvtBuf_Init
-	call SeqBuf2_Init
-	call AltEvtBuf_Init
-	call SeqBuf_NoteEvent_Flush
-	call SeqBuf_VoiceMap_Flush
-	call SeqBuf_NoteEvent_InitBuffer
-	call SeqBuf_SoundEdit_Flush
-	call SeqBuf3_Init
-	call SeqBuf_DspSysEx_InitBuffer
-	stdi8 (0xbf39), 255
-	ret
-
+	.incbin "includes/generated/v7_transplant_Seq_FullInit.bin"
 Seq_InitStub_Nop1:
 	ret
 
@@ -1944,19 +1614,7 @@ Checksum_AccumulateLoop:
 	ret
 
 TaskSched_ScreenGroupTable:
-	.long Boot_InitPeripherals
-	.byte 0x34, 0xdc, 0x01, 0x00
-	.byte 0x00, 0x88, 0x03, 0x00, 0x92, 0x2d, 0xf5, 0x00
-	.byte 0x36, 0xe4, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
-	.long TaskSched_ScreenGroupTable_End
-	.byte 0xb8, 0xe4, 0x01, 0x00
-	.byte 0x00, 0x88, 0x01, 0x00, 0x6c, 0x80, 0xf9, 0x00
-	.byte 0x30, 0xc0, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
-	.byte 0xfa, 0xa2, 0xfa, 0x00, 0x32, 0xd0, 0x01, 0x00
-	.byte 0x00, 0x88, 0x03, 0x00, 0x01, 0x01, 0x01, 0x01
-	.fill 8, 1, 0x01
-	.fill 8, 1, 0x01
-	.byte 0x01, 0x01
+	.incbin "includes/generated/v7_transplant_TaskSched_ScreenGroupTable.bin"
 TaskSched_ScreenGroupTable_End:
 	jr	-2
 
@@ -2091,21 +1749,7 @@ TaskSched_InitLockQueues:
 	ldb b, 0x5
 
 TaskSched_InitMsgQueues:
-	ld ix, hl
-	stw_dpi IX, 0xed
-	stw_dpi IX, 0xed
-	djnz8 b, TaskSched_InitMsgQueues
-	ld xwa, TaskSched_InitMsgQueues_0x12
-	jr TaskSched_PostInit
-
-	normal
-	nop
-	normal
-	nop
-	jr	pe, 25
-	.byte 0xef
-	nop
-
+	.incbin "includes/generated/v7_transplant_TaskSched_InitMsgQueues.bin"
 TaskSched_PostInit:
 	call TaskTimer_Register
 	calr Stop_and_Clear_8bit_Timer_3
@@ -5918,65 +5562,7 @@ E1DMA_ISR_Epilogue:
 	pop xiz
 	reti
 E1DMA_ISR_BytecodeBlock:
-	ei	6
-	lda_d16	xwa, (1566)
-	.byte 0xb0
-	inc	6, l
-	zcf
-	.byte 0xb0, 0xb7
-	di
-	lda_d16	xde, (1556)
-	ld	xwa, (xde)
-	ld	bc, (xde+8)
-	ld	xde, (xde+4)
-	calr	64945
-	di
-	.byte 0xf0
-	jr	-55
-	jr	nz, 27
-	.byte 0xd8
-	pushw	sp
-	ld	xwa, 0xf8e362d1
-	jr	nz, 6
-	incdi16	1, (0xe360)
-	jr	6
-	stdi16	(0xe360), 0
-	stda16	(0xe362), wa
-	jr	6
-	stdi16	(0xe360), 0
-	ldw_d16	wa, (0xe360)
-	cp	wa, 10
-	ret	ule
-	stdi16	(0xe360), 0
-	stdi8	(256), 0
-	stdi8	(1506), 0
-	.byte 0xf0
-	jr	-71
-	incdi8	1, (0xe35e)
-	ret
-	ldw_d16	de, (1033)
-	.byte 0xf1
-	ldb	w, 6
-	dec	6, l
-	pop	sr
-	lds	hl, 0
-	ret
-	ld	wa, de
-	ldw_d16	bc, (1033)
-	sub	bc, wa
-	cp	bc, 250
-	jr	le, -23
-	stdi8	(256), 0
-	stdi8	(1506), 0
-	.byte 0xf0
-	jr	-71
-	.byte 0xf1
-	ldb	w, 6
-	.byte 0xb7
-	incdi8	1, (0xe364)
-	ldw	hl, 0xffff
-	ret
-
+	.incbin "includes/generated/v7_transplant_E1DMA_ISR_BytecodeBlock.bin"
 Flash_IdentifyChip:
 	push xiz
 	ld xbc, 0x280000
@@ -6471,35 +6057,7 @@ Flash_EraseSectorAndWrite_Write:
 ; Identifies the target flash chip, copies ROM content to a buffer,
 ; applies modifications, then programs the flash sector.
 FlashWrite:
-	dec 8, xsp
-	push xiz
-	ld (xsp + 4), de
-	ld (xsp + 6), xbc
-	ld (xsp + 10), a
-	ld a, (xsp + 10)
-	extz wa
-	calr Flash_IdentifyChip
-	ld xiz, (xsp + 16)
-	ld xwa, xiz
-	calr Flash_CopyROMToBuffer
-	ld a, (xsp + 10)
-	extz wa
-	ld xbc, xiz
-	calr Flash_EraseSectorWithBankSelect
-	ld xbc, xiz
-	ldiw_erp 0xe6, 0
-	lda_24 xde, (0x069800)
-	add xde, xbc
-	pushm (xsp + 4)
-	ld xwa, (xsp + 8)
-	push xwa
-	push xde
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	calr Flash_CheckReady
-	cp hl, 0xffff
-	jr nz, FlashWrite_DoWrite
-
+	.incbin "includes/generated/v7_transplant_FlashWrite.bin"
 FlashWrite_WaitEraseLoop:
 	calr Flash_CheckReady
 	cp hl, 0xffff
@@ -6533,32 +6091,7 @@ TableDataROM_IdentifyChip:
 	ld xde, 0x800000
 
 TableDataROM_IdentifyChip_WaitReady:
-	bit_dd8 5, 0x1c
-	jr z, TableDataROM_IdentifyChip_WaitReady
-	ld xbc, xde
-	add xbc, 0x15554
-	ld xwa, 0xaa00aa
-	ld (xbc), xwa
-	ld xbc, xde
-	add xbc, 0xaaa8
-	ld xwa, 0x550055
-	ld (xbc), xwa
-	ld xbc, xde
-	add xbc, 0x15554
-	ld xwa, StringData_APCModeNames_0x24F
-	ld (xbc), xwa
-	ld_sril XWA, (xde + 0x6464)
-	ret
-
-; ===========================================================================
-; HDAE5000_Detect - Detect presence of HDAE5000 expansion board
-; ===========================================================================
-; Entry: None
-; Exit:  XWA at (XSP+8) = 0 if detected, 0xffffffff if not present
-; Notes: Probes Table Data ROM at 0x800000 using flash command sequence
-;        Sends AMD/Atmel flash ID command (0xaa, 0x55, 0x90)
-;        Checks for valid response to confirm hardware presence
-; ===========================================================================
+	.incbin "includes/generated/v7_transplant_TableDataROM_IdentifyChip_WaitReady.bin"
 HDAE5000_Detect:
 	dec 8, xsp
 	push xiz
@@ -6843,16 +6376,7 @@ HDAE5000_Status_DataBlock:
 	ret
 
 SLIDE_Decompress_4K_Init:
-	pushw iz
-	ldfr_lerp XBC, 0x38
-	ldfr_lerp XWA, 0x34
-	pushw 0x1000
-	call Malloc
-	inc 2, xsp
-	stda32 1570, xhl
-	ld xwa, xhl
-	stb_dri A, 0xed, 0xee, 0x0f
-
+	.incbin "includes/generated/v7_transplant_SLIDE_Decompress_4K_Init.bin"
 SLIDE_Decompress_4K_FillRing:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
@@ -6958,24 +6482,9 @@ SLIDE_Decompress_4K_Continue:
 	jrl c, SLIDE_Decompress_4K_MainLoop
 
 SLIDE_Decompress_4K_Done:
-	ldda32 xwa, (1570)
-	push xwa
-	call Free
-	inc 4, xsp
-	popw iz
-	ret
-
+	.incbin "includes/generated/v7_transplant_SLIDE_Decompress_4K_Done.bin"
 SLIDE_Decompress_8K_Init:
-	pushw iz
-	ldfr_lerp XBC, 0x38
-	ldfr_lerp XWA, 0x34
-	pushw 0x2000
-	call Malloc
-	inc 2, xsp
-	stda32 1570, xhl
-	ld xwa, xhl
-	stb_dri A, 0xed, 0xf6, 0x1f
-
+	.incbin "includes/generated/v7_transplant_SLIDE_Decompress_8K_Init.bin"
 SLIDE_Decompress_8K_FillRing:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
@@ -7081,40 +6590,9 @@ SLIDE_Decompress_8K_Continue:
 	jrl c, SLIDE_Decompress_8K_MainLoop
 
 SLIDE_Decompress_8K_Done:
-	ldda32 xwa, (1570)
-	push xwa
-	call Free
-	inc 4, xsp
-	popw iz
-	ret
-
+	.incbin "includes/generated/v7_transplant_SLIDE_Decompress_8K_Done.bin"
 SLIDE_Parse_Header:
-	lda xsp, (xsp - 10)
-	push xiz
-	ld (xsp + 10), xbc
-	ld xiz, xwa
-	ld xiy, SLIDE_STRING	; "SLIDE"
-	lda xix, (xsp + 4)
-	lds bc, 3
-	ldirw
-	pushw 0x5	; string length: 5 bytes
-	lda xwa, (xsp + 6)
-	push xwa
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, SLIDE_Parse_NotFound
-	lda xwa, (xiz + 5)
-	ld xiz, xwa
-	ld a, (xwa)
-	cp a, 0x34
-	jr nz, SLIDE_Parse_Check8K
-	inc 2, xiz
-	ld xwa, xiz
-	ld xbc, (xsp + 10)
-	calr SLIDE_Decompress_4K_Init
-
+	.incbin "includes/generated/v7_transplant_SLIDE_Parse_Header.bin"
 SLIDE_Parse_ReturnOK:
 	lds hl, 0
 	jr SLIDE_Parse_Return
@@ -7153,37 +6631,7 @@ FDC_InitRecalibrate:
 	ret
 
 FDC_SetupSectorParams:
-	lda xsp, (xsp - 14)
-	push xiz
-	ld (xsp + 8), xde
-	ld (xsp + 12), bc
-	ld (xsp + 14), xwa
-	ld xwa, (xsp + 14)
-	ld xbc, 0x12
-	call Math_DivideU32
-	lda_d16 xiz, (1582)
-	ldw (xiz + 2), 0x0
-	ld wa, hl
-	srl wa, 1
-	ld (xiz + 6), wa
-	and hl, 0x1
-	ld (xiz + 4), hl
-	lda xwa, (xiz + 8)
-	ld (xsp + 4), xwa
-	ld xwa, (xsp + 14)
-	ld xbc, 0x12
-	call DivMod32
-	inc 1, xhl
-	ld xwa, (xsp + 4)
-	ld (xwa), hl
-	ld wa, (xsp + 12)
-	ld (xiz + 10), wa
-	ld xwa, (xsp + 8)
-	ld (xiz + 12), xwa
-	pop xiz
-	lda xsp, (xsp + 14)
-	ret
-
+	.incbin "includes/generated/v7_transplant_FDC_SetupSectorParams.bin"
 FDC_ReadSectors:
 	dec 6, xsp
 	push xiz
@@ -7212,120 +6660,23 @@ FDC_ReadSectors_Done:
 	ret
 
 Detect_Disk_Type:
-	dec 2, xsp
-	push xiz
-	ld (xsp + 4), 0xff
-	pushw 0x200
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, 0x21
-	lds bc, 1
-	ld xde, xiz
-	calr FDC_ReadSectors
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x38	; "Technics KN5000 Program  DATA FILE 1/2"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckProgram2of2
-	ld (xsp + 4), 0x1
-	jrl DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_Detect_Disk_Type.bin"
 DetectDisk_CheckProgram2of2:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x60	; "Technics KN5000 Program  DATA FILE 2/2"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckTable1of2
-	ld (xsp + 4), 0x2
-	jrl DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckProgram2of2.bin"
 DetectDisk_CheckTable1of2:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0xb0	; "Technics KN5000 Table    DATA FILE 1/2"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckTable2of2
-	ld (xsp + 4), 0x3
-	jrl DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckTable1of2.bin"
 DetectDisk_CheckTable2of2:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0xd8	; "Technics KN5000 Table    DATA FILE 2/2"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckCmpCustom
-	ld (xsp + 4), 0x4
-	jr DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckTable2of2.bin"
 DetectDisk_CheckCmpCustom:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x128	; "Technics KN5000 CMPCUSTOMDATA FILE"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckHDAEPRG
-	ld (xsp + 4), 0x5
-	jr DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckCmpCustom.bin"
 DetectDisk_CheckHDAEPRG:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x150	; "Technics KN5000 HD-AEPRG DATA FILE"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckProgramPCK
-	ld (xsp + 4), 0x6
-	jr DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckHDAEPRG.bin"
 DetectDisk_CheckProgramPCK:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x88	; "Technics KN5000 Program  DATA FILE PCK"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_CheckTablePCK
-	ld (xsp + 4), 0x7
-	jr DetectDisk_FreeBufAndReturn
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckProgramPCK.bin"
 DetectDisk_CheckTablePCK:
-	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x100	; "Technics KN5000 Table    DATA FILE PCK"
-	push xiz
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, DetectDisk_FreeBufAndReturn
-	ld (xsp + 4), 0x8
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_CheckTablePCK.bin"
 DetectDisk_FreeBufAndReturn:
-	push xiz
-	call Free
-	inc 4, xsp
-	ld l, (xsp + 4)
-	pop xiz
-	inc 2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_DetectDisk_FreeBufAndReturn.bin"
 FDC_WriteSectors:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -7947,40 +7298,7 @@ HDAE5000_FlashWrite_WordLoop:
 	ret
 
 HDAE5000_FlashVerify_BytecodeBlock:
-	lda	xsp, (xsp-10)
-	push	xiz
-	ld	xwa, 0x800000
-	ld	(xsp+8), xwa
-	ld	(xsp+12), 0
-	ld	a, (xsp+12)
-	stb_da	(0x160000), a
-	lda_24	xwa, (0x280000)
-	ld	(xsp+4), xwa
-	lds32	xiz, 0
-	ld	xwa, (xsp+8)
-	.byte 0xf5, 0xe2
-	ldw	bc, 2239
-	jr	f, -23
-	.byte 0x88
-	ld	xde, (xsp+4)
-	.byte 0xe5, 0xea
-	ldb	a, 191
-	.byte 0x04
-	jr	le, 29
-	jrl	ugt, -4291
-	inc	1, xiz
-	cp	xiz, 0x20000
-	jr	c, -34
-	incm8	1, (xsp+12)
-	.byte 0x8f
-	incf
-	push	xsp
-	.byte 0x04
-	jr	c, -61
-	pop	xiz
-	lda	xsp, (xsp+10)
-	ret
-
+	.incbin "includes/generated/v7_transplant_HDAE5000_FlashVerify_BytecodeBlock.bin"
 HDAE5000_TableData_Write:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -8015,154 +7333,7 @@ HDAE5000_TableData_WordLoop:
 	ret
 
 HDAE5000_Init_BytecodeBlock:
-	.byte 0xd7
-	swi	2
-	.byte 0x04, 0xc7
-	swi	3
-	.byte 0xa8, 0x08, 0xe4
-	.long Bitmap_1bit_FlashStatus_Icon
-	ldio	237, 0
-	ldio	227, 0
-	ldio	235, 0
-	stdi8	(340), 102
-	stib_da	(0x160006), 130
-	stib_da	(0x160000), 0
-	stib_da	(0x160004), 0
-	stib_da	(0x160004), 15
-	ld	xwa, 0xdbba0
-	calr	65042
-	stib_da	(0x160004), 0
-	ldb_da	a, (0x160002)
-	extz	wa
-	bit	0, wa
-	jr	nz, -12
-	call	HDAE5000_Detect
-	cp	xhl, 0xffffffff
-	jr	nz, 8
-	.byte 0xf2, 0x04
-	nop
-	ex_ff
-	.byte 0xba, 0xc7
-	swi	3
-	sub	(xbc-40), xbc
-	call	Flash_IdentifyAndValidateChip
-	cp	hl, 0xffff
-	jr	nz, 10
-	.byte 0xf2, 0x04
-	nop
-	ex_ff
-	.byte 0xbb, 0xc7
-	swi	3
-	.byte 0xa9
-	jr	8
-	.byte 0xc7
-	swi	3
-	dec	6, bc
-	halt
-	.byte 0xd7
-	swi	2
-	halt
-	jr	-2
-	stib_da	(0x160004), 0
-	ld	xwa, 0x800000
-	ld	xbc, 0xa00000
-	calr	65060
-	or	xhl, xhl
-	.byte 0xf2, 0xbb
-	push	xiy
-	sll	xsp, 242
-	nop
-	nop
-	ldw	wa, 0xe830
-	and	(xbc-23), w
-	nop
-	nop
-	rcf
-	nop
-	calr	65037
-	or	xhl, xhl
-	jr	z, 6
-	lds	wa, 1
-	call	Flash_ChipErase
-	call	HDAE5000_Status_Check
-	cp	hl, 0xffff
-	jr	nz, 13
-	calr	64920
-	call	HDAE5000_Status_Check
-	cp	hl, 0xffff
-	jr	z, -13
-	stib_da	(0x160004), 0
-	.byte 0xf2, 0x04
-	nop
-	ex_ff
-	.byte 0xb8
-	calr	65155
-	.byte 0xf2, 0x04
-	nop
-	ex_ff
-	ld	(xwa), w
-	.byte 0xa0
-	ld	(xhl+13), 30
-	jr	z, -3
-	.byte 0xf2, 0x04
-	nop
-	ex_ff
-	.byte 0xb8
-	calr	65052
-	.byte 0xf2, 0x04
-	nop
-	ex_ff
-	ret	le
-	.byte 0x04
-	nop
-	ex_ff
-	.byte 0xb9
-	pushw	3
-	ld	xwa, 0x800000
-	ld	xbc, 0x280000
-	lds	de, 0
-	calr	64974
-	or	xhl, xhl
-	.byte 0xf2, 0x90
-	popw	wa
-	sll	xsp, 11
-	.byte 0x01
-	nop
-	ld	xwa, 0x300000
-	ld	xbc, 0x200000
-	lds	de, 0
-	calr	64949
-	or	xhl, xhl
-	.byte 0xf2, 0x9f
-	popw	wa
-	sll	xsp, 242
-	nop
-	nop
-	ex_ff
-	nop
-	reti
-	ldl_da	xwa, (0x2fffc0)
-	.byte 0xe8
-	dec	8, l
-	.ascii "kt_f"
-	halt
-	.byte 0xd7
-	swi	2
-	halt
-	jr	-2
-	ei	7
-	ld	xwa, Debug_SWI_JumpTable_0x6
-	ldw	ix, 331
-	extz	xix
-	.byte 0xe9, 0xee
-	.long SeqCh_SystemHandlerData
-	ld	(xix), 128
-	jp	(xwa)
-	.byte 0xd7
-	swi	2
-	halt
-	ret
-
+	.incbin "includes/generated/v7_transplant_HDAE5000_Init_BytecodeBlock.bin"
 HDAE5000_Init_DetectAndVerify:
 	stib_da (0x160004), 0x00
 	call HDAE5000_Detect
@@ -8336,27 +7507,7 @@ LZSS_Decompress_ToFlash:
 	lds iz, 0
 
 LZSS_Decompress_ReadHeader:
-	calr Parport_ReadNextByte
-	ld bc, iz
-	extz xbc
-	lda xwa, (xsp + 2)
-	ld xde, xwa
-	add xde, xbc
-	ld (xde), l
-	inc 1, iz
-	cps iz, 6
-	jr c, LZSS_Decompress_ReadHeader
-	pushw 0x5	; lenght: 5 bytes
-	pushw 0xe0
-	pushw 0x188	; "SLIDE"
-	push xwa
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr z, LZSS_Decompress_HeaderOK
-	ldw hl, 0xffff
-	jr LZSS_Decompress_Return
-
+	.incbin "includes/generated/v7_transplant_LZSS_Decompress_ReadHeader.bin"
 LZSS_Decompress_HeaderOK:
 	lds iz, 0
 
@@ -8395,17 +7546,7 @@ LZSS_Decompress_Return:
 	ret
 
 LZ_Decompress_Init:
-	lda xsp, (xsp - 16)
-	push xiz
-	pushw 0x1000
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 16), xhl
-	ld xwa, (xsp + 16)
-	ld (xsp + 12), xwa
-	lds32 xwa, 0
-	stda32 1602, xwa
-
+	.incbin "includes/generated/v7_transplant_LZ_Decompress_Init.bin"
 LZ_Decompress_ClearRing:
 	ldda32 xwa, (1602)
 	ld xbc, (xsp + 16)
@@ -8555,14 +7696,7 @@ LZ_Decompress_LoopCheck:
 	jrl c, LZ_Decompress_MainLoop
 
 LZ_Decompress_Done:
-	ld xwa, (xsp + 16)
-	push xwa
-	call Free
-	inc 4, xsp
-	pop xiz
-	lda xsp, (xsp + 16)
-	ret
-
+	.incbin "includes/generated/v7_transplant_LZ_Decompress_Done.bin"
 FLASH_MEM_UPDATE:
 	pushw_erp 0xfa
 	call Check_for_Floppy_Disk_Change
@@ -8677,22 +7811,7 @@ DrawBitmap_CheckNewRow:
 	ldiw_erp 0xee, 0
 
 DrawBitmap_BitLoop:
-	ld de, iz
-	extz xde
-	add xde, (xsp + 2)
-	lda_d16 xwa, (0xe36a); table of bit masks (equivalent to 1044h on boot "table_data" rom)
-	stw_erp BC, 0xee
-	extz xbc
-	add xbc, xwa	; indexing bit masks with value of QHL
-	ld a, (xbc)
-	and a, (xde)	; here XDE points at one of the bytes of the image we're drawing and we select the bit we need
-	ldb_erp A, 0xf2
-	ld de, ix
-	extz xde
-	lda_24 xbc, (0x043c00); aparentemente isso é um buffer offscreen
-
-; Convert Y coordinate to framebuffer row offset: XWA = XDE * 320
-; Uses shift-add: (XDE << 2 + XDE) << 6 = XDE * 5 * 64 = XDE * 320
+	.incbin "includes/generated/v7_transplant_DrawBitmap_BitLoop.bin"
 Set_XWA_to_320_times_XDE:
 	ld xwa, xde
 	sll xwa, 2		; XWA = Y * 4

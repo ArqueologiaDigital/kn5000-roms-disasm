@@ -238,44 +238,12 @@ Boot_MainSequence_Trampoline:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
 User_didnt_request_flash_mem_update:
-	ldb_d8 a, (1026); Load boot combo code
-	extz wa
-	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
-	stiw_da (0x00ffca), 0x0000
-	set_dd8 0, 0x28	; Release Sub-CPU from reset
-	call SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
-	ei 0
-	calr SubCPU_Send_Payload	; Transfer 192KB Sub-CPU firmware
-	calr SubCPU_Payload_Verify	; Verify payload checksum
-	lds wa, 0
-	call ScreenGroup_Dispatch	; Display initial boot screen (group 0)
-	ei 0
-	call SelfTest_FirmwareVersionCheck
-	calr SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
-	cps hl, 0	; HL=0: success, HL!=0: error
-	jr nz, Boot_PayloadError	; Branch if error occurred
-	lds wa, 1	; Success: use screen group 1
-	jr Boot_DisplayScreen
-
-; Sub-CPU payload transfer or verification failed
+	.incbin "includes/generated/v7_transplant_User_didnt_request_flash_mem_update.bin"
 Boot_PayloadError:
 	lds wa, 2	; Error: use screen group 2
 
 Boot_DisplayScreen:
-	call ScreenGroup_Dispatch	; Display appropriate screen group
-	stdi8 (1024), 6
-	lds wa, 3
-	call ScreenGroup_Dispatch
-	stdi8 (1024), 128
-	stiw_da (0x00ffd4), 0x0000
-	ldb_d8 a, (1026); Load boot combo code
-	extz wa
-	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
-	lds wa, 4
-	call Show_ScreenGroup	; Show screen group 4 (main UI initialization)
-	calr Boot_SetConfigFlag7
-	jp MainLoop
-
+	.incbin "includes/generated/v7_transplant_Boot_DisplayScreen.bin"
 Boot_GetButtonComboCode:
 	ldb_d8 l, (1026)
 	ret
@@ -436,32 +404,13 @@ Boot_HandleComboDisplay_Check3:
 	ret
 
 Boot_ParseTableDataTimestamp:
-	ld xwa, 0x9fffc4
-	push xwa
-	call ParseInt16
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_Boot_ParseTableDataTimestamp.bin"
 Boot_GetSystemPointer:
 	ldw_d16 xhl, (1028)
 	ret
 
 Boot_ParseSubCPUTimestamp:
-	ld xwa, 0x87fff5
-	push xwa
-	call ParseInt16
-	inc 4, xsp
-	ret
-
-; ===========================================================================
-; Boot_HandleFactoryReset - Factory reset if combo 1 AND checksums invalid
-; ===========================================================================
-; Entry: A = combo code from CPanel_CheckSpecialCombos
-; If combo code == 1 (Initial Setting) AND DRAM[0xFFCA] != 0x5aa5
-; (payload checksums invalid, e.g. after Flash ROM replacement),
-; zero-fills all work DRAM and SRAM, then restarts the boot sequence.
-; Otherwise returns immediately (normal boot continues).
-; ===========================================================================
+	.incbin "includes/generated/v7_transplant_Boot_ParseSubCPUTimestamp.bin"
 Boot_HandleFactoryReset:
 	cpw_da (65482), 23205; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
 	ret z			; Yes -> checksums valid, skip reset
@@ -882,38 +831,16 @@ pdly_tim_X:
 	jp TaskSched_DelayTicks
 
 PlayHalt:
-	dec 2, xsp
-	ld (xsp), a
-	call SeqBuf_Init
-	call NoteMap_SendAllNotesOff
-	call Part_ReinitAllActive
-	call AccWrap_PlayModeDispatch
-	cp (xsp), 0x0
-	jr z, PlayHalt_SkipSetFlag
-	setda 2, 10407
-
+	.incbin "includes/generated/v7_transplant_PlayHalt.bin"
 PlayHalt_SkipSetFlag:
-	call AccompSeq_StopSequence
-	call AudioInit_RefreshToneBank
-	call NoteMap_ProcessAndMerge
-	call Voice_InitializeAll
-	call Voice_InitTablePair
-	call Voice_InitTableGroup
-	call MIDI_SendAllSoundOff
-	call MidiThru_Enable
-	inc 2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_PlayHalt_SkipSetFlag.bin"
 PlayStandBy:
 	bitda 2, (10407)
 	jr z, PlayStandBy_SkipClearFlag
 	resda 2, 10407
 
 PlayStandBy_SkipClearFlag:
-	resda 3, 10407
-	call SeqAcc_InitPlaybackState
-	jp MidiThru_Disable
-
+	.incbin "includes/generated/v7_transplant_PlayStandBy_SkipClearFlag.bin"
 EditSwRefresh:
 	call CPanel_InitButtonState_SaveRegs
 	call RefreshSwEvent
@@ -934,8 +861,7 @@ putc_mrx_bf_X:
 	ret
 
 midi_out_en_X:
-	jp MIDI_SC0_TX_DISPATCH
-
+	.incbin "includes/generated/v7_transplant_midi_out_en_X.bin"
 GetAdr_sqbtof:
 	lda_d16 xhl, (1052)
 	ret
@@ -953,15 +879,9 @@ GetAdr_rtmcfg:
 	ret
 
 SetGlobalError:
-	stb_d8 (32578), a
-	ret
-
+	.incbin "includes/generated/v7_transplant_SetGlobalError.bin"
 malloc_X:
-	pushw wa
-	call Malloc
-	inc 2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_malloc_X.bin"
 free_X:
 	push xwa
 	call Free
@@ -1066,18 +986,7 @@ Voice_RefreshBankData:
 	ret
 
 Voice_ResetToFactoryBanks:
-	ldw wa, 0xa
-	ld xhl, 0x7aec
-	ldw bc, 0xff
-	ldw de, 0xf6
-	calr Voice_SetBankParams
-	ld xhl, 0x7bec
-	calr Voice_SetBankParams
-	calr Voice_ReinitIfBankCountNonzero
-	calr Voice_ReinitIfBitFlagSet
-	calr CountAvailableVoiceSlots
-	ret
-
+	.incbin "includes/generated/v7_transplant_Voice_ResetToFactoryBanks.bin"
 Voice_SetBankParams:
 	ld (xhl + 256), wa
 	ld (xhl + 2), bc
@@ -1126,9 +1035,7 @@ CountVoiceSlots_NotUsed:
 	jr CountVoiceSlots_Loop
 
 CountVoiceSlots_Done:
-	stda16 (32280), xwa
-	ret
-
+	.incbin "includes/generated/v7_transplant_CountVoiceSlots_Done.bin"
 Voice_GetSlotAddress:
 	and xhl, 0xffff
 	sla xhl, 8
@@ -1500,47 +1407,7 @@ DrawText_QueueOrDirect:
 	jr DrawText_PopAndReturn
 
 DrawText_QueueDeferred:
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	inc 1, hl
-	ld wa, hl
-	calr DrawQueue_Alloc
-	ld (xsp + 4), xhl
-	ldw wa, 0x1e
-	calr DrawQueue_Alloc
-	ld xiz, xhl
-	lda_24 xwa, (0xfb0f31)
-	ld (xhl), xwa
-	ld xwa, (xsp + 16)
-	ld xiy, xwa
-	lda xix, (xhl + 4)
-	lds bc, 4
-	ldirw
-	ld xwa, (xsp + 12)
-	ld xiy, xwa
-	lda xix, (xhl + 12)
-	ldiw
-	ldiw
-	ld xbc, (xsp + 4)
-	ld (xhl + 16), xbc
-	ld xwa, (xsp + 8)
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xwa, (xsp + 28)
-	ld (xiz + 20), xwa
-	ld wa, (xsp + 26)
-	ld (xiz + 24), wa
-	ld wa, (xsp + 24)
-	ld (xiz + 26), wa
-	ldb_da a, (0x03efa8)
-	ld (xiz + 28), a
-	ld xwa, xiz
-	calr DisplayCmd_DequeueAndExecute
-
+	.incbin "includes/generated/v7_transplant_DrawText_QueueDeferred.bin"
 DrawText_PopAndReturn:
 	pop xiz
 	lda xsp, (xsp + 16)
@@ -1684,26 +1551,7 @@ TextRender_DefaultFontWidth:
 	ld (xbc), wa
 
 TextRender_CustomFontWidth:
-	ld_sril XWA, (xsp + 0x0136)
-	push xwa
-	lda xwa, (xsp + 42)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xwa, (xsp + 38)
-	ld (xsp + 30), xwa
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 12)
-	or xwa, xwa
-	jr nz, TextRender_ProcessStringLoop
-	ld xwa, (xsp + 30)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld wa, (xsp + 20)
-	mul xwa, xhl
-	jr TextRender_AddToDrawPos
-
+	.incbin "includes/generated/v7_transplant_TextRender_CustomFontWidth.bin"
 TextRender_ProcessStringLoop:
 	ld xwa, (xsp + 30)
 	cp (xwa), 0x0
@@ -2088,25 +1936,7 @@ AcChordBox_HandleInitOrSelect:
 	jr AcChordBox_ReturnZero
 
 AcChordBox_HandleChordUpdate:
-	ld_sril XWA, (xsp + 0x0104)
-	ld xde, xiz
-	call InheritedProc
-	push xiz
-	pushw 0xed
-	pushw 0x1c92
-	lda xwa, (xsp + 12)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	cps hl, 0
-	jr nz, AcChordBox_ReturnZero
-	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
-	call SendEvent
-
+	.incbin "includes/generated/v7_transplant_AcChordBox_HandleChordUpdate.bin"
 AcChordBox_ReturnZero:
 	lds32 xhl, 0
 
@@ -2116,70 +1946,12 @@ AcChordBox_PopAndReturn:
 	ret
 
 MainChordPre:
-	push xiz
-	cp xbc, 0x1e2000d
-	jrl nz, MainChordPre_ReturnZero
-	pushw 0x15
-	call Malloc
-	ld xiz, xhl
-	ld (xiz), 0x0
-	ldb_d8 a, (36160)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (Naka_MemoryC_Screens)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	push xiz
-	call Strcat
-	ldb_d8 a, (36162)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (0xecff6a)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	push xiz
-	call Strcat
-	lda xsp, (xsp + 18)
-	cpdi8 (36164), 0
-	jr z, MainChordPre_EmptyChordStr
-	bitda 1, (52958)
-	jr z, MainChordPre_EmptyChordStr
-	ld xwa, 0xed1c96
-	jr MainChordPre_AppendChordSuffix
-
+	.incbin "includes/generated/v7_transplant_MainChordPre.bin"
 MainChordPre_EmptyChordStr:
 	ld xwa, 0xed1c9a
 
 MainChordPre_AppendChordSuffix:
-	push xwa
-	push xiz
-	call Strcat
-	ldb_d8 a, (36162)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (0x03f2f8)
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36160)
-	extz wa
-	sla wa, 2
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36164)
-	extz wa
-	sla wa, 2
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	push xbc
-	push xiz
-	call Strcat
-	lda xsp, (xsp + 16)
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c20001
-	ld xde, xiz
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainChordPre_AppendChordSuffix.bin"
 MainChordPre_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -2286,21 +2058,7 @@ EmptyRoutine_02:
 
 
 CPanel_RX_ProcessOrInit:
-	ldb_d8 a, (36236)
-	and a, 0xc0
-	jr z, CPanel_RX_SkipToProcess
-				; if CP_Flags_A.76 != 0:
-	ld xhl, 0x200ad
-	ldw (xhl - 4), 0x0
-	ldw (xhl - 8), 0x0
-	ldw (xhl - 2), 0x80
-	ei 6
-	stdi16 (36253), 0
-	stdi16 (36255), 0
-	ordi8 36242, 1	; CP_Flags_B.0 = 1
-	ei 0
-	jr CPanel_RX_Return
-				; else:
+	.incbin "includes/generated/v7_transplant_CPanel_RX_ProcessOrInit.bin"
 CPanel_RX_SkipToProcess:
 	calr CPanel_RX_Process
 

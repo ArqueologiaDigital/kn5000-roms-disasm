@@ -3,45 +3,7 @@
 ; accompaniment parameters, and UI widget descriptors for expansion devices
 
 ExtData_ChordTypeTable_Top:
-	.long SeqVoice_ValidateState_StoreChannel
-	.byte 0xed
-	nop
-	.byte 0xee
-	nop
-	.long NakaData_PartConfig
-	.long SepaOut_FormatData_Tail
-	.byte 0xed
-	nop
-	.byte 0xdc
-	nop
-	.byte 0xed
-	nop
-	.byte 0xd6
-	nop
-	.byte 0xed
-	nop
-	.byte 0xd0
-	nop
-	.byte 0xed
-	nop
-	.byte 0xca
-	nop
-	.byte 0xed
-	nop
-	.byte 0xc4
-	nop
-	.byte 0xed
-	nop
-	.byte 0xbe
-	nop
-	.byte 0xed
-	nop
-	.byte 0xb8
-	nop
-	.byte 0xed
-	nop
-	.byte 0xb2
-	nop
+	.incbin "includes/generated/v7_transplant_ExtData_ChordTypeTable_Top.bin"
 ExtData_ChordTypeTable_Mid:
 	.byte 0xed
 	nop

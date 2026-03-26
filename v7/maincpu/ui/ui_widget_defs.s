@@ -192,16 +192,7 @@ AcGridBox_GetRowText:
 	ld xiz, 0x42
 
 AcGridBox_CopyText:
-	call GetViewInstance
-	add xhl, xiz
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcGridBox_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_AcGridBox_CopyText.bin"
 AcGridBox_CellSelect:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -246,29 +237,7 @@ GridCheck_JumpEnd:
 	jr	t, 0x3d
 
 GridCheck_CellSelect:
-	lda xbc, (xsp + 10)
-	ld xwa, xde
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xbc), wa
-	lda xwa, (xbc + 2)
-	ld (xwa), de
-	lda xde, (xsp)
-	ld (xbc + 4), xde
-	pushm (xwa)
-	pushm (xbc)
-	pushw 0xea
-	pushw 0xa266
-	push xde
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 10)
-	ld xbc, 0x1e0008c
-	call SendEvent
-	lds32 xhl, 0
-
+	.incbin "includes/generated/v7_transplant_GridCheck_CellSelect.bin"
 GridCheck_Return:
 	lda xsp, (xsp + 18)
 	ret
@@ -374,66 +343,7 @@ PsEditBox_ReturnZero:
 	jrl PsEditBox_Return
 
 PsEditBox_Paint:
-	ld_sril XWA, (xsp + 0x021c)
-	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0218)
-	calr VwBoxProc
-	ld_sril XWA, (xsp + 0x021c)
-	call GetViewInstance
-	ld (xsp + 8), xhl
-	ld xwa, (xsp + 8)
-	ld (xsp + 4), xwa
-	ld wa, (xwa + 42)
-	calr DrawEditSw
-	stb_dri A, 0xfd, 0x0c, 0x02
-	ld_sril XWA, (xsp + 0x021c)
-	calr GetClientBox
-	stb_dri A, 0xfd, 0x0c, 0x01
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 28)
-	call ConvertStrings
-	stb_dri W, 0xfd, 0x0c, 0x01
-	push xwa
-	call Strlen
-	ld xwa, (xsp + 12)
-	ld iz, (xwa + 40)
-	add iz, hl
-	stb_dri W, 0xfd, 0x10, 0x01
-	push xwa
-	call Strlen
-	inc 8, xsp
-	stb_dri W, 0xfd, 0x0c, 0x02
-	lda xde, (xwa + 4)
-	ld bc, (xde)
-	sub bc, (xwa)
-	mul xbc, xhl
-	extz xbc
-	div xbc, xiz
-	ld hl, (xwa)
-	add hl, bc
-	ld (xde), hl
-	stb_dri A, 0xfd, 0x14, 0x02
-	calr GetBoxCenter
-	stb_dri W, 0xfd, 0x0c, 0x02
-	stb_dri B, 0xfd, 0x14, 0x02
-	ld xhl, (xsp + 8)
-	ld xbc, (xhl + 32)
-	push xbc
-	pushm (xhl + 36)
-	ld xbc, (xsp + 10)
-	pushm (xbc + 22)
-	ld c, (xbc + 38)
-	extz bc
-	pushw bc
-	ld xhl, (xhl + 28)
-	ld xbc, xde
-	ld xde, xhl
-	call DrawStringAlignment
-	ld_sril XWA, (xsp + 0x021c)
-	ld xbc, 0x1c0000e
-	lds32 xde, 0
-	jrl PsEditBox_Dispatch
-
+	.incbin "includes/generated/v7_transplant_PsEditBox_Paint.bin"
 PsEditBox_Select:
 	ld_sril XWA, (xsp + 0x021c)
 	call GetViewInstance
@@ -447,55 +357,9 @@ PsEditBox_Select:
 	jrl PsEditBox_Dispatch
 
 PsEditBox_Confirm:
-	ld_sril XWA, (xsp + 0x021c)
-	call GetViewInstance
-	ld (xsp + 8), xhl
-	stb_dri A, 0xfd, 0x0c, 0x02
-	ld_sril XWA, (xsp + 0x021c)
-	calr GetClientBox
-	stb_dri A, 0xfd, 0x0c, 0x01
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 28)
-	call ConvertStrings
-	stb_dri W, 0xfd, 0x0c, 0x01
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld xwa, (xsp + 8)
-	ld bc, (xwa + 40)
-	ld iy, bc
-	add iy, hl
-	stb_dri W, 0xfd, 0x0c, 0x02
-	lda xhl, (xwa + 4)
-	ld de, (xhl)
-	ld ix, de
-	sub ix, (xwa)
-	mul xbc, xix
-	extz xbc
-	div xbc, xiy
-	sub de, bc
-	ld (xwa), de
-	decm 6, (xhl)
-	stb_dri A, 0xfd, 0x14, 0x02
-	calr GetBoxCenter
-	lda xde, (xsp + 12)
-	ld_sril XWA, (xsp + 0x0218)
-	or xwa, xwa
-	jr nz, PsEditBox_Confirm_CopyText
-	ld_sril XWA, (xsp + 0x021c)
-	ld xbc, 0x1e0003a
-	call SendEvent
-	cp (xsp + 12), 0x0
-	jr nz, PsEditBox_Confirm_Render
-	jrl PsEditBox_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_PsEditBox_Confirm.bin"
 PsEditBox_Confirm_CopyText:
-	ld_sril XWA, (xsp + 0x0218)
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PsEditBox_Confirm_CopyText.bin"
 PsEditBox_Confirm_Render:
 	ld xiy, (xsp + 8)
 	ld xbc, (xiy + 32)
@@ -651,45 +515,7 @@ PsNumEditBoxProc:
 	jr PsNumEditBox_Return
 
 PsNumEditBox_Confirm:
-	ld xwa, (xsp + 42)
-	call GetViewInstance
-	ld xiz, xhl
-	pushw 0xea
-	pushw 0xa27a
-	lda xwa, (xsp + 28)
-	push xwa
-	call Strcpy
-	pushm (xiz + 50)
-	pushw 0xea
-	pushw 0xa27c
-	lda xwa, (xsp + 28)
-	push xwa
-	call Sprintf_Locked
-	lda xwa, (xsp + 32)
-	push xwa
-	lda xwa, (xsp + 46)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 26)
-	pushw 0xea
-	pushw 0xa280
-	lda xwa, (xsp + 28)
-	push xwa
-	call Strcat
-	ld xwa, (xsp + 42)
-	push xwa
-	lda xwa, (xsp + 36)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 20)
-	lda xde, (xsp + 4)
-	ld xwa, (xsp + 42)
-	ld xbc, (xsp + 38)
-	calr PsEditBoxProc
-	lds32 xhl, 0
-
+	.incbin "includes/generated/v7_transplant_PsNumEditBox_Confirm.bin"
 PsNumEditBox_Return:
 	pop xiz
 	lda xsp, (xsp + 42)
@@ -731,18 +557,7 @@ PsTblEditBox_Return:
 	ret
 
 PasTableCheck:
-	cp xbc, 0x1e0004c
-	jr nz, PasTableCheck_Return
-	ld xwa, (xde)
-	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout_0x3B0
-	add xbc, xwa
-	ld xwa, (xbc)
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PasTableCheck.bin"
 PasTableCheck_Return:
 	lds32 xhl, 0
 	ret
@@ -773,22 +588,7 @@ AcOnOffBoxProc:
 	jrl AcOnOff_Dispatch
 
 AcOnOff_GetText:
-	ld xwa, xiz
-	call GetViewInstance
-	ld xwa, (xhl + 50)
-	ld wa, (xwa)
-	extz xwa
-	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout_0x3C8
-	add xbc, xwa
-	ld xwa, (xbc)
-	push xwa
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl AcOnOff_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_AcOnOff_GetText.bin"
 AcOnOff_SetValue:
 	ld xwa, xiz
 	call GetViewInstance
@@ -892,43 +692,7 @@ AcNumEditBoxProc:
 	jrl AcNumEdit_Dispatch
 
 AcNumEdit_GetText:
-	ld xwa, (xsp + 32)
-	call GetViewInstance
-	ld (xsp + 4), xhl
-	pushw 0xea
-	pushw 0xa2aa
-	lda xwa, (xsp + 22)
-	push xwa
-	call Strcpy
-	ld xwa, (xsp + 12)
-	pushm (xwa + 54)
-	pushw 0xea
-	pushw 0xa2ac
-	lda xwa, (xsp + 22)
-	push xwa
-	call Sprintf_Locked
-	lda xwa, (xsp + 26)
-	push xwa
-	lda xwa, (xsp + 40)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 26)
-	pushw 0xea
-	pushw 0xa2b0
-	lda xwa, (xsp + 22)
-	push xwa
-	call Strcat
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 50)
-	pushm (xwa)
-	lda xwa, (xsp + 28)
-	push xwa
-	ld xwa, (xsp + 42)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 18)
-	jrl AcNumEdit_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_AcNumEdit_GetText.bin"
 AcNumEdit_SetValue:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
@@ -1375,30 +1139,7 @@ AcLswEdit_Return:
 	ret
 
 LswEditCheck:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e00083
-	jr z, LswEditCheck_NotHandled
-	cp xbc, 0x1e0003f
-	jr z, LswEditCheck_StepOne
-	cp xbc, 0x1e0003e
-	jr z, LswEditCheck_StepFour
-	cp xbc, 0x1e00041
-	jr z, LswEditCheck_StepOne
-	cp xbc, 0x1e00040
-	jr z, LswEditCheck_GetAddr
-	cp xbc, 0x1e00042
-	jr nz, LswEditCheck_NotHandled
-	pushm (xde + 4)
-	pushw 0xea
-	pushw 0xa2b2
-	ld xwa, (xde + 8)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	ld xhl, xiz
-	jr LswEditCheck_Return
-
+	.incbin "includes/generated/v7_transplant_LswEditCheck.bin"
 LswEditCheck_GetAddr:
 	ld xhl, 0x1f47
 	jr LswEditCheck_Return
@@ -1419,202 +1160,17 @@ LswEditCheck_Return:
 	ret
 
 MainLswPut:
-	dec 8, xsp
-	push xiz
-	ld (xsp + 4), de
-	ld (xsp + 6), bc
-	ld (xsp + 8), xwa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, (xsp + 8)
-	ld (xiz), xwa
-	ld wa, (xsp + 6)
-	ld (xiz + 4), wa
-	ld wa, (xsp + 4)
-	ld (xiz + 6), wa
-	lds32 xwa, 0
-	ld (xiz + 8), xwa
-	ld xwa, 0x1400002
-	ld xbc, 0x1e00057
-	ld xde, xiz
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call MainFuncCall
-	lds hl, 0
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainLswPut.bin"
 MainLswPartPut:
-	dec 8, xsp
-	pushw iz
-	ld (xsp + 6), de
-	ld (xsp + 8), bc
-	ld iz, wa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	ld bc, (xsp + 8)
-	extz xbc
-	ld de, iz
-	extz xde
-	sll xde, 0
-	add xde, xbc
-	ld xwa, (xsp + 2)
-	ld (xwa), xde
-	ld bc, (xsp + 6)
-	ld (xwa + 4), bc
-	ld bc, (xsp + 14)
-	ld (xwa + 6), bc
-	lds32 xbc, 0
-	ld (xwa + 8), xbc
-	ld xwa, 0x1400002
-	ld xbc, 0x1e0005a
-	ld xde, (xsp + 2)
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 2)
-	call MainFuncCall
-	lds hl, 0
-	popw iz
-	inc 8, xsp
-	retd 0x2
-
+	.incbin "includes/generated/v7_transplant_MainLswPartPut.bin"
 MainLswAdd:
-	dec 8, xsp
-	push xiz
-	ld (xsp + 4), de
-	ld (xsp + 6), bc
-	ld (xsp + 8), xwa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, (xsp + 8)
-	ld (xiz), xwa
-	ld wa, (xsp + 6)
-	ld (xiz + 4), wa
-	ld wa, (xsp + 4)
-	ld (xiz + 6), wa
-	lds32 xwa, 0
-	ld (xiz + 8), xwa
-	ld xwa, 0x1400002
-	ld xbc, 0x1e00058
-	ld xde, xiz
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call MainFuncCall
-	lds hl, 0
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainLswAdd.bin"
 MainLswPartAdd:
-	dec 8, xsp
-	pushw iz
-	ld (xsp + 6), de
-	ld (xsp + 8), bc
-	ld iz, wa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	ld bc, (xsp + 8)
-	extz xbc
-	ld de, iz
-	extz xde
-	sll xde, 0
-	add xde, xbc
-	ld xwa, (xsp + 2)
-	ld (xwa), xde
-	ld bc, (xsp + 6)
-	ld (xwa + 4), bc
-	ld bc, (xsp + 14)
-	ld (xwa + 6), bc
-	lds32 xbc, 0
-	ld (xwa + 8), xbc
-	ld xwa, 0x1400002
-	ld xbc, 0x1e0005b
-	ld xde, (xsp + 2)
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 2)
-	call MainFuncCall
-	lds hl, 0
-	popw iz
-	inc 8, xsp
-	retd 0x2
-
+	.incbin "includes/generated/v7_transplant_MainLswPartAdd.bin"
 MainLswGet:
-	dec 4, xsp
-	push xiz
-	ld (xsp + 4), xwa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, (xsp + 4)
-	ld (xiz), xwa
-	ldw (xiz + 4), 0x0
-	ldw (xiz + 6), 0x0
-	lds32 xwa, 0
-	ld (xiz + 8), xwa
-	ld xwa, 0x1400002
-	ld xbc, 0x1e00059
-	ld xde, xiz
-	call FuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call FuncCall
-	lds hl, 0
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainLswGet.bin"
 MainLswPartGet:
-	dec 6, xsp
-	pushw iz
-	ld (xsp + 6), bc
-	ld iz, wa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	ld bc, (xsp + 6)
-	extz xbc
-	ld de, iz
-	extz xde
-	sll xde, 0
-	add xde, xbc
-	ld xwa, (xsp + 2)
-	ld (xwa), xde
-	ldw (xwa + 4), 0x0
-	ldw (xwa + 6), 0x0
-	lds32 xbc, 0
-	ld (xwa + 8), xbc
-	ld xwa, 0x1400002
-	ld xbc, 0x1e0005c
-	ld xde, (xsp + 2)
-	call FuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 2)
-	call FuncCall
-	lds hl, 0
-	popw iz
-	inc 6, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainLswPartGet.bin"
 SetLswFilter:
 	add xwa, xbc
 	stl_da (0x0276c6), xwa
@@ -1917,112 +1473,18 @@ RamEditCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 RamEditCheck_JumpStart:
-	ld	xwa, (xde+14)
-	push	xwa
-	pushw	234
-	pushw	0xa2b6
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	ld	xhl, xiz
-	jr	31
-	lds32	xhl, 4
-	jr	27
-	lds32	xhl, 1
-	jr	23
-	ld	xhl, 16
-	jr	16
-	ld	xhl, 0xffffffe3
-	jr	9
-	lda_24	xhl, (0x0276ca)
-	jr	2
-
+	.incbin "includes/generated/v7_transplant_RamEditCheck_JumpStart.bin"
 RamEditCheck_NotHandled:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 MainRamPut:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	pushw 0x16
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 4), xhl
-	ld xwa, (xsp + 4)
-	ld xiy, xiz
-	ld xix, xwa
-	ldw bc, 0xb
-	ldirw
-	ld xwa, 0x1400008
-	ld xbc, 0x1e00069
-	ld xde, (xsp + 4)
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 4)
-	call MainFuncCall
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainRamPut.bin"
 MainRamAdd:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	pushw 0x16
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 4), xhl
-	ld xwa, (xsp + 4)
-	ld xiy, xiz
-	ld xix, xwa
-	ldw bc, 0xb
-	ldirw
-	ld xwa, 0x1400008
-	ld xbc, 0x1e0006a
-	ld xde, (xsp + 4)
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 4)
-	call MainFuncCall
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainRamAdd.bin"
 MainRamGet:
-	dec 6, xsp
-	push xiz
-	ld (xsp + 4), bc
-	ld (xsp + 6), xwa
-	pushw 0x16
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, (xsp + 6)
-	ld (xiz), xwa
-	ld wa, (xsp + 4)
-	ld (xiz + 4), wa
-	lds32 xwa, 0
-	ld (xiz + 6), xwa
-	ld (xiz + 10), xwa
-	ld (xiz + 14), xwa
-	ld (xiz + 18), xwa
-	ld xwa, 0x1400008
-	ld xbc, 0x1e00068
-	ld xde, xiz
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call MainFuncCall
-	pop xiz
-	inc 6, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainRamGet.bin"
 AcBitEditBoxProc:
 	lda xsp, (xsp - 26)
 	push xiz
@@ -2214,29 +1676,7 @@ AcBitEdit_Return:
 	ret
 
 BitEditCheck:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e00065
-	jr z, BitEditCheck_NotHandled
-	cp xbc, 0x1e00064
-	jr z, BitEditCheck_GetMask
-	cp xbc, 0x1e00063
-	jr z, BitEditCheck_GetAddr
-	cp xbc, 0x1e00062
-	jr nz, BitEditCheck_NotHandled
-	ld wa, (xde + 8)
-	and wa, 0x1
-	sla wa, 2
-	lda_24 xbc, (Data_SoundEditorCharsLayout_0x3FC)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 10)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr BitEditCheck_Return
-
+	.incbin "includes/generated/v7_transplant_BitEditCheck.bin"
 BitEditCheck_GetAddr:
 	lda_24 xhl, (0x0276ce)
 	jr BitEditCheck_Return
@@ -2253,58 +1693,9 @@ BitEditCheck_Return:
 	ret
 
 MainBitPut:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	pushw 0xe
-	call Malloc
-	ld (xsp + 6), xhl
-	pushw 0xe
-	push xiz
-	ld xwa, (xsp + 12)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 12)
-	ld xwa, 0x1400007
-	ld xbc, 0x1e00067
-	ld xde, (xsp + 4)
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 4)
-	call MainFuncCall
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainBitPut.bin"
 MainBitGet:
-	dec 8, xsp
-	push xiz
-	ld (xsp + 4), xbc
-	ld (xsp + 8), xwa
-	pushw 0xe
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xwa, (xsp + 8)
-	ld (xiz), xwa
-	ld xwa, (xsp + 4)
-	ld (xiz + 4), xwa
-	ldw (xiz + 8), 0x0
-	lds32 xwa, 0
-	ld (xiz + 10), xwa
-	ld xwa, 0x1400007
-	ld xbc, 0x1e00066
-	ld xde, xiz
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call MainFuncCall
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainBitGet.bin"
 PsMenuBoxProc:
 	stb_dri L, 0xfd, 0xec, 0xfe
 	push xiz
@@ -2363,12 +1754,7 @@ PsMenuBox_Confirm:
 	jr PsMenuBox_ReturnZero
 
 PsMenuBox_Confirm_CopyText:
-	ld_sril XWA, (xsp + 0x0114)
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PsMenuBox_Confirm_CopyText.bin"
 PsMenuBox_Confirm_Render:
 	stb_dri C, 0xfd, 0x0c, 0x01
 	stb_dri A, 0xfd, 0x08, 0x01
@@ -2492,46 +1878,7 @@ AcTitleMenu_Confirm_NoIconRight:
 	lds wa, 4
 
 AcTitleMenu_Confirm_SetRight:
-	ldw_sri0 DE, (xsp + 0x0120)
-	sub de, wa
-	ld (xbc), de
-	lda xbc, (xsp + 12)
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 42)
-	call ConvertStrings
-	lda xwa, (xsp + 12)
-	stb_dri A, 0xfd, 0x14, 0x01
-	ld de, (xbc + 4)
-	sub de, (xbc)
-	ld xbc, (xsp + 8)
-	ld xbc, (xbc + 28)
-	call WordwrapStrings
-	ld (xsp + 6), hl
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld de, (xsp + 6)
-	stb_dri A, 0xfd, 0x28, 0x01
-	ld xix, (xsp + 8)
-	lda xwa, (xix + 50)
-	cp de, hl
-	jr nz, AcTitleMenu_Confirm_MultiLine
-	ld xwa, (xwa)	; <-- ICON ID
-	or xwa, xwa
-	jr z, AcTitleMenu_Confirm_SingleLine
-
-	cpw (xbc), 0x0
-	jr z, AcTitleMenu_Confirm_SingleLine
-
-	lda xwa, (xsp + 12)
-	ld xbc, (xix + 28)
-	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0118)
-	sub wa, hl
-	dec 5, wa
-	stw_dri WA, 0xfd, 0x2c, 0x01
-
+	.incbin "includes/generated/v7_transplant_AcTitleMenu_Confirm_SetRight.bin"
 AcTitleMenu_Confirm_SingleLine:
 	stb_dri W, 0xfd, 0x1c, 0x01
 	ld bc, (xwa + 2)
@@ -2558,33 +1905,7 @@ AcTitleMenu_Confirm_SingleLine:
 	jrl AcTitleMenu_Confirm_RenderTop
 
 AcTitleMenu_Confirm_MultiLine:
-	ld hl, (xsp + 6)
-	dec 1, hl
-	lda xde, (xsp + 12)
-	stib_ind 0x07, 0xe8, 0xec, 0x00
-	ld xwa, (xwa)
-	or xwa, xwa
-	jr z, AcTitleMenu_Confirm_RenderBottom
-	cpw (xbc), 0x0
-	jr z, AcTitleMenu_Confirm_RenderBottom
-	ld wa, (xsp + 6)
-	exts xwa
-	add xwa, xde
-	push xwa
-	call Strlen
-	ld iz, hl
-	lda xwa, (xsp + 16)
-	push xwa
-	call Strlen
-	inc 8, xsp
-	ld xwa, (xsp + 8)
-	ld xbc, (xwa + 28)
-	lda xwa, (xsp + 12)
-	cp hl, iz
-	jr ugt, AcTitleMenu_Confirm_MultiAdjust
-	ld de, (xsp + 6)
-	stb_dri W, 0x07, 0xe0, 0xe8
-
+	.incbin "includes/generated/v7_transplant_AcTitleMenu_Confirm_MultiLine.bin"
 AcTitleMenu_Confirm_MultiAdjust:
 	call CalcTotalWidth
 	ldw_sri0 WA, (xsp + 0x0118)
@@ -2854,44 +2175,7 @@ VwMenuBox_Confirm_NoIconRight:
 	lds wa, 4
 
 VwMenuBox_Confirm_SetRight:
-	ldw_sri0 DE, (xsp + 0x011e)
-	sub de, wa
-	ld (xbc), de
-	lda xbc, (xsp + 10)
-	ld xwa, (xsp + 6)
-	ld xwa, (xwa + 42)
-	call ConvertStrings
-	lda xwa, (xsp + 10)
-	stb_dri A, 0xfd, 0x12, 0x01
-	ld de, (xbc + 4)
-	sub de, (xbc)
-	ld xbc, (xsp + 6)
-	ld xbc, (xbc + 28)
-	call WordwrapStrings
-	ld iz, hl
-	lda xwa, (xsp + 10)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld de, iz
-	stb_dri A, 0xfd, 0x26, 0x01
-	ld xix, (xsp + 6)
-	lda xwa, (xix + 46)
-	cp de, hl
-	jr nz, VwMenuBox_Confirm_MultiLine
-	ld xwa, (xwa)
-	or xwa, xwa
-	jr z, VwMenuBox_Confirm_SingleLine
-	cpw (xbc), 0x0
-	jr z, VwMenuBox_Confirm_SingleLine
-	lda xwa, (xsp + 10)
-	ld xbc, (xix + 28)
-	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0116)
-	sub wa, hl
-	dec 5, wa
-	stw_dri WA, 0xfd, 0x2a, 0x01
-
+	.incbin "includes/generated/v7_transplant_VwMenuBox_Confirm_SetRight.bin"
 VwMenuBox_Confirm_SingleLine:
 	stb_dri W, 0xfd, 0x1a, 0x01
 	ld bc, (xwa + 2)
@@ -2918,30 +2202,7 @@ VwMenuBox_Confirm_SingleLine:
 	jrl VwMenuBox_Confirm_RenderTop
 
 VwMenuBox_Confirm_MultiLine:
-	ld hl, iz
-	dec 1, hl
-	lda xde, (xsp + 10)
-	stib_ind 0x07, 0xe8, 0xec, 0x00
-	ld xwa, (xwa)
-	or xwa, xwa
-	jr z, VwMenuBox_Confirm_RenderBottom
-	cpw (xbc), 0x0
-	jr z, VwMenuBox_Confirm_RenderBottom
-	stb_dri W, 0x07, 0xe8, 0xf8
-	push xwa
-	call Strlen
-	ldw_erp HL, 0xfa
-	lda xwa, (xsp + 14)
-	push xwa
-	call Strlen
-	inc 8, xsp
-	ld xwa, (xsp + 6)
-	ld xbc, (xwa + 28)
-	lda xwa, (xsp + 10)
-	cpw_erp HL, 0xfa
-	jr ugt, VwMenuBox_Confirm_MultiAdjust
-	stb_dri W, 0x07, 0xe0, 0xf8
-
+	.incbin "includes/generated/v7_transplant_VwMenuBox_Confirm_MultiLine.bin"
 VwMenuBox_Confirm_MultiAdjust:
 	call CalcTotalWidth
 	ldw_sri0 WA, (xsp + 0x0116)
@@ -3427,44 +2688,7 @@ ButtonState_DispatchDSP:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ButtonState_DispatchDSP_InlineData:
-	lda	xde, (xsp+12)
-	ld	xwa, (xsp+298)
-	ld	xbc, 0x01e0003a
-	call	SendEvent
-	jr	100
-	ld	xwa, Data_SoundEditorCharsLayout_0x418
-	jr	82
-	ld	xwa, Data_SoundEditorCharsLayout_0x41C
-	jr	75
-	ld	xwa, Data_SoundEditorCharsLayout_0x420
-	jr	68
-	ld	xwa, Data_SoundEditorCharsLayout_0x424
-	jr	61
-	.byte 0x40
-	.long NakaInst_OK
-	jr	54
-	ld	xwa, NakaInst_OK_0x4
-	jr	47
-	ld	xwa, NakaInst_OK_0x8
-	jr	40
-	ld	xwa, NakaInst_OK_0xC
-	jr	33
-	ld	xwa, NakaInst_OK_0xE
-	jr	26
-	ld	xwa, NakaInst_OK_0x10
-	jr	19
-	ld	xwa, NakaInst_OK_0x14
-	jr	12
-	ld	xwa, NakaInst_OK_0x18
-	jr	5
-	.byte 0x40
-	.long Str_No
-	push	xwa
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-
+	.incbin "includes/generated/v7_transplant_ButtonState_DispatchDSP_InlineData.bin"
 ButtonState_Paint_DrawAligned:
 	stb_dri W, 0xfd, 0x20, 0x01
 	stb_dri C, 0xfd, 0x14, 0x01
@@ -3911,15 +3135,7 @@ VwEditSwBox_GetText_AltView:
 	ld xiz, 0x28
 
 VwEditSwBox_GetText_CopyStr:
-	call GetViewInstance
-	add xhl, xiz
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_VwEditSwBox_GetText_CopyStr.bin"
 VwEditSwBox_ReturnZero:
 	lds32 xhl, 0
 
@@ -3989,38 +3205,7 @@ PsPageBox_Confirm:
 	call SendEvent
 
 PsPageBox_Confirm_DrawValue:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 28)
-	ld iz, (xwa)
-	ld_sril XWA, (xsp + 0x0114)
-	ld xbc, 0x1e00055
-	lds32 xde, 0
-	call SendEvent
-	pushw hl
-	pushw iz
-	pushw 0xea
-	pushw 0xa354
-	lda xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	stb_dri A, 0xfd, 0x0c, 0x01
-	ld_sril XWA, (xsp + 0x0114)
-	calr GetClientBox
-	stb_dri W, 0xfd, 0x0c, 0x01
-	stb_dri A, 0xfd, 0x08, 0x01
-	calr GetBoxCenter
-	stb_dri W, 0xfd, 0x0c, 0x01
-	stb_dri A, 0xfd, 0x08, 0x01
-	lda xde, (xsp + 8)
-	lds32 xhl, 0
-	push xhl
-	pushw 0x0
-	ld xhl, (xsp + 10)
-	pushm (xhl + 22)
-	call DrawStringCentered
-	jr UIVwBox_ZeroReturn
-
+	.incbin "includes/generated/v7_transplant_PsPageBox_Confirm_DrawValue.bin"
 PsPageBox_HitTest:
 	ld xwa, 0x2600024
 	ld xbc, 0x1e00029
@@ -4753,14 +3938,7 @@ IvPageControl_Paint:
 	jr IvPageControl_Dispatch
 
 IvPageControl_GetText:
-	pushw 0xea
-	pushw 0xa360
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr IvPageControl_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_IvPageControl_GetText.bin"
 IvPageControl_PageChange:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -4830,14 +4008,7 @@ IvMainEditSwProc:
 	jr IvMainEditSw_ReturnZero
 
 IvMainEditSw_GetText:
-	pushw 0xea
-	pushw 0xa366
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr IvMainEditSw_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_IvMainEditSw_GetText.bin"
 IvMainEditSw_BtnOK:
 	ld xwa, xiz
 	call GetViewInstance
@@ -4909,12 +4080,7 @@ IvExit_Paint:
 	jr IvExit_ReturnZero
 
 IvExit_GetText:
-	pushw 0xea
-	pushw 0xa36c
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvExit_GetText.bin"
 IvExit_ReturnZero:
 	lds32 xhl, 0
 	jr IvExit_Return
@@ -4945,15 +4111,7 @@ IvExitModeProc:
 	jrl IvExitMode_DefaultTail
 
 IvExitMode_GetText:
-	pushw 0xea
-	pushw 0xa372
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jr IvExitMode_Return
-
+	.incbin "includes/generated/v7_transplant_IvExitMode_GetText.bin"
 IvExitMode_OK:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -5019,15 +4177,7 @@ IvExitScreenProc:
 	jrl IvExitScreen_DefaultTail
 
 IvExitScreen_GetText:
-	pushw 0xea
-	pushw 0xa378
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jr IvExitScreen_Return
-
+	.incbin "includes/generated/v7_transplant_IvExitScreen_GetText.bin"
 IvExitScreen_OK:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -5092,15 +4242,7 @@ IvExitWindowProc:
 	jrl IvExitWindow_DefaultTail
 
 IvExitWindow_GetText:
-	pushw 0xea
-	pushw 0xa37e
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jr IvExitWindow_Return
-
+	.incbin "includes/generated/v7_transplant_IvExitWindow_GetText.bin"
 IvExitWindow_OK:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1e00053
@@ -5278,32 +4420,13 @@ GetNamingWindowID:
 	ret
 
 NamingCheck:
-	push xiz
-	ld xiz, xwa
-	lda_24 xwa, (0x03ef6e)
-	cp xbc, 0x1e0007c
-	jr z, NamingCheck_GetStrLen
-	cp xbc, 0x1e00084
-	jr z, NamingCheck_NotHandled
-	cp xbc, 0x1e0003a
-	jr nz, NamingCheck_NotHandled
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr NamingCheck_Return
-
+	.incbin "includes/generated/v7_transplant_NamingCheck.bin"
 NamingCheck_NotHandled:
 	lds32 xhl, 0
 	jr NamingCheck_Return
 
 NamingCheck_GetStrLen:
-	push xwa
-	call Strlen
-	inc 4, xsp
-	extz xhl
-
+	.incbin "includes/generated/v7_transplant_NamingCheck_GetStrLen.bin"
 NamingCheck_Return:
 	pop xiz
 	ret
@@ -5502,13 +4625,7 @@ IvInterrupt_Paint:
 	jr IvInterrupt_ReturnZero
 
 IvInterrupt_GetText:
-	pushw 0xea
-	pushw 0xa39c
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvInterrupt_GetText.bin"
 IvInterrupt_ReturnZero:
 	lds32 xhl, 0
 	jr ReminderProc_Return
@@ -5535,54 +4652,21 @@ ReminderProc_Return:
 	ret
 
 IvIntReminderProc:
-	cp xbc, 0x1e0009d
-	jr z, IvIntReminder_GetInterval
-	cp xbc, 0x1e0003a
-	jrl nz, IvInterruptProc
-	pushw 0xea
-	pushw 0xa3a2
-	push xde
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_IvIntReminderProc.bin"
 IvIntReminder_GetInterval:
 	lds32 xhl, 0
 	ldb_da l, (0x0340e6)
 	ret
 
 IvIntCompleteProc:
-	cp xbc, 0x1e0009d
-	jr z, IvIntComplete_GetInterval
-	cp xbc, 0x1e0003a
-	jrl nz, IvInterruptProc
-	pushw 0xea
-	pushw 0xa3a8
-	push xde
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_IvIntCompleteProc.bin"
 IvIntComplete_GetInterval:
 	lds32 xhl, 0
 	ldb_da l, (0x0340e8)
 	ret
 
 IvIntErrorProc:
-	cp xbc, 0x1e0009d
-	jr z, IvIntError_GetInterval
-	cp xbc, 0x1e0003a
-	jrl nz, IvInterruptProc
-	pushw 0xea
-	pushw 0xa3ae
-	push xde
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_IvIntErrorProc.bin"
 IvIntError_GetInterval:
 	lds32 xhl, 0
 	ldb_da l, (0x0340ec)
@@ -5628,13 +4712,7 @@ IvIntVari_ForwardToInterrupt:
 	jr IvIntVari_ReturnZero
 
 IvIntVari_GetText:
-	pushw 0xea
-	pushw 0xa3b4
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvIntVari_GetText.bin"
 IvIntVari_ReturnZero:
 	lds32 xhl, 0
 	jr IvIntVari_Return
@@ -5649,18 +4727,7 @@ IvIntVari_Return:
 	ret
 
 IvIntEasySetProc:
-	cp xbc, 0x1e0009d
-	jr z, IvIntEasySet_GetInterval
-	cp xbc, 0x1e0003a
-	jrl nz, IvInterruptProc
-	pushw 0xea
-	pushw 0xa3ba
-	push xde
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_IvIntEasySetProc.bin"
 IvIntEasySet_GetInterval:
 	lds32 xhl, 0
 	ldb_da l, (0x0340f0)
@@ -5706,13 +4773,7 @@ IvIntWelcome_ForwardToInterrupt:
 	jr IvIntWelcome_ReturnZero
 
 IvIntWelcome_GetText:
-	pushw 0xea
-	pushw 0xa3c0
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvIntWelcome_GetText.bin"
 IvIntWelcome_ReturnZero:
 	lds32 xhl, 0
 	jr IvIntWelcome_Return
@@ -6083,61 +5144,11 @@ AcPmemName_CallMainFunc:
 	jrl PsParaBox_EventReturn
 
 AcPmemName_Confirm:
-	ld xwa, (xsp + 44)
-	ld xde, xiz
-	calr PsParaBoxProc
-	lda xbc, (xiz + 2)
-	ld wa, (xbc)
-	dec 1, wa
-	srl wa, 3
-	inc 1, wa
-	ld w, a
-	lda xde, (xiz + 4)
-	ld xiy, (xde)
-	ld l, w
-	extz hl
-	lda xix, (xsp + 4)
-	cp (xiy), 0x0
-	jr z, AcPmemName_Confirm_EmptySlot
-	cpw (xiz), 0x0
-	jr z, AcPmemName_Confirm_ZeroIndex
-	sll w, 3
-	dec 8, w
-	ld a, w
-	extz wa
-	ld bc, (xbc)
-	sub bc, wa
-	ld xwa, (xde)
-	push xwa
-	extz bc
-	pushw bc
-	pushw hl
-	pushw 0xea
-	pushw 0xa3cc
-	push xix
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-	jr AcPmemName_Confirm_SendEvent
-
+	.incbin "includes/generated/v7_transplant_AcPmemName_Confirm.bin"
 AcPmemName_Confirm_ZeroIndex:
-	ld xwa, (xde)
-	push xwa
-	pushw hl
-	pushw 0xea
-	pushw 0xa3de
-	push xix
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jr AcPmemName_Confirm_SendEvent
-
+	.incbin "includes/generated/v7_transplant_AcPmemName_Confirm_ZeroIndex.bin"
 AcPmemName_Confirm_EmptySlot:
-	pushw hl
-	pushw 0xea
-	pushw 0xa3ee
-	push xix
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_AcPmemName_Confirm_EmptySlot.bin"
 AcPmemName_Confirm_SendEvent:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 44)
@@ -6268,117 +5279,7 @@ AcMixerVol_Paint:
 	jrl UIList_SendEvent
 
 AcMixerVol_Confirm:
-	ld xwa, (xsp + 44)
-	ld xbc, (xsp + 40)
-	ld xde, (xsp + 36)
-	calr VwBoxProc
-	ld xwa, (xsp + 44)
-	call GetViewInstance
-	ld (xsp + 8), xhl
-	ld xwa, (xsp + 8)
-	ld wa, (xwa + 28)
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	add xbc, xbc
-	ld xwa, Str_No_0x1F6
-	add xwa, xbc
-	ld xwa, (xwa)
-	call SndParam_LookupReadOnly
-	ld (xsp + 4), hl
-	ld xwa, (xsp + 8)
-	ld wa, (xwa + 28)
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	add xbc, xbc
-	lda_24 xwa, (Str_No_0x1FA)
-	add xwa, xbc
-	ld xwa, (xwa)
-	call SndParam_LookupReadOnly
-	ld (xsp + 6), hl
-	lda xbc, (xsp + 24)
-	ld xwa, (xsp + 44)
-	call GetClientBox
-	lda xde, (xsp + 24)
-	ld wa, (xde + 4)
-	sub wa, (xde)
-	exts xwa
-	divs wa, 0x2
-	ld hl, (xde)
-	add hl, wa
-	lda xbc, (xsp + 32)
-	ld (xbc), hl
-	ld wa, (xde + 2)
-	inc 4, wa
-	ld (xbc + 2), wa
-	pushm (xsp + 4)
-	pushw 0xea
-	pushw 0xa6b0
-	lda xwa, (xsp + 24)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	lda xwa, (xsp + 24)
-	lda xbc, (xsp + 32)
-	lda xde, (xsp + 18)
-	lds32 xhl, 3
-	push xhl
-	pushw 0x0
-	ld xhl, (xsp + 14)
-	pushm (xhl + 22)
-	call DrawStringCentered
-	lda xwa, (xsp + 32)
-	lda xde, (xsp + 24)
-	ld bc, (xde)
-	inc 4, bc
-	ld (xwa), bc
-	ld bc, (xde + 2)
-	add bc, 0xa
-	ld (xwa + 2), bc
-	lds32 xbc, 2
-	call DrawBitmapFast
-	lda xwa, (xsp + 32)
-	ldw bc, 0x80
-	sub bc, (xsp + 4)
-	muls bc, 0x24
-	exts xbc
-	divs bc, 0x80
-	add (xwa + 2), bc
-	lds32 xbc, 3
-	call DrawBitmapFast
-	cpw (xsp + 6), 0x1
-	jrl nz, UIList_ReturnZeroJmp
-	lda xbc, (xsp + 24)
-	ld xwa, (xsp + 44)
-	call GetClientBox
-	lda xbc, (xsp + 32)
-	lda xwa, (xsp + 24)
-	ld de, (xwa)
-	add de, 0x11
-	ld (xbc), de
-	ld de, (xwa + 2)
-	add de, 0x1f
-	ld (xbc + 2), de
-	ld de, (xbc)
-	sub de, 0xc
-	ld (xwa), de
-	ld de, (xbc)
-	add de, 0xc
-	ld (xwa + 4), de
-	addiw_da (xwa + 6), 0x12
-	lds32 xde, 3
-	push xde
-	pushw 0xfb
-	pushw 0x0
-	pushw 0x0
-	pushw 0x1
-	ld xde, Str_No_0x39E
-	call DrawStringReverse
-	jrl UIList_ReturnZeroJmp
-
+	.incbin "includes/generated/v7_transplant_AcMixerVol_Confirm.bin"
 AcMixerVol_PartSelect:
 	ld xwa, (xsp + 44)
 	call GetViewInstance
@@ -6474,50 +5375,7 @@ AcMixerVol_ValueChange_SendUpdate:
 	jrl UIList_SendEvent
 
 AcMixerVol_OK:
-	ld xwa, (xsp + 44)
-	call GetViewInstance
-	ld (xsp + 8), xhl
-	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
-	ld xde, (xsp + 36)
-	call SendEvent
-	ld xbc, (xsp + 8)
-	ld wa, (xbc + 30)
-	extz xwa
-	cp xwa, xhl
-	jrl nz, AcMixerVol_OK_Fallthrough
-	ld wa, (xbc + 28)
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	add xbc, xbc
-	lda_24 xwa, (Str_No_0x1FA)
-	add xwa, xbc
-	ld xwa, (xwa)
-	call SndParam_LookupReadOnly
-	ld (xsp + 6), hl
-	ld xwa, (xsp + 8)
-	lda xwa, (xwa + 28)
-	cpw (xsp + 6), 0x0
-	jr z, AcMixerVol_OK_Mute
-	ld bc, (xwa)
-	extz xbc
-	ld xwa, xbc
-	sll xwa, 2
-	add xwa, xbc
-	add xwa, xwa
-	ld xbc, Str_No_0x1F6
-	add xbc, xwa
-	ld xwa, (xbc + 4)
-	ld de, (xbc + 8)
-	lds bc, 0
-	calr MainLswPut
-	ld xwa, (xsp + 44)
-	ld xbc, 0x1c00027
-	ld xde, (xsp + 36)
-	jr AcMixerVol_OK_SetAutoInc
-
+	.incbin "includes/generated/v7_transplant_AcMixerVol_OK.bin"
 AcMixerVol_OK_Mute:
 	ld bc, (xwa)
 	extz xbc
@@ -6643,35 +5501,7 @@ AcMixerVol_Reset_Fallthrough:
 	jr UIList_VwBoxCall
 
 AcMixerVol_EncoderUpdate:
-	ld xwa, (xsp + 36)
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ld (xsp + 15), l
-	ld xwa, (xsp + 36)
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	lda xwa, (xsp + 12)
-	ld (xwa + 4), l
-	ld xbc, (xsp + 36)
-	ld (xwa + 2), c
-	call SndParam_FetchOscTableEntry
-	lda xbc, (xsp + 12)
-	ld e, (xbc + 1)
-	extz de
-	ld a, (xbc)
-	extz wa
-	sll wa, 8
-	add wa, de
-	ld bc, wa
-	extz xbc
-	sll xbc, 0
-	ld xwa, (xsp + 36)
-	ld de, wa
-	extz xde
-	add xde, xbc
-	ld xwa, (xsp + 44)
-	ld xbc, 0x1c00023
-
+	.incbin "includes/generated/v7_transplant_AcMixerVol_EncoderUpdate.bin"
 UIList_SendEvent:
 	call SendEvent
 
@@ -6810,68 +5640,7 @@ DbMemo_DrawContent:
 	ld (xsp + 6), xwa
 
 DbMemo_DrawContent_Loop:
-	lda xwa, (xsp + 86)
-	lda xbc, (xsp + 70)
-	call MovePixels
-	lda xwa, (xsp + 78)
-	lds bc, 7
-	call DrawBox
-	pushm (xsp + 4)
-	ld xwa, (xsp + 8)
-	push xwa
-	lda xwa, (xsp + 16)
-	push xwa
-	call Strncpy
-	lda xsp, (xsp + 10)
-	ld wa, (xsp + 4)
-	extz xwa
-	lda xde, (xsp + 10)
-	ld xbc, xde
-	add xbc, xwa
-	ld (xbc), 0x0
-	lda xwa, (xsp + 94)
-	lda xbc, (xsp + 74)
-	lds32 xhl, 3
-	push xhl
-	pushw 0x0
-	pushw 0x7
-	call DrawString
-	lda xwa, (xsp + 10)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	cp hl, (xsp + 4)
-	jrl nz, DbMemo_ReturnZero
-	ld wa, (xsp + 4)
-	extz xwa
-	add (xsp + 6), xwa
-	jr DbMemo_DrawContent_Loop
-	dec 4, xsp
-	push xiz
-	ld (xsp + 4), xwa
-	push xwa
-	call Strlen
-	inc 1, hl
-	pushw hl
-	call Malloc
-	ld xiz, xhl
-	ld xwa, (xsp + 10)
-	push xwa
-	push xiz
-	call Strcpy
-	lda xsp, (xsp + 14)
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00025
-	ld xde, xiz
-	call PostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call PostEvent
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_DbMemo_DrawContent_Loop.bin"
 DbMemo_TrailingData:
 	ret
 
@@ -6966,91 +5735,7 @@ DbMemDump_Confirm:
 	ldw (xsp + 4), 0x0
 
 DbMemDump_Confirm_RowLoop:
-	ld bc, (xsp + 4)
-	mul bc, 0x9
-	lda xwa, (xsp + 104)
-	ld de, (xwa + 2)
-	add de, bc
-	inc 1, de
-	lda xbc, (xsp + 100)
-	ld (xbc + 2), de
-	ld wa, (xwa)
-	ld (xbc), wa
-	ld xwa, (xsp + 6)
-	ld xbc, (xwa + 22)
-	ld wa, (xsp + 4)
-	sll wa, 3
-	extz xwa
-	ld xiz, xwa
-	add xiz, (xbc)
-	pushw 0x8
-	push xiz
-	lda xwa, (xsp + 16)
-	push xwa
-	call Mem_Copy
-	ld wa, iz
-	pushw wa
-	ld xwa, xiz
-	srl xwa, 0
-	pushw wa
-	pushw 0xea
-	pushw 0xa6c6
-	lda xwa, (xsp + 38)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 22)
-	lda xwa, (xsp + 104)
-	lda xbc, (xsp + 100)
-	lda xde, (xsp + 20)
-	lds32 xhl, 3
-	push xhl
-	pushw 0x0
-	pushw 0x7
-	call DrawString
-	lda xbc, (xsp + 10)
-	ld a, (xbc + 7)
-	extz wa
-	pushw wa
-	ld a, (xbc + 6)
-	extz wa
-	pushw wa
-	ld a, (xbc + 5)
-	extz wa
-	pushw wa
-	ld a, (xbc + 4)
-	extz wa
-	pushw wa
-	ld a, (xbc + 3)
-	extz wa
-	pushw wa
-	ld a, (xbc + 2)
-	extz wa
-	pushw wa
-	ld a, (xbc + 1)
-	extz wa
-	pushw wa
-	ld a, (xbc)
-	extz wa
-	pushw wa
-	pushw 0xea
-	pushw 0xa6d2
-	lda xwa, (xsp + 40)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 24)
-	lda xbc, (xsp + 100)
-	addiw_da (xbc), 0x30
-	lda xwa, (xsp + 104)
-	lda xde, (xsp + 20)
-	lds32 xhl, 3
-	push xhl
-	pushw 0x0
-	pushw 0x7
-	call DrawString
-	lda xde, (xsp + 10)
-	ld xwa, xde
-	lda xbc, (xde + 8)
-
+	.incbin "includes/generated/v7_transplant_DbMemDump_Confirm_RowLoop.bin"
 DbMemDump_Confirm_SanitizeLoop:
 	cp (xwa), 0x20
 	jr nc, DbMemDump_Confirm_SanitizeNext
@@ -7204,12 +5889,7 @@ PsCursorBox_Confirm:
 	jrl ScrollBox_ReturnZero
 
 PsCursorBox_Confirm_CopyText:
-	ld_sril XWA, (xsp + 0x022a)
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PsCursorBox_Confirm_CopyText.bin"
 PsCursorBox_Confirm_CheckCursor:
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 36)
@@ -7657,83 +6337,7 @@ PsTrkSw_Confirm_SetSub:
 	ld (xwa), bc
 
 PsTrkSw_Confirm_DrawGeometry:
-	stb_dri A, 0xfd, 0xa6, 0x00
-	ld_sril XWA, (xsp + 0x00b2)
-	call GetBox
-	stb_dri A, 0xfd, 0xa6, 0x00
-	stb_dri B, 0xfd, 0x9e, 0x00
-	ldw wa, 0xcb
-	call GetClientBox2
-	stb_dri E, 0xfd, 0x9e, 0x00
-	stb_dri D, 0xfd, 0x96, 0x00
-	lds bc, 4
-	ldirw
-	stb_dri D, 0xfd, 0x8e, 0x00
-	stb_dri W, 0xfd, 0x9e, 0x00
-	ld bc, (xwa)
-	ld (xix), bc
-	stb_dri E, 0xfd, 0x8a, 0x00
-	ld bc, (xwa + 4)
-	ld (xiy), bc
-	lda xhl, (xwa + 6)
-	ld de, (xwa + 2)
-	ld bc, (xhl)
-	sub bc, de
-	exts xbc
-	divs bc, 0x2
-	ld iz, de
-	add iz, bc
-	lda xde, (xix + 2)
-	ld (xde), iz
-	ld (xiy + 2), iz
-	ld bc, (xde)
-	dec 1, bc
-	ld (xhl), bc
-	ld bc, (xde)
-	inc 1, bc
-	stw_dri BC, 0xfd, 0x98, 0x00
-	stb_dri A, 0xfd, 0x92, 0x00
-	call GetBoxCenter
-	stb_dri W, 0xfd, 0x96, 0x00
-	stb_dri A, 0xfd, 0x86, 0x00
-	call GetBoxCenter
-	ld xwa, (xsp + 4)
-	ld wa, (xwa + 22)
-	inc 1, wa
-	pushw wa
-	pushw 0xea
-	pushw 0xa824
-	lda xwa, (xsp + 124)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 4)
-	ld xbc, (xwa + 24)
-	cpw (xwa + 22), 0x8
-	jrl nc, PsTrkSw_Confirm_Track8Plus
-	cpw (xbc), 0x0
-	jr z, PsTrkSw_Confirm_DrawOff
-	stb_dri W, 0xfd, 0xa6, 0x00
-	ldw bc, 0xcb
-	lds de, 0
-	call DrawDesignBox
-	stb_dri W, 0xfd, 0x8e, 0x00
-	stb_dri A, 0xfd, 0x8a, 0x00
-	lds de, 0
-	call DrawLine
-	stb_dri W, 0xfd, 0x9e, 0x00
-	stb_dri A, 0xfd, 0x92, 0x00
-	lda xde, (xsp + 118)
-	lds32 xhl, 0
-	push xhl
-	pushw 0x7
-	pushw 0xf7
-	call DrawStringCentered
-	stb_dri W, 0xfd, 0x96, 0x00
-	lds bc, 7
-	call DrawBox
-	jrl PsTrkSw_Confirm_DrawSecondary
-
+	.incbin "includes/generated/v7_transplant_PsTrkSw_Confirm_DrawGeometry.bin"
 PsTrkSw_Confirm_DrawOff:
 	stb_dri W, 0xfd, 0xa6, 0x00
 	ldw bc, 0xcb
@@ -7900,17 +6504,7 @@ PsTrkSw_Epilogue:
 	ret
 
 PsTrkSw_TrailingData:
-	.byte 0xef, 0x68, 0x3e, 0xe8, 0x8e, 0xee, 0x88, 0x1d
-	.byte 0x66, 0x62, 0xfa, 0xbb, 0x16, 0x32, 0xbf, 0x04
-	.byte 0x31, 0xb9, 0x02, 0x30, 0x92, 0x3f, 0x08, 0x00
-	.byte 0x6f, 0x06, 0xb0, 0x02, 0xa4, 0x00, 0x68, 0x04
-	.byte 0xb0, 0x02, 0xc4, 0x00, 0x92, 0x20, 0xd8, 0xcc
-	.byte 0x07, 0x00, 0xd8, 0x08, 0x28, 0x00, 0xd8, 0x64
-	.byte 0xb1, 0x50, 0xd8, 0xc8, 0x1f, 0x00, 0xb9, 0x04
-	.byte 0x50, 0x99, 0x02, 0x20, 0xd8, 0xc8, 0x1c, 0x00
-	.byte 0xb9, 0x06, 0x50, 0xee, 0x88, 0x1d, 0xa7, 0x62
-	.byte 0xfa, 0x5e, 0xef, 0x60, 0x0e
-
+	.incbin "includes/generated/v7_transplant_PsTrkSw_TrailingData.bin"
 AcTrackSwitchProc:
 	dec 8, xsp
 	push xiz
@@ -8072,88 +6666,9 @@ AcTrkSw_Reset_UpdateIndex:
 	ld (xsp + 16), xwa
 
 AcTrkSw_Reset_DrawTrack:
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strlen
-	ld xwa, (xsp + 24)
-	ld iz, (xwa + 36)
-	add iz, hl
-	ld wa, iz
-	inc 1, wa
-	pushw wa
-	call Malloc
-	ld (xsp + 30), xhl
-	ld xbc, (xsp + 30)
-	ld (xsp + 16), xbc
-	ld wa, iz
-	inc 1, wa
-	pushw wa
-	pushw 0x0
-	push xbc
-	call Memset
-	lda xsp, (xsp + 14)
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 24)
-	call ConvertStrings
-	lda xbc, (xsp + 28)
-	ld wa, (xbc + 4)
-	sub wa, (xbc)
-	exts xwa
-	divs wa, 0x2
-	ld bc, (xbc)
-	add bc, wa
-	ld (xsp + 36), bc
-	ld xwa, (xsp + 20)
-	ld xwa, (xwa + 28)
-	call GetCharDescent
-	lda xwa, (xsp + 28)
-	ld bc, (xwa + 6)
-	sub bc, (xwa + 2)
-	sub bc, hl
-	ld de, bc
-	ld xwa, (xsp + 20)
-	ld bc, (xwa + 36)
-	extz xde
-	div xde, xbc
-	ld (xsp + 8), de
-	ldw (xsp + 18), 0x0
-	cps bc, 0
-	jrl ule, AcTrkSw_Select_CheckTrackNum
-
+	.incbin "includes/generated/v7_transplant_AcTrkSw_Reset_DrawTrack.bin"
 AcTrkSw_Select:
-	pushw 0xea
-	pushw 0xa828
-	ld xwa, (xsp + 14)
-	push xwa
-	call StrSearch_Init
-	inc 8, xsp
-	ld xwa, (xsp + 10)
-	stb_dri W, 0x07, 0xe0, 0xec
-	ld (xsp + 14), xwa
-	ld (xwa), 0x0
-	lda xwa, (xsp + 28)
-	ld de, (xwa + 4)
-	sub de, (xwa)
-	ld xwa, (xsp + 20)
-	ld xbc, (xwa + 28)
-	ld xwa, (xsp + 10)
-	call WordwrapStrings
-	ld iz, hl
-	ld xwa, (xsp + 10)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld wa, iz
-	cp wa, hl
-	jr z, AcTrkSw_Select_Paint
-	ld xwa, (xsp + 14)
-	ld (xwa), 0xd
-	ld xwa, (xsp + 10)
-	stb_dri W, 0x07, 0xe0, 0xf8
-	ld (xsp + 14), xwa
-	stib_dpd 0xe0, 0x00
-	ld (xsp + 14), xwa
-
+	.incbin "includes/generated/v7_transplant_AcTrkSw_Select.bin"
 AcTrkSw_Select_Paint:
 	ld wa, (xsp + 8)
 	mrdw3 0x9f, 0x12, 0x40
@@ -8190,11 +6705,7 @@ AcTrkSw_Select_Paint:
 	jrl c, AcTrkSw_Select
 
 AcTrkSw_Select_CheckTrackNum:
-	ld xwa, (xsp + 24)
-	push xwa
-	call Free
-	inc 4, xsp
-
+	.incbin "includes/generated/v7_transplant_AcTrkSw_Select_CheckTrackNum.bin"
 AcTrkSw_Select_LowTrack:
 	lds32 xhl, 0
 	jr AcTrkSw_Select_DrawTrack
@@ -8296,201 +6807,7 @@ ObjectProc:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 AcTrkSw_Return:
-	ld	xhl, xiz
-	jrl	682
-	ld	xwa, xiz
-	ld	xbc, 0x01e00001
-	ld	xde, (xsp+136)
-	jrl	597
-	ld	xwa, xiz
-	ld	xbc, 0x01e00002
-	ld	xde, (xsp+136)
-	jrl	582
-	ld	xwa, xiz
-	ld	xbc, 0x01e00003
-	ld	xde, (xsp+136)
-	jrl	567
-	ld	xwa, xiz
-	ld	xbc, 0x01e00015
-	ld	xde, (xsp+136)
-	jrl	552
-	ld	xwa, xiz
-	ld	xbc, 0x01e00004
-	ld	xde, (xsp+136)
-	jrl	537
-	ld	xwa, (xsp+136)
-	ld	(xwa), 0
-	ld	xwa, xiz
-	ld	xbc, 0x01e00005
-	ld	xde, (xsp+136)
-	calr	1662
-	ld	(xsp+4), xhl
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00014
-	ld	xde, 0x01600010
-	call	SendEvent
-	or	xhl, xhl
-	.byte 0x66
-	.long Data_DiskFuncPtrTbl_EA0B12
-	pushw 0xa890
-	ld	xwa, (xsp+140)
-	push	xwa
-	call	Strcat
-	inc	8, xsp
-	ld	xhl, (xsp+4)
-	jrl	534
-	ld	xwa, xiz
-	ld	xbc, 0x01e00006
-	ld	xde, (xsp+136)
-	jrl	449
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	lda	xbc, (xsp+8)
-	ld	xhl, xbc
-	ld	xwa, (xsp+136)
-	add	xhl, (xwa)
-	lda	xde, (xwa+4)
-	cp	(xhl), 89
-	jr	nz, 11
-	pushw 234
-	pushw 0xa894
-	ld	xwa, (xde)
-	push	xwa
-	jr	21
-	ld	xwa, (xsp+136)
-	add	xbc, (xwa)
-	ld	xwa, (xde)
-	cp	(xbc), 90
-	jr	nz, 16
-	pushw 234
-	pushw 0xa89a
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jrl	419
-	pushw 234
-	pushw 0xa8a2
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xwa, xiz
-	ld	xbc, 0x01e00007
-	ld	xde, (xsp+136)
-	jrl	343
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	ld	xwa, (xsp+136)
-	ld	bc, (xwa+8)
-	extz	xbc
-	lda	xwa, (xsp+8)
-	add	xwa, xbc
-	ld	a, (xwa)
-	sub	a, 65
-	ldb	w, 0
-	extz	xwa
-	add	xwa, 0x02600000
-	ld	xbc, 0x01e00008
-	ld	xde, (xsp+136)
-	jrl	184
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	ld	xbc, (xsp+144)
-	ld	xwa, (xsp+136)
-	ld	(xwa+8), xbc
-	lda	xbc, (xsp+8)
-	add	xbc, (xwa)
-	ld	a, (xbc)
-	sub	a, 65
-	ldb	w, 0
-	extz	xwa
-	add	xwa, 0x02600000
-	ld	xbc, 0x01e00009
-	ld	xde, (xsp+136)
-	jr	122
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	ld	xbc, (xsp+144)
-	ld	xwa, (xsp+136)
-	ld	(xwa+8), xbc
-	lda	xbc, (xsp+8)
-	add	xbc, (xwa)
-	ld	a, (xbc)
-	sub	a, 65
-	ldb	w, 0
-	extz	xwa
-	add	xwa, 0x02600000
-	ld	xbc, 0x01e0000a
-	ld	xde, (xsp+136)
-	jr	60
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	ld	xbc, (xsp+144)
-	ld	xwa, (xsp+136)
-	ld	(xwa+8), xbc
-	lda	xbc, (xsp+8)
-	add	xbc, (xwa)
-	ld	a, (xbc)
-	sub	a, 65
-	ldb	w, 0
-	extz	xwa
-	add	xwa, 0x02600000
-	ld	xbc, 0x01e0000b
-	ld	xde, (xsp+136)
-	call	SendEvent
-	jrl	140
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	ld	xbc, (xsp+144)
-	ld	xwa, (xsp+136)
-	ld	(xwa+8), xbc
-	lda	xbc, (xsp+8)
-	add	xbc, (xwa)
-	ld	a, (xbc)
-	sub	a, 65
-	ldb	w, 0
-	extz	xwa
-	add	xwa, 0x02600000
-	ld	xbc, 0x01e0000c
-	ld	xde, (xsp+136)
-	call	SendEvent
-	jr	96
-	ld	xwa, xiz
-	ld	xbc, 0x01e0000d
-	ld	xde, (xsp+136)
-	jr	12
-	ld	xwa, xiz
-	ld	xbc, 0x01e0000e
-	ld	xde, (xsp+136)
-	calr	1145
-	jr	65
-	lda	xde, (xsp+8)
-	ld	xwa, (xsp+144)
-	ld	xbc, 0x01e00019
-	call	SendEvent
-	lda	xwa, (xsp+8)
-	add	xwa, (xsp+136)
-	lds32	xhl, 0
-	ld	l, (xwa)
-	jr	34
-	ld	xwa, (xsp+136)
-	push	xwa
-	call	Free
-	inc	4, xsp
-	lds32	xhl, 0
-	jr	18
-
+	.incbin "includes/generated/v7_transplant_AcTrkSw_Return.bin"
 ExitWindow_Init:
 	ld_sril XWA, (xsp + 0x0090)
 	ld_sril XBC, (xsp + 0x008c)
@@ -8647,20 +6964,7 @@ ExitWindow_Return:
 	ret
 
 CountObject:
-	dec 6, xsp
-	push xiz
-	ld (xsp + 8), bc
-	lds iz, 0
-	ldw_erp WA, 0xfa
-	cp wa, (xsp + 8)
-	jr ugt, InputDialog_GetText_CopyAndReturn
-	lda_24 xwa, (0x027ed2)
-	ld (xsp + 4), xwa
-	stw_erp WA, 0xfa
-	extz xwa
-	ld xbc, 0xe
-	call Math_MultiplyAccumulate
-
+	.incbin "includes/generated/v7_transplant_CountObject.bin"
 InputDialog_GetText:
 	ld xwa, (xsp + 4)
 	add xwa, xhl
@@ -9033,39 +7337,7 @@ TitleWidget_Paint_CheckState:
 	jrl ClassProc_ReturnWithStatus
 
 TitleWidget_Paint_DrawText:
-	ld xwa, xde
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	ld xhl, xwa
-	sll xhl, 3
-	sub xhl, xwa
-	add xhl, xhl
-	ld xwa, xiy
-	add xwa, xhl
-	ld xwa, (xwa + 10)
-	ld (xsp + 4), xwa
-	ldiw_erp 0xea, 0
-	ld wa, de
-	extz xwa
-	ld xde, xwa
-	add xde, xde
-	add xde, xwa
-	sll xde, 3
-	add xde, (xsp + 4)
-	ld xde, (xde + 4)
-	cp xde, 0xffffffff
-	jr nz, TitleWidget_Paint_CheckState
-	jrl ClassProc_ReturnZeroJmp
-	ld xwa, (xiz + 16)
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-	lds32 xwa, 0
-	ld (xsp + 10), xwa
-	jr TitleWidget_Confirm
-
+	.incbin "includes/generated/v7_transplant_TitleWidget_Paint_DrawText.bin"
 TitleWidget_Select:
 	sub a, 0x41
 	ldb w, 0x0
@@ -9077,75 +7349,9 @@ TitleWidget_Select:
 	add (xsp + 10), xwa
 
 TitleWidget_Confirm:
-	stb_dri B, 0xfd, 0x92, 0x00
-	ld xwa, xde
-	add xwa, (xsp + 10)
-	ld a, (xwa)
-	cps a, 0
-	jr nz, TitleWidget_Select
-	ld_sril XWA, (xsp + 0x0112)
-	push xwa
-	push xde
-	call Strcat
-	stb_dri W, 0xfd, 0x9a, 0x00
-	push xwa
-	ld_sril XWA, (xsp + 0x011e)
-	push xwa
-	call Strcpy
-	lda xsp, (xsp + 16)
-	ld wa, (xsp + 8)
-	extz xwa
-	ld xbc, xwa
-	add xbc, xbc
-	add xbc, xwa
-	sll xbc, 3
-	add xbc, (xsp + 4)
-	ld xbc, (xbc + 4)
-	cp xbc, 0xffffffff
-	jrl z, ClassProc_ReturnZeroJmp
-	ld xwa, xbc
-	ld xbc, 0x1e00005
-	ld_sril XDE, (xsp + 0x0112)
-	calr ClassProc
-	jrl ClassProc_ReturnZeroJmp
-	ld xbc, 0x1e00019
-	call SendEvent
-	stb_dri W, 0xfd, 0x92, 0x00
-	push xwa
-	call Strlen
-	inc 4, xsp
-	extz xhl
-	jrl ClassProc_ReturnWithStatus
-	ld xbc, (xhl)
-	cp xbc, 0xffffffff
-	jr z, TitleWidget_Confirm_DrawLayout
-	ld xwa, xbc
-	ld xbc, 0x1e00007
-	ld_sril XDE, (xsp + 0x0112)
-	calr ClassProc
-
+	.incbin "includes/generated/v7_transplant_TitleWidget_Confirm.bin"
 TitleWidget_Confirm_DrawLayout:
-	ld_sril XWA, (xsp + 0x0112)
-	ld xwa, (xwa + 4)
-	cp (xwa), 0x0
-	jrl nz, ClassProc_ReturnZeroJmp
-	ld wa, (xsp + 8)
-	extz xwa
-	ld xbc, xwa
-	add xbc, xbc
-	add xbc, xwa
-	sll xbc, 3
-	add xbc, (xsp + 4)
-	ld xwa, (xbc + 16)
-	push xwa
-	stb_dri W, 0xfd, 0x96, 0x00
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds32 xwa, 0
-	ld (xsp + 10), xwa
-	jr TitleWidget_Confirm_DrawRowLoop
-
+	.incbin "includes/generated/v7_transplant_TitleWidget_Confirm_DrawLayout.bin"
 TitleWidget_Confirm_DrawRow:
 	sub a, 0x41
 	ldb w, 0x0
@@ -9169,45 +7375,7 @@ TitleWidget_Confirm_DrawRowLoop:
 	jr TitleWidget_Confirm_DrawItem
 
 TitleWidget_Confirm_DrawRowNext:
-	ld wa, (xsp + 8)
-	extz xwa
-	ld xbc, xwa
-	add xbc, xbc
-	add xbc, xwa
-	sll xbc, 3
-	add xbc, (xsp + 4)
-	ld xwa, (xsp + 14)
-	sll xwa, 2
-	add xwa, (xbc + 20)
-	ld xwa, (xwa)
-	push xwa
-	lda xwa, (xsp + 22)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	stb_dri W, 0xfd, 0x92, 0x00
-	add xwa, (xsp + 10)
-	ld a, (xwa)
-	sub a, 0x41
-	ldb w, 0x0
-	extz xwa
-	add xwa, 0x2600000
-	lda xde, (xsp + 18)
-	ld xbc, 0x1e00026
-	call SendEvent
-	add (xsp + 14), xhl
-	ld_sril XBC, (xsp + 0x0112)
-	ld xwa, (xbc)
-	or xwa, xwa
-	jr nz, TitleWidget_Confirm_SkipEmpty
-	lda xwa, (xsp + 18)
-	push xwa
-	ld xwa, (xbc + 4)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr ClassProc_ReturnZeroJmp
-
+	.incbin "includes/generated/v7_transplant_TitleWidget_Confirm_DrawRowNext.bin"
 TitleWidget_Confirm_SkipEmpty:
 	lds32 xbc, 1
 	add (xsp + 10), xbc
@@ -9704,43 +7872,7 @@ ObjectEnum_OK_Dispatch:
 	stl_da (0x03ef8a), xwa
 
 ObjectEnum_OK_DispatchInline:
-	ldl_da xwa, (0x03ef8a)
-	ld xde, xwa
-	srl xde, 0
-	and xde, 0xfff
-	ldiw_erp 0xe2, 0
-	ld (xsp + 8), wa
-	ld wa, de
-	extz xwa
-	ld xde, xwa
-	sll xde, 3
-	sub xde, xwa
-	add xde, xde
-	add xbc, xde
-	ld xiz, (xbc + 10)
-	ld wa, (xsp + 8)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, xiz
-	ldw (xhl + 18), 0xffff
-	ldw (xhl + 20), 0xffff
-	ld xwa, 0xffffffff
-	ld (xhl + 14), xwa
-	ldl_da xde, (0x03ef82)
-	ld xwa, 0x1400001
-	ld xbc, 0x1c00014
-	calr MainFuncCall
-	ldl_da xde, (0x03ef8a)
-	ld xwa, 0x1400001
-	ld xbc, 0x1c00015
-	calr MainFuncCall
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
-	lds32 xde, 0
-	call SendEvent
-	jr ObjectEnum_Return
-
+	.incbin "includes/generated/v7_transplant_ObjectEnum_OK_DispatchInline.bin"
 ObjectEnum_Default:
 	ld wa, (xsp + 8)
 	extz xwa
@@ -9815,47 +7947,9 @@ UnregisteredMode:
 	ret
 
 RegisterTitle:
-	dec 4, xsp
-	push xiz
-	ld (xsp + 4), xde
-	ld xiz, xbc
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	ld xbc, 0x32abc
-	add xbc, xhl
-	ld (xbc), xiz
-	ld xwa, (xsp + 4)
-	ld (xbc + 4), xwa
-	ld wa, (xsp + 16)
-	ld (xbc + 8), wa
-	ld xwa, (xsp + 12)
-	ld (xbc + 10), xwa
-	ld xwa, 0xffffffff
-	ld (xbc + 14), xwa
-	ldw (xbc + 18), 0xffff
-	ldw (xbc + 20), 0xffff
-	pop xiz
-	inc 4, xsp
-	retd 0x6
-
+	.incbin "includes/generated/v7_transplant_RegisterTitle.bin"
 UnregisteredTitle:
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	ld xbc, 0x32abc
-	add xbc, xhl
-	ld xwa, 0x1200000
-	ld (xbc), xwa
-	ld xwa, 0xffffffff
-	ld (xbc + 4), xwa
-	ldw (xbc + 8), 0xffff
-	lda_24 xwa, (Str_No_0x600)
-	ld (xbc + 10), xwa
-	ld xwa, 0xffffffff
-	ld (xbc + 14), xwa
-	ldw (xbc + 18), 0xffff
-	ldw (xbc + 20), 0xffff
-	ret
-
+	.incbin "includes/generated/v7_transplant_UnregisteredTitle.bin"
 TitleProc:
 	lda xsp, (xsp - 34)
 	push xiz
@@ -9962,58 +8056,9 @@ TitleProc_EventDispatch:
 	jrl TitleFunc_Epilogue34
 
 EventDispatch_ScanLoop:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	jrl TitleFunc_Epilogue34
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xhl)
-	ld xbc, 0x1e0002a
-	lds32 xde, 0
-	call SendEvent
-	jrl TitleFunc_Epilogue34
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xhl, (xhl)
-	jrl TitleFunc_Epilogue34
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xhl, (xhl + 4)
-	jrl TitleFunc_Epilogue34
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld hl, (xhl + 8)
-	exts xhl
-	jrl TitleFunc_Epilogue34
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_ScanLoop.bin"
 EventDispatch_Select:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xhl, (xhl + 10)
-	jrl TitleFunc_Epilogue34
-	ldl_da xhl, (0x03ef8a)
-	jrl TitleFunc_Epilogue34
-	ldl_da xhl, (0x03ef8e)
-	jrl TitleFunc_Epilogue34
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_Select.bin"
 EventDispatch_SelectMatch:
 	ld xbc, 0x1e0007a
 	lds32 xde, 0
@@ -10034,20 +8079,7 @@ EventDispatch_SelectDone:
 	jr nz, EventDispatch_SelectDone
 
 EventDispatch_ConfirmHandler:
-	ldl_da xwa, (0x03ef8a)
-	stl_da (0x03ef8e), xwa
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xhl + 4)
-	cp xwa, 0xffffffff
-	jr z, EventDispatch_ConfirmSetup
-	ld xwa, (xsp + 30)
-	stl_da (0x03ef8a), xwa
-	jr EventDispatch_ConfirmForward
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_ConfirmHandler.bin"
 EventDispatch_ConfirmSetup:
 	ld xwa, 0x1a00000
 	stl_da (0x03ef8a), xwa
@@ -10063,319 +8095,31 @@ EventDispatch_ConfirmForward:
 	jrl EnumList_OK_CheckHitTest
 
 EventDispatch_OK:
-	ld iz, (xsp + 12)
-	extz xiz
-	ld xwa, xiz
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, xiz
-	cpw (xhl + 18), 0xffff
-	jrl z, EventDispatch_OKDone
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld wa, (xhl + 18)
-	exts xwa
-	add xwa, 0x1a00000
-	ld (xsp + 8), xwa
-	ld wa, (xhl + 20)
-	exts xwa
-	add xwa, 0x1a00000
-	ld (xsp + 18), xwa
-	ld xwa, (xsp + 8)
-	srl xwa, 0
-	and xwa, 0xfff
-	ld bc, wa
-	ld xwa, (xsp + 8)
-	ldiw_erp 0xe2, 0
-	ld (xsp + 12), wa
-	ld wa, bc
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 3
-	sub xbc, xwa
-	add xbc, xbc
-	ld xwa, (xsp + 14)
-	add xwa, xbc
-	ld xwa, (xwa + 10)
-	ld (xsp + 4), xwa
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xbc, (xsp + 18)
-	ld wa, bc
-	ld (xhl + 20), wa
-	cp xbc, 0xffffffff
-	jr z, EventDispatch_OKDone
-	ld xwa, (xsp + 18)
-	srl xwa, 0
-	and xwa, 0xfff
-	ld bc, wa
-	ld xwa, (xsp + 18)
-	ldiw_erp 0xe2, 0
-	ld (xsp + 12), wa
-	ld wa, bc
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 3
-	sub xbc, xwa
-	add xbc, xbc
-	ld xwa, (xsp + 14)
-	add xwa, xbc
-	ld xwa, (xwa + 10)
-	ld (xsp + 4), xwa
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xsp + 8)
-	ld (xhl + 18), wa
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_OK.bin"
 EventDispatch_OKDone:
-	ld xwa, (xsp + 24)
-	ld xwa, (xwa)
-	ld (xsp + 4), xwa
-	ldl_da xwa, (0x03ef8a)
-	stl_da (0x03ef8e), xwa
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xhl + 4)
-	cp xwa, 0xffffffff
-	jr z, EventDispatch_Default
-	ld xwa, (xsp + 30)
-	stl_da (0x03ef8a), xwa
-	jr EventDispatch_DefaultProc
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_OKDone.bin"
 EventDispatch_Default:
 	ld xwa, 0x1a00000
 	stl_da (0x03ef8a), xwa
 
 EventDispatch_DefaultProc:
-	ldl_da xwa, (0x03ef8e)
-	ld (xhl + 18), wa
-	ldl_da xwa, (0x03ef8e)
-	ld xbc, xwa
-	srl xbc, 0
-	and xbc, 0xfff
-	ldiw_erp 0xe2, 0
-	ld (xsp + 12), wa
-	ld wa, bc
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 3
-	sub xbc, xwa
-	add xbc, xbc
-	ld xwa, (xsp + 14)
-	add xwa, xbc
-	ld xwa, (xwa + 10)
-	ld (xsp + 4), xwa
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ldl_da xwa, (0x03ef8a)
-	ld (xhl + 20), wa
-	ldl_da xde, (0x03ef8a)
-	ld xwa, 0x1400001
-	ld xbc, 0x1c00016
-	calr MainFuncCall
-	lds wa, 1
-	calr SetInterruptTime
-	lds wa, 2
-	calr TitleProc_SetResourceDirtyFlag
-	ldw wa, 0x10
-	jrl TitleProc_ClearAndReturn
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_DefaultProc.bin"
 EventDispatch_Return:
-	ld xbc, xwa
-	srl xbc, 0
-	and xbc, 0xfff
-	ldiw_erp 0xe2, 0
-	ld (xsp + 12), wa
-	ld wa, bc
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 3
-	sub xbc, xwa
-	add xbc, xbc
-	ld xwa, (xsp + 14)
-	add xwa, xbc
-	ld xwa, (xwa + 10)
-	ld (xsp + 4), xwa
-	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0009a
-	lds32 xde, 0
-	call SendEvent
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	lda xbc, (xhl + 18)
-	ld wa, (xbc)
-	cp wa, 0xffff
-	jrl z, TitleProc_ReturnZero
-	ldl_da xwa, (0x03ef8a)
-	stl_da (0x03ef8e), xwa
-	ld wa, (xbc)
-	exts xwa
-	add xwa, 0x1a00000
-	stl_da (0x03ef8a), xwa
-	ld xde, xwa
-	ld xwa, 0x1400001
-	ld xbc, 0x1c00028
-	calr MainFuncCall
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ldw (xhl + 18), 0xffff
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	ld xwa, xhl
-	add xwa, (xsp + 4)
-	ldw (xwa + 20), 0xffff
-	add xhl, (xsp + 4)
-	ld xwa, 0xffffffff
-	ld (xhl + 14), xwa
-	ldl_da xwa, (0x03ef8a)
-	ld xbc, xwa
-	srl xbc, 0
-	and xbc, 0xfff
-	ldiw_erp 0xe2, 0
-	ld (xsp + 12), wa
-	ld wa, bc
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 3
-	sub xbc, xwa
-	add xbc, xbc
-	lda_24 xwa, (0x027edc)
-	add xwa, xbc
-	ld xwa, (xwa)
-	ld (xsp + 4), xwa
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ldw (xhl + 20), 0xffff
-	ldw_da xwa, (0x02bc32)
-	exts xwa
-	ld xbc, 0x1c00028
-	push xbc
-	lds32 xbc, 0
-	push xbc
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call KillApTimer
-	ld wa, (xsp + 12)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jrl nz, TitleProc_ReturnZero
-	ldw wa, 0x12
-	jrl TitleProc_ClearAndReturn
-
+	.incbin "includes/generated/v7_transplant_EventDispatch_Return.bin"
 EnumList_Init:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	lda xbc, (xhl + 14)
-	ld xwa, (xbc)
-	cp xwa, 0xffffffff
-	jr nz, EnumList_Init_CheckType
-	ld xwa, (xhl + 4)
-	ld (xbc), xwa
-
+	.incbin "includes/generated/v7_transplant_EnumList_Init.bin"
 EnumList_Init_CheckType:
 	ld xhl, (xbc)
 	jrl TitleFunc_Epilogue34
 
 EnumList_Init_TypeB:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xsp + 30)
-	ld (xhl + 14), xwa
-	jrl TitleProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_EnumList_Init_TypeB.bin"
 EnumList_Close:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jrl z, TitleProc_ReturnZero
-	cpw (xsp + 28), 0x0
-	jrl nz, TitleProc_ReturnZero
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	ld xwa, (xsp + 26)
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	jrl EnumList_OK_ScrollUp
-
+	.incbin "includes/generated/v7_transplant_EnumList_Close.bin"
 EnumList_ShowHide_A:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jrl z, TitleProc_ReturnZero
-	cpw (xsp + 28), 0x0
-	jrl nz, TitleProc_ReturnZero
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	ld xwa, (xsp + 26)
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call ResetApTimer
-	jrl TitleProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_EnumList_ShowHide_A.bin"
 EnumList_ShowHide_B:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jrl z, TitleProc_ReturnZero
-	cpw (xsp + 28), 0x0
-	jr nz, EnumList_PartChange_A
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call ResetApTimer
-	jrl TitleProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_EnumList_ShowHide_B.bin"
 EnumList_PartChange_A:
 	ld xwa, 0x1c00028
 	push xwa
@@ -10397,75 +8141,16 @@ EnumList_PartChange_A:
 	jrl EnumList_OK_ScrollUp
 
 EnumList_PartChange_B:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jrl z, TitleProc_ReturnZero
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call KillApTimer
-	jrl TitleProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_EnumList_PartChange_B.bin"
 EnumList_ValueChange_A:
-	ld xwa, (xsp + 30)
-	or xwa, xwa
-	jr z, EnumList_ValueChange_Done
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jr z, EnumList_ValueChange_B
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call KillApTimer
-
+	.incbin "includes/generated/v7_transplant_EnumList_ValueChange_A.bin"
 EnumList_ValueChange_B:
 	ldw wa, 0x10
 	calr TitleProc_SetResourceDirtyFlag
 	jrl TitleProc_ReturnZero
 
 EnumList_ValueChange_Done:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jr z, EnumList_Confirm_Init
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call ResetApTimer
-	cps hl, 0
-	jr nz, EnumList_Confirm_Init
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call SetApTimer
-
+	.incbin "includes/generated/v7_transplant_EnumList_ValueChange_Done.bin"
 EnumList_Confirm_Init:
 	ldw wa, 0x10
 	jrl TitleProc_ClearAndReturn
@@ -10479,109 +8164,22 @@ EnumList_Confirm_Forward:
 	jrl TitleFunc_Epilogue34
 
 EnumList_Paint:
-	ld xwa, (xsp + 30)
-	or xwa, xwa
-	jr z, EnumList_Paint_Loop
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jr z, EnumList_Paint_DrawEntry
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call KillApTimer
-
+	.incbin "includes/generated/v7_transplant_EnumList_Paint.bin"
 EnumList_Paint_DrawEntry:
 	lds wa, 1
 	calr TitleProc_SetResourceDirtyFlag
 	jrl TitleProc_ReturnZero
 
 EnumList_Paint_Loop:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jr z, EnumList_ReturnZero
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call ResetApTimer
-	cps hl, 0
-	jr nz, EnumList_ReturnZero
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call SetApTimer
-
+	.incbin "includes/generated/v7_transplant_EnumList_Paint_Loop.bin"
 EnumList_ReturnZero:
 	lds wa, 1
 	jrl TitleProc_ClearAndReturn
 
 EnumList_Return:
-	ldw_da xwa, (0x02bc30)
-	bit 0, wa
-	jr z, EnumList_OK
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jr z, TitleProc_ToggleFlag
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call ResetApTimer
-	cps hl, 0
-	jr nz, TitleProc_ToggleFlag
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call SetApTimer
-	jr TitleProc_ToggleFlag
-
+	.incbin "includes/generated/v7_transplant_EnumList_Return.bin"
 EnumList_OK:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	jr z, TitleProc_ToggleFlag
-	ld xwa, 0x1c00028
-	push xwa
-	lds32 xwa, 0
-	push xwa
-	lds32 xwa, 0
-	ld xbc, (xsp + 42)
-	ld xde, 0xffffffff
-	call KillApTimer
-
+	.incbin "includes/generated/v7_transplant_EnumList_OK.bin"
 TitleProc_ToggleFlag:
 	ldw_da xde, (0x02bc30)
 	xor de, 0x1
@@ -10595,16 +8193,7 @@ EnumList_OK_CheckHitTest:
 	jrl TitleProc_ReturnZero
 
 EnumList_OK_Next:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	cpw (xhl + 18), 0xffff
-	scc16 nz, hl
-	extz xhl
-	jrl TitleFunc_Epilogue34
-
+	.incbin "includes/generated/v7_transplant_EnumList_OK_Next.bin"
 EnumList_OK_ScrollDown:
 	ld xwa, (xsp + 30)
 	or xwa, xwa
@@ -10703,51 +8292,9 @@ TitleProc_ClearAndReturn:
 	jrl TitleProc_ReturnZero
 
 EnumList_HitTest_Match:
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xhl)
-	ld xbc, xiz
-	ld xde, (xsp + 30)
-	calr MainFuncCall
-	ld xwa, 0x1400001
-	ld xbc, xiz
-	ld xde, (xsp + 30)
-	calr MainFuncCall
-	ld xwa, (xsp + 30)
-	cp xwa, 0x3
-	jr z, EnumList_Select
-	cp xwa, 0x2
-	jr z, EnumList_HitTest_NoMatch
-	cp xwa, 0x8
-	jr nz, TitleProc_ReturnZero
-	ldl_da xwa, (0x03ef82)
-	stl_da (0x03ef86), xwa
-	ldl_da xwa, (0x03ef8a)
-	stl_da (0x03ef8e), xwa
-	jr TitleProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_EnumList_HitTest_Match.bin"
 EnumList_HitTest_NoMatch:
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00039
-	lds32 xde, 0
-	call SendEvent
-	ldw_da xwa, (0x02bc30)
-	bit 5, wa
-	jr z, TitleProc_ReturnZero
-	ld wa, (xsp + 22)
-	extz xwa
-	ld xbc, 0x16
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 4)
-	ld xwa, (xhl)
-	ld xbc, xiz
-	ld xde, 0x9
-	calr MainFuncCall
-	jr TitleProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_EnumList_HitTest_NoMatch.bin"
 EnumList_Select:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0003a
@@ -11106,47 +8653,9 @@ Viewable_GetName:
 	jrl Viewable_Return
 
 Viewable_SetName:
-	ld (xsp + 4), xix
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strlen
-	ld (xsp + 12), hl
-	ld wa, (xsp + 14)
-	extz xwa
-	sll xwa, 2
-	add xwa, (xsp + 8)
-	ld xwa, (xwa)
-	push xwa
-	call Strlen
-	inc 8, xsp
-	cp hl, (xsp + 8)
-	jr nc, Viewable_SetName_Copy
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strlen
-	inc 1, hl
-	pushw hl
-	call Malloc
-	inc 6, xsp
-	ld wa, (xsp + 10)
-	extz xwa
-	sll xwa, 2
-	add xwa, (xsp + 4)
-	ld (xwa), xhl
-
+	.incbin "includes/generated/v7_transplant_Viewable_SetName.bin"
 Viewable_SetName_Copy:
-	ld xwa, (xsp + 16)
-	push xwa
-	ld wa, (xsp + 14)
-	extz xwa
-	sll xwa, 2
-	add xwa, (xsp + 8)
-	ld xwa, (xwa)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl Viewable_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_Viewable_SetName_Copy.bin"
 Viewable_GetInstance:
 	ld xwa, xiz
 	calr GetViewInstance
@@ -12335,44 +9844,7 @@ BoxStyle6_Done:
 BoxStyle6_Return:
 
 pBoolProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle7_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle7_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle7_CalcWidth
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle7_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle7_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld wa, (xwa)
-	ld (xhl), wa
-	jr BoxStyle7_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pBoolProc.bin"
 BoxStyle7_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12407,12 +9879,7 @@ BoxStyle7_CalcWidth:
 	ld xwa, Str_No_0x6E8
 
 BoxStyle7_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle7_CheckInner.bin"
 BoxStyle7_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle7_DoneAlt
@@ -12458,44 +9925,7 @@ BoxStyle7_DoneAlt:
 BoxStyle7_Return:
 
 pSwordProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle8_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle8_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle8_CalcWidth
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle8_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle8_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld wa, (xwa)
-	ld (xhl), wa
-	jr BoxStyle8_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pSwordProc.bin"
 BoxStyle8_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12530,12 +9960,7 @@ BoxStyle8_CalcWidth:
 	ld xwa, Str_No_0x6FA
 
 BoxStyle8_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle8_CheckInner.bin"
 BoxStyle8_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle8_DoneAlt
@@ -12581,44 +10006,7 @@ BoxStyle8_DoneAlt:
 BoxStyle8_Return:
 
 pUwordProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle9_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle9_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle9_CalcWidth
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle9_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle9_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld wa, (xwa)
-	ld (xhl), wa
-	jr BoxStyle9_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pUwordProc.bin"
 BoxStyle9_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12653,12 +10041,7 @@ BoxStyle9_CalcWidth:
 	ld xwa, Str_No_0x70C
 
 BoxStyle9_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle9_CheckInner.bin"
 BoxStyle9_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle9_DoneAlt
@@ -12704,44 +10087,7 @@ BoxStyle9_DoneAlt:
 BoxStyle9_Return:
 
 pScharProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle10_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle10_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle10_CalcWidth
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle10_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle10_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld a, (xwa)
-	ld (xhl), a
-	jr BoxStyle10_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pScharProc.bin"
 BoxStyle10_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12776,12 +10122,7 @@ BoxStyle10_CalcWidth:
 	ld xwa, Str_No_0x71E
 
 BoxStyle10_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle10_CheckInner.bin"
 BoxStyle10_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle10_DoneAlt
@@ -12828,44 +10169,7 @@ BoxStyle10_DoneAlt:
 BoxStyle10_Return:
 
 pUcharProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle11_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle11_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle11_CalcWidth
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle11_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle11_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld a, (xwa)
-	ld (xhl), a
-	jr BoxStyle11_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pUcharProc.bin"
 BoxStyle11_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12900,12 +10204,7 @@ BoxStyle11_CalcWidth:
 	ld xwa, Str_No_0x730
 
 BoxStyle11_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle11_CheckInner.bin"
 BoxStyle11_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle11_DoneAlt
@@ -12951,44 +10250,7 @@ BoxStyle11_DoneAlt:
 BoxStyle11_Return:
 
 pSlongProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle12_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle12_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle12_CalcWidth
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle12_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle12_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld xwa, (xwa)
-	ld (xhl), xwa
-	jr BoxStyle12_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pSlongProc.bin"
 BoxStyle12_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -13023,12 +10285,7 @@ BoxStyle12_CalcWidth:
 	ld xwa, Str_No_0x742
 
 BoxStyle12_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle12_CheckInner.bin"
 BoxStyle12_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle12_DoneAlt
@@ -13073,44 +10330,7 @@ BoxStyle12_DoneAlt:
 BoxStyle12_Return:
 
 pUlongProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
-	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
-	jrl z, BoxStyle13_Execute
-	cp xiz, 0x1e0000b
-	jrl z, BoxStyle13_CalcHeight
-	lda xhl, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0108)
-	lda xbc, (xwa + 4)
-	cp xiz, 0x1e00009
-	jr z, BoxStyle13_CalcWidth
-	lda xde, (xwa + 8)
-	cp xiz, 0x1e0000a
-	jr z, BoxStyle13_Setup
-	cp xiz, 0x1e00008
-	jrl nz, BoxStyle13_CalcHeight2
-	ld xwa, (xbc)
-	ld bc, (xde)
-	calr IDCountHelper
-	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x0108)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld xiz, xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld (xiz), xhl
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	ld xwa, (xwa)
-	ld (xhl), xwa
-	jr BoxStyle13_InnerFill
-
+	.incbin "includes/generated/v7_transplant_pUlongProc.bin"
 BoxStyle13_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -13146,12 +10366,7 @@ BoxStyle13_CalcWidth:
 	ld xwa, Str_No_0x754
 
 BoxStyle13_CheckInner:
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-
+	.incbin "includes/generated/v7_transplant_BoxStyle13_CheckInner.bin"
 BoxStyle13_InnerFill:
 	lds32 xhl, 0
 	jr BoxStyle13_DoneAlt
@@ -13204,18 +10419,7 @@ RECTWProc:
 	jr EdgeDraw_TopRight
 
 EdgeDraw_TopLeft:
-	ld xiz, xde
-	push xiz
-	lda xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds ix, 0
-	lds iy, 0
-	lda xhl, (xsp + 4)
-	lds32 xde, 0
-	jr EdgeDraw_TopLeft_Return
-
+	.incbin "includes/generated/v7_transplant_EdgeDraw_TopLeft.bin"
 EdgeDraw_TopLeft_Inner:
 	cp c, 0x50
 	jr nz, EdgeDraw_TopLeft_Done
@@ -13284,32 +10488,9 @@ RectX1Proc:
 	jr EdgeDraw_BottomLeft_Done
 
 EdgeDraw_TopRight_Inner:
-	pushw 0xea
-	pushw 0xaa70
-	ld_sril XWA, (xsp + 0x010c)
-	push xwa
-	call Strcat
-	inc 8, xsp
-	jr EdgeDraw_BottomLeft
-
+	.incbin "includes/generated/v7_transplant_EdgeDraw_TopRight_Inner.bin"
 EdgeDraw_TopRight_Done:
-	pushw 0xea
-	pushw 0xaa76
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x0110)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcat
-	lda xwa, (xsp + 24)
-	push xwa
-	ld_sril XWA, (xsp + 0x011c)
-	push xwa
-	call Strcpy
-	lda xsp, (xsp + 24)
-
+	.incbin "includes/generated/v7_transplant_EdgeDraw_TopRight_Done.bin"
 EdgeDraw_BottomLeft:
 	lds32 xhl, 0
 	jr EdgeDraw_BottomLeft_FinishAlt
@@ -13379,13 +10560,7 @@ RectY1Proc:
 	jr EdgeDraw_BottomRight_Draw
 
 EdgeDraw_BottomRight:
-	pushw 0xea
-	pushw 0xaa78
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcat
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_EdgeDraw_BottomRight.bin"
 EdgeDraw_BottomRight_Inner:
 	lds32 xhl, 0
 	jr EdgeDraw_BottomRight_FinishAlt
@@ -13454,14 +10629,7 @@ RectX2Proc:
 	jr TabDraw_TopEdge_Execute
 
 TabDraw_TopEdge:
-	pushw 0xea
-	pushw 0xaa7e
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcat
-	inc 8, xsp
-	jr TabDraw_TopEdge_Execute
-
+	.incbin "includes/generated/v7_transplant_TabDraw_TopEdge.bin"
 TabDraw_TopEdge_Inner:
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
@@ -13478,20 +10646,7 @@ TabDraw_TopEdge_CalcWidth:
 	jr TabDraw_BottomEdge_Prologue
 
 TabDraw_TopEdge_CalcHeight:
-	ld xwa, (xsp + 8)
-	calr IDCursorAdvance
-	lda xbc, (xhl - 4)
-	pushw 0xa
-	ld xwa, (xsp + 10)
-	ld xwa, (xwa + 4)
-	push xwa
-	ld wa, (xhl)
-	sub wa, (xbc)
-	inc 1, wa
-	pushw wa
-	call Itoa_Safe
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_TabDraw_TopEdge_CalcHeight.bin"
 TabDraw_TopEdge_Execute:
 	lds32 xhl, 0
 	jr TabDraw_BottomEdge_Prologue
@@ -13544,24 +10699,9 @@ RectY2Proc:
 	jr EdgeVariant_A_Done
 
 EdgeVariant_A_Setup:
-	pushw 0xea
-	pushw 0xaa86
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcat
-	inc 8, xsp
-	lds32 xhl, 1
-	jr POINTWProc_Return
-
+	.incbin "includes/generated/v7_transplant_EdgeVariant_A_Setup.bin"
 EdgeVariant_A_CalcWidth:
-	pushw 0xea
-	pushw 0xaa8e
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcat
-	inc 8, xsp
-	jr EdgeVariant_A_Done
-
+	.incbin "includes/generated/v7_transplant_EdgeVariant_A_CalcWidth.bin"
 EdgeVariant_A_CalcHeight:
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
@@ -13578,20 +10718,7 @@ EdgeVariant_A_CalcHeight2:
 	jr POINTWProc_Return
 
 EdgeVariant_A_Execute:
-	ld xwa, (xsp + 8)
-	calr IDCursorAdvance
-	lda xbc, (xhl - 4)
-	pushw 0xa
-	ld xwa, (xsp + 10)
-	ld xwa, (xwa + 4)
-	push xwa
-	ld wa, (xhl)
-	sub wa, (xbc)
-	inc 1, wa
-	pushw wa
-	call Itoa_Safe
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_EdgeVariant_A_Execute.bin"
 EdgeVariant_A_Done:
 	lds32 xhl, 0
 	jr POINTWProc_Return
@@ -13633,18 +10760,7 @@ POINTWProc:
 	jr EdgeVariant_C_Setup
 
 EdgeVariant_B_CalcWidth:
-	ld_sril XWA, (xsp + 0x0082)
-	push xwa
-	lda xwa, (xsp + 6)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds iy, 0
-	lds iz, 0
-	lda xix, (xsp + 2)
-	lds32 xbc, 0
-	jr EdgeVariant_B_Return
-
+	.incbin "includes/generated/v7_transplant_EdgeVariant_B_CalcWidth.bin"
 EdgeVariant_B_CalcHeight:
 	cp a, 0x55
 	jr nz, EdgeVariant_B_Done
@@ -13704,32 +10820,9 @@ PointXProc:
 	jr EdgeVariant_C_CalcHeight2
 
 EdgeVariant_C_CalcWidth:
-	pushw 0xea
-	pushw 0xaa90
-	ld_sril XWA, (xsp + 0x0108)
-	push xwa
-	call Strcat
-	inc 8, xsp
-	jr EdgeVariant_C_CheckInner
-
+	.incbin "includes/generated/v7_transplant_EdgeVariant_C_CalcWidth.bin"
 EdgeVariant_C_CalcHeight:
-	pushw 0xea
-	pushw 0xaa94
-	lda xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x010c)
-	push xwa
-	lda xwa, (xsp + 16)
-	push xwa
-	call Strcat
-	lda xwa, (xsp + 20)
-	push xwa
-	ld_sril XWA, (xsp + 0x0118)
-	push xwa
-	call Strcpy
-	lda xsp, (xsp + 24)
-
+	.incbin "includes/generated/v7_transplant_EdgeVariant_C_CalcHeight.bin"
 EdgeVariant_C_CheckInner:
 	lds32 xhl, 0
 	jr EdgeVariant_C_Return
@@ -13792,23 +10885,9 @@ PointYProc:
 	jr ShadowBox_A_CalcHeight
 
 ShadowBox_A_Setup:
-	pushw 0xea
-	pushw 0xaa96
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcat
-	inc 8, xsp
-	lds32 xhl, 1
-	jr IDCursorProc_Return
-
+	.incbin "includes/generated/v7_transplant_ShadowBox_A_Setup.bin"
 ShadowBox_A_CalcWidth:
-	pushw 0xea
-	pushw 0xaa9a
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcat
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_ShadowBox_A_CalcWidth.bin"
 ShadowBox_A_CheckInner:
 	lds32 xhl, 0
 	jr IDCursorProc_Return
@@ -13928,23 +11007,7 @@ ShadowBox_B_Setup:
 	jrl ViewFlagProc_Return
 
 ShadowBox_B_Prologue:
-	pushw 0xea
-	pushw 0xaa9c
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x1118)
-	push xwa
-	lda xwa, (xsp + 28)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 16)
-	push xwa
-	ld_sril XWA, (xsp + 0x1114)
-	push xwa
-	jr ShadowBox_B_InnerFill
-
+	.incbin "includes/generated/v7_transplant_ShadowBox_B_Prologue.bin"
 ShadowBox_B_CalcWidth:
 	ld_sril XIZ, (xsp + 0x1110)
 	ld_sril XWA, (xsp + 0x1110)
@@ -13962,11 +11025,7 @@ ShadowBox_B_CheckInner:
 	push xwa
 
 ShadowBox_B_InnerFill:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jrl ViewFlagProc_Return
-
+	.incbin "includes/generated/v7_transplant_ShadowBox_B_InnerFill.bin"
 ShadowBox_B_CalcHeight:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -13977,31 +11036,7 @@ ShadowBox_B_CalcHeight:
 	jr ule, ShadowBox_C_CalcWidth
 
 ShadowBox_B_Execute:
-	ld xwa, (xiz + 4)
-	push xwa
-	ld xwa, (xsp + 12)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ClassProc
-	push xhl
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, ShadowBox_C_Setup
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld (xiz + 4), xwa
-	lds32 xwa, 0
-	ld (xsp + 4), xwa
-	jr ShadowBox_C_CalcHeight
-
+	.incbin "includes/generated/v7_transplant_ShadowBox_B_Execute.bin"
 ShadowBox_C_Setup:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -14694,55 +11729,9 @@ StringProc:
 	jrl ScrollBar_Return
 
 ScrollBar_Setup:
-	ld xwa, (xde)
-	ld_sril XBC, (xsp + 0x013a)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld (xsp + 6), xhl
-	ld_sril XBC, (xsp + 0x013a)
-	ld xwa, (xbc)
-	ld bc, (xbc + 8)
-	calr IDCountHelper
-	ld (xsp + 10), xhl
-	ld xwa, (xsp + 6)
-	ld xwa, (xwa)
-	push xwa
-	call Strlen
-	inc 1, hl
-	pushw hl
-	call Malloc
-	inc 6, xsp
-	ld xwa, (xsp + 10)
-	ld (xwa), xhl
-	ld xwa, (xsp + 6)
-	ld xwa, (xwa)
-	push xwa
-	ld xwa, (xsp + 14)
-	jrl ScrollBar_ReturnAlt
-
+	.incbin "includes/generated/v7_transplant_ScrollBar_Setup.bin"
 ScrollBar_CalcRange:
-	pushw 0xea
-	pushw 0xaaa0
-	lda xwa, (xsp + 18)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x0142)
-	push xwa
-	lda xwa, (xsp + 26)
-	push xwa
-	call Strcat
-	pushw 0xea
-	pushw 0xaaa2
-	lda xwa, (xsp + 34)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 24)
-	lda xwa, (xsp + 14)
-	push xwa
-	ld_sril XWA, (xsp + 0x013e)
-	push xwa
-	jr ScrollBar_ReturnAlt2
-
+	.incbin "includes/generated/v7_transplant_ScrollBar_CalcRange.bin"
 ScrollBar_CalcThumb:
 	ld_sril XWA, (xsp + 0x013a)
 	calr IDCursorAdvance
@@ -14753,32 +11742,7 @@ ScrollBar_CalcThumb:
 	jr ScrollBar_ReturnAlt
 
 ScrollBar_Draw:
-	ld xwa, (xde)
-	ld (xsp + 4), xwa
-	ld_sril XWA, (xsp + 0x013a)
-	calr IDCursorAdvance
-	ld (xsp + 8), xhl
-	ld xwa, (xsp + 8)
-	ld xiz, (xwa)
-	ld xwa, (xsp + 4)
-	push xwa
-	call Strlen
-	ld (xsp + 16), hl
-	push xiz
-	call Strlen
-	inc 8, xsp
-	cp hl, (xsp + 12)
-	jr nc, ScrollBar_ReturnZero
-	ld xwa, (xsp + 4)
-	push xwa
-	call Strlen
-	inc 1, hl
-	pushw hl
-	call Malloc
-	inc 6, xsp
-	ld xwa, (xsp + 8)
-	ld (xwa), xhl
-
+	.incbin "includes/generated/v7_transplant_ScrollBar_Draw.bin"
 ScrollBar_ReturnZero:
 	ld xwa, (xsp + 4)
 	push xwa
@@ -14789,10 +11753,7 @@ ScrollBar_ReturnAlt:
 	push xwa
 
 ScrollBar_ReturnAlt2:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-
+	.incbin "includes/generated/v7_transplant_ScrollBar_ReturnAlt2.bin"
 ScrollBar_Return:
 	pop xiz
 	stb_dri L, 0xfd, 0x3a, 0x01
@@ -14829,23 +11790,7 @@ SliderH_Setup:
 	jrl SliderH_ReturnAlt5
 
 SliderH_Prologue:
-	pushw 0xea
-	pushw 0xaaa4
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x0110)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 8)
-	push xwa
-	ld_sril XWA, (xsp + 0x010c)
-	push xwa
-	jr SliderH_CalcThumb_Clamp
-
+	.incbin "includes/generated/v7_transplant_SliderH_Prologue.bin"
 SliderH_CalcRange:
 	ld_sril XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
@@ -14865,11 +11810,7 @@ SliderH_CalcThumb:
 	push xwa
 
 SliderH_CalcThumb_Clamp:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jr SliderH_ReturnAlt5
-
+	.incbin "includes/generated/v7_transplant_SliderH_CalcThumb_Clamp.bin"
 SliderH_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -14877,18 +11818,7 @@ SliderH_DrawTrack:
 	jr SliderH_ReturnAlt
 
 SliderH_DrawThumb:
-	push xwa
-	ld_sril XWA, (xsp + 0x010c)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, SliderH_ReturnZero
-	lds32 xwa, 0
-	ld (xsp + 4), xwa
-	jr SliderH_ReturnAlt2
-
+	.incbin "includes/generated/v7_transplant_SliderH_DrawThumb.bin"
 SliderH_ReturnZero:
 	inc 1, xiz
 
@@ -14954,23 +11884,7 @@ SliderV_Setup:
 	jrl BitmapIDProc_Return
 
 SliderV_Prologue:
-	pushw 0xea
-	pushw 0xaaa8
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x0110)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 8)
-	push xwa
-	ld_sril XWA, (xsp + 0x010c)
-	push xwa
-	jr SliderV_CalcThumb_Clamp
-
+	.incbin "includes/generated/v7_transplant_SliderV_Prologue.bin"
 SliderV_CalcRange:
 	ld_sril XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
@@ -14990,11 +11904,7 @@ SliderV_CalcThumb:
 	push xwa
 
 SliderV_CalcThumb_Clamp:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jr BitmapIDProc_Return
-
+	.incbin "includes/generated/v7_transplant_SliderV_CalcThumb_Clamp.bin"
 SliderV_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -15002,18 +11912,7 @@ SliderV_DrawTrack:
 	jr SliderV_ReturnAlt
 
 SliderV_DrawThumb:
-	push xwa
-	ld_sril XWA, (xsp + 0x010c)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, SliderV_ReturnZero
-	lds32 xwa, 0
-	ld (xsp + 4), xwa
-	jr SliderV_ReturnAlt2
-
+	.incbin "includes/generated/v7_transplant_SliderV_DrawThumb.bin"
 SliderV_ReturnZero:
 	inc 1, xiz
 
@@ -15078,23 +11977,7 @@ DrawHelper_A_Setup:
 	jrl ApFuncIDProc_Return
 
 DrawHelper_A_Prologue:
-	pushw 0xea
-	pushw 0xaab0
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x0110)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 8)
-	push xwa
-	ld_sril XWA, (xsp + 0x010c)
-	push xwa
-	jr DrawHelper_A_ClampThumb
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_A_Prologue.bin"
 DrawHelper_A_CalcRange:
 	ld_sril XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
@@ -15114,11 +11997,7 @@ DrawHelper_A_CalcThumb:
 	push xwa
 
 DrawHelper_A_ClampThumb:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jr ApFuncIDProc_Return
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_A_ClampThumb.bin"
 DrawHelper_A_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -15126,18 +12005,7 @@ DrawHelper_A_DrawTrack:
 	jr DrawHelper_A_ReturnAlt
 
 DrawHelper_A_DrawThumb:
-	push xwa
-	ld_sril XWA, (xsp + 0x010c)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, DrawHelper_A_ReturnZero
-	lds32 xwa, 0
-	ld (xsp + 4), xwa
-	jr DrawHelper_A_ReturnAlt2
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_A_DrawThumb.bin"
 DrawHelper_A_ReturnZero:
 	inc 1, xiz
 
@@ -15251,23 +12119,7 @@ DrawHelper_B_Finish:
 	jrl MainFuncIDProc_Return
 
 DrawHelper_B_FinishAlt:
-	pushw 0xea
-	pushw 0xaab4
-	lda xwa, (xsp + 24)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x111c)
-	push xwa
-	lda xwa, (xsp + 32)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 20)
-	push xwa
-	ld_sril XWA, (xsp + 0x1118)
-	push xwa
-	jr DrawHelper_C_CalcThumb
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_B_FinishAlt.bin"
 DrawHelper_C_Setup:
 	ld_sril XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
@@ -15288,11 +12140,7 @@ DrawHelper_C_CalcRange:
 	push xwa
 
 DrawHelper_C_CalcThumb:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jrl MainFuncIDProc_Return
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_C_CalcThumb.bin"
 DrawHelper_C_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
@@ -15305,33 +12153,7 @@ DrawHelper_C_DrawTrack:
 	jr ule, DrawHelper_C_ReturnAlt2
 
 DrawHelper_C_ReturnZero:
-	ld xwa, (xsp + 12)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ApFunctionProc
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	push xhl
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, DrawHelper_C_ReturnAlt
-	ld xwa, (xsp + 12)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc)
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 8), xwa
-	jr DrawHelper_C_ReturnAlt3
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_C_ReturnZero.bin"
 DrawHelper_C_ReturnAlt:
 	lds32 xwa, 1
 	add (xsp + 12), xwa
@@ -15447,23 +12269,7 @@ DrawHelper_D_Finish:
 	jrl ViewIDProc_Return
 
 DrawHelper_D_FinishAlt:
-	pushw 0xea
-	pushw 0xaab8
-	lda xwa, (xsp + 24)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x111c)
-	push xwa
-	lda xwa, (xsp + 32)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 20)
-	push xwa
-	ld_sril XWA, (xsp + 0x1118)
-	push xwa
-	jr DrawHelper_E_CalcThumb
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_D_FinishAlt.bin"
 DrawHelper_E_Setup:
 	ld_sril XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
@@ -15484,11 +12290,7 @@ DrawHelper_E_CalcRange:
 	push xwa
 
 DrawHelper_E_CalcThumb:
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-	jrl ViewIDProc_Return
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_E_CalcThumb.bin"
 DrawHelper_E_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
@@ -15501,33 +12303,7 @@ DrawHelper_E_DrawTrack:
 	jr ule, DrawHelper_E_ReturnAlt2
 
 DrawHelper_E_ReturnZero:
-	ld xwa, (xsp + 12)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call MainFunctionProc
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	push xhl
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, DrawHelper_E_ReturnAlt
-	ld xwa, (xsp + 12)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc)
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 8), xwa
-	jr DrawHelper_E_ReturnAlt3
-
+	.incbin "includes/generated/v7_transplant_DrawHelper_E_ReturnZero.bin"
 DrawHelper_E_ReturnAlt:
 	lds32 xwa, 1
 	add (xsp + 12), xwa
@@ -15625,160 +12401,22 @@ ViewID_EnumFill_OuterNext:
 	jr ule, ViewID_EnumFill_OuterLoop
 
 ViewID_EventSwitch:
-	cp xiz, 0x1e0000c
-	jrl z, ViewID_EnumOpen
-	cp xiz, 0x1e0000b
-	jrl z, ViewID_GetCurrent
-	cp xiz, 0x1e00009
-	jrl z, ViewID_GetCurrent
-	cp xiz, 0x1e00028
-	jrl z, ViewID_GetInfoStr
-	cp xiz, 0x1e0000e
-	jrl z, ViewID_EnumCount
-	cp xiz, 0x1e0000d
-	jrl nz, ViewID_Default
-	ld_sril XWA, (xsp + 0x1114)
-	ld (xsp + 4), xwa
-	ld xwa, (xwa + 8)
-	cp xwa, (xsp + 16)
-	jr nz, ViewID_Select_Lookup
-	pushw 0xea
-	pushw 0xaabc
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	inc 8, xsp
-	jrl ViewID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ViewID_EventSwitch.bin"
 ViewID_Select_Lookup:
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, ViewID_Select_NoName
-	push xhl
-	pushw 0xea
-	pushw 0xaac4
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jrl ViewID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ViewID_Select_Lookup.bin"
 ViewID_Select_NoName:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 8)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xde, (xsp + 4)
-	ld xwa, (xde + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xaaca
-	ld xwa, (xde + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jrl ViewID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ViewID_Select_NoName.bin"
 ViewID_EnumCount:
 	ld xhl, (xsp + 16)
 	inc 1, xhl
 	jrl ViewID_Return
 
 ViewID_GetInfoStr:
-	pushw 0xea
-	pushw 0xaad2
-	lda xwa, (xsp + 24)
-	push xwa
-	call Strcpy
-	ld_sril XWA, (xsp + 0x111c)
-	push xwa
-	lda xwa, (xsp + 32)
-	push xwa
-	call Strcat
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 20)
-	push xwa
-	ld_sril XWA, (xsp + 0x1118)
-	push xwa
-	jrl ViewID_StrCpy
-
+	.incbin "includes/generated/v7_transplant_ViewID_GetInfoStr.bin"
 ViewID_GetCurrent:
-	ld_sril XWA, (xsp + 0x1114)
-	ld (xsp + 4), xwa
-	ld_sril XWA, (xsp + 0x1114)
-	calr IDCursorAdvance
-	ld bc, (xhl)
-	exts xbc
-	ld xde, (xsp + 4)
-	ld (xde), xbc
-	ld xwa, (xde)
-	cp xwa, 0xffffffff
-	jr z, ViewID_GetCurrent_None
-	ld xwa, (xde + 8)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	sll xwa, 0
-	ld xbc, xwa
-	add xbc, (xde)
-	ld xwa, xbc
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, ViewID_GetCurrent_NoName
-	push xhl
-	pushw 0xea
-	pushw 0xaada
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr ViewID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ViewID_GetCurrent.bin"
 ViewID_GetCurrent_NoName:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 8)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xbc, (xsp + 4)
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xaae0
-	ld xwa, (xbc + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jr ViewID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ViewID_GetCurrent_NoName.bin"
 ViewID_GetCurrent_None:
 	pushw 0xea
 	pushw 0xaae8
@@ -15787,9 +12425,7 @@ ViewID_GetCurrent_None:
 	push xwa
 
 ViewID_StrCpy:
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_ViewID_StrCpy.bin"
 ViewID_ReturnZero:
 	lds32 xhl, 0
 	jrl ViewID_Return
@@ -15806,33 +12442,7 @@ ViewID_EnumOpen:
 	jr ule, ViewID_EnumOpen_NotFound
 
 ViewID_EnumOpen_ScanLoop:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	push xhl
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, ViewID_EnumOpen_ScanNext
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc)
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	jr ViewID_EnumOpen_Store
-
+	.incbin "includes/generated/v7_transplant_ViewID_EnumOpen_ScanLoop.bin"
 ViewID_EnumOpen_ScanNext:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -15939,148 +12549,22 @@ ScreenID_EnumFill_OuterNext:
 	jr ule, ScreenID_EnumFill_OuterLoop
 
 ScreenID_EventSwitch:
-	cp xiz, 0x1e0000c
-	jrl z, ScreenID_EnumOpen
-	cp xiz, 0x1e0000b
-	jrl z, ScreenID_GetCurrent
-	cp xiz, 0x1e00009
-	jrl z, ScreenID_GetCurrent
-	cp xiz, 0x1e00028
-	jrl z, ScreenID_ReturnZero
-	cp xiz, 0x1e0000e
-	jrl z, ScreenID_EnumCount
-	cp xiz, 0x1e0000d
-	jrl nz, ScreenID_Default
-	ld_sril XWA, (xsp + 0x1114)
-	ld (xsp + 4), xwa
-	ld xwa, (xwa + 8)
-	cp xwa, (xsp + 16)
-	jr nz, ScreenID_Select_Lookup
-	pushw 0xea
-	pushw 0xaaf0
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	inc 8, xsp
-	jrl ScreenID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ScreenID_EventSwitch.bin"
 ScreenID_Select_Lookup:
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, ScreenID_Select_NoName
-	push xhl
-	pushw 0xea
-	pushw 0xaaf8
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jrl ScreenID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ScreenID_Select_Lookup.bin"
 ScreenID_Select_NoName:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xde, (xsp + 4)
-	ld xwa, (xde + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xaafe
-	ld xwa, (xde + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jrl ScreenID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ScreenID_Select_NoName.bin"
 ScreenID_EnumCount:
 	ld xhl, (xsp + 16)
 	inc 1, xhl
 	jrl ScreenID_Return
 
 ScreenID_GetCurrent:
-	ld_sril XWA, (xsp + 0x1114)
-	ld (xsp + 4), xwa
-	ld_sril XWA, (xsp + 0x1114)
-	calr IDCursorAdvance
-	ld xde, (xsp + 4)
-	ld xbc, (xhl)
-	ld (xde), xbc
-	ld xwa, (xde)
-	cp xwa, 0xffffffff
-	jr z, ScreenID_GetCurrent_None
-	ld xbc, xde
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, ScreenID_GetCurrent_NoName
-	push xhl
-	pushw 0xea
-	pushw 0xab06
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr ScreenID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ScreenID_GetCurrent.bin"
 ScreenID_GetCurrent_NoName:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xbc, (xsp + 4)
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xab0c
-	ld xwa, (xbc + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jr ScreenID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ScreenID_GetCurrent_NoName.bin"
 ScreenID_GetCurrent_None:
-	pushw 0xea
-	pushw 0xab14
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_ScreenID_GetCurrent_None.bin"
 ScreenID_ReturnZero:
 	lds32 xhl, 0
 	jrl ScreenID_Return
@@ -16097,74 +12581,11 @@ ScreenID_EnumOpen:
 	jrl ule, ScreenID_EnumOpen_NotFound
 
 ScreenID_EnumOpen_ScanLoop:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, ScreenID_EnumOpen_ScanNoName
-	push xhl
-	pushw 0xea
-	pushw 0xab1c
-	lda xwa, (xsp + 28)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr ScreenID_EnumOpen_Compare
-
+	.incbin "includes/generated/v7_transplant_ScreenID_EnumOpen_ScanLoop.bin"
 ScreenID_EnumOpen_ScanNoName:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xab22
-	lda xwa, (xsp + 30)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-
+	.incbin "includes/generated/v7_transplant_ScreenID_EnumOpen_ScanNoName.bin"
 ScreenID_EnumOpen_Compare:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	lda xwa, (xsp + 24)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, ScreenID_EnumOpen_ScanNext
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc)
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	jr ScreenID_EnumOpen_Store
-
+	.incbin "includes/generated/v7_transplant_ScreenID_EnumOpen_Compare.bin"
 ScreenID_EnumOpen_ScanNext:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -16173,25 +12594,7 @@ ScreenID_EnumOpen_ScanNext:
 	jrl c, ScreenID_EnumOpen_ScanLoop
 
 ScreenID_EnumOpen_NotFound:
-	ld xwa, (xsp + 12)
-	or xwa, xwa
-	jr z, ScreenID_EnumOpen_CheckEmpty
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	pushw 0xea
-	pushw 0xab2a
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, ScreenID_EnumOpen_CheckEmpty
-	ld xwa, (xsp + 4)
-	ld xbc, 0xffffffff
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	jr ScreenID_EnumOpen_Store
-
+	.incbin "includes/generated/v7_transplant_ScreenID_EnumOpen_NotFound.bin"
 ScreenID_EnumOpen_CheckEmpty:
 	ld xwa, (xsp + 12)
 	or xwa, xwa
@@ -16291,148 +12694,22 @@ WindowID_EnumFill_OuterNext:
 	jr ule, WindowID_EnumFill_OuterLoop
 
 WindowID_EventSwitch:
-	cp xiz, 0x1e0000c
-	jrl z, WindowID_EnumOpen
-	cp xiz, 0x1e0000b
-	jrl z, WindowID_GetCurrent
-	cp xiz, 0x1e00009
-	jrl z, WindowID_GetCurrent
-	cp xiz, 0x1e00028
-	jrl z, WindowID_ReturnZero
-	cp xiz, 0x1e0000e
-	jrl z, WindowID_EnumCount
-	cp xiz, 0x1e0000d
-	jrl nz, WindowID_Default
-	ld_sril XWA, (xsp + 0x1114)
-	ld (xsp + 4), xwa
-	ld xwa, (xwa + 8)
-	cp xwa, (xsp + 16)
-	jr nz, WindowID_Select_Lookup
-	pushw 0xea
-	pushw 0xab32
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	inc 8, xsp
-	jrl WindowID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_WindowID_EventSwitch.bin"
 WindowID_Select_Lookup:
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, WindowID_Select_NoName
-	push xhl
-	pushw 0xea
-	pushw 0xab3a
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jrl WindowID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_WindowID_Select_Lookup.bin"
 WindowID_Select_NoName:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xde, (xsp + 4)
-	ld xwa, (xde + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xab40
-	ld xwa, (xde + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jrl WindowID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_WindowID_Select_NoName.bin"
 WindowID_EnumCount:
 	ld xhl, (xsp + 16)
 	inc 1, xhl
 	jrl WindowID_Return
 
 WindowID_GetCurrent:
-	ld_sril XWA, (xsp + 0x1114)
-	ld (xsp + 4), xwa
-	ld_sril XWA, (xsp + 0x1114)
-	calr IDCursorAdvance
-	ld xde, (xsp + 4)
-	ld xbc, (xhl)
-	ld (xde), xbc
-	ld xwa, (xde)
-	cp xwa, 0xffffffff
-	jr z, WindowID_GetCurrent_None
-	ld xbc, xde
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, WindowID_GetCurrent_NoName
-	push xhl
-	pushw 0xea
-	pushw 0xab48
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr WindowID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_WindowID_GetCurrent.bin"
 WindowID_GetCurrent_NoName:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xbc, (xsp + 4)
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xab4e
-	ld xwa, (xbc + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	jr WindowID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_WindowID_GetCurrent_NoName.bin"
 WindowID_GetCurrent_None:
-	pushw 0xea
-	pushw 0xab56
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_WindowID_GetCurrent_None.bin"
 WindowID_ReturnZero:
 	lds32 xhl, 0
 	jrl WindowID_Return
@@ -16449,74 +12726,11 @@ WindowID_EnumOpen:
 	jrl ule, WindowID_EnumOpen_NotFound
 
 WindowID_EnumOpen_ScanLoop:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call ViewableProc
-	cp (xhl), 0x0
-	jr z, WindowID_EnumOpen_ScanNoName
-	push xhl
-	pushw 0xea
-	pushw 0xab5e
-	lda xwa, (xsp + 28)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr WindowID_EnumOpen_Compare
-
+	.incbin "includes/generated/v7_transplant_WindowID_EnumOpen_ScanLoop.bin"
 WindowID_EnumOpen_ScanNoName:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	srl xwa, 0
-	and xwa, 0xfff
-	extz xwa
-	add xwa, 0x1a00000
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ldiw_erp 0xe2, 0
-	pushw wa
-	push xhl
-	pushw 0xea
-	pushw 0xab64
-	lda xwa, (xsp + 30)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-
+	.incbin "includes/generated/v7_transplant_WindowID_EnumOpen_ScanNoName.bin"
 WindowID_EnumOpen_Compare:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	lda xwa, (xsp + 24)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, WindowID_EnumOpen_ScanNext
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x14, 0x01
-	add xbc, xwa
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc)
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	jr WindowID_EnumOpen_Store
-
+	.incbin "includes/generated/v7_transplant_WindowID_EnumOpen_Compare.bin"
 WindowID_EnumOpen_ScanNext:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -16525,25 +12739,7 @@ WindowID_EnumOpen_ScanNext:
 	jrl c, WindowID_EnumOpen_ScanLoop
 
 WindowID_EnumOpen_NotFound:
-	ld xwa, (xsp + 12)
-	or xwa, xwa
-	jr z, WindowID_EnumOpen_CheckEmpty
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	pushw 0xea
-	pushw 0xab6c
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, WindowID_EnumOpen_CheckEmpty
-	ld xwa, (xsp + 4)
-	ld xbc, 0xffffffff
-	ld (xwa + 4), xbc
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	jr WindowID_EnumOpen_Store
-
+	.incbin "includes/generated/v7_transplant_WindowID_EnumOpen_NotFound.bin"
 WindowID_EnumOpen_CheckEmpty:
 	ld xwa, (xsp + 12)
 	or xwa, xwa
@@ -16642,27 +12838,7 @@ ModeID_EventDispatch:
 	jrl ModeID_Return
 
 ModeID_EnumFill:
-	ld_sril XIZ, (xsp + 0x1110)
-	ld xwa, (xiz + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xbc, (xiz + 4)
-	cp (xhl), 0x0
-	jr nz, ModeID_EnumFill_HasName
-	ld xwa, (xiz + 8)
-	push xwa
-	pushw 0xea
-	pushw 0xab74
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jrl ModeID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ModeID_EnumFill.bin"
 ModeID_EnumFill_HasName:
 	push xhl
 	push xbc
@@ -16694,46 +12870,16 @@ ModeID_GetCurrent_HasName:
 	ld xwa, Str_No_0x86A
 
 ModeID_GetCurrent_SendAudio:
-	push xwa
-	ld xwa, (xiz + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr ModeID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ModeID_GetCurrent_SendAudio.bin"
 ModeID_GetNext:
-	ld_sril XIZ, (xsp + 0x1110)
-	ld_sril XWA, (xsp + 0x1110)
-	calr IDCursorAdvance
-	ld xbc, (xhl)
-	ld (xiz), xbc
-	ld xwa, xbc
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	lda xwa, (xiz + 4)
-	cp (xhl), 0x0
-	jr nz, ModeID_GetNext_HasName
-	ld xbc, (xiz)
-	ldiw_erp 0xe6, 0
-	pushw bc
-	pushw 0xea
-	pushw 0xab90
-	ld xwa, (xwa)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr ModeID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_ModeID_GetNext.bin"
 ModeID_GetNext_HasName:
 	push xhl
 	ld xwa, (xwa)
 	push xwa
 
 ModeID_Strcpy:
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_ModeID_Strcpy.bin"
 ModeID_ReturnZero:
 	lds32 xhl, 0
 	jrl ModeID_Return
@@ -16749,49 +12895,9 @@ ModeID_EnumOpen:
 	jr ule, ModeID_EnumOpen_CheckResult
 
 ModeID_EnumOpen_SearchLoop:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	push xhl
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xbc, (xsp + 16)
-	cp (xbc), 0x0
-	jr nz, ModeID_EnumOpen_Compare
-	ld xwa, (xsp + 8)
-	push xwa
-	pushw 0xea
-	pushw 0xab98
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-
+	.incbin "includes/generated/v7_transplant_ModeID_EnumOpen_SearchLoop.bin"
 ModeID_EnumOpen_Compare:
-	ld xwa, (xiz + 4)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, ModeID_EnumOpen_SearchNext
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld (xiz + 4), xwa
-	lds32 xwa, 0
-	ld (xsp + 4), xwa
-	jr ModeID_EnumOpen_UpdateCursor
-
+	.incbin "includes/generated/v7_transplant_ModeID_EnumOpen_Compare.bin"
 ModeID_EnumOpen_SearchNext:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -16887,27 +12993,7 @@ TitleID_EventDispatch:
 	jrl TitleID_Return
 
 TitleID_EnumFill:
-	ld_sril XIZ, (xsp + 0x1110)
-	ld xwa, (xiz + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	ld xbc, (xiz + 4)
-	cp (xhl), 0x0
-	jr nz, TitleID_EnumFill_HasName
-	ld xwa, (xiz + 8)
-	push xwa
-	pushw 0xea
-	pushw 0xaba0
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jrl TitleID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_TitleID_EnumFill.bin"
 TitleID_EnumFill_HasName:
 	push xhl
 	push xbc
@@ -16939,46 +13025,16 @@ TitleID_GetCurrent_HasName:
 	ld xwa, Str_No_0x896
 
 TitleID_GetCurrent_SendAudio:
-	push xwa
-	ld xwa, (xiz + 4)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr TitleID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_TitleID_GetCurrent_SendAudio.bin"
 TitleID_GetNext:
-	ld_sril XIZ, (xsp + 0x1110)
-	ld_sril XWA, (xsp + 0x1110)
-	calr IDCursorAdvance
-	ld xbc, (xhl)
-	ld (xiz), xbc
-	ld xwa, xbc
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	lda xwa, (xiz + 4)
-	cp (xhl), 0x0
-	jr nz, TitleID_GetNext_HasName
-	ld xbc, (xiz)
-	ldiw_erp 0xe6, 0
-	pushw bc
-	pushw 0xea
-	pushw 0xabbc
-	ld xwa, (xwa)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr TitleID_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_TitleID_GetNext.bin"
 TitleID_GetNext_HasName:
 	push xhl
 	ld xwa, (xwa)
 	push xwa
 
 TitleID_Strcpy:
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_TitleID_Strcpy.bin"
 TitleID_ReturnZero:
 	lds32 xhl, 0
 	jrl TitleID_Return
@@ -16994,49 +13050,9 @@ TitleID_EnumOpen:
 	jr ule, TitleID_EnumOpen_CheckResult
 
 TitleID_EnumOpen_SearchLoop:
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld xbc, 0x1e00015
-	lds32 xde, 0
-	call SendEvent
-	push xhl
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xbc, (xsp + 16)
-	cp (xbc), 0x0
-	jr nz, TitleID_EnumOpen_Compare
-	ld xwa, (xsp + 8)
-	push xwa
-	pushw 0xea
-	pushw 0xabc4
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-
+	.incbin "includes/generated/v7_transplant_TitleID_EnumOpen_SearchLoop.bin"
 TitleID_EnumOpen_Compare:
-	ld xwa, (xiz + 4)
-	push xwa
-	lda xwa, (xsp + 20)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, TitleID_EnumOpen_SearchNext
-	ld xwa, (xsp + 8)
-	sll xwa, 2
-	stb_dri A, 0xfd, 0x10, 0x01
-	add xbc, xwa
-	ld xwa, (xbc)
-	ld (xiz + 4), xwa
-	lds32 xwa, 0
-	ld (xsp + 4), xwa
-	jr TitleID_EnumOpen_UpdateCursor
-
+	.incbin "includes/generated/v7_transplant_TitleID_EnumOpen_Compare.bin"
 TitleID_EnumOpen_SearchNext:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -17118,9 +13134,7 @@ NameProc_ReturnZero:
 	push xwa
 
 NameProc_DefaultForward:
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_NameProc_DefaultForward.bin"
 NameProc_Return:
 	lds32 xhl, 0
 	jr ConstFlagProc_ReturnZero
@@ -17178,10 +13192,7 @@ ConstFlagProc_SetValue_Check:
 	push xwa
 
 ConstFlagProc_SetValue_Store:
-	call Strcpy
-	inc 8, xsp
-	jr ConstFlagProc_Default_Forward
-
+	.incbin "includes/generated/v7_transplant_ConstFlagProc_SetValue_Store.bin"
 ConstFlagProc_Default:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 8)
@@ -17284,50 +13295,9 @@ CommonIDProc_JumpTable:
 	jrl	278
 
 CommonIDProc_CheckAvail:
-	lds32 xhl, 1
-	jrl CommonIDProc_Epilogue
-	ld xwa, (xsp + 16)
-	ld (xsp + 4), xwa
-	pushw 0xea
-	pushw 0xabe2
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr CommonIDProc_ReturnZero
-	ld xwa, (xsp + 16)
-	ld (xsp + 4), xwa
-	pushw 0xa
-	ld xbc, (xsp + 6)
-	ld xwa, (xbc + 4)
-	push xwa
-	ld xwa, (xbc)
-	push xwa
-	call Strlen_LoadParam
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 12)
-	cpw (xwa + 4), 0x0
-	jr z, CommonIDProc_ReturnZero
-	lds iz, 0
-	ld xbc, (xwa + 8)
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa)
-	lds32 xde, 0
-	jr CommonIDProc_SearchLoop_Check
-
+	.incbin "includes/generated/v7_transplant_CommonIDProc_CheckAvail.bin"
 CommonIDProc_SearchLoop_Compare:
-	cp xwa, (xhl + 4)
-	jr nz, CommonIDProc_SearchLoop_Next
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 4)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr CommonIDProc_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_CommonIDProc_SearchLoop_Compare.bin"
 CommonIDProc_SearchLoop_Next:
 	inc 1, iz
 	inc 8, xde
@@ -17352,25 +13322,7 @@ CommonIDProc_ReturnZero:
 	jr CommonIDProc_EnumSearch_Check
 
 CommonIDProc_EnumSearch_Compare:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	ld xwa, (xbc)
-	push xwa
-	call Strcmp
-	inc 8, xsp
-	cps hl, 0
-	jr nz, CommonIDProc_EnumSearch_Next
-	ld bc, iz
-	extz xbc
-	sll xbc, 3
-	ld xwa, (xsp + 12)
-	add xbc, (xwa + 8)
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc + 4)
-	ld (xwa + 4), xbc
-	jr CommonIDProc_EnumSearch_EndCheck
-
+	.incbin "includes/generated/v7_transplant_CommonIDProc_EnumSearch_Compare.bin"
 CommonIDProc_EnumSearch_Next:
 	inc 1, iz
 
@@ -17398,14 +13350,7 @@ CommonIDProc_EnumSearch_EndCheck:
 	jr CommonIDProc_EnumSearch_Result
 
 CommonIDProc_EnumSearch_Atoi:
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 4)
-	push xwa
-	call ParseInt32
-	inc 4, xsp
-	ld xwa, (xsp + 4)
-	ld (xwa + 4), xhl
-
+	.incbin "includes/generated/v7_transplant_CommonIDProc_EnumSearch_Atoi.bin"
 CommonIDProc_EnumSearch_Result:
 	ld xhl, (xsp + 8)
 	jr CommonIDProc_Epilogue
@@ -18483,33 +14428,7 @@ ApDeliveryEvent_ScanLoop:
 	lds wa, 4
 
 ApDeliveryEvent_Deliver:
-	call TaskSched_WaitForEvent
-	ldw_da xwa, (0x02ec36)
-	ld de, wa
-	inc 1, de
-	ldw_da xbc, (0x02ec34)
-	cp de, bc
-	jr z, ApDeliveryEvent_ScanLoop
-	sub wa, 0x3ff
-	cp wa, bc
-	jr z, ApDeliveryEvent_ScanLoop
-	cp xiz, 0xffffffff
-	jr z, ApDeliveryEvent_ReturnZero
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 4), xhl
-	ld (xhl), xiz
-	ld xwa, (xsp + 12)
-	ld (xhl + 4), xwa
-	ld xwa, (xsp + 8)
-	ld (xhl + 8), xwa
-	ld xiz, 0xffffffff
-	ld xwa, 0x1c00037
-	ld (xsp + 12), xwa
-	ld (xsp + 8), xhl
-	jr ApDeliveryEvent_Return
-
+	.incbin "includes/generated/v7_transplant_ApDeliveryEvent_Deliver.bin"
 ApDeliveryEvent_ReturnZero:
 	lds32 xwa, 0
 	ld (xsp + 4), xwa
@@ -19275,44 +15194,7 @@ DrawFunc_XspCheck_Loop:
 	ret
 
 InitializeGraphics:
-	dec 8, xsp
-	push xiz
-	calr InitDrawTask
-	lds wa, 5
-	call Show_ScreenGroup
-	stiw_da (0x03ef92), 0x0001
-	call InitPaletteRGB
-	lds wa, 0
-	calr ChangeWall
-	lds wa, 2
-	calr ChangePalette
-	lds wa, 0
-	calr ChangeWallPalette
-	lda_24 xwa, (0x043c00)
-	ld xiz, xwa
-	pushw 0x9600
-	pushw 0x0
-	push xwa
-	call Memset
-	add xiz, 0x9600
-	pushw 0x9600
-	pushw 0x0
-	push xiz
-	call Memset
-	lda xsp, (xsp + 16)
-	lda xwa, (xsp + 4)
-	ldw (xwa + 2), 0x0
-	ldw (xwa), 0x0
-	ldw (xwa + 4), 0x13f
-	ldw (xwa + 6), 0xef
-	calr SetChangeRect
-	calr UpdateScreen
-	calr LcdOn
-	pop xiz
-	inc 8, xsp
-	ret
-
-; LcdOn - Enable LCD display output (sets flag at 0x030464)
+	.incbin "includes/generated/v7_transplant_InitializeGraphics.bin"
 LcdOn:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0

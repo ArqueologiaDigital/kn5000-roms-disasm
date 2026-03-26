@@ -32,34 +32,7 @@ AcSendEditSwProc:
 	jrl AcSendEditSw_CallInherited
 
 AcSendEditSw_EventD:
-	ld xwa, (xsp + 22)
-	call GetViewInstance
-	ld xiz, xhl
-	ld xwa, (xiz + 48)
-	ld wa, (xwa)
-	ld (xiz + 24), wa
-	ld xwa, (xsp + 22)
-	ld xbc, (xsp + 18)
-	ld xde, (xsp + 14)
-	call InheritedProc
-	ld xwa, (xiz + 44)
-	push xwa
-	lda xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xbc, (xiz + 48)
-	lda xde, (xsp + 4)
-	lda_24 xwa, (UserMemory_FormatStrings_0xCE)
-	cpw (xbc), 0xc1
-	jr nz, AcSendEditSw_DrawAlt
-	lds32 xbc, 0
-	push xbc
-	pushw 0x0
-	pushw 0xf7
-	ld xbc, NakaData_ModeConfig1
-	jr AcSendEditSw_DrawString
-
+	.incbin "includes/generated/v7_transplant_AcSendEditSw_EventD.bin"
 AcSendEditSw_DrawAlt:
 	lds32 xbc, 0
 	push xbc
@@ -185,162 +158,7 @@ ComSetGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ComSetGridCheck_JumpTable:
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	(xsp+22), xhl
-	lda	xbc, (xsp+4)
-	ld	xwa, (xsp+22)
-	srl	xwa, 0
-	ld	qwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+22)
-	ld	(xbc+2), wa
-	cpw	(xbc), 1
-	jrl	nz, 737
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	nz, 34
-	ld	wa, (xsp+6)
-	sla	wa, 2
-	lda_24	xbc, (NakaData_ModeConfig2_0x8)
-	ld_rrl	xwa, xbc, wa
-	cp	xwa, 8705
-	jrl	z, 699
-	cp	xwa, 8709
-	jrl	z, 690
-	ld	bc, (xsp+6)
-	sla	bc, 2
-	lda_24	xwa, (NakaData_ModeConfig2_0x8)
-	ld_rrl	xwa, xwa, bc
-	lds	bc, 1
-	lds	de, 2
-	jr	115
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	(xsp+22), xhl
-	lda	xbc, (xsp+4)
-	ld	xwa, (xsp+22)
-	srl	xwa, 0
-	ld	qwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+22)
-	ld	(xbc+2), wa
-	cpw	(xbc), 1
-	jrl	nz, 621
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	nz, 34
-	ld	wa, (xsp+6)
-	sla	wa, 2
-	lda_24	xbc, (NakaData_ModeConfig2_0x8)
-	ld_rrl	xwa, xbc, wa
-	cp	xwa, 8705
-	jrl	z, 583
-	cp	xwa, 8709
-	jrl	z, 574
-	ld	bc, (xsp+6)
-	sla	bc, 2
-	lda_24	xwa, (NakaData_ModeConfig2_0x8)
-	ld_rrl	xwa, xwa, bc
-	ldw	bc, 0xffff
-	lds	de, 2
-	call	MainLswAdd
-	jrl	546
-	lda	xhl, (xsp+4)
-	ldw	(xhl), 1
-	lda	xde, (xhl+2)
-	ldw	(xde), 0
-	lda_24	xix, (NakaData_ModeConfig2_0x8)
-	ld	xiz, (xsp+22)
-	jr	18
-	ld	iy, bc
-	sla	iy, 2
-	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
-	jr	z, 12
-	inc	1, bc
-	ld	(xde), bc
-	ld	bc, (xde)
-	cp	bc, 9
-	jr	lt, -26
-	lda	xde, (xsp+12)
-	ld	(xhl+4), xde
-	ld	xwa, (xsp+22)
-	ld	xwa, (xwa)
-	cp	xwa, 8709
-	jr	z, 110
-	cp	xwa, 8705
-	jr	z, 102
-	cp	xwa, 8832
-	jr	z, 49
-	cp	xwa, 8858
-	jr	z, 41
-	cp	xwa, 0x2a000
-	jr	z, 33
-	cp	xwa, 0x2a001
-	jr	z, 25
-	cp	xwa, 8834
-	jr	z, 17
-	cp	xwa, 8706
-	jr	z, 9
-	cp	xwa, 8707
-	jrl	nz, 412
-	ld	xbc, NakaInst_OFF_E80048_0x2
-	ld	xwa, (xsp+22)
-	cpw	(xwa+4), 0
-	jr	z, 5
-	ld	xbc, NakaToggle_OnOff_Data_0x4
-	push	xbc
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
-	jrl	363
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	nz, 7
-	ld	xwa, NakaInst_OFF_E80048_0x8
-	jr	44
-	ld	xwa, (xsp+22)
-	ld	wa, (xwa+4)
-	cps	wa, 3
-	jr	z, 22
-	cps	wa, 1
-	jr	z, 11
-	cps	wa, 0
-	jr	nz, 21
-	.byte 0x40
-	.long NakaInst_NORMAL
-	jr	19
-	ld	xwa, NakaInst_NORMAL_0xA
-	jr	12
-	ld	xwa, NakaInst_NORMAL_0x14
-	jr	5
-	ld	xwa, NakaInst_GM_0x8
-	push	xwa
-	lda	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
-	jrl	271
-
-; ComSetGridCheck event handler dispatch
+	.incbin "includes/generated/v7_transplant_ComSetGridCheck_JumpTable.bin"
 ComSetGrid_EventHandler:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 22)
@@ -378,47 +196,13 @@ ComSetGrid_EventHandler:
 	jrl nz, UI_ReturnZero
 
 ComSetGridCheck_ParamDisplay:
-	call SndParam_LookupReadOnly
-	lda xbc, (xsp + 12)
-	ld xwa, NakaInst_GM_0x18
-	cps hl, 0
-	jr z, ComSetGrid_CopyStrAndDispatch
-	ld xwa, NakaInst_GM_0x12
-
+	.incbin "includes/generated/v7_transplant_ComSetGridCheck_ParamDisplay.bin"
 ComSetGrid_CopyStrAndDispatch:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 4)
-	ld xbc, 0x1e0008c
-	jr ComSetGrid_SendEventReturn
-
+	.incbin "includes/generated/v7_transplant_ComSetGrid_CopyStrAndDispatch.bin"
 ComSetGrid_CheckC0Param:
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	cps hl, 1
-	jr nz, ComSetGrid_LookupByColumn
-	ld xwa, NakaInst_GM_0x1E
-	jr UI_DisplayStringAndDispatchEvent
-
+	.incbin "includes/generated/v7_transplant_ComSetGrid_CheckC0Param.bin"
 ComSetGrid_LookupByColumn:
-	ld bc, (xsp + 6)
-	sla bc, 2
-	lda_24 xwa, (NakaData_ModeConfig2_0x8)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
-	call SndParam_LookupReadOnly
-	cps hl, 3
-	jr z, ComSetGrid_ParamStr3
-	cps hl, 1
-	jr z, ComSetGrid_ParamStr1
-	cps hl, 0
-	jr nz, ComSetGrid_ParamStrDefault
-	ld xwa, NakaInst_GM_0x28
-	jr UI_DisplayStringAndDispatchEvent
-
+	.incbin "includes/generated/v7_transplant_ComSetGrid_LookupByColumn.bin"
 ComSetGrid_ParamStr1:
 	ld xwa, NakaInst_GM_0x32
 	jr UI_DisplayStringAndDispatchEvent
@@ -431,16 +215,7 @@ ComSetGrid_ParamStrDefault:
 	ld xwa, NakaInst_GM_0x46
 
 UI_DisplayStringAndDispatchEvent:
-	push xwa
-	lda xwa, (xsp + 16)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 4)
-	ld xbc, 0x1e0008c
-
+	.incbin "includes/generated/v7_transplant_UI_DisplayStringAndDispatchEvent.bin"
 ComSetGrid_SendEventReturn:
 	call SendEvent
 
@@ -753,22 +528,7 @@ AcPmemOutL_GetRowText:
 	ld xiz, 0x42
 
 AcPmemOutL_CopyText:
-	call GetViewInstance
-	add xhl, xiz
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcPmemOutL_ReturnHandled
-	ld xwa, (xsp + 16)
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	jr AcPmemOutL_CellSelect_Forward
-
+	.incbin "includes/generated/v7_transplant_AcPmemOutL_CopyText.bin"
 AcPmemOutL_CellSelect:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -1034,22 +794,7 @@ AcPmemOutR_GetRowText:
 	ld xiz, 0x42
 
 AcPmemOutR_CopyText:
-	call GetViewInstance
-	add xhl, xiz
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcPmemOutR_ReturnHandled
-	ld xwa, (xsp + 16)
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 12)
-	ld xde, (xsp + 8)
-	jr AcPmemOutR_CellSelect_Forward
-
+	.incbin "includes/generated/v7_transplant_AcPmemOutR_CopyText.bin"
 AcPmemOutR_CellSelect:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -1126,319 +871,9 @@ PmemOutLGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PmemOutLGridCheck_JumpTable:
-	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
-	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
-	.byte 0xfa, 0xbf, 0x24, 0x30, 0xeb, 0x89, 0xe9, 0xef
-	.byte 0x00, 0xd7, 0xe6, 0xa8, 0xb0, 0x51, 0xb8, 0x02
-	.byte 0x53, 0x90, 0x3f, 0x01, 0x00, 0x7e, 0xa4, 0x07
-	.byte 0xdb, 0xdb, 0x66, 0x7c, 0xdb, 0xd9, 0x66, 0x27
-	.byte 0xdb, 0xd8, 0x7e, 0x97, 0x07, 0x45, 0x0e, 0x01
-	.byte 0xe8, 0x00, 0xbf, 0x3c, 0x34, 0x31, 0x0b, 0x00
-	.byte 0x95, 0x11, 0xbf, 0x3c, 0x30, 0xf2, 0x72, 0x47
-	.byte 0x02, 0x31, 0xb0, 0x61, 0x41, 0x4f, 0x00, 0x00
-	.byte 0x00, 0xb8, 0x06, 0x61, 0x78, 0x48, 0x01, 0x45
-	.long NakaData_PartFlags
-	.byte 0xbf, 0x3c, 0x34, 0x31
-	.byte 0x0b, 0x00, 0x95, 0x11, 0xf1, 0x2c, 0xfd, 0x32
-	.byte 0xea, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xe8, 0xa8
-	.byte 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8, 0x89, 0xe9
-	.byte 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee, 0x06, 0xf2
-	.byte 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80, 0xe8, 0x89
-	.byte 0xea, 0x81, 0xbf, 0x3c, 0x30, 0xb0, 0x61, 0x41
-	.byte 0xff, 0x00, 0x00, 0x00, 0xb8, 0x06, 0x61, 0xa0
-	.byte 0x21, 0x81, 0x23, 0xcb, 0x31, 0x01, 0x22, 0x00
-	.byte 0xe9, 0x12, 0xb8, 0x0e, 0x61, 0x78, 0xcc, 0x00
-	.byte 0x45, 0x0e, 0x01, 0xe8, 0x00, 0xbf, 0x3c, 0x34
-	.byte 0x31, 0x0b, 0x00, 0x95, 0x11, 0xbf, 0x3c, 0x30
-	.byte 0xf2, 0x74, 0x47, 0x02, 0x31, 0xb0, 0x61, 0xe9
-	.byte 0xaa, 0xb8, 0x06, 0x61, 0x78, 0xd8, 0x00, 0x1d
-	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f, 0x00
-	.byte 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96, 0xfa
-	.byte 0xbf, 0x24, 0x30, 0xeb, 0x89, 0xe9, 0xef, 0x00
-	.byte 0xd7, 0xe6, 0xa8, 0xb0, 0x51, 0xb8, 0x02, 0x53
-	.byte 0x90, 0x3f, 0x01, 0x00, 0x7e, 0xdd, 0x06, 0xdb
-	.byte 0xdb, 0x76, 0x87, 0x00, 0xdb, 0xd9, 0x66, 0x2e
-	.byte 0xdb, 0xd8, 0x7e, 0xcf, 0x06, 0x45, 0x0e, 0x01
-	.byte 0xe8, 0x00, 0xbf, 0x3c, 0x34, 0x31, 0x0b, 0x00
-	.byte 0x95, 0x11, 0xbf, 0x3c, 0x30, 0xf2, 0x72, 0x47
-	.byte 0x02, 0x31, 0xb0, 0x61, 0x41, 0x4f, 0x00, 0x00
-	.byte 0x00, 0xb8, 0x06, 0x61, 0x41, 0xff, 0xff, 0xff
-	.byte 0xff, 0xb8, 0x0e
-	.ascii "ahyE"
-	ret
-	.byte 0x01, 0xe8, 0x00, 0xbf, 0x3c, 0x34, 0x31, 0x0b
-	.byte 0x00, 0x95, 0x11, 0xf1, 0x2c, 0xfd, 0x32, 0xea
-	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xe8, 0xa8, 0xc2
-	.byte 0x72, 0x47, 0x02, 0x21, 0xe8, 0x89, 0xe9, 0xee
-	.byte 0x04, 0xe8, 0xa1, 0xe9, 0xee, 0x06, 0xf2, 0x00
-	.byte 0xd4, 0x1e, 0x30, 0xe9, 0x80, 0xe8, 0x89, 0xea
-	.byte 0x81, 0xbf, 0x3c, 0x30, 0xb0, 0x61, 0x41, 0xff
-	.byte 0x00, 0x00, 0x00, 0xb8, 0x06, 0x61, 0xa0, 0x21
-	.byte 0x81, 0x23, 0xcb, 0x30, 0x01, 0x22, 0x00, 0xe9
-	.byte 0x12, 0xb8, 0x0e, 0x61, 0x1d, 0x47, 0xfe, 0xf9
-	.byte 0x78, 0x51, 0x06, 0x45, 0x0e, 0x01, 0xe8, 0x00
-	.byte 0xbf, 0x3c, 0x34, 0x31, 0x0b, 0x00, 0x95, 0x11
-	.byte 0xbf, 0x3c, 0x30, 0xf2, 0x74, 0x47, 0x02, 0x31
-	.byte 0xb0, 0x61, 0xe9, 0xaa, 0xb8, 0x06, 0x61, 0x41
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb8, 0x0e, 0x61, 0x1d
-	.byte 0x8a, 0xfe, 0xf9, 0x78, 0x26, 0x06, 0xbf, 0x04
-	.byte 0x63, 0xb1, 0x02, 0x01, 0x00, 0xbf, 0x2c, 0x30
-	.byte 0xbf, 0x0c, 0x60, 0xaf, 0x1c, 0x20, 0xaf, 0x0c
-	.byte 0x23, 0xb0, 0x63, 0xf2, 0x72, 0x47, 0x02, 0x31
-	.byte 0xbf, 0x10, 0x65, 0xaf, 0x04, 0x22, 0xba, 0x0e
-	.byte 0x30, 0xbf, 0x1c, 0x60, 0xa2, 0xf1, 0x7e, 0x12
-	.byte 0x02, 0xaf, 0x10, 0x20, 0xb0, 0x02, 0x00, 0x00
-	.byte 0xaf, 0x1c, 0x20, 0xa0, 0x22, 0xea, 0x88, 0xe8
-	.byte 0x89, 0xe9, 0xed, 0x0f, 0xe9, 0xed, 0x00, 0xe9
-	.byte 0xcc, 0x07, 0x00, 0x00, 0x00, 0xe8, 0x81, 0xe9
-	.byte 0xcc, 0xf8, 0xff, 0xff, 0xff, 0xe9, 0xa0, 0xe8
-	.byte 0x61, 0x28, 0xea, 0x89, 0xe9, 0xed, 0x0f, 0xe9
-	.byte 0xed, 0x00, 0xe9, 0xcc, 0x07, 0x00, 0x00, 0x00
-	.byte 0xea, 0x81, 0xe9, 0xed, 0x03, 0xe9, 0x61, 0x29
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x34, 0x01, 0x3b, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0c, 0x37, 0x1d, 0xd0
-	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
-	.byte 0xf1, 0x2c, 0xfd, 0x32, 0xea, 0xca, 0xa0, 0xf9
-	.byte 0x00, 0x00, 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
-	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
-	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
-	.byte 0xe9, 0x80, 0xea, 0x80, 0xb0, 0xc9, 0x66, 0x07
-	.byte 0x40, 0x3e, 0x01, 0xe8, 0x00, 0x68, 0x05, 0x40
-	.long NakaInst_OFF_E80144
-	.byte 0x38, 0xbf, 0x30, 0x30
-	.byte 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0xbf
-	.byte 0x26, 0x02, 0x01, 0x00, 0x1d, 0xd0, 0x44, 0xfa
-	.byte 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41, 0x8c, 0x00
-	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x26
-	.byte 0x02, 0x00, 0x00, 0xf1, 0xc4, 0xf9, 0x30, 0xe8
-	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20, 0x60
-	.byte 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21, 0x41
-	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8
-	.byte 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee
-	.byte 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80
-	.byte 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
-	.long Str_ol
-	.byte 0x0b, 0x4a, 0x01, 0xbf
-	.byte 0x30, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef
-	.byte 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8, 0x12, 0x28
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x50, 0x01, 0xbf, 0x32
-	.byte 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60
-	.byte 0x96, 0xfa, 0xbf, 0x26, 0x02, 0x01, 0x00, 0xf1
-	.byte 0xc5, 0xf9, 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00
-	.byte 0x00, 0xbf, 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74
-	.byte 0x47, 0x02, 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00
-	.byte 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72
-	.byte 0x47, 0x02, 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04
-	.byte 0xe8, 0xa1, 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4
-	.byte 0x1e, 0x30, 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20
-	.byte 0x80, 0x80, 0x21, 0xd8, 0x12, 0x28, 0x0b, 0xe8
-	.byte 0x00, 0x0b, 0x56, 0x01, 0xbf, 0x32, 0x30, 0x38
-	.byte 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf
-	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
-	.byte 0xbf, 0x26, 0x02, 0x02, 0x00, 0xf1, 0xc7, 0xf9
-	.byte 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf
-	.byte 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02
-	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
-	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
-	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
-	.byte 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0
-	.byte 0xcf, 0x66, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0x5c
-	.byte 0x01, 0xbf, 0x30, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8
-	.byte 0x12, 0x28, 0x0b, 0xe8, 0x00, 0x0b, 0x62, 0x01
-	.byte 0xbf, 0x32, 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09
-	.byte 0x00, 0x5b, 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01
-	.byte 0x78, 0xe5, 0x03, 0xaf, 0x14, 0x20, 0xbf, 0x14
-	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21
-	.byte 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9
-	.byte 0xee, 0x06, 0xaf, 0x18, 0x20, 0xe9, 0x80, 0xbf
-	.byte 0x18, 0x60, 0xe8, 0x89, 0xaf, 0x20, 0x81, 0xaf
-	.byte 0x04, 0x20, 0xa0, 0xf9, 0x6e, 0x39, 0xaf, 0x10
-	.byte 0x20, 0xb0, 0x02, 0x01, 0x00, 0xaf, 0x1c, 0x20
-	.byte 0xa0, 0x20, 0xd8, 0x33, 0x01, 0x66, 0x07, 0x40
-	.long NakaInst_ON_E80168
-	.byte 0x68, 0x05, 0x40, 0x6e
-	.byte 0x01, 0xe8, 0x00, 0x38, 0xaf, 0x10, 0x20, 0x38
-	.byte 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d, 0xd0
-	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x81, 0x03, 0xf2
-	.byte 0x74, 0x47, 0x02, 0x31, 0xaf, 0x04, 0x20, 0xa0
-	.byte 0xf1, 0x7e, 0x8d, 0x01, 0xaf, 0x10, 0x20, 0xb0
-	.byte 0x02, 0x03, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20
-	.byte 0xe8, 0xee, 0x02, 0xaf, 0x08, 0x21, 0xe8, 0x81
-	.byte 0xa1, 0x20, 0x38, 0xaf, 0x10, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d, 0xd0, 0x44
-	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41, 0x8c
-	.byte 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf
-	.byte 0x26, 0x02, 0x00, 0x00, 0xf1, 0xc4, 0xf9, 0x30
-	.byte 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20
-	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21
-	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21
-	.byte 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9
-	.byte 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9
-	.byte 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xbf, 0x2c
-	.byte 0x31, 0xb0, 0xcf, 0x66, 0x0f, 0x0b, 0xe8, 0x00
-	.byte 0x0b, 0x74, 0x01, 0x39, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x13, 0x80, 0x21, 0xd8, 0x12
-	.long AudioStream_Property_Table
-	.byte 0x0b, 0x7a, 0x01, 0x39
-	.byte 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf
-	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
-	.byte 0xbf, 0x26, 0x02, 0x01, 0x00, 0xf1, 0xc5, 0xf9
-	.byte 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf
-	.byte 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02
-	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
-	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
-	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
-	.byte 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0x80
-	.byte 0x21, 0xd8, 0x12, 0x28, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0x80, 0x01, 0xbf, 0x32, 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf, 0x24, 0x32
-	.byte 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41, 0x8c, 0x00
-	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x26
-	.byte 0x02, 0x02, 0x00, 0xf1, 0xc7, 0xf9, 0x30, 0xe8
-	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20, 0x60
-	.byte 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21, 0x41
-	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8
-	.byte 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee
-	.byte 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80
-	.byte 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
-	.long Str_ol
-	.byte 0x0b, 0x86, 0x01, 0xbf
-	.byte 0x30, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef
-	.byte 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8, 0x12, 0x28
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x8c, 0x01, 0xbf, 0x32
-	.byte 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xe7
-	.byte 0x01, 0xf1, 0xb6, 0xf9, 0x30, 0xbf, 0x20, 0x60
-	.byte 0xb8, 0x0e, 0x30, 0xaf, 0x14, 0xa0, 0xbf, 0x08
-	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21
-	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xaf, 0x18, 0x21, 0xeb, 0x81, 0xe9, 0x8a
-	.byte 0xaf, 0x08, 0x82, 0xaf, 0x04, 0x20, 0xa0, 0xfa
-	.byte 0x6e, 0x45, 0xaf, 0x10, 0x20, 0xb0, 0x02, 0x00
-	.byte 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0xd8, 0x33
-	.byte 0x07, 0x66, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0x92
-	.byte 0x01, 0xaf, 0x10, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x12, 0x38, 0x0b, 0xe8
-	.byte 0x00, 0x0b, 0x98, 0x01, 0xaf, 0x14, 0x20, 0x38
-	.byte 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0c, 0x37, 0xbf
-	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x71, 0x01, 0xaf
-	.byte 0x20, 0x20, 0xb8, 0x0f, 0x30, 0xaf, 0x14, 0xa0
-	.byte 0xe9, 0x8a, 0xe8, 0x82, 0xaf, 0x04, 0x20, 0xa0
-	.byte 0xfa, 0x6e, 0x2e, 0xaf, 0x10, 0x20, 0xb0, 0x02
-	.byte 0x01, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0x38
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x9e, 0x01, 0xaf, 0x14
-	.byte 0x20, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0c
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x2f
-	.byte 0x01, 0xaf, 0x20, 0x20, 0xb8, 0x11, 0x30, 0xaf
-	.byte 0x14, 0xa0, 0xe8, 0x81, 0xaf, 0x04, 0x20, 0xa0
-	.byte 0xf9, 0x7e, 0x20, 0x01, 0xaf, 0x10, 0x20, 0xb0
-	.byte 0x02, 0x02, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20
-	.byte 0xd8, 0x33, 0x07, 0x66, 0x12, 0x0b, 0xe8, 0x00
-	.byte 0x0b, 0xa4, 0x01, 0xaf, 0x10, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x12, 0x38
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xaa, 0x01, 0xaf, 0x14
-	.byte 0x20, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0c
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xd7
-	nop
-
-; PmemOutLGridCheck dispatch
+	.incbin "includes/generated/v7_transplant_PmemOutLGridCheck_JumpTable.bin"
 PmemOutL_GridCheck:
-	ld xwa, xhl
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xbc), wa
-	ld xix, xiy
-	ld (xiy), hl
-	lda xwa, (xsp + 44)
-	ld (xsp + 20), xwa
-	ld xwa, (xsp + 28)
-	ld xde, (xsp + 20)
-	ld (xwa), xde
-	cpw (xbc), 0x1
-	jrl nz, PmemOutGrid_ReturnZero
-	ld wa, (xix)
-	cps wa, 3
-	jrl z, PmemOutL_ColumnParamDisplay
-	cps wa, 1
-	jr z, PmemOutL_BitCheckDisplay
-	cps wa, 0
-	jrl nz, PmemOutGrid_ReturnZero
-	ldb_da c, (0x024772)
-	ld a, c
-	and a, 0x7
-	inc 1, a
-	extz wa
-	pushw wa
-	srl c, 3
-	inc 1, c
-	extz bc
-	pushw bc
-	pushw 0xe8
-	pushw 0x1b0
-	push xde
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 36)
-	ld xbc, 0x1e0008c
-	jr PmemOutL_GridCheck_Return
-
+	.incbin "includes/generated/v7_transplant_PmemOutL_GridCheck.bin"
 PmemOutL_BitCheckDisplay:
 	lds32 xwa, 0
 	ldb_da a, (0x024772)
@@ -1458,34 +893,9 @@ PmemOutL_LoadOffStr:
 	ld xwa, NakaInst_ON_E80168_0x58
 
 PmemOutL_StrCopyAndDispatch:
-	push xwa
-	ld xwa, (xsp + 24)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 36)
-	ld xbc, 0x1e0008c
-	jr PmemOutL_GridCheck_Return
-
+	.incbin "includes/generated/v7_transplant_PmemOutL_StrCopyAndDispatch.bin"
 PmemOutL_ColumnParamDisplay:
-	ldb_da c, (0x024774)
-	extz bc
-	sla bc, 2
-	ld xwa, (xsp + 8)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
-	push xwa
-	ld xwa, (xsp + 24)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 36)
-	ld xbc, 0x1e0008c
-
-; PmemOutLGridCheck return
+	.incbin "includes/generated/v7_transplant_PmemOutL_ColumnParamDisplay.bin"
 PmemOutL_GridCheck_Return:
 	call SendEvent
 
@@ -1542,709 +952,11 @@ PmemOutRGridCheck:
 ; -----------------------------------------------------------------------------
 
 TtMdCtlMsg_EventDispatch:
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	xiz, xhl
-	lda	xwa, (xsp+32)
-	ld	xbc, xiz
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xwa), bc
-	ld	bc, iz
-	ld	(xwa+2), bc
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
-	jrl	nz, 2053
-	cps	bc, 2
-	jrl	z, 205
-	cps	bc, 1
-	jr	z, 112
-	cps	bc, 0
-	jrl	nz, 2039
-	ld	xiy, NakaInst_ON_E80168_0x6C
-	lda	xix, (xsp+56)
-	ldw	bc, 11
-	.byte 0x95
-	scf
-	lda_d16	xwa, (0xf9c4)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
-	lda	xwa, (xsp+56)
-	ld	(xwa), xbc
-	ld	xbc, 127
-	ld	(xwa+6), xbc
-	ld	xbc, (xwa)
-	.byte 0xb1
-	inc	6, l
-	incf
-	lds32	xbc, 0
-	ld	(xwa+14), xbc
-	call	MainRamPut
-	jrl	1935
-	jrl	598
-	ld	xiy, NakaInst_ON_E80168_0x6C
-	lda	xix, (xsp+56)
-	ldw	bc, 11
-	.byte 0x95
-	scf
-	lda_d16	xwa, (0xf9c5)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
-	lda	xwa, (xsp+56)
-	ld	(xwa), xbc
-	ld	xbc, 255
-	ld	(xwa+6), xbc
-	jrl	509
-	ld	xiy, NakaInst_ON_E80168_0x6C
-	lda	xix, (xsp+56)
-	ldw	bc, 11
-	.byte 0x95
-	scf
-	lda_d16	xwa, (0xf9c7)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
-	lda	xwa, (xsp+56)
-	ld	(xwa), xbc
-	ld	xbc, 127
-	ld	(xwa+6), xbc
-	ld	xbc, (xwa)
-	.byte 0xb1
-	inc	6, l
-	incf
-	lds32	xbc, 0
-	ld	(xwa+14), xbc
-	call	MainRamPut
-	jrl	1739
-	jrl	402
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	xiz, xhl
-	lda	xwa, (xsp+32)
-	.byte 0xee
-	.long OscScope_FinalizeRender
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xwa), bc
-	ld	bc, iz
-	ld	(xwa+2), bc
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
-	jrl	nz, 1692
-	cps	bc, 2
-	jrl	z, 229
-	cps	bc, 1
-	jrl	z, 128
-	cps	bc, 0
-	jrl	nz, 1677
-	ld	xiy, NakaInst_ON_E80168_0x6C
-	lda	xix, (xsp+56)
-	ldw	bc, 11
-	.byte 0x95
-	scf
-	lda_d16	xwa, (0xf9c4)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
-	lda	xwa, (xsp+56)
-	ld	(xwa), xbc
-	ld	xbc, 127
-	ld	(xwa+6), xbc
-	ld	xbc, (xwa)
-	.byte 0xb1
-	scc8	nz, l
-	ldw	wa, 0xa006
-	ldb	a, 184
-	ret
-	ldw	de, 0x3f81
-	nop
-	jr	nz, 10
-	ld	xbc, 128
-	ld	(xde), xbc
-	jrl	216
-	ld	xbc, 0xffffffff
-	ld	(xde), xbc
-	jrl	220
-	.byte 0x45
-	.long NakaInst_ON_E80168_0x6C
-	lda	xix, (xsp+56)
-	ldw	bc, 11
-	.byte 0x95
-	scf
-	lda_d16	xwa, (0xf9c5)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
-	lda	xwa, (xsp+56)
-	ld	(xwa), xbc
-	ld	xbc, 255
-	ld	(xwa+6), xbc
-	ld	xbc, 0xffffffff
-	.byte 0xb8
-	ret
-	.ascii "ah|E"
-	.long NakaInst_ON_E80168_0x6C
-	lda	xix, (xsp+56)
-	ldw	bc, 11
-	.byte 0x95
-	scf
-	lda_d16	xwa, (0xf9c7)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
-	lda	xwa, (xsp+56)
-	ld	(xwa), xbc
-	ld	xbc, 127
-	ld	(xwa+6), xbc
-	ld	xbc, (xwa)
-	.byte 0xb1
-	scc8	nz, l
-	.byte 0x55
-	halt
-	ld	xbc, (xwa)
-	lda	xde, (xwa+14)
-	.byte 0x81
-	push	xsp
-	nop
-	jr	nz, 14
-	ld	xbc, 128
-	ld	(xde), xbc
-	call	MainRamPut
-	jrl	1341
-	ld	xbc, 0xffffffff
-	ld	(xde), xbc
-	call	MainRamAdd
-	jrl	1327
-	ld	(xsp+4), xiz
-	.byte 0xb1
-	push	sr
-	.byte 0x01
-	nop
-	lda	xbc, (xsp+40)
-	ld	(xsp+12), xbc
-	ld	xwa, (xsp+24)
-	ld	(xwa), xbc
-	lda_24	xwa, (0x24772)
-	ld	(xsp+24), xiy
-	lda_d16	xbc, (0xf9a0)
-	.byte 0xa6, 0xf0
-	jrl	nz, 345
-	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	nop
-	nop
-	ld	xwa, (xsp+28)
-	sub	xwa, xbc
-	ld	xiz, xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	ld	xwa, (xsp+16)
-	add	xwa, xbc
-	add	xwa, xhl
-	add	xwa, xiz
-	.byte 0xb0
-	inc	6, l
-	.long Str_ol
-	pushw	506
-	ld	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	22
-	ld	a, (xwa)
-	extz	wa
-	pushw	wa
-	pushw	232
-	pushw	512
-	ld	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	call	SendEvent
-	.byte 0xbf
-	ldb	b, 2
-	.byte 0x01
-	nop
-	lda_d16	xwa, (0xf9c5)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
-	ld	a, (xwa)
-	extz	wa
-	pushw	wa
-	pushw	232
-	pushw	518
-	lda	xwa, (xsp+46)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	call	SendEvent
-	.byte 0xbf
-	ldb	b, 2
-	push	sr
-	nop
-	lda_d16	xwa, (0xf9c7)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0
-	inc	6, l
-	ccf
-	pushw	232
-	pushw	524
-	lda	xwa, (xsp+44)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	22
-	ld	a, (xwa)
-	extz	wa
-	pushw	wa
-	pushw	232
-	pushw	530
-	lda	xwa, (xsp+46)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	jrl	943
-	lda_24	xde, (0x24774)
-	ld	xwa, (xsp+28)
-	sub	xwa, xbc
-	ld	(xsp+28), xwa
-	.byte 0xa6, 0xf2
-	jrl	nz, 336
-	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	nop
-	nop
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	ld	xwa, (xsp+16)
-	add	xwa, xbc
-	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0
-	inc	6, l
-	ccf
-	pushw	232
-	pushw	536
-	ld	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	22
-	ld	a, (xwa)
-	extz	wa
-	pushw	wa
-	pushw	232
-	pushw	542
-	ld	xwa, (xsp+18)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	call	SendEvent
-	.byte 0xbf
-	ldb	b, 2
-	.byte 0x01
-	nop
-	lda_d16	xwa, (0xf9c5)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
-	ld	a, (xwa)
-	extz	wa
-	pushw	wa
-	pushw	232
-	pushw	548
-	lda	xwa, (xsp+46)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	call	SendEvent
-	.byte 0xbf
-	ldb	b, 2
-	push	sr
-	nop
-	lda_d16	xwa, (0xf9c7)
-	sub	xwa, 0xf9a0
-	ld	(xsp+28), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xwa, 0
-	ldb_da	a, (0x24772)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
-	add	xwa, xbc
-	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
-	lda	xbc, (xsp+40)
-	.byte 0xb0
-	inc	6, l
-	retd	0xe80b
-	nop
-	pushw	554
-	push	xbc
-	call	Strcpy
-	inc	8, xsp
-	jr	19
-	ld	a, (xwa)
-	extz	wa
-	.long AudioStream_Property_Table
-	pushw	560
-	push	xbc
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	jrl	589
-	ld	(xsp+8), xbc
-	ld	xwa, (xsp+20)
-	ld	(xsp+20), xwa
-	lds32	xwa, 0
-	ldb_da	a, (0x24774)
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	lds32	xbc, 0
-	ldb_da	c, (0x24772)
-	ld	xwa, xbc
-	sll	xwa, 4
-	sub	xwa, xbc
-	sll	xwa, 6
-	ld	xbc, (xsp+16)
-	add	xbc, xwa
-	add	xbc, xhl
-	ld	xwa, xbc
-	.byte 0xaf, 0x1c, 0x80
-	cp	(xiz), xwa
-	jr	nz, 68
-	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	nop
-	nop
-	ld	xwa, (xiz+14)
-	bit	7, wa
-	.byte 0x66
-	.long Str_ol
-	pushw	566
-	ld	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	18
-	push	xwa
-	pushw	232
-	pushw	572
-	ld	xwa, (xsp+20)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	jrl	463
-	ld	xwa, (xsp+20)
-	lda	xwa, (xwa+15)
-	.byte 0xaf
-	ldio	160, 233
-	.byte 0x8b
-	add	xhl, xwa
-	ld	xwa, (xsp+4)
-	lda	xde, (xwa+14)
-	cp	(xwa), xhl
-	jr	nz, 44
-	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
-	ld	xwa, (xde)
-	push	xwa
-	pushw	232
-	pushw	578
-	ld	xwa, (xsp+20)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	jrl	396
-	ld	xwa, (xsp+20)
-	lda	xwa, (xwa+17)
-	.byte 0xaf
-	ldio	160, 232
-	sub	(xbc), l
-	.byte 0x04
-	ldb	w, 160
-	swi	1
-	jrl	nz, 381
-	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	push	sr
-	nop
-	ld	xwa, (xde)
-	bit	7, wa
-	jr	z, 18
-	pushw	232
-	pushw	584
-	ld	xwa, (xsp+16)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	18
-	push	xwa
-	pushw	232
-	pushw	590
-	ld	xwa, (xsp+20)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+32)
-	ld	xbc, 0x1e0008c
-	jrl	310
-
-; CtlMsgGridCheck event handler dispatch
+	.incbin "includes/generated/v7_transplant_TtMdCtlMsg_EventDispatch.bin"
 CtlMsgGrid_EventHandler:
-	ld xwa, xiz
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xbc), wa
-	ld xhl, xiy
-	ld wa, iz
-	ld (xiy), wa
-	lda xde, (xsp + 40)
-	ld (xsp + 12), xde
-	ld xwa, (xsp + 24)
-	ld (xwa), xde
-	cpw (xbc), 0x1
-	jrl nz, TtMdCtlMsg_ReturnZero2
-	ld iz, (xhl)
-	lds32 xwa, 0
-	ldb_da a, (0x024774)
-	ld xbc, 0x1a
-	call Math_MultiplyAccumulate
-	cps iz, 2
-	jrl z, CtlMsg_ComputeAndCheck
-	lds32 xbc, 0
-	ldb_da c, (0x024772)
-	ld xwa, xbc
-	sll xwa, 4
-	sub xwa, xbc
-	sll xwa, 6
-	ld xbc, (xsp + 16)
-	add xbc, xwa
-	add xbc, xhl
-	cps iz, 1
-	jr z, CtlMsg_ReadOffsetAndSend
-	cps iz, 0
-	jrl nz, TtMdCtlMsg_ReturnZero2
-	ld xwa, (xsp + 28)
-	sub xwa, 0xf9a0
-	add xbc, xwa
-	bitm 7, (xbc)
-	jr z, CtlMsg_SendAudioCommand
-	pushw 0xe8
-	pushw 0x254
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr CtlMsg_GetFocusAndDispatch
-
+	.incbin "includes/generated/v7_transplant_CtlMsgGrid_EventHandler.bin"
 CtlMsg_SendAudioCommand:
-	ld a, (xbc)
-	extz wa
-	pushw wa
-	pushw 0xe8
-	pushw 0x25a
-	ld xwa, (xsp + 18)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_CtlMsg_SendAudioCommand.bin"
 CtlMsg_GetFocusAndDispatch:
 	call GetFocusObject
 	ld xwa, xhl
@@ -2253,60 +965,11 @@ CtlMsg_GetFocusAndDispatch:
 	jrl CtlMsg_SendEventReturn
 
 CtlMsg_ReadOffsetAndSend:
-	ld xwa, (xsp + 20)
-	lda xwa, (xwa + 15)
-	sub xwa, 0xf9a0
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	pushw wa
-	pushw 0xe8
-	pushw 0x260
-	ld xwa, (xsp + 18)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 32)
-	ld xbc, 0x1e0008c
-	jr CtlMsg_SendEventReturn
-
+	.incbin "includes/generated/v7_transplant_CtlMsg_ReadOffsetAndSend.bin"
 CtlMsg_ComputeAndCheck:
-	ld xwa, (xsp + 20)
-	lda xbc, (xwa + 17)
-	sub xbc, 0xf9a0
-	lds32 xwa, 0
-	ldb_da a, (0x024772)
-	ld xde, xwa
-	sll xde, 4
-	sub xde, xwa
-	sll xde, 6
-	ld xwa, (xsp + 16)
-	add xwa, xde
-	add xwa, xhl
-	add xwa, xbc
-	bitm 7, (xwa)
-	jr z, CtlMsg_SendParamValue
-	pushw 0xe8
-	pushw 0x266
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr CtlMsg_DispatchFocusEvent
-
+	.incbin "includes/generated/v7_transplant_CtlMsg_ComputeAndCheck.bin"
 CtlMsg_SendParamValue:
-	ld a, (xwa)
-	extz wa
-	pushw wa
-	pushw 0xe8
-	pushw 0x26c
-	ld xwa, (xsp + 18)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_CtlMsg_SendParamValue.bin"
 CtlMsg_DispatchFocusEvent:
 	call GetFocusObject
 	ld xwa, xhl
@@ -2424,37 +1087,7 @@ AcCtlMsgGrid_Init:
 	jrl AcCtlMsgGrid_ScrollCommit
 
 AcCtlMsgGrid_Show:
-	ld xwa, (xsp + 32)
-	ld xbc, (xsp + 28)
-	ld xde, (xsp + 24)
-	call InheritedProc
-	ld xwa, (xsp + 32)
-	call GetViewInstance
-	ld xiz, xhl
-	ld xwa, MidiPart_PageDisplay_Data
-	ldw bc, 0xc1
-	ldw de, 0xf3
-	call DrawDesignBox
-	ld xwa, (xiz + 74)
-	ld wa, (xwa)
-	sla wa, 2
-	lda_24 xbc, (MidiPart_PageDisplay_Data_0xC)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xde, (xsp + 8)
-	lds32 xwa, 0
-	push xwa
-	pushw 0x0
-	pushw 0xf7
-	ld xwa, MidiPart_PageDisplay_Data
-	ld xbc, MidiPart_PageDisplay_Data_0x8
-	call DrawStringCentered
-	jrl AcCtlMsgGrid_ReturnHandled
-
+	.incbin "includes/generated/v7_transplant_AcCtlMsgGrid_Show.bin"
 AcCtlMsgGrid_OK:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
@@ -2738,18 +1371,7 @@ AcCtlMsgGrid_GetRowText_Push:
 	push xwa
 
 AcCtlMsgGrid_GetRowText_Strcpy:
-	ld xwa, (xsp + 28)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr AcCtlMsgGrid_ReturnHandled
-	ld xwa, (xsp + 32)
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 28)
-	ld xde, (xsp + 24)
-	jr AcCtlMsgGrid_ForwardToParent
-
+	.incbin "includes/generated/v7_transplant_AcCtlMsgGrid_GetRowText_Strcpy.bin"
 AcCtlMsgGrid_CellSelect:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
@@ -2808,145 +1430,11 @@ CtlMsgGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CtlMsgGridCheck_JumpTable:
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	(xsp+30), xhl
-	lda	xbc, (xsp+12)
-	ld	xwa, (xsp+30)
-	srl	xwa, 0
-	ld	qwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+30)
-	ld	(xbc+2), wa
-	cpw	(xbc), 1
-	jrl	nz, 357
-	ld	bc, wa
-	sla	bc, 2
-	ldb_da	a, (0x24776)
-	extz	wa
-	muls	wa, 36
-	ld	de, wa
-	add	de, bc
-	lda_24	xwa, (NakaInst_ON_E80168_0x21E)
-	ld_rrl	xwa, xwa, de
-	lds	bc, 1
-	lds	de, 2
-	jr	82
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	(xsp+30), xhl
-	lda	xbc, (xsp+12)
-	ld	xwa, (xsp+30)
-	srl	xwa, 0
-	ld	qwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+30)
-	ld	(xbc+2), wa
-	cpw	(xbc), 1
-	jrl	nz, 274
-	ld	bc, wa
-	sla	bc, 2
-	ldb_da	a, (0x24776)
-	extz	wa
-	muls	wa, 36
-	ld	de, wa
-	add	de, bc
-	lda_24	xwa, (NakaInst_ON_E80168_0x21E)
-	ld_rrl	xwa, xwa, de
-	ldw	bc, 0xffff
-	lds	de, 2
-	.byte 0x1d, 0x42, 0xf9
-	.long Bitmap_AccompBitmapSpacer
-	ld	(xsp+4), xhl
-	ldw	(xhl), 1
-	ld	xde, xbc
-	ldw	(xbc), 0
-	ldb_da	a, (0x24776)
-	extz	wa
-	muls	wa, 36
-	ld	ix, wa
-	ld	xhl, (xsp+8)
-	ld	xiz, (xsp+30)
-	jr	75
-	ld	wa, bc
-	sla	wa, 2
-	ld	iy, ix
-	add	iy, wa
-	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xec, 0xf4, 0xf0
-	jr	nz, 53
-	lda	xde, (xsp+20)
-	ld	xwa, (xsp+4)
-	ld	(xwa+4), xde
-	ld	xbc, NakaInst_ON_E80168_0x276
-	ld	xwa, (xsp+30)
-	cpw	(xwa+4), 0
-	jr	z, 5
-	ld	xbc, NakaInst_ON_E80168_0x270
-	push	xbc
-	push	xde
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x1e0008c
-	jr	123
-	inc	1, bc
-	ld	(xde), bc
-	ld	bc, (xde)
-	cp	bc, 9
-	jr	lt, -83
-	jr	113
-
-; MidiSetup title dispatch
+	.incbin "includes/generated/v7_transplant_CtlMsgGridCheck_JumpTable.bin"
 MidiSetup_TtlDispatch:
-	ld xwa, (xsp + 30)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xhl), wa
-	ld xde, xbc
-	ld xwa, (xsp + 30)
-	ld (xbc), wa
-	lda xwa, (xsp + 20)
-	ld (xhl + 4), xwa
-	cpw (xhl), 0x1
-	jr nz, CtlMsgGrid_ReturnZero
-	ld de, (xde)
-	sla de, 2
-	ldb_da a, (0x024776)
-	extz wa
-	muls wa, 0x24
-	ld bc, wa
-	add bc, de
-	ld xwa, (xsp + 8)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
-	cp xwa, 0xffffffff
-	jr z, CtlMsgGrid_ReturnZero
-	call SndParam_LookupReadOnly
-	lda xbc, (xsp + 20)
-	ld xwa, NakaInst_ON_E80168_0x282
-	cps hl, 0
-	jr z, MidiSetup_CopyStrAndDispatch
-	ld xwa, NakaInst_ON_E80168_0x27C
-
+	.incbin "includes/generated/v7_transplant_MidiSetup_TtlDispatch.bin"
 MidiSetup_CopyStrAndDispatch:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 12)
-	ld xbc, 0x1e0008c
-	call SendEvent
-
+	.incbin "includes/generated/v7_transplant_MidiSetup_CopyStrAndDispatch.bin"
 CtlMsgGrid_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -3073,38 +1561,7 @@ MidiSetup_TtlCase3:
 
 ; MidiSetup title case 4
 MidiSetup_TtlCase4:
-	ld xwa, (xsp + 32)
-	ld xbc, (xsp + 28)
-	ld xde, (xsp + 24)
-	call InheritedProc
-	ld xwa, (xsp + 32)
-	call GetViewInstance
-	ld xiz, xhl
-	ld xwa, MidiPart_PageDisplay_Data
-	ldw bc, 0xc1
-	ldw de, 0xf3
-	call DrawDesignBox
-	ld xwa, (xiz + 74)
-	ld wa, (xwa)
-	sla wa, 2
-	lda_24 xbc, (MidiPart_PageStr_1of2_0xA)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	lda xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xde, (xsp + 8)
-	lds32 xwa, 0
-	push xwa
-	pushw 0x0
-	pushw 0xf7
-	ld xwa, MidiPart_PageDisplay_Data
-	ld xbc, MidiPart_PageDisplay_Data_0x8
-	call DrawStringCentered
-	jrl MidiPart_ReturnZeroJmp
-
-; MidiSetup title case 5
+	.incbin "includes/generated/v7_transplant_MidiSetup_TtlCase4.bin"
 MidiSetup_TtlCase5:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
@@ -3527,19 +1984,7 @@ MidiSetup_PushGridStr:
 	push xwa
 
 MidiSetup_CopyStrAndReturn:
-	ld xwa, (xsp + 28)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr MidiPart_ReturnZeroJmp
-	ld xwa, (xsp + 32)
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 28)
-	ld xde, (xsp + 24)
-	jr MidiSetup_GridBoxCase3
-
-; MidiSetup grid box case 2
+	.incbin "includes/generated/v7_transplant_MidiSetup_CopyStrAndReturn.bin"
 MidiSetup_GridBoxCase2:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
@@ -3602,176 +2047,11 @@ MidiPartGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MidiPartGridCheck_JumpTable:
-	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
-	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
-	.byte 0xfa, 0xbf, 0x22, 0x63, 0xbf, 0x10, 0x31, 0xaf
-	.byte 0x22, 0x20, 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8
-	.byte 0xb1, 0x50, 0xaf, 0x22, 0x20, 0xb9, 0x02, 0x50
-	.byte 0xd8, 0x09, 0x0c, 0x00, 0xd8, 0x8a, 0xda, 0xca
-	.byte 0x18, 0x00, 0xc2, 0x78, 0x47, 0x02, 0x21, 0xd8
-	.byte 0x12, 0xd8, 0x09, 0x60, 0x00, 0xd8, 0x8b, 0xda
-	.byte 0x83, 0x91, 0x20, 0xd8, 0xec, 0x02, 0xd8, 0x6c
-	.byte 0xd8, 0x8a, 0xdb, 0x82, 0xf2, 0x20, 0x05, 0xe8
-	.byte 0x30, 0xe3, 0x07, 0xe0, 0xe8, 0x20, 0xbf, 0x0c
-	.byte 0x60, 0x91, 0x20, 0xd8, 0xdb, 0x66, 0x7b, 0xd8
-	.byte 0xda, 0x66, 0x55, 0xd8, 0xd9, 0x7e, 0x06, 0x04
-	.byte 0xaf, 0x0c, 0x20, 0xe8, 0x61, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd8, 0x6e, 0x24, 0xaf, 0x0c, 0x20
-	.byte 0xe8, 0x61, 0xd9, 0xa9, 0xda, 0xaa, 0x1d, 0x8a
-	.byte 0xf8, 0xf9, 0xaf, 0x0c, 0x20, 0xe8, 0x62, 0xd9
-	.byte 0xa9, 0xda, 0xaa, 0x1d, 0x8a, 0xf8, 0xf9, 0xaf
-	.byte 0x0c, 0x20, 0xd9, 0xa8, 0xda, 0xaa, 0x78, 0x30
-	.byte 0x01, 0xaf, 0x26, 0x20, 0xe8, 0xcf, 0x19, 0x00
-	.byte 0xc0, 0x01, 0x6e, 0x0a, 0xaf, 0x0c, 0x20, 0xd9
-	.byte 0xac, 0xda, 0xaa, 0x78, 0xec, 0x00, 0xaf, 0x0c
-	.byte 0x20, 0xd9, 0xa9, 0xda, 0xaa, 0x78, 0xe2, 0x00
-	.byte 0xaf, 0x0c, 0x20, 0x1d, 0x37, 0xd4, 0xfc, 0xdb
-	.byte 0x88, 0xd8, 0x80, 0xf2, 0x40, 0x06, 0xe8, 0x31
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x21, 0xdb, 0xf1, 0x76
-	.byte 0x9c, 0x03, 0xaf, 0x0c, 0x20, 0xda, 0xaa, 0x78
-	.byte 0xef, 0x00, 0xaf, 0x0c, 0x20, 0xd9, 0xa9, 0xda
-	.long NakaInst_MidiPresetConfig
-	.byte 0x1d, 0xd0, 0x44, 0xfa
-	.byte 0xeb, 0x88, 0x41, 0x8f, 0x00, 0xe0, 0x01, 0xea
-	.byte 0xa8, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x22, 0x63
-	.byte 0xbf, 0x10, 0x31, 0xaf, 0x22, 0x20, 0xe8, 0xef
-	.byte 0x00, 0xd7, 0xe2, 0xa8, 0xb1, 0x50, 0xaf, 0x22
-	.byte 0x20, 0xb9, 0x02, 0x50, 0xd8, 0x09, 0x0c, 0x00
-	.byte 0xd8, 0x8a, 0xda, 0xca, 0x18, 0x00, 0xc2, 0x78
-	.byte 0x47, 0x02, 0x21, 0xd8, 0x12, 0xd8, 0x09, 0x60
-	.byte 0x00, 0xd8, 0x8b, 0xda, 0x83, 0x91, 0x20, 0xd8
-	.byte 0xec, 0x02, 0xd8, 0x6c, 0xd8, 0x8a, 0xdb, 0x82
-	.byte 0xf2, 0x20, 0x05, 0xe8, 0x30, 0xe3, 0x07, 0xe0
-	.byte 0xe8, 0x20, 0xbf, 0x0c, 0x60, 0x91, 0x20, 0xd8
-	.byte 0xdb, 0x66, 0x7f, 0xd8, 0xda, 0x66, 0x5a, 0xd8
-	.byte 0xd9, 0x7e, 0x22, 0x03, 0xaf, 0x0c, 0x20, 0xe8
-	.byte 0x61, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd9, 0x7e
-	.byte 0x14, 0x03, 0xaf, 0x0c, 0x20, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd8, 0x6e, 0x18, 0xaf, 0x0c, 0x20
-	.byte 0xe8, 0x61, 0xd9, 0xa8, 0xda, 0xaa, 0x1d, 0x8a
-	.byte 0xf8, 0xf9, 0xaf, 0x0c, 0x20, 0xe8, 0x62, 0xd9
-	.byte 0xa8, 0xda, 0xaa, 0x68, 0x4c, 0xaf, 0x26, 0x20
-	.byte 0xe8, 0xcf, 0x1a, 0x00, 0xc0, 0x01, 0x6e, 0x0a
-	.byte 0xaf, 0x0c, 0x20, 0x31, 0xfc, 0xff, 0xda, 0xaa
-	.byte 0x68, 0x08, 0xaf, 0x0c, 0x20, 0x31, 0xff, 0xff
-	.byte 0xda, 0xaa, 0x1d, 0x42, 0xf9, 0xf9, 0x78, 0xcd
-	.byte 0x02, 0xaf, 0x0c, 0x20, 0x1d, 0x37, 0xd4, 0xfc
-	.byte 0xdb, 0x88, 0xd8, 0x80, 0xf2, 0x50, 0x06, 0xe8
-	.byte 0x31, 0xd3, 0x07, 0xe4, 0xe0, 0x21, 0xdb, 0xf1
-	.byte 0x76, 0xb3, 0x02, 0xaf, 0x0c, 0x20, 0xda, 0xaa
-	.byte 0x68, 0x07, 0xaf, 0x0c, 0x20, 0xd9, 0xa8, 0xda
-	.byte 0xaa, 0x1d, 0x8a, 0xf8, 0xf9, 0x78, 0x9e, 0x02
-	.byte 0xaf, 0x22, 0x24, 0xbf, 0x04, 0x65, 0xbf, 0x08
-	.byte 0x63, 0xb2, 0x63, 0xbf, 0x0c, 0x61, 0xb1, 0x02
-	.byte 0x02, 0x00, 0x78, 0x58, 0x01, 0xd9, 0x8a, 0xda
-	.byte 0x09, 0x0c, 0x00, 0xda, 0xca, 0x18, 0x00, 0xc2
-	.byte 0x78, 0x47, 0x02, 0x21, 0xd8, 0x12, 0xd8, 0x09
-	.byte 0x60, 0x00, 0xd8, 0x8d, 0xda, 0x85, 0xf2, 0x20
-	.byte 0x05, 0xe8, 0x33, 0xe3, 0x07, 0xec, 0xf4, 0x26
-	.byte 0xaf, 0x22, 0x22, 0xa2, 0xfe, 0x6e, 0x50, 0xaf
-	.byte 0x04, 0x20, 0xb0, 0x02, 0x01, 0x00, 0xa2, 0x20
-	.byte 0xe8, 0x61, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd8
-	.byte 0x6e, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0xba, 0x06
-	.byte 0xbf, 0x1c, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x1a, 0xaf, 0x22, 0x20, 0x98
-	.byte 0x04, 0x20, 0xd8, 0x61, 0x28, 0x0b, 0xe8, 0x00
-	.byte 0x0b, 0xc0, 0x06, 0xbf, 0x1e, 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0x1d, 0xd0
-	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x0b, 0x02, 0xa4
-	.byte 0x20, 0xe8, 0x69, 0xbc, 0x04, 0x32, 0xee, 0xf0
-	.byte 0x6e, 0x4f, 0xaf, 0x04, 0x20, 0xb0, 0x02, 0x01
-	.byte 0x00, 0x92, 0x3f, 0x00, 0x00, 0x6e, 0x12, 0x0b
-	.byte 0xe8, 0x00, 0x0b, 0xc8, 0x06, 0xaf, 0x0c, 0x20
-	.byte 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68
-	.byte 0x1f, 0xaf, 0x22, 0x20, 0xa0, 0x20, 0xe8, 0x69
-	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x61, 0x2b, 0x0b
-	.byte 0xe8, 0x00, 0x0b, 0xce, 0x06, 0xbf, 0x1e, 0x30
-	.byte 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37
-	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10
-	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xb1
-	.byte 0x01, 0xdd, 0x8e, 0xde, 0x64, 0xa4, 0x20, 0xe3
-	.byte 0x07, 0xec, 0xf8, 0xf0, 0x6e, 0x32, 0xaf, 0x04
-	.byte 0x20, 0xb0, 0x02, 0x02, 0x00, 0x92, 0x20, 0xd8
-	.byte 0xec, 0x02, 0xf2, 0x60, 0x06, 0xe8, 0x31, 0xe3
-	.byte 0x07, 0xe4, 0xe0, 0x20, 0x38, 0xaf, 0x0c, 0x20
-	.byte 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d
-	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32
-	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x72, 0x01
-	.byte 0xdd, 0x60, 0xa4, 0x20, 0xe3, 0x07, 0xec, 0xf4
-	.byte 0xf0, 0x6e, 0x33, 0xaf, 0x04, 0x20, 0xb0, 0x02
-	.byte 0x03, 0x00, 0x40, 0xdc, 0x06, 0xe8, 0x00, 0x92
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x05, 0x40, 0xd6, 0x06
-	.byte 0xe8, 0x00, 0x38, 0xaf, 0x0c, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d, 0xd0, 0x44
-	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41, 0x8c
-	.byte 0x00, 0xe0, 0x01, 0x78, 0x34, 0x01, 0xd9, 0x61
-	.byte 0xaf, 0x0c, 0x20, 0xb0, 0x51, 0xaf, 0x0c, 0x20
-	.byte 0x90, 0x21, 0xd9, 0xcf, 0x0a, 0x00, 0x71, 0x9c
-	.byte 0xfe, 0x78, 0x22, 0x01
-
-; MidiSetup event handler dispatch (6-entry, table 0xe806fc)
+	.incbin "includes/generated/v7_transplant_MidiPartGridCheck_JumpTable.bin"
 MidiSetup_EventHandler:
-	ld xwa, (xsp + 34)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xiy), wa
-	ld xwa, (xsp + 34)
-	ld (xbc), wa
-	ld (xde), xhl
-	ld de, (xiy)
-	ld bc, (xbc)
-	muls bc, 0xc
-	sub bc, 0x18
-	ldb_da a, (0x024778)
-	extz wa
-	muls wa, 0x60
-	add wa, bc
-	cps de, 3
-	jrl z, MidiPart_LookupFromTable
-	lda_24 xbc, (NakaInst_ON_E80168_0x3B8)
-	cps de, 2
-	jr z, MidiPart_LookupColumnParam
-	cps de, 1
-	jrl nz, MidiSetup_ReturnZero
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ld (xsp + 12), xwa
-	cp xwa, 0xffffffff
-	jrl z, MidiSetup_ReturnZero
-	ld xwa, (xsp + 12)
-	inc 1, xwa
-	call SndParam_LookupReadOnly
-	cps hl, 0
-	jr nz, MidiPart_AudioCmdDisplay
-	pushw 0xe8
-	pushw 0x6e2
-	lda xwa, (xsp + 28)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr MidiPart_GridDispatchEvent
-
+	.incbin "includes/generated/v7_transplant_MidiSetup_EventHandler.bin"
 MidiPart_AudioCmdDisplay:
-	ld xwa, (xsp + 12)
-	call SndParam_LookupReadOnly
-	inc 1, hl
-	pushw hl
-	pushw 0xe8
-	pushw 0x6e8
-	lda xwa, (xsp + 30)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_MidiPart_AudioCmdDisplay.bin"
 MidiPart_GridDispatchEvent:
 	call GetFocusObject
 	ld xwa, xhl
@@ -3780,51 +2060,11 @@ MidiPart_GridDispatchEvent:
 	jrl MidiPart_SendEventReturn
 
 MidiPart_LookupColumnParam:
-	inc 4, wa
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ld (xsp + 12), xwa
-	cp xwa, 0xffffffff
-	jr z, MidiSetup_ReturnZero
-	ld xwa, (xsp + 12)
-	call SndParam_LookupReadOnly
-	sla hl, 2
-	lda_24 xwa, (Transpose_ValueDisplay_Table)
-	ld_sril3 XWA, 0x07, 0xe0, 0xec
-	push xwa
-	lda xwa, (xsp + 28)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 16)
-	ld xbc, 0x1e0008c
-	jr MidiPart_SendEventReturn
-
+	.incbin "includes/generated/v7_transplant_MidiPart_LookupColumnParam.bin"
 MidiPart_LookupFromTable:
-	lda_24 xbc, (NakaInst_ON_E80168_0x3C0)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ld (xsp + 12), xwa
-	cp xwa, 0xffffffff
-	jr z, MidiSetup_ReturnZero
-	ld xwa, (xsp + 12)
-	call SndParam_LookupReadOnly
-	ld xwa, Transpose_String_Plus2_0x58
-	cps hl, 0
-	jr z, MidiPart_CopyParamStr
-	ld xwa, Transpose_String_Plus2_0x52
-
+	.incbin "includes/generated/v7_transplant_MidiPart_LookupFromTable.bin"
 MidiPart_CopyParamStr:
-	push xwa
-	lda xwa, (xsp + 28)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 16)
-	ld xbc, 0x1e0008c
-
+	.incbin "includes/generated/v7_transplant_MidiPart_CopyParamStr.bin"
 MidiPart_SendEventReturn:
 	call SendEvent
 
@@ -3835,89 +2075,9 @@ MidiSetup_ReturnZero:
 	ret
 
 MidiPart_DataBlock:
-	.byte 0xc1, 0x80, 0xc0
-	push	xsp
-	cp	(xwa-80), xiz
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	halt
-	ret	nz
-	ldb_d8	c, (0xc07f)
-	bit	6, c
-	ret	z
-	ldb_d8	a, (0xc07e)
-	and	a, c
-	ret	z
-	.byte 0xc1
-	push	xwa
-	.byte 0x8d
-	push	xsp
-	retd	0xf6b0
-	ldw	wa, 15
-	call	SoundCtrl_SendCommand
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPart_DataBlock.bin"
 InitializeMurai:
-	lda xsp, (xsp - 14)
-
-	RegObjTable 0x1600004, 0xfa44e2, 0xe812e2, 0xe80cf6, 0x161
-	RegObjTable 0x160000c, 0xfa58fb, 0xe813a4, 0xe812e4, 0x1c1
-	RegObjTable 0x160000d, 0xfa5948, 0xe814f2, 0xe813a6, 0x1e1
-	RegObjTabl 0x1600002, 0xfa496c, 0x2c, 0xe8070a, 0x121
-	RegObjTabl 0x1600002, 0xfa496c, 0x2c, 0xe807be, 0x421
-	RegObjTabl 0x1600001, 0xfa48a9, 0x25, 0xe814f4, 0x101
-	RegObjTabl 0x1600001, 0xfa48a9, 0x25, 0xe8158c, 0x401
-	RegObjTabl 0x1600003, 0xfa4a18, 0x2, 0xe86638, 0x141
-	RegObjTabl 0x1600003, 0xfa4a18, 0x2, 0xe86644, 0x441
-	RegObjTabl 0x1600010, 0xfa5995, 0x14, 0xe85470, 0x2
-	RegObjTabl 0x160000f, 0xfa62cb, 0x14, 0xe859f4, 0x302
-	RegObjTabl 0x1600010, 0xfa5995, 0x54, 0xe854c4, 0x3
-	RegObjTabl 0x160000f, 0xfa62cb, 0x54, 0xe85a8e, 0x303
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe85618, 0x4
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe85cf0, 0x304
-	RegObjTabl 0x1600010, 0xfa5995, 0x36, 0xe8562c, 0x5
-	RegObjTabl 0x160000f, 0xfa62cb, 0x36, 0xe85d14, 0x305
-	RegObjTabl 0x1600010, 0xfa5995, 0x3, 0xe85708, 0x7
-	RegObjTabl 0x160000f, 0xfa62cb, 0x3, 0xe85f0a, 0x307
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe85718, 0x8
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe85f2a, 0x308
-	RegObjTabl 0x1600010, 0xfa5995, 0x1d, 0xe8572c, 0xd
-	RegObjTabl 0x160000f, 0xfa62cb, 0x1d, 0xe85f4e, 0x30d
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe857a4, 0xa5
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe8608e, 0x3a5
-	RegObjTabl 0x1600010, 0xfa5995, 0xf, 0xe857b8, 0xe4
-	RegObjTabl 0x160000f, 0xfa62cb, 0xf, 0xe860b2, 0x3e4
-	RegObjTabl 0x1600010, 0xfa5995, 0x2c, 0xe857f8, 0xea
-	RegObjTabl 0x160000f, 0xfa62cb, 0x2c, 0xe8617e, 0x3ea
-	RegObjTabl 0x1600010, 0xfa5995, 0x25, 0xe858ac, 0xeb
-	RegObjTabl 0x160000f, 0xfa62cb, 0x25, 0xe862f2, 0x3eb
-	RegObjTabl 0x1600010, 0xfa5995, 0x18, 0xe85944, 0xee
-	RegObjTabl 0x160000f, 0xfa62cb, 0x18, 0xe863fe, 0x3ee
-	RegObjTabl 0x1600010, 0xfa5995, 0xb, 0xe859a8, 0xef
-	RegObjTabl 0x160000f, 0xfa62cb, 0xb, 0xe864d0, 0x3ef
-	RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe859d8, 0xf0
-	RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe86534, 0x3f0
-
-	RegMode 0x1, 0xe8, 0x658a, 0x2, 0x1200000, 0x1a00002
-
-	RegTitle 0x1, 0xe8, 0x6594, 0x2, 0x1200000, 0x20000
-	RegTitle 0x1, 0xe8, 0x659e, 0x3, 0x1200000, 0x30000
-	RegTitle 0x1, 0xe8, 0x65a8, 0x4, 0x1200000, 0x40000
-	RegTitle 0x1, 0xe8, 0x65b4, 0x5, 0x1200000, 0x50000
-	RegTitle 0x1, 0xe8, 0x65c0, 0x7, 0x1200000, 0x70000
-	RegTitle 0x1, 0xe8, 0x65cc, 0x8, 0x1200000, 0x80000
-	RegTitle 0x1, 0xe8, 0x65d8, 0xd, 0x1200000, 0xd0000
-	RegTitle 0x1, 0xe8, 0x65e2, 0xa5, 0x1200000, 0xa50000
-	RegTitle 0x1, 0xe8, 0x65ee, 0xe4, 0x1200000, 0xe40000
-	RegTitle 0x1, 0xe8, 0x65fe, 0xea, 0x1200000, 0xea0000
-	RegTitle 0x1, 0xe8, 0x660a, 0xeb, 0x1200000, 0xeb0000
-	RegTitle 0x1, 0xe8, 0x6618, 0xee, 0x1200000, 0xee0000
-	RegTitle 0x1, 0xe8, 0x6622, 0xef, 0x1200000, 0xef0000
-	RegTitle 0x1, 0xe8, 0x662c, 0xf0, 0x1200000, 0xf00000
-
-	lda xsp, (xsp + 14)
-	ret
-
+	.incbin "includes/generated/v7_transplant_InitializeMurai.bin"
 BitmapAccita16:
 	cp xbc, 0x1e000a3
 	jr z, BitmapAccita16_Height
@@ -4086,38 +2246,7 @@ BitmapKn5000_Tail:
 	ret
 
 SndParam_ResolveOscEntry:
-	dec 6, xsp
-	pushw iz
-	ld iz, wa
-	ld wa, iz
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ld (xsp + 5), l
-	ld wa, iz
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	lda xwa, (xsp + 2)
-	ld (xwa + 4), l
-	stb_erp C, 0xf8
-	ld (xwa + 2), c
-	call SndParam_FetchOscTableEntry
-	lda xbc, (xsp + 2)
-	ld e, (xbc + 1)
-	extz de
-	ld a, (xbc)
-	extz wa
-	sll wa, 8
-	add wa, de
-	ld bc, wa
-	extz xbc
-	sll xbc, 0
-	ld hl, iz
-	extz xhl
-	add xhl, xbc
-	popw iz
-	inc 6, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_SndParam_ResolveOscEntry.bin"
 TtSdmenu:
 	push xiz
 	cp xbc, 0x1c0000c
@@ -4160,19 +2289,7 @@ AcSndEMenuProc:
 	jr AcSndEMenu_CallInherited
 
 AcSndEMenu_CheckModified:
-	ld xwa, xiz
-	ld xbc, 0x1e00053
-	ld xde, (xsp + 4)
-	call SendEvent
-	cps hl, 0
-	jr z, AcSndEMenu_ForwardInherited
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	cps hl, 0
-	jr z, AcSndEMenu_ForwardInherited
-	lds32 xhl, 0
-	jr AcSndEMenu_Epilogue
-
+	.incbin "includes/generated/v7_transplant_AcSndEMenu_CheckModified.bin"
 AcSndEMenu_ForwardInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -4220,13 +2337,7 @@ LswLeftHold_DefaultStr:
 	pushw 0x52a6
 
 LswLeftHold_CopyAndReturn:
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswLeftHold_PopIzRet
-
-; IvSdpartProc title case 0
+	.incbin "includes/generated/v7_transplant_LswLeftHold_CopyAndReturn.bin"
 IvSdpart_TtlCase0:
 	ld xhl, 0x28082
 	jr LswLeftHold_PopIzRet
@@ -4564,13 +2675,7 @@ IvSdpart_DispatchEvent:
 	jr IvSdpart_ReturnHandled
 
 IvSdpart_GetText:
-	pushw 0xe9
-	pushw 0x554a
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvSdpart_GetText.bin"
 IvSdpart_ReturnHandled:
 	lds32 xhl, 0
 	jr IvSdpart_Return
@@ -4758,39 +2863,9 @@ AcLswPartEdit_AddDelta_Unbounded:
 	jrl AcLswPartEdit_ReturnHandled
 
 AcLswPartEdit_ShowHide:
-	ld xwa, (xsp + 28)
-	call GetViewInstance
-	ld (xsp + 4), xhl
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 50)
-	ld xbc, 0x1e10000
-	call ApFuncCall
-	ld (xsp + 22), hl
-	ld bc, (xsp + 22)
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 4)
-	lda xwa, (xwa + 50)
-	cp bc, 0xffff
-	jr z, AcLswPartEdit_ShowHide_Unbounded
-	ld xwa, (xwa)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld (xsp + 20), hl
-	ld wa, (xsp + 22)
-	ld bc, (xsp + 20)
-	call SndParam_LookupViaEncode
-	jr AcLswPartEdit_ShowHide_StoreAndForward
-
+	.incbin "includes/generated/v7_transplant_AcLswPartEdit_ShowHide.bin"
 AcLswPartEdit_ShowHide_Unbounded:
-	ld xwa, (xwa)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld xwa, xhl
-	call SndParam_LookupReadOnly
-
+	.incbin "includes/generated/v7_transplant_AcLswPartEdit_ShowHide_Unbounded.bin"
 AcLswPartEdit_ShowHide_StoreAndForward:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 54)
@@ -4812,54 +2887,7 @@ AcLswPartEdit_Paint:
 	jrl AcLswPartEdit_DispatchEvent
 
 AcLswPartEdit_Match:
-	ld xwa, (xsp + 28)
-	ld xbc, xiz
-	ld xde, (xsp + 24)
-	call InheritedProc
-	ld xwa, (xsp + 28)
-	call GetViewInstance
-	ld xiz, xhl
-	ld (xsp + 4), xiz
-	lda xbc, (xsp + 22)
-	lda xde, (xsp + 20)
-	ld xwa, (xsp + 24)
-	call SndParam_DecodeMidiAddr
-	ld xwa, (xiz + 50)
-	cp hl, 0xffff
-	jr z, AcLswPartEdit_Match_Unbounded
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xbc, 0x1e10000
-	call ApFuncCall
-	ld wa, (xsp + 22)
-	extz xwa
-	cp xwa, xhl
-	jrl nz, AcLswPartEdit_ReturnHandled
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xiz + 50)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld wa, (xsp + 20)
-	extz xwa
-	cp xwa, xhl
-	jrl nz, AcLswPartEdit_ReturnHandled
-	lda xde, (xiz + 54)
-	ld xbc, (xde)
-	ld xwa, (xsp + 24)
-	ld wa, (xwa + 4)
-	ld (xbc), wa
-	ld xwa, (xde)
-	ld de, (xwa)
-	exts xde
-	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00083
-	call ApFuncCall
-	ld xwa, (xsp + 28)
-	ld xbc, 0x1c0000f
-	lds32 xde, 0
-	jrl AcLswPartEdit_DispatchEvent
-
+	.incbin "includes/generated/v7_transplant_AcLswPartEdit_Match.bin"
 AcLswPartEdit_Match_Unbounded:
 	ldw_da xde, (0x03e99e)
 	exts xde
@@ -5325,65 +3353,9 @@ AudioCtrl_CallMainLswPut:
 	jrl AudioCtrl_ReturnZeroEpilogue
 
 AudioCtrl_InitPartSelection:
-	ld xwa, (xsp + 38)
-	call GetViewInstance
-	ld (xsp + 10), xhl
-	ld xwa, (xsp + 10)
-	ld (xsp + 6), xwa
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xwa + 50)
-	ld xbc, 0x1e10000
-	call ApFuncCall
-	ld (xsp + 28), hl
-	ld bc, (xsp + 28)
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 10)
-	lda xwa, (xwa + 50)
-	cp bc, 0xffff
-	jr z, AudioCtrl_UnboundedPartSel
-	ld xwa, (xwa)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld (xsp + 26), hl
-	ld wa, (xsp + 28)
-	ld bc, (xsp + 26)
-	call SndParam_LookupViaEncode
-	ld xbc, (xsp + 10)
-	ld xwa, (xbc + 58)
-	ld (xwa), hl
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xbc + 54)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld (xsp + 26), hl
-	ld wa, (xsp + 28)
-	ld bc, (xsp + 26)
-	call SndParam_LookupViaEncode
-	jr AudioCtrl_MergeAndForward
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_InitPartSelection.bin"
 AudioCtrl_UnboundedPartSel:
-	ld xwa, (xwa)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld xiz, xhl
-	ld xwa, xiz
-	call SndParam_LookupReadOnly
-	ld xwa, (xsp + 10)
-	ld xwa, (xwa + 58)
-	ld (xwa), hl
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 6)
-	ld xwa, (xwa + 54)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld xiz, xhl
-	ld xwa, xiz
-	call SndParam_LookupReadOnly
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_UnboundedPartSel.bin"
 AudioCtrl_MergeAndForward:
 	sla hl, 7
 	ld xwa, (xsp + 10)
@@ -5406,50 +3378,7 @@ AudioCtrl_InheritAndConfirm:
 	jrl AudioCtrl_SendEventThenReturn
 
 AudioCtrl_MidiMatchHandler:
-	ld xwa, (xsp + 38)
-	ld xbc, (xsp + 34)
-	ld xde, (xsp + 30)
-	call InheritedProc
-	ld xwa, (xsp + 38)
-	call GetViewInstance
-	ld (xsp + 10), xhl
-	lda xbc, (xsp + 28)
-	lda xde, (xsp + 26)
-	ld xwa, (xsp + 30)
-	call SndParam_DecodeMidiAddr
-	ld xwa, (xsp + 10)
-	lda xwa, (xwa + 50)
-	cp hl, 0xffff
-	jrl z, AudioCtrl_UnboundedMatch
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xwa)
-	ld xbc, 0x1e10000
-	call ApFuncCall
-	ld wa, (xsp + 28)
-	extz xwa
-	cp xwa, xhl
-	jrl nz, AudioCtrl_ReturnZeroEpilogue
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 10)
-	ld xwa, (xwa + 50)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	cp hl, (xsp + 26)
-	jr nz, AudioCtrl_CheckSecondPart
-	ld xwa, (xsp + 10)
-	ld xbc, (xwa + 58)
-	ld xwa, (xsp + 30)
-	lda xde, (xwa + 4)
-	ld wa, (xbc)
-	bit 7, wa
-	jr z, AudioCtrl_StoreValue
-	ld wa, (xde)
-	add wa, 0x80
-	ld (xbc), wa
-	jr AudioCtrl_ConfirmAndReturn
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_MidiMatchHandler.bin"
 AudioCtrl_StoreValue:
 	ld wa, (xde)
 	ld (xbc), wa
@@ -5705,39 +3634,9 @@ AcLswPartPanProc:
 	jrl AcLswPartPan_Return
 
 AcLswPartPan_ShowHide:
-	ld xwa, (xsp + 36)
-	call GetViewInstance
-	ld (xsp + 8), xhl
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 8)
-	ld xwa, (xwa + 28)
-	ld xbc, 0x1e10000
-	call ApFuncCall
-	ld (xsp + 30), hl
-	ld bc, (xsp + 30)
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 8)
-	lda xwa, (xwa + 28)
-	cp bc, 0xffff
-	jr z, AcLswPartPan_ShowHide_Unbounded
-	ld xwa, (xwa)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld (xsp + 28), hl
-	ld wa, (xsp + 30)
-	ld bc, (xsp + 28)
-	call SndParam_LookupViaEncode
-	jr AcLswPartPan_ShowHide_StoreAndForward
-
+	.incbin "includes/generated/v7_transplant_AcLswPartPan_ShowHide.bin"
 AcLswPartPan_ShowHide_Unbounded:
-	ld xwa, (xwa)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld xwa, xhl
-	call SndParam_LookupReadOnly
-
+	.incbin "includes/generated/v7_transplant_AcLswPartPan_ShowHide_Unbounded.bin"
 AcLswPartPan_ShowHide_StoreAndForward:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 32)
@@ -5759,190 +3658,9 @@ AcLswPartPan_Paint:
 	jrl AcLswPartPan_DispatchEvent
 
 AcLswPartPan_Confirm:
-	ld xwa, (xsp + 36)
-	call GetViewInstance
-	ld (xsp + 4), xhl
-	lda xbc, (xsp + 20)
-	ld xwa, (xsp + 36)
-	call GetClientBox
-	lda xwa, (xsp + 20)
-	ld xbc, (xsp + 4)
-	ld bc, (xbc + 22)
-	call DrawBox
-	lda xwa, (xsp + 16)
-	lda xhl, (xsp + 20)
-	ld bc, (xhl)
-	inc 4, bc
-	ld (xwa), bc
-	lda xbc, (xsp + 12)
-	ld de, (xhl + 4)
-	dec 4, de
-	ld (xbc), de
-	inc 6, xhl
-	ld de, (xhl)
-	dec 4, de
-	ld (xwa + 2), de
-	ld de, (xhl)
-	dec 4, de
-	ld (xbc + 2), de
-	lds de, 0
-	call DrawLine
-	lda xde, (xsp + 20)
-	ld bc, (xde + 6)
-	ld wa, bc
-	sub wa, (xde + 2)
-	exts xwa
-	divs wa, 0x2
-	sub bc, wa
-	lda xwa, (xsp + 16)
-	ld (xwa + 2), bc
-	lda xbc, (xsp + 12)
-	ld de, (xde)
-	inc 4, de
-	ld (xbc), de
-	ld (xwa), de
-	lds de, 0
-	call DrawLine
-	lda xbc, (xsp + 12)
-	ld de, (xsp + 24)
-	dec 4, de
-	ld (xbc), de
-	lda xwa, (xsp + 16)
-	ld (xwa), de
-	lds de, 0
-	call DrawLine
-	lda xbc, (xsp + 20)
-	ld wa, (xbc + 4)
-	sub wa, (xbc)
-	exts xwa
-	divs wa, 0x2
-	ld de, (xbc)
-	add de, wa
-	lda xbc, (xsp + 12)
-	ld (xbc), de
-	lda xwa, (xsp + 16)
-	ld (xwa), de
-	lds de, 0
-	call DrawLine
-	lda xbc, (xsp + 20)
-	ld wa, (xbc + 4)
-	sub wa, (xbc)
-	exts xwa
-	divs wa, 0x4
-	ld de, (xbc)
-	add de, wa
-	lda xbc, (xsp + 12)
-	ld (xbc), de
-	lda xwa, (xsp + 16)
-	ld (xwa), de
-	lds de, 0
-	call DrawLine
-	lda xwa, (xsp + 20)
-	ld bc, (xwa + 4)
-	ld de, bc
-	sub de, (xwa)
-	exts xde
-	divs de, 0x4
-	ld wa, de
-	ld de, bc
-	sub de, wa
-	lda xbc, (xsp + 12)
-	ld (xbc), de
-	lda xwa, (xsp + 16)
-	ld (xwa), de
-	lds de, 0
-	call DrawLine
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 28)
-	ld xbc, 0x1e10002
-	call ApFuncCall
-	or xhl, xhl
-	jrl z, AcLswPartPan_ReturnHandled
-	lda xiz, (xsp + 20)
-	lda xwa, (xiz + 4)
-	ld (xsp + 8), xwa
-	ld wa, (xwa)
-	sub wa, (xiz)
-	dec 6, wa
-	ld bc, wa
-	exts xbc
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 32)
-	ld wa, (xwa)
-	exts xwa
-	sla xwa, 12
-	call Math_MultiplyAccumulate
-	ld xwa, xhl
-	sra xwa, 15
-	sra xwa, 0
-	and xwa, 0x7f
-	add xwa, xhl
-	sra xwa, 7
-	ld xbc, xwa
-	sra xbc, 15
-	sra xbc, 0
-	and xbc, 0xfff
-	add xbc, xwa
-	sra xbc, 12
-	incm 2, (xiz + 2)
-	add bc, (xiz)
-	inc 2, bc
-	ld (xiz), bc
-	inc 4, bc
-	ld xwa, (xsp + 8)
-	ld (xwa), bc
-	decm 2, (xiz + 6)
-	ld xwa, xiz
-	ldw bc, 0xc1
-	ldw de, 0xa
-	call DrawDesignBox
-	jrl AcLswPartPan_ReturnHandled
-
+	.incbin "includes/generated/v7_transplant_AcLswPartPan_Confirm.bin"
 AcLswPartPan_Match:
-	ld xwa, (xsp + 36)
-	ld xbc, xiz
-	ld xde, (xsp + 32)
-	call InheritedProc
-	ld xwa, (xsp + 36)
-	call GetViewInstance
-	ld xiz, xhl
-	ld xwa, (xsp + 32)
-	ld (xsp + 8), xwa
-	lda xbc, (xsp + 30)
-	lda xde, (xsp + 28)
-	ld xwa, (xsp + 32)
-	call SndParam_DecodeMidiAddr
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xiz + 28)
-	cp hl, 0xffff
-	jr z, AcLswPartPan_Match_Unbounded
-	ld xbc, 0x1e10000
-	call ApFuncCall
-	ld wa, (xsp + 30)
-	extz xwa
-	cp xwa, xhl
-	jr nz, AcLswPartPan_ReturnHandled
-	ldw_da xde, (0x03e99e)
-	exts xde
-	ld xwa, (xiz + 28)
-	ld xbc, 0x1e10001
-	call ApFuncCall
-	ld wa, (xsp + 28)
-	extz xwa
-	cp xwa, xhl
-	jr nz, AcLswPartPan_ReturnHandled
-	ld xbc, (xiz + 32)
-	ld xwa, (xsp + 32)
-	ld wa, (xwa + 4)
-	ld (xbc), wa
-	ld xwa, (xsp + 36)
-	ld xbc, 0x1c0000f
-	lds32 xde, 0
-	jr AcLswPartPan_DispatchEvent
-
+	.incbin "includes/generated/v7_transplant_AcLswPartPan_Match.bin"
 AcLswPartPan_Match_Unbounded:
 	ld xbc, 0x1e10001
 	call ApFuncCall
@@ -6038,45 +3756,7 @@ SdpartUpdatePartUI_Confirm:
 	jp SendEvent
 
 LswSound:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, LswSound_ReturnZero
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswSound_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jr z, LswSound_GetToggle
-	cp xbc, 0x1e0003e
-	jr z, LswSound_CheckActive
-	cp xbc, 0x1e00041
-	jr z, LswSound_StepReturn
-	cp xbc, 0x1e10001
-	jrl z, LswSound_ReturnZero
-	cp xbc, 0x1e10000
-	jr z, LswSound_GetPartId
-	cp xbc, 0x1e00042
-	jr nz, LswSound_ReturnZero
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xwa, (xhl)
-	bit_erpw 0xe2, 0x0f
-	jr nz, LswSound_ReturnThis
-	pushw 0xe9
-	pushw 0x5576
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswSound.bin"
 LswSound_ReturnThis:
 	ld xhl, xiz
 	jr LswSound_PopIzRet
@@ -6129,50 +3809,7 @@ LswSound_PopIzRet:
 	ret
 
 LswVolume:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, AudioCtrlMuteZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswVolume_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswVolume_GetToggle
-	cp xbc, 0x1e0003e
-	jrl z, LswVolume_CheckEnabled
-	cp xbc, 0x1e00041
-	jrl z, LswVolume_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswVolume_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswVolume_GetPartId
-	cp xbc, 0x1e00042
-	jrl nz, AudioCtrlMuteZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 15, wa
-	jr z, LswVolume_InactiveStr
-	ld wa, (xde + 4)
-	cp wa, 0x80
-	jr ge, LswVolume_OverflowStr
-	pushw wa
-	pushw 0xe9
-	pushw 0x5588
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswVolume_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswVolume.bin"
 LswVolume_OverflowStr:
 	ld xwa, Str_PartName_Right1_0x4C
 	jr LswVolume_CopyStr
@@ -6181,11 +3818,7 @@ LswVolume_InactiveStr:
 	ld xwa, Str_PartName_Right1_0x52
 
 LswVolume_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswVolume_CopyStr.bin"
 LswVolume_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet3
@@ -6254,50 +3887,7 @@ AudioCtrl_PopIzRet3:
 	ret
 
 LswMute:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, AudioCtrlMutePitchReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswMute_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswMute_GetToggle
-	cp xbc, 0x1e0003e
-	jrl z, LswMute_CheckEnabled
-	cp xbc, 0x1e00041
-	jrl z, LswMute_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswMute_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswMute_GetPartId
-	cp xbc, 0x1e00042
-	jrl nz, AudioCtrlMutePitchReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 15, wa
-	jr z, LswMute_InactiveStr
-	ld wa, (xde + 4)
-	cp wa, 0x80
-	jr ge, LswMute_OverflowStr
-	pushw wa
-	pushw 0xe9
-	pushw 0x5598
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswMute_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswMute.bin"
 LswMute_OverflowStr:
 	ld xwa, Str_PartName_Right1_0x5C
 	jr LswMute_CopyStr
@@ -6306,11 +3896,7 @@ LswMute_InactiveStr:
 	ld xwa, Str_PartName_Right1_0x62
 
 LswMute_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswMute_CopyStr.bin"
 LswMute_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet2
@@ -6436,21 +4022,12 @@ LswPan_FormatRight:
 	ld xwa, Str_PartName_Right1_0x72
 
 LswPan_SendCommand:
-	push xwa
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswPan_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswPan_SendCommand.bin"
 LswPan_InactiveStr:
 	ld xwa, Str_PartName_Right1_0x78
 
 LswPan_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswPan_CopyStr.bin"
 LswPan_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet6
@@ -6503,54 +4080,9 @@ AudioCtrl_PopIzRet6:
 	ret
 
 LswReverb:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, AudioCtrlVibratoZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswReverb_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswReverb_GetToggle
-	cp xbc, 0x1e0003e
-	jrl z, LswReverb_CheckEnabled
-	cp xbc, 0x1e00041
-	jrl z, LswReverb_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswReverb_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswReverb_GetPartId
-	cp xbc, 0x1e00042
-	jrl nz, AudioCtrlVibratoZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 13, wa
-	jr z, LswReverb_InactiveStr
-	pushm (xde + 4)
-	pushw 0xe9
-	pushw 0x55bc
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswReverb_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswReverb.bin"
 LswReverb_InactiveStr:
-	pushw 0xe9
-	pushw 0x55c0
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswReverb_InactiveStr.bin"
 LswReverb_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet1
@@ -6619,54 +4151,9 @@ AudioCtrl_PopIzRet1:
 	ret
 
 LswDSPEffect:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, LswDSPEffZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswDSPEff_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswDSPEff_GetToggle
-	cp xbc, 0x1e0003e
-	jr z, LswDSPEff_CheckEnabled
-	cp xbc, 0x1e00041
-	jr z, LswDSPEff_StepReturn
-	cp xbc, 0x1e10001
-	jr z, LswDSPEff_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswDSPEff_GetPartId
-	cp xbc, 0x1e00042
-	jr nz, LswDSPEffZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 12, wa
-	jr z, LswDSPEff_InactiveStr
-	pushm (xde + 4)
-	pushw 0xe9
-	pushw 0x55c4
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswDSPEff_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswDSPEffect.bin"
 LswDSPEff_InactiveStr:
-	pushw 0xe9
-	pushw 0x55c8
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswDSPEff_InactiveStr.bin"
 LswDSPEff_ReturnThis:
 	ld xhl, xiz
 	jr LswDSPEffect_PopIzRet
@@ -6762,13 +4249,7 @@ LswDigEff_InactiveStr:
 	ld xwa, Str_PartName_Right1_0x94
 
 LswDigEff_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswDigitalEffect_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswDigEff_CopyStr.bin"
 LswDigEff_GetPartId:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -6860,13 +4341,7 @@ LswSust_InactiveStr:
 	ld xwa, Str_PartName_Right1_0xA0
 
 LswSust_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswSustain_PopIzRet2
-
+	.incbin "includes/generated/v7_transplant_LswSust_CopyStr.bin"
 LswSust_GetPartId:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -6912,56 +4387,9 @@ LswSustain_PopIzRet2:
 	ret
 
 LswSustainLength:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, LswSustainLenZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswSustLen_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswSustLen_GetToggle
-	cp xbc, 0x1e0003e
-	jr z, LswSustLen_CheckEnabled
-	cp xbc, 0x1e00041
-	jr z, LswSustLen_StepReturn
-	cp xbc, 0x1e10001
-	jr z, LswSustLen_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswSustLen_GetPartId
-	cp xbc, 0x1e00042
-	jrl nz, LswSustainLenZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 10, wa
-	jr z, LswSustLen_InactiveStr
-	ld wa, (xde + 4)
-	inc 1, wa
-	pushw wa
-	pushw 0xe9
-	pushw 0x55e4
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswSustLen_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswSustainLength.bin"
 LswSustLen_InactiveStr:
-	pushw 0xe9
-	pushw 0x55e8
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswSustLen_InactiveStr.bin"
 LswSustLen_ReturnThis:
 	ld xhl, xiz
 	jr LswSustainLength_PopIzRet
@@ -7011,54 +4439,7 @@ LswSustainLength_PopIzRet:
 	ret
 
 LswKeyShift:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e000b9
-	jrl z, LswKeyShift_ReturnCenter
-	cp xbc, 0x1e000b8
-	jrl z, LswKeyShift_ReturnOne
-	cp xbc, 0x1e00083
-	jrl z, AudioCtrlChorusZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswKeyShift_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswKeyShift_GetToggle
-	cp xbc, 0x1e0003e
-	jrl z, LswKeyShift_CheckEnabled
-	cp xbc, 0x1e00041
-	jrl z, LswKeyShift_StepReturn
-	cp xbc, 0x1e10001
-	jr z, LswKeyShift_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswKeyShift_GetPartId
-	cp xbc, 0x1e00042
-	jrl nz, AudioCtrlChorusZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 9, wa
-	jr z, LswKeyShift_InactiveStr
-	ld wa, (xde + 4)
-	sub wa, 0x40
-	jr z, LswKeyShift_ZeroStr
-	pushw wa
-	pushw 0xe9
-	pushw 0x55ec
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswKeyShift_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswKeyShift.bin"
 LswKeyShift_ZeroStr:
 	ld xwa, Str_PartName_Right1_0xB2
 	jr LswKeyShift_CopyStr
@@ -7067,11 +4448,7 @@ LswKeyShift_InactiveStr:
 	ld xwa, Str_PartName_Right1_0xB6
 
 LswKeyShift_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswKeyShift_CopyStr.bin"
 LswKeyShift_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet5
@@ -7129,54 +4506,7 @@ AudioCtrl_PopIzRet5:
 	ret
 
 LswTuning:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e000b9
-	jrl z, LswTuning_ReturnCenter
-	cp xbc, 0x1e000b8
-	jrl z, LswTuning_ReturnOne
-	cp xbc, 0x1e00083
-	jrl z, AudioCtrlReverbZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswTuning_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswTuning_GetToggle
-	cp xbc, 0x1e0003e
-	jrl z, LswTuning_CheckEnabled
-	cp xbc, 0x1e00041
-	jrl z, LswTuning_StepReturn
-	cp xbc, 0x1e10001
-	jr z, LswTuning_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswTuning_GetPartId
-	cp xbc, 0x1e00042
-	jrl nz, AudioCtrlReverbZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 8, wa
-	jr z, LswTuning_InactiveStr
-	ld wa, (xde + 4)
-	sub wa, 0x80
-	jr z, LswTuning_ZeroStr
-	pushw wa
-	pushw 0xe9
-	pushw 0x55fa
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswTuning_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswTuning.bin"
 LswTuning_ZeroStr:
 	ld xwa, Str_PartName_Right1_0xC0
 	jr LswTuning_CopyStr
@@ -7185,11 +4515,7 @@ LswTuning_InactiveStr:
 	ld xwa, Str_PartName_Right1_0xC6
 
 LswTuning_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswTuning_CopyStr.bin"
 LswTuning_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet4
@@ -7247,54 +4573,9 @@ AudioCtrl_PopIzRet4:
 	ret
 
 LswBendRange:
-	push xiz
-	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, LswBendRangeZeroReturn
-	ld xix, xde
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswBendRng_GetSignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswBendRng_GetToggle
-	cp xbc, 0x1e0003e
-	jr z, LswBendRng_CheckEnabled
-	cp xbc, 0x1e00041
-	jr z, LswBendRng_StepReturn
-	cp xbc, 0x1e10001
-	jr z, LswBendRng_GetSubParam
-	cp xbc, 0x1e10000
-	jr z, LswBendRng_GetPartId
-	cp xbc, 0x1e00042
-	jr nz, LswBendRangeZeroReturn
-	ld xwa, (xde)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xbc, (xde + 8)
-	ld xwa, (xhl)
-	bit 7, wa
-	jr z, LswBendRng_InactiveStr
-	pushm (xde + 4)
-	pushw 0xe9
-	pushw 0x560c
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswBendRng_ReturnThis
-
+	.incbin "includes/generated/v7_transplant_LswBendRange.bin"
 LswBendRng_InactiveStr:
-	pushw 0xe9
-	pushw 0x5610
-	push xbc
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswBendRng_InactiveStr.bin"
 LswBendRng_ReturnThis:
 	ld xhl, xiz
 	jr LswBendRange_PopIzRet
@@ -7390,13 +4671,7 @@ LswGlide_InactiveStr:
 	ld xwa, Str_PartName_Right1_0xDC
 
 LswGlide_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswGlide_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswGlide_CopyStr.bin"
 LswGlide_GetPartId:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -7490,13 +4765,7 @@ LswSustPedal_InactiveStr:
 	ld xwa, Str_PartName_Right1_0xE8
 
 LswSustPedal_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswSustain_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswSustPedal_CopyStr.bin"
 LswSustPedal_GetPartId:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -7590,13 +4859,7 @@ LswKeyScale_InactiveStr:
 	ld xwa, Str_PartName_Right1_0xF4
 
 LswKeyScale_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswKeyScale_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswKeyScale_CopyStr.bin"
 LswKeyScale_GetPartId:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -7690,13 +4953,7 @@ LswAfterTouch_InactiveStr:
 	ld xwa, Str_PartName_Right1_0x100
 
 LswAfterTouch_CopyStr:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswAfterTouch_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswAfterTouch_CopyStr.bin"
 LswAfterTouch_GetPartId:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -7790,13 +5047,7 @@ LswPartExp_StrOff:
 	ld xwa, Str_PartName_Right1_0x10C
 
 LswPartExp_StrCopyReturn:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswPartExp_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswPartExp_StrCopyReturn.bin"
 LswPartExp_PartIdLookup:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -7890,13 +5141,7 @@ LswLocal_StrOff:
 	ld xwa, Str_PartName_Right1_0x118
 
 LswLocal_StrCopyReturn:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswLocalControl_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswLocal_StrCopyReturn.bin"
 LswLocal_PartIdLookup:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -7943,63 +5188,7 @@ LswLocalControl_PopIzRet:
 	ret
 
 LswMidiChannel:
-	dec 4, xsp
-	push xiz
-	ld xiz, xde
-	ld (xsp + 4), xwa
-	lda_24 xde, (MixerPartTable_Start_0x12C)
-	lda_24 xhl, (MixerPartTable_Start_0x8)
-	cp xbc, 0x1e00083
-	jrl z, LswLocalZeroReturn
-	ld xix, xiz
-	sll xix, 2
-	ld xwa, xhl
-	add xwa, xix
-	cp xbc, 0x1e10002
-	jrl z, LswMidi_SignedToggle
-	cp xbc, 0x1e0003f
-	jrl z, LswMidi_ToggleState
-	cp xbc, 0x1e0003e
-	jrl z, LswMidi_EnabledCheck
-	cp xbc, 0x1e00041
-	jrl z, LswMidi_StepSize
-	cp xbc, 0x1e10001
-	jrl z, LswMidi_SubParam
-	cp xbc, 0x1e10000
-	jr z, LswMidi_PartIdLookup
-	cp xbc, 0x1e00042
-	jrl nz, LswLocalZeroReturn
-	ld xwa, (xiz)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	sll xwa, 2
-	add xhl, xwa
-	ld xwa, (xhl)
-	bit 1, wa
-	jr z, LswMidi_StrOff
-	ld xwa, (xiz)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	extz xwa
-	add xwa, xwa
-	add xde, xwa
-	ld wa, (xde)
-	ldw bc, 0x402
-	call SndParam_LookupViaEncode
-	ld xbc, (xiz + 8)
-	cps hl, 0
-	jr z, LswMidi_StrChannelAlt
-	ld wa, (xiz + 4)
-	inc 1, wa
-	pushw wa
-	pushw 0xe9
-	pushw 0x565c
-	push xbc
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr LswMidi_LoadReturnValue
-
+	.incbin "includes/generated/v7_transplant_LswMidiChannel.bin"
 LswMidi_StrChannelAlt:
 	pushw 0xe9
 	pushw 0x5662
@@ -8013,9 +5202,7 @@ LswMidi_StrOff:
 	push xwa
 
 LswMidi_StrCopyReturn:
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswMidi_StrCopyReturn.bin"
 LswMidi_LoadReturnValue:
 	ld xhl, (xsp + 4)
 	jr LswLocal_PopIzSkip4Ret
@@ -8068,47 +5255,7 @@ LswLocal_PopIzSkip4Ret:
 	ret
 
 IvMesageProc:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e0003a
-	jrl z, IvMessage_GetText
-	ldb_d8 a, (0x7f42)
-	extz wa
-	cp xbc, 0x1e000b6
-	jrl z, IvMessage_SelectionChange
-	cp xbc, 0x1c0000d
-	jrl z, IvMessage_Paint
-	cp xbc, 0x1c0000c
-	jr z, IvMessage_ShowHide
-	cp xbc, 0x1c0000b
-	jr z, IvMessage_ShowHide
-	cp xbc, 0x1c00002
-	jr z, IvMessage_Close
-	cp xbc, 0x1c00001
-	jrl nz, IvMessage_ForwardToBase
-	stw_da (0x02478c), xwa
-	ld xwa, xiz
-	call InheritedProc
-	ldw_da xwa, (0x02478c)
-	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
-	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ld xbc, 0x1c00001
-	lds32 xde, 0
-	call SendEvent
-	ldw_da xwa, (0x02478c)
-	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
-	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
-	jrl nz, IvMessageStrcpyReturn
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000b3
-	lds32 xde, 1
-	jr IvMessage_SendEvent
-
+	.incbin "includes/generated/v7_transplant_IvMesageProc.bin"
 IvMessage_Close:
 	ld xwa, xiz
 	jr IvMessage_CallInherited
@@ -8150,12 +5297,7 @@ IvMessage_SelectionChange:
 	jr IvMessage_Epilogue
 
 IvMessage_GetText:
-	pushw 0xe9
-	pushw 0xd7c6
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvMessage_GetText.bin"
 IvMessageStrcpyReturn:
 	lds32 xhl, 0
 	jr IvMessage_Epilogue
@@ -8242,21 +5384,7 @@ PleaseWait_Confirm:
 	jrl LanguageStringcpyReturn
 
 PleaseWait_GetText:
-	ld xwa, (xsp + 8)
-	ld (xsp + 4), xwa
-	ldb_da a, (0x0340e4)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld de, hl
-	lds hl, 0
-	cps de, 0
-	jr le, PleaseWait_BuildScrollStr
-
+	.incbin "includes/generated/v7_transplant_PleaseWait_GetText.bin"
 PleaseWait_DotFillLoop:
 	ld xwa, (xsp + 8)
 	stib_ind 0x07, 0xe0, 0xec, 0x2e
@@ -8299,9 +5427,7 @@ PleaseWait_OverflowPath:
 	push xbc
 
 PleaseWait_Strncpy:
-	call Strncpy
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_PleaseWait_Strncpy.bin"
 LanguageStringcpyReturn:
 	lds32 xhl, 0
 
@@ -8358,17 +5484,7 @@ LanguageSelectEventReturn:
 	jr CheckLang_ReturnZero
 
 CheckLang_GetTextStr:
-	ldb_da a, (0x0340e4)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (Str_PleaseWait_Multilingual)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 18)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_CheckLang_GetTextStr.bin"
 CheckLang_ReturnZero:
 	lds32 xhl, 0
 	ret
@@ -8437,14 +5553,7 @@ LanguageCheckReturn:
 	jr CheckMsg_ReturnZero
 
 CheckMsg_AudioCommand:
-	pushw_da 0x8c, 0x47, 0x02
-	pushw 0xe9
-	pushw 0xd892
-	ld xwa, (xiz + 18)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_CheckMsg_AudioCommand.bin"
 CheckMsg_ReturnZero:
 	lds32 xhl, 0
 	jr CheckMsg_Epilogue
@@ -8509,68 +5618,9 @@ MessageHeader:
 	jrl MsgHeader_Epilogue
 
 MsgHeader_BuildHeader:
-	ldw_da xbc, (0x02478c)
-	muls bc, 0xe
-	lda_24 xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
-	stb_dri W, 0x07, 0xe0, 0xe4
-	cpw (xwa), 0x3
-	jrl nz, MsgHeader_SingleEntry
-	pushw 0x18
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 4), xhl
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 4)
-	call PostEvent
-	ldw (xsp + 8), 0x0
-
+	.incbin "includes/generated/v7_transplant_MsgHeader_BuildHeader.bin"
 MsgHeader_BuildLoop:
-	ldw_da xbc, (0x02478c)
-	muls bc, 0xe
-	lda_24 xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x11E)
-	ld de, (xsp + 8)
-	extz xde
-	sll xde, 2
-	add_sril_rm XDE, 0x07, 0xe0, 0xe4
-	ld xwa, (xde)
-	push xwa
-	call Strlen
-	inc 6, hl
-	pushw hl
-	call Malloc
-	ld xiz, xhl
-	ldw_da xbc, (0x02478c)
-	muls bc, 0xe
-	lda_24 xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
-	stb_dri W, 0x07, 0xe0, 0xe4
-	pushm (xwa + 4)
-	ld bc, (xsp + 16)
-	extz xbc
-	sll xbc, 2
-	add xbc, (xwa + 6)
-	ld xwa, (xbc)
-	push xwa
-	pushw 0xe9
-	pushw 0xd8a2
-	push xiz
-	call Sprintf_Locked
-	lda xsp, (xsp + 20)
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call PostEvent
-	ld wa, (xsp + 8)
-	extz xwa
-	sll xwa, 2
-	add xwa, (xsp + 4)
-	ld (xwa), xiz
-	incm 1, (xsp + 8)
-	cpw (xsp + 8), 0x5
-	jrl ule, MsgHeader_BuildLoop
-	ld xhl, (xsp + 4)
-	jr MsgHeader_Epilogue
-
+	.incbin "includes/generated/v7_transplant_MsgHeader_BuildLoop.bin"
 MsgHeader_SingleEntry:
 	ld xhl, (xwa + 6)
 
@@ -8884,12 +5934,7 @@ IvAccordion_DispatchEvent:
 	jr IvAccordion_ReturnHandled
 
 IvAccordion_GetText:
-	pushw 0xe9
-	pushw 0xd9ba
-	push xiz
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvAccordion_GetText.bin"
 IvAccordion_ReturnHandled:
 	lds32 xhl, 0
 	jr IvAccordion_Return
@@ -8946,13 +5991,7 @@ AccordionX_Paint:
 	jr StringCopyReturn
 
 AccordionX_GetText:
-	pushw 0xe9
-	pushw 0xd9c0
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_AccordionX_GetText.bin"
 StringCopyReturn:
 	lds32 xhl, 0
 
@@ -9104,19 +6143,7 @@ Sdtecd_Init:
 	jr Voice_InheritedProcCall
 
 Sdtecd_InitCase3:
-	ld xwa, 0xd0001
-	ld xbc, 0x1e0007f
-	lds32 xde, 1
-	call SendEvent
-	ld xwa, 0x4200
-	call SndParam_LookupReadOnly
-	cps hl, 0
-	jr nz, Voice_InheritedProcCall
-	ld xwa, 0x4200
-	lds bc, 1
-	lds de, 3
-	call MainLswPut
-
+	.incbin "includes/generated/v7_transplant_Sdtecd_InitCase3.bin"
 Voice_InheritedProcCall:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -9136,13 +6163,7 @@ Sdtecd_Paint:
 	jr Sdtecd_ReturnZero
 
 Sdtecd_GetText:
-	pushw 0xe9
-	pushw 0xd9c6
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_Sdtecd_GetText.bin"
 Sdtecd_ReturnZero:
 	lds32 xhl, 0
 
@@ -9152,49 +6173,7 @@ Sdtecd_Epilogue:
 	ret
 
 IvSdtecd1Proc:
-	dec 4, xsp
-	push xiz
-	ld xiz, xde
-	ld (xsp + 4), xwa
-	cp xbc, 0x1e0003a
-	jrl z, Sdtecd1_GetText
-	cp xbc, 0x1c0000d
-	jrl z, Sdtecd1_Paint
-	cp xbc, 0x1c0001c
-	jrl z, Sdtecd1_Match
-	cp xbc, 0x1c0001a
-	jrl z, Sdtecd1_ScrollUp
-	cp xbc, 0x1c00018
-	jrl z, Sdtecd1_ScrollUp
-	cp xbc, 0x1c00019
-	jr z, Sdtecd1_ScrollDown
-	cp xbc, 0x1c00017
-	jr z, Sdtecd1_ScrollDown
-	cp xbc, 0x1c0000b
-	jrl nz, Sdtecd1_ForwardToBase
-	ld xwa, (xsp + 4)
-	ld xde, xiz
-	call InheritedProc
-	ld xwa, 0x4202
-	call SndParam_LookupReadOnly
-	sla hl, 2
-	lda_24 xwa, (NakaInst_RIGHT_1_E9D9B0_0x1C)
-	ld_sril3 XWA, 0x07, 0xe0, 0xec
-	ld xbc, 0x1e00087
-	lds32 xde, 1
-	call SendEvent
-	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00018
-	lds32 xde, 1
-	call SetDialUp
-	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
-	lds32 xde, 1
-	call SetDialDown
-	lds wa, 1
-	call SetDialEnable
-	jrl IvSdtecd1_ReturnDefault
-
+	.incbin "includes/generated/v7_transplant_IvSdtecd1Proc.bin"
 Sdtecd1_ScrollDown:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
@@ -9224,23 +6203,7 @@ Sdtecd1_ScrollDown:
 	jrl IvSdtecd1_ReturnDefault
 
 Sdtecd1_ScrollDown_Lookup:
-	ld xwa, 0x4202
-	call SndParam_LookupReadOnly
-	ld bc, hl
-	ld xwa, NakaInst_RIGHT_1_E9D9B0_0x54
-	calr SdpartLookupPartId
-	ld wa, hl
-	inc 7, wa
-	cp wa, 0xd
-	jrl gt, IvSdtecd1_ReturnDefault
-	inc 7, hl
-	add hl, hl
-	lda_24 xwa, (NakaInst_RIGHT_1_E9D9B0_0x54)
-	ldw_sri BC, 0x07, 0xe0, 0xec
-	ld xwa, 0x4202
-	lds de, 3
-	jrl Sdtecd1_PutAndReturn
-
+	.incbin "includes/generated/v7_transplant_Sdtecd1_ScrollDown_Lookup.bin"
 Sdtecd1_ScrollUp:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
@@ -9270,21 +6233,7 @@ Sdtecd1_ScrollUp:
 	jrl IvSdtecd1_ReturnDefault
 
 Sdtecd1_ScrollUp_Lookup:
-	ld xwa, 0x4202
-	call SndParam_LookupReadOnly
-	ld bc, hl
-	ld xwa, NakaInst_RIGHT_1_E9D9B0_0x54
-	calr SdpartLookupPartId
-	ld wa, hl
-	sub wa, 0x7
-	jr lt, IvSdtecd1_ReturnDefault
-	dec 7, hl
-	add hl, hl
-	lda_24 xwa, (NakaInst_RIGHT_1_E9D9B0_0x54)
-	ldw_sri BC, 0x07, 0xe0, 0xec
-	ld xwa, 0x4202
-	lds de, 3
-
+	.incbin "includes/generated/v7_transplant_Sdtecd1_ScrollUp_Lookup.bin"
 Sdtecd1_PutAndReturn:
 	call MainLswPut
 	jr IvSdtecd1_ReturnDefault
@@ -9317,12 +6266,7 @@ Sdtecd1_SendEventReturn:
 	jr IvSdtecd1_ReturnDefault
 
 Sdtecd1_GetText:
-	pushw 0xe9
-	pushw 0xda22
-	push xiz
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_Sdtecd1_GetText.bin"
 IvSdtecd1_ReturnDefault:
 	lds32 xhl, 0
 	jr Sdtecd1_Epilogue
@@ -9367,12 +6311,7 @@ LswOrch_StrDefault:
 	pushw 0xdb16
 
 LswOrch_StrCopyReturn:
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswOrchestra_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswOrch_StrCopyReturn.bin"
 LswOrch_SubParam:
 	ld xhl, 0x4201
 	jr LswOrchestra_PopIzRet
@@ -9445,12 +6384,7 @@ PsLabel_Confirm:
 	jrl LswMaster_ReturnZeroJmp
 
 PsLabel_CopyDataStr:
-	ld_sril XWA, (xsp + 0x0110)
-	push xwa
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PsLabel_CopyDataStr.bin"
 PsLabel_DrawReverse:
 	stb_dri C, 0xfd, 0x08, 0x01
 	stb_dri A, 0xfd, 0x04, 0x01
@@ -9564,15 +6498,7 @@ PsLabelBox_SendEvent_Continue:
 	jr LswMaster_ReturnZeroJmp
 
 PsLabel_GetText:
-	ld_sril XWA, (xsp + 0x0114)
-	call GetViewInstance
-	ld xwa, (xhl + 28)
-	push xwa
-	ld_sril XWA, (xsp + 0x0114)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PsLabel_GetText.bin"
 LswMaster_ReturnZeroJmp:
 	lds32 xhl, 0
 	jr PsLabel_Epilogue
@@ -9619,39 +6545,7 @@ LswMasterTuning:
 	ld bc, (xwa + 4)
 
 LswTuning_SearchLoop:
-	ld wa, iz
-	extz xwa
-	ld xhl, xde
-	add xhl, xwa
-	ld a, (xhl)
-	extz wa
-	cp wa, bc
-	jr nz, LswTuning_SearchNext
-	ld wa, iz
-	extz xwa
-	div wa, 0x3
-	add wa, 0x1b
-	pushw wa
-	pushw 0xe9
-	pushw 0xdb76
-	lda xwa, (xsp + 8)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	ld wa, iz
-	extz xwa
-	div wa, 0x3
-	stw_erp BC, 0xe2
-	lda xwa, (xsp + 6)
-	cps bc, 2
-	jr z, LswTuning_Octave6
-	cps bc, 1
-	jr z, LswTuning_Octave3
-	cps bc, 0
-	jr nz, StringOp_CopyCall
-	ld (xwa), 0x30
-	jr StringOp_CopyCall
-
+	.incbin "includes/generated/v7_transplant_LswTuning_SearchLoop.bin"
 LswTuning_Octave3:
 	ld (xwa), 0x33
 	jr StringOp_CopyCall
@@ -9666,16 +6560,7 @@ LswTuning_SearchNext:
 	jr ule, LswTuning_SearchLoop
 
 StringOp_CopyCall:
-	lda xwa, (xsp + 2)
-	push xwa
-	ld xwa, (xsp + 12)
-	ld xwa, (xwa + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, (xsp + 12)
-	jr StringOp_ReturnPoint
-
+	.incbin "includes/generated/v7_transplant_StringOp_CopyCall.bin"
 LswTuning_StepSize:
 	lds32 xhl, 3
 	jr StringOp_ReturnPoint
@@ -9851,13 +6736,7 @@ Sdscltyp2_Paint:
 	jr IvSdscltyp2_ReturnZeroJmp
 
 Sdscltyp2_GetText:
-	pushw 0xe9
-	pushw 0xdbb0
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_Sdscltyp2_GetText.bin"
 IvSdscltyp2_ReturnZeroJmp:
 	lds32 xhl, 0
 	jr Sdscltyp2_Epilogue
@@ -9907,12 +6786,7 @@ LswScaleType_StrDefault:
 	pushw 0xdd08
 
 LswScaleType_StrCopyReturn:
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xhl, (xsp + 4)
-	jr LswScaleType_PopIzSkip4Ret
-
+	.incbin "includes/generated/v7_transplant_LswScaleType_StrCopyReturn.bin"
 LswScaleType_SubParam:
 	ld xhl, 0x4281
 	jr LswScaleType_PopIzSkip4Ret
@@ -9934,32 +6808,7 @@ LswScaleType_PopIzSkip4Ret:
 	ret
 
 LswScalingShift:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e00083
-	jr z, LswScaleShift_ReturnZero
-	cp xbc, 0x1e0003f
-	jr z, LswScaleShift_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswScaleShift_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswScaleShift_StepSize
-	cp xbc, 0x1e00040
-	jr z, LswScaleShift_SubParam
-	cp xbc, 0x1e00042
-	jr nz, LswScaleShift_ReturnZero
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (Scale_Arabic2_NameTable)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswScaleSharp_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswScalingShift.bin"
 LswScaleShift_SubParam:
 	ld xhl, 0x4282
 	jr LswScaleSharp_PopIzRet
@@ -9980,32 +6829,7 @@ LswScaleSharp_PopIzRet:
 	ret
 
 LswScalingShift2:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e00083
-	jr z, LswScaleShift2_ReturnZero
-	cp xbc, 0x1e0003f
-	jr z, LswScaleShift2_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswScaleShift2_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswScaleShift2_StepSize
-	cp xbc, 0x1e00040
-	jr z, LswScaleShift2_SubParam
-	cp xbc, 0x1e00042
-	jr nz, LswScaleShift2_ReturnZero
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (Scale_Names_Table)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswScaleSharp_PopIzRet2
-
+	.incbin "includes/generated/v7_transplant_LswScalingShift2.bin"
 LswScaleShift2_SubParam:
 	ld xhl, 0x4282
 	jr LswScaleSharp_PopIzRet2
@@ -10026,32 +6850,7 @@ LswScaleSharp_PopIzRet2:
 	ret
 
 LswScalingMode:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e00083
-	jr z, LswScaleMode_ReturnZero
-	cp xbc, 0x1e0003f
-	jr z, LswScaleMode_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswScaleMode_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswScaleMode_StepSize
-	cp xbc, 0x1e00040
-	jr z, LswScaleMode_SubParam
-	cp xbc, 0x1e00042
-	jr nz, LswScaleMode_ReturnZero
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (NakaInst_KEY_C_E9DE14_0xA)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswScaleMode_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswScalingMode.bin"
 LswScaleMode_SubParam:
 	ld xhl, 0x4280
 	jr LswScaleMode_PopIzRet
@@ -10072,52 +6871,9 @@ LswScaleMode_PopIzRet:
 	ret
 
 LswScalingKeyX:
-	dec 4, xsp
-	push xiz
-	ld xiz, xde
-	ld (xsp + 4), xwa
-	cp xbc, 0x1e000b9
-	jrl z, LswScaleKeyX_ReturnRange
-	cp xbc, 0x1e000b8
-	jrl z, LswScaleKeyX_ReturnOne
-	cp xbc, 0x1e00083
-	jrl z, LswScaleKeyX_ReturnZero
-	cp xbc, 0x1e0003f
-	jrl z, LswScaleKeyX_ReturnOne
-	cp xbc, 0x1e0003e
-	jrl z, LswScaleKeyX_ReturnFour
-	cp xbc, 0x1e00041
-	jrl z, LswScaleKeyX_StepSize
-	cp xbc, 0x1e00040
-	jr z, LswScaleKeyX_FindFocus
-	cp xbc, 0x1e00042
-	jrl nz, LswScaleKeyX_ReturnZero
-	ld hl, (xiz + 4)
-	exts xhl
-	ld xwa, xhl
-	ld xbc, 0xc9
-	call Math_MultiplyAccumulate
-	add xhl, 0x7f
-	sra xhl, 8
-	sub xhl, 0x64
-	ld xwa, (xiz + 8)
-	or xhl, xhl
-	jr z, LswScaleKeyX_StrZero
-	push xhl
-	pushw 0xe9
-	pushw 0xde32
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	jr LswScaleKeyX_LoadReturn
-
+	.incbin "includes/generated/v7_transplant_LswScalingKeyX.bin"
 LswScaleKeyX_StrZero:
-	pushw 0xe9
-	pushw 0xde38
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_LswScaleKeyX_StrZero.bin"
 LswScaleKeyX_LoadReturn:
 	ld xhl, (xsp + 4)
 	jr LswEnd_PopIzSkip4Ret
@@ -10194,56 +6950,7 @@ IvSoftverProc:
 	jrl Softver_Epilogue
 
 Softver_ShowHide:
-	ld xwa, xiz
-	call InheritedProc
-	pushw_da 0x30, 0x79, 0xeb
-	pushw 0xe9
-	pushw 0xde3e
-	lda xwa, (xsp + 10)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x160
-	ld xbc, 0x1c0000f
-	call SendEvent
-	call Boot_ParseTableDataTimestamp
-	pushw hl
-	pushw 0xe9
-	pushw 0xde42
-	lda xwa, (xsp + 10)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x161
-	ld xbc, 0x1c0000f
-	call SendEvent
-	call Boot_GetSystemPointer
-	pushw hl
-	pushw 0xe9
-	pushw 0xde46
-	lda xwa, (xsp + 10)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x162
-	ld xbc, 0x1c0000f
-	call SendEvent
-	call Boot_ParseSubCPUTimestamp
-	pushw hl
-	pushw 0xe9
-	pushw 0xde4a
-	lda xwa, (xsp + 10)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x163
-	ld xbc, 0x1c0000f
-	jr Softver_SendEvent
-
+	.incbin "includes/generated/v7_transplant_Softver_ShowHide.bin"
 Softver_Paint:
 	ld xwa, xiz
 	call InheritedProc
@@ -10256,12 +6963,7 @@ Softver_SendEvent:
 	jr Softver_ReturnZero
 
 Softver_GetText:
-	pushw 0xe9
-	pushw 0xde4e
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_Softver_GetText.bin"
 Softver_ReturnZero:
 	lds32 xhl, 0
 
@@ -10287,22 +6989,7 @@ IvMPverProc:
 	jr MPver_Epilogue
 
 MPver_ShowHide:
-	ld xwa, xiz
-	call InheritedProc
-	call Get_Firmware_Version
-	extz hl
-	pushw hl
-	pushw 0xe9
-	pushw 0xde54
-	lda xwa, (xsp + 10)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	lda xde, (xsp + 4)
-	ld xwa, CharEncoding_PrintableHi_0xA
-	ld xbc, 0x1c0000f
-	jr MPver_SendEvent
-
+	.incbin "includes/generated/v7_transplant_MPver_ShowHide.bin"
 MPver_Paint:
 	ld xwa, xiz
 	call InheritedProc
@@ -10315,12 +7002,7 @@ MPver_SendEvent:
 	jr MPver_ReturnZero
 
 MPver_GetText:
-	pushw 0xe9
-	pushw 0xde5c
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_MPver_GetText.bin"
 MPver_ReturnZero:
 	lds32 xhl, 0
 
@@ -10850,24 +7532,9 @@ AcWelcomScreen_Select_StartTimer:
 	jr AcWelcomScreen_ReturnHandled
 
 AcWelcomScreen_SubCpuError:
-	ld xwa, (xsp + 20)
-	ld xbc, xiz
-	ld xde, (xsp + 16)
-	call InheritedProc
-	ld xwa, CharEncoding_PrintableHi_0x4
-	ld xbc, 0x1c00001
-	lds32 xde, 3
-	jr AcWelcomScreen_DispatchEvent
-
+	.incbin "includes/generated/v7_transplant_AcWelcomScreen_SubCpuError.bin"
 AcWelcomScreen_SubCpuLoaded:
-	ld xwa, (xsp + 20)
-	ld xbc, xiz
-	ld xde, (xsp + 16)
-	call InheritedProc
-	ld xwa, CharEncoding_PrintableHi_0x7
-	ld xbc, 0x1c00001
-	lds32 xde, 3
-
+	.incbin "includes/generated/v7_transplant_AcWelcomScreen_SubCpuLoaded.bin"
 AcWelcomScreen_DispatchEvent:
 	call SendEvent
 	jr AcWelcomScreen_ReturnHandled
@@ -11374,25 +8041,7 @@ AudioCtrl_DispatchHandler:
 	jrl PsMixer_SendEventAndForward
 
 AudioCtrl_PageHandler:
-	ld xwa, (xsp + 82)
-	cp xwa, 0x8f
-	jrl nz, AudioCtrl_CheckEventF
-	incdi16_24 8, (0x24790)
-	incdi16_24 1, (0x24794)
-	ldw_da xwa, (0x024790)
-	calr PsMixer_ReadWordArrayEntry
-	ldw_erp HL, 0xfa
-	cp_erpw 0xfa, 0xff, 0x00
-	jr z, AudioCtrl_PageAdvance
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	cps hl, 1
-	scc16 z, bc
-	cpw_da (0x24794), 2
-	scc16 z, wa
-	and wa, bc
-	jr z, AudioCtrl_SetupPartDisplay
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_PageHandler.bin"
 AudioCtrl_PageAdvance:
 	ldw_da xwa, (0x024790)
 	exts xwa
@@ -11586,46 +8235,7 @@ PsMixer_Case7_Forward:
 
 ; PsMixer control case 8
 PsMixer_ControlCase8:
-	ld xwa, (xsp + 90)
-	ld xbc, (xsp + 86)
-	ld xde, (xsp + 82)
-	call InheritedProc
-	ld xwa, (xsp + 82)
-	ld (xsp + 8), wa
-	ld wa, (xsp + 8)
-	calr Util_SignExtendAndDouble
-	ld (xsp + 4), xhl
-	ld xwa, (xsp + 4)
-	ld wa, (xwa + 2)
-	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
-	ld xwa, (xsp + 90)
-	ld xbc, (xsp + 86)
-	ld xde, (xsp + 82)
-	ld xhl, (xhl)
-	call (xhl)
-	jrl AudioCtrl_ReturnZero
-	ld xwa, (xsp + 90)
-	ld xbc, (xsp + 86)
-	ld xde, (xsp + 82)
-	call InheritedProc
-	ld xwa, (xsp + 82)
-	ld xiy, xwa
-	lda xix, (xsp + 70)
-	lds bc, 6
-	ldirw
-	lda xwa, (xsp + 70)
-	lda xbc, (xsp + 68)
-	lda xde, (xsp + 66)
-	call SndParam_DecodeMidiAddr
-	ldw_da xwa, (0x024796)
-	muls wa, 0x5
-	ld (xsp + 8), wa
-	ldw (xsp + 10), 0x0
-	cp hl, 0xffff
-	jrl z, PsMixer_UnmatchedPartScan
-
+	.incbin "includes/generated/v7_transplant_PsMixer_ControlCase8.bin"
 PsMixer_MidiScanOuterLoop:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
@@ -11931,40 +8541,7 @@ PsMixer_VolumeSelect_Continue:
 	lds32 xde, 0
 
 PsMixer_SendEventAndForward:
-	call SendEvent
-	jrl AudioCtrl_ReturnZero
-	ld xwa, (xsp + 90)
-	ld xbc, (xsp + 86)
-	ld xde, (xsp + 82)
-	call InheritedProc
-	ldw_da xwa, (0x024790)
-	calr PsMixer_ReadWordArrayEntry
-	ldw_erp HL, 0xfa
-	stw_erp WA, 0xfa
-	add wa, wa
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
-	ldw_sri BC, 0x07, 0xe4, 0xe0
-	ld xwa, (xsp + 82)
-	cp bc, (xwa)
-	jr nz, PsMixer_EventFwd_Setup
-	ld xwa, (xwa + 2)
-	push xwa
-	stw_erp WA, 0xfa
-	sla wa, 2
-	lda_24 xbc, (0x03ea38)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xe9
-	pushw 0xf580
-	lda xwa, (xsp + 30)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 16)
-	lda xde, (xsp + 18)
-	ld xwa, (xsp + 90)
-	ld xbc, 0x1c0000f
-	call SendEvent
-
+	.incbin "includes/generated/v7_transplant_PsMixer_SendEventAndForward.bin"
 PsMixer_EventFwd_Setup:
 	ldw_da xwa, (0x024796)
 	muls wa, 0x5
@@ -12004,13 +8581,7 @@ PsMixer_EventFwd_Next:
 
 ; PsMixer control common handler
 PsMixer_ControlCommon:
-	pushw 0xe9
-	pushw 0xf58e
-	ld xwa, (xsp + 86)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_PsMixer_ControlCommon.bin"
 AudioCtrl_ReturnZero:
 	lds32 xhl, 0
 	jr AudioCtrl_MixerEpilogue
@@ -12217,2601 +8788,7 @@ Util_StoreGridArrayBase:
 	ret
 
 AudioCtrl_DataBlock:
-	lda	xsp, (xsp-22)
-	push	xiz
-	ld	(xsp+24), bc
-	ld	xiz, xwa
-	lda	xbc, (xsp+6)
-	lda	xde, (xsp+4)
-	ldw	wa, 52
-	call	GetFrameSPSize
-	ld	xiy, xiz
-	lda	xix, (xsp+16)
-	lds	bc, 4
-	.byte 0x95
-	scf
-	lda	xwa, (xsp+16)
-	ld	bc, (xsp+4)
-	dec	2, bc
-	add	(xwa+2), bc
-	ldw	bc, 193
-	ld	de, (xsp+24)
-	call	DrawDesignBox
-	lda	xde, (xsp+12)
-	.byte 0xb2
-	push	sr
-	pushw	iy
-	nop
-	lda	xbc, (xsp+16)
-	ld	wa, (xbc+2)
-	inc	2, wa
-	ld	(xde+2), wa
-	lda	xde, (xsp+8)
-	.byte 0xb2
-	push	sr
-	pushw	iy
-	nop
-	ld	wa, (xbc+6)
-	dec	2, wa
-	ld	(xde+2), wa
-	lds	iz, 0
-	lda	xwa, (xsp+12)
-	lda	xbc, (xsp+8)
-	ldw	de, 248
-	call	DrawLine
-	lda	xwa, (xsp+12)
-	incm	1, (xwa)
-	lda	xbc, (xsp+8)
-	incm	1, (xbc)
-	ldw	de, 255
-	call	DrawLine
-	.byte 0x9f
-	incf
-	push	xwa
-	ldb	e, 0
-	.byte 0x9f
-	ldio	56, 37
-	nop
-	inc	1, iz
-	cps	iz, 7
-	jr	lt, -46
-	pop	xiz
-	lda	xsp, (xsp+22)
-	ret
-	lda	xsp, (xsp-14)
-	push	xiz
-	ld	(xsp+16), bc
-	ld	xiz, xwa
-	lda	xbc, (xsp+6)
-	lda	xde, (xsp+4)
-	ldw	wa, 52
-	call	GetFrameSPSize
-	ld	xiy, xiz
-	lda	xix, (xsp+8)
-	lds	bc, 4
-	.byte 0x95
-	scf
-	lda	xwa, (xsp+8)
-	ld	bc, (xsp+4)
-	dec	2, bc
-	add	(xwa+2), bc
-	ldw	bc, 193
-	ld	de, (xsp+16)
-	call	DrawDesignBox
-	pop	xiz
-	lda	xsp, (xsp+14)
-	ret
-	lda	xsp, (xsp-22)
-	push	xiz
-	ld	(xsp+20), xde
-	ld	(xsp+24), bc
-	ld	xiz, xwa
-	lda	xbc, (xsp+6)
-	lda	xde, (xsp+4)
-	ldw	wa, 52
-	call	GetFrameSPSize
-	lda	xwa, (xsp+8)
-	ld	bc, (xiz)
-	ld	(xwa), bc
-	ld	bc, (xiz+2)
-	ld	(xwa+2), bc
-	.byte 0x9f
-	push_f
-	push	xsp
-	nop
-	nop
-	jr	z, 8
-	ldw	bc, 52
-	ldw	de, 242
-	jr	6
-	ldw	bc, 52
-	ldw	de, 8
-	call	DrawFrameSP
-	ld	xiy, xiz
-	lda	xix, (xsp+12)
-	lds	bc, 4
-	.byte 0x95
-	scf
-	lda	xwa, (xsp+12)
-	ld	bc, (xiz)
-	.byte 0x9f, 0x06, 0x81
-	ld	(xwa+4), bc
-	ld	bc, (xiz+2)
-	.byte 0x9f, 0x04, 0x81
-	ld	(xwa+6), bc
-	lda	xbc, (xsp+8)
-	call	GetBoxCenter
-	lda	xwa, (xsp+12)
-	lda	xbc, (xsp+8)
-	lds32	xde, 3
-	push	xde
-	pushw	255
-	pushw	247
-	ld	xde, (xsp+28)
-	call	DrawStringCentered
-	pop	xiz
-	lda	xsp, (xsp+22)
-	ret
-	dec	8, xsp
-	push	xiz
-	ld	xiz, xwa
-	ld	wa, bc
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7, 0xe2, 0x88
-	ld	(xsp+6), wa
-	ld	wa, bc
-	exts	xwa
-	ld	xbc, xwa
-	add	xbc, xbc
-	add	xbc, xwa
-	sll	xbc, 2
-	addda32_24	xbc, (0x3ea30)
-	ld	wa, (xbc+4)
-	ld	(xsp+4), wa
-	ldw	wa, 136
-	.byte 0x9f, 0x06, 0x80
-	lda	xbc, (xsp+8)
-	call	GetEditSwPoint
-	lda	xde, (xiz+2)
-	lda	xbc, (xsp+10)
-	ld	wa, (xbc)
-	sub	wa, 9
-	.byte 0x9f, 0x06, 0xa0
-	ld	(xde), wa
-	.byte 0xb6
-	push	sr
-	ldio	0, 190
-	.byte 0x04
-	push	sr
-	.byte 0x37, 0x01
-	lda	xhl, (xiz+6)
-	ld	wa, (xbc)
-	add	wa, 31
-	.byte 0x9f, 0x06, 0xa0
-	ld	(xhl), wa
-	ld	wa, (xsp+4)
-	add	(xde), wa
-	add	(xhl), wa
-	pop	xiz
-	inc	8, xsp
-	ret
-	lda	xsp, (xsp-22)
-	push	xiz
-	ld	(xsp+20), de
-	ld	(xsp+22), xbc
-	ld	xiz, xwa
-	lda	xbc, (xsp+6)
-	lda	xde, (xsp+4)
-	ldw	wa, 52
-	call	GetFrameSPSize
-	ld	xiy, xiz
-	lda	xix, (xsp+12)
-	lds	bc, 4
-	.byte 0x95
-	scf
-	ld	wa, (xsp+4)
-	dec	2, wa
-	add	(xsp+14), wa
-	ld	wa, (xsp+20)
-	exts	xwa
-	divs	wa, 8
-	.byte 0xd7, 0xe2
-	add	(xiz-34), w
-	lda	xbc, (xsp+8)
-	call	GetEditSwPoint
-	lda	xwa, (xsp+12)
-	ld	xbc, (xsp+22)
-	call	GetBoxCenter
-	ld	wa, iz
-	add	wa, wa
-	dec	8, wa
-	ld	bc, (xsp+8)
-	sub	bc, wa
-	dec	2, bc
-	ld	xwa, (xsp+22)
-	ld	(xwa), bc
-	pop	xiz
-	lda	xsp, (xsp+22)
-	ret
-	lda	xsp, (xsp-18)
-	push	xiz
-	ld	(xsp+16), de
-	ld	(xsp+18), xbc
-	ld	xiz, xwa
-	lda	xbc, (xsp+6)
-	lda	xde, (xsp+4)
-	ldw	wa, 52
-	call	GetFrameSPSize
-	ld	xiy, xiz
-	lda	xix, (xsp+8)
-	lds	bc, 4
-	.byte 0x95
-	scf
-	lda	xde, (xsp+8)
-	lda	xbc, (xde+2)
-	ld	wa, (xsp+4)
-	dec	2, wa
-	add	(xbc), wa
-	ld	wa, (xsp+16)
-	exts	xwa
-	divs	wa, 8
-	.byte 0xd7
-	ldl_da	xwa, (0x49a8b)
-	.byte 0x92
-	xor	(xwa), xwa
-	.byte 0x8c
-	exts	xix
-	divs	ix, 4
-	ld	wa, hl
-	exts	xwa
-	divs	wa, 4
-	add	wa, wa
-	inc	1, wa
-	muls	xwa, xix
-	ld	ix, (xde)
-	add	ix, wa
-	inc	2, ix
-	ld	xiy, (xsp+18)
-	ld	(xiy), ix
-	ld	bc, (xbc)
-	ld	wa, (xde+6)
-	sub	wa, bc
-	exts	xwa
-	divs	wa, 8
-	ld	de, wa
-	exts	xhl
-	divs	hl, 4
-	.byte 0xd7
-	ld	xwa, xiz
-	add	wa, wa
-	inc	1, wa
-	muls	xwa, xde
-	add	bc, wa
-	inc	2, bc
-	ld	(xiy+2), bc
-	pop	xiz
-	lda	xsp, (xsp+18)
-	ret
-	lds32	xhl, 0
-	ret
-	lda	xsp, (xsp-28)
-	push	xiz
-	ld	(xsp+28), xbc
-	ld	wa, de
-	srl	xde, 0
-	ld	(xsp+12), wa
-	.byte 0xd7
-	lds32	xde, 0
-	ld	(xsp+14), de
-	ld	xwa, (xsp+28)
-	cp	xwa, 0x1c0001a
-	jrl	z, 184
-	cp	xwa, 0x1c00018
-	jrl	z, 175
-	cp	xwa, 0x1c00019
-	jrl	z, 166
-	cp	xwa, 0x1c00017
-	jrl	z, 157
-	cp	xwa, 0x1c0000f
-	jr	z, 43
-	cp	xwa, 0x1c0000e
-	jrl	z, 333
-	cp	xwa, 0x1c0000d
-	jrl	nz, 324
-	lda	xwa, (xsp+20)
-	ld	bc, (xsp+12)
-	calr	65096
-	lda	xwa, (xsp+20)
-	.byte 0x98
-	push	sr
-	push	xwa
-	ldwio	0, 0xafd9
-	calr	64762
-	jrl	299
-	ld	wa, (xsp+14)
-	calr	64735
-	ld	(xsp+4), hl
-	lda	xwa, (xsp+20)
-	ld	bc, (xsp+12)
-	calr	65062
-	lda	xwa, (xsp+20)
-	.byte 0x98
-	push	sr
-	push	xwa
-	ldwio	0, 4287
-	ldw	bc, 3743
-	ldb	b, 30
-	cp	(xwa), h
-	lda	xbc, (xsp+16)
-	lda_24	xwa, (0x3eab0)
-	ld	de, (xsp+4)
-	sla	de, 2
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe8
-	ldb	b, 191
-	push_a
-	ldw	wa, 3743
-	ldb	c, 210
-	.byte 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	255
-	pushw	242
-	pushw	0
-	pushw	0
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	255
-	pushw	8
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	jrl	193
-	ld	wa, (xsp+12)
-	calr	64606
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	64621
-	ld	(xsp+4), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	incf
-	jr	f, -97
-	.byte 0x04
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+28)
-	ld	bc, (xsp+10)
-	ld	de, hl
-	calr	48774
-	ld	(xsp+10), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+6), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+8), hl
-	ld	wa, (xsp+6)
-	ld	de, (xsp+4)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 29
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	.byte 0x9f
-	ldio	4, 159
-	ldio	32, 219
-	.byte 0x89
-	ld	de, (xsp+12)
-	call	MainLswPartAdd
-	jr	24
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+10)
-	ld	de, (xsp+8)
-	call	MainLswAdd
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+28)
-	ret
-	lda	xsp, (xsp-28)
-	push	xiz
-	ld	(xsp+28), xbc
-	ld	wa, de
-	srl	xde, 0
-	ld	(xsp+12), wa
-	.byte 0xd7
-	lds32	xde, 0
-	ld	(xsp+14), de
-	ld	xwa, (xsp+28)
-	cp	xwa, 0x1c0001a
-	jrl	z, 223
-	cp	xwa, 0x1c00018
-	jrl	z, 214
-	cp	xwa, 0x1c00019
-	jrl	z, 205
-	cp	xwa, 0x1c00017
-	jrl	z, 196
-	cp	xwa, 0x1c0000f
-	jr	z, 41
-	cp	xwa, 0x1c0000e
-	jrl	z, 372
-	cp	xwa, 0x1c0000d
-	jrl	nz, 363
-	lda	xwa, (xsp+20)
-	ld	bc, (xsp+12)
-	calr	64679
-	lda	xwa, (xsp+20)
-	incm	7, (xwa+2)
-	lds	bc, 7
-	calr	64347
-	jrl	340
-	ld	wa, (xsp+14)
-	calr	64320
-	ld	(xsp+4), hl
-	lda	xwa, (xsp+20)
-	ld	bc, (xsp+12)
-	calr	64647
-	lda	xwa, (xsp+20)
-	incm	7, (xwa+2)
-	lda	xbc, (xsp+16)
-	ld	de, (xsp+14)
-	calr	64739
-	lda	xbc, (xsp+16)
-	decm	6, (xbc+2)
-	lda	xwa, (xsp+20)
-	ld	de, (xsp+4)
-	sla	de, 2
-	lda_24	xhl, (0x3eab0)
-	.byte 0xe3
-	reti
-	.byte 0xec, 0xe8
-	ldb	b, 235
-	.byte 0xab
-	push	xhl
-	pushw	0
-	pushw	247
-	call	DrawStringCentered
-	lda	xbc, (xsp+16)
-	.byte 0x99
-	push	sr
-	push	xwa
-	ldwio	0, 0x88f2
-	.byte 0xeb
-	pop	sr
-	ldw	wa, 3743
-	ldb	b, 218
-	.byte 0xec
-	push	sr
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe8
-	ldb	b, 191
-	push_a
-	ldw	wa, 3743
-	ldb	c, 210
-	.byte 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	255
-	pushw	242
-	pushw	0
-	pushw	0
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	255
-	pushw	8
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	jrl	193
-	ld	wa, (xsp+12)
-	calr	64150
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	64165
-	ld	(xsp+4), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	incf
-	jr	f, -97
-	.byte 0x04
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+28)
-	ld	bc, (xsp+10)
-	ld	de, hl
-	calr	48318
-	ld	(xsp+10), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+6), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+8), hl
-	ld	wa, (xsp+6)
-	ld	de, (xsp+4)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 29
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	.byte 0x9f
-	ldio	4, 159
-	ldio	32, 219
-	.byte 0x89
-	ld	de, (xsp+12)
-	call	MainLswPartAdd
-	jr	24
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+10)
-	ld	de, (xsp+8)
-	call	MainLswAdd
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+28)
-	ret
-	lda	xsp, (xsp-76)
-	pushw	iz
-	ld	(xsp+70), xde
-	ld	(xsp+74), xbc
-	ld	xwa, (xsp+70)
-	ld	(xsp+10), wa
-	ld	xwa, (xsp+70)
-	srl	xwa, 0
-	.byte 0xd7
-	subdm32_24	(0x89d8a8), xsp
-	popw	de
-	ldb	w, 232
-	set	0, l
-	.byte 0xc0, 0x01
-	jrl	z, 724
-	ld	(xsp+12), bc
-	cp	xwa, 0x1c0001a
-	jrl	z, 503
-	cp	xwa, 0x1c00018
-	jrl	z, 494
-	cp	xwa, 0x1c00019
-	jrl	z, 485
-	cp	xwa, 0x1c00017
-	jrl	z, 476
-	cp	xwa, 0x1c0000f
-	jr	z, 99
-	cp	xwa, 0x1c0000e
-	jr	z, 49
-	cp	xwa, 0x1c0000d
-	jrl	nz, 856
-	lda	xwa, (xsp+62)
-	ld	bc, (xsp+10)
-	calr	64206
-	lda	xwa, (xsp+62)
-	lds	bc, 7
-	calr	63877
-	ld	wa, (xsp+10)
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7
-	addl_da	0xc8d888, xwa
-	nop
-	call	DrawEditSw
-	jrl	816
-	ld	wa, (xsp+10)
-	calr	63807
-	ld	(xsp+6), xhl
-	lda	xwa, (xsp+62)
-	ld	bc, (xsp+10)
-	calr	64157
-	lda	xwa, (xsp+62)
-	ld	xbc, (xsp+70)
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	xde, (xsp+6)
-	ld	xde, (xde+8)
-	calr	64010
-	jrl	774
-	ld	wa, (xsp+10)
-	calr	63765
-	ld	(xsp+6), xhl
-	ld	wa, (xsp+12)
-	calr	63779
-	ld	(xsp+4), hl
-	ld	xwa, (xsp+6)
-	ld	wa, (xwa)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	jr	f, -65
-	push	xiz
-	ldw	wa, 2719
-	ldb	a, 30
-	.byte 0x55
-	swi	2
-	lda	xwa, (xsp+62)
-	lda	xbc, (xsp+58)
-	ld	de, (xsp+12)
-	calr	64180
-	.byte 0x9f
-	push	xix
-	push	xde
-	push	0
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+2), hl
-	ld	wa, (xsp+2)
-	ld	de, (xsp+4)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 28
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	iz, hl
-	ld	wa, (xsp+2)
-	ld	bc, iz
-	call	SndParam_LookupViaEncode
-	ld	(xsp+50), hl
-	jr	21
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	call	SndParam_LookupReadOnly
-	ld	(xsp+50), hl
-	ld	bc, iz
-	extz	xbc
-	ld	wa, (xsp+4)
-	.byte 0xe8
-	.long Pad_AfterNaka_DrawbarOrgan_Screens
-	add	xwa, xbc
-	lda	xde, (xsp+46)
-	ld	(xde), xwa
-	lda	xwa, (xsp+14)
-	ld	(xde+8), xwa
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e00042
-	call	ApFuncCall
-	lda	xwa, (xsp+62)
-	lda	xde, (xsp+14)
-	lda	xbc, (xsp+58)
-	ld	hl, (xsp+10)
-	.byte 0xd2, 0x92
-	ld	xsp, 0x1b6ef302
-	ld	hl, (xsp+12)
-	.byte 0xd2, 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	1
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	lda	xwa, (xsp+62)
-	lda	xbc, (xsp+58)
-	ld	de, (xsp+12)
-	calr	63978
-	lda	xwa, (xsp+58)
-	decm	8, (xwa)
-	decm	3, (xwa+2)
-	lds32	xbc, 4
-	call	DrawBitmap
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10002
-	call	ApFuncCall
-	lda_24	xbc, (MidiParam_MixerCfgData_0x2A)
-	or	xhl, xhl
-	jr	z, 41
-	lda	xhl, (xsp+58)
-	lda	xde, (xsp+50)
-	ld	wa, (xde)
-	sra	wa, 3
-	sla	wa, 2
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 147
-	ld	w, (xwa-110)
-	sra	wa, 3
-	sla	wa, 2
-	exts	xwa
-	add	xwa, xbc
-	ld	wa, (xwa+2)
-	add	(xhl+2), wa
-	jr	14
-	lda	xde, (xsp+58)
-	ld	wa, (xbc+32)
-	add	(xde), wa
-	ld	wa, (xbc+34)
-	add	(xde+2), wa
-	lda	xwa, (xsp+58)
-	lds32	xbc, 5
-	call	DrawBitmap
-	jrl	405
-	ld	wa, (xsp+10)
-	calr	63396
-	ld	(xsp+6), xhl
-	ld	wa, (xsp+12)
-	calr	63410
-	ld	(xsp+4), hl
-	ld	xwa, (xsp+6)
-	ld	wa, (xwa)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	jr	f, -97
-	.byte 0x04
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+12), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+74)
-	ld	bc, (xsp+12)
-	ld	de, hl
-	calr	47560
-	ld	(xsp+12), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+2), hl
-	ld	wa, (xsp+12)
-	ld	(xsp+10), wa
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+12), hl
-	ld	wa, (xsp+2)
-	ld	de, (xsp+4)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 32
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	iz, hl
-	.byte 0x9f
-	incf
-	.byte 0x04
-	ld	wa, (xsp+4)
-	ld	bc, iz
-	ld	de, (xsp+12)
-	call	MainLswPartAdd
-	jrl	223
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+10)
-	ld	de, (xsp+12)
-	call	MainLswAdd
-	jrl	196
-	ld	iz, bc
-	ld	wa, (xsp+10)
-	calr	63185
-	ld	(xsp+6), xhl
-	ld	wa, iz
-	calr	63200
-	ld	(xsp+4), hl
-	ld	xwa, (xsp+6)
-	ld	wa, (xwa)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	jr	f, -97
-	.byte 0x04
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e000b8
-	call	ApFuncCall
-	or	xhl, xhl
-	jrl	z, 134
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+2), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+12), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e000b9
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	wa, (xsp+2)
-	cp	wa, 0xffff
-	jr	z, 36
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	iz, hl
-	.byte 0x9f
-	incf
-	.byte 0x04
-	ld	wa, (xsp+4)
-	ld	bc, iz
-	ld	de, (xsp+12)
-	call	MainLswPartPut
-	jr	29
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+10)
-	ld	de, (xsp+12)
-	call	MainLswPut
-	lds32	xhl, 0
-	popw	iz
-	lda	xsp, (xsp+76)
-	ret
-	lda	xsp, (xsp-76)
-	push	xiz
-	ld	(xsp+72), xde
-	ld	(xsp+76), xbc
-	ld	xwa, (xsp+72)
-	.byte 0xaf
-	popw	wa
-	.long OscScope_RenderBlock
-	ld	(xsp+12), wa
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xsp+14), bc
-	ld	xwa, (xsp+76)
-	cp	xwa, 0x1c00031
-	jrl	z, 589
-	cp	xwa, 0x1c0001a
-	jrl	z, 379
-	cp	xwa, 0x1c00018
-	jrl	z, 370
-	cp	xwa, 0x1c00019
-	jrl	z, 361
-	cp	xwa, 0x1c00017
-	jrl	z, 352
-	cp	xwa, 0x1c0000f
-	jr	z, 95
-	cp	xwa, 0x1c0000e
-	jr	z, 49
-	cp	xwa, 0x1c0000d
-	jrl	nz, 714
-	lda	xwa, (xsp+64)
-	ld	bc, (xsp+12)
-	calr	63242
-	lda	xwa, (xsp+64)
-	lds	bc, 7
-	calr	62913
-	ld	wa, (xsp+12)
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7
-	addl_da	0xc8d888, xwa
-	nop
-	call	DrawEditSw
-	jrl	674
-	ld	wa, (xsp+12)
-	calr	62843
-	ld	xiz, xhl
-	lda	xwa, (xsp+64)
-	ld	bc, (xsp+12)
-	calr	63194
-	lda	xwa, (xsp+64)
-	ld	xbc, (xsp+72)
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	xde, (xiz+8)
-	calr	63050
-	jrl	636
-	ld	wa, (xsp+12)
-	calr	62805
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	62820
-	ld	(xsp+6), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ldio	96, 191
-	ld	xwa, 0x210c9f30
-	calr	63129
-	lda	xwa, (xsp+64)
-	lda	xbc, (xsp+60)
-	ld	de, (xsp+14)
-	calr	63224
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	wa, (xsp+4)
-	cp	wa, 0xffff
-	jr	z, 33
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	iz, hl
-	ld	wa, (xsp+4)
-	ld	bc, iz
-	call	SndParam_LookupViaEncode
-	ld	(xsp+52), hl
-	jr	26
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	call	SndParam_LookupReadOnly
-	ld	(xsp+52), hl
-	ld	bc, iz
-	extz	xbc
-	ld	wa, (xsp+6)
-	extz	xwa
-	sll	xwa, 0
-	add	xwa, xbc
-	lda	xde, (xsp+48)
-	ld	(xde), xwa
-	lda	xwa, (xsp+16)
-	ld	(xde+8), xwa
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e00042
-	call	ApFuncCall
-	lda	xwa, (xsp+64)
-	lda	xbc, (xsp+60)
-	lda	xde, (xsp+16)
-	ld	hl, (xsp+12)
-	.byte 0xd2, 0x92
-	ld	xsp, 0x1b6ef302
-	ld	hl, (xsp+14)
-	.byte 0xd2, 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	1
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	jrl	387
-	ld	wa, (xsp+12)
-	calr	62556
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	62571
-	ld	(xsp+6), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ldio	96, 159
-	.byte 0x06
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+76)
-	ld	bc, (xsp+14)
-	ld	de, hl
-	calr	46724
-	ld	iz, hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	(xsp+12), iz
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	ld	wa, (xsp+4)
-	ld	de, (xsp+6)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 32
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	iz, hl
-	.byte 0x9f
-	ret
-	.byte 0x04
-	ld	wa, (xsp+6)
-	ld	bc, iz
-	ld	de, (xsp+14)
-	call	MainLswPartAdd
-	jrl	213
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+12)
-	ld	de, (xsp+14)
-	call	MainLswAdd
-	jrl	186
-	ld	wa, (xsp+12)
-	calr	62355
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	62370
-	ld	(xsp+6), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ldio	96, 159
-	.byte 0x06
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e000b8
-	call	ApFuncCall
-	or	xhl, xhl
-	jrl	z, 129
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e000b9
-	call	ApFuncCall
-	ld	(xsp+12), hl
-	ld	wa, (xsp+4)
-	ld	de, (xsp+6)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 31
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	iz, hl
-	.byte 0x9f
-	ret
-	.byte 0x04
-	ld	wa, (xsp+6)
-	ld	bc, iz
-	ld	de, (xsp+14)
-	call	MainLswPartPut
-	jr	24
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+12)
-	ld	de, (xsp+14)
-	call	MainLswPut
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+76)
-	ret
-	lda	xsp, (xsp-78)
-	push	xiz
-	ld	(xsp+74), xde
-	ld	(xsp+78), xbc
-	ld	xwa, (xsp+74)
-	ld	xbc, (xsp+74)
-	srl	xbc, 0
-	ld	(xsp+10), wa
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xsp+12), bc
-	ld	xwa, (xsp+78)
-	cp	xwa, 0x1c0001a
-	jrl	z, 444
-	cp	xwa, 0x1c00018
-	jrl	z, 435
-	cp	xwa, 0x1c00019
-	jrl	z, 426
-	cp	xwa, 0x1c00017
-	jrl	z, 417
-	cp	xwa, 0x1c0000f
-	jr	z, 95
-	cp	xwa, 0x1c0000e
-	jr	z, 49
-	cp	xwa, 0x1c0000d
-	jrl	nz, 584
-	lda	xwa, (xsp+66)
-	ld	bc, (xsp+10)
-	calr	62429
-	lda	xwa, (xsp+66)
-	lds	bc, 7
-	calr	62100
-	ld	wa, (xsp+10)
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7
-	addl_da	0xc8d888, xwa
-	nop
-	call	DrawEditSw
-	jrl	544
-	ld	wa, (xsp+10)
-	calr	62030
-	ld	xiz, xhl
-	lda	xwa, (xsp+66)
-	ld	bc, (xsp+10)
-	calr	62381
-	lda	xwa, (xsp+66)
-	ld	xbc, (xsp+74)
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	xde, (xiz+8)
-	calr	62237
-	jrl	506
-	ld	wa, (xsp+10)
-	calr	61992
-	ld	xiz, xhl
-	ld	wa, (xsp+12)
-	calr	62007
-	ld	(xsp+4), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	jr	f, -65
-	ld	xde, 0x210a9f30
-	calr	62316
-	lda	xwa, (xsp+66)
-	lda	xbc, (xsp+62)
-	ld	de, (xsp+12)
-	calr	62411
-	lda	xiy, (xsp+62)
-	lda	xix, (xsp+58)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
-	.byte 0x9f
-	ld	xwa, 0xbf00093a
-	push	xde
-	ldw	wa, 0x6f90
-	decm	1, (xwa+2)
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	iz, hl
-	ld	wa, iz
-	ld	de, (xsp+4)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 29
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	.byte 0xd7
-	swi	2
-	add	(xhl-34), wa
-	.byte 0xd7
-	swi	2
-	.byte 0x89
-	call	SndParam_LookupViaEncode
-	ld	(xsp+50), hl
-	jr	21
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	call	SndParam_LookupReadOnly
-	ld	(xsp+50), hl
-	.byte 0xd7
-	swi	2
-	.byte 0x89
-	extz	xbc
-	ld	wa, (xsp+4)
-	extz	xwa
-	sll	xwa, 0
-	add	xwa, xbc
-	lda	xde, (xsp+46)
-	ld	(xde), xwa
-	lda	xwa, (xsp+14)
-	ld	(xde+8), xwa
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e00042
-	call	ApFuncCall
-	lda	xwa, (xsp+66)
-	lda	xbc, (xsp+62)
-	lda	xde, (xsp+14)
-	ld	hl, (xsp+10)
-	.byte 0xd2, 0x92
-	ld	xsp, 0x1b6ef302
-	ld	hl, (xsp+12)
-	.byte 0xd2, 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	1
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10002
-	call	ApFuncCall
-	lda	xwa, (xsp+58)
-	or	xhl, xhl
-	jr	z, 7
-	.byte 0x9f
-	ldw	de, 63
-	nop
-	jr	nz, 7
-	ld	xbc, 30
-	jr	5
-	ld	xbc, 29
-	call	DrawBitmap
-	jrl	192
-	ld	wa, (xsp+10)
-	calr	61678
-	ld	xiz, xhl
-	ld	wa, (xsp+12)
-	calr	61693
-	ld	(xsp+4), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	jr	f, -97
-	.byte 0x04
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	iz, hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+78)
-	ld	bc, iz
-	ld	de, hl
-	calr	45848
-	ld	(xsp+12), hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	iz, hl
-	ld	de, (xsp+4)
-	exts	xde
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	wa, iz
-	ld	de, (xsp+4)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 32
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	.byte 0xd7
-	swi	2
-	.byte 0x9b, 0x9f
-	ldwio	4, 0x88de
-	.byte 0xd7
-	swi	2
-	.byte 0x89
-	ld	de, (xsp+14)
-	call	MainLswPartAdd
-	jr	24
-	ld	xwa, (xsp+6)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+12)
-	ld	de, (xsp+10)
-	call	MainLswAdd
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+78)
-	ret
-	lda	xsp, (xsp-76)
-	push	xiz
-	ld	(xsp+72), xde
-	ld	(xsp+76), xbc
-	ld	xwa, (xsp+72)
-	ld	xbc, (xsp+72)
-	srl	xbc, 0
-	ld	(xsp+12), wa
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xsp+14), bc
-	ld	xwa, (xsp+76)
-	cp	xwa, 0x1c0001a
-	jrl	z, 471
-	cp	xwa, 0x1c00018
-	jrl	z, 462
-	cp	xwa, 0x1c00019
-	jrl	z, 453
-	cp	xwa, 0x1c00017
-	jrl	z, 444
-	cp	xwa, 0x1c0000f
-	jr	z, 100
-	cp	xwa, 0x1c0000e
-	jr	z, 54
-	cp	xwa, 0x1c0000d
-	jrl	nz, 611
-	lda	xwa, (xsp+64)
-	ld	bc, (xsp+12)
-	calr	61746
-	lda	xwa, (xsp+64)
-	.byte 0x98, 0x06
-	push	xwa
-	ldb	w, 0
-	lds	bc, 7
-	calr	61412
-	ld	wa, (xsp+12)
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7
-	addl_da	0xc8d888, xwa
-	nop
-	call	DrawEditSw
-	jrl	566
-	ld	wa, (xsp+12)
-	calr	61342
-	ld	xiz, xhl
-	lda	xwa, (xsp+64)
-	ld	bc, (xsp+12)
-	calr	61693
-	lda	xwa, (xsp+64)
-	ld	xbc, (xsp+72)
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	xde, (xiz+8)
-	calr	61549
-	jrl	528
-	ld	wa, (xsp+12)
-	calr	61304
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	61319
-	ld	(xsp+6), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ldio	96, 191
-	ld	xwa, 0x210c9f30
-	calr	61628
-	lda	xwa, (xsp+64)
-	lda	xbc, (xsp+60)
-	ld	de, (xsp+14)
-	calr	61723
-	.byte 0x9f
-	push	xiz
-	push	xde
-	push	0
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10002
-	call	ApFuncCall
-	or	xhl, xhl
-	jr	z, 78
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	iz, hl
-	ld	wa, iz
-	ld	de, (xsp+6)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 26
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	wa, iz
-	ld	bc, (xsp+4)
-	call	SndParam_LookupViaEncode
-	jr	22
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	call	SndParam_LookupReadOnly
-	jr	2
-	lds	hl, 0
-	ld	(xsp+52), hl
-	ld	bc, (xsp+4)
-	extz	xbc
-	ld	wa, (xsp+6)
-	extz	xwa
-	sll	xwa, 0
-	add	xwa, xbc
-	lda	xde, (xsp+48)
-	ld	(xde), xwa
-	lda	xwa, (xsp+16)
-	ld	(xde+8), xwa
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e00042
-	call	ApFuncCall
-	lda	xde, (xsp+16)
-	lda	xwa, (xsp+64)
-	lda	xbc, (xsp+60)
-	ld	hl, (xsp+12)
-	.byte 0xd2, 0x92
-	ld	xsp, 0x1b6ef302
-	ld	hl, (xsp+14)
-	.byte 0xd2, 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	1
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	lda	xwa, (xsp+64)
-	.byte 0x98, 0x06
-	push	xwa
-	ldb	w, 0
-	lda	xbc, (xsp+60)
-	ld	de, (xsp+14)
-	calr	61494
-	lda	xwa, (xsp+60)
-	.byte 0x90
-	push	xde
-	incf
-	nop
-	.byte 0x98
-	push	sr
-	push	xde
-	zcf
-	nop
-	lds32	xbc, 2
-	call	DrawBitmap
-	ldw	wa, 128
-	.byte 0x9f
-	ldw	ix, 0xd8a0
-	push	36
-	nop
-	exts	xwa
-	divs	wa, 128
-	ld	bc, wa
-	lda	xwa, (xsp+60)
-	add	(xwa+2), bc
-	lds32	xbc, 3
-	call	DrawBitmap
-	jrl	192
-	ld	wa, (xsp+12)
-	calr	60968
-	ld	xiz, xhl
-	ld	wa, (xsp+14)
-	calr	60983
-	ld	(xsp+6), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ldio	96, 159
-	.byte 0x06
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	iz, hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+76)
-	ld	bc, iz
-	ld	de, hl
-	calr	45138
-	ld	(xsp+14), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	iz, hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+12), hl
-	ld	wa, iz
-	ld	de, (xsp+6)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 32
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	.byte 0x9f
-	incf
-	.byte 0x04
-	ld	wa, iz
-	ld	bc, (xsp+6)
-	ld	de, (xsp+16)
-	call	MainLswPartAdd
-	jr	24
-	ld	xwa, (xsp+8)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xwa, xhl
-	ld	bc, (xsp+14)
-	ld	de, (xsp+12)
-	call	MainLswAdd
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+76)
-	ret
-	lda	xsp, (xsp-34)
-	push	xiz
-	ld	(xsp+30), xde
-	ld	(xsp+34), xbc
-	ld	xde, (xsp+34)
-	cp	xde, 0x1c0001c
-	jrl	z, 824
-	.byte 0xaf, 0x1e
-	.long OscScope_RenderBlock
-	.byte 0xd7, 0xe6
-	and	(xwa-22), xsp
-	ldw	bc, 0xc000
-	.byte 0x01
-	jrl	z, 675
-	cp	xde, 0x1c0001a
-	jrl	z, 286
-	cp	xde, 0x1c00018
-	jrl	z, 277
-	cp	xde, 0x1c00019
-	jrl	z, 268
-	cp	xde, 0x1c00017
-	jrl	z, 259
-	cp	xde, 0x1c0000f
-	jrl	nz, 793
-	ld	xbc, (xsp+34)
-	ld	xde, (xsp+30)
-	calr	64732
-	ld	xwa, (xsp+30)
-	ld	(xsp+8), wa
-	ld	xwa, (xsp+30)
-	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
-	ld	(xsp+10), wa
-	ld	wa, (xsp+10)
-	calr	60680
-	ld	(xsp+6), hl
-	ldl_da	xwa, (MixerPartTable_Start_0x104)
-	ld	(xsp+12), xwa
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10002
-	call	ApFuncCall
-	or	xhl, xhl
-	jrl	z, 179
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	wa, (xsp+4)
-	cp	wa, 0xffff
-	jr	z, 35
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	ld	wa, (xsp+4)
-	ld	bc, (xsp+14)
-	call	SndParam_LookupViaEncode
-	ld	(xsp+16), hl
-	jr	28
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xiz, xhl
-	ld	xwa, xiz
-	call	SndParam_LookupReadOnly
-	ld	(xsp+16), hl
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 80
-	lda	xwa, (xsp+22)
-	ld	bc, (xsp+8)
-	calr	60878
-	lda	xwa, (xsp+22)
-	lda	xbc, (xsp+18)
-	ld	de, (xsp+10)
-	calr	60973
-	lda	xbc, (xsp+18)
-	incm	1, (xbc)
-	.byte 0x99
-	push	sr
-	push	xwa
-	ccf
-	nop
-	lda	xwa, (xsp+22)
-	ld	de, (xbc)
-	sub	de, 12
-	ld	(xwa), de
-	ld	de, (xbc)
-	add	de, 12
-	ld	(xwa+4), de
-	.byte 0x98, 0x06
-	push	xwa
-	ccf
-	nop
-	lds32	xde, 3
-	push	xde
-	pushw	251
-	pushw	0
-	pushw	0
-	pushw	1
-	ld	xde, MidiParam_MixerCfgData_0x6A
-	call	DrawStringReverse
-	lds32	xhl, 0
-	jrl	552
-	ld	xwa, (xsp+30)
-	ld	(xsp+8), wa
-	ld	wa, bc
-	calr	60452
-	ld	(xsp+6), hl
-	ldl_da	xwa, (MixerPartTable_Start_0x104)
-	ld	(xsp+12), xwa
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	wa, (xsp+4)
-	cp	wa, 0xffff
-	jr	z, 57
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	ld	wa, (xsp+4)
-	ld	bc, (xsp+14)
-	call	SndParam_LookupViaEncode
-	ld	(xsp+16), hl
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 63
-	.byte 0x9f
-	ldwio	4, 1695
-	ldb	w, 159
-	rcf
-	ldb	a, 218
-	xor	(xwa+29), xiy
-	swi	0
-	swi	1
-	jr	46
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xiz, xhl
-	ld	xwa, xiz
-	call	SndParam_LookupReadOnly
-	ld	(xsp+16), hl
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 11
-	ld	xwa, xiz
-	lds	bc, 0
-	ld	de, (xsp+10)
-	call	MainLswPut
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jrl	nz, -187
-	ld	wa, (xsp+8)
-	calr	60252
-	ld	wa, (xhl)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	incf
-	jr	f, -97
-	.byte 0x06
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+16), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+34)
-	ld	bc, (xsp+16)
-	ld	de, hl
-	calr	44431
-	ld	(xsp+16), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	wa, (xsp+16)
-	ld	(xsp+8), wa
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	wa, (xsp+4)
-	ld	de, (xsp+6)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 34
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	.byte 0x9f
-	ldwio	4, 1695
-	ldb	w, 159
-	rcf
-	ldb	a, 159
-	ldwio	34, 0x951d
-	swi	1
-	swi	1
-	jrl	-356
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xiz, xhl
-	ld	xwa, xiz
-	ld	bc, (xsp+16)
-	ld	de, (xsp+10)
-	call	MainLswAdd
-	jrl	-385
-	ld	wa, bc
-	calr	60078
-	ld	(xsp+6), hl
-	ldl_da	xwa, (MixerPartTable_Start_0x104)
-	ld	(xsp+12), xwa
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+4), hl
-	ld	de, (xsp+6)
-	exts	xde
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+10), hl
-	ld	wa, (xsp+4)
-	ld	de, (xsp+6)
-	exts	xde
-	cp	wa, 0xffff
-	jr	z, 33
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	.byte 0x9f
-	ldwio	4, 1695
-	ldb	w, 159
-	rcf
-	ldb	a, 218
-	xor	(xbc+29), xiy
-	swi	0
-	swi	1
-	jrl	-488
-	ld	xwa, (xsp+12)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	xiz, xhl
-	ld	xwa, xiz
-	lds	bc, 1
-	ld	de, (xsp+10)
-	call	MainLswPut
-	jrl	-516
-	ld	xwa, (xsp+30)
-	cp	xwa, 8
-	jr	z, 17
-	cp	xwa, 0x2880b
-	jr	z, 9
-	cp	xwa, 0xe808
-	jrl	nz, -544
-	lds32	xhl, 1
-	jr	9
-	ld	xbc, (xsp+34)
-	ld	xde, (xsp+30)
-	calr	63939
-	pop	xiz
-	lda	xsp, (xsp+34)
-	ret
-	lda	xsp, (xsp-94)
-	push	xiz
-	ld	(xsp+90), xde
-	ld	(xsp+94), xbc
-	ld	xwa, (xsp+90)
-	ld	xbc, (xsp+90)
-	srl	xbc, 0
-	ld	(xsp+18), wa
-	.byte 0xd7, 0xe6, 0xa8
-	ld	(xsp+20), bc
-	ld	xwa, (xsp+94)
-	cp	xwa, 0x1c0001a
-	jrl	z, 670
-	cp	xwa, 0x1c00018
-	jrl	z, 661
-	cp	xwa, 0x1c00019
-	jrl	z, 652
-	cp	xwa, 0x1c00017
-	jrl	z, 643
-	cp	xwa, 0x1c00020
-	jrl	z, 354
-	cp	xwa, 0x1c0000f
-	jrl	z, 305
-	cp	xwa, 0x1c0000e
-	jrl	z, 253
-	cp	xwa, 0x1c0000d
-	jrl	nz, 738
-	lda	xwa, (xsp+82)
-	ld	bc, (xsp+18)
-	calr	60133
-	lda	xwa, (xsp+82)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
-	lds	bc, 7
-	calr	59937
-	ld	wa, (xsp+18)
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7
-	addl_da	0xc8d888, xwa
-	nop
-	call	DrawEditSw
-	lda	xbc, (xsp+68)
-	.byte 0xbf
-	.asciz "B204"
-	call	GetFrameSPSize
-	lda	xhl, (xsp+82)
-	ld	wa, (xhl+4)
-	.byte 0x93
-	or	(xwa), xwa
-	zcf
-	divs	wa, 2
-	ld	bc, (xhl)
-	add	bc, wa
-	lda	xwa, (xsp+74)
-	ld	(xwa), bc
-	ld	bc, (xsp+66)
-	dec	2, bc
-	.byte 0x9b
-	push	sr
-	xor	(xbc), a
-	jr	le, -72
-	push	sr
-	.byte 0x51
-	lda	xbc, (xsp+70)
-	ld	de, (xwa)
-	ld	(xbc), de
-	ld	de, (xhl+6)
-	dec	2, de
-	ld	(xbc+2), de
-	ldw	de, 248
-	call	DrawLine
-	lda	xwa, (xsp+74)
-	incm	1, (xwa)
-	lda	xbc, (xsp+70)
-	incm	1, (xbc)
-	ldw	de, 255
-	call	DrawLine
-	ldw_da	wa, (0x24794)
-	ld	(xsp+12), wa
-	sla	wa, 3
-	ld	(xsp+12), wa
-	.byte 0xbf
-	ccf
-	push	sr
-	nop
-	nop
-	lda	xwa, (xsp+82)
-	lda	xbc, (xsp+78)
-	ld	de, (xsp+12)
-	calr	60184
-	.byte 0x9f
-	popw	iz
-	push	xde
-	ldw	ix, 0x9f00
-	incf
-	ldb	w, 30
-	.byte 0xef, 0xe8
-	ld	(xsp+8), hl
-	sla	hl, 2
-	lda_24	xwa, (0x3ea38)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	pushw	233
-	pushw	0xf872
-	lda	xwa, (xsp+30)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	lda	xwa, (xsp+82)
-	lda	xbc, (xsp+78)
-	lda	xde, (xsp+22)
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	247
-	call	DrawStringCentered
-	incm	1, (xsp+12)
-	incm	1, (xsp+18)
-	.byte 0x9f
-	ccf
-	push	xsp
-	ldio	0, 97
-	.byte 0xa4
-	jrl	494
-	ld	wa, (xsp+18)
-	calr	59530
-	ld	xiz, xhl
-	lda	xwa, (xsp+82)
-	ld	bc, (xsp+18)
-	calr	59881
-	lda	xwa, (xsp+82)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
-	ld	xbc, (xsp+90)
-	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
-	ld	xde, (xiz+8)
-	calr	59732
-	jrl	451
-	ld	wa, (xsp+20)
-	calr	59510
-	ld	(xsp+8), hl
-	add	hl, hl
-	lda_24	xwa, (MixerPartTable_Start_0x12C)
-	.byte 0xd3
-	reti
-	.byte 0xe0, 0xec
-	ldb	b, 234
-	zcf
-	ld	xwa, 0x1400004
-	ld	xbc, 0x1e0005e
-	call	FuncCall
-	jrl	411
-	ld	xwa, (xsp+90)
-	ld	(xsp+4), xwa
-	ldw_da	wa, (0x24796)
-	muls	wa, 5
-	ld	(xsp+10), wa
-	.byte 0xbf
-	ccf
-	push	sr
-	nop
-	nop
-	ld	wa, (xsp+10)
-	calr	59424
-	ld	xiz, xhl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ret
-	jr	f, -24
-	.byte 0xcf
-	ldb	l, 0
-	ldb	a, 1
-	jrl	nz, 205
-	ldw_da	wa, (0x24794)
-	ld	(xsp+12), wa
-	sla	wa, 3
-	ld	(xsp+12), wa
-	.byte 0xbf
-	push_a
-	push	sr
-	nop
-	nop
-	ld	wa, (xsp+12)
-	calr	59393
-	ld	(xsp+8), hl
-	ld	xwa, (xsp+4)
-	ld	bc, (xwa)
-	ld	xwa, MixerPartTable_Start_0x12C
-	calr	43567
-	.byte 0x9f
-	ldio	243, 126
-	.byte 0x90
-	nop
-	lda	xwa, (xsp+82)
-	ld	bc, (xsp+10)
-	calr	59701
-	lda	xwa, (xsp+82)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
-	lda	xbc, (xsp+78)
-	ld	de, (xsp+12)
-	calr	59887
-	.byte 0x9f
-	popw	iz
-	push	xwa
-	push_a
-	nop
-	lda	xwa, (xsp+54)
-	ld	bc, (xsp+8)
-	extz	xbc
-	sll	xbc, 0
-	ld	(xwa), xbc
-	lda	xbc, (xsp+22)
-	ld	(xwa+8), xbc
-	ld	xwa, (xsp+4)
-	ld	xwa, (xwa+2)
-	push	xwa
-	push	xbc
-	call	Strcpy
-	inc	8, xsp
-	lda	xde, (xsp+54)
-	ld	xwa, (xsp+14)
-	ld	xbc, 0x1e00042
-	call	ApFuncCall
-	lda	xbc, (xsp+78)
-	lda	xwa, (xsp+82)
-	lda	xde, (xsp+22)
-	ld	hl, (xsp+10)
-	.byte 0xd2, 0x92
-	ld	xsp, 0x1b6ef302
-	ld	hl, (xsp+12)
-	.byte 0xd2, 0x90
-	ld	xsp, 0x116ef302
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	1
-	jr	15
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	7
-	pushw	0
-	pushw	0
-	call	DrawStringReverse
-	incm	1, (xsp+12)
-	incm	1, (xsp+20)
-	.byte 0x9f
-	push_a
-	push	xsp
-	ldio	0, 113
-	ld	xiz, 0x610a9fff
-	incm	1, (xsp+18)
-	.byte 0x9f
-	ccf
-	push	xsp
-	halt
-	nop
-	jrl	lt, -254
-	jrl	131
-	ld	wa, (xsp+18)
-	calr	59167
-	ld	xiz, xhl
-	ld	wa, (xsp+20)
-	calr	59182
-	ld	(xsp+8), hl
-	ld	wa, (xiz)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ret
-	jr	f, -97
-	ldio	34, 234
-	zcf
-	ld	xwa, (xsp+14)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+20), hl
-	ld	de, (xsp+8)
-	exts	xde
-	ld	xwa, (xsp+14)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+94)
-	ld	bc, (xsp+20)
-	ld	de, hl
-	calr	43335
-	ld	(xsp+20), hl
-	ld	de, (xsp+8)
-	exts	xde
-	ld	xwa, (xsp+14)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	extz	xhl
-	ld	wa, (xsp+20)
-	extz	xwa
-	sll	xwa, 0
-	ld	xde, xwa
-	add	xde, xhl
-	ld	xwa, 0x1400004
-	ld	xbc, 0x1e000a9
-	call	MainFuncCall
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+94)
-	ret
-	lda	xsp, (xsp-56)
-	push	xiz
-	cp	xbc, 0x1c0000d
-	jr	z, 6
-	calr	64673
-	jrl	226
-	ld	iz, de
-	lda	xwa, (xsp+52)
-	ld	bc, iz
-	calr	59369
-	lda	xwa, (xsp+52)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
-	lds	bc, 7
-	calr	59173
-	ld	wa, iz
-	exts	xwa
-	divs	wa, 5
-	.byte 0xd7
-	addl_da	0xc8d888, xwa
-	nop
-	call	DrawEditSw
-	lda	xbc, (xsp+38)
-	lda	xde, (xsp+36)
-	ldw	wa, 52
-	call	GetFrameSPSize
-	lda	xhl, (xsp+52)
-	ld	wa, (xhl+4)
-	.byte 0x93
-	or	(xwa), xwa
-	zcf
-	divs	wa, 2
-	ld	bc, (xhl)
-	add	bc, wa
-	lda	xwa, (xsp+44)
-	ld	(xwa), bc
-	ld	bc, (xsp+36)
-	dec	2, bc
-	.byte 0x9b
-	push	sr
-	xor	(xbc), a
-	jr	le, -72
-	push	sr
-	.byte 0x51
-	lda	xbc, (xsp+40)
-	ld	de, (xwa)
-	ld	(xbc), de
-	ld	de, (xhl+6)
-	dec	2, de
-	ld	(xbc+2), de
-	ldw	de, 248
-	call	DrawLine
-	lda	xwa, (xsp+44)
-	incm	1, (xwa)
-	lda	xbc, (xsp+40)
-	incm	1, (xbc)
-	ldw	de, 255
-	call	DrawLine
-	ldw_da	iz, (0x24794)
-	sla	iz, 3
-	.byte 0xd7
-	swi	2
-	.byte 0xa8
-	lda	xwa, (xsp+52)
-	lda	xbc, (xsp+48)
-	ld	de, iz
-	calr	59430
-	.byte 0x9f
-	ldw	wa, 0x343a
-	nop
-	ld	wa, iz
-	sla	wa, 2
-	lda_24	xbc, (0x3eb28)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
-	pushw	233
-	pushw	0xf876
-	lda	xwa, (xsp+12)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	lda	xwa, (xsp+52)
-	lda	xbc, (xsp+48)
-	lda	xde, (xsp+4)
-	lds32	xhl, 3
-	push	xhl
-	pushw	0
-	pushw	247
-	call	DrawStringCentered
-	inc	1, iz
-	.byte 0xd7
-	swi	2
-	jr	lt, -41
-	swi	2
-	mul	l, 0
-	jr	lt, -83
-	lds32	xhl, 0
-	pop	xiz
-	lda	xsp, (xsp+56)
-	ret
-	lda	xsp, (xsp-18)
-	pushw	iz
-	ld	(xsp+16), xbc
-	ld	xbc, (xsp+16)
-	cp	xbc, 0x1c0001c
-	jrl	z, 379
-	cp	xbc, 0x1c0001a
-	jr	z, 33
-	cp	xbc, 0x1c00018
-	jr	z, 25
-	cp	xbc, 0x1c00019
-	jr	z, 17
-	cp	xbc, 0x1c00017
-	jr	z, 9
-	ld	xbc, (xsp+16)
-	calr	61275
-	jrl	356
-	ld	wa, de
-	srl	xde, 0
-	.byte 0xd7
-	lds32	xde, 0
-	ld	iz, de
-	calr	58713
-	ld	(xsp+12), xhl
-	ld	wa, iz
-	calr	58728
-	ld	(xsp+8), hl
-	ld	xwa, (xsp+12)
-	ld	wa, (xwa)
-	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	ldwio	96, 2207
-	ldb	b, 234
-	zcf
-	ld	xwa, (xsp+10)
-	ld	xbc, 0x1e0003e
-	call	ApFuncCall
-	ld	(xsp+14), hl
-	ld	de, (xsp+8)
-	exts	xde
-	ld	xwa, (xsp+10)
-	ld	xbc, 0x1e0003f
-	call	ApFuncCall
-	ld	xwa, (xsp+16)
-	ld	bc, (xsp+14)
-	ld	de, hl
-	calr	42878
-	ld	(xsp+14), hl
-	ld	de, (xsp+8)
-	exts	xde
-	ld	xwa, (xsp+10)
-	ld	xbc, 0x1e10000
-	call	ApFuncCall
-	ld	(xsp+2), hl
-	ld	wa, (xsp+14)
-	ld	(xsp+4), wa
-	ld	de, (xsp+8)
-	exts	xde
-	ld	xwa, (xsp+10)
-	ld	xbc, 0x1e00041
-	call	ApFuncCall
-	ld	(xsp+6), hl
-	ld	de, (xsp+8)
-	exts	xde
-	ld	xwa, (xsp+10)
-	ld	xbc, 0x1e10001
-	call	ApFuncCall
-	ld	(xsp+12), hl
-	ld	wa, (xsp+2)
-	cp	wa, 0xffff
-	jrl	z, 144
-	.byte 0x9f
-	ret
-	push	xsp
-	nop
-	nop
-	jrl	z, 140
-	ld	xwa, (xsp+16)
-	cp	xwa, 0x1c0001a
-	jr	z, 81
-	cp	xwa, 0x1c00018
-	jr	z, 73
-	cp	xwa, 0x1c00019
-	jr	z, 8
-	cp	xwa, 0x1c00017
-	jr	nz, 105
-	ld	wa, (xsp+2)
-	ldw	bc, 1026
-	call	SndParam_LookupViaEncode
-	cps	hl, 0
-	jr	nz, 91
-	.byte 0x9f
-	ei	4
-	ld	wa, (xsp+4)
-	ldw	bc, 1026
-	lds	de, 1
-	call	MainLswPartPut
-	.byte 0x9f
-	ei	4
-	ld	wa, (xsp+4)
-	ldw	bc, 1027
-	lds	de, 1
-	call	MainLswPartPut
-	.byte 0x9f
-	ei	4
-	ld	wa, (xsp+4)
-	ld	bc, (xsp+14)
-	lds	de, 0
-	jr	40
-	ld	wa, (xsp+2)
-	ldw	bc, 1025
-	call	SndParam_LookupViaEncode
-	cps	hl, 0
-	jr	nz, 34
-	.byte 0x9f
-	ei	4
-	ld	wa, (xsp+4)
-	ldw	bc, 1026
-	lds	de, 0
-	call	MainLswPartPut
-	.byte 0x9f
-	ei	4
-	ld	wa, (xsp+4)
-	ldw	bc, 1027
-	lds	de, 0
-	call	MainLswPartPut
-	lds32	xhl, 0
-	jr	36
-	.byte 0x9f
-	ei	4
-	ld	wa, (xsp+4)
-	ld	bc, (xsp+14)
-	ld	de, (xsp+6)
-	call	MainLswPartAdd
-	jr	-22
-	cp	xde, 1026
-	jr	z, 8
-	cp	xde, 1027
-	jr	nz, -38
-	lds32	xhl, 1
-	popw	iz
-	lda	xsp, (xsp+18)
-	ret
-	ret
-	ret
-	ret
-	ret
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_DataBlock.bin"
 IvDrawbarProc:
 	dec 8, xsp
 	push xiz
@@ -14985,19 +8962,7 @@ IvDrawbar_Paint:
 	jrl IvDrawbar_DispatchEvent
 
 IvDrawbar_LoadVals:
-	call GetModeNow
-	cp xhl, 0x1800003
-	jr z, IvDrawbar_LoadVals_DualMode
-	ldw_da xwa, (0x02479a)
-	ldw bc, 0x2c1
-	call SndParam_LookupViaEncode
-	stw_da (0x0247c2), xhl
-	ldw_da xwa, (0x02479a)
-	ldw bc, 0x2c0
-	call SndParam_LookupViaEncode
-	stw_da (0x0247c4), xhl
-	jrl IvDrawbar_ReturnHandled
-
+	.incbin "includes/generated/v7_transplant_IvDrawbar_LoadVals.bin"
 IvDrawbar_LoadVals_DualMode:
 	ld xwa, 0x1410001
 	ld xbc, 0x1e10009
@@ -15274,13 +9239,7 @@ IvDrawbar_DispatchEvent:
 	jr IvDrawbar_ReturnHandled
 
 IvDrawbar_GetText:
-	pushw 0xe9
-	pushw 0xf92a
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvDrawbar_GetText.bin"
 IvDrawbar_ReturnHandled:
 	lds32 xhl, 0
 	jr IvDrawbar_Return
@@ -15681,14 +9640,7 @@ DrawCombo_Paint:
 	jrl DrawCombo_SendEvent
 
 DrawCombo_GetText:
-	pushw 0xe9
-	pushw 0xf930
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl AcDrawComboBox_Return
-
+	.incbin "includes/generated/v7_transplant_DrawCombo_GetText.bin"
 DrawCombo_InitWidget:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -15836,44 +9788,7 @@ EditBox_Epilogue:
 	ret
 
 LswPercDecay:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1c00018
-	jrl z, Lsw_PercDecay_DialScroll
-	cp xbc, 0x1c0001a
-	jrl z, Lsw_PercDecay_DialScroll
-	cp xbc, 0x1c00017
-	jrl z, Lsw_PercDecay_DialScroll
-	cp xbc, 0x1c00019
-	jrl z, Lsw_PercDecay_DialScroll
-	cp xbc, 0x1e00083
-	jr z, LswPercDecay_StoreDE
-	cp xbc, 0x1e0003f
-	jr z, LswPercDecay_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswPercDecay_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswPercDecay_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswPercDecay_SubParam
-	cp xbc, 0x1e10002
-	jr z, LswPercDecay_ReturnOne
-	cp xbc, 0x1e10000
-	jr z, LswPercDecay_PartIdLookup
-	cp xbc, 0x1e00042
-	jr nz, LswPercDecay_Return
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswPercDecay_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswPercDecay.bin"
 LswPercDecay_PartIdLookup:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -15953,44 +9868,7 @@ SdpartClamp_StoreResult:
 	ret
 
 LswPercLevel:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1c00018
-	jrl z, Lsw_PercLevel_DialScroll
-	cp xbc, 0x1c0001a
-	jrl z, Lsw_PercLevel_DialScroll
-	cp xbc, 0x1c00017
-	jrl z, Lsw_PercLevel_DialScroll
-	cp xbc, 0x1c00019
-	jrl z, Lsw_PercLevel_DialScroll
-	cp xbc, 0x1e00083
-	jr z, LswPercLevel_StoreDE
-	cp xbc, 0x1e0003f
-	jr z, LswPercLevel_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswPercLevel_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswPercLevel_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswPercLevel_SubParam
-	cp xbc, 0x1e10002
-	jr z, LswPercLevel_ReturnOne
-	cp xbc, 0x1e10000
-	jr z, LswPercLevel_PartIdLookup
-	cp xbc, 0x1e00042
-	jr nz, LswPercLevel_Return
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswPercLevel_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswPercLevel.bin"
 LswPercLevel_PartIdLookup:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -16040,44 +9918,7 @@ LswPercLevel_PopIzRet:
 	ret
 
 LswDrawAttack:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1c00018
-	jrl z, Lsw_DrawAttack_DialScroll
-	cp xbc, 0x1c0001a
-	jrl z, Lsw_DrawAttack_DialScroll
-	cp xbc, 0x1c00017
-	jrl z, Lsw_DrawAttack_DialScroll
-	cp xbc, 0x1c00019
-	jrl z, Lsw_DrawAttack_DialScroll
-	cp xbc, 0x1e00083
-	jr z, LswDrawAttack_StoreDE
-	cp xbc, 0x1e0003f
-	jr z, LswDrawAttack_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswDrawAttack_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswDrawAttack_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswDrawAttack_SubParam
-	cp xbc, 0x1e10002
-	jr z, LswDrawAttack_ReturnOne
-	cp xbc, 0x1e10000
-	jr z, LswDrawAttack_PartIdLookup
-	cp xbc, 0x1e00042
-	jr nz, LswDrawAttack_Return
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswDrawAttack_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswDrawAttack.bin"
 LswDrawAttack_PartIdLookup:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -16127,44 +9968,7 @@ LswDrawAttack_PopIzRet:
 	ret
 
 LswDrawRelease:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1c00018
-	jrl z, Lsw_DrawRelease_DialScroll
-	cp xbc, 0x1c0001a
-	jrl z, Lsw_DrawRelease_DialScroll
-	cp xbc, 0x1c00017
-	jrl z, Lsw_DrawRelease_DialScroll
-	cp xbc, 0x1c00019
-	jrl z, Lsw_DrawRelease_DialScroll
-	cp xbc, 0x1e00083
-	jr z, LswDrawRelease_StoreDE
-	cp xbc, 0x1e0003f
-	jr z, LswDrawRelease_ReturnOne
-	cp xbc, 0x1e0003e
-	jr z, LswDrawRelease_ReturnOne
-	cp xbc, 0x1e00041
-	jr z, LswDrawRelease_StepSize
-	cp xbc, 0x1e10001
-	jr z, LswDrawRelease_SubParam
-	cp xbc, 0x1e10002
-	jr z, LswDrawRelease_ReturnOne
-	cp xbc, 0x1e10000
-	jr z, LswDrawRelease_PartIdLookup
-	cp xbc, 0x1e00042
-	jr nz, LswDrawRelease_Return
-	ld wa, (xde + 4)
-	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr LswDrawRelease_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_LswDrawRelease.bin"
 LswDrawRelease_PartIdLookup:
 	add xde, xde
 	ld xwa, MixerPartTable_Start_0x12C
@@ -16291,25 +10095,7 @@ IvDrawbar1_LoadVals:
 	lds iz, 0
 
 IvDrawbar1_LoadVals_Loop:
-	ldw_da xwa, (0x02479a)
-	ld bc, iz
-	extz xbc
-	add xbc, xbc
-	ld xde, MidiParam_MixerCfgData_0x78
-	add xde, xbc
-	ld bc, (xde)
-	call SndParam_LookupViaEncode
-	ld wa, iz
-	extz xwa
-	add xwa, xwa
-	ld xbc, 0x247b0
-	add xbc, xwa
-	ld (xbc), hl
-	inc 1, iz
-	cp iz, 0x8
-	jr ule, IvDrawbar1_LoadVals_Loop
-	jrl IvDrawbar1_ReturnHandled
-
+	.incbin "includes/generated/v7_transplant_IvDrawbar1_LoadVals_Loop.bin"
 IvDrawbar1_LoadVals_DualMode:
 	ld xwa, 0x1410001
 	ld xbc, 0x1e10008
@@ -16637,13 +10423,7 @@ IvDrawbar1_DispatchEvent:
 	jr IvDrawbar1_ReturnHandled
 
 IvDrawbar1_GetText:
-	pushw 0xe9
-	pushw 0xf936
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvDrawbar1_GetText.bin"
 IvDrawbar1_ReturnHandled:
 	lds32 xhl, 0
 	jr IvDrawbar1_Return
@@ -16721,27 +10501,7 @@ IvDrawbar2_SendEventShared:
 	jrl IvDrawbar_ReturnZeroJmp
 
 IvDrawbar2_LoadValsHandler:
-	call GetModeNow
-	cp xhl, 0x1800003
-	jr z, IvDrawbar2_LoadMode3
-	ldw_da xwa, (0x02479a)
-	ldw bc, 0x2cc
-	call SndParam_LookupViaEncode
-	stw_da (0x0247c6), xhl
-	ldw_da xwa, (0x02479a)
-	ldw bc, 0x2cb
-	call SndParam_LookupViaEncode
-	stw_da (0x0247c8), xhl
-	ldw_da xwa, (0x02479a)
-	ldw bc, 0x293
-	call SndParam_LookupViaEncode
-	stw_da (0x0247ca), xhl
-	ldw_da xwa, (0x02479a)
-	ldw bc, 0x294
-	call SndParam_LookupViaEncode
-	stw_da (0x0247cc), xhl
-	jrl IvDrawbar_ReturnZeroJmp
-
+	.incbin "includes/generated/v7_transplant_IvDrawbar2_LoadValsHandler.bin"
 IvDrawbar2_LoadMode3:
 	ld xwa, 0x1410001
 	ld xbc, 0x1e10008
@@ -16825,13 +10585,7 @@ IvDrawbar2_MainFuncCallShared:
 	jr IvDrawbar_ReturnZeroJmp
 
 IvDrawbar2_GetText:
-	pushw 0xe9
-	pushw 0xf93c
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_IvDrawbar2_GetText.bin"
 IvDrawbar_ReturnZeroJmp:
 	lds32 xhl, 0
 	jr IvDrawbar2_Epilogue
@@ -16895,19 +10649,7 @@ DrawbarNorm_Paint:
 	jrl IvDrawbarNorm_SendEvent
 
 DrawbarNorm_Update:
-	ld xwa, (xsp + 4)
-	cp xwa, 0x4
-	jr z, DrawbarNorm_UpdateCase4
-	or xwa, xwa
-	jrl nz, IvDrawbarNorm_ReturnZeroJmp
-	ld xwa, 0x4003
-	call SndParam_LookupReadOnly
-	exts xhl
-	ld xwa, Presentation_TagStrTable_0x18
-	ld xbc, 0x1e0003b
-	ld xde, xhl
-	jrl IvDrawbarNorm_SendEvent
-
+	.incbin "includes/generated/v7_transplant_DrawbarNorm_Update.bin"
 DrawbarNorm_UpdateCase4:
 	ldw_da xwa, (0x02479a)
 	sla wa, 2
@@ -16964,13 +10706,7 @@ IvDrawbarNorm_SendEvent:
 	jr IvDrawbarNorm_ReturnZeroJmp
 
 DrawbarNorm_GetText:
-	pushw 0xe9
-	pushw 0xf942
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_DrawbarNorm_GetText.bin"
 IvDrawbarNorm_ReturnZeroJmp:
 	lds32 xhl, 0
 	jr DrawbarNorm_Epilogue
@@ -17007,12 +10743,7 @@ DrawbarSndE_Paint:
 	jr DrawbarSndE_ReturnZero
 
 DrawbarSndE_GetText:
-	pushw 0xe9
-	pushw 0xf948
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_DrawbarSndE_GetText.bin"
 DrawbarSndE_ReturnZero:
 	lds32 xhl, 0
 
@@ -17085,22 +10816,7 @@ MemDraw_InitParamLoop:
 	lds iz, 0
 
 MemDraw_ParamLoopBody:
-	ld wa, iz
-	extz xwa
-	add xwa, xwa
-	ld xbc, MidiParam_MixerCfgData_0x8A
-	add xbc, xwa
-	ld wa, (xbc)
-	extz xwa
-	call SndParam_LookupReadOnly
-	ld bc, hl
-	ld wa, iz
-	calr DemoMenu_BuildItemWorkspace
-	inc 1, iz
-	cp iz, 0xe
-	jr ule, MemDraw_ParamLoopBody
-	jr DemoMenu_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_MemDraw_ParamLoopBody.bin"
 MemDraw_UpdateItem:
 	ld xwa, (xsp + 2)
 	srl xwa, 0
@@ -17184,37 +10900,7 @@ DemoMenu_ReturnZero:
 ; type-tag check. The path here (queued, wrong tag) never starts SSF playback.
 ; =============================================================================
 DemoMenu_BuildItemWorkspace:
-	dec 6, xsp
-	pushw iz
-	ld iz, bc
-	ld (xsp + 6), wa
-	pushw 0xc
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	call GetPartSelect
-	ld wa, hl
-	extz xwa
-	sll xwa, 10
-	ld de, (xsp + 6)
-	extz xde
-	add xde, xde
-	ld xbc, MidiParam_MixerCfgData_0x8A
-	add xbc, xde
-	ld hl, (xbc)
-	extz xhl
-	add xhl, xwa
-	ld xwa, (xsp + 2)
-	ld (xwa), xhl
-	ld (xwa + 4), iz
-	cpw (xsp + 6), 0x8
-	jr ugt, DemoMenu_WorkspaceFunc
-	ld xwa, 0x247ce
-	add xwa, xde
-	ld (xwa), iz
-	jr DemoMenu_BuildItemWorkspace_Post
-
-; DemoMenu workspace function
+	.incbin "includes/generated/v7_transplant_DemoMenu_BuildItemWorkspace.bin"
 DemoMenu_WorkspaceFunc:
 	ld wa, (xsp + 6)
 	sub wa, 0x9
@@ -17461,17 +11147,7 @@ AudioView_ReturnZeroJmp:
 	jrl PsVari_Epilogue
 
 PsVari_GetText:
-	ld_sril XWA, (xsp + 0x0118)
-	call GetViewInstance
-	pushm (xhl + 36)
-	pushw 0xe9
-	pushw 0xf99c
-	ld_sril XWA, (xsp + 0x011a)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	jr AudioView_ReturnZeroJmp
-
+	.incbin "includes/generated/v7_transplant_PsVari_GetText.bin"
 PsVari_OK:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
@@ -17687,12 +11363,7 @@ Demofeat1_Paint:
 	jr Demofeat1_ReturnZero
 
 Demofeat1_GetText:
-	pushw 0xe9
-	pushw 0xf9a6
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_Demofeat1_GetText.bin"
 Demofeat1_ReturnZero:
 	lds32 xhl, 0
 
@@ -17746,12 +11417,7 @@ Demofeat2_SendEvent:
 	jr Demofeat2_ReturnZero
 
 Demofeat2_GetText:
-	pushw 0xe9
-	pushw 0xf9ac
-	push xde
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_Demofeat2_GetText.bin"
 Demofeat2_ReturnZero:
 	lds32 xhl, 0
 
@@ -17940,17 +11606,7 @@ AcAudio_SendEvent_Continue:
 	jrl AudioCtrl_ReturnZeroJmp
 
 PresBox_GetText:
-	ld xwa, (xsp + 12)
-	call GetViewInstance
-	ld xwa, (xhl + 36)
-	push xwa
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl AudioCtrl_ReturnZeroJmp
-
-; AcPresCtrl event case 0
+	.incbin "includes/generated/v7_transplant_PresBox_GetText.bin"
 AcPresCtrl_Case0:
 	ld xwa, (xsp + 12)
 	call GetViewInstance

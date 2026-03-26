@@ -27,23 +27,7 @@ JumpInsertFunc:
 	lda_24 xix, (JumpInsert_DispatchBody)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 JumpInsert_DispatchBody:
-	ld	xwa, (xde+14)
-	sll	xwa, 2
-	ld	xbc, DiskWarning_ConfirmStrings_0x9DE
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	17
-	lds32	xhl, 1
-	jr	13
-	lds32	xhl, 4
-	jr	9
-
+	.incbin "includes/generated/v7_transplant_JumpInsert_DispatchBody.bin"
 JumpInsert_Error:
 	lds32 xhl, 0
 	jr JumpInsert_Return
@@ -54,29 +38,7 @@ JumpInsert_Return:
 	ret
 
 FilePriorityFunc:
-	push xiz
-	ld xiz, xwa
-	cp xbc, 0x1e00065
-	jr z, FilePriority_DefaultReturn
-	cp xbc, 0x1e00064
-	jr z, FilePriority_ReturnOne
-	cp xbc, 0x1e00063
-	jr z, FilePriority_ReturnPointer
-	cp xbc, 0x1e00062
-	jr nz, FilePriority_DefaultReturn
-	ld wa, (xde + 8)
-	and wa, 0x1
-	sla wa, 2
-	lda_24 xbc, (DiskWarning_ConfirmStrings_0xA4C)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xde + 10)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr FilePriority_Return
-
+	.incbin "includes/generated/v7_transplant_FilePriorityFunc.bin"
 FilePriority_ReturnPointer:
 	lda_24 xhl, (0x0340f4)
 	jr FilePriority_Return
@@ -104,36 +66,7 @@ SetupOk_Return:
 	ret
 
 SetupExitFunc:
-	push xiz
-	ld xiz, xde
-	cp xbc, 0x1c00002
-	jr nz, SetupExit_Return
-	ld xde, xiz
-	call InheritedProc
-	or xiz, xiz
-	jr nz, SetupExit_Return
-	lds wa, 6
-	call PanelDisplay_DispatchByMode
-	cps hl, 0
-	jr z, SetupExit_Return
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call SendEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call PostEvent
-	stdi8 (0x7f42), 72
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call PostEvent
-	ld xwa, 0x1450030
-	ld xbc, 0x1e5000c
-	ld xde, xiz
-	call MainFuncCall
-
+	.incbin "includes/generated/v7_transplant_SetupExitFunc.bin"
 SetupExit_Return:
 	lds32 xhl, 0
 	pop xiz
@@ -396,21 +329,7 @@ FormatDiskNaming_Return:
 	ret
 
 DrawString_Centered:
-	lda xsp, (xsp - 12)
-	pushw iz
-	ld (xsp + 4), de
-	ld (xsp + 6), xbc
-	ld (xsp + 10), xwa
-	ld xwa, (xsp + 6)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld (xsp + 2), hl
-	lds de, 0
-	ld bc, (xsp + 18)
-	cpw (xsp + 4), 0x0
-	jr ule, DrawStr_Epilogue
-
+	.incbin "includes/generated/v7_transplant_DrawString_Centered.bin"
 DrawStr_LoopBody:
 	ld iy, (xsp + 2)
 	ld iz, de
@@ -469,26 +388,7 @@ WaitingFunc:
 	jr WaitingFunc_Return
 
 WaitingFunc_DrawMessage:
-	ldb_da a, (0x0340e4)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (DiskWarning_ConfirmStrings_0xA6C)
-	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
-	push xiz
-	call Strlen
-	inc 4, xsp
-	srl hl, 1
-	pushw_da 0x8c, 0x74, 0x02
-	lda xwa, (xsp + 6)
-	ld xbc, xiz
-	ld de, hl
-	calr DrawString_Centered
-	stw_da (0x02748c), xhl
-	ld xwa, (xsp + 68)
-	lda xde, (xsp + 4)
-	ld xbc, 0x1c0000f
-	call SendEvent
-
+	.incbin "includes/generated/v7_transplant_WaitingFunc_DrawMessage.bin"
 WaitingFunc_Return:
 	lds32 xhl, 0
 	pop xiz
@@ -673,60 +573,7 @@ PsFileNameBox_Scroll_Apply:
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleConfirm:
-	ld_sril XWA, (xsp + 0x00aa)
-	call GetViewInstance
-	ld (xsp + 10), xhl
-	ld xwa, (xsp + 10)
-	ld (xsp + 4), xwa
-	ld xwa, (xwa + 50)
-	cpw (xwa), 0x0
-	jrl z, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
-	call InheritedProc
-	ld_sril XWA, (xsp + 0x00a2)
-	or xwa, xwa
-	jrl z, PsFileNameBox_ReturnZero
-	ld xwa, (xsp + 10)
-	lda xhl, (xwa + 38)
-	ld de, (xwa + 40)
-	stb_dri A, 0xfd, 0x92, 0x00
-	cps de, 1
-	jrl nz, PsFileNameBox_Confirm_MultiItem
-	cpw (xhl), 0x1
-	jr nz, PsFileNameBox_Confirm_MultiItem
-	ld_sril XWA, (xsp + 0x00aa)
-	call GetClientBox
-	stb_dri W, 0xfd, 0x92, 0x00
-	stb_dri A, 0xfd, 0x9e, 0x00
-	call GetBoxCenter
-	ld_sril XWA, (xsp + 0x00a2)
-	inc 1, xwa
-	push xwa
-	lda xwa, (xsp + 22)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xhl, (xsp + 10)
-	ld xbc, (xhl + 42)
-	lda xde, (xsp + 18)
-	lda xix, (xhl + 22)
-	ld xwa, (xsp + 4)
-	lda xiy, (xwa + 32)
-	lda xhl, (xhl + 28)
-	cpw (xbc), 0x0
-	jr nz, PsFileNameBox_Confirm_Existing
-	stb_dri W, 0xfd, 0x92, 0x00
-	stb_dri A, 0xfd, 0x9e, 0x00
-	ld xhl, (xhl)
-	push xhl
-	pushm (xiy)
-	pushm (xix)
-	pushw 0x0
-	pushw 0x1
-	jr PsFileNameBox_Confirm_Execute
-
+	.incbin "includes/generated/v7_transplant_PsFileNameBox_HandleConfirm.bin"
 PsFileNameBox_Confirm_Existing:
 	stb_dri W, 0xfd, 0x92, 0x00
 	stb_dri A, 0xfd, 0x9e, 0x00
@@ -742,93 +589,7 @@ PsFileNameBox_Confirm_Execute:
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_Confirm_MultiItem:
-	ld wa, (xhl)
-	muls xwa, xde
-	ld de, wa
-	ld_sril XWA, (xsp + 0x00a2)
-	ld a, (xwa)
-	exts wa
-	cp wa, de
-	jrl ge, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00aa)
-	call GetClientBox
-	stb_dri A, 0xfd, 0x92, 0x00
-	lda xwa, (xbc + 4)
-	ld (xsp + 14), xwa
-	ld de, (xwa)
-	sub de, (xbc)
-	exts xde
-	ld xwa, (xsp + 10)
-	mrdw3 0x98, 0x26, 0x5a
-	ld (xsp + 8), de
-	lda xiy, (xbc + 6)
-	lda xix, (xbc + 2)
-	ld hl, (xix)
-	ld iz, (xiy)
-	sub iz, hl
-	ld xwa, (xsp + 4)
-	ld de, (xwa + 40)
-	exts xiz
-	divs xiz, xde
-	ld_sril XWA, (xsp + 0x00a2)
-	ld a, (xwa)
-	exts wa
-	exts xwa
-	divs xwa, xde
-	stw_erp WA, 0xe2
-	ldw_erp WA, 0xea
-	ld_sril XWA, (xsp + 0x00a2)
-	ld a, (xwa)
-	exts wa
-	exts xwa
-	divs xwa, xde
-	ld de, wa
-	ld wa, iz
-	mulw_erp WA, 0xea
-	inc 2, wa
-	add hl, wa
-	ld (xix), hl
-	add hl, iz
-	ld (xiy), hl
-	ld wa, (xsp + 8)
-	mul xwa, xde
-	inc 2, wa
-	add (xbc), wa
-	ld de, (xbc)
-	add de, (xsp + 8)
-	ld xwa, (xsp + 14)
-	ld (xwa), de
-	stb_dri B, 0xfd, 0x9e, 0x00
-	ld wa, (xbc)
-	ld (xde), wa
-	ld wa, (xix)
-	ld (xde + 2), wa
-	ld_sril XWA, (xsp + 0x00a2)
-	inc 1, xwa
-	push xwa
-	lda xwa, (xsp + 22)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	ld xwa, (xsp + 10)
-	ld xix, (xwa + 42)
-	ld_sril XWA, (xsp + 0x00a2)
-	ld a, (xwa)
-	ldb_erp A, 0xf4
-	exts iy
-	ld xwa, (xsp + 4)
-	lda xhl, (xwa + 28)
-	stb_dri A, 0xfd, 0x9e, 0x00
-	lda xde, (xsp + 18)
-	cp iy, (xix)
-	jr nz, PsFileNameBox_Confirm_NewItem
-	stb_dri W, 0xfd, 0x92, 0x00
-	ld xhl, (xhl)
-	push xhl
-	pushw 0x0
-	pushw 0xff
-	jr PsFileNameBox_Confirm_Finish
-
+	.incbin "includes/generated/v7_transplant_PsFileNameBox_Confirm_MultiItem.bin"
 PsFileNameBox_Confirm_NewItem:
 	stb_dri W, 0xfd, 0x92, 0x00
 	ld xhl, (xhl)

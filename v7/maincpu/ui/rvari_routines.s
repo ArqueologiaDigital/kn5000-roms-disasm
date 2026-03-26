@@ -80,59 +80,7 @@ RVari_SelectE_FirstItem_NotFirst:
 	ldw (xwa + 4), 0x137
 
 RVari_SelectE_FirstItem_Draw:
-	stb_dri W, 0xfd, 0x18, 0x02
-	lds bc, 0
-	ldw de, 0xf5
-	call DrawDesignBox
-	ld xwa, (xiz + 56)
-	ld wa, (xwa)
-	extz wa
-	ld xbc, (xiz + 64)
-	ld bc, (xbc)
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1b, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xbc, (xiz + 44)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	exts xwa
-	divs wa, 0x4
-	inc 1, wa
-	cp wa, (xbc)
-	jr nz, RVari_SelectE_SecondItem_Setup
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld xwa, (xiz + 64)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0x4
-	extz wa
-	div a, 0xa
-	ld e, w
-	extz de
-	add de, bc
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0x4
-	cp wa, de
-	jr nz, RVari_SelectE_SecondItem_Setup
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_SelectE_FirstItem_Draw.bin"
 RVari_SelectE_SecondItem_Setup:
 	stb_dri B, 0xfd, 0x18, 0x02
 	stb_dri C, 0xfd, 0x14, 0x02
@@ -156,59 +104,7 @@ RVari_SelectE_SecondItem_NotFirst:
 	ldw (xwa + 4), 0xbe
 
 RVari_SelectE_SecondItem_Draw:
-	dec_sriw 0, 0xfd, 0x16, 0x02
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld xwa, (xiz + 64)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0x4
-	extz wa
-	div a, 0xa
-	ld a, w
-	inc 1, a
-	extz wa
-	add wa, bc
-	pushw wa
-	pushw 0xed
-	pushw 0x1656
-	lda xwa, (xsp + 26)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	stb_dri C, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	lda xde, (xsp + 20)
-	lds32 xwa, 3
-	push xwa
-	ld a, (xsp + 14)
-	extz wa
-	pushw wa
-	ld a, (xsp + 18)
-	extz wa
-	pushw wa
-	ld xwa, xhl
-	call DrawStringLeftJustify
-	stb_dri C, 0xfd, 0x14, 0x02
-	lda xbc, (xhl + 2)
-	ld wa, (xbc)
-	add wa, 0xc
-	ld (xbc), wa
-	stb_dri B, 0xfd, 0x18, 0x02
-	sub wa, 0xf
-	ld (xde + 2), wa
-	ld wa, (xbc)
-	add wa, 0x10
-	ld (xde + 6), wa
-	cpw (xhl), 0x0
-	jr nz, RVari_SelectE_SecondItem_BtnNotFirst
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa), 0x1c
-	ldw (xwa + 4), 0xb0
-	jr RVari_SelectE_SecondItem_BtnDraw
-
+	.incbin "includes/generated/v7_transplant_RVari_SelectE_SecondItem_Draw.bin"
 RVari_SelectE_SecondItem_BtnNotFirst:
 	stb_dri W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -279,58 +175,7 @@ RVari_SelectO_Item_NotFirst:
 	ldw (xwa + 4), 0x137
 
 RVari_SelectO_Item_Draw:
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw bc, 0xc1
-	lds de, 7
-	call DrawDesignBox
-	ld xwa, (xiz + 56)
-	ld wa, (xwa)
-	extz wa
-	ld xbc, (xiz + 60)
-	ld bc, (xbc)
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1b, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xbc, (xiz + 44)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	exts xwa
-	divs wa, 0x4
-	inc 1, wa
-	cp wa, (xbc)
-	jr nz, RVari_SelectO_SecondItem_Setup
-	ld xwa, (xiz + 44)
-	ld de, (xwa)
-	muls de, 0xa
-	sub de, 0xa
-	ld xbc, (xiz + 60)
-	ld wa, (xbc)
-	exts xwa
-	divs wa, 0x4
-	extz wa
-	div a, 0xa
-	ld l, w
-	extz hl
-	add hl, de
-	ld wa, (xbc)
-	exts xwa
-	divs wa, 0x4
-	cp wa, hl
-	jr nz, RVari_SelectO_SecondItem_Setup
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_SelectO_Item_Draw.bin"
 RVari_SelectO_SecondItem_Setup:
 	stb_dri B, 0xfd, 0x18, 0x02
 	stb_dri C, 0xfd, 0x14, 0x02
@@ -354,59 +199,7 @@ RVari_SelectO_SecondItem_NotFirst:
 	ldw (xwa + 4), 0xbe
 
 RVari_SelectO_SecondItem_Draw:
-	dec_sriw 0, 0xfd, 0x16, 0x02
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0x4
-	extz wa
-	div a, 0xa
-	ld a, w
-	inc 1, a
-	extz wa
-	add wa, bc
-	pushw wa
-	pushw 0xed
-	pushw 0x165a
-	lda xwa, (xsp + 26)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	stb_dri C, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	lda xde, (xsp + 20)
-	lds32 xwa, 3
-	push xwa
-	ld a, (xsp + 14)
-	extz wa
-	pushw wa
-	ld a, (xsp + 18)
-	extz wa
-	pushw wa
-	ld xwa, xhl
-	call DrawStringLeftJustify
-	stb_dri C, 0xfd, 0x14, 0x02
-	lda xbc, (xhl + 2)
-	ld wa, (xbc)
-	add wa, 0xc
-	ld (xbc), wa
-	stb_dri B, 0xfd, 0x18, 0x02
-	sub wa, 0xf
-	ld (xde + 2), wa
-	ld wa, (xbc)
-	add wa, 0x10
-	ld (xde + 6), wa
-	cpw (xhl), 0x0
-	jr nz, RVari_SelectO_SecondBtn_NotFirst
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa), 0x1c
-	ldw (xwa + 4), 0xb0
-	jr RVari_SelectO_SecondBtn_Draw
-
+	.incbin "includes/generated/v7_transplant_RVari_SelectO_SecondItem_Draw.bin"
 RVari_SelectO_SecondBtn_NotFirst:
 	stb_dri W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -474,61 +267,7 @@ RVari_SelNE_FirstItem_NotFirst:
 	ldw (xwa + 4), 0x137
 
 RVari_SelNE_FirstItem_Draw:
-	stb_dri W, 0xfd, 0x18, 0x02
-	lds bc, 0
-	ldw de, 0xf5
-	call DrawDesignBox
-	ld xwa, (xiz + 56)
-	ld wa, (xwa)
-	extz wa
-	ld xbc, (xiz + 44)
-	ld bc, (xbc)
-	dec 1, bc
-	mul c, 0xa
-	ld e, c
-	ld xbc, (xiz + 64)
-	ld bc, (xbc)
-	extz bc
-	div c, 0xa
-	ld c, b
-	add c, e
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1b, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xbc, (xiz + 44)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	inc 1, wa
-	cp wa, (xbc)
-	jr nz, RVari_SelNE_FirstItem_Deselect
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld xwa, (xiz + 64)
-	ld wa, (xwa)
-	extz wa
-	div a, 0xa
-	ld e, w
-	extz de
-	add de, bc
-	ld xwa, (xiz + 60)
-	cp (xwa), de
-	jr nz, RVari_SelNE_FirstItem_Deselect
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_SelNE_FirstItem_Draw.bin"
 RVari_SelNE_FirstItem_Deselect:
 	ld c, (xsp + 4)
 	srl c, 1
@@ -643,60 +382,7 @@ RVari_SelNE_SecondItem_NotFirst:
 	ldw (xwa + 4), 0x137
 
 RVari_SelNE_SecondItem_Draw:
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw bc, 0xc1
-	lds de, 7
-	call DrawDesignBox
-	ld xwa, (xiz + 56)
-	ld wa, (xwa)
-	extz wa
-	ld xbc, (xiz + 44)
-	ld bc, (xbc)
-	dec 1, bc
-	mul c, 0xa
-	ld e, c
-	ld xbc, (xiz + 60)
-	ld bc, (xbc)
-	extz bc
-	div c, 0xa
-	ld c, b
-	add c, e
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1b, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xbc, (xiz + 44)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	inc 1, wa
-	cp wa, (xbc)
-	jr nz, RVari_SelNE_SecondItem_Deselect
-	ld xwa, (xiz + 44)
-	ld de, (xwa)
-	muls de, 0xa
-	sub de, 0xa
-	ld xbc, (xiz + 60)
-	ld wa, (xbc)
-	extz wa
-	div a, 0xa
-	ld a, w
-	extz wa
-	add wa, de
-	cp (xbc), wa
-	jr nz, RVari_SelNE_SecondItem_Deselect
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_SelNE_SecondItem_Draw.bin"
 RVari_SelNE_SecondItem_Deselect:
 	ld c, (xsp + 4)
 	srl c, 1
@@ -783,38 +469,7 @@ RVari_Confirm:
 	ld (xsp + 8), 0x0
 
 RVari_Confirm_TypeF_Loop:
-	ld xde, (xiz + 56)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	srl a, 2
-	sll a, 2
-	add a, (xsp + 8)
-	ld c, a
-	extz bc
-	ld wa, (xde)
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1a, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x21, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0x4
-	stw_erp BC, 0xe2
-	ld a, (xsp + 8)
-	extz wa
-	cp wa, bc
-	jr nz, RVari_ConfirmF_CheckSelected
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_Confirm_TypeF_Loop.bin"
 RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
@@ -851,50 +506,7 @@ RVari_ConfirmF_Item_NotFirst:
 	ldw (xwa + 4), 0xbe
 
 RVari_ConfirmF_Item_Draw:
-	dec_sriw 0, 0xfd, 0x16, 0x02
-	ld a, (xsp + 8)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_04)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xed
-	pushw 0x165e
-	lda xwa, (xsp + 28)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	stb_dri C, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	lda xde, (xsp + 20)
-	lds32 xwa, 3
-	push xwa
-	ld a, (xsp + 14)
-	extz wa
-	pushw wa
-	ld a, (xsp + 18)
-	extz wa
-	pushw wa
-	ld xwa, xhl
-	call DrawStringLeftJustify
-	stb_dri C, 0xfd, 0x14, 0x02
-	lda xbc, (xhl + 2)
-	ld wa, (xbc)
-	add wa, 0xc
-	ld (xbc), wa
-	stb_dri B, 0xfd, 0x18, 0x02
-	sub wa, 0xf
-	ld (xde + 2), wa
-	ld wa, (xbc)
-	add wa, 0x10
-	ld (xde + 6), wa
-	cpw (xhl), 0x0
-	jr nz, RVari_ConfirmF_Btn_NotFirst
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa), 0x1c
-	ldw (xwa + 4), 0xb0
-	jr RVari_ConfirmF_Btn_Draw
-
+	.incbin "includes/generated/v7_transplant_RVari_ConfirmF_Item_Draw.bin"
 RVari_ConfirmF_Btn_NotFirst:
 	stb_dri W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -962,72 +574,7 @@ RVari_Confirm_TypeF_SubItems:
 	jrl RVari_Confirm_ReturnZero
 
 RVari_Confirm_TypeNotF:
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa + 2), 0x6
-	ldw (xwa + 6), 0x17
-	ldw (xwa), 0xf5
-	ldw (xwa + 4), 0x13b
-	ldw bc, 0xc1
-	ldw de, 0xf3
-	call DrawDesignBox
-	stb_dri B, 0xfd, 0x18, 0x02
-	ld wa, (xde + 4)
-	sub wa, (xde)
-	exts xwa
-	divs wa, 0x2
-	ld bc, (xde)
-	add bc, wa
-	stb_dri C, 0xfd, 0x14, 0x02
-	ld (xhl), bc
-	ld bc, (xde + 2)
-	ld wa, (xde + 6)
-	sub wa, bc
-	exts xwa
-	divs wa, 0x2
-	add bc, wa
-	inc 1, bc
-	ld (xhl + 2), bc
-	ld xwa, (xiz + 52)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	inc 1, wa
-	pushw wa
-	ld xwa, (xiz + 44)
-	pushm (xwa)
-	pushw 0xed
-	pushw 0x1662
-	stb_dri W, 0xfd, 0x1c, 0x01
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	stb_dri W, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	stb_dri B, 0xfd, 0x14, 0x01
-	lds32 xhl, 0
-	push xhl
-	pushw 0x0
-	pushw 0xf7
-	call DrawStringCentered
-	ld (xsp + 4), 0x9
-	ld xbc, (xiz + 52)
-	ld xwa, (xiz + 44)
-	ld wa, (xwa)
-	muls wa, 0xa
-	dec 1, wa
-	ld bc, (xbc)
-	sub bc, wa
-	jr ge, RVari_Confirm_CalcVisible
-	ld xbc, (xiz + 52)
-	ld xwa, (xiz + 44)
-	ld wa, (xwa)
-	muls wa, 0xa
-	dec 1, wa
-	sub wa, (xbc)
-	ldw bc, 0x9
-	sub bc, wa
-	ld (xsp + 4), c
-
+	.incbin "includes/generated/v7_transplant_RVari_Confirm_TypeNotF.bin"
 RVari_Confirm_CalcVisible:
 	ld xwa, (xiz + 56)
 	cpw (xwa), 0xe
@@ -1037,62 +584,7 @@ RVari_Confirm_CalcVisible:
 	jrl c, RVari_Confirm_ReturnZero
 
 RVari_ConfirmE_Loop:
-	ld xwa, (xiz + 56)
-	ld wa, (xwa)
-	extz wa
-	ld xbc, (xiz + 44)
-	ld bc, (xbc)
-	dec 1, bc
-	mul c, 0x28
-	ld e, c
-	ld c, (xsp + 8)
-	sll c, 2
-	add c, e
-	ld e, c
-	ld xbc, (xiz + 60)
-	ld bc, (xbc)
-	exts xbc
-	divs bc, 0x4
-	stw_erp BC, 0xe6
-	add c, e
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1b, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xbc, (xiz + 44)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	exts xwa
-	divs wa, 0x4
-	inc 1, wa
-	cp wa, (xbc)
-	jr nz, RVari_ConfirmE_CheckSelected
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld e, (xsp + 8)
-	extz de
-	add de, bc
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0x4
-	cp wa, de
-	jr nz, RVari_ConfirmE_CheckSelected
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_ConfirmE_Loop.bin"
 RVari_ConfirmE_CheckSelected:
 	ld c, (xsp + 4)
 	srl c, 1
@@ -1139,53 +631,7 @@ RVari_ConfirmE_Item_NotFirst:
 	ldw (xwa + 4), 0xbe
 
 RVari_ConfirmE_Item_Draw:
-	dec_sriw 0, 0xfd, 0x16, 0x02
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld a, (xsp + 8)
-	inc 1, a
-	extz wa
-	add wa, bc
-	pushw wa
-	pushw 0xed
-	pushw 0x166e
-	lda xwa, (xsp + 26)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	stb_dri C, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	lda xde, (xsp + 20)
-	lds32 xwa, 3
-	push xwa
-	ld a, (xsp + 14)
-	extz wa
-	pushw wa
-	ld a, (xsp + 18)
-	extz wa
-	pushw wa
-	ld xwa, xhl
-	call DrawStringLeftJustify
-	stb_dri C, 0xfd, 0x14, 0x02
-	lda xbc, (xhl + 2)
-	ld wa, (xbc)
-	add wa, 0xc
-	ld (xbc), wa
-	stb_dri B, 0xfd, 0x18, 0x02
-	sub wa, 0xf
-	ld (xde + 2), wa
-	ld wa, (xbc)
-	add wa, 0x10
-	ld (xde + 6), wa
-	cpw (xhl), 0x0
-	jr nz, RVari_ConfirmE_Btn_NotFirst
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa), 0x1c
-	ldw (xwa + 4), 0xb0
-	jr RVari_ConfirmE_Btn_Draw
-
+	.incbin "includes/generated/v7_transplant_RVari_ConfirmE_Item_Draw.bin"
 RVari_ConfirmE_Btn_NotFirst:
 	stb_dri W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -1217,47 +663,7 @@ RVari_ConfirmNE_Setup:
 	jrl c, RVari_Confirm_ReturnZero
 
 RVari_ConfirmNE_Loop:
-	ld xwa, (xiz + 56)
-	ld wa, (xwa)
-	extz wa
-	ld xbc, (xiz + 44)
-	ld bc, (xbc)
-	dec 1, bc
-	mul c, 0xa
-	add c, (xsp + 8)
-	extz bc
-	call AccVoice_DispatchWithChannel
-	extz xhl
-	pushw 0xd
-	push xhl
-	stb_dri W, 0xfd, 0x1b, 0x01
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xff
-	ld (xsp + 12), 0xf5
-	ld xbc, (xiz + 44)
-	ld xwa, (xiz + 60)
-	ld wa, (xwa)
-	exts xwa
-	divs wa, 0xa
-	inc 1, wa
-	cp wa, (xbc)
-	jr nz, RVari_ConfirmNE_CheckSelected
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld e, (xsp + 8)
-	extz de
-	add de, bc
-	ld xwa, (xiz + 60)
-	cp (xwa), de
-	jr nz, RVari_ConfirmNE_CheckSelected
-	ld (xsp + 10), 0x0
-	ld (xsp + 12), 0x7
-
+	.incbin "includes/generated/v7_transplant_RVari_ConfirmNE_Loop.bin"
 RVari_ConfirmNE_CheckSelected:
 	ld c, (xsp + 4)
 	srl c, 1
@@ -1388,51 +794,7 @@ RVari_EnumNotifyF_Item_NotFirst:
 	ldw (xwa + 4), 0xbe
 
 RVari_EnumNotifyF_Item_Draw:
-	dec_sriw 0, 0xfd, 0x16, 0x02
-	ld xwa, (xsp + 6)
-	ld a, (xwa)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_04)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xed
-	pushw 0x1672
-	stb_dri W, 0xfd, 0x1c, 0x01
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	stb_dri C, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	stb_dri B, 0xfd, 0x14, 0x01
-	lds32 xwa, 3
-	push xwa
-	ld a, (xsp + 14)
-	extz wa
-	pushw wa
-	ld a, (xsp + 18)
-	extz wa
-	pushw wa
-	ld xwa, xhl
-	call DrawStringLeftJustify
-	stb_dri C, 0xfd, 0x14, 0x02
-	lda xbc, (xhl + 2)
-	ld wa, (xbc)
-	add wa, 0xc
-	ld (xbc), wa
-	stb_dri B, 0xfd, 0x18, 0x02
-	sub wa, 0xf
-	ld (xde + 2), wa
-	ld wa, (xbc)
-	add wa, 0x10
-	ld (xde + 6), wa
-	cpw (xhl), 0x0
-	jr nz, RVari_EnumNotifyF_Btn_NotFirst
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa), 0x1c
-	ldw (xwa + 4), 0xb0
-	jr RVari_EnumNotifyF_Btn_Draw
-
+	.incbin "includes/generated/v7_transplant_RVari_EnumNotifyF_Item_Draw.bin"
 RVari_EnumNotifyF_Btn_NotFirst:
 	stb_dri W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -1556,54 +918,7 @@ RVari_EnumNotifyE_Item_NotFirst:
 	ldw (xwa + 4), 0xbe
 
 RVari_EnumNotifyE_Item_Draw:
-	dec_sriw 0, 0xfd, 0x16, 0x02
-	ld xwa, (xiz + 44)
-	ld bc, (xwa)
-	muls bc, 0xa
-	sub bc, 0xa
-	ld xwa, (xsp + 6)
-	ld a, (xwa)
-	inc 1, a
-	extz wa
-	add wa, bc
-	pushw wa
-	pushw 0xed
-	pushw 0x1676
-	stb_dri W, 0xfd, 0x1a, 0x01
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	stb_dri C, 0xfd, 0x18, 0x02
-	stb_dri A, 0xfd, 0x14, 0x02
-	stb_dri B, 0xfd, 0x14, 0x01
-	lds32 xwa, 3
-	push xwa
-	ld a, (xsp + 14)
-	extz wa
-	pushw wa
-	ld a, (xsp + 18)
-	extz wa
-	pushw wa
-	ld xwa, xhl
-	call DrawStringLeftJustify
-	stb_dri C, 0xfd, 0x14, 0x02
-	lda xbc, (xhl + 2)
-	ld wa, (xbc)
-	add wa, 0xc
-	ld (xbc), wa
-	stb_dri B, 0xfd, 0x18, 0x02
-	sub wa, 0xf
-	ld (xde + 2), wa
-	ld wa, (xbc)
-	add wa, 0x10
-	ld (xde + 6), wa
-	cpw (xhl), 0x0
-	jr nz, RVari_EnumNotifyE_Btn_NotFirst
-	stb_dri W, 0xfd, 0x18, 0x02
-	ldw (xwa), 0x1c
-	ldw (xwa + 4), 0xb0
-	jr RVari_EnumNotifyE_Btn_Draw
-
+	.incbin "includes/generated/v7_transplant_RVari_EnumNotifyE_Item_Draw.bin"
 RVari_EnumNotifyE_Btn_NotFirst:
 	stb_dri W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -2727,35 +2042,6 @@ RVari_Epilogue:
 	ret
 
 RVari_UpdateDisplayNotify:
-	dec 4, xsp
-	push xiz
-	call GetViewInstance
-	ld (xsp + 4), xhl
-	pushw 0x4
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	ld xbc, (xsp + 4)
-	ld xwa, (xbc + 48)
-	ld wa, (xwa)
-	ld (xiz), a
-	ld (xiz + 1), 0x0
-	ld xwa, (xbc + 56)
-	ld wa, (xwa)
-	ld (xiz + 2), a
-	ld xwa, (xbc + 60)
-	ld wa, (xwa)
-	ld (xiz + 3), a
-	ld xwa, 0x1420000
-	ld xbc, 0x1e20000
-	ld xde, xiz
-	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call MainFuncCall
-	pop xiz
-	inc 4, xsp
-	ret
+	.incbin "includes/generated/v7_transplant_RVari_UpdateDisplayNotify.bin"
 RVari_UpdateNotify_End:
 

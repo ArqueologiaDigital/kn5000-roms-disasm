@@ -71,23 +71,7 @@ ToneGen_ApplyMaskTable:
 	lda xhl, (xwa + 25)
 
 ToneGen_ApplyMaskLoop:
-	ld xix, (xde)
-	ld a, (xbc)
-	and (xix), a
-	inc 5, xde
-	inc 5, xbc
-	cp xde, xhl
-	jr c, ToneGen_ApplyMaskLoop
-	lds wa, 0
-	call BitMapOut_PrepareRender_CheckBit2
-	pushw 0x10
-	pushw 0x20
-	pushw 0x0
-	pushw 0xf9a2
-	call Memset
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_ToneGen_ApplyMaskLoop.bin"
 ToneGen_DSPCfg_Initialize:
 	calr ToneGen_DSPCfg_ResetAll
 	jrl ToneGen_DSPCfg_ResetAllChannels
@@ -145,15 +129,7 @@ Voice_InitChannelNext:
 	ret
 
 Voice_CopyFromScratch:
-	pushw 0x620
-	pushw 0x3
-	pushw 0xc8e4
-	pushw 0x0
-	pushw 0xf9a0
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ret
-
+	.incbin "includes/generated/v7_transplant_Voice_CopyFromScratch.bin"
 ToneGen_DSPCfg_ResetAll:
 	ld xwa, 0xf9a0
 	calr DSPCfg_ResetEntryByTable
@@ -208,48 +184,7 @@ DSPCfg_InitAllEntries:
 	lds iz, 0
 
 DSPCfg_InitEntryLoop:
-	ld wa, iz
-	extz xwa
-	ld xde, xwa
-	sll xde, 2
-	add xde, xwa
-	add xde, xde
-	ld xbc, NakaInst_ExtDevice_Screens_0x2814
-	add xbc, xde
-	ld xwa, (xsp + 2)
-	calr DSPCfg_Init_Entry1
-	inc 1, iz
-	cp iz, 0x2e
-	jr c, DSPCfg_InitEntryLoop
-	lda_d16 xbc, (0xfc74)
-	sub xbc, 0xf9a0
-	add xbc, (xsp + 2)
-	lds wa, 0
-	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfc8e)
-	sub xbc, 0xf9a0
-	add xbc, (xsp + 2)
-	lds wa, 1
-	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfcc2)
-	sub xbc, 0xf9a0
-	add xbc, (xsp + 2)
-	lds wa, 2
-	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfcdc)
-	sub xbc, 0xf9a0
-	add xbc, (xsp + 2)
-	lds wa, 3
-	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfca8)
-	sub xbc, 0xf9a0
-	add xbc, (xsp + 2)
-	lds wa, 4
-	call DSPCfg_WriteAllSlots_Combined
-	popw iz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_DSPCfg_InitEntryLoop.bin"
 DSPCfg_InitAuxEntries:
 	dec 4, xsp
 	pushw iz
@@ -555,166 +490,13 @@ DSPCfg_CopyEntryValues:
 	ret
 
 DSPCfg_SyncBitmapData:
-	lda	xsp, (xsp-18)
-	push	xiz
-	ld	(xsp+18), xbc
-	ld	xiz, xwa
-	lda_d16	xwa, (0xbd3c)
-	ld	(xsp+14), xwa
-	ld	(xsp+10), xwa
-	ldw_d16	bc, (0x90de)
-	jrl	136
-	ld	(xsp+6), 0
-	.byte 0xc5
-	swi	0
-	ldb	a, 191
-	ldio	65, 232
-	.byte 0xaa
-	add	(xsp+18), xwa
-	.byte 0x8f
-	ldio	63, 0
-	jr	z, 115
-	ld	xwa, (xsp+18)
-	ld	a, (xwa)
-	.byte 0x86, 0xf1
-	jr	z, 87
-	cp	bc, 500
-	jr	c, 22
-	extz	xbc
-	.byte 0xaf
-	ldwio	129, 177
-	swi	7
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	SwbtWr_ReinitOutputBank
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	lds	bc, 0
-	ld	de, bc
-	inc	1, bc
-	extz	xde
-	.byte 0xaf
-	ldwio	130, 1167
-	ldb	a, 178
-	ld	xbc, 0x61d98ad9
-	extz	xde
-	.byte 0xaf
-	ldwio	130, 1679
-	ldb	a, 178
-	ld	xbc, 0x61d98ad9
-	extz	xde
-	.byte 0xaf
-	ldwio	130, 8582
-	ld	(xde), a
-	ld	xwa, (xsp+18)
-	ld	e, (xwa)
-	.byte 0x86, 0xd5
-	ld	wa, bc
-	inc	1, bc
-	extz	xwa
-	.byte 0xaf
-	ldwio	128, 0x45b0
-	incm8	1, (xsp+6)
-	decm8	1, (xsp+8)
-	inc	1, xiz
-	lds32	xwa, 1
-	add	(xsp+18), xwa
-	.byte 0x8f
-	ldio	63, 0
-	jr	nz, -115
-	.byte 0xc5
-	swi	0
-	ldb	a, 191
-	.byte 0x04
-	ld	xbc, 0xff3f048f
-	jrl	nz, -149
-	ld	wa, bc
-	extz	xwa
-	add	xwa, (xsp+14)
-	ld	(xwa), 255
-	stda16	(0x90de), bc
-	pop	xiz
-	lda	xsp, (xsp+18)
-	ret
-	ret
-	ret
-
+	.incbin "includes/generated/v7_transplant_DSPCfg_SyncBitmapData.bin"
 SndParam_SyncDisplayBitmap:
-	lds32 xwa, 0
-	call SndParam_LookupReadOnly
-	stb_d8 (0x8e6c), l
-	ld xwa, 0x102
-	call SndParam_LookupReadOnly
-	stb_d8 (0x8e6e), l
-	ld xwa, 0x103
-	call SndParam_LookupReadOnly
-	stb_d8 (0x8e70), l
-	ld xwa, 0x300
-	call SndParam_LookupReadOnly
-	stb_d8 (0x8e72), l
-	ld xwa, 0x4006
-	call SndParam_LookupReadOnly
-	stb_d8 (0x8e74), l
-	pushw 0x620
-	pushw 0x0
-	pushw 0xf9a0
-	pushw 0x3
-	pushw 0xc8e4
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xf9b6)
-	sub xwa, xbc
-	lda_24 xde, (0x03c8e4)
-	add xwa, xde
-	xormi8 (xwa), 0x1
-	lda_d16 xwa, (0xf9d0)
-	sub xwa, xbc
-	add xwa, xde
-	xormi8 (xwa), 0x1
-	lda_d16 xwa, (0xf9ea)
-	sub xwa, xbc
-	add xwa, xde
-	xormi8 (xwa), 0x1
-	lda_d16 xwa, (0xfd97)
-	sub xwa, xbc
-	add xwa, xde
-	ormi8 (xwa), 0x7f
-	ret
-
+	.incbin "includes/generated/v7_transplant_SndParam_SyncDisplayBitmap.bin"
 SoundParam_NotifyMultipleChanges:
-	ldb_d8 c, (0x8e6c)
-	extz bc
-	lds32 xwa, 0
-	lds de, 0
-	call SoundParam_NotifyChange
-	ldb_d8 c, (0x8e6e)
-	extz bc
-	ld xwa, 0x102
-	lds de, 0
-	call SoundParam_NotifyChange
-	ldb_d8 c, (0x8e70)
-	extz bc
-	ld xwa, 0x103
-	lds de, 0
-	call SoundParam_NotifyChange
-	call BitMapOut_DetectChanges
-	jr ToneGen_DiffScanAndUpdate
-
+	.incbin "includes/generated/v7_transplant_SoundParam_NotifyMultipleChanges.bin"
 ToneGen_DiffScanAndUpdate:
-	lda xsp, (xsp - 14)
-	pushw iz
-	ldw_d16 xbc, (0x90de)
-	lda_d16 xwa, (0xbd3c)
-	ld (xsp + 12), xwa
-	ld (xsp + 8), xwa
-	lds iz, 0
-	jrl ToneGen_DiffScanCheckEnd
-
+	.incbin "includes/generated/v7_transplant_ToneGen_DiffScanAndUpdate.bin"
 ToneGen_DiffScanOuter:
 	ld wa, iz
 	extz xwa
@@ -811,68 +593,11 @@ ToneGen_DiffOuterNext:
 	inc 1, iz
 
 ToneGen_DiffScanCheckEnd:
-	lda_d16 xde, (0xfd60)
-	lda_d16 xwa, (0xffbe)
-	sub xwa, xde
-	ld hl, iz
-	extz xhl
-	cp xhl, xwa
-	jrl lt, ToneGen_DiffScanOuter
-	ld wa, bc
-	extz xwa
-	add xwa, (xsp + 12)
-	ld (xwa), 0xff
-	stda16 (0x90de), xbc
-	popw iz
-	lda xsp, (xsp + 14)
-	ret
-
+	.incbin "includes/generated/v7_transplant_ToneGen_DiffScanCheckEnd.bin"
 ToneGen_FileIO_SaveAndSync:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	calr SndParam_SyncDisplayBitmap
-	lda xwa, (xsp + 4)
-	ldmi16 (xwa), 0xfd50
-	ldmi16 (xwa + 1), 0xfd52
-	ldmi16 (xwa + 2), 0xfd54
-	lda_d16 xwa, (0xfda2)
-	lda_d16 xbc, (0xf9a0)
-	sub xwa, xbc
-	pushw wa
-	push xiz
-	push xbc
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	lda xwa, (xsp + 4)
-	mrib4 0x80, 0x19, 0x50, 0xfd
-	mrdb5 0x88, 0x01, 0x19, 0x52, 0xfd
-	mrdb5 0x88, 0x02, 0x19, 0x54, 0xfd
-	call ToneGen_Config_InitAllEntries
-	call ToneGen_InitAllChannelEntries_Skip
-	calr SoundParam_NotifyMultipleChanges
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_ToneGen_FileIO_SaveAndSync.bin"
 ToneGen_FileIO_RestoreFromBackup:
-	calr SndParam_SyncDisplayBitmap
-	pushw 0x620
-	pushw 0x3
-	pushw 0xcf04
-	pushw 0x0
-	pushw 0xf9a0
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	setda 5, 0x8e76
-	calr SoundParam_NotifyMultipleChanges
-	call SwbtWr_ReinitOutputBank
-	call ToneGen_DispatchByMode
-	call CtrlPanel_RefreshIndicatorState
-	call SwbtWr_NullRet
-	resda 5, 0x8e76
-	ret
-
+	.incbin "includes/generated/v7_transplant_ToneGen_FileIO_RestoreFromBackup.bin"
 ToneGen_FlashVerify:
 	lda_24 xhl, (NakaInst_ExtDevice_Screens_0x2B6E)
 	ld xde, 0x3d3000
@@ -888,175 +613,20 @@ ToneGen_FlashVerifyLoop:
 	ret
 
 ToneGen_FlashWriteAll:
-	push xiz
-	ld xwa, 0x3d3000
-	push xwa
-	lds wa, 1
-	ld xbc, NakaInst_ExtDevice_Screens_0x2B6E
-	ldw de, 0xfa
-	call FlashWrite
-	lda_24 xbc, (NakaInst_ExtDevice_Screens_0x2C68)
-	ld xwa, 0x3d3110
-	push xwa
-	lds wa, 1
-	ldw de, 0xea
-	call FlashWrite
-	lda_24 xbc, (NakaInst_ExtDevice_Screens_0x2D52)
-	ld xwa, 0x3d3210
-	push xwa
-	lds wa, 1
-	ldw de, 0xea
-	call FlashWrite
-	pushw 0x50
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	or xiz, xiz
-	jr z, ToneGen_FlashWriteDone
-	pushw 0x0
-	pushw 0x50
-	push xiz
-	call Memset
-	pushw 0x2
-	pushw 0xed
-	pushw 0x931c
-	push xiz
-	call Mem_Copy
-	pushw 0xc
-	pushw 0xed
-	pushw 0x9324
-	lda xwa, (xiz + 16)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 28)
-	pushw 0x4
-	pushw 0xed
-	pushw 0x9330
-	lda xwa, (xiz + 32)
-	push xwa
-	call Mem_Copy
-	pushw 0x4
-	pushw 0xed
-	pushw 0x9320
-	lda xwa, (xiz + 48)
-	push xwa
-	call Mem_Copy
-	pushw 0x6
-	pushw 0xed
-	pushw 0x9334
-	lda xwa, (xiz + 64)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 30)
-	ld xwa, 0x3d3400
-	push xwa
-	lds wa, 1
-	ld xbc, xiz
-	ldw de, 0x50
-	call FlashWrite
-	push xiz
-	call Free
-	inc 4, xsp
-
+	.incbin "includes/generated/v7_transplant_ToneGen_FlashWriteAll.bin"
 ToneGen_FlashWriteDone:
 	pop xiz
 	ret
 
 ToneGen_FlashReadAndRestore:
-	push xiz
-	pushw 0x50
-	call Malloc
-	inc 2, xsp
-	ld xiz, xhl
-	or xiz, xiz
-	jr z, DSPCfg_Param_CaseA
-	pushw 0x0
-	pushw 0x50
-	push xiz
-	call Memset
-	pushw 0x2
-	ld xwa, 0x3d3400
-	push xwa
-	push xiz
-	call Mem_Copy
-	pushw 0xc
-	pushw 0xed
-	pushw 0x9324
-	lda xwa, (xiz + 16)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 28)
-	pushw 0x4
-	pushw 0xed
-	pushw 0x9330
-	lda xwa, (xiz + 32)
-	push xwa
-	call Mem_Copy
-	pushw 0x4
-	pushw 0xed
-	pushw 0x9320
-	lda xwa, (xiz + 48)
-	push xwa
-	call Mem_Copy
-	pushw 0x6
-	pushw 0xed
-	pushw 0x9334
-	lda xwa, (xiz + 64)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 30)
-	ld xwa, 0x3d3400
-	push xwa
-	lds wa, 1
-	ld xbc, xiz
-	ldw de, 0x50
-	call FlashWrite
-	push xiz
-	call Free
-	inc 4, xsp
-	call Gfx_ClearFrameBuffers
-
-; DSP config parameter handler A
+	.incbin "includes/generated/v7_transplant_ToneGen_FlashReadAndRestore.bin"
 DSPCfg_Param_CaseA:
 	pop xiz
 	ret
 
 ; DSP config parameter handler B
 DSPCfg_Param_CaseB:
-	pushw 0x2
-	ld xwa, 0x3d3400
-	push xwa
-	pushw 0x3
-	pushw 0x40e4
-	call Mem_Copy
-	pushw 0xc
-	ld xwa, 0x3d3410
-	push xwa
-	pushw 0x3
-	pushw 0x40e6
-	call Mem_Copy
-	pushw 0x4
-	ld xwa, 0x3d3420
-	push xwa
-	pushw 0x3
-	pushw 0x40f2
-	call Mem_Copy
-	lda xsp, (xsp + 30)
-	pushw 0x4
-	ld xwa, 0x3d3430
-	push xwa
-	pushw 0x3
-	pushw 0x40f6
-	call Mem_Copy
-	pushw 0x6
-	ld xwa, 0x3d3440
-	push xwa
-	pushw 0x3
-	pushw 0x40fa
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	ret
-
+	.incbin "includes/generated/v7_transplant_DSPCfg_Param_CaseB.bin"
 CtrlPanel_IndicatorJumpTable:
 	extz wa
 	cps wa, 0
@@ -1116,38 +686,7 @@ Audio_DispatchCommand:
 
 ; DSP config parameter handler D
 DSPCfg_Param_CaseD:
-	ret
-	pushw	2
-	ld	xwa, 0x3d3400
-	push	xwa
-	ld	xwa, 0x0340e4
-	jr	30
-	pushw	12
-	ld	xwa, 0x3d3410
-	push	xwa
-	ld	xwa, 0x0340e6
-	jr	14
-	pushw	4
-	.asciz "@ 4="
-	push	xwa
-	ld	xwa, 0x0340f2
-	push	xwa
-	jr	32
-	pushw	4
-	ld	xwa, 0x3d3430
-	push	xwa
-	pushw	3
-	pushw	0x40f6
-	jr	15
-	pushw	6
-	ld	xwa, 0x3d3440
-	push	xwa
-	pushw	3
-	pushw	0x40fa
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	ret
-
+	.incbin "includes/generated/v7_transplant_DSPCfg_Param_CaseD.bin"
 PanelDisplay_DispatchByMode:
 	extz wa
 	cps wa, 0
@@ -1222,9 +761,7 @@ DSPCfg_Param_Default:
 	ret
 
 Encoder_MarkInvalid:
-	stdi8 (0xc039), 255
-	ret
-
+	.incbin "includes/generated/v7_transplant_Encoder_MarkInvalid.bin"
 Encoder_Stub1:
 	ret
 
@@ -1238,83 +775,21 @@ Encoder_AlignByte:
 	ret
 
 Encoder_ValueScanAndSync:
-	stdi8 (0x8e8c), 0
-	stdi8 (0x8e8e), 0
-	jr Encoder_SyncLoop
-
+	.incbin "includes/generated/v7_transplant_Encoder_ValueScanAndSync.bin"
 Encoder_ScanAndSync:
 	calr Encoder_ReadNextEntry
 	calr Encoder_PrepareCallback
 
 Encoder_SyncLoop:
-	call MidiCC_SyncForceResync
-	ldb_d8 a, (0x8e8c)
-	extz wa
-	muls wa, 0x3
-	ldb_sri A, 0x07, 0xec, 0xe0
-	stb_d8 (0x8e90), a
-	cp a, 0xff
-	jr nz, Encoder_ScanAndSync
-	ldb_d8 a, (0x8e8e)
-	extz wa
-	sll wa, 2
-	lda_d16 xbc, (0xc039)
-	extz xwa
-	add xwa, xbc
-	ld (xwa), 0xff
-	call MidiCC_ResetState
-	jrl VoiceEntry_FindMasterVolume
-
+	.incbin "includes/generated/v7_transplant_Encoder_SyncLoop.bin"
 Encoder_ReadNextEntry:
-	call MidiCC_SyncForceResync
-	ldb_d8 a, (0x8e8c)
-	extz wa
-	muls wa, 0x3
-	stb_dri E, 0x07, 0xec, 0xe0
-	ld xix, 0x8e78
-	ldi85
-	ldiw
-	incdi8 1, (0x8e8c)
-	ret
-
+	.incbin "includes/generated/v7_transplant_Encoder_ReadNextEntry.bin"
 Encoder_PrepareCallback:
-	push xiz
-	ldb_d8 c, (0x8e90)
-	extz bc
-	sla bc, 2
-	ld xwa, NakaInst_ExtDevice_Screens_0x3452
-	cpdi8 (0x8d34), 20
-	jr nz, Encoder_ResolveCallbackAddr
-	ld xwa, NakaInst_ExtDevice_Screens_0x34D2
-
+	.incbin "includes/generated/v7_transplant_Encoder_PrepareCallback.bin"
 Encoder_ResolveCallbackAddr:
-	ld_sril3 XIZ, 0x07, 0xe0, 0xe4
-	lda_d16 xbc, (0x8e7c)
-	ld (xbc + 4), 0xaa
-	ldmi16 (xbc + 5), 0x8e90
-	lda_d16 xde, (0x8e78)
-	ld a, (xde + 1)
-	ld (xbc + 6), a
-	ld a, (xde + 2)
-	ld (xbc + 7), a
-	jr FileIO_MainLoop
-
+	.incbin "includes/generated/v7_transplant_Encoder_ResolveCallbackAddr.bin"
 FileIO_ProcessMaskAndShift:
-	lda_d16 xhl, (0x8e78)
-	ld e, (xiz + 3)
-	ld d, e
-	and d, (xhl + 1)
-	and e, (xhl + 2)
-	ld l, e
-	ld e, (xiz + 2)
-	bit 4, e
-	jr z, FileIO_AudioControlStart
-	res 4, e
-	ld a, e
-	and a, 0xf
-	jr z, FileIO_ShiftLeftLow
-	slla d
-
+	.incbin "includes/generated/v7_transplant_FileIO_ProcessMaskAndShift.bin"
 FileIO_ShiftLeftLow:
 	ld a, e
 	and a, 0xf

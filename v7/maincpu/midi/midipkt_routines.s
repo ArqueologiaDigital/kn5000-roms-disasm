@@ -8,1311 +8,137 @@
 ; =============================================================================
 
 MidiPkt_ExtractAndPack:
-	; --- Stack-frame: XIZ struct field extraction + packed lookup (96 bytes) ---
-	lda	xsp, (xsp-16)
-	push xiz
-	ld xiz, xwa
-	ld a, (xiz+6)
-	ld c, (xiz+7)
-	call Part_LookupTableEntry
-	extz hl
-	ld (xsp+4), hl
-	ld a, (xiz+6)
-	ld c, (xiz+7)
-	inc 1, c
-	call Part_LookupTableEntry
-	extz hl
-	sll	hl, 8
-	or (xsp+4), hl
-	lda	xbc, (xsp+14)
-	ld a, (xiz+6)
-	ld (xbc), a
-	ld a, (xiz+7)
-	ld (xbc+1), a
-	ld wa, (xsp+4)
-	ld (xbc+2), wa
-	ld e, (xiz+8)
-	extz de
-	ld a, (xiz+0x0b)
-	and a, 0x0f
-	jr z, MidiPkt_ExtractAndPack_StoreShifted
-	.byte 0xda
-	swi	6
+	.incbin "includes/generated/v7_transplant_MidiPkt_ExtractAndPack.bin"
 MidiPkt_ExtractAndPack_StoreShifted:
-	ld (xbc+4), de
-	lda	xwa, (xsp+6)
-	ld (xwa), xbc
-	ld (xwa+4), xiz
-	calr MidiPkt_EnqueueExtended_Data
-	pop xiz
-	lda	xsp, (xsp+16)
-	ret
+	.incbin "includes/generated/v7_transplant_MidiPkt_ExtractAndPack_StoreShifted.bin"
 MidiPkt_ExtractAndPack_Ret:
-	ret
-
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_ExtractAndPack_Ret.bin"
 MidiPkt_BuildDirect:
-	lda xsp, (xsp - 12)
-	push xiz
-	ld xiz, xwa
-	lda xbc, (xsp + 12)
-	lda xde, (xiz + 6)
-	ld a, (xde)
-	ld (xbc), a
-	lda xhl, (xiz + 7)
-	ld a, (xhl)
-	ld (xbc + 1), a
-	ld a, (xde)
-	ld c, (xhl)
-	call Part_LookupTableEntry
-	lda xbc, (xsp + 12)
-	ld (xbc + 2), l
-	ld a, (xiz + 8)
-	ld (xbc + 3), a
-	lda xwa, (xsp + 4)
-	ld (xwa), xbc
-	ld (xwa + 4), xiz
-	calr MidiPkt_EnqueueControl_335C
-	pop xiz
-	lda xsp, (xsp + 12)
-	ret
-
-; --- MIDI_BuildControlPacket: Construct a 4-byte MIDI control packet ---
-; Two entry points building MIDI packets from a parameter structure (XIZ):
-; 1) Full packet: reads MIDI map value from table at 0xbccc (via 0xfd6eb6),
-;    adjusts by subtracting 0x20, ORs with (xiz+6) for status byte,
-;    copies controller number from *(xiz+7), computes data byte via
-;    lookup (0xfd822d), copies channel from (xiz+8).
-; 2) Simple packet: same status byte construction but data byte 2 = 0.
-; Output: 4-byte packet pointer + source struct pointer stored to (XWA).
+	.incbin "includes/generated/v7_transplant_MidiPkt_BuildDirect.bin"
 MidiPkt_BuildControl:
-	lda	xsp, (xsp-12)
-	push	xiz
-	ld	xiz, xwa
-	ldda32	xwa, (0xbcac)
-	ldw	bc, 10
-	call	SeqData_ReadFieldByIndex
-	sub	l, 32
-	ld	c, l
-	ld	l, (xiz+6)
-	or	l, c
-	lda	xbc, (xsp+12)
-	ld	(xbc), l
-	lda	xde, (xiz+7)
-	ld	a, (xde)
-	ld	(xbc+1), a
-	extz	hl
-	ld	c, (xde)
-	ld	wa, hl
-	call	Part_LookupTableEntry
-	lda	xbc, (xsp+12)
-	ld	(xbc+2), l
-	ld	a, (xiz+8)
-	ld	(xbc+3), a
-	lda	xwa, (xsp+4)
-	ld	(xwa), xbc
-	ld	(xwa+4), xiz
-	calr	2277
-	pop	xiz
-	lda	xsp, (xsp+12)
-	ret
-	lda	xsp, (xsp-12)
-	push	xiz
-	ld	xiz, xwa
-	ldda32	xwa, (0xbcac)
-	ldw	bc, 10
-	call	SeqData_ReadFieldByIndex
-	sub	l, 32
-	ld	a, (xiz+6)
-	or	a, l
-	lda	xbc, (xsp+12)
-	ld	(xbc), a
-	ld	a, (xiz+7)
-	ld	(xbc+1), a
-	ld	(xbc+2), 0
-	ld	a, (xiz+8)
-	ld	(xbc+3), a
-	lda	xwa, (xsp+4)
-	ld	(xwa), xbc
-	ld	(xwa+4), xiz
-	calr	1512
-	pop	xiz
-	lda	xsp, (xsp+12)
-	ret
-	lda	xsp, (xsp-16)
-	push	xiz
-	ld	(xsp+16), xwa
-	ld	xiy, SeqData_SubDispatch_Table_0xBC
-	lda	xix, (xsp+6)
-	ldi85
-	ldiw
-	ld	xwa, (xsp+16)
-	cp	(xwa+14), 1
-	jrl	nc, 181
-	ld	xwa, (xsp+16)
-	calr	2344
-	cp	hl, 0xffff
-	jrl	z, 168
-	ldda32	xwa, (0xbcac)
-	ldw	bc, 10
-	call	SeqData_ReadFieldByIndex
-	sub	l, 32
-	ld	xbc, (xsp+16)
-	ld	a, (xbc+6)
-	or	a, l
-	ld	(xsp+4), a
-	extz	wa
-	ld	c, (xbc+7)
-	call	Part_LookupTableEntry
-	ld	(xsp+6), l
-	ld	xwa, (xsp+16)
-	ld	a, (xwa+14)
-	extz	wa
-	sla	wa, 2
-	lda_24	xbc, (WidgetParam_SelfRef_Table_0x4)
-	ld_rrl	xiz, xbc, wa
-	ld	a, (xsp+4)
-	extz	wa
-	ld	c, (xiz+1)
-	call	Part_LookupTableEntry
-	ld	a, (xiz+3)
-	and	a, l
-	jr	z, 4
-	ld	(xsp+6), 129
-	ld	xwa, MidiPkt_EventType_Table_0x590
-	lds	bc, 6
-	call	ArpQueue_Enqueue
-	pushw 6
-	lda	xwa, (xsp+12)
-	push	xwa
-	ld	xwa, (xsp+22)
-	push	xwa
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	lda	xwa, (xsp+10)
-	ld	c, (xsp+4)
-	add	c, 32
-	ld	(xwa+1), c
-	lds	bc, 6
-	call	ArpQueue_Enqueue
-	lda	xwa, (xsp+6)
-	ld	c, (xwa)
-	and	c, 15
-	ld	(xwa+1), c
-	ld	c, (xwa)
-	srl	c, 4
-	ld	(xwa), c
-	lds	bc, 3
-	call	ArpQueue_Enqueue
-	call	ArpQueue_ComputeAndEnqueue
-	ldda32	xwa, (0xbc5c)
-	call	SeqOut_FlushTimedBuffer
-	call	ArpQueue_SwapBuffers
-	pop	xiz
-	lda	xsp, (xsp+16)
-	ret
-	ret
-	lda	xsp, (xsp-18)
-	push	xiz
-	ld	(xsp+18), xwa
-	ld	xwa, (xsp+18)
-	cp	(xwa+14), 255
-	jr	z, 108
-	ldda32	xwa, (0xbcac)
-	ldw	bc, 10
-	call	SeqData_ReadFieldByIndex
-	sub	l, 32
-	ld	xde, (xsp+18)
-	ld	a, (xde+6)
-	or	a, l
-	ld	(xsp+4), a
-	ld	a, (xde+14)
-	cps	a, 1
-	jr	nc, 76
-	extz	wa
-	sla	wa, 2
-	lda_24	xbc, (WidgetParam_SelfRef_Table_0xA)
-	ld_rrl	xiz, xbc, wa
-	ld	a, (xsp+4)
-	extz	wa
-	ld	c, (xde+7)
-	call	Part_LookupTableEntry
-	lda	xbc, (xsp+14)
-	lda	xwa, (xbc+2)
-	cp	l, (xiz)
-	jr	ugt, 5
-	ld	(xwa), 0
-	jr	3
-	ld	(xwa), 1
-	ld	a, (xsp+4)
-	ld	(xbc), a
-	ld	xde, (xsp+18)
-	ld	a, (xde+7)
-	ld	(xbc+1), a
-	ld	a, (xde+8)
-	ld	(xbc+3), a
-	lda	xwa, (xsp+6)
-	ld	(xwa), xbc
-	ld	(xwa+4), xde
-	calr	1870
-	pop	xiz
-	lda	xsp, (xsp+18)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_BuildControl.bin"
 MidiPkt_BuildStatusDirect:
-	lda xsp, (xsp - 12)
-	push xiz
-	ld xiz, xwa
-	lda xbc, (xsp + 12)
-	lda xde, (xiz + 6)
-	ld a, (xde)
-	ld (xbc), a
-	lda xhl, (xiz + 7)
-	ld a, (xhl)
-	ld (xbc + 1), a
-	ld a, (xde)
-	ld c, (xhl)
-	call Part_LookupTableEntry
-	lda xbc, (xsp + 12)
-	ld (xbc + 2), l
-	ld a, (xiz + 8)
-	ld (xbc + 3), a
-	lda xwa, (xsp + 4)
-	ld (xwa), xbc
-	ld (xwa + 4), xiz
-	calr MidiPkt_EnqueueControl_3364
-	pop xiz
-	lda xsp, (xsp + 12)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_BuildStatusDirect.bin"
 MidiPkt_BuildFromConstant:
-	lda xsp, (xsp - 12)
-	lda xde, (xsp + 8)
-	ld c, (xwa + 6)
-	ld (xde), c
-	ld c, (xwa + 7)
-	ld (xde + 1), c
-	ldb_d8 c, (0x8ee4)
-	ld (xde + 2), c
-	ld c, (xwa + 8)
-	ld (xde + 3), c
-	lda xbc, (xsp)
-	ld (xbc), xde
-	ld (xbc + 4), xwa
-	ld xwa, xbc
-	calr MidiPkt_EnqueueControl_3354
-	lda xsp, (xsp + 12)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_BuildFromConstant.bin"
 MidiPkt_BuildZeroData:
-	lda xsp, (xsp - 12)
-	ld xbc, xwa
-	lda xde, (xsp + 8)
-	ld a, (xbc + 6)
-	ld (xde), a
-	ld a, (xbc + 7)
-	ld (xde + 1), a
-	ld (xde + 2), 0x0
-	ld a, (xbc + 8)
-	ld (xde + 3), a
-	lda xwa, (xsp)
-	ld (xwa), xde
-	ld (xwa + 4), xbc
-	calr MidiPkt_EnqueueControl_3358
-	lda xsp, (xsp + 12)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_BuildZeroData.bin"
 MidiPkt_ProcessEventQueue:
-	push xiz
-	bitda 4, (0xfd50)
-	jr nz, MidiPkt_ProcessEventQueue_Done
-	bitda 3, (0xfd56)
-	jr z, MidiPkt_ProcessEventQueue_Done
-	bitda 0, (0xb7e7)
-	jr nz, MidiPkt_ProcessEventQueue_Done
-	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xwa, (0x90e0)
-	ld iz, wa
-	extz xiz
-	add xiz, xbc
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_ProcessEventQueue.bin"
 MidiPkt_ProcessEventQueue_Loop:
-	push xiz
-	call SeqVoice_StoreEntry
-	inc 4, xsp
-	stda32 0xbd22, xhl
-	lda_d16 xwa, (0xbd22)
-	cp (xwa), 0xff
-	jr z, MidiPkt_ProcessEventQueue_Done
-	cp (xwa), 0xc0
-	jr nc, MidiPkt_ProcessEventQueue_Next
-	ld c, (xwa)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (MidiPkt_EventType_Table)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_ProcessEventQueue_Loop.bin"
 MidiPkt_ProcessEventQueue_Next:
-	inc 4, xiz
-	jr MidiPkt_ProcessEventQueue_Loop
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_ProcessEventQueue_Next.bin"
 MidiPkt_ProcessEventQueue_Done:
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_ProcessEventQueue_Done.bin"
 MidiPkt_Nop:
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_Nop.bin"
 MidiPkt_DispatchViaTable_4D6A:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x35A
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4D6A.bin"
 MidiPkt_DispatchViaTable_4D82:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x372
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4D82.bin"
 MidiPkt_DispatchViaTable_4D8E:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x37E
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4D8E.bin"
 MidiPkt_DispatchViaTable_4D9A:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x38A
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4D9A.bin"
 MidiPkt_DispatchViaTable_4DA6:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x396
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4DA6.bin"
 MidiPkt_DispatchViaTable_4DAE:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x39E
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	cp (xiz + 1), 0xb
-	jr nz, MidiPkt_DispatchViaTable_4DAE_Done
-	lda xde, (xiz + 3)
-	ld xwa, (xsp + 8)
-	ld c, (xwa + 8)
-	cpl c
-	ld a, (xde)
-	and a, c
-	ld (xde), a
-	cps a, 0
-	jr z, MidiPkt_DispatchViaTable_4DAE_Done
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x39E
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4DAE.bin"
 MidiPkt_DispatchViaTable_4DAE_Done:
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4DAE_Done.bin"
 MidiPkt_DispatchSpecialType:
-	dec 8, xsp
-	push xiz
-	ld xiz, xwa
-	ld a, (xiz + 1)
-	cp a, 0x11
-	jr nz, MidiPkt_DispatchSpecialType_Type10
-	ld xwa, MidiPkt_EventType_Table_0x584
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ldda32 xwa, (0xbc5c)
-	jr MidiPkt_DispatchSpecialType_SendAndUpdate
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchSpecialType.bin"
 MidiPkt_DispatchSpecialType_Type10:
-	cp a, 0x10
-	jr nz, MidiPkt_DispatchSpecialType_Default
-	ld xwa, MidiPkt_EventType_Table_0x58A
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ldda32 xwa, (0xbc5c)
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchSpecialType_Type10.bin"
 MidiPkt_DispatchSpecialType_SendAndUpdate:
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-	jr MidiPkt_DispatchSpecialType_Return
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchSpecialType_SendAndUpdate.bin"
 MidiPkt_DispatchSpecialType_Default:
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x3B6
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchSpecialType_Default.bin"
 MidiPkt_DispatchSpecialType_Return:
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchSpecialType_Return.bin"
 MidiPkt_MatchParamInTable:
-	ld xde, xbc
-	lda_24 xix, (WidgetParam_Entry_018_0xCE)
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_MatchParamInTable.bin"
 MidiPkt_MatchParamInTable_Loop:
-	ld_spil XHL, 0xea
-	cp xix, xhl
-	ret z
-	ld c, (xhl + 7)
-	cp c, (xwa + 1)
-	jr nz, MidiPkt_MatchParamInTable_Loop
-	ld c, (xhl + 8)
-	and c, (xwa + 3)
-	jr z, MidiPkt_MatchParamInTable_Loop
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_MatchParamInTable_Loop.bin"
 MidiPkt_EnqueueControlNop:
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControlNop.bin"
 MidiPkt_EnqueueControl_3354:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	ld xiy, MidiPkt_EventType_Table_0x300
-	lda xix, (xsp + 4)
-	ldi85
-	ldiw
-	ld xwa, (xiz + 4)
-	calr MidiPkt_CheckGateCondition
-	cp hl, 0xffff
-	jr z, MidiPkt_EnqueueControl_3354_Return
-	lda_24 xbc, (WidgetParam_Entry_018_0xCE)
-	ld xwa, (xiz + 4)
-	cp xbc, xwa
-	jr z, MidiPkt_EnqueueControl_3354_Return
-	ld xbc, (xiz)
-	ld a, (xwa + 8)
-	and a, (xbc + 3)
-	jr z, MidiPkt_EnqueueControl_3354_Return
-	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xwa, (xiz + 4)
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xbc, (xiz)
-	ld xde, (xiz + 4)
-	ld a, (xde + 8)
-	and a, (xbc + 2)
-	ld c, a
-	ld a, (xde + 11)
-	and a, 0xf
-	jr z, MidiPkt_EnqueueControl_3354_ShiftBits
-	srla c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3354.bin"
 MidiPkt_EnqueueControl_3354_ShiftBits:
-	lda xwa, (xsp + 4)
-	ld (xwa), c
-	and c, 0xf
-	ld (xwa + 1), c
-	ld c, (xwa)
-	srl c, 4
-	ld (xwa), c
-	lds bc, 3
-	call ArpQueue_Enqueue
-	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3354_ShiftBits.bin"
 MidiPkt_EnqueueControl_3354_Return:
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3354_Return.bin"
 MidiPkt_EnqueueExtended_Data:
-	dec	4, xsp
-	push	xiz
-	ld	xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x304
-	lda	xix, (xsp+4)
-	.byte 0x85
-	rcf
-	ldiw
-	ld	xwa, (xiz+4)
-	calr	1118
-	cp	hl, 0xffff
-	jr	z, 102
-	lda_24	xwa, (WidgetParam_Entry_018_0xCE)
-	.byte 0xae, 0x04, 0xf0
-	jr	z, 92
-	ld	xwa, (xiz)
-	.byte 0x98, 0x04
-	push	xsp
-	nop
-	nop
-	jr	z, 83
-	ld	xwa, MidiPkt_EventType_Table_0x590
-	lds	bc, 6
-	call	ArpQueue_Enqueue
-	ld	xwa, (xiz+4)
-	lds	bc, 6
-	call	ArpQueue_Enqueue
-	ld	xwa, (xiz)
-	ld	xbc, xwa
-	ld	bc, (xbc+4)
-	.byte 0x98
-	push	sr
-	ldb_d8	w, (1198)
-	ld	a, (xwa+11)
-	and	a, 15
-	jr	z, 2
-	.byte 0xd9
-	swi	7
-	lda	xwa, (xsp+4)
-	ld	(xwa), c
-	and	c, 15
-	ld	(xwa+1), c
-	ld	c, (xwa)
-	srl	c, 4
-	ld	(xwa), c
-	lds	bc, 3
-	call	ArpQueue_Enqueue
-	call	ArpQueue_ComputeAndEnqueue
-	ldda32	xwa, (0xbc5c)
-	call	SeqOut_FlushTimedBuffer
-	call	ArpQueue_SwapBuffers
-	pop	xiz
-	inc	4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueExtended_Data.bin"
 MidiPkt_EnqueueControl_335C:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	ld xiy, MidiPkt_EventType_Table_0x308
-	lda xix, (xsp + 4)
-	ldi85
-	ldiw
-	ld xwa, (xiz + 4)
-	calr MidiPkt_CheckGateCondition
-	cp hl, 0xffff
-	jr z, MidiPkt_EnqueueControl_335C_Return
-	lda_24 xbc, (WidgetParam_Entry_018_0xCE)
-	ld xwa, (xiz + 4)
-	cp xbc, xwa
-	jr z, MidiPkt_EnqueueControl_335C_Return
-	ld xbc, (xiz)
-	ld a, (xwa + 8)
-	and a, (xbc + 3)
-	jr z, MidiPkt_EnqueueControl_335C_Return
-	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xwa, (xiz + 4)
-	lds bc, 6
-	call ArpQueue_Enqueue
-	lda xwa, (xsp + 4)
-	ld (xwa), 0x0
-	ld xde, (xiz)
-	ld xbc, (xiz + 4)
-	ld c, (xbc + 8)
-	and c, (xde + 2)
-	jr z, MidiPkt_EnqueueControl_335C_ZeroData
-	ld (xwa), 0x7f
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_335C.bin"
 MidiPkt_EnqueueControl_335C_ZeroData:
-	ld c, (xwa)
-	and c, 0xf
-	ld (xwa + 1), c
-	ld c, (xwa)
-	srl c, 4
-	ld (xwa), c
-	lds bc, 3
-	call ArpQueue_Enqueue
-	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_335C_ZeroData.bin"
 MidiPkt_EnqueueControl_335C_Return:
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_335C_Return.bin"
 MidiPkt_EnqueueControl_3358:
-	dec 6, xsp
-	push xiz
-	ld xiz, xwa
-	ld xiy, MidiPkt_EventType_Table_0x30C
-	lda xix, (xsp + 4)
-	lds bc, 2
-	ldirw
-	ldi85
-	ld xwa, (xiz + 4)
-	calr MidiPkt_CheckGateCondition
-	cp hl, 0xffff
-	jrl z, MidiPkt_EnqueueControl_3358_Return
-	lda_24 xbc, (WidgetParam_Entry_018_0xCE)
-	ld xwa, (xiz + 4)
-	cp xbc, xwa
-	jrl z, MidiPkt_EnqueueControl_3358_Return
-	ld xbc, (xiz)
-	ld a, (xwa + 8)
-	and a, (xbc + 3)
-	jrl z, MidiPkt_EnqueueControl_3358_Return
-	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xwa, (xiz + 4)
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ldda32 xhl, (0x90f2)
-	ld xwa, (xiz)
-	ld a, (xwa)
-	extz wa
-	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
-	cp xwa, 0xffffffff
-	jr z, MidiPkt_EnqueueControl_3358_Return
-	lda xwa, (xsp + 4)
-	ld xbc, (xiz)
-	ld c, (xbc)
-	extz bc
-	sla bc, 2
-	ld_sril3 XBC, 0x07, 0xec, 0xe4
-	ld c, (xbc)
-	ld (xwa), c
-	lda xde, (xwa + 2)
-	ld xbc, (xiz)
-	ld c, (xbc)
-	extz bc
-	sla bc, 2
-	ld_sril3 XBC, 0x07, 0xec, 0xe4
-	ld c, (xbc + 1)
-	and c, 0x7
-	ld (xde), c
-	ld c, (xwa)
-	bit 7, c
-	jr z, MidiPkt_EnqueueControl_3358_SplitNibbles
-	res 7, c
-	ld (xwa), c
-	ld c, (xde)
-	set 7, c
-	ld (xde), c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3358.bin"
 MidiPkt_EnqueueControl_3358_SplitNibbles:
-	ld c, (xwa)
-	and c, 0xf
-	ld (xwa + 1), c
-	ld c, (xwa)
-	srl c, 4
-	ld (xwa), c
-	ld c, (xde)
-	and c, 0xf
-	ld (xwa + 3), c
-	ld c, (xde)
-	srl c, 4
-	ld (xde), c
-	lds bc, 5
-	call ArpQueue_Enqueue
-	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3358_SplitNibbles.bin"
 MidiPkt_EnqueueControl_3358_Return:
-	pop xiz
-	inc 6, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3358_Return.bin"
 MidiPkt_EnqueueControl_335E:
-	lda xsp, (xsp - 14)
-	push xiz
-	ld xiz, xwa
-	ld xiy, MidiPkt_EventType_Table_0x312
-	lda xix, (xsp + 4)
-	lds bc, 2
-	ldirw
-	ldi85
-	lda xbc, (xsp + 10)
-	ld (xbc), xiz
-	lda_24 xwa, (ToneKit_FrequencyTable_0xDA)
-	ld (xbc + 4), xwa
-	calr MidiPkt_CheckGateCondition
-	cp hl, 0xffff
-	jr z, MidiPkt_EnqueueControl_335E_Return
-	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xwa, (xsp + 14)
-	lds bc, 6
-	call ArpQueue_Enqueue
-	lda xwa, (xsp + 4)
-	ld c, (xiz)
-	ld (xwa), c
-	lda xde, (xwa + 2)
-	ld c, (xiz + 1)
-	ld (xde), c
-	ld c, (xwa)
-	bit 7, c
-	jr z, MidiPkt_EnqueueControl_335E_SplitNibbles
-	res 7, c
-	ld (xwa), c
-	ld c, (xde)
-	set 7, c
-	ld (xde), c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_335E.bin"
 MidiPkt_EnqueueControl_335E_SplitNibbles:
-	ld c, (xwa)
-	and c, 0xf
-	ld (xwa + 1), c
-	ld c, (xwa)
-	srl c, 4
-	ld (xwa), c
-	ld c, (xde)
-	and c, 0xf
-	ld (xwa + 3), c
-	ld c, (xde)
-	srl c, 4
-	ld (xde), c
-	lds bc, 5
-	call ArpQueue_Enqueue
-	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_335E_SplitNibbles.bin"
 MidiPkt_EnqueueControl_335E_Return:
-	pop xiz
-	lda xsp, (xsp + 14)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_335E_Return.bin"
 MidiPkt_EnqueueControl_3364:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	ld xiy, MidiPkt_EventType_Table_0x318
-	lda xix, (xsp + 4)
-	ldi85
-	ldiw
-	ld xwa, (xiz + 4)
-	calr MidiPkt_CheckGateCondition
-	cp hl, 0xffff
-	jr z, MidiPkt_EnqueueControl_3364_Return
-	ld xbc, (xiz)
-	ld xwa, (xiz + 4)
-	ld a, (xwa + 8)
-	and a, (xbc + 3)
-	jr z, MidiPkt_EnqueueControl_3364_Return
-	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xwa, (xiz + 4)
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xbc, (xiz)
-	ld xde, (xiz + 4)
-	ld a, (xde + 8)
-	and a, (xbc + 2)
-	cps a, 1
-	jr nz, MidiPkt_EnqueueControl_3364_FormatData
-	ldb_d8 c, (0xfc61)
-	and c, 0x30
-	ld a, (xde + 11)
-	and a, 0xf
-	jr z, MidiPkt_EnqueueControl_3364_NoShift
-	srla c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3364.bin"
 MidiPkt_EnqueueControl_3364_NoShift:
-	inc 1, c
-	ld (xsp + 4), c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3364_NoShift.bin"
 MidiPkt_EnqueueControl_3364_FormatData:
-	lda xwa, (xsp + 4)
-	ld c, (xwa)
-	and c, 0xf
-	ld (xwa + 1), c
-	ld c, (xwa)
-	srl c, 4
-	ld (xwa), c
-	lds bc, 3
-	call ArpQueue_Enqueue
-	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3364_FormatData.bin"
 MidiPkt_EnqueueControl_3364_Return:
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3364_Return.bin"
 MidiPkt_EnqueueControl_3368:
-	dec 4, xsp
-	push xiz
-	ld xiz, xwa
-	ld xiy, MidiPkt_EventType_Table_0x31C
-	lda xix, (xsp + 4)
-	ldi85
-	ldiw
-	ld xwa, (xiz + 4)
-	calr MidiPkt_CheckGateCondition
-	cp hl, 0xffff
-	jrl z, MidiPkt_EnqueueControl_3368_Return
-	ld xbc, (xiz)
-	ld xwa, (xiz + 4)
-	ld a, (xwa + 8)
-	and a, (xbc + 3)
-	jrl z, MidiPkt_EnqueueControl_3368_Return
-	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ldb_d8 a, (0xfd99)
-	and a, 0x1
-	cps a, 1
-	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
-	ld xwa, ToneKit_FrequencyTable_0xB2
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xbc, (xiz)
-	ld xde, (xiz + 4)
-	ld a, (xde + 8)
-	and a, (xbc + 2)
-	ld c, a
-	ld a, (xde + 11)
-	and a, 0xf
-	jr z, MidiPkt_EnqueueControl_3368_PedalNoShift
-	srla c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3368.bin"
 MidiPkt_EnqueueControl_3368_PedalNoShift:
-	inc 1, c
-	jr MidiPkt_EnqueueControl_3368_FormatData
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3368_PedalNoShift.bin"
 MidiPkt_EnqueueControl_3368_NoPedal:
-	ld xwa, (xiz + 4)
-	lds bc, 6
-	call ArpQueue_Enqueue
-	ld xbc, (xiz)
-	ld xde, (xiz + 4)
-	ld a, (xde + 8)
-	and a, (xbc + 2)
-	ld c, a
-	ld a, (xde + 11)
-	and a, 0xf
-	jr z, MidiPkt_EnqueueControl_3368_FormatData
-	srla c
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3368_NoPedal.bin"
 MidiPkt_EnqueueControl_3368_FormatData:
-	ld (xsp + 4), c
-	lda xwa, (xsp + 4)
-	ld c, (xwa)
-	and c, 0xf
-	ld (xwa + 1), c
-	ld c, (xwa)
-	srl c, 4
-	ld (xwa), c
-	lds bc, 3
-	call ArpQueue_Enqueue
-	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3368_FormatData.bin"
 MidiPkt_EnqueueControl_3368_Return:
-	pop xiz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueControl_3368_Return.bin"
 MidiPkt_EnqueueExtended2_Data:
-	ret
-	lda	xsp, (xsp-10)
-	push	xiz
-	ld	xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x320
-	lda	xix, (xsp+4)
-	.byte 0x85
-	rcf
-	ldiw
-	ld	xwa, (xiz+4)
-	calr	145
-	cp	hl, 0xffff
-	jrl	z, 133
-	lda_24	xbc, (WidgetParam_Entry_018_0xCE)
-	ld	xwa, (xiz+4)
-	cp	xbc, xwa
-	jr	z, 121
-	ld	xbc, (xiz)
-	ld	a, (xwa+8)
-	and	a, (xbc+3)
-	jr	z, 111
-	ld	xwa, MidiPkt_EventType_Table_0x590
-	lds	bc, 6
-	call	ArpQueue_Enqueue
-	pushw	6
-	lda	xwa, (xsp+10)
-	push	xwa
-	ld	xwa, (xiz+4)
-	push	xwa
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	lda	xwa, (xsp+8)
-	ld	xbc, (xiz)
-	ld	c, (xbc)
-	set	5, c
-	ld	(xwa+1), c
-	lds	bc, 6
-	call	ArpQueue_Enqueue
-	ld	xbc, (xiz)
-	ld	xde, (xiz+4)
-	ld	a, (xde+8)
-	.byte 0x89
-	push	sr
-	adddm8	0x8bc9, b
-	pushw	0xc921
-	.byte 0xcc
-	retd	614
-	.byte 0xcb
-	swi	7
-	lda	xwa, (xsp+4)
-	ld	(xwa), c
-	and	c, 15
-	ld	(xwa+1), c
-	ld	c, (xwa)
-	srl	c, 4
-	ld	(xwa), c
-	lds	bc, 3
-	call	ArpQueue_Enqueue
-	call	ArpQueue_ComputeAndEnqueue
-	ldda32	xwa, (0xbc5c)
-	call	SeqOut_FlushTimedBuffer
-	call	ArpQueue_SwapBuffers
-	pop	xiz
-	lda	xsp, (xsp+10)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_EnqueueExtended2_Data.bin"
 MidiPkt_CheckGateCondition:
-	ld c, (xwa + 12)
-	cps c, 0
-	jr z, MidiPkt_CheckGateCondition_Second
-	extz bc
-	muls bc, 0x6
-	lda_24 xde, (ToneKit_FrequencyTable_0x3E2)
-	stb_dri B, 0x07, 0xe8, 0xe4
-	ld xhl, (xde)
-	ld c, (xde + 4)
-	and c, (xhl)
-	cp (xde + 5), c
-	jr nz, MidiPkt_CheckGateCondition_Blocked
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_CheckGateCondition.bin"
 MidiPkt_CheckGateCondition_Second:
-	ld a, (xwa + 13)
-	cps a, 0
-	jr z, MidiPkt_CheckGateCondition_Pass
-	extz wa
-	muls wa, 0x6
-	lda_24 xbc, (ToneKit_FrequencyTable_0x3F4)
-	stb_dri A, 0x07, 0xe4, 0xe0
-	ld xde, (xbc)
-	ld a, (xbc + 4)
-	and a, (xde)
-	cp (xbc + 5), a
-	jr z, MidiPkt_CheckGateCondition_Pass
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_CheckGateCondition_Second.bin"
 MidiPkt_CheckGateCondition_Blocked:
-	ldw hl, 0xffff
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_CheckGateCondition_Blocked.bin"
 MidiPkt_CheckGateCondition_Pass:
-	lds hl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_CheckGateCondition_Pass.bin"
 MidiPkt_DispatchViaTable_4DCE:
-	dec 8, xsp
-	push xiz
-	ld xiz, (xsp + 16)
-	ld xwa, xiz
-	ld xbc, ToneKit_FrequencyTable_0x3BE
-	calr MidiPkt_MatchParamInTable
-	lda xwa, (xsp + 4)
-	lda xbc, (xwa + 4)
-	ld (xbc), xhl
-	ld (xwa), xiz
-	ld xbc, (xbc)
-	ld c, (xbc + 16)
-	extz bc
-	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
-	exts xbc
-	add xbc, xde
-	ld xhl, (xbc)
-	call (xhl)
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchViaTable_4DCE.bin"
 MidiPkt_DispatchData_Chan4:
-	stdi8	(0xbcfc), 4
-	jr	57
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchData_Chan4.bin"
 MidiPkt_DispatchData_Chan3:
-	stdi8	(0xbcfc), 3
-	jr	50
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchData_Chan3.bin"
 MidiPkt_DispatchData_Chan1:
-	stdi8	(0xbcfc), 1
-	jr	43
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchData_Chan1.bin"
 MidiPkt_DispatchData_Chan2:
-	stdi8	(0xbcfc), 2
-	jr	36
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchData_Chan2.bin"
 MidiPkt_DispatchData_Chan5:
-	stdi8	(0xbcfc), 5
-	jr	29
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchData_Chan5.bin"
 MidiPkt_DispatchData_Chan6:
-	stdi8	(0xbcfc), 6
-	jr	t, 0x16
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	AccWrap_PlayModeDispatch
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	ldb_d8	a, (0xbcfc)
-	extz	wa
-	jp	SysEx_InitiateSend
-	ldb_d8	a, (0x8d36)
-	cp	a, 87
-	jr	z, 11
-	cpdi8	(0x8d34), 1
-	jr	nz, 6
-	cps	a, 1
-	jr	nz, 2
-	jr	-44
-	ldda32	xwa, (0xbcac)
-	lds	bc, 4
-	ldw	de, 17
-	jp	MIDI_ReadChannelParam
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_DispatchData_Chan6.bin"
 MidiPkt_SendBankSelect:
-	ldda32 xwa, (0xbcac)
-	lds bc, 4
-	call SeqData_ReadFieldByIndex
-	cps l, 0
-	ret z
-	ldda32 xwa, (0xbcac)
-	lds bc, 5
-	call SeqData_ReadFieldByIndex
-	cp l, 0x2b
-	jr z, MidiPkt_SendBankSelect_Send
-	cp l, 0x2c
-	ret nz
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_SendBankSelect.bin"
 MidiPkt_SendBankSelect_Send:
-	ld xwa, MidiPkt_EventType_Table_0x560
-	lds bc, 5
-	call ArpQueue_Enqueue
-	ldda32 xwa, (0xbc5c)
-	call SeqOut_FlushTimedBuffer
-	call ArpQueue_SwapBuffers
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiPkt_SendBankSelect_Send.bin"
 MidiPkt_SysExValidator_Data:
-	ldb_d8	a, (0x8d36)
-	cp	a, 108
-	jr	c, 5
-	cp	a, 118
-	jr	ule, 6
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
-	cp	a, 153
-	jr	ugt, 5
-	cp	a, 148
-	ret	nc
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xbf
-	lda_d16	xbc, (0xfdad)
-	ld	e, (xbc)
-	set	2, e
-	ld	(xbc), e
-	extz	de
-	pushw	4
-	ldw	wa, 145
-	lds	bc, 3
-	call	AssswbWr
-	push	xiz
-	call	SwbtWr_ReinitBothBanks
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_MidiPkt_SysExValidator_Data.bin"
 MidiPkt_SysExProcessor_Data:
-	ldb_d8	a, (0x8d36)
-	cp	a, 108
-	jr	c, 5
-	cp	a, 118
-	jr	ule, 6
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
-	cp	a, 153
-	jr	ugt, 5
-	cp	a, 148
-	ret	nc
-	lda_d16	xbc, (0xfdad)
-	ld	a, (xbc)
-	bit	2, a
-	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xbf
-	ld	e, (xbc)
-	res	2, e
-	ld	(xbc), e
-	extz	de
-	pushw	4
-	ldw	wa, 145
-	lds	bc, 3
-	call	AssswbWr
-	push	xiz
-	call	SwbtWr_ReinitBothBanks
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_MidiPkt_SysExProcessor_Data.bin"
 MidiPkt_SysExBulkTransfer_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 1

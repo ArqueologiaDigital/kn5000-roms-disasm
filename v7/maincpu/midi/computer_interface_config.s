@@ -19,25 +19,7 @@
 ; =============================================================================
 
 TtComputerConnection:
-	cp xbc, 0x1c0000c
-	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1c0000b
-	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1c00002
-	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1c00001
-	jr nz, ComputerConnectionTitleExit
-	or xde, xde
-	jr nz, ComputerConnectionTitleExit
-	call GET_COMPUTER_INTERFACE_SELECTION
-	cps l, 0	;  MIDI
-	jr nz, ComputerConnectionTitleExit
-	stdi8 (0x7f42), 70
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call PostEvent
-
+	.incbin "includes/generated/v7_transplant_TtComputerConnection.bin"
 ComputerConnectionTitleExit:
 	lds32 xhl, 0
 	ret
@@ -66,60 +48,13 @@ MdCmptCnctFunc:
 	jrl MdCmptCnct_Epilogue
 
 CmptCnctDrawConnectionDiagram:
-	ld bc, (xhl + 4)
-	ld xwa, (xhl + 8)
-	cps bc, 2
-	jr z, CmptCnct_DrawDiagram2
-	cps bc, 1
-	jr z, CmptCnct_DrawDiagram1
-	cps bc, 0
-	jr nz, CmptCnct_DrawDiagramDefault
-	pushw 0xe7
-	pushw 0xf848
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xwa, (xsp + 4)
-	pushw 0x6c
-	ld xbc, Bitmap_MIDIConnections_1
-	ldw de, 0x128
-	jr CmptCnctBitmapDrawComplete
-
+	.incbin "includes/generated/v7_transplant_CmptCnctDrawConnectionDiagram.bin"
 CmptCnct_DrawDiagram1:
-	pushw 0xe7
-	pushw 0xf862
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xwa, (xsp + 4)
-	pushw 0x6c
-	ld xbc, Bitmap_MIDIConnections_2
-	ldw de, 0x128
-	jr CmptCnctBitmapDrawComplete
-
+	.incbin "includes/generated/v7_transplant_CmptCnct_DrawDiagram1.bin"
 CmptCnct_DrawDiagram2:
-	pushw 0xe7
-	pushw 0xf87c
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xwa, (xsp + 4)
-	pushw 0x6c
-	ld xbc, Bitmap_MIDIConnections_3
-	ldw de, 0x128
-	jr CmptCnctBitmapDrawComplete
-
+	.incbin "includes/generated/v7_transplant_CmptCnct_DrawDiagram2.bin"
 CmptCnct_DrawDiagramDefault:
-	pushw 0xe7
-	pushw 0xf896
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xwa, (xsp + 4)
-	pushw 0x6c
-	ld xbc, Bitmap_MIDIConnections_1
-	ldw de, 0x128
-
+	.incbin "includes/generated/v7_transplant_CmptCnct_DrawDiagramDefault.bin"
 CmptCnctBitmapDrawComplete:
 	call DrawBitmapSPFast
 	ld xhl, xiz
@@ -186,11 +121,7 @@ PcgMode_CopyStrEntry:
 	push xbc
 
 PcgMode_CallStrcpy:
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr MdPcgMode_Epilogue
-
+	.incbin "includes/generated/v7_transplant_PcgMode_CallStrcpy.bin"
 PcgMode_InvalidReturn:
 	ld xhl, 0x2201
 	jr MdPcgMode_Epilogue
@@ -251,11 +182,7 @@ DrumType_CopyStrEntry:
 	push xbc
 
 DrumType_CallStrcpy:
-	call Strcpy
-	inc 8, xsp
-	ld xhl, xiz
-	jr MdDrumType_Epilogue
-
+	.incbin "includes/generated/v7_transplant_DrumType_CallStrcpy.bin"
 DrumType_InvalidReturn:
 	ld xhl, 0x2205
 	jr MdDrumType_Epilogue
@@ -287,24 +214,7 @@ MdSetupLoadFunc:
 	lda_24 xix, (SetupLoadOptionJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xec
 SetupLoadOptionJumpTable:
-	ld	xwa, (xde+14)
-	and	xwa, 2
-	sll	xwa, 2
-	lda	xbc, (xsp+4)
-	add	xbc, xwa
-	ld	xwa, (xbc)
-	push	xwa
-	ld	xwa, (xde+18)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	ld	xhl, xiz
-	jr	21
-	lds32	xhl, 2
-	jr	17
-	lds32	xhl, 3
-	jr	13
-
+	.incbin "includes/generated/v7_transplant_SetupLoadOptionJumpTable.bin"
 SetupLoadInvalidIndex:
 	lds32 xhl, 0
 	jr MdSetupLoad_Epilogue

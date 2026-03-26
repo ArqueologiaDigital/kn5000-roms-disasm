@@ -31,61 +31,9 @@
 ; Reached via event 0x1c00038 (direct) or event 0x1c00030 (via
 ; GroupBoxProc_Ev1C00030 fall-through).
 GroupBoxProc_StartSSFPresentation:
-	ld xwa, (xsp + 38)
-	call SetRootObject
-	ld xwa, 0x1c0001c
-	call SetRootEvent
-	lda xwa, (xsp + 18)
-	call SetRootParam
-	lda xbc, (xsp + 30)
-	ld xde, xbc
-	inc 1, xde
-	lda xwa, (xsp + 14)
-	ld c, (xbc)
-	ld (xwa + 3), c
-	ldb_spi C, 0xe8
-	ld (xwa + 2), c
-	ldb_spi C, 0xe8
-	ld (xwa + 1), c
-	ld c, (xde)
-	ld (xwa), c
-	lda xbc, (xsp + 10)
-	lda xde, (xsp + 8)
-	call SndParam_ResolveWidget
-	cp hl, 0xffff
-	jrl z, GroupBox_ReturnZero
-
-; Loop body: iterates over SSF items via FCD437, builds workspace fields,
-; and sends event 0x1c0001c for each item via direct SendEvent.
-; Loops until FCD4FF reports no more items (HL == 0xffff).
+	.incbin "includes/generated/v7_transplant_GroupBoxProc_StartSSFPresentation.bin"
 GroupBoxProc_SSFItemLoop:
-	ld xwa, (xsp + 10)
-	ld (xsp + 18), xwa
-	ld xwa, (xsp + 10)
-	call SndParam_LookupReadOnly
-	lda xde, (xsp + 18)
-	ld (xde + 4), hl
-	ldw (xde + 6), 0x0
-	lds32 xwa, 0
-	ld (xde + 8), xwa
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001c
-	call SendEvent
-	lda xwa, (xsp + 14)
-	lda xbc, (xsp + 10)
-	lda xde, (xsp + 8)
-	call SndParam_ResolveWidget
-	cp hl, 0xffff
-	jr nz, GroupBoxProc_SSFItemLoop
-	jrl GroupBox_ReturnZero
-
-	; --- Event 0x1e0006e: Cancel/Back handler ---
-	; Iterates the 17-entry widget structure array at 0x0274e8
-	; (28-byte entries: stride = (ix*8 - ix)*4 = ix*28).
-	; If event param (XWA) is nonzero: activates entries and sends 0x1c00026.
-	; If event param is zero: deactivates entries and sends 0x1c00026.
-	; Each entry has: byte[0]=active, byte[1]=enabled, dword[2]=workspace,
-	; dword[6]=event(0x1c00007), dword[10]=focus_id, offset[14]=secondary.
+	.incbin "includes/generated/v7_transplant_GroupBoxProc_SSFItemLoop.bin"
 GroupBox_CancelBack:
 	lds iz, 0
 
@@ -802,25 +750,7 @@ EditSwParam_Mode4_Store:
 
 ; GetEditSwPoint handler: tempo table lookup
 EditSwParam_TempoTable:
-	ldw	wa, 0x0014
-	.asciz "h!0<"
-	jr	28
-	ldw	wa, 100
-	jr	23
-	ldw	wa, 140
-	jr	18
-	ldw	wa, 180
-	jr	13
-	ldw	wa, 220
-	jr	8
-	ldw	wa, 260
-	jr	3
-	ldw	wa, 300
-	ld	(xbc), wa
-	.long NakaState_PresentationTail
-	ret
-
-; GetEditSwPoint handler: default (value=0xa0/0x78)
+	.incbin "includes/generated/v7_transplant_EditSwParam_TempoTable.bin"
 EditSwParam_Default:
 	ldw (xbc), 0xa0
 	ldw (xde), 0x78
@@ -1270,44 +1200,7 @@ DirmdTitleFunc:
 
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
-	ldb_d8	a, (0x8d38)
-	cpda8	a, 0x8d39
-	jr	z, 25
-	ldw	wa, 255
-	call	GraphicsRender_ByteData
-	ldw	wa, 245
-	call	TextRender_PopAndReturn_0x9
-	call	GraphicsRender_ByteData_0x67
-	ldw	wa, 255
-	call	GraphicsRender_ByteData_0x6
-	ld	xwa, DiskWarning_ConfirmStrings_0xEC4
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDA
-	ld	xwa, DiskWarning_ConfirmStrings_0xED6
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDB
-	lda	xsp, (xsp-256)
-	pushw	iz
-	pushm	(xsp+264)
-	ld	iz, (xsp+264)
-	pushw	iz
-	pushw 234
-	pushw 0x9b94
-	lda	xwa, (xsp+10)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	lda	xwa, (xsp+2)
-	call	DbMemo_DrawContent_Loop_0x61
-	ld	wa, iz
-	ld	bc, (xsp+264)
-	call	AudioCtrl_DataBlock_0x1BDC
-	popw	iz
-	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
-	ret
-	ld	xwa, DiskWarning_ConfirmStrings_0xF00
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDD
+	.incbin "includes/generated/v7_transplant_DirmdEmu_CaseF.bin"
 DirmdEmulator_Entry:
 
 DirmdEmulator:
@@ -1323,72 +1216,18 @@ DirmdEmulator:
 	ld bc, (xbc)
 	lda_24 xix, (DirmdEmulator_Dispatch)
 	jp_ind 8, 0x07, 0xf0, 0xe4
-DirmdEmulator_Dispatch:	.ascii ":;<>"
-	ld	xwa, (xiz+4)
-	call	(xwa)
-	.ascii "^\\[Zhqñ"
-	.byte 0xe0, 0xe3, 0x00, 0x00, 0x30, 0xff, 0x00, 0x1d
-	.byte 0x50, 0x14, 0xfb, 0x30, 0xf5, 0x00, 0x1d, 0x4a
-	.byte 0x14, 0xfb, 0x1d, 0xb7, 0x14, 0xfb, 0x30, 0xff
-	.byte 0x00, 0x1d, 0x56, 0x14, 0xfb, 0x3a, 0x3b, 0x3c
-	.byte 0x3e, 0xa6, 0x20, 0xb0, 0xe8, 0x5e, 0x5c, 0x5b
-	.byte 0x5a, 0x68, 0x45, 0xf1, 0xe0, 0xe3, 0x00, 0x10
-	.byte 0x3a, 0x3b, 0x3c, 0x3e
-	.byte 0xa6, 0x20, 0xb0, 0xe8
-	.byte 0x5e, 0x5c, 0x5b, 0x5a
-	.byte 0xf1, 0xe0, 0xe3, 0x00
-	.byte 0x00, 0x68, 0x2d, 0xea, 0xcf, 0xff, 0x00, 0x00
-	.byte 0x00
-	.ascii "k%:;<>ê"
-	.byte 0x89, 0xe9, 0xcc, 0x80, 0x00, 0x00, 0x00, 0xcb
-	.byte 0x8a, 0x29, 0xea, 0xcc, 0x1f, 0x00, 0x00, 0x00
-	.byte 0xea, 0x8b, 0x2a, 0xa8, 0x08, 0x22, 0xd9, 0x88
-	.byte 0xb2, 0xe8, 0xef
-	.ascii "d^\\[Z"
-
-; DirmdEmulator default/fallthrough case
+DirmdEmulator_Dispatch:
+	.incbin "includes/generated/v7_transplant_DirmdEmulator_Dispatch.bin"
 DirmdEmu_DefaultCase:
-	bitda 1, (0xe3de)
-	jr z, DirmdEmu_CheckModeChange
-	ldb_d8 a, (0xe3dc)
-	extz wa
-	call UI_PostPartChangeEvent
-
+	.incbin "includes/generated/v7_transplant_DirmdEmu_DefaultCase.bin"
 DirmdEmu_CheckModeChange:
-	bitda 7, (0xe3de)
-	jr z, DirmdEmu_CheckSoundCtrl
-	ldb_d8 a, (0xe3dc)
-	extz wa
-	call UI_PostModeChangeEvent
-
+	.incbin "includes/generated/v7_transplant_DirmdEmu_CheckModeChange.bin"
 DirmdEmu_CheckSoundCtrl:
-	bitda 6, (0xe3de)
-	jr z, DirmdEmu_CheckBit4
-	ldb_d8 a, (0xe3dc)
-	extz wa
-	call SoundCtrl_SendCommand
-
+	.incbin "includes/generated/v7_transplant_DirmdEmu_CheckSoundCtrl.bin"
 DirmdEmu_CheckBit4:
-	bitda 4, (0xe3de)
-	call_24 nz, UI_PostRefreshEvent
-	bitda 4, (0xe3e0)
-	call_24 nz, UI_PostTimerResetEvent
-	bitda 3, (0xe3e2)
-	jr z, DirmdEmu_ClearAllFlags
-	lds wa, 1
-	call UI_PostEvent_0x6E
-
+	.incbin "includes/generated/v7_transplant_DirmdEmu_CheckBit4.bin"
 DirmdEmu_ClearAllFlags:
-	stdi8 (0xe3de), 0
-	stdi8 (0xe3dc), 0
-	stdi8 (0xe3e0), 0
-	stdi8 (0xe3e2), 0
-	stdi8 (0xe3e4), 255
-	stdi8 (0xe3e6), 255
-	lds32 xhl, 0
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_DirmdEmu_ClearAllFlags.bin"
 WindowProc:
 	lda xsp, (xsp - 24)
 	push xiz

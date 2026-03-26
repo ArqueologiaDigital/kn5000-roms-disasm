@@ -8,62 +8,11 @@
 ; =============================================================================
 
 MainGetSoundName:
-	lda xsp, (xsp - 20)
-	push xiz
-	ld (xsp + 20), xde
-	ld xwa, (xsp + 20)
-	cp xbc, 0x1e000a9
-	jrl z, Sound_Navigate_Entry
-	cp xbc, 0x1e000a8
-	jrl z, Sound_SetSelection
-	cp xbc, 0x1e00061
-	jrl z, SoundLookup_ByCategory
-	cp xbc, 0x1e0005e
-	jrl nz, Sound_Navigate_Return
-	pushw 0x6
-	call Malloc
-	ld (xsp + 8), xhl
-	pushw 0x12
-	call Malloc
-	inc 4, xsp
-	ld (xsp + 10), xhl
-	ld xwa, (xsp + 20)
-	ld xbc, (xsp + 6)
-	ld (xbc), wa
-	ld xde, (xsp + 10)
-	ld (xbc + 2), xde
-	cpw (xbc), 0xf
-	jr ule, GetSoundName_BuildString
-	cpw (xbc), 0x15
-	jr c, GetSoundName_DefaultString
-	cpw (xbc), 0x16
-	jr ugt, GetSoundName_DefaultString
-
+	.incbin "includes/generated/v7_transplant_MainGetSoundName.bin"
 GetSoundName_BuildString:
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ldb_erp L, 0xfb
-	ld xwa, (xsp + 20)
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	stb_erp A, 0xfb
-	extz wa
-	extz hl
-	ld bc, hl
-	ld xde, (xsp + 10)
-	call SndParam_ApplyProgramChangeAsync
-	ld xwa, (xsp + 10)
-	ld (xwa + 16), 0x0
-	jr GetSoundName_DispatchResult
-
+	.incbin "includes/generated/v7_transplant_GetSoundName_BuildString.bin"
 GetSoundName_DefaultString:
-	pushw 0xea
-	pushw 0x99e6
-	ld xwa, (xsp + 14)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-
+	.incbin "includes/generated/v7_transplant_GetSoundName_DefaultString.bin"
 GetSoundName_DispatchResult:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00020
@@ -79,65 +28,13 @@ GetSoundName_DispatchResult:
 	jr SoundLookup_DispatchAndReturn
 
 SoundLookup_ByCategory:
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ld (xsp + 17), l
-	ld xwa, (xsp + 20)
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	lda xwa, (xsp + 14)
-	ld (xwa + 4), l
-	ld xbc, (xsp + 20)
-	ld (xwa + 2), c
-	call SndParam_FetchOscTableEntry
-	lda xbc, (xsp + 14)
-	ld e, (xbc + 1)
-	extz de
-	ld a, (xbc)
-	extz wa
-	sll wa, 8
-	add wa, de
-	ld bc, wa
-	extz xbc
-	sll xbc, 0
-	ld xwa, (xsp + 20)
-	ld de, wa
-	extz xde
-	add xde, xbc
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00023
-
+	.incbin "includes/generated/v7_transplant_SoundLookup_ByCategory.bin"
 SoundLookup_DispatchAndReturn:
 	call ApPostEvent
 	jrl Sound_Navigate_Return
 
 Sound_SetSelection:
-	extz wa
-	ld xbc, (xsp + 20)
-	srl xbc, 0
-	ldiw_erp 0xe6, 0
-	ld de, bc
-	srl bc, 8
-	ldb b, 0x0
-	extz bc
-	extz de
-	call MIDI_DistributeParamToChannels
-	ld xwa, (xsp + 20)
-	extz wa
-	ld xbc, (xsp + 20)
-	srl xbc, 0
-	ldiw_erp 0xe6, 0
-	ld de, bc
-	srl de, 8
-	ldb d, 0x0
-	extz de
-	extz bc
-	pushw bc
-	lds bc, 0
-	call SwbtWr
-	lds wa, 1
-	jrl Sound_Navigate_Notify
-
+	.incbin "includes/generated/v7_transplant_Sound_SetSelection.bin"
 Sound_Navigate_Entry:
 	ld (xsp + 4), wa
 	cpw (xsp + 4), 0xf
@@ -148,36 +45,7 @@ Sound_Navigate_Entry:
 	jrl gt, Sound_Navigate_Return
 
 Sound_Navigate_Init:
-	ldw (xsp + 12), 0x0
-	ld xwa, (xsp + 20)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xsp + 10), wa
-	ld wa, (xsp + 4)
-	lds bc, 0
-	call SndParam_LookupViaEncode
-	ld (xsp + 17), l
-	ld wa, (xsp + 4)
-	ldw bc, 0x20
-	call SndParam_LookupViaEncode
-	lda xwa, (xsp + 14)
-	ld (xwa + 4), l
-	ld bc, (xsp + 4)
-	ld (xwa + 2), c
-	call SndParam_FetchOscTableEntry
-	lda xbc, (xsp + 14)
-	ld a, (xbc)
-	extz wa
-	ld (xsp + 8), wa
-	ld a, (xbc + 1)
-	ldb_erp A, 0xf8
-	extz iz
-	ld wa, (xsp + 4)
-	ld bc, (xsp + 8)
-	calr GetSoundBankCount
-	ld (xsp + 6), hl
-	add iz, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_Sound_Navigate_Init.bin"
 Sound_Navigate_SearchLoop:
 	cps iz, 0
 	jr ge, Sound_Navigate_ScanForward
@@ -275,25 +143,7 @@ Sound_Navigate_Commit:
 	jr z, Sound_Navigate_Return
 
 Sound_Navigate_ApplyChange:
-	ld wa, (xsp + 4)
-	extz wa
-	ld bc, (xsp + 8)
-	extz bc
-	stb_erp E, 0xf8
-	extz de
-	call MIDI_DistributeParamToChannels
-	ld wa, (xsp + 4)
-	extz wa
-	ld bc, (xsp + 8)
-	ld e, c
-	extz de
-	stb_erp C, 0xf8
-	extz bc
-	pushw bc
-	lds bc, 0
-	call SwbtWr
-	lds wa, 1
-
+	.incbin "includes/generated/v7_transplant_Sound_Navigate_ApplyChange.bin"
 Sound_Navigate_Notify:
 	call BitMapOut_StorePresetValue
 
@@ -344,63 +194,9 @@ GetSoundBankCount_CheckSpecial:
 	jr z, GetSoundBankCount_Invalid
 
 GetSoundBankCount_DoLookup:
-	call CharMap_ActivePreamb_Prologue
-	exts hl
-	jr GetSoundBankCount_Return
-
+	.incbin "includes/generated/v7_transplant_GetSoundBankCount_DoLookup.bin"
 MainGetRhythmName:
-	dec 4, xsp
-	pushw_erp 0xfa
-	cp xbc, 0x1e0005f
-	jrl nz, MainGetRhythmName_Return
-	ld xwa, 0x28000
-	call SndParam_LookupReadOnly
-	ldb_erp L, 0xfa
-	ld xwa, 0x28001
-	call SndParam_LookupReadOnly
-	ldb_erp L, 0xfb
-	pushw 0x11
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 2), xhl
-	lda_d16 xbc, (0x90ea)
-	stb_erp A, 0xfa
-	ld (xbc), a
-	stb_erp A, 0xfb
-	ld (xbc + 1), a
-	ld (xbc + 2), 0x48
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call Rhythm_DispatchNote_Finalize
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	lda_d16 xbc, (0x90ee)
-	ld a, (xbc)
-	extz wa
-	ld c, (xbc + 1)
-	extz bc
-	call AccVoice_DispatchWithChannel
-	pushw 0xd
-	push xhl
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strncpy
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 2)
-	ld (xwa + 13), 0x0
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00021
-	ld xde, (xsp + 2)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 2)
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainGetRhythmName.bin"
 MainGetRhythmName_Return:
 	lds32 xhl, 0
 	popw_erp 0xfa
@@ -408,43 +204,7 @@ MainGetRhythmName_Return:
 	ret
 
 MainGetPmemName:
-	dec 8, xsp
-	pushw_erp 0xfa
-	pushw 0x8
-	call Malloc
-	ld (xsp + 4), xhl
-	pushw 0x12
-	call Malloc
-	inc 4, xsp
-	ld (xsp + 6), xhl
-	call BitMapOut_PrepareRender_CheckBit1
-	ldb_erp L, 0xfb
-	ld xwa, 0x300
-	call SndParam_LookupReadOnly
-	ld xwa, (xsp + 2)
-	ld (xwa + 2), hl
-	pushw 0x11
-	pushw 0x0
-	pushw 0xf9a2
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strncpy
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 2)
-	lda xbc, (xwa + 2)
-	ld de, (xbc)
-	dec 1, de
-	srl de, 3
-	stb_erp A, 0xfb
-	extz wa
-	cp wa, de
-	jr nz, MainGetPmemName_CalcOffset
-	call BitMapOut_GetRenderMode
-	bit 7, l
-	jr z, MainGetPmemName_PageNotFirst
-	lds bc, 0
-	jr MainGetPmemName_StoreResult
-
+	.incbin "includes/generated/v7_transplant_MainGetPmemName.bin"
 MainGetPmemName_PageNotFirst:
 	lds bc, 1
 	jr MainGetPmemName_StoreResult

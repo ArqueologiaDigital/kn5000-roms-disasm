@@ -24,54 +24,9 @@ MiddleFuncCall:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
-	.byte 0xf1, 0xa4
-	.ascii "(E:;<>"
-	call	Demo_SelectEntry_ProcessSongList
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	jrl	132
-	push	xde
-	pushw	0
-	pushw	4441
-	call	Strcpy
-	inc	8, xsp
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	SetWall_MiscDataAndCode_0x2
-	.ascii "^\\[Zhi:;<>"
-	.byte 0x1d, 0x40, 0xee, 0xf1, 0x5e, 0x5c
-	.ascii "[Zh[:;<>"
-	.byte 0x1d, 0x67, 0xee, 0xf1
-	.ascii "^\\[ZhM:;<>"
-	.byte 0x1d, 0x6a
-	.byte 0xf0, 0xf1
-	.ascii "^\\[Zh?:;<>"
-	.byte 0x1d, 0x7c, 0xf0, 0xf1
-	.ascii "^\\[Zh1:;<>"
-	.byte 0x1d, 0xb5, 0xee, 0xf1, 0x5e, 0x5c
-	.ascii "[Zh#:;<>"
-	call	SetWall_InlineCodeBlock_0xC8
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	jr	21
-	call	Audio_CheckSubsystemReady
-	jr	15
-	calr	60449
-	jr	10
-	call	VoiceChannels_InitPanFromPreset
-	jr	4
-
-; SqTrSelTtl case B
+	.incbin "includes/generated/v7_transplant_MiddleFuncCall_DispatchData.bin"
 SqTrSel_CaseB:
-	call SeqFile_ParseHeader
-
-; SqTrSelTtl case C
+	.incbin "includes/generated/v7_transplant_SqTrSel_CaseB.bin"
 SqTrSel_CaseC:
 	lds32 xhl, 0
 	ret
@@ -263,26 +218,7 @@ SongBankLookup_AppendColon:
 	inc 1, xiz
 
 SongBankLookup_BuildAudioCmd:
-	stib_dsp 0xf8, 0x3a
-	ld a, (xix)
-	extz wa
-	pushw wa
-	pushw 0xe2
-	pushw 0x202
-	push xiz
-	call Sprintf_Locked
-	lda xsp, (xsp + 10)
-	ld (xiz + 4), 0x0
-	ld wa, (xsp + 4)
-	mul wa, 0x7
-	lda_d16 xbc, (7122)
-	extz xwa
-	add xwa, xbc
-	ld xhl, xwa
-	pop xiz
-	inc 2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_SongBankLookup_BuildAudioCmd.bin"
 SeqSongMemoryFunc:
 	pushw iz
 	cp xbc, 0x1e70003
@@ -375,19 +311,7 @@ SongBank_EventHandler_Return:
 	ret
 
 CDlikeSwTtl_DispatchData:
-	.byte 0xeb, 0xa8, 0x0e, 0xeb, 0xa8, 0x0e, 0xf1, 0xe0
-	.byte 0x0c, 0xc8, 0x6e, 0x1e, 0xc1, 0xdf, 0x0c, 0x21
-	.byte 0xc9, 0x62, 0xd8, 0x12, 0xd8, 0x8a, 0xea, 0x12
-	.byte 0xea, 0xc8, 0x00, 0x00, 0x01, 0x00, 0x40, 0x04
-	.byte 0x00, 0x8b, 0x00, 0x41, 0x8d, 0x00, 0xe0, 0x01
-	.byte 0x68, 0x1c, 0xc1, 0xdf, 0x0c, 0x21, 0xc9, 0x6e
-	.byte 0xd8, 0x12, 0xd8, 0x8a, 0xea, 0x12, 0xea, 0xc8
-	.byte 0x00, 0x00, 0x01, 0x00, 0x40, 0x04, 0x00, 0x8b
-	.byte 0x00, 0x41, 0x8d, 0x00, 0xe0, 0x01, 0x1b, 0x58
-	.byte 0x9d, 0xfa, 0x40, 0x03, 0x00, 0x8b, 0x00, 0x41
-	.byte 0x9c, 0x00, 0xe0, 0x01, 0xea, 0xa9, 0x1b, 0x58
-	.byte 0x9d, 0xfa
-
+	.incbin "includes/generated/v7_transplant_CDlikeSwTtl_DispatchData.bin"
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
 	ld xbc, 0x1e0009c
@@ -517,29 +441,11 @@ SeqRecPlay_DisableBoth:
 
 ; SqTrSelTtl case D
 SqTrSel_CaseD:
-	calr SeqRecPlay_DisableBoth
-	call Song_AbortPlayback
-	stdi8 (7498), 0
-	ret
-
-; SqTrSelTtl case E
+	.incbin "includes/generated/v7_transplant_SqTrSel_CaseD.bin"
 SqTrSel_CaseE:
-	calr SeqRecPlay_DisableBoth
-	call Song_AbortPlayback
-	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (7498), 0
-	ret
-
-; SqTrSelTtl case F
+	.incbin "includes/generated/v7_transplant_SqTrSel_CaseE.bin"
 SqTrSel_CaseF:
-	calr SeqRecPlay_DisableBoth
-	call Song_AbortPlayback
-	stdi8 (7498), 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_SqTrSel_CaseF.bin"
 PlayMode_SendStopEvent:
 	ld xwa, 0x6f0026
 	ld xbc, 0x1c70009
@@ -548,19 +454,7 @@ PlayMode_SendStopEvent:
 
 ; SqTrSelTtl case G
 SqTrSel_CaseG:
-	ldb_d8 a, (0x8d36)
-	extz wa
-	sub wa, 0x6f
-	cps wa, 0
-	ret lt
-	cps wa, 7
-	ret gt
-	add wa, wa
-	lda_24 xix, (SepaOut_Config_0_0x26A)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SqTrSel_CaseG_JumpTable)
-	jp_ind 8, 0x07, 0xf0, 0xe0
-
+	.incbin "includes/generated/v7_transplant_SqTrSel_CaseG.bin"
 SqTrSel_CaseG_JumpTable:
 	; --- Jump table entries + 4 register-save call thunks ---
 	jrl CDlikeSwTtl_SongBit1Check
@@ -613,33 +507,9 @@ SqTrSel_CaseG_Thunk4:
 
 
 PlayMode_CheckAndAbort:
-	cpdi8 (0x8d36), 114
-	ret z
-	call SeqState_GetFlags
-	bit 0, hl
-	ret z
-	calr SeqRecPlay_DisableBoth
-	call Song_AbortPlayback
-	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
-	lds32 xde, 0
-	call ApPostEvent
-	ret
-
+	.incbin "includes/generated/v7_transplant_PlayMode_CheckAndAbort.bin"
 PlayMode_SwitchToModeAndNotify:
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldw wa, 0x8b
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 35
-	ldw wa, 0xee
-	jp SoundCtrl_SendCommand
+	.incbin "includes/generated/v7_transplant_PlayMode_SwitchToModeAndNotify.bin"
 DispatchHandler_ConditionalJump:
 	jr	t, 0x08
 
@@ -1018,14 +888,7 @@ VoiceSlot_Overflow:
 	ret
 
 VoiceSlot_SendErrorAndReset:
-	ldb w, 0x68
-	call MIDI_SendSysExCmd
-	anddi8 (0xe3e2), 111
-	stdi8 (0x7f42), 15
-	stdi16 (0xe3dc), 0x40ee
-	popw bc
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceSlot_SendErrorAndReset.bin"
 VoiceSlot_AllocNewSlot:
 	push xix
 	call DispatchHandler_ResolveSlot

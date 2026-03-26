@@ -488,32 +488,11 @@ BmDrEdit_InitDisplayParams:
 	ret
 
 BmDrEdit_TempoAnimTimer:
-	ldb_d8 a, (0xe372)
-	cp a, 0x1e
-	jr ule, BmDrEdit_TempoAnimTimer_Reset
-	inc 1, a
-	stb_d8 (0xe372), a
-	ret
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_TempoAnimTimer.bin"
 BmDrEdit_TempoAnimTimer_Reset:
-	stdi8 (0xe372), 0
-	calr BmDrEdit_CheckTempoData
-	calr BmDrEdit_DecrementDelayA
-	calr BmDrEdit_DelayAExpired
-	calr BmDrEdit_DecrementDelayB
-	calr BmDrEdit_DelayBExpired
-	jrl BmDrEdit_DelayReturn
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_TempoAnimTimer_Reset.bin"
 BmDrEdit_CheckTempoData:
-	call TempoRingBuf_CheckEmpty
-	cps hl, 0
-	ret z
-	ldb_d8 a, (0x8d38)
-	cp a, 0x95
-	jr z, BmDrEdit_CheckTempoData_ReadyToProcess
-	cp a, 0x98
-	ret nz
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_CheckTempoData.bin"
 BmDrEdit_CheckTempoData_ReadyToProcess:
 	bitda 7, (0x295c)
 	ret nz
@@ -658,12 +637,7 @@ BmDrEdit_AllocateNote_NextSlot:
 	ret
 
 BmDrEdit_RefreshDisplayState:
-	resda 0, 0x8d88
-	ldw wa, 0xf
-	call SoundCtrl_SaveAndSendCmd_EE
-	setda 4, 0x28ad
-	ret
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_RefreshDisplayState.bin"
 BmDrEdit_CheckNoteType:
 	ld c, a
 	extz bc
@@ -694,12 +668,7 @@ BmDrEdit_SaveSeqState_SetMode95:
 	ldw wa, 0x95
 
 BmDrEdit_SaveSeqState_Apply:
-	call UI_PostModeChangeEvent
-	ldmm16 0x2963, 3407
-	call SeqVoice_FindSingleActive
-	ldmm8 7512, 0x8d3a
-	ret
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_SaveSeqState_Apply.bin"
 BmDrEdit_CheckScrollBusy:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ScrollRight
@@ -1518,22 +1487,7 @@ BmDrEdit_CalcBeatFromGridPos:
 	ret
 
 BmDrEdit_ByteData_NoteCoordTable:
-	.byte 0xd1, 0x5e, 0x27, 0x19, 0x78, 0x27, 0xc1, 0x60
-	.byte 0x27, 0x19, 0x7a, 0x27, 0xd1, 0xaf, 0x28, 0x19
-	.byte 0x7c, 0x27, 0xd1, 0x66, 0x26, 0x19, 0x7e, 0x27
-	.byte 0x0e, 0xd1, 0x78, 0x27, 0x19, 0x5e, 0x27, 0xc1
-	.byte 0x7a, 0x27, 0x19, 0x60, 0x27, 0xd1, 0x7c, 0x27
-	.byte 0x19, 0xaf, 0x28, 0xd1, 0x7e, 0x27, 0x19, 0x66
-	.byte 0x26, 0x0e, 0xf1, 0x5c, 0x29, 0xcf, 0xb0, 0xfe
-	.byte 0xd1, 0x92, 0x27, 0x20, 0xd8, 0xcf, 0x60, 0x00
-	.byte 0xb0, 0xff, 0xd8, 0x61, 0xf1, 0x92, 0x27, 0x50
-	.byte 0x1b, 0xe1, 0x68, 0xf4, 0xf1, 0x5c, 0x29, 0xcf
-	.byte 0xb0, 0xfe, 0xd1, 0x92, 0x27, 0x20, 0xd8, 0xd8
-	.byte 0x6e, 0x08, 0xf1, 0x92, 0x27, 0x02, 0x30, 0x00
-	.byte 0x68, 0x0a, 0xd8, 0xd9, 0xb0, 0xf3, 0xd8, 0x69
-	.byte 0xf1, 0x92, 0x27, 0x50, 0x1d, 0xe1, 0x68, 0xf4
-	ret
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_ByteData_NoteCoordTable.bin"
 BmDrEdit_ChordScrollUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ChordScrollUp
@@ -1752,19 +1706,7 @@ BmDrEdit_ByteData_ScrollParams:
 	.byte 0xff, 0xff, 0x0e
 
 BmDrEdit_InitDrumMode:
-	pushw 0x6a4
-	call Malloc
-	inc 2, xsp
-	stda32 7504, xhl
-	stda32 7508, xhl
-	calr NoteEditSy_ScanAndSortEntries
-	stdi16 (0x278e), 10
-	ldmm16 0x2792, 0x2796
-	setda 0, 0x2742
-	stdi8 (0x2774), 7
-	stdi8 (0x27a2), 8
-	jr BmDrEdit_InitCommon
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_InitDrumMode.bin"
 BmDrEdit_InitMelodicMode:
 	ldmm16 0x2792, 0x2794
 	ldmm16 0x278e, 0x2790
@@ -1780,43 +1722,11 @@ BmDrEdit_InitCommon:
 	stdi16 (0x2792), 48
 
 BmDrEdit_InitCommon_CheckSongActive:
-	ldb_d8 a, (0x8d36)
-	cpda8 a, 0x8d37
-	jr nz, BmDrEdit_InitCommon_SetupDisplay
-	ldb_d8 a, (0x8d38)
-	cpda8 a, 0x8d39
-	jr z, BmDrEdit_InitCommon_SetupDisplay
-	bitda 4, (0x28ad)
-	jr z, BmDrEdit_InitCommon_SetupDisplay
-	lds wa, 1
-	call UI_PostPartChangeEvent
-	resda 4, 0x28ad
-	resda 0, 9834
-	jrl BmDrEdit_PopIzAndReturn
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_InitCommon_CheckSongActive.bin"
 BmDrEdit_InitCommon_SetupDisplay:
-	setda 0, 9834
-	setda 0, 9954
-	call AccWrap_PlayModeDispatch
-	setda 2, 0x28a7
-	stdi8 (0x295c), 0
-	ldw_d16 xwa, (0x2963)
-	stda16 (3407), xwa
-	ldmm16 3409, 0x2963
-	ldb_d8 a, (0x8d39)
-	cp a, 0x96
-	jr z, BmDrEdit_CopyStepCount
-	cp a, 0x99
-	jr z, BmDrEdit_CopyStepCount
-	cp a, 0x94
-	jr z, BmDrEdit_SetRecordingFlag
-	cp a, 0x97
-	jr nz, BmDrEdit_CheckDrumModeEntry
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_InitCommon_SetupDisplay.bin"
 BmDrEdit_SetRecordingFlag:
-	setda 0, 0x8d88
-	jr BmDrEdit_ReadVoiceBitAndCopy
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_SetRecordingFlag.bin"
 BmDrEdit_CheckDrumModeEntry:
 	bitda 0, (0x2742)
 	jrl z, BmDrEdit_FlagDisplayUpdate
@@ -1914,51 +1824,25 @@ BmDrEdit_ResetAndScanNotes:
 	calr BmDrEdit_ScanChannelEvents
 
 BmDrEdit_FlagDisplayUpdate:
-	call Audio_CheckSubsystemReady
-	setda 0, 0x27b0
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_FlagDisplayUpdate.bin"
 BmDrEdit_PopIzAndReturn:
 	popw iz
 	ret
 
 BmDrEdit_CleanupDrumMode:
-	ldmm16 0x2796, 0x2792
-	ldda32 xwa, (7504)
-	push xwa
-	call Free
-	inc 4, xsp
-	cpdi8 (0x8d36), 152
-	jr z, BmDrEdit_SkipPartSelect
-	resda 0, 9954
-	call PartSelect_UpdateDisplayState
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_CleanupDrumMode.bin"
 BmDrEdit_SkipPartSelect:
 	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupMelodicMode:
-	cpdi8 (0x8d36), 149
-	jr z, BmDrEdit_SkipMelodicPartSelect
-	resda 0, 9954
-	call PartSelect_UpdateDisplayState
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_CleanupMelodicMode.bin"
 BmDrEdit_SkipMelodicPartSelect:
 	ldmm16 0x2794, 0x2792
 	ldmm16 0x2790, 0x278e
 	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupCommon:
-	resda 2, 0x28a7
-	stdi8 (0x295c), 0
-	ldw_d16 xwa, (3407)
-	ordm16_24 (0xffec), xwa
-	stdi16 (3407), 0
-	stdi16 (3409), 0
-	ldmm16 9832, 0x2744
-	call Audio_CheckSubsystemReady
-	resda 0, 0x27b0
-	calr BmDrEdit_ClearAllSlotsAlt
-	jrl BmDrEdit_ClearAllSlots
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_CleanupCommon.bin"
 BmDrEdit_InsertNotesFromSlots:
 	pushw iz
 	bitda 0, (0x2742)
@@ -2953,14 +2837,7 @@ BmDrEdit_DrumVoiceUp_IncrementOctave:
 	stda16 (0x27a0), xwa
 
 BmDrEdit_DrumVoiceUp_UpdateDisplay:
-	call NoteEditSy_SendWidgetCmd0
-	calr NoteEdit_SendScrollCmds
-	call NoteEditSy_UpdateChordDisplay
-	calr BmDrEdit_SendMetronomeNoteOn_Alt
-	stdi8 (0x295c), 131
-	stdi8 (0x295d), 5
-	jp Audio_CheckSubsystemReady
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_DrumVoiceUp_UpdateDisplay.bin"
 BmDrEdit_DrumVoiceDown_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_DrumVoiceDown_ClearFlag
@@ -2989,14 +2866,7 @@ BmDrEdit_DrumVoiceDown_DecrementOctave:
 	stda16 (0x27a0), xwa
 
 BmDrEdit_DrumVoiceDown_UpdateDisplay:
-	call NoteEditSy_SendWidgetCmd0
-	calr NoteEdit_SendScrollCmds
-	call NoteEditSy_UpdateChordDisplay
-	calr BmDrEdit_SendMetronomeNoteOn_Alt
-	stdi8 (0x295c), 131
-	stdi8 (0x295d), 5
-	jp Audio_CheckSubsystemReady
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_DrumVoiceDown_UpdateDisplay.bin"
 BmDrEdit_CalcTrackPosition:
 	bitda 0, (0x2742)
 	ret z
@@ -3907,32 +3777,7 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 	ret
 
 BmDrEdit_ByteData_CompoundWidgetUpdate:
-	.byte 0xef, 0x68, 0xd7, 0xfa, 0x04, 0xbf, 0x08, 0x30
-	.byte 0xbf, 0x06, 0x31, 0x1e, 0xb7, 0xe7, 0x9f, 0x06
-	.byte 0x20, 0x9f, 0x08, 0xa8, 0x9f, 0x08, 0x19, 0xce
-	.byte 0x27, 0x1d, 0xa6, 0x21, 0xf4, 0xc7, 0xfa, 0x9f
-	.byte 0xbf, 0x04, 0x30, 0xbf, 0x02, 0x31, 0x1e, 0xc0
-	.byte 0xeb, 0xc7, 0xfa, 0x89, 0xd8, 0x12, 0x8f, 0x04
-	.byte 0x23, 0xd9, 0x12, 0x1e, 0xa5, 0xff, 0x1d, 0x52
-	.byte 0x00, 0xf4, 0x1d, 0x52, 0x00, 0xf4, 0x1d, 0xa6
-	.byte 0x21, 0xf4, 0xc7, 0xfa, 0x9f, 0xc7, 0xfa, 0x89
-	.byte 0xc7, 0xfb, 0x99, 0x1d, 0x52, 0x00, 0xf4, 0x1d
-	.byte 0xa6, 0x21, 0xf4, 0xc7, 0xfa, 0x9f, 0xc7, 0xfb
-	.byte 0x30, 0x07, 0xc7, 0xfa, 0x30, 0x07, 0xc7, 0xfa
-	.byte 0x8b, 0xd9, 0x12, 0xd9, 0x08, 0x60, 0x00, 0xc7
-	.byte 0xfb, 0x89, 0xd8, 0x12, 0xd8, 0x81, 0xf1, 0xd0
-	.byte 0x27, 0x51, 0x1e, 0x06, 0x00, 0xd7, 0xfa, 0x05
-	.byte 0xef, 0x60, 0x0e, 0xc1, 0x74, 0x27, 0x25, 0xcd
-	.byte 0x08, 0x60, 0xda, 0x69, 0xd1, 0xce, 0x27, 0x20
-	.byte 0xd8, 0x89, 0xd1, 0xd0, 0x27, 0x81, 0xda, 0xf1
-	.byte 0xb0, 0xf3, 0xd8, 0xa2, 0xf1, 0xd0, 0x27, 0x52
-	.byte 0x0e, 0xd1, 0xce, 0x27, 0x20, 0xd8, 0xef, 0x02
-	.byte 0xd8, 0xc8, 0x16, 0x00, 0xf1, 0xba, 0x27, 0x50
-	.byte 0xd1, 0xd0, 0x27, 0x20, 0xd8, 0xef, 0x02, 0xd1
-	.byte 0xba, 0x27, 0x80, 0xf1, 0xbc, 0x27, 0x50, 0xd1
-	.byte 0xbe, 0x27, 0x20, 0xd8, 0x63, 0xf1, 0xc0, 0x27
-	.byte 0x50, 0x0e
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_ByteData_CompoundWidgetUpdate.bin"
 ReadSeqData_StoreParams:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
@@ -4384,28 +4229,12 @@ BmDrEdit_SecondaryNote_PopIzReturn:
 	ret
 
 BmDrEdit_EnterPlayMode:
-	ldb_d8 a, (0x8d36)
-	cpda8 a, 0x8d37
-	ret z
-	ldb_d8 a, (0x28b1)
-	stb_d8 (0x283c), a
-	setda 0, 0x28b1
-	cpdi8 (0x283a), 0
-	jr nz, BmDrEdit_EnterPlay_RestoreSettings
-	ldmm_sd24w 0xec, 0xff, 0x00, 0x9e, 0xf1
-	jr BmDrEdit_EnterPlay_CheckAudio
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_EnterPlayMode.bin"
 BmDrEdit_EnterPlay_RestoreSettings:
 	ldmm16 0xf19e, 0x2963
 
 BmDrEdit_EnterPlay_CheckAudio:
-	call Audio_CheckSubsystemReady
-	ldw_d16 xwa, (0x2744)
-	stda16 (9500), xwa
-	cpda16 xwa, 9502
-	jr ule, BmDrEdit_EnterPlay_UpdateProgress
-	stda16 (9502), xwa
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_EnterPlay_CheckAudio.bin"
 BmDrEdit_EnterPlay_UpdateProgress:
 	ldmm16 9832, 9500
 	cpdi16 9832, 1
@@ -4416,19 +4245,7 @@ BmDrEdit_EnterPlay_AllocAndInit:
 	jp SeqPlay_AllocBuffersAndInit
 
 BmDrEdit_ExitPlayMode:
-	ldb_d8 a, (0x8d36)
-	cpda8 a, 0x8d37
-	ret z
-	ldmm8 0x28b1, 0x283c
-	stdi16 (0xf19e), 0
-	call Audio_CheckSubsystemReady
-	call AccWrap_PlayModeDispatch
-	ldb_d8 a, (0x8d38)
-	cp a, 0x95
-	jr z, BmDrEdit_ExitPlay_RestoreSequencer
-	cp a, 0x98
-	ret nz
-
+	.incbin "includes/generated/v7_transplant_BmDrEdit_ExitPlayMode.bin"
 BmDrEdit_ExitPlay_RestoreSequencer:
 	ldmm16 3407, 0x2963
 	call SeqVoice_FindSingleActive

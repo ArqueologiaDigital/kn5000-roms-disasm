@@ -8,56 +8,9 @@
 ; =============================================================================
 
 FmmWallpaperLoadFunc:
-	dec 6, xsp
-	push xiz
-	ld (xsp + 6), xde
-	ld xiz, xbc
-	ldda32 xwa, (0x81b0)
-	cp xiz, 0x1c00018
-	jrl z, WPLoad_HandleScroll
-	cp xiz, 0x1c00017
-	jrl z, WPLoad_HandleScroll
-	cp xiz, 0x1c0000b
-	jrl z, WPLoad_HandleShow
-	cp xiz, 0x1e50004
-	jrl z, WPLoad_HandleSelection
-	cp xiz, 0x1c00013
-	jrl nz, WPLoad_Return
-	ld xwa, (xsp + 6)
-	cp xwa, 0x3
-	jrl z, WPLoad_HandleAbort
-	cp xwa, 0x2
-	jrl nz, WPLoad_Return
-	stdi8 (0x84fe), 0
-	lds wa, 1
-	calr InitializeOperationState
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	cpdi16 0x8500, 0
-	jr ge, WPLoad_DispatchState
-	call GetDiskSizeInfo
-	extz hl
-	stda16 (0x8500), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmWallpaperLoadFunc.bin"
 WPLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
-	cps wa, 1
-	jrl z, WPLoad_HandleSuccess
-	cps wa, 0
-	jr z, WPLoad_HandleError
-	cps wa, 5
-	jr z, WPLoad_HandleCancel
-	cpdi16 0x850a, 0
-	jr ge, WPLoad_ContinueWait
-	call FileIO_InitWallpaperNav
-	stda16 (0x850a), xhl
-	call FileIO_SearchAndLoadFile
-	call GetEncodedFreeSpaceData
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_WPLoad_DispatchState.bin"
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -69,24 +22,7 @@ WPLoad_ContinueWait:
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleCancel:
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldw wa, 0x48
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 0
-	ldw wa, 0xee
-	jr WPLoad_CallStatusDisplay
-
+	.incbin "includes/generated/v7_transplant_WPLoad_HandleCancel.bin"
 WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -97,24 +33,7 @@ WPLoad_HandleError:
 	jrl WPLoad_Return
 
 WPLoad_HandleSuccess:
-	calr ResetProgressIndication
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldw wa, 0x48
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 2
-	ldw wa, 0xee
-
+	.incbin "includes/generated/v7_transplant_WPLoad_HandleSuccess.bin"
 WPLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 	jrl WPLoad_Return
@@ -124,51 +43,13 @@ WPLoad_HandleAbort:
 	jrl WPLoad_Return
 
 WPLoad_HandleSelection:
-	ld xwa, (xsp + 6)
-	stda32 0x81b0, xwa
-	call FileIO_GetCurrentWallpaperIndex
-	stda16 (0x81b4), xhl
-	cps hl, 0
-	jr ge, WPLoad_Selection_Positive
-	stdi16 (0x81b4), 0
-
+	.incbin "includes/generated/v7_transplant_WPLoad_HandleSelection.bin"
 WPLoad_Selection_Positive:
-	ldw_d16 xwa, (0x81b4)
-	exts xwa
-	divs wa, 0xa
-	stw_erp DE, 0xe2
-	exts xde
-	ldda32 xwa, (0x81b0)
-	ld xbc, 0x1e50002
-	jrl WPLoad_DispatchWidget
-
+	.incbin "includes/generated/v7_transplant_WPLoad_Selection_Positive.bin"
 WPLoad_HandleShow:
-	ldw_d16 xbc, (0x81b4)
-	exts xbc
-	divs bc, 0xa
-	muls bc, 0xa
-	calr DisplaySmfSequenceList
-	jrl WPLoad_Return
-
+	.incbin "includes/generated/v7_transplant_WPLoad_HandleShow.bin"
 WPLoad_HandleScroll:
-	ld xbc, 0x1c50001
-	lds32 xde, 1
-	call ApPostEvent
-	ldw_d16 xhl, (0x81b4)
-	ld (xsp + 4), hl
-	ld xwa, (xsp + 6)
-	or xwa, xwa
-	jr nz, WPLoad_PageScroll
-	ld xwa, xiz
-	cp xwa, 0x1c00018
-	jr nz, WPLoad_ScrollUp
-	ld wa, hl
-	inc 1, wa
-	cpda16 xwa, 0x850a
-	jrl ge, WPLoad_GetSelection
-	inc 1, hl
-	jr WPLoad_StorePosition
-
+	.incbin "includes/generated/v7_transplant_WPLoad_HandleScroll.bin"
 WPLoad_ScrollUp:
 	cp xwa, 0x1c00017
 	jrl nz, WPLoad_GetSelection
@@ -187,131 +68,23 @@ WPLoad_PageScroll:
 	jr WPLoad_StorePosition
 
 WPLoad_PageDown:
-	ld xwa, (xsp + 6)
-	cp xwa, 0x2
-	jr nz, WPLoad_OpLoad
-	ld wa, hl
-	add wa, 0xa
-	ldw_d16 xde, (0x850a)
-	cp wa, de
-	jr ge, WPLoad_PageDown_Boundary
-	add hl, 0xa
-
+	.incbin "includes/generated/v7_transplant_WPLoad_PageDown.bin"
 WPLoad_StorePosition:
-	stda16 (0x81b4), xhl
-	ld bc, hl
-	jrl WPLoad_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_WPLoad_StorePosition.bin"
 WPLoad_PageDown_Boundary:
-	ld bc, de
-	dec 1, bc
-	ld ix, bc
-	exts xix
-	divs ix, 0xa
-	exts xhl
-	divs hl, 0xa
-	cp hl, ix
-	jrl ge, WPLoad_GetSelection
-	exts xde
-	divs de, 0xa
-	stw_erp WA, 0xea
-	cps wa, 0
-	jr z, WPLoad_GetSelection
-	stda16 (0x81b4), xbc
-	jr WPLoad_UpdateDisplay
-
+	.incbin "includes/generated/v7_transplant_WPLoad_PageDown_Boundary.bin"
 WPLoad_OpLoad:
-	ld xwa, (xsp + 6)
-	cp xwa, 0x3
-	jr nz, WPLoad_GetSelection
-	ld xwa, 0x600026
-	ld xbc, 0x1c00001
-	lds32 xde, 5
-	call ApPostEvent
-	lds wa, 0
-	calr InitializeOperationState
-	call LoadFromSecondaryPage
-	ld wa, hl
-	lds bc, 1
-	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
-	calr SignalProgressUpdate
-	ld xwa, 0x600026
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldw wa, 0x48
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	ldw wa, 0xee
-	call SoundCtrl_SendCommand
-
+	.incbin "includes/generated/v7_transplant_WPLoad_OpLoad.bin"
 WPLoad_GetSelection:
-	ldw_d16 xbc, (0x81b4)
-
+	.incbin "includes/generated/v7_transplant_WPLoad_GetSelection.bin"
 WPLoad_UpdateDisplay:
-	cp (xsp + 4), bc
-	jrl z, WPLoad_SendState
-	ld wa, bc
-	call FileIO_SelectWallpaperByIndex
-	ldw_d16 xwa, (0x81b4)
-	exts xwa
-	divs wa, 0xa
-	stw_erp DE, 0xe2
-	exts xde
-	ldda32 xwa, (0x81b0)
-	ld xbc, 0x1e50002
-	call ApPostEvent
-	ldw_d16 xbc, (0x81b4)
-	exts xbc
-	divs bc, 0xa
-	ld de, (xsp + 4)
-	exts xde
-	divs de, 0xa
-	ldda32 xwa, (0x81b0)
-	cp de, bc
-	jr nz, WPLoad_RedrawPage
-	ld bc, (xsp + 4)
-	exts xbc
-	divs bc, 0xa
-	stw_erp BC, 0xe6
-	sll bc, 5
-	lda_d16 xhl, (0x850c)
-	ld de, bc
-	extz xde
-	add xde, xhl
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-	ldw_d16 xwa, (0x81b4)
-	exts xwa
-	divs wa, 0xa
-	stw_erp WA, 0xe2
-	sll wa, 5
-	lda_d16 xbc, (0x850c)
-	ld de, wa
-	extz xde
-	add xde, xbc
-	ldda32 xwa, (0x81b0)
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-	jr WPLoad_SendState
-
+	.incbin "includes/generated/v7_transplant_WPLoad_UpdateDisplay.bin"
 WPLoad_RedrawPage:
 	muls bc, 0xa
 	calr DisplaySmfSequenceList
 
 WPLoad_SendState:
-	ldda32 xwa, (0x81b0)
-	ld xbc, 0x1c50001
-	lds32 xde, 0
-
+	.incbin "includes/generated/v7_transplant_WPLoad_SendState.bin"
 WPLoad_DispatchWidget:
 	call ApPostEvent
 
@@ -322,12 +95,7 @@ WPLoad_Return:
 	ret
 
 WP_ScanAvailability:
-	push xiz
-	call CheckFileSystemStatus
-	ldw_erp HL, 0xfa
-	stdi16 (0x89f6), 0
-	lds iz, 0
-
+	.incbin "includes/generated/v7_transplant_WP_ScanAvailability.bin"
 WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
@@ -359,11 +127,7 @@ WPScan_CheckAvail:
 	slla de
 
 WPScan_MarkAvailable:
-	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
-	jr nc, WPScan_LimitReached
-	jr WPScan_LoopContinue
-
+	.incbin "includes/generated/v7_transplant_WPScan_MarkAvailable.bin"
 WPScan_TypeNotThree:
 	ld a, c
 	cps c, 2
@@ -385,11 +149,7 @@ WPScan_TypeNotThree:
 	slla de
 
 WPScan_TypeTwo_Mark:
-	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
-	jr nc, WPScan_LimitReached
-	jr WPScan_LoopContinue
-
+	.incbin "includes/generated/v7_transplant_WPScan_TypeTwo_Mark.bin"
 WPScan_TypeGeneric:
 	call FileIO_ValidateFileSignature
 	cps hl, 0
@@ -405,14 +165,9 @@ WPScan_TypeGeneric:
 	slla de
 
 WPScan_Generic_Mark:
-	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
-	jr c, WPScan_LoopContinue
-
+	.incbin "includes/generated/v7_transplant_WPScan_Generic_Mark.bin"
 WPScan_LimitReached:
-	stb_erp A, 0xf8
-	stb_d8 (0x89f8), a
-
+	.incbin "includes/generated/v7_transplant_WPScan_LimitReached.bin"
 WPScan_LoopContinue:
 	inc 1, iz
 	cps iz, 4
@@ -421,18 +176,7 @@ WPScan_LoopContinue:
 	ret
 
 WP_FindNextSlot:
-	pushw iz
-	ldb_d8 a, (0x89f8)
-	cps a, 4
-	jr nc, WPFind_NotFound
-	ldw_d16 xbc, (0x89f6)
-	cps bc, 0
-	jr z, WPFind_NotFound
-	lds iz, 1
-	extz wa
-	ldw_erp WA, 0xe6
-	lda_24 xde, (Str_SmfConvert_GmToGm_0x2A)
-
+	.incbin "includes/generated/v7_transplant_WP_FindNextSlot.bin"
 WPFind_SearchLoop:
 	stw_erp HL, 0xe6
 	add hl, iz
@@ -448,12 +192,7 @@ WPFind_SearchLoop:
 	slla iy
 
 WPFind_CheckSlot:
-	and iy, bc
-	jr z, WPFind_NextSlot
-	stb_d8 (0x89f8), l
-	ldb l, 0x1
-	jr WPFind_Return
-
+	.incbin "includes/generated/v7_transplant_WPFind_CheckSlot.bin"
 WPFind_NextSlot:
 	inc 1, iz
 	cps iz, 4

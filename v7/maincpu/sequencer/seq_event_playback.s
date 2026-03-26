@@ -15,81 +15,26 @@ SeqEvt_EntryPoint2:
 	jp SeqEvt_InitVoiceScan
 
 SeqEvt_InitAndProcess:
-	stdi8 (0x7dfd), 95
-	stdi16 (0x7e02), 9
-	stdi16 (0x7e04), 72
-	stdi8 (0x7e06), 16
-	stdi8 (0x7e07), 1
-	ldb_d8 a, (0x7e08)
-	stb_d8 (0x7e0a), a
-	ld xhl, 0x7aec
-	ld xbc, 0x7d6c
-	calr SeqEvt_ProcessReadLoop
-	ldb_d8 a, (0x7e0a)
-	stb_d8 (0x7e08), a
-	stdi8 (0x7e07), 2
-	ldb_d8 a, (0x7e09)
-	stb_d8 (0x7e0a), a
-	ld xhl, 0x7bec
-	ld xbc, 0x7db4
-	calr SeqEvt_ProcessReadLoop
-	ldb_d8 a, (0x7e0a)
-	stb_d8 (0x7e09), a
-	ldb_d8 a, (0x7dfd)
-	stb_d8 (0x7dfc), a
-	ret
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_InitAndProcess.bin"
 SeqEvt_ProcessReadLoop:
-	ld ix, (xhl + 6)
-	stda16 (0x7e0f), xix
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_ProcessReadLoop.bin"
 SeqEvt_ProcessLoop_Check:
 	cp (xhl + 4), ix
 	jr nz, SeqEvt_ClassifyEventType
 	jp SeqEvt_ProcessLoopRet
 
 SeqEvt_ClassifyEventType:
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	ld w, a
-	cp a, 0x90
-	jr nz, SeqEvt_CheckType91
-	stdi8 (0x7e0e), 5
-	jr SeqEvt_ReadAndDispatchEntry
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_ClassifyEventType.bin"
 SeqEvt_CheckType91:
-	cp a, 0x91
-	jr nz, SeqEvt_CheckTypeC0
-	stdi8 (0x7e0e), 7
-	jr SeqEvt_ReadAndDispatchEntry
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_CheckType91.bin"
 SeqEvt_CheckTypeC0:
-	and a, 0xf0
-	cp a, 0xc0
-	jr nz, SeqEvt_CheckTypeD0
-	stdi8 (0x7e0e), 4
-	jr SeqEvt_ReadAndDispatchEntry
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_CheckTypeC0.bin"
 SeqEvt_CheckTypeD0:
-	cp a, 0xd0
-	jr z, SeqEvt_TypeD0_SetCount
-	ld ix, (xhl + 4)
-	ld (xhl + 6), ix
-	stda16 (0x7e0f), xix
-	jr SeqEvt_ProcessLoop_Check
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_CheckTypeD0.bin"
 SeqEvt_TypeD0_SetCount:
-	stdi8 (0x7e0e), 2
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_TypeD0_SetCount.bin"
 SeqEvt_ReadAndDispatchEntry:
-	ldb_sri A, 0x07, 0xec, 0xf0
-	stda16 (0x7e11), xix
-	calr SeqEvtBuf_AdvanceReadPos
-	stda16 (0x7e0f), xix
-	cpda8 a, 1132
-	jr ule, SeqEvt_DispatchByChannel
-	jp SeqEvt_ProcessTempoEvent
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_ReadAndDispatchEntry.bin"
 SeqEvt_DispatchByChannel:
 	ld a, w
 	and a, 0xf0
@@ -98,18 +43,9 @@ SeqEvt_DispatchByChannel:
 	jr SeqEvt_ProcessNonNoteEvent
 
 SeqEvt_ProcessNoteOn:
-	pushw wa
-	ldb_sri W, 0x07, 0xec, 0xf0
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	xor ix, ix
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_ProcessNoteOn.bin"
 SeqEvt_SlotScanLoop:
-	cpda16 xix, 0x7e04
-	jr c, SeqEvt_CheckSlotActive
-	jr SeqEvt_AfterSlotScan
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_SlotScanLoop.bin"
 SeqEvt_CheckSlotActive:
 	bit_dri 7, 0x07, 0xec, 0xf0
 	jr z, SeqEvt_AdvanceSlotIndex
@@ -120,9 +56,7 @@ SeqEvt_CheckSlotActive:
 	jr z, SeqEvt_SlotMatchFound
 
 SeqEvt_AdvanceSlotIndex:
-	addda16 xix, 0x7e02
-	jr SeqEvt_SlotScanLoop
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_AdvanceSlotIndex.bin"
 SeqEvt_SlotMatchFound:
 	calr SeqEvt_WriteNoteOff
 
@@ -131,19 +65,9 @@ SeqEvt_AfterSlotScan:
 	xor ix, ix
 
 SeqEvt_FindFreeSlotLoop:
-	cpda16 xix, 0x7e04
-	jr nc, SeqEvt_AllocateNewSlot
-	bit_dri 7, 0x07, 0xec, 0xf0
-	jr nz, SeqEvt_AdvanceFreeSlotIdx
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	jr SeqEvt_WriteEventAndContinue
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_FindFreeSlotLoop.bin"
 SeqEvt_AdvanceFreeSlotIdx:
-	addda16 xix, 0x7e02
-	jr SeqEvt_FindFreeSlotLoop
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_AdvanceFreeSlotIdx.bin"
 SeqEvt_AllocateNewSlot:
 	calr SeqEvt_WriteNoteOnRotating
 
@@ -163,184 +87,24 @@ SeqEvt_ProcessLoopRet:
 	ret
 
 SeqEvt_WriteNoteOff:
-	ldb_sri A, 0x07, 0xec, 0xf0
-	and_srib_im 0x07, 0xec, 0xf0, 0x7f
-	and a, 0xf0
-	orda8 a, 0x7e07
-	calr SeqEvtBuf_WriteBytePreserve
-	ld a, w
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb a, 0x0
-	calr SeqEvtBuf_WriteBytePreserve
-	ret
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_WriteNoteOff.bin"
 SeqEvt_WriteNoteOnRotating:
-	push xwa
-	xor xwa, xwa
-	ldb_d8 a, (0x7e0a)
-	ld xix, SeqEvt_RotationOffsetTable
-	add xix, xwa
-	ld ix, (xix)
-	ldb_sri A, 0x07, 0xec, 0xf0
-	and_srib_im 0x07, 0xec, 0xf0, 0x7f
-	ld iz, ix
-	inc 2, ix
-	ldb_sri W, 0x07, 0xec, 0xf0
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	and a, 0xf0
-	orda8 a, 0x7e07
-	calr SeqEvtBuf_WriteBytePreserve
-	ld a, w
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb a, 0x0
-	calr SeqEvtBuf_WriteBytePreserve
-	ld ix, iz
-	pop xwa
-	adddi8 0x7e0a, 2
-	ldb_d8 a, (0x7e0a)
-	cpda8 a, 0x7e06
-	jr c, SeqEvt_RotateIndexDone
-	stdi8 (0x7e0a), 0
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_WriteNoteOnRotating.bin"
 SeqEvt_RotateIndexDone:
 	ld a, w
 	and a, 0xf0
 	ret
 
 SeqEvt_WriteVoiceParams:
-	orda8 a, 0x7e07
-	calr SeqEvtBuf_WriteBytePreserve
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	ld a, w
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	ldb a, 0x0
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	ex16 iz, ix
-	ldw_d16 xix, (0x7e0f)
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	ex16 iz, ix
-	calr SeqEvtBuf_WriteBytePreserve
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	ex16 iz, ix
-	calr SeqEvtBuf_WriteBytePreserve
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	push xwa
-	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	ldb_sri W, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	ex16 iz, ix
-	addda16 xwa, 1134
-	cp a, 0x60
-	jr c, SeqEvt_AdjustNoteOctave
-	inc 1, w
-	sub a, 0x60
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_WriteVoiceParams.bin"
 SeqEvt_AdjustNoteOctave:
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	stw_dri WA, 0x07, 0xec, 0xf0
-	inc 2, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	cpda16 xwa, 0x7dfe
-	jr nc, SeqEvt_WriteRemainingParams
-	stda16 (0x7dfe), xwa
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_AdjustNoteOctave.bin"
 SeqEvt_WriteRemainingParams:
-	pop xwa
-	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	stda16 (0x7e0f), xix
-	ex16 iz, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	cp w, 0x90
-	jr z, SeqEvt_UpdateReadPosition
-	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	stda16 (0x7e0f), xix
-	ex16 iz, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	stda16 (0x7e0f), xix
-	ex16 iz, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	stda32 0x7e13, xhl
-	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_WriteRemainingParams.bin"
 SeqEvt_UpdateReadPosition:
-	ldw_d16 xix, (0x7e0f)
-	ld (xhl + 6), ix
-	ret
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_UpdateReadPosition.bin"
 SeqEvt_HandleControlEvent:
-	ld w, a
-	orda8 a, 0x7e07
-	calr SeqEvtBuf_WriteBytePreserve
-	ldw_d16 xix, (0x7e0f)
-	cp w, 0xd0
-	jr nz, SeqEvt_HandleExtendedCtrl
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb_sri A, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	calr SeqEvtBuf_WriteBytePreserve
-	jr SeqEvt_SaveReadPosAndRet
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_HandleControlEvent.bin"
 SeqEvt_HandleExtendedCtrl:
 	ldb_sri A, 0x07, 0xec, 0xf0
 	calr SeqEvtBuf_AdvanceReadPos
@@ -356,52 +120,18 @@ SeqEvt_HandleExtendedCtrl:
 	or a, 0x10
 
 SeqEvt_SetExtendedFlag:
-	popw bc
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb a, 0xd0
-	orda8 a, 0x7e07
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb a, 0x7
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb_sri W, 0x07, 0xec, 0xf0
-	calr SeqEvtBuf_AdvanceReadPos
-	ldb a, 0x0
-	bit 0, w
-	jr z, SeqEvt_WriteSustainValue
-	ldb a, 0x7f
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_SetExtendedFlag.bin"
 SeqEvt_WriteSustainValue:
 	calr SeqEvtBuf_WriteBytePreserve
 
 SeqEvt_SaveReadPosAndRet:
-	stda16 (0x7e0f), xix
-	ld (xhl + 6), ix
-	ret
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_SaveReadPosAndRet.bin"
 SeqEvt_CalcTempoOffset:
-	subda8 a, 1132
-	cpda8 a, 0x7dfd
-	jr nc, SeqEvt_UpdateMinTempo
-	stb_d8 (0x7dfd), a
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_CalcTempoOffset.bin"
 SeqEvt_UpdateMinTempo:
-	ldw_d16 xiy, (0x7e11)
-	lda_dri XBC, 0x07, 0xec, 0xf4
-	xor wa, wa
-	ldb_d8 a, (0x7e0e)
-	addda16 xwa, 0x7e0f
-	stda16 (0x7e0f), xwa
-	ld ix, wa
-	cp ix, (xhl + 2)
-	jr ugt, SeqEvt_HandleBufferWrap
-	jr SeqEvt_CalcTempoRet
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_UpdateMinTempo.bin"
 SeqEvt_HandleBufferWrap:
-	sub ix, (xhl + 2)
-	dec 1, ix
-	add ix, (xhl + 256)
-	stda16 (0x7e0f), xix
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_HandleBufferWrap.bin"
 SeqEvt_CalcTempoRet:
 	ret
 
@@ -442,19 +172,7 @@ SeqEvt_RotationOffsetTable:
 	.byte 0x24, 0x00, 0x2d, 0x00, 0x36, 0x00, 0x3f, 0x00
 
 SeqEvt_InitVoiceScan:
-	stdi16 (0x7e00), 0xff5f
-	stdi16 (0x7e02), 9
-	stdi16 (0x7e04), 72
-	stdi8 (0x7e07), 1
-	ld xhl, 0x7d6c
-	calr Voice_ScanSlotMetric
-	stdi8 (0x7e07), 2
-	ld xhl, 0x7db4
-	calr Voice_ScanSlotMetric
-	ldw_d16 xwa, (0x7e00)
-	stda16 (0x7dfe), xwa
-	jr SeqEvt_VoiceScanDone
-
+	.incbin "includes/generated/v7_transplant_SeqEvt_InitVoiceScan.bin"
 SeqEvt_VoiceScanDone:
 	ret
 
@@ -462,43 +180,14 @@ Voice_ScanSlotMetric:
 	xor iy, iy
 
 Voice_ScanLoop:
-	cpda16 xiy, 0x7e04
-	jr c, Voice_CheckSlotBit
-	jp Voice_ScanLoopDone
-
+	.incbin "includes/generated/v7_transplant_Voice_ScanLoop.bin"
 Voice_CheckSlotBit:
 	bit_dri 7, 0x07, 0xec, 0xf4
 	jr nz, Voice_ReadSlotParams
 	jr Voice_ParamComplete
 
 Voice_ReadSlotParams:
-	ld ix, iy
-	ldb_sri A, 0x07, 0xec, 0xf0
-	stb_d8 (0x7e0b), a
-	inc 2, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	stb_d8 (0x7e0c), a
-	inc 1, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
-	stb_d8 (0x7e0d), a
-	inc 1, ix
-	ldw_sri WA, 0x07, 0xec, 0xf0
-	cpda16 xwa, 1134
-	jr gt, Voice_SubtractBaseFreq
-	ex16 iy, iz
-	ld iy, (xhl + 4)
-	ldb a, 0xf0
-	andda8 a, 0x7e0b
-	orda8 a, 0x7e07
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb_d8 a, (0x7e0c)
-	calr SeqEvtBuf_WriteBytePreserve
-	ldb a, 0x0
-	calr SeqEvtBuf_WriteBytePreserve
-	ex16 iy, iz
-	and_srib_im 0x07, 0xec, 0xf4, 0x7f
-	jr Voice_ParamComplete
-
+	.incbin "includes/generated/v7_transplant_Voice_ReadSlotParams.bin"
 Voice_SubtractBaseFreq:
 	subda16 xwa, 1134
 	bit 7, a
@@ -506,15 +195,9 @@ Voice_SubtractBaseFreq:
 	add a, 0x60
 
 Voice_StoreMetricValue:
-	stw_dri WA, 0x07, 0xec, 0xf0
-	cpda16 xwa, 0x7e00
-	jr nc, Voice_ParamComplete
-	stda16 (0x7e00), xwa
-
+	.incbin "includes/generated/v7_transplant_Voice_StoreMetricValue.bin"
 Voice_ParamComplete:
-	addda16 xiy, 0x7e02
-	jp Voice_ScanLoop
-
+	.incbin "includes/generated/v7_transplant_Voice_ParamComplete.bin"
 Voice_ScanLoopDone:
 	ret
 
@@ -1911,15 +1594,7 @@ AccPlay_StopEntry:
 	jp AccPlay_StopAndReset
 
 AccPlay_MainDispatch:
-	cpdi8 (0x7f0b), 0
-	jr z, AccPlay_CheckPrevRunning
-	cpdi8 (0x7f0c), 0
-	jr z, AccPlay_StartNewAccomp
-	bitda 0, (0x7f0b)
-	jr z, AccPlay_RunningWithBit0
-	calr AccPlay_DispatchSeqStart
-	jr AccPlay_ContinueMainLoop
-
+	.incbin "includes/generated/v7_transplant_AccPlay_MainDispatch.bin"
 AccPlay_RunningWithBit0:
 	calr AccPlay_HandleStopState
 	jr AccPlay_ContinueMainLoop
@@ -1929,117 +1604,23 @@ AccPlay_StartNewAccomp:
 	jr AccPlay_ContinueMainLoop
 
 AccPlay_CheckPrevRunning:
-	cpdi8 (0x7f0c), 0
-	jr z, AccPlay_StopSequencer
-	calr AccPlay_MainUpdateLoop
-	jr AccPlay_ContinueMainLoop
-
+	.incbin "includes/generated/v7_transplant_AccPlay_CheckPrevRunning.bin"
 AccPlay_StopSequencer:
 	calr AccPlay_StopIfRunning
 
 AccPlay_ContinueMainLoop:
-	calr AccPlay_MonitorParamState
-	bitda 0, (0x7f35)
-	jr z, AccPlay_UpdateStateFlags
-	anddi8 (0x7f35), 254
-	calr AccPlay_CheckAndToggle
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ContinueMainLoop.bin"
 AccPlay_UpdateStateFlags:
-	ldb_d8 a, (0x7f0b)
-	stb_d8 (0x7f0c), a
-	bitda 2, (0x7f15)
-	jr z, AccPlay_DispatchRet
-	cpdi8 (0x8d36), 1
-	jr nz, AccPlay_DispatchRet
-	anddi8 (0x7f15), 251
-	stdi8 (0x7f42), 15
-	call DrumVoice_NotifyEE
-
+	.incbin "includes/generated/v7_transplant_AccPlay_UpdateStateFlags.bin"
 AccPlay_DispatchRet:
 	ret
 
 AccPlay_InitializeStart:
-	call AccWrap_PlayModeDispatch
-	call CountAvailableVoiceSlots
-	calr AccPlay_SetupSoundParams
-	call AudioInit_CheckMIDIAndDispatch
-	calr AccPlay_SaveMuteStates
-	stdi16 (0x7f0e), 0xfffe
-	stdi8 (0x7f34), 0
-	push xwa
-	push xhl
-	push xbc
-	push xde
-	push xix
-	push xiy
-	push xiz
-	xor wa, wa
-	ldb a, 0x10
-	call UI_PostPartChangeEvent
-	pop xiz
-	pop xiy
-	pop xix
-	pop xde
-	pop xbc
-	pop xhl
-	pop xwa
-	ldb_d8 a, (1075)
-	sla a, 1
-	and a, 0x1f
-	or a, 0x80
-	stb_d8 (0x7f16), a
-	ld xhl, 0x1e880a
-	ormi8 (xhl), 0x1
-	ld xwa, 0x22
-	lds32 xbc, 0
-	lds32 xde, 0
-	call CtrlPanel_IndicatorDispatch
-	stdi8 (0x8f4e), 4
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_InitializeStart.bin"
 AccPlay_MainUpdateLoop:
-	call AccWrap_PlayModeDispatch
-	stdi8 (1055), 12
-	calr AccPlay_ExtractVoiceSlot
-	push xwa
-	push xhl
-	push xbc
-	push xde
-	push xix
-	push xiy
-	push xiz
-	call PartSelect_UpdateDisplayState
-	pop xiz
-	pop xiy
-	pop xix
-	pop xde
-	pop xbc
-	pop xhl
-	pop xwa
-	call AudioInit_CheckMIDIAndDispatch
-	calr AccPlay_RestoreMuteStates
-	calr AccPlay_ClearSlotTable
-	cpdi8 (0x8d34), 16
-	jr nz, AccPlay_SetIndicatorAndRet
-	push xwa
-	push xhl
-	push xbc
-	push xde
-	push xix
-	push xiy
-	push xiz
-	bitda 2, (0x7f15)
-	jr z, AccPlay_PostEvent9E_Enable
-	call AccSeq_PostEvent9E_Enable
-
+	.incbin "includes/generated/v7_transplant_AccPlay_MainUpdateLoop.bin"
 AccPlay_PostEvent9E_Enable:
-	xor wa, wa
-	ldb a, 0x1
-	call UI_PostPartChangeEvent
-	bitda 2, (0x7f15)
-	jr z, AccPlay_PostEvent9E_Disable
-	call AccSeq_PostEvent9E_Disable
-
+	.incbin "includes/generated/v7_transplant_AccPlay_PostEvent9E_Enable.bin"
 AccPlay_PostEvent9E_Disable:
 	pop xiz
 	pop xiy
@@ -2050,39 +1631,16 @@ AccPlay_PostEvent9E_Disable:
 	pop xwa
 
 AccPlay_SetIndicatorAndRet:
-	ordi8 0x7f15, 1
-	ld xhl, 0x1e880a
-	andmi8 (xhl), 0xfe
-	ld xwa, 0x22
-	call CtrlPanel_SetIndicatorLED
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_SetIndicatorAndRet.bin"
 AccPlay_DispatchSeqStart:
-	bitda 2, (1056)
-	jr nz, AccPlay_DispatchSeqRet
-	call Seq_DispatcherEntry
-	ordi8 0x33e8, 1
-	ordi8 0x34cd, 128
-	call Seq_DispatcherEntry
-	stdi8 (0x7f0b), 2
-
+	.incbin "includes/generated/v7_transplant_AccPlay_DispatchSeqStart.bin"
 AccPlay_DispatchSeqRet:
 	ret
 
 AccPlay_HandleStopState:
-	bitda 2, (0x7e1f)
-	jr nz, AccPlay_CheckResumeState
-	jp AccPlay_PostLoopCleanup
-
+	.incbin "includes/generated/v7_transplant_AccPlay_HandleStopState.bin"
 AccPlay_CheckResumeState:
-	bitda 2, (0x7e23)
-	jr nz, TempoEvt_ProcessLoop
-	calr AccPlay_ProcessVoiceBank
-	call CountAvailableVoiceSlots
-	calr AccPlay_AllocateVoiceSlot
-	ld xwa, 0x22
-	call CtrlPanel_SetIndicatorLED
-
+	.incbin "includes/generated/v7_transplant_AccPlay_CheckResumeState.bin"
 TempoEvt_ProcessLoop:
 	call TempoRingBuf_CheckEmpty
 	cps hl, 0
@@ -2090,58 +1648,17 @@ TempoEvt_ProcessLoop:
 	jp AccPlay_PostLoopCleanup
 
 TempoEvt_ReadAndClassify:
-	call TempoRingBuf_SaveReadPos
-	call TempoRingBuf_ReadAlternate
-	ld a, l
-	ld w, a
-	and w, 0xf0
-	stb_d8 (0x7e54), a
-	stb_d8 (0x7e55), w
-	bitda 7, (0x7f16)
-	jr z, TempoEvt_DispatchEvent
-	cp a, 0x81
-	jr nz, TempoEvt_CheckHighBit
-	ldb_d8 a, (0x7f16)
-	ld w, a
-	and a, 0x1f
-	and w, 0xe0
-	dec 1, a
-	or w, a
-	cps a, 0
-	jr nz, TempoEvt_StoreBankParam
-	and w, 0x7f
-	calr AccPlay_UpdateBankParams
-
+	.incbin "includes/generated/v7_transplant_TempoEvt_ReadAndClassify.bin"
 TempoEvt_StoreBankParam:
-	stb_d8 (0x7f16), w
-	jr TempoEvt_ContinueProcessing
-
+	.incbin "includes/generated/v7_transplant_TempoEvt_StoreBankParam.bin"
 TempoEvt_CheckHighBit:
-	bit 7, a
-	jr z, TempoEvt_ContinueProcessing
-	ldb_d8 a, (0x7f16)
-	and a, 0x1f
-	cps a, 1
-	jr nz, TempoEvt_ContinueProcessing
-	call TempoRingBuf_ReadAlternate
-	ld a, l
-	cp a, 0x48
-	jr c, TempoEvt_ContinueProcessing
-	ordi8 0x7f15, 16
-	ldb_d8 a, (0x7e54)
-	ldb_d8 w, (0x7e55)
-	jr TempoEvt_DispatchEvent
-
+	.incbin "includes/generated/v7_transplant_TempoEvt_CheckHighBit.bin"
 TempoEvt_ContinueProcessing:
 	calr TempoRingBuf_ReadLoop
 	jp TempoEvt_ProcessLoop
 
 TempoEvt_DispatchEvent:
-	cpdi16 0x7e18, 0
-	jr nz, TempoEvt_HandleEndMarker
-	calr AccPlay_InitAndStartLoop
-	jr TempoEvent_ContinueLoop
-
+	.incbin "includes/generated/v7_transplant_TempoEvt_DispatchEvent.bin"
 TempoEvt_HandleEndMarker:
 	cp a, 0x81
 	jr nz, TempoEvt_HandleNoteEvent
@@ -2196,16 +1713,7 @@ AccPlay_PostLoopCleanup:
 	ret
 
 AccPlay_StopIfRunning:
-	bitda 0, (0x7f15)
-	jr z, AccPlay_StopRet
-	bitda 2, (1056)
-	jr nz, AccPlay_StopRet
-	call Seq_DispatcherEntry
-	anddi8 (0x33e8), 254
-	ordi8 0x34cd, 128
-	call Seq_DispatcherEntry
-	anddi8 (0x7f15), 254
-
+	.incbin "includes/generated/v7_transplant_AccPlay_StopIfRunning.bin"
 AccPlay_StopRet:
 	ret
 
@@ -2221,11 +1729,7 @@ AccPlay_VoiceBankRet:
 	ret
 
 Voice_GetBankEntryPointer:
-	ldb_d8 a, (0x7f14)
-	cp a, 0xc
-	jr c, Voice_CalcBankOffset
-	ldb a, 0x0
-
+	.incbin "includes/generated/v7_transplant_Voice_GetBankEntryPointer.bin"
 Voice_CalcBankOffset:
 	ld xiy, 0x1e8820
 	ldb w, 0x10
@@ -2240,16 +1744,7 @@ Voice_ReleaseChain:
 	jr z, Voice_ReleaseChainDone
 
 Voice_ReleaseChainLoop:
-	calr Util_ExtractAndShiftBits
-	ld hl, (xix + 3)
-	ldw (xix + 1), 0xffff
-	ldw (xix + 3), 0xffff
-	andmi8 (xix), 0x7f
-	incdi16 1, (0x7e18)
-	cp hl, 0xffff
-	jr z, Voice_ReleaseChainDone
-	jr Voice_ReleaseChainLoop
-
+	.incbin "includes/generated/v7_transplant_Voice_ReleaseChainLoop.bin"
 Voice_ReleaseChainDone:
 	ret
 
@@ -2282,92 +1777,16 @@ Voice_SlotTemplateData:
 	nop
 
 AccPlay_SetupSoundParams:
-	ldb a, 0x17
-	stb_d8 (0x8d3a), a
-	ldb e, 0x90
-	ldb d, 0x10
-	ldb a, 0x17
-	ldb w, 0xff
-	call SwbtWr_QueuePostEvent
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
-	cp wa, 0x1ff
-	jr nz, AccPlay_SetupJumpTarget
-	lds wa, 0
-	stb_d8 (0xfd62), a
-	stb_d8 (0xfd63), w
-	ldb e, 0x17
-	ldb d, 0x1
-	ldb a, 0x0
-	ldb w, 0x7f
-	call SwbtWr_QueuePostEvent
-	ldb e, 0x17
-	ldb d, 0x0
-	ldb a, 0x0
-	ldb w, 0xff
-	call SwbtWr_QueuePostEvent
-	ldb h, 0x0
-	ldb l, 0x0
-	stdi8 (0x90f7), 23
-	call PartCtrl_WriteProgramChange
-	ld xbc, 0xff7e
-	lda_dri XIZ, 0x03, 0xe4, 0xec
-
+	.incbin "includes/generated/v7_transplant_AccPlay_SetupSoundParams.bin"
 AccPlay_SetupJumpTarget:
 	jp AccPlay_SyncParamsRet
 AccPlay_SyncVoiceParams:
-	ld	xiy, 0xf9b6
-	ld	xix, 0xfd62
-	ldb	c, 30
-	ld	a, (xiy)
-	ld	w, (xix)
-	ld	(xix), a
-	cp	a, w
-	jr	z, 18
-	push	xiy
-	push	xix
-	push	xbc
-	ldb	e, 23
-	ldb	d, 30
-	sub	d, c
-	ldb	w, 255
-	call	SwbtWr_QueuePostEvent
-	pop	xbc
-	pop	xix
-	pop	xiy
-	inc	1, iy
-	inc	1, ix
-	dec	1, c
-	cps	c, 0
-	jr	nz, 0xda
-
+	.incbin "includes/generated/v7_transplant_AccPlay_SyncVoiceParams.bin"
 AccPlay_SyncParamsRet:
 	ret
 
 AccPlay_AllocateVoiceSlot:
-	calr Voice_GetBankEntryPointer
-	push xiy
-	calr Voice_FindFreeSlot
-	ld hl, wa
-	calr Util_ExtractAndShiftBits
-	ormi8 (xix), 0x80
-	decdi16 1, 0x7e18
-	pop xiy
-	ld (xiy + 3), wa
-	ldb l, 0x1
-	or (xiy + 256), l
-	stda16 (0x7f10), xwa
-	lds wa, 6
-	stda16 (0x7f12), xwa
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
-	ld (xiy + 9), wa
-	xor a, a
-	ldb_d8 w, (0xfd66)
-	bit 6, w
-	jr z, AccPlay_CheckReverbFlag
-	or a, 0x1
-
+	.incbin "includes/generated/v7_transplant_AccPlay_AllocateVoiceSlot.bin"
 AccPlay_CheckReverbFlag:
 	ld (xiy + 13), a
 	xor a, a
@@ -2422,22 +1841,9 @@ AccPlay_UnusedCodeFragment:
 	ret
 
 AccPlay_ExtractVoiceSlot:
-	ldw_d16 xhl, (0x7f10)
-	calr Util_ExtractAndShiftBits
-	ldb a, 0x83
-	ldw_d16 xhl, (0x7f12)
-	lda_dri XBC, 0x07, 0xf0, 0xec
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ExtractVoiceSlot.bin"
 AccPlay_ProcessNoteEvent:
-	lds bc, 5
-	calr MidiSeqBuf_ScanAllEntries
-	ldb_d8 a, (0x7f39)
-	cps a, 0
-	jr z, AccPlay_NoteNoSlotMatch
-	calr AccPlay_NoteWithSlot
-	jr AccPlay_NoteEventRet
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ProcessNoteEvent.bin"
 AccPlay_NoteNoSlotMatch:
 	calr AccPlay_FindSlotByChannel
 
@@ -2445,79 +1851,14 @@ AccPlay_NoteEventRet:
 	ret
 
 AccPlay_NoteWithSlot:
-	cpdi16 0x7e18, 0
-	jr z, AccPlay_NoteNoSlotAvail
-	calr AccPlay_FindActiveSlot
-	cp xhl, 0xffff
-	jr nz, AccPlay_NoteAllocAndWrite
-
+	.incbin "includes/generated/v7_transplant_AccPlay_NoteWithSlot.bin"
 AccPlay_NoteNoSlotAvail:
 	jp AccPlay_NoteAllocRet
 
 AccPlay_NoteAllocAndWrite:
-	push xhl
-	push xix
-	ldb_d8 l, (0x7f38)
-	xor h, h
-	ld xix, Display_FontPalette_Table_0x12EA
-	ldb_sri A, 0x07, 0xf0, 0xec
-	xor w, w
-	sla wa, 2
-	ld hl, wa
-	ld xix, AccPlay_NoteParamTable
-	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x7e54), a
-	inc 1, hl
-	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x7e55), a
-	inc 1, hl
-	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x7e56), a
-	ldb a, 0x90
-	cpdi8 (0x7e54), 0
-	jr z, AccPlay_NoteSetType91
-	ldb a, 0x91
-
+	.incbin "includes/generated/v7_transplant_AccPlay_NoteAllocAndWrite.bin"
 AccPlay_NoteSetType91:
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7f37)
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7f38)
-	calr MidiSeqBuf_WriteByte
-	pop xix
-	pop xhl
-	ldb_d8 a, (0x7f38)
-	or a, 0x80
-	ld (xhl), a
-	ldb a, 0x0
-	ld (xhl + 1), a
-	ldb_d8 a, (0x7f37)
-	ld (xhl + 2), a
-	ldw_d16 xwa, (0x7f10)
-	ld (xhl + 3), wa
-	ldw_d16 xwa, (0x7f12)
-	ld (xhl + 5), a
-	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7f39)
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-	ldb a, 0x10
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-	ldb a, 0x0
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-	cpdi8 (0x7e54), 0
-	jr z, AccPlay_NoteAllocRet
-	ldb_d8 a, (0x7e55)
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7e56)
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvancePosition
-
+	.incbin "includes/generated/v7_transplant_AccPlay_NoteSetType91.bin"
 AccPlay_NoteAllocRet:
 	ret
 
@@ -2530,17 +1871,9 @@ AccPlay_NoteParamTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x11, 0x11, 0x00
 
 AccPlay_FindActiveSlot:
-	ld xhl, 0x7e7b
-
+	.incbin "includes/generated/v7_transplant_AccPlay_FindActiveSlot.bin"
 AccPlay_ScanActiveLoop:
-	ld a, (xhl)
-	bit 7, a
-	jr z, AccPlay_ScanActiveRet
-	add xhl, 0x9
-	cp xhl, 0x7f0b
-	jr z, AccPlay_ScanActiveFail
-	jr AccPlay_ScanActiveLoop
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ScanActiveLoop.bin"
 AccPlay_ScanActiveFail:
 	ld xhl, 0xffff
 
@@ -2548,35 +1881,14 @@ AccPlay_ScanActiveRet:
 	ret
 
 AccPlay_FindSlotByChannel:
-	ldb_d8 w, (0x7f38)
-	ld xhl, 0x7e7b
-
+	.incbin "includes/generated/v7_transplant_AccPlay_FindSlotByChannel.bin"
 AccPlay_ChannelScanLoop:
-	ld a, (xhl)
-	and a, 0x7f
-	cp a, w
-	jr z, AccPlay_ChannelSlotFound
-	add hl, 0x9
-	cp xhl, 0x7f0b
-	jr z, AccPlay_ChannelScanFail
-	jr AccPlay_ChannelScanLoop
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ChannelScanLoop.bin"
 AccPlay_ChannelScanFail:
 	jr AccPlay_NoteReleaseRet
 
 AccPlay_ChannelSlotFound:
-	ldb a, 0x0
-	ld (xhl), a
-	ld d, (xhl + 1)
-	ld a, (xhl + 2)
-	ldb_d8 c, (0x7f37)
-	cp c, a
-	jr nc, AccPlay_CalcNoteOffset
-	add c, 0x60
-	cps d, 0
-	jr z, AccPlay_CalcNoteOffset
-	dec 1, d
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ChannelSlotFound.bin"
 AccPlay_CalcNoteOffset:
 	sub c, a
 	ld e, c
@@ -2587,43 +1899,12 @@ AccPlay_CalcNoteOffset:
 	ldb e, 0x2
 
 AccPlay_WriteNoteRelease:
-	ldw_d16 xwa, (0x7f10)
-	pushw wa
-	ldw_d16 xwa, (0x7f12)
-	pushw wa
-	ld wa, (xhl + 3)
-	stda16 (0x7f10), xwa
-	ld a, (xhl + 5)
-	xor w, w
-	stda16 (0x7f12), xwa
-	pushw de
-	calr MidiSeqBuf_AdvanceWritePos
-	calr MidiSeqBuf_AdvanceWritePos
-	popw de
-	ld a, e
-	and a, 0x7f
-	pushw de
-	calr MidiSeqBuf_WriteByte
-	calr MidiSeqBuf_AdvanceWritePos
-	popw de
-	ld a, d
-	and a, 0x7f
-	calr MidiSeqBuf_WriteByte
-	popw wa
-	stda16 (0x7f12), xwa
-	popw wa
-	stda16 (0x7f10), xwa
-
+	.incbin "includes/generated/v7_transplant_AccPlay_WriteNoteRelease.bin"
 AccPlay_NoteReleaseRet:
 	ret
 
 AccPlay_HandleEndMarkerEvt:
-	lds bc, 1
-	calr MidiSeqBuf_ScanAllEntries
-	lds de, 1
-	calr MidiSeqBuf_ProcessEntries
-	ld xhl, 0x7e7b
-
+	.incbin "includes/generated/v7_transplant_AccPlay_HandleEndMarkerEvt.bin"
 AccPlay_IncrementHoldLoop:
 	ld a, (xhl)
 	bit 7, a
@@ -2635,56 +1916,18 @@ AccPlay_IncrementHoldLoop:
 	ld (xhl + 1), a
 
 AccPlay_HoldLoopAdvance:
-	add xhl, 0x9
-	cp xhl, 0x7f0b
-	jr nz, AccPlay_IncrementHoldLoop
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_HoldLoopAdvance.bin"
 MidiSeq_ProcessSustainEvent:
-	lds bc, 4
-	calr MidiSeqBuf_ScanAllEntries
-	ld xhl, 0x7f36
-	ld a, (xhl)
-	cp a, 0xd3
-	jr nz, MidiSeq_SustainFixup
-	ldb a, 0xd5
-	ld (xhl), a
-
+	.incbin "includes/generated/v7_transplant_MidiSeq_ProcessSustainEvent.bin"
 MidiSeq_SustainFixup:
 	lds de, 3
 	calr MidiSeqBuf_ProcessEntries
 	ret
 
 MidiSeq_HandleD2Event:
-	lds bc, 5
-	calr MidiSeqBuf_ScanAllEntries
-	ld xhl, 0x7f36
-	ld a, (xhl + 3)
-	ld (xhl + 2), a
-	lds de, 3
-	calr MidiSeqBuf_ProcessEntries
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiSeq_HandleD2Event.bin"
 MidiSeq_HandleProgChange:
-	lds bc, 7
-	calr MidiSeqBuf_ScanAllEntries
-	ld xhl, 0x7f36
-	ld a, (xhl + 4)
-	ld (xhl + 2), a
-	ld a, (xhl + 5)
-	ld (xhl + 4), a
-	ld a, (xhl)
-	and a, 0x1
-	ld (xhl + 3), a
-	ld a, (xhl)
-	and a, 0xf0
-	ld (xhl), a
-	xor w, w
-	ldb_d8 a, (0xfd66)
-	bit 6, a
-	jr z, MidiSeq_ProgChangeSetReverb
-	or w, 0x1
-
+	.incbin "includes/generated/v7_transplant_MidiSeq_HandleProgChange.bin"
 MidiSeq_ProgChangeSetReverb:
 	ld (xhl + 5), w
 	lds de, 6
@@ -2692,15 +1935,7 @@ MidiSeq_ProgChangeSetReverb:
 	ret
 
 MidiSeq_HandleCtrlChange:
-	lds bc, 7
-	calr MidiSeqBuf_ScanAllEntries
-	ld xhl, 0x7f36
-	ld a, (xhl + 2)
-	ld w, (xhl)
-	bit 2, w
-	jr z, MidiSeq_CtrlCheckType
-	or a, 0x80
-
+	.incbin "includes/generated/v7_transplant_MidiSeq_HandleCtrlChange.bin"
 MidiSeq_CtrlCheckType:
 	ld w, (xhl + 3)
 	and w, 0x1f
@@ -2762,145 +1997,42 @@ MidiSeq_SustainRet:
 	ret
 
 AccPlay_TrackMeasureChange:
-	ldb_d8 a, (1076)
-	ldb_d8 w, (0x7f34)
-	cp a, w
-	jr z, AccPlay_MeasureTrackRet
-	ldw_d16 xhl, (0x7f0e)
-	inc 1, hl
-	cps hl, 0
-	jr nz, AccPlay_MeasureIncrement
-	inc 1, hl
-
+	.incbin "includes/generated/v7_transplant_AccPlay_TrackMeasureChange.bin"
 AccPlay_MeasureIncrement:
-	stda16 (0x7f0e), xhl
-	cpdi8 (0x8d38), 201
-	jr nz, AccPlay_MeasureNotifyDone
-	push xwa
-	push xhl
-	push xbc
-	push xde
-	push xix
-	push xiy
-	push xiz
-	call AccSeq_DeliverC9_0009
-	pop xiz
-	pop xiy
-	pop xix
-	pop xde
-	pop xbc
-	pop xhl
-	pop xwa
-
+	.incbin "includes/generated/v7_transplant_AccPlay_MeasureIncrement.bin"
 AccPlay_MeasureNotifyDone:
-	stb_d8 (0x7f34), a
-
+	.incbin "includes/generated/v7_transplant_AccPlay_MeasureNotifyDone.bin"
 AccPlay_MeasureTrackRet:
 	ret
 
 AccPlay_TrackVoiceCount:
-	ldw_d16 xwa, (0x7e18)
-	ldw_d16 xhl, (0x7e1a)
-	cp wa, hl
-	jr z, AccPlay_VoiceCountRet
-	cpdi8 (0x8d38), 201
-	jr nz, AccPlay_VoiceCountNotify
-	push xwa
-	push xhl
-	push xbc
-	push xde
-	push xix
-	push xiy
-	push xiz
-	call AccSeq_DeliverC9_000A
-	pop xiz
-	pop xiy
-	pop xix
-	pop xde
-	pop xbc
-	pop xhl
-	pop xwa
-
+	.incbin "includes/generated/v7_transplant_AccPlay_TrackVoiceCount.bin"
 AccPlay_VoiceCountNotify:
-	stda16 (0x7e1a), xwa
-
+	.incbin "includes/generated/v7_transplant_AccPlay_VoiceCountNotify.bin"
 AccPlay_VoiceCountRet:
 	ret
 
 AccPlay_MonitorParamState:
-	cpdi8 (0x7f0b), 0
-	jr z, AccPlay_SaveCurrentState
-	cpdi8 (0x7f0c), 0
-	jr z, AccPlay_InitVoiceBankState
-	calr AccPlay_CompareAndSendProg
-	jr AccPlay_SaveCurrentState
-
+	.incbin "includes/generated/v7_transplant_AccPlay_MonitorParamState.bin"
 AccPlay_InitVoiceBankState:
 	calr AccPlay_RestoreVoiceBank
 
 AccPlay_SaveCurrentState:
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
-	and w, 0x7f
-	stda16 (0x7f18), xwa
-	ldb_d8 a, (0xfd66)
-	and a, 0x48
-	xor w, w
-	stda16 (0x7f1a), xwa
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_SaveCurrentState.bin"
 AccPlay_CompareAndSendProg:
-	ldw_d16 xhl, (0x7f18)
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
-	and w, 0x7f
-	cp wa, hl
-	jr z, AccPlay_CompareReverbState
-	ld e, w
-	ld w, a
-	ldb a, 0xc1
-	stb_d8 (0x7e40), w
-	and e, 0xf
-	bit 7, w
-	jr z, AccPlay_SendProgChange
-	or e, 0x10
-	and w, 0x7f
-
+	.incbin "includes/generated/v7_transplant_AccPlay_CompareAndSendProg.bin"
 AccPlay_SendProgChange:
 	call AccompSeq_SendMidiEvent
 
 AccPlay_CompareReverbState:
-	ldw_d16 xhl, (0x7f1a)
-	ldb_d8 a, (0xfd66)
-	and a, 0x40
-	xor w, w
-	and l, 0x40
-	cp wa, hl
-	jr z, AccPlay_CompareChorusState
-	ldb e, 0x0
-	cps a, 0
-	jr z, AccPlay_SetReverbValue
-	ldb e, 0x7f
-
+	.incbin "includes/generated/v7_transplant_AccPlay_CompareReverbState.bin"
 AccPlay_SetReverbValue:
 	ldb w, 0x7
 	ldb a, 0xd1
 	call AccompSeq_SendMidiEvent
 
 AccPlay_CompareChorusState:
-	jr AccPlay_ParamMonitorRet
-	ldw_d16 xhl, (0x7f1a)
-	ldb_d8 a, (0xfd66)
-	and a, 0x8
-	xor w, w
-	and l, 0x8
-	cp wa, hl
-	jr z, AccPlay_ParamMonitorRet
-	ldb e, 0x0
-	cps a, 0
-	jr z, AccPlay_SetChorusValue
-	ldb e, 0x7f
-
+	.incbin "includes/generated/v7_transplant_AccPlay_CompareChorusState.bin"
 AccPlay_SetChorusValue:
 	ldb w, 0x3
 	ldb a, 0xd1
@@ -2910,50 +2042,9 @@ AccPlay_ParamMonitorRet:
 	ret
 
 AccPlay_RestoreVoiceBank:
-	calr Voice_GetBankEntryPointer
-	ld wa, (xiy + 9)
-	ld e, w
-	ld w, a
-	ldb a, 0xc1
-	stb_d8 (0x7e40), w
-	and e, 0xf
-	bit 7, w
-	jr z, AccPlay_SendBankProgram
-	or e, 0x10
-	and w, 0x7f
-
+	.incbin "includes/generated/v7_transplant_AccPlay_RestoreVoiceBank.bin"
 AccPlay_SendBankProgram:
-	call AccompSeq_SendMidiEvent
-	ld wa, (xiy + 9)
-	stb_d8 (0xfd62), a
-	stb_d8 (0xfd63), w
-	ldb e, 0x17
-	ldb d, 0x1
-	ld a, w
-	ldb w, 0x7f
-	call SwbtWr_QueuePostEvent
-	ld wa, (xiy + 9)
-	ldb e, 0x17
-	ldb d, 0x0
-	ldb w, 0xff
-	call SwbtWr_QueuePostEvent
-	ld a, (xiy + 12)
-	ld e, a
-	ldb w, 0x4
-	ldb a, 0xd1
-	call AccompSeq_SendMidiEvent
-	ld a, (xiy + 12)
-	stb_d8 (0xfd6a), a
-	ldb e, 0x17
-	ldb d, 0x8
-	ldb w, 0x7f
-	call SwbtWr_QueuePostEvent
-	ld a, (xiy + 13)
-	ldb e, 0x0
-	bit 0, a
-	jr z, AccPlay_RestoreReverbVal
-	ldb e, 0x7f
-
+	.incbin "includes/generated/v7_transplant_AccPlay_SendBankProgram.bin"
 AccPlay_RestoreReverbVal:
 	ldb w, 0x7
 	ldb a, 0xd1
@@ -2966,18 +2057,7 @@ AccPlay_RestoreReverbVal:
 	or w, 0x40
 
 AccPlay_WriteReverbFlag:
-	stb_d8 (0xfd66), w
-	ldb e, 0x17
-	ldb d, 0x4
-	ld a, w
-	ldb w, 0x40
-	call SwbtWr_QueuePostEvent
-	ld a, (xiy + 14)
-	ldb e, 0x0
-	bit 0, a
-	jr z, AccPlay_RestoreChorusVal
-	ldb e, 0x7f
-
+	.incbin "includes/generated/v7_transplant_AccPlay_WriteReverbFlag.bin"
 AccPlay_RestoreChorusVal:
 	ldb w, 0x3
 	ldb a, 0xd1
@@ -2990,101 +2070,16 @@ AccPlay_RestoreChorusVal:
 	or w, 0x8
 
 AccPlay_WriteChorusFlag:
-	stb_d8 (0xfd66), w
-	ldb e, 0x17
-	ldb d, 0x4
-	ld a, w
-	ldb w, 0x8
-	call SwbtWr_QueuePostEvent
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_WriteChorusFlag.bin"
 AccPlay_ClearSlotTable:
-	ld xhl, 0x7e7b
-	ldb a, 0x0
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ClearSlotTable.bin"
 AccPlay_ClearSlotLoop:
-	ld (xhl), a
-	add xhl, 0x9
-	cp xhl, 0x7f0b
-	jr z, AccPlay_ClearSlotDone
-	jr AccPlay_ClearSlotLoop
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ClearSlotLoop.bin"
 AccPlay_ClearSlotDone:
 	ret
 
 AccPlay_SaveMuteStates:
-	ldb_d8 a, (0xf9c3)
-	ldb_d8 w, (0xf9dd)
-	stda16 (0x7f1c), xwa
-	ldb_d8 a, (0xf9f7)
-	ldb_d8 w, (0xfa11)
-	stda16 (0x7f1e), xwa
-	ldb_d8 a, (0xfa2b)
-	ldb_d8 w, (0xfa45)
-	stda16 (0x7f20), xwa
-	ldb_d8 a, (0xfa5f)
-	ldb_d8 w, (0xfa79)
-	stda16 (0x7f22), xwa
-	ldb_d8 a, (0xfa93)
-	ldb_d8 w, (0xfaad)
-	stda16 (0x7f24), xwa
-	ldb_d8 a, (0xfac7)
-	ldb_d8 w, (0xfae1)
-	stda16 (0x7f26), xwa
-	ldb_d8 a, (0xfafb)
-	ldb_d8 w, (0xfb15)
-	stda16 (0x7f28), xwa
-	ldb_d8 a, (0xfb2f)
-	ldb_d8 w, (0xfb49)
-	stda16 (0x7f2a), xwa
-	ldb_d8 a, (0xfb63)
-	ldb_d8 w, (0xfb7d)
-	stda16 (0x7f2c), xwa
-	ldb_d8 a, (0xfb97)
-	ldb_d8 w, (0xfbb1)
-	stda16 (0x7f2e), xwa
-	ldb_d8 a, (0xfbcb)
-	ldb_d8 w, (0xfbe5)
-	stda16 (0x7f30), xwa
-	ldb_d8 a, (0xfbff)
-	ldb_d8 w, (0xfc19)
-	stda16 (0x7f32), xwa
-	ldb a, 0xc0
-	orddm8 0xf9c3, a
-	orddm8 0xf9dd, a
-	orddm8 0xf9f7, a
-	orddm8 0xfa11, a
-	orddm8 0xfa2b, a
-	orddm8 0xfa45, a
-	orddm8 0xfa5f, a
-	orddm8 0xfa79, a
-	orddm8 0xfa93, a
-	orddm8 0xfaad, a
-	orddm8 0xfac7, a
-	orddm8 0xfae1, a
-	orddm8 0xfafb, a
-	orddm8 0xfb15, a
-	orddm8 0xfb2f, a
-	orddm8 0xfb49, a
-	orddm8 0xfb63, a
-	orddm8 0xfb7d, a
-	orddm8 0xfb97, a
-	orddm8 0xfbb1, a
-	orddm8 0xfbcb, a
-	orddm8 0xfbe5, a
-	orddm8 0xfbff, a
-	orddm8 0xfc19, a
-	ldb_d8 a, (0xfd6f)
-	and a, 0x3f
-	and a, 0xf0
-	stb_d8 (0xfd6f), a
-	ldb e, 0x17
-	ldb d, 0xd
-	ldb w, 0xcf
-	call SwbtWr_QueuePostEvent
-	calr AccompSeq_QueueAllMutes
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_SaveMuteStates.bin"
 AccompSeq_QueueAllMutes:
 	ldb e, 0x0
 	ldb_d8 a, (0xf9c3)
@@ -3161,58 +2156,9 @@ AccompSeq_QueueAllMutes:
 	ret
 
 AccompSeq_QueueMuteEvent:
-	ldb d, 0xd
-	ldb w, 0xcf
-	call SwbtWr_QueuePostEvent
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccompSeq_QueueMuteEvent.bin"
 AccPlay_RestoreMuteStates:
-	ldw_d16 xwa, (0x7f1c)
-	stb_d8 (0xf9c3), a
-	stb_d8 (0xf9dd), w
-	ldw_d16 xwa, (0x7f1e)
-	stb_d8 (0xf9f7), a
-	stb_d8 (0xfa11), w
-	ldw_d16 xwa, (0x7f20)
-	stb_d8 (0xfa2b), a
-	stb_d8 (0xfa45), w
-	ldw_d16 xwa, (0x7f22)
-	stb_d8 (0xfa5f), a
-	stb_d8 (0xfa79), w
-	ldw_d16 xwa, (0x7f24)
-	stb_d8 (0xfa93), a
-	stb_d8 (0xfaad), w
-	ldw_d16 xwa, (0x7f26)
-	stb_d8 (0xfac7), a
-	stb_d8 (0xfae1), w
-	ldw_d16 xwa, (0x7f28)
-	stb_d8 (0xfafb), a
-	stb_d8 (0xfb15), w
-	ldw_d16 xwa, (0x7f2a)
-	stb_d8 (0xfb2f), a
-	stb_d8 (0xfb49), w
-	ldw_d16 xwa, (0x7f2c)
-	stb_d8 (0xfb63), a
-	stb_d8 (0xfb7d), w
-	ldw_d16 xwa, (0x7f2e)
-	stb_d8 (0xfb97), a
-	stb_d8 (0xfbb1), w
-	ldw_d16 xwa, (0x7f30)
-	stb_d8 (0xfbcb), a
-	stb_d8 (0xfbe5), w
-	ldw_d16 xwa, (0x7f32)
-	stb_d8 (0xfbff), a
-	stb_d8 (0xfc19), w
-	ldb_d8 a, (0xfd6f)
-	or a, 0xc0
-	stb_d8 (0xfd6f), a
-	ldb e, 0x17
-	ldb d, 0xd
-	ldb w, 0x4f
-	call SwbtWr_QueuePostEvent
-	calr AccompSeq_QueueAllMutes
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_RestoreMuteStates.bin"
 Util_ExtractAndShiftBits:
 	push xhl
 	and xhl, 0xfff
@@ -3253,145 +2199,35 @@ MidiSeqBuf_ScanAllEntries:
 	xor ix, ix
 
 MidiSeqBuf_ScanLoop:
-	calr TempoRingBuf_ReadLoop
-	ld xhl, 0x7f36
-	lda_dri XBC, 0x07, 0xec, 0xf0
-	inc 1, ix
-	dec 1, bc
-	cps bc, 0
-	jr nz, MidiSeqBuf_ScanLoop
-	bitda 4, (0x7f15)
-	jr z, MidiSeqBuf_ScanDone
-	anddi8 (0x7f15), 239
-	ld (xhl + 1), 0x0
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_ScanLoop.bin"
 MidiSeqBuf_ScanDone:
 	ret
 
 MidiSeqBuf_ProcessEntries:
-	cpdi16 0x7e18, 0
-	jr z, MidiSeqBuf_ProcessDone
-	xor ix, ix
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_ProcessEntries.bin"
 MidiSeqBuf_ProcessLoop:
-	ld xhl, 0x7f36
-	ldb_sri A, 0x07, 0xec, 0xf0
-	push xix
-	pushw de
-	ldw_d16 xhl, (0x7f10)
-	calr Util_ExtractAndShiftBits
-	ldw_d16 xhl, (0x7f12)
-	lda_dri XBC, 0x07, 0xf0, 0xec
-	calr MidiSeqBuf_AdvancePosition
-	popw de
-	pop xix
-	inc 1, ix
-	cp ix, de
-	jr c, MidiSeqBuf_ProcessLoop
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_ProcessLoop.bin"
 MidiSeqBuf_ProcessDone:
 	ret
 
 MidiSeqBuf_AdvancePosition:
-	ldw_d16 xwa, (0x7f12)
-	inc 1, wa
-	cp wa, 0xff
-	jr nz, MidiSeqBuf_AdvanceDone
-	push xix
-	push xde
-	push xhl
-	calr Voice_FindFreeSlot
-	xor ix, ix
-	ldw_d16 xhl, (0x7f10)
-	ld de, hl
-	calr Util_ExtractAndShiftBits
-	ld (xix + 3), wa
-	stda16 (0x7f10), xwa
-	ld hl, wa
-	calr Util_ExtractAndShiftBits
-	ld (xix + 1), de
-	ormi8 (xix), 0x80
-	decdi16 1, 0x7e18
-	lds wa, 6
-	pop xhl
-	pop xde
-	pop xix
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_AdvancePosition.bin"
 MidiSeqBuf_AdvanceDone:
-	stda16 (0x7f12), xwa
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_AdvanceDone.bin"
 MidiSeqBuf_AdvanceWritePos:
-	ldw_d16 xwa, (0x7f12)
-	inc 1, wa
-	cp wa, 0xff
-	jr nz, MidiSeqBuf_WriteAdvDone
-	push xix
-	push xde
-	push xhl
-	ldw_d16 xhl, (0x7f10)
-	ld de, hl
-	calr Util_ExtractAndShiftBits
-	ld wa, (xix + 3)
-	stda16 (0x7f10), xwa
-	lds wa, 6
-	pop xhl
-	pop xde
-	pop xix
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_AdvanceWritePos.bin"
 MidiSeqBuf_WriteAdvDone:
-	stda16 (0x7f12), xwa
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_WriteAdvDone.bin"
 MidiSeqBuf_WriteByte:
-	push xix
-	push xhl
-	ldw_d16 xhl, (0x7f10)
-	calr Util_ExtractAndShiftBits
-	ldw_d16 xhl, (0x7f12)
-	lda_dri XBC, 0x07, 0xf0, 0xec
-	pop xhl
-	pop xix
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_WriteByte.bin"
 AccPlay_InitAndStartLoop:
-	stdi8 (0x7f0b), 0
-	call TempoRingBuf_ReInitAndRet
-	ordi8 0x7f15, 4
-	ldb a, 0x8
-	call MIDI_SendSysExCmd
-	calr AccPlay_MainUpdateLoop
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_InitAndStartLoop.bin"
 AccPlay_ToggleCodeFragment:
-	.byte 0xc1
-	pushw	0x3f7f
-	nop
-	jr	z, 12
-	stdi8	(0x7f0b), 0
-	call	TempoRingBuf_ReInitAndRet
-	calr	62399
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ToggleCodeFragment.bin"
 AccPlay_CheckAndToggle:
-	bitda 1, (0x7f0b)
-	jr z, AccPlay_ToggleRet
-	bitda 2, (1055)
-	jr nz, AccPlay_ToggleRestart
-	call AccWrap_PlayModeStartAccPlay
-	lds wa, 0
-	ei 6
-	stb_d8 (1130), a
-	stda16 (1128), xwa
-	stdi8 (1055), 1
-	ei 0
-	jr AccPlay_ToggleRet
-
+	.incbin "includes/generated/v7_transplant_AccPlay_CheckAndToggle.bin"
 AccPlay_ToggleRestart:
-	stdi8 (0x7f0b), 0
-	call TempoRingBuf_ReInitAndRet
-	calr AccPlay_MainUpdateLoop
-
+	.incbin "includes/generated/v7_transplant_AccPlay_ToggleRestart.bin"
 AccPlay_ToggleRet:
 	ret
 
@@ -3415,88 +2251,7 @@ AccPlay_StopResetRet:
 	ret
 
 InitializeEast:
-	lda xsp, (xsp - 14)
-
-	RegObjTable 0x1600004, 0xfa44e2, 0xe55cd4, 0xe559ea, 0x163
-	RegObjTable 0x160000c, 0xfa58fb, 0xe55cda, 0xe55cd6, 0x1c3
-	RegObjTable 0x160000d, 0xfa5948, 0xe55dac, 0xe55cdc, 0x1e3
-	RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55210, 0x123
-	RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423
-	RegObjTabl 0x1600001, FunctionProc, 0x10, 0xe55dae, 0x103
-	RegObjTabl 0x1600001, FunctionProc, 0x10, MidiMenu_NakaProcName_Table, 0x403
-	RegObjTabl 0x1600003, MainFunctionProc, 0x7, 0xe5ad8c, 0x143
-	RegObjTabl 0x1600003, MainFunctionProc, 0x7, 0xe5adac, 0x443
-	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe59c5a, 0x9
-	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe5a122, 0x309
-	RegObjTabl 0x1600010, ViewableProc, 0x3, 0xe59c6e, 0xf
-	RegObjTabl 0x160000f, ResNameProc, 0x3, 0xe5a152, 0x30f
-	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe59c7e, 0x18
-	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe5a17a, 0x318
-	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe59cb2, 0x19
-	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe5a1d4, 0x319
-	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe59ce6, 0x1a
-	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe5a23a, 0x31a
-	RegObjTabl 0x1600010, ViewableProc, 0x14, 0xe59d1a, 0x50
-	RegObjTabl 0x160000f, ResNameProc, 0x14, 0xe5a2a8, 0x350
-	RegObjTabl 0x1600010, ViewableProc, 0x7, 0xe59d6e, 0x51
-	RegObjTabl 0x160000f, ResNameProc, 0x7, 0xe5a350, 0x351
-	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe59d8e, 0x52
-	RegObjTabl 0x160000f, ResNameProc, 0x8, NakaData_WidgetTables2, 0x352
-	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe59db2, 0x53
-	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe5a3f2, 0x353
-	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe59dce, 0x54
-	RegObjTabl 0x160000f, ResNameProc, 0x5, NakaObj_MidiCommonSetting_Table, 0x354
-	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe59de6, 0x55
-	RegObjTabl 0x160000f, ResNameProc, 0x5, NakaObj_MidiInOutSetting_Table, 0x355
-	RegObjTabl 0x1600010, ViewableProc, 0x43, 0xe59dfe, 0x56
-	RegObjTabl 0x160000f, ResNameProc, 0x43, NakaObj_MidiPresets_Table, 0x356
-	RegObjTabl 0x1600010, ViewableProc, 0x1c, 0xe59f0e, 0x57
-	RegObjTabl 0x160000f, ResNameProc, 0x1c, 0xe5a77c, 0x357
-	RegObjTabl 0x1600010, ViewableProc, 0x15, 0xe59f82, 0x58
-	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xe5a906, 0x358
-	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe59fda, 0x59
-	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe5a9ae, 0x359
-	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe59ff6, 0x5a
-	RegObjTabl 0x160000f, ResNameProc, 0x6, NakaObj_MidiComputerConn_Table, 0x35a
-	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe5a012, 0x5b
-	RegObjTabl 0x160000f, ResNameProc, 0x11, NakaObj_MidiPmemOutput_Table, 0x35b
-	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe5a05a, 0x5c
-	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe5aac6, 0x35c
-	RegObjTabl 0x1600010, ViewableProc, 0x18, 0xe5a07e, 0xd7
-	RegObjTabl 0x160000f, ResNameProc, 0x18, 0xe5ab12, 0x3d7
-	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe5a0e2, 0xd8
-	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe5ac06, 0x3d8
-	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe5a106, 0xec
-	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe5ac5a, 0x3ec
-
-	RegMode 0x3, 0xe5, 0xac90, 0x5, 0x1200000, 0x1a00050
-
-	RegTitle 0x3, 0xe5, 0xac98, 0x9, 0x1200000, 0x90000
-	RegTitle 0x3, 0xe5, 0xaca6, 0xf, 0x1200000, 0xf0000
-	RegTitle 0x3, 0xe5, 0xacb0, 0x18, 0x1200000, 0x180000
-	RegTitle 0x3, 0xe5, 0xacbe, 0x19, 0x1200000, 0x190000
-	RegTitle 0x3, 0xe5, 0xacca, 0x1a, 0x1200000, 0x1a0000
-	RegTitle 0x3, 0xe5, 0xacda, 0x50, 0x1200000, 0x500000
-	RegTitle 0x3, 0xe5, 0xace4, 0x51, 0x1200000, 0x510000
-	RegTitle 0x3, 0xe5, 0xacee, 0x52, 0x1200000, 0x520000
-	RegTitle 0x3, 0xe5, 0xacf8, 0x53, 0x1200000, 0x530000
-	RegTitle 0x3, 0xe5, 0xad02, 0x54, 0x1200000, 0x540000
-	RegTitle 0x3, 0xe5, 0xad0c, 0x55, 0x1200000, 0x550000
-	RegTitle 0x3, 0xe5, 0xad18, 0x56, 0x1200000, 0x560000
-	RegTitle 0x3, 0xe5, 0xad24, 0x57, 0x1200000, 0x570000
-	RegTitle 0x3, 0xe5, 0xad2e, 0x58, 0x1200000, 0x580000
-	RegTitle 0x3, 0xe5, 0xad3a, 0x59, 0x1200000, 0x590000
-	RegTitle 0x3, 0xe5, 0xad46, 0x5a, 0x1200000, 0x5a0000
-	RegTitle 0x3, 0xe5, 0xad50, 0x5b, 0x1200000, 0x5b0000
-	RegTitle 0x3, 0xe5, 0xad5c, 0x5c, 0x1200000, 0x5c0000
-	RegTitle 0x3, 0xe5, 0xad68, 0xd7, 0x1200000, 0xd70000
-	RegTitle 0x3, 0xe5, 0xad74, 0xd8, 0x1200000, 0xd80000
-	RegTitle 0x3, 0xe5, 0xad80, 0xec, 0x1200000, 0xec0000
-
-	lda xsp, (xsp + 14)
-	ret
-
-
+	.incbin "includes/generated/v7_transplant_InitializeEast.bin"
 BitmapBmphk:
 	cp xbc, 0x1e000a3
 	jr z, BitmapBmphk_ReturnA3
@@ -3769,23 +2524,7 @@ AcVocalGrid_ViewAccess:
 	ld xiz, 0x42
 
 AcVocalGrid_CopyViewString:
-	call GetViewInstance
-	add xhl, xiz
-	ld xwa, (xhl)
-	push xwa
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr Vocalist_ReturnZeroJmp
-	ld xwa, xiz
-	call GetViewInstance
-	ld xwa, (xhl + 70)
-	ld xbc, (xsp + 16)
-	ld xde, (xsp + 12)
-	jr AcVocalGrid_FuncCallB
-
-; AcVocalGridBoxProc function callback A
+	.incbin "includes/generated/v7_transplant_AcVocalGrid_CopyViewString.bin"
 AcVocalGrid_FuncCallA:
 	ld xwa, xiz
 	call GetViewInstance
@@ -3846,347 +2585,7 @@ VocalistGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 VocalistGrid_DispatchData:
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	xde, xhl
-	lda	xhl, (xsp+12)
-	ld	xwa, xde
-	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
-	ld	(xhl), wa
-	ld	bc, de
-	ld	(xhl+2), bc
-	cpw	(xhl), 1
-	jr	z, 7
-	cpw	(xhl), 2
-	jrl	nz, 1604
-	ld	wa, (xhl)
-	sla	wa, 2
-	dec	4, wa
-	sla	bc, 3
-	ld	ix, bc
-	add	ix, wa
-	lda_24	xde, (MidiPart_OctaveStr_m2_0x4)
-	.byte 0xe3
-	reti
-	cp	xwa, xwa
-	ldb	w, 232
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jrl	z, 1571
-	ld	wa, (xhl)
-	sla	wa, 2
-	dec	4, wa
-	add	bc, wa
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ldb	w, 217
-	sub	(xbc-38), xde
-	jr	102
-	call	GetFocusObject
-	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
-	lds32	xde, 0
-	call	SendEvent
-	ld	xde, xhl
-	lda	xhl, (xsp+12)
-	ld	xwa, xde
-	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
-	ld	(xhl), wa
-	ld	bc, de
-	ld	(xhl+2), bc
-	.byte 0x93
-	push	xsp
-	.byte 0x01
-	nop
-	jr	z, 7
-	.byte 0x93
-	push	xsp
-	push	sr
-	nop
-	jrl	nz, 1501
-	ld	wa, (xhl)
-	sla	wa, 2
-	dec	4, wa
-	sla	bc, 3
-	ld	ix, bc
-	add	ix, wa
-	lda_24	xde, (MidiPart_OctaveStr_m2_0x4)
-	.byte 0xe3
-	reti
-	cp	xwa, xwa
-	ldb	w, 232
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jrl	z, 1468
-	ld	wa, (xhl)
-	sla	wa, 2
-	dec	4, wa
-	add	bc, wa
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ldb	w, 49
-	swi	7
-	swi	7
-	lds	de, 2
-	call	MainLswAdd
-	jrl	1442
-	ld	(xsp+4), xbc
-	ld	xhl, xiy
-	.byte 0xb5
-	push	sr
-	nop
-	nop
-	ld	xix, (xsp+8)
-	ld	xiz, xde
-	ld	xiy, xde
-	jr	50
-	.byte 0xd7, 0xe6, 0x99, 0xd7, 0xe6, 0xec
-	pop	sr
-	ld	xwa, (xiz)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe6, 0xf0
-	jr	nz, 4
-	lds	bc, 1
-	jr	19
-	.byte 0xd7, 0xe6
-	incm8	4, (xwa-40)
-	.byte 0xd7, 0xe6
-	ld	wa, (xwa-91)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe6, 0xf0
-	jr	nz, 9
-	lds	bc, 2
-	ld	xwa, (xsp+4)
-	ld	(xwa), bc
-	jr	12
-	inc	1, bc
-	ld	(xhl), bc
-	ld	bc, (xhl)
-	cp	bc, 12
-	jr	lt, -58
-	lda	xwa, (xsp+20)
-	ld	(xsp+8), xwa
-	ld	xwa, (xsp+4)
-	ld	xbc, (xsp+8)
-	ld	(xwa+4), xbc
-	ld	xwa, (xde)
-	lda	xbc, (xde+4)
-	sub	xwa, 0x2d00
-	cp	xwa, 0
-	jrl	c, 1331
-	cp	xwa, 19
-	jrl	ugt, 1322
-	add	xwa, xwa
-	.byte 0xe8, 0xc8
-	.long MidiPart_ColWidthData
-	ld	wa, (xwa)
-	lda_24	xix, (VocalistGrid_DispatchData_0x160)
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xe0
-	adc	bc, wa
-	ldb	w, 216
-	.byte 0xcf
-	rcf
-	nop
-	jr	z, 13
-	cp	wa, 17
-	jr	nz, 25
-	ld	xwa, MidiPart_OctaveStr_m2_0x84
-	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0x90
-	push	xwa
-	ld	xwa, (xsp+12)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	20
-	inc	1, wa
-	pushw	wa
-	pushw	231
-	pushw	0xeef8
-	ld	xwa, (xsp+14)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	1222
-	ld	wa, (xbc)
-	inc	1, wa
-	.long Bitmap_MIDIConnections_Header
-	pushw	0xef04
-	ld	xwa, (xsp+14)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	1183
-	ld	wa, (xbc)
-	inc	1, wa
-	pushw	wa
-	pushw	231
-	pushw	0xef10
-	ld	xwa, (xsp+14)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	1144
-	ld	wa, (xbc)
-	sla	wa, 2
-	lda_24	xbc, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
-	pushw	231
-	pushw	0xef1c
-	ld	xwa, (xsp+16)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	1094
-	ld	wa, (xbc)
-	cps	wa, 3
-	jr	z, 33
-	cps	wa, 2
-	jr	z, 22
-	cps	wa, 1
-	jr	z, 11
-	cps	wa, 0
-	.ascii "n%@("
-	or	xsp, xsp
-	nop
-	jr	19
-	ld	xwa, MidiPart_OctaveStr_m2_0xD8
-	jr	12
-	ld	xwa, MidiPart_OctaveStr_m2_0xE4
-	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0xF0
-	push	xwa
-	ld	xwa, (xsp+12)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	1022
-	ld	wa, (xbc)
-	cp	wa, 120
-	jr	z, 13
-	cp	wa, 121
-	jr	nz, 25
-	ld	xwa, MidiPart_OctaveStr_m2_0xFC
-	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0x108
-	push	xwa
-	ld	xwa, (xsp+12)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	18
-	pushw	wa
-	pushw	231
-	pushw	0xef70
-	ld	xwa, (xsp+14)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	948
-	ld	bc, (xbc)
-	ld	de, bc
-	and	de, 127
-	ld	wa, de
-	exts	xwa
-	divs	wa, 12
-	sla	wa, 2
-	lda_24	xhl, (MidiPart_OctaveTable)
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
-	exts	xde
-	divs	de, 12
-	.byte 0xd7
-	ld	xwa, xde
-	sla	wa, 2
-	lda_24	xde, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	or	xwa, xwa
-	ldb	w, 56
-	and	bc, 128
-	sra	bc, 7
-	sla	bc, 2
-	lda_24	xwa, (MidiPart_PageStr_1of3_0x50)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 56
-	pushw	231
-	pushw	0xef7c
-	ld	xwa, (xsp+24)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+20)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	840
-	ld	xwa, MidiPart_OctaveStr_m2_0x12E
-	.byte 0x91
-	push	xsp
-	nop
-	nop
-	jr	z, 5
-	ld	xwa, MidiPart_OctaveStr_m2_0x128
-	push	xwa
-	ld	xwa, (xsp+12)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	796
-
-; VocalistGridCheck dispatch handler
+	.incbin "includes/generated/v7_transplant_VocalistGrid_DispatchData.bin"
 VocalistGrid_CheckHandler:
 	ld (xsp + 4), xbc
 	ld xwa, xde
@@ -4218,251 +2617,7 @@ VocalistGrid_CheckHandler:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 VocalistGrid_CheckDispData:
-	ld	xwa, 0x2d00
-	call	SndParam_LookupReadOnly
-	cp	hl, 16
-	jr	z, 13
-	cp	hl, 17
-	jr	nz, 25
-	ld	xwa, MidiPart_OctaveStr_m2_0x134
-	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0x140
-	push	xwa
-	lda	xwa, (xsp+24)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	jr	29
-	ld	xwa, 0x2d00
-	call	SndParam_LookupReadOnly
-	inc	1, hl
-	pushw	hl
-	pushw	231
-	pushw	0xefa8
-	lda	xwa, (xsp+26)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	613
-	ld	xwa, 0x2d02
-	call	SndParam_LookupReadOnly
-	inc	1, hl
-	pushw	hl
-	pushw	231
-	pushw	0xefb4
-	lda	xwa, (xsp+26)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	567
-	ld	xwa, 0x2d04
-	call	SndParam_LookupReadOnly
-	inc	1, hl
-	pushw	hl
-	pushw	231
-	pushw	0xefc0
-	lda	xwa, (xsp+26)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	521
-	ld	xwa, 0x2d06
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	pushw	231
-	pushw	0xefcc
-	lda	xwa, (xsp+28)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+12)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	464
-	ld	xwa, 0x2d08
-	call	SndParam_LookupReadOnly
-	cps	hl, 3
-	jr	z, 33
-	cps	hl, 2
-	jr	z, 22
-	cps	hl, 1
-	jr	z, 11
-	cps	hl, 0
-	jr	nz, 37
-	ld	xwa, MidiPart_OctaveStr_m2_0x17C
-	jr	19
-	ld	xwa, MidiPart_OctaveStr_m2_0x188
-	jr	12
-	ld	xwa, MidiPart_OctaveStr_m2_0x194
-	jr	5
-	.byte 0x40
-	.long MidiPart_RecvTransStr
-	push	xwa
-	lda	xwa, (xsp+24)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	385
-	ld	xwa, 0x2d0a
-	call	SndParam_LookupReadOnly
-	lda	xbc, (xsp+20)
-	cp	hl, 120
-	jr	z, 13
-	cp	hl, 121
-	jr	nz, 22
-	ld	xwa, MidiPart_RecvTransStr_0xC
-	jr	5
-	.byte 0x40
-	.long MidiPart_AfterStr
-	push	xwa
-	push	xbc
-	call	Strcpy
-	inc	8, xsp
-	jr	27
-	ld	xwa, 0x2d0a
-	call	SndParam_LookupReadOnly
-	pushw	hl
-	pushw	231
-	pushw	0xf020
-	lda	xwa, (xsp+26)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+10)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	295
-	ld	xwa, 0x2d0d
-	call	SndParam_LookupReadOnly
-	exts	xhl
-	divs	hl, 12
-	sla	hl, 2
-	lda_24	xbc, (MidiPart_OctaveTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
-	ld	xwa, 0x2d0d
-	call	SndParam_LookupReadOnly
-	exts	xhl
-	divs	hl, 12
-	.byte 0xd7
-	ld	xwa, xiz
-	sla	wa, 2
-	lda_24	xbc, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
-	ld	xwa, 0x2d0e
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (MidiPart_PageStr_1of3_0x50)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	pushw	231
-	pushw	0xf02c
-	lda	xwa, (xsp+36)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+20)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jrl	177
-	ld	xwa, 0x2d11
-	call	SndParam_LookupReadOnly
-	exts	xhl
-	divs	hl, 12
-	sla	hl, 2
-	lda_24	xbc, (MidiPart_OctaveTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
-	ld	xwa, 0x2d11
-	call	SndParam_LookupReadOnly
-	exts	xhl
-	divs	hl, 12
-	.byte 0xd7
-	ld	xwa, xiz
-	sla	wa, 2
-	lda_24	xbc, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
-	ld	xwa, 0x2d12
-	call	SndParam_LookupReadOnly
-	sla	hl, 2
-	lda_24	xwa, (MidiPart_PageStr_1of3_0x50)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
-	pushw	231
-	pushw	0xf034
-	lda	xwa, (xsp+36)
-	push	xwa
-	call	Sprintf_Locked
-	lda	xsp, (xsp+20)
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	jr	60
-	ld	xwa, (xsp+4)
-	ld	wa, (xwa)
-	sla	wa, 2
-	dec	4, wa
-	add	bc, wa
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ldb	w, 29
-	.byte 0x37, 0xd4
-	swi	4
-	ld	xwa, MidiPart_AfterStr_0x2E
-	cps	hl, 0
-	jr	z, 5
-	ld	xwa, MidiPart_AfterStr_0x28
-	push	xwa
-	lda	xwa, (xsp+24)
-	push	xwa
-	call	Strcpy
-	inc	8, xsp
-	call	GetFocusObject
-	ld	xwa, xhl
-	lda	xde, (xsp+12)
-	ld	xbc, 0x01e0008c
-	call	SendEvent
-
+	.incbin "includes/generated/v7_transplant_VocalistGrid_CheckDispData.bin"
 AcVocalist_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
@@ -4733,120 +2888,22 @@ MainVocalistPage1OKFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:
-	call	MidiSysEx_CopyParamToBuffer
-	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 11
-	call	SndParam_ApplyAndSync
-	ld	xwa, (xsp)
-	srl	xwa, 0
-	ld	qwa, 0
-	cps	wa, 0
-	jr	z, 11
-	ld	xwa, 0x01d400
-	lds	bc, 1
-	lds	de, 2
-	jr	9
-	ld	xwa, 0x01d400
-	lds	bc, 0
-	lds	de, 2
-	call	SoundParam_NotifyChange
-	stdi8	(0x7f42), 35
-	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
-	ld	xde, 0x01a000ee
-	call	ApPostEvent
-	stdi8	(0x7f40), 1
-	call	MidiSysEx_SendAllParams
-	.byte 0xf1, 0x40
-	jrl	nc, 0x0000
-
-; Vocalist page handler
+	.incbin "includes/generated/v7_transplant_VocalistPage1OK_Dispatch.bin"
 VocalistPage_Handler:
 	lds32 xhl, 0
 	inc 4, xsp
 	ret
 
 VocalistPage1_DispatchData:
-	call	MidiSysEx_CopyParamToBuffer
-	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 2
-	call	SndParam_ApplyAndSync
-	ld	xwa, (xsp)
-	srl	xwa, 0
-	ld	qwa, 0
-	cps	wa, 0
-	jr	z, 11
-	ld	xwa, 0x018000
-	lds	bc, 1
-	lds	de, 2
-	jr	9
-	ld	xwa, 0x018000
-	lds	bc, 0
-	lds	de, 2
-	call	SoundParam_NotifyChange
-	stdi8	(0x7f42), 35
-	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
-	ld	xde, 0x01a000ee
-	jr	-98
-	ld	wa, bc
-	call	MidiSysEx_CopyParamToBuffer
-	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 24
-	call	SndParam_ApplyAndSync
-	ld	xwa, 0x4201
-	lds	bc, 3
-	lds	de, 2
-	call	SoundParam_NotifyChange
-	ld	xwa, (xsp)
-	srl	xwa, 0
-	ld	qwa, 0
-	cps	wa, 0
-	jr	z, 11
-	ld	xwa, 0x018c00
-	lds	bc, 1
-	lds	de, 2
-	jr	9
-	ld	xwa, 0x018c00
-	lds	bc, 0
-	lds	de, 2
-	call	SoundParam_NotifyChange
-	stdi8	(0x7f42), 35
-	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
-	ld	xde, 0x01a000ee
-	jrl	-189
-	ld	wa, bc
-	call	MidiSysEx_CopyParamToBuffer
-	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 1
-	call	SndParam_ApplyAndSync
-	lds	wa, 1
-	call	SmfMedley_RawData
-	stdi8	(0x7f42), 35
-	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
-	ld	xde, 0x01a000ee
-	jrl	-237
-
+	.incbin "includes/generated/v7_transplant_VocalistPage1_DispatchData.bin"
 MainVocalistPage2OKFunc:
-	cp xbc, 0x1e30008
-	jr nz, VocalistPage2_ReturnZero
-	call MidiSysEx_SendAllParams
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_MainVocalistPage2OKFunc.bin"
 VocalistPage2_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AccPlay_GetCurrentPart:
-	ldb_d8 l, (0x7f40)
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccPlay_GetCurrentPart.bin"
 RevSelFunc:
 	dec 4, xsp
 	push xiz
@@ -4971,15 +3028,7 @@ EqSel_NoPresetMatch:
 	lds32 xde, 2
 
 EqSel_SendPresetEvent:
-	call SendEvent
-	ld xwa, 0x4006
-	call SndParam_LookupReadOnly
-	exts xhl
-	ld xwa, 0x19000b
-	ld xbc, 0x1e0003b
-	ld xde, xhl
-	jrl EqSel_SendEvent
-
+	.incbin "includes/generated/v7_transplant_EqSel_SendPresetEvent.bin"
 EqSel_HandleConfirm:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -5083,15 +3132,7 @@ RevEqSel_NoPresetMatch:
 	lds32 xde, 3
 
 RevEqSel_SendPresetEvent:
-	call SendEvent
-	ld xwa, 0x4006
-	call SndParam_LookupReadOnly
-	exts xhl
-	ld xwa, 0x1a000a
-	ld xbc, 0x1e0003b
-	ld xde, xhl
-	jrl RevEqSel_SendEvent
-
+	.incbin "includes/generated/v7_transplant_RevEqSel_SendPresetEvent.bin"
 RevEqSel_HandleConfirm:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -5221,19 +3262,7 @@ AcGMOnOffBoxProc:
 	jr AcGMOnOff_CleanupAndRet
 
 AcGMOnOff_InitHandler:
-	ld xwa, (xsp + 12)
-	call GetViewInstance
-	ld xiz, xhl
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	ld xwa, (xiz + 50)
-	ld (xwa), hl
-	ld xwa, (xsp + 12)
-	ld xbc, (xsp + 8)
-	ld xde, (xsp + 4)
-	call InheritedProc
-	lds32 xhl, 0
-
+	.incbin "includes/generated/v7_transplant_AcGMOnOff_InitHandler.bin"
 AcGMOnOff_CleanupAndRet:
 	pop xiz
 	lda xsp, (xsp + 12)
@@ -5327,26 +3356,7 @@ GMNoFunc:
 	ret
 
 GMYesFunc:
-	ld xwa, 0x580001
-	ld xbc, 0x1e0006b
-	lds32 xde, 0
-	call SendEvent
-	ld xwa, 0xc0
-	ld bc, hl
-	lds de, 1
-	call MainLswPut
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00002
-	lds32 xde, 0
-	call PostEvent
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call PostEvent
-	lds32 xhl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_GMYesFunc.bin"
 TtMdGm:
 	cp xbc, 0x1c00001
 	jr nz, TtMdGm_ReturnZero
@@ -5381,38 +3391,7 @@ StsSplit_ReturnZero:
 	ret
 
 SplitPointFunc:
-	lda xsp, (xsp - 12)
-	push xiz
-	ld (xsp + 8), xde
-	ld xde, xbc
-	ld (xsp + 12), xwa
-	ld xiy, SplitPoint_NoteEntry_C_Code_0x38
-	lda xix, (xsp + 4)
-	ldiw
-	ldiw
-	cp xde, 0x1e0003f
-	jrl z, ParamFunc_ReturnOne
-	cp xde, 0x1e0003e
-	jrl z, ParamFunc_ReturnOne
-	cp xde, 0x1e00041
-	jrl z, ParamFunc_ReturnOne
-	cp xde, 0x1e00040
-	jrl z, SplitPoint_ReturnParamId
-	cp xde, 0x1e00042
-	jrl z, SplitPoint_HandleNoteEvt
-	cp xde, 0x1e30002
-	jrl nz, SplitPoint_ReturnZero
-	ld xwa, 0x4180
-	lds bc, 0
-	lds de, 1
-	call SoundParam_NotifyChange
-	ld xwa, (xsp + 8)
-	ldb_erp A, 0xfb
-	cp_erpb 0xfb, 0x24
-	jr c, SplitPoint_ClampToMiddle
-	cp_erpb 0xfb, 0x60
-	jr ule, SplitPoint_StartDraw
-
+	.incbin "includes/generated/v7_transplant_SplitPointFunc.bin"
 SplitPoint_ClampToMiddle:
 	ldi_erpb 0xfb, 0x3c
 
@@ -5483,35 +3462,7 @@ SplitPoint_ReturnZero:
 	jr ParamFunc_CommonExit
 
 SplitPoint_HandleNoteEvt:
-	ld xde, (xsp + 8)
-	ld bc, (xde + 4)
-	ld wa, bc
-	exts xwa
-	divs wa, 0xc
-	dec 2, wa
-	pushw wa
-	exts xbc
-	divs bc, 0xc
-	stw_erp WA, 0xe6
-	sla wa, 2
-	lda_24 xbc, (SplitPoint_NoteNameTable)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	pushw 0xe7
-	pushw 0xf81a
-	ld xwa, (xde + 8)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 14)
-	ld xwa, (xsp + 8)
-	ld de, (xwa + 4)
-	exts xde
-	ld xwa, (xsp + 12)
-	ld xbc, 0x1e30002
-	call ApFuncCall
-	ld xhl, (xsp + 12)
-	jr ParamFunc_CommonExit
-
+	.incbin "includes/generated/v7_transplant_SplitPoint_HandleNoteEvt.bin"
 SplitPoint_ReturnParamId:
 	ld xhl, 0x4181
 	jr ParamFunc_CommonExit
@@ -5525,19 +3476,7 @@ ParamFunc_CommonExit:
 	ret
 
 AccWrap_SetMinVelocity:
-	ld c, a
-	cpdi8 (0x8d38), 236
-	ret nz
-	cp c, 0x15
-	ret c
-	cp c, 0x6c
-	ret ugt
-	extz bc
-	ld xwa, 0x4181
-	lds de, 1
-	call SoundParam_NotifyChange
-	ret
-
+	.incbin "includes/generated/v7_transplant_AccWrap_SetMinVelocity.bin"
 R12OctaveFunc:
 	push xiz
 	ld xiz, xwa
@@ -5590,17 +3529,7 @@ R12Octave_OctaveDefault:
 	ld xwa, SplitPoint_NoteEntry_C_Code_0x60
 
 R12Octave_StringCopyAndSendEvent:
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00078
-	lds32 xde, 0
-	call SendEvent
-	ld xhl, xiz
-	jr R12Octave_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_R12Octave_StringCopyAndSendEvent.bin"
 R12Octave_ReturnParamId:
 	ld xhl, 0x40e0
 	jr R12Octave_PopIzRet

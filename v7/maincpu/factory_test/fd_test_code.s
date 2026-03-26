@@ -65,22 +65,7 @@ FDTest_OpenFailed:
 	calr FDTest_PrintDiag
 
 FDTest_AllocBuffer:
-	pushw 0x800
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 4), xhl
-	ld xwa, xhl
-	or xwa, xwa
-	jr nz, FDTest_FillBuffer
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x134)
-	calr FDTest_PrintDiag
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	ldw hl, 0xffff
-	jrl FDTest_Return
-
+	.incbin "includes/generated/v7_transplant_FDTest_AllocBuffer.bin"
 FDTest_FillBuffer:
 	ld xwa, (xsp + 4)
 	lds bc, 0
@@ -94,95 +79,13 @@ FDTest_FillLoop:
 	jr c, FDTest_FillLoop
 
 FDTest_OpenForWrite:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x148)
-	push xwa
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x108)
-	push xwa
-	call FileOpen
-	inc 8, xsp
-	ld xiz, xhl
-	or xiz, xiz
-	jr nz, FDTest_WriteBuffer
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x14C)
-	calr FDTest_PrintDiag
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	ldw hl, 0xffff
-	jrl FDTest_Return
-
+	.incbin "includes/generated/v7_transplant_FDTest_OpenForWrite.bin"
 FDTest_WriteBuffer:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x164)
-	calr FDTest_PrintDiag
-	push xiz
-	pushw 0x800
-	pushw 0x1
-	ld xwa, (xsp + 12)
-	push xwa
-	call FileWrite
-	lda xsp, (xsp + 12)
-	cp hl, 0x800
-	jr z, FDTest_CloseAndReopen
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x174)
-	calr FDTest_PrintDiag
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	ldw hl, 0xffff
-	jrl FDTest_Return
-
+	.incbin "includes/generated/v7_transplant_FDTest_WriteBuffer.bin"
 FDTest_CloseAndReopen:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x17C)
-	calr FDTest_PrintDiag
-	push xiz
-	call FileClose
-	pushw 0x800
-	pushw 0x0
-	ld xwa, (xsp + 12)
-	push xwa
-	call Memset
-	lda xsp, (xsp + 12)
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x180)
-	calr FDTest_PrintDiag
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x18E)
-	push xwa
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x108)
-	push xwa
-	call FileOpen
-	inc 8, xsp
-	ld xiz, xhl
-	or xiz, xiz
-	jr nz, FDTest_ReadBack
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x192)
-	calr FDTest_PrintDiag
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	ldw hl, 0xffff
-	jrl FDTest_Return
-
+	.incbin "includes/generated/v7_transplant_FDTest_CloseAndReopen.bin"
 FDTest_ReadBack:
-	push xiz
-	pushw 0x800
-	pushw 0x1
-	ld xwa, (xsp + 12)
-	push xwa
-	call FileRead
-	lda xsp, (xsp + 12)
-	cp hl, 0x800
-	jr z, FDTest_VerifyData
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1AA)
-	calr FDTest_PrintDiag
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	ldw hl, 0xffff
-	jr FDTest_Return
-
+	.incbin "includes/generated/v7_transplant_FDTest_ReadBack.bin"
 FDTest_VerifyData:
 	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1B2)
 	calr FDTest_PrintDiag
@@ -206,28 +109,9 @@ FDTest_CompareNext:
 	jr c, FDTest_CompareLoop
 
 FDTest_CompareResult:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1B6)
-	calr FDTest_PrintDiag
-	cps iz, 0
-	jr z, FDTest_Pass
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1C8)
-	calr FDTest_PrintDiag
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	ldw hl, 0xffff
-	jr FDTest_Return
-
+	.incbin "includes/generated/v7_transplant_FDTest_CompareResult.bin"
 FDTest_Pass:
-	ld xwa, (xsp + 4)
-	push xwa
-	call Free
-	inc 4, xsp
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1D8)
-	calr FDTest_PrintDiag
-	lds hl, 0
-
+	.incbin "includes/generated/v7_transplant_FDTest_Pass.bin"
 FDTest_Return:
 	pop xiz
 	inc 4, xsp
@@ -358,15 +242,7 @@ HamaListProc:
 	jr HamaList_Return
 
 HamaList_HandleSelect:
-	call GetViewInstance
-	ld xwa, xiz
-	push xwa
-	ld xwa, (xhl + 42)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lds32 xhl, 0
-
+	.incbin "includes/generated/v7_transplant_HamaList_HandleSelect.bin"
 HamaList_Return:
 	pop xiz
 	ret

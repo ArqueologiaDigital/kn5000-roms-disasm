@@ -16,54 +16,11 @@
 	jr ParaLoadOptSendEvtReturn
 
 ParaLoadOpt_BuildFromIZ1:
-	ld a, (xiz + 1)
-	extz wa
-	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	ld xwa, (xsp + 20)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 20)
-	ld xbc, 0x1e0008c
-	jr ParaLoadOptSendEvtReturn
-
+	.incbin "includes/generated/v7_transplant_ParaLoadOpt_BuildFromIZ1.bin"
 ParaLoadOpt_BuildFromIZ2:
-	ld c, (xiz + 2)
-	extz bc
-	sla bc, 2
-	ld xwa, (xsp + 4)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
-	push xwa
-	ld xwa, (xsp + 20)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 20)
-	ld xbc, 0x1e0008c
-	jr ParaLoadOptSendEvtReturn
-
+	.incbin "includes/generated/v7_transplant_ParaLoadOpt_BuildFromIZ2.bin"
 ParaLoadOpt_BuildFromIZ3:
-	ld c, (xiz + 3)
-	extz bc
-	sla bc, 2
-	ld xwa, (xsp + 4)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
-	push xwa
-	ld xwa, (xsp + 20)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	call GetFocusObject
-	ld xwa, xhl
-	lda xde, (xsp + 20)
-	ld xbc, 0x1e0008c
-
+	.incbin "includes/generated/v7_transplant_ParaLoadOpt_BuildFromIZ3.bin"
 ParaLoadOptSendEvtReturn:
 	call SendEvent
 
@@ -85,24 +42,7 @@ ParaLoadOptOK_ReturnZero:
 	ret
 
 MainFlashFunc:
-	cp xbc, 0x1e30006
-	jr z, MainFlash_AudioDispatch
-	cp xbc, 0x1e30005
-	jr nz, MainFlash_ReturnZero
-	stdi8 (0x7f42), 37
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call ApPostEvent
-	lds wa, 7
-	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	ld xde, 0x1a000ee
-	call ApPostEvent
-	jr MainFlash_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_MainFlashFunc.bin"
 MainFlash_AudioDispatch:
 	lds wa, 7
 	call Audio_DispatchCommand
@@ -752,14 +692,7 @@ IvTimer_HandleDestroy:
 	jr IvTimer_ReturnZero
 
 IvTimer_HandleEvent3A:
-	pushw 0xea
-	pushw 0x9894
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr IvTimer_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_IvTimer_HandleEvent3A.bin"
 IvTimer_HandleEvent09:
 	ld xwa, 0x1e5000a
 	push xwa
@@ -1366,14 +1299,7 @@ Slider_Case1E00067:
 	jrl Slider_UpdateDone
 
 Slider_Case1E0006A:
-	pushw 0xea
-	pushw 0x989a
-	ld xwa, (xsp + 12)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl Slider_NoChange
-
+	.incbin "includes/generated/v7_transplant_Slider_Case1E0006A.bin"
 Slider_Case1E0006B:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -1737,14 +1663,7 @@ Bounds_Case1E0006B:
 	jr Bounds_Done
 
 Bounds_Case1E0006A:
-	pushw 0xea
-	pushw 0x989e
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jr Bounds_Done
-
+	.incbin "includes/generated/v7_transplant_Bounds_Case1E0006A.bin"
 Bounds_Default:
 	ld xwa, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1822,13 +1741,7 @@ Edit_Case1E00067:
 	jr Edit_Update
 
 Edit_Case1E00069:
-	pushw 0xea
-	pushw 0x98a2
-	push xde
-	call Strcpy
-	inc 8, xsp
-	jr Edit_NoChange
-
+	.incbin "includes/generated/v7_transplant_Edit_Case1E00069.bin"
 Edit_Case1E00068:
 	ld xwa, xiz
 	call GetViewInstance
@@ -1926,69 +1839,11 @@ EditControlProc:
 ; Plugged into each UI state as the standard key-scan handler.
 ; ============================================================================
 UIState_KeyScan_Dispatch:
-	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
-	cps hl, 0				; Returns HL=1 if enabled
-	ret z					; Return if scanning disabled
-	ldb_d8 a, (0x8d38); Load current UI state ID
-	extz wa					; Zero-extend to 16-bit
-	sla wa, 2				; state * 4 (pointer table stride)
-	lda_24 xbc, (SSF_PresentationGateTable); Base of state->key-map pointer table
-	ld_rrl	xix, xbc, wa
-	or xix, xix				; Test if pointer is null
-	ret z					; Return if no key map for this state
-	cpw (xix), 0xfffe			; Check for PASS-THROUGH marker
-	jr nz, KeyScan_CheckEmptyMarker			; Not pass-through, try normal scan
-	; --- Pass-through path: broadcast any key press ---
-	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
-	lds32	xde, 0
-	ldb_d8 e, (0xc080); chain byte
-	sll xde, 8				; shift up
-	lds32	xwa, 0
-	ldb_d8 a, (0xc07d); param byte
-	add xde, xwa				; merge into XDE
-	sll xde, 8
-	lds32	xwa, 0
-	ldb_d8 a, (0xc07e); additional key data
-	add xde, xwa
-	sll xde, 8
-	lds32	xwa, 0
-	ldb_d8 a, (0xc07f); additional key data
-	add xde, xwa
-	ld xwa, 0xffffffff			; broadcast target (all handlers)
-	ld xbc, 0x01c00038			; key press event code
-	jr KeyScan_DispatchEvent				; dispatch event
+	.incbin "includes/generated/v7_transplant_UIState_KeyScan_Dispatch.bin"
 KeyScan_CheckEmptyMarker:
-	cpw (xix), 0xffff			; Check for EMPTY marker
-	ret z					; Return if no keys for this state
-	; --- Normal scan: search array for matching (chain<<8)|param ---
-	ldb_d8 a, (0xc07d); param byte
-	ld l, a
-	extz hl
-	ldb_d8 e, (0xc080); chain byte
-	ld c, e
-	extz bc
-	sll bc, 8				; BC = chain << 8
-	add bc, hl				; BC = (chain << 8) | param = key code
+	.incbin "includes/generated/v7_transplant_KeyScan_CheckEmptyMarker.bin"
 KeyScan_ScanLoop:
-	cp	(xix), bc
-	jr nz, KeyScan_AdvanceEntry			; No match, advance to next entry
-	; --- Match found: build XDE = (D<<24)|(E<<16)|(C07E<<8)|C07F ---
-	ldb d, 0x00
-	extz xde				; Zero-extend DE -> XDE
-	sll xde, 8
-	ldb w, 0x00
-	extz xwa				; Zero-extend WA -> XWA
-	add xde, xwa
-	sll xde, 8
-	lds32	xwa, 0
-	ldb_d8 a, (0xc07e)
-	add xde, xwa
-	sll xde, 8
-	lds32	xwa, 0
-	ldb_d8 a, (0xc07f)
-	add xde, xwa
-	ld xwa, 0xffffffff			; broadcast target
-	ld xbc, 0x01c00038			; key press event code
+	.incbin "includes/generated/v7_transplant_KeyScan_ScanLoop.bin"
 KeyScan_DispatchEvent:
 	jp EventDispatch_Direct				; tail-call EventDispatch_Direct
 KeyScan_AdvanceEntry:
@@ -2004,40 +1859,11 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ldb_d8 a, (0xc07d); param byte (key code low)
-	cp a, 0x10				; Check for special key 0x10
-	jr z, CtrlPanel_HandleKey10			; Handle key 0x10
-	cps a, 0				; Check for key 0x00
-	ret nz					; Other keys: return
-	ldb_d8 a, (0xc07f); additional key data
-	and a, 0x03				; check bits 1:0
-	ret z					; return if both clear
-	ldb_d8 a, (0x26e2); load activation state
-	and a, 0x03				; check bits 1:0
-	ret nz					; return if already active
-	jr PartSelect_UpdateDisplayState				; activate
+	.incbin "includes/generated/v7_transplant_CtrlPanel_HandleKeyInput.bin"
 CtrlPanel_HandleKey10:
-	call AudioMode_ResetVoiceState				; handler for key 0x10
-	lds32	xde, 0
-	ldb_d8 e, (0x8d3a); load current state
-	ld xwa, 0xffffffff			; broadcast target
-	ld xbc, 0x01c0002f			; key event code (different from main handler)
-	call ApPostEvent				; dispatch event
-	ret
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_HandleKey10.bin"
 PartSelect_UpdateDisplayState:
-	ldb_d8 a, (0xfc66)
-	and a, 0x1
-	cps a, 0
-	scc8 z, e
-	stb_d8 (0x8d3a), e
-	extz de
-	pushw 0xff
-	ldw wa, 0x90
-	ldw bc, 0x10
-	call AddswbWr
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartSelect_UpdateDisplayState.bin"
 ApTaskControl:
 	cp xbc, 0x1e000b0
 	jr z, ApTaskCtrl_ReturnZero
@@ -2129,45 +1955,7 @@ WakeUpApTask:
 	jrl MainTaskControl
 
 RefreshApTask:
-	stdi8 (0xe3dc), 0
-	stdi8 (0xe3de), 0
-	stdi8 (0xe3e0), 0
-	stdi8 (0xe3e2), 0
-	stdi8 (0xe3e4), 255
-	stdi8 (0xe3e6), 255
-	lds32 xwa, 0
-	stl_da (0x02749a), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x0274a2), xwa
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00008
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001f
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001c
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
-	call DeleteEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e000b0
-	lds32 xde, 0
-	jp ApPostEvent
-
+	.incbin "includes/generated/v7_transplant_RefreshApTask.bin"
 RefreshSwEvent:
 	lds32 xwa, 0
 	stl_da (0x02749a), xwa
@@ -2196,50 +1984,9 @@ KeyScan_Disable:
 	ret
 
 MainAutoFree:
-	push xde
-	call Free
-	inc 4, xsp
-	lds32 xhl, 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_MainAutoFree.bin"
 MainRamControl:
-	lda xsp, (xsp - 16)
-	cp xbc, 0x1e00068
-	jrl z, RamCtrl_Set_Entry
-	cp xbc, 0x1e0006a
-	jrl z, RamCtrl_Adjust_Entry
-	cp xbc, 0x1e00069
-	jrl nz, RamCtrl_Return
-	ld (xsp), xde
-	ld xwa, (xde)
-	ld (xsp + 4), xwa
-	pushw 0x16
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 12), xhl
-	ld xhl, (xsp)
-	ld xde, (xsp + 12)
-	ld xiy, xhl
-	ld xix, xde
-	ldw bc, 0xb
-	ldirw
-	ld wa, (xhl + 4)
-	cps wa, 4
-	jr z, RamCtrl_Read_Dword
-	cps wa, 2
-	jr z, RamCtrl_Read_Word
-	cps wa, 1
-	jr nz, RamCtrl_Read_InvalidSize
-	ld xbc, xhl
-	lda xbc, (xbc + 14)
-	ld xwa, (xbc)
-	ld e, a
-	ld xwa, (xsp + 4)
-	ld (xwa), e
-	ld xwa, 0xff
-	and (xbc), xwa
-	jr RamCtrl_Read_Dispatch
-
+	.incbin "includes/generated/v7_transplant_MainRamControl.bin"
 RamCtrl_Read_Word:
 	ld xwa, (xsp)
 	lda xbc, (xwa + 14)
@@ -2359,29 +2106,7 @@ RamCtrl_Adjust_StoreMax:
 	ld (xsp + 8), xwa
 
 RamCtrl_Adjust_WriteBack:
-	pushw 0x16
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 12), xhl
-	ld xhl, (xsp)
-	ld xwa, (xsp + 12)
-	ld xiy, xhl
-	ld xix, xwa
-	ldw bc, 0xb
-	ldirw
-	ld xbc, (xsp + 8)
-	ld (xwa + 14), xbc
-	ld wa, (xhl + 4)
-	cps wa, 4
-	jr z, RamCtrl_Adjust_Write_Dword
-	cps wa, 2
-	jr z, RamCtrl_Adjust_Write_Word
-	cps wa, 1
-	jr nz, RamCtrl_Adjust_Write_InvalidSize
-	ld xwa, (xsp + 4)
-	ld (xwa), c
-	jr RamCtrl_Adjust_Dispatch
-
+	.incbin "includes/generated/v7_transplant_RamCtrl_Adjust_WriteBack.bin"
 RamCtrl_Adjust_Write_Word:
 	ld xbc, (xsp + 8)
 	ld xwa, (xsp + 4)
@@ -2447,24 +2172,7 @@ RamCtrl_Set_InvalidSize:
 	ld (xde), xwa
 
 RamCtrl_Set_Dispatch:
-	pushw 0x16
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 12), xhl
-	ld xwa, (xsp)
-	ld xde, (xsp + 12)
-	ld xiy, xwa
-	ld xix, xde
-	ldw bc, 0xb
-	ldirw
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001d
-	ld xde, (xsp + 12)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 12)
-
+	.incbin "includes/generated/v7_transplant_RamCtrl_Set_Dispatch.bin"
 RamCtrl_DispatchAndReturn:
 	call ApPostEvent
 
@@ -2474,34 +2182,7 @@ RamCtrl_Return:
 	ret
 
 MainBitControl:
-	dec 8, xsp
-	push xiz
-	cp xbc, 0x1e00066
-	jr z, BitCtrl_ReadBit
-	cp xbc, 0x1e00067
-	jrl nz, BitCtrl_Return
-	ld xiz, xde
-	ld xwa, (xiz)
-	ld (xsp + 4), xwa
-	pushw 0xe
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 8), xhl
-	ld xwa, (xsp + 8)
-	ld xiy, xiz
-	ld xix, xwa
-	lds bc, 7
-	ldirw
-	lda xbc, (xiz + 4)
-	lda xde, (xwa + 8)
-	cpw (xiz + 8), 0x0
-	jr z, BitCtrl_ClearBit
-	ld xwa, (xsp + 4)
-	ld xbc, (xbc)
-	or (xwa), xbc
-	ldw (xde), 0x1
-	jr BitCtrl_PostBitChangeEvent
-
+	.incbin "includes/generated/v7_transplant_MainBitControl.bin"
 BitCtrl_ClearBit:
 	ld xbc, (xbc)
 	xor xbc, 0xffffffff
@@ -2536,23 +2217,7 @@ BitCtrl_ReadBitZero:
 	ldw (xwa), 0x0
 
 BitCtrl_ReadBitDone:
-	pushw 0xe
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 8), xhl
-	ld xwa, (xsp + 8)
-	ld xiy, xiz
-	ld xix, xwa
-	lds bc, 7
-	ldirw
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c00024
-	ld xde, (xsp + 8)
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, (xsp + 8)
-
+	.incbin "includes/generated/v7_transplant_BitCtrl_ReadBitDone.bin"
 BitCtrl_PostFinalEvent:
 	call ApPostEvent
 
@@ -2584,81 +2249,21 @@ MainPmanControl:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MainPmanCtrl_DispatchTable:
-	.byte 0xea, 0x8e, 0xa6, 0x20, 0x9e, 0x04, 0x21, 0x9e
-	.byte 0x06, 0x22, 0x1d, 0x01, 0xd2, 0xfc, 0x78, 0x2d
-	.byte 0x01, 0xea, 0x8e, 0xa6, 0x20, 0x9e, 0x04, 0x21
-	.byte 0x9e, 0x06, 0x22, 0x1d, 0x2f, 0xd3, 0xfc, 0x78
-	.byte 0x1c, 0x01, 0xea, 0x8e, 0xa6, 0x20, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xbe, 0x04, 0x53, 0x0b, 0x0c, 0x00
-	.byte 0x1d
-	addr24 Malloc
-	.byte 0xef, 0x62, 0xbf, 0x04
-	.byte 0x63, 0xaf, 0x04, 0x20, 0xee, 0x8d, 0xe8, 0x8c
-	.byte 0xd9, 0xae, 0x95, 0x11, 0x40, 0xff, 0xff, 0xff
-	.byte 0xff, 0x41, 0x1c, 0x00, 0xc0, 0x01, 0xaf, 0x04
-	.byte 0x22, 0x1d, 0x58, 0x9d, 0xfa, 0x40, 0xff, 0xff
-	.byte 0xff, 0xff, 0x41, 0x23, 0x00, 0xe0, 0x01, 0xaf
-	.byte 0x04, 0x22, 0x68, 0x7a, 0xea, 0x8e, 0xa6, 0x20
-	.byte 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8, 0xa6, 0x21
-	.byte 0x9e, 0x06, 0x04, 0x9e, 0x04, 0x22, 0x1d, 0x1b
-	.byte 0xd3, 0xfc, 0x78, 0xc1, 0x00, 0xea, 0x8e, 0xa6
-	.long OscScope_UpdateDisplay
-	.byte 0xd7, 0xe2, 0xa8, 0xa6
-	.byte 0x21, 0x9e, 0x06, 0x04, 0x9e, 0x04, 0x22, 0x1d
-	.byte 0x23, 0xd4, 0xfc, 0x78, 0xa8, 0x00, 0xea, 0x8e
-	.byte 0xa6, 0x20, 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8
-	.byte 0xa6, 0x21, 0x1d, 0xf7, 0xd4, 0xfc, 0xbe, 0x04
-	.byte 0x53, 0x0b, 0x0c, 0x00, 0x1d
-	addr24 Malloc
-	.byte 0xef, 0x62, 0xbf, 0x04, 0x63, 0xaf, 0x04, 0x20
-	.byte 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xae, 0x95, 0x11
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x1c, 0x00
-	.byte 0xc0, 0x01, 0xaf, 0x04, 0x22, 0x1d, 0x58, 0x9d
-	.byte 0xfa, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x23
-	.byte 0x00, 0xe0, 0x01, 0xaf, 0x04, 0x22, 0x1d, 0x58
-	.byte 0x9d, 0xfa, 0x68, 0x5a
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_DispatchTable.bin"
 MainPmanCtrl_HandleA0:
-	ldmi16 (xsp + 6), 0x8d3a
-	cp xde, 0x10
-	jr c, MainPmanCtrl_StorePartSelect
-	cp xde, 0x15
-	jr z, MainPmanCtrl_StorePartSelect
-	cp xde, 0x16
-	jr nz, MainPmanCtrl_CheckSoundParam
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_HandleA0.bin"
 MainPmanCtrl_StorePartSelect:
-	stb_d8 (0x8d3a), e
-	jr MainPmanCtrl_LoadPartSelect
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_StorePartSelect.bin"
 MainPmanCtrl_CheckSoundParam:
-	ld xwa, 0x4100
-	call SndParam_LookupReadOnly
-	cps l, 1
-	jr z, MainPmanCtrl_SetPartSelectOne
-	cps l, 5
-	jr nz, MainPmanCtrl_SetPartSelectZero
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_CheckSoundParam.bin"
 MainPmanCtrl_SetPartSelectOne:
-	stdi8 (0x8d3a), 1
-	ldb e, 0x1
-	jr MainPmanCtrl_CompareAndUpdate
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_SetPartSelectOne.bin"
 MainPmanCtrl_SetPartSelectZero:
-	stdi8 (0x8d3a), 0
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_SetPartSelectZero.bin"
 MainPmanCtrl_LoadPartSelect:
-	ldb_d8 e, (0x8d3a)
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_LoadPartSelect.bin"
 MainPmanCtrl_CompareAndUpdate:
-	cp e, (xsp + 6)
-	jr z, MainTitle_SendEventDone
-	extz de
-	pushw 0xff
-	ldw wa, 0x90
-	ldw bc, 0x10
-	call AddswbWr
-
+	.incbin "includes/generated/v7_transplant_MainPmanCtrl_CompareAndUpdate.bin"
 MainTitle_SendEventDone:
 	lds32 xhl, 0
 	pop xiz
@@ -2666,84 +2271,17 @@ MainTitle_SendEventDone:
 	ret
 
 MainTitleControl:
-	ld xwa, xde
-	and xwa, 0xffff
-	cp xbc, 0x1e000bb
-	jrl z, MainTitleCtrl_HandleBB
-	ld hl, wa
-	cp xbc, 0x1e000ba
-	jrl z, MainTitleCtrl_HandleBA
-	cp xbc, 0x1e000ab
-	jrl z, MainTitleCtrl_HandleAB
-	ldb_d8 a, (0x8d36)
-	cp xbc, 0x1c00013
-	jrl z, SeqState_DemoModeHandler
-	cp xbc, 0x1c00028
-	jr z, MainTitleCtrl_SaveAndTransition
-	cp xbc, 0x1c00016
-	jr z, MainTitleCtrl_SaveAndTransition
-	cp xbc, 0x1c00015
-	jr z, SeqState_TransitionMode
-	cp xbc, 0x1c00014
-	jrl nz, UIWidget_ReturnZero
-	ldmm8 0x8d35, 0x8d34
-	stb_d8 (0x8d34), l
-	ldw wa, 0x48
-	call CtrlPanel_SetIndicatorBit
-	lds32 xwa, 0
-	stl_da (0x0274a2), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x02749a), xwa
-	jrl UIWidget_ReturnZero
-
-; =============================================================================
-; SeqState_TransitionMode - Screen transition state handler
-;
-; Manages state transitions for the sequencer/demo screen mode changes.
-; Saves current display state bytes (SFR 36150-36153) and clears animation
-; state variables at 0x0274a2, 0x02749e, 0x02749a. Calls CtrlPanel_SetIndicatorBit
-; to initiate the actual screen transition, then AudioMode_ResetVoiceState for cleanup.
-;
-; Animation state addresses:
-;   0x02749a - Transition progress counter
-;   0x02749e - Transition timer
-;   0x0274a2 - Transition type/flags
-;   0x0274a8-0x0274ae - Additional transition parameters
-; =============================================================================
+	.incbin "includes/generated/v7_transplant_MainTitleControl.bin"
 SeqState_TransitionMode:
-	stb_d8 (0x8d37), a
-	ldmm8 0x8d39, 0x8d38
-	stb_d8 (0x8d36), l
-	stb_d8 (0x8d38), l
-	ldw wa, 0x61
-	jr MainTitleCtrl_SetIndicatorAndClear
-
+	.incbin "includes/generated/v7_transplant_SeqState_TransitionMode.bin"
 MainTitleCtrl_SaveAndTransition:
-	ldmm8 0x8d39, 0x8d38
-	stb_d8 (0x8d38), l
-	ldw wa, 0x61
-
+	.incbin "includes/generated/v7_transplant_MainTitleCtrl_SaveAndTransition.bin"
 MainTitleCtrl_SetIndicatorAndClear:
-	call CtrlPanel_SetIndicatorBit
-	lds32 xwa, 0
-	stl_da (0x0274a2), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x02749a), xwa
-	call AudioMode_ResetVoiceState
-	jrl UIWidget_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_MainTitleCtrl_SetIndicatorAndClear.bin"
 SeqState_DemoModeHandler:
-	cp xde, 0x8
-	jrl nz, UIWidget_ReturnZero
-	cpdm8 0x8d38, a
-	jr nz, SeqDemo_SaveCurrentState
-	stb_d8 (0x8d37), a
-
+	.incbin "includes/generated/v7_transplant_SeqState_DemoModeHandler.bin"
 SeqDemo_SaveCurrentState:
-	ldmm8 0x8d39, 0x8d38
-	ldmm8 0x8d35, 0x8d34
-	jr UIWidget_ReturnZero
-
+	.incbin "includes/generated/v7_transplant_SeqDemo_SaveCurrentState.bin"
 MainTitleCtrl_HandleAB:
 	stw_da (0x0274ac), xde
 	stiw_da (0x0274ae), 0x000a
@@ -2766,21 +2304,9 @@ MainTitleCtrl_HandleBB:
 	stw_da (0x0274a6), xwa
 
 MainTitleCtrl_CheckSecondTimer:
-	ldw_da xwa, (0x0274ae)
-	cps wa, 0
-	jr z, UIWidget_ReturnZero
-	dec 1, wa
-	stw_da (0x0274ae), xwa
-	cps wa, 0
-	jr nz, UIWidget_ReturnZero
-	cpw_da (0x274ac), 0
-	jr z, MainTitleCtrl_ClearIndicatorBit
-	setda 0, 0x8f5c
-	jr MainTitleCtrl_SetIndicator60
-
+	.incbin "includes/generated/v7_transplant_MainTitleCtrl_CheckSecondTimer.bin"
 MainTitleCtrl_ClearIndicatorBit:
-	resda 0, 0x8f5c
-
+	.incbin "includes/generated/v7_transplant_MainTitleCtrl_ClearIndicatorBit.bin"
 MainTitleCtrl_SetIndicator60:
 	ldw wa, 0x60
 	call CtrlPanel_SetIndicatorBit
@@ -2809,14 +2335,9 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldb_d8 l, (0x8d3a)
-	extz hl
-	ret
-
+	.incbin "includes/generated/v7_transplant_GetPartSelect.bin"
 GetCurrentPartSelect:
-	ldb_d8 l, (0x8d3a)
-	ret
-
+	.incbin "includes/generated/v7_transplant_GetCurrentPartSelect.bin"
 UI_PostPartChangeEvent:
 	dec 2, xsp
 	ld (xsp), a
@@ -2888,11 +2409,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldb_d8 a, (0x8d36)
-	cpda8 a, 0x8d38
-	scc16 nz, hl
-	ret
-
+	.incbin "includes/generated/v7_transplant_SeqState_HasModeChanged.bin"
 UI_PostDialEnable:
 	ld e, a
 	ldb d, 0x0

@@ -61,20 +61,7 @@ SongMedleyTtl_Return:
 	ret
 
 SetupFlashFunc:
-	cp xbc, 0x1e5000c
-	jr z, SetupFlash_HandleLoadEvent
-	cp xbc, 0x1e5000b
-	jr nz, SetupFlash_Return
-	stdi8 (0x7f42), 37
-	ldw wa, 0xee
-	call SoundCtrl_SendCommand
-	lds wa, 6
-	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
-	ldw wa, 0xee
-	call SoundCtrl_SendCommand
-	jr SetupFlash_Return
-
+	.incbin "includes/generated/v7_transplant_SetupFlashFunc.bin"
 SetupFlash_HandleLoadEvent:
 	lds wa, 6
 	call Audio_DispatchCommand
@@ -84,84 +71,15 @@ SetupFlash_Return:
 	ret
 
 FmmUtilityTitleFunc:
-	cp xbc, 0x1c00013
-	jrl nz, FmmUtility_Return
-	cp xde, 0x3
-	jrl z, FmmUtility_HandleAbort
-	cp xde, 0x2
-	jrl nz, FmmUtility_Return
-	stdi8 (0x84fe), 0
-	lds wa, 1
-	calr InitializeOperationState
-	ld xwa, 0x7b0013
-	ld xbc, 0x1e50005
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ldmm8 0x7f5c, 0x8d37
-	cpdi16 0x8500, 0
-	jr ge, FmmUtility_DispatchState
-	call GetDiskSizeInfo
-	extz hl
-	stda16 (0x8500), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmUtilityTitleFunc.bin"
 FmmUtility_DispatchState:
-	ldw_d16 xwa, (0x8500)
-	cps wa, 1
-	jrl z, FmmUtility_HandleSuccess
-	cps wa, 0
-	jrl z, FmmUtility_HandleError
-	cps wa, 5
-	jr z, FmmUtility_HandleCancel
-	cpdi16 0x8502, 0
-	jr ge, FmmUtility_ScanFormat
-	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
-	call FileIO_SearchAndLoadFile
-	call GetEncodedFreeSpaceData
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmUtility_DispatchState.bin"
 FmmUtility_ScanFormat:
-	cpdi16 0x8502, 0
-	jrl nz, FmmUtility_ContinueWait
-	cpdi16 0x8504, 0
-	jr ge, FmmUtility_CheckCapacity
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmUtility_ScanFormat.bin"
 FmmUtility_CheckCapacity:
-	cpdi16 0x8504, 0
-	jrl le, FmmUtility_ContinueWait
-	cpdi8 (0x7f5c), 124
-	jrl z, FmmUtility_ContinueWait
-	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ldw wa, 0x7c
-	jr FmmUtility_CallHandler
-
+	.incbin "includes/generated/v7_transplant_FmmUtility_CheckCapacity.bin"
 FmmUtility_HandleCancel:
-	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldb_d8 a, (0x7f5c)
-	extz wa
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 0
-	ldw wa, 0xee
-	jr FmmUtility_ShowStatus
-
+	.incbin "includes/generated/v7_transplant_FmmUtility_HandleCancel.bin"
 FmmUtility_HandleError:
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
@@ -174,25 +92,7 @@ FmmUtility_CallHandler:
 	jr FmmUtility_Return
 
 FmmUtility_HandleSuccess:
-	calr ResetProgressIndication
-	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldb_d8 a, (0x7f5c)
-	extz wa
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 2
-	ldw wa, 0xee
-
+	.incbin "includes/generated/v7_transplant_FmmUtility_HandleSuccess.bin"
 FmmUtility_ShowStatus:
 	call SoundCtrl_SendCommand
 	jr FmmUtility_Return
@@ -216,84 +116,15 @@ FmmUtility_Return:
 	ret
 
 FmmSmfUtilityTitleFunc:
-	cp xbc, 0x1c00013
-	jrl nz, FmmSmfUtility_Return
-	cp xde, 0x3
-	jrl z, FmmSmfUtility_HandleAbort
-	cp xde, 0x2
-	jrl nz, FmmSmfUtility_Return
-	stdi8 (0x84fe), 0
-	lds wa, 1
-	calr InitializeOperationState
-	ld xwa, 0x7b002a
-	ld xbc, 0x1e50005
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ldmm8 0x7f5e, 0x8d37
-	cpdi16 0x8500, 0
-	jr ge, FmmSmfUtility_DispatchState
-	call GetDiskSizeInfo
-	extz hl
-	stda16 (0x8500), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmSmfUtilityTitleFunc.bin"
 FmmSmfUtility_DispatchState:
-	ldw_d16 xwa, (0x8500)
-	cps wa, 1
-	jrl z, FmmSmfUtility_HandleSuccess
-	cps wa, 0
-	jrl z, FmmSmfUtility_HandleError
-	cps wa, 5
-	jr z, FmmSmfUtility_HandleCancel
-	cpdi16 0x8504, 0
-	jr ge, FmmSmfUtility_ScanFormat
-	call GetFileCountEncoded
-	stda16 (0x8504), xhl
-	call FileIO_SearchAndLoadFile
-	call GetEncodedFreeSpaceData
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmSmfUtility_DispatchState.bin"
 FmmSmfUtility_ScanFormat:
-	cpdi16 0x8504, 0
-	jrl nz, FmmSmfUtility_ContinueWait
-	cpdi16 0x8502, 0
-	jr ge, FmmSmfUtility_CheckCapacity
-	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
-	calr SignalProgressUpdate
-
+	.incbin "includes/generated/v7_transplant_FmmSmfUtility_ScanFormat.bin"
 FmmSmfUtility_CheckCapacity:
-	cpdi16 0x8502, 0
-	jrl le, FmmSmfUtility_ContinueWait
-	cpdi8 (0x7f5e), 123
-	jrl z, FmmSmfUtility_ContinueWait
-	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ldw wa, 0x7b
-	jr FmmSmfUtility_CallHandler
-
+	.incbin "includes/generated/v7_transplant_FmmSmfUtility_CheckCapacity.bin"
 FmmSmfUtility_HandleCancel:
-	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldb_d8 a, (0x7f5e)
-	extz wa
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 0
-	ldw wa, 0xee
-	jr FmmSmfUtility_ShowStatus
-
+	.incbin "includes/generated/v7_transplant_FmmSmfUtility_HandleCancel.bin"
 FmmSmfUtility_HandleError:
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
@@ -306,25 +137,7 @@ FmmSmfUtility_CallHandler:
 	jr FmmSmfUtility_Return
 
 FmmSmfUtility_HandleSuccess:
-	calr ResetProgressIndication
-	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
-	lds32 xde, 0
-	call ApDeliveryEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 1
-	call ApPostEvent
-	ldb_d8 a, (0x7f5e)
-	extz wa
-	call UI_PostModeChangeEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
-	lds32 xde, 0
-	call ApPostEvent
-	stdi8 (0x7f42), 2
-	ldw wa, 0xee
-
+	.incbin "includes/generated/v7_transplant_FmmSmfUtility_HandleSuccess.bin"
 FmmSmfUtility_ShowStatus:
 	call SoundCtrl_SendCommand
 	jr FmmSmfUtility_Return

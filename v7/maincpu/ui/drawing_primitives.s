@@ -153,52 +153,7 @@ DrawLine_Impl_CalcDyDone:
 	jrl z, DrawLine_Impl_Return
 
 DrawLine_Impl_CopyStartPos:
-	ld xwa, (xsp + 66)
-	ld xiy, xwa
-	lda xix, (xsp + 56)
-	ldiw
-	ldiw
-	lda_24 xwa, (0x043c00)
-	ld (xsp + 36), xwa
-	ld (xsp + 20), xwa
-	ld xwa, (xsp + 4)
-	ld (xsp + 40), xwa
-	sla xwa, 0
-	ld (xsp + 40), xwa
-	ld xbc, (xsp + 8)
-	sla xbc, 0
-	ld wa, (xsp + 46)
-	exts xwa
-	ld (xsp + 44), xwa
-	ld xwa, xbc
-	ld xbc, (xsp + 4)
-	call Math_DivideSigned32
-	ld (xsp + 28), xhl
-	ld xwa, (xsp + 40)
-	ld xbc, (xsp + 8)
-	call Math_DivideSigned32
-	ld (xsp + 24), xhl
-	ld xbc, (xsp + 44)
-	ld (xsp + 32), xbc
-	ld xwa, xbc
-	sll xwa, 2
-	ld (xsp + 32), xwa
-	add (xsp + 32), xbc
-	ld xwa, (xsp + 32)
-	sll xwa, 6
-	ld (xsp + 32), xwa
-	ld xwa, (xsp + 4)
-	ld bc, wa
-	inc 1, bc
-	cpw (xsp + 60), 0xf5
-	jrl z, DrawLine_Impl_PatternSetup
-	or xwa, xwa
-	jr nz, DrawLine_Impl_HorizontalCheck
-	lds32 xbc, 0
-	ld xwa, (xsp + 8)
-	cp xwa, 0x0
-	jrl lt, DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_CopyStartPos.bin"
 DrawLine_Impl_VerticalLoop:
 	lda xde, (xsp + 56)
 	lda xwa, (xde + 2)
@@ -260,32 +215,9 @@ DrawLine_Impl_HorzCalcNegDir:
 	push xbc
 
 DrawLine_Impl_HorzMemset:
-	call Memset
-	inc 8, xsp
-	jrl DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_HorzMemset.bin"
 DrawLine_Impl_SteepCheck:
-	ld xwa, (xsp + 8)
-	cp xwa, (xsp + 4)
-	jr le, DrawLine_Impl_ShallowSetup
-	ld xwa, (xsp + 12)
-	ld xbc, (xsp + 24)
-	call Math_MultiplyAccumulate
-	ld (xsp + 12), xhl
-	lda xwa, (xsp + 56)
-	ld (xsp + 40), xwa
-	ld wa, (xwa)
-	exts xwa
-	ld (xsp + 4), xwa
-	sla xwa, 0
-	ld (xsp + 4), xwa
-	ld xwa, 0x8000
-	add (xsp + 4), xwa
-	lds32 xbc, 0
-	ld xwa, (xsp + 8)
-	cp xwa, 0x0
-	jrl lt, DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_SteepCheck.bin"
 DrawLine_Impl_SteepLoop:
 	ld xhl, (xsp + 40)
 	lda xwa, (xhl + 2)
@@ -317,26 +249,7 @@ DrawLine_Impl_SteepLoop:
 	jrl DrawLine_Impl_BuildDirtyRect
 
 DrawLine_Impl_ShallowSetup:
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 28)
-	call Math_MultiplyAccumulate
-	ld (xsp + 16), xhl
-	lda xwa, (xsp + 56)
-	ld (xsp + 40), xwa
-	inc 2, xwa
-	ld (xsp + 44), xwa
-	ld wa, (xwa)
-	exts xwa
-	ld (xsp + 8), xwa
-	sla xwa, 0
-	ld (xsp + 8), xwa
-	ld xwa, 0x8000
-	add (xsp + 8), xwa
-	lds32 xbc, 0
-	ld xwa, (xsp + 4)
-	cp xwa, 0x0
-	jrl lt, DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_ShallowSetup.bin"
 DrawLine_Impl_ShallowLoop:
 	ld xix, (xsp + 44)
 	ld wa, (xix)
@@ -462,32 +375,9 @@ DrawLine_Impl_PatternHorzNegDir:
 	push xbc
 
 DrawLine_Impl_PatternHorzMemcpy:
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	jrl DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_PatternHorzMemcpy.bin"
 DrawLine_Impl_PatternDiagCheck:
-	ld xwa, (xsp + 8)
-	cp xwa, (xsp + 4)
-	jrl le, DrawLine_Impl_PatternShallowSetup
-	ld xwa, (xsp + 12)
-	ld xbc, (xsp + 24)
-	call Math_MultiplyAccumulate
-	ld (xsp + 12), xhl
-	ld xwa, (xsp + 40)
-	ld (xsp + 32), xwa
-	ld wa, (xwa)
-	exts xwa
-	ld (xsp + 4), xwa
-	sla xwa, 0
-	ld (xsp + 4), xwa
-	ld xwa, 0x8000
-	add (xsp + 4), xwa
-	lds32 xbc, 0
-	ld xwa, (xsp + 8)
-	cp xwa, 0x0
-	jrl lt, DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_PatternDiagCheck.bin"
 DrawLine_Impl_PatternSteepLoop:
 	ld xhl, (xsp + 32)
 	lda xwa, (xhl + 2)
@@ -528,26 +418,7 @@ DrawLine_Impl_PatternSteepLoop:
 	jrl DrawLine_Impl_BuildDirtyRect
 
 DrawLine_Impl_PatternShallowSetup:
-	ld xwa, (xsp + 16)
-	ld xbc, (xsp + 28)
-	call Math_MultiplyAccumulate
-	ld (xsp + 16), xhl
-	ld xwa, (xsp + 40)
-	ld (xsp + 32), xwa
-	ld xwa, (xsp + 44)
-	ld (xsp + 40), xwa
-	ld wa, (xwa)
-	exts xwa
-	ld (xsp + 8), xwa
-	sla xwa, 0
-	ld (xsp + 8), xwa
-	ld xwa, 0x8000
-	add (xsp + 8), xwa
-	lds32 xbc, 0
-	ld xwa, (xsp + 4)
-	cp xwa, 0x0
-	jr lt, DrawLine_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLine_Impl_PatternShallowSetup.bin"
 DrawLine_Impl_PatternShallowLoop:
 	ld xix, (xsp + 40)
 	ld wa, (xix)
@@ -819,35 +690,7 @@ DrawLineEx_HorzXorPixel:
 	jr DrawLineEx_HorzAdvance
 
 DrawLineEx_DiagSetup:
-	lda xwa, (xsp + 40)
-	ld (xsp + 28), xwa
-	ld xwa, (xsp + 8)
-	cp xwa, (xsp + 4)
-	jrl le, DrawLineEx_ShallowSetup
-	ld xwa, (xsp + 4)
-	sla xwa, 0
-	ld xbc, (xsp + 8)
-	call Math_DivideSigned32
-	ld xiz, xhl
-	ld xwa, (xsp + 12)
-	ld xbc, xiz
-	call Math_MultiplyAccumulate
-	ld (xsp + 12), xhl
-	ld xbc, (xsp + 28)
-	ld xwa, xbc
-	ld wa, (xwa)
-	exts xwa
-	ld (xsp + 4), xwa
-	sla xwa, 0
-	ld (xsp + 4), xwa
-	ld xwa, 0x8000
-	add (xsp + 4), xwa
-	lds32 xwa, 0
-	ld (xsp + 28), xwa
-	ld xwa, (xsp + 8)
-	cp xwa, 0x0
-	jrl lt, DrawLineEx_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLineEx_DiagSetup.bin"
 DrawLineEx_SteepLoop:
 	ld iz, (xsp + 58)
 	lda xiy, (xbc + 2)
@@ -893,31 +736,7 @@ DrawLineEx_SteepXorPixel:
 	jr DrawLineEx_SteepAdvance
 
 DrawLineEx_ShallowSetup:
-	ld xwa, (xsp + 8)
-	sla xwa, 0
-	ld xbc, (xsp + 4)
-	call Math_DivideSigned32
-	ld xiz, xhl
-	ld xwa, (xsp + 16)
-	ld xbc, xiz
-	call Math_MultiplyAccumulate
-	ld (xsp + 16), xhl
-	ld xbc, (xsp + 28)
-	ld xwa, xbc
-	lda xde, (xwa + 2)
-	ld wa, (xde)
-	exts xwa
-	ld (xsp + 8), xwa
-	sla xwa, 0
-	ld (xsp + 8), xwa
-	ld xwa, 0x8000
-	add (xsp + 8), xwa
-	lds32 xwa, 0
-	ld (xsp + 28), xwa
-	ld xwa, (xsp + 4)
-	cp xwa, 0x0
-	jr lt, DrawLineEx_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawLineEx_ShallowSetup.bin"
 DrawLineEx_ShallowLoop:
 	ld iz, (xsp + 58)
 	ld wa, (xsp + 44)
@@ -1103,21 +922,7 @@ DrawBox_Impl_ClipYMax:
 	jr gt, DrawBox_Impl_SetChangeRect
 
 DrawBox_Impl_FillRowLoop:
-	pushm (xsp + 10)
-	pushm (xsp + 14)
-	ld xwa, (xsp + 6)
-	push xwa
-	call Memset
-	inc 8, xsp
-	ld xwa, (xsp + 2)
-	stb_dri W, 0xe1, 0x40, 0x01
-	ld (xsp + 2), xwa
-	inc 1, iz
-	ld xwa, (xsp + 14)
-	cp iz, (xwa + 6)
-	jr le, DrawBox_Impl_FillRowLoop
-	jr DrawBox_Impl_SetChangeRect
-
+	.incbin "includes/generated/v7_transplant_DrawBox_Impl_FillRowLoop.bin"
 DrawBox_Impl_PatternSetup:
 	ldl_da xwa, (0x030452)
 	ld (xsp + 6), xwa
@@ -1131,23 +936,7 @@ DrawBox_Impl_PatternSetup:
 	jr gt, DrawBox_Impl_SetChangeRect
 
 DrawBox_Impl_PatternRowLoop:
-	pushm (xsp + 10)
-	ld xwa, (xsp + 8)
-	push xwa
-	ld xwa, (xsp + 8)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld xwa, 0x140
-	add (xsp + 6), xwa
-	ld xwa, (xsp + 2)
-	stb_dri W, 0xe1, 0x40, 0x01
-	ld (xsp + 2), xwa
-	inc 1, iz
-	ld xwa, (xsp + 14)
-	cp iz, (xwa + 6)
-	jr le, DrawBox_Impl_PatternRowLoop
-
+	.incbin "includes/generated/v7_transplant_DrawBox_Impl_PatternRowLoop.bin"
 DrawBox_Impl_SetChangeRect:
 	ld xwa, (xsp + 14)
 	calr SetChangeRect
@@ -1244,92 +1033,9 @@ DrawFrame_Impl_ClipXMax:
 	ldw (xwa), 0xef
 
 DrawFrame_Impl_ClipYMax:
-	ld xwa, (xsp + 38)
-	ld wa, (xwa)
-	ld (xsp + 34), wa
-	ld wa, (xsp + 34)
-	exts xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	sll xbc, 6
-	cpw (xsp + 42), 0xf5
-	jrl z, DrawFrame_Impl_PatternSetup
-	ld wa, (xsp + 42)
-	extz wa
-	ld (xsp + 40), wa
-	ld (xsp + 36), xbc
-	ld xwa, (xsp + 26)
-	ld wa, (xwa)
-	cp wa, (xsp + 34)
-	jr nz, DrawFrame_Impl_SolidTwoEdges
-	ld xwa, (xsp + 30)
-	ld bc, (xwa)
-	ld xwa, (xsp + 44)
-	sub bc, (xwa)
-	inc 1, bc
-	pushw bc
-	pushm (xsp + 42)
-	ld bc, (xwa)
-	ld xwa, (xsp + 40)
-	stb_dri W, 0x07, 0xe0, 0xe4
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	call Memset
-	inc 8, xsp
-	jrl DrawFrame_Impl_SetChangeRect
-
+	.incbin "includes/generated/v7_transplant_DrawFrame_Impl_ClipYMax.bin"
 DrawFrame_Impl_SolidTwoEdges:
-	ld xwa, (xsp + 30)
-	ld bc, (xwa)
-	ld xwa, (xsp + 44)
-	sub bc, (xwa)
-	inc 1, bc
-	pushw bc
-	pushm (xsp + 42)
-	ld bc, (xwa)
-	ld xwa, (xsp + 40)
-	stb_dri W, 0x07, 0xe0, 0xe4
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	call Memset
-	ld xde, (xsp + 52)
-	ld bc, (xde + 4)
-	sub bc, (xde)
-	inc 1, bc
-	pushw bc
-	ld wa, (xsp + 52)
-	extz wa
-	pushw wa
-	ld wa, (xde + 6)
-	exts xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	sll xbc, 6
-	ld wa, (xde)
-	exts xwa
-	add xwa, xbc
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	call Memset
-	lda xsp, (xsp + 16)
-	ldw (xsp + 28), 0xffff
-	ld xbc, (xsp + 44)
-	lda xwa, (xbc + 6)
-	ld (xsp + 30), xwa
-	ld wa, (xwa)
-	ld (xsp + 40), wa
-	ld wa, (xbc + 2)
-	ld (xsp + 38), wa
-	ld wa, (xsp + 40)
-	cp wa, (xsp + 38)
-	jr le, DrawFrame_Impl_SolidYStepPositive
-	ldw (xsp + 28), 0x1
-
+	.incbin "includes/generated/v7_transplant_DrawFrame_Impl_SolidTwoEdges.bin"
 DrawFrame_Impl_SolidYStepPositive:
 	ld wa, (xsp + 28)
 	ld (xsp + 26), wa
@@ -1411,88 +1117,9 @@ DrawFrame_Impl_SolidTwoSideCheck:
 	jrl DrawFrame_Impl_SetChangeRect
 
 DrawFrame_Impl_PatternSetup:
-	ld (xsp + 38), xbc
-	ld xwa, (xsp + 26)
-	ld wa, (xwa)
-	cp wa, (xsp + 34)
-	jr nz, DrawFrame_Impl_PatternTwoEdges
-	ld xwa, (xsp + 30)
-	ld bc, (xwa)
-	ld xde, (xsp + 44)
-	sub bc, (xde)
-	inc 1, bc
-	pushw bc
-	ld wa, (xde)
-	exts xwa
-	ld xbc, (xsp + 40)
-	add xbc, xwa
-	addda32_24 xbc, (0x030452)
-	push xbc
-	ld bc, (xde)
-	ld xwa, (xsp + 44)
-	stb_dri W, 0x07, 0xe0, 0xe4
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	jrl DrawFrame_Impl_SetChangeRect
-
+	.incbin "includes/generated/v7_transplant_DrawFrame_Impl_PatternSetup.bin"
 DrawFrame_Impl_PatternTwoEdges:
-	ld xwa, (xsp + 30)
-	ld bc, (xwa)
-	ld xde, (xsp + 44)
-	sub bc, (xde)
-	inc 1, bc
-	pushw bc
-	ld wa, (xde)
-	exts xwa
-	ld xbc, (xsp + 40)
-	add xbc, xwa
-	addda32_24 xbc, (0x030452)
-	push xbc
-	ld bc, (xde)
-	ld xwa, (xsp + 44)
-	stb_dri W, 0x07, 0xe0, 0xe4
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	call Mem_Copy
-	ld xhl, (xsp + 54)
-	ld bc, (xhl + 4)
-	sub bc, (xhl)
-	inc 1, bc
-	pushw bc
-	ld de, (xhl)
-	exts xde
-	ld wa, (xhl + 6)
-	exts xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	sll xbc, 6
-	ld xwa, xbc
-	add xwa, xde
-	addda32_24 xwa, (0x030452)
-	push xwa
-	ld wa, (xhl)
-	exts xwa
-	add xwa, xbc
-	ld xbc, 0x43c00
-	add xbc, xwa
-	push xbc
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	ldw (xsp + 4), 0xffff
-	ld xde, (xsp + 44)
-	lda xwa, (xde + 6)
-	ld (xsp + 22), xwa
-	ld bc, (xwa)
-	ld de, (xde + 2)
-	cp bc, de
-	jr le, DrawFrame_Impl_PatternYStepPositive
-	ldw (xsp + 4), 0x1
-
+	.incbin "includes/generated/v7_transplant_DrawFrame_Impl_PatternTwoEdges.bin"
 DrawFrame_Impl_PatternYStepPositive:
 	ld wa, de
 	add wa, (xsp + 4)
@@ -2097,53 +1724,7 @@ DrawWall_Deferred:
 	jr DrawWall_DoCopy
 
 DrawWall_DoCopy:
-	lda xsp, (xsp - 12)
-	push xiz
-	ldl_da xiz, (0x030452)
-	lda_24 xwa, (0x043c00)
-	ld (xsp + 4), xwa
-	pushw 0x9600
-	push xiz
-	push xwa
-	call Mem_Copy
-	ld xwa, 0x9600
-	add (xsp + 14), xwa
-	add xiz, 0x9600
-	pushw 0x9600
-	push xiz
-	ld xwa, (xsp + 20)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	lda xwa, (xsp + 8)
-	ldw (xwa + 2), 0x0
-	ldw (xwa), 0x0
-	ldw (xwa + 4), 0x13f
-	ldw (xwa + 6), 0xef
-	calr SetChangeRect
-	pop xiz
-	lda xsp, (xsp + 12)
-	ret
-
-; =============================================================================
-; DrawBitmap - Draw an indexed bitmap/sprite from the bitmap table
-;
-; Draws a bitmap from the ROM bitmap descriptor table at 0x913000.
-; Each descriptor is 8 bytes: {word width, word height, long pixel_data_ptr}.
-; Pixel data is stored as packed 16-bit entries (2 pixels per word).
-; Color 0xf7 is treated as transparent (pixel skipped).
-;
-; Input:
-;   XWA = pointer to position: word[0]=x, word[2]=y
-;   XBC = bitmap index (used as: table[index * 8])
-;
-; Output:
-;   Bitmap rendered to OFFSCREEN_BUFFER_1 (0x43c00)
-;   SetChangeRect called with bitmap bounding box
-;
-; Returns immediately if bitmap index is 0xffffffff (no bitmap).
-; Clips against screen bottom edge (y >= 240 -> skip row).
-; =============================================================================
+	.incbin "includes/generated/v7_transplant_DrawWall_DoCopy.bin"
 DrawBitmap:
 	dec 4, xsp
 	push xiz
@@ -2443,32 +2024,7 @@ DrawBitmapFast_Impl:
 	jr DrawBitmapFast_Impl_RowCheck
 
 DrawBitmapFast_Impl_RowLoop:
-	cpw (xsp + 8), 0xf0
-	jr nc, DrawBitmapFast_Impl_BuildDirtyRect
-	ld wa, (xiz)
-	pushw wa
-	ld xwa, (xsp + 6)
-	push xwa
-	ld xwa, (xsp + 18)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld wa, (xiz)
-	exts xwa
-	divs wa, 0x2
-	stw_erp WA, 0xe2
-	add wa, (xiz)
-	exts xwa
-	divs wa, 0x2
-	exts xwa
-	add xwa, xwa
-	add (xsp + 4), xwa
-	ld xwa, (xsp + 12)
-	stb_dri W, 0xe1, 0x40, 0x01
-	ld (xsp + 12), xwa
-	incm 1, (xsp + 8)
-	incm 1, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFast_Impl_RowLoop.bin"
 DrawBitmapFast_Impl_RowCheck:
 	lda xde, (xiz + 2)
 	ld wa, (xde)
@@ -3121,29 +2677,7 @@ DrawBitmapSPFast_Impl:
 	jr ule, DrawBitmapSPFast_Impl_BuildDirtyRect
 
 DrawBitmapSPFast_Impl_RowLoop:
-	cpw (xsp + 6), 0xf0
-	jr nc, DrawBitmapSPFast_Impl_BuildDirtyRect
-	ld wa, (xsp + 16)
-	pushw wa
-	ld xwa, (xsp + 20)
-	push xwa
-	push xiz
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld wa, (xsp + 16)
-	inc 1, wa
-	exts xwa
-	divs wa, 0x2
-	exts xwa
-	add xwa, xwa
-	add (xsp + 18), xwa
-	stb_dri H, 0xf9, 0x40, 0x01
-	incm 1, (xsp + 6)
-	incm 1, (xsp + 4)
-	ld wa, (xsp + 30)
-	cp (xsp + 4), wa
-	jr c, DrawBitmapSPFast_Impl_RowLoop
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapSPFast_Impl_RowLoop.bin"
 DrawBitmapSPFast_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 8)
 	ld xhl, (xsp + 22)
@@ -3382,61 +2916,7 @@ DrawBitmapFile_ParamBlock:
 	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
 
 DrawBitmapFile_Impl:
-	stb_dri L, 0xfd, 0xc8, 0xfb
-	push xiz
-	stl_dri XBC, 0xfd, 0x34, 0x04
-	stl_dri XWA, 0xfd, 0x38, 0x04
-	pushw 0x2
-	pushw 0xea
-	pushw 0xadf2
-	ld_sril XWA, (xsp + 0x043a)
-	push xwa
-	call String_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jrl nz, DrawBitmapFile_Impl_Return
-	ld_sril XWA, (xsp + 0x0434)
-	lda xwa, (xwa + 14)
-	ld (xsp + 36), xwa
-	ld (xsp + 4), xwa
-	ld xwa, (xsp + 36)
-	ld xwa, (xwa)
-	cp xwa, 0x28
-	jrl nz, DrawBitmapFile_Impl_Return
-	ld xwa, (xsp + 36)
-	cpw (xwa + 12), 0x1
-	jrl nz, DrawBitmapFile_Impl_Return
-	ld xwa, (xsp + 36)
-	cpw (xwa + 14), 0x8
-	jrl ugt, DrawBitmapFile_Impl_Return
-	ld xwa, (xsp + 36)
-	ld xwa, (xwa + 32)
-	cp xwa, 0x100
-	jrl ugt, DrawBitmapFile_Impl_Return
-	ld_sril XWA, (xsp + 0x0434)
-	ld xwa, (xwa + 10)
-	ld (xsp + 32), xwa
-	ld xwa, 0x36
-	sub (xsp + 32), xwa
-	ld xwa, (xsp + 32)
-	cp xwa, 0x400
-	jrl ugt, DrawBitmapFile_Impl_Return
-	ld xwa, (xsp + 32)
-	pushw wa
-	ld_sril XWA, (xsp + 0x0436)
-	lda xwa, (xwa + 54)
-	push xwa
-	lda xwa, (xsp + 58)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 32)
-	srl xwa, 2
-	ld (xsp + 32), xwa
-	ld xbc, 0x69400
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl.bin"
 DrawBitmapFile_Impl_InitPalette:
 	ld xde, (xsp + 12)
 	sll xde, 2
@@ -3484,47 +2964,7 @@ DrawBitmapFile_Impl_LoadPalette:
 	jr c, DrawBitmapFile_Impl_LoadPalette
 
 DrawBitmapFile_Impl_ParseDimensions:
-	ld xbc, (xsp + 36)
-	ld xwa, (xbc + 4)
-	ld (xsp + 16), xwa
-	ld xwa, (xbc + 8)
-	ld (xsp + 8), xwa
-	ld xbc, 0x8
-	ld xwa, (xsp + 4)
-	mrdw3 0x98, 0x0e, 0x51
-	ld iz, bc
-	extz xiz
-	ld xbc, xiz
-	sla xbc, 2
-	ld xwa, xbc
-	dec 1, xwa
-	add xwa, (xsp + 16)
-	call Math_DivideSigned32
-	ld (xsp + 20), xhl
-	sla xhl, 2
-	ld (xsp + 20), xhl
-	ld xwa, xhl
-	ld xbc, xiz
-	call Math_MultiplyAccumulate
-	pushw hl
-	call Malloc
-	inc 2, xsp
-	ld (xsp + 40), xhl
-	ld xwa, (xsp + 40)
-	ld (xsp + 24), xwa
-	ld xwa, (xsp + 32)
-	sll xwa, 2
-	add xwa, 0x36
-	add_sril_mr XWA, 0xfd, 0x34, 0x04
-	ld xwa, (xsp + 8)
-	cp xwa, 0xf0
-	jr le, DrawBitmapFile_Impl_ComputeStride
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	ld xbc, (xsp + 8)
-	sub xbc, 0xf0
-	jr le, DrawBitmapFile_Impl_ClampHeight
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_ParseDimensions.bin"
 DrawBitmapFile_Impl_SkipExtraRows:
 	ld xwa, (xsp + 20)
 	add_sril_mr XWA, 0xfd, 0x34, 0x04
@@ -3538,97 +2978,17 @@ DrawBitmapFile_Impl_ClampHeight:
 	ld (xsp + 8), xwa
 
 DrawBitmapFile_Impl_ComputeStride:
-	ld xwa, 0x140
-	ld (xsp + 32), xwa
-	ld xbc, (xsp + 8)
-	dec 1, xbc
-	ld xwa, (xsp + 32)
-	call Math_MultiplyAccumulate
-	ld (xsp + 32), xhl
-	add xhl, 0x56800
-	ld (xsp + 28), xhl
-	lds32 xwa, 0
-	ld (xsp + 12), xwa
-	ld xwa, (xsp + 8)
-	cp xwa, 0x0
-	jrl le, DrawBitmapFile_Impl_FillRemaining
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_ComputeStride.bin"
 DrawBitmapFile_Impl_DecodeRowLoop:
-	ld xwa, (xsp + 20)
-	pushw wa
-	ld_sril XWA, (xsp + 0x0436)
-	push xwa
-	ld xwa, (xsp + 30)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld xwa, (xsp + 4)
-	ld de, (xwa + 14)
-	ld xwa, (xsp + 24)
-	ld xbc, (xsp + 20)
-	calr Gfx_ProcessSplashData
-	ld xwa, (xsp + 16)
-	cp xwa, 0x140
-	jr lt, DrawBitmapFile_Impl_TileRow
-	pushw 0x140
-	ld xwa, (xsp + 26)
-	push xwa
-	ld xwa, (xsp + 34)
-	push xwa
-	jr DrawBitmapFile_Impl_RowCopy
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_DecodeRowLoop.bin"
 DrawBitmapFile_Impl_TileRow:
-	lds32 xiz, 0
-	ld xbc, (xsp + 16)
-	ld xwa, 0x140
-	call Math_DivideSigned32
-	cp xhl, 0x0
-	jr le, DrawBitmapFile_Impl_TileRemainder
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_TileRow.bin"
 DrawBitmapFile_Impl_TileLoop:
-	ld xwa, (xsp + 16)
-	pushw wa
-	ld xwa, (xsp + 26)
-	push xwa
-	ld xwa, xiz
-	ld xbc, (xsp + 22)
-	call Math_MultiplyAccumulate
-	add xhl, (xsp + 34)
-	push xhl
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	inc 1, xiz
-	ld xbc, (xsp + 16)
-	ld xwa, 0x140
-	call Math_DivideSigned32
-	cp xiz, xhl
-	jr lt, DrawBitmapFile_Impl_TileLoop
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_TileLoop.bin"
 DrawBitmapFile_Impl_TileRemainder:
-	ld xwa, xiz
-	ld xbc, (xsp + 16)
-	call Math_MultiplyAccumulate
-	ld xwa, 0x140
-	sub xwa, xhl
-	pushw wa
-	ld xwa, (xsp + 26)
-	push xwa
-	add xhl, (xsp + 34)
-	push xhl
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_TileRemainder.bin"
 DrawBitmapFile_Impl_RowCopy:
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld xwa, 0x140
-	sub (xsp + 28), xwa
-	ld xwa, (xsp + 20)
-	add_sril_mr XWA, 0xfd, 0x34, 0x04
-	lds32 xwa, 1
-	add (xsp + 12), xwa
-	ld xwa, (xsp + 12)
-	cp xwa, (xsp + 8)
-	jrl lt, DrawBitmapFile_Impl_DecodeRowLoop
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_RowCopy.bin"
 DrawBitmapFile_Impl_FillRemaining:
 	ld xbc, (xsp + 8)
 	cp xbc, 0xf0
@@ -3644,77 +3004,11 @@ DrawBitmapFile_Impl_FillRemaining:
 	jr ge, DrawBitmapFile_Impl_CopyToVRAM
 
 DrawBitmapFile_Impl_FillLoop:
-	pushw 0x140
-	push xiz
-	ld xwa, (xsp + 34)
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	stb_dri H, 0xf9, 0x40, 0x01
-	ld xwa, 0x140
-	add (xsp + 28), xwa
-	lds32 xwa, 1
-	add (xsp + 12), xwa
-	ld xwa, (xsp + 12)
-	cp xwa, 0xf0
-	jr lt, DrawBitmapFile_Impl_FillLoop
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_FillLoop.bin"
 DrawBitmapFile_Impl_CopyToVRAM:
-	ld xwa, (xsp + 40)
-	push xwa
-	call Free
-	inc 4, xsp
-	calr Gfx_DecodeImageToBuffer
-	ld_sril XWA, (xsp + 0x0438)
-	calr IsPointOnScreen
-	cps hl, 0
-	jrl z, DrawBitmapFile_Impl_Return
-	ld xbc, (xsp + 36)
-	ld xwa, (xbc + 4)
-	ld (xsp + 40), wa
-	ld xwa, (xbc + 8)
-	ld (xsp + 42), wa
-	ld_sril XHL, (xsp + 0x0438)
-	ld bc, (xhl + 2)
-	ld wa, bc
-	exts xwa
-	ld xde, xwa
-	sll xde, 2
-	add xde, xwa
-	sll xde, 6
-	ld wa, (xhl)
-	exts xwa
-	add xwa, xde
-	ld xde, 0x43c00
-	add xde, xwa
-	ld xiz, xde
-	ld xwa, 0x56800
-	ld (xsp + 36), xwa
-	ld (xsp + 34), bc
-	ldw (xsp + 32), 0x0
-	ld wa, (xsp + 42)
-	cps wa, 0
-	jr ule, DrawBitmapFile_Impl_BuildDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_CopyToVRAM.bin"
 DrawBitmapFile_Impl_VRAMRowLoop:
-	cpw (xsp + 34), 0xf0
-	jr nc, DrawBitmapFile_Impl_BuildDirtyRect
-	ld wa, (xsp + 40)
-	pushw wa
-	ld xwa, (xsp + 38)
-	push xwa
-	push xiz
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	ld xwa, 0x140
-	add (xsp + 36), xwa
-	stb_dri H, 0xf9, 0x40, 0x01
-	incm 1, (xsp + 34)
-	incm 1, (xsp + 32)
-	ld wa, (xsp + 42)
-	cp (xsp + 32), wa
-	jr c, DrawBitmapFile_Impl_VRAMRowLoop
-
+	.incbin "includes/generated/v7_transplant_DrawBitmapFile_Impl_VRAMRowLoop.bin"
 DrawBitmapFile_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 44)
 	ld_sril XHL, (xsp + 0x0438)
@@ -3786,45 +3080,7 @@ DrawString:
 	jr DrawString_Return
 
 DrawString_DeferredPath:
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	inc 1, hl
-	ld wa, hl
-	calr DrawQueue_Alloc
-	ld (xsp + 4), xhl
-	ldw wa, 0x1c
-	calr DrawQueue_Alloc
-	ld xiz, xhl
-	lda_24 xwa, (DrawString_Return_0x7)
-	ld (xhl), xwa
-	ld xwa, (xsp + 16)
-	ld xiy, xwa
-	lda xix, (xhl + 4)
-	lds bc, 4
-	ldirw
-	ld xwa, (xsp + 12)
-	ld xiy, xwa
-	lda xix, (xhl + 12)
-	ldiw
-	ldiw
-	ld xbc, (xsp + 4)
-	ld (xhl + 16), xbc
-	ld xwa, (xsp + 8)
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xwa, (xsp + 28)
-	ld (xiz + 20), xwa
-	ld wa, (xsp + 26)
-	ld (xiz + 24), wa
-	ld wa, (xsp + 24)
-	ld (xiz + 26), wa
-	ld xwa, xiz
-	calr DisplayCmd_DequeueAndExecute
-
+	.incbin "includes/generated/v7_transplant_DrawString_DeferredPath.bin"
 DrawString_Return:
 	pop xiz
 	lda xsp, (xsp + 16)
@@ -3950,23 +3206,7 @@ DrawString_Impl_ClampDirtyTop:
 	ld (xbc), wa
 
 DrawString_Impl_ClampDirtyBottom:
-	lda xbc, (xsp + 40)
-	ld_sril XWA, (xsp + 0x0138)
-	call ConvertStrings
-	lda xwa, (xsp + 40)
-	ld (xsp + 24), xwa
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 12)
-	or xwa, xwa
-	jr nz, DrawString_Impl_VariableWidthLoop
-	ld xwa, (xsp + 24)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld wa, (xsp + 16)
-	mul xwa, xhl
-	jr DrawString_Impl_ComputeDirtyRect
-
+	.incbin "includes/generated/v7_transplant_DrawString_Impl_ClampDirtyBottom.bin"
 DrawString_Impl_VariableWidthLoop:
 	ld xwa, (xsp + 24)
 	cp (xwa), 0x0

@@ -116,18 +116,7 @@ SoundBank_InitTrack_Loop:
 	xor iy, iy
 
 SoundBank_InitTrack_ByteFields:
-	ld xix, SoundBank_DefaultTrackData
-	ldb_sri A, 0x07, 0xf0, 0xf4
-	lda_dri XBC, 0x07, 0xec, 0xf4
-	inc 1, iy
-	cps iy, 7
-	jr ule, SoundBank_InitTrack_ByteFields
-	ldb_d8 a, (0x8e6a)
-	lda_dri XBC, 0x07, 0xec, 0xf4
-	ld xhl, 0x14
-	add xhl, xde
-	xor iy, iy
-
+	.incbin "includes/generated/v7_transplant_SoundBank_InitTrack_ByteFields.bin"
 SoundBank_InitTrack_WordFields:
 	ld xix, SoundBank_DefaultTrackData_0x8
 	ldw_sri WA, 0x07, 0xf0, 0xf4

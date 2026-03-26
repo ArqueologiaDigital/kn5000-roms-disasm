@@ -7,84 +7,13 @@
 ; =============================================================================
 
 PsGridBox_Init:
-	ld_sril XWA, (xsp + 0x014e)
-	call GetViewInstance
-	ld xiz, xhl
-	ld wa, (xiz + 38)
-	sll wa, 1
-	inc 2, wa
-	pushw wa
-	call Malloc
-	ld xwa, (xiz + 50)
-	ld (xwa), xhl
-	ld wa, (xiz + 36)
-	sll wa, 1
-	inc 2, wa
-	pushw wa
-	call Malloc
-	ld xwa, (xiz + 54)
-	ld (xwa), xhl
-	ld wa, (xiz + 36)
-	sll wa, 1
-	inc 2, wa
-	pushw wa
-	call Malloc
-	inc 6, xsp
-	ld xwa, (xiz + 58)
-	ld (xwa), xhl
-	ld_sril XWA, (xsp + 0x014e)
-	ld_sril XBC, (xsp + 0x014a)
-	ld_sril XDE, (xsp + 0x0146)
-	jrl PsGridBox_ShowHide_Tail
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_Init.bin"
 PsGridBox_Close:
-	ld_sril XWA, (xsp + 0x014e)
-	ld_sril XBC, (xsp + 0x014a)
-	ld_sril XDE, (xsp + 0x0146)
-	calr VwBoxProc
-	ld_sril XWA, (xsp + 0x014e)
-	call GetViewInstance
-	ld xiz, xhl
-	lda xbc, (xiz + 50)
-	ld xwa, (xbc)
-	ld xwa, (xwa)
-	or xwa, xwa
-	jr z, PsGridBox_Close_FreeRows
-	ld xwa, (xbc)
-	ld xwa, (xwa)
-	push xwa
-	call Free
-	inc 4, xsp
-	ld xbc, (xiz + 50)
-	lds32 xwa, 0
-	ld (xbc), xwa
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_Close.bin"
 PsGridBox_Close_FreeRows:
-	ld xbc, (xiz + 54)
-	ld xwa, (xbc)
-	or xwa, xwa
-	jr z, PsGridBox_Close_FreeRowAlt
-	ld xwa, (xbc)
-	push xwa
-	call Free
-	inc 4, xsp
-	ld xbc, (xiz + 54)
-	lds32 xwa, 0
-	ld (xbc), xwa
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_Close_FreeRows.bin"
 PsGridBox_Close_FreeRowAlt:
-	ld xbc, (xiz + 58)
-	ld xwa, (xbc)
-	or xwa, xwa
-	jr z, PsGridBox_ReturnZero
-	ld xwa, (xbc)
-	push xwa
-	call Free
-	inc 4, xsp
-	ld xbc, (xiz + 58)
-	lds32 xwa, 0
-	ld (xbc), xwa
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_Close_FreeRowAlt.bin"
 PsGridBox_ReturnZero:
 	lds32 xhl, 0
 	jrl PsGridBox_Return
@@ -112,39 +41,7 @@ PsGridBox_ShowHide_CountNext:
 	incm 1, (xsp + 14)
 
 PsGridBox_ShowHide_CountLoop:
-	ld bc, (xsp + 14)
-	extz xbc
-	lda xwa, (xsp + 42)
-	add xwa, xbc
-	ld a, (xwa)
-	cps a, 0
-	jr nz, PsGridBox_ShowHide_CountPipe
-	stb_dri A, 0xfd, 0x3e, 0x01
-	ld_sril XWA, (xsp + 0x014e)
-	calr GetClientBox
-	stb_dri A, 0xfd, 0x3e, 0x01
-	ld wa, (xbc + 4)
-	ld (xsp + 8), wa
-	ld wa, (xbc)
-	sub (xsp + 8), wa
-	decm 1, (xsp + 8)
-	lda xwa, (xsp + 42)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld wa, (xsp + 18)
-	sub hl, wa
-	ld (xsp + 10), hl
-	ldw (xsp + 14), 0x0
-	ld xde, (xsp + 4)
-	ld xwa, (xde + 50)
-	ld xbc, (xwa)
-	ldw_sri0 WA, (xsp + 0x013e)
-	ld (xbc), wa
-	ldw (xsp + 12), 0x1
-	cpw (xde + 38), 0x1
-	jr c, PsGridBox_ShowHide_ParseRows
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_ShowHide_CountLoop.bin"
 PsGridBox_ShowHide_CalcWidths:
 	ld wa, (xsp + 14)
 	extz xwa
@@ -173,37 +70,7 @@ PsGridBox_ShowHide_ScanLoop:
 	jr nz, PsGridBox_ShowHide_ScanPipe
 
 PsGridBox_ShowHide_CalcWidth:
-	ld xwa, (xsp + 16)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld wa, (xsp + 8)
-	mul xwa, xhl
-	ld bc, (xsp + 10)
-	extz xwa
-	div xwa, xbc
-	ld hl, wa
-	ld bc, (xsp + 12)
-	dec 1, bc
-	extz xbc
-	add xbc, xbc
-	ld xix, (xsp + 4)
-	ld xwa, (xix + 50)
-	ld xwa, (xwa)
-	ld xde, xwa
-	add xde, xbc
-	ld de, (xde)
-	add de, hl
-	ld bc, (xsp + 12)
-	extz xbc
-	add xbc, xbc
-	add xwa, xbc
-	ld (xwa), de
-	incm 1, (xsp + 12)
-	ld bc, (xsp + 12)
-	cp bc, (xix + 38)
-	jr ule, PsGridBox_ShowHide_CalcWidths
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_ShowHide_CalcWidth.bin"
 PsGridBox_ShowHide_ParseRows:
 	lda xde, (xsp + 42)
 	ld_sril XWA, (xsp + 0x014e)
@@ -971,67 +838,9 @@ PsGridBox_Scroll_Unfocused:
 	lds de, 0
 
 PsGridBox_Scroll_Render:
-	stb_dri C, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x32, 0x01
-	ld xix, (xsp + 20)
-	ld xwa, (xix + 28)
-	push xwa
-	pushm (xix + 32)
-	ld xwa, xix
-	pushm (xwa + 22)
-	ld a, (xwa + 34)
-	extz wa
-	pushw wa
-	pushw de
-	ld xde, (xsp + 40)
-	ld xwa, xhl
-	call DrawStringReverse
-	jrl PsGridBox_ReturnZero
-	lda xde, (xsp + 24)
-	ld_sril XWA, (xsp + 0x0146)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld (xde), wa
-	lda xbc, (xde + 2)
-	ld_sril XWA, (xsp + 0x0146)
-	ld (xbc), wa
-	lda xwa, (xsp + 32)
-	ld (xde + 4), xwa
-	pushm (xbc)
-	pushm (xde)
-	pushw 0xea
-	pushw 0xa1ec
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	lda xde, (xsp + 24)
-	ld_sril XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008c
-	jrl PsGridBox_DispatchEvent
-	ld xwa, Data_SoundEditorCharsLayout_0x320
-	jr PsGridBox_Scroll_CopyStr
-	ld xwa, Data_SoundEditorCharsLayout_0x340
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_Scroll_Render.bin"
 PsGridBox_Scroll_CopyStr:
-	push xwa
-	ld_sril XWA, (xsp + 0x014a)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	jrl PsGridBox_ReturnZero
-	ld_sril XWA, (xsp + 0x014e)
-	call GetViewInstance
-	ld (xsp + 20), xhl
-	ld_sril XWA, (xsp + 0x0146)
-	srl xwa, 0
-	ldiw_erp 0xe2, 0
-	ld iz, wa
-	cp iz, 0xffff
-	jr nz, PsGridBox_Scroll_DefaultRow
-	ld xwa, (xsp + 20)
-	ld xwa, (xwa + 46)
-	ld iz, (xwa)
-
+	.incbin "includes/generated/v7_transplant_PsGridBox_Scroll_CopyStr.bin"
 PsGridBox_Scroll_DefaultRow:
 	ld_sril XWA, (xsp + 0x0146)
 	ld (xsp + 18), wa

@@ -34,865 +34,47 @@ FileIO_AdvancePointer:
 	inc 8, xiz
 
 FileIO_MainLoop:
-	lda_d16 xbc, (0x8e7c)
-	ld a, (xiz)
-	ld (xbc), a
-	cp a, 0xff
-	jr nz, FileIO_ProcessMaskAndShift
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_FileIO_MainLoop.bin"
 FileIO_BytecodeData:
-	.byte 0x80, 0x3f, 0xff, 0xb0, 0xf6, 0xc1, 0x8e, 0x8e
-	.byte 0x23, 0xcb, 0xcf, 0x0f, 0x6b, 0x1f, 0xcb, 0x8d
-	.byte 0xcb, 0x61, 0xf1, 0x8e, 0x8e, 0x43, 0xcd, 0x8b
-	.byte 0xd9, 0x12, 0xd9, 0xee, 0x02, 0xf1, 0x39, 0xc0
-	.byte 0x32, 0xd9, 0x8c, 0xec, 0x12, 0xea, 0x84, 0xe8
-	.byte 0x8d, 0x95, 0x10, 0x95, 0x10, 0xb0, 0x00, 0xff
-	.byte 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x3f
-	.byte 0x13, 0x66, 0x11, 0xee, 0x88, 0x1e, 0x9c, 0x0a
-	.byte 0xee, 0x88, 0x1e, 0xbb, 0xff, 0xee, 0x64, 0xee
-	.byte 0x88, 0x1e, 0xb4, 0xff, 0x5e, 0x0e, 0x3e, 0xe8
-	.byte 0x8e, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x1e
-	.byte 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd9, 0x66, 0x11, 0xee, 0x88, 0x1e
-	.byte 0x72, 0x0a, 0xee, 0x88, 0x1e, 0x91, 0xff, 0xee
-	.byte 0x64, 0xee, 0x88, 0x1e, 0x8a, 0xff, 0x5e, 0x0e
-	.byte 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x21, 0xc9
-	.byte 0xcf, 0x0e, 0x66, 0x12, 0xc9, 0xcf, 0x13, 0x66
-	.byte 0x0d, 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xdb, 0xd9, 0x6e, 0x02, 0x68, 0x11
-	.byte 0xee, 0x88, 0x1e, 0x3f, 0x0a, 0xee, 0x88, 0x1e
-	.byte 0x5e, 0xff, 0xee, 0x64, 0xee, 0x88, 0x1e, 0x57
-	.byte 0xff, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0xee, 0x88
-	.byte 0x1e, 0x4d, 0xff, 0xee, 0x64, 0xee, 0x88, 0x1e
-	.byte 0x46, 0xff, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0xbe
-	.byte 0x02, 0x31, 0x81, 0x21, 0xc9, 0xd8, 0x6e, 0x15
-	.byte 0xb1, 0x00, 0x00, 0xbe, 0x03, 0x00, 0xff, 0xee
-	.byte 0x88, 0x1e, 0x77, 0x00, 0x86, 0x3f, 0xff, 0x6e
-	.byte 0x64, 0xee, 0x88, 0x68, 0x69, 0x20, 0x00, 0xe8
-	.byte 0x12, 0x1d, 0x33, 0x7c, 0xfc, 0xbe, 0x02, 0x32
-	.byte 0xb2, 0x47, 0xc1, 0x90, 0x8e, 0x21, 0xdb, 0x12
-	.byte 0xc9, 0xcf, 0x15, 0x66, 0x3a, 0xc9, 0xcf, 0x10
-	.byte 0x66, 0x2e, 0xc9, 0xcf, 0x0f, 0x66, 0x22, 0xc9
-	.byte 0xcf, 0x0a, 0x66, 0x16, 0xc9, 0xdb, 0x66, 0x0b
-	cps	a, 1
-	.ascii "n=@.ùÌ"
-	nop
-	.ascii "h!@0"
-	.byte 0x9d, 0xed, 0x00
-	.byte 0x68, 0x1a, 0x40, 0x32, 0x9d, 0xed, 0x00, 0x68
-	.byte 0x13, 0x40, 0x34, 0x9d, 0xed, 0x00, 0x68, 0x0c
-	.byte 0x40, 0x36, 0x9d, 0xed, 0x00, 0x68, 0x05, 0x40
-	.byte 0x38, 0x9d, 0xed, 0x00
-	.byte 0xc3, 0x07, 0xe0, 0xec
-	.byte 0x21, 0xb2, 0x41, 0x68, 0x8e, 0xee, 0x88, 0x1e
-	.byte 0xbe, 0xfe, 0xee, 0x64, 0xee, 0x88, 0x1e, 0xb7
-	.byte 0xfe, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34
-	.byte 0x8d, 0x3f, 0x13, 0x6e, 0x0f, 0x8e, 0x02, 0x21
-	.byte 0xc9, 0xcf, 0x13, 0x66, 0x07, 0xc9, 0xd8, 0x66
-	.byte 0x03, 0xb6, 0x00, 0xff, 0x40, 0xc0, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd9, 0x6e
-	.byte 0x1f, 0x8e, 0x02, 0x21, 0xc9, 0xcf, 0x0f, 0x66
-	.byte 0x14, 0xc9, 0xcf, 0x11, 0x66, 0x0f, 0xc9, 0xcf
-	.byte 0x13, 0x66, 0x0a, 0xc9, 0xcf, 0x09, 0x66, 0x05
-	.byte 0xc9, 0xcf, 0x0e, 0x6e, 0x03, 0xb6, 0x00, 0xff
-	.byte 0x1d, 0x7a, 0xbf, 0xfe, 0xdb, 0xcc, 0x07, 0x00
-	.byte 0x66, 0x09, 0x8e, 0x02, 0x3f, 0x07, 0x6e, 0x03
-	.byte 0xb6, 0x00, 0xff, 0xbe, 0x02, 0x30, 0x80, 0x3f
-	.byte 0x09, 0x6e, 0x0c, 0xc1, 0xfc, 0x26, 0x3f, 0x01
-	.byte 0x6e, 0x05, 0xb0, 0x00, 0x08, 0x68, 0x05, 0x80
-	.byte 0x3f, 0x08, 0x6e, 0x09, 0xf1, 0x6a, 0x26, 0xc8
-	.byte 0x66, 0x03, 0xb0, 0x00, 0x0a, 0xd1, 0xa8, 0x28
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x11, 0x80, 0x21, 0xc9
-	.byte 0xcf, 0x13, 0x66, 0x05, 0xc9, 0xcf, 0x14, 0x6e
-	.byte 0x05, 0xb6, 0x00, 0xff, 0x68, 0x04, 0xf1, 0x6a
-	.byte 0x26, 0xb0, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0xbe
-	.byte 0x02, 0x31, 0x81, 0x21, 0xc9, 0xd8, 0x66, 0x7a
-	.byte 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x13, 0x66
-	.byte 0x71, 0xf1, 0x21, 0x04, 0xca, 0x6e, 0x51, 0xc1
-	.byte 0xa5, 0x28, 0x21, 0xc9, 0xcd, 0x01, 0xf1, 0xa5
-	.byte 0x28, 0x41, 0xc1, 0x34, 0x8d, 0x23, 0xcb, 0xcf
-	.byte 0x0d, 0x6b, 0x24, 0xcb, 0xcf, 0x08, 0x67, 0x1f
-	.byte 0xee, 0x88, 0x1e
-	sub	(xsp+182), xbc
-	.byte 0xbe, 0x01, 0x00, 0x20, 0xbe, 0x02, 0x00, 0x0a
-	.byte 0xbe, 0x03, 0x00, 0xff, 0xee, 0x88, 0x1e, 0xcf
-	.byte 0xfd, 0xee, 0x64, 0xee, 0x88, 0x68, 0x30, 0xc9
-	.byte 0x33, 0x00, 0x6e, 0xdc, 0xcb, 0xcf, 0x0e, 0x66
-	.byte 0xd7, 0x1d, 0x5c, 0x36, 0xf4, 0xee, 0x88, 0x1e
-	.byte 0xb6, 0xfd, 0xee, 0x64, 0xee, 0x88, 0x68, 0x17
-	.byte 0xb6, 0x00, 0xa9, 0xbe, 0x01, 0x00, 0x20, 0xb1
-	.byte 0x00, 0x0a, 0xbe, 0x03, 0x00, 0xff, 0xee, 0x88
-	.byte 0x1e, 0x9d, 0xfd, 0xee, 0x64, 0xee, 0x88, 0x1e
-	.byte 0x96, 0xfd, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0x8e
-	.byte 0x01, 0x21, 0xc9, 0xcf, 0x0e, 0x6e, 0x07, 0xc1
-	.byte 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x35, 0xd8, 0x12
-	.byte 0x1d, 0x23, 0x7c, 0xfc, 0xbe, 0x02, 0x31, 0x81
-	.byte 0x3f, 0x00, 0x66, 0x06, 0xe1, 0x84, 0x8e, 0xeb
-	.byte 0x68, 0x0b, 0xeb, 0x88, 0xd8, 0x06, 0xd7, 0xe2
-	.byte 0x06, 0xe1, 0x84, 0x8e, 0xc8, 0xe1, 0x88, 0x8e
-	.byte 0x20, 0xeb, 0xc0, 0x66, 0x02, 0xb1, 0xb9, 0xee
-	.byte 0x88, 0x1e, 0x54, 0xfd, 0xee, 0x64, 0xee, 0x88
-	.byte 0x1e, 0x4d, 0xfd, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e
-	.byte 0x8e, 0x01, 0x21, 0xc9, 0xcf, 0x0e, 0x6e, 0x07
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x35, 0xd8
-	.byte 0x12, 0x1d, 0x23, 0x7c, 0xfc, 0xbe, 0x02, 0x31
-	.byte 0x81, 0x3f, 0x00, 0x66, 0x06, 0xe1, 0x88, 0x8e
-	.byte 0xeb, 0x68, 0x0b, 0xeb, 0x88, 0xd8, 0x06, 0xd7
-	.byte 0xe2, 0x06, 0xe1, 0x88, 0x8e, 0xc8, 0xe1, 0x84
-	.byte 0x8e, 0x20, 0xeb, 0xc0, 0x66, 0x02, 0xb1, 0xb8
-	.byte 0xee, 0x88, 0x1e, 0x0b, 0xfd, 0xee, 0x64, 0xee
-	.byte 0x88, 0x1e, 0x04, 0xfd, 0x5e, 0x0e, 0x3e, 0xe8
-	.byte 0x8e, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x6e, 0x07
-	.byte 0xb6, 0x00, 0xa8, 0xbe, 0x01, 0x00, 0x01, 0xee
-	.byte 0x88, 0x1e, 0xec, 0xfc, 0xee, 0x64, 0xee, 0x88
-	.byte 0x1e, 0xe5, 0xfc, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e
-	.byte 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x10, 0x66
-	.byte 0x11, 0xc9, 0xcf, 0x13, 0x66, 0x0c, 0xee, 0x88
-	.byte 0x1e, 0xcd, 0xfc, 0xee, 0x64, 0xee, 0x88, 0x1e
-	.byte 0xc6, 0xfc, 0x5e, 0x0e, 0xef, 0x6c, 0xd7, 0xfa
-	.byte 0x04, 0xbf, 0x02, 0x60, 0xaf, 0x02, 0x20, 0x88
-	.byte 0x02, 0x23, 0xcb, 0xd8, 0x76, 0x09, 0x01, 0xc1
-	.byte 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x0e, 0x66, 0x0c
-	.byte 0xc9, 0xdb, 0x66, 0x05, 0xc9, 0xcf, 0x13, 0x6e
-	.byte 0x0e, 0x78, 0xf4, 0x00, 0xc2, 0x9b, 0x37, 0x00
-	.byte 0x21, 0xc9, 0xcc, 0x1f, 0x76, 0xe9, 0x00, 0x22
-	.byte 0x00, 0xe9, 0x12, 0xe9, 0x88, 0x1d, 0x33, 0x7c
-	.byte 0xfc, 0xaf, 0x02, 0x20, 0xb8, 0x02, 0x32, 0xb2
-	.byte 0x47, 0xc1, 0x90, 0x8e, 0x21, 0xdb, 0x12, 0xc9
-	.byte 0xcf, 0x14, 0x66, 0x26, 0xc9, 0xcf, 0x0d, 0x66
-	.byte 0x1a, 0xc9, 0xcf, 0x0c, 0x7e, 0xc1, 0x00, 0x40
-	.byte 0x3c, 0x9d, 0xed, 0x00
-	.byte 0xc3, 0x07, 0xe0, 0xec
-	.byte 0x21, 0xb2, 0x41, 0xc9, 0xcf, 0x11, 0x63, 0x11
-	.byte 0x78, 0xad, 0x00, 0x40, 0x44, 0x9d, 0xed, 0x00
-	.byte 0x68, 0xea, 0x40, 0x4c, 0x9d, 0xed, 0x00, 0x68
-	.byte 0xe3, 0xd8, 0x12, 0x1d, 0xa7, 0xe4, 0xfe, 0xcf
-	.byte 0xcf, 0xff, 0x76, 0x93, 0x00, 0x1d, 0x5e, 0x94
-	.byte 0xf9, 0xc7, 0xfb, 0x9f, 0xaf, 0x02, 0x20, 0xe8
-	.byte 0x62, 0xc7, 0xfb, 0xda, 0x63, 0x05, 0x80, 0x3f
-	.byte 0x0c, 0x66, 0x7d, 0xc7, 0xfb, 0xcf, 0x0f, 0x66
-	.byte 0x06, 0xc7, 0xfb, 0xcf, 0x14, 0x6e, 0x05, 0x80
-	.byte 0x3f, 0x0f, 0x6e, 0x6c, 0xc7, 0xfb, 0xcf, 0x10
-	.byte 0x67, 0x0f, 0xc7, 0xfb, 0xcf, 0x13, 0x6b, 0x09
-	.byte 0xaf, 0x02, 0x20, 0x88, 0x02, 0x3f, 0x0f, 0x66
-	.byte 0x57, 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xdb, 0xd9, 0x6e, 0x1d, 0xaf, 0x02
-	.byte 0x20, 0x88, 0x02, 0x21, 0xc9, 0xcf, 0x11, 0x66
-	.byte 0x05, 0xc9, 0xcf, 0x10, 0x6e, 0x02, 0x68, 0x38
-	.byte 0xc7, 0xfb, 0xcf, 0x0e, 0x6b, 0x05, 0xc9, 0xcf
-	.byte 0x0f, 0x66, 0x2d, 0xaf, 0x02, 0x20, 0x1e, 0xab
-	.byte 0x06, 0xaf, 0x02, 0x21, 0x81, 0x21, 0xd8, 0x12
-	.byte 0x89, 0x02, 0x23, 0xd9, 0x12, 0x1d, 0x41, 0x9d
-	.byte 0xfc, 0xaf, 0x02, 0x20, 0xb8, 0x03, 0x47, 0xaf
-	.byte 0x02, 0x20, 0x1e, 0xb3, 0xfb, 0xe8, 0xac, 0xaf
-	.byte 0x02, 0x88, 0xaf, 0x02, 0x20, 0x1e, 0xa8, 0xfb
-	.byte 0xd7, 0xfa, 0x05, 0xef, 0x64, 0x0e, 0x3e, 0xe8
-	.byte 0x8e, 0x8e, 0x02, 0x23, 0xcb, 0xd8, 0x76, 0x99
-	.byte 0x00, 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x13
-	.byte 0x76, 0x8f, 0x00, 0xf1, 0xd3, 0x33, 0xc8, 0x7e
-	.byte 0x88, 0x00, 0xc9, 0xcf, 0x0e, 0x6e, 0x1b, 0xc1
-	.byte 0x36, 0x8d, 0x21, 0xc9, 0xcf, 0xb8, 0x66, 0x12
-	.byte 0xc9, 0xcf, 0xb4, 0x6e, 0x75, 0xf1, 0xd3, 0x34
-	.byte 0xc8, 0x6e, 0x6f, 0xc1, 0xd6, 0x34, 0x3f, 0x0c
-	.byte 0x6f, 0x68, 0x22, 0x00, 0xe9, 0x12, 0xe9, 0x88
-	.byte 0x1d, 0x33, 0x7c, 0xfc, 0xbe, 0x02, 0x32, 0xb2
-	.byte 0x47, 0xc1, 0x90, 0x8e, 0x21, 0xdb, 0x12, 0xc9
-	.byte 0xde, 0x66, 0x24, 0xc9, 0xd9, 0x66, 0x19, 0xc9
-	.byte 0xd8
-	.ascii "nG@N"
-	.byte 0x9d, 0xed, 0x00
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21, 0xb2, 0x41, 0xc9
-	.byte 0x8b, 0xcb, 0xcf, 0x0f, 0x63, 0x10, 0x68, 0x32
-	.byte 0x40, 0x56, 0x9d, 0xed, 0x00, 0x68, 0xe9, 0x40
-	.byte 0x58, 0x9d, 0xed, 0x00
-	.byte 0x68, 0xe2, 0xc1, 0x36
-	.byte 0x8d, 0x3f, 0xb8, 0x6e, 0x05, 0xcb, 0xcf, 0x0e
-	.byte 0x66, 0x18, 0xd9, 0x12, 0x30, 0x48, 0x00, 0x1d
-	.byte 0x41, 0x9d, 0xfc, 0xbe, 0x03, 0x47, 0xee, 0x88
-	.byte 0x1e, 0x05, 0xfb, 0xee, 0x64, 0xee, 0x88, 0x1e
-	.byte 0xfe, 0xfa, 0x5e, 0x0e, 0xef, 0x6a, 0x3e, 0xe8
-	.byte 0x8e, 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x10
-	.byte 0x66, 0x18, 0xc9, 0xcf, 0x0f, 0x66, 0x13, 0xc9
-	.byte 0xcf, 0x0e, 0x66, 0x0e, 0xc9, 0xcf, 0x11, 0x66
-	.byte 0x09, 0xc9, 0xdb, 0x66, 0x05, 0xc9, 0xcf, 0x13
-	.byte 0x6e, 0x02, 0x68, 0x4e, 0xc1, 0x38, 0x8d, 0x21
-	.byte 0xc9, 0xcf, 0xd3, 0x66, 0x12, 0xc9, 0xcf, 0xd2
-	.byte 0x66, 0x0d, 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d
-	.byte 0x37, 0xd4, 0xfc, 0xdb, 0xd9, 0x6e, 0x02, 0x68
-	.byte 0x31, 0x8e, 0x02, 0x3f, 0x00, 0x66, 0x24, 0x1d
-	.byte 0x19, 0x60, 0xfb, 0xcf, 0xee, 0x03, 0xbf, 0x04
-	.byte 0x47, 0xe8, 0xa8, 0x8e, 0x02, 0x21, 0x1d, 0x33
-	.byte 0x7c, 0xfc, 0xcf, 0x61, 0x8f, 0x04, 0x87, 0xbe
-	.byte 0x02, 0x47, 0xbe, 0x03, 0x00, 0x7f, 0xee, 0x88
-	.byte 0x1e, 0x8d, 0xfa, 0xee, 0x64, 0xee, 0x88, 0x1e
-	.byte 0x86, 0xfa, 0x5e, 0xef, 0x62, 0x0e, 0x3e, 0xe8
-	.byte 0x8e, 0x8e, 0x02, 0x3f, 0x00, 0x66, 0x4c, 0xc1
-	.byte 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x10, 0x66, 0x18
-	.byte 0xc9, 0xcf, 0x0f, 0x66, 0x13, 0xc9, 0xcf, 0x0e
-	.byte 0x66, 0x0e, 0xc9, 0xcf, 0x11, 0x66, 0x09, 0xc9
-	.byte 0xdb, 0x66, 0x05, 0xc9, 0xcf, 0x13, 0x6e, 0x02
-	.byte 0x68, 0x29, 0xc1, 0x38, 0x8d, 0x21, 0xc9, 0xcf
-	.byte 0xd3, 0x66, 0x12, 0xc9, 0xcf, 0xd2, 0x66, 0x0d
-	.byte 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd9, 0x6e, 0x02, 0x68, 0x0c, 0xee
-	.byte 0x88, 0x1e, 0x34, 0xfa, 0xee, 0x64, 0xee, 0x88
-	.byte 0x1e, 0x2d, 0xfa, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x0c, 0xee
-	.byte 0x88, 0x1e, 0x1c, 0xfa, 0xee, 0x64, 0xee, 0x88
-	.byte 0x1e, 0x15, 0xfa, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x2f, 0xee
-	.byte 0x88, 0x1e, 0x04, 0xfa, 0xb6, 0x00, 0xa8, 0xbe
-	.byte 0x01, 0x00, 0x05, 0xbe, 0x02, 0x31, 0xbe, 0x03
-	.byte 0x32, 0x82, 0x21, 0x81, 0xc1, 0x66, 0x05, 0xb1
-	.byte 0x00, 0x40, 0x68, 0x03, 0xb1, 0x00, 0x00, 0xb2
-	.byte 0x00, 0x40, 0xee, 0x88, 0x1e, 0xe1, 0xf9, 0xee
-	.byte 0x64, 0xee, 0x88, 0x1e, 0xda, 0xf9, 0x5e, 0x0e
-	.byte 0x3e, 0xe8, 0x8e, 0x8e, 0x02, 0x3f, 0x00, 0x66
-	.byte 0x4b, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x44
-	.byte 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd9, 0x66, 0x37, 0xee, 0x88, 0x1e
-	.byte 0xb6, 0xf9, 0xf1, 0x1e, 0x04, 0xca, 0x66, 0x0d
-	.byte 0x40, 0x80, 0x80, 0x02, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd8, 0x6e, 0x18, 0xb6, 0x00, 0x48
-	.byte 0xbe, 0x01, 0x00, 0x03, 0xc2, 0xc8, 0xff, 0x00
-	.byte 0x21, 0xbe, 0x02, 0x41, 0xbe, 0x03, 0x00, 0x07
-	.byte 0xee, 0x88, 0x1e, 0x8b, 0xf9, 0xee, 0x64, 0xee
-	.byte 0x88, 0x1e, 0x84, 0xf9, 0x5e, 0x0e, 0x3e, 0xe8
-	.byte 0x8e, 0x8e, 0x02, 0x21, 0xc9, 0xd8, 0x66, 0x56
-	.byte 0xc1, 0x34, 0x8d, 0x23, 0xcb, 0xcf, 0x10, 0x66
-	.byte 0x1a, 0xcb, 0xcf, 0x0f, 0x66, 0x15, 0xcb, 0xcf
-	.byte 0x0e, 0x66, 0x10, 0xcb, 0xdb, 0x66, 0x0c, 0xcb
-	.byte 0xcf, 0x13, 0x66, 0x07, 0xc1, 0x36, 0x8d, 0x3f
-	.byte 0x51, 0x6e, 0x02, 0x68, 0x31, 0xf1, 0xe2, 0x26
-	.byte 0xc8, 0x6e, 0x2b, 0x20, 0x00, 0xe8, 0x12, 0x1d
-	.byte 0x33, 0x7c, 0xfc, 0xdb, 0x12, 0xf2, 0x60, 0x9d
-	.byte 0xed, 0x31, 0xc3, 0x07, 0xe4, 0xec, 0x21, 0xbe
-	.byte 0x02, 0x41, 0xf1, 0x3a, 0x8d, 0x41, 0xbe, 0x03
-	.byte 0x00, 0xff, 0xee, 0x88, 0x1e, 0x29, 0xf9, 0xee
-	.byte 0x64, 0xee, 0x88, 0x1e, 0x22, 0xf9, 0x5e, 0x0e
-	.byte 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x21, 0xc9
-	.byte 0xcf, 0x10, 0x66, 0x1f, 0xc9, 0xcf, 0x0f, 0x66
-	.byte 0x1a, 0xc9, 0xcf, 0x0e, 0x66, 0x15, 0xc9, 0xdb
-	.byte 0x66, 0x11, 0xc9, 0xcf, 0x13, 0x66, 0x0c, 0xee
-	.byte 0x88, 0x1e, 0xfc, 0xf8, 0xee, 0x64, 0xee, 0x88
-	.byte 0x1e, 0xf5, 0xf8, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x1e, 0x1e
-	.byte 0xd2, 0x03, 0x83, 0x3f, 0x0f, 0x66, 0x16, 0x83
-	.byte 0x3f, 0x0c, 0x66, 0x11, 0xee, 0x88, 0x1e, 0xb3
-	.byte 0x03, 0xee, 0x88, 0x1e, 0xd2, 0xf8, 0xee, 0x64
-	.byte 0xee, 0x88, 0x1e, 0xcb, 0xf8, 0x5e, 0x0e, 0x3e
-	.byte 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf
-	.byte 0x11, 0x66, 0x13, 0xc9, 0xcf, 0x0e, 0x66, 0x0e
-	.byte 0xc9, 0xcf, 0x13, 0x66, 0x09, 0xc1, 0x3a, 0x8d
-	.byte 0x21, 0xc9, 0xcf, 0x0f, 0x63, 0x02, 0x68, 0x60
-	.byte 0xbe, 0x02, 0x31, 0x81, 0x21, 0xc9, 0xd8, 0x66
-	.byte 0x3b, 0xf1, 0x92, 0x8e, 0xbd, 0xc1, 0x3a, 0x8d
-	.byte 0x21, 0xd8, 0x12, 0x31, 0x5d, 0x00, 0x1d, 0xf7
-	.byte 0xd4, 0xfc, 0xdb, 0xcc, 0x7f, 0x00, 0xbe, 0x03
-	.byte 0x32, 0xbe, 0x02, 0x31, 0xdb, 0xd8, 0x66, 0x05
-	.byte 0xb1, 0x00, 0x00, 0x68, 0x12, 0xc1, 0x3a, 0x8d
-	.byte 0x21, 0xd8, 0x12, 0xf1, 0x8d, 0x91, 0x33, 0xe8
-	.byte 0x12, 0xeb, 0x80, 0x80, 0x21, 0xb1, 0x41, 0xb2
-	.byte 0x00, 0x7f, 0x68, 0x0b, 0xf1, 0x92, 0x8e, 0xb5
-	.byte 0xb1, 0x00, 0x00, 0xbe, 0x03, 0x00, 0x00, 0xee
-	.byte 0x88, 0x1e, 0x30, 0x03, 0xee, 0x88, 0x1e, 0x4f
-	.byte 0xf8, 0xee, 0x64, 0xee, 0x88, 0x1e, 0x48, 0xf8
-	.byte 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d
-	.byte 0x21, 0xc9, 0xcf, 0x11, 0x66, 0x11, 0xc9, 0xcf
-	.byte 0x13, 0x66, 0x0c, 0xee, 0x88, 0x1e, 0x30, 0xf8
-	.byte 0xee, 0x64, 0xee, 0x88, 0x1e, 0x29, 0xf8, 0x5e
-	.byte 0x0e, 0x3e, 0xe8, 0x8e, 0xf1, 0xcd, 0x34, 0xcb
-	.byte 0x6e, 0x2d, 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf
-	.byte 0x11, 0x66, 0x0d, 0xc9, 0xcf, 0x13, 0x66, 0x08
-	.byte 0x1e, 0xf9, 0x02, 0x83, 0x3f, 0x0f, 0x6e, 0x02
-	.byte 0x68, 0x15, 0xf1, 0xf9, 0x90, 0xb1, 0xee, 0x88
-	.byte 0x1e, 0xd9, 0x02, 0xee, 0x88, 0x1e, 0xf8, 0xf7
-	.byte 0xee, 0x64, 0xee, 0x88, 0x1e, 0xf1, 0xf7, 0x5e
-	.byte 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x3f
-	.byte 0x13, 0x66, 0x23, 0x40, 0xc0, 0x00, 0x00, 0x00
-	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd9, 0x66, 0x16
-	.byte 0x8e, 0x02, 0x3f, 0x00, 0x66, 0x04, 0xf1, 0x52
-	.byte 0x8d, 0xbb, 0xee, 0x88, 0x1e, 0xc9, 0xf7, 0xee
-	.byte 0x64, 0xee, 0x88, 0x1e, 0xc2, 0xf7, 0x5e, 0x0e
-	.byte 0xef, 0x6c, 0xd7, 0xfa, 0x04, 0xbf, 0x02, 0x60
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x76, 0x88, 0x00
-	.byte 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd9, 0x66, 0x7b, 0xaf, 0x02, 0x20
-	.byte 0x88, 0x03, 0x21, 0xd8, 0x12, 0xe8, 0x12, 0x1d
-	.byte 0x33, 0x7c, 0xfc, 0xc7, 0xfb, 0x9f, 0x40, 0x00
-	.byte 0x88, 0x02, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xc7
-	.byte 0xfb, 0x8b, 0xd9, 0x12, 0xd9, 0x88, 0xd8, 0xec
-	.byte 0x02, 0xdb, 0xcf, 0x12, 0x00, 0x66, 0x23, 0xdb
-	.byte 0xcf, 0x11, 0x00, 0x6e, 0x3a, 0xf2, 0x7c, 0x9d
-	.byte 0xed, 0x32, 0xc3, 0x07, 0xe8, 0xe4, 0x23, 0xf2
-	.byte 0x64, 0x9d, 0xed, 0x32, 0xf3, 0x07, 0xe8, 0xe0
-	.byte 0x32, 0xaf, 0x02, 0x20, 0xa2, 0x23, 0xb3, 0xe8
-	.byte 0x68, 0x23, 0xf2, 0x9a, 0x9d, 0xed, 0x32, 0xc3
-	.byte 0x07, 0xe8, 0xe4, 0x23, 0xf2, 0x82, 0x9d, 0xed
-	.byte 0x32, 0xf3, 0x07, 0xe8, 0xe0, 0x32, 0xaf, 0x02
-	.byte 0x20, 0xa2, 0x23, 0xb3, 0xe8, 0x68, 0x06, 0xaf
-	.byte 0x02, 0x20, 0x1e, 0x33, 0xf7, 0xe8, 0xac, 0xaf
-	.byte 0x02, 0x88, 0xaf, 0x02, 0x20, 0x1e, 0x28, 0xf7
-	.byte 0xd7, 0xfa, 0x05, 0xef, 0x64, 0x0e, 0xbf, 0xf6
-	.byte 0x37, 0xd7, 0xfa, 0x04, 0xbf, 0x08, 0x60, 0xaf
-	.byte 0x08, 0x20, 0x88, 0x02, 0x21, 0xc7, 0xfb, 0x99
-	.byte 0xc7, 0xfb, 0xd8, 0x76, 0xa4, 0x00, 0xc1, 0x34
-	.byte 0x8d, 0x21, 0xc9, 0xcf, 0x0e, 0x66, 0x5f, 0xc9
-	.byte 0xcf, 0x13, 0x66, 0x5a, 0xe8, 0xa8, 0xc7, 0xfb
-	.byte 0x89, 0x1d, 0x33, 0x7c, 0xfc, 0xc7, 0xfb, 0x9f
-	.byte 0xbf, 0x04, 0x00, 0x48, 0x40, 0x00, 0x80, 0x02
-	.byte 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xbf, 0x05, 0x47
-	.byte 0x40, 0x01, 0x80, 0x02, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xbf, 0x02, 0x30, 0xb8, 0x04, 0x47, 0x1d
-	.byte 0x55, 0x9b, 0xfc, 0xbf, 0x02, 0x33, 0xaf, 0x08
-	.byte 0x20, 0xb8, 0x02, 0x31, 0xb8, 0x03, 0x32, 0x83
-	.byte 0x3f, 0x0e, 0x6f, 0x1c, 0xc7, 0xfb, 0x89, 0xd8
-	.byte 0x12, 0xf2, 0xa0, 0x9d, 0xed, 0x33, 0xc3, 0x07
-	.byte 0xec, 0xe0, 0x21, 0xb1, 0x41, 0xb2, 0x00, 0x30
-	.byte 0xf1, 0x52, 0x8d, 0xbb
-	.ascii "h+h:"
-	.byte 0xaf, 0x08, 0x20, 0xb8, 0x01, 0x00, 0x00, 0x83
-	.byte 0x21, 0xb1, 0x41, 0x8b, 0x01, 0x21, 0xc9, 0xef
-	.byte 0x02, 0xc9, 0xee, 0x02, 0xc7, 0xfb, 0x81, 0xc9
-	.byte 0x8f, 0xb2, 0x47, 0x81, 0x21, 0xd8, 0x12, 0xf1
-	.byte 0x92, 0xff, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0xb0
-	.byte 0x47, 0xaf, 0x08, 0x20, 0x1e, 0x71, 0xf6, 0xe8
-	.byte 0xac, 0xaf, 0x08, 0x88, 0xaf, 0x08, 0x20, 0x1e
-	.byte 0x66, 0xf6, 0xd7, 0xfa, 0x05, 0xbf, 0x0a, 0x37
-	.byte 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x3f
-	.byte 0x13, 0x66, 0x12, 0x40, 0x86, 0x28, 0x00, 0x00
-	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xee, 0x88
-	.byte 0xdb, 0x89, 0x1e, 0x89, 0x01, 0x5e, 0x0e, 0x3e
-	.byte 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66
-	.byte 0x12, 0x40, 0x88, 0x28, 0x00, 0x00, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xdb, 0x12, 0xee, 0x88, 0xdb, 0x89
-	.byte 0x1e, 0x6b, 0x01, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x12, 0x40
-	.byte 0x8a, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
-	.byte 0xdb, 0x12, 0xee, 0x88, 0xdb, 0x89, 0x1e, 0x4d
-	.byte 0x01, 0x5e, 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34
-	.byte 0x8d, 0x3f, 0x13, 0x66, 0x12, 0x40, 0x8c, 0x28
-	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
-	.byte 0xee, 0x88, 0xdb, 0x89, 0x1e, 0x2f, 0x01, 0x5e
-	.byte 0x0e, 0x3e, 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x3f
-	.byte 0x13, 0x66, 0x12, 0x40, 0x8e, 0x28, 0x00, 0x00
-	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xee, 0x88
-	.byte 0xdb, 0x89, 0x1e, 0x11, 0x01, 0x5e, 0x0e, 0x3e
-	.byte 0xe8, 0x8e, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66
-	.byte 0x12, 0x40, 0x90, 0x28, 0x00, 0x00, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xdb, 0x12, 0xee, 0x88, 0xdb, 0x89
-	.byte 0x1e, 0xf3, 0x00, 0x5e, 0x0e, 0xc1, 0x34, 0x8d
-	.byte 0x3f, 0x13, 0xb0, 0xf6, 0xb8, 0x02, 0x33, 0xb8
-	.byte 0x03, 0x34, 0x83, 0x25, 0xcd, 0xcf, 0xff, 0x6e
-	.byte 0x08, 0xb3, 0x00, 0x7f, 0xb4, 0x00, 0x7f, 0x68
-	.byte 0x0f, 0xcd, 0x8b, 0xcb, 0xcc, 0x01, 0xcb, 0xee
-	.byte 0x06, 0xb3, 0x43, 0xcd, 0xef, 0x01, 0xb4, 0x45
-	.byte 0x78, 0x7d, 0xf5, 0x3e, 0xe8, 0x8e, 0x40, 0x80
-	.byte 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb
-	.byte 0xcf, 0xb7, 0x00, 0x66, 0x0a, 0xdb, 0xcf, 0xb6
-	.byte 0x00, 0x6e, 0x17, 0xee, 0x88, 0x68, 0x10, 0xc1
-	.byte 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x0c, 0xb6, 0x00
-	.byte 0xb3, 0xbe, 0x01, 0x00, 0x00, 0xee, 0x88, 0x1e
-	.byte 0x4e, 0xf5, 0x5e, 0x0e, 0xc1, 0x34, 0x8d, 0x3f
-	.byte 0x13, 0xb0, 0xf6, 0x78, 0x42, 0xf5, 0x3e, 0xe8
-	.byte 0x8e, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x66, 0x12
-	.byte 0x40, 0x04, 0x01, 0x00, 0x00, 0x1d, 0x37, 0xd4
-	.byte 0xfc, 0xdb, 0xd8, 0x66, 0x05, 0xee, 0x88, 0x1e
-	.byte 0x26, 0xf5, 0x5e, 0x0e, 0x80, 0x3f, 0x00, 0xb0
-	.byte 0xfe, 0x88, 0x01, 0x3f, 0x03, 0xb0, 0xf6, 0xb0
-	.byte 0x14, 0x3a, 0x8d, 0x0e, 0xef, 0x6e, 0xc1, 0x3a
-	.byte 0x8d, 0x21, 0xd8, 0x12, 0xd9, 0xa8, 0x1d, 0xf7
-	.byte 0xd4, 0xfc, 0xbf, 0x03, 0x47, 0xc1, 0x3a, 0x8d
-	.byte 0x21, 0xd8, 0x12, 0x31, 0x20, 0x00, 0x1d, 0xf7
-	.byte 0xd4, 0xfc, 0xb7, 0x30, 0xb8, 0x04, 0x47, 0xb8
-	.byte 0x02, 0x14, 0x3a, 0x8d, 0x1d, 0x55, 0x9b, 0xfc
-	.byte 0xb7, 0x33, 0xef, 0x66, 0x0e, 0xef, 0x6e, 0x40
-	.byte 0x00, 0x80, 0x02, 0x00, 0x1d, 0x37, 0xd4, 0xfc
-	.byte 0xbf, 0x03, 0x47, 0x40, 0x01, 0x80, 0x02, 0x00
-	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xb7, 0x30, 0xb8, 0x04
-	.byte 0x47, 0xb8, 0x02, 0x00, 0x48, 0x1d, 0x55, 0x9b
-	.byte 0xfc, 0xb7, 0x33, 0xef, 0x66, 0x0e, 0xd9, 0x12
-	.byte 0xf2, 0xa4, 0x9d, 0xed, 0x32, 0xc3, 0x07, 0xe8
-	.byte 0xe4, 0x25, 0xcd, 0xcf, 0x16, 0xb0, 0xfb, 0xda
-	.byte 0x12, 0xda, 0xec, 0x02, 0xf2, 0xa4, 0x9e, 0xed
-	.byte 0x33, 0xea, 0x13, 0xeb, 0x82, 0xa2, 0x23, 0xb3
-	.byte 0xe8, 0x0e, 0xef, 0x6c, 0x3e, 0xe8, 0x8e, 0xc1
-	.byte 0x34, 0x8d, 0x3f, 0x11, 0x66, 0x6c, 0xf1, 0xcd
-	.byte 0x34, 0xcb, 0x6e, 0x66, 0xf1, 0xf9, 0x90, 0xb9
-	.byte 0x8e, 0x03, 0x21, 0x8e, 0x02, 0xc1, 0xbf, 0x04
-	.byte 0x00, 0x00, 0xc9, 0xd8, 0x66, 0x04, 0xbf, 0x04
-	.byte 0x00, 0x08, 0xbf, 0x06, 0x02, 0x00, 0x00, 0xf1
-	.byte 0xfb, 0x90, 0x31, 0x9f, 0x06, 0x20, 0xe8, 0x12
-	.byte 0xe9, 0x80, 0x80, 0x21, 0xc9, 0xcf, 0xff, 0x66
-	.byte 0x39, 0xd8, 0x12, 0x31, 0x01, 0x06, 0x1d, 0xf7
-	.byte 0xd4, 0xfc, 0xdb, 0xd9, 0x6e, 0x22, 0xf1, 0xfb
-	.byte 0x90, 0x30, 0x9f, 0x06, 0x21, 0xe9, 0x12, 0xe8
-	.byte 0x81, 0x81, 0x21, 0xb6, 0x41, 0xbe, 0x01, 0x00
-	.byte 0x04, 0x8f, 0x04, 0x21, 0xbe, 0x02, 0x41, 0xbe
-	.byte 0x03, 0x00, 0x08, 0xee, 0x88, 0x1e, 0x28, 0xf4
-	.byte 0x9f, 0x06, 0x61, 0x9f, 0x06, 0x3f, 0x10, 0x00
-	.byte 0x67, 0xb5, 0x5e, 0xef, 0x64, 0x0e, 0xf1, 0xf9
-	.byte 0x90, 0xb9, 0xb0, 0x00, 0x48, 0xb8, 0x01, 0x00
-	.byte 0x05, 0xb8, 0x02, 0x32, 0xb8, 0x03, 0x33, 0x83
-	.byte 0x23, 0x82, 0xc3, 0x66, 0x05, 0xb2, 0x00, 0x01
-	.byte 0x68, 0x03, 0xb2, 0x00, 0x00, 0xb3, 0x00, 0x01
-	.byte 0x78, 0xf5, 0xf3, 0x3e, 0xe8, 0x8e, 0xc1, 0x34
-	.byte 0x8d, 0x21, 0xc9, 0xcf, 0x10, 0x66, 0x18, 0xc9
-	.byte 0xcf, 0x0f, 0x66, 0x13, 0xc9, 0xcf, 0x0e, 0x66
-	.byte 0x0e, 0xc9, 0xcf, 0x11, 0x66, 0x09, 0xc9, 0xdb
-	.byte 0x66, 0x05, 0xc9, 0xcf, 0x13, 0x6e, 0x02, 0x68
-	.byte 0x43, 0x40, 0xc0, 0x00, 0x00, 0x00, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xdb, 0xd9, 0x66, 0x36, 0x8e, 0x03
-	.byte 0x21, 0x8e, 0x02, 0xc1, 0x66, 0x2e, 0xf1, 0xf9
-	.byte 0x90, 0xb9, 0xb6, 0x00, 0x98, 0xbe, 0x01, 0x00
-	.byte 0x01, 0x40, 0x00, 0x03, 0x00, 0x00, 0x1d, 0x37
-	.byte 0xd4, 0xfc, 0xbe, 0x02, 0x30, 0xcf, 0xcf, 0x50
-	.byte 0x67, 0x05, 0xb0, 0x00, 0x01, 0x68, 0x04, 0xcf
-	.byte 0x61, 0xb0, 0x47, 0xbe, 0x03, 0x00, 0x7f, 0xee
-	.byte 0x88, 0x1e, 0x8c, 0xf3, 0x5e, 0x0e, 0x3e, 0xe8
-	.byte 0x8e, 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x10
-	.byte 0x66, 0x18, 0xc9, 0xcf, 0x0f, 0x66, 0x13, 0xc9
-	.byte 0xcf, 0x0e, 0x66, 0x0e, 0xc9, 0xcf, 0x11, 0x66
-	.byte 0x09, 0xc9, 0xdb, 0x66, 0x05, 0xc9, 0xcf, 0x13
-	.byte 0x6e, 0x02, 0x68, 0x42, 0x40, 0xc0, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd9, 0x66
-	.byte 0x35, 0x8e, 0x03, 0x21, 0x8e, 0x02, 0xc1, 0x66
-	.byte 0x2d, 0xf1, 0xf9, 0x90, 0xb9, 0xb6, 0x00, 0x98
-	.byte 0xbe, 0x01, 0x00, 0x01, 0x40, 0x00, 0x03, 0x00
-	.byte 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xbe, 0x02, 0x30
-	.byte 0xcf, 0xd9, 0x6b, 0x05, 0xb0, 0x00, 0x50, 0x68
-	.byte 0x04, 0xcf, 0x69, 0xb0, 0x47, 0xbe, 0x03, 0x00
-	.byte 0x7f, 0xee, 0x88, 0x1e, 0x22, 0xf3, 0x5e, 0x0e
+	.incbin "includes/generated/v7_transplant_FileIO_BytecodeData.bin"
 ExtDev_SndParam_Block48_Var40:
-	setda	1, 0x90f9
-	ld	(xwa), 72
-	ld	(xwa+1), 5
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 64
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 64
-	jrl	-3333
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block48_Var40.bin"
 ExtDev_SndParam_Block48_Var80:
-	setda	1, 0x90f9
-	ld	(xwa), 72
-	ld	(xwa+1), 5
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 128
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 128
-	jrl	-3370
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block48_Var80.bin"
 ExtDev_SndParam_Block48_Var04:
-	setda	1, 0x90f9
-	ld	(xwa), 72
-	ld	(xwa+1), 5
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 4
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 4
-	jrl	-3407
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block48_Var04.bin"
 ExtDev_SndParam_Block48_Var04_B:
-	setda	1, 0x90f9
-	ld	(xwa), 72
-	ld	(xwa+1), 6
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 4
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 4
-	jrl	-3444
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block48_Var04_B.bin"
 ExtDev_SndParam_Write98_Block:
-	push	xiz
-	ld	xiz, xwa
-	ldb_d8	a, (0x8d3a)
-	extz	wa
-	ldw	bc, 1539
-	call	SndParam_LookupViaEncode
-	cps	hl, 1
-	jr	nz, 39
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-74), 152
-	ld	(xiz+1), 2
-	lda	xbc, (xiz+2)
-	lda	xde, (xiz+3)
-	ld	a, (xde)
-	.byte 0x81, 0xc1
-	jr	z, 5
-	ld	(xbc), 128
-	jr	3
-	ld	(xbc), 0
-	ld	(xde), 128
-	ld	xwa, xiz
-	calr	62033
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Write98_Block.bin"
 ExtDev_SndParam_Block98_Var40:
-	setda	1, 0x90f9
-	ld	(xwa), 152
-	ld	(xwa+1), 2
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 64
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 64
-	jrl	-3542
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block98_Var40.bin"
 ExtDev_SndParam_BlockA9_Var02:
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0x87
-	ret	nz
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-80), 169
-	ld	(xwa+1), 10
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	.byte 0x82, 0xc3
-	jr	z, 5
-	ld	(xde), 2
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 2
-	calr	61950
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_BlockA9_Var02.bin"
 ExtDev_SndParam_Block98_Var80:
-	setda	1, 0x90f9
-	ld	(xwa), 152
-	ld	(xwa+1), 11
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 128
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 128
-	jrl	-3624
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block98_Var80.bin"
 ExtDev_SndParam_Block98_Var40_B:
-	setda	1, 0x90f9
-	ld	(xwa), 152
-	ld	(xwa+1), 11
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 64
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 64
-	jrl	-3661
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block98_Var40_B.bin"
 ExtDev_SndParam_ConfigAndWrite:
-	push	xiz
-	ld	xiz, xwa
-	ld	a, (xiz+3)
-	.byte 0x8e
-	push	sr
-	.byte 0xc1
-	jr	z, 64
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb9, 0xb6
-	push_a
-	push	xde
-	.byte 0x8d
-	ld	(xiz+1), 5
-	ldb_d8	a, (0x8d3a)
-	extz	wa
-	ldw	bc, 93
-	call	SndParam_LookupViaEncode
-	lda	xbc, (xiz+2)
-	cps	hl, 0
-	jr	nz, 20
-	ldb_d8	a, (0x8d3a)
-	extz	wa
-	lda_d16	xde, (0x918d)
-	extz	xwa
-	add	xwa, xde
-	ld	a, (xwa)
-	ld	(xbc), a
-	jr	3
-	ld	(xbc), 0
-	ld	(xiz+3), 127
-	ld	xwa, xiz
-	calr	61800
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_ConfigAndWrite.bin"
 ExtDev_SndParam_Block14_Dual:
-	lda	xhl, (xwa+2)
-	lda	xix, (xwa+3)
-	ld	e, (xhl)
-	ld	c, (xix)
-	and	c, e
-	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb9, 0xb0
-	push_a
-	push	xde
-	.byte 0x8d
-	ld	(xwa+1), 4
-	ld	(xhl), 64
-	ld	(xix), 64
-	calr	61763
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block14_Dual.bin"
 ExtDev_SndParam_Write48_Block:
-	push	xiz
-	ld	xiz, xwa
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 0
-	jr	nz, 39
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-74), 72
-	ld	(xiz+1), 4
-	lda	xbc, (xiz+2)
-	lda	xde, (xiz+3)
-	ld	a, (xde)
-	.byte 0x81, 0xc1
-	jr	z, 5
-	ld	(xbc), 64
-	jr	3
-	ld	(xbc), 0
-	ld	(xde), 64
-	ld	xwa, xiz
-	calr	61707
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Write48_Block.bin"
 ExtDev_SndParam_Block48_Var02:
-	cpdi8	(0x8d34), 16
-	ret	z
-	setda	1, 0x90f9
-	ld	(xwa), 72
-	ld	(xwa+1), 5
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 2
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 2
-	jrl	-3875
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block48_Var02.bin"
 ExtDev_SndParam_Block70_Var04:
-	setda	1, 0x90f9
-	ld	(xwa), 112
-	ld	(xwa+1), 0
-	lda	xde, (xwa+2)
-	lda	xhl, (xwa+3)
-	ld	c, (xhl)
-	and	c, (xde)
-	jr	z, 5
-	ld	(xde), 4
-	jr	3
-	ld	(xde), 0
-	ld	(xhl), 4
-	jrl	-3912
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_Block70_Var04.bin"
 ExtDev_SndParam_DispatchAndWriteA8:
-	push	xiz
-	ld	xiz, xwa
-	ldb_d8	a, (0x8d34)
-	cp	a, 16
-	jr	z, 24
-	cp	a, 15
-	jr	z, 19
-	cp	a, 14
-	jr	z, 14
-	cp	a, 17
-	jr	z, 9
-	cps	a, 3
-	jr	z, 5
-	cp	a, 19
-	jr	nz, 2
-	jr	49
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	z, 36
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-74), 168
-	ld	(xiz+1), 4
-	lda	xde, (xiz+2)
-	lda	xhl, (xiz+3)
-	ld	c, (xde)
-	ld	a, (xhl)
-	and	a, c
-	jr	z, 11
-	ld	(xde), 2
-	ld	(xhl), 2
-	ld	xwa, xiz
-	calr	61537
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_DispatchAndWriteA8.bin"
 ExtDev_SndParam_DispatchAndWriteA8_Alt:
-	push	xiz
-	ld	xiz, xwa
-	ldb_d8	a, (0x8d34)
-	cp	a, 16
-	jr	z, 24
-	cp	a, 15
-	jr	z, 19
-	cp	a, 14
-	jr	z, 14
-	cp	a, 17
-	jr	z, 9
-	cps	a, 3
-	jr	z, 5
-	cp	a, 19
-	jr	nz, 2
-	jr	49
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	z, 36
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-74), 168
-	ld	(xiz+1), 4
-	lda	xde, (xiz+2)
-	lda	xhl, (xiz+3)
-	ld	c, (xde)
-	ld	a, (xhl)
-	and	a, c
-	jr	z, 11
-	ld	(xde), 1
-	ld	(xhl), 1
-	ld	xwa, xiz
-	calr	61448
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_DispatchAndWriteA8_Alt.bin"
 ExtDev_SndParam_MultiReg_Iterate:
-	setda	1, 0x90f9
-	lda	xix, (xwa+2)
-	ld	l, (xwa+3)
-	ld	d, (xix)
-	ld	e, l
-	and	e, d
-	extz	bc
-	cps	e, 0
-	jrl	nz, -1030
-	or	d, l
-	ld	(xix), d
-	jrl	-930
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_MultiReg_Iterate.bin"
 ExtDev_SndParam_DispatchComplex:
-	dec	2, xsp
-	push	xiz
-	ld	(xsp+4), c
-	ld	xiz, xwa
-	ldb_d8	a, (0x8d34)
-	cp	a, 16
-	jr	z, 24
-	cp	a, 15
-	jr	z, 19
-	cp	a, 14
-	jr	z, 14
-	cp	a, 17
-	jr	z, 9
-	cps	a, 3
-	jr	z, 5
-	cp	a, 19
-	jr	nz, 2
-	jr	59
-	ld	xwa, 192
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	z, 46
-	ld	a, (xiz+3)
-	.byte 0x8e
-	push	sr
-	.byte 0xc1
-	jr	z, 38
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-74), 152
-	ld	(xiz+1), 1
-	call	BitMapOut_PrepareRender_CheckBit1
-	sll	l, 3
-	ld	w, (xsp+4)
-	sub	w, 191
-	add	w, l
-	ld	(xiz+2), w
-	ld	(xiz+3), 127
-	ld	xwa, xiz
-	calr	61314
-	pop	xiz
-	inc	2, xsp
-	ret
-	push	xiz
-	ld	xiz, xwa
-	ld	a, (xiz+2)
-	cps	a, 0
-	jr	z, 59
-	ldb	w, 0
-	extz	xwa
-	call	Util_FindLowestSetBit
-	lda	xbc, (xiz+2)
-	ld	(xbc), l
-	ldb_d8	a, (0x8e90)
-	extz	wa
-	sla	wa, 2
-	lda_24	xde, (SoundParam_EncoderMappingData_0x286)
-	.byte 0xe3
-	reti
-	or	xwa, xwa
-	ldb	b, 234
-	.byte 0xe2
-	jr	z, 23
-	extz	hl
-	.byte 0xc3
-	reti
-	sla	xwa, 33
-	ld	(xbc), a
-	cp	a, 255
-	jr	z, 9
-	ld	(xiz+3), 255
-	ld	xwa, xiz
-	calr	61241
-	pop	xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_DispatchComplex.bin"
 VoiceEntry_FindMasterVolume:
-	lda_d16 xde, (0xc039)
-	lds32 xbc, 0
-	lds wa, 0
-	jr VoiceEntry_CheckTerminator
-
+	.incbin "includes/generated/v7_transplant_VoiceEntry_FindMasterVolume.bin"
 VoiceEntry_CheckMatch:
 	cp (xde), 0x98
 	jr nz, VoiceEntryLoop_Continue
@@ -919,12 +101,7 @@ VoiceEntry_CheckTerminator:
 	ret
 
 Audio_CopyStateFromROM:
-	calr MidiCC_ResetState
-	lda_24 xbc, (SoundParam_EncoderMappingData_0x302)
-	ld xwa, xbc
-	lda_d16 xde, (0x8eb6)
-	lda xhl, (xbc + 12)
-
+	.incbin "includes/generated/v7_transplant_Audio_CopyStateFromROM.bin"
 AudioCopy_TransferLoop:
 	ld xiy, xwa
 	ld xix, xde
@@ -946,61 +123,22 @@ Audio_NullHandler_C:
 	ret
 
 Encoder_TimingAndOutput:
-	incdi8 1, (0x8ec6)
-	ldw_d16 xwa, (0x8ec8)
-	cps wa, 0
-	jr z, Encoder_CheckTimerDelta
-	dec 1, wa
-	stda16 (0x8ec8), xwa
-
+	.incbin "includes/generated/v7_transplant_Encoder_TimingAndOutput.bin"
 Encoder_CheckTimerDelta:
-	ldw_d16 xwa, (1033)
-	subda16 xwa, 0x8ec2
-	cp wa, 0x10
-	jr c, Encoder_CheckBitAndProcess
-	stdi8 (0x8ec6), 0
-	jr Encoder_ProcessUpdate
-
+	.incbin "includes/generated/v7_transplant_Encoder_CheckTimerDelta.bin"
 Encoder_CheckBitAndProcess:
-	bitda 0, (0x8ec6)
-	jr nz, Encoder_IncrementAndDispatch
-
+	.incbin "includes/generated/v7_transplant_Encoder_CheckBitAndProcess.bin"
 Encoder_ProcessUpdate:
 	calr Audio_PeriodicUpdate
 
 Encoder_IncrementAndDispatch:
-	call Audio_IncrementUpdateCounter
-	push	sr
-	ei 6
-	call MidiOut_SerializeAndSend
-	pop	sr
-	jp CompIface_ProcessInput
-
+	.incbin "includes/generated/v7_transplant_Encoder_IncrementAndDispatch.bin"
 Audio_PeriodicUpdate:
-	ldmm16 0x8ec2, 1033
-	cpdi8 (0x8d36), 247
-	ret z
-	calr Audio_ProcessVoiceQueue
-	calr MIDI_ProcessVoiceAssignment
-	calr MIDI_ProcessControlChange
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_PeriodicUpdate.bin"
 Audio_ProcessVoiceQueue:
-	push xiz
-	lda_d16 xiz, (0x8eb2)
-	cpdi8 (0x8ec4), 7
-	jr nc, VoiceQueue_Done
-
+	.incbin "includes/generated/v7_transplant_Audio_ProcessVoiceQueue.bin"
 VoiceQueue_ParseNextEntry:
-	ld xwa, xiz
-	calr MIDI_ParseThreeByteParams
-	cp l, 0xff
-	jr z, VoiceQueue_Done
-	ld xwa, xiz
-	calr Voice_SetupFromData
-	cpdi8 (0x8ec4), 7
-	jr c, VoiceQueue_ParseNextEntry
-
+	.incbin "includes/generated/v7_transplant_VoiceQueue_ParseNextEntry.bin"
 VoiceQueue_Done:
 	pop xiz
 	ret
@@ -1034,35 +172,11 @@ MidiParseThreeByte_Done:
 	ret
 
 MIDI_ProcessVoiceAssignment:
-	ld_sd8b A, 0x40
-	and a, 0xc
-	srl a, 2
-	ld c, a
-	ld xwa, 0x8eb6
-	calr MIDI_WriteParamByte
-	ld_sd8b A, 0x40
-	and a, 0xf0
-	srl a, 4
-	cp a, 0xf
-	jr nz, MIDI_ValidateParam
-	stdi16 (0x8ec8), 500
-	jr MIDI_WriteSecondByte
-
+	.incbin "includes/generated/v7_transplant_MIDI_ProcessVoiceAssignment.bin"
 MIDI_ValidateParam:
-	cpdi16 0x8ec8, 0
-	jr nz, MIDI_WriteSecondByte
-	lda_d16 xwa, (0x8eba)
-	ld_sd8b C, 0x40
-	and c, 0xf0
-	srl c, 4
-	calr MIDI_WriteParamByte
-
+	.incbin "includes/generated/v7_transplant_MIDI_ValidateParam.bin"
 MIDI_WriteSecondByte:
-	lda_d16 xwa, (0x8ebe)
-	ldcf_dd8 6, 0x34
-	scc8 c, c
-	jr MIDI_WriteParamByte
-
+	.incbin "includes/generated/v7_transplant_MIDI_WriteSecondByte.bin"
 MIDI_WriteParamByte:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -1081,81 +195,18 @@ MIDI_ChannelSetup_Skip:
 	ld (xhl), c
 
 MIDI_ChannelSetup_Store:
-	cpdi8 (0x8ec4), 7
-	jr nc, VoiceData_Setup_Ret
-	lda xbc, (xwa + 1)
-	ld (xsp + 8), xbc
-	ld b, (xbc)
-	cps b, 0
-	jr nz, MIDI_ChannelSetup_Init
-	cp (xwa + 3), 0x0
-	jr z, VoiceData_Setup_Ret
-
+	.incbin "includes/generated/v7_transplant_MIDI_ChannelSetup_Store.bin"
 MIDI_ChannelSetup_Init:
-	lda_d16 xiz, (0x8eb2)
-	ld (xsp + 4), xiz
-	lda xiy, (xwa + 3)
-	ld e, (xiy)
-	ld (xsp + 12), e
-	lda xix, (xwa + 2)
-	ld l, (xix)
-	ld d, l
-	xor d, b
-	and d, e
-	and l, b
-	or l, d
-	ld (xiy), l
-	ld xbc, (xsp + 8)
-	ld c, (xbc)
-	ld (xix), c
-	cp l, e
-	jr z, VoiceData_Setup_Ret
-	ld a, (xwa)
-	ld (xiz), a
-	ld (xiz + 1), l
-	ld a, (xsp + 12)
-	xor a, l
-	ld (xiz + 2), a
-	ld xwa, (xsp + 4)
-	calr Voice_SetupFromData
-
+	.incbin "includes/generated/v7_transplant_MIDI_ChannelSetup_Init.bin"
 VoiceData_Setup_Ret:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
 MIDI_ProcessControlChange:
-	push xiz
-	lda_d16 xiz, (0x8eb2)
-	cpdi8 (0x8ec4), 7
-	jr nc, MidiCC_ProcessParam
-	lda_d16 xbc, (0x8f10)
-	lda xwa, (xbc + 1)
-	bitm 7, (xwa)
-	jr z, MidiCC_ProcessParam
-	resm 7, (xwa)
-	ld (xiz), 0x1a
-	ld a, (xbc)
-	ld (xiz + 1), a
-	ld (xiz + 2), 0x7f
-	ld xwa, xiz
-	calr Voice_SetupFromData
-
+	.incbin "includes/generated/v7_transplant_MIDI_ProcessControlChange.bin"
 MidiCC_ProcessParam:
-	cpdi8 (0x8ec4), 7
-	jr nc, MidiCC_SkipEntry
-	lda_d16 xbc, (0x8f16)
-	lda xwa, (xbc + 1)
-	bitm 7, (xwa)
-	jr z, MidiCC_SkipEntry
-	resm 7, (xwa)
-	ld (xiz), 0x1b
-	ld a, (xbc)
-	ld (xiz + 1), a
-	ld (xiz + 2), 0x7f
-	ld xwa, xiz
-	calr Voice_SetupFromData
-
+	.incbin "includes/generated/v7_transplant_MidiCC_ProcessParam.bin"
 MidiCC_SkipEntry:
 	pop xiz
 	ret
@@ -1172,95 +223,29 @@ MidiCC_LookupHandler:
 	ret
 
 Voice_SetupFromData:
-	push xiz
-	ld xiz, xwa
-	ldb_d8 c, (0x8ec4)
-	ld a, c
-	extz wa
-	muls wa, 0x3
-	lda_d16 xde, (0x8e94)
-	exts xwa
-	add xwa, xde
-	cpdi8 (0x8d36), 251
-	jrl nz, MidiCC_ReturnClean
-	cp (xiz), 0x3
-	jr nz, MidiCC_ValidateRange
-	cp (xiz + 2), 0x1
-	jr nz, MidiCC_ValidateRange
-	ldb_d8 c, (0x8d80)
-	res 0, c
-	stb_d8 (0x8d80), c
-	ld a, (xiz + 2)
-	and a, 0x1
-	and a, (xiz + 1)
-	bit 0, a
-	jr z, MidiCC_Return
-	set 0, c
-	stb_d8 (0x8d80), c
-	jr MIDI_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_Voice_SetupFromData.bin"
 MidiCC_ValidateRange:
-	cp (xiz), 0x19
-	jr nz, MidiCC_StoreAndDispatch
-	ld a, (xiz + 2)
-	and a, 0x1
-	and a, (xiz + 1)
-	bit 0, a
-	jr z, MidiCC_Return
-	ldw wa, 0x10
-	call MIDI_SendSysExCmd
-	jr MIDI_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_MidiCC_ValidateRange.bin"
 MidiCC_StoreAndDispatch:
-	cp (xiz), 0x15
-	jr ugt, MidiCC_Finalize
-	ld a, (xiz + 2)
-	and a, (xiz + 1)
-	jr z, MidiCC_CheckOverflow
-	ldw wa, 0x10
-	call MIDI_SendSysExCmd
-
+	.incbin "includes/generated/v7_transplant_MidiCC_StoreAndDispatch.bin"
 MidiCC_CheckOverflow:
 	ld xwa, xiz
 	call EffectMode_MidiSetLEDs
 	jr MIDI_PopIzRet
 
 MidiCC_Finalize:
-	inc 1, c
-	stb_d8 (0x8ec4), c
-	ld xiy, xiz
-	ld xix, xwa
-	ldi85
-	ldiw
-	ldb_d8 a, (0x8ec4)
-	extz wa
-	muls wa, 0x3
-	stib_ind 0x07, 0xe8, 0xe0, 0xff
-
+	.incbin "includes/generated/v7_transplant_MidiCC_Finalize.bin"
 MidiCC_Return:
 	jr MIDI_PopIzRet
 
 MidiCC_ReturnClean:
-	inc 1, c
-	stb_d8 (0x8ec4), c
-	ld xiy, xiz
-	ld xix, xwa
-	ldi85
-	ldiw
-	ldb_d8 a, (0x8ec4)
-	extz wa
-	muls wa, 0x3
-	stib_ind 0x07, 0xe8, 0xe0, 0xff
-	call SeqStep_TimerDispatchC
-
+	.incbin "includes/generated/v7_transplant_MidiCC_ReturnClean.bin"
 MIDI_PopIzRet:
 	pop xiz
 	ret
 
 MidiCC_SyncForceResync:
-	lda_d16 xhl, (0x8e94)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiCC_SyncForceResync.bin"
 MidiCC_ResetState:
 	stdi8 (0x8e94), 255
 	stdi8 (0x8ec4), 0
@@ -1269,42 +254,7 @@ MidiCC_ResetState:
 	.include "midi/midi_encoder_routines.s"
 
 MidiParam_ForceResync:
-	stdi8 (297), 131
-	stdi8 (296), 7
-	lds wa, 0
-	calr MidiChannel_GetParamByIndex
-	ld a, l
-	lds bc, 2
-	call CPanel_EncoderDispatch
-	ldb_d8 a, (0x8ee4)
-	cpl a
-	stb_d8 (0x8ee4), a
-	lds wa, 0
-	calr MidiChannel_GetParamByIndex
-	ld a, l
-	lds bc, 2
-	call CPanel_EncoderDispatch
-	lda_d16 xwa, (0x8f10)
-	ld (xwa), l
-	setm 7, (xwa + 1)
-	lds wa, 1
-	calr MidiChannel_GetParamByIndex
-	ld a, l
-	lds bc, 5
-	call CPanel_EncoderDispatch
-	ldb_d8 a, (0x8ef4)
-	cpl a
-	stb_d8 (0x8ef4), a
-	lds wa, 1
-	calr MidiChannel_GetParamByIndex
-	ld a, l
-	lds bc, 5
-	call CPanel_EncoderDispatch
-	lda_d16 xwa, (0x8f16)
-	ld (xwa), l
-	setm 7, (xwa + 1)
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiParam_ForceResync.bin"
 MidiChannel_GetParamByIndex:
 	cps a, 3
 	jr z, MidiChannel_GetParam3
@@ -1333,118 +283,23 @@ MidiChannel_GetParamReturn:
 	ret
 
 MidiParam_ProcessDeltas:
-	ld xwa, 0x8f10
-	calr MidiParam_ProcessChannel0
-	ld xwa, 0x8f16
-	jr MidiParam_ProcessChannel1
-
+	.incbin "includes/generated/v7_transplant_MidiParam_ProcessDeltas.bin"
 MidiParam_ProcessChannel0:
-	dec 4, xsp
-	pushw_erp 0xfa
-	ld (xsp + 2), xwa
-	lds wa, 0
-	calr MidiChannel_GetParamByIndex
-	ldb_erp L, 0xfb
-	stb_erp A, 0xfb
-	extz wa
-	ldb_d8 c, (0x8efc)
-	extz bc
-	ld xde, 0x8f04
-	calr MIDI_ComputeParamDelta
-	lda_d16 xwa, (0x8f04)
-	bitm 3, (xwa)
-	jr z, MidiParam_Ch0_Done
-	resm 3, (xwa)
-	stb_erp A, 0xfb
-	stb_d8 (0x8efc), a
-	stb_erp A, 0xfb
-	extz wa
-	lds bc, 2
-	call CPanel_EncoderDispatch
-	cp hl, 0xffff
-	jr z, MidiParam_Ch0_Done
-	ld xwa, (xsp + 2)
-	ld (xwa), l
-	setm 7, (xwa + 1)
-
+	.incbin "includes/generated/v7_transplant_MidiParam_ProcessChannel0.bin"
 MidiParam_Ch0_Done:
 	popw_erp 0xfa
 	inc 4, xsp
 	ret
 
 MidiParam_ProcessChannel1:
-	dec 4, xsp
-	pushw_erp 0xfa
-	ld (xsp + 2), xwa
-	lds wa, 1
-	calr MidiChannel_GetParamByIndex
-	ldb_erp L, 0xfb
-	stb_erp A, 0xfb
-	extz wa
-	ldb_d8 c, (0x8efe)
-	extz bc
-	ld xde, 0x8f06
-	calr MIDI_ComputeParamDelta
-	lda_d16 xwa, (0x8f06)
-	bitm 3, (xwa)
-	jr z, MidiParam_Ch1_Done
-	resm 3, (xwa)
-	stb_erp A, 0xfb
-	stb_d8 (0x8efe), a
-	stb_erp A, 0xfb
-	extz wa
-	lds bc, 5
-	call CPanel_EncoderDispatch
-	cp hl, 0xffff
-	jr z, MidiParam_Ch1_Done
-	ld xwa, (xsp + 2)
-	ld (xwa), l
-	setm 7, (xwa + 1)
-
+	.incbin "includes/generated/v7_transplant_MidiParam_ProcessChannel1.bin"
 MidiParam_Ch1_Done:
 	popw_erp 0xfa
 	inc 4, xsp
 	ret
 
 MIDI_ComputeParamDelta:
-	dec 8, xsp
-	ld (xsp), xde
-	ld (xsp + 4), c
-	ld (xsp + 6), a
-	ld c, (xsp + 4)
-	extz bc
-	ld a, (xsp + 6)
-	extz wa
-	sub wa, bc
-	pushw wa
-	call Math_AbsInt16
-	inc 2, xsp
-	cps hl, 2
-	jr le, MidiParam_DeltaTooSmall
-	ld c, (xsp + 4)
-	extz bc
-	ld a, (xsp + 6)
-	extz wa
-	sub wa, bc
-	pushw wa
-	call Math_AbsInt16
-	inc 2, xsp
-	cps hl, 6
-	jr le, MidiParam_DeltaMedium
-	ld xwa, (xsp)
-	ld a, (xwa)
-	and a, 0x3
-	xor a, 0x3
-	jr z, MidiParam_DeltaConfirmed
-	ld xbc, (xsp)
-	ld a, (xbc)
-	and a, 0x3
-	inc 1, a
-	and a, 0x3
-	andmi8 (xbc), 0xfc
-	or (xbc), a
-	jr MidiParam_DeltaClearActive
-
+	.incbin "includes/generated/v7_transplant_MIDI_ComputeParamDelta.bin"
 MidiParam_DeltaMedium:
 	ld xwa, (xsp)
 	bitm 2, (xwa)
@@ -1475,121 +330,38 @@ MidiParam_DeltaDone:
 	ret
 
 Audio_UpdateLEDsAndChannels:
-	calr Audio_InitChannelTimers
-	ordi16 0x8f42, 2
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_UpdateLEDsAndChannels.bin"
 MIDI_ProcessChangedChannels:
-	cpdi8 (0x8d36), 251
-	ret z
-	calr Audio_CheckAndFlagChanges
-	ldw_d16 xwa, (0x8f3c)
-	cpl wa
-	andda16 xwa, 0x8f3a
-	jr z, MidiChanged_ProcessGroup2
-	ld xbc, ENCODER_LUT_MODWHEEL_0x3C6
-	calr DispatchBitmaskHandlers
-	stdi16 (0x8f3a), 0
-
+	.incbin "includes/generated/v7_transplant_MIDI_ProcessChangedChannels.bin"
 MidiChanged_ProcessGroup2:
-	ldw_d16 xwa, (0x8f40)
-	cpl wa
-	andda16 xwa, 0x8f3e
-	jr z, MidiChanged_ProcessGroup3
-	ld xbc, ENCODER_LUT_MODWHEEL_0x3FC
-	calr DispatchBitmaskHandlers
-	stdi16 (0x8f3e), 0
-
+	.incbin "includes/generated/v7_transplant_MidiChanged_ProcessGroup2.bin"
 MidiChanged_ProcessGroup3:
-	ldw_d16 xwa, (0x8f44)
-	cpl wa
-	andda16 xwa, 0x8f42
-	jr z, MidiChanged_ProcessGroup4
-	ld xbc, ENCODER_LUT_MODWHEEL_0x43E
-	calr DispatchBitmaskHandlers
-	stdi16 (0x8f42), 0
-
+	.incbin "includes/generated/v7_transplant_MidiChanged_ProcessGroup3.bin"
 MidiChanged_ProcessGroup4:
-	ldw_d16 xwa, (0x8f48)
-	cpl wa
-	andda16 xwa, 0x8f46
-	ret z
-	ld xbc, ENCODER_LUT_MODWHEEL_0x48C
-	calr DispatchBitmaskHandlers
-	stdi16 (0x8f46), 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiChanged_ProcessGroup4.bin"
 MidiChannel_DispatchChanged:
-	cpdi8 (0x8d36), 251
-	ret z
-	ldw_d16 xwa, (0x8f3c)
-	cps wa, 0
-	jr z, MidiDispatch_CheckGroup2
-	ld xbc, ENCODER_LUT_MODWHEEL_0x49E
-	calr DispatchBitmaskHandlers
-
+	.incbin "includes/generated/v7_transplant_MidiChannel_DispatchChanged.bin"
 MidiDispatch_CheckGroup2:
-	ldw_d16 xwa, (0x8f40)
-	cps wa, 0
-	jr z, MidiDispatch_CheckGroup3
-	ld xbc, ENCODER_LUT_MODWHEEL_0x4A4
-	calr DispatchBitmaskHandlers
-
+	.incbin "includes/generated/v7_transplant_MidiDispatch_CheckGroup2.bin"
 MidiDispatch_CheckGroup3:
-	ldw_d16 xwa, (0x8f44)
-	cps wa, 0
-	jr z, MidiDispatch_CheckGroup4
-	ld xbc, ENCODER_LUT_MODWHEEL_0x4BC
-	calr DispatchBitmaskHandlers
-
+	.incbin "includes/generated/v7_transplant_MidiDispatch_CheckGroup3.bin"
 MidiDispatch_CheckGroup4:
-	ldw_d16 xwa, (0x8f48)
-	cps wa, 0
-	jr z, MidiDispatch_UpdateLEDs
-	ld xbc, ENCODER_LUT_MODWHEEL_0x4D4
-	calr DispatchBitmaskHandlers
-
+	.incbin "includes/generated/v7_transplant_MidiDispatch_CheckGroup4.bin"
 MidiDispatch_UpdateLEDs:
 	jrl CtrlPanel_UpdateLEDState
 
 Audio_InitChannelTimers:
-	stdi8 (0x8f4c), 5
-	stdi8 (0x8f4e), 5
-	stdi8 (0x8f50), 5
-	stdi8 (0x8f52), 5
-	stdi8 (0x8f54), 5
-	stdi8 (0x8f56), 5
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_InitChannelTimers.bin"
 Audio_IncrementUpdateCounter:
-	incdi8 1, (0x8f4a)
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_IncrementUpdateCounter.bin"
 Audio_CheckAndFlagChanges:
-	call GetDialEnableState
-	cpda8 l, 0x8f5e
-	jr z, AudioChange_CheckSelectionState
-	ordi16 0x8f42, 64
-	stb_d8 (0x8f5e), l
-
+	.incbin "includes/generated/v7_transplant_Audio_CheckAndFlagChanges.bin"
 AudioChange_CheckSelectionState:
-	call CtrlPanel_GetSelectionState
-	cpda8 l, 0x8f60
-	ret z
-	cps l, 2
-	jr nz, AudioChange_UpdatePreviousSelect
-	ordi16 0x8f44, 4
-
+	.incbin "includes/generated/v7_transplant_AudioChange_CheckSelectionState.bin"
 AudioChange_UpdatePreviousSelect:
-	cpdi8 (0x8f60), 2
-	jr nz, AudioChange_SetChannelFlag
-	anddi16 0x8f44, 0xfffb
-
+	.incbin "includes/generated/v7_transplant_AudioChange_UpdatePreviousSelect.bin"
 AudioChange_SetChannelFlag:
-	ordi16 0x8f42, 4
-	stb_d8 (0x8f60), l
-	ret
-
+	.incbin "includes/generated/v7_transplant_AudioChange_SetChannelFlag.bin"
 DispatchBitmaskHandlers:
 	dec 2, xsp
 	push xiz
@@ -1621,16 +393,7 @@ BitmaskDispatch_Return:
 ; I'm not sure yet if this is initialization, or if it
 ; also serves to update the LEDs later on.
 CtrlPanel_UpdateLEDState:
-	dec 8, xsp
-	pushw_erp 0xfa
-	lda_d16 xwa, (0x8f18)
-	ld (xsp + 2), xwa
-	lda_d16 xwa, (0x8f28)
-	ld (xsp + 6), xwa
-	cpdi8 (0x8d36), 247
-	jr z, LEDUpdate_Cleanup
-	ldib_erp 0xfb, 0
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_UpdateLEDState.bin"
 LEDUpdate_ProcessChannel:
 	stb_erp A, 0xfb
 	extz wa
@@ -1662,20 +425,7 @@ LEDUpdate_Cleanup:
 
 
 Set_LEDs:
-	; Input: WA: row of LEDs
-	;         C: LED pattern
-	ld e, a
-	cp e, 0xf
-	ret ugt
-	lda_d16 xwa, (0x8f38)
-	extz de
-	lda_24 xhl, (Protocol_values_for_LED_rows)
-	ldb_sri E, 0x07, 0xec, 0xe8
-	ld (xwa), e
-	ld (xwa + 1), c
-	calr LED_WriteToPanel
-	ret
-
+	.incbin "includes/generated/v7_transplant_Set_LEDs.bin"
 LED_WriteToPanel:
 	push xiz
 	ld xiz, xwa
@@ -1730,33 +480,14 @@ LED_WriteDone:
 
 
 SndParam_SetResBit0_Via028100:
-	; --- Routine 1: call FCD437(0x028100), set/res bit 0 at (xwa) (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00028100
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+4)
-	cps	hl, 1
-	jr nz, SndParam028100_ResBit0
-	setm	0, (xwa)
-	jr t, SndParam028100_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit0_Via028100.bin"
 SndParam028100_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
 SndParam028100_Done:
 	pop xiz
 	ret
 SndParam_SetResBit1_ViaRegs0100_0101:
-	; --- Routine 2: 2x FCD437, set/res bit 1 at (xiz+4) (41 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00028100
-	call SndParam_LookupReadOnly
-	cps	hl, 2
-	jr z, SndParam028101_SetBit1
-	ld xwa, 0x00028101
-	call SndParam_LookupReadOnly
-	cps	hl, 1
-	jr nz, SndParam028101_ResBit1
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit1_ViaRegs0100_0101.bin"
 SndParam028101_SetBit1:
 	setm	1, (xiz+4)
 	jr t, SndParam028101_Done
@@ -1766,17 +497,7 @@ SndParam028101_Done:
 	pop xiz
 	ret
 SndParam_SetResBit2_ViaRegs0101_0102:
-	; --- Routine 3: 2x FCD437, set/res bit 2 at (xiz+4) (41 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00028101
-	call SndParam_LookupReadOnly
-	cps	hl, 2
-	jr z, SndParam028102_SetBit2
-	ld xwa, 0x00028102
-	call SndParam_LookupReadOnly
-	cps	hl, 1
-	jr nz, SndParam028102_ResBit2
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit2_ViaRegs0101_0102.bin"
 SndParam028102_SetBit2:
 	setm	2, (xiz+4)
 	jr t, SndParam028102_Done
@@ -1788,17 +509,7 @@ SndParam028102_Done:
 
 
 SndParam_SetResBit3_ViaRegs0101_0102:
-	; --- Routine 1: 2x FCD437, set/res bit 3 at (xiz+4) (41 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00028101
-	call SndParam_LookupReadOnly
-	cps	hl, 3
-	jr z, SndParam028102_SetBit3
-	ld xwa, 0x00028102
-	call SndParam_LookupReadOnly
-	cps	hl, 2
-	jr nz, SndParam028102_ResBit3
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit3_ViaRegs0101_0102.bin"
 SndParam028102_SetBit3:
 	setm	3, (xiz+4)
 	jr t, SndParam028102_Done2
@@ -1808,32 +519,14 @@ SndParam028102_Done2:
 	pop xiz
 	ret
 SndParam_SetResBit3_Via4002:
-	; --- Routine 2: FCD437(0x4002), set/res bit 3 at (xwa) via xiz+6 (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00004002
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+6)
-	cps	hl, 0
-	jr z, SndParam4002_ResBit3
-	setm	3, (xwa)
-	jr t, SndParam4002_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit3_Via4002.bin"
 SndParam4002_ResBit3:
 	.byte 0xb0, 0xb3				; res 3, (xwa)  [not in LLVM]
 SndParam4002_Done:
 	pop xiz
 	ret
 SndParam_SetResBit4_Via4004:
-	; --- Routine 3: FCD437(0x4004), set/res bit 4 at (xwa) via xiz+6 (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00004004
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+6)
-	cps	hl, 0
-	jr z, SndParam4004_ResBit4
-	setm	4, (xwa)
-	jr t, SndParam4004_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit4_Via4004.bin"
 SndParam4004_ResBit4:
 	.byte 0xb0, 0xb4				; res 4, (xwa)  [not in LLVM]
 SndParam4004_Done:
@@ -1842,33 +535,9 @@ SndParam4004_Done:
 
 
 SndParam_TableLookup_Via4100:
-	; --- Routine 1: FCD437(0x4100), table lookup at 0xeda626, nibble merge (39 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00004100
-	call SndParam_LookupReadOnly
-	lda_24 xwa, (Protocol_values_for_LED_rows_0x10)
-	ld_rrb	a, xwa, hl
-	and a, 0x07
-	sla	a, 4
-	andmi8	(xiz+10), 143
-	or	(xiz+10), a
-	pop xiz
-	ret
+	.incbin "includes/generated/v7_transplant_SndParam_TableLookup_Via4100.bin"
 SndParam_SetResBit1_ViaPartCC5E:
-	; --- Routine 2: F9945E+FCD4F7(0x5e), set/res bit 1 at (xwa) via xiz+6 (37 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	call GetCurrentPartSelect
-	extz	hl
-	ld	wa, hl
-	ldw bc, 0x005e
-	call SndParam_LookupViaEncode
-	lda	xwa, (xiz+6)
-	cp hl, 0x007f
-	jr nz, SndParamCC5E_ResBit1
-	setm	1, (xwa)
-	jr t, SndParamCC5E_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit1_ViaPartCC5E.bin"
 SndParamCC5E_ResBit1:
 	.byte 0xb0, 0xb1				; res 1, (xwa)  [not in LLVM]
 SndParamCC5E_Done:
@@ -1877,23 +546,7 @@ SndParamCC5E_Done:
 
 
 SndParam_SetResBit2_ViaPartCC5D:
-	; --- Routine 1: 2x F9945E+FCD4F7(0x5d), set/res bit 2 at (xiz+6) (55 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	call GetCurrentPartSelect
-	extz	hl
-	ld	wa, hl
-	ldw bc, 0x005d
-	call SndParam_LookupViaEncode
-	cps	hl, 0
-	jr z, SndParamCC5D_ResBit2
-	call GetCurrentPartSelect
-	extz	hl
-	ld	wa, hl
-	ldw bc, 0x005d
-	call SndParam_LookupViaEncode
-	cp hl, 0xffff
-	jr nz, SndParamCC5D_SetBit2
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit2_ViaPartCC5D.bin"
 SndParamCC5D_ResBit2:
 	resm	2, (xiz+6)
 	jr t, SndParamCC5D_Done
@@ -1903,76 +556,26 @@ SndParamCC5D_Done:
 	pop xiz
 	ret
 SndParam_SetResBit0_ViaPartCC40:
-	; --- Routine 2: F9945E+FCD4F7(0x40), cp 0x7f, set/res bit 0 at (xwa) (37 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	call GetCurrentPartSelect
-	extz	hl
-	ld	wa, hl
-	ldw bc, 0x0040
-	call SndParam_LookupViaEncode
-	lda	xwa, (xiz+6)
-	cp hl, 0x007f
-	jr nz, SndParamCC40_ResBit0
-	setm	0, (xwa)
-	jr t, SndParamCC40_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit0_ViaPartCC40.bin"
 SndParamCC40_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
 SndParamCC40_Done:
 	pop xiz
 	ret
 SndParam_GuardedNibbleSet_ViaReg0103:
-	; --- Routine 3: complex bit checks, and (xiz+0x0e), set 0 in A (59 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	bitda	2, (1054)
-	jr nz, MidiCtrl_PopIzRet
-	ld xwa, 0x00028103
-	call SndParam_LookupReadOnly
-	cps	hl, 0
-	jr nz, MidiCtrl_PopIzRet
-	andmi8	(xiz+14), 240
-	bitda	2, (1057)
-	jr z, MidiCtrl_PopIzRet
-	lds32	xwa, 1
-	call SndParam_LookupReadOnly
-	cps	hl, 1
-	jr nz, MidiCtrl_PopIzRet
-	lda	xbc, (xiz+14)
-	ld a, (xbc)
-	and a, 0xf0
-	set 0, a
-	ld (xbc), a
+	.incbin "includes/generated/v7_transplant_SndParam_GuardedNibbleSet_ViaReg0103.bin"
 MidiCtrl_PopIzRet:
 	pop xiz
 	ret
 SndParam_SetResBit0_Via028103:
-	; --- Routine 4: FCD437(0x028103), set/res bit 0 at (xwa) via xiz+0x0d (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00028103
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+13)
-	cps	hl, 1
-	jr nz, SndParam028103_ResBit0
-	setm	0, (xwa)
-	jr t, SndParam028103_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit0_Via028103.bin"
 SndParam028103_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
 SndParam028103_Done:
 	pop xiz
 	ret
 SndParam_SetResBit5_Via028080:
-	; --- Routine 5: FCD437(0x028080), set/res bit 5 at (xwa) via xiz+3 (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00028080
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+3)
-	cps	hl, 0
-	jr nz, SndParam028080_SetBit5
-	resm	5, (xwa)
-	jr t, SndParam028080_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit5_Via028080.bin"
 SndParam028080_SetBit5:
 	.byte 0xb0, 0xbd				; set 5, (xwa)  [not in LLVM]
 SndParam028080_Done:
@@ -1981,27 +584,7 @@ SndParam028080_Done:
 
 
 SndParam_VoiceEntryLookup_ViaReg8000:
-	; --- Routine 1: stack frame, 3x FCD437 lookup, nibble merge (91 bytes) ---
-	dec 6, xsp
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld (xsp+6), 0x48
-	ld xwa, 0x00028000
-	call SndParam_LookupReadOnly
-	ld (xsp+7), l
-	ld xwa, 0x00028001
-	call SndParam_LookupReadOnly
-	lda	xwa, (xsp+4)
-	ld (xwa+4), l
-	call SndParam_ResolveVoiceEntry
-	lda	xwa, (xsp+4)
-	cp (xwa), 0x0e
-	jr nc, SndParam028000_GetBankBit
-	ld xwa, 0x00028002
-	call SndParam_LookupReadOnly
-	extz	hl
-	ld	wa, hl
-	jr t, SndParam028000_LookupAndMerge
+	.incbin "includes/generated/v7_transplant_SndParam_VoiceEntryLookup_ViaReg8000.bin"
 SndParam028000_GetBankBit:
 	ld a, (xwa+1)
 	and a, 0x03
@@ -2015,39 +598,16 @@ SndParam028000_LookupAndMerge:
 	inc 6, xsp
 	ret
 SndParam_SetResBit7_Via4200:
-	; --- Routine 2: FCD437(0x4200), set/res bit 7 at (xwa) via xiz+0x0a (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00004200
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+10)
-	cps	hl, 1
-	jr nz, SndParam4200_ResBit7
-	setm	7, (xwa)
-	jr t, SndParam4200_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit7_Via4200.bin"
 SndParam4200_ResBit7:
 	.byte 0xb0, 0xb7				; res 7, (xwa)  [not in LLVM]
 SndParam4200_Done:
 	pop xiz
 	ret
 SndParam_MaskShiftMerge_8F58:
-	; --- Routine 3: read (0x8f58), mask+shift, merge into (0x8f1c) (20 bytes) ---
-	ldb_d8	a, (0x8f58)
-	and a, 0x07
-	sla	a, 4
-	anddi8	(0x8f1c), 143
-	orddm8	0x8f1c, a
-	ret
+	.incbin "includes/generated/v7_transplant_SndParam_MaskShiftMerge_8F58.bin"
 SndParam_DecrLookup_Via0300:
-	; --- Routine 4: FCD437(0x300), decrement+mask+lookup via FC7C23 (40 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00000300
-	call SndParam_LookupReadOnly
-	cps	hl, 0
-	jr nz, SndParam0300_DecrAndMask
-	ldb l, 0x00
-	jr t, SndParam0300_StoreLookup
+	.incbin "includes/generated/v7_transplant_SndParam_DecrLookup_Via0300.bin"
 SndParam0300_DecrAndMask:
 	dec 1, l
 	and l, 0x07
@@ -2061,49 +621,21 @@ SndParam0300_StoreLookup:
 
 
 SndParam_SetResBit4_Via0400:
-	; --- Routine 1: call FCD437, set/res bit 4 based on HL (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x00000400
-	call SndParam_LookupReadOnly
-	lda	xwa, (xiz+3)
-	cps	hl, 1
-	jr nz, SndParam0400_ResBit4
-	setm	4, (xwa)
-	jr t, SndParam0400_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit4_Via0400.bin"
 SndParam0400_ResBit4:
 	.byte 0xb0, 0xb4				; res 4, (xwa)  [not in LLVM]
 SndParam0400_Done:
 	pop xiz
 	ret
 SndParam_SetResBit7_ViaSelection:
-	; --- Routine 2: call F99439, 3-way cp HL, set/res bit 7 (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	call CtrlPanel_GetSelectionState
-	cps	hl, 2
-	jr z, CtrlPanel_SetResBit7_Ret
-	cps	hl, 1
-	jr z, SndParamSelect_SetBit7
-	cps	hl, 0
-	jr nz, CtrlPanel_SetResBit7_Ret
-	resm	7, (xiz)
-	jr t, CtrlPanel_SetResBit7_Ret
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit7_ViaSelection.bin"
 SndParamSelect_SetBit7:
 	.byte 0xb6, 0xbf				; set 7, (xiz)  [not in LLVM]
 CtrlPanel_SetResBit7_Ret:
 	pop xiz
 	ret
 SndParam_SetResBit7_ViaF9A541:
-	; --- Routine 3: call F9A541, set/res bit 7 based on HL (24 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	call GetDialEnableState
-	lda	xwa, (xiz+4)
-	cps	hl, 0
-	jr z, SndParamF9A541_ResBit7
-	setm	7, (xwa)
-	jr t, SndParamF9A541_Done
+	.incbin "includes/generated/v7_transplant_SndParam_SetResBit7_ViaF9A541.bin"
 SndParamF9A541_ResBit7:
 	.byte 0xb0, 0xb7				; res 7, (xwa)  [not in LLVM]
 SndParamF9A541_Done:
@@ -2112,292 +644,16 @@ SndParamF9A541_Done:
 
 
 ExtData_VoiceParam_DispatchBytecode:
-	push	xiz
-	lda_d16	xiz, (0x8f18)
-	lda	xbc, (xiz+2)
-	.byte 0xb1, 0xb7, 0xb6, 0xb1, 0xb6, 0xb2, 0xb6, 0xb4
-	lda	xhl, (xiz+10)
-	.byte 0xb3, 0xb3
-	lda	xde, (xiz+6)
-	.byte 0xb2, 0xb6, 0xb2, 0xb7
-	lda	xiy, (xiz+11)
-	.byte 0xb5, 0xb0, 0xb5, 0xb1, 0xb5, 0xb2, 0xb5, 0xb3
-	ldb_d8	a, (0x8d34)
-	extz	wa
-	dec	2, wa
-	cps	wa, 0
-	jr	lt, 88
-	cp	wa, 16
-	jr	gt, 82
-	add	wa, wa
-	lda_24	xix, (Protocol_values_for_LED_rows_0x16)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	jr	117
-	swi	4
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	sbc	bc, wa
-	.byte 0xbf
-	jr	56
-	ldb	a, 1
-	jr	49
-	ldb	a, 2
-	jr	45
-	.byte 0xb2, 0xbf
-	jr	44
-	ld	xwa, xde
-	.byte 0xb2, 0xbf, 0xc1
-	swi	4
-	ldb	h, 63
-	.byte 0x01
-	jr	nz, 33
-	.byte 0xb0, 0xbe
-	jr	29
-	.byte 0xb2, 0xbe
-	jr	25
-	.byte 0xb5, 0xb8
-	jr	21
-	.byte 0xb5, 0xba
-	jr	17
-	.byte 0xb5, 0xb9
-	jr	13
-	.byte 0xb5, 0xbb
-	jr	9
-	.byte 0xb3, 0xbb
-	jr	5
-	ldb	a, 4
-	scf
-	.byte 0xb6
-	pushw	ix
-	pop	xiz
-	ret
-	lda_d16	xwa, (0x8f18)
-	.byte 0xc1, 0x90
-	ldw	hl, 63
-	jr	z, 3
-	.byte 0xb0, 0xbb
-	ret
-	.byte 0xb0, 0xb3
-	ret
-	lda_d16	xwa, (0x8f1e)
-	.byte 0xb0, 0xb5, 0xf1, 0xa5
-	pushw	wa
-	sbc	w, w
-	.byte 0xf6
-	ldb_d8	c, (0x8d34)
-	cp	c, 13
-	ret	z
-	cp	c, 12
-	ret	z
-	cp	c, 11
-	ret	z
-	cp	c, 9
-	ret	z
-	cp	c, 8
-	ret	z
-	.byte 0xb0, 0xbd
-	ret
-	lda	xsp, (xsp-10)
-	push	xiz
-	lda_d16	xwa, (0x8f18)
-	ld	(xsp+4), xwa
-	ld	(xwa+7), 0
-	ld	xwa, (xsp+4)
-	ld	(xwa+8), 0
-	.byte 0x88
-	incf
-	push	xix
-	swi	4
-	call	GetCurrentPartSelect
-	extz	hl
-	ld	wa, hl
-	lds	bc, 0
-	call	SndParam_LookupViaEncode
-	ld	(xsp+11), l
-	call	GetCurrentPartSelect
-	extz	hl
-	ld	wa, hl
-	ldw	bc, 32
-	call	SndParam_LookupViaEncode
-	ld	(xsp+12), l
-	call	GetCurrentPartSelect
-	lda	xwa, (xsp+8)
-	ld	(xwa+2), l
-	call	SndParam_ResolveVoiceEntry
-	lda	xwa, (xsp+8)
-	.byte 0x80
-	push	xsp
-	reti
-	jr	ugt, 8
-	ld	a, (xwa)
-	extz	wa
-	lds32	xiz, 7
-	jr	16
-	.byte 0x80
-	push	xsp
-	retd	6251
-	ld	a, (xwa)
-	dec	8, a
-	extz	wa
-	ld	xiz, 8
-	call	CtrlPanel_LookupIndicatorEntry
-	ld	xwa, (xsp+4)
-	add	xwa, xiz
-	ld	(xwa), l
-	jr	38
-	.byte 0x80
-	push	xsp
-	scf
-	jr	ugt, 26
-	ld	a, (xwa)
-	sub	a, 16
-	extz	wa
-	call	CtrlPanel_LookupIndicatorEntry
-	ld	xwa, (xsp+4)
-	and	l, 3
-	.byte 0x88
-	incf
-	push	xix
-	swi	4
-	or	(xwa+12), l
-	jr	7
-	ld	xwa, (xsp+4)
-	ld	(xwa+7), 1
-	pop	xiz
-	lda	xsp, (xsp+10)
-	ret
-	dec	6, xsp
-	push	xiz
-	lda_d16	xiz, (0x8f18)
-	.byte 0xb6, 0xb0
-	ld	(xiz+1), 0
-	.byte 0x8e
-	push	sr
-	push	xix
-	.byte 0x80
-	ld	xwa, 0x028000
-	call	SndParam_LookupReadOnly
-	ld	(xsp+7), l
-	ld	xwa, 0x028001
-	call	SndParam_LookupReadOnly
-	lda	xwa, (xsp+4)
-	ld	(xwa+4), l
-	ld	(xwa+2), 72
-	call	SndParam_ResolveVoiceEntry
-	lda	xwa, (xsp+4)
-	.byte 0x80
-	push	xsp
-	.byte 0x06
-	jr	ugt, 20
-	ld	a, (xwa)
-	extz	wa
-	call	CtrlPanel_LookupIndicatorEntry
-	res	7, l
-	.byte 0x8e
-	push	sr
-	push	xix
-	add	(xwa), h
-	push	sr
-	dec	8, xsp
-	pushw	de
-	.byte 0x80
-	push	xsp
-	ret
-	jr	ugt, 15
-	ld	a, (xwa)
-	dec	7, a
-	extz	wa
-	call	CtrlPanel_LookupIndicatorEntry
-	ld	(xiz+1), l
-	jr	22
-	.byte 0x80
-	push	xsp
-	retd	1134
-	.byte 0xb6, 0xb8
-	jr	13
-	lda	xbc, (xiz+2)
-	ld	a, (xbc)
-	and	a, 128
-	set	0, a
-	ld	(xbc), a
-	pop	xiz
-	inc	6, xsp
-	ret
-	push	xiz
-	lda_d16	xiz, (0x8f18)
-	call	GetCurrentPartSelect
-	lda	xbc, (xiz+10)
-	ld	a, (xbc)
-	cps	l, 2
-	jr	z, 28
-	cps	l, 1
-	jr	z, 14
-	cps	l, 0
-	jr	nz, 30
-	and	a, 248
-	set	2, a
-	ld	(xbc), a
-	jr	23
-	and	a, 248
-	set	1, a
-	ld	(xbc), a
-	jr	13
-	and	a, 248
-	set	0, a
-	ld	(xbc), a
-	jr	3
-	.byte 0x81
-	push	xix
-	swi	0
-	pop	xiz
-	ret
-	push	xiz
-	lda_d16	xiz, (0x8f18)
-	ld	xwa, 0x40c0
-	call	SndParam_LookupReadOnly
-	cps	hl, 1
-	jr	nz, 4
-	.byte 0xb6, 0xbd
-	jr	2
-	.byte 0xb6, 0xb5
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtData_VoiceParam_DispatchBytecode.bin"
 CtrlPanel_SetResBit6_ViaLookup:
-	; --- Sub 1: set/res bit 6 of (XIZ) via FCD437 lookup (26 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x000040c1
-	call SndParam_LookupReadOnly
-	cps	hl, 1
-	jr nz, CtrlPanel_ResBit6
-	setm	6, (xiz)
-	jr t, CtrlPanel_Bit6Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit6_ViaLookup.bin"
 CtrlPanel_ResBit6:
 	.byte 0xb6, 0xb6				; res 6, (xiz)  [not in LLVM]
 CtrlPanel_Bit6Done:
 	pop xiz
 	ret
 CtrlPanel_MultiWayBitManip_ViaE0:
-	; --- Sub 2: multi-way HL compare, and/set bits at (XBC+0x0d) (74 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ld xwa, 0x000040e0
-	call SndParam_LookupReadOnly
-	lda	xbc, (xiz+13)
-	ld a, (xbc)
-	cp hl, 0x0058
-	jr z, CtrlPanel_SetBit2
-	cp hl, 0x004c
-	jr z, CtrlPanel_SetBit2
-	cp hl, 0x0040
-	jr z, CtrlPanel_ClearBits1_2
-	cp hl, 0x0034
-	jr z, CtrlPanel_SetBit1
-	cp hl, 0x0028
-	jr nz, CtrlPanel_BitManip_Ret
+	.incbin "includes/generated/v7_transplant_CtrlPanel_MultiWayBitManip_ViaE0.bin"
 CtrlPanel_SetBit1:
 	and a, 0xf9
 	set 1, a
@@ -2414,130 +670,47 @@ CtrlPanel_BitManip_Ret:
 	pop xiz
 	ret
 CtrlPanel_SyncBit0_From8F5C:
-	; --- Sub 3: set/res bit 0 at (0x8f1d) based on bit 0 of (0x8f5c) (16 bytes) ---
-	lda_d16	xwa, (0x8f1d)
-	bitda	0, (0x8f5c)
-	jr z, CtrlPanel_ResBit0_8F5C
-	setm	0, (xwa)
-	ret
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SyncBit0_From8F5C.bin"
 CtrlPanel_ResBit0_8F5C:
 	resm	0, (xwa)
 	ret
 CtrlPanel_SetBit3_OnStyleD0D3:
-	; --- Sub 4: conditionally set bit 3 at (0x8f25) based on (0x8d38) (33 bytes) ---
-	lda_d16	xwa, (0x8f25)
-	resm	3, (xwa)
-	ldb_d8	c, (0x8d38)
-	cp c, 0xd3
-	jr z, CtrlPanel_SetBit3
-	cp c, 0xd2
-	jr z, CtrlPanel_SetBit3
-	cp c, 0xd1
-	jr z, CtrlPanel_SetBit3
-	cp c, 0xd0
-	ret nz
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetBit3_OnStyleD0D3.bin"
 CtrlPanel_SetBit3:
 	setm	3, (xwa)
 	ret
 CtrlPanel_SetResBit0_ViaLookup4:
-	; --- Sub 5: set/res bit 0 at (XIZ+4) via FC7C23 + (0x8f54) lookup (34 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f54)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	lda	xwa, (xiz+4)
-	cps	l, 0
-	jr z, CtrlPanelLookup4_ResBit0
-	setm	0, (xwa)
-	jr t, CtrlPanelLookup4_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit0_ViaLookup4.bin"
 CtrlPanelLookup4_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
 CtrlPanelLookup4_Done:
 	pop xiz
 	ret
 CtrlPanel_SetResBit1_ViaLookup56:
-	; --- Sub 6: set/res bit 1 at (XIZ+4) via FC7C23 + (0x8f56) lookup (34 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f56)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	lda	xwa, (xiz+4)
-	cps	l, 0
-	jr z, CtrlPanelLookup56_ResBit1
-	setm	1, (xwa)
-	jr t, CtrlPanelLookup56_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit1_ViaLookup56.bin"
 CtrlPanelLookup56_ResBit1:
 	.byte 0xb0, 0xb1				; res 1, (xwa)  [not in LLVM]
 CtrlPanelLookup56_Done:
 	pop xiz
 	ret
 CtrlPanel_SetResBit2_ViaLookup50:
-	; --- Sub 7: set/res bit 2 at (XIZ+4) via FC7C23 + (0x8f50) lookup (34 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f50)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	lda	xwa, (xiz+4)
-	cps	l, 0
-	jr z, CtrlPanelLookup50_ResBit2
-	setm	2, (xwa)
-	jr t, CtrlPanelLookup50_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit2_ViaLookup50.bin"
 CtrlPanelLookup50_ResBit2:
 	.byte 0xb0, 0xb2				; res 2, (xwa)  [not in LLVM]
 CtrlPanelLookup50_Done:
 	pop xiz
 	ret
 CtrlPanel_SetResBit3_ViaLookup52:
-	; --- Sub 8: set/res bit 3 at (XIZ+4) via FC7C23 + (0x8f52) lookup (34 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f52)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	lda	xwa, (xiz+4)
-	cps	l, 0
-	jr z, CtrlPanelLookup52_ResBit3
-	setm	3, (xwa)
-	jr t, CtrlPanelLookup52_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit3_ViaLookup52.bin"
 CtrlPanelLookup52_ResBit3:
 	.byte 0xb0, 0xb3				; res 3, (xwa)  [not in LLVM]
 CtrlPanelLookup52_Done:
 	pop xiz
 	ret
 CtrlPanel_GuardedNibbleSet_8F4E:
-	; --- Sub 9: guarded nibble set/res at (XIZ+0x0e) via (0x8f4e) lookup (76 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	bitda	2, (1054)
-	jr nz, CtrlPanel_BitOp_Cleanup
-	ld xwa, 0x00028103
-	call SndParam_LookupReadOnly
-	cps	hl, 0
-	jr z, CtrlPanelGuard_PassedCheck
-	cpdi8	(0x8d34), 19
-	jr z, CtrlPanelGuard_PassedCheck
-	cpdi8	(0x7f0b), 0
-	jr z, CtrlPanel_BitOp_Cleanup
+	.incbin "includes/generated/v7_transplant_CtrlPanel_GuardedNibbleSet_8F4E.bin"
 CtrlPanelGuard_PassedCheck:
-	ldb_d8	a, (0x8f4e)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	lda	xwa, (xiz+14)
-	cps	l, 0
-	jr z, CtrlPanelGuard_ClearNibble
-	ld c, (xwa)
-	and c, 0xf0
-	set 0, c
-	ld (xwa), c
-	jr t, CtrlPanel_BitOp_Cleanup
+	.incbin "includes/generated/v7_transplant_CtrlPanelGuard_PassedCheck.bin"
 CtrlPanelGuard_ClearNibble:
 	.byte 0x80
 	push	xix
@@ -2546,66 +719,28 @@ CtrlPanel_BitOp_Cleanup:
 	pop xiz
 	ret
 CtrlPanel_SetResBit0_ViaLookup4C:
-	; --- Sub 10: set/res bit 0 at (XIZ+0x0d) via FC7C23 + (0x8f4c) lookup (34 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f4c)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	lda	xwa, (xiz+13)
-	cps	l, 0
-	jr z, CtrlPanelLookup4C_ResBit0
-	setm	0, (xwa)
-	jr t, CtrlPanelLookup4C_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit0_ViaLookup4C.bin"
 CtrlPanelLookup4C_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
 CtrlPanelLookup4C_Done:
 	pop xiz
 	ret
 CtrlPanel_SetResBit7_ViaLookup4C:
-	; --- Sub 11: set/res bit 7 of (XIZ) via FC7C23 + (0x8f4c) lookup (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f4c)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	jr z, CtrlPanelBit7_Res
-	setm	7, (xiz)
-	jr t, CtrlPanelBit7_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit7_ViaLookup4C.bin"
 CtrlPanelBit7_Res:
 	.byte 0xb6, 0xb7				; res 7, (xiz)  [not in LLVM]
 CtrlPanelBit7_Done:
 	pop xiz
 	ret
 CtrlPanel_SetResBit5_ViaLookup4C:
-	; --- Sub 12: set/res bit 5 of (XIZ) via FC7C23 + (0x8f4c) lookup (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f4c)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	jr z, CtrlPanelBit5_Res
-	setm	5, (xiz)
-	jr t, CtrlPanelBit5_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit5_ViaLookup4C.bin"
 CtrlPanelBit5_Res:
 	.byte 0xb6, 0xb5				; res 5, (xiz)  [not in LLVM]
 CtrlPanelBit5_Done:
 	pop xiz
 	ret
 CtrlPanel_SetResBit6_ViaLookup4C:
-	; --- Sub 13: set/res bit 6 of (XIZ) via FC7C23 + (0x8f4c) lookup (29 bytes) ---
-	push xiz
-	lda_d16	xiz, (0x8f18)
-	ldb_d8	a, (0x8f4c)
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
-	jr z, CtrlPanelBit6_Res
-	setm	6, (xiz)
-	jr t, CtrlPanelBit6_Done
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetResBit6_ViaLookup4C.bin"
 CtrlPanelBit6_Res:
 	.byte 0xb6, 0xb6				; res 6, (xiz)  [not in LLVM]
 CtrlPanelBit6_Done:
@@ -2621,133 +756,43 @@ CtrlPanelBit6_Done:
 ; Looks up bitmask from table at 0xeda66c.
 ; ============================================================================
 CtrlPanel_SetIndicatorBit:
-	pushw_erp 0xfa
-	ld c, a
-	and c, 0xf0
-	ldb_erp C, 0xfb
-	and a, 0xf
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	cp_erpb 0xfb, 0x60
-	jr z, CtrlPanel_SetIndicator_Group4
-	cp_erpb 0xfb, 0x40
-	jr z, CtrlPanel_SetIndicator_Group3
-	cp_erpb 0xfb, 0x20
-	jr z, CtrlPanel_SetIndicator_Group2
-	cpib_erp 0xfb, 0
-	jr nz, CtrlPanel_PopRetFA
-	orddm16 0x8f3a, xhl
-	jr CtrlPanel_PopRetFA
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetIndicatorBit.bin"
 CtrlPanel_SetIndicator_Group2:
-	orddm16 0x8f3e, xhl
-	jr CtrlPanel_PopRetFA
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetIndicator_Group2.bin"
 CtrlPanel_SetIndicator_Group3:
-	orddm16 0x8f42, xhl
-	jr CtrlPanel_PopRetFA
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetIndicator_Group3.bin"
 CtrlPanel_SetIndicator_Group4:
-	orddm16 0x8f46, xhl
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetIndicator_Group4.bin"
 CtrlPanel_PopRetFA:
 	popw_erp 0xfa
 	ret
 
 CtrlPanel_IndicatorDispatch:
-	pushw_erp 0xfa
-	ld c, a
-	and c, 0xf0
-	ldb_erp C, 0xfb
-	and a, 0xf
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	cp_erpb 0xfb, 0x60
-	jr z, CtrlPanel_DispIndicator_Group4
-	cp_erpb 0xfb, 0x40
-	jr z, CtrlPanel_DispIndicator_Group3
-	cp_erpb 0xfb, 0x20
-	jr z, CtrlPanel_DispIndicator_Group2
-	cpib_erp 0xfb, 0
-	jr nz, CtrlPanel_PopRetFA2
-	orddm16 0x8f3c, xhl
-	jr CtrlPanel_PopRetFA2
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_IndicatorDispatch.bin"
 CtrlPanel_DispIndicator_Group2:
-	orddm16 0x8f40, xhl
-	jr CtrlPanel_PopRetFA2
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_DispIndicator_Group2.bin"
 CtrlPanel_DispIndicator_Group3:
-	orddm16 0x8f44, xhl
-	jr CtrlPanel_PopRetFA2
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_DispIndicator_Group3.bin"
 CtrlPanel_DispIndicator_Group4:
-	orddm16 0x8f48, xhl
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_DispIndicator_Group4.bin"
 CtrlPanel_PopRetFA2:
 	popw_erp 0xfa
 	ret
 
 CtrlPanel_SetIndicatorLED:
-	pushw_erp 0xfa
-	ld c, a
-	and c, 0xf0
-	ldb_erp C, 0xfb
-	and a, 0xf
-	extz wa
-	call CtrlPanel_LookupIndicatorEntry
-	ld wa, hl
-	cpl wa
-	cp_erpb 0xfb, 0x40
-	jr z, CtrlPanel_SetLED_Group3
-	cp_erpb 0xfb, 0x20
-	jr z, CtrlPanel_SetLED_Group2
-	cpib_erp 0xfb, 0
-	jr nz, MidiChOutState_Return
-	anddm16 0x8f3c, xwa
-	orddm16 0x8f3a, xhl
-	jr MidiChOutState_Return
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetIndicatorLED.bin"
 CtrlPanel_SetLED_Group2:
-	anddm16 0x8f40, xwa
-	orddm16 0x8f3e, xhl
-	jr MidiChOutState_Return
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetLED_Group2.bin"
 CtrlPanel_SetLED_Group3:
-	anddm16 0x8f44, xwa
-	orddm16 0x8f42, xhl
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_SetLED_Group3.bin"
 MidiChOutState_Return:
 	popw_erp 0xfa
 	ret
 
 MidiChannel_ProcessOutputState:
-	push xiz
-	lda_d16 xiz, (0x8f18)
-	calr MidiChOut_DetectChanges
-	lda xde, (xiz + 14)
-	ldb_d8 c, (0x8e76)
-	bitda 2, (1054)
-	jr nz, MidiChOut_CheckHWState
-	ld a, c
-	bit 1, c
-	jr z, MidiChannel_CleanupRet
-	res 1, a
-	stb_d8 (0x8e76), a
-	jr MidiChOut_ClearLowNibble
-
+	.incbin "includes/generated/v7_transplant_MidiChannel_ProcessOutputState.bin"
 MidiChOut_CheckHWState:
-	ldb_d8 l, (1046)
-	ldb_d8 a, (1045)
-	and a, 0x60
-	jr nz, MidiChOut_CheckBit1Clear
-	setda 1, 0x8e76
-	ldb_d8 a, (1075)
-	cps a, 6
-	jr z, MidiChOut_Mode6or3_Mask7
-	cps a, 3
-	jr nz, MidiChOut_OtherMode_Mask3
-
+	.incbin "includes/generated/v7_transplant_MidiChOut_CheckHWState.bin"
 MidiChOut_Mode6or3_Mask7:
 	and l, 0x7
 	ld xwa, Protocol_values_for_LED_rows_0x38
@@ -2766,12 +811,7 @@ MidiChOut_TableLookup:
 	jr MidiChannel_CleanupRet
 
 MidiChOut_CheckBit1Clear:
-	ld a, c
-	bit 1, c
-	jr z, MidiChannel_CleanupRet
-	res 1, a
-	stb_d8 (0x8e76), a
-
+	.incbin "includes/generated/v7_transplant_MidiChOut_CheckBit1Clear.bin"
 MidiChOut_ClearLowNibble:
 	andmi8 (xde), 0xf0
 
@@ -2780,43 +820,9 @@ MidiChannel_CleanupRet:
 	ret
 
 MidiChOut_DetectChanges:
-	bitda 2, (1054)
-	ret nz
-	ldb_d8 a, (1056)
-	xorda8 a, 0x347b
-	bit 2, a
-	ret z
-	ordi16 0x8f3e, 4
-	ldmm8 0x347b, 1056
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiChOut_DetectChanges.bin"
 MidiChannel_ScanPending:
-	push xiz
-	lda_d16 xiz, (0x8f18)
-	ldw_d16 xwa, (0x8f40)
-	bit 2, wa
-	jr nz, MidiScan_PopIzRet
-	ldb_d8 a, (0x8f4a)
-	and a, 0x3
-	jr nz, MidiScan_PopIzRet
-	bitda 2, (1054)
-	jr nz, MidiScan_PopIzRet
-	bitda 2, (0x28a7)
-	jr nz, MidiScan_AltPathCheck
-	ld xwa, 0x28103
-	call SndParam_LookupReadOnly
-	lda xbc, (xiz + 14)
-	cps hl, 1
-	jr nz, MidiScan_CheckBit2InAddr1057
-	ldw_d16 xwa, (1039)
-	bit 6, wa
-	jr nz, MidiScan_ClearAndReturn
-	ld a, (xbc)
-	and a, 0xf0
-	set 0, a
-	ld (xbc), a
-	jr MidiScan_PopIzRet
-
+	.incbin "includes/generated/v7_transplant_MidiChannel_ScanPending.bin"
 MidiScan_CheckBit2InAddr1057:
 	bitda 2, (1057)
 	jr nz, MidiScan_PopIzRet
@@ -2843,168 +849,37 @@ MidiScan_PopIzRet:
 ; active and which input modes are enabled.
 ; ============================================================================
 UIState_UpdateControlBits:
-	ldb_d8	a, (0xc07d)
-	cps	a, 5
-	jr	z, 22
-	cps	a, 4
-	jr	z, 11
-	cps	a, 0
-	ret	nz
-	.byte 0xd1
-	push	xde
-	decm8	1, (xsp+62)
-	nop
-	ret
-	.byte 0xd1
-	push	xde
-	.byte 0x8f
-	push	xiz
-	pushw	wa
-	nop
-	ret
-	.byte 0xd1
-	push	xde
-	.byte 0x8f
-	push	xiz
-	.byte 0x40
-	nop
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_UpdateControlBits.bin"
 UIState_SwitchOnDisplayMode:
-	; --- Switch on A = (0xc07d): or bits into (0x8f3a)/(0x8f42) (53 bytes) ---
-	ldb_d8	a, (0xc07d)
-	cps	a, 4
-	jr z, UIState_Mode4
-	cps	a, 3
-	jr z, UIState_Mode3
-	cps	a, 1
-	jr z, UIState_Mode0or1
-	cps	a, 0
-	jr z, UIState_Mode0or1
-	cp a, 0x10
-	ret nz
-	ordi16	0x8f3a, 107
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_SwitchOnDisplayMode.bin"
 UIState_Mode0or1:
-	ordi16	0x8f3a, 111
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_Mode0or1.bin"
 UIState_Mode3:
-	ordi16	0x8f42, 512
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_Mode3.bin"
 UIState_Mode4:
-	ordi16	0x8f42, 0x8000
-	ret
-
-
+	.incbin "includes/generated/v7_transplant_UIState_Mode4.bin"
 UIState_ProcessExtendedMode:
-	ldb_d8	a, (0xc07d)
-	extz	wa
-	cps	wa, 0
-	ret	mi
-	cps	wa, 7
-	ret	gt
-	add	wa, wa
-	lda_24	xix, (Protocol_values_for_LED_rows_0x46)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	.byte 0x85
-	jrl	ugt, 13564
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xe0
-	xor	bc, wa
-	push	xiz
-	.byte 0x8f
-	push	xiz
-	pop	sr
-	push	sr
-	ret
-	.byte 0xd1
-	push	xiz
-	cp	(xsp+62), d
-	nop
-	ret
-	ld	xwa, 0x028080
-	call	SndParam_LookupReadOnly
-	cps	l, 0
-	jr	z, 5
-	stb_da	(0xffc8), l
-	.byte 0xd1
-	push	xiz
-	.byte 0x8f
-	push	xiz
-	nop
-	.byte 0x01
-	ret
-	.byte 0xd1
-	ld	xde, 0x103e8f
-	ret
-	.byte 0xd1
-	push	xiz
-	.byte 0x8f
-	push	xiz
-	nop
-	push	sr
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_ProcessExtendedMode.bin"
 UIStateEvt_NullHandler:
 	ret
 UIState_SwitchForMidiFlags:
-	; --- Switch on A = (0xc07d): or bits into (0x8f42) (51 bytes) ---
-	ldb_d8	a, (0xc07d)
-	cp a, 0x14
-	jr z, UIState_MidiMode14
-	cps	a, 4
-	jr z, UIState_MidiMode4
-	cp a, 0x3f
-	jr z, UIState_MidiMode3F
-	cps	a, 6
-	ret nz
+	.incbin "includes/generated/v7_transplant_UIState_SwitchForMidiFlags.bin"
 UIState_MidiMode6:
-	ordi16	0x8f42, 1024
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_MidiMode6.bin"
 UIState_MidiMode3F:
-	ordi16	0x8f42, 2048
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_MidiMode3F.bin"
 UIState_MidiMode4:
-	ordi16	0x8f42, 2
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_MidiMode4.bin"
 UIState_MidiMode14:
-	ordi16	0x8f42, 4096
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_MidiMode14.bin"
 UIState_NullReturn:
 	ret
 
 
 UIState_ProcessAltMode:
-	ldb_d8	a, (0xc07d)
-	cp	a, 11
-	jr	z, 22
-	cps	a, 3
-	jr	z, 11
-	cps	a, 1
-	ret	nz
-	.byte 0xd1
-	ld	xde, 0x033e8f
-	ret
-	.byte 0xd1
-	ld	xde, 0x083e8f
-	ret
-	.byte 0xd1
-	ld	xde, 0x60003e8f
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_ProcessAltMode.bin"
 UIState_ProcessSimpleMode:
-	ldb_d8	a, (0xc07d)
-	cps	a, 1
-	ret	nz
-	.byte 0xd1
-	push	xde
-	.byte 0x8f
-	push	xiz
-	.byte 0x90
-	nop
-	ret
-
+	.incbin "includes/generated/v7_transplant_UIState_ProcessSimpleMode.bin"
 CtrlPanel_LookupIndicatorEntry:
 	extz wa
 	sla wa, 2
@@ -3027,27 +902,7 @@ FindBit_ShiftLoop:
 	ret
 
 Audio_InitAllDefaults:
-	stdi8 (0xc039), 255
-	stdi8 (0xbd3c), 255
-	stdi16 (0x90de), 0
-	stdi16 (0x90e0), 0
-	stdi8 (0xbf39), 255
-	stdi16 (0x90e2), 0
-	stdi16 (0x9133), 0
-	stdi8 (0x90fb), 255
-	stdi8 (0x91ad), 255
-	stdi8 (0x91b5), 255
-	stdi8 (0x91d2), 255
-	stdi8 (0x90f8), 127
-	stdi8 (0x8f63), 255
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
-	stda32 0x90f2, xwa
-	lda_24 xwa, (SoundProgram_DispatchTable_0x800)
-	stda32 0x9182, xwa
-	lda_d16 xbc, (0x918d)
-	ld xwa, xbc
-	lda xbc, (xbc + 31)
-
+	.incbin "includes/generated/v7_transplant_Audio_InitAllDefaults.bin"
 AudioInit_FillLoop:
 	stib_dsp 0xe0, 0x50
 	cp xwa, xbc
@@ -3056,58 +911,16 @@ AudioInit_FillLoop:
 	jp DSPCfg_Param_CaseB
 
 Audio_ResetAfterPayloadError:
-	call SubCPU_Payload_GetErrorFlag
-	cp hl, 0xffff
-	jr nz, Audio_ReinitToneGen
-	cpdi8 (0x8d36), 65
-	jr nz, Audio_ReinitDisplay
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	cps hl, 1
-	jr nz, Audio_ReinitDisplay
-	ld xwa, 0xc0
-	lds bc, 0
-	lds de, 1
-	call SoundParam_NotifyChange
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitBothBanks
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-
+	.incbin "includes/generated/v7_transplant_Audio_ResetAfterPayloadError.bin"
 Audio_ReinitDisplay:
 	calr Display_SetupAndPrepareRender
 	calr Display_CopyAndRenderBitmaps
 	call MainTitle_SetBootFlag
 
 Audio_ReinitToneGen:
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call ToneGen_ApplyMaskTable
-	call ToneGen_Config_InitAndChannels
-	call ToneGen_InitAllChannelEntries_Skip
-	call ToneGen_DSPCfg_Initialize
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	calr MidiMsg_ParseChannelStream
-	calr Audio_InitAllChannelParams
-	call SeqTimer_UpdateTempoReg
-	calr Audio_FillParamBuffer
-	jp CompIface_SetMax
-
+	.incbin "includes/generated/v7_transplant_Audio_ReinitToneGen.bin"
 Audio_FillParamBuffer:
-	lda_d16 xbc, (0x918d)
-	ld xwa, xbc
-	lda xbc, (xbc + 31)
-
+	.incbin "includes/generated/v7_transplant_Audio_FillParamBuffer.bin"
 AudioFill_Loop:
 	stib_dsp 0xe0, 0x50
 	cp xwa, xbc
@@ -3149,423 +962,20 @@ Audio_ReinitToneGenAndOutput:
 	pop xde
 
 Audio_UpdateTempoAndReturn:
-	call SeqTimer_UpdateTempoReg
-	jp CompIface_SetMax
-
+	.incbin "includes/generated/v7_transplant_Audio_UpdateTempoAndReturn.bin"
 Audio_FullReinitWithPreset:
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
-	stda32 0x90f2, xwa
-	lda_24 xwa, (SoundProgram_DispatchTable_0x800)
-	stda32 0x9182, xwa
-	call Sys_CheckPowerStableFlag
-	cps hl, 0
-	jr nz, Audio_CheckAndReinitReverb
-	ld xwa, 0xc0
-	lds bc, 0
-	lds de, 1
-	call SoundParam_NotifyChange
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitBothBanks
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-
+	.incbin "includes/generated/v7_transplant_Audio_FullReinitWithPreset.bin"
 Audio_CheckAndReinitReverb:
-	ld xwa, 0x2880
-	call SndParam_LookupReadOnly
-	cp hl, 0xb7
-	ret nz
-	ld xwa, 0x4001
-	ldw bc, 0x7f
-	lds de, 2
-	call SoundParam_NotifyChange
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitOutputBank
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_CheckAndReinitReverb.bin"
 VoiceData_InitAndCopyParams:
-	dec 2, xsp
-	push xiz
-	ld (xsp + 4), wa
-	cpw (xsp + 4), 0x50
-	jrl nc, VoiceData_InitDone
-	pushw 0x3c0
-	pushw 0x0
-	ld wa, (xsp + 8)
-	extz xwa
-	ld xbc, xwa
-	sll xbc, 4
-	sub xbc, xwa
-	sll xbc, 6
-	ld xwa, 0x1ed400
-	add xwa, xbc
-	push xwa
-	call Memset
-	inc 8, xsp
-	ld iz, (xsp + 4)
-	extz xiz
-	ld xwa, xiz
-	ld xbc, 0x2a2
-	call Math_MultiplyAccumulate
-	add xhl, 0x99eca0
-	ld xwa, xiz
-	sll xwa, 4
-	sub xwa, xiz
-	sll xwa, 6
-	lda_24 xiz, (0x1ed400)
-	add xiz, xwa
-	pushw 0x7c
-	push xhl
-	push xiz
-	call Mem_Copy
-	lda_24 xwa, (Naka_ToshiParam_Table_0x8C)
-	add xwa, 0x7c
-	lda xiz, (xiz + 124)
-	pushw 0x11e
-	push xwa
-	push xiz
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	ld wa, (xsp + 4)
-	extz xwa
-	ld xbc, 0x2a2
-	call Math_MultiplyAccumulate
-	add xhl, 0x99eca0
-	add xhl, 0x7c
-	stb_dri W, 0xf9, 0x1e, 0x01
-	pushw 0x226
-	push xhl
-	push xwa
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-
+	.incbin "includes/generated/v7_transplant_VoiceData_InitAndCopyParams.bin"
 VoiceData_InitDone:
 	pop xiz
 	inc 2, xsp
 	ret
 
 VoiceData_ExtendedParamSetup:
-	cp	wa, 10
-	ret	nc
-	sll	wa, 4
-	extz	xwa
-	ld	xde, xwa
-	add	xde, 0x99ec00
-	lda_24	xbc, (0x1ed360)
-	add	xbc, xwa
-	pushw	16
-	push	xde
-	push	xbc
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	ret
-	calr	753
-	call	ToneGen_Config_InitAllEntries
-	call	Voice_InitAllChannelEntries
-	call	ToneGen_DSPCfg_ResetAll
-	calr	651
-	call	MainTitle_SetBootFlag
-	jrl	-415
-	dec	8, xsp
-	pushw	iz
-	lda_24	xwa, (Naka_ToshiParam_Table_0x8C)
-	ld	(xsp+2), xwa
-	lda_d16	xwa, (0xf9a0)
-	ld	(xsp+6), xwa
-	lds	iz, 0
-	ld	wa, iz
-	extz	xwa
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	add	xhl, 20
-	ld	xbc, xhl
-	.byte 0xaf
-	push	sr
-	add	(xbc), a
-	.byte 0x01
-	ldb	a, 216
-	ccf
-	pushw	wa
-	lda	xwa, (xbc+2)
-	push	xwa
-	.byte 0xaf
-	incf
-	.byte 0x83
-	lda	xwa, (xhl+2)
-	push	xwa
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	ld	wa, iz
-	extz	xwa
-	ld	xbc, 26
-	call	Math_MultiplyAccumulate
-	add	xhl, 20
-	.byte 0xaf, 0x06
-	or	(xhl), c
-	and	(xwa+30), c
-	pop	sr
-	inc	1, iz
-	cp	iz, 24
-	jr	c, -83
-	call	Voice_InitAllChannelEntries
-	popw	iz
-	inc	8, xsp
-	ret
-	lda	xsp, (xsp-10)
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	lda_24	xwa, (Naka_ToshiParam_Table_0x8C)
-	ld	(xsp+4), xwa
-	lda_d16	xwa, (0xf9a0)
-	ld	(xsp+8), xwa
-	ld	(xsp+2), 0
-	ld	a, (xsp+2)
-	extz	wa
-	muls	wa, 26
-	ld	ix, wa
-	add	ix, 20
-	ld	xwa, (xsp+8)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xf0
-	ldw	hl, 3771
-	ldw	de, 9090
-	and	c, 248
-	ld	(xde), c
-	ld	xwa, (xsp+4)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xf0
-	ldw	wa, 3720
-	ldb	a, 201
-	neg	d
-	or	c, a
-	ld	(xde), c
-	ld	a, (xhl)
-	extz	wa
-	ld	e, c
-	extz	de
-	pushw	7
-	ldw	bc, 12
-	calr	1032
-	pushw	9
-	ld	a, (xsp+4)
-	extz	wa
-	muls	wa, 26
-	ld	bc, wa
-	add	bc, 20
-	ld	xwa, (xsp+6)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	wa, 4024
-	ldw	wa, 0xaf38
-	ret
-	ldb	w, 243
-	reti
-	.byte 0xe0, 0xe4
-	ldw	wa, 4024
-	.byte 0x30, 0x38, 0x1d  ; bytecode param 0x1d38
-	addr24 Mem_Copy  ; Mem_Copy
-	lda	xsp, (xsp+10)
-	.byte 0xc7
-	swi	3
-	pop	sr
-	decf
-	ld	a, (xsp+2)
-	extz	wa
-	muls	wa, 26
-	ld	hl, wa
-	ld	bc, hl
-	add	bc, 20
-	ld	xde, (xsp+8)
-	.byte 0xc3
-	reti
-	or	xix, xwa
-	ldb	a, 216
-	ccf
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
-	extz	bc
-	add	hl, bc
-	.byte 0xf3
-	reti
-	sla	xwa, 50
-	ld	e, (xde+22)
-	extz	de
-	pushw	255
-	calr	929
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0xcf
-	pop_a
-	jr	ule, -59
-	incm8	1, (xsp+2)
-	.byte 0x8f
-	push	sr
-	push	xsp
-	push_f
-	jrl	c, -190
-	.byte 0xf2, 0xc0
-	swi	7
-	nop
-	.byte 0xb9
-	pushw	14
-	ld	xwa, (xsp+6)
-	lda	xwa, (xwa+944)
-	push	xwa
-	ld	xwa, (xsp+14)
-	lda	xwa, (xwa+944)
-	push	xwa
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	ld	(xsp+2), 0
-	ld	c, (xsp+2)
-	extz	bc
-	ld	de, bc
-	add	de, 944
-	ld	xwa, (xsp+8)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe8
-	ldb	e, 218
-	ccf
-	pushw	255
-	ldw	wa, 128
-	calr	843
-	incm8	1, (xsp+2)
-	.byte 0x8f
-	push	sr
-	push	xsp
-	ret
-	jr	c, -39
-	ld	xwa, (xsp+8)
-	.byte 0xf3, 0xe1
-	decf
-	.byte 0x04
-	ldw	bc, 8577
-	bit	2, a
-	jr	z, 20
-	res	2, a
-	ld	(xbc), a
-	ld	e, a
-	extz	de
-	pushw	4
-	ldw	wa, 145
-	lds	bc, 3
-	calr	799
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	SwbtWr_ReinitOutputBank
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	ld	(xsp+2), 0
-	lda_24	xwa, (Naka_ToshiParam_Table_0x8C)
-	ld	(xsp+4), xwa
-	lds32	xwa, 0
-	ld	a, (xsp+2)
-	ld	xbc, xwa
-	sll	xbc, 4
-	sub	xbc, xwa
-	sll	xbc, 6
-	ld	xwa, 0x1ed400
-	add	xwa, xbc
-	ld	(xsp+8), xwa
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x89
-	extz	wa
-	muls	wa, 26
-	ld	hl, wa
-	add	hl, 20
-	ld	xwa, (xsp+8)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xec
-	ldw	ix, 3772
-	ldw	de, 9090
-	and	c, 248
-	ld	(xde), c
-	ld	xwa, (xsp+4)
-	exts	xhl
-	add	xhl, xwa
-	ld	a, (xhl+14)
-	and	a, 7
-	or	c, a
-	ld	(xde), c
-	pushw	9
-	lda	xwa, (xhl+15)
-	push	xwa
-	lda	xwa, (xix+15)
-	push	xwa
-	call	Mem_Copy
-	lda	xsp, (xsp+10)
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0xcf
-	push_f
-	jr	c, -77
-	pushw	14
-	ld	xwa, (xsp+6)
-	.byte 0xf3, 0xe1, 0xb0
-	pop	sr
-	ldw	wa, 0xaf38
-	ret
-	ldb	w, 243
-	.byte 0xe1, 0xb0
-	pop	sr
-	.byte 0x30, 0x38, 0x1d  ; bytecode param 0x1d38
-	addr24 Mem_Copy  ; Mem_Copy
-	lda	xsp, (xsp+10)
-	incm8	1, (xsp+2)
-	.byte 0x8f
-	push	sr
-	push	xsp
-	.byte 0x50
-	jrl	c, -151
-	.byte 0xd7
-	swi	2
-	halt
-	lda	xsp, (xsp+10)
-	ret
-	calr	117
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	ToneGen_Config_InitAndChannels
-	call	ToneGen_InitAllChannelEntries_Skip
-	call	ToneGen_DSPCfg_Initialize
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	calr	7
-	calr	173
-	jp	SeqTimer_UpdateTempoReg
-
+	.incbin "includes/generated/v7_transplant_VoiceData_ExtendedParamSetup.bin"
 MidiMsg_ParseChannelStream:
 	push xiz
 	lda_d16 xiz, (0xf9a0)
@@ -3622,27 +1032,7 @@ MidiMsg_LoopAndFlush:
 	ret
 
 Display_SetupAndPrepareRender:
-	pushw 0x20
-	pushw 0xed
-	pushw 0xb3dc
-	pushw 0x0
-	pushw 0xf980
-	call Mem_Copy
-	pushw 0x620
-	pushw 0xed
-	pushw 0xb3fc
-	pushw 0x0
-	pushw 0xf9a0
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	resda_24 0, (0xffc2)
-	setda_24 1, (0xffc0)
-	call Get_Region_Code
-	cps l, 2
-	jr nz, Display_SetRegionNon2
-	stib_da (0x00ffc8), 0x01
-	jr Display_RegionDone
-
+	.incbin "includes/generated/v7_transplant_Display_SetupAndPrepareRender.bin"
 Display_SetRegionNon2:
 	stib_da (0x00ffc8), 0x02
 
@@ -3652,22 +1042,7 @@ Display_RegionDone:
 	jrl Audio_FillParamBuffer
 
 Display_CopyAndRenderBitmaps:
-	pushw iz
-	pushw 0x10
-	pushw 0xed
-	pushw 0xba1c
-	pushw 0x1e
-	pushw 0xd350
-	call Mem_Copy
-	pushw 0xa0
-	ld xwa, 0x99ec00
-	push xwa
-	pushw 0x1e
-	pushw 0xd360
-	call Mem_Copy
-	lda xsp, (xsp + 20)
-	lds iz, 0
-
+	.incbin "includes/generated/v7_transplant_Display_CopyAndRenderBitmaps.bin"
 DisplayRender_Loop:
 	ld wa, iz
 	calr VoiceData_InitAndCopyParams
@@ -3842,54 +1217,7 @@ MidiNoHeader_Done:
 	ret
 
 MIDI_WriteCommandToBuffer:
-	ldw_d16 xhl, (0x90de)
-	ld ix, hl
-	inc 1, hl
-	stda16 (0x90de), xhl
-	lda_d16 xhl, (0xbd3c)
-	extz xix
-	add xix, xhl
-	ld (xix), a
-	ldw_d16 xwa, (0x90de)
-	ld ix, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	ld wa, ix
-	extz xwa
-	add xwa, xhl
-	ld (xwa), c
-	ldw_d16 xwa, (0x90de)
-	ld bc, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xbc
-	add xbc, xhl
-	ld (xbc), e
-	ldw_d16 xwa, (0x90de)
-	ld bc, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xbc
-	add xbc, xhl
-	ld a, (xsp + 4)
-	ld (xbc), a
-	ldw_d16 xwa, (0x90de)
-	extz xwa
-	add xwa, xhl
-	ld (xwa), 0xff
-	cpdi16 0x90de, 508
-	jr c, MidiWrite_ReturnDiscard
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitOutputBank
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	stdi16 (0x90de), 0
-
+	.incbin "includes/generated/v7_transplant_MIDI_WriteCommandToBuffer.bin"
 MidiWrite_ReturnDiscard:
 	retd 0x2
 
@@ -3908,1377 +1236,63 @@ AudioParamInit_Loop:
 	ret
 
 Audio_InitSingleChannelParams:
-	dec 2, xsp
-	ld (xsp), a
-	stdi8 (0x9127), 177
-	mrib4 0x87, 0x19, 0x28, 0x91
-	stdi8 (0x9129), 0
-	stdi8 (0x912a), 64
-	calr SwbtWr_WriteParamBlock
-	stdi8 (0x9127), 178
-	mrib4 0x87, 0x19, 0x28, 0x91
-	stdi8 (0x9129), 0
-	stdi8 (0x912a), 127
-	calr SwbtWr_WriteParamBlock
-	stdi8 (0x9127), 179
-	mrib4 0x87, 0x19, 0x28, 0x91
-	stdi8 (0x9129), 127
-	stdi8 (0x912a), 127
-	calr SwbtWr_WriteParamBlock
-	mrib4 0x87, 0x19, 0x7e, 0x91
-	stdi8 (0x917f), 4
-	stdi8 (0x9180), 0
-	stdi8 (0x9181), 8
-	call MIDI_WriteVoiceParamFromBuffer
-	mrib4 0x87, 0x19, 0x27, 0x91
-	stdi8 (0x9128), 4
-	stdi8 (0x9129), 0
-	stdi8 (0x912a), 8
-	calr SwbtWr_WriteParamBlock
-	inc 2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_InitSingleChannelParams.bin"
 Audio_MainPeriodicUpdate:
-	cpdi8 (0xc039), 255
-	ret z
-	resda 0, 0x9165
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
-	stda32 0x90f2, xwa
-	calr Audio_SyncBufferPositions
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call MidiStream_ProcessEventBuffer
-	call MidiStream_ProcessSeqBuffer
-	call MIDI_SelectTempoExpressionSource
-	call MidiStream_ProcessTempoRingBuf
-	call MidiStream_ProcessRxBuffer
-	call MidiPkt_ProcessEventQueue
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	resda 1, 0x90f9
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_MainPeriodicUpdate.bin"
 Audio_SyncBufferPositions:
-	stdi16 (0x9133), 0
-	ldmm16 0x90e0, 0x90de
-	jr FileIO_ProcessRemainingOps
-
-; File I/O operation dispatch
+	.incbin "includes/generated/v7_transplant_Audio_SyncBufferPositions.bin"
 FileIO_OperationDispatch:
-	calr SndParam_FetchSequencerParams
-	ldb_d8 a, (0x9127)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
-	call (xhl)
-	cpdi16 0x90de, 508
-	jr c, FileIO_ProcessRemainingOps
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitBothBanks
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	stdi16 (0x90e0), 0
-
+	.incbin "includes/generated/v7_transplant_FileIO_OperationDispatch.bin"
 FileIO_ProcessRemainingOps:
-	lda_d16 xbc, (0xc039)
-	ldw_d16 xwa, (0x9133)
-	extz xwa
-	add xwa, xbc
-	cp (xwa), 0xff
-	jr nz, FileIO_OperationDispatch
-	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xwa, (0x90de)
-	extz xwa
-	add xwa, xbc
-	ld (xwa), 0xff
-	stdi8 (0x90f8), 127
-	ret
-
+	.incbin "includes/generated/v7_transplant_FileIO_ProcessRemainingOps.bin"
 ExtData_ToneParam_DispatchHandler:
-	calr	4351
-	ldb_d8	a, (0x912f)
-	cp	a, 22
-	jr	z, 63
-	extz	wa
-	cps	wa, 0
-	ret	mi
-	cp	wa, 11
-	ret	gt
-	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x896)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	jrl	f, -891
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	dec	8, wa
-	.byte 0x1f
-	jrl	179
-	jrl	191
-	jrl	372
-	jrl	378
-	jrl	390
-	jrl	396
-	jrl	402
-	jrl	408
-	jrl	414
-	calr	420
-	ret
-	dec	6, xsp
-	lda	xwa, (xsp)
-	.byte 0xb0
-	push_a
-	ldw	wa, 0xb891
-	.byte 0x01
-	push_a
-	ldw	bc, 0xb891
-	push	sr
-	push_a
-	ldb	l, 145
-	call	SndParam_ApplyProgramChange
-	ldb_d8	a, (0x9127)
-	extz	wa
-	calr	6212
-	cp	xhl, 0xffffffff
-	jr	z, 109
-	lda	xde, (xsp)
-	.byte 0x82
-	push	xsp
-	incf
-	jr	nz, 25
-	ld	a, (xhl)
-	.byte 0x8a
-	pop	sr
-	.byte 0xf1
-	jr	nz, 18
-	ld	a, (xhl+1)
-	res	7, a
-	.byte 0x8a, 0x04, 0xf1
-	jr	nz, 7
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	decf
-	jr	nz, 77
-	ld	a, (xde+3)
-	.byte 0xf5, 0xec
-	ld	xbc, 0xcccb2383
-	.byte 0x80
-	ld	(xhl), c
-	inc	4, xde
-	ld	a, (xde)
-	or	c, a
-	ld	(xhl), c
-	stdi8	(0x9128), 1
-	.byte 0x82
-	pop_f
-	pushw	bc
-	.byte 0x91
-	stdi8	(0x912a), 127
-	calr	4197
-	stdi8	(0x9128), 0
-	.byte 0x8f
-	pop	sr
-	pop_f
-	pushw	bc
-	.byte 0x91
-	stdi8	(0x912a), 255
-	calr	4179
-	ldb_d8	a, (0x9127)
-	extz	wa
-	lda	xde, (xsp)
-	ld	c, (xde+3)
-	extz	bc
-	ld	e, (xde+4)
-	extz	de
-	calr	5727
-	inc	6, xsp
-	ret
-	ldw	wa, 128
-	calr	4420
-	ldw	wa, 127
-	calr	4414
-	jrl	4140
-	dec	6, xsp
-	ldb_d8	a, (0x9127)
-	extz	wa
-	calr	6066
-	cp	xhl, 0xffffffff
-	jrl	z, 161
-	lda	xwa, (xsp)
-	.byte 0xb8
-	push	sr
-	push_a
-	ldb	l, 145
-	ld	c, (xhl)
-	ld	(xwa+3), c
-	ld	c, (xhl+1)
-	res	7, c
-	ld	(xwa+4), c
-	call	SndParam_FetchOscTableEntry
-	lda	xwa, (xsp)
-	.byte 0x80
-	push	xsp
-	retd	2670
-	.byte 0xc1
-	ldw	wa, 0x3c91
-	.byte 0xb7, 0xc1
-	ldw	bc, 0x3c91
-	.byte 0xb7, 0x80
-	push	xsp
-	incf
-	jr	nz, 8
-	.byte 0xf1
-	ldw	wa, 0xb691
-	.byte 0xf1
-	ldw	bc, 0xb691
-	.byte 0xf1
-	swi	1
-	and	(xwa), bc
-	jr	z, 11
-	ldw	wa, 8
-	calr	4682
-	ldw	wa, 96
-	jr	3
-	ldw	wa, 104
-	calr	4137
-	ldb_d8	c, (0x9131)
-	ld	a, c
-	and	a, 7
-	cps	a, 7
-	jr	nz, 7
-	lds	wa, 7
-	calr	4295
-	jr	60
-	and	c, 3
-	jr	z, 55
-	ldb_d8	a, (0x9130)
-	cps	a, 2
-	jr	nz, 21
-	stdi8	(0x9153), 1
-	stdi8	(0x9154), 8
-	stdi8	(0x9155), 7
-	lds	wa, 2
-	lds	bc, 7
-	jr	23
-	cps	a, 1
-	jr	nz, 22
-	stdi8	(0x9153), 255
-	stdi8	(0x9154), 255
-	stdi8	(0x9155), 0
-	lds	wa, 1
-	lds	bc, 7
-	calr	4482
-	calr	3959
-	inc	6, xsp
-	ret
-	ldw	wa, 127
-	calr	4221
-	jrl	3947
-	ldw	wa, 127
-	calr	4212
-	ldw	wa, 128
-	calr	4030
-	jrl	3932
-	ldw	wa, 127
-	calr	4197
-	jrl	3923
-	ldw	wa, 127
-	calr	4188
-	jrl	3914
-	ldw	wa, 127
-	calr	4179
-	jrl	3905
-	ldw	wa, 255
-	calr	4170
-	jrl	3896
-	ldw	wa, 127
-	calr	4161
-	jrl	3887
-	lds	wa, 1
-	calr	3977
-	jrl	3879
+	.incbin "includes/generated/v7_transplant_ExtData_ToneParam_DispatchHandler.bin"
 FileIO_AllocBuffer:
 	ret
 ExtData_ToneParam_CheckMode:
-	calr	3844
-	ldb_d8	a, (0x912f)
-	cps	a, 1
-	jr	z, 6
-	cps	a, 0
-	ret	nz
-	jr	4
-	calr	10
-	ret
-	ldw	wa, 128
-	calr	4122
-	jrl	3848
-	ldw	wa, 128
-	calr	4113
-	ldw	wa, 127
-	calr	4107
-	jrl	3833
+	.incbin "includes/generated/v7_transplant_ExtData_ToneParam_CheckMode.bin"
 ExtData_ToneParam_AltDispatch:
-	calr	3799
-	ldb_d8	a, (0x912f)
-	extz	wa
-	cps	wa, 0
-	ret	mi
-	cp	wa, 8
-	ret	gt
-	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x8AE)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	.byte 0x93
-	cp	(xsp), d
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	dec	8, wa
-	ldio	104, 15
-	jr	28
-	calr	40
-	ret
-	ldw	wa, 255
-	calr	4047
-	jrl	3773
-	ldw	wa, 15
-	calr	4038
-	ldw	wa, 240
-	calr	4032
-	jrl	3758
-	ldw	wa, 15
-	calr	4023
-	ldw	wa, 240
-	calr	4017
-	jrl	3743
-	ldw	wa, 15
-	calr	4008
-	ldw	wa, 48
-	calr	3826
-	jrl	3728
+	.incbin "includes/generated/v7_transplant_ExtData_ToneParam_AltDispatch.bin"
 ExtData_ToneParam_AltEntry:
 	ret
 ExtData_ToneParam_AltBody:
-	calr	3693
-	ldb_d8	a, (0x912f)
-	extz	wa
-	cps	wa, 0
-	ret	mi
-	cp	wa, 8
-	ret	gt
-	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x8C0)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	swi	5
-	cp	(xsp), d
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	dec	8, wa
-	retd	0x7068
-	jrl	143
-	jrl	149
-	jrl	161
-	calr	167
-	ret
-	lda_d16	xwa, (0x90ea)
-	.byte 0xb0
-	push_a
-	ldw	wa, 0xb891
-	.byte 0x01
-	push_a
-	ldw	bc, 0xb891
-	push	sr
-	push_a
-	ldb	l, 145
-	call	Rhythm_LookupTempoVelocity_Wrap
-	ldb_d8	a, (0x9127)
-	extz	wa
-	calr	5575
-	cp	xhl, 0xffffffff
-	ret	z
-	lda_d16	xde, (0x90ee)
-	.byte 0xc5, 0xe8
-	ldb	a, 245
-	.byte 0xec
-	ld	xbc, 0xcccb2383
-	.byte 0x80
-	ld	(xhl), c
-	ld	a, (xde)
-	or	c, a
-	ld	(xhl), c
-	stdi8	(0x9128), 1
-	.byte 0x82
-	pop_f
-	pushw	bc
-	.byte 0x91
-	stdi8	(0x912a), 127
-	calr	3590
-	stdi8	(0x9128), 0
-	.byte 0xc1
-	adc	xwa, xiz
-	pop_f
-	pushw	bc
-	.byte 0x91
-	stdi8	(0x912a), 255
-	calr	3571
-	ret
-	lds	wa, 7
-	calr	4004
-	ldw	wa, 8
-	calr	3654
-	ldb_d8	a, (0x912a)
-	and	a, 7
-	jr	z, 8
-	call	ToneGen_DispatchByMode
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb8
-	calr	3539
-	jrl	516
-	ldw	wa, 80
-	calr	3625
-	jrl	3527
-	.byte 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	jrl	3512
-	ldw	wa, 48
-	calr	3777
-	jrl	3503
-	push	xiz
-	lda_d16	xiz, (0xfc5a)
-	lda	xbc, (xiz+8)
-	lda	xhl, (xiz+9)
-	ldb_d8	e, (0x9130)
-	cp	(xbc), e
-	jr	nz, 8
-	ld	a, (xhl)
-	.byte 0xc1
-	ldw	bc, 0xf191
-	jr	z, 40
-	ld	(xbc), e
-	.byte 0xb3
-	push_a
-	ldw	bc, 0x8191
-	pop_f
-	pushw	bc
-	.byte 0x91
-	stdi8	(0x912a), 255
-	calr	3458
-	stdi8	(0x9128), 9
-	.byte 0x8e
-	push	25
-	pushw	bc
-	.byte 0x91
-	stdi8	(0x912a), 1
-	calr	3440
-	call	SeqTimer_UpdateTempoReg
-	pop	xiz
-	ret
+	.incbin "includes/generated/v7_transplant_ExtData_ToneParam_AltBody.bin"
 ExtData_ToneParam_MultiChannel:
-	calr	3400
-	ldb_d8	a, (0x912f)
-	cp	a, 16
-	jr	z, 20
-	cps	a, 4
-	jr	z, 20
-	cps	a, 3
-	jrl	z, 577
-	cps	a, 1
-	jr	z, 4
-	cps	a, 0
-	ret	nz
-	jrl	129
-	calr	620
-	ret
-	ldb_d8	c, (0x9131)
-	ld	a, c
-	and	a, 255
-	cp	a, 255
-	jr	nz, 6
-	ldw	wa, 255
-	jrl	3649
-	and	c, 3
-	ret	z
-	ldb_d8	c, (0x9130)
-	and	c, 3
-	lda_d16	xwa, (0xfc6a)
-	cps	c, 3
-	jr	z, 59
-	cps	c, 1
-	jr	z, 29
-	cps	c, 2
-	jr	nz, 73
-	stdi8	(0x9153), 12
-	stdi8	(0x9154), 89
-	stdi8	(0x9155), 88
-	lds	wa, 2
-	ldw	bc, 255
-	calr	3847
-	jr	48
-	ld	xbc, xwa
-	ld	a, (xwa)
-	ld	e, a
-	cp	a, 40
-	jr	ule, 3
-	sub	e, 12
-	cp	e, a
-	ret	z
-	ld	(xbc), e
-	stb_d8	(0x9129), e
-	jr	17
-	ld	xbc, xwa
-	ld	a, (xwa)
-	cp	a, 64
-	ret	z
-	ld	(xbc), 64
-	stdi8	(0x9129), 64
-	stdi8	(0x912a), 255
-	calr	3274
-	ret
-	lda_d16	xbc, (0xfc66)
-	ld	e, (xbc+1)
-	extz	de
-	sll	de, 8
-	ld	a, (xbc)
-	extz	wa
-	add	wa, de
-	stda16	(0x9163), wa
-	ldb_d8	a, (0xfc5d)
-	and	a, 7
-	cps	a, 2
-	jr	z, 32
-	cps	a, 0
-	jr	z, 28
-	cps	a, 3
-	jr	z, 9
-	cps	a, 1
-	ret	nz
-	.byte 0xb9
-	pop	sr
-	dec	6, w
-	retd	0x2fc1
-	.byte 0x91
-	push	xsp
-	.byte 0x01
-	jr	nz, 8
-	.byte 0xf1
-	ldw	wa, 0xb191
-	.byte 0xf1
-	ldw	bc, 0xb191
-	.byte 0xc1
-	pushw	sp
-	.byte 0x91
-	push	xsp
-	.byte 0x01
-	jr	nz, 29
-	lds	wa, 2
-	calr	3291
-	.byte 0xf1
-	pushw	de
-	and	(xbc), bc
-	jr	nz, 1
-	ret
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	lda	xwa, (xwa-15)
-	.byte 0x91, 0xb1, 0xf1
-	ldw	bc, 0xb191
-	stdi8	(0x912a), 0
-	calr	7
-	call	ToneGen_DispatchByMode
-	jrl	142
-	ldb_d8	c, (0x9131)
-	cps	c, 0
-	ret	z
-	lda_d16	xix, (0x915f)
-	lda_d16	xhl, (0x9161)
-	ldb_d8	e, (0x912f)
-	extz	de
-	ldb_d8	a, (0x9130)
-	and	a, c
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xe8
-	and	xbc, xbc
-	pushw	sp
-	ld	hl, (xbc)
-	extz	bc
-	ldb_d8	a, (0x9131)
-	cpl	a
-	.byte 0xc3
-	reti
-	or	xix, xix
-	and	a, a
-	pushw	sp
-	ld	hl, (xbc)
-	extz	bc
-	ldb_d8	a, (0x9130)
-	andda8	a, 0x9131
-	.byte 0xc3
-	reti
-	or	xix, xix
-	add	xhl, xbc
-	ldb	c, 203
-	dec	6, wa
-	ret
-	.byte 0x8b, 0x01
-	push	xsp
-	nop
-	jr	nz, 8
-	ld	(xix), 0
-	ld	(xix+1), 0
-	ret
-	ld	a, (xix)
-	and	a, 3
-	jr	nz, 5
-	bit	1, c
-	ret	z
-	lda_d16	xde, (0xfc66)
-	extz	wa
-	lda_24	xbc, (SoundProgram_DispatchTable_0x8D2)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	c, 178
-	ld	xhl, 0xc921018a
-	.byte 0xee
-	ldio	216, 18
-	extz	bc
-	add	bc, wa
-	.byte 0xd1
-	jr	ule, -111
-	.byte 0xf1
-	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb8
-	ret
-
+	.incbin "includes/generated/v7_transplant_ExtData_ToneParam_MultiChannel.bin"
 MIDI_WriteResetSequence:
-	ldb_d8 a, (0x90f9)
-	bit 0, a
-	ret z
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	lda_d16 xbc, (0xbd3c)
-	extz xde
-	add xde, xbc
-	ld (xde), 0x90
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xde
-	add xde, xbc
-	ld (xde), 0x0
-	ldw_d16 xwa, (0x90de)
-	ld hl, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xhl
-	add xhl, xbc
-	lda_d16 xde, (0xfc66)
-	ld a, (xde)
-	ld (xhl), a
-	ldw_d16 xwa, (0x90de)
-	ld hl, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xhl
-	add xhl, xbc
-	ld (xhl), 0x1f
-	ldw_d16 xwa, (0x90de)
-	ld hl, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xhl
-	add xhl, xbc
-	ld (xhl), 0x90
-	ldw_d16 xwa, (0x90de)
-	ld hl, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xhl
-	add xhl, xbc
-	ld (xhl), 0x1
-	ldw_d16 xwa, (0x90de)
-	ld hl, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xhl
-	add xhl, xbc
-	ld a, (xde + 1)
-	ld (xhl), a
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xde
-	add xde, xbc
-	ld (xde), 0x1f
-	ldb_d8 a, (0x90f9)
-	res 0, a
-	stb_d8 (0x90f9), a
-	ret
-
+	.incbin "includes/generated/v7_transplant_MIDI_WriteResetSequence.bin"
 ExtData_Voice_UpdateFlags:
-	lds	wa, 2
-	calr	2926
-	lds	wa, 1
-	calr	3097
-	calr	2823
-	lda_d16	xbc, (0xfc66)
-	.byte 0xb9
-	pop	sr
-	sbc	w, w
-	swi	6
-	ldb_d8	a, (0xfc5d)
-	and	a, 7
-	cps	a, 1
-	ret	nz
-	inc	1, xbc
-	ld	a, (xbc)
-	bit	1, a
-	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb8
-	ld	a, (xbc)
-	res	1, a
-	ld	(xbc), a
-	calr	65296
-	ret
-	.byte 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	jrl	2764
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_UpdateFlags.bin"
 ExtData_Voice_CheckMode:
-	calr	2730
-	ldb_d8	a, (0x912f)
-	cps	a, 1
-	ret	nz
-	calr	1
-	ret
-	ldw	wa, 192
-	calr	2838
-	jrl	2740
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_CheckMode.bin"
 ExtData_Voice_RetEntry:
 	ret
 ExtData_Voice_MixedHandler:
-	calr	2705
-	ldb_d8	a, (0x912f)
-	cps	a, 2
-	jr	z, 6
-	cps	a, 0
-	ret	nz
-	jr	4
-	calr	90
-	ret
-	lds	wa, 4
-	calr	2808
-	calr	2710
-	stdi8	(0x9153), 1
-	stdi8	(0x9154), 4
-	stdi8	(0x9155), 0
-	lds	wa, 1
-	lds	bc, 3
-	calr	3208
-	calr	2685
-	.byte 0xc1
-	and	e, w
-	push	xsp
-	swi	7
-	ret	nz
-	ldb_d8	a, (0x9130)
-	andda8	a, 0x9131
-	bit	0, a
-	jr	z, 23
-	ldb_d8	a, (0xfd02)
-	and	a, 3
-	extz	wa
-	lda_24	xbc, (SoundProgram_DispatchTable_0x8D6)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	pop_f
-	pop	xwa
-	.byte 0x8f
-	jr	5
-	stdi8	(0x8f58), 0
-	ldw	wa, 69
-	call	CtrlPanel_SetIndicatorBit
-	ret
-	ldb_d8	c, (0x9131)
-	ld	a, c
-	and	a, 255
-	cp	a, 255
-	jr	nz, 8
-	ldw	wa, 255
-	calr	2880
-	jr	96
-	.byte 0xf1, 0xe2, 0xe3
-	dec	6, a
-	pop	xde
-	and	c, 3
-	jr	z, 85
-	ldb_d8	a, (0x9130)
-	and	a, 3
-	cps	a, 1
-	jr	z, 26
-	cps	a, 2
-	jr	nz, 47
-	stdi8	(0x9153), 1
-	stdi8	(0x9154), 12
-	stdi8	(0x9155), 11
-	lds	wa, 2
-	ldw	bc, 255
-	jr	20
-	stdi8	(0x9153), 255
-	stdi8	(0x9154), 255
-	stdi8	(0x9155), 0
-	lds	wa, 1
-	ldw	bc, 255
-	calr	3056
-	jr	23
-	lda_d16	xbc, (0xfd04)
-	ld	a, (xbc)
-	cps	a, 5
-	ret	z
-	ld	(xbc), 5
-	stdi8	(0x9129), 5
-	stdi8	(0x912a), 255
-	.byte 0xc1
-	pushw	bc
-	.byte 0x91
-	push	xsp
-	halt
-	jr	nz, 5
-	stdi8	(0x8d3c), 24
-	jrl	2496
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_MixedHandler.bin"
 ExtData_Voice_CheckMode3:
-	calr	2462
-	ldb_d8	a, (0x912f)
-	cps	a, 3
-	ret	nz
-	calr	63863
-	ret
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_CheckMode3.bin"
 ExtData_Voice_RetEntry2:
 	ret
 ExtData_Voice_FullHandler:
-	calr	2446
-	ldb_d8	a, (0x912f)
-	cp	a, 11
-	jr	z, 19
-	cps	a, 2
-	jr	z, 58
-	cps	a, 4
-	jrl	z, -1696
-	cps	a, 3
-	jr	z, 30
-	cps	a, 1
-	ret	nz
-	jr	4
-	calr	59
-	ret
-	ldw	wa, 128
-	calr	3068
-	.byte 0xc1
-	ldw	de, 0x3c91
-	.byte 0x80
-	ldw	wa, 127
-	calr	2612
-	jrl	2425
-	ldb_d8	a, (0x9130)
-	andda8	a, 0x9131
-	ret	z
-	lds	wa, 1
-	calr	2505
-	calr	2407
-	ret
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	lda	xwa, (xbc)
-	ld	xwa, 0x0bd11e00
-	ldw	wa, 128
-	calr	3019
-	jrl	2387
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ldb_d8	a, (0xfda1)
-	and	a, 192
-	.byte 0xc7
-	swi	3
-	.byte 0x99
-	ldw	wa, 128
-	calr	2463
-	ldw	wa, 64
-	calr	2457
-	lda_d16	xde, (0xfda1)
-	ld	c, (xde)
-	ld	a, c
-	and	a, 192
-	cp	a, 192
-	jr	nz, 16
-	.byte 0xf1
-	pushw	de
-	.byte 0x91
-	inc	6, l
-	halt
-	res	6, c
-	jr	3
-	res	7, c
-	ld	(xde), c
-	.byte 0x82
-	pop_f
-	pushw	bc
-	ld	hl, (xbc)
-	nop
-	stdi8	(0x912a), 0
-	ld	l, (xde)
-	and	l, 128
-	.byte 0xc7
-	swi	3
-	and	(xbc-55), d
-	and	(xwa), l
-	.byte 0xf1
-	jr	z, 7
-	set	7, c
-	stb_d8	(0x912a), c
-	ld	c, (xde)
-	and	c, 64
-	.byte 0xc7
-	swi	3
-	and	(xbc-55), d
-	ld	xwa, 0x0466f1cb
-	.byte 0xf1
-	pushw	de
-	.byte 0x91, 0xbe
-	calr	2275
-	.byte 0xd7
-	swi	2
-	halt
-	ret
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_FullHandler.bin"
 ExtData_Voice_CopyAndJump:
-	.byte 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	jrl	2256
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_CopyAndJump.bin"
 ExtData_Voice_CompareAndDispatch:
-	ldb_d8	a, (0x912f)
-	cps	a, 0
-	jr	z, 7
-	cps	a, 1
-	ret	nz
-	jrl	140
-	calr	1
-	ret
-	ldb_d8	a, (0x8ee6)
-	set	7, a
-	stb_d8	(0x8ee2), a
-	calr	3135
-	stdi8	(0x917e), 176
-	stdi8	(0x917f), 0
-	.byte 0xc1
-	ldw	wa, 6545
-	.byte 0x80, 0x91, 0xc1
-	ldw	bc, 6545
-	.byte 0x81, 0x91
-	jp	MIDI_LoadParamsAndDispatchCC
-
+	.incbin "includes/generated/v7_transplant_ExtData_Voice_CompareAndDispatch.bin"
 MidiChannel_ResetAndConfigure:
-	resda 7, 0x28ae
-	ldb_d8 a, (0x8ee4)
-	set 7, a
-	stb_d8 (0x8ee0), a
-	bitda 7, (0x8ee4)
-	ret z
-	calr Audio_FlushPendingBankSelects
-	stdi8 (0x9127), 176
-	stdi8 (0x9128), 1
-	ldb_d8 a, (0x8ee4)
-	res 7, a
-	stb_d8 (0x9129), a
-	stdi8 (0x912a), 127
-	ldb_d8 e, (0x9129)
-	extz de
-	pushw 0x7f
-	ldw wa, 0xb0
-	lds bc, 1
-	call AddswbWr
-	ldmm8 0x917e, 0x9127
-	ldmm8 0x917f, 0x9128
-	ldmm8 0x9180, 0x9129
-	stdi8 (0x9181), 127
-	call MIDI_LoadParamsAndDispatchCC
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiChannel_ResetAndConfigure.bin"
 MidiCh_ConfigVoiceAndParts:
-	ldb_d8	a, (0x8ee0)
-	res	7, a
-	stb_d8	(0x8ee0), a
-	ldb_d8	c, (0x8ee4)
-	cp	c, a
-	ret	z
-	ldb_d8	a, (0x28ae)
-	bit	7, a
-	jr	z, 37
-	stb_d8	(9828), c
-	ldb_d8	e, (0x28ae)
-	ld	l, e
-	res	7, l
-	cp	l, c
-	jr	ule, 6
-	sub	l, c
-	ld	c, l
-	jr	2
-	sub	c, l
-	cp	c, 16
-	jr	c, 17
-	res	7, e
-	stb_d8	(0x28ae), e
-	.byte 0xc1, 0xe4, 0x8e
-	pop_f
-	.byte 0xe0, 0x8e, 0xf1, 0xe4, 0x8e, 0xbf, 0xf1, 0xe4
-	.byte 0x8e
-	sbc	w, l
-	.byte 0xf6
-	calr	2929
-	stdi8	(0x9127), 176
-	stdi8	(0x9128), 1
-	ldb_d8	a, (0x8ee4)
-	res	7, a
-	stb_d8	(0x9129), a
-	stdi8	(0x912a), 127
-	calr	1988
-	.byte 0xc1
-	ldb	l, 145
-	pop_f
-	jrl	nz, -15983
-	pushw	wa
-	.byte 0x91
-	pop_f
-	jrl	nc, -15983
-	ldw	wa, 6545
-	.byte 0x80, 0x91, 0xc1
-	ldw	bc, 6545
-	.byte 0x81, 0x91
-	call	MIDI_LoadParamsAndDispatchCC
-	ret
+	.incbin "includes/generated/v7_transplant_MidiCh_ConfigVoiceAndParts.bin"
 MidiCh_IterateVolume_Forward:
-	pushw	iz
-	ldb_d8	a, (0x9131)
-	res	7, a
-	cps	a, 0
-	jr	z, 114
-	lds	iz, 0
-	lda_d16	xde, (0x90fb)
-	ld	bc, iz
-	extz	xbc
-	add	xbc, xde
-	ld	a, (xbc)
-	cp	a, 255
-	jr	z, 95
-	cps	a, 2
-	jr	nz, 6
-	.byte 0x8a, 0x01
-	push	xsp
-	swi	7
-	jr	nz, 77
-	.byte 0xc1
-	ldb	l, 145
-	pop_f
-	jrl	nz, -32367
-	pop_f
-	jrl	nc, -15983
-	ldw	wa, 6545
-	.byte 0x80, 0x91, 0xc1
-	ldw	bc, 6545
-	.byte 0x81, 0x91
-	call	MIDI_LoadParamsAndDispatchCC
-	lda_d16	xwa, (0x90fb)
-	ld	bc, iz
-	extz	xbc
-	add	xbc, xwa
-	ld	a, (xbc)
-	extz	wa
-	calr	3812
-	.byte 0xbb
-	decf
-	dec	6, e
-	call	0x90fbf1
-	ldw	wa, 0x89de
-	extz	xbc
-	add	xbc, xwa
-	.byte 0x81
-	pop_f
-	pushw	wa
-	.byte 0x91, 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	calr	1841
-	inc	1, iz
-	cp	iz, 32
-	jr	c, -112
-	popw	iz
-	ret
+	.incbin "includes/generated/v7_transplant_MidiCh_IterateVolume_Forward.bin"
 MidiCh_IterateVolume_Reverse:
-	pushw	iz
-	lds	iz, 0
-	lda_d16	xde, (0x90fb)
-	ld	bc, iz
-	extz	xbc
-	add	xbc, xde
-	ld	a, (xbc)
-	cp	a, 255
-	jr	z, 95
-	cps	a, 2
-	jr	nz, 6
-	.byte 0x8a, 0x01
-	push	xsp
-	swi	7
-	jr	nz, 77
-	.byte 0xc1
-	ldb	l, 145
-	pop_f
-	jrl	nz, -32367
-	pop_f
-	jrl	nc, -15983
-	ldw	wa, 6545
-	.byte 0x80, 0x91, 0xc1
-	ldw	bc, 6545
-	.byte 0x81, 0x91
-	call	MIDI_LoadParamsAndDispatchCC
-	lda_d16	xwa, (0x90fb)
-	ld	bc, iz
-	extz	xbc
-	add	xbc, xwa
-	ld	a, (xbc)
-	extz	wa
-	calr	3695
-	.byte 0xbb
-	decf
-	dec	6, e
-	call	0x90fbf1
-	ldw	wa, 0x89de
-	extz	xbc
-	add	xbc, xwa
-	.byte 0x81
-	pop_f
-	pushw	wa
-	.byte 0x91, 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	calr	1761
-	inc	1, iz
-	cp	iz, 32
-	jr	c, -112
-	popw	iz
-	ret
+	.incbin "includes/generated/v7_transplant_MidiCh_IterateVolume_Reverse.bin"
 MidiCh_IteratePan_Forward:
-	pushw	iz
-	ldb_d8	a, (0x9131)
-	res	7, a
-	cps	a, 0
-	jrl	z, 135
-	lds	iz, 0
-	lda_d16	xbc, (0x90fb)
-	ld	wa, iz
-	extz	xwa
-	add	xwa, xbc
-	ld	a, (xwa)
-	cp	a, 255
-	jr	z, 116
-	cps	a, 2
-	jr	nz, 6
-	.byte 0x89, 0x01
-	push	xsp
-	swi	7
-	jr	nz, 97
-	extz	wa
-	calr	3604
-	.byte 0xbb
-	incf
-	inc	6, d
-	.byte 0x57, 0xc1
-	ldb	l, 145
-	pop_f
-	jrl	nz, -3695
-	swi	3
-	.byte 0x90
-	ldw	wa, 0x89de
-	extz	xbc
-	add	xbc, xwa
-	.byte 0x81
-	pop_f
-	jrl	nc, -15983
-	ldw	wa, 6545
-	.byte 0x80, 0x91, 0xc1
-	ldw	bc, 6545
-	.byte 0x81, 0x91
-	call	MIDI_LoadParamsAndDispatchCC
-	lda_d16	xwa, (0x90fb)
-	ld	bc, iz
-	extz	xbc
-	add	xbc, xwa
-	ld	a, (xbc)
-	extz	wa
-	calr	3546
-	.byte 0xbb
-	decf
-	dec	6, e
-	call	0x90fbf1
-	ldw	wa, 0x89de
-	extz	xbc
-	add	xbc, xwa
-	.byte 0x81
-	pop_f
-	pushw	wa
-	.byte 0x91, 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	calr	1575
-	inc	1, iz
-	cp	iz, 32
-	jrl	c, -133
-	popw	iz
-	ret
+	.incbin "includes/generated/v7_transplant_MidiCh_IteratePan_Forward.bin"
 MidiCh_IterateExpression:
-	dec	2, xsp
-	push	xiz
-	ldb_d8	a, (0x9131)
-	res	7, a
-	cps	a, 0
-	jr	z, 125
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
-	lda_d16	xbc, (0x90fb)
-	ld	wa, (xsp+4)
-	extz	xwa
-	add	xwa, xbc
-	ld	a, (xwa)
-	cp	a, 255
-	jr	z, 102
-	extz	wa
-	calr	3459
-	ld	xiz, xhl
-	cp	xiz, 0xffffffff
-	jr	z, 77
-	.byte 0xbe, 0x04
-	inc	6, e
-	popw	wa
-	.byte 0xc1
-	ldb	l, 145
-	pop_f
-	jrl	nz, -3695
-	swi	3
-	.byte 0x90
-	ldw	wa, 1183
-	ldb	a, 233
-	ccf
-	add	xbc, xwa
-	.byte 0x81
-	pop_f
-	jrl	nc, -15983
-	ldw	wa, 6545
-	.byte 0x80, 0x91, 0xc1
-	ldw	bc, 6545
-	.byte 0x81, 0x91
-	call	MIDI_LoadParamsAndDispatchCC
-	.byte 0xbe
-	decf
-	dec	6, e
-	calr	64497
-	.byte 0x90
-	ldw	wa, 1183
-	ldb	a, 233
-	ccf
-	add	xbc, xwa
-	.byte 0x81
-	pop_f
-	pushw	wa
-	.byte 0x91, 0xc1
-	ldw	wa, 6545
-	pushw	bc
-	.byte 0x91, 0xc1
-	ldw	bc, 6545
-	pushw	de
-	.byte 0x91
-	calr	1435
-	incm	1, (xsp+4)
-	.byte 0x9f, 0x04
-	push	xsp
-	ldb	w, 0
-	jr	c, -120
-	pop	xiz
-	inc	2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiCh_IterateExpression.bin"
 CtrlPanel_RefreshIndicatorState:
-	push xiz
-	ld xiz, xwa
-	ld xwa, xiz
-	ld xbc, 0x8f62
-	calr CtrlPanel_CompareAndUpdateIndicators
-	ld xwa, xiz
-	calr CtrlPanel_BuildIndicatorBitmask
-	ld xwa, xhl
-	calr Part_BitmaskToIndexList
-	ld xiy, xiz
-	ld xix, 0x8f62
-	ldw bc, 0xb3
-	ldirw
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_CtrlPanel_RefreshIndicatorState.bin"
 CtrlPanel_CompareAndUpdateIndicators:
 	stb_dri L, 0xfd, 0x8e, 0xfe
 	push xiz
@@ -5318,81 +1332,11 @@ CtrlPanel_CompareAndUpdateIndicators:
 	calr MIDI_DispatchVoiceParamCC
 
 CtrlPanelRefresh_ProcessRemoved:
-	ld xwa, (xsp + 4)
-	xor xwa, xiz
-	and xwa, (xsp + 4)
-	calr Part_BitmaskToIndexList
-	ldb_d8 a, (0x8ee8)
-	extz wa
-	ld_sril XBC, (xsp + 0x0172)
-	ld c, (xbc + 1)
-	extz bc
-	calr Audio_IteratePartsWithExpression
-	ldb_d8 a, (0x8eea)
-	res 7, a
-	extz wa
-	ld_sril XBC, (xsp + 0x0172)
-	ld c, (xbc + 1)
-	extz bc
-	calr Audio_IteratePartsWithVolume
-	ldb_d8 a, (0x8ef4)
-	extz wa
-	ld_sril XBC, (xsp + 0x0172)
-	ld c, (xbc + 1)
-	extz bc
-	calr Audio_IteratePartsWithPan
-	ld_sril XWA, (xsp + 0x0172)
-	lda xbc, (xwa + 1)
-	ld_sril XWA, (xsp + 0x016e)
-	cp (xwa + 1), 0xff
-	jr nz, CtrlPanelRefresh_DispatchVoiceCC
-	cp (xbc), 0xff
-	jr nz, CtrlPanelRefresh_CheckMigration
-
+	.incbin "includes/generated/v7_transplant_CtrlPanelRefresh_ProcessRemoved.bin"
 CtrlPanelRefresh_DispatchVoiceCC:
-	ldb_d8 a, (0x8ee4)
-	res 7, a
-	extz wa
-	ld c, (xbc)
-	extz bc
-	calr MIDI_DispatchVoiceParamCC
-
+	.incbin "includes/generated/v7_transplant_CtrlPanelRefresh_DispatchVoiceCC.bin"
 CtrlPanelRefresh_CheckMigration:
-	ld_sril XBC, (xsp + 0x016e)
-	cp (xbc + 1), 0xff
-	jr nz, CtrlPanelRefresh_Done
-	ld_sril XWA, (xsp + 0x0172)
-	cp (xwa + 1), 0xff
-	jr z, CtrlPanelRefresh_Done
-	ld xiy, xbc
-	lda xix, (xsp + 8)
-	ldw bc, 0xb3
-	ldirw
-	lda xwa, (xsp + 8)
-	ormi8 (xwa), 0x7
-	calr CtrlPanel_BuildIndicatorBitmask
-	ld xiz, xhl
-	ld xwa, (xsp + 4)
-	xor xwa, xiz
-	and xwa, xiz
-	calr Part_BitmaskToIndexList
-	ld_sril XWA, (xsp + 0x0172)
-	ld c, (xwa + 1)
-	extz bc
-	ldw wa, 0x7f
-	calr MIDI_DispatchVoiceParamCC
-	ld xwa, (xsp + 4)
-	xor xwa, xiz
-	and xwa, (xsp + 4)
-	calr Part_BitmaskToIndexList
-	ldb_d8 a, (0x8ee4)
-	res 7, a
-	extz wa
-	ld_sril XBC, (xsp + 0x0172)
-	ld c, (xbc + 1)
-	extz bc
-	calr MIDI_DispatchVoiceParamCC
-
+	.incbin "includes/generated/v7_transplant_CtrlPanelRefresh_CheckMigration.bin"
 CtrlPanelRefresh_Done:
 	pop xiz
 	stb_dri L, 0xfd, 0x72, 0x01
@@ -5430,11 +1374,7 @@ IndBitmask_ReturnResult:
 	ret
 
 Part_BitmaskToIndexList:
-	lds iy, 0
-	lda_d16 xde, (0x90fb)
-	ld (xde), 0xff
-	lds hl, 0
-
+	.incbin "includes/generated/v7_transplant_Part_BitmaskToIndexList.bin"
 BitmaskToIndex_ScanLoop:
 	or xwa, xwa
 	jr z, BitmaskToIndex_Terminate
@@ -5469,44 +1409,9 @@ Audio_IteratePartsWithVolume:
 	lds iz, 0
 
 VolumeIter_NextPart:
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	cp a, 0xff
-	jr z, VolumeIter_Done
-	cps a, 2
-	jr nz, VolumeIter_ApplyParam
-	cp (xsp + 2), 0x2
-	jr nz, VolumeIter_AdvancePart
-
+	.incbin "includes/generated/v7_transplant_VolumeIter_NextPart.bin"
 VolumeIter_ApplyParam:
-	stdi8 (0x917e), 178
-	mrib4 0x81, 0x19, 0x7f, 0x91
-	mrdb5 0x8f, 0x04, 0x19, 0x80, 0x91
-	stdi8 (0x9181), 127
-	call MIDI_LoadParamsAndDispatchCC
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	bitm 5, (xhl + 13)
-	jr nz, VolumeIter_AdvancePart
-	ldb_d8 a, (0x917e)
-	extz wa
-	ldb_d8 c, (0x917f)
-	extz bc
-	ldb_d8 e, (0x9180)
-	extz de
-	ldb_d8 l, (0x9181)
-	extz hl
-	pushw hl
-	call AddswbWr
-
+	.incbin "includes/generated/v7_transplant_VolumeIter_ApplyParam.bin"
 VolumeIter_AdvancePart:
 	inc 1, iz
 	cp iz, 0x20
@@ -5543,46 +1448,9 @@ ExprIter_Start:
 	lds iz, 0
 
 ExprIter_NextPart:
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	cp a, 0xff
-	jr z, ExprIter_Done
-	cps a, 2
-	jr nz, ExprIter_ApplyParam
-	cp (xsp + 4), 0x2
-	jr nz, ExprIter_AdvancePart
-
+	.incbin "includes/generated/v7_transplant_ExprIter_NextPart.bin"
 ExprIter_ApplyParam:
-	stdi8 (0x917e), 177
-	mrib4 0x81, 0x19, 0x7f, 0x91
-	stb_erp A, 0xfa
-	stb_d8 (0x9180), a
-	stb_erp A, 0xfb
-	stb_d8 (0x9181), a
-	call MIDI_LoadParamsAndDispatchCC
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	bitm 5, (xhl + 13)
-	jr nz, ExprIter_AdvancePart
-	ldb_d8 a, (0x917e)
-	extz wa
-	ldb_d8 c, (0x917f)
-	extz bc
-	ldb_d8 e, (0x9180)
-	extz de
-	ldb_d8 l, (0x9181)
-	extz hl
-	pushw hl
-	call AddswbWr
-
+	.incbin "includes/generated/v7_transplant_ExprIter_ApplyParam.bin"
 ExprIter_AdvancePart:
 	inc 1, iz
 	cp iz, 0x20
@@ -5601,52 +1469,9 @@ Audio_IteratePartsWithPan:
 	lds iz, 0
 
 PanIter_NextPart:
-	lda_d16 xbc, (0x90fb)
-	ld wa, iz
-	extz xwa
-	add xwa, xbc
-	ld a, (xwa)
-	cp a, 0xff
-	jr z, PanIter_Done
-	cps a, 2
-	jr nz, PanIter_ApplyParam
-	cp (xsp + 2), 0x2
-	jr nz, MidiLoadParams_ContinueLoop
-
+	.incbin "includes/generated/v7_transplant_PanIter_NextPart.bin"
 PanIter_ApplyParam:
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	bitm 4, (xhl + 12)
-	jr z, MidiLoadParams_ContinueLoop
-	stdi8 (0x917e), 180
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	mrib4 0x81, 0x19, 0x7f, 0x91
-	mrdb5 0x8f, 0x04, 0x19, 0x80, 0x91
-	stdi8 (0x9181), 255
-	call MIDI_LoadParamsAndDispatchCC
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	bitm 5, (xhl + 13)
-	jr nz, MidiLoadParams_ContinueLoop
-	ldb_d8 a, (0x917e)
-	extz wa
-	ldb_d8 c, (0x917f)
-	extz bc
-	ldb_d8 e, (0x9180)
-	extz de
-	ldb_d8 l, (0x9181)
-	extz hl
-	pushw hl
-	call AddswbWr
-
+	.incbin "includes/generated/v7_transplant_PanIter_ApplyParam.bin"
 MidiLoadParams_ContinueLoop:
 	inc 1, iz
 	cp iz, 0x20
@@ -5666,46 +1491,7 @@ MIDI_DispatchVoiceParamCC:
 	lds iz, 0
 
 VoiceParamCC_NextPart:
-	lda_d16 xbc, (0x90fb)
-	ld wa, iz
-	extz xwa
-	add xwa, xbc
-	ld a, (xwa)
-	cp a, 0xff
-	jr z, VoiceParamCC_Done
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	bitm 5, (xhl + 4)
-	jr z, VoiceParamCC_AdvancePart
-	stdi8 (0x917e), 179
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	mrib4 0x81, 0x19, 0x7f, 0x91
-	mrdb5 0x8f, 0x02, 0x19, 0x80, 0x91
-	stdi8 (0x9181), 127
-	call MIDI_LoadParamsAndDispatchCC
-	lda_d16 xwa, (0x90fb)
-	ld bc, iz
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	bitm 5, (xhl + 13)
-	jr nz, VoiceParamCC_AdvancePart
-	ldb_d8 a, (0x917e)
-	extz wa
-	ldb_d8 c, (0x917f)
-	extz bc
-	ldb_d8 e, (0x9180)
-	extz de
-	ldb_d8 l, (0x9181)
-	extz hl
-	pushw hl
-	call AddswbWr
-
+	.incbin "includes/generated/v7_transplant_VoiceParamCC_NextPart.bin"
 VoiceParamCC_AdvancePart:
 	inc 1, iz
 	cp iz, 0x20
@@ -5717,511 +1503,38 @@ VoiceParamCC_Done:
 	ret
 
 UIState_CheckAndRenderBitmap:
-	pushw	iz
-	.byte 0xc1
-	jrl	pl, 16320
-	push	sr
-	jr	nz, 67
-	ldb_d8	a, (0xc07f)
-	and	a, 255
-	jr	z, 58
-	ldb_d8	a, (0xc07e)
-	and	a, 255
-	cp	a, 183
-	jr	z, 32
-	cp	a, 182
-	jr	nz, 41
-	lds	iz, 0
-	pushw	3
-	ld	wa, iz
-	ldw	bc, 11
-	ldw	de, 127
-	call	SndParam_NotifyAndReturn
-	inc	1, iz
-	cp	iz, 15
-	jr	ule, -23
-	jr	14
-	ld	xwa, 0x4001
-	ldw	bc, 127
-	lds	de, 3
-	call	SoundParam_NotifyChange
-	popw	iz
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_CheckAndRenderBitmap.bin"
 UIState_RenderBitmapData:
-	.byte 0xc1
-	jrl	pl, 16320
-	halt
-	jr	nz, 38
-	ldb_d8	a, (0xc07f)
-	res	7, a
-	cps	a, 0
-	jr	z, 27
-	ldb_d8	c, (0xc07e)
-	res	7, c
-	cps	c, 0
-	jr	z, 16
-	ldb_d8	a, (0xc080)
-	extz	wa
-	lda_d16	xde, (0x918d)
-	extz	xwa
-	add	xwa, xde
-	ld	(xwa), c
-	.byte 0xc1
-	jrl	pl, 16320
-	incf
-	jr	nz, 30
-	.byte 0xf1
-	jrl	nc, -13120
-	jr	z, 24
-	.byte 0xf1
-	jrl	nz, -13120
-	jr	nz, 18
-	ldb_d8	a, (0xc080)
-	extz	wa
-	pushw	3
-	ldw	bc, 434
-	lds	de, 0
-	call	SndParam_NotifyAndReturn
-	.byte 0xc1
-	jrl	pl, 16320
-	.byte 0x04
-	ret	nz
-	.byte 0xf1
-	jrl	nc, -12864
-	ret	z
-	.byte 0xf1
-	jrl	nz, -12864
-	ret	nz
-	ldb_d8	a, (0xc080)
-	extz	wa
-	pushw	3
-	ldw	bc, 11
-	ldw	de, 127
-	call	SndParam_NotifyAndReturn
-	ret
+	.incbin "includes/generated/v7_transplant_UIState_RenderBitmapData.bin"
 ToshiCmd_DefaultHandler_Ret:
 	ret
 
 SndParam_FetchSequencerParams:
-	ldw_d16 xwa, (0x9133)
-	ld bc, wa
-	inc 1, wa
-	stda16 (0x9133), xwa
-	lda_d16 xwa, (0xc039)
-	extz xbc
-	add xbc, xwa
-	mrib4 0x81, 0x19, 0x27, 0x91
-	ldb_d8 a, (0x9127)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	stda32 0x912b, xhl
-	ldw_d16 xwa, (0x9133)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x9133), xwa
-	lda_d16 xbc, (0xc039)
-	extz xde
-	add xde, xbc
-	ld a, (xde)
-	stb_d8 (0x9128), a
-	stb_d8 (0x912f), a
-	ldw_d16 xwa, (0x9133)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x9133), xwa
-	extz xde
-	add xde, xbc
-	mrib4 0x82, 0x19, 0x30, 0x91
-	stdi8 (0x9129), 0
-	ldw_d16 xwa, (0x9133)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x9133), xwa
-	extz xde
-	add xde, xbc
-	mrib4 0x82, 0x19, 0x31, 0x91
-	stdi8 (0x912a), 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_SndParam_FetchSequencerParams.bin"
 SndParam_WriteLookupAndStore:
-	ldb_d8	a, (0x9127)
-	extz	wa
-	calr	1959
-	cp	xhl, 0xffffffff
-	ret	z
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xc3
-	reti
-	or	xwa, xix
-	pop_f
-	ldw	de, 3729
-
+	.incbin "includes/generated/v7_transplant_SndParam_WriteLookupAndStore.bin"
 SwbtWr_FlushAndAppendParams:
-	cpdi8 (0x912a), 0
-	ret z
-	cpdi16 0x90de, 508
-	jr c, SwbtWr_FlushDone
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitBothBanks
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	stdi16 (0x90de), 0
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_FlushAndAppendParams.bin"
 SwbtWr_FlushDone:
 	calr SwbtWr_AppendFixedParamBlock
 	ret
 
 SwbtWr_CheckBufferOverflow:
-	cpdi16	0x90de, 508
-	jr	c, 18
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	SwbtWr_ReinitBothBanks
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	stdi16	(0x90de), 0
-	jrl	1770
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_CheckBufferOverflow.bin"
 SwbtWr_WriteParamBlock:
-	cpdi16 0x90de, 508
-	jr c, SwbtWr_WriteParamBlock_Body
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call SwbtWr_ReinitOutputBank
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	stdi16 (0x90de), 0
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_WriteParamBlock.bin"
 SwbtWr_WriteParamBlock_Body:
-	jrl SwbtWr_AppendFixedParamBlock
-	dec 2, xsp
-	ld (xsp), a
-	ldb_d8 c, (0x9131)
-	ld a, c
-	and a, (xsp)
-	jr z, Voice_Update_Return
-	ldb_d8 a, (0x9130)
-	and a, c
-	jr z, Voice_Update_Return
-	ldb_d8 a, (0x9127)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	cp xhl, 0xffffffff
-	jr z, Voice_Update_Return
-	ldb_d8 a, (0x912f)
-	extz wa
-	stb_dri C, 0x07, 0xec, 0xe0
-	ldb_d8 a, (0x9130)
-	andda8 a, 0x9131
-	xor (xhl), a
-	ldb_d8 c, (0x9132)
-	cp (xhl), c
-	jr z, Voice_Update_Return
-	ld a, (xhl)
-	xor a, c
-	and a, (xsp)
-	orddm8 0x912a, a
-	mrib4 0x83, 0x19, 0x32, 0x91
-	mrib4 0x83, 0x19, 0x29, 0x91
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_WriteParamBlock_Body.bin"
 Voice_Update_Return:
 	inc 2, xsp
 	ret
 
 VoiceParam_CompareAndUpdate:
-	dec	2, xsp
-	ld	(xsp), a
-	ldb_d8	a, (0x9131)
-	.byte 0x87
-	andda8	a, 0x4866
-	ldw	wa, 8593
-	.byte 0x87
-	andda8	a, 0x4066
-	ldb	l, 145
-	ldb	a, 216
-	ccf
-	calr	1724
-	cp	xhl, 0xffffffff
-	jr	z, 47
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 8583
-	cpl	a
-	.byte 0x83, 0xc1
-	orda8	a, 0x9130
-	ld	c, a
-	ldb_d8	a, (0x9132)
-	cp	c, a
-	jr	z, 16
-	ld	(xhl), c
-	stb_d8	(0x9132), c
-	stb_d8	(0x9129), c
-	ld	a, (xsp)
-	orddm8	0x912a, a
-	inc	2, xsp
-	ret
-	dec	2, xsp
-	ld	(xsp), a
-	ldb_d8	a, (0x9131)
-	.byte 0x87
-	andda8	a, 0x4066
-	ldb	l, 145
-	ldb	a, 216
-	ccf
-	calr	1645
-	cp	xhl, 0xffffffff
-	jr	z, 47
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 8583
-	cpl	a
-	.byte 0x83, 0xc1
-	orda8	a, 0x9130
-	ld	c, a
-	ldb_d8	a, (0x9132)
-	cp	c, a
-	jr	z, 16
-	ld	(xhl), c
-	stb_d8	(0x9132), c
-	stb_d8	(0x9129), c
-	ld	a, (xsp)
-	orddm8	0x912a, a
-	inc	2, xsp
-	ret
-	dec	2, xsp
-	ld	(xsp), a
-	ldb_d8	a, (0x9131)
-	.byte 0x87
-	andda8	a, 0x4a66
-	ldw	wa, 8593
-	.byte 0x87
-	andda8	a, 0x4266
-	ldb	l, 145
-	ldb	a, 216
-	ccf
-	calr	1558
-	cp	xhl, 0xffffffff
-	jr	z, 49
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 9095
-	cpl	c
-	ld	e, c
-	.byte 0x83, 0xc5
-	orda8	e, 0x9130
-	ldb_d8	a, (0x9132)
-	cp	e, a
-	jr	nz, 2
-	and	e, c
-	ld	(xhl), e
-	stb_d8	(0x9132), e
-	stb_d8	(0x9129), e
-	ld	a, (xsp)
-	orddm8	0x912a, a
-	inc	2, xsp
-	ret
-	dec	2, xsp
-	ld	(xsp), a
-	ldb_d8	a, (0x9131)
-	.byte 0x87
-	andda8	a, 0x4266
-	ldb	l, 145
-	ldb	a, 216
-	ccf
-	calr	1477
-	cp	xhl, 0xffffffff
-	jr	z, 49
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 9095
-	cpl	c
-	ld	e, c
-	.byte 0x83, 0xc5
-	orda8	e, 0x9130
-	ldb_d8	a, (0x9132)
-	cp	e, a
-	jr	nz, 2
-	and	e, c
-	ld	(xhl), e
-	stb_d8	(0x9132), e
-	stb_d8	(0x9129), e
-	ld	a, (xsp)
-	orddm8	0x912a, a
-	inc	2, xsp
-	ret
-	dec	2, xsp
-	ld	(xsp), c
-	ldb_d8	c, (0x9131)
-	and	c, a
-	jr	z, 94
-	ldb_d8	c, (0x9130)
-	and	c, a
-	jr	z, 86
-	ldb_d8	a, (0x9127)
-	extz	wa
-	calr	1388
-	cp	xhl, 0xffffffff
-	jr	z, 69
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 9603
-	.byte 0x87, 0xc5
-	ldb_d8	c, (0x9153)
-	ld	a, e
-	add	a, c
-	.byte 0xc1, 0x54, 0x91, 0xf1
-	jr	nc, 4
-	add	e, c
-	jr	4
-	ldb_d8	e, (0x9155)
-	ld	a, (xsp)
-	cpl	a
-	.byte 0x83
-	andda8	a, 0xe5c9
-	ldw	de, 8593
-	cp	e, a
-	jr	z, 16
-	ld	(xhl), e
-	stb_d8	(0x9132), e
-	stb_d8	(0x9129), e
-	ld	a, (xsp)
-	orddm8	0x912a, a
-	inc	2, xsp
-	ret
-	dec	2, xsp
-	ld	(xsp), a
-	ldb_d8	a, (0x9131)
-	.byte 0x87
-	andda8	a, 0x3c66
-	ldb	l, 145
-	ldb	a, 216
-	ccf
-	calr	1287
-	cp	xhl, 0xffffffff
-	jr	z, 43
-	ldb_d8	a, (0x912f)
-	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 8583
-	cpl	a
-	.byte 0x83
-	andda8	a, 0x8bc9
-	ldw	wa, 8593
-	.byte 0x87, 0xc1
-	or	a, c
-	ld	(xhl), a
-	stb_d8	(0x9132), a
-	stb_d8	(0x9129), a
-	ld	a, (xsp)
-	orddm8	0x912a, a
-	inc	2, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_CompareAndUpdate.bin"
 ToneGen_ApplyVoiceParams:
-	dec 6, xsp
-	ld (xsp), e
-	ld (xsp + 2), c
-	ld (xsp + 4), a
-	cp (xsp + 10), 0x0
-	jr z, ToneGen_DispatchStartVoice
-	ld a, (xsp + 4)
-	extz wa
-	calr VoiceData_LookupPtrByIndex
-	cp xhl, 0xffffffff
-	jr z, ToneGen_DispatchStartVoice
-	ld a, (xsp + 2)
-	extz wa
-	stb_dri C, 0x07, 0xec, 0xe0
-	ld c, (xhl)
-	stb_d8 (0x9132), c
-	ld e, (xsp)
-	and e, (xsp + 10)
-	ld a, (xsp + 10)
-	cpl a
-	and a, c
-	or a, e
-	ld e, a
-	xor a, c
-	and a, (xsp + 10)
-	jr z, ToneGen_DispatchStartVoice
-	ld (xhl), e
-	mrdb5 0x8f, 0x04, 0x19, 0x27, 0x91
-	mrdb5 0x8f, 0x02, 0x19, 0x28, 0x91
-	stb_d8 (0x9129), e
-	stb_d8 (0x912a), a
-
+	.incbin "includes/generated/v7_transplant_ToneGen_ApplyVoiceParams.bin"
 ToneGen_DispatchStartVoice:
-	inc 6, xsp
-	retd 0x2
-	dec 6, xsp
-	pushw_erp 0xfa
-	cpdi8 (0xc07d), 3
-	jr nz, ToneGen_Dispatch_Return
-	bitda 0, (0xc07f)
-	jr z, ToneGen_Dispatch_Return
-	ldw wa, 0x90
-	calr VoiceData_LookupPtrByIndex
-	ld (xsp + 2), xhl
-	ld xbc, (xsp + 2)
-	ld a, (xbc)
-	ldb_erp A, 0xfb
-	ld a, (xbc + 1)
-	ld (xsp + 6), a
-	call ToneGen_DispatchByMode
-	stb_erp C, 0xfb
-	ld xwa, (xsp + 2)
-	xor c, (xwa)
-	and c, 0x3
-	jr z, ToneGen_Dispatch_Return
-	ld c, (xsp + 6)
-	xor c, (xwa + 1)
-	bit 1, c
-	jr z, ToneGen_Dispatch_Return
-	ld e, (xwa)
-	extz de
-	pushw 0x1f
-	ldw wa, 0x90
-	lds bc, 0
-	call AddswbWr
-	ld xwa, (xsp + 2)
-	ld e, (xwa + 1)
-	extz de
-	pushw 0x1f
-	ldw wa, 0x90
-	lds bc, 1
-	call AddswbWr
-
+	.incbin "includes/generated/v7_transplant_ToneGen_DispatchStartVoice.bin"
 ToneGen_Dispatch_Return:
 	popw_erp 0xfa
 	inc 6, xsp
@@ -6231,96 +1544,13 @@ SwbtWr_NullRet:
 	ret
 
 Audio_FlushPendingBankSelects:
-	ldb_d8 a, (0x8ee2)
-	bit 7, a
-	jr z, BankFlush_CheckChannel1
-	res 7, a
-	stb_d8 (0x8ee2), a
-	stdi8 (0x9127), 176
-	stdi8 (0x9128), 0
-	stb_d8 (0x9129), a
-	stdi8 (0x912a), 127
-	calr SwbtWr_FlushAndAppendParams
-
+	.incbin "includes/generated/v7_transplant_Audio_FlushPendingBankSelects.bin"
 BankFlush_CheckChannel1:
-	ldb_d8 a, (0x8ee0)
-	bit 7, a
-	ret z
-	res 7, a
-	stb_d8 (0x8ee0), a
-	stdi8 (0x9127), 176
-	stdi8 (0x9128), 1
-	stb_d8 (0x9129), a
-	stdi8 (0x912a), 127
-	calr SwbtWr_FlushAndAppendParams
-	ret
-
+	.incbin "includes/generated/v7_transplant_BankFlush_CheckChannel1.bin"
 UIWidget_MidiStreamControl:
-	.byte 0xc1
-	jrl	pl, 16320
-	nop
-	ret	nz
-	ldb_d8	a, (0xc07f)
-	and	a, 3
-	.byte 0xf2
-	jr	nov, -102
-	swi	4
-	cp	xbc, xiz
-	jrl	nc, -13632
-	ret	z
-	.byte 0xf1
-	jrl	nz, -13632
-	ret	nz
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xbc
-	call	SeqTimer_UpdateTempoReg
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb4
-	ret
-	lds	wa, 0
-	lda_d16	xbc, (0x93d2)
-	.byte 0xf5, 0xe4
-	nop
-	nop
-	.byte 0xf5, 0xe4
-	nop
-	nop
-	inc	1, wa
-	cp	wa, 32
-	jr	c, -16
-	lds	wa, 0
-	lda_d16	xbc, (0x9412)
-	.byte 0xf5, 0xe4
-	nop
-	nop
-	inc	1, wa
-	cp	wa, 32
-	jr	c, -12
-	ret
-
+	.incbin "includes/generated/v7_transplant_UIWidget_MidiStreamControl.bin"
 SndParam_ApplyAndFetch:
-	dec 6, xsp
-	lda xwa, (xsp)
-	lda_d16 xde, (0x90ea)
-	ld c, (xde)
-	ld (xwa), c
-	ld c, (xde + 1)
-	ld (xwa + 1), c
-	ld c, (xde + 2)
-	ld (xwa + 2), c
-	cp c, 0x1f
-	jr ugt, SndParam_CheckRhythm
-	call SndParam_ApplyProgramChange
-	lda_d16 xde, (0x90ee)
-	lda xbc, (xsp)
-	ld a, (xbc + 3)
-	ld (xde), a
-	ld a, (xbc + 4)
-	ld (xde + 1), a
-	jr SndParam_ApplyDone
-
+	.incbin "includes/generated/v7_transplant_SndParam_ApplyAndFetch.bin"
 SndParam_CheckRhythm:
 	cp c, 0x48
 	call_24 z, Rhythm_LookupTempoVelocity_Wrap
@@ -6330,54 +1560,9 @@ SndParam_ApplyDone:
 	ret
 
 SndParam_ApplyFromPointer:
-	push	xiz
-	ld	xiz, xwa
-	lda	xde, (xiz+2)
-	ld	a, (xde)
-	cp	a, 31
-	jr	ugt, 8
-	ld	xwa, xiz
-	call	SndParam_ApplyProgramChange
-	jr	43
-	cp	a, 72
-	jr	nz, 38
-	lda_d16	xbc, (0x90ea)
-	ld	a, (xiz)
-	ld	(xbc), a
-	ld	a, (xiz+1)
-	ld	(xbc+1), a
-	ld	a, (xde)
-	ld	(xbc+2), a
-	call	Rhythm_LookupTempoVelocity_Wrap
-	lda_d16	xbc, (0x90ee)
-	ld	a, (xbc)
-	ld	(xiz+3), a
-	ld	a, (xbc+1)
-	ld	(xiz+4), a
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_SndParam_ApplyFromPointer.bin"
 SndParam_FetchAndStore:
-	dec 6, xsp
-	lda xwa, (xsp)
-	lda_d16 xde, (0x90ea)
-	ld c, (xde)
-	ld (xwa + 3), c
-	ld c, (xde + 1)
-	ld (xwa + 4), c
-	ld c, (xde + 2)
-	ld (xwa + 2), c
-	cp c, 0x1f
-	jr ugt, SndParam_FetchCheckRhythm
-	call SndParam_FetchOscTableEntry
-	lda_d16 xde, (0x90ee)
-	lda xbc, (xsp)
-	ld a, (xbc)
-	ld (xde), a
-	ld a, (xbc + 1)
-	ld (xde + 1), a
-	jr SndParam_FetchDone
-
+	.incbin "includes/generated/v7_transplant_SndParam_FetchAndStore.bin"
 SndParam_FetchCheckRhythm:
 	cp c, 0x48
 	call_24 z, Rhythm_DispatchNote_Finalize
@@ -6387,156 +1572,17 @@ SndParam_FetchDone:
 	ret
 
 SndParam_ResolveVoiceEntry:
-	push xiz
-	ld xiz, xwa
-	lda xde, (xiz + 2)
-	ld a, (xde)
-	cp a, 0x1f
-	jr ugt, SndParamResolve_CheckRhythm
-	ld xwa, xiz
-	call SndParam_FetchOscTableEntry
-	jr SndParamResolve_Done
-
+	.incbin "includes/generated/v7_transplant_SndParam_ResolveVoiceEntry.bin"
 SndParamResolve_CheckRhythm:
-	cp a, 0x48
-	jr nz, SndParamResolve_Done
-	lda_d16 xbc, (0x90ea)
-	ld a, (xiz + 3)
-	ld (xbc), a
-	ld a, (xiz + 4)
-	ld (xbc + 1), a
-	ld a, (xde)
-	ld (xbc + 2), a
-	call Rhythm_DispatchNote_Finalize
-	lda_d16 xbc, (0x90ee)
-	ld a, (xbc)
-	ld (xiz), a
-	ld a, (xbc + 1)
-	ld (xiz + 1), a
-
+	.incbin "includes/generated/v7_transplant_SndParamResolve_CheckRhythm.bin"
 SndParamResolve_Done:
 	pop xiz
 	ret
 
 SndBuf_WriteParamEntries:
-	dec	6, xsp
-	lda	xwa, (xsp)
-	lda_d16	xde, (0x90ea)
-	ld	c, (xde)
-	ld	(xwa), c
-	ld	c, (xde+1)
-	ld	(xwa+1), c
-	ld	c, (xde+2)
-	ld	(xwa+2), c
-	ld	c, (xde+3)
-	ld	(xwa+5), c
-	call	SndParam_CheckAndApplyMode
-	lda_d16	xde, (0x90ee)
-	lda	xbc, (xsp)
-	ld	a, (xbc+3)
-	ld	(xde), a
-	ld	a, (xbc+4)
-	ld	(xde+1), a
-	inc	6, xsp
-	ret
-	dec	6, xsp
-	lda	xwa, (xsp)
-	lda_d16	xde, (0x90ea)
-	ld	c, (xde)
-	ld	(xwa+3), c
-	ld	c, (xde+1)
-	ld	(xwa+4), c
-	ld	c, (xde+2)
-	ld	(xwa+5), c
-	call	SndParam_ComputeVoiceIndex
-	lda_d16	xde, (0x90ee)
-	lda	xbc, (xsp)
-	ld	a, (xbc)
-	ld	(xde), a
-	ld	a, (xbc+1)
-	ld	(xde+1), a
-	ld	a, (xbc+2)
-	ld	(xde+2), a
-	inc	6, xsp
-	ret
-	dec	6, xsp
-	ldb_d8	a, (0x90f7)
-	lda_d16	xbc, (0x916f)
-	lda	xde, (xbc+1)
-	cp	a, 31
-	jr	ugt, 48
-	lda	xwa, (xsp)
-	ld	c, (xbc)
-	ld	(xwa+3), c
-	ld	c, (xde)
-	ld	(xwa+4), c
-	.byte 0xb8
-	push	sr
-	push_a
-	ldx
-	.byte 0x90
-	call	ApplyProgramChangeAs_LoadReg2_0xA
-	lda_d16	xbc, (0x90ee)
-	lda	xwa, (xsp)
-	ld	l, (xwa)
-	ld	(xbc), l
-	lda_d16	xde, (0x916b)
-	ld	(xde), l
-	ld	a, (xwa+1)
-	ld	(xbc+1), a
-	ld	(xde+1), a
-	jr	36
-	cp	a, 72
-	jr	nz, 31
-	lda_d16	xhl, (0x90ea)
-	ld	a, (xbc)
-	ld	(xhl), a
-	ld	a, (xde)
-	ld	(xhl+1), a
-	.byte 0xbb
-	push	sr
-	push_a
-	ldx
-	.byte 0x90
-	nop
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	call	Rhythm_DispatchNote_Finalize
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	lda_d16	xde, (0x9173)
-	lda_d16	xbc, (0x90ee)
-	ld	a, (xbc)
-	ld	(xde), a
-	ld	a, (xbc+1)
-	ld	(xde+1), a
-	ld	a, (xbc+3)
-	ld	(xde+2), a
-	inc	6, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_SndBuf_WriteParamEntries.bin"
 SndParam_UpdateVoiceEntry:
-	dec 8, xsp
-	pushw_erp 0xfa
-	ld (xsp + 4), e
-	ld (xsp + 6), c
-	ld (xsp + 8), a
-	cp (xsp + 8), 0x1f
-	jr ugt, SndParamUpdate_Done
-	ld a, (xsp + 6)
-	extz wa
-	ld c, (xsp + 4)
-	extz bc
-	call ApplyProgramChangeAs_Prologue
-	ldib_erp 0xfb, 0
-	cps l, 0
-	jr z, SndParamUpdate_SetResBit6
-	ldi_erpb 0xfb, 0x40
-
+	.incbin "includes/generated/v7_transplant_SndParam_UpdateVoiceEntry.bin"
 SndParamUpdate_SetResBit6:
 	ld (xsp + 2), 0x40
 	ld c, (xsp + 4)
@@ -6552,34 +1598,14 @@ SndParamUpdate_SetResBit6:
 	setm 3, (xsp + 2)
 
 SndParamUpdate_DispatchWrite:
-	ld a, (xsp + 8)
-	extz wa
-	stb_erp E, 0xfb
-	extz de
-	ld c, (xsp + 2)
-	extz bc
-	pushw bc
-	lds bc, 4
-	calr ToneGen_ApplyVoiceParams
-	ldb_d8 a, (0x912a)
-	and a, 0x48
-	call_24 nz, SwbtWr_FlushAndAppendParams
-
+	.incbin "includes/generated/v7_transplant_SndParamUpdate_DispatchWrite.bin"
 SndParamUpdate_Done:
 	popw_erp 0xfa
 	inc 8, xsp
 	ret
 
 MIDI_DistributeParamToChannels:
-	dec 8, xsp
-	ld (xsp + 2), e
-	ld (xsp + 4), c
-	ld (xsp + 6), a
-	cp (xsp + 6), 0x1f
-	jr ugt, MidiDistribute_CheckRhythm
-	call ApplyProgramChangeAs_DoLookupRe
-	ld (xsp), l
-
+	.incbin "includes/generated/v7_transplant_MIDI_DistributeParamToChannels.bin"
 MidiDistribute_LookupAndWrite:
 	ld a, (xsp + 6)
 	extz wa
@@ -6607,79 +1633,9 @@ MidiDistribute_Done:
 	ret
 
 VoiceData_DistributeToChannels:
-	dec	8, xsp
-	ld	(xsp+4), c
-	ld	(xsp+6), a
-	ld	(xsp+2), 0
-	.byte 0x8f, 0x06
-	push	xsp
-	.byte 0x1f
-	jr	ugt, 44
-	call	ApplyProgramChangeAs_DoLookupRe
-	ld	(xsp), l
-	ld	a, (xsp+6)
-	extz	wa
-	calr	163
-	cp	xhl, 0xffffffff
-	jr	z, 17
-	ld	a, (xsp+4)
-	.byte 0x87, 0xf1
-	jr	ugt, 10
-	extz	wa
-	.byte 0xc3
-	reti
-	or	xwa, xix
-	ldb	a, 191
-	push	sr
-	ld	xbc, 0x6827028f
-	decf
-	.byte 0x8f, 0x06
-	push	xsp
-	popw	wa
-	jr	nz, 5
-	ld	(xsp), 15
-	jr	-49
-	ldb	l, 0
-	inc	8, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceData_DistributeToChannels.bin"
 SwbtWr_AppendFixedParamBlock:
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	lda_d16 xbc, (0xbd3c)
-	extz xde
-	add xde, xbc
-	ldmi16 (xde), 0x9127
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xde
-	add xde, xbc
-	ldmi16 (xde), 0x9128
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xde
-	add xde, xbc
-	ldmi16 (xde), 0x9129
-	ldw_d16 xwa, (0x90de)
-	ld de, wa
-	inc 1, wa
-	stda16 (0x90de), xwa
-	extz xde
-	add xde, xbc
-	ldmi16 (xde), 0x912a
-	ldw_d16 xwa, (0x90de)
-	extz xwa
-	add xwa, xbc
-	ld (xwa), 0xff
-	stdi8 (0x912a), 0
-	ret
-
+	.incbin "includes/generated/v7_transplant_SwbtWr_AppendFixedParamBlock.bin"
 VoiceData_LookupPtrByIndex:
 	extz wa
 	sla wa, 2
@@ -6712,35 +1668,7 @@ VoiceChannels_InitPanFromPreset:
 	ldiw_erp 0xfa, 0
 
 VoicePanInit_Loop:
-	lda_d16 xwa, (0x90ce)
-	stw_erp BC, 0xfa
-	extz xbc
-	add xbc, xwa
-	ld (xbc), 0x10
-	bit 0, iz
-	jr z, ToneGen_IncrementAndExit
-	lda_d16 xwa, (0xf1a0)
-	stw_erp BC, 0xfa
-	extz xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	lda_24 xbc, (SoundProgram_DispatchTable_0x8F4)
-	ldb_sri A, 0x07, 0xe4, 0xe0
-	calr VoiceData_LookupPtrByIndex
-	cp xhl, 0xffffffff
-	jr z, ToneGen_IncrementAndExit
-	ld c, (xhl + 13)
-	ld a, c
-	and a, 0xc0
-	jr nz, ToneGen_IncrementAndExit
-	lda_d16 xwa, (0x90ce)
-	stw_erp DE, 0xfa
-	extz xde
-	add xde, xwa
-	and c, 0xf
-	ld (xde), c
-
+	.incbin "includes/generated/v7_transplant_VoicePanInit_Loop.bin"
 ToneGen_IncrementAndExit:
 	srl iz, 1
 	inc1w_erp 0xfa
@@ -6770,23 +1698,7 @@ SoundPreset_FindMatch_Reverb:
 	lds iz, 0
 
 ReverbPreset_SearchLoop:
-	pushw 0x18
-	pushw 0x0
-	pushw 0xfc8e
-	ld wa, iz
-	extz xwa
-	sll xwa, 2
-	ld xbc, SoundProgram_DispatchTable_0x908
-	add xbc, xwa
-	ld xwa, (xbc)
-	push xwa
-	call Mem_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, ReverbPreset_NextEntry
-	ld hl, iz
-	jr ReverbPreset_SearchDone
-
+	.incbin "includes/generated/v7_transplant_ReverbPreset_SearchLoop.bin"
 ReverbPreset_NextEntry:
 	inc 1, iz
 	cp iz, 0xa
@@ -6802,23 +1714,7 @@ EQPreset_FindMatch:
 	lds iz, 0
 
 EQPreset_SearchLoop:
-	pushw 0x18
-	pushw 0x0
-	pushw 0xfca8
-	ld wa, iz
-	extz xwa
-	sll xwa, 2
-	ld xbc, Naka_ToshiParam_Table_0x24
-	add xbc, xwa
-	ld xwa, (xbc)
-	push xwa
-	call Mem_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, EQPreset_NextEntry
-	ld hl, iz
-	jr EQPreset_SearchDone
-
+	.incbin "includes/generated/v7_transplant_EQPreset_SearchLoop.bin"
 EQPreset_NextEntry:
 	inc 1, iz
 	cp iz, 0x9
@@ -6834,38 +1730,7 @@ SoundPreset_FindMatch_Combined:
 	lds iz, 0
 
 CombinedPreset_SearchLoop:
-	pushw 0x18
-	pushw 0x0
-	pushw 0xfc8e
-	ld wa, iz
-	extz xwa
-	sll xwa, 2
-	ld xbc, Naka_ToshiParam_Table_0x48
-	add xbc, xwa
-	ld xwa, (xbc)
-	push xwa
-	call Mem_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, CombinedPreset_NextEntry
-	pushw 0x18
-	pushw 0x0
-	pushw 0xfca8
-	ld wa, iz
-	extz xwa
-	sll xwa, 2
-	ld xbc, Naka_ToshiParam_Table_0x48
-	add xbc, xwa
-	ld xwa, (xbc)
-	lda xwa, (xwa + 24)
-	push xwa
-	call Mem_Compare
-	add xsp, 0xa
-	cps hl, 0
-	jr nz, CombinedPreset_NextEntry
-	ld hl, iz
-	jr SoundPreset_ReturnResult
-
+	.incbin "includes/generated/v7_transplant_CombinedPreset_SearchLoop.bin"
 CombinedPreset_NextEntry:
 	inc 1, iz
 	cp iz, 0x9
@@ -6914,158 +1779,19 @@ SoundPreset_Dispatch_Combined:
 ; Preset: B0=algo_id, B1=REV_TIME, B3=PRE_DLY, B4=HI_DAMP, B5=ER_LVL, B22=99
 ; Args: wa = preset index (0-9)
 ReverbPreset_Load:
-	pushw iz
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable_0x908)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	pushw 0x18
-	push xwa
-	pushw 0x0
-	pushw 0xfc8e
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	lds iz, 0
-
+	.incbin "includes/generated/v7_transplant_ReverbPreset_Load.bin"
 ReverbPreset_SendLoop:
-	stb_erp C, 0xf8
-	extz bc
-	lda_d16 xwa, (0xfc8e)
-	ld de, iz
-	extz xde
-	add xde, xwa
-	ld e, (xde)
-	extz de
-	pushw 0xff
-	ldw wa, 0x63
-	call AssswbWr
-	inc 1, iz
-	cp iz, 0x18
-	jr c, ReverbPreset_SendLoop
-	ld xwa, 0x4002
-	ldw bc, 0x7f
-	lds de, 1
-	call SoundParam_NotifyChange
-	popw iz
-	ret
-
-; =============================================================================
-; EQPreset_Load -- Load and send an EQ preset to the Sub CPU
-; =============================================================================
-; Reads 24-byte EQ preset from ROM table at 0xedb394, copies to 0xfca8,
-; sends via cmd 0x64. EQ uses algo 0x4f with 4 big-endian 16-bit frequencies.
-; Args: wa = preset index (0-8)
+	.incbin "includes/generated/v7_transplant_ReverbPreset_SendLoop.bin"
 EQPreset_Load:
-	pushw iz
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (Naka_ToshiParam_Table_0x24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	pushw 0x18
-	push xwa
-	pushw 0x0
-	pushw 0xfca8
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	lds iz, 0
-
+	.incbin "includes/generated/v7_transplant_EQPreset_Load.bin"
 EQPreset_SendLoop:
-	stb_erp C, 0xf8
-	extz bc
-	lda_d16 xwa, (0xfca8)
-	ld de, iz
-	extz xde
-	add xde, xwa
-	ld e, (xde)
-	extz de
-	pushw 0xff
-	ldw wa, 0x64
-	call AssswbWr
-	inc 1, iz
-	cp iz, 0x18
-	jr c, EQPreset_SendLoop
-	ld xwa, 0x4006
-	lds bc, 1
-	lds de, 1
-	call SoundParam_NotifyChange
-	popw iz
-	ret
-
-; =============================================================================
-; CombinedPreset_Load -- Load combined reverb+EQ preset (48 bytes)
-; =============================================================================
-; Reads 48 bytes (24 reverb + 24 EQ) from ROM table at 0xedb3b8.
-; Sends reverb with cmd 0x63, EQ (at offset +24) with cmd 0x64.
-; Args: wa = preset index (0-8)
+	.incbin "includes/generated/v7_transplant_EQPreset_SendLoop.bin"
 CombinedPreset_Load:
-	dec 4, xsp
-	pushw iz
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (Naka_ToshiParam_Table_0x48)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ld (xsp + 2), xwa
-	pushw 0x18
-	ld xwa, (xsp + 4)
-	push xwa
-	pushw 0x0
-	pushw 0xfc8e
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	lds iz, 0
-
+	.incbin "includes/generated/v7_transplant_CombinedPreset_Load.bin"
 CombinedPreset_SendReverbLoop:
-	stb_erp C, 0xf8
-	extz bc
-	lda_d16 xwa, (0xfc8e)
-	ld de, iz
-	extz xde
-	add xde, xwa
-	ld e, (xde)
-	extz de
-	pushw 0xff
-	ldw wa, 0x63
-	call AssswbWr
-	inc 1, iz
-	cp iz, 0x18
-	jr c, CombinedPreset_SendReverbLoop
-	pushw 0x18
-	ld xwa, (xsp + 4)
-	lda xwa, (xwa + 24)
-	push xwa
-	pushw 0x0
-	pushw 0xfca8
-	call Mem_Copy
-	lda xsp, (xsp + 10)
-	lds iz, 0
-
+	.incbin "includes/generated/v7_transplant_CombinedPreset_SendReverbLoop.bin"
 CombinedPreset_SendEQLoop:
-	stb_erp C, 0xf8
-	extz bc
-	lda_d16 xwa, (0xfca8)
-	ld de, iz
-	extz xde
-	add xde, xwa
-	ld e, (xde)
-	extz de
-	pushw 0xff
-	ldw wa, 0x64
-	call AssswbWr
-	inc 1, iz
-	cp iz, 0x18
-	jr c, CombinedPreset_SendEQLoop
-	ld xwa, 0x4002
-	ldw bc, 0x7f
-	lds de, 1
-	call SoundParam_NotifyChange
-	ld xwa, 0x4006
-	lds bc, 1
-	lds de, 1
-	call SoundParam_NotifyChange
-	popw iz
-	inc 4, xsp
-	ret
-
+	.incbin "includes/generated/v7_transplant_CombinedPreset_SendEQLoop.bin"
 MIDI_MapCCToIndex:
 	cp	a, 102
 	jr	z, 36
@@ -7130,18 +1856,8 @@ SwbtWr_WriteVoiceParam_PreserveRegs:
 	pop xwa
 	ret
 
-AudioCtrl_PreserveRegs_PopEpilogue:	.ascii "89:;<=>"
-	.byte 0x1d
-	cp	(xwa-106), d
-	pop	xiz
-	pop	xiy
-	pop	xix
-	pop	xhl
-	pop	xde
-	pop	xbc
-	pop	xwa
-	ret
-
+AudioCtrl_PreserveRegs_PopEpilogue:
+	.incbin "includes/generated/v7_transplant_AudioCtrl_PreserveRegs_PopEpilogue.bin"
 SwbtWr_WriteParamBlockSafe:
 	push xwa
 	push xbc
@@ -7161,49 +1877,9 @@ SwbtWr_WriteParamBlockSafe:
 	ret
 
 SndParam_ApplyProgramChange_Safe:
-	push xwa
-	push xbc
-	push xde
-	push xhl
-	push xix
-	push xiy
-	push xiz
-	stda16 (0x90ea), xhl
-	ldb_d8 a, (0x90f6)
-	stb_d8 (0x90ec), a
-	call SndParam_ApplyAndFetch
-	pop xiz
-	pop xiy
-	pop xix
-	pop xhl
-	pop xde
-	pop xbc
-	pop xwa
-	ldw_d16 xhl, (0x90ee)
-	ret
-
+	.incbin "includes/generated/v7_transplant_SndParam_ApplyProgramChange_Safe.bin"
 PartCtrl_WriteProgramChange:
-	push xwa
-	push xbc
-	push xde
-	push xhl
-	push xix
-	push xiy
-	push xiz
-	stda16 (0x90ea), xhl
-	ldb_d8 a, (0x90f7)
-	stb_d8 (0x90ec), a
-	call SndParam_FetchAndStore
-	pop xiz
-	pop xiy
-	pop xix
-	pop xhl
-	pop xde
-	pop xbc
-	pop xwa
-	ldw_d16 xhl, (0x90ee)
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartCtrl_WriteProgramChange.bin"
 SndParam_UpdateVoiceEntry_Safe:
 	push xwa
 	push xbc
@@ -7229,63 +1905,16 @@ SndParam_UpdateVoiceEntry_Safe:
 	ret
 
 MIDI_LoadParamsAndDispatchCC:
-	ldw_d16 xbc, (0x917e)
-	ldw_d16 xde, (0x9180)
-	call MIDI_ClearGuardAndDispatchCC
-	ret
-
+	.incbin "includes/generated/v7_transplant_MIDI_LoadParamsAndDispatchCC.bin"
 MIDI_ClearGuardAndDispatchCC:
-	stdi8 (0x90e5), 0
-
+	.incbin "includes/generated/v7_transplant_MIDI_ClearGuardAndDispatchCC.bin"
 MIDI_DispatchCC_Guarded:
-	bitda 0, (0xb7e7)
-	jr nz, MidiGuarded_Return
-	bitda 4, (0xfd50)
-	jr nz, MidiGuarded_Return
-	push xwa
-	push xbc
-	push xde
-	push xhl
-	push xix
-	push xiy
-	push xiz
-	call MIDI_DispatchCC
-	pop xiz
-	pop xiy
-	pop xix
-	pop xhl
-	pop xde
-	pop xbc
-	pop xwa
-
+	.incbin "includes/generated/v7_transplant_MIDI_DispatchCC_Guarded.bin"
 MidiGuarded_Return:
 	ret
 
 MIDI_WriteVoiceParamCC:
-	push xix
-	pushw wa
-	push xhl
-	cps d, 0
-	jr z, MidiWriteVoice_Done
-	xor h, h
-	ld l, c
-	sla hl, 2
-	ldda32 xix, (0x90f2)
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
-	cp xix, 0x9166
-	jr z, MidiWriteVoice_Done
-	xor h, h
-	ld l, b
-	ldb_sri A, 0x07, 0xf0, 0xec
-	ld w, d
-	xor w, 0xff
-	and a, w
-	and e, d
-	or e, a
-	lda_dri XIY, 0x07, 0xf0, 0xec
-	stda16 (0x9127), xbc
-	stda16 (0x9129), xde
-
+	.incbin "includes/generated/v7_transplant_MIDI_WriteVoiceParamCC.bin"
 MidiWriteVoice_Done:
 	pop xhl
 	popw wa
@@ -7293,36 +1922,9 @@ MidiWriteVoice_Done:
 	ret
 
 MIDI_WriteVoiceParamFromBuffer:
-	ldb_d8 c, (0x917e)
-	ldb_d8 b, (0x917f)
-	ldb_d8 e, (0x9180)
-	ldb_d8 d, (0x9181)
-
+	.incbin "includes/generated/v7_transplant_MIDI_WriteVoiceParamFromBuffer.bin"
 MIDI_WriteVoiceParamDirect:
-	push xix
-	pushw wa
-	pushw hl
-	cps d, 0
-	jr z, MidiWriteDirect_Done
-	xor h, h
-	ld l, c
-	sla hl, 2
-	ldda32 xix, (0x90f2)
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
-	cp xix, 0x9166
-	jr z, MidiWriteDirect_Done
-	xor h, h
-	ld l, b
-	ldb_sri A, 0x07, 0xf0, 0xec
-	ld w, d
-	xor w, 0xff
-	and a, w
-	and e, d
-	or e, a
-	lda_dri XIY, 0x07, 0xf0, 0xec
-	stda16 (0x9127), xbc
-	stda16 (0x9129), xde
-
+	.incbin "includes/generated/v7_transplant_MIDI_WriteVoiceParamDirect.bin"
 MidiWriteDirect_Done:
 	popw hl
 	popw wa
@@ -7354,26 +1956,9 @@ MIDI_SetupChannelParams:
 	ret
 
 Audio_WriteBankSelectParams:
-	pushw de
-	bitda 7, (0x8ee2)
-	jr z, BankSelect_CheckChannel1
-	anddi8 (0x8ee2), 127
-	stdi16 (0x9127), 176
-	ldb_d8 e, (0x8ee2)
-	ldb d, 0x7f
-	stda16 (0x9129), xde
-	calr SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_Audio_WriteBankSelectParams.bin"
 BankSelect_CheckChannel1:
-	bitda 7, (0x8ee0)
-	jr z, BankSelect_Done
-	anddi8 (0x8ee0), 127
-	stdi16 (0x9127), 432
-	ldb_d8 e, (0x8ee0)
-	ldb d, 0x7f
-	stda16 (0x9129), xde
-	calr SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_BankSelect_CheckChannel1.bin"
 BankSelect_Done:
 	popw de
 	ret
@@ -7400,15 +1985,7 @@ SeqTimer_ClampToDefault:
 	ld (xde + 8), a
 
 SeqTimer_ComputeRegValue:
-	stda16 (0xbd3a), xwa
-	ldw de, 0x40
-	mul xwa, xde
-	ld xde, 0x4c4b400
-	call Boot_ReadFDCStatus
-	cps l, 4
-	jr nz, SeqTimer_AdjustForMode4
-	ld xde, 0x3938700
-
+	.incbin "includes/generated/v7_transplant_SeqTimer_ComputeRegValue.bin"
 SeqTimer_AdjustForMode4:
 	div xde, xwa
 	ld xbc, xde
@@ -7419,21 +1996,9 @@ SeqTimer_AdjustForMode4:
 	inc 1, de
 
 SeqTimer_RoundUp:
-	stda16 (146), xde; LD (TREG5L), DE
-	bitda 4, (0xfd50)
-	jr nz, SeqTimer_ClearFlag
-	bitda 4, (0x90f9)
-	jr nz, SeqTimer_ClearFlag
-	call SeqData_DispatchLoop_Done
-
+	.incbin "includes/generated/v7_transplant_SeqTimer_RoundUp.bin"
 SeqTimer_ClearFlag:
-	anddi8 (0x90f9), 239
-	pop xhl
-	pop xde
-	pop xbc
-	pop xwa
-	pop xiz
-
+	.incbin "includes/generated/v7_transplant_SeqTimer_ClearFlag.bin"
 SeqTimer_Return:
 	ret
 
@@ -7480,75 +2045,7 @@ RegBitManip_Handler_0:
 	jr	nz, 2
 	lds	wa, 1
 RegBitManip_Handler_4:
-	stda16	(0xfc66), wa
-	pop	xix
-	popw	hl
-	popw	wa
-	ret
-	push	xwa
-	push	xbc
-	push	xde
-	push	xhl
-	push	xix
-	push	xiy
-	push	xiz
-	call	SndBuf_WriteParamEntries_0x36
-	pop	xiz
-	pop	xiy
-	pop	xix
-	pop	xhl
-	pop	xde
-	pop	xbc
-	pop	xwa
-	ret
-	push	xbc
-	push	xde
-	push	xhl
-	push	xix
-	push	xiy
-	push	xiz
-	push	xwa
-	call	CharMap_ActivePreamb_Prologue2
-	pop	xwa
-	ld	a, l
-	pop	xiz
-	pop	xiy
-	pop	xix
-	pop	xhl
-	pop	xde
-	pop	xbc
-	ret
-	push	xwa
-	push	xbc
-	push	xde
-	push	xhl
-	push	xix
-	push	xiy
-	push	xiz
-	call	SndBuf_WriteParamEntries
-	pop	xiz
-	pop	xiy
-	pop	xix
-	pop	xhl
-	pop	xde
-	pop	xbc
-	pop	xwa
-	ret
-	.byte 0xf1
-	jr	nc, -111
-	.ascii "S89:;<=>"
-	call	SndBuf_WriteParamEntries_0x6C
-	pop	xiz
-	pop	xiy
-	pop	xix
-	pop	xhl
-	pop	xde
-	pop	xbc
-	pop	xwa
-	ldw_d16	hl, (0x9173)
-	ldb_d8	w, (0x9175)
-	ret
-
+	.incbin "includes/generated/v7_transplant_RegBitManip_Handler_4.bin"
 MIDI_ParamValidate_CheckBit2:
 	xor hl, hl
 	bitda 2, (0xfdad)
@@ -7568,35 +2065,9 @@ MidiParamValid_Return:
 	ret
 
 MidiStream_ProcessEventBuffer:
-	push xiz
-	ldb_d8 a, (0x379b)
-	and a, 0xf
-	jrl z, MidiStream_Return
-	calr MidiStream_InitFromLookup
-	ei 6
-	ordi8 1113, 1
-	ldb_d8 a, (1045)
-	stb_d8 (0x91c9), a
-	ei 0
-	ld xix, 0xbd3c
-	extz xwa
-	ldw_d16 xwa, (0x90e0)
-	add xix, xwa
-	stda32 0x91c1, xix
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessEventBuffer.bin"
 MidiStream_NextEvent:
-	ldda32 xix, (0x91c1)
-	ld_spiw WA, 0xf1
-	cp a, 0xff
-	jr z, MidiStream_BufferDone
-	stda16 (0x91bd), xwa
-	ld_spiw WA, 0xf1
-	stda32 0x91c1, xix
-	stda16 (0x91bf), xwa
-	ldw_d16 xbc, (0x91bd)
-	ldw_d16 xde, (0x91bf)
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_MidiStream_NextEvent.bin"
 MidiStream_ScanForMatch:
 	ld_spiw WA, 0xf1
 	cp a, 0xff
@@ -7646,17 +2117,7 @@ MidiStream_ProcessHandler_5:
 	ret
 
 MidiStream_InitFromLookup:
-	stdi8 (0x91d2), 255
-	extz hl
-	ldb_d8 l, (0x379b)
-	and l, 0xf
-	sll hl, 2
-	ld xiy, VoiceMode_ParamConfigTables_0xAB8
-	ld_sril3 XIY, 0x07, 0xf4, 0xec
-	cp xiy, 0xffffffff
-	jr z, MidiStreamInit_Done
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_MidiStream_InitFromLookup.bin"
 MidiStreamInit_CopyLoop:
 	ld_spiw WA, 0xf5
 	stw_dpi WA, 0xf1
@@ -7669,96 +2130,19 @@ MidiStreamInit_Done:
 	ret
 
 MidiStream_ProcessHandler_0:
-	ld	xix, 0x91ad
-	ldb	a, 209
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91bf)
-	ldb	w, 255
-	ld	(xix), wa
-	stdi8	(0x91ca), 3
-	calr	1517
-	ret
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessHandler_0.bin"
 MidiStream_ProcessHandler_1:
-	ld	xix, 0x91ad
-	ldb	a, 210
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91c0)
-	ldb	w, 255
-	ld	(xix), wa
-	stdi8	(0x91ca), 3
-	calr	1486
-	ret
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessHandler_1.bin"
 MidiStream_ProcessHandler_2:
-	ld	xix, 0x91ad
-	ldb	a, 211
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91bf)
-	ldb	w, 255
-	ld	(xix), wa
-	stdi8	(0x91ca), 3
-	calr	1455
-	ret
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessHandler_2.bin"
 MidiStream_ProcessHandler_3:
-	ld	xix, 0x91ad
-	ldb	a, 212
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5
-	stdi8	(8528), 241
-	.byte 0xbf
-	and	(xbc), hl
-	jr	z, 2
-	ldb	a, 127
-	ldb	w, 255
-	ld	(xix), wa
-	stdi8	(0x91ca), 3
-	calr	1418
-	ret
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessHandler_3.bin"
 MidiStream_ProcessHandler_4:
-	ld	xix, 0x91ad
-	ldb	a, 213
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91bf)
-	ldb	w, 255
-	ld	(xix), wa
-	stdi8	(0x91ca), 3
-	calr	1387
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessHandler_4.bin"
 MidiStream_ProcessSeqBuffer:
-	push xiz
-	cpdi8 (0x8d36), 201
-	jrl nz, MidiSeqBuf_Return
-	cpdi8 (0x7f0b), 0
-	jrl z, MidiSeqBuf_Return
-	ei 6
-	setda 0, 1113
-	ldb_d8 a, (1130)
-	stb_d8 (0x91c9), a
-	ei 0
-	ld xix, 0xbd3c
-	extz xwa
-	ldw_d16 xwa, (0x90e0)
-	add xix, xwa
-	stda32 0x91c1, xix
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessSeqBuffer.bin"
 MidiSeqBuf_NextEvent:
-	ldda32 xix, (0x91c1)
-	ld_spiw WA, 0xf1
-	cp a, 0xff
-	jr z, MidiSeqBuf_Done
-	stda16 (0x91bd), xwa
-	ld_spiw WA, 0xf1
-	stda32 0x91c1, xix
-	stda16 (0x91bf), xwa
-	calr MidiSeqBuf_InitFromTable
-	ldw_d16 xbc, (0x91bd)
-	ldb_d8 d, (0x91c0)
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_NextEvent.bin"
 MidiSeqBuf_ScanForMatch:
 	ld_spiw WA, 0xf1
 	cp a, 0xff
@@ -7779,15 +2163,7 @@ MidiSeqBuf_FoundMatch:
 ; Index: w & 0x7 (0-7), entries: 8
 ; 32-bit function pointers, call (xhl)
 MidiStream_ProcessorDispatchB:
-	stdi8 (0x91c7), 0
-	and w, 0x7
-	sll w, 2
-	ld xix, MidiSeqBuf_ProcessorTable_0x1
-	ld_sril3 XIX, 0x03, 0xf0, 0xe1
-	call (xix)
-	stdi8 (0x91d2), 255
-	jr MidiSeqBuf_NextEvent
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessorDispatchB.bin"
 MidiSeqBuf_Done:
 	call TempoRingBuf_Consume
 	resda 0, 1113
@@ -7797,17 +2173,9 @@ MidiSeqBuf_Return:
 	ret
 
 MidiSeqBuf_ProcessorTable:
-	.byte 0xff, 0x24, 0xa9, 0xfc, 0x00, 0x76, 0xa9, 0xfc
-	.byte 0x00, 0xc8, 0xa9, 0xfc, 0x00, 0xf3, 0xa9, 0xfc
-	.byte 0x00, 0x18, 0xaa, 0xfc, 0x00, 0xb7, 0xa6, 0xfc
-	.byte 0x00, 0xb7, 0xa6, 0xfc, 0x00, 0xb7, 0xa6, 0xfc
-	.byte 0x00, 0x0e
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_ProcessorTable.bin"
 MidiSeqBuf_InitFromTable:
-	stdi8 (0x91d2), 255
-	ld xiy, VoiceMode_ParamConfigTables
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_MidiSeqBuf_InitFromTable.bin"
 MidiSeqBufInit_CopyLoop:
 	ld_spiw WA, 0xf5
 	stw_dpi WA, 0xf1
@@ -7821,13 +2189,7 @@ MidiSeqBufInit_Done:
 	ret
 
 Tempo_ProcessExpressionChange:
-	pushw wa
-	calr MIDI_SelectTempoExpressionSource
-	cpdi16 0x91c5, 0
-	jr z, TempoExpr_Done
-	xor l, l
-	ld xix, 0xf1a0
-
+	.incbin "includes/generated/v7_transplant_Tempo_ProcessExpressionChange.bin"
 TempoExpr_FindActivePart:
 	cpib_sri 0x03, 0xf0, 0xec, 0x0f
 	jr z, TempoExpr_StorePartIndex
@@ -7836,74 +2198,21 @@ TempoExpr_FindActivePart:
 	jr c, TempoExpr_FindActivePart
 
 TempoExpr_StorePartIndex:
-	stb_d8 (0x91c7), l
-	ei 6
-	setda 0, 1113
-	ldb_d8 a, (1051)
-	stb_d8 (0x91c9), a
-	ei 0
-	ld xix, 0x91ad
-	ldb a, 0xc0
-	ldb_d8 w, (0x91c9)
-	stw_dpi WA, 0xf1
-	stiw_dsp 0xf1, 0x17, 0x00
-	ld wa, (xsp)
-	bit 7, a
-	jr z, TempoExpr_CheckHighBitW
-	res 7, a
-	setda 0, 0x91ad
-
+	.incbin "includes/generated/v7_transplant_TempoExpr_StorePartIndex.bin"
 TempoExpr_CheckHighBitW:
-	bit 7, w
-	jr z, TempoExpr_WriteAndProcess
-	res 7, w
-	setda 1, 0x91ad
-
+	.incbin "includes/generated/v7_transplant_TempoExpr_CheckHighBitW.bin"
 TempoExpr_WriteAndProcess:
-	stw_dpi WA, 0xf1
-	ldb_d8 a, (0x91c7)
-	ldb w, 0xff
-	stw_dpi WA, 0xf1
-	stdi8 (0x91ca), 7
-	calr TempoRingBuf_ProcessEntry
-	call TempoRingBuf_Consume
-	resda 0, 1113
-
+	.incbin "includes/generated/v7_transplant_TempoExpr_WriteAndProcess.bin"
 TempoExpr_Done:
 	inc 2, xsp
 	ret
 
 Audio_ProcessAllMidiStreams:
-	stdi16 (0x90e0), 0
-	calr MidiStream_ProcessEventBuffer
-	calr MidiStream_ProcessSeqBuffer
-	calr Mod_SelectExpressionSource
-	calr MidiStream_ProcessTempoRingBuf
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_ProcessAllMidiStreams.bin"
 MIDI_SelectTempoExpressionSource:
-	push xiz
-	xor wa, wa
-	ldb_d8 e, (0x8d34)
-	cp e, 0xb
-	jr z, TempoSrc_CheckAutoPlay
-	cp e, 0xd
-	jr z, TempoSrc_DirectTempoMode
-	ldb_d8 d, (0x8d36)
-	cp d, 0x87
-	jr z, Tempo_Expression_Bypass
-	cp d, 0x88
-	jr z, Tempo_Expression_Bypass
-	anddi8 (0x90f9), 243
-	jr Tempo_ExpressionStore
-
+	.incbin "includes/generated/v7_transplant_MIDI_SelectTempoExpressionSource.bin"
 TempoSrc_CheckAutoPlay:
-	bitda 2, (1057)
-	jr z, Tempo_ExpressionStore
-	ldw_d16 xwa, (0x28a8)
-	setda 2, 0x90f9
-	jr Tempo_ExpressionStore
-
+	.incbin "includes/generated/v7_transplant_TempoSrc_CheckAutoPlay.bin"
 Tempo_Expression_Bypass:
 	bitda 0, (0x28c5)
 	jr z, Tempo_ExpressionStore
@@ -7911,81 +2220,23 @@ Tempo_Expression_Bypass:
 	jr Tempo_ExpressionStore
 
 TempoSrc_DirectTempoMode:
-	ldw_d16 xwa, (3407)
-	setda 3, 0x90f9
-
+	.incbin "includes/generated/v7_transplant_TempoSrc_DirectTempoMode.bin"
 Tempo_ExpressionStore:
-	stda16 (0x91c5), xwa
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_Tempo_ExpressionStore.bin"
 Mod_SelectExpressionSource:
-	xor wa, wa
-	ldb_d8 e, (0x8d34)
-	cp e, 0xb
-	jr z, ModExpr_CheckAutoPlay
-	cp e, 0xd
-	jr z, ModExpr_DirectMode
-	ldb_d8 d, (0x8d36)
-	cp d, 0x87
-	jr z, Tempo_Expression_Bypass
-	cp d, 0x88
-	jr z, Tempo_Expression_Bypass
-	anddi8 (0x90f9), 243
-	jr Mod_ExpressionStore
-
+	.incbin "includes/generated/v7_transplant_Mod_SelectExpressionSource.bin"
 ModExpr_CheckAutoPlay:
-	cpdi16 0x28a8, 0
-	jr z, Mod_ExpressionStore
-	ldw_d16 xwa, (0x28a8)
-	setda 2, 0x90f9
-	jr Mod_ExpressionStore
-	bitda 0, (0x28c5)
-	jr z, Mod_ExpressionStore
-	ldw_d16 xwa, (0x28aa)
-	jr Mod_ExpressionStore
-
+	.incbin "includes/generated/v7_transplant_ModExpr_CheckAutoPlay.bin"
 ModExpr_DirectMode:
-	ldw_d16 xwa, (3407)
-	setda 3, 0x90f9
-
+	.incbin "includes/generated/v7_transplant_ModExpr_DirectMode.bin"
 Mod_ExpressionStore:
-	stda16 (0x91c5), xwa
-	ret
-
+	.incbin "includes/generated/v7_transplant_Mod_ExpressionStore.bin"
 MidiStream_ProcessTempoRingBuf:
-	push xiz
-	cpdi16 0x91c5, 0
-	jrl z, TempoRing_Return
-	ei 6
-	setda 0, 1113
-	ldb_d8 a, (1051)
-	stb_d8 (0x91c9), a
-	ei 0
-	ld xix, 0xbd3c
-	extz xwa
-	ldw_d16 xwa, (0x90e0)
-	add xix, xwa
-	stda32 0x91c1, xix
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessTempoRingBuf.bin"
 TempoRing_NextEvent:
-	ldda32 xix, (0x91c1)
-	ld_spiw WA, 0xf1
-	cp a, 0xff
-	jr z, TempoRing_Done
-	stda16 (0x91bd), xwa
-	ld_spiw WA, 0xf1
-	stda32 0x91c1, xix
-	stda16 (0x91bf), xwa
-	calr TempoRing_ValidateState
-	stdi8 (0x91c7), 0
-
+	.incbin "includes/generated/v7_transplant_TempoRing_NextEvent.bin"
 TempoRing_InitAndScan:
-	calr TempoRing_InitPartStream
-	ldw_d16 xbc, (0x91bd)
-	ldb_d8 d, (0x91c0)
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_TempoRing_InitAndScan.bin"
 TempoRing_ScanForMatch:
 	ld_spiw WA, 0xf1
 	cp a, 0xff
@@ -8013,12 +2264,7 @@ MidiStream_ProcessorDispatchC:
 	call (xix)
 
 TempoRing_UpdateAndContinue:
-	stdi8 (0x91d2), 255
-	incdi8 1, (0x91c7)
-	cpdi8 (0x91c7), 15
-	jr ule, TempoRing_InitAndScan
-	jr TempoRing_NextEvent
-
+	.incbin "includes/generated/v7_transplant_TempoRing_UpdateAndContinue.bin"
 TempoRing_Done:
 	call TempoRingBuf_Consume
 	resda 0, 1113
@@ -8028,223 +2274,25 @@ TempoRing_Return:
 	ret
 
 TempoRing_ProcessorTable:
-	.byte 0xff, 0x24, 0xa9, 0xfc, 0x00, 0x76, 0xa9, 0xfc
-	.byte 0x00, 0x69, 0xaa, 0xfc, 0x00, 0xc8, 0xa9, 0xfc
-	.byte 0x00, 0xf3, 0xa9, 0xfc, 0x00, 0x18, 0xaa, 0xfc
-	.byte 0x00, 0x3d, 0xaa, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0x0e
-
+	.incbin "includes/generated/v7_transplant_TempoRing_ProcessorTable.bin"
 TempoRing_ValidateState:
-	ldda32 xix, (0x91c1)
-	cp xix, 0xbd40
-	jr z, MIDI_ParamValidation_ReturnNoOp
-	ldw_d16 xbc, (0x91bd)
-	cp c, 0x1f
-	jr ugt, MIDI_ParamValidation_ReturnNoOp
-	cps b, 4
-	jr nz, MIDI_ParamValidation_ReturnNoOp
-	cp c, (xix - 8)
-	jr nz, MIDI_ParamValidation_ReturnNoOp
-	cp (xix - 7), 0x0
-	jr nz, MIDI_ParamValidation_ReturnNoOp
-	anddi8 (0x91c0), 183
-
+	.incbin "includes/generated/v7_transplant_TempoRing_ValidateState.bin"
 MIDI_ParamValidation_ReturnNoOp:
 	ret
 
 TempoCC_TransmitBytecodeBlock:
-	ld	xix, 0x91ad
-	ldb	a, 192
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldw_d16	wa, (0x91bd)
-	.byte 0xf5, 0xf1, 0x50
-	ldda32	xiy, (0x90f2)
-	extz	wa
-	sll	wa, 2
-	.byte 0xe3
-	reti
-	.byte 0xf4, 0xe0
-	ldb	e, 149
-	ldb	w, 201
-	ldw	hl, 0x6607
-	reti
-	res	7, a
-	.byte 0xf1, 0xad, 0x91
-	lda	xhl, (xwa-56)
-	reti
-	jr	z, 7
-	res	7, w
-	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91c7)
-	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
-	stdi8	(0x91ca), 7
-	calr	490
-	ret
-	ld	xix, 0x91ad
-	ldb	a, 176
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldw_d16	wa, (0x91bd)
-	bit	7, a
-	jr	z, 7
-	res	7, a
-	.byte 0xf1, 0xad, 0x91, 0xba, 0xf5, 0xf1, 0x50
-	ldw_d16	wa, (0x91bf)
-	bit	7, a
-	jr	z, 7
-	res	7, a
-	.byte 0xf1, 0xad, 0x91
-	lda	xhl, (xwa-56)
-	reti
-	jr	z, 7
-	res	7, w
-	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91c7)
-	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
-	stdi8	(0x91ca), 7
-	calr	408
-	ret
-	ld	xix, 0x91ad
-	ldb	a, 210
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldw_d16	wa, (0x91bf)
-	and	wa, 0x7f7f
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91c7)
-	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
-	stdi8	(0x91ca), 37
-	calr	365
-	ret
-	ld	xix, 0x91ad
-	ldb	a, 209
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91bf)
-	ldb_d8	w, (0x91c7)
-	.byte 0xf5
-	stdi8	(0xb450), 255
-	stdi8	(0x91ca), 20
-	calr	328
-	ret
-	ld	xix, 0x91ad
-	ldb	a, 211
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91bf)
-	ldb_d8	w, (0x91c7)
-	.byte 0xf5
-	stdi8	(0xb450), 255
-	stdi8	(0x91ca), 4
-	calr	291
-	ret
-	.byte 0xf2
-	incdi8_24	6, (0xc800ff)
-	ldb	d, 68
-	.byte 0xad, 0x91
-	nop
-	nop
-	ldb	a, 208
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
-	ldb_d8	a, (0x91bf)
-	ldb_d8	w, (0x91c7)
-	.byte 0xf5
-	stdi8	(0xb450), 255
-	stdi8	(0x91ca), 4
-	calr	247
-	ret
-	ld	xix, 0x91ad
-	ldb	a, 128
-	ldb_d8	w, (0x91c9)
-	.byte 0xf5
-	stda32	0xd150, xde
-	swi	4
-	ldb	w, 216
-	.byte 0xcc
-	swi	7
-	.byte 0x01
-	sll	w, 1
-	bit	7, a
-	jr	z, 3
-	set	0, w
-	res	7, a
-	.byte 0xf5
-	stdi8	(0xb450), 255
-	stdi8	(0x91ca), 4
-	calr	196
-	ret
-
+	.incbin "includes/generated/v7_transplant_TempoCC_TransmitBytecodeBlock.bin"
 MIDI_TransmitTempoCC:
-	stda16 (0x91bd), xbc
-	stda16 (0x91bf), xde
-	calr MIDI_SelectTempoExpressionSource
-	cpdi16 0x91c5, 0
-	jr z, TempoCC_Return
-	ei 6
-	setda 0, 1113
-	ldb_d8 a, (1051)
-	stb_d8 (0x91c9), a
-	ei 0
-	ld xix, 0x91ad
-	ldb a, 0xb0
-	ldb_d8 w, (0x91c9)
-	stw_dpi WA, 0xf1
-	ldw_d16 xwa, (0x91bd)
-	stw_dpi WA, 0xf1
-	ldw_d16 xwa, (0x91bf)
-	bit 7, a
-	jr z, TempoCC_CheckHighBitW
-	res 7, a
-	setda 0, 0x91ad
-
+	.incbin "includes/generated/v7_transplant_MIDI_TransmitTempoCC.bin"
 TempoCC_CheckHighBitW:
-	bit 7, w
-	jr z, TempoCC_WriteAndProcess
-	res 7, w
-	setda 1, 0x91ad
-
+	.incbin "includes/generated/v7_transplant_TempoCC_CheckHighBitW.bin"
 TempoCC_WriteAndProcess:
-	stw_dpi WA, 0xf1
-	ldw wa, 0xff7f
-	ld (xix), wa
-	stdi8 (0x91ca), 135
-	calr TempoRingBuf_ProcessEntry
-	call TempoRingBuf_Consume
-	resda 0, 1113
-
+	.incbin "includes/generated/v7_transplant_TempoCC_WriteAndProcess.bin"
 TempoCC_Return:
 	ret
 
 TempoRing_InitPartStream:
-	stdi8 (0x91d2), 255
-	ldb_d8 c, (0x91c7)
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
-	ldw_d16 xde, (0x91c5)
-	ld a, c
-	scf
-	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
-	jr c, TempoPartStream_Done
-	extz hl
-	ldb_d8 l, (0x91c7)
-	ld xix, 0xf1a0
-	ldb_sri L, 0x07, 0xf0, 0xec
-	sll hl, 2
-	ld xix, VoiceMode_ParamConfigTables_0x68
-	ld_sril3 XIY, 0x07, 0xf0, 0xec
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_TempoRing_InitPartStream.bin"
 TempoPartStream_CopyLoop:
 	ld_spiw WA, 0xf5
 	stw_dpi WA, 0xf1
@@ -8258,90 +2306,22 @@ TempoPartStream_Done:
 	ret
 
 TempoRingBuf_ProcessEntry:
-	cpdi8 (0x91ad), 255
-	jr z, TempoRingBuf_EntryDone
-	ld xix, 0x91ad
-	push xix
-	extz wa
-	ldb_d8 a, (0x91ca)
-	and a, 0x7
-	pushw wa
-	ei 6
-	call TempoRingBuf_WriteBytes
-	inc 6, xsp
-	ei 0
-	cpdi8 (0x90f8), 255
-	jr nz, TempoRingBuf_ClearEntryType
-	call AudioCtrl_SaveAllRegs
-	call SeqPlay_CheckAndStartPlayback
-	call AudioCtrl_RestoreAllRegs
-	jr TempoRingBuf_ClearEntryType
-
+	.incbin "includes/generated/v7_transplant_TempoRingBuf_ProcessEntry.bin"
 TempoRingBuf_ClearEntryType:
-	stdi8 (0x91ca), 0
-
+	.incbin "includes/generated/v7_transplant_TempoRingBuf_ClearEntryType.bin"
 TempoRingBuf_EntryDone:
 	ret
 
 Audio_ProcessPartExpressions:
-	push xiz
-	calr MIDI_SelectTempoExpressionSource
-	cpdi16 0x91c5, 0
-	jrl z, PartExpr_Done
-	ei 6
-	setda 0, 1113
-	ldb_d8 a, (1051)
-	stb_d8 (0x91c9), a
-	ei 0
-	xor c, c
-
+	.incbin "includes/generated/v7_transplant_Audio_ProcessPartExpressions.bin"
 PartExpr_ProcessNextBit:
-	ldw_d16 xwa, (0x91c5)
-	srl wa, 1
-	stda16 (0x91c5), xwa
-	jr nc, PartExpr_AdvanceBit
-	ld l, c
-	ld xix, 0xf1a0
-	ldb_sri A, 0x03, 0xf0, 0xec
-	cps a, 0
-	jr z, PartExpr_WriteToBuffer
-	cps a, 2
-	jr z, PartExpr_WriteToBuffer
-	cps a, 1
-	jr nz, PartExpr_AdvanceBit
-
+	.incbin "includes/generated/v7_transplant_PartExpr_ProcessNextBit.bin"
 PartExpr_WriteToBuffer:
-	ld xix, 0x91ad
-	ldb a, 0xb2
-	ldb_d8 w, (0x91c9)
-	stw_dpi WA, 0xf1
-	ldb a, 0x9a
-	bit 7, a
-	jr z, PartExpr_AddPartIndex
-	setda 2, 0x91ad
-	res 7, a
-
+	.incbin "includes/generated/v7_transplant_PartExpr_WriteToBuffer.bin"
 PartExpr_AddPartIndex:
-	ld w, c
-	add w, 0x4
-	stw_dpi WA, 0xf1
-	ldb_d8 a, (0xc5a8)
-	bit 7, a
-	jr z, PartExpr_ReadCurrentValue
-	setda 0, 0x91ad
-	res 7, a
-
+	.incbin "includes/generated/v7_transplant_PartExpr_AddPartIndex.bin"
 PartExpr_ReadCurrentValue:
-	ldb w, 0x7f
-	stw_dpi WA, 0xf1
-	ld a, c
-	ldb w, 0xff
-	stw_dpi WA, 0xf1
-	stdi8 (0x91ca), 7
-	pushw bc
-	calr TempoRingBuf_ProcessEntry
-	popw bc
-
+	.incbin "includes/generated/v7_transplant_PartExpr_ReadCurrentValue.bin"
 PartExpr_AdvanceBit:
 	inc 1, c
 	cp c, 0x10
@@ -8354,125 +2334,30 @@ PartExpr_Done:
 	ret
 
 Part_ReinitAllActive:
-	push xiz
-	stdi8 (0x91c8), 0
-
+	.incbin "includes/generated/v7_transplant_Part_ReinitAllActive.bin"
 PartReinit_ProcessNextPart:
-	ldb_d8 c, (0x91c8)
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
-	ldw_d16 xde, (0xf19e)
-	ld a, c
-	scf
-	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
-	jr c, PartReinit_AdvancePart
-	extz hl
-	ld l, c
-	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x91cd), a
-	calr PartReinit_SendD0Command
-	calr PartReinit_SendB0Command
-	calr PartReinit_SendD2Command
-	calr PartReinit_SendD1Command
-	calr PartReinit_SendD0Command
-	calr PartReinit_CheckSpecialPart15
-
+	.incbin "includes/generated/v7_transplant_PartReinit_ProcessNextPart.bin"
 PartReinit_AdvancePart:
-	incdi8 1, (0x91c8)
-	cpdi8 (0x91c8), 16
-	jr c, PartReinit_ProcessNextPart
-	calr PendingParam_ScanAllTables
-	call SwbtWr_ReinitOutputBank
-	pop xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartReinit_AdvancePart.bin"
 PartReinit_SendD2Command:
-	ld xix, 0x91b5
-	ldw wa, 0xd2
-	stw_dpi WA, 0xf1
-	xor a, a
-	ldb w, 0x40
-	stw_dpi WA, 0xf1
-	ldb_d8 a, (0x91c8)
-	ldb w, 0xff
-	ld (xix), wa
-	calr VoiceParam_DispatchByMode
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartReinit_SendD2Command.bin"
 PartReinit_SendD1Command:
-	ld xix, 0x91b5
-	ldw wa, 0xd1
-	stw_dpi WA, 0xf1
-	ldb a, 0x0
-	ldb_d8 w, (0x91c8)
-	stw_dpi WA, 0xf1
-	ld (xix), 0xff
-	calr VoiceParam_DispatchByMode
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartReinit_SendD1Command.bin"
 PartReinit_SendD0Command:
-	ld xix, 0x91b5
-	ldw wa, 0xd0
-	stw_dpi WA, 0xf1
-	ldb a, 0x0
-	ldb_d8 w, (0x91c8)
-	stw_dpi WA, 0xf1
-	ld (xix), 0xff
-	calr VoiceParam_DispatchByMode
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartReinit_SendD0Command.bin"
 PartReinit_SendB0Command:
-	ld xix, 0x91b5
-	ldw wa, 0xb0
-	stw_dpi WA, 0xf1
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xiy, 0xf1a0
-	ldb_sri L, 0x07, 0xf4, 0xec
-	ld xiy, VoiceMode_ParamConfigTables_0x24
-	ldb_sri A, 0x07, 0xf4, 0xec
-	ldb w, 0x4
-	stw_dpi WA, 0xf1
-	ldw wa, 0x800
-	stw_dpi WA, 0xf1
-	ldb_d8 a, (0x91c8)
-	ldb w, 0xff
-	ld (xix), wa
-	calr VoiceMode_ParamHandler_3
-	ret
-
+	.incbin "includes/generated/v7_transplant_PartReinit_SendB0Command.bin"
 PartReinit_CheckSpecialPart15:
-	cpdi8 (0x91cd), 15
-	jr nz, PartReinit_SpecialDone
-	ldw bc, 0x298
-	ldw de, 0x8000
-	call MIDI_WriteVoiceParamDirect
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_PartReinit_CheckSpecialPart15.bin"
 PartReinit_SpecialDone:
 	ret
 
 Audio_ReinitAndProcessEvents:
-	calr Audio_SyncAndProcessSequencer
-	calr PendingParam_ScanAllTables
-	call MidiPkt_ProcessEventQueue
-	ret
-
+	.incbin "includes/generated/v7_transplant_Audio_ReinitAndProcessEvents.bin"
 Audio_SyncAndProcessSequencer:
-	ldw_d16 xwa, (0x90de)
-	stda16 (0x90e0), xwa
-	call SeqBuf_SaveReadPos
-
+	.incbin "includes/generated/v7_transplant_Audio_SyncAndProcessSequencer.bin"
 AudioSeq_CheckEventPending:
-	ld xix, 0x1e549
-	ld hl, (xix - 10)
-	cp hl, (xix - 6)
-	jr z, AudioSeq_FlushAndTerminate
-	ld xiy, 0x91b5
-
+	.incbin "includes/generated/v7_transplant_AudioSeq_CheckEventPending.bin"
 AudioSeq_ReadNextEvent:
 	pushw hl
 	call SeqBuf_ReadAlternate
@@ -8489,18 +2374,7 @@ AudioSeq_ReadNextEvent:
 ; Index: DRAM[37301] bits [6:4] (0-7), entries: 8
 ; 32-bit function pointers, call (xhl)
 VoiceMode_ParamDispatch:
-	ld (xiy), 0xff
-	ldb_d8 a, (0x91b6)
-	stb_d8 (0x90f8), a
-	extz hl
-	ldb_d8 l, (0x91b5)
-	and l, 0x70
-	srl hl, 2
-	ld xiy, VoiceMode_ParamDispatch_Table
-	ld_sril3 XIY, 0x07, 0xf4, 0xec
-	call (xiy)
-	jr AudioSeq_CheckEventPending
-
+	.incbin "includes/generated/v7_transplant_VoiceMode_ParamDispatch.bin"
 VoiceMode_ParamDispatch_Sentinel:
 	swi	7
 
@@ -8519,139 +2393,22 @@ VoiceMode_ParamHandler_1:
 	ret
 
 AudioSeq_FlushAndTerminate:
-	ld xix, 0xbd3c
-	ldw_d16 xhl, (0x90de)
-	stib_ind 0x07, 0xf0, 0xec, 0xff
-	ret
-
+	.incbin "includes/generated/v7_transplant_AudioSeq_FlushAndTerminate.bin"
 VoiceMode_ParamHandler_4:
-	calr VoiceMode_CheckPendingFlags
-	cpdi8 (0x91b5), 255
-	jrl z, MidiCtrl_NullRet
-	ld xix, 0x91b7
-	ld_spiw BC, 0xf1
-	ld_spiw DE, 0xf1
-	ld a, (xix)
-	stb_d8 (0x91c8), a
-	extz hl
-	ld l, c
-	sll hl, 2
-	ldda32 xix, (0x90f2)
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
-	cp xix, 0xffffffff
-	jrl z, MidiCtrl_NullRet
-	stda16 (0x915b), xbc
-	stda16 (0x915d), xde
-	stb_d8 (0x90f7), c
-	ld hl, de
-	call PartCtrl_WriteProgramChange
-	stda16 (0x91cf), xhl
-	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceMode4_CheckPart0
-	cpdi8 (0x915b), 23
-	jr nz, VoiceMode4_SetupChannelAndWrite
-	ld hl, de
-	call AccompSeq_ManualMidiEntry2
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceMode_ParamHandler_4.bin"
 VoiceMode4_SetupChannelAndWrite:
-	call MIDI_SetupChannelParams
-	andmi8 (xix + 1), 0x80
-	ldb_d8 a, (0x915e)
-	or (xix + 1), a
-	ldb_d8 a, (0x915d)
-	ld (xix), a
-	ldb_d8 a, (0x915b)
-	ldb w, 0x1
-	stda16 (0x9127), xwa
-	ldb_d8 a, (0x915e)
-	ldb w, 0x7f
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-	ldb_d8 a, (0x915b)
-	ldb w, 0x0
-	stda16 (0x9127), xwa
-	ldb_d8 a, (0x915d)
-	ldb w, 0xff
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-	ldw_d16 xbc, (0x915b)
-	ldw_d16 xde, (0x915d)
-	call SndParam_UpdateVoiceEntry_Safe
-
+	.incbin "includes/generated/v7_transplant_VoiceMode4_SetupChannelAndWrite.bin"
 VoiceMode4_CheckPart0:
-	cpdi8 (0x915b), 0
-	jr nz, MidiCtrl_DispatchHandler
-	bitda 3, (0xfd50)
-	jrl nz, MidiCtrl_NullRet
-
-; MIDI controller dispatch handler
+	.incbin "includes/generated/v7_transplant_VoiceMode4_CheckPart0.bin"
 MidiCtrl_DispatchHandler:
-	xor h, h
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0xd
-	jrl z, MidiCtrl_NullRet
-	cp a, 0xe
-	jrl z, MidiCtrl_NullRet
-	cp a, 0xf
-	jrl z, MidiCtrl_NullRet
-	cp a, 0x10
-	jrl z, MidiCtrl_NullRet
-	ld xix, 0x90ce
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0x10
-	jrl z, MidiCtrl_NullRet
-	set 7, a
-	stb_d8 (0x90e5), a
-	extz hl
-	ldb_d8 l, (0xfd50)
-	and l, 0x3
-	sll hl, 2
-	ld xix, MidiCtrl_ModeDispatch_Table
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
-	jp (xix)
+	.incbin "includes/generated/v7_transplant_MidiCtrl_DispatchHandler.bin"
 MidiCtrl_ModeDispatch_Table:
-	.byte 0xf9, 0xae, 0xfc, 0x00, 0x31, 0xaf, 0xfc, 0x00
-	.byte 0xd1, 0xaf, 0xfc, 0x00, 0x78, 0xaf, 0xfc, 0x00
-	.byte 0x23, 0x81, 0xc1, 0x5b, 0x91, 0x22, 0xc1, 0xd0
-	.byte 0x91, 0x25, 0xcc, 0xd4, 0x1d, 0x03, 0xa2, 0xfc
-	.byte 0xce, 0xd6, 0xc1, 0xc8, 0x91, 0x27, 0x44, 0xce
-	.byte 0x90, 0x00, 0x00, 0xc3, 0x07, 0xf0, 0xec, 0x21
-	.byte 0xc9, 0x31, 0x07, 0xf1, 0xe5, 0x90, 0x41, 0xd1
-	.byte 0x5b, 0x91, 0x21, 0xc1, 0xcf, 0x91, 0x25, 0x24
-	.byte 0xff, 0x1d, 0x03, 0xa2, 0xfc, 0x78, 0xa0, 0x00
-	.byte 0xc1, 0x5b, 0x91, 0x22, 0x23, 0x81, 0xcc, 0xd4
-	.byte 0xf1, 0x5d, 0x91, 0xcf, 0x66, 0x02, 0x24, 0x01
-	.byte 0xc1, 0x5e, 0x91, 0x25, 0xcd, 0xee, 0x04, 0x1d
-	.byte 0x03, 0xa2, 0xfc, 0xdb, 0x12, 0xc1, 0xc8, 0x91
-	.byte 0x27, 0x44, 0xce, 0x90, 0x00, 0x00, 0xc3, 0x07
-	.byte 0xf0, 0xec, 0x21, 0xc9, 0x31, 0x07, 0xf1, 0xe5
-	.byte 0x90, 0x41, 0xc1, 0x5b, 0x91, 0x23, 0x22, 0x00
-	.byte 0xc1, 0x5d, 0x91, 0x25, 0xcd, 0x30, 0x07, 0x24
-	.byte 0xff, 0x1d, 0x03, 0xa2, 0xfc, 0x68, 0x59, 0xd1
-	.byte 0x5d, 0x91, 0x20, 0xf1, 0xea, 0x90, 0x50, 0xc1
-	.byte 0x5b, 0x91, 0x21, 0xf1, 0xec, 0x90, 0x41, 0x1d
-	.byte 0xf6, 0xa3, 0xfc, 0x28, 0x2b, 0xd1, 0x5d, 0x91
-	.byte 0x20, 0x1d, 0x50, 0xa4, 0xfc, 0xdb, 0xe3, 0x4b
-	.byte 0x48, 0x6e, 0x0e, 0xc1, 0x5b, 0x91, 0x22, 0x23
-	.byte 0x81, 0xd1, 0xee, 0x90, 0x22, 0x1d, 0x03, 0xa2
-	.byte 0xfc, 0xdb, 0x12, 0xc1, 0xc8, 0x91, 0x27, 0x44
-	.byte 0xce, 0x90, 0x00, 0x00, 0xc3, 0x07, 0xf0, 0xec
-	.byte 0x21, 0xc9, 0x31, 0x07, 0xf1, 0xe5, 0x90, 0x41
-	.byte 0xc1, 0x5b, 0x91, 0x23, 0xca, 0xd2, 0xc1, 0xf0
-	.byte 0x90, 0x25, 0x24, 0xff, 0x1d, 0x03, 0xa2, 0xfc
-
+	.incbin "includes/generated/v7_transplant_MidiCtrl_ModeDispatch_Table.bin"
 MidiCtrl_NullRet:
 	ret
 
 VoiceMode_CheckPendingFlags:
-	ld xix, 0x91b5
-	bitm 0, (xix)
-	jr z, VoiceMode_CheckFlag1
-	setm 7, (xix + 4)
-
+	.incbin "includes/generated/v7_transplant_VoiceMode_CheckPendingFlags.bin"
 VoiceMode_CheckFlag1:
 	bitm 1, (xix)
 	jr z, VoiceMode_CheckPart15Validate
@@ -8675,244 +2432,23 @@ VoiceMode_FlagCheckDone:
 	ret
 
 VoiceMode_ParamHandler_3:
-	calr VoiceMode3_InitChannelMatch
-	cpdi8 (0x91b5), 255
-	jr z, VoiceMode3_Done
-	extz hl
-	ldb_d8 l, (0x91d1)
-	and l, 0xf
-	sll hl, 2
-	ld xix, VoiceMode3_DispatchTable_0x1
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
-	call (xix)
-
+	.incbin "includes/generated/v7_transplant_VoiceMode_ParamHandler_3.bin"
 VoiceMode3_Done:
 	ret
 
 VoiceMode3_DispatchTable:
-	.byte 0xff, 0x65, 0xb0, 0xfc, 0x00, 0x2a, 0xb2, 0xfc
-	.byte 0x00, 0x82, 0xb2, 0xfc, 0x00, 0xd6, 0xb2, 0xfc
-	.byte 0x00, 0x26, 0xb3, 0xfc, 0x00, 0x8b, 0xb1, 0xfc
-	.byte 0x00, 0xf2, 0xb0, 0xfc, 0x00, 0xc3, 0xad, 0xfc
-	.byte 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc
-	.byte 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc
-	.byte 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc
-	.byte 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc
-	.byte 0x00, 0x1d, 0x90, 0xb9, 0xfc, 0x6f, 0x45, 0xc1
-	.byte 0xba, 0x91, 0x21, 0xc9, 0xcc, 0x07, 0x66, 0x29
-	.byte 0xd1, 0xb7, 0x91, 0x21, 0xdb, 0x12, 0xc1, 0xc8
-	.byte 0x91, 0x27, 0x44, 0xa0, 0xf1, 0x00, 0x00, 0xc3
-	.byte 0x07, 0xf0, 0xec, 0x21, 0xc9, 0xcf, 0x0e, 0x6e
-	.byte 0x02, 0x22, 0x04, 0xc1, 0xb9, 0x91, 0x25, 0x24
-	.byte 0x07, 0x1d, 0x22, 0xa2, 0xfc, 0x1d, 0x53, 0xa1
-	.byte 0xfc, 0xd1, 0xb7, 0x91, 0x21, 0xd1, 0xb9, 0x91
-	.byte 0x22, 0xcc, 0xcc, 0xf8, 0x1d, 0x76, 0xa2, 0xfc
-	.byte 0x1d, 0x53, 0xa1, 0xfc, 0xc1, 0xba, 0x91, 0x21
-	.byte 0xc9, 0xcc, 0x07, 0x66, 0x38, 0xdb, 0x12, 0xc1
-	.byte 0xbb, 0x91, 0x27, 0x44, 0xa0, 0xf1, 0x00, 0x00
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f, 0x6e, 0x25
-	.byte 0x44, 0xce, 0x90, 0x00, 0x00, 0xc3, 0x07, 0xf0
-	.byte 0xec, 0x21, 0xc9, 0xcf, 0x10, 0x66, 0x16, 0xc9
-	.byte 0x31, 0x07, 0xf1, 0xe5, 0x90, 0x41, 0xd1, 0xb7
-	.byte 0x91, 0x21, 0xd1, 0xb9, 0x91, 0x22, 0xcc, 0xcc
-	.byte 0x07, 0x1d, 0x03, 0xa2, 0xfc, 0x0e, 0x1d, 0x90
-	.byte 0xb9, 0xfc, 0x6f, 0x51, 0xd1, 0xb7, 0x91, 0x21
-	.byte 0xd1, 0xb9, 0x91, 0x22, 0xdb, 0x12, 0xcb, 0x8f
-	.byte 0xdb, 0xee, 0x02, 0xe1, 0xf2, 0x90, 0x24, 0xe3
-	.byte 0x07, 0xf0, 0xec, 0x24, 0xec, 0xcf, 0xff, 0xff
-	.byte 0xff, 0xff, 0x66, 0x72, 0xdb, 0x12, 0xca, 0x8f
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xcc, 0x88, 0xc8
-	.byte 0xcd, 0xff, 0xc8, 0xc1, 0xcc, 0xc5, 0xc9, 0xe5
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45, 0xf1, 0x27, 0x91
-	.byte 0x51, 0xf1, 0x29, 0x91, 0x52, 0x1d, 0x53, 0xa1
-	.byte 0xfc, 0xd1, 0xb7, 0x91, 0x3f, 0x98, 0x03, 0x6e
-	.byte 0x04, 0xf1, 0x52, 0x8d, 0xbb, 0xdb, 0x12, 0xc1
-	.byte 0xc8, 0x91, 0x27, 0x44, 0xa0, 0xf1, 0x00, 0x00
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xc9, 0xcf, 0x0f
-	.byte 0x66, 0x2c, 0xc9, 0xcf, 0x0e, 0x66, 0x27, 0xc9
-	.byte 0xcf, 0x0d, 0x66, 0x22, 0x44, 0xce, 0x90, 0x00
-	.byte 0x00, 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xc9, 0xcf
-	.byte 0x10, 0x66, 0x13, 0xc9, 0x31, 0x07, 0xf1, 0xe5
-	.byte 0x90, 0x41, 0xd1, 0xb7, 0x91, 0x21, 0xd1, 0xb9
-	.byte 0x91, 0x22, 0x1d, 0x03, 0xa2, 0xfc, 0x0e, 0xd1
-	.byte 0xb7, 0x91, 0x21, 0xd1, 0xb9, 0x91, 0x22, 0xcc
-	.byte 0x33, 0x07, 0x6e, 0x47, 0xdb, 0x12, 0xc1, 0xc8
-	.byte 0x91, 0x27, 0x44, 0xa0, 0xf1, 0x00, 0x00, 0xc3
-	.byte 0x07, 0xf0, 0xec, 0x3f, 0x0f, 0x66, 0x34, 0xcd
-	.byte 0x31, 0x07, 0x44, 0xb2, 0x94, 0x00, 0x00, 0xf3
-	.byte 0x07, 0xf0, 0xec, 0x45, 0x0e
-
+	.incbin "includes/generated/v7_transplant_VoiceMode3_DispatchTable.bin"
 MidiPartCC_WriteAndDispatch:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	ldb_sri L, 0x07, 0xf0, 0xec
-	ld xix, VoiceMode_ParamConfigTables_0x24
-	ldb_sri C, 0x07, 0xf0, 0xec
-	ldb b, 0x3
-	stda16 (0x915b), xbc
-	ldb d, 0x7f
-	stda16 (0x915d), xde
-	call PartCtrl_CheckBitmaskBit
-	jr nc, MidiPartCC_CheckAndGuard
-	call MIDI_WriteVoiceParamCC
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_MidiPartCC_WriteAndDispatch.bin"
 MidiPartCC_CheckAndGuard:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0xe
-	jr z, MIDI_PartCC_DispatchExit
-	cp a, 0xd
-	jr z, MIDI_PartCC_DispatchExit
-	ld xix, 0x90ce
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0x10
-	jr z, MIDI_PartCC_DispatchExit
-	set 7, a
-	stb_d8 (0x90e5), a
-	ldw_d16 xbc, (0x915b)
-	ldw_d16 xde, (0x915d)
-	call MIDI_DispatchCC_Guarded
-
+	.incbin "includes/generated/v7_transplant_MidiPartCC_CheckAndGuard.bin"
 MIDI_PartCC_DispatchExit:
 	ret
 
 MidiVoice_DataBlockHandler:
-	ld	xiy, 0x91b7
-	stdi8	(0x90e4), 0
-	call	PartCtrl_CheckBitmaskBit
-	jr	nc, 18
-	.byte 0xc1, 0xe4, 0x90
-	push	xiz
-	ldb	w, 149
-	ldb	w, 241
-	ldb	l, 145
-	.byte 0x50
-	ld	wa, (xiy+2)
-	stda16	(0x9129), wa
-	extz	hl
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0x90ce
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 201
-	.byte 0xcf
-	rcf
-	jr	z, 28
-	.byte 0xf1, 0x50
-	swi	5
-	dec	6, d
-	ex_ff
-	orddm8	0x90e4, a
-	.byte 0xc1, 0xe4, 0x90
-	push	xiz
-	ld_sd8b	w, 149
-	stda16	(0x9127), wa
-	ld	wa, (xiy+2)
-	stda16	(0x9129), wa
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	extz	hl
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0xf1a0
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	push	xsp
-	retd	0x406e
-	call	PartCtrl_CheckBitmaskBit
-	jr	nc, 17
-	ldw	bc, 664
-	ldb_d8	e, (0x91b9)
-	ldb	d, 128
-	call	MIDI_WriteVoiceParamDirect
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	extz	hl
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0x90ce
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 201
-	.byte 0xcf
-	rcf
-	jr	z, 20
-	set	7, a
-	stb_d8	(0x90e5), a
-	ldw	bc, 664
-	ldb_d8	e, (0x91b9)
-	ldb	d, 128
-	call	MIDI_DispatchCC_Guarded
-	ret
-	call	PartCtrl_CheckBitmaskBit
-	jr	nc, 33
-	ldb	a, 0
-	stb_d8	(0x9644), a
-	ldw_d16	wa, (0x91b7)
-	stda16	(0x9644), wa
-	ldw	wa, 0x7f00
-	stda16	(0x9646), wa
-	call	MidiStream_DispatchData_0xEE
-	ldb_d8	a, (0x91b6)
-	stb_d8	(0x90f8), a
-	extz	hl
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0x90ce
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 201
-	.byte 0xcf
-	rcf
-	jr	z, 19
-	set	7, a
-	stb_d8	(0x90e5), a
-	ldw_d16	bc, (0x91b7)
-	ldw_d16	de, (0x91b9)
-	call	MIDI_DispatchCC_Guarded
-	ret
-	call	PartCtrl_CheckBitmaskBit
-	jr	nc, 20
-	ldw_d16	wa, (0x91b7)
-	stda16	(0x9127), wa
-	ldw_d16	wa, (0x91b9)
-	stda16	(0x9129), wa
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	extz	hl
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0x90ce
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 201
-	.byte 0xcf
-	rcf
-	jr	z, 19
-	set	7, a
-	stb_d8	(0x90e5), a
-	ldw_d16	bc, (0x91b7)
-	ldw_d16	de, (0x91b9)
-	call	MIDI_DispatchCC_Guarded
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiVoice_DataBlockHandler.bin"
 VoiceMode3_InitChannelMatch:
-	ldb_d8 a, (0x91bb)
-	stb_d8 (0x91c8), a
-	calr VoiceMode3_BuildChannelTable
-	cpdi8 (0x91d2), 255
-	jr z, VoiceMode3_NoMatch
-	ld xix, 0x91b7
-	ld bc, (xix)
-	ld de, (xix + 2)
-	ld a, (xix - 2)
-	bit 2, a
-	jr z, VoiceMode3_CheckBit0
-	set 7, c
-
+	.incbin "includes/generated/v7_transplant_VoiceMode3_InitChannelMatch.bin"
 VoiceMode3_CheckBit0:
 	bit 0, a
 	jr z, VoiceMode3_CheckBit1
@@ -8924,10 +2460,7 @@ VoiceMode3_CheckBit1:
 	set 7, d
 
 VoiceMode3_StoreAndScan:
-	ld (xix), bc
-	ld (xix + 2), de
-	ld xiy, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_VoiceMode3_StoreAndScan.bin"
 VoiceMode3_ScanLoop:
 	ld_spiw WA, 0xf5
 	cp a, 0xff
@@ -8944,26 +2477,14 @@ VoiceMode3_FoundMatch:
 	jr nz, VoiceMode3_StoreSubMode
 
 VoiceMode3_NoMatch:
-	stdi8 (0x91b5), 255
-	jr VoiceMode3_ScanDone
-
+	.incbin "includes/generated/v7_transplant_VoiceMode3_NoMatch.bin"
 VoiceMode3_StoreSubMode:
-	stb_d8 (0x91d1), w
-
+	.incbin "includes/generated/v7_transplant_VoiceMode3_StoreSubMode.bin"
 VoiceMode3_ScanDone:
 	ret
 
 VoiceMode3_BuildChannelTable:
-	stdi8 (0x91d2), 255
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	ldb_sri L, 0x07, 0xf0, 0xec
-	sll hl, 2
-	ld xix, VoiceMode_ParamConfigTables_0x5C4
-	ld_sril3 XIY, 0x07, 0xf0, 0xec
-	ld xix, 0x91d2
-
+	.incbin "includes/generated/v7_transplant_VoiceMode3_BuildChannelTable.bin"
 VoiceMode3_CopyTableEntry:
 	ld_spiw WA, 0xf5
 	stw_dpi WA, 0xf1
@@ -8977,229 +2498,52 @@ VoiceMode3_TableCopyDone:
 	ret
 
 VoiceMode_ParamHandler_0:
-	cpdi8 (0x91b5), 128
-	jr nz, VoiceMode0_Done
-	ldb_d8 a, (0x91b9)
-	stb_d8 (0x91c8), a
-	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceMode0_Done
-	ldw_d16 xwa, (0x91b7)
-	srl w, 1
-	jr nc, VoiceMode0_UpdateTempoAndWrite
-	set 7, a
-
+	.incbin "includes/generated/v7_transplant_VoiceMode_ParamHandler_0.bin"
 VoiceMode0_UpdateTempoAndWrite:
-	ldda32 xix, (0xfc62)
-	and w, 0x1
-	andmi16 (xix), 0xfe00
-	or (xix), wa
-	ldb w, 0xff
-	call SeqTimer_UpdateTempoReg
-	stda16 (0x9129), xwa
-	stdi16 (0x9127), 2120
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_VoiceMode0_UpdateTempoAndWrite.bin"
 VoiceMode0_Done:
 	ret
 
 VoiceParam_DispatchByMode:
-	calr MidiVoiceNote_Dispatch
-	cpdi8 (0x91b5), 255
-	jr z, VoiceParam_DispatchDone
-	ldb_d8 a, (0x91b5)
-	and a, 0x3
-	sll a, 2
-	ld xix, VoiceParam_ModeDispatch_Table
-	ld_sril3 XIX, 0x03, 0xf0, 0xe0
-	call (xix)
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_DispatchByMode.bin"
 VoiceParam_DispatchDone:
 	ret
 
 VoiceParam_ModeDispatch_Table:
-	.byte 0x7f, 0xb4, 0xfc, 0x00, 0x09, 0xb5, 0xfc, 0x00
-	.byte 0x93, 0xb5, 0xfc, 0x00, 0x26, 0xb6, 0xfc, 0x00
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_ModeDispatch_Table.bin"
 VoiceParam_StoreExpression:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0x94d2
-	ldb_d8 a, (0x91b7)
-	set 7, a
-	lda_dri XBC, 0x07, 0xf0, 0xec
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_StoreExpression.bin"
 VoiceParam_WriteExpression:
-	ldb c, 0xb4
-	ld xix, 0xf1a0
-	ldb_d8 l, (0x91c8)
-	ldb_sri L, 0x03, 0xf0, 0xec
-	ld xix, VoiceMode_ParamConfigTables_0x24
-	ldb_sri B, 0x03, 0xf0, 0xec
-	stda16 (0x915b), xbc
-	ldb d, 0x7f
-	stda16 (0x915d), xde
-	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceParam_ExprCheckGuard
-	ldw_d16 xwa, (0x915b)
-	stda16 (0x9127), xwa
-	ldw_d16 xwa, (0x915d)
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_WriteExpression.bin"
 VoiceParam_ExprCheckGuard:
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	cpib_sri 0x03, 0xf0, 0xec, 0x0f
-	jr z, VoiceParam_ExprDone
-	ld xix, 0x90ce
-	ldb_sri A, 0x03, 0xf0, 0xec
-	cp a, 0x10
-	jr z, VoiceParam_ExprDone
-	set 7, a
-	stb_d8 (0x90e5), a
-	ldw_d16 xbc, (0x915b)
-	ldw_d16 xde, (0x915d)
-	call MIDI_DispatchCC_Guarded
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_ExprCheckGuard.bin"
 VoiceParam_ExprDone:
 	ret
 
 VoiceParam_StoreVolume:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0x9452
-	ldb_d8 a, (0x91b7)
-	set 7, a
-	lda_dri XBC, 0x07, 0xf0, 0xec
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_StoreVolume.bin"
 VoiceParam_WriteVolume:
-	ldb c, 0xb2
-	ld xix, 0xf1a0
-	ldb_d8 l, (0x91c8)
-	ldb_sri L, 0x03, 0xf0, 0xec
-	ld xix, VoiceMode_ParamConfigTables_0x24
-	ldb_sri B, 0x03, 0xf0, 0xec
-	stda16 (0x915b), xbc
-	ldb d, 0x7f
-	stda16 (0x915d), xde
-	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceParam_VolCheckGuard
-	ldw_d16 xwa, (0x915b)
-	stda16 (0x9127), xwa
-	ldw_d16 xwa, (0x915d)
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_WriteVolume.bin"
 VoiceParam_VolCheckGuard:
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	cpib_sri 0x03, 0xf0, 0xec, 0x0f
-	jr z, VoiceParam_VolDone
-	ld xix, 0x90ce
-	ldb_sri A, 0x03, 0xf0, 0xec
-	cp a, 0x10
-	jr z, VoiceParam_VolDone
-	set 7, a
-	stb_d8 (0x90e5), a
-	ldw_d16 xbc, (0x915b)
-	ldw_d16 xde, (0x915d)
-	call MIDI_DispatchCC_Guarded
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_VolCheckGuard.bin"
 VoiceParam_VolDone:
 	ret
 
 VoiceParam_StorePan:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	sll l, 1
-	ld xix, 0x9472
-	ldw_d16 xwa, (0x91b7)
-	and wa, 0x7f7f
-	set 7, a
-	stw_dri WA, 0x07, 0xf0, 0xec
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_StorePan.bin"
 VoiceParam_WritePan:
-	ldb c, 0xb1
-	ld xix, 0xf1a0
-	ldb_d8 l, (0x91c8)
-	ldb_sri L, 0x03, 0xf0, 0xec
-	ld xix, VoiceMode_ParamConfigTables_0x24
-	ldb_sri B, 0x03, 0xf0, 0xec
-	stda16 (0x915b), xbc
-	and de, 0x7f7f
-	stda16 (0x915d), xde
-	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceParam_PanCheckGuard
-	ldw_d16 xwa, (0x915b)
-	stda16 (0x9127), xwa
-	ldw_d16 xwa, (0x915d)
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteParamBlockSafe
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_WritePan.bin"
 VoiceParam_PanCheckGuard:
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	cpib_sri 0x03, 0xf0, 0xec, 0x0f
-	jr z, VoiceParam_PanDone
-	ld xix, 0x90ce
-	ldb_sri A, 0x03, 0xf0, 0xec
-	cp a, 0x10
-	jr z, VoiceParam_PanDone
-	set 7, a
-	stb_d8 (0x90e5), a
-	ldw_d16 xbc, (0x915b)
-	ldw_d16 xde, (0x915d)
-	call MIDI_DispatchCC_Guarded
-
+	.incbin "includes/generated/v7_transplant_VoiceParam_PanCheckGuard.bin"
 VoiceParam_PanDone:
 	ret
 
 VoiceNote_StoreBankSelect:
-
-	ldb_d8 e, (0x91b7)
-	extz hl
-	ldb_d8 l, (0x91c8)
-	bitda 7, (0x28ad)
-
-	; LD SP, (XBC)
-	; BIT 7, (28ADh)
-
-	jr nz, VoiceNote_WriteBankAndCC
-	set 7, e
-	ld xix, 0x9432
-	lda_dri XIY, 0x07, 0xf0, 0xec
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceNote_StoreBankSelect.bin"
 VoiceNote_WriteBankAndCC:
-	ldw bc, 0x1b0
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0xf
-	jr z, VoiceNote_SetupCCParams
-	ldb c, 0xb3
-	ld xix, VoiceMode_ParamConfigTables_0x24
-	ldb_sri B, 0x03, 0xf0, 0xe0
-
+	.incbin "includes/generated/v7_transplant_VoiceNote_WriteBankAndCC.bin"
 VoiceNote_SetupCCParams:
-	stda16 (0x915b), xbc
-	ldb d, 0x7f
-	stda16 (0x915d), xde
-	call PartCtrl_CheckBitmaskBit
-	jr nc, MIDI_VoiceNote_CtrlExit
-	cpdi8 (0x915b), 176
-	jr z, VoiceNote_CheckBankSelect
-	ldw_d16 xwa, (0x915b)
-	stda16 (0x9127), xwa
-	ldw_d16 xwa, (0x915d)
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-	jr MIDI_VoiceNote_CtrlExit
-
+	.incbin "includes/generated/v7_transplant_VoiceNote_SetupCCParams.bin"
 VoiceNote_CheckBankSelect:
 	bitda 7, (0x28ad)
 	jr nz, VoiceNote_ApplyBankSelect
@@ -9207,73 +2551,27 @@ VoiceNote_CheckBankSelect:
 	jr z, VoiceNote_CtrlDone
 
 VoiceNote_ApplyBankSelect:
-	ldb_d8 a, (0x915d)
-	set 7, a
-	stb_d8 (0x8ee0), a
-	call Audio_WriteBankSelectParams
-	bitda 7, (0x28ad)
-	jr z, MIDI_VoiceNote_CtrlExit
-	resda 7, 0x28ad
-
+	.incbin "includes/generated/v7_transplant_VoiceNote_ApplyBankSelect.bin"
 MIDI_VoiceNote_CtrlExit:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0x90ce
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0x10
-	jr z, VoiceNote_CtrlDone
-	set 7, a
-	stb_d8 (0x90e5), a
-	ldw_d16 xbc, (0x915b)
-	ldw_d16 xde, (0x915d)
-	call MIDI_DispatchCC_Guarded
-
+	.incbin "includes/generated/v7_transplant_MIDI_VoiceNote_CtrlExit.bin"
 VoiceNote_CtrlDone:
 	ret
 
 ; MIDI voice note dispatch
 MidiVoiceNote_Dispatch:
-	ldb_d8 l, (0x91b5)
-	and l, 0x3
-	sll l, 2
-	ld xix, MidiVoiceNote_Dispatch_Table
-	ld_sril3 XIX, 0x03, 0xf0, 0xec
-	jp (xix)
+	.incbin "includes/generated/v7_transplant_MidiVoiceNote_Dispatch.bin"
 MidiVoiceNote_Dispatch_Table:
-	.byte 0x09, 0xb7, 0xfc, 0x00, 0x19, 0xb7, 0xfc, 0x00
-	.byte 0x29, 0xb7, 0xfc, 0x00, 0x39, 0xb7, 0xfc, 0x00
-
+	.incbin "includes/generated/v7_transplant_MidiVoiceNote_Dispatch_Table.bin"
 MidiVoiceNote_LookupMode0:
-	ld xiy, VoiceMode_ParamConfigTables_0x47
-	ld xbc, 0xf
-	ldb_d8 l, (0x91b8)
-	jr MidiPart_FindChannelInTable
-
+	.incbin "includes/generated/v7_transplant_MidiVoiceNote_LookupMode0.bin"
 MidiVoiceNote_LookupMode1:
-	ld xiy, VoiceMode_ParamConfigTables_0x38
-	ld xbc, 0xf
-	ldb_d8 l, (0x91b8)
-	jr MidiPart_FindChannelInTable
-
+	.incbin "includes/generated/v7_transplant_MidiVoiceNote_LookupMode1.bin"
 MidiVoiceNote_LookupMode2:
-	ld xiy, VoiceMode_ParamConfigTables_0x38
-	ld xbc, 0xf
-	ldb_d8 l, (0x91b9)
-	jr MidiPart_FindChannelInTable
-
+	.incbin "includes/generated/v7_transplant_MidiVoiceNote_LookupMode2.bin"
 MidiVoiceNote_LookupMode3:
-	ld xiy, VoiceMode_ParamConfigTables_0x56
-	ld xbc, 0x11
-	ldb_d8 l, (0x91b8)
-
+	.incbin "includes/generated/v7_transplant_MidiVoiceNote_LookupMode3.bin"
 MidiPart_FindChannelInTable:
-	cp xbc, 0x0
-	jr z, MidiPart_NoChannelFound
-	stb_d8 (0x91c8), l
-	ld xix, 0xf1a0
-	ldb_sri W, 0x07, 0xf0, 0xec
-	stb_d8 (0x91cd), w
-
+	.incbin "includes/generated/v7_transplant_MidiPart_FindChannelInTable.bin"
 MidiPart_ScanNextEntry:
 	ldb_spi A, 0xf4
 	cp a, w
@@ -9281,62 +2579,14 @@ MidiPart_ScanNextEntry:
 	djnz xbc, MidiPart_ScanNextEntry
 
 MidiPart_NoChannelFound:
-	stdi8 (0x91b5), 255
-
+	.incbin "includes/generated/v7_transplant_MidiPart_NoChannelFound.bin"
 MidiPart_ScanDone:
 	ret
 
 MidiNote_RhythmPartDispatch:
-	cp bc, 0x48
-	jrl nz, MidiNoteVel_Handler_2
-	stda16 (0x915b), xbc
-	stda16 (0x915d), xde
-	stb_d8 (0x91c8), a
-	stb_d8 (0x90f7), c
-	ld hl, de
-	call PartCtrl_WriteProgramChange
-	stda16 (0x91cf), xhl
-	call PartCtrl_CheckBitmaskBit
-	jr nc, MidiPart_ChannelDispatch
-	ld xix, 0xfc5a
-	call MIDI_SetupChannelParams
-	ldw_d16 xwa, (0x915d)
-	ld (xix), a
-	andmi8 (xix + 1), 0x80
-	or (xix + 1), w
-	pushw hl
-	ldb_d8 a, (0x915e)
-	ldb w, 0x7f
-	ldw de, 0x148
-	call SwbtWr_QueuePostEvent
-	ldb_d8 a, (0x915d)
-	ldb w, 0xff
-	ldw de, 0x48
-	call SwbtWr_QueuePostEvent
-	popw hl
-
-; MIDI part channel dispatch
+	.incbin "includes/generated/v7_transplant_MidiNote_RhythmPartDispatch.bin"
 MidiPart_ChannelDispatch:
-	extz hl
-	ldb_d8 l, (0x91c8)
-	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xec, 0x10
-	jrl nz, MidiNoteVel_Handler_2
-	ld xix, 0x90ce
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0x10
-	jrl nz, MidiNoteVel_Handler_2
-	set 7, a
-	stb_d8 (0x90e5), a
-	xor h, h
-	ldb_d8 l, (0xfd50)
-	and l, 0x3
-	sll hl, 2
-	ld xix, MidiNote_VelocityHandler_Table
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
-	jp (xix)
-
-
+	.incbin "includes/generated/v7_transplant_MidiPart_ChannelDispatch.bin"
 MidiNote_VelocityHandler_Table:
 	.long MidiNoteVel_Handler_0
 	.long MidiNoteVel_Handler_1
@@ -9344,177 +2594,44 @@ MidiNote_VelocityHandler_Table:
 	.long MidiNoteVel_Handler_2
 
 MidiNoteVel_Handler_0:
-	ldw	bc, 5249
-	xor	de, de
-	bitda	7, (0x91cf)
-	jr	z, 2
-	inc	1, e
-	call	MIDI_DispatchCC_Guarded
-	xor	h, h
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0x90ce
-	ld_rrb	a, xix, hl
-	set	7, a
-	stb_d8	(0x90e5), a
-	ldw	bc, 20
-	ldb_d8	e, (0x91cf)
-	res	7, e
-	ldb	d, 255
-	call	MIDI_DispatchCC_Guarded
-	jr	t, 0x3f
-
+	.incbin "includes/generated/v7_transplant_MidiNoteVel_Handler_0.bin"
 MidiNoteVel_Handler_1:
-	ldw	bc, 5249
-	xor	d, d
-	bitda	7, (0x915d)
-	jr	z, 2
-	ldb	d, 1
-	ldb_d8	e, (0x915e)
-	sll	e, 4
-	call	MIDI_DispatchCC_Guarded
-	extz	hl
-	ldb_d8	l, (0x91c8)
-	ld	xix, 0x90ce
-	ld_rrb	a, xix, hl
-	set	7, a
-	stb_d8	(0x90e5), a
-	ldw	bc, 20
-	ldb_d8	e, (0x915d)
-	res	7, e
-	ldb	d, 255
-	call	MIDI_DispatchCC_Guarded
-
+	.incbin "includes/generated/v7_transplant_MidiNoteVel_Handler_1.bin"
 MidiNoteVel_Handler_2:
 	ret
 
 SeqVoice_UpdateTempoParam:
-	cp bc, 0x748
-	jr nz, SeqVoice_TempoDone
-	stb_d8 (0x91c8), a
-	call PartCtrl_CheckBitmaskBit
-	jr nc, SeqVoice_TempoDone
-	and d, 0x30
-	call MIDI_WriteVoiceParamCC
-	ldw_d16 xde, (0x9127)
-	ldw_d16 xwa, (0x9129)
-	stdi8 (0x912a), 0
-	call SwbtWr_QueuePostEvent
-	setda 3, 0x8d52
-
+	.incbin "includes/generated/v7_transplant_SeqVoice_UpdateTempoParam.bin"
 SeqVoice_TempoDone:
 	ret
 
 PendingParam_ScanAllTables:
-	ld xiy, 0x94d2
-	ldw bc, 0x10
-
+	.incbin "includes/generated/v7_transplant_PendingParam_ScanAllTables.bin"
 PendingExpr_ScanEntry:
-	bitm 7, (xiy)
-	jr z, PendingExpr_NextEntry
-	resm 7, (xiy)
-	ld e, (xiy)
-	ld xhl, xiy
-	sub xhl, 0x94d2
-	stb_d8 (0x91c8), l
-	pushw bc
-	push xiy
-	calr VoiceParam_WriteExpression
-	pop xiy
-	popw bc
-
+	.incbin "includes/generated/v7_transplant_PendingExpr_ScanEntry.bin"
 PendingExpr_NextEntry:
-	inc 1, xiy
-	djnz xbc, PendingExpr_ScanEntry
-	ld xiy, 0x9452
-	ldw bc, 0x10
-
+	.incbin "includes/generated/v7_transplant_PendingExpr_NextEntry.bin"
 PendingVol_ScanEntry:
-	bitm 7, (xiy)
-	jr z, PendingVol_NextEntry
-	resm 7, (xiy)
-	ld e, (xiy)
-	ld xhl, xiy
-	sub xhl, 0x9452
-	stb_d8 (0x91c8), l
-	pushw bc
-	push xiy
-	calr VoiceParam_WriteVolume
-	pop xiy
-	popw bc
-
+	.incbin "includes/generated/v7_transplant_PendingVol_ScanEntry.bin"
 PendingVol_NextEntry:
-	inc 1, xiy
-	djnz xbc, PendingVol_ScanEntry
-	ld xiy, 0x9472
-	ldw bc, 0x10
-
+	.incbin "includes/generated/v7_transplant_PendingVol_NextEntry.bin"
 PendingPan_ScanEntry:
-	bitm 7, (xiy)
-	jr z, PendingPan_NextEntry
-	resm 7, (xiy)
-	ld de, (xiy)
-	ld xhl, xiy
-	sub xhl, 0x9472
-	srl l, 1
-	stb_d8 (0x91c8), l
-	pushw bc
-	push xiy
-	calr VoiceParam_WritePan
-	pop xiy
-	popw bc
-
+	.incbin "includes/generated/v7_transplant_PendingPan_ScanEntry.bin"
 PendingPan_NextEntry:
-	inc 2, xiy
-	djnz xbc, PendingPan_ScanEntry
-	ld xiy, 0x9432
-	ldw bc, 0x10
-
+	.incbin "includes/generated/v7_transplant_PendingPan_NextEntry.bin"
 PendingBank_ScanEntry:
-	bitm 7, (xiy)
-	jr z, PendingBank_NextEntry
-	resm 7, (xiy)
-	ld e, (xiy)
-	ld xhl, xiy
-	sub xhl, 0x9432
-	stb_d8 (0x91c8), l
-	pushw bc
-	push xiy
-	calr VoiceNote_WriteBankAndCC
-	pop xiy
-	popw bc
-
+	.incbin "includes/generated/v7_transplant_PendingBank_ScanEntry.bin"
 PendingBank_NextEntry:
-	inc 1, xiy
-	djnz xbc, PendingBank_ScanEntry
-	ld xiy, 0x94b2
-	ldw bc, 0x10
-
+	.incbin "includes/generated/v7_transplant_PendingBank_NextEntry.bin"
 PendingPartCC_ScanEntry:
-	bitm 7, (xiy)
-	jr z, PendingPartCC_NextEntry
-	resm 7, (xiy)
-	ld e, (xiy)
-	ld hl, iy
-	sub xhl, 0x94b2
-	stb_d8 (0x91c8), l
-	pushw bc
-	push xiy
-	calr MidiPartCC_WriteAndDispatch
-	pop xiy
-	popw bc
-
+	.incbin "includes/generated/v7_transplant_PendingPartCC_ScanEntry.bin"
 PendingPartCC_NextEntry:
 	inc 1, xiy
 	djnz xbc, PendingPartCC_ScanEntry
 	ret
 
 PartCtrl_CheckBitmaskBit:
-	pushw wa
-	pushw bc
-	ldw_d16 xwa, (0xf1d0)
-	ldb_d8 c, (0x91c8)
-	inc 1, c
-
+	.incbin "includes/generated/v7_transplant_PartCtrl_CheckBitmaskBit.bin"
 PartCtrl_ShiftBitmask:
 	srl wa, 1
 	djnz8 c, PartCtrl_ShiftBitmask
@@ -9523,424 +2640,13 @@ PartCtrl_ShiftBitmask:
 	ret
 
 AudioCtrl_SaveAllRegs:
-	stda32 0x9137, xwa
-	stda32 0x913b, xbc
-	stda32 0x913f, xde
-	stda32 0x9143, xhl
-	stda32 0x9147, xix
-	stda32 0x914b, xiy
-	stda32 0x914f, xiz
-	ret
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_SaveAllRegs.bin"
 AudioCtrl_RestoreAllRegs:
-	ldda32 xwa, (0x9137)
-	ldda32 xbc, (0x913b)
-	ldda32 xde, (0x913f)
-	ldda32 xhl, (0x9143)
-	ldda32 xix, (0x9147)
-	ldda32 xiy, (0x914b)
-	ldda32 xiz, (0x914f)
-	ret
-
+	.incbin "includes/generated/v7_transplant_AudioCtrl_RestoreAllRegs.bin"
 VoiceMode_ParamConfigTables:
-	.byte 0xb1, 0x17, 0x7f, 0x02, 0xb2, 0x17, 0x7f, 0x03
-	.byte 0xb3, 0x17, 0x7f, 0x04, 0xb0, 0x01, 0x7f, 0x04
-	.byte 0x17, 0x00, 0xff, 0x00, 0x17, 0x04, 0x48, 0x01
-	.byte 0x17, 0x08, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x02, 0x01, 0x07
-	.byte 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03
-	.byte 0x0f, 0x15, 0x15, 0x00, 0x00, 0x0c, 0x0d, 0x0e
-	.byte 0x00, 0x02, 0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03
-	.byte 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x00
-	.byte 0x02, 0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03, 0x04
-	.byte 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x00, 0x02
-	.byte 0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03, 0x04, 0x05
-	.byte 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c, 0x0f, 0xff
-	.byte 0x97, 0xba, 0xfc, 0x00, 0x47, 0xbb, 0xfc, 0x00
-	.byte 0xef, 0xba, 0xfc, 0x00, 0xaf, 0xbc, 0xfc, 0x00
-	.byte 0xf3, 0xbc, 0xfc, 0x00, 0x37, 0xbd, 0xfc, 0x00
-	.byte 0x7b, 0xbd, 0xfc, 0x00, 0xbf, 0xbd, 0xfc, 0x00
-	.byte 0xe3, 0xbb, 0xfc, 0x00, 0x27, 0xbc, 0xfc, 0x00
-	.byte 0x6b, 0xbc, 0xfc, 0x00, 0x9f, 0xbb, 0xfc, 0x00
-	.byte 0xcf, 0xbe, 0xfc, 0x00, 0xf7, 0xbe, 0xfc, 0x00
-	.byte 0xff, 0xbe, 0xfc, 0x00, 0x37, 0xbf, 0xfc, 0x00
-	.byte 0x23, 0xbf, 0xfc, 0x00, 0x03, 0xbe, 0xfc, 0x00
-	.byte 0x47, 0xbe, 0xfc, 0x00, 0x8b, 0xbe, 0xfc, 0x00
-	.byte 0xb4, 0x00, 0x7f, 0x06, 0xb1, 0x00, 0x7f, 0x03
-	.byte 0xb2, 0x00, 0x7f, 0x04, 0xb3, 0x00, 0x7f, 0x05
-	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x03, 0xff, 0x01
-	.byte 0x00, 0x04, 0x48, 0x01, 0x00, 0x05, 0x7f, 0x01
-	.byte 0x00, 0x07, 0x7f, 0x01, 0x00, 0x08, 0x7f, 0x01
-	.byte 0x00, 0x0b, 0x7f, 0x01, 0x00, 0x0a, 0xff, 0x01
-	.byte 0x00, 0x09, 0x7f, 0x01, 0x44, 0x03, 0xff, 0x01
-	.byte 0x44, 0x04, 0xff, 0x01, 0x44, 0x05, 0xff, 0x01
-	.byte 0x44, 0x06, 0xff, 0x01, 0x44, 0x07, 0x3f, 0x01
-	.byte 0xad, 0x00, 0x7f, 0x01, 0xae, 0x00, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x01, 0x7f, 0x06, 0xb1, 0x01, 0x7f, 0x03
-	.byte 0xb2, 0x01, 0x7f, 0x04, 0xb3, 0x01, 0x7f, 0x05
-	.byte 0x01, 0x00, 0xff, 0x00, 0x01, 0x03, 0xff, 0x01
-	.byte 0x01, 0x04, 0x48, 0x01, 0x01, 0x05, 0x7f, 0x01
-	.byte 0x01, 0x07, 0x7f, 0x01, 0x01, 0x08, 0x7f, 0x01
-	.byte 0x01, 0x0b, 0x7f, 0x01, 0x01, 0x0a, 0xff, 0x01
-	.byte 0x01, 0x09, 0x7f, 0x01, 0x45, 0x03, 0xff, 0x01
-	.byte 0x45, 0x04, 0xff, 0x01, 0x45, 0x05, 0xff, 0x01
-	.byte 0x45, 0x06, 0xff, 0x01, 0x45, 0x07, 0x3f, 0x01
-	.byte 0xad, 0x01, 0x7f, 0x01, 0xae, 0x01, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x02, 0x7f, 0x06, 0xb1, 0x02, 0x7f, 0x03
-	.byte 0xb2, 0x02, 0x7f, 0x04, 0xb3, 0x02, 0x7f, 0x05
-	.byte 0x02, 0x00, 0xff, 0x00, 0x02, 0x03, 0xff, 0x01
-	.byte 0x02, 0x04, 0x48, 0x01, 0x02, 0x05, 0x7f, 0x01
-	.byte 0x02, 0x07, 0x7f, 0x01, 0x02, 0x08, 0x7f, 0x01
-	.byte 0x02, 0x0b, 0x7f, 0x01, 0x02, 0x0a, 0xff, 0x01
-	.byte 0x02, 0x09, 0x7f, 0x01, 0x46, 0x03, 0xff, 0x01
-	.byte 0x46, 0x04, 0xff, 0x01, 0x46, 0x05, 0xff, 0x01
-	.byte 0x46, 0x06, 0xff, 0x01, 0x46, 0x07, 0x3f, 0x01
-	.byte 0xad, 0x02, 0x7f, 0x01, 0xae, 0x02, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x03, 0x7f, 0x06, 0xb1, 0x03, 0x7f, 0x03
-	.byte 0xb2, 0x03, 0x7f, 0x04, 0xb3, 0x03, 0x7f, 0x05
-	.byte 0x03, 0x00, 0xff, 0x00, 0x03, 0x03, 0xff, 0x01
-	.byte 0x03, 0x04, 0x48, 0x01, 0x03, 0x05, 0x7f, 0x01
-	.byte 0x03, 0x07, 0x7f, 0x01, 0x03, 0x08, 0x7f, 0x01
-	.byte 0x03, 0x0b, 0x7f, 0x01, 0x03, 0x0a, 0xff, 0x01
-	.byte 0x03, 0x09, 0x7f, 0x01, 0xad, 0x03, 0x7f, 0x01
-	.byte 0xae, 0x03, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x04, 0x7f, 0x06
-	.byte 0xb1, 0x04, 0x7f, 0x03, 0xb2, 0x04, 0x7f, 0x04
-	.byte 0xb3, 0x04, 0x7f, 0x05, 0x04, 0x00, 0xff, 0x00
-	.byte 0x04, 0x03, 0xff, 0x01, 0x04, 0x04, 0x48, 0x01
-	.byte 0x04, 0x05, 0x7f, 0x01, 0x04, 0x07, 0x7f, 0x01
-	.byte 0x04, 0x08, 0x7f, 0x01, 0x04, 0x0b, 0x7f, 0x01
-	.byte 0x04, 0x0a, 0xff, 0x01, 0x04, 0x09, 0x7f, 0x01
-	.byte 0xad, 0x04, 0x7f, 0x01, 0xae, 0x04, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x05, 0x7f, 0x06, 0xb1, 0x05, 0x7f, 0x03
-	.byte 0xb2, 0x05, 0x7f, 0x04, 0xb3, 0x05, 0x7f, 0x05
-	.byte 0x05, 0x00, 0xff, 0x00, 0x05, 0x03, 0xff, 0x01
-	.byte 0x05, 0x04, 0x48, 0x01, 0x05, 0x05, 0x7f, 0x01
-	.byte 0x05, 0x07, 0x7f, 0x01, 0x05, 0x08, 0x7f, 0x01
-	.byte 0x05, 0x0b, 0x7f, 0x01, 0x05, 0x0a, 0xff, 0x01
-	.byte 0x05, 0x09, 0x7f, 0x01, 0xad, 0x05, 0x7f, 0x01
-	.byte 0xae, 0x05, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x06, 0x7f, 0x06
-	.byte 0xb1, 0x06, 0x7f, 0x03, 0xb2, 0x06, 0x7f, 0x04
-	.byte 0xb3, 0x06, 0x7f, 0x05, 0x06, 0x00, 0xff, 0x00
-	.byte 0x06, 0x03, 0xff, 0x01, 0x06, 0x04, 0x48, 0x01
-	.byte 0x06, 0x05, 0x7f, 0x01, 0x06, 0x07, 0x7f, 0x01
-	.byte 0x06, 0x08, 0x7f, 0x01, 0x06, 0x0b, 0x7f, 0x01
-	.byte 0x06, 0x0a, 0xff, 0x01, 0x06, 0x09, 0x7f, 0x01
-	.byte 0xad, 0x06, 0x7f, 0x01, 0xae, 0x06, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x07, 0x7f, 0x06, 0xb1, 0x07, 0x7f, 0x03
-	.byte 0xb2, 0x07, 0x7f, 0x04, 0xb3, 0x07, 0x7f, 0x05
-	.byte 0x07, 0x00, 0xff, 0x00, 0x07, 0x03, 0xff, 0x01
-	.byte 0x07, 0x04, 0x48, 0x01, 0x07, 0x05, 0x7f, 0x01
-	.byte 0x07, 0x07, 0x7f, 0x01, 0x07, 0x08, 0x7f, 0x01
-	.byte 0x07, 0x0b, 0x7f, 0x01, 0x07, 0x0a, 0xff, 0x01
-	.byte 0x07, 0x09, 0x7f, 0x01, 0xad, 0x07, 0x7f, 0x01
-	.byte 0xae, 0x07, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x08, 0x7f, 0x06
-	.byte 0xb1, 0x08, 0x7f, 0x03, 0xb2, 0x08, 0x7f, 0x04
-	.byte 0xb3, 0x08, 0x7f, 0x05, 0x08, 0x00, 0xff, 0x00
-	.byte 0x08, 0x03, 0xff, 0x01, 0x08, 0x04, 0x48, 0x01
-	.byte 0x08, 0x05, 0x7f, 0x01, 0x08, 0x07, 0x7f, 0x01
-	.byte 0x08, 0x08, 0x7f, 0x01, 0x08, 0x0b, 0x7f, 0x01
-	.byte 0x08, 0x0a, 0xff, 0x01, 0x08, 0x09, 0x7f, 0x01
-	.byte 0xad, 0x08, 0x7f, 0x01, 0xae, 0x08, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x09, 0x7f, 0x06, 0xb1, 0x09, 0x7f, 0x03
-	.byte 0xb2, 0x09, 0x7f, 0x04, 0xb3, 0x09, 0x7f, 0x05
-	.byte 0x09, 0x00, 0xff, 0x00, 0x09, 0x03, 0xff, 0x01
-	.byte 0x09, 0x04, 0x48, 0x01, 0x09, 0x05, 0x7f, 0x01
-	.byte 0x09, 0x07, 0x7f, 0x01, 0x09, 0x08, 0x7f, 0x01
-	.byte 0x09, 0x0b, 0x7f, 0x01, 0x09, 0x0a, 0xff, 0x01
-	.byte 0x09, 0x09, 0x7f, 0x01, 0xad, 0x09, 0x7f, 0x01
-	.byte 0xae, 0x09, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x0a, 0x7f, 0x06
-	.byte 0xb1, 0x0a, 0x7f, 0x03, 0xb2, 0x0a, 0x7f, 0x04
-	.byte 0xb3, 0x0a, 0x7f, 0x05, 0x0a, 0x00, 0xff, 0x00
-	.byte 0x0a, 0x03, 0xff, 0x01, 0x0a, 0x04, 0x48, 0x01
-	.byte 0x0a, 0x05, 0x7f, 0x01, 0x0a, 0x07, 0x7f, 0x01
-	.byte 0x0a, 0x08, 0x7f, 0x01, 0x0a, 0x0b, 0x7f, 0x01
-	.byte 0x0a, 0x0a, 0xff, 0x01, 0x0a, 0x09, 0x7f, 0x01
-	.byte 0xad, 0x0a, 0x7f, 0x01, 0xae, 0x0a, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x0b, 0x7f, 0x06, 0xb1, 0x0b, 0x7f, 0x03
-	.byte 0xb2, 0x0b, 0x7f, 0x04, 0xb3, 0x0b, 0x7f, 0x05
-	.byte 0x0b, 0x00, 0xff, 0x00, 0x0b, 0x03, 0xff, 0x01
-	.byte 0x0b, 0x04, 0x48, 0x01, 0x0b, 0x05, 0x7f, 0x01
-	.byte 0x0b, 0x07, 0x7f, 0x01, 0x0b, 0x08, 0x7f, 0x01
-	.byte 0x0b, 0x0b, 0x7f, 0x01, 0x0b, 0x0a, 0xff, 0x01
-	.byte 0x0b, 0x09, 0x7f, 0x01, 0xad, 0x0b, 0x7f, 0x01
-	.byte 0xae, 0x0b, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x0c, 0x7f, 0x06
-	.byte 0xb1, 0x0c, 0x7f, 0x03, 0xb2, 0x0c, 0x7f, 0x04
-	.byte 0xb3, 0x0c, 0x7f, 0x05, 0x0c, 0x00, 0xff, 0x00
-	.byte 0x0c, 0x03, 0xff, 0x01, 0x0c, 0x04, 0x48, 0x01
-	.byte 0x0c, 0x05, 0x7f, 0x01, 0x0c, 0x07, 0x7f, 0x01
-	.byte 0x0c, 0x08, 0x7f, 0x01, 0x0c, 0x0b, 0x7f, 0x01
-	.byte 0x0c, 0x0a, 0xff, 0x01, 0x0c, 0x09, 0x7f, 0x01
-	.byte 0xad, 0x0c, 0x7f, 0x01, 0xae, 0x0c, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb4, 0x0d, 0x7f, 0x06, 0xb1, 0x0d, 0x7f, 0x03
-	.byte 0xb2, 0x0d, 0x7f, 0x04, 0xb3, 0x0d, 0x7f, 0x05
-	.byte 0x0d, 0x00, 0xff, 0x00, 0x0d, 0x03, 0xff, 0x01
-	.byte 0x0d, 0x04, 0x48, 0x01, 0x0d, 0x05, 0x7f, 0x01
-	.byte 0x0d, 0x07, 0x7f, 0x01, 0x0d, 0x08, 0x7f, 0x01
-	.byte 0x0d, 0x0b, 0x7f, 0x01, 0x0d, 0x0a, 0xff, 0x01
-	.byte 0x0d, 0x09, 0x7f, 0x01, 0xad, 0x0d, 0x7f, 0x01
-	.byte 0xae, 0x0d, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x0e, 0x7f, 0x06
-	.byte 0xb1, 0x0e, 0x7f, 0x03, 0xb2, 0x0e, 0x7f, 0x04
-	.byte 0xb3, 0x0e, 0x7f, 0x05, 0x0e, 0x00, 0xff, 0x00
-	.byte 0x0e, 0x03, 0xff, 0x01, 0x0e, 0x04, 0x48, 0x01
-	.byte 0x0e, 0x05, 0x7f, 0x01, 0x0e, 0x07, 0x7f, 0x01
-	.byte 0x0e, 0x08, 0x7f, 0x01, 0x0e, 0x0b, 0x7f, 0x01
-	.byte 0x0e, 0x0a, 0xff, 0x01, 0x0e, 0x09, 0x7f, 0x01
-	.byte 0xad, 0x0e, 0x7f, 0x01, 0xae, 0x0e, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.byte 0xb3, 0x0f, 0x7f, 0x05, 0x0f, 0x00, 0xff, 0x00
-	.byte 0x0f, 0x03, 0xff, 0x01, 0x0f, 0x04, 0x48, 0x01
-	.byte 0x0f, 0x05, 0x7f, 0x01, 0x0f, 0x07, 0x7f, 0x01
-	.byte 0xad, 0x0f, 0x7f, 0x01, 0xae, 0x0f, 0x7f, 0x01
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x48, 0x03, 0x0f, 0x01, 0x90, 0x03, 0x02, 0x01
-	.byte 0x10, 0x03, 0xff, 0x01, 0x11, 0x03, 0xff, 0x01
-	.byte 0x12, 0x03, 0xff, 0x01, 0x13, 0x03, 0xff, 0x01
-	.byte 0x14, 0x03, 0xff, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x48, 0x00, 0xff, 0x00
-	.byte 0x48, 0x08, 0xff, 0x02, 0x48, 0x07, 0x30, 0x01
-	.fill 8, 1, 0xff
-	.byte 0x48, 0x03, 0x0f, 0x01, 0x48, 0x04, 0x50, 0x01
-	.byte 0x48, 0x00, 0xff, 0x00, 0x48, 0x07, 0x30, 0x01
-	.byte 0x48, 0x08, 0xff, 0x02, 0x90, 0x00, 0x1f, 0x01
-	.byte 0x90, 0x01, 0x1f, 0x01, 0x90, 0x03, 0x02, 0x01
-	.byte 0x60, 0x01, 0xc0, 0x01, 0x70, 0x00, 0x07, 0x01
-	.byte 0x70, 0x02, 0xff, 0x01, 0x98, 0x0b, 0xc0, 0x01
-	.byte 0x98, 0x01, 0x7f, 0x01, 0x98, 0x02, 0x80, 0x01
-	.byte 0x98, 0x03, 0x01, 0x01, 0xb0, 0x01, 0x7f, 0x05
-	.byte 0x10, 0x03, 0xff, 0x01, 0x11, 0x03, 0xff, 0x01
-	.byte 0x12, 0x03, 0xff, 0x01, 0x13, 0x03, 0xff, 0x01
-	.byte 0x14, 0x03, 0xff, 0x01, 0x72, 0x03, 0xff, 0x01
-	.byte 0x72, 0x07, 0x7f, 0x06, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xf3, 0xbf, 0xfc, 0x00
-	.byte 0xfb, 0xc0, 0xfc, 0x00, 0x77, 0xc0, 0xfc, 0x00
-	.byte 0x3f, 0xc2, 0xfc, 0x00, 0x6f, 0xc2, 0xfc, 0x00
-	.byte 0x9f, 0xc2, 0xfc, 0x00, 0xcf, 0xc2, 0xfc, 0x00
-	.byte 0xff, 0xc2, 0xfc, 0x00, 0xaf, 0xc1, 0xfc, 0x00
-	.byte 0xdf, 0xc1, 0xfc, 0x00, 0x0f, 0xc2, 0xfc, 0x00
-	.byte 0x7f, 0xc1, 0xfc, 0x00, 0xbf, 0xc3, 0xfc, 0x00
-	.byte 0xdf, 0xc3, 0xfc, 0x00, 0xef, 0xc3, 0xfc, 0x00
-	.byte 0x2f, 0xc4, 0xfc, 0x00, 0x1b, 0xc4, 0xfc, 0x00
-	.byte 0x2f, 0xc3, 0xfc, 0x00, 0x5f, 0xc3, 0xfc, 0x00
-	.byte 0x8f, 0xc3, 0xfc, 0x00, 0x00, 0x03, 0xff, 0x05
-	.byte 0x00, 0x04, 0x48, 0x06, 0x00, 0x05, 0x7f, 0x06
-	.byte 0x00, 0x07, 0x7f, 0x06, 0x00, 0x08, 0x7f, 0x06
-	.byte 0x00, 0x0b, 0x7f, 0x06, 0x00, 0x0a, 0xff, 0x06
-	.byte 0x00, 0x09, 0x7f, 0x06, 0x44, 0x03, 0xff, 0x06
-	.byte 0x44, 0x04, 0xff, 0x06, 0x44, 0x05, 0xff, 0x06
-	.byte 0x44, 0x06, 0xff, 0x06, 0x44, 0x07, 0x3f, 0x06
-	.byte 0xad, 0x00, 0x7f, 0x03, 0xae, 0x00, 0x7f, 0x04
-	.byte 0x9a, 0x04, 0xff, 0x06, 0x9a, 0x05, 0xff, 0x06
-	.byte 0x9a, 0x06, 0xff, 0x06, 0x9a, 0x07, 0xff, 0x06
-	.byte 0x9a, 0x08, 0xff, 0x06, 0x9a, 0x09, 0xff, 0x06
-	.byte 0x9a, 0x0a, 0xff, 0x06, 0x9a, 0x0b, 0xff, 0x06
-	.byte 0x9a, 0x0c, 0xff, 0x06, 0x9a, 0x0d, 0xff, 0x06
-	.byte 0x9a, 0x0e, 0xff, 0x06, 0x9a, 0x0f, 0xff, 0x06
-	.byte 0x9a, 0x10, 0xff, 0x06, 0x9a, 0x11, 0xff, 0x06
-	.byte 0x9a, 0x12, 0xff, 0x06, 0x9a, 0x13, 0xff, 0x06
-	.fill 8, 1, 0xff
-	.byte 0x01, 0x03, 0xff, 0x05, 0x01, 0x04, 0x48, 0x06
-	.byte 0x01, 0x05, 0x7f, 0x06, 0x01, 0x07, 0x7f, 0x06
-	.byte 0x01, 0x08, 0x7f, 0x06, 0x01, 0x0b, 0x7f, 0x06
-	.byte 0x01, 0x0a, 0xff, 0x06, 0x01, 0x09, 0x7f, 0x06
-	.byte 0x45, 0x03, 0xff, 0x06, 0x45, 0x04, 0xff, 0x06
-	.byte 0x45, 0x05, 0xff, 0x06, 0x45, 0x06, 0xff, 0x06
-	.byte 0x45, 0x07, 0x3f, 0x06, 0xad, 0x01, 0x7f, 0x03
-	.byte 0xae, 0x01, 0x7f, 0x04, 0x9a, 0x04, 0xff, 0x06
-	.byte 0x9a, 0x05, 0xff, 0x06, 0x9a, 0x06, 0xff, 0x06
-	.byte 0x9a, 0x07, 0xff, 0x06, 0x9a, 0x08, 0xff, 0x06
-	.byte 0x9a, 0x09, 0xff, 0x06, 0x9a, 0x0a, 0xff, 0x06
-	.byte 0x9a, 0x0b, 0xff, 0x06, 0x9a, 0x0c, 0xff, 0x06
-	.byte 0x9a, 0x0d, 0xff, 0x06, 0x9a, 0x0e, 0xff, 0x06
-	.byte 0x9a, 0x0f, 0xff, 0x06, 0x9a, 0x10, 0xff, 0x06
-	.byte 0x9a, 0x11, 0xff, 0x06, 0x9a, 0x12, 0xff, 0x06
-	.byte 0x9a, 0x13, 0xff, 0x06, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x02, 0x03, 0xff, 0x05
-	.byte 0x02, 0x04, 0x48, 0x06, 0x02, 0x05, 0x7f, 0x06
-	.byte 0x02, 0x07, 0x7f, 0x06, 0x02, 0x08, 0x7f, 0x06
-	.byte 0x02, 0x0b, 0x7f, 0x06, 0x02, 0x0a, 0xff, 0x06
-	.byte 0x02, 0x09, 0x7f, 0x06, 0x46, 0x03, 0xff, 0x06
-	.byte 0x46, 0x04, 0xff, 0x06, 0x46, 0x05, 0xff, 0x06
-	.byte 0x46, 0x06, 0xff, 0x06, 0x46, 0x07, 0x3f, 0x06
-	.byte 0xad, 0x02, 0x7f, 0x03, 0xae, 0x02, 0x7f, 0x04
-	.byte 0x9a, 0x04, 0xff, 0x06, 0x9a, 0x05, 0xff, 0x06
-	.byte 0x9a, 0x06, 0xff, 0x06, 0x9a, 0x07, 0xff, 0x06
-	.byte 0x9a, 0x08, 0xff, 0x06, 0x9a, 0x09, 0xff, 0x06
-	.byte 0x9a, 0x0a, 0xff, 0x06, 0x9a, 0x0b, 0xff, 0x06
-	.byte 0x9a, 0x0c, 0xff, 0x06, 0x9a, 0x0d, 0xff, 0x06
-	.byte 0x9a, 0x0e, 0xff, 0x06, 0x9a, 0x0f, 0xff, 0x06
-	.byte 0x9a, 0x10, 0xff, 0x06, 0x9a, 0x11, 0xff, 0x06
-	.byte 0x9a, 0x12, 0xff, 0x06, 0x9a, 0x13, 0xff, 0x06
-	.fill 8, 1, 0xff
-	.byte 0x03, 0x03, 0xff, 0x05, 0x03, 0x04, 0x48, 0x06
-	.byte 0x03, 0x05, 0x7f, 0x06, 0x03, 0x07, 0x7f, 0x06
-	.byte 0x03, 0x08, 0x7f, 0x06, 0x03, 0x0b, 0x7f, 0x06
-	.byte 0x03, 0x0a, 0xff, 0x06, 0x03, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x03, 0x7f, 0x03, 0xae, 0x03, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x04, 0x03, 0xff, 0x05, 0x04, 0x04, 0x48, 0x06
-	.byte 0x04, 0x05, 0x7f, 0x06, 0x04, 0x07, 0x7f, 0x06
-	.byte 0x04, 0x08, 0x7f, 0x06, 0x04, 0x0b, 0x7f, 0x06
-	.byte 0x04, 0x0a, 0xff, 0x06, 0x04, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x04, 0x7f, 0x03, 0xae, 0x04, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x05, 0x03, 0xff, 0x05, 0x05, 0x04, 0x48, 0x06
-	.byte 0x05, 0x05, 0x7f, 0x06, 0x05, 0x07, 0x7f, 0x06
-	.byte 0x05, 0x08, 0x7f, 0x06, 0x05, 0x0b, 0x7f, 0x06
-	.byte 0x05, 0x0a, 0xff, 0x06, 0x05, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x05, 0x7f, 0x03, 0xae, 0x05, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x06, 0x03, 0xff, 0x05, 0x06, 0x04, 0x48, 0x06
-	.byte 0x06, 0x05, 0x7f, 0x06, 0x06, 0x07, 0x7f, 0x06
-	.byte 0x06, 0x08, 0x7f, 0x06, 0x06, 0x0b, 0x7f, 0x06
-	.byte 0x06, 0x0a, 0xff, 0x06, 0x06, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x06, 0x7f, 0x03, 0xae, 0x06, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x07, 0x03, 0xff, 0x05, 0x07, 0x04, 0x48, 0x06
-	.byte 0x07, 0x05, 0x7f, 0x06, 0x07, 0x07, 0x7f, 0x06
-	.byte 0x07, 0x08, 0x7f, 0x06, 0x07, 0x0b, 0x7f, 0x06
-	.byte 0x07, 0x0a, 0xff, 0x06, 0x07, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x07, 0x7f, 0x03, 0xae, 0x07, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x08, 0x03, 0xff, 0x05, 0x08, 0x04, 0x48, 0x06
-	.byte 0x08, 0x05, 0x7f, 0x06, 0x08, 0x07, 0x7f, 0x06
-	.byte 0x08, 0x08, 0x7f, 0x06, 0x08, 0x0b, 0x7f, 0x06
-	.byte 0x08, 0x0a, 0xff, 0x06, 0x08, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x08, 0x7f, 0x03, 0xae, 0x08, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x09, 0x03, 0xff, 0x05, 0x09, 0x04, 0x48, 0x06
-	.byte 0x09, 0x05, 0x7f, 0x06, 0x09, 0x07, 0x7f, 0x06
-	.byte 0x09, 0x08, 0x7f, 0x06, 0x09, 0x0b, 0x7f, 0x06
-	.byte 0x09, 0x0a, 0xff, 0x06, 0x09, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x09, 0x7f, 0x03, 0xae, 0x09, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x0a, 0x03, 0xff, 0x05, 0x0a, 0x04, 0x48, 0x06
-	.byte 0x0a, 0x05, 0x7f, 0x06, 0x0a, 0x07, 0x7f, 0x06
-	.byte 0x0a, 0x08, 0x7f, 0x06, 0x0a, 0x0b, 0x7f, 0x06
-	.byte 0x0a, 0x0a, 0xff, 0x06, 0x0a, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x0a, 0x7f, 0x03, 0xae, 0x0a, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x0b, 0x03, 0xff, 0x05, 0x0b, 0x04, 0x48, 0x06
-	.byte 0x0b, 0x05, 0x7f, 0x06, 0x0b, 0x07, 0x7f, 0x06
-	.byte 0x0b, 0x08, 0x7f, 0x06, 0x0b, 0x0b, 0x7f, 0x06
-	.byte 0x0b, 0x0a, 0xff, 0x06, 0x0b, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x0b, 0x7f, 0x03, 0xae, 0x0b, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x0c, 0x03, 0xff, 0x05, 0x0c, 0x04, 0x48, 0x06
-	.byte 0x0c, 0x05, 0x7f, 0x06, 0x0c, 0x07, 0x7f, 0x06
-	.byte 0x0c, 0x08, 0x7f, 0x06, 0x0c, 0x0b, 0x7f, 0x06
-	.byte 0x0c, 0x0a, 0xff, 0x06, 0x0c, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x0c, 0x7f, 0x03, 0xae, 0x0c, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x0d, 0x03, 0xff, 0x05, 0x0d, 0x04, 0x48, 0x06
-	.byte 0x0d, 0x05, 0x7f, 0x06, 0x0d, 0x07, 0x7f, 0x06
-	.byte 0x0d, 0x08, 0x7f, 0x06, 0x0d, 0x0b, 0x7f, 0x06
-	.byte 0x0d, 0x0a, 0xff, 0x06, 0x0d, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x0d, 0x7f, 0x03, 0xae, 0x0d, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x0e, 0x03, 0xff, 0x05, 0x0e, 0x04, 0x48, 0x06
-	.byte 0x0e, 0x05, 0x7f, 0x06, 0x0e, 0x07, 0x7f, 0x06
-	.byte 0x0e, 0x08, 0x7f, 0x06, 0x0e, 0x0b, 0x7f, 0x06
-	.byte 0x0e, 0x0a, 0xff, 0x06, 0x0e, 0x09, 0x7f, 0x06
-	.byte 0xad, 0x0e, 0x7f, 0x03, 0xae, 0x0e, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x0f, 0x03, 0xff, 0x05, 0x0f, 0x04, 0x48, 0x06
-	.byte 0x0f, 0x05, 0x7f, 0x06, 0x0f, 0x07, 0x7f, 0x06
-	.byte 0xad, 0x0f, 0x7f, 0x03, 0xae, 0x0f, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0x48, 0x05, 0xfc, 0x01, 0x48, 0x06, 0xfc, 0x01
-	.fill 8, 1, 0xff
-	.byte 0x48, 0x05, 0xfc, 0x01, 0x48, 0x06, 0xfc, 0x01
-	.byte 0x48, 0x03, 0x0f, 0x00, 0x90, 0x03, 0x02, 0x06
-	.byte 0x10, 0x03, 0xff, 0x06, 0x11, 0x03, 0xff, 0x06
-	.byte 0x12, 0x03, 0xff, 0x06, 0x13, 0x03, 0xff, 0x06
-	.byte 0x14, 0x03, 0xff, 0x06, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x48, 0x05, 0xfc, 0x01
-	.byte 0x48, 0x06, 0xfc, 0x01, 0x48, 0x07, 0x30, 0x06
-	.fill 8, 1, 0xff
-	.byte 0x48, 0x05, 0xfc, 0x01, 0x48, 0x06, 0xfc, 0x01
-	.byte 0x48, 0x03, 0x0f, 0x00, 0x48, 0x04, 0x50, 0x06
-	.byte 0x48, 0x07, 0x30, 0x06, 0x90, 0x00, 0x1f, 0x06
-	.byte 0x90, 0x01, 0x1f, 0x06, 0x90, 0x03, 0x02, 0x06
-	.byte 0x60, 0x01, 0xc0, 0x06, 0x70, 0x00, 0x07, 0x06
-	.byte 0x70, 0x02, 0xff, 0x06, 0x98, 0x0b, 0xc0, 0x06
-	.byte 0x98, 0x01, 0x7f, 0x06, 0x98, 0x02, 0x80, 0x06
-	.byte 0x98, 0x03, 0x01, 0x06, 0x10, 0x03, 0xff, 0x06
-	.byte 0x11, 0x03, 0xff, 0x06, 0x12, 0x03, 0xff, 0x06
-	.byte 0x13, 0x03, 0xff, 0x06, 0x14, 0x03, 0xff, 0x06
-	.byte 0x72, 0x03, 0xff, 0x06, 0x72, 0x07, 0x7f, 0x06
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xd7, 0xc4, 0xfc, 0x00
-	.byte 0xf3, 0xc4, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
-	.byte 0x0f, 0xc5, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x2b, 0xc5, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xb1, 0x10, 0x7f, 0x01, 0xb2, 0x10, 0x7f, 0x00
-	.byte 0xb3, 0x10, 0x7f, 0x02, 0x10, 0x04, 0x08, 0x03
-	.byte 0x10, 0x08, 0x7f, 0x04, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb1, 0x11, 0x7f, 0x01
-	.byte 0xb2, 0x11, 0x7f, 0x00, 0xb3, 0x11, 0x7f, 0x02
-	.byte 0x11, 0x04, 0x08, 0x03, 0x11, 0x08, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	.byte 0xb1, 0x12, 0x7f, 0x01, 0xb2, 0x12, 0x7f, 0x00
-	.byte 0xb3, 0x12, 0x7f, 0x02, 0x12, 0x04, 0x08, 0x03
-	.byte 0x12, 0x08, 0x7f, 0x04, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb1, 0x13, 0x7f, 0x01
-	.byte 0xb2, 0x13, 0x7f, 0x00, 0xb3, 0x13, 0x7f, 0x02
-	.byte 0x13, 0x04, 0x08, 0x03, 0x13, 0x08, 0x7f, 0x04
-	.fill 8, 1, 0xff
-	stdi8	(0x90f8), 255
-	ldb_d8	a, (0xfda1)
-	and	a, 63
-	ld	w, e
-	and	w, 192
-	or	a, w
-	stb_d8	(0xfda1), a
-	ld	e, a
-	stda16	(0x9127), bc
-	stda16	(0x9129), de
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	stdi8	(0x90f8), 255
-	stda16	(0x9127), bc
-	stda16	(0x9129), de
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	1434
-	ret
-
+	.incbin "includes/generated/v7_transplant_VoiceMode_ParamConfigTables.bin"
 MidiStream_ApplyPendingParams:
-	cpdi8 (0x8d34), 14
-	jr z, MidiStream_ApplyDone
-	stdi8 (0x90f8), 255
-	and d, 0x7
-	jr z, MidiStream_ApplyDone
-	call MIDI_WriteVoiceParamCC
-	ldb_d8 a, (0x912a)
-	and a, 0x7
-	jr z, MidiStream_CallFilterAndAudio
-	call ToneGen_DispatchByMode
-	ordi8 0x90f9, 1
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ApplyPendingParams.bin"
 MidiStream_CallFilterAndAudio:
 	call SwbtWr_WriteVoiceParam_PreserveRegs
 	call MIDI_WriteResetSequence
@@ -9949,179 +2655,14 @@ MidiStream_ApplyDone:
 	ret
 
 MidiStream_DispatchData:
-	calr	1382
-	ret
-	stdi8	(0x90f8), 255
-	call	MIDI_WriteVoiceParamDirect
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	1364
-	ret
-	cp	bc, 176
-	jr	z, 20
-	cp	c, 31
-	jr	ugt, 28
-	set	7, e
-	ld	xix, 0x94b2
-	.byte 0xf3
-	pop	sr
-	.byte 0xf0, 0xe4
-	ld	xiy, 0xf8f10d68
-	.byte 0x90
-	nop
-	swi	7
-	stb_d8	(0x8ee2), e
-	call	Audio_WriteBankSelectParams
-	ret
-	calr	1320
-	ret
-	cp	c, 176
-	jr	nz, 9
-	set	7, e
-	stb_d8	(0x94f2), e
-	jr	18
-	cp	b, 31
-	jr	ugt, 13
-	set	7, e
-	ld	xix, 0x9432
-	.byte 0xf3
-	pop	sr
-	.byte 0xf0, 0xe5
-	ld	xiy, 0x05031e0e
-	ret
-	cp	b, 31
-	jr	ugt, -10
-	set	7, e
-	ld	xix, 0x9472
-	sll	b, 1
-	.byte 0xf3
-	pop	sr
-	.byte 0xf0, 0xe5, 0x52
-	ret
-	calr	1257
-	ret
-	cp	b, 31
-	jr	ugt, -36
-	set	7, e
-	ld	xix, 0x9452
-	.byte 0xf3
-	pop	sr
-	.byte 0xf0, 0xe5
-	ld	xiy, 0x04d21e0e
-	ret
-	stdi8	(0x90f8), 255
-	ldw_d16	bc, (0x9644)
-	ldw_d16	de, (0x9646)
-	call	MIDI_WriteVoiceParamCC
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	1208
-	ret
-	stdi8	(0x90f8), 255
-	ldw_d16	wa, (0x9644)
-	stda16	(0x9127), wa
-	ldw_d16	wa, (0x9646)
-	stda16	(0x9129), wa
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	1178
-	ret
-	stdi8	(0x90f8), 255
-	ldw_d16	wa, (0x9644)
-	stda16	(0x9127), wa
-	ldw_d16	wa, (0x9646)
-	stda16	(0x9129), wa
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	1148
-	ret
-	ldw_d16	bc, (0x9644)
-	ldw_d16	de, (0x9646)
-	stdi8	(0x90f8), 255
-	stda16	(0x9127), bc
-	stda16	(0x9129), de
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ldb	e, 177
-	ldb_d8	d, (0x9645)
-	ldw	wa, 0x4000
-	call	SwbtWr_QueuePostEvent
-	ldb	e, 180
-	ldb_d8	d, (0x9645)
-	ldw	wa, 0x7f00
-	call	SwbtWr_QueuePostEvent
-	ldb	e, 178
-	ldb_d8	d, (0x9645)
-	ldw	wa, 0x7f00
-	call	SwbtWr_QueuePostEvent
-	ldb	e, 179
-	ldb_d8	d, (0x9645)
-	ldw	wa, 0x7f7f
-	call	SwbtWr_QueuePostEvent
-	ldb_d8	c, (0x9645)
-	ldb	b, 4
-	ldw	de, 2048
-	call	MIDI_WriteVoiceParamDirect
-	ldw_d16	de, (0x9127)
-	ldw_d16	wa, (0x9129)
-	call	SwbtWr_QueuePostEvent
-	stdi8	(0x912a), 0
-	xor	h, h
-	ldb_d8	l, (0x9645)
-	sla	hl, 1
-	ld	xix, 0x9674
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	push	sr
-	jrl	nc, 3711
-	calr	1015
-	ret
-	ldw_d16	bc, (0x9644)
-	ldw_d16	de, (0x9646)
-	stdi8	(0x90f8), 255
-	stda16	(0x9127), bc
-	stda16	(0x9129), de
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	985
-	ret
-	stdi8	(0x90f8), 255
-	ldw_d16	bc, (0x9644)
-	ldw_d16	de, (0x9646)
-	call	MIDI_WriteVoiceParamCC
-	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ret
-	calr	959
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiStream_DispatchData.bin"
 MidiStream_LoadAllPresets:
-	ld xiy, 0x9432
-	ldb w, 0xb3
-	calr MidiStream_LoadVoicePreset
-	calr MidiStream_LoadBankSelect
-	ld xiy, 0x9452
-	ldb w, 0xb2
-	calr MidiStream_LoadVoicePreset
-	calr MidiStream_LoadMultiPartPreset
-	calr MidiStream_LoadPedalPreset
-	ret
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadAllPresets.bin"
 MidiStream_LoadVoicePreset:
 	xor hl, hl
 
 MidiStream_LoadVoiceLoop:
-	ldb_sri A, 0x07, 0xf4, 0xec
-	bit 7, a
-	jr z, MidiStream_LoadVoiceNext
-	res 7, a
-	lda_dri XBC, 0x07, 0xf4, 0xec
-	stdi8 (0x90f8), 255
-	stb_d8 (0x9127), w
-	stb_d8 (0x9128), l
-	stb_d8 (0x9129), a
-	stdi8 (0x912a), 127
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadVoiceLoop.bin"
 MidiStream_LoadVoiceNext:
 	inc 1, hl
 	cp l, 0x1f
@@ -10129,41 +2670,14 @@ MidiStream_LoadVoiceNext:
 	ret
 
 MidiStream_LoadBankSelect:
-	ld xiy, 0x94f2
-	ld a, (xiy)
-	bit 7, a
-	jr z, MidiStream_LoadBankDone
-	res 7, a
-	ld (xiy), a
-	stb_d8 (0x8ee0), a
-	call Audio_WriteBankSelectParams
-	stdi8 (0x90f8), 255
-	stdi8 (0x9127), 176
-	stdi8 (0x9128), 1
-	stb_d8 (0x9129), a
-	stdi8 (0x912a), 127
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadBankSelect.bin"
 MidiStream_LoadBankDone:
 	ret
 
 MidiStream_LoadMultiPartPreset:
-	ld xiy, 0x9472
-	xor hl, hl
-	xor bc, bc
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadMultiPartPreset.bin"
 MidiStream_LoadMultiLoop:
-	ldw_sri WA, 0x07, 0xf4, 0xec
-	bit 7, a
-	jr z, MidiStream_LoadMultiNext
-	res 7, a
-	stw_dri WA, 0x07, 0xf4, 0xec
-	stdi8 (0x90f8), 255
-	ldb c, 0xb1
-	stda16 (0x9127), xbc
-	stda16 (0x9129), xwa
-	call SwbtWr_WriteParamBlockSafe
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadMultiLoop.bin"
 MidiStream_LoadMultiNext:
 	inc 1, b
 	inc 2, hl
@@ -10172,23 +2686,9 @@ MidiStream_LoadMultiNext:
 	ret
 
 MidiStream_LoadPedalPreset:
-	ld xiy, 0x94b2
-	xor hl, hl
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadPedalPreset.bin"
 MidiStream_LoadPedalLoop:
-	ldb_sri A, 0x07, 0xf4, 0xec
-	bit 7, a
-	jr z, MidiStream_LoadPedalNext
-	res 7, a
-	lda_dri XBC, 0x07, 0xf4, 0xec
-	stdi8 (0x90f8), 255
-	ld c, l
-	ldb b, 0x3
-	ld e, a
-	ldb d, 0x7f
-	call MIDI_WriteVoiceParamCC
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	.incbin "includes/generated/v7_transplant_MidiStream_LoadPedalLoop.bin"
 MidiStream_LoadPedalNext:
 	inc 1, hl
 	cp l, 0x1f
@@ -10196,37 +2696,11 @@ MidiStream_LoadPedalNext:
 	ret
 
 MidiStream_ProcessRxBuffer:
-	bitda 0, (0xb7e7)
-	jr nz, MidiStream_ProcessDone
-	bitda 4, (0xfd50)
-	jr nz, MidiStream_ProcessDone
-	stdi16 (0x9133), 0
-
+	.incbin "includes/generated/v7_transplant_MidiStream_ProcessRxBuffer.bin"
 MidiStream_DispatchLoop:
-	ld xix, 0xc039
-	ldw_d16 xhl, (0x9133)
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0xff
-	jr z, MidiStream_ProcessDone
-	cp a, 0xbf
-	jr ugt, MidiStream_AdvanceRxPtr
-	extz wa
-	sll wa, 2
-	ld xiy, MidiStream_HandleRunningStatus_0x98
-	ld_sril3 XIY, 0x07, 0xf4, 0xe0
-	cp xiy, 0xffffffff
-	jr z, MidiStream_AdvanceRxPtr
-	ldw_sri BC, 0x07, 0xf0, 0xec
-	inc 2, hl
-	stda16 (0x915b), xbc
-	ldw_sri DE, 0x07, 0xf0, 0xec
-	stda16 (0x915d), xde
-	call (xiy)
-
+	.incbin "includes/generated/v7_transplant_MidiStream_DispatchLoop.bin"
 MidiStream_AdvanceRxPtr:
-	incdi8 4, (0x9133)
-	jr MidiStream_DispatchLoop
-
+	.incbin "includes/generated/v7_transplant_MidiStream_AdvanceRxPtr.bin"
 MidiStream_ProcessDone:
 	ret
 
@@ -10255,119 +2729,19 @@ MidiStream_StatusJumpTable:
 	.long MidiStream_HandleSysMsg
 	.long MidiStream_HandleSysMsg
 MidiStream_HandleNoteCC:
-	ret
-	; --- Indexed dispatch: table lookup, conditional call paths (76 bytes) ---
-	cp c, 0x48
-	jr z, MidiStream_HandleNoteCC_Ret
-	extz	hl
-	ld l, c
-	sll	hl, 2
-	ldda32	xix, (0x90f2)
-	ld_rrl	xix, xix, hl
-	ld wa, (xix)
-	stda16	(0x90ea), wa
-	pushw wa
-	stb_d8	(0x90ec), c
-	call RegBitManip_Handler_4_0x8
-	popw wa
-	pushw hl
-	call MIDI_ParamValidate_CheckBit2
-	or	hl, hl
-	popw hl
-	jr nz, MidiStream_PostNoteCC
-	ld b, c
-	ldb c, 0x81
-	ldw_d16	de, (0x90ee)
-	call MIDI_ClearGuardAndDispatchCC
+	.incbin "includes/generated/v7_transplant_MidiStream_HandleNoteCC.bin"
 MidiStream_PostNoteCC:
-	ldb_d8	c, (0x915b)
-	xor b, b
-	ldb_d8	e, (0x90f0)
-	ldb d, 0xff
-	call MIDI_ClearGuardAndDispatchCC
+	.incbin "includes/generated/v7_transplant_MidiStream_PostNoteCC.bin"
 MidiStream_HandleNoteCC_Ret:
 	ret
 
 
 MidiStream_HandlePgmChange:
-	ld	a, d
-	and	a, 127
-	jr	z, 32
-	extz	hl
-	ld	l, c
-	sll	hl, 2
-	ldda32	xix, (0x90f2)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 202
-	.byte 0x8f, 0xc3
-	pop	sr
-	.byte 0xf0, 0xec
-	ldb	e, 205
-	scc8	nc, d
-	ldb	d, 127
-	call	MIDI_ClearGuardAndDispatchCC
-	ret
+	.incbin "includes/generated/v7_transplant_MidiStream_HandlePgmChange.bin"
 MidiStream_HandleChanPressure:
-	and	de, 0x4848
-	and	e, d
-	bit	3, d
-	jr	z, 9
-	.byte 0xf1
-	swi	1
-	and	(xwa), bc
-	jr	z, 3
-	or	e, 8
-	ld	a, e
-	and	e, 72
-	jr	z, 30
-	extz	hl
-	ld	l, c
-	sll	hl, 2
-	ldda32	xix, (0x90f2)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 202
-	.byte 0x8f, 0xc3
-	pop	sr
-	.byte 0xf0, 0xec
-	ldb	e, 204
-	muls8rr	w, d
-	call	MIDI_ClearGuardAndDispatchCC
-	ret
+	.incbin "includes/generated/v7_transplant_MidiStream_HandleChanPressure.bin"
 MidiStream_HandleSysMsg:
-	cps	d, 0
-	jr	z, 27
-	extz	hl
-	ld	l, c
-	sll	hl, 2
-	ldda32	xix, (0x90f2)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 202
-	.byte 0x8f, 0xc3
-	pop	sr
-	.byte 0xf0, 0xec
-	ldb	e, 29
-	swi	6
-	cp	(xbc), xix
-	ret
-	extz	hl
-	ld	l, b
-	cps	l, 3
-	jr	ugt, 31
-	sll	hl, 2
-	ld	xix, MidiStream_SysExJumpTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 180
-	.byte 0xd8
-
-
+	.incbin "includes/generated/v7_transplant_MidiStream_HandleSysMsg.bin"
 MidiStream_SysExJumpTable:
 	.long MidiStream_HandleRunningStatus
 	.long MidiStream_SysExNop
@@ -10376,28 +2750,7 @@ MidiStream_SysExJumpTable:
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	ret
-	jr	z, 18
-	and	d, 7
-	jr	z, 13
-	ldb_d8	e, (0xfc5d)
-	and	e, 7
-	ldb	d, 7
-	call	MIDI_ClearGuardAndDispatchCC
-	ret
-	extz	hl
-	ld	l, b
-	cps	l, 1
-	jr	ugt, 23
-	sll	hl, 2
-	ld	xix, MidiStream_CtrlJumpTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 180
-	.byte 0xd8
+	.incbin "includes/generated/v7_transplant_MidiStream_SysExData.bin"
 MidiStream_CtrlJumpTable:
 	.long MidiStream_CtrlNop
 	.long MidiStream_CtrlData
@@ -10452,20 +2805,7 @@ MidiStream_CmdMaskedNotify:
 MidiStream_CmdMaskedDone:
 	ret
 MidiStream_CmdPedalNotify:
-	; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
-	cpdi8	(0x8d34), 14
-	jr z, MidiStream_CmdPedalDone
-	bitda	3, (0xfd50)
-	jr z, MidiStream_CmdPedalDone
-	and e, 0x7f
-	jr z, MidiStream_CmdPedalDone
-	lds	bc, 0
-	ldb_d8	e, (0xfd97)
-	and e, 0x7f
-	dec 1, e
-	ldb d, 0x7f
-	call MIDI_ClearGuardAndDispatchCC
-; === v7-specific block: MidiStream_CmdPedalDone (924 bytes) ===
+	.incbin "includes/generated/v7_transplant_MidiStream_CmdPedalNotify.bin"
 MidiStream_CmdPedalDone:
 	.incbin "includes/generated/v7_block_midistream_cmdpedaldone.bin"
 ; === end v7 block ===
