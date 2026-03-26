@@ -247,10 +247,7 @@ MIDI_PopIzRet:
 MidiCC_SyncForceResync:
 	.incbin "includes/generated/v7_transplant_MidiCC_SyncForceResync.bin"
 MidiCC_ResetState:
-	stdi8 (0x8e94), 255
-	stdi8 (0x8ec4), 0
-	ret
-
+	.incbin "includes/generated/v7_fix_midicc_resetstate.bin"
 	.include "midi/midi_encoder_routines.s"
 
 MidiParam_ForceResync:

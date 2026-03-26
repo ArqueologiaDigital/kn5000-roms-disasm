@@ -1519,29 +1519,5 @@ VoiceParam_MultiBlock_Ret:
 VoiceParam_MultiBlock_Epilogue_Data:
 	.incbin "includes/generated/v7_transplant_VoiceParam_MultiBlock_Epilogue_Data.bin"
 VoiceParam_LookupAndEnqueue:
-	lda xsp, (xsp - 12)
-	push xiz
-	ld xiz, xwa
-	lda xbc, (xsp + 12)
-	lda xde, (xiz + 6)
-	ld a, (xde)
-	ld (xbc), a
-	lda xhl, (xiz + 7)
-	ld a, (xhl)
-	ld (xbc + 1), a
-	ld a, (xde)
-	ld c, (xhl)
-	call Part_LookupTableEntry
-	lda xbc, (xsp + 12)
-	ld (xbc + 2), l
-	ld a, (xiz + 8)
-	ld (xbc + 3), a
-	lda xwa, (xsp + 4)
-	ld (xwa), xbc
-	ld (xwa + 4), xiz
-	calr MidiPkt_EnqueueControl_3354
-	pop xiz
-	lda xsp, (xsp + 12)
-	ret
-
+	.incbin "includes/generated/v7_fix_voiceparam_lookupandenqueue.bin"
 	.include "midi/midipkt_routines.s"

@@ -744,19 +744,7 @@ DSPCfg_EventType51:
 DSPCfg_Epilogue:
 	.incbin "includes/generated/v7_transplant_DSPCfg_Epilogue.bin"
 DSPCfg_ReturnValueTable:
-	ret
-	ldw	hl, 256
-	ret
-	ldw	hl, 0xffff
-	ret
-	ldw	hl, 0xffff
-	ret
-	ldw	hl, 256
-	ret
-	ldw	hl, 256
-	ret
-
-
+	.incbin "includes/generated/v7_fix_dspcfg_returnvaluetable.bin"
 	.include "boot/screen_group_dispatch.s"
 
 AudioInit_ProcessModeChange:
