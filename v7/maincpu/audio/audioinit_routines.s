@@ -276,29 +276,4 @@ AudioInit_Volume_Next:
 AudioInit_Volume_Return:
 	.incbin "includes/generated/v7_transplant_AudioInit_Volume_Return.bin"
 AudioInit_InitPartSendLevels:
-	lds	de, 0
-	cp	de, 161
-	jr	nc, 38
-	ld	wa, de
-	add	wa, wa
-	lda_d16	xbc, (0xc62a)
-	extz	xwa
-	add	xwa, xbc
-	ld	(xwa), 16
-	ld	wa, de
-	add	wa, wa
-	lda_d16	xbc, (0xc62b)
-	extz	xwa
-	add	xwa, xbc
-	ld	(xwa), 0
-	inc	1, de
-	cp	de, 161
-	jr	c, -38
-	stdi8	(0xca6a), 8
-	stdi8	(0xca6b), 0
-	stdi8	(0xca6c), 8
-	stdi8	(0xca6d), 0
-	stdi8	(0xca6e), 16
-	stdi8	(0xca6f), 0
-	ret
-
+	.incbin "includes/generated/v7_block_audioinit_initpartsendlevels.bin"

@@ -2110,38 +2110,7 @@ EmptyRoutine_03:
 ; Called after preset loads: 0x4002 for reverb, 0x4006 for EQ.
 ; Args: xwa = parameter ID
 SoundParam_NotifyChange:
-	lda xsp, (xsp - 10)
-	push xiz
-	ld (xsp + 10), de
-	ld (xsp + 12), bc
-	ldw (xsp + 4), 0x0
-	ld xiz, xwa
-	lds32 xwa, 0
-	ld (xsp + 6), xwa
-	ld xhl, xiz
-	and xhl, 0xff
-	ld xwa, xhl
-	sll xwa, 9
-	add xwa, xhl
-	ld xhl, xiz
-	srl xhl, 8
-	and xhl, 0xff
-	add xhl, xwa
-	ld xwa, xhl
-	sll xwa, 9
-	add xwa, xhl
-	ld xhl, xiz
-	srl xhl, 0
-	and xhl, 0x1f
-	add xhl, xwa
-	ld xwa, xhl
-	ld xbc, 0x7ff
-	call DivMod32
-	ld ix, hl
-	jr SndParam_ProbeEntry
-
-
-; --- Sound Parameters, MIDI Serial, DSP & Voice Mapping ---
+	.incbin "includes/generated/v7_block_soundparam_notifychange.bin"
 	.include "audio/sndparam_routines.s"
 
 ; MIDI Serial Communication routines (SC0)

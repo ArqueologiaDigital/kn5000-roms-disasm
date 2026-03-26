@@ -39,11 +39,4 @@ ScreenGroup_FinalInit:
 ScreenGroup_InitWordPairsLoop:
 	.incbin "includes/generated/v7_transplant_ScreenGroup_InitWordPairsLoop.bin"
 ScreenGroup_InitFinalize:
-	stdi8 (0xca6a), 8
-	stdi8 (0xca6b), 0
-	stdi8 (0xca6c), 8
-	stdi8 (0xca6d), 0
-	stdi8 (0xca6e), 16
-	stdi8 (0xca6f), 0
-	jp COMM_SendDataReturn
-
+	.incbin "includes/generated/v7_block_screengroup_initfinalize.bin"
