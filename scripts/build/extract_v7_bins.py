@@ -158,6 +158,8 @@ if os.path.exists(elf_for_addrs):
         ('v7_block_seqch_loaddata_checkbass.bin', 'SeqCh_LoadData_CheckBass', 107),
         ('v7_block_seqload_processepilogue.bin', 'SeqLoad_ProcessEpilogue', 88),
         ('v7_block_seqstep_voicereassignexit.bin', 'SeqStep_VoiceReassignExit', 120),
+        
+        # Interrupt vector trampolines: extracted at MidiStream end
         ('v7_block_sebitmap_envcurve5.bin', 'SeBitmap_EnvCurve5', 8055),
         ('v7_block_semenu_comparescreen_datatable.bin', 'SeMenu_CompareScreen_DataTable', 672),
         ('v7_block_accscreen_uidatablock.bin', 'AccScreen_UIDataBlock', 2096),
@@ -303,6 +305,16 @@ if os.path.exists(elf_for_addrs):
             bin_path = os.path.join(gen_dir, bin_name)
             with open(bin_path, 'wb') as f:
                 f.write(data)
+
+
+    # Interrupt vector trampolines: fixed offset after MidiStream_HandleRunningStatus
+    midi_addr = elf_addrs.get('MidiStream_HandleRunningStatus')
+    if midi_addr:
+        tramp_off = midi_addr + 1444 - 0xe00000
+        tramp_data = v7_rom[tramp_off:tramp_off+525]
+        tramp_path = os.path.join(gen_dir, 'v7_block_interrupt_vector_trampolines.bin')
+        with open(tramp_path, 'wb') as f:
+            f.write(tramp_data)
 
     print(f"Extracted {len(v7_code_blocks)} v7-specific code blocks (using {os.path.basename(elf_for_addrs)})")
 
