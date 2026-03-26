@@ -6623,13 +6623,4 @@ AccDisplay_RefreshDone:
 	ret
 
 AccState_ReadAccompParams:
-	ldb a, 0x0
-	ei 6
-	stb_d8 (1124), a
-	ldb_d8 a, (1046)
-	stb_d8 (0x3280), a
-	ldb_d8 a, (1076)
-	stb_d8 (0x32b4), a
-	ldb_d8 a, (1077)
-	stb_d8 (0x32b3), a
-	ldb_d8 a, (1045)
+	.incbin "includes/generated/v7_fix_accstate_readaccompparams.bin"
