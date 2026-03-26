@@ -109,3 +109,44 @@ for bin_name, rom_start, rom_end in v7_data_extractions:
         f.write(data)
 
 print(f"Extracted {len(v7_data_extractions)} v7-specific data bins")
+
+# V7-specific code blocks: regions where v7 has different code than v9.
+# Extracted at the same ROM addresses (shift=0) with same sizes as v9 code.
+v9_elf = 'rebuilt_ROMs/kn5000_v9_program.llvm.elf'
+if os.path.exists(v9_elf):
+    v9_result = subprocess.run(['/mnt/shared/llvm-project/build/bin/llvm-nm', '--no-sort', v9_elf],
+        capture_output=True, text=True)
+    v9_addrs = {}
+    for line in v9_result.stdout.strip().split('\n'):
+        parts = line.strip().split()
+        if len(parts) >= 3:
+            try: v9_addrs[parts[2]] = int(parts[0], 16)
+            except: pass
+
+    v7_code_blocks = [
+        ('v7_block_bitmapout_snapshot_execute.bin', 'BitMapOut_Snapshot_Execute', 303),
+        ('v7_block_bitmapout_copyexttable_check.bin', 'BitMapOut_CopyExtTable_Check', 315),
+        ('v7_block_acmststylealp_boundary.bin', 'AcMstStyleAlp_Boundary', 497),
+        ('v7_block_fileio_loadsongregion8.bin', 'FileIO_LoadSongRegion8', 372),
+        ('v7_block_midistream_cmdpedaldone.bin', 'MidiStream_CmdPedalDone', 924),
+        ('v7_block_midistream_handlerunningstatus.bin', 'MidiStream_HandleRunningStatus', 919),
+        ('v7_block_sprintf_decexp_applysign.bin', 'Sprintf_DecExp_ApplySign', 27),
+        ('v7_block_uistateevt_transposeupdate.bin', 'UIStateEvt_TransposeUpdate', 3812),
+        ('v7_block_seqplay_voicechannelcfg.bin', 'SeqPlay_VoiceChannelCfg', 333),
+        ('v7_block_seqtimerflags_checksysflag.bin', 'SeqTimerFlags_CheckSysFlag', 157),
+        ('v7_block_seqchload_setupandcopy.bin', 'SeqChLoad_SetupAndCopy', 161),
+        ('v7_block_seqch_loaddata_checkbass.bin', 'SeqCh_LoadData_CheckBass', 107),
+        ('v7_block_seqload_processepilogue.bin', 'SeqLoad_ProcessEpilogue', 88),
+        ('v7_block_seqstep_voicereassignexit.bin', 'SeqStep_VoiceReassignExit', 120),
+    ]
+
+    for bin_name, label, size in v7_code_blocks:
+        addr = v9_addrs.get(label)
+        if addr:
+            rom_off = addr - 0xe00000
+            data = v7_rom[rom_off:rom_off + size]
+            bin_path = os.path.join(gen_dir, bin_name)
+            with open(bin_path, 'wb') as f:
+                f.write(data)
+
+    print(f"Extracted {len(v7_code_blocks)} v7-specific code blocks")
