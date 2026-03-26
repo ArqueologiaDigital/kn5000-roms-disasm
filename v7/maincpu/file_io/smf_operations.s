@@ -454,43 +454,4 @@ DisplaySmfSequenceList:
 	lds iz, 0
 
 DispSeqList_LoopBody:
-	ld de, iz
-	sll de, 5
-	lda_d16 xbc, (0x850c)
-	extz xde
-	add xde, xbc
-	stb_erp A, 0xf8
-	ld (xde), a
-	ld wa, (xsp + 2)
-	add wa, iz
-	call FileIO_GetWallpaperEntry
-	ld xbc, xhl
-	ld wa, iz
-	sll wa, 5
-	lds de, 1
-	add de, wa
-	lda_d16 xhl, (0x850c)
-	ld wa, de
-	extz xwa
-	add xwa, xhl
-	ld de, (xsp + 2)
-	add de, iz
-	inc 1, de
-	pushw 0xc
-	pushw 0x1
-	call FileIO_ReadHeader_ParseLoop
-	ld de, iz
-	sll de, 5
-	lda_d16 xbc, (0x850c)
-	extz xde
-	add xde, xbc
-	ld xwa, (xsp + 4)
-	ld xbc, 0x1c0000f
-	call ApPostEvent
-	inc 1, iz
-	cp iz, 0xa
-	jr lt, DispSeqList_LoopBody
-	popw iz
-	inc 6, xsp
-	ret
-
+	.incbin "includes/generated/v7_fix_dispseqlist_loopbody.bin"

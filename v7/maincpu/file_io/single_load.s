@@ -323,17 +323,4 @@ BuildSlotLabel_WriteColon:
 	stib_dsp 0xf8, 0x3a
 
 BuildSlotLabel_WriteContent:
-	ld xwa, xiz
-	ldw de, 0x10
-	call FileIO_CopyString_WriteNull
-	ld (xiz + 16), 0x0
-	ld wa, (xsp + 4)
-	mul wa, 0x15
-	lda_d16 xbc, (0x8202)
-	extz xwa
-	add xwa, xbc
-	ld xhl, xwa
-	pop xiz
-	inc 2, xsp
-	ret
-
+	.incbin "includes/generated/v7_fix_buildslotlabel_writecontent.bin"

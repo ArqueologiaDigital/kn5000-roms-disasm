@@ -127,13 +127,4 @@ Encoder_ApplySystemModeSettings:
 Encoder_ConfigureVolumeMode:
 	.incbin "includes/generated/v7_transplant_Encoder_ConfigureVolumeMode.bin"
 Encoder_ConfigureRangeLimit:
-	ldb_d8 a, (0xc07f)
-	res 7, a	; Clear bit 7
-	cps a, 0
-	ret z	; Return if zero
-	ldb_d8 a, (0xc07e)
-	res 7, a	; Clear bit 7
-	stb_d8 (0x8ede), a; Set range limit
-	ret
-
-; End of MIDI encoder routines
+	.incbin "includes/generated/v7_fix_encoder_configurerangelimit.bin"

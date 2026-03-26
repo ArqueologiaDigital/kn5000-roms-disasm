@@ -427,8 +427,7 @@ Sprintf_ESci_RoundLoop:
 Sprintf_ESci_AfterRound:
 	.incbin "includes/generated/v7_transplant_Sprintf_ESci_AfterRound.bin"
 Sprintf_ESci_AfterRound_NoCase:
-	ld a, (xsp + 10)
-
+	.incbin "includes/generated/v7_fix_sprintf_esci_afterround_nocase.bin"
 Sprintf_ESci_StripTrailZeros:
 	.incbin "includes/generated/v7_transplant_Sprintf_ESci_StripTrailZeros.bin"
 Sprintf_ESci_StripLoop:

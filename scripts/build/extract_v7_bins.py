@@ -158,6 +158,12 @@ if os.path.exists(elf_for_addrs):
         ('v7_block_seqch_loaddata_checkbass.bin', 'SeqCh_LoadData_CheckBass', 107),
         ('v7_block_seqload_processepilogue.bin', 'SeqLoad_ProcessEpilogue', 88),
         ('v7_block_seqstep_voicereassignexit.bin', 'SeqStep_VoiceReassignExit', 120),
+        ('v7_fix_buildslotlabel_writecontent.bin', 'BuildSlotLabel_WriteContent', 34),
+        ('v7_fix_sprintf_esci_afterround_nocase.bin', 'Sprintf_ESci_AfterRound_NoCase', 3),
+        ('v7_fix_encoder_configurerangelimit.bin', 'Encoder_ConfigureRangeLimit', 23),
+        ('v7_fix_dispseqlist_loopbody.bin', 'DispSeqList_LoopBody', 102),
+        ('v7_fix_initializetoshi.bin', 'InitializeToshi', 3381),
+        ('v7_fix_sndparam_heapallocok.bin', 'SndParam_HeapAllocOK', 13),
         
         # Interrupt vector trampolines: extracted at MidiStream end
         ('v7_block_sebitmap_envcurve5.bin', 'SeBitmap_EnvCurve5', 8055),

@@ -289,11 +289,4 @@ SndParam_HeapAlloc:
 SndParam_HeapAllocFail:
 	.incbin "includes/generated/v7_transplant_SndParam_HeapAllocFail.bin"
 SndParam_HeapAllocOK:
-	ld de, (xbc)
-	extz xde
-	inc 2, xde
-	ld xhl, xbc
-	add xhl, xde
-	add (xbc), wa
-	ret
-
+	.incbin "includes/generated/v7_fix_sndparam_heapallocok.bin"
