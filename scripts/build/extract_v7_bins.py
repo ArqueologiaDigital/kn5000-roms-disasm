@@ -266,7 +266,7 @@ if os.path.exists(elf_for_addrs):
         ('v7_block_midistream_handlerunningstatus_0x98.bin', 'MidiStream_HandleRunningStatus_0x98', 1292),
         # Code labels in source with v7-specific data
         ('v7_block_boot_readfdcstatus.bin', 'Boot_ReadFDCStatus', 5),
-        ('v7_block_initializescoop.bin', 'InitializeScoop', 3638),
+        # REMOVED 3638),
         ('v7_block_free_x.bin', 'free_X', 8),
         ('v7_block_accstate_readaccompparams.bin', 'AccState_ReadAccompParams', 43),
         ('v7_block_rhythm_tailpadding.bin', 'Rhythm_TailPadding', 5),
@@ -281,7 +281,7 @@ if os.path.exists(elf_for_addrs):
         ('v7_block_initializeroot.bin', 'InitializeRoot', 571),
         ('v7_block_rvari_select_checksamebank.bin', 'RVari_Select_CheckSameBank', 931),
         ('v7_block_actranspose_formatlabel.bin', 'AcTranspose_FormatLabel', 28),
-        ('v7_block_initializetoshi.bin', 'InitializeToshi', 3381),
+        # REMOVED 3381),
         ('v7_block_midicc_resetstate.bin', 'MidiCC_ResetState', 11),
         ('v7_block_encoder_configurerangelimit.bin', 'Encoder_ConfigureRangeLimit', 23),
         ('v7_block_soundparam_notifychange.bin', 'SoundParam_NotifyChange', 85),
