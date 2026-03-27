@@ -19,7 +19,24 @@
 ; =============================================================================
 
 TtComputerConnection:
-	.incbin "includes/generated/v7_transplant_TtComputerConnection.bin"
+	cp	xbc, 29360140
+	jr	z, 60
+	cp	xbc, 29360139
+	jr	z, 52
+	cp	xbc, 29360130
+	jr	z, 44
+	cp	xbc, 29360129
+	jr	nz, 36
+	or	xde, xde
+	jr	nz, 32
+	call	16626534
+	cps	l, 0
+	jr	nz, 24
+	stdi8	(32422), 70
+	ld	xwa, 4294967295
+	ld	xbc, 29360150
+	ld	xde, 27263214
+	call	16421701
 ComputerConnectionTitleExit:
 	lds32 xhl, 0
 	ret
@@ -48,13 +65,56 @@ MdCmptCnctFunc:
 	jrl MdCmptCnct_Epilogue
 
 CmptCnctDrawConnectionDiagram:
-	.incbin "includes/generated/v7_transplant_CmptCnctDrawConnectionDiagram.bin"
+	ld	bc, (xhl+4)
+	ld	xwa, (xhl+8)
+	cps	bc, 2
+	jr	z, 66
+	cps	bc, 1
+	jr	z, 33
+	cps	bc, 0
+	jr	nz, 87
+	pushw	231
+	pushw	63560
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	lda	xwa, (xsp+4)
+	pushw	108
+	ld	xbc, 15091570
+	ldw	de, 296
+	jr	85
 CmptCnct_DrawDiagram1:
-	.incbin "includes/generated/v7_transplant_CmptCnct_DrawDiagram1.bin"
+	pushw	231
+	pushw	63586
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	lda	xwa, (xsp+4)
+	pushw	108
+	ld	xbc, 15123538
+	ldw	de, 296
+	jr	56
 CmptCnct_DrawDiagram2:
-	.incbin "includes/generated/v7_transplant_CmptCnct_DrawDiagram2.bin"
+	pushw	231
+	pushw	63612
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	lda	xwa, (xsp+4)
+	pushw	108
+	ld	xbc, 15155506
+	ldw	de, 296
+	jr	27
 CmptCnct_DrawDiagramDefault:
-	.incbin "includes/generated/v7_transplant_CmptCnct_DrawDiagramDefault.bin"
+	pushw	231
+	pushw	63638
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	lda	xwa, (xsp+4)
+	pushw	108
+	ld	xbc, 15091570
+	ldw	de, 296
 CmptCnctBitmapDrawComplete:
 	call DrawBitmapSPFast
 	ld xhl, xiz
@@ -121,7 +181,10 @@ PcgMode_CopyStrEntry:
 	push xbc
 
 PcgMode_CallStrcpy:
-	.incbin "includes/generated/v7_transplant_PcgMode_CallStrcpy.bin"
+	call	16713584
+	inc	8, xsp
+	ld	xhl, xiz
+	jr	9
 PcgMode_InvalidReturn:
 	ld xhl, 0x2201
 	jr MdPcgMode_Epilogue
@@ -182,7 +245,10 @@ DrumType_CopyStrEntry:
 	push xbc
 
 DrumType_CallStrcpy:
-	.incbin "includes/generated/v7_transplant_DrumType_CallStrcpy.bin"
+	call	16713584
+	inc	8, xsp
+	ld	xhl, xiz
+	jr	9
 DrumType_InvalidReturn:
 	ld xhl, 0x2205
 	jr MdDrumType_Epilogue
@@ -214,7 +280,23 @@ MdSetupLoadFunc:
 	lda_24 xix, (SetupLoadOptionJumpTable)
 	jp_ind 8, 0x07, 0xf0, 0xec
 SetupLoadOptionJumpTable:
-	.incbin "includes/generated/v7_transplant_SetupLoadOptionJumpTable.bin"
+	ld	xwa, (xde+14)
+	and	xwa, 2
+	sll	xwa, 2
+	lda	xbc, (xsp+4)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	push	xwa
+	ld	xwa, (xde+18)
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	ld	xhl, xiz
+	jr	21
+	lds32	xhl, 2
+	jr	17
+	lds32	xhl, 3
+	jr	13
 SetupLoadInvalidIndex:
 	lds32 xhl, 0
 	jr MdSetupLoad_Epilogue

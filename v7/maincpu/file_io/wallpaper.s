@@ -8,9 +8,29 @@
 ; =============================================================================
 
 FmmWallpaperLoadFunc:
-	.incbin "includes/generated/v7_transplant_FmmWallpaperLoadFunc.bin"
+	.byte 0xef, 0x6e, 0x3e, 0xbf, 0x06, 0x62, 0xe9, 0x8e
+	.byte 0xe1, 0x14, 0x81, 0x20, 0xee, 0xcf, 0x18, 0x00
+	.byte 0xc0, 0x01, 0x76, 0xa5, 0x01, 0xee, 0xcf, 0x17
+	.byte 0x00, 0xc0, 0x01, 0x76, 0x9c, 0x01, 0xee, 0xcf
+	.byte 0x0b, 0x00, 0xc0, 0x01, 0x76, 0x7f, 0x01, 0xee
+	.byte 0xcf, 0x04, 0x00, 0xe5, 0x01, 0x76, 0x42, 0x01
+	.byte 0xee, 0xcf, 0x13, 0x00, 0xc0, 0x01, 0x7e, 0x45
+	.byte 0x03, 0xaf, 0x06, 0x20, 0xe8, 0xcf, 0x03, 0x00
+	.byte 0x00, 0x00, 0x76, 0x27, 0x01, 0xe8, 0xcf, 0x02
+	.byte 0x00, 0x00, 0x00, 0x7e, 0x30, 0x03, 0xf1, 0x62
+	.byte 0x84, 0x00, 0x00, 0xd8, 0xa9, 0x1e, 0x7d, 0xc8
+	.byte 0x40, 0x26, 0x00, 0x60, 0x00, 0x41, 0x01, 0x00
+	.byte 0xc0, 0x01, 0xea, 0xad, 0x1d, 0x4b, 0x99, 0xfa
+	.byte 0xd1, 0x64, 0x84, 0x3f, 0x00, 0x00, 0x69, 0x0d
+	.byte 0x1d, 0x13, 0x91, 0xf8, 0xdb, 0x12, 0xf1, 0x64
+	.byte 0x84, 0x53, 0x1e, 0xb4, 0xc8
 WPLoad_DispatchState:
-	.incbin "includes/generated/v7_transplant_WPLoad_DispatchState.bin"
+	.byte 0xd1, 0x64, 0x84, 0x20, 0xd8, 0xd9, 0x76, 0x9d
+	.byte 0x00, 0xd8, 0xd8, 0x66, 0x7f, 0xd8, 0xdd, 0x66
+	.byte 0x3a, 0xd1, 0x6e, 0x84, 0x3f, 0x00, 0x00, 0x69
+	.byte 0x13, 0x1d, 0x62, 0xad, 0xf8, 0xf1, 0x6e, 0x84
+	.byte 0x53, 0x1d, 0x80, 0x91, 0xf8, 0x1d, 0x2e, 0x91
+	.byte 0xf8, 0x1e, 0x88, 0xc8
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -22,7 +42,23 @@ WPLoad_ContinueWait:
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleCancel:
-	.incbin "includes/generated/v7_transplant_WPLoad_HandleCancel.bin"
+	ld	xwa, 6291494
+	ld	xbc, 29360130
+	lds32	xde, 0
+	call	16423243
+	ld	xwa, 4294967295
+	ld	xbc, 31457438
+	lds32	xde, 1
+	call	16423243
+	ldw	wa, 72
+	call	16355459
+	ld	xwa, 4294967295
+	ld	xbc, 31457438
+	lds32	xde, 0
+	call	16423243
+	stdi8	(32422), 0
+	ldw	wa, 238
+	jr	92
 WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -33,7 +69,23 @@ WPLoad_HandleError:
 	jrl WPLoad_Return
 
 WPLoad_HandleSuccess:
-	.incbin "includes/generated/v7_transplant_WPLoad_HandleSuccess.bin"
+	calr	51015
+	ld	xwa, 6291494
+	ld	xbc, 29360130
+	lds32	xde, 0
+	call	16423243
+	ld	xwa, 4294967295
+	ld	xbc, 31457438
+	lds32	xde, 1
+	call	16423243
+	ldw	wa, 72
+	call	16355459
+	ld	xwa, 4294967295
+	ld	xbc, 31457438
+	lds32	xde, 0
+	call	16423243
+	stdi8	(32422), 2
+	ldw	wa, 238
 WPLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 	jrl WPLoad_Return
@@ -43,13 +95,37 @@ WPLoad_HandleAbort:
 	jrl WPLoad_Return
 
 WPLoad_HandleSelection:
-	.incbin "includes/generated/v7_transplant_WPLoad_HandleSelection.bin"
+	ld	xwa, (xsp+6)
+	stda32	(33044), xwa
+	call	16296968
+	stda16	(33048), hl
+	cps	hl, 0
+	jr	ge, 6
+	stdi16	(33048), 0
 WPLoad_Selection_Positive:
-	.incbin "includes/generated/v7_transplant_WPLoad_Selection_Positive.bin"
+	ldw_d16	wa, (33048)
+	exts	xwa
+	divs	wa, 10
+	ld	de, qwa
+	exts	xde
+	ldda32	xwa, (33044)
+	ld	xbc, 31784962
+	jrl	468
 WPLoad_HandleShow:
-	.incbin "includes/generated/v7_transplant_WPLoad_HandleShow.bin"
+	ldw_d16	bc, (33048)
+	exts	xbc
+	divs	bc, 10
+	muls	bc, 10
+	calr	64979
+	jrl	452
 WPLoad_HandleScroll:
-	.incbin "includes/generated/v7_transplant_WPLoad_HandleScroll.bin"
+	.byte 0x41, 0x01, 0x00, 0xc5, 0x01, 0xea, 0xa9, 0x1d
+	.byte 0x4b, 0x99, 0xfa, 0xd1, 0x18, 0x81, 0x23, 0xbf
+	.byte 0x04, 0x53, 0xaf, 0x06, 0x20, 0xe8, 0xe0, 0x6e
+	.byte 0x2b, 0xee, 0x88, 0xe8, 0xcf, 0x18, 0x00, 0xc0
+	.byte 0x01, 0x6e, 0x0f, 0xdb, 0x88, 0xd8, 0x61, 0xd1
+	.byte 0x6e, 0x84, 0xf0, 0x79, 0xee, 0x00, 0xdb, 0x61
+	.byte 0x68, 0x47
 WPLoad_ScrollUp:
 	cp xwa, 0x1c00017
 	jrl nz, WPLoad_GetSelection
@@ -68,23 +144,124 @@ WPLoad_PageScroll:
 	jr WPLoad_StorePosition
 
 WPLoad_PageDown:
-	.incbin "includes/generated/v7_transplant_WPLoad_PageDown.bin"
+	ld	xwa, (xsp+6)
+	cp	xwa, 2
+	jr	nz, 69
+	ld	wa, hl
+	add	wa, 10
+	ldw_d16	de, (33902)
+	cp	wa, de
+	jr	ge, 13
+	add	hl, 10
 WPLoad_StorePosition:
-	.incbin "includes/generated/v7_transplant_WPLoad_StorePosition.bin"
+	stda16	(33048), hl
+	ld	bc, hl
+	jrl	158
 WPLoad_PageDown_Boundary:
-	.incbin "includes/generated/v7_transplant_WPLoad_PageDown_Boundary.bin"
+	ld	bc, de
+	dec	1, bc
+	ld	ix, bc
+	exts	xix
+	divs	ix, 10
+	exts	xhl
+	divs	hl, 10
+	cp	hl, ix
+	jrl	ge, 131
+	exts	xde
+	divs	de, 10
+	ld	wa, qde
+	cps	wa, 0
+	jr	z, 118
+	stda16	(33048), bc
+	jr	116
 WPLoad_OpLoad:
-	.incbin "includes/generated/v7_transplant_WPLoad_OpLoad.bin"
+	ld	xwa, (xsp+6)
+	cp	xwa, 3
+	jr	nz, 101
+	ld	xwa, 6291494
+	ld	xbc, 29360129
+	lds32	xde, 5
+	call	16423243
+	lds	wa, 0
+	calr	50767
+	call	16287614
+	ld	wa, hl
+	lds	bc, 1
+	calr	51406
+	stb_d8	(32422), l
+	calr	50841
+	ld	xwa, 6291494
+	ld	xbc, 29360130
+	lds32	xde, 0
+	call	16423243
+	ld	xwa, 4294967295
+	ld	xbc, 31457438
+	lds32	xde, 1
+	call	16423243
+	ldw	wa, 72
+	call	16355459
+	ld	xwa, 4294967295
+	ld	xbc, 31457438
+	lds32	xde, 0
+	call	16423243
+	ldw	wa, 238
+	call	16355504
 WPLoad_GetSelection:
-	.incbin "includes/generated/v7_transplant_WPLoad_GetSelection.bin"
+	ldw_d16	bc, (33048)
 WPLoad_UpdateDisplay:
-	.incbin "includes/generated/v7_transplant_WPLoad_UpdateDisplay.bin"
+	cp	(xsp+4), bc
+	jrl	z, 143
+	ld	wa, bc
+	call	16297188
+	ldw_d16	wa, (33048)
+	exts	xwa
+	divs	wa, 10
+	ld	de, qwa
+	exts	xde
+	ldda32	xwa, (33044)
+	ld	xbc, 31784962
+	call	16423243
+	ldw_d16	bc, (33048)
+	exts	xbc
+	divs	bc, 10
+	ld	de, (xsp+4)
+	exts	xde
+	divs	de, 10
+	ldda32	xwa, (33044)
+	cp	de, bc
+	jr	nz, 75
+	ld	bc, (xsp+4)
+	exts	xbc
+	divs	bc, 10
+	ld	bc, qbc
+	sll	bc, 5
+	lda_d16	xhl, (33904)
+	ld	de, bc
+	extz	xde
+	add	xde, xhl
+	ld	xbc, 29360143
+	call	16423243
+	ldw_d16	wa, (33048)
+	exts	xwa
+	divs	wa, 10
+	ld	wa, qwa
+	sll	wa, 5
+	lda_d16	xbc, (33904)
+	ld	de, wa
+	extz	xde
+	add	xde, xbc
+	ldda32	xwa, (33044)
+	ld	xbc, 29360143
+	call	16423243
+	jr	7
 WPLoad_RedrawPage:
 	muls bc, 0xa
 	calr DisplaySmfSequenceList
 
 WPLoad_SendState:
-	.incbin "includes/generated/v7_transplant_WPLoad_SendState.bin"
+	ldda32	xwa, (33044)
+	ld	xbc, 29687809
+	lds32	xde, 0
 WPLoad_DispatchWidget:
 	call ApPostEvent
 
@@ -95,7 +272,11 @@ WPLoad_Return:
 	ret
 
 WP_ScanAvailability:
-	.incbin "includes/generated/v7_transplant_WP_ScanAvailability.bin"
+	push	xiz
+	call	16289841
+	ld	qiz, hl
+	stdi16	(35162), 0
+	lds	iz, 0
 WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
@@ -127,7 +308,8 @@ WPScan_CheckAvail:
 	slla de
 
 WPScan_MarkAvailable:
-	.incbin "includes/generated/v7_transplant_WPScan_MarkAvailable.bin"
+	.byte 0xd1, 0x5a, 0x89, 0xea, 0xc1, 0x5c, 0x89, 0x3f
+	.byte 0x04, 0x6f, 0x64, 0x68, 0x69
 WPScan_TypeNotThree:
 	ld a, c
 	cps c, 2
@@ -149,7 +331,8 @@ WPScan_TypeNotThree:
 	slla de
 
 WPScan_TypeTwo_Mark:
-	.incbin "includes/generated/v7_transplant_WPScan_TypeTwo_Mark.bin"
+	.byte 0xd1, 0x5a, 0x89, 0xea, 0xc1, 0x5c, 0x89, 0x3f
+	.byte 0x04, 0x6f, 0x2b, 0x68, 0x30
 WPScan_TypeGeneric:
 	call FileIO_ValidateFileSignature
 	cps hl, 0
@@ -165,9 +348,10 @@ WPScan_TypeGeneric:
 	slla de
 
 WPScan_Generic_Mark:
-	.incbin "includes/generated/v7_transplant_WPScan_Generic_Mark.bin"
+	.byte 0xd1, 0x5a, 0x89, 0xea, 0xc1, 0x5c, 0x89, 0x3f
+	.byte 0x04, 0x67, 0x07
 WPScan_LimitReached:
-	.incbin "includes/generated/v7_transplant_WPScan_LimitReached.bin"
+	.byte 0xc7, 0xf8, 0x89, 0xf1, 0x5c, 0x89, 0x41
 WPScan_LoopContinue:
 	inc 1, iz
 	cps iz, 4
@@ -176,7 +360,17 @@ WPScan_LoopContinue:
 	ret
 
 WP_FindNextSlot:
-	.incbin "includes/generated/v7_transplant_WP_FindNextSlot.bin"
+	pushw	iz
+	ldb_d8	a, (35164)
+	cps	a, 4
+	jr	nc, 66
+	ldw_d16	bc, (35162)
+	cps	bc, 0
+	jr	z, 58
+	lds	iz, 1
+	extz	wa
+	ld	qbc, wa
+	lda_24	xde, (15337386)
 WPFind_SearchLoop:
 	stw_erp HL, 0xe6
 	add hl, iz
@@ -192,7 +386,11 @@ WPFind_SearchLoop:
 	slla iy
 
 WPFind_CheckSlot:
-	.incbin "includes/generated/v7_transplant_WPFind_CheckSlot.bin"
+	and	iy, bc
+	jr	z, 8
+	stb_d8	(35164), l
+	ldb	l, 1
+	jr	8
 WPFind_NextSlot:
 	inc 1, iz
 	cps iz, 4

@@ -559,7 +559,14 @@ SeqStep_DeletePopReturn:
 	ret
 
 SeqStep_TrackChange:
-	.incbin "includes/generated/v7_transplant_SeqStep_TrackChange.bin"
+	.byte 0xef, 0x6c, 0x3e, 0xf1, 0xa6, 0x7e, 0x00, 0x23
+	.byte 0xc1, 0x0c, 0x27, 0x23, 0xcb, 0xcf, 0x11, 0x6e
+	.byte 0x29, 0xc1, 0x0a, 0x27, 0x23, 0xc1, 0x08, 0x27
+	.byte 0xf3, 0x76, 0xc6, 0x03, 0xc1, 0x78, 0x28, 0x21
+	.byte 0xc7, 0xfb, 0x99, 0xcb, 0x69, 0xf1, 0x78, 0x28
+	.byte 0x43, 0x1d, 0xa1, 0xf8, 0xf3, 0xc7, 0xfb, 0x89
+	.byte 0xf1, 0x78, 0x28, 0x41, 0x1e, 0xaf, 0x03, 0x78
+	.byte 0xa8, 0x03
 SeqStep_TrackChangeCheck:
 	ldb_d8 e, (9992)
 	cpda8 e, 9994
@@ -658,7 +665,8 @@ SeqStep_TrackChangeNonDrum:
 	jr nz, SeqStep_TrackChangeLoopDone
 
 SeqStep_TrackChangeLoop:
-	.incbin "includes/generated/v7_transplant_SeqStep_TrackChangeLoop.bin"
+	stdi8	(32422), 15
+	jrl	240
 SeqStep_TrackChangeLoopCheck:
 	cp l, 0xd
 	jr nz, SeqStep_TrackChangeNext
@@ -754,7 +762,15 @@ SeqStep_TrackChangeComplete:
 	jr nz, SeqStep_TrackChangeFinal
 
 SeqStep_TrackChangeValidate:
-	.incbin "includes/generated/v7_transplant_SeqStep_TrackChangeValidate.bin"
+	ldb_d8	a, (9994)
+	dec	1, a
+	stb_d8	(10000), a
+	ldb_d8	a, (9998)
+	dec	1, a
+	stb_d8	(10010), a
+	calr	2668
+	stdi8	(32422), 15
+	jrl	448
 SeqStep_TrackChangeFinal:
 	call Part_ProcessAndDecrementVoice
 	ldw_erp HL, 0xfa
@@ -1005,7 +1021,11 @@ SeqStep_MultiTrackCopyCheck:
 	jr nz, SeqStep_PartCopy
 
 SeqStep_MultiTrackCleanup:
-	.incbin "includes/generated/v7_transplant_SeqStep_MultiTrackCleanup.bin"
+	.byte 0xc1, 0x78, 0x28, 0x21, 0xc7, 0xfb, 0x99, 0xc1
+	.byte 0x0a, 0x27, 0x21, 0xc9, 0x69, 0xf1, 0x78, 0x28
+	.byte 0x41, 0x1d, 0xa1, 0xf8, 0xf3, 0xc7, 0xfb, 0x89
+	.byte 0xf1, 0x78, 0x28, 0x41, 0xf1, 0xa6, 0x7e, 0x00
+	.byte 0x0f, 0x78, 0x5a, 0x02
 SeqStep_PartCopy:
 	call Part_ProcessAndDecrementVoice
 	ldw_erp HL, 0xfa
@@ -2986,7 +3006,23 @@ SeqStep_ReinitLoop:
 	ret
 
 SeqStep_MemAllocWrapper:
-	.incbin "includes/generated/v7_transplant_SeqStep_MemAllocWrapper.bin"
+	push	xiz
+	ld	wa, (xsp+8)
+	exts	xwa
+	push	xwa
+	pushw	0
+	call	16051728
+	inc	6, xsp
+	ld	xiz, xhl
+	or	xiz, xiz
+	jr	z, 16
+	ld	wa, (xsp+8)
+	pushw	wa
+	pushw	0
+	push	xiz
+	call	16713757
+	inc	8, xsp
+	jr	7
 SeqStep_MemAllocFail:
 	stiw_da (0x01e53c), 0x0003
 

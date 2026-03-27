@@ -65,7 +65,21 @@ FDTest_OpenFailed:
 	calr FDTest_PrintDiag
 
 FDTest_AllocBuffer:
-	.incbin "includes/generated/v7_transplant_FDTest_AllocBuffer.bin"
+	pushw	2048
+	call	16713379
+	inc	2, xsp
+	ld	(xsp+4), xhl
+	ld	xwa, xhl
+	or	xwa, xwa
+	jr	nz, 24
+	lda_24	xwa, (14810738)
+	calr	64885
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ldw	hl, 65535
+	jrl	357
 FDTest_FillBuffer:
 	ld xwa, (xsp + 4)
 	lds bc, 0
@@ -79,13 +93,91 @@ FDTest_FillLoop:
 	jr c, FDTest_FillLoop
 
 FDTest_OpenForWrite:
-	.incbin "includes/generated/v7_transplant_FDTest_OpenForWrite.bin"
+	lda_24	xwa, (14810758)
+	push	xwa
+	lda_24	xwa, (14810694)
+	push	xwa
+	call	16050067
+	inc	8, xsp
+	ld	xiz, xhl
+	or	xiz, xiz
+	jr	nz, 24
+	lda_24	xwa, (14810762)
+	calr	64815
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ldw	hl, 65535
+	jrl	287
 FDTest_WriteBuffer:
-	.incbin "includes/generated/v7_transplant_FDTest_WriteBuffer.bin"
+	lda_24	xwa, (14810786)
+	calr	64791
+	push	xiz
+	pushw	2048
+	pushw	1
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	16050869
+	lda	xsp, (xsp+12)
+	cp	hl, 2048
+	jr	z, 24
+	lda_24	xwa, (14810802)
+	calr	64759
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ldw	hl, 65535
+	jrl	231
 FDTest_CloseAndReopen:
-	.incbin "includes/generated/v7_transplant_FDTest_CloseAndReopen.bin"
+	lda_24	xwa, (14810810)
+	calr	64735
+	push	xiz
+	call	16051286
+	pushw	2048
+	pushw	0
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	16713757
+	lda	xsp, (xsp+12)
+	lda_24	xwa, (14810814)
+	calr	64705
+	lda_24	xwa, (14810828)
+	push	xwa
+	lda_24	xwa, (14810694)
+	push	xwa
+	call	16050067
+	inc	8, xsp
+	ld	xiz, xhl
+	or	xiz, xiz
+	jr	nz, 24
+	lda_24	xwa, (14810832)
+	calr	64673
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ldw	hl, 65535
+	jrl	145
 FDTest_ReadBack:
-	.incbin "includes/generated/v7_transplant_FDTest_ReadBack.bin"
+	push	xiz
+	pushw	2048
+	pushw	1
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	16050796
+	lda	xsp, (xsp+12)
+	cp	hl, 2048
+	jr	z, 23
+	lda_24	xwa, (14810856)
+	calr	64625
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ldw	hl, 65535
+	jr	98
 FDTest_VerifyData:
 	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1B2)
 	calr FDTest_PrintDiag
@@ -109,9 +201,26 @@ FDTest_CompareNext:
 	jr c, FDTest_CompareLoop
 
 FDTest_CompareResult:
-	.incbin "includes/generated/v7_transplant_FDTest_CompareResult.bin"
+	lda_24	xwa, (14810868)
+	calr	64559
+	cps	iz, 0
+	jr	z, 23
+	lda_24	xwa, (14810886)
+	calr	64547
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ldw	hl, 65535
+	jr	20
 FDTest_Pass:
-	.incbin "includes/generated/v7_transplant_FDTest_Pass.bin"
+	ld	xwa, (xsp+4)
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	lda_24	xwa, (14810902)
+	calr	64514
+	lds	hl, 0
 FDTest_Return:
 	pop xiz
 	inc 4, xsp
@@ -242,7 +351,14 @@ HamaListProc:
 	jr HamaList_Return
 
 HamaList_HandleSelect:
-	.incbin "includes/generated/v7_transplant_HamaList_HandleSelect.bin"
+	call	16408153
+	ld	xwa, xiz
+	push	xwa
+	ld	xwa, (xhl+42)
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	lds32	xhl, 0
 HamaList_Return:
 	pop xiz
 	ret
