@@ -7,7 +7,7 @@
 ; presses and dial events to the appropriate UI handlers.
 ; =============================================================================
 
-	call Strcpy
+	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 address)
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl

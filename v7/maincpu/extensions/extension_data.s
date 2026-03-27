@@ -2454,7 +2454,7 @@ NakaInstTable8_NullTerm:
 	nop
 	.byte 0x7f
 	nop
-	.long Naka_PresentationRootState
+	.long 0x00EF013F	; Naka_PresentationRootState (v7 address, v9=0x00EF0115)
 	stib_dsp 0x00, 0x00
 	nop
 	nop

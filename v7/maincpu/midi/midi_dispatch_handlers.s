@@ -206,7 +206,7 @@ MidiCC_ChannelDispatch_TableA_Ret:
 MidiCC_ChannelDispatch_Ctrl40:
 	.incbin "includes/generated/v7_transplant_MidiCC_ChannelDispatch_Ctrl40.bin"
 BitMask_Ctrl40_ConfigExit:
-	ret
+	.byte 0x21
 
 MidiCC_ChannelDispatch_Ctrl41:
 	.incbin "includes/generated/v7_transplant_MidiCC_ChannelDispatch_Ctrl41.bin"

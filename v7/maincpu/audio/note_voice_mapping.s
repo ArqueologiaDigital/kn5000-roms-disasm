@@ -3839,7 +3839,7 @@ HdaeRom_AltDispatch_SetWord:
 HdaeRom_AltDispatch_Block:
 	.incbin "includes/generated/v7_transplant_HdaeRom_AltDispatch_Block.bin"
 PreTmLoad:
-	ret
+	nop
 
 PostTmLoad:
 	.incbin "includes/generated/v7_transplant_PostTmLoad.bin"

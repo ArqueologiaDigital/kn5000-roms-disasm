@@ -1092,11 +1092,11 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	Math_DivideSigned32
+	.byte 0x1d, 0x31, 0x04, 0xff	; call Math_DivideSigned32 (v7)
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	Math_MultiplyAccumulate
+	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7)
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc
@@ -1248,7 +1248,7 @@ Voice_FactoryPresetData:
 	ldw	wa, 16
 	calr	38654
 	ld	xwa, xhl
-	lda_24	xbc, (16452973)
+	lda_24	xbc, (16451936)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -1869,7 +1869,7 @@ TextRender_XorMode_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	.include "display/graphics_text_vga.s"
-	call Sprintf_Locked
+	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 address)
 	lda xsp, (xsp + 12)
 
 ChordProc_SendRefreshEvent:

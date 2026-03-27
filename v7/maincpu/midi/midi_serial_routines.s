@@ -200,7 +200,7 @@ ChanDisp_ThreeByteRoute:
 ChanDisp_EnqueueThreeBytes:
 	.incbin "includes/generated/v7_transplant_ChanDisp_EnqueueThreeBytes.bin"
 ChanDisp_NoteOnZeroReturn:
-	ret
+	.byte 0xf4
 
 ChanDisp_QueueOverflowSet:
 	.incbin "includes/generated/v7_transplant_ChanDisp_QueueOverflowSet.bin"
@@ -255,8 +255,7 @@ MIDI_SC0_ENABLE_TX:
 SC0TxEnable_MidiActivePath:
 	.incbin "includes/generated/v7_transplant_SC0TxEnable_MidiActivePath.bin"
 SC0TxEnable_Return:
-	pop	sr
-	ret
+	.byte 0x6e, 0x13
 
 ; End of MIDI Serial routines
 

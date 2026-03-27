@@ -2780,7 +2780,7 @@ TuningSys_Param_01:
 	jp	0xb50a
 	ld	xhl, 0xc800f900
 	nop
-	.byte 0xa9
+	.byte 0x7f
 	ldw	de, 241
 TuningSystem_Handler_Table:
 	.incbin "includes/generated/v7_fix_tuningsystem_handler_table.bin"
