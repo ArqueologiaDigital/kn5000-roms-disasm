@@ -6461,20 +6461,5 @@ NumToAscii_PadTens:
 	ld (xbc), 0x20
 
 NumToAscii_OnesDigitAndFinish:
-	ld bc, ix
-	inc 1, ix
-	lda_d16 xhl, (0x7f4a)
-	extz xbc
-	add xbc, xhl
-	add a, 0x30
-	ld (xbc), a
-	ld wa, ix
-	extz xwa
-	add xwa, xhl
-	ld (xwa), 0x0
-	pop xiz
-	ret
-
-
-; File I/O and Disk Operations routines (split into file_io/ subdirectory)
+	.incbin "includes/generated/v7_fix_numtoascii_onesdigitandfinish.bin"
 	.include "file_io/title_handlers.s"

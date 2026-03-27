@@ -440,13 +440,7 @@ FactoryReset_TrailingByte:
 	ret
 
 Boot_ReadFDCStatus:
-	ldb_d8 l, (36458)
-	ret
-
-; =============================================================================
-; Shared boot routines (Detect_Region_Code, Get_Region_Code, handlers)
-; Uses REGION_CODE_VAR and BOOT_ENTRY_POINT defined at top of file
-; =============================================================================
+	.incbin "includes/generated/v7_fix_boot_readfdcstatus.bin"
 	.include "shared/boot_routines.s"
 
 ; =============================================================================
@@ -883,13 +877,7 @@ SetGlobalError:
 malloc_X:
 	.incbin "includes/generated/v7_transplant_malloc_X.bin"
 free_X:
-	push xwa
-	call Free
-	inc 4, xsp
-	ret
-
-
-; --- Wallpaper & Demo Routines ---
+	.incbin "includes/generated/v7_fix_free_x.bin"
 	.include "ui/setwall_routines.s"
 	.include "ui/ui_playback_modes.s"
 	.include "demo/demo_routines.s"
@@ -950,14 +938,7 @@ Voice_InitBankTables_Loop:
 	ldb a, 0x39
 
 Voice_InitBankTables_SlotLoop:
-	ld xiy, Voice_SlotTemplate
-	ldw bc, 0x80
-	ldirw
-	dec 1, a
-	jr nz, Voice_InitBankTables_SlotLoop
-	stdi16 (32280), 57
-	ret
-
+	.incbin "includes/generated/v7_fix_voice_initbanktables_slotloop.bin"
 	.include "audio/voice_bank_defaults.s"
 Voice_InitBankData:
 	calr Voice_InitBankTables
@@ -2093,9 +2074,7 @@ CPanel_KeyProcessing_Wrapper:
 
 
 EmptyRoutine_03:
-	ret
-
-
+	.incbin "includes/generated/v7_fix_emptyroutine_03.bin"
 	.include "ui/cpanel_routines.s"
 
 

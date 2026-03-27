@@ -1858,7 +1858,7 @@ ParamStr24_window:	aligned_string "window"
 ParamStr24_page:	aligned_string "page"
 
 ExtData_NormScreenProc_Ptr:
-	.long NormScreenProc
+	.incbin "includes/generated/v7_fix_extdata_normscreenproc_ptr.bin"
 .include "ui_widgets/master_style_grid_screens.s"
 	jr	gt, 0x00
 	aligned_string "AcDispTimeSetGridBox"
