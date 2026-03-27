@@ -452,8 +452,14 @@ SongMode_SendStopCommand:
 	ret
 
 SongMode_AbortAndClearBit2:
-	.byte 0xc1, 0xac, 0x28, 0x3c, 0xfb, 0x1d, 0x4d, 0xb9
-	.byte 0xfe, 0x0e
+	anddi8 (0x28ac), 251
+
+	.byte 0x1d, 0x4d, 0xb9, 0xfe	; call Song_AbortPlayback (v7 addr)
+
+	ret
+
+
+
 SongMode_StartPlayback:
 	cpdi8 (3380), 1
 	jrl nz, SongMode_StartReturn
@@ -583,8 +589,14 @@ PartFormat_SendStopCommand:
 	ret
 
 PartFormat_AbortAndClearBit2:
-	.byte 0xc1, 0xac, 0x28, 0x3c, 0xfb, 0x1d, 0x4d, 0xb9
-	.byte 0xfe, 0x0e
+	anddi8 (0x28ac), 251
+
+	.byte 0x1d, 0x4d, 0xb9, 0xfe	; call Song_AbortPlayback (v7 addr)
+
+	ret
+
+
+
 PartFormat_StartPlayback:
 	cpdi8 (3380), 1
 	jrl nz, PartFormat_StartReturn
@@ -626,8 +638,16 @@ PlayModeStop_SendStopCmd:
 	ret
 
 PlayMode_StopAndAbort:
-	.byte 0xc1, 0xac, 0x28, 0x3c, 0xfb, 0x1d, 0xfd, 0x2a
-	.byte 0xf2, 0x1d, 0x4d, 0xb9, 0xfe, 0x0e
+	anddi8 (0x28ac), 251
+
+	.byte 0x1d, 0xfd, 0x2a, 0xf2	; call PlayMode_SendStopEvent (v7 addr)
+
+	.byte 0x1d, 0x4d, 0xb9, 0xfe	; call Song_AbortPlayback (v7 addr)
+
+	ret
+
+
+
 PlayMode_SendCommand6C:
 	cpdi8 (3380), 1
 	jrl nz, PlayModeStop_SendReturn
