@@ -127,13 +127,13 @@ RENAMES = {
 
 def main():
     files_to_update = set()
-    main_file = "/mnt/shared/kn5000-roms-disasm/maincpu/ui/drawbar_panel_ui.s"
+    main_file = "/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/ui/drawbar_panel_ui.s"
     files_to_update.add(main_file)
 
     # Cross-file references
     cross_refs = {
-        "LABEL_F83E10": ["/mnt/shared/kn5000-roms-disasm/maincpu/demo/fdemotext_routines.s"],
-        "LABEL_F8469B": ["/mnt/shared/kn5000-roms-disasm/maincpu/demo/file_demo_proc.s"],
+        "LABEL_F83E10": ["/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/demo/fdemotext_routines.s"],
+        "LABEL_F8469B": ["/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/demo/file_demo_proc.s"],
     }
     for label, ref_files in cross_refs.items():
         if label in RENAMES:

@@ -454,7 +454,7 @@ def main():
     args = parser.parse_args()
 
     target = (
-        "/mnt/shared/kn5000-roms-disasm/maincpu/midi_serial_routines.s"
+        "/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/midi_serial_routines.s"
     )
 
     with open(target, 'rb') as fh:

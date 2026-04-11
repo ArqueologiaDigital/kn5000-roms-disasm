@@ -21,7 +21,7 @@ import re
 import subprocess
 import os
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
 ENC_RE = re.compile(r'[;#] encoding: \[([^\]]+)\]')
 
 # Documentation comments to insert before each label

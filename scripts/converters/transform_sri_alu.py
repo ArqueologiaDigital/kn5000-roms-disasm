@@ -120,7 +120,7 @@ def transform_file(filepath, dry_run=False):
 
 def main():
     dry_run = '--dry-run' in sys.argv
-    root = '/mnt/shared/kn5000-roms-disasm'
+    root = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 
     total_changed = 0
     total_files = 0

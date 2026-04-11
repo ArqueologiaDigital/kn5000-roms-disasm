@@ -313,7 +313,7 @@ def generate_rom(rom_name, waveform_generator, output_path):
 
 def main():
     # Default output directory: alongside the original ROMs
-    output_dir = '/mnt/shared/kn5000_original_roms/kn5000'
+    output_dir = '/home/fsanches/compartilhado/kn5000_original_roms/kn5000'
 
     if len(sys.argv) > 1:
         output_dir = sys.argv[1]

@@ -23,7 +23,7 @@ import subprocess
 import sys
 import os
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
 ENC_RE = re.compile(r'[;#] encoding: \[([^\]]+)\]')
 
 # Data-like single-byte ops that indicate data, not code

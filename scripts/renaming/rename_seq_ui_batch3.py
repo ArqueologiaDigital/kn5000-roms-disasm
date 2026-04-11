@@ -314,7 +314,7 @@ def main():
     ]
 
     for filepath in files_to_update:
-        full_path = os.path.join('/mnt/shared/kn5000-roms-disasm', filepath)
+        full_path = os.path.join('/home/fsanches/compartilhado/kn5000-roms-disasm', filepath)
         if not os.path.exists(full_path):
             continue
         with open(full_path, 'rb') as f:

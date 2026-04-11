@@ -12,15 +12,15 @@ The size check prevents cascading layout shifts.
 
 import os, glob, re, json, subprocess, tempfile
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
-LLVM_OBJCOPY = '/mnt/shared/llvm-project/build/bin/llvm-objcopy'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
+LLVM_OBJCOPY = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-objcopy'
 V7_DIR = 'v7/maincpu'
 V9_DIR = 'v9/maincpu'
 GEN_DIR = os.path.join(V7_DIR, 'includes/generated')
 
 
 def load_elf_syms(path):
-    r = subprocess.run(['/mnt/shared/llvm-project/build/bin/llvm-nm', '--no-sort', path],
+    r = subprocess.run(['/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm', '--no-sort', path],
                       capture_output=True, text=True)
     syms = {}
     for line in r.stdout.strip().split('\n'):
@@ -78,7 +78,7 @@ def measure_v9_sizes_from_elf(v9_syms):
 
 
 def main():
-    os.chdir('/mnt/shared/kn5000-roms-disasm')
+    os.chdir('/home/fsanches/compartilhado/kn5000-roms-disasm')
     print("=== v7 Source Migration v3: size-checked, ROM-level comparison ===\n")
 
     shift_map = json.load(open('scripts/analysis/v7_shift_map.json'))

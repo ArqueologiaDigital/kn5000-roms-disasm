@@ -17,7 +17,7 @@ import subprocess
 import sys
 import os
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
 ENC_RE = re.compile(r'[;#] encoding: \[([^\]]+)\]')
 
 # 1-byte "data-like" instructions that commonly appear when data is decoded

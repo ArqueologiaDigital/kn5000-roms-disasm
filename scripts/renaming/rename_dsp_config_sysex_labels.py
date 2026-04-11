@@ -8,7 +8,7 @@ import os
 import sys
 import glob
 
-REPO = "/mnt/shared/kn5000-roms-disasm"
+REPO = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 
 # Mapping of old label -> new label
 # Grouped by functional area for clarity

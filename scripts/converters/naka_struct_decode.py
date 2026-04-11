@@ -30,9 +30,9 @@ from collections import OrderedDict
 
 # Paths
 ROMS_DIR = Path(__file__).parent.parent
-ROM_PATH = Path("/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom")
+ROM_PATH = Path("/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom")
 ELF_PATH = ROMS_DIR / "rebuilt_ROMs" / "kn5000_v10_program.llvm.elf"
-LLVM_NM = Path("/mnt/shared/llvm-project/build/bin/llvm-nm")
+LLVM_NM = Path("/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm")
 WIDGETS_DIR = ROMS_DIR / "maincpu" / "ui_widgets"
 ROM_BASE = 0xE00000  # maincpu ROM maps to 0xE00000-0xFFFFFF
 
@@ -1253,9 +1253,9 @@ def verify_build(c_path, base_addr, total_size, rom):
     bin_path = c_path.parent.parent / "includes" / "generated" / f"{stem}.bin"
 
     # Build
-    clang = "/mnt/shared/llvm-project/build/bin/clang"
-    lld = "/mnt/shared/llvm-project/build/bin/ld.lld"
-    objcopy = "/mnt/shared/llvm-project/build/bin/llvm-objcopy"
+    clang = "/home/fsanches/compartilhado/llvm-project/build/bin/clang"
+    lld = "/home/fsanches/compartilhado/llvm-project/build/bin/ld.lld"
+    objcopy = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-objcopy"
 
     obj_path = f"/tmp/{stem}.o"
     elf_path = f"/tmp/{stem}.elf"

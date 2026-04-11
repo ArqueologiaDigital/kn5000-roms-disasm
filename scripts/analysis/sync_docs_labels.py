@@ -14,17 +14,17 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-LLVM_NM = "/mnt/shared/llvm-project/build/bin/llvm-nm"
-DOCS_DIR = Path("/mnt/shared/kn5000-docs")
+LLVM_NM = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm"
+DOCS_DIR = Path("/home/fsanches/compartilhado/kn5000-docs")
 LABEL_RE = re.compile(r'LABEL_([0-9A-Fa-f]{6})')
 
 # ELF files to build address->symbol maps from
 ELF_FILES = [
-    Path("/mnt/shared/kn5000-roms-disasm/rebuilt_ROMs/kn5000_v10_program.llvm.elf"),
-    Path("/mnt/shared/kn5000-roms-disasm/rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf"),
-    Path("/mnt/shared/kn5000-roms-disasm/rebuilt_ROMs/kn5000_subcpu_boot.llvm.elf"),
-    Path("/mnt/shared/kn5000-roms-disasm/rebuilt_ROMs/kn5000_table_data.llvm.elf"),
-    Path("/mnt/shared/kn5000-roms-disasm/rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf"),
+    Path("/home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs/kn5000_v10_program.llvm.elf"),
+    Path("/home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf"),
+    Path("/home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs/kn5000_subcpu_boot.llvm.elf"),
+    Path("/home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs/kn5000_table_data.llvm.elf"),
+    Path("/home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf"),
 ]
 
 

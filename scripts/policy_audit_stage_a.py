@@ -9,9 +9,9 @@ import re
 import sys
 import os
 
-os.chdir('/mnt/shared/kn5000-roms-disasm')
+os.chdir('/home/fsanches/compartilhado/kn5000-roms-disasm')
 
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 V10_ELF = 'rebuilt_ROMs/kn5000_v10_program.llvm.elf'
 V9_ELF = 'rebuilt_ROMs/kn5000_v9_program.llvm.elf'
 

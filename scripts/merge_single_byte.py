@@ -16,11 +16,11 @@ import os
 import re
 import tempfile
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
-UNIDASM = '/mnt/shared/tools/unidasm'
-ROM_DIR = '/mnt/shared/kn5000-roms-disasm/rebuilt_ROMs'
-REPO_DIR = '/mnt/shared/kn5000-roms-disasm'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
+UNIDASM = '/home/fsanches/compartilhado/tools/unidasm'
+ROM_DIR = '/home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs'
+REPO_DIR = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 
 ROM_BASE = {
     'maincpu': 0xE00000,

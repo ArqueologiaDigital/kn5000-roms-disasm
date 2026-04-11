@@ -22,7 +22,7 @@ V9_ROM = 'original_ROMs/kn5000_v9_program.rom'
 V7_ROM = 'original_ROMs/kn5000_v7_program.rom'
 V9_ELF = 'rebuilt_ROMs/kn5000_v9_program.llvm.elf'
 V7_GEN_DIR = 'v7/maincpu/includes/generated'
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 
 def load_rom(path):
     with open(path, 'rb') as f:

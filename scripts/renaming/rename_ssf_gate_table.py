@@ -4,7 +4,7 @@
 Safely handles Latin-1 encoded assembly file.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/rename_ssf_gate_table.py
 """
 

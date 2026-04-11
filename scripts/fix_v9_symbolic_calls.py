@@ -16,7 +16,7 @@ import subprocess
 import sys
 from collections import defaultdict
 
-LLVM_NM = "/mnt/shared/llvm-project/build/bin/llvm-nm"
+LLVM_NM = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm"
 V9_ELF = "rebuilt_ROMs/kn5000_v9_program.llvm.elf"
 V9_MAINCPU = "v9/maincpu"
 ROM_BASE = 0xE00000
@@ -92,7 +92,7 @@ def process_file(filepath, addr_to_sym, stats):
     return modified
 
 def main():
-    os.chdir("/mnt/shared/kn5000-roms-disasm")
+    os.chdir("/home/fsanches/compartilhado/kn5000-roms-disasm")
 
     print("Loading v9 ELF symbols...")
     addr_to_sym = load_symbols(V9_ELF)

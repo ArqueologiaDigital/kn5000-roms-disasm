@@ -86,7 +86,7 @@ Every commit to this repository must include in its commit message:
 `LLVM: <branch>@<short-hash> (<full-hash>)`
 
 This records the exact LLVM source (`llvm-mc`, `ld.lld`, `clang`, `llvm-objcopy`) used for the build. Obtain via:
-`cd /mnt/shared/llvm-project && git log -1 --format="%D @ %h (%H)"`
+`cd /home/fsanches/compartilhado/llvm-project && git log -1 --format="%D @ %h (%H)"`
 
 The `TOOLCHAIN_VERSION` file records the current build. Update it when the toolchain is rebuilt from a different commit.
 
@@ -884,7 +884,7 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 **Workflow for HDAE5000 disassembly:**
 1. Use `unidasm` to disassemble the `.incbin` region: `../tools/unidasm original_ROMs/hd-ae5000_v2_06i.ic4 -arch tlcs900 -basepc <addr> -skip <offset> -count <N>`
-2. Test uncertain instruction encodings: `echo '<instruction>' | /mnt/shared/llvm-project/build/bin/llvm-mc -triple=tlcs900 -show-encoding`
+2. Test uncertain instruction encodings: `echo '<instruction>' | /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -show-encoding`
 3. Write the conversion, replacing the `.incbin` with instructions
 4. Build and verify: `make all` — must show 100% match for all ROMs
 
@@ -1150,4 +1150,4 @@ After any codebase change affecting cross-version comparisons:
 Executable code must be represented as native TLCS-900 instructions, not raw `.byte` directives. When creating a new version's source from ROM bytes, disassemble all code regions to native instructions. `.byte` fallbacks are acceptable ONLY for: (a) genuinely unknown instruction encodings not supported by the LLVM backend, (b) data bytes that are not executable code.
 
 ### 12. All Content Reachable via Website Sidebar (STRICT)
-Every documentation page added to the website (`/mnt/shared/kn5000-docs/`) must have a corresponding entry in `_data/navigation.yml`. No orphan pages.
+Every documentation page added to the website (`/home/fsanches/compartilhado/kn5000-docs/`) must have a corresponding entry in `_data/navigation.yml`. No orphan pages.

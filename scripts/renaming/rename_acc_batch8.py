@@ -85,7 +85,7 @@ RENAMES = {
 }
 
 def main():
-    base = "/mnt/shared/kn5000-roms-disasm"
+    base = "/home/fsanches/compartilhado/kn5000-roms-disasm"
     target_file = os.path.join(base, "maincpu/sequencer/accompaniment_engine.s")
 
     with open(target_file, 'rb') as f:

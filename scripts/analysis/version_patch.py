@@ -38,7 +38,7 @@ def parse_args():
     p.add_argument('--target-rom', required=True, help='Target ROM binary to match')
     p.add_argument('--source-dir', required=True, help='Source directory to patch')
     p.add_argument('--rom-base', required=True, help='ROM base address (hex, e.g. 0xE00000)')
-    p.add_argument('--llvm-bin', default='/mnt/shared/llvm-project/build/bin',
+    p.add_argument('--llvm-bin', default='/home/fsanches/compartilhado/llvm-project/build/bin',
                    help='Path to LLVM bin directory')
     p.add_argument('--dry-run', action='store_true', help='Report changes without modifying files')
     return p.parse_args()

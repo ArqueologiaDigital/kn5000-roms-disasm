@@ -4,7 +4,7 @@ Uses v7 ELF addresses when available (preferred), falls back to v9 ELF.
 Run before assembling v7 to ensure correct data blobs."""
 import subprocess, os, glob, re
 
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 ROM_BASE = 0xe00000
 v7_rom = open('original_ROMs/kn5000_v7_program.rom', 'rb').read()
 

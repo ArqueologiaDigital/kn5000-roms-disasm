@@ -172,8 +172,8 @@ def main():
 
     # Verify all generated files compile and byte-match
     print("=== Verification ===")
-    clang = os.path.join('/mnt/shared/llvm-project/build/bin/clang')
-    objcopy = os.path.join('/mnt/shared/llvm-project/build/bin/llvm-objcopy')
+    clang = os.path.join('/home/fsanches/compartilhado/llvm-project/build/bin/clang')
+    objcopy = os.path.join('/home/fsanches/compartilhado/llvm-project/build/bin/llvm-objcopy')
     types_h = os.path.join(REPO, 'maincpu', 'style_ui', 'screendata_types.h')
 
     all_files = se_files + acmp_files

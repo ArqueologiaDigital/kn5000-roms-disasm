@@ -11,8 +11,8 @@ import sys
 import tempfile
 import bisect
 
-REPO = '/mnt/shared/kn5000-roms-disasm'
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+REPO = '/home/fsanches/compartilhado/kn5000-roms-disasm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 ELF = os.path.join(REPO, 'rebuilt_ROMs/kn5000_v10_program.llvm.elf')
 V10_MAINCPU = os.path.join(REPO, 'v10/maincpu')
 V9_MAINCPU = os.path.join(REPO, 'v9/maincpu')

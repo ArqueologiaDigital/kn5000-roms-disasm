@@ -242,7 +242,7 @@ RENAMES = {
 }
 
 def main():
-    filepath = '/mnt/shared/kn5000-roms-disasm/maincpu/sequencer/sequencer_ui.s'
+    filepath = '/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/sequencer/sequencer_ui.s'
     with open(filepath, 'rb') as f:
         data = f.read()
 

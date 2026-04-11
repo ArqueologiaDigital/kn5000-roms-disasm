@@ -12,7 +12,7 @@ import subprocess
 
 import time
 
-REPO = "/mnt/shared/kn5000-roms-disasm"
+REPO = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 TARGET_FILE = os.path.join(REPO, "maincpu/ui/ui_window_procs.s")
 
 def atomic_replace(filepath, old_name, new_name):

@@ -57,7 +57,7 @@ def extract_byte_block(text, label):
 
 
 def main():
-    filepath = '/mnt/shared/kn5000-roms-disasm/subcpu/kn5000_subprogram_v142.s'
+    filepath = '/home/fsanches/compartilhado/kn5000-roms-disasm/subcpu/kn5000_subprogram_v142.s'
 
     with open(filepath, 'rb') as f:
         text = f.read().decode('latin-1')
@@ -147,7 +147,7 @@ def main():
     text = text.replace(old_block, new_block)
 
     # Update symbol reference
-    sympath = '/mnt/shared/kn5000-roms-disasm/symbols/subcpu_symbols_reference.txt'
+    sympath = '/home/fsanches/compartilhado/kn5000-roms-disasm/symbols/subcpu_symbols_reference.txt'
     with open(sympath, 'rb') as f:
         symtext = f.read().decode('latin-1')
     symtext = re.sub(r'\bDSP_SetCoeff_ExtData\b', 'DSP_SetCoeff_CopyDirect', symtext)

@@ -15,7 +15,7 @@ SAFETY: Computes exact expected byte count using address-aware aligned_string si
 Verifies assembly bytes consumed == ROM string size before applying any fix.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/merge_remaining_latin1.py [--dry-run]
 """
 
@@ -23,7 +23,7 @@ import re
 import sys
 
 ASM_FILE = 'maincpu/kn5000_v10_program.s'
-ROM_FILE = '/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
+ROM_FILE = '/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
 ROM_BASE = 0xE00000
 
 LABEL_RE = re.compile(r'^(LABEL_[0-9A-F]{6}):(.*)$')

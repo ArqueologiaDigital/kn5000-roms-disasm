@@ -13,7 +13,7 @@ Multiple labels targeting the same line are handled together in a single
 combined split operation to avoid overlapping changes.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/place_set_labels.py [--dry-run]
 """
 

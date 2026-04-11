@@ -12,7 +12,7 @@ Strategy:
 - Phase 8: Remove .set directives that conflict with newly added position labels
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/format_pointer_string_groups.py [--dry-run]
 """
 

@@ -6,7 +6,7 @@ import os
 import sys
 
 # All files that may contain references
-MAINCPU_DIR = '/mnt/shared/kn5000-roms-disasm/maincpu'
+MAINCPU_DIR = '/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu'
 
 def find_all_s_files(directory):
     """Find all .s files recursively."""

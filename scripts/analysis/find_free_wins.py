@@ -23,9 +23,9 @@ import tempfile
 from pathlib import Path
 from collections import defaultdict, Counter
 
-LLVM_MC = "/mnt/shared/llvm-project/build/bin/llvm-mc"
-UNIDASM = "/mnt/shared/tools/unidasm"
-REPO_ROOT = Path("/mnt/shared/kn5000-roms-disasm")
+LLVM_MC = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc"
+UNIDASM = "/home/fsanches/compartilhado/tools/unidasm"
+REPO_ROOT = Path("/home/fsanches/compartilhado/kn5000-roms-disasm")
 
 ROM_DIRS = ["maincpu", "subcpu", "hdae5000", "table_data"]
 

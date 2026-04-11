@@ -9,7 +9,7 @@ MSG=$(cat "$COMMIT_MSG_FILE")
 if ! echo "$MSG" | grep -q "^LLVM:"; then
     echo "ERROR: Commit message must contain LLVM version line."
     echo "Add: LLVM: <branch>@<short-hash> (<full-hash>)"
-    echo "Get it with: cd /mnt/shared/llvm-project && git log -1 --format=\"%D @ %h (%H)\""
+    echo "Get it with: cd /home/fsanches/compartilhado/llvm-project && git log -1 --format=\"%D @ %h (%H)\""
     exit 1
 fi
 

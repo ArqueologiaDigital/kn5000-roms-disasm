@@ -12,8 +12,8 @@ Uses binary I/O to preserve Latin-1 encoding in .s files.
 
 import subprocess, os, glob, re, sys
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
-LLVM_OBJCOPY = '/mnt/shared/llvm-project/build/bin/llvm-objcopy'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
+LLVM_OBJCOPY = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-objcopy'
 V7_DIR = 'v7/maincpu'
 V9_DIR = 'v9/maincpu'
 GEN_DIR = os.path.join(V7_DIR, 'includes/generated')
@@ -201,5 +201,5 @@ def main():
 
 
 if __name__ == '__main__':
-    os.chdir('/mnt/shared/kn5000-roms-disasm')
+    os.chdir('/home/fsanches/compartilhado/kn5000-roms-disasm')
     main()

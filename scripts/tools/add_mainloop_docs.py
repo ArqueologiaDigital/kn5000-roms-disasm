@@ -56,7 +56,7 @@ MAINLOOP_DOCS = """; ===========================================================
 """
 
 def main():
-    filepath = '/mnt/shared/kn5000-roms-disasm/maincpu/kn5000_v10_program.s'
+    filepath = '/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/kn5000_v10_program.s'
     with open(filepath, 'rb') as f:
         text = f.read().decode('latin-1')
 

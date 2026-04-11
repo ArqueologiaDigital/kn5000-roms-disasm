@@ -3,7 +3,7 @@
 
 import struct
 
-ROM_PATH = "/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom"
+ROM_PATH = "/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom"
 BASE = 0xE272A4
 ROM_BASE = 0xE00000
 BLOB_SIZE = 692

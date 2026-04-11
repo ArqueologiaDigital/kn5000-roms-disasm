@@ -17,7 +17,7 @@ import re
 
 
 def main():
-    filepath = '/mnt/shared/kn5000-roms-disasm/subcpu/kn5000_subprogram_v142.s'
+    filepath = '/home/fsanches/compartilhado/kn5000-roms-disasm/subcpu/kn5000_subprogram_v142.s'
 
     with open(filepath, 'rb') as f:
         text = f.read().decode('latin-1')
@@ -202,7 +202,7 @@ DSP_ChannelConfigTable:
         print(f"WARNING: DSP_ConfigBlock_Opaque still referenced {refs} times")
 
     # Update symbol reference file too
-    sympath = '/mnt/shared/kn5000-roms-disasm/symbols/subcpu_symbols_reference.txt'
+    sympath = '/home/fsanches/compartilhado/kn5000-roms-disasm/symbols/subcpu_symbols_reference.txt'
     with open(sympath, 'rb') as f:
         symtext = f.read().decode('latin-1')
 

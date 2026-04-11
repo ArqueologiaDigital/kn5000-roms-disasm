@@ -54,7 +54,7 @@ def format_bytes(byte_list, bytes_per_line=8):
 
 
 def main():
-    filepath = '/mnt/shared/kn5000-roms-disasm/subcpu/kn5000_subprogram_v142.s'
+    filepath = '/home/fsanches/compartilhado/kn5000-roms-disasm/subcpu/kn5000_subprogram_v142.s'
 
     with open(filepath, 'rb') as f:
         text = f.read().decode('latin-1')
@@ -187,7 +187,7 @@ def main():
     text = text.replace(old_block_text, new_block)
 
     # Update symbol reference file
-    sympath = '/mnt/shared/kn5000-roms-disasm/symbols/subcpu_symbols_reference.txt'
+    sympath = '/home/fsanches/compartilhado/kn5000-roms-disasm/symbols/subcpu_symbols_reference.txt'
     with open(sympath, 'rb') as f:
         symtext = f.read().decode('latin-1')
 

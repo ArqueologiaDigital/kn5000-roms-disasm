@@ -12,7 +12,7 @@ This script:
 Uses nearby LABEL_XXXXXX: anchors and data byte counting for address computation.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/format_all_pointer_tables.py [--dry-run]
 """
 
@@ -21,7 +21,7 @@ import sys
 from collections import defaultdict
 
 ASM_FILE = 'maincpu/kn5000_v10_program.s'
-ROM_FILE = '/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
+ROM_FILE = '/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
 ROM_BASE = 0xE00000
 
 LABEL_RE = re.compile(r'^(LABEL_[0-9A-F]{6}):(.*)$')

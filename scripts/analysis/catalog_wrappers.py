@@ -24,7 +24,7 @@ S_DIRS = [
     os.path.join(ROMS_DIR, 'subcpu_boot'),
     os.path.join(ROMS_DIR, 'table_data'),
 ]
-UNIDASM = '/mnt/shared/tools/unidasm'
+UNIDASM = '/home/fsanches/compartilhado/tools/unidasm'
 
 # Raw wrapper mnemonic pattern: category + size + digit(s)
 # e.g., erpb3, erpw4, srib4, dri4, dd82, sd8b2, sd16b3, sd24b3, spib3, etc.

@@ -16,7 +16,7 @@ Strategy:
 6. Extract v7-specific .incbin data blocks from the ROM
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python3 scripts/build/create_v7_source.py
     make rebuilt_ROMs/kn5000_v7_program.llvm.rom
 """
@@ -27,7 +27,7 @@ import re
 import sys
 import pickle
 
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 V7_ROM = 'original_ROMs/kn5000_v7_program.rom'
 V9_ROM = 'original_ROMs/kn5000_v9_program.rom'
 V9_ELF = 'rebuilt_ROMs/kn5000_v9_program.llvm.elf'

@@ -1,4 +1,7 @@
-LLVM_BIN=/mnt/shared/llvm-project/build/bin
+# Shared projects root — override with: make PROJECTS_ROOT=/some/other/path <target>
+PROJECTS_ROOT ?= $(HOME)/compartilhado
+
+LLVM_BIN=$(PROJECTS_ROOT)/llvm-project/build/bin
 LLVM_MC=$(LLVM_BIN)/llvm-mc
 LLVM_LLD=$(LLVM_BIN)/ld.lld -e 0
 LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
@@ -781,7 +784,7 @@ gallery:
 	python scripts/build/convert_images.py $(DOCS_GALLERY)
 
 issues:
-	cd /mnt/shared/kn5000_project && python scripts/export_issues_to_website.py $(DOCS_DIR)/issues.md
+	cd $(PROJECTS_ROOT)/kn5000_project && python scripts/export_issues_to_website.py $(DOCS_DIR)/issues.md
 
 rom-status:
 	python scripts/build/generate_rom_status_diagram.py

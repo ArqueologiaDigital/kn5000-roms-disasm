@@ -8,7 +8,7 @@ import os
 import re
 import tempfile
 
-BASE = "/mnt/shared/kn5000-roms-disasm"
+BASE = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 
 # Map of 3-byte LE addresses (low, mid, high) to symbol names
 # Include both v9 and v10 addresses

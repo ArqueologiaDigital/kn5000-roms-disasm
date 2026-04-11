@@ -8,7 +8,7 @@ import os
 import sys
 import subprocess
 
-REPO = '/mnt/shared/kn5000-roms-disasm'
+REPO = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 
 # Map: old_label -> new_label
 # Only labels where purpose is confidently determined from code analysis

@@ -10,7 +10,7 @@ import sys
 import re
 import tempfile
 
-BASE = "/mnt/shared/kn5000-roms-disasm"
+BASE = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 
 def read_file(path):
     with open(path, 'rb') as f:

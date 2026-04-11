@@ -21,9 +21,9 @@ import argparse
 from pathlib import Path
 from collections import defaultdict
 
-LLVM_MC = "/mnt/shared/llvm-project/build/bin/llvm-mc"
-UNIDASM = "/mnt/shared/tools/unidasm"
-REPO_ROOT = Path("/mnt/shared/kn5000-roms-disasm")
+LLVM_MC = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc"
+UNIDASM = "/home/fsanches/compartilhado/tools/unidasm"
+REPO_ROOT = Path("/home/fsanches/compartilhado/kn5000-roms-disasm")
 
 BYTE_LINE_RE = re.compile(r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+)', re.IGNORECASE)
 BYTE_VAL_RE = re.compile(r'0x([0-9a-fA-F]{2})')

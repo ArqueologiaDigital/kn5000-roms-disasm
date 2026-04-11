@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROMS_DIR = Path(__file__).parent.parent
 ELF_PATH = ROMS_DIR / "rebuilt_ROMs" / "kn5000_v10_program.llvm.elf"
-LLVM_NM = Path("/mnt/shared/llvm-project/build/bin/llvm-nm")
+LLVM_NM = Path("/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm")
 WIDGETS_DIR = ROMS_DIR / "maincpu" / "ui_widgets"
 
 

@@ -146,7 +146,7 @@ RENAMES = {
 
 def main():
     files_to_update = set()
-    main_file = "/mnt/shared/kn5000-roms-disasm/maincpu/ui/drawbar_panel_ui.s"
+    main_file = "/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/ui/drawbar_panel_ui.s"
     files_to_update.add(main_file)
 
     total_replacements = 0

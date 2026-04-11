@@ -12,9 +12,9 @@ import sys
 from pathlib import Path
 
 ROMS_DIR = Path(__file__).parent.parent
-ROM_PATH = Path("/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom")
+ROM_PATH = Path("/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom")
 ELF_PATH = ROMS_DIR / "rebuilt_ROMs" / "kn5000_v10_program.llvm.elf"
-LLVM_NM = Path("/mnt/shared/llvm-project/build/bin/llvm-nm")
+LLVM_NM = Path("/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm")
 ROM_BASE = 0xE00000
 
 BLOCK_START = 0xEEE078

@@ -4,7 +4,7 @@ Covers Track Mixer, Feature Presentation, Drawbar Setting, and Percussive/Accord
 
 import os
 
-MAINCPU_DIR = '/mnt/shared/kn5000-roms-disasm/maincpu'
+MAINCPU_DIR = '/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu'
 
 def find_all_s_files(directory):
     result = []

@@ -23,8 +23,8 @@ import argparse
 from pathlib import Path
 from collections import defaultdict, Counter
 
-LLVM_MC = "/mnt/shared/llvm-project/build/bin/llvm-mc"
-REPO_ROOT = Path("/mnt/shared/kn5000-roms-disasm")
+LLVM_MC = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc"
+REPO_ROOT = Path("/home/fsanches/compartilhado/kn5000-roms-disasm")
 
 ROM_DIRS = [
     "maincpu",

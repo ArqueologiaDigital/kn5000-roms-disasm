@@ -16,7 +16,7 @@ import re
 import sys
 
 ROM_BASE = 0xE00000
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 V7_ORIG = 'original_ROMs/kn5000_v7_program.rom'
 V7_BUILT = 'rebuilt_ROMs/kn5000_v7_program.llvm.rom'
 V7_ELF = 'rebuilt_ROMs/kn5000_v7_program.llvm.elf'

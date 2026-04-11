@@ -278,7 +278,7 @@ def main():
 
     command = sys.argv[1]
     filepath = sys.argv[2]
-    repo_dir = '/mnt/shared/kn5000-roms-disasm'
+    repo_dir = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 
     content_bytes = read_file(filepath)
     content_str = content_bytes.decode('latin-1')

@@ -11,7 +11,7 @@ Output: v7_shift_map.json mapping label_name → shift_value
 
 import subprocess, json, os, sys
 
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 ROM_BASE = 0xE00000
 
 
@@ -97,7 +97,7 @@ def compute_shift_map(v9_elf, v7_rom_path, v9_rom_path):
 
 
 def main():
-    os.chdir('/mnt/shared/kn5000-roms-disasm')
+    os.chdir('/home/fsanches/compartilhado/kn5000-roms-disasm')
 
     v9_elf = 'rebuilt_ROMs/kn5000_v9_program.llvm.elf'
     v7_rom = 'original_ROMs/kn5000_v7_program.rom'

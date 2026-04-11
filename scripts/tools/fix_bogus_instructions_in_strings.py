@@ -14,7 +14,7 @@ from a LABEL_XXXXXX on or near the first line. Never relies on incremental
 address tracking through instructions.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/fix_bogus_instructions_in_strings.py [--dry-run]
 """
 
@@ -22,7 +22,7 @@ import re
 import sys
 
 ASM_FILE = 'maincpu/kn5000_v10_program.s'
-ROM_FILE = '/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
+ROM_FILE = '/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
 ROM_BASE = 0xE00000
 
 LABEL_RE = re.compile(r'^(LABEL_[0-9A-F]{6}):(.*)$')

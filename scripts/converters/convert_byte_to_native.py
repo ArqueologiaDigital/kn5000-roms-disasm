@@ -13,7 +13,7 @@ import re
 import sys
 import os
 
-LLVM_MC = "/mnt/shared/llvm-project/build/bin/llvm-mc"
+LLVM_MC = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc"
 DEFAULT_TARGET = "maincpu/audio/audio_control_engine.s"
 
 # Labels that mark DATA sections - skip conversion (per-file)
@@ -235,7 +235,7 @@ def find_byte_blocks(lines_text, data_labels_set):
 
 
 def main():
-    os.chdir("/mnt/shared/kn5000-roms-disasm")
+    os.chdir("/home/fsanches/compartilhado/kn5000-roms-disasm")
 
     target_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TARGET
     print(f"Processing: {target_file}")

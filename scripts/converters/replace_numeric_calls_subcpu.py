@@ -6,7 +6,7 @@ import subprocess
 
 def get_labels_from_elf(elf_path):
     result = subprocess.run(
-        ['/mnt/shared/llvm-project/build/bin/llvm-nm', '--defined-only', elf_path],
+        ['/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm', '--defined-only', elf_path],
         capture_output=True, text=True
     )
     addr_to_name = {}

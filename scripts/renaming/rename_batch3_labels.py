@@ -47,8 +47,8 @@ RENAMES = {
 
 def main():
     files = [
-        '/mnt/shared/kn5000-roms-disasm/maincpu/kn5000_v10_program.s',
-        '/mnt/shared/kn5000-roms-disasm/symbols/maincpu_symbols_reference.txt',
+        '/home/fsanches/compartilhado/kn5000-roms-disasm/maincpu/kn5000_v10_program.s',
+        '/home/fsanches/compartilhado/kn5000-roms-disasm/symbols/maincpu_symbols_reference.txt',
     ]
 
     for filepath in files:

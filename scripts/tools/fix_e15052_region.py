@@ -15,14 +15,14 @@ This script applies structural fixes to the assembly source file:
 All file I/O uses Latin-1 encoding to preserve single-byte characters.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/fix_e15052_region.py [--dry-run]
 """
 
 import sys
 
 ASM_FILE = 'maincpu/kn5000_v10_program.s'
-ROM_FILE = '/mnt/shared/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
+ROM_FILE = '/home/fsanches/compartilhado/kn5000_original_roms/kn5000/kn5000_v10_program.rom'
 ROM_BASE = 0xE00000
 
 

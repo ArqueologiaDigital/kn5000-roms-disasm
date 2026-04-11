@@ -11,7 +11,7 @@ import os
 import re
 import sys
 
-ROMS_DISASM = '/mnt/shared/kn5000-roms-disasm'
+ROMS_DISASM = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 V10_MAINCPU = os.path.join(ROMS_DISASM, 'v10/maincpu')
 V9_MAINCPU = os.path.join(ROMS_DISASM, 'v9/maincpu')
 ELF_SYMBOLS_FILE = '/tmp/elf_symbols.txt'

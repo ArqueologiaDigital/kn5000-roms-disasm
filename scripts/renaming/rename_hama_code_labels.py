@@ -106,7 +106,7 @@ RENAMES = {
 # ---------------------------------------------------------------------------
 # Files to update
 # ---------------------------------------------------------------------------
-ROMS_DISASM = "/mnt/shared/kn5000-roms-disasm"
+ROMS_DISASM = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 
 FILES = [
     # Primary file — contains all 39 definitions plus internal references

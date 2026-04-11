@@ -153,7 +153,7 @@ RENAMES = {
     "LABEL_EFFEA1": "StringData_APCModeNames",
 }
 
-base = '/mnt/shared/kn5000-roms-disasm'
+base = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 s_files = glob.glob(os.path.join(base, 'maincpu', '**', '*.s'), recursive=True)
 
 changed = 0

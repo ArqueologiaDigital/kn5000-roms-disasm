@@ -18,7 +18,7 @@ The assembly file is read/written in Latin-1 encoding so that characters
 like é (0xE9) remain as single bytes, not multi-byte UTF-8.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/merge_latin1_strings.py [--dry-run]
 """
 

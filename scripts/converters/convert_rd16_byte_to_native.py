@@ -27,8 +27,8 @@ import struct
 import sys
 from collections import defaultdict
 
-LLVM_MC = '/mnt/shared/llvm-project/build/bin/llvm-mc'
-REPO_ROOT = '/mnt/shared/kn5000-roms-disasm'
+LLVM_MC = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc'
+REPO_ROOT = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 
 # Mode byte -> register name mapping for d16 addressing
 D16_MODE_BYTES = {

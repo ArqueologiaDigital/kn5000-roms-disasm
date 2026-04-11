@@ -21,7 +21,7 @@ import re
 import glob
 from collections import defaultdict
 
-LLVM_NM = '/mnt/shared/llvm-project/build/bin/llvm-nm'
+LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 ROM_BASE = 0xe00000
 ROM_END = 0x1000000
 MAX_INCBIN_SIZE = 158788
@@ -75,7 +75,7 @@ def has_incbin(lines, start_line, end_line):
 
 
 def main():
-    os.chdir('/mnt/shared/kn5000-roms-disasm')
+    os.chdir('/home/fsanches/compartilhado/kn5000-roms-disasm')
 
     print("Loading ROMs...")
     v7_rom = open('original_ROMs/kn5000_v7_program.rom', 'rb').read()

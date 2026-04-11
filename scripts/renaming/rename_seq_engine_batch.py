@@ -99,7 +99,7 @@ RENAMES = {
 }
 
 def main():
-    base_dir = "/mnt/shared/kn5000-roms-disasm"
+    base_dir = "/home/fsanches/compartilhado/kn5000-roms-disasm"
     s_files = glob.glob(os.path.join(base_dir, "maincpu", "**", "*.s"), recursive=True)
     print(f"Found {len(s_files)} .s files to scan")
 

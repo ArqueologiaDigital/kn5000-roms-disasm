@@ -6,7 +6,7 @@ Uses binary I/O to preserve Latin-1 bytes."""
 import os
 import re
 
-REPO = '/mnt/shared/kn5000-roms-disasm'
+REPO = '/home/fsanches/compartilhado/kn5000-roms-disasm'
 TARGET_FILE = os.path.join(REPO, 'maincpu/ui_widgets/widget_dispatch.s')
 
 # Read file to discover remaining labels and build renames

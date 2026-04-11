@@ -11,7 +11,7 @@ already exist, insertable via byte counting, found in .byte blocks, or found
 via string content matching). Tables with any unresolvable labels are skipped.
 
 Usage:
-    cd /mnt/shared/kn5000-roms-disasm
+    cd /home/fsanches/compartilhado/kn5000-roms-disasm
     python scripts/convert_string_pointer_tables.py [--dry-run]
 """
 

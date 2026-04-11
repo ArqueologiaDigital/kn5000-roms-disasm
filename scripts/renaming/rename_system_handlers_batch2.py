@@ -320,7 +320,7 @@ RENAMES = {
 }
 
 def do_renames(renames):
-    base = "/mnt/shared/kn5000-roms-disasm"
+    base = "/home/fsanches/compartilhado/kn5000-roms-disasm"
     # Find all .s files in maincpu/
     s_files = []
     for root, dirs, files in os.walk(os.path.join(base, "maincpu")):
