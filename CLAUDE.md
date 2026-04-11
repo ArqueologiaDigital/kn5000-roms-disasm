@@ -1,5 +1,11 @@
 # CLAUDE.md
 
+> ⚠️ **Beads note (2026-04-10):** This repo's beads DB is SQLite-era and the
+> regular `bd` CLI is **unsafe** against it. Use **`beads-lite`** (read-only,
+> `~/.local/bin/beads-lite`) for queries and edit `.beads/issues.jsonl` by hand
+> for writes. The old `../tools/bd` snippets below have been rewritten
+> accordingly. Full policy: `~/compartilhado/FSanches/beads-usage-policy.md`.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
@@ -348,27 +354,30 @@ Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `
 This policy exists because the primary goal is building comprehensive documentation for MAME emulation and homebrew development. Closing issues prematurely loses institutional knowledge and creates incomplete documentation.
 
 ```bash
-# The bd command is located at:
-../tools/bd
+# Read-only queries go through beads-lite (SQLite is frozen, bd is unsafe):
+beads-lite list                          # List all issues
+beads-lite show <issue-id>               # Show issue details + comments
+beads-lite ready                         # Find unblocked work
+beads-lite blocked                       # Show blocked issues
+beads-lite history <issue-id>            # Full event audit trail
+beads-lite search <term>                 # Text search
 
-# Common operations:
-../tools/bd list                              # List all issues
-../tools/bd show <issue-id>                   # Show issue details
-../tools/bd close <issue-id>                  # Close an issue
-../tools/bd reopen <issue-id>                 # Reopen a closed issue
-../tools/bd comments add <issue-id> "text"   # Add a comment to an issue
-../tools/bd create "title"                    # Create new issue
-../tools/bd update <issue-id> --notes "text" # Update issue notes
-../tools/bd ready                             # Find available work (unblocked, unassigned)
-../tools/bd sync                              # Sync issues with git
+# Writes (create / close / reopen / comments / notes): edit .beads/issues.jsonl
+# by hand, then:
+git add .beads/issues.jsonl
+git commit -m "issues: <what changed>"
 ```
 
+**Do NOT run `bd`** against this repo (not `bd list`, not `bd sync`, not
+even `bd status`). The central policy is at
+`~/compartilhado/FSanches/beads-usage-policy.md`.
+
 The issue tracker is:
-- Synced to git for persistence
-- Exported to the website via `make issues`
+- Versioned via `.beads/issues.jsonl` in git (single source of truth for writes)
+- Exported to the website via `make issues` (reads JSONL directly, does not invoke bd)
 - Visible at `/issues/` on the documentation site
 
-**Quick access:** Run `../tools/bd list` for current issues, or see `../kn5000-docs/issues.md` for the web version.
+**Quick access:** Run `beads-lite list` for current issues, or see `../kn5000-docs/issues.md` for the web version.
 
 ### Disassembly Quality Standards (MANDATORY)
 
