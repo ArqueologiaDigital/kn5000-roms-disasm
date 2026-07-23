@@ -2,7 +2,7 @@
 ; copyright-holders:Felipe Sanches
 ; KN5000 effects-DSP program -- MULTI TAP DELAY
 ; image rep algo 10  |  slots 10  |  unit 0 (I-RAM load 84)
-; family delay  |  confidence high  |  68 words, 18 class-A multiplies (10 named)
+; family delay  |  confidence high  |  68 words, 18 class-A multiplies (11 named)
 ; role: multi-tap delay: panning taps (partial-cursor-rewind idiom, effect-map 5.1)
 ; coefficient cursor base 0x00
 ;
@@ -56,6 +56,7 @@
   w33   0050000921   ?word   0x0050000921   ; 050.0.00.921  hi12{ST ?6 res=040}
   w34   0002A031D5   ?word   0x0002A031D5   ; 002.A.03.1D5  hi12{f31=1} cur+
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x07] = filter section cell 0 (role filter, INFERRED)
   w35   02042FE000   ?word   0x02042FE000   ; 204.2.FE.000  hi12{f98=2 f31=2}
   w36   0002AFF1D5   ?word   0x0002AFF1D5   ; 002.A.FF.1D5  hi12{f31=1} cur+
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)

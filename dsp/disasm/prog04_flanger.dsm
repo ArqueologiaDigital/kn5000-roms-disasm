@@ -2,7 +2,7 @@
 ; copyright-holders:Felipe Sanches
 ; KN5000 effects-DSP program -- FLANGER
 ; image rep algo 4  |  slots 4  |  unit 0 (I-RAM load 84)
-; family modulation  |  confidence medium  |  65 words, 18 class-A multiplies (2 named)
+; family modulation  |  confidence medium  |  65 words, 18 class-A multiplies (12 named)
 ; role: flanger: swept all-pass chain, 0.3 feedback, wet mix
 ; coefficient cursor base 0x00
 ;
@@ -15,13 +15,17 @@
   w3    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w4    0212A011D5   ?word   0x0212A011D5   ; 212.A.01.1D5  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x00] = filter section cell 0 (role filter, INFERRED)
   w5    0202A451D5   mac     (p)+69
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x01] = filter section cell 1 (role filter, INFERRED)
   w6    0202AC01D5   mac     (p)-64
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x02] = filter section cell 2 (role filter, INFERRED)
   w7    09001602D9   ?word   0x09001602D9   ; 900.1.60.2D9  hi12{ESC f98=1}
   w8    0192AFB1D5   ?word   0x0192AFB1D5   ; 192.A.FB.1D5  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x03] = filter section cell 3 (role filter, INFERRED)
   w9    0182245000   ?word   0x0182245000   ; 182.2.45.000  hi12{f98=1 f31=1 ?7 res=080}
   w10   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w11   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -31,6 +35,7 @@
   w15   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
   w16   0102AB94C8   ?word   0x0102AB94C8   ; 102.A.B9.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x04] = filter section cell 4 (role filter, INFERRED)
   w17   0000204407   ?word   0x0000204407   ; 000.2.04.407  hi12{-}
   w18   00002FA407   ?word   0x00002FA407   ; 000.2.FA.407  hi12{-}
   w19   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
@@ -76,13 +81,17 @@
   w49   0212204407   ?word   0x0212204407   ; 212.2.04.407  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w50   0000AFF1D5   ?word   0x0000AFF1D5   ; 000.A.FF.1D5  hi12{-} cur+
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0D] = filter section cell 0 (role filter, INFERRED)
   w51   0202A481D5   mac     (p)+72
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0E] = filter section cell 1 (role filter, INFERRED)
   w52   0202AB51D5   mac     (p)-75
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0F] = filter section cell 2 (role filter, INFERRED)
   w53   09001602D9   ?word   0x09001602D9   ; 900.1.60.2D9  hi12{ESC f98=1}
   w54   0192A031D5   ?word   0x0192A031D5   ; 192.A.03.1D5  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x10] = filter section cell 3 (role filter, INFERRED)
   w55   0182248000   ?word   0x0182248000   ; 182.2.48.000  hi12{f98=1 f31=1 ?7 res=080}
   w56   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w57   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -92,5 +101,6 @@
   w61   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
   w62   0102AB84C8   ?word   0x0102AB84C8   ; 102.A.B8.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x11] = filter section cell 4 (role filter, INFERRED)
   w63   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
   w64   040010E407   ?word   0x040010E407   ; 400.1.0E.407  hi12{END}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

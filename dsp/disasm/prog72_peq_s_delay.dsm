@@ -2,7 +2,7 @@
 ; copyright-holders:Felipe Sanches
 ; KN5000 effects-DSP program -- PEQ+S.DELAY
 ; image rep algo 72  |  slots 72  |  unit 0 (I-RAM load 84)
-; family combi  |  confidence high  |  54 words, 20 class-A multiplies (14 named)
+; family combi  |  confidence high  |  54 words, 20 class-A multiplies (19 named)
 ; role: 1-band flat PEQ + single delay
 ; coefficient cursor base 0x00
 ;
@@ -37,11 +37,14 @@
   w13   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
   w14   0000A011D5   ?word   0x0000A011D5   ; 000.A.01.1D5  hi12{-} cur+
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x06] = filter section cell 0 (role filter, INFERRED)
   w15   0202AFF1D5   mac     (p)-1
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x07] = filter section cell 1 (role filter, INFERRED)
   w16   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
   w17   0202A01655   ?word   0x0202A01655   ; 202.A.01.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x08] = filter section cell 2 (role filter, INFERRED)
   w18   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}
   w19   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w20   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -82,9 +85,11 @@
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
   w41   0202A001D5   mac     (p)+0
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x11] = filter section cell 0 (role filter, INFERRED)
   w42   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
   w43   0202A00655   ?word   0x0202A00655   ; 202.A.00.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x12] = filter section cell 1 (role filter, INFERRED)
   w44   0000200000   nop
   w45   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w46   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]

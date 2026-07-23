@@ -2,7 +2,7 @@
 ; copyright-holders:Felipe Sanches
 ; KN5000 effects-DSP program -- PHASER
 ; image rep algo 5  |  slots 5  |  unit 0 (I-RAM load 84)
-; family modulation  |  confidence medium  |  106 words, 14 class-A multiplies (4 named)
+; family modulation  |  confidence medium  |  106 words, 14 class-A multiplies (9 named)
 ; role: phaser: LFO-swept first-order all-pass chain (~0.438 +/-0.025), 0.3 feedback
 ; coefficient cursor base 0x00
 ;
@@ -22,6 +22,7 @@
   w8    00002F8407   ?word   0x00002F8407   ; 000.2.F8.407  hi12{-}
   w9    0028AFF1D5   ?word   0x0028AFF1D5   ; 028.A.FF.1D5  hi12{f31=4 ?5 res=020} cur+
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x02] = filter section cell 0 (role filter, INFERRED)
   w10   02022481C8   ?word   0x02022481C8   ; 202.2.48.1C8  hi12{f98=2 f31=1}
   w11   00002BB1D5   ?word   0x00002BB1D5   ; 000.2.BB.1D5  hi12{-}
   w12   01022451CD   ?word   0x01022451CD   ; 102.2.45.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
@@ -54,11 +55,13 @@
   w39   010224E1CD   ?word   0x010224E1CD   ; 102.2.4E.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w40   0212AB0412   ?word   0x0212AB0412   ; 212.A.B0.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x03] = filter section cell 1 (role filter, INFERRED)
   w41   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
   w42   0880130407   ?word   0x0880130407   ; 880.1.30.407  hi12{ESC ?7 res=080}  [framing word, carries no DRAM information (MEASURED)]
   w43   009220A700   ?word   0x009220A700   ; 092.2.0A.700  hi12{ST f31=1 ?7 res=080}
   w44   0104AFB1D5   ?word   0x0104AFB1D5   ; 104.A.FB.1D5  hi12{f98=1 f31=2} cur+
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x04] = filter section cell 2 (role filter, INFERRED)
   w45   0182200407   ?word   0x0182200407   ; 182.2.00.407  hi12{f98=1 f31=1 ?7 res=080}
   w46   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
   w47   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
@@ -93,6 +96,7 @@
   w67   00002F9407   ?word   0x00002F9407   ; 000.2.F9.407  hi12{-}
   w68   0028AFD1D5   ?word   0x0028AFD1D5   ; 028.A.FD.1D5  hi12{f31=4 ?5 res=020} cur+
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0A] = filter section cell 0 (role filter, INFERRED)
   w69   02022531C8   ?word   0x02022531C8   ; 202.2.53.1C8  hi12{f98=2 f31=1}
   w70   00002B11D5   ?word   0x00002B11D5   ; 000.2.B1.1D5  hi12{-}
   w71   010224F1CD   ?word   0x010224F1CD   ; 102.2.4F.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
@@ -125,6 +129,7 @@
   w98   01022581CD   ?word   0x01022581CD   ; 102.2.58.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w99   0212AB1412   ?word   0x0212AB1412   ; 212.A.B1.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0B] = filter section cell 1 (role filter, INFERRED)
   w100  0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
   w101  0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)

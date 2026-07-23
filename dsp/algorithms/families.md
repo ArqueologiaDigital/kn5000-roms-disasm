@@ -11,6 +11,39 @@ in [`../programs.tsv`](../programs.tsv) and its listing header; this doc groups
 them by construction family. Depth lives in the effect-map note, linked once here
 rather than duplicated.
 
+## Named coefficients — 500 / 822 (60.8 %)
+
+Every class-A multiply reads one coefficient from C-RAM through the implicit
+cursor, whose absolute address is known. Joining that address to the host's
+parameter-translator writers names the multiply's OPERAND (which cell, and what
+the host wrote there). Two writer shapes contribute:
+
+- **individually-addressed** T1 writers (biquad `op0x70` = 6 cells, damping
+  `op0x76` = 3, and the single-cell `+0` writers) — **391** names;
+- **block-upload** writers that stream a run of consecutive cells from one T1
+  base via the auto-incrementing writer `0387E6 + 0388B3×n` — **+109**:
+  `op0x73` = a **5-cell bilinear filter section** (103 cells; the FLANGER /
+  PHASER / SINGLE DELAY / vibrato all-pass & comb stages) and `op0x77` = the
+  **ENSEMBLE per-voice modulation depth** (6 cells = 3 voices × 2 channels at
+  C-RAM `02 04 06 | 09 0B 0D`).
+
+Total **500 / 822 = 60.8 %** (zero overlap). Block expansion is driven by
+**T2-confirmed operands only** (the T1 map over-counts), the `0x00`-padding hazard
+is guarded, and where `op0x73`'s nominal 5-cell span reaches the **MEASURED LFO
+words** `092.A.**.200` / `094.A.**.200` (phase increment / `0x7FFFFF` wrap, 29/29)
+the block claim is **REVOKED** — 6 such over-reaches (PHASER 2, S.DELAY+PHASER 4)
+are left unnamed, not scored. **Role known ≠ full word decode:** the block roles
+are **INFERRED** (which of the 5 cells is `b0` vs `−a1` is not decoded, unlike the
+biquad); source coverage stays ~18 %. Tool:
+`kn7000_mame/tools/kn5000_dsp_namedcoeff.py` (the block layouts folded in),
+note `notes/kn5000-dsp-blockcoeff.md`.
+
+A frequent undecoded class-A family gained an operand role this way:
+**`202.A.**.655`** (20 occurrences across the delay / all-pass effects) carries an
+`op0x73` **filter-section coefficient in 19 / 20 (95 %)** — a clean present-and-
+absence role (`INFERRED`). The exact micro-op is the usual mac family; only its
+operand is now pinned as an all-pass/comb section coefficient.
+
 ## Modulation / chorus (LFO-swept delay)
 
 `CHORUS` (1, high), `MODULATED CHORUS` (2, high), `ENSEMBLE` (6, medium),

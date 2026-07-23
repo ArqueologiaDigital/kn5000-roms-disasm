@@ -2,7 +2,7 @@
 ; copyright-holders:Felipe Sanches
 ; KN5000 effects-DSP program -- ENSEMBLE
 ; image rep algo 6  |  slots 6  |  unit 0 (I-RAM load 84)
-; family modulation  |  confidence medium  |  96 words, 15 class-A multiplies (0 named)
+; family modulation  |  confidence medium  |  96 words, 15 class-A multiplies (6 named)
 ; role: ensemble: multi-voice chorus
 ; coefficient cursor base 0x00
 ;
@@ -20,6 +20,7 @@
   w6    08001201D5   ?word   0x08001201D5   ; 800.1.20.1D5  hi12{ESC}
   w7    0192A4041A   ?word   0x0192A4041A   ; 192.A.40.41A  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x02] = ENSEMBLE voice depth (role depth, INFERRED)
   w8    00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w9    000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w10   08801202D9   ?word   0x08801202D9   ; 880.1.20.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -32,6 +33,7 @@
   w16   08001201D5   ?word   0x08001201D5   ; 800.1.20.1D5  hi12{ESC}
   w17   0192A4141A   ?word   0x0192A4141A   ; 192.A.41.41A  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x04] = ENSEMBLE voice depth (role depth, INFERRED)
   w18   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w19   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w20   08801202D9   ?word   0x08801202D9   ; 880.1.20.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -44,6 +46,7 @@
   w26   08001201D5   ?word   0x08001201D5   ; 800.1.20.1D5  hi12{ESC}
   w27   0192A4241A   ?word   0x0192A4241A   ; 192.A.42.41A  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x06] = ENSEMBLE voice depth (role depth, INFERRED)
   w28   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w29   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w30   08801202D9   ?word   0x08801202D9   ; 880.1.20.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -85,6 +88,7 @@
   w64   08001201D5   ?word   0x08001201D5   ; 800.1.20.1D5  hi12{ESC}
   w65   0192A4641A   ?word   0x0192A4641A   ; 192.A.46.41A  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x09] = ENSEMBLE voice depth (role depth, INFERRED)
   w66   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w67   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w68   08801202D9   ?word   0x08801202D9   ; 880.1.20.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -97,6 +101,7 @@
   w74   08001201D5   ?word   0x08001201D5   ; 800.1.20.1D5  hi12{ESC}
   w75   0192A4741A   ?word   0x0192A4741A   ; 192.A.47.41A  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0B] = ENSEMBLE voice depth (role depth, INFERRED)
   w76   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w77   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w78   08801202D9   ?word   0x08801202D9   ; 880.1.20.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -109,6 +114,7 @@
   w84   08001201D5   ?word   0x08001201D5   ; 800.1.20.1D5  hi12{ESC}
   w85   0192A4841A   ?word   0x0192A4841A   ; 192.A.48.41A  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0D] = ENSEMBLE voice depth (role depth, INFERRED)
   w86   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w87   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
   w88   08801202D9   ?word   0x08801202D9   ; 880.1.20.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]

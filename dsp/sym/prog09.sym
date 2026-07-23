@@ -1,0 +1,14 @@
+# license:BSD-3-Clause
+# copyright-holders:Felipe Sanches
+# SINGLE DELAY (algo 9) -- hand-curated labels/comments, merged by gen_dsp_disasm.py.
+# Format: wNN  Label   ; comment    (label and comment both optional)
+#
+# SINGLE DELAY is the cleanest op0x73 exemplar: all 18 class-A coefficients are
+# NAMED (algorithms/families.md, "Named coefficients"). Its filter/feedback
+# coefficients arrive as a block-upload op0x73 5-cell bilinear section
+# (writer 0387E6 + 0388B3x4), so the class-A cursor lands them at C-RAM[0x00..].
+# The 202.A.**.655 family below is that block's coefficient consumer -- a
+# filter-section coefficient in 19/20 occurrences corpus-wide (INFERRED role;
+# the mac micro-op is DETERMINED, only the OPERAND role is inferred).
+w6                   ; 202.A.**.655 = op0x73 filter-section coefficient (INFERRED, 19/20 corpus)
+w29                  ; 202.A.**.655 = op0x73 filter-section coefficient (INFERRED, 19/20 corpus)

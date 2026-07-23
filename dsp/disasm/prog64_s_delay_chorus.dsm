@@ -2,7 +2,7 @@
 ; copyright-holders:Felipe Sanches
 ; KN5000 effects-DSP program -- S.DELAY+CHORUS
 ; image rep algo 64  |  slots 64  |  unit 0 (I-RAM load 84)
-; family combi  |  confidence high  |  95 words, 23 class-A multiplies (6 named)
+; family combi  |  confidence high  |  95 words, 23 class-A multiplies (14 named)
 ; role: single delay + chorus
 ; coefficient cursor base 0x00
 ;
@@ -19,9 +19,11 @@
   w5    00002FE407   ?word   0x00002FE407   ; 000.2.FE.407  hi12{-}
   w6    0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x02] = filter section cell 0 (role filter, INFERRED)
   w7    08801602DA   ?word   0x08801602DA   ; 880.1.60.2DA  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
   w8    0202A00695   ?word   0x0202A00695   ; 202.A.00.695  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x03] = filter section cell 1 (role filter, INFERRED)
   w9    0000200000   nop
   w10   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w11   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -37,12 +39,14 @@
   w19   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}
   w20   0192A3C000   ?word   0x0192A3C000   ; 192.A.3C.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x05] = filter section cell 3 (role filter, INFERRED)
   w21   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w22   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
   w23   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
   w24   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
   w25   0102AC24C8   ?word   0x0102AC24C8   ; 102.A.C2.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x06] = filter section cell 4 (role filter, INFERRED)
   w26   00002FF407   ?word   0x00002FF407   ; 000.2.FF.407  hi12{-}
   w27   00122F51C0   ?word   0x00122F51C0   ; 012.2.F5.1C0  hi12{ST f31=1}
   w28   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}
@@ -90,9 +94,11 @@
   w60   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}
   w61   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0E] = filter section cell 0 (role filter, INFERRED)
   w62   08801602DA   ?word   0x08801602DA   ; 880.1.60.2DA  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
   w63   0202A00695   ?word   0x0202A00695   ; 202.A.00.695  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x0F] = filter section cell 1 (role filter, INFERRED)
   w64   0000200000   nop
   w65   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w66   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
@@ -108,12 +114,14 @@
   w74   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}
   w75   0192A40000   ?word   0x0192A40000   ; 192.A.40.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x11] = filter section cell 3 (role filter, INFERRED)
   w76   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w77   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
   w78   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
   w79   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
   w80   0102ABE4C8   ?word   0x0102ABE4C8   ; 102.A.BE.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
+        ; coeff C-RAM[0x12] = filter section cell 4 (role filter, INFERRED)
   w81   00002FF407   ?word   0x00002FF407   ; 000.2.FF.407  hi12{-}
   w82   00122F51C0   ?word   0x00122F51C0   ; 012.2.F5.1C0  hi12{ST f31=1}
   w83   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}

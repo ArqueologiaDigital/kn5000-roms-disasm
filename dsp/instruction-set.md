@@ -145,7 +145,21 @@ undecoded                                    2707   (91.0 %)
 distinct undecoded words                       655
 distinct undecoded (hi12,class4,lo12) FAMILIES 185
 operand-ROLE known (named coefficients etc.)         ~18.3 %
+
+class-A multiplies (coefficient consumers)     822
+  operand ROLE named (host C-RAM coeff join)   500   (60.8 %)
+    391 individually-addressed T1 writers  +  109 block-upload cells
+    (op0x73 = 5-cell bilinear filter section 103, op0x77 = ENSEMBLE depth 6)
+  operand ROLE still unnamed                   322
 ```
+
+**Role known ≠ full word decode.** The 60.8 % is the fraction of class-A
+*multiplies* whose coefficient OPERAND has a named role (which C-RAM cell it reads
+and what the host wrote there); the multiply MICRO-OP is one of the three DETERMINED
+forms, but the block-coefficient roles (op0x73/op0x77) are INFERRED, not per-cell
+decodes like the biquad's. Source coverage — the fraction of the *instruction set*
+understood — is still **~18.3 %**. The two figures measure different things and this
+tree does not launder one into the other.
 
 **~82 % of the instruction set is still unknown.** The distribution has a long
 tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
