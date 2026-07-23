@@ -1,5 +1,3 @@
-# license:BSD-3-Clause
-# copyright-holders:Felipe Sanches
 # Shared kernel / common header (I-RAM 0..59) -- hand-curated labels/comments.
 # See instruction-set.md "Control flow".  Format: wNN  Label  ; comment
 w0   Header          ; per-frame entry; sets up pointer registers then CALLs the unit bodies

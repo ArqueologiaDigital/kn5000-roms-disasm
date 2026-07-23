@@ -1,5 +1,3 @@
-# license:BSD-3-Clause
-# copyright-holders:Felipe Sanches
 # SINGLE DELAY (algo 9) -- hand-curated labels/comments, merged by gen_dsp_disasm.py.
 # Format: wNN  Label   ; comment    (label and comment both optional)
 #

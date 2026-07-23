@@ -1,5 +1,7 @@
-; license:BSD-3-Clause
-; copyright-holders:Felipe Sanches
+; Reverse-engineered disassembly of the KN5000 effects-DSP microcode
+; (NEC uPD6383GF), recovered from the original firmware.  The microcode is the
+; work of its original authors; this is a disassembly for preservation and
+; interoperability, and no claim of copyright is made over the disassembled program.
 ; KN5000 effects-DSP program -- RING MODULATOR
 ; image rep algo 54  |  slots 54  |  unit 0 (I-RAM load 84)
 ; family am  |  confidence high  |  46 words, 6 class-A multiplies (0 named)

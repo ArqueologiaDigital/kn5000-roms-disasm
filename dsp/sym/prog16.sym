@@ -1,5 +1,3 @@
-# license:BSD-3-Clause
-# copyright-holders:Felipe Sanches
 # REVERB (algo 16, ROOM REVERB 1) -- hand-curated labels/comments.
 # The ONLY unit-1 image (coeff base 0x90), shared by the 12 reverb presets 16-27.
 # See algorithms/reverb.md.  Format: wNN  Label  ; comment
