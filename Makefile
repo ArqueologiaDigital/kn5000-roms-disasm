@@ -10,6 +10,7 @@ CLANG=$(LLVM_BIN)/clang
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
 .PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets
+.PHONY: dsp dsp-verify
 
 # Primary build: LLVM assembly (authoritative source)
 all: llvm-all
@@ -822,3 +823,19 @@ clean-all: clean clean-asl
 clean-preset-data:
 	rm -f table_data/includes/preset_data.p
 	rm -f table_data/includes/preset_data.bin
+
+# ============================================================================
+# Effects-DSP (NEC uPD6383GF, IC311) microprogram disassembly tree -- dsp/
+# ============================================================================
+# Regenerate the annotated per-program listings + manifest from the Sub CPU ROM
+# and the reverse-engineering tools, then byte-match-verify against the ROM.
+# Both are deterministic; `make dsp && git diff --exit-code dsp/disasm` is a
+# drift check.  See dsp/README.md.  Override the reused research tools with
+# TOOLS=<path to kn7000_mame/tools> if they are not at ~/compartilhado.
+TOOLS ?= $(HOME)/compartilhado/kn7000_mame/tools
+
+dsp:
+	python3 dsp/tools/gen_dsp_disasm.py --tools $(TOOLS)
+
+dsp-verify:
+	python3 dsp/verify.py --tools $(TOOLS)

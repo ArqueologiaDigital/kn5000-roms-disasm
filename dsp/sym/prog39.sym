@@ -1,0 +1,16 @@
+# license:BSD-3-Clause
+# copyright-holders:Felipe Sanches
+# PARAMETRIC EQ (algo 39) -- hand-curated labels/comments, merged by gen_dsp_disasm.py.
+# Format: wNN  Label   ; comment    (label and comment both optional)
+# The 9-word Direct-Form-I biquad section (SOLVED, algorithms/biquad-eq.md) is
+# repeated 10 times (5 bands x 2 channels).  This labels the FIRST band; the cursor
+# base 0x00 gives coefficients C-RAM[0x00..05] = b1,b0,b2,-a1,-a2,makeup.
+w5   Band0_Section   ; P = b1*S0 ; latch A <- S0
+w6                   ; S0 <- x ; acc = P ; P = b0*x
+w7                   ; acc += P ; P = b2*S1
+w8                   ; acc += P ; P = -a1*S2 ; latch B <- S2
+w9                   ; acc += P ; P = -a2*S3
+w10                  ; acc += P ; S3 <- latch B (class-2 store)
+w11                  ; class-8 post-sum step -- OPERATION UNKNOWN
+w12                  ; S2 <- acc ; P = makeup*acc
+w13                  ; acc <- P ; S1 <- latch A (class-2 store)
