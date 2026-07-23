@@ -29,6 +29,7 @@ effect program set was recovered statically from firmware.
 | `programs.tsv` | yes | GENERATED manifest: one row per distinct image (name, unit, load, words, class-A count, named-coeff count, slots, family, confidence, role) |
 | `instruction-set.md` | yes | the ISA as decoded — word format, `hi12` microword bits, addressing, call/return control flow, PROVEN vs OPEN, and the honest coverage figure |
 | `algorithms/` | yes | per-family algorithm docs (biquad/EQ and reverb are SOLVED to the bit; the rest are structural), each linking the deep notes rather than duplicating them |
+| `flowcharts/` | yes | GENERATED per-program **Mermaid signal-flow flowcharts** — the shared kernel + all 38 effect bodies (structure, not a per-instruction dump); see [`flowcharts/README.md`](flowcharts/README.md) |
 | `disasm/index.dsm` | yes | GENERATED rendered manifest of all 38 images + totals |
 | `disasm/kernel.dsm` | yes | GENERATED disassembly of the shared 60-word kernel (common header) |
 | `disasm/progNN_<name>.dsm` | yes | GENERATED disassembly of each distinct image: per word — fields, decoded `hi12` flags, structural annotation, absolute C-RAM coefficient address, and the named coefficient where known |
@@ -43,8 +44,9 @@ matching the repo's "derived data is never committed" policy.
 ## Regenerating (the whole point)
 
 ```
-make dsp            # or: python3 dsp/tools/gen_dsp_disasm.py   -- rewrite disasm/, programs.tsv
-make dsp-verify     # or: python3 dsp/verify.py                 -- byte-match check
+make dsp            # or: python3 dsp/tools/gen_dsp_disasm.py      -- rewrite disasm/, programs.tsv
+make dsp-flowcharts # or: python3 dsp/tools/gen_dsp_flowcharts.py -- rewrite flowcharts/
+make dsp-verify     # or: python3 dsp/verify.py                    -- byte-match check
 git diff --exit-code dsp/disasm dsp/programs.tsv   # also a drift check
 ```
 

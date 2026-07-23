@@ -7,6 +7,10 @@ step with the Python disassembler [`tools/dsp_disasm.py`](tools/dsp_disasm.py)
 (itself a mirror of MAME's `src/devices/cpu/upd6383/upd6383d.cpp`). When either
 learns a new form, update both and re-run the generator.
 
+> See also [`flowcharts/`](flowcharts/README.md) for the per-program **signal-flow
+> flowcharts** (the shared kernel + all 38 effect bodies) that visualise the
+> control flow and structural landmarks described below.
+
 There is **no datasheet with an instruction set** — the chip is documented (block
 diagram and pin table only) as IC302 of the Pioneer CDJ-500 service manual. Every
 statement below is either MEASURED from the ROM corpus, PROVEN BY CONSTRUCTION

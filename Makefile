@@ -10,7 +10,7 @@ CLANG=$(LLVM_BIN)/clang
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
 .PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets
-.PHONY: dsp dsp-verify
+.PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
 all: llvm-all
@@ -839,3 +839,9 @@ dsp:
 
 dsp-verify:
 	python3 dsp/verify.py --tools $(TOOLS)
+
+# Regenerate the per-program STRUCTURAL flowcharts (Mermaid) in dsp/flowcharts/.
+# Same inputs as `dsp`; shows signal flow, not a per-instruction dump.  Does not
+# touch the .dsm listings, so it cannot affect the byte-match (dsp-verify).
+dsp-flowcharts:
+	python3 dsp/tools/gen_dsp_flowcharts.py --tools $(TOOLS)
