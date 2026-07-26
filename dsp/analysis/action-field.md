@@ -22,7 +22,7 @@ have it) / **INFERRED** / **FALSIFIED** / **OPEN**.
 | **B** | ★ **The harness can say yes.** A hand-built Gardner all-pass ladder, expressed in the SAME executor with the same delay lines, the same reference and the same matcher, is accepted at 2, 4 and 5 stages and passes the delay-loop filter. **A is therefore a statement about the MODEL, not about the search.** | **MEASURED** |
 | **C** | ★ **R1's families A and B are BOTH falsified by the SRC decode.** Both require the delay-read register `DR` as an ALU operand at slots whose `lo12` SRC names something else — `000.2.00.419` reads **acc**, `012.2.00.680` reads **tempB**, `102.A.00.64B` reads **tempA**. R1 gave every slot a free choice of operands; the routing field says the operand is *not* free. Neither family survives contact with it. (Conditional on one thing, stated: that SRC names the operand on *every* word, which is anchored on five DETERMINED forms and is what the shipped executor does.) | **FORCED** under the SRC decode |
 | **D** | ★ **The obstruction is LOCATED and it is EXHAUSTIVE, no numeric run required.** The all-pass multiplicand is `s[r] = x[r] + w[r] = (D − eta·P) + N`, so it must contain the **previous** delay read `D` and the **fresh** one `N` at once. Over all 5 145 000 parameter settings the multiplicand contains `N` in **70 560** of them and contains **both** `N` and `D` in **0**. The cause is the accumulator CLEAR: tempA is last writable at slot 3, which carries `hi12` bit 4 — *store the accumulator AND CLEAR IT* — after which the only live values are `P` and the current bus. | **MEASURED, exhaustive** |
-| **E** | ★ **A second context gives a reading that WORKS.** SINGLE DELAY (algo 9) carries the same three codes in a five-word block whose algorithm is not in doubt. With **ACTION `0x19` = `tempA ← bus`**, **ACTION `0x00` = `acc += bus`**, **SRC `0x00` = a memory operand** and the DRAM write taking the **latched bus**, the block reproduces `v[n] = x[n] + fb·v[n−D]` — the textbook feedback delay — **exactly**. | **MEASURED**, and see §8 for what is forced inside it |
+| **E** | ★ **A second context gives four FORCED results — the positive half of this pass.** SINGLE DELAY (algo 9) carries the same three codes in a five-word block whose algorithm is not in doubt. Exhaustively, **5 145** assignments reproduce `v[n] = x[n] + fb·v[n−D]` exactly, and every one of them agrees that: the delay-RAM read is **BLOCKING**; **ACTION `0x19` captures into tempA**; **ACTION `0x00` routes the bus into the accumulator** (a null accumulator effect has zero survivors); and **SRC `0x00` is not the delay-read register**. | **FORCED** |
 | **F** | The literal §9 reading (`d_in` and the multiplicand are one register) turns out to be **not a hypothesis but a THEOREM of the decode**: with the DRAM write taking the latched bus, the written value equals the multiplicand in **5 145 000 of 5 145 000** settings — slots 4 and 5 read the same SRC and nothing between them can rewrite it. It is falsified anyway, because **D** kills every reading of the core, and separately, if the value written to a line is the value multiplied by *that same line's* coefficient, the stage cannot be a first-order all-pass at all (§3.1). | **MEASURED** / **FORCED** |
 | **G** | **R1's F6 (`land ∈ [2,5]`) does not survive.** The delay-loop filter forces `land ∈ {0,1}` in the reverb (26 348 / 26 348 each) and SINGLE DELAY needs `land = −1`, a *blocking* read whose own word already sees the returned word. F6 was a property of R1's model, which had no tempA/tempB and demanded the data land inside `DR`. | **MEASURED** |
 
@@ -273,6 +273,53 @@ the block computes, exactly,
 and the tool's numeric check on the values actually written to the line agrees
 with a textbook feedback delay to the last bit (`singledelay`).
 
+**Enumerated, not asserted.** The same exhaustive treatment over this block —
+every effect for ACTION `0x00` and `0x19`, six readings of SRC `0x00`, four read
+latencies, six injection points — leaves **5 145 assignments** that reproduce
+`v[n] = x[n] + fb·v[n−D]` exactly. What they agree on:
+
+```
+   the read latency          FORCED   land = -1, a BLOCKING read: the DRAM read
+                                      word's own bus already carries the word
+                                      it just fetched                5145/5145
+   ACTION 0x19, capture half FORCED   tempA  5145/5145  (tA<-bus x2940,
+                                                          tA<-acc x2205)
+   ACTION 0x00, acc half     FORCED   it TOUCHES the accumulator with the bus:
+                                      "no accumulator effect" has ZERO survivors
+                                      (+bus 2205, -bus 1960, <-bus 735,
+                                       <-bus-acc 735)
+   SRC 0x00 reads            4 values  mem[ptr] x3430  P x980  acc x490  zero x245
+                                      -- the delay-read register: 0 of 5145
+   ACTION 0x0B               35 values (i.e. UNCONSTRAINED -- it occurs in this
+                                      block only on the last word, so the block
+                                      cannot see it.  Stated, not searched away)
+   ACTION 0x00, capture half  7 values (free)
+   ACTION 0x19, acc half      5 values (free)
+   the ladder input arrives   mem[ptr] x3185   acc x1960
+```
+
+**These four are the positive result of this pass**, and they are the first hard
+constraints on the ACTION field beyond the five codes the biquad anchored:
+
+1. the external delay-RAM read is **blocking** — which contradicts R1's F6
+   (`land ∈ [2,5]`) outright;
+2. **ACTION `0x19` captures into tempA** — §9 of `dsp-alu-structure.md`
+   proposed it, `dsp-frame-advance.md` §2 priced it at 13 frame slots and called
+   it "INFERRED, and internally contradicted"; here it is FORCED by a block
+   whose algorithm is not in doubt;
+3. **ACTION `0x00` is not a no-op** — every survivor routes the bus into the
+   accumulator. This is the first direct evidence for the largest open code in
+   the ISA (824 corpus words), and it is what `dsp-alu-structure.md` §6 argued
+   from the LFO without being able to force;
+4. SRC `0x00` is **not** the delay-RAM read register.
+
+Note what (2) settles: the `lo12[2:0]`-as-destination pattern puts tempA at
+`[2:0] == 3` and `0x19` has `[2:0] == 1`, which is why the reading was called
+"internally contradicted". The contradiction is now resolved **against the
+`[2:0]` pattern** — `0x19` captures tempA regardless of what `[2:0]` suggests,
+and `0x1A` (§6.1) captures tempB with `[2:0] == 2`. Reading `0x19`/`0x1A` as a
+second capture pair beside `0x13`/`0x14`, differing in `lo12[4:3]`, fits both.
+
 **This is the reading `dsp-alu-structure.md` §9 proposed for `L = 0x19`, and it
 survives here.** It also explains R1 §7.1's 44/44-versus-0/56 split without a
 coincidence: the two write forms whose SRC is tempA (`64B`, `655`) are always
@@ -356,6 +403,24 @@ machines pass the delay-loop filter and **still 0 reproduce the cascade**. So th
 clear is *a* wrong thing in the model, and something else is wrong as well. The
 core is not decoded by this pass and this note does not pretend otherwise.
 
+### 7.1 What the multiplicand becomes once the clear is gone
+
+The 8 400 settings produce **25 distinct multiplicand forms**, and every single
+one of them is
+
+```
+   +-A  +- k*P  +- D  +- N          k in {0,1,2},  and D sometimes as 0.5*D
+                                    (the machines that keep the tempB >>1)
+```
+
+— always with the **entry accumulator `A`** in it. The form the all-pass needs,
+`D − P + N`, has no `A` and never appears. That is the residual obstruction in
+one line: with the clear gone the two reads can only meet *inside the
+accumulator*, which also drags in whatever the accumulator was carrying, and
+nothing in the core can subtract that back out again. The `0.5*D` variants are
+exactly the machines that keep the biquad's tempB `>>1`, so that shift is not the
+problem either.
+
 ---
 
 ## 8. ★ The collision, stated plainly
@@ -364,8 +429,8 @@ Two contexts, two different demands on the same code:
 
 | | the reverb ladder demands | SINGLE DELAY demands |
 |---|---|---|
-| `SRC 0x00` | the **delay-RAM read register** (52 696/52 696 — the only path by which the fresh read reaches the multiplicand in time) | a **memory operand** (otherwise the delay line receives `(1+fb)·d_out` and the program has no input) |
-| the read latency | `land ∈ {0,1}` | `land = −1`, a blocking read |
+| `SRC 0x00` | the **delay-RAM read register**, 52 696/52 696 — the only path by which the fresh read reaches the multiplicand in time | **not** the delay-RAM read register: **0 of 5 145**. `mem[ptr]` in 3 430, otherwise `P`, `acc` or nothing |
+| the read latency | `land ∈ {0,1}` | `land = −1`, a **blocking** read, FORCED 5 145/5 145 |
 
 They cannot both be right, and one of them is not. The SINGLE DELAY reading is
 the one that produces a working algorithm end-to-end with no free parameters
@@ -408,16 +473,26 @@ that the same search then refutes*. The honest reading is therefore:
 * The result is robust to the coefficient-to-stage alignment: with every gain
   equal (0.50 and 0.75, two delay sets), still **0** of 52 696 (`equal.py`).
 
-**CONSISTENT, not forced** — the SINGLE DELAY reading (§6):
+**FORCED inside SINGLE DELAY** (5 145/5 145 survivors, §6) — the block is a
+second context and these are the pass's positive results:
 
 ```
-   ACTION 0x19 = tempA <- bus          ACTION 0x00 = acc += bus
-   SRC    0x00 = a memory operand      the DRAM write takes the latched bus
+   ACTION 0x19  captures into tempA          (tA<-bus or tA<-acc; which is free)
+   ACTION 0x00  routes the bus into the accumulator, i.e. it is NOT a no-op
+                (+bus / -bus / <-bus / <-bus-acc; which is free)
+   the external delay-RAM read is BLOCKING   (land = -1)
+   SRC 0x00     is NOT the delay-read register
 ```
 
-It is *consistent* rather than *forced* until the enumeration over that block is
-reported (§7/§11) — and even then the block cannot see ACTION `0x0B`, which
-appears in it only on the last word.
+**CONSISTENT, not forced**
+
+* `SRC 0x00 = mem[ptr]` — 3 430 of 5 145 survivors, the largest group, and the
+  only one that makes the block's input arrive where the pointer walk puts it;
+* the DRAM write takes the **latched bus** (tempA) — used by the positive
+  control and by every SINGLE DELAY survivor, and it is what makes R1 §7.1's
+  44/44-versus-0/56 store-adjacency split non-coincidental;
+* `ACTION 0x1A` captures into **tempB** (§6.1, from the reverb separator's tap
+  gain; three earlier unanchored codes could also have written tempB).
 
 **OPEN**
 
@@ -434,12 +509,19 @@ appears in it only on the last word.
 
 ## 11. What this constrains for the other two targets
 
-* **TARGET 3 (the LFO ramp).** SRC `0x00` is the code the LFO argument also needs
-  (`092.A.00.200` is a class-A word with `lo12 = 0x200`, i.e. SRC `0x08`, but its
-  neighbours in the block carry `0x00`). This pass gives Target 3 a *tested*
-  candidate — **`ACTION 0x00 = acc += bus`** — and a warning: the reverb ladder
-  and SINGLE DELAY demand *different* things of SRC `0x00`, so the LFO should be
-  solved with SRC `0x00` left free rather than inherited.
+* **TARGET 3 (the LFO ramp).** The LFO's two words `092.A.dd.200` and
+  `094.A.dd.200` carry ACTION `0x00`, and this pass **FORCES** that `0x00` routes
+  the bus into the accumulator (§6) — so the LFO solve should treat `0x00` as an
+  accumulator-writing action with four candidate signs, not as a no-op, and the
+  ramp `phase += increment` has a mechanism available to it. The second, harder
+  transfer is the **warning**: the reverb ladder and SINGLE DELAY demand
+  *different* things of SRC `0x00` (delay-read register vs anything but), so the
+  LFO must solve SRC `0x00` for itself rather than inherit either.
+* **The ACTION field generally.** `0x19` captures **tempA** (FORCED) and `0x1A`
+  captures **tempB** (CONSISTENT). Those are worth `dsp-frame-advance.md` §4's
+  13 + n frame slots — but note that adopting them in the executor is a separate
+  decision from decoding them, and the core's `0x00`/`0x0B` are still OPEN, so
+  the words that carry them must keep trapping.
 * **TARGET 1 (frame closure).** Nothing here moves the pointer walk: every word
   examined has `addr8 == 0` inside a ladder (F7, MEASURED), so the closure
   residue is untouched. The one transferable item is methodological — the
@@ -453,8 +535,8 @@ appears in it only on the last word.
 |---|---|---|
 | **P-1** | the survivor set will be NON-EMPTY | **MISS.** 0 of 20 580 000 |
 | **P-2** | zero survivors will have `WVAL == MULT` | **vacuously true, and therefore not evidence** — there are no survivors at all. Replaced by the model-free argument of §3 (C3), which is the claim that actually holds |
-| **P-3** | `ACTION 0x19 = tempA ← bus` will be FORCED | **partial.** Not forced by the reverb (nothing is), but it comes out of SINGLE DELAY and is what makes that block an algorithm |
-| **P-4** | some ACTION must route the bus into the accumulator | **HIT.** Without it the accumulator can only ever see `P`, and SINGLE DELAY needs `acc += bus` at `w7` |
+| **P-3** | `ACTION 0x19 = tempA ← bus` will be FORCED | **HIT, in the second context.** Not forced by the reverb (nothing is), but SINGLE DELAY forces the *destination* at 5 145/5 145 — `tempA`, `bus` or post-op `acc` |
+| **P-4** | some ACTION must route the bus into the accumulator | **HIT, and forced.** ACTION `0x00` does, in 5 145/5 145 SINGLE DELAY survivors; a null accumulator effect has zero |
 | **P-5** | `tb_shift = 0` will be required | **UNRESOLVED.** No reverb survivors to force it; SINGLE DELAY never reads tempB |
 | **P-6** | the DRAM write data will be FORCED to the latched bus | **partial.** Forced in neither direction by the empty reverb search; it is what the positive control and SINGLE DELAY both use, and what makes R1 §7.1's split non-coincidental |
 | **P-7** | `land` will not be forced into R1's [2,5] | **HIT.** `{0,1}` in the reverb filter, `−1` in SINGLE DELAY |

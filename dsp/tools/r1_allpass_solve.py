@@ -1522,7 +1522,7 @@ def sec_singledelay(C, rom, imgs, names):
                  " ST" if sl["store"] else "",
                  (" DRAM-" + sl["dram"].upper()) if sl["dram"] else ""))
     random.seed(3)
-    x = [random.uniform(-1, 1) for _ in range(60)]
+    x = [random.uniform(-1, 1) for _ in range(22)]
     fb, D = 0.3, 7
     ref = comb_ref(fb, D, x)
     hits = []
@@ -1566,6 +1566,23 @@ def sec_singledelay(C, rom, imgs, names):
     v = collections.Counter(RNAME[i] for _m, i, _s in hits)
     print("     %-16s %s" % ("x arrives in",
                              "  ".join("%s x%d" % (a, b) for a, b in v.most_common())))
+    # A field is FORCED when every survivor agrees; a code's two HALVES can be
+    # forced separately, so project them rather than only counting whole effects.
+    print()
+    print("   PROJECTED ONTO THE TWO HALVES OF AN ACTION -- what is really forced:")
+    for nm, ix in (("ACTION 0x00", F00), ("ACTION 0x19", F19),
+                   ("ACTION 0x0B", F0B)):
+        for half, sel in (("acc op ", 0), ("capture", 1)):
+            v = collections.Counter(EFFECTS[m[ix]][sel] or "-"
+                                    for m, _i, _s in hits)
+            print("     %-11s %-8s %-8s %s"
+                  % (nm, half, "FORCED" if len(v) == 1 else "%d" % len(v),
+                     "  ".join("%s x%d" % (a, b) for a, b in v.most_common())))
+    v = collections.Counter(EFFECTS[m[F19]][1].split("<-")[0]
+                            for m, _i, _s in hits if EFFECTS[m[F19]][1])
+    print("     ACTION 0x19 captures into: %s   (of %d survivors, %d capture)"
+          % ("  ".join("%s x%d" % (a, b) for a, b in v.most_common()),
+             len(hits), sum(v.values())))
     return hits
 
 
