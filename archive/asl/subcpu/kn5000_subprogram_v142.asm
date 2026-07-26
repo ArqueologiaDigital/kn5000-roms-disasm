@@ -11585,7 +11585,16 @@ LABEL_02109F:
 LABEL_0210A1:
 	RET
 
-LABEL_0210A2:
+; ----------------------------------------------------------------------------
+; ExtVoice_Fold_SlotNumber - fold a raw slot byte into its bank's numbering
+; Entry: A = raw slot byte, C = bank selector (only bits 0..1 are used)
+; Exit:  L = the folded slot number
+; Notes: MEASURED.  Selector 0/1 -> A & 0x3F; 2 -> (A - 0x40) with bit 7 cleared;
+;        3 -> a third variant.  INFERRED that this normalises a slot index into
+;        the 0..0x7F space the caller ORs into its return value.
+;        It is NOT a "wave number" computation - see ExtVoice_Alloc_StreamSlot.
+; ----------------------------------------------------------------------------
+ExtVoice_Fold_SlotNumber:	; 0210A2h
 	AND C, 003h
 	CP C, 3
 	JR Z, LABEL_0210C6
@@ -12305,7 +12314,16 @@ LABEL_02174A:
 	POP XIZ
 	RET
 
-LABEL_02174C:
+; ----------------------------------------------------------------------------
+; ExtVoice_Lookup_SlotFallback - read the 3-entry slot fallback table (INFERRED)
+; Entry: WA = selector (only bits 0..1 are used)
+; Exit:  L = the selected byte from ExtVoice_Slot_FallbackTable
+; Notes: MEASURED that it reads ExtVoice_Slot_FallbackTable at +0, +4 and +8, and
+;        that selector 2 falls back to entry +4 when entry +8 exceeds 0xC0.
+;        The three bytes are 0x00 / 0x40 / 0x80 at rest.  INFERRED that they are
+;        per-bank slot bases; the allocation protocol itself is not decoded.
+; ----------------------------------------------------------------------------
+ExtVoice_Lookup_SlotFallback:	; 02174Ch
 	LDA XBC, 210Bh
 	AND WA, 0003h
 	CP WA, 3
@@ -12336,7 +12354,30 @@ LABEL_02177A:
 LABEL_02177D:
 	RET
 
-LABEL_02177E:
+; ----------------------------------------------------------------------------
+; ExtVoice_Alloc_StreamSlot - allocate a streaming/DMA voice slot (INFERRED)
+; Entry: A = part index (must be < 0x1A), C = desc+0x00 (must be < 0x40),
+;        E = keyflag / bank-mode byte (masked to 0x3F on entry)
+; Exit:  HL = (keyflag << 8) | slot number;  slot 0xFF means allocation failed
+; Notes: This is NOT a wave-number resolver, despite its historical role in the
+;        notes.  MEASURED (notes/kn5000-pipe-resolver.md): its wave-mapping
+;        columns read 0xFF for all 64 tones and all 26 valid rows at runtime, so
+;        the lookup always degenerates to the fallback table; and the value the
+;        caller ships to register +0x440 increments by exactly 1 per note-on and
+;        is INDEPENDENT of pitch (C3/C4/C5 -> 0x40/0x41/0x42).
+;        INFERRED that the tables are voice/DMA slot occupancy maps.  Decisive
+;        tell: the helpers LABEL_02129C and LABEL_021463 WRITE them, which a ROM
+;        lookup table never does, and ExtVoice_SlotPool_Entries has a
+;        next/prev/.../slot free-list shape with slot 0xFF meaning free.
+;        CORRECTION: A is the PART index - both descriptor builders write the part
+;        index into desc+0x04, and the note lives at desc+0x05 | 0x80 - which is
+;        what the A < 0x1A bound checks.  kn5000-pipe-resolver.md 2 called it a
+;        note and then a key-zone index.
+;        Ordinary PCM voices never reach here: their caller gates on
+;        tonerec[+0x1A] != 0 or part_state[+0x0A] bit 15, both false, so registers
+;        +0x440/+0x480 keep the value 0 that ExtVoice_Build_SlotRegisters wrote.
+; ----------------------------------------------------------------------------
+ExtVoice_Alloc_StreamSlot:	; 02177Eh
 	DEC 8, XSP
 	PUSH QIZ
 	LD (XSP + 004h), E
@@ -12398,7 +12439,7 @@ LABEL_0217AD:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0210A2
+	CALR ExtVoice_Fold_SlotNumber
 	LD C, L
 	EXTZ BC
 	LD A, (XSP + 004h)
@@ -12414,7 +12455,7 @@ LABEL_021846:
 	JR Z, LABEL_0218AD
 	LD A, QIZL
 	EXTZ WA
-	CALR LABEL_02174C
+	CALR ExtVoice_Lookup_SlotFallback
 	LD QIZH, L
 	LD A, QIZH
 	CP A, 0c0h
@@ -12448,7 +12489,7 @@ LABEL_021846:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0210A2
+	CALR ExtVoice_Fold_SlotNumber
 	JRL T, LABEL_021966
 
 LABEL_0218A8:
@@ -12490,14 +12531,14 @@ LABEL_0218AD:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0210A2
+	CALR ExtVoice_Fold_SlotNumber
 	SET 7, (XSP + 004h)
 	JR T, LABEL_021966
 
 LABEL_021908:
 	LD A, QIZL
 	EXTZ WA
-	CALR LABEL_02174C
+	CALR ExtVoice_Lookup_SlotFallback
 	LD QIZH, L
 	LD A, QIZH
 	CP A, 0c0h
@@ -12531,7 +12572,7 @@ LABEL_021908:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0210A2
+	CALR ExtVoice_Fold_SlotNumber
 	JR T, LABEL_021966
 
 LABEL_021964:
@@ -12632,7 +12673,7 @@ LABEL_021AC0:
 	LD A, E
 	EXTZ WA
 	EXTZ BC
-	CALR LABEL_0210A2
+	CALR ExtVoice_Fold_SlotNumber
 	LD C, L
 	EXTZ BC
 	LD A, QIZH
@@ -14233,7 +14274,7 @@ LABEL_02281F:
 ; Exit:  L = q, 0..3.  q = 0 is the SOFTEST layer
 ; Notes: v = A & 0x7F; q = 0 if v <= rec[0], 1 if v <= rec[1], 2 if v <= rec[2],
 ;        else 3.  The chosen q indexes the pre-computed 4-entry SET-descriptor array
-;        at part_struct + 0x76 + 0x25*slot + 4*q (see Partial_Store_Set_Pointer), so
+;        at part_struct + 0x76 + 0x25*slot + 4*q (see WaveSel_Cache_SetDescPtr), so
 ;        velocity selects a DIFFERENT SAMPLE, not merely a level.  MEASURED:
 ;        notes/kn5000-variant-model.md 3.1/3.2.
 ; ----------------------------------------------------------------------------
@@ -14554,19 +14595,34 @@ LABEL_022A22:
 	RET
 
 ; ----------------------------------------------------------------------------
-; Pitch_Lookup_Zone_For_Key - map a folded log pitch to a multisample zone index
-; Entry: XWA = the SET s 128-byte key->zone map, BC = folded log pitch (desc[+0x06])
-; Exit:  L = zone index = map[(BC>>8) & 0x7F]
-; Notes: The SAME desc[+0x06] drives pitch and wave selection, so the octave fold in
-;        Pitch_Fold_Octaves_Into_Range moves both together.  MEASURED.
+; WaveSel_KeyTable_Lookup - map the folded key to a zone slot of the SET
+; Entry: XWA = ptrC, the SET's 128-byte note -> zone-slot table
+;        BC = the folded log pitch, desc+0x06
+; Exit:  L = zone slot;  the caller then reads ptrA[4 + L] to get the record index
+; Notes: MEASURED.  key = (BC & 0x7F00) >> 8, i.e. the high byte of the folded
+;        log pitch, which is a MIDI note number in 1/256-semitone units.
+;        The SAME desc+0x06 drives pitch and wave selection, so the octave fold in
+;        Pitch_Fold_Octaves_Into_Range moves both together.
+;        (Named Pitch_Lookup_Zone_For_Key by the pitch/velocity pass; this routine
+;        selects a WAVE zone rather than computing a pitch, so it is filed with
+;        the wave-selection subsystem it is only ever called from.)
 ; ----------------------------------------------------------------------------
-Pitch_Lookup_Zone_For_Key:		; 022A32h
+WaveSel_KeyTable_Lookup:		; 022A32h
 	AND BC, 7f00h
 	SRA 8, BC
 	LD L, (XWA + BC)
 	RET
 
-LABEL_022A3F:
+; ----------------------------------------------------------------------------
+; WaveSel_Emit_ZoneRecord_S15 - stride-15 zone-record emitter
+; Entry: XBC = ptrB, DE = zone record index E, XWA = voice descriptor
+; Exit:  (TG_Scratch_Reg040) = record[0];  desc+0x0F = record address
+;        desc+0x01 |= 0x7000;  (WaveSel_Zone_Trim) = record[+0x0D]
+; Notes: MEASURED.  Selected by SET flags bits 5/6 - which are NEVER set in this
+;        ROM (census over all 487 descriptors), so this emitter is unreachable
+;        with the shipped Table-Data.  Siblings: _S12, _S13, _S10, _S6, _S4.
+; ----------------------------------------------------------------------------
+WaveSel_Emit_ZoneRecord_S15:	; 022A3Fh
 	EXTZ DE
 	MULS_DE 000fh
 	LDA XBC, XBC + DE
@@ -14578,7 +14634,13 @@ LABEL_022A3F:
 	LD (293Eh), WA
 	RET
 
-LABEL_022A61:
+; ----------------------------------------------------------------------------
+; WaveSel_Emit_ZoneRecord_S12 - stride-12 zone-record emitter
+; Entry: XBC = ptrB, DE = zone record index E, XWA = voice descriptor
+; Exit:  as _S15, with pitch class 0x5000 and trim = record[+0x0A]
+; Notes: MEASURED.  Unreachable with the shipped Table-Data (see _S15).
+; ----------------------------------------------------------------------------
+WaveSel_Emit_ZoneRecord_S12:	; 022A61h
 	EXTZ DE
 	MULS_DE 000ch
 	LDA XBC, XBC + DE
@@ -14590,7 +14652,13 @@ LABEL_022A61:
 	LD (293Eh), WA
 	RET
 
-LABEL_022A83:
+; ----------------------------------------------------------------------------
+; WaveSel_Emit_ZoneRecord_S13 - stride-13 zone-record emitter
+; Entry: XBC = ptrB, DE = zone record index E, XWA = voice descriptor
+; Exit:  as _S15, with pitch class 0x3000 and trim = 0
+; Notes: MEASURED.  Unreachable with the shipped Table-Data (see _S15).
+; ----------------------------------------------------------------------------
+WaveSel_Emit_ZoneRecord_S13:	; 022A83h
 	EXTZ DE
 	MULS_DE 000dh
 	LDA XBC, XBC + DE
@@ -14601,7 +14669,13 @@ LABEL_022A83:
 	LDW (293Eh), 0000h
 	RET
 
-LABEL_022AA4:
+; ----------------------------------------------------------------------------
+; WaveSel_Emit_ZoneRecord_S10 - stride-10 zone-record emitter
+; Entry: XBC = ptrB, DE = zone record index E, XWA = voice descriptor
+; Exit:  as _S15, with pitch class 0x1000 and trim = 0
+; Notes: MEASURED.  Unreachable with the shipped Table-Data (see _S15).
+; ----------------------------------------------------------------------------
+WaveSel_Emit_ZoneRecord_S10:	; 022AA4h
 	EXTZ DE
 	MULS_DE 000ah
 	LDA XBC, XBC + DE
@@ -14612,7 +14686,19 @@ LABEL_022AA4:
 	LDW (293Eh), 0000h
 	RET
 
-LABEL_022AC5:
+; ----------------------------------------------------------------------------
+; WaveSel_Emit_ZoneRecord_S6 - stride-6 zone-record emitter (the common one)
+; Entry: XBC = ptrB, DE = zone record index E, XWA = voice descriptor
+; Exit:  (TG_Scratch_Reg040) = record[0];  desc+0x0F = record address
+;        desc+0x01 |= 0x4000;  (WaveSel_Zone_Trim) = record[+0x04]
+; Notes: MEASURED.  Selected when SET flags bit 7 is set: 134 + 9 of the 487
+;        descriptors.  Record = [+0..1] the +0x040 word, [+2..3] pitch word A,
+;        [+4..5] pitch word B.
+;        The 0x4000 stamped into desc+0x01 is the firmware's PITCH class and is
+;        unrelated to the +0x040 class nibble - PIANO uses this emitter yet its
+;        +0x040 nibble is 7.
+; ----------------------------------------------------------------------------
+WaveSel_Emit_ZoneRecord_S6:	; 022AC5h
 	EXTZ DE
 	MULS_DE 0006h
 	LDA XBC, XBC + DE
@@ -14624,7 +14710,16 @@ LABEL_022AC5:
 	LD (293Eh), WA
 	RET
 
-LABEL_022AE7:
+; ----------------------------------------------------------------------------
+; WaveSel_Emit_ZoneRecord_S4 - stride-4 zone-record emitter
+; Entry: XBC = ptrB, DE = zone record index E, XWA = voice descriptor
+; Exit:  (TG_Scratch_Reg040) = record[0];  desc+0x0F = record address
+;        (WaveSel_Zone_Trim) = 0;  desc+0x01 is NOT touched
+; Notes: MEASURED.  Selected when SET flags bit 7 is clear: 318 + 3 + 13 + 10 of
+;        the 487 descriptors.  Record = [+0..1] the +0x040 word, [+2..3] pitch
+;        word A.  This is the only emitter that stamps no pitch class.
+; ----------------------------------------------------------------------------
+WaveSel_Emit_ZoneRecord_S4:	; 022AE7h
 	EXTZ DE
 	SLA 2, DE
 	LDA XBC, XBC + DE
@@ -15903,7 +15998,7 @@ LABEL_023581:
 ;        Finally L==0 -> Pitch_Fold_Octaves_Into_Range, L!=0 -> Pitch_Clamp_Into_Range,
 ;        both bounded by SET[+0x09] (kmin) and SET[+0x0a] (kmax); the result is
 ;        desc[+0x06], which BOTH the pitch register (+0x400) and the wave-select
-;        register (+0x040, via Pitch_Lookup_Zone_For_Key) are derived from.
+;        register (+0x040, via WaveSel_KeyTable_Lookup) are derived from.
 ;        MEASURED end to end: notes/audit/kn5000-audit-pitch.md 1.2/1.4,
 ;        notes/kn5000-variant-model.md 5.1 (+0x400 reproduced 15/16 from ROM bytes).
 ; ----------------------------------------------------------------------------
@@ -16209,19 +16304,31 @@ LABEL_023809:
 	RET
 
 ; ----------------------------------------------------------------------------
-; WaveSel_Build_Reg040 - build the wave-select register (+0x040) from the SET
-; Entry: XWA = voice descriptor with desc[+0x06] (folded pitch) and desc[+0x1F] (SET)
-; Exit:  TG_Scratch_Reg040 (0x0451CE) = wave select word; desc[+0x0f] = zone record
-;        pointer; desc[+0x01] class bits set; WaveSel_Zone_Trim (0x293E) = zone trim
-; Notes: ptrA = SET[+0x01] + DB base, ptrB = SET[+0x05] + DB base (rel32).  The
-;        128-byte key->zone map is *(ptrA) + DB base; the zone index comes from
-;        Pitch_Lookup_Zone_For_Key, and ptrA[4 + zone] is the record number inside
-;        ptrB.  Bits 5/6/7 of SET[0] then select the record stride (15/13/12/10/6/4)
-;        and therefore which builder deposits the per-zone tuning trim used by
-;        Pitch_Apply_Partial_Detune.  Shared with the WAVE-SELECT subsystem.
-;        MEASURED: notes/kn5000-variant-model.md 6.1 (+0x040 reproduced 19/19).
+; WaveSel_StageB_Build_Reg040 - key zone -> the +0x040 wave-select word
+; Entry: XWA = voice descriptor (0x47 bytes: Voice_Desc_Staging, indexed by
+;        partial, or Voice_Desc_Table, indexed by chip voice)
+; Exit:  (TG_Scratch_Reg040) = the 16-bit word destined for register +0x040
+;        desc+0x0F = the selected zone record; desc+0x01 |= the pitch class
+;        (WaveSel_Zone_Trim) = the record's signed pitch offset, or 0
+; Notes: MEASURED.  SETp = desc+0x1F (cached by WaveSel_Cache_SetDescPtr), then
+;            ptrA = (ToneDB_RelBase) + u32[SETp+1]   ; zone-slot remap table
+;            ptrB = (ToneDB_RelBase) + u32[SETp+5]   ; zone record array
+;            ptrC = (ToneDB_RelBase) + u32[ptrA]     ; 128-byte note->slot map
+;            key  = (desc+0x06 >> 8) & 0x7F
+;            E    = ptrA[4 + ptrC[key]]
+;            record = ptrB + stride(SETp[0]) * E ;  word = u16[record]
+;        The record stride comes from SETp[0] bits 5/6/7 -> one of six emitters.
+;        MEASURED over all 487 descriptors: bits 5 and 6 are never set, so only
+;        stride 6 (bit 7 set) and stride 4 actually occur.
+;        The emitted word is { class = bits[15:12], entry = bits[11:0] }.  The
+;        CHIP reads that class as page = class & 3 and bank = (class >> 2) & 3,
+;        with entry indexing that 1 MB page's self-delimiting directory
+;        (notes/kn5000-structural-validation.md 0); the firmware never splits the
+;        nibble itself.
+;        (Named WaveSel_Build_Reg040 by the pitch/velocity pass; the _StageB_
+;        infix is added so the A1/A2/B pipeline reads in order.)
 ; ----------------------------------------------------------------------------
-WaveSel_Build_Reg040:		; 023849h
+WaveSel_StageB_Build_Reg040:		; 023849h
 	LDA XSP, XSP - 12
 	PUSH XIZ
 	LD (XSP + 12), XWA
@@ -16240,7 +16347,7 @@ WaveSel_Build_Reg040:		; 023849h
 	LD XWA, (XSP + 12)
 	LD BC, (XWA + 6)
 	LD XWA, XDE
-	CALR Pitch_Lookup_Zone_For_Key
+	CALR WaveSel_KeyTable_Lookup
 	LD A, L
 	EXTZ WA
 	LD BC, WA
@@ -16256,15 +16363,15 @@ WaveSel_Build_Reg040:		; 023849h
 	LD XBC, (XSP + 8)
 	EXTZ DE
 	LD XWA, (XSP + 12)
-	CALR LABEL_022A3F
-	JR T, LABEL_0238F3
+	CALR WaveSel_Emit_ZoneRecord_S15
+	JR T, WaveSel_StageB_Return
 
 LABEL_0238AC:
 	LD XBC, (XSP + 8)
 	EXTZ DE
 	LD XWA, (XSP + 12)
-	CALR LABEL_022A61
-	JR T, LABEL_0238F3
+	CALR WaveSel_Emit_ZoneRecord_S12
+	JR T, WaveSel_StageB_Return
 
 LABEL_0238B9:
 	BIT 5, (XIZ)
@@ -16272,15 +16379,15 @@ LABEL_0238B9:
 	LD XBC, (XSP + 008h)
 	EXTZ DE
 	LD XWA, (XSP + 00ch)
-	CALR LABEL_022A83
-	JR T, LABEL_0238F3
+	CALR WaveSel_Emit_ZoneRecord_S13
+	JR T, WaveSel_StageB_Return
 
 LABEL_0238CA:
 	LD XBC, (XSP + 008h)
 	EXTZ DE
 	LD XWA, (XSP + 00ch)
-	CALR LABEL_022AA4
-	JR T, LABEL_0238F3
+	CALR WaveSel_Emit_ZoneRecord_S10
+	JR T, WaveSel_StageB_Return
 
 LABEL_0238D7:
 	BIT 7, (XIZ)
@@ -16288,21 +16395,36 @@ LABEL_0238D7:
 	LD XBC, (XSP + 008h)
 	EXTZ DE
 	LD XWA, (XSP + 00ch)
-	CALR LABEL_022AC5
-	JR T, LABEL_0238F3
+	CALR WaveSel_Emit_ZoneRecord_S6
+	JR T, WaveSel_StageB_Return
 
 LABEL_0238E8:
 	LD XBC, (XSP + 008h)
 	EXTZ DE
 	LD XWA, (XSP + 00ch)
-	CALR LABEL_022AE7
+	CALR WaveSel_Emit_ZoneRecord_S4
 
-LABEL_0238F3:
+; ----------------------------------------------------------------------------
+; WaveSel_StageB_Return - common exit of the Stage-B builder
+; ----------------------------------------------------------------------------
+WaveSel_StageB_Return:		; 0238F3h
 	POP XIZ
 	LDA XSP, XSP + 00ch
 	RET
 
-LABEL_0238F8:
+; ----------------------------------------------------------------------------
+; WaveSel_StageB_Build_Reg040_Footage - drawbar/footage variant of Stage B
+; Entry: XWA = voice descriptor
+; Exit:  as WaveSel_StageB_Build_Reg040 (always stride 6, pitch class 0x4000)
+; Notes: MEASURED.  Instead of the key table it derives the zone record index E
+;        from the partial index desc+0x03:  p == 0 -> LABEL_02B154, p < 3 ->
+;        LABEL_02B1E0, else u16[ part_state + 0x102 + 2*p ]; each result passes
+;        through LABEL_02B2C2.  Shares the tail WaveSel_StageB_Store_Reg040 with
+;        the main builder.  Reached from LABEL_02BCD6, for patch record type 0x60
+;        (drawbar registrations) - which is why a DIGITAL DRAWBAR voice's +0x040
+;        is constant across the keyboard.
+; ----------------------------------------------------------------------------
+WaveSel_StageB_Build_Reg040_Footage:	; 0238F8h
 	DEC 4, XSP
 	PUSH XIZ
 	LD XIZ, XWA
@@ -16332,7 +16454,7 @@ LABEL_0238F8:
 	ADD XBC, XWA
 	ADD XBC, XBC
 	ADD (XSP + 004h), XBC
-	JR T, LABEL_02399D
+	JR T, WaveSel_StageB_Store_Reg040
 
 LABEL_023942:
 	CP (XIZ + 003h), 003h
@@ -16357,7 +16479,7 @@ LABEL_023942:
 	ADD XBC, XWA
 	ADD XBC, XBC
 	ADD (XSP + 004h), XBC
-	JR T, LABEL_02399D
+	JR T, WaveSel_StageB_Store_Reg040
 
 LABEL_023979:
 	LD A, (XIZ + 003h)
@@ -16375,7 +16497,18 @@ LABEL_023979:
 	ADD XBC, XBC
 	ADD (XSP + 004h), XBC
 
-LABEL_02399D:
+; ----------------------------------------------------------------------------
+; WaveSel_StageB_Store_Reg040 - shared tail: publish the wave word and the trim
+; Entry: stack +4 = the selected zone record, XIZ = voice descriptor
+; Exit:  (TG_Scratch_Reg040) = record[0];  desc+0x0F = record address
+;        desc+0x01 |= 0x4000;  (WaveSel_Zone_Trim) = record[+0x04]
+; Notes: MEASURED.  Same stores as WaveSel_Emit_ZoneRecord_S6, plus a class
+;        doubling gated on (ToneGen_GlobalFlags) bit 2:
+;            class = (word & 0xF000) * 2 ; word = (word & 0x0FFF) | class
+;        MEASURED live: ToneGen_GlobalFlags = 0x0208 there, so bit 2 is clear and
+;        no doubling happens in the shipped configuration.
+; ----------------------------------------------------------------------------
+WaveSel_StageB_Store_Reg040:	; 02399Dh
 	LD XWA, (XSP + 004h)
 	LD (XIZ + 00fh), XWA
 	ORW (XIZ + 001h), 4000h
@@ -16419,7 +16552,7 @@ LABEL_0239E1:
 ; Notes: desc[+0x0a] = desc[+0x06]
 ;                    + (WaveSel_Zone_Trim)          per-zone tuning trim, 1/256 semitone,
 ;                                                   deposited by the record builder that
-;                                                   ran inside WaveSel_Build_Reg040
+;                                                   ran inside WaveSel_StageB_Build_Reg040
 ;                    + sext(partial_blk[+0x05])*2   PARTIAL FINE TRANSPOSE (x2)
 ;                    + sext(desc[+0x27][+0x21])     UNISON / SLOT DETUNE
 ;                    + (part[+0x14])                part fine tune -- MIDI PITCH BEND
@@ -18393,7 +18526,18 @@ LABEL_024BBD:
 	LDA XSP, XSP + 00ch
 	RETD 0004h
 
-LABEL_024BE3:
+; ----------------------------------------------------------------------------
+; ExtVoice_Build_SlotRegisters - fill scratch +0x10/+0x12 (registers +0x440/+0x480)
+; Entry: XWA = voice descriptor
+; Exit:  (TG_Scratch_Reg440), (TG_Scratch_Reg480) written
+; Notes: MEASURED.  Clears both words FIRST, so the "no extended synthesis" case
+;        is 0 by construction - which is what every ordinary PCM voice gets.
+;        Three branches:
+;          tonerec[+0x1A] != 0                       -> allocate, then LABEL_02DB16
+;          tonerec[+0x1A] == 0, part+0x0A bit 15 set -> LABEL_024DBE / LABEL_024E66
+;          otherwise                                 -> nothing further written
+; ----------------------------------------------------------------------------
+ExtVoice_Build_SlotRegisters:	; 024BE3h
 	LDA XSP, XSP - 016h
 	PUSH XIZ
 	LD (XSP + 016h), XWA
@@ -18440,13 +18584,13 @@ LABEL_024BE3:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00ch), HL
 	LD WA, (XSP + 00ch)
 	LD_W 000h
 	LD (XSP + 00eh), WA
 	CALL LABEL_02DB16
-	JR T, LABEL_024CAB
+	JR T, ExtVoice_Store_SlotNumber
 
 LABEL_024C81:
 	LD A, (XSP + 010h)
@@ -18461,13 +18605,24 @@ LABEL_024C81:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00ch), HL
 	LD WA, (XSP + 00ch)
 	LD_W 000h
 	LD (XSP + 00eh), WA
 
-LABEL_024CAB:
+; ----------------------------------------------------------------------------
+; ExtVoice_Store_SlotNumber - store the allocated slot into the +0x440 scratch
+; Entry: stack local = slot number, XWA = voice descriptor
+; Exit:  (TG_Scratch_Reg440) = (tonerec[+0x1A] & 0xC0) | slot, only if slot < 0x80
+; Notes: MEASURED.  Also indexes a 0x1B-byte per-slot bookkeeping record at
+;        ExtVoice_SlotRecords + 0x1B*slot and stores the voice's velocity
+;        (desc+0x0C with bit 7 cleared) at its +0x06.
+;        For ordinary voices this routine is never reached, so register +0x440
+;        stays 0 - confirming that LABEL_024CAB was mis-read as a wave-number
+;        writer in the earlier notes.
+; ----------------------------------------------------------------------------
+ExtVoice_Store_SlotNumber:	; 024CABh
 	LD WA, (XSP + 00eh)
 	EXTZ XWA
 	LD XBC, 0000001bh
@@ -18598,7 +18753,7 @@ LABEL_024DBE:
 	EXTZ BC
 	LD WA, DE
 	LD DE, 000dh
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00ch), HL
 	LD WA, (XSP + 00ch)
 	LD_W 000h
@@ -18660,7 +18815,7 @@ LABEL_024E66:
 	EXTZ BC
 	LD WA, DE
 	LD DE, 000ch
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00ch), HL
 	LD WA, (XSP + 00ch)
 	LD_W 000h
@@ -18759,7 +18914,7 @@ LABEL_024F41:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00eh), HL
 	LD IZ, (XSP + 00eh)
 	LD IZH, 0
@@ -18781,7 +18936,7 @@ LABEL_024FD4:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00eh), HL
 	LD IZ, (XSP + 00eh)
 	LD IZH, 0
@@ -18922,7 +19077,7 @@ LABEL_025127:
 	EXTZ BC
 	LD WA, DE
 	LD DE, 0010h
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00eh), HL
 	LD IZ, (XSP + 00eh)
 	AND IZ, 00ffh
@@ -19042,7 +19197,7 @@ LABEL_025229:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00eh), HL
 	LD IZ, (XSP + 00eh)
 	LD IZH, 0
@@ -19064,7 +19219,7 @@ LABEL_0252B8:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_02177E
+	CALL ExtVoice_Alloc_StreamSlot
 	LD (XSP + 00eh), HL
 	LD IZ, (XSP + 00eh)
 	LD IZH, 0
@@ -26304,7 +26459,7 @@ LABEL_02A6F7:
 	EXTZ DE
 	LD WA, HL
 	LD BC, IX
-	CALL LABEL_032938
+	CALL WaveSel_Rebuild_PartCaches
 	LD A, (XSP)
 	EXTZ WA
 	MULS_WA 011fh
@@ -27600,9 +27755,9 @@ LABEL_02B4DD:
 ;        the LIVE per-chip-voice copy -- NOT the 0x2942 staging array.  The note-on
 ;        path memcpy s 0x47 bytes from Voice_Desc_Staging[p] into it first.
 ;        CORRECTION: notes/kn5000-variant-model.md 4.1 records only the 0x2942 array.
-;        Builder order: WaveSel_Build_Reg040, Pitch_Apply_Partial_Detune,
+;        Builder order: WaveSel_StageB_Build_Reg040, Pitch_Apply_Partial_Detune,
 ;        Pitch_Emit_Reg400, LABEL_023AD0, TVF_Build_Dispatch, TVF_Emit_Registers,
-;        LABEL_024664, LABEL_0248D5, LABEL_024BE3, LABEL_024F41, LABEL_025229,
+;        LABEL_024664, LABEL_0248D5, ExtVoice_Build_SlotRegisters, LABEL_024F41, LABEL_025229,
 ;        Level_Build_Reg0C0, LABEL_025589, LABEL_025636, LABEL_02591D, LABEL_026396,
 ;        LABEL_026637.  MEASURED.
 ; ----------------------------------------------------------------------------
@@ -27616,7 +27771,7 @@ Voice_Build_Register_Set:		; 02B4E3h
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL WaveSel_Build_Reg040
+	CALL WaveSel_StageB_Build_Reg040
 	LD XWA, XIZ
 	CALL Pitch_Apply_Partial_Detune
 	LD XWA, XIZ
@@ -27632,7 +27787,7 @@ Voice_Build_Register_Set:		; 02B4E3h
 	LD XWA, XIZ
 	CALL LABEL_0248D5
 	LD XWA, XIZ
-	CALL LABEL_024BE3
+	CALL ExtVoice_Build_SlotRegisters
 	LD XWA, XIZ
 	CALL LABEL_024F41
 	LD XWA, XIZ
@@ -27679,7 +27834,7 @@ LABEL_02B576:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD A, (XSP + 024h)
 	LD C, A
 	EXTZ BC
@@ -27687,7 +27842,7 @@ LABEL_02B576:
 	LD E, A
 	EXTZ DE
 	LD XWA, XHL
-	CALL LABEL_032AE0
+	CALL ToneDB_Find_SubToneRecord
 	LD (XSP + 006h), XHL
 	LD XWA, (XSP + 006h)
 	LD A, (XWA + 00dh)
@@ -27713,7 +27868,7 @@ LABEL_02B576:
 	PUSH WA
 	LD WA, BC
 	LD XBC, (XSP + 00ch)
-	CALL LABEL_032682
+	CALL WaveSel_StageA1_FromToneSlot
 	LD (XSP + 00eh), XHL
 	LD A, (XSP + 022h)
 	EXTZ WA
@@ -27723,7 +27878,7 @@ LABEL_02B576:
 	LD A, QIZH
 	EXTZ WA
 	LD XBC, (XSP + 00eh)
-	CALL LABEL_0328B5
+	CALL WaveSel_StageA2_FromVelZone
 	LD A, QIZH
 	SLL 6, A
 	OR A, 012h
@@ -28405,7 +28560,7 @@ LABEL_02BCD6:
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL LABEL_0238F8
+	CALL WaveSel_StageB_Build_Reg040_Footage
 	LD XWA, XIZ
 	CALL Pitch_Apply_Partial_Detune
 	LD XWA, XIZ
@@ -28421,7 +28576,7 @@ LABEL_02BCD6:
 	LD XWA, XIZ
 	CALL LABEL_0248D5
 	LD XWA, XIZ
-	CALL LABEL_024BE3
+	CALL ExtVoice_Build_SlotRegisters
 	LD XWA, XIZ
 	CALL LABEL_024F41
 	LD XWA, XIZ
@@ -28776,7 +28931,7 @@ LABEL_02C0B6:
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL WaveSel_Build_Reg040
+	CALL WaveSel_StageB_Build_Reg040
 	LD XWA, XIZ
 	CALL Pitch_Apply_Zone_Trim
 	LD XWA, XIZ
@@ -28826,7 +28981,7 @@ LABEL_02C12B:
 	LD E, A
 	EXTZ DE
 	LD XWA, XHL
-	CALL LABEL_032AE0
+	CALL ToneDB_Find_SubToneRecord
 	LD (XSP + 004h), XHL
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 00dh)
@@ -28852,7 +29007,7 @@ LABEL_02C12B:
 	PUSH WA
 	LD WA, BC
 	LD XBC, (XSP + 00ah)
-	CALL LABEL_032682
+	CALL WaveSel_StageA1_FromToneSlot
 	LD (XSP + 00ch), XHL
 	LD A, (XSP + 024h)
 	EXTZ WA
@@ -28862,7 +29017,7 @@ LABEL_02C12B:
 	LD A, (XSP + 014h)
 	EXTZ WA
 	LD XBC, (XSP + 00ch)
-	CALL LABEL_0328B5
+	CALL WaveSel_StageA2_FromVelZone
 	LD (XSP + 010h), XHL
 	LD A, (XSP + 028h)
 	EXTZ WA
@@ -29069,7 +29224,7 @@ LABEL_02C3CC:
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL WaveSel_Build_Reg040
+	CALL WaveSel_StageB_Build_Reg040
 	LDA XWA, 0451CEh
 	CALL LABEL_02B3C0
 	LD XWA, XIZ
@@ -29139,7 +29294,7 @@ LABEL_02C450:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD XWA, (XSP + 00eh)
 	LD A, (XWA + 00bh)
 	LD C, A
@@ -29148,7 +29303,7 @@ LABEL_02C450:
 	LD E, A
 	EXTZ DE
 	LD XWA, XHL
-	CALL LABEL_032AE0
+	CALL ToneDB_Find_SubToneRecord
 	LD (XSP + 002h), XHL
 	LD XWA, (XSP + 00eh)
 	BIT 1, (XWA)
@@ -29177,7 +29332,7 @@ LABEL_02C450:
 	PUSH WA
 	LD WA, BC
 	LD XBC, (XSP + 008h)
-	CALL LABEL_032682
+	CALL WaveSel_StageA1_FromToneSlot
 	LD (XSP + 00ah), XHL
 	LD A, (XSP + 020h)
 	EXTZ WA
@@ -29187,7 +29342,7 @@ LABEL_02C450:
 	LD A, QIZH
 	EXTZ WA
 	LD XBC, (XSP + 00ah)
-	CALL LABEL_0328B5
+	CALL WaveSel_StageA2_FromVelZone
 	LD (XSP + 00eh), XHL
 	LD A, (XSP + 024h)
 	EXTZ WA
@@ -30439,6 +30594,32 @@ LABEL_02D0DC:
 	db 00Fh, 0F2h, 002h, 000h, 010h, 050h, 068h, 000h
 	db 000h, 000h, 000h, 05Eh, 00Eh
 
+; ----------------------------------------------------------------------------
+; ToneGen_WriteVoiceParams - burst the 44-byte parameter image to one chip voice
+; Entry: WA = chip voice number (0..63), XBC = TG_Scratch_Base (0x0451CC)
+; Exit:  the voice's registers loaded; scratch unchanged
+; Notes: MEASURED.  Every write is
+;            RES 7,(P6) / LD (100000h),reg / NOP / SET 7,(P6) / LD (100002h),data
+;        - P6.7 is the A23 chip-select that separates the address port at
+;        0x100000 from the data port at 0x100002.
+;        Struct offset -> tone-generator register offset:
+;          +0x02 -> +0x040   wave select { class[15:12], entry[11:0] }  (Stage B)
+;          +0x04 -> +0x080   gate/control - written with bit 15 SET to open the
+;                            burst and re-written with bit 15 CLEAR as the very
+;                            last write, which is what starts the voice
+;          +0x06 -> +0x0C0   level / keyscale        +0x18 -> +0x800
+;          +0x08 -> +0x100   TVF cutoff              +0x1A -> +0x840
+;          +0x0A -> +0x140   TVF depth               +0x1C -> +0x880
+;          +0x0C -> +0x180   expression              +0x1E -> +0x8C0
+;          +0x0E -> +0x400   absolute log pitch      +0x20 -> +0x900
+;          +0x10 -> +0x440   DMA/voice slot          +0x22 -> +0x940
+;          +0x12 -> +0x480   DMA/voice slot          +0x24 -> +0x980
+;          +0x14 -> +0x4C0                           +0x26 -> +0x9C0
+;          +0x16 -> +0x500                           +0x28 -> +0xA00
+;                                                    +0x2A -> +0xA40
+;        The +0x800..+0xA40 half is the envelope-generator level/rate pair set;
+;        see Voice_Calc_LevelPair_EGA/_EGB/_EGC and ToneGen_WriteLevelBurst.
+; ----------------------------------------------------------------------------
 ToneGen_WriteVoiceParams:
 	DEC 4, XSP
 	PUSH IZ
@@ -32326,7 +32507,7 @@ LABEL_02E353:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALL LABEL_0325FC
+	CALL WaveSel_StageA1_FromPatchBlock
 	LD A, (XSP)
 	EXTZ WA
 	MULS_WA 00bh
@@ -32792,7 +32973,7 @@ LABEL_02EC65:
 	EXTZ DE
 	LD WA, HL
 	LD BC, IX
-	CALL LABEL_032938
+	CALL WaveSel_Rebuild_PartCaches
 
 LABEL_02ECBB:
 	INC 2, XSP
@@ -33953,7 +34134,7 @@ LABEL_030960:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALL LABEL_032938
+	CALL WaveSel_Rebuild_PartCaches
 
 LABEL_0309B4:
 	LD WA, (XIZ)
@@ -33987,7 +34168,7 @@ LABEL_0309E4:
 LABEL_0309EA:
 	PUSH XIZ
 	LD XIZ, XDE
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD XBC, XHL
 	LD HL, 0011h
 	LD DE, 0
@@ -34277,7 +34458,7 @@ LABEL_031067:
 LABEL_03106F:
 	PUSH XIZ
 	LD XIZ, XDE
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD A, (XHL + 05dh)
 	LD (XIZ), A
 	LD HL, 1
@@ -34328,7 +34509,7 @@ LABEL_03111A:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	ADD WA, WA
@@ -34396,7 +34577,7 @@ LABEL_0311FD:
 	EXTZ BC
 	LD XWA, XHL
 	LD DE, 00ffh
-	CALL LABEL_032AE0
+	CALL ToneDB_Find_SubToneRecord
 	LD XIZ, XHL
 
 LABEL_03120F:
@@ -34949,7 +35130,7 @@ LABEL_031F00:
 LABEL_031F06:
 	PUSH XIZ
 	LD XIZ, XDE
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD A, (XHL + 011h)
 	LD (XIZ), A
 	LD HL, 1
@@ -34989,17 +35170,194 @@ LABEL_031F16:
 	LD XHL, XWA
 	RET
 
-LABEL_031F71:
-	CP BC, 7
-	JR ULE, LABEL_031F87
-	CP BC, 0040h
-	JR Z, LABEL_031F87
-	CP BC, 0041h
-	JR Z, LABEL_031F87
-	CP BC, 0070h
-	JR NZ, LABEL_031FE4
+; ============================================================================
+;  RESIDENT TONE DATABASE - the data behind subsystem C (wave/sample selection)
+; ============================================================================
+;  The routines below turn "the user picked sound X and pressed key K with
+;  velocity V" into the single 16-bit word the tone generator receives at
+;  register +0x040.  Three stages, all table-driven:
+;
+;    A1  (fine, set) from a patch partial block   -> VelSplit_Record   (11 B)
+;    A2  (fine, set) from the VelSplit_Record     -> MultiSet_Descriptor (15 B)
+;    B   MultiSet_Descriptor + played key         -> the +0x040 word
+;
+;  A1 and A2 run once per tone change (WaveSel_Rebuild_PartCaches) and cache
+;  their results in the part struct; B runs per note-on.
+;
+;  All of these records live in the Table-Data image, which the boot code copies
+;  verbatim from main-CPU 0x830000..0x8A0000 to sub-CPU 0x050000..0x0A0000.
+;  So:  sub S  <->  main S + 0x7E0000  <->  kn5000_table_data.rom offset S - 0x020000.
+;  The symbols are listed with their MAIN addresses in
+;  symbols/table_data_symbols_reference.txt (that is where the bytes are); the
+;  sub-CPU addresses used by the code below are given here.
+;
+;  Every internal pointer is a 32-bit offset relative to (ToneDB_RelBase); the
+;  root struct is at (ToneDB_RootPtr).  Both are set once, statically, at init:
+;  (ToneDB_RelBase) = (ToneDB_RootPtr) = 0x050000, (ToneDB_RamBankB) = 0x0A0000,
+;  (ToneDB_RamBankA) = 0x007800 (the RAM user-tone area).
+;
+;  ToneDB_Root - root of the resident tone database (sub 0x050000)
+;    +0x04  -> bank byte-table (0x050100); u16 program map at its +0x80
+;    +0x08  -> patch pointer array (0x051B00), 629 x rel32
+;    +0x0C  -> A1 index table, families 0x00/0xC0   (0x075A99, 1024 x u16)
+;    +0x10  -> A1 index table, family 0x80          (0x076299, 1024 x u16)
+;    +0x14  -> A1 index table, family 0x40          (0x08FEBD, 1024 x u16)
+;    +0x18  -> VSEL array, families 0x00/0xC0       (0x076A99, 337 x 11)
+;    +0x1C  -> VSEL array, family 0x80              (0x076A99, the same array)
+;    +0x20  -> VSEL array, family 0x40              (0x08F8A3, 142 x 11)
+;    +0x24 / +0x9C -> A2 index table, fam 0x00/0xC0 (0x07959D, 1024 x u16)
+;    +0x28 / +0xA0 -> A2 index table, fam 0x80      (0x079D9D, 1024 x u16)
+;    +0x2C / +0xA4 -> A2 index table, fam 0x40      (0x07A59D, 1024 x u16)
+;    +0x30 / +0x34 / +0x38 -> SET descriptor array  (0x077914, 487 x 15)
+;    +0x74  -> named-tone index table               (0x08D8A3, 4096 x u16)
+;    +0x78  -> named-tone record array              (0x084E6F, 610 x 58)
+;    +0xEA / +0xF0 = 11   VSEL record stride
+;    +0xEC / +0xF2 = 15   SET descriptor stride
+;    +0xEE         = 58   named tone record stride
+;  Array bounds are (gap to the next structure) / stride, and each equals
+;  (max index in its own index table) + 1.
+;
+;  Patch_Record - one instrument ("sound"); 629 of them at sub 0x0524D4
+;    +0x00..+0x0F  16-byte ASCII name, space-centred - the name the UI shows
+;                  (record #0 is "     Piano      ")
+;    +0x10         record/format type: 0x00, 0x10, 0x20, 0x30, 0x60, 0x80.
+;                  WaveSel_Rebuild_PartCaches dispatches on (type & 0xC0):
+;                  0x00 ordinary, 0x40 -> type 0x60 drawbar, 0x80 -> sub-tone
+;                  donor only.
+;    +0x11         partial-present map, TWO BITS PER PARTIAL: partial i is
+;                  present iff bit (2*i) is set (observed 01,05,11,15,45,51,55)
+;    +0x12         a second 2-bit-per-partial field (see Partial_Build_Present_Word)
+;    +0x13         scale-tuning mode, used when the global enable is clear
+;    +0x14..+0x26  patch parameters (effect sends, level/pan matrices, EQ)
+;    +0x27..+0x56  read by ToneDB_Find_SubToneRecord as 2-byte {lo,hi} sub-tone
+;                  selectors.  INFERRED as a general field; MEASURED for patch
+;                  #335 "  Special Kit   ", whose entries select the named
+;                  records "Pick Noise 1/3/4" and "Fret Noise".
+;    +0x57..+0x65  further patch parameters
+;    +0x66 + 0x51*b   Patch_PartialBlock b
+;  The pointer array at 0x051B00 holds rel32 offsets; a tonerec's ptr[0] points
+;  at a BLOCK (record + 0x66 + 0x51*b), not at the record.
+;
+;  Patch_PartialBlock - one partial of a patch record, 0x51 bytes
+;    +0x00  format tag; 0x00 for all 1046 mask-active blocks in this ROM
+;    +0x01  partial flags
+;    +0x02  FINE - low 7 bits index the Stage A1 composite index
+;    +0x03  SET  - { family 0xC0, path 0x30, group 0x0F }
+;    +0x04  coarse transpose, signed semitones (added as sext << 8)
+;    +0x05  fine transpose, signed
+;    +0x06  bits 0..2 = pitch key-follow shift (7 = fixed pitch)
+;    +0x07..+0x50  envelope / level / filter / keyscale parameters
+;  MEASURED over the 1046 mask-active blocks, the SET byte distributes as
+;    family 0x00 x892, 0x40 x51, 0x80 x101, 0xC0 x2
+;    path   0x00 x977, 0x10 x20 (RAM user tone), 0x20 x39, 0x30 x10
+;
+;  VelSplit_Record (VSEL) - velocity switch over four multisample SETs, 11 bytes
+;    337 records at sub 0x076A99 (families 0x00/0x80/0xC0)
+;    142 records at sub 0x08F8A3 (family 0x40)
+;    +0x00  velocity split point 0    ]  q = 0 if vel <= [0]
+;    +0x01  velocity split point 1    ]      1 if vel <= [1]
+;    +0x02  velocity split point 2    ]      2 if vel <= [2] else 3
+;    +0x03 + 2*q   FINE for velocity zone q
+;    +0x04 + 2*q   SET  for velocity zone q
+;  7F 7F 7F in the first three bytes means "no velocity switching" - which is
+;  what the "7F 7F 7F group delimiters" of kn5000-pipe-tonerecord.md 6 were.
+;
+;  MultiSet_Descriptor - one multisample SET header, 15 bytes; 487 at sub 0x077914
+;    +0x00  format flags
+;             bit 7 -> zone-record stride 6; clear -> stride 4
+;             bits 5/6 select the 15/12/13/10-byte emitters - NEVER SET in this ROM
+;             bit 1 -> +0x0B/+0x0C are a SUB-TONE reference, not root/base pitch
+;                      (13 descriptors, all guitar; see ToneDB_Find_SubToneRecord)
+;             bit 0 -> amplitude ceiling 0xFE instead of 0xFF (read in the EG path)
+;             bit 3 -> set on 10 descriptors; consumer NOT identified
+;           MEASURED census: 0x00 x318, 0x01 x3, 0x02 x13, 0x08 x10,
+;                            0x80 x134, 0x81 x9
+;    +0x01  rel32 -> ptrA, the zone-slot remap table.  ptrA[0..3] is itself a
+;                    rel32 -> ptrC (the 128-byte note -> zone-slot key table);
+;                    ptrA[4 + slot] is the zone record index E.
+;    +0x05  rel32 -> ptrB, the zone-record array (stride from bit 7)
+;    +0x09  key range minimum (MIDI note) - lower bound of the octave fold
+;    +0x0A  key range maximum (MIDI note) - upper bound of the octave fold
+;    +0x0B  root key ... OR, when bit 1 is set, the base index into the sub-tone
+;           table of the referenced patch record (observed 0x00 / 0x08 / 0x10)
+;    +0x0C  base pitch, 1/256 semitone ... OR, when bit 1 is set, a {lo,hi} tone
+;           selector - MEASURED: all 13 bit-1 descriptors hold the bytes 7F 41.
+;           Corroborated independently by Pitch_Resolve_Key_Zone, which
+;           substitutes the constant 0x4280 for +0x0C when bit 1 is set.
+;    +0x0E  0x00
+;
+;  MultiSet_ZoneRecord - one key zone of a multisample SET
+;    record = ptrB + stride * E ,  E = ptrA[4 + ptrC[key]]
+;    stride 6 : [+0..1] the +0x040 wave word, [+2..3] pitch word A (s16),
+;               [+4..5] pitch word B (s16, added into the final pitch)
+;    stride 4 : [+0..1] the +0x040 wave word, [+2..3] pitch word A (s16)
+;    +0x040 word = { class = bits[15:12], entry = bits[11:0] }.  1444 distinct
+;    (class, entry) pairs exist across all 487 descriptors; each class is a
+;    95-100% dense 0-based range, i.e. entry is a plain directory index
+;    (notes/kn5000-firmware-sample-tables.md 8).
+;
+;  NamedTone_Record - the ROM's own named sample list, 58 bytes x 610,
+;    at sub 0x084E6F, reached through the 4096-entry index table at 0x08D8A3
+;    +0x00..+0x0C  13-byte ASCII name ("Silent", "Square Click", "FluteKeyClick",
+;                  "Rock Bass Drm", "Fret Noise", ...)
+;    +0x0D         partial-present mask (AND-ed with the caller's 1/2/4/8)
+;    +0x0E, +0x0F  unclassified
+;    +0x10 + 0x15*p   NamedTone_PartialSlot p  (p = 0, 1)
+;    0x0D + 1 + 2 + 2*0x15 = 0x3A = 58 exactly.  MEASURED against records #0..#5.
+;
+;  NamedTone_PartialSlot - one partial of a named tone record, 0x15 bytes
+;    +0x00  partial flags (0x40 / 0x48 observed)
+;    +0x01  FINE   (== Patch_PartialBlock +0x02)
+;    +0x02  SET    (== Patch_PartialBlock +0x03)
+;    +0x03  coarse transpose, signed semitones
+;    +0x04  fine transpose, signed
+;    +0x05..+0x14  envelope / level / filter parameters
+;  Layout == Patch_PartialBlock shifted DOWN ONE BYTE (no format tag), truncated
+;  to 0x15 bytes.  This is why two earlier notes disagreed about which offsets
+;  carry FINE and SET: both were right, about a different record.
+;
+;  OPEN (deliberately not named): the drum-kit per-key map.  0x075A48, the
+;  "DRUM KITS" ptr0, is MEASURED not to be a member of the 629-record patch
+;  array - it is a stand-alone 0x51-byte partial block sitting exactly 0x51
+;  bytes before the A1 index table at 0x075A99.  The mechanism that turns a drum
+;  key into a named tone record is still unlocated; ToneDB_Find_SubToneRecord is
+;  the guitar-noise mechanism and its index range cannot cover 128 keys.
+; ============================================================================
 
-LABEL_031F87:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord - resolve a 16-bit tone selector to a patch record
+; Entry: A  = selector low byte (program 0..0x7F)
+;        C  = selector high byte (bank)
+; Exit:  XHL = pointer to the patch record, in the sub-CPU twin of the Table-Data
+;        image (0x0524D4.. for presets, RAM for user tones)
+; Notes: MEASURED.  The preset banks are exactly {0..7, 0x40, 0x41, 0x70};
+;        anything else falls through to the RAM user-tone / kit paths and
+;        finally to patch record #0.  Preset path:
+;            C   = byte[ ToneDB_Root->BankTable + hi ]
+;            idx = (C << 7) + lo
+;            k   = u16[ ToneDB_Root->BankTable + 0x80 + 2*idx ]
+;            rec = (ToneDB_RelBase) + u32[ ToneDB_Root->PatchPtrs + 4*k ]
+;        Every pointer inside the database is a 32-bit offset relative to
+;        (ToneDB_RelBase); the root struct pointer is (ToneDB_RootPtr).
+;        See the ToneDB_Root / Patch_Record layout blocks below.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord:	; 031F71h
+	CP BC, 7
+	JR ULE, ToneDB_Find_PatchRecord_Preset
+	CP BC, 0040h
+	JR Z, ToneDB_Find_PatchRecord_Preset
+	CP BC, 0041h
+	JR Z, ToneDB_Find_PatchRecord_Preset
+	CP BC, 0070h
+	JR NZ, ToneDB_Find_PatchRecord_UserA
+
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_Preset - preset branch: bank table -> program map -> array
+; Entry: A = program (selector low), C = bank (selector high)
+; Exit:  XHL = patch record pointer
+; Notes: MEASURED.  Reached for banks {0..7, 0x40, 0x41, 0x70}.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_Preset:	; 031F87h
 	LD DE, BC
 	EXTZ XDE
 	LD XBC, (045314h)
@@ -35030,47 +35388,78 @@ LABEL_031F87:
 	LD XWA, (045310h)
 	ADD XWA, XHL
 	LD XHL, XWA
-	JRL T, LABEL_03206E
+	JRL T, ToneDB_Find_PatchRecord_Return
 
-LABEL_031FE4:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_UserA - bank 0x10: RAM user tone, bank A
+; Entry: A = user tone number, C = 0x10
+; Exit:  XHL = (ToneDB_RamBankA) + 0x10 + 0x1D6*A
+; Notes: MEASURED.  0x1D6 is the RAM user-tone record stride.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_UserA:	; 031FE4h
 	CP BC, 0010h
-	JR NZ, LABEL_032002
+	JR NZ, ToneDB_Find_PatchRecord_UserB
 	EXTZ XWA
 	LD XBC, 000001d6h
 	CALL LABEL_03D8CA
 	ADD XHL, 00000010h
 	ADD XHL, (04531Ch)
-	JR T, LABEL_03206E
+	JR T, ToneDB_Find_PatchRecord_Return
 
-LABEL_032002:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_UserB - bank 0x15: RAM user tone, bank B
+; Entry: A = user tone number, C = 0x15
+; Exit:  XHL = (ToneDB_RamBankB) + 0x10 + 0x1D6*A
+; Notes: MEASURED.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_UserB:	; 032002h
 	CP BC, 0015h
-	JR NZ, LABEL_032020
+	JR NZ, ToneDB_Find_PatchRecord_KitA
 	EXTZ XWA
 	LD XBC, 000001d6h
 	CALL LABEL_03D8CA
 	ADD XHL, 00000010h
 	ADD XHL, (045318h)
-	JR T, LABEL_03206E
+	JR T, ToneDB_Find_PatchRecord_Return
 
-LABEL_032020:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_KitA - bank 0x50: the single RAM user drum kit, bank A
+; Entry: C = 0x50
+; Exit:  XHL = (ToneDB_RamBankA) + 0x4980
+; Notes: MEASURED.  No index: bank 0x50 has exactly one kit.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_KitA:	; 032020h
 	CP BC, 0050h
-	JR NZ, LABEL_032032
+	JR NZ, ToneDB_Find_PatchRecord_KitB
 	LD XWA, (04531Ch)
 	LDA XHL, XWA + 4980h
-	JR T, LABEL_03206E
+	JR T, ToneDB_Find_PatchRecord_Return
 
-LABEL_032032:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_KitB - bank 0x55: RAM user drum kits, bank B
+; Entry: A = kit number (only bits 0..1 are used), C = 0x55
+; Exit:  XHL = (ToneDB_RamBankB) + 0x4980 + 0x2927*(A & 3)
+; Notes: MEASURED.  Four kits of 0x2927 bytes each.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_KitB:	; 032032h
 	CP BC, 0055h
-	JR NZ, LABEL_032054
+	JR NZ, ToneDB_Find_PatchRecord_Default
 	AND WA, 0003h
 	EXTZ XWA
 	LD XBC, 00002927h
 	CALL LABEL_03D8CA
 	ADD XHL, 00004980h
 	ADD XHL, (045318h)
-	JR T, LABEL_03206E
+	JR T, ToneDB_Find_PatchRecord_Return
 
-LABEL_032054:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_Default - fallback for an unrecognised bank
+; Entry: none (the bank did not match any branch)
+; Exit:  XHL = patch record #0
+; Notes: MEASURED.  Dereferences ToneDB_Root->PatchPtrs[0], i.e. the same
+;        arithmetic as the preset path with k forced to 0.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_Default:	; 032054h
 	LD XWA, (045314h)
 	LD XHL, (XWA + 008h)
 	LD XWA, (045310h)
@@ -35080,10 +35469,24 @@ LABEL_032054:
 	ADD XWA, XHL
 	LD XHL, XWA
 
-LABEL_03206E:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_PatchRecord_Return - common exit of the bank dispatch
+; Entry: XHL = the resolved record
+; Exit:  XHL unchanged
+; Notes: Shared RET; every branch above jumps here.
+; ----------------------------------------------------------------------------
+ToneDB_Find_PatchRecord_Return:	; 03206Eh
 	RET
 
-LABEL_03206F:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_ToneRecord - tone-selector front end (preset map vs alternate map)
+; Entry: A = selector low byte, C = selector high byte
+; Exit:  XHL = patch record pointer
+; Notes: MEASURED.  (ToneGen_GlobalFlags) bit 0 selects the alternate resolver
+;        LABEL_031F16; otherwise ToneDB_Find_PatchRecord.  Bit 0 is clear in the
+;        shipped configuration, so the ordinary path is the live one.
+; ----------------------------------------------------------------------------
+ToneDB_Find_ToneRecord:		; 03206Fh
 	LD DE, (041343h)
 	BIT 0, DE
 	JR Z, LABEL_03207E
@@ -35091,7 +35494,7 @@ LABEL_03206F:
 	JR T, LABEL_032081
 
 LABEL_03207E:
-	CALR LABEL_031F71
+	CALR ToneDB_Find_PatchRecord
 
 LABEL_032081:
 	RET
@@ -35245,7 +35648,7 @@ LABEL_0321E5:
 	JR UGT, LABEL_032220
 	LD WA, BC
 	LD BC, DE
-	CALR LABEL_03206F
+	CALR ToneDB_Find_ToneRecord
 	LD A, (XSP + 002h)
 	EXTZ WA
 	MULS_WA 011fh
@@ -35256,7 +35659,7 @@ LABEL_0321E5:
 LABEL_032220:
 	LD WA, BC
 	LD BC, DE
-	CALR LABEL_031F71
+	CALR ToneDB_Find_PatchRecord
 	LD A, (XSP + 002h)
 	EXTZ WA
 	MULS_WA 011fh
@@ -35332,7 +35735,7 @@ LABEL_0322F0:
 	JR UGT, LABEL_032312
 	LD WA, BC
 	LD BC, DE
-	CALR LABEL_03206F
+	CALR ToneDB_Find_ToneRecord
 	LD A, (XSP + 002h)
 	EXTZ WA
 	MULS_WA 011fh
@@ -35343,7 +35746,7 @@ LABEL_0322F0:
 LABEL_032312:
 	LD WA, BC
 	LD BC, DE
-	CALR LABEL_031F71
+	CALR ToneDB_Find_PatchRecord
 	LD A, (XSP + 002h)
 	EXTZ WA
 	MULS_WA 011fh
@@ -35418,7 +35821,18 @@ LABEL_0323DF:
 	INC 2, XSP
 	RET
 
-LABEL_0323E5:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_SelectTables - pick the A1 table triple from the SET family
+; Entry: DE = set & 0xC0
+; Exit:  XHL = A1 index-table rel offset, XIX = VSEL array rel offset,
+;        IY = VSEL record stride (11)
+; Notes: MEASURED.  Families 0x00 and 0xC0 share root+0x0C / +0x18 / +0xEA;
+;        family 0x80 -> root+0x10 / +0x1C / +0xEA; family 0x40 -> root+0x14 /
+;        +0x20 / +0xF0.  Absolute addresses in the shipped ROM: index tables
+;        0x075A99 / 0x076299 / 0x08FEBD, VSEL arrays 0x076A99 / 0x08F8A3
+;        (families 0x00, 0x80 and 0xC0 all land on the same 337-record array).
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_SelectTables:	; 0323E5h
 	CP DE, 00c0h
 	JR Z, LABEL_03244F
 	CP DE, 0080h
@@ -35426,14 +35840,14 @@ LABEL_0323E5:
 	CP DE, 0040h
 	JR Z, LABEL_032417
 	CP DE, 0
-	JR NZ, LABEL_032469
+	JR NZ, WaveSel_StageA1_IndexLookup
 	LD XDE, (045314h)
 	LD XHL, (XDE + 00ch)
 	LD XDE, (045314h)
 	LD XIX, (XDE + 018h)
 	LD XDE, (045314h)
 	LD IY, (XDE + 00eah)
-	JR T, LABEL_032469
+	JR T, WaveSel_StageA1_IndexLookup
 
 LABEL_032417:
 	LD XDE, (045314h)
@@ -35442,7 +35856,7 @@ LABEL_032417:
 	LD XIX, (XDE + 020h)
 	LD XDE, (045314h)
 	LD IY, (XDE + 00f0h)
-	JR T, LABEL_032469
+	JR T, WaveSel_StageA1_IndexLookup
 
 LABEL_032433:
 	LD XDE, (045314h)
@@ -35451,7 +35865,7 @@ LABEL_032433:
 	LD XIX, (XDE + 01ch)
 	LD XDE, (045314h)
 	LD IY, (XDE + 00eah)
-	JR T, LABEL_032469
+	JR T, WaveSel_StageA1_IndexLookup
 
 LABEL_03244F:
 	LD XDE, (045314h)
@@ -35461,7 +35875,19 @@ LABEL_03244F:
 	LD XDE, (045314h)
 	LD IY, (XDE + 00eah)
 
-LABEL_032469:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_IndexLookup - the shared A1 index arithmetic
+; Entry: WA = fine & 0x7F, BC = set & 0x0F, XHL/XIX/IY = the table triple
+; Exit:  XHL = (ToneDB_RelBase) + array + stride*entry
+; Notes: MEASURED.  idx = (BC << 7) + WA;  entry = u16[table + 2*idx].
+;        UNRESOLVED: idx can reach 2047 while consecutive index tables are only
+;        1024 entries apart.  Over the 1046 mask-active patch blocks, 20 produce
+;        idx >= 1024 and 7 of those land outside their VSEL array.  Either the
+;        three per-family tables form one contiguous index space that the family
+;        byte merely offsets into, or those blocks are dead data.  Recorded as an
+;        observation - see kn5000-naming-waveselect.md 1.10.
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_IndexLookup:	; 032469h
 	SLL 7, BC
 	ADD BC, WA
 	ADD BC, BC
@@ -35477,7 +35903,23 @@ LABEL_032469:
 	ADD XHL, (045310h)
 	RET
 
-LABEL_03248B:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_FindVelSplit - (fine, set) -> velocity-split record pointer
+; Entry: A = partial index p, C = FINE byte, E = SET byte
+;        stack: +0 part index, +2 user-tone index (or note - see the two feeders)
+; Exit:  XHL = pointer to an 11-byte velocity-split (VSEL) record
+; Notes: MEASURED.  The SET byte is a STRUCTURED address, not a scalar:
+;            set & 0x30 = path    (0x10 -> RAM user tone, {0,0x20,0x30} -> ROM)
+;            set & 0xC0 = family  (picks index table / array base / stride)
+;            set & 0x0F = group   (high 4 bits of the composite index)
+;            fine & 0x7F          = slot within the group
+;        ROM path:  e1   = u16[ A1_index_table + 2*(((set & 0xF) << 7) + (fine & 0x7F)) ]
+;                   VSEL = A1_array_base + 11*e1
+;        Statically validated: PIANO block 0 (fine 0x00, set 0x01) -> VSEL 0x076ABA,
+;        which matches the live desc+0x1B capture; "Silent" (fine 0x00, set 0x40)
+;        -> the family-0x40 array at 0x08F8A3.
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_FindVelSplit:	; 03248Bh
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), A
@@ -35496,22 +35938,35 @@ LABEL_03248B:
 	EXTZ BC
 	AND BC, 0030h
 	CP BC, 0010h
-	JR Z, LABEL_0324DD
+	JR Z, WaveSel_StageA1_UserTonePath
 	CP BC, 0030h
-	JR Z, LABEL_0324D1
+	JR Z, WaveSel_StageA1_PresetPath
 	CP BC, 0020h
-	JR Z, LABEL_0324D1
+	JR Z, WaveSel_StageA1_PresetPath
 	CP BC, 0
-	JRL NZ, LABEL_0325F6
+	JRL NZ, WaveSel_StageA1_Return
 
-LABEL_0324D1:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_PresetPath - ROM-table branch of Stage A1
+; Entry: IZ = fine & 0x7F, IY = set & 0x0F, IX = set & 0xC0
+; Exit:  XHL = VSEL record pointer
+; Notes: MEASURED.  Taken for set & 0x30 in {0x00, 0x20, 0x30}.
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_PresetPath:	; 0324D1h
 	LD WA, IZ
 	LD BC, IY
 	LD DE, IX
-	CALR LABEL_0323E5
-	JRL T, LABEL_0325F6
+	CALR WaveSel_StageA1_SelectTables
+	JRL T, WaveSel_StageA1_Return
 
-LABEL_0324DD:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_UserTonePath - RAM user-tone branch of Stage A1
+; Entry: IX = set & 0xC0, stack +0 = part index, +2 = user-tone index
+; Exit:  XHL = VSEL record inside a 0x1D6-byte RAM user-tone record, at +0x1BA + 11*p
+; Notes: MEASURED.  Taken for set & 0x30 == 0x10.  Checks that the part's patch
+;        pointer really is in the RAM bank before trusting the index.
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_UserTonePath:	; 0324DDh
 	LD BC, IX
 	CP BC, 0040h
 	JRL Z, LABEL_032569
@@ -35520,7 +35975,7 @@ LABEL_0324DD:
 	CP BC, 0080h
 	JR Z, LABEL_0324F7
 	CP BC, 0
-	JRL NZ, LABEL_0325F6
+	JRL NZ, WaveSel_StageA1_Return
 
 LABEL_0324F7:
 	LD C, A
@@ -35547,7 +36002,7 @@ LABEL_032517:
 	LD XWA, (04531Ch)
 	LDA XHL, XWA + DE
 	LDA XHL, XHL + 01bah
-	JRL T, LABEL_0325F6
+	JRL T, WaveSel_StageA1_Return
 
 LABEL_032540:
 	LD A, (XSP + 002h)
@@ -35562,7 +36017,7 @@ LABEL_032540:
 	LD XWA, (045318h)
 	LDA XHL, XWA + DE
 	LDA XHL, XHL + 01bah
-	JRL T, LABEL_0325F6
+	JRL T, WaveSel_StageA1_Return
 
 LABEL_032569:
 	LD C, A
@@ -35589,7 +36044,7 @@ LABEL_032589:
 	LD XWA, (04531Ch)
 	LDA XHL, XWA + DE
 	LDA XHL, XHL + 4ae1h
-	JR T, LABEL_0325F6
+	JR T, WaveSel_StageA1_Return
 
 LABEL_0325B1:
 	LD C, W
@@ -35613,12 +36068,31 @@ LABEL_0325B1:
 	ADD WA, 4ae1h
 	LDA XHL, XBC + WA
 
-LABEL_0325F6:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_Return - common exit of Stage A1 (RETD 0004h)
+; Entry: XHL = the resolved VSEL record, or undefined on the unmatched-path exit
+; Exit:  XHL unchanged; drops the two stack arguments
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_Return:		; 0325F6h
 	POP IZ
 	INC 2, XSP
 	RETD 0004h
 
-LABEL_0325FC:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_FromPatchBlock - Stage A1 fed from a 0x51-byte patch block
+; Entry: A = part index, C = partial index p
+; Exit:  XHL = velocity-split (VSEL) record pointer
+; Notes: MEASURED.  ptr0 = *(Part_Struct_Base + 0x11F*part + 0x6E + 0x25*p), then
+;        (fine, set) = ptr0[+0x02], ptr0[+0x03].
+;        Passes the per-part user-tone index byte (Part_UserToneIndex + 0x11F*part)
+;        as the second stack argument, which Stage A1 only consumes on its
+;        set & 0x30 == 0x10 (RAM user tone) branch.
+;        CORRECTION: this is one of TWO Stage-A1 feeders reading TWO DIFFERENT
+;        record types - see WaveSel_StageA1_FromToneSlot.  The prior notes
+;        disagreed about whether FINE/SET live at +0x01/+0x02 or +0x02/+0x03;
+;        both were right, about a different structure.
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_FromPatchBlock:	; 0325FCh
 	LD E, C
 	EXTZ DE
 	MULS_DE 0025h
@@ -35667,10 +36141,25 @@ LABEL_0325FC:
 	LD WA, IY
 	LD BC, IX
 	LD DE, HL
-	CALR LABEL_03248B
+	CALR WaveSel_StageA1_FindVelSplit
 	RET
 
-LABEL_032682:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA1_FromToneSlot - Stage A1 fed from a 0x15-byte named-record slot
+; Entry: XBC = partial slot (named_record + 0x10 + 0x15*p)
+;        A = partial index p, E = note, stack word = part index
+; Exit:  XHL = velocity-split (VSEL) record pointer
+; Notes: MEASURED.  (fine, set) = slot[+0x01], slot[+0x02].
+;        The 0x15-byte slot is the 0x51-byte patch block shifted DOWN BY ONE BYTE
+;        (the block's constant +0x00 format tag is absent), so its +0x01/+0x02 are
+;        the block's +0x02/+0x03.  Verified against named records #0..#5 of the
+;        ROM array, e.g. "FluteKeyClick" slot 0 = 40 78 40 -> (fine 0x78, set 0x40).
+;        MEASURED CAVEAT: this feeder passes the NOTE in the second stack argument
+;        where WaveSel_StageA1_FromPatchBlock passes a user-tone index.  The value
+;        is only read on the set & 0x30 == 0x10 branch, which no traced caller of
+;        this feeder reaches.
+; ----------------------------------------------------------------------------
+WaveSel_StageA1_FromToneSlot:	; 032682h
 	LD L, (XBC + 001h)
 	LD IYL, L
 	EXTZ IY
@@ -35692,10 +36181,23 @@ LABEL_032682:
 	PUSH WA
 	LD WA, IX
 	LD DE, HL
-	CALR LABEL_03248B
+	CALR WaveSel_StageA1_FindVelSplit
 	RETD 0002h
 
-LABEL_0326B6:
+; ----------------------------------------------------------------------------
+; WaveSel_Cache_VelSplitPtr - resolve and cache a partial's VSEL pointer
+; Entry: A = part index, C = partial index p
+; Exit:  none (writes tonerec+0x04, i.e. Part_Struct_Base + 0x11F*part
+;        + 0x6E + 0x25*p + 4)
+; Notes: MEASURED.  If part_state[+0x00] bit 0 is set the part is playing a RAM
+;        user tone and the pointer is 0x044FCE + 0x1AA + 11*p; otherwise it is
+;        whatever WaveSel_StageA1_FromPatchBlock returns.
+;        This is the "ptr1" that notes/kn5000-pipe-tonerecord.md 6 described as an
+;        undecoded key-zone table with "7F 7F 7F group delimiters" - those 7F
+;        bytes are the three velocity split points of a VelSplit_Record, and the
+;        note's PIANO example 0x076ABA is VSEL #3.
+; ----------------------------------------------------------------------------
+WaveSel_Cache_VelSplitPtr:	; 0326B6h
 	DEC 4, XSP
 	LD (XSP), C
 	LD (XSP + 002h), A
@@ -35737,7 +36239,7 @@ LABEL_032713:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0325FC
+	CALR WaveSel_StageA1_FromPatchBlock
 	LD A, (XSP)
 	EXTZ WA
 	MULS_WA 025h
@@ -35756,7 +36258,21 @@ LABEL_03274D:
 	INC 4, XSP
 	RET
 
-LABEL_032750:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA2_FindSetDesc - (fine, set) -> multisample SET descriptor
+; Entry: A = FINE byte, C = SET byte
+; Exit:  XHL = pointer to a 15-byte MultiSet_Descriptor
+; Notes: MEASURED.  Same shape as Stage A1 with the A2 tables:
+;            family 0x00/0xC0 -> index root+0x24 (or +0x9C), array root+0x30
+;            family 0x80      -> index root+0x28 (or +0xA0), array root+0x34
+;            family 0x40      -> index root+0x2C (or +0xA4), array root+0x38
+;        (ToneGen_GlobalFlags) bit 2 chooses the +0x9C/+0xA0/+0xA4 alternates.
+;        MEASURED: both triples hold identical values in this ROM, so that gate is
+;        a no-op here.  All three array pointers equal 0x077914 - there is exactly
+;        one 487-entry SET array.  Stride 15 comes from root+0xEC (root+0xF2 for
+;        family 0x40).
+; ----------------------------------------------------------------------------
+WaveSel_StageA2_FindSetDesc:	; 032750h
 	PUSH IZ
 	LD L, A
 	EXTZ HL
@@ -35774,7 +36290,7 @@ LABEL_032750:
 	CP WA, 00c0h
 	JR Z, LABEL_032780
 	CP WA, 0
-	JRL NZ, LABEL_032814
+	JRL NZ, WaveSel_StageA2_IndexLookup
 
 LABEL_032780:
 	LD WA, (041343h)
@@ -35793,7 +36309,7 @@ LABEL_03279E:
 	LD XIY, (XWA + 030h)
 	LD XWA, (045314h)
 	LD IZ, (XWA + 00ech)
-	JR T, LABEL_032814
+	JR T, WaveSel_StageA2_IndexLookup
 
 LABEL_0327B2:
 	LD WA, (041343h)
@@ -35812,7 +36328,7 @@ LABEL_0327D0:
 	LD XIY, (XWA + 038h)
 	LD XWA, (045314h)
 	LD IZ, (XWA + 00f2h)
-	JR T, LABEL_032814
+	JR T, WaveSel_StageA2_IndexLookup
 
 LABEL_0327E4:
 	LD WA, (041343h)
@@ -35832,7 +36348,14 @@ LABEL_032802:
 	LD XWA, (045314h)
 	LD IZ, (XWA + 00ech)
 
-LABEL_032814:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA2_IndexLookup - the shared A2 index arithmetic
+; Entry: HL = fine & 0x7F, DE = set & 0x0F, XIX = index table, plus array/stride
+; Exit:  XHL = SET descriptor pointer
+; Notes: MEASURED.  Identical arithmetic to WaveSel_StageA1_IndexLookup, over the
+;        A2 tables and the 15-byte SET stride.
+; ----------------------------------------------------------------------------
+WaveSel_StageA2_IndexLookup:	; 032814h
 	SLL 7, DE
 	ADD DE, HL
 	ADD DE, DE
@@ -35850,7 +36373,15 @@ LABEL_032814:
 	POP IZ
 	RET
 
-LABEL_032839:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA2_FromToneRec - pick the SET for one velocity zone, via the tonerec
+; Entry: A = part index, C = partial index p, E = velocity zone q (0..3)
+; Exit:  XHL = SET descriptor pointer
+; Notes: MEASURED.  Reads the cached VSEL pointer from tonerec+0x04, then
+;        (fine, set) = VSEL[3 + 2*q], VSEL[4 + 2*q], and tail-calls
+;        WaveSel_StageA2_FindSetDesc.
+; ----------------------------------------------------------------------------
+WaveSel_StageA2_FromToneRec:	; 032839h
 	LD L, C
 	EXTZ HL
 	MULS_HL 0025h
@@ -35895,9 +36426,15 @@ LABEL_032839:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	JRL T, LABEL_032750
+	JRL T, WaveSel_StageA2_FindSetDesc
 
-LABEL_0328B5:
+; ----------------------------------------------------------------------------
+; WaveSel_StageA2_FromVelZone - same, with the VSEL pointer already in hand
+; Entry: A = velocity zone q (0..3), XBC = VSEL record
+; Exit:  XHL = SET descriptor pointer
+; Notes: MEASURED.  (fine, set) = VSEL[3 + 2*q], VSEL[4 + 2*q].
+; ----------------------------------------------------------------------------
+WaveSel_StageA2_FromVelZone:	; 0328B5h
 	LD E, A
 	EXTZ DE
 	ADD DE, DE
@@ -35917,18 +36454,20 @@ LABEL_0328B5:
 	LD A, C
 	EXTZ BC
 	LD WA, DE
-	JRL T, LABEL_032750
+	JRL T, WaveSel_StageA2_FindSetDesc
 
 ; ----------------------------------------------------------------------------
-; Partial_Store_Set_Pointer - cache one velocity layer s SET descriptor pointer
-; Entry: A = part index, C = partial slot 0..3, E = velocity zone q 0..3
-; Exit:  *(part_struct + 0x76 + 0x25*C + 4*E) = resolved SET descriptor pointer
-; Notes: The resolver (LABEL_032839) is run once per (slot, zone) at patch-select
-;        time, so note-on only has to index the array with q.  Four SET descriptors
-;        are therefore live per partial slot.  MEASURED:
-;        notes/kn5000-variant-model.md 3.2.
+; WaveSel_Cache_SetDescPtr - cache one (partial, velocity-zone) SET pointer
+; Entry: A = part index, C = partial index p (0..3), E = velocity zone q (0..3)
+; Exit:  none (writes Part_Struct_Base + 0x11F*part + 0x76 + 0x25*p + 4*q)
+; Notes: MEASURED.  The resolver runs once per (partial, zone) at tone-select
+;        time, so note-on only has to index this 4x4 array with q - which is why
+;        note-on does no table walking of its own.  Four SET descriptors are
+;        live per partial slot.  Pairs with WaveSel_Cache_VelSplitPtr.
+;        (Named Partial_Store_Set_Pointer by the pitch/velocity pass; renamed here
+;        so the two cache writers share one vocabulary.)
 ; ----------------------------------------------------------------------------
-Partial_Store_Set_Pointer:		; 0328E2h
+WaveSel_Cache_SetDescPtr:		; 0328E2h
 	DEC 6, XSP
 	LD (XSP), E
 	LD (XSP + 002h), C
@@ -35943,7 +36482,7 @@ Partial_Store_Set_Pointer:		; 0328E2h
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_032839
+	CALR WaveSel_StageA2_FromToneRec
 	LD A, (XSP)
 	EXTZ WA
 	LD BC, WA
@@ -35964,7 +36503,27 @@ Partial_Store_Set_Pointer:		; 0328E2h
 	INC 6, XSP
 	RET
 
-LABEL_032938:
+; ----------------------------------------------------------------------------
+; WaveSel_Rebuild_PartCaches - rebuild a part's whole wave-selection cache
+; Entry: A = part index
+; Exit:  none
+; Notes: MEASURED.  Dispatches on (patch_record[+0x10] & 0xC0), i.e. on the patch
+;        record TYPE byte reached through Part_PatchRecord_Ptr:
+;          0x00 (record types 0x00/0x10/0x20/0x30, the ordinary patches)
+;               -> for p in 0..3 cache the VSEL pointer, then for q in 0..3 cache
+;                  the SET pointer: 4 VSEL + 16 SET pointers.
+;          0x40 (record type 0x60, the drawbar registrations)
+;               -> LABEL_02AAE7 / LABEL_02AB10 four times instead.
+;          0x80 / 0xC0 (record type 0x80, e.g. "  Special Kit   ") -> nothing.
+;               Such records are only ever reached as SUB-TONE donors, never as a
+;               part's own tone.
+;        CORRECTION: the drawbar path is selected HERE, by the type byte - not
+;        through ToneDB_Find_SubToneRecord / ToneDB_Resolve_NamedToneRecord as
+;        notes/kn5000-firmware-sample-tables.md 10.2 states; those are the
+;        guitar-noise path of ToneDB_Find_SubToneRecord.  This is also why drawbar
+;        voices never touch the key-zone tables.
+; ----------------------------------------------------------------------------
+WaveSel_Rebuild_PartCaches:	; 032938h
 	DEC 2, XSP
 	PUSH QIZ
 	LD (XSP + 002h), A
@@ -36000,7 +36559,7 @@ LABEL_032983:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0326B6
+	CALR WaveSel_Cache_VelSplitPtr
 	LD QIZL, 0
 	CP QIZL, 4
 	JR NC, LABEL_0329C0
@@ -36016,7 +36575,7 @@ LABEL_03299E:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR Partial_Store_Set_Pointer
+	CALR WaveSel_Cache_SetDescPtr
 	INC 1, QIZL
 	CP QIZL, 4
 	JR C, LABEL_03299E
@@ -36058,7 +36617,22 @@ LABEL_032A02:
 	INC 2, XSP
 	RET
 
-LABEL_032A08:
+; ----------------------------------------------------------------------------
+; ToneDB_Resolve_NamedToneRecord - {lo,hi} -> one of the 610 named tone records
+; Entry: A = lo, C = hi, E = sub-index, stack word = part index
+; Exit:  XHL = named tone record pointer (58 bytes), or a RAM user-tone slot
+; Notes: MEASURED.  ROM path (hi bit 5 clear):
+;            idx = ((hi & 0x1F) << 7) + (lo & 0x7F)        ; 0..0xFFF
+;            e   = u16[ ToneDB_Root->NamedIndex + 2*idx ]
+;            rec = ToneDB_Root->NamedArray + 58*e          ; stride from root+0xEE
+;        The named array is the ROM's own list of sample NAMES - each record
+;        starts with 13 ASCII bytes ("Silent", "Square Click", "FluteKeyClick",
+;        "Rock Bass Drm", ...) - see the NamedTone_Record layout block.
+;        CORRECTION: the index table holds 4096 entries (0x2000 bytes), not the
+;        1024 quoted in notes/kn5000-firmware-sample-tables.md 0; 4096 is what
+;        the ((hi & 0x1F) << 7) addressing requires.
+; ----------------------------------------------------------------------------
+ToneDB_Resolve_NamedToneRecord:	; 032A08h
 	PUSH IZ
 	LD L, (XSP + 006h)
 	LD IY, WA
@@ -36068,9 +36642,9 @@ LABEL_032A08:
 	AND BC, 0020h
 	LD WA, BC
 	CP WA, 0020h
-	JR Z, LABEL_032A68
+	JR Z, ToneDB_Resolve_NamedToneRecord_User
 	CP WA, 0
-	JRL NZ, LABEL_032ADA
+	JRL NZ, ToneDB_Resolve_NamedToneRecord_Return
 	LD XWA, (045314h)
 	LD XDE, (XWA + 074h)
 	LD XWA, (045314h)
@@ -36091,9 +36665,15 @@ LABEL_032A08:
 	ADD XWA, XBC
 	ADD XWA, (045310h)
 	LD XIX, XWA
-	JR T, LABEL_032ADA
+	JR T, ToneDB_Resolve_NamedToneRecord_Return
 
-LABEL_032A68:
+; ----------------------------------------------------------------------------
+; ToneDB_Resolve_NamedToneRecord_User - hi bit 5 set: the RAM user-tone branch
+; Entry: as ToneDB_Resolve_NamedToneRecord
+; Exit:  XHL = RAM user-tone slot (stride 0x50 inside the +0x4AA7 region)
+; Notes: MEASURED.
+; ----------------------------------------------------------------------------
+ToneDB_Resolve_NamedToneRecord_User:	; 032A68h
 	LD A, L
 	EXTZ WA
 	MULS_WA 011fh
@@ -36113,7 +36693,7 @@ LABEL_032A88:
 	ADD BC, 4aa7h
 	LD XWA, (04531Ch)
 	LDA XIX, XWA + BC
-	JR T, LABEL_032ADA
+	JR T, ToneDB_Resolve_NamedToneRecord_Return
 
 LABEL_032AA2:
 	LD A, E
@@ -36133,12 +36713,35 @@ LABEL_032AA2:
 	ADD XIX, (045318h)
 	LDA XIX, XIX + 4aa7h
 
-LABEL_032ADA:
+; ----------------------------------------------------------------------------
+; ToneDB_Resolve_NamedToneRecord_Return - common exit of the named-record resolver
+; Entry: XHL = the resolved record
+; Exit:  XHL unchanged
+; ----------------------------------------------------------------------------
+ToneDB_Resolve_NamedToneRecord_Return:	; 032ADAh
 	LD XHL, XIX
 	POP IZ
 	RETD 0002h
 
-LABEL_032AE0:
+; ----------------------------------------------------------------------------
+; ToneDB_Find_SubToneRecord - follow a patch's sub-tone reference to a named record
+; Entry: XWA = patch record, C = sub-tone index i, E = part index
+; Exit:  XHL = pointer to the resolved 58-byte named tone record
+; Notes: MEASURED.  Reads the 2-byte selector {lo,hi} at patch + 0x27 + 2*i and
+;        hands it to ToneDB_Resolve_NamedToneRecord.
+;        Reached from the note >= 0x78 branch of the note-on path, where
+;        i = note - 0x78 + MultiSet_Descriptor[+0x0B].  For the 13 SET descriptors
+;        whose flags bit 1 is set (all guitar SETs) the selector at +0x0C is the
+;        byte pair 7F 41, which resolves to patch record #335 "  Special Kit   ";
+;        its +0x27 table then selects the named records "Pick Noise 1/3/4" and
+;        "Fret Noise".  MEASURED from the Table-Data ROM: all 13 bit-1 descriptors
+;        carry 7F 41 at +0x0C, and their +0x0B values are 0x00 / 0x08 / 0x10.
+;        So MIDI notes 120..127 on a guitar patch play the ROM's fret/pick noise.
+;        INFERRED: that +0x27 is a general sub-tone table.  For patches that never
+;        take this branch those bytes are ordinary patch parameters.
+;        Evidence: kn7000_mame/notes/naming/kn5000-naming-waveselect.md 1.3.
+; ----------------------------------------------------------------------------
+ToneDB_Find_SubToneRecord:	; 032AE0h
 	LD L, C
 	EXTZ HL
 	ADD HL, HL
@@ -36162,7 +36765,7 @@ LABEL_032AE0:
 	LD WA, IY
 	LD BC, IX
 	LD DE, HL
-	CALR LABEL_032A08
+	CALR ToneDB_Resolve_NamedToneRecord
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -38922,7 +39525,7 @@ LABEL_034ACD:
 	LD XWA, (XSP + 002h)
 	LD E, (XWA + 003h)
 	LD WA, HL
-	CALR LABEL_032938
+	CALR WaveSel_Rebuild_PartCaches
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 011fh
@@ -39517,7 +40120,7 @@ LABEL_035007:
 	EXTZ BC
 	LD XWA, XDE
 	LD DE, 00ffh
-	CALL LABEL_032AE0
+	CALL ToneDB_Find_SubToneRecord
 	LD (XSP + 004h), XHL
 	LD WA, (XSP + 008h)
 	EXTZ XWA
@@ -39551,7 +40154,7 @@ LABEL_035007:
 	PUSHW 00ffh
 	LD DE, WA
 	LD WA, 0
-	CALL LABEL_032682
+	CALL WaveSel_StageA1_FromToneSlot
 	LD WA, (XSP + 008h)
 	EXTZ XWA
 	LD XBC, XWA
@@ -39577,7 +40180,7 @@ LABEL_035007:
 	PUSHW 00ffh
 	LD DE, WA
 	LD WA, 1
-	CALL LABEL_032682
+	CALL WaveSel_StageA1_FromToneSlot
 	LD WA, (XSP + 008h)
 	EXTZ XWA
 	LD XBC, XWA
@@ -39603,7 +40206,7 @@ LABEL_0350FA:
 	PUSH IZ
 	EXTZ WA
 	EXTZ BC
-	CALL LABEL_03206F
+	CALL ToneDB_Find_ToneRecord
 	LD (XSP + 002h), XHL
 	LD XDE, (04531Ch)
 	LD XWA, (XSP + 002h)
@@ -40000,7 +40603,7 @@ LABEL_0354CA:
 	EXTZ DE
 	LD WA, HL
 	LD BC, IX
-	CALL LABEL_032938
+	CALL WaveSel_Rebuild_PartCaches
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 011fh

@@ -115,3 +115,26 @@ BOOTTIMER_INTERRUPTHANDLER 0x9FEA9D
 HANDLER_INT4 0x9FEAB2
 HANDLER_INTA 0x9FF229
 RESET_HANDLER 0x9FFEE0
+#
+# RESIDENT TONE DATABASE - the wave/sample-selection tables the sub-CPU reads.
+# Copied verbatim to sub-CPU 0x050000..0x0A0000 at boot, so sub S = main S + 0x7E0000.
+# (naming pass 2026-07-26; see kn7000_mame/notes/naming/kn5000-naming-waveselect.md
+#  and the RESIDENT TONE DATABASE block in archive/asl/subcpu/kn5000_subprogram_v142.asm)
+#
+ToneDB_Base 0x830000
+ToneDB_BankTable 0x830100
+ToneDB_ProgramMap 0x830180
+ToneDB_PatchPtrArray 0x831B00
+ToneDB_PatchRecords 0x8324D4
+ToneDB_DefaultPartialBlock 0x855A48
+ToneDB_A1Index_Fam00 0x855A99
+ToneDB_A1Index_Fam80 0x856299
+ToneDB_VelSplit_Records 0x856A99
+ToneDB_MultiSet_Descriptors 0x857914
+ToneDB_A2Index_Fam00 0x85959D
+ToneDB_A2Index_Fam80 0x859D9D
+ToneDB_A2Index_Fam40 0x85A59D
+ToneDB_NamedTone_Records 0x864E6F
+ToneDB_NamedTone_Index 0x86D8A3
+ToneDB_VelSplit_Records_Fam40 0x86F8A3
+ToneDB_A1Index_Fam40 0x86FEBD
