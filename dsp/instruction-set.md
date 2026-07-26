@@ -81,8 +81,27 @@ earlier, which is exactly what an integration pass is for.
 > two side by side. Re-run the audit with
 > `python3 dsp/tools/retraction_sweep.py selftest && … sweep && … code`.
 
+> ★ **AND THE OUTPUT-STAGE PASS (`analysis/output-stage-decode.md`) CLOSED THE FRAME.**
+> The `+121` residue above is **not a defect in the ALU decode**: it is what walking one
+> pointer straight through a machine that **rebases it per unit** produces. The host's own
+> per-algorithm zero-fill, solved against the bodies' pointer walks, PINS the per-unit body
+> **entry pointer** at `0x05` (unit 0) and `0x85` (unit 1) — three independent derivations,
+> including one with no free parameter (PARAMETRIC EQ's 40-cell contiguous run against the
+> host's 40-cell fill block) — and then `X = 0xFF` follows **twice**: from the header walk
+> (`X + 6 = 0x05`) and from the reverb walk plus the output stage (`0x85 + 123 − 1`). The
+> frame closes with **residue 0**. Consequences: the mode-1 register file and the mode-2
+> D-RAM **are one RAM** (the reading `isa-adjudication.md` §6 enumerated without a test);
+> the per-unit **state block** sits at ENTRY+75, which is exactly the host's `0x50`/`0xD0`,
+> in **85 of 85** streams; and the rebase's value is in **no** instruction immediate, so
+> K4 item D's per-unit **BASE REGISTER** is confirmed with a measured value.
+
 | withdrawn claim | why | replaced by |
 |---|---|---|
+| **"the D-RAM absolute base is still unpinned, so no D-RAM absolute is printed"** (Addressing, below) | `analysis/output-stage-decode.md` §3 solved it from the host's zero-fill: entry `0x05`/`0x85`, `X = 0xFF`, and 3 independent derivations agree. It also explains why `isa-adjudication.md` §5.1's naive test scored only 47/85 — `0x50`/`0xD0` are the **state-block bases at ENTRY+75**, not the origins | the map in `analysis/output-stage-decode.md` §3.5, conditional on the one-RAM reading (which that pass is the first positive test of) |
+| **"registers `0x8C`, `0x8D`, `0x8F` — the three the host never touches … their role is OPEN"** (R2 §3.3, §7) | They are **unit-1 body cells at ENTRY+7 / +8 / +10**, and `0x8C` and `0x8F` are two of the three cells the reverb READS AND NEVER WRITES. `P ≈ 1.6e-4` under a 14-of-256 null | `analysis/output-stage-decode.md` §0 item G |
+| **"`w60`/`w61` are adjacent mode-1 stores with nothing between them, so under a `mem[ptr]` target the first is provably dead"** (R2's cleanest argument for the mode-dependent bit-4 target) | `w60` is `(bit7, f31) = (1, 1)` and the **ADOPTED** store gate suppresses its store outright — so there is only one store and nothing is dead. R2's *conclusion* stands on K5's DETERMINED call-vector result; this particular argument is **MOOT** | `analysis/output-stage-decode.md` §0 item L |
+| **"the five `lo12 = 0x820` words"** treated as one family (K3 §5.3, `closure-pointer.md` §8, `dsp-frame-advance.md` #4) | Under the C-FORMAT OPCODE (`bits[35:25]`) they carry **four different opcodes** — `602`, `605` ×2, `621`, `625`. They share a **destination**, not an instruction, which is why no single field rule ever fitted all five. The negative results survive; the framing does not | the opcode census, `analysis/output-stage-decode.md` §5 |
+| **"the per-unit result … cannot be in the accumulator either"** (R2 §0 item 9, FORCED) | `w73`'s `SRC` is `0x10` = **the accumulator**, an ANCHORED code, so the unit-0 result *is* there at the presentation. R2's argument forbids it *surviving the 156 words* since the unit-0 return — a different statement | **NARROWED**: something in I-RAM 60..72 loads it; the only word there naming a unit-0 cell is `w63` (`analysis/output-stage-decode.md` §6.3) |
 | **`C40.1.80.000` and `C40.1.E0.451` are class-1 delay-DRAM words, and they corroborate R2's withdrawal of the `addr8` bit-7 split** (R3 §6.1, §9.5) | They are **C-FORMAT IMMEDIATE LOADS** — `hi12[11:8] == 0xC`, so `class4`/`addr8` are immediate data, not fields. R3's family predicate carries no C-format guard. Decisive: `C40.1.80.000` (A=12) and `C40.2.C0.000` (A=22) are **the same instruction** — same family, same destination `lo12 = 0x000` — differing only in the immediate; one reads `class4 == 1` and the other `class4 == 2` *because bit 8 of the immediate differs*. No machine can make one touch the DRAM and not the other. **FORCED.** | the guarded family (`is_dram()`); R2's bit-7 withdrawal stands on its own evidence (324/324 vs 3 misclassified) and never needed this |
 | **the descriptor-cursor counting model is "consistent with zero residual, 8 solutions in {0,1}"** (R3 §6.1) | That holds only *with* the contamination above. Guarded, the {0,1} solution set collapses to **none** and the naive identity falls **88/96 → 80/96**: the whole residual was being absorbed by two immediates. The twelve reverbs balance only if the four `C40.1.80.000` consume; the COMPRESSOR family only if its two `C40.1.E0.451` do not. | "a good fit with 16 rows over", plus the enumerated resolutions in `analysis/isa-adjudication.md` §2.2. **Every VALIDATED R3 number survives** — the first DRAM word of every body is unchanged, so the ms→address chain, the residue test and the doubled delay lengths are untouched |
 | **the C-format family predicate is `(hi12 & 0xFFE) == 0xC40`** (the Word-format section, below) | That is the predicate of the **payload rule**, not of the format. The FORMAT is `hi12[11:8] == 0xC` (68 words) — which `dsp_disasm.c_format()` has always implemented. Wide is forced three ways: R2's census reproduces row for row **only** under it; classes 3/7/B/E/F are empty **only** under it (narrow, the corpus's one "class 3" is `C04.3.12.820`, a header *pointer-load* word); and both `C00` words carry a **non-zero `B`** while encoding their own I-RAM address. | two predicates: `c_format()` = the format, `is_c40()` = the payload rule (`A = imm13>>5`, `B == 0`, 57/57 in, 2/11 out) |
@@ -139,6 +158,17 @@ exactly the four padding bits). The working field map is INFERRED
   |---|---|---|---|
   | **the FORMAT** | `hi12[11:8] == 0xC` | **68** | whether `class4`/`addr8` exist at all |
   | **the PAYLOAD RULE** | `(hi12 & 0xFFE) == 0xC40` | **57** | whether imm13 is a multiple of 32 (`B == 0`) |
+
+  ★ **AND THERE IS AN OPCODE FIELD, `bits[35:25]`** (`analysis/output-stage-decode.md`
+  §5). Eight values over the 68 words — `600` (2, both WAITs), `602` (1), `605` (3),
+  `60B` (1), **`620` (57)**, `621` (1), `625` (1), `632` (2) — and **the PAYLOAD RULE
+  IS `opcode == 0x620`**, exactly. So "imm13 is a multiple of 32" is not a mysterious
+  family-locality: it is a property of **one instruction**, and the 11 words outside
+  it are simply *other instructions*. Corollary the tree had wrong: the five
+  `lo12 = 0x820` header words carry **four different opcodes**, so they are not a
+  family at all — they share a destination. Neither disassembler renders the opcode
+  yet (both still print a C-format word's `hi12` as microword flags, which is
+  meaningless); that is a sync item.
 
   The 11 words between them are **all kernel words** (8 header, 3 output stage,
   **0 of 2974 body words**) and exactly **2 of 11** are multiples of 32. Use the
@@ -529,8 +559,21 @@ There is **no encoded space-selector field**; the memory space is
   `800.1.60.00B`, which occurs exactly twice in the machine, once at offset +4 of
   each per-unit setup block and nowhere else. ENUMERATED, not decided.
 - **D-RAM** (state) — reached through the signed-`addr8` data pointer (`mem[ptr]`)
-  in mode 2. Its absolute base is **still unpinned**, so **no D-RAM absolute is
-  printed**. ⚠ **Corrected by K3 (`analysis/k3-pointers.md`): the header's per-unit
+  in mode 2. ★ **THE ORIGIN IS NOW PINNED** (`analysis/output-stage-decode.md` §3):
+  the per-unit body **entry pointer** is `0x05` (unit 0) and `0x85` (unit 1), the
+  per-unit **state block** is at ENTRY+75 — which is exactly the host's own `0x50` /
+  `0xD0` — in **85 of 85** streams, and the pointer at PC-restart is **`X = 0xFF`**,
+  reached two independent ways, at which the frame **closes with residue 0** against
+  the standing `+121`. Three derivations of the entry: PARAMETRIC EQ's 40-cell
+  contiguous run against the host's 40-cell fill block (**unique, no free
+  parameter**); the exhaustive 256-way scan (unit 0 **626/729** against 467 for the
+  runner-up, unit 1 **96/108** against 72); and `min(host zero-fill)` = `0x05` in
+  **79/79** and `0x85` in **12/12** streams. The systematic miss is `0x06` / `0x86`
+  — ENTRY+1, the two per-unit OUTPUT LEVELS, which the bodies leave alone.
+  ⚠ **This is conditional on the mode-1 index space and the mode-2 D-RAM being ONE
+  RAM** (below); that reading was ENUMERATED without a test and this is the test.
+  Still **not printed** by either disassembler — it needs a per-image unit and the
+  dependency labelled. ⚠ **Corrected by K3 (`analysis/k3-pointers.md`): the header's per-unit
   `0x70` / `0x50` are NOT the D-RAM base** — they are **C-RAM** addresses, and
   specifically the bases of the two tap tables the host writes at C-RAM `0x50` and
   `0x70`. *(Beware the numerical trap: C-RAM `0x50` and register-file `0x50` are
@@ -548,6 +591,15 @@ There is **no encoded space-selector field**; the memory space is
   continuous walk, no mid-body reload), and the residual failures are **not**
   explained (uncovered offsets split 94 odd / 69 even, so the tempting
   "stereo bodies walk twice" story is *not* supported). ENUMERATED, not picked.
+  ★ **RESOLVED** by `analysis/output-stage-decode.md` §3: the one-RAM reading is
+  right and `0x50`/`0xD0` was the wrong *anchor* inside it — those are the
+  **state-block bases at ENTRY+75**, not the origins, which is precisely why the
+  test scored 47/85 instead of 85/85. Anchored at the entry instead, the fit is
+  three-ways over-determined. The `0x827` slot stays **OPEN**: the origin does not
+  come from any of the five pointer registers, it comes from a **per-unit BASE
+  REGISTER** the CALL copies (K4 item D, now with a measured value
+  `base = 0x05 | (unit << 7)`), and `0x85` appears in **no** nibble-aligned field
+  of I-RAM 50..58.
 - **C-RAM has at least TWO pointers** — the implicit cursor *and* the register
   `lo12 = 0x821`, which is FORCED not to be the cursor (K3 §4.2). The host's C-RAM
   map has exactly four structural bases, `{0x00, 0x50, 0x70, 0x90}`, and the two
