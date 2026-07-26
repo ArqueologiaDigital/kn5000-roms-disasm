@@ -77,6 +77,15 @@ Each carries its evidence in `tools/dsp_disasm.py` next to the code that emits i
 | `202.A.dd.1D4` | `mac.lb (p)+dd` | as `mac`, and latch B ← mem[p] | **DETERMINED**, same source |
 | `212.A.dd.407` | `mulst (p)+dd` | `mem[p] <- acc ; P = coef[cursor++] * acc ; p += (s8)dd` | **DETERMINED UNIQUELY** |
 
+**`lo12` selects the MULTIPLICAND ROUTE.** The three forms above already differ
+only in `lo12` and only in where the multiplier reads: `0x1D5 → mem[p]`,
+`0x407 → acc`. R1 adds a fourth route — the reverb's `102.A.**.64B` needs a
+**sum of two registers**, which neither `mem[p]` nor the incoming `acc` can
+supply, so `0x64B` routes something else (the word's own ALU result under a
+2-input ALU; `mem[p]` pre-built under a 3-input one). Independent support for the
+"`lo12` = route, `class4` = arithmetic" hypothesis (`-core-draft.md` §6 item 2).
+See `analysis/r1-allpass-motif.md` §9.
+
 The recovered interpreter reproduces the transfer function of nine real ROM
 coefficient banks at max|err| = 0 (`notes/kn5000-dsp-semantics.md` §4) — the
 biquad and reverb families are solved on top of these three multiply forms.
@@ -89,10 +98,22 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
 - **terminator / END OF BLOCK** — `class4==1 && addr8 ∈ {0E,0F}` carries a
   transfer of control (CALL/RETURN, unit-tagged); the untagged form falls
   through. `addr8` is the **unit index** (91/91), not the halt.
-- **external-DRAM bracket** — `880.1.60.*` OPEN / `880.1.20.*` CLOSE (INFERRED,
-  MCC +0.944 over the DRAM-using effects); `880.1.30.*` framing.
-- **all-pass marker** `104.2.00.000` (MCC +0.881); the reverb diffuser
-  write/partner pair `012.2.00.680` / `000.2.00.419`.
+- ~~**external-DRAM bracket** — `880.1.60.*` OPEN / `880.1.20.*` CLOSE~~ —
+  **superseded.** The bracket reading was already falsified by the per-frame
+  counts (roadmap §1.6). R1's constraint solve **FORCES the direction**:
+  `880.1.60.*` is the delay-DRAM **READ** and `880.1.20.*` the **WRITE**; the
+  opposite assignment has zero survivors in all three models searched
+  (`analysis/r1-allpass-motif.md` §5). The read data becomes visible **2–5 words**
+  later. `880.1.30.*` framing is unchanged.
+- **all-pass marker** `104.2.00.000` (MCC +0.881) is slot 1 of a
+  **software-pipelined one-multiplier all-pass stage**, together with
+  `000.2.00.419`, `012.2.00.680` and the multiply `102.A.**.64B`; the write
+  trails the read by exactly one ladder stage. Two role assignments for the six
+  words survive the constraint search and the corpus ranks — but does not
+  prove — one of them (`analysis/r1-allpass-motif.md`).
+- **hi12 bit 4 takes the accumulator BEFORE the word's own ALU step** —
+  **FORCED**, zero survivors for "after" in all three models
+  (`analysis/r1-allpass-motif.md` §5).
 - **LFO** — `hi12=0x082` read; `092.A.00.200` phase accumulate; `094.A.00.200`
   wrap on `0x7FFFFF`.
 - ~~**envelope detector** — `hi12=0xC40`~~ — **WITHDRAWN.** `hi12 ∈ {0xC40,0xC41}` is a

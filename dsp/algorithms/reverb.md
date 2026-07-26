@@ -15,10 +15,29 @@ distillation.
 ## Structure — MEASURED
 
 The 133-word program is built from an **8-instruction motif repeated 9 times**, in
-two blocks of 5 and 4. The motif is **byte-identical** at every repetition, and 5
-of its 8 words occur in **exactly the 13 reverb programs and nowhere else** in the
-96-program corpus — a strong structural fingerprint. The two blocks are the **two
-ladders of five all-pass diffusers** predicted by the coefficient bank.
+two blocks of **5 and 4**, and 5 of its 8 words occur in **exactly the 13 reverb
+programs and nowhere else** in the 96-program corpus — a strong structural
+fingerprint. The two blocks are the two **all-pass diffuser ladders** predicted by
+the coefficient bank.
+
+> **Corrections, MEASURED, 2026-07-26** (`../analysis/r1-allpass-motif.md` §1.1,
+> re-measured with `../tools/r1_allpass_solve.py census`):
+> * the motif is **not** byte-identical at every repetition — `addr8` of its 6th
+>   word (the class-A multiply) is `0xBA` at the head of ladder 1 in all twelve
+>   presets, and `0xC4` once in GATED REVERB. Every other field of every other
+>   word is constant, over all 114 core occurrences;
+> * ladder 1 has **four** repetitions, not five ("two ladders of five" is wrong
+>   for the code, though the *parameter stream* really does tile 5+5 buffers —
+>   that off-by-one is still open);
+> * GATED REVERB (algo 8) carries **6** cores, not 4;
+> * the ladder gains are **not** strictly descending in PLATE REVERB 2 or
+>   BRIGHT REVERB 1 (10 of 12 presets, not 12).
+>
+> The **per-repetition semantics** of the motif are worked out by constraint
+> solving in [`../analysis/r1-allpass-motif.md`](../analysis/r1-allpass-motif.md):
+> the core is a software-pipelined one-multiplier all-pass stage, the `880.1.60`
+> word is the delay-DRAM **read** and `880.1.20` the **write**, and the write
+> trails the read by exactly one stage. Two role assignments still survive.
 
 The coefficient bank (unit-1 base **0x90**), read off the named-coefficient
 overlay in the listing:
@@ -36,10 +55,15 @@ C-RAM[0xA6..A8]  damping triple #3
 C-RAM[0xA9..B0]  LEFT / RIGHT output tails (op 0x66 / ER.LEVEL)
 ```
 
-Both chains are **strictly descending gain ladders** — the textbook diffuser
-signature — matching the two 5-gain ladders derived independently from the
-coefficient bank. All 33 class-A multiplies of the image land on one of these
-named slots, so the reverb is named **33/33**.
+Both chains are descending gain ladders in **10 of the 12 presets** — the textbook
+diffuser signature (PLATE REVERB 2 and BRIGHT REVERB 1 permute the same values;
+MEASURED, `../analysis/r1-allpass-motif.md` §2). All 33 class-A multiplies of the
+image land on one of these named slots, so the reverb is named **33/33**.
+
+The base **0x90** is now PROVEN BY CONSTRUCTION, not inferred: every type-2
+coefficient block in the parameter stream is preceded by a literal
+`08 01 09 08 21` packet — the instruction word `801.0.90.821` = `ldptr #$90`
+(`../analysis/r1-allpass-motif.md` §2).
 
 ## Delay lengths — MEASURED, in the parameter stream
 
