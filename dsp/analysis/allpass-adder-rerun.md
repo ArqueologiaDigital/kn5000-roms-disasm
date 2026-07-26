@@ -23,6 +23,7 @@ ADDER_PARTS=gate,control  python3 dsp/tools/r1_allpass_solve.py adder   # ~1 min
 ADDER_PARTS=count         python3 dsp/tools/r1_allpass_solve.py adder   # ~25 min
 ADDER_PARTS=route         python3 dsp/tools/r1_allpass_solve.py adder   # ~10 min
 ADDER_PARTS=search ADDER_ROW=0|1  python3 dsp/tools/r1_allpass_solve.py adder
+ADDER_PARTS=gardner       python3 dsp/tools/r1_allpass_solve.py adder   # sect. 6.2 / 6.3
 ADDER_PARTS=forms         python3 dsp/tools/r1_allpass_solve.py adder
 python3 dsp/tools/r1_allpass_solve.py singledelay adjudicate   # the harness-leak retest
 ```
@@ -446,16 +447,18 @@ stores `d_in[r] = x[r] + t[r]`; at steady state, in the same atoms, that is
 `±(N − Q + Q')`. Over all four DRAM write-data sources:
 
 ```
-   sequential   exact-Gardner MULTIPLICAND  9660
-                | of those, also pass the loop filter        4148
-                | of those, exact-Gardner WRITE-BACK            0
-                | BOTH exact AND loop-consistent                 0
-                | write source when the write-back is exact:  {}   (empty)
+   sequential   exact-Gardner MULTIPLICAND  9660 | also pass the loop filter 4148
+                exact-Gardner WRITE-BACK       0 | BOTH exact AND loop-consistent 0
+                write source when the write-back is exact:  {}   (empty)
+
+   ADDER        exact-Gardner MULTIPLICAND  8400 | also pass the loop filter 3556
+                exact-Gardner WRITE-BACK       0 | BOTH exact AND loop-consistent 0
+                write source when the write-back is exact:  {}   (empty)
 ```
 
-**ZERO.** Not one of the 9 660 machines that computes the correct multiplicand
-can put `x[r] + t[r]` into the delay line, from `bus`, from `acc` before the
-word, from `acc` after it, or from `mem[ptr]`.
+**ZERO, in both models.** Not one of the machines that computes the correct
+multiplicand can put `x[r] + t[r]` into the delay line, from `bus`, from `acc`
+before the word, from `acc` after it, or from `mem[ptr]`.
 
 That is the obstruction, located, and it is a **different word from the one
 `action-field.md` §5 named**: slot **4**, the DRAM write `880.1.**.655` whose

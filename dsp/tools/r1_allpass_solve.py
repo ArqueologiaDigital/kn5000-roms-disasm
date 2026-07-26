@@ -30,7 +30,7 @@ Run:  python3 dsp/tools/r1_allpass_solve.py [--rom SUB] [--main MAIN]
 Sections: census motif banks delays solve verify separator   (default: all)
           control action singledelay price adjudicate
           adder   -- section 10 RE-DECIDED under analysis/acc-adder.md's adder.
-                     Sub-parts via ADDER_PARTS=gate,control,count,route,search,
+                     Sub-parts via ADDER_PARTS=gate,control,count,route,search,gardner,
                      forms,price ; one search row via ADDER_ROW=0|1.
 
 Everything under CENSUS / MOTIF / BANKS / DELAYS is MEASURED from the ROM.
@@ -1917,7 +1917,7 @@ def sec_strict_control(C, rom, imgs, names):
 
 def sec_adder(C, rom, imgs, names):
     parts = set((os.environ.get("ADDER_PARTS") or
-                 "gate,control,count,search,price").split(","))
+                 "gate,control,count,route,search,gardner,forms,price").split(","))
     banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
 
     if "gate" in parts:
@@ -2027,6 +2027,69 @@ def sec_adder(C, rom, imgs, names):
                 print("       %s %-8s %s"
                       % (nm, "FORCED" if len(cc) == 1 else "%d values" % len(cc),
                          "  ".join("%s x%d" % (a, b) for a, b in cc.most_common())))
+        print()
+
+    if "gardner" in parts:
+        print("=" * 76)
+        print("13g. ★★★ CAN THE MOTIF BE A GARDNER STAGE, TERM BY TERM?")
+        print("=" * 76)
+        print("   Two exact symbolic predicates, at steady state, up to one")
+        print("   overall sign and with NO other atom allowed:")
+        print("     the MULTIPLICAND  s[r]    = w[r] + w[r-1] - t[r-1]"
+              "   ->  +-(N' + N - Q)")
+        print("     the WRITE-BACK    d_in[r] = x[r] + t[r]"
+              "              ->  +-(N - Q + Q')")
+        print("   The delay-loop filter never pins the second one down, which is")
+        print("   why an empty numeric set could survive a correct multiplicand.")
+
+        def _exact(f, want, tol=1e-9):
+            for sgn in (1.0, -1.0):
+                if all(abs(f[i] - sgn * want.get(i, 0.0)) < tol
+                       for i in range(NATOM)):
+                    return True
+            return False
+
+        MULT_WANT = {NA2: 1.0, NA: 1.0, QA: -1.0}
+        WR_WANT = {NA: 1.0, QA: -1.0, QA2: 1.0}
+        NE = len(EFFECTS)
+        for nm, order in (("sequential", 0), ("adder", 1)):
+            n_g = n_gl = n_gw = n_glw = 0
+            by00 = collections.Counter()
+            for i00 in range(NE):
+                for i19 in range(NE):
+                    for i0b in range(NE):
+                        for s0 in SRC0_CANDS:
+                            for ld in LANDS:
+                                for ea in (0, 1):
+                                    for sh in (0, 1):
+                                        mm = mach(i00, i19, i0b, s0, None, 1, ld,
+                                                  ea, sh, order=order)
+                                        st, tr = sym_rep(mm)
+                                        if "MULT" not in tr or "W" not in tr:
+                                            continue
+                                        adv = advance(tr["MULT"], st)
+                                        if adv is None or not _exact(adv, MULT_WANT):
+                                            continue
+                                        n_g += 1
+                                        by00[EFFECTS[i00][0] or "(none)"] += 1
+                                        ok = loop_ok(mm)
+                                        if ok:
+                                            n_gl += 1
+                                        for i, wv in enumerate(tr["W"]):
+                                            nx = advance(wv, st)
+                                            if nx is not None and _exact(nx, WR_WANT):
+                                                n_gw += 1
+                                                if WSRCS[i] in ok:
+                                                    n_glw += 1
+                                                break
+            print()
+            print("   %-11s EXACT multiplicand %6d | of those, pass the loop "
+                  "filter %5d" % (nm, n_g, n_gl), flush=True)
+            print("   %-11s EXACT write-back   %6d | BOTH exact AND "
+                  "loop-consistent %5d" % ("", n_gw, n_glw), flush=True)
+            print("   %-11s ACTION 0x00 acc half among them: %s"
+                  % ("", "  ".join("%s x%d" % (a, b)
+                                   for a, b in by00.most_common())), flush=True)
         print()
 
     if "forms" in parts:
