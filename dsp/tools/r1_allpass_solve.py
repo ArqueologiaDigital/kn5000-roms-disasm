@@ -28,6 +28,10 @@ Run:  python3 dsp/tools/r1_allpass_solve.py [--rom SUB] [--main MAIN]
                                             [--tools kn7000_mame/tools]
                                             [--terms 2|3] [section ...]
 Sections: census motif banks delays solve verify separator   (default: all)
+          control action singledelay price adjudicate
+          adder   -- section 10 RE-DECIDED under analysis/acc-adder.md's adder.
+                     Sub-parts via ADDER_PARTS=gate,control,count,route,search,
+                     forms,price ; one search row via ADDER_ROW=0|1.
 
 Everything under CENSUS / MOTIF / BANKS / DELAYS is MEASURED from the ROM.
 SOLVE is DETERMINED-by-exhaustive-search inside the declared model.  VERIFY is
@@ -1015,14 +1019,20 @@ WSRCS = ("bus", "acc_before", "acc_after", "M")
 LANDS = (0, 1, 2, 7, 8)
 
 (F00, F19, F0B, SRC0, WSRC, WTRAIL, LAND, ESCOP, ESCACT, TBSH,
- NOPI, NOCLR, S1OP, SWAP, ACTFIRST) = range(15)
-NOMINAL = dict(escop=0, escact=1, nopi=0, noclr=0, s1op=2, swap=0, actfirst=0)
+ NOPI, NOCLR, S1OP, SWAP, ACTFIRST, ORDERM) = range(16)
+NOMINAL = dict(escop=0, escact=1, nopi=0, noclr=0, s1op=2, swap=0, actfirst=0,
+               order=0)
 
 
 def mach(f00, f19, f0b, src0, wsrc, wtrail, land, escact=1, tbsh=0,
-         escop=0, nopi=0, noclr=0, s1op=2, swap=0, actfirst=0):
+         escop=0, nopi=0, noclr=0, s1op=2, swap=0, actfirst=0, order=0):
+    # `order': 0 = the SEQUENTIAL model of sect. 10 (ACTFIRST then picks which
+    # side of hi12[3:1] the ACTION lands on); 1 = THE ADDER (analysis/acc-adder.md
+    # sect. 2), in which the ACTION is a SELECTOR on the accumulator's adder
+    # inputs rather than a step.  `noclr': 0 = store AND clear (the shipped
+    # reading), 1 = store without clearing, 2 = neither store nor clear.
     return (f00, f19, f0b, src0, wsrc, wtrail, land, escop, escact, tbsh,
-            nopi, noclr, s1op, swap, actfirst)
+            nopi, noclr, s1op, swap, actfirst, order)
 
 
 def eff_str(e):
@@ -1050,6 +1060,12 @@ def motif_slots():
 
 
 MSLOTS = motif_slots()
+#  ★ `s1op' is a relaxation of ONE WORD OF THE REVERB MOTIF -- slot 1's
+#  `104.2.**.000'.  `exec_rep' selected it by POSITION (`s == 1'), so it leaked
+#  into every context that swaps MSLOTS out: SINGLE DELAY's slot 1 is
+#  `202.A.B8.655' (accop = 1) and was being executed with accop = 2 instead.
+#  Identity against the motif is what makes the relaxation mean what it says.
+MOTIF_MSLOTS = MSLOTS
 
 
 EXTRA_ACT = {}          # control-only ACTION codes; empty for every real run
@@ -1141,10 +1157,16 @@ def exec_rep(m, st, alg, coef, lines, r, K, pending, base, trace=None):
         acc_before = st[R_ACC]
         # ---- hi12 bit 4: store the accumulator to mem[ptr] AND clear it ----
         if sl["store"]:
-            st[R_M] = st[R_ACC]
+            if m[NOCLR] != 2:
+                st[R_M] = st[R_ACC]
             if not m[NOCLR]:
                 st[R_ACC] = alg.zero
         aop, cap = act_effect(m, sl["act"])
+
+        def do_capture():
+            if cap:
+                st[{"tA": R_TA, "tB": R_TB, "M": R_M}[cap.split("<-")[0]]] = \
+                    bus if cap.endswith("bus") else st[R_ACC]
 
         def do_action():
             if aop == "+bus":
@@ -1155,24 +1177,53 @@ def exec_rep(m, st, alg, coef, lines, r, K, pending, base, trace=None):
                 st[R_ACC] = bus
             elif aop == "bus-acc":
                 st[R_ACC] = alg.sub(bus, st[R_ACC])
-            if cap:
-                st[{"tA": R_TA, "tB": R_TB, "M": R_M}[cap.split("<-")[0]]] = \
-                    bus if cap.endswith("bus") else st[R_ACC]
+            do_capture()
 
         honour = (not sl["esc"]) or m[ESCACT]
-        if honour and m[ACTFIRST]:
-            do_action()
-        # ---- hi12[3:1]: the accumulator operation -------------------------
-        op = m[S1OP] if s == 1 else sl["accop"]
-        if (not sl["esc"]) or m[ESCOP]:
-            if op == 0:
-                st[R_ACC] = st[R_P]
-            elif op == 1:
-                st[R_ACC] = alg.add(st[R_ACC], st[R_P])
-            elif op == 3:
-                st[R_ACC] = alg.zero
-        if honour and not m[ACTFIRST]:
-            do_action()
+        if m[ORDERM]:
+            # ---- ★ THE ADDER  (analysis/acc-adder.md sect. 2) ------------
+            #   acc <- FB + P_TERM + BUS_TERM,  where the ACTION selects which
+            #   inputs are enabled instead of being a step applied before or
+            #   after hi12[3:1].  This is `order = adder' of acc_adjudicate.py,
+            #   transcribed term for term; the two tools must not drift.
+            #   An ESCAPE word with escop = 0 holds the accumulator, i.e. it
+            #   behaves as hi12[3:1] == 2 -- the adder's own way of spelling
+            #   "the operation is skipped", and identical to the sequential
+            #   model on every word whose ACTION has no accumulator half.
+            op = (m[S1OP] if (s == 1 and MSLOTS is MOTIF_MSLOTS)
+                  else sl["accop"])
+            if sl["esc"] and not m[ESCOP]:
+                op = 2
+            fb = alg.zero if op in (0, 3) else st[R_ACC]
+            pt = alg.zero if op in (2, 3) else st[R_P]
+            bt = alg.zero
+            if honour:
+                if aop == "+bus":
+                    bt = bus
+                elif aop == "-bus":
+                    bt = alg.sub(alg.zero, bus)
+                elif aop == "bus":          # `load'  -- the bus REPLACES FB
+                    fb, bt = bus, alg.zero
+                elif aop == "bus-acc":      # `rload' -- FB enters negated
+                    fb, bt = alg.sub(alg.zero, fb), bus
+            st[R_ACC] = alg.add(alg.add(fb, pt), bt)
+            if honour:
+                do_capture()
+        else:
+            if honour and m[ACTFIRST]:
+                do_action()
+            # ---- hi12[3:1]: the accumulator operation ---------------------
+            op = (m[S1OP] if (s == 1 and MSLOTS is MOTIF_MSLOTS)
+                  else sl["accop"])
+            if (not sl["esc"]) or m[ESCOP]:
+                if op == 0:
+                    st[R_ACC] = st[R_P]
+                elif op == 1:
+                    st[R_ACC] = alg.add(st[R_ACC], st[R_P])
+                elif op == 3:
+                    st[R_ACC] = alg.zero
+            if honour and not m[ACTFIRST]:
+                do_action()
         # ---- class A: the coefficient fetch and the multiply ---------------
         if sl["cls"] == 0xA:
             if trace is not None:
@@ -1319,19 +1370,36 @@ def _ladder_inputs(C, rom, imgs):
     return banks, l0, l1, ch[0][:5], (ch[1][:4] if len(ch) > 1 else ch[0][:4])
 
 
-def mult_can_be_s(base=None):
+def mult_can_be_s(base=None, ranges=None):
     """How many parameter settings put BOTH delay reads into the multiplicand?
 
     The all-pass multiplicand is  s[r] = x[r] + w[r] = (D - eta*P) + N, so it must
     contain the PREVIOUS read D and the FRESH read N at once.  This counts the
     settings that even COULD -- the exhaustive form of the obstruction, and it
-    needs no numeric run at all."""
+    needs no numeric run at all.
+
+    TWO counts are returned, because the first one asks a NARROWER question than
+    its headline suggests:
+
+      n_ND   the multiplicand's ONE-REPETITION form carries atom D, i.e. the
+             previous read as it survives IN THE DRAM READ-DATA REGISTER.  This
+             is what the note published as "BOTH reads 0 / 5 145 000".
+      n_NDa  the ROUTE-AGNOSTIC form: advance the multiplicand by one repetition
+             (`advance', the same fixpoint substitution the delay-loop filter
+             uses) and ask whether it carries the fresh read N' AND the previous
+             read N by ANY route -- through tempA, tempB, mem[ptr] or the
+             accumulator as well as through DR.  A machine that carries the
+             previous read forward in tempA is invisible to n_ND and visible
+             here.  `ranges' restricts the three unknown ACTION codes to a
+             sub-space (sequences of EFFECTS indices), which is how the STRICT
+             adder -- only ACTION 0x00 may route the bus -- is expressed."""
     base = base or {}
-    n_all = n_N = n_ND = 0
+    n_all = n_N = n_ND = n_NDa = 0
     NE = len(EFFECTS)
-    for i00 in range(NE):
-        for i19 in range(NE):
-            for i0b in range(NE):
+    r00, r19, r0b = ranges or (range(NE), range(NE), range(NE))
+    for i00 in r00:
+        for i19 in r19:
+            for i0b in r0b:
                 for s0 in SRC0_CANDS:
                     for ld in LANDS:
                         for ea in ((0, 1) if "escact" not in base
@@ -1348,10 +1416,15 @@ def mult_can_be_s(base=None):
                                 hD = abs(tr["MULT"][DA]) > 1e-12
                                 n_N += hN
                                 n_ND += (hN and hD)
-    return n_all, n_N, n_ND
+                                adv = advance(tr["MULT"], _st)
+                                if (adv is not None and abs(adv[NA2]) > 1e-12
+                                        and abs(adv[NA]) > 1e-12):
+                                    n_NDa += 1
+    return n_all, n_N, n_ND, n_NDa
 
 
-def action_search(banks, l0, D0, base=None, quiet=False):
+def action_search(banks, l0, D0, base=None, quiet=False, ranges=None,
+                  numeric=True):
     """The whole pipeline for ONE set of fixed assumptions.  Returns
     (n_enumerated, loop survivors, numeric survivors)."""
     base = base or {}
@@ -1361,9 +1434,10 @@ def action_search(banks, l0, D0, base=None, quiet=False):
     refs = [allpass_ref(g2, [3, 5], xs), allpass_ref([-v for v in g2], [3, 5], xs)]
     tot, sl = 0, []
     NE = len(EFFECTS)
-    for i00 in range(NE):
-        for i19 in range(NE):
-            for i0b in range(NE):
+    r00, r19, r0b = ranges or (range(NE), range(NE), range(NE))
+    for i00 in r00:
+        for i19 in r19:
+            for i0b in r0b:
                 for s0 in SRC0_CANDS:
                     for ld in LANDS:
                         for ea in ((0, 1) if "escact" not in base
@@ -1376,6 +1450,8 @@ def action_search(banks, l0, D0, base=None, quiet=False):
                                                       1, ld, ea, sh, **k)):
                                     sl.append(mach(i00, i19, i0b, s0, w, 1, ld,
                                                    ea, sh, **k))
+    if not numeric:
+        return tot, sl, None          # structural stage only -- the diagnostics
     num = [(m, machine_matches(m, g2, [3, 5], xs, refs, first=True))
            for m in sl]
     num = [(m, h) for m, h in num if h]
@@ -1442,10 +1518,11 @@ CONTROL_SLOTS = [
          store=False, dram=None)]          # tA <- acc = d_in[r]
 
 
-def sec_control(C, rom, imgs, names):
+def sec_control(C, rom, imgs, names, order=0):
     global MSLOTS, EXTRA_ACT
     print("=" * 76)
-    print("10a. POSITIVE CONTROL -- the harness must be able to SAY YES")
+    print("10a. POSITIVE CONTROL -- the harness must be able to SAY YES%s"
+          % ("   [ORDER = ADDER]" if order else ""))
     print("=" * 76)
     banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
     g = [banks[16][c] for c in l0]
@@ -1456,7 +1533,7 @@ def sec_control(C, rom, imgs, names):
     EXTRA_ACT = {0x01: ("+bus", ""), 0x02: ("", "tA<-bus")}
     m = mach(EFFECTS.index(("bus", "")), EFFECTS.index(("-bus", "")),
              EFFECTS.index(("+bus", "tB<-bus")), "P", "bus", 1, 0,
-             escact=0, noclr=1)
+             escact=0, noclr=1, order=order)
     ok = []
     for nst in (2, 4, 5):
         refs = [allpass_ref(g[:nst], D0[:nst], xs)]
@@ -1744,10 +1821,270 @@ def sec_price(C, rom, imgs, names):
         if only is not None and int(only) != n:
             continue
         print("   [%d] %s" % (n, tag), flush=True)
-        na, nn, nnd = mult_can_be_s(base)
+        na, nn, nnd, nnda = mult_can_be_s(base)
         print("       multiplicand can hold the FRESH read %d/%d, BOTH reads %d/%d"
-              % (nn, na, nnd, na), flush=True)
+              " (route-agnostic %d/%d)" % (nn, na, nnd, na, nnda, na), flush=True)
         action_search(banks, l0, D0, base)
+
+
+# ==========================================================================
+#  13.  ★ THE ADDER RE-RUN -- section 10 re-decided under analysis/acc-adder.md
+#
+#  Section 10's empty set was proved against a model that no longer exists: it
+#  named the accumulator CLEAR as the cause, and `acc-adder.md' replaced exactly
+#  the semantics that clear was part of.  The honest status of the strongest
+#  negative result on this chip was therefore UNKNOWN, not established.  This
+#  section re-decides it, reusing section 10's machine enumeration, its
+#  delay-loop filter and its numeric matcher unchanged -- only `order = adder'
+#  is new, and it is transcribed from acc_adjudicate.py term for term.
+#
+#  TWO sub-spaces are reported, because "the adder" is two claims:
+#
+#    GENEROUS  the accumulator's inputs are SELECTED rather than sequenced, but
+#              any of the three unknown ACTION codes may drive the bus term.
+#              Same 35 x 35 x 35 enumeration as section 10 -- the apples-to-
+#              apples re-run against 20 580 000.
+#    STRICT    what actually SHIPS: only ACTION 0x00 routes the bus; 0x19 and
+#              0x0B are capture-only.  A sub-space of GENEROUS, so an empty
+#              GENEROUS result implies an empty STRICT one -- but the STRICT
+#              space needs its OWN control, because a space too poor to express
+#              an all-pass at all would give an empty set for free.
+# ==========================================================================
+CAPONLY = range(len(CAPS))              # EFFECTS indices whose acc half is ""
+GENEROUS = None                         # = the full 35 x 35 x 35
+STRICT = (range(len(EFFECTS)), CAPONLY, CAPONLY)
+
+
+#  A Gardner one-multiplier all-pass written INSIDE THE STRICT VOCABULARY: one
+#  bus-routing ACTION code (0x00, one mode, one capture half) plus capture-only
+#  codes and hi12[3:1].  If the harness accepts THIS, the strict sub-space is
+#  expressive enough for an empty result in it to mean something.
+#  Carried between repetitions: tA = d_in[r-1], tB = w[r-1], P = t[r-1].
+STRICT_CTL = [
+    dict(word="s0 read",  esc=True,  cls=1, src=0x0B, act=0x15, accop=2,
+         store=False, dram="rd"),
+    dict(word="s1",       esc=False, cls=2, src=0x10, act=0x12, accop=0,
+         store=False, dram=None),      # acc <- P            = t[r-1]
+    dict(word="s2",       esc=False, cls=2, src=0x1A, act=0x00, accop=2,
+         store=False, dram=None),      # acc <- tB - acc     = x[r]
+    dict(word="s3",       esc=False, cls=2, src=0x10, act=0x03, accop=2,
+         store=False, dram=None),      # M <- acc            = x[r]
+    dict(word="s4",       esc=False, cls=2, src=0x00, act=0x00, accop=2,
+         store=False, dram=None),      # acc <- 0 - acc      = -x[r]
+    dict(word="s5",       esc=False, cls=2, src=0x0B, act=0x00, accop=2,
+         store=False, dram=None),      # acc <- DR - acc     = w[r] + x[r] = s[r]
+    dict(word="s6 write", esc=True,  cls=1, src=0x19, act=0x15, accop=2,
+         store=False, dram="wr"),      # line r-1 <- tA = d_in[r-1]
+    dict(word="s7 mult",  esc=False, cls=0xA, src=0x10, act=0x12, accop=2,
+         store=False, dram=None),      # P <- g * s[r]       = t[r]
+    dict(word="s8",       esc=False, cls=2, src=0x07, act=0x00, accop=0,
+         store=False, dram=None),      # acc <- P + M        = t[r] + x[r]
+    dict(word="s9",       esc=False, cls=2, src=0x10, act=0x04, accop=2,
+         store=False, dram=None),      # tA <- acc           = d_in[r]
+    dict(word="s10",      esc=False, cls=2, src=0x0B, act=0x14, accop=2,
+         store=False, dram=None)]      # tB <- bus           = w[r]
+
+
+def sec_strict_control(C, rom, imgs, names):
+    """The control for the STRICT sub-space -- one bus-routing ACTION code."""
+    global MSLOTS, EXTRA_ACT
+    print("=" * 76)
+    print("13a. STRICT-VOCABULARY CONTROL -- can `only 0x00 routes the bus'")
+    print("     express a one-multiplier all-pass AT ALL?")
+    print("=" * 76)
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+    g = [banks[16][c] for c in l0]
+    random.seed(7)
+    xs = [random.uniform(-1, 1) for _ in range(64)]
+    save_slots, save_extra = MSLOTS, EXTRA_ACT
+    MSLOTS = STRICT_CTL
+    EXTRA_ACT = {0x03: ("", "M<-acc"), 0x04: ("", "tA<-acc")}
+    m = mach(EFFECTS.index(("bus-acc", "")), 0, 0, "zero", "bus", 1, -1,
+             escact=0, order=1)
+    ok = []
+    for nst in (2, 4, 5):
+        refs = [allpass_ref(g[:nst], D0[:nst], xs)]
+        h = machine_matches(m, g[:nst], D0[:nst], xs, refs)
+        ok.append((nst, h))
+        print("   %d-stage ladder, ROM gains %s: %s"
+              % (nst, " ".join("%.2f" % v for v in g[:nst]),
+                 ("MATCH  inject=%s extract=%s scale=%+.3f"
+                  % (RNAME[h[0][0]], RNAME[h[0][1]], h[0][3])) if h else "NO"))
+    print("   loop filter on the strict control: %s" % (loop_ok(m) or "REJECTED"))
+    MSLOTS, EXTRA_ACT = save_slots, save_extra
+    return all(h for _n, h in ok)
+
+
+def sec_adder(C, rom, imgs, names):
+    parts = set((os.environ.get("ADDER_PARTS") or
+                 "gate,control,count,search,price").split(","))
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+
+    if "gate" in parts:
+        print("=" * 76)
+        print("13. ★ THE ADDER RE-RUN -- and first, does the STORE GATE even"
+              " reach this motif?")
+        print("=" * 76)
+        print("   acc-adder.md adopts a bit-7 gate on the hi12 bit-4 store.  All")
+        print("   three surviving gates agree that bit7 = 0 STORES.  So: MEASURE")
+        print("   bit 7 on every storing word of the motif before assuming.")
+        for i, sl in enumerate(MSLOTS):
+            hi = int(sl["word"].split(".")[0], 16)
+            if sl["store"]:
+                b7 = (hi >> 7) & 1
+                print("     slot %d  %-16s hi12 bit7 = %d -> all three gates say"
+                      " %s" % (i, sl["word"], b7,
+                               "STORE + CLEAR" if not b7 else "they DISAGREE"))
+        print("   => the gate does not reach the motif; the clear is in force"
+              " here under every adopted gate.  MEASURED.")
+        print()
+
+    if "control" in parts:
+        sec_control(C, rom, imgs, names, order=1)
+        print()
+        sec_strict_control(C, rom, imgs, names)
+        print()
+
+    if "count" in parts:
+        print("=" * 76)
+        print("13b. THE OBSTRUCTION, RECOUNTED -- can the multiplicand hold BOTH"
+              " reads?")
+        print("=" * 76)
+        for tag, base, rng in (
+                ("sequential (section 10, reproduced)", {}, GENEROUS),
+                ("ADDER, generous", dict(order=1), GENEROUS),
+                ("ADDER, strict  ", dict(order=1), STRICT),
+                ("sequential + no clear", dict(noclr=1), GENEROUS),
+                ("ADDER, generous + no clear", dict(order=1, noclr=1), GENEROUS),
+                ("ADDER, strict   + no clear", dict(order=1, noclr=1), STRICT),
+                ("ADDER, generous + no store at all",
+                 dict(order=1, noclr=2), GENEROUS)):
+            na, nn, nnd, nnda = mult_can_be_s(base, rng)
+            print("   %-34s  %8d enumerated   FRESH read %7d   BOTH (via DR)"
+                  " %6d   BOTH (any route) %6d" % (tag, na, nn, nnd, nnda),
+                  flush=True)
+        print()
+
+    if "search" in parts:
+        print("=" * 76)
+        print("13c. THE FULL SEARCH, RE-RUN UNDER THE ADDER")
+        print("=" * 76)
+        rows = [("ADDER, generous -- nothing else relaxed", dict(order=1),
+                 GENEROUS),
+                ("ADDER, strict   -- nothing else relaxed", dict(order=1),
+                 STRICT)]
+        only = os.environ.get("ADDER_ROW")
+        for n, (tag, base, rng) in enumerate(rows):
+            if only is not None and int(only) != n:
+                continue
+            print("   [%d] %s" % (n, tag), flush=True)
+            action_search(banks, l0, D0, base, ranges=rng)
+        print()
+
+    if "route" in parts:
+        print("=" * 76)
+        print("13f. ★ THE ROUTE THE OLD COUNT COULD NOT SEE -- and the ONE"
+              " parameter that closes it")
+        print("=" * 76)
+        print("   Section 10 counted the settings whose multiplicand carries the")
+        print("   previous read IN THE DRAM READ-DATA REGISTER, and got 0.  The")
+        print("   previous read can also arrive through the ACCUMULATOR, which")
+        print("   crosses the repetition boundary.  Marginals of the settings that")
+        print("   DO carry both reads, by any route:")
+        NE = len(EFFECTS)
+        for order in (0, 1):
+            by00 = collections.Counter()
+            by19 = collections.Counter()
+            bysrc = collections.Counter()
+            byland = collections.Counter()
+            tot = 0
+            for i00 in range(NE):
+                for i19 in range(NE):
+                    for i0b in range(NE):
+                        for s0 in SRC0_CANDS:
+                            for ld in LANDS:
+                                mm = mach(i00, i19, i0b, s0, None, 1, ld, 1, 0,
+                                          order=order)
+                                st, tr = sym_rep(mm)
+                                if "MULT" not in tr:
+                                    continue
+                                adv = advance(tr["MULT"], st)
+                                if (adv is None or abs(adv[NA2]) <= 1e-12
+                                        or abs(adv[NA]) <= 1e-12):
+                                    continue
+                                tot += 1
+                                by00[EFFECTS[i00][0] or "(none)"] += 1
+                                by19[EFFECTS[i19][1] or "(none)"] += 1
+                                bysrc[s0] += 1
+                                byland[ld] += 1
+            print()
+            print("   order = %-10s  %d settings carry BOTH reads"
+                  % ("adder" if order else "sequential", tot), flush=True)
+            for nm, cc in (("ACTION 0x00 acc half", by00),
+                           ("ACTION 0x19 capture ", by19),
+                           ("SRC 0x00 reads      ", bysrc),
+                           ("the read lands at   ", byland)):
+                print("       %s %-8s %s"
+                      % (nm, "FORCED" if len(cc) == 1 else "%d values" % len(cc),
+                         "  ".join("%s x%d" % (a, b) for a, b in cc.most_common())))
+        print()
+
+    if "forms" in parts:
+        print("=" * 76)
+        print("13e. WHAT THE SURVIVORS OF THE LOOP FILTER ACTUALLY MULTIPLY")
+        print("=" * 76)
+        print("   The numeric stage says NO.  This says WHAT it is saying no to:")
+        print("   for every machine that passes the delay-loop filter, the")
+        print("   SYMBOLIC multiplicand, and whether the two delay reads can meet")
+        print("   in it at all (route-agnostic).  A first-order all-pass needs")
+        print("   s[r] = x[r] + w[r] with x[r] = w[r-1] - t[r-1], i.e. at steady")
+        print("   state the multiplicand must carry N', N and Q with the SAME")
+        print("   magnitude and NOTHING else that the loop does not cancel.")
+        for tag, base, rng in (("sequential (section 10)", {}, GENEROUS),
+                               ("ADDER, generous", dict(order=1), GENEROUS),
+                               ("ADDER, strict", dict(order=1), STRICT)):
+            _t, sl, _n = action_search(banks, l0, D0, base, quiet=True,
+                                       ranges=rng, numeric=False)
+            forms = collections.Counter()
+            both = 0
+            for mm in sl:
+                st, tr = sym_rep(mm)
+                adv = advance(tr["MULT"], st)
+                if (adv is not None and abs(adv[NA2]) > 1e-12
+                        and abs(adv[NA]) > 1e-12):
+                    both += 1
+                forms[show_form(tr["MULT"])] += 1
+            print()
+            print("   %-24s %6d loop survivors, %d of them can hold BOTH reads"
+                  % (tag, len(sl), both), flush=True)
+            for f, n in forms.most_common(8):
+                print("        %-40s x%d" % (f, n))
+
+    if "price" in parts:
+        print("=" * 76)
+        print("13d. THE PRICE LIST, UNDER THE ADDER -- is the CLEAR still the"
+              " assumption that moves the count?")
+        print("=" * 76)
+        rows = (("(nothing relaxed -- the adder as shipped)", dict(order=1)),
+                ("hi12 bit 4 stores WITHOUT clearing acc",
+                 dict(order=1, noclr=1)),
+                ("hi12 bit 4 neither stores NOR clears", dict(order=1, noclr=2)),
+                ("the two trailing nops are INERT", dict(order=1, nopi=1)),
+                ("slot 1's hi12[3:1]=2 is acc<-P", dict(order=1, s1op=0)),
+                ("slot 1's hi12[3:1]=2 is acc+=P", dict(order=1, s1op=1)),
+                ("the DRAM read/write directions swapped", dict(order=1, swap=1)),
+                ("an ESCAPE word honours hi12[3:1] too", dict(order=1, escop=1)),
+                ("an ESCAPE word ignores lo12 entirely",
+                 dict(order=1, escact=0)))
+        only = os.environ.get("PRICE_ROW")
+        for n, (tag, base) in enumerate(rows):
+            if only is not None and int(only) != n:
+                continue
+            print("   [%d] %s" % (n, tag), flush=True)
+            na, nn, nnd, nnda = mult_can_be_s(base)
+            print("       multiplicand: FRESH %d/%d   BOTH via DR %d   BOTH any"
+                  " route %d" % (nn, na, nnd, nnda), flush=True)
+            action_search(banks, l0, D0, base)
 
 
 def main():
@@ -1801,6 +2138,8 @@ def main():
         sec_price(C, rom, imgs, names)
     if "adjudicate" in want:
         sec_adjudicate(C, rom, imgs, names)
+    if "adder" in want:
+        sec_adder(C, rom, imgs, names)
 
 
 if __name__ == "__main__":
