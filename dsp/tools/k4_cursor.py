@@ -279,6 +279,14 @@ def sec_fields():
                     0x90: "unit-1 coefficient bank base"}.get(ad8(w), "?")
             print("   %s w%-3d  ldptr #$%02X   %s" % (t, a, ad8(w), role))
 
+    print("\nthe candidate copy instructions (analysis sect. 5.1) -- every site:")
+    for pat in ("800.1.60.00B", "010.A.00.20C", "010.9.D0.20C",
+                "400.1.0E.000", "400.1.0F.007"):
+        sites = [(t, a) for t, a, w in allw if fmt(w) == pat]
+        print("   %-14s x%-3d  %s" % (pat, len(sites), sites[:8]))
+    print("   800.1.60.00B: 2 sites, I-RAM 46 and 54 = offset +4 of the unit-0 and")
+    print("   unit-1 setup blocks (42 and 50), and nowhere else in the machine.")
+
 
 def sec_regs():
     hdr("regs -- class-1 register file: bit 7 is the effect unit (G / K6's lead)")
