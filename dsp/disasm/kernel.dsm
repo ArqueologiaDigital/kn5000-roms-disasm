@@ -14,7 +14,7 @@
 ; Put labels/comments in the matching dsp/sym/*.sym; analysis in dsp/algorithms/.
 
 Header:
-  w0    009220120D   ~word   0x009220120D   ; 092.2.01.20D  {addr: ST mem[p], p+1}  hi12{ST f31=1 ?7 res=080}  [K6 input stage, header w0: ST mem[X+0], p+1 -- the epilogue's w80/w81 read X+0 this same frame]
+  w0    009220120D   ~word   0x009220120D   ; 092.2.01.20D  {addr: rd mem[p], p+1}  hi12{ST f31=1 ?7 res=080}  [K6 input stage, header w0: ST mem[X+0], p+1 -- the epilogue's w80/w81 read X+0 this same frame]
         ; per-frame entry; sets up pointer registers then CALLs the unit bodies
   w1    0C0A0E0000   ~word   0x0C0A0E0000   ; C0A.0.E0.000  {C-fmt A=7 B=0}  {addr: none -- C-format, SAFE NO-OP}  hi12{ESC f31=5 ?10 res=400}  [K6 input stage, header w1: C-format, imm13 0x0E0 = 7*32 -> I-RAM 7 = block B; SAFE NO-OP (no memory, pointer or cursor effect)]
         ; C-format A=7; I-RAM 7 is the start of the second input block (INFERRED, n=1)
@@ -23,7 +23,7 @@ Header:
   w4    02042021CE   ~word   0x02042021CE   ; 204.2.02.1CE  {addr: rd mem[p], p+2}  hi12{f98=2 f31=2}  [K6 input stage, header w4: *** THE PORT READ, block A *** mem[X+2] is an AUDIO INPUT LATCH (read-never-written by all 3057 words); p+2]
   w5    0202A00448   ~word   0x0202A00448   ; 202.A.00.448  {addr: rd mem[p], cur+, p+0}  hi12{f98=2 f31=1} cur+  [K6 input stage, header w5: read mem[X+4], p+0, cursor+1; ALU UNKNOWN]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
-  w6    0400A00419   ~word   0x0400A00419   ; 400.A.00.419  {addr: rd mem[p], cur+, p+0}  hi12{END} cur+  [K6 input stage, header w6: END OF BLOCK A (falls through), read mem[X+4], p+0, cursor+1]
+  w6    0400A00419   ld.ta2  acc,c+,(p)+0 ; END OF BLOCK (falls through)
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
 InputBlock1:
   w7    0090A011C8   ~word   0x0090A011C8   ; 090.A.01.1C8  {addr: ST mem[p], cur+, p+1}  hi12{ST ?7 res=080} cur+  [K6 input stage, header w7: ST mem[X+4], p+1, cursor+1 -- X+4 is a one-frame state cell (read at w5/w6, written here)]
@@ -51,9 +51,9 @@ InputBlock1:
   w21   0410A0040E   ?word   0x0410A0040E   ; 410.A.00.40E  hi12{END ST} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
   w22   0C04312820   ?word   0x0C04312820   ; C04.3.12.820  {C-fmt A=24 B=18}  hi12{ESC f31=2 ?10 res=400}  [C-format word with a pointer-load lo12; the A/B split is NOT established for this sub-family (B in {0,17,18,23}) -- residue A=24 B=18 shown for the record]
-  w23   0692A00415   mac     acc,c+,(p)+0 ; mem[p]<-acc, acc=0; END OF BLOCK (falls through)
+  w23   0692A00415   ?word   0x0692A00415   ; 692.A.00.415  hi12{END ST f98=2 f31=1 ?7 res=080} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
-  w24   0692200415   mac     acc,(p)+0 ; mem[p]<-acc, acc=0; END OF BLOCK (falls through)
+  w24   0692200415   ?word   0x0692200415   ; 692.2.00.415  hi12{END ST f98=2 f31=1 ?7 res=080}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
   w25   00002002D9   ?word   0x00002002D9   ; 000.2.00.2D9  hi12{-}
   w26   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
   w27   0012201655   mac     ta,(p)+1 ; mem[p]<-acc, acc=0
@@ -68,11 +68,11 @@ InputBlock1:
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
   w34   0000AFF407   ld.st   acc,c+,(p)-1
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
-  w35   0012A001C0   ?word   0x0012A001C0   ; 012.A.00.1C0  hi12{ST f31=1} cur+
+  w35   0012A001C0   mac.b   (p),c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
   w36   0400A00000   ?word   0x0400A00000   ; 400.A.00.000  hi12{END} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
-  w37   0092A011C0   ?word   0x0092A011C0   ; 092.A.01.1C0  hi12{ST f31=1 ?7 res=080} cur+
+  w37   0092A011C0   mac.b   (p),c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
   w38   0809000839   ?word   0x0809000839   ; 809.0.00.839  hi12{ESC f31=4 ?0 res=001}  [lo12 0x839 -- selector OPEN (K3 sect. 5.4: 'sub-op 3 on register 1' under one field reading, a sixth register under the other); 2 sites in 3057]
   w39   0410AFF647   ld.st   ta,c+,(p)-1 ; mem[p]<-acc, acc=0; END OF BLOCK (falls through)

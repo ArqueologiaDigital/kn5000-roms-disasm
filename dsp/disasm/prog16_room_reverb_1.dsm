@@ -44,7 +44,7 @@ Separator0:
         ; coeff C-RAM[0x96] = DRAM tap gain (0.500) (role decay, PROVEN)
         ; consumes C-RAM[0x96] = DRAM tap gain 0.500 -- NOT a diffuser gain
   w13   00002BA000   ?word   0x00002BA000   ; 000.2.BA.000  hi12{-}
-  w14   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w14   0212200419   mac.ta2 acc,(p)+0 ; mem[p]<-acc, acc=0
   w15   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
   w16   0000200000   nop
   w17   0000A0A1D5   ld      (p),c+,(p)+10
@@ -55,8 +55,8 @@ Ladder0:
   w19   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; DIFFUSER LADDER 0 -- 5 all-pass cores, C-RAM 0x98..0x9C
   w20   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w21   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w22   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w21   0000200419   ld.ta2  acc,(p)+0
+  w22   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w23   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w24   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0x98] (coeff, base 0x90 MEASURED)
@@ -66,8 +66,8 @@ Ladder0:
   w27   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 2 of 5
   w28   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w29   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w30   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w29   0000200419   ld.ta2  acc,(p)+0
+  w30   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w31   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w32   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0x99] (coeff, base 0x90 MEASURED)
@@ -77,8 +77,8 @@ Ladder0:
   w35   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 3 of 5
   w36   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w37   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w38   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w37   0000200419   ld.ta2  acc,(p)+0
+  w38   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w39   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w40   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0x9A] (coeff, base 0x90 MEASURED)
@@ -88,8 +88,8 @@ Ladder0:
   w43   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 4 of 5
   w44   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w45   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w46   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w45   0000200419   ld.ta2  acc,(p)+0
+  w46   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w47   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w48   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0x9B] (coeff, base 0x90 MEASURED)
@@ -99,8 +99,8 @@ Ladder0:
   w51   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 5 of 5
   w52   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w53   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w54   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w53   0000200419   ld.ta2  acc,(p)+0
+  w54   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w55   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w56   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0x9C] (coeff, base 0x90 MEASURED)
@@ -115,7 +115,7 @@ Separator1:
         ; coeff C-RAM[0x9D] = DRAM tap gain (0.500) (role decay, PROVEN)
         ; consumes C-RAM[0x9D] = DRAM tap gain 0.500
   w61   00002F3407   ld.st   acc,(p)-13
-  w62   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w62   0212200419   mac.ta2 acc,(p)+0 ; mem[p]<-acc, acc=0
   w63   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
   w64   000024A407   ld.st   acc,(p)+74
   w65   0000A001D5   ld      (p),c+,(p)+0
@@ -132,8 +132,8 @@ Ladder1:
   w69   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; DIFFUSER LADDER 1 -- FOUR all-pass cores, C-RAM 0xA1..0xA4
   w70   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w71   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w72   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w71   0000200419   ld.ta2  acc,(p)+0
+  w72   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w73   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w74   0102ABA64B   ?word   0x0102ABA64B   ; 102.A.BA.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0xA1] (coeff, base 0x90 MEASURED)
@@ -144,8 +144,8 @@ Ladder1:
   w77   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 2 of 4
   w78   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w79   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w80   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w79   0000200419   ld.ta2  acc,(p)+0
+  w80   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w81   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w82   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0xA2] (coeff, base 0x90 MEASURED)
@@ -155,8 +155,8 @@ Ladder1:
   w85   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 3 of 4
   w86   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w87   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w88   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w87   0000200419   ld.ta2  acc,(p)+0
+  w88   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w89   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w90   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0xA3] (coeff, base 0x90 MEASURED)
@@ -166,8 +166,8 @@ Ladder1:
   w93   08801602D4   ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM READ (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); read data visible 2-5 words later (R1 F6). external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
         ; all-pass core 4 of 4
   w94   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
-  w95   0000200419   ?word   0x0000200419   ; 000.2.00.419  hi12{-}  [all-pass core slot 2/6 -- one accumulate step; which one is NOT settled]
-  w96   0012200680   ?word   0x0012200680   ; 012.2.00.680  hi12{ST f31=1}  [all-pass core slot 3/6 -- the bit-4 store takes the accumulator BEFORE this word's own ALU step (FORCED, R1 F2)]
+  w95   0000200419   ld.ta2  acc,(p)+0
+  w96   0012200680   mac.b   tb,(p)+0 ; mem[p]<-acc, acc=0
   w97   0880120655   ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (DETERMINED, R1 F1 -- the opposite direction has zero survivors in all 3 models); write data staged by the preceding bit-4 store, 44/44. external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word]
   w98   0102A0064B   ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
         ; C-RAM[0xA4] (coeff, base 0x90 MEASURED)
@@ -182,10 +182,10 @@ Separator2:
         ; coeff C-RAM[0xA5] = DRAM tap gain (0.500) (role decay, PROVEN)
         ; consumes C-RAM[0xA5] = DRAM tap gain 0.500
   w103  00002FE407   ld.st   acc,(p)-2
-  w104  0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w104  0212200419   mac.ta2 acc,(p)+0 ; mem[p]<-acc, acc=0
   w105  088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
   w106  0000249407   ld.st   acc,(p)+73
-  w107  0090A001D5   ld      (p),c+,(p)+0 ; mem[p]<-acc, acc=0
+  w107  0090A001D5   ?word   0x0090A001D5   ; 090.A.00.1D5  hi12{ST ?7 res=080} cur+
         ; C-RAM[0xA6] (coeff, base 0x90 MEASURED)
         ; coeff C-RAM[0xA6] = op0x76 damping triple #3 (HIGH DAMP GAIN) (role damping, PROVEN)
   w108  0212A00415   mac     acc,c+,(p)+0 ; mem[p]<-acc, acc=0

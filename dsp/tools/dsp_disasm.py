@@ -185,15 +185,37 @@ LO_SRC_ACC = 0x10    # the accumulator
 LO_SRC_TA  = 0x19    # temporary register A
 LO_SRC_TB  = 0x1A    # temporary register B
 
+# lo12[4:0] = the ACTION.  Five codes were pinned by the biquad; TWO MORE are
+# pinned by the three-context adjudication in analysis/acc-adder.md.
+#   0x00  the accumulator's own input term comes from the BUS.  The LARGEST code
+#         in the field (820 corpus words).  FORCED as the only reading that
+#         satisfies the LFO ramp, SINGLE DELAY and bit-identity with the biquad
+#         at once -- see upd6383d.h LO_ACT_ACC_BUS and exec_alu().
+#   0x19  tempA <- bus, a SECOND CAPTURE PAIR beside 0x13/0x14 (0x19 = 0x13 + 6).
+#         FORCED 72/72 by SINGLE DELAY once the order above is fixed.
+LO_ACT_ACC_BUS = 0x00  # acc's input term <- bus (the adder's second selector)
 LO_ACT_ST_BUS = 0x07  # mem[ptr] <- bus
 LO_ACT_NONE_2 = 0x12  # no temp/memory side effect
 LO_ACT_CAP_TA = 0x13  # tempA <- bus
 LO_ACT_CAP_TB = 0x14  # tempB <- bus
 LO_ACT_NONE_5 = 0x15  # ditto -- how it differs from 0x12 is OPEN
+LO_ACT_CAP_TA2 = 0x19  # tempA <- bus, the second encoding
 
 _ANCHORED_SRC = (LO_SRC_MEM, LO_SRC_ACC, LO_SRC_TA, LO_SRC_TB)
-_ANCHORED_ACT = (LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
-                 LO_ACT_CAP_TB, LO_ACT_NONE_5)
+_ANCHORED_ACT = (LO_ACT_ACC_BUS, LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
+                 LO_ACT_CAP_TB, LO_ACT_NONE_5, LO_ACT_CAP_TA2)
+
+# ---------------------------------------------------------------------------
+#  hi12 BIT 7 GATES THE BIT-4 STORE (upd6383d.h HI_B7).  The biquad's 0.094 dB
+#  never reached a bit-7 word -- PARAMETRIC EQ has ZERO words carrying bit 4 and
+#  bit 7 together -- and the LFO cannot run if they store.  Three surviving
+#  gates agree that (bit7, hi12[3:1]) == (1, 1) does NOT store; alu_decoded()
+#  traps everything they disagree about.
+HI_B7 = 1 << 7
+
+
+def st_suppressed(w):
+    return bool(hi12(w) & HI_B7) and hi_f31(hi12(w)) == 1
 
 
 # --- lo12 bit 11 is a FIELD, not part of an opcode -------------------------
@@ -451,6 +473,15 @@ def alu_decoded(w):
         return False
     if lo_act(w) == LO_ACT_ST_BUS and (cl & 7) != 2:
         return False
+    if (hi12(w) & HI_ST) and (hi12(w) & HI_B7):
+        # guard 7 -- the bit-7 store gate.  The three surviving gates settle
+        # only hi12[3:1] == 1 with the CLEAR made unobservable (ACTION 0x00
+        # replaces the accumulator feedback outright) and hi12[3:1] == 2.
+        g = hi_f31(hi12(w))
+        if g == 1 and lo_act(w) != LO_ACT_ACC_BUS:
+            return False
+        if g not in (1, 2):
+            return False
     f = hi_f31(hi12(w))
     if f in (HI_ACC_LOAD, HI_ACC_ADD):
         return True
@@ -788,7 +819,12 @@ def host_packet(b5):
 # --- the ALU rendering (upd6383d.cpp text(), the `decoded' branch) ----------
 _SRC_NAME = {LO_SRC_MEM: "(p)", LO_SRC_ACC: "acc", LO_SRC_TA: "ta", LO_SRC_TB: "tb"}
 _ACC_MNEM = {HI_ACC_LOAD: "ld", HI_ACC_ADD: "mac"}      # else the class-8 post-sum step
-_ACT_SUFFIX = {LO_ACT_CAP_TA: ".ta", LO_ACT_CAP_TB: ".tb", LO_ACT_ST_BUS: ".st"}
+_ACT_SUFFIX = {LO_ACT_CAP_TA: ".ta", LO_ACT_CAP_TA2: ".ta2",
+               LO_ACT_CAP_TB: ".tb", LO_ACT_ST_BUS: ".st",
+               # the accumulator's input term comes from the BUS, so the
+               # hi12[3:1] prefix loses its meaning: `ld.b' and `mac.b' both
+               # compute `bus + P'.  Both are printed -- hi12[3:1] IS a field.
+               LO_ACT_ACC_BUS: ".b"}
 
 
 def _alu_mnemonic(w):
@@ -830,7 +866,8 @@ def text(w, at=None):
         if (cl & 7) == 2:
             s += ",(p)%+d" % dd
         if hi & HI_ST:
-            s += " ; mem[p]<-acc, acc=0"
+            s += (" ; store SUPPRESSED (bit7)" if st_suppressed(w)
+                  else " ; mem[p]<-acc, acc=0")
         # ★ END OF BLOCK SURVIVES THE DECODE.  A decoded word prints no
         # [annotation], and MEASURED that costs nothing on 381 of the 384 decoded
         # words that carry one -- "writes mem[ptr] (bit 4)", "P-consumer stores
@@ -860,7 +897,7 @@ def text(w, at=None):
             s += "  {addr: none -- C-format, SAFE NO-OP}"
         else:
             s += "  {addr: %s mem[p]%s, p%+d}" % (
-                "ST" if (hi & HI_ST) else "rd",
+                "ST" if ((hi & HI_ST) and not st_suppressed(w)) else "rd",
                 (", cur+" if coeff_consumer(w) else ", cur") if cursor_fetch(w) else "",
                 dd)
     s += "  hi12{%s}" % hi12_text(hi)

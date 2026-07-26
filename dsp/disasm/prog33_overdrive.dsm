@@ -54,7 +54,7 @@
   w29   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}
   w30   0880130407   ?word   0x0880130407   ; 880.1.30.407  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
   w31   0000201000   ?word   0x0000201000   ; 000.2.01.000  hi12{-}
-  w32   00122451C0   ?word   0x00122451C0   ; 012.2.45.1C0  hi12{ST f31=1}
+  w32   00122451C0   mac.b   (p),(p)+69 ; mem[p]<-acc, acc=0
   w33   002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}
   w34   0000200415   ld      acc,(p)+0
   w35   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]

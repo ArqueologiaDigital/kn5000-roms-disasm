@@ -1610,6 +1610,119 @@ def sd_line_values(m, fb, D, x, inj):
     return line.wrote if len(line.wrote) == len(x) else None
 
 
+def sec_adjudicate(C, rom, imgs, names):
+    """★ THE ORDER ADJUDICATION.
+
+    `sec_singledelay' calls mach(...) WITHOUT an `actfirst' argument, so its
+    5 145 survivors were all computed at the NOMINAL ordering `actfirst = 0'
+    (the ACTION acts AFTER the hi12[3:1] operation) -- which is what the shipped
+    exec_alu() does.  TARGET 3's LFO pass independently FORCES the OPPOSITE
+    ordering, `act_first', as a singleton marginal over 432 machines and 29
+    blocks.  The two determinations were therefore reached in models that
+    disagree about the one thing neither of them enumerated jointly.
+
+    So: run the SINGLE DELAY search with the ordering ENUMERATED, and report the
+    ACTION-0x00 marginal SEPARATELY for each order.  Whatever survives at
+    `actfirst = 1' is the only reading that can satisfy both contexts at once.
+    """
+    print("=" * 76)
+    print("12. ★ ADJUDICATION -- SINGLE DELAY with the ACTION/OPERATION ORDER"
+          " enumerated")
+    print("=" * 76)
+    slots = sd_slots(imgs)
+    for sl in slots:
+        print("     %-16s %-4s src=%02X %-9s act=%02X  accop=%d%s%s"
+              % (sl["word"], "ESC" if sl["esc"] else "", sl["src"],
+                 SRC_TXT.get(sl["src"], "?"), sl["act"], sl["accop"],
+                 " ST" if sl["store"] else "",
+                 (" DRAM-" + sl["dram"].upper()) if sl["dram"] else ""))
+    random.seed(3)
+    x = [random.uniform(-1, 1) for _ in range(22)]
+    fb, D = 0.3, 7
+    ref = comb_ref(fb, D, x)
+    save = globals()["MSLOTS"]
+    globals()["MSLOTS"] = slots
+    by_order = {0: [], 1: []}
+    try:
+        for af in (0, 1):
+            for i00 in range(len(EFFECTS)):
+                for i19 in range(len(EFFECTS)):
+                    for i0b in range(len(EFFECTS)):
+                        for s0 in SRC0_CANDS:
+                            for ld in (-1, 0, 1, 2):
+                                for inj in range(6):
+                                    m = mach(i00, i19, i0b, s0, "bus", 0, ld,
+                                             actfirst=af)
+                                    w = sd_line_values(m, fb, D, x, inj)
+                                    if w is None:
+                                        continue
+                                    den = sum(v * v for v in w)
+                                    if den < 1e-18:
+                                        continue
+                                    sc = sum(a * b for a, b in zip(w, ref)) / den
+                                    if abs(sc) < 1e-6:
+                                        continue
+                                    mx = max(abs(v) for v in ref)
+                                    if max(abs(sc * a - b)
+                                           for a, b in zip(w, ref)) < 1e-7 * mx:
+                                        by_order[af].append((m, inj, sc))
+    finally:
+        globals()["MSLOTS"] = save
+
+    for af in (0, 1):
+        hits = by_order[af]
+        print()
+        print("   ---- actfirst = %d  (%s) : %d survivors"
+              % (af, "ACTION before the hi12[3:1] operation" if af else
+                 "ACTION after -- the SHIPPED order", len(hits)))
+        if not hits:
+            print("        NOTHING SURVIVES.")
+            continue
+        for nm, ix in (("ACTION 0x00", F00), ("ACTION 0x19", F19),
+                       ("ACTION 0x0B", F0B), ("SRC 0x00 reads", SRC0),
+                       ("read lands +n", LAND)):
+            v = collections.Counter(
+                (eff_str(EFFECTS[m[ix]]) if ix in (F00, F19, F0B) else m[ix])
+                for m, _i, _s in hits)
+            print("        %-16s %-8s %s"
+                  % (nm, "FORCED" if len(v) == 1 else "%d values" % len(v),
+                     "  ".join("%s x%d" % (a, b) for a, b in v.most_common(6))))
+        for nm, ix in (("ACTION 0x00", F00), ("ACTION 0x19", F19)):
+            for half, sel in (("acc op ", 0), ("capture", 1)):
+                v = collections.Counter(EFFECTS[m[ix]][sel] or "-"
+                                        for m, _i, _s in hits)
+                print("        %-11s %-8s %-8s %s"
+                      % (nm, half, "FORCED" if len(v) == 1 else "%d" % len(v),
+                         "  ".join("%s x%d" % (a, b) for a, b in v.most_common())))
+
+    # ---- the joint question, asked directly ------------------------------
+    print()
+    print("   ★ THE JOINT READING -- what SINGLE DELAY allows at the LFO's order")
+    lfo = [(m, i, s) for m, i, s in by_order[1]
+           if EFFECTS[m[F00]][0] == "bus"]
+    print("        actfirst=1 AND ACTION 0x00 acc-half == `acc <- bus' :"
+          " %d survivors" % len(lfo))
+    if lfo:
+        for nm, ix in (("ACTION 0x00 capture", F00), ("ACTION 0x19", F19),
+                       ("SRC 0x00 reads", SRC0), ("read lands +n", LAND)):
+            v = collections.Counter(
+                (EFFECTS[m[ix]][1] or "-") if ix == F00 else
+                (eff_str(EFFECTS[m[ix]]) if ix == F19 else m[ix])
+                for m, _i, _s in lfo)
+            print("        %-20s %-8s %s"
+                  % (nm, "FORCED" if len(v) == 1 else "%d values" % len(v),
+                     "  ".join("%s x%d" % (a, b) for a, b in v.most_common(6))))
+        v = collections.Counter(EFFECTS[m[F19]][1].split("<-")[0]
+                                for m, _i, _s in lfo if EFFECTS[m[F19]][1])
+        print("        ACTION 0x19 captures into: %s  (%d of %d capture)"
+              % ("  ".join("%s x%d" % (a, b) for a, b in v.most_common()),
+                 sum(v.values()), len(lfo)))
+        v = collections.Counter(EFFECTS[m[F19]][1] or "-" for m, _i, _s in lfo)
+        print("        ACTION 0x19 capture forms: %s"
+              % "  ".join("%s x%d" % (a, b) for a, b in v.most_common()))
+    return by_order
+
+
 def sec_price(C, rom, imgs, names):
     """One fixed assumption relaxed at a time.  ~1 min per row."""
     print("=" * 76)
@@ -1686,6 +1799,8 @@ def main():
         sec_singledelay(C, rom, imgs, names)
     if "price" in want:
         sec_price(C, rom, imgs, names)
+    if "adjudicate" in want:
+        sec_adjudicate(C, rom, imgs, names)
 
 
 if __name__ == "__main__":

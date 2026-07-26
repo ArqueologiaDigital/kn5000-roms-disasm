@@ -19,7 +19,7 @@
   w5    0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = damping filter tap 0 (role damping, PROVEN)
-  w6    0292A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
+  w6    0292A01412   ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = damping filter tap 1 (role damping, PROVEN)
   w7    0282ABF1D5   mac     (p),c+,(p)-65
@@ -39,11 +39,11 @@
   w18   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w19   0880130407   ?word   0x0880130407   ; 880.1.30.407  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
   w20   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}
-  w21   00122441C0   ?word   0x00122441C0   ; 012.2.44.1C0  hi12{ST f31=1}
+  w21   00122441C0   mac.b   (p),(p)+68 ; mem[p]<-acc, acc=0
   w22   0104A001D5   ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x04] = damping filter tap 0 (role damping, PROVEN)
-  w23   0292A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
+  w23   0292A01412   ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = damping filter tap 1 (role damping, PROVEN)
   w24   0282ABB1D5   mac     (p),c+,(p)-69
@@ -75,7 +75,7 @@
   w42   0192A4D000   ?word   0x0192A4D000   ; 192.A.4D.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = op0x64[0] (role coeff, INFERRED)
-  w43   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
+  w43   00822001C0   mac.b   (p),(p)+0
   w44   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 57/57 in this sub-family); destination register lo12=44C UNKNOWN]
   w45   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
   w46   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
@@ -90,7 +90,7 @@
   w53   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = damping filter tap 0 (role damping, PROVEN)
-  w54   0292A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
+  w54   0292A01412   ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = damping filter tap 1 (role damping, PROVEN)
   w55   0282AB51D5   mac     (p),c+,(p)-75
@@ -109,11 +109,11 @@
   w65   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w66   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w67   00002FF407   ld.st   acc,(p)-1
-  w68   001224E1C0   ?word   0x001224E1C0   ; 012.2.4E.1C0  hi12{ST f31=1}
+  w68   001224E1C0   mac.b   (p),(p)+78 ; mem[p]<-acc, acc=0
   w69   0104A001D5   ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x11] = damping filter tap 0 (role damping, PROVEN)
-  w70   0292A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
+  w70   0292A01412   ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = damping filter tap 1 (role damping, PROVEN)
   w71   0282AB11D5   mac     (p),c+,(p)-79
@@ -143,7 +143,7 @@
   w87   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
   w88   0192A56000   ?word   0x0192A56000   ; 192.A.56.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
-  w89   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
+  w89   00822001C0   mac.b   (p),(p)+0
   w90   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 57/57 in this sub-family); destination register lo12=44C UNKNOWN]
   w91   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
   w92   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]

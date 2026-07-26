@@ -156,7 +156,7 @@ contain 77 Hamming-distance-1 pairs against a popcount-matched null of 43.4 ± 4
 | 9:8 | a proven FIELD, meaning **UNKNOWN** (`f98`) | MEASURED as a field; the accumulator-op-selector reading was tested and **FAILED** |
 | 7 | speculative "index/address domain" — but **it GATES bit 4**, see below | 583 words carry it, 127 distinct, in **12 minimal pairs** that are byte-identical except for this bit (e.g. `212.A.01.412` ×34 vs `292.A.01.412` ×4). Its own meaning is still **OPEN**; what is FORCED is that the bit-4 store reads it |
 | 6,5 | no reading | rendered as residue |
-| 4 | **WRITE ACCUMULATOR → mem[ptr]**, taken **BEFORE** the word's own ALU step — ⚠ **only when `hi12` bit 7 is CLEAR** | MEASURED for `bit7 = 0` (`0x212 = 0x202 + bit4`; absence control 0/410 clean) and the **timing** is FORCED (`store = after` has zero survivors in all three models of R1's search, `analysis/r1-allpass-motif.md` F2). ⚠ **NARROWED by `analysis/lfo-ramp.md` Part II**: the 0.094 dB biquad that validates this row contains **0 of 105** words with bit 4 *and* bit 7 (all 22 of its store words are `bit7 = 0`), so it never constrained the `bit7 = 1` case — **527** corpus words are verified, **180 are not**. An exhaustive 276 480-machine search over all 29 LFO blocks gives **0 survivors** with the store unconditional and 432 with it gated, and **FORCES the gate to read bit 7 AND `hi12[3:1]`** (bit 7 alone: 0 survivors; `hi12[3:1] == 2` alone: falsified — it would suppress all 22 biquad stores). Three gates survive, differing on 13 corpus words. **NOT adopted**; the executable predicate still stores unconditionally. The second `0x092 = 0x082 + bit4` citation this row used to carry is an *encoding* observation on two LFO words that cannot both be storing |
+| 4 | **WRITE ACCUMULATOR → mem[ptr]**, taken **BEFORE** the word's own ALU step — ★ **GATED by `hi12` bit 7, and the gate is now APPLIED** | MEASURED for `bit7 = 0` (`0x212 = 0x202 + bit4`; absence control 0/410 clean) and the **timing** is FORCED (`store = after` has zero survivors in all three models of R1's search, `analysis/r1-allpass-motif.md` F2). ⚠ **NARROWED by `analysis/lfo-ramp.md` Part II**: the 0.094 dB biquad that validates this row contains **0 of 105** words with bit 4 *and* bit 7 (all 22 of its store words are `bit7 = 0`), so it never constrained the `bit7 = 1` case — **527** corpus words are verified, **180 are not**. An exhaustive 276 480-machine search over all 29 LFO blocks gives **0 survivors** with the store unconditional and 432 with it gated, and **FORCES the gate to read bit 7 AND `hi12[3:1]`** (bit 7 alone: 0 survivors; `hi12[3:1] == 2` alone: falsified — it would suppress all 22 biquad stores). Three gates survive, differing on 13 corpus words. ★ **ADOPTED in the AGREED part only** (`analysis/acc-adder.md` §6, re-derived there at **0 of 181 440** for the unconditional store in an independently-built space): `bit7 = 0` stores, `(bit7, hi12[3:1]) = (1, 2)` stores, `(1, 1)` does **NOT** store — and where the three gates disagree the word now **TRAPS**. The disputed **CLEAR** at `(1, 1)` is unobservable exactly when the ACTION is `0x00` (the adder's SRC term replaces the accumulator feedback outright), so those 107 corpus words execute and the other 31 do not. MEASURED cost: 19 corpus words lose a decode they should never have had. Timing re-forced independently — of 2160 enumerated models the 480 that are bit-identical on the PARAMETRIC EQ section are **exactly** those storing and clearing BEFORE the ALU. The second `0x092 = 0x082 + bit4` citation this row used to carry is an *encoding* observation on two LFO words that cannot both be storing |
 | 3:1 | a proven FIELD, meaning **UNKNOWN** (`f31`) | MEASURED as a field (8/8 values) |
 | 0 | "`addr8` is an absolute immediate" | PROVEN BY CONSTRUCTION for `0x801` only; **in the C-format family it is instead the MSB of the immediate** (MEASURED); else residue. A third incompatible meaning on one bit — more evidence that `hi12` is a microword, not an opcode |
 
@@ -207,12 +207,36 @@ A word is in this table only if a core could **execute** it.
 
 ```
       L    := src[ lo12[10:6] ]      07 mem[p]  10 acc  19 tempA  1A tempB
-      if hi12 bit 4 :  mem[p] <- acc ; acc := 0                store AND clear
-      hi12[3:1]     :  0 -> acc <- P    1 -> acc += P    2 -> acc unchanged
-      lo12[4:0]     :  13 -> tempA <- L   14 -> tempB <- L   07 -> mem[p] <- L
+      if hi12 bit 4 and NOT (bit7 and hi12[3:1]==1) :
+                       mem[p] <- acc ; acc := 0               store AND clear
+      acc  := SRC_TERM + P_TERM              <- ONE ADDER, TWO SELECTORS
+               SRC_TERM = L            if lo12[4:0] == 00
+                        = 0            if hi12[3:1] == 0      (acc <- P)
+                        = acc          otherwise
+               P_TERM   = 0            if hi12[3:1] == 2      (no product)
+                        = P            otherwise
+      lo12[4:0]     :  13/19 -> tempA <- L   14 -> tempB <- L   07 -> mem[p] <- L
       if class4 == A :  P := coef[cursor++] * L
       if class4 & 7 == 2 :  p += (s8)addr8
 ```
+
+★ **THE ACCUMULATOR STEP IS AN ADDER, NOT A SEQUENCE** — `analysis/acc-adder.md`.
+This replaces "do the `hi12[3:1]` operation, then do the ACTION", and it is the
+adjudication of two passes that reached OPPOSITE determinations: the LFO forced
+`acc ← bus` **before** the operation, SINGLE DELAY forced `acc += bus` **after**
+it, and neither had enumerated the other's ordering. Both blocks actually demand
+the same expression, `bus + P`, at the word where their sum forms — once at
+`hi12[3:1] == 1` and once at `== 0`, which no ordering delivers and one adder
+does. **FORCED**: 18 survivors out of 2160 × 3240 × 181 440 enumerated points
+across three independent numeric contexts (bit-identity with the biquad, the
+SINGLE DELAY comb, all 29 LFO blocks), and all 18 agree on the adder, on
+`ACTION 0x00`, and on the shipped store timing. On every word whose ACTION is not
+`0x00` this is the previous model **exactly** (PROVEN BY CONSTRUCTION), which is
+why the 0.094 dB reconstruction is bit-identical before and after.
+
+*A testable consequence*: on an ACTION-`0x00` word `hi12[3:1] == 0` and `== 1`
+become **indistinguishable**, and the corpus emits both. A context that separates
+them falsifies this reading.
 
 `P` is **not consumed** by the add — an MPLY output latch holds it until the next
 multiply, and `hi12[3:1]` decides whether this word takes it.
@@ -238,7 +262,8 @@ what puts the operation in `hi12` and not in `lo12`: `092.A.dd.200` and
 and no single operation applied twice with their two constants makes a ramp.
 
 **Still OPEN**, and the decoder guesses none of it: 14 of the 18 observed SRC
-codes, 19 of the 24 observed ACTION codes, `lo12` bit 4, the difference between
+codes, **17 of the 24** observed ACTION codes (`0x00` and `0x19` were anchored by
+`analysis/acc-adder.md`), `lo12` bit 4, the difference between
 actions `0x12` and `0x15`, five of the eight `hi12[3:1]` codes, and the `lo12`
 bit-11 **modifier** (PROVEN BY CONSTRUCTION to be a separate flag, so `0x021` and
 `0x821` are one route plus a modifier — never two codes).

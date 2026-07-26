@@ -98,12 +98,12 @@
   w55   0202200407   mac.st  acc,(p)+0
   w56   00002BF000   ?word   0x00002BF000   ; 000.2.BF.000  hi12{-}
   w57   0000203407   ld.st   acc,(p)+3
-  w58   00122F21C0   ?word   0x00122F21C0   ; 012.2.F2.1C0  hi12{ST f31=1}
+  w58   00122F21C0   mac.b   (p),(p)-14 ; mem[p]<-acc, acc=0
   w59   00002091CD   ?word   0x00002091CD   ; 000.2.09.1CD  hi12{-}
   w60   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w61   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w62   00002FE407   ld.st   acc,(p)-2
-  w63   00122F91C0   ?word   0x00122F91C0   ; 012.2.F9.1C0  hi12{ST f31=1}
+  w63   00122F91C0   mac.b   (p),(p)-7 ; mem[p]<-acc, acc=0
   w64   00002FB1CD   ?word   0x00002FB1CD   ; 000.2.FB.1CD  hi12{-}
   w65   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w66   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]

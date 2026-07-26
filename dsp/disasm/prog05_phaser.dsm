@@ -14,7 +14,7 @@
   w0    08801308BC   ?word   0x08801308BC   ; 880.1.30.8BC  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
   w1    0092A0E200   ?word   0x0092A0E200   ; 092.A.0E.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
-  w2    00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
+  w2    00822001C0   mac.b   (p),(p)+0
   w3    0094AF2200   ?word   0x0094AF2200   ; 094.A.F2.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
   w4    000020C1CD   ?word   0x000020C1CD   ; 000.2.0C.1CD  hi12{-}
@@ -135,7 +135,7 @@
   w100  0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w101  0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
-  w102  00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
+  w102  00822001C0   mac.b   (p),(p)+0
   w103  0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
   w104  00002F6447   ?word   0x00002F6447   ; 000.2.F6.447  hi12{-}
