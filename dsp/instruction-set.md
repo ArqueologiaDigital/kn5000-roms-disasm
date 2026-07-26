@@ -65,6 +65,22 @@ earlier, which is exactly what an integration pass is for.
 > today, and the header carries five undecoded C-format words with the register-load
 > selector `0x20`).
 
+> ★ **AND THE RETRACTION SWEEP (`analysis/retraction-sweep.md`) found that this
+> table is not enough on its own — a withdrawal has to be PROPAGATED.**
+> `notes/kn5000-dsp-INDEX.md`, the front door to 188 notes, listed **six** of the
+> claims below in its "Established" block with no banner, including two the
+> disassemblers themselves had already retracted (`bit 23 = multiplier`,
+> `0xC40 = envelope detector`) — the configuration that costs most, where a reader
+> trusts the summary and disbelieves the source. `closure-pointer.md` falsified
+> **K6 finding 5** and never went back to K6, so `dsp-frame-advance.md` §3.1 kept
+> calling frame closure **FORCED** (now **CONSISTENT**) and so did a `logerror`
+> line printed on **every run**. ★ Worst: `kn5000-dsp-pointer.md` headline 3
+> explained away the *pointer never returns* result by saying the pointer is
+> **reloaded every frame** — K3 withdrew the reload, so **that defect is re-opened,
+> and it is the same phenomenon as the `+121` closure residue**. Nobody had put the
+> two side by side. Re-run the audit with
+> `python3 dsp/tools/retraction_sweep.py selftest && … sweep && … code`.
+
 | withdrawn claim | why | replaced by |
 |---|---|---|
 | **`C40.1.80.000` and `C40.1.E0.451` are class-1 delay-DRAM words, and they corroborate R2's withdrawal of the `addr8` bit-7 split** (R3 §6.1, §9.5) | They are **C-FORMAT IMMEDIATE LOADS** — `hi12[11:8] == 0xC`, so `class4`/`addr8` are immediate data, not fields. R3's family predicate carries no C-format guard. Decisive: `C40.1.80.000` (A=12) and `C40.2.C0.000` (A=22) are **the same instruction** — same family, same destination `lo12 = 0x000` — differing only in the immediate; one reads `class4 == 1` and the other `class4 == 2` *because bit 8 of the immediate differs*. No machine can make one touch the DRAM and not the other. **FORCED.** | the guarded family (`is_dram()`); R2's bit-7 withdrawal stands on its own evidence (324/324 vs 3 misclassified) and never needed this |
