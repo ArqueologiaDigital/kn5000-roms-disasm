@@ -325,10 +325,16 @@ The output stage went from **0 of 23** understood to **2 DETERMINED + 5 INFERRED
 and the two DETERMINED ones are the two that gate control flow — which matters far
 more than the percentage does.
 
-The tier-2 words are worth their own line because of *what* they are: for the
-first time, **the decode reaches the audio boundary**. Not one of the tier-1 forms
-touches DI/DO, the external delay DRAM, the stack or the frame strobe; the
-delay-DRAM read/write and the call-vector load do.
+The tier-2 words are worth their own line because of *what* they are. The
+standing complaint (`notes/dsp-critical-path-coverage.md` headline 2) was that
+**not one decoded word sat on the audio boundary** — all six moved data between
+the cursor, the pointer, the accumulator and P, so the decoded subset could not
+get a sample in, could not get one out, and could not even enter a body. That is
+no longer true in either tier: `setvec` (tier 1) is how a body is entered at all,
+and the delay-DRAM read/write (tier 2) is how the delay lines are reached. **DI
+and DO are still untouched by every form**, so a sample still cannot get in or
+out; that is now the whole of the remaining boundary problem rather than three
+quarters of it.
 
 ```
 class-A multiplies (coefficient consumers)     822
