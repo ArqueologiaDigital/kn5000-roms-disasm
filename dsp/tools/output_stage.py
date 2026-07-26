@@ -18,6 +18,9 @@ Subcommands:
   * dram      ★ SOLVE the D-RAM origin from the host's own zero-fill.  The
               per-unit body ENTRY POINTER is forced to 0x05 (unit 0) and 0x85
               (unit 1); the output stage names both.
+  * control   ★ RUN THIS BEFORE BELIEVING `dram': the same solve with the
+              answer destroyed (each body against a DIFFERENT algorithm's fill).
+              It reports one derivation that does NOT survive its own control.
   * closure   ★ the frame walk with the per-unit rebase.  Residue ZERO, from two
               independent routes to X = 0xFF.
     regs      the register-file map that falls out, and where every mode-1 index
@@ -384,6 +387,97 @@ def sec_dram(rom, E, args):
     print("    streams, because below it is the kernel's own I/O window.")
 
 
+def sec_control(rom, E, args):
+    """★ THE CONTROL.  A solve that cannot fail proves nothing, so this asks the
+    same question with the ANSWER DESTROYED -- each body scored against a
+    DIFFERENT algorithm's zero-fill.  If the shuffled pairing scores what the
+    true one does, sect. 3 is measuring the shape of the walk, not the origin."""
+    import random
+    import statistics
+    imgs = images(E, rom)
+    u0 = [a for a in sorted(imgs)
+          if imgs[a][0] == UNIT0_ENTRY_IRAM and fill_cells(rom, a)]
+
+    def cells(algo):
+        T, _W, _R, _p = body_walk(imgs[algo][1], 0)
+        return T
+
+    def blk(algo):
+        base = 0xD0 if imgs[algo][0] == UNIT1_ENTRY_IRAM else 0x50
+        return set(c for c in fill_cells(rom, algo) if c >= base)
+
+    print("=" * 78)
+    print("★ THE CONTROL -- can this harness say NO?")
+    print("=" * 78)
+    print()
+    print("  TEST A -- the aggregate scan of sect. 3.2, scored AT E = 0x%02X." % E0_EXPECTED)
+
+    def score_at(pairs, e):
+        return sum(len(set((e + t) & 0xFF for t in cells(b)) & set(fill_cells(rom, f)))
+                   for b, f in pairs)
+    true = score_at([(a, a) for a in u0], E0_EXPECTED)
+    sh = []
+    for s in range(200):
+        rnd = random.Random(7000 + s)
+        perm = u0[:]
+        rnd.shuffle(perm)
+        while any(a == b for a, b in zip(u0, perm)):
+            rnd.shuffle(perm)
+        sh.append(score_at(list(zip(u0, perm)), E0_EXPECTED))
+    m, sd = statistics.mean(sh), statistics.pstdev(sh)
+    print("     TRUE %d   SHUFFLED(200) mean %.1f sd %.1f max %d   z = %.1f"
+          % (true, m, sd, max(sh), (true - m) / sd))
+    print()
+    print("  ⚠ AND THE HONEST PART: the shuffled pairing still PEAKS at 0x%02X."
+          % E0_EXPECTED)
+    print("    Every stream's fill contains the same low registers 0x05/0x06/0x0E and")
+    print("    every body walk starts at offset 0, so the PEAK LOCATION is a baseline")
+    print("    the scan rides on.  What is evidence is the EXCESS at that E, above.")
+    print()
+    print("  TEST B -- the same solve with the low registers EXCLUDED: only the")
+    print("            contiguous STATE BLOCK, and only streams whose block is >= 8.")
+
+    def admits(bodyalgo, blockalgo):
+        T = cells(bodyalgo)
+        b = blk(blockalgo)
+        return set(e for e in range(256) if b <= set((e + t) & 0xFF for t in T))
+    big = [a for a in u0 if len(blk(a)) >= 8]
+    cnt = collections.Counter()
+    for a in big:
+        for e in admits(a, a):
+            cnt[e] += 1
+    print("     %d streams.  TRUE: %s" % (len(big),
+          ["E=0x%02X:%d" % (e, n) for e, n in cnt.most_common(4)]))
+    tot = []
+    for s in range(60):
+        rnd = random.Random(500 + s)
+        perm = big[:]
+        rnd.shuffle(perm)
+        while any(a == b for a, b in zip(big, perm)):
+            rnd.shuffle(perm)
+        c2 = collections.Counter()
+        for a, b in zip(big, perm):
+            for e in admits(a, b):
+                c2[e] += 1
+        tot.append(max(c2.values()) if c2 else 0)
+    print("     CONTROL(60 shuffles): best-E count max %d, mean %.1f, sd %.1f  =>  z = %.1f"
+          % (max(tot), statistics.mean(tot), statistics.pstdev(tot),
+             (cnt.most_common(1)[0][1] - statistics.mean(tot)) / statistics.pstdev(tot)))
+    fail = [a for a in big if not admits(a, a)]
+    print()
+    print("  ⚠ %d of %d big-block streams admit NO E at all: %s"
+          % (len(fail), len(big), fail))
+    print("    Their zero-filled block is unreachable from ANY origin under a single")
+    print("    continuous walk.  That is a limit of the WALK model, flagged already by")
+    print("    isa-adjudication.md sect. 5.1, and it is why the strict intersection over")
+    print("    all big-block streams is EMPTY while 17 of 19 agree on 0x%02X." % E0_EXPECTED)
+    print()
+    print("  ⇒ the load-bearing derivation is sect. 3.1 (PARAMETRIC EQ: two 40-cell")
+    print("    contiguous runs, ONE alignment, no free parameter) and sect. 3.3")
+    print("    (min(fill) = 0x05 / 0x85 in 91 of 91).  The aggregate scan corroborates")
+    print("    at z = %.0f but cannot locate the peak by itself." % ((true - m) / sd))
+
+
 def sec_closure(rom, E, args):
     k = kernel(E, rom)
     imgs = images(E, rom)
@@ -586,7 +680,7 @@ def sec_checks(rom, E, args):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["words", "cformat", "dram", "closure",
+    ap.add_argument("cmd", choices=["words", "cformat", "dram", "control", "closure",
                                     "regs", "do", "checks", "all"])
     ap.add_argument("--sub", default=os.path.join(REPO, "original_ROMs",
                                                   "kn5000_subprogram_v142.rom"))
@@ -594,10 +688,11 @@ def main():
     args = ap.parse_args()
     rom, E = load(args)
     table = {"words": sec_words, "cformat": sec_cformat, "dram": sec_dram,
-             "closure": sec_closure, "regs": sec_regs, "do": sec_do,
-             "checks": sec_checks}
+             "control": sec_control, "closure": sec_closure, "regs": sec_regs,
+             "do": sec_do, "checks": sec_checks}
     if args.cmd == "all":
-        for name in ("words", "cformat", "dram", "closure", "regs", "do", "checks"):
+        for name in ("words", "cformat", "dram", "control", "closure",
+                     "regs", "do", "checks"):
             table[name](rom, E, args)
             print()
     else:

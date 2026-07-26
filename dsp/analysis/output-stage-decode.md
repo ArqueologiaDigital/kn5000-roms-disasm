@@ -11,6 +11,8 @@ below**:
 python3 dsp/tools/output_stage.py words     # the 23 words, every field
 python3 dsp/tools/output_stage.py cformat   # the C-FORMAT OPCODE census
 python3 dsp/tools/output_stage.py dram      # ★ SOLVE the D-RAM origin
+python3 dsp/tools/output_stage.py control   # ★ RUN THIS FIRST -- the same solve
+                                            #   with the answer destroyed
 python3 dsp/tools/output_stage.py closure   # ★ frame closure -- residue ZERO
 python3 dsp/tools/output_stage.py regs      # the 256-cell map that falls out
 python3 dsp/tools/output_stage.py do        # the w73 / w78 evidence
@@ -32,7 +34,7 @@ still traps, and the rendered audio cannot have moved. §12.
 
 | # | statement | label |
 |---|---|---|
-| **A** | ★ **THE D-RAM ORIGIN IS PINNED, and it was in the host's own zero-fill all along.** The per-unit body **entry pointer** is `0x05` (unit 0) and `0x85` (unit 1). Three independent derivations: PARAMETRIC EQ's 40-cell contiguous run must align with the host's 40-cell fill block (**no free parameter**, E is unique); the exhaustive scan over all 256 origins peaks there and nowhere near (unit 0 **626/729** against 467 for the runner-up, unit 1 **96/108** against 72); and the **lowest cell the host ever zero-fills** is `0x05` in **79 of 79** unit-0 streams and `0x85` in **12 of 12** unit-1 streams. | **MEASURED** (given **B**) |
+| **A** | ★ **THE D-RAM ORIGIN IS PINNED, and it was in the host's own zero-fill all along.** *(Controlled: §3.6. The shuffled control kills the aggregate scan's peak-location claim and leaves its excess; the two derivations that carry the result are unaffected by it.)* The per-unit body **entry pointer** is `0x05` (unit 0) and `0x85` (unit 1). Three independent derivations: PARAMETRIC EQ's 40-cell contiguous run must align with the host's 40-cell fill block (**no free parameter**, E is unique); the exhaustive scan over all 256 origins scores **626/729** there against a shuffled-pairing null of **384 ± 16** (unit 1 **96/108**) — an *excess*, not a peak location, because the control shows the peak location is a baseline (§3.6); and the **lowest cell the host ever zero-fills** is `0x05` in **79 of 79** unit-0 streams and `0x85` in **12 of 12** unit-1 streams. | **MEASURED** (given **B**) |
 | **B** | ★ **The mode-1 REGISTER FILE and the mode-2 D-RAM are ONE 256-cell RAM.** `isa-adjudication.md` §6 offered this as the simpler of two enumerated readings and had no positive test. This is the test: under it the host's fill lands on the body's own footprint three ways at once, the **per-unit state block sits at ENTRY+75 in 85 of 85 streams** (`0x05+75 = 0x50`, `0x85+75 = 0xD0`, both exact), and `E1 − E0 = 0x80` reproduces R2's "bit 7 of a register index is the effect unit" to the bit. Under the alternative (two spaces laid out alike) all of that is coincidence. | **FORCED** by A's over-determination, up to the alternative being enumerated |
 | **C** | ★ **THE FRAME CLOSES. Residue ZERO, and `X = 0xFF` by two independent routes.** Route 1: `X + Δ(0..44) = E0`, i.e. `X + 6 = 0x05`. Route 2: `E1 + net(reverb) + Δ(60..82) = 0x85 + 123 − 1 = 0xFF`. The **+121** residue that has stood since the ADVANCE pass is the artefact of walking one pointer straight through a machine that **rebases it per unit**. | **FORCED** given A |
 | **D** | ★ **A rebase between the two CALLs is FORCED, and its value is NOT an instruction immediate.** `net(body0)` varies over **8 values** across the unit-0 pool, so `E1 = 0x85` cannot be reached by walking. And `0x85` (or `0x83`/`0x84`, the pre-`w55`/`w57` variants) appears in **0** nibble-aligned 8-bit fields of I-RAM 50..58; over *every* contiguous 8-bit field there are 4 hits against **≈3.1 expected** — at chance. This **CONFIRMS** K4 item D and `closure-pointer.md` D′ — a per-unit **BASE REGISTER** — and supplies the value they could not: `base = 0x05 | (unit << 7)`. | **FORCED** |
@@ -244,6 +246,42 @@ The `w45` / `w53` **mode split** that `closure-pointer.md` §5 could only call
 CONSISTENT now has a mechanism: `w45` runs before any body and can use the
 pointer; `w53` runs after body 0, when the pointer is wherever that body left it,
 so it must address absolutely. Both land on their unit's block.
+
+### 3.6 ★ THE CONTROL — and one derivation does not survive it
+
+`output_stage.py control`. A solve that cannot fail proves nothing, so the same
+question is asked with **the answer destroyed**: each body scored against a
+*different* algorithm's zero-fill.
+
+```
+   TEST A -- the aggregate scan of §3.2, scored AT E = 0x05
+      TRUE 626    SHUFFLED(200) mean 384.0  sd 16.0  max 442     z = +15.1
+
+   TEST B -- the same solve with the shared low registers EXCLUDED: only the
+             contiguous STATE BLOCK, and only the 19 streams whose block is >= 8
+      TRUE       E=0x05 : 17 of 19      (E=0x03 : 4, E=0x04 : 4)
+      SHUFFLED(60)  best-E count max 14, mean 11.1, sd 1.1        z = +5.5
+```
+
+**⚠ And the part that does not survive: the shuffled pairing still PEAKS at
+`0x05`.** Every stream's fill contains the same low registers `0x05`/`0x06`/`0x0E`
+and every body walk starts at offset 0, so the *peak location* in §3.2 is a
+baseline the scan rides on, not a discovery. **What is evidence is the EXCESS at
+that `E`** — 626 against 384 ± 16 — and TEST B, which removes the baseline
+entirely and still separates at z = +5.5.
+
+**⚠ Second honest limit: 2 of the 19 big-block streams admit NO `E` at all** —
+algos 15 and 53, whose zero-filled block is unreachable from *any* origin under a
+single continuous walk. So the strict intersection over all big-block streams is
+**empty**, while 17 of 19 agree on `0x05`. That is a limit of the **walk model**,
+which `isa-adjudication.md` §5.1 already flagged as naive (no mid-body reload),
+and it is the same class of failure as the 6 images of P-4.
+
+⇒ **the load-bearing derivations are §3.1 and §3.3**, neither of which uses the
+aggregate scan: PARAMETRIC EQ's two 40-cell contiguous runs have exactly **one**
+alignment and no free parameter, and `min(host zero-fill)` is `0x05`/`0x85` in
+**91 of 91** streams. §3.2 corroborates at z = +15 but **cannot locate the peak by
+itself**, and this note does not let it pretend otherwise.
 
 ---
 
@@ -563,6 +601,7 @@ Predictions were written to a scratch file before the corresponding measurement.
 | **P-7** | The output stage contains no word that can supply `0x05` or `0x85` | **MISS, and the productive one.** `w63`'s `addr8` is `0x05` and `w70`'s is `0x85` — the *only* aligned occurrences in 3057 words. This is what §7.2 is about, and I would not have looked without the prediction failing |
 | **P-8** | *(before §3.2)* the exhaustive scan will agree with the PEQ alignment | **HIT**, and by a wide margin (626 vs 467) |
 | **P-9** | *(before §4)* the two routes to `X` will disagree, because the rebase model is new and under-constrained | **MISS, and the best one.** They agree to the unit, `0xFF` = `0xFF`. Recorded because the agreement is the single strongest piece of evidence in this note and I expected it to fail |
+| **P-10** | *(before §3.6)* the shuffled control will destroy the peak, so §3.2 stands on its own | **MISS, and it cost §3.2 its status.** The shuffled pairing **still peaks at `0x05`**, because every fill contains the same low registers and every walk starts at offset 0. §3.2 survives only as an *excess* (626 vs 384 ± 16) and TEST B (z = +5.5); the derivation that carries the result is §3.1, which has no free parameter, and §3.3, which is 91/91. Had I not run the control I would have published a scan whose headline number measures the shape of the walk |
 
 ---
 
