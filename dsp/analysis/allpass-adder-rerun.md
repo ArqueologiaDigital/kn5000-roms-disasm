@@ -391,6 +391,39 @@ This is the same *shape* of collision as `action-field.md` §8 (the reverb and
 SINGLE DELAY want different things from `SRC 0x00`) but sharper: it is one bit of
 one code, and both readings of it are FORCED — in different contexts.
 
+### 6.2 ★★ And the multiplicand can be EXACTLY Gardner's — so the obstruction is downstream
+
+Having asked "can both reads meet", the obvious next question is the one the
+earlier pass never got to ask, because it believed the answer to the first was
+no: **can the multiplicand be exactly `s[r] = w[r] + w[r−1] − t[r−1]`, and
+nothing else?** Enumerated, up to an overall sign, with no other atom allowed:
+
+```
+   sequential   52920 carry both reads;  9660 reach the EXACT Gardner
+                multiplicand +-(N' + N - Q)
+
+   the steady-state multiplicand forms, most common first:
+       N+Q+N'  x9520     -N+Q-N' x9520    -N+Q+N' x9380    N+N'   x3920
+       -N-N'   x3080     N+2*Q+N' x2380   -N+N'   x2380
+       0.5*N+0.5*Q+0.5*N'  x1680          -N+2*Q-N' x1540  -N+2*Q+N' x1540
+```
+
+**9 660 settings compute precisely the multiplicand a first-order all-pass
+stage needs.** The sample machine printed by the tool —
+`ACTION 0x00 = acc += bus ; tA<-acc`, `0x19 = acc −= bus ; tB<-acc`,
+`SRC 0x00 = DR`, `land = 0` — has exactly `±(N' + N − Q)` on the multiplier's
+input, and **`loop_ok` returns `[]`**: not one of the four DRAM write-data
+sources gets `g·w_k` back to the line without also getting an unmultiplied copy
+of `w_k` there.
+
+<!--G2-->
+
+So the obstruction moves once more, and this time it lands on the **write-back
+path**, not on the multiplicand at all: *the reverb motif can compute an
+all-pass stage's `s[r]`; what it cannot do is store the right thing in the delay
+line afterwards.* That is a different claim from `action-field.md` §5's, it is
+testable, and it is where a next pass should start.
+
 ---
 
 ## 7. What is now FORCED, CONSISTENT, and OPEN
@@ -402,10 +435,11 @@ one code, and both readings of it are FORCED — in different contexts.
   the strict space (2 268 loop survivors). Both spaces have a positive control
   that the same executor, the same delay lines, the same reference and the same
   matcher ACCEPT at 2, 4 and 5 stages.
-* **The adder is not the difference.** Every count that section 10 published is
-  reproduced digit for digit under `order = adder`: 70 560 / 0 / 52 696-plus.
-  The one count that moves — the loop-filter survivors, 52 696 → 74 508 — moves
-  in the direction that would have *helped*.
+* **The adder is not the difference.** Every multiplicand count section 10
+  published is reproduced digit for digit under `order = adder` — 70 560 fresh,
+  0 both-via-DR, and 85 260 / 8 400 with the clear removed. The one count that
+  moves — the loop-filter survivors, 52 696 → 74 508 — moves in the direction
+  that would have *helped*.
 * **If the multiplicand is ever to carry both delay reads, `ACTION 0x00` must
   KEEP the accumulator.** 52 920 of 52 920 route-agnostic settings have its
   accumulator half in `{+bus, −bus, bus−acc}`; `acc ← bus` (`load`) and "no
@@ -438,8 +472,10 @@ one code, and both readings of it are FORCED — in different contexts.
 
 **OPEN**
 
-* **What the reverb core actually computes.** Still not decoded, and this pass
-  decoded no ACTION code from it either.
+* **What the reverb core actually computes.** Still not decoded. Two *half*-codes
+  now are (§5.3) — `ACTION 0x00` touches the accumulator, `ACTION 0x19` captures
+  from the bus — and both merely agree with what SINGLE DELAY already said, so
+  neither buys a frame slot that was not already priced.
 * **`ACTION 0x00`'s accumulator half** is now the parameter to attack: `load` is
   FORCED by the biquad+LFO+SINGLE-DELAY joint solve and refuted by the all-pass
   hypothesis. Since the all-pass hypothesis is independently falsified, `load`
@@ -559,9 +595,9 @@ internally inconsistent.)*
 
 ## 10. PREDICT-THEN-CHECK
 
-The predictions in the first block were written and stored **before any code was
-read or run**; the second block was added after reading the tool but still before
-running it, and is labelled as such.
+PC-1…PC-7 were written and stored **before any code was read or run** (verbatim
+in the Appendix); PC-8 and PC-9 were recorded later but each before the
+measurement it names. **Overall: 5 HITS, 4 MISSES, 1 PARTIAL.**
 
 | | prediction | result |
 |---|---|---|
@@ -582,9 +618,10 @@ running it, and is labelled as such.
 * **`SRC 0x00` is now contradicted by three contexts, not two.** The reverb needs
   it to be the delay-RAM read register (52 696/52 696 in the loop filter,
   13 230/13 230 in the both-reads condition); SINGLE DELAY forbids it (0 of
-  5 145, and 0 of 72 in the strengthened model). Any pass that adopts `SRC 0x00`
-  in either direction is adopting one context over another, and the price list in
-  `acc-adder.md` §6 (30 frame slots) is still the right way to state it.
+  **5 635**, and 0 of 72 in the strengthened model). Any pass that adopts
+  `SRC 0x00` in either direction is adopting one context over another, and the
+  price list in `acc-adder.md` §6 (30 frame slots) is still the right way to
+  state it.
 * **`ACTION 0x00`'s accumulator half is the single highest-value discriminator
   left in the ALU** — `load` versus `add`. It is FORCED to `load` by three
   contexts jointly and would have to be `add`-like for the reverb ever to be an
@@ -594,10 +631,11 @@ running it, and is labelled as such.
   indistinguishable; this is the same seam, seen from the other side.
 * **A harness pattern to check everywhere**: `r1_allpass_solve.py` selected a
   relaxation **by slot position**, and it leaked into every program the tool
-  loaded (§8). The same file still guards the `nopi` relaxation with
-  `len(MSLOTS) == 8`, which `CONTROL_SLOTS` also satisfies — latent, harmless
-  today only because `nopi` is never set in that section. **Any tool that swaps a
-  slot list must not carry position-indexed parameters.** `closure_pointer.py`,
+  loaded (§8). A **second instance of the same shape** was in the same file: the
+  `nopi` relaxation was guarded by `len(MSLOTS) == 8`, which `CONTROL_SLOTS` also
+  satisfies — latent, harmless today only because `nopi` is never set in that
+  section, and now gated on the same identity test. **Any tool that swaps a slot
+  list must not carry position-indexed parameters.** `closure_pointer.py`,
   `lfo_ramp.py` and `acc_adjudicate.py` should be swept for the same shape.
 * **Nothing here moves the closure residue.** Every word examined has
   `addr8 == 0` inside a ladder (F7, MEASURED), so the `+121` on 1 130 880 of

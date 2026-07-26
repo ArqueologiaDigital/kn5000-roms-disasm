@@ -1130,7 +1130,7 @@ def exec_rep(m, st, alg, coef, lines, r, K, pending, base, trace=None):
     src0 = m[SRC0]
     for s in range(len(MSLOTS)):
         sl = MSLOTS[s]
-        if s >= 6 and m[NOPI] and len(MSLOTS) == 8:
+        if s >= 6 and m[NOPI] and MSLOTS is MOTIF_MSLOTS:
             continue                       # relaxation: the two nops are inert
         tick = base + s
         if sl["dram"] == "rd" and m[LAND] < 0:
