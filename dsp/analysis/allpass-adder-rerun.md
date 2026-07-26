@@ -38,10 +38,11 @@ an exhaustive search agrees) / **CONSISTENT** / **FALSIFIED** / **OPEN**.
 |---|---|---|
 | **A** | ★ **THE NEGATIVE RESULT SURVIVES THE ADDER, AND IT SURVIVES IT FROM A LARGER SET OF CHANCES.** Re-run with the same 20 580 000-machine enumeration, the same loop filter and the same matcher: **0 survivors**. Every *multiplicand* count is identical to the sequential model's digit for digit — 70 560 hold the fresh read, **0** hold both reads via the read-data register, 52 920 hold both by any route. The one count that does move moves the *helpful* way: **74 508** machines pass the delay-loop filter under the adder against 52 696 before, and the numeric test rejects all 74 508. | **MEASURED** |
 | **B** | ★ **BUT THE PUBLISHED DIAGNOSIS IS FALSIFIED.** `action-field.md` §3.3/§5/D presented *"the multiplicand contains BOTH N and D in **0** of 5 145 000 — exhaustive, no numeric run required"* as the located cause, and blamed the accumulator CLEAR. That count asks only whether the previous read survives **in the DRAM read-data register**. The previous read can also cross the repetition boundary **in the accumulator**, and route-agnostically **52 920 of 5 145 000 settings DO carry both reads** — *with the clear in force*. The obstruction is real; the reason given for it was not the reason. | **MEASURED**, a **FALSIFICATION** of this project's own headline explanation |
-| **C** | ★ **THE REAL OBSTRUCTION IS ONE NAMED BIT, AND IT IS `ACTION 0x00`.** Of the 52 920 settings that can carry both reads, **every single one** has `ACTION 0x00` *keeping* the accumulator (`+bus` 4410, `−bus` 4410, `bus−acc` 4410 per slice); `acc ← bus` (**`load`**) and "no effect" have **ZERO**. `load` is exactly what `acc-adder.md`'s joint solve FORCED at 18/18. **Under the ALU that ships, the previous delay read cannot reach the multiplicand by any route at all** — not because of the clear, but because `load` discards the accumulator that was carrying it. | **MEASURED / FORCED** |
+| **C** | ★ **WHAT DOES BLOCK IT IN THE SHIPPED ALU IS ONE NAMED BIT, AND IT IS `ACTION 0x00`.** Of the 52 920 settings that can carry both reads, **every single one** has `ACTION 0x00` *keeping* the accumulator (`+bus` 4410, `−bus` 4410, `bus−acc` 4410 per slice); `acc ← bus` (**`load`**) and "no effect" have **ZERO**. Of the 9 660 that reach the exact all-pass multiplicand (item G), 9 520 need `−bus` and 140 `+bus`; `load` again **ZERO**. `load` is exactly what `acc-adder.md`'s joint solve FORCED at 18/18 and what ships. **Under the shipped ALU the previous delay read cannot reach the multiplicand by any route at all** — not because of the clear, but because `load` discards the accumulator that was carrying it. | **MEASURED / FORCED** |
 | **D** | ★ **THE HARNESS HAD A DEFECT, AND IT IS IN THE PUBLISHED SINGLE DELAY NUMBERS.** `exec_rep` selected the `s1op` relaxation **by slot position** (`s == 1`), so it applied to whatever program was loaded. SINGLE DELAY's slot 1 is `202.A.B8.655` (`hi12[3:1] = 1`) and was being executed with `hi12[3:1] = 2` instead. Found because a newly built control tripped over it. See §8 for the retest and the price. | **MEASURED** |
 | **E** | **BOTH CONTROLS PASS UNDER THE ADDER.** The hand-built Gardner ladder is accepted at 2, 4 and 5 stages under `order = adder`, at `inject=P extract=P scale=+1.000`, identically to the sequential model, and it passes the delay-loop filter. A **second, newly built control** that uses only the STRICT vocabulary — one bus-routing ACTION code plus captures — is also accepted at 2/4/5. A search that cannot succeed proves nothing; both of these can. | **MEASURED** |
 | **F** | **The store GATE never reaches this motif.** The motif's only storing word is slot 3, `012.2.**.680`, and `hi12` bit 7 = **0** there, where all three surviving gates agree on STORE + CLEAR. The brief's premise — *"under the adder there is no unconditional clear and the store bit is GATED"* — is true of the ISA and **false of this motif**. | **MEASURED** |
+| **G** | ★★ **AND THE MULTIPLICAND CAN BE EXACTLY GARDNER'S.** Asking the question the old count's answer made look pointless: **9 660** settings compute precisely `±(w[r] + w[r−1] − t[r−1])` on the multiplier input, with no other term, and **4 148 of those also satisfy every condition of the delay-loop filter** — and the numeric test still rejects all of them. The impossibility is real but it lives *downstream* of the multiplicand and of the structural feedback conditions. §6.2 says where to look next. | **MEASURED** |
 
 ---
 
@@ -416,13 +417,33 @@ input, and **`loop_ok` returns `[]`**: not one of the four DRAM write-data
 sources gets `g·w_k` back to the line without also getting an unmultiplied copy
 of `w_k` there.
 
-<!--G2-->
+Enumerated over the whole space, with the loop filter applied on top:
 
-So the obstruction moves once more, and this time it lands on the **write-back
-path**, not on the multiplicand at all: *the reverb motif can compute an
-all-pass stage's `s[r]`; what it cannot do is store the right thing in the delay
-line afterwards.* That is a different claim from `action-field.md` §5's, it is
-testable, and it is where a next pass should start.
+```
+   sequential  EXACT Gardner multiplicand:  9660   of which ALSO pass the loop filter: 4148
+        ACTION 0x00 acc half among them:  -bus x9520   +bus x140      (load: ZERO, none: ZERO)
+        ACTION 0x19 acc half among them:  bus x3080  -bus x1820  +bus x1680  bus-acc x1540  (none) x1540
+
+   adder       EXACT Gardner multiplicand:  8400
+```
+
+★★★ **4 148 machines put exactly `±(w[r] + w[r−1] − t[r−1])` on the multiplier
+input AND satisfy every condition of the delay-loop filter — and the numeric
+test still rejects all of them.** So the obstruction is not that the two reads
+cannot meet (they can, 52 920 ways), not that the multiplicand cannot be the
+all-pass `s[r]` (it can, 9 660 ways), and not that the structural feedback
+conditions cannot be met at the same time (4 148 ways). It is **downstream of all
+three**, and the remaining candidate is the *value written back to the delay
+line*: `loop_ok` only requires the write to carry `g·w_k` with coefficient ±1 and
+no unmultiplied `w_k`; it does **not** require it to be `x[r] + t[r]`, which is
+what a Gardner stage stores.
+
+<!--WB-->
+
+Note also what the 9 660 force about the code this pass has been circling:
+**`ACTION 0x00`'s accumulator half is `−bus` in 9 520 of them and `+bus` in 140 —
+and `load` in none.** The same single bit, from a fourth direction, saying the
+same thing: the shipped reading and the all-pass reading are incompatible.
 
 ---
 
@@ -454,6 +475,11 @@ testable, and it is where a next pass should start.
   settings), which remains incompatible with SINGLE DELAY's blocking read.
 * **The store GATE does not reach this motif** (`hi12` bit 7 = 0 at the only
   storing word).
+* ★ **The impossibility is downstream of the multiplicand.** 9 660 settings reach
+  the exact all-pass multiplicand and 4 148 of those also pass the delay-loop
+  filter, and the numeric test rejects all of them. Whatever forbids the all-pass
+  is therefore *not* any of: the two reads meeting, the multiplicand's form, or
+  the structural feedback conditions C1–C3.
 
 **CONSISTENT, not forced**
 
@@ -484,6 +510,11 @@ testable, and it is where a next pass should start.
 * **Whether `hi12` bit 4 clears the accumulator** — still open, but **DEMOTED**.
   It is not what blocks the all-pass (§6), and in the shipped ISA it is not even
   reachable as a cause (§5.1, row 6).
+* ★ **What the 4 148 actually fail.** They have the right multiplicand and pass
+  C1–C3; the untested requirement is the *value written back*, which a Gardner
+  stage needs to be `x[r] + t[r]` and which the loop filter never pins down. That
+  is the next measurement, it costs one more symbolic predicate, and it is the
+  first version of this question that has not already been answered wrongly.
 
 ---
 
