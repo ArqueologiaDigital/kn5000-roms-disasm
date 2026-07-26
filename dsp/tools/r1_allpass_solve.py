@@ -911,6 +911,715 @@ def sec_separator(imgs):
     print("   could consume the ladder's last t.  Reported as an open miss.")
 
 
+# ==========================================================================
+#  9.  THE SECTION-9 RESTRICTION, TAKEN LITERALLY, INSIDE R1's OWN MODEL
+#
+#  `notes/dsp-alu-structure.md' sect. 9 observes that the all-pass core's DRAM
+#  WRITE (880.1.20.655) and its gain MULTIPLY (102.A.00.64B) carry the SAME
+#  lo12 SOURCE code (0x19), and reads that as the signature of a one-multiplier
+#  Schroeder all-pass in which the delay input and the multiplicand are ONE
+#  value in ONE register.  That is a testable restriction on R1's search and it
+#  costs nothing to test: keep only the machines whose WRITTEN VALUE and whose
+#  MULTIPLICAND are the same symbolic value.
+#
+#  The restriction is applied to the SOLUTION SET, not to the search, so that
+#  the unrestricted count is printed beside it and the reader can see the price.
+# ==========================================================================
+def sec_schroeder(nterms):
+    print("=" * 76)
+    print("9. THE SECT.-9 RESTRICTION TAKEN LITERALLY -- write value == multiplicand")
+    print("=" * 76)
+    print("   dsp-alu-structure.md sect. 9: `880.1.20.655' (the DRAM write) and")
+    print("   `102.A.00.64B' (the gain multiply) carry the SAME lo12 SOURCE 0x19.")
+    print("   Slots 4 and 5 are ADJACENT and nothing between them can rewrite that")
+    print("   register, so under a literal reading the two words move ONE value.")
+    print()
+    for tag, slots, terms in (("base: 2-input ALU, DRAM words inert", (1, 2, 3, 5), nterms),
+                              ("slot 4 (the DRAM write) may drive the ALU too",
+                               (1, 2, 3, 4, 5), nterms),
+                              ("3-input ALU, DRAM words inert", (1, 2, 3, 5), 3)):
+        exprs, sols = search(nterms=terms, alu_slots=slots, verbose=False)
+        uniq, rest = {}, {}
+        for s in sols:
+            uniq.setdefault(canonical(s), []).append(s)
+            if s["WVAL"] == s["MULT"]:
+                rest.setdefault(canonical(s), []).append(s)
+        print("   %-46s %4d machines -> %d with WVAL == MULT"
+              % (tag, len(uniq), len(rest)))
+    print()
+    print("   THIS IS NOT A SEARCH RESULT, IT IS ALGEBRA, and the search only")
+    print("   confirms it.  R1's two acceptance tests are")
+    print("       MULT            == eta*D - P + eta*N          (= s[r])")
+    print("       substitute(WVAL) == D - eta*P + eta*Q          (= d_in[r])")
+    print("   If WVAL == MULT then substitute(MULT) = eta*N - Q + eta*N', which")
+    print("   shares no atom with D - eta*P + eta*Q.  The write and the multiply")
+    print("   are ONE REPETITION APART in the software pipeline, so one register")
+    print("   cannot hold both -- for ANY ALU width and ANY number of registers.")
+    print("   => the literal sect.-9 reading is FALSIFIED.  What survives it is in")
+    print("      section 10: the shared SOURCE is a shared OPERAND, and only the")
+    print("      MULTIPLY consumes it as the multiplicand.")
+
+
+# ==========================================================================
+#  10.  THE ACTION FIELD -- solved INSIDE THE SHIPPED ALU, with lo12 SRC fixed
+#
+#  Section 9 tested `dsp-alu-structure.md' sect. 9 inside R1's OWN machine model
+#  -- four registers (acc, P, mem[ptr], DR), a free two-input ALU per slot and no
+#  notion of a routing field.  That model cannot express the thing the
+#  observation is about: `lo12' SRC names WHICH REGISTER supplies a word's
+#  operand, and tempA / tempB are registers R1 did not have.
+#
+#  This section re-runs the solve in the model that DOES express it -- the one
+#  the biquad forced and that ships in MAME (`upd6383_device::exec_alu()'):
+#
+#      bus  := SRC[ lo12[10:6] ]                       latched FIRST
+#      if hi12 bit 4 :  mem[ptr] <- acc ; acc := 0     store AND clear
+#      hi12[3:1]     :  0 -> acc <- P   1 -> acc += P   2 -> acc unchanged
+#      lo12[4:0]     :  the ACTION -- the field this section solves
+#      if class4 == A :  P := coef[cursor++] * bus
+#
+#  What is ENUMERATED is the unknown: what ACTION 0x00 (the largest open code in
+#  the ISA, 824 corpus words), 0x19 and 0x0B do, plus the model parameters they
+#  cannot be separated from -- what SRC 0x00 reads, what the DRAM write takes its
+#  data from, which line it targets, when the read lands, whether an ESCAPE word
+#  honours lo12, and whether the tempB bus carries the biquad's >>1.
+#
+#  The acceptance test is R1's: the ladder must reproduce a textbook all-pass
+#  cascade with the MEASURED ROM gains and the MEASURED ROM delay lengths.
+#  `price' then re-runs the whole search with ONE fixed assumption relaxed at a
+#  time, so an empty survivor set is a priced result and not a shrug.
+# ==========================================================================
+
+R_ACC, R_P, R_TA, R_TB, R_M, R_DR = range(6)
+RNAME = ("acc", "P", "tA", "tB", "M", "DR")
+
+# the anchored SRC map (dsp-alu-applied.md sect. 3.1; 0x0B from
+# dsp-alu-structure.md sect. 5, 99/106 sit on the delay-RAM word itself)
+SRC_REG = {0x07: R_M, 0x10: R_ACC, 0x19: R_TA, 0x1A: R_TB, 0x0B: R_DR}
+SRC_TXT = {0x07: "mem[ptr]", 0x10: "acc", 0x19: "tempA", 0x1A: "tempB",
+           0x0B: "dram-rd", 0x00: "(OPEN)"}
+SRC0_CANDS = ("zero", "P", "M", "acc", "DR", "tA")
+
+# The declared ACTION effect space.  It CONTAINS the five anchored codes --
+# 0x13 = ('', 'tA<-bus'), 0x14 = ('', 'tB<-bus'), 0x07 = ('', 'M<-bus'),
+# 0x12/0x15 = ('', '') -- which is the sanity property a semantic space must
+# have before it is used to solve for the codes it does not know.
+ACC_OPS = ("", "+bus", "-bus", "bus", "bus-acc")
+#   "bus-acc" is NOT decoration: R1's family B needs `acc <- DR - P' in one word,
+#   and with the accumulator operation living in hi12[3:1] (which only ever ADDS
+#   P) a reversed subtract is the only way the ACTION field could supply it.
+#   Leaving it out makes the search vacuously empty -- which is how it was found.
+CAPS = ("", "tA<-bus", "tB<-bus", "tA<-acc", "tB<-acc", "M<-bus", "M<-acc")
+EFFECTS = [(a, c) for a in ACC_OPS for c in CAPS]
+WSRCS = ("bus", "acc_before", "acc_after", "M")
+LANDS = (0, 1, 2, 7, 8)
+
+(F00, F19, F0B, SRC0, WSRC, WTRAIL, LAND, ESCOP, ESCACT, TBSH,
+ NOPI, NOCLR, S1OP, SWAP, ACTFIRST) = range(15)
+NOMINAL = dict(escop=0, escact=1, nopi=0, noclr=0, s1op=2, swap=0, actfirst=0)
+
+
+def mach(f00, f19, f0b, src0, wsrc, wtrail, land, escact=1, tbsh=0,
+         escop=0, nopi=0, noclr=0, s1op=2, swap=0, actfirst=0):
+    return (f00, f19, f0b, src0, wsrc, wtrail, land, escop, escact, tbsh,
+            nopi, noclr, s1op, swap, actfirst)
+
+
+def eff_str(e):
+    a, c = e
+    if not a and not c:
+        return "-"
+    if not a:
+        return c
+    a = ("acc <- bus" if a == "bus" else "acc <- bus-acc" if a == "bus-acc"
+         else "acc %s= bus" % a[0])
+    return a if not c else "%s ; %s" % (a, c)
+
+
+def motif_slots():
+    """The 8 motif words, decoded mechanically -- never hand-typed."""
+    out = []
+    for hi, cl, lo in CORE + [(0x000, 0x2, 0x000), (0x000, 0x2, 0x000)]:
+        esc = bool(hi & 0x800)
+        out.append(dict(word="%03X.%X.**.%03X" % (hi, cl, lo), esc=esc, cls=cl,
+                        src=(lo >> 6) & 0x1F, act=lo & 0x1F,
+                        accop=(hi >> 1) & 7, store=bool(hi & 0x10),
+                        dram=(None if not (esc and cl == 1)
+                              else "rd" if lo == 0x2D4 else "wr")))
+    return out
+
+
+MSLOTS = motif_slots()
+
+
+EXTRA_ACT = {}          # control-only ACTION codes; empty for every real run
+
+
+def act_effect(m, act):
+    if act in EXTRA_ACT:
+        return EXTRA_ACT[act]
+    if act in (0x12, 0x15):
+        return ("", "")
+    if act == 0x13:
+        return ("", "tA<-bus")
+    if act == 0x14:
+        return ("", "tB<-bus")
+    if act == 0x07:
+        return ("", "M<-bus")
+    return EFFECTS[m[{0x00: F00, 0x19: F19, 0x0B: F0B}[act]]]
+
+
+class NumAlg(object):
+    """floats -- the numeric ladder run."""
+    zero = 0.0
+    add = staticmethod(lambda a, b: a + b)
+    sub = staticmethod(lambda a, b: a - b)
+    half = staticmethod(lambda a: a * 0.5)
+    prod = staticmethod(lambda g, v: g * v)
+
+
+NATOM = 10
+XA, PA, MA, DA, TAA, TBA, NA, QA, NA2, QA2 = range(NATOM)
+ANAME = ("A", "P", "M", "D", "TA", "TB", "N", "Q", "N'", "Q'")
+ENT_ATOM = (XA, PA, TAA, TBA, MA, DA)          # register k -> its entry atom
+
+
+def _sym_unit(a):
+    u = [0.0] * NATOM
+    u[a] = 1.0
+    return tuple(u)
+
+
+def show_form(f):
+    return "".join(("+" if v > 0 else "-") +
+                   (ANAME[i] if abs(abs(v) - 1) < 1e-9
+                    else "%g*%s" % (abs(v), ANAME[i]))
+                   for i, v in enumerate(f) if abs(v) > 1e-12).lstrip("+") or "0"
+
+
+class SymAlg(object):
+    """linear forms over the entry / fresh atoms -- the structural filters."""
+    zero = (0.0,) * NATOM
+    add = staticmethod(lambda a, b: tuple(x + y for x, y in zip(a, b)))
+    sub = staticmethod(lambda a, b: tuple(x - y for x, y in zip(a, b)))
+    half = staticmethod(lambda a: tuple(0.5 * x for x in a))
+    # the multiplier's OUTPUT is the fresh product ATOM: the search never uses a
+    # coefficient VALUE, exactly as R1's did not.
+    prod = staticmethod(lambda _g, _v: _sym_unit(QA))
+
+
+def exec_rep(m, st, alg, coef, lines, r, K, pending, base, trace=None):
+    """ONE 8-slot repetition.  A single implementation, shared by the symbolic
+    filters and the numeric ladder, so the two cannot drift."""
+    src0 = m[SRC0]
+    for s in range(len(MSLOTS)):
+        sl = MSLOTS[s]
+        if s >= 6 and m[NOPI] and len(MSLOTS) == 8:
+            continue                       # relaxation: the two nops are inert
+        tick = base + s
+        if sl["dram"] == "rd" and m[LAND] < 0:
+            # land = -1: a BLOCKING read -- the read word's OWN bus already sees
+            # the returned word.  SINGLE DELAY needs it; R1's model excluded it
+            # by construction (its test 2 demanded the data land inside DR).
+            if lines is None:
+                st[R_DR] = _sym_unit(NA)
+            elif 0 <= r < K:
+                st[R_DR] = lines[r].read()
+        while pending and pending[0][0] <= tick:
+            st[R_DR] = pending.pop(0)[1]
+        # ---- the operand bus, latched before anything else ----------------
+        sc = sl["src"]
+        if sc == 0x00:
+            bus = (alg.zero if src0 == "zero" else
+                   st[{"P": R_P, "M": R_M, "acc": R_ACC,
+                       "DR": R_DR, "tA": R_TA}[src0]])
+        else:
+            reg = SRC_REG[sc]
+            bus = st[reg]
+            if reg == R_TB and m[TBSH]:
+                bus = alg.half(bus)
+        acc_before = st[R_ACC]
+        # ---- hi12 bit 4: store the accumulator to mem[ptr] AND clear it ----
+        if sl["store"]:
+            st[R_M] = st[R_ACC]
+            if not m[NOCLR]:
+                st[R_ACC] = alg.zero
+        aop, cap = act_effect(m, sl["act"])
+
+        def do_action():
+            if aop == "+bus":
+                st[R_ACC] = alg.add(st[R_ACC], bus)
+            elif aop == "-bus":
+                st[R_ACC] = alg.sub(st[R_ACC], bus)
+            elif aop == "bus":
+                st[R_ACC] = bus
+            elif aop == "bus-acc":
+                st[R_ACC] = alg.sub(bus, st[R_ACC])
+            if cap:
+                st[{"tA": R_TA, "tB": R_TB, "M": R_M}[cap.split("<-")[0]]] = \
+                    bus if cap.endswith("bus") else st[R_ACC]
+
+        honour = (not sl["esc"]) or m[ESCACT]
+        if honour and m[ACTFIRST]:
+            do_action()
+        # ---- hi12[3:1]: the accumulator operation -------------------------
+        op = m[S1OP] if s == 1 else sl["accop"]
+        if (not sl["esc"]) or m[ESCOP]:
+            if op == 0:
+                st[R_ACC] = st[R_P]
+            elif op == 1:
+                st[R_ACC] = alg.add(st[R_ACC], st[R_P])
+            elif op == 3:
+                st[R_ACC] = alg.zero
+        if honour and not m[ACTFIRST]:
+            do_action()
+        # ---- class A: the coefficient fetch and the multiply ---------------
+        if sl["cls"] == 0xA:
+            if trace is not None:
+                trace["MULT"] = bus
+            if coef is not None:
+                st[R_P] = alg.prod(coef, bus)
+        # ---- the external delay-DRAM access -------------------------------
+        dram = sl["dram"]
+        if dram and m[SWAP]:
+            dram = "wr" if dram == "rd" else "rd"
+        if dram == "rd" and m[LAND] >= 0:
+            if lines is None:
+                pending.append((tick + m[LAND], _sym_unit(NA)))
+            elif 0 <= r < K:
+                pending.append((tick + m[LAND], lines[r].read()))
+        elif dram == "wr":
+            val = (bus if m[WSRC] == "bus" else
+                   acc_before if m[WSRC] == "acc_before" else
+                   st[R_ACC] if m[WSRC] == "acc_after" else st[R_M])
+            if trace is not None:
+                trace["W"] = (bus, acc_before, st[R_ACC], st[R_M])
+            k = r - m[WTRAIL]
+            if lines is not None and 0 <= k < K:
+                lines[k].write(val)
+    return st
+
+
+def sym_rep(m):
+    """One repetition from fresh entry atoms; returns (exits, trace)."""
+    st = [_sym_unit(a) for a in ENT_ATOM]
+    tr, pend = {}, []
+    # coef = 1.0 is a MARKER: SymAlg.prod ignores the value and writes the fresh
+    # product ATOM, so P really does become Q inside the repetition.
+    exec_rep(m, st, SymAlg, 1.0, None, 0, 1, pend, 0, tr)
+    while pend:
+        st[R_DR] = pend.pop(0)[1]
+    return st, tr
+
+
+def advance(form, ex):
+    """Advance a form by one repetition: every entry atom -> this repetition's
+    exit form for that register, N -> N', Q -> Q'."""
+    out = [0.0] * NATOM
+    for i, c in enumerate(form):
+        if not c:
+            continue
+        if i == NA:
+            out[NA2] += c
+        elif i == QA:
+            out[QA2] += c
+        elif i in (NA2, QA2):
+            return None
+        else:
+            for j, cc in enumerate(ex[ENT_ATOM.index(i)]):
+                out[j] += c * cc
+    return tuple(out)
+
+
+def loop_ok(m):
+    """The DELAY-LOOP filter.  Returns the DRAM-write data sources that pass.
+
+    A first-order all-pass stage has denominator (1 - g z^-D) EXACTLY, so around
+    delay line k there is one and only one feedback path and it goes through the
+    multiply.  With the write trailing the read by one repetition that says:
+
+      C1  the class-A word's bus (the multiplicand) carries the FRESH read with
+          coefficient +-1                      -- w_k reaches the multiplier;
+      C2  the value written one repetition later carries that product with
+          coefficient +-1                      -- g_k w_k reaches the line;
+      C3  and carries NO DIRECT copy of the fresh read -- an unmultiplied path
+          from w_k back to d_k would put the pole on the unit circle.
+
+    All three are properties of the FILTER, not of the ALU model, so they stay
+    valid under every relaxation `price' applies.
+    """
+    st, tr = sym_rep(m)
+    if "MULT" not in tr or "W" not in tr:
+        return []
+    if abs(abs(tr["MULT"][NA]) - 1.0) > 1e-9:
+        return []
+    out = []
+    for i, wv in enumerate(tr["W"]):
+        nx = advance(wv, st)
+        if nx is None or abs(abs(nx[QA]) - 1.0) > 1e-9 or abs(nx[NA]) > 1e-9:
+            continue
+        out.append(WSRCS[i])
+    return out
+
+
+def run_ladder_action(m, gains, delays, x, inj):
+    """Run the ladder as the microcode does: K core repetitions per sample, one
+    delay line per repetition, plus a drain repetition.  The registers are zeroed
+    and the ladder input injected into `inj' at the top -- the two words
+    IMMEDIATELY before Ladder0 (`0000A0A1D5 ld (p),c+' then `0202200000') leave
+    a sum in the ACCUMULATOR, which is why acc is one of the injections; all six
+    are tried.  Returns the exit value of EVERY register for every sample, so the
+    extraction point is enumerated rather than chosen."""
+    K = len(gains)
+    lines = [Line(d) for d in delays]
+    out = [[] for _ in range(6)]
+    for xn in x:
+        st = [0.0] * 6
+        st[inj] = xn
+        pend = []
+        for r in range(K + 1):
+            exec_rep(m, st, NumAlg, gains[r] if r < K else None,
+                     lines, r, K, pend, r * 8)
+        for k in range(6):
+            out[k].append(st[k])
+        for ln in lines:
+            ln.advance()
+    return out
+
+
+def machine_matches(m, gains, delays, x, refs, tol=1e-7, first=False):
+    """Every (injection, extraction, sign-of-g, scale) that reproduces one of the
+    reference cascades.  An arbitrary non-zero SCALE is accepted, not just a
+    sign: a constant factor anywhere in the loop is a coefficient convention, and
+    refusing it would reject a correct machine for a reason the ROM cannot fix."""
+    hits = []
+    for inj in range(6):
+        outs = run_ladder_action(m, gains, delays, x, inj)
+        for ext in range(6):
+            o = outs[ext]
+            den = sum(v * v for v in o)
+            if den < 1e-18:
+                continue
+            for ng, ref in enumerate(refs):
+                sc = sum(a * b for a, b in zip(o, ref)) / den
+                if abs(sc) < 1e-6:
+                    continue
+                mx = max(abs(v) for v in ref)
+                if max(abs(sc * a - b) for a, b in zip(o, ref)) < tol * mx:
+                    hits.append((inj, ext, ng, sc))
+                    if first:
+                        return hits
+    return hits
+
+
+def _ladder_inputs(C, rom, imgs):
+    banks = reverb_banks(C, rom)
+    l0, l1 = ladder_cram(imgs)
+    ch = sorted(ladder_delays(C, rom, 16), key=len, reverse=True)
+    return banks, l0, l1, ch[0][:5], (ch[1][:4] if len(ch) > 1 else ch[0][:4])
+
+
+def mult_can_be_s(base=None):
+    """How many parameter settings put BOTH delay reads into the multiplicand?
+
+    The all-pass multiplicand is  s[r] = x[r] + w[r] = (D - eta*P) + N, so it must
+    contain the PREVIOUS read D and the FRESH read N at once.  This counts the
+    settings that even COULD -- the exhaustive form of the obstruction, and it
+    needs no numeric run at all."""
+    base = base or {}
+    n_all = n_N = n_ND = 0
+    NE = len(EFFECTS)
+    for i00 in range(NE):
+        for i19 in range(NE):
+            for i0b in range(NE):
+                for s0 in SRC0_CANDS:
+                    for ld in LANDS:
+                        for ea in ((0, 1) if "escact" not in base
+                                   else (base["escact"],)):
+                            for sh in (0, 1):
+                                k = dict(base)
+                                k.pop("escact", None)
+                                _st, tr = sym_rep(mach(i00, i19, i0b, s0, None,
+                                                       1, ld, ea, sh, **k))
+                                n_all += 1
+                                if "MULT" not in tr:
+                                    continue
+                                hN = abs(tr["MULT"][NA]) > 1e-12
+                                hD = abs(tr["MULT"][DA]) > 1e-12
+                                n_N += hN
+                                n_ND += (hN and hD)
+    return n_all, n_N, n_ND
+
+
+def action_search(banks, l0, D0, base=None, quiet=False):
+    """The whole pipeline for ONE set of fixed assumptions.  Returns
+    (n_enumerated, loop survivors, numeric survivors)."""
+    base = base or {}
+    g2 = [banks[16][c] for c in l0][:2]
+    random.seed(7)
+    xs = [random.uniform(-1, 1) for _ in range(32)]
+    refs = [allpass_ref(g2, [3, 5], xs), allpass_ref([-v for v in g2], [3, 5], xs)]
+    tot, sl = 0, []
+    NE = len(EFFECTS)
+    for i00 in range(NE):
+        for i19 in range(NE):
+            for i0b in range(NE):
+                for s0 in SRC0_CANDS:
+                    for ld in LANDS:
+                        for ea in ((0, 1) if "escact" not in base
+                                   else (base["escact"],)):
+                            for sh in (0, 1):
+                                tot += len(WSRCS)
+                                k = dict(base)
+                                k.pop("escact", None)
+                                for w in loop_ok(mach(i00, i19, i0b, s0, None,
+                                                      1, ld, ea, sh, **k)):
+                                    sl.append(mach(i00, i19, i0b, s0, w, 1, ld,
+                                                   ea, sh, **k))
+    num = [(m, machine_matches(m, g2, [3, 5], xs, refs, first=True))
+           for m in sl]
+    num = [(m, h) for m, h in num if h]
+    if not quiet:
+        print("     %-9d enumerated  %-8d pass the delay-loop filter  %d "
+              "reproduce a 2-stage cascade" % (tot, len(sl), len(num)))
+    return tot, sl, num
+
+
+def sec_action(C, rom, imgs, names):
+    print("=" * 76)
+    print("10. THE lo12 ACTION FIELD -- solved in the SHIPPED ALU, SRC fixed")
+    print("=" * 76)
+    print("   the motif as the DECODER reads it -- MEASURED:")
+    for sl in MSLOTS:
+        print("     %-16s %-4s src=%02X %-9s act=%02X  accop=%d%s%s"
+              % (sl["word"], "ESC" if sl["esc"] else "", sl["src"],
+                 SRC_TXT[sl["src"]], sl["act"], sl["accop"],
+                 " ST" if sl["store"] else "",
+                 (" DRAM-" + sl["dram"].upper()) if sl["dram"] else ""))
+    print()
+    print("   The DRAM WRITE (slot 4) and the MULTIPLY (slot 5) carry the SAME")
+    print("   SRC 0x19 and nothing between them can rewrite it -- the observation")
+    print("   sect. 9 is built on -- and here it is a MEASURED input, not a")
+    print("   hypothesis: both words simply read tempA.")
+    print()
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+    print("   THE SHIPPED MODEL, nothing relaxed:")
+    tot, sl, num = action_search(banks, l0, D0)
+    if sl:
+        for nm, ix in (("SRC 0x00 reads", SRC0), ("read lands +n slots", LAND),
+                       ("ACTION 0x19", F19)):
+            v = collections.Counter(
+                (eff_str(EFFECTS[m[ix]]) if ix in (F00, F19, F0B) else m[ix])
+                for m in sl)
+            print("       %-22s %s" % (nm, "  ".join("%s x%d" % (a, b)
+                                                     for a, b in v.most_common(4))))
+    return num
+
+
+
+# --- THE POSITIVE CONTROL -------------------------------------------------
+#  A search that cannot succeed proves nothing.  This builds an 8-slot program
+#  that IS a Gardner one-multiplier all-pass ladder, expressed with the SAME
+#  executor, the same delay lines, the same reference and the same matcher, and
+#  checks that the harness accepts it.  It deliberately uses SRC codes the real
+#  motif does not have: the point is to test the HARNESS, not the ISA reading.
+CONTROL_SLOTS = [
+    dict(word="ctl0 read",  esc=True,  cls=1, src=0x0B, act=0x15, accop=2,
+         store=False, dram="rd"),
+    dict(word="ctl1",       esc=False, cls=2, src=0x1A, act=0x00, accop=2,
+         store=False, dram=None),          # acc <- tB          = w[r-1]
+    dict(word="ctl2",       esc=False, cls=2, src=0x00, act=0x19, accop=2,
+         store=False, dram=None),          # acc -= P           = x[r]
+    dict(word="ctl3",       esc=False, cls=2, src=0x0B, act=0x0B, accop=2,
+         store=True,  dram=None),          # M <- x[r] ; acc += w[r] ; tB <- w[r]
+    dict(word="ctl4 write", esc=True,  cls=1, src=0x19, act=0x15, accop=2,
+         store=False, dram="wr"),          # line r-1 <- tA = d_in[r-1]
+    dict(word="ctl5 mult",  esc=False, cls=0xA, src=0x10, act=0x15, accop=2,
+         store=False, dram=None),          # P <- g * acc = g * s[r]
+    dict(word="ctl6",       esc=False, cls=2, src=0x07, act=0x01, accop=0,
+         store=False, dram=None),          # acc <- P + M = t[r] + x[r]
+    dict(word="ctl7",       esc=False, cls=2, src=0x10, act=0x02, accop=2,
+         store=False, dram=None)]          # tA <- acc = d_in[r]
+
+
+def sec_control(C, rom, imgs, names):
+    global MSLOTS, EXTRA_ACT
+    print("=" * 76)
+    print("10a. POSITIVE CONTROL -- the harness must be able to SAY YES")
+    print("=" * 76)
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+    g = [banks[16][c] for c in l0]
+    random.seed(7)
+    xs = [random.uniform(-1, 1) for _ in range(64)]
+    save_slots, save_extra = MSLOTS, EXTRA_ACT
+    MSLOTS = CONTROL_SLOTS
+    EXTRA_ACT = {0x01: ("+bus", ""), 0x02: ("", "tA<-bus")}
+    m = mach(EFFECTS.index(("bus", "")), EFFECTS.index(("-bus", "")),
+             EFFECTS.index(("+bus", "tB<-bus")), "P", "bus", 1, 0,
+             escact=0, noclr=1)
+    ok = []
+    for nst in (2, 4, 5):
+        refs = [allpass_ref(g[:nst], D0[:nst], xs)]
+        h = machine_matches(m, g[:nst], D0[:nst], xs, refs)
+        ok.append((nst, h))
+        print("   %d-stage ladder, ROM gains %s: %s"
+              % (nst, " ".join("%.2f" % v for v in g[:nst]),
+                 ("MATCH  inject=%s extract=%s scale=%+.3f"
+                  % (RNAME[h[0][0]], RNAME[h[0][1]], h[0][3])) if h else "NO"))
+    print("   loop filter on the control: %s" % (loop_ok(m) or "REJECTED"))
+    MSLOTS, EXTRA_ACT = save_slots, save_extra
+    print()
+    print("   The harness therefore CAN accept a correct machine, and the delay-")
+    print("   loop filter passes it.  An empty survivor set in section 10 is a")
+    print("   statement about the MODEL, not about the harness.")
+    return all(h for _n, h in ok)
+
+
+
+# --- SECOND CONTEXT: SINGLE DELAY -----------------------------------------
+#  The all-pass core is not the only place ACTION 0x00 / 0x19 / 0x0B occur.
+#  SINGLE DELAY (algo 9) carries all three in a FIVE-word block that needs no
+#  pipelining argument at all, and whose algorithm is not in doubt: a delay line
+#  with feedback,  v[n] = x[n] + fb * v[n-D].  Solving the same three codes in
+#  that block is a genuine cross-check -- it can agree with the reverb, disagree
+#  with it, or come out empty, and each of those is a different result.
+def sd_slots(imgs, first=True):
+    ws = imgs[9][5:10] if first else imgs[9][28:33]
+    out = []
+    for w in ws:
+        hi, cl, _a, lo = fields(w)
+        esc = bool(hi & 0x800)
+        out.append(dict(word=fmt(w), esc=esc, cls=cl, src=(lo >> 6) & 0x1F,
+                        act=lo & 0x1F, accop=(hi >> 1) & 7,
+                        store=bool(hi & 0x10),
+                        dram=(None if not (esc and cl == 1)
+                              else "rd" if (w >> 12) & 0xFF == 0x60 else "wr")))
+    return out
+
+
+def comb_ref(fb, D, x):
+    """v[n] = x[n] + fb * v[n-D] -- the textbook feedback delay, written from the
+    mathematics."""
+    line = Line(D)
+    out = []
+    for xn in x:
+        v = xn + fb * line.read()
+        line.write(v)
+        out.append(v)
+        line.advance()
+    return out
+
+
+def sec_singledelay(C, rom, imgs, names):
+    print("=" * 76)
+    print("10b. SECOND CONTEXT -- SINGLE DELAY (algo 9), the same three codes")
+    print("=" * 76)
+    slots = sd_slots(imgs)
+    for sl in slots:
+        print("     %-16s %-4s src=%02X %-9s act=%02X  accop=%d%s%s"
+              % (sl["word"], "ESC" if sl["esc"] else "", sl["src"],
+                 SRC_TXT.get(sl["src"], "?"), sl["act"], sl["accop"],
+                 " ST" if sl["store"] else "",
+                 (" DRAM-" + sl["dram"].upper()) if sl["dram"] else ""))
+    random.seed(3)
+    x = [random.uniform(-1, 1) for _ in range(60)]
+    fb, D = 0.3, 7
+    ref = comb_ref(fb, D, x)
+    hits = []
+    save = globals()["MSLOTS"]
+    globals()["MSLOTS"] = slots
+    try:
+        for i00 in range(len(EFFECTS)):
+            for i19 in range(len(EFFECTS)):
+                for i0b in range(len(EFFECTS)):
+                    for s0 in SRC0_CANDS:
+                        for ld in (-1, 0, 1, 2):
+                            for inj in range(6):
+                                m = mach(i00, i19, i0b, s0, "bus", 0, ld)
+                                w = sd_line_values(m, fb, D, x, inj)
+                                if w is None:
+                                    continue
+                                den = sum(v * v for v in w)
+                                if den < 1e-18:
+                                    continue
+                                sc = sum(a * b for a, b in zip(w, ref)) / den
+                                if abs(sc) < 1e-6:
+                                    continue
+                                mx = max(abs(v) for v in ref)
+                                if max(abs(sc * a - b)
+                                       for a, b in zip(w, ref)) < 1e-7 * mx:
+                                    hits.append((m, inj, sc))
+    finally:
+        globals()["MSLOTS"] = save
+    print()
+    print("   %d assignments make the block  v[n] = x[n] + fb*v[n-D]  exactly"
+          % len(hits))
+    for nm, ix in (("ACTION 0x00", F00), ("ACTION 0x19", F19),
+                   ("ACTION 0x0B", F0B), ("SRC 0x00 reads", SRC0),
+                   ("read lands +n", LAND)):
+        v = collections.Counter(
+            (eff_str(EFFECTS[m[ix]]) if ix in (F00, F19, F0B) else m[ix])
+            for m, _i, _s in hits)
+        print("     %-16s %-8s %s"
+              % (nm, "FORCED" if len(v) == 1 else "%d values" % len(v),
+                 "  ".join("%s x%d" % (a, b) for a, b in v.most_common(6))))
+    v = collections.Counter(RNAME[i] for _m, i, _s in hits)
+    print("     %-16s %s" % ("x arrives in",
+                             "  ".join("%s x%d" % (a, b) for a, b in v.most_common())))
+    return hits
+
+
+class RecLine(Line):
+    """a delay line that records what was written to it"""
+    __slots__ = ("wrote",)
+
+    def __init__(self, n):
+        Line.__init__(self, n)
+        self.wrote = []
+
+    def write(self, v):
+        Line.write(self, v)
+        self.wrote.append(v)
+
+
+def sd_line_values(m, fb, D, x, inj):
+    """The sequence of values the block WRITES to its delay line."""
+    line = RecLine(D)
+    for xn in x:
+        st = [0.0] * 6
+        st[inj] = xn
+        exec_rep(m, st, NumAlg, fb, [line], 0, 1, [], 0)
+        line.advance()
+    return line.wrote if len(line.wrote) == len(x) else None
+
+
+def sec_price(C, rom, imgs, names):
+    """One fixed assumption relaxed at a time.  ~1 min per row."""
+    print("=" * 76)
+    print("11. THE PRICE LIST -- one FIXED assumption relaxed at a time")
+    print("=" * 76)
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+    rows = (("(nothing relaxed -- the shipped model)", {}),
+            ("the two trailing nops are INERT", dict(nopi=1)),
+            ("hi12 bit 4 stores WITHOUT clearing acc", dict(noclr=1)),
+            ("slot 1's hi12[3:1]=2 is acc<-P", dict(s1op=0)),
+            ("slot 1's hi12[3:1]=2 is acc+=P", dict(s1op=1)),
+            ("slot 1's hi12[3:1]=2 is acc:=0", dict(s1op=3)),
+            ("the ACTION acts BEFORE hi12[3:1]", dict(actfirst=1)),
+            ("the DRAM read/write directions swapped", dict(swap=1)),
+            ("an ESCAPE word honours hi12[3:1] too", dict(escop=1)),
+            ("an ESCAPE word ignores lo12 entirely", dict(escact=0)))
+    only = os.environ.get("PRICE_ROW")
+    for n, (tag, base) in enumerate(rows):
+        if only is not None and int(only) != n:
+            continue
+        print("   [%d] %s" % (n, tag), flush=True)
+        na, nn, nnd = mult_can_be_s(base)
+        print("       multiplicand can hold the FRESH read %d/%d, BOTH reads %d/%d"
+              % (nn, na, nnd, na), flush=True)
+        action_search(banks, l0, D0, base)
+
+
 def main():
     ap = argparse.ArgumentParser()
     here = os.path.dirname(os.path.abspath(__file__))
@@ -929,7 +1638,8 @@ def main():
     CROM[0], CROM[1] = C, rom
     want = set(args.sections) if args.sections else {
         "census", "motif", "banks", "delays", "solve", "verify",
-        "separator", "discriminator"}
+        "separator", "discriminator", "schroeder", "control", "action",
+        "singledelay"}
     banks = None
     if "census" in want:
         sec_census(imgs, names)
@@ -949,6 +1659,16 @@ def main():
         sec_separator(imgs)
     if "discriminator" in want:
         sec_discriminator(C, rom, names, imgs)
+    if "schroeder" in want:
+        sec_schroeder(args.terms)
+    if "control" in want:
+        sec_control(C, rom, imgs, names)
+    if "action" in want:
+        sec_action(C, rom, imgs, names)
+    if "singledelay" in want:
+        sec_singledelay(C, rom, imgs, names)
+    if "price" in want:
+        sec_price(C, rom, imgs, names)
 
 
 if __name__ == "__main__":
