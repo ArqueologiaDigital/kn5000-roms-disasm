@@ -249,7 +249,21 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
 - **table-lookup idiom** — `040.0.00.C63 | 000.6.TT.4CD | 012.4.01.1CE` (class-6
   `addr8` = table selector); accounts for every class-4/6 word, MCC +1.000.
 - **class 8** — post-sum step (rescale/round/saturate?), **operation unknown**;
-  its *position* is determined, not its operation.
+  its *position* is determined, not its operation. It **fetches** a coefficient
+  (bit 23) but does **not** advance the cursor (K4, FORCED — see the `hi12` table).
+- **the class-1 REGISTER FILE is banked per effect unit, bit 7 = the unit** (K4,
+  `analysis/k4-cursor.md` §4). Over the 91 well-formed parameter streams the host's
+  `000.1.NN.000` register selects split **100 %**: 368 packets / 23 distinct `NN`
+  all `< 0x80` in unit-0 streams, 60 packets / 5 distinct `NN` all `≥ 0x80` in
+  unit-1 streams, and **5 of 5** unit-1 numbers are a unit-0 number `+ 0x80`
+  (`85 87 8A 94 D0` ↔ `05 07 0A 14 50`). The boot blob at `0x01E6BE` writes the
+  matched pair `000.1.06.000` / `000.1.86.000` back to back — PROVEN BY
+  CONSTRUCTION. This resolves K6's "class-1 `addr8` splits on bit 7" lead, and it
+  is **the only place the `+0x80` displacement is real**: it is *not* a C-RAM
+  split. Caveat: the shared output stage names `0x85/0x8C/0x8D/0x8F` (unit-1 half)
+  and only `0x06` from the unit-0 half, which is unexplained. The delay-DRAM
+  sub-ops `0x20/0x30/0x60` are discriminated from register addresses by **`hi12`**
+  (the `0x8xx`/`0x9xx` escapes), not by `addr8` bit 7.
 - **P-consumers / carry latches** — `lo12 ∈ {647,687,1D3,1D4}`.
 - **`hi12=0x212`** writes `mem[ptr]` in every class (bit 4); `hi12=0x102` is the
   shared gain multiply of the phaser all-pass and reverb diffuser.
@@ -521,7 +535,9 @@ tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
 4. **The six `op 0..5` uC-IF handlers** at `0x03C32E + OFFSETS_14739[op]` — they
    are the definition of commands `0x01/0x02/0x04/0x09/0x0C/0x30`. The ASL source
    renders them as `db …`; disassembling them is pure static work and would
-   explain the whole host interface.
+   explain the whole host interface. **K4 promoted this**: it is the one static
+   test that can decide *who* loads the per-unit coefficient-base register the
+   cursor rebase is FORCED to read from (`analysis/k4-cursor.md` §5.2, E1).
 5. `212.2` vs `212.A` — bit 23 on a family whose class-A form is determined.
 6. the `lo12 = 0x415` group across classes A/2/8 (tests "lo12 = route, class4 =
    arithmetic", brings class 8 along).

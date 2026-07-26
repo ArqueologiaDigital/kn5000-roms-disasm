@@ -40,7 +40,8 @@ effect program set was recovered statically from firmware.
 | `disasm/epilogue.dsm` | yes | GENERATED disassembly of the resident kernel part 2 — the 23-word **output stage**, I-RAM 60..82, which runs last in every frame and holds the two per-unit call-vector words the host rewrites (`analysis/k5-output-stage.md`) |
 | `disasm/progNN_<name>.dsm` | yes | GENERATED disassembly of each distinct image: per word — fields, decoded `hi12` flags, structural annotation, absolute C-RAM coefficient address, and the named coefficient where known |
 | `sym/progNN.sym`, `sym/kernel.sym`, `sym/epilogue.sym` | yes | hand-curated per-program labels/comments (the loss-free annotation source) |
-| `analysis/` | yes | per-roadmap-item decode write-ups with explicit PROVEN / DETERMINED / FORCED / INFERRED / OPEN status on every claim (`k5-output-stage.md`, `r1-allpass-motif.md`) |
+| `analysis/` | yes | per-roadmap-item decode write-ups with explicit PROVEN / DETERMINED / FORCED / INFERRED / OPEN status on every claim (`k5-output-stage.md`, `r1-allpass-motif.md`, `k4-cursor.md`) |
+| `tools/k4_cursor.py` | yes | roadmap **K4** — the C-RAM memory map, the forced constraints on the coefficient-cursor rebase, and the class-1 register file's per-unit banking; prints every number quoted in `analysis/k4-cursor.md` |
 | `tools/dsp_disasm.py` | yes | the Python ISA disassembler — a self-contained, byte-faithful mirror of MAME's `upd6383d.cpp` |
 | `tools/gen_dsp_disasm.py` | yes | the generator (extract → disassemble → annotate → emit) |
 | `tools/r1_allpass_solve.py` | yes | roadmap **R1** — the constraint solver that forces the reverb's 8-word all-pass motif, plus the motif census, the coefficient banks and the delay chains, all straight from the ROM |
