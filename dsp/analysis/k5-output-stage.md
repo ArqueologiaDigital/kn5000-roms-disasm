@@ -522,8 +522,16 @@ python3 dsp/tools/gen_dsp_disasm.py && python3 dsp/verify.py
 
 # the 100-algorithm upload-address check of §2.4
 #   walk 0x0001ED7C[0..99] -> stream -> first op-1/3 record -> addr16
-#   result: 88 x I-RAM 84, 12 x I-RAM 200, nothing else
+#   result: 79 x I-RAM 84, 12 x I-RAM 200, nothing else   (= the 91 valid streams)
 ```
+
+**CORRECTION, 2026-07-26 (re-measured).** This block previously said "88 x I-RAM
+84". The ROM says **79**, which is what §2.4 says and what makes the arithmetic
+close: 79 + 12 = the **91** valid streams. The remaining 9 of the 100 table
+entries split two ways, which §2.4's parenthetical also blurred: **5** are the
+`MALFORMED` set {79, 88, 89, 90, 91} and do target 1520 / 3376 (one and four
+respectively), and **4** — algos 57, 58, 59, 60 — parse to **no I-RAM image at
+all**. Nothing in §2.4's argument depends on the difference.
 
 Sub CPU source: `archive/asl/subcpu/kn5000_subprogram_v142.asm`
 (`DSP_BytecodeInterpreter_Loop`, `DSP_Bytecode_Op0E_SendCommand`,

@@ -20,13 +20,13 @@
   w6    0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = filter section cell 0 (role filter, INFERRED)
-  w7    08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w7    08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w8    0202A00655   ?word   0x0202A00655   ; 202.A.00.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = filter section cell 1 (role filter, INFERRED)
   w9    0000200000   nop
   w10   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
-  w11   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w11   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w12   0000202407   ?word   0x0000202407   ; 000.2.02.407  hi12{-}
   w13   00002001D5   ?word   0x00002001D5   ; 000.2.00.1D5  hi12{-}
   w14   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
@@ -34,7 +34,7 @@
         ; coeff C-RAM[0x02] = op0x66[0] (role mix/tap, INFERRED)
   w15   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}
   w16   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w17   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w17   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w18   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
   w19   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
@@ -63,7 +63,7 @@
   w39   0212AB5412   ?word   0x0212AB5412   ; 212.A.B5.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = filter section cell 1 (role filter, INFERRED)
-  w40   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
+  w40   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w41   0000209407   ?word   0x0000209407   ; 000.2.09.407  hi12{-}
   w42   01042001D5   ?word   0x01042001D5   ; 104.2.00.1D5  hi12{f98=1 f31=2}
   w43   0202A01415   ?word   0x0202A01415   ; 202.A.01.415  hi12{f98=2 f31=1} cur+
@@ -109,13 +109,13 @@
   w70   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = filter section cell 0 (role filter, INFERRED)
-  w71   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w71   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w72   0202A00655   ?word   0x0202A00655   ; 202.A.00.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = filter section cell 1 (role filter, INFERRED)
   w73   0000200000   nop
   w74   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
-  w75   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w75   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w76   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
   w77   00002001D5   ?word   0x00002001D5   ; 000.2.00.1D5  hi12{-}
   w78   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
@@ -123,7 +123,7 @@
         ; coeff C-RAM[0x10] = op0x66[6] (role mix/tap, INFERRED)
   w79   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}
   w80   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w81   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w81   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w82   00002F8407   ?word   0x00002F8407   ; 000.2.F8.407  hi12{-}
   w83   0000AFD1D5   ?word   0x0000AFD1D5   ; 000.A.FD.1D5  hi12{-} cur+
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
@@ -146,13 +146,13 @@
   w99   0212ABB412   ?word   0x0212ABB412   ; 212.A.BB.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = filter section cell 4 (role filter, INFERRED)
-  w100  0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
+  w100  0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w101  0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
   w102  00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
   w103  0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)]
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
-  w104  0880160447   ?word   0x0880160447   ; 880.1.60.447  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w104  0880160447   ?word   0x0880160447   ; 880.1.60.447  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w105  00002F6000   ?word   0x00002F6000   ; 000.2.F6.000  hi12{-}
   w106  0000208407   ?word   0x0000208407   ; 000.2.08.407  hi12{-}
   w107  01042001D5   ?word   0x01042001D5   ; 104.2.00.1D5  hi12{f98=1 f31=2}

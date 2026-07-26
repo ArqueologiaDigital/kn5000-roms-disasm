@@ -35,13 +35,13 @@
   w15   0202AFF1D5   mac     (p)-1
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = filter section cell 1 (role filter, INFERRED)
-  w16   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w16   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w17   0202A01655   ?word   0x0202A01655   ; 202.A.01.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = filter section cell 2 (role filter, INFERRED)
   w18   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}
   w19   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
-  w20   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w20   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w21   0000202407   ?word   0x0000202407   ; 000.2.02.407  hi12{-}
   w22   00002001D5   ?word   0x00002001D5   ; 000.2.00.1D5  hi12{-}
   w23   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
@@ -49,7 +49,7 @@
         ; coeff C-RAM[0x07] = op0x66[0] (role mix/tap, INFERRED)
   w24   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}
   w25   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w26   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w26   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w27   00002F8407   ?word   0x00002F8407   ; 000.2.F8.407  hi12{-}
   w28   0000A011D5   ?word   0x0000A011D5   ; 000.A.01.1D5  hi12{-} cur+
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
@@ -66,11 +66,11 @@
         ; coeff C-RAM[0x0B] = filter section cell 3 (role filter, INFERRED)
   w33   0182245000   ?word   0x0182245000   ; 182.2.45.000  hi12{f98=1 f31=1 ?7 res=080}
   w34   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
-  w35   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w35   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w36   0012201655   ?word   0x0012201655   ; 012.2.01.655  hi12{ST f31=1}
   w37   01042001D5   ?word   0x01042001D5   ; 104.2.00.1D5  hi12{f98=1 f31=2}
-  w38   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w39   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w38   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w39   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w40   0102AB94C8   ?word   0x0102AB94C8   ; 102.A.B9.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = filter section cell 4 (role filter, INFERRED)
@@ -114,13 +114,13 @@
   w69   0202A001D5   mac     (p)+0
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = filter section cell 0 (role filter, INFERRED)
-  w70   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w70   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w71   0202A00655   ?word   0x0202A00655   ; 202.A.00.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x14] = filter section cell 1 (role filter, INFERRED)
   w72   0000200000   nop
   w73   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
-  w74   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w74   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w75   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
   w76   00002001D5   ?word   0x00002001D5   ; 000.2.00.1D5  hi12{-}
   w77   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
@@ -128,7 +128,7 @@
         ; coeff C-RAM[0x15] = op0x66[4] (role mix/tap, INFERRED)
   w78   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}
   w79   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w80   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w80   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w81   00002F9407   ?word   0x00002F9407   ; 000.2.F9.407  hi12{-}
   w82   0000AFF1D5   ?word   0x0000AFF1D5   ; 000.A.FF.1D5  hi12{-} cur+
         ; C-RAM[0x16] (coeff, base 0x00 MEASURED)
@@ -145,11 +145,11 @@
         ; coeff C-RAM[0x19] = filter section cell 3 (role filter, INFERRED)
   w87   0182248000   ?word   0x0182248000   ; 182.2.48.000  hi12{f98=1 f31=1 ?7 res=080}
   w88   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
-  w89   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w89   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w90   0012201655   ?word   0x0012201655   ; 012.2.01.655  hi12{ST f31=1}
   w91   01042001D5   ?word   0x01042001D5   ; 104.2.00.1D5  hi12{f98=1 f31=2}
-  w92   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w93   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w92   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w93   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w94   0102AB84C8   ?word   0x0102AB84C8   ; 102.A.B8.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = filter section cell 4 (role filter, INFERRED)
@@ -158,5 +158,5 @@
   w97   0202AEE415   ?word   0x0202AEE415   ; 202.A.EE.415  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1B] = op0x66[5] (role mix/tap, INFERRED)
-  w98   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w98   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w99   060410E000   ?word   0x060410E000   ; 604.1.0E.000  hi12{END f98=2 f31=2}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

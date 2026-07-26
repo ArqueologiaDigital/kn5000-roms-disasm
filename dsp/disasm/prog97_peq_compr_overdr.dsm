@@ -40,7 +40,7 @@
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
   w14   0104A001D5   ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
-  w15   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
+  w15   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 61/61); destination register lo12=000 UNKNOWN]
   w16   0182A00000   ?word   0x0182A00000   ; 182.A.00.000  hi12{f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
   w17   000020B447   ?word   0x000020B447   ; 000.2.0B.447  hi12{-}
@@ -51,15 +51,15 @@
   w21   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = op0x72[0] (role gain-computer, PROVEN)
-  w22   0C401E0451   ?word   0x0C401E0451   ; C40.1.E0.451  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
+  w22   0C401E0451   ?word   0x0C401E0451   ; C40.1.E0.451  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 61/61); destination register lo12=451 UNKNOWN]
   w23   0102201000   ?word   0x0102201000   ; 102.2.01.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w24   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w25   002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}
   w26   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
-  w27   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w27   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w28   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
-  w29   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w29   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w30   00922FF700   ?word   0x00922FF700   ; 092.2.FF.700  hi12{ST f31=1 ?7 res=080}
   w31   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
@@ -84,7 +84,7 @@
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
   w45   02122091CD   ?word   0x02122091CD   ; 212.2.09.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w46   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w47   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w47   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w48   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}
   w49   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
   w50   00122481C0   ?word   0x00122481C0   ; 012.2.48.1C0  hi12{ST f31=1}
@@ -113,7 +113,7 @@
   w62   0104A001D5   ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+
         ; C-RAM[0x19] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x19] = biquad -a1 (role EQ, PROVEN)
-  w63   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
+  w63   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 61/61); destination register lo12=000 UNKNOWN]
   w64   0182A00000   ?word   0x0182A00000   ; 182.A.00.000  hi12{f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = biquad -a2 (role EQ, PROVEN)
@@ -125,16 +125,16 @@
         ; coeff C-RAM[0x1B] = biquad makeup (role EQ, PROVEN)
   w69   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+
         ; C-RAM[0x1C] (coeff, base 0x00 MEASURED)
-  w70   0C401E0451   ?word   0x0C401E0451   ; C40.1.E0.451  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
+  w70   0C401E0451   ?word   0x0C401E0451   ; C40.1.E0.451  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 61/61); destination register lo12=451 UNKNOWN]
   w71   0102201000   ?word   0x0102201000   ; 102.2.01.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w72   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w73   002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}
   w74   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
-  w75   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w75   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w76   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x1D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1D] = op0x74[0] (role input/tone, INFERRED)
-  w77   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w77   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w78   00922FF700   ?word   0x00922FF700   ; 092.2.FF.700  hi12{ST f31=1 ?7 res=080}
   w79   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x1E] (coeff, base 0x00 MEASURED)
@@ -159,5 +159,5 @@
         ; C-RAM[0x23] (coeff, base 0x00 MEASURED)
   w93   02122FB1CD   ?word   0x02122FB1CD   ; 212.2.FB.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w94   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w95   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w95   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w96   042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

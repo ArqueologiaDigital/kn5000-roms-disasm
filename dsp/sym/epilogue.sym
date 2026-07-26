@@ -7,9 +7,9 @@
 w60  OutputStage    ; runs after BOTH unit bodies returned (header transfers are at w49/w59) [PROVEN]
 w62                 ; ptr-load family: register 0x825 <- 0x26 (which register that is: OPEN, K3)
 w63                 ; unit-0 half of a symmetric pair with w70 (2A7.9.05.1C3 / 2A6.1.85.0C7)
-w64  Unit0Vector    ; UNIT-0 CALL VECTOR; host writes 84*32 (link) / 42*32 (disconnect) [DETERMINED]
-w69                 ; ptr-load family: register 0x821 <- 0x90 (= the MEASURED unit-1 C-RAM bank base)
-w71  Unit1Vector    ; UNIT-1 CALL VECTOR; host writes 200*32 (link) / 50*32 (disconnect) [DETERMINED]
+w64  Unit0Vector    ; UNIT-0 CALL VECTOR; host writes setvec unit0,#84 (link) / #42 (disconnect) [DETERMINED]
+w69                 ; ptr-load family: register 0x821 <- 0x90.  0x90 is ALSO the unit-1 C-RAM bank
+w71  Unit1Vector    ; UNIT-1 CALL VECTOR; host writes setvec unit1,#200 (link) / #50 (disconnect) [DETERMINED]
 w73                 ; the machine's ONLY class-C word (0 of 2974 body words)
 w74                 ; C-format; imm13 0x9AB = 77*32 + 11, and I-RAM 77 is the next pointer load
 w75                 ; class 8 post-sum step, operation UNKNOWN; addr8 0x0F equals the unit-1 tag

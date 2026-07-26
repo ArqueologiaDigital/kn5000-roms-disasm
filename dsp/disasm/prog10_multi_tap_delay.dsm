@@ -22,23 +22,23 @@
   w6    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w7    0212A001D5   ?word   0x0212A001D5   ; 212.A.00.1D5  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
-  w8    0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w8    0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w9    0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}
   w10   0000200000   nop
   w11   0000200000   nop
-  w12   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w12   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w13   0000201000   ?word   0x0000201000   ; 000.2.01.000  hi12{-}
   w14   0000200000   nop
   w15   0000200000   nop
-  w16   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w16   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w17   0000201000   ?word   0x0000201000   ; 000.2.01.000  hi12{-}
   w18   0000200000   nop
   w19   0000200000   nop
-  w20   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w20   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w21   00002F5000   ?word   0x00002F5000   ; 000.2.F5.000  hi12{-}
   w22   0000200000   nop
   w23   0000200000   nop
-  w24   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w24   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w25   000020940B   ?word   0x000020940B   ; 000.2.09.40B  hi12{-}
   w26   0040000864   ?word   0x0040000864   ; 040.0.00.864  hi12{?6 res=040}
   w27   0010A011D5   ?word   0x0010A011D5   ; 010.A.01.1D5  hi12{ST} cur+
@@ -101,10 +101,10 @@
   w58   00122F21C0   ?word   0x00122F21C0   ; 012.2.F2.1C0  hi12{ST f31=1}
   w59   00002091CD   ?word   0x00002091CD   ; 000.2.09.1CD  hi12{-}
   w60   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w61   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w61   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w62   00002FE407   ?word   0x00002FE407   ; 000.2.FE.407  hi12{-}
   w63   00122F91C0   ?word   0x00122F91C0   ; 012.2.F9.1C0  hi12{ST f31=1}
   w64   00002FB1CD   ?word   0x00002FB1CD   ; 000.2.FB.1CD  hi12{-}
   w65   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w66   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w66   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w67   061210E000   ?word   0x061210E000   ; 612.1.0E.000  hi12{END ST f98=2 f31=1}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]  [!! bit 4 = store, yet addr8 is the unit index -- UNEXPLAINED]

@@ -14,7 +14,7 @@
   w0    088013000B   ?word   0x088013000B   ; 880.1.30.00B  hi12{ESC ?7 res=080}  [framing word, carries no DRAM information (MEASURED)]
   w1    000020B1CD   ?word   0x000020B1CD   ; 000.2.0B.1CD  hi12{-}
   w2    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w3    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w3    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w4    002A240000   ?word   0x002A240000   ; 02A.2.40.000  hi12{f31=5 ?5 res=020}
   w5    0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
@@ -35,7 +35,7 @@
   w15   010223F1CD   ?word   0x010223F1CD   ; 102.2.3F.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w16   0212ABE412   ?word   0x0212ABE412   ; 212.A.BE.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
-  w17   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
+  w17   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w18   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w19   0880130407   ?word   0x0880130407   ; 880.1.30.407  hi12{ESC ?7 res=080}  [framing word, carries no DRAM information (MEASURED)]
   w20   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}
@@ -59,7 +59,7 @@
   w32   01022431CD   ?word   0x01022431CD   ; 102.2.43.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w33   0212ABA412   ?word   0x0212ABA412   ; 212.A.BA.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
-  w34   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
+  w34   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w35   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w36   0880130000   ?word   0x0880130000   ; 880.1.30.000  hi12{ESC ?7 res=080}  [framing word, carries no DRAM information (MEASURED)]
   w37   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
@@ -76,9 +76,9 @@
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = op0x64[0] (role coeff, INFERRED)
   w43   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w44   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
-  w45   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w46   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w44   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 61/61); destination register lo12=44C UNKNOWN]
+  w45   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w46   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w47   0102AB54C8   ?word   0x0102AB54C8   ; 102.A.B5.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x64[1] (role coeff, INFERRED)
@@ -106,7 +106,7 @@
   w63   01022491CD   ?word   0x01022491CD   ; 102.2.49.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w64   0212AB4412   ?word   0x0212AB4412   ; 212.A.B4.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
-  w65   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
+  w65   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w66   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w67   00002FF407   ?word   0x00002FF407   ; 000.2.FF.407  hi12{-}
   w68   001224E1C0   ?word   0x001224E1C0   ; 012.2.4E.1C0  hi12{ST f31=1}
@@ -129,7 +129,7 @@
   w79   010224D1CD   ?word   0x010224D1CD   ; 102.2.4D.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w80   0212AB0412   ?word   0x0212AB0412   ; 212.A.B0.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4), class-independent]
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
-  w81   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass marker -- step UNKNOWN]
+  w81   0104200000   ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
   w82   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
   w83   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
@@ -144,13 +144,13 @@
   w88   0192A56000   ?word   0x0192A56000   ; 192.A.56.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
   w89   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w90   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
-  w91   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w92   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w90   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 61/61); destination register lo12=44C UNKNOWN]
+  w91   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w92   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w93   0102A9D4C8   ?word   0x0102A9D4C8   ; 102.A.9D.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x19] (coeff, base 0x00 MEASURED)
   w94   0000200000   nop
   w95   0000200000   nop
   w96   0000200000   nop
-  w97   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w97   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w98   042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

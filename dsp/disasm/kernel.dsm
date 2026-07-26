@@ -16,7 +16,8 @@
 Header:
   w0    009220120D   ?word   0x009220120D   ; 092.2.01.20D  hi12{ST f31=1 ?7 res=080}
         ; per-frame entry; sets up pointer registers then CALLs the unit bodies
-  w1    0C0A0E0000   ?word   0x0C0A0E0000   ; C0A.0.E0.000  hi12{ESC f31=5 ?10 res=400}  [hi12[11:8]==C: bits [23:12] are a 12-bit IMMEDIATE, not class+addr]
+  w1    0C0A0E0000   ?word   0x0C0A0E0000   ; C0A.0.E0.000  {C-fmt A=7 B=0}  hi12{ESC f31=5 ?10 res=400}  [C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=7 B=0]
+        ; C-format A=7; I-RAM 7 is the start of the second input block (INFERRED, n=1)
   w2    0084202680   ?word   0x0084202680   ; 084.2.02.680  hi12{f31=2 ?7 res=080}
   w3    00122FF1CE   ?word   0x00122FF1CE   ; 012.2.FF.1CE  hi12{ST f31=1}
   w4    02042021CE   ?word   0x02042021CE   ; 204.2.02.1CE  hi12{f98=2 f31=2}
@@ -24,18 +25,20 @@ Header:
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w6    0400A00419   ?word   0x0400A00419   ; 400.A.00.419  hi12{END} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
+InputBlock1:
   w7    0090A011C8   ?word   0x0090A011C8   ; 090.A.01.1C8  hi12{ST ?7 res=080} cur+
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
+        ; second of the two input blocks (blocks are 0..6 and 7..11) -- K6
   w8    00842011C0   ?word   0x00842011C0   ; 084.2.01.1C0  hi12{f31=2 ?7 res=080}
   w9    00122FF1D5   ?word   0x00122FF1D5   ; 012.2.FF.1D5  hi12{ST f31=1}
   w10   0282A01417   ?word   0x0282A01417   ; 282.A.01.417  hi12{f98=2 f31=1 ?7 res=080} cur+
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w11   0400201447   ?word   0x0400201447   ; 400.2.01.447  hi12{END}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
-  w12   08801202D5   ?word   0x08801202D5   ; 880.1.20.2D5  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w12   08801202D5   ?word   0x08801202D5   ; 880.1.20.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w13   0282200000   ?word   0x0282200000   ; 282.2.00.000  hi12{f98=2 f31=1 ?7 res=080}
   w14   0400A00000   ?word   0x0400A00000   ; 400.A.00.000  hi12{END} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
-  w15   0C0A292820   ?word   0x0C0A292820   ; C0A.2.92.820  hi12{ESC f31=5 ?10 res=400}  [pointer-load family sibling, target register UNKNOWN]
+  w15   0C0A292820   ?word   0x0C0A292820   ; C0A.2.92.820  {C-fmt A=20 B=18}  hi12{ESC f31=5 ?10 res=400}  [C-format word with a pointer-load lo12; the A/B split is NOT established for this sub-family (B in {0,17,18,23}) -- residue A=20 B=18 shown for the record]
   w16   0192A00455   ?word   0x0192A00455   ; 192.A.00.455  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
   w17   0292A00455   ?word   0x0292A00455   ; 292.A.00.455  hi12{ST f98=2 f31=1 ?7 res=080} cur+
@@ -47,18 +50,18 @@ Header:
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
   w21   0410A0040E   ?word   0x0410A0040E   ; 410.A.00.40E  hi12{END ST} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
-  w22   0C04312820   ?word   0x0C04312820   ; C04.3.12.820  hi12{ESC f31=2 ?10 res=400}  [pointer-load family sibling, target register UNKNOWN]
+  w22   0C04312820   ?word   0x0C04312820   ; C04.3.12.820  {C-fmt A=24 B=18}  hi12{ESC f31=2 ?10 res=400}  [C-format word with a pointer-load lo12; the A/B split is NOT established for this sub-family (B in {0,17,18,23}) -- residue A=24 B=18 shown for the record]
   w23   0692A00415   ?word   0x0692A00415   ; 692.A.00.415  hi12{END ST f98=2 f31=1 ?7 res=080} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
   w24   0692200415   ?word   0x0692200415   ; 692.2.00.415  hi12{END ST f98=2 f31=1 ?7 res=080}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
   w25   00002002D9   ?word   0x00002002D9   ; 000.2.00.2D9  hi12{-}
-  w26   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w26   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w27   0012201655   ?word   0x0012201655   ; 012.2.01.655  hi12{ST f31=1}
   w28   05042001D5   ?word   0x05042001D5   ; 504.2.00.1D5  hi12{END f98=1 f31=2}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
-  w29   0C42457820   ?word   0x0C42457820   ; C42.4.57.820  hi12{ESC f31=1 ?10 ?6 res=440}  [pointer-load family sibling, target register UNKNOWN]
+  w29   0C42457820   ?word   0x0C42457820   ; C42.4.57.820  {C-fmt A=34 B=23}  hi12{ESC f31=1 ?10 ?6 res=440}  [C-format word with a pointer-load lo12; the A/B split is NOT established for this sub-family (B in {0,17,18,23}) -- residue A=34 B=23 shown for the record]
   w30   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
-  w31   0C0A4B1820   ?word   0x0C0A4B1820   ; C0A.4.B1.820  hi12{ESC f31=5 ?10 res=400}  [pointer-load family sibling, target register UNKNOWN]
+  w31   0C0A4B1820   ?word   0x0C0A4B1820   ; C0A.4.B1.820  {C-fmt A=37 B=17}  hi12{ESC f31=5 ?10 res=400}  [C-format word with a pointer-load lo12; the A/B split is NOT established for this sub-family (B in {0,17,18,23}) -- residue A=37 B=17 shown for the record]
   w32   0000AFF207   ?word   0x0000AFF207   ; 000.A.FF.207  hi12{-} cur+
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
   w33   0412A00200   ?word   0x0412A00200   ; 412.A.00.200  hi12{END ST f31=1} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
@@ -74,25 +77,33 @@ Header:
   w38   0809000839   ?word   0x0809000839   ; 809.0.00.839  hi12{ESC f31=4 ?0 res=001}
   w39   0410AFF647   ?word   0x0410AFF647   ; 410.A.FF.647  hi12{END ST} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
-  w40   0C4A1C0820   ?word   0x0C4A1C0820   ; C4A.1.C0.820  hi12{ESC f31=5 ?10 ?6 res=440}  [pointer-load family sibling, target register UNKNOWN]
+  w40   0C4A1C0820   ?word   0x0C4A1C0820   ; C4A.1.C0.820  {C-fmt A=14 B=0}  hi12{ESC f31=5 ?10 ?6 res=440}  [C-format word with a pointer-load lo12; the A/B split is NOT established for this sub-family (B in {0,17,18,23}) -- residue A=14 B=0 shown for the record]
   w41   0400A0021A   ?word   0x0400A0021A   ; 400.A.00.21A  hi12{END} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
+Unit0Setup:
   w42   0801070821   ldptr   #$70
+        ; unit-0 pointer setup, and the DISCONNECT vector target for unit 0 [DETERMINED]
   w43   080106C827   ?word   0x080106C827   ; 801.0.6C.827  hi12{ESC ?0 res=001}  [pointer-load family sibling, target register UNKNOWN]
   w44   0801025825   ?word   0x0801025825   ; 801.0.25.825  hi12{ESC ?0 res=001}  [pointer-load family sibling, target register UNKNOWN]
   w45   0010A0020C   ?word   0x0010A0020C   ; 010.A.00.20C  hi12{ST} cur+
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
   w46   080016000B   ?word   0x080016000B   ; 800.1.60.00B  hi12{ESC}
   w47   080080C000   ?word   0x080080C000   ; 800.8.0C.000  hi12{ESC} cur+  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w48   0C645A2000   ?word   0x0C645A2000   ; C64.5.A2.000  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [hi12[11:8]==C: bits [23:12] are a 12-bit IMMEDIATE, not class+addr]
+  w48   0C645A2000   ?word   0x0C645A2000   ; C64.5.A2.000  {C-fmt A=45 B=2}  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=45 B=2]
+Unit0Call:
   w49   040010E000   ?word   0x040010E000   ; 400.1.0E.000  hi12{END}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
+        ; unit-tagged transfer, tag 0x0E -- CALLs the unit-0 body at I-RAM 84
+Unit1Setup:
   w50   0801050821   ldptr   #$50
+        ; unit-1 pointer setup, and the DISCONNECT vector target for unit 1 [DETERMINED]
   w51   0801064827   ?word   0x0801064827   ; 801.0.64.827  hi12{ESC ?0 res=001}  [pointer-load family sibling, target register UNKNOWN]
   w52   0801025825   ?word   0x0801025825   ; 801.0.25.825  hi12{ESC ?0 res=001}  [pointer-load family sibling, target register UNKNOWN]
   w53   00109D020C   ?word   0x00109D020C   ; 010.9.D0.20C  hi12{ST} cur+
   w54   080016000B   ?word   0x080016000B   ; 800.1.60.00B  hi12{ESC}
   w55   0000201007   ?word   0x0000201007   ; 000.2.01.007  hi12{-}
-  w56   0C646A2007   ?word   0x0C646A2007   ; C64.6.A2.007  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
+  w56   0C646A2007   ?word   0x0C646A2007   ; C64.6.A2.007  {C-fmt A=53 B=2}  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=53 B=2]
   w57   0000201000   ?word   0x0000201000   ; 000.2.01.000  hi12{-}
   w58   000018A007   ?word   0x000018A007   ; 000.1.8A.007  hi12{-}
+Unit1Call:
   w59   040010F007   ?word   0x040010F007   ; 400.1.0F.007  hi12{END}  [END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word]
+        ; unit-tagged transfer, tag 0x0F -- CALLs the unit-1 body at I-RAM 200

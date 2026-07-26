@@ -7,7 +7,7 @@ Image rep **algo 98** &middot; slots 98 &middot; **unit 0** (I-RAM load 84) &mid
 
 > PEQ + distortion + delay
 
-**92 words**, 28 class-A coefficient multiplies (25 named), 32 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 3 DRAM tap bracket(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**92 words**, 28 class-A coefficient multiplies (25 named), 32 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -20,7 +20,7 @@ flowchart TD
     N1 --> N3
     N4["controls: DRIVE, ADJUST"]
     N3 -.-> N4
-    N5["External delay line (DRAM)<br/>3 tap bracket(s) (880.1.60/20)"]
+    N5["External delay line (DRAM)<br/>3 read/write word(s) (880.1.60 = READ, 880.1.20 = WRITE)"]
     N3 --> N5
     N6["controls: DELAY DRY/WET, DELAY L, DELAY R, FEEDBACK L, FEEDBACK R"]
     N5 -.-> N6

@@ -20,14 +20,14 @@
   w4    0202A481D5   mac     (p)+72
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = filter section cell 1 (role filter, INFERRED)
-  w5    08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w5    08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w6    0202AB8655   ?word   0x0202AB8655   ; 202.A.B8.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x02] = filter section cell 2 (role filter, INFERRED)
         ; 202.A.**.655 = op0x73 filter-section coefficient (INFERRED, 19/20 corpus)
   w7    0000248000   ?word   0x0000248000   ; 000.2.48.000  hi12{-}
   w8    0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
-  w9    088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w9    088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w10   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = damping filter tap 0 (role damping, PROVEN)
@@ -62,14 +62,14 @@
   w27   0202A4B1D5   mac     (p)+75
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = filter section cell 1 (role filter, INFERRED)
-  w28   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w28   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w29   0202AB5655   ?word   0x0202AB5655   ; 202.A.B5.655  hi12{f98=2 f31=1} cur+
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = filter section cell 2 (role filter, INFERRED)
         ; 202.A.**.655 = op0x73 filter-section coefficient (INFERRED, 19/20 corpus)
   w30   000024B000   ?word   0x000024B000   ; 000.2.4B.000  hi12{-}
   w31   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
-  w32   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w32   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w33   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = damping filter tap 0 (role damping, PROVEN)
@@ -95,5 +95,5 @@
   w43   00002FD407   ?word   0x00002FD407   ; 000.2.FD.407  hi12{-}
   w44   00002FB1CD   ?word   0x00002FB1CD   ; 000.2.FB.1CD  hi12{-}
   w45   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w46   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w46   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w47   061210E000   ?word   0x061210E000   ; 612.1.0E.000  hi12{END ST f98=2 f31=1}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]  [!! bit 4 = store, yet addr8 is the unit index -- UNEXPLAINED]

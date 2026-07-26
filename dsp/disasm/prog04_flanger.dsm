@@ -30,11 +30,11 @@
         ; coeff C-RAM[0x03] = filter section cell 3 (role filter, INFERRED)
   w9    0182245000   ?word   0x0182245000   ; 182.2.45.000  hi12{f98=1 f31=1 ?7 res=080}
   w10   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
-  w11   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w11   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w12   0012201655   ?word   0x0012201655   ; 012.2.01.655  hi12{ST f31=1}
   w13   01042001D5   ?word   0x01042001D5   ; 104.2.00.1D5  hi12{f98=1 f31=2}
-  w14   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w15   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w14   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w15   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w16   0102AB94C8   ?word   0x0102AB94C8   ; 102.A.B9.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x04] = filter section cell 4 (role filter, INFERRED)
@@ -58,7 +58,7 @@
   w31   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = op0x66[0] (role mix/tap, INFERRED)
-  w32   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w32   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w33   00002F9407   ?word   0x00002F9407   ; 000.2.F9.407  hi12{-}
   w34   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
@@ -96,13 +96,13 @@
         ; coeff C-RAM[0x10] = filter section cell 3 (role filter, INFERRED)
   w55   0182248000   ?word   0x0182248000   ; 182.2.48.000  hi12{f98=1 f31=1 ?7 res=080}
   w56   000020044C   ?word   0x000020044C   ; 000.2.00.44C  hi12{-}
-  w57   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w57   088012040B   ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w58   0012201655   ?word   0x0012201655   ; 012.2.01.655  hi12{ST f31=1}
   w59   01042001D5   ?word   0x01042001D5   ; 104.2.00.1D5  hi12{f98=1 f31=2}
-  w60   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w61   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w60   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w61   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w62   0102AB84C8   ?word   0x0102AB84C8   ; 102.A.B8.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x11] = filter section cell 4 (role filter, INFERRED)
-  w63   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w63   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w64   040010E407   ?word   0x040010E407   ; 400.1.0E.407  hi12{END}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

@@ -24,30 +24,30 @@ OutputStage:
   w63   02A79051C3   ?word   0x02A79051C3   ; 2A7.9.05.1C3  hi12{f98=2 f31=3 ?7 ?5 ?0 res=0A1} cur+
         ; unit-0 half of a symmetric pair with w70 (2A7.9.05.1C3 / 2A6.1.85.0C7)
 Unit0Vector:
-  w64   001190E445   ?word   0x001190E445   ; 011.9.0E.445  hi12{ST ?0 res=001} cur+
-        ; UNIT-0 CALL VECTOR; host writes 84*32 (link) / 42*32 (disconnect) [DETERMINED]
+  w64   001190E445   ?word   0x001190E445   ; 011.9.0E.445  hi12{ST ?0 res=001} cur+  [writes the unit-0 CALL VECTOR (I-RAM 64) -- DETERMINED destination; this SOURCE form is the canned boot default, its source field is OPEN]
+        ; UNIT-0 CALL VECTOR; host writes setvec unit0,#84 (link) / #42 (disconnect) [DETERMINED]
   w65   020018F1C1   ?word   0x020018F1C1   ; 200.1.8F.1C1  hi12{f98=2}
   w66   000018C107   ?word   0x000018C107   ; 000.1.8C.107  hi12{-}
   w67   0980520402   ?word   0x0980520402   ; 980.5.20.402  hi12{ESC f98=1 ?7 res=080}
   w68   009218C19B   ?word   0x009218C19B   ; 092.1.8C.19B  hi12{ST f31=1 ?7 res=080}
   w69   0801090821   ldptr   #$90
-        ; ptr-load family: register 0x821 <- 0x90 (= the MEASURED unit-1 C-RAM bank base)
+        ; ptr-load family: register 0x821 <- 0x90.  0x90 is ALSO the unit-1 C-RAM bank
   w70   02A61850C7   ?word   0x02A61850C7   ; 2A6.1.85.0C7  hi12{f98=2 f31=3 ?7 ?5 res=0A0}
 Unit1Vector:
-  w71   001190F446   ?word   0x001190F446   ; 011.9.0F.446  hi12{ST ?0 res=001} cur+
-        ; UNIT-1 CALL VECTOR; host writes 200*32 (link) / 50*32 (disconnect) [DETERMINED]
+  w71   001190F446   ?word   0x001190F446   ; 011.9.0F.446  hi12{ST ?0 res=001} cur+  [writes the unit-1 CALL VECTOR (I-RAM 71) -- DETERMINED destination; this SOURCE form is the canned boot default, its source field is OPEN]
+        ; UNIT-1 CALL VECTOR; host writes setvec unit1,#200 (link) / #50 (disconnect) [DETERMINED]
   w72   0000106087   ?word   0x0000106087   ; 000.1.06.087  hi12{-}
   w73   0E30C00404   ?word   0x0E30C00404   ; E30.C.00.404  hi12{ESC f98=2 ?10 ?5 res=420} cur+
         ; the machine's ONLY class-C word (0 of 2974 body words)
-  w74   0C169AB000   ?word   0x0C169AB000   ; C16.9.AB.000  hi12{ESC f31=3 ?10 res=400} cur+  [hi12[11:8]==C: bits [23:12] are a 12-bit IMMEDIATE, not class+addr]
+  w74   0C169AB000   ?word   0x0C169AB000   ; C16.9.AB.000  {C-fmt A=77 B=11}  hi12{ESC f31=3 ?10 res=400}  [C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=77 B=11]
         ; C-format; imm13 0x9AB = 77*32 + 11, and I-RAM 77 is the next pointer load
   w75   082E80F000   ?word   0x082E80F000   ; 82E.8.0F.000  hi12{ESC f31=7 ?5 res=020} cur+  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
         ; class 8 post-sum step, operation UNKNOWN; addr8 0x0F equals the unit-1 tag
-  w76   0C00984000   ?word   0x0C00984000   ; C00.9.84.000  hi12{ESC ?10 res=400} cur+  [hi12[11:8]==C: bits [23:12] are a 12-bit IMMEDIATE, not class+addr]
+  w76   0C00984000   ?word   0x0C00984000   ; C00.9.84.000  {C-fmt A=76 B=4}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED): A=76 = its own I-RAM address, B=4 = the event; both C00 words in the machine encode their own address (2/2)]
         ; WAIT/SYNC: imm13 0x984 = 76*32 + 4 = its OWN I-RAM address + event 4 [INFERRED]
   w77   0859086822   ?word   0x0859086822   ; 859.0.86.822  hi12{ESC f31=4 ?6 ?0 res=041}  [pointer-load family sibling, target register UNKNOWN]
         ; ptr-load family: register 0x822 <- 0x86
-  w78   0A3CD9F287   ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur+  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
+  w78   0A3CD9F287   ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur+
         ; the machine's ONLY class-D word (0 of 2974 body words)
   w79   00122FF1CE   ?word   0x00122FF1CE   ; 012.2.FF.1CE  hi12{ST f31=1}
         ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
@@ -56,5 +56,5 @@ Unit1Vector:
   w81   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; ordinary body vocabulary (34 exact matches in the 2974-word body corpus)
 FrameWait:
-  w82   0C00A47407   ?word   0x0C00A47407   ; C00.A.47.407  hi12{ESC ?10 res=400} cur+  [hi12[11:8]==C: bits [23:12] are a 12-bit IMMEDIATE, not class+addr]
+  w82   0C00A47407   ?word   0x0C00A47407   ; C00.A.47.407  {C-fmt A=82 B=7}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED): A=82 = its own I-RAM address, B=7 = the event; both C00 words in the machine encode their own address (2/2)]
         ; FRAME TERMINATOR: imm13 0xA47 = 82*32 + 7 = its OWN address + event 7 [INFERRED]

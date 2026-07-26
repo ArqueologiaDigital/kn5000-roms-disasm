@@ -1,4 +1,31 @@
 # REVERB (algo 16, ROOM REVERB 1) -- hand-curated labels/comments.
 # The ONLY unit-1 image (coeff base 0x90), shared by the 12 reverb presets 16-27.
-# See algorithms/reverb.md.  Format: wNN  Label  ; comment
-w0   ReverbBody      ; 8-instruction motif repeated 9x; two diffuser ladders of 5
+# See algorithms/reverb.md and analysis/r1-allpass-motif.md.
+# Format: wNN  Label  ; comment   (only the FIRST comment line per word is emitted)
+#
+# STRUCTURE, MEASURED (tools/r1_allpass_solve.py census motif):
+#   the 6-word ALL-PASS CORE occurs 9x, in TWO ladders of 5 and 4 -- NOT 5 and 5,
+#   which is what this file used to say.  Each ladder is introduced by a 5-word
+#   SEPARATOR whose own class-A word consumes one of the three 0.500 "DRAM tap
+#   gain" cells (C-RAM 0x96 / 0x9D / 0xA5) -- so those three cells are NOT
+#   diffuser gains, and the coefficient bank holds 5 + 4 of those, matching the
+#   code exactly.
+
+w0   ReverbBody      ; unit-1 body, loads at I-RAM 200; 133 words, 33 class-A multiplies
+w11  Separator0      ; 5-word ladder separator: 880.1.60.2DA | 000.A.00.695 | X | 212.2.00.419 | 880.1.20.64B
+w12                  ; consumes C-RAM[0x96] = DRAM tap gain 0.500 -- NOT a diffuser gain
+w19  Ladder0         ; DIFFUSER LADDER 0 -- 5 all-pass cores, C-RAM 0x98..0x9C
+w27                  ; all-pass core 2 of 5
+w35                  ; all-pass core 3 of 5
+w43                  ; all-pass core 4 of 5
+w51                  ; all-pass core 5 of 5
+w59  Separator1      ; same 5-word shape as w11
+w60                  ; consumes C-RAM[0x9D] = DRAM tap gain 0.500
+w69  Ladder1         ; DIFFUSER LADDER 1 -- FOUR all-pass cores, C-RAM 0xA1..0xA4
+w74                  ; the ONE core word whose addr8 differs (0xBA), in all 12 presets
+w77                  ; all-pass core 2 of 4
+w85                  ; all-pass core 3 of 4
+w93                  ; all-pass core 4 of 4
+w101 Separator2      ; same 5-word shape as w11
+w102                 ; consumes C-RAM[0xA5] = DRAM tap gain 0.500
+w115 OutputTails     ; mirrored LEFT / RIGHT output tails, C-RAM 0xA9..0xB4

@@ -15,11 +15,16 @@ pointer table `ALGO_TABLE` at `0x0001ED7C` (coefficient streams: `PARAM_TABLE`
 here needs the physical DSP, a datasheet, or any undumped ROM** — the whole
 effect program set was recovered statically from firmware.
 
-> ⚠️ **DRAFT / RESEARCH INSTRUMENT. THE INSTRUCTION SET IS NOT DECODED.** Six
-> word forms carry a real mnemonic; the honest instruction coverage is **~9 %**
-> of the corpus vocabulary, **~18 %** by operand-role. Everything else is emitted
-> as `?word` with its fields, decoded `hi12` flags and any MEASURED structural
-> landmark — never a guessed opcode. See [`instruction-set.md`](instruction-set.md).
+> ⚠️ **DRAFT / RESEARCH INSTRUMENT. THE INSTRUCTION SET IS NOT DECODED.** Seven
+> word forms carry a real mnemonic; on the **frame floor** (the 83-word resident
+> kernel + the 133-word reverb, i.e. the code that runs in every frame) that is
+> **29 of 216 = 13.4 %**, with **35 more words** whose *operation* is determined
+> but whose operand encoding is not. Over the body corpus it is **9.0 %** by
+> vocabulary. Everything else is emitted as `?word` with its fields, decoded
+> `hi12` flags and any MEASURED structural landmark — never a guessed opcode.
+> Run `python3 dsp/tools/dsp_coverage.py` for the current table; see
+> [`instruction-set.md`](instruction-set.md), whose first section lists the
+> **claims that were withdrawn** as falsified.
 
 ## What's here
 
@@ -39,6 +44,7 @@ effect program set was recovered statically from firmware.
 | `tools/dsp_disasm.py` | yes | the Python ISA disassembler — a self-contained, byte-faithful mirror of MAME's `upd6383d.cpp` |
 | `tools/gen_dsp_disasm.py` | yes | the generator (extract → disassemble → annotate → emit) |
 | `tools/r1_allpass_solve.py` | yes | roadmap **R1** — the constraint solver that forces the reverb's 8-word all-pass motif, plus the motif census, the coefficient banks and the delay chains, all straight from the ROM |
+| `tools/dsp_coverage.py` | yes | the coverage table quoted in `instruction-set.md`, in two tiers that are never added together (executable decode vs. operation-only) |
 | `verify.py` | yes | the byte-match check |
 
 The raw per-image binaries are **not** committed (derived ROM data, regenerable),
@@ -108,9 +114,14 @@ I-RAM dump of the running MAME device.
   malformed streams (algos 79, 88, 89, 90, 91)** load outside the 384-word I-RAM,
   carry no terminator, and are **excluded** (flagged, not disassembled).
 - **Two families are SOLVED to the bit**: the **PARAMETRIC EQ** (Direct-Form-I
-  bilinear biquad — `algorithms/biquad-eq.md`) and the **REVERB** tank (two
-  ladders of five all-pass diffusers — `algorithms/reverb.md`). The rest are
-  mapped structurally at *high* or *medium* confidence, labelled per program.
+  bilinear biquad — `algorithms/biquad-eq.md`) and the **REVERB** tank — two
+  all-pass diffuser ladders of **five and four** stages, *not* five and five
+  (`algorithms/reverb.md`; corrected 2026-07-26, and the coefficient bank now
+  agrees with the code at nine stages). The rest are mapped structurally at
+  *high* or *medium* confidence, labelled per program.
+  Caveat kept in view: the reverb is solved as an *algorithm* — its 33
+  coefficients, 9 stages and delay chain — while the per-word roles of its
+  all-pass core are narrowed to **two** surviving assignments, not one.
 
 ## The chip
 

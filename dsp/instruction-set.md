@@ -18,6 +18,32 @@ from the Sub CPU code that assembles the words, DETERMINED by an exhaustive
 constraint search, INFERRED, or explicitly OPEN. Nothing is a guess dressed as a
 fact.
 
+## ⚠ Corrections — the claims that did NOT survive (2026-07-26)
+
+The K5 (output stage) and R1 (all-pass motif) passes killed more than they added.
+These are listed first because a wrong decode costs more than a missing one, and
+because the disassembler emitted several of them for months.
+
+| withdrawn claim | why | replaced by |
+|---|---|---|
+| **`hi12 == 0xC40` = "envelope / level detector"** (INFERRED) | Wrong on **all 61 sites**. It fired on the reverb tank, on CHORUS, and on the frame terminator's neighbours. The family is a 13-bit **immediate load**. | the C-format rule below (`analysis/k5-output-stage.md` §2.3) |
+| **`880.1.60.*` / `880.1.20.*` = "external-DRAM bracket OPEN / CLOSE"** (INFERRED) | Already falsified by the per-frame counts; R1's constraint solve then **FORCED** the real reading — one is a **READ** and the other a **WRITE**, and the opposite assignment has **zero survivors in all three machine models**. | `dramrd` / `dramwr` semantics below (`analysis/r1-allpass-motif.md` §5) |
+| **`012.2.00.680` = "`d_in ← x + t` (the WRITE)"** and **`000.2.00.419` = "`y ← d_out − t`"** | These are **one of two** role assignments that survive the constraint search, and the corpus **ranks the other one first** (44/44 vs 0/56). They were printed as if settled. | "all-pass core slot 2/6 and 3/6, role NOT settled" |
+| **`hi12[11:8] == 0xA` = "host-poke data form"** | `0A aa bb cc dd` is a **host-stream packet, not an instruction**. The rule fired on genuine in-program words (`A00.0.00.041` in CHORUS, `A3C.D.9F.287` at I-RAM 78). | `host_packet()`, callable only on a host stream |
+| **`nop` is PROVEN BY CONSTRUCTION, writer `LABEL_038922`** | That routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits `000.2.00.000`. | INFERRED (strengthened — see the forms table) |
+| **the output stage's two host-written words carry a linear LEVEL (×2 / ×4)** (roadmap §1.4) | 84 = 2·42 and 200 = 4·50 are accidents of the I-RAM layout. The words are **call vectors**; "disconnect" is not attenuation, and the real mute is uC-IF `cmd 0x04` byte 3. | `setvec` below. **The hardware prediction is inverted**: a disconnected unit goes *silent*, it is not attenuated by 6/12 dB |
+| **the reverb is "two ladders of five all-pass diffusers", "byte-identical at every repetition", "strictly descending gains"** | Re-measured: ladder 1 has **four** repetitions; slot 5's `addr8` varies (`0xBA`, `0xC4`); the gains descend in **10 of 12** presets; GATED REVERB has **6** cores, not 4. | `algorithms/reverb.md` |
+| **the coefficient bank holds "two 5-gain ladders"** (`notes/kn5000-dsp-reverb.md` §3) | The cursor map says otherwise: the code consumes **0x98–0x9C (5)** and **0xA1–0xA4 (4)**, and cells **0x96 / 0x9D / 0xA5** — one of which the old reading counted as a 5th ladder gain — are consumed by the three ladder **separators**, not by an all-pass core. | 5 + 4 diffuser gains + 3 separator tap gains; **the coefficient side now agrees with the code at nine stages** |
+
+Two numbers inside the new analyses were also wrong and are corrected here:
+`k5-output-stage.md` §8 says "88 × I-RAM 84" where §2.4 and the ROM say **79**
+(79 + 12 = the 91 valid streams; 5 more are malformed and 4 parse to no image at
+all); `r1-allpass-motif.md` §7.1's "42 distinct images … 724/3195 = 22.7 %"
+counted the 5 malformed streams as images and used an adjacent-**pair** count as
+if it were a word count — over the canonical 40 blobs it is **703/3017 = 23.3 %**.
+**Re-measured, the 44/44 vs 0/56 split is bit-for-bit identical**, so R1's
+conclusion is unaffected; only its denominator was.
+
 ## Word format — MEASURED
 
 A 36-bit instruction word travels in a **5-byte** container, right-aligned
@@ -32,10 +58,20 @@ exactly the four padding bits). The working field map is INFERRED
 +-----------------+------+------------+------------------------+
 ```
 
-- **`class4`** is NOT universal: inside the `hi12[11:8]==0xC` family and the host
-  poke region it is **immediate DATA** spanning bits [23:12], not a class
-  (MEASURED, `notes/kn5000-dsp-header.md` §6). The disassembler annotates those
-  families rather than pretending the nibble is a class.
+- **`class4`** is NOT universal: inside the `hi12[11:8]==0xC` family (the
+  **C-FORMAT**) it is **immediate DATA** (MEASURED, `notes/kn5000-dsp-header.md`
+  §6). K5 sharpened the span: the immediate is **13 bits at [24:12]**, one bit
+  *further left* than previously written, i.e. it reaches into `hi12` **bit 0** —
+  which is exactly why unit 1's link word carries `0xC41` and not `0xC40`. The
+  family predicate must therefore be `(hi12 & 0xFFE) == 0xC40`, never
+  `hi12 == 0xC40`. Two consequences the disassembler now honours: a C-format word
+  does **not** advance the coefficient cursor (its `class4` bit 3 is immediate
+  data, not the cursor-fetch enable), and it has **no `addr8`**, so it cannot
+  post-increment the data pointer. MEASURED: exactly **one** word in the
+  3057-word corpus is affected by the cursor guard — the frame terminator
+  `C00.A.47.407` — and **zero** body words are, so no committed listing changes.
+  *(Predicted a live mis-count in the named-coefficient join; checked; there is
+  none. Reported as a miss of the prediction, not of the code.)*
 - **`addr8`** is a **signed pointer post-increment** on an 8-bit (wrapping) data
   pointer, active only for `class4 & 7 == 2` (classes 2 and A). MEASURED from the
   algo-32/34 minimal pair (`notes/kn5000-dsp-addressing.md`).
@@ -57,27 +93,92 @@ contain 77 Hamming-distance-1 pairs against a popcount-matched null of 43.4 ± 4
 | 9:8 | a proven FIELD, meaning **UNKNOWN** (`f98`) | MEASURED as a field; the accumulator-op-selector reading was tested and **FAILED** |
 | 7 | speculative "index/address domain" | rendered as residue |
 | 6,5 | no reading | rendered as residue |
-| 4 | **WRITE ACCUMULATOR → mem[ptr]** | MEASURED (`0x212 = 0x202 + bit4`, `0x092 = 0x082 + bit4`; absence control 0/410 clean, one flagged exception) |
+| 4 | **WRITE ACCUMULATOR → mem[ptr]**, taken **BEFORE** the word's own ALU step | MEASURED (`0x212 = 0x202 + bit4`, `0x092 = 0x082 + bit4`; absence control 0/410 clean). The **timing** is new: `store = after` has **zero survivors** in all three models of R1's search (**FORCED**, `analysis/r1-allpass-motif.md` F2) |
 | 3:1 | a proven FIELD, meaning **UNKNOWN** (`f31`) | MEASURED as a field (8/8 values) |
-| 0 | "`addr8` is an absolute immediate" | PROVEN BY CONSTRUCTION for `0x801` only; else residue |
+| 0 | "`addr8` is an absolute immediate" | PROVEN BY CONSTRUCTION for `0x801` only; **in the C-format family it is instead the MSB of the immediate** (MEASURED); else residue. A third incompatible meaning on one bit — more evidence that `hi12` is a microword, not an opcode |
 
 **bit 23** (== `class4` bit 3) is the **CURSOR-FETCH enable**, corrected from an
 earlier "multiply enable" reading (`notes/kn5000-dsp-axes.md`).
 
-## Decoded forms — the only six with a real mnemonic
+## Decoded forms — the only seven with a real mnemonic
 
 Each carries its evidence in `tools/dsp_disasm.py` next to the code that emits it.
+A word is in this table only if a core could **execute** it.
 
 | form | mnemonic | operation | status |
 |---|---|---|---|
-| `000.2.00.000` | `nop` | — | **INFERRED** — position only (the `nop nop` pairs in the reverb). *Corrected:* the earlier "PROVEN BY CONSTRUCTION, writer `LABEL_038922`" was wrong — that routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits this word (`analysis/k5-output-stage.md` §5.7) |
-| `801.0.NN.821` | `ldptr #$NN` | load pointer register | **PROVEN BY CONSTRUCTION** (writer `LABEL_0387E6`) — the firmware builds `addr8` as `(P>>4)` into byte 2's low nibble and `(P&0xF)<<4` into byte 3's high nibble, which independently pins the `class4 | addr8` boundary. NOTE: what is proven is the **host-stream** meaning (it sets the destination pointer for the coefficient pokes that follow); the same word *inside I-RAM* is INFERRED to do the same |
+| `000.2.00.000` | `nop` | — | **INFERRED**, strengthened. *Corrected:* the earlier "PROVEN BY CONSTRUCTION, writer `LABEL_038922`" was wrong — that routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits this word (`analysis/k5-output-stage.md` §5.7). New support: R1's inductive closure requires the two words between consecutive all-pass cores to leave **all four** modelled registers untouched (113 of 114 cores), which is what a `nop` does. Still an inference — it inherits the all-pass reading |
+| `801.0.NN.821` | `ldptr #$NN` | load pointer register | **PROVEN BY CONSTRUCTION in the HOST STREAM ONLY** (writer `LABEL_0387E6`): the firmware builds `addr8` as `(P>>4)` into byte 2's low nibble and `(P&0xF)<<4` into byte 3's high nibble, which independently pins the `class4 \| addr8` boundary. What that proves is the *host-stream* meaning — **it sets the C-RAM destination pointer for the coefficient pokes that follow**, and that is how R1 proves the reverb bank base `0x90`. **The same word inside I-RAM is a different animal and must not be conflated**: K5 shows the in-program instances load `0x70` (unit 0) and `0x50` (unit 1) where the MEASURED C-RAM cursor bases are `0x00` and `0x90`, so in-program `…821` is **not** the coefficient cursor base. In-program meaning: INFERRED, register identity OPEN |
 | `801.0.00.021` | `rstcur` | reset coefficient cursor to base | **VERIFIED** (algo39 section starts 0,6,12,18,24 \| rstcur \| 0,6,12,18,24) |
 | `202.A.dd.1D5` | `mac (p)+dd` | `acc += P ; P = coef[cursor++] * mem[p] ; p += (s8)dd` | **DETERMINED** (all 144 survivors of a 19,674,720-point constraint search agree) |
 | `202.A.dd.1D4` | `mac.lb (p)+dd` | as `mac`, and latch B ← mem[p] | **DETERMINED**, same source |
 | `212.A.dd.407` | `mulst (p)+dd` | `mem[p] <- acc ; P = coef[cursor++] * acc ; p += (s8)dd` | **DETERMINED UNIQUELY** |
+| `C4x.x.xx.445` `C4x.x.xx.446` | `setvec unitN,#A` | load unit *N*'s **call-vector register** with I-RAM address `A = bits[24:17]` | **DETERMINED** — `analysis/k5-output-stage.md` §2. NEW in this pass |
 
-**`lo12` selects the MULTIPLICAND ROUTE.** The three forms above already differ
+### `setvec` — the evidence, because it is the one new mnemonic
+
+* The **only two I-RAM words the host ever rewrites** are I-RAM **64** (`lo12 = 0x445`)
+  and I-RAM **71** (`lo12 = 0x446`); a scan of the whole 192 KB Sub CPU image finds
+  exactly four well-formed writes to them, and they are the four `EFF_Disconnect` /
+  `EFF_Link` scripts, indexed by **effect unit**. The firmware's own debug strings are
+  `"EFF n disconnect."` / `"EFF n link."`, and the unit→chip table `0x01ED6D` =
+  `{0,0,1,1,1}` puts exactly units 0 and 1 on this chip. **PROVEN BY CONSTRUCTION.**
+* The immediate is `bits[24:12]`, and **every one of the 11 distinct values across all
+  61 occurrences of the family is a multiple of 32** (P ≈ 1e-15 under a uniform null),
+  so the payload is `A = bits[24:17]`. **MEASURED.**
+* Decoded that way the four written values are **84 / 42** (unit 0) and **200 / 50**
+  (unit 1). Walking the 100-entry algorithm table: of the **91** streams that yield a
+  valid I-RAM image, **79 load at I-RAM 84 and 12 at I-RAM 200 — nothing else** (91/91).
+  42 and 50 are the first words of the header's own unit-0 / unit-1 setup blocks, and
+  the return-tag constraint independently confines the unit-0 vector to 0..49 and the
+  unit-1 vector to 50..59. **DETERMINED.**
+* Honest limit: the tag constraint narrows each vector to a *range*, it does not single
+  out one address. What carries the reading is that both values land in the correct and
+  *different* window, and both on a structural boundary.
+* This also settles a K1 alternative: the unit entry points are **host-loaded registers**,
+  not a fixed 2-entry vector table.
+* Third state, MEASURED and previously unrecorded: the canned boot image holds
+  `011.9.0E.445` / `011.9.0F.446` at those slots — same `lo12`, so the destination is the
+  same register, but the **source field is OPEN**. `hi12 = 0x011` and
+  `class4 == 9 && addr8 ∈ {0E,0F}` occur **0 times** in the 2974-word body corpus.
+
+## Operations DETERMINED, operand encoding still OPEN — a separate tier
+
+These words **cannot be executed** (we do not know where their address comes from),
+so they are *not* in the table above and keep the greppable `?word` prefix. But
+calling them unknown would now be false. `tools/dsp_disasm.py::status()` reports
+them, and `tools/dsp_coverage.py` counts them **separately — never added into the
+decoded figure**.
+
+| pattern | operation | status |
+|---|---|---|
+| `880.1.60.2D4` | external delay-DRAM **READ**; the data becomes visible **2–5 words later** | **DETERMINED** (R1 F1, F6) — the opposite direction has zero survivors in the base, 3-input-ALU and ALU-on-the-DRAM-word models alike |
+| `880.1.20.655` | external delay-DRAM **WRITE** | **DETERMINED** (R1 F1) |
+| `880.1.20.64B` | external delay-DRAM **WRITE** | **INFERRED** — same `lo12`-selected write-data source; 28/28 store-preceded |
+| other `880.1.60.*` / `880.1.20.*` | external delay-DRAM access; that `addr8` alone selects the direction is **INFERRED**, proven only for the two rows above. Caution: four `880.1.20.*` forms are **never** store-preceded (0/56) while `0x64B`/`0x655` always are (44/44) against a 23.3 % base rate, so `lo12` — not `addr8` — is what selects the write-data source, and the 0 % forms may not be writes at all | MEASURED (the split), INFERRED (the direction) |
+| `(hi12 & 0xFFE) == 0xC40` | **13-bit immediate load**, `A = bits[24:17]`, `B = bits[16:12]`, destination named by `lo12` | format **MEASURED** (61/61 multiple of 32; `B == 0` in 57/57 body occurrences). Destination **OPEN** except for `lo12 ∈ {0x445,0x446}` (= `setvec`) |
+| `102.A.**.64B` | class-A multiply whose **multiplicand is a sum of two registers** — neither `mem[p]` nor the incoming `acc` — i.e. a **fourth multiplicand route** beside `mac` (`0x1D5`), `mac.lb` (`0x1D4`) and `mulst` (`0x407`) | **FORCED under a two-input ALU** (R1 F8), 36/36. Falls to a three-input ALU (260 of 336 survivors take `mem[ptr]` there) — labelled model-dependent, not asserted |
+
+**New MEASURED constraint on the C-format payload, and a caution.** Across the 38
+distinct body images the payload `A` is a **function of `lo12`** — 7 distinct
+`lo12` values, 7 distinct `A`s, no `lo12` ever carrying two — and `B` is 0 in all
+57 occurrences:
+
+```
+   lo12 000 -> A=12 (reverb)     lo12 000 -> A=22 (8 algos)   lo12 1DA -> A=0
+   lo12 359 -> A=29              lo12 44C -> A=25 (8 algos)   lo12 451 -> A=15
+   lo12 647 -> A=40
+```
+
+That **supports** "`lo12` names the destination, everything above it names the
+source", and it **cautions against** generalising K5's "`A` is an I-RAM address"
+beyond `lo12 ∈ {0x445,0x446}`: a body word is loaded at I-RAM 84 or 200 and would
+have no business pointing at I-RAM 12 or 25. `A` is better read as *an address in
+whatever space `lo12`'s register addresses* — I-RAM for the call vectors, unknown
+elsewhere. K5's K6 spin-off ("header w1's `A = 7` is the second input block") is
+therefore **n = 1 in a different `hi12` sub-family** and stays INFERRED.
+
+**`lo12` selects the MULTIPLICAND ROUTE.** The three multiply forms differ
 only in `lo12` and only in where the multiplier reads: `0x1D5 → mem[p]`,
 `0x407 → acc`. R1 adds a fourth route — the reverb's `102.A.**.64B` needs a
 **sum of two registers**, which neither `mem[p]` nor the incoming `acc` can
@@ -98,41 +199,33 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
 - **terminator / END OF BLOCK** — `class4==1 && addr8 ∈ {0E,0F}` carries a
   transfer of control (CALL/RETURN, unit-tagged); the untagged form falls
   through. `addr8` is the **unit index** (91/91), not the halt.
-- ~~**external-DRAM bracket** — `880.1.60.*` OPEN / `880.1.20.*` CLOSE~~ —
-  **superseded.** The bracket reading was already falsified by the per-frame
-  counts (roadmap §1.6). R1's constraint solve **FORCES the direction**:
-  `880.1.60.*` is the delay-DRAM **READ** and `880.1.20.*` the **WRITE**; the
-  opposite assignment has zero survivors in all three models searched
-  (`analysis/r1-allpass-motif.md` §5). The read data becomes visible **2–5 words**
-  later. `880.1.30.*` framing is unchanged.
-- **all-pass marker** `104.2.00.000` (MCC +0.881) is slot 1 of a
-  **software-pipelined one-multiplier all-pass stage**, together with
-  `000.2.00.419`, `012.2.00.680` and the multiply `102.A.**.64B`; the write
-  trails the read by exactly one ladder stage. Two role assignments for the six
-  words survive the constraint search and the corpus ranks — but does not
-  prove — one of them (`analysis/r1-allpass-motif.md`).
-- **hi12 bit 4 takes the accumulator BEFORE the word's own ALU step** —
-  **FORCED**, zero survivors for "after" in all three models
-  (`analysis/r1-allpass-motif.md` §5).
+- **the ALL-PASS CORE** — six words, `880.1.60.2D4 | 104.2.00.000 | 000.2.00.419 |
+  012.2.00.680 | 880.1.20.655 | 102.A.**.64B`, normally followed by two `nop`s.
+  **114 occurrences, in 13 programs, all reverbs** (12 presets × 9 + GATED REVERB × 6);
+  the only field that ever varies is slot 5's `addr8` (`0x00`×101, `0xBA`×12, `0xC4`×1);
+  the inner four-word run is exceptionless 115/115. It is a **software-pipelined
+  one-multiplier all-pass stage**: repetition *r* carries the arithmetic and the DRAM
+  **write** of stage *r−1* together with the DRAM **read** and the **multiply** of stage
+  *r*, because the multiply is the last of the six words and both DRAM words precede it.
+  **Two role assignments survive the constraint search**; both reproduce a textbook
+  all-pass cascade at max|err| = 0.000e+00 over all 12 preset banks and both ladder
+  lengths, so the numbers cannot separate them. The corpus **ranks** — does not prove —
+  the one in which `mem[ptr]` stages the DRAM write. Per-word roles must **not** be
+  printed until that is settled (`analysis/r1-allpass-motif.md`).
 - **LFO** — `hi12=0x082` read; `092.A.00.200` phase accumulate; `094.A.00.200`
   wrap on `0x7FFFFF`.
-- ~~**envelope detector** — `hi12=0xC40`~~ — **WITHDRAWN.** `hi12 ∈ {0xC40,0xC41}` is a
-  13-bit **immediate load**, `imm13 = bits[24:12]`, and every one of its 11 distinct values
-  across 61 occurrences is a multiple of 32 ⇒ payload = bits[24:17], `imm13 = payload*32`.
-  The label fires on the reverb tank and on the frame terminator's neighbours, where a level
-  detector makes no sense (`analysis/k5-output-stage.md` §2.3). The disassembler still emits
-  it and should not.
 - **`C00` wait/sync** — both of the machine's `C00` words encode **their own I-RAM address**
   in bits[24:17] (`C00.9.84.000` @76 = 76*32+4; `C00.A.47.407` @82 = 82*32+7), the second
-  being the frame terminator. INFERRED: "hold here until event bits[16:12]".
-- **per-unit CALL VECTOR** — `lo12 = 0x445` (unit 0) / `0x446` (unit 1), at I-RAM 64 / 71,
-  the only two words the host ever rewrites. `EFF_Link` writes the body entry (84 / 200),
-  `EFF_Disconnect` writes that unit's own header setup block (42 / 50). **DETERMINED**
-  (`analysis/k5-output-stage.md` §2.4).
+  being the frame terminator. INFERRED: "hold here until event bits[16:12]". It is a
+  *positive* explanation for a fact that had none — the output stage contains **no
+  end-of-block word at all**; a block that ends by waiting does not need one.
 - **host coefficient poke** — `0A aa bb cc dd` is NOT an instruction: it is a host-port
   packet carrying a 24-bit coefficient `((aa&0x7F)<<17)|(bb<<9)|(cc<<1)|(dd>>7)` with a
-  destination tag `dd & 0x7F`. **PROVEN BY CONSTRUCTION**. The disassembler's
-  `hi12[11:8]==A → host-poke` annotation must NOT fire on in-program words.
+  destination tag `dd & 0x7F` (`0x26` ↔ register `…821`, `0x4C` ↔ `…825`, `0x15` ↔ the
+  register set by `000.1.06.000`). **PROVEN BY CONSTRUCTION** from the three Sub CPU
+  writers. It is decoded by `dsp_disasm.host_packet()`, which a host-stream viewer calls
+  explicitly; the old `hi12[11:8]==A → host-poke` *annotation* was removed because it
+  fired on in-program words.
 - **table-lookup idiom** — `040.0.00.C63 | 000.6.TT.4CD | 012.4.01.1CE` (class-6
   `addr8` = table selector); accounts for every class-4/6 word, MCC +1.000.
 - **class 8** — post-sum step (rescale/round/saturate?), **operation unknown**;
@@ -152,11 +245,20 @@ There is **no encoded space-selector field**; the memory space is
   cursor: base **0x00** (MEASURED across all 16 swept effects), **+1 per class-A
   word**, reset by `rstcur`. Every class-A word therefore reads a coefficient at
   a **known absolute C-RAM address** — the disassembler prints `; C-RAM[0xNN]`.
-  The unit-1 reverb bank base is **0x90**.
+  A **C-format** word does *not* advance the cursor (its `class4` is immediate
+  data). The unit-1 reverb bank base is **0x90**, now **PROVEN BY CONSTRUCTION**:
+  every type-2 coefficient block in the parameter stream is preceded by a literal
+  `08 01 09 08 21` packet, which *is* `801.0.90.821` = `ldptr #$90` in the writer
+  encoding proven in `analysis/k5-output-stage.md` §1.2. GATED REVERB, a unit-0
+  program, says `ldptr #$00`.
 - **D-RAM** (state) — reached ONLY through the signed-`addr8` data pointer
   (`mem[ptr]`). Its absolute base (the header's per-unit `0x70`/`0x50`) is still
-  unpinned, so **no D-RAM absolute is printed**.
-- **external delay RAM** — reached ONLY through the `880` bracket.
+  unpinned, so **no D-RAM absolute is printed**. NEW constraint: the register the
+  header loads with `0x70`/`0x50` (`lo12 = 0x821` in program) **cannot be the
+  C-RAM cursor base**, because the MEASURED cursor bases are `0x00` and `0x90`.
+- **external delay RAM** — reached ONLY through the `880.1.60` / `880.1.20`
+  words, which are a **READ** and a **WRITE** and not a bracket. How the address
+  is supplied is **OPEN** (this is the largest single hole in the machine).
 
 ## Control flow — INFERRED/PROVEN mix
 
@@ -184,18 +286,51 @@ There is **no encoded space-selector field**; the memory space is
   varying only `addr8`, algo39 repeats 9 words at period 9. There is no loop to
   branch back to (`notes/kn5000-dsp-necfamily.md` §6).
 
-## Coverage — honest
+## Coverage — honest, and in two tiers that are never added together
 
-Forcing the paper analysis through an executable disassembler:
+Every number here comes out of one runnable tool, so this section cannot drift
+away from the disassembler:
 
 ```
-words over the 38 distinct images            2974
-decoded (six forms)                           267   (9.0 %  by vocabulary)
-undecoded                                    2707   (91.0 %)
-distinct undecoded words                       655
-distinct undecoded (hi12,class4,lo12) FAMILIES 185
-operand-ROLE known (named coefficients etc.)         ~18.3 %
+python3 dsp/tools/dsp_coverage.py
+```
 
+**TIER 1 = DECODED** — a real mnemonic; a core could execute the word.
+**TIER 2 = OPERATION ONLY** — determined or measured operation, operand encoding
+still open, so the word *cannot* be executed. The combined column is printed only
+so that nobody has to add the two by hand and get it wrong.
+
+```
+region                          words   tier1  tier1%    tier2   t1+t2%
+resident kernel I-RAM 0..82        83       3    3.6%        4     8.4%
+   ...header  I-RAM  0..59         60       2    3.3%        2     6.7%
+   ...output stage 60..82          23       1    4.3%        2    13.0%
+   ...output stage AS LINKED       23       3   13.0%        0    13.0%
+reverb image (algo 16)            133      26   19.5%       31    42.9%
+FRAME FLOOR kernel + reverb       216      29   13.4%       35    29.6%
+FRAME FLOOR as linked             216      31   14.4%       33    29.6%
+all 38 distinct body images      2974     267    9.0%      230    16.7%
+
+distinct undecoded words           655
+distinct undecoded FAMILIES        185
+images with ZERO tier-1 words     8 of 38
+```
+
+**Read that honestly: on the frame floor, tier 1 did not move.** It was 29/216 =
+**13.4 %** before this pass and it is 29/216 = **13.4 %** after it. What moved is
+tier 2, from nothing to **35 words (29.6 % combined)** — and the two lines *as
+linked* are the only tier-1 gain: after `EFF_Link` the host has overwritten I-RAM
+64 and 71 with `setvec`, so the code that actually executes is 31/216 = **14.4 %**.
+The output stage went from **0 of 23** understood to **2 DETERMINED + 5 INFERRED**,
+and the two DETERMINED ones are the two that gate control flow — which matters far
+more than the percentage does.
+
+The tier-2 words are worth their own line because of *what* they are: for the
+first time, **the decode reaches the audio boundary**. Not one of the tier-1 forms
+touches DI/DO, the external delay DRAM, the stack or the frame strobe; the
+delay-DRAM read/write and the call-vector load do.
+
+```
 class-A multiplies (coefficient consumers)     822
   operand ROLE named (host C-RAM coeff join)   500   (60.8 %)
     391 individually-addressed T1 writers  +  109 block-upload cells
@@ -207,22 +342,46 @@ class-A multiplies (coefficient consumers)     822
 *multiplies* whose coefficient OPERAND has a named role (which C-RAM cell it reads
 and what the host wrote there); the multiply MICRO-OP is one of the three DETERMINED
 forms, but the block-coefficient roles (op0x73/op0x77) are INFERRED, not per-cell
-decodes like the biquad's. Source coverage — the fraction of the *instruction set*
-understood — is still **~18.3 %**. The two figures measure different things and this
+decodes like the biquad's. The two figures measure different things and this
 tree does not launder one into the other.
 
-**~82 % of the instruction set is still unknown.** The distribution has a long
+**Most of the instruction set is still unknown.** The distribution has a long
 tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
-55 % — there is no small set of words that unblocks everything. The highest-value
-open targets, in order (`notes/kn5000-dsp-core-draft.md` §6):
+55 % — there is no small set of words that unblocks everything.
 
-1. `212.2` vs `212.A` — bit 23 on a family whose class-A form is determined.
-2. the `lo12 = 0x415` group across classes A/2/8 (tests "lo12 = route, class4 =
+### The worklist, re-ranked after K5 and R1
+
+1. **The external delay-DRAM ADDRESS path.** We now know *which* words read and
+   write the delay lines and *nothing* about where the address comes from. This is
+   the single largest hole and it blocks every delay, chorus, flanger and reverb.
+   Concretely: what do `880.1.30.*` (58 body occurrences), `880.1.60.000` (26) and
+   the four never-store-preceded `880.1.20.*` forms do? Purely static.
+2. **`880.1.20.*` — which `lo12` values are writes at all?** `0x64B`/`0x655` are
+   store-preceded 44/44 and the other four 0/56. Deciding that also decides R1's
+   two surviving families (O-1) without hardware.
+3. **The C-format destination register file.** `lo12 ∈ {000,1DA,359,44C,451,647}`
+   each carry one fixed payload `A`; naming even one of those registers turns a
+   MEASURED format into a decode, and the payload table above is a free crib.
+4. **The six `op 0..5` uC-IF handlers** at `0x03C32E + OFFSETS_14739[op]` — they
+   are the definition of commands `0x01/0x02/0x04/0x09/0x0C/0x30`. The ASL source
+   renders them as `db …`; disassembling them is pure static work and would
+   explain the whole host interface.
+5. `212.2` vs `212.A` — bit 23 on a family whose class-A form is determined.
+6. the `lo12 = 0x415` group across classes A/2/8 (tests "lo12 = route, class4 =
    arithmetic", brings class 8 along).
-3. the table-lookup triple (`040.0.00.C63 / 000.6.TT.4CD / 012.4.01.1CE`).
-4. `880.1.20.*` — address latch or data latch?
-5. the 83 header+stub words — where `COND`, `BRAKST` and the GF flags must live.
-6. the actual µPD6383 datasheet/databook — would hand over the whole ISA.
+7. the table-lookup triple (`040.0.00.C63 / 000.6.TT.4CD / 012.4.01.1CE`).
+8. the remaining 76 kernel words — where `COND`, `BRAKST` and the GF flags must
+   live. Note the standing warning: **65 of the kernel's 75 families never occur
+   in the 2974-word body corpus**, so frequency-ranked worklists are structurally
+   blind to exactly the code that carries the audio.
+9. the actual µPD6383 datasheet/databook — would hand over the whole ISA.
+
+**What genuinely needs hardware, and nothing else will do:** separating R1's two
+surviving role families by ear/scope (a `ROOM REVERB 1` impulse response with the
+delays 127/435/489/183/522 known would do it — they differ in what is written to
+the delay line, hence in the tail after the first pass), the exact DRAM read
+latency inside its forced [2,5] window, and 17-vs-18 delay address bits (the
+maximum `SINGLE DELAY` time). Everything else on this list is static.
 
 **Emulation status:** MAME instantiates the core (`upd6383` device) **disabled** —
 the host interface is exercised, nothing executes, there is no audio. A

@@ -826,9 +826,13 @@ def sec_discriminator(C, rom, names, imgs):
     print("=" * 76)
     print("8. THE CORPUS DISCRIMINATOR -- MEASURED over DISTINCT images")
     print("=" * 76)
-    # add the two resident kernel blobs; they are code too
+    # add the two resident kernel blobs; they are code too.
+    # CORRECTED 2026-07-26: the 5 MALFORMED streams are excluded, matching
+    # dsp/verify.py and the rest of the tree.  This moves the BASE RATE only
+    # (724/3195 -> 703/3017); every per-form count below is unchanged.
     import kn5000_dsp_extract as E
-    full = dict(imgs)
+    MALFORMED = {79, 88, 89, 90, 91}
+    full = {a: w for a, w in imgs.items() if a not in MALFORMED}
     for tag, addr in (("KERNEL", 0x01E496), ("EPILOG", 0x01E63C)):
         try:
             ir, _c, _o = E.parse_stream(rom, addr, limit=40)

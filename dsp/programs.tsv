@@ -11,12 +11,12 @@
 9	SINGLE DELAY	0	84	48	18	18	1	delay	high	prog09_single_delay.dsm	single delay: 0.5 mix, 0.15/0.3 feedback
 10	MULTI TAP DELAY	0	84	68	18	11	1	delay	high	prog10_multi_tap_delay.dsm	multi-tap delay: panning taps (partial-cursor-rewind idiom, effect-map 5.1)
 15	ROCK ROTARY	0	84	86	33	6	2	rotary	high	prog15_rock_rotary.dsm	rock rotary / rotary speaker (shared with algo 53)
-16	ROOM REVERB 1	1	200	133	33	33	12	reverb	SOLVED	prog16_room_reverb_1.dsm	reverb tank: two ladders of 5 all-pass diffusers + damping (decoded to the bit); the ONLY unit-1 image, shared by the 12 reverb presets algos 16-27
+16	ROOM REVERB 1	1	200	133	33	33	12	reverb	SOLVED	prog16_room_reverb_1.dsm	reverb tank: all-pass diffuser ladders of 5 and 4 stages + damping (algorithm decoded to the bit; the per-word roles of the 6-word core are narrowed to two surviving assignments); the ONLY unit-1 image, shared by the 12 reverb presets algos 16-27
 32	DISTORTION	0	84	42	6	4	1	distortion	high	prog32_distortion.dsm	distortion: AGC waveshaper, curve A
 33	OVERDRIVE	0	84	63	18	4	1	distortion	high	prog33_overdrive.dsm	overdrive: waveshaper + smoother + 4kHz Butterworth tone
 34	FUZZ	0	84	42	6	4	1	distortion	high	prog34_fuzz.dsm	fuzz: rail-clip waveshaper
 35	EXCITER	0	84	69	22	18	1	exciter	high	prog35_exciter.dsm	harmonic exciter: LUT -> band-pass -> +dry
-36	COMPRESSOR	0	84	40	10	1	1	dynamics	medium	prog36_compressor.dsm	compressor: envelope detector (C40) + gain-computer (THRESHOLD/RATIO)
+36	COMPRESSOR	0	84	40	10	1	1	dynamics	medium	prog36_compressor.dsm	compressor: level detector + gain-computer (THRESHOLD/RATIO).  NOTE: the old 'hi12=0xC40 = envelope detector' reading is WITHDRAWN -- C40/C41 is a 13-bit immediate load (analysis/k5-output-stage.md); the detector is here on other grounds
 39	PARAMETRIC EQ	0	84	105	60	60	1	eq	SOLVED	prog39_parametric_eq.dsm	parametric EQ: 5 bands x 2 channels, Direct-Form-I bilinear biquad (decoded to the bit); the reference program
 48	AUTO PAN	0	84	50	8	2	1	am	high	prog48_auto_pan.dsm	auto pan: quadrature LFO amplitude panner
 50	VIBRATO	0	84	53	12	2	1	modulation	high	prog50_vibrato.dsm	vibrato: wet-only modulated delay

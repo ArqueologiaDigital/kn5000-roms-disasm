@@ -57,13 +57,13 @@
   w29   0192A40000   ?word   0x0192A40000   ; 192.A.40.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
   w30   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w31   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
-  w32   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w33   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w31   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 61/61); destination register lo12=44C UNKNOWN]
+  w32   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w33   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w34   0102ABE4C8   ?word   0x0102ABE4C8   ; 102.A.BE.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
   w35   0000243407   ?word   0x0000243407   ; 000.2.43.407  hi12{-}
-  w36   0C400001DA   ?word   0x0C400001DA   ; C40.0.00.1DA  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
+  w36   0C400001DA   ?word   0x0C400001DA   ; C40.0.00.1DA  {C-fmt A=0 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=0 B=0 (imm13 0x0000 = 0*32, MEASURED 61/61); destination register lo12=1DA UNKNOWN]
   w37   00122FC1D5   ?word   0x00122FC1D5   ; 012.2.FC.1D5  hi12{ST f31=1}
   w38   01042C01D5   ?word   0x01042C01D5   ; 104.2.C0.1D5  hi12{f98=1 f31=2}
   w39   0102A401D5   ?word   0x0102A401D5   ; 102.A.40.1D5  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
@@ -73,7 +73,7 @@
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
   w42   02122BE41D   ?word   0x02122BE41D   ; 212.2.BE.41D  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4), class-independent]
   w43   0000247407   ?word   0x0000247407   ; 000.2.47.407  hi12{-}
-  w44   0C400001DA   ?word   0x0C400001DA   ; C40.0.00.1DA  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
+  w44   0C400001DA   ?word   0x0C400001DA   ; C40.0.00.1DA  {C-fmt A=0 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=0 B=0 (imm13 0x0000 = 0*32, MEASURED 61/61); destination register lo12=1DA UNKNOWN]
   w45   00122FC1D5   ?word   0x00122FC1D5   ; 012.2.FC.1D5  hi12{ST f31=1}
   w46   01042C01D5   ?word   0x01042C01D5   ; 104.2.C0.1D5  hi12{f98=1 f31=2}
   w47   0102A401D5   ?word   0x0102A401D5   ; 102.A.40.1D5  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
@@ -100,9 +100,9 @@
   w60   0192A5B000   ?word   0x0192A5B000   ; 192.A.5B.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
   w61   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w62   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
-  w63   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w64   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w62   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 61/61); destination register lo12=44C UNKNOWN]
+  w63   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w64   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w65   0102AA64C8   ?word   0x0102AA64C8   ; 102.A.A6.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x16] (coeff, base 0x00 MEASURED)
   w66   0000A0A412   ?word   0x0000A0A412   ; 000.A.0A.412  hi12{-} cur+
@@ -120,9 +120,9 @@
   w74   0192A50000   ?word   0x0192A50000   ; 192.A.50.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
   w75   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w76   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  hi12{ESC ?10 ?6 res=440}  [envelope / level detector (INFERRED)]
-  w77   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}  [hi12[11:8]==A: host-poke data form, bits [23:12] are immediate]
-  w78   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external-DRAM bracket CLOSE (INFERRED)]
+  w76   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 61/61); destination register lo12=44C UNKNOWN]
+  w77   0A00000041   ?word   0x0A00000041   ; A00.0.00.041  hi12{ESC f98=2}
+  w78   08801202C7   ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 20; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w79   0102AA74C8   ?word   0x0102AA74C8   ; 102.A.A7.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x1C] (coeff, base 0x00 MEASURED)
   w80   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
@@ -134,5 +134,5 @@
         ; C-RAM[0x1F] (coeff, base 0x00 MEASURED)
   w83   0202AF71D5   mac     (p)-9
         ; C-RAM[0x20] (coeff, base 0x00 MEASURED)
-  w84   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external-DRAM bracket OPEN (INFERRED)]
+  w84   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access, addr8 60; direction READ/WRITE from addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)]
   w85   060210E000   ?word   0x060210E000   ; 602.1.0E.000  hi12{END f98=2 f31=1}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

@@ -14,7 +14,7 @@ bodies -- showing SIGNAL FLOW, not a per-instruction dump.
 WHY IT STAYS HONEST + REGENERABLE.  A flowchart node is emitted ONLY when the
 landmark it names is actually DETECTED in the ROM words, using the SAME rules as
 the disassembler (dsp/tools/dsp_disasm.py -- the LFO phase-accumulate word, the
-external-DRAM bracket, the envelope detector, the all-pass marker, the DF-I biquad
+external-DRAM read/write, the all-pass core, the DF-I biquad
 section, the class-8 post-sum step, ...).  Every instruction a program contains is
 accounted for: those matched by a recognised landmark become labelled stages, and
 the remainder are shown as a single opaque "undecoded core (N of M instructions)"
@@ -125,7 +125,7 @@ class Chart:
 # --------------------------------------------------------------------------
 def features(words):
     f = dict(nwords=len(words), classA=0, named=0, opaque=0,
-             biquad=0, lfo=0, lforead=0, env=0, dram=0, table=0,
+             biquad=0, lfo=0, lforead=0, cimm=0, dram=0, table=0,
              allpass=0, allpass_wr=0, class8=0, gainmul=0, ret=0, rstcur=0)
     for w in words:
         hi, cl, ad, lo = D.fields(w)
@@ -134,7 +134,11 @@ def features(words):
         if lo == 0x1D3:                                    f["biquad"] += 1
         if hi == 0x092 and cl == 0xA and lo == 0x200:      f["lfo"] += 1
         if hi == 0x082:                                    f["lforead"] += 1
-        if hi == 0xC40:                                    f["env"] += 1
+        # C-format immediate load.  This used to be counted as an "envelope
+        # detector"; that reading is WITHDRAWN (wrong on all 61 sites -- see
+        # analysis/k5-output-stage.md sect. 2.3).  The words are real and
+        # structural, so they are still counted -- but as what they are.
+        if (hi & 0xFFE) == 0xC40:                          f["cimm"] += 1
         if hi == 0x880 and cl == 1 and ad == 0x60:         f["dram"] += 1
         if cl == 6:                                        f["table"] += 1
         if w == 0x104200000:                               f["allpass"] += 1
@@ -249,7 +253,7 @@ def stage_allpass(c, f, params, reverb=False):
 
 
 def stage_delay(c, f, params):
-    lab = "External delay line (DRAM)<br/>%d tap bracket(s) (880.1.60/20)" % f["dram"]
+    lab = "External delay line (DRAM)<br/>%d read/write word(s) (880.1.60 = READ, 880.1.20 = WRITE)" % f["dram"]
     nid = c.node(lab, "inferred")
     ctl = has(params, "DELAY", "FEEDBACK", "HIGH DAMP")
     if ctl:
@@ -279,19 +283,26 @@ def stage_waveshaper(c, f, params):
     return nid
 
 
-def stage_env(c, f, params, fam):
+def stage_cimm(c, f, params, fam):
+    """C-format 13-bit immediate loads.  DELIBERATELY NOT called an envelope
+    detector any more: `hi12 == 0xC40 -> envelope / level detector' was wrong on
+    all 61 sites in the corpus and is WITHDRAWN.  What is MEASURED is the FORMAT
+    (payload = bits[24:17], always a multiple of 32) and that the payload is a
+    function of lo12; the destination register is OPEN except for the two
+    call-vector words.  The node is therefore drawn OPEN (dashed), not inferred.
+    Any level-detector claim for these programs rests on their COEFFICIENTS (the
+    2/pi constant, the one-pole smoothers), not on this word."""
+    lab = ("C-format immediate loads (C40/C41)<br/>"
+           "destination register UNKNOWN &mdash; the old 'envelope detector' "
+           "reading is WITHDRAWN")
+    ctl = []
     if fam in ("dynamics",):
-        lab = "Envelope / level detector (C40)<br/>gain computed arithmetically (no compare op)"
         ctl = has(params, "THRESHOLD", "RATIO", "ATTACK", "RELEASE")
     elif fam in ("filter",):
-        lab = "Envelope-swept control (C40)"
         ctl = has(params, "RESONANCE", "MANUAL", "SWEEP")
-    else:
-        lab = "One-pole smoother / level detector (C40)"
-        ctl = []
-    nid = c.node("%s &times;%d" % (lab, f["env"]), "inferred")
+    nid = c.node("%s &times;%d" % (lab, f["cimm"]), "open")
     if ctl:
-        c.side(nid, "controls: " + compress(ctl))
+        c.side(nid, "nearby controls: " + compress(ctl))
     return nid
 
 
@@ -334,12 +345,12 @@ def build_eq(c, f, params):
 def build_reverb(c, f, params):
     c.node("Stereo input (L / R)", "io")
     c.node("Input scaling triple<br/>C-RAM[0x90..92] = 0.250 0.500 0.500", "measured")
-    pre = c.node("Pre-delay + delay buffers (external DRAM)<br/>%d tap bracket(s); lengths tiled in the param stream" % f["dram"], "inferred")
+    pre = c.node("Pre-delay + delay buffers (external DRAM)<br/>%d read/write word(s); lengths tiled in the param stream" % f["dram"], "inferred")
     ctl = has(params, "PRE DELAY", "REVERB TIME")
     if ctl:
         c.side(pre, "controls: " + compress(ctl))
     c.node("Damping one-pole filter #1<br/>C-RAM[0x93..95] (op 0x76)", "measured")
-    la = c.node("Diffuser ladder A &mdash; 5 all-pass<br/>C-RAM[0x98..9C] descending gains 0.75&hellip;0.50<br/>w = x + g&middot;d ; y = d &minus; g&middot;w", "measured")
+    la = c.node("Diffuser ladder A &mdash; 5 all-pass<br/>C-RAM[0x98..9C] descending gains 0.75&hellip;0.40<br/>one-multiplier all-pass, software-pipelined", "measured")
     c.side(la, "REVERB TIME sets the ladder gains")
     c.node("Damping one-pole filter #2<br/>C-RAM[0x9E..A0] (op 0x76)", "measured")
     c.node("Diffuser ladder B &mdash; 4 all-pass<br/>C-RAM[0xA1..A4] descending gains", "measured")
@@ -354,23 +365,23 @@ def build_reverb(c, f, params):
 #  Ordered stage list per family (signal order, from families.md).  Each entry
 #  is (stage_key, gate) where gate(f) says whether the landmark was detected.
 FAMILY_PIPELINE = {
-    "modulation": ["lfo", "allpass", "delay", "biquad", "env", "opaque"],
+    "modulation": ["lfo", "allpass", "delay", "biquad", "cimm", "opaque"],
     "delay":      ["delay", "biquad", "opaque"],
     "am":         ["lfo", "opaque"],
-    "filter":     ["env", "allpass", "delay", "biquad", "opaque"],
+    "filter":     ["cimm", "allpass", "delay", "biquad", "opaque"],
     "distortion": ["waveshaper", "biquad", "opaque"],
     "exciter":    ["waveshaper", "biquad", "opaque"],
-    "dynamics":   ["env", "opaque"],
-    "rotary":     ["delay", "biquad", "env", "opaque"],
-    "combi":      ["biquad", "waveshaper", "lfo", "allpass", "delay", "env", "opaque"],
-    "reverb":     ["delay", "allpass", "env", "opaque"],   # gated reverb (algo 8)
+    "dynamics":   ["cimm", "opaque"],
+    "rotary":     ["delay", "biquad", "cimm", "opaque"],
+    "combi":      ["biquad", "waveshaper", "lfo", "allpass", "delay", "cimm", "opaque"],
+    "reverb":     ["delay", "allpass", "cimm", "opaque"],   # gated reverb (algo 8)
 }
 
 
 def build_generic(c, fam, f, params):
     c.node("Stereo input (L / R)", "io")
     order = FAMILY_PIPELINE.get(fam, ["lfo", "allpass", "delay", "biquad",
-                                      "waveshaper", "env", "opaque"])
+                                      "waveshaper", "cimm", "opaque"])
     for key in order:
         if key == "lfo" and (f["lfo"] or f["lforead"]):
             stage_lfo(c, f, params)
@@ -382,8 +393,8 @@ def build_generic(c, fam, f, params):
             stage_biquad(c, f, params)
         elif key == "waveshaper" and f["table"]:
             stage_waveshaper(c, f, params)
-        elif key == "env" and f["env"]:
-            stage_env(c, f, params, fam)
+        elif key == "cimm" and f["cimm"]:
+            stage_cimm(c, f, params, fam)
         elif key == "opaque":
             stage_opaque(c, f)
     trailing(c, params)
@@ -439,8 +450,8 @@ def _landmark_summary(f):
     parts = []
     if f["biquad"]:  parts.append("%d biquad DF-I section(s)" % f["biquad"])
     if f["lfo"]:     parts.append("%d LFO phase word(s)" % f["lfo"])
-    if f["env"]:     parts.append("%d envelope/damping word(s)" % f["env"])
-    if f["dram"]:    parts.append("%d DRAM tap bracket(s)" % f["dram"])
+    if f["cimm"]:    parts.append("%d C-format immediate load(s)" % f["cimm"])
+    if f["dram"]:    parts.append("%d DRAM read/write word(s)" % f["dram"])
     if f["table"]:   parts.append("%d waveshaper LUT selector(s)" % f["table"])
     if f["allpass"]: parts.append("%d all-pass marker(s)" % f["allpass"])
     if f["class8"]:  parts.append("%d class-8 post-sum step(s)" % f["class8"])
@@ -539,7 +550,7 @@ def emit_readme(path, rows):
     lines.append("| solid blue | **MEASURED** &mdash; a structural landmark measured across the corpus "
                  "(LFO phase word, biquad section, damping filter, all-pass marker) |")
     lines.append("| solid amber | **INFERRED** &mdash; a strong reading not yet decoded to the bit "
-                 "(external-DRAM bracket, waveshaper LUT, envelope detector, stage counts) |")
+                 "(external-DRAM read/write, waveshaper LUT, stage counts) |")
     lines.append("| dashed grey | **OPEN** &mdash; the opaque undecoded-core block and other open steps |")
     lines.append("| purple | a **UI control parameter** hanging off the stage it drives |")
     lines.append("")
@@ -592,7 +603,10 @@ def main():
     capture = os.path.join(args.tools, "kn5000_dsp_paramlist_capture.json")
     pmap = load_params(args.tools, args.main, capture)
 
-    header, progs, loadaddr = G.extract_all(E, args.sub)
+    # NOTE: extract_all() grew a 4th return value (the output-stage epilogue) in
+    # the K5 pass and this call was not updated -- `make dsp-flowcharts' has been
+    # broken since commit 8d23009.  Fixed 2026-07-26.
+    header, epilogue, progs, loadaddr = G.extract_all(E, args.sub)
     images = G.group_images(progs)
 
     fcdir = os.path.join(args.out, "flowcharts")

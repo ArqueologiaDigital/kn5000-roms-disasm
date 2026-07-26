@@ -7,7 +7,7 @@ Image rep **algo 72** &middot; slots 72 &middot; **unit 0** (I-RAM load 84) &mid
 
 > 1-band flat PEQ + single delay
 
-**54 words**, 20 class-A coefficient multiplies (19 named), 15 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 3 DRAM tap bracket(s), 2 class-8 post-sum step(s).
+**54 words**, 20 class-A coefficient multiplies (19 named), 15 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -16,7 +16,7 @@ flowchart TD
     N0 --> N1
     N2["controls: BAND EMPHASIS FC, BAND EMPHASIS Q, BAND EMPHASIS G"]
     N1 -.-> N2
-    N3["External delay line (DRAM)<br/>3 tap bracket(s) (880.1.60/20)"]
+    N3["External delay line (DRAM)<br/>3 read/write word(s) (880.1.60 = READ, 880.1.20 = WRITE)"]
     N1 --> N3
     N4["controls: DELAY DRY/WET, DELAY L, DELAY R, FEEDBACK L, FEEDBACK R"]
     N3 -.-> N4

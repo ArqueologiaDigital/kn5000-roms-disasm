@@ -458,12 +458,23 @@ Neither piece is a proof. Both are stated with their *n*.
 
 ### 7.1 The store→write pairing is exceptionless, and exclusive
 
-Counted over the **42 distinct images** (so that the twelve presets sharing one
+Counted over the distinct images (so that the twelve presets sharing one
 reverb image count once, not twelve times), for every `880.1.20.*` word, is the
 immediately preceding word one that carries the `hi12` bit-4 store?
 
+> **CORRECTION, 2026-07-26 (re-measured).** The corpus this section used was **42
+> blobs / 3195**, which is wrong twice: it silently included the **5 malformed
+> streams** that the rest of the tree excludes (`verify.py`'s `MALFORMED` set), and
+> 3195 is a count of *adjacent pairs*, not of words. The canonical corpus is **40
+> blobs** (38 valid distinct images + kernel + output stage) = 3057 words = 3017
+> adjacent pairs, and the base rate is **703 / 3017 = 23.3 %**.
+> **Predict-then-check: re-measured over the canonical corpus, every per-form
+> count below is bit-for-bit identical** — 28/28, 16/16, 0/40, 0/7, 0/6, 0/3 — so
+> the 44/44 vs 0/56 split and the conclusion drawn from it are unaffected. Only
+> the denominator moved.
+
 ```
-   base rate over all words          724 / 3195 = 22.7 %
+   base rate over all words          703 / 3017 = 23.3 %   (corrected)
 
    880.1.20.64B    28 sites   28 preceded by a store   100 %
    880.1.20.655    16 sites   16 preceded by a store   100 %
@@ -475,7 +486,7 @@ immediately preceding word one that carries the `hi12` bit-4 store?
    880.1.60.2D4 (the READ)  16 sites    0                 0 %
 ```
 
-44/44 versus 0/56, against a 22.7 % base rate, and split cleanly by `lo12`. Under
+44/44 versus 0/56, against a 23.3 % base rate, and split cleanly by `lo12`. Under
 family B the store is a **data dependency** of the write (it is what puts the
 value in `mem[ptr]`), and the split says `lo12` selects the write-data source.
 Under family A the adjacency is a scheduling coincidence — and a coincidence has

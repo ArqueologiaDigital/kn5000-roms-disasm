@@ -14,11 +14,11 @@
   w0    00400008BC   ?word   0x00400008BC   ; 040.0.00.8BC  hi12{?6 res=040}
   w1    002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}
   w2    0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
-  w3    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w3    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w4    0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = op0x61[0] (role coeff, INFERRED)
-  w5    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w5    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w6    00922F9700   ?word   0x00922F9700   ; 092.2.F9.700  hi12{ST f31=1 ?7 res=080}
   w7    0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
@@ -40,11 +40,11 @@
   w21   00122F61C0   ?word   0x00122F61C0   ; 012.2.F6.1C0  hi12{ST f31=1}
   w22   002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}
   w23   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
-  w24   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w24   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w25   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = op0x61[1] (role coeff, INFERRED)
-  w26   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w26   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w27   009220A700   ?word   0x009220A700   ; 092.2.0A.700  hi12{ST f31=1 ?7 res=080}
   w28   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)

@@ -50,14 +50,19 @@ operand is now pinned as an all-pass/comb section coefficient.
 `FLANGER` (4, medium), `PHASER` (5, medium), `VIBRATO` (50, high),
 `MIX UP` (56, medium). All build on the LFO phase accumulator
 (`092.A.00.200` += increment `f/44100` in Q0.23, wrap on `0x7FFFFF`) driving a
-table lookup and a swept delay tap. The flanger/phaser add all-pass chains (the
-`104.2.00.000` markers bracket the chain rather than counting it, so the **stage
-count is not decoded**). `VIBRATO` is wet-only (no dry path).
+table lookup and a swept delay tap. The flanger/phaser add all-pass chains. In
+the *reverb* the word `104.2.00.000` is slot 1 of the 6-word all-pass core (one
+per stage, so it does count stages there); in the phaser its position differs and
+the **stage count is still not decoded**. MEASURED: all 8 non-reverb occurrences
+of `104.2.00.000` sit immediately after a class-A multiply-and-store
+(`../analysis/r1-allpass-motif.md` §7.2). `VIBRATO` is wet-only (no dry path).
 
 ## Delay
 
 `SINGLE DELAY` (9, high), `MULTI TAP DELAY` (10, high), `S.DELAY+S.DELAY`
-(65, high). External-DRAM taps via the `880` bracket, mix + feedback coefficients
+(65, high). External-DRAM taps via `880.1.60` (**READ**) and `880.1.20`
+(**WRITE**) — the old "bracket OPEN/CLOSE" reading is withdrawn, the direction is
+FORCED (`../analysis/r1-allpass-motif.md` §5) — plus mix + feedback coefficients
 (0.5 mix, 0.15/0.3 feedback). `MULTI TAP DELAY` needs a **−3 cursor rewind**
 between two words that only two candidates sit between — the best-posed small open
 question in the corpus (effect-map §5.1).
@@ -70,11 +75,15 @@ for the ring modulator) multiplies the signal; the pan version is out-of-phase L
 ## Filter / dynamics
 
 `ENHANCER` (3, medium), `AUTO WAH` (52, medium), `COMPRESSOR` (36, medium),
-`NO OPERATION` (0, medium). These carry the envelope detector (`hi12=0xC40`, the
-2/π scale and one-pole smoothers) and, for the wah, a swept resonator. **`NO
-OPERATION` is not empty**: it is a dry pass-through that still runs a level
-detector (most plausibly effect-level metering or a de-click ramp) — which is why
-it trips the `env`/`dram` structural controls. The compressor computes gain
+`NO OPERATION` (0, medium). These carry a level detector — evidenced by the
+**2/π scale constant and the one-pole smoother coefficients**, and for the wah a
+swept resonator. ⚠ **Correction:** this used to cite `hi12 = 0xC40` as *the*
+envelope detector. That reading is **WITHDRAWN** — `C40`/`C41` is a 13-bit
+immediate load and the label was wrong on all 61 sites
+(`../analysis/k5-output-stage.md` §2.3). The detector claim survives on the
+coefficient evidence alone, which is where it always actually rested. **`NO
+OPERATION` is not empty**: it is a dry pass-through that still runs that level
+detector (most plausibly effect-level metering or a de-click ramp). The compressor computes gain
 **arithmetically**: there is **no comparator opcode** in the corpus (the bodies
 are branchless), so THRESHOLD/RATIO enter as coefficients, not as a compare.
 

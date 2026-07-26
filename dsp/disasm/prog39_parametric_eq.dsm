@@ -13,7 +13,7 @@
 
   w0    000020B1CD   ?word   0x000020B1CD   ; 000.2.0B.1CD  hi12{-}
   w1    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w2    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w2    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w3    002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
   w4    0000240407   ?word   0x0000240407   ; 000.2.40.407  hi12{-}
 Band0_Section:

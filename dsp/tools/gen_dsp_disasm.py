@@ -73,12 +73,12 @@ META = {
     9:  ("delay",      "high",   "single delay: 0.5 mix, 0.15/0.3 feedback"),
     10: ("delay",      "high",   "multi-tap delay: panning taps (partial-cursor-rewind idiom, effect-map 5.1)"),
     15: ("rotary",     "high",   "rock rotary / rotary speaker (shared with algo 53)"),
-    16: ("reverb",     "SOLVED", "reverb tank: two ladders of 5 all-pass diffusers + damping (decoded to the bit); the ONLY unit-1 image, shared by the 12 reverb presets algos 16-27"),
+    16: ("reverb",     "SOLVED", "reverb tank: all-pass diffuser ladders of 5 and 4 stages + damping (algorithm decoded to the bit; the per-word roles of the 6-word core are narrowed to two surviving assignments); the ONLY unit-1 image, shared by the 12 reverb presets algos 16-27"),
     32: ("distortion", "high",   "distortion: AGC waveshaper, curve A"),
     33: ("distortion", "high",   "overdrive: waveshaper + smoother + 4kHz Butterworth tone"),
     34: ("distortion", "high",   "fuzz: rail-clip waveshaper"),
     35: ("exciter",    "high",   "harmonic exciter: LUT -> band-pass -> +dry"),
-    36: ("dynamics",   "medium", "compressor: envelope detector (C40) + gain-computer (THRESHOLD/RATIO)"),
+    36: ("dynamics",   "medium", "compressor: level detector + gain-computer (THRESHOLD/RATIO).  NOTE: the old 'hi12=0xC40 = envelope detector' reading is WITHDRAWN -- C40/C41 is a 13-bit immediate load (analysis/k5-output-stage.md); the detector is here on other grounds"),
     39: ("eq",         "SOLVED", "parametric EQ: 5 bands x 2 channels, Direct-Form-I bilinear biquad (decoded to the bit); the reference program"),
     48: ("am",         "high",   "auto pan: quadrature LFO amplitude panner"),
     50: ("modulation", "high",   "vibrato: wet-only modulated delay"),
@@ -237,11 +237,17 @@ PROVENANCE = [
 
 
 def emit_listing(path, title_lines, words, cur_base, sym_labels, sym_comments,
-                 coeff_notes, first=0, show_cram=True):
-    """`first` = I-RAM word number of words[0] (the epilogue starts at 60).
+                 coeff_notes, first=0, show_cram=True, iram_base=None):
+    """`first` = word number printed for words[0] (the epilogue starts at 60;
+    body listings index from 0 even though they load at I-RAM 84 / 200, because
+    every write-up refers to their words that way).
+    `iram_base` = the REAL I-RAM address of words[0], used only for the C00
+    self-address check; defaults to `first`.
     `show_cram` = print the absolute C-RAM cursor address on class-A words; OFF
     for a listing that does not start at a cursor reset, where the count would
     be a fiction."""
+    if iram_base is None:
+        iram_base = first
     lines = list(PROVENANCE)
     lines += title_lines
     lines.append(";")
@@ -253,7 +259,8 @@ def emit_listing(path, title_lines, words, cur_base, sym_labels, sym_comments,
         # optional label line (sym), repo style
         if i in sym_labels:
             lines.append("%s:" % sym_labels[i])
-        body = "  w%-3d  %010X   %s" % (first + i, w & D.WORD_MASK, D.text(w))
+        body = "  w%-3d  %010X   %s" % (first + i, w & D.WORD_MASK,
+                                        D.text(w, iram_base + i))
         lines.append(body)
         # absolute C-RAM address for class-A words, with the unit base applied
         if show_cram and curs[i] is not None:
@@ -346,7 +353,7 @@ def main():
                 (fam, conf, len(words), na, named),
              "; role: %s" % role,
              "; coefficient cursor base 0x%02X" % base],
-            words, base, sl, sc, cnotes)
+            words, base, sl, sc, cnotes, iram_base=la)
         rows.append((rep, nm, unit, la, len(words), na, named, len(slots), fam, conf, role, fn))
 
     # ---- programs.tsv ----

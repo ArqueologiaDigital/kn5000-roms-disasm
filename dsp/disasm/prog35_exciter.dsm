@@ -14,7 +14,7 @@
   w0    08801308BC   ?word   0x08801308BC   ; 880.1.30.8BC  hi12{ESC ?7 res=080}  [framing word, carries no DRAM information (MEASURED)]
   w1    000020B1CD   ?word   0x000020B1CD   ; 000.2.0B.1CD  hi12{-}
   w2    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w3    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w3    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w4    002A201407   ?word   0x002A201407   ; 02A.2.01.407  hi12{f31=5 ?5 res=020}
   w5    000023F407   ?word   0x000023F407   ; 000.2.3F.407  hi12{-}
   w6    0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
@@ -69,7 +69,7 @@
   w35   00002F7000   ?word   0x00002F7000   ; 000.2.F7.000  hi12{-}
   w36   000020A1CD   ?word   0x000020A1CD   ; 000.2.0A.1CD  hi12{-}
   w37   00002021CE   ?word   0x00002021CE   ; 000.2.02.1CE  hi12{-}
-  w38   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc (nothing asked of lo12)]
+  w38   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w39   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
   w40   0000243407   ?word   0x0000243407   ; 000.2.43.407  hi12{-}
   w41   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}
