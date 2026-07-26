@@ -663,7 +663,6 @@ internally inconsistent.)*
 | "**`hi12` bit 4 CLEARS the accumulator** … the only one of nine relaxations that moves the count at all" | `action-field.md` §7, §10 OPEN | **DEMOTED.** It moves the *DR-route* count (0 → 8 400, reproduced here under the adder) and moves the numeric count not at all; and in the STRICT ISA it cannot be the cause even in principle, because slot 2's `acc ← P` wipes the accumulator first |
 | "the accumulator CLEAR there is still the single highest-value open question in the ALU" | `acc-adder.md` §8, last bullet | **FALSIFIED for this problem.** `ACTION 0x00`'s accumulator half is |
 | "P-9 … the accumulator CLEAR is the assumption that blocks it — **HIT, and cleanly**" | `action-field.md` §12 | **RETRACTED.** It was a hit against a question that had been asked too narrowly; asked route-agnostically, the clear is not the blocker |
-| "SINGLE DELAY … **5 145** assignments reproduce `v[n] = x[n] + fb·v[n−D]` exactly" and the marginals derived from them | `action-field.md` §6; `acc-adder.md` §4 | see §8 — the harness was executing that block's slot 1 with the wrong `hi12[3:1]` |
 | "the two trailing nops are INERT / the ACTION acts BEFORE `hi12[3:1]` / … change nothing at all" (price rows 1, 3–9) | `action-field.md` §7 | **not retested here**; the rows that were retested under the adder (0, 2) reproduce exactly |
 
 ---
