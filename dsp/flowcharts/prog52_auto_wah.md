@@ -7,7 +7,7 @@ Image rep **algo 52** &middot; slots 52 &middot; **unit 0** (I-RAM load 84) &mid
 
 > auto wah: envelope-swept resonator
 
-**72 words**, 13 class-A coefficient multiplies (6 named), 41 instructions still opaque. Landmarks detected: 1 C-format immediate load(s), 2 class-8 post-sum step(s).
+**72 words**, 13 class-A coefficient multiplies (6 named), 30 instructions still opaque. Landmarks detected: 1 C-format immediate load(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -16,7 +16,7 @@ flowchart TD
     N0 --> N1
     N2["nearby controls: RESONANCE, MANUAL, SWEEP RANGE"]
     N1 -.-> N2
-    N3["Undecoded core<br/>41 of 72 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N3["Undecoded core<br/>30 of 72 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N1 --> N3
     N4["VOLUME<br/>output level"]
     N3 --> N4

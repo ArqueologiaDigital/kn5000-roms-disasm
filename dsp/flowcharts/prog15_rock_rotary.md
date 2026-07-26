@@ -7,7 +7,7 @@ Image rep **algo 15** &middot; slots 15,53 &middot; **unit 0** (I-RAM load 84) &
 
 > rock rotary / rotary speaker (shared with algo 53)
 
-**86 words**, 33 class-A coefficient multiplies (6 named), 23 instructions still opaque. Landmarks detected: 1 biquad DF-I section(s), 5 C-format immediate load(s), 1 DRAM read/write word(s), 1 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**86 words**, 33 class-A coefficient multiplies (6 named), 15 instructions still opaque. Landmarks detected: 1 biquad DF-I section(s), 5 C-format immediate load(s), 1 DRAM read/write word(s), 1 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -18,7 +18,7 @@ flowchart TD
     N1 --> N2
     N3["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;5"]
     N2 --> N3
-    N4["Undecoded core<br/>23 of 86 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N4["Undecoded core<br/>15 of 86 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N3 --> N4
     N5["VOLUME<br/>output level"]
     N4 --> N5

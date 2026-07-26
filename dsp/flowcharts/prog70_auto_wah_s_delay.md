@@ -7,7 +7,7 @@ Image rep **algo 70** &middot; slots 70 &middot; **unit 0** (I-RAM load 84) &mid
 
 > auto wah + single delay
 
-**105 words**, 21 class-A coefficient multiplies (13 named), 56 instructions still opaque. Landmarks detected: 1 C-format immediate load(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
+**105 words**, 21 class-A coefficient multiplies (13 named), 35 instructions still opaque. Landmarks detected: 1 C-format immediate load(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -18,7 +18,7 @@ flowchart TD
     N1 -.-> N2
     N3["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;1"]
     N1 --> N3
-    N4["Undecoded core<br/>56 of 105 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N4["Undecoded core<br/>35 of 105 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N3 --> N4
     N5["VOLUME<br/>output level"]
     N4 --> N5

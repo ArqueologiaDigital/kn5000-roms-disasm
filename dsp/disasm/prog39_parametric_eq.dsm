@@ -15,122 +15,122 @@
   w1    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w2    0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w3    002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
-  w4    0000240407   ?word   0x0000240407   ; 000.2.40.407  hi12{-}
+  w4    0000240407   ld.st   acc,(p)+64
 Band0_Section:
-  w5    0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w5    0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = biquad b1 (role EQ, PROVEN)
         ; P = b1*S0 ; latch A <- S0
-  w6    0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w6    0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = biquad b0 (role EQ, PROVEN)
         ; S0 <- x ; acc = P ; P = b0*x
-  w7    0202A011D5   mac     (p)+1
+  w7    0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x02] = biquad b2 (role EQ, PROVEN)
         ; acc += P ; P = b2*S1
-  w8    0202A011D4   mac.lb  (p)+1
+  w8    0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = biquad -a1 (role EQ, PROVEN)
         ; acc += P ; P = -a1*S2 ; latch B <- S2
-  w9    0202A001D5   mac     (p)+0
+  w9    0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x04] = biquad -a2 (role EQ, PROVEN)
         ; acc += P ; P = -a2*S3
-  w10   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
+  w10   01022FF687   mac.st  tb,(p)-1
         ; acc += P ; S3 <- latch B (class-2 store)
-  w11   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
+  w11   0804816415   post    acc,c
         ; class-8 post-sum step -- OPERATION UNKNOWN
-  w12   0212AFF407   mulst   (p)-1
+  w12   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = biquad makeup (role EQ, PROVEN)
         ; S2 <- acc ; P = makeup*acc
-  w13   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
+  w13   0000203647   ld.st   ta,(p)+3
         ; acc <- P ; S1 <- latch A (class-2 store)
-  w14   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w14   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = biquad b1 (role EQ, PROVEN)
-  w15   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w15   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x07] = biquad b0 (role EQ, PROVEN)
-  w16   0202A011D5   mac     (p)+1
+  w16   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = biquad b2 (role EQ, PROVEN)
-  w17   0202A011D4   mac.lb  (p)+1
+  w17   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x09] = biquad -a1 (role EQ, PROVEN)
-  w18   0202A001D5   mac     (p)+0
+  w18   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = biquad -a2 (role EQ, PROVEN)
-  w19   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w20   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w21   0212AFF407   mulst   (p)-1
+  w19   01022FF687   mac.st  tb,(p)-1
+  w20   0804816415   post    acc,c
+  w21   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = biquad makeup (role EQ, PROVEN)
-  w22   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w23   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w22   0000203647   ld.st   ta,(p)+3
+  w23   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = biquad b1 (role EQ, PROVEN)
-  w24   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w24   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = biquad b0 (role EQ, PROVEN)
-  w25   0202A011D5   mac     (p)+1
+  w25   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = biquad b2 (role EQ, PROVEN)
-  w26   0202A011D4   mac.lb  (p)+1
+  w26   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = biquad -a1 (role EQ, PROVEN)
-  w27   0202A001D5   mac     (p)+0
+  w27   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = biquad -a2 (role EQ, PROVEN)
-  w28   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w29   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w30   0212AFF407   mulst   (p)-1
+  w28   01022FF687   mac.st  tb,(p)-1
+  w29   0804816415   post    acc,c
+  w30   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x11] = biquad makeup (role EQ, PROVEN)
-  w31   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w32   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w31   0000203647   ld.st   ta,(p)+3
+  w32   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = biquad b1 (role EQ, PROVEN)
-  w33   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w33   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = biquad b0 (role EQ, PROVEN)
-  w34   0202A011D5   mac     (p)+1
+  w34   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x14] = biquad b2 (role EQ, PROVEN)
-  w35   0202A011D4   mac.lb  (p)+1
+  w35   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x15] = biquad -a1 (role EQ, PROVEN)
-  w36   0202A001D5   mac     (p)+0
+  w36   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x16] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x16] = biquad -a2 (role EQ, PROVEN)
-  w37   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w38   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w39   0212AFF407   mulst   (p)-1
+  w37   01022FF687   mac.st  tb,(p)-1
+  w38   0804816415   post    acc,c
+  w39   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x17] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x17] = biquad makeup (role EQ, PROVEN)
-  w40   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w41   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w40   0000203647   ld.st   ta,(p)+3
+  w41   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x18] = biquad b1 (role EQ, PROVEN)
-  w42   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w42   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x19] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x19] = biquad b0 (role EQ, PROVEN)
-  w43   0202A011D5   mac     (p)+1
+  w43   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = biquad b2 (role EQ, PROVEN)
-  w44   0202A011D4   mac.lb  (p)+1
+  w44   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1B] = biquad -a1 (role EQ, PROVEN)
-  w45   0202A001D5   mac     (p)+0
+  w45   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x1C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1C] = biquad -a2 (role EQ, PROVEN)
-  w46   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w47   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w48   0212AFF407   mulst   (p)-1
+  w46   01022FF687   mac.st  tb,(p)-1
+  w47   0804816415   post    acc,c
+  w48   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x1D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1D] = biquad makeup (role EQ, PROVEN)
-  w49   00002AD647   ?word   0x00002AD647   ; 000.2.AD.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
+  w49   00002AD647   ld.st   ta,(p)-83
   w50   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}
   w51   0880130407   ?word   0x0880130407   ; 880.1.30.407  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
   w52   00002F7000   ?word   0x00002F7000   ; 000.2.F7.000  hi12{-}
@@ -138,110 +138,110 @@ Band0_Section:
   w54   00002FF1CE   ?word   0x00002FF1CE   ; 000.2.FF.1CE  hi12{-}
   w55   0212202000   ?word   0x0212202000   ; 212.2.02.000  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w56   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
-  w57   0000254407   ?word   0x0000254407   ; 000.2.54.407  hi12{-}
+  w57   0000254407   ld.st   acc,(p)+84
   w58   0801000021   rstcur
-  w59   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w59   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = biquad b1 (role EQ, PROVEN)
-  w60   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w60   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = biquad b0 (role EQ, PROVEN)
-  w61   0202A011D5   mac     (p)+1
+  w61   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x02] = biquad b2 (role EQ, PROVEN)
-  w62   0202A011D4   mac.lb  (p)+1
+  w62   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = biquad -a1 (role EQ, PROVEN)
-  w63   0202A001D5   mac     (p)+0
+  w63   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x04] = biquad -a2 (role EQ, PROVEN)
-  w64   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w65   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w66   0212AFF407   mulst   (p)-1
+  w64   01022FF687   mac.st  tb,(p)-1
+  w65   0804816415   post    acc,c
+  w66   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = biquad makeup (role EQ, PROVEN)
-  w67   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w68   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w67   0000203647   ld.st   ta,(p)+3
+  w68   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = biquad b1 (role EQ, PROVEN)
-  w69   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w69   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x07] = biquad b0 (role EQ, PROVEN)
-  w70   0202A011D5   mac     (p)+1
+  w70   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = biquad b2 (role EQ, PROVEN)
-  w71   0202A011D4   mac.lb  (p)+1
+  w71   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x09] = biquad -a1 (role EQ, PROVEN)
-  w72   0202A001D5   mac     (p)+0
+  w72   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = biquad -a2 (role EQ, PROVEN)
-  w73   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w74   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w75   0212AFF407   mulst   (p)-1
+  w73   01022FF687   mac.st  tb,(p)-1
+  w74   0804816415   post    acc,c
+  w75   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = biquad makeup (role EQ, PROVEN)
-  w76   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w77   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w76   0000203647   ld.st   ta,(p)+3
+  w77   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = biquad b1 (role EQ, PROVEN)
-  w78   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w78   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = biquad b0 (role EQ, PROVEN)
-  w79   0202A011D5   mac     (p)+1
+  w79   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = biquad b2 (role EQ, PROVEN)
-  w80   0202A011D4   mac.lb  (p)+1
+  w80   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = biquad -a1 (role EQ, PROVEN)
-  w81   0202A001D5   mac     (p)+0
+  w81   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = biquad -a2 (role EQ, PROVEN)
-  w82   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w83   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w84   0212AFF407   mulst   (p)-1
+  w82   01022FF687   mac.st  tb,(p)-1
+  w83   0804816415   post    acc,c
+  w84   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x11] = biquad makeup (role EQ, PROVEN)
-  w85   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w86   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w85   0000203647   ld.st   ta,(p)+3
+  w86   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = biquad b1 (role EQ, PROVEN)
-  w87   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w87   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = biquad b0 (role EQ, PROVEN)
-  w88   0202A011D5   mac     (p)+1
+  w88   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x14] = biquad b2 (role EQ, PROVEN)
-  w89   0202A011D4   mac.lb  (p)+1
+  w89   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x15] = biquad -a1 (role EQ, PROVEN)
-  w90   0202A001D5   mac     (p)+0
+  w90   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x16] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x16] = biquad -a2 (role EQ, PROVEN)
-  w91   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w92   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w93   0212AFF407   mulst   (p)-1
+  w91   01022FF687   mac.st  tb,(p)-1
+  w92   0804816415   post    acc,c
+  w93   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x17] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x17] = biquad makeup (role EQ, PROVEN)
-  w94   0000203647   ?word   0x0000203647   ; 000.2.03.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w95   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w94   0000203647   ld.st   ta,(p)+3
+  w95   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x18] = biquad b1 (role EQ, PROVEN)
-  w96   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w96   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x19] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x19] = biquad b0 (role EQ, PROVEN)
-  w97   0202A011D5   mac     (p)+1
+  w97   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = biquad b2 (role EQ, PROVEN)
-  w98   0202A011D4   mac.lb  (p)+1
+  w98   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1B] = biquad -a1 (role EQ, PROVEN)
-  w99   0202A001D5   mac     (p)+0
+  w99   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x1C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1C] = biquad -a2 (role EQ, PROVEN)
-  w100  01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w101  0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w102  0212AFF407   mulst   (p)-1
+  w100  01022FF687   mac.st  tb,(p)-1
+  w101  0804816415   post    acc,c
+  w102  0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x1D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1D] = biquad makeup (role EQ, PROVEN)
   w103  0880130647   ?word   0x0880130647   ; 880.1.30.647  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]

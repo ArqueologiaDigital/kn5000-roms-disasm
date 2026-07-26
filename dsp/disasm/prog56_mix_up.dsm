@@ -18,19 +18,19 @@
   w4    0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w5    00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w6    0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)]
+  w6    0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
   w7    0000201447   ?word   0x0000201447   ; 000.2.01.447  hi12{-}
   w8    0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w9    00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w10   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)]
+  w10   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w11   0000201447   ?word   0x0000201447   ; 000.2.01.447  hi12{-}
   w12   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
   w13   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w14   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)]
+  w14   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
   w15   0000208447   ?word   0x0000208447   ; 000.2.08.447  hi12{-}
   w16   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
@@ -43,17 +43,17 @@
   w22   0102AB64C8   ?word   0x0102AB64C8   ; 102.A.B6.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
   w23   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w24   0000A071D5   ?word   0x0000A071D5   ; 000.A.07.1D5  hi12{-} cur+
+  w24   0000A071D5   ld      (p),c+,(p)+7
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
-  w25   0182200407   ?word   0x0182200407   ; 182.2.00.407  hi12{f98=1 f31=1 ?7 res=080}
+  w25   0182200407   mac.st  acc,(p)+0
   w26   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
   w27   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w28   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w29   01042FA1CE   ?word   0x01042FA1CE   ; 104.2.FA.1CE  hi12{f98=1 f31=2}
   w30   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w31   0102A081D5   ?word   0x0102A081D5   ; 102.A.08.1D5  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w31   0102A081D5   mac     (p),c+,(p)+8
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
-  w32   0182200407   ?word   0x0182200407   ; 182.2.00.407  hi12{f98=1 f31=1 ?7 res=080}
+  w32   0182200407   mac.st  acc,(p)+0
   w33   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
   w34   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w35   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
@@ -61,13 +61,13 @@
   w37   01022011CD   ?word   0x01022011CD   ; 102.2.01.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w38   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w39   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w40   0000AF8415   ?word   0x0000AF8415   ; 000.A.F8.415  hi12{-} cur+
+  w40   0000AF8415   ld      acc,c+,(p)-8
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = op0x66[0] (role mix/tap, INFERRED)
   w41   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w42   0212A081D5   ?word   0x0212A081D5   ; 212.A.08.1D5  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w42   0212A081D5   mac     (p),c+,(p)+8 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
-  w43   0182200407   ?word   0x0182200407   ; 182.2.00.407  hi12{f98=1 f31=1 ?7 res=080}
+  w43   0182200407   mac.st  acc,(p)+0
   w44   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
   w45   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w46   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
@@ -75,12 +75,12 @@
   w48   01022021CD   ?word   0x01022021CD   ; 102.2.02.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w49   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w50   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w51   0000AF3415   ?word   0x0000AF3415   ; 000.A.F3.415  hi12{-} cur+
+  w51   0000AF3415   ld      acc,c+,(p)-13
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x66[1] (role mix/tap, INFERRED)
   w52   021220A1CD   ?word   0x021220A1CD   ; 212.2.0A.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w53   00002031CE   ?word   0x00002031CE   ; 000.2.03.1CE  hi12{-}
-  w54   0212200407   ?word   0x0212200407   ; 212.2.00.407  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w54   0212200407   mac.st  acc,(p)+0 ; mem[p]<-acc, acc=0
   w55   09001601D5   ?word   0x09001601D5   ; 900.1.60.1D5  hi12{ESC f98=1}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
   w56   0192A40000   ?word   0x0192A40000   ; 192.A.40.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)

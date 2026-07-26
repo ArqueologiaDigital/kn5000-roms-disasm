@@ -7,7 +7,7 @@ Image rep **algo 8** &middot; slots 8 &middot; **unit 0** (I-RAM load 84) &middo
 
 > gated reverb: all-pass ring + hold gate
 
-**102 words**, 22 class-A coefficient multiplies (7 named), 22 instructions still opaque. Landmarks detected: 2 C-format immediate load(s), 10 DRAM read/write word(s), 6 all-pass marker(s).
+**102 words**, 22 class-A coefficient multiplies (7 named), 15 instructions still opaque. Landmarks detected: 2 C-format immediate load(s), 10 DRAM read/write word(s), 6 all-pass marker(s).
 
 ```mermaid
 flowchart TD
@@ -20,7 +20,7 @@ flowchart TD
     N1 --> N3
     N4["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;2"]
     N3 --> N4
-    N5["Undecoded core<br/>22 of 102 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N5["Undecoded core<br/>15 of 102 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N4 --> N5
     N6["VOLUME<br/>output level"]
     N5 --> N6

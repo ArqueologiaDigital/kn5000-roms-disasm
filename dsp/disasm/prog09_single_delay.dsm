@@ -14,85 +14,85 @@
   w0    088013000B   ?word   0x088013000B   ; 880.1.30.00B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
   w1    00002021CD   ?word   0x00002021CD   ; 000.2.02.1CD  hi12{-}
   w2    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
-  w3    0212A011D5   ?word   0x0212A011D5   ; 212.A.01.1D5  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w3    0212A011D5   mac     (p),c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = filter section cell 0 (role filter, INFERRED)
-  w4    0202A481D5   mac     (p)+72
+  w4    0202A481D5   mac     (p),c+,(p)+72
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = filter section cell 1 (role filter, INFERRED)
   w5    08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w6    0202AB8655   ?word   0x0202AB8655   ; 202.A.B8.655  hi12{f98=2 f31=1} cur+
+  w6    0202AB8655   mac     ta,c+,(p)-72
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x02] = filter section cell 2 (role filter, INFERRED)
         ; 202.A.**.655 = op0x73 filter-section coefficient (INFERRED, 19/20 corpus)
   w7    0000248000   ?word   0x0000248000   ; 000.2.48.000  hi12{-}
   w8    0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w9    088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w10   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
+  w10   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = damping filter tap 0 (role damping, PROVEN)
-  w11   0212A00415   ?word   0x0212A00415   ; 212.A.00.415  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w11   0212A00415   mac     acc,c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x04] = damping filter tap 1 (role damping, PROVEN)
-  w12   0202A001D5   mac     (p)+0
+  w12   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = damping filter tap 2 (role damping, PROVEN)
-  w13   0202200407   ?word   0x0202200407   ; 202.2.00.407  hi12{f98=2 f31=1}
+  w13   0202200407   mac.st  acc,(p)+0
   w14   0000201000   ?word   0x0000201000   ; 000.2.01.000  hi12{-}
-  w15   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
+  w15   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = damping filter tap 0 (role damping, PROVEN)
-  w16   0212A00415   ?word   0x0212A00415   ; 212.A.00.415  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w16   0212A00415   mac     acc,c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x07] = damping filter tap 1 (role damping, PROVEN)
-  w17   0202A001D5   mac     (p)+0
+  w17   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = damping filter tap 2 (role damping, PROVEN)
-  w18   0202200407   ?word   0x0202200407   ; 202.2.00.407  hi12{f98=2 f31=1}
+  w18   0202200407   mac.st  acc,(p)+0
   w19   00002B6000   ?word   0x00002B6000   ; 000.2.B6.000  hi12{-}
-  w20   00002FE407   ?word   0x00002FE407   ; 000.2.FE.407  hi12{-}
+  w20   00002FE407   ld.st   acc,(p)-2
   w21   00002091CD   ?word   0x00002091CD   ; 000.2.09.1CD  hi12{-}
   w22   00002F740E   ?word   0x00002F740E   ; 000.2.F7.40E  hi12{-}
   w23   021220A1CD   ?word   0x021220A1CD   ; 212.2.0A.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w24   00002FF1CE   ?word   0x00002FF1CE   ; 000.2.FF.1CE  hi12{-}
-  w25   02122FA407   ?word   0x02122FA407   ; 212.2.FA.407  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w26   0000AFF1D5   ?word   0x0000AFF1D5   ; 000.A.FF.1D5  hi12{-} cur+
+  w25   02122FA407   mac.st  acc,(p)-6 ; mem[p]<-acc, acc=0
+  w26   0000AFF1D5   ld      (p),c+,(p)-1
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x09] = filter section cell 0 (role filter, INFERRED)
-  w27   0202A4B1D5   mac     (p)+75
+  w27   0202A4B1D5   mac     (p),c+,(p)+75
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = filter section cell 1 (role filter, INFERRED)
   w28   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w29   0202AB5655   ?word   0x0202AB5655   ; 202.A.B5.655  hi12{f98=2 f31=1} cur+
+  w29   0202AB5655   mac     ta,c+,(p)-75
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = filter section cell 2 (role filter, INFERRED)
         ; 202.A.**.655 = op0x73 filter-section coefficient (INFERRED, 19/20 corpus)
   w30   000024B000   ?word   0x000024B000   ; 000.2.4B.000  hi12{-}
   w31   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w32   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w33   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
+  w33   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = damping filter tap 0 (role damping, PROVEN)
-  w34   0212A00415   ?word   0x0212A00415   ; 212.A.00.415  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w34   0212A00415   mac     acc,c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = damping filter tap 1 (role damping, PROVEN)
-  w35   0202A001D5   mac     (p)+0
+  w35   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = damping filter tap 2 (role damping, PROVEN)
-  w36   0202200407   ?word   0x0202200407   ; 202.2.00.407  hi12{f98=2 f31=1}
+  w36   0202200407   mac.st  acc,(p)+0
   w37   0000201000   ?word   0x0000201000   ; 000.2.01.000  hi12{-}
-  w38   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
+  w38   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = damping filter tap 0 (role damping, PROVEN)
-  w39   0212A00415   ?word   0x0212A00415   ; 212.A.00.415  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w39   0212A00415   mac     acc,c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = damping filter tap 1 (role damping, PROVEN)
-  w40   0202A001D5   mac     (p)+0
+  w40   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x11] = damping filter tap 2 (role damping, PROVEN)
-  w41   0202200407   ?word   0x0202200407   ; 202.2.00.407  hi12{f98=2 f31=1}
+  w41   0202200407   mac.st  acc,(p)+0
   w42   00002B5000   ?word   0x00002B5000   ; 000.2.B5.000  hi12{-}
-  w43   00002FD407   ?word   0x00002FD407   ; 000.2.FD.407  hi12{-}
+  w43   00002FD407   ld.st   acc,(p)-3
   w44   00002FB1CD   ?word   0x00002FB1CD   ; 000.2.FB.1CD  hi12{-}
   w45   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w46   0880160000   ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]

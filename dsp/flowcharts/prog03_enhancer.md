@@ -7,7 +7,7 @@ Image rep **algo 3** &middot; slots 3 &middot; **unit 0** (I-RAM load 84) &middo
 
 > enhancer: phase/emphasis shaping
 
-**99 words**, 26 class-A coefficient multiplies (18 named), 39 instructions still opaque. Landmarks detected: 2 C-format immediate load(s), 1 DRAM read/write word(s), 4 all-pass marker(s).
+**99 words**, 26 class-A coefficient multiplies (18 named), 32 instructions still opaque. Landmarks detected: 2 C-format immediate load(s), 1 DRAM read/write word(s), 4 all-pass marker(s).
 
 ```mermaid
 flowchart TD
@@ -24,7 +24,7 @@ flowchart TD
     N3 --> N5
     N6["controls: DELAY L, DELAY R"]
     N5 -.-> N6
-    N7["Undecoded core<br/>39 of 99 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N7["Undecoded core<br/>32 of 99 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N5 --> N7
     N8["VOLUME<br/>output level"]
     N7 --> N8

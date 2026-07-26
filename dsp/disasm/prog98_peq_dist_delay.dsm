@@ -13,36 +13,36 @@
 
   w0    08801308BC   ?word   0x08801308BC   ; 880.1.30.8BC  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
   w1    002A24B00B   ?word   0x002A24B00B   ; 02A.2.4B.00B  hi12{f31=5 ?5 res=020}
-  w2    0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w2    0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = biquad b1 (role EQ, PROVEN)
-  w3    0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w3    0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = biquad b0 (role EQ, PROVEN)
-  w4    0202A011D5   mac     (p)+1
+  w4    0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x02] = biquad b2 (role EQ, PROVEN)
-  w5    0202A011D4   mac.lb  (p)+1
+  w5    0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = biquad -a1 (role EQ, PROVEN)
-  w6    0202A001D5   mac     (p)+0
+  w6    0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x04] = biquad -a2 (role EQ, PROVEN)
-  w7    01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w8    0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w9    0212AFF407   mulst   (p)-1
+  w7    01022FF687   mac.st  tb,(p)-1
+  w8    0804816415   post    acc,c
+  w9    0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = biquad makeup (role EQ, PROVEN)
-  w10   00002C1647   ?word   0x00002C1647   ; 000.2.C1.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
+  w10   00002C1647   ld.st   ta,(p)-63
   w11   002A200407   ?word   0x002A200407   ; 02A.2.00.407  hi12{f31=5 ?5 res=020}
-  w12   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
+  w12   0000200415   ld      acc,(p)+0
   w13   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w14   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w14   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = op0x61[0] (role coeff, INFERRED)
   w15   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w16   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w17   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w17   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
   w18   0182200000   ?word   0x0182200000   ; 182.2.00.000  hi12{f98=1 f31=1 ?7 res=080}
   w19   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
@@ -50,72 +50,72 @@
   w21   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w22   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}
   w23   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
-  w24   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w24   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = op0x62[0] (role output-level, INFERRED)
-  w25   02122001D5   ?word   0x02122001D5   ; 212.2.00.1D5  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w26   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
+  w25   02122001D5   mac     (p),(p)+0 ; mem[p]<-acc, acc=0
+  w26   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x09] = op0x66[0] (role mix/tap, INFERRED)
   w27   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}
   w28   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w29   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w30   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
-  w31   0000A011D5   ?word   0x0000A011D5   ; 000.A.01.1D5  hi12{-} cur+
+  w30   0000201407   ld.st   acc,(p)+1
+  w31   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = filter section cell 0 (role filter, INFERRED)
-  w32   0202AFF1D5   mac     (p)-1
+  w32   0202AFF1D5   mac     (p),c+,(p)-1
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = filter section cell 1 (role filter, INFERRED)
   w33   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w34   0202A01655   ?word   0x0202A01655   ; 202.A.01.655  hi12{f98=2 f31=1} cur+
+  w34   0202A01655   mac     ta,c+,(p)+1
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = filter section cell 2 (role filter, INFERRED)
   w35   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}
   w36   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w37   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w38   00002FF407   ?word   0x00002FF407   ; 000.2.FF.407  hi12{-}
-  w39   00002001D5   ?word   0x00002001D5   ; 000.2.00.1D5  hi12{-}
-  w40   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
+  w38   00002FF407   ld.st   acc,(p)-1
+  w39   00002001D5   ld      (p),(p)+0
+  w40   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = op0x66[1] (role mix/tap, INFERRED)
   w41   02042091CD   ?word   0x02042091CD   ; 204.2.09.1CD  hi12{f98=2 f31=2}
   w42   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w43   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w44   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}
-  w45   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
+  w45   0000201407   ld.st   acc,(p)+1
   w46   00122451C0   ?word   0x00122451C0   ; 012.2.45.1C0  hi12{ST f31=1}
   w47   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
-  w48   0000A001D3   ?word   0x0000A001D3   ; 000.A.00.1D3  hi12{-} cur+  [read into carry latch A (INFERRED)]
+  w48   0000A001D3   ld.ta   (p),c+,(p)+0
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = biquad b1 (role EQ, PROVEN)
-  w49   0212A01412   ?word   0x0212A01412   ; 212.A.01.412  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w49   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = biquad b0 (role EQ, PROVEN)
-  w50   0202A011D5   mac     (p)+1
+  w50   0202A011D5   mac     (p),c+,(p)+1
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = biquad b2 (role EQ, PROVEN)
-  w51   0202A011D4   mac.lb  (p)+1
+  w51   0202A011D4   mac.tb  (p),c+,(p)+1
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x11] = biquad -a1 (role EQ, PROVEN)
-  w52   0202A001D5   mac     (p)+0
+  w52   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = biquad -a2 (role EQ, PROVEN)
-  w53   01022FF687   ?word   0x01022FF687   ; 102.2.FF.687  hi12{f98=1 f31=1}  [P-consumer, stores latch B (INFERRED)]
-  w54   0804816415   ?word   0x0804816415   ; 804.8.16.415  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w55   0212AFF407   mulst   (p)-1
+  w53   01022FF687   mac.st  tb,(p)-1
+  w54   0804816415   post    acc,c
+  w55   0212AFF407   mac.st  acc,c+,(p)-1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = biquad makeup (role EQ, PROVEN)
-  w56   00002BD647   ?word   0x00002BD647   ; 000.2.BD.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
+  w56   00002BD647   ld.st   ta,(p)-67
   w57   002A200407   ?word   0x002A200407   ; 02A.2.00.407  hi12{f31=5 ?5 res=020}
-  w58   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
+  w58   0000200415   ld      acc,(p)+0
   w59   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w60   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w60   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x14] = op0x61[1] (role coeff, INFERRED)
   w61   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w62   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w63   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w63   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
   w64   0182200000   ?word   0x0182200000   ; 182.2.00.000  hi12{f98=1 f31=1 ?7 res=080}
   w65   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
@@ -123,32 +123,32 @@
   w67   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w68   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}
   w69   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
-  w70   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w70   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x16] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x16] = op0x62[1] (role output-level, INFERRED)
-  w71   02122001D5   ?word   0x02122001D5   ; 212.2.00.1D5  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w72   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
+  w71   02122001D5   mac     (p),(p)+0 ; mem[p]<-acc, acc=0
+  w72   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x17] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x17] = op0x66[2] (role mix/tap, INFERRED)
   w73   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}
   w74   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w75   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w76   0000201407   ?word   0x0000201407   ; 000.2.01.407  hi12{-}
-  w77   0000A011D5   ?word   0x0000A011D5   ; 000.A.01.1D5  hi12{-} cur+
+  w76   0000201407   ld.st   acc,(p)+1
+  w77   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
-  w78   0202A001D5   mac     (p)+0
+  w78   0202A001D5   mac     (p),c+,(p)+0
         ; C-RAM[0x19] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x19] = filter section cell 0 (role filter, INFERRED)
   w79   08801602D9   ?word   0x08801602D9   ; 880.1.60.2D9  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w80   0202A00655   ?word   0x0202A00655   ; 202.A.00.655  hi12{f98=2 f31=1} cur+
+  w80   0202A00655   mac     ta,c+,(p)+0
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = filter section cell 1 (role filter, INFERRED)
   w81   0000200000   nop
   w82   0212200419   ?word   0x0212200419   ; 212.2.00.419  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w83   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)]
-  w84   00002FE407   ?word   0x00002FE407   ; 000.2.FE.407  hi12{-}
-  w85   00002001D5   ?word   0x00002001D5   ; 000.2.00.1D5  hi12{-}
-  w86   0202AF3415   ?word   0x0202AF3415   ; 202.A.F3.415  hi12{f98=2 f31=1} cur+
+  w84   00002FE407   ld.st   acc,(p)-2
+  w85   00002001D5   ld      (p),(p)+0
+  w86   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1B] = op0x66[3] (role mix/tap, INFERRED)
   w87   02042FB1CD   ?word   0x02042FB1CD   ; 204.2.FB.1CD  hi12{f98=2 f31=2}

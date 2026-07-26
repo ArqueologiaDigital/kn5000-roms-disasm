@@ -7,7 +7,7 @@ Image rep **algo 16** &middot; slots 16,17,18,19,20,21,22,23,24,25,26,27 &middot
 
 > reverb tank: all-pass diffuser ladders of 5 and 4 stages + damping (algorithm decoded to the bit; the per-word roles of the 6-word core are narrowed to two surviving assignments); the ONLY unit-1 image, shared by the 12 reverb presets algos 16-27
 
-**133 words**, 33 class-A coefficient multiplies (33 named), 17 instructions still opaque. Landmarks detected: 4 C-format immediate load(s), 13 DRAM read/write word(s), 9 all-pass marker(s).
+**133 words**, 33 class-A coefficient multiplies (33 named), 7 instructions still opaque. Landmarks detected: 4 C-format immediate load(s), 13 DRAM read/write word(s), 9 all-pass marker(s).
 
 ```mermaid
 flowchart TD
@@ -34,7 +34,7 @@ flowchart TD
     N9 --> N10
     N11["controls: HIGH DAMP GAIN, ER.LEVEL, VOLUME"]
     N10 -.-> N11
-    N12["Undecoded core<br/>17 of 133 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N12["Undecoded core<br/>7 of 133 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N10 --> N12
     N13["Output (the only unit-1 image; shared by all 12 reverb presets)"]
     N12 --> N13

@@ -7,14 +7,14 @@ Image rep **algo 0** &middot; slots 0,7,11,12,13,14,28,29,30,31,37,38,40,41,42,4
 
 > dry pass-through that still runs a level detector (2/pi env, one-pole smoothers); shared by 42 effect slots
 
-**49 words**, 8 class-A coefficient multiplies (0 named), 26 instructions still opaque. Landmarks detected: 1 biquad DF-I section(s), 2 C-format immediate load(s), 3 DRAM read/write word(s).
+**49 words**, 8 class-A coefficient multiplies (0 named), 22 instructions still opaque. Landmarks detected: 1 biquad DF-I section(s), 2 C-format immediate load(s), 3 DRAM read/write word(s).
 
 ```mermaid
 flowchart TD
     N0["Stereo input (L / R)"]
     N1["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;2"]
     N0 --> N1
-    N2["Undecoded core<br/>26 of 49 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N2["Undecoded core<br/>22 of 49 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N1 --> N2
     N3["Output (RETURN to kernel epilogue)"]
     N2 --> N3

@@ -7,7 +7,7 @@ Image rep **algo 96** &middot; slots 96 &middot; **unit 0** (I-RAM load 84) &mid
 
 > PEQ + compressor + distortion
 
-**90 words**, 30 class-A coefficient multiplies (16 named), 31 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**90 words**, 30 class-A coefficient multiplies (16 named), 28 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -22,7 +22,7 @@ flowchart TD
     N3 -.-> N4
     N5["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;4"]
     N3 --> N5
-    N6["Undecoded core<br/>31 of 90 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N6["Undecoded core<br/>28 of 90 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N5 --> N6
     N7["VOLUME<br/>output level"]
     N6 --> N7

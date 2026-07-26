@@ -45,11 +45,11 @@ Unit1Vector:
         ; class 8 post-sum step, operation UNKNOWN; addr8 0x0F equals the unit-1 tag
   w76   0C00984000   ?word   0x0C00984000   ; C00.9.84.000  {C-fmt A=76 B=4}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED): A=76 = its own I-RAM address, B=4 = the event; both C00 words in the machine encode their own address (2/2)]
         ; WAIT/SYNC: imm13 0x984 = 76*32 + 4 = its OWN I-RAM address + event 4 [INFERRED]
-  w77   0859086822   ?word   0x0859086822   ; 859.0.86.822  hi12{ESC f31=4 ?6 ?0 res=041}  [pointer-load family sibling, target register UNKNOWN]
+  w77   0859086822   ?word   0x0859086822   ; 859.0.86.822  hi12{ESC f31=4 ?6 ?0 res=041}  [register write: selector lo12[7:0]=22, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN; hi12 bit 4 is set BUT SO IS THE FORMAT ESCAPE (bit 11), and inside the escape this decoder does not read bit 4 as the store -- K3 sect. 5.2 reads it as a store anyway.  CONFLICT, 1 site, UNRESOLVED]
         ; ptr-load family: register 0x822 <- 0x86
   w78   0A3CD9F287   ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur
         ; the machine's ONLY class-D word (0 of 2974 body words)
-  w79   00122FF1CE   ?word   0x00122FF1CE   ; 012.2.FF.1CE  hi12{ST f31=1}
+  w79   00122FF1CE   ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
         ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
   w80   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}
         ; ordinary body vocabulary (22 exact matches in the 2974-word body corpus)

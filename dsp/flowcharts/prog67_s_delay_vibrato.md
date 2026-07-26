@@ -7,7 +7,7 @@ Image rep **algo 67** &middot; slots 67 &middot; **unit 0** (I-RAM load 84) &mid
 
 > single delay + vibrato
 
-**86 words**, 22 class-A coefficient multiplies (14 named), 32 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 2 C-format immediate load(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s).
+**86 words**, 22 class-A coefficient multiplies (14 named), 20 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 2 C-format immediate load(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD
@@ -24,7 +24,7 @@ flowchart TD
     N4 -.-> N5
     N6["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;2"]
     N4 --> N6
-    N7["Undecoded core<br/>32 of 86 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N7["Undecoded core<br/>20 of 86 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N6 --> N7
     N8["VOLUME<br/>output level"]
     N7 --> N8

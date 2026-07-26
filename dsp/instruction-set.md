@@ -30,6 +30,17 @@ The four newest rows are the adjudication's own
 (`analysis/isa-adjudication.md`) — two of them against claims committed hours
 earlier, which is exactly what an integration pass is for.
 
+> ★ **And the SYNC pass (`kn7000_mame/notes/dsp-mirror-sync.md`) found one of these
+> was not merely printed but EXECUTED.** `C00.A.47.407` — the frame terminator, the
+> last word of every frame — passed MAME's ALU predicate, which had a class guard, a
+> routing guard and an operation guard and **no format guard**, and was run as a
+> class-A multiply-and-store: a C-RAM read, a multiply, a **cursor advance** and a
+> D-RAM write, all invented. Three of the falsified labels below were also firing on
+> **live I-RAM**, not just on the ROM corpus: the four host-written call-vector words
+> were labelled *"envelope / level detector"* and two of them printed `cur+`. This is
+> why "a wrong decode costs more than a missing one" is the first sentence of this
+> section.
+
 | withdrawn claim | why | replaced by |
 |---|---|---|
 | **`C40.1.80.000` and `C40.1.E0.451` are class-1 delay-DRAM words, and they corroborate R2's withdrawal of the `addr8` bit-7 split** (R3 §6.1, §9.5) | They are **C-FORMAT IMMEDIATE LOADS** — `hi12[11:8] == 0xC`, so `class4`/`addr8` are immediate data, not fields. R3's family predicate carries no C-format guard. Decisive: `C40.1.80.000` (A=12) and `C40.2.C0.000` (A=22) are **the same instruction** — same family, same destination `lo12 = 0x000` — differing only in the immediate; one reads `class4 == 1` and the other `class4 == 2` *because bit 8 of the immediate differs*. No machine can make one touch the DRAM and not the other. **FORCED.** | the guarded family (`is_dram()`); R2's bit-7 withdrawal stands on its own evidence (324/324 vs 3 misclassified) and never needed this |
@@ -138,14 +149,25 @@ re-derived exactly (`analysis/isa-adjudication.md` §4).
 the 83-word **kernel** also sets bit 23 on class **9** (4 words — the call-vector
 writes), class **C** (1) and class **D** (1 — R2's two `DO`-write words). A core
 that assumes the body distribution mis-executes six kernel words.
-The disassembler now prints **`cur+`** only for `class4 == 0xA` and plain **`cur`**
-for every other bit-23 word (the rename K4 deferred; `upd6383d.cpp` still owes it —
-see the MAME sync list in `analysis/isa-adjudication.md` §8).
+**Both** disassemblers now print **`cur+`** only for `class4 == 0xA` and plain
+**`cur`** for every other bit-23 word, and a *decoded* class-8 word renders `,c`
+instead of saying nothing about its fetch at all (35 sites of `804.8.16.415`).
+The MAME sync list of `analysis/isa-adjudication.md` §9 is **drained** — all
+thirteen items landed, on both sides, in `kn7000_mame/notes/dsp-mirror-sync.md`.
+The executor's own cursor advance was wrong in the other direction: it read
+`class4 & 8`, i.e. it advanced on classes 8, 9, A, B, C, D, E **and** F.
 
-## Decoded forms — the only eight with a real mnemonic
+## Decoded forms — the ones with a real mnemonic
 
 Each carries its evidence in `tools/dsp_disasm.py` next to the code that emits it.
 A word is in this table only if a core could **execute** it.
+
+> ⚠ **The two disassemblers are CHECKED identical, not assumed identical.**
+> `kn7000_mame/tools/upd6383d_diff.sh` runs `tools/dsp_disasm.py` and MAME's
+> `upd6383d.cpp` over all **3057** corpus words and diffs them line for line:
+> **3057/3057**. Run it after touching either file. They had genuinely diverged —
+> for most of 2026-07-26 the C++ side carried the ALU decode and this side carried
+> `ldptr.d` / `setvec` / the C-format split, and nothing noticed.
 
 | form | mnemonic | operation | status |
 |---|---|---|---|
@@ -154,12 +176,50 @@ A word is in this table only if a core could **execute** it.
 | `801.0.00.021` | `rstcur` | reset coefficient cursor to base | **VERIFIED** (algo39 section starts 0,6,12,18,24 \| rstcur \| 0,6,12,18,24). K3: this is the **same word as `ldptr` with `lo12` bit 11 CLEAR** — same `hi12`, same `class4`, same low byte `0x21` — and it is the **only** `hi12 == 0x801` word in the 2974-word body corpus (1/2974) |
 | `801.0.NN.825` | `ldptr.d #$NN` | load the **delay-DESCRIPTOR pointer** with the absolute bank index `NN` | **PROVEN BY CONSTRUCTION**, both halves. *Encoding:* writer `LABEL_038922` emits the same four payload steps as the coefficient writer `LABEL_0387E6` — byte for byte, only `ADD XWA,#4Ch` vs `#26h` differs. *Space:* the packets it heads carry host tag **`0x4C`**, and a cell of that bank holds `LINE_BASE + DELAY_IN_SAMPLES` (`ADD (XSP+002h), XWA`). K3 reached the same space by elimination and labelled it INFERRED; **R3 proved it and named it** (`analysis/r3-delaydram.md` §1). Promoted to tier 1 in the adjudication pass — 3 sites, all in the resident kernel |
 | `000.1.NN.000` | — | load the pointer for the **state RAM (D-RAM)** | **PROVEN BY CONSTRUCTION** — writers `LABEL_03846C` / `LABEL_038539` / `LABEL_038CF9` emit `00 00 10\|(P>>4) (P&0xF)<<4 00` plus a tag-`0x15` value packet. **NEW in K3**: this whole family was missing from the writer list. Space = D-RAM, MEASURED — the host zero-fills exactly the cells the freshly-loaded body uses, and PARAMETRIC EQ's fill is 40 cells at `0x50..0x77` = 5 bands × 2 channels × 4 Direct-Form-I state words |
-| `202.A.dd.1D5` | `mac (p)+dd` | `acc += P ; P = coef[cursor++] * mem[p] ; p += (s8)dd` | **DETERMINED** (all 144 survivors of a 19,674,720-point constraint search agree) |
-| `202.A.dd.1D4` | `mac.lb (p)+dd` | as `mac`, and latch B ← mem[p] | **DETERMINED**, same source |
-| `212.A.dd.407` | `mulst (p)+dd` | `mem[p] <- acc ; P = coef[cursor++] * acc ; p += (s8)dd` | **DETERMINED UNIQUELY** |
+| ★ **the ALU** — see below | `ld` / `mac` / `post` `[.ta\|.tb\|.st]` | `lo12` **ROUTES** and `hi12[3:1]` **OPERATES** | **VERIFIED to 0.094 dB** worst case over 8 ROM coefficient banks, 11 biquad sections, 4 programs (`kn7000_mame/notes/dsp-alu-applied.md`). **1029 corpus words**, against 273 for every other form put together |
 | `C4x.x.xx.445` `C4x.x.xx.446` | `setvec unitN,#A` | load unit *N*'s **call-vector register** with I-RAM address `A = bits[24:17]` | **DETERMINED** — `analysis/k5-output-stage.md` §2. NEW in this pass |
 
-### `setvec` — the evidence, because it is the one new mnemonic
+### ★ THE ALU — `lo12` routes, `hi12[3:1]` operates
+
+```
+      L    := src[ lo12[10:6] ]      07 mem[p]  10 acc  19 tempA  1A tempB
+      if hi12 bit 4 :  mem[p] <- acc ; acc := 0                store AND clear
+      hi12[3:1]     :  0 -> acc <- P    1 -> acc += P    2 -> acc unchanged
+      lo12[4:0]     :  13 -> tempA <- L   14 -> tempB <- L   07 -> mem[p] <- L
+      if class4 == A :  P := coef[cursor++] * L
+      if class4 & 7 == 2 :  p += (s8)addr8
+```
+
+`P` is **not consumed** by the add — an MPLY output latch holds it until the next
+multiply, and `hi12[3:1]` decides whether this word takes it.
+
+**This SUPERSEDES three rows this table used to carry** — `202.A.dd.1D5 mac`,
+`202.A.dd.1D4 mac.lb` and `212.A.dd.407 mulst`. They are the same instruction seen
+through a narrower window: `202.A.dd.1D4` is simply source `mem[p]`, action
+"capture tempB", operation "acc += P", class A. Nothing the 19,674,720-point
+constraint search determined is contradicted; what changes is that its per-word
+"accumulator op" table was an artefact of a hypothesis space that never offered a
+store-and-clear.
+
+Two independent blocks force it. **(a)** The PARAMETRIC EQ's nine-word biquad is
+the only block whose arithmetic is known independently — the firmware designs its
+coefficients with its own `tan()`-based bilinear designer — and the model above
+reproduces its transfer function to **max 0.094 dB / 4.0°** over 8 ROM banks in 11
+section instances across 4 programs, with the residual falling with signal level
+(i.e. 24-bit state quantisation, not a structural error). Removing either
+non-obvious part — the accumulator CLEAR riding on `hi12` bit 4, or the one-bit
+right shift on the tempB path — costs **57 dB** and **77 dB**. **(b)** The LFO is
+what puts the operation in `hi12` and not in `lo12`: `092.A.dd.200` and
+`094.A.dd.200` are identical in `class4`, `addr8` and **all twelve `lo12` bits**,
+and no single operation applied twice with their two constants makes a ramp.
+
+**Still OPEN**, and the decoder guesses none of it: 14 of the 18 observed SRC
+codes, 19 of the 24 observed ACTION codes, `lo12` bit 4, the difference between
+actions `0x12` and `0x15`, five of the eight `hi12[3:1]` codes, and the `lo12`
+bit-11 **modifier** (PROVEN BY CONSTRUCTION to be a separate flag, so `0x021` and
+`0x821` are one route plus a modifier — never two codes).
+
+### `setvec` — the evidence
 
 * The **only two I-RAM words the host ever rewrites** are I-RAM **64** (`lo12 = 0x445`)
   and I-RAM **71** (`lo12 = 0x446`); a scan of the whole 192 KB Sub CPU image finds

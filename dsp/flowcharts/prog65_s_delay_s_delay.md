@@ -7,7 +7,7 @@ Image rep **algo 65** &middot; slots 65 &middot; **unit 0** (I-RAM load 84) &mid
 
 > single delay + single delay (dual mono)
 
-**68 words**, 16 class-A coefficient multiplies (16 named), 27 instructions still opaque. Landmarks detected: 5 DRAM read/write word(s).
+**68 words**, 16 class-A coefficient multiplies (16 named), 14 instructions still opaque. Landmarks detected: 5 DRAM read/write word(s).
 
 ```mermaid
 flowchart TD
@@ -16,7 +16,7 @@ flowchart TD
     N0 --> N1
     N2["controls: DELAY1 DRY/WET, DELAY L, DELAY R, FEEDBACK L, FEEDBACK R, DELAY2 DRY/WET, DELAY L, DELAY R, FEEDBACK L, FEEDBACK R"]
     N1 -.-> N2
-    N3["Undecoded core<br/>27 of 68 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N3["Undecoded core<br/>14 of 68 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N1 --> N3
     N4["VOLUME<br/>output level"]
     N3 --> N4

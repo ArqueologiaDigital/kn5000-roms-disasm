@@ -40,25 +40,12 @@ MALFORMED = {79, 88, 89, 90, 91}
 REVERB_ALGO = 16
 
 
-def form_of(w):
-    hi, cl, ad, lo = D.fields(w)
-    if not D.decoded(w):
-        return None
-    if D.is_setvec(w):
-        return "setvec"
-    if hi == 0x000:
-        return "nop"
-    if hi == 0x801 and lo == 0x821:
-        return "ldptr"
-    if hi == 0x801 and lo == 0x825:
-        return "ldptr.d"
-    if hi == 0x801:
-        return "rstcur"
-    if hi == 0x202 and lo == 0x1D5:
-        return "mac"
-    if hi == 0x202:
-        return "mac.lb"
-    return "mulst"
+# THE FORM TABLE LIVES IN dsp_disasm.py, NOT HERE.  This copy drifted once
+# already -- it mapped every `hi12 == 0x801' word that was not `ldptr' to
+# `rstcur', so the newly added `ldptr.d' would have been mis-tallied
+# (analysis/isa-adjudication.md sect. 7).  A second copy of a decode table is a
+# second thing to keep in step, and this project has paid for that twice.
+form_of = D.form_of
 
 
 def tally(words):

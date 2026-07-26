@@ -28,15 +28,15 @@
   w12   0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}
   w13   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}
   w14   0024200000   ?word   0x0024200000   ; 024.2.00.000  hi12{f31=2 ?5 res=020}
-  w15   0000204407   ?word   0x0000204407   ; 000.2.04.407  hi12{-}
+  w15   0000204407   ld.st   acc,(p)+4
   w16   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
   w17   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w18   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)]
+  w18   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w19   0000200447   ?word   0x0000200447   ; 000.2.00.447  hi12{-}
   w20   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w21   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
+  w21   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w22   0182200000   ?word   0x0182200000   ; 182.2.00.000  hi12{f98=1 f31=1 ?7 res=080}
   w23   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
@@ -44,15 +44,15 @@
   w25   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w26   01042FE1CE   ?word   0x01042FE1CE   ; 104.2.FE.1CE  hi12{f98=1 f31=2}
   w27   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
-  w28   0000203407   ?word   0x0000203407   ; 000.2.03.407  hi12{-}
+  w28   0000203407   ld.st   acc,(p)+3
   w29   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
   w30   00822001C0   ?word   0x00822001C0   ; 082.2.00.1C0  hi12{f31=1 ?7 res=080}  [LFO / modulation-source read (INFERRED)]
-  w31   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)]
+  w31   0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
   w32   0000200447   ?word   0x0000200447   ; 000.2.00.447  hi12{-}
   w33   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}
-  w34   0000A001D5   ?word   0x0000A001D5   ; 000.A.00.1D5  hi12{-} cur+
+  w34   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
   w35   0182200000   ?word   0x0182200000   ; 182.2.00.000  hi12{f98=1 f31=1 ?7 res=080}
   w36   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}
@@ -61,7 +61,7 @@
   w39   01042F21CE   ?word   0x01042F21CE   ; 104.2.F2.1CE  hi12{f98=1 f31=2}
   w40   010220A1CD   ?word   0x010220A1CD   ; 102.2.0A.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w41   00002021CE   ?word   0x00002021CE   ; 000.2.02.1CE  hi12{-}
-  w42   0212200407   ?word   0x0212200407   ; 212.2.00.407  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w42   0212200407   mac.st  acc,(p)+0 ; mem[p]<-acc, acc=0
   w43   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
   w44   00262001D5   ?word   0x00262001D5   ; 026.2.00.1D5  hi12{f31=3 ?5 res=020}
   w45   0192A0040E   ?word   0x0192A0040E   ; 192.A.00.40E  hi12{ST f98=1 f31=1 ?7 res=080} cur+

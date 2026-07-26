@@ -13,28 +13,28 @@
 
   w0    000020B1CD   ?word   0x000020B1CD   ; 000.2.0B.1CD  hi12{-}
   w1    000020340E   ?word   0x000020340E   ; 000.2.03.40E  hi12{-}
-  w2    02122FD407   ?word   0x02122FD407   ; 212.2.FD.407  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w2    02122FD407   mac.st  acc,(p)-3 ; mem[p]<-acc, acc=0
   w3    002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
   w4    0022200000   ?word   0x0022200000   ; 022.2.00.000  hi12{f31=1 ?5 res=020}
   w5    0880130000   ?word   0x0880130000   ; 880.1.30.000  hi12{ESC ?7 res=080}  [external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in program order, so it is NOT in this word. addr8 0x30 marks the FIRST DRAM access of a body (37 of 38 distinct images, R3 sect. 6.2)]
-  w6    0000200413   ?word   0x0000200413   ; 000.2.00.413  hi12{-}
+  w6    0000200413   ld.ta   acc,(p)+0
   w7    00002401CD   ?word   0x00002401CD   ; 000.2.40.1CD  hi12{-}
   w8    01122031CE   ?word   0x01122031CE   ; 112.2.03.1CE  hi12{ST f98=1 f31=1}
   w9    01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}
-  w10   02022FF1D5   ?word   0x02022FF1D5   ; 202.2.FF.1D5  hi12{f98=2 f31=1}
-  w11   0102ABF1D4   ?word   0x0102ABF1D4   ; 102.A.BF.1D4  hi12{f98=1 f31=1} cur+  [read into carry latch B (INFERRED)]
+  w10   02022FF1D5   mac     (p),(p)-1
+  w11   0102ABF1D4   mac.tb  (p),c+,(p)-65
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w12   02042421CD   ?word   0x02042421CD   ; 204.2.42.1CD  hi12{f98=2 f31=2}
   w13   02042FE687   ?word   0x02042FE687   ; 204.2.FE.687  hi12{f98=2 f31=2}  [P-consumer, stores latch B (INFERRED)]
   w14   08048161DA   ?word   0x08048161DA   ; 804.8.16.1DA  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w15   00002FF647   ?word   0x00002FF647   ; 000.2.FF.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w16   0000202687   ?word   0x0000202687   ; 000.2.02.687  hi12{-}  [P-consumer, stores latch B (INFERRED)]
-  w17   00002BC407   ?word   0x00002BC407   ; 000.2.BC.407  hi12{-}
+  w15   00002FF647   ld.st   ta,(p)-1
+  w16   0000202687   ld.st   tb,(p)+2
+  w17   00002BC407   ld.st   acc,(p)-68
   w18   0024200000   ?word   0x0024200000   ; 024.2.00.000  hi12{f31=2 ?5 res=020}
-  w19   0000205407   ?word   0x0000205407   ; 000.2.05.407  hi12{-}
-  w20   0010AFC1D5   ?word   0x0010AFC1D5   ; 010.A.FC.1D5  hi12{ST} cur+
+  w19   0000205407   ld.st   acc,(p)+5
+  w20   0010AFC1D5   ld      (p),c+,(p)-4 ; mem[p]<-acc, acc=0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
-  w21   0202A031D5   mac     (p)+3
+  w21   0202A031D5   mac     (p),c+,(p)+3
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w22   0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}
   w23   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
@@ -47,33 +47,33 @@
   w28   0182A00000   ?word   0x0182A00000   ; 182.A.00.000  hi12{f98=1 f31=1 ?7 res=080} cur+
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
   w29   0000200447   ?word   0x0000200447   ; 000.2.00.447  hi12{-}
-  w30   0010AFA1D5   ?word   0x0010AFA1D5   ; 010.A.FA.1D5  hi12{ST} cur+
+  w30   0010AFA1D5   ld      (p),c+,(p)-6 ; mem[p]<-acc, acc=0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
-  w31   0202AFE1D5   mac     (p)-2
+  w31   0202AFE1D5   mac     (p),c+,(p)-2
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x07] = op0x78[0] (role coeff, INFERRED)
   w32   0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}
-  w33   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w33   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = op0x78[1] (role coeff, INFERRED)
   w34   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w35   0000200407   ?word   0x0000200407   ; 000.2.00.407  hi12{-}
+  w35   0000200407   ld.st   acc,(p)+0
   w36   00002FF1CD   ?word   0x00002FF1CD   ; 000.2.FF.1CD  hi12{-}
   w37   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}
   w38   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w39   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
-  w40   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
+  w40   0000200415   ld      acc,(p)+0
   w41   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w42   0000200415   ?word   0x0000200415   ; 000.2.00.415  hi12{-}
+  w42   0000200415   ld      acc,(p)+0
   w43   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w44   0000A00415   ?word   0x0000A00415   ; 000.A.00.415  hi12{-} cur+
+  w44   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x09] = op0x24[0] (role coeff, INFERRED)
-  w45   0212A081D5   ?word   0x0212A081D5   ; 212.A.08.1D5  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+  w45   0212A081D5   mac     (p),c+,(p)+8 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = op0x24[1] (role coeff, INFERRED)
   w46   0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}
-  w47   00002F9407   ?word   0x00002F9407   ; 000.2.F9.407  hi12{-}
+  w47   00002F9407   ld.st   acc,(p)-7
   w48   00122071D1   ?word   0x00122071D1   ; 012.2.07.1D1  hi12{ST f31=1}
   w49   0292200000   ?word   0x0292200000   ; 292.2.00.000  hi12{ST f98=2 f31=1 ?7 res=080}
   w50   0000AFF455   ?word   0x0000AFF455   ; 000.A.FF.455  hi12{-} cur+
@@ -87,18 +87,18 @@
   w56   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w57   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}
   w58   0022200000   ?word   0x0022200000   ; 022.2.00.000  hi12{f31=1 ?5 res=020}
-  w59   0000200413   ?word   0x0000200413   ; 000.2.00.413  hi12{-}
+  w59   0000200413   ld.ta   acc,(p)+0
   w60   00002441CD   ?word   0x00002441CD   ; 000.2.44.1CD  hi12{-}
   w61   01122031CE   ?word   0x01122031CE   ; 112.2.03.1CE  hi12{ST f98=1 f31=1}
   w62   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}
-  w63   02022FF1D5   ?word   0x02022FF1D5   ; 202.2.FF.1D5  hi12{f98=2 f31=1}
-  w64   0102ABB1D4   ?word   0x0102ABB1D4   ; 102.A.BB.1D4  hi12{f98=1 f31=1} cur+  [read into carry latch B (INFERRED)]
+  w63   02022FF1D5   mac     (p),(p)-1
+  w64   0102ABB1D4   mac.tb  (p),c+,(p)-69
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x24[3] (role coeff, INFERRED)
   w65   02042461CD   ?word   0x02042461CD   ; 204.2.46.1CD  hi12{f98=2 f31=2}
   w66   02042FE687   ?word   0x02042FE687   ; 204.2.FE.687  hi12{f98=2 f31=2}  [P-consumer, stores latch B (INFERRED)]
   w67   08048161DA   ?word   0x08048161DA   ; 804.8.16.1DA  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w68   00002FF647   ?word   0x00002FF647   ; 000.2.FF.647  hi12{-}  [P-consumer, stores latch A (INFERRED)]
-  w69   0000202687   ?word   0x0000202687   ; 000.2.02.687  hi12{-}  [P-consumer, stores latch B (INFERRED)]
-  w70   00002AA407   ?word   0x00002AA407   ; 000.2.AA.407  hi12{-}
+  w68   00002FF647   ld.st   ta,(p)-1
+  w69   0000202687   ld.st   tb,(p)+2
+  w70   00002AA407   ld.st   acc,(p)-86
   w71   042410E000   ?word   0x042410E000   ; 424.1.0E.000  hi12{END f31=2 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
