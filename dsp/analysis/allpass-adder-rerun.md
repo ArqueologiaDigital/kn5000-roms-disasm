@@ -42,7 +42,8 @@ an exhaustive search agrees) / **CONSISTENT** / **FALSIFIED** / **OPEN**.
 | **D** | ★ **THE HARNESS HAD A DEFECT, AND IT IS IN THE PUBLISHED SINGLE DELAY NUMBERS.** `exec_rep` selected the `s1op` relaxation **by slot position** (`s == 1`), so it applied to whatever program was loaded. SINGLE DELAY's slot 1 is `202.A.B8.655` (`hi12[3:1] = 1`) and was being executed with `hi12[3:1] = 2` instead. Found because a newly built control tripped over it. See §8 for the retest and the price. | **MEASURED** |
 | **E** | **BOTH CONTROLS PASS UNDER THE ADDER.** The hand-built Gardner ladder is accepted at 2, 4 and 5 stages under `order = adder`, at `inject=P extract=P scale=+1.000`, identically to the sequential model, and it passes the delay-loop filter. A **second, newly built control** that uses only the STRICT vocabulary — one bus-routing ACTION code plus captures — is also accepted at 2/4/5. A search that cannot succeed proves nothing; both of these can. | **MEASURED** |
 | **F** | **The store GATE never reaches this motif.** The motif's only storing word is slot 3, `012.2.**.680`, and `hi12` bit 7 = **0** there, where all three surviving gates agree on STORE + CLEAR. The brief's premise — *"under the adder there is no unconditional clear and the store bit is GATED"* — is true of the ISA and **false of this motif**. | **MEASURED** |
-| **G** | ★★ **AND THE MULTIPLICAND CAN BE EXACTLY GARDNER'S.** Asking the question the old count's answer made look pointless: **9 660** settings compute precisely `±(w[r] + w[r−1] − t[r−1])` on the multiplier input, with no other term, and **4 148 of those also satisfy every condition of the delay-loop filter** — and the numeric test still rejects all of them. The impossibility is real but it lives *downstream* of the multiplicand and of the structural feedback conditions. §6.2 says where to look next. | **MEASURED** |
+| **G** | ★★ **AND THE MULTIPLICAND CAN BE EXACTLY GARDNER'S.** Asking the question the old count's answer made look pointless: **9 660** settings compute precisely `±(w[r] + w[r−1] − t[r−1])` on the multiplier input, with no other term, and **4 148 of those also satisfy every condition of the delay-loop filter** — and the numeric test still rejects all of them. The impossibility is real but it lives *downstream* of the multiplicand and of the structural feedback conditions. | **MEASURED** |
+| **H** | ★★★ **AND HERE IS WHERE IT ACTUALLY LIVES — THE WRITE, NOT THE CLEAR.** Of those 9 660, the number that can also store `d_in[r] = x[r] + t[r]` into the delay line, over all four write-data sources, is **0**. The obstruction is the coupling between slot 4's DRAM-write operand and slot 5's multiplicand — **the same `tempA`, fixed by the ROM word itself**. That is precisely what `action-field.md` §3.1 proved model-free (*"a delay line cannot store the value that its own stage multiplies"*, a THEOREM of the decode at 5 145 000/5 145 000) and then walked past in favour of §5's accumulator clear. **The right diagnosis was already in the note; the wrong one was the one that got the star.** | **MEASURED, exhaustive** |
 
 ---
 
@@ -436,9 +437,44 @@ conditions cannot be met at the same time (4 148 ways). It is **downstream of al
 three**, and the remaining candidate is the *value written back to the delay
 line*: `loop_ok` only requires the write to carry `g·w_k` with coefficient ±1 and
 no unmultiplied `w_k`; it does **not** require it to be `x[r] + t[r]`, which is
-what a Gardner stage stores.
+what a Gardner stage stores. §6.3 asks that, and gets an answer.
 
-<!--WB-->
+### 6.3 ★★★ And there it is: the write-back can NEVER be `x[r] + t[r]`
+
+One more symbolic predicate, asked of the same enumeration. A Gardner stage
+stores `d_in[r] = x[r] + t[r]`; at steady state, in the same atoms, that is
+`±(N − Q + Q')`. Over all four DRAM write-data sources:
+
+```
+   sequential   exact-Gardner MULTIPLICAND  9660
+                | of those, also pass the loop filter        4148
+                | of those, exact-Gardner WRITE-BACK            0
+                | BOTH exact AND loop-consistent                 0
+                | write source when the write-back is exact:  {}   (empty)
+```
+
+**ZERO.** Not one of the 9 660 machines that computes the correct multiplicand
+can put `x[r] + t[r]` into the delay line, from `bus`, from `acc` before the
+word, from `acc` after it, or from `mem[ptr]`.
+
+That is the obstruction, located, and it is a **different word from the one
+`action-field.md` §5 named**: slot **4**, the DRAM write `880.1.**.655` whose
+SRC is `tempA` — the same register the multiply consumes one slot later — not
+slot 3's store-and-clear.
+
+And it is exactly what that same note **already proved model-free** and then
+walked past. §3.1's two lines of algebra: *"whatever else is true, a delay line
+cannot store the value that its own stage multiplies"* — because slots 4 and 5
+carry the same SRC and nothing between them can rewrite it, a fact §0-F called
+"not a hypothesis but a THEOREM of the decode", true in 5 145 000 of 5 145 000
+settings. **The exhaustive search now confirms it from the other end**: the write
+data and the multiplicand cannot be made to differ by the `w[r] − t[r]` that a
+Gardner stage requires between them.
+
+> **`action-field.md` §3.1 was right and §5 was looking at the wrong word.** The
+> obstruction was never the accumulator clear; it is the coupling between the
+> DRAM write's operand and the multiplier's operand, which the ROM word itself
+> fixes.
 
 Note also what the 9 660 force about the code this pass has been circling:
 **`ACTION 0x00`'s accumulator half is `−bus` in 9 520 of them and `+bus` in 140 —
@@ -480,6 +516,10 @@ same thing: the shipped reading and the all-pass reading are incompatible.
   filter, and the numeric test rejects all of them. Whatever forbids the all-pass
   is therefore *not* any of: the two reads meeting, the multiplicand's form, or
   the structural feedback conditions C1–C3.
+* ★★ **It is the WRITE-BACK, exhaustively.** 0 of those 9 660 can store
+  `x[r] + t[r]`, over all four write-data sources — the exhaustive form of
+  `action-field.md` §3.1's model-free algebra, and it names slot 4 rather than
+  slot 3.
 
 **CONSISTENT, not forced**
 
@@ -510,11 +550,11 @@ same thing: the shipped reading and the all-pass reading are incompatible.
 * **Whether `hi12` bit 4 clears the accumulator** — still open, but **DEMOTED**.
   It is not what blocks the all-pass (§6), and in the shipped ISA it is not even
   reachable as a cause (§5.1, row 6).
-* ★ **What the 4 148 actually fail.** They have the right multiplicand and pass
-  C1–C3; the untested requirement is the *value written back*, which a Gardner
-  stage needs to be `x[r] + t[r]` and which the loop filter never pins down. That
-  is the next measurement, it costs one more symbolic predicate, and it is the
-  first version of this question that has not already been answered wrongly.
+* **What the reverb core *does* write to its delay lines.** §6.3 settles what it
+  cannot write; it does not say what the ROM intends instead. The motif stores
+  the multiplicand itself, which is a Schroeder/nested-comb shape rather than a
+  Gardner all-pass — `sec_schroeder` in the same tool is the obvious next
+  acceptance test, and it now has a *reason* to be run rather than a hunch.
 
 ---
 
@@ -615,7 +655,8 @@ internally inconsistent.)*
 | "SINGLE DELAY … **5 145** assignments" | `action-field.md` §6, §0-E | **CORRECTED to 5 635** (§8). The four FORCED conclusions drawn from it all survive |
 | "(+bus 2205, −bus 1960, ←bus 735, ←bus−acc 735)" | `action-field.md` §6 | **CORRECTED**: `←bus−acc` is **245**, and the quoted tuple summed to 5 635 while annotating 5 145 |
 | "no ACTION code was decoded from the reverb" | `action-field.md` §0, closing line | **SUPERSEDED, in part.** The delay-loop filter alone forces that `ACTION 0x00` touches the accumulator (0 survivors for "no effect", all three spaces) and that `ACTION 0x19` captures from the **bus** (2 268/2 268 in the strict space). Both agree with SINGLE DELAY |
-| "The cause is the accumulator CLEAR: tempA is last writable at slot 3, which carries `hi12` bit 4" | `action-field.md` §5, "a one-line diagnosis of a 20-million-machine empty set" | ★ **FALSIFIED as the cause.** 52 920 settings carry both reads *with the clear in force*. What actually forbids it is `ACTION 0x00 = load` |
+| "The cause is the accumulator CLEAR: tempA is last writable at slot 3, which carries `hi12` bit 4" | `action-field.md` §5, "a one-line diagnosis of a 20-million-machine empty set" | ★ **FALSIFIED as the cause.** 52 920 settings carry both reads *with the clear in force*, 9 660 reach the exact all-pass multiplicand, 4 148 also pass the loop filter. The cause is slot 4's write (§6.3); `ACTION 0x00 = load` is what additionally forbids it in the *shipped* ALU |
+| "a delay line cannot store the value that its own stage multiplies" — and "the value written equals the multiplicand in 5 145 000 of 5 145 000 settings" | `action-field.md` §3.1, §0-F, model-free / THEOREM | ★ **UPHELD, and promoted.** It is the actual obstruction, now exhaustive: 0 of 9 660 exact-multiplicand machines can write `x[r] + t[r]`. The note proved it and then argued the wrong cause in §5 |
 | "**`hi12` bit 4 CLEARS the accumulator** … the only one of nine relaxations that moves the count at all" | `action-field.md` §7, §10 OPEN | **DEMOTED.** It moves the *DR-route* count (0 → 8 400, reproduced here under the adder) and moves the numeric count not at all; and in the STRICT ISA it cannot be the cause even in principle, because slot 2's `acc ← P` wipes the accumulator first |
 | "the accumulator CLEAR there is still the single highest-value open question in the ALU" | `acc-adder.md` §8, last bullet | **FALSIFIED for this problem.** `ACTION 0x00`'s accumulator half is |
 | "P-9 … the accumulator CLEAR is the assumption that blocks it — **HIT, and cleanly**" | `action-field.md` §12 | **RETRACTED.** It was a hit against a question that had been asked too narrowly; asked route-agnostically, the clear is not the blocker |
