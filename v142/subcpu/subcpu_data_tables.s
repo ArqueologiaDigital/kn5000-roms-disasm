@@ -216,17 +216,30 @@ Voice_CommandIndexTable:
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x10, 0x20
 	.ascii "!\"#$%&'()*+"
 
-Voice_AttackDecay_Widths:
+// Voice_Pool_Quota_ModeA - per-pool polyphony quota, allocation mode A
+// 18 bytes, one per voice pool (0x112D + g*0x1E); copied into pool.quota by
+// Voice_Reset_Engine (0x021ECB) when called with A = 0.
+// 32+16+4+12 = 64 = the machine's full polyphony -> these are ALLOCATION
+// QUOTAS, not the envelope stage widths the old name claimed.
+Voice_Pool_Quota_ModeA:
 	.byte 0x20, 0x10, 0x04, 0x0c, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x40, 0x40
 
-Voice_EnvelopeRate_Lookup:
+// Voice_Pool_Quota_ModeB - per-pool polyphony quota, allocation mode B
+// Same meaning; used when Voice_Reset_Engine is called with A != 0.
+// 12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
+// The real parameter->envelope-rate table is at 0x011963.
+Voice_Pool_Quota_ModeB:
 	.byte 0x0c, 0x06, 0x06, 0x04, 0x04, 0x04, 0x04, 0x04
 	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06
 	.byte 0x40, 0x40
 
-Voice_ChannelPtrTable:
+// Voice_Part_PoolPtr_ModeA - part -> voice-pool binding, allocation mode A
+// 27 little-endian 32-bit pointers, one per part-allocation descriptor
+// (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
+// the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
+Voice_Part_PoolPtr_ModeA:
 	.byte 0x2d, 0x11, 0x00, 0x00
 	.byte 0x2d, 0x11, 0x00, 0x00
 	.byte 0x2d, 0x11, 0x00, 0x00

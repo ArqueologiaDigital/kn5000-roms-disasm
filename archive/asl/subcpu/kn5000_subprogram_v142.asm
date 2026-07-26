@@ -606,17 +606,56 @@ Voice_CommandIndexTable:
 	db 021h, 022h, 023h, 024h, 025h, 026h, 027h, 028h
 	db 029h, 02Ah, 02Bh
 
-Voice_AttackDecay_Widths:
+; ----------------------------------------------------------------------------
+; Voice_Pool_Quota_ModeA - per-pool polyphony quota, allocation mode A
+; Layout: 18 bytes, one per voice pool (VOICE_POOL_BASE 0x112D + g*0x1E).
+;         byte[g] is copied into pool[g].quota by Voice_Reset_Engine when
+;         it is called with A = 0.
+; Values: 20 10 04 0C  00 x12  40 40
+;         pools 0..3 = 32/16/4/12 voices, pools 4..15 unused, pools 16 and
+;         17 = 64 (the global pool and the FREE pool).
+;         32+16+4+12 = 64 = the machine's full polyphony - which is the
+;         proof that these are ALLOCATION QUOTAS.
+; CORRECTION: this table was previously named Voice_AttackDecay_Widths and
+;         notes/kn5000-envelope-engine.md S1 described it as per-group
+;         envelope stage WIDTHS.  It is not an envelope table at all: its
+;         only consumer is the pool.quota byte, which Voice_Retire_ToFreePool
+;         and Voice_Allocate_Nodes compare against pool.count.
+; ----------------------------------------------------------------------------
+Voice_Pool_Quota_ModeA:	; 00F507h
 	db 020h, 010h, 004h, 00Ch, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 040h, 040h
 
-Voice_EnvelopeRate_Lookup:
+; ----------------------------------------------------------------------------
+; Voice_Pool_Quota_ModeB - per-pool polyphony quota, allocation mode B
+; Layout: 18 bytes, same meaning as Voice_Pool_Quota_ModeA; used when
+;         Voice_Reset_Engine is called with A != 0 (LABEL_028ADC, which
+;         also sets bit0 of the audio config word at 0x041343).
+; Values: 0C 06 06 04 04 04 04 04 02 02 02 02 02 02 02 06  40 40
+;         pools 0..15 = 12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly;
+;         pools 16 and 17 = 64.  So mode B is the fine 16-way split of the
+;         same 64-voice budget that mode A splits four ways.
+; CORRECTION: previously named Voice_EnvelopeRate_Lookup and described as
+;         per-group envelope RATES; it is a polyphony quota table.  The
+;         real parameter->rate table is Voice_EnvRate_Lookup at 0x011963.
+; ----------------------------------------------------------------------------
+Voice_Pool_Quota_ModeB:	; 00F519h
 	db 00Ch, 006h, 006h, 004h, 004h, 004h, 004h, 004h
 	db 002h, 002h, 002h, 002h, 002h, 002h, 002h, 006h
 	db 040h, 040h
 
-LABEL_00F52b:
+; ----------------------------------------------------------------------------
+; Voice_Part_PoolPtr_ModeA - part -> voice-pool binding, allocation mode A
+; Layout: 27 little-endian 32-bit pointers, one per part-allocation
+;         descriptor (VOICE_PARTPOOL_BASE 0x1349 + p*0x0C).  Copied into
+;         descriptor[p].pool by Voice_Reset_Engine (A = 0).
+;         Every value is 0x112D + g*0x1E, i.e. the address of one of the
+;         18 voice pools: 0x112D (g0), 0x114B (g1), 0x1169 (g2),
+;         0x1187 (g3), ...
+; Notes:  the mode-B counterpart is the unlabelled table at 0x00F597.
+; ----------------------------------------------------------------------------
+Voice_Part_PoolPtr_ModeA:	; 00F52Bh
 	db 02Dh, 011h, 000h, 000h
 	db 02Dh, 011h, 000h, 000h
 	db 02Dh, 011h, 000h, 000h
@@ -12713,7 +12752,19 @@ LABEL_021C6B:
 	LD (XWA + 004h), XDE
 	RET
 
-LABEL_021C83:
+; ----------------------------------------------------------------------------
+; Voice_List_MoveToPool - Move a voice node between voice-pool priority lists
+; Entry: XWA = pointer to the voice node
+;        XBC = destination pool block
+;        E   = destination priority class (0..6)
+; Exit:  none
+; Notes: Head address = pool + 0x02 + 4*key, which is exactly the seven dwords
+;        Voice_Reset_Engine zeroes in each 0x1E-byte pool block.
+;        Unlinks the node from its current (node+0x1d, node+0x21) list using the
+;        link pair at node+0x00/+0x04, links it into the destination list, then
+;        records node+0x1d = XBC and node+0x21 = E.
+; ----------------------------------------------------------------------------
+Voice_List_MoveToPool:	; 021C83h
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 004h), E
@@ -12809,7 +12860,18 @@ LABEL_021D3D:
 	LD (XWA + 00ch), XDE
 	RET
 
-LABEL_021D59:
+; ----------------------------------------------------------------------------
+; Voice_List_MoveToPartList - Move a voice node between the per-part allocation lists
+; Entry: XWA = pointer to the voice node
+;        XBC = destination part-allocation descriptor (0x1349 + p*0x0C)
+;        E   = destination list index (0 or 1)
+; Exit:  none
+; Notes: Head address = descriptor + 0x04 + 4*index.  Uses the SECOND link pair
+;        of the node (node+0x08/+0x0C) and records node+0x18 = XBC,
+;        node+0x1c = E.  A node is therefore on two lists at once: one keyed by
+;        voice pool + priority, one keyed by part.
+; ----------------------------------------------------------------------------
+Voice_List_MoveToPartList:	; 021D59h
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 004h), E
@@ -12884,7 +12946,15 @@ LABEL_021DF2:
 	INC 6, XSP
 	RET
 
-LABEL_021E02:
+; ----------------------------------------------------------------------------
+; Voice_List_UnlinkLru - Unlink a voice node from the third (age) chain
+; Entry: XWA = pointer to the voice node
+; Exit:  none
+; Notes: Operates on the link pair node+0x10 / node+0x14 and leaves the node
+;        self-referential.  INFERRED that this chain is the allocation-age order;
+;        MEASURED only that it is a third, independent doubly-linked chain.
+; ----------------------------------------------------------------------------
+Voice_List_UnlinkLru:	; 021E02h
 	LD XDE, (XWA + 010h)
 	LD XBC, (XWA + 014h)
 	LD (XBC + 010h), XDE
@@ -12893,7 +12963,15 @@ LABEL_021E02:
 	LD (XWA + 014h), XWA
 	RET
 
-LABEL_021E15:
+; ----------------------------------------------------------------------------
+; Voice_List_RelinkLru - Move a voice node to the tail of the third (age) chain
+; Entry: XWA = pointer to the voice node
+;        XBC = chain anchor
+; Exit:  none
+; Notes: Unlinks node+0x10/+0x14 from its current position and inserts it before
+;        XBC.  Same caveat as Voice_List_UnlinkLru.
+; ----------------------------------------------------------------------------
+Voice_List_RelinkLru:	; 021E15h
 	LD XHL, (XWA + 010h)
 	LD XDE, (XWA + 014h)
 	LD (XDE + 010h), XHL
@@ -12905,7 +12983,26 @@ LABEL_021E15:
 	LD (XWA + 014h), XDE
 	RET
 
-LABEL_021E31:
+; ----------------------------------------------------------------------------
+; Voice_Retire_ToFreePool - Return a voice node to the free pool and update the pool accounting
+; Entry: XWA = pointer to the voice node
+; Exit:  none
+; Notes: No-op if node+0x22 bit0 (already free) is set.  Otherwise:
+;          if node.pool(+0x1d).count != 0: count--        <- the OLD pool
+;          Voice_List_MoveToPool(node, VOICE_POOL_FREE 0x132B, 6)
+;          Voice_List_MoveToPartList(node, VOICE_PARTPOOL_FREE 0x1481, 1)
+;          Voice_List_UnlinkLru(node)
+;          node+0x22 = 0x01 (FREE), node+0x25 = 0
+;          if node.pool(+0x1d).count < node.pool.quota: count++   <- the NEW pool
+;        The decrement reads node+0x1d BEFORE the move and the increment AFTER,
+;        so together they are a single 'transfer one voice from pool A to pool B'
+;        accounting step - which is what proves pool+0x00 = quota and
+;        pool+0x01 = current occupancy.
+;        0x132B is pool index 17 (0x112D + 17*0x1E) and 0x1481 is part-descriptor
+;        index 26 (0x1349 + 26*0x0C): the free lists are the last entry of each
+;        array, which is why both quota tables end with two 0x40 entries.
+; ----------------------------------------------------------------------------
+Voice_Retire_ToFreePool:	; 021E31h
 	PUSH XIZ
 	LD XIZ, XWA
 	BIT 0, (XIZ + 022h)
@@ -12921,14 +13018,14 @@ LABEL_021E48:
 	LD XBC, XWA
 	LD XWA, XIZ
 	LD DE, 6
-	CALR LABEL_021C83
+	CALR Voice_List_MoveToPool
 	LDA XWA, 1481h
 	LD XBC, XWA
 	LD XWA, XIZ
 	LD DE, 1
-	CALR LABEL_021D59
+	CALR Voice_List_MoveToPartList
 	LD XWA, XIZ
-	CALR LABEL_021E02
+	CALR Voice_List_UnlinkLru
 	LD (XIZ + 022h), 001h
 	LD (XIZ + 025h), 000h
 	LD XWA, (XIZ + 01dh)
@@ -12943,7 +13040,16 @@ LABEL_021E81:
 	POP XIZ
 	RET
 
-LABEL_021E83:
+; ----------------------------------------------------------------------------
+; Voice_Demote_Decayed - Move a decayed voice node to priority class 1 (preferred steal victim)
+; Entry: XWA = pointer to the voice node
+; Exit:  none
+; Notes: No-op if node+0x22 bits 1:0 are already set.  Otherwise clears bits 3:2,
+;        sets bit1 and re-files the node into its current pool at priority 6.
+;        Called by Voice_Manager_PollBank when the chip reports the voice's
+;        envelope level has fallen below 0x80.
+; ----------------------------------------------------------------------------
+Voice_Demote_Decayed:	; 021E83h
 	LD C, (XWA + 022h)
 	AND C, 003h
 	RET NZ
@@ -12954,14 +13060,26 @@ LABEL_021E83:
 	LD XWA, XBC
 	LD XBC, XDE
 	LD DE, 6
-	CALR LABEL_021C83
+	CALR Voice_List_MoveToPool
 	RET
 
-LABEL_021EA1:
+; ----------------------------------------------------------------------------
+; Voice_Reprioritise - Re-file a voice node after its polled level changed
+; Entry: XWA = pointer to the voice node (VOICE_NODE_BASE 0x148D + ch*0x27)
+; Exit:  none
+; Notes: Returns immediately if node+0x22 bit7 (command-held) is set.
+;        If the polled level node+0x25 < 0x80 -> Voice_Demote_Decayed.
+;        Otherwise, if node+0x22 bit3 is set, advance the stage flags
+;        (RES 3 / SET 2) and re-file the node into its own pool at priority
+;        node+0x26 (the per-voice key loaded at allocation).
+;        This is the general 'levels changed' service (10 call sites), NOT a
+;        note-off command (notes/audit/kn5000-audit-voicelife.md S1.4).
+; ----------------------------------------------------------------------------
+Voice_Reprioritise:	; 021EA1h
 	BIT 7, (XWA + 022h)
 	RET NZ
 	CP (XWA + 025h), 080h
-	JR C, LABEL_021E83
+	JR C, Voice_Demote_Decayed
 	BIT 3, (XWA + 022h)
 	RET Z
 	RES 3, (XWA + 022h)
@@ -12973,10 +13091,39 @@ LABEL_021EA1:
 	LD XHL, (XWA + 01dh)
 	LD XWA, XBC
 	LD XBC, XHL
-	CALR LABEL_021C83
+	CALR Voice_List_MoveToPool
 	RET
 
-LABEL_021ECB:
+; ----------------------------------------------------------------------------
+; Voice_Reset_Engine - Reset the whole voice engine: silence IC303 and rebuild the allocator
+; Entry: A = allocation mode (0 = mode A quotas/bindings, non-zero = mode B)
+; Exit:  none; all 64 channels silenced and all allocator state reinitialised
+; Notes: Seven steps, in order:
+;        1. Scan the four words of TONEGEN_ACTIVE_PREV (0x292E).  If ANY bank
+;           still shows sounding voices, panic-silence all 64 channels with the
+;           pair +0x840 = 0xA200, +0x800 = 0xA280 (LABEL_021F08 is that loop's
+;           body label, not a separate routine), then write +0x0C0 = 0x0000 and
+;           +0x000 = 0x7E00 for all 64.
+;        2. Seed the 18 voice pools at 0x112D (stride 0x1E): pool.quota from
+;           Voice_Pool_Quota_ModeA / _ModeB, pool.count = 0, and the SEVEN
+;           priority-list heads at +0x02 .. +0x1D zeroed.
+;        3. Seed the 27 part-allocation descriptors at 0x1349 (stride 0x0C):
+;           descriptor.pool from Voice_Part_PoolPtr_ModeA / the 0x00F597 table,
+;           and the two list heads at +0x04 / +0x08 zeroed.
+;        4. Initialise all 64 voice nodes at 0x148D (stride 0x27): node+0x24 =
+;           channel, the three link pairs (+0/+4, +8/+0xC, +0x10/+0x14) made
+;           self-referential, node+0x22 = 0, node+0x18 = 0x1349, node+0x1c = 1,
+;           node+0x1d = 0x112D, node+0x21 = 6, node+0x25 = 0.
+;        5. Retire every node with Voice_Retire_ToFreePool.
+;        6. Zero TONEGEN_ACTIVE_PREV (0x292E) and TONEGEN_HOLD_MASK (0x2936).
+;        7. Tail call LABEL_0215DA.
+;        Callers: boot (A = 0, asm L38142) and the mode switch LABEL_028ADC.
+;        CORRECTION: notes/kn5000-envelope-engine.md described this routine as an
+;        envelope-state initialiser copying 'seven-stage accumulators'.  The seven
+;        dwords it zeroes are the seven PRIORITY-LIST HEADS of a voice pool - see
+;        Voice_List_MoveToPool, whose head offset is 2 + 4*key for key 0..6.
+; ----------------------------------------------------------------------------
+Voice_Reset_Engine:	; 021ECBh
 	DEC 4, XSP
 	PUSH XIZ
 	LD (XSP + 006h), A
@@ -13238,7 +13385,7 @@ LABEL_022142:
 
 LABEL_022150:
 	LD XWA, XIZ
-	CALR LABEL_021E31
+	CALR Voice_Retire_ToFreePool
 	LDA XIZ, XIZ + 027h
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
@@ -13270,7 +13417,31 @@ LABEL_022198:
 	INC 4, XSP
 	RET
 
-LABEL_02219F:
+; ----------------------------------------------------------------------------
+; Voice_Manager_PollBank - Per-tick voice manager: poll one bank of 16 channels and reclaim voices
+; Entry: none
+; Exit:  none
+; Notes: Runs on the path-B half of Audio_Process_Init, one bank per call.
+;        b = ++(*VOICE_POLL_BANK 0x1128) & 3
+;        now  = DAC_Write_Sample(b) | TONEGEN_HOLD_MASK[b]
+;        edge = (now ^ TONEGEN_ACTIVE_PREV[b]) & TONEGEN_ACTIVE_PREV[b]
+;        TONEGEN_ACTIVE_PREV[b] = now
+;        For each of the 16 channels ch = 16b + i:
+;          edge bit i set and node+0x22 bit0 clear (voice not already free) ->
+;              Voice_Retire_ToFreePool, ToneGen_SilenceChannel(ch),
+;              LABEL_02150D(ch)     <- the 'was sounding, now silent' teardown
+;          else, when node+0x22 & 0x81 == 0 ->
+;              node+0x25 = (read(0x0180+ch) & 0x3FFF) >> 5   (bits 12:5)
+;              if node+0x25 < 0x80 and node+0x22 bit2: Voice_Demote_Decayed
+;        Finishes with LABEL_021BF5(b).
+;        MEASURED: the chip's own active bitmap is the SOLE trigger for reclaim;
+;        a captured 0x7E00 teardown followed a status read returning 0 by 56 us
+;        (notes/audit/kn5000-audit-voicelife.md S1.5).
+;        LABEL_02222A is this routine's per-channel loop body, not an entry.
+;        DAC_Write_Sample (asm L11479) is misnamed - it writes 0x100000 and reads
+;        0x100000 back; it is the only IC303 readback in the payload.
+; ----------------------------------------------------------------------------
+Voice_Manager_PollBank:	; 02219Fh
 	DEC 6, XSP
 	PUSH XIZ
 	INC 1, (1128h)
@@ -13321,10 +13492,10 @@ LABEL_02222A:
 	BIT 0, (XIZ + 022h)
 	JR NZ, LABEL_02224F
 	LD XWA, XIZ
-	CALR LABEL_021E31
+	CALR Voice_Retire_ToFreePool
 	LD A, (XSP + 008h)
 	EXTZ WA
-	CALL LABEL_02B4A1
+	CALL ToneGen_SilenceChannel
 	LD A, (XSP + 008h)
 	EXTZ WA
 	CALR LABEL_02150D
@@ -13347,7 +13518,7 @@ LABEL_02224F:
 	BIT 2, (XIZ + 022h)
 	JR Z, LABEL_02227F
 	LD XWA, XIZ
-	CALR LABEL_021E83
+	CALR Voice_Demote_Decayed
 
 LABEL_02227F:
 	INC 1, (XSP + 008h)
@@ -13364,7 +13535,19 @@ LABEL_02228D:
 	INC 6, XSP
 	RET
 
-LABEL_02229A:
+; ----------------------------------------------------------------------------
+; Voice_Find_Candidate - Pick the voice node to (re)use for a new note
+; Entry: XWA = part-allocation descriptor (0x1349 + p*0x0C)
+;        XBC = priority-order byte list, terminated by 0xFF
+; Exit:  XHL = the chosen node, or 0 when nothing is available
+; Notes: If the override word at 0x1345 is non-zero it is returned unchanged.
+;        Otherwise each byte b of the order list is tried in turn: bit7 set means
+;        'look in the GLOBAL pool' (pool index 16, head array 0x130F) at class
+;        b & 0x7F, bit7 clear means 'look in this part's own pool' at class b.
+;        The first non-empty list head wins - so the byte list IS the stealing
+;        policy.  MEASURED (asm); the musical ordering it encodes is INFERRED.
+; ----------------------------------------------------------------------------
+Voice_Find_Candidate:	; 02229Ah
 	LD XDE, (1345h)
 	OR XDE, XDE
 	JR Z, LABEL_0222A7
@@ -13448,7 +13631,28 @@ LABEL_02233D:
 	LD XHL, 0
 	RET
 
-LABEL_022340:
+; ----------------------------------------------------------------------------
+; Voice_Allocate_Nodes - Allocate and bind voice nodes for one note-on command
+; Entry: XWA = pointer to the note-on command block
+; Exit:  none; up to four voice nodes are bound to the note
+; Notes: part = (cmd[0] & 0x1F00) >> 8, must be < 0x1A (26); the part's
+;        allocation descriptor is VOICE_PARTPOOL_BASE 0x1349 + part*0x0C.
+;        For each of the four partial slots whose cmd[2+i] bit7 is set:
+;          class descriptor = 0x00F633 + (cmd[2+i] & 0x0F)*6
+;              {+0 = pointer to a priority-order byte list, +4 = pool list key,
+;               +5 = the per-voice priority stored in node+0x26}
+;          node = Voice_Find_Candidate(descriptor, order list)
+;          old pool.count--
+;          node+0x23 = key (cmd[0] & 0x7F), node+0x25 = 0xFF, node+0x26 = tbl+5
+;          node+0x22 = 0x88 and TONEGEN_HOLD_MASK bit SET   (command-held voice)
+;             or node+0x22 = 0x08, HOLD bit CLEARED and TONEGEN_ACTIVE_PREV bit
+;             SET (an ordinary voice, whose lifetime the chip then owns)
+;          Voice_List_MoveToPool(node, descriptor.pool, tbl+4)
+;          Voice_List_MoveToPartList(node, descriptor, 0)
+;        Touches no IC303 register: allocation is pure firmware-side list surgery
+;        (notes/audit/kn5000-audit-voicelife.md S1.7, S4.5).
+; ----------------------------------------------------------------------------
+Voice_Allocate_Nodes:	; 022340h
 	LDA XSP, XSP - 010h
 	PUSH XIZ
 	LD (XSP + 010h), XWA
@@ -13502,7 +13706,7 @@ LABEL_022390:
 	LD (XSP + 008h), XWA
 	LD XBC, (XWA)
 	LD XWA, (XSP + 004h)
-	CALR LABEL_02229A
+	CALR Voice_Find_Candidate
 	LD XIZ, XHL
 	LD XWA, XIZ
 	OR XWA, XWA
@@ -13588,23 +13792,23 @@ LABEL_022492:
 	LD XWA, XIZ
 	LD XBC, (XSP + 004h)
 	LD XBC, (XBC)
-	CALR LABEL_021C83
+	CALR Voice_List_MoveToPool
 	LD XWA, XIZ
 	LD XBC, (XSP + 004h)
 	LD DE, 0
-	CALR LABEL_021D59
+	CALR Voice_List_MoveToPartList
 	LD XWA, (1129h)
 	OR XWA, XWA
 	JR Z, LABEL_0224BF
 	LD XWA, XIZ
 	LD XBC, (1129h)
-	CALR LABEL_021E15
+	CALR Voice_List_RelinkLru
 	JR T, LABEL_0224C8
 
 LABEL_0224BF:
 	LD (1129h), XIZ
 	LD XWA, XIZ
-	CALR LABEL_021E02
+	CALR Voice_List_UnlinkLru
 
 LABEL_0224C8:
 	LD XWA, (XIZ + 01dh)
@@ -13629,7 +13833,7 @@ LABEL_0224DC:
 	LD E, A
 	EXTZ DE
 	LD XWA, XIZ
-	CALR LABEL_021C83
+	CALR Voice_List_MoveToPool
 	LD XWA, (XIZ + 01dh)
 	INC 1, (XWA + 001h)
 	SET 4, (XIZ + 022h)
@@ -13691,7 +13895,18 @@ LABEL_022582:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_022587:
+; ----------------------------------------------------------------------------
+; Voice_Clear_HoldBit - Drop a channel's software keep-alive and re-evaluate its priority
+; Entry: A = channel number (0..63)
+; Exit:  falls through into Voice_Reprioritise with XWA = the node
+; Notes: node+0x22 bit7 cleared, then TONEGEN_HOLD_MASK[ch >> 4] &= ~(1 << (ch & 15)).
+;        TONEGEN_HOLD_MASK (0x2936) is ORed into the chip's active bitmap by
+;        Voice_Manager_PollBank, so while a channel's bit is set the voice can
+;        never be reclaimed however quiet the chip says it is.  Clearing it hands
+;        the voice's remaining lifetime back to the chip.
+;        Tail-calls Voice_Reprioritise (JRL T) with XWA = 0x148D + ch*0x27.
+; ----------------------------------------------------------------------------
+Voice_Clear_HoldBit:	; 022587h
 	LD C, A
 	LD A, C
 	EXTZ WA
@@ -13721,7 +13936,7 @@ LABEL_0225A8:
 	LDA XBC, 148Dh
 	EXTS XWA
 	ADD XWA, XBC
-	JRL T, LABEL_021EA1
+	JRL T, Voice_Reprioritise
 
 LABEL_0225D3:
 	PUSH XIZ
@@ -13734,13 +13949,13 @@ LABEL_0225D3:
 	LD XWA, XIZ
 	LD XBC, (XIZ + 018h)
 	LD DE, 1
-	CALR LABEL_021D59
+	CALR Voice_List_MoveToPartList
 	LD XWA, XIZ
-	CALR LABEL_021EA1
+	CALR Voice_Reprioritise
 	CP XIZ, (XIZ + 010h)
 	JR Z, LABEL_022601
 	LD XWA, XIZ
-	CALR LABEL_021E02
+	CALR Voice_List_UnlinkLru
 
 LABEL_022601:
 	POP XIZ
@@ -13793,9 +14008,9 @@ LABEL_022647:
 	LD XWA, XIZ
 	LD XBC, (XIZ + 018h)
 	LD DE, 1
-	CALR LABEL_021D59
+	CALR Voice_List_MoveToPartList
 	LD XWA, XIZ
-	CALR LABEL_021EA1
+	CALR Voice_Reprioritise
 	LD XWA, (XSP + 008h)
 	LD XBC, (XWA)
 	LD A, (XIZ + 024h)
@@ -13808,7 +14023,7 @@ LABEL_022647:
 	LD XWA, (XIZ + 010h)
 	LD (XSP + 004h), XWA
 	LD XWA, XIZ
-	CALR LABEL_021E02
+	CALR Voice_List_UnlinkLru
 	LD XIZ, (XSP + 004h)
 	JR T, LABEL_022647
 
@@ -15192,7 +15407,25 @@ LABEL_0232C4:
 	LD HL, WA
 	RET
 
-LABEL_0232C7:
+; ----------------------------------------------------------------------------
+; Voice_Build_OutputLevel - Build the per-voice output-level word for IC303 register +0x080
+; Entry: XWA = pointer to the voice slot
+;        BC  = accumulated level parameter
+; Exit:  TONEGEN_REG_SCRATCH+0x04 (0x0451D0) = the +0x080 word, bit15 set
+; Notes: BC += tone_rec+0x0c + tone_rec+0x10 + slot+0x33, clamped to 0..255,
+;        then looked up in Voice_LevelCode_To_Log_Table (0x010764, 256 words)
+;        and doubled.  That table is bit-exactly
+;        T[i] = round(128*log2(2^(i>>4) * (1 + (i&15)/16))) for 256/256 entries,
+;        i.e. the level byte is a 4-bit-exponent / 4-bit-mantissa float and the
+;        amplitude scale is exactly 16 counts per octave
+;        (notes/audit/kn5000-eg-calibration.md S2).
+;        The high bits are then ORed from either partial_block+0x02 (bits 6:4
+;        shifted to 14:12, when bit7 of that byte is set) or a word from the
+;        table at 0x00FBE4 indexed by slot+0x06 >> 8.
+;        bit15 SET is the ARM strobe of the note-on burst; ToneGen_WriteVoiceParams
+;        writes this word with bit15 set at the start and clear at the end.
+; ----------------------------------------------------------------------------
+Voice_Build_OutputLevel:	; 0232C7h
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, (XIZ + 023h)
@@ -18810,7 +19043,18 @@ LABEL_025524:
 	LD (0451D2h), DE
 	RET
 
-LABEL_02552A:
+; ----------------------------------------------------------------------------
+; Voice_Apply_GateRouting - OR the per-part bus/routing bits into a group-0/bank-0 command word
+; Entry: A  = part index
+;        BC = command word to be routed
+; Exit:  HL = the routed command word
+; Notes: Reads the part flag byte at 0x04138D + part*0x11F.
+;        Low nibble: 0 -> OR 0x0E00, 2 -> AND 0xF1FF then SET bit9, 1 -> leave.
+;        High nibble: 0 -> OR 0x7000, 0x20 -> AND 0x8FFF then SET bit12,
+;        0x10 -> leave.  Only bits 9-12 are ever touched, so a command word can
+;        never be turned into the note-on strobe 0x81xx (MEASURED, exhaustive).
+; ----------------------------------------------------------------------------
+Voice_Apply_GateRouting:	; 02552Ah
 	LD E, A
 	EXTZ DE
 	MULS_DE 011fh
@@ -18853,7 +19097,22 @@ LABEL_025586:
 	LD HL, BC
 	RET
 
-LABEL_025589:
+; ----------------------------------------------------------------------------
+; Voice_Build_GateCommand - Build the group-0/bank-0 command word for a voice with a partial block
+; Entry: XWA = pointer to the voice slot
+; Exit:  slot+0x2d = the command word; HL = same value
+; Notes: word = {command[15:9], flag[8], magnitude[7:0]}
+;        magnitude = 0x00FF - 4*(partial_block[0] & 0x3F)   (partial_block =
+;        slot+0x17); bit8 is SET whenever partial_block[0] != 0, so bit8 set
+;        <=> magnitude < 0xFF.
+;        Base command is 0xFE00 when part_struct[+0x12] != 0 and the global
+;        release mode at 0x04134C is 0, 5 or 6, else 0xF000.
+;        Voice_Apply_GateRouting then ORs the bus/routing bits 9-12.
+;        MEASURED (asm) - the low byte is NOT a linear amplitude: every rhythm
+;        voice is commanded with magnitude 0x00 yet must sound
+;        (notes/audit/kn5000-audit-amplitude.md S1.5, GAP 1).
+; ----------------------------------------------------------------------------
+Voice_Build_GateCommand:	; 025589h
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, (XIZ + 017h)
@@ -18901,12 +19160,19 @@ LABEL_0255E3:
 	LD A, (XIZ + 004h)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
-	CALR LABEL_02552A
+	CALR Voice_Apply_GateRouting
 	LD (XIZ + 02dh), HL
 	POP XIZ
 	RET
 
-LABEL_0255F3:
+; ----------------------------------------------------------------------------
+; Voice_Build_GateCommand_NoPartial - Build the group-0/bank-0 command word for a voice with no partial block
+; Entry: XWA = pointer to the voice slot
+; Exit:  slot+0x2d = the command word; HL = same value
+; Notes: Same as Voice_Build_GateCommand but the magnitude field is left at
+;        0x00 (bare 0xFE00 / 0xF000), then routed by Voice_Apply_GateRouting.
+; ----------------------------------------------------------------------------
+Voice_Build_GateCommand_NoPartial:	; 0255F3h
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, (XIZ + 013h)
@@ -18936,12 +19202,22 @@ LABEL_025626:
 	LD A, (XIZ + 004h)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
-	CALR LABEL_02552A
+	CALR Voice_Apply_GateRouting
 	LD (XIZ + 02dh), HL
 	POP XIZ
 	RET
 
-LABEL_025636:
+; ----------------------------------------------------------------------------
+; Voice_Build_EnvSegments_PatchAtk - Build the four EG segment words; attack rate taken from the patch
+; Entry: XWA = pointer to the voice slot
+; Exit:  slot+0x3c and TONEGEN_REG_SCRATCH+0x18 written; further segment words
+;        built from tone-record fields +0x29/+0x2b/+0x34
+; Notes: Identical shape to Voice_Build_EnvSegments_FixedAtk except that the
+;        ATK segment's rate is Voice_EnvRate_Lookup[rec+0x28] instead of the
+;        literal 0x7F - i.e. this is the path that makes slow-attack patches
+;        possible.  MEASURED, notes/audit/kn5000-eg-calibration.md S1.1.
+; ----------------------------------------------------------------------------
+Voice_Build_EnvSegments_PatchAtk:	; 025636h
 	LDA XSP, XSP - 14
 	PUSH XIZ
 	LD (XSP + 00eh), XWA
@@ -19352,7 +19628,25 @@ LABEL_025A31:
 	INC 8, XSP
 	RET
 
-LABEL_025A35:
+; ----------------------------------------------------------------------------
+; Voice_Build_EnvSegments_FixedAtk - Build the four EG segment words for a voice; attack rate hard-coded
+; Entry: XWA = pointer to the voice slot
+; Exit:  slot+0x3c/+0x3e/+0x40/+0x46 and TONEGEN_REG_SCRATCH+0x18 written;
+;        slot+0x01 bit15 set
+; Notes: Segment word = (target_level << 8) | (flag << 7) | rate[6:0].
+;        slot+0x3c = ATK/PEAK   = (PEAK << 8) | 0x7F  <- rate literal at asm
+;        L19399, i.e. the maximum ramp speed; PEAK comes from
+;        Voice_PeakLevel_Fader_Lookup (0x011899) indexed by partial_block+0x08,
+;        optionally key-followed via LABEL_022B2A when partial_block+0x0e != 0.
+;        slot+0x3e = DECAY1/SUST1 = (LVL[+0x09] << 8) | max(RATE[+0x0a], 4)
+;        slot+0x40 = DECAY2/SUST2 = (LVL[+0x0b] << 8) | RATE[+0x0c], the rate
+;        present only when desc+0x0d bit5 is set (else rate 0 = HOLD).
+;        slot+0x46 = RELEASE level = LVL[+0x0d].
+;        LVL = Voice_Level_Fader_Lookup (0x0118FE), RATE = Voice_EnvRate_Lookup
+;        (0x011963).  LABEL_025A9E is an inner join point of this routine, not
+;        a separate entry.  MEASURED, notes/audit/kn5000-eg-calibration.md S1.1.
+; ----------------------------------------------------------------------------
+Voice_Build_EnvSegments_FixedAtk:	; 025A35h
 	LDA XSP, XSP - 12
 	PUSH IZ
 	LD (XSP + 00ah), XWA
@@ -20654,7 +20948,7 @@ LABEL_02667B:
 
 LABEL_02667F:
 	LD BC, DE
-	JRL T, LABEL_0232C7
+	JRL T, Voice_Build_OutputLevel
 
 LABEL_026684:
 	LD XBC, (XWA + 017h)
@@ -20693,7 +20987,7 @@ LABEL_0266D1:
 
 LABEL_0266D3:
 	LD BC, DE
-	JRL T, LABEL_0232C7
+	JRL T, Voice_Build_OutputLevel
 
 LABEL_0266D8:
 	DEC 2, XSP
@@ -20739,7 +21033,7 @@ LABEL_026737:
 	LD A, (XIZ)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D50E
+	CALL ToneGen_WriteLevelPair
 
 LABEL_02675E:
 	INC 1, XIZ
@@ -20751,7 +21045,23 @@ LABEL_026765:
 	INC 2, XSP
 	RET
 
-LABEL_026769:
+; ----------------------------------------------------------------------------
+; Voice_Calc_LevelPair_EGA - Compute a voice's level pair into the register scratch block
+; Entry: XWA = pointer to the voice slot
+; Exit:  TONEGEN_REG_SCRATCH+0x2C/0x2E written; shipped later by ToneGen_WriteLevelBurst
+; Notes: i = clamp(partial_block[+0x2d] + (int8)tone_rec[+0x6c], 0, 100)
+;        IZ = Voice_Level_Fader_Lookup[i]   (0x0118FE, param 0..100 -> level)
+;        if tone_rec[+0x0a] bit0 and !(slot+0x01 bit8):
+;            IZ = min(IZ, LVL[Voice_LevelCap_Lookup[tone_rec[+0x18]]])
+;        if partial_block[+0x35] != 0: IZ += velocity scaling (LABEL_022BB8),
+;            then clamp to 0..255 (LABEL_023328).
+;        Result is packed (IZ << 8) | flag and stored to the two scratch
+;        words that become IC303 registers +0x800 / +0x840.
+;        MEASURED: the key-up recomputation of the EGA pair was captured
+;        bit-exact as 0x8B80 / 0x8B00 for IZ = 0x8B
+;        (notes/audit/kn5000-audit-amplitude.md S1.3, S1.6).
+; ----------------------------------------------------------------------------
+Voice_Calc_LevelPair_EGA:	; 026769h
 	DEC 8, XSP
 	PUSH IZ
 	LD (XSP + 006h), XWA
@@ -20840,7 +21150,14 @@ LABEL_02682F:
 	INC 8, XSP
 	RET
 
-LABEL_02684A:
+; ----------------------------------------------------------------------------
+; Voice_Stage_EnvSegments - Copy a voice's DECAY1/SUST1 and DECAY2/SUST2 segment words to the scratch
+; Entry: XWA = pointer to the voice slot
+; Exit:  TONEGEN_REG_SCRATCH+0x1A = slot+0x3e, +0x1C = slot+0x40
+; Notes: Feeds ToneGen_WriteEnvSegments, which ships them to IC303 +0x840 and
+;        +0x880.
+; ----------------------------------------------------------------------------
+Voice_Stage_EnvSegments:	; 02684Ah
 	LD BC, (XWA + 03eh)
 	LD (0451E6h), BC
 	LD WA, (XWA + 040h)
@@ -20957,7 +21274,23 @@ LABEL_02695A:
 	INC 8, XSP
 	RET
 
-LABEL_026975:
+; ----------------------------------------------------------------------------
+; Voice_Calc_LevelPair_EGB - Compute a voice's level pair into the register scratch block
+; Entry: XWA = pointer to the voice slot
+; Exit:  TONEGEN_REG_SCRATCH+0x30/0x32 written; shipped later by ToneGen_WriteLevelBurst
+; Notes: i = clamp(partial_block[+0x2d] + (int8)tone_rec[+0x6c], 0, 100)
+;        IZ = Voice_Level_Fader_Lookup[i]   (0x0118FE, param 0..100 -> level)
+;        if tone_rec[+0x0a] bit0 and !(slot+0x01 bit8):
+;            IZ = min(IZ, LVL[Voice_LevelCap_Lookup[tone_rec[+0x18]]])
+;        if partial_block[+0x35] != 0: IZ += velocity scaling (LABEL_022BB8),
+;            then clamp to 0..255 (LABEL_023328).
+;        Result is packed (IZ << 8) | flag and stored to the two scratch
+;        words that become IC303 registers +0x900 / +0x940.
+;        MEASURED: the key-up recomputation of the EGA pair was captured
+;        bit-exact as 0x8B80 / 0x8B00 for IZ = 0x8B
+;        (notes/audit/kn5000-audit-amplitude.md S1.3, S1.6).
+; ----------------------------------------------------------------------------
+Voice_Calc_LevelPair_EGB:	; 026975h
 	DEC 8, XSP
 	PUSH IZ
 	LD (XSP + 006h), XWA
@@ -21088,7 +21421,23 @@ LABEL_026A93:
 	INC 8, XSP
 	RET
 
-LABEL_026AAA:
+; ----------------------------------------------------------------------------
+; Voice_Calc_LevelPair_EGC - Compute a voice's level pair into the register scratch block
+; Entry: XWA = pointer to the voice slot
+; Exit:  TONEGEN_REG_SCRATCH+0x34/0x36 written; shipped later by ToneGen_WriteLevelBurst
+; Notes: i = clamp(partial_block[+0x2d] + (int8)tone_rec[+0x6c], 0, 100)
+;        IZ = Voice_Level_Fader_Lookup[i]   (0x0118FE, param 0..100 -> level)
+;        if tone_rec[+0x0a] bit0 and !(slot+0x01 bit8):
+;            IZ = min(IZ, LVL[Voice_LevelCap_Lookup[tone_rec[+0x18]]])
+;        if partial_block[+0x35] != 0: IZ += velocity scaling (LABEL_022BB8),
+;            then clamp to 0..255 (LABEL_023328).
+;        Result is packed (IZ << 8) | flag and stored to the two scratch
+;        words that become IC303 registers +0x9C0 / +0xA00.
+;        MEASURED: the key-up recomputation of the EGA pair was captured
+;        bit-exact as 0x8B80 / 0x8B00 for IZ = 0x8B
+;        (notes/audit/kn5000-audit-amplitude.md S1.3, S1.6).
+; ----------------------------------------------------------------------------
+Voice_Calc_LevelPair_EGC:	; 026AAAh
 	DEC 8, XSP
 	PUSH IZ
 	LD (XSP + 006h), XWA
@@ -21214,7 +21563,18 @@ LABEL_026BA3:
 	INC 8, XSP
 	RET
 
-LABEL_026BDC:
+; ----------------------------------------------------------------------------
+; Voice_Calc_LevelPair_Silence - Stage a silencing level set: zero the EGB/EGC pairs, hold EGA
+; Entry: XWA = pointer to the voice slot
+; Exit:  TONEGEN_REG_SCRATCH+0x30/+0x32/+0x34/+0x36 = 0;
+;        +0x2C = (slot+0x46 << 8) | 0x0080, +0x2E = (slot+0x46 << 8)
+; Notes: slot+0x46 is the RELEASE target level built by
+;        Voice_Build_EnvSegments_FixedAtk.  MEASURED consequence: the firmware
+;        silences a voice by zeroing the two *send* pairs, NOT by zeroing the
+;        +0x800 level - so +0x800 is not the mute control
+;        (notes/audit/kn5000-audit-amplitude.md S1.4).
+; ----------------------------------------------------------------------------
+Voice_Calc_LevelPair_Silence:	; 026BDCh
 	LDW (0451FCh), 0000h
 	LDW (0451FEh), 0000h
 	LD C, (XWA + 046h)
@@ -21464,7 +21824,28 @@ LABEL_026E59:
 	POP XIZ
 	RET
 
-LABEL_026E5B:
+; ----------------------------------------------------------------------------
+; Voice_Step_AmpDelay - Per-tick step of a voice's AMPLITUDE-domain delay counter
+; Entry: XWA = pointer to the voice slot (VOICE_SLOT_BASE 0x04308E + ch*0x47)
+; Exit:  none (slot+0x2f updated in place); IZ/XWA clobbered
+; Notes: Called once per audio tick by Audio_Tick_ServiceVoices_A/_B for every
+;        channel whose slot+0x2f has bit15 or bit7 set.
+;        slot+0x2f layout: bit15 = coarse-active, bits 14:8 = coarse count,
+;        bit7 = fine-active, bits 6:0 = fine count.
+;        COARSE branch (bit15): IZ -= 0x100; when bits 14:8 hit 0 it ships the
+;        gate/command word slot+0x2d through ToneGen_WriteSingleReg, calls
+;        Voice_Clear_HoldBit and clears bit15.
+;        FINE branch (bit7): IZ -= 1; when bits 6:0 hit 0 it calls
+;        Voice_Reload_Levels once and clears bit7 -> the counter DISARMS.
+;        MEASURED CORRECTION: bit15 of slot+0x2f is never set anywhere in the
+;        v142 payload (seeded as a byte at asm L27198-27200, only ever ORed
+;        with 0x0080 by Voice_ParamInit L29374), so the COARSE branch is dead
+;        code in this build and this routine is a ONE-SHOT delay, not a ramp.
+;        It is NOT a per-tick level ramp: notes/kn5000-envelope-engine.md S2
+;        claimed a level rewrite every tick; the register capture in
+;        notes/audit/kn5000-audit-amplitude.md S1.6 shows one write per note.
+; ----------------------------------------------------------------------------
+Voice_Step_AmpDelay:	; 026E5Bh
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
@@ -21487,7 +21868,7 @@ LABEL_026E5B:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	RES 0fh, IZ
 
 LABEL_026E9B:
@@ -21500,7 +21881,7 @@ LABEL_026E9B:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	AND IZ, 007fh
 
 LABEL_026EB9:
@@ -21510,7 +21891,28 @@ LABEL_026EB9:
 	INC 4, XSP
 	RET
 
-LABEL_026EC3:
+; ----------------------------------------------------------------------------
+; Voice_Step_ExprRamp - Per-tick step of a voice's second (expression) envelope domain
+; Entry: XWA = pointer to the voice slot
+; Exit:  none (slot+0x31 and slot+0x33 updated in place)
+; Notes: State word slot+0x31: bit15 = armed (the gate tested by
+;        Audio_Tick_ServiceVoices_B), bits 14:12 = phase, bits 6:0 = a kill
+;        countdown.  Merged each tick with the rate byte slot+0x35.
+;        Writes IC303 register +0x180+ch through ToneGen_WriteExprReg, taking
+;        the value from slot+0x2b (or, for part expression modes 1/2 selected
+;        by the byte at 0x04138E + part*0x11F, an alternate packing).
+;        Phase 0x1000 accumulates slot+0x38 and phase 0x4000 accumulates
+;        slot+0x36 into the signed accumulator slot+0x33; the floor is 0xFF00
+;        (= -256).  Reaching the floor clamps slot+0x33 and calls
+;        Voice_Clear_HoldBit + Voice_Reload_Levels; otherwise it emits the
+;        pair +0x840 = 0xFF00 / +0x800 = 0xFF80 and re-gates via
+;        LABEL_02D68F / LABEL_02D73F.
+;        Countdown value 1 in bits 6:0 emits the kill pair +0x840 = 0xA200 /
+;        +0x800 = 0xA280 (the same pair Voice_Reset_Engine uses).
+;        MEASURED for the register traffic and the state-word fields;
+;        INFERRED for the musical meaning of the three phases.
+; ----------------------------------------------------------------------------
+Voice_Step_ExprRamp:	; 026EC3h
 	DEC 6, XSP
 	PUSH IZ
 	LD (XSP + 004h), XWA
@@ -21539,7 +21941,7 @@ LABEL_026EC3:
 	EXTZ WA
 	LD XBC, (XSP + 004h)
 	LD BC, (XBC + 02bh)
-	CALL LABEL_02D670
+	CALL ToneGen_WriteExprReg
 	JR T, LABEL_026F89
 
 LABEL_026F1E:
@@ -21555,7 +21957,7 @@ LABEL_026F1E:
 	EXTZ WA
 	LD XBC, (XSP + 004h)
 	LD BC, (XBC + 02bh)
-	CALL LABEL_02D670
+	CALL ToneGen_WriteExprReg
 	JR T, LABEL_026F89
 
 LABEL_026F4A:
@@ -21575,7 +21977,7 @@ LABEL_026F4A:
 	OR DE, BC
 	LD WA, HL
 	LD BC, DE
-	CALL LABEL_02D670
+	CALL ToneGen_WriteExprReg
 	JR T, LABEL_026F89
 
 LABEL_026F78:
@@ -21584,7 +21986,7 @@ LABEL_026F78:
 	EXTZ WA
 	LD XBC, (XSP + 004h)
 	LD BC, (XBC + 02bh)
-	CALL LABEL_02D670
+	CALL ToneGen_WriteExprReg
 
 LABEL_026F89:
 	LD WA, (XSP + 002h)
@@ -21606,11 +22008,11 @@ LABEL_026F89:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	ANDW (XSP + 002h), 6fffh
 	JRL T, LABEL_0271AF
 
@@ -21716,11 +22118,11 @@ LABEL_0270B0:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	ANDW (XSP + 002h), 6fffh
 	JRL T, LABEL_0271AF
 
@@ -22615,11 +23017,24 @@ LABEL_0279B6:
 	INC 6, XSP
 	RET
 
-LABEL_027A46:
+; ----------------------------------------------------------------------------
+; Audio_Tick_ServiceVoices_A - Audio-tick pass A: service every voice's amplitude-domain counter
+; Entry: none
+; Exit:  none
+; Notes: Called by Audio_Process_Init on even ticks (toggle 0x041342).
+;        Builds the list of live channels with Voice_Query_AllChannels, then for
+;        every channel index in it (slot = VOICE_SLOT_BASE + n*0x47):
+;          if part_struct(slot+0x23)+0x0a bit15 is SET  (delayed-release mode)
+;               and slot+0x2f & 0x8080 -> Voice_Step_AmpDelay(slot)
+;          else if slot+0x2f & 0x8080 -> Voice_Clear_HoldBit(ch),
+;               Voice_Reload_Levels(ch), slot+0x2f = 0    (immediate release)
+;        Pass A does NOT touch the expression domain.
+; ----------------------------------------------------------------------------
+Audio_Tick_ServiceVoices_A:	; 027A46h
 	DEC 4, XSP
 	PUSH XIZ
 	CALR LABEL_026CAE
-	CALL LABEL_02CD55
+	CALL Voice_Query_AllChannels
 	LDA XWA, XHL + 005h
 	LD (XSP + 004h), XWA
 	CP (XWA), 040h
@@ -22642,7 +23057,7 @@ LABEL_027A5B:
 	AND XWA, 00008080h
 	JR Z, LABEL_027AB3
 	LD XWA, XIZ
-	CALR LABEL_026E5B
+	CALR Voice_Step_AmpDelay
 	JR T, LABEL_027AB3
 
 LABEL_027A91:
@@ -22652,10 +23067,10 @@ LABEL_027A91:
 	JR Z, LABEL_027AB3
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	LDW (XIZ + 02fh), 0000h
 
 LABEL_027AB3:
@@ -22670,7 +23085,19 @@ LABEL_027AC0:
 	INC 4, XSP
 	RET
 
-LABEL_027AC4:
+; ----------------------------------------------------------------------------
+; Audio_Tick_ServiceVoices_B - Audio-tick pass B: pitch bend plus both envelope domains
+; Entry: none
+; Exit:  none
+; Notes: Called by Audio_Process_Init on odd ticks, after Voice_Manager_PollBank.
+;        Per live channel, in order:
+;          slot+0x01 bit10 -> recompute pitch (LABEL_023A4A) and ship +0x400
+;              through LABEL_02D0BA;
+;          then the same delayed/immediate split as pass A on slot+0x2f, plus the
+;              expression domain: slot+0x31 bit15 -> Voice_Step_ExprRamp, or the
+;              immediate Voice_Clear_HoldBit / Voice_Reload_Levels / slot+0x31 = 0.
+; ----------------------------------------------------------------------------
+Audio_Tick_ServiceVoices_B:	; 027AC4h
 	DEC 4, XSP
 	PUSH XIZ
 	CALR LABEL_027363
@@ -22678,7 +23105,7 @@ LABEL_027AC4:
 	LD WA, (041343h)
 	BIT 0ah, WA
 	JRL Z, LABEL_027BA0
-	CALL LABEL_02CD55
+	CALL Voice_Query_AllChannels
 	LDA XWA, XHL + 005h
 	LD (XSP + 004h), XWA
 	CP (XWA), 040h
@@ -22713,7 +23140,7 @@ LABEL_027B1A:
 	AND XWA, 00008080h
 	JR Z, LABEL_027B3B
 	LD XWA, XIZ
-	CALR LABEL_026E5B
+	CALR Voice_Step_AmpDelay
 	JR T, LABEL_027B8F
 
 LABEL_027B3B:
@@ -22722,7 +23149,7 @@ LABEL_027B3B:
 	BIT 0fh, WA
 	JR Z, LABEL_027B8F
 	LD XWA, XIZ
-	CALR LABEL_026EC3
+	CALR Voice_Step_ExprRamp
 	JR T, LABEL_027B8F
 
 LABEL_027B4C:
@@ -22732,10 +23159,10 @@ LABEL_027B4C:
 	JR Z, LABEL_027B70
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	LDW (XIZ + 02fh), 0000h
 	JR T, LABEL_027B8F
 
@@ -22746,10 +23173,10 @@ LABEL_027B70:
 	JR Z, LABEL_027B8F
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	LDW (XIZ + 031h), 0000h
 
 LABEL_027B8F:
@@ -22761,7 +23188,7 @@ LABEL_027B8F:
 	JRL T, LABEL_027C48
 
 LABEL_027BA0:
-	CALL LABEL_02CD55
+	CALL Voice_Query_AllChannels
 	LDA XWA, XHL + 005h
 	LD (XSP + 004h), XWA
 	CP (XWA), 040h
@@ -22784,7 +23211,7 @@ LABEL_027BB0:
 	AND XWA, 00008080h
 	JR Z, LABEL_027BE6
 	LD XWA, XIZ
-	CALR LABEL_026E5B
+	CALR Voice_Step_AmpDelay
 	JR T, LABEL_027C3A
 
 LABEL_027BE6:
@@ -22793,7 +23220,7 @@ LABEL_027BE6:
 	BIT 0fh, WA
 	JR Z, LABEL_027C3A
 	LD XWA, XIZ
-	CALR LABEL_026EC3
+	CALR Voice_Step_ExprRamp
 	JR T, LABEL_027C3A
 
 LABEL_027BF7:
@@ -22803,10 +23230,10 @@ LABEL_027BF7:
 	JR Z, LABEL_027C1B
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	LDW (XIZ + 02fh), 0000h
 	JR T, LABEL_027C3A
 
@@ -22817,10 +23244,10 @@ LABEL_027C1B:
 	JR Z, LABEL_027C3A
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	LD A, (XIZ)
 	EXTZ WA
-	CALL LABEL_02CD71
+	CALL Voice_Reload_Levels
 	LDW (XIZ + 031h), 0000h
 
 LABEL_027C3A:
@@ -23672,13 +24099,13 @@ LABEL_028ADC:
 	JR NZ, LABEL_028AF2
 	ORW (041343h), 0001h
 	LD WA, 1
-	CALL LABEL_021ECB
+	CALL Voice_Reset_Engine
 	JR T, LABEL_028AFF
 
 LABEL_028AF2:
 	ANDW (041343h), 0fffeh
 	LD WA, 0
-	CALL LABEL_021ECB
+	CALL Voice_Reset_Engine
 
 LABEL_028AFF:
 	CALL LABEL_034B4B
@@ -23883,7 +24310,7 @@ LABEL_028CBA:
 	LDA XBC, 04308Eh
 	EXTS XWA
 	ADD XWA, XBC
-	CALL LABEL_025589
+	CALL Voice_Build_GateCommand
 	JR T, LABEL_028D10
 
 LABEL_028CE6:
@@ -23900,7 +24327,7 @@ LABEL_028CE6:
 	LDA XBC, 04308Eh
 	EXTS XWA
 	ADD XWA, XBC
-	CALL LABEL_0255F3
+	CALL Voice_Build_GateCommand_NoPartial
 
 LABEL_028D10:
 	LD A, (XIZ)
@@ -24088,12 +24515,12 @@ LABEL_028E89:
 	BIT 8, WA
 	JR Z, LABEL_028EC7
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D620
+	CALL ToneGen_WriteSegRegs_SameLevel
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
@@ -24102,17 +24529,17 @@ LABEL_028E89:
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
 	JRL T, LABEL_028F62
 
 LABEL_028EC7:
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 	LD XWA, XIZ
-	CALL LABEL_026975
+	CALL Voice_Calc_LevelPair_EGB
 	LD XWA, XIZ
-	CALL LABEL_026AAA
+	CALL Voice_Calc_LevelPair_EGC
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
@@ -24125,12 +24552,12 @@ LABEL_028EEA:
 	BIT 8, WA
 	JR Z, LABEL_028F27
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D620
+	CALL ToneGen_WriteSegRegs_SameLevel
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
@@ -24139,7 +24566,7 @@ LABEL_028EEA:
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
 	JR T, LABEL_028F62
 
@@ -25439,7 +25866,7 @@ LABEL_02A672:
 	JR C, LABEL_02A672
 
 LABEL_02A684:
-	CALL LABEL_02CD55
+	CALL Voice_Query_AllChannels
 	LDA XWA, XHL + 005h
 	LD XIZ, XWA
 	CP (XIZ), 040h
@@ -25485,12 +25912,12 @@ LABEL_02A6D9:
 LABEL_02A6DB:
 	EXTS WA
 	CALR LABEL_028B23
-	CALL LABEL_02CD55
+	CALL Voice_Query_AllChannels
 	LD XWA, XHL
 	JRL T, LABEL_028D4C
 	EXTZ WA
 	CALR LABEL_028B3B
-	CALL LABEL_02CD55
+	CALL Voice_Query_AllChannels
 	LD XWA, XHL
 	JRL T, LABEL_028D4C
 
@@ -26767,7 +27194,16 @@ LABEL_02B49E:
 	LD HL, WA
 	RET
 
-LABEL_02B4A1:
+; ----------------------------------------------------------------------------
+; ToneGen_SilenceChannel - Free one IC303 channel
+; Entry: A = channel number (0..63)
+; Exit:  none
+; Notes: Writes +0x0C0 + ch = 0x0000, then +0x000 + ch = 0x7E00.
+;        0x7E00 is the 'voice free' command; its only sources are this routine,
+;        the panic loop inside Voice_Reset_Engine and the boot self-test
+;        (notes/audit/kn5000-audit-voicelife.md S4.2).
+; ----------------------------------------------------------------------------
+ToneGen_SilenceChannel:	; 02B4A1h
 	DEC 2, XSP
 	LD (XSP), A
 	RES 7, (P6)
@@ -26834,9 +27270,9 @@ LABEL_02B4E3:
 	LD XWA, XIZ
 	CALL LABEL_0253FE
 	LD XWA, XIZ
-	CALL LABEL_025589
+	CALL Voice_Build_GateCommand
 	LD XWA, XIZ
-	CALL LABEL_025636
+	CALL Voice_Build_EnvSegments_PatchAtk
 	LD XWA, XIZ
 	LD BC, 0
 	CALL LABEL_02591D
@@ -27419,7 +27855,7 @@ LABEL_02BB1A:
 	LD DE, 0008h
 	CALR LABEL_02B717
 	LD XWA, (XSP + 00ah)
-	CALL LABEL_022340
+	CALL Voice_Allocate_Nodes
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 004h
 	JRL NC, LABEL_02BCCF
@@ -27587,7 +28023,7 @@ LABEL_02BCD6:
 	LD XWA, XIZ
 	CALL LABEL_0253FE
 	LD XWA, XIZ
-	CALL LABEL_025589
+	CALL Voice_Build_GateCommand
 	CP (XIZ + 003h), 003h
 	JR NC, LABEL_02BD5D
 	LD XWA, XIZ
@@ -27873,7 +28309,7 @@ LABEL_02C00E:
 
 LABEL_02C030:
 	LD XWA, (XSP + 00ah)
-	CALL LABEL_022340
+	CALL Voice_Allocate_Nodes
 	LD_E 000h
 	CP E, 4
 	JR NC, LABEL_02C0AF
@@ -27946,9 +28382,9 @@ LABEL_02C0B6:
 	LD XWA, XIZ
 	CALL LABEL_025499
 	LD XWA, XIZ
-	CALL LABEL_0255F3
+	CALL Voice_Build_GateCommand_NoPartial
 	LD XWA, XIZ
-	CALL LABEL_025A35
+	CALL Voice_Build_EnvSegments_FixedAtk
 	LD XWA, XIZ
 	LD BC, 0
 	CALL LABEL_025B6F
@@ -28166,7 +28602,7 @@ LABEL_02C2C0:
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 009h), 000h
 	LD XWA, (XSP + 00ah)
-	CALL LABEL_022340
+	CALL Voice_Allocate_Nodes
 	LD_E 000h
 	CP E, 2
 	JR NC, LABEL_02C3C5
@@ -28241,9 +28677,9 @@ LABEL_02C3CC:
 	LD XWA, XIZ
 	CALL LABEL_025499
 	LD XWA, XIZ
-	CALL LABEL_0255F3
+	CALL Voice_Build_GateCommand_NoPartial
 	LD XWA, XIZ
-	CALL LABEL_025A35
+	CALL Voice_Build_EnvSegments_FixedAtk
 	LD XWA, XIZ
 	LD BC, 0
 	CALL LABEL_025B6F
@@ -28468,7 +28904,7 @@ LABEL_02C653:
 	LD (XIZ + 005h), 000h
 	LD (XIZ + 009h), 000h
 	LD XWA, XIZ
-	CALL LABEL_022340
+	CALL Voice_Allocate_Nodes
 	LD A, (XSP + 004h)
 	EXTZ WA
 	ADD WA, 000ah
@@ -29163,7 +29599,16 @@ LABEL_02CD36:
 	POP XIZ
 	RET
 
-LABEL_02CD55:
+; ----------------------------------------------------------------------------
+; Voice_Query_AllChannels - Build the list of all live channels for the audio-tick service passes
+; Entry: none
+; Exit:  XHL = pointer to the query block at 0x2A5E; +5 onwards is a byte list of
+;        channel indices terminated by a value >= 0x40
+; Notes: Fills the query descriptor 0x2A5E with {mode = 0, key = 0x0000,
+;        mask = 0x1FFF} and runs LABEL_022691 over it.  Used by both
+;        Audio_Tick_ServiceVoices_A and _B.
+; ----------------------------------------------------------------------------
+Voice_Query_AllChannels:	; 02CD55h
 	PUSH XIZ
 	LDA XIZ, 2A5Eh
 	LD (XIZ), 000h
@@ -29175,7 +29620,23 @@ LABEL_02CD55:
 	POP XIZ
 	RET
 
-LABEL_02CD71:
+; ----------------------------------------------------------------------------
+; Voice_Reload_Levels - Recompute and re-ship a voice's level registers (segment reload)
+; Entry: A = channel number (0..63)
+; Exit:  none; the voice's level registers are rewritten
+; Notes: Ten call sites.  This is the general 'the levels changed' service, NOT
+;        a note-off command (notes/audit/kn5000-audit-voicelife.md S1.4).
+;        slot+0x05 bit7 is cleared on entry.  Then:
+;          slot+0x01 bit8 set -> Voice_Calc_LevelPair_EGA,
+;              ToneGen_WriteSegRegs_SameLevel, ToneGen_WriteSingleReg(slot+0x2d),
+;              Voice_Clear_HoldBit, then clear bit8;
+;          bit8 clear -> Voice_Calc_LevelPair_EGA/EGB/EGC then the six-write
+;              burst ToneGen_WriteLevelBurst.
+;        When slot+0x01 bit15 is clear AND the part word part_struct+0x0a bit0
+;        (SUSTAIN PEDAL) is set, the mirror pair at LABEL_02CDFC/LABEL_02CE34 is
+;        used instead.  LABEL_02CDDA is an inner branch target, not an entry.
+; ----------------------------------------------------------------------------
+Voice_Reload_Levels:	; 02CD71h
 	DEC 2, XSP
 	PUSH XIZ
 	LD (XSP + 004h), A
@@ -29199,32 +29660,32 @@ LABEL_02CDA2:
 	BIT 8, WA
 	JR Z, LABEL_02CDDA
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D620
+	CALL ToneGen_WriteSegRegs_SameLevel
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
 	CALL ToneGen_WriteSingleReg
 	LD A, (XSP + 004h)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
 	JR T, LABEL_02CE48
 
 LABEL_02CDDA:
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 	LD XWA, XIZ
-	CALL LABEL_026975
+	CALL Voice_Calc_LevelPair_EGB
 	LD XWA, XIZ
-	CALL LABEL_026AAA
+	CALL Voice_Calc_LevelPair_EGC
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D436
+	CALL ToneGen_WriteLevelBurst
 	JR T, LABEL_02CE48
 
 LABEL_02CDFC:
@@ -29232,28 +29693,28 @@ LABEL_02CDFC:
 	BIT 8, WA
 	JR Z, LABEL_02CE34
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D620
+	CALL ToneGen_WriteSegRegs_SameLevel
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
 	CALL ToneGen_WriteSingleReg
 	LD A, (XSP + 004h)
 	EXTZ WA
-	CALL LABEL_022587
+	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
 	JR T, LABEL_02CE48
 
 LABEL_02CE34:
 	LD XWA, XIZ
-	CALL LABEL_02684A
+	CALL Voice_Stage_EnvSegments
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D5D0
+	CALL ToneGen_WriteEnvSegments
 
 LABEL_02CE48:
 	POP XIZ
@@ -29299,17 +29760,17 @@ LABEL_02CE9A:
 
 LABEL_02CEA8:
 	LD XWA, XIZ
-	CALL LABEL_026769
+	CALL Voice_Calc_LevelPair_EGA
 
 LABEL_02CEAE:
 	LD XWA, XIZ
-	CALL LABEL_026975
+	CALL Voice_Calc_LevelPair_EGB
 	LD XWA, XIZ
-	CALL LABEL_026AAA
+	CALL Voice_Calc_LevelPair_EGC
 	LD A, (XSP + 00ah)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D436
+	CALL ToneGen_WriteLevelBurst
 
 LABEL_02CEC8:
 	LD XWA, (XSP + 004h)
@@ -29331,11 +29792,11 @@ LABEL_02CED5:
 	RES 7, (XWA + 005h)
 	CP (XWA + 046h), 000h
 	JR Z, LABEL_02CF04
-	CALL LABEL_026BDC
+	CALL Voice_Calc_LevelPair_Silence
 	LD A, (XSP)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D436
+	CALL ToneGen_WriteLevelBurst
 
 LABEL_02CF04:
 	INC 2, XSP
@@ -29384,7 +29845,7 @@ LABEL_02CF57:
 LABEL_02CF6A:
 	LD A, (XIZ)
 	EXTZ WA
-	CALR LABEL_02CD71
+	CALR Voice_Reload_Levels
 	JR T, LABEL_02CF8C
 
 LABEL_02CF73:
@@ -29402,7 +29863,7 @@ LABEL_02CF7C:
 LABEL_02CF85:
 	LD A, (XIZ)
 	EXTZ WA
-	CALR LABEL_02CD71
+	CALR Voice_Reload_Levels
 
 LABEL_02CF8C:
 	INC 1, XIZ
@@ -29494,7 +29955,7 @@ LABEL_02D00D:
 	LD (XIZ + 004h), 000h
 	LD (XIZ + 005h), 000h
 	LD XWA, XIZ
-	CALL LABEL_022340
+	CALL Voice_Allocate_Nodes
 	CP (XIZ + 00ah), 040h
 	JR NC, LABEL_02D0B8
 	LD A, (XIZ + 00ah)
@@ -29933,7 +30394,23 @@ LABEL_02D431:
 	POP IZ
 	RET
 
-LABEL_02D436:
+; ----------------------------------------------------------------------------
+; ToneGen_WriteLevelBurst - Ship all six level words of one channel to IC303
+; Entry: WA = channel number (0..63)
+;        XBC = pointer to the register scratch block (TONEGEN_REG_SCRATCH)
+; Exit:  none
+; Notes: Writes, in this exact order:
+;          +0x840 <- scratch+0x2e     +0x940 <- scratch+0x32
+;          +0xA00 <- scratch+0x36     +0x800 <- scratch+0x2c
+;          +0x900 <- scratch+0x30     +0x9C0 <- scratch+0x34
+;        No gate write and no +0x080 write.
+;        This is the ONLY writer that emits +0x940 immediately after +0x840 on
+;        the same channel - a deterministic, timing-free signature for the
+;        EG-stage / release burst (notes/audit/kn5000-audit-voicelife.md GAP 5).
+;        P6.7 is the chip-select strobe: RES 7,(P6) to latch the register index
+;        at 0x100000, SET 7,(P6) to write the datum at 0x100002.
+; ----------------------------------------------------------------------------
+ToneGen_WriteLevelBurst:	; 02D436h
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XBC
@@ -30032,7 +30509,14 @@ LABEL_02D507:
 	INC 4, XSP
 	RET
 
-LABEL_02D50E:
+; ----------------------------------------------------------------------------
+; ToneGen_WriteLevelPair - Ship one channel's EG-A level pair to IC303
+; Entry: WA = channel number
+;        XBC = pointer to the register scratch block
+; Exit:  none
+; Notes: +0x840 <- scratch+0x2e, then +0x800 <- scratch+0x2c.
+; ----------------------------------------------------------------------------
+ToneGen_WriteLevelPair:	; 02D50Eh
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XBC
@@ -30088,7 +30572,15 @@ LABEL_02D55E:
 	db 050h, 068h, 000h, 000h, 000h, 000h, 04Eh, 0EFh
 	db 064h, 00Eh
 
-LABEL_02D5D0:
+; ----------------------------------------------------------------------------
+; ToneGen_WriteEnvSegments - Ship one channel's two decay/sustain segment words to IC303
+; Entry: WA = channel number
+;        XBC = pointer to the register scratch block
+; Exit:  none
+; Notes: +0x840 <- scratch+0x1a (DECAY1/SUST1), +0x880 <- scratch+0x1c
+;        (DECAY2/SUST2).  Staged by Voice_Stage_EnvSegments.
+; ----------------------------------------------------------------------------
+ToneGen_WriteEnvSegments:	; 02D5D0h
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XBC
@@ -30127,7 +30619,16 @@ LABEL_02D619:
 	INC 4, XSP
 	RET
 
-LABEL_02D620:
+; ----------------------------------------------------------------------------
+; ToneGen_WriteSegRegs_SameLevel - Write the same level word to both segment registers of a channel
+; Entry: WA = channel number
+;        XBC = pointer to the register scratch block
+; Exit:  none
+; Notes: +0x840 <- scratch+0x2e and +0x880 <- scratch+0x2e (the SAME word),
+;        i.e. it collapses the decay segments onto the current level.  Used by
+;        Voice_Reload_Levels on the slot+0x01 bit8 path.
+; ----------------------------------------------------------------------------
+ToneGen_WriteSegRegs_SameLevel:	; 02D620h
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XBC
@@ -30166,7 +30667,16 @@ LABEL_02D669:
 	INC 4, XSP
 	RET
 
-LABEL_02D670:
+; ----------------------------------------------------------------------------
+; ToneGen_WriteExprReg - Write one channel's expression register (+0x180 + ch)
+; Entry: WA = channel number
+;        BC = value
+; Exit:  none
+; Notes: The only writer of the +0x180 group.  Same register the voice manager
+;        READS BACK to learn a voice's current envelope level
+;        (Voice_Manager_PollBank).  P6.7 is the chip select.
+; ----------------------------------------------------------------------------
+ToneGen_WriteExprReg:	; 02D670h
 	PUSH IZ
 	LD IZ, BC
 	RES 7, (P6)
@@ -38139,7 +38649,7 @@ DSP_System_Init_Continue:
 	CALL DSP_Config_Init
 	CALL DSP_Reset
 	LD WA, 0
-	CALL LABEL_021ECB
+	CALL Voice_Reset_Engine
 	CALL LABEL_03555F
 	CALL LABEL_034B4B
 	LD (041342h), 000h
@@ -38150,13 +38660,13 @@ LABEL_034CDA:
 Audio_Process_Init:
 	CP (041342h), 000h
 	JR NZ, LABEL_034CED
-	CALL LABEL_027A46
+	CALL Audio_Tick_ServiceVoices_A
 	CALL LABEL_03611E
 	JR T, LABEL_034CF5
 
 LABEL_034CED:
-	CALL LABEL_02219F
-	CALL LABEL_027AC4
+	CALL Voice_Manager_PollBank
+	CALL Audio_Tick_ServiceVoices_B
 
 LABEL_034CF5:
 	XOR (041342h), 0ffh
