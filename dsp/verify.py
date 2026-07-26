@@ -9,12 +9,12 @@ tree is a FAITHFUL view of the real ROM data -- it never invents or drops a byte
 
 What it checks (all of it against original_ROMs/kn5000_subprogram_v142.rom):
 
-  1. Re-extract the shared header and all 100 algorithm streams from the ROM
-     (via the reused parser kn5000_dsp_extract).
+  1. Re-extract the shared header, the output-stage epilogue and all 100
+     algorithm streams from the ROM (via the reused parser kn5000_dsp_extract).
   2. Parse the raw 36-bit word column back out of each committed listing
-     (dsp/disasm/kernel.dsm and every dsp/disasm/progNN_*.dsm) and re-pack it to
-     5-byte big-endian.
-  3. Confirm the kernel bytes == the ROM header stream, and that EVERY valid
+     (dsp/disasm/kernel.dsm, dsp/disasm/epilogue.dsm and every
+     dsp/disasm/progNN_*.dsm) and re-pack it to 5-byte big-endian.
+  3. Confirm the kernel and epilogue bytes == their ROM streams, and that EVERY valid
      algorithm stream in the ROM (all 100, minus the 5 malformed) is byte-identical
      to the committed listing of its distinct image -- so all 96 valid programs and
      all ~100 effect slots are covered, not just the 38 representatives.
@@ -33,6 +33,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ALGO_TABLE = 0x0001ED7C
 HEADER_ROM = 0x01E496
+EPILOGUE_ROM = 0x01E63C
 N_ALGOS = 100
 MALFORMED = {79, 88, 89, 90, 91}
 
@@ -66,6 +67,8 @@ def main():
     # ROM header + algorithm streams
     iram, _c, _o = E.parse_stream(rom, HEADER_ROM, limit=40)
     rom_header = [int.from_bytes(bytes(w), "big") for w in iram[0][1]]
+    iram, _c, _o = E.parse_stream(rom, EPILOGUE_ROM, limit=40)
+    rom_epilogue = [int.from_bytes(bytes(w), "big") for w in iram[0][1]]
     rom_algo = {}
     for i in range(N_ALGOS):
         try:
@@ -86,6 +89,13 @@ def main():
     else:
         checked += 1
 
+    # 1b. output stage (I-RAM 60..82)
+    epath = os.path.join(args.disasm, "epilogue.dsm")
+    if listing_words(epath) != rom_epilogue:
+        print("FAIL: epilogue.dsm != ROM output-stage stream"); fails += 1
+    else:
+        checked += 1
+
     # 2. build a lookup from image content -> committed listing words
     listing_by_words = {}
     for f in sorted(glob.glob(os.path.join(args.disasm, "prog*_*.dsm"))):
@@ -101,8 +111,8 @@ def main():
             print("FAIL: algo %d (%d words) has no byte-identical committed listing" % (i, len(w)))
             fails += 1
 
-    print("checked: kernel + %d valid algorithm streams (%d distinct images)"
-          % (checked - 1, len(listing_by_words)))
+    print("checked: kernel + epilogue + %d valid algorithm streams (%d distinct images)"
+          % (checked - 2, len(listing_by_words)))
     if fails:
         print("BYTE-MATCH FAILED: %d mismatch(es)" % fails)
         sys.exit(1)

@@ -31,9 +31,11 @@ effect program set was recovered statically from firmware.
 | `algorithms/` | yes | per-family algorithm docs (biquad/EQ and reverb are SOLVED to the bit; the rest are structural), each linking the deep notes rather than duplicating them |
 | `flowcharts/` | yes | GENERATED per-program **Mermaid signal-flow flowcharts** — the shared kernel + all 38 effect bodies (structure, not a per-instruction dump); see [`flowcharts/README.md`](flowcharts/README.md) |
 | `disasm/index.dsm` | yes | GENERATED rendered manifest of all 38 images + totals |
-| `disasm/kernel.dsm` | yes | GENERATED disassembly of the shared 60-word kernel (common header) |
+| `disasm/kernel.dsm` | yes | GENERATED disassembly of the resident kernel part 1 — the 60-word common header, I-RAM 0..59 |
+| `disasm/epilogue.dsm` | yes | GENERATED disassembly of the resident kernel part 2 — the 23-word **output stage**, I-RAM 60..82, which runs last in every frame and holds the two per-unit call-vector words the host rewrites (`analysis/k5-output-stage.md`) |
 | `disasm/progNN_<name>.dsm` | yes | GENERATED disassembly of each distinct image: per word — fields, decoded `hi12` flags, structural annotation, absolute C-RAM coefficient address, and the named coefficient where known |
-| `sym/progNN.sym`, `sym/kernel.sym` | yes | hand-curated per-program labels/comments (the loss-free annotation source) |
+| `sym/progNN.sym`, `sym/kernel.sym`, `sym/epilogue.sym` | yes | hand-curated per-program labels/comments (the loss-free annotation source) |
+| `analysis/` | yes | per-roadmap-item decode write-ups with explicit PROVEN / DETERMINED / INFERRED / OPEN status on every claim (`k5-output-stage.md`) |
 | `tools/dsp_disasm.py` | yes | the Python ISA disassembler — a self-contained, byte-faithful mirror of MAME's `upd6383d.cpp` |
 | `tools/gen_dsp_disasm.py` | yes | the generator (extract → disassemble → annotate → emit) |
 | `verify.py` | yes | the byte-match check |

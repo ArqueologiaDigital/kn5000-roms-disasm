@@ -46,6 +46,10 @@ ROM_BASE   = 0xEF00
 ALGO_TABLE = 0x0001ED7C                    # 100 x u32 -> microprogram streams
 N_ALGOS    = 100
 HEADER_ROM = 0x01E496                      # common 60-word header (op-3 record)
+EPILOGUE_ROM = 0x01E63C                    # 23-word output stage, I-RAM 60..82 (op-3
+                                           # record, shipped by DSP_AlgorithmChange, the
+                                           # routine just before subcpu LABEL_038044 --
+                                           # see dsp/analysis/k5-output-stage.md)
 MALFORMED  = {79, 88, 89, 90, 91}          # streams with no valid I-RAM image
 REVERB_BASE = 0x90                         # unit-1 coefficient bank base
 
@@ -115,12 +119,22 @@ def import_research_tools(tools_dir):
     return E, P, NC
 
 
+def extract_block(E, rom, addr):
+    """-> the I-RAM words of a single canned op-3 upload record."""
+    iram, _c, _o = E.parse_stream(rom, addr, limit=40)
+    return [int.from_bytes(bytes(w), "big") for w in iram[0][1]] if iram else []
+
+
 def extract_all(E, sub_path):
-    """-> (header_words, {algo: words}).  header is the shared 60-word kernel."""
+    """-> (header_words, epilogue_words, {algo: words}, {algo: loadaddr}).
+    header = the 60-word common header (I-RAM 0..59); epilogue = the 23-word
+    output stage (I-RAM 60..82).  Together they are the 83-word resident kernel."""
     rom = E.Rom(sub_path)
     # shared header
-    iram, _c, _o = E.parse_stream(rom, HEADER_ROM, limit=40)
-    header = [int.from_bytes(bytes(w), "big") for w in iram[0][1]] if iram else []
+    header = extract_block(E, rom, HEADER_ROM)
+    # output stage / epilogue (I-RAM 60..82) -- a SECOND canned block, shipped by
+    # DSP_AlgorithmChange, not by EFF_WriteHeader
+    epilogue = extract_block(E, rom, EPILOGUE_ROM)
     # every algorithm stream
     progs = {}
     loadaddr = {}
@@ -136,7 +150,7 @@ def extract_all(E, sub_path):
                  (wd for _a, ws, _l in iram for wd in ws)]
         progs[i] = words
         loadaddr[i] = iram[0][0]
-    return header, progs, loadaddr
+    return header, epilogue, progs, loadaddr
 
 
 def group_images(progs):
@@ -157,7 +171,9 @@ def group_images(progs):
 #  but keyed here by WORD INDEX: "wNN  Label   ; comment".  Loss-free across
 #  regeneration because the .dsm is generated and the .sym is the source.
 # --------------------------------------------------------------------------
-def load_sym(path):
+def load_sym(path, base=0):
+    """`base` = the I-RAM word number of words[0], so a .sym can name its words
+    with their REAL I-RAM addresses (the epilogue's are w60..w82)."""
     labels, comments = {}, {}
     if not os.path.exists(path):
         return labels, comments
@@ -175,7 +191,7 @@ def load_sym(path):
         if not idx.startswith("w"):
             continue
         try:
-            wi = int(idx[1:])
+            wi = int(idx[1:]) - base
         except ValueError:
             continue
         if len(toks) >= 2:
@@ -221,7 +237,11 @@ PROVENANCE = [
 
 
 def emit_listing(path, title_lines, words, cur_base, sym_labels, sym_comments,
-                 coeff_notes):
+                 coeff_notes, first=0, show_cram=True):
+    """`first` = I-RAM word number of words[0] (the epilogue starts at 60).
+    `show_cram` = print the absolute C-RAM cursor address on class-A words; OFF
+    for a listing that does not start at a cursor reset, where the count would
+    be a fiction."""
     lines = list(PROVENANCE)
     lines += title_lines
     lines.append(";")
@@ -233,10 +253,10 @@ def emit_listing(path, title_lines, words, cur_base, sym_labels, sym_comments,
         # optional label line (sym), repo style
         if i in sym_labels:
             lines.append("%s:" % sym_labels[i])
-        body = "  w%-3d  %010X   %s" % (i, w & D.WORD_MASK, D.text(w))
+        body = "  w%-3d  %010X   %s" % (first + i, w & D.WORD_MASK, D.text(w))
         lines.append(body)
         # absolute C-RAM address for class-A words, with the unit base applied
-        if curs[i] is not None:
+        if show_cram and curs[i] is not None:
             addr = (cur_base + curs[i]) & 0xFF
             note = "        ; C-RAM[0x%02X] (coeff, base 0x%02X MEASURED)" % (addr, cur_base)
             lines.append(note)
@@ -263,7 +283,7 @@ def main():
     sub_rom = P.Rom(args.sub, P.SUB_BASE)
     main_rom = P.Rom(args.main, 0) if os.path.exists(args.main) else None
 
-    header, progs, loadaddr = extract_all(E, args.sub)
+    header, epilogue, progs, loadaddr = extract_all(E, args.sub)
     images = group_images(progs)
 
     disdir = os.path.join(args.out, "disasm")
@@ -278,13 +298,29 @@ def main():
     ksl, ksc = load_sym(os.path.join(symdir, "kernel.sym"))
     emit_listing(
         os.path.join(disdir, "kernel.dsm"),
-        ["; KN5000 effects-DSP SHARED KERNEL -- common header, I-RAM 0..59 (60 words)",
-         "; Uploaded once at boot from Sub CPU ROM 0x%06X (op-3 record, EFF_WriteHeader" % HEADER_ROM,
-         "; @subcpu 0x0380C1).  Runs every frame; CALLs unit-0 body (I-RAM 84) then unit-1",
-         "; body (I-RAM 200) and returns -- see dsp/instruction-set.md 'Control flow'.",
-         "; The 23-word algorithm-change stub (I-RAM 60..82) is host-patched per effect and",
-         "; is not part of this stream."],
+        ["; KN5000 effects-DSP SHARED KERNEL, part 1 of 2 -- common header, I-RAM 0..59",
+         "; (60 words).  A LITERAL canned image in Sub CPU ROM at 0x%06X, shipped as one" % HEADER_ROM,
+         "; op-3 uC-IF record (cmd 0x01, I-RAM word address 0x0000) by EFF_WriteHeader.",
+         "; Nothing in it is computed by the firmware (PROVEN BY CONSTRUCTION -- see",
+         "; dsp/analysis/k5-output-stage.md).  Runs every frame; CALLs unit-0 body",
+         "; (I-RAM 84) then unit-1 body (I-RAM 200) and returns to the output stage,",
+         "; epilogue.dsm (I-RAM 60..82) -- see dsp/instruction-set.md 'Control flow'."],
         header, 0x00, ksl, ksc, None)
+
+    # ---- output stage / epilogue (part 2 of the resident kernel) ----
+    esl, esc = load_sym(os.path.join(symdir, "epilogue.sym"), base=60)
+    emit_listing(
+        os.path.join(disdir, "epilogue.dsm"),
+        ["; KN5000 effects-DSP SHARED KERNEL, part 2 of 2 -- OUTPUT STAGE, I-RAM 60..82",
+         "; (23 words).  A LITERAL canned image in Sub CPU ROM at 0x%06X, shipped as one" % EPILOGUE_ROM,
+         "; op-3 uC-IF record (cmd 0x01, I-RAM word address 0x003C) by DSP_AlgorithmChange.",
+         "; It runs LAST in the frame, after both unit bodies have returned, and ends on",
+         "; the frame-wait word at I-RAM 82.  EXACTLY TWO of its words are ever rewritten",
+         "; by the host -- I-RAM 64 (unit 0) and I-RAM 71 (unit 1), the per-unit",
+         "; link/disconnect vector words.  Full account: dsp/analysis/k5-output-stage.md.",
+         "; No C-RAM cursor addresses are printed here: the epilogue does not start at a",
+         "; cursor reset, so its absolute cursor position depends on the body that ran."],
+        epilogue, 0x00, esl, esc, None, first=60, show_cram=False)
 
     # ---- per-image listings + manifest rows ----
     rows = []

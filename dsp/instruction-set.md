@@ -70,8 +70,8 @@ Each carries its evidence in `tools/dsp_disasm.py` next to the code that emits i
 
 | form | mnemonic | operation | status |
 |---|---|---|---|
-| `000.2.00.000` | `nop` | — | **PROVEN BY CONSTRUCTION** (writer `LABEL_038922`) |
-| `801.0.NN.821` | `ldptr #$NN` | load pointer register | **PROVEN BY CONSTRUCTION** (writer `LABEL_0387E6`) |
+| `000.2.00.000` | `nop` | — | **INFERRED** — position only (the `nop nop` pairs in the reverb). *Corrected:* the earlier "PROVEN BY CONSTRUCTION, writer `LABEL_038922`" was wrong — that routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits this word (`analysis/k5-output-stage.md` §5.7) |
+| `801.0.NN.821` | `ldptr #$NN` | load pointer register | **PROVEN BY CONSTRUCTION** (writer `LABEL_0387E6`) — the firmware builds `addr8` as `(P>>4)` into byte 2's low nibble and `(P&0xF)<<4` into byte 3's high nibble, which independently pins the `class4 | addr8` boundary. NOTE: what is proven is the **host-stream** meaning (it sets the destination pointer for the coefficient pokes that follow); the same word *inside I-RAM* is INFERRED to do the same |
 | `801.0.00.021` | `rstcur` | reset coefficient cursor to base | **VERIFIED** (algo39 section starts 0,6,12,18,24 \| rstcur \| 0,6,12,18,24) |
 | `202.A.dd.1D5` | `mac (p)+dd` | `acc += P ; P = coef[cursor++] * mem[p] ; p += (s8)dd` | **DETERMINED** (all 144 survivors of a 19,674,720-point constraint search agree) |
 | `202.A.dd.1D4` | `mac.lb (p)+dd` | as `mac`, and latch B ← mem[p] | **DETERMINED**, same source |
@@ -95,7 +95,23 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
   write/partner pair `012.2.00.680` / `000.2.00.419`.
 - **LFO** — `hi12=0x082` read; `092.A.00.200` phase accumulate; `094.A.00.200`
   wrap on `0x7FFFFF`.
-- **envelope detector** — `hi12=0xC40`.
+- ~~**envelope detector** — `hi12=0xC40`~~ — **WITHDRAWN.** `hi12 ∈ {0xC40,0xC41}` is a
+  13-bit **immediate load**, `imm13 = bits[24:12]`, and every one of its 11 distinct values
+  across 61 occurrences is a multiple of 32 ⇒ payload = bits[24:17], `imm13 = payload*32`.
+  The label fires on the reverb tank and on the frame terminator's neighbours, where a level
+  detector makes no sense (`analysis/k5-output-stage.md` §2.3). The disassembler still emits
+  it and should not.
+- **`C00` wait/sync** — both of the machine's `C00` words encode **their own I-RAM address**
+  in bits[24:17] (`C00.9.84.000` @76 = 76*32+4; `C00.A.47.407` @82 = 82*32+7), the second
+  being the frame terminator. INFERRED: "hold here until event bits[16:12]".
+- **per-unit CALL VECTOR** — `lo12 = 0x445` (unit 0) / `0x446` (unit 1), at I-RAM 64 / 71,
+  the only two words the host ever rewrites. `EFF_Link` writes the body entry (84 / 200),
+  `EFF_Disconnect` writes that unit's own header setup block (42 / 50). **DETERMINED**
+  (`analysis/k5-output-stage.md` §2.4).
+- **host coefficient poke** — `0A aa bb cc dd` is NOT an instruction: it is a host-port
+  packet carrying a 24-bit coefficient `((aa&0x7F)<<17)|(bb<<9)|(cc<<1)|(dd>>7)` with a
+  destination tag `dd & 0x7F`. **PROVEN BY CONSTRUCTION**. The disassembler's
+  `hi12[11:8]==A → host-poke` annotation must NOT fire on in-program words.
 - **table-lookup idiom** — `040.0.00.C63 | 000.6.TT.4CD | 012.4.01.1CE` (class-6
   `addr8` = table selector); accounts for every class-4/6 word, MCC +1.000.
 - **class 8** — post-sum step (rescale/round/saturate?), **operation unknown**;
@@ -126,12 +142,21 @@ There is **no encoded space-selector field**; the memory space is
 - **Per-frame hardware PC restart.** The PC sweeps I-RAM once per sample frame
   (Fs-RST / PC-RST pins); 25 MHz / 44.1 kHz = 567 cycles per frame against 384
   I-RAM words — room to spare, as some words take >1 cycle.
-- **The 60-word common header** (`kernel.dsm`) loads pointer registers, then
+- **The 83-word resident kernel is TWO canned blobs**: the 60-word common header
+  (`kernel.dsm`, I-RAM 0..59, Sub CPU ROM `0x01E496`, shipped by `EFF_WriteHeader`)
+  and the 23-word **output stage** (`epilogue.dsm`, I-RAM 60..82, ROM `0x01E63C`,
+  shipped by `DSP_AlgorithmChange`). Both are literal — **no kernel word is
+  computed by the firmware** (PROVEN BY CONSTRUCTION, `analysis/k5-output-stage.md`).
+- The header loads pointer registers, then
   CALLs the unit-0 body (I-RAM 84) and the unit-1 body (I-RAM 200) via a shared
   call/return encoding (the unit-tagged END-OF-BLOCK word), with a **2-level
   stack**. PROVEN BY CONSTRUCTION from the header loading registers 821/827/825
   twice (I-RAM 42–44 and 50–52), so a body must run and return between them
-  (`notes/kn5000-dsp-headerdecode.md`).
+  (`notes/kn5000-dsp-headerdecode.md`). The **entry addresses are host-loaded
+  registers**, not a fixed vector table: the output stage's I-RAM 64 and 71 load
+  them, and the host rewrites those two words to link (84 / 200) or disconnect
+  (42 / 50) each unit. Then the frame ends in the output stage, at the wait word
+  I-RAM 82.
 - **Effect bodies are straight-line, HAND-UNROLLED.** No branch word carrying the
   body entry addresses 84/200 exists; an exhaustive field scan for a branch is
   negative, and there is a positive reason — algo16 repeats 32 words at period 8

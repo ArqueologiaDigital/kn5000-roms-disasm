@@ -1,0 +1,22 @@
+# Resident kernel part 2 -- the OUTPUT STAGE / epilogue, I-RAM 60..82.
+# Hand-curated labels/comments.  Evidence + PROVEN/DETERMINED/INFERRED/OPEN
+# status for every word: dsp/analysis/k5-output-stage.md.
+# Format: wNN  Label  ; comment      (wNN is the REAL I-RAM word number)
+# NOTE: only the FIRST comment line per word reaches the listing -- keep them short.
+
+w60  OutputStage    ; runs after BOTH unit bodies returned (header transfers are at w49/w59) [PROVEN]
+w62                 ; ptr-load family: register 0x825 <- 0x26 (which register that is: OPEN, K3)
+w63                 ; unit-0 half of a symmetric pair with w70 (2A7.9.05.1C3 / 2A6.1.85.0C7)
+w64  Unit0Vector    ; UNIT-0 CALL VECTOR; host writes 84*32 (link) / 42*32 (disconnect) [DETERMINED]
+w69                 ; ptr-load family: register 0x821 <- 0x90 (= the MEASURED unit-1 C-RAM bank base)
+w71  Unit1Vector    ; UNIT-1 CALL VECTOR; host writes 200*32 (link) / 50*32 (disconnect) [DETERMINED]
+w73                 ; the machine's ONLY class-C word (0 of 2974 body words)
+w74                 ; C-format; imm13 0x9AB = 77*32 + 11, and I-RAM 77 is the next pointer load
+w75                 ; class 8 post-sum step, operation UNKNOWN; addr8 0x0F equals the unit-1 tag
+w76                 ; WAIT/SYNC: imm13 0x984 = 76*32 + 4 = its OWN I-RAM address + event 4 [INFERRED]
+w77                 ; ptr-load family: register 0x822 <- 0x86
+w78                 ; the machine's ONLY class-D word (0 of 2974 body words)
+w79                 ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
+w80                 ; ordinary body vocabulary (22 exact matches in the 2974-word body corpus)
+w81                 ; ordinary body vocabulary (34 exact matches in the 2974-word body corpus)
+w82  FrameWait      ; FRAME TERMINATOR: imm13 0xA47 = 82*32 + 7 = its OWN address + event 7 [INFERRED]
