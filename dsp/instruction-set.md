@@ -41,6 +41,30 @@ earlier, which is exactly what an integration pass is for.
 > why "a wrong decode costs more than a missing one" is the first sentence of this
 > section.
 
+> ★ **AND THE ADVANCE PASS (`kn7000_mame/notes/dsp-frame-advance.md`) found the same
+> bug at the OPPOSITE polarity: something DECODED that was NOT being executed.**
+> The signed pointer post-increment (`class4 & 7 == 2`, MEASURED) and the coefficient
+> cursor advance (`class4 == 0xA`, FORCED by K4) read **no part of `lo12`**, so they
+> never needed the ALU decode — yet the core performed them only for the twelve
+> whitelisted K6 input-stage words. Over the cold-boot frame the D-RAM pointer's net
+> displacement was **−259** with only the executing words moving it and is **−135**
+> with every word moving it, and the coefficient cursor advanced **37** times instead
+> of **73**. So the ~92 words that *did* execute were reading a D-RAM cell ~124 away
+> from the right one and a coefficient ~36 cells early. The rule is now **execute what
+> ADDRESSES, never what COMPUTES**: the `hi12` bit-4 accumulator store is deliberately
+> *not* generalised, because it needs a correct accumulator, which a frame full of
+> undecoded words does not have.
+>
+> ★ **And it made FRAME CLOSURE a real measurement, which promptly FAILED.** The DI
+> latches sit at fixed addresses in the chip's D-RAM and the microcode reads them at
+> `ptr+2` / `ptr+5`, so the pointer at PC-restart **must** be identical every frame —
+> the net displacement over a frame is **FORCED** to be 0 (mod 256). With the walk now
+> complete it is **+121**, on 1 130 880 of 1 130 880 complete frames. Something in the
+> model is wrong, and the candidates are enumerated in the note (favoured: **an
+> absolute pointer reload we do not decode** — nothing loads the D-RAM pointer at all
+> today, and the header carries five undecoded C-format words with the register-load
+> selector `0x20`).
+
 | withdrawn claim | why | replaced by |
 |---|---|---|
 | **`C40.1.80.000` and `C40.1.E0.451` are class-1 delay-DRAM words, and they corroborate R2's withdrawal of the `addr8` bit-7 split** (R3 §6.1, §9.5) | They are **C-FORMAT IMMEDIATE LOADS** — `hi12[11:8] == 0xC`, so `class4`/`addr8` are immediate data, not fields. R3's family predicate carries no C-format guard. Decisive: `C40.1.80.000` (A=12) and `C40.2.C0.000` (A=22) are **the same instruction** — same family, same destination `lo12 = 0x000` — differing only in the immediate; one reads `class4 == 1` and the other `class4 == 2` *because bit 8 of the immediate differs*. No machine can make one touch the DRAM and not the other. **FORCED.** | the guarded family (`is_dram()`); R2's bit-7 withdrawal stands on its own evidence (324/324 vs 3 misclassified) and never needed this |
@@ -218,6 +242,26 @@ codes, 19 of the 24 observed ACTION codes, `lo12` bit 4, the difference between
 actions `0x12` and `0x15`, five of the eight `hi12[3:1]` codes, and the `lo12`
 bit-11 **modifier** (PROVEN BY CONSTRUCTION to be a separate flag, so `0x021` and
 `0x821` are one route plus a modifier — never two codes).
+
+**The executable predicate carries SIX guards**, and two of them are the same guard
+twice. `hi12` bit 4's destination is MODE-DEPENDENT (R2), and so is action `0x07`'s:
+`L=07` means *"write the operand to a destination"*, and `2C7` on a mode-1 escape word
+is the external DELAY-RAM write while the output stage's four `L=07` words write the
+register/port space. A core that writes `mem[ptr]` for it unconditionally therefore has
+a hole wherever the mode is not 2 — and class 8 is **mode 0**.
+**PREDICT-THEN-CHECK, and a MISS worth recording:** predicted this was already firing
+on live words; MEASURED that it is **not** — of the 303 corpus words that execute with
+`L=07`, **303 are mode 2 and 0 are not**. Like the bit-4 guard before it, it removes
+**zero** words and closes a hole before it opens rather than fixing a live bug.
+
+**A second PREDICT-THEN-CHECK MISS, same pass.** Under the shipped model `L` (the bus
+operand) is consumed by exactly two things — an action in `{07,13,14}` and the class-A
+multiply — so for a word whose action is `0x12`/`0x15` (DETERMINED: no side effect) and
+whose class is not A, the SOURCE code is **dead** and the source guard does no work.
+Widening the predicate accordingly was predicted to admit a useful number of words. It
+admits **zero**: 1029 → 1029 over the corpus, 0 frame slots. Every word with an
+anchored action and an unanchored source in this machine is either class A or uses an
+action that consumes the operand.
 
 ### `setvec` — the evidence
 

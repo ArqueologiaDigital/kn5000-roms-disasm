@@ -273,6 +273,35 @@ def coeff_consumer(w):
     return class4(w) == 0xA and not c_format(w)
 
 
+# ---------------------------------------------------------------------------
+#  ★ THE ADDRESS GENERATOR IS DECODED EVEN WHERE THE ALU IS NOT.
+#  (upd6383d.h ptr_postinc() / has_addressing().)
+#
+#  Two of this machine's addressing effects read NO PART of lo12:
+#      ptr_postinc()     class4 & 7 == 2  ->  p += (s8)addr8   [MEASURED]
+#      coeff_consumer()  class4 == 0xA    ->  cursor++         [FORCED, K4]
+#  so they do not need the ALU decode, and the MAME core now performs them on
+#  EVERY word rather than on the twelve whitelisted K6 words.  Restricting them
+#  was a LIVE DEFECT: over the cold-boot frame (285 slots) the pointer's net
+#  displacement was -259 with only the executing words moving it and is -135 with
+#  every word moving it, and the coefficient cursor advanced 37 times instead of
+#  73 -- so a decoded `mac (p),c+' late in the frame was reading a D-RAM cell
+#  ~124 away from the right one and a coefficient ~36 cells early.
+#
+#  NOT generalised: hi12 bit 4 (the accumulator store), which needs a CORRECT
+#  accumulator.  EXECUTE WHAT ADDRESSES, NEVER WHAT COMPUTES.
+# ---------------------------------------------------------------------------
+def ptr_postinc(w):
+    return (not c_format(w)) and (class4(w) & 7) == 2
+
+
+def has_addressing(w):
+    """Does this word have ANY modelled addressing effect?  A word that has none
+    (a delay-DRAM access, a table lookup, a register-file word) executes NOTHING
+    -- its own addressing is undecoded too."""
+    return ptr_postinc(w) or coeff_consumer(w) or cursor_fetch(w)
+
+
 # lo12 0x445 / 0x446 name the per-unit CALL VECTOR register.  DETERMINED:
 # analysis/k5-output-stage.md sect. 2.4 -- the ONLY two I-RAM words the host ever
 # rewrites (I-RAM 64 and 71), written by EFF_Link / EFF_Disconnect indexed by
@@ -396,6 +425,13 @@ def is_input_latch_read(w):
 #  4. STORE TARGET.  hi12 bit 4's destination is MODE-DEPENDENT and mem[ptr] is
 #     the MODE-2 target (R2).  MEASURED: this guard removes ZERO words -- no
 #     class-8 corpus word carries bit 4 -- so it costs nothing.
+#  4b. ...AND SO IS ACTION 0x07's, which is guard 4's DEFECT TWIN.  L=07 means
+#     "write the operand to A DESTINATION" and the destination is again the mode:
+#     `2C7' on a mode-1 escape word is the external DELAY-RAM write and the output
+#     stage's four L=07 words write the register/port space.  The executor writes
+#     mem[ptr] unconditionally and class 8 is MODE 0.  PREDICT-THEN-CHECK:
+#     predicted this was already firing; MEASURED that it is NOT -- of the 303
+#     executing L=07 words, 303 are mode 2 and 0 are not.  Zero cost, hole closed.
 #  5. OPERATION.  hi12[3:1] must be one the biquad determines.  HI_ACC_HOLD is
 #     admitted ONLY on class 8.
 # ---------------------------------------------------------------------------
@@ -412,6 +448,8 @@ def alu_decoded(w):
     if lo_src(w) not in _ANCHORED_SRC or lo_act(w) not in _ANCHORED_ACT:
         return False
     if (hi12(w) & HI_ST) and (cl & 7) != 2:
+        return False
+    if lo_act(w) == LO_ACT_ST_BUS and (cl & 7) != 2:
         return False
     f = hi_f31(hi12(w))
     if f in (HI_ACC_LOAD, HI_ACC_ADD):
