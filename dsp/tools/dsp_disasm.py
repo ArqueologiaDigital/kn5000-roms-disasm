@@ -454,6 +454,16 @@ def is_input_latch_read(w):
 #     mem[ptr] unconditionally and class 8 is MODE 0.  PREDICT-THEN-CHECK:
 #     predicted this was already firing; MEASURED that it is NOT -- of the 303
 #     executing L=07 words, 303 are mode 2 and 0 are not.  Zero cost, hole closed.
+#     * AND IT NOW HAS A POSITIVE REASON, not just a precautionary one
+#     (analysis/output-stage-decode.md item J, FORCED).  On a MODE-1 word ACTION
+#     0x07 does NOT write reg[addr8]: the output stage's w72 is `000.1.06.087'
+#     and register 0x06 is the unit-0 OUTPUT LEVEL, written once by the
+#     firmware's EFF_VolumeLoop after linking (PROVEN BY CONSTRUCTION) and
+#     carrying the user's effect depth.  If ACTION 0x07 on a mode-1 word wrote
+#     the addressed register, that depth would survive exactly ONE frame.  So the
+#     guard is not merely cheap -- widening it would be wrong.  (Stated escape,
+#     not excluded: SRC 0x02, undecoded, might carry the level itself and make
+#     the write an identity.)
 #  5. OPERATION.  hi12[3:1] must be one the biquad determines.  HI_ACC_HOLD is
 #     admitted ONLY on class 8.
 # ---------------------------------------------------------------------------

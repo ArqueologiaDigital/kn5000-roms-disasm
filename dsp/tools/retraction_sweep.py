@@ -218,6 +218,32 @@ PREMISES = [
              r"(origin|D-RAM-origin)[^.\n]{0,40}0x827"],
         exempt=[r"falsif", r"0 of 85"],
     ),
+    dict(
+        id="P15",
+        claim="the D-RAM ORIGIN is OPEN / UNKNOWN, and the +121 closure residue "
+              "is an open DEFECT of the walk model",
+        retracted_by="output-stage-decode.md items A/B/D (FORCED) and its "
+                     "application on 2026-07-27: the per-unit body base is "
+                     "0x05 | (unit << 7), a rebase between the two CALLs is "
+                     "FORCED to exist (net(body0) takes 8 values across the 37 "
+                     "unit-0 images), and with it performed the residue is 0 on "
+                     "1 080 959 of 1 106 880 complete frames and X settles on "
+                     "0xFF.  Re-derived host-free before it was applied: the "
+                     "reverb reaches all six kernel-named unit-1 indices at "
+                     "exactly one origin of 256.  What is STILL open is which "
+                     "word, if any, performs the rebase -- not the value",
+        sig=[r"D-RAM origin is (OPEN|UNKNOWN)",
+             r"origin of the D-RAM (pointer|operand pointer) is (OPEN|UNKNOWN)",
+             r"residue is \+?121",
+             r"\+121 (residue|closure)"],
+        # DELIBERATELY SHORT.  `exempt' DROPS a line before it is classified, so
+        # anything put here can never come out COVERED -- and the whole point of
+        # this tool is that a retraction must be VISIBLE next to the claim, which
+        # is what BANNER checks.  Only the two forms that are not assertions of
+        # the premise at all are listed: a line reporting the historical
+        # number, and the house retraction opener.
+        exempt=[r"was \+?121", r"used to"],
+    ),
 ]
 
 # --------------------------------------------------------------------------
@@ -402,6 +428,7 @@ POSITIVE = [
     ("P10", "FRAME CLOSURE (FORCED criterion: the DI latches are fixed)"),
     ("P11", "880.1.60/20.* = external-DRAM bracket (MCC +0.944)"),
     ("P13", "The pointer does not return -- it is reloaded every frame."),
+    ("P15", "The D-RAM origin is OPEN, so the pointer moves only by post-increment."),
 ]
 NEGATIVE = [
     ("P1",  "K3 WITHDREW the reading that 0x821 is the data pointer."),
@@ -409,6 +436,7 @@ NEGATIVE = [
     ("P6",  "FALSIFIED: \"this board uses one stereo pair\" -- all three DI are wired"),
     ("P9",  "0 of 38 was MEASURED under an origin model K3 has since withdrawn"),
     ("P11", "the external-DRAM bracket reading is FALSIFIED by the per-frame counts"),
+    ("P15", "the D-RAM origin is OPEN -- WITHDRAWN, it is PINNED at 0x05 | (unit << 7)"),
 ]
 
 

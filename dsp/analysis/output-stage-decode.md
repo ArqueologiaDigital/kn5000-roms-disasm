@@ -683,3 +683,64 @@ Inputs: `original_ROMs/kn5000_subprogram_v142.rom` (microcode at CPU `0x01E496`
 = header, `0x01E63C` = output stage; algorithm table `0x0001ED7C`; parameter
 table `0x0001EF0C`; file offset = CPU address − `0x00EF00`) and the ROM parsers
 in `~/compartilhado/kn7000_mame/tools`.
+
+---
+
+## 14. ★ APPLIED, 2026-07-27 — and confirmed by a route this note did not use
+
+Written by the pass that applied item **D** to the MAME core
+(`~/compartilhado/kn7000_mame/notes/dsp-allpass-rerun-applied.md`). Three things
+belong here rather than there, because they are about *this note's* result.
+
+### 14.1 A fourth derivation of `E`, and it is HOST-FREE
+
+§3.1, §3.2 and §3.3 all run through the **host's** zero-fill, so they are one
+family of evidence. There is a fourth that uses none of it:
+
+> the shared 83-word kernel names six mode-1 **absolute** indices in the unit-1
+> half — `0x85 0x8A 0x8C 0x8D 0x8F 0xD0` — and the reverb body's own **mode-2
+> pointer walk** reaches **all six** at exactly **one** entry pointer of 256.
+
+```
+   E1 = 0x85 : 6 of 6   <-- SOLE winner
+   E1 = 0x83 : 4    0x87 : 4    0x88 : 4    0x8A : 4
+   control over all 256 origins:  mean 0.33   sd 0.85   max 6   z = +6.7
+```
+
+Sharpest instance, with no free parameter at all: the pointer stands at `E1 + 75`
+at reverb body word 7, and `w53` stores **absolutely** at `0xD0`, so
+`E1 = 0xD0 − 75 = 0x85`. This is also item **B**'s first positive test that does
+not route through the host: under the two-space alternative all six agreements
+are chance. Unit 0 by the same method scores 119 and is **rank 1 of 256**
+(z = +4.5), weaker because the low cells sit near the walk start.
+
+### 14.2 A tension this note did not state, and its resolution
+
+`w45 = 010.A.00.20C` and `w53 = 010.9.D0.20C` are the **same `lo12`** in mode 2
+and mode 1 — one operation in two addressing modes — yet under §3.5's map they
+land at `E0+0` and `E1+75`, which is **not** symmetric. That admits a second,
+self-consistent solution of §4's closure equations: `E0 = 0x50`, `E1 = 0xD0`,
+`X = 0x4A` (`0xD0 + 123 − 1 = 0x4A`, `0x4A + 6 = 0x50`) — symmetric, and it
+satisfies **both** routes. ⇒ **FALSIFIED by §3.1**: with `E = 0x50` PARAMETRIC
+EQ's 40-cell run lands at `0x9B`, not `0x50`. The asymmetry is real, and both
+cells are genuinely external inputs — `0x85` is read at reverb word 5 and never
+written, `0xD0` is **read at word 7 before anything writes it**, which is exactly
+what `w53`'s absolute deposit requires. §4 should have enumerated the second
+solution and did not; it is excluded, not overlooked twice.
+
+### 14.3 §7.1's favourite site needs a different number
+
+`d(55..58) = +2` (`w55`, `w57`). So siting the rebase at `800.1.60.00B` /
+I-RAM 54 delivers `E1 + 2` to the body: that siting requires the value **`0x83`**,
+which the note mentions in passing as a "pre-`w55`/`w57` variant" but does not
+connect to its own site argument. What is invariant across every admissible
+siting — and what the core implements — is **the pointer at BODY ENTRY**.
+
+### 14.4 The `+121` sentence in §12 is superseded
+
+§12 says the residue is *"unchanged and still correct for the model the core
+implements"*. True when written; the core now implements the rebase, and the
+residue is **+0** on the last frame and on 1 080 959 of 1 106 880 complete frames.
+`X` settles on `0xFF`, which puts the two DI latches on cells `0x01` / `0x04` —
+§3.5's map, measured live at 97.58 %, and a genuine prediction of it: before the
+rebase `X` drifted and the map could not be tested at all.

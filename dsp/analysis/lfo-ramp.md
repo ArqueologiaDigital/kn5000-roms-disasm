@@ -3,6 +3,11 @@
 NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date: **2026-07-26**.
 No hardware. Static analysis, the ROM corpus and constraint solving only.
 
+> ★ **RETRACTION BANNER, 2026-07-27.** Where this note treats **the +121 residue**
+> as an open pointer defect, that reading is **WITHDRAWN**: the D-RAM origin is
+> pinned (`base = 0x05 | (unit << 7)`, FORCED) and the walk closes. §12's
+> conclusion — that the LFO is *not* its source — was right, and is now moot.
+
 > **This note is in two parts.** **Part I (§0–§6)** determines two ALU codes from
 > the ramp and then falsifies the model they were determined in: at 24 of the 29
 > LFO blocks *no* machine in its space can run the block, and it names four
