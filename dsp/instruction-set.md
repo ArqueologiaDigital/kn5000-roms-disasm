@@ -154,9 +154,9 @@ contain 77 Hamming-distance-1 pairs against a popcount-matched null of 43.4 ± 4
 | 11 | **FORMAT ESCAPE** — bits[10:0] mean something else | MEASURED (removing it leaves a legal `hi12` in only 1/9 cases, vs 9/9 for bits 10 and 4) |
 | 10 | **END OF BLOCK** (only when bit 11 clear) | MEASURED — one per image, always the final word; but 14× in the 60-word header ⇒ it is **not** end-of-*program* and the word still does its datapath work |
 | 9:8 | a proven FIELD, meaning **UNKNOWN** (`f98`) | MEASURED as a field; the accumulator-op-selector reading was tested and **FAILED** |
-| 7 | speculative "index/address domain" | rendered as residue |
+| 7 | speculative "index/address domain" — but **it GATES bit 4**, see below | 583 words carry it, 127 distinct, in **12 minimal pairs** that are byte-identical except for this bit (e.g. `212.A.01.412` ×34 vs `292.A.01.412` ×4). Its own meaning is still **OPEN**; what is FORCED is that the bit-4 store reads it |
 | 6,5 | no reading | rendered as residue |
-| 4 | **WRITE ACCUMULATOR → mem[ptr]**, taken **BEFORE** the word's own ALU step | MEASURED (`0x212 = 0x202 + bit4`, `0x092 = 0x082 + bit4`; absence control 0/410 clean). The **timing** is new: `store = after` has **zero survivors** in all three models of R1's search (**FORCED**, `analysis/r1-allpass-motif.md` F2) |
+| 4 | **WRITE ACCUMULATOR → mem[ptr]**, taken **BEFORE** the word's own ALU step — ⚠ **only when `hi12` bit 7 is CLEAR** | MEASURED for `bit7 = 0` (`0x212 = 0x202 + bit4`; absence control 0/410 clean) and the **timing** is FORCED (`store = after` has zero survivors in all three models of R1's search, `analysis/r1-allpass-motif.md` F2). ⚠ **NARROWED by `analysis/lfo-ramp.md` Part II**: the 0.094 dB biquad that validates this row contains **0 of 105** words with bit 4 *and* bit 7 (all 22 of its store words are `bit7 = 0`), so it never constrained the `bit7 = 1` case — **527** corpus words are verified, **180 are not**. An exhaustive 276 480-machine search over all 29 LFO blocks gives **0 survivors** with the store unconditional and 432 with it gated, and **FORCES the gate to read bit 7 AND `hi12[3:1]`** (bit 7 alone: 0 survivors; `hi12[3:1] == 2` alone: falsified — it would suppress all 22 biquad stores). Three gates survive, differing on 13 corpus words. **NOT adopted**; the executable predicate still stores unconditionally. The second `0x092 = 0x082 + bit4` citation this row used to carry is an *encoding* observation on two LFO words that cannot both be storing |
 | 3:1 | a proven FIELD, meaning **UNKNOWN** (`f31`) | MEASURED as a field (8/8 values) |
 | 0 | "`addr8` is an absolute immediate" | PROVEN BY CONSTRUCTION for `0x801` only; **in the C-format family it is instead the MSB of the immediate** (MEASURED); else residue. A third incompatible meaning on one bit — more evidence that `hi12` is a microword, not an opcode |
 
@@ -377,8 +377,15 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
   operation — and, in the same measurement, **falsifies the model they were
   determined from**: at 24 of the 29 blocks the accumulate word's bit-4 store
   lands on the very cell the next word reads, and **0 of 1920** machines can run
-  it. Neither code is adopted, and the ALU predicate is unchanged.
-  `analysis/lfo-ramp.md`.
+  it. **Part II resolves that**: widening the window past the block and letting
+  the bit-4 store be gated, **432 of 276 480** machines run **all 29** blocks and
+  wrap, the two codes above are re-determined as singletons on 29 blocks instead
+  of 5, and the **publisher is the wrap word `094.A.dd.200`** — the
+  `xxx.2.dd.447` that follows 26 of 29 blocks is *inert* on the phase cell. The
+  block's coefficients are a **triple**, not a pair: increment, `0x7FFFFF`, and an
+  index scale (`0x000018` = 24 at all 8 sites carrying the waveform tail
+  `447 | 700 | 1D5 | 000 | C63 | 4CD`). Neither code is adopted, and the ALU
+  predicate is unchanged. `analysis/lfo-ramp.md`.
 - **`C00` wait/sync** — both of the machine's `C00` words encode **their own I-RAM address**
   in bits[24:17] (`C00.9.84.000` @76 = 76*32+4; `C00.A.47.407` @82 = 82*32+7), the second
   being the frame terminator. INFERRED: "hold here until event bits[16:12]". It is a

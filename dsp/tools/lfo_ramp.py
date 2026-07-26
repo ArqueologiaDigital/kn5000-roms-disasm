@@ -424,6 +424,7 @@ ACT00 = ["none", "acc_load", "acc_add", "mem_store", "ta", "tb",
 ORDER = ["act_first", "act_last"]
 OP2   = ["hold", "and_coef", "subge_coef", "and_mask23"]
 STORE = ["sat", "wrap24", "wrap23", "f31_2_and_coef", "f31_2_subge_coef"]
+STORE2 = STORE + ["b7_and_coef"]      # the gate could key on bit 7 instead of f31
 
 
 def sim(cfg, words, coefs, nframes, rng, preset=None, cell=None, trace=False):
@@ -715,9 +716,398 @@ def sec_closure():
    24 of 29 are net 0, so the LFO is not where the +121 residue comes from.""")
 
 
+# =========================================================================
+#  7.  PUBLISH -- WHO WRITES THE PHASE CELL?
+#
+#  The `solve' section above proved that no machine in its 1920-point space can
+#  run 24 of the 29 blocks, and named four candidate resolutions (L-1..L-4)
+#  without choosing between them.  This section chooses, by WIDENING the space
+#  in the two directions the falsification pointed at:
+#
+#    * the WINDOW.  `solve' simulated the three-word block alone.  But every
+#      block is followed within a few words by `xxx.2.dd.447' -- SRC 0x11,
+#      ACTION 0x07 (= "write the operand to a destination", ANCHORED) -- sitting
+#      on the very same cell.  A store we were counting as DEAD is a candidate
+#      PUBLISHER, and it cannot be seen from inside the block.
+#    * the STORE GATE.  `solve' held "hi12 bit 4 stores to mem[ptr]" fixed
+#      because the biquad validates it to 0.094 dB.  MEASURED here: every one of
+#      PARAMETRIC EQ's bit-4 words has hi12 bit 7 CLEAR, and all three LFO words
+#      have it SET -- so the biquad constrains bit 4 only on bit7 == 0 words and
+#      the LFO is free to disagree.
+#
+#  Everything else is held exactly as `solve' held it.
+# =========================================================================
+
+MODELLED_SRC = {0x07, 0x08, 0x10, 0x11, 0x19, 0x1A}
+WINDOW_ACT   = {0x00, 0x07, 0x12, 0x13, 0x14, 0x15}
+
+STGATE = ["always",            # the shipped model
+          "not_b7",            # hi12 bit 7 cancels the store (and its clear)
+          "not_b7_keepclear",  # ... cancels the store but not the clear
+          "b7_scratch",        # ... redirects the store off D-RAM
+          "prev_ptr",          # the store uses the PREVIOUS word's pointer
+          "next_ptr",          # ... the pointer after this word's post-increment
+          "f31_2_only",        # the store happens only when hi12[3:1] == 2
+          "b7_f31_1_off",      # suppressed only on bit7 words with hi12[3:1] == 1
+          "b7_ne2_off",        # suppressed on bit7 words unless hi12[3:1] == 2
+          "b7_f31_1_scratch"]  # ... redirected rather than suppressed
+SRC11  = ["acc", "P", "mem", "ta", "tb", "unity", "zero", "coef"]
+DEST07 = ["mem", "elsewhere"]   # ACTION 0x07's destination is MODE-DEPENDENT (R2)
+
+
+def window_of(site):
+    """[accumulate .. wrap] PLUS the contiguous run of ordinary D-RAM words that
+    follows, so the search can see the `447' store.  The run stops at the first
+    word this model cannot execute at all (C-format, an escape/mode-1 word, an
+    unanchored ACTION, or the lo12 bit-11 / bit-5 modifiers)."""
+    (i, la, a, b, ca, cb, ws) = site
+    e = b
+    while e + 1 < len(ws):
+        w = ws[e + 1]
+        if DIS.c_format(w) or class4(w) not in (2, 8, 0xA):
+            break
+        if DIS.lo_act(w) not in WINDOW_ACT:
+            break
+        if (lo12(w) & 0x800) or (lo12(w) & 0x20):
+            break
+        e += 1
+    return a, e
+
+
+def publish_blocks():
+    """[(algo, a, e, words, coefs, inc, qcell)] over all 29 sites."""
+    out = []
+    for site in lfo_sites():
+        (i, la, a, b, ca, cb, ws) = site
+        a, e = window_of(site)
+        base = 0x90 if la == 200 else 0x00
+        cram, cur = cram_of_algo(i), DIS.cursor_addresses(ws)
+        coefs = [cram.get(base + cur[k]) if cur[k] is not None else None
+                 for k in range(a, e + 1)]
+        if coefs[0] is None:
+            continue
+        words = [ws[k] for k in range(a, e + 1)]
+        cells = block_cells(words)
+        out.append((i, a, e, words, coefs, coefs[0], cells[1]))
+    return out
+
+
+def sim2(cfg, words, coefs, nframes, rng, preset=None, qcell=0, trace=False):
+    """One candidate machine over the WINDOW.  As in `sim', the entering
+    accumulator, product latch and both temporaries are randomised every frame,
+    and any source this ISA does not decode delivers a fresh random value -- so a
+    machine only passes if the ramp is independent of everything we cannot read."""
+    src08, act00, order, op2, store, stgate, src11, dest07 = cfg
+    mem = collections.defaultdict(int)
+    if preset is not None:
+        mem[qcell] = preset
+    hist = []
+    for _ in range(nframes):
+        acc = rng.randrange(-(1 << 23), 1 << 23)
+        P   = rng.randrange(-(1 << 23), 1 << 23)
+        ta, tb = rng.randrange(0, 1 << 24), rng.randrange(0, 1 << 24)
+        scratch = 0
+        p = pprev = 0
+        for k, w in enumerate(words):
+            hi, coef = hi12(w), coefs[k]
+            src, act = DIS.lo_src(w), DIS.lo_act(w)
+            isA, f = DIS.coeff_consumer(w), DIS.hi_f31(hi)
+            b7 = (hi >> 7) & 1
+            nxt = p + (s8(addr8(w)) if DIS.ptr_postinc(w) else 0)
+            # ---------------- the bus operand
+            if src == 0x07:   Lv = s24(mem[p])
+            elif src == 0x10: Lv = s24(acc)
+            elif src == 0x19: Lv = s24(ta)
+            elif src == 0x1A: Lv = s24(tb) >> 1
+            elif src == 0x08:
+                Lv = {"unity": MASK23, "zero": 0, "acc": s24(acc),
+                      "mem": s24(mem[p]), "P": s24(P),
+                      "coef": s24(coef) if coef is not None else 0}[src08]
+            elif src == 0x11:
+                Lv = {"acc": s24(acc), "P": s24(P), "mem": s24(mem[p]),
+                      "ta": s24(ta), "tb": s24(tb), "unity": MASK23, "zero": 0,
+                      "coef": s24(coef) if coef is not None else 0}[src11]
+            else:
+                Lv = rng.randrange(-(1 << 23), 1 << 23)      # UNDECODED source
+            # ---------------- the hi12 bit-4 store
+            if hi & DIS.HI_ST:
+                v = acc
+                if store == "sat":      v = max(-(1 << 23), min(MASK23, v))
+                elif store == "wrap24": v = s24(v)
+                elif store == "wrap23": v = v & MASK23
+                elif store == "f31_2_and_coef":
+                    v = (v & coef) if (f == 2 and coef is not None) \
+                        else max(-(1 << 23), min(MASK23, v))
+                elif store == "b7_and_coef":
+                    v = (v & coef) if (b7 and coef is not None) \
+                        else max(-(1 << 23), min(MASK23, v))
+                else:
+                    v = (v - coef * (v // coef)) if (f == 2 and coef and v >= coef) \
+                        else max(-(1 << 23), min(MASK23, v))
+                do, tgt, clr = True, p, True
+                if stgate == "not_b7" and b7:            do, clr = False, False
+                elif stgate == "not_b7_keepclear" and b7: do = False
+                elif stgate == "b7_scratch" and b7:      tgt = "S"
+                elif stgate == "prev_ptr":               tgt = pprev
+                elif stgate == "next_ptr":               tgt = nxt
+                elif stgate == "f31_2_only" and f != 2:  do, clr = False, False
+                elif stgate == "b7_f31_1_off" and b7 and f == 1: do, clr = False, False
+                elif stgate == "b7_ne2_off" and b7 and f != 2: do, clr = False, False
+                elif stgate == "b7_f31_1_scratch" and b7 and f == 1: tgt = "S"
+                if do:
+                    if tgt == "S": scratch = v & MASK24
+                    else:          mem[tgt] = v & MASK24
+                if clr:
+                    acc = 0
+            # ---------------- the lo12 ACTION and the hi12[3:1] operation
+            def do_act():
+                nonlocal acc, ta, tb
+                if act == 0x13:   ta = Lv & MASK24
+                elif act == 0x14: tb = Lv & MASK24
+                elif act == 0x07:
+                    if dest07 == "mem": mem[p] = Lv & MASK24
+                elif act in (0x12, 0x15): pass
+                elif act == 0x00:
+                    if act00 == "acc_load":    acc = Lv
+                    elif act00 == "acc_add":   acc = acc + Lv
+                    elif act00 == "mem_store": mem[p] = Lv & MASK24
+                    elif act00 == "ta":        ta = Lv & MASK24
+                    elif act00 == "tb":        tb = Lv & MASK24
+                else:
+                    raise KeyError(act)
+            def do_op():
+                nonlocal acc
+                if f == 0:   acc = P
+                elif f == 1: acc = acc + P
+                elif f == 2:
+                    if op2 == "and_coef":
+                        acc = acc & (coef if coef is not None else MASK24)
+                    elif op2 == "subge_coef":
+                        kk = coef if coef is not None else MASK24
+                        if kk > 0 and acc >= kk:
+                            acc -= kk * (acc // kk)
+                    elif op2 == "and_mask23":
+                        acc = acc & MASK23
+                else:
+                    return 1
+            if order == "act_first":
+                do_act()
+                if do_op(): return None
+            else:
+                if do_op(): return None
+                do_act()
+            if isA:
+                if coef is None:
+                    return None
+                P = s24(coef) if (src08 == "unity" and src == 0x08) \
+                    else (s24(coef) * Lv) >> 23
+            if trace:
+                print("      %-14s p=%+3d L=%-9d acc=%-11d P=%-9d mem=%s"
+                      % (fmt(w), p, Lv, acc, P, dict(mem)))
+            pprev = p
+            p = nxt
+        hist.append(mem[qcell] & MASK24)
+    return hist
+
+
+def is_ramp(hist, inc):
+    return (len(set(hist)) == len(hist)
+            and all(0 <= v < (1 << 23) for v in hist)
+            and all((hist[k + 1] - hist[k]) % (1 << 23) == inc
+                    for k in range(len(hist) - 1)))
+
+
+def sec_publish():
+    hdr("publish -- who writes the phase cell?  the WIDENED search")
+    print("""Two facts this section adds to `solve', both MEASURED first:
+
+   (1) every LFO block is followed, within the same run of ordinary D-RAM words,
+       by `xxx.2.dd.447' -- SRC 0x11, ACTION 0x07 -- ON THE PHASE CELL.  `solve'
+       could not see it because its window was the three-word block.
+   (2) PARAMETRIC EQ -- the biquad that validates `hi12 bit 4 = store' to
+       0.094 dB -- contains NO word with hi12 bit 7 set and bit 4 set.  Every one
+       of its store words is `212.xx' (bit7 = 0).  All three LFO words are
+       `09x.xx' (bit7 = 1).  The biquad therefore does not constrain bit 4 here.
+
+Free parameters: the five of `solve', plus
+   stgate what gates or redirects the hi12 bit-4 store
+   src11  what lo12[10:6] == 0x11 puts on the bus""")
+
+    # ---- (1) and (2), measured
+    a2i = algo_to_image()
+    peq = a2i[39][2]
+    nb = sum(1 for w in peq if not DIS.c_format(w)
+             and (hi12(w) >> 4) & 1 and (hi12(w) >> 7) & 1)
+    print("\n   PARAMETRIC EQ words with BOTH hi12 bit 4 and bit 7: %d of %d"
+          % (nb, len(peq)))
+    pool = publish_blocks()
+    n447 = 0
+    for (i, a, e, words, coefs, inc, q) in pool:
+        cells = block_cells(words)
+        if any(DIS.lo_act(w) == 0x07 and DIS.lo_src(w) == 0x11 and c == q
+               for w, c in zip(words[3:], cells[3:])):
+            n447 += 1
+    print("   blocks whose window contains a SRC-0x11 / ACTION-0x07 word ON the"
+          " phase cell: %d of %d" % (n447, len(pool)))
+    print("   window length after the wrap word: %s"
+          % dict(collections.Counter(e - a - 2 for (i, a, e, *_) in pool)))
+
+    # ---- the search, staged
+    space = list(itertools.product(SRC08[:5] + ["coef"], ACT00[:6], ORDER,
+                                   OP2, STORE2, STGATE, SRC11, DEST07))
+    print("\n   candidate machines: %d" % len(space))
+    seed = [r for r in pool if r[0] in (1, 4)][:2]
+    stage1 = []
+    for cfg in space:
+        ok = True
+        for (i, a, e, words, coefs, inc, q) in seed:
+            h = sim2(cfg, words, coefs, 10, random.Random(5 + i), qcell=q)
+            if h is None or not is_ramp(h, inc):
+                ok = False; break
+        if ok:
+            stage1.append(cfg)
+    print("   stage 1 (2 blocks, 10 frames)          : %d survive" % len(stage1))
+
+    stage2 = []
+    for cfg in stage1:
+        ok = True
+        for (i, a, e, words, coefs, inc, q) in pool:
+            h = sim2(cfg, words, coefs, 30, random.Random(97 + i * 13 + a), qcell=q)
+            if h is None or not is_ramp(h, inc):
+                ok = False; break
+        if ok:
+            stage2.append(cfg)
+    print("   stage 2 (ALL %d blocks, 30 frames)      : %d survive" % (len(pool), len(stage2)))
+
+    stage3 = []
+    for cfg in stage2:
+        ok = True
+        for (i, a, e, words, coefs, inc, q) in pool:
+            h = sim2(cfg, words, coefs, 6, random.Random(3 + i), qcell=q,
+                     preset=(1 << 23) - 2 * inc)
+            want = [((1 << 23) - 2 * inc + inc * (k + 1)) % (1 << 23) for k in range(6)]
+            if h is None or h != want:
+                ok = False; break
+        if ok:
+            stage3.append(cfg)
+    print("   stage 3 (the 2**23 WRAP, all %d blocks) : %d survive" % (len(pool), len(stage3)))
+
+    if stage3:
+        print("\n   marginals over the survivors:")
+        for k, f in enumerate(["src08", "act00", "order", "op2", "store",
+                               "stgate", "src11", "dest07"]):
+            print("      %-7s : %s" % (f, sorted({c[k] for c in stage3})))
+        fam = collections.Counter((c[5], c[6], c[7]) for c in stage3)
+        print("\n   survivors by (stgate, src11, dest07) -- the NEW axes:")
+        for k, v in sorted(fam.items()):
+            print("      stgate=%-18s src11=%-6s dest07=%-10s  x%d" % (k + (v,)))
+    return pool, stage3
+    return pool, stage3
+
+
+# =========================================================================
+#  8.  GATE -- the INDEPENDENT test of the store gate the ramp determined
+#
+#  `publish' determines the gate from a NUMERIC constraint (the ramp).  The dead
+#  store census is a STRUCTURAL measurement that knows nothing about rates.  If
+#  the gate is right the two must agree: suppressing exactly those stores should
+#  make the corpus's provably-dead stores go away.  If it is wrong, or merely
+#  tuned to the LFO, the 216 should barely move.  This can fail.
+# =========================================================================
+GATES = {
+    "always (shipped)":  lambda b7, f: True,
+    "not_b7":            lambda b7, f: not b7,
+    "f31_2_only":        lambda b7, f: f == 2,
+    "b7_f31_1_off":      lambda b7, f: not (b7 and f == 1),
+    "b7_ne2_off":        lambda b7, f: not (b7 and f != 2),
+}
+
+
+def deadstores(gate, src11_inert=False):
+    """(total dead stores, chain census) under a bit-4 store gate.
+
+    `src11_inert' applies the OTHER thing the ramp forces: a SRC-0x11 /
+    ACTION-0x07 word must not deposit a foreign value in the cell (either because
+    its source IS the cell or because its destination is elsewhere), so it cannot
+    kill a live store."""
+    def mode2(w):  return (not DIS.c_format(w)) and (class4(w) & 7) == 2
+    def wr(w):
+        if DIS.lo_act(w) == 0x07:
+            if src11_inert and DIS.lo_src(w) == 0x11:
+                return False
+            return True
+        if not (hi12(w) & DIS.HI_ST):
+            return False
+        return gate((hi12(w) >> 7) & 1, DIS.hi_f31(hi12(w)))
+    def rd(w):     return DIS.lo_src(w) == 0x07
+    tot, ex = 0, collections.Counter()
+    for i, (p, la, ws) in sorted(algo_to_image().items()):
+        ptr, c = [0] * len(ws), 0
+        for k, w in enumerate(ws):
+            ptr[k] = c
+            if DIS.ptr_postinc(w):
+                c += s8(addr8(w))
+        for k in range(len(ws)):
+            if mode2(ws[k]) and wr(ws[k]):
+                j, chain = k + 1, [k]
+                while j < len(ws) and mode2(ws[j]) and ptr[j] == ptr[k] and not rd(ws[j]):
+                    if wr(ws[j]):
+                        chain.append(j)
+                    j += 1
+                if len(chain) > 1:
+                    ex[tuple(fmt(ws[x]) for x in chain)] += 1
+                    tot += len(chain) - 1
+    return tot, ex
+
+
+def sec_gate():
+    hdr("gate -- an INDEPENDENT test of the store gate the ramp determined")
+    print("""The ramp is a NUMERIC constraint; the dead-store census is a STRUCTURAL one
+that knows nothing about rates.  They are independent, so they can disagree --
+which is the point.  Under the shipped model the 38-image body corpus contains
+216 provably dead stores (`deadstore').  If the gate `publish' determined is a
+real property of the chip it should remove them; if it is an LFO-shaped patch it
+should not.
+""")
+    peq = algo_to_image()[39][2]
+    pf = collections.Counter(((hi12(w) >> 7) & 1, DIS.hi_f31(hi12(w)))
+                             for w in peq if not DIS.c_format(w) and (hi12(w) & DIS.HI_ST))
+    print("   PARAMETRIC EQ's bit-4 store words, by (hi12 bit 7, hi12[3:1]): %s"
+          % {("b7=%d,f31=%d" % k): v for k, v in sorted(pf.items())})
+    print("   -> every one is bit7 = 0, so `not_b7' and `b7_*' leave the 0.094 dB")
+    print("      biquad reconstruction untouched, and `f31_2_only' DESTROYS it.\n")
+    base, _ = deadstores(GATES["always (shipped)"])
+    print("   %-20s %-8s %-9s %s" % ("gate", "dead", "removed", "corpus bit-4 stores kept"))
+    nb4 = [((hi12(w) >> 7) & 1, DIS.hi_f31(hi12(w)))
+           for _, _, w in corpus() if not DIS.c_format(w) and (hi12(w) & DIS.HI_ST)]
+    for nm, g in GATES.items():
+        tot, ex = deadstores(g)
+        kept = sum(1 for b7, f in nb4 if g(b7, f))
+        print("   %-20s %-8d %-9s %d of %d" %
+              (nm, tot, "%+.1f%%" % (100.0 * (tot - base) / base) if base else "-",
+               kept, len(nb4)))
+    print("\n   the JOINT model the ramp forces -- gate AND the SRC-0x11 / ACTION-0x07"
+          "\n   word being inert on the cell (the other thing `publish' determines):")
+    for nm in ("always (shipped)", "b7_f31_1_off", "b7_ne2_off"):
+        tot, _ = deadstores(GATES[nm], src11_inert=True)
+        print("      %-20s %d dead   (%+.1f%% vs the shipped 216)"
+              % (nm, tot, 100.0 * (tot - base) / base))
+
+    print("\n   the chains that SURVIVE the b7_f31_1_off gate:")
+    tot, ex = deadstores(GATES["b7_f31_1_off"])
+    for k, v in ex.most_common(8):
+        print("      x%-3d %s" % (v, " -> ".join(k)))
+    print("\n   the chains the gate REMOVES (present under `always', gone under it):")
+    _, ex0 = deadstores(GATES["always (shipped)"])
+    gone = collections.Counter({k: v for k, v in ex0.items() if k not in ex})
+    for k, v in gone.most_common(8):
+        print("      x%-3d %s" % (v, " -> ".join(k)))
+
+
 SECTIONS = [("fields", sec_fields), ("sites", sec_sites), ("rate", sec_rate),
             ("walk", sec_walk), ("solve", sec_solve),
-            ("deadstore", sec_deadstore), ("closure", sec_closure)]
+            ("deadstore", sec_deadstore), ("closure", sec_closure),
+            ("publish", sec_publish), ("gate", sec_gate)]
 
 if __name__ == "__main__":
     want = sys.argv[1:] or [n for n, _ in SECTIONS]

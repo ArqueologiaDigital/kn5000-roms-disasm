@@ -3,13 +3,23 @@
 NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date: **2026-07-26**.
 No hardware. Static analysis, the ROM corpus and constraint solving only.
 
+> **This note is in two parts.** **Part I (§0–§6)** determines two ALU codes from
+> the ramp and then falsifies the model they were determined in: at 24 of the 29
+> LFO blocks *no* machine in its space can run the block, and it names four
+> candidate resolutions (L-1 … L-4) without choosing. **Part II (§7–§14)**, added
+> in the same pass series, **chooses** — by widening the search in the two
+> directions the falsification pointed at, and by measuring that the biquad which
+> validated `hi12` bit 4 never constrains it on the words the LFO uses. Part II's
+> ledger is in **§11** and it supersedes Part I's **§6** where the two touch.
+
 Reproduce every number below with
 [`dsp/tools/lfo_ramp.py`](../tools/lfo_ramp.py) (standard library only, no
 emulator, no undumped ROM):
 
 ```
-python3 dsp/tools/lfo_ramp.py                       # all seven sections
-python3 dsp/tools/lfo_ramp.py fields rate solve     # the three that matter
+python3 dsp/tools/lfo_ramp.py                       # all nine sections
+python3 dsp/tools/lfo_ramp.py fields rate solve     # Part I
+python3 dsp/tools/lfo_ramp.py publish gate          # Part II  (~6 min)
 ```
 
 Labels: **MEASURED** / **PROVEN BY CONSTRUCTION** / **FORCED** / **DETERMINED** /
@@ -29,6 +39,17 @@ Labels: **MEASURED** / **PROVEN BY CONSTRUCTION** / **FORCED** / **DETERMINED** 
 | **F** | The same defect, measured independently and corpus-wide: **216 provably dead stores** in the 38-image body corpus — pairs, triples and six quadruples of consecutive writes to one cell with no read between. Only 27 of 180 chains contain an LFO word, so this is a **general** defect of the memory model, not an LFO peculiarity. | **MEASURED** |
 | **G** | The wrap is **not** in the accumulator. `hi12[3:1] == 2` runs *after* the bit-4 store has already written the phase and cleared the accumulator, so it can never reach the value that persists. Of five store-path candidates only two survive, and one of them is falsified by the biquad. The survivor: **the accumulator STORE PATH takes the value modulo the fetched coefficient when `hi12[3:1] == 2`** — which is also exactly why the biquad's class-8 word looks like a no-op (it has no store). | **FORCED** (against the accumulator) / **CONSISTENT** (the store path) |
 | **H** | Price, for the ledger: adopting `ACTION 0x00` + `SRC 0x08` + `hi12[3:1] == 2` off class 8 takes the decodable corpus **1029 → 1288** words (**+259**). **It is not adopted.** A pass that has just measured that the datapath cannot run the block it solved must not put 259 more words on that datapath. | **MEASURED** |
+
+### Part II — added in the second pass (§7–§12)
+
+| # | what | label |
+|---|---|---|
+| **I** | ★ **THE BIQUAD NEVER CONSTRAINED BIT 4 HERE, AND NOBODY HAD CHECKED.** PARAMETRIC EQ — the block that validates "`hi12` bit 4 = store accumulator to `mem[ptr]`" to 0.094 dB — contains **0 of 105** words carrying bit 4 *and* bit 7. All **22** of its store words are `(bit7 = 0, hi12[3:1] = 1)`. All three LFO words are `(bit7 = 1)`. The 57 dB evidence for bit 4 therefore says **nothing** about the words Part I could not run. Part I held bit 4 fixed for a reason that does not apply. | **MEASURED** |
+| **J** | ★ **ALL 29 BLOCKS NOW RAMP AND WRAP.** Widening the window to include the words *after* the block and letting the bit-4 store be gated gives a **276 480**-machine space; **432** survive the ramp *and* the 2²³ wrap at **all 29 blocks**, against **0** in Part I's space at 24 of them. Part I's three determinations survive the 144×-larger space **unchanged and still as singletons** — `src08 = unity`, `act00 = acc ← bus`, `order = act before the operation` — and are now carried by 29 blocks in 16 programs over **0.2 – 1000 Hz** instead of 5. | **DETERMINED** |
+| **K** | ★ **THE STORE GATE READS TWO BITS, AND NEITHER ONE ALONE.** `hi12` bit 7 alone (`not_b7`) has **0** survivors — the numeric constraint kills it. `hi12[3:1] == 2` alone (`f31_2_only`) survives the ramp and is **falsified by the biquad** (it would suppress all 22 PEQ stores). What survives is a gate reading **both**: the store is suppressed-or-redirected exactly on `(bit7 = 1, hi12[3:1] = 1)`. Three such gates survive and the ramp cannot separate them; they differ on **13** corpus words. | **FORCED** (that both bits are read) / **OPEN** (which of the three) |
+| **L** | ★ **THE PUBLISHER IS THE WRAP WORD, NOT THE `447`.** Traced: `094.A.dd.200`'s bit-4 store is what deposits `phase + inc` in the cell; the `xxx.2.dd.447` word that follows 26 of 29 blocks is **inert on that cell**. My prediction was the opposite and it is a **MISS**. What is forced about the `447` is only negative: it must not deposit a *foreign* value — either its source is the cell itself or ACTION `0x07`'s destination is elsewhere (R2 already FORCED that destination to be mode-dependent). | **FORCED** (negative) / **OPEN** (which reading) |
+| **M** | ★ **AN INDEPENDENT TEST, PARTLY PASSED — AND IT LOCATES A SECOND DEFECT.** The gate comes from a *numeric* constraint; the 216 provably-dead stores are a *structural* measurement that knows nothing about rates. The gate removes **55** of them (216 → **161**); with the `447` constraint as well, 216 → **135** (−37.5 %) or **123** (−43.1 %). Real, and **partial**. The residue is dominated by `212.2.00.000 → 000.2.F9.407` **×44**, which carries `bit7 = 0` and which this pass cannot touch. **The memory model has a second, independent defect.** | **MEASURED** |
+| **N** | Nothing is adopted, again, and for a stated reason: **three** gates survive, and the datapath still carries 135 provably dead stores. The ALU predicate, both disassemblers and every `.dsm` are **unchanged**; `verify.py` **BYTE-MATCH OK**. §11 says what would settle it. | **MEASURED** |
 
 ---
 
@@ -326,7 +347,13 @@ that C-RAM has at least two independent pointers; whether D-RAM does is **OPEN**
 
 ---
 
-## 6. What is FORCED, what is CONSISTENT, what is OPEN
+## 6. What is FORCED, what is CONSISTENT, what is OPEN — *Part I's ledger*
+
+> ⚠ **Read §11 before using this list.** Part II resolves this section's first
+> OPEN item (which of L-1 … L-4 resolves §4.2 — it is **L-1**, with the
+> discriminator narrowed), promotes two of its DETERMINED rows from 5 blocks to
+> 29, and adds constraints this list does not carry. Where the two ledgers touch,
+> **§11 wins**; nothing in this section is withdrawn.
 
 **FORCED**
 
@@ -455,3 +482,487 @@ cd dsp && python3 verify.py               # BYTE-MATCH OK (no listing changed)
 Nothing in this pass changes either disassembler, any `.dsm`, or the MAME device:
 the two codes it determines are **not** adopted, for the reason in §0 row H.
 `verify.py` re-run and **BYTE-MATCH OK**.
+
+---
+---
+
+# PART II — the gate, and who actually writes the phase
+
+Part I ended on a located falsification: *nothing in a 1920-machine space runs 24
+of the 29 LFO blocks, because the accumulate word `092.A.dd.200` carries `hi12`
+bit 4 and sits on the very cell the next word reads.* It named four candidate
+resolutions and adopted none. This part tests them.
+
+Two things Part I held fixed turn out to be the two things worth moving, and both
+were fixed for reasons that do not survive being checked.
+
+---
+
+## 7. ★ The biquad never constrained bit 4 on these words
+
+Part I's search declared, in its own preamble: *"Fixed, and **not**
+re-litigated: bit 4 stores to `mem[ptr]` and clears the accumulator (biquad,
+57 dB)."* That is a reasonable thing to hold fixed — the PARAMETRIC EQ
+reconstruction is the strongest numeric result this project has, and removing the
+bit-4 store costs it 57 dB.
+
+It is also, as an argument about the LFO, **empty**. MEASURED:
+
+```
+   PARAMETRIC EQ (algo 39), 105 words:
+      words carrying hi12 bit 4 AND hi12 bit 7 :   0
+      its bit-4 store words, by (bit7, hi12[3:1]) : {b7=0, f31=1} x22
+
+   the three LFO words:
+      092.A.dd.200  bit4=1  bit7=1  hi12[3:1]=1
+      082.2.00.1C0  bit4=0  bit7=1  hi12[3:1]=1
+      094.A.dd.200  bit4=1  bit7=1  hi12[3:1]=2
+```
+
+**Every word that carries the biquad's evidence has `bit7 = 0`; every word of the
+LFO has `bit7 = 1`.** The 0.094 dB validation therefore constrains bit 4 on
+`bit7 = 0` words and on nothing else. Part I's own §4.2 note that "`hi12` bit 7
+is the most interesting candidate" was right, and the reason it could not be
+pursued was that Part I never measured *where the bit-4 evidence lives*.
+
+This narrows a standing ISA claim rather than contradicting it.
+`instruction-set.md` records bit 4 as **MEASURED**, citing
+`0x212 = 0x202 + bit4` **and** `0x092 = 0x082 + bit4`. The first is the biquad.
+The second is **the LFO's own accumulate word against the LFO's own middle
+word** — an *encoding* observation (the two hi12 values do differ by bit 4), not
+a semantic one, and this pass shows those two words cannot both be storing. So:
+
+> **`hi12` bit 4 = "store the accumulator to `mem[ptr]` and clear it" is VERIFIED
+> for `bit7 = 0` and UNVERIFIED for `bit7 = 1`.** 527 corpus words are in the
+> verified case; **180** are not.
+
+Corpus census, C-format excluded (2989 of the 3057 words):
+
+| | bit7 = 0 | bit7 = 1 |
+|---|---|---|
+| **bit4 = 0** | 1879 | 403 |
+| **bit4 = 1** | **527** (biquad's case) | **180** (unverified) |
+
+`hi12` bit 7 is not a rarity and not an artefact: 583 words carry it, 127
+distinct, and the corpus contains **12 minimal pairs** that are byte-identical
+except for it — including `212.A.01.412` (×34, the biquad's input word) against
+`292.A.01.412` (×4, ENHANCER) and `212.2.00.000` (×88) against `292.2.00.000`
+(×2). Whatever bit 7 is, the compiler emits both polarities of the same
+instruction deliberately.
+
+---
+
+## 8. ★ The widened search — and it runs all 29 blocks
+
+### 8.1 What was widened, and why exactly that
+
+**The window.** Part I simulated the three-word block alone. But the block does
+not end there:
+
+```
+   A> 092.A.00.200   store? ; SRC 0x08 ; ACTION 0x00        the accumulate
+   M> 082.2.00.1C0           SRC 0x07 = mem[Q] ANCHORED     the phase read
+   W> 094.A.00.200   store? ; SRC 0x08 ; ACTION 0x00        the wrap
+      000.2.dd.447           SRC 0x11 ; ACTION 0x07 = "write the operand to a
+                             destination" (ANCHORED) -- ON THE SAME CELL Q
+      092.2.00.700   store? ; SRC 0x1C ; ACTION 0x00        -- ALSO on Q
+      000.A.00.1D5           SRC 0x07 = mem[Q], class A     -- READS Q again
+```
+
+**MEASURED: 26 of the 29 blocks carry a `SRC 0x11 / ACTION 0x07` word on the
+phase cell**, inside the same run of ordinary D-RAM words. A store Part I's §5
+was counting as *dead* is a candidate **publisher**, and it is invisible from
+inside a three-word window. The window here runs from the accumulate word to the
+first following word this model cannot execute at all (C-format, a mode-1 escape,
+an unanchored ACTION, or the `lo12` bit-11 / bit-5 modifiers) — 0 to 18 extra
+words, most often 4.
+
+**The store gate**, for the reason in §7.
+
+Everything else is held exactly as Part I held it, including the parts that make
+the test hard: the entering accumulator, the product latch and both temporaries
+are **randomised every frame**, and **any source this ISA does not decode
+delivers a fresh random value** — so `SRC 0x00`, `SRC 0x13` and `SRC 0x1C` inside
+the window are noise, and a machine that depends on any of them cannot pass.
+
+### 8.2 The result
+
+```
+   candidate machines                              276480
+   stage 1  (2 blocks, 10 frames)                     864 survive
+   stage 2  (ALL 29 blocks, 30 frames)                864 survive
+   stage 3  (the 2**23 WRAP, all 29 blocks)           432 survive
+
+   marginals over the 432:
+      src08   : ['unity']                     <- singleton, as in Part I
+      act00   : ['acc_load']                  <- singleton, as in Part I
+      order   : ['act_first']                 <- singleton, as in Part I
+      op2     : all four                      <- the ramp still cannot see it
+      store   : ['b7_and_coef', 'f31_2_and_coef', 'wrap23']
+      stgate  : ['b7_f31_1_off', 'b7_f31_1_scratch', 'b7_ne2_off', 'f31_2_only']
+      src11   : all eight, with dest07='elsewhere'; only 'mem' with dest07='mem'
+```
+
+**Stage 2 does not shrink stage 1.** Every machine that runs two blocks runs all
+twenty-nine, in sixteen independently written programs, at nine different rates
+spanning four decades. That is the property Part I's five clean blocks could not
+demonstrate.
+
+**Part I's three determinations are re-derived, not assumed.** They were
+singletons in a 1920-point space over 5 blocks; they are singletons in a
+276 480-point space over 29 blocks. `src08 = unity`, `act00 = acc ← bus`,
+`order = ACTION before the hi12[3:1] operation`.
+
+### 8.3 What the gate has to be
+
+Eight gates were offered. **Five have zero survivors:**
+
+| gate | survivors | why it fails |
+|---|---|---|
+| `always` (**the shipped model**) | **0** | Part I's falsification, restated in a 144× larger space with the successor words visible. It is not a window artefact |
+| `not_b7` — bit 7 cancels the store | **0** | then the **wrap** word does not store either, and nothing publishes the phase |
+| `not_b7_keepclear` | 0 | as above |
+| `b7_scratch` — bit 7 redirects it off D-RAM | 0 | as above |
+| `prev_ptr` — the store uses the previous word's pointer | 0 | a pipelined write address does not help: in 24 of 29 blocks the previous word already left the pointer at Q |
+| `next_ptr` — the store uses the post-incremented pointer | 0 | and it *breaks the 5 blocks that worked*: PHASER's `092.A.0E.200` would then store at +14 = Q |
+
+**Three survive, plus one the biquad kills:**
+
+| gate | ramp | biquad |
+|---|---|---|
+| `f31_2_only` — store only when `hi12[3:1] == 2` | ✔ | ✘ **FALSIFIED** — it suppresses all 22 PARAMETRIC EQ stores, i.e. the 57 dB |
+| `b7_f31_1_off` — suppressed iff `bit7 == 1 && hi12[3:1] == 1` | ✔ | ✔ |
+| `b7_ne2_off` — suppressed iff `bit7 == 1 && hi12[3:1] != 2` | ✔ | ✔ |
+| `b7_f31_1_scratch` — *redirected* rather than suppressed | ✔ | ✔ |
+
+So, **FORCED**: *the gate reads `hi12` bit 7 **and** `hi12[3:1]`.* Bit 7 alone
+is excluded by the ramp (a numeric constraint); `hi12[3:1]` alone is excluded by
+the biquad (an independent numeric constraint). This is the single sharpest
+statement this pass produces, and it is exactly the discriminator Part I §4.2
+said was needed and could not find — *"the discriminator has to separate two
+words that differ only in `hi12[3:1]`"* — the answer being that it separates them
+**by also reading bit 7**.
+
+The three survivors differ on **13 corpus words**:
+
+```
+   09A.A.00.200 x9   090.A.01.1C8   29A.A.B8.21A   090.A.00.1D5   090.2.FB.40E
+```
+
+Nine of the thirteen are `09A.A.00.200` (`hi12[3:1] = 5`), and it is **not** an
+LFO word: it is the **COMPRESSOR's** envelope step (1 in the resident kernel,
+8 across COMPRESSOR / PEQ COMPRESSOR / PEQ COMPR DIST / PEQ COMPR OVERDR), reached
+by `000.A.00.219 | 09A.A.00.200 | C40.1.E0.451`, and the coefficients it eats are
+`0x600000` = **0.750000** and `0x517CC1` = **0.636620** — the latter being 2/π to
+six figures. Deciding between the three gates therefore means decoding
+`hi12[3:1] == 5`, which is a compressor question, not an LFO one. **OPEN, and
+located.**
+
+*A note on parsimony, stated because it is the honest objection:* a two-condition
+gate is an ugly thing to propose. It is proposed anyway because the alternative
+is not a simpler gate but **no gate at all**, and "no gate" has zero survivors
+against 29 blocks whose output is known as a number. A natural single-bit reading
+that fits — e.g. bit 7 = a CONDITION flag (the part has a COND field in the
+CDJ-500 block diagram, which nothing in this decode models) whose condition
+happens to be false at `hi12[3:1] == 1` and true at 2 — is **EDUCATED GUESS**, and
+it is written here as one.
+
+### 8.4 The block, read out in full
+
+Traced, `python3 dsp/tools/lfo_ramp.py publish` and the `trace=True` path of
+`sim2()`, CHORUS, increment `0x000072`:
+
+```
+   092.A.00.200   ST SUPPRESSED (bit7 & f31==1) ; acc <- 1.0 ; acc += P ; P := INC
+   082.2.00.1C0                                   acc <- mem[Q] = phase ; acc += P
+   094.A.00.200   ST mem[Q] <- (phase + INC) mod 2**23 , acc := 0
+                                                  acc <- 1.0 ; op2 ; P := 0x7FFFFF
+   000.2.09.447   INERT on Q                    ; acc <- P
+
+   mem[Q] over three frames:  000072  0000E4  000156      delta = 114 = INC
+```
+
+**The publisher is the wrap word.** My prediction before running was that it
+would be the `447` word with `SRC 0x11 = acc`; that is a **MISS**, and `acc` is
+positively excluded — after the wrap word's store-and-clear the accumulator holds
+`1.0`, so a `447` that copied it would overwrite the phase with unity every
+frame.
+
+What the ramp forces about the `447` word is therefore only **negative**: *it must
+not deposit a foreign value in the phase cell.* Two readings do that and the ramp
+cannot separate them:
+
+* `SRC 0x11 = mem[ptr]`, making the word a self-copy on this cell — the only
+  `src11` that survives with ACTION `0x07` writing D-RAM; or
+* ACTION `0x07`'s **destination** is not D-RAM here, in which case `SRC 0x11` is
+  unconstrained by the LFO. **R2 already FORCED that this destination is
+  mode-dependent**, so this is not an invention.
+
+### 8.5 One thing that did *not* have to work, and did
+
+The gate was determined from the accumulate word. It applies unchanged to
+`092.2.00.700` — the `SRC 0x1C` word that sits **on the phase cell** in 8 of the
+29 blocks, carries `hi12 = 0x092` (bit7 = 1, `hi12[3:1]` = 1) and bit 4, and
+would under the shipped model clobber the phase a *third* time. The gate
+suppresses it too, without being asked. 28 corpus occurrences.
+
+---
+
+## 9. ★ The independent test — structural, and only partly passed
+
+The ramp is a numeric constraint. The **provably dead store** census (Part I §5)
+is a structural one that knows nothing about rates: a store is provably dead if
+the next access to the same cell is another write, with no read between and no
+word of unknown addressing between. The two are independent, so they can
+disagree — which is why this is a test and not a demonstration.
+
+```
+   gate                 dead     removed   corpus bit-4 stores kept
+   always (shipped)     216      +0.0%     707 of 707
+   not_b7               123      -43.1%    527 of 707     <- 0 ramp survivors
+   f31_2_only            26      -88.0%     29 of 707     <- falsified by the biquad
+   b7_f31_1_off         161      -25.5%    569 of 707
+   b7_ne2_off           149      -31.0%    556 of 707
+
+   joint with the OTHER thing the ramp forces (the SRC-0x11 / ACTION-0x07 word
+   being inert on the cell):
+      always (shipped)   182   (-15.7 %)
+      b7_f31_1_off       135   (-37.5 %)
+      b7_ne2_off         123   (-43.1 %)
+```
+
+**It passes, partially, and the partiality is the useful part.** A gate invented
+to make one block work would have removed the LFO's own chains and nothing else.
+This one removes 55 by itself and 81 jointly, across programs it was not fitted
+to — the removed chains are led by the `092.2.00.700` family (§8.5), which the
+gate was never shown:
+
+```
+   removed:  x8  094.A.00.200 -> 000.2.00.447 -> 092.2.00.700
+             x8  000.2.00.447 -> 092.2.00.700
+             x4  02A.2.00.407 -> 212.2.00.000 -> 212.2.00.000 -> 092.2.00.700
+             x4  212.2.00.000 -> 092.2.00.700
+             x2  292.A.00.1D3 -> 212.A.01.452
+```
+
+But **135 survive**, and they are led by a chain this pass cannot touch:
+
+```
+   surviving: x44  212.2.00.000 -> 000.2.F9.407      bit7 = 0 on both words
+              x16  212.2.00.000 -> 212.2.00.000
+              x12  212.A.00.1D5 -> 212.A.00.415
+              x12  090.A.00.1D5 -> 212.A.00.415
+```
+
+`212.2.00.000` stores the accumulator and clears it; `000.2.F9.407` then latches
+`L = acc = 0` and writes **zero** over what was just stored, 44 times in the
+corpus. Both carry `bit7 = 0`, so the store gate leaves them exactly as they were.
+
+> **MEASURED, and it is a result in its own right: the memory model has a second,
+> independent defect, and the LFO cannot see it.** The most likely candidates are
+> the ones Part I §5 already flagged as caveats — a second D-RAM pointer, or a
+> host read of D-RAM — plus the possibility that `SRC 0x00` / `ACTION 0x00` on
+> `212.2.00.000` is not what the model assumes. Whoever attacks the `212` chain
+> should not expect the LFO to help.
+
+---
+
+## 10. The LFO's output path — one motif, one number, and one hypothesis I falsified
+
+The natural next numeric anchor after the ramp is the ramp's **consumer**. 8 of
+the 29 blocks (FLANGER, AUTO PAN, VIBRATO, RING MODULATOR — two blocks each)
+carry a single exceptionless tail:
+
+```
+   000.2.00.447 | 092.2.00.700 | 000.A.00.1D5 | 182.2.00.000 | 040.0.00.C63 | 000.6.18.4CD
+      inert       SRC 0x1C       P := coef x mem[Q]   SRC 0x00     ---- the table idiom ----
+```
+
+`000.A.00.1D5` is `SRC 0x07 = mem[Q]`, ACTION `0x15` (no side effect), class A —
+so it **multiplies the phase by a coefficient** and leaves the product in `P`,
+two words before the class-0/6/4 table-lookup idiom. That is a phase-to-index
+scaling followed by a waveform lookup, which is what an oscillator's output stage
+looks like.
+
+MEASURED: **the coefficient is `0x000018` = 24 at 8 of 8**, and the C-RAM shows
+the LFO's coefficients are a **triple**, not a pair:
+
+```
+   FLANGER  C-RAM   05:000026  06:7FFFFF  07:000018  08:400000
+                    09:000026  0A:7FFFFF  0B:000018  0C:400000
+   AUTO PAN C-RAM   01:0000E4  02:7FFFFF  03:000018
+                    04:0000E4  05:7FFFFF  06:000018
+                    ^ increment ^ wrap    ^ index scale
+```
+
+`(coef × phase) >> 23` with `coef = 24` maps a Q0.23 phase onto `0 … 23` — an
+integer index into a 24-entry table.
+
+**PREDICT-THEN-CHECK, and a MISS.** The class-6 word in the same motif carries
+`addr8 = 0x18` = **24**, the same number. I predicted that this was the table's
+extent appearing in both fields, and that the machine's *other* class-6 selector
+— `000.6.28.4CD`, `addr8 = 0x28` = 40, ×17 — would be fed by a scale coefficient
+of `0x000028` = 40. **It is not.** All ten of those sites are preceded by
+`000.A.00.415` consuming `0x000010` = **16** (eight sites) or `0xC00008` (two).
+`0x000028` does not occur in the coefficient corpus at all. The `24/0x18`
+agreement is a **coincidence**, and the general rule is **FALSIFIED**.
+
+What survives is weaker and still worth having: *the class-A word immediately
+before a table-lookup idiom consumes a small integer* — 24 before the LFO's
+lookup, 16 before the waveshaper's — which is what an index scale looks like and
+which puts the tables at ~24 and ~16 entries. **CONSISTENT, not forced.**
+A second temptation resisted: `0x000018` occurs 29 times in the coefficient
+corpus but only **10** of those are within three cells of an LFO wrap cell, and
+only **11 of 29** blocks carry it near their wrap at all — so it is a general
+small constant, **not** an LFO signature.
+
+---
+
+## 11. ★ Part II's ledger
+
+**MEASURED**
+
+* PARAMETRIC EQ contains **0 of 105** words with `hi12` bit 4 and bit 7 together;
+  all 22 of its store words are `(bit7 = 0, hi12[3:1] = 1)`. The biquad
+  constrains bit 4 only on `bit7 = 0`. (§7)
+* 527 corpus words are in the verified bit-4 case; **180 are not**. 583 words
+  carry bit 7, 127 distinct, in 12 bit-7 minimal pairs. (§7)
+* 26 of 29 blocks carry a `SRC 0x11 / ACTION 0x07` word **on the phase cell**. (§8.1)
+* The gate removes 55 of the 216 provably dead stores alone, 81 jointly; **135
+  survive**, led by `212.2.00.000 → 000.2.F9.407` ×44 at `bit7 = 0`. (§9)
+* The LFO's coefficients are a **triple** — increment, `0x7FFFFF`, and a third
+  cell that is `0x000018` = 24 at all 8 sites carrying the waveform tail. (§10)
+
+**FORCED**
+
+* **The `hi12` bit-4 store is not unconditional.** 0 of 276 480 machines run the
+  24 broken blocks with `stgate = always`, with the successor words visible. This
+  is Part I's falsification confirmed in a 144×-larger space, so it is not an
+  artefact of the three-word window. (§8.3)
+* **The gate reads `hi12` bit 7 *and* `hi12[3:1]`.** Bit 7 alone: 0 survivors
+  (ramp). `hi12[3:1]` alone: falsified (biquad). This resolves Part I's §4.2 in
+  favour of **(L-1)**, and narrows it — bit 7 is necessary but, exactly as Part I
+  warned, not sufficient. (§8.3)
+* **The publisher is the wrap word `094.A.dd.200`.** The `447` word is inert on
+  the phase cell, and `SRC 0x11 = acc` is positively excluded. (§8.4)
+* The same gate suppresses `092.2.00.700`'s store without being fitted to it. (§8.5)
+* `hi12[3:1] == 2` **still** cannot be what wraps the phase — Part I §4.3 stands,
+  for the same reason (the store precedes it and clears the accumulator), and all
+  four `op2` candidates still survive equally. (§8.2)
+
+**DETERMINED** (unique survivor, now over **all 29 blocks**, 16 programs,
+0.2 – 1000 Hz, in a 276 480-machine space — was 5 blocks in a 1920-machine space)
+
+* `SRC 0x08` = a **unity multiplicand**: the class-A product for `lo12 = 0x200`
+  is the coefficient itself.
+* `ACTION 0x00` = **`acc ← bus`**, taken **before** the `hi12[3:1]` operation.
+
+**CONSISTENT, not forced**
+
+* The 2²³ wrap lives on the accumulator **store path**, keyed by something that
+  separates the LFO's wrap word from the biquad's store words. Two candidates now
+  survive where Part I had one — `f31_2_and_coef` (keyed on `hi12[3:1] == 2`) and
+  `b7_and_coef` (keyed on bit 7). `wrap23` remains **falsified** by the biquad's
+  signed store path.
+* The gate **suppresses** rather than **redirects** the store
+  (`b7_f31_1_off` vs `b7_f31_1_scratch`); the ramp cannot tell.
+* The class-A word before a table-lookup idiom carries a small-integer index
+  scale (24 for the LFO, 16 for the waveshaper). (§10)
+
+**OPEN**
+
+* **Which of the three surviving gates.** They differ on 13 corpus words, 9 of
+  them `09A.A.00.200` — the COMPRESSOR's envelope step at `hi12[3:1] == 5`, eating
+  `0.750000` and `0.636620` (= 2/π). Settling it means decoding `hi12[3:1] == 5`.
+* Whether `SRC 0x11` is `mem[ptr]` or whether ACTION `0x07`'s destination is
+  elsewhere on these words.
+* What `hi12[3:1] == 2` does to the accumulator. Unchanged: the ramp cannot see it.
+* **What causes the surviving 135 dead stores**, above all
+  `212.2.00.000 → 000.2.F9.407` ×44. A different defect, at `bit7 = 0`.
+* What `hi12` bit 7 *means* — the gate uses it without reading it. A COND flag
+  (CDJ-500 block diagram) is an **EDUCATED GUESS**, nothing more.
+
+**FALSIFIED in this pass**
+
+* ★ **The brief's SRC anchors.** The task brief lists *"Anchored SRC: … `0x1C`
+  LFO out, `0x08` LFO phase"*. **Neither is anchored anywhere in this
+  repository** — `grep` over `dsp/`, the MAME device and its disassembler finds
+  no such claim. `SRC 0x08` was **DETERMINED** by Part I, and re-determined here
+  over 29 blocks, to be a **unity multiplicand**, which is not "LFO phase";
+  `SRC 0x1C` has no anchor at all and is treated as *noise* by this pass's
+  simulator, which is why the result does not depend on it. What exists is a
+  *word-level* landmark — `092.A.dd.200` is "the LFO phase-accumulate word" — and
+  it appears to have been read as a *field-level* anchor.
+* My own "the index scale equals the class-6 selector byte" (§10).
+* The scope of `instruction-set.md`'s bit-4 row is **narrowed**, not withdrawn:
+  its `0x092 = 0x082 + bit4` half is an encoding observation on two LFO words
+  that this pass shows cannot both be storing.
+
+---
+
+## 12. PREDICT-THEN-CHECK log — Part II
+
+| | prediction | result |
+|---|---|---|
+| **P-9** | `stgate = always` has **zero** survivors even with the window widened — i.e. Part I's falsification is not a window artefact | **HIT.** 0 of 276 480 |
+| **P-10** | some non-shipped gate runs all 29 blocks | **HIT.** 432 machines do, over four gates |
+| **P-11** | Part I's `src08 = unity`, `act00 = acc_load`, `order = act_first` carry over to the wider space | **HIT.** Still singleton marginals, now on 29 blocks instead of 5 |
+| **P-12** | the publisher is the **`447`** word, with `SRC 0x11 = acc` | **MISS.** The publisher is the **wrap word**; the `447` is inert, and `src11 = acc` is excluded — after the wrap's store-and-clear the accumulator holds 1.0 |
+| **P-13** | the gate is `not_b7` — bit 7 alone suppresses the store | **MISS.** 0 survivors: with both LFO stores gone nothing publishes the phase. The gate needs `hi12[3:1]` as well |
+| **P-14** | the gate removes more than 60 of the 216 provably dead stores | **MISS (marginal).** 55 by itself; 81 with the `447` constraint. Reported because I set the threshold before looking |
+| **P-15** | `212.2.00.000 → 000.2.F9.407` ×44 survives every gate untouched, because both words carry `bit7 = 0` | **HIT**, and it is the largest surviving chain |
+| **P-16** | if `addr8` on the class-6 selector is the table extent, `0x000028` = 40 appears in the coefficient corpus at the `0x28` sites | **MISS.** They are fed by `0x000010` = 16; `0x000028` does not occur at all. My §10 hypothesis is falsified |
+| **P-17** | `prev_ptr` (a pipelined write address) is a live candidate | **MISS.** 0 survivors — in 24 of 29 blocks the previous word had already left the pointer on Q |
+
+---
+
+## 13. What Part II hands to the other two targets
+
+**TARGET 2 — the `lo12` ACTION field.** Three things, one of them a warning.
+
+* `ACTION 0x00 = acc ← bus, before the operation` is no longer a five-block
+  determination: it is a **29-block** one, in 16 programs, at nine rates over four
+  decades. It is the field's largest code (824 corpus words, 51 of the 205
+  undecoded frame slots) and the all-pass core carries it twice —
+  `082.2.00.1C0` (×64, and **the LFO's own middle word**, so this pass reads it
+  directly) and `012.2.00.680` (×16).
+* **The gate does not touch the all-pass core.** `012.2.00.680` has
+  `hi12 = 0x012` → `bit7 = 0`, so its bit-4 store stands exactly as R1 modelled
+  it; and `880.1.20.655`, the core's external-DRAM write, has bit 7 set but **no**
+  bit 4, so the gate does not apply. R1's model is untouched by this pass — which
+  is worth knowing before the multiplicand-restriction re-run, because it means a
+  collapse or a survival there is not confounded with anything here.
+* A constraint for `SRC 0x00`: under the determined `ACTION 0x00`, every
+  `xxx.?.??.000` word — `104.2.00.000` ×9 in the reverb, `182.2.00.000` in the LFO
+  tail — reads **`acc ← src00`**. That does not say what `SRC 0x00` *is*, and this
+  pass explicitly **cannot** say: those words sit downstream of the publisher, so
+  the ramp is invariant under them. The brief's §4 blocker #2 experiment
+  ("solve for `SRC = 0x00` from the LFO") is unreachable for a **second**,
+  sharper reason than Part I's field misreading.
+
+**TARGET 1 — frame closure.** Unchanged, and now provably so: **this pass alters
+no pointer displacement.** The gate changes only whether a store happens, never
+`ptr_postinc()` or the cursor, so the static walk's −135 ≡ +121 (mod 256) and the
+live +121 are exactly as they were. The LFO remains not the source of the residue
+(25 of 29 blocks are net 0). What does transfer is the negative result of §9: the
+pointer walk that produces 216 dead stores still produces **135** of them after
+this pass, so *"a pointer model that could also be producing the +121"* remains a
+live candidate — but the LFO has now been eliminated as its cause.
+
+---
+
+## 14. Reproducing Part II
+
+```
+python3 dsp/tools/lfo_ramp.py publish     # the 276480-machine search   (~5 min)
+python3 dsp/tools/lfo_ramp.py gate        # the independent dead-store test
+python3 dsp/tools/lfo_ramp.py             # everything, Part I and Part II
+cd dsp && python3 verify.py               # BYTE-MATCH OK
+```
+
+**Nothing is adopted.** The ALU predicate, `upd6383d.cpp`, `dsp_disasm.py` and
+every `.dsm` are untouched by this pass; `verify.py` re-run and **BYTE-MATCH OK**
+(kernel + epilogue + 91 valid algorithm streams, 38 distinct images). Part I's
+row H price stands, and this part adds a second reason to refuse it: three gates
+survive, and the datapath they would run on still contains 135 provably dead
+stores that this pass has shown it cannot explain.
