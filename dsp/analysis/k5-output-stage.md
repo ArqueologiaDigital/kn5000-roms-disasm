@@ -25,7 +25,7 @@ verified by `dsp/verify.py` like every other listing.
 | 3 | I-RAM 64 / 71 are written by exactly two routines, **`EFF_Disconnect`** and **`EFF_Link`**, indexed by *effect unit*: unit 0 → I-RAM 64, unit 1 → I-RAM 71, units 2/3/4 → DSP2 registers. The firmware's own debug strings are `"EFF n disconnect."` / `"EFF n link."`. | **PROVEN BY CONSTRUCTION** |
 | 4 | Those two slots have a **third, previously unrecorded state**: the value in the canned image, `011.9.0E.445` / `011.9.0F.446`, which carries the **unit tag** (0x0E/0x0F) in `addr8`. | **MEASURED** |
 | 5 | The `0xC40/0xC41` immediate is **13 bits at [24:12] and always a multiple of 32** (11/11 distinct values, 61/61 occurrences) ⇒ the payload is the 8-bit field **[24:17]**, `imm13 = payload × 32`. | **MEASURED** |
-| 6 | Decoded that way, the four host-written values are **84, 42** (unit 0) and **200, 50** (unit 1). 84 and 200 are the I-RAM load addresses of every unit-0 / unit-1 body (91/91 well-formed algorithm streams). 42 and 50 are the first words of the header's own unit-0 / unit-1 setup blocks — the *only* two addresses that make the call a harmless no-op returning through the correct unit tag. **I-RAM 64/71 load the per-unit CALL VECTOR.** | **DETERMINED** |
+| 6 | Decoded that way, the four host-written values are **84, 42** (unit 0) and **200, 50** (unit 1). 84 and 200 are the I-RAM load addresses of every unit-0 / unit-1 body (91/91 well-formed algorithm streams). 42 and 50 are the first words of the header's own unit-0 / unit-1 setup blocks, and the return-tag constraint confines the unit-0 vector to 0..49 and the unit-1 vector to 50..59 — which 42 and 50 satisfy, exactly on the block boundaries. **I-RAM 64/71 load the per-unit CALL VECTOR.** | **DETERMINED** |
 | 7 | The **`×2` / `×4` "linear level" reading of §1.4/§3.3 is falsified**: 84 = 2·42 and 200 = 4·50 are arithmetic accidents of the I-RAM layout, and "disconnect" is not attenuation — the DSP's real mute is a different mechanism entirely (uC-IF cmd `0x04`, data byte 3 = `0x3F` mute / `0x00` unmute). | **PROVEN BY CONSTRUCTION** |
 | 8 | The frame terminator **`C00.A.47.407` @ I-RAM 82** encodes **its own address**: `imm13 = 0xA47 = 82×32 + 7`. The only other `C00` word in the corpus, `C00.9.84.000` @ I-RAM 76, does the same: `0x984 = 76×32 + 4`. | **MEASURED (2/2)**, semantics INFERRED |
 | 9 | The host-poke coefficient packet is decoded: `0A aa bb cc dd` = 24-bit `V = ((aa&0x7F)<<17)|(bb<<9)|(cc<<1)|(dd>>7)`, tag `dd & 0x7F` selecting the destination pointer register (0x26 ↔ `…821`, 0x4C ↔ `…825`). | **PROVEN BY CONSTRUCTION** |
@@ -134,6 +134,15 @@ EFF_Link        table @ 0x01F404 : 01E602  01E60D  01E618  01E624  01E630
 unit -> chip    table @ 0x01ED6D :   00      00      01      01      01
 ```
 
+(One contiguous 10-entry array at `0x01F3F0`: five disconnect scripts then five link
+scripts, `EFF_Link`'s base being `0x01F3F0 + 5*4`. Entry 10 is not a valid pointer, so the
+array is exactly 10 long. Both routines compute their index as `arg2*12 + unit*4`; the
+array size forces `arg2 == 0` on every live call — any other value would index across the
+disconnect/link boundary or off the end. That secondary term is the one part of the
+indexing not independently confirmed, and it does not affect anything below, because a
+ROM-wide scan finds **exactly four** well-formed writes to I-RAM 64/71 in the whole
+192 KB image and they are these four scripts.)
+
 | unit | chip | what the disconnect script does | what the link script does |
 |---|---|---|---|
 | 0 | 0 (uPD6383) | I-RAM **64** ← `C40.5.40.445` | I-RAM **64** ← `C40.A.80.445` |
@@ -241,13 +250,16 @@ Four independent structural matches, all four exact:
 4. **50 is the first word of the header's unit-1 setup block** (`w50 ldptr #$50`, …) and
    the first unit-tagged word at or after 50 is **w59 `400.1.0F.007`, tag 0x0F = unit 1**.
 
-Points 3 and 4 are the load-bearing ones, because they are *forced*, not merely matched.
-Under K1's mechanism (a unit-tagged word calls when the stack is empty and returns when it
-is not), a "disconnect" vector must point at a stretch of code that (a) is harmless and
-(b) terminates on a word carrying **that unit's own tag**, or the return will not happen.
-Scanning the kernel, the words satisfying (b) for tag 0x0E are the addresses 0..49 whose
-next tagged word is 49, and for tag 0x0F the addresses 50..59. Of those, 42 and 50 are the
-canonical block starts. So:
+Points 3 and 4 are the load-bearing ones, because they are *constrained*, not merely
+matched. Under K1's mechanism (a unit-tagged word calls when the stack is empty and returns
+when it is not), a "disconnect" vector must point at a stretch of code that (a) is harmless
+and (b) terminates on a word carrying **that unit's own tag**, or the return will not
+happen. The kernel contains exactly two tagged words, at 49 (tag 0x0E) and 59 (tag 0x0F)
+— so (b) confines the unit-0 vector to **0..49** and the unit-1 vector to **50..59**. The
+observed 42 and 50 fall in the right window each, and land exactly on the first word of
+that unit's own setup block. **Honest limit:** (b) narrows the choice to a range, it does
+not single out one address; what makes the reading strong is that both values land in the
+correct (and *different*) window, and both on a structural boundary. So:
 
 > **I-RAM 64 and I-RAM 71 load the CALL VECTOR of unit 0 and unit 1.**
 > LINK points the vector at the unit's real body; DISCONNECT points it at that unit's own
