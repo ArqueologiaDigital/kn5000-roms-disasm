@@ -14227,7 +14227,17 @@ LABEL_02281F:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_022824:
+; ----------------------------------------------------------------------------
+; Velocity_Select_Split_Zone - pick the velocity layer q from a 3-byte split record
+; Entry: A = note velocity, XBC = velocity-split record (3 split bytes)
+; Exit:  L = q, 0..3.  q = 0 is the SOFTEST layer
+; Notes: v = A & 0x7F; q = 0 if v <= rec[0], 1 if v <= rec[1], 2 if v <= rec[2],
+;        else 3.  The chosen q indexes the pre-computed 4-entry SET-descriptor array
+;        at part_struct + 0x76 + 0x25*slot + 4*q (see Partial_Store_Set_Pointer), so
+;        velocity selects a DIFFERENT SAMPLE, not merely a level.  MEASURED:
+;        notes/kn5000-variant-model.md 3.1/3.2.
+; ----------------------------------------------------------------------------
+Velocity_Select_Split_Zone:		; 022824h
 	RES 7, A
 	CP A, (XBC)
 	JR ULE, LABEL_022841
@@ -14252,7 +14262,13 @@ LABEL_022841:
 LABEL_022843:
 	RET
 
-LABEL_022844:
+; ----------------------------------------------------------------------------
+; Velocity_Select_Split_Zone_Alt - byte-identical twin of Velocity_Select_Split_Zone
+; Entry: A = note velocity, XBC = velocity-split record
+; Exit:  L = q, 0..3
+; Notes: Same code, separate entry point used by the other note-on chains.  MEASURED.
+; ----------------------------------------------------------------------------
+Velocity_Select_Split_Zone_Alt:		; 022844h
 	RES 7, A
 	CP A, (XBC)
 	JR ULE, LABEL_022861
@@ -14378,7 +14394,21 @@ LABEL_02294B:
 	LD_L 000h
 	RET
 
-LABEL_02294E:
+; ----------------------------------------------------------------------------
+; Pitch_Get_Patch_Octave_Shift - per-patch octave transpose from tone record byte +0x29
+; Entry: WA = part index, C = tone record byte +0x29
+; Exit:  HL = signed offset in 1/256 semitone (0 when disabled)
+; Notes: Returns 0 when ToneGen_GlobalFlags bit 1 is set.  Otherwise indexes
+;        Patch_OctaveShift_Table with (C & 0x0F) and returns sext(byte) << 8.
+;        CORRECTION to notes/audit/kn5000-audit-pitch.md 1.2, which calls this a
+;        "per-patch key shift": the 16 table entries are A0 AC B8 C4 D0 DC E8 F4 00 0C
+;        18 24 30 3C 48 54 = -96,-84,...,0,...,+84 semitones, i.e. exact OCTAVE steps
+;        (12 semitones), index 8 = no shift.  MEASURED (ROM bytes, this pass).
+;        For part indices 0x10..0x19 a 10-entry offset table at 0xF693 dispatches
+;        relative to LABEL_022982; 9 of the 10 offsets are 0 and one (part 0x14) is 4,
+;        and both targets reach the same table lookup.
+; ----------------------------------------------------------------------------
+Pitch_Get_Patch_Octave_Shift:		; 02294Eh
 	LD DE, (041343h)
 	BIT 1, DE
 	JR Z, LABEL_02295C
@@ -14416,7 +14446,16 @@ LABEL_022986:
 LABEL_02299C:
 	RET
 
-LABEL_02299D:
+; ----------------------------------------------------------------------------
+; Pitch_Clamp_Into_Range - clamp a log pitch into [kmin,kmax] (no octave folding)
+; Entry: WA = log pitch, C = kmin key, E = kmax key
+; Exit:  HL = clamped log pitch
+; Notes: First saturates a bit-15 value exactly like Pitch_Saturate_15bit (<= 0xC000
+;        unsigned -> 0x7FFF, else -> 0), then clamps to [(C<<8)+0x80,(E<<8)+0x80].
+;        Used when the partial has reduced or fixed key follow (blk[+0x06]&7 != 0),
+;        where folding by octaves would defeat the programmed ratio.  MEASURED.
+; ----------------------------------------------------------------------------
+Pitch_Clamp_Into_Range:		; 02299Dh
 	LD HL, WA
 	BIT 0fh, WA
 	JR Z, LABEL_0229B1
@@ -14458,7 +14497,20 @@ LABEL_0229CF:
 LABEL_0229EB:
 	RET
 
-LABEL_0229EC:
+; ----------------------------------------------------------------------------
+; Pitch_Fold_Octaves_Into_Range - fold a log pitch into [kmin,kmax] by whole octaves
+; Entry: WA = log pitch (1/256 semitone), C = kmin key, E = kmax key
+; Exit:  HL = folded log pitch, inside [(C<<8)+0x80 , (E<<8)+0x80]
+; Notes: Two stages.  (1) while bit 15 is set, add or subtract 0x0C00 (one octave) --
+;        this renormalises a 16-bit wrapped value: a slightly negative pitch is raised
+;        an octave at a time, a value that overflowed past 0x7FFF is lowered.
+;        (2) while below the low bound add 0x0C00; while above the high bound subtract
+;        0x0C00.  Used when the partial has full key follow (blk[+0x06]&7 == 0), so a
+;        key outside the SET s range plays the nearest octave of the same pitch class.
+;        MEASURED.  The wrap-normalising first stage is NOT described in
+;        notes/audit/kn5000-audit-pitch.md 1.2 -- read from the code this pass.
+; ----------------------------------------------------------------------------
+Pitch_Fold_Octaves_Into_Range:		; 0229ECh
 	LD HL, WA
 	JR T, LABEL_022A00
 
@@ -14501,7 +14553,14 @@ LABEL_022A22:
 	JR GT, LABEL_022A1E
 	RET
 
-LABEL_022A32:
+; ----------------------------------------------------------------------------
+; Pitch_Lookup_Zone_For_Key - map a folded log pitch to a multisample zone index
+; Entry: XWA = the SET s 128-byte key->zone map, BC = folded log pitch (desc[+0x06])
+; Exit:  L = zone index = map[(BC>>8) & 0x7F]
+; Notes: The SAME desc[+0x06] drives pitch and wave selection, so the octave fold in
+;        Pitch_Fold_Octaves_Into_Range moves both together.  MEASURED.
+; ----------------------------------------------------------------------------
+Pitch_Lookup_Zone_For_Key:		; 022A32h
 	AND BC, 7f00h
 	SRA 8, BC
 	LD L, (XWA + BC)
@@ -14575,7 +14634,17 @@ LABEL_022AE7:
 	LDW (293Eh), 0000h
 	RET
 
-LABEL_022B02:
+; ----------------------------------------------------------------------------
+; Pitch_Saturate_15bit - saturate a wrapped log pitch to the legal 0..0x7FFF range
+; Entry: WA = candidate log pitch
+; Exit:  HL = WA unchanged if bit 15 clear; else 0x7FFF if WA <= 0xC000 (unsigned),
+;        else 0
+; Notes: This is what fixes the +0x400 register format: 15 bits at 0x100 units per
+;        semitone = 128 semitones, 0xC00 per octave.  A value that wrapped just past
+;        the top (0x8000..0xC000) saturates HIGH, a value that went just below zero
+;        (0xC001..0xFFFF) saturates LOW.  MEASURED.
+; ----------------------------------------------------------------------------
+Pitch_Saturate_15bit:		; 022B02h
 	LD BC, WA
 	BIT 0fh, BC
 	JR Z, LABEL_022B16
@@ -14706,7 +14775,14 @@ LABEL_022BDB:
 	SRA 5, HL
 	RETD 0004h
 
-LABEL_022BF2:
+; ----------------------------------------------------------------------------
+; TVF_Clamp_Cutoff - clamp a cutoff value to the legal computed range
+; Entry: WA = candidate value (signed)
+; Exit:  HL = clamp(WA, 0, 0x78)
+; Notes: The computed path can never reach 0x7F, which is why 0x7F is available as the
+;        reserved "wide open / no filter" code written by TVF_Set_Bypass.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Clamp_Cutoff:		; 022BF2h
 	CP WA, 0078h
 	JR LE, LABEL_022BFD
 	LD WA, 0078h
@@ -14721,7 +14797,25 @@ LABEL_022C03:
 	LD HL, WA
 	RET
 
-LABEL_022C06:
+; ----------------------------------------------------------------------------
+; TVF_Calc_Cutoff - the per-voice filter cutoff / brightness value
+; Entry: XWA = voice descriptor, BC = base cutoff, DE = velocity depth (signed),
+;        (XSP+4) = key-follow depth (signed, pushed by the caller)
+; Exit:  HL = cutoff, 0..0x78.  Returns with RETD 2 (pops the pushed argument)
+; Notes: if veldepth != 0:
+;             curve = (VP[+0x36] & 0xE0) >> 5
+;             base += veldepth * sext(TVF_Velocity_Curves[curve][velocity & 0x7F]) / 32
+;        if keydepth != 0:
+;             k = clamp((desc[+0x08] >> 8) & 0x7F, VP[+0x3a], VP[+0x3b])
+;             base += keydepth * (k - VP[+0x39]) / 32
+;        base += 0x18 ; return TVF_Clamp_Cutoff(base)
+;        The key used for key follow is the high byte of desc[+0x08], the ABSOLUTE
+;        pitch AFTER all transposes -- not the raw played key (a refinement of
+;        notes/audit/kn5000-audit-timbre.md 1.3, which says "the played note").
+;        The seven curves run from -64 at velocity 0 to about 0 at velocity 127, so
+;        soft playing darkens the sound.  MEASURED (9/9 live hits on +0x100).
+; ----------------------------------------------------------------------------
+TVF_Calc_Cutoff:		; 022C06h
 	LD HL, DE
 	LD XIX, (XWA + 017h)
 	CP HL, 0
@@ -14785,10 +14879,18 @@ LABEL_022C7A:
 LABEL_022C8D:
 	ADD BC, 0018h
 	LD WA, BC
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	RETD 0002h
 
-LABEL_022C99:
+; ----------------------------------------------------------------------------
+; TVF_Calc_Cutoff_NoKeyFollow - cutoff for the short parameter set (velocity only)
+; Entry: XWA = voice descriptor, BC = base cutoff; VP = desc[+0x17]
+; Exit:  HL = cutoff, 0..0x78
+; Notes: depth = sext(VP[+0x10]); curve = (VP[+0x0F] & 0xE0) >> 5; the velocity term
+;        is identical to TVF_Calc_Cutoff s, there is no key-follow term, then +0x18
+;        and TVF_Clamp_Cutoff.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Calc_Cutoff_NoKeyFollow:		; 022C99h
 	LD XIX, (XWA + 017h)
 	LD E, (XIX + 010h)
 	LD L, E
@@ -14820,9 +14922,16 @@ LABEL_022C99:
 LABEL_022CDF:
 	ADD BC, 0018h
 	LD WA, BC
-	JRL T, LABEL_022BF2
+	JRL T, TVF_Clamp_Cutoff
 
-LABEL_022CE8:
+; ----------------------------------------------------------------------------
+; TVF_Bias_Clamp_Amount - bias a 7-bit TVF amount and clamp it
+; Entry: WA = raw value
+; Exit:  HL = min(WA + 0x18, 0x78)
+; Notes: The same +0x18 bias TVF_Calc_Cutoff applies, used for the low 7 bits of the
+;        +0x140 word.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Bias_Clamp_Amount:		; 022CE8h
 	ADD WA, 0018h
 	CP WA, 0078h
 	JR LE, LABEL_022CF5
@@ -14832,7 +14941,22 @@ LABEL_022CF5:
 	LD HL, WA
 	RET
 
-LABEL_022CF8:
+; ----------------------------------------------------------------------------
+; TVF_Lookup_Depth_Amount - decode the +0x140 depth index into amount + sign
+; Entry: A = index byte (bit 7 selects the table, bits 3:0 the record)
+; Exit:  HL = (amount << 8) | sign_bit7 ; TVF_Depth_LevelTrim (0x2940) = signed trim
+; Notes: Two 16 x 3-byte tables: TVF_Depth_Table_A (bit 7 clear) and
+;        TVF_Depth_Table_B (bit 7 set), mirror images of each other.
+;        record +0 = 0x00 or 0x80, ORed in as bit 7 of the result (the SIGN)
+;        record +1 = the 7-bit AMOUNT, shifted to bits 15:8
+;        record +2 = a signed LEVEL TRIM (0,-16,-13,-11,-8,-5,-3,0,...) stored in the
+;                    global TVF_Depth_LevelTrim
+;        NEW this pass: that global is READ BACK by the amplitude accumulator, so the
+;        depth index also applies a make-up gain in the level domain.
+;        notes/audit/kn5000-audit-timbre.md 1.4 records the stash but not the consumer.
+;        MEASURED (18/18 live hits on +0x140).
+; ----------------------------------------------------------------------------
+TVF_Lookup_Depth_Amount:		; 022CF8h
 	LD C, A
 	AND C, 00fh
 	LD E, C
@@ -14909,7 +15033,16 @@ LABEL_022D9E:
 	OR HL, IX
 	RET
 
-LABEL_022DA1:
+; ----------------------------------------------------------------------------
+; TVF_Set_Bypass - write the "no TVF" constants into the descriptor
+; Entry: XWA = voice descriptor
+; Exit:  desc[+0x42] = 0x017F (-> +0x100), desc[+0x44] = 0x7F7F (-> +0x140)
+; Notes: 0x7F in the low 7 bits is out of reach of the computed path (clamped to
+;        0x78), so it is a reserved bypass code -- and it fixes the polarity of the
+;        field: higher = brighter, 0x7F = no filtering.  Bit 10 (computed-cutoff
+;        present) is CLEAR here and bit 8 is set.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Set_Bypass:		; 022DA1h
 	LDW (XWA + 042h), 017fh
 	LDW (XWA + 044h), 7f7fh
 	RET
@@ -15734,7 +15867,47 @@ LABEL_023581:
 	INC 2, XSP
 	RET
 
-LABEL_023584:
+; ----------------------------------------------------------------------------
+; Pitch_Resolve_Key_Zone - key + transposes -> absolute pitch and folded zone key
+; Entry: XWA = voice descriptor (0x2942+0x47*p staging, or 0x04308E+0x47*ch live)
+;        desc[+0x05] = played key | 0x80,  desc[+0x1F] = SET descriptor,
+;        desc[+0x17] = 0x51-byte patch partial block,  desc[+0x23] = part struct
+; Exit:  desc[+0x08] = absolute log pitch (before zone fold), desc[+0x06] = zone-folded
+;        log pitch (its high byte is the key that selects the multisample zone).
+;        Clobbers WA/BC/DE/HL/IZ.
+; Notes: Units are 1/256 semitone throughout (0x100 per semitone, 0xC00 per octave),
+;        key K enters as (K<<8)+0x80.  Accumulated in order:
+;          + (Pitch_MasterTranspose)                whole semitones <<8
+;          + sext(part[+0x16])<<8                   part TRANSPOSE
+;          + sext(part[+0x6d])<<8                   part OCTAVE
+;          + Pitch_Get_Patch_Octave_Shift(...)      patch octave, tone record byte +0x29
+;          + <scale tuning>                         see below
+;        -> desc[+0x08] via Pitch_Saturate_15bit.
+;        SCALE TUNING source: if ToneGen_GlobalFlags bit 9 is set AND the part present
+;        word (Part_PresentWord) bit 8 is set, the mode comes from the panel global
+;        ScaleTune_GlobalMode; otherwise from the patch record byte +0x13.  Modes:
+;          0x80 -> ScaleTune_UserOffsets[key mod 12] * 2
+;          0x41 -> ScaleTune_PerKey_Offsets_41[key] (word)
+;          0x42 -> ScaleTune_PerKey_Offsets_42[key] (word)
+;          0x40 -> + (Pitch_ScaleTune_FlatOffset)
+;          0x00 -> none
+;          else -> ScaleTune_Temperament_Table[mode][key mod 12] * 2
+;        Then the multisample/key-follow stage, L = partial_blk[+0x06] & 7:
+;          SET[0] bit1 clear:  L==7 -> pitch := SET[+0x0c] (FIXED pitch, no key follow)
+;                              else -> pitch -= (SET[+0x0b]<<8)+0x80  (SET root key)
+;                                      if L: pitch >>= L             (key follow 1/2^L)
+;                                      pitch += SET[+0x0c]           (SET base pitch)
+;          SET[0] bit1 set:    same shape with the constant 0x4280 for root and base
+;          + sext(partial_blk[+0x04])<<8            PARTIAL COARSE TRANSPOSE
+;          + sext(desc[+0x27][+0x20])<<8            per-slot coarse offset
+;        Finally L==0 -> Pitch_Fold_Octaves_Into_Range, L!=0 -> Pitch_Clamp_Into_Range,
+;        both bounded by SET[+0x09] (kmin) and SET[+0x0a] (kmax); the result is
+;        desc[+0x06], which BOTH the pitch register (+0x400) and the wave-select
+;        register (+0x040, via Pitch_Lookup_Zone_For_Key) are derived from.
+;        MEASURED end to end: notes/audit/kn5000-audit-pitch.md 1.2/1.4,
+;        notes/kn5000-variant-model.md 5.1 (+0x400 reproduced 15/16 from ROM bytes).
+; ----------------------------------------------------------------------------
+Pitch_Resolve_Key_Zone:		; 023584h
 	LDA XSP, XSP - 10
 	PUSH IZ
 	LD (XSP + 008h), XWA
@@ -15774,9 +15947,9 @@ LABEL_023584:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_02294E
+	CALR Pitch_Get_Patch_Octave_Shift
 	ADD IZ, HL
-	CALL LABEL_028D42
+	CALL ScaleTune_Is_Global_Enabled
 	CP HL, 0
 	JRL Z, LABEL_023698
 	LD A, (XSP + 006h)
@@ -15786,7 +15959,7 @@ LABEL_023584:
 	LD WA, (XBC + WA)
 	BIT 8, WA
 	JRL Z, LABEL_023738
-	CALL LABEL_028B96
+	CALL ScaleTune_Get_Global_Mode
 	LD A, L
 	CP A, 080h
 	JR Z, LABEL_023637
@@ -15807,7 +15980,7 @@ LABEL_023637:
 	DIV_A 00ch
 	LD A, W
 	EXTZ WA
-	CALL LABEL_028C28
+	CALL ScaleTune_Get_User_Offset
 	LD A, L
 	EXTS WA
 	ADD WA, WA
@@ -15908,7 +16081,7 @@ LABEL_023708:
 
 LABEL_023738:
 	LD WA, IZ
-	CALR LABEL_022B02
+	CALR Pitch_Saturate_15bit
 	LD XWA, (XSP + 008h)
 	LD (XWA + 008h), HL
 	LD XWA, (XSP + 008h)
@@ -15982,7 +16155,7 @@ LABEL_0237A0:
 	LD E, A
 	EXTZ DE
 	LD WA, IZ
-	CALR LABEL_0229EC
+	CALR Pitch_Fold_Octaves_Into_Range
 	LD XWA, (XSP + 008h)
 	LD (XWA + 006h), HL
 	JR T, LABEL_023804
@@ -15997,7 +16170,7 @@ LABEL_0237E5:
 	LD E, A
 	EXTZ DE
 	LD WA, IZ
-	CALR LABEL_02299D
+	CALR Pitch_Clamp_Into_Range
 	LD XWA, (XSP + 008h)
 	LD (XWA + 006h), HL
 
@@ -16030,12 +16203,25 @@ LABEL_023809:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_0229EC
+	CALR Pitch_Fold_Octaves_Into_Range
 	LD (XIZ + 006h), HL
 	POP XIZ
 	RET
 
-LABEL_023849:
+; ----------------------------------------------------------------------------
+; WaveSel_Build_Reg040 - build the wave-select register (+0x040) from the SET
+; Entry: XWA = voice descriptor with desc[+0x06] (folded pitch) and desc[+0x1F] (SET)
+; Exit:  TG_Scratch_Reg040 (0x0451CE) = wave select word; desc[+0x0f] = zone record
+;        pointer; desc[+0x01] class bits set; WaveSel_Zone_Trim (0x293E) = zone trim
+; Notes: ptrA = SET[+0x01] + DB base, ptrB = SET[+0x05] + DB base (rel32).  The
+;        128-byte key->zone map is *(ptrA) + DB base; the zone index comes from
+;        Pitch_Lookup_Zone_For_Key, and ptrA[4 + zone] is the record number inside
+;        ptrB.  Bits 5/6/7 of SET[0] then select the record stride (15/13/12/10/6/4)
+;        and therefore which builder deposits the per-zone tuning trim used by
+;        Pitch_Apply_Partial_Detune.  Shared with the WAVE-SELECT subsystem.
+;        MEASURED: notes/kn5000-variant-model.md 6.1 (+0x040 reproduced 19/19).
+; ----------------------------------------------------------------------------
+WaveSel_Build_Reg040:		; 023849h
 	LDA XSP, XSP - 12
 	PUSH XIZ
 	LD (XSP + 12), XWA
@@ -16054,7 +16240,7 @@ LABEL_023849:
 	LD XWA, (XSP + 12)
 	LD BC, (XWA + 6)
 	LD XWA, XDE
-	CALR LABEL_022A32
+	CALR Pitch_Lookup_Zone_For_Key
 	LD A, L
 	EXTZ WA
 	LD BC, WA
@@ -16226,7 +16412,23 @@ LABEL_0239E1:
 	LD (041366h), WA
 	RET
 
-LABEL_023A05:
+; ----------------------------------------------------------------------------
+; Pitch_Apply_Partial_Detune - add the zone trim and the per-partial detunes
+; Entry: XWA = voice descriptor, desc[+0x06] already set by Pitch_Resolve_Key_Zone
+; Exit:  desc[+0x0a] = detuned log pitch; desc[+0x01] bit 10 set/cleared (BEND enable)
+; Notes: desc[+0x0a] = desc[+0x06]
+;                    + (WaveSel_Zone_Trim)          per-zone tuning trim, 1/256 semitone,
+;                                                   deposited by the record builder that
+;                                                   ran inside WaveSel_Build_Reg040
+;                    + sext(partial_blk[+0x05])*2   PARTIAL FINE TRANSPOSE (x2)
+;                    + sext(desc[+0x27][+0x21])     UNISON / SLOT DETUNE
+;                    + (part[+0x14])                part fine tune -- MIDI PITCH BEND
+;                                                   lands here (Voice_PitchBend)
+;        desc[+0x01] bit 10 is set only when part[+0x0a] bit 2 AND tone record byte
+;        [+0x10] bit 5 are both set; Pitch_Emit_Reg400 then adds the live bend value.
+;        MEASURED: notes/audit/kn5000-audit-pitch.md 1.2.
+; ----------------------------------------------------------------------------
+Pitch_Apply_Partial_Detune:		; 023A05h
 	LD DE, (XWA + 006h)
 	ADD DE, (293Eh)
 	LD XBC, (XWA + 017h)
@@ -16255,7 +16457,19 @@ LABEL_023A44:
 	ANDW (XWA + 001h), 0fbffh
 	RET
 
-LABEL_023A4A:
+; ----------------------------------------------------------------------------
+; Pitch_Emit_Reg400 - final master tune / detune / bend, then ship to chip reg +0x400
+; Entry: XWA = voice descriptor with desc[+0x0a] set by Pitch_Apply_Partial_Detune
+; Exit:  TG_Scratch_Reg400 (0x0451DA) = saturated log pitch; HL = same value
+; Notes: value = desc[+0x0a] + (Pitch_MasterFineTune)
+;                            +- (part[+0x1d])  when desc[+0x27][+0x18] bit 4 is set
+;                                              (bit 5 selects the sign: set = subtract)
+;                            +  (Pitch_BendValue) when desc[+0x01] bit 10 is set
+;        then Pitch_Saturate_15bit.  ToneGen_WriteVoiceParams ships scratch +0x0e to
+;        chip register voice+0x400; ToneGen_WriteVoicePitch ships that word alone.
+;        MEASURED: notes/audit/kn5000-audit-pitch.md 1.2/1.3.
+; ----------------------------------------------------------------------------
+Pitch_Emit_Reg400:		; 023A4Ah
 	LD DE, (XWA + 00ah)
 	ADD DE, (041347h)
 	LD XBC, (XWA + 027h)
@@ -16282,11 +16496,18 @@ LABEL_023A76:
 
 LABEL_023A83:
 	LD WA, DE
-	CALR LABEL_022B02
+	CALR Pitch_Saturate_15bit
 	LD (0451DAh), HL
 	RET
 
-LABEL_023A8E:
+; ----------------------------------------------------------------------------
+; Pitch_Apply_Zone_Trim - short form of Pitch_Apply_Partial_Detune (trim only)
+; Entry: XWA = voice descriptor with desc[+0x06] set
+; Exit:  desc[+0x0a] = desc[+0x06] + (WaveSel_Zone_Trim)
+; Notes: No partial fine / slot detune / part fine tune terms.  Used by the short
+;        (12-builder) note-on chain.  MEASURED (code read, this pass).
+; ----------------------------------------------------------------------------
+Pitch_Apply_Zone_Trim:		; 023A8Eh
 	LD BC, (XWA + 006h)
 	ADD BC, (293Eh)
 	LD (XWA + 00ah), BC
@@ -16313,7 +16534,7 @@ LABEL_023ABF:
 
 LABEL_023AC5:
 	LD WA, DE
-	CALR LABEL_022B02
+	CALR Pitch_Saturate_15bit
 	LD (0451DAh), HL
 	RET
 
@@ -16542,7 +16763,22 @@ LABEL_023CC6:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_023D01:
+; ----------------------------------------------------------------------------
+; TVF_Build_Full - the TVF builder used by every stock sound (mode 1)
+; Entry: XWA = voice descriptor; VP = desc[+0x17], part struct = desc[+0x23]
+; Exit:  desc[+0x42] = +0x100 word, desc[+0x44] = +0x140 word
+; Notes: V = TVF_Calc_Cutoff(base = VP[+0x4d] + sext(part[+0x67]),
+;                            veldepth = sext(VP[+0x37]),
+;                            keydepth = sext(VP[+0x3c]))
+;        desc[+0x42] = ((VP[+0x4e] & 7) << 13) | 0x0400 | V
+;        desc[+0x44] = TVF_Lookup_Depth_Amount(VP[+0x50]) | TVF_Bias_Clamp_Amount(VP[+0x4f])
+;        Bit 10 (the 0x0400) marks "computed cutoff present"; the bypass constant
+;        0x017F does not carry it.
+;        REFINEMENT of notes/audit/kn5000-audit-timbre.md 1.3: when Part_PresentWord
+;        bit 9 is set the +0x140 word is built from the CONSTANTS 0x48 and 0x8D
+;        instead of VP[+0x4f]/VP[+0x50].  MEASURED (code read, this pass).
+; ----------------------------------------------------------------------------
+TVF_Build_Full:		; 023D01h
 	DEC 8, XSP
 	PUSH IZ
 	LD (XSP + 006h), XWA
@@ -16569,7 +16805,7 @@ LABEL_023D01:
 	PUSH WA
 	LD XWA, (XSP + 008h)
 	LD BC, IZ
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04eh)
@@ -16588,10 +16824,10 @@ LABEL_023D01:
 	BIT 9, WA
 	JR Z, LABEL_023D8D
 	LD WA, 0048h
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD WA, 008dh
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -16603,12 +16839,12 @@ LABEL_023D8D:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04fh)
 	EXTZ WA
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 050h)
 	EXTZ WA
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -16652,7 +16888,7 @@ LABEL_023DB5:
 	PUSH WA
 	LD XWA, (XSP + 008h)
 	LD BC, IZ
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04eh)
@@ -16667,10 +16903,10 @@ LABEL_023DB5:
 	LD XWA, (XSP + 006h)
 	LD (XWA + 042h), BC
 	LD WA, 0048h
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD WA, 008dh
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -16699,7 +16935,7 @@ LABEL_023E44:
 	PUSH WA
 	LD XWA, (XSP + 008h)
 	LD BC, IZ
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04eh)
@@ -16716,12 +16952,12 @@ LABEL_023E44:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04fh)
 	EXTZ WA
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 050h)
 	EXTZ WA
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -16765,7 +17001,7 @@ LABEL_023EC2:
 	PUSH WA
 	LD XWA, (XSP + 008h)
 	LD BC, IZ
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04eh)
@@ -16779,10 +17015,10 @@ LABEL_023EC2:
 	LD XWA, (XSP + 006h)
 	LD (XWA + 042h), BC
 	LD WA, 0048h
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD WA, 008dh
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -16811,7 +17047,7 @@ LABEL_023F4E:
 	PUSH WA
 	LD XWA, (XSP + 008h)
 	LD BC, IZ
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04eh)
@@ -16871,7 +17107,7 @@ LABEL_023FF0:
 	PUSH WA
 	LD XWA, (XSP + 006h)
 	LD BC, HL
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD A, (XIZ + 04eh)
 	EXTZ WA
 	LD BC, WA
@@ -16943,7 +17179,7 @@ LABEL_024097:
 	PUSH WA
 	LD XWA, (XSP + 00ah)
 	LD BC, (XSP + 006h)
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD (XSP + 004h), HL
 	LD A, (XIZ + 037h)
 	LD E, A
@@ -16953,7 +17189,7 @@ LABEL_024097:
 	PUSH WA
 	LD XWA, (XSP + 00ah)
 	LD BC, (XSP + 008h)
-	CALR LABEL_022C06
+	CALR TVF_Calc_Cutoff
 	LD (XSP + 006h), HL
 	LD A, (XIZ + 050h)
 	EXTZ WA
@@ -16978,7 +17214,18 @@ LABEL_024097:
 	INC 8, XSP
 	RET
 
-LABEL_024102:
+; ----------------------------------------------------------------------------
+; TVF_Build_Dispatch - select the TVF (filter/brightness) builder for this partial
+; Entry: XWA = voice descriptor; partial block VP = desc[+0x17]
+; Exit:  desc[+0x42] (-> chip +0x100) and desc[+0x44] (-> chip +0x140) built
+; Notes: Dispatches on VP[+0x36] & 7 through the 6-entry offset table at 0xF6A7,
+;        relative to the JRL block that follows: 0 -> TVF_Set_Bypass, 1 -> TVF_Build_Full,
+;        2 -> LABEL_023DB5, 3 -> LABEL_023EC2, 4 -> LABEL_023FBD, 5 -> LABEL_02403D.
+;        Values 6 and 7 fall through to the bypass entry.  Every stock sound in the 16
+;        SOUND-GROUP defaults and the 20 PIANO variants uses mode 1.  MEASURED:
+;        notes/audit/kn5000-audit-timbre.md 1.3.
+; ----------------------------------------------------------------------------
+TVF_Build_Dispatch:		; 024102h
 	LD XBC, (XWA + 017h)
 	LD C, (XBC + 036h)
 	AND C, 007h
@@ -16994,15 +17241,29 @@ LABEL_024102:
 	JP T, XIX + BC
 
 LABEL_02412B:
-	JRL T, LABEL_022DA1
-	JRL T, LABEL_023D01
+	JRL T, TVF_Set_Bypass
+	JRL T, TVF_Build_Full
 	JRL T, LABEL_023DB5
 	JRL T, LABEL_023EC2
 	JRL T, LABEL_023FBD
 	CALR LABEL_02403D
 	RET
 
-LABEL_02413E:
+; ----------------------------------------------------------------------------
+; TVF_Build_Short - TVF builder for the short (12-builder) note-on chain
+; Entry: XWA = voice descriptor; VP = desc[+0x17]
+; Exit:  desc[+0x42] = +0x100 word, desc[+0x44] = +0x140 word
+; Notes: Same register layout as TVF_Build_Full but reads the parallel parameter set
+;        VP[+0x0f..+0x14]: [+0x0f] bits2:0 builder select and bits7:5 velocity curve,
+;        [+0x10] velocity depth, [+0x11] base cutoff, [+0x12] -> +0x100 bits15:13,
+;        [+0x13] -> +0x140 low 7 bits, [+0x14] -> depth amount index.  There is NO
+;        key-follow term (TVF_Calc_Cutoff_NoKeyFollow).
+;        CORRECTION: notes/audit/kn5000-audit-pitch.md 1.3 and its GAP 9 call the
+;        TVF_BuildEmit_Short_Dispatch family an LFO (rate/depth/delay/waveform).  It
+;        is not: it fills the SAME +0x100/+0x140 pair with the SAME cutoff+amount
+;        layout, from a shorter parameter set.  MEASURED (code read, this pass).
+; ----------------------------------------------------------------------------
+TVF_Build_Short:		; 02413Eh
 	DEC 8, XSP
 	PUSH IZ
 	LD (XSP + 006h), XWA
@@ -17013,7 +17274,7 @@ LABEL_02413E:
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 006h)
-	CALR LABEL_022C99
+	CALR TVF_Calc_Cutoff_NoKeyFollow
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 012h)
@@ -17029,12 +17290,12 @@ LABEL_02413E:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 013h)
 	EXTZ WA
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 014h)
 	EXTZ WA
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -17055,7 +17316,7 @@ LABEL_0241A0:
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 006h)
-	CALR LABEL_022C99
+	CALR TVF_Calc_Cutoff_NoKeyFollow
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 012h)
@@ -17072,12 +17333,12 @@ LABEL_0241A0:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 013h)
 	EXTZ WA
-	CALR LABEL_022CE8
+	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 014h)
 	EXTZ WA
-	CALR LABEL_022CF8
+	CALR TVF_Lookup_Depth_Amount
 	LD WA, IZ
 	LD BC, WA
 	OR BC, HL
@@ -17097,7 +17358,7 @@ LABEL_024205:
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 004h)
-	CALR LABEL_022C99
+	CALR TVF_Calc_Cutoff_NoKeyFollow
 	LD A, (XIZ + 012h)
 	EXTZ WA
 	LD BC, WA
@@ -17129,7 +17390,7 @@ LABEL_024250:
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 004h)
-	CALR LABEL_022C99
+	CALR TVF_Calc_Cutoff_NoKeyFollow
 	LD A, (XIZ + 012h)
 	EXTZ WA
 	LD BC, WA
@@ -17163,13 +17424,13 @@ LABEL_0242A1:
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 006h)
-	CALR LABEL_022C99
+	CALR TVF_Calc_Cutoff_NoKeyFollow
 	LD (XSP + 004h), HL
 	LD A, (XIZ + 013h)
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 006h)
-	CALR LABEL_022C99
+	CALR TVF_Calc_Cutoff_NoKeyFollow
 	LD A, (XIZ + 014h)
 	EXTZ WA
 	LD BC, WA
@@ -17192,7 +17453,17 @@ LABEL_0242A1:
 	INC 6, XSP
 	RET
 
-LABEL_024300:
+; ----------------------------------------------------------------------------
+; TVF_BuildEmit_Short_Dispatch - build AND emit +0x100/+0x140 for the short chain
+; Entry: XWA = voice descriptor; VP = desc[+0x17]
+; Exit:  scratch 0x0451D4 (+0x100) and 0x0451D6 (+0x140) written
+; Notes: Dispatches on VP[+0x0F] & 7 through the 6-entry offset table at 0xF6B3:
+;        0 -> TVF_Set_Bypass then copy, 1 -> TVF_Build_Short, 2 -> LABEL_0241A0,
+;        3 -> LABEL_024205, 4 -> LABEL_024250, 5 -> LABEL_0242A1.  Unlike the long
+;        chain, build and emit are one routine (no TVF_Emit_Registers step, so no
+;        live controller offset).  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_BuildEmit_Short_Dispatch:		; 024300h
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, (XIZ + 017h)
@@ -17211,14 +17482,14 @@ LABEL_024300:
 
 LABEL_02432C:
 	LD XWA, XIZ
-	CALR LABEL_022DA1
+	CALR TVF_Set_Bypass
 	LD WA, (XIZ + 042h)
 	LD (0451D4h), WA
 	LD WA, (XIZ + 044h)
 	LD (0451D6h), WA
 	JR T, LABEL_024364
 	LD XWA, XIZ
-	CALR LABEL_02413E
+	CALR TVF_Build_Short
 	JR T, LABEL_024364
 	LD XWA, XIZ
 	CALR LABEL_0241A0
@@ -17236,7 +17507,15 @@ LABEL_024364:
 	POP XIZ
 	RET
 
-LABEL_024366:
+; ----------------------------------------------------------------------------
+; TVF_Emit_Offset_Reg100 - emit with the controller offset applied to +0x100 only
+; Entry: XWA = voice descriptor
+; Exit:  scratch 0x0451D4 / 0x0451D6 written
+; Notes: If desc[+0x27][+0x18] bit 6 is clear the words are copied unchanged.  Else
+;        cut = clamp((desc[+0x42] & 0x7F) -/+ sext(part[+0x1f]), 0, 0x78), sign from
+;        bit 7, and only the low 7 bits of +0x100 are replaced.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Emit_Offset_Reg100:		; 024366h
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, (XIZ + 027h)
@@ -17266,7 +17545,7 @@ LABEL_024394:
 	LD WA, BC
 
 LABEL_0243A7:
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	LD WA, (XIZ + 042h)
 	AND WA, 0ff80h
 	OR WA, HL
@@ -17283,7 +17562,14 @@ LABEL_0243C2:
 	POP XIZ
 	RET
 
-LABEL_0243CC:
+; ----------------------------------------------------------------------------
+; TVF_Emit_Offset_Both - emit with the controller offset applied to BOTH registers
+; Entry: XWA = voice descriptor
+; Exit:  scratch 0x0451D4 / 0x0451D6 written
+; Notes: As TVF_Emit_Offset_Reg100, but the same clamped value also replaces the low
+;        7 bits of the +0x140 word.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Emit_Offset_Both:		; 0243CCh
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, (XIZ + 027h)
@@ -17314,7 +17600,7 @@ LABEL_0243FA:
 
 LABEL_02440D:
 	LD WA, HL
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	LD WA, HL
 	LD BC, (XIZ + 042h)
 	AND BC, 0ff80h
@@ -17336,7 +17622,19 @@ LABEL_024442:
 	POP XIZ
 	RET
 
-LABEL_024444:
+; ----------------------------------------------------------------------------
+; TVF_Emit_Registers - ship +0x100 / +0x140 to the scratch, with the live offset
+; Entry: XWA = voice descriptor with desc[+0x42] / desc[+0x44] built
+; Exit:  scratch 0x0451D4 (+0x100) and 0x0451D6 (+0x140) written
+; Notes: Dispatches on VP[+0x36] & 7 through the 6-entry offset table at 0xF6BF,
+;        offsets {0, 0x13, 0x13, 0x1B, 0x36, 0x3E} relative to the plain-copy case.
+;        Mode 0 copies the two words unchanged; the others route through
+;        TVF_Emit_Offset_Reg100 or TVF_Emit_Offset_Both, which add or subtract the
+;        live controller value part[+0x1f] from the cutoff field, gated on
+;        desc[+0x27][+0x18] bit 6 (enable) and bit 7 (direction), re-clamped by
+;        TVF_Clamp_Cutoff.  MEASURED.
+; ----------------------------------------------------------------------------
+TVF_Emit_Registers:		; 024444h
 	DEC 2, XSP
 	PUSH XIZ
 	LD XIZ, XWA
@@ -17361,22 +17659,22 @@ LABEL_024472:
 	LD (0451D6h), WA
 	JRL T, LABEL_024550
 	LD XWA, XIZ
-	CALR LABEL_024366
+	CALR TVF_Emit_Offset_Reg100
 	JRL T, LABEL_024550
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 002h)
 	BIT 9, WA
 	JR Z, LABEL_0244A0
 	LD XWA, XIZ
-	CALR LABEL_024366
+	CALR TVF_Emit_Offset_Reg100
 	JRL T, LABEL_024550
 
 LABEL_0244A0:
 	LD XWA, XIZ
-	CALR LABEL_0243CC
+	CALR TVF_Emit_Offset_Both
 	JRL T, LABEL_024550
 	LD XWA, XIZ
-	CALR LABEL_0243CC
+	CALR TVF_Emit_Offset_Both
 	JRL T, LABEL_024550
 	LD XWA, (XIZ + 027h)
 	LD WA, (XWA + 018h)
@@ -17420,13 +17718,13 @@ LABEL_0244F0:
 
 LABEL_024517:
 	LD WA, DE
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	LD WA, (XIZ + 042h)
 	AND WA, 0ff80h
 	OR WA, HL
 	LD (0451D4h), WA
 	LD WA, (XSP + 004h)
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	LD WA, (XIZ + 044h)
 	AND WA, 0ff80h
 	OR WA, HL
@@ -17469,22 +17767,22 @@ LABEL_024582:
 	LD (0451D6h), WA
 	JRL T, LABEL_024660
 	LD XWA, XIZ
-	CALR LABEL_024366
+	CALR TVF_Emit_Offset_Reg100
 	JRL T, LABEL_024660
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 002h)
 	BIT 9, WA
 	JR Z, LABEL_0245B0
 	LD XWA, XIZ
-	CALR LABEL_024366
+	CALR TVF_Emit_Offset_Reg100
 	JRL T, LABEL_024660
 
 LABEL_0245B0:
 	LD XWA, XIZ
-	CALR LABEL_0243CC
+	CALR TVF_Emit_Offset_Both
 	JRL T, LABEL_024660
 	LD XWA, XIZ
-	CALR LABEL_0243CC
+	CALR TVF_Emit_Offset_Both
 	JRL T, LABEL_024660
 	LD XWA, (XIZ + 027h)
 	LD WA, (XWA + 018h)
@@ -17528,13 +17826,13 @@ LABEL_024600:
 
 LABEL_024627:
 	LD WA, DE
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	LD WA, (XIZ + 042h)
 	AND WA, 0ff80h
 	OR WA, HL
 	LD (0451D4h), WA
 	LD WA, (XSP + 004h)
-	CALR LABEL_022BF2
+	CALR TVF_Clamp_Cutoff
 	LD WA, (XIZ + 044h)
 	AND WA, 0ff80h
 	OR WA, HL
@@ -18885,7 +19183,21 @@ LABEL_0253F9:
 	LDA XSP, XSP + 016h
 	RET
 
-LABEL_0253FE:
+; ----------------------------------------------------------------------------
+; Level_Build_Reg0C0 - build the part-level / patch-level register (+0x0C0)
+; Entry: XWA = voice descriptor; part struct = desc[+0x23], tone record = desc[+0x13]
+; Exit:  scratch 0x0451D2 (+0x0C0) written
+; Notes: hi = part[+0x0f]; forced to 0 when part[+0x0f] or part[+0x12] is 0, and to 0
+;        when the part mode byte at 0x04134C is 6.  When nonzero:
+;          hi += tone_record[+0x5c] - 0x40      per-PATCH level/brightness byte
+;          hi += sext(part[+0x66])              live per-part offset
+;          hi  = clamp(hi, 0, 0x7F)
+;        lo = part[+0x12] (or 0x7F in the global part modes).  It is neither key- nor
+;        velocity-scaled.  MEASURED (2/2 live: the Piano/Bright delta of 0x1A in
+;        tone_record[+0x5c] appears exactly in the register).  POLARITY of the field
+;        is NOT established -- notes/audit/kn5000-audit-timbre.md GAP 4.
+; ----------------------------------------------------------------------------
+Level_Build_Reg0C0:		; 0253FEh
 	LD XBC, (XWA + 023h)
 	CP (XBC + 00fh), 000h
 	JR Z, LABEL_025429
@@ -22222,7 +22534,18 @@ LABEL_0271AF:
 	INC 6, XSP
 	RET
 
-LABEL_0271BC:
+; ----------------------------------------------------------------------------
+; Pitch_Bend_Ramp_Tick - advance the panel BEND / auto-bend ramp by one tick
+; Entry: None (state in ToneGen_GlobalFlags and Pitch_BendRampPhase)
+; Exit:  Pitch_BendValue updated; ToneGen_GlobalFlags state bits advanced
+; Notes: ToneGen_GlobalFlags bit 11 arms the ramp (phase := 1, value := 2*curve[0],
+;        flags -> clear bit 11, set bits 10 and 12); bit 12 counts the hold; bit 13
+;        runs the ramp, stepping Pitch_BendRampPhase and setting
+;        Pitch_BendValue = sext(Pitch_Bend_Curve_Table[phase]) * 2 (1/256 semitone).
+;        Bit 10 of the flags is the "bend active" bit that Pitch_Emit_Reg400 tests via
+;        desc[+0x01] bit 10.  MEASURED.
+; ----------------------------------------------------------------------------
+Pitch_Bend_Ramp_Tick:		; 0271BCh
 	LD WA, (041343h)
 	BIT 0bh, WA
 	JR Z, LABEL_0271E8
@@ -23091,8 +23414,8 @@ LABEL_027AC0:
 ; Exit:  none
 ; Notes: Called by Audio_Process_Init on odd ticks, after Voice_Manager_PollBank.
 ;        Per live channel, in order:
-;          slot+0x01 bit10 -> recompute pitch (LABEL_023A4A) and ship +0x400
-;              through LABEL_02D0BA;
+;          slot+0x01 bit10 -> recompute pitch (Pitch_Emit_Reg400) and ship +0x400
+;              through ToneGen_WriteVoicePitch;
 ;          then the same delayed/immediate split as pass A on slot+0x2f, plus the
 ;              expression domain: slot+0x31 bit15 -> Voice_Step_ExprRamp, or the
 ;              immediate Voice_Clear_HoldBit / Voice_Reload_Levels / slot+0x31 = 0.
@@ -23101,7 +23424,7 @@ Audio_Tick_ServiceVoices_B:	; 027AC4h
 	DEC 4, XSP
 	PUSH XIZ
 	CALR LABEL_027363
-	CALR LABEL_0271BC
+	CALR Pitch_Bend_Ramp_Tick
 	LD WA, (041343h)
 	BIT 0ah, WA
 	JRL Z, LABEL_027BA0
@@ -23122,12 +23445,12 @@ LABEL_027AE8:
 	BIT 0ah, WA
 	JR Z, LABEL_027B1A
 	LD XWA, XIZ
-	CALR LABEL_023A4A
+	CALR Pitch_Emit_Reg400
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALL LABEL_02D0BA
+	CALL ToneGen_WriteVoicePitch
 
 LABEL_027B1A:
 	LD XWA, (XIZ + 023h)
@@ -24179,7 +24502,14 @@ LABEL_028B90:
 	LD (04134Dh), A
 	RET
 
-LABEL_028B96:
+; ----------------------------------------------------------------------------
+; ScaleTune_Get_Global_Mode - read the panel-wide scale-tuning mode
+; Entry: None
+; Exit:  L = ScaleTune_GlobalMode  (0x00 none, 0x40 flat offset, 0x41/0x42 per-key
+;        tables, 0x80 user scale, anything else = a temperament table row)
+; Notes: MEASURED.
+; ----------------------------------------------------------------------------
+ScaleTune_Get_Global_Mode:		; 028B96h
 	LD L, (04134Dh)
 	RET
 
@@ -24242,7 +24572,14 @@ LABEL_028C14:
 	LD (XDE + WA), C
 	RET
 
-LABEL_028C28:
+; ----------------------------------------------------------------------------
+; ScaleTune_Get_User_Offset - one entry of the 12-note user scale
+; Entry: WA = pitch class 0..11 (key mod 12, 0 = C)
+; Exit:  L = signed offset; the caller doubles it (unit = 2/256 semitone = 0.78 cent)
+; Notes: Reads ScaleTune_UserOffsets = 0x041342 + 0x0C + pitch class = 0x04134E..59.
+;        MEASURED.
+; ----------------------------------------------------------------------------
+ScaleTune_Get_User_Offset:		; 028C28h
 	EXTZ WA
 	ADD WA, 000ch
 	LDA XBC, 041342h
@@ -24303,7 +24640,7 @@ LABEL_028CBA:
 	LDA XBC, 04308Eh
 	EXTS XWA
 	ADD XWA, XBC
-	CALL LABEL_0253FE
+	CALL Level_Build_Reg0C0
 	LD A, (XIZ)
 	EXTZ WA
 	MULS_WA 047h
@@ -24357,12 +24694,30 @@ LABEL_028D3A:
 	ANDW (041343h), 0fdffh
 	RET
 
-LABEL_028D42:
+; ----------------------------------------------------------------------------
+; ScaleTune_Is_Global_Enabled - is scale tuning taken from the panel or from the patch?
+; Entry: None
+; Exit:  HL = ToneGen_GlobalFlags & 0x0200 (nonzero = use the global mode)
+; Notes: When zero, Pitch_Resolve_Key_Zone reads the mode from the PATCH RECORD byte
+;        +0x13 instead.  MEASURED (this branch is not described in the audit note).
+; ----------------------------------------------------------------------------
+ScaleTune_Is_Global_Enabled:		; 028D42h
 	LD HL, (041343h)
 	AND HL, 0200h
 	RET
 
-LABEL_028D4C:
+; ----------------------------------------------------------------------------
+; Pitch_Refresh_Sounding_Voices - re-ship +0x400 for a part s currently sounding voices
+; Entry: XWA = pointer to a voice-number list; the list starts at XWA+5 and is
+;        terminated by the first entry >= 0x40
+; Exit:  Chip register +0x400 rewritten for every listed voice whose descriptor
+;        selects it
+; Notes: For each voice it reads Voice_Desc_Table[ch][+0x01] & 0x3C and acts only on
+;        the values 0x04, 0x08, 0x10, 0x20; then calls Pitch_Emit_Reg400 followed by
+;        the single-register write.  Called after a master-TUNE change and from the
+;        MIDI control-change handler.  MEASURED.
+; ----------------------------------------------------------------------------
+Pitch_Refresh_Sounding_Voices:		; 028D4Ch
 	DEC 4, XSP
 	PUSH XIZ
 	LDA XBC, 04308Eh
@@ -24393,7 +24748,7 @@ LABEL_028D60:
 
 LABEL_028D8E:
 	LD XWA, XBC
-	CALL LABEL_023A4A
+	CALL Pitch_Emit_Reg400
 	LD A, (XIZ)
 	EXTZ WA
 	LDA XBC, 0451CCh
@@ -25286,7 +25641,7 @@ LABEL_02A11C:
 	CALL LABEL_02F50D
 	LD A, (XSP + 002h)
 	EXTZ WA
-	CALL LABEL_032B1E
+	CALL Partial_Build_Present_Word
 	LD A, (XSP + 002h)
 	EXTZ WA
 	CALL LABEL_032E1E
@@ -25622,7 +25977,7 @@ Voice_CC_Portamento:
 	EXTZ WA
 	CALL LABEL_02CD36
 	LD XWA, XHL
-	CALR LABEL_028D4C
+	CALR Pitch_Refresh_Sounding_Voices
 	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	LD E, A
@@ -25914,12 +26269,12 @@ LABEL_02A6DB:
 	CALR LABEL_028B23
 	CALL Voice_Query_AllChannels
 	LD XWA, XHL
-	JRL T, LABEL_028D4C
+	JRL T, Pitch_Refresh_Sounding_Voices
 	EXTZ WA
 	CALR LABEL_028B3B
 	CALL Voice_Query_AllChannels
 	LD XWA, XHL
-	JRL T, LABEL_028D4C
+	JRL T, Pitch_Refresh_Sounding_Voices
 
 LABEL_02A6F7:
 	DEC 2, XSP
@@ -27142,7 +27497,7 @@ LABEL_02B3DD:
 	SLA 8, WA
 	ADD IZ, WA
 	LD WA, IZ
-	CALL LABEL_022B02
+	CALL Pitch_Saturate_15bit
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 008h), HL
 	LD XWA, (XSP + 006h)
@@ -27172,7 +27527,7 @@ LABEL_02B3DD:
 	LD E, A
 	EXTZ DE
 	LD WA, IZ
-	CALL LABEL_0229EC
+	CALL Pitch_Fold_Octaves_Into_Range
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 006h), HL
 	POP IZ
@@ -27236,7 +27591,22 @@ LABEL_02B4DD:
 	INC 2, XSP
 	RET
 
-LABEL_02B4E3:
+; ----------------------------------------------------------------------------
+; Voice_Build_Register_Set - run the 17 parameter builders and burst one chip voice
+; Entry: A = chip voice number 0..63
+; Exit:  All 0x2C bytes of the parameter scratch at 0x0451CC filled and shipped to the
+;        chip by ToneGen_WriteVoiceParams
+; Notes: The descriptor it works on is Voice_Desc_Table[A] = 0x04308E + 0x47*A, i.e.
+;        the LIVE per-chip-voice copy -- NOT the 0x2942 staging array.  The note-on
+;        path memcpy s 0x47 bytes from Voice_Desc_Staging[p] into it first.
+;        CORRECTION: notes/kn5000-variant-model.md 4.1 records only the 0x2942 array.
+;        Builder order: WaveSel_Build_Reg040, Pitch_Apply_Partial_Detune,
+;        Pitch_Emit_Reg400, LABEL_023AD0, TVF_Build_Dispatch, TVF_Emit_Registers,
+;        LABEL_024664, LABEL_0248D5, LABEL_024BE3, LABEL_024F41, LABEL_025229,
+;        Level_Build_Reg0C0, LABEL_025589, LABEL_025636, LABEL_02591D, LABEL_026396,
+;        LABEL_026637.  MEASURED.
+; ----------------------------------------------------------------------------
+Voice_Build_Register_Set:		; 02B4E3h
 	DEC 2, XSP
 	PUSH XIZ
 	LD (XSP + 004h), A
@@ -27246,17 +27616,17 @@ LABEL_02B4E3:
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL LABEL_023849
+	CALL WaveSel_Build_Reg040
 	LD XWA, XIZ
-	CALL LABEL_023A05
+	CALL Pitch_Apply_Partial_Detune
 	LD XWA, XIZ
-	CALL LABEL_023A4A
+	CALL Pitch_Emit_Reg400
 	LD XWA, XIZ
 	CALL LABEL_023AD0
 	LD XWA, XIZ
-	CALL LABEL_024102
+	CALL TVF_Build_Dispatch
 	LD XWA, XIZ
-	CALL LABEL_024444
+	CALL TVF_Emit_Registers
 	LD XWA, XIZ
 	CALL LABEL_024664
 	LD XWA, XIZ
@@ -27268,7 +27638,7 @@ LABEL_02B4E3:
 	LD XWA, XIZ
 	CALL LABEL_025229
 	LD XWA, XIZ
-	CALL LABEL_0253FE
+	CALL Level_Build_Reg0C0
 	LD XWA, XIZ
 	CALL Voice_Build_GateCommand
 	LD XWA, XIZ
@@ -27348,7 +27718,7 @@ LABEL_02B576:
 	LD A, (XSP + 022h)
 	EXTZ WA
 	LD XBC, (XSP + 00eh)
-	CALL LABEL_022844
+	CALL Velocity_Select_Split_Zone_Alt
 	LD QIZH, L
 	LD A, QIZH
 	EXTZ WA
@@ -27437,7 +27807,30 @@ LABEL_02B6FC:
 	LDA XSP, XSP + 018h
 	RETD 000ah
 
-LABEL_02B717:
+; ----------------------------------------------------------------------------
+; Voice_Build_Partial_Descriptor - build one partial s staging voice descriptor
+; Entry: XWA = note-on scratch, C = part index, DE = partial present mask (1/2/4/8),
+;        stack: [+0x20] velocity, [+0x22] note, [+0x24] source slot a4,
+;        [+0x26] destination slot p
+; Exit:  Voice_Desc_Staging[p] filled; returns without touching it if the partial is
+;        absent
+; Notes: Skips immediately when (Part_PresentWord & DE) == 0.  Then
+;          VSEL = *(part_struct + 0x6E + 0x25*a4 + 0x04)
+;          q    = Velocity_Select_Split_Zone(velocity, VSEL)
+;          blk  = *(part_struct + 0x6E + 0x25*a4 + 0x00)   0x51-byte partial block
+;          SETp = *(part_struct + 0x76 + 0x25*a4 + 4*q)    velocity-selected SET
+;        and writes desc[+0x01] = (q<<6)|0x04, [+0x03] = p, [+0x04] = part,
+;        [+0x05] = note|0x80, [+0x0c] = velocity, [+0x13] = patch record,
+;        [+0x17] = blk, [+0x1b] = VSEL, [+0x1f] = SETp, [+0x23] = part struct,
+;        [+0x27] = part_struct + 0x6E + 0x25*p, then calls Pitch_Resolve_Key_Zone.
+;        Passing a4 != p is how the synthesised UNISON layer reuses partial 0 s wave
+;        and split with slot 1 s own detune sub-struct.
+;        When ToneGen_GlobalFlags bit 1 is set the velocity is boosted by +0x28 on
+;        part 0 and +0x0C on part 1 (clamped to 0x7F) AFTER the split decision.
+;        Notes >= 0x78 take a separate path that is only taken when SET[0] bit 1 is
+;        set; otherwise the partial is dropped.  MEASURED.
+; ----------------------------------------------------------------------------
+Voice_Build_Partial_Descriptor:		; 02B717h
 	LDA XSP, XSP - 016h
 	PUSH XIZ
 	LD (XSP + 014h), C
@@ -27466,7 +27859,7 @@ LABEL_02B717:
 	LD A, (XSP + 020h)
 	EXTZ WA
 	LD XBC, (XSP + 008h)
-	CALL LABEL_022824
+	CALL Velocity_Select_Split_Zone
 	LD A, (XSP + 024h)
 	EXTZ WA
 	MULS_WA 025h
@@ -27622,7 +28015,7 @@ LABEL_02B8D3:
 	LD XWA, (XSP + 00ch)
 	LD (XIZ + 01fh), XWA
 	LD XWA, XIZ
-	CALL LABEL_023584
+	CALL Pitch_Resolve_Key_Zone
 	LD A, (XSP + 014h)
 	LD E, A
 	EXTZ DE
@@ -27722,7 +28115,20 @@ LABEL_02BA25:
 	LDA XSP, XSP + 016h
 	RETD 000ah
 
-LABEL_02BA2C:
+; ----------------------------------------------------------------------------
+; Voice_Build_Four_Partials - build up to four partial descriptors for one note-on
+; Entry: XWA = note-on scratch, C = part index, E = velocity; note on the stack
+; Exit:  scratch[0] = (note<<8)|velocity|0x80; Voice_Desc_Staging[0..3] filled for
+;        every present partial
+; Notes: Calls Voice_Build_Partial_Descriptor four times with the masks 1, 2, 4, 8.
+;        The first two calls test Part_PresentWord bits 14 and 15 (the unison cross
+;        flags set by Partial_Build_Present_Word) to decide whether the SOURCE slot a4
+;        differs from the DESTINATION slot p: when it does, the twin reuses the other
+;        partial s wave, split record and SET while taking its own slot s detune
+;        sub-struct, so the two voices differ only in +0x400.  MEASURED:
+;        notes/kn5000-variant-model.md 4.1/4.2.
+; ----------------------------------------------------------------------------
+Voice_Build_Four_Partials:		; 02BA2Ch
 	LDA XSP, XSP - 10
 	PUSH XIZ
 	LD (XSP + 006h), E
@@ -27760,7 +28166,7 @@ LABEL_02BA2C:
 	PUSHW 0000h
 	LD XWA, (XSP + 014h)
 	LD DE, 1
-	CALR LABEL_02B717
+	CALR Voice_Build_Partial_Descriptor
 	JR T, LABEL_02BAB6
 
 LABEL_02BA92:
@@ -27778,7 +28184,7 @@ LABEL_02BA92:
 	PUSHW 0000h
 	LD XWA, (XSP + 014h)
 	LD DE, 1
-	CALR LABEL_02B717
+	CALR Voice_Build_Partial_Descriptor
 
 LABEL_02BAB6:
 	LD A, (XSP + 008h)
@@ -27803,7 +28209,7 @@ LABEL_02BAB6:
 	PUSHW 0001h
 	LD XWA, (XSP + 014h)
 	LD DE, 2
-	CALR LABEL_02B717
+	CALR Voice_Build_Partial_Descriptor
 	JR T, LABEL_02BB1A
 
 LABEL_02BAF6:
@@ -27821,7 +28227,7 @@ LABEL_02BAF6:
 	PUSHW 0001h
 	LD XWA, (XSP + 014h)
 	LD DE, 2
-	CALR LABEL_02B717
+	CALR Voice_Build_Partial_Descriptor
 
 LABEL_02BB1A:
 	LD A, (XSP + 008h)
@@ -27838,7 +28244,7 @@ LABEL_02BB1A:
 	PUSHW 0005h
 	LD XWA, (XSP + 014h)
 	LD DE, 4
-	CALR LABEL_02B717
+	CALR Voice_Build_Partial_Descriptor
 	LD A, (XSP + 008h)
 	LD C, A
 	EXTZ BC
@@ -27853,7 +28259,7 @@ LABEL_02BB1A:
 	PUSHW 0003h
 	LD XWA, (XSP + 014h)
 	LD DE, 0008h
-	CALR LABEL_02B717
+	CALR Voice_Build_Partial_Descriptor
 	LD XWA, (XSP + 00ah)
 	CALL Voice_Allocate_Nodes
 	LD (XSP + 004h), 000h
@@ -28001,15 +28407,15 @@ LABEL_02BCD6:
 	LD XWA, XIZ
 	CALL LABEL_0238F8
 	LD XWA, XIZ
-	CALL LABEL_023A05
+	CALL Pitch_Apply_Partial_Detune
 	LD XWA, XIZ
-	CALL LABEL_023A4A
+	CALL Pitch_Emit_Reg400
 	LD XWA, XIZ
 	CALL LABEL_023AD0
 	LD XWA, XIZ
-	CALL LABEL_024102
+	CALL TVF_Build_Dispatch
 	LD XWA, XIZ
-	CALL LABEL_024444
+	CALL TVF_Emit_Registers
 	LD XWA, XIZ
 	CALL LABEL_024664
 	LD XWA, XIZ
@@ -28021,7 +28427,7 @@ LABEL_02BCD6:
 	LD XWA, XIZ
 	CALL LABEL_025229
 	LD XWA, XIZ
-	CALL LABEL_0253FE
+	CALL Level_Build_Reg0C0
 	LD XWA, XIZ
 	CALL Voice_Build_GateCommand
 	CP (XIZ + 003h), 003h
@@ -28156,7 +28562,7 @@ LABEL_02BE62:
 	LD (XIZ + 01fh), XHL
 	LD (XIZ + 027h), XIX
 	LD XWA, XIZ
-	CALL LABEL_023584
+	CALL Pitch_Resolve_Key_Zone
 	LDW (XIZ + 02fh), 0000h
 	LDW (XIZ + 031h), 00ffh
 	LD (XIZ + 035h), 000h
@@ -28370,13 +28776,13 @@ LABEL_02C0B6:
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL LABEL_023849
+	CALL WaveSel_Build_Reg040
 	LD XWA, XIZ
-	CALL LABEL_023A8E
+	CALL Pitch_Apply_Zone_Trim
 	LD XWA, XIZ
 	CALL LABEL_023A99
 	LD XWA, XIZ
-	CALL LABEL_024300
+	CALL TVF_BuildEmit_Short_Dispatch
 	LD XWA, XIZ
 	CALL LABEL_024554
 	LD XWA, XIZ
@@ -28451,7 +28857,7 @@ LABEL_02C12B:
 	LD A, (XSP + 024h)
 	EXTZ WA
 	LD XBC, (XSP + 00ch)
-	CALL LABEL_022844
+	CALL Velocity_Select_Split_Zone_Alt
 	LD (XSP + 014h), L
 	LD A, (XSP + 014h)
 	EXTZ WA
@@ -28663,15 +29069,15 @@ LABEL_02C3CC:
 	LDA XBC, 04308Eh
 	LDA XIZ, XBC + WA
 	LD XWA, XIZ
-	CALL LABEL_023849
+	CALL WaveSel_Build_Reg040
 	LDA XWA, 0451CEh
 	CALL LABEL_02B3C0
 	LD XWA, XIZ
-	CALL LABEL_023A8E
+	CALL Pitch_Apply_Zone_Trim
 	LD XWA, XIZ
 	CALL LABEL_023A99
 	LD XWA, XIZ
-	CALL LABEL_024300
+	CALL TVF_BuildEmit_Short_Dispatch
 	LD XWA, XIZ
 	CALL LABEL_024554
 	LD XWA, XIZ
@@ -28776,7 +29182,7 @@ LABEL_02C450:
 	LD A, (XSP + 020h)
 	EXTZ WA
 	LD XBC, (XSP + 00ah)
-	CALL LABEL_022844
+	CALL Velocity_Select_Split_Zone_Alt
 	LD QIZH, L
 	LD A, QIZH
 	EXTZ WA
@@ -29185,7 +29591,7 @@ Voice_SetVelocity:
 	EXTZ WA
 	PUSH WA
 	LD XWA, XHL
-	CALR LABEL_02BA2C
+	CALR Voice_Build_Four_Partials
 	LD QIZL, 0
 	CP QIZL, 4
 	JRL NC, LABEL_02C9FA
@@ -29242,7 +29648,7 @@ LABEL_02C9C4:
 LABEL_02C9E9:
 	LD A, QIZH
 	EXTZ WA
-	CALR LABEL_02B4E3
+	CALR Voice_Build_Register_Set
 
 LABEL_02C9F1:
 	INC 1, QIZL
@@ -29997,7 +30403,17 @@ LABEL_02D0B8:
 	POP XIZ
 	RET
 
-LABEL_02D0BA:
+; ----------------------------------------------------------------------------
+; ToneGen_WriteVoicePitch - write ONLY the pitch register of one sounding voice
+; Entry: WA = chip voice number (0..63), XBC = parameter scratch (0x0451CC)
+; Exit:  Chip register voice+0x400 loaded from scratch +0x0e
+; Notes: P6.7 low selects the address port at 0x100000, P6.7 high the data port at
+;        0x100002 -- the same chip-select convention as ToneGen_WriteVoiceParams.
+;        This is the ONLY path that retunes an already-sounding voice; its callers are
+;        the per-tick auto-bend sweep, Pitch_Bend_Ramp_Tick and
+;        Pitch_Refresh_Sounding_Voices (master TUNE change / MIDI CC).  MEASURED.
+; ----------------------------------------------------------------------------
+ToneGen_WriteVoicePitch:		; 02D0BAh
 	PUSH XIZ
 	LD XIZ, XBC
 	RES 7, (P6)
@@ -33280,7 +33696,7 @@ LABEL_0306A3:
 	LD A, (XWA + 04dh)
 	EXTZ WA
 	ADD WA, (XSP + 004h)
-	CALL LABEL_022BF2
+	CALL TVF_Clamp_Cutoff
 	LD IZ, HL
 	LD WA, QIZ
 	EXTZ XWA
@@ -33304,7 +33720,7 @@ LABEL_0306EC:
 	LD A, (XWA + 04dh)
 	EXTZ WA
 	ADD WA, (XSP + 004h)
-	CALL LABEL_022BF2
+	CALL TVF_Clamp_Cutoff
 	LD IZ, HL
 	LD WA, QIZ
 	EXTZ XWA
@@ -33325,7 +33741,7 @@ LABEL_0306EC:
 	LD A, (XWA + 04fh)
 	EXTZ WA
 	ADD WA, (XSP + 004h)
-	CALL LABEL_022BF2
+	CALL TVF_Clamp_Cutoff
 	LD IZ, HL
 	LD WA, QIZ
 	EXTZ XWA
@@ -35503,7 +35919,16 @@ LABEL_0328B5:
 	LD WA, DE
 	JRL T, LABEL_032750
 
-LABEL_0328E2:
+; ----------------------------------------------------------------------------
+; Partial_Store_Set_Pointer - cache one velocity layer s SET descriptor pointer
+; Entry: A = part index, C = partial slot 0..3, E = velocity zone q 0..3
+; Exit:  *(part_struct + 0x76 + 0x25*C + 4*E) = resolved SET descriptor pointer
+; Notes: The resolver (LABEL_032839) is run once per (slot, zone) at patch-select
+;        time, so note-on only has to index the array with q.  Four SET descriptors
+;        are therefore live per partial slot.  MEASURED:
+;        notes/kn5000-variant-model.md 3.2.
+; ----------------------------------------------------------------------------
+Partial_Store_Set_Pointer:		; 0328E2h
 	DEC 6, XSP
 	LD (XSP), E
 	LD (XSP + 002h), C
@@ -35591,7 +36016,7 @@ LABEL_03299E:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_0328E2
+	CALR Partial_Store_Set_Pointer
 	INC 1, QIZL
 	CP QIZL, 4
 	JR C, LABEL_03299E
@@ -35740,7 +36165,32 @@ LABEL_032AE0:
 	CALR LABEL_032A08
 	RET
 
-LABEL_032B1E:
+; ----------------------------------------------------------------------------
+; Partial_Build_Present_Word - rebuild a part s runtime partial-present word
+; Entry: A = part index
+; Exit:  Part_PresentWord (0x04136A + 0x11F*part) rewritten; the per-slot flag words
+;        at part_struct + 0x86 / 0xAB / 0xD0 / 0xF5 have their bit 15 set or cleared
+; Notes: Starts from the old word masked with 0x3FF0 (bits 0..3 and 14..15 rebuilt,
+;        bits 4..13 preserved), then, with patch = the record at 0x04136E+0x11F*part:
+;          patch[+0x11] bit 0 -> present bit 0 (partial 0)
+;          patch[+0x11] bit 2 -> present bit 1 (partial 1)
+;          patch[+0x11] bit 4 -> present bit 2 (partial 2)
+;          patch[+0x11] bit 6 -> present bit 3 (partial 3)
+;        and TWO symmetric UNISON syntheses, each gated on part_struct[+0x0a] bit 15
+;        and (patch[+0x5D] & 0x0F) <= 8:
+;          partial 0 absent but partial 1 present -> OR 0x4001 (present bit 0 + flag 14)
+;          partial 1 absent but partial 0 present -> OR 0x8002 (present bit 1 + flag 15)
+;        CORRECTION to notes/kn5000-variant-model.md 4.2, which documents only the
+;        second of the two and starts the function at Partial_Try_Unison_Slot1 (an
+;        interior branch label), missing the first.
+;        Separately, patch[+0x12] carries a 2-bit code per partial; the value 01 sets
+;        bit 15 of that slot s flag word (part_struct + 0x6E + 0x25*p + 0x18), any
+;        other value clears it.  That is the same word whose bits 4/5 gate the pitch
+;        detune (Pitch_Emit_Reg400) and 6/7 the TVF controller offset.
+;        Only the EVEN bits of patch[+0x11] are read here; the odd bits are not.
+;        MEASURED (code read, this pass).
+; ----------------------------------------------------------------------------
+Partial_Build_Present_Word:		; 032B1Eh
 	LD C, A
 	EXTZ BC
 	MULS_BC 011fh
@@ -35761,11 +36211,19 @@ LABEL_032B1E:
 	LDA XIX, 04136Eh
 	LD XBC, (XIX + BC)
 	BIT 0, (XBC + 011h)
-	JR Z, LABEL_032B6B
+	JR Z, Partial_Try_Unison_Slot0
 	SET 0, DE
 	JR T, LABEL_032BC0
 
-LABEL_032B6B:
+; ----------------------------------------------------------------------------
+; Partial_Try_Unison_Slot0 - synthesise partial 0 as a unison twin of partial 1
+; Entry: A = part index, DE = present word under construction
+; Exit:  DE |= 0x4001 when the gate passes (present bit 0 + cross flag bit 14)
+; Notes: Interior branch of Partial_Build_Present_Word, reached when patch[+0x11]
+;        bit 0 is clear.  Gate: part_struct[+0x0a] bit 15 AND patch[+0x11] bit 2 AND
+;        (patch[+0x5D] & 0x0F) <= 8.  MEASURED.
+; ----------------------------------------------------------------------------
+Partial_Try_Unison_Slot0:		; 032B6Bh
 	LD C, A
 	EXTZ BC
 	MULS_BC 011fh
@@ -35820,11 +36278,21 @@ LABEL_032BF3:
 	LDA XIX, 04136Eh
 	LD XBC, (XIX + BC)
 	BIT 2, (XBC + 011h)
-	JR Z, LABEL_032C0F
+	JR Z, Partial_Try_Unison_Slot1
 	SET 1, DE
 	JR T, LABEL_032C64
 
-LABEL_032C0F:
+; ----------------------------------------------------------------------------
+; Partial_Try_Unison_Slot1 - synthesise partial 1 as a unison twin of partial 0
+; Entry: A = part index, DE = present word under construction, L = patch[+0x12]
+; Exit:  DE |= 0x8002 when the gate passes (present bit 1 + cross flag bit 15)
+; Notes: Interior branch of Partial_Build_Present_Word, reached when patch[+0x11]
+;        bit 2 is clear.  Gate: part_struct[+0x0a] bit 15 AND patch[+0x11] bit 0 AND
+;        (patch[+0x5D] & 0x0F) <= 8.  This is the layer that gives 235 of the 258
+;        one-partial patches a detuned second voice.  MEASURED:
+;        notes/kn5000-variant-model.md 4.2.
+; ----------------------------------------------------------------------------
+Partial_Try_Unison_Slot1:		; 032C0Fh
 	LD C, A
 	EXTZ BC
 	MULS_BC 011fh
@@ -38218,7 +38686,7 @@ LABEL_034890:
 	CALR LABEL_034732
 	LD A, (XSP + 004h)
 	EXTZ WA
-	CALR LABEL_032B1E
+	CALR Partial_Build_Present_Word
 	LD A, (XSP + 004h)
 	EXTZ WA
 	CALR LABEL_032E1E
@@ -52037,7 +52505,7 @@ ToneGen_Read_NoteOff:		; 03D0F6h
 ToneGen_Read_Release:		; 03D100h
 	LD C, L
 	LD XWA, XIZ
-	CALR ToneGen_Calc_Pitch
+	CALR Keybed_Decode_Event
 	LD (XIZ + 001h), 000h	; Clear velocity for note-off
 	LD HL, 0
 	JR T, ToneGen_Read_Done
@@ -52045,7 +52513,7 @@ ToneGen_Read_Release:		; 03D100h
 ToneGen_Read_NoteOn:		; 03D10Fh
 	LD C, L
 	LD XWA, XIZ
-	CALR ToneGen_Calc_Pitch
+	CALR Keybed_Decode_Event
 	LD HL, 0
 	JR T, ToneGen_Read_Done
 
@@ -52057,19 +52525,42 @@ ToneGen_Read_Done:		; 03D11Dh
 	RET
 
 ; ----------------------------------------------------------------------------
-; ToneGen_Calc_Pitch - Calculate pitch value for voice
+; Keybed_Decode_Event - Calculate pitch value for voice
 ; Entry: C = note number, XWA = result pointer
 ; Exit:  Pitch value stored at (XWA), velocity at (XWA+1)
 ; Notes: Uses lookup tables at 0x01F43E (note map), 0x01F420 (mode params)
 ;        Mode stored at 0x4A48, calculation uses MULS/DIVS
 ; ----------------------------------------------------------------------------
-ToneGen_Calc_Pitch:		; 03D11Fh
+; ----------------------------------------------------------------------------
+; Keybed_Decode_Event - decode one key-bed FIFO event into (MIDI note, velocity)
+; Entry: C = raw key byte (bit 7 = BREAK/release flag), E = key-travel TIME byte,
+;        XWA = 2-byte output buffer
+; Exit:  (XWA+0) = MIDI note = (C & 0x7F) + 0x24 ; (XWA+1) = velocity 1..127,
+;        or 0 when C bit 7 is set (release)
+; Notes: RENAMED from ToneGen_Calc_Pitch, which was WRONG: this routine computes no
+;        pitch at all.  It converts the key bed s TRAVEL TIME into a MIDI velocity:
+;          x   = Keybed_Time_To_Strength[E]           (256 bytes, monotone DECREASING)
+;          m   = Keybed_Touch_Mode                    (0..9, power-on default 6)
+;          G   = Keybed_Touch_Curve_Table[m].gain     ; byte +0 of the 3-byte record
+;          O   = Keybed_Touch_Curve_Table[m].offset   ; byte +1
+;          y   = (x - Keybed_Touch_TimeRef) * G / Keybed_Touch_Divisor + O
+;          if (note mod 12) is 1,3,6,8 or 10 (a BLACK KEY):
+;                 y -= Keybed_Touch_Curve_Table[m].black   ; byte +2
+;          y   = clamp(y, 0, 0xFF)
+;          vel = Keybed_Strength_To_Velocity[y]       (256 bytes, monotone INCREASING)
+;        Because the first table DECREASES, the FIFO byte is a make-to-break interval:
+;        a short travel time is a hard strike.  MEASURED (tables dumped from ROM).
+;        NEW this pass: the third byte of each touch record is a BLACK-KEY velocity
+;        trim (0,3,6,8,11,14,16,19,22,24 for modes 0..9).  It is absent from
+;        notes/kn5000-variant-model.md 3.3, which documents only gain and offset.
+; ----------------------------------------------------------------------------
+Keybed_Decode_Event:		; 03D11Fh
 	LD L, C
 	RES 7, L		; Clear release flag
 	ADD L, 024h		; Add pitch offset (36)
 	LD (XWA), L		; Store base pitch
 	BIT 7, C		; Check if release (note-off)
-	JRL Z, ToneGen_Calc_NoVel
+	JRL Z, Keybed_Decode_NoteOff
 	LD C, E
 	EXTZ BC
 	LDA XDE, 01F43Eh
@@ -52105,17 +52596,17 @@ ToneGen_Calc_Pitch:		; 03D11Fh
 	DIV_C 00ch
 	LD C, B
 	CP C, 00ah
-	JR Z, ToneGen_Pitch_Adjust
+	JR Z, Keybed_Vel_BlackKey_Trim
 	CP C, 008h
-	JR Z, ToneGen_Pitch_Adjust
+	JR Z, Keybed_Vel_BlackKey_Trim
 	CP C, 6
-	JR Z, ToneGen_Pitch_Adjust
+	JR Z, Keybed_Vel_BlackKey_Trim
 	CP C, 3
-	JR Z, ToneGen_Pitch_Adjust
+	JR Z, Keybed_Vel_BlackKey_Trim
 	CP C, 1
-	JR NZ, ToneGen_Pitch_Clamp
+	JR NZ, Keybed_Vel_Clamp
 
-ToneGen_Pitch_Adjust:		; 03D1AAh - apply mode-specific pitch offset
+Keybed_Vel_BlackKey_Trim:		; 03D1AAh - apply mode-specific pitch offset
 	LD C, (4A48h)		; Get tone gen mode
 	EXTZ BC
 	MULS_BC 0003h		; mode * 3 for table index
@@ -52125,20 +52616,20 @@ ToneGen_Pitch_Adjust:		; 03D1AAh - apply mode-specific pitch offset
 	EXTZ XBC
 	SUB XDE, XBC		; Apply offset
 
-ToneGen_Pitch_Clamp:		; 03D1C4h - clamp pitch to 0-255 range
+Keybed_Vel_Clamp:		; 03D1C4h - clamp pitch to 0-255 range
 	LD XBC, 000000ffh
 	CP XDE, 000000ffh
-	JR GT, ToneGen_Pitch_ClampHi
+	JR GT, Keybed_Vel_ClampHi
 	LD XBC, XDE
 
-ToneGen_Pitch_ClampHi:		; 03D1D3h
+Keybed_Vel_ClampHi:		; 03D1D3h
 	LD XDE, XBC
 	LD XBC, 0
 	CP XDE, 00000000h
-	JR LT, ToneGen_Pitch_ClampLo
+	JR LT, Keybed_Vel_ClampLo
 	LD XBC, XDE
 
-ToneGen_Pitch_ClampLo:		; 03D1E1h
+Keybed_Vel_ClampLo:		; 03D1E1h
 	LD XDE, XBC
 	LD C, E
 	EXTZ BC
@@ -52147,7 +52638,7 @@ ToneGen_Pitch_ClampLo:		; 03D1E1h
 	LD (XWA + 001h), C	; Store velocity
 	RET
 
-ToneGen_Calc_NoVel:		; 03D1F5h - note-off, no velocity
+Keybed_Decode_NoteOff:		; 03D1F5h - note-off, no velocity
 	LD (XWA + 001h), 000h
 	RET
 
