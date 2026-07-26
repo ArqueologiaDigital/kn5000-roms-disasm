@@ -20,9 +20,10 @@ fact.
 
 ## ⚠ Corrections — the claims that did NOT survive (2026-07-26)
 
-The K5 (output stage) and R1 (all-pass motif) passes killed more than they added.
-These are listed first because a wrong decode costs more than a missing one, and
-because the disassembler emitted several of them for months.
+The K5 (output stage), R1 (all-pass motif), R2 (result routing) and K3 (pointer
+register file) passes killed more than they added. These are listed first because a
+wrong decode costs more than a missing one, and because the disassembler emitted
+several of them for months.
 
 | withdrawn claim | why | replaced by |
 |---|---|---|
@@ -37,6 +38,11 @@ because the disassembler emitted several of them for months.
 | **"`hi12` bit 4 writes `mem[ptr]` in every class"** | R2: `w64`/`w71` are mode-1 bit-4 words whose destination K5 **DETERMINED** to be the call-vector *register*, and `w60`/`w61` are adjacent mode-1 stores with nothing between them, so under `mem[ptr]` the first is provably dead. The rule produces **four dead stores in the 23-word output stage**. | bit 4's target is **mode-dependent**; `mem[ptr]` is the mode-2 target (`analysis/r2-output.md` §1, §4.4) |
 | **"class-1 `addr8` splits on bit 7"** (K6 lead) and **"`w53` stores the unit-1 send at the pointer"** (K6 §6) | R2: `0x06`/`0x0E`/`0x0F` are `< 0x80` and are not DRAM sub-ops, so bit 7 misclassifies 3 of 324; and `w53` is class **9** = mode 1 = a *register* access, so it never wrote `mem[ptr]`. K6's "2-cell discrepancy" had a false premise and dissolves. | `hi12` bit 11 (324/324); K6 resolution 2 confirmed (`analysis/r2-output.md` §1.1, §4.5) |
 | **the coefficient bank holds "two 5-gain ladders"** (`notes/kn5000-dsp-reverb.md` §3) | The cursor map says otherwise: the code consumes **0x98–0x9C (5)** and **0xA1–0xA4 (4)**, and cells **0x96 / 0x9D / 0xA5** — one of which the old reading counted as a 5th ladder gain — are consumed by the three ladder **separators**, not by an all-pass core. | 5 + 4 diffuser gains + 3 separator tap gains; **the coefficient side now agrees with the code at nine stages** |
+| **"the two resident effect units are given the two halves of the 256-word coefficient RAM, unit 0 low and unit 1 from `0x80`"** (INFERRED, `notes/kn5000-dsp-cursor-general.md` §1.2 headline 8) | C-RAM is **not** halved at `0x80`. Cells **`0x50..0x8B` hold a 60-word RESIDENT table** written once by a literal uC-IF blob at Sub CPU ROM `0x01E6BE`, and it **straddles `0x80`**. The unit-1 bank starts at `0x90` — the first 16-aligned cell after that table — and it is a **software** allocation (a literal in each parameter script; the poke writer builds its address with an 8-bit add). The `+0x80` the note actually saw is real but lives in the **class-1 register file**, a different space. | the C-RAM map in "Addressing" below, and `analysis/k4-cursor.md` §1, §4 |
+| **"the host-window and in-I-RAM meanings of `801.0.NN.821` CANNOT be the same space"** (K6 headline 11) | K3: they *are* the same space — C-RAM. The argument silently equated *the C-RAM pointer* with *the C-RAM cursor*; they are different registers. The in-program payloads `0x70` / `0x50` / `0x90` are 3 of the 4 structural bases of the host's own C-RAM map (a mechanically-derived 4-cell target in 256), and `0x70` is a boundary in the **data** only — the host wrote `0x6E..0x8B` in one transfer. K6's measurements stand; the inference does not. | `ldptr` row above (`analysis/k3-pointers.md` §4) |
+| **"the body's operand pointer is the `0x821` register; unit 0 origin `0x70`, unit 1 origin `0x50`"** (`notes/kn5000-dsp-pointer.md` headline 2) | K3: `0x821` addresses the **coefficient** space, which is exactly why it cannot be the D-RAM operand pointer. The host-map argument that selected it was right about the space and wrong about the job. | `0x827` (payloads `0x6C` / `0x64`) inherits the slot, INFERRED by elimination |
+| **the C-format payload rule applied to all of `hi12[11:8] == 0xC`** | K3: "imm13 is a multiple of 32" is **57/57 inside `(hi12 & 0xFFE) == 0xC40`** — 61/61 once the four host-written `setvec` values are counted, which reconciles K5's number exactly — and **2/11 outside it**. Four of the nine misses are the header's `lo12 = 0x820` words, which the listing annotates with an `A`/`B` split they have not earned. | keep `A = imm13 >> 5` for the `0xC40` family only; `C00` uses the same split with a non-zero `B` |
+| **"the only DSP words the firmware ever constructs are `LABEL_0387E6` / `LABEL_038922` / `LABEL_0388B3`"** (K5 §1.2) | K3: there are **seven** writers. The missing family is `000.1.PP.000` + tag `0x15` (`LABEL_03846C` / `LABEL_038539` / `LABEL_038CF9`, plus the packet-only `LABEL_038606`) — i.e. R2's mode-1 register space. `LABEL_038CF9` also proves the host word window `0x0160 = 352` by construction. | the forms table above |
 
 Two numbers inside the new analyses were also wrong and are corrected here:
 `k5-output-stage.md` §8 says "88 × I-RAM 84" where §2.4 and the ROM say **79**
@@ -101,7 +107,16 @@ contain 77 Hamming-distance-1 pairs against a popcount-matched null of 43.4 ± 4
 | 0 | "`addr8` is an absolute immediate" | PROVEN BY CONSTRUCTION for `0x801` only; **in the C-format family it is instead the MSB of the immediate** (MEASURED); else residue. A third incompatible meaning on one bit — more evidence that `hi12` is a microword, not an opcode |
 
 **bit 23** (== `class4` bit 3) is the **CURSOR-FETCH enable**, corrected from an
-earlier "multiply enable" reading (`notes/kn5000-dsp-axes.md`).
+earlier "multiply enable" reading (`notes/kn5000-dsp-axes.md`). **FETCH is not
+ADVANCE — only `class4 == 0xA` advances the cursor** (K4, FORCED): the PARAMETRIC
+EQ body carries **10 class-8 words** (`804.8.16.415`, one per biquad section) inside
+a cursor map that is proven to the bit at 6 cells per band, 60/60 named, transfer
+function reproduced at max|err| = 0; if class 8 advanced, band *k* would start at
+cell `7k` instead of `6k` and every role would shift. Corpus-wide the bit-23 words
+in bodies are class 8 (42) and class A (822) and nothing else. The disassembler's
+`cur+` annotation on a class-8 word is therefore misleading and should read `cur`
+— **not renamed yet, to keep `tools/dsp_disasm.py` in step with MAME's
+`upd6383d.cpp`** (`analysis/k4-cursor.md` §6).
 
 ## Decoded forms — the only seven with a real mnemonic
 
@@ -238,8 +253,15 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
 - **P-consumers / carry latches** — `lo12 ∈ {647,687,1D3,1D4}`.
 - **`hi12=0x212`** writes `mem[ptr]` in every class (bit 4); `hi12=0x102` is the
   shared gain multiply of the phaser all-pass and reverb diffuser.
-- pointer-load siblings `lo12 ∈ {820,822,825,827}` (INFERRED; which register each
-  loads is unknown).
+- pointer-load siblings `lo12 ∈ {820,822,825,827}` — K3 updates this. `0x825`'s
+  space is INFERRED (the tag-`0x4C` space, payloads `0x25`/`0x25`/`0x26` against a
+  2-cell boundary set); `0x822` occurs once, at `w77`, where R2 reads `addr8 = 0x86`
+  as unit 1's output-level register; `0x827` (payloads `0x6C`/`0x64`) and `0x820`
+  (five header words, a 13-bit immediate, and the only sub-family whose payload is
+  *not* a multiple of 32) are **OPEN**, with the alternatives enumerated in
+  `analysis/k3-pointers.md` §5. `lo12` bit 11 is a **separate flag** built by a
+  literal `INC 8` in the writer, and `rstcur` = `801.0.00.021` is the same word with
+  it clear — the only `hi12 == 0x801` word in the 2974-word body corpus.
 
 ## Addressing — MEASURED
 
@@ -261,11 +283,49 @@ There is **no encoded space-selector field**; the memory space is
   `08 01 09 08 21` packet, which *is* `801.0.90.821` = `ldptr #$90` in the writer
   encoding proven in `analysis/k5-output-stage.md` §1.2. GATED REVERB, a unit-0
   program, says `ldptr #$00`.
-- **D-RAM** (state) — reached ONLY through the signed-`addr8` data pointer
-  (`mem[ptr]`). Its absolute base (the header's per-unit `0x70`/`0x50`) is still
-  unpinned, so **no D-RAM absolute is printed**. NEW constraint: the register the
-  header loads with `0x70`/`0x50` (`lo12 = 0x821` in program) **cannot be the
-  C-RAM cursor base**, because the MEASURED cursor bases are `0x00` and `0x90`.
+  **The whole 256-cell map is now MEASURED** (`analysis/k4-cursor.md` §1):
+
+  ```
+     0x00..0x4F  unit-0 effect coefficient bank   (79/79 unit-0 streams: ldptr #$00;
+                                                   largest cell ever used 0x2C)
+     0x50..0x6F  RESIDENT TABLE A, 32 cells  = (32+k)*0x400   \_ written ONCE, by a
+     0x70..0x8B  RESIDENT TABLE B, 28 cells  = min(1214k,32767)/  LITERAL uC-IF blob at
+     0x8C..0x8F  never written                                    Sub CPU ROM 0x01E6BE
+     0x90..0xB5  unit-1 effect coefficient bank   (12/12 unit-1 streams: ldptr #$90
+                                                   +30, ldptr #$AE +7)
+     0xB6..0xFF  never written
+  ```
+
+  No parameter stream ever points at `0x50..0x8B` (0 of 91), so the tables are
+  resident — **a C-RAM model that starts zeroed and only replays parameter streams
+  reads zeros for every table lookup.** `0x90` is simply the first 16-aligned cell
+  after the tables: the split is a **software allocation**, not a hardware bank
+  (the base is a literal in each parameter script, and `LABEL_0387E6` builds a poke
+  address with an 8-bit *add*).
+  **The REBASE between the two units is FORCED to exist but is NOT IDENTIFIED**
+  (`analysis/k4-cursor.md`): a free-running cursor cannot give the constant `0x90`
+  (the unit-0 class-A count varies 6…60 over 24 values); it is not in any body (the
+  intersection of the 37 unit-0 images' pre-first-class-A prefixes is empty); and it
+  cannot carry `0x90` as an immediate — an exhaustive search of every contiguous
+  8–16-bit field of I-RAM 50…59 finds it nowhere, and `0x90` occurs as an aligned
+  field in **1 word of 3057** (I-RAM 69, which runs *after* the unit-1 body).
+  **⇒ the chip must hold a per-unit COEFFICIENT-BASE register holding an arbitrary
+  8-bit value, and the rebase copies it.** Leading candidate instruction:
+  `800.1.60.00B`, which occurs exactly twice in the machine, once at offset +4 of
+  each per-unit setup block and nowhere else. ENUMERATED, not decided.
+- **D-RAM** (state) — reached through the signed-`addr8` data pointer (`mem[ptr]`)
+  in mode 2. Its absolute base is **still unpinned**, so **no D-RAM absolute is
+  printed**. ⚠ **Corrected by K3 (`analysis/k3-pointers.md`): the header's per-unit
+  `0x70` / `0x50` are NOT the D-RAM base** — they are **C-RAM** addresses, and
+  specifically the bases of the two tap tables the host writes at C-RAM `0x50` and
+  `0x70`. The candidate that inherits the D-RAM-origin slot is `lo12 = 0x827`, with
+  per-unit payloads `0x6C` / `0x64`; that is INFERRED by elimination, not measured.
+  Independently: the host's per-algorithm zero-fill gives each body's state
+  footprint directly (PARAMETRIC EQ = 40 cells at index `0x50..0x77`).
+- **C-RAM has at least TWO pointers** — the implicit cursor *and* the register
+  `lo12 = 0x821`, which is FORCED not to be the cursor (K3 §4.2). The host's C-RAM
+  map has exactly four structural bases, `{0x00, 0x50, 0x70, 0x90}`, and the two
+  the cursor does not supply are exactly the two `0x821` is loaded with per unit.
 - **external delay RAM** — reached ONLY through the `880.1.60` / `880.1.20`
   words, which are a **READ** and a **WRITE** and not a bracket. How the address
   is supplied is **OPEN** (this is the largest single hole in the machine).
@@ -436,13 +496,22 @@ tree does not launder one into the other.
 tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
 55 % — there is no small set of words that unblocks everything.
 
-### The worklist, re-ranked after K5 and R1
+### The worklist, re-ranked after K5, R1, R2 and K3
 
 1. **The external delay-DRAM ADDRESS path.** We now know *which* words read and
    write the delay lines and *nothing* about where the address comes from. This is
    the single largest hole and it blocks every delay, chorus, flanger and reverb.
    Concretely: what do `880.1.30.*` (58 body occurrences), `880.1.60.000` (26) and
    the four never-store-preceded `880.1.20.*` forms do? Purely static.
+   **K3 hands this three concrete cribs** (`analysis/k3-pointers.md` §7): the two
+   C-RAM tap tables the header points each unit at — TABLE B at `0x70` covering
+   `0 … 32767` in 27 equal steps and TABLE A at `0x50` covering `32768 … 64512` in
+   31, with TABLE B's last entry **clamped to exactly `0x7FFF`**, which reads as
+   "unit 0 owns DRAM `0x0000..0x7FFF`, unit 1 owns `0x8000..0xFFFF`"; the constant
+   tag-`0x4C` table at `0x00..0x1F`, whose values all lie in `0x8000..0xC4E5`
+   (unit-1 territory) with `0x7FFF` at `0x1E`; and CHORUS's four register-space
+   `(value, 0)` pairs `0x190 / 0x5A0 / 0x9B0 / 0xDC0`, 1040 apart and all below
+   `0x8000`. Every delay-address-shaped value in the corpus fits in **16 bits**.
 2. **`880.1.20.*` — which `lo12` values are writes at all?** `0x64B`/`0x655` are
    store-preceded 44/44 and the other four 0/56. Deciding that also decides R1's
    two surviving families (O-1) without hardware.
@@ -461,7 +530,13 @@ tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
    live. Note the standing warning: **65 of the kernel's 75 families never occur
    in the 2974-word body corpus**, so frequency-ranked worklists are structurally
    blind to exactly the code that carries the audio.
-9. the actual µPD6383 datasheet/databook — would hand over the whole ISA.
+9. **Where the C-RAM cursor's per-unit base comes from.** K3 sharpened this from
+   "unknown" to a three-way choice: the header performs **22 cursor advances before
+   the unit-0 CALL**, so a reset provably happens every frame, yet R2 eliminated
+   every pointer-load word as its source. The survivors are the unit-tagged transfer
+   itself (a BNK-R reload), a non-pointer-load word in `w45..w48` / `w53..w58`, or
+   the frame restart. Purely static (`analysis/k3-pointers.md` §4.2).
+10. the actual µPD6383 datasheet/databook — would hand over the whole ISA.
 
 **What genuinely needs hardware, and nothing else will do:** separating R1's two
 surviving role families by ear/scope (a `ROOM REVERB 1` impulse response with the
