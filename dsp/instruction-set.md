@@ -33,6 +33,9 @@ because the disassembler emitted several of them for months.
 | **`nop` is PROVEN BY CONSTRUCTION, writer `LABEL_038922`** | That routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits `000.2.00.000`. | INFERRED (strengthened — see the forms table) |
 | **the output stage's two host-written words carry a linear LEVEL (×2 / ×4)** (roadmap §1.4) | 84 = 2·42 and 200 = 4·50 are accidents of the I-RAM layout. The words are **call vectors**; "disconnect" is not attenuation, and the real mute is uC-IF `cmd 0x04` byte 3. | `setvec` below. **The hardware prediction is inverted**: a disconnected unit goes *silent*, it is not attenuated by 6/12 dB |
 | **the reverb is "two ladders of five all-pass diffusers", "byte-identical at every repetition", "strictly descending gains"** | Re-measured: ladder 1 has **four** repetitions; slot 5's `addr8` varies (`0xBA`, `0xC4`); the gains descend in **10 of 12** presets; GATED REVERB has **6** cores, not 4. | `algorithms/reverb.md` |
+| **"there is no encoded space-selector field; the memory space is pointer-identity"** (Addressing, below) | R2: `hi12` bit 11 is set on **0 of 2399** mode-2 words and on 370 words of modes 0/1/4/5 — it *is* a space selector, and `class4 & 7` is an addressing mode. Pointer-identity describes **mode 2 only**. | the `class4 & 7` section below (`analysis/r2-output.md` §1) |
+| **"`hi12` bit 4 writes `mem[ptr]` in every class"** | R2: `w64`/`w71` are mode-1 bit-4 words whose destination K5 **DETERMINED** to be the call-vector *register*, and `w60`/`w61` are adjacent mode-1 stores with nothing between them, so under `mem[ptr]` the first is provably dead. The rule produces **four dead stores in the 23-word output stage**. | bit 4's target is **mode-dependent**; `mem[ptr]` is the mode-2 target (`analysis/r2-output.md` §1, §4.4) |
+| **"class-1 `addr8` splits on bit 7"** (K6 lead) and **"`w53` stores the unit-1 send at the pointer"** (K6 §6) | R2: `0x06`/`0x0E`/`0x0F` are `< 0x80` and are not DRAM sub-ops, so bit 7 misclassifies 3 of 324; and `w53` is class **9** = mode 1 = a *register* access, so it never wrote `mem[ptr]`. K6's "2-cell discrepancy" had a false premise and dissolves. | `hi12` bit 11 (324/324); K6 resolution 2 confirmed (`analysis/r2-output.md` §1.1, §4.5) |
 | **the coefficient bank holds "two 5-gain ladders"** (`notes/kn5000-dsp-reverb.md` §3) | The cursor map says otherwise: the code consumes **0x98–0x9C (5)** and **0xA1–0xA4 (4)**, and cells **0x96 / 0x9D / 0xA5** — one of which the old reading counted as a 5th ladder gain — are consumed by the three ladder **separators**, not by an all-pass core. | 5 + 4 diffuser gains + 3 separator tap gains; **the coefficient side now agrees with the code at nine stages** |
 
 Two numbers inside the new analyses were also wrong and are corrected here:
@@ -108,8 +111,10 @@ A word is in this table only if a core could **execute** it.
 | form | mnemonic | operation | status |
 |---|---|---|---|
 | `000.2.00.000` | `nop` | — | **INFERRED**, strengthened. *Corrected:* the earlier "PROVEN BY CONSTRUCTION, writer `LABEL_038922`" was wrong — that routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits this word (`analysis/k5-output-stage.md` §5.7). New support: R1's inductive closure requires the two words between consecutive all-pass cores to leave **all four** modelled registers untouched (113 of 114 cores), which is what a `nop` does. Still an inference — it inherits the all-pass reading |
-| `801.0.NN.821` | `ldptr #$NN` | load pointer register | **PROVEN BY CONSTRUCTION in the HOST STREAM ONLY** (writer `LABEL_0387E6`): the firmware builds `addr8` as `(P>>4)` into byte 2's low nibble and `(P&0xF)<<4` into byte 3's high nibble, which independently pins the `class4 \| addr8` boundary. What that proves is the *host-stream* meaning — **it sets the C-RAM destination pointer for the coefficient pokes that follow**, and that is how R1 proves the reverb bank base `0x90`. **The same word inside I-RAM is a different animal and must not be conflated**: K5 shows the in-program instances load `0x70` (unit 0) and `0x50` (unit 1) where the MEASURED C-RAM cursor bases are `0x00` and `0x90`, so in-program `…821` is **not** the coefficient cursor base. In-program meaning: INFERRED, register identity OPEN |
-| `801.0.00.021` | `rstcur` | reset coefficient cursor to base | **VERIFIED** (algo39 section starts 0,6,12,18,24 \| rstcur \| 0,6,12,18,24) |
+| `801.0.NN.821` | `ldptr #$NN` | load the **C-RAM pointer** (not the cursor) with the absolute C-RAM address `NN` | **PROVEN BY CONSTRUCTION** for the encoding (writer `LABEL_0387E6`: `addr8` is built as `(P>>4)` into byte 2's low nibble and `(P&0xF)<<4` into byte 3's high nibble, and `lo12` bit 11 is added by a literal `INC 8, WA`, so the payload is exactly 8 bits and bit 11 is a separate flag). **UPDATED by K3 (`analysis/k3-pointers.md`): the host-stream and in-program meanings are THE SAME — both name a C-RAM pointer.** The three in-program payloads `0x70` (unit 0), `0x50` (unit 1), `0x90` (output stage) are the three non-zero structural bases of the host's own C-RAM map (two tap tables + the reverb coefficient bank), 3/3 on a mechanically-derived 4-cell target. What it is **not** is the implicit coefficient cursor — that is FORCED against by the CHORUS wrap-constant join. So C-RAM has **at least two independent pointers**. Which architectural register (CP/DP/BP1/BP2/PR1/PR2): OPEN |
+| `801.0.00.021` | `rstcur` | reset coefficient cursor to base | **VERIFIED** (algo39 section starts 0,6,12,18,24 \| rstcur \| 0,6,12,18,24). K3: this is the **same word as `ldptr` with `lo12` bit 11 CLEAR** — same `hi12`, same `class4`, same low byte `0x21` — and it is the **only** `hi12 == 0x801` word in the 2974-word body corpus (1/2974) |
+| `801.0.NN.825` | — | load the pointer for the **tag-`0x4C` space** | **PROVEN BY CONSTRUCTION** (writer `LABEL_038922`). Space assignment INFERRED (strong): in-program payloads `0x25`/`0x25`/`0x26` against a 2-cell boundary set `{0x00, 0x26}` (K3 §4.3) |
+| `000.1.NN.000` | — | load the pointer for the **state RAM (D-RAM)** | **PROVEN BY CONSTRUCTION** — writers `LABEL_03846C` / `LABEL_038539` / `LABEL_038CF9` emit `00 00 10\|(P>>4) (P&0xF)<<4 00` plus a tag-`0x15` value packet. **NEW in K3**: this whole family was missing from the writer list. Space = D-RAM, MEASURED — the host zero-fills exactly the cells the freshly-loaded body uses, and PARAMETRIC EQ's fill is 40 cells at `0x50..0x77` = 5 bands × 2 channels × 4 Direct-Form-I state words |
 | `202.A.dd.1D5` | `mac (p)+dd` | `acc += P ; P = coef[cursor++] * mem[p] ; p += (s8)dd` | **DETERMINED** (all 144 survivors of a 19,674,720-point constraint search agree) |
 | `202.A.dd.1D4` | `mac.lb (p)+dd` | as `mac`, and latch B ← mem[p] | **DETERMINED**, same source |
 | `212.A.dd.407` | `mulst (p)+dd` | `mem[p] <- acc ; P = coef[cursor++] * acc ; p += (s8)dd` | **DETERMINED UNIQUELY** |
@@ -238,6 +243,11 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
 
 ## Addressing — MEASURED
 
+> **Superseded in part by R2 (2026-07-26).** There *is* an encoded space-selector field
+> after all — `hi12` bit 11 — and `class4`'s low three bits are an **addressing mode**.
+> See the next section; the pointer-identity statement below survives only as a
+> description of **mode 2**.
+
 There is **no encoded space-selector field**; the memory space is
 **pointer-identity** (`notes/kn5000-dsp-spaces.md`):
 
@@ -259,6 +269,77 @@ There is **no encoded space-selector field**; the memory space is
 - **external delay RAM** — reached ONLY through the `880.1.60` / `880.1.20`
   words, which are a **READ** and a **WRITE** and not a bracket. How the address
   is supplied is **OPEN** (this is the largest single hole in the machine).
+
+## `class4 & 7` is an ADDRESSING MODE, and `hi12` bit 11 picks the SPACE — MEASURED
+
+New in **R2** (`analysis/r2-output.md`). Classifying all 2989 non-C-format words by
+`mode = class4 & 7`, cursor-fetch (`class4 & 8`) and the FORMAT ESCAPE bit:
+
+```
+   mode  cur  ESC     n                       mode  cur  ESC     n
+    0    no   no     62                        2    no   no   1556
+    0    no   yes    47                        2    yes  no    843
+    0    yes  yes    44                        4    no   no     53
+    1    no   no     48                        4    yes  yes     1   <- epilogue w73
+    1    no   yes   276                        5    no   yes     1   <- epilogue w67
+    1    yes  no      4                        5    yes  yes     1   <- epilogue w78
+                                               6    no   no     53
+```
+
+* **Mode 2 — the only mode that moves the data pointer — is NEVER escape: 0 of 2399.**
+  Mode 6 is never escape either. So **`hi12` bit 11 = "this word does not address D-RAM
+  through the data pointer"**, which is *why* `addr8` is a sub-op on the `880`/`800`/`900`
+  family. Exceptionless over the whole 3057-word corpus.
+* **Mode 1 without escape is an internal REGISTER FILE indexed by `addr8`.** Its index space
+  is a subset of the space the host itself addresses with `000.1.NN.000` — `0x06`, `0x85`
+  and `0x8A` are poked by the host at cold boot — and the host stream proves the file
+  **auto-increments** (a 9-select run `0x1D,0x21,…,0x3D`, stride 4, four values each,
+  tiling `0x1D..0x40`). **Mode 1 with escape is the external delay DRAM.** 324/324.
+* **Bit 7 of a register index is the EFFECT-UNIT selector** (0 = unit 0, 1 = unit 1): five
+  independent positional confirmations (`w63`/`w70` sit immediately before the unit-0 /
+  unit-1 vector words; header `w58` and `w53` are inside the unit-1 setup block; the
+  epilogue's unit-1 run), zero counter-examples, and the host clears the indices in
+  bit-7-matched pairs `0x05/0x85`, `0x06/0x86`, `0x07/0x87`, `0x50/0xD0`.
+* The exception is `addr8 ∈ {0x0E, 0x0F}`, where **`hi12` bit 10 (END) is also set**: there
+  `addr8` is the **unit tag**, 40/40. Bit 10 re-purposes `addr8` exactly as bit 11 does.
+* **Classes 3, 7, B, E, F do not exist.** All 31 words that appear to be class 3 are
+  C-format words whose `class4` field is immediate data.
+
+**Consequence for `hi12` bit 4 (STORE).** Its target is **mode-dependent**, not universal.
+`mem[ptr]` is the mode-2 target only. Two mode-1 bit-4 words have a DETERMINED destination
+in the **register** space — `w64`/`w71`, the call vectors (K5) — and `w60`/`w61` are adjacent
+mode-1 stores with no pointer-moving word between them, so under a `mem[ptr]` target the
+first would be provably dead. The old "`hi12=0x212` writes `mem[ptr]` in every class" reading
+produces **four dead stores in the 23-word output stage**; the corrected one produces none.
+
+### Registers `0x06` / `0x86` are the per-unit OUTPUT LEVELS — PROVEN BY CONSTRUCTION
+
+The last four host actions of the cold-boot capture, in order, are
+`setvec unit1,#200` (I-RAM 71), `setvec unit0,#84` (I-RAM 64), `reg 0x06 ← +0.500000`,
+`reg 0x86 ← +0.183992` — one level per unit, in bit-7 order, immediately after linking, and
+both registers were cleared to 0 at reset. This also re-confirms `setvec` from the **live**
+stream (K5 proved it from the ROM; the chip is seen receiving `A = 84` and `A = 200`).
+
+### The DO write — `w73` / `w78`, the item K5 left OPEN
+
+Only **3 of the 370** escape words in the machine carry `hi12` bit 4, and only **1 of the 68**
+C-format words does; all four are `w73`, `w74`, `w77`, `w78`, in two groups either side of
+the wait word `w76`. `w72` reads unit 0's level register `0x06`; `w77` aims a pointer at
+unit 1's level register `0x86`; `w74`'s C-format immediate is `A = 77` (= `w77`) and `w75`
+carries `addr8 = 0x0F`, the unit-1 tag. ⇒ **`w73` presents the unit-0 result on DO1 (→
+IC303.SDIA) and `w78` the unit-1 result on DO2 (→ IC303.SDIB); DO3 is never written.**
+The L/R split within a port is enumerated, not settled (`analysis/r2-output.md` §3.3).
+
+### Where a unit result goes — FORCED
+
+The output stage performs **zero D-RAM reads before either presentation** (its only three
+mode-2 words are at positions 19/20/21 of 23, and K6 forced those to be the one-frame
+feedback loop), and unit 0's result must survive **156 intervening words** between its return
+at header `w49` and `w73`, so it is not in the accumulator either. ⇒ **the per-unit result is
+held in a dedicated register, loaded at the body's terminator** — the only word every body
+executes at that moment, and the only one that names a per-unit index. The terminator's
+optional bit-4 store is *not* the mechanism: only 5 of 38 bodies set it
+(`612.1.0E.000` ×4, `612.1.0F.000` ×1, against the minimal pair `602.1.0E.000` ×3).
 
 ## Control flow — INFERRED/PROVEN mix
 
