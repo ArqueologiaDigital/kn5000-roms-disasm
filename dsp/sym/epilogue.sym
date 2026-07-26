@@ -5,7 +5,7 @@
 # NOTE: only the FIRST comment line per word reaches the listing -- keep them short.
 
 w60  OutputStage    ; runs after BOTH unit bodies returned (header transfers are at w49/w59) [PROVEN]
-w62                 ; ptr-load family: register 0x825 <- 0x26 (which register that is: OPEN, K3)
+w62                 ; ldptr.d #$26 -- the DELAY-DESCRIPTOR pointer, aimed at unit 0's region base [PROVEN, R3]
 w63                 ; unit-0 half of a symmetric pair with w70 (2A7.9.05.1C3 / 2A6.1.85.0C7)
 w64  Unit0Vector    ; UNIT-0 CALL VECTOR; host writes setvec unit0,#84 (link) / #42 (disconnect) [DETERMINED]
 w69                 ; ptr-load family: register 0x821 <- 0x90.  0x90 is ALSO the unit-1 C-RAM bank

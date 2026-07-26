@@ -50,6 +50,8 @@ def form_of(w):
         return "nop"
     if hi == 0x801 and lo == 0x821:
         return "ldptr"
+    if hi == 0x801 and lo == 0x825:
+        return "ldptr.d"
     if hi == 0x801:
         return "rstcur"
     if hi == 0x202 and lo == 0x1D5:

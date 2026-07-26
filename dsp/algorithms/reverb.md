@@ -97,6 +97,50 @@ two chains of five delay buffers each. The microcode reaches them only through t
 (the bracket reading is withdrawn; the direction is FORCED, `../analysis/r1-allpass-motif.md`
 §5 F1) — never by naming a delay cell.
 
+> ### ⚠ Every number this file's sources used to quote was HALF the real one
+>
+> R3 (`../analysis/r3-delaydram.md` §2) proved by construction that a descriptor
+> payload is the **24-bit poke value** `2 × raw + tagbyte bit 7`, not the raw
+> three bytes. Corrected ladders (samples at 44.1 kHz):
+>
+> | preset | ladder 0 | ladder 1 |
+> |---|---|---|
+> | ROOM REVERB 1 | 255 869 979 366 1044 | 528 1252 359 675 |
+> | ROOM REVERB 2 | 510 1740 1878 734 2088 | 1057 2505 639 1351 |
+> | PLATE REVERB 1 | 904 2181 3095 1382 2747 | 1676 3569 1112 1948 |
+> | CONCERT REVERB 1 | 904 1957 2154 1382 1578 | 1276 2924 992 1548 |
+> | WAVE REVERB 1 | 904 2981 8295 1382 4347 | 1676 4169 6512 2548 |
+>
+> (5.8 → 188 ms, the range a diffuser network wants; the raw reading gave
+> 2.9 → 94 ms, short for the long stages.) `PRE DELAY` likewise: `ROOM REVERB 1`
+> is **800 samples = 18.1 ms** above the region floor, and the twelve presets
+> spread over 20 / 500 / 800 / 1000 / 2000 samples. The full table is in
+> `../analysis/r3-delaydram.md` §7.3. R1's *solve* is unaffected — it never uses
+> a delay value, and an all-pass ladder is exact for any positive integer delay.
+
+## Where a delay address comes from — ANSWERED
+
+```
+   delay-DRAM address = ( DESCRIPTOR_CELL[cursor] + G )  mod 2^N
+```
+
+**PROVEN BY CONSTRUCTION** (`../analysis/r3-delaydram.md`). The cells are a
+host-written bank behind pointer `…825` / tag `0x4C`; a cell holds
+`LINE_BASE + DELAY_IN_SAMPLES`, so **a delay is an address and a line's delay is
+the difference of two cells** — which is exactly the "contiguous-tiling address
+pairs" shape this file already described, now explained. The reverbs are the
+unit-1 programs and own delay memory `[0x8000, 0x10000)` — 32,768 words =
+**743.0 ms**. Every reverb writes `32768` (its own floor) and `32767` (the top of
+unit 0's region, one below).
+
+The cell for each DRAM word comes from an implicit auto-incrementing cursor in
+program order, which lands the alternating read/write pair of R1's forced core on
+an alternating pair of cells whose successive differences **are** the diffuser
+delays — a non-trivial cross-check between two passes that used entirely
+different evidence. ⚠ The *tail* of that alignment is not settled: guarded of
+R3's C-format contamination the reverb writes 32 cells and contains 28 consuming
+words (`../analysis/isa-adjudication.md` §2.2).
+
 ## Read against the priors
 
 The shape is a Schroeder/Moorer/Dattorro-family reverb: input scaling → **series
@@ -131,14 +175,20 @@ write its own stage's `d_in`.
   WRITE; the read data lands 2–5 words later; the `hi12` bit-4 store takes the
   accumulator *before* its own word's ALU step; the write trails the read by one
   ladder stage.
+- **PROVEN BY CONSTRUCTION (new):** where the delay-line **address** comes from —
+  the descriptor bank behind `…825` / tag `0x4C` (see the section above). This has
+  been removed from the OPEN list.
 - **OPEN:** which of the two surviving role assignments is the real one (they are
   numerically indistinguishable — both reproduce the cascade at max|err| = 0 over
-  all 12 banks); where the delay-line **address** comes from; whether
-  `880.1.20.*`'s `lo12` selects the write-data source (44/44 vs 0/56 says it
-  does, but four of the six forms may not be writes at all); the separator's
-  class-A word appearing to clobber `P` three words before its consumers; and the
-  9-repetition / 10-buffer off-by-one on the *address* side. These are shared with
-  the whole ISA worklist (`../instruction-set.md`).
+  all 12 banks); whether `880.1.20.*`'s `lo12` selects the write-data source
+  (44/44 vs 0/56 says it does — and R3 **half-settled this in the direction R1
+  hedged**: the cursor alignment reads `880.1.20.2C7` as a READ, which removes the
+  0/56 arm and leaves family B ranked on the 44/44 arm alone); the separator's
+  class-A word appearing to clobber `P` three words before its consumers; the
+  9-repetition / 10-buffer off-by-one on the *address* side; and the four surplus
+  descriptor cells. ⚠ **`addr8` does NOT select the DRAM direction** — falsified
+  by R3 §6.3, so the `60`=read / `20`=write reading holds only for `2D4`/`655`.
+  These are shared with the whole ISA worklist (`../instruction-set.md`).
 
 ## The other reverbs
 

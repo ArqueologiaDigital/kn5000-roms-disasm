@@ -9,6 +9,11 @@ w0   Header          ; per-frame entry; sets up pointer registers then CALLs the
 w1                   ; C-format A=7; I-RAM 7 is the start of the second input block (INFERRED, n=1)
 w7   InputBlock1     ; second of the two input blocks (blocks are 0..6 and 7..11) -- K6
 w42  Unit0Setup      ; unit-0 pointer setup, and the DISCONNECT vector target for unit 0 [DETERMINED]
+w44                  ; ldptr.d #$25 -- delay-DESCRIPTOR pointer; unit-0 bodies then start at cell 0x26 [R3]
+w45                  ; lo12 0x20C, unit-0 half of the pair with w53; mode 2 (mem[ptr]) vs w53's register
+w46                  ; 800.1.60.00B -- one of only 2 sites, +4 in each setup block; K4's copy candidate
 w49  Unit0Call       ; unit-tagged transfer, tag 0x0E -- CALLs the unit-0 body at I-RAM 84
 w50  Unit1Setup      ; unit-1 pointer setup, and the DISCONNECT vector target for unit 1 [DETERMINED]
+w52                  ; ldptr.d #$25 -- same payload as w44; the per-unit PHASE is OPEN (R3 sect. 6.3)
+w53                  ; lo12 0x20C; register 0xD0 = unit 1's STATE-BLOCK BASE [MEASURED 87/91]
 w59  Unit1Call       ; unit-tagged transfer, tag 0x0F -- CALLs the unit-1 body at I-RAM 200

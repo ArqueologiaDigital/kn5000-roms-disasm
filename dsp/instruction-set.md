@@ -20,13 +20,22 @@ fact.
 
 ## ⚠ Corrections — the claims that did NOT survive (2026-07-26)
 
-The K5 (output stage), R1 (all-pass motif), R2 (result routing) and K3 (pointer
-register file) passes killed more than they added. These are listed first because a
-wrong decode costs more than a missing one, and because the disassembler emitted
-several of them for months.
+The K5 (output stage), R1 (all-pass motif), R2 (result routing), K3 (pointer
+register file), K4 (cursor rebase) and R3 (delay-DRAM addressing) passes killed
+more than they added, and the **adjudication pass** that integrated them killed two
+more. These are listed first because a wrong decode costs more than a missing one,
+and because the disassembler emitted several of them for months.
+
+The four newest rows are the adjudication's own
+(`analysis/isa-adjudication.md`) — two of them against claims committed hours
+earlier, which is exactly what an integration pass is for.
 
 | withdrawn claim | why | replaced by |
 |---|---|---|
+| **`C40.1.80.000` and `C40.1.E0.451` are class-1 delay-DRAM words, and they corroborate R2's withdrawal of the `addr8` bit-7 split** (R3 §6.1, §9.5) | They are **C-FORMAT IMMEDIATE LOADS** — `hi12[11:8] == 0xC`, so `class4`/`addr8` are immediate data, not fields. R3's family predicate carries no C-format guard. Decisive: `C40.1.80.000` (A=12) and `C40.2.C0.000` (A=22) are **the same instruction** — same family, same destination `lo12 = 0x000` — differing only in the immediate; one reads `class4 == 1` and the other `class4 == 2` *because bit 8 of the immediate differs*. No machine can make one touch the DRAM and not the other. **FORCED.** | the guarded family (`is_dram()`); R2's bit-7 withdrawal stands on its own evidence (324/324 vs 3 misclassified) and never needed this |
+| **the descriptor-cursor counting model is "consistent with zero residual, 8 solutions in {0,1}"** (R3 §6.1) | That holds only *with* the contamination above. Guarded, the {0,1} solution set collapses to **none** and the naive identity falls **88/96 → 80/96**: the whole residual was being absorbed by two immediates. The twelve reverbs balance only if the four `C40.1.80.000` consume; the COMPRESSOR family only if its two `C40.1.E0.451` do not. | "a good fit with 16 rows over", plus the enumerated resolutions in `analysis/isa-adjudication.md` §2.2. **Every VALIDATED R3 number survives** — the first DRAM word of every body is unchanged, so the ms→address chain, the residue test and the doubled delay lengths are untouched |
+| **the C-format family predicate is `(hi12 & 0xFFE) == 0xC40`** (the Word-format section, below) | That is the predicate of the **payload rule**, not of the format. The FORMAT is `hi12[11:8] == 0xC` (68 words) — which `dsp_disasm.c_format()` has always implemented. Wide is forced three ways: R2's census reproduces row for row **only** under it; classes 3/7/B/E/F are empty **only** under it (narrow, the corpus's one "class 3" is `C04.3.12.820`, a header *pointer-load* word); and both `C00` words carry a **non-zero `B`** while encoding their own I-RAM address. | two predicates: `c_format()` = the format, `is_c40()` = the payload rule (`A = imm13>>5`, `B == 0`, 57/57 in, 2/11 out) |
+| **`lo12 = 0x827` (payloads `0x6C`/`0x64`) inherits the D-RAM-origin slot** (K3, "INFERRED by elimination") | Elimination gave it no positive test. There is one — *the host's zero-fill must clear the state the body reads* — and under it the filled block lies inside the body's pointer reach in **0 of 85** streams, against **47 of 85** for the fill's own base `0x50`/`0xD0`. | the slot is **OPEN** again; `0x50`/`0xD0` is the better-supported candidate but is **not** a pin (see the Addressing section) |
 | **`hi12 == 0xC40` = "envelope / level detector"** (INFERRED) | Wrong on **all 61 sites**. It fired on the reverb tank, on CHORUS, and on the frame terminator's neighbours. The family is a 13-bit **immediate load**. | the C-format rule below (`analysis/k5-output-stage.md` §2.3) |
 | **`880.1.60.*` / `880.1.20.*` = "external-DRAM bracket OPEN / CLOSE"** (INFERRED) | Already falsified by the per-frame counts; R1's constraint solve then **FORCED** the real reading — one is a **READ** and the other a **WRITE**, and the opposite assignment has **zero survivors in all three machine models**. | `dramrd` / `dramwr` semantics below (`analysis/r1-allpass-motif.md` §5) |
 | **`012.2.00.680` = "`d_in ← x + t` (the WRITE)"** and **`000.2.00.419` = "`y ← d_out − t`"** | These are **one of two** role assignments that survive the constraint search, and the corpus **ranks the other one first** (44/44 vs 0/56). They were printed as if settled. | "all-pass core slot 2/6 and 3/6, role NOT settled" |
@@ -71,9 +80,19 @@ exactly the four padding bits). The working field map is INFERRED
   **C-FORMAT**) it is **immediate DATA** (MEASURED, `notes/kn5000-dsp-header.md`
   §6). K5 sharpened the span: the immediate is **13 bits at [24:12]**, one bit
   *further left* than previously written, i.e. it reaches into `hi12` **bit 0** —
-  which is exactly why unit 1's link word carries `0xC41` and not `0xC40`. The
-  family predicate must therefore be `(hi12 & 0xFFE) == 0xC40`, never
-  `hi12 == 0xC40`. Two consequences the disassembler now honours: a C-format word
+  which is exactly why unit 1's link word carries `0xC41` and not `0xC40`.
+  ⚠ **Two predicates, and conflating them cost a committed error**
+  (`analysis/isa-adjudication.md` §1, §3):
+
+  | | predicate | n / 3057 | decides |
+  |---|---|---|---|
+  | **the FORMAT** | `hi12[11:8] == 0xC` | **68** | whether `class4`/`addr8` exist at all |
+  | **the PAYLOAD RULE** | `(hi12 & 0xFFE) == 0xC40` | **57** | whether imm13 is a multiple of 32 (`B == 0`) |
+
+  The 11 words between them are **all kernel words** (8 header, 3 output stage,
+  **0 of 2974 body words**) and exactly **2 of 11** are multiples of 32. Use the
+  wide one to decide whether to parse `class4`; use the narrow one before
+  reading `A = imm13 >> 5`. Two consequences the disassembler now honours: a C-format word
   does **not** advance the coefficient cursor (its `class4` bit 3 is immediate
   data, not the cursor-fetch enable), and it has **no `addr8`**, so it cannot
   post-increment the data pointer. MEASURED: exactly **one** word in the
@@ -112,13 +131,18 @@ ADVANCE — only `class4 == 0xA` advances the cursor** (K4, FORCED): the PARAMET
 EQ body carries **10 class-8 words** (`804.8.16.415`, one per biquad section) inside
 a cursor map that is proven to the bit at 6 cells per band, 60/60 named, transfer
 function reproduced at max|err| = 0; if class 8 advanced, band *k* would start at
-cell `7k` instead of `6k` and every role would shift. Corpus-wide the bit-23 words
-in bodies are class 8 (42) and class A (822) and nothing else. The disassembler's
-`cur+` annotation on a class-8 word is therefore misleading and should read `cur`
-— **not renamed yet, to keep `tools/dsp_disasm.py` in step with MAME's
-`upd6383d.cpp`** (`analysis/k4-cursor.md` §6).
+cell `7k` instead of `6k` and every role would shift. In the **2974-word body
+corpus** the bit-23 words are class 8 (42) and class A (822) and nothing else —
+re-derived exactly (`analysis/isa-adjudication.md` §4).
+⚠ **Do not turn that into "bit 23 ⇒ class 8 or A".** K4's claim is body-scoped;
+the 83-word **kernel** also sets bit 23 on class **9** (4 words — the call-vector
+writes), class **C** (1) and class **D** (1 — R2's two `DO`-write words). A core
+that assumes the body distribution mis-executes six kernel words.
+The disassembler now prints **`cur+`** only for `class4 == 0xA` and plain **`cur`**
+for every other bit-23 word (the rename K4 deferred; `upd6383d.cpp` still owes it —
+see the MAME sync list in `analysis/isa-adjudication.md` §8).
 
-## Decoded forms — the only seven with a real mnemonic
+## Decoded forms — the only eight with a real mnemonic
 
 Each carries its evidence in `tools/dsp_disasm.py` next to the code that emits it.
 A word is in this table only if a core could **execute** it.
@@ -128,7 +152,7 @@ A word is in this table only if a core could **execute** it.
 | `000.2.00.000` | `nop` | — | **INFERRED**, strengthened. *Corrected:* the earlier "PROVEN BY CONSTRUCTION, writer `LABEL_038922`" was wrong — that routine emits `801.0.NN.825` plus a tag-`0x4C` coefficient packet and never emits this word (`analysis/k5-output-stage.md` §5.7). New support: R1's inductive closure requires the two words between consecutive all-pass cores to leave **all four** modelled registers untouched (113 of 114 cores), which is what a `nop` does. Still an inference — it inherits the all-pass reading |
 | `801.0.NN.821` | `ldptr #$NN` | load the **C-RAM pointer** (not the cursor) with the absolute C-RAM address `NN` | **PROVEN BY CONSTRUCTION** for the encoding (writer `LABEL_0387E6`: `addr8` is built as `(P>>4)` into byte 2's low nibble and `(P&0xF)<<4` into byte 3's high nibble, and `lo12` bit 11 is added by a literal `INC 8, WA`, so the payload is exactly 8 bits and bit 11 is a separate flag). **UPDATED by K3 (`analysis/k3-pointers.md`): the host-stream and in-program meanings are THE SAME — both name a C-RAM pointer.** The three in-program payloads `0x70` (unit 0), `0x50` (unit 1), `0x90` (output stage) are the three non-zero structural bases of the host's own C-RAM map (two tap tables + the reverb coefficient bank), 3/3 on a mechanically-derived 4-cell target. What it is **not** is the implicit coefficient cursor — that is FORCED against by the CHORUS wrap-constant join. So C-RAM has **at least two independent pointers**. Which architectural register (CP/DP/BP1/BP2/PR1/PR2): OPEN |
 | `801.0.00.021` | `rstcur` | reset coefficient cursor to base | **VERIFIED** (algo39 section starts 0,6,12,18,24 \| rstcur \| 0,6,12,18,24). K3: this is the **same word as `ldptr` with `lo12` bit 11 CLEAR** — same `hi12`, same `class4`, same low byte `0x21` — and it is the **only** `hi12 == 0x801` word in the 2974-word body corpus (1/2974) |
-| `801.0.NN.825` | — | load the pointer for the **tag-`0x4C` space** | **PROVEN BY CONSTRUCTION** (writer `LABEL_038922`). Space assignment INFERRED (strong): in-program payloads `0x25`/`0x25`/`0x26` against a 2-cell boundary set `{0x00, 0x26}` (K3 §4.3) |
+| `801.0.NN.825` | `ldptr.d #$NN` | load the **delay-DESCRIPTOR pointer** with the absolute bank index `NN` | **PROVEN BY CONSTRUCTION**, both halves. *Encoding:* writer `LABEL_038922` emits the same four payload steps as the coefficient writer `LABEL_0387E6` — byte for byte, only `ADD XWA,#4Ch` vs `#26h` differs. *Space:* the packets it heads carry host tag **`0x4C`**, and a cell of that bank holds `LINE_BASE + DELAY_IN_SAMPLES` (`ADD (XSP+002h), XWA`). K3 reached the same space by elimination and labelled it INFERRED; **R3 proved it and named it** (`analysis/r3-delaydram.md` §1). Promoted to tier 1 in the adjudication pass — 3 sites, all in the resident kernel |
 | `000.1.NN.000` | — | load the pointer for the **state RAM (D-RAM)** | **PROVEN BY CONSTRUCTION** — writers `LABEL_03846C` / `LABEL_038539` / `LABEL_038CF9` emit `00 00 10\|(P>>4) (P&0xF)<<4 00` plus a tag-`0x15` value packet. **NEW in K3**: this whole family was missing from the writer list. Space = D-RAM, MEASURED — the host zero-fills exactly the cells the freshly-loaded body uses, and PARAMETRIC EQ's fill is 40 cells at `0x50..0x77` = 5 bands × 2 channels × 4 Direct-Form-I state words |
 | `202.A.dd.1D5` | `mac (p)+dd` | `acc += P ; P = coef[cursor++] * mem[p] ; p += (s8)dd` | **DETERMINED** (all 144 survivors of a 19,674,720-point constraint search agree) |
 | `202.A.dd.1D4` | `mac.lb (p)+dd` | as `mac`, and latch B ← mem[p] | **DETERMINED**, same source |
@@ -175,7 +199,9 @@ decoded figure**.
 | `880.1.60.2D4` | external delay-DRAM **READ**; the data becomes visible **2–5 words later** | **DETERMINED** (R1 F1, F6) — the opposite direction has zero survivors in the base, 3-input-ALU and ALU-on-the-DRAM-word models alike |
 | `880.1.20.655` | external delay-DRAM **WRITE** | **DETERMINED** (R1 F1) |
 | `880.1.20.64B` | external delay-DRAM **WRITE** | **INFERRED** — same `lo12`-selected write-data source; 28/28 store-preceded |
-| other `880.1.60.*` / `880.1.20.*` | external delay-DRAM access; that `addr8` alone selects the direction is **INFERRED**, proven only for the two rows above. Caution: four `880.1.20.*` forms are **never** store-preceded (0/56) while `0x64B`/`0x655` always are (44/44) against a 23.3 % base rate, so `lo12` — not `addr8` — is what selects the write-data source, and the 0 % forms may not be writes at all | MEASURED (the split), INFERRED (the direction) |
+| **every mode-1 + ESCAPE word** (`class4 == 1`, `hi12` bit 11 set, C-format excluded) — 276 of the 3057-word corpus | **external delay-DRAM access**, at `address = DESCRIPTOR_CELL[cursor] + G mod 2^N`: a host-written 24-bit descriptor bank reached through pointer `…825` / tag `0x4C`, one cell per DRAM word in program order. The address is **not in the word**, which is why these stay tier 2 | family **MEASURED** (R2, 324/324 against mode-1-without-escape = the register file); address model **PROVEN BY CONSTRUCTION** (R3 §1). ⚠ the C-format guard is mandatory — omitting it is what `analysis/isa-adjudication.md` §1 falsifies |
+| `880.1.30.*` | the **first** DRAM access of a body — `addr8 = 0x30` marks it in **37 of 38** distinct images | **MEASURED** (R3 §6.2). *Corrected:* the old annotation "framing word, carries no DRAM information" was wrong — it is a DRAM word |
+| direction of any **other** `880.1.*` / `800.1.*` / `900.1.*` form | **UNKNOWN** | ⚠ **`addr8` does NOT select the direction** — FALSIFIED by R3 §6.3: MULTI TAP DELAY's cursor alignment puts three of its four tap **READS** on `880.1.20.2C7` and its line **WRITE** on `880.1.60.000`. Direction must live in `lo12`/`hi12`. The `60`=read / `20`=write reading is FORCED for `2D4`/`655` (and inferred for `64B`) and **must not be generalised** |
 | `(hi12 & 0xFFE) == 0xC40` | **13-bit immediate load**, `A = bits[24:17]`, `B = bits[16:12]`, destination named by `lo12` | format **MEASURED** (61/61 multiple of 32; `B == 0` in 57/57 body occurrences). Destination **OPEN** except for `lo12 ∈ {0x445,0x446}` (= `setvec`) |
 | `102.A.**.64B` | class-A multiply whose **multiplicand is a sum of two registers** — neither `mem[p]` nor the incoming `acc` — i.e. a **fourth multiplicand route** beside `mac` (`0x1D5`), `mac.lb` (`0x1D4`) and `mulst` (`0x407`) | **FORCED under a two-input ALU** (R1 F8), 36/36. Falls to a three-input ALU (260 of 336 survivors take `mem[ptr]` there) — labelled model-dependent, not asserted |
 
@@ -264,9 +290,17 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
   and only `0x06` from the unit-0 half, which is unexplained. The delay-DRAM
   sub-ops `0x20/0x30/0x60` are discriminated from register addresses by **`hi12`**
   (the `0x8xx`/`0x9xx` escapes), not by `addr8` bit 7.
+  **Named cells so far:** `0x06`/`0x86` = the per-unit OUTPUT LEVEL (R2, PROVEN BY
+  CONSTRUCTION) and `0x50`/`0xD0` = the per-unit STATE-BLOCK BASE (MEASURED,
+  87/91 — `analysis/isa-adjudication.md` §5). That §5 also **adds two pairs to
+  K4's list**, `0x06`/`0x86` and `0x0B`/`0x8B`, from the shape of the host's
+  zero-fill.
 - **P-consumers / carry latches** — `lo12 ∈ {647,687,1D3,1D4}`.
-- **`hi12=0x212`** writes `mem[ptr]` in every class (bit 4); `hi12=0x102` is the
-  shared gain multiply of the phaser all-pass and reverb diffuser.
+- **`hi12=0x212`** — ⚠ the old "writes `mem[ptr]` in **every class**" is
+  WITHDRAWN (R2). Bit 4's target is **mode-dependent**; `mem[ptr]` is the mode-2
+  target, and the universal reading manufactures four dead stores in the 23-word
+  output stage. `hi12=0x102` is the shared gain multiply of the phaser all-pass
+  and reverb diffuser.
 - pointer-load siblings `lo12 ∈ {820,822,825,827}` — K3 updates this. `0x825`'s
   space is INFERRED (the tag-`0x4C` space, payloads `0x25`/`0x25`/`0x26` against a
   2-cell boundary set); `0x822` occurs once, at `w77`, where R2 reads `addr8 = 0x86`
@@ -332,17 +366,67 @@ There is **no encoded space-selector field**; the memory space is
   printed**. ⚠ **Corrected by K3 (`analysis/k3-pointers.md`): the header's per-unit
   `0x70` / `0x50` are NOT the D-RAM base** — they are **C-RAM** addresses, and
   specifically the bases of the two tap tables the host writes at C-RAM `0x50` and
-  `0x70`. The candidate that inherits the D-RAM-origin slot is `lo12 = 0x827`, with
-  per-unit payloads `0x6C` / `0x64`; that is INFERRED by elimination, not measured.
-  Independently: the host's per-algorithm zero-fill gives each body's state
-  footprint directly (PARAMETRIC EQ = 40 cells at index `0x50..0x77`).
+  `0x70`. *(Beware the numerical trap: C-RAM `0x50` and register-file `0x50` are
+  different spaces that happen to share a number — conflating two 256-cell spaces
+  is exactly what produced K6's withdrawn headline.)*
+  ⚠ **K3's replacement candidate `lo12 = 0x827` (payloads `0x6C`/`0x64`) is now
+  WITHDRAWN too** (`analysis/isa-adjudication.md` §5.1). It was inferred by
+  elimination and had no positive test; the one available test — *the host's
+  zero-fill must clear the state the body reads* — puts the filled block inside
+  the body's pointer reach in **0 of 85** streams under `0x6C`/`0x64`, against
+  **47 of 85** under the fill's own base `0x50`/`0xD0`. **The slot is OPEN.**
+  `0x50`/`0xD0` is the better-supported candidate and would pin the origin *if*
+  the mode-1 index space and the mode-2 pointer space are one RAM reached two
+  ways — but 47/85 is not a pin, the walk model behind it is naive (one
+  continuous walk, no mid-body reload), and the residual failures are **not**
+  explained (uncovered offsets split 94 odd / 69 even, so the tempting
+  "stereo bodies walk twice" story is *not* supported). ENUMERATED, not picked.
 - **C-RAM has at least TWO pointers** — the implicit cursor *and* the register
   `lo12 = 0x821`, which is FORCED not to be the cursor (K3 §4.2). The host's C-RAM
   map has exactly four structural bases, `{0x00, 0x50, 0x70, 0x90}`, and the two
   the cursor does not supply are exactly the two `0x821` is loaded with per unit.
-- **external delay RAM** — reached ONLY through the `880.1.60` / `880.1.20`
-  words, which are a **READ** and a **WRITE** and not a bracket. How the address
-  is supplied is **OPEN** (this is the largest single hole in the machine).
+- **external delay RAM** — reached through the **mode-1 + ESCAPE** family (R2's
+  predicate, C-format excluded). ⚠ *"How the address is supplied is OPEN — the
+  largest single hole in the machine"* is **no longer true**. R3 answered it, and
+  the address is not in the instruction at all:
+
+  ```
+     delay-DRAM address = ( DESCRIPTOR_CELL[cursor] + G )  mod 2^N
+  ```
+
+  **PROVEN BY CONSTRUCTION** (`analysis/r3-delaydram.md`): the descriptors are a
+  host-written 24-bit register bank addressed by pointer `…825` with host tag
+  `0x4C` — the delay twin of the coefficient bank behind `…821` / tag `0x26`,
+  written by the *same four instructions* in the Sub CPU. **A cell holds
+  `LINE_BASE + DELAY_IN_SAMPLES`: a delay is an ADDRESS, and a line's delay is
+  the DIFFERENCE of two cells.** No length, mask or wrap register exists
+  anywhere, which is why the model needs a single global rotation `G`. The
+  authoring chain is `cell = K24 + ms × 44100/1000`, opcode `0x67` — the only
+  opcode in the firmware that can write a descriptor.
+  **MEASURED:** unit 0 owns `[0x0000,0x8000)`, unit 1 (the twelve reverbs)
+  `[0x8000,0x10000)` — 32,768 words = **743.0 ms** each; the largest address the
+  firmware ever emits is 64,899, so bits 16/17 are never exercised.
+  **VALIDATED end to end:** `SINGLE DELAY` slot 0 = `DELAY L (ms)` → cell `0x26`,
+  and the ROM ships **15,435 = 350 × 44100/1000** exactly; its right channel gives
+  the same 350 ms out of a different base.
+  ⚠ **Every delay length this tree used to print was HALF the real one** — the
+  payload is the 24-bit poke value `2×raw + tagbyte bit 7`, not the raw three
+  bytes. `ROOM REVERB 1`'s ladder is `255 869 979 366 1044`, not
+  `127 435 489 183 522`; its pre-delay is 8,905 samples, not 4,452.
+  **OPEN:** the descriptor cursor's per-unit phase; the per-word READ/WRITE
+  assignment; `N`. The counting model behind the cursor is **a good fit, not
+  exactly satisfiable** — see the Corrections table.
+- **the internal REGISTER FILE** (mode 1 **without** the escape) — indexed
+  directly by `addr8`, bit 7 = the effect unit. Named cells so far:
+  **`0x06` / `0x86` = the per-unit OUTPUT LEVEL** (PROVEN BY CONSTRUCTION, R2 —
+  the last four host actions of cold boot) and **`0x50` / `0xD0` = the base of the
+  per-unit STATE BLOCK** (MEASURED, `analysis/isa-adjudication.md` §5: in **87 of
+  91** parameter streams the host's tag-`0x15` zero-fill is `{low unit-tagged
+  registers} ∪ {a CONTIGUOUS block based at exactly 0x50 / 0xD0}`; PARAMETRIC
+  EQ's is the 40-cell one, `0x50..0x77` = 5 bands × 2 ch × 4 Direct-Form-I state
+  words). That names the pair R2 could only observe being cleared together, and
+  gives `w53` (`010.9.D0.20C`) a job — its unit-0 partner `w45` (`010.A.00.20C`)
+  shares `lo12 = 0x20C`.
 
 ## `class4 & 7` is an ADDRESSING MODE, and `hi12` bit 11 picks the SPACE — MEASURED
 
@@ -457,28 +541,39 @@ so that nobody has to add the two by hand and get it wrong.
 
 ```
 region                          words   tier1  tier1%    tier2   t1+t2%
-resident kernel I-RAM 0..82        83       3    3.6%        4     8.4%
-   ...header  I-RAM  0..59         60       2    3.3%        2     6.7%
-   ...output stage 60..82          23       1    4.3%        2    13.0%
-   ...output stage AS LINKED       23       3   13.0%        0    13.0%
-reverb image (algo 16)            133      26   19.5%       31    42.9%
-FRAME FLOOR kernel + reverb       216      29   13.4%       35    29.6%
-FRAME FLOOR as linked             216      31   14.4%       33    29.6%
-all 38 distinct body images      2974     267    9.0%      230    16.7%
+resident kernel I-RAM 0..82        83       6    7.2%        6    14.5%
+   ...header  I-RAM  0..59         60       4    6.7%        4    13.3%
+   ...output stage 60..82          23       2    8.7%        2    17.4%
+   ...output stage AS LINKED       23       4   17.4%        0    17.4%
+reverb image (algo 16)            133      26   19.5%       32    43.6%
+FRAME FLOOR kernel + reverb       216      32   14.8%       38    32.4%
+FRAME FLOOR as linked             216      34   15.7%       36    32.4%
+all 38 distinct body images      2974     267    9.0%      329    20.0%
 
 distinct undecoded words           655
 distinct undecoded FAMILIES        185
 images with ZERO tier-1 words     8 of 38
 ```
 
-**Read that honestly: on the frame floor, tier 1 did not move.** It was 29/216 =
-**13.4 %** before this pass and it is 29/216 = **13.4 %** after it. What moved is
-tier 2, from nothing to **35 words (29.6 % combined)** — and the two lines *as
-linked* are the only tier-1 gain: after `EFF_Link` the host has overwritten I-RAM
-64 and 71 with `setvec`, so the code that actually executes is 31/216 = **14.4 %**.
-The output stage went from **0 of 23** understood to **2 DETERMINED + 5 INFERRED**,
-and the two DETERMINED ones are the two that gate control flow — which matters far
-more than the percentage does.
+**Read that honestly.** On the frame floor tier 1 moved from **29/216 = 13.4 %**
+to **32/216 = 14.8 %** (as linked, 31 → 34 = **15.7 %**). The whole tier-1 gain is
+**three words**: the `ldptr.d #$NN` sites at I-RAM 44, 52 and 62, promoted because
+R3 proved *both* halves of `801.0.NN.825` by construction — the encoding from the
+writer and the space from the tag. That is the honest size of it.
+
+Tier 2 moved much further — frame floor 35 → **38**, bodies **230 → 329**
+(16.7 % → **20.0 %**) — because the delay-DRAM family widened from
+`hi12 == 0x880, addr8 ∈ {0x20,0x60}` to R2's real predicate (mode 1 + ESCAPE,
+C-format guarded), and because R3 supplied the address model that makes those
+words describable at all. They stay tier 2 for a good reason: the address comes
+from an implicit descriptor cursor, so the word still cannot be executed in
+isolation.
+
+**What did not move, and why that is the interesting number:** `distinct
+undecoded words` is still **655** and `distinct undecoded FAMILIES` still **185**.
+Four analysis passes and an adjudication added mnemonics, killed six wrong
+readings and explained where two whole address spaces come from — without
+reducing the undecoded vocabulary by one entry. The long tail is untouched.
 
 The tier-2 words are worth their own line because of *what* they are. The
 standing complaint (`notes/dsp-critical-path-coverage.md` headline 2) was that
@@ -486,10 +581,13 @@ standing complaint (`notes/dsp-critical-path-coverage.md` headline 2) was that
 the cursor, the pointer, the accumulator and P, so the decoded subset could not
 get a sample in, could not get one out, and could not even enter a body. That is
 no longer true in either tier: `setvec` (tier 1) is how a body is entered at all,
-and the delay-DRAM read/write (tier 2) is how the delay lines are reached. **DI
-and DO are still untouched by every form**, so a sample still cannot get in or
-out; that is now the whole of the remaining boundary problem rather than three
-quarters of it.
+`ldptr.d` (tier 1) is how the delay-line addresses are aimed, and the delay-DRAM
+family (tier 2) is how the lines are reached — **with a proven address model**,
+which is new: `DESCRIPTOR_CELL[cursor] + G`. **DI and DO are still untouched by
+every *decoded* form**, so a sample still cannot get in or out — but R2 has now
+*identified* the two words that present the results (`w73` → DO1, `w78` → DO2,
+and DO3 never written), so the remaining boundary problem is one of decoding two
+named words rather than of not knowing which words to look at.
 
 ```
 class-A multiplies (coefficient consumers)     822
@@ -510,56 +608,74 @@ tree does not launder one into the other.
 tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
 55 % — there is no small set of words that unblocks everything.
 
-### The worklist, re-ranked after K5, R1, R2 and K3
+### The worklist, re-ranked after K5, R1, R2, K3, K4, R3 and the adjudication
 
-1. **The external delay-DRAM ADDRESS path.** We now know *which* words read and
-   write the delay lines and *nothing* about where the address comes from. This is
-   the single largest hole and it blocks every delay, chorus, flanger and reverb.
-   Concretely: what do `880.1.30.*` (58 body occurrences), `880.1.60.000` (26) and
-   the four never-store-preceded `880.1.20.*` forms do? Purely static.
-   **K3 hands this three concrete cribs** (`analysis/k3-pointers.md` §7): the two
-   C-RAM tap tables the header points each unit at — TABLE B at `0x70` covering
-   `0 … 32767` in 27 equal steps and TABLE A at `0x50` covering `32768 … 64512` in
-   31, with TABLE B's last entry **clamped to exactly `0x7FFF`**, which reads as
-   "unit 0 owns DRAM `0x0000..0x7FFF`, unit 1 owns `0x8000..0xFFFF`"; the constant
-   tag-`0x4C` table at `0x00..0x1F`, whose values all lie in `0x8000..0xC4E5`
-   (unit-1 territory) with `0x7FFF` at `0x1E`; and CHORUS's four register-space
-   `(value, 0)` pairs `0x190 / 0x5A0 / 0x9B0 / 0xDC0`, 1040 apart and all below
-   `0x8000`. Every delay-address-shaped value in the corpus fits in **16 bits**.
-2. **`880.1.20.*` — which `lo12` values are writes at all?** `0x64B`/`0x655` are
-   store-preceded 44/44 and the other four 0/56. Deciding that also decides R1's
-   two surviving families (O-1) without hardware.
-3. **The C-format destination register file.** `lo12 ∈ {000,1DA,359,44C,451,647}`
-   each carry one fixed payload `A`; naming even one of those registers turns a
-   MEASURED format into a decode, and the payload table above is a free crib.
-4. **The six `op 0..5` uC-IF handlers** at `0x03C32E + OFFSETS_14739[op]` — they
-   are the definition of commands `0x01/0x02/0x04/0x09/0x0C/0x30`. The ASL source
-   renders them as `db …`; disassembling them is pure static work and would
-   explain the whole host interface. **K4 promoted this**: it is the one static
-   test that can decide *who* loads the per-unit coefficient-base register the
-   cursor rebase is FORCED to read from (`analysis/k4-cursor.md` §5.2, E1).
-5. `212.2` vs `212.A` — bit 23 on a family whose class-A form is determined.
-6. the `lo12 = 0x415` group across classes A/2/8 (tests "lo12 = route, class4 =
+The old **#1 — "the external delay-DRAM ADDRESS path, the single largest hole"** —
+is **answered** (R3; see Addressing). What replaces it at the top is smaller and
+sharper, because the two structural spaces (coefficients, delay descriptors) now
+both have a decoded pointer and a proven writer, and what is left is *direction*
+and *phase*.
+
+1. **DIRECTION of the delay-DRAM words.** We know which family touches the DRAM
+   (276 words), where its address comes from, and which cell each word gets — but
+   for all but three forms we do not know **read or write**. `addr8` is FALSIFIED
+   as the selector (R3 §6.3), so it lives in `lo12`/`hi12`. Deciding it also
+   decides R1's O-1 (its two surviving role families) *and* R3's O-2 in one move,
+   and it is what stands between the reverb model and an audible tail. Purely
+   static; the cribs are the store-preceded split (`0x64B`/`0x655` 44/44 versus
+   four forms at 0/56) now that `0x2C7` is known to be a READ.
+2. **The descriptor cursor's per-unit PHASE.** Unit-0 bodies start at cell `0x26`,
+   unit-1 bodies at `0x00`. New evidence the enumeration did not have
+   (`analysis/isa-adjudication.md` §6): there are **three** `…825` loads, not two —
+   the output stage's `w62` loads **`0x26`**, exactly unit 0's region base, so the
+   frame *ends* by aiming the descriptor pointer at unit 0's first cell. That is
+   direct support for R3's resolution (i) and changes the arithmetic of (iii).
+3. **The reverb's four surplus descriptor cells** (`analysis/isa-adjudication.md`
+   §2.2) — 32 written, 28 consumed. Resolving it repairs the counting model that
+   the adjudication downgraded, and the leading candidate is testable: under R3's
+   reading a reverb DRAM word addresses cell `0x1E = 32767`, the *only* reverb cell
+   outside unit 1's own region.
+4. **The C-format destination register file.** `lo12 ∈ {000,1DA,359,44C,451,647}`
+   each carry one fixed payload `A`; naming even one turns a MEASURED format into a
+   decode. New crib: `A` is **bounded by the block it lives in** — 11/11 kernel
+   words have `A ≤ 82` (the kernel is 83 words, `P ≈ 4×10⁻⁶`) and 57/57 body words
+   have `A ≤ 40`.
+5. **The six `op 0..5` uC-IF handlers** at `0x03C32E + OFFSETS_14739[op]` — the
+   definition of commands `0x01/0x02/0x04/0x09/0x0C/0x30`. The ASL source renders
+   them as `db …`; disassembling them is pure static work and would explain the
+   whole host interface. **K4 promoted this**: it is the one static test that can
+   decide *who* loads the per-unit coefficient-base register the cursor rebase is
+   FORCED to read from (`analysis/k4-cursor.md` §5.2, E1).
+6. **Are the mode-1 register file and the mode-2 D-RAM one space?** If yes, the
+   D-RAM origin is pinned at `0x50`/`0xD0` and every listing can print D-RAM
+   absolutes. The evidence is 47/85 versus 0/85 for K3's withdrawn candidate; what
+   it needs is a **better pointer-walk model** (mid-body reloads), which is static
+   work on the 38 body images.
+7. `212.2` vs `212.A` — bit 23 on a family whose class-A form is determined.
+8. the `lo12 = 0x415` group across classes A/2/8 (tests "lo12 = route, class4 =
    arithmetic", brings class 8 along).
-7. the table-lookup triple (`040.0.00.C63 / 000.6.TT.4CD / 012.4.01.1CE`).
-8. the remaining 76 kernel words — where `COND`, `BRAKST` and the GF flags must
-   live. Note the standing warning: **65 of the kernel's 75 families never occur
-   in the 2974-word body corpus**, so frequency-ranked worklists are structurally
-   blind to exactly the code that carries the audio.
-9. **Where the C-RAM cursor's per-unit base comes from.** K3 sharpened this from
-   "unknown" to a three-way choice: the header performs **22 cursor advances before
-   the unit-0 CALL**, so a reset provably happens every frame, yet R2 eliminated
-   every pointer-load word as its source. The survivors are the unit-tagged transfer
-   itself (a BNK-R reload), a non-pointer-load word in `w45..w48` / `w53..w58`, or
-   the frame restart. Purely static (`analysis/k3-pointers.md` §4.2).
-10. the actual µPD6383 datasheet/databook — would hand over the whole ISA.
+9. the table-lookup triple (`040.0.00.C63 / 000.6.TT.4CD / 012.4.01.1CE`).
+10. the remaining 73 kernel words — where `COND`, `BRAKST` and the GF flags must
+   live. Standing warning: **65 of the kernel's 75 families never occur in the
+   2974-word body corpus**, so frequency-ranked worklists are structurally blind to
+   exactly the code that carries the audio. Note also that the output stage is
+   **lexically disjoint** — 20 of its 23 words, 14 of its `lo12` values and 13 of
+   its `hi12` values occur nowhere else (R2).
+11. **Where the C-RAM cursor's per-unit base comes from.** K3/K4 sharpened this to
+   a choice between a per-unit BASE REGISTER copy (K4 FORCED that one must exist,
+   and that it is *not* a power-of-two bank), the unit-tagged transfer, and the
+   frame restart. Purely static.
+12. the actual µPD6383 datasheet/databook — would hand over the whole ISA.
 
 **What genuinely needs hardware, and nothing else will do:** separating R1's two
-surviving role families by ear/scope (a `ROOM REVERB 1` impulse response with the
-delays 127/435/489/183/522 known would do it — they differ in what is written to
-the delay line, hence in the tail after the first pass), the exact DRAM read
-latency inside its forced [2,5] window, and 17-vs-18 delay address bits (the
-maximum `SINGLE DELAY` time). Everything else on this list is static.
+surviving role families by ear/scope (a `ROOM REVERB 1` impulse response would do
+it — with the **corrected** delays `255/869/979/366/1044`, *not* the halved
+`127/435/489/183/522` this document used to quote; the families differ in what is
+written to the delay line, hence in the tail after the first pass), the exact DRAM
+read latency inside its forced [2,5] window, R2's prediction that **DO3 is never
+written** (a scope on pin 25 should show nothing), and `N` in `mod 2^N` — for which
+the KN5000 firmware is simply mute, since it never sets bits 16/17. Everything else
+on this list is static.
 
 **Emulation status:** MAME instantiates the core (`upd6383` device) **disabled** —
 the host interface is exercised, nothing executes, there is no audio. A

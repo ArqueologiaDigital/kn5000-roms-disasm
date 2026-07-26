@@ -7,7 +7,7 @@ Image rep **algo 56** &middot; slots 56 &middot; **unit 0** (I-RAM load 84) &mid
 
 > mix up: burst vibrato (sin.sin product modulators)
 
-**64 words**, 15 class-A coefficient multiplies (2 named), 24 instructions still opaque. Landmarks detected: 3 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
+**64 words**, 15 class-A coefficient multiplies (2 named), 22 instructions still opaque. Landmarks detected: 3 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD
@@ -20,7 +20,7 @@ flowchart TD
     N1 --> N3
     N4["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;2"]
     N3 --> N4
-    N5["Undecoded core<br/>24 of 64 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N5["Undecoded core<br/>22 of 64 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N4 --> N5
     N6["VOLUME<br/>output level"]
     N5 --> N6

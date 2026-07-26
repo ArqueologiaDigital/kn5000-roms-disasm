@@ -7,7 +7,7 @@ Image rep **algo 2** &middot; slots 2 &middot; **unit 0** (I-RAM load 84) &middo
 
 > modulated chorus: dual-rate ensemble
 
-**85 words**, 25 class-A coefficient multiplies (5 named), 33 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
+**85 words**, 25 class-A coefficient multiplies (5 named), 29 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD
@@ -20,7 +20,7 @@ flowchart TD
     N1 --> N3
     N4["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;4"]
     N3 --> N4
-    N5["Undecoded core<br/>33 of 85 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N5["Undecoded core<br/>29 of 85 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N4 --> N5
     N6["VOLUME<br/>output level"]
     N5 --> N6

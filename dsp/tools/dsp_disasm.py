@@ -47,6 +47,36 @@ WRITE); the family-A-only all-pass readings of 012.2.00.680 and 000.2.00.419
 (two assignments survive); and the `hi12[11:8]==A -> host-poke' rule, which
 fired on genuine in-program words -- host packets are a HOST-STREAM object and
 now live in host_packet().
+
+2026-07-26, later -- the K3/K4/R2/R3 ADJUDICATION pass changed it again
+(analysis/isa-adjudication.md).  ADDED:
+
+  * `ldptr.d #$NN' (801.0.NN.825), the DELAY-DESCRIPTOR pointer -- tier 1, both
+    halves PROVEN BY CONSTRUCTION by R3 (encoding from the writer, space from
+    the tag).  3 sites, all in the resident kernel.
+  * the delay-DRAM family widened from `hi12 == 0x880, addr8 in {20,60}' to
+    R2's real predicate (addressing mode 1 WITH the format escape, C-format
+    guarded), carrying R3's address model in the annotation.  Tier 2: the
+    address is a descriptor cell from an implicit cursor, so the word still
+    cannot be executed alone.
+  * the internal REGISTER FILE annotation (mode 1 without the escape), with
+    named cells 0x06/0x86 = per-unit OUTPUT LEVEL and 0x50/0xD0 = per-unit
+    STATE-BLOCK BASE.
+
+WITHDRAWN in the same pass:
+
+  * `880.1.30.* = framing word, carries no DRAM information'.  It is the FIRST
+    DRAM ACCESS of a body, 37 of 38 distinct images (R3 sect. 6.2).
+  * `addr8 selects the DRAM direction' beyond 2D4/655/64B.  MULTI TAP DELAY's
+    tap READS land on 880.1.20.2C7 (R3 sect. 6.3).
+  * `hi12 == 0x212 writes mem[ptr], class-independent'.  Bit 4's target is
+    MODE-DEPENDENT; mem[ptr] is the mode-2 target (R2).
+
+FIXED: annotate() violated its own stated precedence rule -- the C-format block
+sat BELOW the delay-DRAM rule and survived only because that rule tested
+hi12 == 0x880 exactly.  Widening the family made it a live bug (the reverb's
+C40.1.80.000 matched), which is exactly the error R3 made.  C-format is now
+first.  See c_format() vs is_c40() for the two predicates that were conflated.
 """
 
 WORD_MASK = 0xFFFFFFFFF          # 36 bits
@@ -71,13 +101,29 @@ def fields(w):
 # --- the C-FORMAT split (hi12[11:8] == 0xC) --------------------------------
 # In this family `class4|addr8' is NOT a class and a pointer: bits [24:12] are
 # one 13-bit IMMEDIATE that reaches ONE BIT INTO hi12 (which is why the unit-1
-# link value carries 0xC41 and not 0xC40).  MEASURED over the whole corpus:
-# every one of the 11 distinct imm13 values of the 0xC40/0xC41 family, across
-# all 61 occurrences, is a multiple of 32 -- so the payload is the 8-bit field
-# [24:17] and the low five bits [16:12] are a separate small field.
-# (analysis/k5-output-stage.md sect. 2.3.)  The family PREDICATE must therefore
-# mask hi12 bit 0 away: (hi12 & 0xFFE) == 0xC40, never hi12 == 0xC40.
+# link value carries 0xC41 and not 0xC40).
+#
+# TWO DIFFERENT PREDICATES, and conflating them caused a committed error --
+# ADJUDICATED 2026-07-26, analysis/isa-adjudication.md sect. 1:
+#
+#   c_format()  hi12[11:8] == 0xC          the FORMAT.  68 words of 3057.
+#               This is the one that decides whether class4/addr8 exist.
+#               R2's addressing-mode census (2989 non-C-format words) is
+#               reproduced EXACTLY, row for row, ONLY by this predicate, and
+#               it is the predicate that empties classes 3/7/B/E/F -- under
+#               the narrow mask the corpus's one apparent `class 3' is
+#               C04.3.12.820, a header word of the pointer-load lo12 family.
+#   is_c40()    (hi12 & 0xFFE) == 0xC40     the PAYLOAD RULE.  57 words.
+#               Only inside it is imm13 a multiple of 32 (57/57; 2/11 outside),
+#               so only there is the payload the 8-bit field [24:17] with
+#               B == 0.  analysis/k3-pointers.md.
+#
+# The 11 words between the two predicates are ALL kernel words (8 header, 3
+# output stage) and 0 of 2974 body words, and their imm13 carries a non-zero B
+# -- e.g. both C00 wait words encode their own I-RAM address as A*32+B
+# (76*32+4 at I-RAM 76, 82*32+7 at I-RAM 82).
 def c_format(w):  return (hi12(w) & 0xF00) == 0xC00
+def is_c40(w):    return (hi12(w) & 0xFFE) == 0xC40
 def c_imm13(w):   return (w >> 12) & 0x1FFF
 def c_a(w):       return (w >> 17) & 0xFF      # payload
 def c_b(w):       return (w >> 12) & 0x1F      # 5-bit sub-field
@@ -109,7 +155,16 @@ def coeff_consumer(w):
     word does NOT shift the C-RAM addresses after it.  MEASURED: exactly ONE word
     in the whole 3057-word corpus is affected, the frame terminator
     C00.A.47.407 at I-RAM 82, and zero body words are -- so no committed listing
-    changes.  The guard is here because the hazard is real, not because it bit."""
+    changes.  The guard is here because the hazard is real, not because it bit.
+
+    FETCH IS NOT ADVANCE (K4, FORCED).  bit 23 says a coefficient is fetched;
+    only class4 == 0xA moves the cursor on.  The PARAMETRIC EQ body's ten
+    class-8 words sit inside a cursor map proven to the bit at 6 cells per
+    band; if class 8 advanced, band k would start at cell 7k and all 60 named
+    roles would shift.  MEASURED over the 2974-word body corpus: the only
+    classes that set bit 23 are 8 (42) and A (822).  The KERNEL additionally
+    has class 9 (4), C (1) and D (1), so a core must NOT assume
+    `bit 23 => class 8 or A'."""
     return class4(w) == 0xA and not c_format(w)
 
 
@@ -140,7 +195,23 @@ VECTOR_MEANING = {
 
 def is_setvec(w):
     """C-format immediate load into a per-unit CALL VECTOR register."""
-    return (hi12(w) & 0xFFE) == 0xC40 and lo12(w) in VECTOR_LO12
+    return is_c40(w) and lo12(w) in VECTOR_LO12
+
+
+# --- named cells of the internal REGISTER FILE (addressing mode 1, no escape)
+# bit 7 of the index is the effect unit, so every role comes in a matched pair.
+REGISTER_ROLE = {
+    0x06: "per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- the last four host "
+          "actions of cold boot are setvec unit1,#200 / setvec unit0,#84 / "
+          "reg 0x06 <- +0.500000 / reg 0x86 <- +0.183992, both cleared at reset)",
+    0x86: "per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- see 0x06)",
+    0x50: "base of the per-unit STATE BLOCK (MEASURED: in 87 of 91 parameter "
+          "streams the host's tag-0x15 zero-fill is a CONTIGUOUS run based here; "
+          "PARAMETRIC EQ's is the 40-cell one, 0x50..0x77 = 5 bands x 2 ch x 4 "
+          "Direct-Form-I state words)",
+    0xD0: "base of the per-unit STATE BLOCK (MEASURED -- see 0x50; unit 1's run "
+          "is 3 cells in all 12 reverbs)",
+}
 
 
 def decoded(w):
@@ -150,6 +221,7 @@ def decoded(w):
     hi, cl, ad, lo = fields(w)
     if hi == 0x000 and cl == 2 and ad == 0x00 and lo == 0x000: return True  # nop
     if hi == 0x801 and cl == 0 and lo == 0x821:                return True  # ldptr
+    if hi == 0x801 and cl == 0 and lo == 0x825:                return True  # ldptr.d
     if hi == 0x801 and cl == 0 and ad == 0x00 and lo == 0x021: return True  # rstcur
     if hi == 0x202 and cl == 0xA and lo == 0x1D5:              return True  # mac
     if hi == 0x202 and cl == 0xA and lo == 0x1D4:              return True  # mac.lb
@@ -166,13 +238,37 @@ def decoded(w):
 #  other.  status() is what the coverage tool counts.
 # --------------------------------------------------------------------------
 def is_dram(w):
-    """external delay-DRAM access word.  addr8 0x60 / 0x20 = READ / WRITE:
-    FORCED for the all-pass core's own pair (880.1.60.2D4 read, 880.1.20.655
-    write) -- the opposite assignment has zero survivors in all three machine
-    models searched (analysis/r1-allpass-motif.md sect. 5, F1).  Extending the
-    direction to the OTHER lo12 values of the same addr8 is INFERRED, and
-    annotate() says so."""
-    return hi12(w) == 0x880 and class4(w) == 1 and addr8(w) in (0x20, 0x60)
+    """external delay-DRAM access word.
+
+    THE FAMILY is `addressing mode 1 WITH the hi12 FORMAT-ESCAPE bit', which is
+    R2's predicate and is exceptionless over the corpus: mode 1 without the
+    escape is the internal register file, mode 1 with it is the external delay
+    DRAM (analysis/r2-output.md sect. 1).  C-format words must be excluded
+    first -- their class4 is immediate data, and C40.1.80.000 (the reverb's
+    A=12 immediate load) otherwise walks straight into this family.  That
+    misclassification is exactly what analysis/isa-adjudication.md sect. 1
+    falsifies in R3.
+
+    THE ADDRESS is NOT in the word (R3, PROVEN BY CONSTRUCTION):
+
+        delay-DRAM address = ( DESCRIPTOR_CELL[cursor] + G ) mod 2^N
+
+    a host-written 24-bit descriptor bank reached through pointer register
+    `...825' with host-poke tag 0x4C -- the delay twin of the coefficient bank
+    behind `...821' / tag 0x26, written by the very same four instructions in
+    the Sub CPU (LABEL_038922 vs LABEL_0387E6).  A cell holds
+    LINE_BASE + DELAY_IN_SAMPLES, so a delay is an ADDRESS and a line's delay
+    is the DIFFERENCE of two cells.  The cell comes from an implicit
+    auto-incrementing cursor, in program order, so it is still not derivable
+    from the word alone -- which is why these stay TIER 2.
+
+    DIRECTION: FORCED for the all-pass core's own pair (880.1.60.2D4 read,
+    880.1.20.655 write; the opposite assignment has zero survivors in all three
+    machine models -- analysis/r1-allpass-motif.md sect. 5, F1).  It does NOT
+    generalise: `addr8' does not select direction.  R3 sect. 6.3's cursor
+    alignment puts three of MULTI TAP DELAY's four tap READS on 880.1.20.2C7
+    and its line WRITE on 880.1.60.000.  Direction must live in lo12/hi12."""
+    return (hi12(w) & HI_ESC) and class4(w) == 1 and not c_format(w)
 
 
 DRAM_FORCED = {(0x60, 0x2D4): "READ", (0x20, 0x655): "WRITE"}
@@ -186,7 +282,7 @@ def status(w):
         return "DECODED"
     if is_dram(w):
         return "DETERMINED" if (addr8(w), lo12(w)) in DRAM_FORCED else "MEASURED"
-    if (hi12(w) & 0xFFE) == 0xC40:
+    if is_c40(w):
         return "MEASURED"          # 13-bit immediate load; destination OPEN
     if lo12(w) in VECTOR_LO12:
         return "MEASURED"          # writes a call vector; SOURCE field OPEN
@@ -228,36 +324,21 @@ def annotate(w, at=None):
     class and a pointer -- it is immediate data."""
     hi, cl, ad, lo = fields(w)
 
-    if is_end(w):
-        if cl == 1 and ad == 0x0E:
-            return "END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word"
-        if cl == 1 and ad == 0x0F:
-            return "END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word"
-        return "END OF BLOCK (falls through) -- and still performs the rest of the word"
-
-    # ---- external delay DRAM.  DIRECTION forced, ADDRESS SOURCE open --------
-    if hi == 0x880 and cl == 1 and ad in (0x20, 0x60):
-        role = DRAM_FORCED.get((ad, lo))
-        if role:
-            extra = ("; read data visible 2-5 words later (R1 F6)"
-                     if role == "READ" else
-                     "; write data staged by the preceding bit-4 store, 44/44")
-            return ("external delay-DRAM %s (DETERMINED, R1 F1 -- the opposite "
-                    "direction has zero survivors in all 3 models)%s" % (role, extra))
-        return ("external delay-DRAM access, addr8 %02X; direction READ/WRITE from "
-                "addr8 is INFERRED here (FORCED only for 60.2D4 / 20.655)" % ad)
-    if hi == 0x880 and cl == 1 and ad == 0x30:
-        return "framing word, carries no DRAM information (MEASURED)"
-
-    # ---- C-FORMAT: bits [24:12] are one immediate ---------------------------
+    # ---- C-FORMAT FIRST.  bits [24:12] are one immediate --------------------
+    # This block MUST precede every rule keyed on class4 or addr8.  It used to
+    # sit below the delay-DRAM rule and got away with it only because that rule
+    # tested `hi12 == 0x880' exactly; the moment the DRAM family was widened to
+    # R2's real predicate (mode 1 + ESCAPE) the reverb's C40.1.80.000 started
+    # matching it.  That is precisely R3's error -- see
+    # analysis/isa-adjudication.md sect. 1.
     if c_format(w):
         a, b = c_a(w), c_b(w)
         if is_setvec(w):                       # decoded(); never reaches here
             return None
-        if (hi & 0xFFE) == 0xC40:
+        if is_c40(w):
             return ("C-format IMMEDIATE LOAD: A=%d B=%d (imm13 0x%04X = %d*32, "
-                    "MEASURED 61/61); destination register lo12=%03X UNKNOWN"
-                    % (a, b, c_imm13(w), a, lo))
+                    "MEASURED 57/57 in this sub-family); destination register "
+                    "lo12=%03X UNKNOWN" % (a, b, c_imm13(w), a, lo))
         if hi == 0xC00:
             own = ("= its own I-RAM address" if at is not None and a == at
                    else "(I-RAM index?)")
@@ -270,6 +351,34 @@ def annotate(w, at=None):
                     "A=%d B=%d shown for the record" % (a, b))
         return ("C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into "
                 "hi12 bit 0, not class+addr; A=%d B=%d" % (a, b))
+
+    if is_end(w):
+        if cl == 1 and ad == 0x0E:
+            return "END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word"
+        if cl == 1 and ad == 0x0F:
+            return "END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word"
+        return "END OF BLOCK (falls through) -- and still performs the rest of the word"
+
+    # ---- external delay DRAM.  ADDRESS SOURCE now known, DIRECTION mostly not
+    if is_dram(w):
+        role = DRAM_FORCED.get((ad, lo))
+        base = ("external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] "
+                "+ G, from the host bank behind pointer ...825 / tag 0x4C "
+                "(R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in "
+                "program order, so it is NOT in this word")
+        if role:
+            extra = ("; read data visible 2-5 words later (R1 F6)"
+                     if role == "READ" else
+                     "; write data staged by the preceding bit-4 store, 44/44")
+            return ("external delay-DRAM %s (DETERMINED, R1 F1 -- the opposite "
+                    "direction has zero survivors in all 3 models)%s. %s"
+                    % (role, extra, base))
+        if ad == 0x30:
+            return (base + ". addr8 0x30 marks the FIRST DRAM access of a body "
+                    "(37 of 38 distinct images, R3 sect. 6.2)")
+        return (base + ". DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI "
+                "TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE "
+                "on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)")
 
     # ---- the reverb all-pass core (analysis/r1-allpass-motif.md) ------------
     # NOT decoded: two role assignments survive the constraint search and the
@@ -300,6 +409,20 @@ def annotate(w, at=None):
     if hi == 0x094 and cl == 0xA and lo == 0x200:
         return "LFO: phase wrap, consumes the constant 0x7FFFFF (29/29)"
 
+    # ---- mode 1 WITHOUT the escape = the internal REGISTER FILE -------------
+    # R2 sect. 1: index space shared with the host's own `000.1.NN.000', which
+    # the host stream proves auto-increments.  bit 7 of the index = the effect
+    # unit (K4, FORCED: 368 host packets / 23 indices all < 0x80 in unit-0
+    # streams, 60 / 5 all >= 0x80 in unit-1 streams, and the boot blob writes
+    # the matched pair 000.1.06.000 / 000.1.86.000 back to back).
+    if (cl & 7) == 1:          # class 1 and class 9 (= mode 1 + cursor fetch)
+        role = REGISTER_ROLE.get(ad)
+        unit = "unit %d" % (1 if ad & 0x80 else 0)
+        if role:
+            return "internal register file [%02X] -- %s, %s" % (ad, role, unit)
+        return ("internal register file [%02X], %s (bit 7 = the unit); this "
+                "index has no named role yet" % (ad, unit))
+
     if lo in (0x820, 0x825, 0x827, 0x822):
         return "pointer-load family sibling, target register UNKNOWN"
 
@@ -325,8 +448,16 @@ def annotate(w, at=None):
 
     if w == 0x212200000:
         return "plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)"
-    if hi == 0x212:
-        return "writes mem[ptr] (bit 4), class-independent"
+    # NOTE: the old rule `hi12 == 0x212 -> writes mem[ptr], class-independent'
+    # was WITHDRAWN by R2.  bit 4's TARGET is mode-dependent: mem[ptr] is the
+    # MODE-2 target.  Two mode-1 bit-4 words (w64/w71) have a DETERMINED
+    # destination in the REGISTER space, and w60/w61 are adjacent mode-1 stores
+    # with no pointer-moving word between them, so under a universal mem[ptr]
+    # reading the first is provably dead -- the old rule manufactured four dead
+    # stores in the 23-word output stage.  Bit 4 is now rendered as the flag
+    # `ST' by hi12_text() and given no target unless the mode supplies one.
+    if hi == 0x212 and (cl & 7) == 2:
+        return "writes mem[ptr] (bit 4); mode 2, so the target IS the pointer"
 
     if hi == 0x102:
         return "gain multiply (same op in phaser all-pass and reverb diffuser)"
@@ -366,6 +497,8 @@ def text(w, at=None):
             return "nop"
         if hi == 0x801 and lo == 0x821:
             return "ldptr   #$%02x" % ad
+        if hi == 0x801 and lo == 0x825:
+            return "ldptr.d #$%02x" % ad
         if hi == 0x801:
             return "rstcur"
         if hi == 0x202 and lo == 0x1D5:
@@ -381,7 +514,10 @@ def text(w, at=None):
         s += "  {C-fmt A=%d B=%d}" % (c_a(w), c_b(w))
     s += "  hi12{%s}" % hi12_text(hi)
     if cursor_fetch(w):
-        s += " cur+"
+        # FETCH is not ADVANCE (K4, FORCED).  `cur+' means "fetches AND moves
+        # the cursor on"; `cur' means "fetches, cursor stays put".  Only
+        # class4 == 0xA advances.
+        s += " cur+" if coeff_consumer(w) else " cur"
     note = annotate(w, at)
     if note is not None:
         s += "  [%s]" % note

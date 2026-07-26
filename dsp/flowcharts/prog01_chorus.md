@@ -7,7 +7,7 @@ Image rep **algo 1** &middot; slots 1 &middot; **unit 0** (I-RAM load 84) &middo
 
 > quadrature 2-voice chorus (LFO-swept delay, wet 0.25/0.15)
 
-**70 words**, 19 class-A coefficient multiplies (2 named), 27 instructions still opaque. Landmarks detected: 1 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
+**70 words**, 19 class-A coefficient multiplies (2 named), 23 instructions still opaque. Landmarks detected: 1 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD
@@ -20,7 +20,7 @@ flowchart TD
     N1 --> N3
     N4["C-format immediate loads (C40/C41)<br/>destination register UNKNOWN &mdash; the old 'envelope detector' reading is WITHDRAWN &times;4"]
     N3 --> N4
-    N5["Undecoded core<br/>27 of 70 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N5["Undecoded core<br/>23 of 70 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N4 --> N5
     N6["VOLUME<br/>output level"]
     N5 --> N6

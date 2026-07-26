@@ -40,7 +40,9 @@ effect program set was recovered statically from firmware.
 | `disasm/epilogue.dsm` | yes | GENERATED disassembly of the resident kernel part 2 — the 23-word **output stage**, I-RAM 60..82, which runs last in every frame and holds the two per-unit call-vector words the host rewrites (`analysis/k5-output-stage.md`) |
 | `disasm/progNN_<name>.dsm` | yes | GENERATED disassembly of each distinct image: per word — fields, decoded `hi12` flags, structural annotation, absolute C-RAM coefficient address, and the named coefficient where known |
 | `sym/progNN.sym`, `sym/kernel.sym`, `sym/epilogue.sym` | yes | hand-curated per-program labels/comments (the loss-free annotation source) |
-| `analysis/` | yes | per-roadmap-item decode write-ups with explicit PROVEN / DETERMINED / FORCED / INFERRED / OPEN status on every claim (`k5-output-stage.md`, `r1-allpass-motif.md`, `k4-cursor.md`) |
+| `analysis/` | yes | per-roadmap-item decode write-ups with explicit PROVEN / DETERMINED / FORCED / INFERRED / OPEN status on every claim (`k5-output-stage.md`, `r1-allpass-motif.md`, `k3-pointers.md`, `k4-cursor.md`, `r2-output.md`, `r3-delaydram.md`) |
+| `analysis/isa-adjudication.md` | yes | the **integration pass** that reconciled K3/K4/R2/R3 against each other and against the ISA reference. Confirms R2's census and K4's class-8 result exactly; **falsifies** R3's C-format-contaminated DRAM family and K3's `0x827` D-RAM origin; adds the per-unit STATE-BLOCK BASE |
+| `tools/isa_adjudicate.py` | yes | re-derives every claim on which two passes can disagree, and prints the verdict; stdlib only |
 | `tools/k4_cursor.py` | yes | roadmap **K4** — the C-RAM memory map, the forced constraints on the coefficient-cursor rebase, and the class-1 register file's per-unit banking; prints every number quoted in `analysis/k4-cursor.md` |
 | `tools/dsp_disasm.py` | yes | the Python ISA disassembler — a self-contained, byte-faithful mirror of MAME's `upd6383d.cpp` |
 | `tools/gen_dsp_disasm.py` | yes | the generator (extract → disassemble → annotate → emit) |

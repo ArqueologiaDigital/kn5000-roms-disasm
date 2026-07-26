@@ -7,7 +7,7 @@ Image rep **algo 66** &middot; slots 66 &middot; **unit 0** (I-RAM load 84) &mid
 
 > single delay + flanger
 
-**100 words**, 28 class-A coefficient multiplies (21 named), 44 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s).
+**100 words**, 28 class-A coefficient multiplies (21 named), 42 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD
@@ -22,7 +22,7 @@ flowchart TD
     N2 --> N4
     N5["controls: DELAY DRY/WET, DELAY L, DELAY R, FEEDBACK L, FEEDBACK R"]
     N4 -.-> N5
-    N6["Undecoded core<br/>44 of 100 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N6["Undecoded core<br/>42 of 100 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
     N4 --> N6
     N7["VOLUME<br/>output level"]
     N6 --> N7
