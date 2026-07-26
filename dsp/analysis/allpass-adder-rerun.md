@@ -634,13 +634,23 @@ at all. **Nothing has to be withdrawn — but the number does, and a survivor co
 that moves by 10 % when a harness bug is fixed is a reminder that a marginal is
 only as exhaustive as the executor under it.**
 
-**Still to retest**: `acc-adder.md` §4's `actfirst = 1` arm (22 050 survivors).
-`w7`'s ACTION runs *before* its `acc ← P` there, so its capture half can read the
-accumulator `w6` left — the one place the leak can change a conclusion rather
-than a count. `python3 dsp/tools/r1_allpass_solve.py adjudicate` re-runs it; the
-number is expected to move and the adjudication's *verdict* is not, because the
-verdict rests on the strengthened `acc_adjudicate.py` model, which never used
-this code path.
+**And `acc-adder.md` §4's adjudication is UNAFFECTED — retested, not assumed.**
+`w7`'s ACTION runs *before* its `acc ← P` at `actfirst = 1`, so its capture half
+can read the accumulator `w6` left; that was the one place the leak could change
+a conclusion rather than a count. It did not:
+
+```
+   actfirst = 0  (the SHIPPED order)  : 5145 -> 5635 survivors
+   actfirst = 1  (the LFO's order)    : 22050 -> 22050   -- UNCHANGED
+       ACTION 0x00          35 values  -- still UNCONSTRAINED
+       SRC 0x00 reads        6 values  -- still UNCONSTRAINED
+       ACTION 0x19 capture  FORCED     tA<-acc x22050   -- unchanged
+```
+
+Every claim `acc-adder.md` §4 draws from that arm — that the older model at
+act-first forces the *opposite* capture semantics with equal formal confidence,
+and is therefore not a determination — reproduces exactly. The leak touched one
+count in one arm and nothing else.
 
 *(One further correction while re-reading: `action-field.md` §6's tuple
 "(+bus 2205, −bus 1960, ←bus 735, ←bus−acc 735)" sums to 5 635, not to the 5 145
@@ -671,7 +681,7 @@ internally inconsistent.)*
 
 PC-1…PC-7 were written and stored **before any code was read or run** (verbatim
 in the Appendix); PC-8 and PC-9 were recorded later but each before the
-measurement it names. **Overall: 5 HITS, 4 MISSES, 1 PARTIAL.**
+measurement it names. **Overall: 5 HITS, 5 MISSES, 1 PARTIAL.**
 
 | | prediction | result |
 |---|---|---|
@@ -684,6 +694,7 @@ measurement it names. **Overall: 5 HITS, 4 MISSES, 1 PARTIAL.**
 | **PC-7** | if PC-3 holds, the residual obstruction points at slot 2 as the only tempA writer | **partially, and better than predicted.** Slot 2 is indeed decisive, but as the word whose `hi12[3:1] = 0` **wipes the accumulator**, not as a tempA writer — and that is what makes the STRICT DR-route count 0 even without the clear |
 | **PC-8** | *(recorded in `mult_can_be_s`'s docstring when the second column was written, before any count was run — "a machine that carries the previous read forward in tempA is invisible to `n_ND` and visible here")* the route-agnostic count will be non-zero | **HIT.** 52 920, and one worked example printed symbolically (§6) |
 | **PC-9** | *(recorded in §8 before the retest ran)* SINGLE DELAY's **5 145** is unchanged by the harness fix at the shipped order, because `w6`'s accumulator result is overwritten by `w7`'s `acc ← P` | **MISS.** 5 145 → **5 635**. The overwrite argument is correct and incomplete: restoring `w6`'s `acc += P` opens a new *injection* point, and the 490 extra survivors are exactly those whose input arrives in `P`. Every FORCED conclusion survives; the cardinality does not |
+| **PC-10** | *(same note, same moment)* the `actfirst = 1` arm **can** move, because there `w7`'s ACTION runs first and its capture half may read the accumulator `w6` left | **MISS, in the safe direction.** 22 050 → **22 050**, and `ACTION 0x19 = tA<-acc` still FORCED at 22 050/22 050. Hedging that a number *might* move is not a prediction; the measurement is what settled it |
 
 ---
 
