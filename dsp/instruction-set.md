@@ -362,8 +362,23 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
   lengths, so the numbers cannot separate them. The corpus **ranks** — does not prove —
   the one in which `mem[ptr]` stages the DRAM write. Per-word roles must **not** be
   printed until that is settled (`analysis/r1-allpass-motif.md`).
-- **LFO** — `hi12=0x082` read; `092.A.00.200` phase accumulate; `094.A.00.200`
-  wrap on `0x7FFFFF`.
+- **LFO / OSCILLATOR** — `092.A.dd.200` phase accumulate, `082.2.00.1C0` the
+  phase read, `094.A.dd.200` the wrap on `0x7FFFFF`. **29 blocks in 16 programs**,
+  and it is the machine's one numerically-known block: the increment is
+  `floor(f × 2²³ / 44100)` at **9 of 9** distinct values, for *f* ∈ {0.2, 0.4,
+  0.6, 1.2, 3.0, 4.0, 5.2, 7.4, **1000.0**} Hz (RING MODULATOR is the same
+  mechanism at audio rate), joint null 3.1e-12, and the wrap coefficient is
+  `0x7FFFFF` at 29/29 — 29 of that value's 32 occurrences in the whole 1770-word
+  coefficient corpus. ⚠ **`092.A.00.200` does NOT carry `SRC = 0x00`** — the `00`
+  is `addr8`; `SRC` is `lo12[10:6]` = `0x08`, and all three words carry
+  `ACTION = 0x00`. An exhaustive 1920-machine search **DETERMINES**
+  `SRC 0x08` = a unity multiplicand (the class-A product is the coefficient
+  itself) and `ACTION 0x00` = `acc ← bus` taken **before** the `hi12[3:1]`
+  operation — and, in the same measurement, **falsifies the model they were
+  determined from**: at 24 of the 29 blocks the accumulate word's bit-4 store
+  lands on the very cell the next word reads, and **0 of 1920** machines can run
+  it. Neither code is adopted, and the ALU predicate is unchanged.
+  `analysis/lfo-ramp.md`.
 - **`C00` wait/sync** — both of the machine's `C00` words encode **their own I-RAM address**
   in bits[24:17] (`C00.9.84.000` @76 = 76*32+4; `C00.A.47.407` @82 = 82*32+7), the second
   being the frame terminator. INFERRED: "hold here until event bits[16:12]". It is a
