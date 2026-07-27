@@ -175,16 +175,19 @@ def hi_op(f, mode):
 
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
-                 "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi")
+                 "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
+                 "act1a", "act0d", "act0e")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
-                 src11="mem", dest07="mem", act0b="none", f31hi=None):
+                 src11="mem", dest07="mem", act0b="none", f31hi=None,
+                 act1a=None, act0d=None, act0e=None):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
         self.src11, self.dest07, self.act0b = src11, dest07, act0b
         self.f31hi = f31hi
+        self.act1a, self.act0d, self.act0e = act1a, act0d, act0e
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -266,7 +269,11 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
         return False
 
     if act not in (0x00, 0x07, 0x12, 0x13, 0x14, 0x15, 0x19, 0x0B):
-        return False
+        # ★ SPECULATIVE CODES (2026-07-27).  Each defaults to None = REFUSE, so
+        # the gated behaviour is unchanged; supplying a reading opts in.
+        spec = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e}
+        if act not in spec or spec[act] is None:
+            return False
     if f > 2 and m.f31hi is None:
         return False
 
@@ -326,6 +333,23 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
                 st.mem[st.p] = bus & MASK24
                 if obs is not None:
                     obs.append(("W0B", st.p, bus & MASK24))
+        elif act in (0x1A, 0x0D, 0x0E):
+            r = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e}[act]
+            if r == "tA<-bus":
+                st.ta = bus & MASK24
+            elif r == "tB<-bus":
+                st.tb = bus & MASK24
+            elif r == "tA<-acc":
+                st.ta = datum(st.acc) & MASK24
+            elif r == "tB<-acc":
+                st.tb = datum(st.acc) & MASK24
+            elif r == "mem<-bus":
+                st.mem[st.p] = bus & MASK24
+                if obs is not None:
+                    obs.append(("W", st.p, bus & MASK24))
+            elif r == "out":
+                if obs is not None:
+                    obs.append(("OUT", st.p, bus & MASK24))
 
     busa = bus << ash                          # the bus, in accumulator units
 
