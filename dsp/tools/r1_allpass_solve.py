@@ -2806,7 +2806,23 @@ def sec_schroeder2(C, rom, imgs, names):
                 ("ADDER, strict  ", dict(order=1), STRICT),
                 ("sequential, generous", {}, GENEROUS),
                 ("ADDER, generous + SINGLE DELAY's ACTION 0x19 -> tempA",
-                 dict(order=1), JOINT)]
+                 dict(order=1), JOINT),
+                #  ★ ROBUSTNESS AGAINST THE PARALLEL PASS.
+                #  `action00-discriminator.md' (2026-07-27) falsifies the 18/18
+                #  forcing of `load' by widening the STORE GATE -- a suppressed
+                #  store whose CLEAR is deferred.  The motif's only storing word
+                #  has hi12 bit 7 = 0, so the SUPPRESSION cannot reach it
+                #  (allpass-adder-rerun.md sect. 3, MEASURED) -- but the CLEAR
+                #  itself can still be wrong, and a parameter settled elsewhere
+                #  is not settled inside this search.  So enumerate it here:
+                ("ADDER, strict + bit-4 stores WITHOUT clearing",
+                 dict(order=1, noclr=1), STRICT),
+                ("ADDER, strict + bit-4 neither stores NOR clears",
+                 dict(order=1, noclr=2), STRICT),
+                ("ADDER, joint + bit-4 stores WITHOUT clearing",
+                 dict(order=1, noclr=1), JOINT),
+                ("ADDER, joint + bit-4 neither stores NOR clears",
+                 dict(order=1, noclr=2), JOINT)]
         only = os.environ.get("SCH_ROW")
         refs = topology_refs(g2, DEL, xs)
         random.seed(5)

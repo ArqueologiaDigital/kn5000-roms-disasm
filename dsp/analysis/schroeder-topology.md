@@ -25,6 +25,7 @@ SCH_PARTS=search SCH_ROW=1       python3 dsp/tools/r1_allpass_solve.py schroeder
 SCH_PARTS=search SCH_ROW=0       python3 dsp/tools/r1_allpass_solve.py schroeder2   # generous, ~1 h
 SCH_PARTS=search SCH_ROW=2       python3 dsp/tools/r1_allpass_solve.py schroeder2   # sequential
 SCH_PARTS=search SCH_ROW=3       python3 dsp/tools/r1_allpass_solve.py schroeder2   # ★ the JOINT row
+SCH_PARTS=search SCH_ROW=4|5|6|7 python3 dsp/tools/r1_allpass_solve.py schroeder2   # the CLEAR relaxations
 ```
 
 > **NAMING.** `sec_schroeder` was already taken — by section 9 of the same
@@ -43,9 +44,9 @@ of an exhaustive search agrees) / **CONSISTENT** / **FALSIFIED** / **OPEN**.
 | # | statement | label |
 |---|---|---|
 | **A** | ★★★ **THE REVERB CORE IS A COMB NETWORK, AND IT IS NOT EMPTY.** Against the two published zeros: **16 520 of 20 580 000** machines reproduce a comb topology in the GENEROUS space (the apples-to-apples re-run), and **112 of 823 200** in the STRICT sub-space that actually ships — at two independent delay sets, with the all-pass reference carried inside the same reference set and matched by **0** of them. The multiplicand and the written value are both `w[r] + t[r−1]`: the fresh delay read plus the previous stage's product. | **MEASURED** |
-| **B** | ★★★ **AND IT UN-BREAKS THE `ACTION 0x00` CONTRADICTION, IN FAVOUR OF WHAT SHIPS.** `ACTION 0x00`'s accumulator half is **`acc ← bus`** — **`load`** — in **16 520 of 16 520** generous survivors and **112 of 112** strict ones. That is exactly what `acc-adder.md`'s three-context joint solve forced 18/18 and exactly what `exec_alu()` implements. The all-pass hypothesis was the *only* thing demanding an `add`-like code, and the all-pass hypothesis is falsified. **Live contradiction #1 is RESOLVED.** | **FORCED** |
+| **B** | ★★★ **AND IT DECIDES `ACTION 0x00` — GIVEN THE BIT-4 CLEAR.** Its accumulator half is **`acc ← bus`** (**`load`**) in **16 520/16 520** generous, **10 080/10 080** sequential, **112/112** strict and **12 740/12 740** joint survivors — three spaces, both accumulator models. It does **not** rest on the 18/18 three-context solve, which the parallel `action00-discriminator.md` falsified the same day (the gate widening that broke it differs only where `hi12` bit 7 is **set**, and this motif's only storing word has bit 7 = 0). ★★ **But REMOVE the clear and the forcing goes with it** — 12 740 : 1 284 in the joint space, 9 380 : 1 284 with the store gone too — which **independently corroborates that note's §0-C**: `act00` and the store gate really are one question, reached here from a different program with a different acceptance test. | **FORCED given the clear**; 90.8 % without |
 | **C** | ★★ **AND IT FALSIFIES THE STRICT VOCABULARY — via a THIRD contradiction that then resolves.** The strict sub-space forces `ACTION 0x19 = tB ← bus`, which contradicts SINGLE DELAY's **tempA** (5 635/5 635, and `tA<-acc` 22 050/22 050 at act-first). Enumerated rather than assumed: restrict `0x19`'s capture to tempA and re-run the whole search — **12 740 comb machines survive**, and every one of them forces `ACTION 0x19`'s capture half to **`tA ← acc`** *and* requires `0x19` to **route the bus into the accumulator**. So `"only ACTION 0x00 routes the bus"` — the reading the device implements — is **FALSIFIED**, conditional on the comb plus SINGLE DELAY. | **FORCED (joint) / a FALSIFICATION** |
-| **D** | **`SRC 0x00` still reads the delay-RAM data register — 16 520/16 520 and 112/112.** So live contradiction #2 (the reverb needs `DR`, SINGLE DELAY forbids it) is **NOT** resolved; it now has a fifth independent witness, and it is the last one standing. | **FORCED** |
+| **D** | ★★ **`SRC 0x00 = DR` IS REINSTATED AS A REAL CONTRADICTION.** `action00-discriminator.md` §0-J dismissed the reverb's demand as *a necessary condition of a refuted premise* — true of the all-pass. **The comb is not refuted**, and it makes the same demand: `DR`, FORCED in every row and under both clear relaxations, while SINGLE DELAY has 0 of 5 635. A necessary condition of a **supported** hypothesis is evidence. **Contradiction #2 is the only one left, and it is now the highest-value experiment on this chip.** | **FORCED** |
 | **E** | ★★ **A DEGENERATE CONTROL, FOUND IN THE PUBLISHED WORK.** `sec_control` and `sec_strict_control` run the all-pass reference with the ROM's real ladder-0 delays `[127, 435, 489, 183, 522]` over **64 samples**. `min(delay) = 127 > 64`, so **not one delay line ever recirculates** — every read returns 0 and the reference collapses to `y = x·Π(−g_k)`, a pure scalar. Those controls were asserting *"the machine's output is a scalar multiple of x"*. **They could not fail.** | **MEASURED**, a **FALSIFICATION** |
 | **F** | **The control survives repair; its published figures do not.** Re-run at delays that recirculate, both controls still MATCH — but at `extract = M, scale = −1.000`, not the published `extract = P, scale = +1.000`, which was the zero-delay artefact. **The searches are unaffected**: `action_search` uses delays `[3, 5]` over 32 samples, which do recirculate. | **MEASURED** |
 | **G** | **The controls of THIS pass are shipped with the cases where they say NO.** The comb-cascade control is accepted; its twin — identical except that `tA` is captured *before* the accumulate, so that **write == multiplicand** — is **REJECTED at 6 of 6** configurations. The pipe-comb control is accepted with the correct `(b, c)` label; flipping `b` **moves** the label; dropping the product from the loop, storing a raw read, removing the pipeline trail and mis-landing the read each **REJECT at 6 of 6**. | **MEASURED** |
@@ -99,6 +100,7 @@ substance:
 | **PC-6** | (implicit) the controls would behave | **MISS** — two of the four "wrong twins" were not twins at all (§0-H), and the *published* controls turned out to be degenerate (§0-E) |
 | **PC-7** | `SRC 0x00 = DR` would again be forced | **HIT** — every row, and the contradiction with SINGLE DELAY survives untouched |
 | **PC-8** | (not predicted at all) | ★★ **UNFORESEEN** — the pass produced a *third* contradiction, at `ACTION 0x19`, and resolved it against the **strict vocabulary** rather than against either block (§6.6). Nothing in the prediction anticipated that the shipped "only `0x00` routes the bus" reading would be what breaks. |
+| **PC-9** | recorded mid-pass, after rows 4/5: *"the comb's `load` does not depend on the store or the clear at all"* | ★★ **MISS.** True in the strict space (112/112, 84/84) and **false in the joint space**: removing the clear leaves 12 740 `load` against 1 284 others — a majority, not a forcing (§6.7-i). Reported rather than quietly scoped to the rows that agreed. |
 
 ---
 
@@ -443,6 +445,107 @@ The §0-C result (`ACTION 0x00 ; tA ← acc` FORCED in the strict space) is
 therefore **the strict space's answer, not the chip's**, and it is withdrawn as
 a determination — see §8.
 
+### 6.7 ★★ RECONCILIATION with `action00-discriminator.md`, committed the same day
+
+A parallel pass ([`action00-discriminator.md`](action00-discriminator.md),
+commit `1931927`) landed while this search was running, and it engages this
+note's two headline results directly. Both sides move.
+
+**(i) Its §0-A falsifies the 18/18 forcing of `load`** — widening the store gate
+by one entry (a bit-7-*suppressed* store whose CLEAR is deferred to the end of
+the word) turns the three-context joint solve's 18/18 into **33 survivors with
+`load` ×15, `add` ×12, `rload` ×6**. **So §0-B of this note must not lean on the
+18/18, and it no longer does.** What replaces it is stronger, not weaker:
+
+* the reverb comb forces `load` **on its own**, 16 520/16 520 + 10 080/10 080 +
+  112/112 + 12 740/12 740, in three spaces and under both accumulator models;
+* **the widening that broke the 18/18 cannot reach this motif.** The new gates
+  differ only where `hi12` bit 7 is **set**, and the motif's only storing word
+  (`012.2.00.680`) has bit 7 = **0** — MEASURED in `allpass-adder-rerun.md` §3
+  and reprinted by `ADDER_PARTS=gate`;
+* and the *clear* itself is enumerated here rather than assumed. Rows 4 and 5
+  re-run the strict search with `hi12` bit 4 storing **without** clearing, and
+  with it doing **neither**:
+
+  ```
+     [4] ADDER, strict + bit-4 stores WITHOUT clearing
+         1428 loop survivors -> 112 comb;  ACTION 0x00 acc op FORCED bus;  SRC 0x00 FORCED DR
+     [5] ADDER, strict + bit-4 neither stores NOR clears
+          532 loop survivors ->  84 comb;  ACTION 0x00 acc op FORCED bus;  SRC 0x00 FORCED DR
+     [6] ADDER, joint  + bit-4 stores WITHOUT clearing
+        37538 loop survivors -> 14024 comb;  SRC 0x00 FORCED DR
+        ACTION 0x00 acc op   4 values   bus x12740   bus-acc x444  +bus x420  -bus x420
+     [7] ADDER, joint  + bit-4 neither stores NOR clears
+        27458 loop survivors -> 10664 comb;  SRC 0x00 FORCED DR
+        ACTION 0x00 acc op   4 values   bus  x9380   bus-acc x444  +bus x420  -bus x420
+        ACTION 0x19 capture  2 values   tA<-acc x10022   tA<-bus x642
+  ```
+
+★★ **AND ROW 6 IS A MISS AGAINST THIS NOTE'S OWN ROBUSTNESS CLAIM — REPORTED,
+NOT BURIED.** In the *joint* space, removing the clear un-forces `load`: 12 740
+`load` against 1 284 others, a 90.8 % majority and **not** a forcing — 88.0 %
+with the store dropped as well (row 7). (The 12 740 `load` machines are
+literally the same set as row 3's; the relaxation only *adds* non-`load` ones,
+and the same 1 284 intruders appear in both relaxations.) The strict rows kept it forced only because the strict
+vocabulary is narrower — and §6.6 falsifies that vocabulary. So the honest
+status is:
+
+> **`ACTION 0x00 = load` is FORCED in every space *given the bit-4 clear*
+> (16 520/16 520, 10 080/10 080, 112/112, 12 740/12 740, both accumulator
+> models) and is a 90.8 % majority without it.**
+
+★★★ **Which independently corroborates that note's §0-C** — *"the two open
+questions are one question: `act00` and the store gate are locked together"*.
+Reached here from a completely different direction, in a different program, with
+a different acceptance test: **removing the clear is exactly what un-forces
+`load` here too.** Two routes to the same coupling is much better evidence than
+either alone, and it is a better result than a flat "`load` is forced".
+
+★ **Intersecting what remains: that note's widened joint solve allows
+`{load ×15, add ×12, rload ×6}`; the comb *with the clear* allows only `load`,
+and *without* it prefers `load` 12 740 : 1 284 while giving `add` 420. So the
+intersection is `load`, but it inherits the same antecedent — and the deciding
+bit is still whether the bit-4 store clears.**
+
+**(ii) Its §0-D says a fourth context does not exist. This pass is one — of a
+different kind, and the difference must be stated.** That census asked for a
+block that can bear the difference **and** whose arithmetic is known
+*independently of the DSP*; only PARAMETRIC EQ and SINGLE DELAY qualify, and
+both are blind. But its own site list names the discriminating words:
+
+```
+   algo 16  ROOM REVERB 1 : 9 sites -- all of them 104.2.00.000, f31 = 2,
+                            OBSERVED one word later by SRC 0x10
+```
+
+That is **slot 1 of this motif**, observed at slot 2 — exactly the mechanism the
+symbolic trace in §6.3 runs through. So the reverb *can* discriminate; what it
+lacked was known mathematics. **This pass supplies them** — but by *derivation*,
+from a search with 16 520 survivors and 0 for the competing hypothesis, not
+independently of the DSP. **It is therefore weaker evidence than PARAMETRIC EQ
+would have been, and it is not nothing.** Stated that way rather than claimed as
+an equal.
+
+**(iii) Its §0-J — "neither of the brief's two live contradictions is a
+contradiction between two blocks, because the reverb's demands are necessary
+conditions of a refuted premise" — is right about the premise and is
+SUPERSEDED for `SRC 0x00`.** The refuted premise was the all-pass. The comb is
+not refuted: it has 16 520 survivors, and **it makes the same demand**,
+`SRC 0x00 = DR`, at 16 520/16 520, 10 080/10 080, 12 740/12 740 and under both
+clear relaxations. A necessary condition of a *supported* hypothesis is
+evidence. **Contradiction #2 is reinstated as a genuine two-block
+contradiction**, and it is now the only one left.
+
+Conversely §0-J is **upheld and sharpened for `ACTION 0x00`**: the reverb's old
+demand that `0x00` *keep* the accumulator really was an artefact of the refuted
+all-pass, and the comb's demand runs the other way.
+
+**(iv) One structural fact was discovered twice, independently, on the same
+day** — `hi12[3:1] == 0` makes `load`, `add` and `rload` the same expression
+(that note's §0-D, this note's §0-H/§5.1). Here it came out of a control that
+refused to behave; there, out of a decidability census. Agreement between two
+routes to the same fact is worth recording.
+
 ---
 
 ## 7. What is now FORCED, CONSISTENT and OPEN
@@ -454,12 +557,19 @@ a determination — see §8.
   against **0** for the all-pass in every one of them, at two delay sets, with a
   positive control that is demonstrated to reject the write==multiplicand
   property and accept the comb.
-* ★ **`ACTION 0x00`'s accumulator half is `acc ← bus` (`load`).** 16 520/16 520,
-  10 080/10 080, 112/112, 12 740/12 740 — **all three spaces and both
-  accumulator models.** Agrees with the 18/18 three-context joint solve and with
-  the shipped `exec_alu()`. **Live contradiction #1 is resolved.**
-* **`SRC 0x00` reads the delay-RAM data register** — FORCED in every row.
-  Contradiction #2 is untouched and now has a fifth witness.
+* ★ **`ACTION 0x00`'s accumulator half is `acc ← bus` (`load`) — GIVEN the bit-4
+  clear.** 16 520/16 520, 10 080/10 080, 112/112, 12 740/12 740: all three
+  spaces, both accumulator models, and 112/112 + 84/84 in the strict space even
+  with the clear relaxed. It does **not** rest on the 18/18 joint solve, which
+  `action00-discriminator.md` falsified the same day; the widening that broke
+  that solve cannot reach a motif whose only storing word has `hi12` bit 7 = 0.
+  **Live contradiction #1 is resolved.** ★ *Not* forced once the clear is
+  removed in the joint space (90.8 % `load`) — moved to OPEN below, and it
+  corroborates that note's `act00`↔gate coupling.
+* **`SRC 0x00` reads the delay-RAM data register** — FORCED in every row and
+  under both clear relaxations. Contradiction #2 is not merely untouched: it is
+  **reinstated**, because the demand no longer hangs off the refuted all-pass
+  (§6.7-iii).
 * **The multiplicand is `w[r] + t[r−1]`** — the fresh read plus the previous
   stage's product, and (when the write takes the bus) the same number is written
   to the line.
@@ -497,6 +607,11 @@ a determination — see §8.
 * **`ACTION 0x19`'s accumulator op** — 4 values, and SINGLE DELAY does not pin it
   either. Its *capture* half is now joint-forced; its *accumulator* half is the
   next cheap win.
+* ★ **Whether the bit-4 store CLEARS the accumulator.** `allpass-adder-rerun.md`
+  DEMOTED this question; this pass **RE-PROMOTES** it, from the other side: it is
+  what decides whether `ACTION 0x00 = load` is forced or merely 90.8 % likely,
+  and `action00-discriminator.md` §0-C reaches the same coupling from the LFO.
+  **Two independent programs now say the same single bit is the blocker.**
 * **Which comb network** — the write-source choice (§6.4).
 * **What feeds the ladder** and what the output stage does with it: this pass
   decodes the *core*, not the 133-word program around it.
@@ -532,6 +647,16 @@ a determination — see §8.
 * ★★ **The strict vocabulary is falsified conditionally** — `0x19` routes the
   bus. This is a constraint on *every* remaining ACTION solve, and it enlarges
   the space each of them must search.
+* ★★ **`SRC 0x00` is now the only live contradiction, and it is a real one.**
+  `action00-discriminator.md` §0-J retired it as a condition of a refuted
+  premise; the comb restores it. A **third** block that needs `SRC 0x00` to
+  carry data — neither the reverb nor SINGLE DELAY — decides it.
+* **The reverb core is now a usable discriminator for OTHER codes**, at the nine
+  `104.2.00.000` sites that same census flags as observable. `ACTION 0x0B` and
+  the write source are the obvious next things to hang on it.
+* **Audit every numeric control for delay degeneracy** (§3). Checked here:
+  `acc_adjudicate.py` and `sec_singledelay` use `D = 7` over 22–24 samples and
+  are FINE; the defect is confined to the two ladder controls.
 * ★ **`hi12[3:1] == 0` hides the `load`/`add`/`rload` distinction entirely.** Any
   determination of an ACTION's accumulator half made at such a word is
   **vacuous**, in any block. This is worth sweeping for.
