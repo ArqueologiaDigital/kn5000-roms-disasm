@@ -42,8 +42,7 @@ rendered audio cannot have moved. §11.
 | **E** | ★★ **CLASS `(1,2)` IS FORCED, AND IT IS THE ORDINARY STORE.** 17 928/17 928 survivors give `(1,2)` = **store the accumulator to `mem[ptr]`, BEFORE the word's own ALU step**; only the clear is free (never/before/after, 5 976 each). Class `(0,1)` is FORCED by the biquad to **store the accumulator to `mem[ptr]` with the clear taken BEFORE the ALU** — with a measured blindness: at PARAMETRIC EQ's store words the bus *is* the accumulator, so `store the BUS` is bit-identical (**0.198 dB**, accepted) and the store's *source* is not decidable there. | **FORCED** (both) + **MEASURED** (the blindness) |
 | **F** | ★★★ **THE CONDITION QUESTION — `b7 & f31 == 1` vs `b7 & f31 != 2` — IS WORTH ONE CORPUS WORD, AND ITS STORE IS DEAD.** `lfo-ramp.md` item K and `acc-adder.md` §8 leave it open as *"13 corpus words, nine of them the COMPRESSOR's envelope step at `hi12[3:1] == 5`"*. MEASURED: the disagreement set is **11**, not 13; **9** of them trap because `hi12[3:1] > 2` is an undecoded accumulator operation and **1** more (`090.2.FB.40E`) because ACTION `0x0E` is not anchored — **both reasons independent of bit 7 and of the gate**. Exactly **one** word's behaviour changes: `090.A.00.1D5`, ROOM REVERB 1 `w107`, and its cell is overwritten by `w108` at the same pointer with no read in between. **A dead store.** | **MEASURED**, a **FALSIFICATION** of the published count |
 | **G** | ★★★ **THE WHOLE GATE IS WORTH 17 WORDS IN 9 PROGRAMS, NOT 130.** Of the 130 class-`(1,1)` words, **114 trap for reasons that have nothing to do with bit 7** — SRC `0x1C` ×46, SRC `0x00` ×31, SRC `0x08` ×29, ACTION `0x1A` ×6, ACTION `0x0E` ×2, none of them anchored. Words the shipped decoder refuses **and would accept if the gate were settled — refused by guard 7 and by nothing else — number 17** (16 at class `(1,1)`, 1 at `(1,0)`). ★ And **not one of the 16 carries ACTION `0x00`**, so guard 7's *"`f31 == 1` requires ACTION `0x00`"* clause refuses every one of them today. | **MEASURED** |
-| **H** | ★★ **THE MIRROR CHECK PASSES EXACTLY — AND ONLY AFTER IT CAUGHT A BUG IN THIS PASS.** Restricted to the published spaces this tool returns `4416 → 4416 → 3312` (`action00-discriminator.md` published **3312**) and `1632 → 1632 → 1224` (`acc-adder.md` published **1224**), with the `(act00, gate)` table reproduced **row for row**. It did not, on the first run: mapping `(condition, effect, sttime)` as an independent product gave 3456, because in the published tool the global `sttime` also moves a **gated** word's clear. Fixing that exposed two defects in the published space. **Degeneracy:** | **MEASURED** |
-| **H′** | the 18 `(gate name, sttime)` pairs are only **16 distinct machines** — `b7_f31_1_keepclear` and `b7_f31_1_clrlate` coincide at `sttime ∈ {after, st_before_clr_after}`. **Hole:** `action00-discriminator.md`'s `STGATE` list has `b7_f31_1_{off, keepclear, clrlate}` but only `b7_ne2_{off, clrlate}` — ★ **`b7_ne2_keepclear` was never enumerated.** Method rule 3, in the file that wrote method rule 3. | **MEASURED** |
+| **H** | ★★ **THE MIRROR CHECK PASSES EXACTLY — AND ONLY AFTER IT CAUGHT A BUG IN THIS PASS.** Restricted to the published spaces this tool returns `4416 → 4416 → 3312` (`action00-discriminator.md` published **3312**) and `1632 → 1632 → 1224` (`acc-adder.md` published **1224**), with the `(act00, gate)` table reproduced **row for row**. It did not on the first run: mapping `(condition, effect, sttime)` as an independent product gave 3456, because in the published tool the global `sttime` also moves a **gated** word's clear. Fixing that exposed two defects in the published space. ★ **DEGENERACY:** the 18 `(gate name, sttime)` pairs are only **16 distinct machines** — `b7_f31_1_keepclear` and `b7_f31_1_clrlate` coincide at `sttime ∈ {after, st_before_clr_after}`. ★ **HOLE:** `action00-discriminator.md`'s `STGATE` list has `b7_f31_1_{off, keepclear, clrlate}` but only `b7_ne2_{off, clrlate}` — **`b7_ne2_keepclear` was never enumerated.** Method rule 3, in the file that wrote method rule 3. | **MEASURED** |
 | **I** | ★ **AND THE OBSERVATIONAL QUOTIENT IS `act00`-DEPENDENT — WHICH IS THE COUPLING, MEASURED AS A NUMBER.** At the LFO's `092.A.00.200` the 33 effects collapse to **15** distinguishable machines under `act00 = load` and **23** under `act00 = add`: with `load` the word's own ALU overwrites the accumulator and a third of the gate becomes invisible. `action00-discriminator.md` item C said the two questions are one; here is *how much* of the gate each reading of `ACTION 0x00` lets you see. The coupling itself re-derives exactly: `add` and `rload` occur **only** with a late clear, `bsel` **only** with an early one, `load` with all three. | **MEASURED** |
 | **J** | ★★★ **SECOND TASK — `SRC 0x00`: THE AMBIGUITY DOES NOT CLOSE, AND THE CELL HAS A NAME ON THE FRONT PANEL.** `blocking-read.md` item G makes `SRC 0x00 = mem[ptr]` forced *only while SINGLE DELAY's two "input-mix" coefficients are 0.0000*, and names an emulator capture. A capture can only SAMPLE; the firmware's own parameter table decides, exhaustively. MEASURED: SINGLE DELAY's `w3` coefficient is **C-RAM cell `0x00`**; algorithm 9's T2 stream writes it with `op 73 #00`; and `register-space.md`'s UI alignment names opcode `0x73` **`FEEDBACK L`** (`FEEDBACK L`/`FEEDBACK R`/`RESONANCE`, 28 of 28). ★ **The "input-mix coefficient that happens to be zero" is the SINGLE DELAY FEEDBACK knob, and `0.0000` is simply *feedback = 0* as the shipped default.** Corroborated by a control that could fail: at all **28 of 28** `op 0x73` targets the ROM-loaded C-RAM value lies inside that record's own `(lo, hi)` pair — **0 outside**, against 85 % corpus-wide — and **8 of the 28 are already non-zero** (`+0.3000`, `+0.0250`). **`SRC 0x00 = mem[ptr]` stays CONSISTENT, the 30 PARTIAL + 10 TRAP slots keep trapping, and the capture is superseded.** | **MEASURED** |
 | **J′** | ★★ **AND IT PUTS A PUBLISHED NAME IN DOUBT — flagged as a lead, not a result.** `action00-discriminator.md` §0-H calls `w3`/`w4` "the two input-mix coefficients" and `w6` (cell `0x02`, `0.5000`) "the feedback". The host calls cell `0x00` **FEEDBACK L** and cell `0x09` **FEEDBACK R**, and does not name cell `0x02` at all. Either the SD motif's roles are mis-assigned or algorithm 9's image contains more than one delay whose cells do not line up with the first motif instance. **OPEN**, and it belongs to whoever next touches SINGLE DELAY. | **OPEN** |
@@ -386,6 +385,29 @@ disagree with the ramp and the biquad, which is what makes it worth running.
       NOT b7                 27 of 114 (23.7 %)  -145   <- biquad kills it
 ```
 
+### 6.1 A new discriminator for class `(1,1)`, tried and empty
+
+The LFO leaves class `(1,1)` at three families and only one of them — `LOAD` —
+*reads* `mem[ptr]`. Under it an earlier store to the same cell is **live** where
+the other two leave it dead. That is a structural test, independent of every
+numeric criterion, and it can fire:
+
+```
+   class (1,1) = no memory access : dead 128  live 302  opaque 120
+   class (1,1) = LOAD (reads it)  : dead 128  live 302  opaque 120
+
+   class-(1,1) words preceded on the same cell by a write with no read
+   between -- sites where the test CAN fire                      : 35
+   ... of which the earlier store is DEAD under `none'           :  0
+```
+
+**It fires at 35 sites and finds nothing**: at every one of them the earlier
+store is already live. The structural criterion is therefore **measurably** blind
+to the `LOAD` reading, not silently blind — and class `(1,1)` keeps all three
+families. Recorded as a **MISS**.
+
+### 6.2 The condition, priced against the base rate
+
 Both class-`(1,0)` words are dead if they fire, and the marginal `b7 & f31 != 2`
 removes exactly **one** more dead store than `b7 & f31 == 1`. **With a base rate
 of 32.8 %, two-of-two dead is p ≈ 0.11 under the null** — evidence, not a
@@ -606,6 +628,7 @@ never-decidable ACTION codes are new.
 | **P-8** | the class-`(1,0)` words will turn out to be dead stores | **HIT**, 2 of 2 — but the base rate is 32.8 %, so it is reported as `p ≈ 0.11` evidence, not a forcing |
 | **P-9** | the emulator capture will be needed to settle `SRC 0x00` | **MISS.** The firmware's own parameter table answers it exhaustively and in the direction that keeps the ambiguity **open**; no capture was run |
 | **P-12** | *(recorded after reading the sibling pass)* the cell will turn out to be an obscure internal coefficient with no user name | ★ **MISS, and the best miss of the pass.** It is `FEEDBACK L` — a named front-panel knob spanning ±0.48, with 8 of the 28 `op 0x73` targets already non-zero in the ROM image |
+| **P-13** | the dead-store census will separate `LOAD` from `none` at class `(1,1)`, because only `LOAD` reads the cell | **MISS.** The test can fire at 35 sites and changes **0** verdicts: at every one the earlier store is already live. Reported because the blindness is now *measured* rather than assumed |
 | **P-10** | the gate is worth ~130 words | **MISS by 8×.** 17, in 9 programs, and none of the 16 class-`(1,1)` ones carries `ACTION 0x00` |
 | **P-11** | no frame completes and no audio moves | **HIT, by construction** — nothing that runs in the emulator was edited |
 

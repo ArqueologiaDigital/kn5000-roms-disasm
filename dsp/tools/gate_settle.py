@@ -675,6 +675,76 @@ def deadness(ws, k, ptr, src11_inert, opaque_kills):
     return False
 
 
+def _deadness2(ws, k, ptr, c11_reads):
+    """Deadness with class (1,1) optionally counted as a READER of its own cell.
+    Class-(1,1) words are never WRITERS of mem[ptr] here -- that is what the LFO
+    FORCES (sect. `lfo'), 0 of 17 928 survivors."""
+    p = ptr[k]
+    for j in range(k + 1, len(ws)):
+        w = ws[j]
+        if DIS.c_format(w):
+            return None
+        if ptr[j] != p:
+            continue
+        hi = DIS.hi12(w)
+        b7, f, st = (hi >> 7) & 1, DIS.hi_f31(hi), bool(hi & 0x10)
+        if c11_reads and st and b7 and f == 1:
+            return False
+        if DIS.lo_src(w) == 0x07:
+            return False
+        if DIS.lo_act(w) == 0x07:
+            if DIS.lo_src(w) == 0x11:
+                continue
+            return True
+        if st:
+            if b7 and f == 1:
+                continue
+            return True
+    return False
+
+
+def _dead_under(sw, c11_reads):
+    d = l = u = 0
+    for (algo, k, w, b7, f, ws, ptr) in sw:
+        if b7 and f == 1:
+            continue
+        v = _deadness2(ws, k, ptr, c11_reads)
+        if v is True:
+            d += 1
+        elif v is False:
+            l += 1
+        else:
+            u += 1
+    return d, l, u
+
+
+def _load_sites():
+    """(sites where the LOAD test can fire, sites where it would rescue)."""
+    cand = resc = 0
+    for algo, ws in images():
+        ptr = walk(ws)
+        for k, w in enumerate(ws):
+            if DIS.c_format(w):
+                continue
+            hi = DIS.hi12(w)
+            if not ((hi & 0x10) and ((hi >> 7) & 1) and DIS.hi_f31(hi) == 1):
+                continue
+            for j in range(k - 1, -1, -1):
+                w2 = ws[j]
+                if DIS.c_format(w2):
+                    break
+                if ptr[j] != ptr[k]:
+                    continue
+                if DIS.lo_src(w2) == 0x07:
+                    break
+                if DIS.lo_act(w2) == 0x07 or (DIS.hi12(w2) & 0x10):
+                    cand += 1
+                    if _deadness2(ws, j, ptr, False) is True:
+                        resc += 1
+                break
+    return cand, resc
+
+
 def sec_dead():
     hdr("dead -- the STRUCTURAL criterion, and what it says about (0,0)/(1,0)")
     print("""A store whose cell is overwritten before anything reads it computes
@@ -734,6 +804,27 @@ rate is printed first.""")
       -> Both are DEAD STORES if they fire.  The two published conditions differ
          on EXACTLY these words: `b7 & f31 == 1' lets them store, `b7 & f31 != 2'
          suppresses them.  The base rate above is what this is worth.""")
+
+    print("""
+   * A NEW DISCRIMINATOR, TRIED AND EMPTY.  The LFO leaves class (1,1) at three
+   families -- `none', `store -> elsewhere' and `LOAD'.  Only `LOAD' READS
+   mem[ptr], so under it an earlier store to that same cell is LIVE where the
+   other two leave it dead.  That is a structural test, and it can fire:""")
+    c11_dead = _dead_under(sw, False)
+    c11_load = _dead_under(sw, True)
+    print("      class (1,1) = no memory access : dead %3d  live %3d  opaque %3d"
+          % c11_dead)
+    print("      class (1,1) = LOAD (reads it)  : dead %3d  live %3d  opaque %3d"
+          % c11_load)
+    cand, resc = _load_sites()
+    print("      class-(1,1) words PRECEDED on the same cell by a write with no"
+          "\n      read between -- i.e. sites where the test CAN fire : %d" % cand)
+    print("      ... of which the earlier store is DEAD under `none'    : %d"
+          % resc)
+    print("""      -> the test fires at %d sites and finds NOTHING: at every one of them the
+         earlier store is already live.  The structural criterion is therefore
+         MEASURABLY BLIND to the LOAD reading, not silently blind.  Recorded as
+         a MISS.""" % cand)
 
     # per-condition residual dead-store count
     print("\n   residual PROVABLY-DEAD stores, by gate condition"
@@ -1741,8 +1832,10 @@ SECTIONS = [("enum", sec_enum), ("price", sec_price), ("census", sec_census),
             ("lfo", sec_lfo), ("joint", sec_joint)]
 
 if __name__ == "__main__":
-    want = sys.argv[1:] or ["enum", "census", "control", "dead", "vacuity",
-                            "biquad"]
+    #  the default set is everything that runs in a couple of minutes; `mirror',
+    #  `lfo' and `joint' are exhaustive searches and must be asked for by name.
+    want = sys.argv[1:] or ["enum", "price", "census", "control", "condition",
+                            "hostmix", "dead", "vacuity", "biquad"]
     for name, fn in SECTIONS:
         if name in want:
             fn()
