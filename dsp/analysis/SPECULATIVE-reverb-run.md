@@ -117,7 +117,11 @@ one.
 
 ---
 
-## ★★★ Result 7 — `ACT 0x15` and the diffuser ladder (the best thing here)
+## ⛔ Result 7 — `ACT 0x15` as a capture: PROPOSED, THEN REFUTED
+
+> **KILLED THE SAME DAY, by the biquad, at 53.474 dB.** Read the whole section
+> anyway: the hypothesis died but **the problem that motivated it did not**, and
+> that surviving problem (§7.1) is the real output of this pass.
 
 Tracing the frame in which the pre-delay returns (frame 800) shows the ladder
 failing for a *specific, mechanical* reason:
@@ -160,7 +164,49 @@ The resulting cascade:
 ±1 LSB, in ladder order, through all eleven stages** — where the shipped reading
 dies after two.
 
-### What this is and is not
+
+### ⛔ 7.0 The refutation
+
+The solved biquad carries `ACT 0x12` once and **`ACT 0x15` three times**, and it
+captures `tempA` at word 0 via `ACT 0x13`. A `0x15` that also writes a temporary
+clobbers that capture two words later. Scored against the firmware's own
+coefficient designer:
+
+| `ACT 0x15` | worst-band error |
+|---|---|
+| `none` (shipped) | **0.198 dB** — accepted |
+| `tA<-acc` | **53.474 dB** — REJECTED |
+| `tB<-acc` | 31.897 dB — REJECTED |
+| `tA<-bus` | 53.474 dB — REJECTED |
+| `tB<-bus` | 59.311 dB — REJECTED |
+
+**`ACT 0x15` is not a capture.** The shipped no-op stands, and the 1323-word
+blast radius does not open. One query, known mathematics, no ambiguity — exactly
+what the gated instrument is for, and exactly the right way for a speculative
+lead to die.
+
+### ★ 7.1 But the problem it was invented to solve is REAL, and it survives
+
+The refutation removes the answer, not the question. Under **every** semantics
+this project currently has, the reverb's BLOCK A does this:
+
+```
+.3  acc <- tempB + P      the delayed sample arrives
+.4  acc <- P              it is destroyed, one word later
+.5  multiply tempA        which never saw it
+```
+
+A filter stage cannot load its delay-line sample and discard it before the
+multiply. So **something in the current decode of BLOCK A is wrong**, and it is
+localised to three words — `.2` (`ACT 0x19`), `.3` (`SRC 0x1A`, `ACT 0x00`) and
+`.4` (the DRAM read, `f31 = 0`).
+
+That is a **constraint on the model that does not depend on any speculation**,
+and it is the durable result of this pass. Note which word is the prime suspect:
+`.2` carries **`ACT 0x19`** — the code shipping on a *withdrawn* forcing, whose
+destination `capture-signature.md` showed is not actually measured.
+
+### What the ladder result was, before it fell
 
 **Is:** a mechanism argument (the stage must capture before it clobbers) that
 predicts a specific reading, plus a functional test that the reading passes and
@@ -185,8 +231,9 @@ device.
 
 **Carry back (re-derive under the normal discipline first):**
 
-1. ★ **Result 7** — `ACT 0x15 = tempA ← acc`. Highest value and highest risk:
-   1323 corpus words carry that code, and it currently ships as a no-op.
+1. ★★ **Result 7.1** — BLOCK A discards its delayed sample under every current
+   semantics. A model-level defect, localised to three words, independent of the
+   speculation. `ACT 0x19` at `.2` is the prime suspect.
 2. **Result 6** — the executed flush-read / prime-write behaviour. Independent
    confirmation of a published FORCED result, from execution rather than
    structure.
@@ -205,6 +252,7 @@ device.
   because the run did not vary them.
 - The claim that `0x0E = mem[ptr] ← bus`, until it is re-derived without
   assuming the injection point.
+- **`ACT 0x15 = tempA ← acc` — refuted outright, §7.0. Do not revive it.**
 
 ## The honest verdict
 
