@@ -317,3 +317,78 @@ must happen.
 3. ★ **`src08 = "coef"`** reproduces the LFO's ROM step and should be the harness default.
 4. ★ **Robust discriminators: PEQ+COMPR+DIST (16) and COMPRESSOR (10)**, not AUTO PAN.
 5. ★★★ **Delay-line traffic is invariant under every reading of `ACT 0x0D`/`0x0E`.**
+
+---
+
+## 12. Eight oscillators now run at their ROM rates — and the mode-4 determination still does not follow
+
+### 12.1 ★★ The LFO corpus, scored
+
+With `src08 = "coef"` and `mode4dest ≠ "ptr"`, the per-frame step of each program's
+phase cell is measured and compared against the ramp constant `lfo_ramp.py` derives
+from the ROM:
+
+```
+   algo program            ROM step   reproduced
+     1  CHORUS                  114       ★ 114
+     4  FLANGER                  38       ★  38
+     5  PHASER                   76       ★  76
+     6  ENSEMBLE                114       ★ 114
+    48  AUTO PAN                228       ★ 228
+    50  VIBRATO                 760       ★ 760
+    56  MIX UP           570/989/1407     ★ 570  (1 of 3)
+    68  S.DELAY+PHASER          114       ★ 114
+
+   not reproduced: MODULATED CHORUS, RING MODULATOR, S.DELAY+CHORUS,
+                   S.DELAY+FLANGER, S.DELAY+VIBRATO, PEQ+CHORUS,
+                   PEQ+FLANGER, PEQ+VIBRATO                    11 of 19 steps
+```
+
+★★ **Eight distinct oscillators, in eight different programs, stepping at exactly the
+rate their own ROM coefficient specifies.** That is a far broader known-mathematics
+validation than the single AUTO PAN case in §10 — and it was not available at all
+before §1's unblocking, because none of these programs executed.
+
+### 12.2 ⛔ But the mode-4 target is still not determined
+
+```
+   ROM ramp steps reproduced:   mode4dest = "addr8"  8 of 19
+                                mode4dest = "none"   8 of 19
+```
+
+**Identical.** 19 of 26 images *do* behave differently under the two (§11 task), so
+the corpus can see a difference — but the difference does not reach the LFO, which is
+the only known-mathematics scorer available. ⛔ **`"ptr"` stays refuted (§10.3);
+`"addr8"` versus `"none"` stays OPEN**, and the honest statement is that the
+instrument that separates them has not been found, not that the two are equivalent.
+
+### 12.3 The 11 failures are structured
+
+Every failure is a **combination** effect (`S.DELAY+…`, `PEQ+…`) or one of two
+singletons (MODULATED CHORUS, RING MODULATOR). The plain single-effect LFOs all pass.
+That is a lead: whatever the combination programs do differently — a second unit, a
+different entry pointer, a shared phase cell — is a narrower question than "why does
+the LFO fail", and it comes with 8 working cases to compare against.
+
+## 13. Session handover
+
+**Durable results**
+
+1. ★★★ 36 of 38 images execute (was 2), 98.0 % mean execution (was 12.7 %).
+2. ★★★ `mode 4` does **not** store to `mem[st.p]` — functionally refuted (§10.3).
+3. ★★ Eight LFOs reproduce their ROM ramp constants exactly (§12.1).
+4. ★★ `src08 = "coef"` is required for any of it and is itself justified by those
+   constants.
+5. ★★★ Delay-line traffic is invariant under every reading of `ACT 0x0D`/`0x0E`
+   (§6.1), checked under two `src08` settings, 25 readings, six programs.
+6. ★ SINGLE DELAY's validated answer — lag 1001, gain +0.02149296 — is **unchanged by
+   every change in this note**, and was checked at every stage.
+
+**Open, in priority order**
+
+1. Separate `mode4dest` `"addr8"` from `"none"`: 19 images differ observably (§11) but
+   the LFO cannot score them (§12.2).
+2. Why the 11 combination-effect LFOs do not ramp (§12.3).
+3. The robust discriminators PEQ+COMPR+DIST and COMPRESSOR remain unscored.
+4. ⛔ Every reading in §1 is scaffolding, not a decoding, and still needs its own
+   evidence.
