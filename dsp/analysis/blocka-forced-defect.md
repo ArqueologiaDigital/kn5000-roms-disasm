@@ -479,3 +479,64 @@ written** rather than by running anything. The input-stage answer has been on
 file since 2026-07-26 with the status **FORCED**. I ran perhaps a dozen
 simulations that could not have worked, when twenty minutes of reading would have
 said so.
+
+---
+
+## 11. How to feed the reverb — the input mix, DECODED
+
+Felipe: *"what can we do to feed input (even if fabricated) into the reverb so
+that it can be tested?"* The standing rule
+([[fake-with-the-real-mechanism]]) says route the fake through the **correct
+datapath**, so the first job was to find where that datapath actually is.
+
+### ★★ 11.1 The reverb's input mix is three named multiplies
+
+Tracing the body's first six words with the entry pointer confirmed at `0x85`:
+
+```
+  w002  class-A  x 0.25  <- mem[0x0E]
+  w003  class-A  x 0.50  <- mem[0x8F]
+  w004  class-A  x 0.50  <- mem[0x8C]
+```
+
+Three class-A multiplies with **coefficients read from the ROM**, sourcing the
+three cells the program reads and never writes. And each one is independently
+identified:
+
+| cell | what it is | evidence |
+|---|---|---|
+| `0x0E` | **the unit-0 send** | 69 of 79 unit-0 bodies write it; all 12 reverbs read it (§9.1's corrected cross-tab) |
+| `0x8C`, `0x8F` | **the two hardware audio latches** | unreachable from the host by any path ([`host-side.md`](host-side.md)); two of R2's three unexplained registers; K6's "two audio input latches", which the unit-1 image touches at cold-boot entry |
+
+★ **So the reverb's input is `0.25 × (unit-0 send) + 0.5 × latch + 0.5 × latch`,
+and every term is decoded.** That is the faithful interface, and it is the thing
+to drive.
+
+### 11.2 The recipe
+
+To test the reverb, write the audio into **`mem[0x0E]`, `mem[0x8C]`, `mem[0x8F]`
+each frame**, with the body entry pointer at `0x85`. The mechanism is the real
+one — those are the cells the program's own input-mix multiplies read, at the
+gains the ROM specifies. Only the *values* are fabricated, and they are
+drop-in-replaceable the moment a capture supplies the real ones.
+
+This supersedes every injection point used in this project's history: `0x09`
+(arbitrary), `0x80` (an artefact of the wrong entry pointer), and `0x85` (the
+send-cell guess, which the body reads at `w005` but does **not** multiply).
+
+### 11.3 And it is still not sufficient — stated plainly
+
+Driving all three cells yields **2 delay addresses at frame 0 and no
+recirculation**, the same as driving one. So the missing input was never the only
+blocker:
+
+- **9 of the 133 reverb words still trap** (`ACT 0x0D`, `0x0E`, `0x1A`), and the
+  runs above use *speculative* readings for them — §5's verdict stands, those
+  readings are unfalsifiable and must not be trusted.
+- The signal path beyond the input mix still fails, for reasons §6 showed are in
+  decoded semantics rather than undecoded codes.
+
+**What changed is the quality of the question.** "How do we feed the reverb" is
+answered, with a decoded three-term mix and named cells. "Why does the signal die
+after the mix" is now the whole remaining problem, and it no longer has an input
+gap hiding inside it.
