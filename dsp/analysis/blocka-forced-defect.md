@@ -792,3 +792,76 @@ short of `w131`, the only word that can inject into the delay network.
   `ACT 0x00` problem: `SRC 0x10, ACT 0x07, f31 = 0` — a store of the accumulator
   to `mem[ptr]`, with `f31 = 0` reloading the accumulator from a product that is
   zero because the tail's multiplies have not run yet.
+
+---
+
+## 15. `wdata = acc` — the reverb produces structure at last, and a metric of mine fails again
+
+§7 concluded the `wdata` dilemma was false and the write always stores the
+word's own bus. Testing it against the corrected input mix says otherwise.
+
+### 15.1 The combination never tried
+
+Input mix of §11, `act00` from §13's LFO-admitted set, both `wdata` readings:
+
+| `wdata` | `act00` | delay addresses | reach |
+|---|---|---|---|
+| `bus` | any | 2–4 | dies frame 0 |
+| `acc` | `load` *(ships)* | 6 | dies frame 0 |
+| **`acc`** | **`add`, `rload`, `bsel`** | **17** | signal persists |
+
+★ **17 delay addresses of the reverb's ~22 carry signal**, against 2–6 for every
+other combination. And under `wdata = acc` the write word `880.1.60.2D4` does
+*both* jobs coherently: it stores the accumulator to the line **and** its
+`ACT 0x14` captures the previously-read datum into `tempB`. The `SRC 0x0B` field
+serves the ALU capture; it is not the write source.
+
+**So §7's "the dilemma is false, `wdata` is always the bus" is WITHDRAWN.** Under
+`bus` the network deadlocks — the ladder writes copy an empty read register and
+only `w131` injects, but `w131` needs the tail, which needs the lines.
+
+### ⛔ 15.2 And my success metric was another control that cannot fail
+
+I flagged this as *"★★★ RECIRCULATES — signal alive at frame 7999 of 8000"*. The
+metric was **"the last frame with any non-zero delay write"**, and the value
+sustaining it is **±4 LSB**. A quantisation residue satisfies it.
+
+The actual impulse response at the output tail:
+
+```
+  t=     0     0.0 dB   the impulse
+  t=   400   -99.0 dB   nothing
+  t=  1355  -54.3 dB  ┐
+  t=  1356  -42.1 dB  │ ONE echo cluster, five samples
+  t=  1357  -46.5 dB  │
+  t=  1358  -53.4 dB  │
+  t=  1359  -61.8 dB  ┘
+  t=  1600+ -81.5 dB   a CONSTANT floor, +/-4 LSB, forever
+```
+
+**Six events above 20 LSB in 3000 frames.** That is an impulse and a single echo,
+not a decaying train. **It is not a reverb**, and the "recirculation" was a stuck
+residue at the quantisation floor. Thirteenth control-that-cannot-fail on this
+chip, and the third of mine in this session.
+
+### 15.3 What is nonetheless true
+
+The machine now produces **structure where it produced nothing**: a delayed echo
+at ≈1356 samples at −42 dB, from a program that has never before returned
+anything but silence in simulation. And the configuration that does it is exactly
+the one **both** independent criteria favour — LFO-admitted `act00`, and the
+functional signal-survival test — with `load`, the shipped reading, excluded by
+the second.
+
+`t = 1356` is **not** an obvious sum of the known delays (pre-delay 800; ladder
+83 172 356 513 739 240 119 247 428 616 360; ER taps 540 650 800), and I am not
+going to force an interpretation onto it.
+
+### 15.4 Status
+
+- **`wdata = acc`** — §7 withdrawn; `bus` deadlocks the delay network.
+- **`act00 ≠ load`** — now supported by two independent criteria, still not
+  applied (the LFO admits `load`; the gate is invisible to the reverb).
+- **One echo is not a tank.** Whatever produces a *decaying train* is still
+  missing, and the ±4 LSB floor suggests a feedback path that is present but
+  attenuated to the quantisation limit rather than absent.
