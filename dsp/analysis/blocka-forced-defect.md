@@ -618,7 +618,28 @@ point the signal is lost.**
 
 ---
 
-## 13. `ACT 0x00` settled against the LFO — down to two, and neither is the one that ships
+## 13. `ACT 0x00` settled against the LFO — down to three
+
+> ## ⛔ CORRECTION (same day) — §13 AS FIRST WRITTEN WAS WRONG
+>
+> I reported *"the LFO refutes three of six"* and an intersection of
+> `{add, rload}`. **`bsel` is not refuted.** My search fixed `src08` at its
+> default `unity` instead of enumerating it — **method rule 2, violated in the
+> pass whose subject was settling a parameter.** With `src08` enumerated `bsel`
+> survives (3 in my reduced run; **72** in the published `sec_publish`, which
+> also enumerates `src11` and `dest07`).
+>
+> | | as first written | corrected |
+> |---|---|---|
+> | LFO refutes | `none`, `sub`, **`bsel`** | `none`, `sub` — **two of six** |
+> | LFO admits | `add`, `load`, `rload` | `add`, `load`, `rload`, **`bsel`** |
+> | intersection with the reverb | `{add, rload}` | **`{add, rload, bsel}`** |
+>
+> The published tool's own `lfo` section had the right answer on file
+> (`act00 4 values load x1440 add x1080 rload x720 bsel x72`) and I did not check
+> against it before writing the section. Everything below is corrected; the
+> conclusion is weakened, not reversed — **`load` still ships and is still the
+> reading the reverb's signal path disfavours.**
 
 The LFO ramp is the **only known-mathematics context on this chip that carries an
 `ACTION 0x00` word** — PARAMETRIC EQ has none at all, so the biquad is blind to
@@ -640,20 +661,26 @@ blocks at 30 frames, with `is_ramp` as the criterion:
 | `rload` | 120 | **4** |
 | `bsel` | **0 — REFUTED** | 4 |
 
-★ **The LFO refutes three of the six outright** — `none`, `sub` and `bsel` cannot
-produce the ramp under any gate, order, wrap or `op2`. That reproduces
-[`action00-discriminator.md`](action00-discriminator.md)'s survivor set
-(`load`/`add`/`rload`) from an independent re-implementation.
+★ **The LFO refutes two of the six** — `none` and `sub` cannot produce the ramp
+under any setting. `bsel` **does** survive once `src08` is enumerated (the table
+above under-enumerated it; see the correction banner). The admitted set is
+`{add, load, rload, bsel}`, matching
+[`action00-discriminator.md`](action00-discriminator.md) and the published
+`sec_publish` counts exactly.
 
 ### ★★ 13.1 The intersection is `{add, rload}`
 
 Cross the LFO's three against §12's functional result — which readings let the
 reverb carry its mixed input past `w020`:
 
-- `sub` and `bsel` pass signal but the **LFO refutes them**.
+- `sub` passes signal but the **LFO refutes it**.
+- `bsel` passes signal **and** the LFO admits it — so it is in, not out. (It was
+  refuted in SINGLE DELAY 0/5832, but that context's forcings were withdrawn in
+  round 7 when its polarity was corrected, so that refutation needs re-running
+  before it can be leaned on.)
 - `load` is **LFO-admitted and is precisely the reading that erases the signal**
   at `w020`, reaching half as many delay addresses as the alternatives.
-- **`add` and `rload` are admitted by both.**
+- **`add`, `rload` and `bsel` are admitted by both.**
 
 **`load` is what the device ships.** It is the one member of the LFO's set that
 fails the functional test the other two pass.
@@ -671,9 +698,10 @@ not a numeric match against known mathematics, and the runs still carry
 speculative readings for the nine trapping words. **It ranks the three; it does
 not force one.**
 
-So: `ACT 0x00 ∈ {add, load, rload}` **FORCED by the LFO**, narrowed to
-`{add, rload}` **CONSISTENT-favoured** by the reverb's signal path — and nothing
-here distinguishes `add` from `rload`, which the reverb scores identically.
+So: `ACT 0x00 ∈ {add, load, rload, bsel}` **FORCED by the LFO**, narrowed to
+`{add, rload, bsel}` **CONSISTENT-favoured** by the reverb's signal path — and
+nothing here distinguishes the three, which the reverb scores identically at 4
+delay addresses each.
 
 ### 13.3 Not applied, and why that is the right call
 
@@ -688,5 +716,5 @@ ship one guess to fix another.
 **one question** (that note's own headline), the LFO forces the pair to three
 possibilities, the reverb's signal path disfavours the shipped one, and the gate
 is the half with 130 corpus words behind it. **Settle the gate and `ACT 0x00`
-falls out — and if it falls out as `add` or `rload`, the reverb gains its signal
-path at the same moment.**
+falls out — and if it falls out as anything but `load`, the reverb gains its
+signal path at the same moment.**
