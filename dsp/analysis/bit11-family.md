@@ -316,3 +316,132 @@ correlates with the effect class, not with the presence of an oscillator.
 3. ⛔ **Do not build an acceptance test on the LFO or the biquad for anything in
    this family.** Measured blind: 0 of 29 windows, and no site at all in the EQ.
 4. ⛔ **Do not look for a bit-11 minimal pair.** 0 of 8, measured.
+
+---
+
+## 9. ★★★ `lo12` bit 11 SELECTS A SECOND ENCODING — and five "codes" therefore do not exist
+
+§7.3 identified the `w000` pair as the only controlled comparison. Enumerating
+what could differ there — addressing excluded (§7.4), direction excluded
+(`dram_dir` is a function of `addr8` alone, and both words carry `0x30` = READ),
+`hi12` identical — leaves the difference **entirely inside `lo12`**. Three readings
+were on the table:
+
+* **(i)** `lo12` is the ALU route on these words too → `0x8BC` = SRC `0x02`,
+  ptrmode 1, ACT `0x1C`.
+* **(ii)** bit 11 switches `lo12` to a **different encoding**, as it demonstrably
+  does in the register-load family.
+* **(iii)** bit 11 is an independent modifier on an otherwise-ALU `lo12`.
+
+Two measurements decide between them.
+
+### 9.1 Bits 11 and 5 co-vary — 80 of 80, and the single exception is a proven-different family
+
+```
+   over 2917 non-c-format words in the 38 distinct IC311 images
+
+                       bit 5 SET     bit 5 CLEAR
+      bit 11 SET            80             0
+      bit 11 CLEAR           1          2836
+```
+
+★ **Every bit-11 word has bit 5 set; no bit-11 word has it clear.** Under (i) or
+(iii), bit 5 is the pointer mode — an *independent* field — and there is no reason
+for all 80 to agree.
+
+The lone off-diagonal cell is `algo 39 PARAMETRIC EQ w058 = 801.0.00.021`, and it
+is **`is_regload` — the cursor reset**, named in [`k3-pointers.md`](k3-pointers.md)
+item K as one of only two body words in the whole `0x_2x` selector block. In that
+family `lo12` is **PROVEN BY CONSTRUCTION** to be selector + flag rather than
+SRC/mode/ACTION, so bit 5 there is part of the *selector*. **Excluding the one
+family whose `lo12` encoding is already known to be different, the co-occurrence is
+exceptionless.**
+
+### 9.2 The ALU reading needs five field values attested nowhere else
+
+Parsing the five bit-11 shapes as SRC/mode/ACTION triples:
+
+```
+   lo12   would be                                   attested among the 2836 bit-11-CLEAR words
+   8BC    SRC 0x02, ptrmode 1, ACT 0x1C              SRC 0x02: 0x     ACT 0x1C: 0x
+   C63    SRC 0x11, ptrmode 1, ACT 0x03              SRC 0x11: 70x    ACT 0x03: 0x
+   864    SRC 0x01, ptrmode 1, ACT 0x04              SRC 0x01: 35x    ACT 0x04: 0x
+   921    SRC 0x04, ptrmode 1, ACT 0x01              SRC 0x04: 0x     ACT 0x01: 36x
+   839    SRC 0x00, ptrmode 1, ACT 0x19              SRC 0x00: 598x   ACT 0x19: 87x
+```
+
+**Four of the five require a field value that occurs nowhere else in the corpus**,
+and all five require the ptrmode that §9.1 shows is not free. Reading (ii) explains
+every one of those facts with a single rule; (i) and (iii) must post-hoc admit five
+codes that appear only, and exactly, where the flag is set.
+
+★★★ **`lo12` bit 11 selects a second `lo12` encoding. On bit-11 words there is no
+SRC field and no ACTION field**, and bit 5 is part of the alternate form rather
+than the pointer mode.
+
+### 9.3 Consequence — five "codes" are parse artefacts
+
+Every site of these is a bit-11 word:
+
+```
+   ACT 0x03    54 sites   100% bit-11    (all C63)
+   ACT 0x1C    25 sites   100% bit-11    (all 8BC)
+   ACT 0x04     1 site    100% bit-11    (MULTI TAP DELAY w026)
+   SRC 0x02    25 sites   100% bit-11    (all 8BC)
+   SRC 0x04     1 site    100% bit-11    (MULTI TAP DELAY w033)
+```
+
+⛔ **`ACT 0x03`, `ACT 0x04`, `ACT 0x1C`, `SRC 0x02` and `SRC 0x04` do not exist.**
+They are what you get by applying the bit-11-clear encoding to bit-11 words. This
+independently explains [`output-stage-io.md`](output-stage-io.md) §10's retraction
+from the other direction: `ACT 0x04` had no anchored pair and no context **because
+it is not an action**.
+
+### 9.4 Partial contamination — the denominators that move
+
+```
+   SRC 0x11    231 sites,  54 bit-11  (23.4%)  -> 177     (the C63 words)
+   ACT 0x19    425 sites,  42 bit-11  ( 9.9%)  -> 383     (the 839 word x42)
+   SRC 0x00   1653 sites,  42 bit-11  ( 2.5%)  -> 1611
+   ACT 0x01     40 sites,   1 bit-11           -> 39
+   SRC 0x01     39 sites,   1 bit-11           -> 38
+```
+
+★ `ACT 0x19` is `LO_ACT_CAP_TA2`, whose semantics ship on the owner's 2026-07-27
+decision. **Its count falls from 425 to 383.** No semantics change — the 42 removed
+sites are 42 replicas of one word in one image (§2) — but the published figure was
+wrong twice over, by replication and by form.
+
+### 9.5 ★ And the codes under active investigation are CLEAN
+
+```
+   ACTION with ZERO bit-11 contamination:
+      0x00 0x07 0x08 0x0B 0x0C 0x0D 0x0E 0x11 0x12 0x13 0x14 0x15 0x16 0x1A 0x1D
+```
+
+**Every code this project has been trying to decode — `0x0D`, `0x0E`, `0x1A`,
+`0x0B`, `0x00` — is uncontaminated.** [`three-codes.md`](three-codes.md)'s counts,
+the `ACT 0x0B` work and the `ACT 0x00` LFO adjudication are untouched by this. The
+contamination is confined to codes that turn out not to be codes.
+
+## 10. Predict-then-check
+
+- **P4 HIT.** §8 predicted the option space at `w000` was "small enough to
+  enumerate rather than search". Three readings, two measurements, one survivor.
+- **P5 unforeseen.** I expected to *narrow* `8BC`'s meaning. Instead the
+  enumeration removed the question's premise: there is no ACTION field to decode.
+- **P6 residue.** What the alternate encoding *means* is still **OPEN**. §9 says
+  what `lo12` is not on 80 words; it does not say what it is.
+
+## 11. Handover
+
+1. ★ **The alternate `lo12` encoding is the object now.** 80 words, 5 shapes, and
+   the `w000` pair (`8BC` vs `00B`, 27 images, same slot, same descriptor cell,
+   same direction) is still the controlled comparison — but the question is now
+   "what does the alternate form encode", not "which ACTION is this".
+2. ⛔ **Delete `ACT 0x03/0x04/0x1C` and `SRC 0x02/0x04` from any working ISA table.**
+   `dsp_disasm.py` now carries `alt_lo12()` and `PHANTOM_ACT`/`PHANTOM_SRC` so the
+   parse cannot be re-applied silently.
+3. **Restate `SRC 0x11` as 177 and `ACT 0x19` as 383** wherever they are published.
+4. ⛔ Still no scoring context (§7.1) — this was decided by *enumeration and
+   parsimony*, not by an acceptance test, and it is labelled accordingly.

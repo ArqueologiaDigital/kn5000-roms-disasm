@@ -318,6 +318,40 @@ def lo_sel(w): return lo12(w) & 0xFF          # the register SELECTOR
 def lo_imm(w): return bool((w >> 11) & 1)     # "addr8 carries a payload"
 def lo_mid(w): return (lo12(w) >> 8) & 7      # residue: 0 at all 10 corpus sites
 
+
+# --- lo12 bit 11 SELECTS A SECOND ENCODING -------------------------------
+# analysis/bit11-family.md sect. 9.  Over the 38 distinct IC311 images, bits 11
+# and 5 CO-VARY: 80 words have both set, 0 have bit 11 without bit 5, and the
+# single bit-5-without-bit-11 word is `801.0.00.021' -- PARAMETRIC EQ's cursor
+# reset, an is_regload() word whose lo12 is PROVEN BY CONSTRUCTION (K3 item A) to
+# be selector+flag rather than SRC/mode/ACTION.  Excluding that one already-known
+# family the co-occurrence is EXCEPTIONLESS.
+#
+# Under a SRC/mode/ACTION parse the five bit-11 shapes would need SRC 0x02, SRC
+# 0x04, ACT 0x03, ACT 0x04 and ACT 0x1C -- every one of which occurs ZERO times
+# among the 2836 bit-11-clear words.  So bit 11 switches lo12 out of the ALU
+# encoding, exactly as it does in the register-load family, and bit 5 is part of
+# the alternate form, NOT the pointer mode.
+#
+# WHAT the alternate form encodes is OPEN.  This says only what it is not.
+def alt_lo12(w):
+    """True if lo12 is NOT the SRC/mode/ACTION route.  lo_src()/lo_act()/
+    lo_ptrmode() are MEANINGLESS on these words -- they are the field accessors
+    applied to the wrong encoding, and using them is how PHANTOM_ACT/PHANTOM_SRC
+    got into published censuses."""
+    return (not c_format(w)) and bool((w >> 11) & 1)
+
+
+# Codes whose every corpus site is an alt_lo12() word: they are parse artefacts,
+# not instructions.  Counts over the IC311 corpus, analysis/bit11-family.md 9.3.
+PHANTOM_ACT = {0x03: 54, 0x04: 1, 0x1C: 25}
+PHANTOM_SRC = {0x02: 25, 0x04: 1}
+
+# Codes whose counts are INFLATED by alt_lo12() words (corrected value second),
+# analysis/bit11-family.md sect. 9.4.  ACT 0x19 is LO_ACT_CAP_TA2.
+INFLATED_ACT = {0x19: (425, 383), 0x01: (40, 39)}
+INFLATED_SRC = {0x11: (231, 177), 0x00: (1653, 1611), 0x01: (39, 38)}
+
 LO_SEL_CP  = 0x21    # a C-RAM pointer -- NOT the cursor, NOT the D-RAM pointer
 LO_SEL_DSC = 0x25    # the delay-DESCRIPTOR pointer (tag 0x4C)
 _REGLOAD_SEL = (0x20, 0x21, 0x22, 0x25, 0x27)
