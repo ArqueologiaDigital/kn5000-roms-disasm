@@ -198,13 +198,38 @@ LO_SRC_TB  = 0x1A    # temporary register B
 #         load x15 / add x12 / rload x6, with act00 and the gate locked together.
 #         `load' ships as the plurality and the only reading compatible with all
 #         five surviving gates.  See upd6383d.h LO_ACT_ACC_BUS and exec_alu().
+#         ⚠ AND ONE OF THE ADDER'S TWO LEGS IS WITHDRAWN, 2026-07-27
+#         (adjudication-round6.md sect. 3): the adder is a RECONCILIATION of the
+#         LFO ramp with SINGLE DELAY, and SINGLE DELAY's harness wires the delay
+#         line at the polarity round 5 REVERSED.  RETAINED (not refuted; the LFO
+#         leg is untouched; 27 of 33 even in the reversed model) but "FORCED"
+#         now stands on ONE context.
 #   0x19  tempA <- bus, a SECOND CAPTURE PAIR beside 0x13/0x14 (0x19 = 0x13 + 6).
-#         FORCED 72/72 by SINGLE DELAY once the order above is fixed (108/108 in
-#         the wider space of action00-discriminator.md sect. 7).  ★ The reverb
-#         comb's conditional falsification of it (schroeder-topology.md sect. 0-C)
-#         is WITHDRAWN: that search omitted the BLOCKING read SINGLE DELAY forces,
-#         and with it restored the reverb reaches tempB through the read word's
-#         own anchored ACTION 0x14 -- analysis/blocking-read.md.
+#         ⛔ ITS FORCING IS WITHDRAWN, 2026-07-27 -- adjudication-round6.md sect. 3.
+#         This comment used to read "FORCED 72/72 by SINGLE DELAY once the order
+#         above is fixed (108/108 in the wider space of
+#         action00-discriminator.md sect. 7)", and to add that the reverb comb's
+#         conditional falsification (schroeder-topology.md sect. 0-C) was
+#         WITHDRAWN because that search omitted "the BLOCKING read SINGLE DELAY
+#         forces".  BOTH statements rest on the SAME premise and the premise is
+#         FALSIFIED: SINGLE DELAY's harness (action00_discriminate.sd_run,
+#         acc_adjudicate.sd_run) hard-codes `addr8 0x20 -> WRITE, 0x60 -> READ',
+#         which is the polarity adjudication-round5 item D REVERSED.  SINGLE
+#         DELAY is the ONLY published ALU context that contains delay-DRAM words
+#         (ACTION 0x19 appears in 92 of 94 corpus sites inside DRAM-carrying
+#         images; the only DRAM-free one is algo 88, an IC310 stream), so it is
+#         the only one affected -- and it is the only context that constrains
+#         0x19 at all.  Re-run at the corrected polarity the same harness scores
+#         0 of 5832, because its one-cursor `Line' reads and writes the SAME cell
+#         and the corrected order is WRITE-then-READ, so the read returns the
+#         value written in that very frame (delay 0, demonstrated).  So the 108
+#         and the 0 are BOTH artefacts: the determination is UNFORCED, not
+#         refuted.  ★ THE SEMANTIC IS RETAINED DELIBERATELY AND IS NOT FORCED --
+#         withdrawing it would re-trap words on the strength of a harness that
+#         provably cannot model the corrected machine, which is the method-rule-1
+#         defect in the other direction.  What re-derives it is a TWO-ADDRESS
+#         delay line (read cell and write cell separate, per dram-bounds.md's
+#         line set, with a rotation), which nothing in dsp/tools has yet.
 LO_ACT_ACC_BUS = 0x00  # acc's input term <- bus (the adder's second selector)
 LO_ACT_ST_BUS = 0x07  # mem[ptr] <- bus
 LO_ACT_NONE_2 = 0x12  # no temp/memory side effect
