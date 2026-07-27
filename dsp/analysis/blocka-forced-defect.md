@@ -132,3 +132,65 @@ arithmetic, of which this project currently has **none**.
 3. **Do not apply anything here.** Every result is a measurement about the model,
    not about the chip, and the one reading that makes the reverb work is
    refuted by the biquad at 59 dB.
+
+---
+
+## 6. The joint tempB solve — exhaustively empty, and that kills a premise
+
+§5 said to stop treating the two tempB disagreements as separate open items.
+Done: enumerate the whole temp-register file as one space — **which register each
+of the four capture codes (`ACT 0x13/0x14/0x19/0x1A`) writes, which register each
+of the two source codes (`SRC 0x19/0x1A`) reads, over THREE temporaries**, with
+and without the `>>1`. Three, not two, because
+[`adjudication-round8.md`](adjudication-round8.md) withdrew *"`0x13` and `0x19`
+are one operation in two encodings"* as shipped-without-evidence, so a second
+register pair is admissible.
+
+```
+  machines enumerated                      : 1458
+  make BLOCK A deliver its delayed sample  :  324
+  ...of those, ALSO satisfy the biquad     :    0
+```
+
+**No assignment satisfies both.** 324 machines make the block a filter; the
+biquad rejects every one.
+
+### 6.1 So one of the two premises is wrong, and it is not the biquad
+
+| premise | standing |
+|---|---|
+| the biquad's semantics (0.198 dB against the firmware's own designer, able to reject wrong models by 51–999 dB) | the best-established fact on this chip |
+| **BLOCK A's multiply consumes the delayed sample** | an assumption I introduced, never tested |
+
+The second is mine. It came from *"a filter stage cannot load its delay-line
+sample and discard it"* — which is true of a filter stage, and simply assumes
+BLOCK A is one.
+
+★ **The exhaustive zero says it is not.** Whatever BLOCK A computes, the sample
+it reads is not what its multiply scales.
+
+### 6.2 What that opens
+
+The write word at `.0` carries **`SRC 0x0B` — the delay-read register**. Under
+`wdata = bus` that word is *an unmultiplied line-to-line copy*
+([`dram-datapath.md`](dram-datapath.md) recorded exactly this), which needs no
+multiply at all: BLOCK A would be **a tap-and-copy stage**, moving one delay line
+into the next while the multiply taps it into a separate accumulator sum. That is
+a perfectly ordinary reverb-diffusion structure, and it makes the "defect"
+disappear because there was never a requirement to violate.
+
+**But it does not resolve cleanly either**, and the dilemma should be stated:
+under `wdata = bus` the input never reaches the delay lines at all (the write
+takes the read register, not the accumulator, so nothing injects), while under
+`wdata = acc` the input enters — and the ladder is then a filter that cannot
+work. **Neither reading of `wdata` yields a functioning reverb.** That is the
+next thing to break, and it is a sharper question than the one this pass started
+with.
+
+### 6.3 Method note
+
+This is the fourth time in this sequence that an exhaustive zero has been more
+informative than a survivor would have been, and the third time the thing it
+killed was **my own framing** rather than a published claim. The framing was
+never labelled — it entered as "a filter stage cannot do that", which sounds like
+a fact about filters and is actually an assumption about this block.
