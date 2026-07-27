@@ -103,3 +103,52 @@ one is worth considerably more than either alone.
    anchored context. It is the one code here for which the honest answer is *the
    available evidence cannot settle this*, and saying so is more useful than
    another search that was never going to work.
+
+---
+
+## 5. The `0x0E` execution experiment — attempted, and the instrument has no power
+
+§4 proposed executing the 8 word-shapes where one program uses `ACT 0x07` and
+another uses `ACT 0x0E` in the identical slot. The natural test: **a word that
+writes `mem[ptr]` should be followed by a read of `mem[ptr]` at the same
+pointer**, before that cell is overwritten.
+
+With the calibration codes included it looked promising — the known memory write
+at 34.5%, the known temp writes at 8.9% and 5.1%, `no side effect` at 2.3%. Then
+the null:
+
+```
+  base rate over ALL 3154 words (any ACTION) : 31.3%
+
+  0x07  mem[ptr] <- bus  KNOWN   34.5%   x1.10
+  0x00  acc <- bus       KNOWN   33.1%   x1.06     <- writes NO memory
+  0x15  none             KNOWN   25.4%   x0.81
+  0x13  tempA <- bus     KNOWN    8.9%   x0.28
+  0x14  tempB <- bus     KNOWN    5.1%   x0.16
+  0x12  none             KNOWN    2.3%   x0.07
+  0x0E  ?                TARGET  44.8%   x1.43
+  0x0D  ?                TARGET  66.5%   x2.13
+  0x1A  ?                TARGET  14.3%   x0.46
+```
+
+⛔ **The known memory write beats the null by 1.10×, and a known NON-memory-write
+matches it at 1.06×.** The test does not detect memory writes; it detects how
+often a `mem[ptr]` read happens to follow, which is a property of **code
+density**. Any conclusion about `0x0E` drawn from it would be unfounded, and none
+is drawn.
+
+**`ACT 0x0E = mem[ptr] ← bus` therefore stands at TWO routes, not three** —
+distributional (§2) and functional
+([`SPECULATIVE-reverb-run.md`](SPECULATIVE-reverb-run.md) §2). Still CONSISTENT,
+still not applied.
+
+### 5.1 Method note
+
+This is the fifth instrument in one day that could not measure what it was built
+to measure — **and the first that was caught before a conclusion was stated
+rather than after.** The catch was computing the null *before* interpreting the
+table, which is the specific step missing from the other four.
+
+The residue worth keeping: `0x0D` at **×2.13** is the strongest association in
+the table and is *higher than the known memory write* — which is not what a
+memory write looks like. Unexplained, and recorded rather than interpreted.
