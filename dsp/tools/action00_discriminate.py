@@ -176,13 +176,15 @@ def hi_op(f, mode):
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
                  "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
-                 "act1a", "act0d", "act0e", "act15", "storemode")
+                 "act1a", "act0d", "act0e", "act15", "storemode", "altlo12", "cfmt", "act08", "act0c", "act11", "act01", "act16")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
                  src11="mem", dest07="mem", act0b="none", f31hi=None,
                  act1a=None, act0d=None, act0e=None, act15=None,
-                 storemode="mode"):
+                 storemode="mode", altlo12=None, cfmt=None,
+                 act08=None, act0c=None, act11=None, act01=None,
+                 act16=None):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
@@ -191,6 +193,10 @@ class Machine(object):
         self.act1a, self.act0d, self.act0e = act1a, act0d, act0e
         self.act15 = act15
         self.storemode = storemode
+        self.altlo12 = altlo12
+        self.cfmt, self.act08 = cfmt, act08
+        self.act0c, self.act11 = act0c, act11
+        self.act01, self.act16 = act01, act16
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -223,8 +229,79 @@ class State(object):
 #     ACC   regime (ash=16, psh=6)  -- kn5000_dsp_alu.py, the regime in which
 #                                      the biquad reproduces its designer
 # ---------------------------------------------------------------------------
+CFMT = ("acc", "P", "ta", "tb", "mem", "reg")
+
+ALT_LO12 = ("nop", "acc<-dr", "ta<-dr", "tb<-dr", "mem<-dr", "acc<-mem",
+            "acc+=dr", "P<-dr")
+
+
+def _alt_step(m, st, w, coef, rng, ash, psh, dram, obs):
+    """★ THE ALTERNATE lo12 ENCODING -- analysis/bit11-family.md sect. 9.
+
+    lo12 bit 11 selects a SECOND encoding: there is NO SRC field and NO ACTION
+    field, and bit 5 is part of the form (bits 11 and 5 co-vary 80 of 80, the
+    single exception being a register-load word whose lo12 is already known to
+    encode differently).  Reading SRC/ACT off these words produces the PHANTOM
+    codes ACT 0x03/0x04/0x1C and SRC 0x02/0x04, attested nowhere else.
+
+    WHAT the form encodes is OPEN.  This routine executes the ADDRESSING, which
+    is decoded, and applies one ENUMERATED candidate ALU effect.  Every option
+    is speculative and `altlo12=None' (the default) keeps the word trapping.
+    """
+    nxt = (st.p + (s8(DIS.addr8(w)) if DIS.ptr_postinc(w) else 0)) & 0xff
+    bus = s24(st.mem[st.p])
+    if dram is not None and (DIS.hi12(w) & 0x800) and DIS.class4(w) == 1:
+        dram(w, bus, st)
+    r = m.altlo12
+    if r == "acc<-dr":
+        st.acc = s24(st.dr)
+    elif r == "ta<-dr":
+        st.ta = st.dr & MASK24
+    elif r == "tb<-dr":
+        st.tb = st.dr & MASK24
+    elif r == "mem<-dr":
+        st.mem[st.p] = st.dr & MASK24
+    elif r == "acc<-mem":
+        st.acc = bus
+    elif r == "acc+=dr":
+        st.acc = st.acc + s24(st.dr)
+    elif r == "P<-dr":
+        st.P = s24(st.dr)
+    if obs is not None:
+        obs.append(("ALT", r, st.p))
+    st.p = nxt
+    return True
+
+
 def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
          obs=None):
+    if DIS.alt_lo12(w):
+        if m.altlo12 is None:
+            return False
+        return _alt_step(m, st, w, coef, rng, ash, psh, dram, obs)
+    #  ★ C-FORMAT -- dsp_disasm.status() calls it MEASURED: a 13-bit immediate
+    #  load whose DESTINATION is OPEN.  `cfmt = None' keeps it trapping.
+    if DIS.c_format(w):
+        if m.cfmt is None:
+            return False
+        imm = DIS.c_imm13(w)
+        imm = imm - (1 << 13) if imm >= (1 << 12) else imm
+        v = imm << 11                       # 13 bits into the 24-bit datum
+        if m.cfmt == "acc":
+            st.acc = v
+        elif m.cfmt == "P":
+            st.P = v
+        elif m.cfmt == "ta":
+            st.ta = v & MASK24
+        elif m.cfmt == "tb":
+            st.tb = v & MASK24
+        elif m.cfmt == "mem":
+            st.mem[st.p] = v & MASK24
+        elif m.cfmt == "reg":
+            st.mem[DIS.addr8(w)] = v & MASK24
+        if obs is not None:
+            obs.append(("CIMM", m.cfmt, v))
+        return True
     hi, cl = DIS.hi12(w), DIS.class4(w)
     src, act = DIS.lo_src(w), DIS.lo_act(w)
     f, b7 = DIS.hi_f31(hi), (hi >> 7) & 1
@@ -274,7 +351,9 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
     if act not in (0x00, 0x07, 0x12, 0x13, 0x14, 0x15, 0x19, 0x0B):
         # ★ SPECULATIVE CODES (2026-07-27).  Each defaults to None = REFUSE, so
         # the gated behaviour is unchanged; supplying a reading opts in.
-        spec = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e}
+        spec = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e,
+                0x08: m.act08, 0x0C: m.act0c, 0x11: m.act11,
+                0x01: m.act01, 0x16: m.act16}
         if act not in spec or spec[act] is None:
             return False
     if f > 2 and m.f31hi is None:
@@ -370,8 +449,10 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
                 st.ta = bus & MASK24
             elif m.act15 == "tB<-bus":
                 st.tb = bus & MASK24
-        elif act in (0x1A, 0x0D, 0x0E):
-            r = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e}[act]
+        elif act in (0x1A, 0x0D, 0x0E, 0x08, 0x0C, 0x11):
+            r = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e,
+                 0x08: m.act08, 0x0C: m.act0c, 0x11: m.act11,
+                0x01: m.act01, 0x16: m.act16}[act]
             if r == "tA<-bus":
                 st.ta = bus & MASK24
             elif r == "tB<-bus":
