@@ -269,8 +269,20 @@ LO_ACT_NONE_2 = 0x12  # no temp/memory side effect
 LO_ACT_CAP_TA = 0x13  # tempA <- bus
 LO_ACT_CAP_TB = 0x14  # tempB <- bus
 LO_ACT_NONE_5 = 0x15  # ditto -- how it differs from 0x12 is OPEN
-LO_ACT_CAP_TA2 = 0x19  # tempA <- ??? -- DESTINATION measured (74/89, lag 1),
-#                        SOURCE open; "second encoding of 0x13" UNSUPPORTED
+LO_ACT_CAP_TA2 = 0x19  # tempA <- ??? -- SHIPS ON THE OWNER'S DECISION, 2026-07-27.
+#   ⚠ The DESTINATION is *** NOT MEASURED ***.  This comment used to say it was
+#   ("74/89, lag 1", adjudication-round8.md item G).  That statistic -- a word
+#   SOURCING the register at a characteristic lag -- FAILS ITS OWN CALIBRATION
+#   0 of 2 on the codes whose destinations we know independently: for 0x13
+#   (tempA) tempA and tempB TIE and mem beats both; for 0x14 (tempB) the WRONG
+#   temporary wins by 20 points.  It measures structural adjacency in a motif
+#   that interleaves two temporaries, not dataflow.  See analysis/
+#   capture-signature.md and run tools/capture_sig.py calib before trusting it.
+#   0x19's profile IS the cleanest of the three (its own register far above a
+#   200-fold null, both rivals AT or BELOW it, which neither known code
+#   manages) -- but "cleanest" is not a calibrated criterion.  What survives is
+#   SUCCESSION, not destination.  SOURCE (<-bus vs <-acc) open; "second
+#   encoding of 0x13" UNSUPPORTED.
 
 _ANCHORED_SRC = (LO_SRC_MEM, LO_SRC_ACC, LO_SRC_TA, LO_SRC_TB)
 _ANCHORED_ACT = (LO_ACT_ACC_BUS, LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
