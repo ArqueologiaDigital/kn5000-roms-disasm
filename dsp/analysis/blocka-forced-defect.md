@@ -194,3 +194,69 @@ informative than a survivor would have been, and the third time the thing it
 killed was **my own framing** rather than a published claim. The framing was
 never labelled — it entered as "a filter stage cannot do that", which sounds like
 a fact about filters and is actually an assumption about this block.
+
+---
+
+## 7. The `wdata` dilemma — RESOLVED, and it removes a free parameter
+
+§6.2 posed it as a dilemma: `wdata = bus` and the input never reaches the delay
+lines, `wdata = acc` and the ladder is a filter that cannot work.
+
+**It is a false dilemma, and `topology.py` had already said why:** *"`wdata`
+should be a per-word decode, not a global switch."* Every delay-write word in the
+reverb, with what its own operand bus carries:
+
+```
+  w011 w019 w027 w035 w043 w051 w059 w069 w077 w085 w093 w101
+        SRC 0x0B  -> the delay-read register   = a LINE-TO-LINE COPY   (12 words)
+
+  w131  SRC 0x10  -> THE ACCUMULATOR           = INJECTION of the ALU result
+                     -> address 45103, the write end of L11 (D = 360)
+```
+
+★ **There is no global choice to make.** Take `wdata = bus` universally — a write
+stores the word's own operand bus — and the **`SRC` field, which is anchored,
+decides per word** what that bus is. Twelve words copy line-to-line; one word,
+the **last of the program**, injects the accumulated result into the delay
+network. Both behaviours coexist because the words ask for different sources.
+
+**`wdata` should be removed from the model as a free parameter.** It was never a
+parameter; it was the `SRC` field, already decoded, read as though it were a
+global mode.
+
+### 7.1 And it retires two things
+
+- The `wdata = bus` versus `acc` enumeration in every future search — one fewer
+  dimension, and one fewer place for a control to be blind. Recall that the
+  harness *default* of `bus` was what made an ALU search unable to fail
+  ([`act0b-reverb.md`](act0b-reverb.md) item C): under the per-word reading that
+  hazard disappears, because a write word sourcing `SRC 0x10` is visible to the
+  ALU by construction.
+- `dram-datapath.md` item J's *"the write-data source is still OPEN"* — it is
+  not open; it is per-word and already anchored.
+
+### 7.2 What it does NOT do, stated plainly
+
+**The reverb still does not work.** Traced at frame 0, the accumulator is **zero
+through the entire tail**, so `w131` injects zero and nothing ever enters the
+delay network:
+
+```
+  w126..w130  four class-A multiplies, all with P = 0
+  w131        the injector, acc = 0
+```
+
+The cause is upstream and already known: the input enters at `w002` and is
+destroyed at `w006` by an `f31 = 0` word (`acc ← P`, `P` zero). The ALU chain in
+the **head** does not carry the input to the tail.
+
+So the dilemma resolves into a **relocation**: the question is no longer "which
+`wdata`" but "why does the head not deliver the input to the accumulator". That
+is the same `f31 = 0` barrier that has now appeared in four separate
+investigations — the biquad's blindness to upstream state
+([`f31-high.md`](f31-high.md) item E), the destruction of the delayed sample in
+BLOCK A (§1), the input dying at `w006`, and now the tail.
+
+★ **Four independent failures, one mechanism.** `acc ← P` with a stale or zero
+`P` is where this program keeps losing its signal, and the next pass should
+attack that rather than any individual code.
