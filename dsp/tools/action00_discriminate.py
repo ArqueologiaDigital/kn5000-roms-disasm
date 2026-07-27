@@ -176,18 +176,19 @@ def hi_op(f, mode):
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
                  "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
-                 "act1a", "act0d", "act0e")
+                 "act1a", "act0d", "act0e", "act15")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
                  src11="mem", dest07="mem", act0b="none", f31hi=None,
-                 act1a=None, act0d=None, act0e=None):
+                 act1a=None, act0d=None, act0e=None, act15=None):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
         self.src11, self.dest07, self.act0b = src11, dest07, act0b
         self.f31hi = f31hi
         self.act1a, self.act0d, self.act0e = act1a, act0d, act0e
+        self.act15 = act15
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -333,6 +334,18 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
                 st.mem[st.p] = bus & MASK24
                 if obs is not None:
                     obs.append(("W0B", st.p, bus & MASK24))
+        elif act == 0x15 and m.act15:
+            # ★ SPECULATIVE.  0x15 ships as "no side effect", and the device's
+            # own comment says how it differs from 0x12 is OPEN.  None = the
+            # shipped no-op, so the gated behaviour is unchanged.
+            if m.act15 == "tA<-acc":
+                st.ta = datum(st.acc) & MASK24
+            elif m.act15 == "tB<-acc":
+                st.tb = datum(st.acc) & MASK24
+            elif m.act15 == "tA<-bus":
+                st.ta = bus & MASK24
+            elif m.act15 == "tB<-bus":
+                st.tb = bus & MASK24
         elif act in (0x1A, 0x0D, 0x0E):
             r = {0x1A: m.act1a, 0x0D: m.act0d, 0x0E: m.act0e}[act]
             if r == "tA<-bus":

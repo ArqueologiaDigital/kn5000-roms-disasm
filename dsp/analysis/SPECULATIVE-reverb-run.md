@@ -114,18 +114,87 @@ model cannot run the program. It should be re-derived properly and, if it holds,
 it strengthens `dram-datapath.md` item A from a static argument to an executed
 one.
 
+
+---
+
+## ★★★ Result 7 — `ACT 0x15` and the diffuser ladder (the best thing here)
+
+Tracing the frame in which the pre-delay returns (frame 800) shows the ladder
+failing for a *specific, mechanical* reason:
+
+```
+w022  SRC 1A -> acc = 10057     the delayed sample arrives from tempB
+w023  f31=0  -> acc <- P = 0    ...and is destroyed one word later
+w024  multiplies tempA = 0
+```
+
+The stage loads the delay-line sample and throws it away before the multiply.
+**A filter cannot do that.** And the word that throws it away, `w023`, carries
+**`ACT 0x15`** — which ships as *"no temp/memory side effect"* with the device's
+own comment: *"ditto — how it differs from `0x12` is OPEN."*
+
+If `0x15` captures the accumulator into tempA, the stage becomes coherent: the
+delayed sample arrives at `.3`, is captured at `.4` **before** the accumulator is
+overwritten, and is multiplied by the stage gain at `.5`.
+
+**Tested, sweeping four readings of `0x15` with everything else fixed:**
+
+| `ACT 0x15` | ladder addresses carrying signal |
+|---|---|
+| `none` (shipped) | 5 |
+| `tB<-acc`, `tA<-bus`, `tB<-bus` | 5 (identical to shipped) |
+| **`tA<-acc`** | **16** |
+
+It is the only one of the four that changes anything, and it triples the reach.
+The resulting cascade:
+
+```
+  41590   15085     41673    9503     41845    4941
+  42201    2470     42714     987     43453     103
+  43693      65     43812      41     44059      22
+  44487       9     45103       5
+```
+
+`20114 × 0.750 = 15085`. `× 0.630 = 9503`. `× 0.520 = 4941`. `× 0.500 = 2470`.
+`× 0.400 = 987`. **Every stage attenuates by exactly its own ROM coefficient, to
+±1 LSB, in ladder order, through all eleven stages** — where the shipped reading
+dies after two.
+
+### What this is and is not
+
+**Is:** a mechanism argument (the stage must capture before it clobbers) that
+predicts a specific reading, plus a functional test that the reading passes and
+its three rivals fail, on a chain eleven stages deep.
+
+**Is not:** proof. The gain cascade is partly circular — the coefficients *are*
+the ROM's, so any model that applies them in sequence shows this. What is **not**
+automatic is that they apply **once per stage, in ladder order**: under the
+shipped `0x15` they do not apply at all past stage two. And the run still has
+**no recirculation** — energy traverses the ladder and leaves. A reverb tank
+needs feedback that this configuration does not produce.
+
+**The check to run under the normal discipline:** `0x15` is *anchored* and
+shipping as a no-op. If it is really a capture, that is not a new decode — it is
+a **correction to a shipped semantic**, and it would touch every program
+containing `ACT 0x15`, which is **1323 corpus words, the second most common
+ACTION code on the chip**. That is a large enough blast radius that it must be
+re-derived from a context with known mathematics before anyone touches the
+device.
+
 ## What to carry back, and what to burn
 
 **Carry back (re-derive under the normal discipline first):**
 
-1. **Result 6** — the executed flush-read / prime-write behaviour. Independent
+1. ★ **Result 7** — `ACT 0x15 = tempA ← acc`. Highest value and highest risk:
+   1323 corpus words carry that code, and it currently ships as a no-op.
+2. **Result 6** — the executed flush-read / prime-write behaviour. Independent
    confirmation of a published FORCED result, from execution rather than
    structure.
-2. **Result 2's method** — scoring a candidate reading by *whether the program
+3. **Result 2's method** — scoring a candidate reading by *whether the program
    can pass signal at all*. This project has scored readings by numeric match
    and by statistical signature; "does the machine function" is a third
    criterion, it is cheap, and here it eliminated 30 of 36 combinations.
-3. **Result 3** — `0x0D`'s blindness in the reverb, which is a decidability
+4. **Result 3** — `0x0D`'s blindness in the reverb, which is a decidability
    fact and holds regardless of the speculation around it.
 
 **Burn:**
