@@ -220,3 +220,45 @@ register file on the chip — are **all mode 1**.
 - **P2 unforeseen.** I did not expect the blocker to be a forced result **already
   written down and simply not implemented**. That is the third time today the
   answer was in the project's own notes.
+
+---
+
+## 7. The emulator does NOT have the same gap — checked, and nothing to ship
+
+§6 found the analysis tool storing to `mem[ptr]` in every mode against a FORCED
+result. The obvious follow-up was whether `upd6383.cpp` carries the same defect,
+since that would be a shippable correctness fix.
+
+**It does not.** `upd6383d.h:561`:
+
+```cpp
+    if ((hi12(w) & HI_ST) && (class4(w) & 7) != 2)      // refuse
+```
+
+The device handles the mode-dependence the **conservative** way: rather than
+store to the wrong place, it refuses to execute any bit-4 word outside mode 2.
+`upd6383.cpp`'s own comment states it — *"`alu_decoded()` now refuses any bit-4
+word outside mode 2, which is what makes the write below sound"* — and the guard
+is measured to cost nothing on the body corpus (303 bit-4 words are mode 2, 0 are
+not).
+
+**So the analysis tool was the outlier, not the device.** Nothing to ship, and
+the check is recorded here so it is not repeated.
+
+### 7.1 And widening the guard would not help — checked before proposing it
+
+With the mode-1 target now implemented and validated against K5, the device
+*could* decode mode-1 bit-4 words instead of trapping them. It would not move the
+frame counter: all five epilogue words concerned still carry an unanchored
+ACTION or SRC —
+
+```
+  w60  ACT 1B, SRC 05      w61  ACT 1B, SRC 01      w64  ACT 05
+  w68  ACT 1B, SRC 06      w71  ACT 06
+```
+
+— so they would trap on those instead. The store target was never what blocked
+them.
+
+**`ACT 0x1B` remains the gate**, exactly as §4 ranked it, and it is now the only
+thing between the model and a testable §2 loop.
