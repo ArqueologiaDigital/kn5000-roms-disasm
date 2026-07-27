@@ -176,12 +176,13 @@ def hi_op(f, mode):
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
                  "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
-                 "act1a", "act0d", "act0e", "act15")
+                 "act1a", "act0d", "act0e", "act15", "storemode")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
                  src11="mem", dest07="mem", act0b="none", f31hi=None,
-                 act1a=None, act0d=None, act0e=None, act15=None):
+                 act1a=None, act0d=None, act0e=None, act15=None,
+                 storemode="mode"):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
@@ -189,6 +190,7 @@ class Machine(object):
         self.f31hi = f31hi
         self.act1a, self.act0d, self.act0e = act1a, act0d, act0e
         self.act15 = act15
+        self.storemode = storemode
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -292,9 +294,31 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
         elif m.wrap == "b7_and_coef":
             v = (v & coef) if (b7 and coef is not None) \
                 else max(-(1 << 23), min(MASK23, v))
-        st.mem[st.p] = v & MASK24
+        #  ★ THE BIT-4 STORE TARGET IS MODE-DEPENDENT (2026-07-27).
+        #  `isa-adjudication.md', Behavioural notes for the core, item 1:
+        #      "hi12 bit 4's target is mode-dependent -- mem[ptr] ONLY IN MODE 2.
+        #       Eight kernel words mis-execute otherwise."
+        #  and `r2-output.md' item 11, FORCED: a mode-1 bit-4 word is a REGISTER
+        #  access, not a mem[ptr] store -- K5's DETERMINED result on w64/w71
+        #  (class 9, bit 4, destination = the CALL VECTOR at addr8 0x0E / 0x0F)
+        #  is the witness.  So mode 1 targets the register indexed by addr8.
+        #  `storemode = "ptr"' restores the old unconditional behaviour so the
+        #  published numbers stay reproducible.
+        #  A C-FORMAT word has no meaningful class4/addr8 (its bits [35:25] are
+        #  an opcode and [24:12] an immediate), so the mode rule cannot apply to
+        #  it -- `isa-adjudication.md' item 13 scopes the register-file
+        #  annotation to "mode 1 WITHOUT ESCAPE".  w74 is the corpus's only
+        #  bit-4 C-format word and would otherwise be mis-targeted at 0xAB.
+        mode = -1 if DIS.c_format(w) else (cl & 7)
+        if m.storemode == "ptr" or mode == 2:
+            dest = st.p
+        elif mode == 1:
+            dest = DIS.addr8(w)
+        else:
+            dest = st.p                      # modes 0/4/5: only 4 words, OPEN
+        st.mem[dest] = v & MASK24
         if obs is not None:
-            obs.append(("ST", st.p, v & MASK24))
+            obs.append(("ST", dest, v & MASK24))
 
     store = bool(hi & 0x10)
     dost, doclr, clr_end = gate_of(m.stgate, b7, f) if store else (False, False, False)
