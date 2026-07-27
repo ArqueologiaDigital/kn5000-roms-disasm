@@ -137,18 +137,54 @@ def gate_of(stgate, b7, f):
 #  choice is now visible and can be swept.
 ACT0B = ("none", "tA<-bus", "tB<-bus", "mem<-bus", "tA<-acc", "tB<-acc")
 
+#  ★ f31hi, ADDED 2026-07-27 (analysis/f31-high.md).  hi12[3:1] is the
+#  accumulator's operation select.  Values 0/1/2 are decoded; 3..7 are not, and
+#  step() has always REFUSED them -- 203 of 3154 corpus words, 31 of which trap
+#  for this reason ALONE.  `f31hi = None' keeps that refusal, so the default is
+#  the historical behaviour exactly; any other value supplies a reading and lets
+#  the word execute, which is what makes the field testable.
+#
+#  Each mode maps f -> (take the accumulator as feedback?, product term).
+#  Bases 0/1/2 are the decoded ones and every mode reproduces them:
+#      f=0  acc <- P          f=1  acc <- acc + P        f=2  acc <- acc
+F31HI = ("base", "negP", "hold", "prod")
+
+
+def hi_op(f, mode):
+    """(use_feedback, product term in {'P', '-P', '0'}) for hi12[3:1] = f."""
+    if f == 0:
+        return False, "P"
+    if f == 1:
+        return True, "P"
+    if f == 2:
+        return True, "0"
+    if mode == "hold":                      # every undecoded value holds
+        return True, "0"
+    if mode == "prod":                      # every undecoded value takes P
+        return False, "P"
+    b = f & 3                               # bit 2 as an independent modifier
+    neg = (mode == "negP") and (f & 4)
+    if b == 0:
+        return False, "-P" if neg else "P"
+    if b == 1:
+        return True, "-P" if neg else "P"
+    if b == 2:
+        return True, "0"
+    return True, "-P"                       # base 3: the missing subtract
+
 
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
-                 "act19", "src00", "src08", "src11", "dest07", "act0b")
+                 "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
-                 src11="mem", dest07="mem", act0b="none"):
+                 src11="mem", dest07="mem", act0b="none", f31hi=None):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
         self.src11, self.dest07, self.act0b = src11, dest07, act0b
+        self.f31hi = f31hi
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -231,7 +267,7 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
 
     if act not in (0x00, 0x07, 0x12, 0x13, 0x14, 0x15, 0x19, 0x0B):
         return False
-    if f > 2:
+    if f > 2 and m.f31hi is None:
         return False
 
     def do_store():
@@ -294,6 +330,10 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
     busa = bus << ash                          # the bus, in accumulator units
 
     def accop(cur):
+        if f > 2:
+            usefb, pt = hi_op(f, m.f31hi)
+            base = cur if usefb else 0
+            return base + (0 if pt == "0" else (-st.P if pt == "-P" else st.P))
         if f == 0:
             return st.P
         if f == 1:
@@ -319,8 +359,13 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
         st.acc = actop(st.acc)
         capture()
     else:                                       # adder
-        fb = 0 if f == 0 else st.acc
-        pt = 0 if f == 2 else st.P
+        if f > 2:
+            usefb, ptm = hi_op(f, m.f31hi)
+            fb = st.acc if usefb else 0
+            pt = 0 if ptm == "0" else (-st.P if ptm == "-P" else st.P)
+        else:
+            fb = 0 if f == 0 else st.acc
+            pt = 0 if f == 2 else st.P
         bt = 0
         if act == 0x00:
             a0 = m.act00
