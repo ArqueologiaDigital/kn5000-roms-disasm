@@ -461,3 +461,71 @@ not equivalent — just not separated by this instrument.
 - ★ **Both of this round's defects were in the harness, not the chip** — the fourth and
   fifth such this session, and the pattern is now unmistakable: *what I inject is as
   much a modelling choice as what I decode, and it needs enumerating too.*
+
+---
+
+## 15. Speculation round 2: multi-LFO programs — the second oscillator inherits a saturated accumulator
+
+**The speculation.** §14 left 8 of 19 ROM constants unreproduced. Looking at *which*:
+**MODULATED CHORUS** carries steps 989 and 114 and reproduces only **989**; **MIX UP**
+carries 570, 1407, 989 and reproduces only **570**. Every program that fully passes has
+its LFOs at the *same* rate, where one working oscillator satisfies the test.
+
+★ **So the pattern is: a program with LFOs at DIFFERENT rates runs only its FIRST.** The
+obvious guess, given §10, was a second clobbering word.
+
+### 15.1 ⛔ Not clobbering — SATURATION, and it is inherited
+
+Tracing MIX UP's three LFO store words:
+
+```
+   w6   -> mem[0x02] = 570, 1140, 1710       ★ ramping correctly
+   w10  -> mem[0x03] = 8388607 every frame     SATURATED
+   w14  -> mem[0x04] = 8388607 every frame     SATURATED
+```
+
+`8388607 = 0x7FFFFF` is **the wrap word's own coefficient**. The three store words are
+byte-identical (`0094A00200`); the first works because `acc` enters it at 0, and the
+second and third inherit an accumulator the previous wrap word left holding the wrap
+constant.
+
+★ **The oscillators are not destroyed by another word — they are starved by the state
+the previous oscillator leaves behind.**
+
+### 15.2 ⛔ And no enumerated parameter fixes it
+
+A phase accumulator wraps rather than saturating, and the coefficient `0x7FFFFF` is
+literally a 23-bit mask, so `wrap` and `op2` were the natural candidates —
+`op2 = "and_coef"` would make the wrap word compute `acc & 0x7FFFFF` exactly:
+
+```
+   wrap = sat / wrap23 / f31_2_and_coef / b7_and_coef   ->  11 / 11 / 11 / 11  of 19
+   op2  = hold / and_coef / and_mask23                  ->  11 / 11 / 11  of 19
+```
+
+**Seven settings, all 11.** None touches the inter-block accumulator behaviour.
+
+### 15.3 ★ The constraint this establishes
+
+**MIX UP's ROM specifies three distinct LFO rates and MODULATED CHORUS two. The real
+instrument runs all of them** — they are user-visible modulation rates on shipping
+effects. The model runs one per program.
+
+★ **So the accumulator's state at a wrap word's exit is wrong, and the error is in a
+field that is not currently parameterised at all** — not `wrap`, not `op2`, not
+`stgate`, all of which were varied. That is a *localisation*: the defect is in what
+`f31 = 2` leaves in `acc` on a coefficient-consuming word, and the ROM's own rates say
+what the answer has to permit.
+
+This is the same shape as §10.3's mode-4 result — a known-mathematics constant refusing
+to appear until a specific field behaves differently — but one level less resolved,
+because there the option set contained a working value and here it does not.
+
+### 15.4 Predict-then-check
+
+- **P14 MISS.** I predicted a second clobbering word. It is saturation inheritance.
+- **P15 MISS.** I predicted `op2 = "and_coef"` would restore the wrap, since the
+  coefficient is exactly the mask. 11 of 19, unchanged.
+- ★ **P16 the useful residue.** Both misses converge on the same localisation: the
+  accumulator hand-off *between* LFO blocks, which no current parameter models. **The
+  next parameter this machine needs is one nobody has written yet.**
