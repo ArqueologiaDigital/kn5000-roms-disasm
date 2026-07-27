@@ -330,3 +330,68 @@ poked value does not stand in for it.
 tried so far: run a unit-0 body and the reverb together, as the frame does**,
 rather than the reverb in isolation. Every reverb result in this project's
 history was measured without the one thing that feeds it.
+
+---
+
+## 9. Running the units together — the premise was wrong, and §8.3 needs correcting
+
+### ⛔ 9.1 Correction: "cell `0x80` is the inter-unit signal path" was an artefact
+
+§8.3 computed the D-RAM census with the **same start pointer (`0x80`) for both
+units**. The per-unit body entries are **`0x05` and `0x85`**
+([`output-stage-decode.md`](output-stage-decode.md), 85 of 85 streams). Redone
+properly:
+
+| entry pointers | cells written by a unit-0 body AND read by a unit-1 body |
+|---|---|
+| both `0x80` (what §8.3 used) | 11, headed by `0x80` — **artefact** |
+| `0x05` / `0x85` (derived) | **3** — `0x0E` (69 unit-0 writers), `0x89` (2), `0x8B` (1) |
+
+**`0x80` is not the inter-unit path.** It was an artefact of walking both units
+from the same origin. Withdrawn.
+
+### ★ 9.2 But the entry pointer itself is now confirmed, from a new direction
+
+Sweeping all 256 candidate entry pointers against the host's canned D-RAM image
+for algo 16 (`85 86 87 8A 8B 94 D0 D1 D2`):
+
+```
+  best entry pointer: 0x85, covering 8 of 9 host-primed cells
+```
+
+★ **`p0 = 0x85` wins outright**, and it is exactly the unit-1 entry
+`output-stage-decode.md` derived from the host's *zero-fill* — confirmed here by
+the host's *parameter writes*, a different mechanism entirely. Two independent
+routes to the same origin.
+
+### 9.3 And the corrected read-never-written set names the input
+
+At `p0 = 0x85` the reverb loads but never stores: **`0x85`, `0x8C`, `0x8F`**.
+`0x85` is host-primed. The other two are not — and
+[`host-side.md`](host-side.md) has them as *"unreachable from the host by any
+path"*, two of R2's three unexplained registers.
+
+[`closure-pointer.md`](closure-pointer.md) already settled what they are:
+
+> The two audio input latches sit at **fixed chip addresses** … the unit-1 image
+> touches **both latches** at the cold-boot entry.
+
+★ **So the reverb's input is a HARDWARE INPUT LATCH, not a unit-0 body writing
+D-RAM.** The premise of this experiment — "run a unit-0 body and the reverb
+together" — was wrong, and the project already knew where the input comes from;
+it had simply never been connected to the reverb's own read set.
+
+### 9.4 What still does not work
+
+Injecting at `0x8C`, at `0x8F`, at both, or at `0x85`, with the confirmed entry
+pointer, still yields **no recirculation** — 2 delay addresses at frame 0 and
+nothing after. So the input latch is necessary and not sufficient; something
+further along the chain still fails.
+
+**What survives §8 intact:** the accumulator resets by design and the state lives
+in D-RAM (§8.1, §8.2), and **every reverb simulation this project has run has had
+its input at zero** (§8.3's headline, which does not depend on *which* cell the
+input arrives in). That remains a systematic defect in the methodology.
+
+**What is withdrawn:** `0x80` as the inter-unit path, and the plan to run a
+unit-0 body alongside the reverb as the fix.
