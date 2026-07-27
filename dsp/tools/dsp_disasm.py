@@ -598,16 +598,49 @@ def is_dram(w):
     auto-incrementing cursor, in program order, so it is still not derivable
     from the word alone -- which is why these stay TIER 2.
 
-    DIRECTION: FORCED for the all-pass core's own pair (880.1.60.2D4 read,
-    880.1.20.655 write; the opposite assignment has zero survivors in all three
-    machine models -- analysis/r1-allpass-motif.md sect. 5, F1).  It does NOT
-    generalise: `addr8' does not select direction.  R3 sect. 6.3's cursor
-    alignment puts three of MULTI TAP DELAY's four tap READS on 880.1.20.2C7
-    and its line WRITE on 880.1.60.000.  Direction must live in lo12/hi12."""
+    DIRECTION: `addr8' bit 6 selects it, and 0x60 is the WRITE -- FORCED in
+    analysis/adjudication-round5.md sect. 3.  This REVERSES R1 F1, and the
+    reversal is the round's main result, so both sides are named here:
+
+      * the FIELD is forced by an EXHAUSTIVE enumeration (dram-direction.md
+        item B): over the 133 non-C-format equal-value descriptor pairs, of
+        every boolean function of every named field only two reach zero
+        violations -- `addr8' bit 6 and its own global flip -- and bit by bit
+        over all 36 bits exactly one reaches zero.
+      * the POLARITY is forced twice over, once the cell<->word map is pinned
+        to the IDENTITY (adjudication-round5 sect. 1, three polarity-free
+        oracles, unique among 13 phases, permutation null 0 of 2000):
+          (a) MULTI TAP DELAY has FOUR op-0x67 taps sharing ONE line base, and
+              a multi-tap is one write and N reads.  The four taps carry
+              addr8 0x20/0x30 and the shared base carries 0x60.
+          (b) at a boundary shared by two ladder segments the READ must take
+              the aged word BEFORE the write overwrites it; the earlier access
+              of all 133 opposite-bit pairs carries bit 6 = 0.
+      * R1 F1 said the opposite and is FALSIFIED AS STATED, not outvoted: its
+        acceptance test 2 and F6 bound the DRAM read latency to inside one
+        8-word repetition, and the descriptor addresses need TWENTY words.
+        read_slot = 4 was outside the searched model class.
+      * R3 sect. 6.3, which was quoted here as REFUTING the addr8 rule, in fact
+        refutes only its old polarity.  Its MULTI TAP observation is (a).
+
+    SCOPE: stated and applied only over addr8 0x20 / 0x30 / 0x60.  The C-format
+    consumer C40.1.80.000 carries addr8 0x80 and is excluded by `c_format'
+    anyway; it is the word no instruction rule can reach (the identical 36-bit
+    word sits on both sides of three equal-value pairs)."""
     return bool(hi12(w) & HI_ESC) and class4(w) == 1 and not c_format(w)
 
 
-DRAM_FORCED = {(0x60, 0x2D4): "READ", (0x20, 0x655): "WRITE"}
+def dram_dir(w):
+    """'READ' | 'WRITE' | None -- the delay-DRAM direction, FORCED.
+
+    None means the word's addr8 is outside the validated set and the direction
+    keeps trapping (method rule 6)."""
+    ad = addr8(w)
+    if ad in (0x20, 0x30):
+        return "READ"
+    if ad == 0x60:
+        return "WRITE"
+    return None
 
 
 def status(w):
@@ -619,7 +652,7 @@ def status(w):
     if addressing_only(w):
         return "PARTIAL"           # K6: addressing decoded and executed, ALU open
     if is_dram(w):
-        return "DETERMINED" if (addr8(w), lo12(w)) in DRAM_FORCED else "MEASURED"
+        return "DETERMINED" if dram_dir(w) else "MEASURED"
     if is_c40(w):
         return "MEASURED"          # 13-bit immediate load; destination OPEN
     if lo12(w) in VECTOR_LO12:
@@ -700,26 +733,33 @@ def annotate(w, at=None):
             return "END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word"
         return "END OF BLOCK (falls through) -- and still performs the rest of the word"
 
-    # ---- external delay DRAM.  ADDRESS SOURCE now known, DIRECTION mostly not
+    # ---- external delay DRAM.  ADDRESS SOURCE and DIRECTION known; the CELL is
+    #      still an implicit cursor, so these stay TIER 2 and keep trapping.
     if is_dram(w):
-        role = DRAM_FORCED.get((ad, lo))
-        base = ("external delay-DRAM access; address = DESCRIPTOR_CELL[cursor] "
-                "+ G, from the host bank behind pointer ...825 / tag 0x4C "
-                "(R3, PROVEN BY CONSTRUCTION) -- one cell per DRAM word, in "
-                "program order, so it is NOT in this word")
-        if role:
-            extra = ("; read data visible 2-5 words later (R1 F6)"
-                     if role == "READ" else
-                     "; write data staged by the preceding bit-4 store, 44/44")
-            return ("external delay-DRAM %s (DETERMINED, R1 F1 -- the opposite "
-                    "direction has zero survivors in all 3 models)%s. %s"
-                    % (role, extra, base))
-        if ad == 0x30:
-            return (base + ". addr8 0x30 marks the FIRST DRAM access of a body "
-                    "(37 of 38 distinct images, R3 sect. 6.2)")
-        return (base + ". DIRECTION UNKNOWN: addr8 does NOT select it -- MULTI "
-                "TAP DELAY's tap READS land on 880.1.20.2C7 and its line WRITE "
-                "on 880.1.60.000 (R3 sect. 6.3 falsifies the old addr8 rule)")
+        role = dram_dir(w)
+        base = ("external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, "
+                "from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN "
+                "BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes "
+                "the k-th cell of that body's own descriptor block (the IDENTITY "
+                "map, FORCED in adjudication-round5 sect. 1), so the address is "
+                "NOT in this word")
+        if role == "READ":
+            extra = ("; this end moves with the user's DELAY (ms) knob, and the "
+                     "delay is READ_CELL - WRITE_CELL")
+            if ad == 0x30:
+                extra += ("; addr8 0x30 also marks the FIRST DRAM access of a "
+                          "body, 37 of 38 distinct images (R3 sect. 6.2)")
+        elif role == "WRITE":
+            extra = ("; the line BASE -- MULTI TAP DELAY's four taps share "
+                     "exactly one of these, which is what forces the polarity")
+        else:
+            return (base + ". DIRECTION OUT OF SCOPE: addr8 0x%02X is outside "
+                    "the 0x20 / 0x30 / 0x60 the rule was validated on" % ad)
+        return ("external delay-DRAM %s (FORCED, adjudication-round5 sect. 3 -- "
+                "addr8 bit 6 is the direction field and 0x60 is the WRITE; this "
+                "REVERSES R1 F1, which bounded the read latency to one "
+                "repetition when the descriptors need twenty words)%s. %s"
+                % (role, extra, base))
 
     # ---- the reverb all-pass core (analysis/r1-allpass-motif.md) ------------
     # NOT decoded: two role assignments survive the constraint search and the
