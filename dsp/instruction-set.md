@@ -440,6 +440,16 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
 - **terminator / END OF BLOCK** — `class4==1 && addr8 ∈ {0E,0F}` carries a
   transfer of control (CALL/RETURN, unit-tagged); the untagged form falls
   through. `addr8` is the **unit index** (91/91), not the halt.
+  ⚠ **CORRECTION (2026-07-27, `analysis/second-dsp-and-ready.md` §4.2).** The
+  unit stride *here* is **`+1`** — `0x0E` for unit 0 and `0x0F` for unit 1,
+  measured as the last word of **37 + 1 of the 38 distinct body images** — and it
+  is **NOT** the `+0x80` rule the *parameter cells* obey (428 of 428,
+  `analysis/k4-cursor.md` item G). The `+0x80` rule predicts `0x8E` here and is
+  rejected. So the class-1 `addr8` space and the host's parameter-cell space are
+  **different regions with different unit conventions**, and conflating them is
+  how `analysis/dark-words.md` §4.3's hypothesis (β) was framed.
+  (Established in `analysis/host-side.md` B1/B2; that note asked for this
+  sentence and nobody had changed it.)
 - **the ALL-PASS CORE** — six words, `880.1.60.2D4 | 104.2.00.000 | 000.2.00.419 |
   012.2.00.680 | 880.1.20.655 | 102.A.**.64B`, normally followed by two `nop`s.
   **114 occurrences, in 13 programs, all reverbs** (12 presets × 9 + GATED REVERB × 6);

@@ -15,9 +15,20 @@ What it checks (all of it against original_ROMs/kn5000_subprogram_v142.rom):
      (dsp/disasm/kernel.dsm, dsp/disasm/epilogue.dsm and every
      dsp/disasm/progNN_*.dsm) and re-pack it to 5-byte big-endian.
   3. Confirm the kernel and epilogue bytes == their ROM streams, and that EVERY valid
-     algorithm stream in the ROM (all 100, minus the 5 malformed) is byte-identical
-     to the committed listing of its distinct image -- so all 96 valid programs and
-     all ~100 effect slots are covered, not just the 38 representatives.
+     algorithm stream in the ROM is byte-identical to the committed listing of its
+     distinct image -- so all 91 IC311 programs and all 91 IC311 effect slots are
+     covered, not just the 38 representative images.
+
+     ** DENOMINATOR, corrected 2026-07-27 (analysis/second-dsp-and-ready.md sect. 2). **
+     NINE of the 100 algorithm slots -- 57 STANDARD, 58 PERCUSSIVE, 59 SYMPHONIC,
+     60 DEEP SPACE, 79 GEQ, 88 ROOM, 89 KARAOKE, 90 BATH ROOM, 91 STAGE -- are
+     programs for the SECOND DSP, IC310 (Matsushita MN19413), and touch IC311 not at
+     all: every record they carry uses command 0x30.  So the IC311 population is 91,
+     not 95 or 96.  DSP2_MISPARSED below is only the subset whose cmd-0x30 record
+     rides on record opcode 3 and therefore survives this IC311-shaped parser as a
+     phantom I-RAM block; 57-60 ride on opcode 0x0E and parse to nothing, so `if ir:'
+     already drops them.  The old name for the set asserted a defect that does not
+     exist -- the streams are not malformed, they are a different chip.
 
 Exit 0 and prints "BYTE-MATCH OK" iff the whole corpus round-trips.
 
@@ -35,7 +46,11 @@ ALGO_TABLE = 0x0001ED7C
 HEADER_ROM = 0x01E496
 EPILOGUE_ROM = 0x01E63C
 N_ALGOS = 100
-MALFORMED = {79, 88, 89, 90, 91}
+# RENAMED 2026-07-27: these are IC310 (MN19413) programs whose cmd-0x30
+# record rides on record opcode 3 and so parses into a phantom I-RAM block.
+# Not malformed.  See the docstring and analysis/second-dsp-and-ready.md.
+DSP2_MISPARSED = {79, 88, 89, 90, 91}
+MALFORMED = DSP2_MISPARSED      # deprecated alias, kept for other tools
 
 WORD_RE = re.compile(r"^\s*w\d+\s+([0-9A-Fa-f]{10})\s")
 

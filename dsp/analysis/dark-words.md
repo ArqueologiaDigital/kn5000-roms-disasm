@@ -34,7 +34,7 @@ disassembler was edited, so the mirror diff is unaffected.
 | **C** | ★★ **THE DARK SET IS NOT WHAT MAKES THE ARITHMETIC WRONG — THE PARTIAL SET IS.** Marginal taint walk: the 91 PARTIAL slots alone contaminate **100 of 108** decoded slots starting at slot 6; the 86 dark slots alone contaminate **93** starting at slot **39**. Decoding *all* 86 would still leave 100 of 108 decoded slots computing on stale state. The dark set's exclusive contribution is elsewhere — see D. | **MEASURED** (lower bound: the walk enters the frame clean) |
 | **D** | ★★★ **WHAT THE DARK SET EXCLUSIVELY OWNS IS I/O.** (a) All 42 delay-DRAM accesses are dark, so **the external delay line is never read and never written** — a failure no amount of ALU decoding can repair. (b) Both per-unit **OUTPUT LEVEL** words (`w72` register `0x06`, `w77` register `0x86`) are dark, and they are the two words immediately preceding the two presentations. The presentations themselves (`w73`/`w78`) are PARTIAL. So the last gate on the audio path is dark. | **MEASURED** + **INFERRED** (the roles are R2/K5's) |
 | **E** | ★★ **THE PUBLISHED RANKED BLOCKER LIST IS NOT A PARTITION AND OVERCOUNTS.** `dsp-closure-applied.md` §5's twelve buckets sum to **179** against its own stated **177**, and its "external delay-DRAM 41 slots" is **42** here (`880.1.30.8BC` also carries the `lo12` bit-11 modifier and was counted in the other bucket). The grouping in §3 below is a strict partition of the 86 by *blocker set*, which is what makes a per-unknown metric computable at all. | **MEASURED** (a predict-then-check MISS, §8) |
-| **F** | ★ **A DIRECTION RULE FOR THE DELAY-DRAM FAMILY, AND IT SCORES 4/4 WHERE THE FALSIFIED ONE SCORES 2/4.** `H-DIR`: SRC `0x0B` ⇔ the word is a delay-line READ. It reproduces both R1-FORCED assignments *and* both R3 §6.3 assignments — including the two that falsified the `addr8` rule — and neither established assignment was derived from `lo12`, so the agreement is not circular. | **CONSISTENT, 4 of 4** — *not* forced (§6) |
+| **F** | ~~★ **A DIRECTION RULE FOR THE DELAY-DRAM FAMILY, AND IT SCORES 4/4 WHERE THE FALSIFIED ONE SCORES 2/4.** `H-DIR`: SRC `0x0B` ⇔ the word is a delay-line READ.~~ ⛔ **RETIRED 2026-07-27 — SEE §6's BANNER.** `dram-direction.md` B FORCED the direction field to `addr8` bit 6 by exhaustive elimination over every boolean function of every field (`SRC` reaches zero violations in **0 of 64**), and `adjudication-round5.md` D closed the polarity (`0x20/0x30` = READ, `0x60` = WRITE), which SHIPPED. Re-scored against that rule over the whole 276-word delay-DRAM corpus, H-DIR agrees **111 of 276 = 40.2 %** — *below chance*; the inverted rule scores 59.8 %. `SRC 0x0B` sits on **both** sides (49 read words, 50 write words). One of F's own four rows, R1's F1, is itself FALSIFIED (round 5). **Nothing may be built on F.** | **FALSIFIED** (`second-dsp-and-ready.md` §5) |
 | **G** | ★★ **NOTHING IN THE MODEL ADVANCES THE DELAY-DESCRIPTOR CURSOR, BECAUSE ITS ONLY CONSUMERS ARE THE 42 DARK WORDS.** The "+0 residue / the frame closes" result is about the **D-RAM operand pointer**. The descriptor cursor R3 proved the DRAM address comes from has **never had a closure test**, and it cannot have one until this group executes. | **PROVEN BY CONSTRUCTION** (`upd6383.cpp:1019`, `m_dsc` is a pointer with no cursor) |
 | **H** | ★ **THE 86 ARE ONLY 47 DISTINCT WORDS AND 46 DISTINCT FAMILIES**, and the top three groups are **82.6 %** of the set. Across all 37 unit-0 bodies the dark count spans **64..91 slots (20.0 %..30.2 % of the frame)** — it is a property of the machine, not of the cold-boot pair. | **MEASURED** |
 
@@ -277,10 +277,14 @@ Two unknowns, both needed:
   (item G). Candidate (iii) predicts the highest cell index in use is `< 0x40`
   and the MEASURED maximum is `0x39` — so (iii) already survives one test and
   the closure test can kill it.
-* **`DRAM-DIR` — the direction encoding.** `addr8` is FALSIFIED (R3 §6.3).
+* **`DRAM-DIR` — the direction encoding.** ~~`addr8` is FALSIFIED (R3 §6.3).
   **H-DIR (§6) is a candidate that scores 4/4 on the four established
   assignments.** Confirming or killing it is cheap and it removes one of the two
-  unknowns on 42 slots.
+  unknowns on 42 slots.~~ ⛔ **CLOSED, and the opposite way round.** R3 §6.3
+  falsified a *polarity*, not the field: `dram-direction.md` B forces the field
+  to `addr8` **bit 6** and `adjudication-round5.md` D forces the polarity
+  (`0x20/0x30` = READ, `0x60` = WRITE). H-DIR was **killed** — 111 of 276, below
+  chance. §6's banner.
 
 **Firmware-side lever, unused so far:** there is **no continuation writer for tag
 `0x4C`** (K3): every descriptor value is preceded by its own `801.0.PP.825`. So
@@ -557,8 +561,39 @@ the dark set.
 
 ## 6. H-DIR — a direction rule for the delay-DRAM family
 
+> # ⛔ RETIRED 2026-07-27. THIS WHOLE SECTION IS DEAD. DO NOT CITE IT.
+>
+> `DRAM-DIR` is **settled and it is not this**. `dram-direction.md` item B
+> FORCED the direction to **`addr8` bit 6** by exhaustive enumeration over every
+> boolean function of every named field — `addr8` admits 2 of 8 with zero
+> violations, **`SRC` admits 0 of 64** — and `adjudication-round5.md` item D
+> closed the polarity from two independent routes: **`addr8 ∈ {0x20,0x30}` ⇒
+> READ, `0x60` ⇒ WRITE**. That rule is APPLIED, in both disassembler mirrors.
+>
+> Re-scored against it on the full corpus (population: 38 distinct IC311 body
+> images + kernel + epilogue = 3057 words, of which **276** are delay-DRAM
+> words), H-DIR agrees **111 of 276 = 40.2 %** — *worse than a coin flip*; the
+> inverted rule scores **165 of 276 = 59.8 %**. `SRC 0x0B` is on **both** sides
+> of the partition: **49** READ words and **50** WRITE words, 3 READ forms and 4
+> WRITE forms out of 25 distinct forms. `dram-direction.md` had already measured
+> the same failure on its own population (21 of 136 equal-value pairs, where the
+> *instruction-blind* cell-parity control beats H-DIR 19–5).
+>
+> **The consequence sentence below must go with it.** *"Under it, 99 of 276
+> corpus delay-DRAM words (35.9 %) are reads"* is REPRODUCIBLE (99 is exactly
+> the count of `SRC 0x0B` delay-DRAM words) and is **RETRACTED**. The
+> replacement, under the FORCED rule: **READ 164 / WRITE 112 / still-trapping 0,
+> of 276 = 59.4 % reads.** §10 item 1's `SRC 0x00` argument, which is built on
+> H-DIR calling those 52 words *all one way*, goes with it — under the forced
+> rule the 52 `SRC 0x00` delay-DRAM words split **29 WRITE / 23 READ**, so
+> "H-DIR calls all 52 writes" / "H-DIR calls all 52 reads" is simply false and
+> the "H-DIR and R3 §6.3 agree exactly" leg no longer exists.
+>
+> Reproduce: `python3 dsp/tools/second_dsp.py darkf`.
+> Adjudicated in [`second-dsp-and-ready.md`](second-dsp-and-ready.md) §5.
+
 `dark_words.py dirtest`. Offered because `DRAM-DIR` is one of the two unknowns on
-the rank-1 group.
+the rank-1 group. **(Historical text kept below for the audit trail only.)**
 
 > **H-DIR.** `SRC == 0x0B` (the delay-RAM read register) ⟺ the word is a
 > delay-line **READ**. Every other SRC code is a WRITE source.
@@ -678,8 +713,9 @@ machine.
 
 **CONSISTENT, not forced**
 
-* **H-DIR** — 4 of 4 established assignments, against 2 of 4 for the falsified
-  `addr8` rule (§6).
+* ~~**H-DIR** — 4 of 4 established assignments, against 2 of 4 for the falsified
+  `addr8` rule (§6).~~ ⛔ **FALSIFIED 2026-07-27** — 111 of 276 = 40.2 %, below
+  chance; the field is `addr8` bit 6 after all. §6's banner.
 * **`hi12 == 0xC00` is self-addressing, 2 of 2** (`C00.A.47.407` at I-RAM 82
   encodes A = 82; `C00.9.84.000` at I-RAM 76 encodes A = 76), and `w74`'s A = 77
   names `w77`, which is R2's independent reading of that word.
@@ -718,7 +754,12 @@ machine.
 
 ## 10. What this constrains for the other two targets
 
-1. **`SRC 0x00` (contradiction #2) gets a third constraint that needs no search.**
+1. ⛔ **WITHDRAWN 2026-07-27 with §6.** Under the FORCED direction the 52
+   `SRC 0x00` delay-DRAM words split **29 WRITE / 23 READ**, so the "all 52 one
+   way" premise this item rests on is false and the constraint evaporates. The
+   `SRC 0x00` question is unaffected in either direction — it simply gets no
+   help from here. *(Historical text follows.)*
+   ~~**`SRC 0x00` (contradiction #2) gets a third constraint that needs no search.**~~
    Under H-DIR, `SRC 0x00` appears on 52 corpus delay-DRAM words. Reading it as
    the delay-RAM register (what the reverb demands) forces `880.1.60.000` to be a
    *read*, contradicting R3 §6.3's independently derived line-write — unless that
