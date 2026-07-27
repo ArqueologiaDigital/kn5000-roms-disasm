@@ -172,3 +172,76 @@ establish.
 4. **First concrete task: find why no state persists across frames in AUTO PAN**
    (§6.2). Until the LFO ramps, the one program that combines discrimination with
    known mathematics cannot be used.
+
+---
+
+## 8. ★ Why the LFO does not run — and it partly dissolves AUTO PAN's headline
+
+§6.2 left "why does no state persist in AUTO PAN" as the next task. Answered.
+
+### 8.1 The cause was a fixed parameter of mine, again
+
+`src08` decides the multiplier's other input for `SRC 0x08` words. My harness left
+it at its **default `"unity"`**, which makes `P = MASK23` — and that **saturates the
+accumulator on the LFO's very first word**. Tracing the block with a seeded prior
+phase of 1000:
+
+```
+   src08 = "unity"   w16 acc -> 8388607 (saturated)   ...  mem[0x04] = 8388607
+   src08 = "coef"    w16 acc ->     228               ...  mem[0x04] =    1228   ★
+```
+
+★ **With `src08 = "coef"` the block reproduces the ROM's own step exactly: 1000 →
+1228, a step of +228 = the coefficient `0x0000E4`** that `lfo_ramp.py` derives from
+`floor(f × 2²³/44100)`. The LFO's known mathematics is reproduced.
+
+**Method rule 2, for the third time this session** — and the third time the culprit
+was a parameter I had left at a default rather than enumerated.
+
+### 8.2 ⚠️ But in the FULL program the phase still stays zero
+
+Over 2 000 frames of the complete 50-word AUTO PAN, cell `0x04` never leaves 0: the
+per-frame step is `0` in 1 999 of 1 999 transitions. The isolated block ramps; the
+whole program does not. **Some later word clobbers the phase cell, and which one is
+OPEN.**
+
+### 8.3 ⚠️⚠️ And this dissolves part of §0 item D
+
+Re-running the observable/transient split under both `src08` settings:
+
+```
+   algo program            src08=unity (D/M/R)   src08=coef (D/M/R)
+    48  AUTO PAN               1 / 3 / 14           1 / 2 /  1     <- COLLAPSES
+    50  VIBRATO                2 / 4 /  5           1 / 2 /  1     <- COLLAPSES
+     5  PHASER                 1 / 3 /  7           1 / 3 /  3     <- partly
+    96  PEQ+COMPR+DIST         1 / 3 / 16           1 / 3 / 16     ★ UNCHANGED
+    36  COMPRESSOR             1 / 2 / 10           1 / 2 / 10     ★ UNCHANGED
+     9  SINGLE DELAY           1 / 2 /  1           1 / 2 /  1
+```
+
+⛔ **AUTO PAN's 18 was substantially an artefact of a saturating accumulator.** §0
+item D reported it as robust because the settings I varied did not include `src08` —
+a control gap, and the exact failure mode this project keeps hitting.
+
+★ **PEQ+COMPR+DIST and COMPRESSOR are unchanged under both settings.** They, not
+AUTO PAN, are the robust discriminators.
+
+★★★ **And `D = 1` in every program under both settings.** The delay-line traffic is
+invariant under every reading — now confirmed across two independent `src08`
+settings, which makes §6.1's generalisation of `single-delay-restored.md` §5.5 the
+firmest result in this note.
+
+## 9. Revised handover
+
+1. ★★★ **The unblocking programme is the durable result** (§1): 36 of 38 images
+   execute, 98.0 % mean execution, SINGLE DELAY's validated answer exact throughout.
+2. ★ **The robust discriminators are PEQ+COMPR+DIST (16) and COMPRESSOR (10)** — not
+   AUTO PAN (§8.3). Any adjudication attempt should start there.
+3. ★ **`src08 = "coef"` reproduces the LFO's ROM step of 228 exactly** (§8.1) and is
+   a known-mathematics anchor the harness should carry by default.
+4. ⚠️ **OPEN: which word zeroes AUTO PAN's phase cell in the full program** (§8.2).
+5. ★★★ **The delay-line traffic is invariant under every reading of `ACT 0x0D`/
+   `0x0E`.** Any future instrument must look elsewhere; this is now checked under two
+   `src08` settings and 25 readings across six programs.
+6. ⛔ **Every count in §§3–4 was taken at `src08 = "unity"`** and must be re-derived
+   before being quoted.
