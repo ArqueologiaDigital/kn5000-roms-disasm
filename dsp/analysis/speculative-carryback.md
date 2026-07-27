@@ -125,3 +125,57 @@ better than the "blind, look elsewhere" conclusion it replaces.
   the dataflow contradicts it at two destinations out of three.
 - **P4 HIT.** I predicted carry-back 2 would not survive without the injection
   point, and flagged that in the speculative note before testing it.
+
+---
+
+## 5. Second iteration — a hypothesis that works and cannot be tested
+
+**Speculation A — the delay-read datum lands in a temporary rather than a
+separate DR register.** Motivated by the surviving defect: the delayed sample
+arrives in `tempB` at `.0` and is never overwritten before `.5`, yet `.5`
+multiplies `tempA`. **Refuted immediately** — routing the read datum to `tempA`
+*reduces* the live ladder addresses from 5 to 3. Not a near miss; wrong.
+
+**Speculation B — `ACT 0x15` is a capture, but only on a class-1 DRAM PORT
+word.** Motivated by exactly what the biquad refutation did and did not say: it
+killed `0x15` as a **global** capture, and the biquad's three `0x15` words are
+class A and class 8, while the reverb's is **class 1 with the `hi12` escape**.
+`lo12` is operand *routing* and `class4` selects the unit, so a per-class
+interpretation is not ad hoc.
+
+**It works.** Live ladder addresses 5 → **16**, and signal persists to frame
+**1356** where the global reading died at frame 0 — the first configuration that
+produces anything resembling a tail.
+
+### 5.1 And then the rigorous check, which is the point
+
+| check | result |
+|---|---|
+| blast radius | **53** of 698 corpus `0x15` words are class-1 port words — 7.6%, not the 1323 the global reading would have touched |
+| does the biquad refute it? | **No — it has 0 class-1 port words.** The refutation genuinely does not apply |
+| does the biquad *confirm* it? | **No — for exactly the same reason** |
+| PARAMETRIC EQ / SINGLE DELAY / AUTO PAN | **0** such words each |
+| CHORUS | 4 such words — **all outside the anchored LFO block windows** |
+| LFO blocks in the whole corpus containing one | **0 of 29** |
+
+★ **The reading survives the refutation *by construction*, which is the same
+fact as: no independently-anchored program can test it.** Every context on this
+chip whose arithmetic we know — the biquad, the SINGLE DELAY motif, all 29 LFO
+ramp windows — contains **zero** class-1 `ACT 0x15` port words.
+
+### 5.2 The honest verdict
+
+This is a hypothesis that **makes the machine work and cannot be falsified by
+anything we trust**. That combination is precisely what this project has been
+burned by repeatedly — a reading that explains the data because it was shaped to,
+with no instrument able to say no.
+
+It is not evidence. It is a **prediction**, and it makes a specific one: under
+this reading the reverb produces a decaying tail out to ≈1356 frames with the
+ROM's own gains and delays. **The only instrument that can test it is the real
+KN5000.** That moves it out of static analysis entirely and into the one place
+this project treats as ground truth — Felipe's hardware.
+
+Filed accordingly: **not applied, not carried back, and not to be quoted as a
+decode.** Recorded because a well-posed question for the hardware is worth more
+than a badly-posed one for the solver.
