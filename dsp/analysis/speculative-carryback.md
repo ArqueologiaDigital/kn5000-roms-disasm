@@ -179,3 +179,75 @@ this project treats as ground truth — Felipe's hardware.
 Filed accordingly: **not applied, not carried back, and not to be quoted as a
 decode.** Recorded because a well-posed question for the hardware is worth more
 than a badly-posed one for the solver.
+
+---
+
+## 6. Third pass — the speculation's *premise* validated, and refuted
+
+§5 left Speculation B (`ACT 0x15` is a capture on class-1 DRAM port words) as
+"works, untestable". That framing was incomplete. The reading itself may be
+untestable, but the **premise it rests on — that the ACTION field is
+re-interpreted on port words — is fully testable, on codes whose meaning we
+already know.**
+
+### 6.1 The ACTION field is not a separate space on port words
+
+Census over the 40 distinct images, 3154 words, splitting every ACTION code by
+whether its word is a class-1 DRAM port word:
+
+```
+  codes appearing on BOTH sides          : 10   00 07 0B 0E 11 14 15 19 1A 1C
+  ...of which ANCHORED (meaning known)   :  5   00 07 14 15 19
+```
+
+Five codes whose semantics are fixed by the biquad — an ALU context — also occur
+on port words. So the ACTION field is **not** a separate namespace: the same
+codes are used on both sides of the split.
+
+### 6.2 And an anchored code demonstrably KEEPS its ALU meaning on a port word
+
+The decisive case is in the block under investigation, and it needs no execution:
+
+```
+w019  08801602D4   class-1 PORT word
+      SRC 0x0B  = the delay-read register   [anchored]
+      ACT 0x14  = tempB <- bus              [anchored, fixed by the biquad]
+
+w022  0012200680   ordinary ALU word
+      SRC 0x1A  = tempB                     [anchored]
+```
+
+`w019` is a port word, and **its anchored ALU meaning is exactly what delivers
+the delayed sample into `tempB`** — from which `w022` brings it to the
+accumulator. If the ACTION field were re-interpreted on port words, that capture
+would not happen and the delayed sample would never reach the accumulator at
+all. It demonstrably does (`tempB = 20114` at frame 800). Nine such words in this
+image — every BLOCK A `.0`.
+
+### ⛔ 6.3 Verdict
+
+**Speculation B's motivation is refuted.** `ACT 0x14` keeps its ALU meaning on a
+class-1 port word, in the very block the speculation was invented to fix, so
+there is no principled reason for `ACT 0x15` to acquire a different one there.
+
+The class-dependent reading is therefore not merely *untestable* (§5.1) — the
+structural argument that made it plausible now **points the other way**. It
+should be dropped, not parked.
+
+### 6.4 What survives, and it is the real result
+
+The defect stands and is now better isolated. BLOCK A carries the delayed sample
+from the DRAM port into the accumulator **entirely through anchored semantics**
+— `ACT 0x14`, `SRC 0x0B`, `SRC 0x1A`, all fixed independently — and then
+discards it at `.4` before the multiply at `.5`. Every step of that chain is
+anchored. So:
+
+> **The defect cannot be explained by any undecoded ACTION or SRC code in the
+> block.** The delivery is anchored; the destruction at `.4` is `f31 = 0`, which
+> the biquad fixes; the multiply at `.5` sources `tempA`, which is anchored.
+
+Whatever is wrong is in something all of those share — the **order** of capture
+against the accumulator operation, the **`ACT 0x19`** capture at `.2` (shipping
+on a withdrawn forcing), or the assumption that `.5`'s multiplicand register is
+the one we think. That is a much smaller space than "one of the undecoded
+codes", and it is where the next rigorous pass should go.
