@@ -92,13 +92,64 @@ was left at `bus`; anything that does not override it measures nothing.
   with the longest reach: it means every ALU search this project has run has
   been assuming an answer to a question it was not asking.
 
-## 4. What the next pass needs
+## 4. The minimal pair cannot be executed — and not because of the ACTION
 
-1. **The three-way question needs a reference, not a bigger search.** `none`,
-   `mem<-bus`, `tA<-acc`. The reverb separates them; nothing yet says which is
-   right. The minimal pair at algos 98/99 versus 96/97 sits immediately upstream
-   of a *solved* biquad and is still the only site in the corpus with known
-   mathematics on the downstream side.
+`python3 dsp/tools/act0b_reverb.py pair`
+
+The pair `target4.py act0b` offers as *"a bounded, well-posed next experiment"*
+is structurally everything one could ask for: two words identical in `hi12`,
+`class4`, `addr8` and `SRC`, differing in the ACTION field alone, each sitting
+immediately before a byte-identical copy of the **solved** biquad. Running it
+against the biquad's own designer response should decide `ACTION 0x0B` outright.
+
+It returns **TRAPPED**, for both members:
+
+```
+002A24B00B  algos 98/99 w001   hi12=02A ... ACT=0B   hi12[3:1]=5  <-- REFUSED
+002A24B000  algo 96    w001    hi12=02A ... ACT=00   hi12[3:1]=5  <-- REFUSED
+```
+
+Both twins carry **`hi12[3:1] = 5`**, and `step()` refuses every word with
+`hi12[3:1] > 2`. The accumulator-operation field is decoded for 0, 1 and 2 and
+**undecoded for 3..7**, so the site is blocked by a field that has nothing to do
+with the comparison being made. The baseline biquad scores 0.198 dB; prepending
+either twin scores nothing at all.
+
+### 4.1 Which inverts that section's own conclusion
+
+`target4.py act0b` ends: *"The reverb, which owns 9 of the 35 non-DRAM sites, is
+**NOT** where it will be settled."* The reverb's sites carry `hi12[3:1] = 1` and
+**do** execute; the composite sites carry 5 and do not. **The reverb is the only
+place `ACTION 0x0B` can currently be examined at all** — the opposite of the
+handover's own expectation, and the reason §2's experiment exists.
+
+### 4.2 A blocker nobody had sized
+
+| `hi12[3:1]` | words | share | modelled |
+|---|---|---|---|
+| 0 | 1335 | 42.3% | yes |
+| 1 | 1331 | 42.2% | yes |
+| 2 | 285 | 9.0% | yes |
+| **3** | 53 | 1.7% | **no** |
+| **4** | 59 | 1.9% | **no** |
+| **5** | 58 | 1.8% | **no** |
+| **6** | 12 | 0.4% | **no** |
+| **7** | 21 | 0.7% | **no** |
+
+**203 of 3154 words (6.4%)** are refused on `hi12[3:1] > 2`, and **31 of those
+have both their SRC and their ACTION anchored** — they trap for this reason
+*alone*. Five undecoded values of what is otherwise the accumulator's whole
+operation select, and `dsp_disasm.hi_f31`'s own comment records that all
+**8 of 8** values occur in the corpus.
+
+## 5. What the next pass needs
+
+1. ★ **Decode `hi12[3:1]` values 3..7 — 203 words, and it is what blocks the
+   minimal pair.** §4 shows the one site in the corpus with known mathematics
+   downstream cannot be run because of it, and 31 words trap for this reason
+   *alone*. Until then the three-way question (`none` / `mem<-bus` / `tA<-acc`)
+   has no reference to be settled against: the reverb separates the readings but
+   nothing says which is right.
 2. **`ACT 0x1A` is what stands between BLOCK B and execution** — it is the first
    word of both BLOCK B instances, and BLOCK B's four multiplies now resolve.
    The same `act0b`-style enumeration applies directly.

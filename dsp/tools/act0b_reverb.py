@@ -219,6 +219,67 @@ def cmd_partition():
     return {"ran": ran}
 
 
+W_0B = 0x002A24B00B     # algos 98/99 w001 -- ACTION 0x0B
+W_00 = 0x002A24B000     # algo  96   w001 -- ACTION 0x00, identical otherwise
+
+
+def cmd_pair():
+    hdr("★ THE MINIMAL PAIR CANNOT BE EXECUTED -- and not because of the ACTION")
+    print("""  `target4.py act0b' offers the pair below as "a bounded, well-posed
+  next experiment": two words identical in hi12, class4, addr8 and SRC,
+  differing in the ACTION field alone, each sitting immediately before a
+  BYTE-IDENTICAL copy of PARAMETRIC EQ's solved biquad.  Structurally it is
+  everything one could ask for.  It still cannot decide anything:
+""")
+    for w, nm in ((W_0B, "algos 98/99 w001"), (W_00, "algo 96 w001")):
+        hi = DIS.hi12(w)
+        print("     %010X  %-18s hi12=%03X  class4=%d  addr8=%02X  SRC=%02X  "
+              "ACT=%02X   hi12[3:1]=%d %s"
+              % (w, nm, hi, DIS.class4(w), DIS.addr8(w), DIS.lo_src(w),
+                 DIS.lo_act(w), DIS.hi_f31(hi),
+                 "<-- REFUSED" if DIS.hi_f31(hi) > 2 else ""))
+    print("""
+  ★ BOTH members carry hi12[3:1] = 5, and `step()' refuses every word with
+  hi12[3:1] > 2 -- the accumulator-operation field is decoded for values
+  0, 1 and 2 and undecoded for 3..7.  So the twins trap for a reason that
+  has NOTHING TO DO with the ACTION field being compared, and prepending
+  either to the biquad returns TRAPPED rather than a decibel figure.
+
+  ★★ THIS INVERTS `target4.py act0b's OWN CONCLUSION.  That section ends
+  "The reverb, which owns 9 of the 35 non-DRAM sites, is NOT where it will
+  be settled."  The reverb sites carry hi12[3:1] = 1 and DO execute; the
+  composite sites carry 5 and do not.  The reverb is the only place ACTION
+  0x0B can currently be examined at all.""")
+    C = DL.ctx()
+    seen = {}
+    for a in sorted(C.imgs):
+        seen.setdefault(tuple(C.imgs[a]), a)
+    imgs = [list(k) for k in seen]
+    n = ref = anch = 0
+    c = collections.Counter()
+    for ws in imgs:
+        for w in ws:
+            n += 1
+            f = DIS.hi_f31(DIS.hi12(w))
+            c[f] += 1
+            if f > 2:
+                ref += 1
+                if DIS.lo_act(w) in DIS._ANCHORED_ACT and \
+                        DIS.lo_src(w) in DIS._ANCHORED_SRC:
+                    anch += 1
+    print("\n  THE FIELD, SIZED (population %d words / %d DISTINCT images):" % (n, len(imgs)))
+    for f in range(8):
+        print("     hi12[3:1] = %d : %5d  %5.1f%%   %s"
+              % (f, c[f], 100.0 * c[f] / n,
+                 "modelled" if f <= 2 else "UNDECODED"))
+    print("""
+  ★ %d of %d words (%.1f%%) are refused on hi12[3:1] > 2, and %d of those
+  have BOTH their SRC and their ACTION anchored -- they trap for this
+  reason ALONE.  Five undecoded values (3..7) of a field that is otherwise
+  the accumulator's whole operation select.""" % (ref, n, 100.0 * ref / n, anch))
+    return {"refused": ref, "anchored": anch}
+
+
 def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
     if cmd in ("all", "census"):
@@ -227,6 +288,8 @@ def main():
         cmd_wdata()
     if cmd in ("all", "partition"):
         cmd_partition()
+    if cmd in ("all", "pair"):
+        cmd_pair()
 
 
 if __name__ == "__main__":
