@@ -865,3 +865,71 @@ going to force an interpretation onto it.
 - **One echo is not a tank.** Whatever produces a *decaying train* is still
   missing, and the ±4 LSB floor suggests a feedback path that is present but
   attenuated to the quantisation limit rather than absent.
+
+---
+
+## 16. The fixed-point scaling is not the missing piece — and a fourth metric of mine fails
+
+§15 left the ±4 LSB floor looking like an over-attenuation, with an obvious
+suspect: `step` has **two fixed-point regimes**, and every reverb run in this
+project has used the DATUM one (`ash=0, psh=23`) while the biquad reproduces its
+designer only in the ACC one (`ash=16, psh=6`).
+
+### 16.1 The two regimes bracket the behaviour
+
+| regime | result |
+|---|---|
+| DATUM `ash=0, psh=23` | dies to ±4 LSB after one echo — **over-attenuated** |
+| ACC `ash=16, psh=6` | 10 646 events above −50 dB, energy at frame 6000 **0.0 dB below the impulse** — **a runaway** |
+
+Neither is a reverb. But they bracket it, which suggested sweeping the product
+shift and letting the loop's own stability pick the value.
+
+### ⛔ 16.2 It does not work, and my verdict column was meaningless
+
+```
+  ash psh   peak       E@2000    E@5000    E@8000
+   16   4    8388607     -18.4     -18.4     -18.4
+   16   5    8388607      -8.5      -8.5      -5.6
+   16   6    7947815      -2.8      -2.8      -1.1
+   16   7      47758     -84.0     -84.0     -84.0
+   16   8        277     -42.8     -42.8     -42.8
+   16   9..12       1     -99.0     -99.0     -99.0
+    0  23      47758     -81.5     -81.5     -81.5
+```
+
+**No value produces a decaying tail.** Every row is either *sustained at a
+constant level* (4, 5, 6, 8) or *dead at the quantisation floor* (7, 9–12,
+DATUM). A decaying tail requires `E@2000 > E@5000 > E@8000`; **not one row shows
+that.**
+
+★ **And I labelled two of them "★ DECAYS".** My verdict test was
+`-70 < E@8000 < -12` — a check that the level sits in a *range*, which says
+nothing whatever about whether it is *decreasing*. Fourth metric of mine this
+session that could not measure what it claimed. The pattern is consistent enough
+to name: **every one of them tested a level or a presence where the claim was
+about a trend or an identity.**
+
+### 16.3 What the bracket actually says
+
+A loop whose energy is either **constant** or **zero** has a round-trip gain of
+≈1 or ≈0. A reverb needs a gain strictly between — that is what makes a tail
+decay. **No product shift moves this loop off those two attractors**, which means
+the missing element is not a scaling constant.
+
+So the fixed-point regime is **eliminated** as the explanation, which is worth
+having: it was the most plausible remaining "one constant is wrong" hypothesis,
+and it is now excluded across the whole range that keeps the arithmetic
+representable.
+
+### 16.4 Where that leaves the reverb
+
+Established this session, and holding: the input mix (§11), the entry pointer
+(§9.2), `wdata = acc` (§15.1), `act00 ≠ load` on two independent criteria
+(§13, §14), and a real echo at ≈1356 samples.
+
+Still missing: **whatever makes the loop gain less than one and greater than
+zero.** Given §16.3 that is a *structural* element — a feedback path with a
+coefficient — not a scaling choice. The nine still-trapping words (`ACT 0x0D`,
+`0x0E`, `0x1A`) remain the obvious place for it to be hiding, and every result
+above still carries speculative readings for them.
