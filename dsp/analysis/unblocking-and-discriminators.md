@@ -245,3 +245,75 @@ firmest result in this note.
    `src08` settings and 25 readings across six programs.
 6. ⛔ **Every count in §§3–4 was taken at `src08 = "unity"`** and must be re-derived
    before being quoted.
+
+---
+
+## 10. ★★★ The word that kills the LFO — and a FUNCTIONAL refutation of the mode-4 store target
+
+§8.2 left "which word zeroes AUTO PAN's phase" open. Logging every memory write in
+one full frame answers it, and the answer lands on a word this project had already
+singled out.
+
+### 10.1 First, a measurement error of mine
+
+The LFO phase does **not** live at `mem[0x04]`. In the *full* program the pointer at
+the store word is `0x0D` (and `0x0E` for the second LFO); `0x04` was the value in an
+isolated run that started at `w14`. **§8.2's "the phase stays 0" was watching the
+wrong cell.** The phase does get written — 228, on schedule — and is then destroyed.
+
+### 10.2 The killer
+
+```
+   w18  094.A.00.200   writes mem[0x0D] = 228     <- the LFO phase, correct
+   w25  012.4.01.1CE   writes mem[0x0D] = 0       <- ★ destroyed
+   w31  094.A.00.200   writes mem[0x0E] = 228     <- the second LFO
+   w38  012.4.01.1CE   writes mem[0x0E] = 0       <- ★ destroyed
+```
+
+★ **`012.4.01.1CE` is exactly the word [`dark-words.md`](dark-words.md) §4.4 Group E
+calls "a known-mathematics lever … the cleanest possible probe of what class 4
+changes."** That prediction is now vindicated from an entirely different direction:
+it is the word that decides whether the chip's oscillators can run at all.
+
+### 10.3 ★★★ The functional refutation
+
+`class4 = 4` ⇒ `mode 4`, and `do_store()`'s own comment reads
+*"modes 0/4/5: only 4 words, **OPEN**"*, defaulting the target to `st.p`. Making that
+target a parameter and asking the ROM's own mathematics:
+
+```
+   mode4dest    LFO phase after 400 frames    per-frame step   verdict
+   "ptr"                       0              0                flat -- phase destroyed
+   "addr8"                 91200              +228             ★ RAMPS AT THE ROM STEP
+   "none"                  91200              +228             ★ RAMPS AT THE ROM STEP
+```
+
+**228 = `0x0000E4` = `floor(1.1986 Hz × 2²³ / 44100)`** — `lfo_ramp.py`'s own
+derivation, and 91 200 = 228 × 400 exactly.
+
+★★★ **`mode 4` does NOT store to `mem[st.p]`.** If it did, `012.4.01.1CE` would zero
+the LFO phase every frame and AUTO PAN could not pan — which the instrument
+demonstrably does. This is a **functional refutation of one of the three options for a
+target the code itself marks OPEN**, from a program whose known mathematics says what
+must happen.
+
+### 10.4 Controls, and what is NOT claimed
+
+* **Regression: SINGLE DELAY is unchanged under all three settings** — lag **1001**,
+  gain **+0.02149296**. The one program with an independently known answer does not
+  move.
+* ⚠️ **The test does NOT separate `addr8` from `none`.** Both preserve the phase
+  identically. This is a **refutation of one option, not a determination** — and it is
+  labelled that way.
+* The result depends on `src08 = "coef"` (§8.1), which is itself justified by the same
+  LFO mathematics, so the two stand or fall together.
+
+## 11. Handover, revised again
+
+1. ★★★ **`mode 4` store target ≠ `mem[st.p]`** (§10.3) — the first *functional*
+   constraint this project has put on that field. Separating `addr8` from `none` needs
+   a program where they differ; finding one is a well-posed next task.
+2. ★★ **The unblocking programme** (§1): 36 of 38 execute, 98.0 %.
+3. ★ **`src08 = "coef"`** reproduces the LFO's ROM step and should be the harness default.
+4. ★ **Robust discriminators: PEQ+COMPR+DIST (16) and COMPRESSOR (10)**, not AUTO PAN.
+5. ★★★ **Delay-line traffic is invariant under every reading of `ACT 0x0D`/`0x0E`.**

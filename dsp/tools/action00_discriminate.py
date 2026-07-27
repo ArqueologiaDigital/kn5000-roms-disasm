@@ -176,7 +176,7 @@ def hi_op(f, mode):
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
                  "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
-                 "act1a", "act0d", "act0e", "act15", "storemode", "altlo12", "cfmt", "act08", "act0c", "act11", "act01", "act16")
+                 "act1a", "act0d", "act0e", "act15", "storemode", "altlo12", "cfmt", "act08", "act0c", "act11", "act01", "act16", "mode4dest")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
@@ -184,7 +184,7 @@ class Machine(object):
                  act1a=None, act0d=None, act0e=None, act15=None,
                  storemode="mode", altlo12=None, cfmt=None,
                  act08=None, act0c=None, act11=None, act01=None,
-                 act16=None):
+                 act16=None, mode4dest="ptr"):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
@@ -197,6 +197,7 @@ class Machine(object):
         self.cfmt, self.act08 = cfmt, act08
         self.act0c, self.act11 = act0c, act11
         self.act01, self.act16 = act01, act16
+        self.mode4dest = mode4dest
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -393,6 +394,20 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
             dest = st.p
         elif mode == 1:
             dest = DIS.addr8(w)
+        elif mode in (0, 4, 5):
+            #  ★ MODES 0/4/5 -- the target the comment below calls OPEN.  It is
+            #  now a PARAMETER because a functional constraint bears on it:
+            #  `012.4.01.1CE' (mode 4) lands on AUTO PAN's LFO phase cell under
+            #  `ptr' and ZEROES it every frame, which a panner cannot survive.
+            #  See analysis/unblocking-and-discriminators.md sect. 10.
+            if m.mode4dest == "addr8":
+                dest = DIS.addr8(w)
+            elif m.mode4dest == "none":
+                if obs is not None:
+                    obs.append(("ST-SUPPRESSED", mode, v & MASK24))
+                return
+            else:
+                dest = st.p                  # the historical default
         else:
             dest = st.p                      # modes 0/4/5: only 4 words, OPEN
         st.mem[dest] = v & MASK24
