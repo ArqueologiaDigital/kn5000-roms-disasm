@@ -310,18 +310,136 @@ def cmd_scan():
    wrong.  Report it as such and do NOT read a semantics off it.""")
 
 
+# ---------------------------------------------------------------------------
+#  3. THE VALUE TEST -- an IDENTITY, not a presence.
+#
+#  single-delay-restored.md sect. 2: the presence test failed because it asked
+#  whether signal ARRIVED.  The claim needs an IDENTITY.  algo 9's C-RAM stream
+#  supplies one without any topology assumption:
+#
+#      TWO coefficients of +0.500000 (w006, w029, the `655' words)
+#      FOUR identical 3-tap blocks {+0.273441, +0.387057, -0.207331}
+#
+#  A delay with feedback g emits echoes at D, 2D, 3D whose successive energies
+#  are in the ratio g.  So measure E2/E1 and ask whether it is a number THE ROM
+#  SUPPLIES.  That is the biquad methodology -- reproduce the designer -- applied
+#  to the one other program whose mathematics is known.
+# ---------------------------------------------------------------------------
+def out_run(m, nsamp=2600, polarity="correct", sign=+1, incell=0x03, p0=0x08,
+            seed=20260727, coef_scramble=None):
+    import random
+    words, cells, cons, coefs = descriptors()
+    if coef_scramble is not None:
+        coefs = list(coefs)
+        rr = random.Random(coef_scramble)
+        idx = [i for i, c in enumerate(coefs) if c]
+        vals = [coefs[i] for i in idx]
+        rr.shuffle(vals)
+        for i, v in zip(idx, vals):
+            coefs[i] = v
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+    rng = random.Random(seed)
+    dram = DelayDRAM(sign)
+    st = A.State(rng)
+    x = [0.0] * nsamp
+    x[4] = float(1 << 21)
+    out = [0.0] * nsamp
+    for n in range(nsamp):
+        st.acc = st.P = 0
+        st.ta = st.tb = 0
+        st.p = p0
+        st.dr = 0
+        st.mem[incell] = int(x[n]) & A.MASK24
+
+        def port(w, bus, s):
+            c = cell_of[port.idx]
+            d = DIS.dram_dir(w)
+            if polarity == "reversed":
+                d = "WRITE" if d == "READ" else "READ"
+            if d == "WRITE":
+                dram.write(c, bus)
+            else:
+                s.dr = int(dram.read(c)) & A.MASK24
+
+        for k, w in enumerate(words):
+            port.idx = k
+            if not A.step(m, st, w, coefs[k], rng, dram=port, unknown=lambda: 0):
+                return None
+        v = st.mem.get(0x0E, 0)
+        out[n] = float(v - (1 << 24)) if v >= (1 << 23) else float(v)
+        dram.advance()
+    return x, out
+
+
+def echo_energies(out, D=500, half=8):
+    """energy in a window around each multiple of D."""
+    e = []
+    for k in (1, 2, 3):
+        c = 4 + k * D
+        lo, hi = max(0, c - half), min(len(out), c + half + 1)
+        e.append(sum(out[i] * out[i] for i in range(lo, hi)) ** 0.5)
+    return e
+
+
+ROM_GAINS = {0.500000: "+0.500000 (w006/w029)",
+             0.273441: "+0.273441", 0.387057: "+0.387057", 0.207331: "-0.207331"}
+
+
+def cmd_value():
+    hdr("value -- does the echo RATIO reproduce a coefficient the ROM supplies?")
+    print("""   IDENTITY test.  A delay with feedback g emits echoes at D, 2D, 3D with
+   successive energies in the ratio g.  algo 9's stream carries +0.500000 twice.
+   Ask: is E2/E1 equal to a ROM gain?  No topology is assumed -- only that
+   feedback exists, which the two `655' coefficients assert.\n""")
+    base = machine(act0d="tA<-bus", act0e="tA<-bus")
+
+    print("   %-34s %-10s %-10s %s" % ("configuration", "E2/E1", "E3/E2", "verdict"))
+
+    def row(lbl, m, **kw):
+        r = out_run(m, **kw)
+        if r is None:
+            print("   %-34s %-10s %-10s machine refused" % (lbl, "-", "-"))
+            return None
+        x, out = r
+        e = echo_energies(out)
+        if e[0] <= 0:
+            print("   %-34s %-10s %-10s NO FIRST ECHO" % (lbl, "-", "-"))
+            return None
+        r1 = e[1] / e[0]
+        r2 = (e[2] / e[1]) if e[1] > 0 else 0.0
+        hit = [g for g in ROM_GAINS if abs(r1 - g) < 0.02]
+        v = ("★ = %s" % ROM_GAINS[hit[0]]) if hit else "no ROM gain"
+        print("   %-34s %-10.6f %-10.6f %s" % (lbl, r1, r2, v))
+        return r1
+
+    row("BASELINE", base)
+    print()
+    print("   -- CALIBRATION: a control that cannot fail is not a control.  Moving the")
+    print("      ANCHORED memory writer (ACT 0x07) must change an instrument that can")
+    print("      see the datapath.  In the presence test it did not, 4 of 4.")
+    for d in ("mem", "tA", "tB", "acc"):
+        row("dest07 = %s" % d, machine(act0d="tA<-bus", act0e="tA<-bus", dest07=d))
+    print()
+    print("   -- NULL: the ROM's own coefficients, shuffled among the same slots.")
+    for sd in (1, 2, 3):
+        row("coefficients SCRAMBLED #%d" % sd, base, coef_scramble=sd)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", nargs="?", default="all",
-                    choices=["taps", "control", "scan", "all"])
+                    choices=["taps", "control", "scan", "value", "all"])
     a = ap.parse_args()
     if a.cmd in ("taps", "all"):
         cmd_taps()
     if a.cmd in ("control", "all"):
         print()
         cmd_control()
-    if a.cmd in ("scan", "all"):
+    if a.cmd in ("value", "all"):
+        print()
+        cmd_value()
+    if a.cmd == "scan":
         print()
         cmd_scan()
 
