@@ -615,3 +615,78 @@ been the accumulator being overwritten before its value is used — at `w006`
 word is `f31 = 0` or `ACT 0x00 = load`. The first is FORCED and correct (§8.1).
 **The second is not forced, and it is the one that keeps appearing at the exact
 point the signal is lost.**
+
+---
+
+## 13. `ACT 0x00` settled against the LFO — down to two, and neither is the one that ships
+
+The LFO ramp is the **only known-mathematics context on this chip that carries an
+`ACTION 0x00` word** — PARAMETRIC EQ has none at all, so the biquad is blind to
+this parameter by construction. Run over the full published space (3888 machines:
+`order × act00 × sttime × stgate × op2 × wrap`), scored against all **29** LFO
+blocks at 30 frames, with `is_ramp` as the criterion:
+
+```
+  stage 1 (6 blocks, 12 frames)  : 540 survive
+  stage 2 (ALL 29 blocks, 30 fr) : 540 survive
+```
+
+| `act00` | LFO survivors | reverb: delay addresses reached |
+|---|---|---|
+| `none` | **0 — REFUTED** | 0 |
+| `add` | 180 | **4** |
+| `sub` | **0 — REFUTED** | 4 |
+| **`load`** *(ships)* | 240 | **2** |
+| `rload` | 120 | **4** |
+| `bsel` | **0 — REFUTED** | 4 |
+
+★ **The LFO refutes three of the six outright** — `none`, `sub` and `bsel` cannot
+produce the ramp under any gate, order, wrap or `op2`. That reproduces
+[`action00-discriminator.md`](action00-discriminator.md)'s survivor set
+(`load`/`add`/`rload`) from an independent re-implementation.
+
+### ★★ 13.1 The intersection is `{add, rload}`
+
+Cross the LFO's three against §12's functional result — which readings let the
+reverb carry its mixed input past `w020`:
+
+- `sub` and `bsel` pass signal but the **LFO refutes them**.
+- `load` is **LFO-admitted and is precisely the reading that erases the signal**
+  at `w020`, reaching half as many delay addresses as the alternatives.
+- **`add` and `rload` are admitted by both.**
+
+**`load` is what the device ships.** It is the one member of the LFO's set that
+fails the functional test the other two pass.
+
+### 13.2 Stated at its real strength
+
+**The LFO half is solid**: 3888 machines, all 29 blocks, 30 frames, a criterion
+(`is_ramp`) that requires an exact arithmetic progression matching a rate the ROM
+encodes as `floor(f × 2²³/44100)`. Three values are **refuted**.
+
+**The reverb half is a functional heuristic, not a forcing.** "4 delay addresses
+versus 2" is a real, measured asymmetry — and it is the same *can the program
+pass signal* criterion that eliminated 30 of 36 combinations earlier — but it is
+not a numeric match against known mathematics, and the runs still carry
+speculative readings for the nine trapping words. **It ranks the three; it does
+not force one.**
+
+So: `ACT 0x00 ∈ {add, load, rload}` **FORCED by the LFO**, narrowed to
+`{add, rload}` **CONSISTENT-favoured** by the reverb's signal path — and nothing
+here distinguishes `add` from `rload`, which the reverb scores identically.
+
+### 13.3 Not applied, and why that is the right call
+
+`load` continues to ship. Three reasons: the LFO admits it; the reverb's
+preference is a heuristic rather than a forcing; and
+`action00-discriminator.md` §0-C measured that `act00` is **locked to the store
+gate** in all 33 survivors — `add` and `rload` occur *only* under a late-clearing
+gate, `load` under any of five. Changing `act00` without settling the gate would
+ship one guess to fix another.
+
+★ **The handover is now exact**: `ACT 0x00` and the bit-7 store-gate clear are
+**one question** (that note's own headline), the LFO forces the pair to three
+possibilities, the reverb's signal path disfavours the shipped one, and the gate
+is the half with 130 corpus words behind it. **Settle the gate and `ACT 0x00`
+falls out — and if it falls out as `add` or `rload`, the reverb gains its signal
+path at the same moment.**
