@@ -48,7 +48,7 @@ every word that trapped before still traps.
 | **C3a** | ★★★ **The read strobe exists and is NEVER ASSERTED.** Call-site census of the nine pin primitives over the whole 192 KB Sub CPU ROM: `/WR assert` 2, `/RD release` 6, READY read 6 — and **`0x0383B7`, the routine that asserts /RD, has ZERO call sites**. The chip's byte port is bidirectional (the primitive exists) and this firmware only ever writes. There is no host read-back against which any data-direction hypothesis could be validated. | **MEASURED** |
 | **C3** | ★★ **A SECOND chip-side input exists and is read exactly once.** `DSP_SYSTEM_INIT` samples **PH.3** at `0x034C87` and stores its **complement** into bit 3 of the config word at RAM `0x041343`, before `DSP_RESET` runs. It is the only DSP-side input outside the byte handshake. | **MEASURED** |
 | **C4** | ★★★ **THE CHIP'S COMMAND-BYTE SPACE, censused.** `0x01` + a 16-bit N = *aim the write pointer at N, then stream 36-bit words*; N ∈ {`0x0000 0x003C 0x0040 0x0047 0x0054 0x00C8`} are I-RAM word addresses **0/60/64/71/84/200** — the kernel, the two link words and the two body entry points — while **`0x0160` is a poke PORT, not an I-RAM address**. `0x02` + `0x0161` = the 24-bit coefficient port. `0x03` = end of transaction. `0x04`/`0x09`/`0x0C` = boot-time singletons. **`0x30` is not IC311 at all.** | **MEASURED** |
-| **C5** | ★★★ **THE "MALFORMED" ALGORITHM SET IS NOT MALFORMED.** Every tool in `dsp/tools` excludes `{79, 88, 89, 90, 91}` as `MALFORMED`. They are **exactly the five algorithms with no IC311 program**: their op-3 program record carries command `0x30` and a "load address" of `0x05F0`/`0x0D30` which is not an I-RAM word address. **They are DSP2 (MN19413, IC310) programs** — GEQ, ROOM, KARAOKE, BATH ROOM, STAGE. Algorithms 57–60 (STANDARD/PERCUSSIVE/SYMPHONIC/DEEP SPACE) configure **both** chips. | **PROVEN BY CONSTRUCTION** |
+| **C5** | ★★★ **THE "MALFORMED" ALGORITHM SET IS NOT MALFORMED.** Every tool in `dsp/tools` excludes `{79, 88, 89, 90, 91}` as `MALFORMED`. They are **exactly the five algorithms with no IC311 program**: their op-3 program record carries command `0x30` and a "load address" of `0x05F0`/`0x0D30` which is not an I-RAM word address. **They are DSP2 (MN19413, IC310) programs** — GEQ, ROOM, KARAOKE, BATH ROOM, STAGE. ~~Algorithms 57–60 (STANDARD/PERCUSSIVE/SYMPHONIC/DEEP SPACE) configure **both** chips.~~ ⛔ **CORRECTED 2026-07-27, and the correction is FALSIFYING, not additive** (`second-dsp-and-ready.md` §2): algorithms **57–60 are IC310-ONLY too**. Algo 57's program stream is **one** op-E cmd-0x30 record and its parameter stream is **four**; there is **no IC311 traffic in any of the nine**. The partition is **IC311 91 / IC310 9 / both 0 / neither 0**, so **the IC311 algorithm population is 91**, not 95 or 96. Only five were ever flagged because their cmd-0x30 rides on record opcode **3** (which an IC311-shaped parser turns into a phantom I-RAM block); 57–60's rides on opcode **`0x0E`** and parses to nothing. | **PROVEN BY CONSTRUCTION** for the five; the “both chips” clause **FALSIFIED** |
 | **D1** | ★★★ **`action00-discriminator.md` §0-H's three SINGLE DELAY labels are all wrong, and `store-gate.md` item J′ closes.** Algo 9's canned C-RAM image is **two mirrored 9-cell channel blocks**: `0x00..0x08` and `0x09..0x11` are value-for-value identical. The host names `0x00` **FEEDBACK L** and `0x09` **FEEDBACK R** (opcode `0x73`, operands 0 and 2). `0x01`/`0x0A` are T1-allocated and never referenced. `0x02`/`0x0B` are `+0.5000` in both channels and **carry no user name at all**. So `w3` (cell `0x00`) is not an input mix, `w4` (cell `0x01`) is not the other half of one, and `w6` (cell `0x02`) is **not "the feedback"**. | **MEASURED** |
 | **D2** | ★★ **PARAMETRIC EQ's cell layout, from the host: five bands on a SIX-cell stride.** `T1[0x70] = 00 06 0C 12 18 | 64 68 6C 70 74`; the three UI knobs `BAND EMPHASIS FC/Q/G` of band *b* are three T2 records with the **same operand** *b*, and the handler writes **three C-RAM cells** per record. Every band's canned image has `cell+3 = −(cell+0)` and `cell+5 = −1.0000` exactly. | **MEASURED** — for the matching pass |
 | **E1** | ★★ **A three-way agreement that no single artefact could give.** Opcode `0x67` is the **only** opcode routed to the delay-descriptor writer; its evaluator `0x03925E` is the **only** one that multiplies by `44100/1000`; and its UI unit is **`ms` in 38 of 38** named sites, against **2 of 100** in the D space and **2 of 265** in the C space. Three independent firmware structures, one answer. | **MEASURED** |
@@ -503,8 +503,16 @@ Population: 100 canned program streams + 100 canned parameter streams, plus the
 
 ### 6.4 ★ The `MALFORMED` set is a second chip
 
+> ⛔ **CORRECTED 2026-07-27** — the four `IC311 unit 0 + DSP2` rows below are
+> **WRONG**. Algorithms 57–60 carry **no IC311 record at all**: their program
+> stream is one op-E cmd-0x30 record and their parameter stream is four, every
+> one of them command `0x30`. The chip partition is **91 / 9 / 0 / 0** and the
+> IC311 population is **91**. See
+> [`second-dsp-and-ready.md`](second-dsp-and-ready.md) §2; reproduce with
+> `python3 dsp/tools/second_dsp.py dsp2`.
+
 ```
-   algo 57 STANDARD     IC311 unit 0 + DSP2 (program rec-op E, params rec-op E)
+   algo 57 STANDARD     DSP2 ONLY (program rec-op E cmd 0x30, params rec-op E cmd 0x30)
    algo 58 PERCUSSIVE   idem      algo 59 SYMPHONIC   idem   algo 60 DEEP SPACE  idem
    algo 79 GEQ          NO IC311 PROGRAM -- program rec-op 3, cmd 0x30, port 0x05F0
    algo 88 ROOM         NO IC311 PROGRAM -- cmd 0x30, port 0x0D30
@@ -640,8 +648,13 @@ corrupt. They are DSP2 (MN19413, IC310) programs and IC311 never sees them.**
    different regions, and conflating them is how `dark-words.md` §4.3's
    hypothesis (β) was framed.
 5. **Everyone: stop calling `{79, 88, 89, 90, 91}` malformed.** Rename the
-   constant. Four more algorithms (57–60) *also* talk to DSP2 while running on
-   IC311, so any per-algorithm statistic over "all 100" is mixing two chips.
+   constant. ~~Four more algorithms (57–60) *also* talk to DSP2 while running on
+   IC311~~ — ⛔ **CORRECTED: 57–60 do NOT run on IC311 at all.** Nine algorithm
+   slots are IC310's and none of them touches IC311; the IC311 population is
+   **91**. Any per-algorithm statistic whose denominator is 95, 96 or 100 is
+   wrong — `second-dsp-and-ready.md` §3 lists every site, and the good news is
+   that **nothing has to be recomputed**: the numbers were already over the
+   right set. The constant is now `DSP2_MISPARSED` throughout `dsp/tools`.
 6. **Anyone modelling the host port in MAME**: `porth_read().set_constant(0x01)`
    makes the READY line unfailable. The firmware has an 8000-poll timeout and two
    error paths, and it drops parameter writes silently when they fire — which is

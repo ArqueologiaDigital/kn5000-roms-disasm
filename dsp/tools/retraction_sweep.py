@@ -266,6 +266,53 @@ PREMISES = [
              r"pre-?delay[^.\n]{0,30}4,?452"],
         exempt=[r"not 127", r"halved", r"HALF of what", r"RETRACT", r"withdraw"],
     ),
+    dict(
+        id="P17",
+        claim="H-DIR -- `SRC == 0x0B' is the delay-DRAM READ -- and its "
+              "consequence that 99 of 276 corpus delay-DRAM words (35.9 %) are "
+              "reads",
+        retracted_by="dram-direction.md item B FORCED the direction FIELD to "
+                     "`addr8' bit 6 by exhaustive elimination (SRC reaches zero "
+                     "violations in 0 of 64 boolean functions) and "
+                     "adjudication-round5.md item D closed the POLARITY "
+                     "(0x20/0x30 = READ, 0x60 = WRITE), which SHIPPED to both "
+                     "mirrors.  Re-scored against it over all 276 corpus "
+                     "delay-DRAM words, H-DIR agrees 111 of 276 = 40.2 % -- "
+                     "BELOW CHANCE; the inverted rule gets 59.8 %; and SRC 0x0B "
+                     "sits on BOTH sides (49 read words, 50 write words).  The "
+                     "replacement census is READ 164 / WRITE 112 / trapping 0.  "
+                     "second-dsp-and-ready.md sect. 5; reproduce with "
+                     "`python3 dsp/tools/second_dsp.py darkf'",
+        sig=[r"99 of 276", r"35\.9 ?%",
+             r"SRC ..?0x0B..? ?(is|=|<=>|\u21d4)[^.\n]{0,30}READ"],
+        # A line that ASKS for the retirement, or reports the historical
+        # number as history, is not an assertion of the premise.  These four
+        # phrasings are the ones the two notes that predicted this retirement
+        # actually used, and they are listed individually rather than as a
+        # blanket so that a future ASSERTION cannot hide behind them.
+        exempt=[r"RETIRED", r"RETRACT", r"below chance", r"FALSIFIED",
+                r"40\.2", r"111 of 276",
+                r"is retired", r"should be retired", r"anti-correlated",
+                r"not FORCED", r"falsified"],
+    ),
+    dict(
+        id="P18",
+        claim="algorithms 57-60 configure BOTH chips, and {79,88,89,90,91} is "
+              "the set of DSP2 algorithms -- so the IC311 population is 95/96",
+        retracted_by="second-dsp-and-ready.md sect. 2: an algorithm is IC310's "
+                     "iff any of its records carries cmd 0x30, and the split is "
+                     "IC311 91 / IC310 9 / both 0 / neither 0.  Algo 57's "
+                     "program stream is ONE op-E cmd-0x30 record and its "
+                     "parameter stream is FOUR; there is no IC311 traffic in any "
+                     "of the nine.  Only five were ever flagged because their "
+                     "cmd-0x30 rides on record opcode 3; 57-60's rides on "
+                     "opcode 0x0E and parses to nothing.  Reproduce with "
+                     "`python3 dsp/tools/second_dsp.py dsp2'",
+        sig=[r"57.{0,6}60[^.\n]{0,40}both chips",
+             r"configure \*?\*?both\*?\*? chips",
+             r"96 valid programs"],
+        exempt=[r"FALSIFIED", r"RETRACT", r"corrected", r"is 91", r"91 IC311"],
+    ),
 ]
 
 # --------------------------------------------------------------------------

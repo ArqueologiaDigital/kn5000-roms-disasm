@@ -23,12 +23,14 @@ python3 dsp/tools/second_dsp.py all       # ~90 s
 python3 dsp/verify.py                     # BYTE-MATCH OK
 ```
 
-**No MAME source is touched and no disassembler is touched.** Zero dark slots are
-recovered: every word that trapped before still traps; the frame tally is
-unchanged (107 FULLY / 92 addressing-only / 86 dark, 0 of 1 536 349 frames
-complete). Three published claims are **retired**, three notes are **corrected**,
-and one emulator comment is shown to be **measurably wrong** without its
-behaviour being wrong.
+**No emulator BEHAVIOUR is changed and no disassembler is touched.** One MAME
+file is edited **and every edited line is a `//` comment** — the rebuilt binary is
+**byte-identical** to the one published before it (§6.1), which is a control that
+could have failed and did not. Zero dark slots are recovered: every word that
+trapped before still traps; the frame tally is unchanged (107 FULLY /
+92 addressing-only / 86 dark, 0 of 1 536 349 frames complete). Three published
+claims are **retired**, five notes are **corrected**, and the emulator comment
+that was measurably wrong is fixed without its behaviour moving.
 
 ---
 
@@ -603,6 +605,29 @@ rule 6.
   `0x034C87` and stores complemented into the DSP config word. **Do not change
   this constant to "model READY".**
 
+### 6.1 ★ APPLIED — and PROVED inert by a control that could have failed
+
+The comment correction is **shipped** (`kn7000_mame`, `src/mame/matsushita/kn5000.cpp`,
+commit `e773a45`), together with an expansion of the `subcpu_mem` DSP2 note.
+
+Two independent proofs that no behaviour changed:
+
+1. **By construction.** `git diff -U0 src/mame/matsushita/kn5000.cpp | grep -vE
+   '^[+-]\s*//'` is **empty** — every added and every removed line is a `//`
+   comment.
+2. **By the artefact.** The rebuilt binary is **byte-identical** to the one
+   published before the change — `md5 965976f50bbfa11299d1449caca7d336`,
+   74 405 928 bytes, both. ★ **This control could have failed**: the edit adds 48
+   lines to the middle of the file and therefore shifts `__LINE__` for everything
+   after it, so any macro in `kn5000.cpp` that embeds `__LINE__` would have
+   changed the object. None does.
+
+An audio capture is *strictly weaker evidence than this* and was therefore not
+taken: a bit-identical executable produces bit-identical audio by definition,
+whereas a capture only samples one trajectory. Build log: 0 `error:`, binary
+mtime advanced, size 74.4 MB; `tools/publish-binary.sh` run afterwards and the
+published hash is unchanged.
+
 **AND `subcpu_mem`'s DSP2 comment is confirmed, not corrected** — `PF.0 = SDA,
 PF.2 = SCLK, PE.6 = CS2` is exactly what the firmware does and what the nets
 `DSP2DA / DSP2SCK / DSP2CS` are called. Worth adding: **write-only, and IC310 is
@@ -727,3 +752,17 @@ hole in the audio model than IC311's.
 * `dsp/instruction-set.md` — the terminator sentence, corrected in place.
 * `dsp/analysis/dark-words.md` — item F, §3, §6, §9 and §10 item 1 retired in
   place, historical text kept.
+* `dsp/analysis/host-side.md` — C5, §6.4 and §10 item 5 corrected in place
+  (the "57–60 configure both chips" clause is FALSIFIED).
+* `dsp/algorithms/families.md` — the "Excluded — malformed" section rewritten.
+* `dsp/README.md`, `dsp/verify.py` — the 96 → 91 denominator, and
+  `MALFORMED` → `DSP2_MISPARSED` (a deprecated alias keeps every caller working).
+* `dsp/tools/{dark_words,closure_pointer,dsp_coverage,isa_adjudicate,
+  r1_allpass_solve,k3_pointers,gen_dsp_disasm,register_space}.py` — the same
+  rename, mechanical and behaviour-preserving.
+* `dsp/tools/retraction_sweep.py` — **premises P17 (H-DIR and its 99/276) and
+  P18 (the "both chips" claim and the 95/96 population) filed**, so that anyone
+  who quotes either number again is caught. Both report **0 LIVE sites** after
+  the corrections above.
+* `kn7000_mame/src/mame/matsushita/kn5000.cpp` — comment only; the rebuilt
+  binary is byte-identical (§6.1).

@@ -399,7 +399,7 @@ the 8 unaligned ones have `#cells ≠ #consumers`). **IN SCOPE: 781.**
 
 ★ **This inverts `dram-direction.md` §7.3's replacement census**, which put
 `880.1.60.000` (×63) and `900.1.60.1D5` (×32) on the READ side. They are WRITES.
-`dark-words.md` item F's consequence — *"99 of 276 delay-DRAM words are reads
+`dark-words.md` item F's consequence (RETIRED) — *"99 of 276 delay-DRAM words are reads
 under H-DIR"* — is retired along with `H-DIR` itself, which scores **12 of 61**
 on the host-labelled set and is not merely incomplete but **anti-correlated**.
 

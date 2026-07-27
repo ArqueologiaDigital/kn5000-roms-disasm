@@ -544,7 +544,7 @@ what is the strongest instruction-blind rival, and was it ever run?
   2 becomes a measurement and §7's polarity closes — against r1. If they are not,
   witness 2 collapses and it closes the other way.
 * **To whoever next edits `dark-words.md`.** Item F's `H-DIR` is falsified (§8);
-  its consequence paragraph — *"99 of 276 corpus delay-DRAM words (35.9 %) are
+  its consequence paragraph (now RETIRED) — *"99 of 276 corpus delay-DRAM words (35.9 %) are
   reads under H-DIR"* — should be retired with it. The replacement census is
   §7.3.
 * **To the adjudicator.** Two published labels move: `dram-cursor-closure.md`
