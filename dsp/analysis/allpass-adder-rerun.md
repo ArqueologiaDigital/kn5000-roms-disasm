@@ -134,6 +134,20 @@ what turns out to matter, in a direction nobody predicted.
 
 ## 4. The controls — the harness must be able to say YES in the new model
 
+> ⚠ **RETRACTED IN PART (2026-07-27, [`schroeder-topology.md`](schroeder-topology.md) §3).**
+> **BOTH controls in this section were run with the ROM's real ladder-0 delays
+> `[127, 435, 489, 183, 522]` over 64 samples.** `min(delay) = 127 > 64`, so no
+> delay line ever recirculated: every read returned 0, `allpass_ref` collapsed to
+> `y = x·Π(−g_k)`, and "MATCH" meant only *"one scalar multiple of x equals
+> another"*. **The controls could not fail — which is the very defect §4 says it
+> found in the OLD control, present again in its replacement.** Re-run at delays
+> that recirculate, both controls still MATCH, so §5's zero keeps a valid
+> positive control; but `extract = P, scale = +1.000` below is the zero-delay
+> artefact and the true figures are `extract = M, scale = −1.000`. The searches
+> are unaffected — `action_search` uses delays `[3, 5]` over 32 samples.
+> §4.1's conclusion ("the strict sub-space CAN express a one-multiplier
+> all-pass") survives the repair unchanged.
+
 ```
    ORDER = ADDER, the existing hand-built Gardner ladder
      2-stage ladder, ROM gains 0.75 0.63:                 MATCH  inject=P extract=P scale=+1.000
@@ -558,6 +572,16 @@ same thing: the shipped reading and the all-pass reading are incompatible.
   the multiplicand itself, which is a Schroeder/nested-comb shape rather than a
   Gardner all-pass — `sec_schroeder` in the same tool is the obvious next
   acceptance test, and it now has a *reason* to be run rather than a hunch.
+  > ★ **ANSWERED (2026-07-27, [`schroeder-topology.md`](schroeder-topology.md)).**
+  > It writes `w[r] + t[r−1]` — the fresh delay read plus the previous stage's
+  > product — and multiplies the same number. **The core is a COMB network**:
+  > 16 520 of 20 580 000 generous machines and 112 of 823 200 strict ones
+  > reproduce a comb topology exactly, against 0 for the all-pass. And it
+  > **settles `ACTION 0x00` the other way from this note's expectation**: every
+  > comb survivor forces `load`, so `load` is now agreed by four contexts and
+  > the contradiction is closed. (The test needed a NEW section — `sec_schroeder`
+  > was already taken by section 9's different proposition — so it is
+  > `sec_schroeder2`.)
 
 ---
 

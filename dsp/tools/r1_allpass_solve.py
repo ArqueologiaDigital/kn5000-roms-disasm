@@ -2150,6 +2150,735 @@ def sec_adder(C, rom, imgs, names):
             action_search(banks, l0, D0, base)
 
 
+# ==========================================================================
+#  14.  ★ THE SCHROEDER / NESTED-COMB TEST
+#
+#  NAMING.  `sec_schroeder' above is ALREADY TAKEN, by a different and much
+#  older question (section 9: can a GARDNER machine have WVAL == MULT, inside
+#  R1's four-register model -- answer no).  This section is the one the brief
+#  asks for and it is called `sec_schroeder2' / CLI `schroeder2' so that the
+#  published reproduce lines for section 9 keep working.
+#
+#  WHY IT EXISTS.  `allpass-adder-rerun.md' sect. 6.3 located the obstruction
+#  exhaustively: slot 4 (the DRAM WRITE, src 0x19) and slot 5 (THE MULTIPLY,
+#  src 0x19) are ADJACENT and slot 4's ACTION 0x15 has no capture half, so
+#  whenever the write takes its data from the BUS the value stored into the
+#  delay line and the value handed to the multiplier are THE SAME NUMBER.
+#  Call it u.  Then
+#
+#        line <- u ,   t = g*u ,   w = u[n-D]      =>   g*w[n] = t[n-D]
+#
+#  A first-order all-pass stage stores x+t and multiplies x+w -- two different
+#  numbers -- so it is excluded, which is the published zero.  What is NOT
+#  excluded is a recirculating COMB: with the write trailing the read by one
+#  repetition, u_r = a*x + b*w_r + c*t_{r-1} gives
+#
+#        d_k[n] = (b*c*g_k) * d_k[n-D_k] + (terms not involving line k)
+#
+#  -- loop gain b*c*g_k, closed through the multiplier exactly once, ACROSS the
+#  repetition boundary.  That is the comb denominator 1 - g z^-D.
+#
+#  ★ AND THAT REFRAMES THE EXISTING FILTER.  `loop_ok's C1/C2/C3 are conditions
+#  on the DENOMINATOR alone (the fresh read reaches the multiplier +-1; the
+#  product reaches the line one repetition later +-1; nothing unmultiplied gets
+#  back).  They are the COMB conditions.  The all-pass lives entirely in the
+#  NUMERATOR, which only the numeric matcher ever tested.  So the 74 508 adder
+#  survivors already have a correct comb denominator and were rejected on the
+#  numerator only -- which is exactly why re-testing the SAME survivor set
+#  against COMB references is the cheap, well-posed next question.
+# ==========================================================================
+
+# --- the candidate topologies, each written FROM THE MATHEMATICS -----------
+#  Every one of these is a textbook structure transcribed from its difference
+#  equation with the same `Line' class the ladder uses.  None of them is
+#  derived from the executor, from the ROM words or from a search result.
+
+def comb_series_ref(gains, delays, x, tap="v"):
+    """A CASCADE of feedback combs:  V_k = V_{k-1} / (1 - g_k z^-D_k).
+    Line k stores v; reading it returns v[n-D_k]."""
+    lines = [Line(d) for d in delays]
+    out = []
+    for xn in x:
+        v, w = xn, 0.0
+        for k, g in enumerate(gains):
+            w = lines[k].read()
+            v = v + g * w
+            lines[k].write(v)
+        out.append(v if tap == "v" else w)
+        for ln in lines:
+            ln.advance()
+    return out
+
+
+def comb_parallel_ref(gains, delays, x):
+    """Schroeder's parallel comb BANK:  y = SUM_k x/(1 - g_k z^-D_k)."""
+    lines = [Line(d) for d in delays]
+    out = []
+    for xn in x:
+        y = 0.0
+        for k, g in enumerate(gains):
+            v = xn + g * lines[k].read()
+            lines[k].write(v)
+            y += v
+        out.append(y)
+        for ln in lines:
+            ln.advance()
+    return out
+
+
+def lp_comb_ref(gains, delays, x):
+    """A MOORER comb: the feedback runs through a fixed one-zero averager
+    (1 + z^-1)/2, which the chip could supply with the tempB >>1 and no second
+    multiplier.  y = SUM_k of  v_k[n] = x[n] + g_k*(w_k[n] + w_k[n-1])/2."""
+    lines = [Line(d) for d in delays]
+    prev = [0.0] * len(delays)
+    out = []
+    for xn in x:
+        y = 0.0
+        for k, g in enumerate(gains):
+            w = lines[k].read()
+            v = xn + g * 0.5 * (w + prev[k])
+            prev[k] = w
+            lines[k].write(v)
+            y += v
+        out.append(y)
+        for ln in lines:
+            ln.advance()
+    return out
+
+
+def nested_ap_ref(gains, delays, x):
+    """GARDNER's NESTED all-pass: stage k is a one-multiplier all-pass whose
+    delay line is fed by stage k+1's output -- an all-pass inside the delay of
+    an all-pass.  Written from the recursion, not from any machine."""
+    lines = [Line(d) for d in delays]
+    K = len(gains)
+
+    def stage(k, v):
+        w = lines[k].read()
+        t = gains[k] * (v + w)
+        inner = v + t
+        if k + 1 < K:
+            inner = stage(k + 1, inner)
+        lines[k].write(inner)
+        return w - t
+
+    out = []
+    for xn in x:
+        out.append(stage(0, xn))
+        for ln in lines:
+            ln.advance()
+    return out
+
+
+#  ★ THE STRUCTURE THE OBSTRUCTION ITSELF IMPLIES.  Not a textbook name: the
+#  difference equation of the note's own §6.3, written out.  Repetition r reads
+#  line r, forms u_r = b*w_r + c*t_{r-1}, writes u_r into line r-1 (the write
+#  trails by one) and multiplies the SAME u_r by g_r.  The ladder input enters
+#  as t_{-1}, i.e. through the product register -- which is what the five-word
+#  separator in front of every ladder supplies (one DRAM read + one class-A
+#  multiply), the same injection `run_ladder' documents.
+#  `drain' is the ONE boundary convention, enumerated and not chosen: at the
+#  K-th (drain) repetition there is no read, so the read-data register either
+#  reads as zero or HOLDS the previous repetition's value.
+def pipe_net_ref(gains, delays, x, b, c, tap, drain="hold"):
+    K = len(gains)
+    lines = [Line(d) for d in delays]
+    out = []
+    for xn in x:
+        tprev, wprev = xn, 0.0
+        us, ws, ts = [], [], []
+        for r in range(K + 1):
+            if r < K:
+                w = lines[r].read()
+            else:
+                w = wprev if drain == "hold" else 0.0
+            u = b * w + c * tprev
+            if r - 1 >= 0:
+                lines[r - 1].write(u)
+            us.append(u)
+            ws.append(w)
+            wprev = w
+            tprev = gains[r] * u if r < K else tprev
+            ts.append(tprev)
+        out.append({"u_last": us[-1], "t_last": ts[-1], "w_last": ws[-1],
+                    "u_sum": sum(us), "w_sum": sum(ws)}[tap])
+        for ln in lines:
+            ln.advance()
+    return out
+
+
+PIPE_TAPS = ("u_last", "t_last", "w_last", "u_sum", "w_sum")
+
+
+def topology_refs(gains, delays, x, wide=True):
+    """The reference set.  Returns [(name, array), ...].
+
+    A LATTICE is deliberately NOT here, and the reason is stated rather than
+    assumed: a Gray-Markel one-multiplier lattice REALISES the same all-pass
+    transfer function, and the matcher only ever compares INPUT/OUTPUT, so it
+    is the same test as `allpass_ref' -- already zero, twice.  The same
+    argument retires the two-multiply Schroeder all-pass (comb + feed-forward):
+    identical transfer function, and it needs g twice per stage where the core
+    has one class-A word."""
+    refs = [("allpass (the published zero, kept as a NEGATIVE control)",
+             allpass_ref(gains, delays, x)),
+            ("comb cascade, tap = stored", comb_series_ref(gains, delays, x, "v")),
+            ("comb cascade, tap = delayed", comb_series_ref(gains, delays, x, "w")),
+            ("comb bank, parallel", comb_parallel_ref(gains, delays, x)),
+            ("Moorer lowpass comb bank", lp_comb_ref(gains, delays, x)),
+            ("nested all-pass (Gardner)", nested_ap_ref(gains, delays, x))]
+    if wide:
+        for b in (1.0, -1.0):
+            for c in (1.0, -1.0):
+                for dr in ("hold", "zero"):
+                    for tp in PIPE_TAPS:
+                        refs.append(("pipe-comb b%+d c%+d %s %s"
+                                     % (b, c, dr, tp),
+                                     pipe_net_ref(gains, delays, x, b, c, tp,
+                                                  dr)))
+    # DEDUPLICATE.  The matcher grants a free scale, so two references that are
+    # PROPORTIONAL are the same test twice and would inflate every count.  The
+    # pipe-comb family is symmetric under (b,c) -> (-b,-c) -- an overall sign --
+    # and at drain = zero u_K = c*t_{K-1}, so u_last and t_last coincide there.
+    # Both are real identities, so the duplicates are merged, not hidden.
+    out = []
+    for nm, a in refs:
+        for _n2, a2 in out:
+            p = _proj(a, a2)
+            if p is not None and p[1] < 1e-12:
+                break
+        else:
+            out.append((nm, a))
+    return out
+
+
+def _proj(o, ref):
+    """best scale and the worst relative residue -- the matcher's own test."""
+    den = sum(v * v for v in o)
+    if den < 1e-18:
+        return None
+    sc = sum(a * bb for a, bb in zip(o, ref)) / den
+    if abs(sc) < 1e-6:
+        return None
+    mx = max(abs(v) for v in ref)
+    if mx < 1e-12:
+        return None
+    return sc, max(abs(sc * a - bb) for a, bb in zip(o, ref)) / mx
+
+
+def match_refs(outs, refs, tol=1e-7):
+    """Every (reference, injection, extraction, scale) that reproduces one of
+    the references.  Same acceptance rule as `machine_matches', applied to a
+    SET of references over ONE ladder run -- which is the whole point: the
+    expensive part is the ladder, not the comparison.
+
+    The probe-sample early-out is an OPTIMISATION ONLY: a candidate that clears
+    the probe is still checked on every sample, so the accept/reject decision is
+    identical to `_proj's, and `refs_selftest' asserts that on real data."""
+    prep = [(nm, ref, tol * max(abs(v) for v in ref)) for nm, ref in refs]
+    hits = []
+    for inj in range(6):
+        for ext in range(6):
+            o = outs[inj][ext]
+            den = 0.0
+            for v in o:
+                den += v * v
+            if den < 1e-18:
+                continue
+            probe = range(0, len(o), max(1, len(o) // 5))
+            for nm, ref, lim in prep:
+                sc = 0.0
+                for a, b in zip(o, ref):
+                    sc += a * b
+                sc /= den
+                if abs(sc) < 1e-6:
+                    continue
+                for i in probe:
+                    if abs(sc * o[i] - ref[i]) > lim:
+                        break
+                else:
+                    if max(abs(sc * a - b) for a, b in zip(o, ref)) <= lim:
+                        hits.append((nm, inj, ext, sc))
+    return hits
+
+
+def machine_outputs(m, gains, delays, x):
+    return [run_ladder_action(m, gains, delays, x, inj) for inj in range(6)]
+
+
+# --- CONTROLS THAT CAN SAY NO ---------------------------------------------
+#  Rule, earned the hard way: a control that cannot fail is not evidence.  The
+#  previous positive control produced BIT-IDENTICAL output across both settings
+#  of the parameter it was built to validate.  So each control below is shipped
+#  WITH a deliberately wrong twin, and the twin's rejection is printed next to
+#  the acceptance.
+
+#  (a) a COMB CASCADE, built where the write and the multiplicand DIFFER --
+#      the multiplicand is the fresh read w, the written value is the running
+#      accumulator v.  This is the control for the comb REFERENCE.
+COMB_CTL = [
+    dict(word="c0 read",  esc=True,  cls=1, src=0x0B, act=0x15, accop=2,
+         store=False, dram="rd"),                      # DR <- w[k]
+    dict(word="c1 mult",  esc=False, cls=0xA, src=0x0B, act=0x15, accop=2,
+         store=False, dram=None),                      # P  <- g_k * w[k]
+    dict(word="c2",       esc=False, cls=2, src=0x00, act=0x15, accop=1,
+         store=False, dram=None),                      # acc += P   -> v
+    dict(word="c3",       esc=False, cls=2, src=0x10, act=0x13, accop=2,
+         store=False, dram=None),                      # tA <- acc
+    dict(word="c4 write", esc=True,  cls=1, src=0x19, act=0x15, accop=2,
+         store=False, dram="wr")]                      # line k <- tA = v
+
+#  (a') THE WRONG TWIN, and it is wrong in EXACTLY the way this pass is about:
+#       tA is captured BEFORE the accumulate, so the written value becomes the
+#       value the multiplier consumed -- WRITE == MULTIPLICAND.  If the comb
+#       reference cannot tell these two apart it is worthless.
+COMB_CTL_WRITEEQ = [COMB_CTL[0], COMB_CTL[1],
+                    dict(word="c2' tA<-DR", esc=False, cls=2, src=0x0B,
+                         act=0x13, accop=2, store=False, dram=None),
+                    dict(word="c3' acc+=P", esc=False, cls=2, src=0x00,
+                         act=0x15, accop=1, store=False, dram=None),
+                    COMB_CTL[4]]
+
+#  (b) THE PIPELINED COMB the obstruction implies: write == multiplicand, the
+#      write trailing the read by one repetition.  b = c = +1.
+PIPE_CTL = [
+    dict(word="p0 read",  esc=True,  cls=1, src=0x0B, act=0x15, accop=2,
+         store=False, dram="rd"),                      # DR <- w[r] (lands +1)
+    dict(word="p1",       esc=False, cls=2, src=0x0B, act=0x01, accop=0,
+         store=False, dram=None),                      # acc <- P + DR = u_r
+    dict(word="p2",       esc=False, cls=2, src=0x10, act=0x13, accop=2,
+         store=False, dram=None),                      # tA <- acc = u_r
+    dict(word="p3 write", esc=True,  cls=1, src=0x19, act=0x15, accop=2,
+         store=False, dram="wr"),                      # line r-1 <- tA
+    dict(word="p4 mult",  esc=False, cls=0xA, src=0x19, act=0x15, accop=2,
+         store=False, dram=None)]                      # P <- g_r * tA
+
+#  (b') THE WRONG TWINS OF (b).  Two of the twins tried first were NOT twins at
+#  all and the run said so, which is itself a measured fact about the adder:
+#  ★ AT A WORD WITH hi12[3:1] == 0 THE FEEDBACK INPUT IS ALREADY ZERO, so the
+#  ACTION halves `+bus', `bus' (load) and `bus-acc' (rload) ALL PRODUCE P + bus
+#  and are INDISTINGUISHABLE THERE.  The twins below therefore perturb things
+#  the model can actually separate: the sign of b, the presence of the product
+#  in the loop (hi12[3:1] = 3 drops it), and the pipeline trail of the write.
+PIPE_CTL_NOLOOP = [PIPE_CTL[0],
+                   dict(word="p1' acc<-DR", esc=False, cls=2, src=0x0B,
+                        act=0x15, accop=3, store=False, dram=None),
+                   PIPE_CTL[2], PIPE_CTL[3], PIPE_CTL[4]]
+#  tA captured straight from the delay read: the line then stores a RAW read,
+#  which is a pure delay chain and not a comb at all.
+PIPE_CTL_RAW = [PIPE_CTL[0],
+                dict(word="p1'' tA<-DR", esc=False, cls=2, src=0x0B, act=0x13,
+                     accop=2, store=False, dram=None),
+                dict(word="p2'' idle", esc=False, cls=2, src=0x00, act=0x15,
+                     accop=2, store=False, dram=None),
+                PIPE_CTL[3], PIPE_CTL[4]]
+
+
+#  a nominal machine, only ever used to ASK the anchored half of `act_effect'
+#  (0x15 has no unknown half, so nothing about it depends on this choice)
+NOMINAL_M = mach(0, 0, 0, "zero", "bus", 1, 0)
+
+#  Delay sets SHORT ENOUGH TO RECIRCULATE inside a 32/64-sample run.  The ROM's
+#  real ladder-0 lengths are [127, 435, 489, 183, 522] and the shipped controls
+#  used them over 64 samples, so not one line ever returned a written value --
+#  see 14c.  Two independent sets, because one could be a coincidence.
+DSHORT = [3, 5, 7, 11, 13]
+DSHORT2 = [2, 3, 4, 5, 6]
+
+
+class _ProbeLine(Line):
+    __slots__ = ("nz",)
+
+    def __init__(self, n):
+        Line.__init__(self, n)
+        self.nz = 0
+
+    def read(self):
+        v = Line.read(self)
+        if v:
+            self.nz += 1
+        return v
+
+
+def _probe_reads(gains, delays, x):
+    """How many delay reads actually return a written value?  A reference whose
+    lines never recirculate is not a reference to a delay network at all."""
+    lines = [_ProbeLine(d) for d in delays]
+    for xn in x:
+        v = xn
+        for k, g in enumerate(gains):
+            w = lines[k].read()
+            t = g * (v + w)
+            lines[k].write(v + t)
+            v = w - t
+        for ln in lines:
+            ln.advance()
+    return [ln.nz for ln in lines]
+
+
+def _run_ctl(slots, extra, m, gains, delays, x, refs, tol=1e-7):
+    global MSLOTS, EXTRA_ACT
+    sv, se = MSLOTS, EXTRA_ACT
+    MSLOTS, EXTRA_ACT = slots, extra
+    try:
+        outs = machine_outputs(m, gains, delays, x)
+        hits = match_refs(outs, refs, tol)
+        lp = loop_ok(m)
+    finally:
+        MSLOTS, EXTRA_ACT = sv, se
+    return hits, lp
+
+
+def sec_schroeder2(C, rom, imgs, names):
+    parts = set((os.environ.get("SCH_PARTS") or
+                 "facts,theory,refs,degeneracy,control,search").split(","))
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+    g2 = [banks[16][c] for c in l0][:2]
+    random.seed(7)
+    xs = [random.uniform(-1, 1) for _ in range(32)]
+    DEL = [3, 5]
+
+    # ---------------------------------------------------------------- facts
+    if "facts" in parts:
+        print("=" * 76)
+        print("14. ★ SCHROEDER / NESTED-COMB -- the constraints, MEASURED first")
+        print("=" * 76)
+        rev = [i for i in sorted(imgs)
+               if "REVERB" in (names.get(i, "") or "").upper()]
+        grp = collections.Counter(tuple(imgs[i]) for i in rev)
+        big = [i for i in rev if len(imgs[i]) == 133]
+        print("   reverb algos: %s" % ", ".join("%d(%d w)" % (i, len(imgs[i]))
+                                                for i in rev))
+        print("   distinct word images among them: %d  (sizes %s)"
+              % (len(grp), sorted(len(k) for k in grp)))
+        print("   the %d presets with a 133-word body: %s"
+              % (len(big), "ONE image, byte-identical"
+                 if len({tuple(imgs[i]) for i in big}) == 1 else "DIFFER"))
+        print("   => any surviving assignment is automatically PRESET-")
+        print("      INDEPENDENT: nothing below reads a preset at all, only the")
+        print("      shared image, and the gains enter only the numeric stage.")
+        img = imgs[16]
+        esc1 = sum(1 for w in img if ((w >> 24) & 0x800) and ((w >> 20) & 0xF) == 1)
+        print("   external-DRAM words (escape, class 1) in the 133-word image: %d"
+              % esc1)
+        print()
+
+    # --------------------------------------------------------------- theory
+    if "theory" in parts:
+        print("=" * 76)
+        print("14a. WRITE == MULTIPLICAND -- proven by construction, then spot-"
+              "measured")
+        print("=" * 76)
+        s4, s5 = MSLOTS[4], MSLOTS[5]
+        print("   slot 4 %-16s src=%02X  act=%02X -> %s" %
+              (s4["word"], s4["src"], s4["act"], act_effect(NOMINAL_M, s4["act"])))
+        print("   slot 5 %-16s src=%02X  act=%02X   (class A: THE multiply)" %
+              (s5["word"], s5["src"], s5["act"]))
+        print("   Same SRC, adjacent, and slot 4's ACTION 0x15 is anchored to")
+        print("   ('','') -- no capture half at all.  Nothing between the two")
+        print("   words can rewrite tempA, for ANY assignment of the three")
+        print("   unknown codes: they are not even reachable at slot 4.")
+        print("   => PROVEN BY CONSTRUCTION.  Now measured anyway, on a random")
+        print("      sample of the same 5 145 000-setting space:")
+        random.seed(11)
+        NE = len(EFFECTS)
+        agree = tot = 0
+        for _ in range(20000):
+            mm = mach(random.randrange(NE), random.randrange(NE),
+                      random.randrange(NE), random.choice(SRC0_CANDS), None, 1,
+                      random.choice(LANDS), random.choice((0, 1)),
+                      random.choice((0, 1)), order=random.choice((0, 1)))
+            _st, tr = sym_rep(mm)
+            if "MULT" not in tr or "W" not in tr:
+                continue
+            tot += 1
+            agree += (tr["W"][0] == tr["MULT"])
+        print("      bus write value == multiplicand: %d / %d settings"
+              % (agree, tot))
+        print()
+        print("   THE DIFFERENCE EQUATION THAT PRODUCES (write source = bus):")
+        print("      line <- u ;  t = g*u ;  w = u[n-D]   =>   g*w[n] = t[n-D]")
+        print("      u_r = a*x + b*w_r + c*t_{r-1}   (a,b,c in {0,+-1}: the ALU"
+              " only adds)")
+        print("      d_k[n] = u_{k+1}[n] = a*x + b*w_{k+1}[n] + c*g_k*u_k[n]")
+        print("      =>  d_k[n] = (b*c*g_k)*d_k[n-D_k] + (no line-k terms)")
+        print("   ★ loop gain b*c*g_k, through the multiplier exactly once, and")
+        print("     it closes ACROSS the repetition boundary.  A first-order")
+        print("     all-pass needs line <- x+t while the multiplicand is x+w --")
+        print("     two different numbers -- so it is excluded; a COMB is not.")
+        print()
+
+    # ----------------------------------------------------------------- refs
+    if "refs" in parts:
+        print("=" * 76)
+        print("14b. ARE THE REFERENCES EVEN DISTINGUISHABLE?")
+        print("=" * 76)
+        print("   The matcher grants an arbitrary scale and enumerates 6 x 6")
+        print("   injection/extraction pairs.  With that much freedom, two")
+        print("   references that happen to be proportional would make a `hit'")
+        print("   meaningless.  So: pairwise, after the best scale, the worst")
+        print("   relative residue between every pair.  Anything at 0 is a")
+        print("   DUPLICATE and the section would have to say so.")
+        refs = topology_refs(g2, DEL, xs)
+        worst = 1e30
+        dup = []
+        for i in range(len(refs)):
+            for j in range(i + 1, len(refs)):
+                p = _proj(refs[i][1], refs[j][1])
+                r = 1e30 if p is None else p[1]
+                worst = min(worst, r)
+                if r < 1e-7:
+                    dup.append((refs[i][0], refs[j][0]))
+        print("   %d references; closest pair residue %.3g; duplicate pairs %d"
+              % (len(refs), worst, len(dup)))
+        for a, b in dup[:12]:
+            print("       DUPLICATE  %-38s == %s" % (a, b))
+        # the fast matcher must decide EXACTLY what the plain one decides
+        random.seed(23)
+        mism = trials = 0
+        for _ in range(60):
+            mm = mach(random.randrange(len(EFFECTS)),
+                      random.randrange(len(EFFECTS)),
+                      random.randrange(len(EFFECTS)), random.choice(SRC0_CANDS),
+                      random.choice(WSRCS), 1, random.choice(LANDS),
+                      order=random.choice((0, 1)))
+            outs = machine_outputs(mm, g2, DEL, xs)
+            fast = {(a, i, e) for a, i, e, _s in match_refs(outs, refs)}
+            slow = set()
+            for i in range(6):
+                for e in range(6):
+                    for nmr, rf in refs:
+                        p = _proj(outs[i][e], rf)
+                        trials += 1
+                        if p is not None and p[1] < 1e-7:
+                            slow.add((nmr, i, e))
+            mism += (fast != slow)
+        print("   fast matcher vs plain _proj: %d disagreements over %d "
+              "reference tests on %d random machines" % (mism, trials, 60))
+        print()
+
+    # ----------------------------------------------------------- degeneracy
+    #  ★ FOUND BY THIS PASS, AND IT IS IN THE PUBLISHED CONTROLS.
+    if "degeneracy" in parts:
+        print("=" * 76)
+        print("14c. ★ A DEGENERATE CONTROL -- the published positive controls"
+              " never exercised a delay")
+        print("=" * 76)
+        g5 = [banks[16][c] for c in l0]
+        print("   sec_control / sec_strict_control run the reference with the")
+        print("   ROM's REAL ladder-0 delays %s over %d samples."
+              % (D0, 64))
+        print("   Count the delay reads that return a NON-ZERO value:")
+        for nst in (2, 4, 5):
+            nz = _probe_reads(g5[:nst], D0[:nst],
+                              [random.uniform(-1, 1) for _ in range(64)])
+            print("       %d-stage, 64 samples: non-zero reads per line = %s"
+                  % (nst, nz))
+        print("   ZERO.  min(delay) = %d > 64 samples, so no line recirculates"
+              % min(D0))
+        print("   and the all-pass reference collapses to y = x * PROD(-g_k),")
+        print("   a pure scalar.  The control was asserting `the machine's")
+        print("   output is a scalar multiple of x'.  It could not fail.")
+        print()
+        print("   RE-RUN, with delays short enough to recirculate:")
+        for nm, slots, extra, m in (
+                ("gardner (sec_control)", CONTROL_SLOTS,
+                 {0x01: ("+bus", ""), 0x02: ("", "tA<-bus")},
+                 mach(EFFECTS.index(("bus", "")), EFFECTS.index(("-bus", "")),
+                      EFFECTS.index(("+bus", "tB<-bus")), "P", "bus", 1, 0,
+                      escact=0, noclr=1, order=1)),
+                ("strict (13a)", STRICT_CTL,
+                 {0x03: ("", "M<-acc"), 0x04: ("", "tA<-acc")},
+                 mach(EFFECTS.index(("bus-acc", "")), 0, 0, "zero", "bus", 1,
+                      -1, escact=0, order=1))):
+            for dd in (D0[:5], DSHORT, DSHORT2):
+                random.seed(7)
+                x64 = [random.uniform(-1, 1) for _ in range(64)]
+                sv, se = MSLOTS, EXTRA_ACT
+                globals()["MSLOTS"], globals()["EXTRA_ACT"] = slots, extra
+                try:
+                    h = machine_matches(m, g5[:5], dd[:5], x64,
+                                        [allpass_ref(g5[:5], dd[:5], x64)])
+                finally:
+                    globals()["MSLOTS"], globals()["EXTRA_ACT"] = sv, se
+                print("       %-22s delays %-22s %s"
+                      % (nm, str(dd[:5]),
+                         ("MATCH inj=%s ext=%s sc=%+.4f"
+                          % (RNAME[h[0][0]], RNAME[h[0][1]], h[0][3])) if h
+                         else "NO MATCH"))
+        print("   => the control SURVIVES repair, but its PUBLISHED figures do")
+        print("      not: `extract = P, scale = +1.000' is the zero-delay")
+        print("      artefact; with a recirculating line it is extract = M,")
+        print("      scale = -1.000.  The SEARCH is unaffected -- action_search")
+        print("      uses delays [3, 5] over 32 samples, which do recirculate.")
+        print()
+
+    # -------------------------------------------------------------- control
+    if "control" in parts:
+        print("=" * 76)
+        print("14d. ★ THE CONTROLS -- each one shipped WITH the case where it"
+              " says NO")
+        print("=" * 76)
+        g5 = [banks[16][c] for c in l0]
+        random.seed(5)
+        x64 = [random.uniform(-1, 1) for _ in range(64)]
+        print("   Delays %s and %s -- SHORT ON PURPOSE, over %d samples, so"
+              % (DSHORT, DSHORT2, len(x64)))
+        print("   every line recirculates many times.  Non-zero delay reads per")
+        print("   line: %s / %s" % (_probe_reads(g5[:5], DSHORT, x64),
+                                    _probe_reads(g5[:5], DSHORT2, x64)))
+        print("   (a control run on lines that never return anything is the")
+        print("    defect 14c just retired -- it must not be repeated here.)")
+        print()
+
+        def _ctl(tag, slots, extra, m):
+            for dd in (DSHORT, DSHORT2):
+                for nst in (2, 3, 5):
+                    gg, d = g5[:nst], dd[:nst]
+                    rr = topology_refs(gg, d, x64)
+                    h, _lp = _run_ctl(slots, extra, m, gg, d, x64, rr)
+                    names_ = sorted({n for n, _i, _e, _s in h})
+                    print("       %-30s %d-stage %-18s %s"
+                          % (tag, nst, str(d),
+                             ", ".join(names_) if names_
+                             else "NO MATCH   <- SAYS NO"))
+
+        print("   (a) COMB CASCADE, built with write != multiplicand:")
+        m = mach(0, 0, 0, "zero", "bus", 0, -1, escact=0, order=1)
+        _ctl("comb cascade", COMB_CTL, {0x01: ("+bus", "")}, m)
+        print("       loop filter on it: %s"
+              % (loop_ok_ctl(COMB_CTL, {0x01: ("+bus", "")}, m) or "REJECTED"))
+        print()
+        print("   (a') THE WRONG TWIN -- identical except tA is captured BEFORE")
+        print("        the accumulate, so WRITE == MULTIPLICAND, the exact")
+        print("        property this whole pass is about:")
+        _ctl("comb cascade, write==mult", COMB_CTL_WRITEEQ, {}, m)
+        print()
+        print("   (b) THE PIPELINED COMB the obstruction implies (write ==")
+        print("       multiplicand, the write trailing the read by one rep):")
+        mp = mach(0, 0, 0, "zero", "bus", 1, 1, escact=0, order=1)
+        _ctl("pipe-comb b=+1 c=+1", PIPE_CTL, {0x01: ("+bus", "")}, mp)
+        print("       loop filter on it: %s"
+              % (loop_ok_ctl(PIPE_CTL, {0x01: ("+bus", "")}, mp) or "REJECTED"))
+        print()
+        print("   (b') THE WRONG TWINS OF (b).  If the reference set is worth")
+        print("        anything, flipping the ALU op must MOVE the match to the")
+        print("        matching (b,c) label and BREAKING the loop must kill it.")
+        print("        ★ NOTE first what the run itself taught: at hi12[3:1]=0")
+        print("        the feedback input is ALREADY zero, so `+bus', `bus'")
+        print("        (load) and `bus-acc' all give P+bus and are the SAME")
+        print("        machine there.  Two of the twins tried first were not")
+        print("        twins; these are:")
+        _ctl("b = -1  (p1 does acc<-P-DR)", PIPE_CTL, {0x01: ("-bus", "")}, mp)
+        _ctl("c = 0   (hi12[3:1]=3, no P)", PIPE_CTL_NOLOOP, {}, mp)
+        _ctl("line stores a RAW read", PIPE_CTL_RAW, {}, mp)
+        _ctl("write does not trail (wtrail=0)", PIPE_CTL, {0x01: ("+bus", "")},
+             mach(0, 0, 0, "zero", "bus", 0, 1, escact=0, order=1))
+        _ctl("read lands too late (land=7)", PIPE_CTL, {0x01: ("+bus", "")},
+             mach(0, 0, 0, "zero", "bus", 1, 7, escact=0, order=1))
+        print()
+
+    # --------------------------------------------------------------- search
+    if "search" in parts:
+        print("=" * 76)
+        print("14e. ★ THE SEARCH -- the SAME loop-filter survivor set, re-tested"
+              " against every topology")
+        print("=" * 76)
+        print("   The structural stage is `action_search's, unchanged and")
+        print("   delay-independent.  What is new is the numeric stage: the")
+        print("   ladder is run ONCE per survivor and compared against every")
+        print("   reference, and a hit is only reported if it SURVIVES A SECOND")
+        print("   run at a different delay set and twice the samples -- the")
+        print("   guard against a numerical accident at one delay pair.")
+        #  ★ ROW 3 IS THE JOINT ROW.  SINGLE DELAY -- a block whose algorithm is
+        #  not in doubt -- FORCES `ACTION 0x19' to capture into tempA (5145/5145,
+        #  action-field.md sect. 6).  The STRICT reverb survivors say tempB, and
+        #  the GENEROUS ones say tempA by a majority.  So intersect: enumerate
+        #  ONLY the 0x19 effects that capture into tempA and ask what the comb
+        #  then forces.  A parameter settled in another context is not settled
+        #  inside this search -- so it is ENUMERATED here, restricted, never
+        #  assumed.
+        TA_CAP = [i for i, e in enumerate(EFFECTS)
+                  if e[1] in ("tA<-bus", "tA<-acc")]
+        JOINT = (range(len(EFFECTS)), TA_CAP, range(len(EFFECTS)))
+        rows = [("ADDER, generous", dict(order=1), GENEROUS),
+                ("ADDER, strict  ", dict(order=1), STRICT),
+                ("sequential, generous", {}, GENEROUS),
+                ("ADDER, generous + SINGLE DELAY's ACTION 0x19 -> tempA",
+                 dict(order=1), JOINT)]
+        only = os.environ.get("SCH_ROW")
+        refs = topology_refs(g2, DEL, xs)
+        random.seed(5)
+        x64 = [random.uniform(-1, 1) for _ in range(64)]
+        DEL2 = [3, 7]
+        refs2 = topology_refs(g2, DEL2, x64)
+        for n, (tag, base, rng) in enumerate(rows):
+            if only is not None and int(only) != n:
+                continue
+            print("   [%d] %s" % (n, tag), flush=True)
+            _t, sl, _x = action_search(banks, l0, D0, base, quiet=True,
+                                       ranges=rng, numeric=False)
+            print("       %d machines pass the delay-loop filter" % len(sl),
+                  flush=True)
+            byref = collections.Counter()
+            keep = []
+            for k, mm in enumerate(sl):
+                if k and k % 10000 == 0:
+                    print("          ... %d/%d, %d hits so far"
+                          % (k, len(sl), len(keep)), flush=True)
+                outs = machine_outputs(mm, g2, DEL, xs)
+                h = match_refs(outs, refs)
+                if not h:
+                    continue
+                o2 = machine_outputs(mm, g2, DEL2, x64)
+                h2 = match_refs(o2, refs2)
+                names2 = {a for a, _i, _e, _s in h2}
+                h = [t for t in h if t[0] in names2]
+                if h:
+                    keep.append((mm, h))
+                    for nmr, _i, _e, _s in h:
+                        byref[nmr] += 1
+            print("       %d machines reproduce SOME topology at BOTH delay sets"
+                  % len(keep), flush=True)
+            for nmr, cnt in byref.most_common():
+                print("          %-46s x%d" % (nmr, cnt))
+            if keep:
+                for nm, ix in (("SRC 0x00 reads", SRC0),
+                               ("read lands +n", LAND),
+                               ("write data from", WSRC),
+                               ("ACTION 0x00", F00), ("ACTION 0x19", F19),
+                               ("ACTION 0x0B", F0B)):
+                    v = collections.Counter(
+                        (eff_str(EFFECTS[mm[ix]]) if ix in (F00, F19, F0B)
+                         else mm[ix]) for mm, _h in keep)
+                    print("       %-16s %-8s %s"
+                          % (nm, "FORCED" if len(v) == 1 else "%d" % len(v),
+                             "  ".join("%s x%d" % (a, b)
+                                       for a, b in v.most_common(6))))
+                for nm, ix in (("ACTION 0x00", F00), ("ACTION 0x19", F19),
+                               ("ACTION 0x0B", F0B)):
+                    for half, sel in (("acc op ", 0), ("capture", 1)):
+                        v = collections.Counter(EFFECTS[mm[ix]][sel] or "-"
+                                                for mm, _h in keep)
+                        print("       %-11s %-8s %-8s %s"
+                              % (nm, half,
+                                 "FORCED" if len(v) == 1 else "%d" % len(v),
+                                 "  ".join("%s x%d" % (a, b)
+                                           for a, b in v.most_common())))
+        print()
+
+
+def loop_ok_ctl(slots, extra, m):
+    global MSLOTS, EXTRA_ACT
+    sv, se = MSLOTS, EXTRA_ACT
+    MSLOTS, EXTRA_ACT = slots, extra
+    try:
+        return loop_ok(m)
+    finally:
+        MSLOTS, EXTRA_ACT = sv, se
+
+
 def main():
     ap = argparse.ArgumentParser()
     here = os.path.dirname(os.path.abspath(__file__))
@@ -2203,6 +2932,8 @@ def main():
         sec_adjudicate(C, rom, imgs, names)
     if "adder" in want:
         sec_adder(C, rom, imgs, names)
+    if "schroeder2" in want:
+        sec_schroeder2(C, rom, imgs, names)
 
 
 if __name__ == "__main__":
