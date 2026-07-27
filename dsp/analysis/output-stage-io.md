@@ -317,3 +317,52 @@ job, rather than a structural mystery spread across 133 words.
 
 That is a better problem than the one this line started with, and it is the one
 [`three-codes.md`](three-codes.md) and §4 both point at.
+
+---
+
+## 9. The two presentation unknowns split — one reachable, one not, and the published counts span two chips
+
+[`output-stage-decode.md`](output-stage-decode.md) §6.5 leaves the presentation
+arithmetic open: *"ACTION `0x04` and SRC `0x0A` are decoded nowhere and each
+occurs once or twice."* Those counts are taken over the **3057-word corpus**,
+which spans **both chips**.
+
+Restricted to IC311 — excluding the nine IC310 streams
+`{57, 58, 59, 60, 79, 88, 89, 90, 91}` that
+[`second-dsp-and-ready.md`](second-dsp-and-ready.md) B1 proves by construction:
+
+| code | all corpus sites | IC311 only | verdict |
+|---|---|---|---|
+| **`ACT 0x04`** | `w73` + algo 10 + **algo 79** | `w73` + **MULTI TAP DELAY `w026`** | ★ **reachable** |
+| **`SRC 0x0A`** | `w78` + **algo 79** | **`w78` alone** | ⛔ **unique — undecidable by comparison** |
+
+★ **`ACT 0x04` has a second site in a real IC311 program.** MULTI TAP DELAY
+`w026` = `0040000864`, mode 0, `SRC 0x01`, no store — a different mode and a
+different source from `w73`, but the same ACTION, in a program whose delay
+structure is host-anchored (its four taps are named `DELAY 1..4` and confirmed by
+both the parameter records and the on-screen names). That is a real second
+context.
+
+⛔ **`SRC 0x0A` is unique to `w78` on this chip.** Its only other occurrence is an
+**IC310** word — a different processor, 32-bit instruction words, no shared
+encoding. So on IC311 it is a single site with nothing to compare against, in
+exactly the position [`three-codes.md`](three-codes.md) item E put `ACT 0x0D`.
+
+### 9.1 Which ranks the last two output-stage unknowns
+
+1. **`ACT 0x04` — pursue.** Two IC311 sites, one of them in a host-anchored
+   program. This is the tractable half of the presentation arithmetic.
+2. **`SRC 0x0A` — do not.** One site, nothing to compare, no anchored context.
+   Like `ACT 0x0D`, the honest position is that the available evidence cannot
+   settle it, and effort spent there is effort not spent on `ACT 0x04` or
+   `ACT 0x1B`.
+
+### 9.2 A correction that propagates
+
+Any count of a rare code taken over the "3057-word corpus" **mixes IC311 and
+IC310**. For common codes the contamination is negligible; for codes occurring
+once or twice — which is exactly the set still undecoded — it can double the
+apparent evidence or invent a second site that is on another chip.
+`second-dsp-and-ready.md` §3 already restated several denominators as 91; the
+**rare-code counts in `output_stage.py do` were not among them**, and they are
+the ones where it matters most.
