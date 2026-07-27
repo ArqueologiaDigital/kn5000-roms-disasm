@@ -37,7 +37,7 @@ rendered audio cannot have moved. §11.
 |---|---|---|
 | **A** | ★★★ **THE GATE IS NOT A LIST, IT IS A FUNCTION — AND THE FUNCTION HAS ONLY FIVE ARGUMENTS.** A bit-4 store word is characterised for the ALU by `(hi12 bit 7, hi12[3:1])`; `hi12[3:1] > 2` traps, so there are **six** addressable store classes and the corpus occupies **five**: `(0,0)` 12 words, `(0,1)` 486, `(1,0)` 2, `(1,1)` 130, `(1,2)` 29. `(0,2)` has **zero** words — a gate's behaviour there is unobservable **by construction**. Enumerating an EFFECT per class (memory op ∈ {none, store, **load**} × value {acc, bus} × destination {ptr, elsewhere} × timing {before, after} × clear {never, before, after} = **33** canonical effects) gives **33⁵ = 39 135 393** gates and absorbs the global `sttime`, which the published parameterisation double-counted. The published space was **18 (name, sttime) pairs**, all inside. | **PROVEN BY CONSTRUCTION** + **MEASURED** |
 | **B** | ★★★ **THE DECIDABILITY CENSUS, AND IT DECIDES WHAT IS ANSWERABLE AT ALL.** Three of the five occupied classes have a witness whose arithmetic is known independently of the DSP and **two do not**. PARAMETRIC EQ's 22 store words are **all** class `(0,1)`; SINGLE DELAY's are **all** class `(0,1)`; the 29 LFO ramp blocks carry **only** `(0,1)`, `(1,1)` and `(1,2)`. **Nothing with known mathematics sees `(0,0)` (12 words) or `(1,0)` (2 words)** — they are reachable only structurally. The biquad's measured blindness to the bit-7 gate is therefore not luck: PARAMETRIC EQ has **no bit-7 store word at all**. | **MEASURED** |
-| **C** | ★★★ **bit 7 IS IN THE GATE CONDITION — FORCED, and by two blocks that disagree about the same `hi12[3:1]`.** Class `(0,1)` and class `(1,1)` differ **in bit 7 and in nothing else**. The biquad REQUIRES `(0,1)` to store to `mem[ptr]` (suppressing it is **51.090 dB** wrong against the designer); the LFO REQUIRES `(1,1)` **not** to write `mem[ptr]` (every gate that lets it store is rejected). A condition that does not read bit 7 cannot separate them: `f31 == 1 (no bit 7)` and `NOT b7` both die. This is the first *positive* determination about what bit 7 is for. | **FORCED** |
+| **C** | ★★★ **bit 7 IS IN THE GATE CONDITION — FORCED, and by two blocks that disagree about the same `hi12[3:1]`.** Class `(0,1)` and class `(1,1)` differ **in bit 7 and in nothing else**. The biquad REQUIRES `(0,1)` to store to `mem[ptr]` (suppressing it is **51.090 dB** wrong against the designer); the LFO REQUIRES `(1,1)` **not** to write `mem[ptr]`. Checked, not asserted: all **nine** conditions in the enumeration are run against both witnesses and exactly **two survive** — `b7 & f31 == 1` and `b7 & f31 != 2`. The two bit-7-free ones (`f31 == 1`, `NOT b7`) are killed by the **biquad at 52.381 dB**; `always`, `b7 alone`, `b7 & f31 == 0`, `b7 & f31 == 2` and `f31 == 2` are killed by the **LFO**. Each witness kills conditions the other accepts, so neither is doing the work alone. This is the first *positive* determination about what bit 7 is for. | **FORCED** |
 | **D** | ★★★ **THE LFO DOES NOT FORCE "THE STORE IS SUPPRESSED". IT FORCES "THE STORE DOES NOT REACH `mem[ptr]`".** Exhaustively over **19 758 816** machines (33 × 33 class effects × 18 144 non-gate settings), **17 928** survive all 29 blocks and the 2²³ wrap, and class `(1,1)` takes **21 of 33** effects — but **not one survivor writes `mem[ptr]`**. What survives is `none`, `store → elsewhere`, and ★ `load` — *the memory access is a READ into the accumulator*. The third reading is new: **bit 7 as a DIRECTION bit on the memory port**, which explains the bit instead of merely fitting it. `lfo-ramp.md` item K said "suppressed-or-redirected"; that disjunction is now measured, and it has a third arm. | **FORCED** (negative) / **MEASURED** |
 | **E** | ★★ **CLASS `(1,2)` IS FORCED, AND IT IS THE ORDINARY STORE.** 17 928/17 928 survivors give `(1,2)` = **store the accumulator to `mem[ptr]`, BEFORE the word's own ALU step**; only the clear is free (never/before/after, 5 976 each). Class `(0,1)` is FORCED by the biquad to **store the accumulator to `mem[ptr]` with the clear taken BEFORE the ALU** — with a measured blindness: at PARAMETRIC EQ's store words the bus *is* the accumulator, so `store the BUS` is bit-identical (**0.198 dB**, accepted) and the store's *source* is not decidable there. | **FORCED** (both) + **MEASURED** (the blindness) |
 | **F** | ★★★ **THE CONDITION QUESTION — `b7 & f31 == 1` vs `b7 & f31 != 2` — IS WORTH ONE CORPUS WORD, AND ITS STORE IS DEAD.** `lfo-ramp.md` item K and `acc-adder.md` §8 leave it open as *"13 corpus words, nine of them the COMPRESSOR's envelope step at `hi12[3:1] == 5`"*. MEASURED: the disagreement set is **11**, not 13; **9** of them trap because `hi12[3:1] > 2` is an undecoded accumulator operation and **1** more (`090.2.FB.40E`) because ACTION `0x0E` is not anchored — **both reasons independent of bit 7 and of the gate**. Exactly **one** word's behaviour changes: `090.A.00.1D5`, ROOM REVERB 1 `w107`, and its cell is overwritten by `w108` at the same pointer with no read in between. **A dead store.** | **MEASURED**, a **FALSIFICATION** of the published count |
@@ -192,10 +192,28 @@ reverse-engineered.
 ★ **And the census yields a forcing before any search runs.** Classes `(0,1)`
 and `(1,1)` differ in **bit 7 and in nothing else**. §3 shows the biquad demands
 that `(0,1)` store and §4 shows the LFO demands that `(1,1)` not write
-`mem[ptr]`. **No condition that ignores bit 7 can satisfy both** — which is the
-first positive statement anyone has made about what `hi12` bit 7 is *for*. The
-two bit-7-free conditions in the enumeration, `f31 == 1` and `NOT b7`, are both
-rejected, and the rejection is shown, not assumed.
+`mem[ptr]`. **No condition that ignores bit 7 can satisfy both.** Checked rather
+than asserted — every condition in the enumeration run against both witnesses:
+
+```
+   condition            biquad (class (0,1))       LFO
+   always (no gate)        0.198 dB  accepts      REJECTED
+   b7 & f31==1             0.198 dB  accepts      runs        <- SURVIVES
+   b7 & f31!=2             0.198 dB  accepts      runs        <- SURVIVES
+   b7 alone                0.198 dB  accepts      REJECTED
+   b7 & f31==0             0.198 dB  accepts      REJECTED
+   b7 & f31==2             0.198 dB  accepts      REJECTED
+   f31==1  (NO bit 7)     52.381 dB  REJECTED     runs
+   f31==2  (NO bit 7)      0.198 dB  accepts      REJECTED
+   NOT b7                 52.381 dB  REJECTED     REJECTED
+```
+
+**Two of nine survive, and both read bit 7 *and* `hi12[3:1]`.** Each witness
+kills conditions the other accepts — the biquad kills the two bit-7-free ones,
+the LFO kills the four that are wrong about `hi12[3:1]` — so neither is doing the
+work alone. This is the first positive statement anyone has made about what
+`hi12` bit 7 is *for*, and §5 prices the remaining choice between the two
+survivors at one corpus word.
 
 The two words of class `(1,0)`, in full:
 
@@ -659,11 +677,12 @@ never-decidable ACTION codes are new.
   words, and no second witness in the corpus. Class `(1,0)`: *does the store
   happen*, one word, dead either way. Class `(0,0)`: 12 words, no witness.
   **Everything else about the gate is settled.**
-* ★ **`store → elsewhere` and `load` are testable, and not by the LFO.** Both
-  predict a *value* that the current model discards. The shortest route is a
-  program in which a class-`(1,1)` word's pointer cell is read later — the
-  dead-store census (§6) says 117 of the 130 are followed by a read, so the
-  material exists; what is missing is a block whose arithmetic is known.
+* ★ **`store → elsewhere` and `load` are testable, and not by the LFO — nor by
+  the dead-store census, which §6.1 shows *measurably* blind (35 sites, 0
+  verdicts changed).** Both predict a *value* the current model discards. The
+  material exists — the census classifies 82 of the 130 class-`(1,1)` stores as
+  live and 35 as opaque — but what is missing is a block whose arithmetic is
+  known independently, and §2 says the corpus has none.
 * **For `ACTION 0x00`.** It is still coupled, and §1.1 quantifies the coupling:
   choosing `load` makes 18 of 33 gate effects unobservable. Any future solve must
   enumerate `act00` and the class-`(1,1)` effect **jointly** — 21 × 4, not 3 × 6.

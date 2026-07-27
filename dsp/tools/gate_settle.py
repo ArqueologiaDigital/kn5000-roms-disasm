@@ -642,6 +642,43 @@ is attached to a (bit 7, hi12[3:1]) class -- so the question is per class:
          needs (0,1) to store and the LFO needs (1,1) not to.  A condition that
          does not read bit 7 cannot separate them.  This is checked, not
          asserted, in `biquad' and `lfo'.""")
+
+    print("""
+   ★ AND THE FORCING, CHECKED RATHER THAN ASSERTED.  Every condition in the
+   enumeration is run against BOTH witnesses: the biquad (does class (0,1) still
+   reproduce the designer?) and the LFO (does the ramp still run?).  A condition
+   survives only if both accept.""")
+    banks = A.peq_banks()
+    pool = L.publish_blocks()
+    (bi, ba, be, bws, bcf, binc, bq) = pool[0]
+    conds = [
+        ("always (no gate)",   lambda b7, f: False),
+        ("b7 & f31==1",        lambda b7, f: bool(b7) and f == 1),
+        ("b7 & f31!=2",        lambda b7, f: bool(b7) and f != 2),
+        ("b7 alone",           lambda b7, f: bool(b7)),
+        ("b7 & f31==0",        lambda b7, f: bool(b7) and f == 0),
+        ("b7 & f31==2",        lambda b7, f: bool(b7) and f == 2),
+        ("f31==1  (NO bit 7)", lambda b7, f: f == 1),
+        ("f31==2  (NO bit 7)", lambda b7, f: f == 2),
+        ("NOT b7",             lambda b7, f: not b7),
+    ]
+    OFF = ("none", None, None, None, "never")
+    print("      %-20s %-26s %s" % ("condition", "biquad (class (0,1))", "LFO"))
+    for nm, fn in conds:
+        g = tuple(EFF_IX[OFF if fn(b7, f) else NORMAL] for (b7, f) in CLASSES)
+        v = worst_db(M("adder", "load", g), banks, 512)
+        h = lfo_run(M("adder", "load", g), bws, bcf, 10,
+                    random.Random(5 + bi), bq)
+        lok = h is not None and L.is_ramp(h, binc)
+        print("      %-20s %8.3f dB  %-12s %s"
+              % (nm, v if v is not None else -1.0,
+                 "REJECTED" if (v is None or v > 0.5) else "accepts",
+                 "runs" if lok else "REJECTED"))
+    print("""      -> the only conditions BOTH witnesses accept read bit 7 AND hi12[3:1].
+         `f31==1 (NO bit 7)' and `NOT b7' are killed by the biquad; `b7 alone',
+         `b7 & f31==0', `b7 & f31==2' and `always' are killed by the LFO.  Two
+         survive -- `b7 & f31==1' and `b7 & f31!=2' -- and sect. `condition'
+         prices the difference between them at ONE corpus word.""")
     return per
 
 
