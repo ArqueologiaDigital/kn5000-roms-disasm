@@ -268,3 +268,88 @@ question the census in §6 did not ask.
   finding by an independent route, nor to hand back the sample rate.
 - ★ **The census in §6 is unchanged.** `NO OPERATION` does not become a fourth
   context, so *all three* remains *all three*.
+
+---
+
+## 9. The corpus-wide decidability census — and it relocates the bottleneck
+
+§8.4 left one well-posed question: does *any* program let the undecoded readings
+select between paths of different length? §6 answered "which contexts have known
+mathematics"; this asks something weaker and far more useful.
+
+★ **Decidability does not require known mathematics.** A program discriminates the
+readings if different readings produce **different observable behaviour** — whether
+or not we know which behaviour is correct. That is a *necessary* condition for any
+future test, it is cheap, and it had never been swept.
+
+### 9.1 The instrument, and the calibration that first refuted it
+
+Signature = every delay-DRAM write bus value plus both send cells, over 60 frames,
+hashed; run all **25** `act0d × act0e` readings per image and count distinct
+signatures.
+
+⛔ **Version 1 reported "1 signature" for all 38 images — including SINGLE DELAY,
+which is KNOWN to give 2.** Instrument refuted on the spot, before any conclusion:
+it fixed `p0 = 0`, and SINGLE DELAY only delivers at `p0 = 0x08`. **SINGLE DELAY's
+known outcome count is the built-in calibration**, and version 2 locates delivery
+per image before measuring. Version 2 reports SINGLE DELAY = **2**. Instrument
+valid.
+
+### 9.2 The result
+
+```
+   images that DELIVER an input to their delay line ...........   3 of 38
+      algo  9  SINGLE DELAY     (incell 0x00, p0 0x05)   2 signatures
+      algo 72  PEQ+S.DELAY      (incell 0x00, p0 0x05)   2 signatures
+      algo 16  ROOM REVERB 1    (incell 0x00, p0 0xB4)   1 signature
+
+   images with NO DELIVERY .................................... 35 of 38
+   ★ images producing MORE THAN 2 distinct signatures ..........  0
+```
+
+**No discriminator exists among the images that can be fed**, and the "2" in both
+delay programs is the generic *does-the-register-chain-survive* split already
+identified in §5.3 — not a semantic distinction.
+
+### 9.3 ★★★ But the headline is the other column — 35 of 38
+
+**Thirty-five of the thirty-eight images cannot be fed at all.** The body has no
+input; the audio arrives through the shared 60-word kernel — a fact on file as
+**FORCED** since 2026-07-26 and the reason the reverb resisted every pass. A search
+that drives one body cell is structurally unable to feed them.
+
+★ **So the census is CONCLUSIVE for the 3 feedable images and BLOCKED for the other
+35 by a single known cause.** And that cause is the same one every line of this
+investigation has hit from a different direction:
+
+* the reverb produced silence for its entire history — no input;
+* `NO OPERATION` delivers 0 of 208 800 — no input;
+* 35 of 38 images here — no input.
+
+⛔ **The bottleneck is not the ACTION codes. It is that most programs cannot be fed.**
+Every attempt to decide `0x0D`/`0x0E`/`0x1A` has been blocked upstream by the same
+missing piece, and treating the codes as the obstacle has been a misdiagnosis.
+
+### 9.4 What that reprioritises
+
+1. ★★ **Solve the kernel input path and 35 programs become testable at once.** This
+   is a far larger lever than any individual opcode, and it is partly solved
+   already: the reverb work identified unit 1's input mix as
+   `0.25 × mem[0x0E] + 0.50 × mem[0x8F] + 0.50 × mem[0x8C]`. What is missing is the
+   **unit-0 equivalent** and a harness that drives the kernel rather than a body
+   cell.
+2. Only after that does a discriminator census mean anything — §9.2's "0 of 3" is a
+   real answer over a sample of three, and three is not a corpus.
+3. ⛔ Do not spend further effort attacking the codes directly while 92 % of the
+   corpus cannot be given a signal.
+
+### 9.5 Predict-then-check
+
+- **P9 MISS.** I predicted some program would let the readings select between paths
+  of different length. None of the three feedable ones does.
+- **P10 HIT, and it is the one that mattered.** I built SINGLE DELAY's known outcome
+  count into the instrument as a calibration *before* running it — and it caught
+  version 1 immediately. **First time this session an instrument was refuted by a
+  control designed in from the start rather than added after a suspicious result.**
+- **P11 unforeseen.** The census's most valuable column was the one I was not
+  looking at.
