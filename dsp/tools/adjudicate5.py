@@ -301,27 +301,37 @@ def cmd_degen(K):
     print("   therefore worth NOTHING here, and are printed so they are not")
     print("   mistaken later for evidence:")
     print()
-    K0 = 0
-    a = 16
-    wof = K.wordof(a, K0)
-    u, cells, cons = K.algos[a]
-    ck = sorted(cells)
-    lines_x, lines_y = [], []
-    for (tc, bc, d) in K.anchored(a):
-        lines_x.append((cells[bc], cells[tc], d))
-    # the ladder, both readings
-    for i in range(0, len(ck) - 3):
-        j = i + 3
-        d = cells[ck[i]] - cells[ck[j]]
-        if 1 <= d <= 32767:
-            lines_x.append((cells[ck[j]], cells[ck[i]], d))
-            lines_y.append((cells[ck[i]], cells[ck[j]], d))
+    # BOTH readings built by the SAME procedure, so the comparison is fair.
+    same = diff = 0
+    tot = 0
+    for a in K.aligned():
+        u, cells, cons = K.algos[a]
+        wof = K.wordof(a, 0)
+        ck = sorted(cells)
+        ivx, ivy = set(), set()
+        for i in range(len(ck)):
+            j = (i + 3) % len(ck)
+            lo, hi = cells[ck[j]], cells[ck[i]]
+            if 1 <= hi - lo <= 32767:
+                # X: bit6=1 is the WRITE, s = -1  -> line spans [write, read]
+                ivx.add((lo, hi))
+                # Y: bit6=1 is the READ,  s = +1  -> line spans [read, write]
+                ivy.add((lo, hi))
+        tot += len(ivx)
+        if ivx == ivy:
+            same += 1
+        else:
+            diff += 1
     print("   (a) `the lines must not OVERLAP in DRAM' (dram-matching item B).")
-    print("       X gives %d lines, Y gives %d lines, and the INTERVAL SET IS"
-          % (len(lines_x), len(lines_y)))
-    print("       IDENTICAL -- only the labels on the two ends swap.  The")
-    print("       no-overlap argument settles the OFFSET s=+3 (it did) and")
-    print("       CANNOT settle the direction.")
+    print("       Built by ONE procedure and then labelled two ways, over %d"
+          % (same + diff))
+    print("       aligned algorithms and %d lines: the INTERVAL SET is IDENTICAL" % tot)
+    print("       in %d and differs in %d.  Only the labels on the two ends swap."
+          % (same, diff))
+    print("       The no-overlap argument settles the OFFSET s=+3 (it did) and")
+    print("       CANNOT settle the direction.  This is a PROOF, not a count:")
+    print("       delay = s*(W - R), and flipping BOTH the polarity and s leaves")
+    print("       every |W - R| unchanged.")
     print("   (b) `the fixed end of a knob-swept allocation is the write'.  An")
     print("       engineering-plausibility argument; under Y the fixed end is the")
     print("       read and the layout is the same.  Not used below.")

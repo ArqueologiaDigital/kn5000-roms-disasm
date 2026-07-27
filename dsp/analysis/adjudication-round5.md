@@ -40,7 +40,9 @@ python3 dsp/verify.py                                    # BYTE-MATCH OK
 
 **What was applied:** the delay-DRAM **direction**, to both disassembler mirrors
 — *and it is the reverse of what they shipped*. Nothing reached the device; the
-42 delay-DRAM slots still trap; **0 of 1 344 001 frames complete**.
+42 delay-DRAM slots still trap; **0 of 1 536 349 frames complete** in the live
+re-measurement (the brief quotes 1 344 001 from a shorter run; the count is the
+run length, the ZERO is the result).
 
 ---
 
@@ -481,7 +483,7 @@ descriptor addresses supplied as constraints.
 
 The brief asks for an impulse test *"if the delay line executes"*. **It does
 not**: nothing in this round reaches the device, the 42 delay-DRAM slots still
-trap, and 0 of 1 344 001 frames complete. What is delivered is the prediction
+trap, and 0 of 1 536 349 frames complete. What is delivered is the prediction
 with its constants re-derived:
 
 ```
@@ -518,8 +520,25 @@ physical word.
   `has_addressing()` are untouched, so the device's behaviour is unchanged **by
   construction**.
 
+Live: cold boot, fresh nvram per run, identical cfg, identical 32 s keybed
+programme (three chords at 20.0 / 23.5 / 27.0 s), `-str 32`, `DSPCFG` Off and On,
+before and after.
+
 | | before | after |
 |---|---|---|
+| frames run | 1 536 349 | **1 536 349** |
+| words executing **something** of 285 | 199 | **199** |
+| words executing **FULLY** | 107 | **107** |
+| words executing **addressing only** | 92 | **92** |
+| words executing **nothing** | 86 | **86** |
+| ★ **frames COMPLETED** | **0** of 1 536 349 | ★ **0** of 1 536 349 |
+| ended on wait word / CAP / OVERRUN | 1 299 228 / 210 241 / 26 880 | **identical** |
+| ★ **operand-pointer closure residue, last frame** | **+0** | ★ **+0** |
+| complete frames that CLOSED | 1 273 307 of 1 299 228 | **identical** |
+| residue min / max, entry pointer X | −1 / +116, `0xFF` 97.93 % | **identical** |
+| input-stage audit | 1 309 788 both-reads, **0 MISMATCHED** | **identical** |
+| ★ frames carrying a NON-ZERO sample into the chip | **438 663**, peak `0x542500` | **identical** |
+| descriptor-cursor residue | NOT TESTABLE (its 42 consumers trap) | **still NOT TESTABLE** |
 | frame floor tier 1 | 82 of 216, **38.0 %** | 82, **38.0 %** |
 | frame floor tier 1+2 | **60.6 %** | **60.6 %** |
 | 38 body images (2974 words) | 1234 tier 1, **41.5 % / 52.6 %** | identical |
@@ -529,6 +548,20 @@ physical word.
 | distinct undecoded words | 443 | 443 |
 | `dsp/verify.py` | BYTE-MATCH OK | ★ **BYTE-MATCH OK** (39 `.dsm` regenerated) |
 | `upd6383d_diff.sh` | MIRRORS AGREE 3057/3057 | ★ **MIRRORS AGREE 3057/3057** |
+| ★ audio, all four WAVs | `f57115a26a55fcfed68fb6eab0769ea8` | ★ **identical** |
+
+★ **THE DESCRIPTOR-CURSOR RESIDUE IS STILL NOT TESTABLE, and Target 1's claim
+that its own result made it testable does not survive** — its `|R| ≥ 2` was
+derived from `δ = −1`, and `δ = −1` is falsified. What replaces it: under `δ = 0`
+a **pre-increment** cursor loaded with `0x25` (I-RAM 44, `801.0.25.825`) delivers
+cell `0x26` to the unit-0 body's first consumer exactly.
+
+★ **THE AUDIO CONTROL IS SHOWN FAILING BEFORE IT IS SHOWN PASSING.** All four
+WAVs — `DSPCFG` Off and On, before and after — are
+`f57115a26a55fcfed68fb6eab0769ea8`, **1 536 001 frames, 876 696 non-zero
+samples, peak 21 541**. My *first* capture programme produced **peak 0 and zero
+non-zero samples in 1 440 001 frames** — a control that cannot fail, reported in
+§14 P11 rather than deleted.
 
 The live tally is in
 [`kn7000_mame/notes/dsp-adjudication-round5-applied.md`](../../../kn7000_mame/notes/dsp-adjudication-round5-applied.md).
@@ -553,7 +586,7 @@ The live tally is in
 
 ---
 
-## 14. PREDICT-THEN-CHECK — 4 hits, 6 misses
+## 14. PREDICT-THEN-CHECK — 4 hits, 8 misses
 
 | # | prediction | outcome |
 |---|---|---|
@@ -567,6 +600,8 @@ The live tally is in
 | **P8** | Applying the direction would recover dark slots. | ★ **HIT (negative), as expected.** Zero. The rotation register, the unit-1 cursor reload, the bounds question and — now — the datapath are all still open. |
 | **P9** | The ladder would come out with all eleven segments at offset +3. | ★★ **MISS.** Ten at +3, the eleventh at **+9**, and that miss is what explains Target 2's unexplained `+11` pairs. |
 | **P10** | The brief's own constants would hold, since they were re-derived last round. | ★ **MISS.** `8905` is stale — a retracted pairing's artefact that survived into the brief. |
+| **P11** | My before/after audio control would work first time, since the recipe is in three previous applied notes. | ★★★ **MISS, and it is a method-rule-1 failure of my own.** The first capture programme pressed keys with a single `set_value(1)` at machine-frame 600 and produced **peak 0, zero non-zero samples in 1 440 001 frames** — a capture that *cannot fail*, which is exactly the thing this project has been burned by. Two causes, both already documented in `play_c4.lua` and neither read first: a keybed field must be **RE-ASSERTED every tick** or the port is cleared between scans, and the machine needs **~20 emulated seconds** to reach a state where a key sounds. Rebuilt against emulated time with re-assertion; §12's audio row is from the rebuilt one, and the silent capture is reported rather than deleted. |
+| **P12** | My own scoring set would need no audit, since its labels come from the host. | ★★ **MISS.** The many-taps-one-base branch fired on two algorithms whose taps are two different lines. Both sites were labelled correctly and were removed anyway (K11). |
 
 ---
 
