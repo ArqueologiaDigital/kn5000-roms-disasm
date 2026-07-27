@@ -143,3 +143,80 @@ Both are checkable, and both are cheaper than executing the epilogue.
 region, a known job — is still the shortest route to testing §2 properly, and it
 is far more constrained than anything left in
 [`three-codes.md`](three-codes.md).
+
+---
+
+## 6. The store gate does NOT suppress `w68` — and the reason is a FORCED result the model never implemented
+
+§5 accepted `output_stage.py`'s annotation that the adopted gate suppresses
+`w60` and `w68` (both `(b7, f31) = (1,1)`), which would mean the §2 loop does not
+exist. Taking the gate seriously turns that around.
+
+### ★★★ 6.1 A priority-1 behavioural requirement is missing from the ALU model
+
+[`isa-adjudication.md`](isa-adjudication.md), *Behavioural notes for the core, in
+priority order*, item **1**:
+
+> **`hi12` bit 4's target is mode-dependent — `mem[ptr]` only in mode 2. Eight
+> kernel words mis-execute otherwise.**
+
+`action00_discriminate.step`'s `do_store()` is:
+
+```python
+    st.mem[st.p] = v & MASK24        # unconditional -- no mode check
+```
+
+**The model stores to `mem[ptr]` for every mode.** A FORCED result, filed as the
+*first* item on the core's handover list, with its own warning that eight kernel
+words mis-execute without it, was never implemented. Every ALU search this
+project has run carries it.
+
+### ★★★ 6.2 Which invalidates the gate constraint at exactly the words that matter
+
+`store-gate.md` FORCED its class-`(1,1)` result from the LFO: *"the memory access
+does not deliver the accumulator to `mem[ptr]`"*, 0 of 17 928 survivors writing
+it. Measured now:
+
+```
+  the LFO's bit-4 store words, by mode:
+      class4 = 2  -> mode 2 :  8
+      class4 = A  -> mode 2 : 80
+      mode-2 stores: 88 of 88
+```
+
+**Every one is mode 2** — words whose bit-4 target *is* `mem[ptr]`. The constraint
+is therefore a statement about **mode-2 stores**, and it is silent about mode-1
+words, whose target the forced result places elsewhere.
+
+And `w60`, `w61`, `w68` — the three `ACT 0x1B` words, the only stores into the I/O
+register file on the chip — are **all mode 1**.
+
+> ★ **So the gate does not suppress `w68`.** Its apparent suppression came from
+> applying a mode-2-derived constraint to a mode-1 word, inside a model that
+> ignores the mode-dependence entirely.
+
+### 6.3 Status
+
+- **§2's loop is NOT excluded.** `w68`'s store into register `0x8C` is not gated
+  off; §5's caricature-negative was already weak, and §6 removes the structural
+  objection as well. The loop is **OPEN and untested**, one step better than it
+  stood an hour ago.
+- **What `w68` stores, and to which register, is OPEN** — R2 forced only that
+  mode-1's bit-4 target is *not* `mem[ptr]`; `isa-adjudication.md` item 13's
+  register-file annotation (mode-1 without escape, `addr8` as the index) is the
+  obvious candidate and is not established for stores.
+- ⚠ **The model gap is the actionable item.** Implementing the mode-dependent
+  target is a change to `do_store()` that affects **every** ALU result this
+  project has published, and `isa-adjudication.md` says eight kernel words
+  currently mis-execute. It should be done deliberately, with the published
+  numbers re-run, not folded into another pass.
+
+### 6.4 Predict-then-check
+
+- **P1 HIT, and it is the pass.** I predicted that giving the store gate a
+  *consequence* would make it tractable where the abstract 17-word framing had
+  not. It immediately exposed a model gap instead — better than the answer I was
+  looking for.
+- **P2 unforeseen.** I did not expect the blocker to be a forced result **already
+  written down and simply not implemented**. That is the third time today the
+  answer was in the project's own notes.
