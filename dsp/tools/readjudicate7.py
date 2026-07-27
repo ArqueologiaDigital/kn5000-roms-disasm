@@ -729,12 +729,19 @@ def cmd_act19():
           "cursor_addresses) : %d of 83" % len(runnable))
     print("        ... of the %d with a closed executable loop, that leaves: %s"
           % (len(have), [a for a in have if a in runnable]))
-    print("""        ** A SECOND, INDEPENDENT BLOCKER, AND IT IS NEW. **  The twelve
-        133-word reverbs resolve 0 of 33 coefficient words each -- the
-        cursor-to-C-RAM map that works for the 48-word blocks does not
-        work for them.  So of the 13 algorithms that CAN close a loop,
-        exactly ONE can be executed today.  Fixing that map is the
-        cheapest single thing anyone can do for this question.""")
+    print("""        ** THAT BLOCKER IS FIXED (2026-07-27) -- see
+        analysis/cram-unit-base.md. **  This section originally read "the
+        twelve 133-word reverbs resolve 0 of 33 coefficient words each ...
+        so of the 13 algorithms that CAN close a loop, exactly ONE can be
+        executed today".  The cause was a missing addend, not a broken
+        map: `cursor_addresses' returns an OFFSET and the C-RAM base is
+        per unit (0x00 / 0x90), which `lfo_ramp' adds at all six of its
+        call sites and `delayline.coefs_of' did not.  MEASURED after the
+        fix: unit 1 goes 0 of 33 -> 33 of 33 in 12 of 12 reverbs, the
+        aligned corpus goes 70 -> 82 of 83, and ALL THIRTEEN algorithms
+        with a closed executable loop can now be run.  The fix is inert on
+        unit 0 by construction (base 0x00, 0 + k == k), so no unit-0
+        number in this file moved.""")
     base = []
     for t in itertools.product(A0.ORDER, A0.ACT00, A0.STTIME, A0.STGATE,
                                ("mem", "P", "acc", "zero", "DR", "tA")):

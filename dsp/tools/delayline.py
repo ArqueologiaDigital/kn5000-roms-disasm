@@ -646,9 +646,56 @@ def program(algo):
     raise KeyError(algo)
 
 
-def coefs_of(algo, words):
+_UNIT = {}
+
+
+def unit_of(algo):
+    """0 for the 79 load-84 bodies, 1 for the twelve load-200 reverbs.
+
+    MEASURED, and the two routes agree exactly: the (unit, load) cross-tab over
+    all 91 IC311 programs is {(0, 84), (1, 200)} and nothing else, so `ctx()'s
+    unit and `lfo_ramp.algo_to_image()'s load address are the same fact.
+    """
+    if not _UNIT:
+        for (a, u, _cells, _cons) in ctx().algos:
+            _UNIT[a] = u
+    return _UNIT.get(algo)
+
+
+def cram_base(algo):
+    """★ THE C-RAM CURSOR IS UNIT-RELATIVE -- 0x00 for unit 0, 0x90 for unit 1.
+
+    `dsp_disasm.cursor_addresses' returns k, the count of class-A words since
+    the last rstcur: an OFFSET, not an address.  Its own docstring says so --
+    "`base' is added by the caller for the unit-1 reverb bank (0x90)" -- and
+    `lfo_ramp' has added it at all six of its call sites since the LFO work
+    (`base = 0x90 if la == 200 else 0x00').  `coefs_of' did not, which is why
+    every unit-1 body resolved ZERO coefficients and the twelve 133-word
+    reverbs were unexecutable (`adjudication-round7.md' STEP 4b, "the twelve
+    133-word reverbs resolve 0 of 33 coefficient words each ... fixing that map
+    is the cheapest single thing anyone can do for this question").
+
+    MEASURED, population 91 IC311 programs, 1546 class-A words:
+
+        unit 1 (12 reverbs, 33 class-A words each, C-RAM keys 0x90..0xB5):
+              0 of 33 resolve at base 0x00   ->  0 of 12 algorithms executable
+             33 of 33 resolve at base 0x90   -> 12 of 12 algorithms executable
+        unit 0 (79 bodies, C-RAM keys from 0x00):
+             78 of 79 fully resolve at base 0x00
+              0 of 79 fully resolve at base 0x90
+
+    RULE 7 -- the rival is SEPARATED, and it is the one that also fixes the
+    reverbs: "always add 0x90" is rejected 79 of 79 on unit 0.  The base is
+    genuinely per-unit; a global constant cannot be right.
+    """
+    return 0x90 if unit_of(algo) == 1 else 0x00
+
+
+def coefs_of(algo, words, base=None):
+    """Per word index, the 24-bit C-RAM coefficient a class-A word fetches."""
+    base = cram_base(algo) if base is None else base
     cram, cur = L.cram_of_algo(algo), DIS.cursor_addresses(words)
-    return [(cram.get(cur[i]) if cur[i] is not None else None)
+    return [(cram.get(base + cur[i]) if cur[i] is not None else None)
             for i in range(len(words))]
 
 
