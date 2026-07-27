@@ -311,7 +311,12 @@ valid.
 delay programs is the generic *does-the-register-chain-survive* split already
 identified in §5.3 — not a semantic distinction.
 
-### 9.3 ★★★ But the headline is the other column — 35 of 38
+### 9.3 ⛔ SUPERSEDED BY §10 — the diagnosis below is WRONG
+
+**§10 refutes this section experimentally.** The 35 images are not starved of input;
+the ALU model refuses to execute them. Kept for the record.
+
+### 9.3 (superseded) The other column — 35 of 38
 
 **Thirty-five of the thirty-eight images cannot be fed at all.** The body has no
 input; the audio arrives through the shared 60-word kernel — a fact on file as
@@ -353,3 +358,91 @@ missing piece, and treating the codes as the obstacle has been a misdiagnosis.
   control designed in from the start rather than added after a suspicious result.**
 - **P11 unforeseen.** The census's most valuable column was the one I was not
   looking at.
+
+---
+
+## 10. ★★★ The fake-input experiment — and it refutes §9.3
+
+**A deliberate, authorised break of the "fake with the REAL mechanism" rule**
+(2026-07-27, owner's instruction). §9.3 concluded the corpus was blocked for want of
+an input path. That is a hypothesis, and a fake signal can *test* it even though it
+could never validate what the chip computes.
+
+**The fake.** An *input plane*: any memory cell a program has not written returns the
+current input sample. No kernel, no per-program input cell — every program is fed
+wherever it looks.
+
+**Admissibility, stated up front.** This cannot support any claim about what the
+chip computes. It *can* support a claim about whether an observable varies with the
+reading, and about whether the input is what blocks a program — both structural
+questions a fake signal answers honestly.
+
+### 10.1 The result: nothing changed, and that is the finding
+
+```
+   with a real single-cell input :  3 of 38 deliver, 35 give nothing
+   with the FAKE INPUT PLANE     :  3 of 38 deliver, 35 give nothing   <- IDENTICAL
+```
+
+⛔ **Feeding every cell in the machine changed nothing.** So the input was never the
+blocker, and **§9.3 is refuted.** Those 35 rows were not "no delivery" — they were
+`A.step()` **refusing to execute the program at all**.
+
+★ The rule-break earned its keep by *eliminating* a hypothesis I had just committed
+to. That is exactly what a deliberately inadmissible experiment is good for.
+
+### 10.2 ★★★ The real blocker, ranked — and it is today's other discovery
+
+Running each image until the model refuses, and recording why:
+
+```
+   ★ alt lo12 (bit 11) -- THE SECOND ENCODING ....  blocks 25 of 38 images FIRST
+     hi12[3:1] > 2 .................................  blocks  8
+     c-format (13-bit immediate) ...................  blocks  2
+     runs to completion ............................          3
+                                                              --
+                                                              38
+
+   mean fraction of each image executed before the stop:  13.1 %
+```
+
+★★★ **The bit-11 second encoding is the single largest blocker of the entire
+corpus** — and in **21 of those 25 images it stops the program at `w000`, the very
+first instruction.**
+
+```
+   880.1.30.8BC   CHORUS, MOD CHORUS, PHASER, ROCK ROTARY, EXCITER, AUTO PAN,
+                  S.DELAY+{FLANGER,VIBRATO,PHASER}, AUTO WAH+S.DELAY,
+                  PEQ+{CHORUS,FLANGER,VIBRATO}, PEQ+COMPR+{DIST,OVERDR},
+                  PEQ+{DIST,OVERDR}+DELAY                        ... 17 images, at w000
+   040/050.0.00.8BC  FLANGER, ENSEMBLE, DISTORTION, OVERDRIVE, FUZZ, VIBRATO,
+                     RING MODULATOR                              ...  7 images, at w000/w001
+   040.0.00.864      MULTI TAP DELAY                             ...  1 image,  at w026
+```
+
+### 10.3 The convergence
+
+[`bit11-family.md`](bit11-family.md) found the bit-11 form this morning as a
+*corpus-statistics* curiosity, proved in §9 that it is a **second `lo12` encoding**
+with no SRC and no ACTION field, and named the `w000` pair (`8BC` vs `00B`, 27
+images, one held-fixed slot, descriptor already excluded) as its tractable handle.
+
+★ **That handle now has a measured payoff: decoding it unblocks 25 of 38 images,
+most of them at their first instruction.** The morning's structural find and the
+evening's execution census are the same object approached from opposite ends.
+
+### 10.4 What this does to §6's census
+
+§6 concluded all three known-mathematics contexts are blind to `ACT 0x0D`/`0x0E`/
+`0x1A`. That stands — but §10.2 shows its scope was narrower than it read: **only 3
+of 38 images execute at all**, so every execution-based statement in §§5–9 has a
+denominator of **3**, not 38. The other 35 have never been run by anything.
+
+## 11. Revised priority
+
+1. ★★★ **Decode the bit-11 alternate encoding.** It is the #1 execution blocker (25
+   of 38, 21 at `w000`), it is the most frequent undecoded form (80 sites), and it
+   already has the corpus's only controlled comparison. Everything else is behind it.
+2. **`hi12[3:1] > 2`** — 8 images, 203 words (sized in earlier work). Second lever.
+3. ⛔ **Not the input path** (§10.1), and ⛔ **not the three ACTION codes** — they sit
+   inside programs that do not run.
