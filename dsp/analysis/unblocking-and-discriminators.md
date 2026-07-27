@@ -529,3 +529,58 @@ because there the option set contained a working value and here it does not.
 - ★ **P16 the useful residue.** Both misses converge on the same localisation: the
   accumulator hand-off *between* LFO blocks, which no current parameter models. **The
   next parameter this machine needs is one nobody has written yet.**
+
+---
+
+## 16. Does §15 decode an instruction? — **No**, and the near-miss shows why
+
+§15 localised a defect to "what `f31 = 2` leaves in `acc`". The natural follow-up: the
+wrap word's gate already clears `acc`, and then its own ALU reloads `P` (= `0x7FFFFF`)
+into it — so whether the clear lands **before or after** the ALU is exactly what
+`sttime`/`stgate` control, and both had been fixed in every run so far.
+
+### 16.1 The enumeration
+
+All 3 × 6 = 18 `sttime` × `stgate` combinations, scored against the 19 ROM ramp
+constants:
+
+```
+   sttime = before,  stgate = b7_f31_1_off        11   (baseline)
+   sttime = before,  stgate = b7_ne2_off          11
+   sttime = before,  stgate = b7_f31_1_keepclear  12   <- the only one above baseline
+   everything else                                <11
+```
+
+### 16.2 ⛔ Why 12 is not a decoding
+
+The 12 is a **trade, not a gain**:
+
+```
+   baseline (11)  : CHORUS, MOD CHORUS, FLANGER, PHASER, ENSEMBLE, AUTO PAN,
+                    VIBRATO, MIX UP, S.DELAY+{CHORUS,FLANGER,PHASER}
+   keepclear (12) : the same MINUS MIX UP, PLUS PEQ+CHORUS and PEQ+FLANGER
+```
+
+**+2 −1.** And it does not touch §15's constraint at all: MODULATED CHORUS still runs
+only 989 of its two rates, and MIX UP now runs **none** of its three.
+
+⛔ **A criterion that trades is not a forcing.** One net constant out of nineteen,
+bought by breaking a program that previously worked, is exactly the kind of margin this
+project has learned not to read as evidence — and the option was reached by *scoring*,
+not by any argument that `keepclear` is what the hardware does.
+
+### 16.3 What §15 actually gives, stated exactly
+
+* ✅ **A localisation.** The accumulator hand-off between LFO blocks is wrong, and the
+  ROM's own modulation rates are the criterion that says so.
+* ✅ **An exhausted option set.** `wrap` (4), `op2` (3), `sttime` × `stgate` (18) — **25
+  settings**, none of which makes a second oscillator run at its ROM rate.
+* ⛔ **Not a decoding.** Nothing here determines a field. The missing behaviour is not
+  in any enumerated option, so the honest position is that the machine needs a field it
+  does not yet have — §15.4's P16, now with 25 settings behind it rather than 7.
+
+**Contrast with §10.3**, which *was* a result: there the option set contained a value
+that reproduced a ROM constant exactly (+228/frame) while the refuted value reproduced
+none, and the regression control held. Here no option reproduces the constants at all.
+The difference between "we refuted an option" and "we decoded a field" is exactly this,
+and it is worth keeping sharp.
