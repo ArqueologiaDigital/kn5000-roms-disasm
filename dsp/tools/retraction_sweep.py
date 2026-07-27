@@ -313,6 +313,47 @@ PREMISES = [
              r"96 valid programs"],
         exempt=[r"FALSIFIED", r"RETRACT", r"corrected", r"is 91", r"91 IC311"],
     ),
+    dict(
+        id="P19",
+        claim="SINGLE DELAY FORCES the BLOCKING read (`land = -1'), 5145/5145 "
+              "-- and its re-measured successor 5635/5635",
+        retracted_by="adjudication-round7.md items A and D: at the polarity "
+                     "adjudication-round5.md item D forced, SINGLE DELAY has NO "
+                     "closed executable delay loop at all (both loops cross "
+                     "w21..w24, ACTION 0x0D/0x0E), so the count cannot be "
+                     "re-scored in ANY window; and the premise it rested on -- "
+                     "`the read word's own ACTION consumes the fetched sample' "
+                     "-- is false by exhaustive count, 0 of 416 read words "
+                     "carry a capture ACTION.  13 of 83 CEILING words argue the "
+                     "other way.  Reproduce with `python3 "
+                     "dsp/tools/readjudicate7.py windows blockread'",
+        sig=[r"5\s?145\s*/\s*5\s?145", r"5\s?635\s*/\s*5\s?635",
+             r"blocking read[^.\n]{0,40}FORCED",
+             r"FORCED[^.\n]{0,40}blocking read",
+             r"land\s*=\s*-1[^.\n]{0,30}FORCED"],
+        exempt=[r"FALSIFIED", r"RETRACT", r"withdraw", r"void", r"VOID",
+                r"UNRE-SCOREABLE", r"no search", r"cannot be re-scored",
+                r"never be quoted", r"stale"],
+    ),
+    dict(
+        id="P20",
+        claim="`order = adder' is FORCED, 18 of 18, by three independent "
+              "contexts (biquad AND LFO AND SINGLE DELAY)",
+        retracted_by="adjudication-round7.md item E: the SINGLE DELAY leg is "
+                     "void (its 72 survivors come from a one-cell delay line at "
+                     "the reversed polarity, and the block has no scoreable "
+                     "loop at the forced one).  biquad AND LFO alone leave "
+                     "THREE orders -- act_first 576 / adder 576 / act_last 72 "
+                     "of 1224 -- because PARAMETRIC EQ carries no ACTION 0x00 "
+                     "word and is blind to the question.  FORCED -> CONSISTENT. "
+                     "Reproduce with `python3 dsp/tools/readjudicate7.py adder'",
+        sig=[r"order\s*=\s*adder[^.\n]{0,30}FORCED",
+             r"FORCED[^.\n]{0,30}order\s*=\s*adder",
+             r"18 survivors[^.\n]{0,40}all 18 agree",
+             r"all 18 agree"],
+        exempt=[r"FALSIFIED", r"RETRACT", r"withdraw", r"CONSISTENT",
+                r"void", r"VOID", r"no longer", r"reverts"],
+    ),
 ]
 
 # --------------------------------------------------------------------------
