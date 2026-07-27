@@ -36,7 +36,14 @@ ALGO_TABLE = 0x0001ED7C
 HEADER_ROM = 0x01E496
 EPILOGUE_ROM = 0x01E63C
 N_ALGOS = 100
-MALFORMED = {79, 88, 89, 90, 91}
+# RENAMED 2026-07-27: NOT malformed -- these are IC310 (MN19413) programs
+# whose cmd-0x30 record rides on record opcode 3, so an IC311-shaped parser
+# turns them into a phantom I-RAM block.  Algorithms 57-60 are IC310's too
+# (their cmd-0x30 rides on opcode 0x0E and parses to nothing, so `if ir:'
+# already drops them): the IC311 population is 91 of 100, not 95.
+# See dsp/analysis/second-dsp-and-ready.md sect. 2.
+DSP2_MISPARSED = {79, 88, 89, 90, 91}
+MALFORMED = DSP2_MISPARSED      # deprecated alias
 REVERB_ALGO = 16
 
 

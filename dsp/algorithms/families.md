@@ -112,15 +112,39 @@ two copies of `OVERDRIVE`'s tone biquad byte-for-byte, and the `PEQ+COMP…` set
 shows a consistent **+4 cursor/host offset** that still decodes to the identical
 flat default (effect-map §5.2).
 
-## Excluded — malformed
+## Excluded — ~~malformed~~ **NOT IC311's** (corrected 2026-07-27)
 
-Algos **79, 88, 89, 90, 91** load outside the 384-word I-RAM, carry no terminator
-and no class-2 word. They are the same defect and are **excluded** from the tree
-(flagged in the generator's `MALFORMED` set), not disassembled.
+~~Algos **79, 88, 89, 90, 91** load outside the 384-word I-RAM, carry no
+terminator and no class-2 word. They are the same defect~~ — **they are not a
+defect at all.** They are **IC310 (MN19413) programs**, and so are **57, 58, 59
+and 60**. **Nine** of the 100 algorithm slots belong to the second DSP; the IC311
+population is **91**. The reason only five were ever flagged is that their
+cmd-`0x30` record rides on record opcode **3**, which an IC311-shaped parser
+turns into a phantom I-RAM block, while 57–60's rides on opcode **`0x0E`** and
+parses to nothing. The generator's constant is renamed `DSP2_MISPARSED`.
+See [`../analysis/second-dsp-and-ready.md`](../analysis/second-dsp-and-ready.md)
+§2.
 
-## The second DSP (MN19413) — untouched
+## The second DSP (MN19413) — scoped, not covered
 
-Effect units 2–4 route to **IC310, an MN19413** — a different chip (own 20 MHz
-crystal, 8-bit delay DRAM), bit-banged over PF.0/PF.2/PE.6. Its bodies
-autocorrelate at lag 4, suggesting a **32-bit** word rather than 36. It is a whole
-second effects processor and is **not covered here**.
+Nine algorithm slots route to **IC310, an MN19413** — a different chip (own
+20 MHz crystal X302, byte-wide 1 Mbit delay DRAM IC308), bit-banged **write-only**
+over PF.0 (`DSP2DA`) / PF.2 (`DSP2SCK`) / PE.6 (`DSP2CS`), with **no READY line**.
+
+| slot | name | program |
+|---|---|---|
+| 57 / 58 / 59 / 60 | STANDARD / PERCUSSIVE / SYMPHONIC / DEEP SPACE | load 1336, 177 words (shared) |
+| 79 | GEQ | load 1520, 60 words |
+| 88 / 89 / 90 / 91 | ROOM / KARAOKE / BATH ROOM / STAGE | load 3376, 165 words (shared) |
+
+Its instruction word is **32 bits** — the old *"bodies autocorrelate at lag 4,
+suggesting 32 bits"* is now FORCED within an enumeration `{1,2,3,4,5,6,8,12}` by
+integrality + block disjointness + a period test against a byte-shuffle null —
+and its coefficient word is **16 bits, word-addressed** (record abutment, 8 of 8
+against 0 of 8 for every rival width). 3 programs / 402 words; 9 coefficient
+images / 674 words.
+
+**And it is the chip the whole main mix passes through** (`IC303 SDO0 → IC310 SDI
+→ IC313 PCM69AU`), plus the only ADC the microphone reaches. It is a whole second
+effects processor, it carries the master reverb, and it is **not covered here**
+and not modelled in MAME.

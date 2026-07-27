@@ -37,7 +37,14 @@ sys.path.insert(0, HERE)
 T_ALGO = 0x0001ED7C
 T_PARAM = 0x0001EF0C
 REVERB_ALGOS = list(range(16, 28))
-MALFORMED = {79, 88, 89, 90, 91}      # the 5 streams that parse to junk
+# RENAMED 2026-07-27: NOT malformed -- these are IC310 (MN19413) programs
+# whose cmd-0x30 record rides on record opcode 3, so an IC311-shaped parser
+# turns them into a phantom I-RAM block.  Algorithms 57-60 are IC310's too
+# (their cmd-0x30 rides on opcode 0x0E and parses to nothing, so `if ir:'
+# already drops them): the IC311 population is 91 of 100, not 95.
+# See dsp/analysis/second-dsp-and-ready.md sect. 2.
+DSP2_MISPARSED = {79, 88, 89, 90, 91}      # the 5 streams that parse to junk
+MALFORMED = DSP2_MISPARSED      # deprecated alias
 
 
 def fields(w):

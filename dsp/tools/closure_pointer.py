@@ -367,7 +367,14 @@ def cmd_solve(args, rom, E):
 #  ==> admissible iff every body net that the tail contains is CONSTANT over the
 #      pool of algorithms that can occupy that unit.  That is a MEASUREMENT.
 # ---------------------------------------------------------------------------
-MALFORMED = {79, 88, 89, 90, 91}                 # dsp/verify.py
+# RENAMED 2026-07-27: NOT malformed -- these are IC310 (MN19413) programs
+# whose cmd-0x30 record rides on record opcode 3, so an IC311-shaped parser
+# turns them into a phantom I-RAM block.  Algorithms 57-60 are IC310's too
+# (their cmd-0x30 rides on opcode 0x0E and parses to nothing, so `if ir:'
+# already drops them): the IC311 population is 91 of 100, not 95.
+# See dsp/analysis/second-dsp-and-ready.md sect. 2.
+DSP2_MISPARSED = {79, 88, 89, 90, 91}                 # dsp/verify.py
+MALFORMED = DSP2_MISPARSED      # deprecated alias
 
 
 def algo_images(E, rom):
