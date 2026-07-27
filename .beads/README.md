@@ -1,3 +1,8 @@
+> **OBSOLETE — DO NOT FOLLOW.** Beads was decommissioned on 2026-07-27 at the
+> owner's request. The `bd` binary was removed from this machine; the commands below
+> will not run and must not be reinstalled. This directory is kept only as a frozen
+> data archive. See /home/fsanches/compartilhado/beads-decommission-2026-07-27/
+
 # Beads - AI-Native Issue Tracking
 
 Welcome to Beads! This repository uses **Beads** for issue tracking - a modern, AI-native tool designed to live directly in your codebase alongside your code.

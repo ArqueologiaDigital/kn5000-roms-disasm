@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-> ⚠️ **Beads note (2026-04-10):** This repo's beads DB is SQLite-era and the
-> regular `bd` CLI is **unsafe** against it. Use **`beads-lite`** (read-only,
-> `~/.local/bin/beads-lite`) for queries and edit `.beads/issues.jsonl` by hand
-> for writes. The old `../tools/bd` snippets below have been rewritten
-> accordingly. Full policy: `~/compartilhado/FSanches/beads-usage-policy.md`.
+> ⚠️ **Beads was decommissioned on 2026-07-27** at the owner's request. `bd` and
+> `beads-lite` were removed from the machine — do not run them and do not reinstall
+> them. `.beads/issues.jsonl` **stays** and remains this project's task list: read
+> it with `jq`/`grep`, write it by editing it directly, publish it with
+> `make issues` (which reads the file itself and never invoked `bd`).
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -35,7 +35,7 @@ In-repo analysis notes are in `analysis/`. Key documents:
 
 ### Issue Tracker
 
-Issues are tracked with Beads in `.beads/issues.jsonl`. Use `../tools/bd` commands (see Issue Tracking section below).
+Issues live in `.beads/issues.jsonl` as plain JSON lines, edited by hand (see Issue Tracking section below).
 
 ## Build Commands
 
@@ -317,9 +317,8 @@ This is a strict policy to prevent documentation from becoming outdated as symbo
 
 ### Issue Tracking (STRICT POLICY)
 
-Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `.beads/issues.jsonl`.
-
-**CRITICAL: NEVER edit `.beads/issues.jsonl` directly!** Always use the `bd` command:
+Project issues live in `.beads/issues.jsonl` — one JSON object per line, no tracker
+tool. Beads was decommissioned on 2026-07-27; edit the file directly.
 
 ### Issue Closure Requirements (MANDATORY)
 
@@ -354,13 +353,10 @@ Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `
 This policy exists because the primary goal is building comprehensive documentation for MAME emulation and homebrew development. Closing issues prematurely loses institutional knowledge and creates incomplete documentation.
 
 ```bash
-# Read-only queries go through beads-lite (SQLite is frozen, bd is unsafe):
-beads-lite list                          # List all issues
-beads-lite show <issue-id>               # Show issue details + comments
-beads-lite ready                         # Find unblocked work
-beads-lite blocked                       # Show blocked issues
-beads-lite history <issue-id>            # Full event audit trail
-beads-lite search <term>                 # Text search
+# Read (plain JSON lines — no tool required):
+jq -r 'select(.status!="closed") | "\(.id)  p\(.priority)  \(.title)"' .beads/issues.jsonl
+jq 'select(.id=="<issue-id>")' .beads/issues.jsonl   # one issue, with comments
+grep -i '<term>' .beads/issues.jsonl                  # text search
 
 # Writes (create / close / reopen / comments / notes): edit .beads/issues.jsonl
 # by hand, then:
@@ -368,16 +364,17 @@ git add .beads/issues.jsonl
 git commit -m "issues: <what changed>"
 ```
 
-**Do NOT run `bd`** against this repo (not `bd list`, not `bd sync`, not
-even `bd status`). The central policy is at
-`~/compartilhado/FSanches/beads-usage-policy.md`.
+**Do NOT run `bd` or `beads-lite`** — both were removed on 2026-07-27 when beads was
+decommissioned. Do not reinstall them or introduce a replacement tracker without
+asking. The archived issues are at
+`/home/fsanches/compartilhado/beads-decommission-2026-07-27/`.
 
-The issue tracker is:
-- Versioned via `.beads/issues.jsonl` in git (single source of truth for writes)
-- Exported to the website via `make issues` (reads JSONL directly, does not invoke bd)
+The task list is:
+- Versioned via `.beads/issues.jsonl` in git (single source of truth)
+- Exported to the website via `make issues` (reads JSONL directly)
 - Visible at `/issues/` on the documentation site
 
-**Quick access:** Run `beads-lite list` for current issues, or see `../kn5000-docs/issues.md` for the web version.
+**Quick access:** read `.beads/issues.jsonl`, or see `../kn5000-docs/issues.md` for the web version.
 
 ### Disassembly Quality Standards (MANDATORY)
 
