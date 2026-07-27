@@ -193,3 +193,78 @@ looking.
    answer: **lag 1001, gain +0.02149296**.
 3. ★ **External evidence is now the justified move** (§6): a uPD6383-family
    datasheet, a documented sibling, or hardware measurement.
+
+---
+
+## 8. A speculative round — `NO OPERATION` as a fourth context, and what it actually gave
+
+§7 said external evidence is the justified move. Before taking it, one creative
+pass, because §5.5 names precisely what *kind* of observable fails and that narrows
+what to invent.
+
+**The idea.** §5.5 kills **amplitude** observables — the emitted gain is a product
+of coefficients and is invariant across every machine that passes signal. It says
+nothing about **LAG**, which is structural. And `NO OPERATION` is a candidate fourth
+context that nobody counted: it carries **`ACT 0x0D` ×4, `ACT 0x0E` ×4 AND
+`ACT 0x1A` ×1** — the only image to carry all three — it is the best-attested image
+on the chip (42 slots), and its mathematics is the sharpest possible reference. Its
+coefficients include **8388291 / 2²³ = 0.99999**, a unity gain. A pass-through must
+emit at **lag 0**; a machine that routes the signal through the delay line cannot.
+
+### 8.1 ⛔ Refuted as a context — the line is never written
+
+```
+   act0d x act0e (25 readings) x 261 entry states x 32 start pointers
+      = 208 800 configurations
+
+   configurations that get the input into NO OPERATION's delay line:  0
+```
+
+★ **And this zero counts, because the positive control passes.** The same harness,
+the same enumeration, delivers signal for SINGLE DELAY in 1 024–7 680
+configurations. An instrument that demonstrably writes one program's line writes
+none of `NO OPERATION`'s. **This is not the "five instruments that could not
+measure" pattern — the control both can and does fire.**
+
+### 8.2 ★ But the zero is evidence for something else
+
+[`bit11-family.md`](bit11-family.md) item G established by **byte comparison** that
+twelve named effects ship a program identical to `NO OPERATION`. §8.1 establishes by
+**execution** that that program never writes its delay line.
+
+**Two independent routes, one conclusion:** those twelve effects do nothing. The
+first compared bytes; the second ran the program. That materially strengthens the
+hardware prediction in `bit11-family.md` §4.2 — *select `SLOW ATTACKER` on a real
+KN5000 and it should be indistinguishable from no effect.*
+
+### 8.3 ★ And a free calibration of the whole project — 100.000 ms
+
+`NO OPERATION`'s descriptors allocate:
+
+```
+   write 4510 / read  100  ->  D = 4410  =  100.000 ms
+   write 9021 / read 4610  ->  D = 4411  =  100.023 ms
+```
+
+★ **4410 samples is exactly 0.1 s at 44 100 Hz.** A round number that falls out of
+raw descriptor arithmetic is a designed value, and it **confirms the 44.1 kHz sample
+rate from ROM data alone** — a constant this project has assumed throughout and had
+never derived.
+
+### 8.4 What survives of the idea
+
+The **lag observable is still sound** — §5.5's invariance argument applies to
+amplitude and not to it. What §8.1 shows is that `NO OPERATION` cannot host it,
+because its signal never reaches an observable at all. The idea needs a program in
+which the undecoded readings can *select between two paths of different length*.
+Whether such a program exists in the corpus is **OPEN**, and it is a well-posed
+question the census in §6 did not ask.
+
+### 8.5 Predict-then-check
+
+- **P7 MISS.** I predicted `NO OPERATION` would be a fourth known-mathematics
+  context. It is not one: 0 of 208 800.
+- **P8 unforeseen.** I did not expect the refutation to corroborate the twelve-stub
+  finding by an independent route, nor to hand back the sample rate.
+- ★ **The census in §6 is unchanged.** `NO OPERATION` does not become a fourth
+  context, so *all three* remains *all three*.
