@@ -451,6 +451,26 @@ affine map of `{0x6C, 0x64}` land on `{0x26, 0x00}` — and does the host's tag-
 cell allocation per unit agree? Both are static, both are one pass over data
 already extracted.
 
+> ## ⚠ ★ THE TEST WAS RUN, AND IT FAILS — 2026-07-27 (`dark_words.py cursorbase`)
+>
+> **No map in the declared family takes `{0x6C, 0x64}` to `{0x26, 0x00}`**, in
+> either orientation — `a·x + b (mod m)` for `a ∈ [−16,16]`, `b ∈ [−256,256]`,
+> `m ∈ {FF,7F,3F,1F}`, plus `(x >> s) + b` and `(x << s) + b` for `s ∈ [0,7]`.
+> The reason is arithmetic rather than exhaustion: a scale-and-offset map must
+> carry the payload difference **8** onto the target difference **38**, and
+> `38/8 = 4.75` is not an integer.
+>
+> The family is shown able to hit reachable targets — **28** maps onto the
+> payloads themselves, **6** onto the FORCED D-RAM bases `0x05`/`0x85` — so the
+> zero is a result and not an artefact of a family too poor to express anything.
+>
+> **This falsifies the TEST, not the register.** R3 offers descriptor-base
+> candidates (i) and (ii) as well, and a cursor base need not be an affine image
+> of a pointer payload. What it does remove is this note's claim that §4.5 is
+> *"the highest possible payoff per unit of work in the dark set"* — the cheap
+> route is closed, and what is left is the tag-`0x4C` cell-allocation comparison,
+> which is a capture rather than an arithmetic check.
+
 ---
 
 ## 5. ★ CRITICAL PATH — aborts the frame vs merely unexecuted

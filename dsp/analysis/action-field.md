@@ -457,6 +457,29 @@ Two contexts, two different demands on the same code:
 | `SRC 0x00` | the **delay-RAM read register**, 52 696/52 696 — the only path by which the fresh read reaches the multiplicand in time | **not** the delay-RAM read register: **0 of 5 145**. `mem[ptr]` in 3 430, otherwise `P`, `acc` or nothing |
 | the read latency | `land ∈ {0,1}` | `land = −1`, a **blocking** read, FORCED 5 145/5 145 |
 
+> ## ⚠ ★★ THE TWO ROWS ARE ONE ROW — 2026-07-27, `blocking-read.md`
+>
+> The second row **causes** the first, and printing them side by side is what
+> made it visible. `land = −1` is the **BLOCKING read**: the DRAM read word's own
+> operand bus already carries the word it fetched. `action_search` enumerates
+> `LANDS = (0,1,2,7,8)` and **omits it**, so inside the reverb's space the fresh
+> sample could reach the ALU by exactly one route — `SRC 0x00 = DR` at slot 1.
+> The two blocks were being solved **under different read models**, and the one
+> whose read model could not deliver the word is the one that "required" a second
+> route for it.
+>
+> Restore the blocking read and the reverb reaches slot 3 through the read word's
+> **own anchored ACTION `0x14` (`tempB ← bus`)**: **3 206** comb machines survive
+> (against 112 published) with `SRC 0x00` at **six** values, and in the sequential
+> model **2 310** with `SRC 0x00` perfectly uniform, 385 each. **The reverb has no
+> opinion about `SRC 0x00`.** `DR` is now refused by SINGLE DELAY (0/5 832),
+> by `dark-words.md`'s H-DIR/R3 structural test, and by nothing at all in the
+> reverb — a 3-0 agreement where there used to be a deadlock.
+>
+> Also: `land ∈ {0,1}` is **one machine counted twice** (`exec_rep` makes both
+> first visible at slot 1; 4 000/4 000 symbolically identical), so the row's left
+> cell was never a two-valued freedom either.
+
 They cannot both be right, and one of them is not. The SINGLE DELAY reading is
 the one that produces a working algorithm end-to-end with no free parameters
 left over; the reverb "requirement" is a *necessary condition of an assumption

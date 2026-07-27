@@ -188,11 +188,23 @@ LO_SRC_TB  = 0x1A    # temporary register B
 # lo12[4:0] = the ACTION.  Five codes were pinned by the biquad; TWO MORE are
 # pinned by the three-context adjudication in analysis/acc-adder.md.
 #   0x00  the accumulator's own input term comes from the BUS.  The LARGEST code
-#         in the field (820 corpus words).  FORCED as the only reading that
-#         satisfies the LFO ramp, SINGLE DELAY and bit-identity with the biquad
-#         at once -- see upd6383d.h LO_ACT_ACC_BUS and exec_alu().
+#         in the field (820 corpus words).  The ADDER is FORCED; WHICH half this
+#         code selects is CONSISTENT, NOT FORCED -- CORRECTED 2026-07-27,
+#         analysis/action00-discriminator.md.  SINGLE DELAY and the biquad are
+#         BLIND to the question (at hi12[3:1] == 0 `load' and `add' are the same
+#         expression, and the biquad carries no ACTION-0x00 word at all), so the
+#         published 18/18 was ONE context; widen the store gate by a suppressed
+#         store that clears LATE and the same solve gives 33 survivors,
+#         load x15 / add x12 / rload x6, with act00 and the gate locked together.
+#         `load' ships as the plurality and the only reading compatible with all
+#         five surviving gates.  See upd6383d.h LO_ACT_ACC_BUS and exec_alu().
 #   0x19  tempA <- bus, a SECOND CAPTURE PAIR beside 0x13/0x14 (0x19 = 0x13 + 6).
-#         FORCED 72/72 by SINGLE DELAY once the order above is fixed.
+#         FORCED 72/72 by SINGLE DELAY once the order above is fixed (108/108 in
+#         the wider space of action00-discriminator.md sect. 7).  ★ The reverb
+#         comb's conditional falsification of it (schroeder-topology.md sect. 0-C)
+#         is WITHDRAWN: that search omitted the BLOCKING read SINGLE DELAY forces,
+#         and with it restored the reverb reaches tempB through the read word's
+#         own anchored ACTION 0x14 -- analysis/blocking-read.md.
 LO_ACT_ACC_BUS = 0x00  # acc's input term <- bus (the adder's second selector)
 LO_ACT_ST_BUS = 0x07  # mem[ptr] <- bus
 LO_ACT_NONE_2 = 0x12  # no temp/memory side effect

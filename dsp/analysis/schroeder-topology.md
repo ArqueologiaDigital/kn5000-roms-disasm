@@ -39,6 +39,30 @@ of an exhaustive search agrees) / **CONSISTENT** / **FALSIFIED** / **OPEN**.
 
 ---
 
+> ## ⚠ BANNER — THREE OF THIS NOTE'S RESULTS ARE WITHDRAWN (2026-07-27)
+>
+> **The comb topology STANDS and is broadened. Its `SRC 0x00` and `ACTION 0x19`
+> corollaries do not.** See [`blocking-read.md`](blocking-read.md).
+>
+> Every search in this note enumerates the read latency over `LANDS = (0,1,2,7,8)`
+> and **omits `land = −1`, the BLOCKING read** — the read model SINGLE DELAY
+> itself FORCES 5 145/5 145 (`action-field.md` §8 tabulates that as a *separate*
+> disagreement; it is the *cause* of the other one). With the blocking read the
+> reverb's fresh delay sample reaches slot 3 through the read word's **own
+> anchored ACTION `0x14` (`tempB ← bus`)** — the route `dark-words.md` §10.3
+> named — and needs `SRC 0x00` not at all.
+>
+> | this note's claim | status |
+> |---|---|
+> | ★ **§0-D / §7: `SRC 0x00 = DR` FORCED; "contradiction #2 reinstated"** | **WITHDRAWN.** STRICT + blocking: 3 206 comb machines, `SRC 0x00` at **six** values (`DR` 581, the other five 525 each); sequential + blocking: 2 310, **perfectly uniform, 385 each** |
+> | ★ **§0-C / §6.2: `ACTION 0x19 = tB ← bus` FORCED 112/112** | **WITHDRAWN** — 56 of 3 206, and all 56 are the old `SRC 0x00 = DR` route |
+> | ★★ **§0-C / §6.6 / §8: the STRICT VOCABULARY is FALSIFIED (`0x19` must route the bus)** | **FALSIFIED IN TURN.** `ACTION 0x19`'s accumulator half is FORCED to **"no effect"**, 3 206/3 206 and 2 310/2 310. The reading the device implements is re-upheld by this note's own search |
+> | §6.1/6.2/6.6 "read lands +n: **2** values, CONSISTENT" | **DEGENERATE** — `land = 0` and `land = 1` are the *same machine* (4 000/4 000 symbolic), which is why every split is exactly 50/50 |
+> | §0-B: `ACTION 0x00 = load` FORCED given the clear | **WEAKENED** to a plurality (896 of 3 206) and **absent** from the 2 310 sequential survivors |
+> | §0-A: **the core is a COMB, not an all-pass** | ★ **STANDS, broadened**: 3 206 / 2 310 comb machines with the blocking read and the all-pass reference matched by **0** in every row |
+> | §0-E/§0-F: the published ladder controls were degenerate | **STANDS** |
+> | *(never printed by this note)* the comb also FORCES `tbsh = 0` — 112/112 in **its own** strict row | a **third** cross-block contradiction, with the biquad's 77 dB `>>1`; see `blocking-read.md` item **H** |
+
 ## 0. Result in one page
 
 | # | statement | label |

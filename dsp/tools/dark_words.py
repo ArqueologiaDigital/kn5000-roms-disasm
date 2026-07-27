@@ -971,13 +971,81 @@ def cmd_robust(rompath, toolsdir):
 
 
 # --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#  ★ sect. 4.5's OWN TEST, RUN -- and it FAILS
+#
+#  This note proposed that the per-unit pointer register `0x827' (payloads 0x6C
+#  for unit 0, 0x64 for unit 1) is the DELAY-DESCRIPTOR CURSOR's base, which
+#  would settle DRAM-ADDR -- 42 slots -- from two dark slots, "the highest
+#  possible payoff per unit of work in the dark set".  The test it named:
+#  does any affine map of {0x6C, 0x64} land on R3 candidate (iii)'s per-unit
+#  descriptor bases {0x26, 0x00}?
+#
+#  Answered here over a DECLARED family, both target orientations, with two
+#  controls that must (and do) return hits.
+# --------------------------------------------------------------------------
+P827 = (0x6C, 0x64)
+DSC_BASES = (0x26, 0x00)
+_MASKS = (0xFF, 0x7F, 0x3F, 0x1F)
+
+
+def _maps(target):
+    out = []
+    p0, p1 = P827
+    for a in range(-16, 17):
+        for b in range(-256, 257):
+            for m in _MASKS:
+                if (((a * p0 + b) & m), ((a * p1 + b) & m)) == target:
+                    out.append(("affine a=%d b=%d mod %02X" % (a, b, m)))
+    for sh in range(0, 8):
+        for b in range(-256, 257):
+            for m in _MASKS:
+                for tag, v in ((">>", (((p0 >> sh) + b) & m, ((p1 >> sh) + b) & m)),
+                               ("<<", (((p0 << sh) + b) & m, ((p1 << sh) + b) & m))):
+                    if v == target:
+                        out.append("x %s %d, +%d mod %02X" % (tag, sh, b, m))
+    return out
+
+
+def cmd_cursorbase():
+    print("=" * 76)
+    print("★ sect. 4.5's OWN TEST -- is `0x827' the delay-DESCRIPTOR CURSOR base?")
+    print("=" * 76)
+    print("   family: a*x+b (mod m), a in [-16,16], b in [-256,256],")
+    print("           m in {FF,7F,3F,1F}; plus (x>>s)+b and (x<<s)+b, s in [0,7]")
+    print("   payloads      0x%02X (unit 0)  0x%02X (unit 1)" % P827)
+    print("   target        0x%02X / 0x%02X   (R3 candidate (iii) bases)" % DSC_BASES)
+    fwd = _maps(DSC_BASES)
+    rev = _maps((DSC_BASES[1], DSC_BASES[0]))
+    print("   HITS forward %d ; reversed orientation %d" % (len(fwd), len(rev)))
+    print("   REASON, and it is arithmetic rather than exhaustion:")
+    print("       0x%02X - 0x%02X = %d      0x%02X - 0x%02X = %d      ratio %.2f"
+          % (P827[0], P827[1], P827[0] - P827[1], DSC_BASES[0], DSC_BASES[1],
+             DSC_BASES[0] - DSC_BASES[1],
+             (DSC_BASES[0] - DSC_BASES[1]) / float(P827[0] - P827[1])))
+    print("       a scale-and-offset map must carry 8 onto 38, and 38/8 is not")
+    print("       an integer -- so NO map of this shape exists, at any mask.")
+    c1 = _maps(P827)
+    c2 = _maps((0x05, 0x85))
+    print("   ★ CONTROLS -- the family must be able to HIT something:")
+    print("       target = the payloads themselves        %d hits  (e.g. %s)"
+          % (len(c1), c1[0] if c1 else "NONE"))
+    print("       target = the FORCED D-RAM bases 05 / 85 %d hits  (e.g. %s)"
+          % (len(c2), c2[0] if c2 else "NONE"))
+    print("   VERDICT: sect. 4.5's proposed test is FALSIFIED.  It kills the")
+    print("            TEST, not the register: R3 offers candidates (i) and (ii)")
+    print("            as well, and a cursor base need not be an affine image.")
+    return len(fwd) == 0 and len(rev) == 0 and c1 and c2
+
+
+
 def main():
     repo = os.path.abspath(os.path.join(HERE, "..", ".."))
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", nargs="?", default="all",
                     choices=["all", "frame", "enumerate", "groups", "leverage",
                              "critical", "neighbours", "dirtest", "robust",
-                             "cformat", "control"])
+                             "cformat", "control", "cursorbase"])
     ap.add_argument("--sub", default=os.path.join(repo, "original_ROMs",
                                                   "kn5000_subprogram_v142.rom"))
     ap.add_argument("--tools",
@@ -1013,6 +1081,9 @@ def main():
         print()
     if args.cmd in ("all", "robust"):
         cmd_robust(args.sub, args.tools)
+        print()
+    if args.cmd in ("all", "cursorbase"):
+        cmd_cursorbase()
         print()
     if args.cmd == "neighbours":
         cmd_neighbours(F)

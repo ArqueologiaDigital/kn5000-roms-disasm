@@ -1424,9 +1424,17 @@ def mult_can_be_s(base=None, ranges=None):
 
 
 def action_search(banks, l0, D0, base=None, quiet=False, ranges=None,
-                  numeric=True):
+                  numeric=True, lands=None):
     """The whole pipeline for ONE set of fixed assumptions.  Returns
-    (n_enumerated, loop survivors, numeric survivors)."""
+    (n_enumerated, loop survivors, numeric survivors).
+
+    ★ `lands' EXISTS BECAUSE THE DEFAULT IS NOT NEUTRAL.  `LANDS' omits the
+    BLOCKING read (`land = -1'), which is the read model SINGLE DELAY FORCES
+    (5145/5145, action-field.md sect. 8) -- so the reverb and SINGLE DELAY were
+    being solved under DIFFERENT read models, and that asymmetry is what made
+    `SRC 0x00 = DR' look forced here.  Passing it explicitly makes the choice
+    visible instead of inherited.  Callers that pass nothing keep the published
+    space exactly."""
     base = base or {}
     g2 = [banks[16][c] for c in l0][:2]
     random.seed(7)
@@ -1439,7 +1447,7 @@ def action_search(banks, l0, D0, base=None, quiet=False, ranges=None,
         for i19 in r19:
             for i0b in r0b:
                 for s0 in SRC0_CANDS:
-                    for ld in LANDS:
+                    for ld in (LANDS if lands is None else lands):
                         for ea in ((0, 1) if "escact" not in base
                                    else (base["escact"],)):
                             for sh in (0, 1):
@@ -2802,11 +2810,11 @@ def sec_schroeder2(C, rom, imgs, names):
         TA_CAP = [i for i, e in enumerate(EFFECTS)
                   if e[1] in ("tA<-bus", "tA<-acc")]
         JOINT = (range(len(EFFECTS)), TA_CAP, range(len(EFFECTS)))
-        rows = [("ADDER, generous", dict(order=1), GENEROUS),
-                ("ADDER, strict  ", dict(order=1), STRICT),
-                ("sequential, generous", {}, GENEROUS),
+        rows = [("ADDER, generous", dict(order=1), GENEROUS, None),
+                ("ADDER, strict  ", dict(order=1), STRICT, None),
+                ("sequential, generous", {}, GENEROUS, None),
                 ("ADDER, generous + SINGLE DELAY's ACTION 0x19 -> tempA",
-                 dict(order=1), JOINT),
+                 dict(order=1), JOINT, None),
                 #  ★ ROBUSTNESS AGAINST THE PARALLEL PASS.
                 #  `action00-discriminator.md' (2026-07-27) falsifies the 18/18
                 #  forcing of `load' by widening the STORE GATE -- a suppressed
@@ -2816,25 +2824,34 @@ def sec_schroeder2(C, rom, imgs, names):
                 #  itself can still be wrong, and a parameter settled elsewhere
                 #  is not settled inside this search.  So enumerate it here:
                 ("ADDER, strict + bit-4 stores WITHOUT clearing",
-                 dict(order=1, noclr=1), STRICT),
+                 dict(order=1, noclr=1), STRICT, None),
                 ("ADDER, strict + bit-4 neither stores NOR clears",
-                 dict(order=1, noclr=2), STRICT),
+                 dict(order=1, noclr=2), STRICT, None),
                 ("ADDER, joint + bit-4 stores WITHOUT clearing",
-                 dict(order=1, noclr=1), JOINT),
+                 dict(order=1, noclr=1), JOINT, None),
                 ("ADDER, joint + bit-4 neither stores NOR clears",
-                 dict(order=1, noclr=2), JOINT)]
+                 dict(order=1, noclr=2), JOINT, None),
+                #  ★★ ROWS 8-10: THE BLOCKING READ.  See sec_blockread() for the
+                #  whole argument; these rows are here so the marginals can be
+                #  read side by side with rows 0-7 in one output.
+                ("ADDER, strict + THE BLOCKING READ (land = -1)",
+                 dict(order=1), STRICT, (-1,)),
+                ("ADDER, joint  + THE BLOCKING READ (land = -1)",
+                 dict(order=1), JOINT, (-1,)),
+                ("sequential, strict + THE BLOCKING READ (land = -1)",
+                 {}, STRICT, (-1,))]
         only = os.environ.get("SCH_ROW")
         refs = topology_refs(g2, DEL, xs)
         random.seed(5)
         x64 = [random.uniform(-1, 1) for _ in range(64)]
         DEL2 = [3, 7]
         refs2 = topology_refs(g2, DEL2, x64)
-        for n, (tag, base, rng) in enumerate(rows):
+        for n, (tag, base, rng, lnd) in enumerate(rows):
             if only is not None and int(only) != n:
                 continue
             print("   [%d] %s" % (n, tag), flush=True)
             _t, sl, _x = action_search(banks, l0, D0, base, quiet=True,
-                                       ranges=rng, numeric=False)
+                                       ranges=rng, numeric=False, lands=lnd)
             print("       %d machines pass the delay-loop filter" % len(sl),
                   flush=True)
             byref = collections.Counter()
@@ -2863,6 +2880,10 @@ def sec_schroeder2(C, rom, imgs, names):
                 for nm, ix in (("SRC 0x00 reads", SRC0),
                                ("read lands +n", LAND),
                                ("write data from", WSRC),
+                               #  escact and tbsh were ENUMERATED all along and
+                               #  never printed.  tbsh in particular is a live
+                               #  cross-block constraint -- see sec_blockread().
+                               ("escact", ESCACT), ("tempB >>1", TBSH),
                                ("ACTION 0x00", F00), ("ACTION 0x19", F19),
                                ("ACTION 0x0B", F0B)):
                     v = collections.Counter(
@@ -2882,6 +2903,157 @@ def sec_schroeder2(C, rom, imgs, names):
                                  "FORCED" if len(v) == 1 else "%d" % len(v),
                                  "  ".join("%s x%d" % (a, b)
                                            for a, b in v.most_common())))
+        print()
+
+
+# ==========================================================================
+#  15. ★★★ THE BLOCKING READ -- the shared assumption behind BOTH halves of
+#      the reverb-vs-SINGLE-DELAY contradiction
+#
+#  `action-field.md' sect. 8 tabulates TWO rows of disagreement:
+#
+#      SRC 0x00        reverb: DR (52696/52696)  |  SINGLE DELAY: never DR (0/5145)
+#      read latency    reverb: land in {0,1}     |  SINGLE DELAY: land = -1 FORCED
+#
+#  They are ONE row.  `land = -1' is the BLOCKING read: the DRAM read word's own
+#  operand bus already carries the word it fetched.  `LANDS' omits it, so in the
+#  reverb's search space the fresh delay sample could reach the ALU by exactly
+#  ONE route -- `SRC 0x00 = DR' at slot 1.  Enumerate the blocking read and a
+#  SECOND route opens that needs no `SRC 0x00' at all:
+#
+#      slot 0  880.1.60.2D4  is an ESCAPE word whose ACTION is 0x14, the
+#                            ANCHORED `tempB <- bus'.  Under a blocking read its
+#                            bus IS w[r], so tempB <- w[r] at slot 0;
+#      slot 3  012.2.00.680  reads SRC 0x1A = tempB and computes acc <- tB + P
+#                            = w[r] + t[r-1], which is the comb multiplicand
+#                            sect. 14 published -- unchanged.
+#
+#  dark-words.md sect. 10.3 named this ACTION 0x14 and asked that any nested-comb
+#  model satisfy both halves of the read/write pair.  This is that model.
+# ==========================================================================
+def sec_blockread(C, rom, imgs, names):
+    parts = set((os.environ.get("BLK_PARTS") or
+                 "degeneracy,route,control,search").split(","))
+    banks, l0, l1, D0, D1 = _ladder_inputs(C, rom, imgs)
+    g2 = [banks[16][c] for c in l0][:2]
+
+    # ------------------------------------------------- 15a. the degeneracy
+    if "degeneracy" in parts:
+        print("=" * 76)
+        print("15a. ★ `land = 0' AND `land = 1' ARE THE SAME MACHINE")
+        print("=" * 76)
+        print("   exec_rep appends the read at tick+land and pops it at the")
+        print("   START of a slot when deadline <= tick.  The read is at slot 0,")
+        print("   so 0+0 and 0+1 are BOTH first visible at slot 1.  Every")
+        print("   published row's LAND split is therefore exactly 50/50 -- and")
+        print("   it is (8260/8260 generous, 56/56 strict, 6370/6370 joint).")
+        random.seed(3)
+        NE = len(EFFECTS)
+        rows = collections.Counter()
+        random.seed(7)
+        xs = [random.uniform(-1, 1) for _ in range(32)]
+        for _ in range(4000):
+            a = dict(f00=random.randrange(NE), f19=random.randrange(NE),
+                     f0b=random.randrange(NE), src0=random.choice(SRC0_CANDS),
+                     wsrc=random.choice(WSRCS), wtrail=1,
+                     escact=random.choice((0, 1)), tbsh=random.choice((0, 1)),
+                     order=random.choice((0, 1)), noclr=random.choice((0, 1, 2)))
+            s0, t0 = sym_rep(mach(land=0, **a))
+            s1, t1 = sym_rep(mach(land=1, **a))
+            rows["0 vs 1"] += ((s0, sorted(t0.items())) ==
+                               (s1, sorted(t1.items())))
+        print("   SYMBOLIC, 4000 random machines: identical %d / 4000"
+              % rows["0 vs 1"])
+        # ...AND THE COMPARISON MUST BE ABLE TO SAY `DIFFERENT'.
+        for other in (2, -1):
+            random.seed(19)
+            same = 0
+            for _ in range(300):
+                a = dict(f00=random.randrange(NE), f19=random.randrange(NE),
+                         f0b=random.randrange(NE),
+                         src0=random.choice(SRC0_CANDS),
+                         wsrc=random.choice(WSRCS), wtrail=1,
+                         escact=random.choice((0, 1)),
+                         tbsh=random.choice((0, 1)), order=1)
+                same += (machine_outputs(mach(land=0, **a), g2, [3, 5], xs) ==
+                         machine_outputs(mach(land=other, **a), g2, [3, 5], xs))
+            print("   CONTROL land 0 vs %-2d on the real ladder: identical %d / 300"
+                  "   <- MUST NOT be 300" % (other, same))
+        print("   => `read lands +n: 2 values' is ONE machine counted twice, and")
+        print("      the BLOCKING read (land = -1) -- the one SINGLE DELAY FORCES")
+        print("      5145/5145 -- was never in the reverb's space at all.")
+        print()
+
+    # ----------------------------------------------------- 15b. the route
+    if "route" in parts:
+        print("=" * 76)
+        print("15b. ★★ THE SECOND ROUTE, and it needs NOTHING from SRC 0x00")
+        print("=" * 76)
+        for i, sl in enumerate(MSLOTS):
+            print("   slot %d %-16s %-4s src=%02X %-9s act=%02X -> %-12s accop=%d%s"
+                  % (i, sl["word"], "ESC" if sl["esc"] else "", sl["src"],
+                     SRC_TXT.get(sl["src"], "?"), sl["act"],
+                     eff_str(act_effect(NOMINAL_M, sl["act"]))
+                     if sl["act"] in (0x12, 0x13, 0x14, 0x15, 0x07) else "(OPEN)",
+                     sl["accop"], " ST" if sl["store"] else ""))
+        print("   ★ slot 0's ACTION 0x14 is ANCHORED: tempB <- bus.  With a")
+        print("     BLOCKING read its bus is w[r], so the delay sample lands in")
+        print("     tempB before slot 1 executes -- and slot 3 reads tempB.")
+        m = mach(EFFECTS.index(("bus", "tA<-acc")),
+                 EFFECTS.index(("", "tA<-bus")), EFFECTS.index(("", "")),
+                 "zero", "bus", 1, -1, escact=1, tbsh=0, order=1)
+        st, tr = sym_rep(m)
+        print()
+        print("   SYMBOLIC repetition, SRC 0x00 = ZERO, land = -1, escact = 1:")
+        print("       MULTIPLICAND = %s        (P = t[r-1], N = w[r])"
+              % show_form(tr["MULT"]))
+        print("       write value  = %s" % show_form(tr["W"][0]))
+        print("       exit tA=%s tB=%s acc=%s DR=%s"
+              % (show_form(st[R_TA]), show_form(st[R_TB]),
+                 show_form(st[R_ACC]), show_form(st[R_DR])))
+        print("       delay-loop filter -> %s" % (loop_ok(m) or "REJECTED"))
+        print("   => the SAME multiplicand w[r] + t[r-1] sect. 14 published, with")
+        print("      SRC 0x00 reading NOTHING.")
+        print()
+
+    # --------------------------------------------------- 15c. the controls
+    if "control" in parts:
+        print("=" * 76)
+        print("15c. ★ CONTROLS -- each shown able to say NO")
+        print("=" * 76)
+        # (1) kill the route by refusing the escape word its lo12: the machine
+        #     above must STOP passing the loop filter.
+        for tag, kw in (("escact = 1 (the route open)", dict(escact=1)),
+                        ("escact = 0 (read word's ACTION 0x14 ignored)",
+                         dict(escact=0))):
+            m = mach(EFFECTS.index(("bus", "tA<-acc")),
+                     EFFECTS.index(("", "tA<-bus")), EFFECTS.index(("", "")),
+                     "zero", "bus", 1, -1, tbsh=0, order=1, **kw)
+            lp = loop_ok(m)
+            print("   %-44s loop filter -> %s"
+                  % (tag, lp if lp else "REJECTED   <- SAYS NO"))
+        # (2) and the same machine with a PIPELINED read: the route needs the
+        #     block, so it must die there too.
+        for ld in (0, 1, 2):
+            m = mach(EFFECTS.index(("bus", "tA<-acc")),
+                     EFFECTS.index(("", "tA<-bus")), EFFECTS.index(("", "")),
+                     "zero", "bus", 1, ld, escact=1, tbsh=0, order=1)
+            lp = loop_ok(m)
+            print("   %-44s loop filter -> %s"
+                  % ("land = %d (pipelined, SRC 0x00 = zero)" % ld,
+                     lp if lp else "REJECTED   <- SAYS NO"))
+        print()
+
+    # ----------------------------------------------------- 15d. the search
+    if "search" in parts:
+        print("=" * 76)
+        print("15d. ★★★ THE SEARCH -- run sect. 14e rows 8, 9, 10")
+        print("=" * 76)
+        print("   SCH_PARTS=search SCH_ROW=8   strict  + blocking read")
+        print("   SCH_PARTS=search SCH_ROW=9   joint   + blocking read")
+        print("   SCH_PARTS=search SCH_ROW=10  sequential strict + blocking")
+        print("   SCH_PARTS=search SCH_ROW=1   the PUBLISHED strict row, which")
+        print("                                must still return 112.")
         print()
 
 
@@ -2950,6 +3122,8 @@ def main():
         sec_adder(C, rom, imgs, names)
     if "schroeder2" in want:
         sec_schroeder2(C, rom, imgs, names)
+    if "blockread" in want:
+        sec_blockread(C, rom, imgs, names)
 
 
 if __name__ == "__main__":
