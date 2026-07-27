@@ -128,17 +128,27 @@ def gate_of(stgate, b7, f):
     raise KeyError(stgate)
 
 
+#  ★ act0b, ADDED 2026-07-27 (analysis/act0b-reverb.md).  ACTION 0x0B was in
+#  step()'s accepted-code list from the start but had NO branch in capture() and
+#  NO parameter -- so it silently executed as "no side effect", an UNENUMERATED
+#  modelling choice (method rule 3), while `dsp_disasm._ANCHORED_ACT' traps the
+#  same word.  The default is "none", i.e. exactly the old behaviour, so every
+#  published number is preserved BY CONSTRUCTION; what changes is that the
+#  choice is now visible and can be swept.
+ACT0B = ("none", "tA<-bus", "tB<-bus", "mem<-bus", "tA<-acc", "tB<-acc")
+
+
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
-                 "act19", "src00", "src08", "src11", "dest07")
+                 "act19", "src00", "src08", "src11", "dest07", "act0b")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
-                 src11="mem", dest07="mem"):
+                 src11="mem", dest07="mem", act0b="none"):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
-        self.src11, self.dest07 = src11, dest07
+        self.src11, self.dest07, self.act0b = src11, dest07, act0b
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -266,6 +276,20 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
                 st.ta = datum(st.acc) & MASK24
             elif m.act19 == "tB<-bus":
                 st.tb = bus & MASK24
+        elif act == 0x0B:
+            # See the ACT0B note above.  "none" is the historical behaviour.
+            if m.act0b == "tA<-bus":
+                st.ta = bus & MASK24
+            elif m.act0b == "tB<-bus":
+                st.tb = bus & MASK24
+            elif m.act0b == "tA<-acc":
+                st.ta = datum(st.acc) & MASK24
+            elif m.act0b == "tB<-acc":
+                st.tb = datum(st.acc) & MASK24
+            elif m.act0b == "mem<-bus":
+                st.mem[st.p] = bus & MASK24
+                if obs is not None:
+                    obs.append(("W0B", st.p, bus & MASK24))
 
     busa = bus << ash                          # the bus, in accumulator units
 
