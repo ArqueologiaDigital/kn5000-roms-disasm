@@ -45,7 +45,8 @@ rendered audio cannot have moved. §11.
 | **H** | ★★ **THE MIRROR CHECK PASSES EXACTLY — AND ONLY AFTER IT CAUGHT A BUG IN THIS PASS.** Restricted to the published spaces this tool returns `4416 → 4416 → 3312` (`action00-discriminator.md` published **3312**) and `1632 → 1632 → 1224` (`acc-adder.md` published **1224**), with the `(act00, gate)` table reproduced **row for row**. It did not, on the first run: mapping `(condition, effect, sttime)` as an independent product gave 3456, because in the published tool the global `sttime` also moves a **gated** word's clear. Fixing that exposed two defects in the published space. **Degeneracy:** | **MEASURED** |
 | **H′** | the 18 `(gate name, sttime)` pairs are only **16 distinct machines** — `b7_f31_1_keepclear` and `b7_f31_1_clrlate` coincide at `sttime ∈ {after, st_before_clr_after}`. **Hole:** `action00-discriminator.md`'s `STGATE` list has `b7_f31_1_{off, keepclear, clrlate}` but only `b7_ne2_{off, clrlate}` — ★ **`b7_ne2_keepclear` was never enumerated.** Method rule 3, in the file that wrote method rule 3. | **MEASURED** |
 | **I** | ★ **AND THE OBSERVATIONAL QUOTIENT IS `act00`-DEPENDENT — WHICH IS THE COUPLING, MEASURED AS A NUMBER.** At the LFO's `092.A.00.200` the 33 effects collapse to **15** distinguishable machines under `act00 = load` and **23** under `act00 = add`: with `load` the word's own ALU overwrites the accumulator and a third of the gate becomes invisible. `action00-discriminator.md` item C said the two questions are one; here is *how much* of the gate each reading of `ACTION 0x00` lets you see. The coupling itself re-derives exactly: `add` and `rload` occur **only** with a late clear, `bsel` **only** with an early one, `load` with all three. | **MEASURED** |
-| **J** | ★★★ **SECOND TASK — `SRC 0x00`: THE AMBIGUITY DOES NOT CLOSE, AND THE ANSWER IS IN THE ROM, NOT THE EMULATOR.** `blocking-read.md` item G makes `SRC 0x00 = mem[ptr]` forced *only while SINGLE DELAY's two input-mix coefficients are 0.0000*, and names an emulator capture. A capture can only SAMPLE. MEASURED instead, exhaustively: SINGLE DELAY's `w3` coefficient is **C-RAM offset `0x00`**, and algorithm 9's own parameter table has `T1 op 0x73 -> 00 01 09 0A` with a T2 record **`op 73 #00 -> addr 00`**. **The cell is a user-parameter target.** The antecedent is the ROM-loaded *default*, not a property of the running machine. **`SRC 0x00 = mem[ptr]` stays CONSISTENT, the 30 PARTIAL + 10 TRAP slots keep trapping, and no capture is needed.** | **MEASURED** |
+| **J** | ★★★ **SECOND TASK — `SRC 0x00`: THE AMBIGUITY DOES NOT CLOSE, AND THE CELL HAS A NAME ON THE FRONT PANEL.** `blocking-read.md` item G makes `SRC 0x00 = mem[ptr]` forced *only while SINGLE DELAY's two "input-mix" coefficients are 0.0000*, and names an emulator capture. A capture can only SAMPLE; the firmware's own parameter table decides, exhaustively. MEASURED: SINGLE DELAY's `w3` coefficient is **C-RAM cell `0x00`**; algorithm 9's T2 stream writes it with `op 73 #00`; and `register-space.md`'s UI alignment names opcode `0x73` **`FEEDBACK L`** (`FEEDBACK L`/`FEEDBACK R`/`RESONANCE`, 28 of 28). ★ **The "input-mix coefficient that happens to be zero" is the SINGLE DELAY FEEDBACK knob, and `0.0000` is simply *feedback = 0* as the shipped default.** Corroborated by a control that could fail: at all **28 of 28** `op 0x73` targets the ROM-loaded C-RAM value lies inside that record's own `(lo, hi)` pair — **0 outside**, against 85 % corpus-wide — and **8 of the 28 are already non-zero** (`+0.3000`, `+0.0250`). **`SRC 0x00 = mem[ptr]` stays CONSISTENT, the 30 PARTIAL + 10 TRAP slots keep trapping, and the capture is superseded.** | **MEASURED** |
+| **J′** | ★★ **AND IT PUTS A PUBLISHED NAME IN DOUBT — flagged as a lead, not a result.** `action00-discriminator.md` §0-H calls `w3`/`w4` "the two input-mix coefficients" and `w6` (cell `0x02`, `0.5000`) "the feedback". The host calls cell `0x00` **FEEDBACK L** and cell `0x09` **FEEDBACK R**, and does not name cell `0x02` at all. Either the SD motif's roles are mis-assigned or algorithm 9's image contains more than one delay whose cells do not line up with the first motif instance. **OPEN**, and it belongs to whoever next touches SINGLE DELAY. | **OPEN** |
 | **K** | ★ **THIRD TASK — THE VACUITY SWEEP: NO NEW HEADLINE FALLS.** The theorem (`load`, `add` and `rload` are the same expression wherever `hi12[3:1] == 0`) is verified at 3 000/3 000 random states at SINGLE DELAY `w7` and shown able to say *different* at the LFO's `082` and the reverb's slot 1 (0/3 000 each). Swept over every published ACTION determination: `action-field.md` §6's SINGLE DELAY forcing is stated at exactly the strength its `f31 == 0` site can bear (*"not a no-op"*, and `none` **is** distinguishable there) and **survives**; `ACTION 0x19`'s two determinations sit at `f31 == 1` and survive; `schroeder-topology.md` §0-B and `allpass-adder-rerun.md` §0-C rest on motif slots 1 and 3 (`f31 = 2` and `1`) and survive. **152 of the field's 806 ACTION-`0x00` words (18.9 %) are structurally incapable of deciding their own accumulator half.** Reported as a **MISS**: the sweep was expected to catch one and caught none. Attribution: the theorem is `schroeder-topology.md` item H. | **MEASURED** / a **MISS** |
 | **L** | Housekeeping: `dsp/verify.py` **BYTE-MATCH OK**; no `.dsm` regenerated; no device or disassembler file touched; the DSPCFG-off audio is untouched **by construction**. §11. | **MEASURED** |
 
@@ -470,12 +471,12 @@ item G's own logic **the ambiguity does not close. The 30 PARTIAL + 10 TRAP
 slots keep trapping and `SRC 0x00 = mem[ptr]` stays CONSISTENT.** Nothing is
 applied.
 
-Two controls, one of which is only partly satisfied and is reported that way:
+Three controls, one of which is only partly satisfied and is reported that way:
 
 ```
    CONTROL 1 -- a cell that must NOT be a target and one that must:
-      offset 02 (the feedback coefficient) is a target : False
-      offset 90 (op 0x21, the output LEVEL)            : True
+      cell 02 (the 0.5000 coefficient) is a target : False
+      cell 90 (op 0x21) is a target                : True
 
    CONTROL 2 -- is a 6-byte immediate a (lo, hi) RANGE?  Over EVERY algorithm,
    does the ROM-loaded C-RAM value at the target lie between the halves?
@@ -483,14 +484,64 @@ Two controls, one of which is only partly satisfied and is reported that way:
       e.g. algo 5 op 66#1 -> 06  [+0.3000, +0.4350]  value +0.4380
 ```
 
-So the range reading is **CONSISTENT (85 %), not proven**, and the headline does
-not rest on it: algorithm 9's record is `op 73 #00 -> addr 00, imm C28F5C 3D70A3`
-= the pair `(−0.4800, +0.4800)` with the ROM-loaded value at the *midpoint*,
-which is suggestive; what is MEASURED, and sufficient, is that **the cell is
-written by the parameter path at all.** Caveat stated: `kn5000-dsp-parameters.md`
-§6 marks the opcode→helper binding INFERRED and partially wrong, and opcode
-`0x73`'s helper is a *block* writer whose address space is not independently
-pinned.
+So corpus-wide the range reading is **CONSISTENT (85 %), not proven** — which is
+exactly what makes the third control worth running.
+
+### 8.1 ★ The cell has a name, and the name is a front-panel knob
+
+`register-space.md` (sibling pass, the same day) aligns each algorithm's T2
+record list against the captured UI parameter list — 49 of 49 algorithms align,
+and the alignment is checked by a *unit* control that could scatter. It binds
+opcode `0x73` to **`FEEDBACK L` / `FEEDBACK R` / `RESONANCE`, 28 of 28**.
+Algorithm 9's seven records, with their names:
+
+```
+   op 67#0 -> cell 0x26   DELAY L            (ms)
+   op 67#1 -> cell 0x28   DELAY R            (ms)
+   op 73#0 -> cell 0x00   FEEDBACK L         <- SINGLE DELAY w3's OWN COEFFICIENT
+   op 73#2 -> cell 0x09   FEEDBACK R
+   op 76#0 -> cell 0x03   HIGH DAMP GAIN
+   op 63#0 -> cell 0x06   VOLUME
+   op 21#0 -> cell 0x90   REV SEND
+```
+
+★ **The "input-mix coefficient that happens to be `0.0000`" is the SINGLE DELAY
+FEEDBACK knob.** `0.0000` is not an accident of the image and not a structural
+zero — it is *feedback = 0* as the shipped default of a user control that spans
+`(−0.4800, +0.4800)`.
+
+**CONTROL 3, and it could have failed.** If `op 0x73`'s addresses really are
+C-RAM *coefficient* cells then the ROM-loaded value at each of the 28 targets
+must lie inside that record's own `(lo, hi)` pair — and corpus-wide that test
+scores only 85 %, so it is not automatic:
+
+```
+   op 0x73 targets INSIDE their own (lo, hi) pair : 28
+   ...                            OUTSIDE          :  0
+      algo 4  FLANGER          #0 -> 0x00  [-0.4900,+0.4900]  loaded +0.300000
+      algo 5  PHASER           #0 -> 0x02  [-0.4900,+0.4900]  loaded +0.300000
+      algo 9  SINGLE DELAY     #0 -> 0x00  [-0.4800,+0.4800]  loaded +0.000000
+      algo 9  SINGLE DELAY     #2 -> 0x09  [-0.4800,+0.4800]  loaded +0.000000
+      algo 10 MULTI TAP DELAY  #0 -> 0x07  [-0.1200,+0.1200]  loaded +0.025000
+      algo 64 S.DELAY+CHORUS   #0 -> 0x02  [-0.4500,+0.4500]  loaded +0.300000
+```
+
+**8 of the 28 are already non-zero in the ROM image**, so the address space is
+not merely plausible — the opcode demonstrably lands real gains in C-RAM
+coefficient cells. Caveat still stated: `kn5000-dsp-parameters.md` §6 marks the
+opcode→helper binding INFERRED and partially wrong, and `0x73`'s helper is a
+*block* writer at `0x039ABD` whose code has not been read; 28/28 with 8 non-zero
+is strong corroboration, not a disassembly.
+
+### 8.2 A lead for whoever next touches SINGLE DELAY
+
+`action00-discriminator.md` §0-H calls `w3`/`w4` **the two input-mix
+coefficients** and `w6` (cell `0x02`, `0.5000`) **the feedback**. The host calls
+cell `0x00` **FEEDBACK L** and cell `0x09` **FEEDBACK R**, and never names cell
+`0x02`. Either the motif's roles are mis-assigned, or algorithm 9's 133-word
+image holds more than one delay and the first motif instance is not the one the
+parameter map addresses. **OPEN.** It does not change §0-J either way: whatever
+`w3` is *for*, its coefficient is host-written.
 
 ---
 
@@ -554,6 +605,7 @@ never-decidable ACTION codes are new.
 | **P-7** | this tool will reproduce `action00-discriminator.md`'s LFO count on the first attempt | ★ **MISS, and the mirror check is why it exists.** My first mapping treated `(condition, effect, sttime)` as an independent product; in the published tool `sttime` also moves a *gated* word's clear. Corrected, and the correction exposed the degeneracy in §0-H |
 | **P-8** | the class-`(1,0)` words will turn out to be dead stores | **HIT**, 2 of 2 — but the base rate is 32.8 %, so it is reported as `p ≈ 0.11` evidence, not a forcing |
 | **P-9** | the emulator capture will be needed to settle `SRC 0x00` | **MISS.** The firmware's own parameter table answers it exhaustively and in the direction that keeps the ambiguity **open**; no capture was run |
+| **P-12** | *(recorded after reading the sibling pass)* the cell will turn out to be an obscure internal coefficient with no user name | ★ **MISS, and the best miss of the pass.** It is `FEEDBACK L` — a named front-panel knob spanning ±0.48, with 8 of the 28 `op 0x73` targets already non-zero in the ROM image |
 | **P-10** | the gate is worth ~130 words | **MISS by 8×.** 17, in 9 programs, and none of the 16 class-`(1,1)` ones carries `ACTION 0x00` |
 | **P-11** | no frame completes and no audio moves | **HIT, by construction** — nothing that runs in the emulator was edited |
 

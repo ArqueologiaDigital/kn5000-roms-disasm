@@ -1532,6 +1532,85 @@ the same question EXHAUSTIVELY, and it is in the ROM.""")
               "  value %+.4f"
               % (e[0], e[1], e[2], e[3], e[4] / 2.0 ** 23, e[5] / 2.0 ** 23,
                  e[6] / 2.0 ** 23))
+    print("""
+   * CONTROL 3 -- ★ THE OPCODE HAS A NAME, AND THE ADDRESS SPACE HAS A CHECK.
+     register-space.md (sibling pass, same day) aligns each T2 record against
+     the captured UI parameter list and binds opcode 0x73 to FEEDBACK L /
+     FEEDBACK R / RESONANCE, 28 of 28.  If op 0x73's addresses really are C-RAM
+     COEFFICIENT cells, the ROM-loaded value at every one of those 28 targets
+     must lie inside that record's own (lo, hi) pair -- and the corpus-wide test
+     above scores only 85 %, so this can fail.""")
+    try:
+        import register_space as RS
+        rom2, mainrom, _E = RS.load(
+            os.path.join(HERE, "..", "..", "original_ROMs",
+                         "kn5000_subprogram_v142.rom"),
+            os.path.join(HERE, "..", "..", "original_ROMs",
+                         "kn5000_v10_program.rom"),
+            os.path.expanduser("~/compartilhado/kn7000_mame/tools"))
+        cap = RS.load_capture(os.path.expanduser("~/compartilhado/kn7000_mame/tools"))
+        pn = RS.param_names(mainrom)
+        byname = {}
+        for e in cap:
+            for part in e["name"].split(" / "):
+                byname[RS.norm(part)] = e["indices"]
+        ins = outn = 0
+        shown = 0
+        for a in range(100):
+            t1p = rom2.u32le(RS.T1_ARRAY + 4 * a)
+            t2p = rom2.u32le(RS.T2_ARRAY + 4 * a)
+            if not t2p or not t1p or t1p == RS.NULL_T1:
+                continue
+            am = {op: e for op, e in RS.parse_t1(rom2, t1p)}
+            cr = L.cram_of_algo(a)
+            if not cr:
+                continue
+            for (_x, _l, body) in RS.split_t2(rom2, t2p):
+                op, opr = body[0], body[1]
+                if op != 0x73 or len(body) < 8:
+                    continue
+                imm = body[2:8]
+                lo = int.from_bytes(imm[0:3], "big")
+                hi = int.from_bytes(imm[3:6], "big")
+                lo = lo - (1 << 24) if lo & (1 << 23) else lo
+                hi = hi - (1 << 24) if hi & (1 << 23) else hi
+                ent = am.get(op, [])
+                if opr >= len(ent):
+                    continue
+                v = cr.get(ent[opr])
+                if v is None:
+                    continue
+                v2 = v - (1 << 24) if v & (1 << 23) else v
+                ok = min(lo, hi) <= v2 <= max(lo, hi)
+                ins += ok
+                outn += (not ok)
+                if shown < 6:
+                    shown += 1
+                    print("      algo %-3d %-18s #%d -> cell 0x%02X"
+                          "  [%+.4f,%+.4f]  loaded %+.6f  %s"
+                          % (a, RS.effect_name(mainrom, a)[:18], opr, ent[opr],
+                             lo / 2.0 ** 23, hi / 2.0 ** 23, v2 / 2.0 ** 23,
+                             "in" if ok else "OUT"))
+        print("      op 0x73 targets INSIDE their own (lo,hi) pair : %d" % ins)
+        print("      ...                            OUTSIDE        : %d" % outn)
+        # the algo-9 binding, by name
+        ui = byname.get(RS.norm(RS.effect_name(mainrom, 9)))
+        t1p = rom2.u32le(RS.T1_ARRAY + 4 * 9)
+        t2p = rom2.u32le(RS.T2_ARRAY + 4 * 9)
+        am = {op: e for op, e in RS.parse_t1(rom2, t1p)}
+        print("\n      ★ algorithm 9's records, with the UI names they carry:")
+        for (_x, _l, body), idx in zip(RS.split_t2(rom2, t2p), ui or []):
+            op, opr = body[0], body[1]
+            ent = am.get(op, [])
+            cell = ent[opr] if opr < len(ent) else None
+            nm, un = pn[idx - 1]
+            print("         op %02X#%d -> cell %-5s UI name = %-18s %s"
+                  % (op, opr, ("0x%02X" % cell) if cell is not None else "??",
+                     nm, ("<- SINGLE DELAY w3's OWN COEFFICIENT"
+                          if cell == 0x00 else "")))
+    except Exception as e:
+        print("      (register_space.py unavailable: %s)" % e)
+
     lo, hi = 0xC28F5C - (1 << 24), 0x3D70A3
     print("""
       -> algorithm 9's record is `op 73 #00 -> addr 00, imm C28F5C 3D70A3',
