@@ -356,6 +356,30 @@ survives verbatim in a space of 1 089: **`add` and `rload` require a LATE clear;
 erases the accumulator at the gated word itself, so the gate's timing stops
 mattering.
 
+### 4.3 The gate, assembled class by class
+
+`gate_settle.py joint` runs the biquad and the LFO and prints the intersection
+in the coordinates that matter — one row per class:
+
+```
+   class (0,1)  biquad : 3 effects, ALL of them `store -> ptr, clear BEFORE'
+                            ST(acc->ptr)@before/clr:before
+                            ST(bus->ptr)@before/clr:before
+                            ST(bus->ptr)@after /clr:before
+   class (1,1)  LFO    : 21 effects, NONE of them writing mem[ptr]
+                            -            x{1512, 648, 432} by clear
+                            ST(*->else)  x{1512, 648, 432} by clear, 2 sources
+                            LD           x{1512, 648, 432} by clear, 2 timings
+   class (1,2)  LFO    : 3 effects, ALL of them
+                            ST(acc->ptr)@before/clr:{never, before, after}
+   class (0,0)  NO WITNESS -- 12 words, structural evidence only
+   class (1,0)  NO WITNESS -- 2 words, 1 executable, and it is a dead store
+   class (0,2)  VACUOUS   -- 0 words
+```
+
+**That is the whole gate.** Three classes are pinned to a single memory
+behaviour each, two have no witness in the corpus, and one does not exist.
+
 ---
 
 ## 5. The condition half — `b7 & f31 == 1` vs `b7 & f31 != 2`
