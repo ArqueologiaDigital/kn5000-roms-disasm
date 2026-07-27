@@ -52,7 +52,14 @@ anything in the gated notes. **It is still not a proof:** it assumes the input
 injection point is right, and it only rules out the five alternatives actually
 enumerated.
 
-## Result 3 — `ACT 0x0D` is blind here
+## ⛔ Result 3 — `ACT 0x0D` is blind here — **FALSIFIED, see
+[`speculative-carryback.md`](speculative-carryback.md) §3**
+
+> The blindness is a property of **this configuration**, not of the program.
+> All three `0x0D` sites source `mem[ptr]` at pointer `0x80`, which nothing in
+> this run ever wrote — so the bus was zero, every reading wrote zero, and
+> writing zero is indistinguishable from writing nothing. Dataflow shows `0x0D`
+> IS observable, via `tempB` at `w012` and via `mem[ptr]` at the next site.
 
 All six readings of `0x0D` give **bit-identical** output. Another blind site, in
 the same family as the three already on record. Whatever settles `0x0D`, it is
