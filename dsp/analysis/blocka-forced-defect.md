@@ -395,3 +395,87 @@ input arrives in). That remains a systematic defect in the methodology.
 
 **What is withdrawn:** `0x80` as the inter-unit path, and the plan to run a
 unit-0 body alongside the reverb as the fix.
+
+---
+
+## 10. Re-reading the closure and input-stage work — the simulations were never capable of this
+
+Two notes hold the answer, and I had not connected them to the reverb work.
+
+### 10.1 The input enters through the KERNEL, not the body
+
+[`closure-pointer.md`](closure-pointer.md) §2.1:
+
+> The two audio input latches sit at **fixed chip addresses**: the serial
+> receivers write them, no instruction does, and **the kernel reads them at
+> `ptr+2` and `ptr+5` in its first twelve words**. The kernel is *shared* — the
+> same 60 words run for every effect.
+
+**Every reverb simulation in this project has run the 133-word body alone.** The
+60-word kernel — the only thing that reads the audio input — has never been in
+any of them. That is the systematic defect §8.3 was groping at, stated exactly.
+
+### 10.2 And hand-injecting D-RAM is not a substitute
+
+`kn7000_mame/notes/dsp-k6-input-stage.md` finding **7** (FORCED + MEASURED,
+over-determined 37×):
+
+> the input stage does **not** hand cells to the bodies. It hands the
+> **accumulator** to the header's mix block, which deposits the per-unit send
+> with `w45` (unit 0) / `w53` (unit 1) at exactly **the cell the body reads
+> first**.
+
+So the value the body sees is *computed by the kernel's mix block* — it is not a
+raw sample poked into a cell. Injection at any single cell reproduces neither the
+value nor the timing. Tested anyway, across the ±3 window around the confirmed
+entry pointer `0x85`, to see whether finding **8**'s open 2-cell discrepancy
+could be chosen functionally:
+
+```
+   inject 0x82..0x88 (entry ±3) : 0 delay addresses alive at every offset
+                                  except +3, which gives 2 at frame 1
+```
+
+**It cannot.** The discrepancy stays OPEN, and injection is the wrong instrument
+for it.
+
+### ★★ 10.3 And the kernel cannot be run either — its coefficients are unknown
+
+K6 finding **12** (MEASURED):
+
+> the header's own 23-slot bank is **not written anywhere in the cold-boot
+> capture**, so **the four input-stage coefficients are UNKNOWN values**.
+
+★ **That closes the loop, and it is the real answer to "why has the reverb never
+produced audio in simulation".** Not a decode gap, not a wrong reading:
+
+> **The signal cannot be computed at all, because the numbers that scale it on
+> entry have never been observed.** They are not in the ROM's canned parameter
+> streams and not in the cold-boot capture.
+
+Everything downstream — the ladder, `ACT 0x0B`, the topology, BLOCK A — has been
+investigated on a machine whose input stage is missing four unknown constants.
+
+### 10.4 What this reframes
+
+- **The reverb was never simulable**, and no amount of ALU decoding would have
+  made it so. Four rounds of topology search were run on a program with no input.
+- **The blocker is a DATA gap, not a decode gap** — a different kind of problem,
+  and one the host firmware may still answer: the four coefficients must be
+  written by *some* path the captures did not cover (a different preset, a
+  parameter change at run time, a second capture).
+- **`closure-pointer.md` finding 9 is the one testable thing here**: a closed,
+  origin-free loop — `iw0` writes `X+0`, the epilogue reads `X+0` the same frame,
+  the epilogue writes `X+1` and `iw2` reads it the *next* frame — *"the dry path
+  plus a one-sample feedback"*, FORCED by the pointer rule alone. That loop needs
+  no unknown coefficient to trace, and it is the only part of the audio path that
+  can be checked today.
+
+### 10.5 Method note, and it is the lesson of the whole session
+
+Two consecutive passes produced headline claims that were artefacts of my own
+setup, and **both were resolved by reading notes this project had already
+written** rather than by running anything. The input-stage answer has been on
+file since 2026-07-26 with the status **FORCED**. I ran perhaps a dozen
+simulations that could not have worked, when twenty minutes of reading would have
+said so.
