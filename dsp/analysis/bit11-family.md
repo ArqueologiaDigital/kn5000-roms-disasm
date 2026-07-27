@@ -206,3 +206,113 @@ name. Owner testimony is ground truth here and this is a one-minute test.
 4. **Do not re-run the presentation-code comparison.** Item B closes it: `w73` and
    `w78` each have one IC311 site in their own form, and the corpus cannot decide
    either.
+
+---
+
+## 7. Can anything decide this family? A decidability census — two routes closed, one open
+
+Item 6 ranked `C63` "the highest-value undecoded form". That ranking was by
+**frequency** and it skipped the question this project exists to ask first: *is
+there any instrument that could score it?* Three routes, tested before any search
+was written.
+
+### 7.1 ⛔ Both known-mathematics contexts are blind to the whole family
+
+* **The LFO: 0 of 29 block windows contain a bit-11 word.** Identical verdict to
+  the one [`three-codes.md`](three-codes.md) §1.2 reached for `0x0D`/`0x0E`/`0x1A`.
+* **PARAMETRIC EQ carries no bit-11 word at all** — it is a `{none}` image (§3).
+
+So the two contexts on this chip whose output is known as a number **cannot see a
+single one of the family's 80 sites.** No acceptance test can be built on either,
+and one should not be attempted.
+
+### 7.2 ⛔ No minimal pair across the flag — 0 of 8
+
+For each of the 8 distinct bit-11 words, the same 36 bits with bit 11 **cleared**:
+
+```
+   080B000839  ->  080B000039   present 0 times
+   08801308BC  ->  08801300BC   present 0 times
+   0040000C63  ->  0040000463   present 0 times
+   0142000C63  ->  0142000463   present 0 times
+   00400008BC  ->  00400000BC   present 0 times
+   00500008BC  ->  00500000BC   present 0 times
+   0040000864  ->  0040000064   present 0 times
+   0050000921  ->  0050000121   present 0 times
+```
+
+**Zero of eight.** The flag cannot be isolated by whole-word comparison either.
+
+### 7.3 ★★ But there IS a controlled comparison — the `w000` slot
+
+**`w000` is a fixed structural slot.** 28 of the 38 distinct images begin with
+`880.1.<30|60>.<lo12>` — a delay-DRAM access — and `lo12` there is one of exactly
+two values:
+
+```
+   880.1.30.8BC   x17    CHORUS, MODULATED CHORUS, PHASER, ROCK ROTARY, EXCITER,
+                         AUTO PAN, S.DELAY+{FLANGER,VIBRATO,PHASER}, AUTO WAH+S.DELAY,
+                         PEQ+{CHORUS,FLANGER,VIBRATO}, PEQ+COMPR+{DIST,OVERDR},
+                         PEQ+{DIST,OVERDR}+DELAY
+   880.1.30.00B   x10    NO OPERATION, ENHANCER, FLANGER, GATED REVERB, SINGLE DELAY,
+   880.1.60.00B   x 1    MULTI TAP DELAY, ROOM REVERB, MIX UP, S.DELAY+S.DELAY,
+                         PEQ+S.DELAY, ENSEMBLE
+```
+
+Same `hi12`, same `class4`, same `addr8`, same position, same program role — 27 of
+them differing in **nothing but `lo12`**. ★ **This is the only controlled
+comparison the bit-11 family has, and it is far stronger than any of the
+whole-corpus statistics above**, because position and surrounding role are held
+fixed by construction rather than by argument.
+
+### 7.4 ⛔ And the descriptor is NOT what differs — the addressing hypothesis is dead
+
+[`dram-cursor-closure.md`](dram-cursor-closure.md) §3.5 already resolves both
+words to a delay descriptor cell:
+
+```
+   880.1.30.8BC   x18   ->  {0x26}
+   880.1.30.00B   x63   ->  {0x00, 0x26}
+```
+
+★ **Both read cell `0x26`.** (`00B`'s second base, `0x00`, is the twelve reverbs',
+and §3.5 flags that clash as its own falsification of `V-word`.) So the bit-11
+choice at `w000` does **not** select a different delay descriptor, a different
+base, or a different cell.
+
+**That removes the entire addressing hypothesis space.** Whatever distinguishes
+the two is on the **routing/ALU side**, not the addressing side — which is a real
+narrowing, and it came from a note already on file rather than from a new search.
+
+### 7.5 One `lo12`, two unrelated host words
+
+`8BC` also occurs in a **non-DRAM** shape: `040.0.00.8BC` ×5 (DISTORTION,
+OVERDRIVE, FUZZ, VIBRATO, RING MODULATOR) and `050.0.00.8BC` ×1 (ENSEMBLE), with
+`class4 = 0` and no DRAM role at all.
+
+**The same `lo12` therefore rides on two structurally unrelated words.** That is
+exactly what [`k3-pointers.md`](k3-pointers.md) item A's "assembled as a separate
+flag" predicts, and what any single-instruction reading of `0x8BC` forbids.
+
+### 7.6 And the split is not the LFO
+
+FLANGER, MIX UP and ENSEMBLE all contain LFO blocks and all take the `00B` side of
+the `w000` pair. Consistent with item E: `C63`'s and `8BC`'s distribution
+correlates with the effect class, not with the presence of an oscillator.
+
+---
+
+## 8. Revised handover — §6 item 1 corrected
+
+§6 ranked `C63` first on frequency. With §7 measured, the ranking changes:
+
+1. ★ **The `w000` pair is the tractable object, and it is `8BC`, not `C63`.** 27
+   images, one held-fixed slot, one held-fixed descriptor cell, one free field.
+   Its **addressing is already excluded** (§7.4), so the question is narrowed to
+   what the word routes.
+2. **`C63` remains the most FREQUENT undecoded form** — 53 sites, 25 of 38 images —
+   but it has no controlled comparison and no scoring context. Frequency is not
+   tractability, and §6 item 1 conflated them.
+3. ⛔ **Do not build an acceptance test on the LFO or the biquad for anything in
+   this family.** Measured blind: 0 of 29 windows, and no site at all in the EQ.
+4. ⛔ **Do not look for a bit-11 minimal pair.** 0 of 8, measured.
