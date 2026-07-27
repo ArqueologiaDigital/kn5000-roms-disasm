@@ -296,6 +296,24 @@ the shipped effect while the two visible ones are enumerated over all 33 × 33.
    ★ ST(...->ptr) at class (1,1) : 0 of 17 928
 ```
 
+The other marginals, printed because two of them matter elsewhere:
+
+```
+   order   3 values   adder 8856  act_first 7560  act_last 1512
+   act00   4 values   load 9072  add 4536  rload 3024  bsel 1296
+   op2     3 values   (all)
+   wrap    3 values   wrap23 / f31_2_and_coef / b7_and_coef -- `sat' is OUT
+   src08   2 values   unity 16632  coef 1296
+   src11   7 values   src11 = mem 4482, the rest 2241 each
+   dest07  2 values   elsewhere 15687  mem 2241
+```
+
+★ **In the widened gate space the LFO alone no longer forces the order**, and
+`bsel` survives it — both were killed elsewhere (`bsel` by SINGLE DELAY, 0 of
+5832; the order by the joint solve), and neither is re-opened here, only
+correctly attributed. `wrap = sat` is out, which is the published result of the
+2²³-wrap stage.
+
 **So the published "the store is suppressed" is a special case of what is
 actually forced: the class-`(1,1)` word's memory access does not deliver the
 accumulator to `mem[ptr]`.** `lfo-ramp.md` item K already hedged
