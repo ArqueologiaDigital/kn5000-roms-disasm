@@ -88,3 +88,58 @@ i.e. almost all of it.
 3. **The output stage is the right place to be working.** It is 8.7% decoded, it
    owns the only exclusive opcode on the chip, and it holds the one structural
    path that matches what the reverb is missing.
+
+---
+
+## 5. The loop, probed structurally — negative, and weakly so
+
+§2's path cannot be run directly: the epilogue traps on `ACT 0x01`–`0x06`,
+`0x1B`, `f31` values 3/4/6/7 and three C-format words — nearly all of itself. So
+the loop was probed *structurally* instead: take a fraction **g** of the frame's
+output and place it in `mem[0x8C]` for the next frame, which is what `w68`'s
+store would do whatever value it computes.
+
+Decay measured properly this time — `E@2000 > E@5000 > E@8000`, not a range check:
+
+```
+  regime    g     E@2000  E@5000  E@8000   decaying?
+  DATUM  0.00      -75.5   -75.5   -75.5      no
+  DATUM  0.25      -73.5   -73.5   -73.5      no
+  DATUM  1.00      -73.5   -73.5   -73.5      no
+  ACC    0.00       -2.8    -2.8    -1.1      no
+  ACC    0.50        0.0    -1.4    -1.4      no
+  ACC    1.00       -1.2    -0.8    -0.8      no
+```
+
+**No decaying tail at any gain, in either regime.** And in DATUM the feedback
+barely couples at all — 2 dB of change across the whole range from `g = 0` to
+`g = 1`, meaning `mem[0x8C]` contributes almost nothing to the output despite
+being multiplied by 0.5 in the input mix.
+
+### ⚠ 5.1 How weak this negative is
+
+**It cannot refute §2.** What the epilogue actually writes at `w68` is computed by
+23 words that cannot be executed — that is the whole reason for probing
+structurally. This test substitutes *a scalar multiple of one chosen output
+probe* (`w123`) for that computation. A negative therefore shows only that
+
+> **simple proportional feedback from `w123` does not produce a tail** —
+
+not that the epilogue's real write fails to. The two differ in value, in timing,
+and in which quantity is fed back.
+
+Stated plainly so nobody quotes it as a refutation: **§2's loop remains
+CONSISTENT and untested.** What §5 rules out is one particular caricature of it.
+
+### 5.2 And what it does add
+
+The 2 dB coupling figure is a real measurement and it is informative on its own:
+whatever reaches `mem[0x8C]`, the reverb's output at `w123` is **almost
+insensitive to it** in the regime that produces the echo. Either the input mix's
+`0x8C` term is not the dominant path to the output, or `w123` is the wrong probe.
+Both are checkable, and both are cheaper than executing the epilogue.
+
+**The honest ranking is unchanged:** decoding `ACT 0x1B` — three words, one
+region, a known job — is still the shortest route to testing §2 properly, and it
+is far more constrained than anything left in
+[`three-codes.md`](three-codes.md).
