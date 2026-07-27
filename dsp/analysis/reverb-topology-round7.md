@@ -45,7 +45,7 @@ says exactly which constraint stops each of them.
 | **C** | ★★★ **AND `dram-datapath.md` §4 D IS WRONG IN ITS DETAIL.** It says *"the NINE motif repetitions read lines 2..10 and write lines 0..8"*. The ledger says they read `{L2..L6, L8..L11}` and write `{L0..L4, L6..L9}`: **L7's read and L5's write belong to the interlude BLOCK B**, and L10's write and L12's read to the tail one. A search that runs nine contiguous BLOCK A repetitions is searching a program the chip does not execute. | **MEASURED** (§2) |
 | **D** | ★★★ **RULE 4, AND IT DEFLATES THIS ROUND'S OWN PREMISE: ON THE REVERB LADDER THE TWO-ADDRESS MEMORY IS DEGENERATE WITH r1's ONE-CELL `Line`.** 200 machines per cell, 8 cells: **0 disagreements everywhere except `(swap = 1, wtrail = 0)`, where 48 of 200 disagree.** Mechanism: under the FORCED polarity slot 0 is the WRITE and slot 4 the READ, so only a trail of ZERO puts the write before the read of the *same* line. **⇒ round 6's `the line could not delay' voids `SINGLE DELAY', not the ladder**, and `dram-datapath.md` §6.2's zero was never a memory artefact. | **MEASURED** (§3) |
 | **E** | ★★★ **THE `wtrail = 2` ZERO IS GONE. `swap = 1, wtrail = 2, rlag = 0`: 102 of 400 sampled machines match, out of an EXHAUSTIVE pool of 82 632.** `dram-datapath.md` §6.2 printed **0** there and said in its own words that the zero was *an absence of a search*. It was. The families that match are the **pipe-comb** family (335 hits) and the **series comb cascade** (208); the first-order all-pass, the parallel comb bank, Moorer, the nested all-pass and the lattice are at **0** — **and they stay at 0 in the topology-NEUTRAL pool too** (§7.3), which is what makes those zeros rejections rather than an absence of a search. | **MEASURED** (§7.2, §7.3) |
-| **F** | ★★★ **BUT EVERY SURVIVOR SITS AT `land = −1`, THE BLOCKING READ — AND AT `rlag = 1` THE COUNT IS ZERO, ALL THREE DRAIN CONVENTIONS.** The exhaustive `wtrail = 2, rlag = 0` pool is **82 632 of 82 632 at `land = −1`**; the `rlag = 1` pool spreads over every land and matches **0 of 400**. So the topology survivors and `dram-datapath.md` §3's flush-read bound (`land ≥ 1`) are still pointing in opposite directions, now with the trail and the read-lag both enumerated. **The contradiction is not dissolved; it is sharpened.** | **MEASURED** (§7.2) |
+| **F** | ★★★ **BUT EVERY SURVIVOR SITS AT `land = −1`, THE BLOCKING READ — AND `reverb-head-tail.md` FALSIFIES `land = −1` AT THE TAIL, 24 of 24 against 0 of 24 ON DISAGREEMENT SITES.** The exhaustive `wtrail = 2, rlag = 0` pool is **82 632 of 82 632 at `land = −1`**; the `rlag = 1` pool — the regime the tail requires — spreads over every land and matches **0 of 400, all three drain conventions**. ⇒ ★★★ **THE TOPOLOGY SEARCH RETURNS ZERO IN THE ONLY READ REGIME THE REST OF THE PROGRAM PERMITS**, so the 102 matches are probably an artefact of the blocking read rather than a determination. **This is the located obstruction (TARGET C), and it is stronger than either pass alone.** | **MEASURED** (§7.2, §7.2b) |
 | **G** | ★★★ **AND THE STRADDLE IS DECISIVE: WITH THE HONEST BOUNDARY CONVENTION THE COUNT IS ZERO.** `drain = open` — the lines whose write falls outside the 5-repetition window are simply never written, which is what §2's ledger says happens — gives **0 of 400** where r1's drain gives 102. Only **3 of the 5** lines a BLOCK A run touches have both ends inside it. **Every non-zero in this round depends on closing the window with repetitions the ROM does not contain in that form.** | **MEASURED** (§5, §7.2) |
 | **H** | ★★ **TARGET B, DECIDED. `no cascade reference can ever match a software-pipelined loop' IS FALSE AS STATED, AND TRUE IN A DIFFERENT FORM.** (i) A pipelined ladder that carries each stage value in a *private* register for `w` repetitions is **bit-identical to the cascade, `max|diff| = 0`, for `w = 0,1,2,3` and both topologies** — the trail is invisible to the transfer function, because a two-address line is order-independent inside a frame. (ii) What is *not* covered is a **shared** carry: **0 of the 40 members of the `wtrail = 2` pipe family are in the published (`w = 1`) reference set.** (iii) The real obstruction is (G): the window is not the loop. | **PROVEN BY CONSTRUCTION** + **MEASURED** (§5) |
 | **I** | ★★ **A PUBLISHED ASSERTION THAT DOES NOT HOLD: THE LATTICE IS NOT THE ALL-PASS.** `r1_allpass_solve.topology_refs`'s docstring excludes a Gray-Markel lattice from the reference set because it *"realises the same all-pass transfer function ... so it is the same test as `allpass_ref`"*. With **unit** delays that is a theorem; with the ladder's five distinct delays the two references project onto each other with residue **9.70e-01**. The lattice was excluded from every published search on a false premise. It is in the set here, and it matches **0**. | **FALSIFIED** (§4) |
@@ -61,7 +61,7 @@ says exactly which constraint stops each of them.
 | **PROVEN BY CONSTRUCTION** | the prologue is BLOCK B rotated with its two anchored `M ← bus` carry-copies disabled (§2); a pure-carry pipelined ladder ≡ its cascade (§5) |
 | **MEASURED** | memory-model degeneracy on the ladder except `(swap=1, wtrail=0)` (§3); the `wtrail = 2` survivor count 102/400 out of 82 632 (§7.2); `land = −1` on 82 632 of 82 632 at `rlag = 0` (§7.0/§8.1); `wdata = bus` at 0 of 1 543 857 (§8.1); `drain = open` at 0 (§7.2) |
 | **CONSISTENT** | that the reverb is a **comb-family** structure rather than an all-pass one — pipe-comb and series comb cascade match, and first-order all-pass / nested all-pass / lattice / parallel comb bank / Moorer are at **0 in BOTH the loop-filtered and the topology-neutral pool**. Not FORCED, because every non-zero depends on the `drain` convention (§7.2 row 3) and on `land = −1` |
-| **OPEN** | which topology (comb cascade vs pipe-comb vs something outside the set); the read latency `land`; the write-data source (narrowed, not closed); the drain/straddle convention; BLOCK B's ten words; the head and the tail; whether the pre-delay closes an outer 800-sample loop |
+| **OPEN** | which topology (comb cascade vs pipe-comb vs something outside the set) — **and §7.2b makes this MORE open, not less**; the read latency `land`; the write-data source (narrowed, not closed); the drain/straddle convention; BLOCK B's ten words; whether the pre-delay closes an outer 800-sample loop |
 | **FALSIFIED** | *"a lattice is the same test as the all-pass"* (§4); *"the nine motif repetitions read lines 2..10 and write lines 0..8"* (§2); *"the reverb searches were voided by the one-cell `Line`"* — for the **ladder** (§3); *"no cascade reference can ever match the motif regardless of topology"* as stated (§5) |
 
 ---
@@ -460,6 +460,49 @@ Three things at once, and the uncomfortable two are printed first:
    and `dram-datapath.md` §3's flush-read bound (`land ≥ 1`) point in opposite
    directions with the trail and the read-lag both enumerated.**
 
+### 7.2b ★★★ THE COLLISION WITH `reverb-head-tail.md`, AND WHAT IT DOES TO THE NON-ZERO
+
+Round 7's TARGET 4 pass, committed hours before this one and reached from a
+site no search had used, measures the **same parameter from the other end**.
+[`reverb-head-tail.md`](reverb-head-tail.md) item **B** scores the reverb's two
+output tails on the sites where a pipelined read and a blocking read *disagree*:
+
+```
+                        rising tap triples   cells inside the pre-delay buffer
+     PIPELINED (land>=1)      24 of 24                  72 of 72
+     BLOCKING  (land=-1)       0 of 24                  60 of 72
+```
+
+— the RIGHT channel's third "early reflection" would otherwise be the
+out-of-region flush address 32767. That note records `land = −1` as
+**FALSIFIED at that site.**
+
+★★★ **PUT THE TWO TOGETHER AND THE OBSTRUCTION IS LOCATED.** This section's
+survivors are **82 632 of 82 632 at `land = −1`**, and at `rlag = 1` — the
+regime the tail *requires* — the topology search returns **0 of 400, all three
+drain conventions**. So:
+
+> **THE REVERB TOPOLOGY SEARCH RETURNS ZERO IN THE ONLY READ REGIME THE REST OF
+> THE PROGRAM PERMITS.** The 102 matches are real, exhaustively pooled and
+> controlled — and they live at a read latency that a second, independent
+> round-7 measurement rules out.
+
+That is a much stronger statement than either pass makes alone, and it is a
+**negative** one: it says the comb-family match found here is probably an
+artefact of the blocking read rather than a determination of the topology. It
+is written down in this form so that nobody quotes the 102 without it.
+
+**Which parameter is being held fixed (rule 10)?** Three candidates, none
+decided here:
+
+1. the reference set still does not contain the machine's real structure
+   (BLOCK B is not executed, §5 B-3 and §12);
+2. `rlag` is not the right way to model a pipelined read inside r1's `exec_rep`
+   — it re-frames every condition in the reading repetition, and the tail
+   argument is about *port slots*, not repetitions;
+3. one of the two anchored inputs — `dram-datapath.md` item A's flush-read
+   argument, or round 5 D's polarity — is wrong somewhere neither pass looked.
+
 ### 7.3 ★★ The topology-neutral arm — the zeros survive a pool that does not assume a loop
 
 `loop_ok_w` is the **single-feedback-path** filter: it demands the multiplicand
@@ -609,7 +652,8 @@ the SRC/ACTION fields, not as one global switch.
 | `dram-datapath.md` item I | *"every reference is a self-contained K-stage cascade while the motif is a software-pipelined loop"* | ★★ **HALF RIGHT, AND THE HALF THAT IS RIGHT IS NOT THE TRAIL.** The trail is transfer-function-invisible (§5 B-1). What bites is the **straddle**: 3 of 5 lines close in-window and `drain = open` scores 0 (§7.2) |
 | `dram-datapath.md` §6.2 | 0 matches at `(swap=1, wtrail=2)`; *"an absence of a search"* | ★★★ **CONFIRMED AS AN ABSENCE OF A SEARCH.** With the `wtrail = 2` filter the same cell scores **102 of 400** out of an exhaustive 82 632 |
 | `dram-datapath.md` item J | *"no route separates bus from acc"* | ★★ **SUPERSEDED.** `bus` is 0 of 1 543 857 under the loop filter, with a control demonstrating the filter can say `bus` (§8) |
-| `dram-datapath.md` §3 vs §6.1 | `land ≥ 1` (flush read) vs `land = −1` (ALU) | ★★ **STILL CONTRADICTORY, NOW SHARPER.** With `rlag` enumerated the whole `rlag = 0` pool is `land = −1` and the `rlag = 1` pool matches **nothing** (§7.2) |
+| `dram-datapath.md` §3 vs §6.1 | `land ≥ 1` (flush read) vs `land = −1` (ALU) | ★★★ **DECIDED AGAINST THE ALU ARM, BY THE OTHER ROUND-7 PASS.** `reverb-head-tail.md` item B falsifies `land = −1` at the output tail, 24 of 24 vs 0 of 24 on disagreement sites. This round's whole `rlag = 0` pool is `land = −1` and its `rlag = 1` pool matches **nothing** — so the topology arm is the one that has to give (§7.2b) |
+| `reverb-head-tail.md` item B | `land = −1` FALSIFIED at the tail | ★★★ **CORROBORATED FROM THE OPPOSITE DIRECTION, AND IT COSTS THIS ROUND ITS HEADLINE.** Every topology survivor here sits at `land = −1`; in the regime that note forces, this search finds **0** (§7.2b) |
 | `adjudication-round6.md` §3.5 / this round's brief | the reverb searches ran *against a delay line that could not delay* | ★★★ **TRUE FOR `SINGLE DELAY`, FALSE FOR THE LADDER.** 0 disagreements in 7 of 8 cells, 48 of 200 in the eighth (§3) |
 | `r1_allpass_solve.topology_refs` docstring | a lattice *"is the same test as `allpass_ref`"* | ★★ **FALSIFIED** for multi-sample delays: residue 9.70e-01 (§4) |
 | `schroeder-topology.md` §0-C | the conditional challenge, re-opened by round 6 | ★ **STILL OPEN.** The two matching families here are pipe-comb and comb cascade; both all-pass forms and the nested all-pass are at 0 — but the pool assumes a single feedback path, so the all-pass zeros are **not** rejections of those topologies (§7.3) |
@@ -623,11 +667,21 @@ the SRC/ACTION fields, not as one global switch.
 
 | word class | what is settled | what still blocks it |
 |---|---|---|
-| **line READ** (`addr8 & 0xF0 == 0x20/0x30`) | direction (round 5 D), address (descriptor cell, `delta = 0`), that the datum is **not** on its own bus (`dram-datapath.md` A) | **which `land`** — §7.2's survivors say `−1`, §3 of that note says `≥ 1`, and this round makes the disagreement worse rather than better |
+| **line READ** (`addr8 & 0xF0 == 0x20/0x30`) | direction (round 5 D), address (descriptor cell, `delta = 0`), that the datum is **not** on its own bus (`dram-datapath.md` A, now with `reverb-head-tail.md` item B's independent leg) | **which `land`** — the tail forces `≥ 1`; §7.2's topology survivors are all at `−1` and the `≥ 1` regime matches **nothing**. Applying a read word means committing to a latency the two round-7 passes disagree about |
 | **line WRITE** (`0x60`) | direction, address | **the write-data source.** §8 excludes `bus` *conditionally*; `acc_before` / `acc_after` / `M` remain, and they are three different machines |
 | **PRIME write** (LIMIT, 74) | it stores a datum no read can reach | same as line WRITE; harmless *only if* `wdata` is settled |
 | **FLUSH read** (CEILING, 83) | its datum is discarded | nothing to apply — it is a no-op by construction, but 48 of the 83 carry ACTION `0x0B`, which is undecoded |
 | **C-format** (`C40.1.**.000`, 4 in ROOM REVERB 1) | nothing | undecoded entirely |
+
+★ **AND THE HONEST HEADLINE FOR TARGET C IS THE ZERO, NOT THE 102.** §7.2b:
+the topology search returns **0** in the only read regime the rest of the
+program permits. Rule 11 — *could this harness have represented a match at
+all?* **Yes**: it says YES to seven hand-built topologies (§6.1), reproduces
+two published non-empty cells numerically (§7.1), and finds 102 matches one
+`rlag` away. So the `rlag = 1` zero is **a rejection, not an absence of a
+search** — and what it rejects is *the whole candidate set at that read
+latency*, which is a statement about the reference set (BLOCK B is not in it)
+rather than about the chip.
 
 **A FORCED list for the Apply agent: EMPTY.** Nothing in this round reaches
 the threshold. The two candidates closest to it are (a) `wtrail = 2` as the
@@ -691,10 +745,13 @@ someone else's instrument; P5 and P7 are about mine.
    own, and it sits **inside** the ladder. No search has ever executed it.
    Until it is decoded the ladder cannot be solved as a whole, and every
    `drain` convention is a guess about what it does.
-2. ★★★ **The `land = −1` vs `land ≥ 1` contradiction**, now sharper: the
-   topology survivors are *entirely* at the blocking read and the pipelined-read
-   pool matches nothing. One of the two arguments has a parameter held fixed;
-   this round could not find which.
+2. ★★★ **The `land = −1` vs `land ≥ 1` contradiction, now decided AGAINST the
+   topology arm.** `reverb-head-tail.md` item B falsifies `land = −1` at the
+   output tail on disagreement sites, 24 of 24 vs 0 of 24 — and this round's
+   topology survivors are *entirely* at `land = −1`, while the pipelined-read
+   pool matches **nothing**. **The next pass must find out why a pipelined read
+   admits no topology at all**; that, not the choice between comb and all-pass,
+   is now the blocking question.
 3. ★★ **The head and the pre-delay loop.** Whether `w000`'s tap feeds the
    ladder decides whether an open-cascade reference is legal at all.
 4. ★★ **`wdata` as a per-word decode** rather than a global switch (§8).
