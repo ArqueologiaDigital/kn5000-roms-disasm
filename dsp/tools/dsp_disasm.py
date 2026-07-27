@@ -227,16 +227,50 @@ LO_SRC_TB  = 0x1A    # temporary register B
 #         refuted.  ★ THE SEMANTIC IS RETAINED DELIBERATELY AND IS NOT FORCED --
 #         withdrawing it would re-trap words on the strength of a harness that
 #         provably cannot model the corrected machine, which is the method-rule-1
-#         defect in the other direction.  What re-derives it is a TWO-ADDRESS
-#         delay line (read cell and write cell separate, per dram-bounds.md's
-#         line set, with a rotation), which nothing in dsp/tools has yet.
+#         defect in the other direction.
+#         ══════════════════════════════════════════════════════════════════════
+#         ★ RESOLVED (as far as it can be), ROUND 7 -- adjudication-round7.md and
+#         adjudication-round8.md.  THE SENTENCE THAT USED TO END THIS BLOCK --
+#         "what re-derives it is a TWO-ADDRESS delay line ... which nothing in
+#         dsp/tools has yet" -- IS NOW FALSE ON BOTH HALVES:
+#           (a) the two-address line EXISTS (dsp/tools/delayline.py, audited
+#               independently in adjudicate8.py `harness': it delays, it says YES
+#               to a textbook comb and NO to that comb's D+1 twin, and all 324
+#               ROM lines are representable);
+#           (b) IT DOES NOT RE-DERIVE THE FORCING, AND CANNOT.  At the FORCED
+#               polarity algo 9's two loops both cross w21..w24 (ACTIONs 0x0D /
+#               0x0E, undecoded), so no executable window of SINGLE DELAY
+#               contains a delay loop at all -- every cell of the enumeration
+#               {forced,published} x {push_read,push_any,latency,blocking} x
+#               4 windows x 7776 ALU machines is `-- NONE --' at the forced
+#               polarity.  That is an ABSENCE OF A SEARCH, not a zero.
+#         WHAT IS MEASURED INSTEAD, by a corpus route with no delay line in it:
+#         ACTION 0x19 is followed by a word SOURCING tempA at a tight modal lag
+#         of 1, in ** 74 of 89 ** distinct-image sites (base rate 16.0 %,
+#         best-of-2000 ACTION-shuffled null 42.7 %).  ⚠ NOT the "401 of 402 /
+#         99.8 %" of adjudication-round7.md -- that denominator counts one word
+#         position once per ALGORITHM sharing the image, a 4.79x replication
+#         (adjudicate8.py `denom').  So: DESTINATION = tempA, MEASURED.
+#         SOURCE (`<- bus' vs `<- acc') NEVER TESTED BY ANY OF IT -- still OPEN.
+#         ⚠ AND `0x19 = 0x13 + 6, a second encoding of ONE operation' HAS NO
+#         POSITIVE EVIDENCE: their consumer lags are DISJOINT (0x13's tempA
+#         reader sits at lag EXACTLY 8 -- one 8-word motif repetition -- in 35 of
+#         40 sites, against a 5.1 % base rate; 0x19's sits at lag 1), and NINE
+#         of 38 images use BOTH, so it is not a per-program assembler
+#         convention.  Not refuted; unsupported.  Do not state it as fact.
+#         ⇒ IT KEEPS SHIPPING, under the owner's 2026-07-27 decision, with the
+#         destination measured and the source OPEN.  Trapping it would still
+#         destroy the only executing frames any harness can be validated
+#         against, and nothing refutes the semantic.
+#         ══════════════════════════════════════════════════════════════════════
 LO_ACT_ACC_BUS = 0x00  # acc's input term <- bus (the adder's second selector)
 LO_ACT_ST_BUS = 0x07  # mem[ptr] <- bus
 LO_ACT_NONE_2 = 0x12  # no temp/memory side effect
 LO_ACT_CAP_TA = 0x13  # tempA <- bus
 LO_ACT_CAP_TB = 0x14  # tempB <- bus
 LO_ACT_NONE_5 = 0x15  # ditto -- how it differs from 0x12 is OPEN
-LO_ACT_CAP_TA2 = 0x19  # tempA <- bus, the second encoding
+LO_ACT_CAP_TA2 = 0x19  # tempA <- ??? -- DESTINATION measured (74/89, lag 1),
+#                        SOURCE open; "second encoding of 0x13" UNSUPPORTED
 
 _ANCHORED_SRC = (LO_SRC_MEM, LO_SRC_ACC, LO_SRC_TA, LO_SRC_TB)
 _ANCHORED_ACT = (LO_ACT_ACC_BUS, LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
