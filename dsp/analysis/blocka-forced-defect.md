@@ -718,3 +718,77 @@ possibilities, the reverb's signal path disfavours the shipped one, and the gate
 is the half with 130 corpus words behind it. **Settle the gate and `ACT 0x00`
 falls out — and if it falls out as anything but `load`, the reverb gains its
 signal path at the same moment.**
+
+---
+
+## 14. The joint solve — the gate is invisible, `load` is the outlier, and the signal now reaches `w123`
+
+Testing the **twelve `(act00, gate)` pairs the LFO admits** (taken from
+`sec_publish`'s own output, so no re-enumeration error) against the reverb's
+signal path, with the input mix of §11 driven:
+
+```
+  act00   gate                    acc@w020   addrs
+  add     b7_f31_1_clrlate          121324      4
+  add     b7_f31_1_keepclear        121324      4
+  add     b7_ne2_clrlate            121324      4
+  bsel    b7_f31_1_keepclear        121324      4
+  load    (all five gates)               0      2
+  rload   (all three gates)        -121324      4
+```
+
+### ★★ 14.1 The gate is invisible to the reverb
+
+**Every gate gives an identical result for a given `act00`.** The reverb cannot
+distinguish `b7_f31_1_clrlate` from `b7_ne2_off` from any of the others — a
+decidability fact, and an unwelcome one: the two halves of the "one question" are
+**not equally testable here**. The reverb ranks `act00` and says nothing at all
+about the gate.
+
+### ★★ 14.2 `load` is the outlier among the four the LFO admits
+
+| `act00` | acc at `w020` | reach |
+|---|---|---|
+| **`load`** *(ships)* | **0 — destroyed** | dies at word 20 of 133 |
+| `add`, `bsel` | `+121324` — survives | **reaches `w123`** |
+| `rload` | `−121324` — survives | **reaches `w123`** |
+
+With any of the three alternatives the mixed input travels from `w002` to
+**`w123` — 121 of the body's 133 words**, through nine BLOCK A stages with the
+accumulator carrying signal the whole way (`121324 → 242648 → 212317 → 181986 →
+224752 …`). With `load` it dies at the twentieth word.
+
+★ **That is a six-fold difference in reach between the shipped reading and the
+three alternatives the LFO admits equally.** It is still a functional argument,
+not a numeric forcing — but it is now a large, clean separation rather than
+"4 addresses against 2".
+
+### 14.3 And the last obstruction is eight words from the finish
+
+```
+  w118  A  acc = 47758      alive
+  w119     acc = 47758
+  w120     acc =     0      ACT 0x0E, f31=0 -- dies
+  w122     acc = 47758      recovers: ACT 0x00=add re-reads what w120 stored
+  w123     acc = 47758      <<< last live word
+  w124     acc =     0      SRC 0x10, ACT 0x07, f31=0 -- dies for good
+  ...
+  w131     acc =     0      <<< THE INJECTOR
+```
+
+The signal dies for good at **`w124`**, and the second output tail's four
+multiplies (`w126`–`w129`) then read D-RAM cells that are empty. Eight words
+short of `w131`, the only word that can inject into the delay network.
+
+### 14.4 Status
+
+- **`ACT 0x00`**: `{add, load, rload, bsel}` FORCED by the LFO; `load` is the
+  unique member that destroys the reverb's signal at `w020`. **Not applied** —
+  the LFO admits `load`, the reverb's argument is functional, and `act00` is
+  coupled to a gate the reverb cannot see.
+- **The gate**: unconstrained by the reverb. It needs a different context, and
+  `store-gate.md` already priced it at 17 corpus words.
+- **`w124`** is the new frontier, and unlike `w020` it is not obviously an
+  `ACT 0x00` problem: `SRC 0x10, ACT 0x07, f31 = 0` — a store of the accumulator
+  to `mem[ptr]`, with `f31 = 0` reloading the accumulator from a product that is
+  zero because the tail's multiplies have not run yet.
