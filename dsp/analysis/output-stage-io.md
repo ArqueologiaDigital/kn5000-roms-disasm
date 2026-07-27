@@ -262,3 +262,58 @@ them.
 
 **`ACT 0x1B` remains the gate**, exactly as §4 ranked it, and it is now the only
 thing between the model and a testable §2 loop.
+
+---
+
+## 8. The loop, run at last — the path WORKS, and it carries zero
+
+With the mode-dependent target implemented (§6, `c16fe87`), the §2 loop was run
+for the first time: reverb body, then the epilogue, with every undecoded epilogue
+code given the **least-committal** reading — unanchored ACTION → no side effect,
+unanchored SRC → `mem[ptr]`, C-format skipped.
+
+### 8.1 The path is verified
+
+Isolating `w68` and firing it directly:
+
+```
+  gate=always            b7 intact   ->  store lands at mem[0x8C] = <the accumulator>
+  gate=b7_f31_1_off      b7 intact   ->  NONE      (suppressed)
+  gate=b7_f31_1_off      b7 cleared  ->  mem[0x8C] = <the accumulator>
+  gate=b7_f31_1_clrlate  b7 cleared  ->  mem[0x8C] = <the accumulator>
+```
+
+★ **The store fires, and it lands at register `0x8C`** — the cell the reverb's
+input mix reads at ×0.5. The mode-dependent target works as implemented, and the
+§2 loop is **structurally closed in the model** for the first time. Only `hi12`
+bit 7 stands between the store and the loop, and §6 argued the gate that reads
+that bit was measured entirely on mode-2 words.
+
+### 8.2 And it changes nothing, for a reason that is not the loop
+
+```
+  body only                                      E@2k -6.4  E@5k -6.4  E@8k -6.4
+  body + epilogue, gate suppresses mode-1        E@2k -6.4  E@5k -6.4  E@8k -6.4
+  body + epilogue, gate only on mode 2 (sect. 6) E@2k -6.4  E@5k -6.4  E@8k -6.4
+```
+
+**Bit-identical in all three.** The accumulator at `w68` is **zero**, so the loop
+carries zero — and it is zero because the epilogue's arithmetic is exactly what
+the least-committal reading throws away. Every undecoded ACTION was replaced by
+*no side effect*, and those are the words that would compute the value.
+
+### 8.3 What this settles and what it does not
+
+| | |
+|---|---|
+| **Settled** | the loop's *path* exists and functions: `w68` stores the accumulator to the cell the input mix reads. Not a hypothesis any more. |
+| **Settled** | the only obstruction on the path is `hi12` bit 7, whose gate §6 showed was measured on mode-2 words only. |
+| **NOT settled** | what flows through it. That is the epilogue's arithmetic, which needs `ACT 0x1B`, `0x01`–`0x06` and `SRC 0x01`–`0x06`, `0x0A` — the region's own code space. |
+
+★ **The question has changed shape.** It is no longer *"does the reverb have a
+feedback path"* — it has one, and it works. It is now *"what does the output
+stage compute"*, which is a decoding problem in a 23-word region with a known
+job, rather than a structural mystery spread across 133 words.
+
+That is a better problem than the one this line started with, and it is the one
+[`three-codes.md`](three-codes.md) and §4 both point at.
