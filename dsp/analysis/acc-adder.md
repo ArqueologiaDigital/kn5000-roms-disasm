@@ -20,6 +20,21 @@ python3 dsp/tools/r1_allpass_solve.py adjudicate   # the older model, order enum
 Labels: **MEASURED** / **PROVEN BY CONSTRUCTION** / **FORCED** (every survivor of
 an exhaustive search agrees) / **CONSISTENT** / **FALSIFIED** / **OPEN**.
 
+> ⚠ **SUPERSEDED IN ONE ROW — read `action00-discriminator.md` (2026-07-27) with
+> this note.** Item **C** below ("the joint search has a unique answer … all 18
+> agree … `ACTION 0x00 = load`") is **NOT FORCED**. Its space enumerated four
+> readings of the bit-7 store gate and none of them let a *suppressed* store
+> clear the accumulator at the **end** of the word; with that fifth reading
+> present the same three contexts leave **33** survivors and `act00` takes three
+> values (`load` 15, `add` 12, `rload` 6), with `add`/`rload` occurring **only**
+> on a late-clearing gate. The later pass reproduces every number in §3 and §3.4
+> inside this note's own sub-space (LFO **1224**, joint **9**, and 9 × 2 = 18
+> where the 2 is `op2`), so nothing else here moves — the **adder** (item B),
+> the **store timing**, `ACTION 0x19` and the gate's agreed part all stand.
+> Item **F** is also sharpened: the biquad's forcing of the store timing survives
+> replacement of the bit-identity criterion by the designer's own transfer
+> function (24/24; `clear late` is 51.090 dB wrong, not merely different).
+
 ---
 
 ## 0. Result in one page

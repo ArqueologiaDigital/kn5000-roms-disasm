@@ -209,6 +209,17 @@ matcher:
 
 A search that cannot succeed proves nothing. This one can.
 
+> ⚠ **RETRACTED IN PART (2026-07-27, [`schroeder-topology.md`](schroeder-topology.md) §3).**
+> This control was run with the ROM's **real** ladder-0 delays
+> `[127, 435, 489, 183, 522]` over 64 samples. `min(delay) = 127 > 64`, so **not
+> one delay line ever recirculated** — every read returned 0 and the reference
+> collapsed to `y = x·Π(−g_k)`, a pure scalar. The control was asserting only
+> that the machine's output is a scalar multiple of `x`; **it could not fail.**
+> Re-run at delays that do recirculate the control still MATCHES, so the search
+> keeps a valid positive control — but the figures above are wrong: the true
+> extraction point is **M** and the true scale **−1.000**. The SEARCH itself is
+> unaffected (`action_search` uses delays `[3, 5]` over 32 samples).
+
 ---
 
 ## 5. ★ The obstruction, located
@@ -424,6 +435,20 @@ problem either.
 ---
 
 ## 8. ★ The collision, stated plainly
+
+> ⚠ **RE-READ 2026-07-27 — it is not a collision** (`action00-discriminator.md`
+> §5.3). Both of the reverb's "demands" below are **necessary conditions of the
+> first-order all-pass hypothesis**, and that hypothesis is refuted by the same
+> tool, exhaustively and twice (0 of 20 580 000 sequential, 0 again under the
+> adder, obstruction located in slot 4's write — `allpass-adder-rerun.md` §6.3).
+> A necessary condition of a false premise carries no information, so there is
+> nothing here for SINGLE DELAY to contradict. The same applies to the
+> `9520 of 9660` demand that `ACTION 0x00` keep the accumulator. **The reverb
+> imposes no *unconditional* constraint on `SRC 0x00` or on `ACTION 0x00`.**
+> (What *did* move is SINGLE DELAY's side: its `SRC 0x00 = mem[ptr]` is forced
+> only while the block's input-mix coefficients are the zeros the ROM loads —
+> give them a gain and `acc` becomes equally admissible. `DR` still has zero
+> survivors under every variant.)
 
 Two contexts, two different demands on the same code:
 

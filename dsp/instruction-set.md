@@ -273,16 +273,36 @@ adjudication of two passes that reached OPPOSITE determinations: the LFO forced
 it, and neither had enumerated the other's ordering. Both blocks actually demand
 the same expression, `bus + P`, at the word where their sum forms — once at
 `hi12[3:1] == 1` and once at `== 0`, which no ordering delivers and one adder
-does. **FORCED**: 18 survivors out of 2160 × 3240 × 181 440 enumerated points
-across three independent numeric contexts (bit-identity with the biquad, the
-SINGLE DELAY comb, all 29 LFO blocks), and all 18 agree on the adder, on
-`ACTION 0x00`, and on the shipped store timing. On every word whose ACTION is not
-`0x00` this is the previous model **exactly** (PROVEN BY CONSTRUCTION), which is
-why the 0.094 dB reconstruction is bit-identical before and after.
+does. The **adder** itself, the shipped **store timing** and `ACTION 0x19` are
+FORCED. On every word whose ACTION is not `0x00` this is the previous model
+**exactly** (PROVEN BY CONSTRUCTION), which is why the 0.094 dB reconstruction is
+bit-identical before and after.
+
+> ⚠ **`ACTION 0x00 = load` IS NO LONGER FORCED — CORRECTED 2026-07-27**,
+> `analysis/action00-discriminator.md`. The 18/18 that this row used to claim was
+> an artefact of an **incomplete gate space**: `acc-adder.md` enumerated four
+> readings of the bit-7 store gate and none of them let a *suppressed* store clear
+> the accumulator at the **end** of the word. Add that one gate and the same three
+> contexts leave **33** survivors with `act00` at **three** values — `load` ×15,
+> `add` ×12, `rload` ×6 — while reproducing `acc-adder.md`'s own numbers exactly
+> inside `acc-adder.md`'s own sub-space (LFO 1224; joint 9, where 9 × 2 = 18 and
+> the 2 is `op2`). ★ And in all 33 survivors `act00` and the gate are **locked
+> together**: `add`/`rload` occur only with a late-clearing gate, `load` with any
+> of five. **So this is one question, not two, and the primary half of it is the
+> gate.** `load` remains **CONSISTENT** — the plurality and the only reading
+> compatible with every surviving gate — which is why it still ships; it is not
+> FORCED, and nothing here re-opens `SINGLE DELAY` (blind: its ACTION-`0x00` word
+> has `hi12[3:1] == 0`) or the biquad (blind: it carries no ACTION-`0x00` word).
 
 *A testable consequence*: on an ACTION-`0x00` word `hi12[3:1] == 0` and `== 1`
 become **indistinguishable**, and the corpus emits both. A context that separates
-them falsifies this reading.
+them falsifies this reading. ★ That consequence is now a **theorem with a
+census**: 257 of the corpus's 806 ACTION-`0x00` words are blind for exactly this
+reason (or because `hi12[3:1] > 2`), only 359 can bear a difference, 221 carry it
+to an observable — and **none of those 221 is in PARAMETRIC EQ or SINGLE DELAY**,
+the only two programs whose arithmetic is known independently of the DSP. There is
+no fourth context to be had; the LFO is the only known-mathematics discriminator
+in the machine.
 
 `P` is **not consumed** by the add — an MPLY output latch holds it until the next
 multiply, and `hi12[3:1]` decides whether this word takes it.
