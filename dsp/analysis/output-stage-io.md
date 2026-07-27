@@ -333,7 +333,7 @@ Restricted to IC311 — excluding the nine IC310 streams
 
 | code | all corpus sites | IC311 only | verdict |
 |---|---|---|---|
-| **`ACT 0x04`** | `w73` + algo 10 + **algo 79** | `w73` + **MULTI TAP DELAY `w026`** | ★ **reachable** |
+| **`ACT 0x04`** | `w73` + algo 10 + **algo 79** | `w73` + **MULTI TAP DELAY `w026`** | ⛔ ~~reachable~~ **RETRACTED — see [`bit11-family.md`](bit11-family.md) item A: `w026` carries `lo12` bit 11 and `w73` does not, so they are not the same form** |
 | **`SRC 0x0A`** | `w78` + **algo 79** | **`w78` alone** | ⛔ **unique — undecidable by comparison** |
 
 ★ **`ACT 0x04` has a second site in a real IC311 program.** MULTI TAP DELAY
@@ -366,3 +366,25 @@ apparent evidence or invent a second site that is on another chip.
 `second-dsp-and-ready.md` §3 already restated several denominators as 91; the
 **rare-code counts in `output_stage.py do` were not among them**, and they are
 the ones where it matters most.
+
+---
+
+## 10. ⛔ RETRACTION of §9's ★ half
+
+**§9's claim that `ACT 0x04` is *reachable* via `MULTI TAP DELAY w026` is wrong.**
+`w026` = `040.0.00.864` carries **`lo12` bit 11**; `w73` = `E30.C.00.404` does
+not. `alu_decoded()` refuses every bit-11 word because `lo12` is not the ALU route
+there, and [`k3-pointers.md`](k3-pointers.md) item A proves by construction that
+the firmware ORs bit 11 in as a separate flag. `lo12[4:0] == 0x04` occurs **once**
+in the 6344-word IC311 body corpus and that once is bit-11-set.
+
+★ **So BOTH presentation unknowns are undecidable by comparison**, and §9.1's
+ranking is void. §9's *other* half — that the published rare-code counts span two
+chips — stands, and so does the `SRC 0x0A` verdict.
+
+**The defect is §9's own, one level down.** §9 corrected a denominator that spanned
+two *chips*, then compared two words across a *form* boundary on the same chip.
+Restricting the corpus was necessary and not sufficient.
+
+Full census of the bit-11 form, and what it turned out to select for:
+[`bit11-family.md`](bit11-family.md).
