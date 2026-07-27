@@ -260,3 +260,73 @@ BLOCK A (§1), the input dying at `w006`, and now the tail.
 ★ **Four independent failures, one mechanism.** `acc ← P` with a stale or zero
 `P` is where this program keeps losing its signal, and the next pass should
 attack that rather than any individual code.
+
+---
+
+## 8. `acc ← P` — the mechanism is CORRECT, and my framing of it was wrong
+
+§7.2 ended by naming `acc ← P` as one mechanism behind four failures and saying
+to attack it. Attacked, and **it is right**.
+
+### 8.1 The biquad genuinely tests it
+
+`f31 = 0` appears in the biquad at words `[0]` and `[8]`, so it is not assumed
+there — it is exercised:
+
+| `f31 = 0` read as | designer error |
+|---|---|
+| `acc ← P` — **discards the accumulator** (shipped) | **0.198 dB** accepted |
+| `acc ← acc + P` — does not discard | 10.716 dB REJECTED |
+| `acc ← acc` — ignores the product | 17.363 dB REJECTED |
+
+★ **So the signal loss is BY DESIGN.** `acc ← P` is how a multiply-accumulate
+unit *starts a fresh accumulation chain*, and a chain boundary is supposed to
+discard what came before. **My "four failures, one mechanism" was the wrong
+diagnosis** — the mechanism is correct and the error was my expectation that
+signal should cross a boundary built to reset.
+
+### 8.2 Which relocates the state, correctly this time
+
+If the accumulator resets by design, whatever survives between chains lives
+elsewhere. It lives in **D-RAM**:
+
+```
+  reverb D-RAM cells:  15 touched,  9 written AND read   (a real round trip)
+  loaded but NEVER stored by the program : 0x80, 0x87, 0x8A
+```
+
+Cross-checked against the host's canned image for algo 16
+(`register_space.py cells`): the host primes `85 86 87 8A 8B 94 D0 D1 D2`, all
+zero. So `0x87` and `0x8A` are host-primed — and **`0x80` is not written by the
+host either.**
+
+### ★★★ 8.3 Cell `0x80` is the inter-unit signal path, and it explains everything
+
+```
+  algorithms that WRITE D-RAM cell 0x80 : 18   -- ALL of them unit-0 bodies
+  algorithms that READ  it              : 91   -- including all 12 unit-1 reverbs
+```
+
+**Unit 0 processes, stores its result to `0x80`, and unit 1 — the reverb — reads
+it in the same frame.** That is the send path between the two effect units, and
+it is derived from the pointer walk and the anchored store/load codes alone.
+
+> ⚠ **AND EVERY REVERB SIMULATION THIS PROJECT HAS RUN EXECUTED THE REVERB IMAGE
+> ALONE.** Cell `0x80` was therefore zero in all of them. **The reverb has been
+> simulated with no input, in every pass, for the entire investigation.**
+
+That is a systematic defect in the methodology, not in the model — and it is
+established rigorously, with no adopted reading.
+
+### 8.4 What it does not yet fix
+
+Injecting an impulse directly into cell `0x80` does **not** bring the reverb to
+life either (0 delay addresses carry signal, against 2 for the old injection
+point). So the input path is more than one cell write — the unit-0 body must be
+*running*, with its own pointer walk and its own chain of stores, and a single
+poked value does not stand in for it.
+
+**The next experiment is therefore concrete and different in kind from anything
+tried so far: run a unit-0 body and the reverb together, as the frame does**,
+rather than the reverb in isolation. Every reverb result in this project's
+history was measured without the one thing that feeds it.
