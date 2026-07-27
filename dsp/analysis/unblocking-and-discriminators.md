@@ -322,7 +322,7 @@ must happen.
 
 ## 12. Eight oscillators now run at their ROM rates — and the mode-4 determination still does not follow
 
-### 12.1 ★★ The LFO corpus, scored
+### 12.1 ★★ The LFO corpus, scored — ⛔ **the counts here are CORRECTED in §14; my own input injection was depressing them**
 
 With `src08 = "coef"` and `mode4dest ≠ "ptr"`, the per-frame step of each program's
 phase cell is measured and compared against the ramp constant `lfo_ramp.py` derives
@@ -392,3 +392,72 @@ the LFO fail", and it comes with 8 working cases to compare against.
 3. The robust discriminators PEQ+COMPR+DIST and COMPRESSOR remain unscored.
 4. ⛔ Every reading in §1 is scaffolding, not a decoding, and still needs its own
    evidence.
+
+---
+
+## 14. Speculation round: the entry pointer — refuted, and it exposed two harness defects
+
+**The speculation.** SINGLE DELAY needed `p0 = 0x08`; every other program was run at
+`p0 = 0`. If entry pointers are per-program, and the LFO's ROM constant is a known
+answer, then *sweeping `p0` should DETERMINE each program's entry pointer* — turning a
+guess into a measurement.
+
+### 14.1 ⛔ Refuted, cleanly
+
+Sweeping `p0` over all 256 values for each of the 16 LFO-bearing images:
+
+```
+   programs whose ROM step is reproduced at p0 = 0 ........ 11
+   programs whose ROM step is reproduced at SOME p0 ....... 11   (no gain)
+   typical number of p0 values that work ................. 254 of 256
+```
+
+★ **The LFO is insensitive to the entry pointer** — 254 of 256 values reproduce the
+constant. So it cannot determine one, and the speculation is dead as stated. **A
+parameter that almost nothing depends on cannot be measured by the thing that does not
+depend on it.**
+
+### 14.2 ⚠️ But the sweep exposed a defect in §12 — the input injection was corrupting the programs
+
+§12 reported **8 of 19**. This round reported **11**. The only difference was that §12
+drove `mem[0x00]` **and** `mem[0x03]` every frame, and `0x03` is *program state* in
+three images. Isolated:
+
+```
+   cells driven every frame   mode4dest=addr8   =none   =ptr
+   0x00 + 0x03  (sect. 12)          8 of 19        8       5
+   0x00 only                       11 of 19       11       8
+   nothing at all                  11 of 19       11       8
+```
+
+⛔ **Writing `mem[0x03]` every frame destroys three programs' oscillators**
+(MODULATED CHORUS, S.DELAY+CHORUS, S.DELAY+FLANGER). Verified sustained at NF = 30,
+120 and 300 — 299 of 299 transitions at the exact ROM step once `0x03` is left alone.
+
+★ **And driving nothing at all scores the same as driving `0x00`** — correct, and
+obvious in hindsight: *an oscillator needs no audio input*. The injection was pure
+downside.
+
+**§12.1's "eight oscillators" is corrected to ELEVEN**, in eleven distinct programs:
+CHORUS 114, MODULATED CHORUS 989, FLANGER 38, PHASER 76, ENSEMBLE 114, AUTO PAN 228,
+VIBRATO 760, MIX UP 570, S.DELAY+CHORUS 114, S.DELAY+FLANGER 114, S.DELAY+PHASER 114.
+
+### 14.3 ★ And it strengthens the mode-4 refutation
+
+`ptr` scores **3 fewer ROM constants than `addr8`/`none` in every one of the three
+injection settings** — 5 vs 8, 8 vs 11, 8 vs 11. §10.3 refuted `ptr` on one program's
+inability to pan; it is now refuted on a corpus-wide count of reproduced ROM constants,
+robust to how the input is driven.
+
+⛔ **`addr8` versus `none` remains identical in all three settings.** Still OPEN, still
+not equivalent — just not separated by this instrument.
+
+### 14.4 Predict-then-check
+
+- **P12 MISS.** The entry pointer is not determinable from the LFO — 254 of 256 values
+  work.
+- **P13 unforeseen, and the useful part.** The refuted sweep exposed that my own input
+  injection had been suppressing three oscillators and depressing every count in §12.
+- ★ **Both of this round's defects were in the harness, not the chip** — the fourth and
+  fifth such this session, and the pattern is now unmistakable: *what I inject is as
+  much a modelling choice as what I decode, and it needs enumerating too.*
