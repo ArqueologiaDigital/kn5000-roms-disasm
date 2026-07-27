@@ -540,3 +540,78 @@ blocker:
 answered, with a decoded three-term mix and named cells. "Why does the signal die
 after the mix" is now the whole remaining problem, and it no longer has an input
 gap hiding inside it.
+
+---
+
+## 12. Why the signal dies after the input mix — located to one word
+
+Driving the three input cells §11 identified, the signal **enters for the first
+time in this project's history**:
+
+```
+  w002  x0.25 <- mem[0x0E]   P = 262144
+  w003  x0.50 <- mem[0x8F]   P = 524288   acc =  262144
+  w004  x0.50 <- mem[0x8C]                acc =  786432
+  w005                                    acc = 1310720
+  ...
+  w018                                    acc =  121324   still alive
+```
+
+### ★★ 12.1 It dies at `w020`, on `ACT 0x00 = load`
+
+```
+  w019  0B 14  f31=0   acc = 121324
+  w020  00 00  f31=2   acc =       0     <<< SRC 0x00, ACT 0x00
+```
+
+`w020` is `SRC 0x00, ACT 0x00, f31 = 2`. Under `f31 = 2` the product term is
+suppressed and the accumulator would simply hold — **except that `ACT 0x00 =
+load` replaces the accumulator's feedback term with the bus**, and the bus there
+is `mem[ptr]`, an empty cell. The mixed input is overwritten with zero.
+
+★ **And `act00 = load` is exactly the parameter
+[`action00-discriminator.md`](action00-discriminator.md) demoted**: the "18/18
+FORCED" was **one** context, not three, and `load` survives only as a plurality
+(15 of 33), *"the only reading compatible with all five gates — why it still
+ships"*. It is CONSISTENT, never forced.
+
+### 12.2 And a second, structural leak at `w019`
+
+`w019` — the head's first delay-line write — carries **`SRC 0x0B`**, the
+delay-read register. Under the per-word write rule established in §7 it therefore
+stores *the read register*, which is empty, **not the accumulator that holds the
+mixed input**. Of the reverb's thirteen delay writes only `w131` sources the
+accumulator, and by then the accumulator is zero.
+
+So the mixed input has **no route into the delay network at the head at all** —
+it must survive the entire 133-word body to reach `w131`, and `w020` destroys it
+at the twentieth word.
+
+### 12.3 Testing every `act00` reading
+
+| `act00` | delay addresses alive | recirculates |
+|---|---|---|
+| `load` (ships) | 2 | no |
+| `add`, `sub`, `rload`, `bsel` | **4** | no |
+| `none` | 0 | no |
+
+The four alternatives all get the signal **twice as far** as `load` does — which
+is consistent with `load` being the specific thing that erases it — but **none
+recirculates**. So `act00` is *a* cause and not the only one.
+
+### 12.4 Status
+
+**Answered:** the signal dies at `w020`, on a CONSISTENT-only reading of
+`ACT 0x00`, with a second structural leak at `w019` where the head's delay write
+cannot carry the accumulator.
+
+**Not answered:** what else kills it, since fixing `act00` doubles the reach and
+still yields no tail. And these runs still carry speculative readings for the
+nine trapping words (§5), so the residue cannot yet be attributed cleanly.
+
+★ **The through-line of this whole sequence is now visible.** Every failure has
+been the accumulator being overwritten before its value is used — at `w006`
+(§8), at `.4` in BLOCK A (§1), and now at `w020`. In each case the overwriting
+word is `f31 = 0` or `ACT 0x00 = load`. The first is FORCED and correct (§8.1).
+**The second is not forced, and it is the one that keeps appearing at the exact
+point the signal is lost.**
