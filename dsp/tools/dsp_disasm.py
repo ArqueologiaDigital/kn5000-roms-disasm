@@ -223,6 +223,15 @@ _ANCHORED_ACT = (LO_ACT_ACC_BUS, LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
 #  bit 7 together -- and the LFO cannot run if they store.  Three surviving
 #  gates agree that (bit7, hi12[3:1]) == (1, 1) does NOT store; alu_decoded()
 #  traps everything they disagree about.
+#
+#  ★ 2026-07-27: bit 7 being IN THE CONDITION is now FORCED, not assumed --
+#  analysis/store-gate.md item C runs all nine enumerated conditions against
+#  both witnesses (the biquad needs class (0,1) to store, the LFO needs class
+#  (1,1) not to) and exactly two survive, `b7 & f31 == 1' (this one) and
+#  `b7 & f31 != 2'.  They differ only where alu_decoded() already refuses.
+#  What the suppressed case DOES is forced only negatively: 0 of 17 928
+#  survivors write mem[ptr], but 21 of 33 effects survive, including `LOAD'
+#  (bit 7 as a memory-port DIRECTION bit).  See analysis/adjudication-round4.md.
 HI_B7 = 1 << 7
 
 
@@ -496,13 +505,18 @@ def alu_decoded(w):
     if lo_act(w) == LO_ACT_ST_BUS and (cl & 7) != 2:
         return False
     if (hi12(w) & HI_ST) and (hi12(w) & HI_B7):
-        # guard 7 -- the bit-7 store gate.  The three surviving gates settle
-        # only hi12[3:1] == 1 with the CLEAR made unobservable (ACTION 0x00
-        # replaces the accumulator feedback outright) and hi12[3:1] == 2.
-        g = hi_f31(hi12(w))
-        if g == 1 and lo_act(w) != LO_ACT_ACC_BUS:
-            return False
-        if g not in (1, 2):
+        # guard 7 -- the bit-7 store gate.  The ONLY case the surviving gates
+        # settle is hi12[3:1] == 2.
+        #
+        # ★ THE ACTION-0x00 ESCAPE AT hi12[3:1] == 1 IS WITHDRAWN (2026-07-27,
+        # analysis/adjudication-round4.md sect. 6).  Its justification -- "the
+        # CLEAR is unobservable because ACTION 0x00 replaces the accumulator
+        # feedback outright" -- covers only the gates whose clear is taken
+        # BEFORE the ALU or never.  `b7_f31_1_clrlate' defers it to AFTER the
+        # ALU, where it zeroes the result whatever the ACTION was, and it is
+        # one of the 21 class-(1,1) effects store-gate.md sect. 4 leaves alive.
+        # Price, MEASURED: ONE corpus word (`092.A.01.1C0', header I-RAM 37).
+        if hi_f31(hi12(w)) != 2:
             return False
     f = hi_f31(hi12(w))
     if f in (HI_ACC_LOAD, HI_ACC_ADD):

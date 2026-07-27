@@ -244,6 +244,28 @@ PREMISES = [
         # number, and the house retraction opener.
         exempt=[r"was \+?121", r"used to"],
     ),
+    dict(
+        id="P16",
+        claim="the reverb delay-line lengths are the RAW descriptor payloads -- "
+              "ROOM REVERB 1's ladder is 127 / 435 / 489 / 183 / 522 and its "
+              "pre-delay 4452",
+        retracted_by="r3-delaydram.md sect. 5(c): bit 7 of the tag byte is the "
+                     "payload's LSB, so EVERY delay length in the tree is HALF "
+                     "of what it should be.  ROOM REVERB 1's ladder is "
+                     "255 / 869 / 979 / 366 / 1044 and the long head is 8905.  "
+                     "Re-derived independently by adjudicate4.py `segments' / "
+                     "`schroeder': the descriptor block is a CONTIGUOUS ADDRESS "
+                     "PARTITION whose 11 segment lengths are 83 172 356 513 739 "
+                     "240 119 247 428 616 360, and the even two-segment sums "
+                     "reproduce r3's chain 0 to the digit.  ★ THIS ONE MATTERS "
+                     "OPERATIONALLY: a control or an impulse test sized against "
+                     "the halved numbers amputates the feedback of every line "
+                     "(schroeder-topology.md sect. 3 is the published instance)",
+        sig=[r"127[ ,/]+435[ ,/]+489[ ,/]+183[ ,/]+522",
+             r"\[127, 435, 489, 183, 522\]",
+             r"pre-?delay[^.\n]{0,30}4,?452"],
+        exempt=[r"not 127", r"halved", r"HALF of what", r"RETRACT", r"withdraw"],
+    ),
 ]
 
 # --------------------------------------------------------------------------
