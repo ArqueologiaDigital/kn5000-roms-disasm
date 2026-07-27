@@ -354,6 +354,50 @@ PREMISES = [
         exempt=[r"FALSIFIED", r"RETRACT", r"withdraw", r"CONSISTENT",
                 r"void", r"VOID", r"no longer", r"reverts"],
     ),
+    dict(
+        id="P21",
+        claim="ACTION 0x19 is followed by a tempA source in 401 of 402 corpus "
+              "sites, 99.8 %, against a 29.9 % base rate and a 45.8 % null",
+        retracted_by="adjudication-round8.md item E: the denominator is "
+                     "REPLICATED.  The 133-word reverb image serves algos "
+                     "16..27 BYTE FOR BYTE, so counting per-ALGORITHM counts "
+                     "one word position once per algorithm sharing the image "
+                     "-- a 4.79x inflation.  Those 402 sites are 89 "
+                     "independent word positions.  De-duplicated over the 38 "
+                     "DISTINCT body images: 74 of 89 = 83.1 %, base rate "
+                     "16.0 %, best-of-2000 null 42.7 %.  THE DIRECTION "
+                     "SURVIVES (ACTION 0x19 IS a capture into tempA); the "
+                     "strength does not.  Use the per-image denominator for "
+                     "any corpus frequency statistic.  Reproduce with "
+                     "`python3 dsp/tools/adjudicate8.py denom'",
+        sig=[r"401\s*(of|/)\s*402", r"99\.8\s*%",
+             r"402 corpus ACTION 0x19", r"402 sites"],
+        exempt=[r"FALSIFIED", r"RETRACT", r"withdraw", r"replicated",
+                r"REPLICATED", r"74 of 89", r"de-duplicat", r"inflat",
+                r"NOT the", r"4\.79"],
+    ),
+    dict(
+        id="P22",
+        claim="ACTION 0x13 and ACTION 0x19 are ONE OPERATION IN TWO ENCODINGS "
+              "-- a second capture pair, 0x19 = 0x13 + 6 and 0x1A = 0x14 + 6",
+        retracted_by="adjudication-round8.md item H: the claim has NO POSITIVE "
+                     "EVIDENCE and shipped in upd6383.cpp as fact.  Their "
+                     "consumer lags are DISJOINT -- 0x13's tempA reader sits "
+                     "at lag EXACTLY 8 (one 8-word motif repetition) in 35 of "
+                     "40 sites against a 5.1 % base rate and a 20.0 % null, "
+                     "while 0x19's sits at lag 1 -- and 9 of 38 distinct body "
+                     "images use BOTH, so it is not a per-program assembler "
+                     "convention.  NOT REFUTED (one operation may be scheduled "
+                     "two ways) but it must not be stated as fact.  Reproduce "
+                     "with `python3 dsp/tools/adjudicate8.py capture'",
+        sig=[r"ONE OPERATION IN TWO ENCODINGS",
+             r"one operation in two encodings",
+             r"second capture pair", r"SECOND CAPTURE PAIR"],
+        exempt=[r"FALSIFIED", r"RETRACT", r"withdraw", r"UNSUPPORTED",
+                r"unsupported", r"no positive evidence",
+                r"NO POSITIVE EVIDENCE", r"disjoint", r"DISJOINT",
+                r"used to", r"USED TO"],
+    ),
 ]
 
 # --------------------------------------------------------------------------
