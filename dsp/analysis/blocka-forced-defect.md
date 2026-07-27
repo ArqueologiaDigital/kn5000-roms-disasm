@@ -1,0 +1,134 @@
+# BLOCK A's defect is in a FORCED parameter — and the tempB path has now failed twice, on the same boundary
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date: **2026-07-27**.
+No hardware. Static analysis and differential dataflow only — **no impulse, no
+injection point, no reference response, no adopted reading.**
+
+**Why this note exists.** Three passes established that the reverb's BLOCK A
+carries the delayed sample from the DRAM port into the accumulator **entirely
+through anchored semantics**, then discards it before the multiply — so the
+defect cannot be explained by any undecoded code
+([`speculative-carryback.md`](speculative-carryback.md) §6.4). This note asks
+which *decoded* parameter is wrong.
+
+Labels: **MEASURED** / **PROVEN BY CONSTRUCTION** / **FORCED** / **FALSIFIED** /
+**OPEN**.
+
+---
+
+## 0. Result
+
+| # | statement | label |
+|---|---|---|
+| **A** | ★★★ **NOT ONE of the 54 machines over BLOCK A's decoded-but-not-forced parameters delivers the delayed sample to its multiply.** `order` (3) × `act00` (6) × `act19` (3), each currently CONSISTENT or shipping on a withdrawn forcing. **0 of 54.** | **MEASURED** |
+| **B** | ★★ **And the software pipeline does not rescue it.** The loop is pipelined (`wtrail = 2`), so the sample could legitimately be multiplied a block or two later. Re-run over 1, 2, 3 and 4 consecutive BLOCK A instances: **0 of 54 at every window.** | **MEASURED** |
+| **C** | ★★★ **Therefore the defect is in something currently FORCED.** Every step of the delivery chain is anchored, every non-forced parameter has been enumerated, and the sample still never arrives. | **FORCED** (by elimination over the printed space) |
+| **D** | ★★★ **AND THE STRUCTURE NAMES THE SUSPECT.** The sample is captured into **tempB** by `ACT 0x14` at `.0`; the multiply at `.5` sources **`SRC 0x19` = tempA**. Swap which register the two temp source codes read and **36 of 54** machines deliver the sample — the block becomes a filter stage. | **MEASURED** |
+| **E** | ⛔ **But the biquad forbids the swap: 59.339 dB against 0.198.** It uses both codes, so it can test this — and it says no. The swap as a *global* rule is **FALSIFIED**. | **MEASURED** |
+| **F** | ★★★ **THE TEMPB PATH HAS NOW FAILED TWICE, INDEPENDENTLY, ON THE SAME BOUNDARY.** [`blocking-read.md`](blocking-read.md) item H: the reverb comb FORCES `tbsh = 0` (no shift on tempB) while **the biquad FORCES a `>>1` on the tempB path** — 77 dB without it. That was published, MEASURED and left OPEN. This note adds a second, independent disagreement about the *same register*: which code reads it. **Both are reverb-versus-biquad, i.e. unit 1 versus unit 0.** | **MEASURED** |
+
+---
+
+## 1. The solve, and why its window is honest
+
+The differential test: run BLOCK A twice with two different values in the
+delay-read register, everything else identical, and ask whether the value
+reaching the multiply differs. No impulse, no injection point, no reference —
+so none of the three failure modes that killed the previous attempts applies.
+
+```
+  machines tried                                  : 54
+  in which the delayed sample reaches the multiply:  0
+```
+
+My first version of this test used a one-block window, which **assumes the
+sample must be consumed in the block that reads it** — false for a
+software-pipelined loop, and exactly the "wrong window" error this project has
+hit before. Widened:
+
+```
+  1 block   w019..w026    0 of 54
+  2 blocks  w019..w034    0 of 54
+  3 blocks  w019..w042    0 of 54
+  4 blocks  w019..w050    0 of 54
+```
+
+The pipeline does not rescue it. The conclusion survives the correction.
+
+## 2. The swap: what BLOCK A needs, and what the biquad forbids
+
+| | delivers the sample | biquad |
+|---|---|---|
+| `SRC 0x19`/`0x1A` as published | **0 of 54** | 0.198 dB ✓ |
+| `SRC 0x19`/`0x1A` swapped | **36 of 54** | **59.339 dB** ✗ |
+
+The swap is precisely what the reverb requires and precisely what the biquad
+rejects. As a global rule it is dead.
+
+## 3. ★ The convergence, which is the real result
+
+This is the **second** independent way the reverb and the biquad disagree about
+the **tempB path**:
+
+| disagreement | reverb says | biquad says | status |
+|---|---|---|---|
+| the tempB `>>1` (`blocking-read.md` H) | `tbsh = 0`, no shift | a `>>1` is required, 77 dB without | published, OPEN |
+| which register the temp codes read (this note) | swapped, or the block cannot filter | unswapped, 59 dB | new |
+
+Two measurements, taken years apart in project time by different methods, both
+saying *the reverb's tempB path is not the biquad's*. And the boundary is the
+same in both: **the reverb is a unit-1 program and the biquad is unit-0.**
+
+### 3.1 What that does and does not license
+
+[`k4-cursor.md`](k4-cursor.md) establishes per-unit banking **of the C-RAM
+coefficient space** — unit-0 at `0x00..0x4F`, unit-1 at `0x90..0xB5`, forced,
+12/12 and 79/79. It says **nothing** about the temporary registers, and this note
+does not claim it does.
+
+What the convergence licenses is a **hypothesis with two independent supporting
+observations instead of one**: *the tempB path is per-unit*. That is a claim
+about a **decoded, forced** parameter, which is exactly where item C says the
+defect must be — and unlike the readings the speculative passes produced, it is
+not invented to fit a single block.
+
+### 3.2 And the trap to avoid
+
+A per-unit reading is **invisible to the biquad by construction**, because the
+biquad is unit-0. That is the same structure as the class-dependent `ACT 0x15`
+reading this project dropped two passes ago, and it must not be waved through on
+the strength of making the reverb work.
+
+**The difference that matters:** the `>>1` tension is *already measured on both
+sides* — the reverb forces one value, the biquad forces the other, both
+published. That is a genuine cross-block contradiction, not a hypothesis fitted
+to one block. Any per-unit reading must be tested against **both** halves, and
+the discriminator has to be a unit-1 program with independently known
+arithmetic, of which this project currently has **none**.
+
+## 4. Predict-then-check
+
+- **P1 HIT, and it was the branch I said was more interesting.** I predicted
+  before running that the failure branch — no machine works — would be the
+  bigger result. 0 of 54.
+- **P2 MISS, caught by myself.** My first window was one block, which assumes
+  away the pipeline. Widening changed nothing, but the test was invalid as first
+  written and is reported that way.
+- **P3 HIT.** I predicted the structure would name a specific forced parameter
+  rather than leaving "something is wrong". It named the temp source codes.
+- **P4 unforeseen.** I did not expect the swap to collide with an *already
+  published* tension about the same register. That convergence is worth more
+  than either measurement alone.
+
+## 5. What the next pass needs
+
+1. ★ **Treat the two tempB disagreements as one problem.** They are the same
+   register and the same unit boundary. Solving them separately has failed
+   twice.
+2. **Find a unit-1 program with independently known arithmetic** — the project
+   has none, and without one no per-unit hypothesis can ever be refuted. The
+   host's parameter names are the most promising route, as they have been for
+   five rounds.
+3. **Do not apply anything here.** Every result is a measurement about the model,
+   not about the chip, and the one reading that makes the reverb work is
+   refuted by the biquad at 59 dB.
