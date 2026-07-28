@@ -1155,3 +1155,50 @@ improvement to the output.**
 ★ **For `f31 = 0` and `1` the behaviour is unchanged** — 0 still cuts the feedback, 1 still
 keeps it — so the biquad and LFO results are untouched. Only the HOLD case changes, and
 `alu_decoded()` admits that solely on class 8, so nothing in the shipping gate moves.
+
+## 17. ★★★ The two remaining stages are CORRECT — and the body's terminator names the gap
+
+```
+   n=151  iw=221  000.2.00.419   f31 = 0 (LOAD, acc <- P)   P = 0  -> acc = 0
+   n=262  iw=332  612.1.0F.000   f31 = 1, hi12 bit 10 (END) + bit 4 (STORE)
+```
+
+* **n=151** is a legitimate `acc <- P` with a stale product. `f31 = 0` means *feedback cut*
+  — this is the **start** of a ladder stage, resetting the accumulator by design.
+* **n=262** is the body's **TERMINATOR**: `hi12 = 0x612` carries bit 10 (END) *and* bit 4
+  (store), so it deposits the result and the store gate's `doclr` clears the accumulator.
+  Also by design.
+
+★★★ **So §16's change removed every SPURIOUS zeroing.** Nine stages were losing the signal;
+seven were the `ACTION 0x00` defect and the two survivors are the machine working correctly.
+The reverb's ladder now accumulates end to end.
+
+### 17.1 ★ And the terminator names the producer/consumer gap exactly
+
+`612.1.0F.000` is **mode 1**, so its bit-4 store targets `mem[addr8]` = **register `0x0F`**.
+That is where body 1 deposits its result.
+
+**The epilogue reads `0x85`, `0x8C`, `0x8D`, `0x06`.**
+
+⛔ **`0x0F` is not among them.** §5.6 established that producers and consumer disagree about
+the send-cell address; this identifies the producer's side precisely — it is the body's
+terminator, and its destination is fixed by `addr8` in the microcode, not by any guess of
+mine.
+
+### 17.2 The state this run reaches
+
+```
+   audio enters                                     ✓
+   kernel computes                                  ✓
+   both bodies run, ladder accumulates end to end   ✓  (126 of 133 slots live)
+   body 1 terminator stores its result to reg 0x0F  ✓
+   ─────────────────────────────────────────────────────────────────────────
+   ✗ the epilogue reads 0x85 / 0x8C / 0x8D / 0x06   ✗  not 0x0F
+   ─────────────────────────────────────────────────────────────────────────
+   presentations + output slots fire per frame      ✓  (slot 5 non-zero)
+   tone generator mixes                             ✗  slot 5 is DO3, which it drops
+```
+
+★ **Two clean, separable questions remain**, and neither is a semantics search:
+1. why the epilogue reads a different register than the terminator writes;
+2. whether the live presentation really belongs on DO3, or the slot→port mapping is wrong.
