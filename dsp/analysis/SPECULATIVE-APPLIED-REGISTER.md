@@ -1747,3 +1747,84 @@ Kept in tree, behind the gate, clearly labelled — not because it is right, but
 reverting it would also erase the falsification. **Felipe's call whether it stays.**
 
 Evidence grade: **REFUTATION** (of §27's fix; the diagnosis it rests on is unaffected).
+
+## 29. Why the multiply never issues — TWO gates, both wrong, both measured
+
+**2026-07-28.** Added a `MUL` column (did the multiply *run*) and an `L` column (what
+operand it was given) to the frame trace, to separate *"it never issues"* from *"it issues
+and multiplies by zero"*. I had guessed the latter in §28. **Wrong — it never issues:**
+`MUL = '.'` at all 22 epilogue slots. Two independent causes, and neither is subtle.
+
+### Cause 1 — the multiply inherited the CURSOR's gate
+
+```cpp
+static constexpr bool coeff_consumer(u64 w) { return class4(w) == 0xa && !c_format(w); }
+```
+
+K4 **forced** this predicate — but it forced it for the **cursor advance**
+(`class4 == 0xA → cursor++`). The multiply was written *inside the same block*, so it
+silently inherited a gate never established for it. `r2-output.md` §3.1 reads coefficient
+fetch as **`class4` bit 3**: *"Both w73 and w78 fetch a coefficient (class4 bit 3), which
+is what an output-level multiply needs."*
+
+The measured consequence, over the epilogue's eight coefficient-bearing words:
+
+| iw | class4 | bit 3 | `== 0xA` |
+|---|---|---|---|
+| 63, 71, 74, 76 | 9 | ✔ | ✘ |
+| 75 | 8 | ✔ | ✘ |
+| 73 | C | ✔ | ✘ |
+| 78 | D | ✔ | ✘ |
+| 64 | A | ✔ | ✔ — but `hi12 = 0xC40` is **c-format**, which the predicate excludes |
+
+**Not one of the eight qualified.** Split `coeff_fetch()` (bit 3 → multiply) from
+`coeff_consumer()` (`== 0xA` → cursor++), leaving K4's forced cursor result untouched.
+
+### Cause 2 — the presentation `return`ed before the arithmetic
+
+Splitting the gate lit up only `w75`. `w73` and `w78` are class **C** and **D**, and the
+class-C/D presentation branch sits *inside* `exec_alu()` and **`return`ed** — before the
+multiply at the bottom of that same function. So the two output presentations could never
+have multiplied under any gate.
+
+That is backwards from what the word does: `w73` is *"`ACCA ← level × ACCA`, then present"*,
+so it must run the ALU **first** and present the **result**. Deferred: the branch now
+latches the unit and falls through, and the presentation runs after the product and the
+accumulator are final.
+
+```
+MUL at w73   .  ->  Y
+MUL at w75   .  ->  Y
+MUL at w78   .  ->  Y
+```
+
+★ **The output-stage multiply issues for the first time.** Both causes are code defects in
+this core, each demonstrable from the trace, and neither is a guess about the chip.
+
+### What did NOT change, and why
+
+```
+w73:  MUL Y   L = 0   P = 0   acc = 0
+```
+
+`w73` sources `ACC` (0x10) and **ACCA is zero**, so it multiplies the output level by zero.
+The gate was one blocker; the operand is another, and it is the same hole §27 named:
+
+> `tA` holds the unit result (**−126480**) across the whole output stage, and **no
+> epilogue word has `SRC 0x19` (tA) or `0x1A` (tB)** — nothing ever reads it back.
+
+The path that exists is `mem[0x8F] → tA` (w65) `→ mem[0x8C]` (w66, `SRC 0x04 = tA`,
+ACT 0x07 store). Then it stops. ★ **Prime suspect: `w68` = `092.1.8C.19B`, whose `addr8` is
+exactly `0x8C` — the cell now holding the result — and whose `SRC 0x06` is unread.** If
+`SRC 0x06` reads `mem[addr8]`, w68 (`f31 = 1`, ADD) is the missing load into ACCA. That is
+a next test, not a claim.
+
+⚠ Unchanged and still wrong: the presented value still saturates (`datum peak −2^23`), so
+§28's refutation stands — this fixes the multiply gate, not the output.
+
+⚠ **Controls not yet re-run.** `coeff_fetch` changes which words multiply across the WHOLE
+program, not just the epilogue. SINGLE DELAY (lag 1001, gain +0.02149296), the PARAMETRIC
+EQ biquad (0.198 dB) and the 19 LFO ramp constants must be re-measured before any of this
+is treated as settled.
+
+Evidence grade: **MEASURED** (both gate defects, from the MUL/L trace).
