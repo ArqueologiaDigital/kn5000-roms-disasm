@@ -53,6 +53,7 @@ it cannot be assumed.
 | 12 | `980.5.20.402`, `A00.0.00.015`, `A00.0.00.041` | no side effect | **PLAIN GUESS** ×3 |
 | 13 | ★ `E30.C.00.404` (w73), `A3C.D.9F.287` (w78) | **present `acc` to the unit's output latch**, unit from `addr8` bit 7 | **PART-MEASURED / PLACEHOLDER** — see §3 |
 | 14 | ★★ **the external delay DRAM (IC309)** | address = `descriptor cell + frame counter`, direction from `addr8`, 24→16-bit truncation | **PART-MEASURED** — see §3.1 |
+| 16 | ★ the presentation's FIXED-POINT REGIME | present the **raw accumulator**, not `acc_to_datum()` | **MEASURED defect, GUESSED fix** — see §3.2 |
 | 15 | `SRC 0x0B` | the delay-DRAM data register | **PLAIN GUESS** — a delay read must land somewhere, and `0x0B` is the only source code otherwise unaccounted for |
 
 ## 3. ⛔ The load-bearing guess, named
@@ -99,6 +100,50 @@ that the line rotates by one cell per frame; and the 24→16-bit truncation.
 NO OPERATION's 4410 = exactly 100.000 ms at 44.1 kHz both fall out of it.** The
 cell-pairing guess is the weakest and is where a contradiction is most likely to
 surface first.
+
+### 3.2 ★★ The 96 dB — measured, and the fix is a guess
+
+With rows 1–15 applied the DSP completed frames and the mix was **bit-identical to
+dry** — 0 of 5 472 003 samples differed, exactly what the owner reported hearing.
+Instrumenting the presentation words found two things:
+
+**Defect A (mine, now fixed).** Admitting *every* word to the speculative gate made the
+twelve **K6 input-stage** words take the generic ALU path instead of
+`exec_addressing_only()`, losing their MEASURED pointer walk:
+
+```
+   frames in which both port reads executed   973 440  ->  0
+   "NOTHING ENTERED THE CHIP -- the input stage never ran to completion"
+```
+
+★ **Filling the grid broke something that had been working** — which is precisely the
+contradiction this strategy exists to produce. Restored, and audio enters the chip for
+the first time: **1 597 440** frames with both port reads, **485 859** carrying a
+non-zero sample, peak `0x4FD900`.
+
+**Defect B (a fixed-point regime mismatch).** Measured at the presentation word:
+
+```
+   raw accumulator peak            4 988 928
+   after acc_to_datum() (>> 16)           76
+   peak sample that ENTERED        5 232 896
+```
+
+★ **The signal traverses the whole chip at ~0.95× in accumulator units** — the loss is
+entirely the 16-bit shift, applied to a value that is already a datum. `wet = (DO1 +
+DO2) >> 8` then floors 76 to zero.
+
+⛔ **Which side is wrong is OPEN.** Either the accumulator legitimately holds a datum
+here and must not be shifted, or some upstream path fails to scale a datum *into*
+accumulator units and the shift is right. `ACT 0x00` does apply `L << ACC_SHIFT`, which
+argues for the second — **but the measurement says the value arriving here never went
+through it.** Presenting the raw value is the reading that makes the chip audible, and
+it is a guess.
+
+**Result:** dry peak 20 441 → **32 696**, with **58 % of samples differing**. ★ The
+emulated IC311 audibly processes the signal for the first time. Whether it processes it
+*correctly* is entirely unestablished — 16 rows of this table are guesses, and the peak
+is close enough to full scale that the wet may simply be too hot.
 
 ## 4. How to use this list
 
