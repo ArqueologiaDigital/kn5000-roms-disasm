@@ -53,6 +53,7 @@ it cannot be assumed.
 | 12 | `980.5.20.402`, `A00.0.00.015`, `A00.0.00.041` | no side effect | **PLAIN GUESS** ×3 |
 | 13 | ★ `E30.C.00.404` (w73), `A3C.D.9F.287` (w78) | **present `acc` to the unit's output latch**, unit from `addr8` bit 7 | **PART-MEASURED / PLACEHOLDER** — see §3 |
 | 14 | ★★ **the external delay DRAM (IC309)** | address = `descriptor cell + frame counter`, direction from `addr8`, 24→16-bit truncation | **PART-MEASURED** — see §3.1 |
+| 17 | ★★ host command `0x02`, the COEFFICIENT STREAM | land at the `801.0.NN.821` pointer, auto-incrementing | ★ **PROVEN BY CONSTRUCTION** (the rule) + **VERIFIED** (§3.3) |
 | 16 | ★ the presentation's FIXED-POINT REGIME | present the **raw accumulator**, not `acc_to_datum()` | **MEASURED defect, GUESSED fix** — see §3.2 |
 | 15 | `SRC 0x0B` | the delay-DRAM data register | **PLAIN GUESS** — a delay read must land somewhere, and `0x0B` is the only source code otherwise unaccounted for |
 
@@ -144,6 +145,44 @@ it is a guess.
 emulated IC311 audibly processes the signal for the first time. Whether it processes it
 *correctly* is entirely unestablished — 16 rows of this table are guesses, and the peak
 is close enough to full scale that the wet may simply be too hot.
+
+### 3.3 ★★★ The coefficient stream — was discarded, now routed and VERIFIED
+
+`upd6383.cpp` said of host command `0x02`: *"ACCEPTED AND IGNORED … routing it would put
+invented data in a real memory."* The consequence was never stated: **C-RAM was never
+loaded, so the emulated DSP ran with no effect coefficients at all.** It also explains why
+registers `0x06`/`0x86` (the per-unit OUTPUT LEVEL, PROVEN BY CONSTRUCTION) read zero —
+the host writes them through that same command.
+
+**Round 4 guessed** the words land sequentially from 0. Wrong: the wet changed on 0.03 %
+of samples.
+
+**Round 5 uses the rule that is PROVEN BY CONSTRUCTION** and that
+[`lfo_ramp.py`](../tools/lfo_ramp.py)`.cram_of_algo()` already replays to recover every
+coefficient this project has measured: **`801.0.NN.821` loads the C-RAM pointer, and the
+`0x02` coefficients that follow land at that pointer, auto-incrementing.** The pointer
+word arrives through the ordinary `cmd 0x01` path, including at the host poke port —
+captured transfer 26 is `01 60 | 08 01 09 78 21` = `ldptr 0x09`.
+
+★★★ **And the result verifies itself against an independent source:**
+
+```
+   device C-RAM after boot :  00=000072  01=7FFFFF  02=0000F0 ... 09=400000  13=200000
+   lfo_ramp.py, algo 1 CHORUS:  w5 -> cell 00 value 000072
+                                w7 -> cell 01 value 7FFFFF
+```
+
+**Cell `0x00` = 114 is CHORUS's LFO ramp step and cell `0x01` = `0x7FFFFF` is its wrap
+constant** — the two numbers derived from the ROM by tooling that knows nothing about
+this device. `0x400000` = 0.5 and `0x200000` = 0.25 appear as real effect gains, and
+`0x50..0x7F` holds a 48-entry linear ramp table. **112 of 256 cells populated, 117
+coefficients routed.**
+
+⛔ **But the wet still changes on only 0.06 % of samples.** The coefficients are now
+demonstrably in the cells the microcode reads, so **the remaining defect is in
+consumption, not routing** — the ALU is not multiplying by them. That is a cleanly
+separated next question, and `f2_prod = "skip"` (row 1) suppressing products on every
+`f31 == 2` word is the first suspect.
 
 ## 4. How to use this list
 
