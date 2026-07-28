@@ -53,6 +53,9 @@ it cannot be assumed.
 | 12 | `980.5.20.402`, `A00.0.00.015`, `A00.0.00.041` | no side effect | **PLAIN GUESS** ×3 |
 | 13 | ★ `E30.C.00.404` (w73), `A3C.D.9F.287` (w78) | **present `acc` to the unit's output latch**, unit from `addr8` bit 7 | **PART-MEASURED / PLACEHOLDER** — see §3 |
 | 14 | ★★ **the external delay DRAM (IC309)** | address = `descriptor cell + frame counter`, direction from `addr8`, 24→16-bit truncation | **PART-MEASURED** — see §3.1 |
+| 20 | ★★ the unanchored SRC codes | `0x08` → the coefficient; `0x00`/`0x11` → `mem[ptr]`; `0x13`/`0x1C` still zero | ★ `0x08` **MEASURED**; the rest ⛔ 1-of-N enumerated — §3.11 |
+| 19 | the kernel's coefficient cursor | re-seeded to `0x90` each frame | ★ **VERIFIED** by the coefficients there (§3.8) |
+| 18 | `HI_ACC_HOLD` off class 8 | admitted | ⛔ extends a class-8-only result (§3.6) |
 | 17 | ★★ host command `0x02`, the COEFFICIENT STREAM | land at the `801.0.NN.821` pointer, auto-incrementing | ★ **PROVEN BY CONSTRUCTION** (the rule) + **VERIFIED** (§3.3) |
 | 16 | ★ the presentation's FIXED-POINT REGIME | present the **raw accumulator**, not `acc_to_datum()` | **MEASURED defect, GUESSED fix** — see §3.2 |
 | 15 | `SRC 0x0B` | the delay-DRAM data register | **PLAIN GUESS** — a delay read must land somewhere, and `0x0B` is the only source code otherwise unaccounted for |
@@ -482,6 +485,48 @@ lead**, and it was written into the code by whoever wrote that guard, waiting.
 ⛔ Two diagnostic errors in two messages (the presentation "peak" that was a constant, and
 this "overflow" that was a sign). Both were *my instruments*, not the device, and both were
 caught by measuring the operands instead of trusting the summary.
+
+### 3.11 ★★★ Fixing the unanchored sources unblocks the kernel AND the bodies
+
+§3.10 identified the live lead: the widened predicate made `SRC 0x00/0x08/0x11/0x13/0x1B/
+0x1C` read **zero**, exactly as the `default:` branch's comment warned. Supplying readings
+from the research model:
+
+* **`SRC 0x08` = the coefficient.** ★ **MEASURED** — the setting under which the LFO's
+  phase accumulator reproduces its ROM ramp constant exactly (`mem[0x04]` 1000 → 1228,
+  step +228 = coefficient `0x0000E4`), and 11 of 19 such constants corpus-wide. The rival
+  `"unity"` saturates the accumulator on the LFO's first word.
+* **`SRC 0x00`, `SRC 0x11` = `mem[ptr]`.** ⛔ 1 of 6 and 1 of 7 enumerated options, no
+  independent support.
+* **`SRC 0x13`, `SRC 0x1C` have no reading anywhere** and keep reading zero — now
+  **counted**: 6 241 920 and 1 560 960 reads per run. `SRC 0x1B` never occurs.
+
+**Result — the accumulator comes alive across most of the frame:**
+
+```
+   slots  0..49 :  LIVE          (was: zero from slot 25 on)
+   slots 50..59 :  0             <- the rest of the kernel
+   slots 60..82 :  0             <- ★ the ENTIRE EPILOGUE, where w73/w78 present
+   slots 84+    :  LIVE          <- the unit-0 body computes
+```
+
+★★ **Both the kernel and the effect bodies now carry signal.** That is the furthest this
+has ever got.
+
+### 3.11.1 The new boundary
+
+⛔ **The epilogue sees a zero accumulator**, which is why the presentation still writes
+nothing and the audio is still bit-identical to dry. The zeroing starts at **slot 50** —
+`801.0.50.821`, the `ldptr` that loads the **unit-1 body's** C-RAM bank.
+
+That is a *register-load* word, which takes the `exec_decoded()` register path rather than
+the ALU path. Whether it should touch the accumulator at all is the question; `hi12 =
+0x801` gives `f31 = 0` (`acc ← P`), so under the ALU reading it would load a stale product
+— but K3 proves this family "is a REGISTER WRITE and nothing else", which argues it should
+leave the accumulator alone entirely.
+
+★ **That is a sharp, well-posed next question with a decode already attached to it**, and
+it is the last boundary between a live accumulator and the words that present the output.
 
 ## 4. How to use this list
 
