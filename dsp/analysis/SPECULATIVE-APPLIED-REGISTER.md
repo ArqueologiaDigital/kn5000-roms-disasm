@@ -2900,3 +2900,81 @@ plumbing; the last joint is still open, and the DC proves it.
 
 Evidence grade: **MEASURED** (the silence-window census, the zero-crossing test, the
 descriptor A/B); **RETRACTION** of §44's audibility claim.
+
+## 48. What connects the body to w73 — IT ALREADY DOES. The chip is SATURATED.
+
+**2026-07-28.** §47 ended by saying *"nothing connects the body's accumulator to w73/w78"*.
+⛔ **That is wrong too.** Tracing the epilogue at the actual default (`0x14C`) — which I had
+never done, having traced only `0xDC` and `0x1C`:
+
+```
+  n=276  iw 73  E30.C.00.404   acc 538 760 587 509  ->  datum 8 220 834   MUL Y
+                               tA 8 388 607 = 0x7FFFFF      mem[dp] 8 220 834
+```
+
+The body's value **reaches the presentation.** The connection was never missing.
+
+### ★★★ The chip is in hard saturation
+
+`tA` is pinned at **0x7FFFFF — the 24-bit maximum** — and the accumulator profile is
+decisive: every peak is an exact small-integer multiple of ONE quantum.
+
+```
+538 760 587 509 (x1)   1 077 521 175 018 (x2)   1 616 281 762 527 (x3)   2 155 042 350 036 (x4)
+```
+
+That is a railed datum being added repeatedly. **A saturated value is constant regardless of
+input — which is exactly the DC of §46.** The DC was never a routing failure; it is a
+clipped signal.
+
+### Why it saturates: §44 removed the loop's only attenuation
+
+The tap multiplies I stopped in §44 were, whatever else they were, the **ladder's damping**.
+With them, the loop lost 10⁴ (§43-45). Without them each stage has unity gain, the
+accumulation is unbounded, and it clips. Both extremes are wrong, and the truth is that the
+feedback term should come from somewhere else entirely.
+
+### ★★ And it does — from the delay line, which is being thrown away
+
+```
+delay-port READS per frame      32 986 560 / 1 586 880  =  ~20.8
+SRC 0x0B consumed per frame      1 595 520 / 1 586 880  =    1.0
+```
+
+★★★ **The port reads ~21 taps per frame and the ladder consumes exactly ONE.** `m_dr` is a
+single register that every read overwrites, so 20 of 21 delay data are destroyed before
+anything can use them. The ladder therefore has **no per-stage feedback term** — which is
+precisely why it has no damping and saturates.
+
+And `dram-datapath.md` already models what is needed, in detail this pass did not use:
+
+* item **A**: *"THE DRAM PORT IS A ONE-DEEP PIPELINE"* — **FORCED**, with the two dummy
+  accesses (a leading harmless write, a trailing discarded read) already identified as its
+  two ends;
+* item **E**: the read latency is **FORCED** to `land ∈ [1,4]`, mode 4 — *"the datum must
+  still be in the read-data register when the first word naming SRC 0x0B executes"*;
+* item **B**: `wtrail = 2` — the write of a line trails its read by two repetitions.
+
+A one-deep pipeline with `land ≥ 1` is exactly a model in which each read's datum is
+consumed a few slots later by its own `SRC 0x0B` word. **Ours overwrites it immediately.**
+
+### Corrected state
+
+| claim | status |
+|---|---|
+| §44 "the DSP produces audible output" | ⛔ RETRACTED (§46) — a DC |
+| §47 "nothing connects the body to w73/w78" | ⛔ **RETRACTED** — it connects; it is railed |
+| the body multiplies by address-shaped cells | ✔ MEASURED, stands |
+| skipping those multiplies removes the loop's damping | ★ **NEW**, and it explains the DC |
+| the delay port is fed with real per-unit descriptors | ✔ MEASURED (§47, bit 9) |
+| ~20 of 21 delay reads are discarded | ★ **MEASURED** — the missing feedback term |
+
+⇒ **Next: implement the one-deep read pipeline** — hold each delay datum for `land` slots
+(4 is both the FORCED upper bound and the corpus mode) so that each stage's `SRC 0x0B`
+consumer receives *its own* read rather than the last one. That restores a real feedback
+term to the ladder, which should both remove the saturation and make the output track the
+input. It is the piece `dram-datapath.md` items A/B/E were written to specify, and it has
+never been implemented.
+
+Evidence grade: **MEASURED** (the epilogue trace at the shipped default, the quantised
+accumulator profile, the read/consume ratio); **RETRACTION** of §47's conclusion.
