@@ -176,7 +176,7 @@ def hi_op(f, mode):
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
                  "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
-                 "act1a", "act0d", "act0e", "act15", "storemode", "altlo12", "cfmt", "act08", "act0c", "act11", "act01", "act16", "mode4dest")
+                 "act1a", "act0d", "act0e", "act15", "storemode", "altlo12", "cfmt", "act08", "act0c", "act11", "act01", "act16", "mode4dest", "f2_act00", "f2_prod")
 
     def __init__(self, order, act00, sttime, stgate, op2="hold", wrap="sat",
                  act19="tA<-bus", src00="mem", src08="unity",
@@ -184,7 +184,8 @@ class Machine(object):
                  act1a=None, act0d=None, act0e=None, act15=None,
                  storemode="mode", altlo12=None, cfmt=None,
                  act08=None, act0c=None, act11=None, act01=None,
-                 act16=None, mode4dest="ptr"):
+                 act16=None, mode4dest="ptr", f2_act00="apply",
+                 f2_prod="compute"):
         self.order, self.act00, self.sttime = order, act00, sttime
         self.stgate, self.op2, self.wrap = stgate, op2, wrap
         self.act19, self.src00, self.src08 = act19, src00, src08
@@ -198,6 +199,12 @@ class Machine(object):
         self.act0c, self.act11 = act0c, act11
         self.act01, self.act16 = act01, act16
         self.mode4dest = mode4dest
+        #  ★ NEW FIELDS, 2026-07-28 (analysis/... sect. 17).  sect. 15/16 showed the
+        #  accumulator hand-off between LFO blocks is wrong and that NO existing
+        #  option fixes it -- 25 settings tried.  These are the two leaks the trace
+        #  identifies, each defaulted to the historical behaviour.
+        self.f2_act00 = f2_act00      # does ACT 0x00's bus term apply at f31 == 2?
+        self.f2_prod = f2_prod        # does an f31 == 2 word update P at all?
 
     def key(self):
         return (self.order, self.act00, self.sttime, self.stgate,
@@ -524,7 +531,7 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
             fb = 0 if f == 0 else st.acc
             pt = 0 if f == 2 else st.P
         bt = 0
-        if act == 0x00:
+        if act == 0x00 and not (f == 2 and m.f2_act00 == "suppress"):
             a0 = m.act00
             if a0 == "add":
                 bt = busa
@@ -552,8 +559,9 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
     if isA:
         if coef is None:
             return False
-        st.P = (s24(coef) if (m.src08 == "unity" and src == 0x08 and ash == 0)
-                else (s24(coef) * bus) >> psh)
+        if not (f == 2 and m.f2_prod == "skip"):
+            st.P = (s24(coef) if (m.src08 == "unity" and src == 0x08 and ash == 0)
+                    else (s24(coef) * bus) >> psh)
         if obs is not None:
             obs.append(("MUL", bus, 0))
 

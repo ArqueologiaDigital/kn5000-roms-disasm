@@ -584,3 +584,79 @@ that reproduced a ROM constant exactly (+228/frame) while the refuted value repr
 none, and the regression control held. Here no option reproduces the constants at all.
 The difference between "we refuted an option" and "we decoded a field" is exactly this,
 and it is worth keeping sharp.
+
+---
+
+## 17. ★★★ YES — an `f31 = 2` word does NOT update the product register
+
+§16 answered "does §15 decode an instruction?" with **no**. §17 answers it with **yes**,
+for one field, and the difference between the two is exactly the difference §16.3 drew.
+
+### 17.1 The mechanism, traced rather than scored
+
+MIX UP's accumulate and wrap words are **one instruction with one field changed**:
+
+```
+   w4   0092A00200   hi12 = 092, f31 = 1   lo12 = 200   coef  570   ACCUMULATE
+   w6   0094A00200   hi12 = 094, f31 = 2   lo12 = 200   coef  8388607   WRAP + STORE
+```
+
+Identical `lo12`, identical `ACT 0x00`, identical `SRC 0x08`. Tracing the accumulator
+across the first two LFO blocks shows **two** leaks, not one:
+
+* the wrap word's gate clears `acc`, and then `ACT 0x00` **adds the bus** — which on
+  that word is the wrap coefficient `0x7FFFFF`;
+* the next word (`f31 = 0`, `acc = P`) picks up the **stale `P`** that the wrap word's
+  multiply left behind.
+
+### 17.2 Two candidate fields, and only one matters
+
+```
+   f2_act00   f2_prod    ROM constants     change vs baseline
+   apply      compute        11            (baseline)
+   suppress   compute        11            none
+   apply      skip       ★   14            +3, NO losses
+   suppress   skip       ★   14            +3, NO losses
+```
+
+★★★ **`f2_prod = "skip"` — an `f31 = 2` word does not write `P` — gives 14 of 19
+against 11, and every baseline constant is retained.** Not a trade (§16.2), a strict
+superset.
+
+⛔ **`f2_act00` is NOT determined**: `apply` and `suppress` score identically. The
+ACT-0x00 leak is real in the trace but is not what the LFOs can see.
+
+### 17.3 It fixes the structural problem that motivated it
+
+```
+   MODULATED CHORUS   [989]        ->  ★ [114, 989]     BOTH rates
+   MIX UP             [570]        ->  ★ [570, 989]     2 of 3
+   S.DELAY+VIBRATO    -            ->  ★ [760]          new
+```
+
+§15's constraint was *"a program with LFOs at different rates runs only its first."*
+Under `skip`, MODULATED CHORUS runs both. **The field was predicted from a mechanism
+and then confirmed by the criterion that named the problem.**
+
+### 17.4 Three controls, all passed
+
+| control | `compute` | `skip` |
+|---|---|---|
+| SINGLE DELAY (validated: lag 1001, +0.02149296) | exact | **exact** |
+| execution coverage | 88 complete, 98.6 % | **identical** |
+| PARAMETRIC EQ biquad, worst-case | 0.198 dB | **0.198 dB** |
+
+★ The biquad **neither confirms nor refutes** — its section contains only **1** `f31 = 2`
+word of 9, so it is nearly blind to the field. Stated rather than counted as support:
+**the LFO is the sole anchor for this result.**
+
+### 17.5 Status
+
+**MEASURED**, anchored on the LFO ramp constants alone, with the biquad blind and the
+delay context unaffected. Strength: 14 of 19 versus 11, no losses, across 12 distinct
+programs, plus a mechanism identified before the score was taken.
+
+⛔ **Not applied to the device.** It should be, but only after the remaining 5 constants
+are understood — RING MODULATOR (190217), MIX UP's third rate (1407), PEQ+CHORUS,
+PEQ+FLANGER, PEQ+VIBRATO — since a field that explains 14 of 19 may still be one
+refinement short of the real rule.
