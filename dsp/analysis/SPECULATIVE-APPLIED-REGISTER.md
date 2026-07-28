@@ -362,6 +362,49 @@ from "what are the four values" to **"which C-RAM bank does the kernel's cursor 
 from"** — a pointer question with a small answer space, not a search for four unknown
 numbers.
 
+### 3.8 ★★★ The kernel's cursor base is 0x90 — and the coefficients there prove it
+
+§3.7 narrowed the question from "what are the four values" to "which bank does the
+kernel's cursor start from". Scanning every pointer-family word in the kernel and epilogue
+answers it — the corpus loads the C-RAM pointer exactly **three** times:
+
+```
+   kernel   iw42  801.0.70.821  ->  0x70   the unit-0 body's bank
+   kernel   iw50  801.0.50.821  ->  0x50   the unit-1 body's bank
+   epilogue iw69  801.0.90.821  ->  0x90   ★ the LAST load of the frame, so it is what
+                                             the NEXT frame's kernel inherits
+```
+
+K3 names `0x70 / 0x50 / 0x90` as three of the four structural bases of the host's C-RAM
+map; the two bodies claim `0x70` and `0x50`; and the coefficient stream fills
+`[0x90..0xAD]` with **30** values — unclaimed by either body and enough for the kernel's
+23 slots. ★ Also decisive: **the cursor was FREE-RUNNING across frames** (drifted to
+`0x77` and climbing), so a fixed program was reading different coefficients every frame,
+which cannot be right.
+
+★★★ **And seeding it at `0x90` verifies itself:**
+
+```
+   cur = 0x90  ->  0x200000 = 0.25
+   cur = 0x91  ->  0x400000 = 0.50
+   cur = 0x92  ->  0x400000 = 0.50
+```
+
+Those are **exactly** the reverb input-mix gains derived independently in
+[`blocka-forced-defect.md`](blocka-forced-defect.md):
+`0.25 × mem[0x0E] + 0.50 × mem[0x8F] + 0.50 × mem[0x8C]` — same three values, same order,
+at the base the epilogue's pointer load names. Two unrelated routes to one answer.
+
+⛔ **What is still guessed** (row 19): that the implicit cursor is re-seeded per frame at
+all. K3 proves `0x21` loads a C-RAM *pointer* that is **NOT** the implicit cursor, and the
+only `rstcur` in the corpus sits in PARAMETRIC EQ's body — so what actually resets the
+cursor each frame is unknown. Seeding from the epilogue's payload is the reading that
+makes a fixed program read fixed coefficients.
+
+⛔ **And the audio still does not flow**: the accumulator still dies at slot 25 and the
+presentation still writes zero. The cursor base was a real defect and is now fixed; it was
+not the last one.
+
 ## 4. How to use this list
 
 1. **Every contradiction found downstream should be checked against this table first.**
