@@ -1828,3 +1828,77 @@ EQ biquad (0.198 dB) and the 19 LFO ramp constants must be re-measured before an
 is treated as settled.
 
 Evidence grade: **MEASURED** (both gate defects, from the MUL/L trace).
+
+## 30. ⛔ THE TESTS WERE RUN WITH NO NOTES PLAYING — and fixing that refutes §27
+
+**2026-07-28, on Felipe asking "are you playing notes when you run these tests?"** No. Every
+run in §§25–29 was `-seconds_to_run` with only the DSPCFG script: **silence**. I had even
+noticed the symptom and worked around it in the wrong direction — the trace arms on live
+input, produced nothing, and instead of playing a note I added a frame-count fallback.
+
+### The controlled experiment
+
+Two runs, identical binary, identical arming frame (**970 000 ≈ 22 s**, chosen to land
+inside `note_spec.lua`'s held C-major triad at t = 20 s rather than relying on the input
+latch, whose audit peak is exactly `0x800000` — the rail — and so cannot distinguish "a
+note is sounding" from "the latch is railed").
+
+**The control works** — the instrument can see the difference:
+
+```
+                     peak |sample| that entered the chip
+   with notes                 0x800000   (8 388 608)
+   silent                     0x000000   (0)
+```
+
+**And the epilogue is BYTE-IDENTICAL in both:**
+
+```
+  iw  word           acc   P        tA        cur  coef  MUL      L
+  65  200.1.8F.1C1    0    0    -126480       71  0004BE  .  -126480
+  73  E30.C.00.404    0    0    -126480       90  200000  Y        0
+  78  A3C.D.9F.287    0    0    -126480       90  200000  Y        0
+```
+
+Same to the digit, with 8.4 million counts of signal entering versus none.
+
+### What this refutes
+
+⛔ **§27's central claim is wrong.** It said *"tempA holds 504 — the unit result — across
+the entire output stage"*, and §29 repeated it as *"tA holds the unit result (−126480)"*.
+**It is not a result.** A value that is bit-identical with and without audio is not derived
+from audio; it is a constant artefact of the mis-executing program. Every sentence in
+§§27–29 calling `tA` "the unit result" is retracted.
+
+★ **The break is far upstream of the epilogue.** The signal demonstrably enters the chip
+and demonstrably reaches nothing in the output stage. Chasing "what loads ACCA" — §29's
+proposed next step, `SRC 0x06` at w68 — would have been chasing the wrong end: even a
+perfect load would load a constant.
+
+⚠ And the input peak is **exactly 2^23**, the rail, whenever a note sounds. An input that
+saturates at full scale is itself a defect and must be characterised before anything
+downstream is interpreted.
+
+### What SURVIVES
+
+The §29 findings are **code-structure facts**, established by reading the source and
+confirmed by the MUL column, and are independent of what data flows:
+
+* `coeff_consumer()` (`class4 == 0xA`, K4-forced **for the cursor**) gated the multiply,
+  and **none** of the epilogue's eight `class4`-bit-3 words satisfied it.
+* The class-C/D presentation branch `return`ed from inside `exec_alu()`, before the
+  multiply at the bottom of the same function, so `w73`/`w78` could never multiply.
+
+Both are real defects, both are fixed, and `MUL` at w73/w75/w78 went `.` → `Y`. Neither
+claim depended on a note being played.
+
+### Method rule 12
+
+**A DSP test with no signal at its input is not a test.** State the stimulus in every
+result, and require a control that demonstrably moves — here, input peak
+`0 → 8 388 608`. This is [[measurement-discipline-emulation]] and the reason it is a
+standing rule: five instruments in one earlier day could not measure what they claimed,
+and this is the sixth.
+
+Evidence grade: **MEASURED, with a working control.** The null is meaningful precisely
+because the control moved.
