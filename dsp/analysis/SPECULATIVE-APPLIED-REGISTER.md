@@ -2719,3 +2719,104 @@ nothing). It is a switch, documented, with its effect measured.
 
 Evidence grade: **MEASURED** (the trace before/after, and the `188 >> 16 = 0` arithmetic);
 **NOT ADOPTED** for bit 7 itself.
+
+## 44-45. ★★★★ FOUND: the body was multiplying by DELAY-TAP ADDRESSES
+
+**2026-07-28.** §43 reduced the silence to one number: the signal is ~10⁴ too small at the
+output stage. Located it, and it is not in the epilogue at all.
+
+### The decay is in body 1's tail, and it is a chain of tiny multiplies
+
+```
+n=231 iw301   acc 197 295 225 680        <- the ladder, at full magnitude
+n=232 iw302   acc   2 533 682 112
+n=233 iw303   P        32 783 680        cur 66  coef 00D800
+n=237 iw307   acc          424 000
+n=240 iw310   acc           10 656
+n=243 iw313   acc                0
+```
+
+Each step is `acc ← coef × (acc >> 16)`. With `coef = 0x00D800` read as Q0.23 that is
+**×0.0066 per stage**, and six stages give the missing 10⁴ exactly.
+
+### ★★★ Why the coefficients are tiny: they are not coefficients
+
+Dumping the whole coefficient RAM shows **three regions of completely different character**:
+
+```
+C-RAM 00: 000072 7FFFFF 0000F0 000000 ... 2CCCCC 2CCCCC 000018 400000 400000 E00000
+C-RAM 50: 008000 008400 008800 008C00 ... 00F800 00FC00      <- RAMP, step 0x400
+C-RAM 70: 000000 0004BE 00097C 000E3A ... 007B4C 007FFF      <- RAMP, step 0x4BE
+C-RAM 90: 200000 400000 400000 3B9885 2DF3A0 C62251 170A3D   <- real coefficients
+```
+
+* `0x00..0x13` — real parameters: the LFO ramp step `000072` = 114, the wrap `7FFFFF`,
+  levels `2CCCCC`, `400000`, `E00000`.
+* `0x90..0xB4` — real coefficients: 0.25, 0.5, 0.464, 0.359, **−0.452**, 0.181, 0.75 …
+  signed, irregular, exactly what a reverb needs. **This is what the KERNEL reads**, and
+  the kernel shows no decay.
+* `0x50..0x8B` — **two monotonic, evenly-spaced ramps**, and they are precisely the host's
+  two 30-cell write runs `[0x50..0x6D]` and `[0x6E..0x8B]`. `0x8000 → 0xFC00` in steps of
+  1024 spans the upper half of a 64 K space. **This is what the BODY reads.**
+
+A monotonic ramp of 1024-sample steps is an **address table**, not a gain set — and this
+chip's block diagram (**PROVEN**) gives it *"an on-chip controller for external DRAM;
+ring-buffer address generation (echo / reverb-A / reverb-B regions)"*, with the delay DRAM
+identified as IC309 (M5M44260AJ). **The body was feeding delay-tap addresses to the
+multiplier.**
+
+### The test, and the result
+
+Mask bit 8: when the cursor lands in `0x50..0x8B` the fetched word is an address, so do not
+form a product from it. (The delay datapath is not modelled, so the honest action is to stop
+multiplying by an address, not to invent a delay read.)
+
+```
+                              before            after
+presentations writing NON-ZERO      0        1 560 000   (of 1 560 000 frames)
+datum peak at presentation          0        2 877 291   (expected ~2 936 000)
+raw acc at presentation             0    538 760 587 509
+frames trapped                      0                0
+input read == latched         100 %            100 %
+```
+
+★★★ **And it is audible in the main mix.** A/B of the rendered audio, DSPCFG 1 vs 3:
+
+```
+DSPCFG=1 (decoded)     peak 20 441
+DSPCFG=3 (speculative) peak 31 057
+samples DIFFERENT   3 120 000 of 5 472 003  (57.02 %)   max |delta| 11 239
+```
+
+★ **Three independent arithmetic cross-checks, all exact:**
+1. accumulator datum at presentation **8 220 834** ≈ the body's expected ~2.9 M × the
+   ladder's remaining gain;
+2. × the C-RAM level `0x2CCCCC` (0.35) = **2 877 292**, matching the measured datum peak
+   2 877 291 to one LSB — §42's level fix confirmed end-to-end;
+3. `2 877 291 >> 8` = **11 239**, matching the measured max delta in the mix exactly — the
+   tone generator's own shift.
+
+Adopted. **Default mask is now `0x14C`** (coeff_fetch + deferred presentation + C-RAM level
++ tap table). Bits 0/1 (§28 ACCB), 4 (§40 latched-K) and 7 (§43 level-select) are OFF and
+each measurably destroys the result — mask `0x1DC` returns 0 non-zero presentations, which
+independently vindicates the refusals in §28, §40 and §43.
+
+### ⚠ THIS IS NOT A WORKING REVERB, and that must not be overstated
+
+The delay-DRAM datapath is **still not modelled**. We *skip* the tap multiplies rather than
+*perform* the delay reads, so there is **no delay line and no reverberation**. Measured:
+the wet is ≈ 0.55 × dry, i.e. essentially a scaled copy. What has been fixed is that the
+chip no longer **destroys** its signal; what it does with it is still mostly absent.
+
+Distinguish this from Part 101's earlier "audible" claim, which was an artefact (a stuck DC
+constant on DO3, a pin that carries nothing). This one is on **DO1/DO2 — the main mix**,
+with the input verified intact, the level applied, and three stages of arithmetic agreeing.
+
+⇒ **Next: model the external delay DRAM** (IC309 M5M44260AJ), addressed by the `0x50..0x8B`
+tap table. That is now the single largest missing piece, and for the first time it is the
+*only* thing between here and a real effect.
+
+Evidence grade: **MEASURED** — the C-RAM dump, the decay chain, the presentation census and
+the rendered-audio A/B. **SPECULATIVE (well-supported)**: that `0x50..0x8B` are delay-tap
+addresses — monotonic ramps, a PROVEN ring-buffer controller, and magnitudes that fit a
+64 K space.
