@@ -2393,3 +2393,57 @@ measured, and it is the real remaining question in this area.
 
 Evidence grade: **MEASURED** (residue histogram + time buckets over 1 824 001 frames);
 **RETRACTION** of §36's characterisation.
+
+## 38. CAP and OVERRUN — the same boot transient, ending at the same frame
+
+**2026-07-28.** §37 left this as "the real remaining question in this area": 210 241 frames
+end on the 384-slot CAP and 26 880 by I-RAM OVERRUN — 13 % of all frames, excluded from the
+closure census. Measured with the same instrument.
+
+```
+CAP     over time   118 749  85 732  5 760  0 0 0 0 0 0 0 0 0 0 0 0 0
+CAP     frames 1 .. 264 001            slots always EXACTLY 384..384  (the cap)
+OVERRUN over time         0   6 138  20 742  0 0 0 0 0 0 0 0 0 0 0 0 0
+OVERRUN frames 231 362 .. 258 241      slots always EXACTLY 350..350
+```
+
+★★★ **Both are bounded in time, and both stop at the same place §37's closure residue
+stops** — frame ~264 002. Thirteen of sixteen time buckets are empty for CAP and thirteen
+for OVERRUN. After that boundary, all ~1.56 M remaining frames reach the wait word, trap 0
+times, and close with residue 0.
+
+**So all three anomalies are one event**: the last program upload completes at ≈ frame
+264 002, and from there the emulated DSP runs perfectly for the remaining 85.5 % of the run.
+
+Two details worth keeping:
+
+* **CAP is always exactly 384 slots and starts at frame 1.** That is the signature of an
+  I-RAM with no wait word in it yet — the frame runs to the hard cap because there is
+  nothing to stop it. Exactly what the pre-upload state should look like.
+* **OVERRUN is always exactly 350 slots**, in a narrow window. A constant, not a scatter:
+  a partially-uploaded image whose execution runs off the loaded region at one fixed point.
+
+### They are also harmless
+
+`clean = (traps == 0) && (partials == 0) && hit_wait && !overrun`, so neither kind is
+returned to the tone generator — **these frames produce no audio at all.** They are
+discarded, not mixed.
+
+### The area is closed
+
+```
+§33-§36  input-latch corruption      -> fixed at the decode (double store), no band-aid
+§37      frame-closure "drift"       -> boot transient, 100 % closure in steady state
+§38      CAP / OVERRUN               -> same boot transient, discarded, no audio effect
+```
+
+★ **In steady state the emulated IC311 now: reads its true input on 100 % of frames, runs
+all 285 slots with 0 traps, and closes its pointer with residue exactly 0.** Every "13 %",
+"1.69 %" and "1.63 %" statistic in this area turned out to describe boot and nothing else —
+three separate figures, one cause, and none of them a defect.
+
+⚠ What this does **not** touch: the epilogue still presents zero (§§27–29 remain open on
+their own terms), and the deferred controls for `coeff_fetch` (SINGLE DELAY, the biquad,
+the 19 LFO constants) have still not been re-run. That is now the outstanding item.
+
+Evidence grade: **MEASURED** (time buckets and slot-count bounds over 1 824 001 frames).
