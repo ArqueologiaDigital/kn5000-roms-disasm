@@ -903,3 +903,50 @@ one this project has circled for months, now visible as a single number at a sin
 ```
 
 ★ Every stage is live, instrumented and cadence-correct except one pointer value.
+
+## 11. ⛔ The epilogue pointer — two speculations tried, neither separable, and the stop
+
+**Speculation A — rebase the epilogue like a body.** The device applies
+`base = 0x05 | unit<<7` at each per-unit CALL, and the epilogue is the one part of the
+frame that runs *without* a CALL, so it never receives one. Applied at I-RAM 60.
+
+*Result:* the stores moved from `ptr 0x00` to `ptr 0x05` and **still read zero** — but it
+revealed the useful number:
+
+```
+   EPILOGUE POINTER WALK:  60:46 61:46 ... 79:46   80:45 81:45   82:00
+```
+
+★ **The epilogue ARRIVES with the pointer at `0x46` and holds it across the whole block.**
+The bodies' live cells are `0x47`, `0x48`, `0x4B`, `0x4C`, `0x4D` — the pointer parks
+exactly **one below** the first of them. The natural arrival is right; the rebase was
+wrong, and it is **withdrawn**.
+
+**Speculation B — the off-by-one.** `+1` at the epilogue entry, putting the pointer on
+`0x47`, a cell with 3.1 M non-zero writes.
+
+*Result:* **no change.** Every store still reads zero.
+
+### 11.1 What that rules out, and the stop
+
+⛔ **The epilogue is not merely mis-aimed by one.** Reading a cell that demonstrably holds
+data still yields zero, which leaves two possibilities the current instruments cannot
+separate:
+
+1. **The epilogue runs BEFORE the bodies deposit** in the frame's execution order, so the
+   cells are empty *at that moment* even though they are full later; or
+2. **the value it needs is not in D-RAM at all** — it is in a register or latch the model
+   does not connect.
+
+★ **Two speculations in a row that a measurement cannot separate is the signal to stop.**
+Adding a third would make the next contradiction unattributable, which is the failure mode
+this register exists to prevent — and the session has already demonstrated the cost of
+pressing on (§3.4's DC constant, §3.10's phantom overflow).
+
+### 11.2 The one instrument that would settle it
+
+**A time-ordered trace of a single frame** — slot index, pointer, and the value at that
+pointer, in execution order — rather than the per-slot maxima used throughout this session.
+Every wrong turn today (§3.9's overflow, §3.11's slot-50, §3.12's boundary) came from
+reading a *maximum* as if it were a *sequence*. The frame is 285 slots; one frame's trace
+is 285 lines and would answer possibility 1 outright.
