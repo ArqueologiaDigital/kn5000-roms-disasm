@@ -2516,3 +2516,70 @@ controls were computed in. Re-running them would have measured agreement I could
 off the source — and would have been the fourth instrument this month that could not fail.
 
 Evidence grade: **DOCUMENTED (K4, FORCED)** — pre-existing, independent of this session.
+
+## 40. What enables the multiply — the LATCH is real, the reading is NOT adopted
+
+**2026-07-28.** §39 localised the last guess: the core gates the multiply on bit 23, which
+`dsp_disasm.py` says is *"CURSOR-FETCH enable (**NOT multiply-enable**)"*.
+
+### The architectural clue was already in the device
+
+```cpp
+u32 m_k, m_l;           // multiplier input latches
+```
+
+`m_k` is loaded from `C-RAM[cursor]` inside the fetch block — **and then never read**. The
+multiply uses the freshly-read `coef` instead. So the device declares a latched-coefficient
+MAC and then bypasses its own latch. That is exactly the shape "bit 23 is not
+multiply-enable" describes: **bit 23 RELOADS K; the multiplier runs on whatever K holds.**
+
+Implemented as mask bit 4: `P = K × L` on every word that is not `f31 == HOLD`, with bit 23
+reloading K and `class4 == 0xA` still the only cursor advance.
+
+### Result — the epilogue accumulates for the FIRST TIME
+
+```
+  iw  word           acc     P    MUL
+  65  200.1.8F.1C1     0    94     Y
+  66  000.1.8C.107    94    94     Y
+  68  092.1.8C.19B   188     0     Y     <- acc has ACCUMULATED, 94 -> 188
+  72  000.1.06.087     0     0     Y     <- LOAD acc <- P, and P is 0
+  73  E30.C.00.404     0                 <- presents zero
+```
+
+★ Every previous section had `acc = 0` at all 22 epilogue slots. It is now non-zero and
+*adding*. **And the presentation still reads zero for a new and sharply-localised reason:**
+`w72` (`000.1.06.087`, `f31 = 0` ⇒ LOAD acc←P) **zeroes the accumulator one word before
+`w73` presents it**, because P is 0 at that moment.
+
+### ⛔ NOT ADOPTED — it fails the honesty test
+
+```
+tA at the output stage   504  ->  5      (mask 0xC -> 0x1C)
+presentations non-zero     0  ->  0
+```
+
+The body's own output dropped by **two orders of magnitude**, and there is no control that
+says which value is right. A reading that makes the epilogue livelier while shrinking the
+body's result 100-fold, with the audible outcome unchanged, is not evidence of anything —
+it is the "plausible-but-wrong" this device exists to refuse. **Default stays `0xC`; bit 4
+is off and available as a switch.**
+
+### What IS established
+
+1. ★ **`m_k`/`m_l` are declared multiplier input latches and the multiply bypasses them.**
+   That is a real inconsistency in the core, independent of which reading is right, and it
+   is the mechanism by which "bit 23 is not multiply-enable" could be true.
+2. ★★ **`w72` is the immediate blocker at the presentation**, whatever gates the multiply.
+   It performs LOAD acc←P with P = 0 in the slot before `w73`. Under *every* configuration
+   tried, `w73` presents whatever `w72` left, and `w72` leaves zero.
+3. The multiply-enable question is **not settled**: latched-K is one reading, it is
+   untested against any control, and the LFO/biquad instruments that could discriminate it
+   live in the offline model, which does not implement a multiply gate at all.
+
+⇒ The successor question is now `w72`, not the multiplier: **what should `w72` load, and
+from where?** It is one word, in a known slot, with a known operation — a far smaller target
+than "what enables the multiply".
+
+Evidence grade: **MEASURED** for the latch inconsistency and for `w72`'s effect;
+**NOT ADOPTED / UNCONTROLLED** for the latched-K multiply itself.
