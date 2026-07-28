@@ -52,6 +52,8 @@ it cannot be assumed.
 | 11 | `000.6.18.4CD`, `000.6.20.407` | addressing only | **INFERRED** — the disassembler already annotates a table-lookup idiom; no table is modelled |
 | 12 | `980.5.20.402`, `A00.0.00.015`, `A00.0.00.041` | no side effect | **PLAIN GUESS** ×3 |
 | 13 | ★ `E30.C.00.404` (w73), `A3C.D.9F.287` (w78) | **present `acc` to the unit's output latch**, unit from `addr8` bit 7 | **PART-MEASURED / PLACEHOLDER** — see §3 |
+| 14 | ★★ **the external delay DRAM (IC309)** | address = `descriptor cell + frame counter`, direction from `addr8`, 24→16-bit truncation | **PART-MEASURED** — see §3.1 |
+| 15 | `SRC 0x0B` | the delay-DRAM data register | **PLAIN GUESS** — a delay read must land somewhere, and `0x0B` is the only source code otherwise unaccounted for |
 
 ## 3. ⛔ The load-bearing guess, named
 
@@ -75,6 +77,28 @@ candidates.
 comparison** — one IC311 site each, in their own form, nothing to compare against. So
 this is a placeholder that lets the frame close, and **any audio the device now
 produces is shaped by a guess about how the chip presents its output.**
+
+### 3.1 ★★ The delay DRAM — declared, mapped, and never touched until now
+
+`AS_DELAY` has existed as an address space and been **mapped by the driver** all along,
+and the device **never read or wrote it once** — grep found zero accesses.
+[`dark-words.md`](dark-words.md) §5.3 named exactly this as the one failure
+*"structurally out of reach of ALU decoding"*, 48.8 % of the dark set: **a delay line
+that is never written cannot produce an echo**, so delay, reverb, chorus and flanger
+were impossible however correct the ALU became.
+
+**MEASURED** — the direction field (`addr8` `0x20`/`0x30` = READ, `0x60` = WRITE;
+round 5 item D, FORCED by two independent routes); the region split (unit 0 below
+`0x8000`, unit 1 above; round 4 §2, over 486 + 384 cells); and the descriptor cells
+themselves, in D-RAM at `m_dsc`.
+
+**GUESSED** — that the *N*th delay word of a frame consumes the *N*th descriptor cell;
+that the line rotates by one cell per frame; and the 24→16-bit truncation.
+
+★ The rotation guess has the best support of the three: **SINGLE DELAY's 501/500 and
+NO OPERATION's 4410 = exactly 100.000 ms at 44.1 kHz both fall out of it.** The
+cell-pairing guess is the weakest and is where a contradiction is most likely to
+surface first.
 
 ## 4. How to use this list
 
