@@ -2340,3 +2340,56 @@ symptom attached to it.
 
 Evidence grade: **MEASURED** — the by-word census, and the suppressing/report-only A/B
 showing an identical input audit.
+
+## 37. The frame-closure drift — there is nothing to fix. It is a BOOT TRANSIENT.
+
+**2026-07-28.** §36 closed by naming the frame-closure residue "the better-evidenced
+target". Measured it before touching it, and **that characterisation was wrong**.
+
+The device reported `min -1  max +116  (VARIES between frames)` and `frames that closed
+1 560 959 of 1 586 880` — which reads like a persistent 1.63 % failure. It is not. Adding a
+residue histogram and a time placement:
+
+```
+RESIDUE HISTOGRAM   +0:1 560 959   -1:21 120   +5:2 880   +6:960   +7:960   +116:1
+non-closing over time (16 buckets)   0  25 920  1  0 0 0 0 0 0 0 0 0 0 0 0 0
+first non-closing frame 204 482,  last 264 002,  longest consecutive run 21 120
+```
+
+★★★ **Every non-closing frame lies between frame 204 482 and 264 002** — one contiguous
+window of ~60 000 frames, ≈ 4.6 s to 6.0 s of emulated audio, i.e. while the host is still
+uploading programs. Fifteen of sixteen time buckets are **empty**. From frame 264 003 to
+the end of the run, **all 1 560 959 measured frames close with residue exactly 0.**
+
+The residues are not noise either: `-1` occurs 21 120 times in **one contiguous run**, and
+`+5`/`+6`/`+7` in small blocks. Those are transient programs, each internally consistent
+with its own walk — exactly what a sequence of partially-uploaded or short-lived images
+looks like.
+
+### Consequences
+
+1. **There is no steady-state pointer bug.** The run-wide `min/max … VARIES` line mixes the
+   boot window into the census and makes a settled quantity look broken — the same trap
+   [[check-the-handover-first]] warns about (*"compute the null and the calibration before
+   interpreting a table"*). Annotated in the device so the next pass does not chase it.
+2. ★ **§36's second symptom dissolves with it.** The 1.69 % of frames whose `X ≠ 0x45` are
+   the *same* frames, so the input-window spread that produced the 609 residue is this
+   transient and nothing else. Both observations have one cause, and it is boot.
+3. **The honest closure figure is 100 %**, not 98.4 %: over the whole steady state the
+   pointer returns exactly, which makes the per-unit D-RAM base `0x05 | unit<<7` look
+   considerably better supported than "a residue of 0 is its strongest live consequence"
+   suggested.
+
+### What I did not do
+
+No fix, because there is no defect to fix. Writing one would have been a change justified
+by a statistic I had not decomposed — and the only honest deliverable here is the
+decomposition plus the retraction of my own framing.
+
+⚠ Still genuinely open, and unaffected: **210 241 frames end on the 384-slot CAP and 26 880
+by I-RAM OVERRUN** (13 % of all frames), which are excluded from the closure census
+entirely. Those are concentrated at boot too on the face of it, but that has **not** been
+measured, and it is the real remaining question in this area.
+
+Evidence grade: **MEASURED** (residue histogram + time buckets over 1 824 001 frames);
+**RETRACTION** of §36's characterisation.
