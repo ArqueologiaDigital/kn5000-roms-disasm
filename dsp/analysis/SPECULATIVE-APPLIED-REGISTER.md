@@ -950,3 +950,56 @@ pointer, in execution order — rather than the per-slot maxima used throughout 
 Every wrong turn today (§3.9's overflow, §3.11's slot-50, §3.12's boundary) came from
 reading a *maximum* as if it were a *sequence*. The frame is 285 slots; one frame's trace
 is 285 lines and would answer possibility 1 outright.
+
+## 12. ★★★ THE TIME-ORDERED FRAME TRACE — and it settles the question in one read
+
+§11.2 asked for a trace in *execution order* rather than per-slot maxima. Built, armed on
+the first frame carrying a non-zero input sample, 285 slots.
+
+### 12.1 The frame's real execution order
+
+```
+   n=  0.. 49   kernel     (I-RAM 0..49)
+   n= 50..119   body 0
+   n=120..129   kernel     (I-RAM 50..59)
+   n=130..262   body 1     (I-RAM 200..332 -- the 133-word reverb)
+   n=263..284   EPILOGUE   (I-RAM 60..82)
+```
+
+★ **The epilogue runs LAST, after both bodies.** ⛔ **§11.1's possibility 1 is REFUTED** —
+the cells are full when it executes; it is not reading them early.
+
+### 12.2 ⛔ And the epilogue is not mis-aimed either
+
+Every epilogue slot runs with `dp = 0x46`, `mem[dp] = 0`, `acc = 0`, `P = 0`. Body 1 *ends*
+that way too (n=255..262 all zero). **The epilogue is handed nothing.** Both §11
+speculations were treating a symptom.
+
+### 12.3 ★★★ Where the accumulator actually dies — one word, and it is anchored
+
+```
+   n=231  iw=301  08801602DA   acc = 192 414 482 432    <- last live slot in the frame
+   n=232  iw=302  0000A00695   acc = 0                  <- DIES HERE
+```
+
+`I-RAM 302` = `000.A.00.695`: class A (coefficient consumer), **`SRC 0x1A` = tempB
+(ANCHORED)**, `ACT 0x15` (ANCHORED), and **`f31 = 0` = `HI_ACC_LOAD`, i.e. `acc ← P`**. It
+discards the accumulator and takes the product register — and `P` is **0**.
+
+★ Being a class-A multiply with `SRC 0x1A`, `P = coef × tempB`. So **either the coefficient
+at that cursor position or tempB is empty**, and both fields of the word are otherwise
+anchored: there is no undecoded semantics here at all.
+
+⛔ Which of the two is the defect is **not** settled by this trace — it records `acc` and
+`P` but not `tempB` or the cursor. That is a one-line extension, not a new instrument.
+
+### 12.4 What the instrument was worth
+
+Every wrong turn of this session came from reading a per-slot **maximum** as a
+**sequence**: the "overflow" that was a sign bit (§3.10), the slot-50 boundary that was an
+`ldptr` doing nothing (§3.12), and both §11 pointer speculations. **The trace answered in
+one read what four separate speculations could not**, and it refuted the framing of the
+last two.
+
+★ 104 of 285 slots carry a non-zero accumulator. The frame is more alive than any previous
+measurement suggested — and it dies at exactly one anchored word.
