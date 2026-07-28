@@ -2191,3 +2191,86 @@ input in place, not a claim about the hardware.
 
 Evidence grade: **MEASURED** (slot histogram, field decode, the D-RAM census) for 1–3;
 **REFUTATION** for the round-4 tie-break.
+
+## 35. ★★★ RE-ADJUDICATED: the audio enters EXACTLY where the model said. §34 is retracted.
+
+**2026-07-28.** §34 concluded that the modelling assumption was wrong — that cells X+2/X+5
+are ordinary scratch and "w4 reads what w3 just wrote". **That is retracted.** The
+adjudication went the other way, and the answer was in `K6_INPUT_STAGE`, the twelve-word
+table the core already carries.
+
+### The documented walk says the stores never touch the latches
+
+```
+w0  ST mem[X+0], p+1        w6  END BLOCK A, read mem[X+4], p+0
+w1  C-format, no effect     w7  ST mem[X+4], p+1
+w2  read mem[X+1], p+2      w8  *** PORT READ B *** mem[X+5], p+1
+w3  ST mem[p] (= X+3), p-1  w9  ST mem[X+6], p-1
+w4  *** PORT READ A *** mem[X+2], p+2      w10 read mem[X+5] again, p+1
+w5  read mem[X+4], p+0                     w11 END BLOCK B, read mem[X+6], p+1
+```
+
+★ **w3 stores at X+3 and w7 at X+4.** Neither goes near X+2 or X+5. And our pointer trace
+matches the table at **all twelve words**:
+
+```
+measured  w0:46 w1:46 w2:48 w3:47 w4:49 w5:49 w6:49 w7:4A w8:4B w9:4A w10:4B w11:4C
+expected  w0:46 w1:46 w2:48 w3:47 w4:49 w5:49 w6:49 w7:4A w8:4B w9:4A w10:4B w11:4C
+```
+
+So the walk was never wrong, the offsets were never wrong, and the input window is exactly
+where it was said to be. **The defect was ours.**
+
+### The defect: the bit-4 store was performed TWICE
+
+The twelve input-stage words execute as
+
+```cpp
+exec_addressing_only(word, true);   // pointer, STORE, cursor, latch capture
+exec_alu_k6(word);                  // "the ALU, without re-walking the pointer"
+```
+
+`exec_addressing_only()` **already performs the bit-4 store**, at `cell` — the pointer
+*before* its post-increment, which is correct. `exec_alu()` then performed it **a second
+time** at `stdest = m_dp`, i.e. at the pointer the first call had already advanced: **one
+cell late.**
+
+★★★ And one cell late is catastrophic *precisely here*, because the walk is built so the
+post-increment parks the pointer on the cell the **next** word reads. w3's late store lands
+on X+2 and w7's on X+5 — which is exactly what makes them the input latches. The bug could
+not have picked a worse pair of cells if it had tried.
+
+### Result
+
+```
+                                  before        after
+w3 stores onto a latch          1 597 440         0
+w7 stores onto a latch          1 597 440         0
+total suppressed by the guard   3 198 369       609   (0.04 %)
+value read == value latched     1 597 440 / 0 MISMATCHED   (unchanged, now WITHOUT the guard doing the work)
+peak |sample| read               0x4FD900 = 5 232 896 = 20 441 x 256  ✓
+frames trapped                                   0 (0.00 %)
+pointer walk                                 identical
+```
+
+§33's guard is no longer load-bearing: it went from suppressing 3 198 369 stores to 609,
+and those come from three epilogue words (iw61, iw64, iw71) — a separate, tiny residue for
+another pass. **The guard is now a genuine regression alarm rather than a patch.**
+
+### What this corrects
+
+| claim | status |
+|---|---|
+| §34: "cells X+2/X+5 are ordinary scratch; the modelling assumption is wrong" | ⛔ **RETRACTED** |
+| §34: "w4 reads what w3 just wrote" | ⛔ **RETRACTED** — w3 writes X+3 |
+| §34: "the store is not a decode error" | ✔ correct, but it was an *execution* error |
+| `IN_LATCH_L_OFF = 2` / `IN_LATCH_R_OFF = 5`, marked FORCED | ✔ **VINDICATED** |
+| the round-4 tie-break test (§34) | still a refutation, and now clearly a false lead |
+
+★ Three sections (§§33–35) were spent on a defect that the project's own twelve-word table
+described precisely enough to have caught immediately — the *fourth* time today the answer
+was already written down ([[check-the-handover-first]]). The difference is that this time
+the table also **vindicated** the model instead of overturning it.
+
+Evidence grade: **MEASURED** — pointer walk against the documented table at 12/12 words,
+and the store counts before/after.
