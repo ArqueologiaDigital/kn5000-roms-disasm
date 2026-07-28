@@ -2274,3 +2274,69 @@ the table also **vindicated** the model instead of overturning it.
 
 Evidence grade: **MEASURED** — pointer walk against the documented table at 12/12 words,
 and the store counts before/after.
+
+## 36. The 609 residue — the GUARD was the defect, not the stores
+
+**2026-07-28.** §35 left 609 stores (0.04 % of frames) still reaching the input window, from
+`iw61`, `iw64`, `iw71` and `iw320`. Censused them by word rather than trusting the slot
+attribution — which was right to do, since the slot histogram and the "last offender"
+disagreed:
+
+```
+word 012.1.8D.05B  iw61   mode 1  dest 8D  x203
+word 011.9.0F.446  iw71   mode 1  dest 0F  x201
+word 011.9.0E.445  iw64   mode 1  dest 0E  x203
+word 090.2.FB.40E  iw320  mode 2  dest 53  x2
+```
+
+★ **Not one destination is a latch cell.** They are `0x8D`, `0x0F`, `0x0E`, `0x53` — named
+registers. Three of the four are **mode-1** stores, which aim at `addr8` explicitly and
+cannot "wander" onto anything.
+
+They matched the guard only because **`m_in_addr` had drifted on top of them.** `X` is
+`m_dp` at frame start; it is `0x45` on 98.31 % of frames, and in the other **1.69 %** the
+input window lands wherever the pointer failed to return to — sometimes on `0x8D` or `0x0E`.
+
+⇒ **The residue is a symptom of frame-closure failure** (936 959 of 962 880 frames close),
+not a store defect. And §33's guard was *suppressing 607 legitimate register writes* to
+fake-fix 0.04 % of frames — a real corruption traded for a cosmetic one.
+
+### Fix: the guard stops suppressing
+
+```
+                              suppressing        report-only
+value read == value latched   1 597 440 / 0      1 597 440 / 0      ← unchanged
+peak |sample| read              0x4FD900           0x4FD900
+frames trapped                    0 (0.00 %)         0 (0.00 %)
+legitimate register writes       607 CORRUPTED      all preserved
+```
+
+★★★ **Allowing the 609 stores changes the input audit by nothing at all** — still 100 %
+intact, 0 mismatches. That is the proof they were never clobbering a read: the collisions
+happen in frames and at moments where nothing depends on them. The suppression was pure
+cost.
+
+The counter stays as a **regression alarm** for §35: if a structural clobber ever returns,
+it is reported rather than silently corrupting the input.
+
+### Where the input question now stands — CLOSED
+
+```
+§31  the input "rails"                 -> self-inflicted, §28's ACCB pair
+§32  which row saturates               -> ACCB, coeff_fetch exonerated
+§33  latch corruption                  -> guarded, input 100 % (band-aid)
+§34  "the model is wrong"              -> RETRACTED
+§35  the real cause                    -> the bit-4 store ran TWICE on the K6 path
+§36  the 609 residue                   -> the guard itself; now report-only
+```
+
+**The audio enters at X+2 and X+5, read by w4 and w8, exactly as `K6_INPUT_STAGE` says.**
+The offsets marked FORCED are vindicated, no band-aid is load-bearing, and the input is
+intact on 100 % of frames with 0 traps.
+
+★ The one genuine defect this exposed and did NOT fix: **X drifts on 1.69 % of frames**,
+i.e. the frame-closure residue, which is a pre-existing open item and now has a second
+symptom attached to it.
+
+Evidence grade: **MEASURED** — the by-word census, and the suppressing/report-only A/B
+showing an identical input audit.
