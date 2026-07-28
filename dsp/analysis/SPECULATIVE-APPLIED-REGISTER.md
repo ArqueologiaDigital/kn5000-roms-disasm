@@ -3058,3 +3058,82 @@ consumer in the program, our decode has no route for it.
 Evidence grade: **MEASURED** (the landed/collision counts, the consumption ratio, the
 slot-0 profile). **The runaway is the headline** and it retires four sections of
 downstream chasing.
+
+## 51. The runaway's ROOT CAUSE: the body never fetches a real coefficient
+
+**2026-07-28.** Before fixing the runaway, two corrections to §50 — both from checking my
+own instrument rather than trusting it.
+
+**(a) It is not an accumulator runaway.** §50 read `slot 0 peak |acc| = 902 153 722 877`
+from the ACCUMULATOR PROFILE and called it a cross-frame runaway. The profile is a **per-slot
+maximum over the whole run, not a time series** — the same misreading this project has
+already recorded once ("slot 50 zeroes the accumulator"). The actual trace shows the
+accumulator **is** cleared inside the frame (slot 3: `acc = 0`).
+
+**(b) The rail is in the STATE MEMORY.**
+
+```
+slot  8   mem[dp] = 8 388 607 = 0x7FFFFF      <- a D-RAM state cell, at the rail
+slot 11   mem[dp] = 8 388 352
+```
+
+The reverb's state cells have saturated, not the accumulator.
+
+**(c) The host framing is fine.** The cmd-0x02 payload is 90 bytes after the `01 61`
+prefix = exactly 30 × 3, so the 24-bit grouping is self-consistent; and the two tables
+together span `0x0000..0x7FFF` (28 steps of 0x4BE) and `0x8000..0xFC00` (32 steps of
+0x400) — **the two halves of a 64 K space**, matching the per-unit delay regions. The
+descriptors are correct and correctly placed.
+
+### ★★★ And then the measurement that explains everything
+
+Which C-RAM cells does each region's cursor actually visit?
+
+```
+BODY      (slots 200-332)   0x50 .. 0x71      <- descriptors ONLY
+KERNEL    (slots   0- 59)   0x90 .. 0xA4      <- the real coefficients
+EPILOGUE  (slots  60- 82)   0x71, 0x90
+```
+
+★★★ **The body never fetches a real coefficient. Not one.** Every multiply in the reverb
+body takes its multiplicand from the descriptor table. And **cells `0xA5..0xB4` — sixteen
+real coefficients — are read by nobody at all.**
+
+That is the whole dilemma of §43-§50 in one line:
+
+| §44 bit 8 | what the body multiplies by | outcome |
+|---|---|---|
+| **off** | a descriptor read as Q0.23 ≈ 0.0066 | 10⁴ attenuation per frame, signal vanishes |
+| **on** | nothing | no damping, state memory saturates, DC |
+
+**Neither is a coefficient, so neither can be right.** The loop has no gain term because the
+body has no gains.
+
+### What this makes the next question
+
+Not "how do I damp the loop" — that would be inventing a coefficient — but **where does the
+body get its multiplicands?** Three candidates, none tested:
+
+1. **A second cursor.** Our model has ONE cursor; a machine that reads a descriptor *and* a
+   coefficient per stage needs two, and `0xA5..0xB4` being unread is what that would look
+   like.
+2. **The descriptor word carries both** — an address in one field, a gain in another. The
+   descriptors use only bits [15:0] of a 24-bit cell; **bits [23:16] are always zero**,
+   which is either wasted space or a field we have not decoded.
+3. **The body's cursor base is wrong** and should reach `0x90+` like the kernel. Against
+   this: the program's own three `ldptr` loads name 0x70 and 0x50 for the bodies, and the
+   descriptor contents match the per-unit regions exactly.
+
+★ Candidate 2 is the cheapest to test and the most likely: a 24-bit cell holding a 16-bit
+address has 8 bits spare, and every descriptor in both tables has them zero.
+
+### ⛔ Stopping the patch loop, deliberately
+
+Five successive changes — ACCB, latched-K, level-select, delay descriptors, the read
+pipeline — each well-motivated, each producing **bit-identical output**. That is not bad
+luck; it is the signature of working downstream of an undiagnosed defect. The slot-0
+profile and the cursor census, each one line, would have redirected the last four turns.
+**The next step should be a decode question answered from the ROM, not another switch.**
+
+Evidence grade: **MEASURED** (the cursor census per region, the state-cell rail, the
+transfer framing); **RETRACTION** of §50's cross-frame-runaway framing.
