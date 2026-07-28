@@ -1260,3 +1260,58 @@ pointer. The parallel is strong and the two addresses meet, but it remains a par
    presentations read 0x8C / 0x8D                     ✓  fire per frame, values 0
    tone generator mixes                               ✗
 ```
+
+## 20. The 0x8F → 0x8C link — applied, no effect, and the blocker is back to `SRC 0x02/0x03/0x04`
+
+**Row 28, the mode-1 register READ**, applied as the mirror of row 27's mode-1 store: a
+register-file word names its register in `addr8`, and one addressing mode addressing
+differently to read than to write would be the odd claim.
+
+**Measured effect: none.** `0x8C` stays empty and every output slot stays zero.
+
+★ **The reason is exact.** The link `0x8F → 0x8C` runs through two words:
+
+```
+   iw65  200.1.8F.1C1   SRC 0x07, ACT 0x01   reads 0x8F -- now LIVE
+   iw66  000.1.8C.107   SRC 0x04, ACT 0x07   stores into 0x8C
+```
+
+`iw65` now reads the live register, but its **`ACT 0x01` has no handler**, so nothing
+captures the value. `iw66` then stores **`L = 0`**, because **`SRC 0x04` has no reading**.
+
+⛔ **So the chain is blocked by the same two unknowns §9 identified** — and row 28 does not
+change that. It is applied because the symmetry argument stands on its own, not because it
+helped.
+
+### 20.1 ★ But one thing HAS changed, and it matters
+
+§9 closed with: *"an acceptance test on a source that reads an empty cell cannot
+discriminate anything"*. **`0x8F` is no longer empty** — it carries body 1's result on
+1 559 999 frames of 1 560 839.
+
+★★ **`SRC 0x02/0x03/0x04` are now testable.** A reading that routes `iw66`'s source to a
+live register will propagate a value to `0x8C`; one that does not, will not. The
+discriminating experiment §9 could not run is now runnable, and the same applies to
+`ACT 0x01`.
+
+**That is the first time in this investigation that those codes have had a live source to be
+tested against.**
+
+## 21. Final chain
+
+```
+   audio enters                                    ✓
+   kernel computes                                 ✓
+   both bodies run, ladder accumulates             ✓  126/133 slots
+   body 1 stores its result to register 0x8F       ✓  1 559 999 frames
+   epilogue iw65 READS 0x8F                        ✓  (row 28)
+   ──────────────────────────────────────────────────────────────────
+   ✗ ACT 0x01 has no handler; SRC 0x04 has no reading  ✗  two codes
+   ──────────────────────────────────────────────────────────────────
+   iw66 stores 0 into 0x8C                         ✓ cadence, ✗ value
+   presentations read 0x8C/0x8D                    ✓ cadence, ✗ value
+   tone generator mixes                            ✗
+```
+
+★ **Two named codes stand between a live producer and a live consumer**, with a live
+register between them to test against.
