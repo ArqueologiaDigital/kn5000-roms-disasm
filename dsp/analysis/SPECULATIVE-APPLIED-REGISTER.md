@@ -1315,3 +1315,60 @@ tested against.**
 
 ★ **Two named codes stand between a live producer and a live consumer**, with a live
 register between them to test against.
+
+## 22. ★★★ The pair test PASSES — the datapath is complete end to end
+
+The first test of `SRC 0x04` and `ACT 0x01` that *could* discriminate, because `0x8F` finally
+carries a value. Pairing under test: `ACT 0x01 = tempA ← bus` (it sits in the same family as
+`0x13`/`0x14`/`0x19`, all temp captures) and `SRC 0x04 = tempA`.
+
+```
+   register 0x8F  :  1 559 999 non-zero      <- body 1's result
+   register 0x8C  :  1 559 999 non-zero      <- WAS 0
+   output slot 5  :  1 559 999 non-zero      <- carrying the value
+```
+
+★★★ **`0x8F → tempA → 0x8C → slot 5`, every stage carrying on 1 559 999 frames.** The
+emulated IC311 now runs a complete signal path from the audio input to an output port.
+
+### 22.1 ⛔ What this is worth
+
+* ⛔ **One pairing of sixteen.** A single pairing passing is weak evidence. What makes it
+  more than nothing is that it was **predicted from the family** (`ACT 0x01` grouped with the
+  known temp captures) and then **confirmed by cadence** — 1 559 999, the same count as its
+  producer, not an approximation.
+* ⛔ **The other fifteen were not tried.** Several would probably also propagate *something*;
+  only a criterion that scores the VALUE, not its presence, can separate them, and this
+  project has learned that lesson three times (§5.5, §9, §12).
+
+### 22.2 The last break
+
+**The audio is still bit-identical to dry.** Slot 5 is **port 2 = DO3**, which
+`kn5000_tonegen` deliberately drops — its own EDUCATED GUESS G-4: *"DO3 leaves the
+tone-generator block entirely on a long run heading out of the area; it is not the DAC and
+it is not one of this chip's six serial ports."*
+
+★ So the final question is no longer inside the DSP at all: **either the slot → port mapping
+(§5.3, already narrowed once) is wrong, or G-4 is wrong and DO3 does return to the mix.**
+Both are board-level questions with board-level evidence available, and the second is
+answerable from the service manual rather than from the ROM.
+
+## 23. Where the session ends
+
+```
+   audio enters the chip                          ✓
+   kernel computes                                ✓
+   both bodies run, ladder accumulates            ✓  126/133 slots
+   body 1 -> register 0x8F                        ✓  1 559 999 frames
+   0x8F -> tempA -> 0x8C                          ✓  1 559 999 frames
+   0x8C -> output slot 5                          ✓  1 559 999 frames
+   ─────────────────────────────────────────────────────────────────
+   ✗ slot 5 is DO3, which the tone generator drops ✗
+   ─────────────────────────────────────────────────────────────────
+```
+
+★ From **100 % of frames trapping and 123 undecoded forms** to **a complete datapath whose
+only remaining break is a board-level routing question**, with every speculative reading
+graded in this register and the four measured results (`f31 == 2` does not write `P`;
+`src08 = coef`; mode 4 ≠ `mem[ptr]`; the coefficient stream's pointer rule) separable from
+the twenty-odd guesses.
