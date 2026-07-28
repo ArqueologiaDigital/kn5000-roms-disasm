@@ -2583,3 +2583,73 @@ than "what enables the multiply".
 
 Evidence grade: **MEASURED** for the latch inconsistency and for `w72`'s effect;
 **NOT ADOPTED / UNCONTROLLED** for the latched-K multiply itself.
+
+## 41-42. ★★★ THE OUTPUT LEVEL WAS READ FROM THE WRONG MEMORY
+
+**2026-07-28.** §40 handed over "what should `w72` load, and from where?". `w72` is
+`000.1.06.087` and its `addr8` is **0x06** — the **unit-0 OUTPUT LEVEL**. Its unit-1 twin
+is `w77` (`addr8 = 0x86`). Chasing that pair produced a defect one level up.
+
+### The level was never applied. At all.
+
+`do_presentation()` reads the per-unit level and guards it:
+
+```cpp
+const u32 lvl = m_dram.read_dword(unit ? 0x86 : 0x06) & 0xffffff;
+if (lvl != 0) scaled = (scaled * s64(util::sext(lvl, 24))) >> 23;
+```
+
+Instrumented at the presentation: **`lvl` is `0x000000` on 100 % of frames, both units.**
+So the guard skipped the multiply every time and **the per-unit output level has never been
+applied in this emulator.**
+
+### Why: the host writes C-RAM, and only C-RAM
+
+★★★ There is exactly **one** host write path into this device, and it writes **`m_cram`**.
+There is **no host write to D-RAM anywhere in the core.** The per-unit output level is a
+host-programmed value ("the last four host actions of cold boot are `setvec unit1,#200` /
+`setvec unit0,#84` / `reg 0x06 <- +0.500000` / `reg 0x86 <- +0.183992`"), so reading
+**D-RAM**`[0x06]` read a cell the host can never touch.
+
+Corroboration, all independent:
+
+* Reading **C-RAM** instead: `unit0 = 0x2CCCCC` non-zero on **1 560 000** frames,
+  `unit1 = 0x006854` on **1 582 080** — against 0 and 0 from D-RAM.
+* The host's C-RAM write runs are `[0x00..0x13] [0x50..0x6D] [0x6E..0x8B] [0x90..0xAD]
+  [0xAE..0xB4]`. **`0x06` lies inside `[0x00..0x13]` and `0x86` inside `[0x6E..0x8B]`** —
+  both are host-written cells.
+* The kernel's cursor walk shows `0x400000` — exactly **+0.5** — living in C-RAM.
+
+Adopted as mask bit 6; **default is now `0x4C`.**
+
+### ⚠ What is NOT established
+
+The values read (`0x2CCCCC` ≈ 0.35, `0x006854` ≈ 0.0032) are **not** the cold-boot
+constants `+0.500000` / `+0.183992`. Two readings, not separated: the host reprograms the
+levels for the loaded effect between cold boot and frame 970 000 (likely — these are
+plausible reverb send levels), or the address mapping inside C-RAM is off. **The SPACE is
+established; the exact CELL is not.**
+
+### And a false lead recorded (§41)
+
+Before finding this I read the D-RAM census — `06: 0/1613627`, "written 1.6 M times, always
+zero" — and concluded `w72`/`w77` were *clobbering* the level, exactly as `w3`/`w7` clobbered
+the input latch. Built a guard (mask bit 5) to suppress those stores. ⛔ **It changed
+nothing**: the level was still `0x000000`, because nothing was ever *there* to protect. The
+census counts store *attempts*, and I read a symptom of the real defect as its cause. Bit 5
+is left off; the counter stays as an observer.
+
+### Where this leaves the output stage
+
+The level path is now correct, and the presentation **still writes zero** — because `acc`
+is 0 at `w73` (§40's `w72` LOAD acc←P with P = 0). Fixing the level could not have made
+sound on its own; it removes a second, independent defect that would have silently
+attenuated the result to nothing *even after* the accumulator is fixed.
+
+★ Two defects were stacked here: the accumulator arrives empty, **and** the level it would
+be scaled by was read from a memory the host cannot write. Only one of them was visible
+from the audio.
+
+Evidence grade: **MEASURED** — the single host write path, the D-RAM/C-RAM A/B at the
+presentation, and the host's own C-RAM write runs containing both addresses.
+**NOT ESTABLISHED**: the exact C-RAM cell. **REFUTATION**: §41's clobber theory.
