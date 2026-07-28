@@ -664,3 +664,38 @@ codes as a routing matrix would:
   *read* a source — a structural change to `exec_alu`, and the first thing to check
   afterwards is whether the presentation words (rows 13) become redundant, since they would
   then be doing the same job twice.
+
+### 5.5 APPLIED, and the double-count check — row 13 is retired
+
+The decode is wired: a class-1 register-file word with `SRC 0x01..0x06` writes the register
+named by `addr8` into output slot `SRC − 1` of `m_do[3][2]`.
+
+**The structure holds exactly.** Every one of the six slots is written **once per frame**:
+
+```
+   slot0 0/1 588 800   slot1 0/1 587 840   slot2 0/1 587 840
+   slot3 0/1 588 800   slot4 0/1 589 760   slot5 0/1 588 800
+```
+
+★ Six slots, six codes, one write each per frame, no slot missed and none written twice —
+the routing reading survives contact with the running machine.
+
+⛔ **But every write is ZERO**, because the registers they read — `0x85`, `0x8C`, `0x8D`,
+`0x06` — are empty. The effect bodies compute (slots 84..202 all live) but their results
+never reach the send registers.
+
+**The double-count check, run rather than reasoned:**
+
+```
+   row 13 ON vs OFF :  0 of 1 824 001 samples differ
+```
+
+★ **Row 13 is redundant and is retired.** Both it and the new slot writes target `m_do`, so
+they *would* have fought had either produced a value — the risk was real, it simply has not
+fired yet. And §5.3's decode says why row 13 was wrong in principle: the routing is done by
+the **class-1** words, so reading `w73`/`w78` (class C/D) as "present the accumulator" was a
+guess competing with the actual mechanism.
+
+**Net: one guessed row removed, one inferred row applied, and the open question moves one
+stage upstream** — from *"how does the epilogue present?"* (answered) to *"why do the
+bodies' results never reach the send registers?"*
