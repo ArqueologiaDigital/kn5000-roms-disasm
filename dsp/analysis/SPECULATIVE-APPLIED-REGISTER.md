@@ -263,6 +263,59 @@ words* rather than a corpus-wide search. It also explains, retrospectively, why:
 the *priority*: this is not one open item among many, it is the one that gates the entire
 audio path.
 
+### 3.6 ★★★ The K6 ALU decoded far enough to move signal — and the next wall named
+
+§3.5 showed the accumulator is zero at all 285 slots because the twelve K6 words return
+before the arithmetic. Decoding their `lo12` shows the block is **much less open than
+"ALU OPEN" suggests** — both fields are ANCHORED on five of them:
+
+```
+   iw6   400.A.00.419   SRC 0x10 acc   ACT 0x19   -- NOTHING refuses it
+   iw9   012.2.FF.1D5   SRC 0x07 mem   ACT 0x15   -- NOTHING refuses it
+   iw8   084.2.01.1C0   SRC 0x07 mem   ACT 0x00   -- refused ONLY by
+   iw2   084.2.02.680   SRC 0x1A tB    ACT 0x00      "f31 == 2 on class 2"
+   iw4   204.2.02.1CE   SRC 0x07 mem   ACT 0x0E      (class-8 restriction)
+```
+
+★ **`iw8` is "THE PORT READ of block B" and its ACTION is `0x00` = acc's input term ←
+bus.** Executing it hands the sample to the accumulator as `L << ACC_SHIFT`.
+
+⛔ **The one assumption**: that `HI_ACC_HOLD` (`f31 == 2`) means the same off class 8.
+`alu_decoded()`'s comment says it is *"ONLY **established** on class 8"* — established,
+not restricted — so this extends a proven reading to an untested class. **Row 18, a
+guess.**
+
+**Result — the accumulator comes alive:**
+
+```
+   slot  0.. 8 :  0
+   slot  9     : -423 322 663 648      <- the input ENTERS
+   slot 10     : -846 645 327 296
+   slot 11..20 :  493 613 037 846      <- carried intact (>> 16 = 7 531 937,
+                                          0.9x full scale -- correctly scaled)
+   slot 21     :  0                    <- ★ WIPED
+   slot 25..284:  0                    <- both effect bodies and the epilogue
+```
+
+### 3.6.1 The next wall, named
+
+```
+   iw 21 = 410.A.00.40E   class A (coefficient consumer)
+                          SRC 0x10 = the accumulator (ANCHORED)
+                          f31 = 0  = HI_ACC_LOAD  ->  acc <- P
+```
+
+★★★ **It computes `acc = coefficient × acc` — a gain stage — and wipes the signal
+because its coefficient reads ZERO.** That is exactly
+[`notes/dsp-k6-input-stage.md`](../../kn7000_mame/notes/dsp-k6-input-stage.md) §9.2's
+open item: *"the four input coefficients — values unknown, not merely unnamed."*
+
+**So the audio path is now blocked by a missing VALUE, not a missing semantics** — a very
+different and much narrower problem than anything before it. Either those coefficients
+arrive in a host transfer this device still discards, or they land at a cursor position
+the routing does not reach (§3.3 populated 112 of 256 cells; the kernel's cursor base is
+the obvious suspect).
+
 ## 4. How to use this list
 
 1. **Every contradiction found downstream should be checked against this table first.**
