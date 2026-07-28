@@ -1102,3 +1102,56 @@ order — are all present.
 column read as an operand). Every one was caught by the next measurement, and every one was
 mine rather than the device's. The trace is the right instrument; I have to read it more
 carefully than I have been.
+
+## 16. ★★★ The attenuation inside body 1 — `ACTION 0x00` was REPLACING the accumulator, not adding to it
+
+Read carefully this time, one 8-word motif at a time.
+
+**First, what is NOT wrong.** The store into `mem[0x46]` is faithful: `acc = 33 064 592`,
+`33 064 592 >> 16 = 504`, and `mem[0x46] = 504`. `acc_to_datum` is doing exactly its job.
+The accumulator simply *arrives* small.
+
+**The reverb's 8-word allpass motif ends in `104.2.00.000`** — `f31 = 2` (`HI_ACC_HOLD`),
+`SRC 0x00`, `ACT 0x00` — and it zeroed the accumulator at **every** stage:
+
+```
+   n=158  acc 192 414 482 432 -> 0        n=208  192 464 026 112 -> 0
+   n=166      192 414 491 392 -> 0        n=224  192 414 482 432 -> 0
+   n=174      192 414 482 432 -> 0        n=232  192 414 488 960 -> 0
+   n=182      192 414 482 432 -> 0        ... nine stages in all
+```
+
+★★★ **The cause is one expression:**
+
+```cpp
+   src_term = (act == LO_ACT_ACC_BUS) ? (L << ACC_SHIFT)
+                                      : (f31 == HI_ACC_LOAD ? 0 : m_acc);
+```
+
+When `ACTION 0x00` is present this returns **the bus ALONE, regardless of `hi12[3:1]`** — so
+a word that is simultaneously being told to **HOLD** the accumulator discards it. With
+`L = mem[ptr] = 0`, each ladder stage threw away everything the stage before it built.
+
+**The three operations are** `0` = LOAD (feedback cut), `1` = ADD, `2` = HOLD (keep the
+accumulator, no product). `ACTION 0x00` contributes the bus as an **extra term** to
+whichever applies — which is what this device's own DELTA table already says
+(*"hi12[3:1] == 1, act != 00: acc += P"*).
+
+### 16.1 Result, and the honest limit
+
+```
+   ladder stages that ZERO the accumulator :  9  ->  2
+   body-1 slots carrying a non-zero acc    : 114 -> 126  of 133
+```
+
+★ **Seven of the nine losing stages are fixed**, and the reverb now accumulates across most
+of its ladder.
+
+⛔ **But the delivered value did not move**: `acc` at the body's last slot is still
+33 064 592 and `mem[0x46]` is still 504. Two stages still zero, and whatever reaches the
+send cell is decided after them. **A real improvement to the datapath that is not yet an
+improvement to the output.**
+
+★ **For `f31 = 0` and `1` the behaviour is unchanged** — 0 still cuts the feedback, 1 still
+keeps it — so the biquad and LFO results are untouched. Only the HOLD case changes, and
+`alu_decoded()` admits that solely on class 8, so nothing in the shipping gate moves.
