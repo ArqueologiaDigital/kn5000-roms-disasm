@@ -43,7 +43,7 @@ it cannot be assumed.
 | 2 | mode 4 store target | `addr8`, not `mem[ptr]` | ★ **REFUTATION** of `ptr` — 3 fewer ROM constants in all 3 injection settings (§10.3, §14.3) |
 | 3 | `src08` | `coef` | ★ **MEASURED** — reproduces the LFO's ROM step exactly (§8.1) |
 | 4 | `lo12` bit 11 (alternate encoding) | **addressing only**, no ALU effect | ★★ **PROVEN** that it has no SRC/ACTION field (§9); that it does *nothing else* is a guess |
-| 5 | c-format | 13-bit immediate → `acc` | **PART-MEASURED** — `status()` already calls it a 13-bit immediate; the destination is 1 of 6 enumerated |
+| 5 | c-format | ~~13-bit immediate → `acc`~~ → a dedicated latch | ⛔ **`acc` REFUTED** — it was the sole source of a fake signal, §3.4 |
 | 6 | `hi12[3:1] > 2` | contributes no product | **PLAIN GUESS** — 1 of 4 enumerated (`f31hi = hold`) |
 | 7 | `ACT 0x01/0x08/0x0C/0x11/0x16` | capture into tempA | **PLAIN GUESS** ×5 |
 | 8 | `ACT 0x0D`, `ACT 0x0E` | capture into tempA | **PLAIN GUESS** — and §5.3/§6 show no context can discriminate them |
@@ -183,6 +183,44 @@ demonstrably in the cells the microcode reads, so **the remaining defect is in
 consumption, not routing** — the ALU is not multiplying by them. That is a cleanly
 separated next question, and `f2_prod = "skip"` (row 1) suppressing products on every
 `f31 == 2` word is the first suspect.
+
+### 3.4 ⛔ Rows 5 and 16 REFUTED — the "audible DSP" was my own immediate
+
+The A/B that made the chip "audible" was analysed properly and it is **not an effect**:
+
+```
+   wet samples at t = 24 s :  19488, 19488, 19488, 19488, ...
+   19488 on 96.8 % of all output samples, present from t ~ 4 s -- BEFORE any note
+   correlation(wet, dry)   :  -0.0018 at every lag from -600 to +600
+   rms wet / rms dry       :  13.3x
+```
+
+A **stuck DC constant**, unrelated to the input. DC is inaudible, which is exactly what
+the owner reported hearing.
+
+★ **And the constant identifies its own cause: 19488 × 256 = 4 988 928 = 2436 << 11**,
+which is precisely the shape of row 5's `m_acc = imm << 11`. Removing that one line:
+
+```
+   PRESENTATION WORDS: 3 175 680 executed, 0 wrote NON-ZERO, datum peak 0
+```
+
+⛔ **The only thing that ever reached the accumulator at the presentation word was my own
+c-format immediate.** Both rows fall:
+
+* **Row 5, `cfmt = "acc"` — REFUTED.** The destination was "1 of 6 enumerated"; this one
+  is eliminated. It parks in a dedicated latch now, which is honest about knowing nothing.
+* **Row 16, presenting the raw accumulator — REVERTED.** It did not make the chip
+  audible; it made a clobbered constant loud enough to clear the tone generator's `>> 8`.
+
+★ **What this leaves is the real problem, cleanly isolated:** the accumulator is **zero**
+at both presentation words. Nothing connects the body's computed result to the epilogue
+that presents it — the same shape as the reverb's "the loop carries zero", now measured
+in the device rather than the model.
+
+**This is what the strategy is for.** Seventeen rows of guesses produced one contradiction
+sharp enough to name its own cause from a single number, and the cost of being wrong was
+bounded because the register said which rows to suspect.
 
 ## 4. How to use this list
 
