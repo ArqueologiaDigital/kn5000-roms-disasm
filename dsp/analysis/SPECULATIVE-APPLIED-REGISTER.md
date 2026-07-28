@@ -1427,3 +1427,72 @@ Recorded in MAME at `src/devices/bus/technics/kn5000/hdae5000.cpp` (device note)
 `src/mame/matsushita/kn5000_tonegen.cpp` (G-4, promoted from EDUCATED GUESS to RESOLVED).
 Evidence grade: **MEASURED (external)** — schematics + manufacturer documentation,
 supplied by Felipe, whose hardware testimony outranks inference here.
+
+## 25. §24 OVERREACHED — the normal user path is EMPTY, and Felipe called it
+
+**2026-07-28.** Felipe's objection: DO3 may only be live when the HD-AE5000 is fitted,
+and in any case *"there's also the normal audio path that most users would [use], which
+is just the speakers of the KN5000 itself without the extension board."* Measured, and
+he is right on the point that matters.
+
+Two 25-second runs, DSPCFG = 3 (speculative), identical but for `-extension hdae5000`:
+
+```
+                        no extension                with hdae5000
+slot0  DO1 L      0 nonzero /   964 800        0 /   964 949
+slot1  DO1 R      0          /         0        0 /         0     <- NEVER WRITTEN
+slot2  DO2 L      0          /         0        0 /         0     <- NEVER WRITTEN
+slot3  DO2 R      0          /         0        0 /         0     <- NEVER WRITTEN
+slot4  DO3 L      0 nonzero /   965 760        0 /   965 909
+slot5  DO3 R  935 999       /   964 800   936 148 /   964 949
+```
+
+**Finding 1 — the extension board changes nothing.** The two columns are identical bar
+the 149-frame runtime difference. Our emulation gates nothing on board presence, so the
+HD-AE5000 slot is *not* currently a way to test the DO3 path. Felipe's hypothesis about
+real hardware is untouched by this; it simply is not modelled.
+
+**Finding 2 — ★ a user with no extension board gets NOTHING.** DO1 and DO2 are the main
+mix. Slot 0 is written every frame and is *always zero*; slots 1, 2 and 3 are never
+written at all. So the effect is inaudible on the speakers by construction — which is the
+normal configuration for almost every user.
+
+**Finding 3 — the one live output rides entirely on a guess.** `PRESENTATION WORDS: 0
+executed`: the class-C/D presentation path is `m_row13`, which is hard-`false` (RETIRED
+after the double-count check). The *only* live writer of any output is the class-1
+register-file selector rule, whose own comment reads: *"⛔ The slot->code MAPPING is
+untested — slot = SRC-1 in natural order is the obvious reading and nothing more."*
+
+**Finding 4 — the resulting pattern is internally implausible, which is evidence against
+the mapping.** DO2 receives nothing, ever; DO3's left channel is always zero while its
+right carries 97 % nonzero. A stereo effects output does not look like that.
+
+### What §24 got wrong
+
+§24 said *"the datapath is complete end to end"* and *"the main-mix silence must stop
+being cited as a contradiction."* Both go too far. The correct statement:
+
+> The datapath is complete **for one channel of one port**, delivered by an **explicitly
+> untested** slot mapping, onto the one port that is **not** in the main mix. The main-mix
+> silence is not explained by the DO3 discovery, because DO1/DO2 are not *excluded* — they
+> are **empty**.
+
+§24's board-level facts stand (DO3 → pin 62 → HD-AE5000; G-4 correct to exclude DO3).
+What does not stand is treating that as closure. **The main-mix silence goes back on the
+books as a live contradiction.**
+
+### The alternative worth testing
+
+There are exactly **three** ACT 0x1B (output-presentation) words, and the §5/§6.1
+adjudication pairs them with **SRC 0x01, 0x05, 0x06**. Three presentations, three serial
+output ports. Under `slot = SRC-1` those three scatter to DO1-L, DO3-L, DO3-R — leaving
+DO2 unwritten, exactly the anomaly observed. Under a **port** reading (`port = f(SRC)`,
+each presentation driving one stereo port) they would land one per port and put signal
+into the main mix.
+
+⚠ The note at the class-1 rule records that remapping onto ports 0/1 was *tried and
+reverted* because the wet was a ±1 LSB constant. That attempt predates the 96 dB
+presentation-shift fix, so it is worth re-running, not cited as a refutation.
+
+Evidence grade: **MEASURED** (the slot census, both configurations). The port-mapping
+alternative is **UNTESTED INFERENCE**.
