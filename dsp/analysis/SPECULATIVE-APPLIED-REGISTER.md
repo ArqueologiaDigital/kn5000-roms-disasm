@@ -2111,3 +2111,83 @@ value from §27) — so the output stage is at last responding to something real
 
 Evidence grade: **MEASURED, with a working control** (the DSPCFG A/B, the drift histogram,
 the per-read dump, and a 0-mismatch result against 1 565 758 before).
+
+## 34. Why that store targets the latch — the word is NAMED in our own notes
+
+**2026-07-28.** §33's guard was explicitly a band-aid. Chased the cause.
+
+### Which words, and when
+
+Recording the I-RAM slot of every suppressed store:
+
+```
+iw3:1597440   iw7:1597440   iw61:203  iw64:203  iw71:201  iw79:2880  iw320:2
+```
+
+★ **`w3` and `w7`, exactly once per frame each** — the words *immediately preceding* the
+header reads at `w4` and `w8`. Everything else is noise. So `w3`→`w4` and `w7`→`w8` are
+store-then-read pairs **on the same cell**: the microcode writes the cell that the input
+stage then reads.
+
+### The word decodes as a perfectly ordinary ring-buffer step
+
+`090.A.01.1C8` — `hi12` bit 4 **SET** (store), bit 7 **SET**, `f31 = 0`, `class4 = 0xA`
+⇒ mode 2, post-increment **+1**, `SRC = MEM`. Read `mem[ptr]`, write the accumulator back
+to `mem[ptr]`, advance one. Nothing is malformed; every rule in the core admits it.
+
+### ★★★ And the note already names it
+
+`upd6383d.h`'s round-4 adjudication, item 3, lists the three words guard 7 refuses:
+
+> *"the other three (`090.A.00.1D5`, `090.2.FB.40E`, **`090.A.01.1C8`**) are refused by
+> guard 7 — so settling the CONDITION changes the emulated machine by ZERO words."*
+
+**Our offender is one of the three, named by hand.** That is why DSPCFG = 1 is clean: the
+decoded core refuses it. And item 1 records that two suppression conditions survived
+round 4 —
+
+> *"exactly TWO survive — `b7 & f31 == 1` (this one) and `b7 & f31 != 2`. They differ only
+> where hi12[3:1] is outside {1,2}, **which alu_decoded() refuses anyway, so the choice
+> costs ZERO words.**"*
+
+Our word has `f31 = 0` — precisely the region where the two differ. ★ **The "costs zero
+words" clause is true of the decoded core and false of the speculative one**, which admits
+that whole region. So the round-4 tie is *live* here, and this is the first context in the
+project that can even see it.
+
+### The tie-break was testable — and it FAILED
+
+Prediction: under `!= 2` the stores are suppressed and the input survives. Measured:
+
+```
+                      f31 == 1 (round-4)      f31 != 2 (the rival)
+w3 / w7 stores          1 597 440 each          gone, as predicted
+w79 stores onto latch           2 880              1 600 927   ← moved here
+read == latched            31 682 / 1 597 440   31 682 / 1 597 440   unchanged
+```
+
+⛔ **The corruption relocated rather than disappeared.** Suppressing more stores also
+perturbs `alu_decoded()`'s executable set, so the pointer trajectory itself moves and a
+different word arrives at the latch. **The input stage does not settle the round-4 tie**:
+one rule does not save the input and the other does not uniquely destroy it. Reverted to
+the round-4 condition; §33's guard restored (input 100 % intact, 0 traps).
+
+### What this establishes
+
+1. **The store is not a decode error.** `w3`/`w7` are ordinary mode-2 read-modify-write
+   ring-buffer steps and every rule admits them.
+2. ★ **So the modelling assumption is what is wrong.** Cells `X+2`/`X+5` are ordinary
+   D-RAM that the program writes on its way past — the D-RAM write census shows **all 256
+   cells written**, with `0x46`, `0x4A`, `0x4B` among the busiest. Treating two of them as
+   the audio input port puts our deposit in the program's scratch.
+3. **`w4` reads what `w3` just wrote.** The inference "`w4` reads cell X+2, therefore the
+   input arrives at X+2" does not survive: X+2 has a writer one slot earlier.
+
+⇒ **The open question is no longer "why does the store target the latch" — it is "where
+does the audio actually enter the chip?"** The `+2`/`+5` offsets are marked FORCED from a
+pointer-rule walk of the twelve input words, and that walk now has a competing explanation.
+Until that is re-adjudicated the guard stays: it is a declared modelling patch holding the
+input in place, not a claim about the hardware.
+
+Evidence grade: **MEASURED** (slot histogram, field decode, the D-RAM census) for 1–3;
+**REFUTATION** for the round-4 tie-break.
