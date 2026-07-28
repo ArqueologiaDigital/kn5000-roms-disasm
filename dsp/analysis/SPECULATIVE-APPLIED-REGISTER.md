@@ -699,3 +699,48 @@ guess competing with the actual mechanism.
 **Net: one guessed row removed, one inferred row applied, and the open question moves one
 stage upstream** — from *"how does the epilogue present?"* (answered) to *"why do the
 bodies' results never reach the send registers?"*
+
+### 5.6 ★★★ Why the send registers are empty — producers and consumer disagree on the address
+
+A census of every D-RAM write, by cell, over a full run:
+
+```
+   written MILLIONS of times :  0x07  3 121 920 nonzero / 3 172 889
+                                0x13  1 560 960 nonzero / 3 122 968
+                                0x0C, 0x0E, 0x0F, 0x10..0x12, 0x17, 0x18  -- ALL ZERO
+   written ~1000 times       :  0x80..0x8F  -- all zero EXCEPT
+                                0x8E  3 840 nonzero / 7 741
+   the epilogue READS        :  0x85, 0x8C, 0x8D, 0x06   -- all zero
+```
+
+★★★ **Only three cells in the whole 256-cell D-RAM ever hold a non-zero value: `0x07`,
+`0x13` and `0x8E`.** And none of them is a cell the epilogue reads.
+
+**That fits the FORCED per-unit rebase** — this device applies `base = 0x05 | unit<<7`, so
+unit 0 works around `0x05+` and unit 1 around `0x85+`. The bodies duly deposit at **`0x07`**
+(unit 0, base + 2) and **`0x8E`** (unit 1, base + 9). The epilogue collects from `0x85` /
+`0x8C` / `0x8D`.
+
+⛔ **So the producers and the consumer disagree about where the send cells are**, and the
+gap is a small constant offset, not a missing computation. Either the bodies' deposit
+offsets are wrong, or the epilogue's `addr8` values are being applied without the same
+rebase the bodies get.
+
+★ **The second is the more likely and it is checkable**: the rebase is applied at the CALL,
+and the epilogue does not go through a CALL. If the epilogue's register-file `addr8` is a
+*rebased* address in the microcode's own terms, the device is reading it raw.
+
+★ Also worth recording: the `0x80..0x8F` cells are written **~1 000 times over 1.8 M
+frames** — roughly once per algorithm change, not once per frame. Whatever writes them is
+host/setup traffic, not the per-frame datapath. **The per-frame send store is not
+happening at all.**
+
+## 6. Handover
+
+**Live chain today:** audio enters the chip → kernel computes (slots 0–49) → both effect
+bodies run (slots 84–202, 119 of 119 live) → bodies deposit at `0x07` / `0x8E` → **✗ gap ✗**
+→ epilogue reads `0x85` / `0x8C` / `0x8D` (empty) → six output slots written once per frame
+(all zero) → tone generator mixes zero.
+
+**The one remaining break is that gap**, and it is an addressing question with a small
+answer space, not a semantics question.
