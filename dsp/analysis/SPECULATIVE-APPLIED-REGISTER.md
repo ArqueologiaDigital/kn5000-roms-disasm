@@ -2653,3 +2653,69 @@ from the audio.
 Evidence grade: **MEASURED** — the single host write path, the D-RAM/C-RAM A/B at the
 presentation, and the host's own C-RAM write runs containing both addresses.
 **NOT ESTABLISHED**: the exact C-RAM cell. **REFUTATION**: §41's clobber theory.
+
+## 43. The accumulator at w73 — the blocker becomes QUANTITATIVE
+
+**2026-07-28.** Implemented §42's implication as mask bit 7: `w72`/`w77` (class 1,
+`addr8 = 0x06`/`0x86`, the per-unit level cells) **load the coefficient and leave the
+accumulator alone**, rather than performing `f31 = 0 ⇒ LOAD acc←P` and destroying it.
+
+### It works — and it is not enough
+
+```
+  iw  word           acc     P    MUL
+  68  092.1.8C.19B   188     0     Y
+  71  C41.9.00.446   188     0     .
+  72  000.1.06.087   188     0     .     <- ★ was 0 here; the ladder now SURVIVES
+  73  E30.C.00.404     0     0     Y     <- w73 zeroes it ITSELF
+```
+
+★ `w72` no longer clears the accumulator. The epilogue's ladder reaches the presentation
+intact for the first time. **And `w73` then zeroes it anyway**, for a reason that is
+arithmetic rather than structural:
+
+`w73` is `SRC = ACC`, `f31 = 0`, and fetches a coefficient — i.e. `acc ← K × acc_to_datum(acc)`.
+`acc_to_datum()` shifts right by `ACC_SHIFT = 16`, and
+
+```
+    acc = 188      ->      188 >> 16  =  0
+```
+
+The accumulator is **too small to survive its own datum conversion**. Multiply by any level
+and it is still zero.
+
+### ⇒ The defect is now a MAGNITUDE, not a route
+
+Everything structural in the output stage is finally in place: the input arrives intact
+(§35), the multiply issues (§29), the presentation runs after the arithmetic (§29), the
+level is read from the memory the host writes (§42), and the ladder survives to `w73`
+(§43). What remains is one number.
+
+```
+   input entering the chip          5 232 896
+   accumulator at the presentation        188
+   the body's expected datum        ~2 936 000   (this core's own comment)
+```
+
+★★★ **The signal is ~4 orders of magnitude too small by the time it reaches the output
+stage.** That is the whole of the remaining silence, and it is a single, well-posed
+question: *where does the body lose 10⁴?*
+
+Two candidates already on record, neither tested:
+* the **latched-K multiply** (§40, mask bit 4) is what makes the epilogue accumulate at
+  all — but it also dropped the body's own `tA` from 504 to 5, a 100× loss it introduced.
+  So it may be buying the ladder at the cost of the level.
+* the **fixed-point regime** (`ACC_SHIFT = 16`, `P_SHIFT = 6/23`) is flagged in this core
+  as "MEASURED and still a GUESS as to which side is wrong". A per-stage shift error of
+  2⁴ compounding across the ladder would produce exactly this.
+
+### Not adopted by default
+
+Bit 7 stays **off** (default remains `0x4C`). It is well-motivated — r2-output.md §3.1
+calls `w77` the word that *"aims a POINTER at reg 0x86"*, and §42 established those cells
+are the host-written levels — but it is untested against any control, and today's record on
+adopting well-motivated untested readings is poor (§28 saturated the chip, §41 fixed
+nothing). It is a switch, documented, with its effect measured.
+
+Evidence grade: **MEASURED** (the trace before/after, and the `188 >> 16 = 0` arithmetic);
+**NOT ADOPTED** for bit 7 itself.
