@@ -1003,3 +1003,59 @@ last two.
 
 ★ 104 of 285 slots carry a non-zero accumulator. The frame is more alive than any previous
 measurement suggested — and it dies at exactly one anchored word.
+
+## 13. ★★★ tempB and the cursor in the trace — the coefficient was the empty one
+
+Adding `tA`, `tB`, the cursor and the coefficient under it to the trace answers §12.3's
+open half in one line:
+
+```
+   n=232  iw=302  acc=0  P=0  tA=0  tB=5 872 025  cur=CE  coef=000000
+```
+
+★ **tempB holds 5 872 025 — 0.70 of full scale, perfectly healthy.** The **coefficient is
+zero**, so `P = coef × tB = 0`. §12.3 offered two candidates; the trace names which.
+
+★★ And `cur = 0xCE` is **outside every C-RAM run the host writes** (`0x50..0xB4`,
+`0x00..0x13`). **The reverb's cursor had walked past the end of its bank into unwritten
+memory** — free-running from the frame-start seed of row 19 instead of being re-seeded per
+body.
+
+### 13.1 The fix, and what it recovered
+
+The kernel loads each unit's bank immediately before its CALL — `iw42 → 0x70` (unit 0),
+`iw50 → 0x50` (unit 1) — and those are exactly the banks the coefficient stream fills.
+Seeding `m_cursor = m_cp` at the CALL (row 24):
+
+```
+   before:  cur=CE  coef=000000   P=0            acc dies at n=232
+   after:   cur=65  coef=00D400   P=2 489 738 176   acc RECOVERS at n=233
+```
+
+★★★ **The multiply produces a value and the accumulator survives the word that killed it.**
+Downstream, `mem[dp]` and `tA` start carrying data (37 990 at n=233–236), and **output slot
+5 goes non-zero on 1 560 000 of 1 588 800 frames** — the first time any output slot has
+carried a value.
+
+⛔ **GUESSED, and against a FORCED result.** K3 proves selector `0x21` loads a C-RAM
+*pointer* that is **NOT** the implicit cursor. Row 24 couples them anyway, on the functional
+grounds that a body must read its own bank and nothing else re-seeds the cursor. **If K3 is
+right, this is wrong and some other word does the job.**
+
+### 13.2 ⛔ Still no audio, and the reason is now specific
+
+Slot 5 is `port 2` = **DO3**, which the tone generator deliberately drops (*"DO3's
+destination is unknown, so it is ignored"* — its own EDUCATED GUESS G-4). A diagnostic remap
+onto ports 0/1 was tried **and reverted**: the resulting wet was **rms 1.0**, a ±1 LSB
+constant present even in silence. **The live presentation carries no audio signal**, so the
+routing question is not what is blocking sound.
+
+## 14. Where this leaves it
+
+★ **Real, and independent of the audio:** the coefficient cursor is now re-seeded per body,
+the reverb's multiplies produce values, the accumulator survives to the end of the body, and
+one output slot carries data.
+
+⛔ **Not achieved:** audible output. The value presented is ~1 LSB, so something upstream is
+still attenuating by orders of magnitude — the same class of defect as §3.4's regime
+mismatch, and the trace now has the columns (`tA`, `tB`, `cur`, `coef`) to find it.
