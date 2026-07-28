@@ -2820,3 +2820,83 @@ Evidence grade: **MEASURED** — the C-RAM dump, the decay chain, the presentati
 the rendered-audio A/B. **SPECULATIVE (well-supported)**: that `0x50..0x8B` are delay-tap
 addresses — monotonic ramps, a PROVEN ring-buffer controller, and magnitudes that fit a
 64 K space.
+
+## 46-47. ⛔⛔ RETRACTION: §44's "audible" output is a DC CONSTANT
+
+**2026-07-28.** Modelled the delay DRAM, and in doing so found that **§44's headline claim
+is wrong**. Recording the retraction first, because it is the most important thing here.
+
+### The measurement that decides it
+
+```
+t = 8.0-12.0 s   SILENCE     dry peak      0 mean    0 | DSP peak 11 239 mean 7 492
+t = 15.0-19.5 s  SILENCE     dry peak      0 mean    0 | DSP peak 11 239 mean 7 492
+t = 20.5-26.5 s  NOTES ON    dry peak 20 441 mean  443 | DSP peak 31 057 mean 7 492
+t = 28.0-33.0 s  after       dry peak    390 mean   13 | DSP peak 11 629 mean 7 492
+```
+
+★ **The DSP's contribution has mean 7 492 in EVERY window — including four seconds of
+silence before any note is pressed** — and the difference signal has **no zero crossings at
+all**. It is a **DC constant**, not processed audio.
+
+⛔ So "57.02 % of samples differ, peak 20 441 → 31 057" was **true and meaningless**: a
+constant offset differs from silence on every sample. This is the *same class of artefact*
+as Part 101's, reached by a different route, and I did not catch it because I checked
+*whether* the output changed and never checked *whether it tracked the input*.
+
+★ The tell was in my own numbers: the presentation datum peak was **identical**
+(2 877 291) across two configurations with different delay behaviour, and a peak that does
+not move when the input moves is a constant. My "three exact cross-checks" verified the
+arithmetic of a constant propagating — they could not have failed.
+
+**Method rule 13: a difference from silence is not a signal. Compare against the input, not
+against zero — and always measure a window with NO stimulus.**
+
+### What survives from §44
+
+* **MEASURED, stands:** C-RAM has three regions of distinct character; the body's ladder
+  multiplies by cells from the `0x50..0x8B` ramps; that chain destroys ~10⁴ of signal.
+* **MEASURED, stands:** stopping those multiplies makes the presentations non-zero.
+* ⛔ **RETRACTED:** that this constitutes audible output, or output at all. The
+  presentations emit a constant. Tracing it: the raw accumulator at presentation is
+  538 760 587 509, which the accumulator profile shows is **slot 45/46's peak — a KERNEL
+  value**, identical every frame. The output stage is presenting a fixed kernel constant,
+  not the body's result.
+
+### The delay DRAM — modelled, fed, and it changes nothing
+
+The port was already implemented (descriptor → `addr = (cell + frame) & 0xffff` → 16-bit
+read/write). It was running (33 M reads, 31 M writes) but **every descriptor cell read
+`0x0000`**, so all taps addressed one rotating cell.
+
+★★ The descriptors are the per-unit C-RAM banks, and two independent structures agree:
+
+```
+cursor bank 0x70 (unit 0)  ->  cells 0x0000..0x7FFF  ->  unit 0 delay region (below 0x8000)
+cursor bank 0x50 (unit 1)  ->  cells 0x8000..0xFC00  ->  unit 1 delay region (above 0x8000)
+```
+
+against `adjudication-round4.md` §2's **MEASURED** split *"unit 0 below 0x8000, unit 1
+above"*. This file's own note already recorded the three cursor loads — *"iw42 → 0x70
+(unit 0), iw50 → 0x50 (unit 1), iw69 → 0x90 (the epilogue)"*.
+
+Wired as mask bit 9: descriptors now read **0x04BE, 0x2132, 0x25F0** — real and distinct,
+non-zero on 64 281 598 of ~64 M accesses (was 1 561 919). 0 traps.
+
+⛔ **And the rendered audio is bit-identical to without it: 0 of 5 472 003 samples differ.**
+Which is exactly what the retraction predicts — if the output is a constant sourced from
+the kernel, the delay line cannot reach it.
+
+### Where this actually leaves things
+
+The chip now has: a correct input (§35), a working multiply gate (§29/§39), the level from
+the right memory (§42), no address-multiplies (§44), and a **fed delay line with distinct
+per-unit taps** (§47). What it does **not** have is any path from the body's result to the
+presentation — the presentation emits a kernel constant.
+
+⇒ **The real question is the one §40 and §43 kept circling and I mistook for solved: what
+connects the BODY's accumulator to `w73`/`w78`?** Every fix since has been upstream
+plumbing; the last joint is still open, and the DC proves it.
+
+Evidence grade: **MEASURED** (the silence-window census, the zero-crossing test, the
+descriptor A/B); **RETRACTION** of §44's audibility claim.
