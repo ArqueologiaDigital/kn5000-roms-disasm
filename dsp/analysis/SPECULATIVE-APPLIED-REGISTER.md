@@ -1496,3 +1496,85 @@ presentation-shift fix, so it is worth re-running, not cited as a refutation.
 
 Evidence grade: **MEASURED** (the slot census, both configurations). The port-mapping
 alternative is **UNTESTED INFERENCE**.
+
+## 26. The port-mapping test — REFUTED, and the answer was in our own notes
+
+**2026-07-28.** Felipe asked for the port-mapping test. Before permuting anything I
+instrumented what the three "presentations" actually read, because two of them are written
+every frame and are *always zero*, and remapping which port a zero lands on cannot create
+signal:
+
+```
+slot0  SRC 0x01  reads reg 0x8D  word 012.1.8D.05B  peak 0     (0/964800)
+slot4  SRC 0x05  reads reg 0x8D  word 092.1.8D.15B  peak 0     (0/965760)
+slot5  SRC 0x06  reads reg 0x8C  word 092.1.8C.19B  peak 504   (935999/964800)
+```
+
+Those three words are **w61, w60 and w68**, and `r2-output.md` §3.2 had already inventoried
+every one of them — as **INTERNAL register writes**, with w68 explicitly *"read at w66
+first ⇒ a state register"*. They are not outputs at all.
+
+⛔ **So the class-1 rule "lo12[10:6] is an output-slot selector" is REFUTED.** It hijacked
+three internal register writes onto the output latches. That single error produced every
+anomaly in §25: DO2 never written (no real presentation ran), DO3 carrying signal that
+§3.2 predicts it never carries, and DO3-L always zero.
+
+★ **This is the [[check-the-handover-first]] failure again.** §3.2 is a table of exactly
+these words, written before the rule was invented, and the rule was invented without
+reading it. The rule's own comment even said *"the slot→code MAPPING is untested — the
+obvious reading and nothing more."* It was worse than untested; it was already contradicted.
+
+### The real outputs, and the retired path that had them right
+
+```
+w73  E30.C.00.404   class 0xC   addr8 0x00 -> unit 0 -> DO1
+w78  A3C.D.9F.287   class 0xD   addr8 0x9F -> unit 1 -> DO2
+```
+
+Class **0xC / 0xD**, unit from **addr8 bit 7** — which is precisely what the `m_row13`
+presentation path implemented before it was **retired over a double-count against the
+class-1 rule**. The double-count was real; it was resolved in favour of the wrong member of
+the pair. Fixed: class-1 hijack disabled (those words now fall through to their mode-1
+store, which is what they are), `m_row13` un-retired.
+
+### Result — correct routing, and a sharply better blocker
+
+```
+PRESENTATION WORDS   0 executed  ->  1 927 680 executed   (2 per frame)
+  ... wrote NON-ZERO                        0
+  raw accumulator peak AT presentation      0
+0x8C  966 147 stores, 935 999 NONZERO (site 3, peak 504)
+0x8D  965 206 stores,       0 nonzero (site 2)
+```
+
+**The two real presentations now execute every frame — and the accumulator is ZERO at both
+of them.** Signal demonstrably exists inside the chip (0x8C is nonzero 97 % of frames);
+it is simply not in the accumulator when the output words run.
+
+⚠ **Honest trade: the DSP is now silent again.** The audio §24 celebrated was an artefact
+of the refuted rule, on a pin that should carry nothing. Losing it is a *gain* — a false
+positive removed — but it must be stated plainly rather than buried.
+
+**The new question is far better posed than the old one:** not *"where does the output
+go?"* (settled: DO1/DO2, unit 0/unit 1) but **"what should load the accumulator before
+w73/w78, and why does it not run?"** — a question about a handful of epilogue words rather
+than about the whole output stage.
+
+### Does the service manual help? (Felipe's question)
+
+Partly, and it is worth being precise about where.
+
+* **For DO3 it was decisive** — the destination could not have been got from the ROM, and
+  the schematics settled it (§24, and that stands).
+* **For this blocker, no.** It is internal: which microcode word loads the accumulator. No
+  schematic can say that.
+* ★ **But it corroborates Felipe's hypothesis.** §3.2 predicted *"DO3 is a wired-but-undriven
+  pin; with a scope on IC311 pin 25, DO3 carries no audio in any effect configuration."*
+  The schematic says that pin is wired to the HD-AE5000. Both hold together exactly if DO3
+  is driven only in some **other** configuration — which is what Felipe proposed. The
+  normal-configuration microcode writes DO1 and DO2 and leaves DO3 idle.
+* **Still worth reading:** whether the extension connector carries a board-DETECT line back
+  to the SubCPU, since that would be the mechanism by which a different program gets loaded.
+
+Evidence grade: **MEASURED** (the instrumented reads; the presentation census) +
+**DOCUMENTED** (r2-output.md §3.2, pre-existing).
