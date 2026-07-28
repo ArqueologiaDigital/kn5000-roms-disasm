@@ -744,3 +744,48 @@ bodies run (slots 84–202, 119 of 119 live) → bodies deposit at `0x07` / `0x8
 
 **The one remaining break is that gap**, and it is an addressing question with a small
 answer space, not a semantics question.
+
+### 6.1 ⛔ The addressing fix applied, no effect, and why — two of my decodes collide
+
+`ACT 0x07`'s store target was made mode-dependent (row 21): `mem[addr8]` on a mode-1 word,
+`mem[ptr]` on mode 2. **The rule is not new** — `isa-adjudication.md` behavioural note 1
+already establishes exactly it for the bit-4 store (*"mem[ptr] ONLY IN MODE 2. Eight kernel
+words mis-execute otherwise"*), and `do_store()` implements it. Extending it to `ACT 0x07`
+is the consistent reading, and `alu_decoded()` refuses that code off mode 2 precisely
+because its target there is unproven.
+
+**Measured effect: none.** The D-RAM write map is byte-identical and every output slot is
+still zero.
+
+★ **The reason is a collision between §5 and §6.1, both mine.** `000.1.8C.107` is a class-1
+register-file word, so §5's handler claims it *first* and returns before the ALU — the
+`ACT 0x07` store never executes. The word cannot both "route register `0x8C` to an output
+slot" and "store the bus into register `0x8C`".
+
+⛔ **One of the two readings is wrong, and the data does not yet say which.** What is
+certain is that **nothing anywhere fills `0x8C`**, so whichever reading is right, the
+producer is still missing.
+
+## 7. State at the end of this run
+
+```
+   audio enters the chip                                    ✓  peak 0x4FD900
+   kernel computes                                          ✓  slots 0..49 live
+   both effect bodies run                                   ✓  slots 84..202, 119/119
+   bodies deposit                                           ✓  0x07, 0x13, 0x47, 0x48,
+                                                               0x4B, 0x4C, 0x4D, 0xF1
+   ────────────────────────────────────────────────────────────────────────────────
+   ✗ epilogue reads 0x85 / 0x8C / 0x8D / 0x06               ✗  never written by anything
+   ────────────────────────────────────────────────────────────────────────────────
+   six output slots written once per frame                  ✓  structure exact, values 0
+   tone generator mixes                                     ✗  zero
+```
+
+★ **Every stage is live and instrumented except one**, and that one is a single question:
+*what writes the send registers the epilogue reads?* The candidate answer — that the
+class-1 register-file words do it via `ACT 0x07` — is blocked by §5's competing claim on
+the same words, which is the next thing to adjudicate.
+
+⛔ **Do not add another reading before settling that.** Two decodes already contend for one
+word; a third would make the contradiction unattributable, which is the failure mode this
+register exists to prevent.
