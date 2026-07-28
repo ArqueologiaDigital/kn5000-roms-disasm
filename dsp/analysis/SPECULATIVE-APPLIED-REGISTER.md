@@ -3137,3 +3137,85 @@ profile and the cursor census, each one line, would have redirected the last fou
 
 Evidence grade: **MEASURED** (the cursor census per region, the state-cell rail, the
 transfer framing); **RETRACTION** of §50's cross-frame-runaway framing.
+
+## 52. The descriptor bits, and two refutations — one of them mine
+
+**2026-07-29.** §51 named three candidates for where the body gets its multiplicands. Two
+are now dead, both from static analysis of the ROM rather than another emulator switch.
+
+### ★ Candidate 2 — a gain in the descriptor's spare byte — is DEAD
+
+Every descriptor cell is 24 bits carrying a 16-bit address, so 8 bits are spare. Across
+**all 91 programs and 870 descriptor cells**:
+
+```
+cells with bits[23:16] NON-ZERO :   0   (0.00 %)
+value bit-length distribution   :   max 16, and 439 cells use all 16
+```
+
+Not one. The upper byte is genuinely unused, not an undecoded gain field.
+
+### ★★★ And a MEASURED structural fact that refutes §47
+
+Cross-tabulating the two predicates over every body word in the corpus:
+
+```
+cursor_fetch AND is_dram   :    0        <- DISJOINT
+cursor_fetch, NOT is_dram  : 1590
+is_dram, NOT cursor_fetch  :  834
+neither                    : 4108
+```
+
+★★ **A delay word NEVER fetches from the coefficient cursor, and a cursor-fetching word is
+never a delay access — zero overlap in 91 programs.**
+
+⛔ That refutes **§47 (mask bit 9)**, which took the delay descriptor *from the cursor*. It
+was feeding a pointer those words do not use, which is exactly why it produced bit-identical
+output. **Retired; default drops to `0x54C`.** The delay port's descriptors come from
+somewhere else, and `m_dsc` (the `ldptr.d` 0x825 form) remains the only candidate on record.
+
+It also means the 1 590 cursor-fetching body words **do** consume the ramp bank as
+coefficients, by the program's own instruction — the three `ldptr` loads are all `lo12 =
+0x821` (iw42 → 0x70, iw50 → 0x50, iw69 → 0x90), not the `0x825` descriptor form.
+
+### Candidate 1 — a continuous cursor — TESTED AND REFUTED
+
+Register **row 25** ("ldptr ALSO SEEDS THE COEFFICIENT CURSOR") is speculative and this
+core's own comment flags it *"⛔ STILL AGAINST K3, which proves 0x21 is NOT the implicit
+cursor"* — K3 being **FORCED**. So removing it is well-motivated, and the arithmetic was
+inviting: the kernel reads `0x90..0xA4` (21 cells), leaving `0xA5..0xB4` (16) unread, and
+21 + 16 = 37 = exactly the host's coefficient-run total.
+
+**Prediction: without row 25 the cursor runs continuously and the body reads 0xA5..0xB4.**
+
+```
+row 25 ON   body cursor 0x50..0x71   presentations 1 560 000 non-zero, datum peak 2 877 291 (the DC)
+row 25 OFF  body cursor 0x78..0x99   presentations        75 non-zero, datum peak   -21 847
+```
+
+⛔ **Refuted.** The cursor lands on `0x78..0x99` — straddling the ramp bank's tail and the
+start of the real coefficients — not on the predicted partition. The 21 + 16 = 37 arithmetic
+was numerology; it did not survive its own test. And neither setting is right: one gives a
+DC, the other near-silence.
+
+### Where that leaves it
+
+All three of §51's candidates are now tested. Two are dead and the third (a wrong cursor
+base) is not simply a matter of removing row 25. What is newly **MEASURED** and durable:
+
+1. descriptor cells carry **no** spare-byte field, corpus-wide;
+2. coefficient fetch and delay access are **disjoint operations** — a fact about the ISA,
+   not about one program;
+3. the body's cursor is aimed at the ramp bank by the program's own `0x821` loads, so the
+   ramps being consumed as coefficients is what the microcode asks for.
+
+⇒ (2) and (3) together are uncomfortable and therefore interesting: the microcode
+deliberately multiplies by a monotonic address-shaped ramp. Either those cells are *not*
+delay descriptors after all — and §44/§47's reading is wrong at the root — or the ramp bank
+is read through a **different scaling** than Q0.23. The second is worth a look: as Q0.16
+these same cells are 0.5 → 0.98, which are entirely plausible reverb gains, and the earlier
+observation that a 7-bit left shift turns `0x008000` into exactly `0x400000` = 0.5 has never
+been tested.
+
+Evidence grade: **MEASURED** (both corpus cross-tabs); **REFUTATION** of §47's bit 9 and of
+the continuous-cursor prediction.
