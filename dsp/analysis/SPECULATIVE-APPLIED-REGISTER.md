@@ -528,6 +528,54 @@ leave the accumulator alone entirely.
 ★ **That is a sharp, well-posed next question with a decode already attached to it**, and
 it is the last boundary between a live accumulator and the words that present the output.
 
+### 3.12 ⛔ Slot 50 was a misdiagnosis — the epilogue reads the REGISTER FILE, and those sources are unmodelled
+
+§3.11 named slot 50 (`801.0.50.821`) as the zeroing point. **It is not.** `exec_decoded()`
+dispatches `is_ldptr` to `m_cp = addr8` and never touches the accumulator, exactly as K3
+requires. The apparent boundary was an artefact of reading a per-slot *maximum* profile as
+if it were a time series.
+
+**The corrected picture:**
+
+```
+   slots   0.. 49 :  LIVE
+   slots  50.. 82 :  0            <- kernel tail + the whole epilogue
+   slots  84..202 :  LIVE         <- 119 of 119 slots non-zero: BOTH effect bodies run
+```
+
+★ The kernel's per-unit **send stores** (`iw45`, `iw53`) carry the bit-4 store, and the
+store gate's `doclr` clears the accumulator after storing — **modelled behaviour, not a
+bug**. So the accumulator is legitimately empty entering the epilogue; the epilogue is
+supposed to rebuild it by reading the units' send registers.
+
+**It cannot, because those reads return zero.** Counting *every* unhandled source:
+
+```
+   0x01: 1 588 800    0x02: 1 587 840    0x03: 1 587 840    0x04: 1 588 800
+   0x05: 1 589 760    0x06: 1 588 800    0x13: 6 241 920    0x1C: 1 560 960
+```
+
+★★★ **Six codes at ~1.59 M reads — exactly once per frame each — and they are precisely
+the epilogue's sources**: `000.1.8C.107` uses `SRC 0x04`, `092.1.8C.19B` uses `0x06`,
+`2A6.1.85.0C7` uses `0x03`, `000.1.06.087` uses `0x02`.
+
+### 3.12.1 The structural reading this suggests
+
+Those epilogue words are **class 1 with `addr8` bit 7 set** — the internal register file,
+whose cells the trap histogram already names (`[06]`/`[86]` = per-unit OUTPUT LEVEL,
+PROVEN BY CONSTRUCTION; `[8C]`, `[8D]`, `[8A]` = unnamed). The `addr8` selects the
+register.
+
+★ **So on a class-1 register-file word, `SRC 0x01..0x06` is very likely not a "source
+operand" in the ALU sense at all** — it is part of the register access. That matches
+`dsp-k6-input-stage.md` §10 item 7's standing LEAD: *"bit 7 of a class-1 `addr8` selects
+address-vs-sub-op"*.
+
+⛔ **Not decoded here.** But the audio path's last gap is now a single, coherent question —
+*what does the SRC field mean on a class-1 register-file word* — rather than eight
+unrelated codes, and it sits between two fully-live regions: a kernel that computes and
+bodies that run.
+
 ## 4. How to use this list
 
 1. **Every contradiction found downstream should be checked against this table first.**
