@@ -3219,3 +3219,59 @@ been tested.
 
 Evidence grade: **MEASURED** (both corpus cross-tabs); **REFUTATION** of §47's bit 9 and of
 the continuous-cursor prediction.
+
+## 53. Q0.16 on the ramp bank — REFUTED, and the ramps look less like gains than ever
+
+**2026-07-29.** §52's closing suggestion was that the ramp bank might be read at a different
+scaling: as Q0.16 the same cells are 0.5..0.98, and `0x008000 << 7 = 0x400000` is exactly
++0.5. Falsifier declared in advance: *a no-stimulus window must be silent and the output must
+track the input.*
+
+Tested with the tap-skip OFF so the multiplies actually happen (mask `0x244C`):
+
+```
+body tail   mem[dp] 8 388 607 = 0x7FFFFF      tA 8 388 607 = 0x7FFFFF
+            acc up to 1 597 861 666 816
+presentations                    0 non-zero
+```
+
+⛔ **Saturated.** With per-stage gains of 0.5..0.98 in a feedback ladder the loop runs away,
+exactly as removing the multiplies did in §44. So **both scalings fail**:
+
+| reading | per-stage | outcome |
+|---|---|---|
+| Q0.23 | 0.0066 | 10⁴ loss per frame, silence (§43) |
+| skip entirely | 1.0 | saturation (§44-49) |
+| **Q0.16** | **0.5..0.98** | **saturation (§53)** |
+
+★★ And the shape is the real argument. A reverb's gain set is **irregular and signed** — the
+genuine coefficient bank at `0x90..0xB4` reads `200000 400000 3B9885 2DF3A0 C62251 170A3D
+600000` = 0.25, 0.5, 0.464, 0.359, **−0.452**, 0.181, 0.75. The ramp bank is **monotonic,
+evenly spaced, and entirely positive**, in two runs that between them tile `0x0000..0x7FFF`
+and `0x8000..0xFC00` — the two halves of a 64 K space.
+
+**Nothing about that is a gain set, at any scaling.** Three scalings have now been tried and
+the two that are not degenerate both destabilise the loop.
+
+### The tension this leaves, stated precisely
+
+* §52, **MEASURED**: 1 590 body words fetch from the cursor as coefficients, and the microcode
+  aims that cursor at the ramp bank with its own three `0x821` loads.
+* §52, **MEASURED**: no delay word ever fetches from the cursor (disjoint, 91 programs).
+* §53 + §43 + §44, **MEASURED**: no scaling of the ramp bank yields a stable, signal-tracking
+  ladder.
+
+Those three cannot all be right about a coefficient bank. The surviving readings are that the
+cursor-fetch for these words is **not** a multiplicand at all (it is consumed by some other
+unit — modulation, address generation, or the delay controller reached by a route we have not
+decoded), or that the corpus cross-tab is measuring `is_dram` with a predicate that is itself
+too narrow.
+
+⇒ ★ **The next question is about `is_dram()` itself**: it is the predicate that made
+fetch-and-DRAM look disjoint, and if it under-recognises delay words then the ramps could be
+addresses after all and §52's central cross-tab would be an artefact of our own decode. That
+is checkable from the corpus — `is_dram` is `addr8` bit 4 plus a direction, and the notes
+mark `addr8` bit 4 as *"the head of an access chain"*, which is not obviously the same as
+*"this word is an access"*.
+
+Evidence grade: **MEASURED / REFUTATION** — the declared falsifier fired.
