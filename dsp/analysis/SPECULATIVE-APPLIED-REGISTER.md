@@ -1976,3 +1976,64 @@ multiply across the whole program, and no control has been re-run since.
 
 Evidence grade: **MEASURED, with a working control** (the DSPCFG A/B, and the tone-generator
 census that eliminates the send).
+
+## 32. Bisection — the saturation is §28's ACCB pair, and `coeff_fetch` is EXONERATED
+
+**2026-07-28.** §31 named `coeff_fetch` (§29) the leading suspect for the accumulator
+saturation. **Wrong.** Wired each of today's four speculative rows to a bit of an env-var
+mask (`UPD6383_SPEC`) so one build could leave each out in turn, and measured the
+input-latch read-back (correct = 5 232 896; railed = 0x800000):
+
+```
+mask   left out                       input read-back
+0xF    (all on)                       0x800000  (8 388 608)   RAILED
+0xE    bit0  ACCB + f31[2] select     0x2CCCCC  (2 936 012)   clean
+0xD    bit1  SRC 0x11 = ACCB          0x2CCCCC  (2 936 012)   clean
+0xB    bit2  coeff_fetch      (§29)   0x800000  (8 388 608)   RAILED
+0x7    bit3  deferred presentation    0x800000  (8 388 608)   RAILED
+0x0    (all off)                      0x2CCCCC  (2 936 012)   clean
+0xC    §29's two fixes only           0x2CCCCC  (2 936 012)   clean, 0 % traps
+```
+
+★ **The saturation requires BOTH ACCB bits and appears with neither §29 fix.** Removing
+either half of §28 clears it; removing either half of §29 does not. My suspicion was
+backwards: I blamed the rows that were code-defect fixes and exonerated nothing.
+
+★★ **§28 is now worse than "failed its test" — it is ACTIVELY HARMFUL.** It saturates the
+accumulator, and via `w79`'s bit-4 feedback store that saturated value lands on the input
+latch every frame, which is the whole of §31 and the cause of §30's null. Default changed
+to **`0xC`**: §29's two fixes on, §28's ACCB reading off, kept only as a switch.
+
+⚠ **`0x2CCCCC` = 2 936 012 is NOT the correct value either.** DSPCFG = 1 reads
+**5 232 896**, so the speculative core still corrupts the latch — just not to the rail.
+Noted, not solved. (It is however striking that 2 936 012 matches the *"the body delivered
+a datum of 504 instead of ~2 936 000"* figure already on record in the core's own comments,
+so the value is the body's output, not noise.)
+
+### Answering "how many speculations became confirmed findings?"
+
+Honest count over this register's 32 sections. **Confirmed, standing:**
+
+| # | finding | how |
+|---|---|---|
+| 1 | `f31 == 2` does not write `P` | 14 of 19 ROM LFO constants vs 11, a strict superset |
+| 2 | `SRC 0x08 = coef` | measured |
+| 3 | mode 4's target ≠ `mem[ptr]` | measured |
+| 4 | the coefficient stream's pointer rule | verified, C-RAM[0x00] = 114 |
+| 5 | DO3 → HSO pin 62 → HD-AE5000 | §24, service manual + manufacturer (external) |
+| 6 | the multiply inherited the cursor's gate | §29, MUL column |
+| 7 | the class-C/D presentation returned before the multiply | §29, MUL column |
+| 8 | the input send never clips (peak 20 441/32 768, 0.00 %) | §31, with control |
+
+**Refuted, and that is also a result:** the class-1 slot-selector (§26), ACT 0x04
+reachability, the census v1, "stereo 500/501", "eight oscillators", "the DSP is audible",
+`SRC 0x11 = mem[ptr]`, §27's ACCA/ACCB reading and "tempA holds the unit result" (§30),
+§28's fix, and §31's own `coeff_fetch` suspicion (§32).
+
+★ So of roughly **29 graded speculative rows, 4 became confirmed** — and 3 more confirmed
+findings came from *code-defect* work and *external documents* rather than from the
+speculation. The rest are either still guesses or have been shot down. **The refutations
+outnumber the confirmations**, and every confirmation but one came from a measurement with
+a control that could have failed.
+
+Evidence grade: **MEASURED, with a working control** (leave-one-out, 7 configurations).
