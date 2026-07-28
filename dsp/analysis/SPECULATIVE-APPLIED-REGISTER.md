@@ -2978,3 +2978,83 @@ never been implemented.
 
 Evidence grade: **MEASURED** (the epilogue trace at the shipped default, the quantised
 accumulator profile, the read/consume ratio); **RETRACTION** of §47's conclusion.
+
+## 49-50. The pipeline is IMPLEMENTED and CORRECT — and the saturation is a CROSS-FRAME RUNAWAY
+
+**2026-07-28.** Implemented the one-deep read pipeline exactly as `dram-datapath.md`
+items A and E specify: a delay read's datum is not on its own bus; it is scheduled `land`
+slots ahead (`land = 4`, the FORCED upper bound and the corpus mode) and delivered when
+that slot arrives. Ring-buffered, per-frame.
+
+```
+§49 PIPELINE: 32 986 560 delay data LANDED, 0 lost to ring collisions (land = 4)
+```
+
+Mechanically perfect — every read is delivered, nothing collides. **And it changes
+nothing:** presentation datum peak `2 877 291`, accumulator `538 760 587 509`, byte for
+byte identical to before.
+
+### Why: the consumers do not exist
+
+```
+delay-port READS per frame   ~20.8
+SRC 0x0B consumed per frame    1.0
+```
+
+★ This program contains **exactly one** word naming `SRC 0x0B`. Delivering 33 million data
+into a register that is read once per frame cannot matter. Item H points at `tempA`
+instead — *"the multiply at slot 5 reads SRC 0x19 = tempA and the read is at slot 4 with
+nothing between them"* — so I also landed the datum in `tempA` (bit 11). **Also
+bit-identical.** Four configurations, one result.
+
+### ★★★ Because the saturation starts before any of it
+
+The accumulator profile, at **slot 0 — the first word of the frame**:
+
+```
+slot 0 peak |acc|   902 153 722 877
+        >> 16    =      13 765 839
+24-bit rail       =       8 388 607
+```
+
+**The accumulator enters every frame already 64 % above the rail.** `run_frame()` restarts
+the PC *and only the PC* — the accumulator threads across frames by design — so this is a
+**cross-frame runaway**: the loop has net gain ≥ 1 and climbs until it clips, and it is
+already clipped before the first instruction of the frame executes.
+
+⇒ No change *inside* the frame — pipeline, tempA, descriptors, level, presentation — can
+matter while the state it starts from is railed. That is why five successive fixes produced
+bit-identical output.
+
+### ★★ And §44 is the direct cause
+
+The tap multiplies removed in §44 were the loop's only attenuation:
+
+| §44 bit 8 | loop behaviour | result |
+|---|---|---|
+| **off** | ×0.0066 at each of ~6 ladder stages | attenuates 10⁴ per frame, signal vanishes (§43) |
+| **on** | unity gain per stage | **net gain ≥ 1, runaway, rail** (§49) |
+
+Both are wrong, and neither is the chip. **The cells are address-shaped — that finding
+stands — but a word that supplies a delay ADDRESS must still contribute a real
+multiplicand from somewhere, and skipping its product entirely removes the damping that
+made the difference equation stable.**
+
+⇒ The question is no longer "what connects the body to the output" (§48: it connects) nor
+"where is the feedback" (§49: the port works). It is: **what do the ~21 address-supplying
+words contribute to the ALU?** They cannot contribute nothing, and they cannot contribute
+the address. The delay datum they fetch is the obvious candidate — but with one `SRC 0x0B`
+consumer in the program, our decode has no route for it.
+
+### Deliverables kept
+
+* The one-deep pipeline is implemented, correct, and **on** in the default mask
+  (`0x74C`) — it costs nothing and it is what items A/E specify, so the next pass starts
+  from a faithful port rather than a single overwritten register.
+* `UPD6383_LAND` env var exposes `land` for the [1,4] interval item E leaves open.
+* Bit 11 (datum → tempA) is implemented and **off**: item H motivates it, no measurement
+  supports it yet.
+
+Evidence grade: **MEASURED** (the landed/collision counts, the consumption ratio, the
+slot-0 profile). **The runaway is the headline** and it retires four sections of
+downstream chasing.
