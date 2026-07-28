@@ -1059,3 +1059,46 @@ one output slot carries data.
 ⛔ **Not achieved:** audible output. The value presented is ~1 LSB, so something upstream is
 still attenuating by orders of magnitude — the same class of defect as §3.4's regime
 mismatch, and the trace now has the columns (`tA`, `tB`, `cur`, `coef`) to find it.
+
+## 15. ⛔ The attenuation — my diagnosis was wrong, and one rule replaced two guesses anyway
+
+**The claim:** the epilogue multiplies by `0x0004BE = 1214` (a linear-ramp-table value at
+cursor `0x71`, left over from unit 1's body), i.e. `×0.000145`, ~6 900× attenuation.
+
+⛔ **Wrong.** The epilogue's presentation words are **class 1**, and `coeff_consumer()`
+requires bit 23, which they do not carry. **They are not coefficient consumers** — the
+cursor and the coefficient under it are *irrelevant to them*. The `coef` column sitting
+beside them in the trace is the cursor's current contents, not something the word uses. I
+read a column that happened to be adjacent as if it were an operand.
+
+★ **The real number is `mem[0x46] = 504`** — that is what the body hands the epilogue, and
+the body's own tempB at that point is **5 872 025**. The attenuation is ~11 650× and it
+happens **inside the body, before the epilogue is reached.**
+
+### 15.1 What survives: row 25 subsumes rows 19 and 24
+
+Coupling `ldptr` to the cursor is still the better rule, independent of the wrong
+diagnosis:
+
+* the corpus loads that pointer exactly three times, and **each load precedes the block
+  that needs that bank** — `iw42 → 0x70` (unit 0), `iw50 → 0x50` (unit 1), `iw69 → 0x90`
+  (the epilogue, and hence the next frame's kernel);
+* `iw69 → 0x90` is **exactly the value row 19 was seeding by hand at frame start**, which
+  is a consistency check row 19 could not supply for itself;
+* so **rows 19 and 24 are retired** and one rule replaces two hand-placed seeds.
+
+⛔ Still against K3, which proves selector `0x21` is *not* the implicit cursor. One rule is
+tidier than two; it is not more proven.
+
+### 15.2 Where the attenuation actually is
+
+Between the body's live accumulator (192 414 488 960, i.e. datum ≈ 2 936 000) and
+`mem[0x46] = 504`. **That is inside body 1, in the trace already captured**, and the columns
+needed to find it — `acc`, `P`, `tA`, `tB`, `cur`, `coef`, `mem[dp]` per slot in execution
+order — are all present.
+
+★ **This is the fourth diagnostic error of the session** (§3.4's constant read as a peak,
+§3.10's sign read as overflow, §3.12's maximum read as a boundary, and now an adjacent
+column read as an operand). Every one was caught by the next measurement, and every one was
+mine rather than the device's. The trace is the right instrument; I have to read it more
+carefully than I have been.
