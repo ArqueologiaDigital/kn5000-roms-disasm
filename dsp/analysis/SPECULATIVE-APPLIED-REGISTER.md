@@ -846,3 +846,60 @@ share no assumption.
 
 **The open question is no longer "route or store" — it is "what do `SRC 0x02/0x03/0x04`
 read".** That is one field, three values, on five words whose role is now known.
+
+## 9. ★★★ `SRC 0x02/0x03/0x04` — the question dissolves: the epilogue arrives with an empty pointer
+
+Instrumenting the five mode-1 `ACT 0x07` stores at the moment they execute:
+
+```
+   [dest 8C  src 04  ptr 00  L 0]
+   [dest 85  src 03  ptr 00  L 0]
+   [dest 06  src 02  ptr 00  L 0]
+   [dest 8A  src 00  ptr C7  L 0]
+   [dest 0F  src 00  ptr C7  L 0]
+```
+
+★ **The three `SRC 0x02/0x03/0x04` words run with the pointer at `0x00`**, and `0x00` is one
+of the cells the D-RAM census shows is written 6 786 times and **never non-zero**.
+
+⛔ **So the source reading is not the defect.** `mem[ptr]` reads zero there; so would
+`tempA`, `tempB` or the accumulator, which is also zero across slots 60–82. **Every
+candidate source is empty at that point**, which means no assignment of `SRC 0x02/0x03/0x04`
+can produce a value.
+
+### 9.1 What the defect actually is
+
+The bodies deposit at `0x07`, `0x13`, `0x47`, `0x48`, `0x4B`, `0x4C`, `0x4D`, `0x8E`. The
+epilogue arrives with `m_dp = 0x00` (and `0xC7` for the two `SRC 0x00` words). **The
+pointer does not walk from where the bodies wrote to where the epilogue reads.**
+
+★ That is the same object as the standing frame-closure problem — `dsp-k6-input-stage.md`
+§10 item 6 (*"the absolute origin X"*), the 25 921 frames whose walk does not close, and
+`closure-pointer.md`'s falsification of K6 finding 5. **It is not a new unknown; it is the
+one this project has circled for months, now visible as a single number at a single word.**
+
+### 9.2 The honest ranking this leaves
+
+1. ★★★ **The pointer's value entering the epilogue.** Everything downstream is blocked on
+   it, and it is one number, observable per frame, with the producing cells known
+   (`0x07` / `0x8E`) and the consuming words known (five stores, three presentations).
+2. ⛔ **`SRC 0x02/0x03/0x04` cannot be decided until then** — an acceptance test on a source
+   that reads an empty cell cannot discriminate anything, which is method rule 6 exactly.
+3. Row 22 (`= mem[ptr]`) is therefore **applied but untested**, and labelled so.
+
+## 10. Final state of this run
+
+```
+   audio enters the chip                            ✓
+   kernel computes (slots 0..49)                    ✓
+   both effect bodies run (84..202, 119/119)        ✓
+   bodies deposit at 0x07/0x13/0x47/0x4C/0x8E       ✓
+   ─────────────────────────────────────────────────────────────
+   ✗ the epilogue's POINTER arrives at 0x00         ✗   <- the single break
+   ─────────────────────────────────────────────────────────────
+   five register stores fire once per frame         ✓   (values 0)
+   three ACT 0x1B presentations fire per frame      ✓   (values 0)
+   tone generator mixes                             ✗   zero
+```
+
+★ Every stage is live, instrumented and cadence-correct except one pointer value.
