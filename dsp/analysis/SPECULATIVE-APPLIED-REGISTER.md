@@ -1372,3 +1372,58 @@ only remaining break is a board-level routing question**, with every speculative
 graded in this register and the four measured results (`f31 == 2` does not write `P`;
 `src08 = coef`; mode 4 ≠ `mem[ptr]`; the coefficient stream's pointer rule) separable from
 the twenty-odd guesses.
+
+## 24. §23's remaining break is ANSWERED — and the answer is "neither branch"
+
+**2026-07-28, from Felipe.** §22 posed the fork as: *either the slot→port mapping is
+wrong, or G-4 is wrong and DO3 does return to the mix.* It said the second was
+"answerable from the service manual rather than from the ROM". It was, and the answer is
+that **both branches are false and the datapath is fine**.
+
+The KN5000 service-manual schematics route
+
+```
+   DO3  -> extension connector (HSO) pin 62
+   LRCK -> extension connector (HSO) pin 61
+```
+
+and the only board that plugs into that connector is the optional **HD-AE5000**, whose
+"AE" is **Audio Extension**. Technics' promotional material for it:
+
+> "…separate outputs for bass and drums. In detail, there are 3 different selections
+> (Drums L/R, Drums and bass mixed stereo, Drums L and Bass R)… Because of KN5000
+> hardware reasons, all separate outputs are developed as **direct out** and have **no
+> volume control** from the KN5000. They have the same level as the line outputs."
+
+So:
+
+| §22 branch | verdict |
+|---|---|
+| slot→port mapping is wrong | **false** — slot 5 = DO3 stands |
+| G-4 is wrong, DO3 returns to the mix | **false** — G-4 is *right*, and for a stronger reason than it claimed |
+
+★ **The line in §23 marked ✗ was never a defect.** DO3 is a **separate physical output**.
+A live, non-zero, correctly-computed sample on slot 5 that does not appear in the main L/R
+mix is **exactly what the hardware does**. The tone generator excluding it is correct;
+summing it in would have folded a direct-out feed back into the main mix, which the board
+does not do.
+
+Two things follow that matter more than the bookkeeping:
+
+1. **The datapath is complete end to end.** `input → kernel → body 1 → 0x8F → tempA →
+   0x8C → slot 5 → DO3 → HSO pin 62 → HD-AE5000`. There is no missing stage. The
+   "bit-identical to dry" result was measuring the wrong output.
+2. **The main-mix silence is no longer evidence against the speculative readings.** §§5.3
+   and 22 had been treating it as a standing contradiction to be resolved; it isn't one,
+   so it must stop being cited as one. Whatever tests the ~29 graded rows from here has to
+   observe DO3, not the L/R sum.
+
+**What this does NOT establish.** That the *value* on slot 5 is correct — only that its
+destination is. The register's grades are untouched: the guesses are still guesses, and
+DO3 carrying a number proves nothing about that number. It does mean the obvious next
+instrument is a capture of slot 5 itself rather than of the speaker output.
+
+Recorded in MAME at `src/devices/bus/technics/kn5000/hdae5000.cpp` (device note) and
+`src/mame/matsushita/kn5000_tonegen.cpp` (G-4, promoted from EDUCATED GUESS to RESOLVED).
+Evidence grade: **MEASURED (external)** — schematics + manufacturer documentation,
+supplied by Felipe, whose hardware testimony outranks inference here.
