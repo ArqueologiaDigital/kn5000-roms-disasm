@@ -1578,3 +1578,102 @@ Partly, and it is worth being precise about where.
 
 Evidence grade: **MEASURED** (the instrumented reads; the presentation census) +
 **DOCUMENTED** (r2-output.md §3.2, pre-existing).
+
+## 27. What loads the accumulator before w73/w78 — NOTHING CAN. The chip has TWO.
+
+**2026-07-28.** The accumulator profile settles where the signal dies, and it is not at the
+presentation:
+
+```
+slots   0..59   (kernel)   peak |acc| up to 735 262 305 072
+slots  60..83   (EPILOGUE) peak |acc| = 0   AT EVERY SINGLE SLOT
+slots 200..284  (body 1)   peak |acc| up to 192 416 248 000   <- ends FULL
+```
+
+Body 1 finishes with 192 billion in the accumulator. The epilogue then runs 22 words with
+the accumulator at **exactly zero throughout**. The time-ordered trace shows why, and it
+also shows the signal is *present* the whole time:
+
+```
+  iw  word         acc    P     tA      cur  coef
+  65  200.1.8F.1C1   0     0      0     71  0004BE   <- reads reg 0x8F
+  66  000.1.8C.107   0     0    504     71  0004BE   <- tA = 504, stored to 0x8C
+  ...
+  71  C41.9.00.446   0     0    504     90  200000   <- FETCHES COEF 0.25, LOAD acc<-P
+  73  E30.C.00.404   0     0    504     90  200000   <- the unit-0 presentation
+  78  A3C.D.9F.287   0     0    504     90  200000   <- the unit-1 presentation
+```
+
+**tempA holds 504 — the unit result — across the entire output stage, and a 0.25
+output-level coefficient is sitting under the cursor at 0x90.** Everything needed is
+present. `P` is zero, so `acc` is zero, so the presentations write zero.
+
+### Field decode of all 22 epilogue words
+
+| iw | word | fetches coef | SRC | f31 |
+|---|---|---|---|---|
+| 64 | `C40.A.80.445` | ✔ | **0x11 — unmodelled** | 0 LOAD acc←P |
+| 65 | `200.1.8F.1C1` |  | MEM | 0 |
+| 71 | `C41.9.00.446` | ✔ | **0x11 — unmodelled** | 0 LOAD acc←P |
+| 73 | `E30.C.00.404` | ✔ | ACC (0x10) | 0 LOAD acc←P |
+| 74 | `C16.9.AB.000` | ✔ | 0x00 | **3 — undecoded** |
+| 75 | `82E.8.0F.000` | ✔ | 0x00 | **7 — undecoded** |
+| 77 | `859.0.86.822` |  | 0x00 | **4 — undecoded** |
+| 78 | `A3C.D.9F.287` | ✔ | 0x0A | **6 — undecoded** |
+
+Six of the 22 carry **f31 > 2**, which is *"attack hi12[3:1] > 2"* — the standing #2
+execution blocker — and the epilogue is where it bites.
+
+### ★★★ The reading: ACCA / ACCB
+
+Two independent gaps land on the same structure, and the block diagram already names it.
+
+**1. `SRC 0x11` is the second accumulator.** The anchored source codes are
+`0x07 = MEM`, `0x10 = ACC`, `0x19 = tA`, `0x1A = tB`. **0x11 sits immediately next to
+0x10.** And `effects-dsp.md`, from the CDJ-500 block diagram marked **PROVEN**:
+
+> ALU — **44-bit, with two accumulators (ACCA / ACCB)** and two shifters
+
+`0x10 = ACCA`, `0x11 = ACCB`. We model **one** accumulator, so every word sourcing ACCB
+silently reads zero.
+
+**2. `f31` bit 2 selects the accumulator.** The known map is `0 = LOAD acc←P`,
+`1 = ADD`, `2 = HOLD` — three of four codes in a 2-bit field. Observed values are
+{0,1,2,3,4,6,7}. Read `f31[2]` as the accumulator select and `f31[1:0]` as the operation:
+
+| f31 | reading |
+|---|---|
+| 0,1,2 | LOAD / ADD / HOLD on **ACCA** |
+| 3 | op-3 on ACCA (fourth operation, still open) |
+| 4,5,6 | LOAD / ADD / HOLD on **ACCB** |
+| 7 | op-3 on ACCB |
+
+**It predicts the output stage exactly.** Unit 0 → ACCA, unit 1 → ACCB:
+
+* `w73` (unit 0 → DO1): fetches the coefficient, `SRC = ACCA`, `f31 = 0` ⇒
+  `ACCA ← level × ACCA`. **An output-level multiply, which is precisely what §3.1 said
+  w73 must be.**
+* `w77` (`addr8 = 0x86`, the unit-1 wet-level register — §3.1) : `f31 = 4` ⇒
+  **LOAD ACCB ← P**. The unit-1 level load.
+* `w78` (unit 1 → DO2): `f31 = 6` ⇒ HOLD ACCB — present without disturbing it.
+
+Three words, three roles, all consistent, and the ACCA/ACCB split matches the
+**two effect units** the epilogue is already known to serve.
+
+### Why this closes the question as asked
+
+*"What loads the accumulator before w73/w78?"* — **w64 and w71 for unit 0, w77 for unit 1.**
+All three are unexecutable today: w64/w71 source `0x11` (ACCB, unmodelled → 0) and w77
+carries `f31 = 4` (undecoded → no write). Nothing loads the accumulator because every word
+that would has a field we do not implement.
+
+Evidence grade: **MEASURED** (profile, trace, field decode) for the diagnosis;
+**INFERRED (strong)** for ACCA/ACCB — adjacency of 0x10/0x11, a PROVEN two-accumulator
+block diagram, two effect units, and three independent word roles predicted correctly.
+It is not yet tested in the core.
+
+### Next
+
+Implement ACCB + the f31[2] select behind the speculative gate. Falsifiable and cheap: if
+right, the presentations stop writing zero and DO1/DO2 — the **main mix**, the path every
+user without an extension board hears — carry signal for the first time.
