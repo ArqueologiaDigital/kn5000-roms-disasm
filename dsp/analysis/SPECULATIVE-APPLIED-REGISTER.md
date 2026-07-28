@@ -789,3 +789,60 @@ the same words, which is the next thing to adjudicate.
 ⛔ **Do not add another reading before settling that.** Two decodes already contend for one
 word; a third would make the contradiction unattributable, which is the failure mode this
 register exists to prevent.
+
+## 8. ★★★ ADJUDICATION: §5 vs §6.1 — both survive, split by ACT, and `ACT 0x1B` is the presentation opcode
+
+The two readings were never about the same field: §5 is `lo12[10:6]`, §6.1 is `lo12[4:0]`
+and its store target. They collided only in the implementation. And on the ten
+kernel/epilogue words the fields **co-vary**:
+
+```
+   ACT 0x07 (store)  <->  SRC 0x00, 0x02, 0x03, 0x04     iw58 iw59 iw66 iw70 iw72
+   ACT 0x1B          <->  SRC 0x01, 0x05, 0x06           iw60 iw61 iw68
+   ACT 0x01          <->  SRC 0x07                       iw65
+```
+
+A free six-slot selector would pair with any ACT. This partition predicts the split, and
+testing it settles both:
+
+**Letting the `ACT 0x07` words store instead of route:**
+
+```
+   epilogue register writes per run     before        after
+      0x06                              25 983    1 613 823
+      0x85                               1 051    1 588 891
+      0x8A                               1 012    1 566 772
+      0x8C                               1 970    1 590 770
+```
+
+★ **They fire ONCE PER FRAME now, as a datapath store must.** Before, they were ~1 000 per
+1.8 M frames — host/setup cadence. **§6.1 is CONFIRMED for `ACT 0x07`.**
+
+**And the output slots collapse from six to three:**
+
+```
+   slot0 ✓    slot1 --    slot2 --    slot3 --    slot4 ✓    slot5 ✓
+```
+
+⛔ **§5's "six codes, six slots" is WRONG as stated** — the count coincidence was just that.
+The three surviving routing words are exactly the **`ACT 0x1B`** ones.
+
+### 8.1 ★★★ And that lands on an independent measurement
+
+[`output-stage-io.md`](output-stage-io.md) measured, from the corpus alone and long before
+any of this: **`ACT 0x1B` — three sites, one region, all mode-1 stores into the I/O
+register file.**
+
+★ **Three sites. Three output ports.** The corpus census and the running machine agree
+that `ACT 0x1B` is the **output presentation opcode**, reached from two directions that
+share no assumption.
+
+### 8.2 What is now settled, and what replaces the old question
+
+* ★ **`ACT 0x07` on a mode-1 word = store into register `addr8`** — CONFIRMED by cadence.
+* ★ **`ACT 0x1B` = present to an output port**, `SRC 0x01/0x05/0x06` selecting which —
+  INFERRED, and corroborated by an independent corpus measurement.
+* ⛔ **`SRC 0x02/0x03/0x04` are still unread**, so the `ACT 0x07` stores write **zero**.
+
+**The open question is no longer "route or store" — it is "what do `SRC 0x02/0x03/0x04`
+read".** That is one field, three values, on five words whose role is now known.
