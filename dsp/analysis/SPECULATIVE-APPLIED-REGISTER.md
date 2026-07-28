@@ -1902,3 +1902,77 @@ and this is the sixth.
 
 Evidence grade: **MEASURED, with a working control.** The null is meaningful precisely
 because the control moved.
+
+## 31. The "railing input" is NOT an input — it is self-inflicted corruption
+
+**2026-07-28.** §30 flagged the input peaking at exactly `0x800000` as "its own defect,
+must be characterised first". Characterised. **It is not an input defect at all.**
+
+### 1. The tone generator's send is clean
+
+`to24(v) = clamp(v × 256, ±2²³)` is applied to `mix_l`/`mix_r`, which are **pre-softclip**
+and unbounded — so the clamp was the natural suspect. Counted over a full run with a held
+C-major triad:
+
+```
+3 648 002 samples,  peak |mix| 20 441  (full scale 32768),
+clipped 0 (0.00 %),  over 2x FS 0 (0.00 %),  mean |mix| 191
+```
+
+**`to24` never clamps.** The peak sits at 62 % of full scale. The send is correctly scaled
+and the "FORCED by the two formats" comment is upheld: 20 441 × 256 = **5 232 896**, which
+is exactly what the chip should read.
+
+### 2. The corruption is switched by our own speculative gate
+
+Same binary, same stimulus, only DSPCFG differs:
+
+| DSPCFG | value the microcode reads back | tone-generator side |
+|---|---|---|
+| **1** — decoded ISA only | `0x4FD900` = **5 232 896** ✓ (= 20 441 × 256) | peak 20 441, 0 % clipped |
+| **3** — + speculative ISA | `0x800000` = **the 24-bit rail** ✗ | peak 20 441, 0 % clipped |
+
+★ The input is delivered correctly and read correctly by the *decoded* core. The
+speculative core destroys it.
+
+### 3. Which word, and by which mechanism
+
+Watching every D-RAM store that lands on the input-latch cells:
+
+```
+INPUT LATCH L (0x47): 1 597 811 stores, site 2, word 012.2.FF.1CE
+INPUT LATCH R (0x4A): 1 601 622 stores, site 2, word 090.A.01.1C8
+```
+
+**Site 2 is the bit-4 accumulator store** — `write_dword(stdest, acc_to_datum(m_acc))` —
+firing **once per frame** on each latch. The L-side word is `w79`, which `r2-output.md`
+§3.2 lists as *"the FORCED one-frame D-RAM feedback store at X+1 (K6 §5)"*.
+
+So the mechanism is: **the accumulator saturates under the speculative ISA** (§28 measured
+it at −8 795 993 156 259, against a 2⁴³ = 8 796 093 022 208 rail) → `acc_to_datum` of a
+saturated accumulator is the 24-bit rail → the bit-4 feedback store writes that rail into
+the input-latch cell, every frame.
+
+### 4. What this explains
+
+★★★ **§30's null.** The epilogue was byte-identical with and without notes because the
+cell the input stage reads is overwritten with a saturated constant every frame. A constant
+in gives a constant out. It was never evidence about the epilogue's decode at all.
+
+It also reframes the whole §§27–29 sequence: those were readings taken downstream of a
+corrupted input, which is why every value in them was fixed and none responded to audio.
+
+### 5. The order of work is now inverted
+
+The accumulator saturation is **upstream of everything else** and must be fixed first.
+Chasing the epilogue (§29's `SRC 0x06` at w68), the output mapping (§26) or the
+presentation (§28) while the input cell is being overwritten by a railed accumulator is
+measuring a machine whose input is a constant.
+
+⛔ **And it is a REGRESSION introduced today.** DSPCFG = 1 reads the input correctly, so
+the corruption arrived with the speculative rows. The first question is which one saturates
+the accumulator — `coeff_fetch` (§29) is the leading suspect, since it made many more words
+multiply across the whole program, and no control has been re-run since.
+
+Evidence grade: **MEASURED, with a working control** (the DSPCFG A/B, and the tone-generator
+census that eliminates the send).
