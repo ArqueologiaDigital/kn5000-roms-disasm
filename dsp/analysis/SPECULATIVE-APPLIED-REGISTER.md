@@ -1202,3 +1202,61 @@ mine.
 ★ **Two clean, separable questions remain**, and neither is a semantics search:
 1. why the epilogue reads a different register than the terminator writes;
 2. whether the live presentation really belongs on DO3, or the slot→port mapping is wrong.
+
+## 18. ★★★ Why the epilogue read a different register — the bit-4 store ignored its own mode rule
+
+⛔ **First, a correction to §17.1.** I said the terminator "stores its result to register
+`0x0F`". It did not. The bit-4 store site in `exec_alu()` wrote **`mem[m_dp]`
+unconditionally** — so `612.1.0F.000` deposited into `mem[0x46]`, and **that is exactly the
+504 the epilogue was seen holding at its pointer** while the registers it reads stayed
+empty. I read the microcode's `addr8` as the destination without checking that the code
+used it.
+
+★ **The rule was already on file and unimplemented at this site.**
+`isa-adjudication.md` behavioural note 1: *"hi12 bit 4's target is mode-dependent —
+`mem[ptr]` ONLY IN MODE 2. Eight kernel words mis-execute otherwise."* `do_store()`
+implements it; this path did not.
+
+### 18.1 ★ And the unit bit
+
+`addr8` bit 7 selects the unit — **MEASURED** in `output-stage-decode.md` item I (*"0x00 →
+unit 0, 0x9F → unit 1"*), named in this device's own register annotations (`[06]` unit 0 /
+`[86]` unit 1), and already applied to the pointer as `DRAM_UNIT_BASE = 0x05 | unit<<7`.
+The microcode writes `addr8` **unit-relative** and the hardware supplies the unit, so body
+1's `0x0F` is register **`0x8F`**.
+
+★★★ **Which is precisely what the epilogue reads at `iw65 = 200.1.8F.1C1`.** Two addresses
+derived independently — one from the producer's microcode, one from the consumer's — meeting
+on the same register.
+
+### 18.2 Result
+
+```
+   register 0x8F :  0 non-zero  ->  1 559 999 non-zero of 1 560 839
+```
+
+★★ **Body 1's result now lands in the register the epilogue reads, every frame.** That
+producer/consumer gap is closed.
+
+⛔ **And output slot 5 went to zero.** It reads register `0x8C`, which sits *downstream* of
+`0x8F` in the epilogue's own arithmetic (`iw65` reads `0x8F`; `iw66` is the `ACT 0x07` store
+into `0x8C`). Closing one link exposed that the next one is not connected — the honest
+reading is that the chain got one stage longer, not that it regressed.
+
+⛔ **GUESSED**: that the unit bit applies to REGISTER destinations and not only to the D-RAM
+pointer. The parallel is strong and the two addresses meet, but it remains a parallel.
+
+## 19. The chain as it now stands
+
+```
+   audio enters                                       ✓
+   kernel computes                                    ✓
+   both bodies run, ladder accumulates end to end     ✓  126/133 slots
+   body 1 stores its result to register 0x8F          ✓  1 559 999 frames
+   epilogue iw65 reads 0x8F                           ✓
+   ─────────────────────────────────────────────────────────────────────
+   ✗ 0x8F -> 0x8C, the epilogue's own arithmetic      ✗  not connected
+   ─────────────────────────────────────────────────────────────────────
+   presentations read 0x8C / 0x8D                     ✓  fire per frame, values 0
+   tone generator mixes                               ✗
+```
