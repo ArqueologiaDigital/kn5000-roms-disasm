@@ -1677,3 +1677,73 @@ It is not yet tested in the core.
 Implement ACCB + the f31[2] select behind the speculative gate. Falsifiable and cheap: if
 right, the presentations stop writing zero and DO1/DO2 — the **main mix**, the path every
 user without an extension board hears — carry signal for the first time.
+
+## 28. ACCB + f31[2] IMPLEMENTED — and it FAILS its own test
+
+**2026-07-28.** §27's stated criterion was: *"if right, the presentations stop writing zero
+and DO1/DO2 carry signal."* Implemented (ACCB wired into the ALU, `f31[2]` as accumulator
+select, `SRC 0x11 = ACCB`) and measured:
+
+```
+PRESENTATION WORDS   1 927 680 executed,  936 000 wrote NON-ZERO   (was 0)
+datum peak                       -8 388 608   = -2^23, THE NEGATIVE RAIL
+raw accumulator peak     -8 788 183 587 355   (2^43 = 8 796 093 022 208)
+```
+
+The presentations stopped writing zero. **But the criterion was two-part and the second
+half failed**, and one number in the epilogue trace decides it:
+
+```
+  iw  word           acc   P        tA     cur  coef
+  71  C41.9.00.446    0    0    -126480    90  200000
+  73  E30.C.00.404    0    0    -126480    90  200000
+  78  A3C.D.9F.287    0    0    -126480    90  200000
+```
+
+⛔ **`P` is still zero at every one of the 22 epilogue slots — exactly as before.** The
+diagnosed root cause (no product is formed in the output stage) is **untouched**. The
+nonzero presentations are ACCB carrying a value that saturated at the 44-bit rail, not a
+computed output. A railed constant is not signal.
+
+Three further consequences, all against:
+
+1. **ACCA is still zero at every epilogue slot**, so `w73` → **DO1 is still silent**. Only
+   the unit-1 side changed, and it changed to a rail.
+2. **The bodies' behaviour moved too.** `tA` at the output stage went `504 → -126480`, so
+   `SRC 0x11` is consumed inside the bodies as well, and re-reading it changed results that
+   were not under test. The old `0x11 = mem[ptr]` guess was inert; this one is not.
+3. ⚠ **Anything enabling DSPCFG = 3 now gets a full-scale DC on DO2.** It is behind the
+   default-off gate, so no default behaviour changes, but it would sound bad if selected.
+
+### What survives
+
+The *diagnosis* in §27 stands on its own evidence and is unaffected: the epilogue runs 22
+words with no product, six of them carry `f31 > 2`, and `w64`/`w71` source `0x11`. Those
+are measurements.
+
+What is **not** supported is the specific fix. Of §27's inference chain:
+
+| claim | status after the test |
+|---|---|
+| the chip has two accumulators (block diagram, PROVEN) | untouched — still true |
+| `SRC 0x11 = ACCB` | **not supported** — it does not make w71 form a product |
+| `f31[2]` = accumulator select | **not supported** — w73/ACCA still dead |
+| unit 0 → ACCA, unit 1 → ACCB | **not supported** — only unit 1 moved, and to a rail |
+
+★ The prediction was falsifiable and it was falsified. That is the value of having stated
+it in advance: had the criterion been "presentations write something nonzero", this would
+have been recorded as a success, and it is not one.
+
+### Where that leaves the real question
+
+`P = 0` across the whole epilogue is now the *sole* remaining defect, and it survived a
+change that touched both accumulators and the source decode — so it is not about which
+accumulator is read. **Something is preventing the multiplier from loading an operand pair
+in the epilogue at all.** The coefficient side is demonstrably fine (`coef = 0x200000`
+under cursor `0x90`), so the failure is on the operand side or in the multiply's issue
+condition.
+
+Kept in tree, behind the gate, clearly labelled — not because it is right, but because
+reverting it would also erase the falsification. **Felipe's call whether it stays.**
+
+Evidence grade: **REFUTATION** (of §27's fix; the diagnosis it rests on is unaffected).
