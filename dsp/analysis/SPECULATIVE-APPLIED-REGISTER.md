@@ -2037,3 +2037,77 @@ outnumber the confirmations**, and every confirmation but one came from a measur
 a control that could have failed.
 
 Evidence grade: **MEASURED, with a working control** (leave-one-out, 7 configurations).
+
+## 33. ★★★ THE LATCH CORRUPTION IS FIXED — the chip reads its own input for the first time
+
+**2026-07-28.** §32 left the speculative core still corrupting the input latch (reading
+`0x2CCCCC` where DSPCFG = 1 reads `0x4FD900`). Located and fixed.
+
+### It was never an addressing mismatch
+
+The natural suspicion was that the deposit and the read used different cells. Instrumented
+the pointer drift between them, and it is **exactly +2 and +5, 50/50, with no other value
+in 3 194 880 reads** — the pointer arrives precisely at the two latch cells. Dumping every
+quantity at a single read:
+
+```
+§33 READ ch0  in_base=45 dp=47 cell=47 in_addr=47/4A | mem[cell]=002CCCCC  in_val=00170800
+§33 READ ch1  in_base=45 dp=4A cell=4A in_addr=47/4A | mem[cell]=00000000  in_val=001D8700
+```
+
+★ **Every address agrees.** `in_base + 2 = dp = cell = in_addr[0] = 0x47`. The cell simply
+did not contain what had just been deposited into it: the deposit wrote `0x170800` and the
+read took `0x2CCCCC` — *the previous frame's body datum*. The chip was processing **its own
+stale output instead of its input, every frame.**
+
+### The cause, predicted verbatim by this device's own comment
+
+The **bit-4 accumulator store** was landing on the latch cells. And the disassembler already
+says why that must never happen:
+
+> *"hi12 bit 4 (the accumulator store) … needs a CORRECT ACCUMULATOR, and the accumulator of
+> a frame full of undecoded words is not the chip's — so performing it would write invented
+> data into real cells. … EXECUTE WHAT ADDRESSES, NEVER WHAT COMPUTES."*
+
+The speculative gate generalised the store and broke exactly that rule. **The rule was
+already written down, with the consequence spelled out, before the rule was broken** —
+[[check-the-handover-first]] for the fourth time today.
+
+### Result
+
+```
+                            before          after
+value read == value latched   31 682      1 597 440   (100 %)
+                MISMATCHED  1 565 758             0
+peak |sample| read           0x2CCCCC      0x4FD900   (5 232 896 = 20 441 x 256 ✓)
+"THE DEPOSIT AND THE READ DISAGREE"  printed        GONE
+frames trapped                                    0 (0.00 %)
+guard suppressed                            3 198 369 stores (2/frame)
+last offender                               090.A.01.1C8
+```
+
+★★★ **The speculative core now reads its true input, on 100 % of frames**, and the value
+matches the decoded core exactly. Every downstream measurement taken before this section
+was made on a chip whose input was its own stale output — which is why §30's notes-vs-silence
+A/B showed nothing, and why §§27–29 saw only fixed values.
+
+⛔ **This is a GUARD, not a decode.** K6's feedback store is FORCED at X+1; the latch cells
+are X+2 and X+5. A store reaching them means our **addressing is still wrong somewhere**,
+and the offender is named (`090.A.01.1C8`, class 0xA, `addr8 = 0x01`, i.e. a +1
+post-increment word). Finding why its store targets the latch is the next real question;
+the guard stops the corruption from masking every measurement meanwhile.
+
+### What did NOT change — and this is now a clean fact
+
+```
+tA at the output stage   -126480  ->  504     (the corrupted vs the true input)
+PRESENTATION WORDS       3 175 680 executed,  0 wrote NON-ZERO
+raw accumulator at presentation                0
+```
+
+The epilogue still presents zero. But that is now a **measurement on a correctly-fed chip**
+rather than on a self-poisoned one, and `tA` moved with the input (504, the pre-corruption
+value from §27) — so the output stage is at last responding to something real.
+
+Evidence grade: **MEASURED, with a working control** (the DSPCFG A/B, the drift histogram,
+the per-read dump, and a 0-mismatch result against 1 565 758 before).
