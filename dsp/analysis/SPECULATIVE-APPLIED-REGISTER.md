@@ -405,7 +405,7 @@ makes a fixed program read fixed coefficients.
 presentation still writes zero. The cursor base was a real defect and is now fixed; it was
 not the last one.
 
-### 3.9 ★★★ Slot 25 — the product register is OVERFLOWING, and that is what kills the signal
+### 3.9 ⛔ Slot 25 — I claimed the product register OVERFLOWS. **It does not.** Corrected in §3.10
 
 Slot 25 is `000.2.00.2D9`: `SRC 0x0B` (the delay data register), `ACT 0x19` (tempA ← bus),
 and **`f31 = 0` = `HI_ACC_LOAD`, i.e. `acc ← P`**. It discards the accumulator and takes
@@ -437,6 +437,51 @@ rescaled. This project has now hit it **twice** in the same session, in differen
 source is a register rather than memory — `SRC 0x10` (accumulator), `SRC 0x11`
 (parameterised), and the speculative `SRC 0x0B` (row 15, the delay data register I added).
 `0x0B` is the first suspect precisely because it is mine and because slot 25 uses it.
+
+### 3.10 ⛔ CORRECTION — no overflow, and `SRC 0x0B` is exonerated
+
+§3.9 read `P ≈ 17 592 181 986 428` as saturation against the 44-bit mask. **It is a
+two's-complement misread of my own diagnostic.** `m_p` is stored masked to 44 bits and I
+printed it as signed:
+
+```
+   2^44 - 17 592 181 986 428  =  4 057 988
+```
+
+★ The product register held **−4 057 988** — an ordinary datum-scale value. There is no
+overflow anywhere. The "99.99997 % of full scale" line was wrong.
+
+**And the operand check clears `SRC 0x0B`:**
+
+```
+   BIGGEST MULTIPLY: pre-shift 20 437 959 687 424
+                   = coef 3 905 669 (0x3B9885 = 0.4656)  x  L 5 232 896
+                     SRC 0x07 (mem[ptr], ANCHORED)  at iw8
+```
+
+`L = 5 232 896` is **exactly the input sample peak**, arriving through an anchored source
+at the port read. That product after `>> P_SHIFT` is 3.19 × 10¹¹ — well inside range. The
+multiply path is behaving.
+
+### 3.10.1 So what actually kills slot 25
+
+`P` is **0** at slots 20, 23 and 24, and slot 25 is `acc ← P`. **The accumulator is
+zeroed because the product register is genuinely empty at that point**, which is what
+§3.6.1 originally said before §3.9 talked me out of it.
+
+★ A real defect surfaced on the way, though, and it is mine: the `default:` branch of the
+SRC switch carries the comment *"UNREACHABLE BY CONSTRUCTION — alu_decoded() gates the four
+codes above … if the predicate is ever widened, an unanchored source must NOT quietly
+become a memory read. **Leaving L at 0 is the failure that shows.**"*
+
+**I widened the predicate.** Every unanchored SRC — `0x00`, `0x08`, `0x11`, `0x13`, `0x1B`,
+`0x1C` — now silently reads **zero**, exactly the failure that comment predicted, and the
+multiplies that feed `P` at those slots are multiplying by nothing. **That is the live
+lead**, and it was written into the code by whoever wrote that guard, waiting.
+
+⛔ Two diagnostic errors in two messages (the presentation "peak" that was a constant, and
+this "overflow" that was a sign). Both were *my instruments*, not the device, and both were
+caught by measuring the operands instead of trusting the summary.
 
 ## 4. How to use this list
 
