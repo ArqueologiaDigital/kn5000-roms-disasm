@@ -222,6 +222,47 @@ in the device rather than the model.
 sharp enough to name its own cause from a single number, and the cost of being wrong was
 bounded because the register said which rows to suspect.
 
+### 3.5 ★★★ Where the signal dies — measured at every slot, and it is the K6 input stage
+
+§3.4 left "the accumulator is zero at the presentation". Profiling **peak |acc| at every
+one of the 285 frame slots** over a full run answers it far more sharply:
+
+```
+   slot   0 .. 284 :  peak |acc| = 0  at EVERY SLOT
+```
+
+★ **The accumulator is never non-zero anywhere in the frame.** Not "dies late" — never
+starts. So the defect is not in the epilogue, the presentation, or any of the seventeen
+guesses: nothing downstream matters because nothing upstream produces a value.
+
+**And the cause is a documented open item, not a guess.** The only words that read the
+audio input latches are the twelve **K6 input-stage** words (`084.2.01.1C0`, *"THE PORT
+READ, block B"*, and its siblings). This device's own header states their status:
+
+> their pointer walk, their store enable and their cursor fetch are all MEASURED, and
+> executing just that much is what lets a sample enter the chip — **the ALU is OPEN**
+
+They are `addressing_only()`: they deposit the sample into D-RAM and **return before the
+ALU runs**. That was true before the speculative work and is still true now.
+
+★★★ **So the chain is: the sample enters the chip, is read, is stored — and is never
+handed to the arithmetic.** Everything after it computes on zeros, which is why every
+effect produces nothing and why no ALU reading could ever have changed the audio.
+
+**This is the single highest-value target in the device**, and it is *one block of twelve
+words* rather than a corpus-wide search. It also explains, retrospectively, why:
+
+* the reverb "carries zero" around its loop;
+* the delay-line traffic is invariant under every `ACT 0x0D`/`0x0E` reading (§6.1) — the
+  line is fed zeros either way;
+* 17 speculative rows moved the audio by exactly nothing until one of them (row 5)
+  injected a constant of its own.
+
+⛔ **What it does NOT do is make the K6 ALU decidable.** `notes/dsp-k6-input-stage.md`
+§3/§7 already record the addressing as FORCED and the arithmetic as OPEN. What is new is
+the *priority*: this is not one open item among many, it is the one that gates the entire
+audio path.
+
 ## 4. How to use this list
 
 1. **Every contradiction found downstream should be checked against this table first.**
