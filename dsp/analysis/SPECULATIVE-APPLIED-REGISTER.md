@@ -2447,3 +2447,72 @@ their own terms), and the deferred controls for `coeff_fetch` (SINGLE DELAY, the
 the 19 LFO constants) have still not been re-run. That is now the outstanding item.
 
 Evidence grade: **MEASURED** (time buckets and slot-count bounds over 1 824 001 frames).
+
+## 39. The deferred controls — `coeff_fetch` was never speculative. It is K4, FORCED.
+
+**2026-07-28.** §29 flagged that `coeff_fetch` "changes which words multiply across the
+WHOLE program" and that SINGLE DELAY, the biquad and the 19 LFO constants had to be
+re-measured before trusting it. Went to run them. **The premise was wrong.**
+
+`lfo_ramp.py` turns out to be a ROM/descriptor analysis — it decodes constants to Hz and
+never simulates the ALU, so it cannot test this at all. The instrument that can is
+`action00_discriminate.py`, which calls `DIS.coeff_consumer(w)` — and following that into
+`dsp_disasm.py` produced the answer directly:
+
+```python
+def cursor_fetch(w):
+    """bit 23 (== class4 bit3) = CURSOR-FETCH enable (NOT multiply-enable).
+    NOT in the C-format family: there bit 23 is a bit of the immediate."""
+    return bool((w >> 23) & 1) and not c_format(w)
+```
+
+★★★ **That is bit-for-bit the `coeff_fetch()` I added to the core in §29** — `class4 & 8`
+*is* `(w >> 23) & 1`, with the same `!c_format` exclusion. The split between **fetch**
+(bit 23) and **advance** (`class4 == 0xA`) is already the established reading, marked
+**K4, FORCED**, and the offline model has been using it all along. The C++ core was the
+only place that conflated them.
+
+### The biquad is EVIDENCE FOR it, not a control at risk
+
+From `coeff_consumer`'s own docstring:
+
+> *"The PARAMETRIC EQ body's ten class-8 words sit inside a cursor map proven to the bit at
+> 6 cells per band; if class 8 advanced, band k would start at cell 7k and all 60 named
+> roles would shift."*
+
+So the control I was afraid of breaking is the reason the reading exists. ⇒ **§29's caveat
+was over-cautious in exactly the wrong direction**: the change did not risk the controls,
+it brought the core *into line* with the model that produced them.
+
+### And the docstring warns about precisely what I hit
+
+> *"MEASURED over the 2974-word body corpus: the only classes that set bit 23 are 8 (42)
+> and A (822). **The KERNEL additionally has class 9 (4), C (1) and D (1), so a core must
+> NOT assume `bit 23 => class 8 or A`.**"*
+
+Those 4 + 1 + 1 kernel words are the epilogue set from §29 — `w73` is the class **C**,
+`w78` the class **D**. The note is an instruction addressed to the core, and the core was
+violating it. Fifth time today the answer predated the question.
+
+### ⚠ One thing my version still assumes, and the note contradicts
+
+`cursor_fetch` is documented as *"CURSOR-FETCH enable (**NOT multiply-enable**)"*. The core
+now gates the whole block — fetch, multiply, and (separately) advance — on it. So:
+
+| aspect | status |
+|---|---|
+| fetch and advance are DIFFERENT conditions | ✔ **FORCED (K4)**, now matched |
+| fetch = bit 23, advance = `class4 == 0xA` | ✔ **FORCED**, now matched |
+| the MULTIPLY is gated by bit 23 | ⛔ **still an assumption** — the note says bit 23 is *not* multiply-enable |
+
+So §29's split is settled and its residual guess is now sharply localised: what enables the
+**multiply**, as distinct from the fetch. That is a much smaller open question than "did I
+break the controls", and it is the honest successor to it.
+
+### Controls: not run, and correctly so
+
+No control needed re-running, because the change moved the core *toward* the model the
+controls were computed in. Re-running them would have measured agreement I could have read
+off the source — and would have been the fourth instrument this month that could not fail.
+
+Evidence grade: **DOCUMENTED (K4, FORCED)** — pre-existing, independent of this session.
