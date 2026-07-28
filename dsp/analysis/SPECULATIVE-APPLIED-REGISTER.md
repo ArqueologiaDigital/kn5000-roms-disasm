@@ -316,6 +316,52 @@ arrive in a host transfer this device still discards, or they land at a cursor p
 the routing does not reach (§3.3 populated 112 of 256 cells; the kernel's cursor base is
 the obvious suspect).
 
+### 3.7 ★★★ The four input coefficients — not missing from the stream, READ FROM THE WRONG BANK
+
+⛔ **First, a correction to §3.6.1.** I read the profile too quickly: `acc` is non-zero at
+slots **23–24** and dies at **25**, not 21. Slot 21 is a dip, not the death.
+
+Instrumenting which C-RAM cell each kernel slot consumes:
+
+```
+   kernel slot :  0    5    10   14   16   18   20   21   23
+   cursor      : 0x77 0x78 0x7B 0x7C 0x7D 0x7F 0x80 0x81 0x82
+   value       : 002132 0025F0 00342A 0038E8 003DA6 004722 004BE0 00509E 00555C
+```
+
+★★★ **Those are a LINEAR RAMP with a constant step of `0x04BE`** — they are transfer 8's
+**lookup table**, not effect coefficients. The kernel's cursor is grazing table data.
+
+And the coefficient stream's write runs show a 60-cell hole:
+
+```
+   [0x50..0x6D]=30  [0x6E..0x8B]=30  [0x90..0xAD]=30  [0xAE..0xB4]=7  [0x00..0x13]=20
+                              ★ NEVER WRITTEN: 0x14 .. 0x4F
+```
+
+`[0x00..0x13]` is the CHORUS *body* bank (K6 finding 12). **The header's own 23-slot bank
+is not in any run** — consistent with finding 12's MEASURED claim that it *"is not written
+anywhere in the cold-boot capture"*, now confirmed on a **running** machine too.
+
+### 3.7.1 What this actually establishes
+
+★ **The four coefficients are not "unknown values the host never sends".** Two candidate
+explanations, and they are distinguishable:
+
+1. **The cursor base is wrong.** The kernel should read its own bank; it reads `0x77+`,
+   inside a table. If the header's bank is the unwritten `0x14..0x4F` hole, then the
+   coefficients *are* absent — but if the kernel's true base is elsewhere in a written
+   run, they are present and simply mis-addressed. **`rstcur` resets the cursor to a
+   per-unit BASE, and the kernel runs BEFORE either unit's body** — so which base it
+   inherits is exactly the open question.
+2. **They genuinely never arrive**, and the host relies on a power-on default this
+   emulation does not model.
+
+⛔ **Neither is settled here**, and the honest position is that this narrows the question
+from "what are the four values" to **"which C-RAM bank does the kernel's cursor start
+from"** — a pointer question with a small answer space, not a search for four unknown
+numbers.
+
 ## 4. How to use this list
 
 1. **Every contradiction found downstream should be checked against this table first.**
