@@ -593,3 +593,74 @@ bodies that run.
 * 210 241 frames (17.5 %) still end on the slot cap and 26 880 (2.2 %) on I-RAM
   overrun; only the 962 880 that end on the wait word are used.
 * 25 921 complete frames do **not** close their pointer walk.
+
+---
+
+## 5. ★★★ The SRC field on class-1 register-file words — it is not a source
+
+§3.12 left one coherent question. This is the answer, and it is the strongest inference in
+this file.
+
+### 5.1 The ten words
+
+Every class-1 register-file word (class 1 **without** the `hi12` escape bit) in the kernel
+and epilogue:
+
+```
+   iw49  400.1.0E.000   SRC 00  ACT 00      iw66  000.1.8C.107   SRC 04  ACT 07
+   iw58  000.1.8A.007   SRC 00  ACT 07      iw68  092.1.8C.19B   SRC 06  ACT 1B
+   iw59  400.1.0F.007   SRC 00  ACT 07      iw70  2A6.1.85.0C7   SRC 03  ACT 07
+   iw60  092.1.8D.15B   SRC 05  ACT 1B      iw72  000.1.06.087   SRC 02  ACT 07
+   iw61  012.1.8D.05B   SRC 01  ACT 1B      iw65  200.1.8F.1C1   SRC 07  ACT 01
+```
+
+★ **`SRC 0x01` … `0x06` each appear EXACTLY ONCE.** A source operand repeats; a selector
+does not.
+
+### 5.2 They occur nowhere else in the machine
+
+Censused over all 38 distinct body images:
+
+```
+   SRC 0x02, 0x03, 0x04, 0x05, 0x06 :  ABSENT -- zero occurrences
+   SRC 0x01                         :  38, and ALL of them class 0, a different form
+
+   for contrast:  0x07 -> 1667    0x10 -> 1343    0x19 -> 534    0x1A -> 250
+```
+
+⛔ **A field that is a genuine ALU source cannot be absent from 2 974 body words and
+present once each in one structural block.**
+
+### 5.3 ★★★ Six codes, six output slots
+
+The epilogue's job is presenting the two units' returns at the chip's outputs. The device's
+own output latch is **`m_do[3][2]` — three serial ports × two channels = SIX slots**. And
+`SRC 0x01..0x06` is **six codes, one word each**.
+
+★ **INFERRED (strong): on a class-1 register-file word, `lo12[10:6]` is not a source
+operand — it selects which of the six output slots the word drives.** The `addr8` names the
+register supplying the value, `ACT` says what is done (`0x07` = store, plus the open
+`0x1B`/`0x01`), and the "SRC" bits say *where it goes*.
+
+Their pairing supports it — each code takes one register, and the registers repeat across
+codes as a routing matrix would:
+
+```
+   SRC 01 <- reg 0x8D     SRC 03 <- reg 0x85     SRC 05 <- reg 0x8D
+   SRC 02 <- reg 0x06     SRC 04 <- reg 0x8C     SRC 06 <- reg 0x8C
+```
+
+### 5.4 What this is worth, and what it is not
+
+* ★ It explains the **last gap in the audio path**: the epilogue's reads returned zero
+  because the model treated a routing selector as a source operand and found no reading for
+  it.
+* ★ It independently supports `output-stage-decode.md` item I, which measured that
+  `addr8` bit 7 assigns the **unit** — the same words, the same routing role.
+* ⛔ **It is an INFERENCE from an exclusivity census plus a count coincidence, not a
+  forcing.** Six-of-six is suggestive; it is not proof, and the specific slot→code mapping
+  is untested.
+* ⛔ **Not yet applied.** Wiring it means making these words *write* `m_do` rather than
+  *read* a source — a structural change to `exec_alu`, and the first thing to check
+  afterwards is whether the presentation words (rows 13) become redundant, since they would
+  then be doing the same job twice.
