@@ -405,6 +405,39 @@ makes a fixed program read fixed coefficients.
 presentation still writes zero. The cursor base was a real defect and is now fixed; it was
 not the last one.
 
+### 3.9 ★★★ Slot 25 — the product register is OVERFLOWING, and that is what kills the signal
+
+Slot 25 is `000.2.00.2D9`: `SRC 0x0B` (the delay data register), `ACT 0x19` (tempA ← bus),
+and **`f31 = 0` = `HI_ACC_LOAD`, i.e. `acc ← P`**. It discards the accumulator and takes
+whatever the product register holds. Profiling `P` through the kernel:
+
+```
+   slot 18   P = 17 592 181 986 428     acc = 229 286 650 000
+   slot 19   P = 17 592 181 986 428     acc =  82 543 155 149
+   slot 20   P = 0                      acc =  82 543 155 149
+   slot 21   P = 17 592 180 924 743     acc = 0
+   slot 23   P = 0                      acc = 104 004 325 735
+   slot 25                              acc = 0
+```
+
+★★★ **2⁴⁴ = 17 592 186 044 416.** The product register is pinned at **99.99997 % of full
+scale** and alternating with zero — it is saturating against its own 44-bit mask, and
+`acc ← P` then hands that to the accumulator.
+
+**So the signal is destroyed by FIXED-POINT OVERFLOW, not by a missing coefficient.** For
+`P` to reach 2⁴⁴ after `>> P_SHIFT` (6), the pre-shift product must be ≈ 1.1 × 10¹⁵ —
+which needs an operand of ≈ 1.3 × 10⁸, far outside a 24-bit datum. **Some SRC path is
+handing the multiplier a value in accumulator units rather than datum units.**
+
+★ That is the same class of defect as row 16 (§3.4): a value crossing between the DATUM
+regime (`ash = 0, psh = 23`) and the ACC regime (`ash = 16, psh = 6`) without being
+rescaled. This project has now hit it **twice** in the same session, in different places.
+
+⛔ **Which SRC is at fault is not identified here.** The candidates are the ones whose
+source is a register rather than memory — `SRC 0x10` (accumulator), `SRC 0x11`
+(parameterised), and the speculative `SRC 0x0B` (row 15, the delay data register I added).
+`0x0B` is the first suspect precisely because it is mine and because slot 25 uses it.
+
 ## 4. How to use this list
 
 1. **Every contradiction found downstream should be checked against this table first.**
