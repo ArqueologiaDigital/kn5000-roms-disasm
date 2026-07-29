@@ -5135,3 +5135,48 @@ If it wants base+2, (1) is required. If the corpus shows unit-0 and unit-1 bodie
 *same* absolute cell for their first input, (2) is required.
 
 Evidence grade: **MEASURED** (the null result, with an instrument shown to discriminate).
+
+## 93. The discriminator returns NEITHER — and names a cell nobody was looking at
+
+**2026-07-29.** §92 left two shapes and a clean discriminator: take each body's first
+pointer-based memory read and compare unit 0 against unit 1, relatively and absolutely.
+
+```
+unit-0 bodies   first mem[ptr] read at base+0 = 0x05   in 64 of ~79 programs
+unit-1 reverbs  first mem[ptr] read at absolute 0x0E   (+137 from base 0x85), 12 of 12
+
+shared RELATIVE offsets : none      ->  (1) per-unit deposit  NOT supported
+shared ABSOLUTE cells   : none      ->  (2) no-rebase-for-input  NOT supported
+```
+
+⛔ **Both hypotheses fail.** The discriminator was built to choose between them and instead
+eliminated both — which is the outcome a good discriminator is allowed to have, and better
+than picking the least-bad of two wrong models.
+
+### ★★ What it found instead
+
+* **Unit-0 bodies read `base + 0` — the base cell itself — in 64 of ~79 programs.** So for
+  unit 0 the input is at `0x05`, *not* at the `0x06`/`0x07` the kernel deposits to. The
+  deposit and the first read disagree by one even in the unit that can reach both.
+* **All twelve reverbs read absolute `0x0E`**, uniformly, at `+137` from base `0x85` (i.e.
+  the walk wraps). `0x0E` is not a deposit cell — and it is one of the two **unit-tag**
+  addresses `{0x0E, 0x0F}` that `upd6383d.h` names as the CALL's unit selector, and one of
+  the cells §71 measured the host zero-filling.
+
+⇒ The reverbs' input does not come from the kernel's deposit region at all. It comes from
+`0x0E`, a cell with an established role in the unit-dispatch machinery, which nothing in this
+investigation has yet connected to audio.
+
+**Next, and it is one query:** is `0x0E` ever *written* with input-dependent data? §86's
+census says no — it is one of the nine kernel-written cells and it was **not** input-dependent
+(only `0x06`/`0x07` were). So either the kernel should be writing the audio there and does
+not, or `0x0E` is read for something other than the input and the reverbs' true input read is
+a later word this "first read" query walked past.
+
+⚠ The query took the **first** `SRC = MEM` word, which assumes the first memory read is the
+input read. That assumption is unexamined, and given unit 0's first read lands on `base+0`
+rather than the deposit, it is probably wrong for both units. **Re-run over ALL pointer reads
+per body, not just the first, before drawing anything from `0x0E`.**
+
+Evidence grade: **MEASURED** (the census); the `0x0E` interpretation is **UNSUPPORTED** — it
+rests on a first-read assumption the same table undermines.
