@@ -4488,3 +4488,62 @@ rather than in the model.
 
 Evidence grade: **MEASURED** (108 paired instances, 12/12 programs);
 **REFUTATION** of §78's refutation.
+
+## 80. ★★★ THE PAIRING IS PERFECT — and the loop is stuck in a ZERO FIXED POINT
+
+**2026-07-29.** §79 said the remaining question was a code bug. Instrumented the latch and
+publish directly:
+
+```
+§80 LATCH/PUBLISH: latched 9 802 560 (0 non-zero) | publish attempts 19 096 320,
+                   hits 9 802 557 (0 non-zero)
+```
+
+★★★ **The per-line pairing works exactly.** 9 802 557 publish hits against 9 802 560 latches —
+every delay read is matched to the write that consumes it, three misses in ten million. §78's
+model was right, §78's refutation was wrong (§79), and the machinery built on it is sound.
+
+**The datum is zero because there is nothing to carry.**
+
+### The collapse, and it is causal
+
+```
+                        before §77's guard      after
+delay writes with content   6 383 984            455 999     (~1 per frame)
+delay reads non-zero        6 383 984                  0
+```
+
+Writes-with-content collapsed by 93 % **at the moment the ALU started running on delay
+words**. That is a **zero fixed point**:
+
+```
+   delay read returns 0  ->  the ALU computes 0  ->  the accumulator is 0
+        ->  the write stores 0  ->  the delay read returns 0
+```
+
+Self-consistent, and stable. Before §77 the delay words' ALU did not run, so the accumulator
+was driven entirely by the *rest* of the body and the writes carried its output; now the
+ladder is closed and it closes onto zero.
+
+★ **A closed feedback loop with no excitation stays at zero — which is correct behaviour.**
+The loop is not broken; it is *unexcited*. Something must inject the input into the ladder,
+and the surviving `455 999 ≈ 1 per frame` writes with content are presumably exactly that one
+injection point.
+
+### So the question has moved, and it is a good move
+
+For the first time the reverb is a **closed, correctly-paired feedback structure** rather than
+a collection of stages that do not reach each other. What it lacks is the input.
+
+⇒ **Next: trace the input from the latch cells into the body's ladder.** §35 proved the input
+arrives and is read correctly by the kernel header. Whether it reaches the *body's*
+accumulator has never been measured — every input-side check in this register stops at the
+header. The falsifier is clean: with a note held, at least one delay write per line should
+carry content, not one per frame.
+
+⚠ And the §70 self-oscillation is gone: with the ladder closed, the output is honest silence
+rather than a rail-clamped constant. Three states in one session — DC, oscillating, silent —
+and silence is the first one that is *correct given the input reaching the ladder*.
+
+Evidence grade: **MEASURED** (latch/publish census, the before/after collapse in
+writes-with-content).
