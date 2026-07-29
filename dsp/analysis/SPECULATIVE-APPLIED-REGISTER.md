@@ -3599,3 +3599,62 @@ ever had before in this emulator.
 
 Evidence grade: **MEASURED** — the tag census closes arithmetically, and the descriptor
 pairing at stride 5 independently reproduces item C's twelve-lines-one-read-one-write.
+
+## 61-62. Per-unit visibility, and why f31[2] cannot be the accumulator select
+
+**2026-07-29.** Added a per-unit presentation census (P2.1). It immediately inverts §56.
+
+```
+mask 0x5DF   unit0/DO1  483 840 exec,       0 non-zero, peak 0
+             unit1/DO2  483 840 exec, 455 998 non-zero, peak -26 708
+```
+
+★ **DO1 is identically zero and DO2 carries the whole DC.** §56 said the opposite — and it
+was right *for the old `0x54C` default*, where bit 0 was clear so `m_accb` was never written.
+With bits 0/1 restored (§55) the situation flips: ACCB takes everything and **ACCA is now the
+dead one**. Both statements are true of their own configuration; neither is a fact about the
+chip. ⚠ Any claim of the form "unit N never reaches a pin" must name its mask.
+
+Bit 8 makes essentially no difference here (455 998 vs 455 999), so the ramp-bank multiplies
+are not reaching the output at all — consistent with §57's finding that the ramps were never
+descriptors, and further weakening bit 8's premise.
+
+### ★★★ The structural argument against f31[2]
+
+Body 0 and body 1 execute the **same instruction encodings**. So an *instruction field*
+cannot separate them: whatever `hi12[3]` means, it cannot be "which unit's accumulator",
+because both units run identical words. The per-unit separation must come from the **CALL
+context** — which this core already tracks as `m_cur_unit1`, and which the **FORCED** per-unit
+D-RAM base `0x05 | unit<<7` is already keyed on.
+
+Implemented as mask bit 14: ACCA for unit 0, ACCB for unit 1, with `f31[1:0]` still supplying
+the operation.
+
+```
+mask 0x5DF    DO1 0 / DO2 455 998   VERDICT: DC -- output with NO input
+mask 0x45DF   DO1 0 / DO2       0   VERDICT: SILENT
+mask 0x44DF   DO1 0 / DO2       0   VERDICT: SILENT
+```
+
+★ **The DC disappears.** That is a real result: the constant on DO2 was an artefact of routing
+by `f31[2]`, not a property of the chip. Trading a lie for silence is progress — a DC that
+tracks nothing is worse than nothing, because it can be mistaken for output (twice, so far).
+
+⚠ But ACCA is empty under **every** setting, and that is now the sharp question. Frame order
+is kernel → body 0 → kernel → body 1 → **epilogue**, and the epilogue presents *both* units.
+So ACCA must survive from body 0, across body 1, to `w73`. Under bit 14 the epilogue's own
+arithmetic is steered by `m_cur_unit1`, which body 1 leaves **set** — so every epilogue word
+lands in ACCB and `w73` presents an ACCA that nothing has touched since body 0.
+
+⇒ **Next: the unit context across the epilogue.** Either `m_cur_unit1` must be restored per
+presentation word (`w73` carries `addr8 = 0x00`, `w78` carries `0x9F` — the unit tag is *in
+the word*), or the epilogue runs in a third context of its own. That is a small, well-posed
+question with an obvious falsifier: ACCA must become non-zero at `w73` without DO2 losing
+what it has.
+
+Default stays `0x5DF` — bit 14 is the better-argued reading but not yet the better-measured
+one, and per the standing instruction the structure grows rather than being swapped.
+
+Evidence grade: **MEASURED** (the per-unit census, the three-mask comparison);
+**INFERRED (strong)** for the structural argument that an instruction field cannot select
+between two units running identical code.
