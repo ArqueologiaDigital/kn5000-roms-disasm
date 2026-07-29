@@ -6067,3 +6067,92 @@ which is the only reason this was caught rather than published.
 Evidence grade: **FORCED** that no offset reconciles the two strides; **MEASURED** that filling
 `base+0` leaves body 0 bit-identical (3.6M mirrored writes, criterion demonstrably two-sided
 elsewhere); **MEASURED** that `iw85`'s action is `0x0D` and undecoded.
+
+---
+
+## §107 — ACTION 0x0D IS **STILL UNDECODED**, AND THE TEST THAT WAS SUPPOSED TO DECODE IT FAILS ITS OWN CONTROL — WHICH WEAKENS A READING WE ARE SHIPPING
+
+### 1. The hypothesis, and it was a good one
+
+`action-field.md` §6 establishes a family arithmetic: *"`0x19` captures tempA and `0x1A`
+captures tempB … a second pair of capture codes beside the anchored `0x13`/`0x14`, with the
+same two destinations and `lo12[4:3]` = 3 instead of 2. The arithmetic agrees:
+`0x19 = 0x13 + 6`, `0x1A = 0x14 + 6`."*
+
+Extending downward: `0x0D = 0x13 − 6`, `0x0E = 0x14 − 6`, a third family at `lo12[4:3] = 1`.
+Supporting it: `0x0D`'s SRC profile is 75% `SRC 0x07` (mem[ptr]), closely matching anchored
+`0x13`'s 90%; and the counts pair up (203/227, like 40/58 and 89/18). Unlike SRC 0x02/0x03 this
+had **203 sites**, so the corpus could in principle answer.
+
+### 2. The method was not new either — and that is the point
+
+`upd6383.cpp` records how ACTION `0x19`'s destination was established: *"ACTION 0x19 is followed
+by a word SOURCING tempA in 74 of 89 distinct-image sites (base rate 16.0%, shuffled null
+42.7%). DESTINATION = tempA is measured."* `act0d.py` replicates that test and adds the
+discriminator it lacked — the CROSS pairing — plus the anchored codes as calibration.
+
+Replication is faithful: it reproduces `0x19 → tempA` at **74/89** exactly.
+
+### 3. ⛔ THE CALIBRATION SPLITS, SO THE TEST IS NOT USABLE
+
+```
+  null, computed first:  an arbitrary ALU word is followed within 4 by a tempA source 16.7%
+                                                                  ... a tempB source 10.2%
+
+  lo12[4:3]  ACT   n    ->tempA      ->tempB     family expects
+      2      14   58   20/58  34%   58/58 100%   tempB   ✅ ANCHORED, and the test nails it
+      2      13   40    0/40   0%    1/40   2%   tempA   ⛔ ANCHORED, and the test scores ZERO
+      3      19   89   74/89  83%   16/89  18%   tempA   (the shipping reading)
+      3      1A   18   15/18  83%   10/18  56%   tempB   ⛔ scores HIGHER on tempA
+      1      0D  203    6/203  3%    5/203  2%   tempA   both BELOW null
+      1      0E  227    3/227  1%    4/227  2%   tempB   both BELOW null
+```
+
+**One anchored code scores 100% on its own destination and the other scores 0%.** A test whose
+two controls disagree that completely cannot adjudicate a third code. So:
+
+**ACTION 0x0D remains UNDECODED.** Not "probably tempA" — undecoded.
+
+### 4. What can still be said about 0x0D, carefully
+
+`0x0D` and `0x0E` score **below the null** on both destinations, across 203 and 227 sites. If
+they were temp captures one would expect at least the base rate, as `0x14` (100%) and `0x19`
+(83%) do. That is a **weak refutation** of the family-arithmetic extension — weak precisely
+because the instrument is unreliable, and stated as weak rather than promoted.
+
+### 5. ★★★ THE CONSEQUENCE I DID NOT GO LOOKING FOR — a shipping reading is weaker than recorded
+
+`0x19 → tempA` is **live in the emulator** and its justification is the 74/89 figure from this
+test, which the device's own comment calls *"measured"*. The same test scores **0 of 40** on the
+anchored tempA code. So the instrument that certified `0x19` fails on the one case where the
+answer is already known.
+
+And `0x1A → tempB`, from the same §6 reading, scores **83% tempA against 56% tempB** — the wrong
+direction.
+
+⚠ This does not make `0x19 → tempA` false. `action-field.md` §6 has an independent argument for
+it (the tap gain `C-RAM[0x96] = 0.500` multiplying tempB at the first separator, role PROVEN),
+and §6 was careful to grade the family reading **CONSISTENT and not FORCED**, explicitly
+noting *"three earlier words in that body (`0x0B`, `0x0D`, `0x0E`) carry unanchored ACTION codes
+and could in principle have written tempB"*. The note hedged correctly. What changes is that the
+**follow-on statistic should not be cited as its evidence**, and `upd6383.cpp`'s comment calling
+the destination "measured" overstates it.
+
+**Action taken: none to the shipping behaviour.** `0x19` stays as it is, under the owner's
+2026-07-27 decision. The comment needs correcting, and I have not silently changed a behaviour
+on the strength of a test I just showed to be unreliable.
+
+### 6. Where this leaves the audio path
+
+Body-0's `base+0` read (`iw85`, `ACT 0x0D`) is still the blocker, and it is still blocked by an
+undecoded action. The available routes now:
+* an argument from the **arithmetic of the block** that contains `iw85`, the way §6 got `0x19` —
+  i.e. reconstruct what CHORUS must compute and see what the action has to be. `r1-allpass-solve`
+  and `act0b-reverb.md` are the precedents.
+* the `hi12[3:1] > 2` task, since `iw84`'s `f31 = 0` and `iw30`'s `f31 = 5` sit on the same path.
+* ⚠ NOT another follow-on statistic over the same corpus, which §3 has just disqualified for
+  this family of question.
+
+Evidence grade: **MEASURED** (all six rows, the null computed first); **REFUTED** that this test
+can decode a capture destination; **WEAKLY AGAINST** the family-arithmetic extension to `0x0D`;
+**UNDECODED** for ACTION 0x0D itself.
