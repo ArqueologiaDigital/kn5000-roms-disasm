@@ -5180,3 +5180,49 @@ per body, not just the first, before drawing anything from `0x0E`.**
 
 Evidence grade: **MEASURED** (the census); the `0x0E` interpretation is **UNSUPPORTED** — it
 rests on a first-read assumption the same table undermines.
+
+## 94. ★★★★ OPTION (1) VINDICATED — both units read base+2, and only unit 0's is fed
+
+**2026-07-29.** §93's discriminator eliminated both hypotheses, and I flagged its weakness in
+the same breath: it took only the **first** `SRC = MEM` word. Re-run over **all** pointer
+reads per body:
+
+```
+unit-1 reverbs   cells read: 0E 85 87 89 8A 8B 8C 8F 94 D0 D1 D2
+                 ★ 0x85 read by 12 of 12    ★ 0x87 read by 12 of 12
+unit-0 programs  ★ 0x05 read by 79          ★ 0x07 read by 61     (0x06 by only 7)
+```
+
+★★★ **Both units read `base + 0` and `base + 2`.** unit 0 → `0x05` / `0x07`; unit 1 → `0x85`
+/ `0x87`. The shared *relative* structure §93 declared absent is there in 12/12 and 61-79
+programs — it was hidden because the first read happens to be a different cell in each unit.
+
+⇒ **§93's elimination of option (1) is RETRACTED. The deposit must be per-unit.**
+
+```
+kernel deposits    0x06 (2 400 000 writes)  and  0x07 (600 000 writes)
+unit 0 reads       0x07  in 61 programs                     ->  FED
+unit 1 reads       0x87  in 12 of 12 reverbs                ->  NOT FED
+```
+
+**`0x87` is never written.** The reverbs read their input cell every frame and find whatever
+the zero-fill left. That is the whole of the remaining silence, and it is one address.
+
+★ Note `0x07` is the main input cell (61 programs) and `0x06` is minor (7) — so the kernel's
+4:1 write ratio favouring `0x06` (§91) is worth revisiting: the cell almost nobody reads gets
+four times the traffic. Either the two carry different things (L/R? dry/send?) or the deposit
+offsets are themselves off by one, which would rhyme with unit 0's first read landing on
+`base+0` rather than the deposit.
+
+⇒ **Next: what should write `0x87`.** Candidates, in order of cheapness: the kernel's second
+block (`iw 50..59`, which runs between the two bodies and is the natural staging point — but
+§86's census found it writes nothing input-dependent); a per-unit mirror in the deposit
+itself; or the CALL's rebase applying to the deposit as well as the body.
+
+★★ **Method note.** §93 reached a confident "both eliminated" from a query with an
+unexamined restriction, and I published that conclusion with the caveat attached rather than
+resolving it first. The caveat turned out to *be* the answer. **A stated limitation is not a
+substitute for removing it** — especially when removing it costs one line.
+
+Evidence grade: **MEASURED** (all pointer reads, 91 programs); **RETRACTION** of §93's
+elimination of option (1).
