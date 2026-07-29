@@ -4384,3 +4384,51 @@ datum routing  ✘ one pending register serves nineteen consumers   <-- the gap
 
 Evidence grade: **MEASURED** (the entered/skipped asymmetry, the 0 → 8 841 600 jump, the
 census agreement); the per-line model is **INFERRED (strong)** and untested.
+
+## 78. Per-line keying by descriptor value — REFUTED by evidence I already had
+
+**2026-07-29.** §77 left one pending register serving ~19 consumers. Made it per-line, keyed
+by the **descriptor value**, on the reasoning that §59-60 shows the bank holding each value
+twice at stride 5 (`51E2` at 02 and 07, `5460` at 06 and 0B) — one read and one write per
+line sharing a descriptor.
+
+```
+SRC 0x0B: 9 333 120 consumptions, 0 with a non-zero datum      (unchanged)
+VERDICT: SILENT
+```
+
+⛔ **Refuted — and the disproof was in §75, which I wrote myself two sections ago:**
+
+```
+DLY R  addr 6969  cell 00C8      <- read descriptor
+DLY W  addr 70C1  cell 0820      <- write descriptor, DIFFERENT VALUE
+```
+
+The two accesses sampled in the *same frame* carry descriptors `0x00C8` and `0x0820`. The
+stride-5 duplication is a property of the **bank layout**, not of what consecutive delay
+words fetch — so a read and the write that consumes its datum do **not** share a descriptor,
+and keying by value cannot pair them.
+
+★ I had the counter-example in my own §75 dump and re-derived a model that contradicts it.
+That is the second time this session a note of mine contained the refutation of a later claim
+(the first was §67's "cleared in slots 50..59", disproved by the trace in the same file).
+
+### What the §75 sample actually says about the lag
+
+`0x0820 − 0x00C8 = 1880` samples = **42.6 ms** at 44.1 kHz, and the read at frame *f* collects
+what the write stored at frame *f − 1880*. So the read/write pairing IS real and the lag is
+correct — the pairing is by **address arithmetic across frames**, not by shared descriptor.
+A line is `(read desc, write desc)` with the *difference* setting the delay.
+
+⇒ **The correct key is the PAIR, and it must be discovered from the descriptor bank**, not
+from the value: find, for each read descriptor `r`, the write descriptor `w` such that
+`w − r` is the intended lag. §60's bank has 40 populated cells and the pairing is visible in
+the dump; extracting `(r, w)` pairs statically and keying the outstanding access by pair index
+is the next attempt.
+
+⚠ And a broader flag: three of the last four attempts (§74, §76, §78) proposed a routing model
+and were refuted. The measurements around them are solid — the consumers fire, the memory is
+healthy, the addressing is right — but I am guessing at the *pairing* rather than deriving it.
+**The next step should extract the pairs from the ROM before touching the core again.**
+
+Evidence grade: **REFUTATION**, by a measurement already in this register.
