@@ -5540,3 +5540,83 @@ into the single question "what is supposed to feed unit 1?".
 Evidence grade: **MEASURED** (the window, the writers, the input-dependence census);
 **INFERRED** for "kernel B is the region that ought to feed unit 1" — that rests on symmetry
 with kernel A, and symmetry is not evidence.
+
+---
+
+## §99 — THE STORE SIDE SPLIT, AND ITEM J's PREDICTION FIRES ON CUE
+
+§98 named the incompleteness: §97 routed the mode-1 READ and the host's tag-0x15 writes to the
+register file and left both STORE sites writing `m_dram` unconditionally — so the only outside
+writer of body 1's input cell `0x85` was still a mode-1 word landing in the pointer-walked
+D-RAM. Both sites already computed the mode and selected `addr8` for mode 1, so this was again
+a routing change: one `store_mode()` helper, both call sites through it.
+
+### 1. The four predictions
+
+| # | prediction | result |
+|---|---|---|
+| 1 | `0x85` leaves the epilogue's mode-2 row | ✅ epilogue mode-2 is now `00w FFr` |
+| 2 | `0x8A` leaves kernel B's mode-2 row | ✅ kernel B mode-2 is now `FCw` alone |
+| 3 | they reappear in the mode-1 rows | ✅ kernel B `0Fw 8Aw D0w`, epilogue `05r 06w 85w 8Cw 8Dw 8Fr` |
+| 4 | ★ **live failure mode:** if the mode-1 store to `reg 0x06` is not an identity, the unit-0 level collapses | ✅ **it collapsed — `0x000000`, non-zero on 0 frames** |
+
+### 2. ⚠ AND PREDICTION 4 FIRING DOES **NOT** REFUTE ITEM J's ESCAPE — read the source field
+
+Item J's stated escape is *"SRC 0x02, undecoded, might carry the level itself and make the
+write an identity."* The word that collapsed the level is `iw72 = 000.1.06.087`, and
+`lo_src(0x087) = 0x02` — **exactly that source.** Our core does not decode SRC 0x02 and
+evaluates it as 0.
+
+So the collapse measures **our undecoded source**, not the chip's behaviour. The routing is
+right; it exposed a pre-existing hole and made it visible for the first time. I nearly filed
+this as "item J's escape is refuted, MEASURED", which would have been a false retraction of a
+correctly-hedged reading — the escape remains **open**, and now has a name: decode SRC 0x02.
+
+### 3. ★ THE GUARD I CALLED INERT IN §97 IS LOAD-BEARING
+
+§97 reported the `host_reg` guard (mask bit `0x20`, `unsupported_src = src == 0x02 || 0x03`)
+as *"inert in both configurations"* and noted its own comment calls it *"⛔ A GUARD, NOT A
+DECODE"*. It was inert **because the store went to D-RAM, where zeroing `0x06` cost nothing.**
+Routing the store to the register file makes it the thing that keeps the level alive:
+
+```
+  store split, guard OFF   unit0 0x000000  non-zero on       0
+  store split, guard ON    unit0 0x200000  non-zero on 452,160
+                           §41 LEVEL GUARD: suppressed 483,840 zero-stores
+```
+
+Bit `0x20` joins the default; the mask is now `0x9F442F`. **A guard being inert is a fact about
+the current configuration, not about the guard** — and §97 stated it as though it were the
+latter. Third time this week a "this does nothing" reading turned out to be about the state
+rather than the claim (cf. Part 103).
+
+### 4. ⚠ THE GUARD IS NARROWER THAN THE DEFECT — stated, not fixed here
+
+It tests `d07 == 0x06 || d07 == 0x86` only. `iw70` (`2A6.1.85.0C7`) carries `SRC 0x03` — also
+undecoded, also evaluated as 0 — and stores to register `0x85`, which C2 lists as **host-primed**.
+Nothing reads reg `0x85` today so there is no live harm, but we are writing an undecoded value
+into a host parameter. The principled form is *"suppress any mode-1 store whose SRC is
+undecoded"*. **Not done here** — that is a separate change with its own measurement, not a free
+rider on this one.
+
+### 5. Where this leaves the machine
+
+```
+  kernel A  mode-2  01r 02w 03rw 04r [05rw] 06w [07rw]      <- feeds unit 0, INPUT-DEPENDENT
+  body 0    mode-2  03r [05r] [07rw] ...                     <- receives it
+  kernel B  mode-2  FCw                    mode-1  0Fw 8Aw D0w
+  body 1    mode-2  0Erw [85r] [87rw] ...  mode-1  8Fw       <- reads 85/87
+  epilogue  mode-2  00w FFr                mode-1  05r 06w 85w 8Cw 8Dw 8Fr
+```
+
+**No region writes `0x85` or `0x87` from outside body 1 at all now.** Unit 1 is visibly unfed
+rather than fed with non-audio, which is the honest state and was the point of the change.
+§54 verdict `SILENT`, DC leak 0.00% — no leak introduced by any of it.
+
+The question is now single and well-posed: **what is supposed to feed unit 1?** Kernel B is the
+structural counterpart of kernel A and sits exactly between the bodies, but "symmetry" is not
+evidence, and its whole mode-2 window is one cell (`FCw`).
+
+Evidence grade: **MEASURED** (all four predictions, the guard A/B); **INFERRED** for the
+store's true destination — not-D-RAM is forced, but *where* remains open, and §99 deliberately
+does not guess.
