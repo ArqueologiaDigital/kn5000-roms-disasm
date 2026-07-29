@@ -6156,3 +6156,88 @@ undecoded action. The available routes now:
 Evidence grade: **MEASURED** (all six rows, the null computed first); **REFUTED** that this test
 can decode a capture destination; **WEAKLY AGAINST** the family-arithmetic extension to `0x0D`;
 **UNDECODED** for ACTION 0x0D itself.
+
+---
+
+## §108 — RECONSTRUCTING CHORUS AT iw84..92, AND A REFUTATION THAT RETIRES A WHOLE FAMILY OF FIXES
+
+### 1. The block, decoded and measured together
+
+```
+ iw  word          f31 st gt esc  SRC ACT  dp  delta   measured acc / mem / L
+ 84  880.1.30.8BC   0  0  1  1     02  1C  05   +0     0 / 0 / 0      alt-encoding: addressing only
+ 85  000.2.0E.1CD   0  0  0  0     07  0D  05  +14     0 / 0 / 0      §106's blocker: reads base+0
+ 86  000.2.DE.40E   0  0  0  0     10  0E  13  -34     0 / 0 / 0
+ 87  212.2.22.00B   1  1  0  0     00  0B  F1  +34     0 / 0 / 0      the only store; symmetric excursion
+ 88  000.2.F4.407   0  0  0  0     10  07  13  -12     0 / 0 / 0
+ 89  092.A.00.200   1  1  1  0     08  00  07   +0     3735552 / 4194304 / 57      ] LFO phase accumulate
+ 90  082.2.00.1C0   1  0  1  0     07  00  07   +0     2.7e11 / 4194304 / 4194304  ] acc <- mem[Q]
+ 91  094.A.00.200   2  1  1  0     08  00  07   +0     8.2e11 / 4194304 / 8388607  ] the wrap
+ 92  000.2.09.447   0  0  0  0     11  07  07   +9     50 / 4194361 / 8388607
+```
+
+### 2. ★ WHAT THE RECONSTRUCTION ESTABLISHED — the phase DOES increment
+
+`lfo-ramp.md` §11 records *"the block stores the phase back unchanged — no ramp"*. The §104
+census shows that is not quite it. The phase cell reads **4194304** at iw89/90/91 and
+**4194304 + 57** at iw92 — so the body **does** increment it, by 57 (`lfo-ramp.md` predicts 114
+for CHORUS; the familiar factor of 2, and `iw89`'s `L` is exactly 57). The increment then fails
+to survive to the next frame, because something resets the cell to `0x400000` — **which is
+exactly the value kernel `iw32` stores.**
+
+### 3. The over-determined hypothesis, and its prediction
+
+One parameter, two independently measured symptoms: if the body's base were `0x06` rather than
+`0x05`, then (a) the LFO phase lands on `0x08`, outside kernel A's measured `01..07` window, and
+can ramp; and (b) `iw85`'s `base+0` read lands on the kernel's audio at `0x06` instead of the
+measurably empty `0x05`. Predicted before the run: (a) fires, (b) does not — because `ACT 0x0D`
+is still undecoded (§107) and §106 already showed that filling `base+0` alone changes nothing.
+
+### 4. ⛔⛔ REFUTED — and the refutation is worth more than the hypothesis was
+
+Applied as mask bit 27. **The gate fires** — `dp` is `0x06` at iw84/85 and `0x08` at iw89..92 —
+**and every measured value is bit-identical. The phase is still pinned at 4194304.**
+
+Why:
+
+```
+  base 0x05:  kernel A window  01..07     body 0 LFO phase at 0x07
+  base 0x06:  kernel A window  02..08     body 0 LFO phase at 0x08
+```
+
+**The whole frame moves together.** Kernel A's walk begins where the previous frame *closed*, and
+the closure is downstream of the base, so base and window are coupled. `iw32` follows the phase
+cell wherever it goes.
+
+### 5. ★★★ THE CONSEQUENCE: an entire family of attempted fixes is dead
+
+**No value of `DRAM_UNIT_BASE` can fix the deposit/pickup collision, because the collision is in
+the RELATIVE geometry and the base cancels out of it.** That is a structural result, not a
+failed experiment, and it explains two earlier dead ends rather than adding a third:
+
+* §105's "off-by-one between deposit and pickup" was doomed for this reason, not only because of
+  the stride mismatch it identified.
+* §106's mirror changed nothing partly because `ACT 0x0D` routes nowhere — but also because
+  no absolute-address change could have mattered.
+
+**What CAN change the relative geometry** is a per-word **addressing** decode: some word's
+`addr8` contribution to the walk, `iw30`/`iw32`'s store target, or the body's LFO block not
+really sitting at base+2. That is where to look. Not at the anchor.
+
+This is also the fourth time this session that the fix I reached for was an ANCHOR VALUE when the
+defect was a per-word DECODE. Worth naming as a bias: an anchor is a single number and therefore
+feels cheap to try, but every anchor here is pinned by closure arithmetic, and a per-word decode
+is where the unmodelled opcodes actually are.
+
+### 6. Housekeeping
+
+Bit 27 stays implemented and OFF, with the refutation recorded at the site so it is reproducible
+rather than a claim, and so the next reader does not retry it.
+
+⚠ **A stale diagnostic found in passing:** the PER-UNIT REBASE audit prints `DRAM_UNIT_BASE`
+rather than the gated value, so its *"the walk ALREADY delivered 0x05 on 93.32%"* line is
+meaningless whenever bit 27 is on. Noted at the site; not read under the gate.
+
+Evidence grade: **MEASURED** (the block decode, the phase increment of 57, the window shift,
+the bit-identical outcome); **FORCED** that no base value can fix the collision; **UNDECODED**
+still for `ACT 0x0D`, `ACT 0x0E`, `ACT 0x0B`, `ACT 0x1C` and `f31 = 5`.
