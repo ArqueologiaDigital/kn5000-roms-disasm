@@ -4547,3 +4547,55 @@ and silence is the first one that is *correct given the input reaching the ladde
 
 Evidence grade: **MEASURED** (latch/publish census, the before/after collapse in
 writes-with-content).
+
+## 81. ★★★★ THE INPUT REACHES THE KERNEL AND DIES BEFORE THE BODY
+
+**2026-07-29.** §80 said the loop is closed but unexcited. Probed the accumulator at four
+points, splitting each range by whether the frame carried input — a probe whose quiet and
+loud ranges are identical has not seen the input.
+
+```
+header exit  iw 12    quiet [72 492 492 081 .. 72 492 492 081]
+                      loud  [-39 413 178 582 .. 187 837 611 422]   ★ DIFFERS
+body-0 end   iw 152   quiet [0 .. 0]   loud [0 .. 0]   IDENTICAL
+body-1 entry iw 201   quiet [0 .. 0]   loud [0 .. 0]   IDENTICAL
+body-1 end   iw 332   quiet [0 .. 0]   loud [0 .. 0]   IDENTICAL
+```
+
+★★★ **The input is in the kernel's accumulator** — a single fixed value in silence, a wide
+signal-dependent range under a note. The whole input chain (§35's latch fix, the header
+reads, the K6 stage) is working end to end.
+
+★★ **And the body never sees it.** All three body probes are not merely identical — they are
+**zero**. The accumulator arrives at body 0 empty.
+
+### Which is the zero fixed point, seen from the other side
+
+§65 measured `ACCA = 539 074 636 021` at body-0 entry, before §77 let delay words run their
+ALU. Now it is 0. The mechanism is direct: a delay word whose datum is empty executes
+`f31 = 0` ⇒ **LOAD acc ← P** with `P = 0`, and there are ~19 of them per frame. **The delay
+words wipe the accumulator faster than the kernel can fill it.**
+
+So the loop is not merely unexcited — it is **actively drained**, and the drain is the same
+mechanism that closes the feedback. Before §77 the accumulator survived because the delay
+words were inert; now they are live and empty, and empty is worse than inert.
+
+⇒ The chain is now completely mapped, and every link is measured:
+
+```
+host -> descriptors, parameters, levels, coefficients   ✔ (§56-60, §71-72)
+input -> latch -> kernel header -> kernel accumulator   ✔ (§35, §81)
+kernel accumulator -> BODY                              ✘ ARRIVES EMPTY   <-- HERE
+body ladder -> delay lines -> paired feedback           ✔ (§79-80, 9.8 M matched)
+body -> per-unit accumulators -> presentations -> pins  ✔ (§65-69)
+```
+
+★ **One link, and it is between two things that both work.** The kernel holds the input; the
+body needs it; the handoff loses it — because ~19 delay words per frame each execute a LOAD
+with an empty product.
+
+**The falsifier for whatever comes next is clean**: probe iw152 again and it must differ
+between quiet and loud.
+
+Evidence grade: **MEASURED**, with a control that fires — the same probe reports DIFFERS at
+one point and IDENTICAL at three, so it can distinguish the two outcomes.
