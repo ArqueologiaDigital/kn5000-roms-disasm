@@ -4988,3 +4988,72 @@ decode structured around "what does the ALU do?" will drop, because every branch
 
 Evidence grade: **MEASURED** — the ROM sum (exact, two algorithms), the histogram, and the
 per-slot `dp` trace isolating which of the two −70 words is dropped.
+
+## 90. ★★★★★ FIXED — an INFERRED "nop" was swallowing a MEASURED pointer move
+
+**2026-07-29.** §89 isolated the loss to `iw213`. The instrumented probe never fired, which
+was itself the clue: **`iw213` never reaches `exec_alu` at all.** `exec_decoded()` catches it
+three branches earlier:
+
+```cpp
+else if (hi12(word) == 0x000 && class4(word) == 2 && lo12(word) == 0x000)
+{
+    // nop -- INFERRED.  (The old "PROVEN BY CONSTRUCTION" citation was WITHDRAWN...)
+}
+```
+
+`iw213 = 000.2.BA.000` matches all three conditions exactly and is executed as a **total
+no-op** — ALU *and* addressing.
+
+★★★★ **But `class4 & 7 == 2 ⇒ p += (s8)addr8` is MEASURED**, and this device's own header
+states the principle in capitals:
+
+> *"THE ADDRESS GENERATOR IS DECODED EVEN WHERE THE ALU IS NOT … EXECUTE WHAT ADDRESSES,
+> NEVER WHAT COMPUTES."*
+
+An **INFERRED** nop was overriding a **MEASURED** addressing rule. The word's ALU content is
+genuinely nothing — `hi12 = 0x000`, `lo12 = 0x000` — but its `addr8 = 0xBA` is a −70 pointer
+delta, and that is not optional.
+
+### The fix, and all four falsifiers declared in §89
+
+```cpp
+if (upd6383_disassembler::ptr_postinc(word))
+    m_dp = u8(m_dp + s8(upd6383_disassembler::addr8(word)));
+```
+
+```
+                                        before        after      predicted
+1. dp across iw213                     D0 -> D0      D0 -> 8A    -70 applied      ✓
+2. body 1 net displacement                  -63          -133    exactly -133     ✓
+3. frame closes on                         0x45          0xFF    0xFF             ✓
+4. input-dependent kernel cells         4C / 4D       06 / 07    06 / 07          ✓
+```
+
+★★★★★ **Four independent predictions, written down before the change, all confirmed.** And
+`0x06`/`0x07` sit adjacent to the **FORCED** per-unit body base `0x05` — the kernel now hands
+its audio to the body's own base region, exactly as §87 predicted from the note's arithmetic.
+
+### The chain this closes
+
+```
+INFERRED nop swallows a MEASURED -70   ->  body 1 walks -63 not -133     (§88, §89)
+                                       ->  frame closes 0x45 not 0xFF    (§87)
+                                       ->  input window at 0x47/0x4A/0x4C not 0x01/0x04/0x06
+                                       ->  kernel deposits audio where no body word can reach (§86)
+                                       ->  the body never receives the input   (§81, §85)
+```
+
+**All five links are now measured closed.** One instruction, one omitted increment.
+
+⚠ **The chip is still SILENT** — presentations remain zero. So this was necessary and not
+sufficient, and §80's zero fixed point in the delay loop is the next thing standing. But the
+input now arrives where the body can address it, which was not true in any previous state of
+this emulator.
+
+★ The general lesson, and it is the third instance today: **a reading graded INFERRED must
+never override one graded MEASURED.** The same shape produced §72 (a guard whose premise the
+census had disproved) and §84 (that guard suppressing the kernel's arithmetic). Grades exist
+to be compared when readings collide, and I have not been comparing them.
+
+Evidence grade: **MEASURED** — four falsifiers stated in advance, all fired correctly.
