@@ -4874,3 +4874,59 @@ per-frame pointer arithmetic, with every landmark on both sides now known.
 
 Evidence grade: **MEASURED** (both addressing routes enumerated over the corpus; the 0x46
 displacement arithmetic), against a **FORCED** base and a documented steady state.
+
+## 88. ★★★★ THE 0x46 IS BODY 1's WALK — it moves −63 where it must move −133
+
+**2026-07-29.** §87 localised the input displacement to the frame-closure steady state.
+Measured the pointer at every region boundary:
+
+```
+n=0    iw=0    dp=46      frame entered at X = 0x45
+n=11   iw=11   dp=4C      input window: X+7, as K6_INPUT_STAGE says
+n=49   iw=49   dp=4B      kernel block 1:  +6
+n=50   iw=84   dp=05      CALL body 0 -- REBASED to 0x05   ✓ FORCED base, unit 0
+n=119  iw=153  dp=FC      body 0 net:  −9
+n=120  iw=50   dp=FC
+n=129  iw=59   dp=FD      kernel block 2:  +1
+n=130  iw=200  dp=85      CALL body 1 -- REBASED to 0x85   ✓ FORCED base, unit 1
+n=262  iw=332  dp=46      body 1 net:  −63
+n=263  iw=60   dp=46
+n=284  iw=81   dp=45      epilogue:  −1   ✓ "the output stage walks −1"
+```
+
+★★★★ **Body 1 walks −63. The documented walk requires −133.** `0x85 = 133`, and
+`133 − 133 = 0`, then the epilogue's −1 gives `0xFF`. We get `133 − 63 = 70 = 0x46`, then −1
+gives `0x45`.
+
+**Shortfall: exactly 70 = 0x46 — the whole displacement, in one region.**
+
+Everything else is right: both per-unit rebases land on the FORCED bases `0x05` and `0x85`,
+the epilogue's −1 matches the note verbatim, and the input window sits at `X+7` exactly where
+`K6_INPUT_STAGE` says. **One region, one number.**
+
+### Where 70 counts can go missing
+
+`exec_alu()` performs the pointer post-increment **at the very end**:
+
+```cpp
+// ---- the pointer post-increment (classes 2 and A) ----
+if ((cl & 7) == 2) m_dp = u8(m_dp + dd);
+```
+
+**Every early `return` above it skips that increment.** The function has several: the bit-11
+family, the C-format/no-op cases, `cl == 6`, the deferred-presentation path, `is_dram`, and —
+until §84 — the tap-table guard. Any body-1 word with `class4 & 7 == 2` that exits through one
+of those loses its contribution to the walk.
+
+⇒ **Next: count, over body 1's 133 words, how many have `(class4 & 7) == 2` and what their
+`addr8` deltas sum to.** If the ROM's own sum is −133 and the emulator applies −63, the
+difference names exactly which words are exiting early — and that is a static computation
+against a runtime counter, both cheap.
+
+★ This also explains, retrospectively, why the input window has always been at `0x47/0x4A`
+rather than `0x01/0x04`: `output-stage-decode.md` §3.5's map predicts the latter, and the
+core's own comment flagged that prediction as *"a PREDICTION of that map and not an input to
+it"*. It has been falsified for a while and read as agreement.
+
+Evidence grade: **MEASURED** (the boundary dump), against a **FORCED** per-unit base and a
+documented walk.
