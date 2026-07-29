@@ -4930,3 +4930,61 @@ it"*. It has been falsified for a while and read as agreement.
 
 Evidence grade: **MEASURED** (the boundary dump), against a **FORCED** per-unit base and a
 documented walk.
+
+## 89. ★★★★ ONE INSTRUCTION: iw213 loses its −70, and that is the whole 0x46
+
+**2026-07-29.** §88 said body 1 walks −63 where the ROM requires −133. Summed the ROM's own
+deltas:
+
+```
+algo 16 ROOM REVERB 1     133 words, 100 post-increments, SUM = -133   ★ exact
+algo 20 CONCERT REVERB 1  133 words, 100 post-increments, SUM = -133   ★ exact
+delta histogram: { -127:1  -119:1  -72:1  -70:2  -13:1 ... 0:75 ... 73:1 74:1 75:1 123:1 }
+```
+
+★★ **The ROM sums to exactly −133**, matching the documented walk to the unit, in both
+algorithms. The emulator applies −63. **Exactly 70 counts are lost — and the histogram
+contains exactly two words with delta −70.**
+
+### The trace names which one
+
+```
+iw 212  0000A00695  dp=D0
+iw 213  00002BA000  dp=D0     <-- delta -70 NOT APPLIED
+iw 214  0212200419  dp=D0
+
+iw 273  0880120655  dp=17
+iw 274  0102ABA64B  dp=D1     <-- delta -70 APPLIED  (0x17 + 0xBA = 0xD1)
+```
+
+★★★★ **`iw 213` = `000.2.BA.000` does not apply its pointer post-increment. `iw 274`
+(`102.A.BA.64B`) does.** One instruction of 133, one omitted increment of 100, and it accounts
+for **the entire chain**:
+
+```
+iw213 loses -70
+  -> body 1 walks -63 instead of -133          (§88)
+  -> the frame closes on 0x45 instead of 0xFF  (§87)
+  -> the input window sits at 0x47/0x4A/0x4C instead of 0x01/0x04/0x06   (§86)
+  -> the kernel deposits the audio at 0x4C, which no body word can address (§87)
+  -> the body never receives the input                                    (§81, §85)
+  -> the ladder is unexcited and the chip is silent                       (§80)
+```
+
+⚠ **Why it is skipped is NOT yet established.** `000.2.BA.000` matches none of the early-return
+branches I checked — `word == 0`, `cl == 5`, the escape NOPs, `lo12` bit 11, `cl == 6`,
+`is_dram`, c-format. So the omission is real and measured, and its cause is the next question,
+not this one. It is one instruction in one function, with a runtime probe (`dp` unchanged
+across it) that will confirm any fix instantly.
+
+★ Note `lo12 = 0x000` and `hi12 = 0x000`: this word has **no ALU content at all** — it is a
+pure pointer move. A word whose only effect is the post-increment is exactly the kind that a
+decode structured around "what does the ALU do?" will drop, because every branch that answers
+"nothing" returns early.
+
+**Falsifier for the fix**: `dp` must change by −70 across `iw 213`, body 1's net must become
+−133, the frame must close on `0xFF`, and the input-dependent kernel cells must move from
+`0x4C/0x4D` to `0x06/0x07`. Four independent checks, all already instrumented.
+
+Evidence grade: **MEASURED** — the ROM sum (exact, two algorithms), the histogram, and the
+per-slot `dp` trace isolating which of the two −70 words is dropped.
