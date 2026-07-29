@@ -3424,3 +3424,75 @@ all — it is an unimplemented host command.
 
 Evidence grade: **MEASURED** (poke payload decoded from the upload log; both source lines
 inspected); the plan's wider claims are graded in `ROADMAP-2026-07-29.md`.
+
+## 57. ★★★★ THE POKE STREAM DECODED — it is the delay-descriptor upload
+
+**2026-07-29.** §56 established that the `0x0160` poke port is a control channel we drop.
+Decoding its payloads settles what we were dropping, and it is the missing half of the chip.
+
+### The packet format
+
+Payload after the `01 60` port word is a stream of **5-byte packets**:
+
+```
+08 01 00 08 25   ->  801.0.00.825   ldptr.d  -- DESCRIPTOR pointer <- 0x00
+0A 00 40 FA 4C   ->  marker 0A | datum 0040FA | tag 4C
+0A 00 00 00 4C                     000000     | 4C
+0A 00 51 E2 CC                     0051E2     | CC
+0A 00 40 00 4C                     004000     | 4C
+0A 00 52 FF 4C                     0052FF     | 4C
+0A 00 51 3B 4C                     00513B     | 4C
+0A 00 54 60 CC                     005460     | CC
+```
+
+* `0x0A` is a packet marker; bytes 1–3 are a **24-bit datum**; byte 4 is the **TAG**.
+* **Tag `0x4C` is the descriptor bank** and `0x15` the D-RAM register file — exactly the two
+  tags `host-side.md` C4/A4 counts at **870 writes / 52 cells** and **881 writes / 65 cells**.
+* `0x4C` and `0xCC` alternate: `0xCC = 0x4C | 0x80`, i.e. **the direction bit**, which pairs
+  with the FORCED read/write split already on record.
+
+### ★★★ And the data are unmistakable
+
+```
+0040FA  000000  0051E2  004000  0052FF  00513B  005460  0051E2
+0056D1  0052FF  005A16  005460  005B06  0056D1  005C06  005A16
+005DB9  005B06  005F0C  005C06  0060CE ...
+```
+
+**16-bit addresses in the 0x4000..0x6000 range, and they repeat in PAIRS** — `0051E2`,
+`005460`, `0052FF`, `0056D1` each appear twice, one tagged `4C` and one `CC`. That is
+**one read and one write per delay line**, which is precisely `dram-datapath.md` item C's
+accounting: *twelve delay lines, each with exactly one write and one read, plus two extra
+early-reflection taps.*
+
+⇒ **These are the real delay descriptors.** Irregular, paired, direction-tagged — everything
+the C-RAM ramp bank is not.
+
+### What this settles, and what it kills
+
+★ **The ramps at C-RAM `0x50..0x8B` are NOT delay descriptors.** The real ones arrive by a
+different channel, in a different format, with a different shape. So §44's and §47's central
+reading is **wrong at the root**, exactly as §53 suspected on shape grounds — and mask bit 8
+(skip the multiply when the cursor is in the ramp bank) is standing on a false premise even
+though it is currently load-bearing for any non-zero output at all.
+
+★ The ramps' monotonic 1024-step structure remains unexplained, but it is now free to be what
+it looks like: a **table** (LFO waveform, envelope or crossfade), consistent with A3's finding
+that opcode `0x74` uploads a 36-entry waveform table to D-RAM `0x1D..0x40`.
+
+### The implementation this specifies
+
+1. At port `0x0160`, frame the payload as 5-byte packets rather than I-RAM words.
+2. `801.0.PP.825` → set the **descriptor write pointer**; `801.0.NN.821` → C-RAM pointer
+   (already handled, which is why C-RAM alone was populated).
+3. `0A dd dd dd TAG` → write the 24-bit datum to the space TAG names, auto-incrementing by
+   **+1** (A4: PROVEN BY CONSTRUCTION), with `0x80` in the tag as the direction bit.
+4. Tag `0x15` writes land in the D-RAM register file — which is where the per-effect
+   parameters and the zero-fill have always been going.
+
+⇒ This is **P1.1**, the roadmap's highest-leverage step, and it is now fully specified rather
+than merely identified.
+
+Evidence grade: **MEASURED** — decoded directly from the captured upload stream; the tags,
+the pairing and the counts all match independently established results (`host-side.md` C4/A4,
+`dram-datapath.md` item C, the FORCED direction split).
