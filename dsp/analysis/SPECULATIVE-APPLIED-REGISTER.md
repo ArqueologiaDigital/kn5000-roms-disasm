@@ -5226,3 +5226,56 @@ substitute for removing it** — especially when removing it costs one line.
 
 Evidence grade: **MEASURED** (all pointer reads, 91 programs); **RETRACTION** of §93's
 elimination of option (1).
+
+## 95. What should write 0x87 — the per-unit pair EXISTS but carries no audio
+
+**2026-07-29.** §94 localised the silence to one address: the reverbs read `0x87` and nothing
+writes it. Searched the resident kernel (286 words recovered from the upload stream) for a
+writer.
+
+### ★★ The per-unit pair is real
+
+```
+iw 72   000.1.06.087   addr8 06                    <- unit 0's cell
+iw 77   859.0.86.822   addr8 86   hi12 bit4 STORE  <- unit 1's cell
+```
+
+**Two words, one per unit, `0x06` and `0x86`** — exactly the mirrored structure §94 predicted
+must exist. They are the same pair `r2-output.md` §3.1 calls the unit-0 and unit-1 *level*
+words, and that §43's mask bit 7 reads as level-selects.
+
+### ⛔ But they do not carry the input
+
+Two tests, both negative:
+
+* **Mask bit 7 off** (so `iw72`/`iw77` perform their stores rather than being read as
+  level-selects): no change to any cell, probe or verdict.
+* **The census widened to every slot** — my §86 instrument gated on `m_cur_iw < 60`, which
+  silently **excluded the epilogue where iw72/iw77 live**. Widened: 29 cells written, and
+  **still only `0x06` and `0x07` are input-dependent.** `iw77` does write `0x86`, with
+  constant data.
+
+⇒ **Nothing writes the reverbs' input cell with audio.** The pair exists, it is per-unit, and
+it carries something input-independent — a level, most likely, consistent with §71 measuring
+the host writing `0x06 = +0.25` and `0x86 = +0.092` at load.
+
+### ★ Which raises a conflict worth stating plainly
+
+`0x06` is now doing two jobs. §71 measured the **host** writing it the unit-0 output level
+(`0x200000` = +0.25, confirmed against the documented cold-boot value). §86 measures the
+**kernel** writing it input-dependent audio 2 700 000 times per run. **Both cannot be right**:
+either the kernel is clobbering a host-programmed level every frame, or one of the two
+readings has the wrong cell.
+
+That conflict is now the most informative thing on the table, because it is between two
+MEASURED results rather than between a measurement and a guess. Resolving it decides whether
+`0x06/0x07` are the input cells at all — and if they are not, §90's four confirmed predictions
+localised the *pointer* correctly while I attached the wrong meaning to where it landed.
+
+⚠ **A third instrument of mine had a silent restriction.** §86's `m_cur_iw < 60` gate was
+never stated in its own note, and it hid the epilogue for nine sections. That is the same
+failure as §93's first-read restriction, one day apart. **Instruments need their scope written
+into the result line, not just into the code.**
+
+Evidence grade: **MEASURED** (the kernel word search; the widened census; the bit-7 A/B);
+the `0x06` double-role conflict is **OPEN and between two measurements**.
