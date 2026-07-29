@@ -5097,3 +5097,41 @@ move, and it distinguishes (3) from (1)/(2) outright.
 ratio, so they are not a stereo pair of equals. Whatever reads them may want only one.
 
 Evidence grade: **MEASURED** (both per-unit walks enumerated from the ROM; the probe ladder).
+
+## 92. Option (3) ELIMINATED — no mode-1 word names the deposit
+
+**2026-07-29.** §91 offered three shapes for how the input might cross from the kernel's
+deposit into a unit-1 reverb body, and named (3) as the one testable for free.
+
+```
+mode-1 (class4 == 1) words naming 0x06 / 0x07 / 0x86 / 0x87,
+across the twelve unit-1 reverb bodies:     0, 0, 0, 0     (from 0 algorithms)
+```
+
+⛔ **Option (3) is eliminated.** No reverb body word addresses the deposit — or its unit-1
+mirror — absolutely. The same query returned zero for `0x4C` in §87, so this is now the second
+address family ruled out by the same instrument, which is worth stating: the query
+discriminates, and it has answered "no" to two different candidate addresses.
+
+⇒ **Two shapes remain**, and they are distinguishable:
+
+1. **The deposit is per-unit** — something writes `0x86`/`0x87` as well as `0x06`/`0x07`.
+   ★ Supported by the walk: unit 1 **does** visit `0x87`, at exactly `0x07 + 0x80`, the same
+   offset inside its own **FORCED** region base `0x85`.
+   ⚠ But §86's census covered *all* kernel slots — including block 2 at `iw 50..59`, which
+   runs between body 0 and body 1 and would be the natural place to stage unit 1's copy — and
+   found **only** `0x06`/`0x07` input-dependent. So if a per-unit copy exists, **the kernel
+   does not make it**, and the candidate becomes the hardware: the DI latch region mirrored
+   into both halves, which is testable against `output-stage-decode.md` §3.5's map.
+
+2. **The rebase should not apply to the input access.** `0x05 | (unit << 7)` is FORCED for
+   the body's *own* state, but nothing forces that the *input* read is rebased with it — a
+   reverb reading a shared input cell while keeping its private state banked is an ordinary
+   design.
+
+★ Both are decidable from the ROM. The cleanest discriminator: for a unit-1 reverb, take the
+first body word that reads through the pointer and ask what cell it wants **relative to entry**.
+If it wants base+2, (1) is required. If the corpus shows unit-0 and unit-1 bodies reading the
+*same* absolute cell for their first input, (2) is required.
+
+Evidence grade: **MEASURED** (the null result, with an instrument shown to discriminate).
