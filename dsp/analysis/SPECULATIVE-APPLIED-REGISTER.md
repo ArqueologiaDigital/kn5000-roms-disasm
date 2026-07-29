@@ -3715,3 +3715,62 @@ the answer in it.
 
 Evidence grade: **MEASURED** (the presentation dumps); **REFUTATION** of §62's claim and of
 §64's prediction, both by declared falsifiers.
+
+## 65-66. The per-slot ACCA/ACCB trace — both bodies work, and one reader killed a unit
+
+**2026-07-29.** Added ACCB and the unit context to the frame trace. The picture is not what
+any of §§43-64 assumed.
+
+```
+n=50   iw 84   U=0  ACCA=539 074 636 021   ACCB=0                <- body 0 FILLS ACCA
+n=131  iw 201  U=1  ACCA=769 657 969 049   ACCB=769 657 969 049
+n=132  iw 202  U=1  ACCA=0                 ACCB=1 539 315 938 098
+n=135  iw 205  U=1  ACCA=0                 ACCB=3 848 289 845 245
+```
+
+★ **Both bodies compute.** Body 0 fills ACCA; body 1 fills ACCB. Under bit 14 the per-unit
+routing works exactly as intended — the thing §61-63 could not see because it only ever
+looked at the two accumulators *at the presentation*, by which time the answer was gone.
+
+★★ **And the ladder behaves like a comb, not like a decay or a runaway:**
+
+```
+iw 206  769 657 969 049      iw 224  461 794 730 311
+iw 212  0                    iw 229  269 380 247 879
+iw 222  192 414 482 432      iw 298  731 174 978 190
+```
+
+Oscillating, recovering, re-accumulating. That is the first time in this investigation the
+body has behaved like a **filter** rather than like a number sliding to zero or to the rail.
+
+### ★★★ And then it died at one slot, because of my own code
+
+```
+iw 305   ACCB = 269 380 247 879
+iw 306   ACCB = 0                 `000.2.49.407'  SRC = ACC, f31 = 0 (LOAD acc <- P)
+```
+
+`LO_SRC_ACC` — "read the accumulator" — was hard-wired to `m_acc`. Under bit 14 the *current*
+accumulator during body 1 is `m_accb`, so that word read **ACCA = 0**, formed `P = 0`, and
+loaded zero into ACCB. **One reader of the wrong register annihilated an entire effect unit,
+133 slots from the end of its body.**
+
+That is not a speculative reading — it is internally required by bit 14's own semantics, and
+it was wrong from the moment §62 introduced the unit-selected accumulator. Fixed:
+
+```
+DO2 non-zero   0  ->  455 999   (peak +26 707)
+```
+
+### Where that leaves it
+
+Still `DC` by the tracking test — the peak is now `+26 707` where it was `−26 708`, the same
+magnitude with the sign flipped. So a constant survives at the end of a ladder that visibly
+oscillates on the way there, which is a much more specific problem than "the chip is silent".
+
+⇒ Next: the same trace through the **epilogue** with the fix in, to see what the working
+ladder's output becomes between `iw 332` and `w73`/`w78` — and whether ACCA (body 0's
+539 074 636 021, which nothing in the epilogue should touch) survives to DO1.
+
+Evidence grade: **MEASURED** throughout — the per-slot dump, and the single-slot death
+localised to `iw 306` by direct observation rather than inference.
