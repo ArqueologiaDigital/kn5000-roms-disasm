@@ -4331,3 +4331,56 @@ switch.** Everything upstream and downstream of that is now measured working.
 
 Evidence grade: **MEASURED** — the 0 → 455 998 delivery, against a model taken verbatim from
 item A rather than invented.
+
+## 77. ★★★ THE CONSUMERS FIRE — a missing re-entrancy guard, and §74's census confirmed live
+
+**2026-07-29.** §76 delivered the datum but only ~1 consumer per frame reached it. Measured
+the delay path directly rather than reasoning about `alu_decoded()`:
+
+```
+§77 DELAY-PATH ALU: entered 19 096 320 times, SKIPPED 19 096 320; SRC 0x0B among them 0
+```
+
+★ The ALU **was** entered 19 M times — and reached `SRC 0x0B` **zero** times. The equal
+entered/skipped counts give it away: `exec_alu()`'s own `is_dram` branch had **no re-entrancy
+guard**, so §76's recursive call re-entered it, performed a **second port access**, and
+returned before the arithmetic. The K6 input stage needed exactly this guard (`m_in_k6`) and
+I did not carry the pattern across.
+
+```
+entered 19 096 320, skipped 0;  SRC 0x0B among them 8 841 600
+SRC 0x0B consumed:  491 520  ->  9 333 120     (~19 per frame)
+```
+
+★★★ **~19 consumers per frame, against §74's census prediction of ~15 from the ROM.** A count
+derived statically from the corpus, reproduced dynamically by the emulator, having fixed a
+defect found by a third route. That is three independent things agreeing.
+
+### ⚠ And now every consumer sees zero
+
+```
+SRC 0x0B: 9 333 120 consumptions, 0 with a non-zero datum
+ACCA at w73: min 0 max 0 in BOTH quiet and loud
+VERDICT: SILENT   (the DC is gone -- DC leak 0.00 %)
+```
+
+The publish/consume model is now wrong in the other direction. §76 latches one pending datum
+and the **first** following delay word consumes it; with ~19 consumers per frame, one datum
+cannot serve them. Every delay word is both a consumer *and* an issuer, so the correct model
+is almost certainly **per-line**, not per-port-globally: each of the twelve delay lines has
+its own outstanding access, which is what the read/write descriptor **pairing** (§59-60,
+stride 5) has been saying all along.
+
+★ Note the DC has disappeared entirely — verdict `SILENT`, leak 0.00 %. Three sections ago
+the output was a clamped constant; it is now honestly zero, which is a better failure.
+
+### Status of the chain
+
+```
+delay memory   ✔ healthy      descriptors ✔ real       addressing ✔ correct
+pipeline       ✔ delivers     consumers   ✔ ALL FIRE   (~19/frame, census-matched)
+datum routing  ✘ one pending register serves nineteen consumers   <-- the gap
+```
+
+Evidence grade: **MEASURED** (the entered/skipped asymmetry, the 0 → 8 841 600 jump, the
+census agreement); the per-line model is **INFERRED (strong)** and untested.
