@@ -5620,3 +5620,104 @@ evidence, and its whole mode-2 window is one cell (`FCw`).
 Evidence grade: **MEASURED** (all four predictions, the guard A/B); **INFERRED** for the
 store's true destination — not-D-RAM is forced, but *where* remains open, and §99 deliberately
 does not guess.
+
+---
+
+## §100 — **SRC 0x02 = `reg[addr8]`**, ITEM J's HEDGE PAYS OFF, AND THE GUARD IS RETIRED
+
+### 1. ⚠ FIRST, TWO OF MY OWN TESTS THAT CANNOT FAIL — caught, and reported as failures
+
+`src02.py` census, over all 3057 words:
+
+```
+   SRC  total   mode-1   mode-2   verdict as printed
+   02       1        1        0   "★ MODE-1 LOCKED (1 of 1)"
+   03       1        1        0   "★ MODE-1 LOCKED (1 of 1)"
+```
+
+**SRC 0x02 occurs exactly ONCE in the corpus.** "Mode-1 locked, 1 of 1" and the companion
+"100% of SRC-0x02 words name a host-primed cell, 1 of 1" are criteria that **cannot fail** —
+METHOD RULE 14, which this project wrote after the last one. The tool printed two confident
+verdicts carrying zero information. **The corpus cannot decode SRC 0x02 by frequency; there is
+nothing to count.** Recorded rather than deleted, because the tool is still right about the
+census and the sites.
+
+### 2. The two words, and what the notes already said
+
+```
+  iw70   2A6.1.85.0C7   SRC 0x03   dest reg 0x85   ACT 0x07
+  iw72   000.1.06.087   SRC 0x02   dest reg 0x06   ACT 0x07
+```
+
+`output-stage-decode.md` §7.2 enumerated exactly these, called them *"the sharpest single
+question this pass leaves open"*, and refused to choose — correctly. Its reading (R-2) is
+*"`w70` writing `0x85` … `0x85` is a cell the reverb reads and never writes, so something must
+supply it and `w70` is the only candidate in the machine"*, with two objections: it feeds the
+reverb one frame late, and item J forces `ACT 0x07` not to write `reg[addr8]`.
+
+**§98 and §99 moved both objections:**
+* *"one frame late"* — §98 MEASURED that unit 1 is fed **nothing at all**. One frame late beats
+  never; the objection assumed a better alternative exists and there isn't one.
+* *"item J forbids the write"* — §99 established item J's force comes **entirely from the
+  volume's persistence**. That argument is about `reg 0x06`. It does not reach `0x85`, which is
+  an input cell that *should* be rewritten every frame.
+
+### 3. ★ THE MERGE: our core had SRC 0x02 and 0x03 as ONE case
+
+```cpp
+  case 0x02: case 0x03:                        // "no independent support"
+      L = mem[m_dp];
+```
+
+The two hypotheses in play **require these codes to differ**:
+* item J's escape needs `w72` (SRC 0x02) to be an **IDENTITY**
+* §7.2's R-2 needs `w70` (SRC 0x03) to **SUPPLY** something new
+
+Both cannot hold of one route. They are different codes; nothing forced them to share a case.
+Same shape as the two memories — a merge in the model creating a contradiction in the machine.
+
+### 4. APPLIED — mask bit **24**, and the A/B that could have gone either way
+
+SRC 0x02 alone reads `reg[addr8 | unit]`. SRC 0x03 deliberately keeps the old `mem[ptr]` guess:
+this tests ONE code, per the Part 103 lesson.
+
+**Guard bit `0x20` OFF in both runs**, so nothing protects the level except the decode:
+
+```
+  9F440F   bit 24 OFF   unit0 0x000000  non-zero on       0 frames
+  19F440F  bit 24 ON    unit0 0x200000  non-zero on 452,160 frames
+```
+
+**PREDICTED IN ADVANCE by item J**, days ago, and hedged rather than promoted:
+*"SRC 0x02, undecoded, might carry the level itself and make the write an identity."*
+It does. `w72` is `reg[0x06] ← reg[0x06]`.
+
+### 5. The guard is RETIRED, and that is the point
+
+§99 promoted the `host_reg` guard to the default one section ago. §100 removes it. That is not
+a reversal of §99 — §99 was the correct interim state, and the guard's own comment asked for
+exactly this outcome: **"⛔ A GUARD, NOT A DECODE: it suppresses the symptom so the level
+survives; what w72/w77 really do is OPEN."** It is no longer open. Default mask `0x19F440F`;
+bit 5 stays available for bisection.
+
+A hack retired by understanding is worth more than the audio it didn't produce — and the chip
+is, still, silent.
+
+### 6. Next, and the tension I am NOT smoothing over
+
+SRC 0x03 (`w70`) is now the named candidate to feed unit 1. **But there is a live conflict with
+§97 that must be resolved before implementing it:** under the two-space split, `w70` writes
+**register** `0x85`, while §98 MEASURED body 1 reading **D-RAM** `0x85` through the pointer
+(mode 2). Those are different cells. So R-2 as literally stated cannot feed the reverb under
+§97, and one of the following must give:
+
+* body 1's read of `0x85` is not really mode 2 (our decode of that word is wrong), or
+* `w70`'s store really does target D-RAM (§99's routing is wrong for this word), or
+* the two spaces are not two flat arrays (a window, a shadow, a small file aliasing low
+  addresses) — in which case §97 is right in substance and wrong in shape.
+
+⚠ Note the third possibility means §97 could be **right that they are distinct and wrong that
+they are two independent 256-cell arrays**. I have not tested the shape, only the distinctness.
+
+Evidence grade: **MEASURED** (the A/B, with a live failure mode and the guard disabled);
+**FORCED** that 0x02 and 0x03 cannot share one route; **OPEN** for SRC 0x03 itself.
