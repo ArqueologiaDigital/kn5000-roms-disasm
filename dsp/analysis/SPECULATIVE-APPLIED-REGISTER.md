@@ -3774,3 +3774,63 @@ ladder's output becomes between `iw 332` and `w73`/`w78` — and whether ACCA (b
 
 Evidence grade: **MEASURED** throughout — the per-slot dump, and the single-slot death
 localised to `iw 306` by direct observation rather than inference.
+
+## 67. The epilogue traced with the fix in — it does NO arithmetic at all
+
+**2026-07-29.** With §66's fix, the epilogue is legible end to end for the first time.
+
+```
+iw 332  U=1  ACCA=0   ACCB=3 078 631 876 196   P=0     <- body 1 ends
+iw  60  U=0  ACCA=0   ACCB=3 078 631 876 196   P=0
+iw  65  U=0  ACCA=0   ACCB=3 078 631 876 196   P=0
+iw  73  U=0  ACCA=0   ACCB=3 078 631 876 196   P=0     <- presents ACCA -> DO1 = 0
+iw  78  U=0  ACCA=0   ACCB=3 078 631 876 196   P=0     <- presents ACCB -> DO2
+iw  81  U=0  ACCA=882 940 994 777              P=333 185 246 425
+```
+
+★★★ **ACCB is bit-identical from `iw 60` to `iw 81`.** Twenty-two words execute and not one
+of them changes it. And **`P = 0` across the whole epilogue** until `iw 79`. The epilogue
+performs **no arithmetic on the body's result whatsoever** — it is a pure presentation stage
+in our model, which is precisely what §29 measured (*"the multiply never issues"*) and what
+§39 localised (*"what enables the multiply, as distinct from the fetch, is OPEN"*).
+
+### So the DC has an exact arithmetic explanation
+
+```
+ACCB at the presentation :  3,078,631,876,196
+acc_to_datum (>>16)      :         46,977,433
+24-bit rail              :          8,388,607
+overshoot                :        5.6x  -> CLAMPS -> a constant
+expected body datum      :        16.0x too hot
+```
+
+★ **DO2's DC is a clamp.** The body's result is 5.6× the rail before any level is applied, so
+the clamp returns the same value every frame regardless of input — a constant *by
+construction*, not by a broken datapath. That is why every reading tried since §44 produced
+either this DC or silence: the two outcomes are "clamped" and "not clamped", and nothing in
+between was ever reachable while the epilogue applies no attenuation.
+
+★★ And it is **16× hotter than the body's own expected datum** (~2 936 000), which points at
+body 1's ladder: §65 measured its accumulation stepping by a constant 769 657 969 049 per
+repetition. A ladder that adds a fixed quantum rather than a decaying one is missing its
+feedback attenuation — the same gap §51 named as *"the loop has no gain term because the body
+has no gains"*.
+
+### DO1's zero has a different cause
+
+`ACCA = 0` already at `iw 328`, i.e. **before body 1 even ends**. Body 0 filled it with
+539 074 636 021 (§65), so ACCA is cleared somewhere between body 0's exit and body 1 — in the
+kernel's second block, slots 50..59. That is a separate, small, well-bounded question:
+**twelve words, and one of them discards unit 0's entire result.**
+
+### Two questions, both now sharp
+
+1. **Why does the epilogue form no product?** (`P = 0` at 22 of 22 slots.) This is the oldest
+   open item in the investigation and it is now isolated from every other defect.
+2. **What clears ACCA in kernel slots 50..59?** New, and cheap — the trace already covers
+   those slots.
+
+Neither is speculative. Both are single-question, single-window measurements.
+
+Evidence grade: **MEASURED** — the full epilogue dump, and the clamp arithmetic checked
+against the 24-bit rail.
