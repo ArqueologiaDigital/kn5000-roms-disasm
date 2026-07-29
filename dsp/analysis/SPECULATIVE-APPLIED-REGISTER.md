@@ -3535,3 +3535,67 @@ Two observations kept for later, not interpreted now:
 is worth another attempt first.
 
 Evidence grade: **MEASURED** — 64 runs, one criterion, declared before the sweep.
+
+## 59-60. ★★★★ P1.1 + P1.2 SHIPPED — the chip receives its descriptors for the first time
+
+**2026-07-29.** Implemented the roadmap's critical-path head.
+
+### P1.1 — the poke port
+
+`cmd 0x01` address `0x0160` is now parsed as a **packet stream** instead of being written to
+I-RAM[352+]. A `0x0A` marker introduces a data packet (24-bit datum + tag byte); anything
+else is a 36-bit word that aims a write pointer (`0x825` → descriptor, `0x821` → C-RAM,
+`class4 == 1 && lo12 == 0x000` → D-RAM register file).
+
+★ **The tag census came out self-consistent on the first run, which is the falsifier passing:**
+
+```
+42 pointer words | D-RAM 59, DESCRIPTOR 43, C-RAM 13, unrecognised 4
+tags: 15:42  95:17  |  4C:19  CC:24  |  26:8  A6:5
+```
+
+`0x15 + 0x95 = 59`, `0x4C + 0xCC = 43`, `0x26 + 0xA6 = 13` — every raw tag is one of the
+three C4 tags with or without bit 7, and **`0x80` is the direction bit**, exactly as §57
+predicted from the byte stream. Only 4 packets of 119 are unrecognised.
+
+### P1.2 — the descriptor bank is its own space
+
+Writing descriptors into D-RAM was not enough: the microcode's own stores clobbered them
+(measured — the host wrote 43 and the port still read `0x0000`). `r3-delaydram.md` says the
+bank is **its own space**, with its own writer `LABEL_038922`. Given one, and read by the
+delay port.
+
+### ★★★ The result
+
+```
+00:40F3  02:51E2  03:4000  04:52FF  05:513B  06:5460  07:51E2  08:56D1  09:52FF
+0A:5A16  0B:5460  0C:5B06  0D:56D1  0E:5C06  0F:5A16  10:5DB9  11:5B06  12:5F0C
+13:5C06  14:60CE  15:5DB9  16:6272  17:5F0C  18:43A5  19:4617  1A:47F7  1B:430B
+...  2A:04D8  2B:0208  2C:06E0  2D:0410  2E:4000  2F:0618       (40 cells)
+```
+
+★★ **The pairing is visible to the eye**: `51E2` at 02 and 07, `52FF` at 04 and 09, `5460`
+at 06 and 0B, `56D1` at 08 and 0D, `5A16` at 0A and 0F, `5B06` at 0C and 11, `5C06` at 0E
+and 13, `5DB9` at 10 and 15, `5F0C` at 12 and 17 — **every value twice, exactly five cells
+apart.** One read and one write per delay line, which is `dram-datapath.md` item C's
+accounting arriving from a completely independent direction.
+
+```
+descriptor cells non-zero   1 561 919  ->  4 559 999 accesses
+```
+
+⚠ The `[R dsc 26 = 0000]` lines in the §46 report are **stale** — that instrumentation
+records the *first* value seen per index, captured during boot before the upload. Cells
+`0x25..0x2F` are populated. (A reminder that an instrument written for one question can
+mislead when read for another.)
+
+### Still DC, and that is expected
+
+The verdict is unchanged. The roadmap's critical path has four more links after these two —
+P2.1 (the ACCB read gate), P3.0 (the cursor cross-tab), P3.1 (the per-unit base), P3.3 (the
+descriptor source). **What has changed is that the chip is no longer being measured with no
+input:** it now has delay descriptors, D-RAM parameters and a zero-fill, none of which it has
+ever had before in this emulator.
+
+Evidence grade: **MEASURED** — the tag census closes arithmetically, and the descriptor
+pairing at stride 5 independently reproduces item C's twelve-lines-one-read-one-write.
