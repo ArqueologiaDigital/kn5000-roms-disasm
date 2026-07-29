@@ -3496,3 +3496,42 @@ than merely identified.
 Evidence grade: **MEASURED** — decoded directly from the captured upload stream; the tags,
 the pairing and the counts all match independently established results (`host-side.md` C4/A4,
 `dram-datapath.md` item C, the FORCED direction split).
+
+## 58. The 64-combination sweep — ZERO tracking, and that is the useful answer
+
+**2026-07-29.** Felipe's point was that the right answer might be a **joint** setting I never
+tried, because I had been convicting readings one at a time. So: the six genuinely uncertain
+bits, all 64 combinations, scored by the §54 in-core tracking test.
+(`sweep-2026-07-29.txt`, fixed ON: coeff_fetch, deferred presentation, C-RAM level, read
+pipeline; fixed OFF: bit 9.)
+
+```
+TRACKS THE INPUT :  0 of 64
+DC               : 42
+SILENT           : 22
+```
+
+★ **Not one combination tracks the input.** Every setting either emits a constant or eats
+the signal. The hypothesis that a joint configuration would work is cleanly **refuted** —
+and that is worth far more than another single-bit result, because it closes the whole
+64-point space at once rather than one corner of it.
+
+★★ **And it corroborates the roadmap's critical path exactly.** §56/§57 established that the
+chip has never received its delay descriptors (870 writes, tag `0x4C`) or its D-RAM
+parameters (881 writes, tag `0x15`) — the poke port that carries both is unimplemented.
+**No permutation of ALU readings can compensate for a chip whose delay lines are unaddressed
+and whose state cells are never initialised.** The sweep is the experimental confirmation
+that the blocker is upstream of everything it varied.
+
+Two observations kept for later, not interpreted now:
+
+* one configuration gives quiet peak **−2 936 012** and loud peak **+2 936 011** — equal
+  magnitude, opposite sign, and that magnitude is *exactly* the body's long-expected datum
+  (~2 936 000). Still DC by the criterion, but the number is not a coincidence worth losing.
+* the DC value `−26 708` recurs across many configurations, which makes it a fixed artefact
+  of something common to all of them rather than of any varied reading.
+
+⇒ **Next is P1.1**, now fully specified by §57, and the sweep says nothing downstream of it
+is worth another attempt first.
+
+Evidence grade: **MEASURED** — 64 runs, one criterion, declared before the sweep.

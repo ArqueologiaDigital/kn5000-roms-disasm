@@ -1,0 +1,66 @@
+MASK     bits                         DCleak passthru  quietPeak   loudPeak  VERDICT
+0x44C     (none)                          ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x44F     A                               ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x45C     B                               ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x45F     A B                             ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x4CC     C                               ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x4CF     A C                             ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x4DC     B C                             ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x4DF     A B C                           ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x54C     D                               ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x54F     A D                             ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x55C     B D                             ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x55F     A B D                           ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x5CC     C D                             ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x5CF     A C D                           ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x5DC     B C D                           ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x5DF     A B C D                         ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x144C    E                               ?%     0.0%         13          0  SILENT -- chip eats the signal
+0x144F    A E                             ?%     0.0%     129023     -26708  DC -- output present with NO input
+0x145C    B E                             ?%     0.0%         13          0  SILENT -- chip eats the signal
+0x145F    A B E                           ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x14CC    C E                             ?%     0.0%         13          0  SILENT -- chip eats the signal
+0x14CF    A C E                           ?%     0.0%     129023     -26708  DC -- output present with NO input
+0x14DC    B C E                           ?%     0.0%         13          0  SILENT -- chip eats the signal
+0x14DF    A B C E                         ?%     0.0%     129023     -26708  DC -- output present with NO input
+0x154C    D E                             ?%     0.0%    2936011    2936011  DC -- output present with NO input
+0x154F    A D E                           ?%     0.0%   -2936012    2936011  DC -- output present with NO input
+0x155C    B D E                           ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x155F    A B D E                         ?%     0.0%   -2865545    2644164  DC -- output present with NO input
+0x15CC    C D E                           ?%     0.0%    2936011    2936011  DC -- output present with NO input
+0x15CF    A C D E                         ?%     0.0%   -2936012    2936011  DC -- output present with NO input
+0x15DC    B C D E                         ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x15DF    A B C D E                       ?%     0.0%   -1130824   -1130824  DC -- output present with NO input
+0x244C    F                               ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x244F    A F                             ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x245C    B F                             ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x245F    A B F                           ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x24CC    C F                             ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x24CF    A C F                           ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x24DC    B C F                           ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x24DF    A B C F                         ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x254C    D F                             ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x254F    A D F                           ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x255C    B D F                           ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x255F    A B D F                         ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x25CC    C D F                           ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x25CF    A C D F                         ?%     0.0%    2877291    2877291  DC -- output present with NO input
+0x25DC    B C D F                         ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x25DF    A B C D F                       ?%     0.0%     -26708     -26708  DC -- output present with NO input
+0x344C    E F                             ?%     0.0%     219303          0  SILENT -- chip eats the signal
+0x344F    A E F                           ?%     0.0%   -8388608     -26708  DC -- output present with NO input
+0x345C    B E F                           ?%     0.0%     335160          0  SILENT -- chip eats the signal
+0x345F    A B E F                         ?%     0.0%     335160     -26708  DC -- output present with NO input
+0x34CC    C E F                           ?%     0.0%     219303          0  SILENT -- chip eats the signal
+0x34CF    A C E F                         ?%     0.0%   -8388608     -26708  DC -- output present with NO input
+0x34DC    B C E F                         ?%     0.0%     335160          0  SILENT -- chip eats the signal
+0x34DF    A B C E F                       ?%     0.0%   -8388608     -26708  DC -- output present with NO input
+0x354C    D E F                           ?%     0.0%    2936011    2936011  DC -- output present with NO input
+0x354F    A D E F                         ?%     0.0%   -2936012    2936011  DC -- output present with NO input
+0x355C    B D E F                         ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x355F    A B D E F                       ?%     0.0%   -2865545    2644164  DC -- output present with NO input
+0x35CC    C D E F                         ?%     0.0%    2936011    2936011  DC -- output present with NO input
+0x35CF    A C D E F                       ?%     0.0%   -2936012    2936011  DC -- output present with NO input
+0x35DC    B C D E F                       ?%     0.0%          0          0  SILENT -- chip eats the signal
+0x35DF    A B C D E F                     ?%     0.0%   -1130824   -1130824  DC -- output present with NO input
+DONE
