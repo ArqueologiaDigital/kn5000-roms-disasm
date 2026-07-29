@@ -3354,3 +3354,73 @@ A contingency table between two predicates that cannot co-occur is not a measure
 
 Evidence grade: **REFUTATION** (of §52's cross-tab, on structural grounds);
 **MEASURED** (the class4 census and the 834/870 accounting).
+
+## 56. ★★★★ THE ROOT CAUSE, FOUND BY AUDIT: the host poke port is unimplemented
+
+**2026-07-29.** A 14-agent audit of the whole project (→ `ROADMAP-2026-07-29.md`) found the
+defect that sits underneath §§42–55. **Independently re-verified by hand before adoption.**
+
+### The host's control channel writes into dead I-RAM
+
+`cmd 0x01` carries a 16-bit address, and the core treats it as an **I-RAM word index**
+(`upd6383.cpp:588-598`). Address **`0x0160` is not an address — it is a POKE PORT**
+(`host-side.md` C4/A4). Its payloads land at I-RAM[352..382], **past the 285-slot frame,
+where nothing ever executes.**
+
+Confirmed from the ROM's own upload log:
+
+```
+transfer  7: cmd 0x01  7 bytes  I-RAM[352..352]   01 60 | 08 01 06 E8 21
+                                        -> word 801.0.6E.821 = ldptr, C-RAM pointer <- 0x6E
+transfer 19: cmd 0x01 72 bytes  I-RAM[352..365]   "(24 x3) candidate C-RAM/D-RAM words"
+```
+
+★★★ `0x6E` is **exactly** where a C-RAM write run begins. The poke port is the channel that
+aims every other transfer — and the dump has been labelling those payloads *"candidate
+C-RAM/D-RAM words"* the entire time.
+
+**Consequence: all 881 tag-`0x15` D-RAM writes (65 cells) and all 870 tag-`0x4C` descriptor
+writes (52 cells) are DROPPED.** So:
+
+* every delay descriptor reads `0x0000` (§46 measured exactly this and I blamed the port);
+* **no per-effect parameter has ever reached the chip** — delay time, reverb time, feedback,
+  high-damp, LFO table, ER level;
+* D-RAM is never zero-filled, so state cells never clear — the saturation of §48/§53.
+
+### ⛔ Two "chip facts" I reasoned from are EMULATOR ARTEFACTS
+
+* §42: *"the host's only write path reaches C-RAM; there is no host write to D-RAM anywhere."*
+  **False.** There are 881 of them and we drop every one. The level being absent from D-RAM
+  is our bug, not the chip's design — though reading the level from C-RAM may still be right.
+* §47: *"nothing writes those D-RAM cells."* Same artefact. It motivated mask bit 9, which
+  §52 then "refuted" with a tautology (§54). **The entire bit-9 chain — motivation and
+  refutation — is void.**
+
+### Two more confirmed by inspection
+
+**Unit 1 has never reached a pin.** `m_accb` is assigned **only** at `upd6383.cpp:1849`
+behind `m_specmask & 1` — *clear* in the old `0x54c` default. So `w78` presented an
+accumulator nothing wrote, and **DO2 was identically 0 on every frame**. The reverbs are the
+corpus's only unit-1 programs. ★ Every measurement in §§43–53 is **DO1-only** and must not be
+quoted as chip-wide. (Restored in §55's `0x5DF` — Felipe's "stop pruning" instruction fixed
+this before I knew why it mattered.)
+
+**The frame clock is 8.8 % wrong.** `kn5000_tonegen.cpp:78` allocates the stream at **48 000**
+and `:741` hard-codes `SAMPLE_RATE = 48000.0`, while Fs = **44 100** is PROVEN four
+independent ways. Every millisecond figure derived from the emulator is off by 8.8 %.
+
+### The critical path, six links
+
+```
+P0.1 conformance harness -> P1.1 HOST POKE PORT -> P2.1 ACCB read gate
+   -> P3.0 cursor cross-tab -> P3.1 per-unit base -> P3.3 descriptor source
+```
+
+*"Everything before that is measurement of an instrument that has no input."* Which is a fair
+description of the last twenty sections.
+
+★ **P1.1 is the single highest-leverage fix in the project** and it is not an ISA question at
+all — it is an unimplemented host command.
+
+Evidence grade: **MEASURED** (poke payload decoded from the upload log; both source lines
+inspected); the plan's wider claims are graded in `ROADMAP-2026-07-29.md`.
