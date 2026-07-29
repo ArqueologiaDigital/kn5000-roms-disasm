@@ -3904,3 +3904,58 @@ first, and I added it three sections before I looked.
 
 Evidence grade: **MEASURED** throughout; §69's suppression is **SPECULATIVE** but now
 supported by a concrete consequence rather than by preference.
+
+## 70. ⛔ Why it does not track: the body SELF-OSCILLATES, and −2 936 012 is not a signal
+
+**2026-07-29.** §68-69 reported DO1 reaching *"exactly the long-predicted body datum,
+−2 936 012"*. **That reading is wrong, and the correction matters more than the result.**
+
+```
+ACCA at w73   quiet frames  min -767 935 722 468   max +768 999 109 494
+              loud  frames  min -767 935 722 468   max +768 999 109 494
+```
+
+★ The accumulator is **not constant** — it swings ±7.7 × 10¹¹ every frame. But **the range is
+identical with and without input.** The chip is generating that swing *by itself*.
+
+### The arithmetic closes exactly, and it is damning
+
+```
+ACCA peak            768 999 109 494
+>>16                      11 733 890        (24-bit rail: 8 388 607)
+-> CLAMPS to               8 388 607
+x level 0x2CCCCC           2 936 011
+measured DO1 peak          2 936 012
+```
+
+★★★ **The output is the rail times the output level.** And because the level is
+`0x2CCCCC = 2 936 012` in Q0.23, `rail × level / 2²³ ≈ level` — **so DO1's "signal" is
+numerically the level coefficient itself.** It looked like the predicted body datum because
+`0x2CCCCC` *is* 2 936 012; the resemblance is a coincidence of the same constant appearing
+on both sides.
+
+⚠ And that casts doubt backwards: this core's own comment *"the body delivered a datum of 504
+instead of ~2 936 000"* may itself have been this artefact rather than a real expectation.
+**The figure ~2 936 000 should not be quoted as the body's target again without re-deriving
+it from the ROM.**
+
+### So the diagnosis is stability, not routing
+
+The datapath is now, as far as every measurement can tell, **correct**: the input arrives
+(§35), both bodies compute (§65), both units reach their pins (§68-69), the descriptors are
+real (§59-60), the level is applied (§42). What is wrong is that **the ladder oscillates and
+clips**, so the output is pinned by the rail and the level and cannot encode the input.
+
+That is exactly §51's finding, now visible as a waveform rather than an inference:
+**the loop has no gain term because the body has no gains.** A feedback ladder whose
+per-stage attenuation is missing will oscillate at full scale regardless of what is fed in —
+and it will do so *identically* whether the input is a note or silence, which is precisely
+what the two identical ranges show.
+
+⇒ **The remaining question is a single number per stage, and it is not in the C-RAM ramp
+bank** (§53 killed every scaling of it). The roadmap's answer is `H1`: a **measured T60 from
+the real instrument gives the per-pass loop gain numerically** — the one quantity three
+separate guesses (Q0.23, unity, Q0.16) have failed to supply.
+
+Evidence grade: **MEASURED** (the quiet/loud range comparison; the clamp arithmetic closing
+to one LSB); **RETRACTION** of §68's "the predicted datum arrived".
