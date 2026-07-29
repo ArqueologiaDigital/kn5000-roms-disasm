@@ -4819,3 +4819,58 @@ installs).
 
 Evidence grade: **MEASURED** (the per-cell census, with a control that could have gone either
 way), corroborated by an independent hand-written source landing on the same addresses.
+
+## 87. ★★★★ NO BODY WORD CAN REACH 0x4C — the input window is DISPLACED BY 0x46
+
+**2026-07-29.** §86 set the falsifier: *"if no body word can address `0x4C`, the connection
+must be made by the pointer the CALL installs."* Checked both routes over the corpus.
+
+```
+1. mode-1 words naming 0x4C or 0xCC :  0  across the twelve reverbs
+2. pointer walk from the FORCED base 0x85, ROOM REVERB 1 and CONCERT REVERB 1:
+      15 distinct cells, range 0x00..0xD2
+      reaches 0x4C? NO      cells visited in 0x40..0x60: NONE AT ALL
+```
+
+★★ **The body cannot address `0x4C` by any route.** The falsifier fired.
+
+### ★★★ And this core's own comment says what the pointer should be
+
+Quoted verbatim from `upd6383.cpp`, dated 2026-07-27:
+
+> *"★ THERE IS A STEADY STATE AGAIN, and **X IS 0xFF**. … the per-unit rebase at the CALL
+> (DRAM_UNIT_BASE, FORCED) does place the pointer: the unit-1 body starts at 0x85, walks
+> −133, the output stage walks −1, and the frame ends on 0xFF. So the two deposits below land
+> on **cells 0x01 and 0x04** — exactly the two DI latches of
+> `output-stage-decode.md` sect. 3.5's map, which is a PREDICTION of that map and not an
+> input to it."*
+
+Against what we measure:
+
+```
+                X = 0xFF (the note)        X = 0x45 (MEASURED, 98.31 % of frames)
+input latch L   0x01                       0x47
+input latch R   0x04                       0x4A
+deposit X+7     0x06                       0x4C
+```
+
+★★★★ **The whole input window is displaced by exactly `0x46`.** And at `X = 0xFF` the deposit
+lands on **`0x06`** — adjacent to the **FORCED** per-unit body base `0x05`. The kernel would
+be handing the input to the body's own base region, which is precisely the connection §86
+found missing.
+
+⇒ **The defect is the frame-closure steady state**, not the input stage, not the body, and
+not any ALU reading. Our pointer ends each frame on `0x45` where the documented walk
+(`0x85 − 133 − 1`) ends on `0xFF`, so every input-stage address is off by 0x46 and the body
+looks in the right place at the wrong cells.
+
+★ §37 measured the closure residue as **exactly 0** in steady state and concluded the pointer
+"returns exactly". That is true — it returns to a *stable* value, and I never checked it
+returned to the **right** value. A residue of zero says the walk is self-consistent; it says
+nothing about its origin.
+
+**Next: find why the walk terminates on 0x45 rather than 0xFF** — a 0x46 discrepancy in the
+per-frame pointer arithmetic, with every landmark on both sides now known.
+
+Evidence grade: **MEASURED** (both addressing routes enumerated over the corpus; the 0x46
+displacement arithmetic), against a **FORCED** base and a documented steady state.
