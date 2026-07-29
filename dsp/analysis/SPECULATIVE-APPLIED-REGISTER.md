@@ -5721,3 +5721,77 @@ they are two independent 256-cell arrays**. I have not tested the shape, only th
 
 Evidence grade: **MEASURED** (the A/B, with a live failure mode and the guard disabled);
 **FORCED** that 0x02 and 0x03 cannot share one route; **OPEN** for SRC 0x03 itself.
+
+---
+
+## §101 — SRC 0x03 IS **BLOCKED, NOT OPEN**, AND §100 NEEDS RIGHT-SIZING
+
+### 1. ⚠ FIRST: §100 CLAIMED MORE THAN IT MEASURED
+
+§100 decoded SRC 0x02 as `reg[addr8]`. What the A/B established is narrower:
+
+* **MEASURED:** the value SRC 0x02 must produce at `w72` is `reg[0x06]`, the level. The level
+  survives with the guard disabled, on 452 160 frames, where it collapsed before. That stands.
+* **NOT established:** that the *code* means `reg[addr8]` generally. **n = 1.** Any reading
+  that yields the level at that one site passes identically.
+
+And there is positive evidence against the general form: **SRC 0x07 on a mode-1 word already
+reads `reg[addr8]`** — that is the `regfile` local §97 routed, and the census shows **37 mode-1
+words use it**. So §100 gives two distinct opcodes the same meaning. Instruction sets do not
+usually spend a code twice. The *effect* at `w72` is right; the *identity* of the code is
+weaker than §100 wrote it. Regrade: **MEASURED** at the site, **INFERRED (weak, n=1)** as a
+route.
+
+### 2. The experiment for SRC 0x03, and why it is VOID rather than negative
+
+SRC 0x03's only corpus site is `w70`, so again n = 1 and again the corpus cannot count. The
+testable consequence: §7.2's R-2 needs `w70` to SUPPLY `reg 0x85`, so the value it stores must
+be **input-dependent**. §86 already reports exactly that, per cell, and only `0x06`/`0x07`
+qualify — a two-sided criterion that is currently failing, which is the right shape.
+
+Implemented SRC 0x03 = the accumulator (mask bit 25) — the one operand at that point in the
+frame that could plausibly carry unit 0's result. Result: **bit-identical. Cell `0x85` did not
+join the input-dependent set.**
+
+⚠ **That refutes nothing.** From the same run:
+
+```
+  §63 PRESENT unit0  cur_unit1=0  ACCA=0 ACCB=0  pacc=0 -> v=0
+  §63 PRESENT unit1  cur_unit1=0  ACCA=0 ACCB=0  pacc=0 -> v=0
+  ★ §81 PROBE kernel iw12   quiet [0 .. 0]  loud [-65,697,963,445 .. 61,536,416,410]  ★ DIFFERS
+```
+
+**Both accumulators are ZERO at the epilogue.** Storing the accumulator stores zero whether or
+not the reading is correct. The criterion was sound; the **operand was known-dead**, and
+knowably so — §46 recorded that the presentation emits a kernel constant, and the standing open
+question in this project's own notes is *"nothing connects the BODY's accumulator to
+`w73`/`w78`"*. `check-the-handover-first` says compute the NULL before interpreting the table.
+I computed it after.
+
+### 3. ★ THE USEFUL RESULT: a named blocker, and an ordering
+
+SRC 0x03 cannot be decoded **at all** right now, and the reason is specific:
+
+> Every candidate reading of SRC 0x03 must be judged by what `w70` supplies. **Every operand
+> available at `w70` is currently zero.** No experiment at that site can discriminate between
+> readings until the accumulator survives from the kernel to the epilogue.
+
+So this is not an open question awaiting a better idea — it is a **blocked** one with a
+prerequisite, and the prerequisite is the project's oldest standing defect. The dependency runs:
+
+```
+  accumulator survives kernel -> epilogue      (OPEN, oldest defect, §46)
+    -> w70 has a live operand
+      -> SRC 0x03 becomes decidable by the §86 two-sided test (already built)
+        -> R-2 testable: does w70 feed unit 1?
+          -> and only then does the §97/§98 routing conflict need resolving
+```
+
+The last line matters: I was about to resolve the register-vs-D-RAM conflict for `0x85`. That
+work is **premature** — it decides where a zero goes.
+
+Bit 25 stays implemented and OFF by default. Not reverted: it is the right hypothesis to re-run
+the moment the blocker clears, and the test harness for it now exists.
+
+Evidence grade: **MEASURED** that both accumulators are zero at the epilogue while the input
+reaches iw12/iw20; **VOID** for the SRC 0x03 experiment; **INFERRED** for the dependency order.
