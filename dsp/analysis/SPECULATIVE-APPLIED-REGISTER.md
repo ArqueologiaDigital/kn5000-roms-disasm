@@ -5795,3 +5795,95 @@ the moment the blocker clears, and the test harness for it now exists.
 
 Evidence grade: **MEASURED** that both accumulators are zero at the epilogue while the input
 reaches iw12/iw20; **VOID** for the SRC 0x03 experiment; **INFERRED** for the dependency order.
+
+---
+
+## §102 — THE ACCUMULATOR DOES NOT "DIE". IT IS HANDED OVER THROUGH MEMORY, AND **BODY 0 FAILS TO PICK IT UP**
+
+§101 named the blocker as *"the accumulator does not survive from the kernel to the epilogue"*.
+Measuring it dissolves that framing.
+
+### 1. Where it stops being input-dependent
+
+Existing §81 probes, extended into the window between the last live probe (iw30) and the first
+dead one (iw40):
+
+```
+  after iw30   quiet [329,853,435,904]      loud [-1,715,237,814,272 .. 2,374,944,442,285]  ★ DIFFERS
+  after iw31   quiet [329,853,435,904]      loud [-1,715,237,814,272 .. 2,374,944,442,285]  ★ DIFFERS
+  after iw32   quiet [395,824,060,170]      loud [395,824,060,170]                          IDENTICAL
+  after iw34   quiet [274,877,906,944]      loud [274,877,906,944]                          IDENTICAL
+  after iw39   quiet [401,321,689,088]      loud [401,321,689,088]                          IDENTICAL
+```
+
+**`iw32` = `000.A.FF.207`, `f31 = 0`, `SRC 0x08`.** `f31 = 0` is `acc <- P`: it *discards* the
+accumulator unconditionally and reloads it from the product.
+
+### 2. ⚠ AND I FIRST BLAMED THE WRONG WORD, FOR THE OLDEST REASON
+
+I read the probes as sampling **before** the slot executes, which put the death at `iw31` — a
+**C-format** word, and the C-format handler has previous form (Part 102's phantom DC was
+`2436 << 11`, manufactured there). It was a satisfying story and it was wrong.
+
+The probe block sits **after** `exec_decoded(word)` (`upd6383.cpp:3174` vs `:3195`). Probe
+`iwN` is the accumulator *after* slot N. I checked the source instead of building on the
+assumption, which is the only reason this is a paragraph and not a section. The labels are now
+corrected in the code so the next reader cannot repeat it.
+
+### 3. ★★★ THE REFRAME: `iw32` IS NOT A DEFECT
+
+A `LOAD acc <- P` starting a fresh MAC chain is **normal DSP behaviour**, and the kernel has
+already put the audio somewhere safe before it fires. §86, same run:
+
+```
+  ★ cell 06  quiet [0 .. 8388607]  loud [0 .. 16776739]   INPUT-DEPENDENT
+  ★ cell 07  quiet [0 .. 8388607]  loud [0 .. 16772017]   INPUT-DEPENDENT
+  2 of 29 kernel-written cells are INPUT-DEPENDENT
+```
+
+The audio is deposited in D-RAM `0x06`/`0x07` by iw11..iw32 and **the handover is through
+memory, not through the accumulator.** So "the accumulator must survive to the epilogue" was
+never a requirement. §101's blocker, as stated, does not exist.
+
+### 4. ★★★ SO WHERE IT ACTUALLY FAILS — and it is one step, not a chain
+
+§98 measured that **body 0 READS the audio cells**: `03r [05r] [07rw] ...`. And §81 measures
+what body 0's accumulator does with them:
+
+```
+  body-0 iw90       quiet [274,881,642,546]  loud [274,881,642,546]  IDENTICAL
+  body-0 END iw152  quiet [0 .. 0]           loud [0 .. 0]           IDENTICAL
+```
+
+**Body 0 reads two cells that demonstrably carry the input and produces an accumulator that
+does not depend on it.** That is the defect, stated as one fact:
+
+> The kernel hands the audio over correctly. The body picks it up and loses it.
+
+Unit 1 not being fed (§98) is downstream of this and probably *not* independent — body 0's
+result is a plausible source for the unit-1 send, and body 0 has no result.
+
+### 5. What this reorders
+
+The §101 dependency chain is **wrong at its root** and is withdrawn:
+
+```
+  WITHDRAWN:  accumulator survives kernel -> epilogue  ->  w70 live  ->  SRC 0x03  -> ...
+  REPLACED:   body 0 converts its input-bearing reads into an input-bearing accumulator
+                -> body 0 has a result
+                  -> the unit-1 send has a possible source
+                    -> SRC 0x03 / R-2 become decidable
+```
+
+The new head of the chain is **narrow and instrumented**: body 0 is iw84..199, its first
+audio-bearing read is at `[05r]`, and the §81 probe at iw90 is already inside it. The next
+measurement is which slot between the read and iw90 drops the operand — the same bisection that
+worked here, on a region a tenth the size of the frame.
+
+⚠ **Grade honestly:** §101's blocker was MEASURED (the accumulators *are* zero at the
+epilogue) but MIS-INTERPRETED — a true observation promoted to a causal requirement without
+checking whether the machine needs it. The observation stands; the conclusion drawn from it
+does not.
+
+Evidence grade: **MEASURED** (probe series, cell input-dependence, probe placement verified in
+source); **INFERRED** that body 0's failure is upstream of unit 1's.
