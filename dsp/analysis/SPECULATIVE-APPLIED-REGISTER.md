@@ -4716,3 +4716,54 @@ most costly wrong turn in this register.
 
 Evidence grade: **MEASURED** (the `return` located in source; the MUL and probe deltas across
 one bit).
+
+## 85. WHERE THE INPUT LEAVES THE ACCUMULATOR — iw39, and what that implies
+
+**2026-07-29.** Probed a ladder through the kernel rather than proposing a model.
+
+```
+kernel iw12   quiet [0 .. 0]              loud [-65 697 963 445 .. 61 536 416 410]   ★ DIFFERS
+kernel iw20   quiet [0 .. 0]              loud [-282 529 599 130 .. 264 633 226 187]  ★ DIFFERS
+kernel iw30   quiet [329 853 435 904]     loud [-1 715 237 814 272 .. 2 374 944 442 285]  ★ DIFFERS
+kernel iw40   quiet [401 321 689 088]     loud [401 321 689 088]                       IDENTICAL
+kernel iw46   quiet [0]                   loud [0]                                     IDENTICAL
+body-0 entry  quiet [0]                   loud [0]                                     IDENTICAL
+```
+
+★★ **The input is in the kernel accumulator through iw30 — a ±2.4 × 10¹² swing — and gone by
+iw40.** The trace names the word:
+
+```
+n=37  iw=37  0092A011C0   ACCA=1 086 503 328 112   P=401 321 689 088   MUL=Y
+n=39  iw=39  0410AFF647   ACCA=  401 321 689 088   P=401 321 689 088   MUL=Y
+```
+
+`iw 39` = `410.A.FF.647`, `f31 = 0` ⇒ **LOAD acc ← P**, and `P = 401 321 689 088` is
+**identical in quiet and loud**. So the kernel's input-carrying accumulation is *deliberately
+discarded* by a LOAD whose product does not carry the input.
+
+### ★★★ Which suggests the handoff is not the accumulator at all
+
+I have spent §81–§85 assuming the input must reach the body *through the accumulator*, because
+that is where the kernel puts it. But a LOAD at iw39 that throws it away is not a defect if
+the input was already **committed elsewhere** — and the kernel demonstrably stores: `w0` is
+*"ST mem[X+0]"*, `w3` and `w7` store, `w9` stores *"the only input-stage product the header's
+mix block consumes"* (`K6_INPUT_STAGE`, in this core's own table).
+
+⇒ **The input almost certainly crosses into the body through D-RAM, not through the
+accumulator.** The kernel mixes it, stores it to a cell, and the body reads that cell with
+`SRC = MEM`. On that reading iw39's LOAD is correct behaviour — the accumulator is scratch
+that has already done its job — and the real question becomes **which cell the kernel commits
+the input to, and whether the body reads it.**
+
+★ That reframes §81's conclusion. *"The kernel accumulator arrives at the body empty"* is
+**true and probably not a defect.** The chain I drew ending in "one link between two things
+that both work" was drawn along the wrong wire.
+
+**Next, and it is a measurement not a model:** watch every D-RAM cell the kernel writes,
+split by quiet/loud, and find which ones carry the input. Then check whether any body word
+reads those cells. The falsifier is clean — if no D-RAM cell is input-dependent, the handoff
+really is the accumulator and §85 is wrong.
+
+Evidence grade: **MEASURED** (the probe ladder; iw39 identified from the trace);
+**INFERRED** for the D-RAM handoff, from the kernel's own documented stores.
