@@ -5328,3 +5328,121 @@ this question.
 
 Evidence grade: **MEASURED** (the writer census); the two-space reading is **INFERRED
 (strong)** — it is the only reading under which both prior measurements survive.
+
+---
+
+## §97 — MODE-1 `addr8` AND MODE-2 `mem[ptr]` ARE **NOT** THE SAME MEMORY, AND THE ALIAS WAS DESTROYING THE UNIT-0 OUTPUT LEVEL
+
+§96 asked the question this section answers, and named `dram-datapath.md` and
+`register-space.md` as the notes that bear on it.  Both were read **before** any model was
+proposed, and `register-space.md` C2 turns out to be most of the answer already.
+
+### 1. The decisive argument needs no pointer walk
+
+`output-stage-decode.md` item **J** is **FORCED**, and the disassembler's guard 6 already
+rests on it:
+
+> *"On a MODE-1 word ACTION 0x07 does NOT write `reg[addr8]`: the output stage's `w72` is
+> `000.1.06.087` and register `0x06` is the unit-0 OUTPUT LEVEL, written once by the
+> firmware's `EFF_VolumeLoop` after linking (PROVEN BY CONSTRUCTION) and carrying the user's
+> effect depth.  **If ACTION 0x07 on a mode-1 word wrote the addressed register, that depth
+> would survive exactly ONE frame.**"*
+
+Extend it one step.  Under the alias, the kernel's own mode-2 scratch stores overwrite that
+same cell **every frame** — the identical impossibility item J already rejected, only worse.
+Item J therefore refutes the alias, using a forcing this project had already paid for.
+
+### 2. Three independent supports, all pre-existing
+
+* **`register-space.md` C2** — four mode-1 cells (`0x0F`, `0x8C`, `0x8D`, `0x8F`) are never
+  initialised by the host, in 100 canned streams *and* the live cold-boot capture, and C2
+  concluded *"a cell the host never initialises is not state the host owns; it behaves like a
+  hardware register or port."*  Ports do not live in working memory.
+* **`host-side.md` C4** names tag `0x15` *"the D-RAM **register file**"* — the host's own
+  transport already distinguishes it.
+* **Shape** (`dsp/tools/mode_alias.py`, new): corpus-wide the mode-1 route names **8 distinct
+  cells across 48 of 3057 words**; the mode-2 route reaches **129 cells across 3440 accesses**.
+  A register file and a memory.
+
+Per region, mode-1 vs mode-2 cells:
+
+```
+  kernel   (iw 0..59)    mode-1  0E 0F 8A       mode-2  01..07 FF     intersection EMPTY
+  epilogue (iw 60..82)   mode-1  06 85 8C 8D 8F mode-2  84 85         intersection 85
+  38 bodies              mode-1  0E 0F          mode-2  128 cells     intersection 0E 0F
+```
+
+⚠ **The numeric intersection is NOT evidence of aliasing** — both routes index with 8 bits,
+so collisions are expected either way.  It is listed because its *absence* in the kernel would
+have been evidence, and it is nearly absent.
+
+### 3. ⚠ A CALIBRATION THAT FAILED, STATED BEFORE THE RESULT IT AFFECTS
+
+`mode_alias.py` reimplements the pointer walk statically.  Run against §96's live writer
+census of cell `0x06` it agrees on 6 of 7 words and adds 4 of its own:
+
+```
+  sect.96 measured : [11, 19, 21, 27, 33, 34, 39]
+  static walk      : [16, 17, 19, 21, 23, 24, 27, 33, 34, 39]
+```
+
+The walk carries at least three unverified conventions (kernel entry cell, pre- vs
+post-increment store cell, which store forms count).  **Nothing in this section rests on it.**
+It did, however, catch one real error: the walk was starting the kernel at `0x05`, six cells
+late.  The core's own closure arithmetic (`upd6383.cpp:3236`) is `0x85 − 133 − 1 = 0xFF` and
+`0xFF + 6 = 0x05` — the forced per-unit base is applied **at the body call**, not at kernel
+entry.
+
+### 4. APPLIED — mask bit **23** (`0x800000`), and the A/B
+
+A separate `m_rf[256]` for the mode-1 / host-tag-0x15 space.  Three routing sites; the third
+is the one that shows how close this already was — `exec_alu()` line 1843 **already** computed
+a local named `regfile` to separate the two modes, and then read both from `m_dram`.
+
+Predictions written before the build; masks recomputed after the first attempt used four
+hand-hexed bits I did not intend (recorded, not hidden).
+
+```
+  run  mask      unit-0 level (cell 06)         unit-1 level (cell 86)
+  A    1F440F    0x000000  non-zero on      0   0x0BC685  on 452,160    aliased
+  B    9F440F    0x200000  non-zero on 452,160  0x0BC685  on 452,160    register file
+  C    1F442F    0x000000  non-zero on      0   0x0BC685  on 452,160    aliased + guard
+  D    9F442F    0x200000  non-zero on 452,160  0x0BC685  on 452,160    split   + guard
+```
+
+**P1 CONFIRMED** — the level goes from `0x000000` on 100% of frames to the host's value on
+452,160 frames.  `0x200000` is exactly half the documented cold-boot `0x06 = +0.5 = 0x400000`,
+which is the already-known host-payload factor of 2 (A3), not a new discrepancy.
+
+**P2 CONFIRMED but WEAKER THAN I WANTED** — the `host_reg` symptom-guard (bit `0x20`) changes
+nothing under the split (B ≡ D).  ⚠ It also changes nothing *without* it (A ≡ C), so the guard
+is **inert in both** configurations and this run does not demonstrate it was ever suppressing
+anything.  What it does show: the split does not depend on the guard.
+
+**P3 CONFIRMED** — all four runs verdict `SILENT`, not `DC`.  No leak introduced.
+
+### 5. ★ THE STRONGEST EVIDENCE, AND IT IS POST-HOC — flagged as such
+
+Unit 0's level is cell `0x06`, **inside** the kernel's pointer window; unit 1's is `0x86`,
+**outside** it.  Under the alias, unit 0's level is destroyed (non-zero on **0** frames) and
+unit 1's survives **bit-identical through both routings** (`0x0BC685` in all four runs).
+
+A harmless alias predicts both survive.  A global corruption predicts both die.  Exactly the
+in-window one died.  I did **not** state this in advance — it is post-hoc — but it had a live
+failure mode and a two-sided one, which is why it is worth more than the arithmetic.
+
+### 6. What this does and does not do
+
+It fixes a **parameter** path, not the ladder.  **The chip is still silent.**  It also
+dissolves §94 rather than solving it: *"the reverbs read `0x87` and nothing writes it"* was a
+statement about the aliased array.  And it retires the escape route §42 took — the level was
+never "in C-RAM"; it is in the register file, and C-RAM was a workaround for reading the wrong
+one of two spaces we had merged into one.
+
+**Open, and not claimed here:** the register file's true depth (256 is chosen to make this a
+routing change and nothing else); whether index bit 7 is the unit select there as it is in
+D-RAM; and why unit 1's `0x0BC685` is close to but not exactly half the documented
+`0x178D50` (`0x0BC6A8`) while unit 0's is exact.
+
+Evidence grade: **FORCED** for the two-space reading (item J's forcing, extended);
+**MEASURED** for the A/B; **INFERRED** for the register file's depth and index mapping.

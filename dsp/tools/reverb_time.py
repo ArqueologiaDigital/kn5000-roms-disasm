@@ -1,237 +1,192 @@
 #!/usr/bin/env python3
-# license:BSD-3-Clause
-# copyright-holders:Felipe Sanches
-"""reverb_time.py -- THE REVERB FEEDBACK GAIN, READ OUT OF THE FIRMWARE.
+"""REVERB TIME -> feedback gain: the KN5000's own law, read out of the Sub CPU.
 
-NEC uPD6383GF-3BA (Technics SX-KN5000, IC311).  ROUTE 2: the Sub CPU computes
-the reverb coefficients arithmetically; this reproduces that computation.
+NEC uPD6383GF-3BA (Technics SX-KN5000, IC311), 2026-07-29.  No hardware.
 
-The chain, every link MEASURED in the two dumped ROMs:
+The reverb ladder's decay gain was never a missing number: the firmware computes
+it, and the ROM ships the answer twice -- once as a static C-RAM block and once
+as the law that recomputes it whenever REVERB TIME moves.
 
-    UI parameter  "REVERB TIME", unit `s' (main ROM param 33)
-      -> T2 record  [0x75][operand 0][three payload bytes]      canned, per algorithm
-      -> jump table 0x014745 -> stub 0x03CE25 -> EVALUATOR 0x039D98
-      -> writer LABEL_0387E6 -> `801.0.97.821' + `0A .. .. .. |0x26'
-      -> C-RAM cell 0x97 of effect unit 1, signed Q0.23
+    UI slot 0 of every reverb = "REVERB TIME (s)"   (paramlist.md, captured live)
+      -> level-2 opcode 0x75, one 24-bit literal K24 per preset
+      -> scaler  0x039D98  (5 piecewise ranges)     -> writer 0x0387E6 (tag 0x26)
+      -> C-RAM cell 0x97   (T2[0x75] == [0x97], identical in all 12 reverbs)
 
-and the evaluator, decompiled from 0x039D98..0x03A229 (a double-precision
-softfloat library: 0x03E290 dmul, 0x03D3A4 ddiv, 0x03E10E dadd, 0x03D404 dneg,
-0x03D533 pow, 0x03E2C0 fmul, 0x03D44C f->int, 0x03DCF2 f->d, 0x03DD6C d->f,
-0x03DDCA int->f, 0x03D92C fsub, 0x03CF07 read 3 stream bytes big-endian <<8):
+    T(p)  = 0.02p+0.1 (p<=15) | 0.05(p-16)+0.45 (<=23) | 0.1(p-24)+0.9 (<=55)
+          | 0.2(p-56)+4.2 (<=75) | p-67                      -- seconds
+    K     = K24 / 2^23
+    cell  = (int) ( 10^(-4.816 * K / T) / 2 * 2^23 )         -- Q0.23 as shipped
+    g     = 2 * cell/2^23 = 10^(-4.816 * K / T)              -- the gain itself
 
-    P = payload / 2**23                         # SECONDS, hand-authored per algorithm
-    T = piecewise_linear(user_value)            # SECONDS, 0.10 .. 32.00
-    C-RAM[0x97] = round_to_q23( -(10 ** (-4.816 * P / T)) / 2 )
+Every constant above is an IEEE-754 literal at 0x012E07..0x012F03 in
+kn5000_subprogram_v142.rom; the FP ABI is the one notes/kn5000-dsp-biquad-coeffs.md
+section 2.1 decoded (0x03E290 dmul, 0x03E10E dadd, 0x03D3A4 ddiv, 0x03D3D4 fdiv,
+0x03D533 pow, 0x03DCF2/0x03DD6C float<->double, 0x03E2C0 fmul, 0x03D44C f->int).
 
-    python3 dsp/tools/reverb_time.py [all|curve|table|match|controls]
-
-stdlib only, plus the repo's ROM parsers (like the other tools here).
+Run:  python3 dsp/tools/reverb_time.py [--rom SUB] [--main MAIN]
 """
-import argparse
-import os
-import struct
-import sys
+import argparse, math, os, sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-
-# ---------------------------------------------------------------------------
-# MEASURED addresses, Sub CPU v1.42
-# ---------------------------------------------------------------------------
-EVAL_0x75 = 0x039D98             # the REVERB TIME evaluator
-STUB_0x75 = 0x03CE25
-CELL_0x97 = 0x97                 # C-RAM cell it writes, effect unit 1
-
-# the double literal at 0x012E27 / 0x012E77 / 0x012EA3 / 0x012ECF / 0x012EEB --
-# the SAME constant in all five branches.
-DECAY = struct.unpack('<d', bytes.fromhex('dd24068195' '4313c0'))[0]      # -4.816
-
-# the five branch break-points and their (offset-const, slope, intercept),
-# read straight off the five `cp XWA,imm' / float constants.
-BRANCHES = [(0x0F, 0.0, 0.02, 0.1),      # 39de8: v*0.02 + 0.1   (no offset subtract)
-            (0x17, 16.0, 0.05, 0.45),    # 39f55
-            (0x37, 24.0, 0.10, 0.9),     # 3a00f
-            (0x4B, 56.0, 0.20, 4.2),     # 3a0c9
-            (0x63, 67.0, 1.00, 0.0)]     # 3a177: (v-67) * 1 + 0
-
-# MEASURED: the opcode-0x75 record payload of every algorithm that has one.
-PAYLOAD = {16: 0x0765FD, 17: 0x128F5C, 18: 0x2E76C8, 19: 0x347AE1,
-           20: 0x179724, 21: 0x1A4DD2, 22: 0x1FBE76, 23: 0x1FBE76,
-           24: 0x1FBE76, 25: 0x1C8B43, 26: 0x2A5E35, 27: 0x2A5E35,
-           88: 0x1BE76C, 89: 0x10C49B, 90: 0x1D0E56, 91: 0x1D0E56}
-NAMES = {16: "ROOM REVERB 1", 17: "ROOM REVERB 2", 18: "PLATE REVERB 1",
-         19: "PLATE REVERB 2", 20: "CONCERT REVERB 1", 21: "CONCERT REVERB 2",
-         22: "DARK REVERB 1", 23: "DARK REVERB 2", 24: "BRIGHT REVERB 1",
-         25: "BRIGHT REVERB 2", 26: "WAVE REVERB 1", 27: "WAVE REVERB 2",
-         88: "ROOM (IC310)", 89: "KARAOKE (IC310)", 90: "BATH ROOM (IC310)",
-         91: "STAGE (IC310)"}
-
-# MEASURED at the host port, live cold boot
-# (kn7000_mame/notes/data/kn5000_dsp1_upload_coldboot.txt, transfer 26).
-LIVE_0x97 = 0xE8F713
-LIVE_ERLEVEL = 0x26C9B2          # transfer 30, C-RAM 0xAC and 0xB2
-LIVE_PREDELAY = 0x0081E7         # transfer 27, delay descriptor cell 0x00
+A_CONST = 4.816          # 0x012E27/0x012E77/0x012EA3/0x012ECF/0x012EEB, all -4.816
+FS = 44100.0
+T_PARAM = 0x0001EF0C
+T_LVL2_DEFAULTS = 0x0001F09C
+T_LVL2_DESTS = 0x0001F22C
+REVERBS = list(range(16, 28))
 
 
-def f32(x):
-    return struct.unpack('<f', struct.pack('<f', x))[0]
+def T_of(p):
+    if p <= 15: return 0.02 * p + 0.1
+    if p <= 23: return 0.05 * (p - 16) + 0.45
+    if p <= 55: return 0.1 * (p - 24) + 0.9
+    if p <= 75: return 0.2 * (p - 56) + 4.2
+    return float(p - 67)
 
 
 def q23(v):
-    return (v - 0x1000000) / 0x800000 if v & 0x800000 else v / 0x800000
+    return (v - (1 << 24)) / (1 << 23) if v & 0x800000 else v / (1 << 23)
 
 
-def revtime(v):
-    """-> REVERB TIME in seconds.  The five-branch piecewise-linear map, and
-    the float round-trips the compiler emits are reproduced exactly."""
-    for hi, off, slope, base in BRANCHES:
-        if v <= hi:
-            return float(f32(f32(v) - f32(off)) if off else f32(v)) * slope + base
-    raise ValueError(v)
+def records(rom, ptr, limit=256):
+    out, p, g = [], ptr, 0
+    while g < limit:
+        g += 1
+        b0, b1 = rom.u8(p), rom.u8(p + 1)
+        if (b0 & 0xF0) == 0xF0: break
+        ln = ((b0 & 0x0F) << 8) | b1
+        if ln < 3 or ln > 0x400: break
+        out.append(bytes(rom.slice(p + 2, ln - 2)))
+        p += ln
+    return out
 
 
-def datum(payload, v):
-    """-> the 24-bit word the writer sends to C-RAM cell 0x97."""
-    # 0x03CF07 returns the 3 payload bytes big-endian, SIGN EXTENDED, << 8.
-    raw = payload << 8
-    if payload & 0x800000:
-        raw -= 1 << 32
-    P = f32(f32(raw / f32(32768.0)) / f32(65536.0))          # == payload / 2**23
-    e = (float(P) * DECAY) / revtime(v)
-    if v <= 0x0F:
-        e = f32(e)                                # branch 1 round-trips via float
-        if float(e) < -7.0:                       # the underflow-avoiding path
-            g = -(10.0 ** float(f32(f32(e) + f32(7.0)))) * 1e-07 / 2.0
-        else:
-            g = -(10.0 ** float(e)) / 2.0
-    else:
-        g = -(10.0 ** e) / 2.0
-    return int(f32(f32(g) * f32(8388608.0))) & 0xFFFFFF
+def k24_of(rom, algo):
+    """slot 0 of a reverb is `75 <idx> b0 b1 b2 7A'.  Do NOT split on 0x7A --
+    PLATE REVERB 2's literal 0x347AE1 contains one."""
+    recs = records(rom, rom.u32le(T_LVL2_DEFAULTS + 4 * algo))
+    if not recs or recs[0][0] != 0x75: return None
+    pl = recs[0]
+    return (pl[2] << 16) | (pl[3] << 8) | pl[4]
 
 
-def cmd_curve():
-    print("=" * 78)
-    print("1. THE REVERB TIME CURVE -- what the user value MEANS, in seconds")
-    print("=" * 78)
-    print("  the five branches, MEASURED at 0x039DDF / 0x039F4C / 0x03A006 /")
-    print("  0x03A0C0 (the `cp XWA,0x0F/0x17/0x37/0x4B' chain):")
-    print("     v  0..15   T = 0.02*v        + 0.10      0.10 .. 0.40 s")
-    print("     v 16..23   T = 0.05*(v - 16) + 0.45      0.45 .. 0.80 s")
-    print("     v 24..55   T = 0.10*(v - 24) + 0.90      0.90 .. 4.00 s")
-    print("     v 56..75   T = 0.20*(v - 56) + 4.20      4.20 .. 8.00 s")
-    print("     v 76..99   T = 1.00*(v - 67)             9.00 .. 32.00 s")
-    print("  the pieces JOIN: 0.40->0.45 (+0.05), 0.80->0.90 (+0.10),")
-    print("  4.00->4.20 (+0.20), 8.00->9.00 (+1.00) -- each step equals the NEXT")
-    print("  branch's slope, so the map is monotone with no gap and no overlap.")
-    print("  CONTROL: the main ROM's own parameter table gives parameter 33")
-    print("  `REVERB TIME' the unit string `s'.  A curve that did not come out in")
-    print("  seconds would contradict the firmware's own label.")
-    print()
-    print("     v :", "  ".join("%d=%.2f" % (v, revtime(v)) for v in (0, 15, 16, 23, 24, 55, 56, 75, 76, 99)))
-
-
-def cmd_table():
-    print("=" * 78)
-    print("2. THE PER-ALGORITHM CONSTANT P, AND THE GAIN IT PRODUCES")
-    print("=" * 78)
-    print("  P = payload / 2**23, in SECONDS -- every one is a round 3-or-4 digit")
-    print("  decimal, so it is hand-authored, not derived:")
-    for a in sorted(PAYLOAD):
-        p = PAYLOAD[a]
-        print("     algo %2d %-18s payload %06X   P = %-9.4f s = %8.2f samples"
-              % (a, NAMES[a], p, p / 2 ** 23, p / 2 ** 23 * 44100))
-    print()
-    print("  and the coefficient, for the twelve IC311 reverbs:")
-    print("     %-18s %s" % ("", "  ".join("v=%-2d" % v for v in (0, 25, 50, 75, 99))))
-    for a in range(16, 28):
-        row = []
-        for v in (0, 25, 50, 75, 99):
-            row.append("%+.4f" % q23(datum(PAYLOAD[a], v)))
-        print("     algo %2d %-18s %s" % (a, NAMES[a], " ".join(row)))
-    print()
-    print("  the stored value is NEGATIVE and never leaves (-0.5, 0].  The loop")
-    print("  gain it encodes is TWICE it: G = 2*|C-RAM[0x97]| = 10**(-4.816*P/T).")
-
-
-def cmd_match():
-    print("=" * 78)
-    print("3. THE PREDICT / CHECK against the LIVE cold-boot capture")
-    print("=" * 78)
-    print("  MEASURED at the host port, one single runtime C-RAM write to 0x97:")
-    print("     C-RAM[0x97] <- %06X   (Q0.23 %+0.7f)" % (LIVE_0x97, q23(LIVE_0x97)))
-    print()
-    hits = [(a, v) for a in PAYLOAD for v in range(100)
-            if datum(PAYLOAD[a], v) == LIVE_0x97]
-    print("  search over all %d (algorithm, user value) pairs -- EXACT 24-bit"
-          % (len(PAYLOAD) * 100))
-    print("  equality, no tolerance:")
-    for a, v in hits:
-        print("     >>> algo %d %s, REVERB TIME value %d  ->  T = %.3f s"
-              % (a, NAMES[a], v, revtime(v)))
-    print("     hits: %d of %d  (a random 24-bit word would hit with p = %.1e)"
-          % (len(hits), len(PAYLOAD) * 100, len(PAYLOAD) * 100 / 2 ** 24))
-    print()
-    print("  the recovered T is EXACTLY 2.000 s -- a round factory default, which")
-    print("  the search was in no way steered towards.")
-    return hits
-
-
-def cmd_controls():
-    print("=" * 78)
-    print("4. THE CONTROLS -- each shown REJECTING something")
-    print("=" * 78)
-    print("  C1. SIGN.  The canned C-RAM image of every reverb holds cell 0x97 as a")
-    print("      POSITIVE round decimal (+0.18 for algo 20).  The formula emits a")
-    print("      NEGATIVE number.  The live capture says %+0.7f -- negative."
-          % q23(LIVE_0x97))
-    print("      A missing 0x03D404 (double negate) would put the sign bit at 0 and")
-    print("      the datum would be %06X, not %06X.  REJECTS."
-          % (LIVE_0x97 ^ 0xFFFFFF, LIVE_0x97))
-    print()
-    print("  C2. THE HALVING.  Drop the `/2.0' at 0x03A0AC and the datum becomes")
-    print("      %06X.  The live value is %06X.  REJECTS."
-          % ((-int(f32(f32(-2 * q23(LIVE_0x97)) * f32(8388608.0)))) & 0xFFFFFF,
-             LIVE_0x97))
-    print()
-    print("  C3. THE ALGORITHM, decided WITHOUT the formula.  The capture uploads a")
-    print("      37-cell unit-1 C-RAM image; compared cell-for-cell against all")
-    print("      twelve canned images it matches algo 20 CONCERT REVERB 1 in 37 of")
-    print("      37 and every other reverb in 13 or 14.  The formula, run on algo")
-    print("      20's payload, is what reproduced the datum.  Two chains, no shared")
-    print("      premise.  (run: dsp/tools/reverb_time.py needs no ROM for this;")
-    print("      the cross-tab is in the findings.)")
-    print()
-    print("  C4. SIBLING PARAMETERS, same capture, same reverb.  Decoding their")
-    print("      evaluators the same way reproduces their live values too:")
-    print("        ER.LEVEL   eval 0x039206:  LO + (HI-LO)*v/99, LO=0, HI=0x4CCCCC")
-    print("                   v=50 -> %06X ; live %06X"
-          % ((0x4CCCCC * 50) // 99, LIVE_ERLEVEL))
-    print("        PRE DELAY  eval 0x03925E:  base + v*0xAC44/0x3E8 (ms -> samples)")
-    print("                   base=0x8002, v=11 ms -> %06X ; live %06X"
-          % (0x8002 + 11 * 44100 // 1000, LIVE_PREDELAY))
-    print("      Both exact.  A wrong reading of the shared stream reader 0x03CF07")
-    print("      or of the writer split would break all three at once.")
-    print()
-    print("  C5. THE OPCODE IS REVERB-ONLY.  Opcode 0x75 appears in the parameter")
-    print("      bytecode of exactly 16 algorithms: the twelve IC311 reverbs")
-    print("      (16..27) and the four IC310/MN19413 reverbs (88..91).  Zero of the")
-    print("      79 unit-0 effects use it.  A general-purpose evaluator would not")
-    print("      partition that way.")
+def bank_of(rom, algo):
+    """The whole parameter stream: 5-byte poke packets AND type-2 bulk records.
+    The reverb coefficient bank arrives ONLY as type-2 bulk (raw 24-bit words)
+    aimed by a poke-port `801.0.NN.821'.  Poke payloads are 2*raw3 + tagbit
+    (r3-delaydram.md P2); type-2 words are raw."""
+    p, guard = rom.u32le(T_PARAM + 4 * algo), 0
+    cram, desc, dram = {}, {}, {}
+    ptr, space = None, None
+    while guard < 512:
+        guard += 1
+        b0, b1 = rom.u8(p), rom.u8(p + 1)
+        if (b0 >> 4) == 0xF: break
+        ln = ((b0 & 0x0F) << 8) | b1
+        if ln < 2 or ln > 0x0FFF: break
+        op, body = b0 >> 4, rom.slice(p + 2, ln - 2)
+        if op in (0, 1, 5):
+            data = body[3:]
+            for k in range(0, len(data) - 4, 5):
+                e = data[k:k + 5]
+                if e[0] == 0x08 and e[1] == 0x01 and e[4] in (0x21, 0x25):
+                    ptr = (e[2] << 4) | (e[3] >> 4)
+                    space = 'CRAM' if e[4] == 0x21 else 'DESC'
+                elif e[0] == 0x00 and e[1] == 0x00 and e[4] == 0x00:
+                    ptr, space = (e[2] << 4) | (e[3] >> 4), 'DRAM'
+                elif e[0] == 0x0A:
+                    v = ((e[1] & 0x7F) << 17) | (e[2] << 9) | (e[3] << 1) | (e[4] >> 7)
+                    sp = {0x26: 'CRAM', 0x4C: 'DESC', 0x15: 'DRAM'}.get(e[4] & 0x7F)
+                    d = {'CRAM': cram, 'DESC': desc, 'DRAM': dram}.get(sp)
+                    if d is not None and ptr is not None:
+                        d[ptr] = v; ptr += 1
+        elif op == 2:
+            data = body[3:]
+            for k in range(0, len(data) - 2, 3):
+                v = (data[k] << 16) | (data[k + 1] << 8) | data[k + 2]
+                d = {'CRAM': cram, 'DESC': desc, 'DRAM': dram}.get(space)
+                if d is not None and ptr is not None:
+                    d[ptr] = v; ptr += 1
+        p += ln
+    return cram, desc, dram
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", nargs="?", default="all",
-                    choices=["all", "curve", "table", "match", "controls"])
+    ap.add_argument("--rom", default=os.path.expanduser(
+        "~/compartilhado/kn5000-roms-disasm/original_ROMs/kn5000_subprogram_v142.rom"))
+    ap.add_argument("--main", default=os.path.expanduser(
+        "~/compartilhado/kn5000-roms-disasm/original_ROMs/kn5000_v10_program.rom"))
+    ap.add_argument("--tools", default=os.path.expanduser("~/compartilhado/kn7000_mame/tools"))
     a = ap.parse_args()
-    if a.cmd in ("all", "curve"):
-        cmd_curve(); print()
-    if a.cmd in ("all", "table"):
-        cmd_table(); print()
-    if a.cmd in ("all", "match"):
-        cmd_match(); print()
-    if a.cmd in ("all", "controls"):
-        cmd_controls()
+    sys.path.insert(0, a.tools)
+    import kn5000_dsp_extract as E, kn5000_dsp_coeffs as C
+    rom = E.Rom(a.rom)
+    names = C.effect_names(a.main) if os.path.exists(a.main) else {}
+    VAL = [T_of(p) for p in range(110)]
+
+    print("=" * 78)
+    print("THE REVERB-TIME VALUE LIST the five ranges of scaler 0x039D98 spell out")
+    print("=" * 78)
+    for lo, hi, f in ((0, 16, "%.2f"), (16, 24, "%.2f"), (24, 56, "%.1f"),
+                      (56, 76, "%.1f"), (76, 86, "%.0f")):
+        print("   p=%-3d..%-3d : %s" % (lo, hi - 1, " ".join(f % v for v in VAL[lo:hi])))
+    print("   -- 0.1 s .. >= 16 s, step 0.02 / 0.05 / 0.1 / 0.2 / 1.0.  The four")
+    print("      range breaks ARE the four step changes.")
+    print()
+    print("=" * 78)
+    print("THE DEFAULT DECAY GAIN, and the reverb time it decodes to")
+    print("=" * 78)
+    print("   %-18s %-8s %-6s %-10s %-7s %-8s %-6s %-6s"
+          % ("preset", "K", "cell", "coef Q0.23", "g=2c", "T solved", "listT", "err%"))
+    bad = 0
+    for al in REVERBS:
+        cram, _d, _r = bank_of(rom, al)
+        cell = 0x98 if al == 25 else 0x97   # algo 25's bank is 38 cells, shifted +1
+        K24 = k24_of(rom, al); K = K24 / 2 ** 23
+        c = q23(cram[cell]); g = 2 * c
+        T = -A_CONST * K / math.log10(g)
+        nv = min(VAL, key=lambda v: abs(v - T))
+        err = 100 * abs(T - nv) / nv
+        bad += err > 2.0
+        print("   %-18s %-8.4f 0x%02X%s 0x%06X   %-7.4f %-8.4f %-6.2f %-6.2f"
+              % (names.get(al, "?"), K, cell, "*" if al == 25 else " ",
+                 cram[cell], g, T, nv, err))
+    print()
+    print("   FALSIFIER: every solved T must land on the discrete list above.")
+    print("   %d of 12 miss by more than 2 %%." % bad)
+    print()
+    print("=" * 78)
+    print("THE LADDER, per preset: descriptor lags and the whole coefficient bank")
+    print("=" * 78)
+    for al in REVERBS:
+        cram, desc, _r = bank_of(rom, al)
+        pairs = [(desc[0x04 + 2 * i], desc[0x05 + 2 * i]) for i in range(10)]
+        lags = [r - w for r, w in pairs]
+        sh = 1 if al == 25 else 0
+        print("   %-18s pre-delay %5d   ladderA %s   ladderB %s"
+              % (names.get(al, "?"), desc[0x00] - desc[0x03],
+                 " ".join("%5d" % x for x in lags[0::2]),
+                 " ".join("%5d" % x for x in lags[1::2])))
+        print("   %-18s allpass A %s | B %s | decay %.4f | damp %.4f"
+              % ("", " ".join("%+.3f" % q23(cram[c]) for c in range(0x99 + sh, 0x9E + sh)),
+                 " ".join("%+.3f" % q23(cram[c]) for c in range(0xA1 + sh, 0xA6 + sh)),
+                 2 * q23(cram[0x97 + sh]), q23(cram[0x9E + sh])))
+    print()
+    print("=" * 78)
+    print("CONTROL -- the comb identity T60 = -3D/(Fs log10 g) does NOT recover D")
+    print("=" * 78)
+    print("   %-18s %-10s %-9s %-9s %s" % ("preset", "D=A*Fs*K/3", "ladderA", "ladderB", "verdict"))
+    for al in REVERBS:
+        _c, desc, _r = bank_of(rom, al)
+        lags = [desc[0x04 + 2 * i] - desc[0x05 + 2 * i] for i in range(10)]
+        K = k24_of(rom, al) / 2 ** 23
+        D = A_CONST * FS * K / 3
+        sa, sb = sum(lags[0::2]), sum(lags[1::2])
+        print("   %-18s %-10.1f %-9d %-9d %s" % (names.get(al, "?"), D, sa, sb,
+              "ratio %.3f / %.3f" % (D / sa, D / sb)))
+    print("   DARK 1, DARK 2 and BRIGHT 1 carry the SAME K over ladders that differ")
+    print("   by 25 %%, so K is NOT this preset's loop length.  The comb route fails;")
+    print("   K is a per-preset calibration constant and the firmware's law stands.")
 
 
 if __name__ == "__main__":
