@@ -3834,3 +3834,73 @@ Neither is speculative. Both are single-question, single-window measurements.
 
 Evidence grade: **MEASURED** — the full epilogue dump, and the clamp arithmetic checked
 against the 24-bit rail.
+
+## 68-69. ★★★★ DO1 LIVES — two unit-blind writes, and a store that ate its own result
+
+**2026-07-29.** §67 guessed ACCA was cleared in kernel slots 50..59. **Wrong** — the trace
+shows those slots leaving it healthy:
+
+```
+iw 50  ACCA=1 154 487 091 200      iw 53  ACCA=538 760 587 509
+iw 59  ACCA=  769 657 969 049      <- kernel hands unit 0's result on intact
+```
+
+Two defects, both the same shape as §66, both in code I wrote.
+
+### §68 — the bit-4 store was unit-blind, twice
+
+```cpp
+m_dram.write_dword(stdest, u32(acc_to_datum(m_acc)) & 0xffffff);   // reads ACCA
+...
+m_acc = 0;                                                          // clears ACCA
+```
+
+Both hard-wired to ACCA regardless of unit. So during **body 1** — which accumulates into
+ACCB — every bit-4 store read ACCA for its datum and then wiped it, destroying unit 0's
+result one slot into a body that has 132 more to run. Fixed: ACCA now survives body 1 intact
+(769 657 969 049 at iw 201, iw 202 **and iw 332**).
+
+### §69 — and then the epilogue's first word ate it
+
+ACCA survived the body and was still 0 by `iw 73`. The epilogue's **first** word,
+`w60 = 092.1.8D.15B`, carries `HI_ST` — so under "store-and-clear" it stores **and wipes the
+accumulator** at the top of the very stage whose job is to present it.
+
+★ That clear is not established. Round-4 adjudication item 2 lists `no memory access`,
+`store -> elsewhere` and `LOAD` as equally surviving, and this core's own comment says it
+*"implements 'no store, no clear', which is one point inside that set"*. **A store that
+annihilates the value the next words must read is not a plausible chip behaviour** — and that
+is now specific evidence, not a preference. Suppressed under mask bit 16.
+
+### ★★★ The result
+
+```
+                    before            after
+unit0 / DO1   0 non-zero        455 998 non-zero,  peak -2 936 012
+unit1 / DO2   455 999           455 999            peak    26 707
+ACCA at iw 60 / 73 / 78   353 970 438 019 / -415 687 531 030 / 134 068 217 322
+```
+
+★★★★ **DO1 carries a signal for the first time in this project**, and its peak is
+**−2 936 012** — the body datum this investigation has been predicting since §43
+(*"the body delivered a datum of 504 instead of ~2 936 000"*). The number arrived on its own,
+from a datapath fix, with nothing tuned to produce it.
+
+★★ And ACCA now **varies across the epilogue** rather than sitting at one value, so the
+epilogue is finally performing arithmetic on a live accumulator.
+
+⚠ Still `DC` by the tracking test — the output does not yet follow the input. But the failure
+has changed character completely: from *"nothing reaches the pin"* to *"the right magnitude
+reaches the pin without tracking"*, which is the difference between a broken datapath and an
+unfinished one.
+
+### The pattern worth naming
+
+§66, §68 and §69 are all the same bug: **a unit-selected accumulator introduced in §62, with
+three readers left pointing at ACCA.** Each one silently destroyed a whole unit's work, and
+each was invisible until the per-slot trace existed. The lesson is not about the chip — it is
+that adding a second register to a datapath means auditing *every* reader and writer of the
+first, and I added it three sections before I looked.
+
+Evidence grade: **MEASURED** throughout; §69's suppression is **SPECULATIVE** but now
+supported by a concrete consequence rather than by preference.
