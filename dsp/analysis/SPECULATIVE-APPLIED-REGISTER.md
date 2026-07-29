@@ -5887,3 +5887,106 @@ does not.
 
 Evidence grade: **MEASURED** (probe series, cell input-dependence, probe placement verified in
 source); **INFERRED** that body 0's failure is upstream of unit 1's.
+
+---
+
+## §105 — THE BODY-0 BISECTION: EXCELLENT MEASUREMENT, **REFUTED MECHANISM**, AND THE REAL DEFECT IS AN OFF-BY-ONE
+
+A multi-agent run bisected body 0. Its measurements are strong and are kept. Its central
+interpretation is **wrong**, and what refutes it was already written in `lfo-ramp.md` — the
+fourth time this week.
+
+⚠ **All three adversarial verifiers died on API 529/500 with zero tokens spent, so the finding
+arrived unchecked.** The verification below is mine, done because the checking is the half that
+matters.
+
+### 1. WHAT STANDS — and it is a lot
+
+* **A new instrument worth keeping (§104):** per slot, the quiet/loud min-max of THREE
+  quantities — the accumulator *after* the slot, the D-RAM cell under the pointer *before* it
+  (a RESIDENCY census, distinct from §86/§96's write census), and `L`, the operand bus the
+  decode actually selected.
+* **The null computed first, properly:** every slot executed in *both* buckets — 92 592 quiet
+  and 207 408 loud frames at every slot — and the same columns report DIFFERS on kernel slots
+  in the same run. No verdict here is a "1 of 1".
+* ★★★ **Frame-wide sweep: the LAST slot at which any of acc/mem/L is input-dependent is
+  `iw33`.** From `iw34` through kernel A's tail, all of body 0, kernel B, all of body 1 and the
+  epilogue, all three columns are bit-identical quiet versus loud. **The audio never leaves
+  kernel A.**
+* **A negative result that killed the static lenses' favourite:** two of three lenses ranked
+  `iw85` first. Cell `0x05` reads `0..0` in both buckets at every appearance anywhere in the
+  frame. The canonical base+0 read has nothing to lose.
+* **Value-level identification:** `iw32` puts `L = 4194304 = 0x400000` into the cell, and
+  4194304 is exactly what body 0 finds resident seventy slots later.
+
+### 2. ⛔ THE MECHANISM IS REFUTED — `iw90` IS THE CHORUS LFO, NOT AN AUDIO PATH
+
+The claim: *"body-0 `iw90` is the acquisition slot; it fails because kernel `iw32` overwrote the
+audio in cell `0x07`."*
+
+`lfo-ramp.md` §1 tabulates the LFO block's three words:
+
+```
+   0092A00200    092 (f31=1,ST)  A  +0  200  SRC 0x08   phase accumulate
+   00822001C0    082 (f31=1   )  2  +0  1C0  SRC 0x07   the middle word
+   0094A00200    094 (f31=2,ST)  A  +0  200  SRC 0x08   the wrap
+```
+
+The measured body-0 rows at iw89/90/91 are `0092A00200`, `00822001C0`, `0094A00200` —
+**character for character, in order.** And §11 of the same note gives the semantics:
+`082.2.00.1C0` is `acc <- mem[Q] = phase`.
+
+So `iw90` is the **CHORUS LFO phase read**, cell `0x07` there is `mem[Q]`, and it is *supposed*
+to be input-independent. An LFO phase that tracked the audio would be a defect, not a fix.
+
+**Which inverts the counterfactual.** Suppressing `iw32`'s store made `iw90` report DIFFERS —
+but it achieved that by letting the LFO phase read pick up audio the kernel had left in the
+cell. That is not the bug being fixed; it is a second wrong behaviour producing a DIFFERS. A
+one-word counterfactual with a genuine two-sided criterion still measured the wrong thing.
+
+And the agent's own "independent corroboration not fitted to" — *"mem[0x07] is 4194304 in every
+frame, so the CHORUS LFO phase never ramps"* — is not corroboration for its mechanism at all.
+It is a **separate, pre-existing finding**: `lfo-ramp.md` §11 already states *"the block stores
+the phase back unchanged — no ramp."*
+
+### 3. ★★★ THE REAL DEFECT: THE DEPOSIT AND THE PICKUP ARE ONE CELL APART
+
+Put the measured facts side by side:
+
+```
+  kernel A deposits the audio in    cells 0x06 AND 0x07   (§86: the only 2 of 29 that are
+                                                           input-dependent)
+  body 0's pointer window is        03 05 07 0C 0D 0E 0F 10 11 12 13 50 51 52 53 F1   (§98)
+                                       ^^    ^^
+                                    0x05 and 0x07 -- base+0 and base+2.  NO 0x06.
+  and 0x07 is independently the CHORUS LFO PHASE cell (lfo-ramp.md §1/§11)
+```
+
+**Body 0 never reads the cell that holds the audio.** `0x06` is base+1, and the body reads
+base+0 and base+2. `0x05` is measurably empty; `0x07` belongs to the LFO. The audio sits in the
+one cell between them, untouched.
+
+That is a **one-cell misalignment between the kernel's deposit and the body's pickup**, and one
+of the two anchors involved is the FORCED per-unit base `0x05 | unit << 7`. Either the base is
+off by one, or the kernel's deposit pair is.
+
+It also explains the `0x07` collision cleanly: our model has **two subsystems aliased onto one
+cell** — the kernel writing audio there and the body's LFO using it as phase — which is the same
+shape of error as §97's two memories, one level down.
+
+### 4. Notes on the run itself
+
+* The workflow shape earned its keep in an unexpected way: the parallel static lenses were
+  *wrong* (both favoured `iw85`) and the measurement killed them. Fan-out plus measurement beat
+  fan-out alone.
+* Two decode details the agent did not flag, found on re-derivation: **`iw30` carries bit 4 AND
+  the gate bit 7 with `f31 = 5`**, and guard 7 says a bit-4 word carrying bit 7 executes only at
+  `f31 == 2` — so `iw30` should TRAP, not store. Same class as the guard-6/`iw70` discrepancy in
+  §98, and now two of them. And **`iw92`'s `SRC 0x11` is the SPECULATIVE ACCB reading**, so the
+  "secondary downstream defect" the agent reported at `iw92` rests on a guess.
+* Nothing was promoted: no default mask changed, and the §104 instrumentation was committed
+  alone, labelled unverified.
+
+Evidence grade: **MEASURED** for §1's facts and for the LFO-block word identity;
+**REFUTED** for the mechanism; **FORCED** that body 0 does not read cell `0x06`;
+**INFERRED** that the misalignment is off-by-one rather than something larger.
