@@ -5446,3 +5446,97 @@ D-RAM; and why unit 1's `0x0BC685` is close to but not exactly half the document
 
 Evidence grade: **FORCED** for the two-space reading (item J's forcing, extended);
 **MEASURED** for the A/B; **INFERRED** for the register file's depth and index mapping.
+
+---
+
+## §98 — THE POINTER WINDOW, MEASURED LIVE: UNIT 0 IS FED, UNIT 1 IS NOT, AND THE ONLY WRITERS OF UNIT 1'S INPUT CELL ARE **MODE-1 STORES §97 FAILED TO SPLIT**
+
+§97 leaned on a window figure ("the kernel's window is `0x01..0x07`, so `0x06` is inside it and
+`0x86` is not") that came from a static walk which **had already failed its own calibration**.
+It happened to match the observed damage, which is exactly when a discredited instrument is
+most dangerous. So: measure it.
+
+New live census `pwatch()` — per REGION, per cell, mode-2 reads and writes, mode-1 counted
+**separately** rather than pooled. Regions follow the measured execution order.
+
+```
+  kernel A  (iw   0.. 49)  mode-2  7 cells 01..07   01r 02w 03rw 04r [05rw] 06w [07rw]
+  body 0    (iw  84..199)  mode-2 17 cells 03..F1   03r [05r] [07rw] 0Crw 0Dr 0Erw 0Frw
+                                                    10rw 11w 12rw 13w 20w 50r 51r 52r 53r F1w
+  kernel B  (iw  50.. 59)  mode-2  4 cells 0F..FC   0Fw 8Aw D0w FCw
+  body 1    (iw 200..332)  mode-2 14 cells 0E..D2   0Erw [85r] [87rw] 88w 89rw 8Arw 8Brw
+                                                    8Cr 8Dw 8Frw 94rw D0rw D1rw D2rw
+  epilogue  (iw  60.. 82)  mode-2  6 cells 00..FF   00w 06w [85w] 8Cw 8Dw FFr
+                           mode-1                   05r 8Fr
+```
+
+### 1. §97's window claim SURVIVES measurement
+
+Kernel A's window is exactly `0x01..0x07`. `0x06` is inside it, `0x86` is not. The static walk
+was right here; it is now MEASURED rather than borrowed from a discredited tool.
+
+### 2. ★ THE UNIT-0 HANDOFF IS VISIBLE AND WORKS
+
+Kernel A writes `[05rw]` and `[07rw]`; body 0 reads `[05r]` and `[07rw]`. And the §86 census
+says which cells carry audio:
+
+```
+  ★ cell 06  quiet [0 .. 8388607]  loud [0 .. 16776739]  (2 700 000 writes)
+  ★ cell 07  quiet [0 .. 8388607]  loud [0 .. 16772017]  (1 200 000 writes)
+  2 of 29 kernel-written cells are INPUT-DEPENDENT
+```
+
+Only `0x06` and `0x07`. Both unit 0's.
+
+### 3. ★★★ THE UNIT-1 HANDOFF DOES NOT EXIST
+
+**No region writes `0x85` or `0x87` with input-dependent data before body 1 runs.** Kernel B
+(iw 50..59) sits exactly between the two bodies — the structural counterpart of kernel A — and
+writes `0F 8A D0 FC`, missing `85`/`87`. Body 1 is measurably unexcited:
+
+```
+  ★ §81 PROBE body-1 iw210      quiet [0 .. 0]  loud [0 .. 0]  IDENTICAL
+  ★ §81 PROBE body-1 END iw332  quiet [0 .. 0]  loud [0 .. 0]  IDENTICAL
+```
+
+**The twelve reverbs are unit 1.** That is the silence, stated as one fact instead of a chain.
+
+### 4. ★★★ AND THE WRITERS OF `0x85`/`0x8A` ARE MODE-1 STORES — §97 IS INCOMPLETE
+
+```
+  §96 cell 85 written by iw70   word 2A61850C7     2A6.1.85.0C7   class4 = 1  MODE-1
+  §96 cell 8A written by iw58   word 00018A007     000.1.8A.007   class4 = 1  MODE-1
+  §96 cell 87 written by iw262, iw264, iw328       class4 2/2/A   mode-2, INSIDE body 1
+```
+
+Both anomalies in the window are the same thing: a **mode-1 word's ACTION-0x07 store being
+routed into the pointer-walked D-RAM**. `register-space.md` C2 already lists both words as
+mode-1 (`slot 273` and `slot 128`).
+
+§97 split the **read** side and the host writes. **It did not split the store side.** So the
+category error it diagnosed is still live in the direction that matters most: mode-1 stores are
+landing in D-RAM, and one of them lands on `0x85` — body 1's own input cell.
+
+⚠ **This also flags a possible conflict with guard 6**, which claims "of the 303 executing
+`L=07` words, 303 are mode 2 and 0 are not". `iw70` has `lo_act = 0xC7 & 0x1F = 0x07` and
+`class4 = 1`. Either the guard is not firing on it, or the 303/303 census counted something
+narrower than it says. **Not resolved here — recorded as a discrepancy, not explained away.**
+
+### 5. ⚠ AND I OVER-CORRECTED IN §97
+
+§97 said the split "dissolves §94 rather than solving it — *the reverbs read `0x87` and nothing
+writes it* was a statement about the aliased array". Half right. `0x87` **is** written
+(`iw262`), so that clause was wrong. But §94's underlying observation — **unit 1 does not
+receive the input** — is now CONFIRMED live, and I waved it away. A claim being wrongly
+*argued* is not the same as its being wrong.
+
+### 6. Next, with its prediction
+
+Complete the §97 split on the STORE side. **PREDICTION: `0x85` loses its only outside writer,
+`0x8A` disappears from kernel B's window, and unit 1's input cells become visibly unfed rather
+than fed with non-audio** — which is the honest state, and turns "why is the reverb silent"
+into the single question "what is supposed to feed unit 1?".
+
+Evidence grade: **MEASURED** (the window, the writers, the input-dependence census);
+**INFERRED** for "kernel B is the region that ought to feed unit 1" — that rests on symmetry
+with kernel A, and symmetry is not evidence.
