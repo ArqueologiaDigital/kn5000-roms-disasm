@@ -4105,3 +4105,57 @@ that split. **Next: per-unit bases, not a blanket offset.**
 Evidence grade: **MEASURED** (the 0/445 census, re-run here; the wire decode, re-done here);
 **PROVEN BY CONSTRUCTION** (the firmware law, two independent readers); **SPECULATIVE** (the
 `+0x40` relocation, which is already known to be the wrong shape).
+
+## 73. The body reads REAL coefficients at last — and still oscillates
+
+**2026-07-29.** §72's flat `+0x40` was the wrong shape. `cram-unit-base.md` item A is exact
+and **MEASURED** over 91 programs / 1546 class-A words: *"The C-RAM cursor is UNIT-RELATIVE:
+base `0x00` for unit 0, `0x90` for unit 1"*, with unit 1's reverbs resolving 33/33 at `0x90`,
+keys `0x90..0xB4` and **nothing below `0x90`**; item E rejects the tempting global
+"always add 0x90" **79/79** on unit 0. The tools count k from **zero within each unit's body**
+and add the base — so the cursor is **reset per unit at the CALL**, not aimed by the
+in-program `ldptr`, whose `0x50`/`0x70` payloads land in the never-written ramp bank.
+
+Implemented as mask bit 18. Verified at the same slots:
+
+```
+                iw 205        iw 206        iw 207
+before  cur=53  coef=008C00   008C00        009000     <- ramp residue, +0.0069
+after   cur=93  coef=3B9885   3B9885        2DF3A0     <- REAL gains, +0.464 / +0.359
+```
+
+★★ **The reverb body multiplies by genuine reverb coefficients for the first time in this
+project.** The values match the bank the host actually writes (445 writes, 12 algorithms).
+
+### ⛔ And it still self-oscillates
+
+```
+ACCA swing at w73   ±7.7e11  ->  ±3.5e11
+quiet vs loud                    IDENTICAL
+verdict                          DC
+```
+
+Identical to §72's blunt `+0x40`, which is itself informative: **two different relocations,
+same amplitude** — so the oscillation is not sensitive to *which* coefficients are read.
+A loop whose behaviour does not change when its gains change from 0.0069 to 0.464 **is not
+being attenuated by those gains at all.**
+
+⇒ That is the sharpest statement of the problem yet, and it points away from the coefficients
+entirely. The ladder's feedback must be closing through a path the coefficient multiply is
+not in — and the obvious candidate is the **delay line**, where §48 measured the port issuing
+~20.8 reads per frame while the ALU consumes `SRC 0x0B` exactly **1.0** times. A feedback
+loop whose delay reads are discarded 20 times in 21 has no per-pass attenuation no matter
+what the multiplier is doing.
+
+★ Note this also re-frames §49-50: the one-deep read pipeline was implemented correctly and
+changed nothing *because the consumers do not exist in our decode*. That is now not a curiosity
+but the leading explanation of the oscillation.
+
+**Next: find the other consumers of the delay-read datum.** `SRC 0x0B` is a PLAIN GUESS with
+one consumer in the whole reverb; `dram-datapath.md` item E says the datum *"must still be in
+the read-data register when the first word naming SRC 0x0B executes"*, which implies there are
+several. If ~21 reads per frame each feed a ladder stage, finding their source code is the
+remaining structural gap.
+
+Evidence grade: **MEASURED** (the coefficient values now read, the unchanged oscillation
+amplitude across two different relocations).
