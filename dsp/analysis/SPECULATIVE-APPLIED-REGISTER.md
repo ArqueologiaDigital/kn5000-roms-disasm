@@ -4012,3 +4012,96 @@ are.
 
 Evidence grade: **MEASURED**, with two independent pre-existing results reproduced;
 **REFUTATION** of §42.
+
+## 72. ★★★★ THE REVERB DECAY COEFFICIENT IS FOUND — C-RAM 0x97, computed by the firmware
+
+**2026-07-29.** A 12-agent workflow hunted the loop gain from the ROM alone (no hardware).
+Its headline claims are re-verified here by hand; full output in the run journal.
+
+### The ramp bank is not a coefficient source — and now it is PROVEN, not argued
+
+Census over **all 91 algorithms' parameter streams** (re-run this session):
+
+```
+C-RAM writes into the RAMP bank 0x50..0x8B :   0   (from  0 algorithms)
+C-RAM writes into the COEFF bank 0x90..0xB5: 445   (from 12 algorithms)
+```
+
+★★★ **No algorithm ever writes `0x50..0x8B`.** Its monotonic contents are boot residue. That
+retires, in one measurement, the whole §43–§53 sequence: Q0.23 gave silence, unity gave
+saturation, Q0.16 gave saturation, and the shape never looked like a gain set — because it
+never was one. `cram-unit-base.md` item A (**MEASURED**: 33/33 fetches resolve at base `0x90`,
+0/33 at `0x00`, in 12/12 reverbs) says where the gains really are.
+
+### The gains, ROOM REVERB 1 (algo 16), signed Q0.23
+
+```
+0x90 +0.250  0x91 +0.500  0x92 +0.500      input mix
+0x93 +0.384  0x94 +0.198  0x95 -0.206      input filter
+0x96 +0.500                                summing tap
+0x97 +0.200   <-- ★ THE DECAY / REVERB-TIME COEFFICIENT
+0x98..0x9C +0.750 +0.630 +0.520 +0.500 +0.400        ladder A
+0x9D..0xA0 +0.500 +0.438 +0.363 -0.415              damp A
+0xA1..0xA4 +0.630 +0.620 +0.520 +0.400              ladder B
+0xA5..0xA8  byte-identical to 0x9D..0xA0, 12/12     damp B
+```
+
+Irregular, signed, |g| ≤ 0.75 in the eleven clean presets — **exactly what a Schroeder ladder
+looks like**, and nothing like the ramp.
+
+### ★★★ Cell 0x97 is COMPUTED by the Sub CPU, and the law reproduces the wire
+
+```
+T(v)  = 0.02v+0.1 (v<=15) | 0.05(v-16)+0.45 | 0.1(v-24)+0.9 | 0.2(v-56)+4.2 | v-67
+        -- REVERB TIME, 0.10 .. 32.00 s
+C-RAM[0x97] = int( -(10 ** (-4.816 * K / T)) / 2.0 * 8388608 )
+```
+
+Evaluator at **`0x039D98..0x03A229`**, constants at `0x012E07..0x012F03` (`-4.816` ×5, `10.0`,
+`2.0`, `8388608.0f`), softfloat `pow` at `0x03D533`, and the negation is a real
+`XOR QH,0x80` at **`0x03D404`** — 6 `pow` calls, 6 negations, one per code path.
+
+★★ **Verified against the live wire, by hand:**
+
+```
+transfer 26:  01 60 | 08 01 09 78 21 | 0A 74 7B 89 A6
+  ldptr  801.0.97.821  -> C-RAM pointer = 0x97          ✓ (decoded independently)
+  packet 0A 74 7B 89 A6 -> payload 0x747B89
+  x2 (r3-delaydram's host-payload rule, INDEPENDENTLY CONFIRMED in §71 where the
+      levels came out exactly half the documented values)  ->  0xE8F712 = -0.17996
+```
+
+The workflow searched 12 algorithms × 100 knob positions and found **exactly one exact hit:
+CONCERT REVERB 1, REVERB TIME = 35 → T = 2.000 s** — a round factory default the search was
+not steered toward. Sign-flipped and un-halved variants: 0 hits each.
+
+⚠ My first hand-decode read `+0.9100` and disagreed — because I omitted the ×2. The rule that
+resolved it is the one §71 had confirmed an hour earlier from a completely different datum.
+
+### ★★ And a NEW ISA finding: hi12 bit 12 selects the coefficient format
+
+Q1.22 vs Q0.23, per instruction word. Forced by biquad mathematics in PARAMETRIC EQ: a 0 dB
+block's `b0/a0 ≡ 1` cell holds `0x400000` and its word has **bit12 = 1** (1.000 only at
+Q1.22), while the `-a2/a0` cell — which must satisfy |·| < 1 — has **bit12 = 0**. SINGLE
+DELAY's anchored cell holds the same `0x400000` with bit12 = 0 and its **MEASURED** regression
+requires exactly +0.5. **All 33 reverb ladder words have bit12 = 0**, so the ladder is Q0.23
+and the chip multiplies by the stored value.
+
+### Implemented, and it is not yet enough
+
+Mask bit 17 relocates the body's cursor window `0x50..0x8B → 0x90..0xCB`:
+
+```
+ACCA swing at w73   +/-7.7e11  ->  +/-3.5e11     (halved)
+quiet vs loud range                IDENTICAL      (still self-oscillating)
+verdict                            DC
+```
+
+★ Real progress — the amplitude halves — but the loop still oscillates, so the mapping
+`+0x40` is not yet the right one. Item A gives base `0x90` for **unit 1** and base `0x00`
+for unit 0 (*"rival 'always add 0x90' rejected 79/79 on unit 0"*), and my flat `+0x40` ignores
+that split. **Next: per-unit bases, not a blanket offset.**
+
+Evidence grade: **MEASURED** (the 0/445 census, re-run here; the wire decode, re-done here);
+**PROVEN BY CONSTRUCTION** (the firmware law, two independent readers); **SPECULATIVE** (the
+`+0x40` relocation, which is already known to be the wrong shape).
