@@ -4767,3 +4767,55 @@ really is the accumulator and §85 is wrong.
 
 Evidence grade: **MEASURED** (the probe ladder; iw39 identified from the trace);
 **INFERRED** for the D-RAM handoff, from the kernel's own documented stores.
+
+## 86. ★★★★ THE INPUT'S D-RAM HOME: cells 0x4C and 0x4D — §85 CONFIRMED
+
+**2026-07-29.** §85 inferred that the input crosses into the body through D-RAM rather than
+the accumulator. Measured it: every D-RAM write from a kernel slot, per cell, value range
+split by whether the frame carried input.
+
+```
+★ cell 4C   quiet [0 .. 8 388 607]   loud [0 .. 16 776 739]   (2 400 000 writes)
+★ cell 4D   quiet [0 .. 4 194 304]   loud [0 .. 16 772 017]   (  600 000 writes)
+    2 of 9 kernel-written cells are INPUT-DEPENDENT
+```
+
+★★★ **Exactly two cells carry the audio, and only two.** Seven other kernel-written cells are
+input-independent. This is a control that could have failed in either direction — it could
+have found none (refuting §85 outright) or found all nine (meaning nothing was localised).
+
+### ★★ And the addresses are exactly where the ISA table says they should be
+
+`K6_INPUT_STAGE`, this core's own twelve-word table, ends with:
+
+> *"w11: END OF BLOCK B (falls through), read mem[X+6], p+1 — **the pointer leaves at X+7**"*
+
+With `X = 0x45` (MEASURED, §33, the steady-state window on 98.31 % of frames), **X+7 = 0x4C**
+and X+8 = `0x4D`. The input stage deposits its mixed result exactly where its own documented
+walk ends. Two independent artefacts — a runtime census and a hand-written ISA note — landing
+on the same two addresses.
+
+⇒ **§85 is confirmed and §81 is corrected.** The handoff is D-RAM, not the accumulator;
+`iw 39`'s LOAD is ordinary behaviour; and "the kernel accumulator arrives at the body empty"
+was a true observation about the wrong wire.
+
+### ★ The gap, now stated precisely
+
+The **FORCED** per-unit D-RAM base is `0x05 | (unit << 7)` — `0x05` for unit 0, `0x85` for
+unit 1 — established at the CALL (`DRAM_UNIT_BASE`, and this core already applies it). So the
+body begins reading around `0x05`/`0x85`, while **the input sits at `0x4C`/`0x4D`.**
+
+The body never looks where the kernel put it.
+
+**Next, and it is bounded:** either a body word reaches `0x4C` by absolute addressing (the
+mode-1 register file, whose `addr8` names a cell directly), or the kernel's deposit address
+and the body's base are related by an offset we have not decoded. Both are checkable from the
+corpus — enumerate every cell any reverb-body word can address, and see whether `0x4C` is
+among them.
+
+**Falsifier:** if no body word can address `0x4C`, the deposit and the body are genuinely
+disjoint and the connection must be made elsewhere (most likely the pointer value the CALL
+installs).
+
+Evidence grade: **MEASURED** (the per-cell census, with a control that could have gone either
+way), corroborated by an independent hand-written source landing on the same addresses.
