@@ -4599,3 +4599,61 @@ between quiet and loud.
 
 Evidence grade: **MEASURED**, with a control that fires — the same probe reports DIFFERS at
 one point and IDENTICAL at three, so it can distinguish the two outcomes.
+
+## 82-83. Two refuted attempts — then the answer, DERIVED from the trace
+
+**2026-07-29.** §81 localised the loss to the kernel→body handoff. I then proposed two models
+and both failed their declared falsifiers:
+
+* **§82** (mask bit 21) — the delay word's ACTION puts its datum on the accumulator, extending
+  row 26's MEASURED "ACTION 0x00 ADDS the bus". ⛔ No change: the datum is itself zero, so
+  summing it contributes nothing.
+* **§83** (mask bit 22) — a delay word does not LOAD from a stale product, since it fetches no
+  coefficient and §29 showed the multiply only issues on fetching words. ⛔ No change: delay
+  words are not the drain on this path.
+
+★ That is three consecutive refuted models (§78, §82, §83), exactly what §78's own flag
+warned about: *"I am guessing at the pairing rather than deriving it."* So I stopped and read
+the trace.
+
+### ★★★ The answer, in the trace all along
+
+```
+n=46  iw=46  080016000B   ACCA=538 760 587 509   P=0   MUL=Y
+n=47  iw=47  080080C000   ACCA=0                 P=0   MUL=.    <-- KILLS IT
+n=48  iw=48  0C645A2000   ACCA=0
+n=49  iw=49  040010E000   ACCA=0
+n=50  iw=84                                              body 0 starts EMPTY
+```
+
+**`iw 47` = `800.8.0C.000`.** `hi12 = 0x800` ⇒ `f31 = 0` ⇒ **LOAD acc ← P**, and `P = 0`, so
+it erases the kernel's accumulator **three slots before the body-0 call**. Every frame.
+
+★★ **And its multiply did not issue** — `MUL = '.'` — although `class4 = 8` **sets the
+coefficient-fetch bit** and `hi12 = 0x800` is not c-format, so `coeff_fetch()` is true. A word
+that fetches a coefficient and then loads the accumulator from the product is a perfectly
+ordinary MAC; it destroys state only because **the product was never formed.**
+
+⇒ This is §39's open question arriving where it actually costs something:
+*"what enables the MULTIPLY, as distinct from the fetch, is OPEN."* The multiply-enable gap
+was an accounting curiosity for forty sections; it is now the specific reason the input never
+reaches the reverb.
+
+★ Note the same shape at `iw 41` (`400.A.00.21A`, ACCA 401e9 → 0) and `iw 47`, with `iw 45`
+restoring in between — several LOAD-from-empty-product words in the kernel tail, of which
+`iw 47` is simply the last before the call.
+
+### Where this leaves the investigation
+
+```
+input -> latch -> kernel header -> kernel accumulator   ✔ live to iw 46 (538 760 587 509)
+iw 47: LOAD acc <- P, P never formed                    ✘ THE DRAIN
+kernel accumulator -> body                              ✘ arrives empty, as measured
+body ladder, delay lines, pairing, presentations        ✔ all verified working
+```
+
+**One word, one register, one unformed product.** And the falsifier stays clean: fix why
+`iw 47`'s multiply does not issue, and probe `iw 84` — it must differ between quiet and loud.
+
+Evidence grade: **MEASURED** (the per-slot trace); **REFUTATION** of §82 and §83, each by its
+own stated prediction.
