@@ -5990,3 +5990,80 @@ shape of error as §97's two memories, one level down.
 Evidence grade: **MEASURED** for §1's facts and for the LFO-block word identity;
 **REFUTED** for the mechanism; **FORCED** that body 0 does not read cell `0x06`;
 **INFERRED** that the misalignment is off-by-one rather than something larger.
+
+---
+
+## §106 — THERE IS NO OFF-BY-ONE. THE BASE+0 PICKUP IS BLOCKED BY **UNDECODED ACTION 0x0D**
+
+Asked to fix the off-by-one §105 named. It does not exist, and saying so cost one diagnostic
+rather than one guess.
+
+### 1. Why it cannot be an off-by-one
+
+```
+  kernel's audio pair    0x06 and 0x07   -- ADJACENT, stride 1  (§86, the only 2 of 29
+                                            input-dependent kernel-written cells)
+  body's pickup pair     base+0, base+2 = 0x05 and 0x07 -- stride 2  (§94, 12 of 12 reverbs)
+```
+
+**No single offset aligns a stride-1 pair to a stride-2 pair.** And the kernel's window cannot
+slide regardless: the frame closure pins it, with residue exactly 0 — one of §90's four
+confirmed predictions. So a "fix" would have had to move a FORCED anchor on a premise that
+does not hold. Two further cracks: `0x07` is independently the CHORUS LFO phase cell
+(`lfo-ramp.md` §1), and the input-latch offsets `+2`/`+5` rest on a premise
+`retraction-sweep.md` P9 explicitly DOWNGRADED ("the NEVER-WRITTEN half does not survive").
+
+### 2. The discriminator, run instead of the fix (mask bit 26, DIAGNOSTIC, never to be promoted)
+
+Mirror the kernel's `0x06` result into `0x05` as well. Deliberately does not touch `0x07`, so
+the LFO stays separable. Two-sided by construction:
+* body 0 becomes input-dependent ⇒ the pickup model is right, the deposit address is the defect
+* it does not ⇒ `base+0` is not an input cell either, and the pair identification is wrong
+
+```
+  §106 DIAGNOSTIC: mirrored 3,649,369 writes of cell 0x06 into 0x05
+  §104 SUMMARY over body-0 iw84..199: first acc DIFFERS at -1, first mem DIFFERS at -1  (-1 = never)
+  §81 PROBE body-0 iw90    quiet [274881642546]  loud [274881642546]  IDENTICAL
+```
+
+**Second arm. Feeding audio into `base+0` changes nothing.** The off-by-one hypothesis is dead
+from the pickup side, not merely unsupported.
+
+### 3. ★★★ WHY — and it corrects the workflow's own dismissal
+
+Body 0's `base+0` read is `iw85`:
+
+```
+  iw85  000020E1CD = 000.2.0E.1CD   f31 = 0 (LOAD acc <- P)
+                                    SRC 0x07 = mem[ptr]   ANCHORED
+                                    ACTION 0x0D           ⛔ UNDECODED
+  iw84  08801308BC = 880.1.30.8BC   lo12 bit 11 set -> the ALTERNATE ENCODING,
+                                    addressing only, no ALU route at all
+```
+
+So the cell is read through an anchored source and then handed to an **undecoded action**, which
+routes it nowhere. Filling the cell cannot help while the action that consumes it is unmodelled.
+
+⚠ **The bisection agent saw ACTION 0x0D and dismissed it** — *"the canonical base+0 read has
+nothing to lose, so its undecoded ACTION 0x0D is not the failure here."* That inference was
+conditional on `0x05` being empty. The mirror removed the condition, and the conclusion
+reverses: give `base+0` something to lose and the undecoded action still loses it. **A negative
+result that holds only because an input is empty is not a negative result about the consumer.**
+
+### 4. What the real target is now
+
+Not an address. **ACTION 0x0D**, and behind it the action field generally — `action-field.md` is
+the note that owns it. This also re-ranks the standing task list: the pending item *"attack
+hi12[3:1] > 2"* has a sibling of at least equal weight, since `iw30` (`f31 = 5`) and `iw85`
+(`ACT 0x0D`) are both on the audio path and both unmodelled.
+
+⚠ And a procedural note on me: this is the **second hex-composition error this session**. The
+first §97 A/B used four hand-typed mask bits I did not intend; here `0x419F440F` was typed for
+`0x19F440F | 0x4000000` (correct: `0x59F440F`), the diagnostic silently never fired, and the
+first A/B came back bit-identical for that reason alone. It looked exactly like a real negative
+result. **Masks get computed, never typed** — and a diagnostic needs a fired-count in the log,
+which is the only reason this was caught rather than published.
+
+Evidence grade: **FORCED** that no offset reconciles the two strides; **MEASURED** that filling
+`base+0` leaves body 0 bit-identical (3.6M mirrored writes, criterion demonstrably two-sided
+elsewhere); **MEASURED** that `iw85`'s action is `0x0D` and undecoded.
