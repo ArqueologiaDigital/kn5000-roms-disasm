@@ -4657,3 +4657,62 @@ body ladder, delay lines, pairing, presentations        ✔ all verified working
 
 Evidence grade: **MEASURED** (the per-slot trace); **REFUTATION** of §82 and §83, each by its
 own stated prediction.
+
+## 84. ★★★ WHY iw47's MULTIPLY NEVER ISSUED — §44's guard returns before it
+
+**2026-07-29.** Traced it to a `return` in code I wrote forty sections ago.
+
+```cpp
+const bool tap_table = (m_cursor >= 0x50 && m_cursor <= 0x8b) && !(m_specmask & 0x20000);
+if (m_speculative && (m_specmask & 0x100) && tap_table)
+{
+    m_tap_n++;
+    if (coeff_consumer(word)) m_cursor++;
+    return;                     // <-- and the MULTIPLY is below this
+}
+m_k = coef;
+```
+
+★★★ **§44's tap-table guard (mask bit 8) returns before the multiply.** `tap_table` is true
+whenever the cursor is in `0x50..0x8B` — which it is throughout the kernel — so `iw 47`, and
+every other kernel word in that window, **never reached the multiply at all**. P was never
+formed, `f31 = 0` loaded it, and the accumulator died.
+
+⚠ And §72 already **proved** that guard's premise false: **0 of 91 algorithms write
+`0x50..0x8B`.** The guard was protecting the chip from multiplying by a bank that is boot
+residue — a reasonable act when it was written, and superseded the moment the census landed.
+I left it enabled for eleven sections after disproving it.
+
+### Dropping it, and keeping §72's relocation instead
+
+```
+mask 0x5D459F (bit 8 ON)    iw47 MUL='.'   ACCA -> 0
+mask 0x1F440F (bit 8 OFF,
+              bit 17 relocate ON)  iw47 MUL='Y'   the multiply issues
+```
+
+★★ Two further improvements fall out:
+
+```
+header exit iw12   before: quiet [72 492 492 081 .. same]   loud [-39.4e9 .. 187.8e9]
+                   after : quiet [0 .. 0]                   loud [-65.7e9 .. 61.5e9]
+body-1 entry       before: [0 .. 0]     after: [1 301 505 024 .. same]
+```
+
+**The kernel accumulator is now zero in silence** and signal-dependent under a note — which is
+what a correct input stage looks like, and was not true before. And body 1 now receives a
+non-zero value where it received nothing.
+
+### ⚠ Still silent, and the honest position
+
+`body-0 ENTRY` remains identical quiet and loud, and the verdict is `SILENT`. So the input
+still does not cross into the body. What has changed is that the drain is understood and
+removed, the multiply issues, and the kernel's silence behaviour is now correct.
+
+★ **Bit 8 should be retired from the default**, and its whole §44 line of reasoning with it —
+that reading generated §§44–53, was refuted by §53's shape argument, refuted again by §72's
+census, and has now been shown to also suppress the kernel's arithmetic. It is the single
+most costly wrong turn in this register.
+
+Evidence grade: **MEASURED** (the `return` located in source; the MUL and probe deltas across
+one bit).
