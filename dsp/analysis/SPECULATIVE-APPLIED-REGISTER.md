@@ -3275,3 +3275,82 @@ mark `addr8` bit 4 as *"the head of an access chain"*, which is not obviously th
 *"this word is an access"*.
 
 Evidence grade: **MEASURED / REFUTATION** — the declared falsifier fired.
+
+## 54-55. ⛔ §52's "disjoint" cross-tab is a TAUTOLOGY — and a calibration correction
+
+**2026-07-29.** Felipe's note: I had been too quick to revert speculative readings, and
+should let a speculative structure grow rather than pruning at the first failure. Acting on
+it exposed a defect in my own reasoning that is worse than the prunes.
+
+### The specific error: a whole-chain test applied to single changes
+
+My bar for a speculative reading was *"does the chip now produce audio that tracks its
+input?"* That requires the input path, the decode, the coefficient routing, the delay
+addressing, the ladder and the output stage to be simultaneously correct. **Applying it to
+one change at a time asks each reading to fix the whole chip by itself**, so every reading
+"failed" and I switched it off:
+
+```
+default mask   0xF -> 0xC -> 0x14C -> 0x74C -> 0x54C     (five prunes, one session)
+```
+
+★ That is the mirror of the cannot-fail instrument: **a test almost nothing can pass.** The
+failures carried no information and I read them as evidence. Restored (default `0x5DF`):
+bits 0/1 (ACCB — the block diagram *proves* two accumulators, so modelling one is wrong by
+construction), 4 (the device declares `m_k`/`m_l` "multiplier input latches" and the multiply
+bypasses them), 7 (r2-output §3.1 calls w77 the word that "aims a POINTER at reg 0x86", and
+§42 proved those cells hold the level).
+
+### ⛔⛔ And §52's central measurement was structurally forced
+
+```cpp
+is_dram(w)      = (hi12(w) & HI_ESC) && class4(w) == 1 && !c_format(w);
+cursor_fetch(w) = (class4(w) & 8)                      && !c_format(w);
+```
+
+`class4 == 1` has bit 3 **clear**; `cursor_fetch` requires bit 3 **set**. **No word can
+satisfy both.** §52's headline — *"cursor_fetch AND is_dram : 0, DISJOINT across all 91
+programs"* — could not have come out any other way. It is a property of two predicates I
+wrote, not of the chip.
+
+★ **That is the seventh instrument in this project that could not fail**, and I used it to
+refute mask bit 9 (delay descriptors taken from the cursor). **That refutation is VOID.**
+Bit 9 is now *untested*, not disproved — which is exactly the distinction Felipe's note was
+about, arrived at from the other direction.
+
+### ★ But the same run produced a REAL corroboration
+
+```
+escape words by class4    class 0 :  81
+                          class 1 : 834      <- is_dram accepts exactly these
+                          class 8 :  44      <- bit 3 set: cursor_fetch fires on these too
+is_dram accepts, corpus-wide : 834
+descriptor cells declared    : 870
+```
+
+834 accesses against 870 declared descriptor cells is **close, and close in the right
+direction**: `dram-datapath.md` item C accounts ROOM REVERB 1's 32 cells as 14 line reads +
+12 line writes + 1 flush read + 1 prime write + **4 still-trapping C-format**, i.e. fewer
+accesses than cells. A 36-cell shortfall over 91 programs fits that accounting.
+
+⇒ So `is_dram`'s **scope** is independently supported even though the cross-tab built on it
+was vacuous. Two different things, and I had them fused.
+
+★★ The 44 class-8 escape words (ROCK ROTARY, OVERDRIVE …) are the interesting residue: they
+carry the escape bit *and* fetch from the cursor. If any of them is a delay access, `is_dram`
+is too narrow after all — and that is a real, non-tautological question.
+
+### What this changes
+
+| claim | before | now |
+|---|---|---|
+| cursor_fetch and is_dram are disjoint | MEASURED (§52) | ⛔ **TAUTOLOGY — void** |
+| bit 9 (descriptors from the cursor) | REFUTED | **UNTESTED** |
+| is_dram's scope is about right | untested | ★ **CORROBORATED** (834 vs 870) |
+| bits 0/1, 4, 7 | switched off | **restored**, live and labelled |
+
+**Method rule 14: before believing a cross-tab, check whether its cells can be non-empty.**
+A contingency table between two predicates that cannot co-occur is not a measurement.
+
+Evidence grade: **REFUTATION** (of §52's cross-tab, on structural grounds);
+**MEASURED** (the class4 census and the 834/870 accounting).
