@@ -4286,3 +4286,48 @@ ring, which is a different machine.
 
 Evidence grade: **MEASURED** (read/write content counts, the sampled addressing arithmetic
 recomputed by hand); **REFUTATION** of §74's closing claim.
+
+## 76. ★★★ THE PORT-KEYED PIPELINE WORKS — the delay datum reaches the ALU at last
+
+**2026-07-29.** §75 localised the loss to §49's slot-indexed ring. Re-keyed to the port, as
+`dram-datapath.md` item A actually specifies — *"THE DRAM PORT IS A ONE-DEEP PIPELINE"*, one
+**outstanding access**, not a fixed slot latency.
+
+Model (mask bit 20): a delay READ **latches** its datum into a pending register; the **next
+delay word** publishes it, runs its ALU with the datum on the bus, and only then performs its
+own port access — the ordering matters, because a write must store the accumulator *after*
+the ALU has updated it.
+
+```
+bit 20 OFF   SRC 0x0B: 491 520 consumptions,       0 with a non-zero datum
+bit 20 ON    SRC 0x0B: 491 520 consumptions, 455 998 with a non-zero datum   (93 %)
+```
+
+★★★ **The delay-read datum reaches the ALU for the first time in this project.** Zero to
+455 998. The feedback path from the delay line into the arithmetic now exists.
+
+### What is still missing, precisely
+
+The consumption **count** is unchanged at ~1.0 per frame, where §74's census says ~15 of the
+168 `SRC 0x0B` words should fire per frame. So the datum now arrives correctly for the one
+word that reaches the source switch, and the other ~14 still do not get there: `alu_decoded()`
+routes `class4 == 1` + escape words elsewhere before the switch, exactly as §74 flagged.
+
+And the ladder is unchanged — ACCA swing ±3.5e11, quiet and loud identical, verdict `DC`.
+That follows: one feedback term per frame cannot damp a twelve-line ladder.
+
+### The remaining chain, stated compactly
+
+```
+delay memory        ✔ healthy   (69 % of writes carry content, 65 % of reads non-zero)
+descriptors         ✔ real      (§59-60, paired at stride 5)
+addressing          ✔ correct   (read at 0x00C8 finds the write at 0x0820, 1880 frames back)
+pipeline            ✔ delivers  (§76, 93 % non-zero)
+CONSUMERS           ✘ ~1 of ~15 reach the ALU   <-- THE LAST GAP
+```
+
+⇒ **One question remains: get the class-1 escape words past `alu_decoded()` to their source
+switch.** Everything upstream and downstream of that is now measured working.
+
+Evidence grade: **MEASURED** — the 0 → 455 998 delivery, against a model taken verbatim from
+item A rather than invented.
