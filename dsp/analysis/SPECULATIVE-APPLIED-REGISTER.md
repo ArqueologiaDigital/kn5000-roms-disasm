@@ -3959,3 +3959,56 @@ separate guesses (Q0.23, unity, Q0.16) have failed to supply.
 
 Evidence grade: **MEASURED** (the quiet/loud range comparison; the clamp arithmetic closing
 to one LSB); **RETRACTION** of §68's "the predicted datum arrived".
+
+## 71. ⛔ §42 REFUTED — the output level IS in D-RAM, and the poke decode is confirmed
+
+**2026-07-29.** With P1.1 working, the tag-`0x15` D-RAM packets are readable for the first
+time. Extracted from the captured upload stream and mapped cell by cell:
+
+```
+06 = 200000 = +0.250000     <-- ★ UNIT-0 OUTPUT LEVEL
+86 = 0BC685 = +0.091996     <-- ★ UNIT-1 OUTPUT LEVEL
+1D..40 = 0611E3 158547 238139 2F11C1 376D1D 3C0182 3C7F0A 38DD28 315B3A 267C3A ...
+05 07 0E 10 11 50 51 52 53 85 87 8A 8B 94 D0 D1 D2 = 000000   (the zero-fill)
+```
+
+### ★★★ Two independent confirmations that the poke decode is right
+
+1. **The LFO table lands exactly where A3 says it does.** `host-side.md` A3 is **PROVEN BY
+   CONSTRUCTION + MEASURED**: *"opcode 0x74 … a 36-entry D-RAM TABLE … destination base cell
+   `0x1D` … the live cold-boot capture's 36-value burst at `0x1D..0x40` is the SINE table,
+   36 of 36 values identical."* My decode puts 36 values at `0x1D..0x40`, rising to a peak
+   and falling — a 12-point sine, three cycles. **Reproduced independently, to the cell.**
+2. **The levels are exactly half the documented cold-boot values.** The record says
+   `reg 0x06 <- +0.500000` and `reg 0x86 <- +0.183992`; the stream carries `+0.250000` and
+   `+0.091996` — **half of each, to six decimal places** — which is precisely
+   `r3-delaydram.md`'s *"host payload is 2× the raw three bytes"*.
+
+Two established results, from different notes, both reproduced by the same decode. That is a
+control that could have failed and did not.
+
+### ⛔ So §42 is wrong
+
+§42 concluded *"the per-unit output level lives in C-RAM, not D-RAM"* because `D-RAM[0x06]`
+measured `0x000000` on 100 % of frames. **It measured zero because the poke port was dropped
+(§56).** The original code read the right cell; my "fix" (mask bit 6, read from C-RAM)
+compensated for a different bug and happened to find non-zero values there by coincidence —
+`0x2CCCCC` and `0x006854`, which are ordinary coefficients, not levels.
+
+Verified at runtime:
+
+```
+bit 6 OFF (D-RAM)   unit0 0x200000 (+0.25)      unit1 0x0BC685 (+0.091996)   ✓ the host's own values
+bit 6 ON  (C-RAM)   unit0 0x2CCCCC             unit1 0x006854               ✗ coincidence
+```
+
+**Default `0x5DF` → `0x59F`.** And this is the general lesson of §56 arriving a second time:
+*a measurement taken on a subsystem that was never fed is not evidence about the chip.*
+Several conclusions in §§42-53 were drawn from a D-RAM the host could not reach.
+
+★ Note the zero-fill is real too — `05 07 0E 10 11 50..53 85 87 8A 8B 94 D0..D2` all receive
+`000000`. The state cells that §48/§53 found saturating **were never being cleared**, and now
+are.
+
+Evidence grade: **MEASURED**, with two independent pre-existing results reproduced;
+**REFUTATION** of §42.
