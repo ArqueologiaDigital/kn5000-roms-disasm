@@ -4229,3 +4229,60 @@ untangled first.
 
 Evidence grade: **MEASURED** (the enrichment table and the 168/168 census);
 **REFUTATION** of the first implementation attempt, by its own declared prediction.
+
+## 75. ⛔ Correction: the delay memory is NOT empty — the PIPELINE is losing the datum
+
+**2026-07-29.** §74 said the delay memory *"reads back empty, a regression the recent
+cursor/descriptor changes introduced."* **Wrong**, and the correction localises the fault
+precisely.
+
+```
+§46 DELAY PORT :  9 802 560 reads (6 383 984 returned NON-ZERO), 9 293 760 writes
+§75 writes with content       :  6 383 984 of 9 293 760  (69 %)
+§48 SRC 0x0B consumed         :    491 520 times, 0 with a non-zero datum
+```
+
+★ **65 % of delay reads return real data, and 69 % of writes carry content.** The delay line
+works. What fails is the **delivery**: every one of 491 520 consumptions sees zero.
+
+### The addressing is right, which is worth recording
+
+Sampled at frame 420 001:
+
+```
+DLY R  addr 6969  cell 00C8   got 000000
+DLY W  addr 70C1  cell 0820   data 7D70
+```
+
+`addr = (descriptor + frame) & 0xffff`, so a read at descriptor `0x00C8` targets what a write
+at descriptor `0x0820` stored `0x0820 − 0x00C8 = 1880` frames earlier:
+`(0x0820 + 418121) & 0xffff = 0x6969` — **exactly the read address**. The ring-buffer
+arithmetic, the descriptor pairing and the lag are all correct, and 1880 samples is 42.6 ms,
+a plausible reverb tap.
+
+### So the defect is the §49 pipeline
+
+The one-deep pipeline (mask bit 10) schedules each datum into ring slot `(slot + land) & 7`
+and publishes it when execution reaches that slot. **The consumer never lands on that slot**,
+so `m_dr` holds a stale zero at every read.
+
+★★ And §74 says why the slot model cannot be right: the consumer is **the delay WRITE word
+itself** (168 of 168 `SRC 0x0B` words are `class4 == 1`, escape set, `addr8 = 0x60`). A write
+word is not at a fixed slot offset from its read — it is the *next delay access on that
+line*, which the descriptor pairing places a variable number of ordinary words later.
+
+⇒ **The pipeline should be keyed to the port, not to the slot counter**: a read latches the
+datum, and the *next delay word* consumes it. That is what "one-deep pipeline" means in
+`dram-datapath.md` item A — one outstanding access — and I implemented it as a slot-indexed
+ring, which is a different machine.
+
+### Three corrections in one section, all mine
+
+1. §74's "delay memory reads back empty" — **false**, 65 % of reads carry data.
+2. §49's ring is the wrong shape — one-deep means *one outstanding access*, not *a fixed
+   slot latency*.
+3. The delay write's data source was ACCA regardless of unit (fixed here) — the **third**
+   instance of the §66/§68 unit-blind defect, after the ALU source and the bit-4 store.
+
+Evidence grade: **MEASURED** (read/write content counts, the sampled addressing arithmetic
+recomputed by hand); **REFUTATION** of §74's closing claim.
