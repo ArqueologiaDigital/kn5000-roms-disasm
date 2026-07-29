@@ -5057,3 +5057,43 @@ census had disproved) and §84 (that guard suppressing the kernel's arithmetic).
 to be compared when readings collide, and I have not been comparing them.
 
 Evidence grade: **MEASURED** — four falsifiers stated in advance, all fired correctly.
+
+## 91. WHY THE BODY STILL DOES NOT SEE THE INPUT: the deposit is in unit 0's region only
+
+**2026-07-29.** §90 moved the kernel's audio deposit from `0x4C/0x4D` to `0x06/0x07`. The body
+probes are still identical quiet vs loud, so the input still does not enter the ladder.
+Enumerated where each unit's pointer walk actually goes:
+
+```
+unit-0 walk (base 0x05):  05 07 08 09 0A 0B 0C 0D 0F 14 50 51 ...   ★ reaches 0x07
+unit-1 walk (base 0x85):  00 0E 85 87 88 89 8A 8B 8C 8D 8F 94 ...   ✘ never 0x05/06/07
+```
+
+★★★ **The twelve reverbs are unit 1, and unit 1's walk never touches the deposit cells.**
+But it *does* visit **`0x87`** — which is `0x07 + 0x80`, the same offset inside its own
+region. The **FORCED** per-unit base is `0x05 | (unit << 7)`, so unit 0's input cell `0x07`
+has an exact counterpart at `0x87` that unit 1 reads.
+
+⇒ **The kernel deposits once, into unit 0's region only.** Unit 0 can see it; unit 1 looks at
+the mirrored address and finds whatever is there.
+
+That is a coherent and checkable next step, and it has three possible shapes worth separating
+before any code is written:
+
+1. **The deposit is per-unit** — the input stage runs once but writes both `0x07` and `0x87`
+   (or the hardware mirrors the low region into both).
+2. **The rebase is wrong for unit 1** — `0x85` is FORCED, but if unit 1's body is meant to
+   read the *unit-0* cell for its input, the CALL should not offset that particular access.
+3. **A different word carries the input across** — a mode-1 word naming `0x06`/`0x07`
+   absolutely, which the pointer-walk census cannot see because it only models pointer
+   addressing.
+
+★ **(3) is testable statically and costs nothing**: enumerate every mode-1 `addr8` in the
+twelve reverb bodies and check for `0x06`, `0x07`, `0x86`, `0x87`. §87 already ran exactly
+this query for `0x4C` and got zero — the same query for the new addresses is the obvious first
+move, and it distinguishes (3) from (1)/(2) outright.
+
+⚠ Note the deposit split: `0x06` receives **2 400 000** writes and `0x07` **600 000** — a 4:1
+ratio, so they are not a stereo pair of equals. Whatever reads them may want only one.
+
+Evidence grade: **MEASURED** (both per-unit walks enumerated from the ROM; the probe ladder).
