@@ -3658,3 +3658,60 @@ one, and per the standing instruction the structure grows rather than being swap
 Evidence grade: **MEASURED** (the per-unit census, the three-mask comparison);
 **INFERRED (strong)** for the structural argument that an instruction field cannot select
 between two units running identical code.
+
+## 63-64. The presentation state, measured — and one hypothesis refuted by its own falsifier
+
+**2026-07-29.** Instrumented what is actually in both accumulators at each presentation,
+rather than reasoning about it. Two corrections and one new fact.
+
+```
+mask 0x5DF   PRESENT unit0  cur_unit1=0  ACCA=0  ACCB=1 262 805 272 320  -> v=0
+             PRESENT unit1  cur_unit1=0  ACCA=0  ACCB=1 812 561 020 672  -> v=26707
+             PRESENT unit0  cur_unit1=0  ACCA=0  ACCB=2 824 090 736 224  -> v=0
+             PRESENT unit1  cur_unit1=0  ACCA=0  ACCB=3 373 846 484 576  -> v=26707
+mask 0x45DF  both units     cur_unit1=0  ACCA=0  ACCB=0
+```
+
+⛔ **§62's diagnosis was wrong.** I claimed body 1 leaves `m_cur_unit1` set, so the epilogue's
+arithmetic all lands in ACCB. Measured: **`cur_unit1 = 0` at both presentations** — row 27
+already clears it at `upd6383.cpp:2872`, exactly as it says it does. I asserted a defect
+without checking the line I was asserting it about.
+
+★ **ACCB runs away.** Successive presentations differ by 549 755 748 352 ≈ **2³⁹** — the
+accumulator is being incremented by a fixed near-power-of-two every pass, without bound.
+That is the saturation of §48/§53 seen directly, and it is the whole of the `−26 708` DC.
+
+★★ **ACCA is empty under every configuration ever measured** — §43, §48, §61, §63, at every
+mask. That is now the single sharpest fact in the investigation, because `w73` presents ACCA
+and `w73` is DO1, the main mix.
+
+### §64 — a good hypothesis, and its falsifier fired
+
+`801.0.NN.821` (ldptr) and `801.0.PP.825` (ldptr.d) carry `hi12 = 0x801`, so
+`f31 = (0x801 >> 1) & 7 = 0`, which this ALU reads as **LOAD acc ← P**. With P = 0 that wipes
+the accumulator — and the epilogue's second word is `801.0.26.825`, whose `0x26` is *exactly*
+the `dsc` range the delay port reads, so it is unambiguously the descriptor-pointer load.
+A word whose job is to aim a pointer clobbering the accumulator is a real defect.
+
+**Prediction, stated first: ACCA becomes non-zero at `w73`.**
+
+Implemented as mask bit 15 (pointer-load words aim their pointer and return without touching
+the ALU). **ACCA is still 0.** ⛔ The falsifier fired; §64 is **not** the blocker, though the
+reasoning may still be correct — a pointer load should not be an accumulator operation
+regardless of whether fixing it moves this particular number. Kept as a switch, off.
+
+### Where ACCA actually dies is now the question
+
+Under bit 14 (accumulator by unit) **ACCB is never non-zero either**, even though
+`m_cur_unit1` *is* assigned at the CALL (`:2840`, from the tag word's `addr8 != 0x0e`). So
+under unit-selection **neither** accumulator receives the bodies' work — which means the
+bodies' accumulation is not reaching any accumulator, and the f31[2] reading was merely
+concentrating the *kernel's* output into ACCB and calling it a result.
+
+⇒ Next is a per-slot ACCA/ACCB trace through both bodies and the epilogue. The frame trace
+now arms at frame 420 000 (~9.5 s) instead of 970 000, so the fast 16-second harness produces
+one — the previous runs emitted no trace at all and I did not notice until I went looking for
+the answer in it.
+
+Evidence grade: **MEASURED** (the presentation dumps); **REFUTATION** of §62's claim and of
+§64's prediction, both by declared falsifiers.
