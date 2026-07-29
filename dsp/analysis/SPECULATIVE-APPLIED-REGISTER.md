@@ -5279,3 +5279,52 @@ into the result line, not just into the code.**
 
 Evidence grade: **MEASURED** (the kernel word search; the widened census; the bit-7 A/B);
 the `0x06` double-role conflict is **OPEN and between two measurements**.
+
+## 96. ★★★ THE §71/§86 CONFLICT RESOLVED — two address spaces, not one
+
+**2026-07-29.** §95 left two MEASURED results contradicting each other: §71 has the **host**
+writing `0x06` the unit-0 output level; §86 has the **kernel** writing that same cell
+input-dependent audio 2 700 000 times. Recorded which words write the disputed cells:
+
+```
+cell 06  written by iw11, iw19, iw21, iw27, iw33, iw34, iw39   -- SEVEN kernel words
+cell 07  written by iw30, iw32, iw91, iw92
+cell 87  written by iw262                                       -- and it IS written
+```
+
+★★★ **Seven distinct kernel words store to `0x06`.** That is not a dedicated parameter cell
+being read once per frame — it is **scratch**, written all through the kernel's arithmetic.
+No sane design would put a host-programmed output level in a cell its own microcode spills to
+seven times a frame.
+
+⇒ **The two results describe two different memories.** `host-side.md` C4 names tag `0x15`
+*"the D-RAM **register file**"*, and the ISA distinguishes **mode-1** words, whose `addr8`
+names a **register** directly, from **mode-2** words, which walk a **pointer** through D-RAM.
+Our core resolves both onto the same 256-cell array. **They are not the same space.**
+
+* §71 is right: the host writes **register `0x06`** = the unit-0 level (+0.25, exactly half
+  the documented cold-boot `+0.5`, confirmed independently by the LFO table landing at
+  `0x1D..0x40`).
+* §86 is right: the kernel writes **D-RAM cell `0x06`** with audio, via the pointer.
+* **Neither is wrong. The emulator aliases them.**
+
+★★ **And this dissolves §94's problem rather than solving it.** "The reverbs read `0x87` and
+nothing writes it" was a statement about the aliased array. `iw262` — a body-1 word — does
+write `0x87`. What the reverbs read is a *register*, addressed by `addr8`; what the kernel
+deposits is a *D-RAM cell*, addressed by the pointer. Whether those should be the same cell is
+now the open question, and it is a question about the chip's memory topology rather than about
+any single word.
+
+★ This also puts §90 in its proper place. Its four confirmed predictions were all about the
+**pointer** — displacement, closure, walk — and every one of them stands. What does not follow
+is the meaning I attached: that landing on `0x06` meant landing where the body reads. If the
+spaces are distinct, the pointer is now right and the aliasing is a separate defect.
+
+⇒ **Next: establish whether mode-1 `addr8` and mode-2 `mem[ptr]` address the same memory.**
+Decidable from the corpus — if any cell is written through one route and read through the
+other with a coherent value, they alias; if the two routes partition cleanly, they do not.
+`dram-datapath.md` and `register-space.md` both bear on it and neither has been consulted for
+this question.
+
+Evidence grade: **MEASURED** (the writer census); the two-space reading is **INFERRED
+(strong)** — it is the only reading under which both prior measurements survive.
