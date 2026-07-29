@@ -4432,3 +4432,59 @@ healthy, the addressing is right — but I am guessing at the *pairing* rather t
 **The next step should extract the pairs from the ROM before touching the core again.**
 
 Evidence grade: **REFUTATION**, by a measurement already in this register.
+
+## 79. ★★★ THE PAIRS, EXTRACTED FROM THE ROM — and §78's refutation is itself REFUTED
+
+**2026-07-29.** §78 concluded that a read and its write do not share a descriptor, citing a
+§75 runtime sample. Extracted the pairs statically instead of arguing from one sample.
+
+`ROOM REVERB 1` (algo 16), delay words in execution order with the cell each consumes:
+
+```
+k= 0  iw   0  READ   8320        k= 1  iw  11  WRITE  B198
+k= 2  iw  15  READ   A2C9        k= 7  iw  35  WRITE  A2C9   <-- SAME
+k= 4  iw  23  READ   A375        k= 9  iw  43  WRITE  A375   <-- SAME
+k= 6  iw  31  READ   A4D9        k=11  iw  51  WRITE  A4D9   <-- SAME
+k= 8  iw  39  READ   A6DA        k=13  iw  59  WRITE  A6DA   <-- SAME
+k=10  iw  47  READ   A9BD        k=15  iw  69  WRITE  A9BD   <-- SAME
+k=12  iw  55  READ   AAAD        k=17  iw  77  WRITE  AAAD   <-- SAME
+k=14  iw  63  READ   AB24        k=19  iw  85  WRITE  AB24   <-- SAME
+k=16  iw  73  READ   AC1B        k=21  iw  93  WRITE  AC1B   <-- SAME
+k=18  iw  81  READ   ADC7        k=23  iw 101  WRITE  ADC7   <-- SAME
+```
+
+★★★ **The read and its write DO share a descriptor value, at stride 5 in the consumer order.**
+And it is not one program:
+
+```
+all twelve reverbs:  15 READs, 13 WRITEs, 9 of 15 paired at stride 5 -- 12 of 12 algorithms
+```
+
+⛔ **So §78's refutation was wrong.** Its evidence — §75's runtime sample showing a read at
+descriptor `0x00C8` and a write at `0x0820` — compared **two accesses from different lines**,
+which of course carry different descriptors. One sample of an unpaired pair, used to overturn
+a model that 108 paired instances across twelve programs support.
+
+★ That is a specific methodological failure worth naming: I refuted a correct model with a
+sample I had not established was a matched pair, having earlier refuted a *tautology* by
+reading two predicates that could not co-occur. **Both times the fix was to compute the
+population instead of inspecting an instance.**
+
+### What the pairs give
+
+* **9 clean lines per reverb**, read at `k`, write at `k+5`, sharing a descriptor. Reading a
+  walking address and then overwriting it is a circular delay line whose lag is the buffer
+  length — which is why the descriptors match rather than differ.
+* **6 of 15 reads unpaired**, consistent with `dram-datapath.md` item C's accounting: twelve
+  lines plus *"two extra early-reflection taps on the pre-delay buffer"*, one flush read and
+  one prime write, which are exactly the accesses with no partner.
+* The structure is **identical in 12 of 12 reverbs**, so it is a property of the shared
+  133-word image, not of any preset.
+
+⇒ **The core should key its outstanding delay access by the descriptor value** — which is what
+§78 implemented and what its own (bad) refutation caused me to abandon. The remaining question
+is why that implementation still delivered zero, and it must now be a defect in the code
+rather than in the model.
+
+Evidence grade: **MEASURED** (108 paired instances, 12/12 programs);
+**REFUTATION** of §78's refutation.
