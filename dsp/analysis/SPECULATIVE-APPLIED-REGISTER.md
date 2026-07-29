@@ -4159,3 +4159,73 @@ remaining structural gap.
 
 Evidence grade: **MEASURED** (the coefficient values now read, the unchanged oscillation
 amplitude across two different relocations).
+
+## 74. ★★★ THE DELAY-READ CONSUMER IS THE DELAY WRITE WORD — and the ISA says so
+
+**2026-07-29.** §73 left the question: who consumes the ~21 delay reads per frame, when
+`SRC 0x0B` is consumed only 1.0 times? Answered from the corpus, and it is structural.
+
+### The enrichment test
+
+For every delay READ in the twelve unit-1 reverb bodies, the SRC codes of the words inside
+the **FORCED** latency window `land ∈ [1,4]`, against their corpus-wide base rate:
+
+```
+SRC    obs      exp   ratio
+0x11    24     10.8    2.22
+0x0B   120     75.8    1.58   m_dr  <-- enriched, so the guess is SUPPORTED
+0x07   144     92.0    1.56   MEM
+0x00   264    211.1    1.25
+0x19   108    113.7    0.95   tA
+0x10    60    151.6    0.40   ACC     <-- depleted
+0x1A     0     65.0    0.00   tB      <-- absent entirely
+```
+
+★ `SRC 0x0B` is genuinely enriched after a delay read. The PLAIN GUESS survives a test that
+could have killed it.
+
+### ★★★ And then the decisive census
+
+**All 168 words carrying `SRC 0x0B` in the twelve reverb bodies are `class4 == 1` with the
+escape bit — so `is_dram` claims every single one — and every one has `addr8 = 0x60`, the
+FORCED WRITE direction.**
+
+```
+8801602D4   hi 880  cl 1  addr8 60  lo12 2D4  ACT 14
+8801602DA   hi 880  cl 1  addr8 60  lo12 2DA  ACT 1A
+```
+
+⇒ **The delay WRITE word IS the delay-read consumer.** It stores to the line *and* takes the
+read-register onto its bus in the same instruction. That is `dram-datapath.md` item F in its
+own words — *"the structural argument moves onto the WRITE word, which is the pipeline"* — and
+it is the read/write pairing the descriptors show (§59-60), seen from the instruction side.
+
+★★ Our `is_dram` branch **`return`ed after the port access**, so the ALU half of those 168
+words never ran. That is why §48 measured 1.0 consumption against ~20.8 reads, why §49's
+correctly-implemented read pipeline changed nothing, and why §73 found a loop whose behaviour
+is insensitive to its own gains: **the ladder had no per-pass feedback term because the word
+that carries it was being executed as a port access only.**
+
+### ⚠ The fix attempt did NOT produce the predicted effect
+
+Mask bit 19 lets a delay word run its ALU after the port access. **Prediction: `SRC 0x0B`
+consumption rises from ~1/frame to ~15/frame.**
+
+```
+bit 19 OFF   SRC 0x0B consumed 491 520 times, 0 with a non-zero datum
+bit 19 ON    SRC 0x0B consumed 491 520 times, 0 with a non-zero datum
+```
+
+⛔ Unchanged, and the datum is now **always zero** (it was 1 557 537 non-zero at §48). So two
+things are wrong: the ALU is not reaching the `SRC 0x0B` case for these words — they are
+`class4 == 1` with the escape bit, which `alu_decoded()` may route elsewhere — and the delay
+memory is now reading back empty, a regression against §48 that the recent cursor/descriptor
+changes must have introduced.
+
+**The finding stands; the implementation does not.** The corpus census is a fact about the
+ROM: 168 of 168, one direction, one class. What remains is making the core execute those
+words as both a port access and an ALU operation, which needs the escape/class-1 dispatch
+untangled first.
+
+Evidence grade: **MEASURED** (the enrichment table and the 168/168 census);
+**REFUTATION** of the first implementation attempt, by its own declared prediction.
