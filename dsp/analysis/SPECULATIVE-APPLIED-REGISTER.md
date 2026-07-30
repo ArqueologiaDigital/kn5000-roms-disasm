@@ -9375,3 +9375,72 @@ effect"; and **there is no modulation register in the device at all**.
 Evidence grade: §1 **MEASURED** and a **retraction of §149 §3**; §2 **INFERRED (strong)**;
 §3 **PROVEN BY CONSTRUCTION** (ENHANCER's UI→ROM→cell→word chain) + **MEASURED** (the geometry and
 the null); §4 corrections; §5 the consequence, not yet implemented.
+
+---
+
+## §153/§154 — THE MODULATION PATH IMPLEMENTED; my census was a criterion that could not fail, in the other direction
+
+§152 licensed the change: `lo12 == 0x44C` applies a delay-tap offset, and the offset is a
+**sample count**. The device had no modulation register at all — `addr = cellv + m_frames_run`,
+the rotation `G` and nothing else (§149).
+
+Implemented on mask bit 60: `m_tapmod`, set at the `0x44C` word from the per-unit accumulator in
+datum units, added to the address. ★ Deliberately **not** scaled to make any excursion come out —
+a per-cell census reports the range, so a wrong quantity shows as a wrong range instead of being
+fitted away.
+
+### 1. ⛔ THE FIRST RUN WAS VOID BY ITS OWN F2, AND THE FAULT WAS THE INSTRUMENT
+
+```
+  BASE (bit 60 off): [00]0..65535(range 65535) [10] .. [20] .. [30] ..   -- every cell
+  ARM  (bit 60 on):  identical
+```
+
+I pre-registered *"in BASE the range must be 0 for every cell"*, reasoning that `G` is common to
+all cells so no address can move **relative** to another. True of the relative geometry — and
+irrelevant to what I actually measured. The census took the **absolute** address, and
+`m_frames_run` ramps across 1.39 M frames, so `G` alone sweeps the whole 16-bit space. **An
+absolute-address range can only ever return 65535.**
+
+★ Same defect as a criterion that cannot fail, inverted: it could not *succeed*. F2 fired, the run
+was void, and the census now measures the **modulation term** itself.
+
+★ One sanity check did pass and is worth keeping: **fired-count 4 513 920** = 4 words/frame ×
+1 128 480 frames. CHORUS has exactly four `0x44C` words — and §148 measured the *same* 4 513 920
+for its four `f98 = 1` twins. Two independent gates over two different word-sets in one program,
+agreeing to the digit. **The gate was right; the census was blind.**
+
+### 2. The corrected run: the null is real, and P3 fails
+
+```
+  BASE: "NONE -- the modulation term never moved"          <- P2, a REAL null
+  ARM : fired 4 513 920
+        [00] range 8 388 607   [10] range 8 388 607
+        [20] range       670   [30] range 8 388 607
+```
+
+`8 388 607 = 0x7FFFFF` — the full 24-bit datum rail, against an expected ~120–240 samples.
+**F3 fired: the accumulator, as transported, is not the offset.**
+
+### 3. ★ And the diagnosis points at a reading I already have
+
+This ran at the **default** mask, which does **not** enable §145's `SRC 0x00 = coef`. But §152
+established that word [1] of the transaction is **`192.A.40.000` — a `SRC 0x00` class-A word** —
+and that it consumes `C-RAM[0x02] = 240`, the depth. Under the default that word reads `mem[ptr]`
+instead, which §148 measured as **the rail (8 388 607) at exactly those slots** (`iw94`, `iw103`).
+
+⇒ **The depth is never loaded, and the accumulator inherits the rail — which is precisely the
+8 388 607 excursion measured.**
+
+★★ So §145's reading is not an optional extra here: **it is the thing that puts the depth on the
+bus.** §148 graded it *"inert downstream — nothing reads it"*; its consumer is this path, which
+did not exist when that was written. The combined arm is pre-registered in `data/PREDICT_155.md`
+with its own falsifiers — including F3, *"right register, wrong scaling: report the ratio, do NOT
+introduce a fudge factor to close it."*
+
+⚠ And stated in advance: a pass there would show **the depth reaches the address with the right
+magnitude**. It would *not* decode the modulation arithmetic — sine table vs triangle vs raw ramp
+is a separate question this test does not touch.
+
+Evidence grade: §1 **MEASURED** and a **void run by my own falsifier**; §2 **MEASURED**, F3 fired;
+§3 **INFERRED** (the diagnosis), with the test pre-registered.
