@@ -6940,3 +6940,98 @@ nothing to modulate yet.
 Evidence grade: **FORCED** for the wrap-word discriminator (29/29, exceptionless, matching an
 independent count); **MEASURED** for §113's A/B; **RETRACTED** for §117's claim that the phase
 ramped — it did not, and §114/§116/§117 all inherited the error.
+
+---
+
+## §119 — A REAL MECHANISM, AN OVER-READ CONCLUSION, ⛔ **AND IT UNDERMINES §118's PROMOTION OF BIT 18**
+
+Six agents; both adversarial verifiers ran and both returned **refuted=true**, each with grounds
+the other did not raise. Separating what survived from what did not.
+
+### 1. ★ WHAT SURVIVES — one hop, measured properly
+
+`iw92` = `000.2.09.447` is class 2, `addr8 = +9`, `SRC 0x11`, `ACT 0x07`. Under our PRE-increment
+store target it is `mem[0x07] <- mem[0x07]`, an identity. Under a POST target it is
+`mem[0x10] <- mem[0x07]` — **a memory-to-memory MOVE**, and `0x10` is the cell the next two slots
+read.
+
+And the tracking witness is the one I demanded under rule 8 — not "it varies" but **it equals**:
+
+```
+  LFO phase at iw89, 8 consecutive frames:  1006784 1006898 1007012 1007126 1007240 ...
+  cell 0x10 at iw94, the same frames:       1006898 1007012 1007126 1007240 1007354 ...
+  cell 0x10 == phase + 114 on 8 of 8 -- iw91's published value, to the digit
+```
+
+Both verifiers granted this. Verifier 2 additionally confirmed the isolation is near-clean: bit
+34 touches only **two** non-K6 words in the 285-slot frame, and the other one moves a value whose
+D-RAM non-zero count is 0 in both arms.
+
+★ It also **dissolves the apparent conflict with §109's PRE finding**. The degeneracy is a
+property of the ENCODING — source and destination naming the same cell — and it selects **56 of
+444** mode-2 ACT-07 words. The other 388 include all 256 accumulator-source words, which is where
+§109's PRE anchors (`iw34`, `iw88`) live. PRE is right for those; the memory-source ones are
+moves. That is why bit 34 survives where bit 28 (move everything) kills the ramp.
+
+### 2. ⛔⛔ AND IT UNDERMINES SOMETHING I PROMOTED TWO SECTIONS AGO
+
+Verifier 1's first ground, and it is the one that matters most to this project's own record:
+
+> `lfo-ramp.md` §8.4's constraint on the `447` word is **purely negative** and names **TWO**
+> compliant readings: *"`SRC 0x11 = mem[ptr]`, making the word a self-copy"* **OR** *"ACTION
+> 0x07's destination is not D-RAM here, in which case `SRC 0x11` is UNCONSTRAINED by the LFO."*
+
+**Bit 34 is the second family.** Under it the phase ramps *regardless* of what `SRC 0x11` reads —
+so §118's A/B, the sole evidence for §113, no longer discriminates. §118 concluded `SRC 0x11 =
+mem[ptr]` (bit 18, now in the default) because arm A pinned and arm B ramped; that contrast
+exists **only** because iw92's store lands on the phase cell under PRE.
+
+⚠ **I promoted bit 18 to the default in §118 on evidence that a second, equally compliant reading
+would remove.** The note named both readings; I tested one and shipped it. §27's `SRC 0x11 = ACCB`
+is still the enum name in `upd6383d.h` and is not refuted. **Bit 18's grade drops from MEASURED to
+CONTESTED**, and the two readings are now a live tie that needs an experiment able to separate
+them.
+
+### 3. The conclusion, refuted on five further grounds
+
+The claim was *"the LFO's operand-level consumers are the four delay-voice blocks"*.
+
+* **Cell `0x10` was not empty.** `0x0E`/`0x0F`/`0x10` are a matched set of three, each written from
+  the accumulator by gate-permitted stores in the w32..w48 section and each read by a
+  `192.A.4X.000` voice word. Bit 34 **overwrites** the previous frame's value rather than filling
+  a gap — method rule 8 one level up.
+* **A 4.5-order magnitude contradiction.** Four structurally identical voice blocks would take
+  operands of `0..8,388,562` (voices 1/2) and `0..264` / `0..203` (voices 3/4). A tap offset is
+  the *small* one — so the right magnitude sits at `0x0E`/`0x0F`, the cells the claim demoted to
+  "derived".
+* **It destroys the quadrature.** CHORUS's two table-lookup idioms feed `0x0E`/`0x0F` and produce
+  two *distinct* outputs — the "quadrature 2-voice chorus" of the disassembly header. Under the
+  claim voices 1 and 2 read the **same cell with the same value**: zero quadrature. A chorus
+  needs decorrelated voices.
+* **Arm F was confounded.** Bit 25 is not an LFO switch: it gates §112 *and* `SRC 0x03 = acc`,
+  and clearing it flips 1,470,720 operations across three kernel words, changing the kernel's
+  arithmetic from `iw13` onward. **Arm F is a different machine, not "arm E with the LFO frozen"**,
+  so the DC control is invalid and every attribution resting on it is unsupported.
+* The claimed 5.4 ms depth **exists nowhere in the run** — the agent conceded our multiply applies
+  ×65536, not ×240.
+
+### 4. ★ The agent's own near-miss, which it caught
+
+It reported the delay line going from 455,999 to 1,812,851 writes-with-content under bit 34 —
+then found arm F gives 1,821,119, and refused to credit the LFO: *"a DC fills the delay line just
+as well."* That is rule 2/8 applied correctly and unprompted. It also declined to claim the tap
+**address** is modulated, on rule 7 — our core computes it from a program-order counter with no
+data input, so no value can reach it by construction.
+
+### 5. Where this leaves things
+
+**Not promoted.** Bit 34 stays gated OFF, instrumentation committed for reproducibility.
+
+The honest position: **`iw92` is a MOVE and its destination tracks the phase to the digit** — that
+is measured and survived both skeptics. **What the phase is FOR is not established**, and the
+leading structural candidate has shifted to `0x0E`/`0x0F` — the small-magnitude, quadrature-
+producing pair fed by CHORUS's own table-lookup idioms — rather than to `0x10`.
+
+Evidence grade: **MEASURED** for the move and the phase-tracking of cell `0x10`; **REFUTED** for
+the four-delay-voice consumer reading; **CONTESTED** (downgraded from MEASURED) for §113/bit 18;
+**OPEN** for the consumer itself.
