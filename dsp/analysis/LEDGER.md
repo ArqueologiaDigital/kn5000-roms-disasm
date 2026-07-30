@@ -51,9 +51,15 @@ Everything downstream is built and waiting:
 silently returns 0 (`upd6383.cpp` SRC evaluator default). `SRC 0x13` is the table read port
 (§162) — that is the most likely single missing link.
 
+---
+
 ## TIER 0b — ⛔ DEAD ENDS. DO NOT RETRY ANY OF THESE.
 
 Each cost at least one full pass. The refutation is worth more than the hypothesis was.
+
+⚠ #1 and #2 were aimed at §163's *"kernel `iw32` pins the phase"* blocker, which §165 then
+measured out of existence. They stay listed: the refutations are still sound, and the ideas are
+the ones a reader would reach for again.
 
 | # | the idea | why it is dead | where |
 |---|---|---|---|
@@ -65,6 +71,7 @@ Each cost at least one full pass. The refutation is worth more than the hypothes
 | 6 | The brief's anchors **`SRC 0x1C` = "LFO out"**, **`SRC 0x08` = "LFO phase"** | Neither is anchored anywhere in this repository, the MAME device, or its disassembler. A *word*-level landmark was read as a *field*-level one | `lfo-ramp.md` §11 |
 | 7 | `st_gate = always` | 0 survivors of 276 480 | `lfo-ramp.md` P-9 |
 | 8 | Remap the three internal writes onto **output ports 0/1** | Reverted: the resulting wet was rms 1.0 — a ±1 LSB constant present *even in silence* | `upd6383.cpp:2011` |
+| 10 | **Bit 54** (latch to `m_k`) and **bit 54 + bit 4** (§40 reads it) to route the phase | §136's *"the pair has never been evaluated together"* is discharged: bit 54 alone is **bit-identical to control in every cell**; the pair produces `§70 ACCA min = max = 176 471 605 248`, the exact DC §137 retracted | §165 §4 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
 
 ---
