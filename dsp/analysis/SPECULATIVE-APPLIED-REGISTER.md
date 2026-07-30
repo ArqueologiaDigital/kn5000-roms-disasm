@@ -11206,3 +11206,76 @@ firings. That result is independent of `C63` and is not affected by this refutat
 
 Evidence grade: §1 **MEASURED**; §2 **FORCED** (read at source), §166 §3's SPECULATIVE half
 **REFUTED**; §3 **MEASURED**; §4 procedural.
+
+---
+
+## §182 — ⛔ my own next-task was misconceived, and `bit11-family.md` had refuted §166 §3 FOUR DAYS EARLY
+
+§181 set the next task as *"model the bit-11 alternate `lo12` encoding on an ALU route"* and flagged
+that a task marked **completed** claimed to have decoded it. Following that flag first — as the
+handoff instructed — found `analysis/bit11-family.md`, 447 lines, dated **2026-07-27**.
+
+### 1. ⛔ THE TASK AS I WROTE IT CANNOT BE DONE, because the premise is wrong
+
+That note's §9 establishes, on two independent measurements, that **`lo12` bit 11 selects a SECOND
+ENCODING — on those words there is no `SRC` field and no `ACTION` field at all**:
+
+* **§9.1** bits 11 and 5 co-vary, 80 of 80 over the body corpus, with one off-diagonal in a family
+  whose `lo12` encoding is *already known* to be selector + flag.
+* **§9.2** parsing the five bit-11 shapes as SRC/mode/ACTION needs **four field values attested
+  nowhere else in the corpus**, plus a pointer mode §9.1 shows is not free.
+
+⇒ `alu_decoded()` refusing every bit-11 word is **CORRECT, not a gap**, and `k3-pointers.md` item A
+proves *by construction* that the firmware assembles bit 11 as a separate flag. **"Model it on an
+ALU route" would have been implementing a field that does not exist.**
+
+### 2. ⛔ AND §9.3 REFUTED §166 §3 BEFORE I WROTE IT
+
+> *"`ACT 0x03`, `ACT 0x04`, `ACT 0x1C`, `SRC 0x02` and `SRC 0x04` **do not exist**. They are what
+> you get by applying the bit-11-clear encoding to bit-11 words."*
+
+`ACT 0x03` is the code §166 §3 used to claim `C63` performs `m_tb = L`. Verified here: **54 sites,
+53 of them bit-11 set.** §181 refuted that reading by reading the device source; this note refuted
+it four days earlier, from the corpus, with the stronger argument.
+
+★ **Fourteenth occurrence of rule 3.** §167, §168 and §181's arm D are all *measurements* and stand;
+what falls is only the interpretation, and §181 already retracted it. But the whole `SRC 0x11` line
+would have cost nothing if `bit11-family.md` had been opened when §166 first wrote down `ACT 0x03`.
+
+### 3. ★ WHAT IS NEW HERE — the note's own population excluded the header, and §178 said to check
+
+`bit11-family.md` measures over *"2917 non-C-format words in the 38 distinct IC311 images"* — bodies
+only. Re-run including the kernel and the epilogue (2989 words):
+
+```
+                 bit5 SET   bit5 CLEAR                   ACT 0x03   54 sites, 53 bit-11  (98.1%)
+   bit11 SET         90           0                      ACT 0x1C   24 sites, 24 bit-11  (100%)
+   bit11 CLEAR        1        2898                      SRC 0x02   25 sites, 24 bit-11  (96.0%)
+```
+
+* **§9.1 is STRENGTHENED on the wider population**: 90 of 90, still exactly one off-diagonal
+  (`prog39 w58 = 801.0.00.021`, the cursor reset the note already names).
+* **And §9.3 acquires exactly one genuine exception**: `epilogue w63 = 2A7.9.05.1C3`, `SRC 0x07`
+  `ACT 0x03`, **bit 11 CLEAR**. ⇒ `ACT 0x03` is *not purely* a parse artefact — there is **one real
+  site, and it is in the OUTPUT STAGE**, the one place this chip's signal has to emerge and does
+  not. The note's population could not see it. *(The other three apparent exceptions — `w66`,
+  `w72`, `w73` — are also epilogue words, and item A already discusses `w73` explicitly, so they
+  are not counterexamples to anything the note claimed.)*
+
+### 4. ⇒ RETARGET, to the note's own §6
+
+> *"`C63` is now the highest-value undecoded form on the chip — 53 sites in 25 of 38 images …
+> corpus-wide it is the single most common thing this chip does that we cannot read."*
+
+with §6's second item as the concrete lead: **`8BC` co-occurs with `C63` in 23 of 24 of its images
+and is exactly one per image**, against `C63`'s two — *"the shape of setup + per-channel use", and
+testable against the pointer state, which is decoded.*
+
+⚠ And item E is a standing correction to §166's label: `C63` count equals LFO count in only 11 of
+16 images, is *exactly 2* in 20 of its 25, and **is never fewer** — *"the shape of a per-channel
+constant, not a per-LFO one. `C63` is not the LFO's table read."* §166 §2's 53/53 bijection with
+class 6 is a measurement and stands; the *name* does not.
+
+Evidence grade: §1 **FORCED** (two independent measurements in the owning note, re-read not
+re-derived); §2 **MEASURED**; §3 **MEASURED**, and new — the wider population is this pass's
+contribution; §4 procedural.
