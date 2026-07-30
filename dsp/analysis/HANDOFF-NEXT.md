@@ -16,53 +16,52 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**The LFO index multiply's pointer is 5. The phase is in cell 7. Close the 2.**
+**Fix the POINTER-DELTA RULE — which words carry the signed `addr8` post-increment.**
 
-The whole modulation section is now blocked on one addressing offset, and every other link in the
-chain is measured and healthy.
+★ **READ `kn7000_mame/notes/kn5000-dsp-pointer.md` FIRST.** It owns this question, its own §10.2
+names it *"the single binding unknown"*, and its header warns on the first screen that the current
+rule (*"classes 2 and A move it"*) is **known wrong, by two independent checks**.
 
-### MEASURED (`runs164/probe176`, shipped default, cold-boot CHORUS, 1 392 430 frames)
-
-```
-  0202A071D5   (202.A.07.1D5, SRC 0x07 = mem[ptr])   CHORUS's LFO index multiply
-      coef  0..24     <- THE INDEX SCALE, exactly as `lfo-ramp.md' designed it.  It ARRIVES.
-      m_dp  5..5      <- CONSTANT.  The pointer never moves.
-      L     0..0      <- cell 0x05 reads zero
-      P     0..0      <- 24 x 0
-
-  D-RAM, all 32 cells:  02:6553600  06:8388607  07:2811786(0..8388598/chg1128429)  0E:39718
-                        everything else settles at ZERO.
-```
-
-**The phase is in cell 7. The pointer is on cell 5. Off by exactly two.**
-
-Every dead multiply site's `m_dp` lands on a cell the census reads as zero; the one apparent
-counterexample (`m_dp 14`, cell `0x0E`) is not one — `0E` has `chg 2`, zero for essentially the
-whole run.
-
-### ★★ It converges on a candidate that was NAMED AND NEVER TESTED
-
-§108 §5 FORCED that no anchor value could fix this, and listed what could:
-
-> *"some word's `addr8` contribution to the walk, `iw30`/`iw32`'s store target, or **the body's LFO
-> block not really sitting at base+2**."*
-
-The measured offset is **exactly 2**. That candidate has sat untested through a `DRAM_UNIT_BASE`
-refutation, two retractions and eleven occurrences of trap #3.
-
-⚠ **Heed §108's own warning:** an *anchor* is a single number and feels cheap to try, and every
-anchor here is pinned by closure arithmetic. Move a **per-word addressing contribution**, not a
-base — bit 27 already proved a base change is bit-identical.
-
-### The two-sided criterion is already sharp
+### Why this is the task — §176 turned out to be a fourth instance, not a new problem
 
 ```
-  pointer reaches cell 7  ->  L stops being 0, P becomes 24 x phase, the class-6 index VARIES.
-                              Then K2 is four lines, discriminator 226 NOT 240.
-  it does not             ->  L stays 0 and nothing else moves.
+  C1  phaser algo  5   chain READS {76}       modulator WRITES {7B}       miss +5
+  C2  phaser algo 68   chain READS {76}       modulator WRITES {77}       miss +1
+  C3  phaser algo  3   chain READS {7E,7F}    modulator WRITES {7B,7C}    miss -3
+  C4  CHORUS algo  1   index multiply at m_dp 5, LFO phase in cell 7       miss +2   ★ §176
 ```
+
+Every one is a producer/consumer pair that **must** name the same cell. Both sides are
+`origin + Σ(deltas)`, so **the origin cancels** — that is why the note calls it FORCED that the
+error is in the Σ, i.e. in *which words carry a delta*.
+
+★ **C4 is this project's contribution**: a different effect family, a different idiom, and its
+consumer's role pinned **independently of any addressing claim** (§176 measured that word's
+coefficient as `0..24`, the index scale `lfo-ramp.md` designed). A rule that fits C1–C3 by
+construction can still fail C4.
+
+Three properties any candidate must NOT break — the current rule already satisfies all three:
+
+```
+  P1  the phaser's 20 all-pass sections are net-zero      P2  the biquad walks +4 per band
+  P3  8 of 9 reverb diffusers keep a stationary pointer
+```
+
+### ⛔ Do not touch the ORIGIN
+
+MEASURED three ways — the ROM record at `0x01E496`, the cold-boot capture, and the **live I-RAM of
+a booted KN5000** read back by the device — and it cancels out of every constraint above.
+"Reach for the anchor" is a named standing bias (§108 §5; LEDGER rule 9), and bit 27 already
+measured a base change as bit-identical.
+
+### ⚠ And validate any `hi12`-conditioned rule on the HEADER, not just the bodies
+
+`kn5000-dsp-pointer.md` §5: *"bit 10 with bit 11 clear = END OF PROGRAM"* was measured 38/38 on the
+38 body images and **falsified as a bit meaning** — the common header (I-RAM 0..82) carries it 14
+times in 60 words. Every static search in this series excluded those 83 words *by construction*.
 
 ### ⛔ Dead, do not retry
+
 
 
 
