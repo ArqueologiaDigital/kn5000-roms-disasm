@@ -7694,3 +7694,127 @@ is a *measured* pass-through rather than an assumed silence is what makes this a
 
 Evidence grade: §1 **MEASURED** (per-press snapshots) and one **RETRACTION** of the confounded
 sweep; §2 **MEASURED**; §3 **MEASURED** + **FORCED**; §4 **FORCED** given §2/§3.
+
+---
+
+## §129 — THE FIRST LIVE TRACE OF PEQ: the static walk CONFIRMED, and **bank 1 runs on the TAP TABLE**
+
+Enabled by the `UPD6383_TRACE_FRAME` change (the trace armed unconditionally at frame 420000
+≈ 8.75 s; PEQ is selected at t ≈ 50 s ≈ frame 2.2 M, so **every trace ever taken of "PEQ" would
+have been a CHORUS frame**). Armed at frame 2 300 000, inside the held note.
+
+### 1. ★ The control passes: the static pointer walk is confirmed live, to the cell, at 13/13 slots
+
+| slot | word | dp after | derived |
+|---|---|---|---|
+| iw84 `w0` | `000020B1CD` | `10` | read cell **0x05**, +11 |
+| iw88 `w4` | `0000240407` | `50` | +64 → **bank 1 state base 0x50** |
+| iw136 `w52` | `00002F7000` | `05` | −9 |
+| iw137 `w53` | `000020A1CD` | `0F` | read cell **0x05**, +10 |
+| iw141 `w57` | `0000254407` | `64` | +84 → **bank 2 state base 0x64** |
+
+**MEASURED.** State blocks `0x50..0x63` and `0x64..0x77` are disjoint and contiguous.
+
+★ **And it falsifies the expectation §127 §4 was built toward.** PEQ is "5 bands × 2 channels", so
+the two banks were expected to read two *different* input cells. **They read the same one:
+D-RAM `0x05`, both of them.** Any future reading of `ACT 0x0D` must accommodate that.
+
+⚠ Grade correction: §125 graded this walk MEASURED. It was **STATIC/INFERRED** — PEQ had never
+executed. It is MEASURED as of now, and it agrees.
+
+### 2. ★★★ BANK 1 EXECUTES AGAINST THE DELAY-TAP TABLE, NOT ITS COEFFICIENTS
+
+The trace's coefficient column across body 0:
+
+```
+  iw 84..126  (bank 1)   0004BE 00097C 000E3A 0012F8 0017B6 001C74 002132 ... 007B4C 007FFF 000000
+  iw142 = w58 rstcur
+  iw143..    (bank 2)    C0515C 20691C 1F481C 7F6996 81227A 800000   <- PEQ's REAL band-0 coefficients
+```
+
+The bank-1 stream is an arithmetic ramp of step **`0x4BE` = 1214**, saturating at `0x007FFF`.
+That is **C-RAM TABLE B verbatim** (`k3-pointers.md` §: `0x70..0x8B`, 28 entries, `1214·k`,
+clamped to `0x7FFF`) — confirmed against the live dump, `C-RAM 70: 000000 0004BE 00097C 000E3A …`.
+The cursor enters body 0 at **`0x71`** and walks the delay-tap address table for all five of
+bank 1's biquad sections.
+
+**So PARAMETRIC EQ's first channel multiplies its audio by delay-tap ADDRESSES.** Only the second
+channel is correct, and only because `w58 = rstcur` re-bases the cursor to `0x00`.
+
+This is the open item `dsp-perframe-execution.md` named and could not localise: *"the coefficient
+cursor must be re-based twice per frame (0x00 / 0x90) and no word on the path is known to do it;
+`rstcur` is in 1 of 38 programs."* PEQ **is** that 1 of 38, and it makes the defect visible by
+contrast **inside a single frame**: same program, same C-RAM, two banks, one based and one not.
+`dsp-critical-path-coverage.md` predicted exactly this — *"the header runs 21 class-A words with
+no `rstcur` before the unit-0 CALL, yet body coefficients are MEASURED at C-RAM base 0x00 ⇒ an
+undecoded word must rebase/bank the cursor."* The undecoded rebase word is now the top blocker.
+
+★ **The contrast is also the strongest positive control yet on the coefficient chain.** Bank 2's
+fetched stream is `C0515C 20691C 1F481C 7F6996 81227A 800000` — **bit-identical to the G12
+capture's C-RAM section 0, in order**. The host upload, the §111 ×2 payload, the stride-6 layout
+and the cursor mechanism are confirmed *from inside the chip's own execution*, not from a dump.
+
+### 3. ⛔ GO/NO-GO: the audio comparison of §128 CANNOT RUN YET, and the null is already measured
+
+From the §127 run: `§61 PER-UNIT PRESENTATION: unit0/DO1 2099250 exec, **0 non-zero, peak 0**`
+and `§70 ACCA AT w73: quiet min 0 max 0 | loud min 0 max 0`. **PARAMETRIC EQ's output is
+identically zero.** Its input is a constant too: the trace's operand bus at iw84 reads `8388607`
+= `0x7FFFFF`, the rail, in every loud frame.
+
+Per this project's own rules — *compute the null first*, and *a test whose operand is constant
+says nothing about its consumer* — building an output-capture harness now buys a spectrum of
+zeros. §128's target stands; it cannot be scored until §2 above and the `iw45`/`iw32` `SRC 0x08`
+clobber are fixed.
+
+### 4. Corrections to §127, from an adversarial pass — three of them are mine to own
+
+1. ⛔ **The make-up cell is `−2.0`, not `+2.0`.** `0x800000` signed / 2²² = **−2.0** exactly;
+   `+2.0` is not representable (`0x7FFFFF`/2²² = 1.9999998). Five sections give `(−2)⁵ = −32`:
+   the magnitude is 32 as §127 said, but **the PEQ channel is POLARITY-INVERTED** and §127 erased
+   that. `dsp-alu-biquad.md` §: *"−2.0 in Q1.22 … Section gain is therefore −1: unity magnitude,
+   inverted."*
+2. ⛔ **§127's stated evidence for the make-up was a criterion that could not fail.**
+   `peq_tf.py` never reads cell `NN+5`; its "with make-up" column is `abs(h)*32` with **32 as a
+   hardcoded literal**. The printed "0.00 dB flat" would be identical if the cell held anything at
+   all. (§128's `peq_ab.py` does take the value from C-RAM, so §128's numbers are sound.)
+3. ⛔ **Trap 1 for the eighth time.** `kn5000-dsp-biquad-map.md` §3 made this same correction on
+   2026-07-22, **44 minutes after** the "padding" note it corrects and 8 days before §127, with
+   better evidence (OVERDRIVE's `0x600201` = 1.500122 at 2²² against an independently decoded
+   Butterworth DC gain of 1.500150 — an external, non-circular anchor). `kn5000-dsp-INDEX.md`
+   already said "+5 = make-up gain". And §127's "the disassembler's own label was right" is
+   **circular**: that label was written by that analysis.
+   The claim SURVIVES — on other people's evidence. The note's own counter-evidence is **void**:
+   algo 79 `GEQ` is an **IC310/MN19413** program (`second-dsp-and-ready.md` B1/B7), so its stride-5
+   is a different chip's 16-bit coefficient memory.
+4. ⚠ **§127 §2's ISO control is much weaker than it looked.** At `G = 0 dB` the bilinear design
+   gives numerator ≡ denominator, so `NN+0..+2` are a rescaled negated *copy* of `NN+3/NN+4` and
+   the pole is recoverable from **either** pair — a rival that reads poles out of the numerator
+   scores 5/5 ISO hits too. `nearest_iso()` also snapped unconditionally. §128's gain edit is what
+   actually breaks the degeneracy (gain moved the numerator and left `0x03/0x04` bit-identical).
+
+### 5. ★ The replacement control, and it CAN fail: the ROM designer run forward in float32
+
+`dsp/tools/peq_roundtrip.py` runs `LABEL_03A933` (transcribed in `-biquad-coeffs.md` §3) forward
+from the **panel-stated** (f0, Q, gain) of all three captures, quantises to 24 bits and scores
+**every word**: 75 words, zero free parameters, no fitting.
+
+**Result: 13 of 15 band-instances close to ≤ 13 LSB of 2²⁴.** A wrong cell role, a wrong
+2²²/2²³ split, a missing pre-halving or a wrong stride would move words by 10⁵–10⁶ LSB.
+
+The two outliers are exactly the `+12 dB` band, and the mechanism is clean. `N = (1−A1−A2)/(b0+b1+b2)`
+is *analytically exactly 1* (both sums equal `4B`, `B = K²`). At `G = 0` the ROM forms them from
+**the same floats**, so `N ≡ 1` bit-for-bit and the words close. At `G ≠ 0` the two sums are built
+from different values and `N` inherits catastrophic float32 cancellation — `4K² ≈ 3.2e−4` formed
+by cancelling operands of magnitude ~2, i.e. ~3e−4 relative error. The live `+12 dB` word requires
+`N = 0.9996225` (predicted `b0` = `0x206C3E`, live `0x20691C`), a 3.8e−4 deviation — the right
+mechanism and the right order of magnitude.
+
+⇒ **Correction to `kn5000-dsp-biquad-coeffs.md` §3.2**, which grades *"the tool measures
+N = 1.000000 on every one of the 42 336 presets"* as MEASURED: that holds in double precision, but
+the ROM works in float32, where `N` is **not** identically 1 on gain ≠ 0 — and the live coefficient
+proves it. Its open question (*"the exact predicate of the `1.0f` guard is NOT ESTABLISHED"*)
+is now bounded: the guard does **not** simply clamp to 1.0, or the `+12 dB` word would be `0x206C3E`.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED**; §3 **MEASURED**; §4.1–4.3 **FORCED**
+(arithmetic + provenance), §4.4 **FORCED**; §5 **MEASURED** with the `N` mechanism **INFERRED
+(strong)** — the exact float32 operation order of the ROM's `N` has not been transcribed.
