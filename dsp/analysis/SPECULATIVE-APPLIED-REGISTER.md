@@ -6855,3 +6855,88 @@ criterion noted in §116 becomes a real one.
 Evidence grade: **MEASURED** (the range becoming non-negative, with the previous arm as a
 two-sided control); **DERIVED, not measured** for 0.5993 Hz; **KNOWN-WRONG** for unit-0 audio,
 and recorded as evidence about where the modulus lives.
+
+---
+
+## §118 — THE ENABLE AND THE MODULUS SEPARATED, ⛔ §117's RAMP WAS AN ARTEFACT, AND §113 IS FINALLY CONFIRMED
+
+### 1. The per-datapath discriminator is exceptionless
+
+Of the 678 bit-4 store words in the corpus, split by the gate bit and `f31`:
+
+```
+  gate f31  count
+    0   0      19        1   0       3
+    0   1     494        1   1     138
+    0   4      13        1   2      29   <-- hi12 forms {0x094: 29}, SRC {0x08: 29}
+    0   6       1        1   5      10
+```
+
+**29 words, ONE `hi12` form, ONE operand source.** `lfo-ramp.md` item C independently counts
+*"29 LFO blocks in 16 programs"*. **29 words, 29 blocks.** The wrap-word family is exactly the set
+of LFO publishers, and it is also the only bit-7 store shape that survives `store-gate.md` item
+C's co-equal survivor — which is why `iw91` publishes and `iw30` does not.
+
+So the two knobs are now distinct, as §117 said they had to be:
+
+```
+  m_ovc bit 3        does this UNIT contain a wrapping datapath?      (§116)
+  the wrap-word form is THIS STORE the wrapping one?                  (§118, 29/29)
+```
+
+### 2. ⛔ AND SEPARATING THEM REFUTED MY OWN §117
+
+With the modulus scoped correctly, the phase **pinned again at `0x7FFFFF`** — and the diagnostic
+row says why:
+
+```
+  §118 only    phase at iw89: 8,388,607 .. 8,388,607   pinned
+               phase at iw92:     3,411 .. 3,411       iw91 publishes a CONSTANT
+```
+
+Under §114/§116/§117 **everything in unit 0 wrapped, including `iw92`** — the word §109 identified
+as writing `0x7FFFFF` over the phase one slot after `iw91` publishes. **The varying value I
+reported as a phase ramp was iw92's wrapped accumulator, not the publish.** `iw91` was emitting a
+constant the whole time; over-broad wrapping hid it.
+
+⚠ This is the same failure §105 caught in the workflow — *"a probe reported DIFFERS because a
+second wrong behaviour produced motion"* — and I committed it myself three sections later, in
+§114, and again in §116 and §117 without re-examining it. A range that stops being constant is
+not automatically the quantity you think is moving.
+
+### 3. ★★★ AND THE FIX IS §113, NOW VALIDLY TESTED
+
+`lfo-ramp.md` item L names the compliant reading of the `447` word: `SRC 0x11 = mem[ptr]`, making
+`iw92` an **identity** on the phase cell. §113 implemented it and could not be tested because its
+gate bit was already set in the default; §114 freed bit 18 and gave it a real null arm.
+
+```
+  A  §118 only        §113 fired         0    phase iw89: 8,388,607 .. 8,388,607   PINNED
+  B  §118 + §113      §113 fired 3,900,480    phase iw89:        36 .. 8,388,562   quiet
+                                                                 18 .. 8,388,594   loud
+                      phase at iw92: the same range -- an identity, as predicted
+                      wraps 1,827,840 in BOTH arms; §54 SILENT, DC leak 0.00% in both
+```
+
+**The LFO now ramps from the correct word**, with `iw91` as the publisher `lfo-ramp.md` forces,
+`iw92` as an identity, the modulus scoped to the wrap-word datapath, and **unit 0's audio
+saturating again** — which removes the known-wrong cost §117 had to record.
+
+Bit 18 rejoins the default; mask `0x2A39F440F`.
+
+### 4. What is now standing on measurement rather than on a chain
+
+```
+  §111  host payload x2         two pre-registered right answers, hit exactly
+  §116  selector 0x27 -> OVC    payloads predicted from the ROM, hit exactly (0x6C / 0x64, nothing else)
+  §118  wrap-word family        29/29, one hi12 form, one SRC, matching an independent count of 29
+  §113  SRC 0x11 = mem[ptr]     two-sided A/B, pinned -> ramping, with a zero null
+```
+
+Still open: whether 0.5993 Hz is the true rate (it is derived from two measured inputs, not
+measured); unit-1's residual `0x46`; and the chip is still silent — the LFO is a modulator with
+nothing to modulate yet.
+
+Evidence grade: **FORCED** for the wrap-word discriminator (29/29, exceptionless, matching an
+independent count); **MEASURED** for §113's A/B; **RETRACTED** for §117's claim that the phase
+ramped — it did not, and §114/§116/§117 all inherited the error.
