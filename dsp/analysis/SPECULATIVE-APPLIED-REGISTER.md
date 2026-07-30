@@ -6560,3 +6560,78 @@ pinned constant has not yet earned promotion. §113 because it was never tested.
 
 Evidence grade: **MEASURED** for §112's A/B (fired-count, null, cell 0x07 leaving the set);
 **UNTESTED** for §113; **FORCED by the note** that the publish is mod 2²³ and we clamp.
+
+---
+
+## §114 — ★★★ THE LFO RUNS. CLAMPING WAS THE BLOCKER — BUT THE MODULUS IS HALF, AND IT DOES NOT BELONG IN `acc_to_datum()`
+
+### 1. The blocker was a labelled guess, not a bug
+
+`acc_to_datum()` converts the 44-bit accumulator to a 24-bit datum, and its own comment is
+admirably honest:
+
+> *"whether it saturates or wraps is UNKNOWN, and saturation is the choice that cannot turn a
+> loud sound into a louder one."*
+
+`lfo-ramp.md` §11 settles it for at least one datapath, inside the simulation it uses to derive
+the LFO rates: `094.A.00.200  ST mem[Q] <- (phase + INC) mod 2**23`. A clamped phase accumulator
+stops dead at full scale; a wrapped one is the sawtooth an LFO is.
+
+### 2. ★ MEASURED — the CHORUS LFO ramps for the first time
+
+```
+  clamp (A39B440F)   phase at body iw89:  8388607..8388607    a SINGLE value, pinned
+  wrap  (1A39B440F)  phase at body iw89: -8388587..8388485    full-range sawtooth
+                     §114 fired 122,255,040   null arm: 0
+                     §54 SILENT, DC leak 0.00% in BOTH
+```
+
+★ **The falsifier I wrote down did not fire, and it was a real one.** The original comment's
+reasoning is that wrapping an AUDIO accumulator turns a loud sample into an inverted one — so a
+wrong wrap should have raised the DC leak or worsened the tracking verdict. Neither moved.
+
+This also closes the layered-clobber chain: `iw30` (alternative store gate, bit 29), `iw32`
+(§112, bit 25) and finally the clamp. **Three gated readings that only show their effect
+jointly** — precisely the whole-chain trap Part 103 was written about, escaped this time because
+each link had its own local criterion.
+
+### 3. ⚠ BUT THE MODULUS IS EXACTLY HALF, AND THAT IS THE THIRD FACTOR OF 2 THIS SESSION
+
+```
+  mod 2^23  (lfo-ramp.md)              period  73,584 frames  ->  0.5993 Hz   ← the derived rate
+  mod 2^24  (my signed 24-bit wrap)    period 147,169 frames  ->  0.2997 Hz
+```
+
+`lfo-ramp.md` item C anchors 0.5993 Hz across **29 LFO blocks in 16 programs with 9 distinct
+increments** — that is not a single coincidence to be explained away. My implementation wraps the
+signed 24-bit datum (`mod 2^24`) and runs the LFO at **exactly half rate**.
+
+⚠ Note the pattern: §111's host payload was 2× too small; the unit-1 level is still 0x46 off;
+and now the phase period is 2× too long. **Three factors of two in one session** is either a
+coincidence or a shared scaling convention we have not found. Recorded as a question, not a
+theory.
+
+### 4. ⛔ AND THE FIX IS IN THE WRONG PLACE — stated before anyone promotes it
+
+`acc_to_datum()` is the **general** accumulator-to-datum conversion used by every store in the
+device. Audio needs the full signed 24-bit range; only the **phase** wants a 23-bit unsigned
+modulus. Putting `mod 2^23` here would clip audio, and putting `mod 2^24` here is what produced
+the half-rate LFO. **The modulus belongs to the datapath, not to the conversion** — the chip has
+an OVC (overflow control) on the CDJ-500 block diagram, which is exactly the kind of per-mode
+control this implies, and nothing in our decode reads it yet.
+
+**Not promoted.** The mechanism is confirmed; its scope and modulus are not. Promoting a global
+wrap would trade a documented-safe clamp for an undocumented-wrong wrap on every audio store, to
+buy a half-rate LFO.
+
+### 5. Housekeeping — and the cause of §113's failure is now removed
+
+`m_specmask` is **widened to u64**: every bit 0..31 had a consumer, and the sole apparent
+exception, bit 18, was SET in the default — which is exactly how §113 came to be gated behind an
+already-on bit and never tested. Bit 18 is now cleared from the default (it has no other
+consumer, so this restores pre-§113 behaviour) and §113 can finally be A/B'd. New experiments
+take bit 32 and up. `acc_to_datum()` is no longer `static`.
+
+Evidence grade: **MEASURED** that clamping blocked the LFO and wrapping releases it, with a
+zero-valued null and a named falsifier that did not fire; **FORCED by the note** that the phase
+modulus is 2²³; **OPEN** where the modulus lives and why our period is 2× long.
