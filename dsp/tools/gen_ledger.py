@@ -28,7 +28,7 @@ def default_mask():
 
 def mask_bits():
     """bit -> (list of §refs, list of one-line descriptions) from the C++ sources."""
-    bits = collections.defaultdict(lambda: {'sec': set(), 'desc': set()})
+    bits = collections.defaultdict(lambda: {'sec': set(), 'desc': set(), 'blk': ''})
     for fn in ('upd6383.cpp', 'upd6383.h'):
         lines = open(os.path.join(MAME, fn)).read().split('\n')
         for i, ln in enumerate(lines):
@@ -62,9 +62,11 @@ def mask_bits():
                     desc += ' ' + c.group(1).strip()
                 desc = re.sub(r'\s+', ' ', desc).strip().rstrip('.').lstrip(': ')
                 break
+            blk = '\n'.join(ctx)
             for b in hit:
                 if secs: bits[b]['sec'].add(int(secs[-1]))
                 if desc: bits[b]['desc'].add(desc[:120])
+                bits[b]['blk'] = bits[b].get('blk', '') + '\n' + blk
     return bits
 
 def sections():
@@ -96,15 +98,39 @@ def main():
     w.append('\n---\n')
     w.append('## TIER 1 — the mask-bit register  (generated from `upd6383.cpp/.h`; authoritative)\n')
     w.append('Default `m_specmask` = **`0x%X`**.  `ON` = in the shipped default; `off` = implemented\n'
-             'but not armed, which usually means **tried and refuted** — read the section before re-arming.\n\n'
+             'but not armed.  ⚠ `REFUTED` means **stop**; `⚠ UNTESTED` means **this is owed a run**;\n'
+             'plain `off` means the classifier found neither marker — read the section.\n\n'
              '⚠ **The `§` column routes; the text does not adjudicate.** Both are heuristic excerpts taken\n'
              'from the nearest `★` banner in the source, and where two gates share a comment block the text\n'
              'can belong to the neighbour. Use this table to find the section, then read the section.\n' % dm)
+    #  ★ §168: an unarmed bit is NOT one state.  "off because REFUTED" says stop;
+    #  "off because UNTESTED" says this is owed a run.  The index could not tell them
+    #  apart, and bit 18 sat testable-but-invisible for weeks as a result.
+    UNTESTED = ('NOT VALIDLY TESTED', 'never tested', 'UNTESTED', 'never been evaluated',
+                'has never been', 'not yet been tested', 'awaiting a run', 'owed a run')
+    REFUTED  = ('REFUTED', 'REVERTED', 'bit-identical', 'measurably destroys', 'FALSIFIED',
+                'refutation', 'did not fire', 'changed nothing', 'DEAD END')
+    def classify(b):
+        if (dm >> b) & 1: return '**ON**'
+        blk = bits[b]['blk']
+        #  ★ REFUTED WINS when both markers are present.  A block that once said
+        #  "never tested" and later says "refuted" has been superseded in that
+        #  order, never the reverse -- and the asymmetry is deliberate: mis-filing
+        #  a refuted bit as UNTESTED costs a wasted run, mis-filing an untested one
+        #  as REFUTED costs an idea that is never revisited.  Prefer the cheap error.
+        if any(k in blk for k in REFUTED):  return 'REFUTED'
+        if any(k in blk for k in UNTESTED): return '⚠ UNTESTED'
+        return 'off'
+    owed = [b for b in sorted(bits) if classify(b) == '⚠ UNTESTED']
+    if owed:
+        w.append('★ **OWED A RUN** (implemented, unarmed, and the comment block says it was never'
+                 ' validly tested — these are opportunities, not dead ends): **bit %s**.\n'
+                 % ', '.join(str(b) for b in owed))
     w.append('| bit | state | § | what it does |')
     w.append('|----:|:-----:|--:|---|')
     for b in sorted(bits):
         s = bits[b]
-        state = '**ON**' if (dm >> b) & 1 else 'off'
+        state = classify(b)
         sec = ', '.join('§%d' % x for x in sorted(s['sec'])[:2]) or '—'
         d = sorted(s['desc'], key=len)[-1] if s['desc'] else ''
         d = d[:150]

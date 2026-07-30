@@ -28,7 +28,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from pat_corpus import load, fmt, decode_str                        # noqa: E402
+from pat_corpus import load, fmt, decode_str, F                     # noqa: E402
 from pat_ngram import KEYS                                          # noqa: E402
 
 
@@ -251,10 +251,40 @@ def cmd_period(progs, meta, args):
                   % (nm, p, run, i, i + run - 1, run // p))
 
 
+def cmd_twins(progs, meta, args):
+    """TWINS: pairs of programs whose (hi12, class4, lo12) sequences are
+    IDENTICAL, so the whole difference between two named effects is addr8.
+    Also near-twins (same length, few differing words)."""
+    K = {nm: [KEYS["m8"](w) for w in ws] for nm, ws in progs.items()}
+    names = list(progs)
+    print("=" * 78)
+    print("TWINS -- programs identical up to addr8, and near-twins")
+    print("=" * 78)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            if len(progs[a]) != len(progs[b]):
+                continue
+            dm8 = sum(1 for x, y in zip(K[a], K[b]) if x != y)
+            dex = sum(1 for x, y in zip(progs[a], progs[b]) if x != y)
+            if dm8 > args.maxdiff:
+                continue
+            print("\n%-26s <-> %-26s  len %d" % (a, b, len(progs[a])))
+            print("   words differing at all      : %d" % dex)
+            print("   words differing OUTSIDE addr8: %d" % dm8)
+            for k in range(len(progs[a])):
+                if progs[a][k] != progs[b][k]:
+                    x, y = F(progs[a][k]), F(progs[b][k])
+                    s8 = lambda v: v - 256 if v >= 0x80 else v
+                    print("     w%-3d %s  vs  %s     addr8 %+d vs %+d"
+                          % (k, x.txt(), y.txt(), s8(x.addr8), s8(y.addr8)))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", nargs="?", default="all",
-                    choices=["combi", "split", "matrix", "period", "all"])
+                    choices=["combi", "split", "matrix", "period", "twins",
+                             "all"])
+    ap.add_argument("--maxdiff", type=int, default=0)
     ap.add_argument("--key", default="m8", choices=["exact", "m8"])
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--minrun", type=int, default=12)
@@ -268,6 +298,9 @@ def main():
     if args.cmd in ("matrix", "all"):
         print()
         cmd_matrix(progs, meta, args)
+    if args.cmd in ("twins", "all"):
+        print()
+        cmd_twins(progs, meta, args)
     if args.cmd in ("period", "all"):
         print()
         cmd_period(progs, meta, args)

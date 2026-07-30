@@ -109,7 +109,8 @@ the ones a reader would reach for again.
 ## TIER 1 — the mask-bit register  (generated from `upd6383.cpp/.h`; authoritative)
 
 Default `m_specmask` = **`0x3910E446A39B440F`**.  `ON` = in the shipped default; `off` = implemented
-but not armed, which usually means **tried and refuted** — read the section before re-arming.
+but not armed.  ⚠ `REFUTED` means **stop**; `⚠ UNTESTED` means **this is owed a run**;
+plain `off` means the classifier found neither marker — read the section.
 
 ⚠ **The `§` column routes; the text does not adjudicate.** Both are heuristic excerpts taken
 from the nearest `★` banner in the source, and where two gates share a comment block the text
@@ -120,8 +121,8 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 0 | **ON** | §62 |  |
 | 4 | off | §29, §40 | THE MULTIPLY IS NOT GATED BY THE FETCH |
 | 5 | off | §41 | DO NOT LET AN UNSUPPORTED SOURCE OVERWRITE A HOST-PROGRAMMED REGISTER |
-| 6 | off | §41 |  |
-| 7 | off | §43 | w72 / w77 ARE LEVEL-SELECT WORDS, NOT ACCUMULATOR OPERATIONS |
+| 6 | REFUTED | §41 |  |
+| 7 | REFUTED | §43 | w72 / w77 ARE LEVEL-SELECT WORDS, NOT ACCUMULATOR OPERATIONS |
 | 8 | off | §44 | C-RAM 0x50..0x8B IS A DELAY-TAP TABLE, NOT COEFFICIENTS. Dumped, the space has three clearly distinct regions: |
 | 9 | off | §47 | TAKE THE DESCRIPTOR FROM THE PER-UNIT C-RAM BANK, NOT FROM D-RAM AT m_dsc |
 | 10 | **ON** | §49, §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
@@ -132,16 +133,16 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 15 | off | §116 | SELECTOR 0x27 LOADS THE PER-UNIT OVERFLOW / MODE REGISTER (m_ovc) |
 | 16 | **ON** | §69 |  |
 | 17 | **ON** | §44, §72 | C-RAM 0x50..0x8B IS A DELAY-TAP TABLE, NOT COEFFICIENTS. Dumped, the space has three clearly distinct regions: |
-| 18 | off | §113 | SRC 0x11 = mem[ptr], NOT ACCB |
+| 18 | REFUTED | §113 | SRC 0x11 = mem[ptr], NOT ACCB |
 | 19 | **ON** | §76 | A DELAY WORD ALSO RUNS ITS ALU |
 | 20 | **ON** | §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
-| 21 | off | §82, §138 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
-| 22 | off | §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
+| 21 | REFUTED | §82, §138 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
+| 22 | REFUTED | §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
 | 23 | **ON** | §71, §94 | THE HOST PAYLOAD IS 2x THE RAW THREE BYTES. r3-delaydram.md states it; §71/A3 reproduced it as a control that could have |
 | 24 | **ON** | §100 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 25 | **ON** | §101, §112 | DO NOT LET AN UNSUPPORTED SOURCE OVERWRITE A HOST-PROGRAMMED REGISTER |
 | 26 | off | §94 |  |
-| 27 | off | §108 |  |
+| 27 | REFUTED | §108 |  |
 | 28 | off | §109 | ACTION 0x07's MODE-2 store lands on the POST-increment cell |
 | 29 | **ON** | §104, §109 |  |
 | 30 | off | §119 |  |
@@ -154,9 +155,9 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 40 | off | §121 |  |
 | 41 | off | §121 |  |
 | 52 | **ON** | §133 |  |
-| 53 | off | §135 |  |
-| 54 | off | §40 |  |
-| 55 | off | §136, §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
+| 53 | REFUTED | §135 |  |
+| 54 | REFUTED | §40 |  |
+| 55 | REFUTED | §136, §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
 | 56 | **ON** | §70, §153 | THE DELAY-TAP MODULATION REGISTER |
 | 57 | off | §142, §148 | `coef' only where f98 == 1 AND the word consumes a coefficient. §146 localised the railing to four words -- kernel iw14/ |
 | 58 | off | §145, §148 | `coef' only where f98 == 1 AND the word consumes a coefficient. §146 localised the railing to four words -- kernel iw14/ |
@@ -168,7 +169,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-60 sections, §97..§165.  **Read the tail first** — later sections retract earlier ones *in place*.
+62 sections, §97..§168.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -232,4 +233,6 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §162 | SHIPPED | K2 is NOT blocked on the table any more. It is blocked on the PHASE. | §1 **MEASURED** (census over all 91 programs) with the `0x18`/`0x28` functional |
 | §163 | REFUTED/RETRACTED | ⛔ CORRECTION to §162 §5. The dark words are not dark, and §108 already had the answer. | §1 **MEASURED** (§104's census, re-read not re-run); §2 **FORCED** (§108's |
 | §165 | REFUTED/RETRACTED | ⛔⛔ THE PHASE IS NOT PINNED. IT RAMPS. The blocker was one build out of date. | §2 **MEASURED** (two counters, plus the 0.99915 identification); §3 **FORCED** by |
+| §166 | OPEN | `C63` + class-6 is ONE IDIOM: 53 of 53, both directions. And it names the index register. | §2 **MEASURED** (exhaustive over all 91 programs, null computed first); |
+| §168 | OPEN | bit 18 tested at last, and it names the defect: **`C63` reads a cell that never changes** | §1 **MEASURED** (five falsifiers, fired-count satisfied); §2 **FORCED** by the |
 
