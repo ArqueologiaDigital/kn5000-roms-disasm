@@ -10558,3 +10558,70 @@ conclusion, not a measurement, and it has an untested rival.**
 
 Evidence grade: §1 **MEASURED**, independently reproduced; §2 **MEASURED**; §3 **MEASURED**;
 §4 **OPEN** — two live accounts, one experiment separates them.
+
+---
+
+## §172 — ⛔ "DISTORTION ≡ FUZZ" does not survive its own test, and the data corroborates the notes
+
+A parallel pass reported *"DISTORTION ≡ FUZZ — same 42 words, differing in exactly 4 `addr8`
+bytes"*, marked it as **contradicting** `programs.tsv`'s two role strings, and proposed the
+cheapest hardware test in the project: **ask Felipe whether the two effects sound the same**. Its
+own stated precondition was *"if algos 32 and 34 also ship identical data"*. That precondition is
+checkable statically, and it fails.
+
+### 1. The microcode half is CONFIRMED, exactly
+
+```
+  DISTORTION 42 words, FUZZ 42 words -- 38 identical, 4 differ, and `addr8' is the ONLY field
+  that ever differs:
+     w6   -7  vs -122      w8   +7  vs +122
+     w16  -16 vs +125      w17  +16 vs -125
+```
+
+★ Each program's four displacements form **two symmetric ± pairs** — an out-and-back pointer
+excursion. So this is one algorithm walking two very different strides, which is a stronger and
+more useful statement than "the same program".
+
+### 2. ⛔ But the DATA is not identical, and the precondition fails
+
+From §170's TYPE-walk capture, DISTORTION's and FUZZ's own upload payloads: **16 of 19 transfers
+identical, 3 differ.** The coefficient payload is legible:
+
+```
+                      Q0.23
+  DISTORTION   7E63CE = +0.9874208     066666 = +0.050000
+  FUZZ         7FFFFE = +0.9999998     028F5C = +0.020000
+```
+
+**FUZZ ships full scale — a hard rail. DISTORTION ships just under unity — a soft knee.** And the
+companions are exactly `0.05` and `0.02`, two time constants differing by 2.5×.
+
+`programs.tsv` says `DISTORTION = "AGC waveshaper, curve A"` and `FUZZ = "rail-clip waveshaper"`.
+⇒ **The data corroborates the role strings; it does not contradict them.** The claim was aimed at
+the wrong target: the *microcode* is shared, the *parameters* are what make them different effects,
+which is exactly what "same waveshaper, two curves" means.
+
+### 3. ⇒ Do NOT put this to Felipe as written
+
+The proposed question — *"do DISTORTION and FUZZ sound the same?"* — is already answered by the
+ROM, and asking it would spend the one irreplaceable resource on this project (★
+`felipe-hardware-testimony-is-ground-truth`) on something a `diff` settles. **A hardware question
+is only worth asking when the static evidence cannot decide it.**
+
+★ There *is* a good question underneath, and it is sharper: the static evidence **predicts** FUZZ
+is the harder-clipping of the two with a time constant 2.5× faster. That is a prediction the
+instrument can falsify, and it is worth asking only once the chip makes sound.
+
+### 4. What survives, and it is worth keeping
+
+* **MEASURED:** DISTORTION and FUZZ share 38 of 42 words; `addr8` is the only differing field.
+* **MEASURED:** their coefficient payloads differ, in the direction the role strings state.
+* **INFERRED:** the drive family is one waveshaper microcode parameterised by pointer stride and
+  by a clip coefficient. §162's `addr8 = 0x28` table selector is shared across the whole family;
+  the *curve* is selected by the stride, not by the program.
+* ⚠ **Method note.** §170 independently found DISTORTION and FUZZ colliding on a 4-word
+  fingerprint, and I read that as support for "shared macros". It is — but a shared *prologue* and
+  a shared *program* are different claims, and the second does not follow from the first.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED**, the original claim's precondition **REFUTED**;
+§3 procedural; §4 as labelled.
