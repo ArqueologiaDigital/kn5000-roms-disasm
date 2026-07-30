@@ -10133,3 +10133,75 @@ D-RAM the phase census reads. Same number, different space. **Not identified; le
 
 Evidence grade: §1 **MEASURED** (§104's census, re-read not re-run); §2 **FORCED** (§108's
 enumeration) with the bit-27 refutation **MEASURED**; §3 deliberately **UNIDENTIFIED**.
+
+---
+
+## §165 — ⛔⛔ THE PHASE IS NOT PINNED. IT RAMPS. The blocker was one build out of date.
+
+§163 restated §108's *"the phase is pinned at 4194304"* and made it the project's headline blocker.
+An instrument built to score §112's two-sided criterion says otherwise, in the very first run.
+
+### 1. The instrument, and why min/max alone would not have done
+
+A per-frame census over D-RAM `0x00..0x1F`: range **and** the number of frames in which the cell
+*changed*. ⚠ Range alone is the §137 trap in a new place — a cell pinned at `0x400000` and a cell
+alternating between two values both report a range. A pinned cell changes **0** times.
+
+### 2. MEASURED, cold-boot CHORUS, 1 392 430 frames
+
+```
+  01: -4275712..4952576  chg 308646        06: 0..8388607  chg 1100
+  02:       0..6553600   chg 1             07: 0..8388598  chg 1128429    <- the LFO phase cell
+  04: -5579776..4994816  chg 307312        0E:       0..39718  chg 2
+```
+
+**Cell `0x07` sweeps essentially the full Q0.23 range** — `0..8 388 598` against a full scale of
+`8 388 607` — and changes in **1 128 429 of 1 392 430 frames**.
+
+★ And the cross-check that identifies it beyond doubt: §162 measured the class-6 word executing
+**1 129 389** times. The phase changes **1 128 429** times. Ratio **0.99915** — the phase advances
+**once per body execution**, which is what an LFO phase accumulator does and what nothing else in
+the frame does.
+
+The rate settles the increment too. `0.599 Hz` is the panel's LFO rate; increment 114 gives
+**0.652 Hz** and increment 57 gives 0.326 Hz. **`lfo-ramp.md`'s predicted 114 is the match; §108's
+measured `L = 57` is the half.** (§108 itself flagged *"the familiar factor of 2"*.)
+
+### 3. ⇒ The real defect is ROUTING, not generation
+
+§162 stands: `acc 0..0 | m_dp 12..12 | cursor 9..9` at the class-6 word. Both are now true at once,
+and together they are much sharper than either alone:
+
+> **The phase ramps in D-RAM cell `0x07` and does not reach the class-6 word.**
+
+That is a *routing* failure over a handful of words, not a missing accumulator. §108's whole
+analysis — kernel `iw32`, the deposit/pickup collision, the `DRAM_UNIT_BASE` family — was aimed at
+a symptom that no longer exists in this build. Some combination of what has shipped since (§130's
+cursor rebase, §144, §156, §161) fixed the generation.
+
+### 4. §112 / §136's untried arm: RUN, and REFUTED
+
+| arm | mask | result |
+|---|---|---|
+| **A** control | `0x3910E446A39B440F` | — |
+| **C** +bit 54 (latch to `m_k`) | `0x3950E446A39B440F` | **bit-identical to A in every cell.** Inert. |
+| **D** +bit 54 +bit 4 (§40 reads `m_k`) | `0x3950E446A39B441F` | `§70 ACCA min = max = 176 471 605 248` |
+
+D's ACCA is **the exact DC constant §137 already retracted** — and `min == max`, so standing rule 1
+caught it before it could be reported as output. §136's *"the pair has never been evaluated
+together"* is now discharged: **evaluated, and refuted.** Bits 54 and 4 stay off.
+
+### 5. The lesson, and it is about the ledger
+
+§163's blocker was **inherited from a section written days and several shipped gates ago, and never
+re-measured**. The dead-ends list Felipe asked for on the same day would not have caught this one,
+because the entry was not a refuted idea — it was a *stale measurement presented as current state*.
+
+> **RULE: a blocker is a MEASUREMENT, and measurements expire. Before building a task on a symptom
+> from an earlier section, re-run the measurement on the current build. Cite the run, not the
+> section.**
+
+`LEDGER.md` Tier 0a now carries the run that established the current blocker, not just its name.
+
+Evidence grade: §2 **MEASURED** (two counters, plus the 0.99915 identification); §3 **FORCED** by
+§2 together with §162; §4 **MEASURED** (A/B/C/D, with the known-answer DC recognised).
