@@ -6486,3 +6486,77 @@ it.**
 
 Evidence grade: **MEASURED**, with two independent pre-registered controls hit exactly and a
 zero-valued null arm; the residual unit-1 0.006% remains **OPEN**.
+
+---
+
+## §112 — THE iw32 CLOBBER IS REMOVED, AND IT REVEALS THE NEXT ONE EXACTLY AS §109 PREDICTED. ⚠ §113 WAS NOT VALIDLY TESTED
+
+### 1. The clobbers are LAYERED, and two of three are now off
+
+Cell `0x07` — the CHORUS LFO phase cell — had three kernel/body writers ahead of the body's read:
+
+```
+  iw30  09A.A.00.200  the live accumulator (audio)   -> removed by the ALTERNATIVE STORE GATE
+  iw32  000.A.FF.207  0x400000 (a C-RAM coefficient) -> removed by §112, below
+  iw92  000.2.09.447  0x7FFFFF (unity)               -> STILL PRESENT
+```
+
+**The alternative store gate** (mask bit 29, `store-gate.md` item C's co-equal survivor
+`bit7 && f31 != 2`): `iw30`'s `f31 = 5`, so it no longer stores. **Cell `0x07` drops out of the
+input-dependent set**, and with §111's correction the increment reads correctly — `iw92`'s
+residency shows `4194304 + 114`.
+
+**§112: ACTION 0x07 on a class-A word LATCHES P rather than storing to D-RAM.** `class4 == 0xA`
+is the coefficient consumer, and `lfo-ramp.md` §11 annotates `iw32`'s two sibling class-A /
+SRC-0x08 words in exactly those terms (`P := INC`, `P := 0x7FFFFF`). Guard 6 already concedes
+the point: *"Applying the same mode rule to ACTION 0x07 is the CONSISTENT reading, not a
+separate proof."*
+
+```
+  mask 819F440F   §112 fired 0          phase pinned at 4194304 (= 0x400000, iw32's value)
+  mask 839F440F   §112 fired 1,470,720  phase pinned at 8388607 (= 0x7FFFFF, iw92's value)
+                                        cell 0x07 leaves the input-dependent set
+  §54 verdict     SILENT, DC leak 0.00% in both -- no regression
+```
+
+Proper null, proper fired-count. **`iw32`'s clobber is removed** — and the phase immediately pins
+at the *next* writer's value, which is precisely what §109 forecast: *"iw92 destroys the published
+phase ONE SLOT AFTER iw91 publishes it, with 0x7FFFFF = unity — verbatim the case lfo-ramp.md
+§8.4 positively excludes."*
+
+### 2. ⚠⚠ §113 WAS NOT VALIDLY TESTED — a mask collision, and my third of the session
+
+I implemented `SRC 0x11 = mem[ptr]` (lfo-ramp.md item L's compliant reading of `iw92`, which
+would make it an identity) behind **mask bit 18** — chosen by grepping the source for
+`m_specmask & 0x…` consumers and finding none for `0x40000`.
+
+**Bit 18 is already SET in the default mask.** `0x819F440F` has bits 0-3, 10, 14, 16-20, 23, 24,
+31. So the gate was live in *both* arms, the computed "new" mask came out byte-identical to the
+old one, and **no A/B exists.** The reading is neither supported nor refuted.
+
+★ The lesson is narrower than "compute your masks" — I *did* compute it. **Checking that a bit
+has no consumer in the code is not the same as checking it is clear in the default.** A free-bit
+search must test both. And the tell was visible before the run: the two masks printed the same
+value, and I did not look.
+
+### 3. ★ THE NEXT DEFECT IS ALREADY NAMED, PRECISELY
+
+`0x7FFFFF` is the maximum positive 24-bit value, and `lfo-ramp.md` §11's simulation states the
+publish semantics verbatim:
+
+> `094.A.00.200   ST mem[Q] <- (phase + INC) mod 2**23`
+
+**mod 2²³ — a WRAP.** Our phase saturates at `0x7FFFFF` and sticks, i.e. we **CLAMP**. A clamped
+phase accumulator stops dead at full scale; a wrapped one is a sawtooth, which is what an LFO is.
+
+So the remaining question on this path is not "who clobbers the cell" — it is **whether the
+publish wraps or clamps**, and the note already gives the answer to check against.
+
+### 4. Nothing promoted
+
+Neither §112 nor §113 goes into the default. §112 because its measured consequence is "reveals
+the next clobber", not "the LFO works" — and a change whose only visible effect is to move a
+pinned constant has not yet earned promotion. §113 because it was never tested.
+
+Evidence grade: **MEASURED** for §112's A/B (fired-count, null, cell 0x07 leaving the set);
+**UNTESTED** for §113; **FORCED by the note** that the publish is mod 2²³ and we clamp.
