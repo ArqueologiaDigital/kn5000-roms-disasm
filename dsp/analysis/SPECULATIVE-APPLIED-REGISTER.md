@@ -9976,3 +9976,93 @@ an address. The table's base at `0x1D` was right all along, which was candidate 
 Evidence grade: the field's meaning **FORCED** (276/276, prior adjudication); the misuse
 **MEASURED** (four falsifiers, A/B, known-answer control); the restored value **MEASURED against an
 independent in-table witness**, not against my own fit.
+
+---
+
+## §162 — K2 is NOT blocked on the table any more. It is blocked on the PHASE.
+
+§161 handed K2 an intact table, so I went to build the lookup — and stopped at the step this
+project keeps skipping: I did not know where the *index* comes from. Guessing would have been a
+fourth hypothesis about an uninstrumented datapath. So the probe went in first, read-only.
+
+### 1. The idiom, from the disassembly
+
+CHORUS's lookup is a **four-word motif**, and it appears twice:
+
+```
+  w30  040.0.00.C63          w34  142.0.00.C63
+  w31  000.6.18.4CD          w35  000.6.20.407     <- class 6
+  w32  012.4.01.1CE          w36  012.4.01.1CE
+  w33  104.2.02.1CE          w37  104.2.01.1CE
+```
+
+Across all 91 programs there are **6 distinct class-6 encodings at 54 sites in 26 programs**, in
+exactly two `lo12` forms — and the forms are an operation pair, not two tables:
+
+| form | SRC | ACT | meaning |
+|---|---|---|---|
+| `..4CD` ×46 | `0x13` | `0x0D` | **acc ← bus** (§144, shipped) |
+| `..407` ×7 | `0x10` | `0x07` | **store acc** |
+
+⇒ `SRC 0x13` is the class-6 **table read port**: the word's whole job is `acc ← table[...]`.
+
+★ And the `addr8` split runs along a clean functional line. `0x18` occurs in chorus, flanger,
+phaser, ensemble, auto pan, vibrato, ring modulator, mix up and the s_delay/peq variants —
+**every modulation effect**. `0x28` occurs in rock rotary, distortion, overdrive, fuzz, exciter and
+the peq compressor/distortion pairs — **every drive effect**, which is where a waveshaper transfer
+curve belongs and where an LFO does not.
+
+### 2. ★ An independent confirmation of the table I recovered
+
+`lfo-ramp.md` §10 MEASURED, on 2026-07-22, the scale coefficient feeding the LFO lookup as
+`0x000018` = **24** at 8 of 8 sites, and reads the idiom as `(coef × phase) >> 23` — an integer
+index into a **24-entry** table.
+
+§161's recovered table has period **exactly 24**, from a sine fit that was never shown that
+coefficient. Two independent routes, a week apart, to the same 24. *(That note also records
+P-16 as a MISS: `addr8` is **not** the table extent. Nothing here revives it — the `0x18`/`0x28`
+split is a selector, and 0x28 = 40 is not the drive table's 16.)*
+
+### 3. THE PROBE, and its pre-stated null
+
+Instrument the three candidate index sources at every class-6 site. Stated before running: if the
+accumulator carries the phase it must **sweep** — a large fraction of 2^23 at the LFO rate. If
+`min == max`, the phase is not there and the candidate is dead. A probe that could not come back
+constant would not be a test.
+
+```
+  §162 CLASS-6 SITE 00006184CD addr8=18 lo12=4CD : hits 1129389 |
+       acc 0..0 (CONSTANT) | m_dp 12..12 | cursor 9..9
+  §162 CLASS-6 SITE 0000620407 addr8=20 lo12=407 : hits 1129389 |
+       acc 0..0 (CONSTANT) | m_dp 14..14 | cursor 9..9
+```
+
+**All three are constant, over 1 129 389 executions, in silence and under a held chord alike.**
+
+### 4. ⇒ Why building K2 today would have manufactured a false null
+
+Every available index source is frozen, so the lookup would have returned **the same table entry
+in every frame** whichever one I picked. The measured excursion would then have been a constant —
+and against the pre-registered "226 not 240" discriminator that reads as *refuting the sine*, when
+it is a statement about a missing phase.
+
+That is exactly §158's trap, one level up: §155 and §157 both reported motion that was not there.
+This time the instrument ran before the claim.
+
+> **Generalised rule (fourth occurrence): before implementing a consumer, MEASURE that its inputs
+> vary. A datapath whose every input is constant cannot be validated by its output.**
+
+### 5. The redirect — where the phase actually is
+
+The accumulator is *zero*, not merely constant, at both sites. Its producers are the two words
+immediately around the class-6 word, and both are known-dark: `040.0.**.C63` ×46 and
+`012.4.01.1CE` ×53 are two of the four largest families in `ROADMAP-2026-07-29.md` #10's list of
+**"words with no reading of any kind"**. The LFO's coefficient triple is already MEASURED
+(`lfo-ramp.md`) as *increment / wrap `0x7FFFFF` / index-scale `0x18`*, so the phase is accumulated
+somewhere and wrapped — the emulator simply never performs it.
+
+⇒ **NEXT TASK is `C63` and `1CE`, not the lookup.** The lookup is four lines once the index exists.
+
+Evidence grade: §1 **MEASURED** (census over all 91 programs) with the `0x18`/`0x28` functional
+split **INFERRED** from program membership; §2 **MEASURED** twice independently; §3 **MEASURED**;
+§4 **FORCED** by §3; §5 the location **INFERRED**, the coefficient triple **MEASURED** elsewhere.
