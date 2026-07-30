@@ -8211,3 +8211,95 @@ scale error is **not** available as the explanation.
 
 Evidence grade: §1 **MEASURED**; §2 **MEASURED** (three arms); §3 **MEASURED**, three refutations;
 §4 **MEASURED** (the six words) + **INFERRED** (the feedback mechanism); §5 **OPEN**.
+
+---
+
+## §136/§137 — "SPLIT `m_p`" HAS NO SPLIT TO MAKE; §40 RE-MEASURED AND STILL REFUSED; and a DC I called output
+
+§135 §5 named the standing suspect for the reverb divergence: *"`m_p` is one member modelling what
+is probably TWO real registers — a multiplier input latch and a product register."* That was
+followed up. **The hypothesis is dead**, and the way it died is worth recording.
+
+### 1. ★ The split already exists in the type system
+
+Auditing **every** `m_p` site (`upd6383.cpp`, enumerated not grepped-by-spelling):
+
+```
+  WRITES  :2737 :2770   ACT 0x0D / 0x0E selector 5   raw datum
+          :2739 :2772   ACT 0x0D / 0x0E selector 7   L << ACC_SHIFT
+          :2995         §112 class-A ACT-07          raw datum
+          :3126         the multiply                 (sext(coef,24) * L) >> P_SHIFT
+          :3149         the §40 latched multiply     (sext(m_k,24) * L) >> P_SHIFT
+  READS   :2641         the accumulator op           <-- THE ONLY FUNCTIONAL READ
+          :3792 :3805   trace / profiling            (diagnostics)
+```
+
+`upd6383.h:451` already declares `m_k, m_l` as **"multiplier input latches"** and `:450` declares
+`m_p` as the **"MPLY product register"**. `m_p` has exactly **one** functional read and the
+multiplies never read it. **There is nothing to split.** MEASURED.
+
+### 2. The real defect, and why it is inert
+
+§112's class-A ACT-07 site writes `m_p` while its own reasoning says it *"LATCHES the coefficient
+into the multiplier input"*. It therefore does not latch an input at all — it overwrites the last
+multiply's outcome with a raw 24-bit datum, which §133 proved is wrong by 2^ACC_SHIFT.
+
+★ But it is **coupled to §40**: writing `m_k` is a no-op unless the multiply reads `m_k`, and the
+default multiply bypasses the latch — *"a latched-coefficient MAC with the latch bypassed"*
+(`:3136`, the file's own words). So §112 and §40 had never been evaluated together, exactly the
+shape that made §133's `ACT 0x0D`/`0x0E` pair decodable only jointly.
+
+Four arms, `peq_gain.lua`, PARAMETRIC EQ selected (bit 54 = route §112's latch to `m_k`; bit 4 = §40):
+
+| arm | 54 | 4 | unit0/DO1 | unit1/DO2 | DC leak |
+|---|---|---|---|---|---|
+| A default | 0 | 0 | 0 non-zero, peak 0 | 1 064 113, peak −1 543 434 | 34.69 % |
+| B §112→`m_k` | 1 | 0 | **bit-identical to A** | **bit-identical to A** | — |
+| C §40 | 0 | 1 | 2 398 138, peak 1 346 371 | 2 546 794, peak −1 543 434 | **99.79 %** |
+| D both | 1 | 1 | **identical to C, to the digit** | identical to C | 99.79 % |
+| E D + §133 | 1 | 1 | identical to C | 2 547 974, peak −1 543 434 | 99.85 % |
+
+Frames close 320/320, 0 traps, in every arm.
+
+* **B is bit-identical to A** — the pre-registered prediction, confirmed: routing the latch to the
+  input register does nothing while the multiply bypasses it.
+* **C and D are identical to the digit** ⇒ with §40 on, it makes **no observable difference**
+  whether §112 writes `m_p` or `m_k`. **§136's routing question is UNDECIDABLE by this observable**
+  and needs a different instrument. (Two summary statistics cannot prove waveform identity — this
+  is "no difference detected", not "no difference".)
+
+### 3. ⛔ AND I CALLED A DC "OUTPUT FOR THE FIRST TIME"
+
+Arm C makes `unit0/DO1` non-zero on 2 398 138 presentations after being **identically 0** in every
+measurement of this investigation. I reported that as unit 0 producing output. **It is a constant.**
+
+```
+  §70 ACCA AT w73:  loud frames 291193   min 176471605248   max 176471605248
+```
+
+min == max over 291 193 loud frames; `176471605248 >> 17 = 1346371`, the reported "peak". This is
+**method rule 13** — *a difference from SILENCE is not a signal* — and the project has already
+**retracted** one "IC311 outputs audio" claim for exactly this. I repeated it, and only the
+accumulator check caught it. ★ The check that catches this is cheap and should be automatic:
+**before reporting any non-zero output, read `§70 ACCA` and compare min against max.**
+
+### 4. ⇒ §40 is CONFIRMED REFUSED, with a better reason than before
+
+The old refusal said §40 "measurably destroys the result". Re-measured under today's model it does
+something more specific: it takes the DC leak from **34.69 % → 99.79 %** of quiet frames and makes
+*both* units emit a near-permanent constant. It does not rescue unit 0; it replaces silence with DC.
+
+### 5. What genuinely survives
+
+★ **With §40 on, §135's railing DISAPPEARS**: unit 1 returns from −8 388 608 (railed) to
+−1 543 434, the baseline peak, even with the §133 readings enabled (arm E). So the reverb's
+divergence is **mediated by the multiply's coefficient source** — real mechanistic information
+about §135, obtained inside a regime (99.8 % DC) that is itself unusable. INFERRED.
+
+⇒ The "two registers" explanation for §135 is **closed**. The next explanation must come from the
+delay-DRAM datapath or from what `f31 = 1` means on the reverb's `ACT 0x0D` words, not from the
+register file.
+
+Evidence grade: §1 **MEASURED** (site enumeration); §2 **MEASURED** (four arms) with the routing
+question **UNDECIDED**; §3 **MEASURED** and a retraction of my own claim; §4 **MEASURED**;
+§5 **INFERRED**.
