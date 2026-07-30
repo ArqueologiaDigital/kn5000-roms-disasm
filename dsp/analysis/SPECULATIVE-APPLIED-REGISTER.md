@@ -8030,3 +8030,96 @@ left in P.
 
 Evidence grade: §1 **FORCED** (arithmetic, source, `programs.tsv`); §2 **MEASURED** (source, quoted);
 §3 **OPEN** — a modelling tension, deliberately not resolved here; §4 a plan, not a result.
+
+---
+
+## §133 — ★★★ `ACT 0x0D` AND `ACT 0x0E` DECODED: the entry hands the sample over in **P**, at the multiply's scale
+
+The bank-entry demultiplexer, run as specified in §132 §4. A non-repeating stimulus is injected
+into D-RAM `0x05`/`0x0F` **at the unit-0 body CALL** — downstream of the `SRC 0x08` clobber, which
+is why this did not have to wait for it — and the 40 Direct-Form-I state cells `0x50..0x77` are read
+back as a bit-exact witness. 1024 joint readings × 64 frames in **one** run, armed on I-RAM
+identity (`I-RAM[84] == 000020B1CD`), never on a frame count.
+
+Masks pre-registered in `data/PREDICT_133.md`; arm `0x1003C6A39B440F`. **Run twice** (before and
+after the §134 instrument fixes) with identical results: 224/1024.
+
+### 1. The null is perfect, and the criterion discriminates
+
+| | trials | `chg` | feed |
+|---|---|---|---|
+| non-feeding | **800** | `0` — every one | `(0,0,0,0)` — every one |
+| feeding | **224** | `63` — every one | 64/64 bit-exact |
+
+**No overlap.** 21.9 % pass, so the criterion can fail, and chance is 2⁻²⁴ per frame per bank.
+
+### 2. ★★ The result: only **P** ever carries the sample, and only at the multiply's scale
+
+```
+  sel0D \ sel0E |none      acc<-L    tempA     tempB     mem[ptr]  P raw     acc+=L    P<<16
+  none          |-/-       -/-       -/-       -/-       -/-       -/-       -/-       -/0F
+  acc<-L        |-/-       -/-       -/-       -/-       -/-       -/-       -/-       05/0F
+  tempA..acc+=L |-/-       -/-       -/-       -/-       -/-       -/-       -/-       -/0F
+  P<<16         |05/05     05/05     05/05     05/05     05/05     -/-       05/05     -/0F
+```
+
+* **All 36 combinations in which neither action writes P feed nothing at all.** §131 was derived
+  from the word encodings; it is now MEASURED.
+* **`P raw` scores 0/128; `P<<16` scores 128/128.** And `sel0D=P<<16, sel0E=P raw` reads `-/-`: a
+  raw write does not merely fail, it **destroys a working feed**. ⇒ **§132 §3 is RESOLVED**: P is
+  written at the multiply's scale (`<< ACC_SHIFT`), not as a raw 24-bit datum. The `:2684`/`:2908`
+  raw-datum latches are wrong by 2¹⁶.
+
+### 3. ★★★ THE TWO-CHANNEL STRUCTURE PICKS ONE COMBINATION UNIQUELY
+
+PARAMETRIC EQ is **"5 bands × 2 channels"** (`programs.tsv`, from the ROM's own role table), so the
+two banks must filter **different** inputs. Exactly one cell of the 8×8 map delivers that:
+
+| reading | bank 1 | bank 2 | two channels? |
+|---|---|---|---|
+| `0x0D → P`, `0x0E` anything | `0x05` | **`0x05`** | ✗ both banks filter the same input |
+| **`0x0D → acc`, `0x0E → P`** | **`0x05`** | **`0x0F`** | **✓** |
+
+⇒ **`ACT 0x0D` = `acc ← bus`. `ACT 0x0E` = `P ← bus`, at the multiply's scale.**
+
+The mechanism is elegant and explains the microcode's asymmetry. Bank 1's `w1` has `SRC 0x10` =
+**acc**, so `0x0D` loads the accumulator from `mem[0x05]` and `0x0E` relays it into P. Bank 2's
+`w54` has `SRC 0x07` = **mem[ptr]** with the pointer on `0x0F`, so `0x0E` takes its operand
+straight from the *other* cell. **The SRC fields do the channel selection; the two actions are the
+same pair in both banks.**
+
+★ And this closes §121 completely: `ACT 0x0D → acc` **was a correct reading**, but with `ACT 0x0E`
+doing nothing the accumulator never reached P, so it produced no observable. **The pair only works
+together** — exactly §125 point 4, and the reason a one-at-a-time sweep could not find it.
+
+### 4. ⛔ HONEST LIMIT: `f31=4` and `f31=5` are BLIND to this test
+
+**0 of 64 `(sel0D, sel0E)` pairs showed any dependence on either**, and all four readings score
+56/256. This test decides **two** of the four unknowns and says nothing whatever about the other
+two. They are not "probably the alias" — they are unmeasured, and `HANDOFF-NEXT`'s standing task
+("attack `hi12[3:1] > 2`") remains open with a new fact attached: whatever they do, it does not
+change what the entry delivers to the cascade.
+
+### 5. ⛔ A PRE-REGISTERED CRITERION OF MINE WAS BADLY SPECIFIED — and the data proves it, rather than me arguing it
+
+F1 was *"trial 0 `nz > 0` ⇒ the injector leaks ⇒ run VOID"*. It **fired**, twice (`nz` = 18, then 3
+after the §134 clear-at-arm fix). Rather than reinterpret a failed criterion after the fact, the
+distribution settles it:
+
+```
+  nz among the 800 NON-feeding trials: 37 x720, 20 x55, 3 x10, 14 x10, 17 x5
+  nz among the 224     FEEDING trials: 37 x224
+```
+
+**720 of 800 non-feeders share `nz = 37` with all 224 feeders.** `nz` counts cells the *core* wrote
+— the biquad stores into them every frame whatever the entry did — so it has **zero discriminating
+power** and should never have been registered. The two predicates that were also registered, motion
+and feed identity, separate the space perfectly (§1). The decode conclusion never used `nz`.
+
+★ The lesson is not "F1 was wrong": it is that **a null must be a predicate the hypothesis can
+actually move**. `nz` measures the core, not the entry.
+
+Evidence grade: §1 **MEASURED** (twice, identical); §2 **FORCED** by the 8×8 map plus the
+destructive interference of `P raw`; §3 **INFERRED (strong)** — the map is measured, and the
+selection among its feeding cells rests on PEQ's documented two-channel role; §4 a **MEASURED
+NEGATIVE**; §5 **FORCED** by the `nz` distribution.
