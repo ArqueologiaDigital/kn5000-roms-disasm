@@ -9002,3 +9002,89 @@ are the candidates — and the latter is the one the whole chorus depends on.
 
 Evidence grade: §1 **MEASURED**; §2 **MEASURED** and a **partial retraction of §143 §2**;
 §3 **FORCED**; §4 status.
+
+---
+
+## §149 — ★★★ WHY `coef` IS INERT DOWNSTREAM: **THE LFO IS NOT CONNECTED TO THE DELAY TAP AT ALL**
+
+§148 asked for an observable between the LFO phase cell and the delay tap it modulates. There
+isn't one, and the reason is structural rather than instrumental.
+
+### 1. The LFO ramps correctly — that half already works
+
+`§109 LFO PHASE resident at body-0 iw89 on 8 consecutive frames`:
+
+```
+  f420001:1006784  f420002:1006898  f420003:1007012  f420004:1007126 ...
+```
+
+Successive differences are **exactly 114** — CHORUS's ROM LFO increment (0.599 Hz). **MEASURED**,
+and *identical in both §148 arms*, because `iw89` is the anchored `SRC 0x08` word the gate does
+not touch.
+
+### 2. ⛔ And the delay address ignores it completely
+
+`upd6383.cpp:1813`:
+
+```cpp
+    const u32 addr = (cellv + u32(m_frames_run)) & 0xffff;
+```
+
+**Descriptor cell + the free-running frame counter, and nothing else.** No accumulator, no temp,
+no phase term appears anywhere in the address computation. `m_frames_run` is the circular-buffer
+rotation `G` (`r3-delaydram.md` §5.1, *"address = (cell + G) mod 2^N, G a single global
+rotation"*) — which is right, and is **not** modulation.
+
+⇒ **A swept delay cannot exist in this model.** The LFO accumulates a correct phase every frame
+and the phase has nowhere to go. That is the whole explanation for §148's F4: `SRC 0x00 = coef`
+puts the designed increment on the bus, the phase ramps, and **the consumer is missing from the
+emulator**, not from the reading.
+
+★ It also predicts what the emulated CHORUS would sound like if anything were audible: a **fixed**
+comb, not a chorus.
+
+### 3. ★ A concrete candidate for the missing link
+
+CHORUS's two modulated delay READs are each preceded by a byte-identical three-word idiom:
+
+```
+   C40.3.20.44C     C-format immediate
+   A00.0.00.041     SRC 0x01, ACT 0x01     <- immediately before the read, both times
+   880.1.20.2C7     THE DELAY READ (addr8 = 0x20)
+```
+
+and the LFO twin (`192.A.4x.000`) plus its phase-read successor sit a few words earlier, so the
+phase is in hand when this idiom runs.
+
+**`A00.0.00.041` occurs 38 times in 14 programs**, and the population is exactly the swept-delay
+family — with a clean **present-and-absence**:
+
+```
+  CARRIERS   CHORUS, MODULATED CHORUS, FLANGER, VIBRATO, MIX UP, ROCK ROTARY, ENHANCER,
+             + the S.DELAY and PEQ combis of those same effects
+  ABSENT     PHASER  -- which sweeps ALL-PASS COEFFICIENTS, not a delay tap
+```
+
+★ **SPECULATIVE (strong): `A00.0.00.041` is the word that applies the LFO-derived offset to the
+delay-tap address.** It sits in the one slot where the modulation must be applied, it is present
+in every effect that sweeps a delay, and it is absent from the one modulation effect that sweeps
+something else. `ACT 0x01` is one of the five codes given a "PLAIN GUESS ×5" tempA reading with no
+evidence, so nothing currently stops it meaning this.
+
+*Kills it:* find `A00.0.00.041` in a program with no delay line, or a swept-delay effect that
+lacks it. *Confirms it:* an address term derived from the phase cell that reproduces the ROM's
+designed sweep depth at the tap.
+
+### 4. ⇒ Consequence for the `SRC 0x00` line of work
+
+`coef` cannot be validated downstream **until the modulation path exists**, so the next step is not
+another mask arm on `SRC 0x00`. It is to decode the tap-offset mechanism — which is also what
+`dsp-audiopath-wiring.md`'s O-2 and `r3-delaydram.md`'s open items have been circling, and what
+every swept effect in the machine depends on.
+
+★ And note the shape of this result: three sections (§145–§148) refined a reading that was already
+right, against a consumer that does not exist. The fired-count and the bit-exact bus check kept
+saying "the gate works"; only asking *what reads this* found the gap.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED** (source, quoted); §3 **MEASURED** (the idiom, the
+38/14 census and the present-and-absence) + **SPECULATIVE** (the role); §4 **FORCED** by §2.
