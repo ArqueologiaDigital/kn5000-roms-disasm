@@ -10625,3 +10625,69 @@ instrument can falsify, and it is worth asking only once the chip makes sound.
 
 Evidence grade: §1 **MEASURED**; §2 **MEASURED**, the original claim's precondition **REFUTED**;
 §3 procedural; §4 as labelled.
+
+---
+
+## §173 — the lookup is a FOUR-WORD idiom, and the `-2` slot is operand staging with three forms
+
+§171 left an open question: is there really an addressing defect (§168), or is the frozen cell just
+a consequence of the dead multiply (§169) — one cause rather than two? The `-2` slot decides most
+of it, statically.
+
+### 1. The idiom, measured at every offset
+
+```
+   offset -3   class-A ACT 0x15            (the multiply)     46 of 54    null 8.3
+   offset -2   class-2 SRC 0x10 ACT 0x07   (store acc)        21 of 54    null 3.6
+   offset -1   C63                          (load index)      53 of 54    null 0.9
+   offset  0   class 6                      (the lookup)      54 of 54
+```
+
+**All three present simultaneously at 21 of 54**, against a joint null of **0.01** if the three
+were independent.
+
+### 2. ★ The `-2` slot is not one word — it is the OPERAND-STAGING slot, and it has three forms
+
+**53 of 54 are class 2** (the lone exception is the kernel's C-format lookup, `800.1.60.00B`).
+By ACTION:
+
+```
+   ACT 0x00  x25   SRC 0x00   acc <- C-RAM[cursor]     (a coefficient)   §156
+   ACT 0x07  x21   SRC 0x10   store the accumulator                      `182.2.00.407'
+   ACT 0x0E  x7    SRC 0x07   P <- mem[ptr]                              §144
+```
+
+Three ways to stage an operand — from the coefficient bank, from the accumulator, from memory —
+all feeding the same lookup. `hi12 = 0x182` accounts for 45 of them. ⇒ the idiom is
+
+```
+   [-3] multiply     [-2] stage an operand     [-1] load the index register     [0] look up
+```
+
+### 3. ⇒ §171 §4 leans to ONE CAUSE, for the 21 sites that include CHORUS
+
+At those 21 — CHORUS among them — the `-2` word **stores the accumulator into the cell `C63` then
+reads**. If the `-3` multiply is dead, the accumulator is stale, so the stored cell is frozen, so
+`C63` reads a frozen cell. **That is one cause, and §168's separate "addressing defect" is not
+needed to explain it.**
+
+⚠ **NOT CLOSED, and here is what stops me closing it.** §167 measured `m_tb = 5872025` at the
+lookup — exactly `0.700000` in Q0.23, a clean coefficient, arrived at once and never again. A
+scratch cell written from a stale-zero accumulator should read **0**, not `0.7`. So either `C63`
+is not reading the cell the `-2` word writes, or something else wrote `0.7` there first. **That
+must be explained before "one cause" is asserted** — it is exactly the loose end that, three times
+on this project, turned out to be the actual mechanism.
+
+### 4. SPECULATIVE
+
+* **S3.** The three `-2` forms may be *the same operation* with the operand routed from three
+  places, which would make the whole family one macro with a source parameter — consistent with
+  §169's S1 and with §170's prologue collisions. Testable once `ACT 0x15` is decoded: all three
+  should leave the lookup's index in the same place.
+* **S4.** `ACT 0x00` ×25 at `-2` reads `acc <- C-RAM[cursor]`. If the `-3` `ACT 0x15` word is the
+  multiply, then `-2` loading a *coefficient* into the accumulator right after it is an odd order —
+  unless `ACT 0x15` leaves its result somewhere other than the accumulator. That is a constraint on
+  the `ACT 0x15` decode, obtained without decoding it. **SPECULATIVE.**
+
+Evidence grade: §1 **MEASURED** (nulls computed first); §2 **MEASURED**; §3 **INFERRED** and
+explicitly **left open**, with the falsifying observation named; §4 **SPECULATIVE**.
