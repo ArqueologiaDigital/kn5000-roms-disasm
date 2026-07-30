@@ -9,58 +9,50 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Decode `040.0.**.C63` (×46) and `012.4.01.1CE` (×53) — the LFO PHASE ACCUMULATOR.**
+**Stop kernel `iw32` re-depositing `0x400000` on the LFO phase cell.** Everything downstream —
+the class-6 lookup, the chorus sweep, every modulation effect — is waiting on this one write.
 
-⛔ **Do NOT implement the class-6 lookup first.** It looks ready and it is not. §162 MEASURED all
-three candidate index sources at every class-6 site:
+### The chain, in the order it was established
 
-```
-  §162 CLASS-6 SITE 00006184CD : hits 1129389 | acc 0..0 | m_dp 12..12 | cursor 9..9
-  §162 CLASS-6 SITE 0000620407 : hits 1129389 | acc 0..0 | m_dp 14..14 | cursor 9..9
-```
+1. **§161** — the wavetable is intact: `m_rf[0x1D..0x40]`, 36 cells,
+   `0.9500000 x 2^23 x sin(2*pi*k/24 + 0.100000 rad)` to within 2 LSB, period exactly **24**.
+2. **§162** — every class-6 index candidate is CONSTANT over 1 129 389 executions
+   (`acc 0..0 | m_dp 12..12 | cursor 9..9`). So the lookup has nothing varying to consume.
+3. **§163** — why: the phase **does** increment, by 57 within the frame (`iw89`, `L = 57`), and
+   kernel `iw32` re-deposits `0x400000` every frame. Pinned at 2^22 = **0.5 in Q0.23**, which with
+   the measured scale 24 selects table index **12**, forever.
 
-**All constant.** A lookup built on any of them returns the same entry every frame, and that frozen
-excursion would read as *refuting the sine* against the pre-registered "226 not 240" test. It is
-§158's trap one level up — §155 and §157 each reported motion that was not there.
+### ⛔ Two dead ends, both already paid for — do not retry either
 
-> **RULE (fourth occurrence): before implementing a consumer, MEASURE that its inputs vary.
-> A datapath whose every input is constant cannot be validated by its output.**
+* **Any `DRAM_UNIT_BASE` value.** §108 §5 **FORCED**: kernel A's walk begins where the previous
+  frame closed, so base and window are coupled and `iw32` follows the cell wherever it is moved.
+  Mask bit 27 ran it — the gate fires, `dp` goes `0x07` -> `0x08`, **every value bit-identical**.
+  ★ Standing bias named there: *an anchor is a single number and feels cheap to try, but every
+  anchor here is pinned by closure arithmetic.*
+* **Decoding `040.0.**.C63` / `012.4.01.1CE`.** §163: both already modelled — `SRC 0x11/ACT 0x03`
+  = `tempB <- ACCB` (`upd6383.cpp:2932`) and `SRC 0x07/ACT 0x0E` = `P <- mem[ptr]` (§144).
+  They are in the roadmap's *"no reading of any kind"* list, which is a **corpus statistic, not a
+  statement about the emulator**.
 
-### What is already MEASURED — do not re-derive any of this
+### Where to look instead — a per-word ADDRESSING decode
 
-* **The table exists and is intact.** `m_rf[0x1D..0x40]`, 36 cells, all non-zero as of §161:
-  `0.9500000 x 2^23 x sin(2*pi*k/24 + 0.100000 rad)` to within 2 LSB. Period exactly **24**.
-* **The index arithmetic.** `lfo-ramp.md` §10: `(coef x phase) >> 23` with `coef = 0x18 = 24` at
-  8 of 8 sites -> an integer 0..23. Measured a week before the table was recovered; the two agree
-  on 24 independently.
-* **The coefficient triple.** `increment / wrap 0x7FFFFF / index-scale 0x18`. So the phase IS
-  accumulated and wrapped somewhere; the emulator simply never performs it.
-* **`SRC 0x13` is the class-6 table read port** (§162): the `..4CD` form is `acc <- bus` (§144).
-  The `..407` form (`SRC 0x10`/`ACT 0x07`) stores it back. They are an operation pair.
-* **`addr8` selects the table, functionally**: `0x18` in every modulation effect, `0x28` in every
-  drive effect (a waveshaper curve, not an LFO). ⚠ `addr8` is **not** the table *extent* —
-  `lfo-ramp.md` P-16 falsified that and nothing here revives it.
+§108 §5 names the candidates: `iw30`/`iw32`'s store target, or the body's LFO block not really
+sitting at base+2. **§109 continues exactly this chain** — it resolved both `iw30`/`iw32`
+discrepancies and found one genuine per-word addressing defect at `iw11`. Start there.
 
-### The idiom you are decoding (CHORUS, twice)
+### Then K2 is four lines. Pre-register these — they are already computed
 
-```
-  w30  040.0.00.C63          w34  142.0.00.C63
-  w31  000.6.18.4CD          w35  000.6.20.407     <- class 6
-  w32  012.4.01.1CE          w36  012.4.01.1CE
-  w33  104.2.02.1CE          w37  104.2.01.1CE
-```
-
-The accumulator arrives at the class-6 word as **zero**, not merely constant — so its producer is
-doing nothing at all. Both bracketing families are in `ROADMAP-2026-07-29.md` #10's list of
-*"words with no reading of any kind"*.
-
-★ Then K2 is four lines, and these are already computed — **pre-register them**:
 ```
   peak excursion  226, NOT 240     <- table peak is 0.9452541, not 1.0
                                       226 kills "no table";  240 kills "sine"
   DEPTH 30 -> +/-36 samples        DEPTH 99 -> +/-120       (30/99 = 0.30303030, seven digits)
   rate 0.599 Hz
 ```
+
+⚠ **Unidentified, deliberately:** §160's `m_rf[0x06] = 0x400000` is the same number as the pinned
+phase, but `lfo-ramp.md` §10 shows `400000` is the fourth member of the LFO **coefficient** group
+(FLANGER `08:`, AUTO PAN `04:`), and `m_rf` is the host-coefficient side of §97's split. Same
+value, different space. Left open rather than asserted.
 
 ### ⛔ THREE RETRACTIONS — do not build on any of them
 
