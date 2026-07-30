@@ -101,7 +101,14 @@ the ones a reader would reach for again.
    table, not after**.
 9. **When the fix you reach for is an ANCHOR VALUE, stop.** Every anchor here is pinned by closure
    arithmetic; the defects are per-word **decodes**. *(§108 §5, named as a standing bias)*
-10. **A blocker is a MEASUREMENT, and measurements expire.** Before building a task on a symptom
+10. **When a measurement surprises you, the first hypothesis is that it answered a DIFFERENT
+    QUESTION than the one you asked. Move the instrument one step toward what you care about
+    before theorising.** Four in one day: `m_p` read at the consumer not the producer (§169);
+    36 M firings **pooled across sites** instead of keyed (§174); a census printing only the cells
+    that *changed*, so "static and non-zero" and "static and **zero**" were indistinguishable
+    (§176); and a table capped below the case of interest (§176 F3). Each was invisible until the
+    previous was fixed. *(Part 109)*
+11. **A blocker is a MEASUREMENT, and measurements expire.** Before building a task on a symptom
     reported in an earlier section, re-run it on the current build — several gates ship between
     passes. **Cite the run, not the section.** *(§165: the headline blocker had been fixed by
     other work and nobody re-measured it)*
@@ -140,7 +147,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 20 | **ON** | §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
 | 21 | REFUTED | §82, §138 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
 | 22 | REFUTED | §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
-| 23 | **ON** | §71, §94 | THE HOST PAYLOAD IS 2x THE RAW THREE BYTES. r3-delaydram.md states it; §71/A3 reproduced it as a control that could have |
+| 23 | **ON** | §71, §94 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 24 | **ON** | §100 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 25 | **ON** | §101, §112 | DO NOT LET AN UNSUPPORTED SOURCE OVERWRITE A HOST-PROGRAMMED REGISTER |
 | 26 | off | §94 |  |
@@ -171,7 +178,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-68 sections, §97..§174.  **Read the tail first** — later sections retract earlier ones *in place*.
+71 sections, §97..§178.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -243,4 +250,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §172 | REFUTED/RETRACTED | ⛔ "DISTORTION ≡ FUZZ" does not survive its own test, and the data corroborates the notes | §1 **MEASURED**; §2 **MEASURED**, the original claim's precondition **REFUTED**; |
 | §173 | OPEN | the lookup is a FOUR-WORD idiom, and the `-2` slot is operand staging with three forms | §1 **MEASURED** (nulls computed first); §2 **MEASURED**; §3 **INFERRED** and |
 | §174 | REFUTED/RETRACTED | ⛔⛔ §169 §2 RETRACTED. The multiply issues. The dead operand is `L`, and §168 was right. | §1 **FORCED** (read at source); §2 **MEASURED**, the pooled reading **VOIDED**; |
+| §176 | OPEN | ★★★ THE INDEX MULTIPLY POINTS AT CELL 5. THE PHASE IS IN CELL 7. Off by exactly 2. | §1 **MEASURED**; §2 **MEASURED** (coefficient 24 identifies the word's role |
+| §177 | OPEN | §176's "off by 2" is an instance of a KNOWN, LOCALISED defect, and it adds a fourth constraint | §1 **FORCED** (quoted from the owning note, origins cancel); §2 C4 **MEASURED** |
+| §178 | OPEN | the header's vocabulary, verified and enumerated; and a gap I nearly reported that is not there | §1 **MEASURED** (the quoted figure independently reproduced); §2 **MEASURED**, and |
 

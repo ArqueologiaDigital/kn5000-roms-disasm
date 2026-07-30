@@ -10921,3 +10921,65 @@ validated on the header too, not only on the 38 body images.
 
 Evidence grade: §1 **FORCED** (quoted from the owning note, origins cancel); §2 C4 **MEASURED**
 (§176), its independence **INFERRED**; §3 procedural.
+
+---
+
+## §178 — the header's vocabulary, verified and enumerated; and a gap I nearly reported that is not there
+
+`kn5000-dsp-pointer.md` §10.3 calls the common header *"the highest-value remaining static
+target"*, on the strength of a figure quoted from another note: *"about 90 % of its vocabulary
+appears in no effect body."* Checked, because a quoted figure is not a measurement.
+
+### 1. VERIFIED, and tightly
+
+```
+  header (kernel.dsm)      60 words,  57 distinct
+  bodies                  688 distinct words over 38 images
+  header words in NO body  51 of 57 distinct  =  89.5 %
+                           54 of 60 slots     =  90.0 %
+```
+
+The figure is right to the tenth. And the six pointer-family loads the note says every static
+search excluded reproduce exactly where it puts them:
+
+```
+  iw42 801.0.70.821   iw43 801.0.6C.827   iw44 801.0.25.825      <- unit 0
+  iw50 801.0.50.821   iw51 801.0.64.827   iw52 801.0.25.825      <- unit 1
+```
+
+### 2. ⚠ THE GAP I NEARLY REPORTED, AND IT IS NOT THERE
+
+`kernel.dsm` runs `w0..w59`, and the header is I-RAM `0..82` — so 23 words that every effect
+executes appeared to be in no listing at all. That would have been a clean, quotable finding.
+
+**It is wrong.** `epilogue.dsm` covers `w60..w82` exactly, 23 words, and its own header says so:
+*"SHARED KERNEL, part 2 of 2 — OUTPUT STAGE, I-RAM 60..82 … a LITERAL canned image in Sub CPU ROM
+at `0x01E63C`."* The header is fully disassembled; it is split across two files under names that do
+not advertise the range.
+
+★ I record this because the near-miss is the same failure mode as the twelve trap-#3 occurrences,
+merely pointing the other way: **assuming absence from one file's name instead of checking the
+directory.** One `ls` and one range query cost nothing and stopped a false claim.
+
+### 3. The target list — what "decode the header" actually means
+
+The 51 header-only words, by `(class4, ACT)` profile — **30 distinct profiles**, so this is a
+vocabulary problem, not a handful of opcodes:
+
+```
+  class A ACT 0x00 x5    class 2 ACT 0x00 x4    class A ACT 0x15 x4    class 2 ACT 0x15 x3
+  class A ACT 0x07 x3    class 2 ACT 0x0D x2    class 2 ACT 0x0E x2    class A ACT 0x08 x2
+  class 2 ACT 0x07 x2    class 4 ACT 0x00 x2    class 0 ACT 0x01 x2    class 0 ACT 0x07 x2
+  ... 18 further profiles at x1
+```
+
+★ Note the overlap with the current blocker: `class A ACT 0x15` occurs **4 times in the header**.
+Any pointer-delta rule conditioned on `hi12` bits **must be validated here** — `kn5000-dsp-pointer.md`
+§5 records that *"bit 10 = END OF PROGRAM"* held 38/38 across the body images and was **falsified as
+a bit meaning** the moment the header was looked at (14 occurrences in 60 words, only 2 of them
+terminators). A rule fitted to the bodies alone is fitted to a population that excludes the control
+layer.
+
+Evidence grade: §1 **MEASURED** (the quoted figure independently reproduced); §2 **MEASURED**, and
+recorded as a near-miss rather than a finding; §3 **MEASURED** census, its *interpretation* as a
+target list **INFERRED**.

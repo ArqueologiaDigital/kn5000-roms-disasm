@@ -101,7 +101,14 @@ the ones a reader would reach for again.
    table, not after**.
 9. **When the fix you reach for is an ANCHOR VALUE, stop.** Every anchor here is pinned by closure
    arithmetic; the defects are per-word **decodes**. *(§108 §5, named as a standing bias)*
-10. **A blocker is a MEASUREMENT, and measurements expire.** Before building a task on a symptom
+10. **When a measurement surprises you, the first hypothesis is that it answered a DIFFERENT
+    QUESTION than the one you asked. Move the instrument one step toward what you care about
+    before theorising.** Four in one day: `m_p` read at the consumer not the producer (§169);
+    36 M firings **pooled across sites** instead of keyed (§174); a census printing only the cells
+    that *changed*, so "static and non-zero" and "static and **zero**" were indistinguishable
+    (§176); and a table capped below the case of interest (§176 F3). Each was invisible until the
+    previous was fixed. *(Part 109)*
+11. **A blocker is a MEASUREMENT, and measurements expire.** Before building a task on a symptom
     reported in an earlier section, re-run it on the current build — several gates ship between
     passes. **Cite the run, not the section.** *(§165: the headline blocker had been fixed by
     other work and nobody re-measured it)*
