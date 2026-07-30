@@ -7035,3 +7035,81 @@ producing pair fed by CHORUS's own table-lookup idioms — rather than to `0x10`
 Evidence grade: **MEASURED** for the move and the phase-tracking of cell `0x10`; **REFUTED** for
 the four-delay-voice consumer reading; **CONTESTED** (downgraded from MEASURED) for §113/bit 18;
 **OPEN** for the consumer itself.
+
+---
+
+## §120 — `0x0E`/`0x0F` ARE **DEAD IN THE SHIPPED BUILD**, AND THE BLOCKER IS **CLASS 6** — 53 WORDS, WITH A 29/29 SIGNATURE
+
+### 1. The hypothesis as stated is not supported
+
+§119's verifier argued `0x0E`/`0x0F` are the real modulation cells, citing operand ranges of
+`0..264` and `0..203` — tap-offset sized, and producing the quadrature pair the disassembly
+header names. Measured in the **shipped default**, every slot whose pointer sits on
+`0x0E`/`0x0F`/`0x10` sees:
+
+```
+  102..151   mem 0..0   L 0..0        dead, with ONE exception:
+  118  0142000C63  dp 0E   mem 39,718..39,718
+  119  0000620407  dp 0E   mem 39,718..39,718
+  120  00124011CE  dp 0E   mem 39,718   L 39,718   <- reads it, and zeroes the cell
+  121+                     mem 0..0     L 0..0
+```
+
+⚠ **The verifier's `0..264`/`0..203` figures came from arm E (bit 34), not the default.** In the
+shipped build these cells carry one constant and then nothing. So "0x0E/0x0F are the consumer" is
+**not currently supported** — though nothing here refutes it as a statement about the real chip.
+
+★ **And an instrument limitation worth recording:** `kwatch`'s quiet/loud split measures
+**INPUT** dependence, while an LFO is a free-running modulator *independent* of the input. A
+correctly-working modulation cell would show as "not input-dependent" in that census while still
+varying frame to frame. **§86-style input-dependence is the wrong instrument for anything
+downstream of the LFO**; the §104 residency range is the right one.
+
+### 2. ★★★ BUT THE STRUCTURE IS REAL, AND THE BLOCKER IS NOW NAMED
+
+`iw118`/`iw119` are exactly the table-lookup idiom the verifier identified — a class-0
+pointer-family word (`lo12 = 0xC63`) followed by a **class-6** word. Class 6 is one of
+`register-space.md` §5.3's "unknown classes", and its corpus population is far larger than that
+section's header-only list suggests:
+
+```
+  000.6.18.4CD   addr8 = 24   x29      ★
+  000.6.28.4CD   addr8 = 40   x17
+  000.6.20.407   addr8 = 32   x3       <- the one feeding 0x0E in CHORUS
+  000.6.1E.407   addr8 = 30   x3
+  000.6.1A.407   addr8 = 26   x1
+                              -----
+                               53 words, 5 forms
+```
+
+★ **`addr8 = 24` occurs exactly 29 times, and `lfo-ramp.md` item C counts exactly 29 LFO blocks
+in 16 programs.** That is the same 29/29 signature that identified the wrap-word family in §118 —
+one per LFO block, exceptionless. And **24 is the "×24 table"** earlier analysis named without
+being able to say what indexed it.
+
+So the chain is structurally identified end to end, and blocked at one opcode:
+
+```
+  phase (sawtooth, 0..2^23, ramping)        MEASURED, §113..§118
+    -> class-0 lo12 0xC63   aim at the table
+      -> CLASS 6, addr8 = 24  the LOOKUP        ⛔ UNDECODED -- the blocker
+        -> 0x0E / 0x0F        the modulation pair, currently dead
+          -> the voice words  192.A.4X.000
+```
+
+### 3. Why this is a better target than the last four blockers
+
+`SRC 0x02` and `SRC 0x03` had **n = 1** and defeated §100/§101. The OVC payload had **n = 2**
+(§115). Class 6 has **53 words in 5 forms**, and its leading form has a 29/29 structural match to
+an independently-derived count. It is decodable by corpus argument in a way the recent blockers
+were not.
+
+⚠ Note also that all five `addr8` values are small integers — 24, 26, 30, 32, 40 — which is what
+a table SIZE or STRIDE looks like, not a pointer delta. That is a reading, not a measurement, and
+its falsifier is simple: if `addr8` here were a pointer delta, the pointer would move by 24..40
+at these slots, and the §104 `dp` column says it does not.
+
+Evidence grade: **MEASURED** that `0x0E`/`0x0F`/`0x10` are dead in the shipped build and that the
+`0..264`/`0..203` figures belong to arm E; **MEASURED** the class-6 census and the 29/29 match;
+**INFERRED** that class 6 is the table lookup and `addr8` its table parameter; **OPEN** for what
+class 6 computes.
