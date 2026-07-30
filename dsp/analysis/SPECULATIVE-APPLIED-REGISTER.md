@@ -7463,3 +7463,56 @@ while three others in the same block were still guesses.
 Evidence grade: **MEASURED** (the parallel structure, the private state ranges, the differing
 `addr8` values); **FORCED** that the criterion discriminates given parallel summation and unequal
 mixes; the decode itself remains **OPEN**, with a validated test now specified.
+
+---
+
+## §126 — THE TEST HAS A PREREQUISITE NOBODY HAS DONE: **PARAMETRIC EQ IS NOT THE LOADED EFFECT**
+
+### 1. PEQ's coefficients are not in the ROM
+
+Parsing algo 39's stream: **1 I-RAM block, 0 C-RAM records.** The coefficients are not baked into
+the program — which is correct and obvious in hindsight: a *parametric* EQ's coefficients are
+whatever the user dials in, written at runtime through the host poke port (§111 counted 115 such
+packets). **There is no fixed ROM transfer function for PEQ**, so §125's step 1 as written —
+"extract the ten sections' coefficients from the ROM C-RAM image" — cannot be done. The analytic
+prediction must come from the LIVE C-RAM.
+
+### 2. ★ And the live C-RAM holds a different effect
+
+The device does dump it, and the contents identify the effect immediately:
+
+```
+  C-RAM 00: 000072 7FFFFF 0000F0 000000 0000F0 000000 2CCCCC 2CCCCC ...
+             ^114   ^wrap  ^240          ^240
+```
+
+`0x000072` = **114** is the CHORUS LFO increment (§111); `0x0000F0` = **240** is the voice-word
+coefficient §119 measured. This is CHORUS's image. **PARAMETRIC EQ is not loaded and has never
+been loaded in any measurement this session.**
+
+### 3. ⇒ THE DEEPER FORM OF §122's DIAGNOSIS
+
+§122 concluded *"we picked the wrong vehicles — effects were chosen by what sounded interesting."*
+That was too generous to us. **We did not choose them at all: the cold-boot default did.** Every
+number in §98–§125 describes CHORUS (unit 0) and ROOM REVERB (unit 1) because those are what the
+instrument loads at power-on, and no pass ever changed the selection. The investigation has been
+shaped by a default for its entire length.
+
+### 4. The prerequisite, and why it is worth doing
+
+Before the transfer-function test can run at all:
+
+* select **PARAMETRIC EQ** on the emulated panel (or force algo 39's upload) so its I-RAM image
+  and its host-written C-RAM are the live ones;
+* confirm from the live C-RAM dump that ten sections' worth of coefficients are present and
+  non-trivial — with a **known** panel setting, so the analytic response is computable;
+* only then enumerate `ACT 0x0D`/`0x0E`/`f31=4`/`f31=5` together (§125's point 4).
+
+★ This is also the cheapest broad win available: the SD/panel machinery already works in this
+driver, and selecting effects would let every future pass choose its vehicle by decode coverage
+(§122's table) rather than inherit CHORUS. Ten of the 91 programs are more decoded than CHORUS,
+and none of them has ever been executed.
+
+Evidence grade: **MEASURED** (0 C-RAM records in algo 39's stream; the live C-RAM identified as
+CHORUS by two independently-known constants); **FORCED** that §125's test cannot run until PEQ is
+selected.
