@@ -11052,3 +11052,84 @@ one that resolves into the seven live cells.
 Evidence grade: §1 **MEASURED**; §2 **MEASURED** (a standing prediction confirmed);
 §3 **MEASURED** as to the emptiness, the two readings **ENUMERATED, not chosen**;
 §4 **INFERRED**, offered as a scoring heuristic and not a constraint.
+
+---
+
+## §180 — PTRD-A: the dead multiply comes ALIVE, by moving the DATA rather than the pointer. Not shipped.
+
+An exhaustive search over 21 364 736 candidate delta rules returns `class4 ∈ {2,0xA}` **AND**
+`lo12 ≠ 0x1C0` as the **unique best non-degenerate rule in the entire space** (C4 + P1 + P2 + P3).
+Re-verified independently before building — control reproduces C1 `+5`, C2 `+1`, C3 `−3`, C4 `−2`,
+P1 30/38, P2 8/8, P3 8/9 and the absolute cells `0x76`/`0x7B`/`0x7E,0x7F`; and the gate is not
+vacuous (103 sites, **36** with a non-zero `addr8`). Mask bit 62, clear in the default, one site.
+
+### 1. Results against `data/PREDICT_180.md`
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **F1** fires | count > 0 | **1 165 869** | ✔ |
+| **F2** the point | `m_dp → 7`, `L` non-zero, `P` real | `m_dp` **stays 5** — but `L` **`−599858..8388607`, nz 1 128 428** and `P` **`0..1.76e13`** | ⚠ see §2 |
+| **F3** downstream | `m_tb` chg → ~1.1 M | `m_tb 0..5872025` **chg 1** — still frozen | ✗ |
+| **F4** control | phase still ramps in cell `07` | `07: 0..8388598 chg 1128429` — **exact** | ✔ |
+| **F5** rule 1 | `§70 ACCA` min = max | `min 0 max 0` — silent, as predicted | ✔ |
+
+### 2. ⚠ MY FALSIFIER WAS MIS-SPECIFIED, and I am reporting that before the result
+
+F2 said *"`m_dp` becomes `7..7` … or lands anywhere but 7 ⇒ PTRD-A is refuted."* `m_dp` stayed at
+**5**. By the letter of my own criterion, refuted.
+
+**But I wrote the wrong criterion.** C4 is a *coincidence* constraint — consumer and producer must
+name the **same cell** — and it says nothing about *which* cell. I assumed the consumer would move.
+The census shows the other resolution:
+
+```
+  control  01  02  04  06  07  0E  92        (7 moving, cell 05 DEAD)
+  armed    01  02  05  07  0C  0E  0F  91    (8 moving, cell 05 now  -599858..8388607 / chg 2772)
+```
+
+**The producer's writes relocated onto cell 5, which is where the consumer already reads.** They now
+coincide — C4 satisfied, by the arm I did not enumerate.
+
+> **RULE: when a constraint says "two things must be equal", do not pre-register WHICH ONE MOVES.
+> State the equality and let the run say how it is met.** Otherwise a pass reads as a refutation.
+
+### 3. ★ What genuinely changed — the multiply is no longer dead
+
+`0202A071D5`, CHORUS's LFO index multiply, across 1 129 389 executions:
+
+```
+  before   coef 0..24 nz 1128429  |  L 0..0        nz 0        |  P 0..0
+  after    coef 0..24 nz 1128429  |  L -599858..8388607 nz 1128428 | P 0..17592185828702
+```
+
+**The operand that was identically zero on every one of 1.1 million firings is now live on all but
+one of them, and the multiply produces a real product for the first time.** That is the datapath
+§169–§176 chased across eight sections.
+
+### 4. ⛔ AND IT IS NOT SHIPPED. Three reasons, all pre-registered.
+
+* **F3 failed.** `m_tb` at the lookup is still frozen at chg = 1, so the index still does not reach
+  the class-6 word. PTRD-A is **at most half the fix** — exactly the outcome F3 was written to
+  detect.
+* **C1/C2/C3 remain unexplained by every non-degenerate rule in 21 million**, and C3 is *provably*
+  unreachable: it demands `77x − 80y = 0` with `x,y ∈ {0,1}`, and `gcd(77,80) = 1` forces the inert
+  case. ★ Verified independently — `x = y = 1` gives exactly the `−3` C3 misses by today.
+* **The output is unchanged and silent** (`§70 ACCA min 0 max 0`), so nothing audible corroborates
+  the change, and cell `04` vanished while `0C`/`0F`/`91` appeared — a layout shift with no
+  independent confirmation that the *new* layout is the right one.
+
+⇒ Bit 62 stays **off**, implemented, with this measurement recorded at the site.
+
+### 5. SPECULATIVE
+
+* **S5.** The search's own conclusion is that the thing to drop is the **C1–C3 producer/consumer
+  premise** (`-axes.md` §2.4, graded INFERRED) — not the arithmetic, not the origin. Corroborating
+  and worth testing: under the current rule *both* of algo 5's modulator writes land on one cell,
+  and two LFOs clobbering a single gain cell is not a phaser. **SPECULATIVE.**
+* **S6.** P1's 8 "chain-terminal exceptions" and C1–C3's misses are reported by the owning note as
+  a reproduction and a failure respectively — and they are **the same eight words**. One defect at
+  one location, double-counted as a success and a problem. **INFERRED** from the search; worth an
+  independent check.
+
+Evidence grade: §1 **MEASURED**; §2 the mis-specification **acknowledged**, the coincidence
+**MEASURED**; §3 **MEASURED**; §4 **FORCED** as to C3, **MEASURED** as to F3; §5 **SPECULATIVE**.
