@@ -16,37 +16,38 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Route the ramping LFO phase from D-RAM cell `0x07` to the class-6 word.** The defect is
-**routing over a handful of words, not generation.**
+**`C63` reads D-RAM cell `0x0C`. The LFO phase is in cell `0x07`. Fix that addressing.**
 
-⛔ **The previous blocker in this slot — "kernel `iw32` pins the phase at `0x400000`" — is DEAD.**
-§165 measured it out of existence. It came from §108, written several shipped gates earlier, and
-was never re-run. ★ **Rule 10: a blocker is a MEASUREMENT and measurements expire. Cite the run,
-not the section.**
+This is the whole remaining gap between a ramping phase and a working modulation section, and it
+is now localised to **one word**.
 
-MEASURED — run `runs164/A_control`, mask `0x3910E446A39B440F`, cold-boot CHORUS, 1 392 430 frames:
+### How it was localised — three censuses, no guessing
 
 ```
-  §164  cell 0x07:  0..8388598   chg 1128429 / 1392430 frames      full Q0.23 sweep
-  §162  at the class-6 word:  acc 0..0 | m_dp 12..12 | cursor 9..9
+  §165  cell 0x07 (the phase):  0..8388598  chg 1128429 / 1392430    a full Q0.23 ramp
+  §164  every D-RAM cell 0x00..0x1F that moves AT ALL:  01 02 04 06 07 0E  -- and nothing else
+  §162  m_dp at the class-6 word:  12 (0x0C)            -> not in that list, so it never changes
+  §167  m_tb at the class-6 word:  0..5872025 but chg = 1
+        m_k = 24  (the index scale `lfo-ramp.md` measured, confirmed live)
+        m_ta = 0, m_l = 0
+  §166  C63 + class-6 is ONE idiom: 53/53 in BOTH directions, null 0.94 +/- 0.96
 ```
 
-Both true at once. The phase changes 1 128 429 times against the class-6 word's 1 129 389
-executions — ratio **0.99915**, so it advances **once per body execution**, which identifies it as
-the LFO beyond doubt and which nothing else in the frame does. The rate puts the increment at
-**114** (0.652 Hz against the panel's 0.599 Hz), not §108's measured 57.
+`C63` is `ACT 0x03` = `m_tb = L`, i.e. **load the index register**; class-6 then reads the table.
+`m_tb` holds `5872025 / 2^23` = **0.700000** — a coefficient, loaded once. It is reading a cell
+that is pinned, so the index is pinned, so the lookup would be frozen.
 
-### Where to look
+⚠ **`m_tb`'s range says VARIES and its change-count says 1.** Range alone would have licensed
+`table[m_tb]` and produced §158 all over again. Keep the change-count on any new probe.
 
-Trace `0x07` -> the class-6 word. The path runs through `082.2.00.1C0` (`SRC 0x07` = `mem[ptr]`
--> acc) and then the class-6 word's own **`SRC 0x13`**, which has **no reading anywhere** and
-silently returns 0 from the SRC evaluator's default. §162 established `SRC 0x13` is the class-6
-**table read port** (`..4CD` is `acc <- bus`, §144). That is the most likely single missing link.
-
-### ⛔ Dead, do not retry — all three cost a pass
+### ⛔ Dead, do not retry
+ — all three cost a pass
 
 * kernel `iw32` / any `DRAM_UNIT_BASE` value (§108 §5 FORCED; bit 27 bit-identical) — and it is
   aimed at a symptom this build no longer has.
+* **bit 18** (`SRC 0x11 = mem[ptr]`, §113): TESTED at last (§168) — fired **9 279 912** times and
+  `m_tb` is unchanged. Swapping the source moves *which* constant arrives, not whether it is
+  constant. Not inert (`06: chg 1100 -> 2`) but not shipped.
 * **bit 54** alone (latch to `m_k`): **bit-identical to the control in every cell.**
 * **bit 54 + bit 4** (§136's *"never evaluated together"*, now discharged): `§70 ACCA min = max =
   176 471 605 248`, the exact DC §137 retracted. Standing rule 1 caught it.
