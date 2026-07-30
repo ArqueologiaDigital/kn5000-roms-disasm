@@ -10329,3 +10329,104 @@ refutation or an untested marker in the owning comment block, and Tier 0 carries
 
 Evidence grade: §1 **MEASURED** (five falsifiers, fired-count satisfied); §2 **FORCED** by the
 conjunction of §162's `m_dp = 12` and §164's exhaustive moved-cell list; §3 **MEASURED**.
+
+---
+
+## §169 — the register enumeration is COMPLETE and EMPTY, and it names the hole: **`ACT 0x15` is 23.7% of the corpus and decodes as nothing**
+
+### 1. The last register, and the enumeration closes
+
+`data/PREDICT_169.md` asked whether the index is the *product* — `lfo-ramp.md` §10 reads the idiom
+as `(coef × phase) >> 23`, and §167 measured `m_k = 24`, so the scale is already in the multiplier
+input latch. ⚠ §167 censused `m_ta`/`m_tb`/`m_k`/`m_l` and **not `m_p`** — a gap in my instrument,
+not a measurement.
+
+```
+  §169 SAME SITE, THE PRODUCT: P 0..0 chg 0
+```
+
+**F1 arm 2.** With that, every register at the class-6 site is enumerated:
+
+```
+   acc  0..0        m_ta 0..0        m_tb 0..5872025 chg 1      m_k  0..24 (the scale)
+   m_l  0..0        m_p  0..0 chg 0  m_dp 12..12                cursor 9..9
+```
+
+> **Nothing varying reaches the site. The enumeration is complete and it is empty.**
+
+And `m_p = 0` with **chg = 0** says more than "not the index": across 1 129 389 executions the
+multiplier **never produced a product at all** before the lookup. ⇒ **The index multiply never
+issues.** That is a much sharper statement than "the index is missing".
+
+### 2. ★★ WHY — and it is one undecoded ACTION code
+
+The word that `lfo-ramp.md` §10 identifies as consuming the scale is `000.A.00.1D5`: class A (the
+coefficient consumer), `SRC 0x07` = `mem[ptr]`, **`ACT 0x15`**. And in the device:
+
+```
+   LO_ACT_NONE_5 = 0x15,   // ditto -- how it differs from 0x12 is OPEN
+```
+
+**It is decoded as a no-op.** The word that must issue `scale × phase` does nothing, so `m_p`
+stays 0, so no register at the lookup ever varies. Every measurement in §162/§167/§169 is
+downstream of that one line.
+
+### 3. How big the hole is — corpus census, C-format excluded
+
+```
+  ACT    count     %      programs   decode
+  0x00    820    27.4 %      40      acc <- bus (before op)
+  0x15    707    23.7 %      39      ★ NO-OP
+  0x07    455    15.2 %      40      STORE
+  0x0E    227     7.6 %      40      P <- bus  (§144)
+  0x0D    203     6.8 %      39      acc <- bus (§144)
+```
+
+**`ACT 0x15` is the second-largest ACTION code in the entire corpus, present in 39 of 91 programs,
+and it does nothing.** *(`adjudication-round7`'s count of 1174 is a different population — it does
+not exclude C-format words, whose `lo12` is a 13-bit immediate and has no ACTION field at all.)*
+
+⇒ **NEXT TASK: decode `ACT 0x15`.** It is the largest single unmodelled behaviour left in the
+device, and the LFO is merely the first place its absence has been traced end to end.
+
+### 4. ⚠ A vehicle result — my measurement vehicle is the worst one available
+
+Static, all 91 programs: the distance from the LFO phase-accumulate block to the class-6 lookup.
+
+```
+  prog05_phaser            44, 54          prog02_modulated_chorus  24, 31, 35
+  prog06_ensemble          40, 44, 48, 52  prog56_mix_up            13, 20, 31
+  prog64_s_delay_chorus    40, 44          prog01_chorus            24, 28   <- MY VEHICLE
+  prog71_peq_chorus        37, 41
+  ---------------------------------------------------------------------------
+  prog04_flanger            6, 6           prog50_vibrato            6, 6
+  prog48_auto_pan           6, 6           prog54_ring_modulator     6, 6
+```
+
+**Two families, and the split is sharp:** four programs at *exactly* 6, everything else ≥ 13.
+Cold-boot CHORUS — the vehicle rule 2 mandates for audio statistics — carries the phase **24 words**
+from its own lookup, and has one LFO block where the gap-6 family has two.
+
+⇒ For *index-path* work, AUTO PAN / VIBRATO / FLANGER / RING MODULATOR are four times shorter.
+⚠ But reaching them needs panel navigation, and §148 measured that the navigation vehicle *creates*
+a unit-1 rail. **Rule 2 is about absolute audio statistics; a register census at a class-6 site is
+not one** — so the vehicle may be switched for this purpose, and must not be for that one.
+
+### 5. SPECULATIVE — patterns recorded, not claimed
+
+* **S1.** The gap-6 four (FLANGER, AUTO PAN, VIBRATO, RING MODULATOR) share an *identical*
+  structural signature: 4 phase-accumulate words, 2 lookups, both gaps exactly 6. That is what a
+  single assembler **macro** instantiated four times looks like. If so, one decode validated on
+  AUTO PAN transfers to all four for free, and the ≥13 family is the same macro with body code
+  spliced between phase and lookup. **SPECULATIVE** — untested, and the null (do unrelated
+  programs share signatures this exact?) is not yet computed.
+* **S2.** `ACT 0x15` at 23.7 % with `ACT 0x00` at 27.4 % is suspicious as a *pair*: two codes
+  covering half the corpus between them, one decoded as "acc ← bus before the operation" and the
+  other as nothing. A plausible shape is that they are the two halves of one operand-order choice.
+  `LO_ACT_NONE_5`'s own comment — *"how it differs from 0x12 is OPEN"* — says the field's
+  neighbourhood was never resolved. **SPECULATIVE.**
+
+Evidence grade: §1 **MEASURED**, and *"nothing varying reaches the site"* **FORCED** by exhaustion
+of the register set; §2 the mechanism **FORCED** (the decode is a literal no-op in the source), the
+claim that `ACT 0x15` *should* multiply **INFERRED** from `lfo-ramp.md` §10; §3 **MEASURED**;
+§4 **MEASURED**; §5 **SPECULATIVE** and labelled.

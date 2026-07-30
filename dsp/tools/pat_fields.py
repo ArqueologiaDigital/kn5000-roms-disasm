@@ -282,10 +282,112 @@ def cmd_cooc(progs, meta, args):
         print("   n=%-5d  %s == %X   =>   %s == %X" % (tot, a, av, b, bv))
 
 
+def cmd_pos(progs, meta, args):
+    """POSITIONAL structure: what does a body start and end with?  A macro
+    assembler would emit a fixed prologue/epilogue."""
+    bodies = {n: ws for n, ws in progs.items()
+              if n not in ("KERNEL", "EPILOGUE")}
+    print("=" * 78)
+    print("BODY PROLOGUE / EPILOGUE -- the k-th word from each end")
+    print("=" * 78)
+    for tag, idx in (("FIRST", range(0, 5)), ("LAST", range(-1, -6, -1))):
+        for k in idx:
+            c = collections.Counter(fmt(ws[k]) for ws in bodies.values()
+                                    if len(ws) > abs(k))
+            top = c.most_common(4)
+            print("  %-5s w%-4d %s" % (tag, k, "   ".join(
+                "%s x%d" % (a, b) for a, b in top)))
+    print()
+    print("mean normalised POSITION of each word form (>=8 occurrences):")
+    pos = collections.defaultdict(list)
+    for nm, ws in bodies.items():
+        for i, w in enumerate(ws):
+            pos[fmt(w)].append(i / max(1, len(ws) - 1))
+    rows = [(sum(v) / len(v), len(v), k) for k, v in pos.items()
+            if len(v) >= args.minsup]
+    rows.sort()
+    print("   --- earliest ---")
+    for m, n, k in rows[:8]:
+        print("     %.3f  x%-4d %s" % (m, n, k))
+    print("   --- latest ---")
+    for m, n, k in rows[-8:]:
+        print("     %.3f  x%-4d %s" % (m, n, k))
+
+
+def cmd_traits(progs, meta, args):
+    """The tsv `family` column puts 14 of 38 images in one bucket, `combi`,
+    which swamps any family test.  This re-runs the family test on TRAITS
+    derived from the effect NAME only (never from the words)."""
+    bodies = [n for n in progs if n not in ("KERNEL", "EPILOGUE")]
+
+    def traits(n):
+        u = n.upper()
+        t = set()
+        for key, tr in (("CHORUS", "MOD"), ("FLANGER", "MOD"),
+                        ("PHASER", "MOD"), ("VIBRATO", "MOD"),
+                        ("ENSEMBLE", "MOD"), ("MIX UP", "MOD"),
+                        ("ROTARY", "MOD"), ("PAN", "MOD"), ("RING", "MOD"),
+                        ("DISTORTION", "DRIVE"), ("OVERDR", "DRIVE"),
+                        ("FUZZ", "DRIVE"), ("DIST", "DRIVE"),
+                        ("EXCITER", "DRIVE"),
+                        ("COMPR", "DYN"), ("REVERB", "REVERB"),
+                        ("DELAY", "DELAY"), ("PEQ", "EQ"),
+                        ("PARAMETRIC EQ", "EQ"), ("WAH", "FILT"),
+                        ("ENHANCER", "FILT")):
+            if key in u:
+                t.add(tr)
+        return t or {"NONE"}
+
+    T = {n: traits(n) for n in bodies}
+    where = collections.defaultdict(set)
+    occ = collections.Counter()
+    for nm in bodies:
+        for w in progs[nm]:
+            for k, v in fields_of(w).items():
+                where[(k, v)].add(nm)
+                occ[(k, v)] += 1
+    alltr = sorted({t for s in T.values() for t in s})
+    rng = random.Random(23)
+    print("=" * 78)
+    print("FIELD/VALUE x TRAIT (traits read off the effect NAME, never the words)")
+    print("images carrying a value >= %d; a value is reported when EVERY image"
+          % args.mink)
+    print("carrying it has trait X, and that is above the p99 of a size-matched")
+    print("random-subset null.")
+    print("=" * 78)
+    hits = []
+    for tr in alltr:
+        have = [n for n in bodies if tr in T[n]]
+        base = len(have) / len(bodies)
+        # null: P(a random k-subset is entirely inside `have`)
+        for key, S in where.items():
+            if len(S) < args.mink:
+                continue
+            if not all(tr in T[n] for n in S):
+                continue
+            k = len(S)
+            null = 1.0
+            for j in range(k):
+                null *= (len(have) - j) / (len(bodies) - j)
+            hits.append((null, tr, key, k, occ[key], base))
+    hits.sort()
+    print("%-8s %-14s %-10s %5s %5s %9s" %
+          ("trait", "field", "value", "imgs", "occ", "P(null)"))
+    seen = set()
+    for null, tr, key, k, o, base in hits[:args.top]:
+        fld, val = key
+        vs = ("%X" % val) if isinstance(val, int) else str(val)
+        if (fld, vs) in seen:
+            continue
+        seen.add((fld, vs))
+        print("%-8s %-14s %-10s %5d %5d %9.2e" % (tr, fld, vs, k, o, null))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", nargs="?", default="all",
-                    choices=["addr8", "family", "closure", "cooc", "all"])
+                    choices=["addr8", "family", "closure", "cooc", "pos",
+                             "traits", "all"])
     ap.add_argument("-B", type=int, default=400)
     ap.add_argument("--top", type=int, default=40)
     ap.add_argument("--mink", type=int, default=3)
@@ -304,6 +406,12 @@ def main():
     if args.cmd in ("cooc", "all"):
         print()
         cmd_cooc(progs, meta, args)
+    if args.cmd in ("pos", "all"):
+        print()
+        cmd_pos(progs, meta, args)
+    if args.cmd in ("traits", "all"):
+        print()
+        cmd_traits(progs, meta, args)
 
 
 if __name__ == "__main__":
