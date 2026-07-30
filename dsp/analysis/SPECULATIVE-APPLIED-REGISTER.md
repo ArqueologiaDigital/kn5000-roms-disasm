@@ -7818,3 +7818,70 @@ is now bounded: the guard does **not** simply clamp to 1.0, or the `+12 dB` word
 Evidence grade: §1 **MEASURED**; §2 **MEASURED**; §3 **MEASURED**; §4.1–4.3 **FORCED**
 (arithmetic + provenance), §4.4 **FORCED**; §5 **MEASURED** with the `N` mechanism **INFERRED
 (strong)** — the exact float32 operation order of the ROM's `N` has not been transcribed.
+
+---
+
+## §130 — THE PER-UNIT COEFFICIENT-CURSOR REBASE, CONFIRMED AND SHIPPED — plus a confounded run of my own
+
+### 1. ⛔ FIRST, THE RETRACTION: §129's rebase run was CONFOUNDED
+
+Mask **bit 18 gated two unrelated readings**: §113 (`SRC 0x11 = mem[ptr]`, `upd6383.cpp:2151`)
+and the §73 per-unit cursor rebase (`:3917`). The first A/B (`0x6A39F440F`) therefore turned on
+**both** — including a reading §121 had **deliberately removed** because it destroys the audio
+deposit (`iw11` becomes a self-copy of `mem[0x05]`). That run is not evidence for the rebase and
+is discarded.
+
+★ **The audit that was supposed to catch this ran and missed it.** It grepped `0x40000\b`, which
+**does not match `0x40000u`** — the spelling at `:2151`. The handoff's rule ("verify your bit is
+CLEAR IN THE DEFAULT") was followed and was not enough; the missing half is **"and used at
+exactly one site."** *Match the bit, not the spelling* — enumerate bits from every mask literal
+programmatically, never by text search.
+
+The rebase now has **its own bit 38** and a **fired-count**.
+
+### 2. ★★★ The clean A/B: three pre-registered predictions, all confirmed bit-exactly
+
+`UPD6383_SPEC=46A39B440F` (default | bit 38; bit 38 clear in the default, used at one site).
+Predictions written to `scratchpad/PREDICT_129.md` **before** the run.
+
+| | prediction | measured |
+|---|---|---|
+| **P1** | bank 1 (iw84..) fetches C-RAM `0x00..0x1D` in order, bit-identical to bank 2 | cursor `00 00 00 00 00 01 02 03 04 05`, coeffs `C0515C 20691C 1F481C 7F6996 81227A 800000` ✔ |
+| **P2** | bank 2 **UNCHANGED** — the gate must be a no-op where `rstcur` already re-based | cursor `00 01 02 03 04 05`, identical to baseline ✔ |
+| **P3** | unit 1 rebases to `0x90`, not `0x00` | cursor `90 90 91 92 93`, coeffs `4D9364 400000 3B9885` ✔ |
+
+**Fired-count 5 148 920** = 2 body CALLs × 2 574 460 frames — not a silent no-op.
+Falsifiers F1/F2/F3 all avoided. ★ **P2 is the load-bearing one**: it is the control whose answer
+was known in advance, and a gate that "fixed" bank 2 as well would have been doing something other
+than a rebase.
+
+★ The confound also **resolves itself**: unit 1's output under bit 38 alone (1 064 113 non-zero,
+peak −1543434) is within one frame of the confounded run's (1 064 112, −1543434), so §113
+contributed nothing to it and the whole unit-1 change is the rebase.
+
+### 3. SHIPPED — the default becomes `0x46A39B440F`
+
+Backed by `cram-unit-base.md` item A, **MEASURED** over 91 programs / 1546 class-A words (unit-1
+reverbs 33/33 at base `0x90`, 0/33 at `0x00`; the rival "always add `0x90`" rejected 79/79 on
+unit 0), and by §129's direct demonstration that without it a program multiplies its audio by
+delay-tap addresses — which cannot be right on any reading.
+
+⚠ **Two consequences that must not be buried:**
+
+1. **Unit 1's output changed**: 620 866 → 1 064 113 non-zero presentations, peak **+1543433 →
+   −1543434**. The reverb now reads its real coefficient bank instead of whatever the unrebased
+   cursor delivered. This is the only currently-audible unit. **It needs a listen** — the sign flip
+   in particular is a claim about the instrument, not a bookkeeping detail.
+2. **Every earlier measurement taken inside a BODY was taken against tap-table values standing in
+   for coefficients.** Body-0 findings in §§98–129 should be re-checked before being quoted. This
+   does not touch the kernel/epilogue results, which run before the CALL.
+
+### 4. Still NOT fixed, and still the blocker
+
+`unit0/DO1` remains **0 non-zero in 2 581 792 presentations**. PARAMETRIC EQ now reads the right
+coefficients and still emits nothing, because its **input** is railed at `0x7FFFFF` by the
+`iw45`/`iw32` `SRC 0x08` clobber. That was pre-registered as *not* predicted here, and it is the
+next task. §128's audio target stands, unscoreable until then.
+
+Evidence grade: §1 **FORCED** (two gate sites on one bit, verified by enumeration); §2 **MEASURED**
+with a passing known-answer control; §3 shipped on §2 + `cram-unit-base.md` item A; §4 **MEASURED**.
