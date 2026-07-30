@@ -9,62 +9,63 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Implement the class-6 WAVEFORM LOOKUP. Until it exists, nothing modulates.**
+**Find where the LFO wavetable lands — the class-6 lookup cannot be built until it exists.**
 
-⛔ **First, three retractions — do not build on any of them:**
+⛔ **K2 (implement the lookup) is BLOCKED, and the prerequisite check is why it was not built.**
+§159 MEASURED D-RAM `0x1D..0x40` — the 36-entry wavetable range — as **~800 writes per cell with
+NOT ONE non-zero**. Implementing the lookup today would index a table of zeros, measure exactly
+what the no-op measures, and that null would read as a refutation of the sine when it is a
+statement about an empty table.
+
+★ **Likely cause is structural, not a bug:** tag `0x15` routes host pokes to the **mode-1 register
+file** (`upd6383.cpp:919`, mask bit 23, set in the default) that §97 deliberately split off from
+the pointer-walked D-RAM — while the microcode's class-6 lookup addresses D-RAM. Upload and
+reader on opposite sides of a correct split.
+
+**§160 is running that measurement** (`data/PREDICT_160.md`): dump `m_rf[0x1D..0x40]` by value
+against the ROM table at `0x01EAFA`, with the tag-0x15 cells §97 validated as the known-answer
+control. Two mutually exclusive outcomes and two different fixes:
+* **table present in `m_rf`** ⇒ the READER is misaddressed; K2 becomes small.
+* **`m_rf` also zero** ⇒ the op-0x74 upload never reaches the chip; the target moves upstream to
+  the host route (`ROADMAP-2026-07-29.md:229`, *"881 writes / 65 cells dropped"*).
+
+⚠ **The aliasing hazard applies either way**: descriptor cells `0x26..0x39` overlap D-RAM
+`0x1D..0x40` under `upd6383.cpp:1305`'s flat `map(0x00,0xff).ram()`. **Separate them before
+trusting the table**, or a correct upload gets corrupted by descriptor writes and the wrong
+waveform reads as a refutation of the sine.
+
+### ⛔ THREE RETRACTIONS — do not build on any of them
 
 ```
-  §155  "the delay tap SWEEPS +/-240"        WRONG -- the census pooled voices of opposite sign
-  §157  "each voice RAMPS 0 -> depth"        WRONG -- boot transient inside an undeclared window
-  §158  TRUTH: the tap-mod is a CONSTANT per voice.  Nothing moves at all.
+  §155  "the delay tap SWEEPS +/-240"     WRONG -- the census pooled voices of opposite sign
+  §157  "each voice RAMPS 0 -> depth"     WRONG -- boot transient inside an undeclared window
+  §158  TRUTH: the tap-mod is CONSTANT per voice.  Nothing moves, because the lookup is a no-op.
 ```
 
-`§104` over the settled window (frames > 420 000), quiet **and** loud identical:
+`§104` over the settled window, quiet **and** loud identical:
 `iw96 15729946 | iw105 15729540 | iw137 −15727740 | iw146 −15727740` — **all min == max.**
 
-★ **Why nothing moves:** `upd6383.cpp:2030` — class 6, the **table-lookup idiom, is an explicit
-NO-OP** (*"no table is modelled"*). The LFO waveform is a frozen constant, so every downstream
-multiply produces a constant too.
-
-### The mechanism, MEASURED end to end
+### The mechanism, MEASURED end to end (this part stands)
 
 ```
-  LCD "DEPTH 30" -> UI slot 0 -> op 0x66 -> C-RAM[0x09]=[0x0A] = 0x1364D8
-                    = 0.30303 x the ROM base 0x400000,  and 30/99 = 0.30303030 (7 digits)
-  -> iw123 `000.A.00.415`  acc = DEPTH x LFO   -> D-RAM 0x0F
-  -> iw126 `010.A.00.1D5`  acc = DEPTH x that  -> D-RAM 0x0E, and 0x10 at iw132
+  LCD "DEPTH 30" -> op 0x66 -> C-RAM[0x09]=[0x0A] = 0x1364D8
+                    = 0.30303 x the ROM base,  and 30/99 = 0.30303030 (7 digits)
+  -> iw123 acc = DEPTH x LFO -> D-RAM 0x0F ; iw126 -> 0x0E ; iw132 -> 0x10
   -> the tap idiom's word [1] reads D-RAM 0x10/0x0E/0x0F as its BUS operand
   -> word [3] `C40.3.20.44C` applies it to the delay-tap address
 ```
 
-**The waveform is a 36-entry table the host uploads at boot** (op 0x74, six ROM tables at
-`0x01EAFA / 0x01EB67 / 0x01EBD4` (36) and `0x01EC41 / 0x01ECA5 / 0x01ED09` (32), user-selectable
-as "LFO WAVEFORM"). The cold-boot default is an **exact sine** — `0.95·sin(2πk/24 + 0.1)` to
-**0.94 LSB**, one-bin DFT, peak `table[6] = 0x78FE14 = 0.9452541`, **not 1.0**.
-The lookup is universal: `000.6.18.4CD` with a preceding ×24 scale coefficient at **29 of 29**
-LFO blocks.
-
-### K2 — the test, pre-registered
-
-Implement the lookup, then at DEPTH 30 expect **±36 samples per site, sweeping at 0.599 Hz**
-(73 584-frame period); move DEPTH to 99 → **±120**. ★ Three independent ways to fail: magnitude,
-period, knob response. And with the sine table the peak must be `0.9452541 × depth` — **226, not
-240** for a raw ±240 — which is two-sided: 226 kills "no table", 240 kills "sine".
-
-⚠ **CHECK FIRST whether the table is actually loaded.** `ROADMAP-2026-07-29.md:229` records the
-tag-`0x15` host route as *"881 writes / 65 cells dropped"*, so D-RAM `0x1D..0x40` may be empty even
-though a handler now exists. And descriptor cells `0x26..0x39` **alias** that D-RAM range
-(`upd6383.cpp:1305`, flat `map(0x00,0xff).ram()`) — an emulator memory-map defect that will corrupt
-the wavetable the moment the route starts landing.
+With the lookup working, expect **±36 samples at DEPTH 30** and **±120 at DEPTH 99**, sweeping at
+0.599 Hz (73 584-frame period) — three independent ways to fail. And under the sine table the peak
+must be `0.9452541 × depth`: **226, not 240**, which is two-sided.
 
 ### ⚠ A SHIPPED READING IS IN TENSION (§158 §3)
 
 The four taps read `dp = 0x10/0x10/0x0E/0x0F` — exactly the cells the DEPTH block writes — and
-§145's *"rail and unrelated residue"* `8388607/8388607/671/203` are, for the last two, **literally
-the outputs of the two DEPTH multiplies.** So `SRC 0x00 = coef` may be wrong **at these four
-slots**, replacing a live operand with a ROM constant. It is **SHIPPED** (bit 59).
-**Not un-shipped**: the 29/29 corpus twin is independent, and the class-A cursor fetch supplies
-±240 to `K` regardless of `SRC`. K2 decides it.
+§145's *"rail and unrelated residue"* `8388607/8388607/671/203` are, for the last two, **the
+outputs of the two DEPTH multiplies.** So `SRC 0x00 = coef` may be wrong **at these four slots**.
+It is SHIPPED (bit 59). **Not un-shipped**: the 29/29 corpus twin is independent, and the class-A
+cursor fetch supplies ±240 to `K` regardless of `SRC`. The working lookup decides it.
 
 ## 1a. Still open, and untouched by any measurement
 
