@@ -7952,3 +7952,81 @@ so the clobber fix is a prerequisite for it too.
 Evidence grade: §1 **FORCED** (direct decode of six words, verified independently of the proposal);
 §2 **FORCED** given §1; §3 **MEASURED** (both gates read from source), action deferred; §4 an
 offline computation not yet reproduced here — **INFERRED**, listed so the next pass can re-run it.
+
+---
+
+## §132 — ADVERSARIAL PASS: three corrections to §127's own confirmation, and the two structural reasons §121 could never have worked
+
+A three-skeptic + three-design + judge panel over §§127–130. Every claim below **re-verified here
+against source**, not accepted from the agent that raised it.
+
+### 1. ⛔ §127's third confirmation row was wrong in three ways
+
+| §127 said | actually |
+|---|---|
+| `286 − 70 + 105 = 321` … measured **320** … ✔ | **321 ≠ 320. I ticked a miss.** `286` is a *structural* sum; the *measured* CHORUS frame is **285** (this document says so ten times). `285 − 70 + 105 = 320` exactly. The tight invariant is **Δframe = +35 = 105 − 70**. |
+| "320 DECODED, 0 PARTIAL, 0 TRAP" as confirmation | **A criterion that cannot fail.** `alu_decoded_speculative()` ends in an unconditional `return true` (`upd6383d.h:618`) and `DSPCFG=3` enables it. **§122 in this very document already called this statistic meaningless** — and §127 re-quoted it as evidence. |
+| frame length identifies PEQ | **Degenerate.** `programs.tsv` has **two** 105-word unit-0 programs: algo 39 PARAMETRIC EQ and **algo 70 AUTO WAH+S.DELAY**. Slot count identifies SIZE, not identity. |
+
+The claim itself **SURVIVES** — on the other two rows (the `cnt=17 idx=[51,52,53]×5` fingerprint and
+C-RAM `0x00` = `C04B34`), the screenshot, and §128's coefficient decode, which the skeptic could not
+break. But one third of the stated evidence was bad, and the tautology was one this document had
+already flagged.
+
+Also corrected: §127 §4's *"numerator == denominator **exactly** per section"* is an overstatement —
+`2·b2` vs `a2/a0` differ by ≈176 LSB at 2²². The conclusion (flat to ±0.05 dB ⇒ cannot discriminate
+a decoded filter from a pass-through) is unaffected.
+
+★ And a preservation failure: `run.sh` does `rm -f error.log`, and §127's log was overwritten before
+being archived. The runs are now committed under `dsp/analysis/data/`.
+
+### 2. ★★ THE SECOND STRUCTURAL REASON §121 WAS BLIND — a blanket capture upstream of the selector
+
+`upd6383.cpp:2626-2642`, under `m_speculative` and **before** §121's destination switch at `:2675`:
+
+```cpp
+    case 0x01: case 0x08: case 0x0C: case 0x11: case 0x16:
+    case 0x0D: case 0x0E:
+        m_ta = u32(L) & 0xffffff;     // blanket tempA capture -- ALWAYS runs
+```
+
+So every §121 arm was *"destination X **and** tempA"*. **Selector value 2 (→ tempA) is
+indistinguishable from value 0 (none)**, and no arm could ever isolate a destination.
+
+This is independent of, and compounds, §131's finding that the accumulator cannot carry the
+sample across the entry. **§121 had two structural reasons to fail and neither was statistical.**
+Any future enumeration must suppress this capture for an action whose own selector is non-zero.
+
+### 3. ⚠ "`ACT 0x0D` → P" as currently coded is dimensionally suspect
+
+`:2684` `case 5: m_p = u32(L) & 0xffffff;` — a raw 24-bit datum. But a multiply writes
+`m_p = (sext(coef,24) * L) >> P_SHIFT` held as 44 bits (`:3039`), with `P_SHIFT = 6`,
+`ACC_SHIFT = 22 − 6 = 16`. The two differ by ≈2¹⁶.
+
+⚠ **Stated as a tension, not a defect**, because `:2908` *also* latches a raw datum into `m_p`
+("latch the multiplier input") under the §112 class-A ACT-07 reading. So `m_p` is doing double
+duty in this model — *multiplier input* at `:2908`/`:2684` and *product* at `:3039` — and they
+cannot both be right under one consumer. **This matters because §131 shows P is the only register
+that can carry the sample across the entry**, so the arm that could work is the one whose
+implementation is in question. Resolve `m_p`'s meaning before enumerating it.
+
+### 4. The adjudicated plan
+
+Winner: **inject a known, per-cell-distinct stimulus into D-RAM `0x05`/`0x0F` at the body CALL and
+read the 40 Direct-Form-I state cells** (`0x50..0x77`) as a bit-exact witness of what the entry
+left in P.
+
+* ★ **It does not need the chip audible**, and it does not need the `iw45` `SRC 0x08` clobber
+  fixed — the injector writes at the CALL, *downstream* of the clobber. That **removes the
+  clobber from the critical path** for the decode (it stays a prerequisite only for the final
+  audio confirmation), which reverses the ordering assumed in §130 §4 and in `HANDOFF-NEXT`.
+* Its null is computed **and** measured: 576 of 1024 readings leave all 40 cells at zero.
+* The FLAT closed form is `+s, +s/2, −s, −s/2, …` — the alternating sign following from the
+  make-up being **−2.0** (§129 §4.1), the very value §127 got wrong.
+* **The lowest free mask bit is now 39**, not 38 (§130 took 38). Enumerate bits programmatically
+  from every mask literal — the §130 lesson.
+* Prerequisites: suppress the §2 blanket capture; resolve §3; add fired-counts for `ACT 0x0E` and
+  for `f31 ≥ 4` **split by value** (today `op = f31 & 3` executes both silently).
+
+Evidence grade: §1 **FORCED** (arithmetic, source, `programs.tsv`); §2 **MEASURED** (source, quoted);
+§3 **OPEN** — a modelling tension, deliberately not resolved here; §4 a plan, not a result.
