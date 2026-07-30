@@ -305,50 +305,65 @@ def cmd_det(progs, args):
         print("   x%-3d  %s  ->  %s" % (tot, fmt(w), fmt(b)))
 
 
-def cmd_maximal(progs, args):
-    """MAXIMAL idioms: grow every recurring gram to its longest form and drop
-    every gram that is only ever seen inside a longer kept one.
-
-    This is what turns the n=2..6 sliding window into a MACRO LIBRARY."""
-    kind = args.key or "m8"
+def maximal_repeats(progs, kind, minn, maxn, mincount, minprogs):
+    """Classical MAXIMAL REPEATS: a gram is kept only if it is both LEFT- and
+    RIGHT-diverse (extending it either way strictly loses occurrences).  That
+    removes the shifted-window duplicates a plain n-gram scan produces."""
     kf = KEYS[kind]
     keyed = {nm: [kf(w) for w in ws] for nm, ws in progs.items()}
-    maxn = args.maxn
-    kept = []
-    covered = set()                       # (prog, position) already inside a kept idiom
-    for n in range(maxn, args.minn - 1, -1):
-        cnt = collections.defaultdict(list)
+    out = []
+    for n in range(minn, maxn + 1):
+        occ = collections.defaultdict(list)
         for nm, ks in keyed.items():
             for i in range(len(ks) - n + 1):
-                cnt[tuple(ks[i:i + n])].append((nm, i))
-        cand = []
-        for g, occ in cnt.items():
-            if len(occ) < args.mincount:
+                occ[tuple(ks[i:i + n])].append((nm, i))
+        for g, os_ in occ.items():
+            if len(os_) < mincount or len({o[0] for o in os_}) < minprogs:
                 continue
-            if len({o[0] for o in occ}) < args.minprogs:
+            right = {keyed[nm][i + n] if i + n < len(keyed[nm]) else "$"
+                     for nm, i in os_}
+            left = {keyed[nm][i - 1] if i > 0 else "^" for nm, i in os_}
+            if len(right) < 2 or len(left) < 2:
                 continue
-            fresh = [o for o in occ
-                     if not all((o[0], o[1] + j) in covered for j in range(n))]
-            if len(fresh) < args.mincount:
-                continue
-            cand.append((len(occ), len({o[0] for o in occ}), g, occ))
-        cand.sort(key=lambda c: (-c[0] * c[1], -c[0]))
-        for tot, npg, g, occ in cand:
-            fresh = [o for o in occ
-                     if not all((o[0], o[1] + j) in covered for j in range(n))]
-            if len(fresh) < args.mincount:
-                continue
-            kept.append((n, tot, npg, g, occ))
-            for nm, i in occ:
-                for j in range(n):
-                    covered.add((nm, i + j))
-    kept.sort(key=lambda k: (-k[0], -k[1] * k[2]))
+            out.append((n, len(os_), len({o[0] for o in os_}), g, os_))
+    return out
+
+
+def cmd_maximal(progs, args):
+    kind = args.key or "m8"
+    kept = maximal_repeats(progs, kind, args.minn, args.maxn,
+                           args.mincount, args.minprogs)
+    covered = set()
+    for n, _t, _p, _g, occ in kept:
+        for nm, i in occ:
+            for j in range(n):
+                covered.add((nm, i + j))
+    kept.sort(key=lambda k: (-(k[1] * k[2]), -k[0]))
     total_words = sum(len(v) for v in progs.values())
     print("=" * 78)
-    print("MAXIMAL IDIOMS  key=%s  (count>=%d, progs>=%d, len %d..%d)"
-          % (kind, args.mincount, args.minprogs, args.minn, maxn))
-    print("corpus %d words; %d word-slots (%.1f%%) lie inside a maximal idiom"
-          % (total_words, len(covered), 100.0 * len(covered) / total_words))
+    print("MAXIMAL REPEATS  key=%s  (count>=%d, progs>=%d, len %d..%d)"
+          % (kind, args.mincount, args.minprogs, args.minn, args.maxn))
+    print("%d maximal repeats; %d of %d word-slots (%.1f%%) lie inside one"
+          % (len(kept), len(covered), total_words,
+             100.0 * len(covered) / total_words))
+    # NULL: the same measurement on within-program shuffles
+    rng = random.Random(11)
+    cov = []
+    for _b in range(args.Bcov):
+        sh = {nm: (lambda s: (rng.shuffle(s), s)[1])(list(ws))
+              for nm, ws in progs.items()}
+        kk = maximal_repeats(sh, kind, args.minn, args.maxn,
+                             args.mincount, args.minprogs)
+        c = set()
+        for n, _t, _p, _g, occ in kk:
+            for nm, i in occ:
+                for j in range(n):
+                    c.add((nm, i + j))
+        cov.append(len(c) / total_words)
+    m = sum(cov) / len(cov)
+    sd = math.sqrt(sum((x - m) ** 2 for x in cov) / len(cov))
+    print("NULL (within-program shuffle, B=%d): %.1f%% +- %.1f%%  (max %.1f%%)"
+          % (args.Bcov, 100 * m, 100 * sd, 100 * max(cov)))
     print("=" * 78)
     for n, tot, npg, g, occ in kept[:args.top]:
         print("\n--- len %d   count %d   programs %d   score %d ---"
@@ -369,6 +384,7 @@ def main():
     ap.add_argument("--minn", type=int, default=3)
     ap.add_argument("--mincount", type=int, default=2)
     ap.add_argument("--minprogs", type=int, default=2)
+    ap.add_argument("--Bcov", type=int, default=20)
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("-n", type=int, default=4)
     ap.add_argument("-B", type=int, default=100)

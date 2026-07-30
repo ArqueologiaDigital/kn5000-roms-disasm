@@ -10266,3 +10266,66 @@ Next action is therefore **extend the §162 probe, not write the lookup.**
 Evidence grade: §2 **MEASURED** (exhaustive over all 91 programs, null computed first);
 §3 the idiom's *shape* **INFERRED** from the field decode, the identity of the index register
 **SPECULATIVE**; §4 procedural.
+
+---
+
+## §168 — bit 18 tested at last, and it names the defect: **`C63` reads a cell that never changes**
+
+§113 has sat off since it was written. §112 §2 records why — *"⚠⚠ §113 WAS NOT VALIDLY TESTED — a
+mask collision"* — and §130 moved the colliding gate to bit 38, so the confound is gone. Bit 18
+verified programmatically as **clear in the default and used at exactly one site**
+(`upd6383.cpp:2369`) before arming.
+
+### 1. Results against `data/PREDICT_168.md`
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **F1** gate fires | count > 0, else the run says nothing | **9 279 912** | ✔ |
+| **F2** two-sided | `m_tb` chg → ~1 129 389, **or** stays ≈1 ⇒ gap is upstream | **chg = 1**, unchanged | **arm 2** |
+| **F3** control | `m_dp`/`cursor` must not move (bit 18 is a SRC decode) | `12..12` / `9..9`, unchanged | ✔ |
+| **F4** upstream null | cell `0x07` census unchanged | `0..8388598`, chg 1 128 429 | ✔ |
+| **F5** rule 1 | `§70 ACCA` min ≠ max before any output claim | `min 0 max 0` | ✔ (silent) |
+
+F1 matters here more than usual: without it, "`m_tb` did not move" is indistinguishable from "the
+gate never ran". **9 279 912 firings** makes arm 2 a decision rather than an absence.
+
+### 2. ★ THE DIAGNOSIS, and it falls out of two censuses already in hand
+
+`§164`'s per-frame census lists **every** D-RAM cell in `0x00..0x1F` that moved at all:
+
+```
+  01  02  04  06  07  0E          <- and NOTHING else
+```
+
+`§162` measures `m_dp = 12` (`0x0C`) at the class-6 word. **Cell `0x0C` is not in that list — it
+never changes.** So `m_tb` is constant for the plainest possible reason:
+
+> **`C63` reads cell `0x0C`. The phase is in cell `0x07`. It is reading the wrong cell.**
+
+That also explains why bit 18 changed nothing here: swapping `SRC 0x11` from `ACCB` to `mem[ptr]`
+moves *which* constant arrives, not whether it is constant.
+
+⇒ This is an **addressing** defect, precisely the class §108 §5 forced the fix to be
+(*"a per-word ADDRESSING decode … not the anchor"*) and precisely what §165 predicted the shape of
+the remaining gap to be. Three independent lines now agree on the same conclusion.
+
+### 3. ⚠ Bit 18 is NOT inert, and it does NOT ship
+
+One cell differs against the control: `06: chg 1100 → 2`. Everything else is bit-identical. That
+is a real effect on a cell §160 could not identify, too small to justify overturning §27's live
+`ACCB` reading, and it is now **TESTED-and-recorded** rather than untested. Bit 18 stays off with
+this measurement at the site.
+
+### 4. ⚠ A structural gap in `LEDGER.md`, found by using it
+
+Tier 1 renders every unarmed bit as *"off … which usually means tried and refuted"*. Bit 18 was off
+because it was **never tested**. Those are opposite states — one says *stop*, the other says
+*this is owed a run* — and the index could not tell them apart. Being unable to distinguish them is
+how a testable idea becomes invisible for weeks.
+
+The generator now classifies unarmed bits as **REFUTED**, **UNTESTED** or **off** by looking for a
+refutation or an untested marker in the owning comment block, and Tier 0 carries an explicit
+"owed a run" list.
+
+Evidence grade: §1 **MEASURED** (five falsifiers, fired-count satisfied); §2 **FORCED** by the
+conjunction of §162's `m_dp = 12` and §164's exhaustive moved-cell list; §3 **MEASURED**.
