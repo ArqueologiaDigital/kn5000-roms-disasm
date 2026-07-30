@@ -6731,3 +6731,64 @@ Evidence grade: **MEASURED** (the corpus positions and payloads, `m_ovc` being d
 **FORCED** that the per-unit configuration site is selector `0x27` — it is the only unidentified
 member of a triple that occurs once per unit; **CANDIDATE ONLY (n = 2)** that bit 3 is the
 selector.
+
+---
+
+## §116 — ★★★ CONFIRMED: SELECTOR `0x27` LOADS A PER-UNIT MODE REGISTER, AND BIT 3 SELECTS THE WRAP
+
+§115 predicted the payloads from the ROM and specified the test. Run:
+
+```
+  §116 OVC loads: 951,360    values seen:  64:461,760   6C:489,600      and NOTHING else
+  §114 wraps:  34,599,360    (122,255,040 under §114's GLOBAL wrap)  -> 28%, correctly scoped
+  phase at body iw89:  -8,388,587 .. 8,388,485          full-range sawtooth -- the LFO RAMPS
+  §54 verdict: SILENT, DC leak 0.00%                    unchanged
+```
+
+**Exactly the two predicted payloads and no others**, in near-equal counts — one per unit per
+frame. `0x6C` for unit 0 (bit 3 set → wrap), `0x64` for unit 1 (bit 3 clear → saturate). The
+prediction was made from the corpus in §115 *before* the register was ever loaded, and the wire
+agrees.
+
+**And the wrap is now correctly SCOPED**: 28% of accumulator stores wrap where §114's global
+version wrapped 100%. Unit 1 — the twelve reverbs — keeps the saturation `acc_to_datum()`'s
+comment defends.
+
+### ⚠ THE FIRST PLACEMENT MEASURED ZERO, AND ITS OWN FIRED-COUNT CAUGHT IT
+
+I first inserted the handler at the register-load dispatch. **`§116 OVC loads: 0`.** `lo12 =
+0x827` carries bit 11, so a selector-0x27 word is swallowed by the ALTERNATE-ENCODING branch and
+returns long before that dispatch. Moved ahead of it; 951,360 loads.
+
+That branch executes **addressing only**, which is right for a word whose ALU route is
+unmodelled and wrong for one whose entire job is to load a register. Without the fired-count this
+would have read as a clean negative result — the same silent no-op that invalidated two earlier
+passes, caught this time in one run because the instrument reports what it did.
+
+### ⚠ AND THE SAFETY CRITERION IS WEAK RIGHT NOW — stated, not glossed
+
+Criterion (c) was: *if unit 0's audio wraps and that is wrong, the tracking verdict should
+worsen.* It did not worsen. **But the chip is silent** — `peak 0` in both buckets — so the
+tracking test has almost no power to detect an audio-wrap regression when there is no audio to
+regress. **The falsifier did not fire, and it also could barely have fired.** That is a
+criterion that cannot fail, in this state, and it must be re-run the moment the chip emits
+anything.
+
+What is NOT weak: the payload prediction, which was two-sided and exact.
+
+### Promoted, and what is still wrong
+
+Mask bits **25** (§112, class-A ACT-07 latches P), **29** (`store-gate.md` item C's co-equal
+survivor) and **33** (§116) join the default — `0x2A39B440F`. Each has its own local
+justification and each is individually removable; jointly they make a documented subsystem run
+for the first time in this project.
+
+⚠ **Still half rate.** §114's arithmetic stands: `mod 2^23` gives 0.5993 Hz — the rate
+`lfo-ramp.md` anchors across 29 LFO blocks in 16 programs with 9 distinct increments — and our
+signed 24-bit wrap gives 0.2997 Hz. The register tells us *which unit* wraps; it does not yet
+tell us the **modulus**. That is the next question, and it is the fourth factor of two this
+session.
+
+Evidence grade: **MEASURED**, with a pre-registered payload prediction hit exactly and a
+zero-valued null; **WEAK** on the audio-safety falsifier while the chip is silent; **OPEN** on
+the modulus.
