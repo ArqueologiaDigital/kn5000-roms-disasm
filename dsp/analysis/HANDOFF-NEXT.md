@@ -1,17 +1,40 @@
 # HANDOFF — read this first
 
-**Rewritten 2026-07-30 after §§127–129.** The previous version told you to select PARAMETRIC EQ
-and run the transfer-function test. **PEQ is now selected, running and traced**, and that test has
-been reformulated twice. Read this, then `SPECULATIVE-APPLIED-REGISTER.md` §§127–129.
+**Rewritten 2026-07-30 after §§127–132.** The original version told you to select PARAMETRIC EQ
+and run the transfer-function test. **PEQ is now selected, running, traced, and reading its own
+coefficients**, and that test has been reformulated three times. Read this, then
+`SPECULATIVE-APPLIED-REGISTER.md` §§127–132 (§132 first — it corrects §127).
 
 ---
 
 ## 1. YOUR NEXT TASK
 
-**Make body 0 read its own coefficients, then unrail its input.** In that order — they are the two
-defects standing between PARAMETRIC EQ and a scoreable audio test, and both are now localised.
+**Run the BANK-ENTRY DEMULTIPLEXER** (§132 §4): inject a known, per-cell-distinct stimulus into
+D-RAM `0x05`/`0x0F` **at the body CALL**, and read the 40 Direct-Form-I state cells `0x50..0x77` as
+a bit-exact witness of what the entry left in **P**.
 
-1. **The coefficient-cursor rebase.** §129 measured that PEQ's bank 1 executes with the C-RAM
+★ **It does not need the chip audible, and it does NOT need the `SRC 0x08` clobber fixed first** —
+the injector writes at the CALL, downstream of the clobber. That removes the clobber from the
+critical path for the decode; it stays a prerequisite only for the final audio confirmation.
+Its null is computed *and* measured: 576 of 1024 readings leave all 40 cells at zero.
+
+**Before any arm runs — three prerequisites, each of which independently voided a past pass:**
+
+* **Suppress the blanket tempA capture** at `upd6383.cpp:2626-2642`. It fires for `ACT 0x0D`/`0x0E`
+  *before* §121's destination switch, so every arm is "destination X **and** tempA" and selector 2
+  is indistinguishable from the null. This is one of the two structural reasons §121 failed.
+* **Resolve what `m_p` means** (§132 §3): it is written as a raw datum at `:2684`/`:2908` and as a
+  product at `:3039`, differing by ≈2¹⁶. §131 shows P is the *only* register that can carry the
+  sample across the entry, so the one arm that could work is the one whose implementation is in
+  question.
+* **Add fired-counts** for `ACT 0x0E` and for `f31 ≥ 4` **split by value** — today `op = f31 & 3`
+  executes both silently.
+
+The two older defects, for context (no longer the next task):
+
+1. ~~**The coefficient-cursor rebase.**~~ **DONE, §130** — shipped on bit 38, default now
+   `0x46A39B440F`, three pre-registered predictions confirmed bit-exactly.
+   Historical description: §129 measured that PEQ's bank 1 executes with the C-RAM
    cursor at `0x71`, walking **TABLE B** (the delay-tap address table, step `0x4BE` = 1214) instead
    of its biquad coefficients at `0x00..0x1D`. Bank 2 is correct only because `w58 = rstcur`
    re-bases it. Mask **bit 18** already implements the per-unit rebase
@@ -72,9 +95,12 @@ any enumeration must A/B against the *alias*, not against a trap — and the ali
 
 * **NEVER `-video none`.** Always `timeout`-wrap. Always play notes.
 * **COMPUTE masks in python, never type them, AND verify your bit is CLEAR IN THE DEFAULT.**
-  Default `0x6A39B440F`, `m_specmask` is u64. Bits 0–34 are used-in-code or set-in-default and
-  **bits 35–37 are §121's `ACT 0x0D` selector, extracted by shift so a grep for the hex misses
-  them** — the lowest genuinely free bit is **38**.
+  Default is now **`0x46A39B440F`**, `m_specmask` is u64. Bits 0–34 are used-in-code or
+  set-in-default, **bits 35–37 are §121's `ACT 0x0D` selector** (extracted by shift, so a grep for
+  the hex misses them) and **bit 38 is §130's rebase** — the lowest genuinely free bit is **39**.
+  ★ Enumerate bits **programmatically from every mask literal**. Checking "is this bit clear in the
+  default" is not enough: §130's audit grepped `0x40000\b`, which does not match `0x40000u`, and
+  so missed a second site and produced a confounded run. **Match the bit, not the spelling.**
 * **Every new gate must log a FIRED-COUNT.**
 
 ## 5. The traps that keep costing time
