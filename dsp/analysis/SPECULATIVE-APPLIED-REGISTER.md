@@ -10494,3 +10494,67 @@ class-6 site is not one.** Use these for index-path work and cold-boot CHORUS fo
 Evidence grade: §1 **FORCED** (the manifest's population is the wrong one by construction);
 §2 **MEASURED**, with the LCD instrument **VOIDED by its own control**; §3 **MEASURED**;
 §4 **MEASURED**, two independent known-answer controls passing.
+
+---
+
+## §171 — §169's one word is a **46-site family**, and it is a minimal pair. Three lines converge.
+
+A parallel read-only pass found this while §169 was being written; independently re-measured here
+before being built on.
+
+### 1. VERIFIED — and the first check said 0 of 54
+
+```
+  class-A ACT-0x15 base rate 0.1544  ->  chance gives ~8.3 of 54 at any fixed offset
+
+  offset from the class-6 word :  -5:13   -4:0   -3:46   -2:0   -1:0   0:0
+  offset from the C63 word     :  -5:21   -4:13  -3:0    -2:46  -1:0   0:0
+```
+
+**46 of 54, against a null of 8.3.** The remaining 8 are *chained* lookups whose −3 slot is
+occupied by the previous idiom's tail — so **54 of 54 are accounted for**.
+
+⚠ My first verification returned **0 hits** and I nearly filed the claim as unreproduced. The
+finding was anchored on `C63`; I measured from the class-6 word. Same 46 sites, offsets −2 and −3
+for the same thing. The base rates agreed to a tenth (8.4 vs 8.3), which is what said the
+disagreement was the *anchor* and not the statistic.
+
+> **RULE: an offset claim is meaningless without its anchor. State the anchor word explicitly, or
+> report the whole offset profile — which is cheaper than the argument.**
+
+### 2. What it buys — a minimal pair with BOTH sides already decoded
+
+```
+  SRC 0x07 (mem[ptr])  x29        SRC 0x10 (the accumulator)  x17
+     000.A.00.1D5 x8  ...            000.A.00.415 x17
+```
+
+Same class, same ACTION, two **already-decoded** sources. That bounds `ACT 0x15` from both sides:
+whatever it does, it must make sense applied to memory *and* to the accumulator, at the same slot
+in the same idiom. §169's `000.A.00.1D5` is one of 46 instances, not a special case — the
+NEXT TASK just became a 46-site, 25-image problem instead of a one-word one.
+
+### 3. ★ Three independent lines land on the same family
+
+The `f31` pass's decidable minimal pair — `020.A.06.1D5` vs `028.A.06.1D5`, byte-identical but for
+bit 27 — is **inside this list** (`x1` and `x2` respectively). So the `f31 > 2` question, the
+`ACT 0x15` question and the LFO index path are all the same 46 words, reached from three
+directions that could not see each other.
+
+### 4. ⚠ An open challenge to §168, and it is cheaper than what §168 concluded
+
+§168 concluded *"`C63` reads cell `0x0C`, the phase is in `0x07` — an **addressing** defect"*, and
+§169 then concluded *"the multiply never issues — `ACT 0x15`"*. **They were written in that order
+and never put side by side.** The corpus names `182.2.**.407` as the writer of the cell `C63`
+reads, which admits a cheaper account:
+
+> There is **no addressing defect**. The cell `C63` reads is frozen *because* the dead `ACT 0x15`
+> multiply never produces the value that would be written into it. One cause, not two.
+
+**Unresolved, and recorded as such.** It is falsifiable at the first step and both ways: decode
+`ACT 0x15`, and either cell `0x0C` starts changing (one cause) or it stays frozen (two). Do not
+carry §168's "addressing defect" forward as settled until that runs — ★ **rule 10 again: it is a
+conclusion, not a measurement, and it has an untested rival.**
+
+Evidence grade: §1 **MEASURED**, independently reproduced; §2 **MEASURED**; §3 **MEASURED**;
+§4 **OPEN** — two live accounts, one experiment separates them.
