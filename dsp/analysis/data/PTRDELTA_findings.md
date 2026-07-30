@@ -275,12 +275,20 @@ The control already has P1 & P2 & P3; the *only* thing PTRD-A adds is C4. So the
     tier 1+2 : 266 240 keep P1&P2&P3 & N ;  2 048 of them satisfy C4  =  0.769 %
 ```
 
-**PTRD-A beats its own null by ~130× — enrichment, not proof.** And it carries a stated cost that
-should be weighed against it: a03 ENHANCER's chain reads go from two adjacent cells `[14,15]` to
-four cells spanning `[-132 … +15]`, because the same form `012.2.**.1C0` carries `+68` and `+78` in
-a03 where it carries `−2` in CHORUS. A pointer excursion of −132 is outside any 256-cell window
-that also holds `+15`. **INFERRED (weak): PTRD-A is a local repair for CHORUS that damages a03.**
-It is the best thing in 21 million rules and it is still not good.
+**PTRD-A beats its own null by ~130× — enrichment, not proof.** And it carries three stated costs
+that should be weighed against it:
+
+1. **a03 ENHANCER's chain reads go from two adjacent cells `[14,15]` to four cells spanning
+   `[-132 … +15]`**, because the same form `012.2.**.1C0` carries `+68` and `+78` in a03 where it
+   carries `−2` in CHORUS. A pointer excursion of −132 is outside any 256-cell window that also
+   holds +15.
+2. **The gate is not local to CHORUS.** `012.2.**.1C0` occurs 33 times across **20 of the 38 body
+   images**, with `addr8` from −14 to +78. Turning it inert moves the pointer in every one of them.
+3. **It silences two kernel words** (I-RAM 8 and 37) — harmless *if* the dispatch model is right,
+   which is INFERRED and not measured. See §7.1.
+
+**INFERRED (weak): PTRD-A is a local repair for CHORUS with global collateral.** It is the best
+thing in 21 million rules and it is still not good.
 
 ### 4.3 Tier 5 — the maximal field-based space
 
@@ -424,9 +432,39 @@ reported over KERNEL (I-RAM 0..59) and EPILOGUE (60..82) as well:
     gate f98==3    KERNEL  0/60                              | EPILOGUE  0/23
 ```
 
-**PTRD-A's gate (`lo12 ≠ 0x1C0`) is not `hi12`-conditioned and the header contains no `0x1C0` word
-at all**, so it is header-neutral by construction — which is the one thing that can be said for it
-without a live core.
+### 7.1 ★ AND THE HEADER CHECK CAUGHT SOMETHING — on the winner itself
+
+My first draft of this section said *"PTRD-A's gate is not `hi12`-conditioned and the header
+contains no `0x1C0` word at all, so it is header-neutral by construction."* **That was wrong, and
+running the census is what caught it** (thirteenth instance of trap #3, caught before it shipped):
+
+```
+    KERNEL   (I-RAM 0..59):  3 words carry lo12 == 0x1C0
+                 I-RAM  8   084.2.01.1C0   addr8 +1   -> class 2, SILENCED by PTRD-A
+                 I-RAM 35   012.A.00.1C0   addr8 +0   -> the gate changes nothing
+                 I-RAM 37   092.A.01.1C0   addr8 +1   -> class A, SILENCED by PTRD-A
+    EPILOGUE (I-RAM 60..82):  0 words
+
+    the per-unit pointer loads sit at I-RAM 42/43/44 (unit 0) and 50/51/52 (unit 1)
+```
+
+**PTRD-A removes two `+1` post-increments from the common header — and BOTH of them (I-RAM 8 and
+37) sit BEFORE the per-unit pointer loads at 42 and 50.** Under the dispatch model (owning note §2)
+the pointer is reloaded from `801.0.70.821` / `801.0.50.821` after them, so their contribution is
+discarded before either body runs and PTRD-A is header-neutral *in effect*.
+
+> ⚠ **But that neutrality is inherited from the dispatch model, which is INFERRED, not measured**
+> (owning note §8 item 6: *"the dispatch model has no falsifier yet"*). If the pointer is not
+> reloaded per unit — closure-pointer.md §4.1's package A — the header's `−2` reaches both bodies
+> and PTRD-A's absolute prediction changes from "consumer moves 5 → 7" to "consumer and producer
+> meet at 5". **Both arms are still two-sided, but §8.2 must log which one it is.**
+
+My first draft of this section said *"the header contains no `0x1C0` word at all, so PTRD-A is
+header-neutral by construction."* **That was wrong on the census and right by accident on the
+conclusion, and running the census is what caught it** — thirteenth instance of trap #3, caught
+before it shipped. The general lesson is the owning note's own §5, discharged again: **a rule
+validated on the 38 body images has not been validated until it has been run over the 83
+header/stub words that every body-scoped corpus statistic excludes by construction.**
 
 ---
 
@@ -468,9 +506,16 @@ run of the *already shipped* build — no gate, no new decode.
 * **The control that can fail**: PEQ (algo 39) must be **bit-identical** — P2 says the biquad's +4
   walk is untouched by this gate, so any change to the a39 band cursor means collateral damage and
   the run is void. Select PARAMETRIC EQ (§127's vehicle) and compare the coefficient-cursor trace.
-* **The falsifier this file already knows about**: a03 ENHANCER's chain reads scatter to
-  `[-132,-54,-53,15]` under this gate. If ENHANCER audibly breaks or its pointer leaves D-RAM in the
-  trace, PTRD-A is refuted even if the CHORUS arm passes.
+* **The falsifiers this file already knows about, and they must be pre-registered with the run**:
+  (a) a03 ENHANCER's chain reads scatter to `[-132,-54,-53,15]` under this gate — if ENHANCER's
+  pointer leaves D-RAM in the trace, PTRD-A is refuted even if the CHORUS arm passes;
+  (b) §7.1 — the gate silences two `+1` kernel words at I-RAM 8 and 37. Both precede the pointer
+  loads at 42/50, so under the dispatch model their effect is discarded; **log the pointer at the
+  two unit terminators (I-RAM 49 and 59) in both arms to confirm it.** If they differ between arms
+  the reload is not happening, the header's `−2` reaches the body, and the expected landing cell is
+  **5, not 7** — score the run against that instead of calling it a FAIL. (This log is also the
+  dispatch model's first falsifier, which the owning note §8 item 6 has been owed since it was
+  written.)
 
 ---
 
