@@ -8123,3 +8123,91 @@ Evidence grade: §1 **MEASURED** (twice, identical); §2 **FORCED** by the 8×8 
 destructive interference of `P raw`; §3 **INFERRED (strong)** — the map is measured, and the
 selection among its feeding cells rests on PEQ's documented two-channel role; §4 a **MEASURED
 NEGATIVE**; §5 **FORCED** by the `nz` distribution.
+
+---
+
+## §135 — TOWARDS SHIPPING §133: the blocker localised to six words, three hypotheses refuted
+
+### 1. The blast radius, and independent corpus corroboration
+
+`ACT 0x0D` + `ACT 0x0E` = **829 of the corpus's 6282 ALU words (13.2 %), in ALL 91 programs**, so
+setting them in the default is a corpus-wide change. Their SRC pairings corroborate §133's decode
+from a base far wider than PEQ:
+
+```
+  ACT 0D <- SRC 07 (mem[ptr]) 350/402 = 87%      "load the accumulator from memory"
+  ACT 0E <- SRC 10 (acc)      239/427 = 56%      the RELAY  (PEQ bank 1's w1)
+         <- SRC 07 (mem[ptr]) 187/427 = 44%      the DIRECT form (PEQ bank 2's w54)
+```
+
+The two patterns measured inside PEQ are the two the whole corpus uses.
+
+### 2. ⛔ SHIPPING RAILS THE ONLY AUDIBLE UNIT
+
+| arm | unit1/DO2 non-zero | peak | frame |
+|---|---|---|---|
+| default `0x46A39B440F` | 1 064 113 / 2 581 792 = 41.2 % | −1 543 434 | 320/320, 0 trap |
+| **ship** (`sel0D=1, sel0E=7, supp`) | **2 553 952 = 98.9 %** | **−8 388 608 = −0x800000, THE RAIL** | 320/320, 0 trap |
+| ship without tempA suppression | identical to ship | identical | identical |
+
+Frames still close everywhere, so nothing is structurally broken — the reverb is simply railed.
+**A default that rails the only audible unit is strictly worse than the current one however well
+evidenced the reading, so this is NOT shipped.**
+
+★ Note bit 52 (suppress the blanket tempA capture) is **inert in normal operation** — ship and
+no-suppress arms are identical. It was indispensable to §133's *isolation* and does nothing here.
+
+### 3. The cause is ONE of the two readings, and THREE hypotheses are refuted
+
+* **`ACT 0x0D → acc` alone is bit-identical to the default.** Harmless corpus-wide. It is
+  shippable on its own.
+* **`ACT 0x0E → P` alone reproduces the railing exactly.** It is the entire cause.
+
+Refuted, each by measurement rather than argument:
+
+1. **The suppressed store-and-clear** (§131 §3's flagged tension, and my stated leading candidate):
+   clearing mask bit 16 changes **nothing**.
+2. **Multiply-carrying words** ("don't clobber P on a word that computes a product"): only
+   **3 of 427** `ACT 0x0E` words are class A.
+3. **The resident scaffolding** (5 of the 10 live `ACT 0x0E` sites are in the kernel and the
+   epilogue, and the epilogue is the output stage): restricting the write to body slots
+   (`iw >= 84`, mask bit 53) is **identical to the full ship arm**.
+
+### 4. ⇒ Localised to SIX WORDS, and the idiom is the same one
+
+The railing is unit 1's own three `ACT 0x0D`/`0x0E` pairs. Beside PEQ's:
+
+```
+  PEQ    w0/w1     000.2.0B.1CD + 000.2.00.40E    f31=0 on the 0x0D word
+  REVERB w5/w6     202.2.4B.1CD + 000.2.00.40E    f31=1
+         w119/w120 202.2.08.1CD + 090.2.FB.40E    f31=1, and bit-4 STORE
+         w130/w131 202.2.7B.1CD + 880.1.60.40E    f31=1, and a delay-DRAM WRITE
+```
+
+**The same adjacent-pair idiom, with the same `lo12` values `1CD` then `40E`.** The difference is
+`f31`: PEQ's `0x0D` word carries `f31 = 0` (`acc ← P`, which discards the accumulator anyway), the
+reverb's carry **`f31 = 1`** (`acc ← acc + P`) — i.e. the reverb is *accumulating* when the pair
+overwrites the accumulator, and it is a **feedback** structure, so the injection compounds instead
+of passing through. Its `ACT 0x0D` words read `mem[ptr]` at `+75 / +8 / +123`, inside the reverb's
+own state block, so the pair copies loop state back into the loop at unity gain.
+
+★ This also explains why `ACT 0x0D → acc` alone is neutral: the ACT switch runs **after** the
+`f31` accumulator op, so in the reverb `acc += P` happens first and the overwritten accumulator is
+discarded by the next word's own `acc ← P`. Only when `0x0E` then relays it into P does the value
+survive into the ladder.
+
+### 5. Where this leaves shipping
+
+* **`ACT 0x0D = acc ← bus` — shippable now**, measured neutral, corroborated 350/402.
+* **`ACT 0x0E = P ← bus` — confirmed inside the bank entry** (bit-exact 64/64; the only reading
+  yielding two channels) **but conflicts in a feedback structure.**
+
+The open question is no longer "what does `ACT 0x0E` do" but "why does doing it in a feedback
+ladder diverge". The standing suspect remains §132 §3: `m_p` is one member modelling what is
+probably **two** real registers — a multiplier input latch and a product register — and the reverb
+is where the difference between them would show. ⚠ Note §133's feed test does *not* let the scale
+float: it compares the state cell after `acc_to_datum`, so `<< ACC_SHIFT` is pinned, and a common
+scale error is **not** available as the explanation.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED** (three arms); §3 **MEASURED**, three refutations;
+§4 **MEASURED** (the six words) + **INFERRED** (the feedback mechanism); §5 **OPEN**.
