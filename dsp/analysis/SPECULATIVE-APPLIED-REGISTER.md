@@ -9088,3 +9088,79 @@ saying "the gate works"; only asking *what reads this* found the gap.
 
 Evidence grade: §1 **MEASURED**; §2 **MEASURED** (source, quoted); §3 **MEASURED** (the idiom, the
 38/14 census and the present-and-absence) + **SPECULATIVE** (the role); §4 **FORCED** by §2.
+
+---
+
+## §150 — ⛔ §141's MECHANISM IS REFUTED: `w73`'s MULTIPLY **DOES** ISSUE, AND THE ACCUMULATOR IS ZEROED ANYWAY
+
+§141 concluded that `w73` *"fetches a coefficient and then loads the accumulator from a product
+that is never formed, so `P = 0` and the LOAD is an erasure"*, and made that the third instance of
+one root cause (§39's *"what enables the MULTIPLY"*). **The trace says otherwise**, and it was in
+logs I already had.
+
+### 1. The measurement
+
+Frame trace, columns `n iw u word dp acc accb P cur coef MUL L`:
+
+```
+  DEFAULT arm
+   275  72  0 0000106087 00              0              0              0 90 4D9364  .  4194304
+   276  73  0 0E30C00404 00              0              0              0 90 4D9364  Y        0
+
+  §138-GUARD arm (accumulator preserved through iw65..72)
+   275  72  0 0000106087 00 -1291953864697 -1841681917543              0 90 4D9364  .  4194304
+   276  73  0 0E30C00404 00              0 -1841681917543  -666370572288 90 4D9364  Y -8388608
+```
+
+★★ At `iw73`, **`MUL = 'Y'`** — the multiply issues, in both arms. In the guarded arm the operand
+bus carries `L = −8 388 608` (the preserved accumulator, clamped by `acc_to_datum`) and
+**`P = −666 370 572 288`, a real product** — and **`acc` comes out `0` regardless.**
+
+⇒ **The erasure is not "no product". Something zeroes the accumulator at `w73` despite a valid
+product.** MEASURED.
+
+### 2. Why §141 got it wrong, and the general lesson
+
+§141 inferred the mechanism *by analogy* with §83's trace of `iw47`, where `MUL = '.'` was directly
+observed — and then reasoned from `coeff_fetch(w73) == true` to "so it should multiply, and doesn't".
+Both halves were checkable in one grep of a log I had already committed. I checked the **gate**
+(`upd6383.cpp:3157`, `coeff_fetch` selected by mask bit 2, which is set) and not the **outcome**.
+
+★ The pattern is the same one §149 closed with, one level down: I asked *"is this word allowed to
+multiply?"* when the answer needed was *"did it?"* — and the instrument that answers the second was
+already running.
+
+### 3. The new suspect, and it is already on record as contested
+
+`w73 = 0E30C00404`, `hi12 = 0xE30`: **bit 4 (STORE) is SET**. The store-and-clear writes `mem[p]`
+and then zeroes the accumulator — which is exactly the observed behaviour: a product forms, the
+store takes it, and the accumulator is left at 0 for the presentation that follows (deferred to
+after the arithmetic by §29 / mask bit 3, which is set).
+
+⚠ And this is the tension §131 §3 recorded and deliberately did **not** act on: mask bit 16
+*suppresses* the store-and-clear and is SET in the default, while `dsp-alu-biquad.md` §6 ablates
+the clear at **57.193 dB** and calls it required. The device's own comment gives the counter-
+argument in the same terms as this finding — *"the epilogue's FIRST word w60 carries HI_ST, so it
+stores AND CLEARS — destroying unit 0's result at the top of the very stage whose job is to present
+it."* **The same argument applies verbatim to `w73`.**
+
+So one of these must be wrong:
+* the store-and-clear reading (a store that annihilates the value the next word must present), or
+* the claim that `w73`'s `hi12` bit 4 means *store*, or
+* the presentation ordering.
+
+⚠ Note `w73` carries **bit 11 (ESC)**, so per §139 §2 `f31` is **not a valid field** in it — the
+`f31 = 0 ⇒ LOAD acc ← P` reading of this word rests on a field the escape has repurposed, and
+§141 §4 already flagged that as a second reason to distrust its handling. **Bit 4's meaning under
+the escape is equally unestablished.**
+
+### 4. What to measure next
+
+The discriminating observable is **whether the store fires at `iw73` and what it writes**: the §109
+per-slot store witness already reports `dpPre`, `dpPost`, the store address, the path taken and
+which guard admitted the word. Point it at slot 73 (`SPROBE` list) and read it — no new mechanism
+needed, and it distinguishes "the store-and-clear zeroed it" from "something else did".
+
+Evidence grade: §1 **MEASURED** (the trace, both arms); §2 a **RETRACTION** of §141's mechanism —
+its *localisation* to `w73` survives, its *explanation* does not; §3 **INFERRED** (the store-bit
+suspect) and the contradiction between the two readings **FORCED**; §4 a named, existing instrument.
