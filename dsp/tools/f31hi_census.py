@@ -454,6 +454,166 @@ def cmd_bit5(rows=None):
               % (k[0], k[0] | 0x20, k[1], k[2], k[3], (k[0] >> 1) & 7))
 
 
+# --------------------------------------------------------------------------
+#  alias -- THE question: does f31 carry independent information?
+# --------------------------------------------------------------------------
+def _H(c):
+    n = sum(c.values())
+    return -sum(v / n * math.log2(v / n) for v in c.values() if v)
+
+
+def cmd_alias(rows=None):
+    hdr("★ THE ALIASING TEST -- does f31 carry information the rest does not?")
+    import random
+    rows = rows or corpus()
+    P = [r for r in rows if plain(r[5])]
+    keys = [(DIS.hi12(r[5]) & ~0x00E, DIS.class4(r[5]), DIS.addr8(r[5]),
+             DIS.lo12(r[5])) for r in P]
+    F = [f31(r[5]) for r in P]
+
+    def hcond(labels):
+        ctx = collections.defaultdict(collections.Counter)
+        for k, f in zip(keys, labels):
+            ctx[k][f] += 1
+        n = len(labels)
+        return sum(sum(c.values()) / n * _H(c) for c in ctx.values())
+
+    obs = hcond(F)
+    null = []
+    for s in range(50):
+        sh = F[:]
+        random.Random(s).shuffle(sh)
+        null.append(hcond(sh))
+    mu = sum(null) / len(null)
+    sd = (sum((v - mu) ** 2 for v in null) / len(null)) ** 0.5
+    print("""  Condition f31 on the ENTIRE REST OF THE WORD -- all nine non-f31 hi12
+  bits, class4, addr8 and all twelve lo12 bits together.  This is the only
+  conditioner that can settle the aliasing question, because an alias means
+  `something else in the word already says it'.
+""")
+    print("  H(f31)                                  = %.4f bits" % _H(
+        collections.Counter(F)))
+    print("  H(f31 | ENTIRE rest of word)            = %.4f bits" % obs)
+    print("  the same, with f31 labels SHUFFLED      = %.4f +- %.4f  (z = %.1f)"
+          % (mu, sd, (obs - mu) / sd))
+    print("""
+  ⇒ the rest of the word predicts f31 far better than chance (z = %.0f), which
+    is what a horizontal microword with idiomatic word-shapes looks like --
+    but H(f31 | rest) is NOT zero.  An aliased or don't-care field would be
+    fully determined.  The residual is carried by the CONTEXTS BELOW.""" %
+          ((obs - mu) / sd))
+
+    byctx = collections.defaultdict(set)
+    for k, f in zip(keys, F):
+        byctx[k].add(f)
+    print("\n  ★ EXCHANGEABILITY -- in how many of each value's contexts does "
+          "another\n    f31 value appear on a BYTE-IDENTICAL word?")
+    print("  %-8s %10s %10s %8s" % ("f31", "contexts", "shared", "rate"))
+    print("  " + "-" * 44)
+    for f in range(8):
+        ks = [k for k, v in byctx.items() if f in v]
+        sh = [k for k in ks if len(byctx[k]) > 1]
+        if ks:
+            print("  %-8d %10d %10d %7.2f"
+                  % (f, len(ks), len(sh), len(sh) / len(ks)))
+    print("""
+  ★★ THE FALSIFIER FOR ALIASING.  If `f31 = 4' were `f31 = 0 plus a family
+  prefix carried elsewhere in the word', then no f31=4 word could be
+  byte-identical to an f31=0 word outside bits [3:1] -- the prefix would have
+  to differ too.  The `shared' column counts exactly those impossible words.""")
+
+
+def cmd_anchors(rows=None):
+    hdr("★★★ THE ANCHORED MINIMAL PAIRS -- f31 > 2 against a DECODED twin")
+    a2i = L.algo_to_image()
+    seen = {}
+    for a in sorted(a2i):
+        seen.setdefault(tuple(a2i[a][2]), a)
+    imgs = {a: list(ws) for ws, a in seen.items()}
+
+    def run(x, i, y, j):
+        A, B = imgs[x], imgs[y]
+        b = 0
+        while i - b - 1 >= 0 and j - b - 1 >= 0 and A[i - b - 1] == B[j - b - 1]:
+            b += 1
+        f = 0
+        while i + f + 1 < len(A) and j + f + 1 < len(B) \
+                and A[i + f + 1] == B[j + f + 1]:
+            f += 1
+        print("    a%-3d w%-3d  vs  a%-3d w%-3d : byte-identical run of %d words"
+              " (-%d .. +%d)" % (x, i, y, j, b + f + 1, b, f))
+        for k in range(-b, f + 1):
+            m = ("   <== f31 %d vs %d"
+                 % (f31(A[i + k]), f31(B[j + k]))) if k == 0 else ""
+            print("        %+3d  %s   %s%s"
+                  % (k, fmt(A[i + k]), fmt(B[j + k]), m))
+        return b + f + 1
+
+    def find(a, w):
+        return [i for i, v in enumerate(imgs[a]) if v == w]
+
+    print("""  Three contexts put an undecoded f31 on a word that is IDENTICAL, bit for
+  bit, to a word whose f31 IS decoded.  Nothing else in the corpus constrains
+  f31 = 4 and f31 = 5 this tightly.
+""")
+    print("  ★ A.  class A, addr8 0x06, lo12 0x1D5 -- and the run is NINE WORDS")
+    print("     f31=0  020.A.06.1D5  = `ld (p),c+,(p)+6'  acc <- P   [PEQ+CHORUS]")
+    print("     f31=4  028.A.06.1D5  = ???                           [PEQ+FLANGER,"
+          " PEQ+VIBRATO]")
+    run(71, find(71, 0x0020A061D5)[0], 73, find(73, 0x0028A061D5)[0])
+    run(71, find(71, 0x0020A061D5)[0], 74, find(74, 0x0028A061D5)[0])
+
+    print("\n  ★ B.  class A, addr8 0x00, lo12 0x200 -- ★ THE PAIR THAT PROVED "
+          "f31 IS A FIELD")
+    print("     f31=1  092.A.00.200  acc <- acc + P        [24 images -- the LFO]")
+    print("     f31=2  094.A.00.200  acc unchanged         [28 images -- the LFO]")
+    print("     f31=5  09A.A.00.200  ???                   [COMPRESSOR, "
+          "PEQ+COMPR x3, ★ KERNEL w30]")
+    for a in (36, 75, 96, 97):
+        print("        a%-3d 09A at %s" % (a, find(a, 0x009AA00200)))
+
+    print("\n  ★ C.  class A, addr8 0x00, lo12 0x1D5")
+    print("     f31=0  010.A.00.1D5  acc <- P              [CHORUS w42, "
+          "SD+CHORUS w53]")
+    print("     f31=1  012.A.00.1D5  acc <- acc + P        [GATED REVERB w85]")
+    print("     f31=4  018.A.00.1D5  ???                   [the 2/pi level-"
+          "detector idiom, 12 sites]")
+    print("""
+        the idiom (sect.139 sect.3), byte-identical at all 12 sites:
+            02E|026.2.xx.xxx   f31 = 7 or 3
+         ** 018.A.00.1D5       f31 = 4, ST   x C-RAM = 0x517CC1 = 2/pi
+            104.A.00.1D5       f31 = 2       x C-RAM = 0x400000 = 0.5
+            C40.2.C0.000       C-format immediate
+            182.A.00.000       f31 = 1       one-pole smoother
+        `018' and `104' share class4/addr8/lo12 -- the SAME operand routing --
+        so the multiplication by 2/pi and the multiplication by 0.5 differ
+        only in hi12.""")
+
+
+def cmd_s2(rows=None):
+    hdr("sect.140 S2 re-verified on the IC311 population -- linear vs not")
+    a2i = L.algo_to_image()
+    seen = {}
+    for a in sorted(a2i):
+        seen.setdefault(tuple(a2i[a][2]), a)
+    z3, z4 = [], []
+    for ws, a in sorted(seen.items(), key=lambda kv: kv[1]):
+        fs = [f31(w) for w in ws if plain(w)]
+        if not any(f >= 3 for f in fs):
+            z3.append(a)
+        if not any(f >= 4 for f in fs):
+            z4.append(a)
+    print("  images with ZERO f31 >= 3 (%d of 38): %s"
+          % (len(z3), [_name(a) for a in z3]))
+    print("\n  images with ZERO f31 >= 4 (%d of 38): %s"
+          % (len(z4), [_name(a) for a in z4]))
+    print("""
+  Every one of the 14 is a purely LINEAR program.  The converse FAILS:
+  PHASER and PARAMETRIC EQ are linear and do carry f31 >= 3.  So S2's split is
+  a NECESSARY condition on the nonlinear side, not a biconditional -- MEASURED
+  as an inclusion, SPECULATIVE as a cause.""")
+
+
 def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
     rows = corpus()
@@ -463,10 +623,16 @@ def main():
         cmd_census(rows)
     if cmd in ("all", "mi"):
         cmd_mi(rows)
+    if cmd in ("all", "alias"):
+        cmd_alias(rows)
     if cmd in ("all", "pairs"):
         cmd_pairs(rows)
+    if cmd in ("all", "anchors"):
+        cmd_anchors(rows)
     if cmd in ("all", "bit5"):
         cmd_bit5(rows)
+    if cmd in ("all", "s2"):
+        cmd_s2(rows)
 
 
 if __name__ == "__main__":
