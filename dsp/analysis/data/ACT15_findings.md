@@ -43,6 +43,8 @@ task was raised, and the experiment that would overturn the ranking.
 Read before any statistic was computed: `LEDGER.md` (all four tiers), §169,
 `action-field.md`, `adjudication-round7.md`/`round8.md`, `lfo-ramp.md` §10–§11,
 `capture-signature.md`, and `upd6383d.h` / `upd6383.cpp` at every `0x15` site.
+**§171 landed from a parallel worker while this pass was running** and is
+re-verified and used in §5.3.
 
 `ACT 0x15` **is already written down twice**, and neither entry is a decode:
 
@@ -335,6 +337,41 @@ w28 and w31 is a fetch word, so `m_p` at the class-6 site *is* w28's product.
 of its main clause. **Standing rule 3, eleventh occurrence** — and this time the
 note that had the answer is the one being cited.
 
+### 5.3 ★ Cross-check against §171, and it decides §171's open question
+
+§171 (parallel worker, landed mid-pass) generalises §169's one word into a
+**46-site family**: a class-A `ACT 0x15` word sits at offset **−3** from the
+class-6 lookup, 46 times, against a null of 8.4. Re-verified here independently
+(`act15_census.py` corpus, class-6 sites with the C-format kernel word excluded):
+
+```
+   offset from the class-6 word :  -5:13   -4:0   -3:46   -2:0   -1:0   0:0
+   at offset -3:  000.A.00.415 x17 (SRC 0x10 acc)   +  29 SRC-0x07 forms
+                  -- 16 distinct forms, TOTAL 46, by SRC: 07:29  10:17
+   class-A ACT-0x15 base rate 0.1579 -> null over 53 sites = 8.4
+```
+
+Exact reproduction, including CHORUS's `202.A.07.1D5` appearing once. §171's
+**§2 stands**: `ACT 0x15` at the index slot is a 46-site, 25-image family with
+*two already-decoded sources*, not a one-word special case.
+
+⛔ **But §171 §4 does not.** Its rival account of §168 is:
+
+> *"There is no addressing defect. The cell `C63` reads is frozen because the
+> dead `ACT 0x15` multiply never produces the value that would be written into
+> it. One cause, not two."*
+
+**Its premise is false.** §5 shows the multiply at those 46 words is not dead —
+`coeff_consumer()` fires on every one of them and the ACTION field is not in the
+gate. So "the dead `ACT 0x15` multiply" names something that does not exist, and
+the one-cause account collapses at its first clause.
+
+⇒ **§168's addressing diagnosis is NOT displaced**, and §171 §4's "do not carry
+§168 forward as settled" should be narrowed to: the *rival* is withdrawn, and the
+one experiment that separates them (E2) is now a measurement of operands, not of
+a gate.
+
+
 ---
 
 ## 6. Minimal pairs, in full — MEASURED
@@ -528,8 +565,9 @@ the control.
 *Purpose: this is the experiment that decides what the LFO work does next, and it
 needs no code change at all — only instrumentation.*
 
-Arm nothing. Instrument, at CHORUS's `202.A.07.1D5` (**w28**, not the class-6
-word): the execution count, `m_mul_issued`, the two multiply operands (`coef` and
+Arm nothing. Instrument, at the **offset −3 word of §171's 46-site family** —
+in CHORUS that is `202.A.07.1D5` (**w28**), *not* the class-6 word: the
+execution count, `m_mul_issued`, the two multiply operands (`coef` and
 `L`), and `m_p` **immediately after** the word. Cold boot, notes playing (rule
 12 — a DSP test with no notes is not a test), traces armed by frame count.
 
