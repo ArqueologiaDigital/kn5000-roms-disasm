@@ -59,6 +59,19 @@ APMARK = 0x104200000                    # a16's all-pass marker word
 BANDMARK = (0x102, 2, 0xFF, 0x687)      # a39's biquad band marker
 CRIT = ["C1", "C2", "C3", "C4", "P1", "P2", "P3"]
 
+# ---------------------------------------------------------------------------
+#  N -- NON-DEGENERACY.  Not pre-registered: added after the first run, which
+#  showed C1-C4 can all be satisfied VACUOUSLY by a rule under which the
+#  pointer never moves in those images (0 == 0).  "A criterion that cannot fail
+#  is not a test" (LEDGER rule 8), so the score-7 bucket had to be re-audited.
+#
+#  Grounding: an n-section all-pass chain needs n DISTINCT one-sample state
+#  cells; a03/a05/a68 have 8/20/10 sections (the P1 population, 38 total).  A
+#  rule that gives the phaser fewer distinct pointer values than it has
+#  sections cannot be describing the machine.
+# ---------------------------------------------------------------------------
+NDEG = {"a03 ENHANCER": 8, "a05 PHASER": 20, "a68 S.DELAY+PHASER": 10}
+
 
 def reads(ws):
     return [i for i, w in enumerate(ws)
@@ -169,6 +182,8 @@ class Scorer:
         prog = "a16 ROOM REVERB 1"
         ws = self.progs[prog]
         self.p3 = [(self.idx[prog][m], self.idx[prog][m + 5]) for m in ap_marks(ws)]
+        self.ndeg = [([self.idx[p][i] for i in range(len(self.progs[p]))], n)
+                     for p, n in sorted(NDEG.items())]
 
     # ----------------------------------------------------------------
     def columns(self, gate_fn, signed=True):
@@ -221,7 +236,14 @@ class Scorer:
         res["P2"] = ok2
         n3 = sum(1 for a, b in self.p3 if P[b] - P[a] == 0)
         res["P3"] = (n3 >= 8)
-        return res, (n1, p1s, n3)
+        nd = True
+        cells = []
+        for colset, need in self.ndeg:
+            d = len({P[c] for c in colset})
+            cells.append(d)
+            if d < need:
+                nd = False
+        return res, (n1, p1s, n3, nd, cells)
 
 
 def name_subset(mask):
@@ -250,7 +272,7 @@ def sect1_control(sc):
     print("=" * 78)
     cols = sc.columns(lambda f: True, signed=True)
     P = combine(cols, [c for c in (2, 0xA) if c in cols]) or [0] * sc.ncol
-    res, (n1, p1s, n3) = sc.evaluate(P)
+    res, (n1, p1s, n3, nd, cells) = sc.evaluate(P)
     print()
     for tag, prog in (("C1", "a05 PHASER"), ("C2", "a68 S.DELAY+PHASER"),
                       ("C3", "a03 ENHANCER")):
@@ -271,6 +293,8 @@ def sect1_control(sc):
     print("  P2  a39 bands advancing exactly +4    : %s  (%d gaps)"
           % (res["P2"], len(sc.p2)))
     print("  P3  a16 diffusers stationary          : %d of %d" % (n3, len(sc.p3)))
+    print("  N   distinct pointer cells a03/a05/a68: %s  (need >= 8/20/10)  -> %s"
+          % (cells, nd))
     score = sum(1 for c in CRIT if res[c])
     print("\n  CONTROL SCORE %d/7   (%s)"
           % (score, " ".join("%s=%s" % (c, "Y" if res[c] else "n") for c in CRIT)))
@@ -304,8 +328,14 @@ def enumerate_tiers(sc, gates, quick=False):
     print("3. EXHAUSTIVE ENUMERATION, AND THE NULL")
     print("=" * 78)
     tally = {1: [0] * 8, 2: [0] * 8}
+    tallyN = {1: [0] * 8, 2: [0] * 8}
+    ndtot = {1: 0, 2: 0}
     percrit = {1: dict.fromkeys(CRIT, 0), 2: dict.fromkeys(CRIT, 0)}
+    percritN = {1: dict.fromkeys(CRIT, 0), 2: dict.fromkeys(CRIT, 0)}
+    combos = {}                      # which subsets of C1..C4 are jointly reachable
+    ppp = {1: [0, 0], 2: [0, 0]}     # [rules with P1&P2&P3 & N, of which also C4]
     survivors = []
+    best_nd = []
     glist = gates[:1] if quick else gates
     for gi, (gname, gfn) in enumerate(glist):
         for signed in (True, False):
@@ -319,26 +349,44 @@ def enumerate_tiers(sc, gates, quick=False):
                 P = combine(cols, chosen)
                 if P is None:
                     P = [0] * sc.ncol
-                res, (n1, p1s, n3) = sc.evaluate(P)
+                res, extra = sc.evaluate(P)
+                nd = extra[3]
                 sk = sum(1 for c in CRIT if res[c])
+                mask = 0
+                for c in chosen:
+                    mask |= 1 << c
                 for tier in ((1, 2) if gname == "ALL" else (2,)):
                     tally[tier][sk] += mult
                     for c in CRIT:
                         if res[c]:
                             percrit[tier][c] += mult
+                    if nd:
+                        ndtot[tier] += mult
+                        if res["P1"] and res["P2"] and res["P3"]:
+                            ppp[tier][0] += mult
+                            if res["C4"]:
+                                ppp[tier][1] += mult
+                        tallyN[tier][sk] += mult
+                        for c in CRIT:
+                            if res[c]:
+                                percritN[tier][c] += mult
+                if nd:
+                    key = tuple(c for c in ("C1", "C2", "C3", "C4") if res[c])
+                    rec = (sk, gname, "signed" if signed else "unsigned", mask,
+                           free, dict(res), extra)
+                    if key not in combos or sk > combos[key][0]:
+                        combos[key] = rec
+                    if sk >= 4:
+                        best_nd.append(rec)
                 if sk >= 6:
-                    mask = 0
-                    for c in chosen:
-                        mask |= 1 << c
                     survivors.append((sk, gname, "signed" if signed else "unsigned",
-                                      mask, free,
-                                      dict(res), (n1, p1s, n3)))
+                                      mask, free, dict(res), extra))
         if not quick and (gi + 1) % 40 == 0:
             print("    ... %d/%d gates" % (gi + 1, len(glist)))
-    return tally, percrit, survivors
+    return (tally, tallyN, ndtot, percrit, percritN, survivors, best_nd, combos, ppp)
 
 
-def sect3_report(tally, percrit, ngates):
+def sect3_report(tally, tallyN, ndtot, percrit, percritN, ngates):
     tot1 = 2 * 65536
     tot2 = 2 * 65536 * ngates
     print()
@@ -352,19 +400,55 @@ def sect3_report(tally, percrit, ngates):
         print("      %d   | %10d  %8.4f%%  | %13d  %9.5f%%"
               % (k, a, 100.0 * a / tot1, b, 100.0 * b / max(tot2, 1)))
     print()
+    print("  ★ THE SAME DISTRIBUTION, RESTRICTED TO **NON-DEGENERATE** RULES (N)")
+    print("    N = the phaser images get at least as many distinct pointer cells as")
+    print("    they have all-pass sections (8/20/10).  Without N, C1-C4 are all")
+    print("    satisfiable VACUOUSLY by freezing the pointer -- 0 == 0.")
+    print()
+    print("    non-degenerate rules: tier1 %d of %d (%.4f%%),  tier1+2 %d of %d (%.4f%%)"
+          % (ndtot[1], tot1, 100.0 * ndtot[1] / tot1,
+             ndtot[2], tot2, 100.0 * ndtot[2] / max(tot2, 1)))
+    print()
+    print("    score |  TIER 1 & N              |  TIER 1+2 & N")
+    print("    ------+-------------------------+---------------------------------")
+    for k in range(8):
+        a, b = tallyN[1][k], tallyN[2][k]
+        print("      %d   | %10d  %8.4f%%  | %13d  %9.5f%%"
+              % (k, a, 100.0 * a / max(ndtot[1], 1), b,
+                 100.0 * b / max(ndtot[2], 1)))
+    print()
     print("  PER-CRITERION HIT RATE  -- this IS the per-criterion null")
     print()
     for c in CRIT:
-        print("    %-3s   tier1 %10d /%8d = %7.3f%%     tier1+2 %12d /%9d = %8.4f%%"
-              % (c, percrit[1][c], tot1, 100.0 * percrit[1][c] / tot1,
-                 percrit[2][c], tot2, 100.0 * percrit[2][c] / max(tot2, 1)))
+        print("    %-3s  all: t1 %8d = %7.3f%%  t1+2 %10d = %7.4f%%   |  "
+              "N-only: t1 %7d = %7.3f%%  t1+2 %9d = %7.4f%%"
+              % (c, percrit[1][c], 100.0 * percrit[1][c] / tot1,
+                 percrit[2][c], 100.0 * percrit[2][c] / max(tot2, 1),
+                 percritN[1][c], 100.0 * percritN[1][c] / max(ndtot[1], 1),
+                 percritN[2][c], 100.0 * percritN[2][c] / max(ndtot[2], 1)))
+
+
+def sect3c_combos(combos):
+    print()
+    print("  ★ WHICH SUBSETS OF {C1,C2,C3,C4} ARE JOINTLY REACHABLE AT ALL,")
+    print("    over the whole space, by a NON-DEGENERATE rule:")
+    print()
+    for key in sorted(combos, key=lambda k: (-len(k), k)):
+        sk, gname, sign, mask, free, res, extra = combos[key]
+        print("    %-16s  best example: classes %-16s gate %-14s %s  "
+              "(score %d/7, P1 %d, P2 %s, P3 %d)"
+              % ("{" + ",".join(key) + "}" if key else "{}",
+                 name_subset(mask), gname, sign, sk, extra[0], res["P2"], extra[2]))
+    got = {len(k) for k in combos}
+    print("\n    largest jointly-reachable subset of C1..C4 under N: %d of 4"
+          % (max(got) if got else 0))
 
 
 def per_image_arithmetic(sc, mask, gfn, signed):
     cols = sc.columns(gfn, signed=signed)
     chosen = [c for c in range(16) if (mask >> c) & 1 and c in cols]
     P = combine(cols, chosen) or [0] * sc.ncol
-    res, (n1, p1s, n3) = sc.evaluate(P)
+    res, (n1, p1s, n3, nd, cells) = sc.evaluate(P)
     out = []
     for tag, prog in (("C1", "a05 PHASER"), ("C2", "a68 S.DELAY+PHASER"),
                       ("C3", "a03 ENHANCER")):
@@ -375,27 +459,37 @@ def per_image_arithmetic(sc, mask, gfn, signed):
     a, b = P[sc.c4[0]], P[sc.c4[1]]
     out.append("      C4 %-20s consumer %+d  producer %+d   %s"
                % ("a01 CHORUS", a, b, "OK" if a == b else "MISS %+d" % (a - b)))
-    out.append("      P1 %d/%d   P1s(one cell) %s   P2 %s   P3 %d/%d"
-               % (n1, len(sc.p1), p1s, res["P2"], n3, len(sc.p3)))
+    out.append("      P1 %d/%d   P1s(one cell) %s   P2 %s   P3 %d/%d   "
+               "N cells %s -> %s"
+               % (n1, len(sc.p1), p1s, res["P2"], n3, len(sc.p3), cells,
+                  "NON-DEGENERATE" if nd else "*** DEGENERATE ***"))
     return "\n".join(out)
 
 
-def sect4_detail(sc, survivors, gmap, limit=30):
+def sect4_detail(sc, survivors, gmap, title, limit=14):
     print()
     print("=" * 78)
-    print("4. THE SURVIVORS (score >= 6) AND THEIR PER-IMAGE ARITHMETIC")
+    print("4. %s" % title)
     print("=" * 78)
     if not survivors:
-        print("\n  NONE.  No rule anywhere in the space scores 6 or 7.")
+        print("\n  NONE.")
         return
     survivors = sorted(survivors, key=lambda r: (-r[0], r[1]))
-    for n, (sk, gname, sign, mask, free, res, extra) in enumerate(survivors[:limit]):
+    seen = set()
+    shown = 0
+    for sk, gname, sign, mask, free, res, extra in survivors:
+        key = (sk, gname, sign, mask)
+        if key in seen:
+            continue
+        seen.add(key)
+        shown += 1
+        if shown > limit:
+            print("\n  ... %d more" % (len(survivors) - limit))
+            break
         print("\n  [%d] score %d/7   classes %s (+%d inert classes free)  gate %s  %s"
-              % (n, sk, name_subset(mask), free, gname, sign))
+              % (shown - 1, sk, name_subset(mask), free, gname, sign))
         print("      " + " ".join("%s=%s" % (c, "Y" if res[c] else "n") for c in CRIT))
         print(per_image_arithmetic(sc, mask, gmap[gname], sign == "signed"))
-    if len(survivors) > limit:
-        print("\n  ... %d more survivors" % (len(survivors) - limit))
 
 
 def tier3(sc, gates):
@@ -414,7 +508,10 @@ def tier3(sc, gates):
                 c = sc.columns(gfn, signed=True)
                 colcache[(cls, gi)] = c.get(cls, [0] * sc.ncol)
     tally = [0] * 8
+    tallyN = [0] * 8
+    ndn = 0
     hits = []
+    hitsN = []
     for i2 in range(n):
         A = colcache[(2, i2)]
         for iA in range(n):
@@ -423,18 +520,78 @@ def tier3(sc, gates):
             res, extra = sc.evaluate(P)
             sk = sum(1 for c in CRIT if res[c])
             tally[sk] += 1
+            if extra[3]:
+                ndn += 1
+                tallyN[sk] += 1
+                if sk >= 5:
+                    hitsN.append((sk, G[i2][0], G[iA][0], dict(res), extra))
             if sk >= 6:
                 hits.append((sk, G[i2][0], G[iA][0], dict(res), extra))
     print()
-    print("    score |    count  |  fraction of %d" % (n * n))
+    print("    score |   count  | fraction |  count & N | fraction & N   (N = %d of %d)"
+          % (ndn, n * n))
     for k in range(8):
-        print("      %d   | %8d  | %8.5f%%" % (k, tally[k], 100.0 * tally[k] / (n * n)))
-    print("\n  rules scoring >= 6 : %d" % len(hits))
-    for sk, g2, gA, res, extra in sorted(hits, key=lambda r: -r[0])[:30]:
-        print("    score %d/7  cls2 gate %-14s  clsA gate %-14s  %s  P1=%d P1s=%s P3=%d"
+        print("      %d   | %8d | %7.4f%% | %8d   | %7.4f%%"
+              % (k, tally[k], 100.0 * tally[k] / (n * n), tallyN[k],
+                 100.0 * tallyN[k] / max(ndn, 1)))
+    print("\n  rules scoring >= 6 (ANY):            %d" % len(hits))
+    print("  rules scoring >= 5 AND NON-DEGENERATE: %d" % len(hitsN))
+    print("\n  -- the >= 6, degeneracy shown --")
+    for sk, g2, gA, res, extra in sorted(hits, key=lambda r: -r[0])[:12]:
+        print("    score %d/7  cls2 %-13s clsA %-13s %s  cells %s %s"
               % (sk, g2, gA,
                  " ".join("%s=%s" % (c, "Y" if res[c] else "n") for c in CRIT),
-                 extra[0], extra[1], extra[2]))
+                 extra[4], "OK" if extra[3] else "*** DEGENERATE ***"))
+    print("\n  -- the NON-DEGENERATE leaders --")
+    for sk, g2, gA, res, extra in sorted(hitsN, key=lambda r: -r[0])[:20]:
+        print("    score %d/7  cls2 %-13s clsA %-13s %s  cells %s"
+              % (sk, g2, gA,
+                 " ".join("%s=%s" % (c, "Y" if res[c] else "n") for c in CRIT),
+                 extra[4]))
+    return tally, hits
+
+
+def tier4(sc, gates):
+    """mode-2 classes {2,A} with a CONJUNCTION of two gates."""
+    print()
+    print("=" * 78)
+    print("3c. TIER 4 -- classes {2,A} with a CONJUNCTION of two gates")
+    print("=" * 78)
+    n = len(gates)
+    tally = [0] * 8
+    tallyN = [0] * 8
+    ndn = 0
+    hits = []
+    tot = 0
+    for i in range(n):
+        gi = gates[i][1]
+        for j in range(i, n):
+            gj = gates[j][1]
+            fn = (lambda a, b: lambda f: a(f) and b(f))(gi, gj)
+            cols = sc.columns(fn, signed=True)
+            P = combine(cols, [c for c in (2, 0xA) if c in cols]) or [0] * sc.ncol
+            res, extra = sc.evaluate(P)
+            sk = sum(1 for c in CRIT if res[c])
+            tot += 1
+            tally[sk] += 1
+            if extra[3]:
+                ndn += 1
+                tallyN[sk] += 1
+                if sk >= 5:
+                    hits.append((sk, gates[i][0], gates[j][0], dict(res), extra))
+    print()
+    print("    %d conjunctions;  %d of them non-degenerate" % (tot, ndn))
+    print("    score |   count  | fraction |  count & N | fraction & N")
+    for k in range(8):
+        print("      %d   | %8d | %7.4f%% | %8d   | %7.4f%%"
+              % (k, tally[k], 100.0 * tally[k] / max(tot, 1), tallyN[k],
+                 100.0 * tallyN[k] / max(ndn, 1)))
+    print("\n  non-degenerate rules scoring >= 5 : %d" % len(hits))
+    for sk, ga, gb, res, extra in sorted(hits, key=lambda r: -r[0])[:20]:
+        print("    score %d/7  %-14s AND %-14s  %s  cells %s"
+              % (sk, ga, gb,
+                 " ".join("%s=%s" % (c, "Y" if res[c] else "n") for c in CRIT),
+                 extra[4]))
     return tally, hits
 
 
@@ -469,11 +626,26 @@ def main():
         return 1
     ng = sect2_space(gates)
 
-    tally, percrit, survivors = enumerate_tiers(sc, gates, quick=quick)
-    sect3_report(tally, percrit, 1 if quick else ng)
-    sect4_detail(sc, survivors, gmap)
+    (tally, tallyN, ndtot, percrit, percritN,
+     survivors, best_nd, combos, ppp) = enumerate_tiers(sc, gates, quick=quick)
+    sect3_report(tally, tallyN, ndtot, percrit, percritN, 1 if quick else ng)
+    print()
+    print("  ★ THE NULL THAT MATTERS FOR THE WINNER.  The control already has")
+    print("    P1 & P2 & P3; the only thing a candidate adds is C4.  So the right")
+    print("    null is: among NON-DEGENERATE rules that keep P1 & P2 & P3, how many")
+    print("    also satisfy C4?")
+    for t in (1, 2):
+        a, b = ppp[t][0], ppp[t][1]
+        print("      tier %d:  %d keep P1&P2&P3 & N;  %d of them also satisfy C4  = %.4f%%"
+              % (t, a, b, 100.0 * b / max(a, 1)))
+    sect3c_combos(combos)
+    sect4_detail(sc, survivors, gmap,
+                 "THE SURVIVORS (score >= 6, degeneracy shown)")
+    sect4_detail(sc, best_nd, gmap,
+                 "THE NON-DEGENERATE LEADERS (score >= 4 AND N)", limit=40)
 
     t3tally, t3hits = tier3(sc, gates)
+    tier4(sc, gates)
 
     used = [("ALL", gmap["ALL"])]
     for rec in survivors[:10]:
