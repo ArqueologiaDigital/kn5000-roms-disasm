@@ -16,53 +16,52 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Model the bit-11 alternate `lo12` encoding on an ALU route.**
+**Decode `C63`** — *"the highest-value undecoded form on the chip"* (`analysis/bit11-family.md` §6):
+53 sites in 25 of 38 images, *"the single most common thing this chip does that we cannot read."*
 
-⚠ **FIRST: task "Decode the bit-11 alternate lo12 encoding" is marked COMPLETED in this session's
-task list, and the device says the opposite.** Check what it actually delivered before redoing it —
-thirteenth application of rule 3, and the first where the stale record is a task list, not a note.
+★ **READ `analysis/bit11-family.md` FIRST — all 447 lines.** It owns this family, and §182 lost a
+tick to not having read it.
 
-### The device does not route these words to the ALU at all
+### ⛔ What is NOT the task, and why
 
-```cpp
-  upd6383d.h:609   if (lo12(w) & 0x800) return true;    // the alternate lo12 encoding:
-                                                        // addressing only, no ALU effect
-  upd6383d.h:628   if (lo12(w) & 0x800) return false;   // ... simply not modelled on an
-                                                        // ALU route yet.
+The previous entry here — *"model the bit-11 alternate `lo12` encoding on an ALU route"* — is
+**misconceived**. §9 of that note establishes on two independent measurements that **bit 11 selects
+a SECOND ENCODING: on those words there is no `SRC` field and no `ACTION` field**.
+
+* §9.1 bits 11 and 5 co-vary **80 of 80** in the bodies (**90 of 90** including the header, §182).
+* §9.2 the ALU reading needs **four field values attested nowhere else in the corpus**.
+* `k3-pointers.md` item A proves *by construction* that the firmware assembles bit 11 as a
+  **separate flag**.
+
+⇒ `alu_decoded()` refusing every bit-11 word is **CORRECT, not a gap.**
+
+### ⛔ Five codes that DO NOT EXIST (§9.3) — do not build on any of them
+
+```
+   ACT 0x03    ACT 0x04    ACT 0x1C    SRC 0x02    SRC 0x04
 ```
 
-### Why it is load-bearing rather than long-tail
+They are what you get by applying the bit-11-clear encoding to bit-11 words. **`ACT 0x03` is the
+code §166 §3 used to claim `C63` does `m_tb = L`** — refuted twice over, and the note said so on
+2026-07-27, four days before §166 wrote it.
 
-```
-  90 of 2989 corpus words = 3.0 %, in 9 forms
-     0xC63 x53 (25 programs)  <- HALF THE TABLE-LOOKUP IDIOM (§166, 53/53 bijection)
-     0x8BC x24 (24 programs)
-     0x821 x3, 0x825 x3, 0x827 x2  <- THE POINTER-FAMILY LOADS that set the operand origin
-     0x839 x2, 0x822 x1, 0x864 x1, 0x921 x1
-```
+⚠ **One genuine exception, found by §182 and invisible to the note's population**:
+`epilogue w63 = 2A7.9.05.1C3`, `SRC 0x07` `ACT 0x03`, bit 11 **clear** — and it is in the
+**OUTPUT STAGE**, the one place this chip's signal must emerge and does not.
 
-Three percent of the corpus, sitting on the two structures the last twenty sections have been
-blocked by.
+### The concrete lead — §6 item 2
 
-### What it already cost — §181
+**`8BC` co-occurs with `C63` in 23 of 24 of its images and is EXACTLY ONE per image**, against
+`C63`'s **exactly two in 20 of its 25**. *"A once-per-program word alongside a twice-per-program one
+is the shape of setup + per-channel use. That pairing is testable against the pointer state, which
+is decoded."*
 
-`C63`'s `lo12` is `0xC63`, bit 11 set, so **it performs addressing only and never writes `m_tb`.**
-⇒ §168 (bit 18 alone), §181 arm D (bit 18 + 62), and the whole `SRC 0x11` line were testing **the
-source of a write that never happens**. `m_tb`'s `chg = 1` was never evidence about `SRC 0x11`.
-
-⇒ **§166 §3 REFUTED** — it applied the *standard* `lo12` split to a word in the *alternate*
-encoding. ★ §166 graded it correctly at the time (shape INFERRED, index register SPECULATIVE) and
-it is the SPECULATIVE half that fell; its 53/53 bijection is a measurement and stands.
-
-### Still open, unchanged
-
-* **PTRD-A (bit 62, off)** takes CHORUS's index multiply from `L 0..0 nz 0` to live on 1 128 428 of
-  1 129 389 firings. Independent of `C63`. Unshipped for §180's three reasons.
-* **C1/C2/C3** are satisfied by **zero** of 6 088 704 non-degenerate delta rules, and C3 is
-  *provably* unreachable (`gcd(77,80) = 1`). The search's conclusion is to drop the C1–C3
-  producer/consumer premise (`-axes.md` §2.4, INFERRED), not the arithmetic and not the origin.
+⚠ And item E is a standing correction: `C63` count == LFO count in only 11 of 16 images, never
+fewer — *"the shape of a per-channel constant, not a per-LFO one. `C63` is not the LFO's table
+read."* §166 §2's 53/53 bijection with class 6 is a measurement and stands; the **name** does not.
 
 ### ⛔ Dead, do not retry
+
 
 
 
