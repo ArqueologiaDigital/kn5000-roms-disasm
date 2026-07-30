@@ -7264,3 +7264,74 @@ known-arithmetic program is a far better decoding vehicle than a reverb with 27.
 Evidence grade: **MEASURED** (all counts, from the ROM); **INFERRED** that `SRC 0x00` marks the
 absence of a bus operand — uniform ACT 0x00 across 1270 words and a MAC-shaped f31 split, but not
 yet tested.
+
+---
+
+## §123 — ⛔ §122's `SRC 0x00` READING WAS ALREADY FALSIFIED, THE DEVICE COMMENT IS STALE, AND PARAMETRIC EQ IS **8 WORDS** FROM BEING THE FIRST FULLY EXECUTABLE EFFECT
+
+### 1. The hypothesis was dead before I proposed it
+
+§122 argued `SRC 0x00` marks the ABSENCE of a bus operand, from the encoding: all 1270 corpus
+instances carry `ACT 0x00`, with a MAC-shaped f31 split. `action00-discriminator.md` §5.1 makes
+**exactly that argument**, in the same terms, and then kills it:
+
+> *"`SRC 0x07` appears with nine different ACTIONs. `SRC 0x00` appears with essentially one. That
+> is what a **null routing** encoding looks like … **It is a good hypothesis and SINGLE DELAY
+> kills it: `zero` has 0 survivors**, in both windows and at both mix settings. `SRC 0x00`
+> carries data."*
+
+Item I adds that `DR` (the delay-RAM register) also has **0 survivors**. Item H states the
+surviving reading's limit precisely: **`SRC 0x00 = mem[ptr]` is not forced absolutely — it is
+forced GIVEN THE LOADED COEFFICIENTS.**
+
+★ **Sixth time this session the answer was already in a note.** And this one is the sharpest: I
+did not merely miss a result, I independently reconstructed a hypothesis the note names as
+attractive and had already refuted by constraint solve.
+
+### 2. The device comment is STALE, and that is what misled §122
+
+The `SRC 0x00` site inherits the neighbouring *"1 of 6 enumerated, no independent support"*
+phrasing. That was true when written and is not true now: `action00-discriminator.md` supplies
+the support by falsifying both rivals at 0 survivors. Corrected at the site, with item H's
+conditional stated so nobody over-promotes it either.
+
+### 3. ★ THE CORRECTED PICTURE — and §122's ranking was wrong
+
+With `SRC 0x00` counted as decided:
+
+```
+  COMMON CODE:  23 of 83 words blocked = 28%   (§122 said 40%)
+
+  blocker    words   programs        CLOSEST PROGRAMS
+  ACT 0E      422      91             8/68    algo 10
+  ACT 0D      356      91             8/105   algo 39  PARAMETRIC EQ
+  ACT 0B      341      76            11/48    algo  9  SINGLE DELAY
+  f31=7       139      49            11/54    algo 72  PEQ+S.DELAY
+  f31=5        96      61            13/86    algo 15  ROCK ROTARY
+  f31=4        87      62
+  f31=6        84      42
+```
+
+The `f31 > 2` family totals **406 words across 62 programs** — one field, four codes, and it is
+the standing task list's item #2.
+
+### 4. ★★★ AND PARAMETRIC EQ IS EIGHT WORDS AWAY
+
+PEQ's remaining blockers are **exactly four unknowns, each appearing twice**, in two
+near-identical motifs — the two stages of the biquad:
+
+```
+  iw84  000.2.0B.1CD  ACT 0D        iw137 000.2.0A.1CD  ACT 0D
+  iw85  000.2.00.40E  ACT 0E        iw138 000.2.FF.1CE  ACT 0E
+  iw86  212.2.00.000  (now decoded) iw139 212.2.02.000  (now decoded)
+  iw87  02A.2.00.000  f31=5         iw140 02A.2.00.000  f31=5
+  iw134 028.2.00.000  f31=4         iw188 428.1.0E.000  f31=4
+```
+
+**Decode `ACT 0x0D`, `ACT 0x0E`, `f31=4` and `f31=5` and PARAMETRIC EQ becomes the first fully
+executable effect on this chip** — and those same four unknowns are the top of the corpus-wide
+ranking, so nothing about the target is parochial. The biquad's difference equation constrains
+what each must compute, which is the context §107's failed attempt lacked.
+
+Evidence grade: **REFUTED** for §122's `SRC 0x00` reading, on a pre-existing constraint solve;
+**MEASURED** for the corrected coverage numbers; **FORCED** that PEQ needs exactly those four.
