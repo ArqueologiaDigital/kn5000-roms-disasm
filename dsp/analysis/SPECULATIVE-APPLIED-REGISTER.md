@@ -7183,3 +7183,84 @@ reusable.
 Evidence grade: **MEASURED** (bit-18 bisect, the criterion contamination caught by its null, the
 constant operand at iw85); **REFUTED** for `ACT 0x0D -> mem[ptr]`; **VOID** for the other five;
 **RETRACTED** for my "last blocker" framing.
+
+---
+
+## §122 — COVERAGE STATS, AND THEY REDIRECT THE WHOLE EFFORT
+
+New tool `dsp/tools/coverage_report.py`. ⚠ First, an artefact to kill: the device reports
+*"285 slots = 285 DECODED, 0 TRAP"*. That is meaningless — `alu_decoded_speculative()` ends in an
+unconditional `return true`, so every word is admitted regardless of its fields. The per-slot
+probe's `dec`/`gfail` columns show the truth. This tool counts words decoded on **anchored**
+evidence versus words depending on a field still listed as unknown.
+
+### 1. The stats
+
+```
+  COMMON CODE (60-word kernel + 23-word epilogue, run by EVERY effect)
+      83 words, 33 blocked = 40% of the code every effect runs
+
+  FULLY EXECUTABLE PROGRAMS:  0 of 91
+
+  CLOSEST, blocked/words:
+      11/105   algo 39  PARAMETRIC EQ      <- 89.5% decoded, far ahead of the field
+      17/54    algo 72  PEQ+S.DELAY
+      19/48    algo  9  SINGLE DELAY
+      24/86    algo 15  ROCK ROTARY
+      25/53    algo 50  VIBRATO
+      27/49    algo  0  NO OPERATION       <- and 41 stub twins sharing its image
+```
+
+### 2. ★★★ THE BLOCKER RANKING — one dominates
+
+```
+  blocker    words   programs affected
+  SRC 00      1270      91        <- 3x the next, and it blocks EVERY program
+  ACT 0E       422      91
+  ACT 0D       356      91
+  ACT 0B       341      76
+  f31=7        139      49
+  f31=5         96      61
+  f31=4         87      62
+  f31=6         84      42
+```
+
+★ **`SRC 0x00` is the single biggest unknown in the machine** — and its population is
+strikingly uniform:
+
+```
+  1270 words, ALL of them ACT 0x00, in just 3 (class, ACT) shapes
+  by f31:  LOAD 581   ADD 542   HOLD 147
+```
+
+**Every one is `SRC 0x00 + ACT 0x00`.** That is not a source code at all — it reads as the
+**ABSENCE** of a bus operand: `lo12 = 0x000` means "no operand, just the accumulator and the
+product", and `f31` already says load/add/hold. The f31 split is exactly a MAC chain's.
+
+⛔ Our core currently reads `SRC 0x00` as `mem[ptr]` — a guess its own comment marks *"1 of 6
+enumerated, no independent support"* — which **injects a spurious memory read into 1270 words,
+in every program.**
+
+### 3. ★ AND WE HAVE BEEN DECODING AGAINST THE HARDEST PROGRAMS
+
+The whole investigation has been driven by **CHORUS** (unit 0) and **ROOM REVERB** (unit 1).
+`PARAMETRIC EQ` is **89.5% decoded** — nearly twice as complete as anything we have used — and has
+never been the vehicle. It is also a **biquad**, the structure that FORCED several of this
+project's anchored readings in the first place, so its remaining 11 words sit in a context where
+the arithmetic is already known.
+
+**That is a strategic error worth naming:** the effects were picked by what sounded interesting
+(a reverb, a chorus) rather than by what is closest to executable. Eleven blocked words in a
+known-arithmetic program is a far better decoding vehicle than a reverb with 27.
+
+### 4. Next
+
+1. **Decode `SRC 0x00`** — 1270 words, all 91 programs, uniform shape, and a strong structural
+   reading available (no bus operand). Biggest single win in the machine.
+2. **Switch the decoding vehicle to PARAMETRIC EQ** and drive the remaining unknowns from its 11
+   blocked words, where the biquad pins the arithmetic.
+3. `ACT 0x0E`/`0x0D`/`0x0B` next, at 422/356/341 words.
+
+Evidence grade: **MEASURED** (all counts, from the ROM); **INFERRED** that `SRC 0x00` marks the
+absence of a bus operand — uniform ACT 0x00 across 1270 words and a MAC-shaped f31 split, but not
+yet tested.
