@@ -10430,3 +10430,67 @@ Evidence grade: §1 **MEASURED**, and *"nothing varying reaches the site"* **FOR
 of the register set; §2 the mechanism **FORCED** (the decode is a literal no-op in the source), the
 claim that `ACT 0x15` *should* multiply **INFERRED** from `lfo-ramp.md` §10; §3 **MEASURED**;
 §4 **MEASURED**; §5 **SPECULATIVE** and labelled.
+
+---
+
+## §170 — the DSP EFFECT TYPE map, measured from the machine's own uploads. Vehicle problem solved.
+
+§169 established that index-path work wants one of the four **gap-6** programs (FLANGER, AUTO PAN,
+VIBRATO, RING MODULATOR — phase-accumulate 6 words from the lookup) instead of cold-boot CHORUS
+at 24. Selecting one needs its TYPE index, and nobody had the list.
+
+### 1. It cannot be derived from the manifest, and the attempt says so out loud
+
+`programs.tsv` lists **distinct programs**, so every TYPE slot that reuses an already-listed
+program is absent from it. Deriving the index from manifest order puts PARAMETRIC EQ at **16**
+where `peq_select.lua` measured **15**. The off-by-one is the manifest telling you it is the wrong
+source; it is not an origin to adjust away.
+
+### 2. The instrument failed, its control caught it, and a second instrument passed the same control
+
+`tools/type_enum.lua` walks the list on the machine and reads the display. **The readout was
+wrong** — `0x30AE5` is the *parameter* line, not the TYPE line, so it returned garbage
+(`'  2k  i     G   S'`) at every stop. The pre-registered control — *index 0 must read CHORUS and
+index 15 must read PARAMETRIC EQ, and if either disagrees the enumeration is VOID* — failed, and
+the run was voided rather than rationalised.
+
+★ But the walk itself worked: the snapshot shows the editor open on the list's last entry, and the
+device dumped **882 transfers / 38 KB** on the way — every effect's program upload, in order. So
+the effect was identified from **the DSP's own uploaded image** instead of from the LCD, and the
+same two controls **both pass** on that instrument.
+
+### 3. ⚠ And my matcher was unsound, caught by a check I nearly skipped
+
+The first pass fingerprinted each upload on its **first 4 words**. Soundness check:
+
+```
+  first  4 words: 34 distinct prefixes over 38 programs -> 8 programs in 4 COLLIDING groups
+                  distortion/fuzz, exciter/auto_pan, peq_chorus/peq_flanger, peq_dist_delay/peq_overdr_delay
+  first  8 words: 36 distinct                          -> 4 programs in 2 groups
+  first 16 words: 38 distinct                          -> NONE
+```
+
+The 4-word map mislabelled four entries and showed AUTO PAN twice — which is what made me check.
+**A fingerprint that cannot separate its candidates is a criterion that cannot fail.** Redone on
+16 words. ⚠ Note the collisions are not random: they pair *distortion with fuzz* and *peq_chorus
+with peq_flanger* — effects that share a prologue, which is independent support for §169's
+SPECULATIVE S1 (programs assembled from shared macros).
+
+### 4. The result — `analysis/data/typewalk/TYPE_MAP.md`
+
+```
+   0 CHORUS           3 FLANGER        15 PARAMETRIC EQ   16 AUTO PAN
+  17 VIBRATO         20 RING MODULATOR
+```
+
+The four gap-6 vehicles are TYPE **3, 16, 17, 20**. The capture itself is committed under
+`analysis/data/typewalk/` — it is overwritten by every emulator run, so it is preserved rather
+than regenerable.
+
+⚠ Reaching any of them costs ~26 s of navigation, and §148 measured that the navigation vehicle
+*creates* a unit-1 rail. **Rule 2 governs absolute audio statistics; a register census at a
+class-6 site is not one.** Use these for index-path work and cold-boot CHORUS for audio.
+
+Evidence grade: §1 **FORCED** (the manifest's population is the wrong one by construction);
+§2 **MEASURED**, with the LCD instrument **VOIDED by its own control**; §3 **MEASURED**;
+§4 **MEASURED**, two independent known-answer controls passing.
