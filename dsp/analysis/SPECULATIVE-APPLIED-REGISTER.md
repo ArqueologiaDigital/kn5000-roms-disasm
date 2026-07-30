@@ -10205,3 +10205,64 @@ because the entry was not a refuted idea — it was a *stale measurement present
 
 Evidence grade: §2 **MEASURED** (two counters, plus the 0.99915 identification); §3 **FORCED** by
 §2 together with §162; §4 **MEASURED** (A/B/C/D, with the known-answer DC recognised).
+
+---
+
+## §166 — `C63` + class-6 is ONE IDIOM: 53 of 53, both directions. And it names the index register.
+
+A static test, no emulator. `dark-words.md` §4.4 lists `040.0.**.C63` and the class-6 words as
+separate dark forms; they are not separate.
+
+### 1. Pre-registered, with the null computed first
+
+* **H1** — a `C63` word immediately precedes every class-6 word ⇒ they are one idiom.
+* **H0** — the adjacency I saw in two hand-read programs is coincidence.
+* **NULL:** 53 of 3057 corpus words carry `lo12 = 0xC63`, a base rate of **0.0173**. On 54
+  class-6 sites chance predicts **0.94 ± 0.96** predecessors.
+
+### 2. MEASURED
+
+```
+  53 of 54  class-6 words are immediately PRECEDED by a C63 word
+  53 of 53  C63 words are immediately FOLLOWED by a class-6 word
+```
+
+**Bidirectional and exclusive.** Against a null of ~1, at a base rate of 0.0173, a 53/53
+bijection is not a coincidence any reasonable prior survives.
+
+⚠ The single exception is `kernel.dsm w56 = 0C646A2007`, and it is *not* a counterexample — it is
+the **only C-format class-6 word in the corpus** (`hi12 = 0xC64`, ESC, END, `addr8 = 0xA2`,
+`lo12 = 0x007` ⇒ `SRC 0x00 / ACT 0x07`). Different form, different `lo12`, different everything.
+Excluding it the pairing is **53/53 both ways with no exceptions at all**.
+
+### 3. ⇒ What the idiom is, and where the index lives
+
+`C63` decodes as `SRC 0x11 / ACT 0x03`, and `ACT 0x03` is `m_tb = L` (`upd6383.cpp:2932`):
+
+```
+   C63          tempB <- SRC 0x11          "load the index register"
+   class 6      acc   <- table[ tempB ]    "indexed table read"     (SPECULATIVE)
+```
+
+That is the canonical shape of an indexed lookup, and it explains why the corpus never separates
+the two words. The class-6 branch in the emulator reads **none** of `m_ta`/`m_tb` — it returns
+early — which is consistent with §162's finding that no *modelled* index source varies.
+
+★ And it supplies a candidate route for the phase. `SRC 0x11`'s reading is **contested, not
+settled**: §27 shipped it as `ACCB`, and §113 proposed `mem[ptr]` as bit 18 (implemented, off).
+If `SRC 0x11 = mem[ptr]` and the pointer is on the phase cell there, then `C63` loads the ramping
+phase (§165: cell `0x07`, `0..8388598`, chg 1 128 429) straight into `tempB`, and the whole
+routing gap closes in one word.
+
+### 4. ⛔ What must be measured BEFORE any of that is implemented
+
+**Standing rule 4.** `tempB` is now a *candidate* index and nothing more. §162 measured
+`acc`/`m_dp`/`cursor`; it never measured `m_ta`/`m_tb`/`m_k`/`m_l`. If `m_tb` is constant at the
+class-6 site, `table[m_tb]` is frozen and implementing it manufactures exactly the false null §162
+was written to prevent.
+
+Next action is therefore **extend the §162 probe, not write the lookup.**
+
+Evidence grade: §2 **MEASURED** (exhaustive over all 91 programs, null computed first);
+§3 the idiom's *shape* **INFERRED** from the field decode, the identity of the index register
+**SPECULATIVE**; §4 procedural.
