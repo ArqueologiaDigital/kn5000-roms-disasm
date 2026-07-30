@@ -24,10 +24,22 @@ state back into the loop.
 (mask bit 16 changes nothing), multiply-carrying words (3 of 427), and the resident
 kernel/epilogue sites (body-only gate `iw >= 84`, bit 53, is identical to full ship).
 
-★ The standing suspect is §132 §3: **`m_p` is one member modelling what is probably TWO real
-registers** — a multiplier input latch and a product register — and a feedback ladder is exactly
-where the difference shows. ⚠ A common scale error is NOT available as the explanation: §133's
-feed test compares the state cell *after* `acc_to_datum`, so `<< ACC_SHIFT` is pinned.
+⛔ **The `m_p` two-registers suspect is CLOSED (§136/§137).** The split already exists —
+`m_k`/`m_l` are the multiplier input latches, `m_p` is the product register with exactly one
+functional read. Routing §112's class-A ACT-07 latch to `m_k` is **bit-identical** to the default
+(the multiply bypasses the latch), and with §40 on it is identical either way, so that routing is
+**undecidable by presentation statistics**. §40 itself is confirmed refused: DC leak 34.69 % →
+99.79 %. ⚠ A common scale error is also NOT available: §133's feed test compares the state cell
+*after* `acc_to_datum`, so `<< ACC_SHIFT` is pinned.
+
+★ **The one live lead from that pass:** with §40 on, the railing **disappears** (unit 1 back to
+−1 543 434 even with the §133 readings). So the divergence is **mediated by the multiply's
+coefficient source**, and the next explanation must come from the delay-DRAM datapath or from what
+**`f31 = 1`** means on the reverb's `ACT 0x0D` words — not from the register file.
+
+★★ **BEFORE REPORTING ANY NON-ZERO OUTPUT**, read `§70 ACCA AT w73` and compare **min against
+max**. A constant presents as "output" in every summary statistic. This has now produced two
+retracted "IC311 outputs audio" claims; the check is one grep.
 
 ⚠ **Ship the two readings TOGETHER or not at all.** They are jointly selected by PEQ's two-channel
 structure; the 8x8 map also admits `0x0D -> P` (both banks then read `0x05`), and only the
