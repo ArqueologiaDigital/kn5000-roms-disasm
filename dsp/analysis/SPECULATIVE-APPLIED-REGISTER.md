@@ -8431,3 +8431,81 @@ joint `(f98, f31)` code and `f31 ≥ 3` is simply where `f98` does not apply —
 ONLY plain `f31 ∈ {4,5}` word that executes at cold boot with the default effects, it runs every
 frame of every boot with any effect, it is already a named §109 probe slot, and it is one of the 13
 words separating the two surviving store-gate rules. No panel path, no effect selection needed.
+
+---
+
+## §141 — §138's GUARD WORKED, AND WALKED THE SILENCE TO ITS LAST SLOT: **`w73` erases the accumulator at the door**
+
+Scored against `data/PREDICT_138.md`, written before the run.
+
+| | prediction | result |
+|---|---|---|
+| **P1** | the guard fires, count >> 0 | ✔ **198 372 977** = 76.8 words/frame of 320 |
+| **P2** | acc at iw65..72 stops being 0 | ✔ **the body's result SURVIVES all eight slots** |
+| **P3** | `unit0/DO1` becomes non-zero | ✘ still **0 non-zero, peak 0** |
+| **P4** | §70 ACCA at w73 `min != max` | ✘ **min = max = 0** |
+
+### 1. ★★★ The accumulator now reaches the presentation word — and dies inside it
+
+```
+  iw        baseline            §138 guard
+  64    1 102 114 506 752   −2 199 023 124 480
+  65..72              0     −2 199 023 124 480   <-- P2: the erasure is GONE
+  73                  0                      0   <-- and w73 zeroes it ITSELF
+```
+
+The eight-slot drain §138 targeted is **fixed**. The value is carried intact to the door and
+**`w73` destroys it in its own slot.** MEASURED.
+
+### 2. Why, precisely — and it is the same defect a third time
+
+```
+  w73 = 0E30C00404   hi12=E30  class4=C  addr8=00  lo12=404
+        f31 = 0  ->  LOAD acc <- P        bit4 ST, bit11 ESC, bit10 END
+        class 0xC  ->  bit 3 set  ->  coeff_fetch() TRUE   (upd6383d.h:869)
+```
+
+So `w73` **fetches a coefficient and then loads the accumulator from the product** — an ordinary
+MAC — but its **multiply does not issue**, so `P = 0` and the LOAD is an erasure. And because it
+*does* fetch, §138's guard (gated on `!coeff_fetch`) **excludes it by construction** — which is
+exactly why the accumulator survives iw65..72 and dies at iw73.
+
+★★ **This is the third instance of one defect, not three defects:**
+
+| site | word | fetches? | multiply issues? | effect |
+|---|---|---|---|---|
+| kernel `iw47` (§83's trace) | `800.8.0C.000` | **yes** | **no** | drains before body 0 |
+| epilogue `iw65..72` (§138) | class 1/5/9, no fetch | no | n/a | drained before presentation — **now fixed** |
+| **presentation `w73`** | `E30.C.00.404` | **yes** | **no** | **erases at the door** |
+
+⇒ §39's long-open question — *"what enables the MULTIPLY, as distinct from the fetch, is OPEN"* —
+is not an accounting curiosity. **It is the single root cause of unit 0's silence, and it acts at
+three separate sites.** Fixing any one of them alone cannot produce audio; the register's
+"one word, one register, one unformed product" framing was right about the mechanism and wrong
+about the count.
+
+### 3. ⛔ The guard is NOT shippable as written
+
+It fires on **76.8 of 320 words per frame** — far too broad. It rails unit 1 (2 553 952 non-zero,
+peak −8 388 608, DC leak 99.94 %) and perturbs the whole body trajectory (iw84 goes
+1 805 397 833 546 → −2 002 210 652 160). ★ P1's fired-count is what exposed this: a guard that
+fires 198 million times is changing the machine, not repairing one defect. **Keep bit 55 OFF.**
+
+Its value is diagnostic: it is the instrument that walked the drain from iw65 to iw73.
+
+### 4. ⇒ The next question is now single and well-posed
+
+**Why does `w73`'s multiply not issue, when `coeff_fetch(w73)` is true?**
+
+Same question as `iw47`. Both are class-with-bit-3-set words whose product is never formed. The
+answer decides whether unit 0 can present anything at all, and it is upstream of every remaining
+audio question — including §135's railing, which is also mediated by the multiply's coefficient
+source (§137 §5).
+
+⚠ And note what `w73` carries: `bit 11 ESC` — so per §139 §2, `f31` is **not a valid field** in it
+and the "`f31 = 0` ⇒ LOAD" reading of `w73` is itself resting on a field the escape has
+repurposed. That is a second, independent reason to distrust the current handling of this word,
+and it may be the whole answer.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED** (the exclusion is forced by `coeff_fetch`'s own
+definition); §3 **MEASURED**; §4 **OPEN**, and now single.
