@@ -6421,3 +6421,68 @@ disqualified follow-on statistic lacked.
 Evidence grade: **MEASURED** (the fix, its fired-count and null, cell 0x05's input-dependence and
 its four writers in order); **FORCED** that PRE is the ACT-07 convention; **INFERRED** that
 `SRC 0x08` is one root cause for both clobbers — the two sites agree but that is two instances.
+
+---
+
+## §111 — ★★★ **SRC 0x08 WAS ALREADY RIGHT. THE HOST PAYLOAD IS 2× THE RAW BYTES** — two independent known-right answers, both hit exactly
+
+### 1. The note refuted my own §110 hypothesis before I could test it
+
+§110 named `SRC 0x08` as the root cause: it clobbers cell `0x05` (via `iw45`) and cell `0x07`
+(via `iw32`), and it yielded 57 at the LFO where `lfo-ramp.md` predicts 114. I was about to
+decode it. Reading the owning note first says otherwise — `lfo-ramp.md` §2:
+
+> *"**C-RAM cells**. The first cell is the per-frame phase increment; the second is …"*
+
+So `SRC 0x08 = C-RAM[cursor]` is **corroborated as a route, not refuted**. And 57 is exactly
+half of 114 — which is not an SRC decode error at all but the **already-known host-payload factor
+of 2**, recorded in `r3-delaydram.md` as *"host payload is 2× the raw three bytes"* and
+reproduced in §71/A3 as a control that could have failed: the cold-boot record says
+`reg 0x06 <- +0.500000` / `reg 0x86 <- +0.183992` while the wire carries `+0.250000` /
+`+0.091996`, **half of each to six decimal places.**
+
+**We had been storing the raw bytes ever since, so every host-programmed quantity in this device
+was half.** The factor was documented twice and never applied.
+
+### 2. The test, and why it is strong
+
+Doubling the 24-bit datum in the poke-port DATA packet, behind mask bit 31 with a fired-count.
+**Two independent known-right answers, from different notes and different subsystems, neither
+fitted to the other** — a wrong scaling cannot satisfy both:
+
+```
+                          mask 19F440F      mask 819F440F      independently predicted by
+  §111 fired-count        0 (proper null)   115 packets
+  unit-0 output level     0x200000          0x400000     ✅  +0.5, documented cold boot (A1/A3)
+  CHORUS LFO increment    57                114          ✅  0x72, lfo-ramp.md, 11 sites, 0.5993 Hz
+  acc at iw89             3,735,552         7,471,104        (exactly 2×, consistent)
+  §54 verdict             SILENT 0.00% DC   SILENT 0.00% DC   no regression
+```
+
+Both hit **exactly**. This is the strongest single result of the session: it is a decode with a
+control whose answer was written down in advance, by someone else's analysis, at 11 sites.
+
+**Promoted to the default mask, now `0x819F440F`.**
+
+### 3. What it does NOT fix, stated plainly
+
+The chip is still silent, and the LFO phase is still pinned — the increment is now correct but
+`iw32`/`iw45` still overwrite the cells before the body reads them. §110's *clobber* observation
+stands; only its attribution to an SRC-0x08 mis-decode falls.
+
+⚠ **Residual, unresolved:** unit-1's level doubles to `0x178D0A` against a documented
+`0x178D50` — a difference of 0x46, about 0.006%. Unit 0's is exact. So the doubling is right and
+unit 1's *source value* carries a small pre-existing error, which §97 first noticed and this does
+not explain.
+
+### 4. The lesson, since it is the fourth of its kind today
+
+I was one build away from "decoding" a route that was already correct, because a two-fold
+discrepancy looked like a decode error. What separated them was reading the note that owns the
+quantity — and the factor had been recorded in `r3-delaydram.md`, reproduced in §71/A3, and
+quoted verbatim in §97 and §110's own text. **A known constant offset between our value and the
+documented one is a scaling bug until proven otherwise, not evidence about the route that carries
+it.**
+
+Evidence grade: **MEASURED**, with two independent pre-registered controls hit exactly and a
+zero-valued null arm; the residual unit-1 0.006% remains **OPEN**.
