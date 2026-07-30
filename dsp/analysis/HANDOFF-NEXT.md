@@ -9,29 +9,58 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**K2 — implement the class-6 waveform lookup. It is UNBLOCKED as of §161.**
+**Decode `040.0.**.C63` (×46) and `012.4.01.1CE` (×53) — the LFO PHASE ACCUMULATOR.**
 
-The prerequisite is done. `m_rf[0x1D..0x40]` now holds a complete, bit-exact 36-entry sine:
-`0.9500000 x 2^23 x sin(2*pi*k/24 + 0.100000 rad)`, all 36 cells within 2 LSB, verified against
-the shipped default with no env override.
+⛔ **Do NOT implement the class-6 lookup first.** It looks ready and it is not. §162 MEASURED all
+three candidate index sources at every class-6 site:
 
-* §159's "not one non-zero" was measuring **D-RAM**; the table lives in the **register file**
-  (`m_rf`), the side §97's split put host pokes on. The reader is what must move, not the upload.
-* §161 fixed the one destroyed cell: `ACT 0x07`'s mode-1 store was taking its destination from
-  `addr8`, which on a class-1 escape word is the **delay direction code** (FORCED, 276/276).
-* `upd6383.cpp:2030` is where class 6 currently gives up: *"no table is modelled, so execute the
-  addressing and leave the ALU alone."* The table now exists; that comment is stale.
-
-★ **Pre-register these before running** — they are already computed and mutually exclusive:
 ```
-  peak excursion  226, NOT 240     <- the table's peak is 0.9452541, not 1.0 (index 6, undamaged)
+  §162 CLASS-6 SITE 00006184CD : hits 1129389 | acc 0..0 | m_dp 12..12 | cursor 9..9
+  §162 CLASS-6 SITE 0000620407 : hits 1129389 | acc 0..0 | m_dp 14..14 | cursor 9..9
+```
+
+**All constant.** A lookup built on any of them returns the same entry every frame, and that frozen
+excursion would read as *refuting the sine* against the pre-registered "226 not 240" test. It is
+§158's trap one level up — §155 and §157 each reported motion that was not there.
+
+> **RULE (fourth occurrence): before implementing a consumer, MEASURE that its inputs vary.
+> A datapath whose every input is constant cannot be validated by its output.**
+
+### What is already MEASURED — do not re-derive any of this
+
+* **The table exists and is intact.** `m_rf[0x1D..0x40]`, 36 cells, all non-zero as of §161:
+  `0.9500000 x 2^23 x sin(2*pi*k/24 + 0.100000 rad)` to within 2 LSB. Period exactly **24**.
+* **The index arithmetic.** `lfo-ramp.md` §10: `(coef x phase) >> 23` with `coef = 0x18 = 24` at
+  8 of 8 sites -> an integer 0..23. Measured a week before the table was recovered; the two agree
+  on 24 independently.
+* **The coefficient triple.** `increment / wrap 0x7FFFFF / index-scale 0x18`. So the phase IS
+  accumulated and wrapped somewhere; the emulator simply never performs it.
+* **`SRC 0x13` is the class-6 table read port** (§162): the `..4CD` form is `acc <- bus` (§144).
+  The `..407` form (`SRC 0x10`/`ACT 0x07`) stores it back. They are an operation pair.
+* **`addr8` selects the table, functionally**: `0x18` in every modulation effect, `0x28` in every
+  drive effect (a waveshaper curve, not an LFO). ⚠ `addr8` is **not** the table *extent* —
+  `lfo-ramp.md` P-16 falsified that and nothing here revives it.
+
+### The idiom you are decoding (CHORUS, twice)
+
+```
+  w30  040.0.00.C63          w34  142.0.00.C63
+  w31  000.6.18.4CD          w35  000.6.20.407     <- class 6
+  w32  012.4.01.1CE          w36  012.4.01.1CE
+  w33  104.2.02.1CE          w37  104.2.01.1CE
+```
+
+The accumulator arrives at the class-6 word as **zero**, not merely constant — so its producer is
+doing nothing at all. Both bracketing families are in `ROADMAP-2026-07-29.md` #10's list of
+*"words with no reading of any kind"*.
+
+★ Then K2 is four lines, and these are already computed — **pre-register them**:
+```
+  peak excursion  226, NOT 240     <- table peak is 0.9452541, not 1.0
                                       226 kills "no table";  240 kills "sine"
-  DEPTH 30  -> +/-36 samples       DEPTH 99 -> +/-120       (30/99 = 0.30303030, seven digits)
+  DEPTH 30 -> +/-36 samples        DEPTH 99 -> +/-120       (30/99 = 0.30303030, seven digits)
   rate 0.599 Hz
 ```
-⚠ And the shape claim is only trustworthy now *because* index 3 is no longer a notch. A wavetable
-with a hole produces a waveform with a glitch, and a sweep measured through it would have looked
-like a shape result.
 
 ### ⛔ THREE RETRACTIONS — do not build on any of them
 
