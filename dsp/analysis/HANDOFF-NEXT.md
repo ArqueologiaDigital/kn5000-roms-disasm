@@ -23,19 +23,39 @@ any older summary, including older parts of this file.
   mechanism the emulator does not have, and this is the whole reason `SRC 0x00 = coef` measured
   inert downstream.
 
-★ **The candidate, SPECULATIVE (strong).** CHORUS's two modulated delay READs are each preceded by
-a byte-identical idiom, with the LFO twin and its phase-read a few words earlier:
+★★ **THE MECHANISM IS `lo12 = 0x44C`, AND IT WAS WRITTEN DOWN ON 2026-07-22** —
+`kn7000_mame/notes/kn5000-dsp-chorus.md` §3.1/§3.2. §149's candidate `A00.0.00.041` is
+**RETRACTED** (§152): ENSEMBLE sweeps six taps, carries `0x44C`, and has **zero** of it —
+§149's own kill test, on data one grep away. `A00.0.00.041` is the **interpolator's second
+point** (FLANGER has two consecutive DRAM reads with it between them).
+
+The seven-word transaction, CHORUS voice 0:
 
 ```
-   C40.3.20.44C     C-format immediate
-   A00.0.00.041     SRC 0x01, ACT 0x01     <- immediately before the read, both times
-   880.1.20.2C7     THE DELAY READ (addr8 = 0x20)
+   900.1.60.1D5   [0] DRAM WRITE, opens
+   192.A.40.000   [1] consumes C-RAM[0x02] = 240  <- THE DEPTH, IN SAMPLES
+   082.2.00.1C0   [2] LFO phase READ        byte-invariant 29/29
+   C40.3.20.44C   [3] APPLY THE OFFSET      byte-invariant 29/29   <- THE MECHANISM
+   A00.0.00.041   [4] interpolation partner (absent when the effect truncates)
+   880.1.20.2C7   [5] DRAM READ -- the tap
+   102.A.C3.4C8   [6] per-voice output gain
 ```
 
-`A00.0.00.041` occurs **38 times in 14 programs** = exactly the swept-delay family, and is
-**ABSENT from PHASER**, the one modulation effect that sweeps all-pass coefficients rather than a
-delay tap. `ACT 0x01` carries a "PLAIN GUESS ×5" tempA reading with no evidence behind it.
-*Kill it:* find it in a program with no delay line, or a swept-delay effect that lacks it.
+★ **The depth is a SAMPLE COUNT, proven against a named UI parameter**: ENHANCER's
+"DELAY L (ms)" = 350 → `C-RAM[0x0B]` = **15435 = 350 × 44100/1000 exactly**, filling a
+15437-cell allocation to `r3`'s +2 guard. And `allocation = nominal tap + |depth|` **exactly**
+in four effects, across two independent host streams.
+
+★ **This is also the consumer §148 could not find.** Word [1] is `192.A` — a `SRC 0x00`
+class-A word — so **§145's `coef` reading is what feeds the depth into this path.** The reading
+was never inert; its reader is the mechanism that does not exist yet.
+
+**THE CHANGE:** `upd6383.cpp:1813`'s `addr = (cellv + m_frames_run) & 0xffff` needs a third
+term set by the `lo12 == 0x44C` word. Today the C-format immediate is written to `m_cimm` and
+**`m_cimm` is never read anywhere**, `A00.0.00.041` carries a PLAIN GUESS "no side effect", and
+**there is no modulation register in the device at all**.
+⚠ Do **not** gate that change on the descriptor-cursor alignment being right — `r3` O-1 is open
+and CHORUS's 4th modulated read takes the ceiling cell.
 
 ⚠ **Do NOT spend more mask arms on `SRC 0x00` first.** It is decoded where it is observable
 (MEASURED bit-exact at the 29 twins, two vehicles, passing control; INFERRED strong at the twelve
