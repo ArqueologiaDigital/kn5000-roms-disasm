@@ -10845,3 +10845,79 @@ mismatch at a word whose coefficient is provably correct that carries the weight
 
 Evidence grade: §1 **MEASURED**; §2 **MEASURED** (coefficient 24 identifies the word's role
 independently of any addressing claim); §3 the convergence **MEASURED**, the fix **UNTESTED**.
+
+---
+
+## §177 — §176's "off by 2" is an instance of a KNOWN, LOCALISED defect, and it adds a fourth constraint
+
+Before building anything on §176 I read the note the pointer trace names in its own header —
+`kn7000_mame/notes/kn5000-dsp-pointer.md`. It says the rule I was about to chase is already known
+to be wrong, and says so on the file's first screen:
+
+> *"CAUTION, stated up front: WHICH words move the pointer is NOT established … the rule used below
+> is `classes 2 and A move it'. Two independent checks say that rule is still WRONG."*
+
+★ Twelfth avoided repetition of trap #3, and the first one this session caught **before** spending
+a build.
+
+### 1. The same defect, from an unrelated effect family, already FORCED
+
+That note's §6 runs the walk from a measured origin and finds a producer/consumer pair that
+*must* coincide and does not:
+
+```
+   algo  5   chain READS {76}      modulator WRITES {7B}     miss  +5
+   algo 68   chain READS {76}      modulator WRITES {77}     miss  +1
+   algo  3   chain READS {7E,7F}   modulator WRITES {7B,7C}  miss  -3
+```
+
+and concludes — **FORCED**, because both addresses are `origin + Σ(deltas)` so the origin cancels:
+
+> *"The error is in the Σ — in which words carry a pointer delta."*
+
+⇒ §176's CHORUS finding is the same defect: a consumer (`202.A.07.1D5`, the index multiply, at
+`m_dp = 5`) and its producer's cell (the LFO phase, cell `7`). **Not a new problem — a fourth
+instance of a problem already localised.** And it independently corroborates §108 §5's FORCED
+"no anchor value can fix this", now from two directions.
+
+### 2. ★ What §176 CONTRIBUTES: a fourth constraint, from a family the note did not use
+
+The note had three constraints, all from the phaser family. §176 supplies one from **modulation**:
+
+```
+   C1  phaser algo  5    write - read  =  +5
+   C2  phaser algo 68    write - read  =  +1
+   C3  phaser algo  3    write - read  =  -3
+   C4  CHORUS  algo  1   consumer 5, producer cell 7   ->  miss  +2      ★ NEW, §176
+```
+
+and three that any candidate rule must **not** break (all reproduced by the current rule):
+
+```
+   P1  the phaser's 20 all-pass sections are net-zero (deltas cancel)
+   P2  the biquad walks +4 per band
+   P3  8 of 9 reverb diffusers are stationary
+```
+
+★ C4's value is that it is **structurally different**: a different effect family, a different
+idiom, and — unlike C1–C3 — its consumer's role is pinned independently of any addressing claim,
+because §176 measured that word's coefficient as `0..24`, the index scale `lfo-ramp.md` designed.
+**A rule that satisfies C1–C3 by construction can still fail C4.** Four constraints over three
+families is a materially better-posed search than three over one.
+
+### 3. ⇒ The task is now well posed and STATIC
+
+Enumerate candidate delta rules — which classes, and under which conditions, carry the signed
+`addr8` post-increment — and score each against C1–C4 and P1–P3. No emulator.
+
+⚠ **Do NOT touch the origin.** It is MEASURED three ways (ROM record `0x01E496`, cold-boot
+capture, live I-RAM read-back), it cancels out of every constraint above, and "reach for the
+anchor" is a named standing bias (§108 §5, LEDGER rule 9).
+
+⚠ And the note's §5 is a live warning about the corpus this search will run on: *"bit 10 with
+bit 11 clear = END OF PROGRAM"* was measured 38/38 on the bodies and **falsified as a bit meaning**
+— the header carries it 14 times in 60 words. Any rule conditioned on `hi12` bits must be
+validated on the header too, not only on the 38 body images.
+
+Evidence grade: §1 **FORCED** (quoted from the owning note, origins cancel); §2 C4 **MEASURED**
+(§176), its independence **INFERRED**; §3 procedural.
