@@ -7885,3 +7885,70 @@ next task. §128's audio target stands, unscoreable until then.
 
 Evidence grade: §1 **FORCED** (two gate sites on one bit, verified by enumeration); §2 **MEASURED**
 with a passing known-answer control; §3 shipped on §2 + `cram-unit-base.md` item A; §4 **MEASURED**.
+
+---
+
+## §131 — ★★ THE ENTRY HANDS THE INPUT OVER IN **P**, NOT IN THE ACCUMULATOR — which is why §121 was structurally blind
+
+From a three-way design panel run over §§127–130. This item is **verified here independently of
+the agent that proposed it**, by decoding the words directly.
+
+### 1. The structural fact
+
+`f31 = hi12[3:1] = 0` is **LOAD: `acc ← P`** (it discards whatever the accumulator held). Decoding
+the six words that bracket each bank's hand-over:
+
+```
+  w0   000020B1CD  hi12=000  f31=0   acc <- P     (bank 1 entry, ACT 0x0D)
+  w1   000020040E  hi12=000  f31=0   acc <- P     (bank 1 entry, ACT 0x0E)
+  w4   0000240407  hi12=000  f31=0   acc <- P     (bank 1 entry, last word)
+  w5   0000A001D3  hi12=000  f31=0   acc <- P     (bank 1 CORE, first word)
+  w57  0000254407  hi12=000  f31=0   acc <- P     (bank 2 entry, last word)
+  w59  0000A001D3  hi12=000  f31=0   acc <- P     (bank 2 CORE, first word)
+```
+
+**Every slot in both entries reloads the accumulator from P.** So the sample the cascade filters
+is **whatever is in P at `w4` / `w57`** — the accumulator physically cannot carry it across the
+entry, because it is overwritten at each step and again by the core's own first word.
+
+### 2. ⇒ Why §121's enumeration could not have worked
+
+§121 enumerated `ACT 0x0D`'s **destination** (1 acc=L, 2 tempA, 3 tempB, 4 mem[ptr], 5 P, 6 acc+=L)
+one value at a time and found all seven arms — including the null — reporting the same thing. The
+reason is now structural, not statistical: **`ACT 0x0D → acc` is erased one slot later by `w1`'s
+own `acc ← P`.** Any arm whose destination is the accumulator is indistinguishable from the null
+*by construction*. The enumeration was not underpowered; it was measuring a register that is
+guaranteed to be overwritten before anything reads it.
+
+This also sharpens §125's "resolve all four together": the four unknowns are not merely
+*correlated*, they are **competing to write one register**, and only the arms that land in P (or in
+a temp that a later word moves to P) can survive to the core at all.
+
+### 3. Two live defects the panel surfaced, recorded but NOT acted on
+
+* **Mask bit 16 is SET in the default and suppresses the store-and-clear on `hi12` bit 4**
+  (`upd6383.cpp:2412-2417`). That clear fires on `w6` — the word that commits `x[n]` to the
+  section's first state cell. `dsp-alu-biquad.md` §6 ablates the clear at **57.193 dB** and calls
+  it required under both readings of the accumulator op. The code carries a specific counter-
+  argument (the epilogue's `w60` carries HI_ST, so an unsuppressed clear destroys unit 0's result
+  at the top of the presentation stage), so this is a **considered decision in tension with a
+  measured ablation**, not an oversight. It deserves its own A/B; it does not get flipped on one
+  agent's say-so.
+* **`f31=4` and `f31=5` are not trapping**: with mask bit 0 set, `op = f31 & 3`, so they execute as
+  `HI_ACC_LOAD` / `HI_ACC_ADD` aliases with **no fired-count anywhere** — a standing violation of
+  this project's own "every gate logs a fired-count" rule. Any enumeration must A/B against that
+  alias, not against a trap.
+
+### 4. A pre-computed null worth keeping
+
+One design built an offline 105-word taint simulator over PEQ and enumerated
+`ACT 0x0D × ACT 0x0E × f31=4 × f31=5` = 576 destination combinations, scoring "both banks acquire
+an input, and not the same one". **32 of 576 pass = 5.6 %**, with sub-nulls 112/576 (bank 1 alone)
+and 176/576 (bank 2 alone). That is a *sharp* criterion with a computed null and a non-trivial pass
+rate on each half — exactly the shape §121 lacked. ⚠ Its own stated weakness stands: with cell
+`0x05` railed, every grid cell may fail for a reason that has nothing to do with the four unknowns,
+so the clobber fix is a prerequisite for it too.
+
+Evidence grade: §1 **FORCED** (direct decode of six words, verified independently of the proposal);
+§2 **FORCED** given §1; §3 **MEASURED** (both gates read from source), action deferred; §4 an
+offline computation not yet reproduced here — **INFERRED**, listed so the next pass can re-run it.
