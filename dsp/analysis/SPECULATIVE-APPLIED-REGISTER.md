@@ -7612,3 +7612,85 @@ corpus-wide top — but the criterion must change:
 Evidence grade: §1 **MEASURED** (three pre-registered checks); §2 **MEASURED** + **FORCED**
 (the Q solve-back); §3 **MEASURED**; §4/§5 **FORCED** (`rstcur` + the 30-coefficient extent +
 the flat response); §6 **OPEN**, with the enumeration constraint of §125 point 4 still binding.
+
+---
+
+## §128 — THE PANEL DRIVES THE COEFFICIENTS: a non-flat target and two measured pass-through controls
+
+### 1. The editor's PARAMETER and VALUE keys, MEASURED
+
+`-paramlist.md` §1.3 names the three rockers "TYPE / PARAMETER / VALUE" but had measured only
+TYPE. The other two are now measured, and the first attempt got them wrong in an instructive way.
+
+| rocker | port/bit | how established |
+|---|---|---|
+| TYPE up / down | `CPL_SEG10 0x20 / 0x10` | prior, `-paramlist.md` §1.3 |
+| **PARAMETER down / up** | **`CPL_SEG8 0x10 / 0x20`** | per-press snapshot diagnostic |
+| **VALUE up** | **`CPL_SEG7 0x20`** | drove `FC 125 Hz -> 16K Hz` |
+
+⚠ **A first sweep concluded PARAMETER = `CPL_SEG8 0x80` and that was WRONG.** The sweep pressed
+each pair's UP, snapshotted, then pressed its DOWN to restore — so the restore of pair *n* fell
+between the snapshot of pair *n* and the snapshot of pair *n+1*, and the cursor move attributed to
+`0x80` had actually been caused by the preceding restore press `0x10`. A clean rerun with **one
+snapshot per press and no restores** shows `0x80` changes nothing (0 pixels differ, twice).
+★ Method note: *a control that runs between the stimulus and the observation is part of the
+stimulus.* The confound was invisible in the log and only fell out of the pixel diff.
+
+`CPL_SEG10 0x80` is also not PARAMETER: it changes the **effect** (`cnt` 17 -> 6).
+
+### 2. Three live captures, and what each panel edit moved
+
+Driving the real panel gives three C-RAM images of the same program:
+
+| capture | band 0 | C-RAM section 0 |
+|---|---|---|
+| FLAT | FC 125 Hz, Q 2.0, G 0.0 dB | `C04B34 200000 1FB760 7F6996 81227A 800000` |
+| FC16K | FC **16K** Hz, Q 2.0, G 0.0 dB | `2303C4 200000 15CA92 B9F876 A8D5B0 800000` |
+| G12 | FC 125 Hz, Q 2.0, G **+12.0** dB | `C0515C 20691C 1F481C 7F6996 81227A 800000` |
+
+In every case **sections 1..4 stayed byte-identical** — only the edited band moved.
+
+★ **The GAIN edit moved the NUMERATOR ONLY**: cells `0x03`/`0x04` are bit-identical between FLAT
+and G12, while `0x00`/`0x01`/`0x02` all changed. The FC edit moved both. That is exactly the
+signature of this designer's **gain-independent denominator** (`a0 = 1+K/Q+K²`, `a1 = 2(K²−1)`,
+`a2 = 1−K/Q+K²`, `-biquad-coeffs.md` §1.1) and it **independently confirms the cell roles**:
+`0,1,2` = numerator, `3,4` = denominator. Nothing about that assignment was assumed to get it.
+
+### 3. ★★ The analytic target, and it hits the panel's own number
+
+Cascading the five decoded sections:
+
+```
+       f(Hz)      FLAT     G=+12dB    FC=16kHz
+        62.5     -0.05     +3.93     -0.01
+       125.0     -0.01    +11.99     -0.01        <- the panel says G: +12.0 dB at FC: 125 Hz
+       250.0     +0.01     +3.95     -0.00
+      1000.0     +0.00     +0.25     +0.00
+   G=+12dB PEAK: +11.99 dB at 125.1 Hz
+```
+
+**+11.99 dB at 125.1 Hz against a panel-stated +12.0 dB at 125 Hz, with no free parameters.**
+Together with §127's ISO-centre and Q solve-back, the host-designer -> poke port -> C-RAM ->
+coefficient-format chain is now confirmed three independent ways.
+
+### 4. ⇒ The test now has a target AND a measured null
+
+This is the part §125 never had. **FLAT and FC16K are exact pass-throughs** — with `G = 0.0 dB`
+the bilinear design gives numerator == denominator per section, so `H(z) = 1` *whatever the centre
+frequency is* (max deviation 0.050 dB and 0.007 dB over 20 Hz..20 kHz).
+
+So the three captures form a test with the null measured rather than assumed:
+
+* a chip that merely **passes its input through** scores **identically** on FLAT and FC16K, and
+  identically again on G12 — three-way tie, hypothesis dead;
+* a chip that **executes the biquad correctly** scores flat on FLAT and FC16K and shows a
+  **+12 dB / Q 2 peak at 125 Hz** on G12;
+* a chip whose bank entries are **mis-decoded** (wrong input cell, colliding state blocks, or the
+  cascade never fed) fails to reproduce the peak *while still* being flat on the other two — which
+  distinguishes it from both of the above.
+
+★ The G12 capture is the ONLY discriminating one; FLAT and FC16K are its controls. That the null
+is a *measured* pass-through rather than an assumed silence is what makes this a test.
+
+Evidence grade: §1 **MEASURED** (per-press snapshots) and one **RETRACTION** of the confounded
+sweep; §2 **MEASURED**; §3 **MEASURED** + **FORCED**; §4 **FORCED** given §2/§3.
