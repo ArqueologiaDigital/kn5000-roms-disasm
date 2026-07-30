@@ -595,6 +595,65 @@ def tier4(sc, gates):
     return tally, hits
 
 
+def sect6_localise(sc):
+    """Where each miss is MADE.  This is the part that generalises."""
+    print()
+    print("=" * 78)
+    print("6. LOCALISATION -- which words actually make each miss")
+    print("=" * 78)
+    for tag, nm in (("C1", "a05 PHASER"), ("C2", "a68 S.DELAY+PHASER"),
+                    ("C3", "a03 ENHANCER")):
+        ws = sc.progs[nm]
+        p = [0] * (len(ws) + 1)
+        for i, w in enumerate(ws):
+            f = F(w)
+            p[i + 1] = p[i] + (s8(f.addr8) if f.class4 in (2, 0xA) else 0)
+        rd, wr, secs = reads(ws), writes(ws), ap_sections(ws)
+        bad = [i for i in secs if p[i + 3] - p[i] != 0]
+        print("\n  %s  %-20s  reads %s  writes %s" %
+              (tag, nm, sorted({p[i] for i in rd}), sorted({p[i] for i in wr})))
+        print("      P1: %d sections, %d NON-ZERO, at words %s with nets %s"
+              % (len(secs), len(bad), bad, [p[i + 3] - p[i] for i in bad]))
+        for i in bad:
+            for k in range(i, i + 3):
+                f = F(ws[k])
+                d = s8(f.addr8) if f.class4 in (2, 0xA) else 0
+                if d:
+                    print("         w%-3d %s  %+4d" % (k, f.txt(), d))
+        for j in wr:
+            prev = max([i for i in rd if i < j], default=None)
+            if prev is None:
+                continue
+            tot = sum(s8(F(ws[k]).addr8) if F(ws[k]).class4 in (2, 0xA) else 0
+                      for k in range(prev, j))
+            print("      write w%-3d at %+d ; last preceding read w%-3d at %+d ;"
+                  " span %+d" % (j, p[j], prev, p[prev], tot))
+            for k in range(prev, j):
+                f = F(ws[k])
+                d = s8(f.addr8) if f.class4 in (2, 0xA) else 0
+                if d:
+                    print("         w%-3d %s  %+4d" % (k, f.txt(), d))
+    print("""
+  ★ THE TWO-LINE IMPOSSIBILITY PROOF FOR C3, which needs no search at all.
+    a03's SECOND bank runs from its last chain read (w79) to its modulator
+    write (w84) over five words, and only two of them have a non-zero addr8:
+
+        w79  102.2.4D.1CD   +77      x = does this FORM carry a delta?
+        w80  212.A.B0.412   -80      y = does this FORM carry a delta?
+        w81  104.2.00.000     0
+        w82  026.2.00.000     0
+        w83  000.A.00.415     0
+
+    C3 requires  77x - 80y = 0  with x, y in {0,1}.  gcd(77,80) = 1, so the
+    ONLY solution is x = y = 0 -- the phaser's chain-read form and its
+    bank-exit form must BOTH be inert.  a03's FIRST bank gives 67x - 70y = 0,
+    same conclusion.  Any rule that decides from the word's fields must treat
+    the four occurrences of each form alike, and the difference between the
+    banks is carried by the addr8 VALUES (67/70 vs 77/80), which such a rule
+    cannot see.  The exhaustive search then confirms that no rule with
+    x = y = 0 satisfies C3 either, non-degenerately.""")
+
+
 def sect5_header(progs, gates_used):
     print()
     print("=" * 78)
@@ -659,6 +718,7 @@ def main():
         if gn not in seen:
             seen.add(gn)
             uniq.append((gn, gf))
+    sect6_localise(sc)
     sect5_header(progs, uniq[:14])
     return 0
 
