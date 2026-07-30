@@ -6635,3 +6635,99 @@ take bit 32 and up. `acc_to_datum()` is no longer `static`.
 Evidence grade: **MEASURED** that clamping blocked the LFO and wrapping releases it, with a
 zero-valued null and a named falsifier that did not fire; **FORCED by the note** that the phase
 modulus is 2²³; **OPEN** where the modulus lives and why our period is 2× long.
+
+---
+
+## §115 — WHERE THE MODULUS LIVES: A **PER-UNIT MODE REGISTER**, LOADED BY SELECTOR `0x27`, AND BIT 3 IS WHAT SELECTS IT
+
+### 1. The register exists in our model and is DEAD
+
+```
+  upd6383.h:476   u8  m_ovc;              // overflow control
+  upd6383.cpp:160 m_gf(0), m_rq(0), m_ovc(0), ...      reset
+  upd6383.cpp:278 state_add(UPD6383_OVC, "OVC", m_ovc); exposed to the debugger
+  upd6383.cpp:337 save_item(NAME(m_ovc));               saved
+```
+
+**Never written or read by any instruction.** The CDJ-500 block diagram gives this ALU "two
+shifters and an OVC", the device modelled the register, and nothing drives it — exactly the
+shape `m_accb` had before §27 (Part 103: *"the device already declared m_accb, saved it in its
+state, and reset it. Nothing ever read or wrote it."*).
+
+### 2. ★★★ AND THE HEADER LOADS IT, ONCE PER UNIT, IMMEDIATELY BEFORE EACH BODY
+
+Every class-0 register-load word in the corpus, in order:
+
+```
+  iw42  801.0.70.821   sel 21  cursor bank      ]
+  iw43  801.0.6C.827   sel 27  ??? = 0x6C       ]  UNIT 0, immediately before its CALL
+  iw44  801.0.25.825   sel 25  descriptor ptr   ]
+
+  iw50  801.0.50.821   sel 21  cursor bank      ]
+  iw51  801.0.64.827   sel 27  ??? = 0x64       ]  UNIT 1, immediately before its CALL
+  iw52  801.0.25.825   sel 25  descriptor ptr   ]
+```
+
+A **per-unit triple**, repeated identically. Two of the three are settled — `0x821` loads the
+coefficient pointer (K3 FORCED), `0x825` the delay-descriptor pointer (PROVEN BY CONSTRUCTION).
+**`0x27` is the only member whose target is unidentified, and it occurs exactly twice: once per
+unit.** That is where a per-unit mode register is configured, and it is the only such site.
+
+### 3. ★ AND ITS TWO PAYLOADS DIFFER IN EXACTLY ONE BIT
+
+```
+  unit 0   0x6C = 01101100
+  unit 1   0x64 = 01100100
+  XOR      0x08  ->  bit 3, and nothing else
+```
+
+**Polarity fits the requirement:** unit 0 carries the LFO-bearing effects (CHORUS, PHASER, AUTO
+PAN, ENSEMBLE…) whose phase accumulator MUST wrap; unit 1 is the twelve reverbs, whose audio
+wants the saturation `acc_to_datum()`'s comment defends. Bit 3 is **set** for unit 0 and
+**clear** for unit 1.
+
+### 4. The prior falsification does NOT block this — it sharpens it
+
+The device records *"K3's `0x827` candidate stays falsified (0 of 85 streams)"*. Read in full:
+
+> *"`0x827` was falsified as **the D-RAM origin** at 0 of 85 streams"* … *"`0x825`/`0x827` are
+> INFERRED siblings **whose target register is unknown**"*
+
+`0x827` was tested as the **pointer** load and rejected. That it loads *some* register is not in
+dispute; *which* is explicitly open. An overflow-mode register is compatible with the
+falsification, and I checked this before proposing rather than after — the connection dropping
+mid-edit is the only reason I read it in time, which is not a method.
+
+### 5. ⚠ WHAT IS AND IS NOT ESTABLISHED
+
+**Established:** the modulus lives in a **per-unit mode register**, written once per unit by
+selector `0x27` immediately before that unit's body, alongside the two settled pointer loads.
+That answers "where it lives", structurally and from the ROM.
+
+**NOT established:** that bit 3 is the overflow selector. **n = 2.** Two samples differing in one
+bit tell you that bit encodes *something* per-unit; they do not tell you it is the modulus. I
+have been caught twice today by n = 1 (§100's SRC 0x02, §101's SRC 0x03) and this is barely
+better. It is the **leading candidate**, not a decode.
+
+Also note the payloads sit in the COMMON HEADER, so they are fixed for all 100 algorithms — unit
+0 is always `0x6C`, unit 1 always `0x64`. Consistent with a fixed two-unit architecture
+(modulation effect + reverb), but it means this register is per-unit, never per-algorithm.
+
+### 6. The test, fully specified
+
+Load `m_ovc` from `addr8` on selector `0x27` (returning without touching the accumulator, exactly
+as `0x821`/`0x825` do), and gate the wrap on `m_ovc` bit 3:
+* **(a)** the CHORUS LFO ramps — unit 0 wraps. Currently pinned; two-sided.
+* **(b)** the §54 DC leak stays 0.00% — and this is the *better-scoped* version of §114, because
+  unit 1 keeps saturation instead of the whole device wrapping.
+* **(c)** ⚠ the falsifier: bit 3 would make unit 0's **audio** wrap too, which is precisely the
+  risk `acc_to_datum()`'s comment names. If the tracking verdict worsens for unit 0 while the LFO
+  ramps, then bit 3 is a per-unit flag but not the overflow mode, and the modulus is per-DATAPATH
+  within the unit.
+* the 2²³-versus-2²⁴ question (§114: our period is exactly 2× long) is **orthogonal** and stays
+  open under either outcome.
+
+Evidence grade: **MEASURED** (the corpus positions and payloads, `m_ovc` being dead);
+**FORCED** that the per-unit configuration site is selector `0x27` — it is the only unidentified
+member of a triple that occurs once per unit; **CANDIDATE ONLY (n = 2)** that bit 3 is the
+selector.
