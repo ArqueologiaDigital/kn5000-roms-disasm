@@ -6241,3 +6241,101 @@ meaningless whenever bit 27 is on. Noted at the site; not read under the gate.
 Evidence grade: **MEASURED** (the block decode, the phase increment of 57, the window shift,
 the bit-identical outcome); **FORCED** that no base value can fix the collision; **UNDECODED**
 still for `ACT 0x0D`, `ACT 0x0E`, `ACT 0x0B`, `ACT 0x1C` and `f31 = 5`.
+
+---
+
+## §109 — iw30/iw32's STORE TARGET: BOTH DISCREPANCIES RESOLVED, PRE CONFIRMED ON A DECODED CONTROL, AND ONE GENUINE PER-WORD ADDRESSING DEFECT (iw11)
+
+Six agents, all returning; both adversarial verifiers ran and both re-derived every word field by
+hand. What follows separates what survived that from what did not.
+
+### 1. SURVIVES — the two named discrepancies are resolved
+
+**Guard 7 does not fire for `iw30`, and is never consulted.** `iw30`'s `SRC 0x08` is unanchored,
+so `alu_decoded()` returns false at the **ROUTING** test (`gfail = 23`) *before* guard 7's test is
+reached. `guard7_would_refuse()` is nevertheless 1 — the guard's own rule *would* refuse it — and
+`path = 1` shows `alu_decoded_speculative()`'s unconditional `return true` discards that verdict
+wholesale. The only **live** gate on the store is `st_suppressed() = bit7 && f31 == 1`, which
+`f31 = 5` does not match, so it stores at the bit-4 site.
+
+★ **The control passes** (rule 3): `iw37` returns `gfail = 7`, so code 7 *can* appear. "iw30's
+gfail is 23, not 7" is a discrimination, not a vacuous 1-of-1.
+
+**The guard-6 / `iw70` sibling has the same shape:** `iw70` is class 1, refused by guard 1 first,
+so it never entered guard 6's *"303 of 303 are mode 2"* census — which is silently **post-guard-1**.
+
+**⇒ Both are DOCUMENTARY defects in `upd6383d.h`'s comments, not code defects.** Guard 7's
+"everything else traps" and guard 6's "303 of 303" are scoped to `alu_decoded()`'s executable set
+and neither says so.
+
+**ACT 0x07 stores at the PRE-increment cell**, and this is confirmed on a **fully decoded,
+anchored control**: `iw34` (`0000AFF407`, `SRC 0x10`, ACT 0x07, `gfail 0`) reads dpPre 06 / dpPost
+05 and stores at 06. So PRE is not merely our convention on speculative words.
+
+**POST is measurably worse**, via a decoded witness: `iw88` (`000.2.F4.407`, class 2, `SRC 0x10`
+anchored, `gfail 0`) stores at 0x13 under PRE and at **0x07 — the phase cell — under POST**,
+300 000 times, driving the resident phase to 0. `lfo-ramp.md` §8.4 forces the negative *"it must
+not deposit a foreign value in the phase cell"*. Base-invariant, so §108's result does not touch it.
+
+**`iw30` and `iw32` both store to cell `0x07`.** For `iw30` pre-vs-post is **moot** — `addr8 = 0x00`,
+dpPre = dpPost = 0x07 — and the pass says so rather than manufacturing a distinction.
+
+### 2. ★★★ THE ONE GENUINE DEFECT, and it is exactly the class §108 asked for
+
+`iw11` (`0400201447`), the single K6 input-stage word carrying ACTION 0x07, stores at **dpPost
+(0x06)** while every other ACT-07 word in the build stores at dpPre. Cause: `exec_alu_k6()` runs
+after `exec_addressing_only()` has already advanced `m_dp`, and §35's `if (m_in_k6)` short-circuit
+covers **only the bit-4 site**, not the ACT-07 site. **Two timings for one action code in one
+binary.** `iw11` is the earliest writer of cell `0x06` — one of the two cells this whole
+§105–§108 line is about. It also served as the instrument's **positive control**: it proves the
+probe can see a POST landing, so the PRE nulls are not blind.
+
+Not changed here: a separate change with its own measurement.
+
+### 3. REFUTED — three sub-claims, and the first is the instructive one
+
+**A. The "13 corpus words" figure is a statistic its own source retracted.** `store-gate.md` item F
+says verbatim *"★ published count: 13. MEASURED: 11"*, labelled *"a FALSIFICATION of the published
+count"* — and goes further: the nine `f31 = 5` words (iw30's own form) *"trap because
+`hi12[3:1] > 2` is an undecoded accumulator operation … independent of bit 7 and of the gate"*,
+with *"A gate cannot disagree about a word it never reaches. Pricing a question at words that
+cannot execute is the same defect as a control that cannot fail."*
+⚠ **A pass whose whole subject is a scope defect in `upd6383d.h`'s comments reproduced a retracted
+statistic out of those same comments.** The substance (the gate tie is live under speculation)
+stands; the number does not.
+
+**B. "iw32 is not the reset" is contradicted by the pass's own arm C** — and this restores my §108.
+With `iw30`'s store suppressed, cell `0x07`'s writers are `{iw32, iw91, iw92}` and the phase
+resident at `iw89` is **still 4194304**. So `iw32` alone installs the reset value and is the last
+kernel write before the body reads. **§108's "kernel iw32 resets the phase" was correct; the
+agent's correction of it was wrong.** What *is* new and right: `iw92` **also** destroys the
+published phase one slot after `iw91` publishes it, writing `0x7FFFFF` = unity — verbatim the case
+`lfo-ramp.md` §8.4 positively excludes. Cell `0x07` has **four** writers per frame.
+
+**C. A fabricated citation, masking the real one.** "the biquad's static 10-of-10" bearing on the
+ACT-07 store target **does not exist** anywhere in the tree. Meanwhile the genuinely decisive
+static result went uncited: `lfo-ramp.md` §8.3 already ran the post-increment hypothesis over
+**276 480 machines with 0 survivors**, noting it *"breaks the 5 blocks that worked: PHASER's
+`092.A.0E.200` would then store at +14 = Q"* — the identical failure mode as the new `iw88`
+finding. **The PRE conclusion was already established statically and got re-derived against a
+phantom source.**
+
+**D. And one of the VERIFIERS is wrong.** Verifier 1 claimed the unit-0 output level is written to
+zero ~1.6 M times per run, citing the device's §41 **comment** — which describes the pre-§100
+state. Measured at the shipped default immediately after: `unit0 0x200000, non-zero on 452 160
+frames`. The level is intact. ⚠ A verifier citing a stale comment as a measurement is the same
+error it flagged in the pass; adversarial verification is not self-validating either.
+
+### 4. Left open, explicitly
+
+* The phase step is **+57** where `lfo-ramp.md` predicts **114** for CHORUS. Possibly a different
+  host-programmed rate, possibly the factor of 2 seen in the host levels. Unreconciled.
+* A live conflict between `lfo-ramp.md`'s determined **unity** for `SRC 0x08` and the coefficient
+  the device measures there. Both cannot hold.
+* `ACT 0x0D`, `0x0E`, `0x0B`, `0x1C` and `f31 = 5` remain undecoded — and per store-gate.md, the
+  `f31 = 5` words trap for a reason independent of the gate, so `hi12[3:1] > 2` is the live blocker.
+
+Evidence grade: **MEASURED** (store targets, gfail codes with a passing control, the PRE/POST arms
+with fired-counts, the iw11 timing split); **FORCED** that POST is wrong (decoded witness plus
+§8.3's 0 of 276 480); **REFUTED** for the three sub-claims above; **documentary** for the two guard
+comments.
