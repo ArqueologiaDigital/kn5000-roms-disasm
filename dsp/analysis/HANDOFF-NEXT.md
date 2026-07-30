@@ -9,7 +9,22 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Pin the scope of `SRC 0x00 = C-RAM[cursor]` (§145/§146).**
+**Find an observable DOWNSTREAM of the LFO for `SRC 0x00 = coef` (§148 §4).**
+
+The reading is in good shape and stuck for want of a witness: **MEASURED** bit-exact `±240` at the
+29 LFO twins in two vehicles with a passing control (§145, §148); **INFERRED (strong)** on the
+twelve `182` smoothers, which land on the ROM's own attack/release constants in its own upload
+order (§147). But §148 measured it **INERT downstream** — `coef` puts the right value on the bus
+and DO1/DO2 are 0 non-zero in both arms, so no further arm can validate it.
+
+⇒ The next step is not another mask bit. It is an observable **between the LFO phase cell and the
+delay tap it is supposed to modulate** — §104's residency ranges on the phase cell, or the
+delay-tap address itself, which is what the whole chorus depends on.
+
+⚠ Still untouched: the **1262-word class-2 majority**, 78 % of the `SRC 0x00` population. Nothing
+measured so far speaks to it.
+
+### Superseded scope note (§145/§146)
 
 §145 decoded it: at CHORUS's four LFO twins the operand bus becomes **+240/+240/−240/−240**,
 bit-exact, predicted before the run from the live C-RAM, with the anchored `SRC 0x08` control
@@ -46,9 +61,16 @@ blocker**, and it is **PARAMETRIC EQ's entire remaining blocker set** (§143 §6
   and the LOAD is an erasure. This is the third instance of ONE defect (kernel `iw47`, epilogue
   `iw65..72`, `w73`), and §39's *"what enables the MULTIPLY, as distinct from the fetch"* is its
   single root cause. **This is what keeps unit 0 silent.**
-* **★ Unit 1's railing is PRE-EXISTING (§143 §2).** `iw331`'s accumulator is `0x7FFFFF << 16`
-  **exactly** on loud frames *in the default*. Every "X rails unit 1" claim must be read against
-  that baseline; §135 spent three refutations on a phenomenon that had no external cause.
+* **★ Unit 1's railing is VEHICLE-DEPENDENT (§148, correcting §143 §2).** In a **clean**
+  vehicle — cold boot, notes after the ~19 s boot settles, no panel navigation — `iw330/331/332`
+  are `0..0` in quiet *and* loud, and **both units present 0 non-zero** with 314 063 loud frames.
+  The rail appears only in the `peq_gain` vehicle, which drives the panel for ~40 s and uploads a
+  different effect at every TYPE step (~55 program loads mid-run).
+  ★★ **STANDING RULE: report audio statistics from a CLEAN vehicle** (`data/PREDICT_148.md`'s
+  setup; harness `scratchpad/coldnotes2.lua`). Use the navigation vehicle only when the experiment
+  needs a *selected* effect, and then only for **deltas** — a shared contaminant cancels in a
+  delta but not in a characterisation. Every DO2 / DC-leak *absolute* number in §§135–148
+  describes the vehicle, not the chip.
 
 ## 1c. ⛔ RETRACTED — do not build on these
 
