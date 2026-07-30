@@ -16,45 +16,54 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**The multiply's memory operand `L` reads ZERO. Find why the D-RAM fetch is empty.**
+**The LFO index multiply's pointer is 5. The phase is in cell 7. Close the 2.**
 
-⛔ **The previous entry here — "decode `ACT 0x15`" — was based on a RETRACTED cause.** §174: the
-multiply's gate is `coeff_consumer(w) = class4(w)==0xA && !c_format(w)`; **the ACTION field is not
-in it**, so `ACT 0x15` words multiply already. §169 §2 was a source-level error, and rule 3's
-eleventh occurrence — `lfo-ramp.md` §10 said so in the paragraph §169 quoted.
+The whole modulation section is now blocked on one addressing offset, and every other link in the
+chain is measured and healthy.
 
-### MEASURED (`runs164/probe175b`, shipped default, cold-boot CHORUS)
-
-Per class-A `ACT 0x15` site, keyed **by word** (the pooled form reported "both operands live" and
-was wrong — §155's error in a new place):
+### MEASURED (`runs164/probe176`, shipped default, cold-boot CHORUS, 1 392 430 frames)
 
 ```
-  5 sites LIVE   coef live | L 0..8388607 | P up to 1.76e13
-  7 sites DEAD   coef live on 1.1-3.4 M firings | L 0..0 nz 0 | P 0..0
+  0202A071D5   (202.A.07.1D5, SRC 0x07 = mem[ptr])   CHORUS's LFO index multiply
+      coef  0..24     <- THE INDEX SCALE, exactly as `lfo-ramp.md' designed it.  It ARRIVES.
+      m_dp  5..5      <- CONSTANT.  The pointer never moves.
+      L     0..0      <- cell 0x05 reads zero
+      P     0..0      <- 24 x 0
+
+  D-RAM, all 32 cells:  02:6553600  06:8388607  07:2811786(0..8388598/chg1128429)  0E:39718
+                        everything else settles at ZERO.
 ```
 
-**The coefficient arrives on every firing. The memory operand is identically zero.** `L` here is
-`SRC 0x07` = `mem[ptr]`. The multiply is healthy and is being fed nothing.
+**The phase is in cell 7. The pointer is on cell 5. Off by exactly two.**
 
-⇒ **§168's addressing diagnosis is CONFIRMED and generalised** — not one word reading one frozen
-cell, but the operand fetch returning zero across most of the family. The chain now reads: the
-phase ramps (§165), the coefficient arrives (§174), the multiply runs (§174) — **and the D-RAM read
-under it is empty.**
+Every dead multiply site's `m_dp` lands on a cell the census reads as zero; the one apparent
+counterexample (`m_dp 14`, cell `0x0E`) is not one — `0E` has `chg 2`, zero for essentially the
+whole run.
 
-### Where to start
+### ★★ It converges on a candidate that was NAMED AND NEVER TESTED
 
-* The per-site table caps at the first **12** distinct words. **Raise the cap** — CHORUS's own
-  `0202A071D5` is not in it, and 7/12 is a sample, not a census.
-* The split is **not** a simple function of `SRC`: `0182A00415` is live where `0212A00415` — same
-  `lo12`, different `hi12` — is dead. Whatever selects the pointer is in `hi12`.
-* Then compare the live and dead sites' pointer state. §162's `m_dp` census is the obvious
-  instrument, aimed at the **multiply** word rather than the class-6 word.
+§108 §5 FORCED that no anchor value could fix this, and listed what could:
 
-⚠ Vehicle: §170 measured the TYPE map, so a 6-word-gap program is now reachable —
-**FLANGER 3, AUTO PAN 16, VIBRATO 17, RING MODULATOR 20** (CHORUS 0, PARAMETRIC EQ 15). Rule 2
-governs absolute audio statistics; a register census is not one.
+> *"some word's `addr8` contribution to the walk, `iw30`/`iw32`'s store target, or **the body's LFO
+> block not really sitting at base+2**."*
+
+The measured offset is **exactly 2**. That candidate has sat untested through a `DRAM_UNIT_BASE`
+refutation, two retractions and eleven occurrences of trap #3.
+
+⚠ **Heed §108's own warning:** an *anchor* is a single number and feels cheap to try, and every
+anchor here is pinned by closure arithmetic. Move a **per-word addressing contribution**, not a
+base — bit 27 already proved a base change is bit-identical.
+
+### The two-sided criterion is already sharp
+
+```
+  pointer reaches cell 7  ->  L stops being 0, P becomes 24 x phase, the class-6 index VARIES.
+                              Then K2 is four lines, discriminator 226 NOT 240.
+  it does not             ->  L stays 0 and nothing else moves.
+```
 
 ### ⛔ Dead, do not retry
+
 
 
  — all three cost a pass
