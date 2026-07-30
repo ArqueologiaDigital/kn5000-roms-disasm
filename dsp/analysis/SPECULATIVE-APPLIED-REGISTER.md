@@ -7404,3 +7404,62 @@ Remaining for PEQ to become the first fully executable effect: `ACT 0x0D`, `ACT 
 Evidence grade: **MEASURED** (the verbatim core match, the stride-9 repeat, the ten sections, the
 two bank-entry positions); **FORCED** that the two unknowns carry no term of the difference
 equation; **INFERRED** that they are the bank input mix.
+
+---
+
+## §125 — PEQ IS **TWO PARALLEL FIVE-SECTION BANKS**, AND THAT IS WHAT MAKES THE TRANSFER-FUNCTION CRITERION VALID FOR `ACT 0x0D`/`0x0E`
+
+### 1. ⚠ THE CRITERION-VALIDITY CHECK, RUN BEFORE THE TEST THIS TIME
+
+§124 handed off "PEQ has a known transfer function" as the criterion. That needed checking
+first, because a biquad's response is set by `b0,b1,b2,a1,a2` **inside the core, which is already
+decoded** — so if `ACT 0x0D`/`0x0E` merely assemble a bank's input, they would affect **gain, not
+shape**, and the criterion would be blind to them. Exactly the class of hole that voided §121 and
+wasted §107.
+
+### 2. The structure, from the pointer walk
+
+```
+  both banks READ cell 0x05 at entry     idx 0 and idx 53      -> PARALLEL, not series
+  bank 1 private state   0x50..0x63      20 cells = 5 sections x 4
+  bank 2 private state   0x64..0x77      20 cells = 5 sections x 4
+  both write shared scratch              0x0E, 0x10
+```
+
+**PARAMETRIC EQ is two PARALLEL five-section banks, both fed from the unit-0 audio input cell
+`0x05`, summed through shared scratch.** The 20-cell private ranges match the biquad note's
+four-cell state (`x[n-1] x[n-2] y[n-1] y[n-2]`) times five sections, exactly — an independent
+confirmation of that layout from the address map rather than from the arithmetic.
+
+### 3. ★ SO THE CRITERION IS VALID — the two mixes are not identical
+
+```
+  bank 1 entry:  ACT 0D addr8 = 0x0B (+11)     ACT 0E addr8 = 0x00
+  bank 2 entry:  ACT 0D addr8 = 0x0A (+10)     ACT 0E addr8 = 0xFF (-1)
+```
+
+The two banks' input words **differ in `addr8`**. Because the banks are parallel and summed,
+their relative contributions change the **shape** of the combined response, not merely its level.
+**A known input therefore yields an output that depends on `ACT 0x0D`/`0x0E`** — the criterion
+discriminates, and it does so without needing the chip to be audible.
+
+Had the banks been in series, or had the two mixes been identical, this criterion would have been
+blind and §124's handoff would have been another void experiment.
+
+### 4. The test, now fully specified and validated
+
+1. Extract the ten sections' `b0,b1,b2,a1,a2` from the ROM C-RAM image (cursor banks feeding
+   `ACT 12/13/14/15`), and compute the analytic response of *two parallel five-section banks*.
+2. Drive the emulated chip with a known input and compare its output spectrum.
+3. Enumerate `ACT 0x0D`/`0x0E` readings; the correct pair reproduces the analytic response, and a
+   wrong pair mis-weights one bank against the other — a **shape** error, which is visible.
+4. ⚠ `f31=4` and `f31=5` also sit in the bank entry (idx 3, idx 50/104), so all four unknowns must
+   be resolved together or held fixed while one varies. Do not attribute a shape change to
+   `ACT 0x0D` while `f31=5` is also unmodelled in the same five-word sequence.
+
+Point 4 is the constraint that would have caught §121's error: the enumeration varied one unknown
+while three others in the same block were still guesses.
+
+Evidence grade: **MEASURED** (the parallel structure, the private state ranges, the differing
+`addr8` values); **FORCED** that the criterion discriminates given parallel summation and unequal
+mixes; the decode itself remains **OPEN**, with a validated test now specified.
