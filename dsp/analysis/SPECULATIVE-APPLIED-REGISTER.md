@@ -10773,3 +10773,75 @@ outright. **`0x12` vs `0x15` cannot be closed from the corpus** — `0x12` is es
 Evidence grade: §1 **FORCED** (read at source); §2 **MEASURED**, the pooled reading **VOIDED**;
 §3 **MEASURED** with its sampling limit stated; §4 **INFERRED**, from a separate pass, not
 re-derived here.
+
+---
+
+## §176 — ★★★ THE INDEX MULTIPLY POINTS AT CELL 5. THE PHASE IS IN CELL 7. Off by exactly 2.
+
+Against `data/PREDICT_176.md`. Both probes were pointed one step further upstream than §174's, and
+that is where the answer was.
+
+### 1. F1 — the D-RAM is mostly empty (H1's arm fires)
+
+Every cell `0x00..0x1F`, settled value, over 1 392 430 frames:
+
+```
+  02:6553600   06:8388607   07:2811786(0..8388598/chg1128429)   0E:39718
+  ---- and 00 01 03 04 05 08 09 0A 0B 0C 0D 0F 10 ... 1F all settle at ZERO ----
+                                                       ||  NON-ZERO 4 of 32
+```
+
+⚠ §164 reported only the cells that *moved*, so it could not tell "static and non-zero" from
+"static and **zero**" — and the whole fork turned on that. Same defect as §169 measuring `m_p` at
+the consumer: the instrument was one step off.
+
+### 2. F2/F3 — and the per-site pointer table settles it
+
+Cap raised 12 → 24, so **CHORUS's own word is now in the table** (F3 satisfied):
+
+```
+  0202A071D5   coef 0..24   L 0..0   P 0..0   m_dp 5..5
+  ^ 202.A.07.1D5, SRC 0x07 = mem[ptr] -- CHORUS's LFO index multiply
+```
+
+> **`coef` is `0..24` — the index scale `lfo-ramp.md` measured as `0x18` = 24. It arrives, exactly
+> as designed. `m_dp` is a CONSTANT 5. The phase is in cell 7. The multiply computes 24 × 0.**
+
+**Pointer 5, target 7. Off by exactly two.**
+
+And F2's prediction holds across the table: every dead site's `m_dp` lands on a cell the census
+reads as zero (`5`, `0F`, `0x10`, `0x12`, `15..18`), and the one apparent counterexample —
+`0010A001D5` at `m_dp 14..14`, cell `0x0E` — is not one: `0E` has `chg 2`, i.e. it is zero for
+essentially the whole run.
+
+### 3. ★★ The convergence, and it is with a candidate that was named and never tested
+
+§108 §5 FORCED that no anchor value could fix this and listed what could:
+
+> *"some word's `addr8` contribution to the walk, `iw30`/`iw32`'s store target, or **the body's LFO
+> block not really sitting at base+2**."*
+
+**The measured offset is exactly 2.** That third candidate has sat in the register untested since
+§108, through a `DRAM_UNIT_BASE` refutation, two retractions and eleven occurrences of trap #3 —
+and it is the one the measurement now names.
+
+⇒ **NEXT: test the +2.** ⚠ Pre-register properly and remember §108's own warning — an *anchor* is
+cheap to try and every anchor here is pinned by closure arithmetic. The thing to move is a per-word
+addressing contribution, not a base. And the two-sided criterion is already available and sharp:
+
+```
+  if the pointer reaches cell 7:  L stops being 0, P becomes 24 x phase, and the class-6 index
+                                  finally VARIES -- then K2 is four lines and the discriminator
+                                  is 226, not 240.
+  if it does not:                 L stays 0 and nothing else moves.
+```
+
+### 4. What this does NOT say
+
+`§70 ACCA min 0 max 0` — the chip is silent, unchanged (F5). Neither arm of F1 nor this finding
+makes it audible. And "28 of 32 cells are zero" is **not** yet established as a defect: this is a
+small scratch window and the delay lines live elsewhere. It is the *specific* pointer/target
+mismatch at a word whose coefficient is provably correct that carries the weight here.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED** (coefficient 24 identifies the word's role
+independently of any addressing claim); §3 the convergence **MEASURED**, the fix **UNTESTED**.
