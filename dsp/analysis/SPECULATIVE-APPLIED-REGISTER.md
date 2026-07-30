@@ -7516,3 +7516,99 @@ and none of them has ever been executed.
 Evidence grade: **MEASURED** (0 C-RAM records in algo 39's stream; the live C-RAM identified as
 CHORUS by two independently-known constants); **FORCED** that §125's test cannot run until PEQ is
 selected.
+
+---
+
+## §127 — PARAMETRIC EQ **SELECTED AND RUNNING**; the coefficient chain verified end-to-end; §125's criterion CORRECTED
+
+§126's prerequisite is done. The panel route already existed and had already been used once:
+`kn7000_mame/notes/kn5000-dsp-origin-capture.md` (2026-07-23) selected PARAMETRIC EQ in MAME with
+`tools/kn5000_dsp_origincap.lua`, snapshot- and RAM-verified. **That note was not read before §126
+was written** — the sixth-and-seventh occurrence of trap 1 (`HANDOFF-NEXT.md` §7).
+
+### 1. PEQ is loaded — three independent confirmations
+
+Run: `UPD6383_SPEC=6A39B440F`, `DSPCFG=3`, harness `peq_select.lua` (the origincap navigation:
+`CPR_SEG10 0x04` SOUND -> `CPL_SEG7 0x02` DSP EFFECT editor -> 40x `CPL_SEG10 0x10` to saturate at
+CHORUS -> 15x `CPL_SEG10 0x20` to PARAMETRIC EQ), notes held 6 s at t = 40.5 s.
+
+| check | expected (pre-registered, from the 2026-07-23 note) | measured |
+|---|---|---|
+| name-index array | `RAM[0x29AA]=17`, `RAM[0x29AC..]=[51,52,53]x5` | `cnt=17 idx=[51,52,53,51,52,53,...]` ✔ |
+| live C-RAM cell 0x00 | anything but CHORUS's `000072` | `C04B34` ✔ |
+| frame length | 286 - 70 (CHORUS) + 105 (PEQ) = 321 | **320 slots, 320 DECODED, 0 PARTIAL, 0 TRAP** ✔ |
+
+### 2. ★★ The coefficients decode to a textbook 5-band EQ — an END-TO-END control that PASSES
+
+Live C-RAM `0x00..0x1D` = **30 values, five stride-6 sections**, decoded with the format already
+solved in `notes/kn5000-dsp-biquad-coeffs.md` §3 (`NN+0..+2` = b1,b0,b2 x2^22 pre-halved;
+`NN+3` = -a1/a0 x2^22; `NN+4` = -a2/a0 x2^23):
+
+```
+  sec   pole r     pole-angle f     nearest ISO 1/3-oct centre    err
+   0    0.99556       121.1 Hz              125 Hz              -3.2 %
+   1    0.99114       242.1 Hz              250 Hz              -3.2 %
+   2    0.98236       484.2 Hz              500 Hz              -3.2 %
+   3    0.96511       968.7 Hz             1000 Hz              -3.1 %
+   4    0.93203      1939.7 Hz             2000 Hz              -3.0 %
+```
+
+All five poles **stable** (r < 1) and all five land on ISO centres one octave apart. The -3.1 %
+is not an error: the sub-CPU designer prewarps with `K = tan(pi*f0/fs)`, so the *digital pole
+angle* is not `2*pi*f0/fs`. Solving the design equations back for band 0 gives `Q = 2.0011` — a
+value that **is in the 32-entry Q table** — and predicts the pole angle as 121.2 Hz against 121.1
+measured. So the chain host designer -> poke port (incl. the §111 x2 payload) -> C-RAM addressing
+-> coefficient format is verified end to end, on live data, with no free parameters.
+
+### 3. ★ CORRECTION to `kn5000-dsp-biquad-coeffs.md` §3/§4: cell `NN+5` is a **x2 make-up**, not padding
+
+That note concluded "the sixth coefficient does not exist ... algorithm 39's stride-6 blocks
+contain one padding word each". Against this:
+
+* the program **multiplies by it** — `w12/w21/w30/w39/w48` are `mac.st acc,c+,(p)-1` on C-RAM
+  `0x05/0x0B/0x11/0x17/0x1D`, exactly the `NN+5` cells;
+* the host **writes** them: `C-RAM WRITE RUNS (3): [0x50..0x8B]=60 [0x90..0xB4]=37 [0x00..0x2C]=301`
+  — the third run spans them, and the rest of C-RAM `0x20..0x4F` is `000000`;
+* all five hold exactly `0x800000` = **2.0** at the b-scale `2^22`;
+* and only that reading is self-consistent: the b's are stored **pre-halved**, so five sections
+  are 1/32; the cascade computes **-30.10 dB** flat with the cell unused and **0.00 dB flat
+  (+/-0.05 dB)** with it as x2. `-20*log10(32) = -30.10`.
+
+**MEASURED.** The disassembler's own label (`coeff C-RAM[0x05] = biquad makeup`) was right.
+
+### 4. ⛔ §125's CRITERION IS DEAD — the two banks share one coefficient set
+
+`w58 = 0801000021 = rstcur`. Bank 2 restarts the coefficient cursor at 0x00, and the generated
+listing confirms both banks walk `0x00..0x1D`; the host uploads exactly 30 coefficients
+(extent `0x1E` = 30, `origin-capture.md`). So the two banks are **not** two differently-weighted
+parallel voices — they are the **two CHANNELS** of "5 bands x 2 channels" (`programs.tsv`), running
+identical filters on different inputs into different state blocks.
+
+§125's argument was: *"parallel banks sum, so their relative weights change the shape; a wrong
+reading mis-weights one bank against the other."* Identical coefficients and separate channels mean
+there is **no relative weight to get wrong** and nothing sums. This is exactly the fragility §125
+itself flagged ("if you change anything that makes the banks series, or equalises the mixes, the
+criterion dies") — it was already dead when written, and it dies on the *coefficients*, a case §125
+did not consider.
+
+### 5. And the loaded preset is FLAT, which is a second, independent reason the test as specified cannot discriminate
+
+The cascade is 0.00 dB at every frequency. A flat EQ cannot distinguish a correctly-decoded filter
+from a plain pass-through, so even a perfect audio comparison would score the same for both.
+
+### 6. What replaces it
+
+The vehicle is still right — PEQ is 8 words from fully executable and its 4 blockers are the
+corpus-wide top — but the criterion must change:
+
+1. **Dial one band's GAIN off 0 dB** so the target response has a sharp, localised, predicted
+   feature. Candidate soft-keys (INFERRED from `-paramlist.md` §1.3 "TYPE / PARAMETER / VALUE, each
+   an up/down pair", only TYPE measured): PARAMETER = UP-2/DOWN-2 = `CPL_SEG10 0x80/0x40`,
+   VALUE = UP-3/DOWN-3 = `CPL_SEG9 0x20/0x10`. ★ This is **self-validating**: if the presses are the
+   right ones, the live C-RAM section coefficients move off flat in the predicted direction.
+2. Then discriminate on **which input cell each bank reads and which state block it walks**, which
+   is what the four unknowns actually control — not on a mix weight.
+
+Evidence grade: §1 **MEASURED** (three pre-registered checks); §2 **MEASURED** + **FORCED**
+(the Q solve-back); §3 **MEASURED**; §4/§5 **FORCED** (`rstcur` + the 30-coefficient extent +
+the flat response); §6 **OPEN**, with the enumeration constraint of §125 point 4 still binding.
