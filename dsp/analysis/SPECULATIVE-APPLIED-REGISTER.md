@@ -9892,3 +9892,87 @@ overlap, inside `m_rf`, at `0x20`. Both need separating before the table is trus
 Evidence grade: §1 **MEASURED** (35 of 36 cells fitted, control passing); §2 **MEASURED** (both
 counters, and the symmetry confirming the missing value); §3 **FORCED** as to the blocker, the two
 candidate causes **ENUMERATED, not chosen**.
+
+---
+
+## §161 — the delay word's `addr8` is a DIRECTION field, and it was being used as a store address
+### SHIPPED into the default: mask bit 61 → `0x3910E446A39B440F`
+
+§160 closed by enumerating two candidate causes for the one destroyed wavetable cell and
+explicitly declining to choose. This is the choice, made by reading the code rather than by
+running anything, and then gated A/B.
+
+### 1. The word
+
+```
+  880.1.20.2C7      hi12=0x880  ESC(bit 11)=1  class4=1  addr8=0x20  lo12=0x2C7
+                    SRC = 0x0B  (the delay-read register)
+                    ACT = 0x07  (STORE)
+```
+
+`upd6383.cpp:2977` computes `mode07 = c_format(word) ? 2 : (class4(word) & 7)`. This word is
+**not** C-format, so `mode07 = 1`, and `:2979` then takes `d07 = addr8(word) = 0x20`.
+
+But `addr8` on a class-1 **escape** word is the delay direction code, not a register address.
+That reading is **FORCED**, not speculative — adjudication-round5 item D at 276/276: bit 6
+selects, `0x20`/`0x30` are READ and `0x60` is WRITE. A field cannot be a direction code and a
+destination at the same time.
+
+⇒ CHORUS's four delay READs were storing into register cell `0x20` = **LFO wavetable index 3**.
+
+### 2. The arithmetic that made the prediction bit-exact
+
+A least-squares sine fit over the **22 surviving cells** (index 3 excluded from the fit) returned
+
+```
+  A   = 7 969 178  =  0.9500000 x 2^23        max residual 2 LSB over 22 cells
+  phi = 0.100000 rad
+```
+
+Amplitude and phase both *fell out*; neither was assumed. Predicted index 3 = `+6 169 475`.
+
+★ **But the decisive witness was not the fit.** The window is 36 entries and the sine's period is
+24, so **index 3 and index 27 are the same phase**. Cell `0x38` = index 27 already read `0x5E2382`
+in the control, undisturbed. The prediction had a bit-exact in-table twin available the whole time.
+
+### 3. A/B, all four pre-registered falsifiers (`data/PREDICT_161.md`)
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **F1** aim | fires on exactly those four words | `FIRED 4 515 636` = §153's tapmod count **in the same run** | ✔ |
+| **F2** value | cell `0x20` = `0x5E2383`, 36/36 | `0x5E2382`, **36 of 36** | ✔ |
+| **F3** collateral | re-aimed to `m_dp`, so it could punch a NEW hole | full non-zero-cell diff vs control = **exactly one added line, `20=5E2382`** | ✔ |
+| **F4** null | control unchanged | 35/36, `0x20 = 000000`, `FIRED 0` | ✔ |
+
+F2 landed **1 LSB** off my fit and **bit-identical** to the period-24 twin — the fit's own stated
+residual is 2 LSB, so the fit was never the tighter instrument. F3 is the one that could have
+failed quietly: the fix redirects the store rather than deleting it, and `m_dp` could have pointed
+back into `0x1D..0x40`. It does not.
+
+### ⚠ 4. A methodological correction against my own pre-registration
+
+F1 as written demanded `4 513 920`, a literal copied from §153's *earlier* run. The measurement is
+`4 515 636`. **The number I pre-registered was wrong and the claim it was testing was right**: both
+counters read `4 515 636` in the run being adjudicated. Cold-boot frame totals vary run to run
+(§159 saw 1 128 480 frames, this pair 1 156 269), so:
+
+> **An absolute event count is not a falsifier across runs. Only a within-run comparison of two
+> counters is.** Pre-register the *relation*, never the literal, whenever the quantity scales with
+> frame count.
+
+This is the second time a stale cross-run constant has been carried into a prediction.
+
+### 5. What this does and does not buy
+
+It does **not** make the chip audible — the shipped-default confirmation run still reports
+`§70 ACCA min 0 max 0` in 678 469 quiet and 313 960 loud frames, and both ports at peak 0. That
+was pre-registered as not-a-goal.
+
+What it buys is precisely the §160 blocker: **K2 now has an intact table to index.** And it retires
+§160 §2's "the host's wavetable and the microcode's scratch COLLIDE inside the register file" as a
+*structural* claim — there is no collision to separate. One line was reading a direction field as
+an address. The table's base at `0x1D` was right all along, which was candidate 2 of the two.
+
+Evidence grade: the field's meaning **FORCED** (276/276, prior adjudication); the misuse
+**MEASURED** (four falsifiers, A/B, known-answer control); the restored value **MEASURED against an
+independent in-table witness**, not against my own fit.

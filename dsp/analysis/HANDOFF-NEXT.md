@@ -9,30 +9,29 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Find where the LFO wavetable lands — the class-6 lookup cannot be built until it exists.**
+**K2 — implement the class-6 waveform lookup. It is UNBLOCKED as of §161.**
 
-⛔ **K2 (implement the lookup) is BLOCKED, and the prerequisite check is why it was not built.**
-§159 MEASURED D-RAM `0x1D..0x40` — the 36-entry wavetable range — as **~800 writes per cell with
-NOT ONE non-zero**. Implementing the lookup today would index a table of zeros, measure exactly
-what the no-op measures, and that null would read as a refutation of the sine when it is a
-statement about an empty table.
+The prerequisite is done. `m_rf[0x1D..0x40]` now holds a complete, bit-exact 36-entry sine:
+`0.9500000 x 2^23 x sin(2*pi*k/24 + 0.100000 rad)`, all 36 cells within 2 LSB, verified against
+the shipped default with no env override.
 
-★ **Likely cause is structural, not a bug:** tag `0x15` routes host pokes to the **mode-1 register
-file** (`upd6383.cpp:919`, mask bit 23, set in the default) that §97 deliberately split off from
-the pointer-walked D-RAM — while the microcode's class-6 lookup addresses D-RAM. Upload and
-reader on opposite sides of a correct split.
+* §159's "not one non-zero" was measuring **D-RAM**; the table lives in the **register file**
+  (`m_rf`), the side §97's split put host pokes on. The reader is what must move, not the upload.
+* §161 fixed the one destroyed cell: `ACT 0x07`'s mode-1 store was taking its destination from
+  `addr8`, which on a class-1 escape word is the **delay direction code** (FORCED, 276/276).
+* `upd6383.cpp:2030` is where class 6 currently gives up: *"no table is modelled, so execute the
+  addressing and leave the ALU alone."* The table now exists; that comment is stale.
 
-**§160 is running that measurement** (`data/PREDICT_160.md`): dump `m_rf[0x1D..0x40]` by value
-against the ROM table at `0x01EAFA`, with the tag-0x15 cells §97 validated as the known-answer
-control. Two mutually exclusive outcomes and two different fixes:
-* **table present in `m_rf`** ⇒ the READER is misaddressed; K2 becomes small.
-* **`m_rf` also zero** ⇒ the op-0x74 upload never reaches the chip; the target moves upstream to
-  the host route (`ROADMAP-2026-07-29.md:229`, *"881 writes / 65 cells dropped"*).
-
-⚠ **The aliasing hazard applies either way**: descriptor cells `0x26..0x39` overlap D-RAM
-`0x1D..0x40` under `upd6383.cpp:1305`'s flat `map(0x00,0xff).ram()`. **Separate them before
-trusting the table**, or a correct upload gets corrupted by descriptor writes and the wrong
-waveform reads as a refutation of the sine.
+★ **Pre-register these before running** — they are already computed and mutually exclusive:
+```
+  peak excursion  226, NOT 240     <- the table's peak is 0.9452541, not 1.0 (index 6, undamaged)
+                                      226 kills "no table";  240 kills "sine"
+  DEPTH 30  -> +/-36 samples       DEPTH 99 -> +/-120       (30/99 = 0.30303030, seven digits)
+  rate 0.599 Hz
+```
+⚠ And the shape claim is only trustworthy now *because* index 3 is no longer a notch. A wavetable
+with a hole produces a waveform with a glitch, and a sweep measured through it would have looked
+like a shape result.
 
 ### ⛔ THREE RETRACTIONS — do not build on any of them
 
