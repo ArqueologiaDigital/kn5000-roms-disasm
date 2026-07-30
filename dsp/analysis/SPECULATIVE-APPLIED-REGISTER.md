@@ -11133,3 +11133,76 @@ one of them, and the multiply produces a real product for the first time.** That
 
 Evidence grade: §1 **MEASURED**; §2 the mis-specification **acknowledged**, the coincidence
 **MEASURED**; §3 **MEASURED**; §4 **FORCED** as to C3, **MEASURED** as to F3; §5 **SPECULATIVE**.
+
+---
+
+## §181 — ⛔ `C63` NEVER WRITES `m_tb`. Three experiments were aimed at the operand of a word the device does not route to the ALU.
+
+### 1. Results against `data/PREDICT_181.md`
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **F1** both gates fire | two non-zero counts | bit 62 **1 165 869**, bit 18 **9 279 912** | ✔ |
+| **F2** two-sided | `m_tb` chg → ~1.13 M, **or** stays ≈1 ⇒ `SRC 0x11` is not the route | **chg = 1 in both arms** | **arm 2** |
+| **F3** control | arm B must reproduce §180 bit-exactly | `L −599858..8388607 nz 1128428`, `m_dp 5..5`, `P 0..1.76e13` — **exact** | ✔ |
+| **F4** rule 1 | `§70 ACCA` min = max | `min 0 max 0` | ✔ (silent) |
+
+Arm D does change the multiply — `L 0..8388607`, `P 0..3145727` against B's `1.76e13` — so bit 18 is
+live and consequential. **`m_tb` is untouched by either.**
+
+### 2. ★★★ WHY, and it is written in the source in plain sight
+
+```cpp
+  upd6383d.h:609   if (lo12(w) & 0x800) return true;    // the alternate lo12 encoding:
+                                                        // addressing only, no ALU effect
+  upd6383d.h:628   if (lo12(w) & 0x800) return false;   // the bit-11 MODIFIER ... Not part of
+                                                        // the code -- simply not modelled on
+                                                        // an ALU route yet.
+```
+
+`C63`'s `lo12` is **`0xC63`**, and `0xC63 & 0x800` is set. ⇒ **`C63` performs addressing only. It
+does not execute an ALU operation, so it never writes `m_tb`, whatever `SRC 0x11` delivers.**
+
+⇒ **§166 §3 is REFUTED.** It read `C63` as `SRC 0x11 / ACT 0x03 → m_tb = L` by applying the
+**standard** `lo12` split to a word in the **alternate** encoding. ★ §166 graded that exactly
+right at the time — *"the idiom's shape INFERRED, the identity of the index register
+SPECULATIVE"* — and it is the SPECULATIVE half that falls. §166 §2's 53/53 bijection is a
+measurement and stands untouched.
+
+⇒ And it explains **three** experiments at once: §168 (bit 18 alone), §181 arm D (bit 18 + 62), and
+the whole `SRC 0x11` line were testing **the source of a write that never happens.** `m_tb`'s
+`chg = 1` was never evidence about `SRC 0x11` at all.
+
+### 3. The size of the hole
+
+Words whose `lo12` carries bit 11, C-format excluded:
+
+```
+  90 of 2989 corpus words = 3.0 %, in 9 distinct forms
+     0xC63 x53 (25 programs)   0x8BC x24 (24 programs)   0x825 x3   0x821 x3
+     0x839 x2   0x827 x2   0x822 x1   0x864 x1   0x921 x1
+```
+
+Only 3.0 % by population — but `0xC63` is **one half of the table-lookup idiom** (§166: 53/53), and
+`0x821`/`0x825`/`0x827` are the **pointer-family loads** the header uses to set the operand origin
+(`kn5000-dsp-pointer.md` §1). ⚠ **This is not a long-tail decode. It is small, and it sits on two
+load-bearing structures.**
+
+### 4. ⇒ NEXT TASK, and a warning about the task list
+
+**Model the bit-11 alternate `lo12` encoding on an ALU route.**
+
+⚠ Task #1 in this session's list — *"Decode the bit-11 alternate lo12 encoding"* — is marked
+**completed**, and the device says *"not modelled on an ALU route **yet**"*. Either the earlier work
+decoded the field without wiring it, or the completion was about something narrower. **Check what
+that task actually delivered before redoing it** — thirteenth application of rule 3, and the first
+where the stale record is my own task list rather than a note.
+
+### 5. What survives from §180, unchanged
+
+PTRD-A still takes CHORUS's index multiply from `L 0..0 nz 0` to `L` live on 1 128 428 of 1 129 389
+firings. That result is independent of `C63` and is not affected by this refutation. It remains
+**unshipped** for §180's three reasons.
+
+Evidence grade: §1 **MEASURED**; §2 **FORCED** (read at source), §166 §3's SPECULATIVE half
+**REFUTED**; §3 **MEASURED**; §4 procedural.
