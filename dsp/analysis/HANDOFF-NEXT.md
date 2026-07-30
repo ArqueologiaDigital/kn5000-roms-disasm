@@ -9,20 +9,46 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Find an observable DOWNSTREAM of the LFO for `SRC 0x00 = coef` (§148 §4).**
+**Decode the LFO → DELAY-TAP link. It does not exist in the model (§149).**
 
-The reading is in good shape and stuck for want of a witness: **MEASURED** bit-exact `±240` at the
-29 LFO twins in two vehicles with a passing control (§145, §148); **INFERRED (strong)** on the
-twelve `182` smoothers, which land on the ROM's own attack/release constants in its own upload
-order (§147). But §148 measured it **INERT downstream** — `coef` puts the right value on the bus
-and DO1/DO2 are 0 non-zero in both arms, so no further arm can validate it.
+§148 asked for an observable downstream of the LFO; §149 found there is no downstream.
 
-⇒ The next step is not another mask bit. It is an observable **between the LFO phase cell and the
-delay tap it is supposed to modulate** — §104's residency ranges on the phase cell, or the
-delay-tap address itself, which is what the whole chorus depends on.
+* **The LFO half already works** — §109's phase cell advances by exactly **114 per frame**,
+  CHORUS's ROM increment (0.599 Hz). MEASURED, and identical across arms.
+* ⛔ **`upd6383.cpp:1813`: `addr = (cellv + m_frames_run) & 0xffff`** — descriptor cell plus the
+  free-running frame counter and **nothing else**. No accumulator, no temp, no phase term.
+  `m_frames_run` is the circular-buffer rotation `G` (`r3-delaydram.md` §5.1), which is correct
+  and is **not** modulation.
+* ⇒ **A swept delay cannot exist.** Every chorus / flanger / vibrato in the machine depends on a
+  mechanism the emulator does not have, and this is the whole reason `SRC 0x00 = coef` measured
+  inert downstream.
 
-⚠ Still untouched: the **1262-word class-2 majority**, 78 % of the `SRC 0x00` population. Nothing
-measured so far speaks to it.
+★ **The candidate, SPECULATIVE (strong).** CHORUS's two modulated delay READs are each preceded by
+a byte-identical idiom, with the LFO twin and its phase-read a few words earlier:
+
+```
+   C40.3.20.44C     C-format immediate
+   A00.0.00.041     SRC 0x01, ACT 0x01     <- immediately before the read, both times
+   880.1.20.2C7     THE DELAY READ (addr8 = 0x20)
+```
+
+`A00.0.00.041` occurs **38 times in 14 programs** = exactly the swept-delay family, and is
+**ABSENT from PHASER**, the one modulation effect that sweeps all-pass coefficients rather than a
+delay tap. `ACT 0x01` carries a "PLAIN GUESS ×5" tempA reading with no evidence behind it.
+*Kill it:* find it in a program with no delay line, or a swept-delay effect that lacks it.
+
+⚠ **Do NOT spend more mask arms on `SRC 0x00` first.** It is decoded where it is observable
+(MEASURED bit-exact at the 29 twins, two vehicles, passing control; INFERRED strong at the twelve
+`182` smoothers via the ROM's own upload script) and **unobservable everywhere else until this
+link exists**. §§145–148 refined a reading that was already right against a consumer that is
+missing — the fired-count and the bit-exact bus check both kept saying "the gate works".
+
+## 1a. Still open, and untouched by any measurement
+
+The **1262-word class-2 `SRC 0x00` majority** — 78 % of the population. `coef` is wrong there by
+construction (a class-2 word consumes no cursor coefficient, so `C-RAM[cursor]` returns whatever
+the last class-A word left), and §143 §5 established that the constraint which once narrowed
+`SRC 0x00` to `{mem[ptr], acc}` is **VOID**.
 
 ### Superseded scope note (§145/§146)
 
