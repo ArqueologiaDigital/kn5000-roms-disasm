@@ -8919,3 +8919,86 @@ idiom, because `2/π` is meaningless without one.
 Evidence grade: §1/§2 **MEASURED** (ROM bytes and the disassembler's cursor addresses);
 §3 **INFERRED (strong)** — the UI parameter names, the two stages and the two constants agree;
 §4 the scope, explicitly bounded.
+
+---
+
+## §148 — THE `f98` GATE IS INERT IN A CLEAN VEHICLE — and the clean vehicle overturns §143 §2
+
+Scored against `data/PREDICT_148.md`. Vehicle: **cold-boot CHORUS**, notes at t = 21..27.5 s,
+i.e. *after* the ~19 s boot — which fixes §145's defect of having **zero** loud frames. This run
+has **314 063** of them.
+
+| | prediction | result |
+|---|---|---|
+| **P1** | fired-count > 0, ≪ the class-A arm's 16 063 766 | ✔ **4 513 920** |
+| **P2** | ★ control: twins still ±240, anchored `iw89` still 114 | ✔ `+240/+240/−240/−240`, `114` |
+| **P3** | the railing does not appear | **VOID in this vehicle** — see §2 |
+| **P4** | ★ something downstream differs | ✘ **DO1 and DO2 are 0 non-zero in BOTH arms** |
+
+⇒ **F4 fired**: `coef` puts the right value on the bus and **nothing downstream reads it**. The
+reading is **inert in this vehicle** and cannot be validated by it. The gate is not refuted; it is
+unobservable here, which is a different and weaker outcome than either a pass or a refutation.
+
+### 1. ★★ THE CLEAN STEADY STATE IS SILENT IN **BOTH** UNITS
+
+```
+  cold-boot CHORUS + notes, DEFAULT mask, 314 063 loud frames:
+     unit0/DO1  1 155 840 exec, 0 non-zero, peak 0
+     unit1/DO2  1 155 840 exec, 0 non-zero, peak 0
+     VERDICT: SILENT -- chip eats the signal
+     §70 ACCA at w73: quiet min 0 max 0 | loud min 0 max 0
+```
+
+This is exactly what §141 predicts (`w73` erases the accumulator at the door) and it is the first
+time it has been measured in a vehicle that both plays notes *and* leaves the machine alone.
+
+### 2. ⛔ AND IT OVERTURNS §143 §2: THE UNIT-1 RAILING IS **VEHICLE-DEPENDENT**
+
+The same slot, the same default mask, two vehicles:
+
+```
+  CLEAN cold-boot CHORUS      iw330/331/332   acc  0..0   quiet AND loud, marked '='
+  80 s peq_gain (navigation)  iw331           acc  549 755 748 352 = 0x7FFFFF<<16  (the rail)
+                              iw332           acc 1 099 511 496 704 = 2x the rail
+```
+
+§143 §2 concluded *"unit 1's railing is PRE-EXISTING"* and `HANDOFF-NEXT` §1b carries it as a
+standing caution. It is pre-existing **within the `peq_gain` vehicle** — and **that vehicle creates
+it.** In the clean steady state the reverb's accumulator is identically zero.
+
+★ The mechanism is not mysterious: `peq_gain.lua` spends ~40 s driving the panel — DSP EFFECT
+toggle, SOUND menu, editor, 40 DOWN presses, 15 UP presses — and **every TYPE step uploads a
+different effect** (`origin-capture.md` measured 16 uploads in one 16-step sweep). So the chip
+takes ~55 program loads and coefficient rewrites mid-run.
+
+### 3. ⇒ What this qualifies, and what it does NOT
+
+**Qualified — every DO2 / DC-leak *absolute* number in §§135–148** was measured in the
+navigation vehicle and describes **the vehicle**, not the chip's steady state. That includes
+§135's "98.9 %", §144's "41.2 %" and §145/§146's railing figures.
+
+**NOT invalidated — the A/B *deltas*.** §144's ship decision rested on the ship arm being within
+0.1 % of the default *in the same vehicle*, and §142's three predictions were differences between
+two arms measured identically. A shared contaminant cancels in a delta; it does not cancel in a
+characterisation. ★ The distinction matters and is worth keeping: §135's *"shipping rails unit 1"*
+was wrong for a different reason (my unit-blind write, §143 §3), but its numbers were
+vehicle-contaminated **as well**.
+
+**New standing rule:** report audio statistics from a **clean vehicle** (cold boot, notes after
+the boot settles, no panel navigation), and use the navigation vehicle only when the experiment
+actually needs a selected effect — and then only for deltas.
+
+### 4. Where `SRC 0x00 = coef` now stands
+
+* **MEASURED**: bit-exact ±240 at the 29 LFO twins, control passing, in two vehicles (§145, §148).
+* **INFERRED (strong)**: the twelve `182` smoothers land on the ROM's own attack/release constants
+  (§147).
+* **UNOBSERVABLE downstream** in a clean vehicle — nothing yet reads what it puts on the bus.
+* **UNTOUCHED**: the 1262-word class-2 majority, 78 % of the population.
+
+⇒ To validate it further requires an observable *downstream of the LFO*, not another arm. §104's
+residency ranges on the phase cell, or the delay-tap address the LFO is supposed to modulate,
+are the candidates — and the latter is the one the whole chorus depends on.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED** and a **partial retraction of §143 §2**;
+§3 **FORCED**; §4 status.
