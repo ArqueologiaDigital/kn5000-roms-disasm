@@ -8775,3 +8775,78 @@ to fail.
 
 Evidence grade: §1 **MEASURED**, three pre-registered predictions including a known-answer control;
 §3 **MEASURED**; §4 a stated **limitation**; §5 **OPEN** — the generalisation beyond the twins.
+
+---
+
+## §146 — THE CLASS GATE FAILS ITS OWN P3, AND THE FAILURE LOCALISES THE RAILING TO **FOUR WORDS**
+
+Scored against `data/PREDICT_146.md`.
+
+| | prediction | result |
+|---|---|---|
+| **P1** | fired-count falls sharply | ✔ **91 383 219 → 16 063 766** |
+| **P2** | ★ the twins UNCHANGED (known-answer control) | ✔ `+240 / +240 / −240 / −240`, and `iw89` still 114 |
+| **P3** | ★ the railing stops | ✘ **DO2 2 553 951, peak +8 388 607, DC leak 99.94 %** |
+
+`2 553 951` against the all-words arm's `2 553 952` — **one frame different.** So restricting the
+read to coefficient-consuming words removes 82 % of its firings and changes the outcome by
+essentially nothing. **F3 fired: class is not the discriminator.**
+
+★ But that is a *better* result than a pass, because it localises the cause. Of the ~111 class-A
+`SRC 0x00` words in the corpus, only **FOUR execute in the live frame**:
+
+```
+  KERNEL           iw14, iw36    400.A.00.000    f98=0  f31=0
+  ROOM REVERB 1    iw315, iw326  282.A.00.000    f98=2  f31=1
+  PARAMETRIC EQ                  -- none --
+  EPILOGUE                       -- none --
+```
+
+**Unit 1's railing is produced by at most four words, and the two in the audible unit are
+`282.A.00.000`.**
+
+### 1. ⚠ A measurement-hygiene note about these runs
+
+The `peq_gain.lua` runs do **not** set `UPD6383_TRACE_FRAME`, so the trace still arms at frame
+420 000 ≈ 8.75 s while PEQ is selected at ≈ 50 s. **The `iw94/103/135/144` readings in this and the
+previous arm are therefore CHORUS frames, not PEQ frames** — which is fine, because the twins live
+in CHORUS, but it must be said rather than assumed. It also means the DO2 statistics over an 80 s
+run are dominated by the **CHORUS**-era ~62 % of it, not by PEQ.
+
+### 2. ★ The encoding that separates them, and one independent check before it is believed
+
+All 47 class-A `SRC 0x00` words over the 38 distinct images + kernel + epilogue:
+
+```
+  hi12=192  f98=1  f31=1  n=29   <- THE LFO TWINS, bit-exact +/-240 (§145)
+  hi12=182  f98=1  f31=1  n=12
+  hi12=282  f98=2  f31=1  n=2    <- ROOM REVERB iw315/iw326, the railers
+  hi12=212  f98=2  f31=1  n=2
+  hi12=400  f98=0  f31=0  n=2    <- KERNEL iw14/iw36
+```
+
+`f98 = 1` covers **41 of 47** and excludes exactly the words that rail.
+
+⚠ **Gating on `f98 = 1` because it separates the twins from the railers would be fitting the gate
+to the outcome.** What makes it more than that is an *independent* identification of the other
+f98=1 form: `182.A.00.000` is the **one-pole smoother** of the 2/π level-detector idiom (§139 §3),
+found from a byte-identical 12-site window, not from this experiment. So `f98 = 1` collects
+{LFO phase accumulator, one-pole smoother} — two *coefficient-consuming filter* contexts — while
+`f98 = 2` and `f98 = 0` are something else.
+
+★ **The independent prediction that would make it evidence:** under `coef` the twelve `182` words
+must consume the smoother time constants the idiom needs (≈ 4.712 ms and 11.764 ms, ratio ≈ 5/2),
+**not** whatever `mem[ptr]` supplies. That is checkable offline, on a population this experiment
+never touched, and it should be checked **before** the gate is run.
+
+### 3. Where this leaves `SRC 0x00`
+
+* **MEASURED**: `coef` is right at the 29 LFO twins, bit-exact, with a passing control.
+* **MEASURED**: `coef` applied to all 1610, or to all 111 class-A, rails unit 1 identically.
+* ⇒ The reading is **context-dependent**, and `class4` is not the context. `f98` is the leading
+  candidate and is **not yet tested**.
+* The 1262-word class-2 majority remains entirely unaddressed — it is 78 % of the population and
+  no measurement here speaks to it.
+
+Evidence grade: §1 **MEASURED** with one **stated hygiene limitation**; §2 **MEASURED** (the
+census) + **SPECULATIVE** (the f98 reading), with its independent test named; §3 **OPEN**.
