@@ -10691,3 +10691,85 @@ on this project, turned out to be the actual mechanism.
 
 Evidence grade: §1 **MEASURED** (nulls computed first); §2 **MEASURED**; §3 **INFERRED** and
 explicitly **left open**, with the falsifying observation named; §4 **SPECULATIVE**.
+
+---
+
+## §174 — ⛔⛔ §169 §2 RETRACTED. The multiply issues. The dead operand is `L`, and §168 was right.
+
+A parallel read-only pass found the error; I verified it at source before accepting it, and then the
+correction propagated further than the pass predicted.
+
+### 1. ⛔ The retraction — a source-level mistake, and rule 3's ELEVENTH occurrence
+
+§169 §2 said the LFO index multiply never issues *because* `ACT 0x15` decodes as a no-op. The
+multiply's gate is:
+
+```cpp
+   coeff_consumer(w) = class4(w) == 0xa && !c_format(w)          // upd6383d.h:841
+```
+
+**The ACTION field is not in that condition.** CHORUS's word is `202.A.07.1D5` — class A, `f31 = 1`
+— so it multiplies already, `ACT 0x15` or not. And `lfo-ramp.md` §10 says so *in the paragraph
+§169 quoted*: *"ACTION 0x15 (no side effect), class A — so it multiplies the phase by a coefficient
+and leaves the product in P."*
+
+⇒ **§169's measurement stands (`m_p 0..0 chg 0` at the lookup); its cause does not.**
+⇒ And it takes two other sections with it: **§171 §4 and §173 §3's "one cause — the dead multiply"
+lose their premise. §168's addressing diagnosis is NOT displaced.**
+
+### 2. ⚠ My first probe pooled, and §175 caught it — §155's error in a new place
+
+Instrumenting the multiply gave *"both operands live, P up to 1.76 × 10^13"* — over **36 463 968**
+firings pooled across every class-A `ACT 0x15` word in every program. Meanwhile a second probe
+naming the last writer of `P` reported **THE MULTIPLY** at CHORUS's lookup, with `P` still 0.
+
+Both cannot be read together unless the census is hiding a dead site inside 36 million live ones.
+**A pooled census cannot answer a per-site question.** Keyed by word:
+
+```
+  0192A00455  coef -3792303..3527094 nz 1133229 | L 0..8388607 nz 1133229 | P ..1.75e13   live
+  0292A00455  ...                                                                         live
+  0182A00415  ...                                                                         live
+  0692A00415  ...                                                                         live
+  0212A811D5  coef 0..5084004        nz 1133229 | L 0..16384    nz 3839    | P ..5.4e8    live
+  ---------------------------------------------------------------------------------------------
+  0202AFD1D5  coef 0..4194304 nz 1133229 | L 0..0 nz 0 | P 0..0   <= L ALWAYS 0 -> POINTER
+  0202AF91D5  coef 0..4194304 nz 1133229 | L 0..0 nz 0 | P 0..0   <= L ALWAYS 0
+  0212A001D5  coef 0..3905669 nz 1133229 | L 0..0 nz 0 | P 0..0   <= L ALWAYS 0
+  0212A00415  coef 0..3527094 nz 3394887 | L 0..0 nz 0 | P 0..0   <= L ALWAYS 0
+  0202A001D5  coef -3792303..0 nz 3394887 | L 0..0 nz 0 | P 0..0  <= L ALWAYS 0
+  0000A00695  coef 0..4194304 nz 3394887 | L 0..0 nz 0 | P 0..0   <= L ALWAYS 0
+  0000A0A1D5  coef -1509614..1509949 nz 1133229 | L 0..0 nz 0 | P 0..0  <= L ALWAYS 0
+```
+
+**Seven of twelve sites: the coefficient arrives on every one of 1.1–3.4 million firings, and the
+memory operand is identically zero on all of them.**
+
+### 3. ⇒ THE DEFECT IS THE OPERAND FETCH, and that is §168's pointer
+
+`L` at these sites is the bus datum — `SRC 0x07` = `mem[ptr]`. It reads **0**, always, while the
+coefficient beside it is live. The multiply is healthy; it is being fed nothing.
+
+⇒ §168's *"`C63` reads a cell that never changes — an **addressing** defect"* is **confirmed and
+generalised**: it is not one word reading one frozen cell, it is the operand fetch returning zero
+across most of the family. ★ The chain §165→§174 now reads: the phase ramps, the coefficient
+arrives, the multiply runs — **and the memory read under it is empty.**
+
+⚠ **Limits, stated.** The per-site table is capped at the first **12** distinct words, so it is not
+exhaustive and CHORUS's own `0202A071D5` is not among them; the 7/12 split is a sample, not a
+census. And `0182A00415` is live where `0212A00415` — same `lo12`, different `hi12` — is dead, so
+the split is not a simple function of `SRC`.
+
+### 4. What `ACT 0x15` is, from the same pass — kept separate because it is not measured here
+
+**INFERRED, ~70 %:** `ACT 0x15` has no architecturally visible side effect — the "no capture"
+member of the ACTION field, the plain-MAC code. 23.7 % is what that predicts. The negative half is
+much stronger (**≥95 %**): PARAMETRIC EQ's biquad contains an adjacent minimal pair
+`202.A.01.1D4` / `202.A.01.1D5` differing *only* in ACT, and the section's state shift requires the
+first to write a register and the second not to — which excludes `0x13`'s effect, `0x14`'s effect,
+any accumulator write, any store, any pointer or cursor move, and "0x15 enables the multiply"
+outright. **`0x12` vs `0x15` cannot be closed from the corpus** — `0x12` is essentially one form.
+
+Evidence grade: §1 **FORCED** (read at source); §2 **MEASURED**, the pooled reading **VOIDED**;
+§3 **MEASURED** with its sampling limit stated; §4 **INFERRED**, from a separate pass, not
+re-derived here.
