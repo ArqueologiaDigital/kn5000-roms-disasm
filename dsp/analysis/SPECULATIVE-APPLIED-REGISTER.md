@@ -9164,3 +9164,112 @@ needed, and it distinguishes "the store-and-clear zeroed it" from "something els
 Evidence grade: §1 **MEASURED** (the trace, both arms); §2 a **RETRACTION** of §141's mechanism —
 its *localisation* to `w73` survives, its *explanation* does not; §3 **INFERRED** (the store-bit
 suspect) and the contradiction between the two readings **FORCED**; §4 a named, existing instrument.
+
+---
+
+## §151 — `SRC 0x00` ON CLASS 2: the build already ships TWO incompatible readings, and `acc` is excluded
+
+From a read-only corpus agent; every claim below **re-verified here** before recording.
+
+### 1. ⛔ THE BUILD CONTRADICTS ITSELF, AND NO NOTE RECORDS IT
+
+`000.2.00.000` — **273 words, across 91 programs** (re-counted) — is hard-coded as a **`nop`** in
+both mirrors:
+
+```
+  upd6383d.cpp:728   if (hi == 0x000 && cl == 2 && ad == 0x00 && lo == 0x000) return true;  // nop
+  upd6383.cpp:3401   else if (hi12(word)==0x000 && class4(word)==2 && lo12(word)==0x000)
+                     { /* nop -- INFERRED */ ... ptr_postinc still applied (§90) ... }
+```
+
+That branch precedes `exec_alu()`, so those 273 words never reach the ALU. **Every other class-2
+`SRC 0x00` word does**, and there reads `mem[m_dp]`.
+
+⇒ **The shipped emulator uses `SRC 0x00 = zero` for 273 of the class-2 population and
+`SRC 0x00 = mem[ptr]` for the rest — two incompatible semantics for one source code, live, and
+undocumented.** And the `nop` reading is the *only* class-2 `SRC 0x00` decode this project has ever
+shipped. FORCED (source).
+
+★ It is also self-consistent only under `zero`: with `f31 = 0` and `ACT 0x00`, a non-zero bus would
+**overwrite** the accumulator, so treating the word as a no-op *is* the claim that its operand is 0.
+
+### 2. ★★ `SRC 0x00` and `SRC 0x07` have DISJOINT `hi12` vocabularies inside class 2
+
+Re-verified: over class-2 words with `ACT 0x00`,
+
+```
+  SRC 0x00 (lo12 = 0x000):  17 distinct hi12
+  SRC 0x07 (lo12 = 0x1C0):   3 distinct hi12
+  SHARED:                    0
+```
+
+The agent's permutation null (20 000 draws, marginals preserved, global and within-program) gives
+mean overlap ≈ 19 and **P(overlap ≤ 0) < 5×10⁻⁵**. Concretely `022.2.00.000` and `002.2.00.1C0`
+have *identical* decoded ALU fields and differ only in `hi12` bit 5 and the source code.
+
+⇒ If `SRC 0x00` were `mem[ptr]`, the two encodings would be interchangeable and the assembler's
+choice would be uncorrelated with the accumulator operation. It is perfectly correlated.
+**This is the strongest static evidence yet that `SRC 0x00 ≠ mem[ptr]`** — i.e. against the reading
+the build ships for 989 of the 1262. MEASURED.
+
+### 3. ★★★ The self-write exclusion, promoted to a reusable ISA constraint
+
+Over the 38 distinct images (2899 routed words), five source×action pairs that would write a
+register from itself:
+
+```
+  mem[ptr] SRC 07 x ACT 07 : obs 0, exp 145.17
+  acc      SRC 10 x ACT 00 : obs 0, exp 198.28
+  tempA    SRC 19 x ACT 13 : obs 0, exp   1.92
+  tempA    SRC 19 x ACT 19 : obs 0, exp   4.27
+  tempB    SRC 1A x ACT 14 : obs 0, exp   1.52
+  TOTAL    observed 0, expected 351.15    ->  P = 3.1e-153
+```
+
+**Any proposed "`SRC X` = register `R`" must have zero co-occurrence with the actions that write
+`R`.** This has been rediscovered piecemeal; it belongs in the ISA notes as a standing test.
+
+Applying it:
+* ⛔ **`SRC 0x00 = acc` is EXCLUDED.** `SRC 0x00 × ACT 0x00` occurs **580** times (453 in class 2),
+  and `ACT 0x00` is the code that admits the bus to the accumulator adder. ⚠ The honest escape:
+  if `0x00` and `0x10` were two encodings of one register with a spelling convention, the
+  exclusion would be convention rather than prohibition — weakened by their overlap elsewhere
+  (`ACT 0x0B`: 27 vs 10; `ACT 0x07`: 3 vs 264).
+* ✔ **`P` survives with positive support**: `SRC 0x00 × ACT 0x0E` (`P ← bus`, §133) = **0** against
+  47.84 expected.
+* ⚠ **`zero` is untouched** — it names no register, so the test is silent by construction. That is
+  a limitation of the test, not evidence for the reading.
+* ★ **Free by-product**: `ACT 0x0B` co-occurs with `SRC 0x19` (tempA) **44** times. If `ACT 0x0B`
+  wrote tempA that would be 44 self-writes against an exceptionless prohibition — so this argues
+  **`ACT 0x0B ≠ tempA ← bus`**, a different open code, at no cost.
+
+### 4. ⚠ The live null is 89.7 % — do not spend another mask arm here
+
+From `data/clean_vehicle_default.log.gz` (§148's clean vehicle, 314 063 loud frames): of the 39
+class-2 `SRC 0x00` slots that execute per frame, **35 read `L ≡ 0` in quiet *and* loud**. Only one
+is input-dependent — kernel `iw13 = 282.2.00.000` at `dp = 0x06`.
+
+⇒ A live A/B on this population has ≈10 % power **before it starts**. Combined with §148's F4 and
+§149's missing consumer, a live arm here is the wrong instrument twice over.
+
+### 5. Bookkeeping
+
+**`SRC 0x00` is 1610 words per-program** (class split `1:233 | 2:1262 | 8:4 | A:111`), not the
+**1270** quoted in §143 §6 and `HANDOFF-NEXT` §1a. The 1270 figure is `coverage_report.py`'s
+*ranking* number, which excludes words already blocked by a higher-priority field. Both are
+correct for their denominator; the register quotes it as the population, which it is not.
+
+### 6. ⇒ Where this leaves the class-2 majority
+
+The population is one word shape: **97 % is exactly `lo12 = 0x000`**, and **76 % is
+`hi12 . 2 . 00 . 000`** — no pointer move, no coefficient, no side-effect action. And class 2
+never fetches a coefficient or issues a multiply (`class4 & 8` clear), so on such a word the
+operand reaches **exactly one place**: `accum += L << ACC_SHIFT`.
+
+Surviving readings, class-2 only: **`zero`** (shipped for 273 words, untouched by the exclusion),
+**`P`** (survives with positive absence support), `hold-the-bus`, `DR`. Excluded: **`acc`**.
+Weakest survivor: **`mem[ptr]`** — the one the build ships for the other 989.
+
+Evidence grade: §1 **FORCED** (source, both mirrors); §2 **MEASURED** (re-verified; the
+permutation null is the agent's); §3 **MEASURED** and promoted to a standing constraint;
+§4 **MEASURED**; §5 bookkeeping; §6 **OPEN**.
