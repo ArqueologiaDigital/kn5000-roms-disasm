@@ -7335,3 +7335,72 @@ what each must compute, which is the context §107's failed attempt lacked.
 
 Evidence grade: **REFUTED** for §122's `SRC 0x00` reading, on a pre-existing constraint solve;
 **MEASURED** for the corrected coverage numbers; **FORCED** that PEQ needs exactly those four.
+
+---
+
+## §124 — THE BIQUAD PLACES `ACT 0x0D`/`0x0E` BY EXCLUSION: THEY ARE **PER-BANK INPUT PLUMBING**, NOT PART OF THE DIFFERENCE EQUATION
+
+### 1. PARAMETRIC EQ contains the reconstructed biquad verbatim
+
+`notes/dsp-alu-biquad.md` reconstructs a biquad section and names its words. PEQ's body holds
+them **character for character** at idx 5..8:
+
+```
+  note row 0   000.A.00.1D3   ACT 13    =  PEQ idx 5
+  note row 1   212.A.01.412   ACT 12    =  PEQ idx 6
+  note row 2   202.A.01.1D5   ACT 15    =  PEQ idx 7
+  note row 3   202.A.01.1D4   ACT 14    =  PEQ idx 8
+```
+
+★ **And the core repeats at a stride of 9, ten times** — `ACT 0x13` occurs at idx 5, 14, 23, 32,
+41, then 59, 68, 77, 86. **PARAMETRIC EQ is a ten-section filter bank, in two banks of five.**
+That is exactly what a parametric EQ is, and it means the note's reconstruction — which FORCED the
+anchored actions `0x12`/`0x13`/`0x14`/`0x15` — already covers **90 of PEQ's 105 words**.
+
+### 2. ★★★ WHICH PLACES THE TWO UNKNOWNS PRECISELY
+
+```
+  ACT 0x0D at idx  0 and 53
+  ACT 0x0E at idx  1 and 54
+```
+
+`idx 0/1` sit immediately before the **first** bank's first section (idx 5); `idx 53/54`
+immediately before the **sixth** section, i.e. the **second** bank's first. **Two occurrences, one
+per bank, always as an adjacent `0x0D`,`0x0E` pair at the bank entry.**
+
+The full bank-entry sequence, now that `SRC 0x00` is settled (§123):
+
+```
+  idx 0  000.2.0B.1CD   f31=0  SRC 07 = mem[ptr]   ACT 0D   ⛔
+  idx 1  000.2.00.40E   f31=0  SRC 10 = acc        ACT 0E   ⛔
+  idx 2  212.2.00.000   f31=1  SRC 00 = mem[ptr]   ACT 00   store
+  idx 3  02A.2.00.000   f31=5                      ACT 00   ⛔ f31
+  idx 4  000.2.40.407   f31=0  SRC 10 = acc        ACT 07   store acc to +64
+  idx 5  ...the biquad core...
+```
+
+★ **The biquad constrains them BY EXCLUSION, and that is the useful part.** The difference
+equation `y = b0·x + b1·x1 + b2·x2 − a1·y1 − a2·y2` is **fully decoded without them** — every MAC
+step and both state writes are anchored actions inside the core. So `ACT 0x0D`/`0x0E` cannot be
+carrying any term of the filter. They are the **per-bank input plumbing**: whatever assembles the
+bank's input in the accumulator before `idx 4` deposits it where the core reads it.
+
+That is a much tighter constraint than the destination enumeration §121 attempted. It says what
+they are *for* — a two-word input mix, once per bank, reading `mem[ptr]` then the accumulator —
+before any candidate destination is proposed, which is the ordering §107 and §121 both got wrong.
+
+### 3. Handoff — the next step, fully specified
+
+The pair reads `mem[ptr]` (`0x0D`) and then the accumulator (`0x0E`), and four words later the
+accumulator is stored to `+64`. So the candidate readings are constrained to operations that
+**assemble a sum or a scaled mix in the accumulator**, and the criterion is available and sharp:
+**PEQ is a filter with a known transfer function.** Feed it a known input and the ten sections'
+output is analytically predictable — which is a far stronger criterion than "does something stop
+being constant", and it does not depend on the chip being audible.
+
+Remaining for PEQ to become the first fully executable effect: `ACT 0x0D`, `ACT 0x0E`, `f31=4`,
+`f31=5` — 8 words, 4 unknowns, in a program whose other 97 words are decoded.
+
+Evidence grade: **MEASURED** (the verbatim core match, the stride-9 repeat, the ten sections, the
+two bank-entry positions); **FORCED** that the two unknowns carry no term of the difference
+equation; **INFERRED** that they are the bank input mix.
