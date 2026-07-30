@@ -1,13 +1,44 @@
 # HANDOFF — read this first
 
-**Rewritten 2026-07-30 after §§127–132.** The original version told you to select PARAMETRIC EQ
+**Rewritten 2026-07-30 after §§127–135.** The original version told you to select PARAMETRIC EQ
 and run the transfer-function test. **PEQ is now selected, running, traced, and reading its own
 coefficients**, and that test has been reformulated three times. Read this, then
-`SPECULATIVE-APPLIED-REGISTER.md` §§127–132 (§132 first — it corrects §127).
+`SPECULATIVE-APPLIED-REGISTER.md` §§127–135 (§132 first — it corrects §127; then §133 and §135).
 
 ---
 
 ## 1. YOUR NEXT TASK
+
+**Find out why `ACT 0x0E -> P` diverges in a FEEDBACK ladder** (§135 §5). The decode itself is
+done — §133 decoded `ACT 0x0D = acc <- bus` and `ACT 0x0E = P <- bus` (at the multiply's scale) —
+but putting them in the default **rails unit 1, the only audible unit**, at `-0x800000` on 98.9 %
+of presentations. So neither is shipped.
+
+It is localised to **six words**: unit 1's three `ACT 0x0D`/`0x0E` pairs, which use the *same*
+idiom as PEQ's (same `lo12`, `1CD` then `40E`) but carry **`f31 = 1`** on the `0x0D` word instead
+of `0` — the reverb is *accumulating* when the pair overwrites the accumulator, and its `0x0D`
+words read `mem[ptr]` at `+75 / +8 / +123`, inside its own state block, so the pair copies loop
+state back into the loop.
+
+**Three hypotheses are already REFUTED — do not re-run them:** the suppressed store-and-clear
+(mask bit 16 changes nothing), multiply-carrying words (3 of 427), and the resident
+kernel/epilogue sites (body-only gate `iw >= 84`, bit 53, is identical to full ship).
+
+★ The standing suspect is §132 §3: **`m_p` is one member modelling what is probably TWO real
+registers** — a multiplier input latch and a product register — and a feedback ladder is exactly
+where the difference shows. ⚠ A common scale error is NOT available as the explanation: §133's
+feed test compares the state cell *after* `acc_to_datum`, so `<< ACC_SHIFT` is pinned.
+
+⚠ **Ship the two readings TOGETHER or not at all.** They are jointly selected by PEQ's two-channel
+structure; the 8x8 map also admits `0x0D -> P` (both banks then read `0x05`), and only the
+two-channel requirement rules it out. `ACT 0x0D -> acc` alone measures bit-identical to the
+default, so shipping it would be inert *and* would put half a jointly-supported pair in the default.
+
+Masks: ship `0x10E446A39B440F`; `0x0D` alone `0x100446A39B440F`; `0x0E` alone `0x10E046A39B440F`.
+
+---
+
+### DONE — the bank-entry demultiplexer (§133)
 
 **Run the BANK-ENTRY DEMULTIPLEXER** (§132 §4): inject a known, per-cell-distinct stimulus into
 D-RAM `0x05`/`0x0F` **at the body CALL**, and read the 40 Direct-Form-I state cells `0x50..0x77` as
