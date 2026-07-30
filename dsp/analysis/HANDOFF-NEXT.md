@@ -9,46 +9,62 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Decode the modulation WAVEFORM — the excursion is right, its shape over time is untested.**
+**Implement the class-6 WAVEFORM LOOKUP. Until it exists, nothing modulates.**
 
-★★ §155: the delay tap **now sweeps, by exactly ±240 samples** on CHORUS — `C-RAM[0x02]`, the
-depth the ROM designs — reproducing a `160..640` containment window inside a 1040-sample line
-that §152 computed **from the ROM alone, beforehand**. Four pre-registered predictions, all pass.
-
-The mechanism is `lo12 == 0x44C` (§152, and it had been written down in
-`kn7000_mame/notes/kn5000-dsp-chorus.md` since 2026-07-22). The seven-word transaction:
+⛔ **First, three retractions — do not build on any of them:**
 
 ```
-   900.1.60.1D5   [0] DRAM WRITE, opens
-   192.A.40.000   [1] the DEPTH, in samples   <- a SRC 0x00 class-A word
-   082.2.00.1C0   [2] LFO phase READ          byte-invariant 29/29
-   C40.3.20.44C   [3] APPLY THE OFFSET        byte-invariant 29/29
-   A00.0.00.041   [4] interpolate (absent when the effect truncates)
-   880.1.20.2C7   [5] DRAM READ -- the tap
-   102.A.C3.4C8   [6] per-voice output gain
+  §155  "the delay tap SWEEPS +/-240"        WRONG -- the census pooled voices of opposite sign
+  §157  "each voice RAMPS 0 -> depth"        WRONG -- boot transient inside an undeclared window
+  §158  TRUTH: the tap-mod is a CONSTANT per voice.  Nothing moves at all.
 ```
 
-⚠ **What §155 did NOT establish, by pre-registration:** the modulation *arithmetic*. The census
-measures the excursion's **extent**, not its **shape over time**. Sine / triangle / raw ramp is
-open. Look at the **36-entry SINE table at D-RAM `0x1D..0x40`** — and first check whether it is
-real, because descriptor cells `0x26..0x39` **alias** that range in the emulator's map.
+`§104` over the settled window (frames > 420 000), quiet **and** loud identical:
+`iw96 15729946 | iw105 15729540 | iw137 −15727740 | iw146 −15727740` — **all min == max.**
 
-**Two measured anomalies, deliberately unfitted:**
-* **DEPTH's 0.5 gain is not applied.** `chorus.md` reads the UI DEPTH knob as op 0x66, default
-  `0x400000` = 0.5, predicting ±120. Measured is **±240, the full depth**. No factor has been
-  introduced to close this.
-* **One cell sweeps `−240..0`, one-sided**, where three sweep `−240..+240`. Rectifier, phase
-  offset, or census artefact — undecoded.
+★ **Why nothing moves:** `upd6383.cpp:2030` — class 6, the **table-lookup idiom, is an explicit
+NO-OP** (*"no table is modelled"*). The LFO waveform is a frozen constant, so every downstream
+multiply produces a constant too.
 
-★ **And this retired §148's "inert downstream" verdict on `SRC 0x00 = coef`.** That was true and
-the wrong conclusion: its consumer is this path, which did not exist when it was written.
-`tapmod` without `coef` **rails**; both together land on the designed depth. **Neither reading is
-observable without the other** — the third time this corpus has punished one-at-a-time
-enumeration (after §133's `ACT 0x0D`/`0x0E` and §136/§40).
+### The mechanism, MEASURED end to end
 
-**Ship candidate:** `0x1910E446A39B440F` (default | bit 59 `coef` | bit 60 `tapmod`), regression
-pre-registered in `data/PREDICT_156.md`. ⚠ Shipping models a swept delay for the first time; it
-makes **nothing audible** — DO1/DO2 are 0 for reasons upstream (§141/§150).
+```
+  LCD "DEPTH 30" -> UI slot 0 -> op 0x66 -> C-RAM[0x09]=[0x0A] = 0x1364D8
+                    = 0.30303 x the ROM base 0x400000,  and 30/99 = 0.30303030 (7 digits)
+  -> iw123 `000.A.00.415`  acc = DEPTH x LFO   -> D-RAM 0x0F
+  -> iw126 `010.A.00.1D5`  acc = DEPTH x that  -> D-RAM 0x0E, and 0x10 at iw132
+  -> the tap idiom's word [1] reads D-RAM 0x10/0x0E/0x0F as its BUS operand
+  -> word [3] `C40.3.20.44C` applies it to the delay-tap address
+```
+
+**The waveform is a 36-entry table the host uploads at boot** (op 0x74, six ROM tables at
+`0x01EAFA / 0x01EB67 / 0x01EBD4` (36) and `0x01EC41 / 0x01ECA5 / 0x01ED09` (32), user-selectable
+as "LFO WAVEFORM"). The cold-boot default is an **exact sine** — `0.95·sin(2πk/24 + 0.1)` to
+**0.94 LSB**, one-bin DFT, peak `table[6] = 0x78FE14 = 0.9452541`, **not 1.0**.
+The lookup is universal: `000.6.18.4CD` with a preceding ×24 scale coefficient at **29 of 29**
+LFO blocks.
+
+### K2 — the test, pre-registered
+
+Implement the lookup, then at DEPTH 30 expect **±36 samples per site, sweeping at 0.599 Hz**
+(73 584-frame period); move DEPTH to 99 → **±120**. ★ Three independent ways to fail: magnitude,
+period, knob response. And with the sine table the peak must be `0.9452541 × depth` — **226, not
+240** for a raw ±240 — which is two-sided: 226 kills "no table", 240 kills "sine".
+
+⚠ **CHECK FIRST whether the table is actually loaded.** `ROADMAP-2026-07-29.md:229` records the
+tag-`0x15` host route as *"881 writes / 65 cells dropped"*, so D-RAM `0x1D..0x40` may be empty even
+though a handler now exists. And descriptor cells `0x26..0x39` **alias** that D-RAM range
+(`upd6383.cpp:1305`, flat `map(0x00,0xff).ram()`) — an emulator memory-map defect that will corrupt
+the wavetable the moment the route starts landing.
+
+### ⚠ A SHIPPED READING IS IN TENSION (§158 §3)
+
+The four taps read `dp = 0x10/0x10/0x0E/0x0F` — exactly the cells the DEPTH block writes — and
+§145's *"rail and unrelated residue"* `8388607/8388607/671/203` are, for the last two, **literally
+the outputs of the two DEPTH multiplies.** So `SRC 0x00 = coef` may be wrong **at these four
+slots**, replacing a live operand with a ROM constant. It is **SHIPPED** (bit 59).
+**Not un-shipped**: the 29/29 corpus twin is independent, and the class-A cursor fetch supplies
+±240 to `K` regardless of `SRC`. K2 decides it.
 
 ## 1a. Still open, and untouched by any measurement
 
