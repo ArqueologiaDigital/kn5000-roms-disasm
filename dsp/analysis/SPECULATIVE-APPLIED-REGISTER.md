@@ -6792,3 +6792,66 @@ session.
 Evidence grade: **MEASURED**, with a pre-registered payload prediction hit exactly and a
 zero-valued null; **WEAK** on the audio-safety falsifier while the chip is silent; **OPEN** on
 the modulus.
+
+---
+
+## §117 — THE MODULUS IS 2²³ **UNSIGNED**, AND THE FOURTH FACTOR OF TWO CLOSES
+
+### 1. Applied and observed
+
+`lfo-ramp.md` §11 states it as `mem[Q] <- (phase + INC) mod 2**23`, and its measured phase
+series — `000072`, `0000E4`, `000156` — is **small positive values ramping**, i.e. the
+accumulator lives in `0..0x7FFFFF` and wraps to zero, never going negative. Our wrap was a
+*signed 24-bit* one.
+
+```
+  before  (mod 2^24 signed)     phase at body iw89:  -8,388,587 .. 8,388,485
+  after   (mod 2^23 unsigned)   phase at body iw89:          21 .. 8,388,485   quiet
+                                                             37 .. 8,388,533   loud
+  §116 OVC loads 951,360 (64 / 6C) and §114 wraps 34,599,360 -- both unchanged
+  §54 SILENT, DC leak 0.00% -- unchanged
+```
+
+**The range is now strictly non-negative**, which is the direct observable for the modulus and it
+is two-sided: the previous arm spanned negatives.
+
+### 2. What is measured and what merely follows
+
+⚠ I have **not** measured 0.5993 Hz directly. What is measured is the two quantities that
+determine it, each independently:
+
+```
+  modulus    2^23   -- observed this section (the range is non-negative and spans 0..0x7FFFFF)
+  increment  114    -- §111, and it matches lfo-ramp.md at 11 sites
+  => period 73,584 frames -> 0.5993 Hz at Fs = 44100
+```
+
+`lfo-ramp.md` item C anchors that rate across **29 LFO blocks in 16 programs with 9 distinct
+increments**. So the frequency follows arithmetically from two measured inputs and agrees with an
+independently-derived table — which is good, but it is a derivation, not a frequency measurement,
+and the min/max instrument cannot distinguish 2 sweeps from 4 over the sample window.
+
+★ **The fourth factor of two closes.** §111 fixed the host payload (×2 too small); this fixes the
+period (×2 too long). Two of the four are now resolved and both were the same *kind* of error — a
+scaling convention we had not applied. Still open: unit-1's residual `0x46`, and whether the
+remaining two share a cause.
+
+### 3. ⛔ THE COST, STATED PROMINENTLY BECAUSE IT IS KNOWN-WRONG
+
+The modulus is selected **per unit** by `m_ovc` bit 3, so **unit 0's AUDIO is now non-negative
+too** — an unsigned 23-bit signal, which is simply wrong for a waveform. It is currently
+invisible only because the chip is silent, so no measurement in the suite can see it.
+
+That is not a reason to leave it unstated: it is **positive evidence that the modulus belongs to
+the DATAPATH, not to the unit.** The OVC bit plausibly selects *which units contain a wrapping
+datapath at all*, while the phase accumulator's 23-bit unsigned modulus is a property of the
+phase register itself. Our model has one knob where the chip has two.
+
+Kept in the default because the LFO is the only datapath currently producing anything and it is
+now correct there; removable via mask bit 33. **This must be revisited the moment the chip emits
+audio** — at which point the §54 tracking test regains the power to see it, and the weak
+criterion noted in §116 becomes a real one.
+
+Evidence grade: **MEASURED** (the range becoming non-negative, with the previous arm as a
+two-sided control); **DERIVED, not measured** for 0.5993 Hz; **KNOWN-WRONG** for unit-0 audio,
+and recorded as evidence about where the modulus lives.
