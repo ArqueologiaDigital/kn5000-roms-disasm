@@ -9521,3 +9521,55 @@ firings, because bit 59 drove them. The line should report which of bits 57/58/5
 Evidence grade: §1 **MEASURED** (four pre-registered predictions, one of them a cross-check
 against a prior static computation); §3 a **stated discrepancy**, deliberately unfitted;
 §4 scope.
+
+---
+
+## §156 — SHIPPED: `SRC 0x00 = coef` and the DELAY-TAP MODULATION PATH; default `0x1910E446A39B440F`
+
+Regression against `data/PREDICT_156.md`, clean cold-boot vehicle (§148's rule: absolute audio
+statistics come from the clean vehicle, never the panel-navigation one).
+
+| | prediction | result |
+|---|---|---|
+| **P1** | frames still close | ✔ **285/285 decoded, 0 PARTIAL, 0 TRAP** |
+| **P2** | the tap sweeps ±240 | ✔ `[00] −240..240` `[10] −240..240` `[30] −240..240`, `[20] −240..0` |
+| **P3** | ★ DO1/DO2 **unchanged** | ✔ both 0 non-zero, peak 0; **§70 ACCA min == max == 0** |
+| **P4** | no new trap/partial classes | ✔ DC leak 0.00 %, verdict SILENT — identical to BASE |
+
+No blocker fired: F1 (traps) no, F2 (new DC leak) no, F3 (sweep reproduces) it does, F4 (slot
+count) unchanged at 285.
+
+### 1. What is now in the default
+
+* **`SRC 0x00 = C-RAM[cursor]`**, gated on `f98 == 1` **and** coefficient-consuming — bit-exact
+  `±240` at the 29 LFO twins with a passing anchored control (§145), independently supported at
+  the twelve `182` smoothers by the ROM's own upload script and the UI's ATTACK/RELEASE names
+  (§147).
+* **The delay-tap modulation path** — the device has never had a modulation register; the address
+  was `cellv + G` and nothing else, so a swept delay could not exist (§149).
+
+★ **Neither is observable without the other.** `tapmod` alone rails at `0x7FFFFF` (§154); `coef`
+alone was graded *"inert downstream"* (§148) because its consumer did not yet exist. That is the
+**third** time this corpus has punished one-at-a-time enumeration, after §133's `ACT 0x0D`/`0x0E`
+and §136/§40's coupled pair. It is worth stating as a working rule: **in this ISA, a reading that
+measures inert is a hypothesis about a missing consumer, not a refutation.**
+
+### 2. ⚠ WHAT SHIPPING THIS DOES NOT MEAN
+
+* **Nothing is audible.** DO1 and DO2 are still 0 non-zero and `§70 ACCA` is `min == max == 0`.
+  The chip stays silent for reasons upstream — §141 localised it to `w73` and §150 corrected the
+  mechanism (the multiply *does* issue; the accumulator is zeroed despite a formed product).
+  **Shipped on the mechanism, not on a sound.**
+* **The waveform is undecoded.** The census measures the excursion's **extent**, not its **shape
+  over time**. Sine vs triangle vs raw ramp is open, and is now `HANDOFF-NEXT` §1.
+* **Two anomalies stand unfitted**: DEPTH's 0.5 gain is not applied (measured ±240, not ±120), and
+  cell `[20]` sweeps `−240..0` one-sided where three sweep symmetrically.
+
+### 3. A reporting bug fixed in passing
+
+The `§145` line printed **bit 57's** state while reporting firings driven by bit 58 or 59 — a gate
+reporting the wrong gate, which would have made a future arm look inert when it was not. It now
+names whichever selector is active.
+
+Evidence grade: **MEASURED** (four pre-registered predictions, one of them the known-answer
+control P3); the ship decision **FORCED** by §155 plus this regression; §2 the bounded scope.
