@@ -9273,3 +9273,105 @@ Weakest survivor: **`mem[ptr]`** — the one the build ships for the other 989.
 Evidence grade: §1 **FORCED** (source, both mirrors); §2 **MEASURED** (re-verified; the
 permutation null is the agent's); §3 **MEASURED** and promoted to a standing constraint;
 §4 **MEASURED**; §5 bookkeeping; §6 **OPEN**.
+
+---
+
+## §152 — ⛔ §149 NAMED THE WRONG WORD, AND THE ANSWER WAS WRITTEN DOWN EIGHT DAYS EARLIER
+
+Trap 1 again — the ninth time. `kn7000_mame/notes/kn5000-dsp-chorus.md`, dated **2026-07-22**,
+already resolves §149's "byte-identical three-word idiom" into a **seven-word transaction** and
+assigns the offset-applying word. It is **not** `A00.0.00.041`.
+
+```
+  chorus.md:61  ★★ A NEW SHARED-`lo12` FACT: `lo12 = 0x44C` is "apply the modulation offset",
+                and the CLASS selects interpolation.  CHORUS uses C40.3.20.44C,
+                ENSEMBLE uses 000.2.00.44C.  Same lo12, different class ...
+```
+
+### 1. ★ §149's OWN KILL TEST FIRES, on data I could have checked in one command
+
+§149 wrote: *"Kill it: find `A00.0.00.041` in a program with no delay line, **or a swept-delay
+effect that lacks it**."* Re-verified here:
+
+```
+  ENSEMBLE   15 DRAM words | lo12=0x44C x6 | A00.0.00.041 x0    <- SIX modulated taps, ZERO
+  CHORUS     10            | 0x44C x4      | A00.0.00.041 x4
+  FLANGER     8            | 0x44C x2      | A00.0.00.041 x2
+```
+
+**ENSEMBLE sweeps six delay taps, carries the `0x44C` route, and has none of the word I named.**
+My present-and-absence census was over *effects*, and I checked that PHASER (which sweeps
+all-passes) lacks it — a confirming absence. I did not check for a **disconfirming presence**:
+a swept-delay effect that lacks it. One `grep` would have done it, and I had already written the
+test that would have caught it.
+
+### 2. What `A00.0.00.041` actually is
+
+The FLANGER layout settles it by position: there the transaction contains **two consecutive DRAM
+READs** and `A00.0.00.041` sits *between* them. That is linear interpolation written longhand —
+`d[⌊m⌋]`, advance, `d[⌊m⌋+1]`. In CHORUS's C-format form the second fetch folds into the single
+`2C7` word, which is what *"class 3 keeps the fraction, class 2 truncates"* means. ENSEMBLE
+truncates, so it needs no interpolation partner and has none.
+
+⇒ **`A00.0.00.041` = the interpolator's second point / address advance.** INFERRED (strong).
+⇒ **`lo12 = 0x44C` = apply the modulation offset** — 41 sites, 14 images, present in **every**
+swept-delay effect without exception. That is the missing link, and the correct target.
+
+### 3. ★★ AND THE MISSING QUANTITY IS A SAMPLE COUNT, proved against a named UI parameter
+
+The `192.A` word's coefficient is a **delay-tap offset in samples**, not a Q0.23 gain:
+
+```
+  ENHANCER  UI slot 3 "DELAY L (ms)"  -> op 0x64, literal 350
+            -> C-RAM[0x0B] = 15435  =  350 x 44100/1000  EXACTLY   (re-verified here)
+            -> consumed by w42 192.A.4D.000, word [1] of the modulated-tap idiom
+            -> its line allocation is 15437 = 15435 + r3's +2 minimum-delay guard
+```
+
+A Q0.23 reading of the same cell gives 0.00184, which means nothing; a "rate" reading gives
+ENHANCER an **81 Hz LFO**, which is impossible. And CHORUS's four values are `+240 +240 −240 −240`
+— **bit-identical to what §145 captured live off the bus**, so the static read and the live
+measurement agree.
+
+★ The geometry then closes on two independent host streams (tag-0x4C descriptors vs tag-0x26
+coefficients), which is the arithmetic most likely to have failed and did not:
+
+```
+  CHORUS 1040 = 800 + 240   MOD CHORUS 900 = 800 + 100
+  VIBRATO 840 = 800 +  40   MIX UP     880 = 800 +  80
+  PEQ+CHORUS and S.DELAY+CHORUS: allocation 640 = 400 + 240  EXACTLY
+```
+
+`allocation = nominal tap + |depth|`, exactly, in four standalone effects. Containment
+(`0 ≤ tap−|depth|` and `tap+|depth| ≤ allocation`) passes **8 of 10** carriers with a **10/10 null
+failure** when a different class-A coefficient of the same image is substituted. The single outlier
+is ROCK ROTARY — the one modulated image whose rate mechanism `chorus.md` §8 already records as
+undecoded.
+
+### 4. Corrections this forces
+
+* ⛔ **§149 §3's role assignment is RETRACTED.** Its *structural* finding stands — the delay
+  address has no modulation term and a swept delay cannot exist — but the candidate was wrong and
+  `chorus.md` had the right one.
+* ⛔ **`chorus.md` Headline 4** (*"its default is 0 in every chorus image, i.e. depth is entirely
+  host-supplied"*) is **falsified** by the static ROM (240/100/40/80/200/96/15435) and by §145's
+  live capture. Depth is a **ROM constant**; the UI DEPTH knob is a separate op-0x66 Q0.23
+  *multiplier* on it (CHORUS cells 0x09/0x0A, default 0.5).
+* ★ **Bonus, retiring part of `r3-delaydram.md` O-3**: `880.1.20.40B` consumes **no** descriptor
+  cell (it is the interpolator's first fetch, reusing the computed address). With r3's own
+  `C40.1.E0.451` exclusion that closes the counting identity from **88/96 to 38/38** distinct
+  images.
+
+### 5. The emulator change this licenses
+
+`upd6383.cpp:1813`'s `addr = (cellv + m_frames_run) & 0xffff` needs a third term set by the
+`lo12 == 0x44C` word from the depth × LFO product. Today: the C-format immediate is written to
+`m_cimm` and **`m_cimm` is never read anywhere**; `A00.0.00.041` carries a PLAIN GUESS "no side
+effect"; and **there is no modulation register in the device at all**.
+
+⚠ Do **not** gate that change on the current descriptor-cursor alignment being right — `r3` O-1
+(the per-unit cursor phase) is still open, and CHORUS's 4th modulated read takes the ceiling cell.
+
+Evidence grade: §1 **MEASURED** and a **retraction of §149 §3**; §2 **INFERRED (strong)**;
+§3 **PROVEN BY CONSTRUCTION** (ENHANCER's UI→ROM→cell→word chain) + **MEASURED** (the geometry and
+the null); §4 corrections; §5 the consequence, not yet implemented.
