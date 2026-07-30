@@ -9,59 +9,46 @@ any older summary, including older parts of this file.
 
 ## 1. YOUR NEXT TASK
 
-**Decode the LFO → DELAY-TAP link. It does not exist in the model (§149).**
+**Decode the modulation WAVEFORM — the excursion is right, its shape over time is untested.**
 
-§148 asked for an observable downstream of the LFO; §149 found there is no downstream.
+★★ §155: the delay tap **now sweeps, by exactly ±240 samples** on CHORUS — `C-RAM[0x02]`, the
+depth the ROM designs — reproducing a `160..640` containment window inside a 1040-sample line
+that §152 computed **from the ROM alone, beforehand**. Four pre-registered predictions, all pass.
 
-* **The LFO half already works** — §109's phase cell advances by exactly **114 per frame**,
-  CHORUS's ROM increment (0.599 Hz). MEASURED, and identical across arms.
-* ⛔ **`upd6383.cpp:1813`: `addr = (cellv + m_frames_run) & 0xffff`** — descriptor cell plus the
-  free-running frame counter and **nothing else**. No accumulator, no temp, no phase term.
-  `m_frames_run` is the circular-buffer rotation `G` (`r3-delaydram.md` §5.1), which is correct
-  and is **not** modulation.
-* ⇒ **A swept delay cannot exist.** Every chorus / flanger / vibrato in the machine depends on a
-  mechanism the emulator does not have, and this is the whole reason `SRC 0x00 = coef` measured
-  inert downstream.
-
-★★ **THE MECHANISM IS `lo12 = 0x44C`, AND IT WAS WRITTEN DOWN ON 2026-07-22** —
-`kn7000_mame/notes/kn5000-dsp-chorus.md` §3.1/§3.2. §149's candidate `A00.0.00.041` is
-**RETRACTED** (§152): ENSEMBLE sweeps six taps, carries `0x44C`, and has **zero** of it —
-§149's own kill test, on data one grep away. `A00.0.00.041` is the **interpolator's second
-point** (FLANGER has two consecutive DRAM reads with it between them).
-
-The seven-word transaction, CHORUS voice 0:
+The mechanism is `lo12 == 0x44C` (§152, and it had been written down in
+`kn7000_mame/notes/kn5000-dsp-chorus.md` since 2026-07-22). The seven-word transaction:
 
 ```
    900.1.60.1D5   [0] DRAM WRITE, opens
-   192.A.40.000   [1] consumes C-RAM[0x02] = 240  <- THE DEPTH, IN SAMPLES
-   082.2.00.1C0   [2] LFO phase READ        byte-invariant 29/29
-   C40.3.20.44C   [3] APPLY THE OFFSET      byte-invariant 29/29   <- THE MECHANISM
-   A00.0.00.041   [4] interpolation partner (absent when the effect truncates)
+   192.A.40.000   [1] the DEPTH, in samples   <- a SRC 0x00 class-A word
+   082.2.00.1C0   [2] LFO phase READ          byte-invariant 29/29
+   C40.3.20.44C   [3] APPLY THE OFFSET        byte-invariant 29/29
+   A00.0.00.041   [4] interpolate (absent when the effect truncates)
    880.1.20.2C7   [5] DRAM READ -- the tap
    102.A.C3.4C8   [6] per-voice output gain
 ```
 
-★ **The depth is a SAMPLE COUNT, proven against a named UI parameter**: ENHANCER's
-"DELAY L (ms)" = 350 → `C-RAM[0x0B]` = **15435 = 350 × 44100/1000 exactly**, filling a
-15437-cell allocation to `r3`'s +2 guard. And `allocation = nominal tap + |depth|` **exactly**
-in four effects, across two independent host streams.
+⚠ **What §155 did NOT establish, by pre-registration:** the modulation *arithmetic*. The census
+measures the excursion's **extent**, not its **shape over time**. Sine / triangle / raw ramp is
+open. Look at the **36-entry SINE table at D-RAM `0x1D..0x40`** — and first check whether it is
+real, because descriptor cells `0x26..0x39` **alias** that range in the emulator's map.
 
-★ **This is also the consumer §148 could not find.** Word [1] is `192.A` — a `SRC 0x00`
-class-A word — so **§145's `coef` reading is what feeds the depth into this path.** The reading
-was never inert; its reader is the mechanism that does not exist yet.
+**Two measured anomalies, deliberately unfitted:**
+* **DEPTH's 0.5 gain is not applied.** `chorus.md` reads the UI DEPTH knob as op 0x66, default
+  `0x400000` = 0.5, predicting ±120. Measured is **±240, the full depth**. No factor has been
+  introduced to close this.
+* **One cell sweeps `−240..0`, one-sided**, where three sweep `−240..+240`. Rectifier, phase
+  offset, or census artefact — undecoded.
 
-**THE CHANGE:** `upd6383.cpp:1813`'s `addr = (cellv + m_frames_run) & 0xffff` needs a third
-term set by the `lo12 == 0x44C` word. Today the C-format immediate is written to `m_cimm` and
-**`m_cimm` is never read anywhere**, `A00.0.00.041` carries a PLAIN GUESS "no side effect", and
-**there is no modulation register in the device at all**.
-⚠ Do **not** gate that change on the descriptor-cursor alignment being right — `r3` O-1 is open
-and CHORUS's 4th modulated read takes the ceiling cell.
+★ **And this retired §148's "inert downstream" verdict on `SRC 0x00 = coef`.** That was true and
+the wrong conclusion: its consumer is this path, which did not exist when it was written.
+`tapmod` without `coef` **rails**; both together land on the designed depth. **Neither reading is
+observable without the other** — the third time this corpus has punished one-at-a-time
+enumeration (after §133's `ACT 0x0D`/`0x0E` and §136/§40).
 
-⚠ **Do NOT spend more mask arms on `SRC 0x00` first.** It is decoded where it is observable
-(MEASURED bit-exact at the 29 twins, two vehicles, passing control; INFERRED strong at the twelve
-`182` smoothers via the ROM's own upload script) and **unobservable everywhere else until this
-link exists**. §§145–148 refined a reading that was already right against a consumer that is
-missing — the fired-count and the bit-exact bus check both kept saying "the gate works".
+**Ship candidate:** `0x1910E446A39B440F` (default | bit 59 `coef` | bit 60 `tapmod`), regression
+pre-registered in `data/PREDICT_156.md`. ⚠ Shipping models a swept delay for the first time; it
+makes **nothing audible** — DO1/DO2 are 0 for reasons upstream (§141/§150).
 
 ## 1a. Still open, and untouched by any measurement
 
