@@ -8620,3 +8620,75 @@ three of them (`iw86`, `iw136`, `iw139`) blocked by `SRC 0x00` **alone**.
 Evidence grade: §1 **MEASURED** and a **RETRACTION**; §2 **MEASURED**; §3 **FORCED** (source) and a
 **bug fix**; §4 **MEASURED**, a partial retraction; §5 **FORCED** from the round-6 void;
 §6 **MEASURED**.
+
+---
+
+## §144 — ★★★ §135's REFUSAL IS OVERTURNED: the railing was my own bug, and the §133 READINGS ARE SHIPPED
+
+Scored against `data/PREDICT_142.md`, written before the run.
+
+| | prediction | A: unit-BLIND | B: unit-AWARE |
+|---|---|---|---|
+| **P1** | fired-count 0 in A, >> 0 in B | **0** ✔ | **7 690 128** ✔ |
+| **P2** | ★ the railing STOPS; DO2 falls toward 41.2 % | 2 553 952 = 98.9 % | **1 062 933 = 41.2 %** ✔ |
+| **P3** | DO1 UNCHANGED (known-answer control) | 0 non-zero, peak 0 | **0 non-zero, peak 0** ✔ |
+
+```
+  arm                        DO2 non-zero   frac    peak          DC leak
+  default (§130)             1 064 113      41.2 %  −1 543 434    34.69 %
+  ship, unit-BLIND (§135)    2 553 952      98.9 %  −8 388 608    99.94 %
+  ship + §142 unit-AWARE     1 062 933      41.2 %  +1 543 433    34.64 %
+```
+
+Frames close **320/320, 0 traps**.
+
+### 1. What this settles
+
+**§135's entire "NOT shippable" verdict rested on a defect in code I had written the same day.**
+The `ACT 0x0D`/`0x0E` destination menu wrote `m_acc` unconditionally while the `SRC 0x10` reader is
+unit-aware and mask bit 14 is set — so in unit 1 the pair wrote ACCA and read ACCB. With the writer
+matched to the reader the arm returns to the default's statistics to within **0.1 %**.
+
+★ **P3 is the load-bearing one.** Unit 0 uses `m_acc` either way, so the fix *had* to be a no-op
+there — and it was, exactly. A fix that also moved DO1 would have been doing something other than
+what it claims.
+
+★ Note what this says about §135's three "refuted hypotheses" (store-and-clear, multiply-carrying
+words, kernel/epilogue sites): all three were **correctly** refuted, and all three were refutations
+of explanations for a phenomenon that **had no external cause at all**. Ruling out real hypotheses
+about an artefact is the expensive failure mode; the thing that ended it was an agent reading the
+source, not another arm.
+
+### 2. SHIPPED — the default becomes `0x110E446A39B440F`
+
+`sel0D = 1` (`ACT 0x0D = acc ← bus`), `sel0E = 7` (`ACT 0x0E = P ← bus` at the multiply's scale),
+bit 52 (excused from the blanket tempA capture), bit 56 (per-unit accumulator write).
+
+Backed by: §133's bit-exact demultiplexer (224/1024, chance 2⁻²⁴ per frame, and the *only*
+combination yielding two channels); the corpus corroboration (`ACT 0x0D` pairs with `SRC 0x07` in
+350/402 = 87 %; `ACT 0x0E` splits 239/187 between the relay and direct forms — the two patterns
+measured inside PEQ); and now a corpus-wide regression that is statistically indistinguishable from
+the default.
+
+**829 of 6282 ALU words (13.2 %), in all 91 programs, move from undecoded to decoded.**
+
+### 3. ⚠ THE ONE REAL DIFFERENCE, AND IT IS NOT MINE TO CALL
+
+**Unit 1's peak flips sign: −1 543 434 → +1 543 433.**
+
+Both are rails — §143 §2 measured the **default** already railed at `0x7FFFFF << 16` exactly — so
+this is a polarity change between two railed states, not a change from clean audio to clipping.
+But it is audible behaviour in the only audible unit. ★ **It needs a listen**, alongside §130's
+still-outstanding one. The agent's speculative SP-4 offers a candidate reading: the PEQ channel is
+already known polarity-inverted by an odd number of `−2.0` make-ups (§129 §4.1), and the reverb
+tail may carry an unpaired inversion of the same kind.
+
+### 4. What is NOT claimed
+
+Nothing here makes the chip audible. `unit0/DO1` is still **0 non-zero**, and §141 localised that
+to a single slot: `w73` loads the accumulator from an unformed product and erases it at the door.
+The railing of unit 1 is also still unexplained — it is *pre-existing*, which is a different and
+harder question than the one §135 thought it was asking.
+
+Evidence grade: **MEASURED** (three pre-registered predictions, one of them a known-answer
+control); the ship decision **FORCED** by §133 + the regression; §3 flagged for hardware judgement.
