@@ -8692,3 +8692,86 @@ harder question than the one §135 thought it was asking.
 
 Evidence grade: **MEASURED** (three pre-registered predictions, one of them a known-answer
 control); the ship decision **FORCED** by §133 + the regression; §3 flagged for hardware judgement.
+
+---
+
+## §145 — ★★★ `SRC 0x00` = **C-RAM[cursor]** — the reading that was never in the menu
+
+Scored against `data/PREDICT_145.md`, written before the run.
+
+### 1. The result, bit-exact
+
+```
+                       baseline (mem[ptr])          bit 57 (coef)
+  fired-count                  0                    15 540 204
+  iw89   ANCHORED SRC 0x08   L = 114                L = 114        <- control, UNCHANGED
+  iw94   twin  SRC 0x00      L = 8388607            L = +240
+  iw103  twin  SRC 0x00      L = 8388607            L = +240
+  iw135  twin  SRC 0x00      L = 671                L = −240
+  iw144  twin  SRC 0x00      L = 203                L = −240
+```
+
+**P1 ✔ P2 ✔ P3 ✔.** The predicted values were `+240 / +240 / −240 / −240`, written down before the
+run from the live C-RAM, and they came back **exactly**. Chance of a coincidental 24-bit match at
+four slots is 2⁻⁹⁶. The known-answer control — the anchored `SRC 0x08` word — did not move, so the
+gate is confined to `SRC 0x00`. Frames close 285/285, 0 traps.
+
+★ And the sign pattern is itself a finding: `+240, +240, −240, −240` is **two antiphase pairs**,
+which is exactly what a two-voice chorus needs. The shipped reading delivered the **rail** at two
+of the four sites and unrelated residue at the others.
+
+### 2. Why this was invisible for so long — three compounding reasons
+
+1. **`coef` was never in the menu.** `action00_discriminate.py:340-343` enumerates
+   `src00 ∈ {mem, P, acc, zero, DR, tA}` while the **`src08` menu on the next line contains
+   `coef`**. Every "1 of 6 enumerated" statement about this source is a statement about those six.
+2. **The LFO tool's site predicate excluded the twin by construction.** `lfo_ramp.py:263` defines an
+   LFO site as `lo12 == 0x200 and class == 0xA` — that *is* the `SRC 0x08` encoding, so no LFO
+   analysis in this project has ever seen the `SRC 0x00` form.
+3. **The constraint that appeared to settle the question was VOID.** §123 restored a device comment
+   citing `action00-discriminator.md` item I, which `adjudication-round6.md:605` had voided three
+   days earlier (§143 §5).
+
+### 3. The corpus twin, MEASURED
+
+```
+  092.A.xx.200  SRC 0x08 (ANCHORED)  n=29, successor 082.2.00.1C0 in 29/29
+  192.A.xx.000  SRC 0x00             n=29, successor 082.2.00.1C0 in 29/29
+  base rate of that successor after ANY class-A word: 64/822 = 7.79 %
+```
+
+The two differ in **exactly two bits** — `hi12` bit 8 and `SRC` bit 3 — occupy the same slot of the
+same idiom, and `082.2.00.1C0` is the anchored LFO phase-read. 29/29 against 7.79 % is ~10⁻³².
+Twin programs: CHORUS, MODULATED CHORUS, ENHANCER, ROCK ROTARY, VIBRATO, MIX UP, S.DELAY+CHORUS,
+S.DELAY+VIBRATO, PEQ+CHORUS, PEQ+VIBRATO — the modulation family.
+
+CHORUS's anchored word consumes `C-RAM[0x00] = 114`, **its known LFO increment** (0.599 Hz); its
+four twins consume `0x02/0x04/0x0D/0x0F`, holding ±240 = 1.262 Hz.
+
+### 4. ⚠ WHAT THIS RUN DOES **NOT** ESTABLISH — and the limitation is mine to state
+
+**The run had ZERO loud frames.** `§54 TRACKING: loud-in 0`. The cold-boot vehicle exits at t = 14 s
+and the machine does not reach the play screen until ≈ 19 s, so **the notes never sounded**. By
+method rule 12, *a DSP test with no notes playing is not a test* — for anything input-dependent.
+
+★ The decode result survives that anyway, and precisely because of *why*: **an LFO is
+input-independent by construction.** The operand bus at those four slots equals a ROM constant
+whatever the input does, which is what makes a 24-bit bit-exact match meaningful here. But:
+
+* the **audio regression is NOT assessed** by this run. With bit 57 the same run took
+  `unit1/DO2` from 0 non-zero to 408 252 with peak 8 388 607 (the rail) — **on quiet frames only**,
+  because there were no others. That is not evidence of a defect *or* of its absence.
+* A comparable-vehicle regression (PEQ + notes, the §144 setup) is running separately, and the
+  shipping decision waits for it.
+
+### 5. Scope
+
+`SRC 0x00` is the **#1 corpus blocker**: **1270 words across all 91 programs**, three times the
+next. It is also **PARAMETRIC EQ's entire remaining blocker set** — its seven `SRC 0x00` words
+(§143 §6). This result is measured on the 29 twins, which are a *modulation-family* population;
+whether `coef` is right for the other ~1240 words is **not** established here, and the class-2
+`lo12 = 0x000` majority (which does not consume a cursor coefficient) is the obvious place for it
+to fail.
+
+Evidence grade: §1 **MEASURED**, three pre-registered predictions including a known-answer control;
+§3 **MEASURED**; §4 a stated **limitation**; §5 **OPEN** — the generalisation beyond the twins.
