@@ -16,31 +16,38 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**`C63` reads D-RAM cell `0x0C`. The LFO phase is in cell `0x07`. Fix that addressing.**
+**Decode `ACT 0x15`.** It is the second-largest ACTION code in the corpus — **707 words, 23.7 %,
+in 39 of 91 programs** — and the device decodes it as **nothing** (`LO_ACT_NONE_5`,
+`upd6383d.h:343`, *"how it differs from 0x12 is OPEN"*). It is the largest single unmodelled
+behaviour left in the chip.
 
-This is the whole remaining gap between a ramping phase and a working modulation section, and it
-is now localised to **one word**.
-
-### How it was localised — three censuses, no guessing
+### How the LFO chase arrived here — the whole path is now traced end to end
 
 ```
-  §165  cell 0x07 (the phase):  0..8388598  chg 1128429 / 1392430    a full Q0.23 ramp
-  §164  every D-RAM cell 0x00..0x1F that moves AT ALL:  01 02 04 06 07 0E  -- and nothing else
-  §162  m_dp at the class-6 word:  12 (0x0C)            -> not in that list, so it never changes
-  §167  m_tb at the class-6 word:  0..5872025 but chg = 1
-        m_k = 24  (the index scale `lfo-ramp.md` measured, confirmed live)
-        m_ta = 0, m_l = 0
-  §166  C63 + class-6 is ONE idiom: 53/53 in BOTH directions, null 0.94 +/- 0.96
+  §165  the phase RAMPS          cell 0x07: 0..8388598, chg 1128429 / 1392430 frames
+  §166  C63 + class-6 = ONE idiom, 53/53 both ways, null 0.94 +/- 0.96; C63 = `m_tb = L'
+  §167  at the lookup: m_tb chg 1 | m_k = 24 (the scale, arriving correctly) | m_ta = m_l = 0
+  §168  bit 18 fired 9 279 912 times and changed nothing -> not a SRC decode
+  §169  m_p 0..0 chg 0  ->  THE INDEX MULTIPLY NEVER ISSUES
 ```
 
-`C63` is `ACT 0x03` = `m_tb = L`, i.e. **load the index register**; class-6 then reads the table.
-`m_tb` holds `5872025 / 2^23` = **0.700000** — a coefficient, loaded once. It is reading a cell
-that is pinned, so the index is pinned, so the lookup would be frozen.
+⇒ **Every register at the class-6 site is enumerated and every one is dead.** The word that must
+issue `scale × phase` is `000.A.00.1D5` — class A, `SRC 0x07`, **`ACT 0x15`** — and it does
+nothing. Everything measured in §162/§167/§169 is downstream of that one line.
 
-⚠ **`m_tb`'s range says VARIES and its change-count says 1.** Range alone would have licensed
-`table[m_tb]` and produced §158 all over again. Keep the change-count on any new probe.
+### ⚠ Switch vehicle for this work
+
+Static, all 91 programs: the phase-accumulate-to-lookup distance splits into **four programs at
+exactly 6** (FLANGER, AUTO PAN, VIBRATO, RING MODULATOR) and everything else at **≥ 13**.
+Cold-boot CHORUS — my vehicle — is at **24**, the worst available, and has one LFO block where the
+gap-6 family has two.
+
+★ **Rule 2 is about ABSOLUTE AUDIO STATISTICS. A register census at a class-6 site is not one**, so
+the vehicle may be switched for index-path work — and must not be for audio work, where §148's
+unit-1 rail applies.
 
 ### ⛔ Dead, do not retry
+
  — all three cost a pass
 
 * kernel `iw32` / any `DRAM_UNIT_BASE` value (§108 §5 FORCED; bit 27 bit-identical) — and it is
