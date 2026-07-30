@@ -9651,3 +9651,103 @@ kills "sine on the default preset". That is `HANDOFF-NEXT` §1.
 Evidence grade: §1 **FORCED** (source); §2 **MEASURED**, both my hypotheses refuted;
 §3 **INFERRED (strong)** — the one-sided 0→depth ramp is what an unshaped phase accumulator gives,
 and the class-6 no-op is FORCED; §4 the retraction; §5 the pre-computed next test.
+
+---
+
+## §158 — ⛔ §157 WAS ALSO WRONG. The tap-mod is a CONSTANT. And the DEPTH chain is now traced end to end
+
+Two corrections of my own claim in a row, and the second agent's report went further than the
+first. Everything below **re-verified in my own logs** before recording.
+
+### 1. ⛔ The settled state is CONSTANT — §157's "sawtooth" was a boot transient
+
+`§104` per-slot, frames > 420 000, quiet **and** loud, marked `=` (identical):
+
+```
+  iw96   15729946 .. 15729946   -> datum  240
+  iw105  15729540 .. 15729540   -> datum  240
+  iw137 -15727740 ..-15727740   -> datum -239
+  iw146 -15727740 ..-15727740   -> datum -239
+```
+
+**All four constant.** §157's census read `0..240` only because it recorded from the *first*
+firing, including the boot period where the accumulator is still 0. It is a **step from 0 to a
+constant**, not a ramp.
+
+```
+  §155  "the tap SWEEPS ±240"         -> WRONG: pooled across voices of opposite sign
+  §157  "the tap RAMPS, a sawtooth"   -> WRONG: boot transient inside the census window
+  TRUTH: the tap-mod is a CONSTANT per voice.  Nothing moves at all.
+```
+
+★ **H-CONST was right after all**, and I refuted it on an artefact of my own census window. Two
+successive corrections to one claim, each from a different defect in the *instrument* rather than
+the hypothesis. The lesson is narrow and worth stating: **a min/max census must declare its window**
+— §104 has one (frames > 420 000) and my ad-hoc census did not.
+
+### 2. ★★★ The DEPTH chain, traced end to end and MEASURED
+
+```
+  LCD "DEPTH 30"
+   -> UI slot 0 -> T2 record #1 -> op 0x66 (eval_038FE8, C-RAM writer 0387E6)
+   -> C-RAM[0x09] = C-RAM[0x0A] = 0x1364D8 = 1 271 000
+        = 0.30303 x the ROM base 0x400000     and  30/99 = 0.30303030  (7 digits)
+   -> iw123 `000.A.00.415`  acc = DEPTH x LFO   -> stored to D-RAM 0x0F
+   -> iw126 `010.A.00.1D5`  acc = DEPTH x that  -> stored to D-RAM 0x0E, and 0x10 at iw132
+   -> the tap idiom's word [1] reads D-RAM 0x10 / 0x0E / 0x0F as its BUS operand
+```
+
+The live trace shows the gain applied **twice in cascade**: `iw123` L=2216 → datum 671
+(ratio 0.3028), `iw126` L=671 → datum 203 (ratio 0.3025), against `0x1364D8/2²² = 0.30303`.
+CHORUS has exactly five T2 records against five UI slots in order, with slots 1 and 2 independently
+anchored — so record #1 ↔ DEPTH is **PROVEN BY CONSTRUCTION**, closing `chorus.md`'s open item
+*"NOT ESTABLISHED — whether host op 0x66 is DEPTH"*.
+
+### 3. ★★ AND THIS PUTS A SHIPPED READING IN TENSION
+
+The four modulated taps read `dp = 0x10 / 0x10 / 0x0E / 0x0F` — **exactly the three cells the DEPTH
+block writes.** And §145's own baseline column at those slots was `8388607 / 8388607 / 671 / 203`,
+which I described as *"the rail and unrelated residue"*.
+
+**`671` and `203` are literally the outputs of the two DEPTH multiplies.** That was not residue;
+it was the depth-scaled modulation signal. `0x10` reads the rail only because the LFO chain is dead
+upstream — the class-6 table-lookup triplet has **no handler at all** in `upd6383.cpp`.
+
+⇒ **`SRC 0x00 = coef` at these four slots may be wrong**: it replaces a live memory operand (the
+depth-scaled LFO) with the raw ROM constant ±240. And that reading is **SHIPPED** (§156, bit 59).
+
+⚠ I am **not** un-shipping it on this. The corpus twin (29/29 successor identity against a 7.79 %
+base rate) is independent evidence and is untouched; what is challenged is the reading *at these
+four sites*, where the class-A cursor fetch supplies ±240 to `K` regardless of what `SRC` says
+(bit 23 is unconditional on class A). Both can be true: `coef` right in general, and the bus
+operand at these slots being the memory value. **This is a tension, not a refutation**, and it is
+now the next task.
+
+### 4. ★ The ±240 vs ±120 discrepancy — RESOLVED, with no factor introduced
+
+`PREDICT_155` P2 predicted ±120 from a 0.5 DEPTH gain and measured ±240. Both numbers were wrong
+for the same reason: **two missing multiplications**, not a scale error.
+
+```
+  excursion = |ROM depth| x g,  g = C-RAM[0x09] as Q0.23
+     live setting DEPTH 30  -> g = 0.15152 -> +-36.4 samples
+     DEPTH 99 (the ROM base) -> g = 0.5     -> +-120 samples
+```
+
+So ±120 was right **for the maximum knob position**, and the vehicle sits at DEPTH 30. §152's
+containment geometry survives with margin: the ROM sizes the line for the raw ±240 and the knob can
+never exceed ±120. ★ **The gap was never a scale error, and no fudge factor was needed** — which is
+why F3's standing instruction (*report the ratio, do not close it*) was worth following.
+
+### 5. Next: the two tests that settle it
+
+* **K1** — re-key §157's census on the `0x44C` **word index** with an explicit settled-frame window.
+  Prediction: 4 constants, every range 0. (§1 above already effectively shows this via §104.)
+* **K2** — implement the class-6 table lookup so the LFO waveform actually varies, and turn bit 59
+  **off** at these four slots. Prediction at DEPTH 30: **±36 samples per site, sweeping at
+  0.599 Hz** (73 584-frame period); move DEPTH to 99 → **±120**. ★ That can fail in three
+  independent ways — magnitude, period, and knob response — and it decides §3's tension.
+
+Evidence grade: §1 **MEASURED**, a second retraction of my own claim; §2 **MEASURED** +
+**PROVEN BY CONSTRUCTION** (record order); §3 a **stated tension** against a shipped reading, not a
+refutation; §4 **MEASURED**; §5 pre-registered.
