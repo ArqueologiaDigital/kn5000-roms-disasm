@@ -9751,3 +9751,75 @@ why F3's standing instruction (*report the ratio, do not close it*) was worth fo
 Evidence grade: §1 **MEASURED**, a second retraction of my own claim; §2 **MEASURED** +
 **PROVEN BY CONSTRUCTION** (record order); §3 a **stated tension** against a shipped reading, not a
 refutation; §4 **MEASURED**; §5 pre-registered.
+
+---
+
+## §159 — K2's PREREQUISITE FAILS: the wavetable is 36 cells of ZERO, and the upload is on the wrong side of the §97 split
+
+`HANDOFF-NEXT` §1 said *"⚠ CHECK FIRST whether the table is actually loaded."* It is not, and
+checking cost one grep of a committed log — against implementing a lookup that would have read
+zeros and measured nothing.
+
+### 1. MEASURED: every wavetable cell is written, and every write is zero
+
+`D-RAM WRITES (nonzero/total)` from `data/clean_vehicle_default.log.gz`, cells `0x1D..0x40` — the
+36-entry LFO wavetable range:
+
+```
+  1D:0/795  1E:0/811  1F:0/810  20:0/4514717  21:0/793  22:0/798  23:0/806 ...
+  ... 3E:0/800  3F:0/790  40:0/795
+```
+
+**~800 writes to each cell and NOT ONE of them non-zero.** The cells are live and the table never
+arrives. (`0x20`'s 4.5 M writes are a different, per-frame writer; its non-zero count is 0 too.)
+
+⇒ **K2 as specified cannot work.** Implementing the class-6 lookup today would index a table of
+zeros, produce a modulation of 0, and measure exactly what the no-op already measures — a null
+that would look like a refutation of the sine reading when it is a statement about an empty table.
+★ This is "compute the NULL first" doing its job: the prerequisite was checkable offline and
+would have cost a build, a run, and a wrong conclusion.
+
+### 2. ★ The likely cause, and it is structural rather than a bug
+
+`upd6383.cpp:912` — the host poke port's **tag `0x15` routes to the mode-1 REGISTER FILE**, which
+§97 split off from the pointer-walked D-RAM:
+
+```
+  case 0x15:   // D-RAM register file
+      // ★ §97: "register file" ... is the MODE-1 space -- not the pointer-walked
+      //  D-RAM.  Writing it into m_dram put the host's parameters ...
+```
+
+The `§59` census confirms the route fires: `tags: 15:42`, `data packets -> D-RAM 59`.
+
+⇒ **SPECULATIVE (strong): the wavetable upload and the wavetable reader are on opposite sides of
+the §97 memory split.** The host writes the table into the mode-1 register file; the microcode's
+class-6 lookup addresses the pointer-walked D-RAM, where `0x1D..0x40` stays zero. §97 was a
+correct and well-evidenced split (two memories, one array), and this is the kind of seam it would
+naturally create.
+
+⚠ **Not yet verified**: I have not confirmed the table actually *lands* in `m_rf`, only that it
+does not land in `m_dram`. Both "it arrives in the register file" and "it never arrives at all"
+fit the evidence so far, and they need different fixes.
+
+### 3. The next measurement, and it is cheap
+
+Dump `m_rf[0x1D..0x40]` at `device_stop()` alongside the existing D-RAM census and compare against
+the ROM table at `0x01EAFA` (36 entries, the exact sine, peak `0x78FE14`).
+
+* **Table present in `m_rf`** ⇒ the reader must address the register file, and K2 becomes a
+  one-line change plus the lookup.
+* **`m_rf` also zero** ⇒ the op-0x74 upload is not reaching the chip at all, and the target moves
+  upstream to the host route — `ROADMAP-2026-07-29.md:229`'s *"881 writes / 65 cells dropped"*.
+
+**Control whose answer is known:** the same dump must show the tag-0x15 cells that §97 *did*
+validate as non-zero. If those are empty too, the dump is reading the wrong array.
+
+⚠ And the aliasing hazard stands either way: descriptor cells `0x26..0x39` overlap D-RAM
+`0x1D..0x40` under `upd6383.cpp:1305`'s flat `map(0x00,0xff).ram()`. **Whichever space the table
+lands in, that overlap must be separated before the table is trusted** — otherwise a correct
+upload will be corrupted by descriptor writes, and the resulting wrong waveform would be read as a
+refutation of the sine.
+
+Evidence grade: §1 **MEASURED**; §2 **SPECULATIVE (strong)**, with the unverified half stated;
+§3 pre-registered with its control.
