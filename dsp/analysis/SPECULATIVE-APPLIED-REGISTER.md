@@ -9573,3 +9573,81 @@ names whichever selector is active.
 
 Evidence grade: **MEASURED** (four pre-registered predictions, one of them the known-answer
 control P3); the ship decision **FORCED** by §155 plus this regression; §2 the bounded scope.
+
+---
+
+## §157 — ⛔ §155's "±240 SWEEP" WAS POOLED. The tap moves — as an UNSHAPED SAWTOOTH, not a sweep
+
+A read-only agent challenged §155's headline. The challenge was sound, I re-verified it in source
+before accepting it, and the deciding measurement went to **neither** of my two hypotheses.
+
+### 1. The challenge, verified
+
+* `upd6383.cpp:2030` — **class 6, the TABLE-LOOKUP idiom, is an explicit NO-OP**:
+  *"no table is modelled, so execute the addressing and leave the ALU alone."*
+* §155's census buckets on `cellv & 0x3f` and takes min/max over the run.
+* CHORUS's four ROM depths are **`+240 +240 −240 −240`** (§145 live, §152 static).
+
+⇒ A bucket holding one positive and one negative voice reports `−240..+240` **with no sweep at
+all.** §155's P2 could not distinguish a sweep from pooled signed constants — a **criterion that
+cannot fail**, the same family as §153's void run, which I had already flagged once.
+
+⚠ And §155's cross-check was weaker than I presented it: `160..640` **is** `400 ± 240`, and ±240
+is what the constants alone give. I called it "a static prediction and a live measurement
+agreeing"; both sides may have been reading the same four numbers.
+
+### 2. The deciding census — per I-RAM SLOT, where voices cannot pool
+
+```
+  iw96: 0..240 (r240)   iw105: 0..240 (r240)   iw137: -240..0 (r240)   iw146: -240..0 (r240)
+```
+
+| hypothesis | prediction | verdict |
+|---|---|---|
+| **H-CONST** (pooled constants) | every slot range **0** | ⛔ **REFUTED** — range is 240 |
+| **H-SWEEP** (a real, zero-mean sweep) | each slot `−\|d\|..+\|d\|` | ⛔ **REFUTED** — each slot is ONE-SIDED |
+
+★ **F2 fired, as pre-registered: "neither hypothesis; report the numbers, do not fit."**
+
+### 3. ★★ What is actually happening
+
+Each slot ramps **0 → its own signed depth**. That is the **raw phase accumulator passed through
+unshaped** — a **sawtooth**, not an oscillation. The phase ramps `0..0x7FFFFF` and wraps, so
+`depth × phase` gives exactly `0..+240` for a `+240` voice and `−240..0` for a `−240` voice.
+
+This explains, with no extra hypothesis, **both** anomalies §155 left open:
+* the pooled `−240..+240` = two positive ramps and two negative ramps in one bucket;
+* cell `[20]`'s "one-sided `−240..0`" = a bucket that happened to hold only negative voices.
+  It was never a rectifier.
+
+⇒ **The correct statement replacing §155's headline: the modulation term DOES reach the delay
+address and DOES vary over time — but as an unshaped sawtooth ramp, because the waveform lookup
+is a no-op.** A sawtooth LFO on a chorus is a click train once per cycle, not a chorus.
+
+### 4. What survives, and what §156's ship now rests on
+
+* **SURVIVES**: the mechanism. `lo12 == 0x44C` reaches the address; the depth is a sample count;
+  the excursion's magnitude is the ROM's designed depth. §156's regression (285/285, 0 traps,
+  DO1/DO2 unchanged) is untouched — those were deltas, not shape claims.
+* **RETRACTED**: "the tap **sweeps**" as a description of the motion, in §155's headline, §156's
+  ship note, `HANDOFF-NEXT` §1 and blog Part 107. The motion is a ramp.
+* **STILL OPEN**: DEPTH's 0.5 gain (±240 not ±120) is **not** explained by this and remains unfitted.
+
+### 5. ★ And the next test is now sharp, two-sided, and pre-computable
+
+The waveform is a **36-entry table the host uploads at boot**, and the cold-boot default is an
+exact sine — `0.95·sin(2πk/24 + 0.1)` to **0.94 LSB**, one-bin DFT. Its peak is
+`table[6] = 0x78FE14 = 0.9452541`, **not 1.0**.
+
+```
+  with the class-6 lookup implemented:   peak = 0.9452541 x 240 = 226.86  ->  226
+  today (no table, raw ramp):            peak = 240
+  triangle table (peak 1.0):             peak = 240
+```
+
+**226 vs 240 is 5.5 %, about 30× the 24-bit quantum, and two-sided**: 226 kills "no table", 240
+kills "sine on the default preset". That is `HANDOFF-NEXT` §1.
+
+Evidence grade: §1 **FORCED** (source); §2 **MEASURED**, both my hypotheses refuted;
+§3 **INFERRED (strong)** — the one-sided 0→depth ramp is what an unshaped phase accumulator gives,
+and the class-6 no-op is FORCED; §4 the retraction; §5 the pre-computed next test.
