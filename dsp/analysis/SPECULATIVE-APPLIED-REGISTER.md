@@ -6339,3 +6339,85 @@ Evidence grade: **MEASURED** (store targets, gfail codes with a passing control,
 with fired-counts, the iw11 timing split); **FORCED** that POST is wrong (decoded witness plus
 §8.3's 0 of 276 480); **REFUTED** for the three sub-claims above; **documentary** for the two guard
 comments.
+
+---
+
+## §110 — THE iw11 TIMING DEFECT FIXED, AND IT EXPOSES A SINGLE ROOT CAUSE: **SRC 0x08 CLOBBERS BOTH AUDIO CELLS**
+
+### 1. The fix
+
+§109 measured that `iw11` (`0400201447`), the one K6 input-stage word carrying ACTION 0x07,
+stored at its **post**-increment cell while every other ACT-07 word stored at its **pre**-increment
+cell — two timings for one action code in one binary. Cause: `exec_alu_k6()` runs after
+`exec_addressing_only()` advanced `m_dp`, and §35's `if (m_in_k6)` short-circuit covers only the
+**bit-4** site.
+
+Corrected by undoing the advance rather than skipping the store: the bit-4 site can skip because
+`exec_addressing_only()` performs that store itself at the pre-increment cell it captured on
+entry; it performs **no** ACT-07 store, and `iw11` carries no bit 4, so skipping would lose the
+store entirely. Mask bit 30 reverts; the fix is ON by default.
+
+PRE is right on independent evidence, not symmetry: §109 confirmed it on `iw34`, a fully decoded
+anchored ACT-07 word, and `lfo-ramp.md` §8.3 ran the post-increment hypothesis over **276 480
+machines with zero survivors**.
+
+### 2. Predictions, all four confirmed
+
+```
+                              FIXED (19F440F)              REVERTED (419F440F)
+  §110 fired-count            492,480                      0            <- proper null
+  cell 05                     ★ INPUT-DEPENDENT            absent from the set
+                              quiet [0..4194304] loud [0..16776739], 1,200,000 writes
+  cell 06                     2,400,000 writes             2,700,000, iw11 in its writers
+  §54 verdict                 SILENT, DC leak 0.00%        SILENT, DC leak 0.00%
+  kernel input-dependent      3 of 29                      2 of 29
+```
+
+Body 0 still does not acquire the input, exactly as predicted — `iw85`'s `ACT 0x0D` is undecoded
+(§107) and routes the operand nowhere.
+
+### 3. ★★★ BUT THE RESIDENCY COLUMN SAYS SOMETHING SHARPER
+
+§104 still reports **`first mem DIFFERS at -1`** across body 0. So cell `0x05` is written
+input-dependently by the kernel and is **constant again by the time body 0 reads it** — the
+identical pattern as `0x07`. Naming its writers, in execution order:
+
+```
+  cell 05   iw9  012.2.FF.1D5  SRC 07  ACT 15  store
+            iw11 400.2.01.447  SRC 11  ACT 07          <- the audio, after §110's fix
+            iw35 012.A.00.1C0  SRC 07  ACT 00  store   <- SRC 07 = mem[ptr], reads and writes back
+            iw45 010.A.00.20C  SRC 08  ACT 0C  store   <- ⛔ LAST before the body
+  cell 07   iw30 09A.A.00.200  SRC 08  ACT 00  store   <- the audio
+            iw32 000.A.FF.207  SRC 08  ACT 07          <- ⛔ LAST before the body
+```
+
+**Both audio cells are destroyed by a word whose operand source is `SRC 0x08` — which is
+UNDECODED.** Two cells, two different store sites (bit-4 and ACT-07), reached independently, one
+source. That is a root cause, not a coincidence.
+
+### 4. And SRC 0x08 is where the evidence already conflicts
+
+* At `iw89`/`iw91` — the CHORUS LFO block — `SRC 0x08` yields **57**, and `lfo-ramp.md`'s ramp
+  constants are `0x72 = 114` for CHORUS at 11 sites. Ours is exactly half: the same factor of 2
+  as the host levels. So there `SRC 0x08 = C-RAM[cursor]` looks **right**.
+* At `iw32`/`iw45` the same route yields **`0x400000`** and destroys the audio. So either the
+  route is right and the **cursor is mis-positioned** at those two words, or these words should
+  not store, or the LFO agreement is coincidence.
+* §109 already recorded a live conflict: `lfo-ramp.md` determines **unity** for `SRC 0x08` while
+  the device measures a coefficient. Both cannot hold.
+
+★ **`SRC 0x08` has 83 corpus words** — genuinely decodable, unlike `SRC 0x02`/`0x03` which had
+n = 1 each and defeated §100/§101. This is the first blocker in this chain with enough sites to
+support a corpus argument.
+
+### 5. Next
+
+**Decode `SRC 0x08`**, and the question is now sharply posed rather than open-ended: it must yield
+~114 at the LFO block (where `lfo-ramp.md` independently predicts the value) and must not yield a
+constant that overwrites the audio at `iw32`/`iw45`. That is a **two-sided criterion with a known
+right answer at one site** — the strongest test shape available, and precisely what §107's
+disqualified follow-on statistic lacked.
+
+Evidence grade: **MEASURED** (the fix, its fired-count and null, cell 0x05's input-dependence and
+its four writers in order); **FORCED** that PRE is the ACT-07 convention; **INFERRED** that
+`SRC 0x08` is one root cause for both clobbers — the two sites agree but that is two instances.
