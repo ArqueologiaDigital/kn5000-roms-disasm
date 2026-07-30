@@ -9444,3 +9444,80 @@ is a separate question this test does not touch.
 
 Evidence grade: §1 **MEASURED** and a **void run by my own falsifier**; §2 **MEASURED**, F3 fired;
 §3 **INFERRED** (the diagnosis), with the test pre-registered.
+
+---
+
+## §155 — ★★★ THE DELAY TAP SWEEPS, AT EXACTLY THE DESIGNED DEPTH
+
+Scored against `data/PREDICT_155.md`, written before the run.
+
+```
+  §154  tapmod alone      [00] range 8 388 607   -- the full 24-bit datum rail
+  §155  coef + tapmod     [00] -240..240   [10] -240..240   [30] -240..240
+                          [20] -240..  0
+```
+
+**The excursion is exactly ±240** — `C-RAM[0x02] = 240`, the depth §152 read out of the ROM
+statically and §145 measured on the bus. Not "of order the depth": **the depth, to the sample.**
+
+| | prediction | result |
+|---|---|---|
+| **P1** | fired-count unchanged at 4 513 920 | ✔ identical |
+| **P2** | ★ excursion collapses from 8 388 607 to order the depth | ✔ **to exactly ±240** |
+| **P3** | the three railed cells fall **together** | ✔ `[00]`, `[10]`, `[30]` all ±240 |
+| **P4** | cell `[20]`'s 670 changes | ✔ → `−240..0` |
+
+Frames close 285/285, 0 traps.
+
+### 1. ★★ The cross-check that makes this more than an internal consistency
+
+§152 computed, **from the ROM alone** and before any of this was implemented, that CHORUS's swept
+tap must live in `160..640` inside a 1040-sample allocation — from the tag-0x4C descriptor stream
+and the tag-0x26 coefficient stream, two independent host paths.
+
+The live measurement gives nominal tap 400 ± 240 = **160..640**.
+
+**A static ROM-derived prediction and a live emulator measurement, agreeing exactly, on a
+mechanism that did not exist in the emulator two hours ago.**
+
+### 2. ⇒ And it retires "inert downstream"
+
+§148 graded `SRC 0x00 = coef` *"INERT downstream — `coef` puts the right value on the bus and
+DO1/DO2 are 0 in both arms, so no further arm can validate it."* That was true and it was the
+wrong conclusion to draw: **its consumer is this path**, which did not exist when the sentence was
+written. §154 (tapmod without `coef`) railed at `0x7FFFFF`; §155 (both) lands on the designed
+depth. **Neither reading is observable without the other** — the same joint structure as §133's
+`ACT 0x0D`/`0x0E` pair, and the third time this corpus has punished one-at-a-time enumeration.
+
+### 3. ⚠ WHAT DID *NOT* COME OUT AS PREDICTED — stated, not fitted
+
+`PREDICT_155.md` P2 also said DEPTH defaults to a **0.5 gain**, so *"expect roughly ±120"*.
+**Measured is ±240 — the FULL depth.** The 0.5 DEPTH multiplier (`chorus.md`: op 0x66, CHORUS
+cells `0x09`/`0x0A`, default `0x400000`) is **not applied on this path.** Either it enters
+somewhere this transaction does not touch, or the default is 1.0, or `chorus.md`'s reading of it
+is wrong. ⛔ **No factor has been introduced to close this**, per F3's standing instruction.
+
+Also unexplained: **cell `[20]` sweeps `−240..0`, one-sided**, where the other three are symmetric.
+An asymmetric voice is not obviously wrong — a chorus wants voices in antiphase and §145 measured
+the four twins at `+240 +240 −240 −240` — but a *rectified* excursion is a different shape from an
+inverted one, and this is not decoded.
+
+### 4. What this does and does not establish
+
+**Established (MEASURED):** the depth reaches the delay-tap address with the correct magnitude and
+sign range, in the effect whose geometry the ROM independently predicts.
+
+**NOT established, and pre-registered as out of scope:** the modulation **arithmetic**. Sine table
+vs triangle vs raw ramp is untouched — the census measures the excursion's *extent*, not its
+*shape over time*. The next question is whether the sweep is sinusoidal, and D-RAM `0x1D..0x40`
+(the 36-entry SINE table, `dsp-next-steps-roadmap.md`) is where to look.
+
+**Still silent:** DO1/DO2 remain 0 in this vehicle for reasons upstream (§141's `w73`, §150's
+correction to it). A swept tap is not audio; it is the mechanism audio would need.
+
+⚠ Reporting bug to fix: the `§145` line prints `mask bit 57 = 0` while reporting 4 513 920
+firings, because bit 59 drove them. The line should report which of bits 57/58/59 is active.
+
+Evidence grade: §1 **MEASURED** (four pre-registered predictions, one of them a cross-check
+against a prior static computation); §3 a **stated discrepancy**, deliberately unfitted;
+§4 scope.
