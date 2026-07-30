@@ -8850,3 +8850,72 @@ never touched, and it should be checked **before** the gate is run.
 
 Evidence grade: §1 **MEASURED** with one **stated hygiene limitation**; §2 **MEASURED** (the
 census) + **SPECULATIVE** (the f98 reading), with its independent test named; §3 **OPEN**.
+
+---
+
+## §147 — ★★ THE `182` SMOOTHER TEST PASSES, FROM THE ROM'S OWN UPLOAD SCRIPT — and it names the compressor's ATTACK/RELEASE
+
+§146 §2 pre-registered this test *before* running anything, on a population the §145 twin
+experiment never touched: **under `coef` the twelve `182.A.00.000` words must consume the
+one-pole smoother time constants the 2/π level-detector idiom needs.** It passes, and the check
+needed no emulator at all.
+
+### 1. The ROM contains the host's upload script, and the constants are consecutive
+
+At ROM `0x84CD`, five consecutive 3-byte big-endian Q0.23 coefficients:
+
+```
+   517CC1   0.636620   = floor(2/pi * 2^23) EXACTLY -- the mean of |sin|
+   400000   0.500000
+   009DAD   0.004812   -> one-pole tau = 1/(a*fs) = 4.712 ms
+   003F29   0.001927   -> one-pole tau =            11.764 ms
+   066666   0.050000
+```
+
+(The preceding bytes `... 08 21 20 26 ...` are the `0x821` coefficient-base pointer load.)
+
+### 2. And COMPRESSOR's cursor consumes them in exactly that order
+
+```
+   w3   018.A.00.1D5  -> C-RAM[0x00]   = 2/pi        the rectifier calibration
+   w4   104.A.00.1D5  -> C-RAM[0x01]   = 0.5
+   w6   182.A.00.000  -> C-RAM[0x02]   = 0.004812    ★ THE SMOOTHER, 4.712 ms
+   w10  000.A.00.219  -> C-RAM[0x03]   = 0.001927       11.764 ms
+   w11  09A.A.00.200  -> C-RAM[0x04]   = 0.05
+   w24/w25/w27  the same idiom again  -> C-RAM[0x05]/[0x06]/[0x07]  (the second stage)
+```
+
+**The upload order and the consumption order are the same sequence.** The `182` word lands on a
+one-pole time constant, which is what `coef` predicts it reads and what `mem[ptr]` does not.
+
+### 3. ★ And the parameter list closes the loop with the UI
+
+`kn5000-dsp-paramlist.md`: **COMPRESSOR's six parameters are THRESHOLD, RATIO, ATTACK SENS.(s),
+RELEASE SENS.(s), VOLUME, REV SEND.** Two time constants, *in seconds* — and the idiom appears
+**twice**, once per stage, consuming one smoother constant each.
+
+⇒ `0.004812` → 4.712 ms and `0.001927` → 11.764 ms are the compressor's **ATTACK and RELEASE**
+sensitivities, ratio 2.4964 ≈ 5/2. The `018`/`182` pair is a **rectify-and-smooth envelope
+follower**: `2/π` calibrates the rectified mean, the `182` word applies the one-pole.
+
+This also gives §139 §3's `0x517CC1` finding its consumer, and gives §140's speculative **S3**
+(*"`f31` bit 2 = RECTIFY"*) a concrete context to be tested in: the rectifier must live in this
+idiom, because `2/π` is meaningless without one.
+
+### 4. What this does and does not license
+
+* **Supports** `SRC 0x00 = coef` on the `f98 = 1` family, from an independent population and an
+  independent source (the ROM's parameter script, not a model output). The `182` words are 12 of
+  the 41 `f98 = 1` class-A `SRC 0x00` words; the `192` twins are the other 29 and were already
+  bit-exact (§145).
+* **Does NOT** license the `f98 = 1` gate by itself. §146 warned that gating on `f98` *because* it
+  separates the twins from the railers is fitting to the outcome; this removes that objection for
+  the `182` half but the gate is still **untested in the emulator**.
+* **Says nothing** about the 1262-word class-2 majority — 78 % of the population, still untouched.
+* ⚠ Grade: the cells are shown to *hold* designed smoother constants and to be consumed in the
+  ROM's own upload order. A live capture of the operand bus at a `182` word would upgrade this
+  from **INFERRED (strong)** to MEASURED, as §145 did for the twins.
+
+Evidence grade: §1/§2 **MEASURED** (ROM bytes and the disassembler's cursor addresses);
+§3 **INFERRED (strong)** — the UI parameter names, the two stages and the two constants agree;
+§4 the scope, explicitly bounded.
