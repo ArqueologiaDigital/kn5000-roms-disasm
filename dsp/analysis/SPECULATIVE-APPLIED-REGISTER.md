@@ -8303,3 +8303,131 @@ register file.
 Evidence grade: §1 **MEASURED** (site enumeration); §2 **MEASURED** (four arms) with the routing
 question **UNDECIDED**; §3 **MEASURED** and a retraction of my own claim; §4 **MEASURED**;
 §5 **INFERRED**.
+
+---
+
+## §139 — WHY `f31 = 4/5` WERE BLIND: a POPULATION failure, not a witness failure
+
+From a read-only corpus agent, with the load-bearing claims **re-verified here independently**.
+
+### 1. ★★★ At cold boot, essentially no `f31 ∈ {4,5}` word executes at all
+
+Counting only **plain** words — `f31 = hi12[3:1]` is not a field inside C-format
+(`hi12[11:8] == 0xC`, where bits [24:12] are one 13-bit immediate reaching *into* `hi12`) nor
+inside the bit-11 escape:
+
+```
+  CHORUS        a1   70 words -> f31=4 x0, f31=5 x0
+  ROOM REVERB 1 a16 133 words -> f31=4 x0, f31=5 x0
+  PARAMETRIC EQ a39 105 words -> f31=4 x2, f31=5 x2
+  KERNEL             60 words -> f31=4 x0, f31=5 x1
+  EPILOGUE           23 words -> f31=4 x0, f31=5 x0
+```
+
+**MEASURED** (re-verified). And PEQ's four are `w3`/`w56` = `02A.2.00.000`, `w50` = `028.2.00.000`
+and the `428.1.0E.000` terminator — the **operand-free NOP form**: SRC 0, ACT 0, `addr8` 0,
+class 2, no coefficient, no store. Such a word can touch nothing but the accumulator, and §131
+established the accumulator cannot cross a bank entry.
+
+⇒ **§133's "f31 = 4/5 are BLIND" was not an instrument limitation. It was FORCED by the words.**
+The demultiplexer could not have decided them in that vehicle no matter how many arms it ran.
+This is a materially better statement than §133 §4's, and it changes what to do next.
+
+★ **It also pre-refutes the standing plan.** `f31-high.md` hands over *"★ AUTO PAN, not PARAMETRIC
+EQ"* — but AUTO PAN's four sites (`w4`/`w43` = `02A.2.00.000`, `w13`/`w48` = `028.2.00.000`) are
+**the identical NOP form**. It would fail identically. Do not run it. (A saved run, from reading
+the corpus rather than the handoff.)
+
+### 2. ⚠ A field-hygiene correction that moves every published `f31` count
+
+Because `f31` is not a field in the two alternate formats, the corpus split is
+`f31=4`: 48 total → **46 plain**; `f31=5`: 60 → **52 plain**.
+
+⛔ **This removes §27's evidence.** §27's "`f31[2]` selects the accumulator" argument rests on
+epilogue `w73` (`E30.C.00.404`), `w77` (`859.0.86.822`) and `w78` (`A3C.D.9F.287`) — **all three
+carry bit 11**, so their quoted `f31` values 0/4/6 are read out of an immediate. That does not make
+§27 wrong; it leaves it **unsupported**. And the independent check is unfavourable: of the 128
+`SRC 0x11` (putative ACCB) reads, distance to the nearest preceding `f31 ≥ 4` word gives
+P(d ≤ 4) = 0.273 against a shuffled null 0.247 ± 0.050 — **z = +0.50**, no support; 62 of the 128
+have no preceding `f31 ≥ 4` word in their image at all, and PARAMETRIC EQ has four such words and
+**zero** `SRC 0x11` reads.
+
+### 3. ★★ `0x517CC1` = `floor(2/π × 2²³)`, EXACTLY
+
+**MEASURED, re-verified**: `0x517CC1` = 5 340 353 = `floor(2/π × 2²³)` to the LSB — the same
+truncation convention `lfo-ramp.md` anchored nine-fold. `2/π` is the mean of a **rectified** sine,
+i.e. `programs.tsv`'s "2/pi env" level detector, named in the ROM's own role table.
+
+It sits in a byte-identical four-word idiom at **12 sites across 8 images**, every one of which is
+an effect with a level detector (NO OPERATION ×42 slots, GATED REVERB, COMPRESSOR ×2, AUTO WAH,
+AUTO WAH+S.DELAY, and the PEQ+COMPRESSOR combis):
+
+```
+    026|02E.2.xx.xxx   (f31 = 3 or 7)          -- 11 of 12 sites
+ ** 018.A.00.1D5       f31 = 4, ST   C-RAM = 0x517CC1 = 2/pi
+    104.A.00.1D5       f31 = 2       C-RAM = 0x400000 = 0.5   <- same lo12/addr8, pointer FROZEN
+    C40.2.C0.000       C-format immediate
+    182.A.00.000       f31 = 1       one-pole smoothers, 4.712 ms and 11.764 ms
+```
+
+### 4. Absences — the sharpest part of the profile
+
+* `f31 = 4` **never** carries bit 7 (0/46; base rate 23 % at `f31=1`, p ≈ 8e-6).
+* **Neither** ever carries bit 6 (0/98; 6 % at `f31=0`).
+* Their non-null SRC sets are **disjoint**: `f31=4 → {07}`, `f31=5 → {08,10}`. `f31=4` never
+  sources the accumulator; `f31=5` never sources memory.
+* **12 of 38 images terminate on `428.1.0E.000` (`f31=4`); not one terminates on `f31=5`.**
+  `f31=4` has the corpus's highest mean position (0.622), `f31=5` among the lowest (0.391).
+* Neither is ever a delay-DRAM word.
+
+### 5. ⚠ AN INSTRUMENT DEFECT THAT MAY HAVE CAUSED PART OF §133's NULL
+
+`bx_stim` (`upd6383.h`) returns `0x010000 + n·0x101` and `0x018000 + n·0x203` — **strictly positive
+and monotone**. **A rectifier is invisible to a strictly positive stimulus.** If any of these codes
+takes an absolute value, no number of arms can see it. The stimulus must alternate sign before
+`f31` is enumerated again.
+
+Evidence grade: §1 **MEASURED** (re-verified) and **FORCED** as to the blindness; §2 **MEASURED**
++ a **withdrawal of support** from §27, not a refutation; §3 **MEASURED**; §4 **MEASURED**;
+§5 **FORCED** by inspection of the stimulus.
+
+---
+
+## §140 — SPECULATIVE PATTERNS (explicitly not gated; recorded so they accumulate)
+
+Per Felipe's instruction to leave room for speculation. **None of these is evidence.** Each carries
+what would confirm or kill it.
+
+**S1 — `hi12` bit 5 changes what `hi12[3:1]` MEANS.** Outside the bit-5 family `f31 > 2` is
+**0.90 %** of words; inside it, **76.05 %**. The 8/8 sub-field completeness that originally
+established `hi12[3:1]` *is* a field used the prefix `0x02_` — **entirely inside the bit-5 family**.
+Under this reading, "`f31 = 4`" inside and outside bit 5 are two different questions, and every
+enumeration so far has conflated them. *Kill it by:* finding one bit-5-clear word whose behaviour
+matches a bit-5-set word of the same `f31`.
+
+**S2 — `f31 ≥ 3` marks the NONLINEAR / LEVEL-DEPENDENT stage.** The 14 images with **zero**
+`f31 ≥ 3` words are CHORUS, MODULATED CHORUS, FLANGER, ENSEMBLE, VIBRATO, MIX UP, SINGLE DELAY,
+MULTI TAP DELAY, ROOM REVERB 1 and the five S.DELAY combis — **every purely linear program in the
+machine, and nothing else.** Everything with a rectifier, level detector, waveshaper or envelope
+carries them. The split is MEASURED; the causal reading is the speculation. (PEQ and PHASER are
+the awkward cases: linear, but carrying only the operand-free NOP form.)
+
+**S3 — `f31` bit 2 = RECTIFY / absolute value.** ★ The strongest new lead and nobody has proposed
+it. Its motivation is the *constant*, not a frequency argument: `2/π` is the mean of `|sin|`, so
+the idiom containing it must take an absolute value somewhere — and **the ISA has no ACT code for
+one**. Carriers would be the `026`/`02E` word (`f31` = 3 or 7) preceding 11 of the 12 sites, or the
+`018` word itself. Then `026`(3) → `018`(4) reads as *rectify* → *rectify-and-scale-by-2/π*, with
+3/7 vs 4/5 the same LOAD/ADD distinction one bit lower. *Kill it by:* a sign-alternating stimulus —
+which §5 above says the current instrument cannot produce.
+
+**S4 — `f98` is a modifier OF the accumulator op, not an independent field.** `f98 ≠ 0 ⇒
+f31 ∈ {1,2}` holds on **2158/2203 = 97.96 %** of plain words (my per-program denominator; the
+agent reported 1203/1207 = 99.67 % over the 38 distinct images — the regularity is strong either
+way, the exact rate depends on the denominator, and I quote mine). If true, the operation is a
+joint `(f98, f31)` code and `f31 ≥ 3` is simply where `f98` does not apply — meaning the four
+`f31hi` readings enumerated so far search the wrong axis.
+
+**S5 — kernel `w30` (`09A.A.00.200`) is the cheapest `f31=5` observable in the machine.** It is the
+ONLY plain `f31 ∈ {4,5}` word that executes at cold boot with the default effects, it runs every
+frame of every boot with any effect, it is already a named §109 probe slot, and it is one of the 13
+words separating the two surviving store-gate rules. No panel path, no effect selection needed.
