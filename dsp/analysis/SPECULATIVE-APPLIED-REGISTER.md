@@ -9823,3 +9823,72 @@ refutation of the sine.
 
 Evidence grade: §1 **MEASURED**; §2 **SPECULATIVE (strong)**, with the unverified half stated;
 §3 pre-registered with its control.
+
+---
+
+## §160 — ★★★ THE WAVETABLE IS THERE, IT IS AN EXACT SINE, AND EXACTLY ONE CELL IS DESTROYED
+
+Scored against `data/PREDICT_160.md`. **H-RF confirmed.**
+
+### 1. The table arrives in the register file, and it is the ROM sine to the bit
+
+`m_rf[0x1D..0x40]`, **35 of 36 non-zero**, fitted against `0.95·sin(2πk/24 + 0.1)`:
+
+```
+  idx cell   raw      signed      /2^23      expected     err(LSB)
+   0  0x1D 0C23C6    +795590   +0.094842   +0.094842        0.2
+   2  0x1F 470272   +4653682   +0.554762   +0.554762        1.8
+   3  0x20 000000          0   +0.000000   +0.735459   6169474.9   <-- A HOLE
+   6  0x23 78FE14   +7929364   +0.945254   +0.945254        0.9    <-- the peak
+  12  0x29 F3DC38    -795592   -0.094842   -0.094842        1.8
+  18  0x2F 8701EA   -7929366   -0.945254   -0.945254        1.1    <-- the trough
+```
+
+**23 of 24 cells match to under 3 LSB**, most under 2. The predicted peak `table[6] = 0x78FE14 =
+0.9452541` is present exactly where predicted. **MEASURED.**
+
+★ **The control passes**: the all-cells listing shows `06 = 400000` — §97's validated unit-0 output
+level, `+0.5`. The dump is reading the right array.
+
+### 2. ⛔ ONE CELL IS CLOBBERED, AND THE CULPRIT IS COUNTED
+
+Index 3 = register cell **`0x20`** reads `0x000000` where the sine requires **+6 169 476**. Index
+15 holds **−6 169 476** exactly, so the missing value is confirmed by the table's own symmetry.
+
+```
+  §99 MODE-1 STORES -> register file:  06:1155840  0E:28800  0F:1167360  20:4513920 ...
+  §159 D-RAM census, same cell:        20:0/4514717   (neighbours ~800)
+```
+
+**Cell `0x20` takes 4 513 920 mode-1 stores from the MICROCODE** — and 4 513 920 = **4 per frame ×
+1 128 480 frames**, the *same* count as §153's tapmod gate and §148's `f98` gate, i.e. the same
+four words per frame.
+
+⇒ **The host's wavetable and the microcode's mode-1 scratch COLLIDE inside the register file.**
+§97 split host parameters off from the pointer-walked D-RAM and fixed one conflict; **this is a
+residual conflict within the space that split created** — the same defect one level down, and the
+first hard evidence that the register file needs a further separation (or that one of the two
+addressings into it is wrong).
+
+### 3. ⇒ K2 is unblocked, with one prerequisite
+
+The lookup can now be built against a real table. **But not before cell `0x20` is fixed**, because
+a wavetable with a zero at index 3 produces a waveform with a notch in it — and a sweep measured
+through that notch would be wrong in a way that looks like a shape result. ★ Concretely: the
+excursion peak would still be `0.9452541 × depth` (the peak is at index 6, undamaged), so the
+**226-not-240 test survives**, but any *shape* claim would be contaminated.
+
+**Two candidate fixes, and they are distinguishable:**
+* the microcode's mode-1 stores at `0x20` are correctly addressed and the **wavetable base is
+  wrong** (it should not be at `0x1D`), or
+* the base is right and those four stores are **mis-addressed**.
+The `§109` per-slot store witness already reports the store address and the guard that admitted it;
+pointing it at the four words that hit `0x20` names which.
+
+⚠ And the **aliasing hazard is now demonstrated rather than hypothetical.** `HANDOFF-NEXT` flagged
+descriptor cells `0x26..0x39` overlapping D-RAM `0x1D..0x40`; what actually bit is a *different*
+overlap, inside `m_rf`, at `0x20`. Both need separating before the table is trusted.
+
+Evidence grade: §1 **MEASURED** (35 of 36 cells fitted, control passing); §2 **MEASURED** (both
+counters, and the symmetry confirming the missing value); §3 **FORCED** as to the blocker, the two
+candidate causes **ENUMERATED, not chosen**.
