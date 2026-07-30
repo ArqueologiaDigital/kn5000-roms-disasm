@@ -72,6 +72,8 @@ the ones a reader would reach for again.
 | 7 | `st_gate = always` | 0 survivors of 276 480 | `lfo-ramp.md` P-9 |
 | 8 | Remap the three internal writes onto **output ports 0/1** | Reverted: the resulting wet was rms 1.0 — a ±1 LSB constant present *even in silence* | `upd6383.cpp:2011` |
 | 10 | **Bit 54** (latch to `m_k`) and **bit 54 + bit 4** (§40 reads it) to route the phase | §136's *"the pair has never been evaluated together"* is discharged: bit 54 alone is **bit-identical to control in every cell**; the pair produces `§70 ACCA min = max = 176 471 605 248`, the exact DC §137 retracted | §165 §4 |
+| 13 | `C63` writes the index register `m_tb` via `SRC 0x11 / ACT 0x03` (**§166 §3**) | ⛔ **REFUTED §181.** `lo12 = 0xC63` has bit 11 set, and `upd6383d.h:609` routes those words to *addressing only, no ALU effect*. It never writes `m_tb`. §166's 53/53 bijection is a measurement and stands | §181 |
+| 14 | `SRC 0x11`'s reading explains `m_tb` being frozen | ⛔ Three experiments (§168, §181 arm D, the whole `SRC 0x11` line) tested **the source of a write that never happens** | §181 |
 | 11 | `ACT 0x15` is a no-op, so the LFO index multiply never issues (**§169 §2**) | ⛔ **RETRACTED §174.** The multiply's gate is `coeff_consumer(w) = class4==0xA && !c_format(w)` — the ACTION field is not in it. `lfo-ramp.md` §10 said so in the paragraph §169 quoted. Takes §171 §4 and §173 §3 with it | §174 |
 | 12 | "one cause — the frozen cell is just the dead multiply", displacing §168 | ⛔ Premise gone with #11. §168's addressing diagnosis is **confirmed** instead: 7 of 12 multiply sites have `L` identically zero while `coef` is live | §174 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
@@ -147,7 +149,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 20 | **ON** | §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
 | 21 | REFUTED | §82, §138 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
 | 22 | REFUTED | §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
-| 23 | **ON** | §71, §94 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
+| 23 | **ON** | §71, §94 | THE HOST PAYLOAD IS 2x THE RAW THREE BYTES. r3-delaydram.md states it; §71/A3 reproduced it as a control that could have |
 | 24 | **ON** | §100 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 25 | **ON** | §101, §112 | DO NOT LET AN UNSUPPORTED SOURCE OVERWRITE A HOST-PROGRAMMED REGISTER |
 | 26 | off | §94 |  |
@@ -173,12 +175,13 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 59 | **ON** | §145, §148 | `coef' only where f98 == 1 AND the word consumes a coefficient. §146 localised the railing to four words -- kernel iw14/ |
 | 60 | **ON** | §47, §50 | TAKE THE DESCRIPTOR FROM THE PER-UNIT C-RAM BANK, NOT FROM D-RAM AT m_dsc |
 | 61 | **ON** | §160, §161 | A DELAY WORD'S `addr8' IS A DIRECTION FIELD, NOT A REGISTER ADDRESS -- so ACTION 0x07 must not store to it |
+| 62 | off | §174, §180 | PTRD-A -- `lo12 == 0x1C0' DOES NOT MOVE THE POINTER |
 
 ---
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-71 sections, §97..§178.  **Read the tail first** — later sections retract earlier ones *in place*.
+74 sections, §97..§181.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -253,4 +256,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §176 | OPEN | ★★★ THE INDEX MULTIPLY POINTS AT CELL 5. THE PHASE IS IN CELL 7. Off by exactly 2. | §1 **MEASURED**; §2 **MEASURED** (coefficient 24 identifies the word's role |
 | §177 | OPEN | §176's "off by 2" is an instance of a KNOWN, LOCALISED defect, and it adds a fourth constraint | §1 **FORCED** (quoted from the owning note, origins cancel); §2 C4 **MEASURED** |
 | §178 | OPEN | the header's vocabulary, verified and enumerated; and a gap I nearly reported that is not there | §1 **MEASURED** (the quoted figure independently reproduced); §2 **MEASURED**, and |
+| §179 | SHIPPED | the census window was RIGHT, and the note's origin region is EMPTY. An open discrepancy. | §1 **MEASURED**; §2 **MEASURED** (a standing prediction confirmed); |
+| §180 | SHIPPED | PTRD-A: the dead multiply comes ALIVE, by moving the DATA rather than the pointer. Not shipped. | §1 **MEASURED**; §2 the mis-specification **acknowledged**, the coincidence |
+| §181 | REFUTED/RETRACTED | ⛔ `C63` NEVER WRITES `m_tb`. Three experiments were aimed at the operand of a word the device does not route to the ALU. | §1 **MEASURED**; §2 **FORCED** (read at source), §166 §3's SPECULATIVE half |
 

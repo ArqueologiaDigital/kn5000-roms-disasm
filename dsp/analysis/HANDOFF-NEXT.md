@@ -16,51 +16,54 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Fix the POINTER-DELTA RULE — which words carry the signed `addr8` post-increment.**
+**Model the bit-11 alternate `lo12` encoding on an ALU route.**
 
-★ **READ `kn7000_mame/notes/kn5000-dsp-pointer.md` FIRST.** It owns this question, its own §10.2
-names it *"the single binding unknown"*, and its header warns on the first screen that the current
-rule (*"classes 2 and A move it"*) is **known wrong, by two independent checks**.
+⚠ **FIRST: task "Decode the bit-11 alternate lo12 encoding" is marked COMPLETED in this session's
+task list, and the device says the opposite.** Check what it actually delivered before redoing it —
+thirteenth application of rule 3, and the first where the stale record is a task list, not a note.
 
-### Why this is the task — §176 turned out to be a fourth instance, not a new problem
+### The device does not route these words to the ALU at all
 
-```
-  C1  phaser algo  5   chain READS {76}       modulator WRITES {7B}       miss +5
-  C2  phaser algo 68   chain READS {76}       modulator WRITES {77}       miss +1
-  C3  phaser algo  3   chain READS {7E,7F}    modulator WRITES {7B,7C}    miss -3
-  C4  CHORUS algo  1   index multiply at m_dp 5, LFO phase in cell 7       miss +2   ★ §176
-```
-
-Every one is a producer/consumer pair that **must** name the same cell. Both sides are
-`origin + Σ(deltas)`, so **the origin cancels** — that is why the note calls it FORCED that the
-error is in the Σ, i.e. in *which words carry a delta*.
-
-★ **C4 is this project's contribution**: a different effect family, a different idiom, and its
-consumer's role pinned **independently of any addressing claim** (§176 measured that word's
-coefficient as `0..24`, the index scale `lfo-ramp.md` designed). A rule that fits C1–C3 by
-construction can still fail C4.
-
-Three properties any candidate must NOT break — the current rule already satisfies all three:
-
-```
-  P1  the phaser's 20 all-pass sections are net-zero      P2  the biquad walks +4 per band
-  P3  8 of 9 reverb diffusers keep a stationary pointer
+```cpp
+  upd6383d.h:609   if (lo12(w) & 0x800) return true;    // the alternate lo12 encoding:
+                                                        // addressing only, no ALU effect
+  upd6383d.h:628   if (lo12(w) & 0x800) return false;   // ... simply not modelled on an
+                                                        // ALU route yet.
 ```
 
-### ⛔ Do not touch the ORIGIN
+### Why it is load-bearing rather than long-tail
 
-MEASURED three ways — the ROM record at `0x01E496`, the cold-boot capture, and the **live I-RAM of
-a booted KN5000** read back by the device — and it cancels out of every constraint above.
-"Reach for the anchor" is a named standing bias (§108 §5; LEDGER rule 9), and bit 27 already
-measured a base change as bit-identical.
+```
+  90 of 2989 corpus words = 3.0 %, in 9 forms
+     0xC63 x53 (25 programs)  <- HALF THE TABLE-LOOKUP IDIOM (§166, 53/53 bijection)
+     0x8BC x24 (24 programs)
+     0x821 x3, 0x825 x3, 0x827 x2  <- THE POINTER-FAMILY LOADS that set the operand origin
+     0x839 x2, 0x822 x1, 0x864 x1, 0x921 x1
+```
 
-### ⚠ And validate any `hi12`-conditioned rule on the HEADER, not just the bodies
+Three percent of the corpus, sitting on the two structures the last twenty sections have been
+blocked by.
 
-`kn5000-dsp-pointer.md` §5: *"bit 10 with bit 11 clear = END OF PROGRAM"* was measured 38/38 on the
-38 body images and **falsified as a bit meaning** — the common header (I-RAM 0..82) carries it 14
-times in 60 words. Every static search in this series excluded those 83 words *by construction*.
+### What it already cost — §181
+
+`C63`'s `lo12` is `0xC63`, bit 11 set, so **it performs addressing only and never writes `m_tb`.**
+⇒ §168 (bit 18 alone), §181 arm D (bit 18 + 62), and the whole `SRC 0x11` line were testing **the
+source of a write that never happens**. `m_tb`'s `chg = 1` was never evidence about `SRC 0x11`.
+
+⇒ **§166 §3 REFUTED** — it applied the *standard* `lo12` split to a word in the *alternate*
+encoding. ★ §166 graded it correctly at the time (shape INFERRED, index register SPECULATIVE) and
+it is the SPECULATIVE half that fell; its 53/53 bijection is a measurement and stands.
+
+### Still open, unchanged
+
+* **PTRD-A (bit 62, off)** takes CHORUS's index multiply from `L 0..0 nz 0` to live on 1 128 428 of
+  1 129 389 firings. Independent of `C63`. Unshipped for §180's three reasons.
+* **C1/C2/C3** are satisfied by **zero** of 6 088 704 non-degenerate delta rules, and C3 is
+  *provably* unreachable (`gcd(77,80) = 1`). The search's conclusion is to drop the C1–C3
+  producer/consumer premise (`-axes.md` §2.4, INFERRED), not the arithmetic and not the origin.
 
 ### ⛔ Dead, do not retry
+
 
 
 
