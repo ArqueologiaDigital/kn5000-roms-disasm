@@ -10983,3 +10983,72 @@ layer.
 Evidence grade: §1 **MEASURED** (the quoted figure independently reproduced); §2 **MEASURED**, and
 recorded as a near-miss rather than a finding; §3 **MEASURED** census, its *interpretation* as a
 target list **INFERRED**.
+
+---
+
+## §179 — the census window was RIGHT, and the note's origin region is EMPTY. An open discrepancy.
+
+§176 censused D-RAM `0x00..0x1F` — one eighth of the 256-cell space — while the owning pointer note
+measures the operand origin at `0x70`/`0x50`. If the data lived there, §176's off-by-2 was measured
+in an empty corner. That is a doubt worth one run rather than an argument.
+
+### 1. F1 — arm 1. The window was right.
+
+All 256 cells, 1 392 430 frames:
+
+```
+  01:0(-4275712..4952576/chg308646)   02:6553600(chg1)   04:0(-5579776..4994816/chg307312)
+  06:8388607(chg1100)   07:2811786(0..8388598/chg1128429)   0E:39718(chg2)   92:8388607(chg2)
+                                    ||  NON-ZERO 5 of 256 (4 below 0x20), MOVING 7 of 256
+```
+
+**Seven cells move, in the whole 256-cell space.** Six of them are inside §176's window; the
+seventh is `0x92`. ⇒ **§176 stands as measured** — its off-by-2 was not an artefact of a narrow
+window. A cheap negative result that removes a real doubt.
+
+★ New: cell **`0x92`** at full scale (`8388607`). §72 places the body's coefficient bank at
+`0x90+`, so this is the first observed live cell in that bank. **Not identified**; recorded.
+
+### 2. F2 — the shipped closure argument's observable half HOLDS
+
+`upd6383.cpp:1209` argues `DRAM_UNIT_BASE = 0x05` is FORCED: unit 1 starts at `0x85`, walks `−133`,
+the output stage walks `−1`, the frame ends on `0xFF`, *"so the two deposits below land on cells
+`0x01` and `0x04`"* — and it flags that as a **prediction** of `output-stage-decode.md`'s DI-latch
+map rather than an input to it.
+
+**`0x01` and `0x04` are two of the seven moving cells**, at 308 646 and 307 312 changes. The
+prediction holds. (`0x85` and `0xFF` are dead, but the argument only ever claimed the pointer
+*passes through* them.)
+
+### 3. ⚠⚠ AND THE NOTE'S ORIGIN REGION IS COMPLETELY DEAD — recorded, NOT adjudicated
+
+`kn5000-dsp-pointer.md` §4 measures the operand origin at `0x70` (unit 0) / `0x50` (unit 1)
+**three ways**: the ROM record at `0x01E496`, the cold-boot capture, and the live I-RAM of a booted
+KN5000 read back by the device. In this emulator **nothing in `0x50..0x8B` is non-zero and nothing
+there ever moves.**
+
+Two readings, and I am deliberately not choosing:
+
+* **(a)** the device never implements the header's `ldptr` at all — it substitutes
+  `DRAM_UNIT_BASE` — so that region is dead *because unimplemented*, and the note describes the
+  real machine while the emulator describes a different one;
+* **(b)** the note's `0x821` is **not** the operand pointer. That note grades its own selection
+  **INFERRED (strong)** and says explicitly *"`0x827` not excluded"*.
+
+⛔ **Do not resolve this by moving `DRAM_UNIT_BASE`.** §108 §5 FORCED that no base value fixes the
+geometry, bit 27 measured a base change bit-identical, and "reach for the anchor" is LEDGER rule 9.
+The discrepancy is between two *models*, and the deciding evidence is the note's own §10.1
+experiment — capture the host's parameter poke while PHASER is selected and see which register and
+which address it uses.
+
+### 4. What this constrains for the delta-rule search running in parallel
+
+Any candidate rule that walks the operand pointer into `0x20..0x4F` or `0x93..0xFF` puts it
+somewhere **nothing in this machine ever writes**. That is not a proof the rule is wrong — those
+regions could be dead precisely *because* the pointer never reaches them — but a rule whose
+producer/consumer pair resolves into dead space has explained nothing, and should be scored below
+one that resolves into the seven live cells.
+
+Evidence grade: §1 **MEASURED**; §2 **MEASURED** (a standing prediction confirmed);
+§3 **MEASURED** as to the emptiness, the two readings **ENUMERATED, not chosen**;
+§4 **INFERRED**, offered as a scoring heuristic and not a constraint.
