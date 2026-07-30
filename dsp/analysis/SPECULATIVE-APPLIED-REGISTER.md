@@ -7113,3 +7113,73 @@ Evidence grade: **MEASURED** that `0x0E`/`0x0F`/`0x10` are dead in the shipped b
 `0..264`/`0..203` figures belong to arm E; **MEASURED** the class-6 census and the 29/29 match;
 **INFERRED** that class 6 is the table lookup and `addr8` its table parameter; **OPEN** for what
 class 6 computes.
+
+---
+
+## §121 — ⛔ BIT 18 REMOVED (IT WAS DESTROYING THE AUDIO DEPOSIT), AND THE ACT 0x0D ENUMERATION IS **VOID TWICE OVER**
+
+### 1. Bit 18 resolved, and worse than §119 thought
+
+§119 argued §113 (`SRC 0x11 = mem[ptr]`, bit 18) had no discriminating evidence. Measured:
+
+```
+  bit18 ON,  bit34 off   phase RAMPS   36..8,388,562
+  bit18 off, bit34 off   phase PINNED  8,388,607
+  bit18 off, bit34 ON    phase RAMPS   33..8,388,493      §113 fired 0
+```
+
+`lfo-ramp.md` §8.4's two compliant readings are **observationally equivalent on the LFO** — both
+ramp. Confirmed.
+
+★★★ **And bisecting the promoted bits found something worse.** Cell `0x05` — the audio deposit
+§110 established — is **dead at the current default** and restored by clearing bit 18 alone:
+
+```
+  default             cell 05 input-dependent?  NO
+  no bit 18 (§113)    quiet [1105 .. 4,194,304]  loud [151 .. 16,776,890]   YES
+  no bit 25 / 29 / 33                            NO   (so it is bit 18 specifically)
+```
+
+**Mechanism:** `iw11` = `400.2.01.447` — `SRC 0x11`, `ACT 0x07` — is the K6 input word §110 fixed
+to deposit the audio at `0x05`. Under §113 its source becomes `mem[ptr]`, so it executes
+`mem[0x05] <- mem[0x05]`: **a self-copy instead of the audio deposit.**
+
+So §113 is not merely unsupported — it **silently un-fed the audio path**, and it did so in the
+same section (§118) where I promoted it on a single non-discriminating A/B. **Removed.**
+Bit 34 joins instead: it delivers the LFO ramp without bit 18, and both §119 verifiers granted its
+mechanism even while refuting its consumer conclusion. Default `0x6A39B440F`.
+
+### 2. ⚠ THE ACT 0x0D ENUMERATION IS VOID — twice, and the second is the interesting one
+
+Six destinations (`acc=L`, `tempA`, `tempB`, `mem[ptr]`, `P`, `acc+=L`) against the criterion
+*"does body 0's accumulator become INPUT-dependent"*.
+
+**Void #1 — a criterion that could not fail.** With the LFO ramping, all seven arms *including the
+null* reported `first acc DIFFERS at 90`. That is not input dependence: it is the free-running
+sawtooth sampled over unequal buckets (92,592 quiet vs 207,408 loud) making min/max differ
+spuriously. **The null arm caught it** — which is the only reason it is a paragraph and not a
+result. Re-run with the LFO frozen gave a clean null (`-1`) and all five candidates also `-1`.
+
+**Void #2 — an empty, then constant, operand.** `iw85` reads `mem[0x05]` and gets `0..0` under
+bit 18, and `1105..1105` — a CONSTANT — once bit 18 is removed. **I tested six destinations for a
+value that does not vary.** That is verbatim the trap §106 named: *"a negative result that holds
+only because an input is empty says nothing about the consumer."* I wrote that sentence and then
+walked into it.
+
+**⇒ The enumeration establishes nothing about ACT 0x0D**, except that `mem[ptr]` (sel 4) is
+refuted independently — it flips the §54 verdict to **DC**, output with no input.
+
+### 3. ⛔ AND MY STRATEGIC CALL WAS WRONG
+
+I recommended ACT 0x0D as *"the last blocker on the audio path"*. It is not. The resident value at
+`iw85` is a constant because the audio deposited at `0x05` is **overwritten before the body reads
+it** — §110's `iw45` (`010.A.00.20C`, `SRC 0x08`) clobber, which has been standing since §110 and
+which I walked past while planning two sections of work downstream of it.
+
+**The real order is:** fix the `iw45`/`iw32` clobber → give `iw85` a varying operand → *then*
+ACT 0x0D becomes decidable by exactly the enumeration built here, which is now correct and
+reusable.
+
+Evidence grade: **MEASURED** (bit-18 bisect, the criterion contamination caught by its null, the
+constant operand at iw85); **REFUTED** for `ACT 0x0D -> mem[ptr]`; **VOID** for the other five;
+**RETRACTED** for my "last blocker" framing.
