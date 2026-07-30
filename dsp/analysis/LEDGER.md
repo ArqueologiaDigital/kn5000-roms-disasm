@@ -20,37 +20,36 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (as of §163, 2026-07-30)
+## TIER 0a — THE CURRENT BLOCKER  (§165, 2026-07-30)
 
-> **Kernel `iw32` re-deposits `0x400000` on the LFO phase cell every frame.**
+> **The LFO phase RAMPS in D-RAM cell `0x07` and does not REACH the class-6 word.
+> The defect is ROUTING over a handful of words, not generation.**
 
-The phase *does* increment — by 57 within the frame (`iw89`, `L = 57`) — and then does not survive
-to the next. It is pinned at 2^22 = **0.5 in Q0.23**, which with the measured index scale 24
-selects wavetable index **12, forever**. Every modulation effect in the machine waits on this one
-write.
+Established by run `runs164/A_control`, mask `0x3910E446A39B440F`, cold-boot CHORUS,
+1 392 430 frames — **cite the run, not the section** (see rule 10):
 
-Both things downstream of it are **already built and verified**, waiting:
+```
+  §164  07: 0..8388598  chg 1128429 / 1392430 frames     full Q0.23 sweep
+  §162  at the class-6 word:  acc 0..0 | m_dp 12..12 | cursor 9..9
+```
 
-* **§161** — the LFO wavetable is intact: `m_rf[0x1D..0x40]`, 36 cells,
+The phase changes 1 128 429 times against the class-6 word's 1 129 389 executions — ratio
+**0.99915**, so it advances once per body execution. That identifies it as the LFO beyond doubt.
+Rate puts the increment at **114** (0.652 Hz against the panel's 0.599), not §108's measured 57.
+
+⛔ **§163's blocker — "kernel `iw32` pins the phase at `0x400000`" — is DEAD.** It was inherited
+from §108, written several shipped gates earlier, and never re-measured. §108's whole kernel-`iw32`
+/ `DRAM_UNIT_BASE` analysis is aimed at a symptom this build no longer has.
+
+Everything downstream is built and waiting:
+* **§161** — the wavetable is intact: `m_rf[0x1D..0x40]`, 36 cells,
   `0.9500000 × 2^23 × sin(2πk/24 + 0.100000 rad)` to within 2 LSB, period exactly **24**.
-* **§162** — the class-6 lookup is four lines *once the index varies*, and must not be written
-  before then.
+* **§162** — the class-6 lookup is four lines *once the index varies*, and not before.
 
-**The single next experiment**, and it is already implemented and never run to conclusion:
-§112's bit 25 is **ON and its own two-sided criterion is failing**. §136 explains why and names
-the untried arm — *"§112 and §40 are coupled, and neither can be right alone … the pair has never
-been evaluated together."* That is **bit 54** (route the latch to `m_k`, the multiplier **input**,
-instead of `m_p`, the **product**) together with **bit 4** (make the multiply read `m_k`).
-
-```
-  A control  0x3910E446A39B440F          C  +54     0x3950E446A39B440F
-  B  = A (bit 25 already on)             D  +54+4   0x3950E446A39B441F
-```
-
-Two-sided criterion, from §112's own comment: **if the reading is right the phase stops being reset
-and RAMPS; if it is wrong the phase stays pinned and nothing else should move either.**
-
----
+**Next:** trace `0x07` → the class-6 word. The path runs through `082.2.00.1C0` (`SRC 0x07` =
+`mem[ptr]` → acc) and the class-6 word's own `SRC 0x13`, which has **no reading anywhere** and
+silently returns 0 (`upd6383.cpp` SRC evaluator default). `SRC 0x13` is the table read port
+(§162) — that is the most likely single missing link.
 
 ## TIER 0b — ⛔ DEAD ENDS. DO NOT RETRY ANY OF THESE.
 
@@ -93,6 +92,10 @@ Each cost at least one full pass. The refutation is worth more than the hypothes
    table, not after**.
 9. **When the fix you reach for is an ANCHOR VALUE, stop.** Every anchor here is pinned by closure
    arithmetic; the defects are per-word **decodes**. *(§108 §5, named as a standing bias)*
+10. **A blocker is a MEASUREMENT, and measurements expire.** Before building a task on a symptom
+    reported in an earlier section, re-run it on the current build — several gates ship between
+    passes. **Cite the run, not the section.** *(§165: the headline blocker had been fixed by
+    other work and nobody re-measured it)*
 
 ---
 
@@ -158,7 +161,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-59 sections, §97..§163.  **Read the tail first** — later sections retract earlier ones *in place*.
+60 sections, §97..§165.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -221,4 +224,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §161 | SHIPPED | the delay word's `addr8` is a DIRECTION field, and it was being used as a store address | the field's meaning **FORCED** (276/276, prior adjudication); the misuse |
 | §162 | SHIPPED | K2 is NOT blocked on the table any more. It is blocked on the PHASE. | §1 **MEASURED** (census over all 91 programs) with the `0x18`/`0x28` functional |
 | §163 | REFUTED/RETRACTED | ⛔ CORRECTION to §162 §5. The dark words are not dark, and §108 already had the answer. | §1 **MEASURED** (§104's census, re-read not re-run); §2 **FORCED** (§108's |
+| §165 | REFUTED/RETRACTED | ⛔⛔ THE PHASE IS NOT PINNED. IT RAMPS. The blocker was one build out of date. | §2 **MEASURED** (two counters, plus the 0.99915 identification); §3 **FORCED** by |
 
