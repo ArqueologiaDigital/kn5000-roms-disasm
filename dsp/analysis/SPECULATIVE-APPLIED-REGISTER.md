@@ -8509,3 +8509,114 @@ and it may be the whole answer.
 
 Evidence grade: §1 **MEASURED**; §2 **MEASURED** (the exclusion is forced by `coeff_fetch`'s own
 definition); §3 **MEASURED**; §4 **OPEN**, and now single.
+
+---
+
+## §143 — FOUR CORRECTIONS FROM THE PARALLEL PASS, three of them to my own sections
+
+Three read-only agents over the corpus, the notes and the **committed** logs. Every claim below
+**re-verified here** before being recorded.
+
+### 1. ⛔ §135 §4 IS RETRACTED: the reverb pairs do NOT read loop state
+
+§135 §4 said unit 1's `ACT 0x0D` words *"read `mem[ptr]` at +75 / +8 / +123, inside the reverb's
+own state block, so the pair copies loop state back into the loop"*, and `HANDOFF-NEXT` carried
+that as the framing of the whole open question.
+
+**`+75 / +8 / +123` are the signed pointer POST-INCREMENTS, not the read addresses.** For
+`class4 & 7 == 2` the operand is `mem[m_dp]` *before* the increment. From
+`data/ship_46A39B440F.log.gz`'s §104 table:
+
+```
+  205 020224B1CD 85  ... |  mem quiet 0..0  loud 0..0  =  | L 0..0  0..0  =
+  319 02022081CD 85  ... |  mem quiet 0..0  loud 0..0  =  | L 0..0  0..0  =
+  330 020227B1CD 85  ... |  mem quiet 0..0  loud 0..0  =  | L 0..0  0..0  =
+```
+
+**All three read `dp = 0x85` — the SAME cell, unit 1's INPUT latch — and it is measured ZERO**
+(`=` marks quiet and loud identical). `0x85 = DRAM_UNIT_BASE 0x05 | (unit<<7)`. The idiom is
+identical to PEQ's, which reads unit 0's `0x05`: **`acc ← mem[unit input cell]`, then `P ← acc`.
+It is the INPUT-ACQUISITION pair**, used three times because the reverb needs the dry input in
+three places — not an all-pass injection and not a feedback tap. **MEASURED, re-verified.**
+
+### 2. ⛔ AND §135's A/B COMPARED TWO ALREADY-RAILED CONFIGURATIONS
+
+`iw331`'s accumulator on loud frames is **549 755 748 352 = `0x7FFFFF << 16` EXACTLY** — the
+positive rail — **in the DEFAULT arm**. Body-1 END is `2 × (0x7FFFFF << 16)`; the ship arm's is
+`−2⁴⁰`, the same magnitude with the sign flipped.
+
+⇒ **The railing is pre-existing.** `ACT 0x0E → P` does not cause it; it flips which rail and
+extends it from 41.2 % of frames to 98.9 %. §135's headline — *"shipping the §133 readings rails
+unit 1"* — attributes to the reading something the default already does. **MEASURED.**
+
+★ This also rehabilitates §135's refutation #1 only partially: clearing mask bit 16 changing
+nothing is a valid statement about the **delta** between two railed arms and says nothing about
+whether the machine should be railed at all.
+
+### 3. ⛔ A BUG IN CODE I WROTE TODAY: the `ACT 0x0D`/`0x0E` destination menu was UNIT-BLIND
+
+```
+  :2771 :2804   case 1: m_acc = u64(s64(L)) << ACC_SHIFT;    <- unconditional
+  :2776 :2809   case 6: m_acc += ...                          <- unconditional
+  :2143         L = acc_to_datum((m_specmask & 0x4000) && m_cur_unit1 ? m_accb : m_acc);
+```
+
+Mask bit 14 is **SET** in the default, so unit 1 accumulates into `m_accb` — and the `SRC 0x10`
+**reader is unit-aware** while my **writer was not**. In unit 1 the pair therefore wrote ACCA and
+read ACCB: *the write and the read targeted different registers*, and `ACT 0x0D`'s write went to a
+register nothing in unit 1 reads.
+
+★ **That is exactly why "`ACT 0x0D → acc` alone is bit-identical to the default" (§135 §3)** — in
+unit 1 it wrote a dead register. And it means **§133's decode was only ever validated in unit 0**
+(PEQ), where `m_acc` is the live one; the corpus-wide ship test was exercising a broken
+implementation in unit 1.
+
+This is the **fourth** instance of a defect this file has already fixed three times — §66 (source
+side), §68 (the bit-4 store), §75 (the delay write). Fixed on mask bit 56 (`bx_acc_w`), gated so
+the correction is A/B-able; predictions pre-registered in `data/PREDICT_142.md`. **FORCED** (source).
+
+### 4. ⛔ §131's ARGUMENT WAS OVERSTATED — the conclusion survives, the premise did not
+
+§131 §1 said *"Every slot in both entries reloads the accumulator from P"* and listed six words.
+The entries contain **thirteen**:
+
+```
+  w0  f31=0   w1  f31=0   w2  f31=1   w3  f31=5   w4  f31=0
+  w50 f31=4   w51 [ESC: f31 not a field]   w52 f31=0   w53 f31=0
+  w54 f31=0   w55 f31=1   w56 f31=5   w57 f31=0
+```
+
+Five carry `f31 ∈ {1,4,5}`. ★ **The conclusion still holds** — the last word before each core
+(`w4`, `w57`) is `f31 = 0`, so the accumulator is discarded at the entry's final slot regardless,
+and §133 confirmed it independently (all 36 non-P combinations feed nothing). But the *argument*
+generalised from six words to "every slot", and **the words it skipped are precisely the
+`SRC 0x00` / `f31 = 4/5` words now in question.** MEASURED.
+
+### 5. ⛔ `SRC 0x00`: the constraint that narrowed it to two readings is VOID, and §123 restored it
+
+`adjudication-round6.md:605` — *"`action00-discriminator.md` §7's 108/108 and the `single`
+section's 72/72: **VOID**"* — because round 5 falsified the delay polarity those counts assumed
+(`adjudication-round7.md:48-49`: at the forced polarity *every* `src00` reading scores 0).
+
+**§123 replaced a stale device comment with a citation to a section that had already been voided
+three days earlier.** The correct status is: **`SRC 0x00` — 1 of 6 enumerated, and the constraint
+that narrowed it to `{mem, acc}` is VOID.** `zero`, `DR`, `P` and `tA` are **not** excluded by any
+surviving measurement.
+
+★ And the menu itself is short: `action00_discriminate.py:340-343` enumerates
+`{mem, P, acc, zero, DR, tA}` for `src00` while the *`src08`* menu next to it contains **`coef`** —
+the C-RAM word at the cursor. **`SRC 0x00 = coef` has never been enumerated.**
+
+### 6. ⇒ PARAMETRIC EQ's remaining blockers are its SEVEN `SRC 0x00` WORDS
+
+With §133 applied, `coverage_report.py` leaves PEQ 11 blocked words, and after `ACT 0x0D`/`0x0E`
+the remainder are **all `SRC 0x00`**: `iw86`, `iw87`, `iw134`, `iw136`, `iw139`, `iw140`, `iw188` —
+three of them (`iw86`, `iw136`, `iw139`) blocked by `SRC 0x00` **alone**.
+
+**§123's "eight words away" list named `ACT 0D`, `ACT 0E`, `f31=4`, `f31=5` and OMITTED `SRC 0x00`**
+— because §123 had just declared it decided, on the strength of the section that was already void.
+`SRC 0x00` is also the **#1 corpus blocker**: 1270 words, 91 programs, three times the next.
+
+Evidence grade: §1 **MEASURED** and a **RETRACTION**; §2 **MEASURED**; §3 **FORCED** (source) and a
+**bug fix**; §4 **MEASURED**, a partial retraction; §5 **FORCED** from the round-6 void;
+§6 **MEASURED**.
