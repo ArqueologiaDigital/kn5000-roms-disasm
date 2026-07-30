@@ -10066,3 +10066,70 @@ somewhere and wrapped — the emulator simply never performs it.
 Evidence grade: §1 **MEASURED** (census over all 91 programs) with the `0x18`/`0x28` functional
 split **INFERRED** from program membership; §2 **MEASURED** twice independently; §3 **MEASURED**;
 §4 **FORCED** by §3; §5 the location **INFERRED**, the coefficient triple **MEASURED** elsewhere.
+
+---
+
+## §163 — ⛔ CORRECTION to §162 §5. The dark words are not dark, and §108 already had the answer.
+
+§162's measurement stands. **Its redirect does not.** I named `040.0.**.C63` and `012.4.01.1CE`
+as the missing phase producers on the strength of their appearing in the roadmap's *"no reading of
+any kind"* list. Decoding their fields takes one line each and refutes that immediately:
+
+```
+  040.0.00.C63    SRC 0x11  ACT 0x03   ->  tempB <- ACCB       upd6383.cpp:2932, MODELLED
+  012.4.01.1CE    SRC 0x07  ACT 0x0E   ->  P <- mem[ptr]       §144, SHIPPED
+```
+
+Both are implemented. **Tenth occurrence of trap #1**, and the sharpest yet: I checked the owning
+note for the *table* (`lfo-ramp.md`, correctly) and then skipped the same check for the *phase*.
+
+### 1. What is actually true — MEASURED at §104, recorded at §108
+
+```
+ iw  word           SRC ACT  dp    measured acc / mem / L
+ 89  092.A.00.200    08  00   07   3735552 / 4194304 / 57      ] LFO phase accumulate
+ 90  082.2.00.1C0    07  00   07   2.7e11  / 4194304 / 4194304 ] acc <- mem[Q]
+ 91  094.A.00.200    08  00   07   8.2e11  / 4194304 / 8388607 ] the wrap
+ 92  000.2.09.447    11  07   07   50      / 4194361 / 8388607
+```
+
+**The phase DOES increment — by 57, within the frame.** `lfo-ramp.md` §11's *"the block stores the
+phase back unchanged — no ramp"* is superseded by this. The increment then **fails to survive to
+the next frame**, because kernel `iw32` re-deposits `0x400000` into the cell every frame.
+
+⇒ The LFO is pinned at exactly `0x400000` = 2^22 = **0.5 in Q0.23**, which with the measured index
+scale 24 selects table index `(24 × 2^22) >> 23` = **12** — one fixed entry, forever. §162's
+conclusion (do not build the lookup yet) is therefore **right, and right for a better reason than
+the one I gave**.
+
+### 2. And an entire family of fixes is already dead — §108 §5, FORCED
+
+> *"No value of `DRAM_UNIT_BASE` can fix the deposit/pickup collision, because the collision is in
+> the RELATIVE geometry and the base cancels out of it."*
+
+Mask bit 27 tried it: the gate fires, `dp` moves from `0x07` to `0x08`, and **every measured value
+is bit-identical**. Kernel A's walk starts where the previous frame closed, so base and window are
+coupled and `iw32` follows the phase cell wherever it is moved.
+
+⇒ **The fix must be a per-word ADDRESSING decode** — `iw30`/`iw32`'s store target, or the body's
+LFO block not sitting at base+2 — not an anchor value. §108 §5 names this as a standing bias:
+*an anchor is a single number and therefore feels cheap to try, but every anchor here is pinned by
+closure arithmetic.* §109 then resolved both `iw30`/`iw32` discrepancies and found one genuine
+per-word addressing defect at `iw11`; **that chain is where task #8 belongs.**
+
+### 3. ⚠ A third over-read, caught before it was written
+
+§160's register dump has `06=400000` as the only non-zero cell outside the wavetable, and the
+phase is pinned at `0x400000`. Tempting. But `lfo-ramp.md` §10's C-RAM listings show `400000` is
+the **fourth member of the LFO coefficient group** in both FLANGER (`08:400000`) and AUTO PAN
+(`04:400000`), and `m_rf` is the side §97 split *host coefficients* onto, not the pointer-walked
+D-RAM the phase census reads. Same number, different space. **Not identified; left open.**
+
+### 4. Standing rules, restated because they keep earning their keep
+
+> **Check the owning note for EVERY component of a claim, not for the one you happened to doubt.**
+> **A word in a "no reading" list is a claim about a corpus statistic, not about the emulator** —
+> verify against the source before building on it.
+
+Evidence grade: §1 **MEASURED** (§104's census, re-read not re-run); §2 **FORCED** (§108's
+enumeration) with the bit-27 refutation **MEASURED**; §3 deliberately **UNIDENTIFIED**.
