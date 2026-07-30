@@ -1,95 +1,70 @@
 # HANDOFF — read this first
 
-**Rewritten 2026-07-30 after §§127–135.** The original version told you to select PARAMETRIC EQ
-and run the transfer-function test. **PEQ is now selected, running, traced, and reading its own
-coefficients**, and that test has been reformulated three times. Read this, then
-`SPECULATIVE-APPLIED-REGISTER.md` §§127–135 (§132 first — it corrects §127; then §133 and §135).
+**Rewritten 2026-07-30 after §§127–146.** Read this, then
+`SPECULATIVE-APPLIED-REGISTER.md` **§143 first** (it corrects §127, §131 and §135), then
+§§144–146. Several earlier sections are retracted *in place*; trust the register tail over
+any older summary, including older parts of this file.
 
 ---
 
 ## 1. YOUR NEXT TASK
 
-**Find out why `ACT 0x0E -> P` diverges in a FEEDBACK ladder** (§135 §5). The decode itself is
-done — §133 decoded `ACT 0x0D = acc <- bus` and `ACT 0x0E = P <- bus` (at the multiply's scale) —
-but putting them in the default **rails unit 1, the only audible unit**, at `-0x800000` on 98.9 %
-of presentations. So neither is shipped.
+**Pin the scope of `SRC 0x00 = C-RAM[cursor]` (§145/§146).**
 
-It is localised to **six words**: unit 1's three `ACT 0x0D`/`0x0E` pairs, which use the *same*
-idiom as PEQ's (same `lo12`, `1CD` then `40E`) but carry **`f31 = 1`** on the `0x0D` word instead
-of `0` — the reverb is *accumulating* when the pair overwrites the accumulator, and its `0x0D`
-words read `mem[ptr]` at `+75 / +8 / +123`, inside its own state block, so the pair copies loop
-state back into the loop.
+§145 decoded it: at CHORUS's four LFO twins the operand bus becomes **+240/+240/−240/−240**,
+bit-exact, predicted before the run from the live C-RAM, with the anchored `SRC 0x08` control
+unmoved and a fired-count of 15 540 204. Chance of a coincidental 24-bit match at four slots
+is 2⁻⁹⁶.
 
-**Three hypotheses are already REFUTED — do not re-run them:** the suppressed store-and-clear
-(mask bit 16 changes nothing), multiply-carrying words (3 of 427), and the resident
-kernel/epilogue sites (body-only gate `iw >= 84`, bit 53, is identical to full ship).
+⛔ **But applied to all 1610 `SRC 0x00` words it RAILS unit 1** — DO2 98.9 % non-zero at
++8 388 607, DC leak 99.94 %, against the default's 41.2 % / +1 543 433 / 34.64 %.
 
-⛔ **The `m_p` two-registers suspect is CLOSED (§136/§137).** The split already exists —
-`m_k`/`m_l` are the multiplier input latches, `m_p` is the product register with exactly one
-functional read. Routing §112's class-A ACT-07 latch to `m_k` is **bit-identical** to the default
-(the multiply bypasses the latch), and with §40 on it is identical either way, so that routing is
-**undecidable by presentation statistics**. §40 itself is confirmed refused: DC leak 34.69 % →
-99.79 %. ⚠ A common scale error is also NOT available: §133's feed test compares the state cell
-*after* `acc_to_datum`, so `<< ACC_SHIFT` is pinned.
+★ The class split explains both, and is the live hypothesis:
 
-★ **The one live lead from that pass:** with §40 on, the railing **disappears** (unit 1 back to
-−1 543 434 even with the §133 readings). So the divergence is **mediated by the multiply's
-coefficient source**, and the next explanation must come from the delay-DRAM datapath or from what
-**`f31 = 1`** means on the reverb's `ACT 0x0D` words — not from the register file.
+```
+  SRC 0x00 by class:  class1 233 | class2 1262 | class8 4 | class A 111   (of 1610)
+```
 
-★★ **BEFORE REPORTING ANY NON-ZERO OUTPUT**, read `§70 ACCA AT w73` and compare **min against
-max**. A constant presents as "output" in every summary statistic. This has now produced two
-retracted "IC311 outputs audio" claims; the check is one grep.
+Only **111** are class A — the coefficient consumers. **The twins are all class A.** A class-2
+word consumes no cursor coefficient, so `C-RAM[cursor]` there returns whatever the last class-A
+word left: stale residue, which is exactly the shape of a corpus-wide rail.
 
-⚠ **Ship the two readings TOGETHER or not at all.** They are jointly selected by PEQ's two-channel
-structure; the 8x8 map also admits `0x0D -> P` (both banks then read `0x05`), and only the
-two-channel requirement rules it out. `ACT 0x0D -> acc` alone measures bit-identical to the
-default, so shipping it would be inert *and* would put half a jointly-supported pair in the default.
+**Mask bit 58 gates the read on `coeff_consumer(word)`; the arm `0x510E446A39B440F` was running
+when this was written** — see `data/PREDICT_146.md` for its three pre-registered predictions
+(fired-count falls sharply; ★ the twins are UNCHANGED, the known-answer control; ★ the railing
+stops) and its falsifiers. If P3 fails, class is not the discriminator and `coef` may be wrong
+generally rather than merely over-applied.
 
-Masks: ship `0x10E446A39B440F`; `0x0D` alone `0x100446A39B440F`; `0x0E` alone `0x10E046A39B440F`.
+`SRC 0x00` is worth this care: **1270 words across all 91 programs, three times the next
+blocker**, and it is **PARAMETRIC EQ's entire remaining blocker set** (§143 §6).
 
----
+## 1b. The two standing open items, neither of which is the above
 
-### DONE — the bank-entry demultiplexer (§133)
+* **★ `w73` erases the accumulator at the door (§141).** The body's result now reaches the
+  epilogue intact, and `w73` — `0E30C00404`, class 0xC, so `coeff_fetch()` is TRUE — fetches a
+  coefficient and then loads the accumulator from a product **that is never formed**, so `P = 0`
+  and the LOAD is an erasure. This is the third instance of ONE defect (kernel `iw47`, epilogue
+  `iw65..72`, `w73`), and §39's *"what enables the MULTIPLY, as distinct from the fetch"* is its
+  single root cause. **This is what keeps unit 0 silent.**
+* **★ Unit 1's railing is PRE-EXISTING (§143 §2).** `iw331`'s accumulator is `0x7FFFFF << 16`
+  **exactly** on loud frames *in the default*. Every "X rails unit 1" claim must be read against
+  that baseline; §135 spent three refutations on a phenomenon that had no external cause.
 
-**Run the BANK-ENTRY DEMULTIPLEXER** (§132 §4): inject a known, per-cell-distinct stimulus into
-D-RAM `0x05`/`0x0F` **at the body CALL**, and read the 40 Direct-Form-I state cells `0x50..0x77` as
-a bit-exact witness of what the entry left in **P**.
+## 1c. ⛔ RETRACTED — do not build on these
 
-★ **It does not need the chip audible, and it does NOT need the `SRC 0x08` clobber fixed first** —
-the injector writes at the CALL, downstream of the clobber. That removes the clobber from the
-critical path for the decode; it stays a prerequisite only for the final audio confirmation.
-Its null is computed *and* measured: 576 of 1024 readings leave all 40 cells at zero.
-
-**Before any arm runs — three prerequisites, each of which independently voided a past pass:**
-
-* **Suppress the blanket tempA capture** at `upd6383.cpp:2626-2642`. It fires for `ACT 0x0D`/`0x0E`
-  *before* §121's destination switch, so every arm is "destination X **and** tempA" and selector 2
-  is indistinguishable from the null. This is one of the two structural reasons §121 failed.
-* **Resolve what `m_p` means** (§132 §3): it is written as a raw datum at `:2684`/`:2908` and as a
-  product at `:3039`, differing by ≈2¹⁶. §131 shows P is the *only* register that can carry the
-  sample across the entry, so the one arm that could work is the one whose implementation is in
-  question.
-* **Add fired-counts** for `ACT 0x0E` and for `f31 ≥ 4` **split by value** — today `op = f31 & 3`
-  executes both silently.
-
-The two older defects, for context (no longer the next task):
-
-1. ~~**The coefficient-cursor rebase.**~~ **DONE, §130** — shipped on bit 38, default now
-   `0x46A39B440F`, three pre-registered predictions confirmed bit-exactly.
-   Historical description: §129 measured that PEQ's bank 1 executes with the C-RAM
-   cursor at `0x71`, walking **TABLE B** (the delay-tap address table, step `0x4BE` = 1214) instead
-   of its biquad coefficients at `0x00..0x1D`. Bank 2 is correct only because `w58 = rstcur`
-   re-bases it. Mask **bit 18** already implements the per-unit rebase
-   (`m_cursor = unit1 ? 0x90 : 0x00` at the body CALL, `upd6383.cpp:3917`, motivated by
-   `cram-unit-base.md` item A) and is **OFF in the default**. A/B arm = `0x6A39F440F`.
-   The pre-registered prediction and its falsifiers are in the register and in
-   `scratchpad/PREDICT_129.md`: **bank 1's fetched stream must become bit-identical to bank 2's,
-   and bank 2 must not change** (that second half is the control whose answer is already known).
-2. **The `SRC 0x08` clobber.** `iw45`/`iw32` overwrite D-RAM `0x05`/`0x07` before body 0 reads
-   them. MEASURED consequence: the operand bus at `iw84` is `0x7FFFFF` — the rail — in every loud
-   frame, and `unit0/DO1` presents **0 non-zero in 2 099 250 frames**. Identified in §110 and
-   walked past three times since. Nothing audio-shaped can be scored until this is fixed.
+* §135 §4's *"the reverb pairs read loop state"*: `+75/+8/+123` are the signed pointer
+  POST-INCREMENTS, not addresses. All three read `dp = 0x85`, unit 1's input latch, measured
+  `0..0`. The "feedback ladder" framing is gone.
+* §135's *"not shippable"*: the railing was **my own unit-blind accumulator write** (§143 §3).
+  The §133 readings are **SHIPPED** — default `0x110E446A39B440F` (§144).
+* §131's *"every word of the bank entries carries `f31 = 0`"*: the entries hold **thirteen**
+  words, five with `f31 ∈ {1,4,5}`. The conclusion survives (`w4`/`w57` are `f31=0`); the
+  argument did not.
+* §123's `SRC 0x00` device comment cites `action00-discriminator.md` item I, which
+  `adjudication-round6.md:605` had **VOIDED**. `SRC 0x00` was never narrowed to `{mem, acc}`.
+* The `m_p` two-registers suspect (§136/§137): there is no split to make — `m_k`/`m_l` are the
+  input latches and `m_p` the product register with one functional read. §40 stays refused
+  (DC leak 34.69 % → 99.79 %).
 
 ## 2. What is already done, so you do not redo it
 
