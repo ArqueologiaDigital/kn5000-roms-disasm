@@ -16,37 +16,46 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Decode `ACT 0x15`.** It is the second-largest ACTION code in the corpus — **707 words, 23.7 %,
-in 39 of 91 programs** — and the device decodes it as **nothing** (`LO_ACT_NONE_5`,
-`upd6383d.h:343`, *"how it differs from 0x12 is OPEN"*). It is the largest single unmodelled
-behaviour left in the chip.
+**The multiply's memory operand `L` reads ZERO. Find why the D-RAM fetch is empty.**
 
-### How the LFO chase arrived here — the whole path is now traced end to end
+⛔ **The previous entry here — "decode `ACT 0x15`" — was based on a RETRACTED cause.** §174: the
+multiply's gate is `coeff_consumer(w) = class4(w)==0xA && !c_format(w)`; **the ACTION field is not
+in it**, so `ACT 0x15` words multiply already. §169 §2 was a source-level error, and rule 3's
+eleventh occurrence — `lfo-ramp.md` §10 said so in the paragraph §169 quoted.
+
+### MEASURED (`runs164/probe175b`, shipped default, cold-boot CHORUS)
+
+Per class-A `ACT 0x15` site, keyed **by word** (the pooled form reported "both operands live" and
+was wrong — §155's error in a new place):
 
 ```
-  §165  the phase RAMPS          cell 0x07: 0..8388598, chg 1128429 / 1392430 frames
-  §166  C63 + class-6 = ONE idiom, 53/53 both ways, null 0.94 +/- 0.96; C63 = `m_tb = L'
-  §167  at the lookup: m_tb chg 1 | m_k = 24 (the scale, arriving correctly) | m_ta = m_l = 0
-  §168  bit 18 fired 9 279 912 times and changed nothing -> not a SRC decode
-  §169  m_p 0..0 chg 0  ->  THE INDEX MULTIPLY NEVER ISSUES
+  5 sites LIVE   coef live | L 0..8388607 | P up to 1.76e13
+  7 sites DEAD   coef live on 1.1-3.4 M firings | L 0..0 nz 0 | P 0..0
 ```
 
-⇒ **Every register at the class-6 site is enumerated and every one is dead.** The word that must
-issue `scale × phase` is `000.A.00.1D5` — class A, `SRC 0x07`, **`ACT 0x15`** — and it does
-nothing. Everything measured in §162/§167/§169 is downstream of that one line.
+**The coefficient arrives on every firing. The memory operand is identically zero.** `L` here is
+`SRC 0x07` = `mem[ptr]`. The multiply is healthy and is being fed nothing.
 
-### ⚠ Switch vehicle for this work
+⇒ **§168's addressing diagnosis is CONFIRMED and generalised** — not one word reading one frozen
+cell, but the operand fetch returning zero across most of the family. The chain now reads: the
+phase ramps (§165), the coefficient arrives (§174), the multiply runs (§174) — **and the D-RAM read
+under it is empty.**
 
-Static, all 91 programs: the phase-accumulate-to-lookup distance splits into **four programs at
-exactly 6** (FLANGER, AUTO PAN, VIBRATO, RING MODULATOR) and everything else at **≥ 13**.
-Cold-boot CHORUS — my vehicle — is at **24**, the worst available, and has one LFO block where the
-gap-6 family has two.
+### Where to start
 
-★ **Rule 2 is about ABSOLUTE AUDIO STATISTICS. A register census at a class-6 site is not one**, so
-the vehicle may be switched for index-path work — and must not be for audio work, where §148's
-unit-1 rail applies.
+* The per-site table caps at the first **12** distinct words. **Raise the cap** — CHORUS's own
+  `0202A071D5` is not in it, and 7/12 is a sample, not a census.
+* The split is **not** a simple function of `SRC`: `0182A00415` is live where `0212A00415` — same
+  `lo12`, different `hi12` — is dead. Whatever selects the pointer is in `hi12`.
+* Then compare the live and dead sites' pointer state. §162's `m_dp` census is the obvious
+  instrument, aimed at the **multiply** word rather than the class-6 word.
+
+⚠ Vehicle: §170 measured the TYPE map, so a 6-word-gap program is now reachable —
+**FLANGER 3, AUTO PAN 16, VIBRATO 17, RING MODULATOR 20** (CHORUS 0, PARAMETRIC EQ 15). Rule 2
+governs absolute audio statistics; a register census is not one.
 
 ### ⛔ Dead, do not retry
+
 
  — all three cost a pass
 

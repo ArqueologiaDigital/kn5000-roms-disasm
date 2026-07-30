@@ -72,6 +72,8 @@ the ones a reader would reach for again.
 | 7 | `st_gate = always` | 0 survivors of 276 480 | `lfo-ramp.md` P-9 |
 | 8 | Remap the three internal writes onto **output ports 0/1** | Reverted: the resulting wet was rms 1.0 — a ±1 LSB constant present *even in silence* | `upd6383.cpp:2011` |
 | 10 | **Bit 54** (latch to `m_k`) and **bit 54 + bit 4** (§40 reads it) to route the phase | §136's *"the pair has never been evaluated together"* is discharged: bit 54 alone is **bit-identical to control in every cell**; the pair produces `§70 ACCA min = max = 176 471 605 248`, the exact DC §137 retracted | §165 §4 |
+| 11 | `ACT 0x15` is a no-op, so the LFO index multiply never issues (**§169 §2**) | ⛔ **RETRACTED §174.** The multiply's gate is `coeff_consumer(w) = class4==0xA && !c_format(w)` — the ACTION field is not in it. `lfo-ramp.md` §10 said so in the paragraph §169 quoted. Takes §171 §4 and §173 §3 with it | §174 |
+| 12 | "one cause — the frozen cell is just the dead multiply", displacing §168 | ⛔ Premise gone with #11. §168's addressing diagnosis is **confirmed** instead: 7 of 12 multiply sites have `L` identically zero while `coef` is live | §174 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
 
 ---
@@ -169,7 +171,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-62 sections, §97..§168.  **Read the tail first** — later sections retract earlier ones *in place*.
+68 sections, §97..§174.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -235,4 +237,10 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §165 | REFUTED/RETRACTED | ⛔⛔ THE PHASE IS NOT PINNED. IT RAMPS. The blocker was one build out of date. | §2 **MEASURED** (two counters, plus the 0.99915 identification); §3 **FORCED** by |
 | §166 | OPEN | `C63` + class-6 is ONE IDIOM: 53 of 53, both directions. And it names the index register. | §2 **MEASURED** (exhaustive over all 91 programs, null computed first); |
 | §168 | OPEN | bit 18 tested at last, and it names the defect: **`C63` reads a cell that never changes** | §1 **MEASURED** (five falsifiers, fired-count satisfied); §2 **FORCED** by the |
+| §169 | OPEN | the register enumeration is COMPLETE and EMPTY, and it names the hole: **`ACT 0x15` is 23.7% of the corpus and decodes a | §1 **MEASURED**, and *"nothing varying reaches the site"* **FORCED** by exhaustion |
+| §170 | OPEN | the DSP EFFECT TYPE map, measured from the machine's own uploads. Vehicle problem solved. | §1 **FORCED** (the manifest's population is the wrong one by construction); |
+| §171 | OPEN | §169's one word is a **46-site family**, and it is a minimal pair. Three lines converge. | §1 **MEASURED**, independently reproduced; §2 **MEASURED**; §3 **MEASURED**; |
+| §172 | REFUTED/RETRACTED | ⛔ "DISTORTION ≡ FUZZ" does not survive its own test, and the data corroborates the notes | §1 **MEASURED**; §2 **MEASURED**, the original claim's precondition **REFUTED**; |
+| §173 | OPEN | the lookup is a FOUR-WORD idiom, and the `-2` slot is operand staging with three forms | §1 **MEASURED** (nulls computed first); §2 **MEASURED**; §3 **INFERRED** and |
+| §174 | REFUTED/RETRACTED | ⛔⛔ §169 §2 RETRACTED. The multiply issues. The dead operand is `L`, and §168 was right. | §1 **FORCED** (read at source); §2 **MEASURED**, the pooled reading **VOIDED**; |
 
