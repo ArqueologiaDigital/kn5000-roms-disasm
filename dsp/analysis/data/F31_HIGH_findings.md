@@ -349,9 +349,17 @@ PEQ+FLANGER/PEQ+VIBRATO at this stage is `hi12` bit 3.
 | **24 (LFO)** | **4** | **2** — `a73 w41`, `a74 w34` |
 
 Read with the decoded meanings: `f31 = 0` = *index := 24·phase*; `f31 = 1` = *index
-:= acc + 24·phase* (the quadrature partner's offset — it is the **second** LFO of a
-pair at 11 of 11 sites); `f31 = 2` = *index := acc, discard the product*. `f31 = 4`
-is the first LFO of exactly two programs. **MEASURED.**
+:= acc + 24·phase* (a phase **offset** added to the scaled ramp); `f31 = 2` =
+*index := acc, discard the product*. `f31 = 4` is the first LFO scale word of
+exactly two programs, PEQ+FLANGER and PEQ+VIBRATO.
+
+★ And the slot has an internal ordering rule: **in every program whose two LFO
+scale words differ, the LATER one is `f31 = 1` — 7 of 7** (PHASER `2→1`, MIX UP
+`0→1→1`, SD+FLANGER / SD+VIBRATO / SD+PHASER `2→1`, **PEQ+FLANGER `4→1`,
+PEQ+VIBRATO `4→1`**). The programs whose scale words agree all use one value
+throughout. So `f31 = 4` occupies the *first-of-a-pair* position that `f31 = 0` and
+`f31 = 2` occupy elsewhere — it is a **peer of the decoded values in the same
+structural slot**, which is exactly what makes the pair usable. **MEASURED.**
 
 ★★ **And the observable is immediate and unambiguous**: `w+1` = `182.2.00.407` has
 `SRC 0x10` (**the accumulator**) and `ACT 0x07` (**`mem[ptr] ← bus`**). The value
