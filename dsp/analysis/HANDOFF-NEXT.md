@@ -7,40 +7,51 @@ any older summary, including older parts of this file.
 
 ---
 
+## 0. ★ READ `LEDGER.md` FIRST
+
+`analysis/LEDGER.md` is a four-tier progressive-disclosure index: the current blocker, **the dead
+ends**, the mask-bit register (generated from the C++, so it cannot drift), and a one-line index of
+all 60 register sections. It exists because ten passes were lost to re-asking answered questions.
+Tiers 1-2 regenerate with `tools/gen_ledger.py`.
+
 ## 1. YOUR NEXT TASK
 
-**Stop kernel `iw32` re-depositing `0x400000` on the LFO phase cell.** Everything downstream —
-the class-6 lookup, the chorus sweep, every modulation effect — is waiting on this one write.
+**Route the ramping LFO phase from D-RAM cell `0x07` to the class-6 word.** The defect is
+**routing over a handful of words, not generation.**
 
-### The chain, in the order it was established
+⛔ **The previous blocker in this slot — "kernel `iw32` pins the phase at `0x400000`" — is DEAD.**
+§165 measured it out of existence. It came from §108, written several shipped gates earlier, and
+was never re-run. ★ **Rule 10: a blocker is a MEASUREMENT and measurements expire. Cite the run,
+not the section.**
 
-1. **§161** — the wavetable is intact: `m_rf[0x1D..0x40]`, 36 cells,
-   `0.9500000 x 2^23 x sin(2*pi*k/24 + 0.100000 rad)` to within 2 LSB, period exactly **24**.
-2. **§162** — every class-6 index candidate is CONSTANT over 1 129 389 executions
-   (`acc 0..0 | m_dp 12..12 | cursor 9..9`). So the lookup has nothing varying to consume.
-3. **§163** — why: the phase **does** increment, by 57 within the frame (`iw89`, `L = 57`), and
-   kernel `iw32` re-deposits `0x400000` every frame. Pinned at 2^22 = **0.5 in Q0.23**, which with
-   the measured scale 24 selects table index **12**, forever.
+MEASURED — run `runs164/A_control`, mask `0x3910E446A39B440F`, cold-boot CHORUS, 1 392 430 frames:
 
-### ⛔ Two dead ends, both already paid for — do not retry either
+```
+  §164  cell 0x07:  0..8388598   chg 1128429 / 1392430 frames      full Q0.23 sweep
+  §162  at the class-6 word:  acc 0..0 | m_dp 12..12 | cursor 9..9
+```
 
-* **Any `DRAM_UNIT_BASE` value.** §108 §5 **FORCED**: kernel A's walk begins where the previous
-  frame closed, so base and window are coupled and `iw32` follows the cell wherever it is moved.
-  Mask bit 27 ran it — the gate fires, `dp` goes `0x07` -> `0x08`, **every value bit-identical**.
-  ★ Standing bias named there: *an anchor is a single number and feels cheap to try, but every
-  anchor here is pinned by closure arithmetic.*
-* **Decoding `040.0.**.C63` / `012.4.01.1CE`.** §163: both already modelled — `SRC 0x11/ACT 0x03`
-  = `tempB <- ACCB` (`upd6383.cpp:2932`) and `SRC 0x07/ACT 0x0E` = `P <- mem[ptr]` (§144).
-  They are in the roadmap's *"no reading of any kind"* list, which is a **corpus statistic, not a
-  statement about the emulator**.
+Both true at once. The phase changes 1 128 429 times against the class-6 word's 1 129 389
+executions — ratio **0.99915**, so it advances **once per body execution**, which identifies it as
+the LFO beyond doubt and which nothing else in the frame does. The rate puts the increment at
+**114** (0.652 Hz against the panel's 0.599 Hz), not §108's measured 57.
 
-### Where to look instead — a per-word ADDRESSING decode
+### Where to look
 
-§108 §5 names the candidates: `iw30`/`iw32`'s store target, or the body's LFO block not really
-sitting at base+2. **§109 continues exactly this chain** — it resolved both `iw30`/`iw32`
-discrepancies and found one genuine per-word addressing defect at `iw11`. Start there.
+Trace `0x07` -> the class-6 word. The path runs through `082.2.00.1C0` (`SRC 0x07` = `mem[ptr]`
+-> acc) and then the class-6 word's own **`SRC 0x13`**, which has **no reading anywhere** and
+silently returns 0 from the SRC evaluator's default. §162 established `SRC 0x13` is the class-6
+**table read port** (`..4CD` is `acc <- bus`, §144). That is the most likely single missing link.
 
-### Then K2 is four lines. Pre-register these — they are already computed
+### ⛔ Dead, do not retry — all three cost a pass
+
+* kernel `iw32` / any `DRAM_UNIT_BASE` value (§108 §5 FORCED; bit 27 bit-identical) — and it is
+  aimed at a symptom this build no longer has.
+* **bit 54** alone (latch to `m_k`): **bit-identical to the control in every cell.**
+* **bit 54 + bit 4** (§136's *"never evaluated together"*, now discharged): `§70 ACCA min = max =
+  176 471 605 248`, the exact DC §137 retracted. Standing rule 1 caught it.
+
+### Then K2 is four lines. Pre-register these — already computed
 
 ```
   peak excursion  226, NOT 240     <- table peak is 0.9452541, not 1.0
@@ -48,11 +59,6 @@ discrepancies and found one genuine per-word addressing defect at `iw11`. Start 
   DEPTH 30 -> +/-36 samples        DEPTH 99 -> +/-120       (30/99 = 0.30303030, seven digits)
   rate 0.599 Hz
 ```
-
-⚠ **Unidentified, deliberately:** §160's `m_rf[0x06] = 0x400000` is the same number as the pinned
-phase, but `lfo-ramp.md` §10 shows `400000` is the fourth member of the LFO **coefficient** group
-(FLANGER `08:`, AUTO PAN `04:`), and `m_rf` is the host-coefficient side of §97's split. Same
-value, different space. Left open rather than asserted.
 
 ### ⛔ THREE RETRACTIONS — do not build on any of them
 
