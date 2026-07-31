@@ -12758,3 +12758,42 @@ And the **X0 identity control** (`0xb919e446a39b440f`, a twin of the shipped def
 
 Evidence grade: §1 **FORCED** (the datapath) with the corpus census **MEASURED**; §2 the closures
 **MEASURED**, the writeback-mode reading **INFERRED**; §3 **MEASURED**.
+
+---
+
+## §206 — the descriptor base is not missing from the emulator; it is absent from `0x825`. Look at `0x827`.
+
+The current task is *"the per-unit descriptor BASE — `m_dsc` comes only from the in-program
+`ldptr.d`, `0x25` in both header blocks."* Checked against the header words already in hand (§178):
+
+```
+   unit 0    iw42 801.0.70.821    iw43 801.0.6C.827    iw44 801.0.25.825
+   unit 1    iw50 801.0.50.821    iw51 801.0.64.827    iw52 801.0.25.825
+
+   selector 0x821   0x70 vs 0x50   DIFFERS
+   selector 0x827   0x6C vs 0x64   DIFFERS
+   selector 0x825   0x25 vs 0x25   *** IDENTICAL ***
+```
+
+⇒ **`m_dsc` is `0x25` for both units because the FIRMWARE LOADS THE SAME VALUE.** That is not an
+emulator defect, and "give `0x825` a per-unit base" would be inventing a split the instruction
+stream does not contain.
+
+★ `k3-pointers.md` already forced this and I had read it: *"`0x825` is **dead**: it is loaded with
+the same value (`#$25`) in **both** unit segments, and both effect units are resident
+simultaneously, so the two units' state would alias completely."* The note used that to eliminate
+`0x825` as the **operand** pointer; the same argument eliminates it as the **descriptor** base.
+
+⇒ **The descriptor base must come from `0x827`** — the only pointer-family register that differs
+per unit (`0x6C` / `0x64`) and the one `k3-pointers.md` explicitly left **"not excluded"** when it
+selected `0x821` for operands. **INFERRED**, and it is the first candidate with a per-unit split to
+offer.
+
+⚠ **Falsifier, and it must be stated before any build:** `0x6C − 0x64 = 8`. If `0x827` is the
+descriptor base, the two units' descriptor blocks sit **8 cells apart**. §189's live bank has
+unit-1 descriptors at `0x00..0x1F` and CHORUS's at `0x26..0x2F` — a gap far larger than 8. So
+either the base is scaled, or `0x827` is not it. **A candidate that already disagrees with a
+measurement is not a fix; it is the next thing to check.**
+
+Evidence grade: the header values **MEASURED**; "the firmware does not split `0x825`" **FORCED**;
+the `0x827` candidate **INFERRED and already in tension with §189**.
