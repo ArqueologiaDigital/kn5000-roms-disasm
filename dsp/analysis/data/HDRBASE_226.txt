@@ -1,0 +1,53 @@
+=== §226 SELF-TEST (known answers published by OTHER passes) ===
+   kernel words 60                                                                   PASS
+   epilogue words 23                                                                 PASS
+   kernel cursor-advancing words 21                                                  PASS
+   ...of which BEFORE w42's ldptr, 20                                                PASS
+   epilogue cursor-advancing words 0                                                 PASS
+   w30/w32/w33 offsets 0x0B/0x0C/0x0D                                                PASS
+   coldboot cmd-0x02 run bases/lens                                                  PASS
+   headerdecode §5: algo 39 ships 31 coefficients                                    PASS
+   live C-RAM non-zero cells (log: 112)                                              PASS
+   §224 §S2 iw33 at the shipped base 0x9B                                            PASS
+   10 of 10 PASS
+
+=== 1. THE HEADER'S CURSOR-ADVANCE MAP (corpus, D.coeff_consumer) ===
+   w5:+00  w6:+01  w7:+02  w10:+03  w14:+04  w16:+05  w17:+06  w18:+07  w20:+08  w21:+09  w23:+0A  w30:+0B  w32:+0C  w33:+0D  w34:+0E  w35:+0F  w36:+10  w37:+11  w39:+12  w41:+13  w45:+14
+   w42 `ldptr #$70' re-aims the cursor, so the header block proper consumes base+0x00 .. base+0x13 (20 cells).
+   epilogue cursor-advancing words: NONE  <== the epilogue's own iw69 `ldptr #$90' is therefore
+   the LAST thing to touch the cursor in a frame, and the next frame's w0 starts at EXACTLY 0x90.
+
+=== 2. IS THE BANK EFFECT-DEPENDENT?  (a) capture vs capture ===
+   CHORUS-boot vs PARAMETRIC-EQ capture differ on 31 cells: 0x00..0x1E
+   NOTHING at or above 0x50 differs.  The unit-0 effect change rewrote base 0x00 and only base 0x00.
+
+=== 3. IS THE BANK EFFECT-DEPENDENT?  (b) the ROM's own T1 parameter map ===
+   cells 0x00..0x13 written by NO algorithm: 0
+   cells 0x90..0xB4 written by NO algorithm: 22  91 92 93 94 95 96 97 98 99 9A 9B 9C 9D A1 A2 A3 A4 A5 AD AE B3 B4
+
+=== 4. RUNTIME POKES: the archived capture vs the live 30 s run ===
+   10 cells moved: 09 0A 90 97 9F A0 A7 A8 AC B2
+   9 of 10 are named by some algorithm's T1 parameter map
+
+=== 4b. ⇒ THE HEADER'S 20 CELLS, SCORED FOR INVARIANCE, PER CANDIDATE BASE ===
+   base 0x90 (SHIPPED )  cells 0x90..0xA3 : 15 of 20 INVARIANT,  5 effect/poke-written 90 97 9E 9F A0
+        the iw30/32/33 ladder cells 9B 9C 9D : ALL INVARIANT
+   base 0x00 (PROPOSED)  cells 0x00..0x13 :  0 of 20 INVARIANT, 20 effect/poke-written 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13
+        the iw30/32/33 ladder cells 0B 0C 0D : EFFECT-DEPENDENT (0B 0C 0D)
+
+=== 5. THE §S2 LADDER, per candidate base, per C-RAM image ===
+   coldboot  (CHORUS + ROOM REVERB 1) base 0x9B  C=4CCCCC/400000/400000  iw30  +0.600  iw32  +0.720  iw33  +1.720  CLIPS
+   coldboot  (CHORUS + ROOM REVERB 1) base 0x0B  C=E00000/E00000/FFFF10  iw30  -0.250  iw32  +0.125  iw33  +0.250  no clip
+   parameq   (PARAMETRIC EQ + RR1)    base 0x9B  C=4CCCCC/400000/400000  iw30  +0.600  iw32  +0.720  iw33  +1.720  CLIPS
+   parameq   (PARAMETRIC EQ + RR1)    base 0x0B  C=800000/D445EF/400000  iw30  -1.000  iw32  +2.000  iw33  +2.733  CLIPS
+   LIVE armK (the shipped default)    base 0x9B  C=4CCCCC/400000/400000  iw30  +0.600  iw32  +0.720  iw33  +1.720  CLIPS
+   LIVE armK (the shipped default)    base 0x0B  C=E00000/E00000/FFFF10  iw30  -0.250  iw32  +0.125  iw33  +0.250  no clip
+
+=== 6. THE NULL -- how often the ladder clips, swept by base ===
+   coldboot 0x00..0x13     3 of 18 clip   16.7 %
+   coldboot 0x90..0xB4    30 of 35 clip   85.7 %
+   parameq  0x00..0x1E    14 of 29 clip   48.3 %
+   LIVE     0x00..0x13     2 of 20 clip   10.0 %
+   LIVE     0x50..0x8B     0 of 60 clip    0.0 %
+   LIVE     0x90..0xB4    28 of 37 clip   75.7 %
+   LIVE all non-zero      30 of 112 clip   26.8 %

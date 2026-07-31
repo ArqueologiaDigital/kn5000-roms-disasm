@@ -16258,3 +16258,190 @@ fail plus two zero-moved-value diffs against the previous build's arms; §4/§5 
 external known-answer control passing to the unit and one pre-registered control **failing** and
 correcting a nine-section-old note; §7 **SPECULATIVE**, pre-registered.
 **`dsp/verify.py`: BYTE-MATCH OK.**
+
+---
+
+## §226 — ★★★★ THE HEADER'S COEFFICIENT BANK IS **FOUND**, `headerdecode.md` §7.6 IS **ANSWERED**, AND THE SHIPPED BUILD IS **ALREADY READING IT**. THE PROPOSED FRAME-START SEED IS **REFUTED FROM DISK**: BASE `0x00` IS THE UNIT-0 EFFECT'S OWN PER-EFFECT PARAMETER BANK, AND THE SAME LADDER RUN THERE WITH **PARAMETRIC EQ** LOADED REACHES **`2.733 × FS`**
+
+<!-- LEDGER-VERDICT: NO CHANGE SHIPPED (a from-disk refutation of the pass's own candidate, plus a positive identification that closes a nine-day-old filed open question) -->
+
+**READ-ONLY. No source edited, no build, no MAME run, no new log.** Everything below comes from the
+committed corpus, from **two archived host captures**, from the Sub CPU ROM's own per-algorithm
+parameter map, and from `data/K_lfowrap_default_225.log.gz` (arm **K**, the shipped default).
+Instrument: `dsp/tools/hdrbase.py` (**10 of 10 self-tests PASS**, three of them external);
+archived output `data/HDRBASE_226.txt`; full write-up `HEADER-BANK_findings.md`.
+
+> **THE TASK (`SQUARING-MULTIPLY_findings.md` item F, `§225` §7.1):** *"the C-RAM coefficient
+> cursor is seeded only at the two CALLs and never at frame start, so kernel A's header runs
+> against `C-RAM[0x9B..]` — ROOM REVERB 1's coefficient bank. Run the identical ladder at
+> `kernel.dsm`'s own annotated base `0x0B` and it lands at `+0.125 FS`, no clip."*
+> **⚠ THE BRIEF'S OWN TRAP:** *"`headerdecode.md` §7.6 says `I did not find the upload that fills
+> it`, so the bank you would seed to may be EMPTY — establish first whether `C-RAM[0x0B..]` is
+> actually filled, by what, and when."*
+>
+> ### ★★★★ THE TRAP FIRED — IN A DIRECTION NOBODY PRE-REGISTERED.
+>
+> **`C-RAM[0x0B..0x0D]` IS FILLED** (`E00000 / E00000 / FFFF10`, by the boot-time `cmd 0x02` run
+> at base `0x00`, 20 values). So the literal *"multiply by zero"* trap does not fire.
+> **BUT THAT RUN IS THE UNIT-0 EFFECT'S OWN PARAMETER BANK.** Selecting **PARAMETRIC EQ**
+> rewrites `0x00..0x1E` wholesale in twelve `cmd 0x02` runs and moves **every one of
+> `0x00..0x13`** — while writing **nothing at or above `0x50`**:
+>
+> ```
+>                   C[0x0B]  C[0x0C]  C[0x0D]   |  C[0x9B]  C[0x9C]  C[0x9D]
+>    coldboot        E00000   E00000   FFFF10   |  4CCCCC   400000   400000
+>    parametriceq    800000   D445EF   400000   |  4CCCCC   400000   400000   <- IDENTICAL
+>    LIVE arm K      E00000   E00000   FFFF10   |  4CCCCC   400000   400000   <- IDENTICAL
+> ```
+>
+> The header is a **literal canned image in Sub CPU ROM** (PROVEN BY CONSTRUCTION). It cannot read
+> a bank that changes with the effect selection. ⇒ ⛔ **THE PROPOSED SEED IS REFUTED**, and the
+> *number* refutes it too: the identical ladder at `0x0B` with PEQ loaded is
+> **`iw30 −1.000 FS`, `iw32 +2.000 FS`, `iw33 +2.733 FS`** — **1.6 × worse than the shipped
+> `1.720`**. *"+0.125 FS, no clip"* is a property of **CHORUS's parameter set**, not of the base.
+>
+> ### ★★★★ AND THE BANK `headerdecode.md` §5 PREDICTED IS **FOUND**, WITH ITS UPLOAD.
+>
+> **`C-RAM[0x90..0xB4]`** — filled by the **boot-time `cmd 0x02` runs at base `0x90` (30 values)
+> and `0xAE` (7)**, byte-identical in both captures. **22 of those 37 cells are written by NO
+> algorithm's parameter map.** The header consumes `0x90..0xA3`:
+>
+> ```
+>    base 0x90 (SHIPPED )  15 of 20 INVARIANT   ladder cells 9B 9C 9D : ALL INVARIANT
+>    base 0x00 (PROPOSED)   0 of 20 INVARIANT   ladder cells 0B 0C 0D : ALL EFFECT-DEPENDENT
+> ```
+>
+> ⇒ ★★★ **`headerdecode.md` §7.6 IS ANSWERED** and **the shipped build was already right**.
+> **NOTHING SHIPS. `§S1 iw34` and `§S2 iw33` are unchanged, because nothing changed.**
+
+### 1. ★★★★ WHY NOBODY FOUND THE UPLOAD: THE `cmd 0x02` PACKET CARRIES NO ADDRESS
+
+`headerdecode.md` §7.6 said *"the cold-boot capture's early `cmd 0x0C` / short `cmd 0x02`
+transfers are the place to look, and I did not look."* The reason looking would not have worked
+by itself: **a `cmd 0x02` packet is a bare stream of 3-byte coefficients with no destination in
+it.** The host sets the destination by writing an **`ldptr` word** (`hi12 0x801`, `lo12 0x821`)
+into a scratch I-RAM slot with a `cmd 0x01`, *then* streams. Replaying that rule over the
+cold-boot capture yields, in order:
+
+```
+   ldptr #$50 -> 30 values     ldptr #$6E -> 30 values     (the two linear RAMPS, 0x50..0x8B)
+   ldptr #$90 -> 30 values     ldptr #$AE ->  7 values     (37 cells, 0x90..0xB4)  ★ THE HEADER'S BANK
+   ldptr #$00 -> 20 values                                 (the unit-0 EFFECT's bank)
+```
+
+`30 + 30 + 30 + 7 + 20 = 117` = the log's own *"117 coefficients routed"*, and the three
+contiguous runs are exactly `§224`'s `C-RAM WRITE RUNS (3): [0x50..0x8B]=60 [0x90..0xB4]=37
+[0x00..0x13]=20`. ★ **The replayer reproduces the emulator's C-RAM on 246 of 256 cells** and the
+10 exceptions are runtime parameter pokes the capture predates (§4).
+
+### 2. ★★★ THE BRIEF'S PREMISE IS FALSE, TWICE — THE BASE **IS** SEEDED, BY AN INSTRUCTION
+
+*"Never seeded at frame start"* is true only of a frame-start assignment statement.
+
+* **Register row 25 is LIVE.** The `is_ldptr` branch does `m_cursor = ad` under
+  `!(m_specmask & 0x1000)`, and **mask bit 12 is CLEAR** in the default `0xb910e446a39b440f`
+  (checked programmatically, standing rule 7). The corpus loads that pointer exactly three times:
+  `iw42 -> 0x70`, `iw50 -> 0x50`, **`iw69 -> 0x90` in the EPILOGUE, the last of the frame.**
+* **The epilogue contains ZERO cursor-advancing words** (MEASURED over its 23 words with
+  `D.coeff_consumer`). ⇒ nothing can perturb the value between `iw69` and the next frame's `w0`:
+  the header's base is **exactly `0x90`, every frame**, not `0x90 + n`.
+* `upd6383.cpp`'s frame-restart block says this deliberately and cites the measured position:
+  *"Words 0..41 … run on pointers left behind by the PREVIOUS frame's epilogue (its last loads
+  are I-RAM 62 `825<-$26`, **69 `821<-$90`**, 77 `822<-$86`)."*
+* Corroborated live: `KERNEL CURSOR` in arm K reads `0:cur=0x90 … 5:cur=0x91 … 23:cur=0x9B`, and
+  `w30` is the header's **twelfth** cursor word ⇒ `0x90 + 0x0B = 0x9B`. ✔
+
+⚠ ⇒ **Do not re-file this as an unseeded carry-over of the previous frame's body walk.** It is a
+deterministic in-program seed, and it lands on the one effect-invariant bank.
+
+### 3. ★★★ THE `20` COINCIDENCE, ANSWERED HEAD-ON (it is the best evidence the other way)
+
+The header block proper has exactly **20** cursor-advancing words, and the boot run at base `0x00`
+is exactly **20** cells. That looks decisive for `0x00`. It is not: **that run is sized by CHORUS's
+body**, not by the header — `classA 19`, `+1`, which is `headerdecode.md` §5's own centring — and
+the same run is **31 cells** when PARAMETRIC EQ is selected. ★ **That 31 is §5's named `−39`
+outlier (*"70 cursor words, 31 coefficients"*), reproduced here by a decoder that has never seen
+that note** — one of the pass's three external known-answer controls. **A bank whose length tracks
+the algorithm is the algorithm's.**
+
+### 4. ★ BONUS — `SQUARING`'s "which 13 tag-`0x26` cells" GAP IS BOUNDED
+
+The cold-boot capture and the live 30-second run differ on exactly **10** cells:
+`09 0A 90 97 9F A0 A7 A8 AC B2`, and **9 of 10 are named by the ROM's own T1 parameter map** —
+`09/0A/90` are CHORUS's (`op66` ×2 + `op21`), and `9F/A0/A7/A8/AC/B2` are ROOM REVERB 1's `op76`
+damping triples with their L/R twins. ⚠ **This is the NET difference, not the packet log**: a poke
+that rewrote the same value is invisible, and `0x97` is unattributed. ★★★ **None of the ten is
+`0x9B`, `0x9C` or `0x9D`** — the ladder's three coefficients survive every runtime poke in the run.
+
+### 5. ⚠ STATED AT ITS REAL STRENGTH — WHAT IS **NOT** CLEAN
+
+`15 of 20` is not `20 of 20`. Five of the header's cells are effect- or poke-written: `0x90`
+(opcode `0x21`, one cell in **every** unit-0 algorithm — plausibly effect depth, and `w5` is the
+input stage's first cursor word, which is a *sensible* thing for it to read), `0x9E/0x9F/0xA0`
+(ROOM REVERB 1's `op76` damping triple) and `0x97` (unattributed). **The header/body overlap on
+`[0x90..]` is real and OPEN**, and it is filed in `HEADER-BANK_findings.md` §8 rather than hidden.
+⚠ Also: the invariance is measured against **one capture pair in which unit 1 did not change**.
+**The right next capture is a REVERB-PRESET change**, which the ROM's map says would rewrite
+`0x9E..0xB2`.
+
+### 6. ⇒ WHY NOTHING WAS BUILT — AND THE GUARD, GENERALISED
+
+The brief's guard was *"a clip rate that falls because a coefficient became zero is a REGRESSION,
+not a fix."* The generalisation that actually bit:
+
+> ★★★★ **A CLIP RATE THAT FALLS BECAUSE A COEFFICIENT BECAME *SOMEBODY ELSE'S* IS ALSO A
+> REGRESSION.** Seeding to `0x00` would have dropped `§S1`'s `iw34` row and `§S2`'s `iw33` row on
+> the archived vehicle and looked like a clean win in every statistic this project prints — while
+> aiming a **fixed canned program** at a **per-effect parameter bank**, and while making the same
+> ladder **worse** on the other effect selection we happen to have a capture of. **The falsifier
+> cost one capture file and no run.**
+
+⇒ ⛔ **`UPD6383_HDRBASE` was NOT written, NOT built and NOT run.**
+
+### 7. ⇒ WHAT SHIPS
+
+* `dsp/tools/hdrbase.py` — the instrument: the header's cursor-advance map, a `cmd 0x02` capture
+  replayer, the ROM's per-algorithm cell map, the `§S2` ladder at any base, and the by-bank clip
+  null. **Ten self-tests, printed first, three of them external.**
+* `dsp/analysis/HEADER-BANK_findings.md`; `data/HDRBASE_226.txt`; this section.
+* **NO source change, NO build, NO run, NO new log, NO mask bit, NO default flip.**
+  `dsp/verify.py`: **BYTE-MATCH OK** (baseline re-confirmed).
+
+### 8. ★★★ THE NEXT EXPERIMENT, PRE-REGISTERED
+
+1. ★★★★ **THE BLOCKER MOVES TO THE ALU DECODE OF `iw30 / iw32 / iw33`.** Their addresses are
+   established and their constants are boot-fixed, so `1.720 × FS` is produced by **what the three
+   words do**, not by what they read. Terms: `C[0x9B] = +0.6`, `C[0x9B]² = +0.72`, `C[0x9D] = +0.5`,
+   `C[0x9C]² = +0.5`. The one untested reading: **`iw33`'s `f31 = 1` should not CARRY `iw32`'s
+   accumulator.** Drop it ⇒ `0.500 + 0.500 = 1.000 FS` (still at the rail); drop it **and** apply
+   the Q-consistent `P_SHIFT = 7` ⇒ `0.500 + 0.250 = 0.750 FS`, in range. ⚠ **BISECT — two changes
+   at once is not an experiment**, and ⛔ `P_SHIFT` still may not move on a number alone.
+2. ★★★ **CAPTURE A REVERB-PRESET CHANGE.** One capture closes the only surviving threat to §226's
+   positive half. `hdrbase.py` scores it in one line.
+3. ★★ **RESOLVE THE HEADER/BODY OVERLAP ON `[0x90..]`.** With mask bit 38 live the header reads
+   `0x90..0xA3` and unit 1's body re-reads from `0x90`. ⚠ The source comment at `upd6383.cpp`
+   (*"kernel 0x90..0xA4 (21 cells) then body 0xA5..0xB4 (16), and 21 + 16 = 37"*) **does not
+   close** — the reverb has **33** cursor words, not 16. Do not adopt it without re-deriving.
+4. ⛔ **NOT a frame-start cursor seed** — refuted here, and the base is already `0x90` and already
+   deterministic, so an assignment setting it to the value it already has **cannot fail**.
+5. ⛔ **NOT `UPD6383_NOSQ` as a FIX.** `SQUARING` §7 designed it as a two-sided **diagnostic** and
+   its own items A/B established the squaring is faithful. Its `P2` prediction
+   (`iw33 → 0.500 FS`) is now known to be a **suppression**, not a correction.
+
+### 9. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **"the cursor is never seeded at frame start; the header runs on whatever the previous frame's unit-1 body left behind"** | ⛔ **FALSE, twice.** The epilogue's own `iw69 ldptr #$90` seeds it through row 25 (mask bit 12 CLEAR = live), and the epilogue has **zero** cursor-advancing words, so `w0` starts at **exactly** `0x90` every frame |
+| **"run the ladder at `0x0B` and it lands at +0.125 FS, no clip"** (`SQUARING` item F) | ⛔ **REFUTED AS A FIX.** True for CHORUS only; with PARAMETRIC EQ loaded the same base gives `iw32 +2.000 FS`, `iw33 +2.733 FS` |
+| **"`kernel.dsm` annotates base `0x00` MEASURED"** | ⚠ **THE GENERATOR HARDCODES IT.** `gen_dsp_disasm.py`'s kernel `emit_listing` call passes the literal `0x00`; the word MEASURED belongs to `cram-unit-base.md` item A, which measured **unit BODIES** |
+| **`headerdecode.md` §5** *"a separate, fixed coefficient bank, loaded once at boot"* | ★★★ **CONFIRMED AND LOCATED — `C-RAM[0x90..0xB4]`**, 22 of whose 37 cells no algorithm ever writes |
+| **`headerdecode.md` §7.6** *"I did not find the upload that fills it"* | ★★★★ **ANSWERED** — the boot-time `cmd 0x02` runs at base `0x90` (30) and `0xAE` (7). The write address is **not in the packet**; the host writes an `ldptr` into a scratch I-RAM slot first |
+| **`SQUARING` §9** *"the 13 tag-`0x26` C-RAM targets are unrecorded"* | ★ **BOUNDED** — 10 cells move capture→live, 9 of 10 named by the ROM's T1 map; `0x97` unattributed |
+| **`upd6383.cpp`'s *"the coefficient stream fills `[0x90..0xAD]` with 30 values, unclaimed by either body"*** | ⚠ **STALE.** It is `[0x90..0xB4] = 37` cells in **two** packets, and with mask bit 38 live **unit 1's body claims `0x90..` too** |
+| **"the `1.720 × FS` overflow is the CURSOR BASE"** | ⛔ **RE-ATTRIBUTED AGAIN, away from addressing entirely.** The addresses are right and the constants are boot-fixed ⇒ it is an **ALU decode** question at `iw30/iw32/iw33` |
+
+Evidence grade: §0/§2/§3 **MEASURED and FORCED**, from two archived captures, the ROM's own
+parameter tables and the corpus, **with no run**; §1 **MEASURED**; §4 **MEASURED with its
+limitation named**; §5 **the pass's own negative, stated**; §6 **a decline, pre-argued**;
+§8 **SPECULATIVE, pre-registered**. `dsp/verify.py`: **BYTE-MATCH OK.**

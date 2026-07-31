@@ -20,10 +20,51 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§225, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§226, 2026-07-31)
 
-> **★★★★ `§S2sq` — THE COEFFICIENT SQUARING — IS THE BLOCKER, AND §225 GAVE IT A MEASURED
-> CONSEQUENCE.**
+> **★★★★ THE BLOCKER IS THE *ALU DECODE* OF `iw30 / iw32 / iw33`. THE ADDRESSES ARE SETTLED.**
+>
+> **§226 FOUND THE HEADER'S FIXED COEFFICIENT BANK AND ITS UPLOAD — `headerdecode.md` §7.6 IS
+> ANSWERED — AND THE SHIPPED BUILD WAS ALREADY READING IT.** It is **`C-RAM[0x90..0xB4]`**, filled
+> by the **boot-time `cmd 0x02` runs at base `0x90` (30 values) + `0xAE` (7)**, byte-identical in
+> both archived captures, **22 of whose 37 cells are written by NO algorithm's parameter map**
+> (`91..9D`, `A1..A5`, `AD AE B3 B4` — including all three ladder cells).
+> ★ Reproduce in one line: `python3 dsp/tools/hdrbase.py` (10 self-tests, 3 external, printed first).
+>
+> ⛔ **DO NOT SEED THE CURSOR AT FRAME START, AND DO NOT AIM THE HEADER AT `0x00`.**
+> (i) The base **is** seeded, by an instruction: row 25 is LIVE (`is_ldptr` → `m_cursor = ad` under
+> `!(m_specmask & 0x1000)`; **mask bit 12 CLEAR**), and the **epilogue's `iw69 ldptr #$90`** is the
+> last of the frame while the epilogue has **ZERO** cursor-advancing words ⇒ `w0` starts at
+> **exactly `0x90`, every frame**. (ii) `C-RAM[0x00..0x13]` is the **UNIT-0 EFFECT's own parameter
+> bank**: selecting PARAMETRIC EQ rewrites `0x00..0x1E` wholesale and moves **all 20** cells while
+> writing **nothing at or above `0x50`**; the header is a **literal canned image in Sub CPU ROM**
+> and cannot read a per-effect bank.
+> ```
+>    base 0x90 (SHIPPED ):  15 of 20 header cells INVARIANT | ladder 9B/9C/9D ALL INVARIANT
+>    base 0x00 (PROPOSED):   0 of 20 header cells INVARIANT | ladder 0B/0C/0D ALL EFFECT-DEPENDENT
+>    the same ladder at 0x0B with PARAMETRIC EQ loaded:  iw32 +2.000 FS, iw33 +2.733 FS
+>                                                        -- 1.6x WORSE than the shipped 1.720
+> ```
+> ⇒ ★★★★ **A CLIP RATE THAT FALLS BECAUSE A COEFFICIENT BECAME *SOMEBODY ELSE'S* IS ALSO A
+> REGRESSION.** §226 declined the build on that guard alone.
+>
+> **⇒ THE LIVE QUESTION.** Terms are `C[0x9B] = +0.6`, `C[0x9B]² = +0.72`, `C[0x9D] = +0.5`,
+> `C[0x9C]² = +0.5`, all boot-fixed. **The one untested reading: `iw33`'s `f31 = 1` should not
+> CARRY `iw32`'s accumulator** — drop it ⇒ `1.000 FS` (still railed); drop it **and** apply the
+> Q-consistent `P_SHIFT = 7` ⇒ `0.750 FS`, in range. ⚠ **BISECT**; ⛔ `P_SHIFT` may not move on a
+> number alone. Second job: **capture a REVERB-PRESET change** — the invariance above was measured
+> on one capture pair in which unit 1 did **not** change, and the ROM's map says a preset rewrites
+> `0x9E..0xB2`, which is inside the header's walk.
+> ⚠ **`kernel.dsm`'s *"base 0x00 MEASURED"* IS A GENERATOR DEFAULT** (`gen_dsp_disasm.py` passes
+> the literal `0x00` for the kernel listing; the word MEASURED belongs to `cram-unit-base.md` item
+> A, which measured unit **BODIES**). **Never anchor on it again.**
+
+## TIER 0a-prev-225 — §225's BLOCKER, SUPERSEDED by §226 (the squaring is FAITHFUL; the base is RIGHT)
+
+> **★★★★ `§S2sq` — THE COEFFICIENT SQUARING — WAS THE BLOCKER, AND §225 GAVE IT A MEASURED
+> CONSEQUENCE.** ⛔ **`SQUARING-MULTIPLY_findings.md` then established the squaring is FAITHFUL
+> and re-attributed the overflow to the cursor base; §226 refuted THAT too. Do NOT re-open
+> `cursor + 1`.**
 > `SRC 0x08` resolves to `C-RAM[m_cursor]`; on a class-A word the multiply reads
 > `C-RAM[m_cursor]` **again**, before the post-increment, so the product is the coefficient
 > **SQUARED**. It fires **5 100 000** times a run at `iw30 iw32 iw33 iw41 iw89`.

@@ -17,8 +17,16 @@ defects 1 and 2 are now documented in the instruments themselves). See `§224`.
 
 **⇒ §225 CONSUMED items 7 and 8** — `UPD6383_LFOWRAP` **SHIPPED** on a restated gate, and the
 cell-`0x06` question is **ANSWERED** by the new `§S3` boot-window recorder (`0` is not a fixed
-point; the "latch-up" framing is retired). **§225 ADDED item 9**, which is the blocker.
+point; the "latch-up" framing is retired). **§225 ADDED item 9**, which was the blocker.
 See `SPECULATIVE-APPLIED-REGISTER.md` **§225**.
+
+**⇒ §226 CLOSED item 9 WITHOUT A BUILD, and closed it twice over.** `SQUARING-MULTIPLY_findings.md`
+established the squaring is **FAITHFUL** (the coefficient port is hardwired; there is no second
+port for a sample) and re-attributed the `1.720 × FS` overflow to the **cursor base**; **§226 then
+refuted the base too — from two archived host captures and the ROM's own per-algorithm parameter
+map, with no run.** The header's fixed bank is `C-RAM[0x90..0xB4]`, its upload is the boot-time
+`cmd 0x02` runs at base `0x90` + `0xAE`, and **the shipped build was already reading it**.
+**§226 ADDED item 10**, which is the blocker. See **§226** and `HEADER-BANK_findings.md`.
 
 ---
 
@@ -240,7 +248,23 @@ boot-window sampler and **state its arming in the prediction** — the opposite 
 
 ---
 
-## 9. ★★★★ `§S2sq` — THE COEFFICIENT SQUARING. **THE BLOCKER.**
+## 9. ~~`§S2sq` — THE COEFFICIENT SQUARING~~ — ✅ **CLOSED by `SQUARING-MULTIPLY_findings.md` + §226, NO BUILD**
+
+> **DONE, and the answer is a double negative.** ⛔ **The squaring is FAITHFUL**: the multiply has
+> one **hardwired** coefficient port (`C-RAM[ccur]`, no instruction field selects it) and **one**
+> operand bus, so a word routing the coefficient onto that bus has no second port for a sample.
+> `SRC 0x08 = C-RAM[cursor]` is ANCHORED by the CHORUS LFO (`acc = 114 << 16` exactly).
+> Census `123 / 893 = 13.77 %` against a `0.05 %` null, `z = +90` — **evidence FOR the decode.**
+> ⛔ **And the re-attribution to the CURSOR BASE is ALSO refuted (§226):** base `0x00` is the
+> unit-0 effect's own per-effect parameter bank (PARAMETRIC EQ rewrites all 20 cells), while the
+> shipped base `0x90` is the boot-fixed bank `headerdecode.md` §5 predicted — `15 of 20` header
+> cells invariant, **ladder cells `9B/9C/9D` ALL invariant**, and the same ladder at `0x0B` with
+> PEQ loaded reaches **`2.733 × FS`**.
+> ⇒ ⛔ **DO NOT re-open `cursor + 1`, and DO NOT seed the cursor at frame start.**
+
+<details><summary>original entry</summary>
+
+### `§S2sq` — THE COEFFICIENT SQUARING. **THE BLOCKER.**
 
 **Grade: MEASURED (the population), UNDECIDED (the reading).** Source: `§224` §3, `§225` §4/§7.
 
@@ -261,6 +285,41 @@ scale** (`1.720 × FS`; zeroing the `ACT 0x00` bus term still leaves `1.220 × F
 **Two-sided, default OFF, unconditional fired count.** Falsifiers: `§41`, SINGLE DELAY's
 validated `+0.02149296` three-factor product, **and now `§S3`'s ladder** — a correct reading
 must move store #1357's `1 650 061` and #1360's `6 039 795`, and `§S1`'s 4.924 % with them.
+
+</details>
+
+---
+
+## 10. ★★★★ THE **ALU DECODE** OF `iw30 / iw32 / iw33`. **THE BLOCKER.**
+
+**Grade: the ADDRESSES are settled (§226, MEASURED); the ALU reading is UNDECIDED.**
+Source: `§226`, `HEADER-BANK_findings.md` §9, `§224` §1.
+
+`iw33`'s three terms are `CARRIED 0.720` + `BUS C[0x9D] = 0.500` + `P C[0x9C]² = 0.500`
+= **`1.720 × FS`**, and **not one of them is a sample**. §226 established the addresses are right
+and the constants boot-fixed, so the defect is in **what the three words do**.
+
+**The one untested reading:** `iw33`'s `f31 = 1` should **not CARRY** `iw32`'s accumulator.
+Drop the carried term ⇒ `0.500 + 0.500 = 1.000 FS` (still at the rail); drop it **and** apply the
+Q-consistent `P_SHIFT = 7` ⇒ `0.500 + 0.250 = 0.750 FS`, in range.
+⚠ **BISECT — two changes at once is not an experiment.**
+⛔ **`P_SHIFT` may NOT move on a number alone** — `§41` (`0x400000 / 0x178D0B`),
+`m_rf[0x8D] = 0x009B26` and SINGLE DELAY's validated `+0.02149296` three-factor product calibrate
+the chain end to end, and `ACC_SHIFT = 22 − P_SHIFT` ties the two.
+**Falsifiers:** `§41`; SINGLE DELAY's `+0.02149296`; `§S3`'s ladder (store #1357 `1 650 061`,
+#1360 `6 039 795`); `§S1`'s `4.924 %` quiet / `4.920 %` loud; and **PARAMETRIC EQ + SINGLE DELAY
+must stay bit-identical** — they carry **zero** squaring words between them and share the header,
+so a header-only change must move them **not at all**.
+
+---
+
+## 11. ★★★ CAPTURE A **REVERB-PRESET CHANGE** — one capture, no build
+
+**Grade: the gap §226 named in its own result.** §226's invariance evidence is **one capture pair
+in which unit 1 did not change**. The ROM's per-algorithm map says a reverb preset rewrites
+`0x9E..0xB2`, and `0x9E/0x9F/0xA0` are **inside** the header's `0x90..0xA3` walk. If those move
+under the user's reverb knob, the header reads live reverb parameters and the "fixed bank" result
+needs qualifying. `python3 dsp/tools/hdrbase.py` scores a new capture in one line.
 
 ---
 

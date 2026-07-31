@@ -19,9 +19,96 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
+**★★★★ §226 ANSWERED `headerdecode.md` §7.6 FROM DISK AND REFUTED ITS OWN CANDIDATE WITH THE SAME
+EVIDENCE. THE HEADER'S FIXED COEFFICIENT BANK IS `C-RAM[0x90..0xB4]`, ITS UPLOAD IS THE BOOT-TIME
+`cmd 0x02` RUNS AT BASE `0x90` + `0xAE`, AND THE SHIPPED BUILD IS ALREADY READING IT.
+NOTHING SHIPPED. THE BLOCKER MOVES TO THE *ALU DECODE* OF `iw30 / iw32 / iw33`.**
+
+### ★★★★ 1.-0.A DO NOT SEED THE COEFFICIENT CURSOR AT FRAME START. IT IS REFUTED.
+
+The §226 brief's thesis was *"the cursor is never seeded at frame start, so the header runs on
+whatever the previous frame's unit-1 body left behind — fix it by seeding `0x00`."* **Both halves
+are wrong, and the second is wrong in the expensive direction.**
+
+* **The base IS seeded, by an instruction.** Register row 25 is LIVE (`is_ldptr` does
+  `m_cursor = ad` under `!(m_specmask & 0x1000)`; **mask bit 12 is CLEAR**). The corpus loads that
+  pointer three times and the **last of the frame is the epilogue's `iw69 ldptr #$90`**. The
+  epilogue has **ZERO** cursor-advancing words, so the next frame's `w0` starts at **exactly
+  `0x90`, every frame**. `§S2`'s `0x9B` is `0x90 + 0x0B`, `w30` being the header's 12th cursor word.
+* **Base `0x00` is the UNIT-0 EFFECT's own parameter bank.** Selecting PARAMETRIC EQ rewrites
+  `0x00..0x1E` wholesale (twelve `cmd 0x02` runs) and moves **every one of `0x00..0x13`**, while
+  writing **nothing at or above `0x50`**. The ROM's per-algorithm map writes **all 20** of them.
+  The header is a **literal canned image in Sub CPU ROM** — it cannot read a per-effect bank.
+* **The number refutes it too:**
+
+```
+                   C[0x0B] C[0x0C] C[0x0D]  ladder at 0x0B   |  C[0x9B] C[0x9C] C[0x9D]  at 0x9B
+   coldboot         E00000  E00000  FFFF10  -0.250/+0.125/+0.250 |  4CCCCC 400000 400000  +0.600/+0.720/+1.720
+   parametriceq     800000  D445EF  400000  -1.000/+2.000/+2.733 |  4CCCCC 400000 400000  +0.600/+0.720/+1.720
+   LIVE arm K       E00000  E00000  FFFF10  -0.250/+0.125/+0.250 |  4CCCCC 400000 400000  +0.600/+0.720/+1.720
+   base 0x90 (SHIPPED ):  15 of 20 header cells INVARIANT, ladder cells 9B/9C/9D ALL INVARIANT
+   base 0x00 (PROPOSED):   0 of 20 header cells INVARIANT, ladder cells 0B/0C/0D ALL EFFECT-DEPENDENT
+```
+
+⇒ ★★★★ **A CLIP RATE THAT FALLS BECAUSE A COEFFICIENT BECAME *SOMEBODY ELSE'S* IS ALSO A
+REGRESSION.** Seeding `0x00` drops `§S1 iw34` and `§S2 iw33` on the archived vehicle and looks like
+a clean win in every statistic — while aiming a fixed program at a per-effect bank and making the
+same ladder **1.6 × worse** on the other effect selection we have a capture of.
+
+### ★★★★ 1.-0.B `headerdecode.md` §7.6 IS ANSWERED — AND WHY NOBODY FOUND THE UPLOAD
+
+**A `cmd 0x02` packet carries NO destination address.** The host writes an `ldptr` word
+(`hi12 0x801`, `lo12 0x821`) into a scratch I-RAM slot with a `cmd 0x01`, *then* streams 3-byte
+coefficients. Replaying that rule over the cold-boot capture gives, in order:
+
+```
+   ldptr #$50 -> 30    ldptr #$6E -> 30     the two linear RAMPS      0x50..0x8B  (60)
+   ldptr #$90 -> 30    ldptr #$AE ->  7  ★  THE HEADER'S FIXED BANK   0x90..0xB4  (37)
+   ldptr #$00 -> 20                         the UNIT-0 EFFECT's bank  0x00..0x13  (20)
+   30+30+30+7+20 = 117 = the log's own "117 coefficients routed"
+```
+
+**22 of the 37 cells in `0x90..0xB4` are written by NO algorithm's parameter map**
+(`91..9D`, `A1..A5`, `AD AE B3 B4`) — including all three ladder cells. That is
+`headerdecode.md` §5's *"separate, fixed coefficient bank, loaded once at boot"*, located.
+★ Reproduce in one line: `python3 dsp/tools/hdrbase.py` (10 self-tests, 3 external, printed first).
+
+### ★★★★ 1.-0.C THE BLOCKER: THE **ALU DECODE** OF `iw30 / iw32 / iw33`
+
+The addresses are established and the constants are boot-fixed, so `1.720 × FS` is produced by
+**what the three words do**, not by what they read. Terms: `C[0x9B] = +0.6`, `C[0x9B]² = +0.72`,
+`C[0x9D] = +0.5`, `C[0x9C]² = +0.5`.
+
+1. ★★★★ **The one untested reading: `iw33`'s `f31 = 1` should not CARRY `iw32`'s accumulator.**
+   Drop the carried term ⇒ `0.500 + 0.500 = 1.000 FS` (still at the rail); drop it **and** apply
+   the Q-consistent `P_SHIFT = 7` ⇒ `0.500 + 0.250 = 0.750 FS`, in range.
+   ⚠ **BISECT — two changes at once is not an experiment.** ⛔ `P_SHIFT` may still not move on a
+   number alone (`§41`, `m_rf[0x8D]`, SINGLE DELAY's `+0.02149296` calibrate the chain).
+2. ★★★ **Capture a REVERB-PRESET change.** The only surviving threat to §226's positive half is
+   that the invariance was measured on **one capture pair in which unit 1 did not change**; the
+   ROM's map says a reverb preset rewrites `0x9E..0xB2`, and `0x9E/0x9F/0xA0` are inside the
+   header's walk. One capture closes it; `hdrbase.py` scores it in one line.
+3. ★★ **The header/body overlap on `[0x90..]` is REAL and OPEN.** With mask bit 38 live the header
+   reads `0x90..0xA3` and unit 1's body re-reads from `0x90`. ⚠ The source comment
+   (*"kernel 0x90..0xA4 (21) then body 0xA5..0xB4 (16), 21 + 16 = 37"*) **does not close** — the
+   reverb has **33** cursor words, not 16. Do not adopt it without re-deriving.
+4. ⛔ **NOT a frame-start cursor seed** (refuted; and setting it to the value it already has
+   **cannot fail**). ⛔ **NOT `UPD6383_NOSQ` as a FIX** — `SQUARING` items A/B established the
+   squaring is faithful, so its `P2` (`iw33 → 0.500 FS`) is a **suppression**, not a correction.
+5. ⚠ **`kernel.dsm`'s *"base 0x00 MEASURED"* IS A GENERATOR DEFAULT**, not a measurement of the
+   header: `gen_dsp_disasm.py`'s kernel `emit_listing` call passes the literal `0x00`, and the word
+   MEASURED belongs to `cram-unit-base.md` item A, which measured unit **BODIES**. **Never anchor
+   on it again.**
+
+Full write-up: `HEADER-BANK_findings.md`; register **§226**; archived output `data/HDRBASE_226.txt`.
+
+---
+
+### ⛔ 1.-0-prev-225 — §225's headline, SUPERSEDED as the task, TRUE IN EVERY PART
+
 **★★★ §225 ANSWERED §224's RULE-21 QUESTION FROM DISK — `28/32/28` SURVIVES, `26/28/27` OF IT
 PROOF-GRADE — SHIPPED THE `LFOWRAP` FLIP ON A RESTATED GATE, AND RETIRED THE `0x06` "LATCH-UP":
-`0` IS NOT A FIXED POINT. THE NEW BLOCKER IS `§S2sq`, THE COEFFICIENT SQUARING.**
+`0` IS NOT A FIXED POINT.**
 
 ```
    arm K  (NEW shipped default)   data/K_lfowrap_default_225.log.gz
@@ -119,7 +206,7 @@ the two (`RESET-STATE` / `SETTLING` / `NO CROSSING`, unconditional).
 ★ **Its first control is EXTERNAL and passed to the unit:** mask bit 26 counts the identical
 predicate at the identical hook and `§220` measured **5 881 351**; `§S3` reports **5 881 351**.
 
-### ★★★★ 1.-0.3 THE NEW BLOCKER: `§S2sq`, THE COEFFICIENT SQUARING
+### ⛔ 1.-0.3 §225's BLOCKER — `§S2sq` — **CLOSED as a defect by `SQUARING-MULTIPLY_findings.md` (the squaring is FAITHFUL) and RE-ATTRIBUTED TWICE SINCE.** `SQUARING` moved it to the cursor base; **§226 refuted THAT and moved it to the ALU decode of `iw30/iw32/iw33`** (see §1.-0.C). ⛔ The paragraph below is kept for its measured content only — **do NOT re-open `cursor + 1`.**
 
 **The FIRST non-zero datum ever placed in cell `0x06` is `iw33`'s `6 039 795` = `C-RAM[0x9B]²
 >> 6` = `0.720 × FS` — a COEFFICIENT SQUARED, not a sample**, and `§224` §1 already showed
