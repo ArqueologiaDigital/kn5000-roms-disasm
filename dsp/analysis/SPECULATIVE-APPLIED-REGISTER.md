@@ -11447,3 +11447,88 @@ values are already known, then apply it to `C63`'s `sub = 4`.
 Evidence grade: §1 **MEASURED** (null computed first); §2 **MEASURED**, exhaustive over all 90;
 §3 **MEASURED** (the collision is exhaustive over the corpus), the two decodes cited not re-derived;
 §4 **FORCED** by §2; §5 **SPECULATIVE**.
+
+---
+
+## §185 — reading the alternate encoding as SELECTOR + VALUE: `C63` is a per-channel RESET
+
+§184 decomposed the alternate `lo12` as `FLAG | SUB[10:8] | PAYLOAD[7:0]`. `k3-pointers.md` §1.1
+item 1 supplies the other half, **proven by construction**: *"`addr8` is exactly bits [19:12] and
+the payload is 8 bits"* — the firmware writes the **value** into `addr8`. So on these words
+`lo12[7:0]` is a **selector** and `addr8` is the **value written**.
+
+### 1. The whole family, read that way — MEASURED
+
+```
+  selector  sub  sites   addr8 (the VALUE)      hi12 carriers
+    0x21     0      3    50  70  90             801        <- ldptr: real pointer values
+    0x21     1      1    00                     050        <- ★ THE TARGET
+    0x22     0      1    86                     859
+    0x25     0      3    25  26                 801
+    0x27     0      2    64  6C                 801
+    0x39     0      2    00                     809 80B
+    0x63     4     53    00                     040 142    <- C63, ALWAYS zero
+    0x64     0      1    00                     040
+    0xBC     0     24    00  30                 040 050 880
+```
+
+★ **`addr8` is non-zero only on the `0x80x` carriers** — and on `880.1.30.8BC`, where `0x30` is the
+delay **direction** code (FORCED, adjudication-round5). On the `040`/`050`/`142` carriers it is
+**identically zero across all 62 sites**.
+
+### 2. ⇒ INFERRED — the `04x`/`05x` carrier writes ZERO, i.e. it RESETS
+
+If `addr8` is the value, then every one of those 62 words writes **0** to its selector. That is a
+**reset**, not a load. And it explains a measurement `bit11-family.md` recorded as a puzzle:
+
+> item E: *"`C63` is **exactly 2** in 20 of its 25 images — which is the shape of a **per-channel
+> constant**, not a per-LFO one."*
+
+⇒ **`C63` resets register `0x63`, once per channel.** That is the first coherent reading of *"the
+single most common thing this chip does that we cannot read"* — 53 sites, 25 images — and it comes
+from a construction proven off the firmware's own assembly rather than from a corpus statistic.
+
+### 3. ★★ And `0x921` reads out at a SECTION BOUNDARY
+
+`050.0.00.921`, MULTI TAP DELAY `w33`, in context:
+
+```
+   w30  202.A.0C.1D5   mac (p),c+,(p)+12    C-RAM[0x06]  role mix/TAP
+   w32  000.2.FD.407   ld.st acc,(p)-3
+   w33  050.0.00.921   <- selector 0x21 (the POINTER register), value 0, STORE bit set
+   w34  002.A.03.1D5   mac (p),c+,(p)+3     C-RAM[0x07]  role FILTER
+```
+
+Three things line up at once: the C-RAM **role annotation changes from tap to filter** exactly
+here; the word is bracketed by a **symmetric `−3`/`+3`** pointer excursion; and its selector is
+`0x21`, the register `ldptr` loads and `rstcur` resets.
+
+⇒ **INFERRED: `0x921` resets the pointer at a section boundary** — which is precisely what a
+multi-tap delay needs between its tap bank and its damping filter.
+
+### 4. ⚠ WHAT THIS IS NOT
+
+`k3-pointers.md` proves its construction for the form **`hi12 = 0x801`**. `C63` and `0x921` sit on
+`0x040`/`0x050`/`0x142`. **Transferring the selector/value reading across carriers is INFERRED, not
+FORCED**, and it rests on §183's measurement that the payload is carrier-independent (the same
+`8BC` rides class 0 and class 1). ⚠ It is exactly the kind of step that has been retracted here
+before — §166 §3 applied a decode across an encoding boundary and was wrong.
+
+★ **The falsifiable consequence, and it is cheap:** if `C63` zeroes a register twice per frame per
+image, that register must show **exactly two writes of 0 per frame** in the existing
+`§164`/`§176` census once the word is modelled. If it shows a different count, or writes a non-zero
+value, the reading is refuted. **Do not implement it without that pre-registration.**
+
+### 5. SPECULATIVE
+
+* **S11.** Selectors `0x63` and `0x64` are **adjacent**, and `0x64` occurs once on the same `040`
+  carrier. Adjacent selectors reset together is the shape of a **register pair** — plausibly the
+  two channels whose per-channel reset §2 infers. **SPECULATIVE.**
+* **S12.** `sub` may not be an opcode at all: `sub 0` covers every proven register load, `sub 1` and
+  `sub 4` each have exactly one selector. A field whose non-zero values are used by one selector
+  apiece looks like a **register-bank** or width selector rather than an operation. **SPECULATIVE**,
+  and it competes with §184 S9.
+
+Evidence grade: §1 **MEASURED**, exhaustive; §2 **INFERRED** from a FORCED construction, with the
+independent corroboration of item E's per-channel count; §3 **INFERRED** (three independent
+alignments); §4 the limitation **stated**; §5 **SPECULATIVE**.
