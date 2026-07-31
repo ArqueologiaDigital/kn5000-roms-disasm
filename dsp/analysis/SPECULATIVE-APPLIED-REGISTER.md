@@ -12017,3 +12017,59 @@ would grade them.** Three have now been proposed and withdrawn (§185's reset co
 
 Evidence grade: §1 **MEASURED**; §2 **FORCED** by §1 (same words, two vehicles, opposite answers);
 §3 **MEASURED**; §4 **FORCED** given §183; §5 **SPECULATIVE**.
+
+---
+
+## §193 — the f31 run is VOID: the navigation vehicle loaded the wrong program. The control caught it.
+
+### 1. The instrument took three attempts, and all three failures are the same species
+
+* **Slot only.** Keyed the probe on I-RAM slot 122..130 alone. It sampled from **frame 0**, before
+  the program is uploaded, so the captured word logged as `0000000000` and the min/max were
+  dominated by boot content. Symptom: **both arms reported byte-identical accumulator ranges for
+  two different programs.** ⇒ *a slot does not identify an instruction; a slot AND a word does.*
+* **A dangling `else`.** Inserting the word-capture between an `if` and its `else` — caught by the
+  compiler, cost one build.
+* **Gated on the expected words.** Works: the words now log correctly and 21.4 M out-of-window
+  samples are rejected and counted.
+
+### 2. ⛔ AND THE RUN IS STILL VOID — the vehicle did not load what I asked for
+
+With the words visible, the two arms disagree structurally:
+
+```
+   TYPE 30 arm:  +0..+8 = 0202AFC415 0204200000 00922FA700 0020A061D5 0182200407 ...
+                                                            ^ the f31 = 0 variant
+   TYPE 28 arm:  the same words, SHIFTED by five slots
+```
+
+`0020A061D5` is **PEQ+CHORUS's** variant. So TYPE 30 did not load PEQ+FLANGER, and TYPE 28's window
+is offset — i.e. a third program entirely.
+
+Fingerprinting the upload confirms the last run loaded **`prog72_peq_s_delay`**, which §170's map
+places one slot away from the target. ⇒ **The navigation dropped a step.** TYPEIDX 8 worked
+earlier (8 presses, verified `prog10_multi_tap_delay`); 28 and 30 do not.
+
+⚠ **And my own check was sloppy**: I copied the upload dump per-run in the first loop but not the
+second, so the script read **one file twice**. The conclusion above rests on the *word sequence*
+in the probe output, which is per-run and unambiguous — not on that file comparison.
+
+### 3. ⇒ Two standing requirements for any navigated run
+
+1. **Verify the loaded program from the upload fingerprint, in the same run, every time.** §170's
+   map is correct — it was confirmed live at TYPE 8 — but `peq_select.lua` presses UP at 0.10 s
+   intervals and **drops steps over long distances**. The map is not the failure; the transport is.
+2. **Copy `kn5000_dsp1_upload.txt` into the run directory before the next run starts.** It is
+   overwritten by every launch, and comparing two runs against one file is not a comparison.
+
+★ The `f31 = 4` experiment itself is **untouched** — its design still holds, including the
+input-control at `+0..+2` that would detect a confound. It needs a transport that lands on the
+program it is asked for.
+
+### 4. What is NOT claimed
+
+No statement about `f31 = 4`. The accumulator numbers in both arms describe `prog72_peq_s_delay`
+and possibly a neighbour, not the minimal pair, and are not reported as results.
+
+Evidence grade: §1 **MEASURED** (the symptom is diagnostic); §2 **FORCED** by the word sequence
+alone; §3 procedural.
