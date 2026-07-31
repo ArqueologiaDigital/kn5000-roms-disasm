@@ -16,56 +16,57 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Decode `f31 = 4`, using the PEQ+CHORUS / PEQ+FLANGER / PEQ+VIBRATO minimal pair.**
+**Audit the notes for decodes graded PROVEN BY CONSTRUCTION or FORCED that are NOT implemented in
+the device — and implement them.**
 
-★ It is the one open item that arrives **with its grading criterion already stated**, which is
-exactly what §192 says to require before proposing another experiment.
+★ **This class has the best track record on the project by a wide margin.** §188 shipped from
+exactly it: two notes gave the host packet decode *by construction* off the firmware's own writers,
+the device disagreed, and a ROM-derived table supplied a **bit-exact** control (max err 2→1 LSB,
+RMS 1.291→0.707 = 1/√2, and the 12 moved cells matched the capture's tag-bit pattern
+bit-for-bit). No hypothesis, no A/B, no confound.
 
-### The vehicle — verified independently
+⚠ It is also known to be non-empty: `adjudication-round4.md` item D says its retraction left
+**7 live sites**, of which §188 fixed one — the other six are in documents, and
+`tools/retraction_sweep.py` already detects them.
 
-```
-   PEQ+CHORUS  w38..w46    TYPE 28
-   PEQ+FLANGER w38..w46    TYPE 30       byte-identical for NINE words, differing at ONE BIT
-   PEQ+VIBRATO w31..w39    TYPE 31
-```
+### How to run it
 
-```
-   020.A.06.1D5   f31 = 0   (decoded: acc <- P)          PEQ+CHORUS
-   028.A.06.1D5   f31 = 4   ⚠ UNDECODED                  PEQ+FLANGER, PEQ+VIBRATO
-   XOR = bit 27 only
-```
+1. `grep` the notes for `PROVEN BY CONSTRUCTION` and `FORCED` and list each claim's *operational*
+   content (a field width, a packet layout, an address map, a direction rule).
+2. For each, check the device actually implements it. §188's defect was visible as a **two-line
+   diff** between the note's formula and the code.
+3. Ship only what has an **independent** control — a ROM table, a host capture, a boundary the
+   firmware states. That is what separated §188 from the last six ticks.
 
-Re-verified here from the disassembly: **8 of 9 byte-identical, the ninth differing in exactly one
-bit.** `lfo-ramp.md` §10 independently identifies that slot as the LFO **phase-to-index scale**,
-coefficient `0x18` = 24, and the coefficient is `0x000018` in all three programs' own C-RAM banks.
+### ⛔ Two lines are now CLOSED. Do not reopen without a new instrument.
 
-### ★ THE CRITERION — this is why it is the target
+* **`f31 = 4`** — §194 and §195. The two-way comparison failed its input control (the programs
+  diverge at `+2`, *before* the bit); the three-way repair failed because the two `f31 = 4`
+  programs agree at `+2` as well, so **bit identity is confounded with program similarity**.
+* **The bit-11 family** — §192. All four decidability routes closed; three experiments proposed and
+  withdrawn.
 
-**The next word reads the accumulator (`SRC 0x10`) and writes it to memory (`ACT 0x07`)**, so the
-result is observable **one word later**, with no `f31 = 0` barrier, no biquad, and no store-gate
-dependence. Two programs differ only in this bit, so the same slot can be read with `f31 = 0` and
-`f31 = 4` and compared **against each other** — the ground truth is the *other program*, not a
-guess.
+> **The lesson both lines share:** an instruction-stream minimal pair bounds what a field can
+> **encode**; it does not yield a controlled **measurement**, because neither the machine state
+> entering the window nor the similarity of the host programs is part of the pair.
 
-⚠ `§139 §1`'s *"no `f31 ∈ {4,5}` word is usable"* was right about PARAMETRIC EQ and AUTO PAN and
-**wrong to generalise**.
+⚠ **Process, recorded because it is the point:** §193–§195 spent **five probe revisions and five
+builds for two negatives**. Every revision was caught by an internal check rather than by a wrong
+result — the instrumentation is working — but the confound analysis belonged *before* the first
+build, not after the fourth. **Ask for the criterion AND the confound before building.**
 
-### ⛔ The bit-11 family is PARKED — §192
+### ★ Infrastructure gained on the way (all verified)
 
-All four decidability routes are closed: `bit11-family.md` §7 shut two, §183 showed the third
-(`w000`) compares **encodings rather than payloads**, and §191/§192 shut the fourth (every
-candidate's pointer is either already constant, or varies with no ground truth for the reset value).
-
-**Three bit-11 experiments have been proposed and withdrawn** — §185's reset count (circular),
-§186's "bit-identical" (cannot fail), §191's pointer reset (no criterion). ⚠ **Do not propose a
-fourth without naming the criterion that would grade it.**
-
-★ What survives from that line, all MEASURED: the `FLAG | SUB[10:8] | SELECTOR[7:0]` decomposition
-(§184); the selector space is the chip's **internal control registers**, not `m_rf`, proven by
-collision (§187); and `C63`'s two carriers sit at `m_dp` 12 and 14 while its two class-6 partners
-sit at 12 and 14 — §166's structural bijection confirmed **pairwise in the running machine** (§192).
+* `tools/type_select.lua` — reliable effect selection: saturate **UP**, step **DOWN**
+  `(36 − TYPEIDX)`. `peq_select.lua` drops steps over long walks.
+* **§170's TYPE map is off by one above index 8** (its generator deduplicated consecutive identical
+  programs). Use `TYPELAST=36`, and **always fingerprint the loaded program from the upload dump in
+  the same run**.
+* `$SP/run_type.sh` copies `kn5000_dsp1_upload.txt` into the run directory **before** the next
+  launch overwrites it.
 
 ### ⛔ Dead, do not retry
+
 
 
 
