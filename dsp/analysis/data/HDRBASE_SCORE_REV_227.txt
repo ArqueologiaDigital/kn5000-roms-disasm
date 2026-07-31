@@ -1,0 +1,20 @@
+=== §227 CAPTURE-PAIR SELF-TEST (RULE 20, printed first) ===
+   archived cold-boot cmd-0x02 runs                         PASS
+   CONTROL capture reproduces cold-boot C-RAM[0x90..0xB4]   PASS
+   §224 §S2 iw33 on the CONTROL image                       PASS
+   3 of 3 PASS
+
+=== §227 THE PAIR ===
+   control : /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/c6cf97f4-b4f1-4ba1-adc0-85474706b167/scratchpad/logs/REV4/kn5000_dsp1_upload.txt   (21 cmd-0x02 runs)
+   test    : /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/c6cf97f4-b4f1-4ba1-adc0-85474706b167/scratchpad/logs/REV0/kn5000_dsp1_upload.txt   (13 cmd-0x02 runs)
+   cells differing anywhere : 23  93 94 95 97 9A 9B 9C 9E 9F A0 A1 A2 A3 A4 A6 A7 A8 AC AD AE B2 B3 B4
+   unit-0 effect bank + spare               [00..4F] :  0 of 80 differ  ALL INVARIANT
+   the two linear RAMPS                     [50..8F] :  0 of 64 differ  ALL INVARIANT
+   ★ THE HEADER'S FIXED BANK                [90..B4] : 23 of 37 differ  93 94 95 97 9A 9B 9C 9E 9F A0 A1 A2 A3 A4 A6 A7 A8 AC AD AE B2 B3 B4
+   ★★ the header's own 20-cell WALK         [90..A3] : 13 of 20 differ  93 94 95 97 9A 9B 9C 9E 9F A0 A1 A2 A3
+   the ROM T1 map's reverb-preset range     [9E..B2] : 14 of 21 differ  9E 9F A0 A1 A2 A3 A4 A6 A7 A8 AC AD AE B2
+   ★★★★ the iw30/iw32/iw33 LADDER CELLS     [9B..9D] :  2 of  3 differ  9B 9C
+
+=== §227 THE LADDER, BOTH IMAGES, base 0x9B ===
+   control  C = 4CCCCC/400000/400000   iw30 +0.600  iw32 +0.720  iw33 +1.720  CLIPS
+   test     C = 400000/333333/400000   iw30 +0.500  iw32 +0.500  iw33 +1.320  CLIPS

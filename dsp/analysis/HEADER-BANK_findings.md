@@ -1,5 +1,30 @@
 # `§226` — the header's coefficient bank is **FOUND**, and the shipped build is **already reading it**
 
+> ## ⛔⛔ CORRECTION BANNER — `§227`, 2026-07-31. **READ THIS BEFORE ANY LINE BELOW.**
+>
+> **§227 took the reverb-preset capture §8 of this document asked for, and it REFUTES ITEM D IN ITS
+> STRONG FORM.** `C-RAM[0x90..0xB4]` is **NOT** a boot-fixed bank: it is **UNIT 1's (the reverb's)
+> own per-algorithm parameter bank**. A preset change `CONCERT REVERB 1 → ROOM REVERB 1` rewrites
+> **23 cells, every one inside `0x90..0xB4` and NOTHING else in the 256-cell C-RAM**; **13 of the
+> header's 20 walk cells `0x90..0xA3` move**, and **2 of the 3 ladder cells — `0x9B` and `0x9C` —
+> move with them**. The ladder is `+1.720 FS` on CONCERT 1 and `+1.320 FS` on ROOM 1.
+>
+> **The control that makes this proof-grade:** an independent 45 s panel run landing on CONCERT
+> REVERB 1 reproduces the archived cold-boot capture on **all 256 cells, 0 differ** ⇒ ★ **the
+> cold-boot default reverb is CONCERT REVERB 1, not ROOM REVERB 1** — so every "CHORUS + RR1"
+> label in §3.1/§4 and item G's preset attribution below names the **wrong preset**.
+>
+> **WHAT SURVIVES UNCHANGED:** the *upload* half of item D (the boot-time `cmd 0x02` runs at
+> `0x90` + `0xAE`, and `headerdecode.md` §7.6's answer that the destination comes from an `ldptr`
+> in a scratch I-RAM slot); item B (base `0x00` is unit 0's per-effect bank); item C (⛔ **base
+> `0x00` is still refuted and is still worse on every image**); item E (the base is seeded by
+> `iw69`); item F; item H.
+>
+> **WHAT IS NOW THE BLOCKER:** *both* candidate bases are somebody's per-algorithm parameter bank.
+> See `SPECULATIVE-APPLIED-REGISTER.md` **§227** §9.1 — three separable readings, and a falsifier
+> that distinguishes them is required before any of them is tried.
+> Reproduce: `python3 dsp/tools/hdrbase.py --score notes/data/kn5000_dsp1_upload_concertreverb1.txt notes/data/kn5000_dsp1_upload_roomreverb1.txt`
+
 NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-07-31**. Register head **§226**.
 **STRICTLY READ-ONLY pass**: no source edited, no build, no MAME run. Every number comes from the
 committed corpus (`dsp/disasm/*.dsm`), from the **two archived host captures**

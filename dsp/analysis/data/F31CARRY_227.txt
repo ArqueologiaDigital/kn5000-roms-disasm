@@ -1,0 +1,165 @@
+=== §227 SELF-TEST (known answers, 5 of them from OTHER instruments) ===
+   corpus listings (41 incl. index-less)                    PASS
+   corpus words 3057                                        PASS
+   kernel w30 raw                                           PASS
+   kernel w32 raw                                           PASS
+   kernel w33 raw                                           PASS
+   kernel w34 raw                                           PASS
+   f31 of w30/w32/w33/w34                                   PASS
+   EXT §224 §S2 iw33 @0x9B = 945 579 874 058                PASS
+   EXT §224 §S2 iw30 bus = 329 853 435 904                  PASS
+   EXT §224 §S2 iw32 P   = 395 824 060 170                  PASS
+   EXT §S1 iw34 pre-clamp datum = 14 428 403                PASS
+   EXT §S3 store #1360 datum = 6 039 795                    PASS
+   core: the FIXED POINT comment says the TOTAL 22 is FORCED PASS
+   core: shipped default P_SHIFT 6 / ACC_SHIFT 16           PASS
+   PEQ w6..w10 all f31 == 1                                 PASS
+   CONTROL ladder @0x0B != §S2 (must differ)                PASS
+   EXT §227 CONCERT REVERB 1 capture == archived cold boot (256 cells) PASS
+   EXT §227 ROOM REVERB 1 moves 23 cells, ALL inside 0x90..0xB4 PASS
+   18 of 18 PASS
+
+=== 1. THE LADDER, FIELD BY FIELD (corpus) ===
+   iw    raw          f31   ST   END  SRC   ACT   cl    meaning
+   iw30  009AA00200 5     Y    .    0x08  0x00  A     ADD   bus C[b+0]         (f31 5 -> op 1)
+   iw32  0000AFF207 0     .    .    0x08  0x07  A     LOAD  P = C[b+0]^2       (ACT 0x07 = store bus, no bus term)
+   iw33  0412A00200 1     Y    Y    0x08  0x00  A     ADD   carried + C[b+2] + C[b+1]^2
+   iw34  0000AFF407 0     .    .    0x10  0x07  A     LOAD  SRC 0x10 = THE ACCUMULATOR -> ACT 0x07 stores it
+   ⇒ iw34 is the CONSUMER: SRC 0x10 puts the accumulator on the bus and ACT 0x07
+     stores it.  That conversion is §S1's iw34 row -- the clip everyone quotes.
+
+=== 2. WHAT IS `f31 == 1'?  THE CORPUS CENSUS ===
+   f31 : corpus words (non-C-format) | of which ALU-DECODED | shipped op (mask bit 0 SET)
+     0 :  1243                     |   448                | LOAD  acc <- P
+     1 :  1309                     |   695                | ADD   acc <- acc + P
+     2 :   280                     |    35                | HOLD  acc unchanged, no P
+     3 :    34                     |     0                | op 3  (HOLD-like, OPEN)
+     4 :    48                     |     0                | LOAD  (f31 & 3)
+     5 :    56                     |     0                | ADD   (f31 & 3)
+     6 :     3                     |     0                | HOLD  (f31 & 3)
+     7 :    16                     |     0                | op 3  (f31 & 3)
+   ⇒ the ADD family (f31 1 and 5) is 1365 of 2989 non-C-format words, 45.7 %
+   ⇒ there is NO OTHER accumulate: op 0 LOADs, op 2 HOLDs without a product,
+     op 3 is given HOLD's behaviour.  Removing the carry from f31 == 1 removes
+     MULTIPLY-ACCUMULATE FROM THE INSTRUCTION SET.
+
+=== 3. BLAST RADIUS -- THE PARAMETRIC EQ BIQUAD (programs.tsv: confidence SOLVED) ===
+   iw    raw          f31  SRC   ACT    listing annotation
+   w5    0000A001D3 0    0x07  0x13   P = b1*S0 ; latch A <- S0
+   w6    0212A01412 1    0x10  0x12   S0 <- x ; acc = P ; P = b0*x
+   w7    0202A011D5 1    0x07  0x15   acc += P ; P = b2*S1
+   w8    0202A011D4 1    0x07  0x14   acc += P ; P = -a1*S2 ; latch B <- S2
+   w9    0202A001D5 1    0x07  0x15   acc += P ; P = -a2*S3
+   w10   01022FF687 1    0x1A  0x07   acc += P ; S3 <- latch B
+   w11   0804816415 2    0x10  0x15   class-8 post-sum step
+   w12   0212AFF407 1    0x10  0x07   S2 <- acc ; P = makeup*acc
+   ⇒ 6 of the 8 biquad words are f31 == 1, and they are EXACTLY the words the
+     generated listing renders `acc += P'.  Direct-Form-I needs five products
+     summed:  y = b0*x + b1*x1 + b2*x2 - a1*y1 - a2*y2.
+   ⇒ WITHOUT THE CARRY the accumulator at w11 holds ONLY the last product,
+     so H(z) collapses to `makeup * (-a2) * z^-2' -- a delayed gain, not an EQ.
+     band 0 of the archived PEQ capture: b0 = C[0x01] = 0xD216A0, -a2 = C[0x04] = 0x440573
+     the surviving term would be the -a2 one; every numerator tap is dropped.
+   ⛔ prog39 is the ONE program validated against its DESIGNER (0.198 dB, upd6383.cpp
+     :4736).  A decode that destroys it is refuted whatever it does to the header.
+
+=== 4. THE PRE-REGISTERED BISECTION, EVALUATED ON EVERY C-RAM IMAGE ===
+   arm 1 = "iw33 does not carry"     arm 2 = "P_SHIFT = 7"
+   ⚠ P_SHIFT and ACC_SHIFT are TIED in the source (ACC_SHIFT = 22 - P_SHIFT), so
+     "P_SHIFT = 7" has TWO possible meanings and they are NOT the same experiment.
+
+   --- LIVE armK, base 0x9B ---
+     SHIPPED             iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm1 no-carry       iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm2a P7 TIED  15   iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm2b P7 UNTIED 16  iw30  +0.600  iw32  +0.360  iw33  +1.110  stored datum   9311353  CLIPS
+     arm1+2a             iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm1+2b             iw30  +0.600  iw32  +0.360  iw33  +0.750  stored datum   6291456  in range
+   --- coldboot , base 0x9B ---
+     SHIPPED             iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm1 no-carry       iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm2a P7 TIED  15   iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm2b P7 UNTIED 16  iw30  +0.600  iw32  +0.360  iw33  +1.110  stored datum   9311353  CLIPS
+     arm1+2a             iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm1+2b             iw30  +0.600  iw32  +0.360  iw33  +0.750  stored datum   6291456  in range
+   --- parametEQ, base 0x9B ---
+     SHIPPED             iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm1 no-carry       iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm2a P7 TIED  15   iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm2b P7 UNTIED 16  iw30  +0.600  iw32  +0.360  iw33  +1.110  stored datum   9311353  CLIPS
+     arm1+2a             iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm1+2b             iw30  +0.600  iw32  +0.360  iw33  +0.750  stored datum   6291456  in range
+   --- REVERB=CONCERT 1, base 0x9B ---
+     SHIPPED             iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm1 no-carry       iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm2a P7 TIED  15   iw30  +0.600  iw32  +0.720  iw33  +1.720  stored datum  14428403  CLIPS
+     arm2b P7 UNTIED 16  iw30  +0.600  iw32  +0.360  iw33  +1.110  stored datum   9311353  CLIPS
+     arm1+2a             iw30  +0.600  iw32  +0.720  iw33  +1.000  stored datum   8388608  CLIPS
+     arm1+2b             iw30  +0.600  iw32  +0.360  iw33  +0.750  stored datum   6291456  in range
+   --- REVERB=ROOM 1   , base 0x9B ---
+     SHIPPED             iw30  +0.500  iw32  +0.500  iw33  +1.320  stored datum  11072962  CLIPS
+     arm1 no-carry       iw30  +0.500  iw32  +0.500  iw33  +0.820  stored datum   6878658  in range
+     arm2a P7 TIED  15   iw30  +0.500  iw32  +0.500  iw33  +1.320  stored datum  11072962  CLIPS
+     arm2b P7 UNTIED 16  iw30  +0.500  iw32  +0.250  iw33  +0.910  stored datum   7633633  in range
+     arm1+2a             iw30  +0.500  iw32  +0.500  iw33  +0.820  stored datum   6878658  in range
+     arm1+2b             iw30  +0.500  iw32  +0.250  iw33  +0.660  stored datum   5536481  in range
+
+   ★ THE BRIEF PREDICTED  arm1 -> 1.000 FS  and  arm1+P7 -> 0.750 FS.
+     arm1 measured: stored datum = 8388608.  FS = 8388607.  EXCESS = +1.
+     ⇒ "1.000 FS" is 2**23 = 8388608, which is FS + 1: THE ARM STILL CLIPS, every frame,
+       in both buckets.  It converts a 1.720 x FS clip into a 1.0000001 x FS clip.
+
+=== 5. IS `P_SHIFT = 7' Q-CONSISTENT?  THE SOURCE'S OWN ANSWER ===
+   upd6383.h, verbatim:
+     //
+     // THE FIXED POINT (notes/dsp-alu-biquad.md sect. 5).  What is FORCED is
+     // only the TOTAL: a coefficient is scaled by 2^22 (Q1.22 -- MEASURED from
+     // the firmware's own scale constants) while a datum is Q0.23, so the
+     // product must be brought back down by 22 bits somewhere between the
+     // multiplier and the memory.  WHERE the 22 is split between the multiplier
+     // output and the accumulator read is NOT determined -- every split from 2
+     // to 12 gives numerically identical results on all eleven ROM coefficient
+     // banks.  6 is chosen because it keeps the whole 48-bit product inside the
+     // 44-bit ALU with room for the five-term sum, which is the only physical
+     // consideration that discriminates at all.
+     int P_SHIFT   = 6;
+     int ACC_SHIFT = 16;
+     u32 m_pshift_mode = 0;
+
+   ⇒ THE TOTAL 22 IS FORCED AND MEASURED: coefficients are **Q1.22**, data Q0.23.
+     P as a datum is (coef * L) >> (P_SHIFT + ACC_SHIFT) = >> 22, WHICHEVER split.
+     A Q0.23 coefficient would want 23; a Q1.22 one wants 22.  22 SHIPS.
+     ⇒ "P_SHIFT = 7 is the Q-consistent value" is FALSE unless the tie is broken,
+       and breaking it contradicts the MEASURED Q1.22 coefficient scale.
+
+   The three ladder coefficients read as Q1.22 (value / 2**22):
+     C[0x9B] = 0x4CCCCC =  +5033164  ->  Q1.22 +1.200000   Q0.23 +0.600000
+     C[0x9C] = 0x400000 =  +4194304  ->  Q1.22 +1.000000   Q0.23 +0.500000
+     C[0x9D] = 0x400000 =  +4194304  ->  Q1.22 +1.000000   Q0.23 +0.500000
+   ⇒ 1.2 / 1.0 / 1.0 exactly, in Q1.22.  Round coefficients, not noise.
+
+   Is a TIED split even observable?  P as a datum, both ways, on these operands:
+     C[0x9B]^2 : split 6/16 -> 6039795   split 7/15 -> 6039795   IDENTICAL
+     C[0x9C]^2 : split 6/16 -> 4194304   split 7/15 -> 4194304   IDENTICAL
+   ⇒ single-term identity is exact (floor division by 2**m then 2**n == by 2**(m+n)).
+     A MULTI-TERM sum can differ by 1 LSB because each product truncates separately,
+     so the arm is NOT provably bit-identical -- it was predicted to be UNMOVED at the
+     FS scale, which is a falsifiable prediction, and §227 built and ran it:
+
+=== 6. AND HERE IS WHAT THE BUILD MEASURED (§227, four arms, 30 s each) ===
+   arm  env                   P/ACC TOT | §S1 quiet  §S1 loud | iw34 datum | m_rf[0x8D]  §41
+   N    (none, SHIPPED)        6/16  22 | 4.924 %    4.920 %  | 14 428 403 | 0x009B26 ✔  ✔
+   O    UPD6383_NOCARRY=1      6/16  22 | 0.379 %    0.379 %  |  8 388 608 | ABSENT   ✘  ✔
+   P    UPD6383_PSHIFT=1       7/15  22 | 4.924 %    4.920 %  | 14 428 403 | 0x009B26 ✔  ✔
+   Q    UPD6383_PSHIFT=2       7/16  23 | 2.273 %    2.141 %  |  9 311 353 | 0x004D93 ✘  ✔
+
+   ★ arm P: the ENTIRE §S1 saturation-census block is BIT-IDENTICAL to arm N over
+     269 279 999 conversions -- the only differing line is the header text
+     "pre-clamp acc >> 16" vs ">> 15".  THE TIED MOVE IS A MEASURED NO-OP.
+   ★ arm O: iw34 clips 706040/706040 quiet and 313960/313960 loud -- IDENTICAL to
+     shipped.  Its 13x clip-rate "win" is 117 655 680 accumulate steps refusing to
+     add, and §104 body-0 goes 100 % input-INDEPENDENT (first DIFFERS at -1 = never).
+   ⚠⚠ §41 is UNMOVED in EVERY arm, including the one that halves every product.
+      §41 DOES NOT GUARD P_SHIFT.  m_rf[0x8D] = 39 718 is the guard that fires.
+   ⛔ §54 is quiet-in 826 040 -> 826 040 SILENT / 0 LOUD (peak 0) in all four arms,
+      and §70/§211 are mean 0.0 span 0 in both buckets in all four.  NO AUDIO CLAIM.

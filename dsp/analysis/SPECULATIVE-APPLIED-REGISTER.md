@@ -16445,3 +16445,272 @@ Evidence grade: §0/§2/§3 **MEASURED and FORCED**, from two archived captures,
 parameter tables and the corpus, **with no run**; §1 **MEASURED**; §4 **MEASURED with its
 limitation named**; §5 **the pass's own negative, stated**; §6 **a decline, pre-argued**;
 §8 **SPECULATIVE, pre-registered**. `dsp/verify.py`: **BYTE-MATCH OK.**
+
+---
+
+## §227 — ★★★★ BOTH HALVES OF §226's PRE-REGISTERED BISECTION ARE **REFUTED**, ONE FROM DISK AND ONE BY A **MEASURED NO-OP**; AND THE REVERB CAPTURE §226 ASKED FOR **REFUTES §226's OWN POSITIVE HALF**: `C-RAM[0x90..0xB4]` IS **NOT** A BOOT-FIXED BANK — IT IS **UNIT 1's (THE REVERB's) PARAMETER BANK**, AND A PRESET CHANGE MOVES **13 OF THE HEADER'S 20 WALK CELLS AND 2 OF THE 3 LADDER CELLS**
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-07-31**. Register head **§227**.
+Build lane. Two env gates added (**both DEFAULT OFF / DEFAULT SHIPPED**), **nothing shipped as a
+default flip**. Four MAME arms + two new host captures, both **screen-verified**.
+
+| arm | env | log |
+|---|---|---|
+| **N** | *(none)* — the new default | `data/N_227.log.gz` |
+| **O** | `UPD6383_NOCARRY=1` | `data/O_227.log.gz` |
+| **P** | `UPD6383_PSHIFT=1` (TIED 7/15) | `data/P_227.log.gz` |
+| **Q** | `UPD6383_PSHIFT=2` (UNTIED 7/16) | `data/Q_227.log.gz` |
+| **REV0** | `REVIDX=0` → **ROOM REVERB 1** (screen-verified) | `notes/data/kn5000_dsp1_upload_roomreverb1.txt` |
+| **REV4** | `REVIDX=4` → **CONCERT REVERB 1** (screen-verified) | `notes/data/kn5000_dsp1_upload_concertreverb1.txt` |
+
+Instruments: `dsp/tools/f31carry.py` (**18 self-tests, 7 external, printed first**),
+`dsp/tools/hdrbase.py --score` (**3 controls**), `dsp/tools/reverb_select.lua`.
+Archived output: `data/F31CARRY_227.txt`, `data/HDRBASE_SCORE_REV_227.txt`.
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ★★★★ **`f31 == 1` IS THE ISA'S ONLY ACCUMULATE, SO "iw33's `f31 = 1` should not carry" IS REFUTED FROM DISK.** It is `HI_ACC_ADD` — **1309 of 2989** non-C-format corpus words, **695 of the 1178** ALU-decoded ones. op 0 LOADs, op 2 HOLDs *without a product*, op 3 is given HOLD's behaviour: **there is no second way to add two products.** The **PARAMETRIC EQ** biquad — the one program `programs.tsv` grades **SOLVED** and `upd6383.cpp:4736` validates against its designer at **0.198 dB** — sums five products through `f31 == 1` words `w6..w10`, which this repo's own generator renders **`acc += P`**. Without the carry `H(z)` collapses to `makeup · (−a2) · z⁻²`: a delayed gain, not an EQ. | **FORCED** (corpus + the generated listing) |
+| **B** | ★★★★ **AND IT DOES NOT EVEN FIX THE CLIP IT WAS PROPOSED TO FIX.** Drop the carry and `iw34` converts `(C[0x9D] << 16) + (C[0x9C]² >> 6) = 549 755 813 888`, datum **`8 388 608` = `2²³` = `FS + 1`**. **MEASURED live in arm O**: `§S1 iw34 q 706040/706040 l 313960/313960` — **100 % clip in both buckets, exactly as on the shipped default.** The brief's *"1.000 FS"* is one LSB above the rail. | **MEASURED** |
+| **C** | ★★★★ **ARM O IS THE GENERALISED GUARD FIRING, WITH A NUMBER.** `§S1` TOTALS fall **`4.924 % → 0.379 %` quiet and `4.920 % → 0.379 %` loud** — a **13×** drop, the most attractive statistic this project prints — and it is bought by **`117 655 680` accumulate steps refusing to add their term**. Two independent regressions come with it: **`§104` body-0 goes 100 % input-INDEPENDENT** (`first acc / mem / L DIFFERS at −1 = never`, vs `90 / 89 / 90` shipped), and the register-file calibration **`m_rf[0x8D] = 0x009B26` DISAPPEARS ENTIRELY** (`§160` lists 41 non-zero cells with **no `8D`** and a spurious `53=7D7000`). | **MEASURED** |
+| **D** | ★★★★ **"THE Q-CONSISTENT `P_SHIFT = 7`" IS FALSE, AND THE TIED MOVE IS A MEASURED NO-OP.** The core's own header records the total as **FORCED and MEASURED**: *"a coefficient is scaled by 2^22 (**Q1.22 — MEASURED from the firmware's own scale constants**) while a datum is Q0.23, so the product must be brought back down by **22** bits … every split from 2 to 12 gives numerically identical results."* Q-consistency for a **Q1.22** coefficient is **22**, which is what ships. Arm P (7/15, tied) is the first *measurement* of that comment: **the entire `§S1` SATURATION CENSUS block is BIT-IDENTICAL to arm N over 269 279 999 conversions** — the only differing line is the header text `pre-clamp acc >> 16` → `>> 15`. `m_rf[0x8D] = 39 718` unchanged; `§41` unchanged; `rule21_all` identical. | **MEASURED** |
+| **E** | ★★★ **THE UNTIED MOVE (7/16, total 23) FAILS ITS PRE-REGISTERED FALSIFIER 2 : 1, AND `§41` WOULD NOT HAVE CAUGHT IT.** Arm Q: **`m_rf[0x8D] = 0x004D93 = 19 859`, exactly half of the pre-registered `0x009B26 = 39 718`.** Meanwhile **`§41` is UNMOVED** (`unit0 0x400000  unit1 0x178D0B`) because it is a C-RAM *level*, not a product. ⇒ ⚠ **`§41` DOES NOT GUARD `P_SHIFT`. `m_rf[0x8D]` DOES.** And arm Q **still clips**: `iw34 = 9 311 353 = 1.110 × FS`, 706040/706040 and 313960/313960. | **MEASURED** |
+| **F** | ★★★★★ **THE REVERB CAPTURE REFUTES §226 ITEM D.** A preset change **`CONCERT REVERB 1 → ROOM REVERB 1`** rewrites **23 cells, every one of them inside `0x90..0xB4`, and NOTHING anywhere else in the 256-cell C-RAM**. Of the header's own 20-cell walk `0x90..0xA3`, **13 move**; of the three ladder cells, **`0x9B` and `0x9C` move**. ⇒ **`C-RAM[0x90..0xB4]` IS UNIT 1's PER-ALGORITHM PARAMETER BANK.** It looked "boot-fixed" only because both §226 captures carried the **same** reverb. | **MEASURED** |
+| **G** | ★★★★ **AND THE CONTROL THAT MAKES F PROOF-GRADE PASSED.** An **independent 45-second panel run** — boot, SOUND menu, REVERB page, 40 DOWN presses, 4 UP presses — landing on CONCERT REVERB 1 reproduces the **2026-07-22 archived cold-boot capture on ALL 256 C-RAM CELLS, 0 differ.** ⇒ the replayer is faithful, the navigation perturbs nothing, and **the cold-boot default reverb is CONCERT REVERB 1** (not ROOM REVERB 1, as §226 §3.1/§4 assumed when it labelled its images *"CHORUS + RR1"*). Both arms are **screen-verified**: `notes/data/kn5000_dsp_{room,concert}reverb1_screen.png`. | **MEASURED** |
+| **H** | ★★★ **THE `1.720 × FS` OVERFLOW IS ITSELF PRESET-DEPENDENT, WHICH IS THE §226 PATTERN AGAIN.** On CONCERT REVERB 1 the shipped ladder is **`+1.720 FS`**; on ROOM REVERB 1 it is **`+1.320 FS`** — and the no-carry arm lands **in range (`+0.820`) on ROOM 1 while still clipping on CONCERT 1.** A "fix" whose verdict flips with the user's reverb knob is not a fix. | **MEASURED** |
+
+**VERDICT — `NO DEFAULT FLIP SHIPS.` Two env gates ship OFF; the `§227` blocker moves.**
+The addresses are **not** settled after all: **both candidate bases are now measured to be
+somebody's per-algorithm parameter bank** — `0x00` is unit 0's (§226) and `0x90` is unit 1's
+(here). ⛔ **This does NOT re-open base `0x00`** (§S2 measures the cursor at `0x9B`, and the
+`0x00` arm is worse on every image). It re-opens what `0x90` *means*.
+
+---
+
+## 1. RULE 20 — the self-tests, printed BEFORE any interpretation
+
+`python3 dsp/tools/f31carry.py` — **18 of 18 PASS**, **7 of them external**:
+
+```
+   EXT §224 §S2 iw33 @0x9B = 945 579 874 058                            PASS
+   EXT §224 §S2 iw30 bus   = 329 853 435 904                            PASS
+   EXT §224 §S2 iw32 P     = 395 824 060 170                            PASS
+   EXT §S1  iw34 pre-clamp datum = 14 428 403                           PASS
+   EXT §S3  store #1360 datum    =  6 039 795                           PASS
+   EXT §227 CONCERT REVERB 1 capture == archived cold boot (256 cells)  PASS   <- NEW, and it CAN fail
+   EXT §227 ROOM REVERB 1 moves 23 cells, ALL inside 0x90..0xB4         PASS   <- NEW, two-sided
+   CONTROL ladder @0x0B != §S2 (must differ)                            PASS   <- fails in the other direction
+```
+
+`python3 dsp/tools/hdrbase.py --score <ctrl> <test>` — **3 of 3 PASS**, and the pair is
+**orientation-sensitive**: run with ROOM 1 as the control and limbs 2 and 3 **FAIL**, which is how
+the cold-boot default reverb was identified in the first place. ⚠ **A capture-pair scorer whose
+control limb cannot fail would have reported the same 23 cells and told us nothing about which
+image is the baseline.**
+
+---
+
+## 2. THE LADDER, DECODED — AND WHO CONSUMES IT
+
+```
+   iw   raw          f31  ST  END  SRC   ACT   cl   what it does
+   iw30 009AA00200   5    Y   .    0x08  0x00  A    ADD   acc = 0 + C[b+0]<<16 + 0
+   iw32 0000AFF207   0    .   .    0x08  0x07  A    LOAD  acc = C[b+0]^2 >> 6       (ACT 0x07 = store bus)
+   iw33 0412A00200   1    Y   Y    0x08  0x00  A    ADD   acc = carried + C[b+2]<<16 + C[b+1]^2>>6
+   iw34 0000AFF407   0    .   .    0x10  0x07  A    LOAD  SRC 0x10 = THE ACCUMULATOR -> ACT 0x07 STORES it
+```
+
+⚠ **THE ONE-SLOT PRODUCT PIPELINE, restated because it is where `iw32`'s `C[0x9B]²` comes from.**
+`m_p` is formed at the **bottom** of `exec_alu()`, so slot *N*'s accumulator consumes slot *N−1*'s
+product. `iw32` is at cursor `0x9C` and its `P` is `C[0x9B]²`; `iw33` is at `0x9D` and its `P` is
+`C[0x9C]²`. **Pre-increment trap, sixth occurrence** — it is why the ladder reads "off by one cell".
+
+★ **`iw34` IS THE CONSUMER, and that is what `§S1`'s iw34 row is**: `SRC 0x10` puts the
+accumulator on the operand bus and `ACT 0x07` stores it. So the ladder's whole product is one
+D-RAM datum per frame, and it is **input-independent** (`§S2` min == max, both buckets, every arm).
+
+---
+
+## 3. ARM O — WHAT `f31 == 1` NOT CARRYING ACTUALLY DOES
+
+```
+                                     arm N (shipped)          arm O (NOCARRY=1)
+   §227 NOCARRY fired                 0                        117 655 680
+   §S1 TOTALS quiet          9 178 556/186 394 560  4.924 %     706 040/186 394 560  0.379 %
+   §S1 TOTALS loud           4 077 722/ 82 885 440  4.920 %     314 025/ 82 885 440  0.379 %
+   §S1 iw34   datum          14 428 403  (1.720 FS)             8 388 608  (FS + 1)
+   §S1 iw34   clips          706040/706040 l 313960/313960      706040/706040 l 313960/313960   UNMOVED
+   §S2 iw33   carried        395 824 060 170                    0
+              bus            274 877 906 944                    274 877 906 944
+              P              274 877 906 944                    274 877 906 944
+              = result       945 579 874 058                    549 755 813 888
+   §104 body-0 first DIFFERS at acc/mem/L    90 / 89 / 90       -1 / -1 / -1   (= NEVER)
+   rule21_all body 0         acc 2 = I 0 + FREE 2 ...           (no body-0 markers at all)
+   rule21_all kernel A D-I   27 / 21 / 18                       22 / 11 / 13
+   §160 m_rf[0x8D]           0x009B26 = 39 718                  ABSENT (and a spurious 53=7D7000)
+   §S3 entry store           #1357 iw19 1 650 061 (0.1967 FS)   #1360 iw33 6 039 795 (0.7200 FS)
+   §81 kernel iw12 quiet     239 225 266 218                    0
+   §54 / §70 / §211          unchanged                          unchanged
+```
+
+★★★★ **THE GUARD, IN ITS SHARPEST FORM YET.** The brief asked for it: *"a clip rate that falls
+because a term stopped being added is only a fix if the term was provably not meant to be there."*
+Here **117 655 680 terms stopped being added**, the term is **provably meant to be there** (item
+A), the clip the arm targeted **did not move at all**, and three unrelated measurements broke.
+⇒ **the 13× clip-rate improvement is a REGRESSION wearing a good number.**
+
+---
+
+## 4. ARMS P AND Q — THE `P_SHIFT` BISECTION, AND WHAT ACTUALLY GUARDS IT
+
+```
+   arm  P_SHIFT ACC_SHIFT TOTAL | §S1 quiet   §S1 loud  | iw34 datum   | m_rf[0x8D]      §41
+   N        6      16      22   | 4.924 %     4.920 %   | 14 428 403   | 0x009B26 ✔     0x400000/0x178D0B ✔
+   P        7      15      22   | 4.924 %     4.920 %   | 14 428 403   | 0x009B26 ✔     0x400000/0x178D0B ✔
+   Q        7      16      23   | 2.273 %     2.141 %   |  9 311 353   | 0x004D93 ✘     0x400000/0x178D0B ✔
+```
+
+* **Arm P is a MEASURED NO-OP.** Diffing the whole `§S1` block N vs P gives **2 lines, and both are
+  the same header sentence** (`pre-clamp acc >> 16` vs `>> 15`). Every per-`iw` min/max/clip row is
+  identical; `rule21_all` is identical; `§S3`'s entry store is identical (`#1357 iw19 1 650 061`).
+  The internal 44-bit values all halve — `iw33 945 579 874 058 → 472 789 937 029` — because they
+  are at the internal scale, and `472 789 937 029 >> 15` is `14 428 403` again.
+  ⇒ ★★ **"`>> 6` is one bit short of Q-consistency" is not merely an observation without a licence
+  — under the tie it is not even OBSERVABLE.**
+* **Arm Q is the only way to make `P_SHIFT` matter, and it breaks a calibration.**
+  `m_rf[0x8D] = 19 859` is **exactly half** of `39 718 = 2 603 010 048 >> 16`, the value
+  `PREDICT_D0_producer.md` pre-registered as a known-answer control. And it **still clips**.
+* ⚠ **A CORRECTION TO THE STANDING FALSIFIER LIST.** `§41` is quoted everywhere as one of the
+  three things that "calibrate the chain end to end" and gate `P_SHIFT`. **It does not**: it reads
+  C-RAM levels `0x06`/`0x86` and is unmoved by a 2× product rescale. Of the three named guards only
+  **`m_rf[0x8D]`** actually fires. SINGLE DELAY's `+0.02149296` is an offline ROM-coefficient
+  product and was not exercised by any arm here.
+
+---
+
+## 5. THE REVERB-PRESET CAPTURE — §226's OWN NAMED THREAT, REALISED
+
+```
+   CONCERT REVERB 1 (cold-boot default)  vs  ROOM REVERB 1
+   cells differing anywhere : 23   93 94 95 97 9A 9B 9C 9E 9F A0 A1 A2 A3 A4 A6 A7 A8 AC AD AE B2 B3 B4
+   [00..4F] unit-0 effect bank + spare  :  0 of 80 differ   ALL INVARIANT
+   [50..8F] the two linear RAMPS        :  0 of 64 differ   ALL INVARIANT
+   [90..B4] "THE HEADER'S FIXED BANK"   : 23 of 37 differ
+   [90..A3] the header's own 20-cell WALK : 13 of 20 differ
+   [9B..9D] THE LADDER CELLS            :  2 of  3 differ   9B 9C
+
+   ladder:  CONCERT 1  C = 4CCCCC/400000/400000  iw30 +0.600 iw32 +0.720 iw33 +1.720  CLIPS
+            ROOM 1     C = 400000/333333/400000  iw30 +0.500 iw32 +0.500 iw33 +1.320  CLIPS
+```
+
+**In Q1.22 the ladder cells are round numbers and they read as reverb gains**, which is the
+independent confirmation that the bank is the reverb's:
+
+```
+   CONCERT REVERB 1 (2.00 s, HIGH DAMP -4.0)  C[9B] 1.200  C[9C] 1.000  C[9D] 1.000
+   ROOM    REVERB 1 (0.60 s, HIGH DAMP -6.0)  C[9B] 1.000  C[9C] 0.800  C[9D] 1.000
+```
+
+### 5.1 What this RETIRES, precisely
+
+| §226 claim | status |
+|---|---|
+| **item D** *"the bank `headerdecode.md` §5 predicted is FOUND: `C-RAM[0x90..0xB4]`, boot-fixed, 15 of 20 header cells invariant, **ladder cells `9B/9C/9D` ALL invariant**"* | ⛔ **REFUTED IN ITS STRONG FORM.** The invariance was measured on **one pair carrying the same reverb**. Under a preset change **13 of 20** move and **`9B`/`9C`** move. **The bank is unit 1's.** |
+| *"22 of the 37 cells are written by NO algorithm at all"* | ⚠ **THAT IS A GAP IN THE ROM's T1 MAP, NOT A PROPERTY OF THE CHIP.** Of the 22, **15 move under a preset change**: `93 94 95 97 9A 9B 9C A1 A2 A3 A4 AD AE B3 B4` — **including all three ladder cells' neighbours and `9B`/`9C` themselves**. The other 8 movers (`9E 9F A0 A6 A7 A8 AC B2`) *are* in the T1 map, so the map is right where it speaks and silent where it does not. Prefer the **capture** over the derived join — §226 §8 said so and this is the instance. |
+| **item D's upload half** — *"filled by the boot-time `cmd 0x02` runs at base `0x90` (30) + `0xAE` (7)"* | ✔ **SURVIVES, with its meaning changed**: those runs upload **the cold-boot reverb's** coefficients. `headerdecode.md` §7.6 is still answered — the destination comes from an `ldptr` in a scratch I-RAM slot, not from the packet. |
+| §226 §9 item 3 *"the header/body overlap on `[0x90..]` is REAL and OPEN"* | ★★★★ **PROMOTED TO THE BLOCKER.** It is not an overlap; on the shipped decode the canned header reads **the reverb's live parameters** as its own coefficients. |
+| *"CHORUS + ROOM REVERB 1"* as the label on the cold-boot image (§226 §3.1/§4/§G) | ⚠ **WRONG PRESET.** The cold-boot reverb is **CONCERT REVERB 1**, proven by a 256-of-256 cell match against an independent screen-verified run. §226 item G's attribution of `9F/A0/A7/A8/AC/B2` to *"ROOM REVERB 1's `op76` damping triples"* names the wrong preset (the cells are right). |
+
+---
+
+## 6. THE ARM, QUOTED — `§54` FIRST, THEN RULE 19, EVERY ARM
+
+⚠ **`§54` GRADED FIRST, AS INSTRUCTED. Identical in all four arms, and it is a NULL:**
+
+```
+   §54  quiet-in 826 040 -> 826 040 SILENT / 0 LOUD (peak 0)
+        loud-in  313 960 -> 313 960 silent / 0 loud (peak 0)          N, O, P, Q -- ALL FOUR
+```
+
+The quiet window is **not** full scale (peak `0`) and the loud peak does **not** exceed the quiet
+peak (both `0`). **There is no output to claim and none is claimed. This pass makes no audio claim
+of any kind.**
+
+```
+   RULE 19, mean AND AC span, both buckets, every arm:
+   §70  ACCA@w73   N/O/P/Q   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   §211 ACCB@w78   N/O/P/Q   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+```
+
+**Body 0's `26/28/27` over `0/0/0`:** the `0/0/0` shipped null **HOLDS** — `rule21_all.py` gives
+body 0 `acc 2 = I 0 + FREE 2 | mem 9 = I 0 + FREE 9 | L 4 = I 0 + FREE 4` in **both** arm N and
+arm P, and kernel A's `D-I` is `27/21/18` in both, matching §225's `W4′-c`. **`26/28/27` is the
+`NOZ05` send-open arm's figure and no arm here touched that rig, so it is unaffected by this
+pass.** ⚠ In arm O body 0 produces **no markers at all**; in arm Q kernel A degrades to
+`21/13/12` with `6/8/6` UNDETERMINED.
+
+**Arm N is the inertness control for the `constexpr → member` refactor:** arm N vs §225's arm M
+(same vehicle, same env) is **4 diff lines and every one of them is a new `§227` announcement —
+NOT ONE is a measured value.**
+
+---
+
+## 7. WHAT SHIPPED
+
+1. **`UPD6383_NOCARRY`** — env, **DEFAULT OFF**, two-sided, unconditional fired count. Diagnostic,
+   with the from-disk refutation written into `upd6383.h` above the member so it cannot be
+   re-proposed as a fix.
+2. **`UPD6383_PSHIFT`** — env, **DEFAULT 0 = the shipped 6/16**, three-way (`1` = tied 7/15,
+   `2` = untied 7/16), announced unconditionally with `P_SHIFT`, `ACC_SHIFT` and their TOTAL.
+   `P_SHIFT`/`ACC_SHIFT` are no longer `constexpr`; **arm N proves the refactor inert.**
+3. **`dsp/tools/f31carry.py`** (new, 18 self-tests / 7 external) and
+   **`dsp/tools/hdrbase.py --score`** (new mode, 3 controls, orientation-sensitive).
+4. **`dsp/tools/reverb_select.lua`** (new) and the two screen-verified captures.
+5. ⛔ **NO DEFAULT FLIP. NO DECODE CHANGE ON THE SHIPPED PATH.** `dsp/verify.py`: **BYTE-MATCH OK.**
+
+---
+
+## 8. WHAT THIS PASS IS BLIND TO
+
+* **Two reverb presets of fourteen, one board, one boot.** ROOM 1 and CONCERT 1 differ on 23 cells;
+  whether every preset writes the same 23 is **not** measured. The claim made is the weak one and
+  it is enough: **at least one preset change moves the ladder cells.**
+* **Nothing here decides what the header's cursor base *should* be.** It shows that the shipped
+  base points at unit 1's parameter bank. ⛔ It does **not** rehabilitate `0x00` (unit 0's bank,
+  and worse on every image), and it does **not** touch row 25.
+* **`§S1`'s 4.924 % is unexplained and untouched.** No arm here was designed to move it, and the
+  two that did moved it by breaking something.
+* **The one-slot product pipeline is a property of THIS core's `exec_alu()` ordering**, not a
+  measured property of the chip. If it is wrong, `iw32`'s `C[0x9B]²` is wrong with it.
+* **SINGLE DELAY's `+0.02149296` was never exercised.** It is named as a `P_SHIFT` falsifier
+  everywhere and no arm ran it; only `m_rf[0x8D]` actually fired.
+
+---
+
+## 9. THE NEXT EXPERIMENT, PRE-REGISTERED
+
+1. ★★★★ **THE BLOCKER IS NOW: WHY DOES A CANNED, EFFECT-INDEPENDENT HEADER READ UNIT 1's
+   PARAMETER BANK?** Both candidate bases are measured per-algorithm banks. Three readings, and
+   they are separable: (a) **row 25 is wrong** — `ldptr` does not seed the coefficient cursor
+   (K3 has said so all along) and the kernel's base comes from elsewhere; (b) the base is right
+   and the **header legitimately reads the reverb's gains** (it does run immediately before the
+   reverb's own CALL); (c) the **cursor-advance map** is wrong, so the header's 20 cells are not
+   `base+0x00..base+0x13`. ⚠ Whoever takes this must produce a **falsifier that distinguishes
+   them**, not a base that makes a number smaller — §226 and §227 both caught that failure mode.
+2. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS.** `dsp/tools/reverb_select.lua REVIDX=n` +
+   `hdrbase.py --score` is one command per preset. If the 23 moving cells are the same set every
+   time, that set **is** the reverb's parameter block and its boundaries are then measured, not
+   inferred from the ROM's T1 map. **Cheap, and it bounds item F.**
+3. ★★ **RE-DERIVE `§226` ITEM G's ATTRIBUTIONS AGAINST THE RIGHT PRESET.** The 10 runtime-poke
+   cells were named against ROOM REVERB 1's parameter map; the board was on **CONCERT REVERB 1**.
+4. ⛔ **NOT `UPD6383_NOCARRY` AS A FIX** (item A/B/C). ⛔ **NOT `P_SHIFT`** — tied is a measured
+   no-op, untied halves `m_rf[0x8D]`. ⛔ **NOT a frame-start cursor seed** (§226). ⛔ **NOT base
+   `0x00`** (§226, and worse on all five images here).
+5. ⚠ **AND FIX THE FALSIFIER LIST WHEREVER IT IS QUOTED**: `§41` does **not** guard `P_SHIFT`.
+
+**GRADES.** §0 items A **FORCED**; B, C, D, E, F, G, H **MEASURED**; §5.1's re-attributions
+**MEASURED**; §9.1's three readings **SPECULATIVE, pre-registered, and required to be separated
+before any of them is tried**. `dsp/verify.py`: **BYTE-MATCH OK.**

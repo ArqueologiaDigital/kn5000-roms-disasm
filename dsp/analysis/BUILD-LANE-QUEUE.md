@@ -290,36 +290,81 @@ must move store #1357's `1 650 061` and #1360's `6 039 795`, and `§S1`'s 4.924 
 
 ---
 
-## 10. ★★★★ THE **ALU DECODE** OF `iw30 / iw32 / iw33`. **THE BLOCKER.**
+## 10. ~~THE **ALU DECODE** OF `iw30 / iw32 / iw33`~~ — ✅ **CLOSED by §227, BOTH ARMS REFUTED**
 
-**Grade: the ADDRESSES are settled (§226, MEASURED); the ALU reading is UNDECIDED.**
-Source: `§226`, `HEADER-BANK_findings.md` §9, `§224` §1.
+> **DONE, four arms, and the guard fired on the attractive one.**
+> * **arm 1 `UPD6383_NOCARRY`** — ⛔ **REFUTED FROM DISK BEFORE IT RAN**: `f31 == 1` is `HI_ACC_ADD`,
+>   **1309 of 2989** non-C-format corpus words and **695 of 1178** ALU-decoded; op 0 LOADs, op 2
+>   HOLDs *without a product*, op 3 gets HOLD's behaviour ⇒ it is the **only accumulate the ISA
+>   has**, and the **PARAMETRIC EQ** biquad (grade SOLVED, validated at **0.198 dB** against its
+>   designer) sums five products through `f31 == 1` words `w6..w10`, rendered **`acc += P`**.
+>   **AND IT DOES NOT FIX THE CLIP:** `iw34` becomes `8 388 608` = `2²³` = **FS + 1**, clipping
+>   `706040/706040` quiet and `313960/313960` loud — **unmoved from shipped.** Its `§S1`
+>   `4.924 % → 0.379 %` is **117 655 680 accumulate steps refusing to add**, and it takes `§104`
+>   body-0 to **100 % input-INDEPENDENT** and makes **`m_rf[0x8D]` vanish**.
+> * **arm 2 `UPD6383_PSHIFT`** — the phrase had **two** meanings and they are different
+>   experiments. **TIED (7/15, total still 22): a MEASURED NO-OP** — the entire `§S1` block is
+>   BIT-IDENTICAL to the default over 269 279 999 conversions. **UNTIED (7/16, total 23):
+>   `m_rf[0x8D]` halves `0x009B26 → 0x004D93`** and it *still* clips at `1.110 × FS`.
+>   The core's own header records the total 22 as **FORCED**: coefficients are **Q1.22, MEASURED**.
+> * ⚠⚠ **A STANDING CORRECTION:** `§41` is quoted everywhere as a `P_SHIFT` guard. **It is not** —
+>   it reads C-RAM *levels* and is unmoved by a 2× product rescale. **`m_rf[0x8D] = 39 718` is the
+>   one that fires.**
+> **Both gates ship OFF/inert.** `P_SHIFT`/`ACC_SHIFT` are no longer `constexpr`; **arm N vs
+> §225's arm M is 4 diff lines and NOT ONE is a measured value.**
 
-`iw33`'s three terms are `CARRIED 0.720` + `BUS C[0x9D] = 0.500` + `P C[0x9C]² = 0.500`
-= **`1.720 × FS`**, and **not one of them is a sample**. §226 established the addresses are right
-and the constants boot-fixed, so the defect is in **what the three words do**.
+## 11. ~~CAPTURE A **REVERB-PRESET CHANGE**~~ — ✅ **DONE by §227, AND IT REFUTED §226**
 
-**The one untested reading:** `iw33`'s `f31 = 1` should **not CARRY** `iw32`'s accumulator.
-Drop the carried term ⇒ `0.500 + 0.500 = 1.000 FS` (still at the rail); drop it **and** apply the
-Q-consistent `P_SHIFT = 7` ⇒ `0.500 + 0.250 = 0.750 FS`, in range.
-⚠ **BISECT — two changes at once is not an experiment.**
-⛔ **`P_SHIFT` may NOT move on a number alone** — `§41` (`0x400000 / 0x178D0B`),
-`m_rf[0x8D] = 0x009B26` and SINGLE DELAY's validated `+0.02149296` three-factor product calibrate
-the chain end to end, and `ACC_SHIFT = 22 − P_SHIFT` ties the two.
-**Falsifiers:** `§41`; SINGLE DELAY's `+0.02149296`; `§S3`'s ladder (store #1357 `1 650 061`,
-#1360 `6 039 795`); `§S1`'s `4.924 %` quiet / `4.920 %` loud; and **PARAMETRIC EQ + SINGLE DELAY
-must stay bit-identical** — they carry **zero** squaring words between them and share the header,
-so a header-only change must move them **not at all**.
+> **DONE, two screen-verified captures, and the answer is the one §226 named as its own threat.**
+> `CONCERT REVERB 1 → ROOM REVERB 1` rewrites **23 cells, every one inside `0x90..0xB4` and
+> NOTHING else in the 256-cell C-RAM**: `[00..4F]` **0 of 80**, `[50..8F]` **0 of 64**,
+> the header's own walk `[90..A3]` **13 of 20**, and the ladder cells `[9B..9D]` **2 of 3**
+> (`0x9B`, `0x9C`). ⇒ **`C-RAM[0x90..0xB4]` IS UNIT 1's PER-ALGORITHM PARAMETER BANK**, not a
+> boot-fixed one; it looked fixed only because both §226 captures carried the same reverb.
+> ★ **The control:** an independent 45 s panel run landing on CONCERT REVERB 1 reproduces the
+> archived cold-boot capture on **all 256 cells, 0 differ** ⇒ **the cold-boot default reverb is
+> CONCERT REVERB 1**, so every *"CHORUS + RR1"* label in §226 names the wrong preset.
+> ★ In Q1.22 the ladder cells read as reverb gains: CONCERT `1.200/1.000/1.000`,
+> ROOM `1.000/0.800/1.000`. The ladder is `+1.720 FS` on one preset and `+1.320 FS` on the other —
+> **the overflow itself is preset-dependent.**
+> Tools: `dsp/tools/reverb_select.lua` (`REVIDX=n`) + `python3 dsp/tools/hdrbase.py --score <a> <b>`
+> (3 controls, **orientation-sensitive** — run it the wrong way round and two limbs fail, which is
+> how the cold-boot preset was identified).
 
 ---
 
-## 11. ★★★ CAPTURE A **REVERB-PRESET CHANGE** — one capture, no build
+## 12. ★★★★ WHAT DOES THE COEFFICIENT BASE `0x90` **MEAN**? **THE BLOCKER.**
 
-**Grade: the gap §226 named in its own result.** §226's invariance evidence is **one capture pair
-in which unit 1 did not change**. The ROM's per-algorithm map says a reverb preset rewrites
-`0x9E..0xB2`, and `0x9E/0x9F/0xA0` are **inside** the header's `0x90..0xA3` walk. If those move
-under the user's reverb knob, the header reads live reverb parameters and the "fixed bank" result
-needs qualifying. `python3 dsp/tools/hdrbase.py` scores a new capture in one line.
+**Grade: the MEASUREMENT is settled (§227); the reading is UNDECIDED.**
+
+Both candidate bases are now measured to be somebody's per-algorithm parameter bank — `0x00` is
+unit 0's (§226) and `0x90` is unit 1's (§227). So a **canned, effect-independent header** is
+reading the **user's reverb-preset coefficients** as its own. Three readings, and they are
+separable:
+
+1. **row 25 is wrong** — `ldptr` does not seed the coefficient cursor. **K3 FORCED that selector
+   `0x21` is not the implicit cursor and has said so all along**; row 25 has always been
+   SPECULATIVE. If it goes, the kernel's base comes from somewhere else and everything downstream
+   of `0x9B` is re-derived.
+2. **the base is right and the header legitimately reads the reverb's gains** — it does run
+   immediately before the reverb's own CALL, and an input stage reading a send level is not absurd.
+3. **the cursor-advance map is wrong**, so the header's cells are not `base+0x00..base+0x13`.
+
+⚠⚠ **A FALSIFIER THAT DISTINGUISHES THEM IS REQUIRED BEFORE ANY OF THEM IS TRIED.** §226 and §227
+both caught the same failure mode: *a base that makes a number smaller is not a reading.*
+⛔ **NOT base `0x00`** (unit 0's bank; `+2.733 FS` with PEQ loaded, 1.6× worse). ⛔ **NOT a
+frame-start seed** (§226; it cannot fail). ⛔ **NOT `NOCARRY`, NOT `P_SHIFT`** (§227).
+
+---
+
+## 13. ★★★ SWEEP THE OTHER TWELVE REVERB PRESETS — one command each, no build
+
+**Grade: the gap §227 named in its own result.** §227 measured **two** presets of fourteen. If the
+same 23 cells move for every preset, that set **is** the reverb's parameter block and its
+boundaries become MEASURED rather than inferred from the ROM's T1 map — which §227 showed is
+**silent on 15 of the 23** movers. `REVIDX=n dsp/tools/reverb_select.lua` then
+`python3 dsp/tools/hdrbase.py --score <a> <b>`. ★ Also re-derive **§226 item G's** ten runtime-poke
+attributions against the **right** preset.
 
 ---
 
@@ -374,6 +419,10 @@ needs qualifying. `python3 dsp/tools/hdrbase.py` scores a new capture in one lin
 - ⛔ **Mask bit 23 is CONFOUNDED** (six sites; it *is* the `m_rf`/`m_dram` split). **Bit 26 is dead
   end 30.** u64 mask **EXHAUSTED programmatically**: 61 of 64 bits referenced, the only three
   unreferenced (1, 2, 3) are **SET**. New gates are env vars, default OFF, unconditional fired-count.
+- ⚠⚠ **`§41` DOES NOT GUARD `P_SHIFT` (§227).** It reads the C-RAM output *levels* `0x06`/`0x86`
+  and is UNMOVED by a 2x product rescale (arm Q: `§41` unchanged while `m_rf[0x8D]` halved).
+  **`m_rf[0x8D] = 0x009B26 = 39 718` is the guard that actually fires.** Fix this wherever the
+  three-guard phrase is quoted.
 - ⚠ **VEHICLE**: `-cfg_directory` must carry `:DSPCFG value="3"` (fresh cfg ⇒ **zero DSP frames**,
   no report at all); **`-log` REQUIRED**; `timeout`-wrapped; visible video, **never `-video none`**;
   isolated `-nvram_directory`; ONE run at a time. `build.sh` **exits 0 on compile failure** — grep

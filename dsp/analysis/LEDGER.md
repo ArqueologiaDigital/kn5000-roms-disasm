@@ -20,44 +20,77 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§226, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§227, 2026-07-31)
 
-> **★★★★ THE BLOCKER IS THE *ALU DECODE* OF `iw30 / iw32 / iw33`. THE ADDRESSES ARE SETTLED.**
+> **★★★★ THE BLOCKER IS: *WHAT DOES THE COEFFICIENT BASE `0x90` MEAN?* BOTH CANDIDATE BASES ARE
+> NOW MEASURED TO BE SOMEBODY's PER-ALGORITHM PARAMETER BANK.**
 >
-> **§226 FOUND THE HEADER'S FIXED COEFFICIENT BANK AND ITS UPLOAD — `headerdecode.md` §7.6 IS
-> ANSWERED — AND THE SHIPPED BUILD WAS ALREADY READING IT.** It is **`C-RAM[0x90..0xB4]`**, filled
-> by the **boot-time `cmd 0x02` runs at base `0x90` (30 values) + `0xAE` (7)**, byte-identical in
-> both archived captures, **22 of whose 37 cells are written by NO algorithm's parameter map**
-> (`91..9D`, `A1..A5`, `AD AE B3 B4` — including all three ladder cells).
-> ★ Reproduce in one line: `python3 dsp/tools/hdrbase.py` (10 self-tests, 3 external, printed first).
+> **§227 took the reverb-preset capture §226 asked for, and it REFUTED §226's own positive half.**
+> `C-RAM[0x90..0xB4]` is **NOT** a boot-fixed bank — it is **UNIT 1's (the reverb's) parameter
+> bank**. A preset change `CONCERT REVERB 1 → ROOM REVERB 1` rewrites **23 cells, every one inside
+> `0x90..0xB4` and NOTHING else in the 256-cell C-RAM**; **13 of the header's 20 walk cells move**
+> and **2 of the 3 ladder cells (`0x9B`, `0x9C`) move with them**.
+> ★ **The control that makes it proof-grade:** an independent 45 s panel run landing on CONCERT
+> REVERB 1 reproduces the archived cold-boot capture on **all 256 cells, 0 differ** ⇒ the
+> **cold-boot default reverb is CONCERT REVERB 1**, not ROOM REVERB 1.
+> ★ Reproduce in one line:
+> `python3 dsp/tools/hdrbase.py --score notes/data/kn5000_dsp1_upload_concertreverb1.txt notes/data/kn5000_dsp1_upload_roomreverb1.txt`
 >
-> ⛔ **DO NOT SEED THE CURSOR AT FRAME START, AND DO NOT AIM THE HEADER AT `0x00`.**
-> (i) The base **is** seeded, by an instruction: row 25 is LIVE (`is_ldptr` → `m_cursor = ad` under
-> `!(m_specmask & 0x1000)`; **mask bit 12 CLEAR**), and the **epilogue's `iw69 ldptr #$90`** is the
-> last of the frame while the epilogue has **ZERO** cursor-advancing words ⇒ `w0` starts at
-> **exactly `0x90`, every frame**. (ii) `C-RAM[0x00..0x13]` is the **UNIT-0 EFFECT's own parameter
-> bank**: selecting PARAMETRIC EQ rewrites `0x00..0x1E` wholesale and moves **all 20** cells while
-> writing **nothing at or above `0x50`**; the header is a **literal canned image in Sub CPU ROM**
-> and cannot read a per-effect bank.
-> ```
->    base 0x90 (SHIPPED ):  15 of 20 header cells INVARIANT | ladder 9B/9C/9D ALL INVARIANT
->    base 0x00 (PROPOSED):   0 of 20 header cells INVARIANT | ladder 0B/0C/0D ALL EFFECT-DEPENDENT
->    the same ladder at 0x0B with PARAMETRIC EQ loaded:  iw32 +2.000 FS, iw33 +2.733 FS
->                                                        -- 1.6x WORSE than the shipped 1.720
-> ```
-> ⇒ ★★★★ **A CLIP RATE THAT FALLS BECAUSE A COEFFICIENT BECAME *SOMEBODY ELSE'S* IS ALSO A
-> REGRESSION.** §226 declined the build on that guard alone.
+> **THE THREE READINGS, and a falsifier that DISTINGUISHES them is required first:**
+> (a) **row 25 is wrong** — `ldptr` does not seed the coefficient cursor (**K3 has said so all
+> along**); (b) the base is right and the header **legitimately reads the reverb's gains** (it runs
+> immediately before the reverb's CALL); (c) the **cursor-advance map** is wrong.
+> ★★★ **CHEAP AND NEXT: sweep the other twelve reverb presets** —
+> `REVIDX=n dsp/tools/reverb_select.lua` + `hdrbase.py --score`, one command each. If the same 23
+> cells move every time, that set **is** the reverb's parameter block, measured not inferred.
 >
-> **⇒ THE LIVE QUESTION.** Terms are `C[0x9B] = +0.6`, `C[0x9B]² = +0.72`, `C[0x9D] = +0.5`,
-> `C[0x9C]² = +0.5`, all boot-fixed. **The one untested reading: `iw33`'s `f31 = 1` should not
-> CARRY `iw32`'s accumulator** — drop it ⇒ `1.000 FS` (still railed); drop it **and** apply the
-> Q-consistent `P_SHIFT = 7` ⇒ `0.750 FS`, in range. ⚠ **BISECT**; ⛔ `P_SHIFT` may not move on a
-> number alone. Second job: **capture a REVERB-PRESET change** — the invariance above was measured
-> on one capture pair in which unit 1 did **not** change, and the ROM's map says a preset rewrites
-> `0x9E..0xB2`, which is inside the header's walk.
-> ⚠ **`kernel.dsm`'s *"base 0x00 MEASURED"* IS A GENERATOR DEFAULT** (`gen_dsp_disasm.py` passes
-> the literal `0x00` for the kernel listing; the word MEASURED belongs to `cram-unit-base.md` item
-> A, which measured unit **BODIES**). **Never anchor on it again.**
+> ### ⛔ THE ALU DECODE OF `iw30/iw32/iw33` IS **CLOSED**. BOTH HALVES REFUTED (§227, four arms).
+> * **`f31 == 1` IS the ISA's only accumulate** — `HI_ACC_ADD`, **1309 of 2989** non-C-format
+>   corpus words, **695 of 1178** ALU-decoded; op 0 LOADs, op 2 HOLDs *without a product*, op 3
+>   gets HOLD's behaviour. The **PARAMETRIC EQ biquad** (grade **SOLVED**, validated against its
+>   designer at **0.198 dB**) sums five products through `f31 == 1` words `w6..w10`, rendered
+>   **`acc += P`** by this repo's own generator. Without the carry `H(z) = makeup·(−a2)·z⁻²`.
+> * **AND THE ARM DOES NOT FIX THE CLIP:** `iw34` becomes `8 388 608` = `2²³` = **FS + 1** and
+>   clips `706040/706040` quiet and `313960/313960` loud — **identical to shipped.** Its 13 %→0.4 %
+>   `§S1` "win" is **117 655 680 accumulate steps refusing to add**, and it takes `§104` body-0 to
+>   100 % input-INDEPENDENT and makes `m_rf[0x8D]` disappear.
+> * **`P_SHIFT = 7` IS NOT Q-CONSISTENT AND THE TIED MOVE IS A MEASURED NO-OP.** Coefficients are
+>   **Q1.22 (MEASURED)** ⇒ the Q-consistent total is **22**, which ships. Arm P (7/15): the entire
+>   `§S1` block is **BIT-IDENTICAL** to the default over 269 279 999 conversions. Arm Q (7/16,
+>   untied): **`m_rf[0x8D]` halves, `0x009B26 → 0x004D93`** — and it still clips at `1.110 × FS`.
+> * ⚠⚠ **CORRECT THE FALSIFIER LIST EVERYWHERE IT IS QUOTED: `§41` DOES NOT GUARD `P_SHIFT`**
+>   (it reads C-RAM *levels* and is unmoved by a 2× product rescale). **`m_rf[0x8D] = 39 718` does.**
+>
+> ### ⛔ STILL BINDING FROM §226 — do NOT re-derive
+> * **DO NOT SEED THE CURSOR AT FRAME START** — row 25 is LIVE (mask bit 12 CLEAR), the epilogue's
+>   `iw69 ldptr #$90` is the frame's last pointer load and the epilogue has **ZERO** cursor-advancing
+>   words ⇒ `w0` starts at exactly `0x90`. Setting it to what it already is **cannot fail**.
+> * **DO NOT AIM THE HEADER AT `0x00`** — that is **unit 0's** per-effect bank (PEQ rewrites all 20
+>   cells; §227's reverb capture moves **0 of 80** cells in `[00..4F]`), and the `0x0B` ladder is
+>   `+2.733 FS` with PEQ loaded, **1.6× worse than shipped**.
+> * **`headerdecode.md` §7.6 STAYS ANSWERED** (the `cmd 0x02` runs at `0x90` + `0xAE`; the packet
+>   carries no destination — an `ldptr` in a scratch I-RAM slot does). ⚠ Only their *meaning*
+>   changed: they upload the **cold-boot reverb's** coefficients.
+> * ⚠ **`kernel.dsm`'s *"base 0x00 MEASURED"* IS A GENERATOR DEFAULT.** Never anchor on it.
+> * **THE SQUARING MULTIPLY IS FAITHFUL**; ⛔ **do not touch the `SRC 0x08` source read** (anchored
+>   by the CHORUS LFO, `acc = 114 << 16` exactly).
+
+## TIER 0a-prev-226 — §226's BLOCKER, CLOSED by §227 (both halves refuted; see TIER 0a)
+
+> **§226's headline was:** *"the header's fixed coefficient bank is FOUND — `C-RAM[0x90..0xB4]`,
+> uploaded by the boot-time `cmd 0x02` runs at base `0x90` (30 values) + `0xAE` (7); `headerdecode.md`
+> §7.6 is ANSWERED; the shipped build was already reading it; 22 of the 37 cells are written by no
+> algorithm; the blocker moves to the ALU decode of `iw30/iw32/iw33`."*
+>
+> ⛔ **RETRACTED by §227:** *boot-fixed*, *15 of 20 invariant*, *ladder cells `9B/9C/9D` ALL
+> invariant*, and the *"CHORUS + ROOM REVERB 1"* label on the cold-boot image (it is **CONCERT
+> REVERB 1**). Of the "22 written by no algorithm", **15 move under a preset change**
+> (`93 94 95 97 9A 9B 9C A1 A2 A3 A4 AD AE B3 B4`) ⇒ that list measured a **gap in the ROM's T1
+> map**, not a property of the chip.
+> ✔ **SURVIVES:** the upload half and `headerdecode.md` §7.6's answer; base `0x00` is unit 0's
+> per-effect bank and is still refuted; the frame-start seed is still refuted; `kernel.dsm`'s
+> *"base 0x00 MEASURED"* is still a generator default.
+> ⇒ **the ALU decode it handed on is now CLOSED (§227) and the blocker is TIER 0a.**
 
 ## TIER 0a-prev-225 — §225's BLOCKER, SUPERSEDED by §226 (the squaring is FAITHFUL; the base is RIGHT)
 
@@ -758,7 +791,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-119 sections, §97..§226.  **Read the tail first** — later sections retract earlier ones *in place*.
+120 sections, §97..§227.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -881,4 +914,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §224 | SHIPPED (two read-only instruments, one fully-measured decode arm, DEFAULT OFF on a self-imposed gate) | ★★★ `iw34` IS **ANSWERED**, AND ITS ANSWER KILLS `§223`'s OWN CANDIDATE: `ACT 0x00`'s BUS TERM CANNOT BE THE CAUSE THERE | §1 **FORCED** from an archived log, no run, then **CONFIRMED** by a new |
 | §225 | SHIPPED (one default flip on a restated gate that CAN fail, one boot-window instrument, one from-disk result that needed no run) | ★★★ `28/32/28` **SURVIVES, AND THE DISCRIMINATOR IS A PROOF**: `26/28/27` of it is input-dependent by the instrument's o | §1 **FORCED** from 33 archived logs, **no run**, with two controls that use no |
 | §226 | NO CHANGE SHIPPED (a from-disk refutation of the pass's own candidate, plus a positive identification that closes a nine-day-old filed open question) | ★★★★ THE HEADER'S COEFFICIENT BANK IS **FOUND**, `headerdecode.md` §7.6 IS **ANSWERED**, AND THE SHIPPED BUILD IS **ALRE | §0/§2/§3 **MEASURED and FORCED**, from two archived captures, the ROM's own |
+| §227 | REFUTED/RETRACTED | ★★★★ BOTH HALVES OF §226's PRE-REGISTERED BISECTION ARE **REFUTED**, ONE FROM DISK AND ONE BY A **MEASURED NO-OP**; AND  |  |
 

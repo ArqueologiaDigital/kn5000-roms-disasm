@@ -187,10 +187,79 @@ def clips(r):
 
 
 # ---------------------------------------------------------------------------
+def score_pair(ctrl_path, test_path):
+    """§227 TASK 2 -- did a preset change move the header's own bank?
+
+    §226's positive result (`C-RAM[0x90..0xB4]' is a boot-fixed bank the header
+    reads) rested on ONE capture pair in which unit 1 did NOT change.  The Sub CPU
+    ROM's per-algorithm map says a reverb preset rewrites `0x9E..0xB2', and
+    `0x9E/0x9F/0xA0' are inside the header's own `0x90..0xA3' walk.  This scores a
+    matched pair: same navigation, one preset apart.
+
+    ★ RULE 20.  Three known-answer controls print FIRST and each CAN fail:
+      1. the archived cold-boot capture must replay to the published run list;
+      2. the control capture must reproduce the cold-boot HEADER BANK exactly --
+         if it does not, the vehicle moved and nothing below means anything;
+      3. the ladder on the control image must be §224 §S2's 945 579 874 058."""
+    cold, cold_runs = capture_cram(CAP_COLD)
+    ctrl, ctrl_runs = capture_cram(ctrl_path)
+    test, test_runs = capture_cram(test_path)
+
+    print("=== §227 CAPTURE-PAIR SELF-TEST (RULE 20, printed first) ===")
+    t = []
+    t.append(("archived cold-boot cmd-0x02 runs", cold_runs,
+              [(0x50, 30), (0x6e, 30), (0x90, 30), (0xae, 7), (0x00, 20)]))
+    t.append(("CONTROL capture reproduces cold-boot C-RAM[0x90..0xB4]",
+              [ctrl[i] for i in range(0x90, 0xB5)],
+              [cold[i] for i in range(0x90, 0xB5)]))
+    t.append(("§224 §S2 iw33 on the CONTROL image", ladder(ctrl, 0x9B)[2], 945579874058))
+    ok = 0
+    for name, got, want in t:
+        good = got == want
+        ok += good
+        print("   %-56s %s" % (name, "PASS" if good else "** FAIL **\n      got  %s\n      want %s" % (got, want)))
+    print("   %d of %d PASS\n" % (ok, len(t)))
+
+    print("=== §227 THE PAIR ===")
+    print("   control : %s   (%d cmd-0x02 runs)" % (ctrl_path, len(ctrl_runs)))
+    print("   test    : %s   (%d cmd-0x02 runs)" % (test_path, len(test_runs)))
+    diff = [i for i in range(256) if ctrl[i] != test[i]]
+    print("   cells differing anywhere : %d  %s"
+          % (len(diff), ' '.join('%02X' % i for i in diff) if diff else '(none)'))
+    for lo, hi, tag in ((0x00, 0x4F, 'unit-0 effect bank + spare'),
+                        (0x50, 0x8F, 'the two linear RAMPS'),
+                        (0x90, 0xB4, "★ THE HEADER'S FIXED BANK"),
+                        (0x90, 0xA3, "★★ the header's own 20-cell WALK"),
+                        (0x9E, 0xB2, "the ROM T1 map's reverb-preset range"),
+                        (0x9B, 0x9D, "★★★★ the iw30/iw32/iw33 LADDER CELLS")):
+        d = [i for i in diff if lo <= i <= hi]
+        print("   %-40s [%02X..%02X] : %2d of %2d differ  %s"
+              % (tag, lo, hi, len(d), hi - lo + 1,
+                 ' '.join('%02X' % i for i in d) if d else 'ALL INVARIANT'))
+    print()
+    print("=== §227 THE LADDER, BOTH IMAGES, base 0x9B ===")
+    for nm, C in (('control', ctrl), ('test   ', test)):
+        r = ladder(C, 0x9B)
+        cc = [C[0x9B], C[0x9C], C[0x9D]]
+        print("   %s  C = %06X/%06X/%06X   iw30 %+.3f  iw32 %+.3f  iw33 %+.3f  %s"
+              % (nm, cc[0], cc[1], cc[2], (r[0] >> ACC_SHIFT) / 8388607.0,
+                 (r[1] >> ACC_SHIFT) / 8388607.0, (r[2] >> ACC_SHIFT) / 8388607.0,
+                 'CLIPS' if clips(r) else 'no clip'))
+    return 0
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument('--base', default=None)
+    ap.add_argument('--score', nargs=2, metavar=('CTRL_CAPTURE', 'TEST_CAPTURE'),
+                    default=None,
+                    help='§227: replay two uC-IF captures and score whether the '
+                         'header bank C-RAM[0x90..0xB4] moved between them')
     args = ap.parse_args(argv[1:])
+
+    # ---- §227: score a capture PAIR (e.g. a reverb-preset change) --------
+    if args.score:
+        return score_pair(args.score[0], args.score[1])
 
     kern, epi, adv, epi_adv = cursor_map()
     cold, cold_runs = capture_cram(CAP_COLD)

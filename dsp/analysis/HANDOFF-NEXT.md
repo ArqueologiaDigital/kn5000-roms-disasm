@@ -1,12 +1,13 @@
 # HANDOFF — read this first
 
-**§1 rewritten 2026-07-31 by §225.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
-then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§225**, **§224** and **§223**, then
-§§215–221 backwards as needed. Several earlier sections are retracted *in place*; **trust the
+**§1 rewritten 2026-07-31 by §227.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
+then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§227**, **§226** and **§225**, then
+§§215–224 backwards as needed. Several earlier sections are retracted *in place*; **trust the
 register tail over any older summary, including older parts of this file** — §219 found this
 file's own §1 four sections stale (standing rule 3, fifth occurrence), §223 found §222's
 pre-registered next experiment refutable from a log already on disk, and §224 found §223's own
-next candidate refutable the same way.
+next candidate refutable the same way, and **§227 refuted BOTH halves of §226's own
+pre-registered bisection AND §226's positive half, with one capture and four arms**.
 
 ---
 
@@ -19,88 +20,125 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★★★ §226 ANSWERED `headerdecode.md` §7.6 FROM DISK AND REFUTED ITS OWN CANDIDATE WITH THE SAME
-EVIDENCE. THE HEADER'S FIXED COEFFICIENT BANK IS `C-RAM[0x90..0xB4]`, ITS UPLOAD IS THE BOOT-TIME
-`cmd 0x02` RUNS AT BASE `0x90` + `0xAE`, AND THE SHIPPED BUILD IS ALREADY READING IT.
-NOTHING SHIPPED. THE BLOCKER MOVES TO THE *ALU DECODE* OF `iw30 / iw32 / iw33`.**
+**★★★★ §227 REFUTED BOTH HALVES OF §226's PRE-REGISTERED BISECTION — ONE FROM DISK, ONE AS A
+MEASURED NO-OP — AND THE REVERB CAPTURE §226 ASKED FOR REFUTED §226's OWN POSITIVE HALF.
+`C-RAM[0x90..0xB4]` IS NOT A BOOT-FIXED BANK: IT IS UNIT 1's (THE REVERB's) PARAMETER BANK.
+NOTHING SHIPPED AS A DEFAULT. THE BLOCKER MOVES TO *WHAT THE BASE `0x90` MEANS*.**
 
-### ★★★★ 1.-0.A DO NOT SEED THE COEFFICIENT CURSOR AT FRAME START. IT IS REFUTED.
+### ⛔ 1.-0.A `f31 == 1` IS THE ISA's ONLY ACCUMULATE. DO NOT PROPOSE "iw33 does not carry" AGAIN.
 
-The §226 brief's thesis was *"the cursor is never seeded at frame start, so the header runs on
-whatever the previous frame's unit-1 body left behind — fix it by seeding `0x00`."* **Both halves
-are wrong, and the second is wrong in the expensive direction.**
+* It is `HI_ACC_ADD`: **1309 of 2989** non-C-format corpus words, **695 of 1178** ALU-decoded.
+  op 0 LOADs, op 2 HOLDs *without a product*, op 3 gets HOLD's behaviour ⇒ **no second accumulate
+  exists**. The **PARAMETRIC EQ biquad** — `programs.tsv` grade **SOLVED**, validated against its
+  designer at **0.198 dB** — sums five products through `f31 == 1` words `w6..w10`, which this
+  repo's generator renders **`acc += P`**. Without the carry `H(z)` = `makeup · (−a2) · z⁻²`.
+* **AND IT DOES NOT FIX THE CLIP.** Arm O, MEASURED: `iw34` becomes `8 388 608` = `2²³` = **FS+1**
+  and clips `706040/706040` quiet and `313960/313960` loud — **exactly as on the shipped default.**
+* **The 13× clip-rate "win" is the guard firing.** `§S1` `4.924 % → 0.379 %`, bought with
+  **117 655 680** accumulate steps refusing to add. Collateral, all measured: `§104` body-0 goes
+  100 % input-INDEPENDENT (`first DIFFERS at −1 = never`), and **`m_rf[0x8D]` disappears entirely**.
 
-* **The base IS seeded, by an instruction.** Register row 25 is LIVE (`is_ldptr` does
-  `m_cursor = ad` under `!(m_specmask & 0x1000)`; **mask bit 12 is CLEAR**). The corpus loads that
-  pointer three times and the **last of the frame is the epilogue's `iw69 ldptr #$90`**. The
-  epilogue has **ZERO** cursor-advancing words, so the next frame's `w0` starts at **exactly
-  `0x90`, every frame**. `§S2`'s `0x9B` is `0x90 + 0x0B`, `w30` being the header's 12th cursor word.
-* **Base `0x00` is the UNIT-0 EFFECT's own parameter bank.** Selecting PARAMETRIC EQ rewrites
-  `0x00..0x1E` wholesale (twelve `cmd 0x02` runs) and moves **every one of `0x00..0x13`**, while
-  writing **nothing at or above `0x50`**. The ROM's per-algorithm map writes **all 20** of them.
-  The header is a **literal canned image in Sub CPU ROM** — it cannot read a per-effect bank.
-* **The number refutes it too:**
+### ⛔ 1.-0.B `P_SHIFT` IS SETTLED. THE TIED MOVE IS A **MEASURED NO-OP**; THE UNTIED ONE BREAKS A CALIBRATION.
 
-```
-                   C[0x0B] C[0x0C] C[0x0D]  ladder at 0x0B   |  C[0x9B] C[0x9C] C[0x9D]  at 0x9B
-   coldboot         E00000  E00000  FFFF10  -0.250/+0.125/+0.250 |  4CCCCC 400000 400000  +0.600/+0.720/+1.720
-   parametriceq     800000  D445EF  400000  -1.000/+2.000/+2.733 |  4CCCCC 400000 400000  +0.600/+0.720/+1.720
-   LIVE arm K       E00000  E00000  FFFF10  -0.250/+0.125/+0.250 |  4CCCCC 400000 400000  +0.600/+0.720/+1.720
-   base 0x90 (SHIPPED ):  15 of 20 header cells INVARIANT, ladder cells 9B/9C/9D ALL INVARIANT
-   base 0x00 (PROPOSED):   0 of 20 header cells INVARIANT, ladder cells 0B/0C/0D ALL EFFECT-DEPENDENT
-```
-
-⇒ ★★★★ **A CLIP RATE THAT FALLS BECAUSE A COEFFICIENT BECAME *SOMEBODY ELSE'S* IS ALSO A
-REGRESSION.** Seeding `0x00` drops `§S1 iw34` and `§S2 iw33` on the archived vehicle and looks like
-a clean win in every statistic — while aiming a fixed program at a per-effect bank and making the
-same ladder **1.6 × worse** on the other effect selection we have a capture of.
-
-### ★★★★ 1.-0.B `headerdecode.md` §7.6 IS ANSWERED — AND WHY NOBODY FOUND THE UPLOAD
-
-**A `cmd 0x02` packet carries NO destination address.** The host writes an `ldptr` word
-(`hi12 0x801`, `lo12 0x821`) into a scratch I-RAM slot with a `cmd 0x01`, *then* streams 3-byte
-coefficients. Replaying that rule over the cold-boot capture gives, in order:
+The core's own header says the total is **FORCED and MEASURED**: coefficients are **Q1.22**, data
+Q0.23 ⇒ the Q-consistent total is **22**, which is what ships. *"P_SHIFT = 7 is Q-consistent"* is
+**false**.
 
 ```
-   ldptr #$50 -> 30    ldptr #$6E -> 30     the two linear RAMPS      0x50..0x8B  (60)
-   ldptr #$90 -> 30    ldptr #$AE ->  7  ★  THE HEADER'S FIXED BANK   0x90..0xB4  (37)
-   ldptr #$00 -> 20                         the UNIT-0 EFFECT's bank  0x00..0x13  (20)
-   30+30+30+7+20 = 117 = the log's own "117 coefficients routed"
+   arm  P_SHIFT ACC_SHIFT TOTAL | §S1 quiet  §S1 loud | iw34 datum | m_rf[0x8D]    §41
+   N        6      16      22   | 4.924 %    4.920 %  | 14 428 403 | 0x009B26 ✔   0x400000/0x178D0B ✔
+   P        7      15      22   | 4.924 %    4.920 %  | 14 428 403 | 0x009B26 ✔   0x400000/0x178D0B ✔
+   Q        7      16      23   | 2.273 %    2.141 %  |  9 311 353 | 0x004D93 ✘   0x400000/0x178D0B ✔
 ```
 
-**22 of the 37 cells in `0x90..0xB4` are written by NO algorithm's parameter map**
-(`91..9D`, `A1..A5`, `AD AE B3 B4`) — including all three ladder cells. That is
-`headerdecode.md` §5's *"separate, fixed coefficient bank, loaded once at boot"*, located.
-★ Reproduce in one line: `python3 dsp/tools/hdrbase.py` (10 self-tests, 3 external, printed first).
+Arm P's **entire `§S1` block is BIT-IDENTICAL to arm N** over 269 279 999 conversions — the only
+differing line is the header text `>> 16` vs `>> 15`.
+⚠ **CORRECT THE FALSIFIER LIST WHEREVER IT IS QUOTED: `§41` DOES NOT GUARD `P_SHIFT`** (it reads
+C-RAM levels and is unmoved by a 2× product rescale). **`m_rf[0x8D] = 0x009B26 = 39 718` does**,
+and arm Q halves it to `0x004D93 = 19 859`.
 
-### ★★★★ 1.-0.C THE BLOCKER: THE **ALU DECODE** OF `iw30 / iw32 / iw33`
+### ★★★★ 1.-0.C THE BANK AT `0x90` IS **UNIT 1's**, AND THE LADDER CELLS MOVE WITH THE REVERB KNOB
 
-The addresses are established and the constants are boot-fixed, so `1.720 × FS` is produced by
-**what the three words do**, not by what they read. Terms: `C[0x9B] = +0.6`, `C[0x9B]² = +0.72`,
-`C[0x9D] = +0.5`, `C[0x9C]² = +0.5`.
+```
+   CONCERT REVERB 1 (the COLD-BOOT DEFAULT)  vs  ROOM REVERB 1     -- both SCREEN-VERIFIED
+   23 cells differ, EVERY ONE inside 0x90..0xB4, NOTHING else in 256 cells
+      [00..4F]  0 of 80 differ     [50..8F]  0 of 64 differ
+      [90..A3]  13 of 20 differ  <- the header's own walk
+      [9B..9D]   2 of  3 differ  <- 9B and 9C, the LADDER CELLS
+   ladder: CONCERT 1  C=4CCCCC/400000/400000  iw33 +1.720 CLIPS
+           ROOM 1     C=400000/333333/400000  iw33 +1.320 CLIPS
+   in Q1.22 they read as reverb gains:  CONCERT 1.200/1.000/1.000   ROOM 1.000/0.800/1.000
+```
 
-1. ★★★★ **The one untested reading: `iw33`'s `f31 = 1` should not CARRY `iw32`'s accumulator.**
-   Drop the carried term ⇒ `0.500 + 0.500 = 1.000 FS` (still at the rail); drop it **and** apply
-   the Q-consistent `P_SHIFT = 7` ⇒ `0.500 + 0.250 = 0.750 FS`, in range.
-   ⚠ **BISECT — two changes at once is not an experiment.** ⛔ `P_SHIFT` may still not move on a
-   number alone (`§41`, `m_rf[0x8D]`, SINGLE DELAY's `+0.02149296` calibrate the chain).
-2. ★★★ **Capture a REVERB-PRESET change.** The only surviving threat to §226's positive half is
-   that the invariance was measured on **one capture pair in which unit 1 did not change**; the
-   ROM's map says a reverb preset rewrites `0x9E..0xB2`, and `0x9E/0x9F/0xA0` are inside the
-   header's walk. One capture closes it; `hdrbase.py` scores it in one line.
-3. ★★ **The header/body overlap on `[0x90..]` is REAL and OPEN.** With mask bit 38 live the header
-   reads `0x90..0xA3` and unit 1's body re-reads from `0x90`. ⚠ The source comment
-   (*"kernel 0x90..0xA4 (21) then body 0xA5..0xB4 (16), 21 + 16 = 37"*) **does not close** — the
-   reverb has **33** cursor words, not 16. Do not adopt it without re-deriving.
-4. ⛔ **NOT a frame-start cursor seed** (refuted; and setting it to the value it already has
-   **cannot fail**). ⛔ **NOT `UPD6383_NOSQ` as a FIX** — `SQUARING` items A/B established the
-   squaring is faithful, so its `P2` (`iw33 → 0.500 FS`) is a **suppression**, not a correction.
-5. ⚠ **`kernel.dsm`'s *"base 0x00 MEASURED"* IS A GENERATOR DEFAULT**, not a measurement of the
-   header: `gen_dsp_disasm.py`'s kernel `emit_listing` call passes the literal `0x00`, and the word
-   MEASURED belongs to `cram-unit-base.md` item A, which measured unit **BODIES**. **Never anchor
-   on it again.**
+★ **THE CONTROL THAT MAKES IT PROOF-GRADE:** an independent 45 s panel run (boot → SOUND → REVERB
+page → 40 DOWN → 4 UP) landing on CONCERT REVERB 1 reproduces the **2026-07-22 archived cold-boot
+capture on all 256 C-RAM cells, 0 differ** ⇒ the replayer is faithful, the navigation perturbs
+nothing, and **the cold-boot default reverb is CONCERT REVERB 1** — every *"CHORUS + RR1"* label in
+§226 names the wrong preset.
 
-Full write-up: `HEADER-BANK_findings.md`; register **§226**; archived output `data/HDRBASE_226.txt`.
+⇒ ★★★★ **BOTH CANDIDATE BASES ARE NOW MEASURED TO BE SOMEBODY's PER-ALGORITHM PARAMETER BANK**:
+`0x00` is unit 0's (§226) and `0x90` is unit 1's (§227). ⛔ **This does NOT re-open `0x00`** — `§S2`
+measures the cursor at `0x9B` and the `0x00` arm is worse on every image. It re-opens what `0x90`
+*means*.
+
+### ★★★★ 1.-0.D THE BLOCKER, AND THE THREE READINGS THAT MUST BE SEPARATED
+
+Why does a **canned, effect-independent** header read **unit 1's live parameters**?
+
+1. **row 25 is wrong** — `ldptr` does not seed the coefficient cursor (**K3 has said so all
+   along**), and the kernel's base comes from somewhere else;
+2. **the base is right and the header legitimately reads the reverb's gains** — it does run
+   immediately before the reverb's own CALL;
+3. **the cursor-advance map is wrong**, so the header's 20 cells are not `base+0x00..base+0x13`.
+
+⚠⚠ **A falsifier that DISTINGUISHES these is required before any of them is tried.** §226 and §227
+both caught the same failure mode: a base that makes a number smaller is not a reading.
+
+**CHEAP AND NEXT:** ★★★ **sweep the other twelve reverb presets** —
+`REVIDX=n dsp/tools/reverb_select.lua` + `python3 dsp/tools/hdrbase.py --score <a> <b>`, one command
+each. If the same 23 cells move every time, that set **is** the reverb's parameter block, measured
+rather than inferred from the ROM's T1 map.
+
+Full write-up: register **§227**; `HEADER-BANK_findings.md` carries a **CORRECTION BANNER**;
+instruments `dsp/tools/f31carry.py` (18 self-tests, 7 external) and `dsp/tools/hdrbase.py --score`
+(3 controls, orientation-sensitive); logs `data/{N,O,P,Q}_227.log.gz`; captures
+`notes/data/kn5000_dsp1_upload_{room,concert}reverb1.txt` + their screenshots.
+
+**SHIPPED (both OFF/inert by default):** `UPD6383_NOCARRY` (diagnostic, refuted from disk before
+it ran) and `UPD6383_PSHIFT` (0 = shipped 6/16, 1 = tied 7/15, 2 = untied 7/16). `P_SHIFT` and
+`ACC_SHIFT` are no longer `constexpr`; **arm N vs §225's arm M is 4 diff lines and NOT ONE is a
+measured value**, which is the inertness proof. `dsp/verify.py` **BYTE-MATCH OK**.
+
+---
+
+### ⛔ 1.-0-prev-226 — §226's headline, **PART-RETRACTED by §227**, the rest STILL BINDING
+
+**⛔ RETRACTED (see 1.-0.C above):** *"the header's fixed coefficient bank is `C-RAM[0x90..0xB4]`,
+boot-fixed, 15 of 20 header cells invariant, ladder cells `9B/9C/9D` ALL invariant"*. It is
+**unit 1's per-algorithm bank**; a reverb-preset change moves **13 of 20** walk cells and **`9B`,
+`9C`**. Also **wrong preset**: the cold-boot board is **CONCERT REVERB 1**, not ROOM REVERB 1, so
+§226 item G's `9F/A0/A7/A8/AC/B2` attribution names the wrong algorithm.
+
+**★ STILL BINDING, EVERY WORD:**
+
+* ⛔ **DO NOT SEED THE COEFFICIENT CURSOR AT FRAME START.** The base **is** seeded, by an
+  instruction: row 25 is LIVE (`is_ldptr` → `m_cursor = ad` under `!(m_specmask & 0x1000)`,
+  **mask bit 12 CLEAR**), the **epilogue's `iw69 ldptr #$90`** is the last of the frame, and the
+  epilogue has **ZERO** cursor-advancing words ⇒ `w0` starts at **exactly `0x90`, every frame**.
+  Setting it to the value it already has **cannot fail**.
+* ⛔ **DO NOT AIM THE HEADER AT `0x00`.** `C-RAM[0x00..0x13]` is the **UNIT-0 EFFECT's** own
+  parameter bank: PARAMETRIC EQ rewrites `0x00..0x1E` wholesale, moves **all 20**, and writes
+  **nothing at or above `0x50`**. §227 re-confirms it: the reverb capture moves **0 of 80** cells
+  in `[00..4F]`. The `0x0B` ladder is `+2.733 FS` with PEQ loaded — **1.6× worse than shipped.**
+* ✔ **`headerdecode.md` §7.6 STAYS ANSWERED**: the boot-time `cmd 0x02` runs at `0x90` (30) and
+  `0xAE` (7) are the upload; a `cmd 0x02` packet carries **no destination** — the host writes an
+  `ldptr` into a scratch I-RAM slot first. `30+30+30+7+20 = 117` = the log's own count.
+  ⚠ §227 changes only what those 37 cells ARE: **the cold-boot reverb's coefficients.**
+* ⚠ **`kernel.dsm`'s *"base 0x00 MEASURED"* IS A GENERATOR DEFAULT.** `gen_dsp_disasm.py` passes
+  the literal `0x00`; the word MEASURED belongs to `cram-unit-base.md` item A, which measured unit
+  **BODIES**. **Never anchor on it again.**
+* ✔ **THE SQUARING MULTIPLY IS FAITHFUL** and ⛔ **`SRC 0x08` MUST NOT BE TOUCHED** (anchored by
+  the CHORUS LFO: `acc = 114 << 16` exactly).
 
 ---
 
