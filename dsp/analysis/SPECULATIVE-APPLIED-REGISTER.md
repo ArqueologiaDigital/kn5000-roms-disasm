@@ -12374,3 +12374,69 @@ note contradicts its own item A. ★ MAME is unaffected and correct; `dsp_disasm
 
 Evidence grade: §1 gaps **MEASURED/FORCED** per the linked audits, none implemented here;
 §2 **MEASURED** (10 of 10 in order); §3 **MEASURED**, my own under-report **acknowledged**.
+
+---
+
+## §199 — the rotation sign: I nearly refuted a correct finding by checking the wrong quantity
+
+§198 ranked the inverted delay-rotation sign first. Before implementing it I checked the arithmetic,
+and the check appeared to **kill** it.
+
+### 1. ⛔ The objection — and it is valid, about the wrong quantity
+
+The rotation `G` is added to **both** the read and the write address:
+
+```
+   device    addr = (cell + G) & 0xffff
+   proposed  addr = (cell - G) & 0xffff
+```
+
+so it **cancels** in `R − W`. Measured on §189's live descriptor pair (`R = 41925`, `W = 41590`),
+`R − W = 335` under either sign, at every `G`. ⇒ *the rotation sets where the heads are, not how
+far apart they are* — and "yields `65536 − D` on every line" cannot be a statement about `R − W`.
+
+### 2. ★★★ Working it through TEMPORALLY reverses that, and the finding stands
+
+A read at address `R + G` returns whatever the **write** head deposited when it was at that same
+address:
+
+```
+   G RISING (device)   read at R+T returns the sample written at T' with W+T' = R+T
+                       => T' = T + 335   -- a FUTURE sample.  The only consistent
+                          reading is a delay of 65536 - 335 = 65201 = 1.478 s @ 44.1 kHz
+   G FALLING (round5)  read at R-T returns the sample written at T' with W-T' = R-T
+                       => T' = T - 335   -- a PAST sample.  Delay = 335 = 7.60 ms  ✓
+```
+
+⇒ **`R − W` is constant under either sign — that is what I checked — but the TEMPORAL delay is
+`(R−W)` or its complement depending on which way the heads sweep.** The finding is confirmed, and
+by the audit's own number: 1.478 s here against its 1.468 s on a different line.
+
+> ★ **RULE: for a circular buffer, the delay is a TEMPORAL quantity. A difference of addresses is
+> not a delay, and checking one to test the other will refute a correct claim.** I was one step from
+> filing "the rotation sign cannot matter."
+
+### 3. ⚠ AND THE OBJECTION LEAVES A REAL CONSEQUENCE FOR THE FALSIFIER
+
+Because `R − W` is sign-invariant, **no static or per-frame address measurement can grade this
+fix.** Every instrument this project currently has — the descriptor census, the delay-port census,
+the tap-modulation census — reports addresses. They will all be bit-identical across the change.
+
+⇒ **The falsifier must be temporal**: tag each delay-line address with the frame it was last
+written, and at each read report `frames_since_written`. Predicted **335** for that line with the
+fix, **65201** without; and for CHORUS's line, **1040** (§152's ROM-derived length, confirmed live
+at descriptor `0x2B = 0x0410` in §189) against `64496`.
+
+**That instrument does not exist yet, and the fix must not be shipped without it** — a change that
+every existing probe reports as bit-identical is exactly the kind that gets shipped on reasoning and
+retracted later.
+
+### 4. Not done, deliberately
+
+The fix is **one operator**. It is not applied, because §195's process note says to have the
+criterion before the build, and the criterion here needs a new instrument. Next tick: build the
+write-timestamp probe, pre-register 335 / 1040, then flip the sign.
+
+Evidence grade: §1 **MEASURED** (the cancellation); §2 **FORCED** (the temporal argument, matching
+the audit's independent figure); §3 **FORCED** by §1 — sign-invariance of `R − W` is exactly why the
+existing instruments are blind.
