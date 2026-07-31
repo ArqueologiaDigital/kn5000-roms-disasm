@@ -12651,3 +12651,55 @@ yet and is the natural companion to §200.
 
 Evidence grade: the claim **FORCED** (r3 §6.1, plus the 28 + 4 = 32 arithmetic); the run
 **MEASURED** and **inconclusive by construction**, recorded as such rather than as a refutation.
+
+---
+
+## §204 — the CONSUMER-TO-CELL census grades §203. It was right. SHIPPED.
+
+§203 left `C40.1.80.000`'s descriptor consumption unshipped because the delay census could not see
+it — *"inert by this probe, not wrong"* — and named the missing instrument: a **consumer-to-cell**
+map rather than a delay map. Built.
+
+### 1. ⚠ It took two attempts, the same defect as §193
+
+Keyed on "the first 16 consumers", it recorded them **from frame 0**, before the program uploads:
+body 0 logged `iw12` sixteen times with `cell0000`, and **both arms of the A/B were identical**
+because the gate never fires during boot. Gated to a settled frame (> 900 k), it works.
+
+### 2. ★★★ MEASURED — and it grades §203 positively
+
+```
+   CFMTIX=0   iw12->ix0(dsc26,cell0190)  iw26->ix1(dsc27,cell1041)  iw46->ix2(dsc28,cell1041)
+   CFMTIX=1   iw12->ix0(dsc26,cell0190)  iw26->ix1(dsc27,cell1041)  iw46->ix3(dsc29,cell05A0)
+```
+
+**With the gate OFF, `iw26` and `iw46` both read descriptor value `0x1041` — two consumers sharing
+one cell.** With it ON, `iw46` advances to index 3 and reads `0x05A0`: **every consumer gets a
+distinct cell**, which is exactly what round5 §1's identity map requires and what
+`r3-delaydram.md` §6.1 FORCES.
+
+⇒ The C-format word between them **does** consume a cell. **SHIPPED**, default ON, fired 5 698 785
+times.
+
+★ The collision is the point: a duplicate descriptor value is a *signature* of a short cursor, and
+it is visible in the mapping while being invisible in the delay — which is why §203's null was
+correctly recorded as inconclusive rather than as a refutation.
+
+### 3. ⚠ Not claimed
+
+* **Still silent** — `§70 ACCA min 0 max 0`, verified on the shipped default.
+* The **delay-age census is unchanged**. The mapping is fixed; whether those cells then yield
+  audible delays depends on the per-unit descriptor **base**, still absent.
+* ⚠ The census labels kernel consumers (`iw12/26/46`, before I-RAM 84) under "body 0". Harmless
+  here — the A/B compares like with like — but the label is wrong and should be fixed before the
+  data is quoted elsewhere.
+
+### 4. Four shipped this session, all from the same audit
+
+§197 · §201 · §202 · §204 — each from the PROVEN-BY-CONSTRUCTION sweep, each with an independent
+control, none from a hypothesis. §203 is the counter-example that proves the discipline: a FORCED
+claim held back one tick for want of an instrument, then shipped when the instrument existed.
+
+Evidence grade: the decode **FORCED** (r3 §6.1 + the 28 + 4 = 32 arithmetic); the consequence
+**MEASURED** (a duplicate-cell collision removed); the probe's first form **VOIDED** by boot
+pollution and recorded.
