@@ -13829,3 +13829,62 @@ per-frame count that discharges its own falsifier), the verdict **FORCED** from 
 §3 **MEASURED**, including the no-stimulus window; §4 **MEASURED** (`§80` vs `§215` in the same
 log), the attribution to the publish schedule **INFERRED (strong)**; §5 as noted per row.
 The rival reading is **REFUTED and NOT SHIPPED**; `UPD6383_SRC0B2` stays **default OFF**.
+
+---
+
+## §216 — the rival is refuted, my "suspicious loop" is retracted, and the OUTPUT STAGE NULL IS NOW PROVEN BY FEEDING IT
+
+### 1. `SRC 0x0B` SURVIVES at `iw25` — decided by the corpus, not the run
+
+`lo12 0x2D9` is a **36-word family**: 29 class-1 delay WRITE, 6 class-1 delay READ (all ENSEMBLE),
+**1** class-2 — the kernel's `iw25`. Its consumer `0012201655` (`mac ta,(p)+1`, the **only** word
+that multiplies `tempA`) has a 0.43 % base rate and **13 of 13** of its sites are immediately
+preceded by a class-1 `addr8 0x20` delay READ.
+
+★ ENSEMBLE `w10` **fuses** read+capture in one word → `w11`. The kernel **splits** the *identical*
+`2D9` off one word ahead of its read: `w25 → w26 (READ) → w27`. **Same `lo12`, same idiom, same
+successor, two independent programs.** The rival would need one `lo12` to mean two things on two
+classes *and* would leave the kernel's two delay READs with no consumer anywhere in the frame.
+
+### 2. ⛔ ALL FOUR FALSIFIERS PASSED — AND IT PROVES NOTHING
+
+`tempA@iw25`, `P@iw39`, the last input-dependent `acc` slot (`iw38 → iw204`) and body 0's
+`iw84/85` all flipped to input-dependent. **They had to**: arm A's own counter measured
+`mem[ptr]` at `iw25` non-zero on **313 169 evaluations ≈ the 314 063 loud frames — before the rival
+was ever run.** `iw25`'s pointer sits on a live cell, so **any** live operand scores 4/4.
+
+★ The four falsifiers I passed forward in `HANDOFF-NEXT.md` §1.2 **could not fail**. Caught by the
+agent on its own experiment, from a control measured before the arm ran. Filed as standing rule 15
+and dead-end 22.
+
+### 3. ★★★ THE RESULT THAT OUTLIVES THE REFUTED READING
+
+With the send **forced open** — delay port non-zero **181 521×** against 0, `§48` **121 014 live
+consumptions** against 0 — **body 0 ran its whole ladder on live audio and `w73`/`w78` still read
+exactly zero.**
+
+⇒ **The output stage is a null INDEPENDENTLY of what the send carries.** §211 asserted that; this
+**proved it by feeding it**. That is a far stronger statement than the refutation it came wrapped in.
+
+### 4. ⛔ And my "suspicious closed loop" is RETRACTED
+
+§213/§214 flagged `iw25 → tempA → P → acc → send → delay write → next frame's iw25` as a
+self-sustaining loop to be wary of. **It is the intended feedback comb.** I described a working
+design as a defect — the mirror of §205, where I described a working fact as a blocker.
+
+### 5. The new blocker, one hop upstream
+
+`m_dr` at `iw25` was non-zero on **0 of 1 211 520** evaluations *in the arm where `§80` published
+181 521 non-zero data*. **The datum `iw12` fetches never reaches `iw25`** — the §78 per-line publish
+schedule (`line = descriptor_value & 0x3f`; the kernel's delay words share line 0).
+
+### 6. Unchanged
+
+`§70 ACCA@w73` and `§211 ACCB@w78`: `min 0 max 0` in the loud bucket **and** in the 726 040-frame
+no-stimulus window, **in both arms**. `§61` both ports 0 non-zero; `§54` 0 loud output frames.
+**No audio claim.** `UPD6383_SRC0B2` is **default OFF, not shipped**; arm A is bit-identical to the
+pre-§215 control in all three score columns.
+
+Evidence grade: §1 **MEASURED** (41 listings, 13/13, two independent programs); §2 **FORCED** — the
+criterion was unfalsifiable and a pre-arm control shows it; §3 **MEASURED**, and the strongest form
+of the output-stage null yet; §4 my framing **retracted**.
