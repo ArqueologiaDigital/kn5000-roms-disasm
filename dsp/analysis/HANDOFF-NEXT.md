@@ -96,6 +96,14 @@ range, and **a constant index CLOSES that code rather than opening it** (`SRC 0x
 guard: a clip rate that falls because a term stopped being added is a **REGRESSION**); `§54`
 graded first; `§70`/`§211` as **mean AND AC span, both buckets, ONE ROW** (§230).
 
+### ⚠⚠ 1.-0.NEW231.F THE `826 040` / `706 040` PAIR IN EVERY BRIEF IS **PRE-§228**
+
+Those are the **48 000 Hz** window sizes. On the §228 44 100 clock the same two arming windows
+measure **`734 548`** (`§54`, arms at 300 000) and **`614 548`** (`§S1`/`§104`/`§70`/`§211`/`§231`,
+arms at `S1_ARM_FRAME = 420 000`) — `1 323 000` frames less the arm, less the boundary. The
+**120 000**-frame offset between them is unchanged. **Convert before comparing; never subtract one
+window from the other.** (⚠ Same class as §229's `§38` correction — the third stale-clock figure.)
+
 ### ⛔ 1.-0.NEW231.E WHAT §231 DID NOT DO
 
 **It did not build the pre-registered applied arm**, and deliberately: §229 §7.1's own kill

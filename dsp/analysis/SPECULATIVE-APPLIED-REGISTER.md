@@ -17840,8 +17840,12 @@ on the case under test. ⚠ A mismatch column above zero would have voided every
 ```
 
 ⚠ **THE POPULATION.** `614 548` quiet / `288 451` loud per site is the **`S1_ARM_FRAME = 420 000`**
-window, i.e. `§S1`/`§104`/`§70`/`§211`'s. It is **NOT** comparable with `§54`'s 300 000-frame arms
-(`826 040` vs `706 040`). Never subtract one from the other.
+window, i.e. `§S1`/`§104`/`§70`/`§211`'s. It is **NOT** comparable with `§54`'s 300 000-frame arms: on **this** run `§54` reports
+`734 548` quiet against the census's `614 548`, a constant **120 000**-frame offset.
+⚠⚠ **AND THE `826 040` / `706 040` PAIR EVERY BRIEF STILL QUOTES IS PRE-§228** — those are
+the **48 000 Hz** figures. On the 44 100 clock the same two windows are **`734 548`** and
+**`614 548`** (`1 323 000 − 300 000` and `1 323 000 − 420 000`, less the arming boundary).
+**Convert before comparing, and never subtract one window from the other.**
 
 ⚠ **WHAT IT IS NOT.** It does **not** say the four words are *decoded*. It says that under the
 shipped machine every quantity their operation field could gate is **zero**, so no reading of that
