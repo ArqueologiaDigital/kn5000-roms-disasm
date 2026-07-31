@@ -28,15 +28,15 @@ HISTORY TURNED OUT TO BE THE DIAGNOSTIC RIG'S OWN RAIL.**
    arm D  XB85=2  ARRAY ROUTE only       data/D_xb85_route_222.log.gz    the bisection
    arm E  XB85=3  LATCH + LOAD only      data/E_xb85_latch_222.log.gz    the bisection
 
-   §222 iw205, arm C:  L 1111532..8388607   ACCB after 72845361152..549755748352
-                       1 111 532 x 65536 = 72 845 361 152   EXACT   -> ACT 0x0D = acc <- L<<16
+   §222 iw205, arm C:  L 547518..8388607    ACCB after 35882139648..549755748352
+                         547 518 x 65536 = 35 882 139 648   EXACT   -> ACT 0x0D = acc <- L<<16
    §222 D-RAM[0x85] writers, arms A and B:  NO WRITER AT ALL  (the audit names iw70 in arms C/D)
-   §222 arm C:  body 1  2/1/2 -> 58/44/47 | epilogue 0/0/0 -> 22/19/9 | §70/§211 LEFT ZERO
-   §54  arm C:  quiet-in 826 142 -> 0 silent / 826 142 LOUD (peak 8 388 607)
-                loud-in  314 063 -> 0 silent / 314 063 loud (peak 2 692 742)
-   arm E:  latch fired 1 204 800, load fired 1 203 840, result BIT-IDENTICAL to arm B
-   arm D:  §70 quiet mean 352 943 168 421.0 span 0  -- DIGIT FOR DIGIT arm C
-   §222 MODE-1 REBASE:  5 977 025 resolutions, 0 disagreements, all five arms
+   §222 arm C:  body 1  2/1/2 -> 59/44/49 | epilogue 0/0/0 -> 22/19/9 | §70/§211 LEFT ZERO
+   §54  arm C:  quiet-in 826 040 -> 0 silent / 826 040 LOUD (peak 8 388 607)
+                loud-in  313 960 -> 0 silent / 313 960 loud (peak 2 692 742)
+   arm E:  latch fired 1 204 800, load fired 1 203 840, §E-D0 block diffs EMPTY vs arm B
+   arm D:  == arm C in EVERY s104 column and in §70 both buckets -- the LATCH DOES NOTHING
+   §222 MODE-1 REBASE:  5 976 000 resolutions, 0 disagreements, all five arms
 ```
 
 ⇒ ⛔ **NOTHING SHIPPED BEHAVIOURALLY, AND THE MOVED NUMBER IS NOT AUDIO.** The silent-input peak
@@ -90,12 +90,20 @@ rail: `D-RAM[0x05]` reads `8 388 607` on every quiet frame **in arm B, before an
   `writers85.py` said 6, the machine performs 4 (1 on the rig).
 * ★ **THE PRE-INCREMENT TRAP IS NOW STRUCTURALLY IMPOSSIBLE AT THIS SITE.** `§E-D0` prints
   `dpPRE` and `dpPOST` as **separate columns**: `iw205` reads `0x85` and parks `0xD0`,
-  `var = 0/0/0` on 540 205 settled frames. Fourth occurrence, first time instrumented.
+  `var = 0/0/0` on 540 000 settled frames. Fourth occurrence, first time instrumented.
 * ★ **`D-RAM[0x85]` "NO PRODUCER" IS NOW MEASURED, NOT INFERRED** — by an instrument that names
   `iw70` the instant one exists.
+* ★★ **THE INSTRUMENT AUDIT LANDED MID-PASS AND WAS OBEYED.** `INSTRUMENT-AUDIT_findings.md`
+  row 4: *"before believing any future non-zero `§70`, raise the gate to 420 000 and re-run."*
+  `§70`/`§211` armed at **400 000** while `§104` arms at **420 000** — exactly the 20 000-frame
+  gap in every log (`§70 quiet 726 040` vs `§104 nq 706 040`). Its **R6 was applied**
+  (`S70_ARM_FRAME = 420000`, read-only) and **all five arms were re-run**; `§70` now reports
+  `706 040`, matching `§104`. **The verdict did not move** — and the bisection got sharper.
+  ★ **If the number you are about to report is the one the audit flagged, RE-RUN rather than
+  caveat.**
 * ★ **THE `:2914`/`:3491` MODE-1 REBASE DIVERGENCE IS DECIDED AND UNIFIED**: corpus body images
   are unit-relative **7 of 7**, `iw332 → m_rf[0x8F]` is measured (§221, 540 000/540 000), and the
-  unification disagrees with the old rule **0 times in 5 977 025 resolutions**. It also closes a
+  unification disagrees with the old rule **0 times in 5 976 000 resolutions**. It also closes a
   latent **cross-unit corruption** in `a04 FLANGER` / `a05 PHASER`.
 
 ### ⛔ 1.-0-prev-221 — §221's headline, SUPERSEDED as the task, TRUE IN EVERY PART
@@ -275,7 +283,7 @@ need one lo12 to mean two things on two classes **and** would leave the kernel's
 **⛔ AND THE FOUR FALSIFIERS ARE RETIRED AS A TEST.** All four passed under the rival — `tempA`
 at `iw25`, `P` at `iw39`, the last input-dependent `acc` slot (`iw38` → **`iw204`**), and body 0's
 `iw84`/`iw85`. They had to: arm A's own counter measured `mem[ptr]` at `iw25` non-zero on
-**313 169** evaluations ≈ the **314 063** loud frames, *before the rival ever ran*. **They grade
+**313 169** evaluations ≈ the **313 960** loud frames, *before the rival ever ran*. **They grade
 "is the operand alive", not "is the operand `mem[ptr]`".**
 
 **★★★ AND THE ONE RESULT THAT OUTLIVES THE REFUTED READING:** with the send FORCED open, body 0
@@ -572,7 +580,7 @@ blocker**, and it is **PARAMETRIC EQ's entire remaining blocker set** (§143 §6
   single root cause. **This is what keeps unit 0 silent.**
 * **★ Unit 1's railing is VEHICLE-DEPENDENT (§148, correcting §143 §2).** In a **clean**
   vehicle — cold boot, notes after the ~19 s boot settles, no panel navigation — `iw330/331/332`
-  are `0..0` in quiet *and* loud, and **both units present 0 non-zero** with 314 063 loud frames.
+  are `0..0` in quiet *and* loud, and **both units present 0 non-zero** with 313 960 loud frames.
   The rail appears only in the `peq_gain` vehicle, which drives the panel for ~40 s and uploads a
   different effect at every TYPE step (~55 program loads mid-run).
   ★★ **STANDING RULE: report audio statistics from a CLEAN vehicle** (`data/PREDICT_148.md`'s

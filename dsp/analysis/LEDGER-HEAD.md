@@ -26,17 +26,18 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > EVERY QUIET FRAME, AND IT IS THE ONLY ARM THAT MAKES UNIT 0 LIVE.**
 > §222 forced unit 1's empty input cell open (the epilogue-crossbar arm, `UPD6383_XB85`), and the
 > output stage **left zero for the first time in the project** — `§70`/`§211` went from
-> `min 0 max 0` to means of `3.53e11` / `1.21e12`, body 1 from `2/1/2` to `58/44/47`, the epilogue
+> `min 0 max 0` to means of `3.53e11` / `1.21e12`, body 1 from `2/1/2` to `59/44/49`, the epilogue
 > from `0/0/0` to `22/19/9`. ⛔ **AND IT IS NOT AUDIO:**
 >
 > ```
->    §54 arm C   quiet-in 826 142 -> 0 silent / 826 142 LOUD (peak 8 388 607)   <- THE FATAL CASE
->                loud-in  314 063 -> 0 silent / 314 063 loud (peak 2 692 742)   <- LOWER than quiet
->    §70  quiet mean 352 943 168 421.0 span 0 | loud mean 352 936 790 122.1 span 306 176 449 480
->    §211 quiet mean 1 212 718 186 496.0 span 0 | loud mean 1 212 702 694 236.0 span 1 239 924 867 072
+>    §54 arm C   quiet-in 826 040 -> 0 silent / 826 040 LOUD (peak 8 388 607)   <- THE FATAL CASE
+>                loud-in  313 960 -> 0 silent / 313 960 loud (peak 2 692 742)   <- LOWER than quiet
+>    §70  quiet mean 352 943 168 421.0 span 0 | loud mean 352 935 830 162.3 span 329 906 836 205
+>    §211 quiet mean 1 212 718 186 496.0 span 0 | loud mean 1 212 708 031 370.7 span 1 207 096 377 344
+>    (gate raised 400 000 -> 420 000 per INSTRUMENT-AUDIT R6 and ALL FIVE ARMS RE-RUN; verdict unmoved)
 >    m_rf[8D] 009B26 -> 7FFFFF ; body 0 28/32/28 -> 28/27/24 ; w65's operand a RAILED CONSTANT
->    arm D (route only)  reproduces arm C's quiet means DIGIT FOR DIGIT
->    arm E (latch only)  fired 1 204 800 + 1 203 840 times and is BIT-IDENTICAL to the control
+>    arm D (route only)  == arm C in EVERY s104 column and in §70, both buckets
+>    arm E (latch only)  fired 1 204 800 + 1 203 840 times; its §E-D0 block diffs EMPTY vs control
 > ```
 >
 > ⇒ **The pedestal is the rig's own rail — `D-RAM[0x05]` reads `8 388 607` on every quiet frame in
@@ -49,8 +50,8 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > re-ask it **only on a non-railing rig**. **(3)** body-0's coefficient cursor at `iw112`
 > (`coef 0..24`, −111 dB).
 > ⛔ **NOT `ACT 0x0D` / `m_bx_sel0d` / `iw205`** — §222 closed the destination **at the site**:
-> `iw205`'s own `ACCB` = its own operand `× 65536`, both endpoints (`1 111 532 × 65536 =
-> 72 845 361 152` EXACT). `m_bx_sel0d` is FROZEN at 1 and is now a regression control.
+> `iw205`'s own `ACCB` = its own operand `× 65536`, both endpoints (`547 518 × 65536 =
+> 35 882 139 648` EXACT). `m_bx_sel0d` is FROZEN at 1 and is now a regression control.
 > ⛔ **NOT `SRC 0x03` / `ACT 0x03` as a crossbar latch** — REFUTED by the two-sided bisection.
 > ⛔ **NOT the epilogue's operand set** — `§221 F1` is **still 0 with the link open**; the operand
 > the crossbar delivers is provenance `iw11`, **kernel A's dry deposit**, not body 0.
@@ -58,7 +59,7 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > ★ **`D-RAM[0x85]` HAS NO WRITER AT ALL — now MEASURED**, not inferred, by an audit that names
 > `iw70` the instant one exists. ★ **The `:2914`/`:3491` mode-1 unit-rebase divergence is DECIDED
 > and UNIFIED**: corpus body images unit-relative **7 of 7**, `iw332 → m_rf[0x8F]` measured, and
-> **0 disagreements in 5 977 025 resolutions**; it also closes a latent cross-unit corruption in
+> **0 disagreements in 5 976 000 resolutions**; it also closes a latent cross-unit corruption in
 > `a04 FLANGER` / `a05 PHASER`.
 > ⚠ `UPD6383_XB85` and `UPD6383_PICKUP` are **DEFAULT OFF**, fired counts printed unconditionally.
 > Logs: `data/{A_pickup,B_pickup_noz05,C_xb85_full,D_xb85_route,E_xb85_latch}_222.log.gz`.
@@ -195,7 +196,7 @@ build**; N1/N2/N3 and the calibration all held.
    arm B  §46  24 922 560 reads, 181 521 returned NON-ZERO      (arm A: 0)
           §80  latched 24 922 560 (181 521 nz) | publish hits 24 922 552 (181 521 nz)
           §215 m_dr non-zero AT iw25:  0 of 1 211 520           <- the blocker, in one line
-   arm A  §215 mem[ptr] at iw25 non-zero on 313 169 ~= 314 063 loud frames | m_dr non-zero on 0
+   arm A  §215 mem[ptr] at iw25 non-zero on 313 169 ~= 313 960 loud frames | m_dr non-zero on 0
 ```
 
 **THE DECODE, settled by the corpus (41 listings, 3057 words):** `lo12 0x2D9` is 36 words — 29
@@ -301,7 +302,7 @@ the ones a reader would reach for again.
 | 19 | `iw39` stores TWICE to cell `0x06` and the second store wins (**§211 §6**) | ⛔ **RETRACTED §213.** The site-3 record is a **PHANTOM**: an unbraced `else` at the ACT-0x07 site let `kwatch`/`watch_store`/`store_probe`/`m_dwr` run on every VISIT while §112's latch arm stored nothing. Fired count after the fix = **3 630 720 = the §112 latch count exactly**; §211's own log already contradicted it (`iw34` logged storing 8 388 607 to `0x06` while §104 shows `6 039 795` still there two slots later). "Suppress one store" was a **no-op on the machine** | §213 |
 | 20 | `tempA` is empty at `iw39` because its producer has never been identified (the `SRC 0x13` shape) | ⛔ **ANSWERED §213, not a hole.** `tempA` is INPUT-DEPENDENT `iw7..iw24` and is **zeroed at `iw25`** by `SRC 0x0B` + `ACT 0x19` — the delay-read register, 0 on 24 922 560 of 24 922 560 reads. A correct consequence of §48, and the send inherits it | §213 |
 | 21 | `SRC 0x0B` at a CLASS-2 word is a different code (`mem[ptr]`, or anything but the delay register) | ⛔ **REFUTED §215, by the corpus.** `lo12 0x2D9` is 36 words — 29 delay WRITE, 6 delay READ, 1 = kernel `iw25`. Its consumer `0012201655` (`mac ta`, **0.43 %** base rate) sits within 3 slots of a class-1 `addr8 0x20` DELAY READ at **13 of 13** sites. ENSEMBLE `w10` fuses read+capture in one `2D9`; the kernel splits the identical `2D9` off one word ahead of its read, with the SAME successor. The rival needs one lo12 to mean two things on two classes AND leaves the kernel's two delay READs with no consumer | §215 |
-| 22 | `HANDOFF-NEXT.md` §1.2's FOUR FALSIFIERS as a decode test | ⛔ **RETIRED §215.** All four passed under the refuted rival, and had to: arm A measured `mem[ptr]` at `iw25` non-zero on **313 169** ≈ the **314 063** loud frames *before the rival ran*. `iw25`'s pointer sits on a LIVE cell, so ANY live operand scores 4/4. They grade **reach**, not **identity** | §215 |
+| 22 | `HANDOFF-NEXT.md` §1.2's FOUR FALSIFIERS as a decode test | ⛔ **RETIRED §215.** All four passed under the refuted rival, and had to: arm A measured `mem[ptr]` at `iw25` non-zero on **313 169** ≈ the **313 960** loud frames *before the rival ran*. `iw25`'s pointer sits on a LIVE cell, so ANY live operand scores 4/4. They grade **reach**, not **identity** | §215 |
 | 23 | "the output-stage null is an artefact of a zero send" | ⛔ **REFUTED §215.** The send was FORCED open: body 0 ran its whole ladder on live audio (28 input-dependent slots, last dependent `acc` slot `iw38` → **`iw204`**), fed body 1 — and `§70 ACCA at w73` / `§211 ACCB at w78` stayed `min 0 max 0` in **both** buckets, `§61` 0 non-zero, `§54` 0 loud frames | §215 |
 | 24 | The **LINE INDEX** (`line = descriptor_value & 0x3f`) loses `iw12`'s datum — "the kernel's delay words all share line 0" | ⛔ **REFUTED §217.** That came from `§46`'s descriptor dump, which is an **UNGUARDED BOOT-TIME SAMPLE** (`m_dly_dsc[]` has no `m_frames_run` guard, so it freezes the pre-upload state where every cell reads `0000`). `§204`'s **guarded** census, *in the same log*, gives the kernel three distinct lines (`0x01`/`0x20`/`0x00`) with `iw12 ↔ iw98` paired exactly as `§79` says. Standing rule 10, third occurrence | §217 |
 | 25 | **Widen `m_dr`** / "it is a single-register problem" | ⛔ **MOOT §217.** One register is enough: `§217` measured **`publishes strictly between iw12 and iw25: 0`** — nothing overwrites it in `iw13..iw24`. The fault was *when* `m_dr` is written (only at a delay word, and `iw25` is not one), not *how many* registers there are | §217 |
@@ -385,7 +386,7 @@ the ones a reader would reach for again.
     four pre-computed falsifiers all passed under a reading the corpus refutes — because `iw25`'s
     pointer sits on a **live cell**, so *any* substitution that puts a live value on the bus scores
     4/4. The counterfactual was measurable in the DEFAULT arm (`mem[ptr]` non-zero on 313 169
-    ≈ the 314 063 loud frames) **before the rival was ever built**. ⇒ **Count, in the control, how
+    ≈ the 313 960 loud frames) **before the rival was ever built**. ⇒ **Count, in the control, how
     many arms would pass your test. If the answer is "all of them", it is not a test.** And when a
     decode question has a CORPUS answer, the corpus outranks any run. *(§215)*
 16. **A census that enumerates "cells touched" only sees the hooks it has.** §98 marks kernel
