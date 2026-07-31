@@ -11663,3 +11663,80 @@ already found that roadmap's headline item stale.
 
 Evidence grade: §1 **MEASURED**; §2 the artefact **acknowledged**; §3 **FORCED** by the collision
 of two independently-grounded decodes; §4 follows; §5 procedural, with the discrepancy flagged.
+
+---
+
+## §188 — the host payload's LSB was being dropped. SHIPPED, default → `0xB910E446A39B440F`.
+
+Chasing §187's flagged "59 vs 881" discrepancy closed it (1086 tag-`0x15` packets over a 37-effect
+walk ≈ 29 per effect per unit; my one-effect two-unit run measured 59 — **no defect**) and turned up
+a real one on the way.
+
+### 1. ⛔ A hypothesis refuted in the same breath as forming it
+
+The tag histogram pairs cleanly — `15`/`95`, `26`/`A6`, `4C`/`CC` — each differing in **bit 7**, and
+the device does `switch (tag & 0x7f)`, discarding it. That reads as a **unit selector** being
+thrown away, which would mean unit-1's parameters clobbering unit-0's.
+
+**It is the payload's LSB.** `k5-output-stage.md` item 9 and `k3-pointers.md` §1.1 item 3 both give
+the decode as `V = ((aa&0x7F)<<17)|(bb<<9)|(cc<<1)|(dd>>7)` — **PROVEN BY CONSTRUCTION**, off the
+firmware's own writers. `adjudication-round4.md` item D says so explicitly. Sixteenth application of
+rule 3, and the cheapest yet: the idea and its refutation arrived together.
+
+### 2. ★ But the decode exposes a live defect
+
+```
+   PROVEN     V = ((aa&0x7F)<<17) | (bb<<9) | (cc<<1) | (dd>>7)
+   DEVICE     v = ((aa<<16)|(bb<<8)|cc) << 1  =  (aa<<17)|(bb<<9)|(cc<<1)
+```
+
+§111's `×2` reproduces the three shifts and **drops `dd>>7`**. 32 % of host packets carry it set, so
+a third of every host-programmed quantity in this machine was 1 LSB low. `adjudication-round4.md`
+item D records this retraction as having *"never reached"* six documents, leaving **7 live sites**.
+This was one.
+
+### 3. ★★★ Measured STATICALLY first, then confirmed bit-exactly
+
+The host stream contains the LFO sine. Decoding those 24 packets both ways against
+`round(0.95 × 2^23 × sin(2πk/24 + 0.1))` — **before writing any code**:
+
+```
+   PROVEN decode : max err 1 LSB, RMS 0.707        tag bit 7 set in 12 of 24 -- half,
+   DEVICE decode : max err 2 LSB, RMS 1.291        as a sine's LSBs should be
+```
+
+Implemented as mask bit 63 and run against `data/PREDICT_188.md`:
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **F1** fires | > 0, not all packets | **46 of 115 (40.0 %)** | ✔ |
+| **F2** the fit | max `2 → 1` LSB, RMS `1.291 → ≈0.707`, and 16/24-negative must stop | **max 1 LSB, RMS 0.707, 12/24 negative** | ✔ exact |
+| **F3** null half | bit-7-clear cells bit-identical | **True** | ✔ |
+| **F4** rule 1 | `§70 ACCA` min = max | `min 0 max 0` | ✔ silent |
+
+★ **RMS `0.707` = `1/√2`, exactly the RMS of uniform ±0.5 rounding.** The residual is now pure
+quantisation — the table is reproduced as exactly as a 24-bit integer can represent it.
+
+★★ And the 12 cells that moved match the capture's tag-bit-7 pattern **bit-for-bit**:
+`011000000011100111111100`. That is a 24-bit prediction made from the host stream and confirmed in
+the register file, with no fitted parameter between them.
+
+### 4. SHIPPED
+
+Default `0x3910E446A39B440F` → **`0xB910E446A39B440F`**, verified with no env override.
+
+⚠ **The chip is still silent** (`min 0 max 0`), and this was pre-registered as not an audio fix.
+What it buys is that **every host parameter in the device is now bit-exact** — delay times, reverb
+times, feedback, damping, levels and the LFO table — which every downstream measurement has been
+resting on.
+
+### 5. ⚠ A correction to my own working
+
+Fitting the *measured* table with a free amplitude and phase gave "mean residual exactly −1.000,
+24 of 24 negative", and I tested "add 1 to every value", which improved it. **That was an
+artefact** — a free fit lets `A`/`φ` absorb per-value structure. The packet-level check showed the
+deficit is **per value, set in 12 of 24**. Scoring against the **ideal formula** rather than a fit
+to the corrupted data is what made F2 a real criterion.
+
+Evidence grade: §1 **FORCED** (two notes, by construction); §2 **FORCED**; §3 **MEASURED**, all four
+falsifiers pre-registered and exact; §5 the artefact **acknowledged**.
