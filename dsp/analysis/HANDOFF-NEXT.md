@@ -16,56 +16,46 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Audit the notes for decodes graded PROVEN BY CONSTRUCTION or FORCED that are NOT implemented in
-the device — and implement them.**
+**THE DELAY ROTATION SIGN IS INVERTED — every delay line in the machine is `65536 − D`.**
 
-★ **This class has the best track record on the project by a wide margin.** §188 shipped from
-exactly it: two notes gave the host packet decode *by construction* off the firmware's own writers,
-the device disagreed, and a ROM-derived table supplied a **bit-exact** control (max err 2→1 LSB,
-RMS 1.291→0.707 = 1/√2, and the 12 moved cells matched the capture's tag-bit pattern
-bit-for-bit). No hypothesis, no A/B, no confound.
+From the DRAM audit (`data/AUDIT_DRAM_findings.md`), the highest-value finding of the whole sweep:
 
-⚠ It is also known to be non-empty: `adjudication-round4.md` item D says its retraction left
-**7 live sites**, of which §188 fixed one — the other six are in documents, and
-`tools/retraction_sweep.py` already detects them.
+```cpp
+   upd6383.cpp:1850-1882   addr = (cellv + m_frames_run) & 0xffff       with G counting UP
+```
 
-### How to run it
+`adjudication-round5.md` §3 **FORCES** `delay = READ_CELL − WRITE_CELL`. The two are arithmetically
+incompatible: the shipped sign yields **`65536 − D` on every line**, turning ROOM REVERB 1's
+**18.1 ms pre-delay into 1.468 s**.
 
-1. `grep` the notes for `PROVEN BY CONSTRUCTION` and `FORCED` and list each claim's *operational*
-   content (a field width, a packet layout, an address map, a direction rule).
-2. For each, check the device actually implements it. §188's defect was visible as a **two-line
-   diff** between the note's formula and the code.
-3. Ship only what has an **independent** control — a ROM table, a host capture, a boundary the
-   firmware states. That is what separated §188 from the last six ticks.
+### ★ It has TWO independent controls
 
-### ⛔ Two lines are now CLOSED. Do not reopen without a new instrument.
+1. The host's own evaluator `cell = round(ms × 44100/1000) + BASE24` (`LABEL_03925E`, **PROVEN BY
+   CONSTRUCTION**) requires the delay to **grow** as the knob turns. The shipped sign makes it shrink.
+2. **The device's own disassembler mirror already prints the corrected relation**
+   (`upd6383d.cpp:468`) — the two halves of the same device disagree with each other.
 
-* **`f31 = 4`** — §194 and §195. The two-way comparison failed its input control (the programs
-  diverge at `+2`, *before* the bit); the three-way repair failed because the two `f31 = 4`
-  programs agree at `+2` as well, so **bit identity is confounded with program similarity**.
-* **The bit-11 family** — §192. All four decidability routes closed; three experiments proposed and
-  withdrawn.
+⚠ The device comment cites `r3 §5.1`, whose sign rests on the retracted `i+1` pairing **and** the
+retracted polarity. Check that before trusting it.
 
-> **The lesson both lines share:** an instruction-stream minimal pair bounds what a field can
-> **encode**; it does not yield a controlled **measurement**, because neither the machine state
-> entering the window nor the similarity of the host programs is part of the pair.
+### Two more FORCED claims absent, on the same six lines
 
-⚠ **Process, recorded because it is the point:** §193–§195 spent **five probe revisions and five
-builds for two negatives**. Every revision was caught by an internal check rather than by a wrong
-result — the instrumentation is working — but the confound analysis belonged *before* the first
-build, not after the fourth. **Ask for the criterion AND the confound before building.**
+* **Per-body descriptor map** — `m_delay_ix` is frame-global, reset only at frame end, so the
+  unit-1 reverb draws cells `0x33..0x4E` instead of `0x00..0x1F`: **mostly never-written cells, i.e.
+  no delay line at all.**
+* **`C40.1.80.000` must consume a cell** (r3 §6.1, all 8 exact solutions; verified arithmetically:
+  28 non-C consumers + 4 C-format = 32 = *n*). **The cursor runs 4 short inside every reverb.**
 
-### ★ Infrastructure gained on the way (all verified)
+### ★ And §189/§190's OPEN discrepancy is CLOSED by the same audit
 
-* `tools/type_select.lua` — reliable effect selection: saturate **UP**, step **DOWN**
-  `(36 − TYPEIDX)`. `peq_select.lua` drops steps over long walks.
-* **§170's TYPE map is off by one above index 8** (its generator deduplicated consecutive identical
-  programs). Use `TYPELAST=36`, and **always fingerprint the loaded program from the upload dump in
-  the same run**.
-* `$SP/run_type.sh` copies `kn5000_dsp1_upload.txt` into the run directory **before** the next
-  launch overwrites it.
+The cold-boot unit-1 preset is **CONCERT REVERB 1 (algo 20)**, not ROOM REVERB 1. Its ROM ladder
+reproduces §189's measured chain `569 707 1250 1674 480 512 870 678 900 840` **exactly, 10 of 10 in
+order**, and its cell `0x02 = 41925` is §190's live value. §190 fingerprinted the *body image* —
+which **all twelve reverbs share byte for byte**; the preset lives only in the descriptors. ⇒ my
+§190 identification method was sound for unit 0 and **cannot identify a reverb**.
 
 ### ⛔ Dead, do not retry
+
 
 
 
