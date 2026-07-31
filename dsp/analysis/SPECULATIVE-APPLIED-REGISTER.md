@@ -11367,3 +11367,83 @@ strictly better posed than the `w000` one because both sides are in the same enc
 
 Evidence grade: §1 **MEASURED** (null computed first, a pre-registered MISS); §2 **MEASURED**,
 exhaustive over all 90; §3 **FORCED** by §2; §4 **MEASURED**; §5 **SPECULATIVE**.
+
+---
+
+## §184 — the alternate `lo12` decomposes, and there is exactly ONE payload with a decoded sibling
+
+§183 handed forward the Rosetta constraint: `k3-pointers.md` §1.1 item 2 proves **by construction**
+that the firmware builds `lo12 = 0x800 | X` — *"not opaque constants `0x821`/`0x825`"* — because
+`INC 8, WA` adds a literal 8 to byte 3 *after* the address nibble is placed. Applied here.
+
+### 1. Stripping the flag does NOT find the payloads elsewhere — and that is a result
+
+```
+   lo12   X = lo12 & 0x7FF    occurs with bit 11 CLEAR?
+   0x821  ->  0x021           YES x1   <- rstcur, the pair k3 §1.2 already names
+   0x822  0x825  0x827  0x839  0x864  0x8BC  0x921  0xC63     ->  none
+```
+
+**1 of 9, against a null of 0.3** (70 distinct `lo12` values occur bit-11-clear, of 2048). The
+alternate encoding's payloads are **disjoint** from the ALU encoding's values. ⇒ supports
+`bit11-family.md` §9's *"second encoding"* over the *"modifier on an otherwise-ALU `lo12`"* reading,
+from a third direction.
+
+### 2. ★★ But the flag is not alone up there — a SUB-FIELD at `lo12[10:8]`
+
+```
+   lo12[11:8]   sub    sites   forms
+      0x8        0       36    821 822 825 827 839 864 8BC
+      0x9        1        1    921
+      0xC        4       53    C63
+```
+
+⇒ **`lo12` under bit 11 decomposes as `FLAG(11) | SUB[10:8] | PAYLOAD[7:0]`**, with `sub ∈ {0,1,4}`.
+`sub` separates **`C63` (53 sites, sub 4) from every other member of the family** — perfectly, and
+it is the only field that does. All 28 register-load words sit at `sub = 0` with no exceptions.
+
+### 3. ★★★ THE PAYLOAD-`0x21` TRIPLE — the only payload collision in the corpus
+
+Enumerating every payload that appears under more than one `(flag, sub)`:
+
+```
+   payload 0x21:   0x021    0x821    0x921        <- and NOTHING ELSE collides, anywhere
+```
+
+```
+   lo12 0x021   flag 0  sub 0   x1    rstcur — DECODED (k3 item K)        prog39_parametric_eq w58
+   lo12 0x821   flag 1  sub 0   x3    ldptr  — PROVEN BY CONSTRUCTION     kernel w42, w50, epilogue w69
+   lo12 0x921   flag 1  sub 1   x1    ⚠ UNDECODED                        prog10_multi_tap_delay w33
+```
+
+**Two of the three are decoded, and one of those is proven from the firmware's own assembly.**
+
+⇒ `050.0.00.921` at MULTI TAP DELAY `w33` is **the highest-leverage single undecoded word in the
+bit-11 family**: it is one `sub` value away from a decode that cannot be argued with, on a payload
+whose other two readings are known. Nothing else in the corpus offers that.
+
+### 4. ⚠ And it reframes the `C63` task
+
+`C63` is `sub 4 / payload 0x63`; `8BC` is `sub 0 / payload 0xBC`. **They differ in *both* fields**,
+so they are not siblings and `8BC` cannot bound `C63` the way §6.2's once-vs-twice pairing implied.
+The `040.0.00.C63` / `040.0.00.8BC` minimal pair §183 found is real as a *carrier* control, but
+under this decomposition it varies two fields at once.
+
+⇒ The tractable target is **`0x921` first, not `C63`** — decode the `sub` field where two of three
+values are already known, then apply it to `C63`'s `sub = 4`.
+
+### 5. SPECULATIVE
+
+* **S9.** `0x021` = *reset the cursor*, `0x821` = *load the pointer*. Both are pointer/cursor
+  operations **on the same payload**, distinguished by the flag. The natural reading is that
+  `payload` names a register-family operand and `(flag, sub)` selects the operation — making
+  `0x921` a **third pointer/cursor operation**, in MULTI TAP DELAY, an effect that plausibly needs
+  one. **SPECULATIVE**, but it predicts `0x921`'s effect is on pointer state and nothing else,
+  which is measurable against the `§164` census.
+* **S10.** `sub = 4` is one-hot-ish against `sub = 1`, and `C63` — 53 sites, more than half the
+  family — is the only occupant. A field whose most common value is used by exactly one form is
+  more likely a *mode* than an *opcode*. **SPECULATIVE.**
+
+Evidence grade: §1 **MEASURED** (null computed first); §2 **MEASURED**, exhaustive over all 90;
+§3 **MEASURED** (the collision is exhaustive over the corpus), the two decodes cited not re-derived;
+§4 **FORCED** by §2; §5 **SPECULATIVE**.
