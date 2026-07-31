@@ -13092,3 +13092,208 @@ are not audio.
 
 Evidence grade: §209's census **MEASURED** against a pre-registration committed before the build;
 §207's over-reach **acknowledged**.
+
+---
+
+## §211 — ⛔⛔ THE OUTPUT STAGE IS NOT WHERE THE SILENCE LIVES. `w73` PRESENTS A ZERO IT WAS HANDED, AND `§48` IS NOT A GATE
+
+Scored against `data/PREDICT_211.md`, **committed before the emulator was launched**
+(`kn5000-roms-disasm@d171953`). Run: `data/outstage_211.log.gz` — shipped default
+`0xB910E446A39B440F`, all five env gates ON, clean vehicle
+(`kn7000_mame/scratchpad/coldnotes2.lua`, cold boot, isolated NVRAM, triad C4/E4/G4 held
+21.0–27.5 s, `-seconds_to_run 30`), 1 440 001 frames, **313 960 loud**.
+
+**The task was "the output stage — why is IC311 silent". The answer is that the output stage is
+not silent for any reason of its own: it is handed a zero, and everything it does with that zero
+is correct.**
+
+### 0. The calibration passed, so the run counts
+
+`§54 TRACKING` reports **313 960 loud frames** against the pre-registered `~312 000`
+(6.5 s × 48 kHz). The kernel shows **27 input-dependent accumulator slots** against the
+pre-registered `>= 20`. Neither could have been arranged after the fact; both were written down
+first, and either failing would have voided every number below.
+
+### 1. ★★★ THE EXHAUSTIVE READING, and it settles the whole question
+
+⚠ **The scoring rule was fixed in advance** (`PREDICT_211.md` §1), because §104's `*` flag is not a
+test of input dependence — a **free-running** quantity sampled over two buckets of unequal length
+reports two different ranges too. So:
+
+```
+  INPUT-DEPENDENT  iff  flag == '*'  AND  (loud_lo - quiet_lo) != (loud_hi - quiet_hi)
+  FREE-RUNNING     iff  flag == '*'  AND  the two deltas are EQUAL  (a pure translation)
+```
+
+Applied to all 285 executed slots by `dsp/tools/s104_score.py`:
+
+```
+  acc: 29 slots flagged '*'  ->  27 INPUT-DEPENDENT, 2 free-running
+       input-dependent: iw 9..31, 35, 36, 37, 38          ALL of them in KERNEL A
+       free-running:    iw 90, 91   (both endpoints translate by EXACTLY 262 144)
+       kernel B 50..59:  0     epilogue 60..82:  0     body 0:  0     body 1:  0
+```
+
+★★ **Not one accumulator anywhere in I-RAM 39..384 depends on the input.** The last
+input-dependent slot in the frame is **`iw 38`**; `iw 39` is where it becomes a both-buckets
+constant. The two slots that *look* alive inside body 0 — `iw90/91`, the ones §104's own SUMMARY
+line names as "first acc DIFFERS at 90" — are the **LFO ramp**, and the pre-registered rule
+identifies them as such without needing to know that: both range endpoints move by the same
+262 144.
+
+⇒ **The presentation cannot be input-dependent, because nothing upstream of it is.** That is not
+an inference about `w73`; it is exhaustion over every slot that could have carried a signal to it.
+
+### 2. `§150 §4`'s NAMED MEASUREMENT, TAKEN AT LAST — and the suspect is MOOT
+
+§150 §4 wrote: *"The discriminating observable is whether the store fires at `iw73` and what it
+writes … Point it at slot 73 (`SPROBE` list) and read it."* That was **60 sections ago and was
+never done**; the probe was already in the build and had simply never been aimed. `SPROBE_MAX`
+16 → 24 and eight epilogue slots added (read-only, no gate, no decode change):
+
+```
+  iw  word        n_exec   dpPre dpPost | dec gfail supp g7 path | stores
+  63 02A79051C3  1020000     00    00   |  0    1    1   0   1  | (NO STORE)
+  64 0C40A80445  1020000     00    00   |  0    4    0   0   0  | (NO STORE)
+  70 02A61850C7  1020000     00    00   |  0    1    1   0   1  | [site3 addr 85 val 0..0 x1020000]
+  71 0C41900446  1020000     00    00   |  0    4    0   0   0  | (NO STORE)
+  72 0000106087  1020000     00    00   |  0    1    0   0   1  | [site3 addr 06 val 4194304..4194304]
+  73 0E30C00404  1020000     00    00   |  0    1    0   0   1  | [site2 addr 00 val 0..0 x1020000]
+  77 0859086822  1020000     00    00   |  0    1    0   0   1  | (NO STORE)
+  78 0A3CD9F287  1020000     00    00   |  0    1    0   0   1  | [site2 addr 00 val 0..0] [site3 addr 00 val 0..0]
+```
+
+★ **`w73`'s bit-4 store FIRES** — 1 020 000 times, once per settled frame, not suppressed
+(`supp 0`) — **and it writes `0`, to D-RAM cell `0x00`, min = max, every frame.**
+
+⇒ **§150 §3's store-and-clear suspect is MOOT, not refuted: there is nothing to clear.** The
+accumulator is already zero when `w73` begins. The three-way contradiction §150 posed (the
+store-and-clear reading vs `hi12` bit 4 meaning *store* vs the presentation ordering) **cannot be
+adjudicated at this word by any experiment**, because all three readings produce the same
+observable when the datum is zero. And the destination is cell `0x00`, which nothing in the frame
+reads (§104: `dp = 0x00` at every slot 60..79, `mem` 0..0). The store is inert as well as empty.
+
+### 3. ⛔ §141's LOCALISATION TO `w73` DOES NOT HOLD ON THE SHIPPED BUILD
+
+The epilogue's accumulator, MEASURED per slot, quiet **and** loud, both identical:
+
+```
+  w54..w64   2 603 010 048   a CONSTANT, both buckets, '='
+  w65        0               020.1.8F.1C1  -- reg 0x8F, ACT 0x01
+  w66..w82   0
+```
+
+**The accumulator is zero from `w65`, eight slots before `w73`.** §141 reported
+`iw64: 1 102 114 506 752 | iw65..72: preserved | iw73: 0` — **measured with mask bit 55 (the §138
+guard) ON**. This run confirms `§138 stale-LOAD guard (mask bit 55 = 0): FIRED 0 times`. §141's
+table describes an arm that is **not shipped and never was**.
+
+★★ And note what `w73` would have destroyed even under that arm: `2 603 010 048`, **a constant in
+quiet and loud alike.** Standing rule 1 exists for exactly this — *a difference from silence is not
+a signal*. Chasing `w73` was chasing the right to present a DC.
+
+★ **`w65` is not an "erasure" either.** It is `SRC 0x07 / ACT 0x01` on register `0x8F` — an
+ordinary load of a unit-1 body cell that is empty. It does what its fields say.
+
+### 4. ★ THE UNIT-1 HALF, MEASURED FOR THE FIRST TIME
+
+§70 has only ever watched **ACCA at `w73`**. `w78` presents **ACCB**, and standing rule 1 had
+therefore never been applied to DO2 at all — §61's "DO2 peak 0" cannot tell an empty ACCB from an
+empty unit-1 OUTPUT LEVEL, and the two call for different work. New probe, same buckets:
+
+```
+  §70  ACCA AT w73:  quiet 726 040 frames  min 0 max 0  |  loud 313 960  min 0 max 0
+  §211 ACCB AT w78:  quiet 726 040 frames  min 0 max 0  |  loud 313 960  min 0 max 0
+  §61  unit0/DO1 1 203 840 exec, 0 non-zero, peak 0 | unit1/DO2 1 203 840 exec, 0 non-zero, peak 0
+```
+
+**Both accumulators are hard zeros.** The unit-1 level is not the problem; there is nothing for it
+to scale. ⇒ `w78` is closed on the same terms as `w73`, and the `A3C.D.9F.287` decode is not what
+is between the chip and audio.
+
+### 5. ★★★ THE BRIEF'S OWN QUESTION: **NEITHER**. `§48` IS NOT A GATE, IT IS A SYMPTOM
+
+The task asked whether the output silence is *downstream of §48's delay-read gate* or *independent
+of it*. Decided in advance (`PREDICT_211.md` §4), and P1 held, so: **neither, as posed.** Both are
+downstream of the same upstream fact — and the delay port itself says so:
+
+```
+  §48 DELAY READ CONSUMED (SRC 0x0B):  23 733 120 times, 0 with a non-zero datum
+  §46 DELAY PORT: 24 922 560 reads (0 returned NON-ZERO), 23 693 760 writes
+  §75 DELAY WRITES WITH CONTENT: 1 175 999 of 23 693 760   ->  95.04 % write ZERO
+  §75 DLY W addr 966F cell 0000 frame 420001 data 7D70     <- and the other 4.96 % write THIS
+```
+
+`0x7D70 = 32 112`. The delay WRITE takes `acc_to_datum(m_acc) >> 8` (`upd6383.cpp:2016`, source),
+and the accumulator at kernel `iw46` is the **constant** `538 760 587 509`; `538760587509 >> 16 =
+8 220 787`, `>> 8 = 32 112 = 0x7D70`. Predicted from §104's table before the sample line was read,
+and it matches to the bit.
+
+⇒ **The one non-zero datum any delay write has ever put into the line is a constant.** Opening
+§48's gate could therefore only deliver a DC to the ladder. ★ **§205 §1's *"while that is 0 the
+send is 0 whatever else is done"* is TRUE and is NOT the operative constraint.** The unit-0 send is
+not merely zero — it is **input-blind from `iw39`, which is upstream of every delay word except the
+kernel's own two reads.** Fixing the delay path cannot produce audio; it would produce a delayed
+constant.
+
+### 6. WHERE THE INPUT ACTUALLY GOES — three MEASURED facts, handed over rather than acted on
+
+Two independent instruments agree, so this is not a reading of one table:
+
+* **§96 writer census**: cell `0x05` — the unit-0 body **entry** cell (`output-stage-decode.md`
+  item A, and `DRAM_UNIT_BASE = 0x05 | unit<<7` at the CALL) — is written by
+  `iw9`, `iw11`, **`iw35`**, **`iw45`**. `iw11`'s store is INPUT-DEPENDENT
+  (`[site3 addr 05 val 722..16 760 298]`, SPROBE).
+* **§104 residency**: cell `0x05` reads **input-dependent at `iw35`**, then `4 194 304` at
+  `iw36..45`, then **`0`** at `iw46..49` and at body-0's own `iw84`/`iw85`.
+  `4 194 304 = 0x400000 = acc_to_datum(2^38)`, and `2^38` is exactly the accumulator `iw34` leaves.
+* ⇒ **body 0 reads its entry cell and finds `0`, every frame.** The input arrives in `0x05` and is
+  overwritten twice before the body runs.
+
+★ **The new, gradeable lead — `iw39` stores TWICE to the same cell, and the second store wins:**
+
+```
+  39 0410AFF647  [site2 addr 06 val 1991044..8388607 x1020000]   <- bit-4: the INPUT-BEARING acc
+                 [site3 addr 06 val 0..0          x1020000]      <- ACT 0x07: tempA, and it is 0
+```
+
+`site 2` is `upd6383.cpp:2816`, `site 3` is `:3487` — same function, same word, second one last.
+`iw39 = 410.A.FF.647` is **fully `alu_decoded()`** (`dec 1`, `gfail 0`, `path 0`), so this is not a
+speculative artefact. Its `SRC` is `0x19 = LO_SRC_TA` (ANCHORED), and **tempA is empty at that
+word**. So the kernel's one input-bearing deposit into cell `0x06` is overwritten by an empty
+temporary in the same instruction.
+
+⚠ **This is a LEAD, not a finding, and nothing here was changed on the strength of it.** Two things
+must be established before anyone touches it: (a) that a word carrying *both* `HI_ST` and
+`ACT 0x07` really performs two stores on real silicon — the alternative is that one of the two
+readings is wrong for this encoding, which is a decode question and not a bug; and (b) **why
+tempA is empty**, which is the same shape as the `SRC 0x13` hole in the LEDGER's tier-0a blocker.
+⛔ Do **not** reach for "suppress one of the two stores": that is an ANCHOR-VALUE fix (standing
+rule 9) aimed at a symptom.
+
+### 7. What was built, and the control on it
+
+`SPROBE_MAX` 16 → 24, eight epilogue slots added to `sprobe_idx()`, and the `§211 ACCB AT w78`
+probe. **All read-only**: no gate, no mask bit, no decode. The control is free and it passed — the
+instrumented build's §104 census is **identical, slot for slot**, to the pre-instrument run
+(27/2 split, same slot list, same loud count 313 960). A probe that changed the machine would have
+shown up there.
+
+### 8. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| *"the output stage — why is IC311 silent"* as a task | the stage presents what it is handed, and it is handed a hard zero in both units |
+| **`w73`** as the localisation (§141) | measured under the §138 guard, which fires **0 times** in the shipped default; the accumulator is zero from **`w65`** |
+| **`w73`'s store-and-clear** as a suspect (§150 §3) | the store FIRES and writes **0** to cell `0x00`; there is nothing to clear and nothing reads the cell |
+| **`w78` / `A3C.D.9F.287`** | ACCB is a hard zero, so the unit-1 decode is not between the chip and audio |
+| **`§48`'s delay-read gate** as *the* blocker (§205 §1) | true but not operative: 95 % of delay writes write 0 and the rest write the constant `0x7D70`; opening the gate delivers a DC |
+| **`bit11-family.md` item B's undecidability** as a *blocker* | it remains true and is now also **irrelevant**: nothing downstream of the presentation unknowns is waiting on them |
+
+Evidence grade: §1 **MEASURED** against a scoring rule committed before the run, and **exhaustive**
+over all 285 executed slots; §2 **MEASURED** (the store witness, fired-count 1 020 000); §3
+**MEASURED**, and §141's arm identified as unshipped by that run's own bit-55 fired-count of 0;
+§4 **MEASURED**; §5 **MEASURED**, with the `0x7D70` arithmetic **FORCED** from source and matched
+to the bit; §6 **MEASURED** (two independent instruments) for the cell-`0x05` history, the double
+store **MEASURED** and its net effect **INFERRED (strong)** from the two sites' order in one
+function; §7 **MEASURED** (the identity control).

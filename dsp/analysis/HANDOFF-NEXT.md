@@ -16,9 +16,67 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★ §209 SHIPPED THE PER-UNIT DESCRIPTOR RING. Body 1's census went 0 of 16 → 16 of 16, all four
-arms bit-exact against a pre-registration committed before the build. §202 is re-baselined.
-⇒ THE DESCRIPTOR PATH IS DONE. The next task is the OUTPUT STAGE.**
+**★★★ §211 CLOSED THE OUTPUT STAGE, AND IT CLOSED IT AS A NULL. `w73`, `w78` and `§48` are all
+RETIRED. The signal never leaves the KERNEL: not one accumulator in I-RAM `39..384` depends on
+the input, in either body or in the epilogue. THE NEXT TASK IS THE KERNEL, I-RAM `35..46`.**
+
+Run `data/outstage_211.log.gz`, shipped default `0xB910E446A39B440F`, clean vehicle
+(`kn7000_mame/scratchpad/coldnotes2.lua`), **313 960 loud frames** — cite the run, not the section.
+
+### ⛔ 0a. DO NOT RE-OPEN THE OUTPUT STAGE. Every branch of it is closed by §211
+
+* **`w73` is NOT where the accumulator dies.** On the shipped build the epilogue's accumulator is
+  the **constant `2 603 010 048`** from `w54` to `w64` and **`0` from `w65`** — eight slots before
+  `w73`. §141's table was measured with **mask bit 55 (the §138 guard) ON**; that bit is 0 in the
+  default and **fires 0 times**. ⚠ And what `w73` would have destroyed under that arm was a
+  **constant in quiet and loud alike** — standing rule 1's exact shape.
+* **`w73`'s store FIRES and writes ZERO** (`[site2 addr 00 val 0..0 x1 020 000]`, the §109 probe
+  finally aimed at slot 73 as §150 §4 asked 60 sections ago). ⇒ §150 §3's *store-and-clear* suspect
+  is **MOOT, not refuted**: there is nothing to clear, the destination cell `0x00` is read by
+  nothing, and all three of §150's rival readings produce the same observable on a zero datum.
+  **No experiment at this word can separate them.**
+* **`w78` / ACCB is a hard zero too** — §211's new probe, the unit-1 half measured for the first
+  time: `ACCB AT w78: quiet min 0 max 0 | loud min 0 max 0`. So the `A3C.D.9F.287` decode is not
+  between the chip and audio either, and `bit11-family.md` item B's undecidability is now not just
+  true but **irrelevant**.
+* **`§48` IS NOT A GATE, IT IS A SYMPTOM.** 95.04 % of delay writes write **0**
+  (`1 175 999 of 23 693 760` with content) and the other 5 % write the **constant `0x7D70`** —
+  `acc_to_datum(538 760 587 509) >> 8`, forced from source and matched to the bit. Opening §48
+  delivers a **DC** to the ladder. §205 §1's *"while that is 0 the send is 0 whatever else is
+  done"* is true and **is not the operative constraint**.
+
+### ★★ 0b. THE NEXT TASK, and the two things it must establish first
+
+The input reaches unit 0's body **entry cell `0x05`** and is destroyed before the body runs.
+Two independent instruments, same run:
+
+```
+  §96  cell 05 written by iw9, iw11, iw35, iw45     (iw11's store is INPUT-DEPENDENT: 722..16 760 298)
+  §104 cell 05 residency: INPUT-DEPENDENT at iw35 -> 4 194 304 at iw36..45 -> 0 at iw46..49
+                          -> and body 0 reads 0 at its own iw84/iw85, every frame
+       4 194 304 = 0x400000 = acc_to_datum(2^38), and 2^38 is what iw34 leaves in the accumulator
+```
+
+★ **The one gradeable lead — `iw39` stores TWICE to cell `0x06`, and the second store wins:**
+
+```
+  39 0410AFF647  [site2 addr 06 val 1991044..8388607]   <- bit-4: the INPUT-BEARING accumulator
+                 [site3 addr 06 val 0..0           ]    <- ACT 0x07: tempA, and tempA is EMPTY
+```
+
+`site 2` = `upd6383.cpp:2816`, `site 3` = `:3487`, same word, second one last. `iw39` is **fully
+`alu_decoded()`** (`dec 1 gfail 0 path 0`), so this is not a speculative artefact, and its
+`SRC 0x19 = LO_SRC_TA` is **ANCHORED**.
+
+⚠ **Two things must be established BEFORE anything is changed:**
+1. **Does a word carrying both `HI_ST` and `ACT 0x07` really perform two stores?** If not, one of
+   the two readings is wrong *for this encoding* — a decode question, not a bug. `iw39` is not
+   alone: `iw78` shows the same double store, and `iw32`/`iw34`/`iw72`/`iw92` are ACT-0x07-only.
+2. **Why is tempA empty at `iw39`?** Same shape as the `SRC 0x13` hole in tier 0a — a source whose
+   producer has never been identified.
+
+⛔ **Do NOT reach for "suppress one of the two stores".** That is an ANCHOR-VALUE fix (standing
+rule 9) aimed at a symptom, and §205 already closed one task of exactly that shape.
 
 ### ⛔ 0. DO NOT RE-OPEN THE DESCRIPTOR BASE — every branch of it is closed
 
@@ -49,22 +107,14 @@ rotation sweeps down) stands and is strengthened. ⛔ `age = R − W` is an **id
 do not score "the age equals a ROM cell difference"; only *which* cell it resolves to is
 informative (7 of 15 land inside unit 1's own block).
 
-### ★★ 2. THE NEXT TASK: THE OUTPUT STAGE, and the gate in front of it
+### ⛔ 2. SUPERSEDED BY §211 — this section's task is DONE and its framing was wrong
 
-**`§70 ACCA min 0 max 0`, quiet and loud, on the shipped default. The chip is SILENT and the
-descriptor fix did not change that — it was never expected to.** Localised to `w73` (§141/§150).
-
-⚠ **AND THE GATE THAT IS STILL SHUT** (§205 §1, unchanged by §209):
-
-```
-   §48 DELAY READ CONSUMED (SRC 0x0B): 22 781 700 times, 0 with a non-zero datum
-```
-
-While that is 0, the kernel's unit-0 send is 0 whatever else is done. ⇒ the two live questions are
-**why a resolved delay read still returns zero data** and **what `w73` does**, in that order.
-⚠ The `PRE=0 RING=1` arm was the only one that ever returned data (1 128 908 non-zero reads) and it
-is a **degenerate** line — it reads back the same frame's own write at zero distance. It looks like
-progress and is not.
+It read: *"the two live questions are why a resolved delay read still returns zero data and what
+`w73` does, in that order."* **Both are answered and neither is live.** `§70 ACCA min 0 max 0`
+still holds, and `§211 ACCB AT w78 min 0 max 0` now holds beside it — but the cause is not in the
+output stage and not at the delay port. See §1 above. ⚠ The `PRE=0 RING=1` arm remains a
+**degenerate** line (it reads back the same frame's own write at zero distance); that warning
+stands.
 
 ### Also still open, unchanged
 
@@ -106,8 +156,8 @@ for the **second** DSP (MN19413/IC310), which Felipe wants inspected · `f31 = 4
 ### Then
 
 per-unit **CALL VECTORS** written and read by nothing (controls: four Sub CPU ROM constants;
-cold-boot capture → 84/42, 200/50) · **the OUTPUT STAGE** — still silent, `§70 ACCA min 0 max 0`,
-both ports peak 0, localised to `w73`.
+cold-boot capture → 84/42, 200/50). ⛔ *"the OUTPUT STAGE — still silent, localised to `w73`"*
+is **CLOSED by §211**; see §1.
 
 ### ⛔ Dead, do not retry
 

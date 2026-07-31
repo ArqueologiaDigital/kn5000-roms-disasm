@@ -20,7 +20,45 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§165, 2026-07-30)
+## TIER 0a — THE CURRENT BLOCKER  (§211, 2026-07-31)
+
+> **THE SIGNAL NEVER LEAVES THE KERNEL. Not one accumulator in I-RAM `39..384` depends on the
+> input — not in either body, not in the epilogue. The OUTPUT STAGE is not the defect; it
+> presents a hard zero, correctly.**
+
+Established by run `data/outstage_211.log.gz`, the **shipped default** `0xB910E446A39B440F`, clean
+vehicle (`kn7000_mame/scratchpad/coldnotes2.lua`), 1 440 001 frames, **313 960 loud** — cite the
+run, not the section (rule 11). Scored by `dsp/tools/s104_score.py` under a rule committed in
+`data/PREDICT_211.md` **before** the run:
+
+```
+  §104 acc column, all 285 executed slots:
+       29 flagged '*'  ->  27 INPUT-DEPENDENT, 2 free-running
+       input-dependent: iw 9..31, 35..38     ALL of them in KERNEL A
+       free-running:    iw 90, 91  (both endpoints translate by EXACTLY 262 144 = the LFO ramp)
+       kernel B: 0    epilogue: 0    body 0: 0    body 1: 0
+  §70  ACCA AT w73  min 0 max 0 quiet AND loud   |   §211 ACCB AT w78  min 0 max 0 quiet AND loud
+```
+
+⚠ **The `*` flag alone is NOT a test of input dependence** — a free-running quantity sampled over
+two buckets of unequal length reports two ranges too (trap #7). The discriminator is: *both* range
+endpoints translating by the same constant ⇒ free-running. §104's own SUMMARY line says "first acc
+DIFFERS at 90"; under the rule, `iw90/91` are the **LFO**, and nothing in either body is alive.
+
+**Where the input dies:** it reaches unit 0's body **entry cell `0x05`** (`iw11`'s store is
+input-dependent, `722..16 760 298`) and is overwritten twice before the body runs — `4 194 304`
+at `iw35`, `0` at `iw45`. Body 0 reads `0` at its own `iw84/85`, every frame.
+
+**Next:** I-RAM `35..46`, and specifically the **double store at `iw39`** —
+`[site2 addr 06 val 1 991 044..8 388 607]` (the bit-4 store of the input-bearing accumulator)
+followed by `[site3 addr 06 val 0..0]` (`ACT 0x07` writing an **empty tempA**), same word, second
+one last. ⚠ Establish (a) whether `HI_ST` + `ACT 0x07` really is two stores, and (b) why tempA is
+empty, **before** changing anything. ⛔ "Suppress one of the two stores" is an anchor-value fix
+(rule 9) at a symptom.
+
+---
+
+## TIER 0a-old — the previous blocker  (§165, 2026-07-30), still open but no longer the headline
 
 > **The LFO phase RAMPS in D-RAM cell `0x07` and does not REACH the class-6 word.
 > The defect is ROUTING over a handful of words, not generation.**
@@ -88,6 +126,8 @@ the ones a reader would reach for again.
 
 1. **Before reporting any non-zero output, read `§70 ACCA` and compare min against max.** Two
    "IC311 outputs audio" claims have been retracted; one was a DC. *(§137)*
+   ★ §211 adds the unit-1 half: **`§211 ACCB AT w78`**, same buckets. `§61`'s "DO2 peak 0" cannot
+   tell an empty ACCB from an empty unit-1 OUTPUT LEVEL — read both.
 2. **Report absolute audio statistics from a CLEAN vehicle** — `scratchpad/coldnotes2.lua`, cold
    boot, notes after ~19 s. The `peq_gain` vehicle *creates* a unit-1 rail through ~55 mid-run
    effect uploads; use it for **deltas only**. *(§148)*
@@ -118,3 +158,16 @@ the ones a reader would reach for again.
     reported in an earlier section, re-run it on the current build — several gates ship between
     passes. **Cite the run, not the section.** *(§165: the headline blocker had been fixed by
     other work and nobody re-measured it)*
+    ★ **Second occurrence, §211:** §141's *"`w73` erases the accumulator at the door"* was measured
+    **with mask bit 55 ON**. That bit is 0 in the shipped default and fires **0 times**; on the
+    shipped build the accumulator is zero from `w65`. A measurement taken under a gate belongs to
+    that gate — **quote the arm with the number, every time.**
+12. **A DIFFERENCE BETWEEN TWO BUCKETS IS NOT INPUT DEPENDENCE.** Free-running quantities (ramps,
+    counters, phases) sampled over buckets of unequal length report different ranges by
+    construction. The discriminator, and it is cheap: **do both range endpoints translate by the
+    same constant?** If yes it is free-running. *(§211 — under the raw flag, body 0 appears to
+    carry the signal at `iw90/91`; it does not, and `dsp/tools/s104_score.py` applies the rule)*
+13. **AIM THE PROBE YOU ALREADY HAVE.** §150 §4 named the exact instrument and the exact slot —
+    *"point the §109 store witness at slot 73 and read it"* — and 60 sections passed with the probe
+    in the build and the slot missing from its list. **Before designing an experiment, check
+    whether an existing instrument merely needs pointing.** *(§211)*
