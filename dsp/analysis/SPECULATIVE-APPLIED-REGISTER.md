@@ -12703,3 +12703,58 @@ claim held back one tick for want of an instrument, then shipped when the instru
 Evidence grade: the decode **FORCED** (r3 §6.1 + the 28 + 4 = 32 arithmetic); the consequence
 **MEASURED** (a duplicate-cell collision removed); the probe's first form **VOIDED** by boot
 pollution and recorded.
+
+---
+
+## §205 — both standing tasks return NOT-AS-NAMED. One is 93 sections stale; the other is undecidable.
+
+### 1. ⛔ "Fix the `SRC 0x08` clobber that rails PEQ's input cell" — the task is wrong four ways
+
+* The bit-4 store at `iw45` (`010.A.00.20C`) writes **the accumulator**. `SRC 0x08` is not in that
+  datapath at all — `L` reaches only `ACT 0x0C`'s tempA capture and the next word's `m_p`.
+  **No `SRC 0x08` decode change can alter this write.** ★ **§111 §3 already retracted the
+  attribution; the task title outlived its own retraction by 93 sections.**
+* `iw45` **is** the unit-0 SEND (`k6-input-stage` finding 7, FORCED, over-determined 37×).
+  Suppressing it deletes the only kernel→body-0 route.
+* Of the 71 mode-2 bit-4 `SRC 0x08` stores, **59 are the `092`/`094` LFO phase-accumulate + wrap
+  idiom** — a `src == 0x08` suppression would delete the LFO publish in 21 images.
+* **"Rails" is a vehicle artefact**: `0x7FFFFF` appears only in the `peq_gain` navigation vehicle
+  (standing rule 2 — deltas only). In the clean vehicle the same word sends **0**.
+
+⇒ **The patch must not be written.** What is real is a different word and is **downstream of the
+current blocker**: the send is 0 because `§48 DELAY READ CONSUMED (SRC 0x0B): 22 773 120 times,
+0 with a non-zero datum`. ★ That second field is the single number that settles it — while it is
+zero the send is zero regardless of `iw45`.
+
+### 2. `f31 = 4/5` — UNDECIDABLE, and now partly MEASURED
+
+The audit named its grading criterion before proposing anything and found that for four of six
+candidate readings *no quantity outside the emulator depends on the choice at all*. Three routes
+closed by measurement: the delay domain (15 of 98 sites precede a delay word, **all 15 are READs,
+0 of 98 reach a WRITE**); `F31_HIGH`'s index vehicle (the device does not model the table);
+and `f31-high.md` §6's "14/14 linear" statistic, which is **circular** — that list was *derived* as
+"images with zero f31 ≥ 3". Replaced with an a-priori partition: **69 of 97 vs 36.4 expected,
+p = 8.4e-12**, so the inert-alias null is refuted on admissible evidence.
+
+★ **New structural fact:** 46 % of the `f31 = 4/5` population is operand-free (`0XX.2.00.000`), and
+for `f31 = 0/1/2` those decode as exactly the three **MAC product-writeback modes**. ⇒ `hi12[3:1]`
+on those words is the **writeback mode**, and the shipped `{LOAD, ADD, HOLD}` space is
+*categorically* wrong for 45 of them. **INFERRED.**
+
+### 3. ★ Two measurements taken here
+
+The counters `m_bx_f4_n`/`m_bx_f5_n` were **incremented and never printed** — this project's own
+*"every gate logs a fired-count"* rule, breached for exactly the most contested field. Now printed:
+
+```
+   f31=4  0            f31=5  1 162 989          (mask bits 48-51 = 0)
+```
+
+⚠ **`f31 = 4` never fires in the clean vehicle.** Any experiment on it needs a vehicle that
+exercises it — a requirement no previous `f31 = 4` proposal stated.
+
+And the **X0 identity control** (`0xb919e446a39b440f`, a twin of the shipped default) ran: both arms
+**identical**, `§70 ACCA min 0 max 0`. A free control that could have failed and did not.
+
+Evidence grade: §1 **FORCED** (the datapath) with the corpus census **MEASURED**; §2 the closures
+**MEASURED**, the writeback-mode reading **INFERRED**; §3 **MEASURED**.
