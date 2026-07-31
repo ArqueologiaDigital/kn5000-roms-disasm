@@ -129,3 +129,27 @@ for both is the expected outcome; the deliverable is which of C2/C4 is true.**
 `-cfg_directory` **carrying `:DSPCFG value="3"`**, `-pluginspath ./plugins`,
 `-autoboot_script ../kn7000_mame/scratchpad/coldnotes2.lua`, `-seconds_to_run 30`, `-window
 -resolution 640x480` (**never `-video none`**), `timeout`-wrapped, **one run at a time**.
+
+---
+
+## 6. ADDENDUM — arm D, pre-registered AFTER arms A/B/C ran and BEFORE arm D was launched
+
+Arm C turned out to be the first arm in which the **delay line carries substantial content**:
+`§46` reads returning NON-ZERO go **0 -> 3 494 021** of 24 922 560, and `§75` writes-with-content
+**1 175 999 -> 2 351 009**. That makes one currently-unknown fact cheap to measure, and it is
+`§219 §1.-0` item 3's standing question: **does `UPD6383_DRPUB` have ANY observable consequence
+once the line is full?** In every arm so far it was bit-identical to its control *because the datum
+it correctly delivered was zero*.
+
+**arm D** = `UPD6383_NOZ05=1 UPD6383_DRPUB=1`, one variable off arm C.
+
+> **D1:** `§215 CLASS-2 SRC 0x0B ... m_dr non-zero on` goes from **0** (arm C) to **> 0**.
+> Fails if it stays 0, which would mean `iw12`'s own reads are still always zero and the loss is
+> upstream of the publish — §217 F3's alternative, and equally publishable.
+> **D2:** the `§217` provenance at `iw25` reads **`iw12`, age 0**, as it did in §217 arm B.
+> **D3:** `§104` differs from arm C from `iw25` onward. **A null here would mean `iw25`'s `tempA`
+> does not reach anything, which contradicts §215's corpus anchoring and would need explaining.**
+> **D4:** `§70`/`§211` still `min == max == 0` in both buckets. Same standing rule 1.
+
+⚠ **This CANNOT make `DRPUB` shippable**: §219 §1.-0 item 3 requires the **shipped** build's line
+to carry content, and arm C's line is full only because a diagnostic gate is on.
