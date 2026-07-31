@@ -20,7 +20,7 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230, 2026-07-31)
 
 > ### ★★★★★ §229 — READ THIS BEFORE QUOTING ANY NULL
 >
@@ -62,6 +62,69 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > place in the device, the nop guard, so the A/B measures our dispatch table and nothing else,
 > and the review's own kill-condition cannot fire).
 
+
+> ### ★★★★ §230 — READ THIS BEFORE QUOTING ANY **CONTROL**
+>
+> **THE PROJECT'S WORST CONTROL IS REPAIRED, AND ITS MOST-QUOTED BATTERY IS ONE CHECK.**
+>
+> **1. SINGLE DELAY's `+0.02149296` IS TWO-SIDED AGAIN.** It used to **reject** the corrected
+> machine and **accept** the doubly-defective one. Repaired, `python3 dsp/tools/sd_rerun.py control`
+> **ACCEPTS** the corrected machine at lag **1001** with sample **45074** and **REJECTS seven**
+> others — `cursor −1`, `reversed`, `reversed + cursor −1` (the one it used to accept), the `p0 = 0`
+> defect, and **all three coefficient scrambles**. **1 / 7, 8 of 8 as expected**, self-test 13/13.
+> ★ **The criterion is BIT-EXACT and comes out of the ROM**: `((c·c) >> 23)·h >> 23 = 180 297`
+> with `c = 0xE5762C = −0.207331`, `h = 0x400000 = +0.500000`; `180 297 · 2²¹ >> 23 = ` **45 074**.
+> ⛔ **`+0.02149296` is SINGLE DELAY's gain, NOT PARAMETRIC EQ's** (PEQ's control is the separate
+> **0.198 dB** biquad). ★★ **The three scrambles are the point** — they carry the ROM's own
+> coefficients reshuffled, so they **do** put an echo at 1001. **A presence test passes all three;
+> only the VALUE separates them.**
+> ⚠ Three harness defects, none a property of any machine: an **uninitialised pointer** (the head
+> write sat on `mem[0xFB]`, so the line was fed zero every frame), a **double negation**
+> (`reversed + cursor −1` restores correct addressing — the old control was mislabelling a
+> *differently-correct* machine), and a **hard-coded `D = 500`** where the taps are in **CASCADE**
+> (`500 + 501 = 1001`).
+>
+> **2. ⛔ `§54` / `§70` / `§211` / rule-19 / `§61` / the epilogue `D-I` tally ARE ONE CRITERION
+> COUNTED SIX TIMES.** Measured as a **set identity** over the 33 modern arms
+> (`dsp/tools/outstage_collapse.py`, 19/19 self-tests): all six have the **identical move-set**
+> `{C_xb85_full_222, D_xb85_route_222}`. The source forces five of them — in `present()`, `§70`
+> and `§211` read the **same local `pacc`**, rule-19 sums it, `§61` reads `v` derived from it, and
+> `§54`'s `m_frame_out_nz` comes from that same `v`. **One number, five prints.**
+> ⇒ *"§54 clean | §70/§211 mean 0.0 span 0 — PASS"* is **ONE ROW**. Keep them as the output-stage
+> watch they are; **stop counting them as a battery.**
+>
+> **3. ★★★★ THE INDEPENDENT SECOND CHECK IS `m_rf[0x8D]` — AND §229 CLEARED IT.** Its move-set
+> `{C_xb85, D_xb85, O_227, Q_227}` **strictly contains** the null's; it lives in the output stage
+> (the `w61` self-loop, `§104` rows 60/61); and **it has actually failed** — `0x009B26 → 0x7FFFFF`
+> (§222), **halved** to `0x004D93` (arm Q), **absent** (arm O). §229's fabricated-zero census
+> independently reports **its non-zero stores come from a third site**, so it survives that audit.
+> ⚠⚠ **BUT ON THE PRESENTED VALUE THERE IS EXACTLY ONE MEASUREMENT POINT.** Every *"the output
+> stage is still a null"* this project has published rests on **a single measurement** — and at
+> `w78` that measurement's only operand is a zero **we fabricate** (§229). ⇒ **`§70` and `§211`
+> are not even the same KIND of null**: `w73` is a statement about the chip, `w78` is partly a
+> statement about us.
+>
+> **4. `W4′` IS A SEND-STATE DETECTOR, `20 of 20`** — body-0 `D-I` is `(0,0,0)` on every modern arm
+> whose delay port returned no non-zero datum, across four mask defaults, `EPIBUS`, `PICKUP`,
+> `PSHIFT`, `NOCARRY` and **both LFOWRAP polarities**. ✔ **The `UPD6383_LFOWRAP` gate survives** on
+> `W0`/`W1`/`W2`, which are two-sided and did move; what falls is the published **11 of 11**, which
+> is really **6 of 11 plus `m_rf[0x8D]`**. ⚠ `§46`'s non-zero count is a **delay-line-content**
+> detector, not a clean send-state one (`O_227` moves it 1 175 999 times and still scores `0/0/0`).
+>
+> **5. §220's *"slot for slot IDENTICAL to the §215 calibration arm"* — the RAW markers are equal
+> element for element; the RULE-21 content is `26/28/27` vs `17/16/15`, body 1 `2/1/2` vs `0/0/1`.**
+> ★ The whole difference is **UNDECIDABLE slots** — `11/12/12` vs `2/0/0`. **The two arms mark the
+> same slots; the rig decides them and the calibration arm does not.** ✔ The send model survives on
+> §225's independent re-grade; **the corroboration does not.**
+>
+> ⛔ **`dsp/verify.py` IS NOT A DEVICE CONTROL.** It reads `original_ROMs/*.rom` and `dsp/disasm/*.dsm`
+> and **cannot see `upd6383.cpp` at all**. Keep it as a repo invariant; never count it as a
+> falsifier row for a C++ change — the equivalent there is the **diff-line** control.
+>
+> ⚠ **Five control repairs are SPECIFIED AND QUEUED, not shipped** (`BUILD-LANE-QUEUE.md` 15–19):
+> `§S1 CONTROL`'s refuted *"clips = 0"*, `§S3`'s *"EXTERNAL"* control (the source's own comment
+> admits the predicate is identical at the same hook), `§44`'s 0-in-40-of-40, mask bit 5's level
+> guard and `§S3-C4` — both never exercised in the direction that would make them fire.
 
 > ### ★★★★ §228 SHIPPED FIRST, AND IT IS NOT THE BLOCKER — IT IS A CLOCK
 >
@@ -873,3 +936,36 @@ the ones a reader would reach for again.
     survives as `26/28/27` proof-grade + `0/4/1` free-running, and the shipped build's `2/4/1`
     "null" is **100 % free-running — body 0 is `0/0/0`**. Damage is confined to rows reading cell
     `0x07` or `0x10`; every other published tally is proof-grade. *(§224, operational §225)*
+
+22. **★★ A CONTROL IS NOT A ROW, IT IS A **QUANTITY** — AND TWO CONTROLS THAT MOVE IN THE SAME
+    ARMS ARE ONE CONTROL.** `§54`, `§70`, `§211`, the rule-19 line, `§61` and `§104`'s epilogue
+    `D-I` tally have the **identical move-set** over 33 arms, and `present()` shows five of them
+    are functions of **one local variable at one program point**. A battery of six that has never
+    once disagreed with itself is one check with five extra prints. ⇒ **Before quoting N
+    falsifiers, compute their MOVE-SETS: `python3 dsp/tools/outstage_collapse.py`.** Identical
+    move-set ⇒ collapse them and say so. Strict containment ⇒ *that* is your independent check.
+    ★ **AND TWO CONTROLS CAN COLLAPSE BY SENSITIVITY WHILE DIFFERING IN KIND**: `§70`'s `w73` reads
+    the accumulator; `§211`'s `w78` reads an operand the emulator **fabricates** (§229). Both print
+    `mean 0.0 span 0`; only one is a statement about the chip. **Sameness of behaviour is not
+    sameness of meaning — check both.** *(§230; the control audit `f601303` found four of these and
+    the measurement found six)*
+    ⚠ **AND A CONTROL CAN BE INVERTED, NOT MERELY INSENSITIVE.** SINGLE DELAY's harness **rejected**
+    the corrected machine and **accepted** the doubly-defective one, confidently and reproducibly,
+    for three independent harness reasons (an uninitialised pointer, a double negation, a hard-coded
+    window). ⇒ **"the control fired" is not evidence; run it against a machine you KNOW is good and
+    one you KNOW is bad, and print both.** *(§230)*
+
+23. **★★ A DOCUMENT THAT CALLS ITSELF *DERIVED* MUST NAME THE SOURCE IT WAS DERIVED FROM.**
+    `gen_ledger.py` and `gen_fixlist.py` generate from `upd6383.cpp` *"so it cannot drift"* — from
+    the **WORKING TREE**. On 2026-07-31 that tree held **211 uncommitted lines** from a concurrent
+    lane, and a routine regeneration would have baked them into two documents whose entire
+    authority is that they are derived. Both now take **`UPD6383_SRC_DIR`**; `SHIPPED-FIX-LIST.md`
+    was regenerated against a pristine checkout of `HEAD`. ★ The same defect had a second head:
+    `lint_handoff.py` picks *"the current shipped-default log"* as the **newest by mtime** in a
+    shared directory, and graded four documents against an **untracked** arm dropped mid-pass by
+    that lane. It now considers **git-tracked logs only**. ⇒ **An untracked artefact is not
+    evidence, and a shared working tree is not a source.** *(§230)*
+    ⚠ **AND A SECTION NUMBER IS A SHARED RESOURCE**: two `## §229` headings existed at once, which
+    would have corrupted the generated tier-2 index. Claim it by writing the heading early, or
+    check before writing. The prose-only pass renumbered.
+

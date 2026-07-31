@@ -72,6 +72,28 @@
     accumulator it writes) are: m_rf[0x8D] and §104's epilogue D-I tally.
     Everything else is upstream (kernel, body 0/1, the send).
 
+  ★★★★★ AND §229 SHARPENS THIS FURTHER -- READ IT WITH THIS TABLE.
+    §229's FABRICATED-ZERO census (the parallel lane) measured that
+    3.982 % of ALL operand resolutions are zeros src_term()'s `default:'
+    INVENTS -- 9 832 536 of 246 952 062 -- and the DISTRIBUTION is the
+    finding: kernel A 0.000 %, kernel B 0.000 %, body 1 0.000 %,
+    body 0 8.772 %, EPILOGUE 28.492 %.  Therefore:
+
+      ⚠⚠ §70 AND §211 ARE NOT THE SAME KIND OF NULL, AND NOBODY HAD SAID SO.
+         §70  @ w73  SRC 0x10 = the ACCUMULATOR, f31 outside the bit-5
+                     family        -> a statement about the chip
+         §211 @ w78  SRC 0x0A resolved as an INVENTED ZERO 1 106 028
+                     times, AND its operation code collapsed by
+                     `op = f31 & 3'  -> partly a statement about US
+         Both print `mean 0.0 span 0'.  They collapse by DEMONSTRATED
+         SENSITIVITY (identical move-sets, above) but they DIFFER IN KIND.
+
+      ✔ m_rf[0x8D] = 0x009B26 SURVIVES that audit -- §229 reports its
+        non-zero stores come from a THIRD SITE.  So the one control this
+        tool nominates as the genuine second check is the one their
+        census CLEARS.  Two passes, opposite directions, same nomination.
+      ⛔ m_rf[0x8C]'s permanent zero is now 100 % ATTRIBUTED TO US.
+
 ==============================================================================
 == 4. §54 AND §70/§211 -- MEAN AND AC SPAN, BOTH BUCKETS, EVERY ARM.
 ==    ⚠ THESE ARE ONE CRITERION, NOT FOUR.  §54 arms at frame 300 000

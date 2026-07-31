@@ -514,3 +514,86 @@ body-0 denominator is published, and **convert `§38`'s 264 002** to the 44 100 
   per-upload provenance line).
 * **Action 2, the 44 100 Hz frame clock — SHIPPED in §228.** **Action 5, the bookkeeping repair —
   SHIPPED in §228** (P1–P9).
+
+---
+
+## 15–19. ★★★ FIVE **CONTROL** REPAIRS — specified by §230, **not shipped** (the lane was contested)
+
+**Grade: FORCED (each replacement is a quantity an existing instrument ALREADY PRINTS).**
+Source: `CONTROL-AUDIT_findings.md` (`f601303`) §6 + register **§230**.
+
+⛔ **§230 made NO source change**: `upd6383.cpp` carried **211 uncommitted lines** from a
+concurrent lane throughout that pass (register §230 §0). All five are **print-text only** — no
+behaviour change, no gate, no mask bit. **Ship them as ONE arm**, certified by the **diff-line**
+control (`D1`): every differing line must be one of the restated criteria and **not one a measured
+value**. ⚠ **Cite the predicate, not the line** — this file's own item 1 records a guard that moved
+`:4059 → :4075 → :4538` in a single day.
+
+**15. `§S1 CONTROL` prints a criterion that was REFUTED on its first run.** It reads
+*"must be clips = 0"* and has printed **`706040/706040` — 100 %** in all 12 arms that carry it,
+ever since §223 §2 refuted it (the off-by-one, **fifth occurrence**). A permanently-violated
+criterion printed beside a result is a trap with a fuse on it.
+⇒ **Restate the criterion, not the instrument:** *"`iw34`'s pre-clamp quiet value must equal
+**14 428 403**"* — a number **the same line already prints**, and which **moved** in both §227 arms
+(`9 311 353` in Q, `8 388 608` in O). Zero new measurement.
+
+**16. `§S3`'s *"EXTERNAL"* control is the SAME PREDICATE AT THE SAME HOOK, and the source says so.**
+`if (mode != 1 && dest == 0x06) s3_boot(...)` sits immediately above the mask-bit-26 site with the
+identical expression, under a comment calling the identity *"deliberate"*. It validates **counter
+plumbing**; it cannot detect a wrong predicate, a wrong `pre`, a wrong epoch-0, a wrong ladder or a
+wrong verdict — which is everything `§S3` exists for. This is §224's own *"internal consistency
+true by construction is not a self-test"*, one section later.
+⇒ **Replace with a genuinely external limb, both already printed:** `§176`'s
+`06:8388607(0..8388607/chg1100)` change-count, **or** `§104` row 19's `acc`. ✔ `§S3`'s **ladder**
+is independently sound (it moved in `O_227` and `Q_227`), so nothing downstream falls — only the
+word *"EXTERNAL"* has to go.
+
+**17. `§44` TAP-TABLE fetches print a clean `0` in 40 of 40 arms.** RULE 20, verbatim: a census
+printing a clean zero is indistinguishable from a correct negative. Nobody has established what it
+is sensitive to.
+⇒ **Print it as *"0 — UNTESTED in this vehicle"***, the way `§NG` and §227's `NOCARRY` banner
+already do, **or** point it at a program known to fetch the tap table.
+
+**18. `§41`'s LEVEL GUARD (mask bit 5) has NEVER been observed to fire.** Its line is conditional on
+`m_lvlguard_n` and is **absent from all 40 arms**. ⇒ **arm mask bit 5 once, in a throwaway arm, and
+record the fired count.** Until then quote it as **UNTESTED**, never as clean.
+
+**19. `§S3-C4` reads `0 PASS` in 7 of 7 arms and has never been exercised in the direction that
+would make it fire.** ⇒ **clear mask bit 23 once** to show the count *can* be non-zero.
+⚠ Bit 23 is **CONFOUNDED** (six sites) — this is a throwaway demonstration arm, **not** a candidate
+for shipping.
+
+★ **AND A SIXTH, cheap and not print-text:** `D1`'s **unit is inconsistent between citations** —
+`K1` says *"7 diff lines"* where a raw both-sides `diff` gives 12. **State whether the count is
+one-sided or both-sided**, once, wherever `D1` is defined.
+
+---
+
+## ⚠⚠ STANDING ADDITION FROM §230 — READ BEFORE WRITING A FALSIFIER LIST
+
+- ⛔ **`§54` / `§70` / `§211` / rule-19 / `§61` / `§104`'s epilogue `D-I` tally ARE ONE CRITERION.**
+  Measured as a **set identity** over the 33 modern arms: identical move-set
+  `{C_xb85_full_222, D_xb85_route_222}`. Five of the six are functions of **one local variable at
+  one program point** in `present()`. **Quote them as ONE ROW.** Keep them as the output-stage
+  watch they are; stop counting them as a battery.
+  ⚠⚠ **AND `§70` AND `§211` DIFFER IN KIND** (§229): `w73` reads the accumulator; `w78`'s only
+  operand is a zero the emulator **fabricates** (`SRC 0x0A`, 1 106 028 times) with its operation
+  code collapsed. Both print `mean 0.0 span 0`; **only one is a statement about the chip.**
+- ★★★★ **THE INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE IS `m_rf[0x8D] = 0x009B26 = 39 718`.**
+  Its move-set **strictly contains** the null's, it lives in the output stage (`w61`'s self-loop,
+  `§104` rows 60/61), **it has actually failed** (`→ 0x7FFFFF` §222; halved in Q; absent in O), and
+  §229's fabricated-zero census **clears it** (its non-zero stores come from a third site).
+- ★★★ **SINGLE DELAY's falsifier IS USABLE AGAIN, with a restated criterion:**
+  `python3 dsp/tools/sd_rerun.py control` — an impulse must return at lag **1001** with sample
+  **45074**, the ROM's three-factor product in fixed point. **1 ACCEPT / 7 REJECT, 8 of 8**,
+  self-test 13/13. ⛔ It is **SINGLE DELAY's** gain, **not PARAMETRIC EQ's** (PEQ's is the separate
+  **0.198 dB** biquad).
+- ⛔ **`dsp/verify.py` IS NOT A DEVICE CONTROL** — it reads ROMs and `.dsm` files and **cannot see
+  `upd6383.cpp`**. Repo invariant, never a falsifier row for a C++ change.
+- ⚠ **`§46`'s non-zero count is a DELAY-LINE-CONTENT detector, not a clean send-state
+  discriminator** — `O_227` moves it **1 175 999** times and still scores body-0 `D-I = 0/0/0`.
+  **Quote the rig, not the port.**
+- ⚠⚠ **CHECK `git -C kn7000_mame status` BEFORE ANY BUILD**, and **never `git checkout` a shared
+  working tree**. §230 found 211 uncommitted lines from another lane mid-pass. `gen_ledger.py` and
+  `gen_fixlist.py` now take **`UPD6383_SRC_DIR`**; `lint_handoff.py` now considers **git-tracked
+  logs only** (it had graded four documents against an untracked arm dropped mid-pass).

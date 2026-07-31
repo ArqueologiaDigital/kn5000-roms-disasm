@@ -105,7 +105,7 @@ def current_clip_rates():
             want[g] = 0
         elif re.fullmatch(r'\d+', v):
             want[g] = int(v)
-    #  ★★ §229: ONLY GIT-TRACKED ARMS COUNT.  This function picks the NEWEST
+    #  ★★ §230: ONLY GIT-TRACKED ARMS COUNT.  This function picks the NEWEST
     #  matching log by mtime, so before this guard the linter's single authority
     #  quantity -- "the current shipped-default clip rate" -- was whatever file
     #  had most recently APPEARED in a shared directory.  On 2026-07-31 that was

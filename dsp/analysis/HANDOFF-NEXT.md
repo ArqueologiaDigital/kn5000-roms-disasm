@@ -93,21 +93,28 @@ TIMES**, MEASURED AS A SET IDENTITY OVER 33 ARMS.
 ⛔ NOTHING WAS BUILT OR RUN: ANOTHER LANE HOLDS `upd6383.cpp` WITH 211 UNCOMMITTED LINES.
 ⛔ THE BLOCKER IS UNMOVED: IT IS STILL *WHAT THE BASE `0x90` MEANS* (§227, queue item 12).**
 
-### ⛔⛔ 1.-0.NEW.A READ THIS BEFORE YOU TOUCH THE SOURCE — THE LANE IS CONTESTED
+### ⛔⛔ 1.-0.NEW230.A READ THIS BEFORE YOU TOUCH THE SOURCE — THE LANE IS CONTESTED
 
 At **17:25:47** on 2026-07-31 `src/devices/cpu/upd6383/upd6383.{cpp,h}` gained **211 uncommitted
-lines** carrying a **`§229 UPLOAD LEDGER`** and a **`§229 FABRICATED-ZERO CENSUS`**, and at
-**17:29** an **untracked** `dsp/analysis/data/D_229.log.gz` appeared. §229 was dispatched with
+lines** carrying a **`§230 UPLOAD LEDGER`** and a **`§230 FABRICATED-ZERO CENSUS`**, and at
+**17:29** an **untracked** `dsp/analysis/data/D_229.log.gz` appeared. §230 was dispatched with
 *"you hold the build/run lane, no other agent is editing source"* — **that was false.**
 
 * ⛔ **Check `git -C kn7000_mame status` BEFORE any build, and NEVER `git checkout` a shared
   working tree** — it would have wiped those 211 lines.
-* ⚠ **`D_229.log.gz` is EXCLUDED from every §229 census, by name**, because it was produced by a
+* ⚠ **`D_229.log.gz` is EXCLUDED from every §230 census, by name**, because it was produced by a
   device nobody can rebuild from the committed repo. `outstage_collapse.py` prints the exclusion.
   **If that lane lands, re-run the tool: its arms re-enter the population.**
-* ⚠⚠ **THE `§229` LABEL IS DOUBLE-BOOKED.** The other lane stamped it into **C++**. Whoever lands
-  second renumbers, **and it should be the register section** — §229 is prose only, ships no gate
-  and touches no mask bit. Retitle to §230; the cost is a `sed`.
+* ✅ **THE `§229` LABEL WAS DOUBLE-BOOKED AND THIS PASS RENUMBERED ITSELF TO `§230`.** Two
+  `## §229` headings existed at once; the ledger's tier-2 index is **generated from those
+  headings**, so a duplicate produces a corrupt index. The prose-only pass moved.
+  ⚠ **BOTH LANES' TEXT IS PRESENT AND INTERLEAVED IN THIS FILE AND IN THE REGISTER.** Nothing was
+  deleted — `1.-0.NEW9.*` is the FABRICATED-ZEROS lane's §229, `1.-0.NEW230.*` is the control-repair
+  lane's §230. **They do not contradict each other; read both.** ★ In fact they meet: §229 measures
+  that **28.492 % of the epilogue's operands are zeros we invent, landing on `w78`**, and §230
+  measures that **`w78` is one of five prints of the single output-stage measurement**. ⇒ **the one
+  measurement everything rests on is partly OUR OWN FABRICATION.** That is the joint headline and
+  neither pass could have stated it alone.
 * ★★ **AND THE GENERAL LESSON:** `gen_ledger.py` and `gen_fixlist.py` call themselves **DERIVED**
   and both read `upd6383.cpp` **from the working tree**. A routine regeneration would have baked
   another lane's unreviewed work into two documents whose whole authority is that they are derived.
@@ -115,7 +122,7 @@ lines** carrying a **`§229 UPLOAD LEDGER`** and a **`§229 FABRICATED-ZERO CENS
   checkout of `HEAD` (`8884d88`). ⇒ **A DOCUMENT THAT CALLS ITSELF DERIVED MUST NAME THE SOURCE IT
   WAS DERIVED FROM.**
 
-### ★★★★ 1.-0.NEW.B THE REPAIRED SINGLE DELAY CONTROL — USE THIS, THE OLD CITATION IS VOID
+### ★★★★ 1.-0.NEW230.B THE REPAIRED SINGLE DELAY CONTROL — USE THIS, THE OLD CITATION IS VOID
 
 ```
    python3 dsp/tools/sd_rerun.py control      # self-test 13/13 printed FIRST, then:
@@ -151,7 +158,7 @@ configurations; (D4) there is no feedback, so its `E2/E1` had no second echo.
 ⚠ **`dest07` is INERT for this observable** (all four readings give 45074) and is now printed as
 INERT, not counted as a calibration.
 
-### ★★★ 1.-0.NEW.C THE OUTPUT-STAGE NULL IS **ONE** CRITERION, NOT FOUR — AND NOT SIX EITHER
+### ★★★ 1.-0.NEW230.C THE OUTPUT-STAGE NULL IS **ONE** CRITERION, NOT FOUR — AND NOT SIX EITHER
 
 `python3 dsp/tools/outstage_collapse.py --quote` (19/19 self-tests, 4 synthetic, 12 external):
 
@@ -174,7 +181,7 @@ every arm, so `v == 0 ⟺ pacc == 0`. **One number, five prints.**
 **706 040** — all 120 000 of the difference is quiet (the loud count 313 960 is identical).
 **Never compare their counts directly.**
 
-### ★★★★ 1.-0.NEW.D IS THERE AN INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE? **YES, ONE**
+### ★★★★ 1.-0.NEW230.D IS THERE AN INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE? **YES, ONE**
 
 **`m_rf[0x8D]`.** It reads the `w61` **self-loop accumulator** (`§104` rows 60/61, inside the
 epilogue), its move-set **strictly contains** the null's, and **it has actually failed**:
@@ -188,7 +195,7 @@ stage is still a null" this project has published rests on a SINGLE measurement*
 quoted beside it have never been corroboration. `§216` makes that null believable by feeding it; it
 does not make it independently measured.
 
-### ★★ 1.-0.NEW.E `W4′` RESTATED — A SEND-STATE DETECTOR, `20 of 20`, AND THE GATE SURVIVES
+### ★★ 1.-0.NEW230.E `W4′` RESTATED — A SEND-STATE DETECTOR, `20 of 20`, AND THE GATE SURVIVES
 
 Body-0 `D-I` is **`(0,0,0)` on 20 of 20** modern arms whose delay port returned no non-zero datum —
 spanning **four mask defaults**, the store-probe fix, `EPIBUS`, `PICKUP`, `PSHIFT`, `NOCARRY` and
@@ -205,7 +212,7 @@ appears nowhere in the source.
 (NOCARRY takes body 0 100 % input-INDEPENDENT). ⇒ **`§46`'s non-zero count is a
 DELAY-LINE-CONTENT detector, not a clean send-state discriminator. Quote the rig, not the port.**
 
-### ★★ 1.-0.NEW.F §220's *"SLOT FOR SLOT IDENTICAL"* — CORRECTED, WITH ITS MECHANISM
+### ★★ 1.-0.NEW230.F §220's *"SLOT FOR SLOT IDENTICAL"* — CORRECTED, WITH ITS MECHANISM
 
 `python3 dsp/tools/rule21_all.py data/C_noz05_220.log.gz data/src0b2_B_on_215.log.gz`:
 
@@ -226,16 +233,16 @@ proof-grade content"*, never *"the rig delivers the same signal"*.
 `drpub_C_on_src0b2_217`, from the identical raw tally. **NEVER QUOTE A `§104` TALLY WITHOUT ITS ARM
 AND ITS `D-I` SPLIT.**
 
-### ⚠ 1.-0.NEW.G FIVE CONTROL REPAIRS ARE SPECIFIED AND **QUEUED**, NOT SHIPPED
+### ⚠ 1.-0.NEW230.G FIVE CONTROL REPAIRS ARE SPECIFIED AND **QUEUED**, NOT SHIPPED
 
-All five are SOURCE print-text changes and §229 would not make one while the lane was contested.
+All five are SOURCE print-text changes and §230 would not make one while the lane was contested.
 See `BUILD-LANE-QUEUE.md` items 14–18: **A11** (`§S1 CONTROL`'s refuted *"clips = 0"*),
 **A15** (`§S3`'s *"EXTERNAL"* control — the source's own comment admits the predicate is identical),
 **A19** (`§44`'s 0-in-40-of-40), **A2** (mask bit 5's level guard, never observed to fire),
 **A17** (`§S3-C4`, never exercised in the direction that would make it fire). Ship as **one** arm,
 certified by `D1`.
 
-### ⚠ 1.-0.NEW.H ONE CORRECTION TO THE CONTROL AUDIT ITSELF
+### ⚠ 1.-0.NEW230.H ONE CORRECTION TO THE CONTROL AUDIT ITSELF
 
 `§41`'s level is **not** bit-identical in 31 of 31 modern arms. **`clean_vehicle_default` is a
 MODERN-layout arm (285 rows) carrying the pre-§188 `0x178D0A`**, which the audit attributed wholly

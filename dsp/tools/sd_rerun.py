@@ -41,12 +41,12 @@ each DRAM READ returns against the input and the peak lag IS the delay.
                where the descriptors say it must be.
 
 ===========================================================================
-  ★★★★ 229 -- THREE DEFECTS IN THIS TOOL, DIAGNOSED AND REPAIRED
+  ★★★★ 230 -- THREE DEFECTS IN THIS TOOL, DIAGNOSED AND REPAIRED
 ===========================================================================
 
 CONTROL-AUDIT_findings.md (f601303) graded this tool's `control' leg the WORST
 control in the project: rerun, it returned NO SIGNAL for the CORRECTED machine
-and `500 * MATCHES' for the doubly-defective one, i.e. it was INVERTED.  229
+and `500 * MATCHES' for the doubly-defective one, i.e. it was INVERTED.  230
 found why.  All three defects are in the HARNESS; none is a property of any
 machine under test.
 
@@ -182,7 +182,7 @@ def taps():
     return out
 
 
-#  ★★★ 229 D3.  The two taps are in CASCADE, and the ORDER IS DERIVED, not
+#  ★★★ 230 D3.  The two taps are in CASCADE, and the ORDER IS DERIVED, not
 #  assumed: a write word whose operand bus is SRC 0x0B is fed by an earlier
 #  DELAY READ, so it is a LATER stage; a write fed from anywhere else is the
 #  HEAD.  Nothing about "500" or "1001" is written down anywhere below.
@@ -196,7 +196,7 @@ def cascade():
     return st, sum(s[5] for s in st)
 
 
-#  ★★★ 229 D1.  The pointer walk is p0-invariant modulo 256, so the pointer at
+#  ★★★ 230 D1.  The pointer walk is p0-invariant modulo 256, so the pointer at
 #  every delay word is p0 + a FIXED offset.  Derive those offsets by executing
 #  the program once with no delay port attached, and report them.  p0 and the
 #  input cell are then ONE number: the head write reads mem[p0 + off].
@@ -228,7 +228,7 @@ def derive_p0(m, incell):
     return (incell - off[head_write_iw()]) & 0xff
 
 
-#  ★★★ 229.  THE PREDICTION, IN FIXED POINT, FROM THE ROM's OWN COEFFICIENTS.
+#  ★★★ 230.  THE PREDICTION, IN FIXED POINT, FROM THE ROM's OWN COEFFICIENTS.
 #  No float tolerance: the harness's multiply is (s24(coef) * bus) >> 23, so the
 #  three-factor product is computable exactly and the echo SAMPLE is an integer.
 def rom_triple(psh=23):
@@ -265,7 +265,7 @@ def run(m, nsamp=1400, polarity="correct", sign=+1, seed=20260727, incell=0x00,
     import random
     words, cells, cons, coefs = descriptors()
     cell_of = {idx: c for (idx, _), c in zip(cons, cells)}
-    #  ★ 229 D1: p0 is DERIVED so the head write lands on `incell'.  Passing
+    #  ★ 230 D1: p0 is DERIVED so the head write lands on `incell'.  Passing
     #  p0 explicitly is still allowed -- that is how the defect is reproduced.
     if p0 is None:
         p0 = derive_p0(m, incell)
@@ -363,7 +363,7 @@ def cmd_taps():
    0x8000 partition line, which adjudication-round4 sect. 2 shows are MARKERS.""")
 
 
-#  ★★★ 229 -- THE REPAIRED, TWO-SIDED CONTROL.
+#  ★★★ 230 -- THE REPAIRED, TWO-SIDED CONTROL.
 #
 #  The criterion is BIT-EXACT and comes out of the ROM, not out of a tolerance:
 #  an impulse must return at the CASCADE lag the descriptors give and carry the
@@ -394,7 +394,7 @@ def _grade(lbl, m, want_lag, want_samp, must_pass, **kw):
 
 
 def cmd_control():
-    hdr("control -- 229's REPAIRED two-sided control (see the module docstring)")
+    hdr("control -- 230's REPAIRED two-sided control (see the module docstring)")
     stages, D = cascade()
     (fa, fb, fc), prod, gain = rom_triple()
     amp = 1 << 21
@@ -414,7 +414,7 @@ def cmd_control():
           % ", ".join("w%d:%+d" % (k, (v ^ 0x80) - 0x80) for k, v in sorted(off.items())))
     print("      head write is w%d at p0%+d, so p0 and the input cell are ONE"
           % (hw, (off[hw] ^ 0x80) - 0x80))
-    print("      number:  incell 0x03  =>  p0 = 0x%02X   (229 D1)\n"
+    print("      number:  incell 0x03  =>  p0 = 0x%02X   (230 D1)\n"
           % derive_p0(m, 0x03))
     print("      ROM three-factor product, in the harness's own fixed point:")
     print("         (%d * %d) >> 23 = %d ;  (that * %d) >> 23 = %d  = %+.8f"
@@ -435,8 +435,8 @@ def cmd_control():
     for sd in (1, 2, 3):
         okall &= _grade("coefficients SCRAMBLED #%d" % sd, m, D, want, False,
                         coef_scramble=sd)
-    #  --- p0 left at State's default: 229 D1 reproduced on purpose ---
-    okall &= _grade("p0 = 0 (the 229 D1 defect)", m, D, want, False, p0=0x00)
+    #  --- p0 left at State's default: 230 D1 reproduced on purpose ---
+    okall &= _grade("p0 = 0 (the 230 D1 defect)", m, D, want, False, p0=0x00)
     print()
     print("   ⇒ TWO-SIDED: 1 configuration ACCEPTED, 7 REJECTED, %s\n"
           % ("all 8 as expected" if okall else "⛔ NOT all as expected"))
@@ -513,7 +513,7 @@ def cmd_scan():
 def out_run(m, nsamp=2600, polarity="correct", sign=+1, incell=0x03, p0=None,
             seed=20260727, coef_scramble=None):
     import random
-    #  ★ 229 D1: 0x08 was hard-coded here and NOWHERE ELSE, which is why the
+    #  ★ 230 D1: 0x08 was hard-coded here and NOWHERE ELSE, which is why the
     #  value leg had a live datapath and the control leg did not.  Derive it.
     if p0 is None:
         p0 = derive_p0(m, incell)
@@ -560,7 +560,7 @@ def out_run(m, nsamp=2600, polarity="correct", sign=+1, incell=0x03, p0=None,
     return x, out
 
 
-#  ★★★ 229 D3.  NO WINDOW AND NO HARD-CODED D.  `echo_energies' summed a
+#  ★★★ 230 D3.  NO WINDOW AND NO HARD-CODED D.  `echo_energies' summed a
 #  +/-8-sample window around 4 + k*500 and the echo is at 4 + 1001, so it read
 #  zero for every configuration ever passed to it.  This reports EVERY non-zero
 #  output sample as (lag, sample, gain) -- no window to be wrong about, and a
@@ -577,7 +577,7 @@ ROM_GAINS = {0.500000: "+0.500000 (w006/w029)",
 
 
 def cmd_value():
-    hdr("value -- the ROM's three-factor product, measured (229's repair)")
+    hdr("value -- the ROM's three-factor product, measured (230's repair)")
     stages, D = cascade()
     (fa, fb, fc), prod, gain = rom_triple()
     amp = 1 << 21
@@ -620,7 +620,7 @@ def cmd_value():
         row("dest07 = %s" % d, machine(act0d="tA<-bus", act0e="tA<-bus", dest07=d))
 
 
-#  ★★★ 229 -- THE SYNTHETIC SELF-TEST (RULE 20, with 228's clause).
+#  ★★★ 230 -- THE SYNTHETIC SELF-TEST (RULE 20, with 228's clause).
 #
 #  228 recorded that a control which IS the open defect is validated exactly
 #  once and is invalidated by its own success -- it cost two tools their

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""outstage_collapse.py -- §229.  ARE THE OUTPUT-STAGE CONTROLS ONE CHECK OR FOUR?
+"""outstage_collapse.py -- §230.  ARE THE OUTPUT-STAGE CONTROLS ONE CHECK OR FOUR?
 
 CONTROL-AUDIT_findings.md (`f601303') §0 records, as the pass's biggest single
 finding, that four of the five CANNOT-FAIL controls -- `§54', `§70', `§211' and
@@ -42,13 +42,16 @@ sys.path.insert(0, HERE)
 DATA = os.path.join(HERE, "..", "analysis", "data")
 
 
-#  ⚠ §229: `D_229.log.gz' is UNTRACKED in git and was written by a CONCURRENT,
-#  UNCOMMITTED build (its report carries `§229 UPLOAD LEDGER' and `§229
-#  FABRICATED ZEROS', instruments that exist only in an uncommitted working
-#  tree).  Grading it would silently include an unattributed arm produced by a
-#  device nobody can rebuild.  It is excluded BY NAME, and the exclusion is
-#  printed, so the census stays reproducible from the committed repo alone.
-UNATTRIBUTED = {"D_229.log.gz"}
+#  ⚠ §230: `D_229.log.gz' and `E_229.log.gz' were written by a CONCURRENT lane
+#  (§229, the FABRICATED-ZEROS pass) from a build whose `upd6383.cpp' was NOT IN
+#  ANY COMMIT at the time -- its reports carry `§229 UPLOAD LEDGER' and `§229
+#  FABRICATED ZEROS', instruments that existed only in a working tree.  The logs
+#  themselves are now committed; the DEVICE that produced them was not.  Grading
+#  them would make every move-set below non-reproducible from the committed repo.
+#  They are excluded BY NAME and the exclusion is PRINTED.
+#  ⇒ ★ WHEN §229's SOURCE LANDS, DELETE THIS SET AND RE-RUN: its arms re-enter the
+#    population and every count in section 1 must be recomputed.  One command.
+UNATTRIBUTED = {"D_229.log.gz", "E_229.log.gz"}
 
 
 def arms():
@@ -369,6 +372,28 @@ def main():
     print("    output stage (the epilogue, rows 60..82, and the w61 self-loop")
     print("    accumulator it writes) are: m_rf[0x8D] and §104's epilogue D-I tally.")
     print("    Everything else is upstream (kernel, body 0/1, the send).")
+    print()
+    print("  ★★★★★ AND §229 SHARPENS THIS FURTHER -- READ IT WITH THIS TABLE.")
+    print("    §229's FABRICATED-ZERO census (the parallel lane) measured that")
+    print("    3.982 % of ALL operand resolutions are zeros src_term()'s `default:'")
+    print("    INVENTS -- 9 832 536 of 246 952 062 -- and the DISTRIBUTION is the")
+    print("    finding: kernel A 0.000 %, kernel B 0.000 %, body 1 0.000 %,")
+    print("    body 0 8.772 %, EPILOGUE 28.492 %.  Therefore:")
+    print()
+    print("      ⚠⚠ §70 AND §211 ARE NOT THE SAME KIND OF NULL, AND NOBODY HAD SAID SO.")
+    print("         §70  @ w73  SRC 0x10 = the ACCUMULATOR, f31 outside the bit-5")
+    print("                     family        -> a statement about the chip")
+    print("         §211 @ w78  SRC 0x0A resolved as an INVENTED ZERO 1 106 028")
+    print("                     times, AND its operation code collapsed by")
+    print("                     `op = f31 & 3'  -> partly a statement about US")
+    print("         Both print `mean 0.0 span 0'.  They collapse by DEMONSTRATED")
+    print("         SENSITIVITY (identical move-sets, above) but they DIFFER IN KIND.")
+    print()
+    print("      ✔ m_rf[0x8D] = 0x009B26 SURVIVES that audit -- §229 reports its")
+    print("        non-zero stores come from a THIRD SITE.  So the one control this")
+    print("        tool nominates as the genuine second check is the one their")
+    print("        census CLEARS.  Two passes, opposite directions, same nomination.")
+    print("      ⛔ m_rf[0x8C]'s permanent zero is now 100 % ATTRIBUTED TO US.")
 
     if a.quote:
         print()

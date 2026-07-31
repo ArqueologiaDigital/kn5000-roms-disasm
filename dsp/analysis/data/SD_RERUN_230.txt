@@ -38,7 +38,7 @@
    0x8000 partition line, which adjudication-round4 sect. 2 shows are MARKERS.
 
 ==============================================================================
-== control -- 229's REPAIRED two-sided control (see the module docstring)
+== control -- 230's REPAIRED two-sided control (see the module docstring)
 ==============================================================================
    THE DERIVATIONS -- nothing below is written down, all of it is read
    off the program's own words:
@@ -50,7 +50,7 @@
 
       pointer at each delay word, relative to p0: w0:+0, w5:+75, w9:+75, w28:+77, w32:+77, w46:-5
       head write is w46 at p0-5, so p0 and the input cell are ONE
-      number:  incell 0x03  =>  p0 = 0x08   (229 D1)
+      number:  incell 0x03  =>  p0 = 0x08   (230 D1)
 
       ROM three-factor product, in the harness's own fixed point:
          (-1739220 * -1739220) >> 23 = 360594 ;  (that * 4194304) >> 23 = 180297  = +0.02149308
@@ -64,7 +64,7 @@
    coefficients SCRAMBLED #1      lag 1001  sample 60691  gain +0.02893972       REJECT    ✔
    coefficients SCRAMBLED #2      lag 1001  sample -32511  gain -0.01550245      REJECT    ✔
    coefficients SCRAMBLED #3      lag 1001  sample -46019  gain -0.02194357      REJECT    ✔
-   p0 = 0 (the 229 D1 defect)     NO ECHO at lag 1001                            REJECT    ✔
+   p0 = 0 (the 230 D1 defect)     NO ECHO at lag 1001                            REJECT    ✔
 
    ⇒ TWO-SIDED: 1 configuration ACCEPTED, 7 REJECTED, all 8 as expected
 
@@ -79,7 +79,7 @@
         move this observable.  dest07 is NOT a calibration for it.
 
 ==============================================================================
-== value -- the ROM's three-factor product, measured (229's repair)
+== value -- the ROM's three-factor product, measured (230's repair)
 ==============================================================================
    IDENTITY test, BIT-EXACT.  The old leg asked for E2/E1 in a +/-8 window
    around 4 + k*500.  There is no feedback (so no second echo) and the echo is

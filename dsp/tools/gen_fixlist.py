@@ -47,7 +47,7 @@ Usage:  python3 dsp/tools/gen_fixlist.py [--md] [--no-git]
 import os, re, sys, subprocess, collections
 
 MAME_REPO = '/home/fsanches/compartilhado/kn7000_mame'
-#  ★ §229: overridable for the same reason as gen_ledger.py -- a document that
+#  ★ §230: overridable for the same reason as gen_ledger.py -- a document that
 #  calls itself DERIVED must state WHICH source it was derived from, and must
 #  not silently absorb another lane's uncommitted working-tree edits.
 DEV       = os.environ.get('UPD6383_SRC_DIR',
