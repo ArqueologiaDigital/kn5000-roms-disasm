@@ -11,7 +11,7 @@ Tiers, cheapest first — stop as soon as you have what you need:
 |---|---|---|
 | **0** | the current blocker + **the dead ends** | this page, below |
 | **1** | the mask-bit register — every bit, its state, its § | generated, below |
-| **2** | the section index — 59 sections, one line each | generated, below |
+| **2** | the section index — every section, one line each | generated, below |
 | **3** | the sections themselves | `SPECULATIVE-APPLIED-REGISTER.md` |
 
 ⚠ Tiers 1 and 2 are **generated** by `tools/gen_ledger.py` from the C++ source and the register's
@@ -20,7 +20,41 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§215, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§218, 2026-07-31)
+
+> **★★★ THE WHOLE `iw25` LINE OF ENQUIRY IS CLOSED — decode, delivery, schedule, line index,
+> register width and latency. §218 refuted the last open rival (the CROSS-FRAME pipeline) with
+> NO run and NO rebuild, and corrected the census it rested on: there are **7** class-2
+> `SRC 0x0B` words in the corpus, not 9, and `ENSEMBLE w62` is not one — its `lo12 0x40B` carries
+> `SRC 0x10` (the ACCUMULATOR); the `0B` §217 §5 read was the ACTION field.
+> With `w62` removed, `dram-datapath.md` item A + a hold register explains **7 of 7**.
+> **THE BLOCKER IS NOW UPSTREAM OF EVERYTHING §§215–218 TOUCHED: THE SEND IS CLOSED, so the delay
+> line is empty (`§46`: 0 non-zero of 24 922 560 reads) and every correct mechanism below it
+> correctly carries zero — AND, INDEPENDENTLY, THE OUTPUT STAGE IS A NULL EVEN WHEN FED (§216).**
+
+Decided from `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz` (three arms, one build) plus the
+corpus tool `tools/src0b_census.py` — cite the run, not the section (rule 11):
+
+```
+   arm A  §217 provenance at iw25  540000 evals | age 1..1 | read by iw289 x540000   <- SINGLE BIN
+   arm B  (DRPUB=1)                540000 evals | age 0..0 | read by iw12  x540000
+   the cross-frame rival predicted  read by iw26, age 1..1                <- 0 % of the mass
+   §218  41 delay words (21 READS) between iw26(N-1) and iw25(N) -- one-deep cannot span it
+   §218  item A "+4 after the PRECEDING read" is 6/6 at ENSEMBLE; the rival is UNDEFINED at w92
+```
+
+**⇒ NEXT: (1) the SEND — `§213 §4`'s one corpus-unique word whose `SRC` is a GUESS; (2) the
+OUTPUT STAGE — nothing connects the body accumulator to `w73`/`w78`. They are independent.**
+⚠ **`UPD6383_DRPUB`: model settled, gate present, DEFAULT OFF, fired 24 922 560.** It is
+bit-identical to the control on the shipped build; it ships only when an arm exists in which the
+shipped delay line carries content and `DRPUB=1` vs `=0` differ in `§104`/`s104_score.py`.
+
+---
+
+## TIER 0a-prev — the §215 blocker, RETIRED by §217 and §218. Kept so the closure is legible
+
+> ⛔ **"THE BLOCKER IS THE §78 PER-LINE PUBLISH SCHEDULE" is REFUTED (§217).** The datum is not
+> lost — it is published intact to `iw98`, 540 000/540 000. The line index is a RED HERRING.
 
 > **THE `iw25` DECODE IS CLOSED — `SRC 0x0B` = the delay-read data register IS RIGHT, on a class-2
 > word as on a class-1 one, REFUTING the rival by the corpus. THE BLOCKER MOVES ONE HOP UPSTREAM:
@@ -51,7 +85,7 @@ no consumer. ⇒ `UPD6383_SRC0B2` **default OFF, NOT SHIPPED.**
 **⛔ THE FOUR FALSIFIERS OF `HANDOFF-NEXT.md` §1.2 ARE RETIRED AS A TEST.** All four passed under
 the rival — and had to: arm A measured `mem[ptr]` at `iw25` non-zero on ≈ the loud-frame count
 *before the rival ever ran*. They grade **"is the operand alive"**, not "is it `mem[ptr]`".
-★ RULE 14: *a criterion that every live operand satisfies is a reach test, not a decode test.*
+★ RULE 15: *a criterion that every live operand satisfies is a reach test, not a decode test.*
 
 **★★★ AND THE RESULT THAT OUTLIVES IT:** with the send FORCED open, body 0 ran its whole ladder on
 live audio (28 input-dependent slots, `acc` last-dependent slot `iw38` → **`iw204`**), fed body 1 —
@@ -145,6 +179,10 @@ the ones a reader would reach for again.
 | 21 | `SRC 0x0B` at a CLASS-2 word is a different code (`mem[ptr]`, or anything but the delay register) | ⛔ **REFUTED §215, by the corpus.** `lo12 0x2D9` is 36 words — 29 delay WRITE, 6 delay READ, 1 = kernel `iw25`. Its consumer `0012201655` (`mac ta`, **0.43 %** base rate) sits within 3 slots of a class-1 `addr8 0x20` DELAY READ at **13 of 13** sites. ENSEMBLE `w10` fuses read+capture in one `2D9`; the kernel splits the identical `2D9` off one word ahead of its read, with the SAME successor. The rival needs one lo12 to mean two things on two classes AND leaves the kernel's two delay READs with no consumer | §215 |
 | 22 | `HANDOFF-NEXT.md` §1.2's FOUR FALSIFIERS as a decode test | ⛔ **RETIRED §215.** All four passed under the refuted rival, and had to: arm A measured `mem[ptr]` at `iw25` non-zero on **313 169** ≈ the **314 063** loud frames *before the rival ran*. `iw25`'s pointer sits on a LIVE cell, so ANY live operand scores 4/4. They grade **reach**, not **identity** | §215 |
 | 23 | "the output-stage null is an artefact of a zero send" | ⛔ **REFUTED §215.** The send was FORCED open: body 0 ran its whole ladder on live audio (28 input-dependent slots, last dependent `acc` slot `iw38` → **`iw204`**), fed body 1 — and `§70 ACCA at w73` / `§211 ACCB at w78` stayed `min 0 max 0` in **both** buckets, `§61` 0 non-zero, `§54` 0 loud frames | §215 |
+| 24 | The **LINE INDEX** (`line = descriptor_value & 0x3f`) loses `iw12`'s datum — "the kernel's delay words all share line 0" | ⛔ **REFUTED §217.** That came from `§46`'s descriptor dump, which is an **UNGUARDED BOOT-TIME SAMPLE** (`m_dly_dsc[]` has no `m_frames_run` guard, so it freezes the pre-upload state where every cell reads `0000`). `§204`'s **guarded** census, *in the same log*, gives the kernel three distinct lines (`0x01`/`0x20`/`0x00`) with `iw12 ↔ iw98` paired exactly as `§79` says. Standing rule 10, third occurrence | §217 |
+| 25 | **Widen `m_dr`** / "it is a single-register problem" | ⛔ **MOOT §217.** One register is enough: `§217` measured **`publishes strictly between iw12 and iw25: 0`** — nothing overwrites it in `iw13..iw24`. The fault was *when* `m_dr` is written (only at a delay word, and `iw25` is not one), not *how many* registers there are | §217 |
+| 26 | The class-2 `SRC 0x0B` pipeline is **one-deep and CROSS-FRAME** — the word captures the datum of the read that FOLLOWS it, from the previous frame, so `DRPUB`'s `age 0` is off by one frame | ⛔ **REFUTED §218, three ways, with NO run.** (a) Pre-registered discriminator: the rival predicts tag `iw26`; arm A's histogram is **SINGLE-BIN `iw289`**, age 1..1, 540 000/540 000 — `iw26` holds **0 %** (`m_prov_other` silent in all three arms). (b) FORCED: **41 delay words, 21 of them READS**, execute between `iw26`(*N−1*) and `iw25`(*N*) — *one-deep* forbids the retention *cross-frame* needs. (c) Corpus: item A's "+4 after the PRECEDING read" is exceptionless **6/6** at ENSEMBLE, while "the FOLLOWING read" is **UNDEFINED at `w92`** and −30 at `w34` | §218 |
+| 27 | **`ENSEMBLE w62` / `MULTI TAP w25` are class-2 `SRC 0x0B` words** "ahead of their read" (§217 §5's residue) | ⛔ **WRONG FIELD, §218.** `lo12 0x40B` = `SRC 0x10` (**the ACCUMULATOR**, anchored) + `ACT 0x0B`; the `0B` is the ACTION. The corpus has **7** class-2 `SRC 0x0B` words, not 9 — which `upd6383.cpp`'s own `case 0x0B` comment has said since §215. ⇒ §217 §5's "a shape no latency model explains" is **EMPTY**: `w62` is not in the class, and `iw25` at **+13** is *inside* item E's `land ≤ 4` with 0 intervening publishes | §218 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
 
 ---
@@ -198,15 +236,15 @@ the ones a reader would reach for again.
     *"point the §109 store witness at slot 73 and read it"* — and 60 sections passed with the probe
     in the build and the slot missing from its list. **Before designing an experiment, check
     whether an existing instrument merely needs pointing.** *(§211)*
+    ★ **Second occurrence, §218, and it paid the most:** the whole cross-frame rival was decided
+    from three logs that already existed and a corpus already committed — **zero MAME runs, zero
+    rebuilds**. ⇒ **A STATIC DECISION IS THE BEST OUTCOME, NOT A LESSER ONE.** Before designing
+    an experiment, prove the existing logs *cannot* answer it.
 14. **Instrumentation must follow the EFFECT, not the visit.** A probe placed beside a
     conditional rather than inside it reports events that did not happen — and the next pass
     builds a task on them. §211's headline lead was one unbraced `else`: three phantom stores
     per frame, polluting `§96`, `§109` and the `m_dwr` census at once. **When a gate's fired
     count and a store census disagree, suspect the census.** *(§213)*
-15. **A census that enumerates "cells touched" only sees the hooks it has.** §98 marks kernel
-    cell `0x06` write-only because `pwatch()`'s READ hook sits on the anchored `SRC 0x07`
-    evaluator alone; `0x06` is in fact a cross-frame carry read by `SRC 0x00`. Check the hook
-    before quoting an absence. *(§213)*
 15. **A CRITERION THAT EVERY LIVE OPERAND SATISFIES IS A REACH TEST, NOT A DECODE TEST.** §215's
     four pre-computed falsifiers all passed under a reading the corpus refutes — because `iw25`'s
     pointer sits on a **live cell**, so *any* substitution that puts a live value on the bus scores
@@ -214,3 +252,24 @@ the ones a reader would reach for again.
     ≈ the 314 063 loud frames) **before the rival was ever built**. ⇒ **Count, in the control, how
     many arms would pass your test. If the answer is "all of them", it is not a test.** And when a
     decode question has a CORPUS answer, the corpus outranks any run. *(§215)*
+16. **A census that enumerates "cells touched" only sees the hooks it has.** §98 marks kernel
+    cell `0x06` write-only because `pwatch()`'s READ hook sits on the anchored `SRC 0x07`
+    evaluator alone; `0x06` is in fact a cross-frame carry read by `SRC 0x00`. Check the hook
+    before quoting an absence. *(§213 — numbered 16 in §218; it and rule 15 were both filed as 15)*
+17. **★ GRADE BY PROVENANCE, NEVER BY LIVENESS — and state the WRONG `iw` NUMBER as the failure
+    mode.** The constructive fix for rule 15. §217's instrument tags every delay latch with the
+    `iw` that performed the READ, carries the tag with the datum and histograms it at the consumer;
+    a wrong source then reports a **wrong `iw`**, which no amount of liveness can fake. It graded a
+    decode **with every value counter still at zero** (arm B: provenance flipped `iw289`→`iw12`,
+    `§215 m_dr nz at iw25` still 0), and §218 refuted the cross-frame rival on the same histogram.
+    ⇒ **A decode test must be able to name the specific wrong answer it would print.** *(§217, §218)*
+18. **★ GRADE A FIELD CENSUS WITH THE DISASSEMBLER'S OWN ACCESSORS, NEVER BY EYE AND NEVER BY THE
+    `lo12` STRING.** §217 §5 re-derived in prose a census `upd6383.cpp`'s `case 0x0B` comment had
+    carried correctly since §215, read `lo12`'s **ACTION** field (`lo12[4:0]`) as its **SOURCE**
+    field (`lo12[10:6]`), got **9** class-2 `SRC 0x0B` words instead of **7**, and built a
+    handover question on the two impostors. **11** distinct `lo12` values occur on both class-1
+    delay words and class-2 words, so the `lo12` string carries no class information at all.
+    Use `dsp_disasm.lo_src` / `lo_act`, and control the result against a published corpus
+    statistic (§218 reproduced `register-space.md` §4's `82`/`50` split digit-for-digit).
+    ⇒ **And when a re-derived number disagrees with the source comment beside the counter, the
+    comment is evidence — reconcile before building on the new number.** *(§218)*

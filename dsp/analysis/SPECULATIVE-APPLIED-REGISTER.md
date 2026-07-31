@@ -14076,3 +14076,275 @@ against a pre-registration committed before the build, `F1`/`N4` held, `N3` MISS
 listings), the "observationally identical" claim **FORCED** from the no-intervening-read structure;
 §6 **MEASURED**, including the no-stimulus window; §7 a decision, **not shipped**.
 `UPD6383_DRPUB` is **DEFAULT OFF**.
+
+---
+
+## §218 — ⛔★★★ THE CROSS-FRAME RIVAL IS REFUTED WITHOUT A RUN, AND `ENSEMBLE w62` IS NOT AN `SRC 0x0B` WORD AT ALL. §217 §5's CENSUS SAID 9; THE DEVICE'S OWN COMMENT SAID 7, AND 7 IS RIGHT
+
+**Decided STATICALLY. No build, no MAME run, no new gate.** Scored against `HANDOFF-NEXT.md`
+§1.-0.5's pre-registered discriminator (*"the rival predicts tag `iw26`, `age 1..1`"*) using the
+logs §217 already produced — `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz` — plus a re-run of
+the corpus census with the disassembler's **own** field accessors
+(`dsp/tools/src0b_census.py`, new; `dsp_disasm.lo_src/lo_act`, 41 listings / 3057 words).
+
+> **THE QUESTION:** `HANDOFF-NEXT.md` §1.-0.5 asked to decide `ENSEMBLE w62` and `kernel iw25` —
+> the two `000.2.00.*` class-2 `SRC 0x0B` words that sit *ahead* of a delay READ instead of after
+> one — against the rival *"the pipeline is one-deep and CROSS-FRAME: a class-2 word captures the
+> datum of the read that FOLLOWS it, from the previous frame"*, under which `DRPUB`'s `age 0`
+> would be wrong by exactly one frame.
+>
+> **THE ANSWER:** `ENSEMBLE w62` **is not one of the words**, and for `kernel iw25` the rival is
+> **REFUTED three times over** — by the pre-registered measurement, by the frame schedule, and by
+> the corpus. `DRPUB`'s `age 0` is **NOT** wrong by one frame.
+
+### 1. ★★★ THE PRE-REGISTERED DISCRIMINATOR, READ OFF THE LOGS THAT ALREADY EXISTED
+
+Standing rule 13, applied as instructed: the instrument was already built and already pointed at
+this word. `upd6383.cpp:2176-2190, 2452-2461` tags every per-line latch with **the `iw` that
+performed the READ** and the frame, carries the tag through the publish, and histograms it at
+`iw25`; the age is `m_frames_run - m_dr_prov_frame`, in frames.
+
+```
+   arm A  drpub_A_off_217.log.gz:2589   540000 evaluations | age 1..1 | read by iw289 x540000 (0 nz)
+   arm B  drpub_B_on_217.log.gz:2589    540000 evaluations | age 0..0 | read by iw12  x540000 (0 nz)
+   arm C  drpub_C_on_src0b2_217:2596    540000 evaluations | age 0..0 | read by iw12  x540000 (60507 nz)
+```
+
+★ **Arm A is the arm that grades the rival, because arm A is the pure one-deep hold register** —
+`DRPUB` off, `m_dr` written only by the §78 publish. Whatever a one-deep bus actually retains
+across the frame boundary, arm A measures it.
+
+| | predicted tag | predicted age | MEASURED |
+|---|---|---|---|
+| **the rival** | **`iw26`** | 1..1 | — |
+| `DRPUB` (§217) | `iw12` | 0..0 | arm B/C: `iw12`, age 0..0, 540 000/540 000 |
+| shipped residue | — | — | arm A: **`iw289`**, age 1..1, 540 000/540 000 |
+
+★★★ **`iw26` holds EXACTLY ZERO of the mass.** The histogram is **single-bin**: `m_prov_other`
+(`upd6383.cpp:5601`, *"producers beyond slot N"*) prints only when mass falls outside the printed
+bins, and it prints in **none** of the three arms. So the 0 % is enumerated, not inferred.
+
+★ **The age agreed and the age was never the discriminator.** Arm A does report `age 1..1`, which
+is the half of the rival's prediction that any previous-frame residue satisfies. **Rule 17 exists
+for exactly this**: the criterion must name a *wrong `iw` number* as its failure mode, and it does
+— predicted `iw26`, measured `iw289`, a word **263 slots away in the other unit's reverb**.
+⇒ **FALSIFIED on the pre-registered discriminator.** MEASURED.
+
+★ **And the test could have passed.** Had the bus at `iw25` really carried the datum of the read
+that follows it, arm A would have printed `read by iw26` — the same instrument, the same log, one
+different integer. It printed `iw289`. (Rule 8: a criterion that cannot fail is not a test; this
+one could, and did not.)
+
+### 2. ★★ WHY IT HAD TO FAIL: "ONE-DEEP" AND "CROSS-FRAME" ARE MUTUALLY EXCLUSIVE HERE
+
+The rival needs `iw26`'s datum from frame *N−1* to still be on the bus at `iw25` of frame *N*.
+Reconstructing the frame's delay schedule statically — kernel `kernel.dsm`, unit 0 = **CHORUS**
+(`prog01`, I-RAM load 84), unit 1 = **ROOM REVERB 1** (`prog16`, load 200), epilogue **none**:
+
+```
+  iw12R iw26R iw46W | iw84R iw93W iw98R iw102W iw107R iw134W iw139R iw143W iw148R iw152W | iw54W |
+  iw200R iw211W iw215R iw219W iw223R iw227W iw231R iw235W iw239R iw243W iw247R iw251W iw255R
+  iw259W iw263R iw269W iw273R iw277W iw281R iw285W iw289R iw293W iw297R iw301W iw305R iw314R
+  iw325R iw331W
+```
+
+**42 delay words per frame — 22 READS, 20 WRITES.** ★ That is `dram-datapath.md` item K's
+independently-counted **"42 delay-DRAM frame slots"**, reproduced here from the listings by a
+different route. Between `iw26` (frame *N−1*) and `iw25` (frame *N*) sit **41 delay words — 21
+READS and 20 WRITES**. Every one of them writes `m_dr` (a READ latches and, under `DRPUB`,
+publishes; every delay word attempts the per-line publish).
+
+⇒ **A one-deep register cannot carry `iw26`'s datum across 21 subsequent reads.** The rival's two
+clauses cannot both hold: *one-deep* forbids the retention that *cross-frame* requires, and
+*cross-frame per-word* retention is not one-deep — it is a per-word or per-line hold, which is
+`m_dr_line[]`, which §217 §1 already measured delivering `iw12`'s datum to **`iw98`**
+(540 000/540 000), not to `iw25`. **FORCED**, and arm A is the measurement that closes it: what a
+one-deep bus actually retains across that boundary is the frame's **LAST** read, not its **NEXT**
+one.
+
+★ **By-product, and it completes §217's `P1`.** §217 recorded that `P1`'s hand-trace named `iw247`
+and the instrument answered `iw289`, blaming `§204`'s 16-consumer cap. The full schedule above
+shows the cap truncated `P1`'s table at **both** ends: body 0's first delay word is **`iw84`**
+(CHORUS `w0`, a READ), absent from `P1`'s list, and body 1 runs to **`iw331`**, not `iw269`.
+`iw289` = ROOM REVERB 1 offset **89**, a READ — present and correct in the reconstructed schedule.
+The instrument was right about a word the census could not print. MEASURED.
+
+### 3. ⛔★★★ HALF THE QUESTION DISSOLVES: `ENSEMBLE w62` CARRIES `SRC 0x10`, NOT `SRC 0x0B`
+
+`dsp_disasm.py:179-180` is the authority on the two fields, and they are **different bit ranges**:
+
+```
+   def lo_src(w):  return (w >> 6) & 0x1F      # lo12[10:6]  -- the SOURCE
+   def lo_act(w):  return  w       & 0x1F      # lo12[4:0]   -- the ACTION
+```
+
+| word | lo12 | `lo_src` | `lo_act` | what it really is |
+|---|---|---|---|---|
+| kernel `iw25` | `0x2D9` | **`0x0B`** | `0x19` | class-2 `SRC 0x0B` ✔ |
+| ENSEMBLE `w14/24/34/72/82/92` | `0x2C7` | **`0x0B`** | `0x07` | class-2 `SRC 0x0B` ✔ |
+| **ENSEMBLE `w62`** | `0x40B` | **`0x10`** | **`0x0B`** | ⛔ `SRC` = **the ACCUMULATOR** |
+| **MULTI TAP `w25`** | `0x40B` | **`0x10`** | **`0x0B`** | ⛔ `SRC` = **the ACCUMULATOR** |
+
+★ **`0x10` is `LO_SRC_ACC`, an ANCHORED code** (`dsp_disasm.py:184`, `_ANCHORED_SRC`). The `0B`
+§217 §5 saw in `000.2.00.40B` is the **ACTION** field. Two words were promoted into the census by
+a **field mix-up**, and the corpus population is:
+
+```
+   SRC 0x0B, 41 listings / 3057 words:  106 total = 99 class-1 delay words + 7 class 2
+   ACT 0x0B,          same corpus    :   82 total =  50 delay words + 16 class 2 + 16 class A
+```
+
+★★ **AND THE DEVICE ALREADY SAID SO.** `upd6383.cpp:2436-2441`, written for **§215**, two sections
+earlier, in the very function that counts these words:
+
+> *"Of 106 corpus `SRC 0x0B` words, 99 are class-1 delay words (addr8 0x20 READ / 0x60 WRITE) and
+> **7 are class 2** addr8 0x00 — ENSEMBLE's `020.2.00.2C7` ×6 and the resident kernel's
+> `000.2.00.2D9` ×1, which is `iw25`."*
+
+**§217 §5 re-did in prose a census the source already carried, got 9 instead of 7, and neither the
+section nor its verdict noticed the contradiction.** Standing rule 3, *fourth* occurrence — and
+standing rule 13 in its sharpest form yet: the answer was not merely in an existing instrument, it
+was in a **comment beside the counter being discussed**. The `82`/`50` split is `register-space.md`
+§4's published statistic, reproduced digit-for-digit here, which is the control on the accessors.
+
+⇒ **`ENSEMBLE w62` is not a class-2 `SRC 0x0B` word and never was.** It is
+`mac`-neighbourhood accumulator traffic — `w61 = mac.st acc,(p)+12`, `w62 = 000.2.00.40B`
+(`SRC` acc), `w63 = ld.st acc,(p)-4` — with **no** delay-bus source in it. `dram-datapath.md`
+item A owes it nothing. **The "honest residue" of §217 §5 is half retracted on the spot.**
+MEASURED (corpus), the field reading **FORCED** from `dsp_disasm.py:179-180`.
+
+### 4. ★ AND THE CORPUS REFUTES THE RIVAL INDEPENDENTLY, ON THE SEVEN WORDS THAT DO EXIST
+
+`python3 dsp/tools/src0b_census.py` — every class-2 `SRC 0x0B` word, and the delay READ on each
+side of it:
+
+```
+   kernel           w25  000.2.00.2D9   prevREAD w12  (+13)   nextREAD w26  (+1)
+   ENSEMBLE         w14  020.2.00.2C7   prevREAD w10  (+4)    nextREAD w16  (+2)
+   ENSEMBLE         w24  020.2.00.2C7   prevREAD w20  (+4)    nextREAD w26  (+2)
+   ENSEMBLE         w34  020.2.00.2C7   prevREAD w30  (+4)    nextREAD w64  (+30)  <- WRITE at w39 between
+   ENSEMBLE         w72  020.2.00.2C7   prevREAD w68  (+4)    nextREAD w74  (+2)
+   ENSEMBLE         w82  020.2.00.2C7   prevREAD w78  (+4)    nextREAD w84  (+2)
+   ENSEMBLE         w92  020.2.00.2C7   prevREAD w88  (+4)    nextREAD  --   (NONE)
+```
+
+| rule | uniformity over the 6 ENSEMBLE sites |
+|---|---|
+| **item A** — *the PRECEDING read* | **+4, +4, +4, +4, +4, +4 — exceptionless 6/6**, and `+4` is item E's corpus **mode** (40 of 111) *and* its FORCED upper bound |
+| **the rival** — *the FOLLOWING read, previous frame* | −2, −2, **−30**, −2, −2, and **UNDEFINED at `w92`** — its next delay word is `w94`, a WRITE, and it is the program's last |
+
+⇒ The rival is not merely unmeasured, it is **not statable** as a uniform rule for the class: at
+1 of 6 sites it has no producer to name, and at another the producer is 30 slots and a WRITE away.
+Item A is exceptionless. **Rule 15's closing clause — when a decode question has a corpus answer,
+the corpus outranks any run — applies, and the corpus and the run agree.** MEASURED.
+
+### 5. ★★★ WITH `w62` REMOVED, THE RESIDUE IS **EMPTY**: ITEM A + A HOLD REGISTER EXPLAINS 7 OF 7
+
+§217 §5 closed with *"`w62` and (arguably) `iw25` remain a shape no latency model explains."*
+Both halves are now discharged:
+
+* **`w62`** — not an `SRC 0x0B` word (§3). Nothing to explain.
+* **`iw25`** — at **+13** after `iw12`, which is *later* than item E's `land ≤ 4`, not earlier.
+  The datum lands by `iw16` at the latest; `m_dr` is a **hold** register; and §217 measured
+  **`publishes strictly between iw12 and iw25: 0`** (structural — the kernel has no delay word in
+  `iw13..iw24`). So the datum is still on the bus at `iw25`. **There is no anomaly.** The only
+  thing that prevents it in the shipped build is that `m_dr` is written *solely* by the per-line
+  publish, which fires *only at a delay word*, and `iw25` is not one — which is precisely §217 §1's
+  located defect, and precisely what `DRPUB` repairs.
+
+★★★ ⇒ **All 7 class-2 `SRC 0x0B` words are consistent with `land ∈ [1,4]` + a hold register, with
+no latency parameter and no exception**, and at every one of them no read intervenes between the
+producing read and the consumer, so `land = 1` (which is where `DRPUB` sits — it publishes *after*
+`exec_alu`, so item A's `land ≥ 1` flush-read lower bound survives) and `land = 4` are
+observationally identical. **`DRPUB` is now the only model on the table that fits all seven.**
+**FORCED** from §3 + §4 + §217 §1's measured zero.
+
+### 6. ★★★ STANDING RULE 1 — RE-READ IN ALL THREE ARMS, INCLUDING THE NO-STIMULUS WINDOW
+
+```
+   arm A / arm B / arm C, all three identical, straight out of the logs:
+       §70  ACCA AT w73   quiet 726040  min 0 max 0   |   loud 313960  min 0 max 0
+       §211 ACCB AT w78   quiet 726040  min 0 max 0   |   loud 313960  min 0 max 0
+```
+
+`min == max == 0` in **both** accumulators, in **both** buckets including the 726 040-frame
+no-stimulus window, in **all three** arms. **NO non-zero output. NO audio claim.** This pass did
+not touch the emulator's behaviour at all, so it could not have produced one; §216's result —
+the output stage is a null *independent* of the send — is untouched and unchallenged.
+
+### 7. ⇒ VERDICT, AND WHAT IT DOES AND DOES NOT CHANGE FOR `UPD6383_DRPUB`
+
+**The cross-frame rival is REFUTED. `DRPUB`'s `age 0` is NOT wrong by one frame.** §217 §7 named
+this as *"the one remaining check before flipping it"*; **that check is now DISCHARGED**, and it
+was discharged offline, against logs that already existed, at the cost of no run.
+
+**`UPD6383_DRPUB` nevertheless stays DEFAULT OFF in this pass, and the reason is unchanged and is
+not doubt about the model.** On the shipped build (`SRC0B2=0`) arm B is **bit-identical to arm A in
+every column** (`s104_score.py` acc 27/2, mem 21/9, L 18/3, last slots `iw38`/`iw35`/`iw35`;
+`§80` 24 922 560 / 24 922 552 in both), because the datum it correctly delivers is **zero** — the
+delay line is empty (`§46`: 0 non-zero of 24 922 560 reads) because the send is closed, and §216
+proved that forcing the send open still leaves the output stage a null. ⚠ **A default flip with no
+observable consequence cannot be validated by measurement, and this project does not ship one on a
+model argument alone.** The blocker to flipping is no longer the corpus — it is that there is
+nothing downstream able to show the difference.
+
+**What would license the flip, stated so the next pass can grade it:** any arm in which the shipped
+build's delay line carries content — i.e. after whatever closes the send — where `DRPUB=1` and
+`DRPUB=0` differ in `§104`/`s104_score.py`. Until then the correct state is: **model settled,
+gate present, default OFF, fired count 24 922 560.**
+
+### 8. ★ SECONDARY — SPECULATIVE CORPUS PATTERNS RECORDED THIS PASS
+
+⚠ All **SPECULATIVE** unless marked. None is applied; none gates anything.
+
+* **★ `lo12` DOES NOT DETERMINE CLASS BEHAVIOUR, AND 11 CODES PROVE IT (MEASURED).** Eleven
+  distinct `lo12` values occur **both** on class-1 delay words and on class-2 words:
+  `0x000, 0x00B, 0x1D5, 0x2C7, 0x2D9, 0x407, 0x40B, 0x40E, 0x447, 0x647, 0x655`. The kernel's own
+  `iw26` is `880.1.20.40B` — a class-1 delay READ sharing `w62`'s `lo12`, which is very likely how
+  `0x40B` entered §217 §5's census in the first place. ⇒ **Group by the SOURCE field, never by the
+  `lo12` string.** Cheap, and it would have prevented this section's §3.
+* **★ THE `212.2.xx.00B` PROGRAM-HEAD IDIOM — 9 sites, 8 of them at `w3` (MEASURED, unexplained).**
+  `hi12 = 0x212` (`ST` + `f98=2` + `f31=1`), `SRC 0x00`, `ACT 0x0B`, class 2, in
+  CHORUS, MODULATED CHORUS, S.DELAY+FLANGER, S.DELAY+VIBRATO, S.DELAY+PHASER, AUTO WAH+S.DELAY,
+  PEQ+CHORUS, PEQ+FLANGER (all `w3`) and PEQ+VIBRATO (`w11`). In **all 9** the program's first
+  delay word is `w0`, a READ, so the idiom is *"opening delay READ, then this word 3 slots later"*.
+  `addr8` varies freely (`0x22, 0xF1, 0xA7, 0x0A, 0x00, 0xB1, 0x7F, 0x7F, 0x47`) — consistent with
+  `addr8` being a signed pointer post-increment (`dsp_disasm.py:1019`), i.e. **not** part of the
+  idiom. Three more sit in the PEQ+compressor family as `02A.2.4B.00B` at `w0`/`w1`/`w1`.
+  ⇒ SPECULATIVE: `ACT 0x0B` is a **head-of-program state-cell action**, and `register-space.md` §4's
+  *"ACTION `0x0B` and the delay-DRAM family are entangled"* may be a **positional** entanglement
+  (both live at program heads and around taps) rather than a functional one.
+* **★ `ACT 0x0B` IS THE LARGEST OPEN ACTION CODE STILL UNSPLIT (MEASURED).** 82 corpus words:
+  **50** delay-DRAM, **16** class 2, **16** class A. `register-space.md` §4 notes PARAMETRIC EQ —
+  the one block solved to the bit — contains **zero** of them, so no solved block can settle it.
+  The 16 class-2 members catalogued in §3/§8 are the first population of `ACT 0x0B` words that is
+  **not** a delay word and **not** inside the all-pass motif; if any block containing them is ever
+  solved numerically, `ACT 0x0B` becomes decidable. ⇒ recorded as a **target of opportunity**.
+* **★ ROOM REVERB 1's DELAY SCHEDULE IS STRICTLY ALTERNATING R/W FOR 21 WORDS, THEN BREAKS
+  (MEASURED).** Offsets `0R 11W 15R 19W 23R 27W 31R 35W 39R 43W 47R 51W 55R 59W 63R 69W 73R 77W
+  81R 85W 89R 93W 97R 101W 105R` then **`114R 125R 131W`** — three trailing words that break the
+  pattern. Consistent with `dram-datapath.md` item C's ledger (12 line writes + 14 line reads +
+  1 flush read + 1 prime write) and item A's *"the CEILING is the LAST READ of its program"*:
+  the two extra reads look like the pre-delay's early-reflection taps plus the flush.
+  SPECULATIVE as an interpretation; the offsets are MEASURED.
+
+### 9. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **the CROSS-FRAME rival** (`HANDOFF-NEXT.md` §1.-0.5) | **REFUTED**, three independent ways: the pre-registered tag is `iw26` and arm A measures **`iw289`** with a single-bin histogram (0 % `iw26`); a one-deep register cannot span the **41 delay words / 21 READS** between `iw26`(*N−1*) and `iw25`(*N*); and the rival is **undefined** at 1 of 6 ENSEMBLE sites where item A is exceptionless 6/6 |
+| **"`DRPUB`'s `age 0` is wrong by one frame"** | **NO.** `age 0` with tag `iw12` is the correct model; the shipped `age 1` / `iw289` is unrelated residue |
+| **"`ENSEMBLE w62` is a class-2 `SRC 0x0B` word" / "the kernel's twin"** (§217 §5) | ⛔ **WRONG FIELD.** `lo12 0x40B` carries `SRC 0x10` (the accumulator, ANCHORED) and `ACT 0x0B`. Same for MULTI TAP `w25`. The corpus population is **7**, not 9 — as `upd6383.cpp:2436-2441` has said since §215 |
+| **§217 §5's "honest residue: a shape no latency model explains"** | **EMPTY.** `w62` is not in the class; `iw25` at `+13` is *inside* item E's bound with **0** intervening publishes, so item A + a hold register explains **7 of 7** |
+| **§217 `P1`'s per-frame delay table** | **INCOMPLETE AT BOTH ENDS**, not just the tail: body 0 begins at **`iw84`** (CHORUS `w0` R) and body 1 ends at **`iw331`**, not `iw269`. The full 42-word schedule is in §2 and matches `dram-datapath.md` item K's independent count |
+| **"§217 needs a run to be decided"** | It did not. The whole verdict comes from three existing logs and the 41-listing corpus. **Rule 13 paid for itself: zero MAME runs, zero rebuilds** |
+
+Evidence grade: §1 **MEASURED** (three existing logs, single-bin histograms, `m_prov_other`
+silent in all three arms); §2 **FORCED** from the statically reconstructed 42-word schedule, whose
+total independently reproduces `dram-datapath.md` item K, plus arm A's measurement of what the
+one-deep bus actually retains; §3 **MEASURED** (corpus, 3057 words) with the field reading
+**FORCED** from `dsp_disasm.py:179-180` and controlled against `register-space.md` §4's published
+`82`/`50` split; §4 **MEASURED**; §5 **FORCED** from §3 + §4 + §217 §1's measured zero;
+§6 **MEASURED**, including the no-stimulus window; §7 a decision, **not shipped**;
+§8 **SPECULATIVE** except where the counts are marked MEASURED.
+`UPD6383_DRPUB` remains **DEFAULT OFF**. **No source behaviour was changed by this pass.**
