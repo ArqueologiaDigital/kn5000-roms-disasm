@@ -12609,3 +12609,45 @@ the PROVEN-BY-CONSTRUCTION sweep, each with an independent control, none from a 
 
 Evidence grade: **MEASURED**, bit-exact at two lines against an independently-taken dump; the
 decode itself **FORCED** (round5 §3). My pre-registration **WRONG**, recorded.
+
+---
+
+## §203 — `C40.1.80.000` consuming a descriptor cell is INERT by the only instrument that could grade it. Not shipped.
+
+§198 gap #4: `r3-delaydram.md` §6.1 **FORCES** that `C40.1.80.000` consumes a descriptor cell (all
+8 exact solutions require it), and it is verified arithmetically from the .dsm — **28 non-C-format
+consumers + 4 C-format = 32 = *n***. The delay path excludes C-format, so the cursor was thought to
+run four short inside every reverb.
+
+Implemented at the dispatch, in program order (round5 §1's identity map counts consumers in program
+order), gated on `UPD6383_CFMTIX`.
+
+### Result
+
+```
+   §203 FIRED 5 698 785 times
+   §200 DELAY AGE  dsc 26 0..0 | 28 0..4161 | 2A 0..0 | 2C 0..0 | 2E 0..0 | 30 0..3120
+                   -- BYTE-IDENTICAL to §202's shipped run
+   §70 ACCA  min 0 max 0
+```
+
+**The gate fires 5.7 million times and changes nothing the delay census can see.** ⇒ **not shipped**;
+implemented and off.
+
+### ⚠ Why that is a weak negative, stated plainly
+
+The write-timestamp census reports the delay of lines that **already resolve**. §202 left four of
+six lines at `0..0`, and a cursor advancing four further cells would move which *descriptor* each
+consumer reads — a change this instrument only sees if the newly-read cells are non-zero **and** the
+line then resolves. So *"inert by this probe"* is much weaker than *"wrong"*.
+
+⇒ **Do not read this as refuting r3 §6.1.** It is FORCED by an argument this run does not touch.
+What is measured is only that the shipped delay census cannot grade it — the same shape as §200's
+finding about the rotation sign, and the reason that one needed §201 first.
+
+★ What would grade it: a census of **which descriptor index each consumer reads**, per body, against
+the identity map's prediction — a *consumer-to-cell* probe, not a delay probe. That does not exist
+yet and is the natural companion to §200.
+
+Evidence grade: the claim **FORCED** (r3 §6.1, plus the 28 + 4 = 32 arithmetic); the run
+**MEASURED** and **inconclusive by construction**, recorded as such rather than as a refutation.
