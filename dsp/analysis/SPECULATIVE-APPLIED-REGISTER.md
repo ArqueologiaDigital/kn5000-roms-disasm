@@ -11886,3 +11886,71 @@ but not a decode.
 Evidence grade: §1 **FORCED** (P5 is MEASURED and the arithmetic is decisive), with two bit-exact
 corroborations; §2 **MEASURED**; §3 **SPECULATIVE and declined**, with the deciding experiment
 stated.
+
+---
+
+## §191 — the probe reverses the target: `0x921` sits at a CONSTANT pointer, `C63` is the one that varies
+
+Built to answer §162's rule — *measure that a consumer's inputs vary before implementing it* — for
+the `0x921` reset. It took two attempts to place, and both failures are worth recording.
+
+### 1. ⚠ Two instrument defects, both mine
+
+* **Wrong function.** I put the probe in `exec_addressing_only()` — the function whose *name*
+  matches "addressing only, no ALU effect". It is only reached from the k6 path (`:1708`), so **no
+  bit-11 word ever entered it** and the first run logged **zero sites**. LEDGER rule 10 applied to
+  my own instrument: I instrumented the concept, not the path.
+* **C-format pollution.** The second placement worked but had no `c_format` filter, and its 12
+  slots filled with **C-format false positives** (`0C0A292820`, `0C04312820`, …) whose 13-bit
+  *immediate* merely happens to carry bit 11. The static census excluded C-format; the probe did
+  not. ⇒ **A probe whose sample is chosen by arrival order must be filtered at the door.**
+
+### 2. MEASURED — the pointer at every bit-11 word, MULTI TAP DELAY vehicle (TYPE 8)
+
+★ Control first: `I-RAM[84] = prog10_multi_tap_delay`, `I-RAM[200] = prog16_room_reverb_1` — §170's
+TYPE map confirmed **live**, on a different unit and a different effect from the one it was built on.
+
+```
+   0040000C63  sel 63 sub 4   hits 1441604 | m_dp   5..208  chg 70177   ★ VARIES
+   0142000C63  sel 63 sub 4   hits 1405020 | m_dp  13..210  chg 32902   ★ VARIES
+   ------------------------------------------------------------------------------
+   0050000921  sel 21 sub 1   hits  552876 | m_dp  16..16   chg 0       CONSTANT
+   0040000864  sel 64 sub 0   hits  552876 | m_dp  16..16   chg 0       CONSTANT
+   08801308BC  sel BC sub 0   hits 1383360 | m_dp   5..5    chg 0       CONSTANT
+   00400008BC / 00500008BC    (both)       | m_dp   5..5    chg 0       CONSTANT
+```
+
+★ `0x921` and `0x864` have **identical hit counts (552 876)** and sit at the **same constant
+pointer (16)** — they execute together, once per frame, in the same block. §185 S11 guessed
+`0x63`/`0x64` were a pair; the measured pairing is `0x921`/`0x864`.
+
+### 3. ⇒ THE TARGET IS REVERSED, and the motivating argument dissolves
+
+§185 §3 inferred that `0x921` *"resets the pointer at a section boundary"*, motivated by the C-RAM
+role changing tap→filter there. **The pointer at that word is already a constant 16 in every one of
+552 876 executions.** So the *function* the reading attributes to it — giving the filter section a
+fixed base — is already true without it.
+
+⚠ Precisely: implementing the reset **would** change something (`m_dp` 16 → 0, shifting the whole
+filter section's addressing by −16). It is not unobservable. But **nothing available says which
+value is correct**, because both are constants and there is no independent ground truth for where
+the filter section should read. ⇒ **no criterion, rather than no effect** — and building it would
+produce a change I could not grade.
+
+⇒ **`C63` is the one bit-11 form whose pointer varies**, at two carriers, tens of thousands of
+changes each. It is where a pointer-affecting reading *can* be tested — the opposite of what §184
+and §190 concluded on structural grounds.
+
+### 4. SPECULATIVE
+
+* **S13.** The split is **exactly `sub 4` varies / `sub 0` constant**. If `sub` selected a register
+  bank (§185 S12) rather than an operation (§184 S9), a systematic difference in pointer state
+  between the two is what you would expect. **SPECULATIVE**, and it now has a measurement behind it
+  rather than only a population count.
+* **S14.** `0x8BC` sits at `m_dp = 5` on **all three** of its carriers — including the class-1
+  delay word and both class-0 words. §183 measured the payload as carrier-independent; this is the
+  first behavioural evidence for it. **SPECULATIVE.**
+
+Evidence grade: §1 both defects **acknowledged**; §2 **MEASURED**, with the vehicle's program
+identity as a passing control; §3 **FORCED** by §2 (the pointer is constant, so the motivating
+argument cannot discriminate); §4 **SPECULATIVE**.
