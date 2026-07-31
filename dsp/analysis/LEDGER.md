@@ -20,20 +20,57 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§218, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§219, 2026-07-31)
+
+> **★★★ THE SEND IS D-RAM CELL `0x05`, AND `iw35` OVERWRITES THE AUDIO THAT `iw9`/`iw11`
+> DEPOSITED THERE.** §219 decided the assigned frontier STATICALLY and it came out a double
+> negative: `§213 §4`'s *"one corpus-unique word whose `SRC` is a GUESS"* (`iw25`, `SRC 0x0B`)
+> **stopped being a guess in §215**, and **no `SRC` on the send path can decide a stored value
+> anyway** — the delay WRITE (`upd6383.cpp:2081-2090`) and the `HI_ST` store (`:2942`) both take
+> `acc_to_datum(m_acc)`, never the bus, so `SRC 0x0B` reaches the line only as a MULTIPLICAND.
+> ⇒ **DO NOT look for the send defect in a SOURCE-field decode.**
+> **AND, INDEPENDENTLY, THE OUTPUT STAGE IS A NULL EVEN WHEN FED (§216) — so nothing here can
+> produce audio, and `§104`, not `§70`/`§211`, is the falsifier for any send experiment.**
+
+Decided from `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz` and
+`data/src0b2_{A_off,B_on}_215.log.gz` — five arms, all agreeing digit-for-digit — plus
+`tools/src0b_census.py sendpath`. **Cite the run, not the section** (rule 11):
+
+```
+   §96  cell 05 written by iw9 / iw11  (DEPOSIT)  and by iw35 / iw45  (OVERWRITE)
+   §86  cell 05  quiet [0..5 084 004]  loud [0..16 760 298]     <- the audio IS deposited
+   §104 mem under dp=05:  iw35  5 084 004 ‖ -5 307 593..8 388 607   *   <- still alive
+                          iw36..iw45   4 194 304 ‖ 4 194 304      =   <- iw35's store landed
+                          iw46 and body 0's iw84   0 ‖ 0          =   <- iw45's store landed
+   4 194 304 = acc_to_datum(274 877 906 944), the accumulator iw34 leaves.  FORCED.
+   CONTROL: in the two SRC0B2=1 arms the SAME iw45 store delivered -8 034 877..7 192 534 to
+            body 0's iw84 -- so cell 0x05 IS the pickup and the instrument can tell them apart.
+```
+
+⚠ **AND "the delay line is EMPTY" is IMPRECISE** (§219 §5, corrected): `§75` in the same report
+says **1 175 999 delay writes carry content** — one per settled frame, the kernel's `iw46` writing
+the DC `0x7D70` — and `§200` reports reads resolving onto written addresses with 0..4401-frame
+ages. The reads return zero because the **bodies** write zero, which is §3's cell `0x05`.
+
+**⇒ NEXT: (1) the SEND — `iw35`'s `HI_ST` store target, with the pre-registered two-sided
+discriminator in §219 §8; ★ the instrument may already exist — mask bit 26 (`0x4000000`,
+`m_mirror06_n`) is 0 in the shipped default and has never been run. (2) the OUTPUT STAGE —
+nothing connects the body accumulator to `w73`/`w78`. They are independent.**
+⚠ **`UPD6383_DRPUB`: model settled, gate present, DEFAULT OFF, fired 24 922 560.** It ships only
+when an arm exists in which the shipped delay line carries content and `DRPUB=1` vs `=0` differ in
+`§104`/`s104_score.py`.
+
+---
+
+## TIER 0a-prev — the §218 blocker, SUPERSEDED by §219. Kept so the closure is legible
 
 > **★★★ THE WHOLE `iw25` LINE OF ENQUIRY IS CLOSED — decode, delivery, schedule, line index,
 > register width and latency. §218 refuted the last open rival (the CROSS-FRAME pipeline) with
 > NO run and NO rebuild, and corrected the census it rested on: there are **7** class-2
 > `SRC 0x0B` words in the corpus, not 9, and `ENSEMBLE w62` is not one — its `lo12 0x40B` carries
-> `SRC 0x10` (the ACCUMULATOR); the `0B` §217 §5 read was the ACTION field.
-> With `w62` removed, `dram-datapath.md` item A + a hold register explains **7 of 7**.
-> **THE BLOCKER IS NOW UPSTREAM OF EVERYTHING §§215–218 TOUCHED: THE SEND IS CLOSED, so the delay
-> line is empty (`§46`: 0 non-zero of 24 922 560 reads) and every correct mechanism below it
-> correctly carries zero — AND, INDEPENDENTLY, THE OUTPUT STAGE IS A NULL EVEN WHEN FED (§216).**
-
-Decided from `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz` (three arms, one build) plus the
-corpus tool `tools/src0b_census.py` — cite the run, not the section (rule 11):
+> `SRC 0x10` (the ACCUMULATOR); the `0B` §217 §5 read was the ACTION field.**
+> ⛔ Its handover — *"NEXT: the SEND, `§213 §4`'s one corpus-unique word whose `SRC` is a GUESS"* —
+> is **RETIRED BY §219**: the guess was decided in §215 and no `SRC` on the path is load-bearing.
 
 ```
    arm A  §217 provenance at iw25  540000 evals | age 1..1 | read by iw289 x540000   <- SINGLE BIN
@@ -42,12 +79,6 @@ corpus tool `tools/src0b_census.py` — cite the run, not the section (rule 11):
    §218  41 delay words (21 READS) between iw26(N-1) and iw25(N) -- one-deep cannot span it
    §218  item A "+4 after the PRECEDING read" is 6/6 at ENSEMBLE; the rival is UNDEFINED at w92
 ```
-
-**⇒ NEXT: (1) the SEND — `§213 §4`'s one corpus-unique word whose `SRC` is a GUESS; (2) the
-OUTPUT STAGE — nothing connects the body accumulator to `w73`/`w78`. They are independent.**
-⚠ **`UPD6383_DRPUB`: model settled, gate present, DEFAULT OFF, fired 24 922 560.** It is
-bit-identical to the control on the shipped build; it ships only when an arm exists in which the
-shipped delay line carries content and `DRPUB=1` vs `=0` differ in `§104`/`s104_score.py`.
 
 ---
 
@@ -183,6 +214,8 @@ the ones a reader would reach for again.
 | 25 | **Widen `m_dr`** / "it is a single-register problem" | ⛔ **MOOT §217.** One register is enough: `§217` measured **`publishes strictly between iw12 and iw25: 0`** — nothing overwrites it in `iw13..iw24`. The fault was *when* `m_dr` is written (only at a delay word, and `iw25` is not one), not *how many* registers there are | §217 |
 | 26 | The class-2 `SRC 0x0B` pipeline is **one-deep and CROSS-FRAME** — the word captures the datum of the read that FOLLOWS it, from the previous frame, so `DRPUB`'s `age 0` is off by one frame | ⛔ **REFUTED §218, three ways, with NO run.** (a) Pre-registered discriminator: the rival predicts tag `iw26`; arm A's histogram is **SINGLE-BIN `iw289`**, age 1..1, 540 000/540 000 — `iw26` holds **0 %** (`m_prov_other` silent in all three arms). (b) FORCED: **41 delay words, 21 of them READS**, execute between `iw26`(*N−1*) and `iw25`(*N*) — *one-deep* forbids the retention *cross-frame* needs. (c) Corpus: item A's "+4 after the PRECEDING read" is exceptionless **6/6** at ENSEMBLE, while "the FOLLOWING read" is **UNDEFINED at `w92`** and −30 at `w34` | §218 |
 | 27 | **`ENSEMBLE w62` / `MULTI TAP w25` are class-2 `SRC 0x0B` words** "ahead of their read" (§217 §5's residue) | ⛔ **WRONG FIELD, §218.** `lo12 0x40B` = `SRC 0x10` (**the ACCUMULATOR**, anchored) + `ACT 0x0B`; the `0B` is the ACTION. The corpus has **7** class-2 `SRC 0x0B` words, not 9 — which `upd6383.cpp`'s own `case 0x0B` comment has said since §215. ⇒ §217 §5's "a shape no latency model explains" is **EMPTY**: `w62` is not in the class, and `iw25` at **+13** is *inside* item E's `land ≤ 4` with 0 intervening publishes | §218 |
+| 28 | The **SEND is decided by a guessed `SRC`** (`§213 §7`, `HANDOFF-NEXT.md` §1 item 1) | ⛔ **DOUBLY REFUTED §219, statically.** (a) The guess — `SRC 0x0B` at `iw25` — **stopped being a guess in §215** (13/13 successor identity, the ENSEMBLE/kernel `2D9` twin), was provenance-graded in §217 and its population re-verified in §218. (b) **No `SRC` on the path decides a stored value**: the delay WRITE (`upd6383.cpp:2081-2090`) and the `HI_ST` store (`:2942`) both take `acc_to_datum(m_acc)`, never the bus, so a `SRC` there changes a GAIN OPERAND, never whether anything is injected. `tools/src0b_census.py sendpath` grades all 44 non-C-format words of kernel A | §219 |
+| 29 | "the delay line is **EMPTY**" as an independent fact | ⚠ **IMPRECISE §219.** `§75` in the same report as `§46`: **1 175 999 writes carry content** (one per settled frame — the kernel's `iw46` writing the DC `0x7D70`), and `§200` reports reads resolving with 0..4401-frame ages. The reads return zero because the **bodies** write zero, because their input cell `0x05` is zeroed by `iw45`. "Empty" names a symptom of dead-end 28's replacement, not a cause | §219 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
 
 ---
@@ -341,7 +374,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-111 sections, §97..§218.  **Read the tail first** — later sections retract earlier ones *in place*.
+112 sections, §97..§219.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -456,4 +489,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §216 | REFUTED/RETRACTED | the rival is refuted, my "suspicious loop" is retracted, and the OUTPUT STAGE NULL IS NOW PROVEN BY FEEDING IT | §1 **MEASURED** (41 listings, 13/13, two independent programs); §2 **FORCED** — the |
 | §217 | REFUTED/RETRACTED | ⛔★★★ THE `§78` BLOCKER IS REFUTED: THE DATUM IS NOT LOST, IT IS DELIVERED TO `iw98`. The LINE INDEX is a RED HERRING and | §0 **MEASURED** (both censuses are in `src0b2_B_on_215.log.gz`; the boot-sample |
 | §218 | REFUTED/RETRACTED | ⛔★★★ THE CROSS-FRAME RIVAL IS REFUTED WITHOUT A RUN, AND `ENSEMBLE w62` IS NOT AN `SRC 0x0B` WORD AT ALL. §217 §5's CENS |  |
+| §219 | REFUTED/RETRACTED | ⛔★★★ THE SEND'S "GUESSED `SRC`" WAS DECIDED FOUR SECTIONS AGO, AND NO `SRC` ON THE PATH CAN CLOSE THE SEND ANYWAY. THE S |  |
 

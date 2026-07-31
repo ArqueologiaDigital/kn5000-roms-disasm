@@ -23,6 +23,17 @@ Everything §218 states about the corpus comes out of this file.
     python3 dsp/tools/src0b_census.py pairs      # 3  lo12 values that span class-1 and class-2
     python3 dsp/tools/src0b_census.py schedule   # 4 ★ the 42-word per-frame delay schedule
     python3 dsp/tools/src0b_census.py heads      # 5  the 212.2.xx.00B program-head idiom
+    python3 dsp/tools/src0b_census.py sendpath   # 6 ★ §219: every SRC on the unit-0 SEND path
+
+§219 added `sendpath'.  `HANDOFF-NEXT.md' §1 item 1 asked for "§213 §4's one
+corpus-unique word whose SRC is a GUESS", on the premise that a guessed SRC in
+the send path is what keeps the delay line empty.  `sendpath' grades that
+premise exhaustively instead of by eye: it walks kernel A (w0..w49), prints
+every word's SOURCE and ACTION with the disassembler's own accessors (standing
+rule 18) and marks which SRC codes are ANCHORED, and it marks the words that
+STORE.  The result is that NO `SRC' on the path decides a stored value -- both
+the delay WRITE and the `HI_ST' store take `acc_to_datum(m_acc)', never the
+bus -- so no SRC decode can be the reason the line is empty.
 """
 import os
 import re
@@ -159,7 +170,59 @@ def heads():
     print("   addr8 varies freely and is a SIGNED pointer post-increment, so it is not the idiom.")
 
 
-ALL = {'census': census, 'act0b': act0b, 'pairs': pairs, 'schedule': schedule, 'heads': heads}
+#  ★ §219.  MEASURED, from `data/drpub_A_off_217.log.gz' (all three §217 arms and
+#  both §215 arms agree digit-for-digit): §96's writer census of D-RAM cell 0x05,
+#  the unit-0 body's INPUT cell, in execution order, and §104's residency of that
+#  cell (the `mem' column, sampled BEFORE each word).  Kept here so the corpus
+#  listing and the run agree in one place.
+CELL05 = {
+    9:  ("deposit", "input-dependent -- §86 cell 05 loud [0 .. 16 760 298]"),
+    11: ("deposit", "mem-to-mem ACT-07 move (SRC 0x11), §119"),
+    35: ("OVERWRITE", "stores acc_to_datum(m_acc)=4 194 304; mem BEFORE it is INPUT-DEPENDENT"),
+    45: ("OVERWRITE", "stores the pre-adder acc = 0; mem at iw46 and at body 0's iw84 is 0..0"),
+}
+
+
+def sendpath():
+    """6 -- §219: every SRC on the unit-0 send path, graded ANCHORED vs OPEN."""
+    ws = dict(words('kernel.dsm'))
+    print("6) THE UNIT-0 SEND PATH -- kernel A, w0..w49 (`kernel.dsm')")
+    print("   SRC = lo12[10:6], ACT = lo12[4:0]  (dsp_disasm.lo_src / lo_act -- standing rule 18)")
+    print("   ANCHORED SRC codes: %s;  everything else is OPEN"
+          % " ".join("0x%02X" % s for s in D._ANCHORED_SRC))
+    print("   %-5s %-14s %-10s %-10s %s" % ("iw", "field", "SRC", "ACT", "note"))
+    openc = collections.Counter()
+    for i in sorted(ws):
+        if i > 49:
+            break
+        w = ws[i]
+        if D.c_format(w):
+            print("   w%-4d %-14s %-10s %-10s C-format (no SRC/ACT field)" % (i, field(w), "--", "--"))
+            continue
+        s, a = D.lo_src(w), D.lo_act(w)
+        anch = s in D._ANCHORED_SRC
+        note = []
+        if D.is_dram(w):
+            note.append("delay %s -- stores/loads acc_to_datum, NOT the bus" % D.dram_dir(w))
+        if i in CELL05:
+            note.append("cell 0x05 %s: %s" % CELL05[i])
+        if not anch:
+            openc[s] += 1
+        print("   w%-4d %-14s SRC %02X %-3s ACT %02X     %s"
+              % (i, field(w), s, "" if anch else "(?)", a, "; ".join(note)))
+    print("   ⇒ OPEN SRC codes on the path: %s"
+          % ", ".join("0x%02X x%d" % (s, n) for s, n in sorted(openc.items())))
+    print("   ⇒ and NONE of them decides a stored value: the delay WRITE (upd6383.cpp:2081-2090)")
+    print("     and every HI_ST store take `acc_to_datum(m_acc)'.  `SRC 0x0B' reaches the line")
+    print("     only as a MULTIPLICAND (tempA -> P = coef x tempA -> acc), so a wrong SRC there")
+    print("     changes a GAIN OPERAND, never whether anything is injected.")
+    print("   ⇒ THE SEND IS CELL 0x05, and it is written FOUR times per frame:")
+    for i in sorted(CELL05):
+        print("       iw%-4d %-10s %s" % (i, CELL05[i][0], CELL05[i][1]))
+
+
+ALL = {'census': census, 'act0b': act0b, 'pairs': pairs, 'schedule': schedule,
+       'heads': heads, 'sendpath': sendpath}
 
 if __name__ == '__main__':
     which = sys.argv[1:] or list(ALL)

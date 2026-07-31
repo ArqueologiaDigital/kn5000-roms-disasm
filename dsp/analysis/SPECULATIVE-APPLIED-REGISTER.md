@@ -14348,3 +14348,260 @@ one-deep bus actually retains; §3 **MEASURED** (corpus, 3057 words) with the fi
 §6 **MEASURED**, including the no-stimulus window; §7 a decision, **not shipped**;
 §8 **SPECULATIVE** except where the counts are marked MEASURED.
 `UPD6383_DRPUB` remains **DEFAULT OFF**. **No source behaviour was changed by this pass.**
+
+---
+
+## §219 — ⛔★★★ THE SEND'S "GUESSED `SRC`" WAS DECIDED FOUR SECTIONS AGO, AND NO `SRC` ON THE PATH CAN CLOSE THE SEND ANYWAY. THE SEND IS D-RAM CELL `0x05`, AND `iw35` OVERWRITES THE AUDIO THAT `iw9`/`iw11` DEPOSITED THERE
+
+**Decided STATICALLY. No build of the emulator's behaviour, no MAME run, no new gate, no mask
+bit.** Scored against `HANDOFF-NEXT.md` §1 item 1 (*"`§213 §4`'s one corpus-unique word whose
+`SRC` is a GUESS — that word, not the delivery, is the next decode"*) using the five logs that
+already existed — `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz` and
+`data/src0b2_{A_off,B_on}_215.log.gz` — plus the corpus tool `dsp/tools/src0b_census.py`,
+extended with a new `sendpath` section rather than replaced. **Cite the run, not the section.**
+
+> **THE QUESTION:** what is the guessed `SRC`, and is that guess what keeps the delay line empty?
+>
+> **THE ANSWER, in three parts:**
+> **(1)** The word is kernel `iw25 = 000.2.00.2D9` and the field is **`SRC 0x0B` = the delay-DRAM
+> data register** (`upd6383.cpp` `case 0x0B`, register row 14, labelled *"It is a GUESS"*).
+> **It has not been a guess since §215** — the corpus anchored it 13/13, §217 graded it by
+> provenance, §218 re-verified its population with the disassembler's own accessors. The source
+> comment was **STALE**; it is corrected in this pass. *(The premise of the task was 4 sections old
+> at the moment it was written down — standing rule 3, fifth occurrence.)*
+> **(2) ★★ And even had it been wrong, it could not be the cause.** **No `SRC` code anywhere on
+> the send path decides a stored value.** Both stores on the path take `acc_to_datum(m_acc)` and
+> never the bus — the delay WRITE (`upd6383.cpp:2081-2090`) and the `HI_ST` store
+> (`upd6383.cpp:2942`). `SRC 0x0B` reaches the delay line **only as a MULTIPLICAND**
+> (`tempA → P = coef × tempA → acc`), so a wrong reading there changes a **gain operand**, never
+> whether anything is injected. **FORCED from the source.**
+> **(3) ★★★ WHERE THE SEND ACTUALLY CLOSES, and it names an `iw`:** the unit-0 send is **D-RAM
+> cell `0x05`**, body 0's input pickup. The kernel **deposits the audio into it at `iw9`/`iw11`
+> and then OVERWRITES it at `iw35` and again at `iw45`, before the CALL at `iw49`.** MEASURED, in
+> all five logs, digit-for-digit identical.
+
+### 1. ★ THE ASSIGNED QUESTION, ANSWERED WITHOUT A RUN
+
+`§213 §7` named it exactly: `iw25` is the **only** class-2 `SRC 0x0B` word in the whole corpus
+outside ENSEMBLE, it performs no delay access itself, and the `0x0B` reading was motivated by the
+99 class-1 delay words *none of which is `iw25`*. That is a fair statement of a guess — **as of
+§213**. What happened next:
+
+| § | what it did to the guess | grade |
+|---|---|---|
+| **§215** | ANCHORED it by the corpus: `lo12 0x2D9` is a 36-word family; its consumer `0012201655` (`mac ta`, base rate **0.43 %**) is immediately preceded by a class-1 `addr8 0x20` DELAY READ at **13 of 13** sites; ENSEMBLE fuses read+capture in one `2D9`, the kernel splits the identical `2D9` one word ahead of its read — same `lo12`, same idiom, same successor, two independent programs | MEASURED (41 listings / 3057 words) |
+| **§217** | graded it **by provenance**, not by liveness: the datum is tagged with the `iw` that READ it, and the histogram at `iw25` is single-bin | MEASURED |
+| **§218** | re-verified the population — **7** class-2 words, not 9 — with `dsp_disasm.lo_src`/`lo_act`, and refuted the last rival (cross-frame) three ways | MEASURED / FORCED |
+
+⇒ **`SRC 0x0B` at `iw25` is DECIDED.** `UPD6383_SRC0B2` (the rival) stays default OFF and is
+dead-end 21. **The only thing left to do about it was to stop calling it a guess in the source**,
+which this pass does (`upd6383.cpp`, `case 0x0B` preamble). Documentation only — no behaviour
+changed, no gate added, no mask bit touched.
+
+### 2. ★★ AND THE PREMISE BEHIND THE TASK IS FALSE — FORCED, FROM THE DEVICE'S OWN STORE SITES
+
+`HANDOFF-NEXT.md` §1 reasoned *"a guessed `SRC` in the send path is exactly the kind of unforced
+assumption that keeps a line empty"*. That is a good instinct and it is **structurally impossible
+here**, for a reason that takes two greps rather than a run:
+
+```
+   the delay WRITE        upd6383.cpp:2081-2090   m_delay.write_word(addr,
+                                                     u16((u32(acc_to_datum(wacc)) >> 8) & 0xffff))
+   the HI_ST bit-4 store  upd6383.cpp:2942        store_mode(stmode, stdest, u32(acc_to_datum(sacc)))
+```
+
+**Both take the ACCUMULATOR. Neither consults `src`, `L`, or any `SRC` evaluator.** The bus only
+reaches a stored value through the multiplier (`m_p = sext(coef,24) * L >> P_SHIFT`) and then the
+adder. So on the send path a `SRC` decode can scale what is written; it cannot decide *whether*
+something is written, and it cannot introduce a term that is not already in the accumulator.
+
+★ The new `sendpath` section grades the whole path rather than the one word, with the
+disassembler's own accessors (standing rule 18): **kernel A `w0..w49`, 44 non-C-format words**:
+
+```
+   python3 dsp/tools/src0b_census.py sendpath
+   ANCHORED SRC codes: 0x07 0x10 0x19 0x1A
+   OPEN SRC codes on the path:  0x00 x10,  0x08 x6,  0x0B x2,  0x11 x5
+        0x0B  w12 (class-1 delay READ)  and  w25 (the class-2 word)  <- both DECIDED, §215
+        0x08  w0 w30 w32 w33 w41 w45    = THE COEFFICIENT (dead-end 5; the "unity" rival saturates)
+        0x11  w5 w11 w16 w17 w19        = ACCB (§27, replacing a mem[ptr] guess)
+        0x00  w13 w14 w36 w38 w42..44 w46 w47 w49  = mem[ptr]  ⛔ 1 of 6 enumerated, no support
+```
+
+⇒ The largest genuinely unsupported `SRC` population on the path is **`SRC 0x00`**, not `0x0B` —
+and `SRC 0x00` sits on `w46`, the delay WRITE itself, where by §2 it is **inert**: the write takes
+the accumulator. **MEASURED** (corpus), the inertness **FORCED** (source).
+
+### 3. ★★★ THE SEND IS CELL `0x05`, AND IT IS WRITTEN FOUR TIMES A FRAME
+
+D-RAM cell `0x05` is the unit-0 body's input pickup — `[05r]` in `§98`'s live pointer window, and
+the `base = 0x05 | unit<<7` the per-unit rebase is FORCED to. `§96`'s writer census, in execution
+order, **identical in all five logs**:
+
+```
+   §96 cell 05 written by iw9     word 0122FF1D5    `mac (p),(p)-1 ; mem[p]<-acc, acc=0'
+   §96 cell 05 written by iw11    word 400201447    SRC 0x11 / ACT 0x07, a mem-to-mem MOVE (§119)
+   §96 cell 05 written by iw35    word 012A001C0    `mac.b (p),c+,(p)+0'      <- OVERWRITE
+   §96 cell 05 written by iw45    word 010A0020C    010.A.00.20C, HI_ST only  <- OVERWRITE
+   §86 cell 05  quiet [0 .. 5 084 004]  loud [0 .. 16 760 298]  (4 080 000 writes)   INPUT-DEPENDENT
+```
+
+★ **The audio IS deposited.** `§86` grades cell `0x05` input-dependent *when written*, and `iw9`
+is a `mac` whose store is the kernel's input mix. **Then it is destroyed, and `§104`'s residency
+column — `mem` under the pointer, sampled BEFORE each word (`upd6383.cpp:4549-4555`) — states the
+destruction slot by slot** (`data/drpub_A_off_217.log.gz`, quiet ‖ loud, `dp = 0x05` throughout):
+
+```
+   iw35  012.A.00.1C0   mem   5 084 004 ‖ -5 307 593 .. 8 388 607   *  <- THE AUDIO, still alive
+   iw36  400.A.00.000   mem   4 194 304 ‖  4 194 304                =  <- iw35's store landed
+   iw37  092.A.01.1C0   mem   4 194 304 ‖  4 194 304                =
+   iw41..iw45                 4 194 304 ‖  4 194 304                =
+   iw46  800.1.60.00B   mem           0 ‖          0                =  <- iw45's store landed
+   iw84  (body 0's first word, dp = 05) 0 ‖          0                =  <- THE PICKUP. ZERO.
+```
+
+`4 194 304` is not a coincidence: it is `acc_to_datum(m_acc)` for the accumulator `iw34` leaves,
+`274 877 906 944 >> 16 = 4 194 304`, and `iw35` carries `HI_ST` with `mode 2`, so its bit-4 store
+target is `m_dp = 0x05`. `iw45` likewise, storing the **pre-adder** accumulator, which is `0`.
+**MEASURED** (three §217 arms + both §215 arms, identical), the attribution **FORCED** from the
+store site and the arithmetic.
+
+★★ **AND `iw35` ACCOUNTS FOR BOTH DEATHS, not just the send's.** The constant it plants in `0x05`
+is the cell `iw36` and `iw37` re-read as the multiplicand (`§104`'s `L` column: `4 194 304` in
+both buckets at both words), which is why **`P` stops depending on the input at `iw36`** — §213 §3,
+measured, and here given its cause. `iw39` then does `acc ← P` with that constant `P`
+(`401 321 689 088`, both buckets), and the input is out of the accumulator too. ⇒ **One store,
+`iw35`, is upstream of `§213 §3`'s "the input dies at `iw36`" AND of `§213 §4`'s "the send carries
+zero".**
+
+★★★ **THE CONTROL THAT COULD HAVE FAILED, AND DID NOT — `iw45` IS DEMONSTRABLY THE SEND.** In the
+two arms where `tempA` carried live data (`src0b2_B_on_215`, `drpub_C_on_src0b2_217`; the §215
+rival, refuted as a decode) the *same* `iw45` store delivered audio to body 0:
+
+```
+   arm A (shipped)        §104  iw46 mem 0..0 ‖ 0..0                        |  iw84 mem 0..0 ‖ 0..0
+   arm B/C (SRC0B2=1)     §104  iw46 mem 0..0 ‖ -8 034 877 .. 7 192 534  *  |  iw84 mem  idem  *
+                                iw84 acc 0..0 ‖ -864 633 992 785 .. 773 989 370 423  *
+```
+
+⇒ Cell `0x05` **is** body 0's input, `iw45` **is** the word that fills or empties it, and the
+instrument can tell the two states apart. **MEASURED.** *(Rule 17: the failure mode names a
+specific wrong `iw`, and it is `iw35`.)*
+
+### 4. ★★ THIS WAS PREDICTED IN THE SOURCE, AND THE ANSWER WAS ALREADY BEING PRINTED
+
+`upd6383.cpp`'s `kwatch()` note, written for **§110**, says it verbatim:
+
+> *"§110: 0x05 added. The `iw11` timing fix made cell 0x05 input-dependent when WRITTEN, yet
+> §104's residency column still reports body 0 reading it as constant — so something overwrites it
+> between deposit and pickup, exactly as `iw32` does to `0x07`. Name the writers, in execution
+> order."*
+
+The census it asked for has been printing `iw9 / iw11 / iw35 / iw45` in every log since, and
+`§104`'s residency has been printing the `4 194 304 → 0` collapse beside it. **Standing rule 13,
+third occurrence, and the most expensive yet**: 109 sections passed with the answer in the report.
+The lesson is not "read §110"; it is *read the report the build already prints, all of it, before
+designing anything*.
+
+### 5. ⚠ AND "THE DELAY LINE IS EMPTY" IS IMPRECISE — CORRECTED FROM THE SAME REPORT
+
+`HANDOFF-NEXT.md` §1 and `LEDGER.md` tier 0 both say the line is empty, citing `§46`. Eight lines
+above `§46` in the *same* report:
+
+```
+   §75 DELAY WRITES WITH CONTENT:  1 175 999 of 23 693 760      (arm A, drpub_A_off_217)
+   §46 DELAY PORT: 24 922 560 reads (0 returned NON-ZERO), 23 693 760 writes
+   §75 DLY W addr 966F  cell 0000  frame 420001  data 7D70      <- the trace line, kernel iw46
+   §200 DELAY AGE dsc 27: hits 2 358 719 | frames_since_written 0 .. 4401  (0.00 .. 99.80 ms)
+```
+
+* **Content IS written.** `1 175 999` is one per settled frame — the same integer the per-unit
+  rebase reports for *"unit 0: the walk ALREADY delivered `0x05` on 1 175 999"* — and the `§75`
+  trace shows the writer: **the kernel's `iw46`, descriptor cell `0x0000`, the constant `0x7D70`**.
+  That constant is `acc_to_datum(538 760 587 509) >> 8`, i.e. `iw45`'s post-adder accumulator; it is
+  input-independent in both buckets. MEASURED; the attribution to `iw46` MEASURED (trace) and
+  INFERRED (the count identity).
+* **Reads DO resolve onto written addresses.** `§200`'s per-descriptor age census reports finite
+  ages on every live line (`dsc 27`: 0..4401 frames = 0..99.8 ms; `dsc 02/04/06`: 7.60 / 15.06 /
+  23.49 ms), so the address arithmetic is not the reason the reads return zero.
+
+⇒ The accurate statement is: **the line is written with a DC every frame and with zeros from the
+bodies, and every read that resolves lands on a body write — which is zero because the bodies'
+input cell is zero (§3).** *"The line is empty"* names a symptom of §3, not an independent fact.
+Corrected in `HANDOFF-NEXT.md` and `LEDGER-HEAD.md` by this pass.
+
+### 6. ★★★ STANDING RULE 1 — READ IN ALL FIVE LOGS, INCLUDING THE NO-STIMULUS WINDOW
+
+```
+   src0b2_A_off_215   §70 ACCA AT w73  quiet 726142 min 0 max 0 | loud 314063 min 0 max 0
+   src0b2_B_on_215                     quiet 726040 min 0 max 0 | loud 313960 min 0 max 0
+   drpub_A_off_217                     quiet 726040 min 0 max 0 | loud 313960 min 0 max 0
+   drpub_B_on_217                      quiet 726040 min 0 max 0 | loud 313960 min 0 max 0
+   drpub_C_on_src0b2_217               quiet 726040 min 0 max 0 | loud 313960 min 0 max 0
+   §211 ACCB AT w78 -- the same five lines, the same numbers, min == max == 0 throughout
+```
+
+`min == max == 0` in **both** accumulators, in **both** buckets including the 726 040-frame
+no-stimulus window, in **all five** arms. **NO non-zero output. NO audio claim.** This pass changed
+no emulator behaviour at all, so it could not have produced one, and §216's result — the output
+stage is a null *independent* of the send — is untouched.
+
+### 7. ⇒ WHAT SHIPS, AND WHAT DOES NOT
+
+**Ships (documentation and tooling only, zero behavioural change):**
+* `upd6383.cpp` `case 0x0B` preamble — `SRC 0x0B` is no longer described as a guess, with the
+  §215/§217/§218 anchoring and the §2 structural argument recorded beside the counter.
+* `upd6383.cpp` `kwatch()` §110 note — the writers it asked for are named, with §104's collapse.
+* `dsp/tools/src0b_census.py sendpath` — the whole-path `SRC` audit, reusing the §218 tool.
+
+**Does NOT ship:** any gate, any mask bit, any default flip. ⚠ There was nothing to flip: the
+question was a decode, the decode was already decided, and the located defect (`iw35`) has **no
+instrument yet**. Building one on the strength of this section alone would be a change justified by
+a model — which §217 and §218 both correctly declined.
+
+### 8. ★ THE NEXT EXPERIMENT, PRE-REGISTERED HERE SO THE NEXT PASS CAN GRADE IT
+
+**The question:** is `iw35`'s (and `iw45`'s) `HI_ST` store into cell `0x05` a **wrong target**, or
+is cell `0x05` **not** body 0's input pickup?
+
+**The instrument ALREADY EXISTS and has never been run** (rule 13, and it is the cheapest thing on
+the table): `upd6383.cpp:612` — **mask bit 26 (`0x4000000`)**, which mirrors the kernel's `0x06`
+result into `0x05`, with the fired counter `m_mirror06_n`. It is **0 in the shipped default
+`0xB910E446A39B440F`** and no log in `data/` contains a `mirror06` line. Its own comment states the
+two-sided reading in advance. ⚠ It answers the *deposit-address* half; the *overwrite* half needs a
+second arm that suppresses the bit-4 store when `stdest == 0x05` in kernel A (env gate, default
+OFF, fired count — the u64 mask is EXHAUSTED).
+
+**Pre-registered discriminator, and it must name a wrong `iw`:**
+* if body 0's `§104` columns become input-dependent **at `iw84`** (the pickup) — the deposit /
+  overwrite reading is right and the defect is `iw35`'s store TARGET;
+* if they become input-dependent only later, or not at all — cell `0x05` is not the pickup and the
+  `base = 0x05 | unit<<7` identification is wrong, which is worth as much;
+* the **null** is `§104` bit-identical to arm A, which would mean the gate never fired — check the
+  fired count first.
+
+⚠⚠ **AND IT CANNOT PRODUCE AUDIO, BY §216.** The output stage is a null *even when body 0 runs on
+live audio* — `§70`/`§211` stayed `min 0 max 0` with the send forced open. So the falsifier is
+`§104`'s body-0 columns and `s104_score.py`, **never** `§70`/`§211`. Any pass that grades this
+experiment by listening has graded the wrong thing.
+
+### 9. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **`HANDOFF-NEXT.md` §1 item 1 — "the send is decided by ONE corpus-unique word whose `SRC` is a GUESS"** | ⛔ **DOUBLY WRONG.** The guess was decided in **§215** and re-confirmed in §217/§218; and no `SRC` on the path decides a stored value, because both stores take `acc_to_datum(m_acc)` (§2). The task was 4 sections stale when it was written |
+| **`SRC 0x0B` as "a GUESS; register row 14"** (the source's own words) | ANCHORED since §215 — 13/13 successor identity, the ENSEMBLE/kernel `2D9` twin, provenance-graded in §217, population re-verified in §218. Comment corrected |
+| **"the delay line is EMPTY"** | ⚠ **IMPRECISE.** `§75` in the same report: **1 175 999 writes with content** (one per settled frame — the kernel's `iw46` writing the DC `0x7D70`), and `§200` shows reads resolving with 0..4401-frame ages. The reads return zero because the **bodies** write zero (§3), not because nothing is written or nothing resolves |
+| **"the send carries zero and we do not know why"** (§213 §4, §215 §4) | ⛔ **ANSWERED.** The send is cell `0x05`; `iw9`/`iw11` deposit the audio; `iw35` overwrites it with `acc_to_datum(2^38) = 4 194 304` and `iw45` with `0`; body 0 picks up `0` at `iw84`. All three states MEASURED in `§104`'s residency column, in five logs |
+| **"the input dies at `iw36`" as a root cause** (§213 §3) | it is a **consequence**: `iw36`/`iw37` re-read the constant `iw35`'s own store planted in `0x05`. The root is `iw35` |
+| **§110's open question** (`upd6383.cpp:645`) | **ANSWERED** by the census it asked for, which has been in every log since. Standing rule 13, third occurrence |
+
+Evidence grade: §1 **MEASURED** (corpus, §215/§218) and a documentation correction; §2 **FORCED**
+from `upd6383.cpp:2081-2090` and `:2942`, with the path census **MEASURED** over `kernel.dsm`;
+§3 **MEASURED** in five independent logs (`§86`, `§96`, `§104`), the attribution of the `4 194 304`
+to `iw35` **FORCED** from the store site plus `274 877 906 944 >> 16`, and the `iw45`-is-the-send
+control **MEASURED** in the two `SRC0B2=1` arms; §4 a method finding; §5 **MEASURED** (`§75`,
+`§46`, `§200` in one report) with the writer attribution **INFERRED** from the count identity;
+§6 **MEASURED**, including the no-stimulus window; §7 a decision — **nothing behavioural shipped**;
+§8 **SPECULATIVE** as a hypothesis, with a pre-registered two-sided discriminator.
+**No mask bit, no env gate and no default was changed by this pass.**

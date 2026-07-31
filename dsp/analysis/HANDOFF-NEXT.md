@@ -1,9 +1,10 @@
 # HANDOFF — read this first
 
-**Rewritten 2026-07-30 after §§127–146.** Read this, then
-`SPECULATIVE-APPLIED-REGISTER.md` **§143 first** (it corrects §127, §131 and §135), then
-§§144–146. Several earlier sections are retracted *in place*; trust the register tail over
-any older summary, including older parts of this file.
+**§1 rewritten 2026-07-31 by §219.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
+then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§219**, then §§215–218 backwards as
+needed. Several earlier sections are retracted *in place*; **trust the register tail over any older
+summary, including older parts of this file** — §219 found this file's own §1 to be four sections
+stale (standing rule 3, fifth occurrence).
 
 ---
 
@@ -16,60 +17,98 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★★ §218 CLOSED §217's HANDOVER QUESTION WITHOUT A RUN, AND THE `iw25` MODEL IS NOW SETTLED.
-The CROSS-FRAME RIVAL IS REFUTED — `DRPUB`'s `age 0` is NOT wrong by one frame — and
-`ENSEMBLE w62` WAS NEVER AN `SRC 0x0B` WORD (its `lo12 0x40B` carries `SRC 0x10` = the
-ACCUMULATOR; the `0B` is the ACTION field). The corpus population is **7**, not 9, exactly as
-`upd6383.cpp`'s own `case 0x0B` comment has said since §215. With `w62` removed, `item A` +
-a hold register explains **7 of 7** and §217 §5's "honest residue" is EMPTY.
-⇒ THE MODEL FOR `iw25` IS DECIDED; `UPD6383_DRPUB` stays DEFAULT OFF only because it is
-BIT-IDENTICAL to the control on the shipped build (the datum it correctly delivers is zero).**
+**★★★ §219 DECIDED THE SEND FRONTIER STATICALLY, AND IT CAME OUT A DOUBLE NEGATIVE.
+`§213 §4`'s *"one corpus-unique word whose `SRC` is a GUESS"* — kernel `iw25`, `SRC 0x0B` —
+**STOPPED BEING A GUESS IN §215**, and **NO `SRC` ON THE SEND PATH CAN DECIDE A STORED VALUE
+ANYWAY**: the delay WRITE (`upd6383.cpp:2081-2090`) and the `HI_ST` bit-4 store (`:2942`) both
+take `acc_to_datum(m_acc)`, never the bus, so `SRC 0x0B` reaches the delay line only as a
+MULTIPLICAND (`tempA → P = coef × tempA → acc`).
+⇒ ⛔ **DO NOT LOOK FOR THE SEND DEFECT IN A SOURCE-FIELD DECODE.** Dead-end 28.**
 
-### ★★★ 1.-0 WHAT TO DO NEXT — and it is NOT another `iw25` pass
+**★★★ AND HERE IS WHAT THE SEND ACTUALLY IS: D-RAM CELL `0x05`, body 0's input pickup.
+THE KERNEL DEPOSITS THE AUDIO INTO IT AT `iw9`/`iw11` AND THEN OVERWRITES IT AT `iw35` AND `iw45`,
+BEFORE THE CALL AT `iw49`.** MEASURED in five logs, digit-for-digit identical:
 
-`iw25`, the `§78` schedule, the line index, `m_dr`'s width and the class-2 `SRC 0x0B` decode are
-**all closed** (§215, §216, §217, §218; dead ends 21–27). **Do not open any of them again.**
-The chain §217 §1.-1 states is complete and every link is MEASURED, so the only live frontier is
-the one the chain ends on:
+```
+   §96  cell 05 written by iw9 / iw11  (DEPOSIT)  and by iw35 / iw45  (OVERWRITE)
+   §86  cell 05  quiet [0..5 084 004]  loud [0..16 760 298]  4 080 000 writes   INPUT-DEPENDENT
+   §104 mem under dp = 0x05, sampled BEFORE each word:
+        iw35  5 084 004 ‖ -5 307 593..8 388 607  *   <- THE AUDIO, still alive
+        iw36 .. iw45  4 194 304 ‖ 4 194 304      =   <- iw35's HI_ST store landed
+        iw46, and body 0's own iw84:  0 ‖ 0      =   <- iw45's HI_ST store landed.  THE PICKUP.
+   4 194 304 = acc_to_datum(274 877 906 944) = the accumulator iw34 leaves.  FORCED.
+```
 
-1. **★ THE SEND IS CLOSED — why?** The delay line is empty (`§46`: 0 non-zero of 24 922 560 reads)
-   on the shipped build, and everything downstream is correct-and-zero because of it. `§213 §4`
-   named the send as decided by ONE corpus-unique word whose `SRC` is a GUESS. That word, not the
-   delivery, is the next decode.
-2. **★ THE OUTPUT STAGE IS A NULL EVEN WHEN FED** (§216, re-measured in three arms in §217).
-   Nothing connects the body accumulator to `w73`/`w78`; the presentation emits a kernel constant.
-   This is INDEPENDENT of (1) and can be worked in parallel.
+★★ **`iw35` accounts for BOTH deaths.** The constant it plants in `0x05` is the cell `iw36`/`iw37`
+re-read as the multiplicand, which is why `P` stops depending on the input at `iw36` (§213 §3) —
+so §213's "the input dies at `iw36`" is a **consequence**, and `iw35` is the root.
+
+★★★ **THE CONTROL THAT COULD HAVE FAILED AND DID NOT:** in the two arms where `tempA` carried live
+data (`src0b2_B_on_215`, `drpub_C_on_src0b2_217`) the **same** `iw45` store delivered
+`-8 034 877..7 192 534` into cell `0x05` and body 0's `iw84` picked it up. ⇒ cell `0x05` **is** the
+pickup, `iw45` **is** the send, and the instrument can tell the two states apart.
+
+### ★★★ 1.-0 WHAT TO DO NEXT
+
+1. **★ THE SEND — `iw35`'s `HI_ST` store TARGET.** Is `iw35`/`iw45` storing to the wrong cell, or
+   is cell `0x05` not the pickup? **The instrument may already exist and has NEVER been run**
+   (rule 13): `upd6383.cpp:612`, **mask bit 26 (`0x4000000`)**, fired counter `m_mirror06_n`, is
+   **0 in the shipped default** and no log in `data/` contains a `mirror06` line. Its own comment
+   states the two-sided reading in advance. The overwrite half needs a second arm suppressing the
+   bit-4 store when `stdest == 0x05` in kernel A — **env gate, default OFF, fired count**; the u64
+   mask is EXHAUSTED. Pre-registered discriminator: **§219 §8**.
+   ⚠⚠ **IT CANNOT PRODUCE AUDIO, BY §216.** Grade it on `§104`/`s104_score.py`'s body-0 columns,
+   **never** on `§70`/`§211`. A pass that grades this by listening has graded the wrong thing.
+2. **★ THE OUTPUT STAGE IS A NULL EVEN WHEN FED** (§216, re-measured in §217 and §218). Nothing
+   connects the body accumulator to `w73`/`w78`. INDEPENDENT of (1); can be worked in parallel.
 3. **`UPD6383_DRPUB` ships when, and only when, an arm exists in which the shipped build's delay
    line carries content and `DRPUB=1` vs `DRPUB=0` differ in `§104`/`s104_score.py`.** Until then:
-   model settled, gate present, default OFF, fired count 24 922 560. ⚠ Do not flip it on the model
-   argument alone — §218 §7 states why.
+   model settled, gate present, default OFF, fired count 24 922 560 (§218 §7 states why).
 
-**⛔ §217's handover question, kept only so the closure is legible:**
+### ⚠ 1.-0.2 TWO PHRASES IN THIS FILE WERE WRONG, AND §219 CORRECTED BOTH
 
-**§218 (`dsp/tools/src0b_census.py`, three existing logs, ZERO MAME runs) decided it three ways:**
-(a) the pre-registered discriminator — the rival predicts tag `iw26`, and arm A's **single-bin**
-histogram measures **`iw289`**, age 1..1, 540 000/540 000, with `iw26` at **0 %**;
-(b) FORCED — **41 delay words (21 READS)** execute between `iw26`(*N−1*) and `iw25`(*N*), so a
-one-deep register cannot span it: "one-deep" and "cross-frame" are mutually exclusive;
-(c) the corpus — item A's "+4 after the PRECEDING read" is exceptionless 6/6 at ENSEMBLE, while
-the rival's "the FOLLOWING read" is **undefined at `w92`** (no following READ at all) and −30 at
-`w34`. And `iw25` at **+13** is *inside* item E's `land ≤ 4` with **0** intervening publishes,
-so there was never an anomaly to explain.
+* ⛔ ~~"the send is decided by ONE corpus-unique word whose `SRC` is a GUESS"~~ — **dead-end 28**,
+  refuted twice over (the guess was decided in §215; no `SRC` on the path is load-bearing).
+* ⚠ ~~"the delay line is EMPTY"~~ — **IMPRECISE**, dead-end 29. `§75`, eight lines above `§46` in
+  the same report: **1 175 999 delay writes CARRY CONTENT** — one per settled frame, the kernel's
+  `iw46` writing the DC `0x7D70` — and `§200` reports reads resolving onto written addresses with
+  **0..4401-frame ages** (0..99.8 ms). The reads return zero because the **bodies** write zero,
+  because their input cell is zeroed at `iw45`. "Empty" names a symptom, not a cause.
 
-**⛔ §217 (superseded as the headline, still true in every part):**
+**Logs — cite the run, not the section.** `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz`
+(three arms, one build) and `data/src0b2_{A_off,B_on}_215.log.gz`; clean vehicle, `-log`,
+`:DSPCFG value="3"`, 1 440 001 frames / 313 960 loud / 726 040 quiet. §219 used all five and ran
+**nothing**.
 
-**The datum `iw12` fetches is NOT LOST — it is published, intact, to `iw98`, on `540 000` of
-`540 000` settled frames. The `§78` PER-LINE SCHEDULE IS CORRECT and the LINE INDEX IS A RED
-HERRING: `§46`'s "the kernel's descriptors resolve to `0000`" is an UNGUARDED BOOT-TIME SAMPLE,
-and `§204`'s guarded census — in the same log — gives the kernel three distinct lines
-(`iw12` 0x01, `iw26` 0x20, `iw46` 0x00) with `iw12 ↔ iw98` paired exactly as `§79` says.
-THE FAULT IS THAT THE PUBLISH ONLY FIRES AT A DELAY WORD, AND `iw25` IS NOT ONE — it reads a
-UNIT-1 residue (`iw289`) from the PREVIOUS FRAME, 100 % of the time.**
+### ⛔ 1.-0-prev — §218's headline, SUPERSEDED as the task, still true in every part
 
-Runs: `data/drpub_A_off_217.log.gz` (shipped), `data/drpub_B_on_217.log.gz` (`UPD6383_DRPUB=1`),
-`data/drpub_C_on_src0b2_217.log.gz` (`DRPUB=1` + `SRC0B2=1`), one build, clean vehicle, `-log`,
-1 440 001 frames / 313 960 loud / 726 040 quiet — **cite the run, not the section**.
-Older: `data/src0b2_{A_off,B_on}_215.log.gz`.
+**§218 refuted the CROSS-FRAME rival with NO run: `DRPUB`'s `age 0` is NOT wrong by one frame, and
+`ENSEMBLE w62` was never an `SRC 0x0B` word (its `lo12 0x40B` carries `SRC 0x10` = the ACCUMULATOR;
+the `0B` is the ACTION field). The corpus population is 7, not 9, exactly as `upd6383.cpp`'s own
+`case 0x0B` comment has said since §215. With `w62` removed, `dram-datapath.md` item A + a hold
+register explains 7 of 7 and §217 §5's "honest residue" is EMPTY.**
+⇒ `iw25`, the `§78` schedule, the line index, `m_dr`'s width and the class-2 `SRC 0x0B` decode are
+**all closed** (§215–§219; dead ends 21–28). **Do not open any of them again.**
+
+**⛔ §217 (superseded as the headline, still true in every part):** the datum `iw12` fetches is NOT
+LOST — it is published, intact, to `iw98`, on 540 000 of 540 000 settled frames. The `§78` per-line
+schedule is CORRECT and the LINE INDEX is a RED HERRING: `§46`'s descriptor dump is an UNGUARDED
+BOOT-TIME SAMPLE and `§204`'s guarded census — in the same log — gives the kernel three distinct
+lines with `iw12 ↔ iw98` paired exactly as `§79` says.
+
+★★ **THE METHOD LESSONS, and they are the expensive ones:**
+* **rule 18 (§218):** grade a field census with the disassembler's own accessors
+  (`dsp_disasm.lo_src` = `lo12[10:6]`, `lo_act` = `lo12[4:0]`), never by eye and never by the
+  `lo12` string — **11** distinct `lo12` values occur on both class-1 delay words and class-2 words.
+* **rule 13, third occurrence (§219), and the most expensive yet:** `upd6383.cpp`'s `kwatch()` note
+  asked, at **§110**, *"something overwrites cell 0x05 between deposit and pickup — name the
+  writers, in execution order"*. The census it asked for has printed `iw9 / iw11 / iw35 / iw45` in
+  **every log since**, beside a `§104` column showing the `4 194 304 → 0` collapse. 109 sections
+  passed with the answer in the report. ⇒ **read the report the build already prints — all of it —
+  before designing anything.**
+* **rule 3, fifth occurrence (§219):** the task in this file was **four sections stale** at the
+  moment it was written down. Before building on a §-numbered claim, check the sections that came
+  after it.
 
 ### ★★★ 1.-1 READ THIS BEFORE PLANNING — §216 AND §217 TOGETHER BOUND WHAT IS LEFT
 
@@ -80,9 +119,13 @@ Older: `data/src0b2_{A_off,B_on}_215.log.gz`.
   datum** — provenance `iw12`, age 0, 540 000/540 000 — and on the shipped build it is
   **BIT-IDENTICAL to the control in every column**, because the datum it correctly delivers is
   **zero**. Not shipped: a default flip with no observable consequence is a claim, not a fix.
-* ⇒ **The chain is: right datum now deliverable → it is zero because the line is empty → the line
-  is empty because the send is closed → and even forced open, the output stage is a null.**
+* ⇒ **The chain is: right datum now deliverable → it is zero because the delay line carries no
+  audio → the line carries no audio because the bodies write zero → the bodies write zero because
+  the unit-0 input cell `0x05` is zeroed by `iw45` after `iw9`/`iw11` deposited the audio in it
+  (§219) → and even forced open, the output stage is a null (§216).**
   Every link is MEASURED. Do not re-derive any of them.
+  ⚠ **§219 corrected two links of the older phrasing**: the line is *not* unwritten (`§75`:
+  1 175 999 writes with content) and the send is *not* a `SRC` decode (dead-end 28).
 
 ### ⛔ 1.-0.5 ANSWERED BY §218 — kept only so the closure is legible
 
