@@ -28,6 +28,31 @@ map, with no run.** The header's fixed bank is `C-RAM[0x90..0xB4]`, its upload i
 `cmd 0x02` runs at base `0x90` + `0xAE`, and **the shipped build was already reading it**.
 **§226 ADDED item 10**, which is the blocker. See **§226** and `HEADER-BANK_findings.md`.
 
+**⇒ §231 CLOSED THE `f31 ∈ {3,6,7}` LEAD AND RE-PRICED THE WHOLE QUEUE.** `alu_decoded()` is a
+**conjunction**, so only its FIRST failure is observable — and mirrored over the corpus
+(`dsp/tools/f31_367.py`, self-test **1178/3057 = 38.53 %**) the population is:
+**ROUTING (SRC/ACT not anchored) 1139 · CLASS 546 · OPERATION 106 · FORMAT 68 · GUARD 7 20.**
+⇒ ⛔ **any queue item whose payoff is "decode one `hi12` operation code" is worth ≤ 106 words in
+total and typically 8.** ⇒ ★ **The lever is the ROUTING guard**, and it is the same population
+§229's fabricated-zero census counts. **File routing/anchoring work above operation-field work.**
+See **§231** and `LEDGER-HEAD.md` TIER 0a.
+
+---
+
+## 0. ★★★★ THE UNANCHORED SRC/ACTION CENSUS — **READY, NOT STARTED, TOP OF THE QUEUE**
+
+> **Filed by §231.** The single largest decode population in the corpus (**1139 words, 60.6 % of
+> everything undecoded**) and the single largest fabricated-operand population in the device
+> (**28.492 %** of the epilogue's operands, §229) are **the same set of codes**.
+> **Shape, pre-registered:** a **census FIRST** — per unanchored `SRC`/`ACTION` code: its sites,
+> its **index range**, and its consumer. ⛔ **No reading.** Dead end 4 / rule 4 forbid implementing
+> a consumer whose index is measured constant, so **the census must print the index range** and a
+> constant index **CLOSES** that code (as it already closed `SRC 0x13`:
+> `acc 0..0 | m_dp 12..12 | cursor 9..9`).
+> **Falsifiers:** `m_rf[0x8D] = 0x009B26`; `§S1`'s `4.924 %` must not **fall** (§227's guard);
+> `§54` graded first; `§70`/`§211` as **ONE ROW** (§230).
+> **Cost:** one build, one 30 s run on the §228 vehicle. Read-only, no default flip.
+
 ---
 
 ## 1. ~~Narrow the nop guard~~ — ✅ **SHIPPED by §223**

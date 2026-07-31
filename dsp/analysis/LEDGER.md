@@ -20,7 +20,41 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230/§231, 2026-07-31)
+
+> ### ⛔⛔ §231 — READ THIS BEFORE SPENDING A PASS ON DECODE COVERAGE
+>
+> **THE OPERATION FIELD IS NOT WHERE COVERAGE LIVES. THE ROUTING GUARD IS — BY 10×.**
+>
+> `alu_decoded()` is a **conjunction**, so only its FIRST failure is observable. Mirrored over
+> the 3057-word corpus (`dsp/tools/f31_367.py`, self-test **1178 of 3057 = 38.53 %**, reproducing
+> the strategic review's own figure):
+>
+> ```
+>    THE WHOLE CORPUS, BY FIRST REFUSING GUARD
+>      1178  DECODED
+>      1139  routing / SRC-or-ACTION NOT ANCHORED   <-- 60.6 % of everything undecoded
+>       546  CLASS
+>       106  OPERATION (the whole f31 switch, ALL EIGHT CODES)
+>        68  FORMAT (C-format)
+>        20  GUARD 7
+> ```
+>
+> ⇒ ★★★★★ **Solving `f31 ∈ {3,6,7}` COMPLETELY moves coverage `1178 → 1186` = `38.53 % → 38.80 %`
+> — EIGHT WORDS.** 41 of the 53 are refused earlier by the ROUTING guard, 4 by CLASS. `f31 4/5`
+> (§133's alias) is worth 23. **The entire operation field, all codes, is worth at most 106.**
+> ⇒ ★★ **And the routing guard's population is the SAME ONE §229's fabricated-zero census counts**
+> (`SRC 0x01/05/06/0A/13/1C`, 28.492 % of the epilogue's operands). Two instruments, arrived at
+> independently, name **one** bottleneck. ⛔ Rule 4 still governs: **census the unanchored codes'
+> INDEX RANGES first**; a constant index CLOSES a code rather than opening it.
+>
+> ⛔ **`f31 ∈ {3,6,7}` IS DEAD END 44** — off by one, a spandrel of base `0x020`, and measured
+> **not load-bearing** (discarded product `min 0 max 0 nz 0` at all four sites, 3 611 996
+> executions, both buckets, against a control that discards **2 669 493** non-zero products
+> elsewhere). ⚠ And the two defects at `w78` are **separable and both dead**: `w78`'s ACTION is
+> `0x07`, **not `0x00`**, so the fabricated `SRC 0x0A` operand never reaches the accumulator's bus
+> term at all — §229's *"`w78`'s central null is partly our own fabricated zero"* is true of the
+> **store**, not of the presented accumulator.
 
 > ### ★★★★★ §229 — READ THIS BEFORE QUOTING ANY NULL
 >
@@ -786,7 +820,8 @@ the ones a reader would reach for again.
 | 40 | **`P_SHIFT = 7` is the Q-consistent shift** — "`>> 6` is one bit short" | ⛔ **REFUTED §227, and the phrase had TWO meanings which are different experiments.** The core's own header records coefficients **Q1.22 (MEASURED from the firmware's scale constants)** and data Q0.23 ⇒ the Q-consistent TOTAL is **22**, which is what ships. **TIED (7/15, total still 22) is a MEASURED NO-OP** — the entire `§S1` block is BIT-IDENTICAL to the default over **269 279 999** conversions, the only differing line being the header text `>> 16` vs `>> 15`. **UNTIED (7/16, total 23) halves `m_rf[0x8D]` `0x009B26 → 0x004D93`** and *still* clips at `1.110 × FS`. ⚠⚠ **AND `§41` DOES NOT GUARD `P_SHIFT`** — it reads C-RAM *levels* `0x06`/`0x86` and is UNMOVED by a 2× product rescale; **`m_rf[0x8D] = 39 718` is the guard that fires.** Fix the three-guard phrase wherever it is quoted | §227 |
 | 41 | **`C-RAM[0x90..0xB4]` is the header's BOOT-FIXED coefficient bank** (§226 item D, in its strong form) | ⛔ **REFUTED §227 BY THE CAPTURE §226 ITSELF ASKED FOR.** A preset change **CONCERT REVERB 1 → ROOM REVERB 1** rewrites **23 cells, every one inside `0x90..0xB4` and NOTHING else in the 256-cell C-RAM**: `[00..4F]` 0 of 80, `[50..8F]` 0 of 64, the header's own walk `[90..A3]` **13 of 20**, the ladder cells `[9B..9D]` **2 of 3**. ⇒ **it is UNIT 1's per-algorithm parameter bank**; it looked fixed only because both §226 captures carried the **same** reverb. ★ The control that makes it proof-grade: an independent 45 s panel run landing on CONCERT REVERB 1 reproduces the archived cold-boot capture on **all 256 cells, 0 differ** ⇒ **the cold-boot default reverb is CONCERT REVERB 1**, so every *"CHORUS + RR1"* label in §226 names the wrong preset. ⛔ **This does NOT re-open base `0x00`** (entry 33) | §227 |
 | 42 | **The `f98` CROSS-UNIT A/B** — select GATED REVERB into unit 0 with a reverb preset in unit 1, making `012.A.00.1D5` / `212.A.00.1D5` co-resident in one frame (strategic review action 3) | ⛔ **NOT VIABLE, FROM DISK, NO BUILD.** The `f98 = 2` half sits at **`iw207`, inside body 1's third-death region, measured an EXACT ZERO on every channel in BOTH buckets across NINE archived arms** (§220 A/B/C/D, §221 A, §222 A, §223 F, §224 I, §225 K: `dp = 0xD0`, `acc 0..0`, `mem 0..0`, `L 0..0`) — **you cannot A/B a live number against a structural zero.** ★ And it is **UNNECESSARY**: `KERNEL w16 = 0192A00455` (`f98=1`) and `w17 = 0292A00455` (`f98=2`) differ in `f98` **and nothing else** and run **back-to-back in every frame of every program ever emulated**, already printed by `§104`/`§S1`/`§S2`. ⚠ Even that perfect pair is not a controlled measurement — it is a CHAIN (`iw17`'s carried term IS `iw16`'s result) and the two words necessarily read different coefficients. ⇒ **restate the closure: not *"no co-resident pair"* (falsified four ways) but *"NO DISCRIMINATOR"*.** ⚠ The review's sentence also dropped `a10 MULTI TAP DELAY`, which carries the same word | `PREDICT_F98_CORESIDENT.md`, §229 |
-| 43 | **`hi12` bit 5 via ROCK ROTARY** — `000.2.00.000` vs `020.2.00.000` co-resident in `a15`, "one program load decides whether a `nop` the disassembler prints 62 times is a `nop`" (strategic review action 6) | ⛔ **VOID BY CONFOUND, AND THE CONFOUND IS 100 % OURS.** `000.2.00.000` matches the §223 nop guard on **all four** terms (`hi12 == 0x000 && class4 == 2 && addr8 == 0x00 && lo12 == 0x000`) and is **swallowed**; `020.2.00.000` fails the first term, falls through, and runs a full `exec_alu()` that **clears and reloads the accumulator** (`acc <- 0 + (mem[dp]<<16) + P`). Under `DSPCFG = 1` it **TRAPS** and the frame is discarded instead. §223's `addr8` narrowing does not help — `000.2.00.000` has `addr8 = 0x00` too. ★★★★ **DECISIVE: `hi12` bit 5 is read in EXACTLY ONE PLACE in the whole device — that guard's `hi12 == 0x000` equality.** Remove the guard ⇒ the two words execute **bit-identically**; keep it ⇒ the difference **IS** the guard. ⇒ **the review's own kill-condition (*"measures identical ⇒ bit 5 inert"*) CANNOT FIRE** — rule 8. ⚠ Also: the pair is co-resident in **TWO** images (`a70 AUTO WAH+S.DELAY` too, and `a70` is the one with a written vehicle), and the *"ready recipe"* is `verified: false` (29 of 224 are verified). ★ **STRIKE IT, DO NOT DEFER IT** — but keep §229 §2.1: the corpus DOES constrain bit 5 (`f31 in {3,6,7}` is bit-5-only, **53 of 53** static, **0 counterexamples in 246 952 062** live executions) | §229 |
+| 43 | **`hi12` bit 5 via ROCK ROTARY** — `000.2.00.000` vs `020.2.00.000` co-resident in `a15`, "one program load decides whether a `nop` the disassembler prints 62 times is a `nop`" (strategic review action 6) | ⛔ **VOID BY CONFOUND, AND THE CONFOUND IS 100 % OURS.** `000.2.00.000` matches the §223 nop guard on **all four** terms (`hi12 == 0x000 && class4 == 2 && addr8 == 0x00 && lo12 == 0x000`) and is **swallowed**; `020.2.00.000` fails the first term, falls through, and runs a full `exec_alu()` that **clears and reloads the accumulator** (`acc <- 0 + (mem[dp]<<16) + P`). Under `DSPCFG = 1` it **TRAPS** and the frame is discarded instead. §223's `addr8` narrowing does not help — `000.2.00.000` has `addr8 = 0x00` too. ★★★★ **DECISIVE: `hi12` bit 5 is read in EXACTLY ONE PLACE in the whole device — that guard's `hi12 == 0x000` equality.** Remove the guard ⇒ the two words execute **bit-identically**; keep it ⇒ the difference **IS** the guard. ⇒ **the review's own kill-condition (*"measures identical ⇒ bit 5 inert"*) CANNOT FIRE** — rule 8. ⚠ Also: the pair is co-resident in **TWO** images (`a70 AUTO WAH+S.DELAY` too, and `a70` is the one with a written vehicle), and the *"ready recipe"* is `verified: false` (29 of 224 are verified). ★ **STRIKE IT, DO NOT DEFER IT** — but keep §229 §2.1: the corpus DOES constrain bit 5 (`f31 in {3,6,7}` is bit-5-only, **53 of 53** static, **0 counterexamples in 246 952 062** live executions) ⚠ **BUT §231 CORRECTED THAT SENTENCE AND THEN CLOSED IT — see dead end 44.** | §229, §231 |
+| 44 | **`f31 ∈ {3,6,7}` as a decode lead** — three field values collapsed to one behaviour at four epilogue sites; "the cheapest open route to moving decode coverage" (strategic review action 6, §229 §7.1's pre-registered arm) | ⛔ **CLOSED BY §231, THREE INDEPENDENT WAYS, EACH SUFFICIENT.** ⑴ ⚠ **the corpus rule is OFF BY ONE**: 54 words carry `f31 ∈ {3,6,7}`, not 53 — `EPILOGUE w74 = C16.9.AB.000` is **C-format**, bit 5 CLEAR, and in C-format `hi12[3:1]` is not an operation field. Correct form: *53 of 53 among the 2989 NON-C-format words*. (Same conflation in §229's claim 5: the KERNEL's "2 bit-5 words" are both C-format ⇒ the kernel carries **zero**.) ⑵ ★★★★★ **the correlation is a SPANDREL**: base `0x020` — `hi12` with bit 5 and **nothing else** — holds **134 of 172** bit-5 words, **42 of 53** `{3,6,7}` occurrences and **7 of the 8** `f31` codes on ONE routing (`.2.00.000`); no other base carries more than 4. "3/6/7 requires bit 5" = "the only base on which `f31` sweeps its range is the base whose only bit IS bit 5". ⛔ *bit 5 extends the operation field* is **not supported by its own distribution**. ⑶ ★★★★★ **NOT LOAD-BEARING, MEASURED**: at all four sites, both buckets, **3 611 996 executions**, the discarded product is `min 0 max 0 nz 0` and the operand `L` is `min 0 max 0 nz 0`; every range degenerate and identical across buckets. The control **could have failed** — the *undisputed* HOLD (`f31 == 2`) discards a **non-zero** product **2 669 493** times, peak **592 032 946 752**. ★ AND EVEN SOLVED IT IS WORTH **8 WORDS**: `1178 → 1186`, `38.53 % → 38.80 %` — 41 of the 53 are refused **earlier**, by the ROUTING guard | §231 |
 
 ---
 
@@ -1049,7 +1084,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-123 sections, §97..§230.  **Read the tail first** — later sections retract earlier ones *in place*.
+124 sections, §97..§231.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -1176,4 +1211,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §228 | SHIPPED | ★★★★ THE DSP FRAME CLOCK WAS **48 000 Hz AGAINST AN Fs OF 44 100**, MEASURED FROM DISK BEFORE ANYTHING WAS BUILT (1 440  |  |
 | §229 | REFUTED/RETRACTED | ★★★★★ THE REVIEW'S **THREE CHEAP DECODE EXPERIMENTS**, RESOLVED. **TWO WERE REFUTED FROM DISK BEFORE ANY BUILD** (`f98`  |  |
 | §230 | CONTROLS REPAIRED | ★★★★ THE PROJECT'S WORST CONTROL IS **REPAIRED AND TWO-SIDED**: SINGLE DELAY's `+0.02149296` NOW **ACCEPTS** THE CORRECT |  |
+| §231 | SHIPPED | ★★★★★ `f31 ∈ {3,6,7}` IS **DECODED AS FAR AS IT CAN BE, AND IT IS A DEAD LEVER**: the bit-5 rule is **OFF BY ONE** and a |  |
 

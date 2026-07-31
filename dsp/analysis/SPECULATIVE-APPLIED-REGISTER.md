@@ -17745,3 +17745,254 @@ repairs **specified, unrun**; §9 **pre-registered**.
 ⛔ `dsp/verify.py` **NOT RUN AS A GATE** — §230 changed no ROM, no `.dsm` and no device source, and
 the audit's **C1** established it cannot see `upd6383.cpp` at all. Quoting it here would be the
 exact CANNOT-FAIL row this pass exists to retire.
+
+---
+
+## §231 — ★★★★★ `f31 ∈ {3,6,7}` IS **DECODED AS FAR AS IT CAN BE, AND IT IS A DEAD LEVER**: the bit-5 rule is **OFF BY ONE** and a **SPANDREL OF ONE `hi12` BASE**; `op = f31 & 3` IS **DEMONSTRABLY WRONG** (two adjacent words become one instruction); AND THE COLLAPSE IS **NOT LOAD-BEARING** — the product it discards is **MEASURED EXACTLY ZERO at all four sites, 3 611 996 executions, both buckets**. ⚠ AND THE STRATEGIC PREMISE FALLS: solving it completely moves decode coverage **1178 → 1186 (38.53 % → 38.80 %)**, because **41 of the 53 are refused by the ROUTING guard, not the operation guard**
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-07-31**. Register head **§231**.
+Build lane. **NO DEFAULT BEHAVIOUR CHANGE. NO DECODE CHANGE. NO MASK BIT.** One read-only,
+unconditional instrument + one read-only corpus tool. Source of the task: §229 §7.1's
+pre-registration and the strategic review's ranked action 6.
+
+| arm | what | log |
+|---|---|---|
+| **STATIC** | `dsp/tools/f31_367.py` — the corpus, from the ROM, no build | — |
+| **A** | the `§231` COLLAPSED-OP CENSUS, shipped build + instrument | `data/A_231.log.gz` |
+
+Vehicle unchanged from §228/§229 (`coldnotes2.lua`, cold boot, isolated NVRAM, `:DSPCFG value="3"`,
+triad C4/E4/G4 21.02–27.51 s, `-seconds_to_run 30`, `-log`, visible video, one run at a time, the
+§228 44 100 Hz clock). ⚠ Lane verified clean (`git status --porcelain` empty in **both** repos)
+before the first edit, per §230's warning.
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ⚠⚠ **§229's HEADLINE CORPUS CLAIM IS OFF BY ONE, AND THE ERROR IS C-FORMAT.** *"`f31 ∈ {3,6,7}` occurs ONLY with bit 5 set — 53 words, 53 of 53, zero counterexamples in 3057"* — measured over the 3057: **54 words carry `f31 ∈ {3,6,7}` and 53 have bit 5.** The 54th is `EPILOGUE w74 = C16.9.AB.000`, **C-format**, bit 5 **CLEAR** — and in C-format `hi12[11:8]` is a FORMAT TAG, so `hi12[3:1]` is not an operation field there at all. **Correct form: `53 of 53` among the 2989 NON-C-FORMAT words.** ★ Same conflation in §229's claim 5: the KERNEL's *"2 bit-5 words"* are `C64.5.A2.000` and `C64.6.A2.007`, **both C-format** ⇒ **the kernel carries ZERO genuine bit-5 words.** Claims 2, 3 and 4 reproduce **exactly**. | **MEASURED**, from disk |
+| **B** | ★★★★★ **AND THE CORRELATION IS A *SPANDREL*, NOT A GATE.** Eight `hi12` bases carry bit 5. **One of them — `0x020`, bit 5 and NOTHING ELSE — holds 134 of the 172 bit-5 words, 42 of the 53 `{3,6,7}` occurrences, and SEVEN of the eight `f31` codes on ONE routing (`.2.00.000`).** No other base in the corpus carries more than **four**. ⇒ *"`f31` 3/6/7 requires bit 5"* reduces to *"the only base on which `f31` sweeps its whole range is the base whose only bit **is** bit 5"*. ⛔ **§229 §2.1's `bit 5 EXTENDS THE OPERATION FIELD` is NOT supported by the distribution it was derived from**, and the remaining 11 occurrences sit on **seven singleton bases** (`0A0`×6, `2A0`, `2A1`, `420`, `820`, `A30`) — not a family. | **MEASURED**, from disk |
+| **C** | ★★★★★ **`op = f31 & 3` IS *DEMONSTRABLY WRONG*, NOT MERELY UNPROVEN — AND THE PROOF IS TWO ADJACENT WORDS.** `a97 PEQ+COMPR+OVERDRIVE` carries `026.2.00.000` **immediately followed by** `02E.2.00.000` at `[24,25]` **and again at `[72,73]`** — byte-identical routing (class 2, `addr8 0x00`, `lo12 0x000`), differing in **hi12 bit 3 alone** (`f31` 3 vs 7). Both collapse to `op 3` ⇒ **the model executes the same instruction twice in a row from two different encodings.** The corpus has **nine** adjacent `hi12[3:1]`-only pairs and the shipped model reads **six** of them as one instruction (two from this collapse, four from §133's `f31 5 → 1` alias). And **nine programs** carry ≥3 distinct `f31` codes on base `0x020` with identical routing. | **FORCED**, from the corpus |
+| **D** | ★★★★ **§229's *"hold, no product"* IS HALF WRONG, AND THE OTHER HALF WAS THE WHOLE QUESTION.** The ADDER's `p_term` is forced to 0 — but **the MULTIPLIER's gate at `upd6383.cpp:4947` reads the RAW `f31`, not `op`**: `hi_f31(hi12) != HI_ACC_HOLD`, and 3, 6 and 7 are all ≠ 2. So on the three sites that also satisfy `coeff_fetch()` (`class4 & 8`: `iw63` class 9, `iw75` class 8, `iw78` class D) the model **DOES issue a multiply and DOES write `m_p`**. The same word both *"holds, no product"* for the adder and *"issues a multiply"* for the multiplier. ★ And because the accumulate at `:4310` runs **before** the multiply at `:4963` in the same `exec_alu()`, **the quantity the collapse discards is `m_p` ON ENTRY** — never measured by anyone. | **FORCED**, from source |
+| **E** | ★★★★★ **SO §231 MEASURED IT, AND THE COLLAPSE IS *NOT LOAD-BEARING*.** At all four sites, in both buckets, over **614 548 quiet + 288 451 loud executions each (3 611 996 total)**: **DISCARDED PRODUCT `min 0 max 0`, non-zero `0`** — and the **operand `L` is `min 0 max 0`, non-zero `0`** as well. `acc-in` is the frame-invariant constant **2 603 010 048** at `iw63` and **exactly 0** at `iw70`/`iw75`/`iw78`. **Every range is degenerate and identical across buckets** ⇒ nothing at these four words is input-dependent (rule 21, the strong direction). **The operation field cannot matter when every one of its operands is zero.** | **MEASURED** |
+| **F** | ★★★★ **RULE 20: THE CONTROL PASSED 3 OF 3 AND IT COULD HAVE FAILED — AND ITS *TWO-SIDED* HALF IS THE POINT.** The three decoded-op reference rows report **0 mismatches in 199 562 779 executions** (`f31 0` LOAD `95 717 894`, `f31 1` ADD `88 493 902`, `f31 2` HOLD `15 350 983`). ★★ And the **UNDISPUTED HOLD (`f31 == 2`) discards a NON-ZERO product 2 669 493 times, peak 592 032 946 752** — so the instrument demonstrably **sees** a non-zero discarded product where one exists, and sees **exactly zero** at all four collapsed sites. A presence test would have passed either way; only the value separates them. | **MEASURED** |
+| **G** | ★★★★★ **THE BISECTION IS ANSWERED — AND §229 §7.1's PRE-REGISTERED ORDER IS MOOT.** At `w78` the two candidate defects touch **DIFFERENT TERMS**, and neither is live. (i) **`w78`'s ACTION is `0x07`, not `0x00`** — so the fabricated `SRC 0x0A` operand **never reaches the accumulator's bus term at all**; it reaches only ACTION 0x07's store and `w78`'s own *outgoing* product. §229's *"`w78`'s central null is partly our own fabricated zero"* is true of the **store**, **not** of the presented accumulator. (ii) The op code governs only `p_term`, whose source `m_p` is **measured exactly 0** at `w78` in both buckets. ⇒ **Neither arm can be graded at `w78`: both candidate quantities are measured zero**, and *"do the op reading FIRST, `SRC 0x0A` SECOND"* is answered without applying either. | **MEASURED** |
+| **H** | ★★★★ **AND THE FABRICATED-ZERO CENSUS DOES NOT EXPLAIN `iw63`/`iw70`/`iw75` EITHER.** Their operands are **anchored, real reads** — `SRC 0x07` = `mem[ptr]`, `SRC 0x03` and `SRC 0x00` = `D-RAM[dp]` — and they measure **exactly zero anyway**, 902 999 executions each, degenerate in both buckets. ⇒ **The silence at the four words is an OPERAND-SUPPLY fact, not a decode fact.** No reading of `f31` can move it. | **MEASURED** |
+| **I** | ★★★★★ **THE STRATEGIC PREMISE FALLS, MEASURED.** Mirroring `upd6383d.h`'s `alu_guard_fail()` over the corpus (self-test: **1178 of 3057 = 38.53 %**, reproducing the published figure exactly): of the 53 `{3,6,7}` words the **OPERATION guard is the first refusal for only 8**; **41 are refused earlier by ROUTING (SRC-or-ACTION not anchored)** and 4 by CLASS. ⇒ **solving `f31` 3/6/7 completely moves coverage `1178 → 1186` = `38.53 % → 38.80 %`.** The review called this *"the cheapest open route to moving decode coverage"*; **it is worth 8 words.** | **MEASURED** |
+| **J** | ★★★★★ **AND THE WHOLE-CORPUS BREAKDOWN NAMES THE REAL BOTTLENECK.** By first refusing guard: **ROUTING/SRC-or-ACTION-not-anchored 1139**, CLASS 546, **OPERATION 106**, FORMAT 68, GUARD 7 20. ⇒ **the operation field — ALL EIGHT CODES TOGETHER — is worth at most 106 words (+3.5 %), while the ROUTING guard alone holds 1139 = 60.6 % of everything undecoded.** The `f31` route is not where coverage lives; the **SRC/ACTION anchoring** is — and that is the same population §229's fabricated-zero census counts. | **MEASURED** |
+| **K** | ★ **THE PASS IS PROVABLY INERT.** Every published control reproduces §229 arm E **to the digit**: `§54` `734 548 → 734 548 silent / 0 loud (peak 0)` and `288 451 → 288 451 / 0`; `§70`/`§211` `mean 0.0 span 0` both buckets; `§S1` `quiet 7 989 156/162 240 672 = 4.924 %`, `loud 3 746 410/76 151 064 = 4.920 %`; `§41` `unit0 0x400000 unit1 0x178D0B`; `m_rf[0x8D] = 0x009B26 = 39 718` (`2 187 849` stores, `1 080 450` non-zero); §228 `T4 = 44 086.742`; all six fabricated-zero counts unchanged. | **MEASURED** |
+
+**VERDICT — `ONE INSTRUMENT SHIPS; NO DECODE MOVES; NO DEFAULT FLIPS; NO AUDIO CLAIM.`**
+★★ **`f31 ∈ {3,6,7}` IS CLOSED AS A LEAD.** The decode gap is **real** (item C) and **not
+load-bearing** (items E–H), and even if it were solved it is worth **+0.26 %** of coverage
+(item I). ⛔ **DEAD END 44.**
+
+---
+
+## 1. RULE 20 — THE SELF-TESTS, PRINTED FIRST
+
+### 1.1 The static tool, against three published answers, by instruments that do not know it exists
+
+```
+   §231  f31 in {3,6,7} -- RULE 20 SELF-TESTS
+      corpus words                       3057   published   3057   PASS
+      distinct 36-bit encodings           759   published    759   PASS
+      alu_decoded() over the corpus      1178   published   1178   PASS
+      => decode coverage 1178 / 3057 = 38.53 %
+```
+
+★ The third is the load-bearing one: it reproduces the strategic review's own **1178/3057** figure
+from a *mirror of the C++ conjunction*, so the coverage arithmetic in §0 item I rests on the same
+predicate the device executes.
+
+### 1.2 The device instrument, with a control that is **two-sided**
+
+```
+   §231 COLLAPSED-OP CENSUS -- RULE 20 CONTROL (decoded ops; a mismatch voids the census)
+     f31=0 LOAD acc<-P   n=95717894   mismatches=0  ✔   (product available: 22535016 non-zero, peak 592032946752)
+     f31=1 ADD  acc+=P   n=88493902   mismatches=0  ✔   (product available: 18595381 non-zero, peak 592032946752)
+     f31=2 HOLD acc,noP  n=15350983   mismatches=0  ✔   (product available:  2669493 non-zero, peak 592032946752)
+   CONTROL: PASS 3 of 3
+```
+
+★★ **The `f31 == 2` row is the two-sided half.** It is the *undisputed* hold — the one the biquad
+established — and it discards a **non-zero** product **2 669 493** times. So *"the census sees a
+non-zero discarded product"* is demonstrated on a known case **before** the census reports zero
+on the case under test. ⚠ A mismatch column above zero would have voided every number below it.
+
+---
+
+## 2. THE MEASUREMENT
+
+```
+   §231 COLLAPSED-OP CENSUS, armed at frame 420 000 (§S1/§104 population -- NOT §54's)
+   iw   f31 op SRC ACT fetch bucket  n        DISCARDED PRODUCT      L                acc-in
+   63    3   3  07  03   Y   quiet  614548   min 0 max 0  nz 0   min 0 max 0 nz 0   2603010048..2603010048
+   63    3   3  07  03   Y   loud   288451   min 0 max 0  nz 0   min 0 max 0 nz 0   2603010048..2603010048
+   70    3   3  03  07   n   quiet  614548   min 0 max 0  nz 0   min 0 max 0 nz 0            0..0
+   70    3   3  03  07   n   loud   288451   min 0 max 0  nz 0   min 0 max 0 nz 0            0..0
+   75    7   3  00  00   Y   quiet  614548   min 0 max 0  nz 0   min 0 max 0 nz 0            0..0
+   75    7   3  00  00   Y   loud   288451   min 0 max 0  nz 0   min 0 max 0 nz 0            0..0
+   78    6   2  0A  07   Y   quiet  614548   min 0 max 0  nz 0   min 0 max 0 nz 0            0..0
+   78    6   2  0A  07   Y   loud   288451   min 0 max 0  nz 0   min 0 max 0 nz 0            0..0
+   (4 slots used, 0 overflow)
+```
+
+⚠ **THE POPULATION.** `614 548` quiet / `288 451` loud per site is the **`S1_ARM_FRAME = 420 000`**
+window, i.e. `§S1`/`§104`/`§70`/`§211`'s. It is **NOT** comparable with `§54`'s 300 000-frame arms
+(`826 040` vs `706 040`). Never subtract one from the other.
+
+⚠ **WHAT IT IS NOT.** It does **not** say the four words are *decoded*. It says that under the
+shipped machine every quantity their operation field could gate is **zero**, so no reading of that
+field is testable here. **Rule 4 forbids implementing one from this position**, and this pass does
+not.
+
+---
+
+## 3. WHY THE FOUR SITES ARE ZERO — THE STRUCTURE, FROM DISK
+
+```
+   iw   word          cls f31 SRC ACT  fetch mul store   what the operation field gates
+   w63  2A7.9.05.1C3   9   3   07  03    Y    Y    -     p_term only; m_p measured 0
+   w70  2A6.1.85.0C7   1   3   03  07    -    -    -     p_term only; class 1 -> no fetch, m_p stale
+   w75  82E.8.0F.000   8   7   00  00    Y    Y    -     p_term only; m_p measured 0
+   w78  A3C.D.9F.287   D   6   0A  07    Y    Y    Y     p_term only; m_p measured 0
+```
+
+★ And each is followed within one or two slots by a word that first **reads the accumulator through
+its own bit-4 store** and then **`f31 = 0` LOADs over it**: `w63 → w64` (`011.9.0E.445`),
+`w70 → w71` (`011.9.0F.446`), `w75 → w76` (C-format WAIT) `→ w77` (`859.0.86.822`, `f31 = 4 → op 0`).
+Only `w78`'s accumulator survives its successor (`w79` is `f31 = 1`, ADD). ⇒ **`w78` is the only one
+of the four whose accumulator reaches the output tail at all** — and its `m_p` is measured zero.
+
+★★ `iw63`'s `acc-in` is the **frame-invariant constant 2 603 010 048**, in both buckets — the same
+constant `PREDICT_D0_producer.md` §4.4 already refuted `§101`'s reading with. Independent
+reproduction, from a different instrument.
+
+---
+
+## 4. THE CORPUS — WHAT `f31` 3/6/7 ACTUALLY ARE
+
+**They are the three codes that only one instruction family ever uses.** Base `0x020` — `hi12` with
+bit 5 set and nothing else — is a single family whose routing is byte-identical
+(`class 2, addr8 0x00, lo12 0x000`) and whose `hi12[3:1]` takes **seven of eight values**:
+
+```
+   020.2.00.000 f31=0 x2    022 f31=1 x14   024 f31=2 x2    026 f31=3 x18
+   028.2.00.000 f31=4 x17   02A f31=5 x28   02C f31=6 x0    02E f31=7 x11
+```
+
+and its users are the **DYNAMICS / WAVESHAPING** programs — `NO OPERATION` (which runs a level
+detector), `COMPRESSOR`, `ENHANCER`, `EXCITER`, `DISTORTION`, `OVERDRIVE`, `FUZZ`, `AUTO WAH`,
+`AUTO PAN`, and the `PEQ+COMPRESSOR` combis — while `CHORUS`, `FLANGER`, `PHASER`, `ENSEMBLE`,
+`SINGLE DELAY`, `MULTI TAP DELAY`, `ROOM REVERB 1`, `PARAMETRIC EQ`, `VIBRATO` and `RING MODULATOR`
+carry **none**. Per family: `dynamics` **12.36 %**, `distortion` 4.08 %, `filter` 2.92 %,
+`modulation` and `eq` **0.00 %**.
+
+⇒ ★ **SPECULATIVE, and stated as a hypothesis rather than a decode**: base `0x020` is a
+*mode/control* word form — no source, no action, no address, the whole instruction is `hi12` — and
+its `hi12[3:1]` selects among eight variants of something a plain LOAD/ADD/HOLD accumulator cannot
+express (rectify / clip / saturate / round). ⛔ **Not implemented, not implementable from here**:
+41 of the 53 are refused by the ROUTING guard, and §0 item E shows the resident four carry no live
+operand to test a reading against.
+
+---
+
+## 5. THE ARM, QUOTED — `§54` FIRST, THEN RULE 19
+
+⚠ **`§54` GRADED FIRST. A NULL, identical to §229 arm E:**
+
+```
+   §54  quiet-in 734 548 -> 734 548 SILENT / 0 LOUD (peak 0)
+        loud-in  288 451 -> 288 451 silent / 0 loud (peak 0)
+```
+
+```
+   RULE 19, mean AND AC span, both buckets:
+   §70  ACCA@w73   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   §211 ACCB@w78   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   ⚠ §230: these two, §54, the rule-19 line, §61 and the epilogue D-I tally are ONE CRITERION.
+   ⚠ §229/§231: and only §70's is a statement about the chip -- see §0 items G and H.
+```
+
+```
+   THE CALIBRATIONS -- ALL UNCHANGED FROM §229 ARM E.  THIS PASS IS INERT:
+   §S1 TOTALS   quiet 7 989 156/162 240 672 = 4.924 %   loud 3 746 410/76 151 064 = 4.920 %
+   §228 T4      44 086.742 frames / emulated second
+   m_rf[0x8D]   0x009B26 = 39 718  (2 187 849 stores, 1 080 450 non-zero)   ★ THE independent check
+   §41          unit0 0x400000  unit1 0x178D0B      (⛔ struck from the falsifier list, §227)
+   FABRICATED   9 832 536 / 246 952 062 = 3.982 %, all six per-code counts unchanged
+```
+
+⛔ **SINGLE DELAY's `+0.02149296` (lag 1001, sample 45074) and PARAMETRIC EQ's 0.198 dB are NOT
+re-quoted**: this pass changed no decode and no default, so re-running their vehicles would be a
+CANNOT-FAIL row. §230's repaired `sd_rerun.py control` remains the two-sided form; use it on the
+first pass that actually moves a coefficient or a term.
+
+---
+
+## 6. WHAT SHIPPED
+
+1. **`§231` COLLAPSED-OP CENSUS** (`upd6383.h` `co_record`, hook at `upd6383.cpp` `exec_alu`) —
+   read-only, unconditional, `§54`-bucketed, armed at `S1_ARM_FRAME`. Per-site: the **discarded
+   product**, the operand, the entry accumulator, in both buckets. Plus **three aggregate reference
+   rows** whose mismatch columns void the census if non-zero.
+2. **`dsp/tools/f31_367.py`** — the static corpus tool: the 53 (54) words, the base analysis, the
+   adjacent minimal pairs, the epilogue under the shipped model, the audit of §229 §2.1's five
+   claims, and the `alu_guard_fail()` mirror that prices the whole `f31` route.
+3. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT, NO NEW ENV GATE.** The pre-registered
+   `f31` 3/6/7 *applied* arm was **not built**: §0 items E–H show it is a guaranteed null, and
+   §229 §7.1's own kill condition (*"if a reading leaves `§104`'s columns input-INDEPENDENT, the
+   operation field is not the defect"*) is satisfied **without applying it** — every operand at the
+   four sites is already measured input-independent.
+
+---
+
+## 7. WHAT THIS PASS IS BLIND TO, AND THE NEXT EXPERIMENT
+
+* **One vehicle, one boot, one effect pair (CHORUS + a reverb).** The four resident sites are a
+  property of **this** frame; the other 49 `{3,6,7}` words live in images that never load here.
+* **The census measures `m_p` ON ENTRY, not `m_p` after the word's own multiply.** That is the
+  quantity the operation field gates, and it is the only one it gates — but a reading that changed
+  the *multiplier* gate rather than the *adder* gate would not be visible in these columns.
+* **It does not decode base `0x020`.** §4's hypothesis is a hypothesis.
+
+### 7.1 ⛔ STRUCK, NOT DEFERRED — DEAD END 44
+
+**`f31 ∈ {3,6,7}` as a route to audio or to coverage.** Do not re-open it. The three reasons are
+independent and each is sufficient: the operands are measured zero (item E), the fabricated-zero
+census does not explain them (item H), and the whole route is worth **8 corpus words** (item I).
+⛔ And do **not** re-derive the bit-5 correlation: it is a spandrel of base `0x020` (item B).
+
+### 7.2 ★★★★ WHERE THE NEXT PASS SHOULD GO INSTEAD — PRE-REGISTERED
+
+**THE ROUTING GUARD, NOT THE OPERATION GUARD.** `alu_decoded()`'s
+`lo_src_anchored() / lo_act_anchored()` conjunct refuses **1139 corpus words — 60.6 % of everything
+undecoded** — against the operation switch's 106. It is also the **same population** §229's
+fabricated-zero census counts (`SRC 0x01/05/06/0A/13/1C`, `28.492 %` of the epilogue's operands).
+**Two instruments, arrived at independently, name one bottleneck.**
+**The claim to test:** the unanchored SRC/ACTION codes are where both the silence and the coverage
+are. **Required shape:** census FIRST — for each unanchored code, its sites, its *index* range and
+its consumer — before any reading. ⛔ **Dead end 4 / rule 4 still forbid implementing a consumer
+whose index is measured constant**, so the census must report the index range, and a constant
+index closes that code rather than opening it.
+**Falsifiers:** `m_rf[0x8D]` must stay `0x009B26`; `§S1`'s `4.924 %` must not *fall*; §227's guard.
+
+### 7.3 The rest
+
+1. ⛔ **THE BLOCKER IS UNMOVED: *what does the coefficient base `0x90` MEAN*** (queue item 12).
+2. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS** (queue item 13), one command each, no build.
+3. ★★ **SHIP THE FIVE QUEUED CONTROL REPAIRS** (§230 §7) when the lane is uncontested.
+4. ★ **CORRECT THE C-FORMAT CONFLATION WHEREVER IT APPEARS.** §229's claims 1 and 5 both counted
+   C-format words as carrying `f31`/bit-5 fields. Any statistic over `hi12` sub-fields must state
+   its C-format treatment; `f31_367.py` does.
+5. ★★ **`f31 == 4` AND `5` (§133's alias) ARE WORTH 23 WORDS, ~3× THIS ONE** — and four of the six
+   adjacent pairs the shipped model reads as one instruction come from *that* collapse, not this
+   one. If any `f31` work is done at all, it should be that one. ⚠ It is still small.
+
+**GRADES.** §0 items A, B **MEASURED from disk**; C **FORCED from the corpus**; D **FORCED from
+source**; E, F, G, H, I, J, K **MEASURED**; §4's *"base `0x020` is a mode/control word form"*
+**SPECULATIVE, unrun, and not implementable from this vehicle**; §7.2 **pre-registered, unrun**.
+⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
+established it cannot see `upd6383.cpp` at all.
