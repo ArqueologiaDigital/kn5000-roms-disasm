@@ -9,9 +9,25 @@ recurring failure (14+ passes lost, rules 3 and 13).
 register tail are AUTHORITATIVE and fresher; §222 was mid-pass when this was written and may
 supersede items 4 and 5. **Check the tail before starting anything here.**
 
+**⇒ §223 CONSUMED items 1, 4 and 6, and VOIDED item 3's vehicle assumption.** See the per-item
+banners below and `SPECULATIVE-APPLIED-REGISTER.md` §223.
+
 ---
 
-## 1. Narrow the nop guard — **PROVEN BY CONSTRUCTION, ready to ship**
+## 1. ~~Narrow the nop guard~~ — ✅ **SHIPPED by §223**
+
+> **DONE.** `addr8 == 0x00` added; `§NG` fired **2 371 200** words (`iw213:1189440`,
+> `iw57:1181760`), identical in all three arms. Arm F's whole `upd6383:` report `diff`s against
+> §222's archived arm A (`A_pickup_222.log.gz`, same vehicle, same env) in **29 lines**, and **not
+> one of them is a measured value** — the reworded gate announcement, six `§90` probe lines,
+> `§E1`'s fired count `+1 080 000` (a count, not a value), and the additive `§S1` block.
+> ⚠ It also set off a **latent runaway `logerror`** (`§90`, bounded by `m_dbg213 <= 3` where only
+> another site increments `m_dbg213`): **1 020 000 lines, a 300× log.** Fixed, arms re-run.
+> ⚠ **82 of the 103 words remain UNMEASURED**, not measured-zero.
+
+<details><summary>original entry</summary>
+
+### Narrow the nop guard — **PROVEN BY CONSTRUCTION, ready to ship**
 
 **Grade: FORCED.** Source: `NOP-GUARD_findings.md` (`09edb4e`).
 
@@ -25,6 +41,8 @@ address generator is bit-identical either way.
 
 ⚠ **Cite the predicate, not the line** — this guard moved `:4059 → :4075 → :4538` in one day while
 two lanes shared the file.
+
+</details>
 
 **Expect NO behavioural change**: 21 of the 103 execute in the archived vehicle and all read
 `mem 0..0` over 1 020 000 frames in seven logs (`iw57` is an exact identity). **The other 82 are
@@ -81,7 +99,17 @@ regime entirely; fingerprint **522 bytes / `I-RAM[84..187]`**.
 
 ---
 
-## 4. `§E-D85`, the epilogue-crossbar arm — **queued deliberately**
+## 4. ~~`§E-D85`, the epilogue-crossbar arm~~ — ✅ **RUN by §222, and the rig it needs does not exist**
+
+> **DONE and then some.** §222 ran it as arms C/D/E: the array route reproduces the compound arm
+> digit for digit, the **latch is REFUTED** by a two-sided bisection, and the whole thing rails.
+> §223 then showed **no store-suppression rig avoids the rail** — the narrow rig (`NOZ05 = 2`)
+> rails too — so *"re-ask `w63`'s READ on a non-railing rig"* has **no vehicle** until the
+> shipped build's own **5.303 %** quiet-bucket clip rate is dealt with.
+
+<details><summary>original entry</summary>
+
+### `§E-D85`, the epilogue-crossbar arm — **queued deliberately**
 
 **Grade: pre-registered, unrun.** Source: `PREDICT_D0_producer.md` (`64d1cb0`).
 
@@ -95,15 +123,29 @@ NOZ05 arms**. Known-answer controls: `m_rf[0x8D] = 0x009B26 = 39 718 = 2 603 010
 ⚠ It was queued behind §221/§222 because their census may settle it with no run at all. **Re-check
 whether it is already answered before running it.**
 
----
-
-## 5. Body-0's coefficient cursor at `iw112`
-
-**Grade: pre-registered by §221 as its next-after.** ⚠ §222 may have taken or superseded this.
+</details>
 
 ---
 
-## 6. The mode-1 store unit-rebase divergence — **decide it**
+## 5. Body-0's coefficient cursor at `iw112` — **STILL OPEN, and now half-answered for free**
+
+**Grade: pre-registered by §221 as its next-after; §222 and §223 both declined it.**
+★ `RISK-TRIAGE_findings.md` §5 **resolved** the declared-unreconciled `coef 0..24` vs `0x1364D9`
+conflict with **zero runs** — they are one cursor step apart (the pre-increment trap's *fourth*
+occurrence) — and the **×24 attenuation STANDS**. What is left is measuring what that costs.
+It is independent of the rail, the send and the output stage.
+
+---
+
+## 6. ~~The mode-1 store unit-rebase divergence~~ — ✅ **DECIDED AND UNIFIED by §222**
+
+> Corpus body images name mode-1 destinations **unit-relative 7 of 7, absolute 0 of 7**;
+> `iw332 → m_rf[0x8F]` is measured (§221, 540 000/540 000); **0 disagreements in 5 976 000
+> resolutions**, all five arms. Also closes a latent cross-unit corruption in `a04`/`a05`.
+
+<details><summary>original entry</summary>
+
+### The mode-1 store unit-rebase divergence — **decide it**
 
 **Grade: MEASURED (inert today).** Source: `PREDICT_D0_producer.md` (`64d1cb0`).
 
@@ -112,13 +154,23 @@ The two mode-1 store sites disagree: `:2914` uses `addr8 | (m_cur_unit1 ? 0x80 :
 resident frame, so it changes nothing today; it is the kind of latent asymmetry that surfaces months
 later as an unexplained result. Handed to the lane by the pass that found it.
 
+</details>
+
 ---
 
 ## STANDING CONSTRAINTS FOR WHOEVER TAKES THESE
 
-- ⚠ **`UPD6383_NOZ05` is a RIG, NOT A FIX.** It deletes two stores the corpus contains and its cell
-  `0x05` **rails** in the quiet window. Drive signal with it; never ship it; **treat nothing it rails
-  on as evidence.**
+- ⚠ **`UPD6383_NOZ05` is a RIG, NOT A FIX** — and **it deletes EIGHT words, not two**
+  (`iw9 iw19 iw21 iw27 iw33 iw35 iw39 iw45`; its own per-`iw` breakdown always said so).
+  ★ **Use `NOZ05 = 2` from now on** (§223): `iw35`/`iw45` only, **2** stores, and it reproduces
+  `28/32/28` / `33/40/29` / `2/1/2` **column for column**. ⚠ **It still rails**, and so does the
+  shipped build: `§S1` measures **5.303 %** of all accumulator conversions clipping on the shipped
+  default with the input **exactly zero**, at a rate **higher** than the loud bucket.
+  **The rail is upstream of the send entirely.** Treat nothing that rails as evidence.
+- ★★★ **NEW INSTRUMENT — `§S1`, the SATURATION CENSUS.** Read-only, always on, settled frames,
+  pre-clamp min/max and clip counts per `iw` per `§54` bucket, 48-row cap **with** an overflow
+  counter. **Quote it beside `§54` in every future pass**: `§54` sees a DC only once it reaches the
+  output; `§S1` sees the clamp that makes one.
 - ★★ **`m_bx_sel0d` is FROZEN at 1, globally** — changing it breaks body 0's only working pickup and
   the regression **IS** the `79 438 ± 90` rule-19 DC.
 - ⛔ **Mask bit 23 is CONFOUNDED** (six sites; it *is* the `m_rf`/`m_dram` split). **Bit 26 is dead

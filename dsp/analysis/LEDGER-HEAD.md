@@ -20,7 +20,68 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§222, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§223, 2026-07-31)
+
+> **★★★ THE BLOCKER IS A WORD, NOT A RIG: `iw34` CONVERTS A CONSTANT `14 428 403` = 1.720 × FULL
+> SCALE AND CLIPS ON 1 020 000 OF 1 020 000 CONVERSIONS — QUIET AND LOUD, SHIPPED BUILD AND BOTH
+> RIGS.**
+> §223 built `§S1`, a saturation census on `acc_to_datum()`'s **pre-clamp** value, per `iw`, per
+> `§54` bucket, settled frames only. Run on the **shipped default** with the input **exactly zero**:
+>
+> ```
+>    arm F  SHIPPED   quiet  9 884 596 clip / 186 394 560 conversions = 5.303 %   <- ZERO INPUT
+>                     loud   4 391 682 clip /  82 885 440             = 5.298 %   <- LOWER
+>    arm G  NOZ05=1   quiet 14 826 840 / 177 922 080 = 8.333 %
+>    arm H  NOZ05=2   quiet 17 651 000 / 180 746 240 = 9.766 %
+>       H - G = +2 824 160 clip / +2 824 160 conv (quiet), +1 255 624 / +1 255 840 (loud)
+>             = EXACTLY iw9's row, and 100 % of iw9's quiet conversions CLIP
+>    SEVEN sites clip on 100 % of quiet frames in arm F.  iw34: 14 428 403 in BOTH buckets, ALL
+>    THREE ARMS.  iw92 (body 0): pre-clamp MINIMUM 8 388 725 -- above the rail before the range opens.
+>    §54 all three arms: quiet-in 826 040 -> 826 040 SILENT / 0 LOUD (peak 0); loud-in 313 960
+>                        -> 313 960 silent / 0 loud (peak 0).  §70/§211 mean 0.0 span 0, both buckets.
+>    §104  arm F 27/26/20 | 2/4/1 | 0/0/0 | 0/0/0   arms G AND H  33/40/29 | 28/32/28 | 2/1/2 | 0/0/0
+> ```
+>
+> ⇒ ★★★ **THE PEDESTAL IS IN THE SHIPPED MODEL.** `UPD6383_NOZ05` does not create it; it removes
+> the two stores that were **hiding** it from body 0. §222's *"the pedestal is the rig's own rail"*
+> is corrected to that.
+> ⇒ ⛔ **§222's PRE-REGISTERED NEXT EXPERIMENT IS REFUTED FROM DISK, WITH NO RUN.** `iw35`'s
+> POST-update accumulator `908 714 800 127 >> 16 = 13 865 887` = **1.653 × FS, CLIPS**; `iw45`'s
+> `538 760 587 509 >> 16 = 8 220 834` = **98.0 % of FS, constant in both buckets**. A post-update
+> store deposits **the rail** it was proposed to remove.
+> ⇒ ⛔ **NO STORE-SUPPRESSION RIG AVOIDS THE RAIL.** `NOZ05 = 2` (the narrow rig: `iw35`/`iw45`
+> only, 2 stores instead of mode 1's **8**) reproduces `28/32/28` / `33/40/29` / `2/1/2` **column
+> for column** and **still rails** `D-RAM[05]` at `8 388 607`, with `iw9` restored and railing too.
+>
+> ⇒ **NEXT: (1)** name the words that build the accumulator between `iw30` and `iw34` and grade
+> each one's contribution against full scale — **no rig needed**, `iw34` is input-, rig- and
+> arm-independent. Grade on `§S1`'s per-`iw` clip count, **never** on `§70`/`§211`.
+> **(2)** `ACT 0x00`'s **BUS TERM** is the leading structural candidate: row 26 makes ACTION `0x00`
+> **ADD** `L << 16`, the kernel's bus carries coefficient-magnitude constants (`4 194 304` is
+> exactly **½ FS**), so three such words pass full scale with no attenuation — **a unity-gain comb
+> fed a DC ramps to the rail**. Two-sided, env-gated, DEFAULT OFF, fired count; the falsifier is
+> `§S1`'s quiet clip rate FALLING while `§41` and `m_rf[0x8D]` do not move.
+> **(3)** body-0's coefficient cursor at `iw112` — `RISK-TRIAGE_findings.md` §5 resolved the
+> `coef 0..24` vs `0x1364D9` conflict with zero runs and the **×24 attenuation STANDS**.
+> ⛔ **NOT `ACC_SHIFT`** on a moved number — `§41` (`0x400000` / `0x178D0B`) and
+> `m_rf[0x8D] = 0x009B26` calibrate it and both passed in all three arms.
+> ⛔ **NOT `ACT 0x0D` / `m_bx_sel0d` / `iw205`**; ⛔ **NOT `SRC 0x03`/`ACT 0x03` as a latch**;
+> ⛔ **NOT the epilogue's operand set** — all closed by §222 and unchanged.
+>
+> ★ **SHIPPED by §223:** `§S1` (read-only, always on, 48-row cap **with** an overflow counter);
+> `UPD6383_NOZ05` as a **mode** (0/1/2, default OFF, mode 1 verified bit-identical to §222 arm B);
+> the **nop guard narrowed** by `addr8 == 0x00` — `§NG` = 2 371 200 words, and arm F's whole report
+> `diff`s against §222's archived arm A in **29 lines of which NOT ONE is a measured value**;
+> and a **latent runaway `logerror`** (`§90`, bounded by a counter another site owned) fixed.
+> Logs: `data/{F_satcen,G_noz05m1,H_noz05m2}_223.log.gz`.
+> ★★ **METHOD, and it cost a control:** **state which side of the slot a predicted number came
+> from, in the prediction.** `PREDICT_223`'s `S2` took `iw34`'s value from `§104` row 34's `acc`,
+> which is *"acc AFTER the slot"*, where the store's datum is the **PRE**-update accumulator —
+> row 33's. Off-by-one, **fifth occurrence**. ★ **A pure observer's known-answer control must come
+> from a different instrument:** `§S1` printed `iw39`'s loud minimum as `1 991 044`, the number §220
+> established by `kwatch` two sections earlier, digit for digit, without being told.
+
+## TIER 0a-prev-222 — §222's BLOCKER, SUPERSEDED by §223 (and its ATTRIBUTION corrected)
 
 > **★★★ THE BLOCKER IS NOW THE RIG ITSELF: `UPD6383_NOZ05` RAILS `D-RAM[0x05]` AT `8 388 607` ON
 > EVERY QUIET FRAME, AND IT IS THE ONLY ARM THAT MAKES UNIT 0 LIVE.**

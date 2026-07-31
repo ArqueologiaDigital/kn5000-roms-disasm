@@ -15380,3 +15380,290 @@ miss explained; §3 **MEASURED**, five gates, three of them pre-registered as fa
 disagreements); §7 a decision — **nothing behavioural shipped except a unification measured inert
 5 976 000 times**; §8 **SPECULATIVE**, pre-registered with the rig named as the blocker.
 **`dsp/verify.py`: BYTE-MATCH OK.**
+
+---
+
+## §223 — ★★★ THE RAIL IS **NOT THE RIG'S**: THE SHIPPED BUILD CLIPS **5.303 %** OF EVERY ACCUMULATOR CONVERSION WITH THE INPUT **EXACTLY ZERO**, `§222`'s OWN NEXT EXPERIMENT IS REFUTED FROM DISK, AND THE NARROW RIG REPRODUCES `28/32/28` WHILE STILL RAILING
+
+<!-- LEDGER-VERDICT: SHIPPED (one instrument, one narrower rig, one proven-by-construction fix, one latent runaway) -->
+
+Scored against `data/PREDICT_223.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@fc6d792`). **Three arms, one build**, the §217/§220/§221/§222 clean vehicle
+(`coldnotes2.lua`, cold boot, isolated NVRAM **and** isolated `-cfg_directory` carrying
+`:DSPCFG value="3"`, `-log`, triad C4/E4/G4 held 21.02–27.51 s, `-seconds_to_run 30`, visible
+video, one run at a time):
+
+| arm | log | env |
+|---|---|---|
+| **F** | `data/F_satcen_223.log.gz` | `PICKUP=1 EPIBUS=1` — **shipped default, THE NULL** |
+| **G** | `data/G_noz05m1_223.log.gz` | `+ NOZ05=1` — §220/§222's rig, **the regression control** |
+| **H** | `data/H_noz05m2_223.log.gz` | `+ NOZ05=2` — **the NARROW rig: `iw35`/`iw45` only** |
+
+> **THE TASK (§222 §8.1):** *"no end-to-end claim about this machine can be graded until
+> `UPD6383_NOZ05` stops railing `D-RAM[0x05]`. §220's post-update-store residual is the way in."*
+>
+> **THE ANSWER, and the first half of it needed no run at all: THE POST-UPDATE STORE IS THE RAIL
+> TOO, and the rail was never the rig's.** Convert the numbers §220 and §222 both quote the way
+> the store actually converts them — `acc_to_datum()`'s own `>> ACC_SHIFT` and its own clamp:
+>
+> ```
+>    iw35 POST, quiet   908 714 800 127 >> 16 = 13 865 887  >  8 388 607   CLIPS  (1.653 x FS)
+>    iw35 POST, loud                            3 474 290 .. 17 170 490    CLIPS at the top
+>    iw45 POST, both    538 760 587 509 >> 16 =  8 220 834  = 98.0 % OF FULL SCALE, CONSTANT
+> ```
+>
+> ⇒ ⛔ **A post-update bit-4 store deposits the RAIL into cell `0x05` on every quiet frame** — the
+> exact failure it was proposed to cure. **CROSSED OFF. Do not build it.**
+>
+> **AND THE REASON IS BIGGER THAN THE RIG.** `§S1`, the new saturation census, run on the
+> **SHIPPED DEFAULT** with the input **exactly zero** (`§54`'s own predicate):
+> **`quiet 9 884 596 clip / 186 394 560 conversions = 5.303 %`**, and the quiet rate **EXCEEDS**
+> the loud rate (`5.298 %`). **Six kernel-A sites and one body-0 site clip on 100 % of quiet
+> frames**, `iw34` converting the constant **`14 428 403` = 1.720 × FS in BOTH buckets and in ALL
+> THREE ARMS**. ⇒ ★★★ **THE PEDESTAL IS IN THE SHIPPED MODEL, NOT IN `UPD6383_NOZ05`.** The rig
+> does not create it; it removes the two stores that were hiding it from body 0.
+>
+> **AND THE NARROW RIG SETTLES WHAT `iw9` WAS DOING: NOTHING BUT CLIPPING.** `NOZ05 = 2` deletes
+> **2** stores where mode 1 deletes **8**, reproduces `28/32/28` and `33/40/29` and `2/1/2`
+> **column for column**, and **still rails** `D-RAM[05]` at `8 388 607`. Its only difference from
+> mode 1 is `iw9`'s **2 824 160 conversions, EVERY ONE OF WHICH CLIPS** — the two arms' clip
+> counts differ by exactly that, in **both** buckets. **`§54` is clean in all three arms and
+> `§70`/`§211` are `mean 0.0 span 0` in all three. NOTHING MOVED, AND THAT IS THE POINT.**
+
+### 1. ★★★★ `§S1` — THE SATURATION CENSUS, AND WHAT IT SAYS ABOUT THE SHIPPED BUILD
+
+`§54` can only see a DC that reaches the **output**. The pedestal that has now cost three sections
+is made much further upstream, inside `acc_to_datum()` itself, at the single point where the
+44-bit accumulator becomes a 24-bit datum. `§S1` records the **pre-clamp** value there, per `iw`,
+split by `§54`'s own quiet/loud predicate, settled frames only, read-only, always on.
+
+```
+   ARM F  --  UPD6383_NOZ05 = 0, THE SHIPPED DEFAULT
+   TOTALS  quiet  9 884 596 clip / 186 394 560 conversions (5.303 %)
+           loud   4 391 682 clip /  82 885 440 conversions (5.298 %)   off-range iw 0
+
+   iw   region   calls q/l          clips q/l          pre-clamp quiet[min..max]   pre-clamp loud
+   16   kernelA   706040/313960      706040/313841     12 038 894 (constant)        2 052 665..14 411 582
+   17   kernelA   706040/313960      706040/313951     18 061 870 (constant)        3 482 224..20 434 557
+   18   kernelA   706040/313960      706040/313441     10 477 265 (constant)        1 626 296..12 849 952
+   19   kernelA  3530200/1569800    3530200/1569775    18 865 872 (constant)        5 108 520..21 238 559
+   34   kernelA   706040/313960      706040/313960     14 428 403 (constant)       14 428 403 (SAME)
+   39   kernelA  2824160/1255840    2824160/1251928    10 729 595 (constant)        1 991 044..13 508 518
+   92   body0     706040/313960      706040/313960      8 388 725..16 777 315       8 388 729..16 777 319
+   §S1 rows printed 13 of cap 48, DROPPED 0
+```
+
+**`S1` PASSES, and by more than it predicted:** not "≥ 4 distinct `iw` clip in the quiet bucket"
+but **seven sites clipping on 100 % of quiet frames**, and `iw39` — the one the prediction named —
+is among them. **`S3` PASSES**: 13 rows, inside the predicted 4–24, **0 dropped**, against a cap
+that prints its own overflow counter (the defect `INSTRUMENT-AUDIT` item 7 found in
+`store_probe()`).
+
+★★★ **`iw34` IS THE PUREST STATEMENT OF THE PEDESTAL.** Its conversion is
+**`14 428 403 .. 14 428 403` in the QUIET bucket AND in the LOUD bucket AND in all three arms** —
+a constant **1.720 × full scale** that clips on **1 020 000 of 1 020 000** conversions in every
+configuration ever measured. It is not input-dependent, not rig-dependent and not arm-dependent.
+★ **`iw92` is the body-0 twin:** its pre-clamp **minimum** is `8 388 725`, i.e. **already above the
+rail before the range even opens**, on the shipped build, in both buckets.
+
+**`S4` HOLDS AND MUST BE QUOTED:** the loud bucket clips **too** (`4 391 682`, `5.298 %`). ⇒
+*"clipping only happens with no input"* is **NOT** the claim. The claim is the sharper one: **the
+quiet rate is HIGHER than the loud rate**, so the overflow is not the signal overdriving anything
+— it is a standing DC the signal modulates.
+
+### 2. ⚠ THE PRE-REGISTERED CONTROL `S2` **FAILED, AND THE FAULT IS MINE** — off-by-one, FIFTH OCCURRENCE
+
+`PREDICT_223` §3.1 `S2` named `iw34` as a conversion that **must not clip**, computing it as
+`274 877 906 944 >> 16 = 4 194 304`. **It clips 100 % of the time at `14 428 403`.**
+
+The census is not wrong; **the prediction was**. `§104`'s `acc` column is *"acc **AFTER** the
+slot"*, and the bit-4 store's datum is the **PRE-update** accumulator — which is row `n−1`'s value,
+not row `n`'s. `274 877 906 944` is what `iw34` **leaves**; `945 579 874 058 >> 16 = 14 428 403` is
+what it **stores**. ⇒ **the after-slot / before-slot off-by-one, fifth occurrence** (after
+`OUTPUT-STAGE-NULL_findings.md` §1.2, `§104`'s `dp` column, §221's `w79`, and
+`RISK-TRIAGE_findings.md` §5's *cursor*). ★ **A prediction derived from a per-slot table must state
+which side of the slot it took the number from, in the prediction.**
+
+★★ **THE CONTROL THAT DID WORK IS AN INDEPENDENTLY ESTABLISHED NUMBER FROM ANOTHER INSTRUMENT.**
+§220 established, by `kwatch` and by hand, *"`iw39` stores `acc_to_datum(130 485 107 904)` =
+**1 991 044**, `iw38`'s post-value"*. `§S1` prints `iw39`'s **loud minimum** as **`1 991 044`**,
+digit for digit, without ever being told about it. ⇒ **the census is validated against a number
+decided two sections ago by a different route**, which is the only kind of known-answer control a
+pure observer can have. (`iw40`, the prediction's second control, records **0 calls** — no
+conversion happens there at all, so it grades nothing. Recorded so it is not quoted as a pass.)
+
+### 3. ★★★ ARM H — THE NARROW RIG. IT REPRODUCES THE WHOLE EFFECT AND IT STILL RAILS
+
+```
+                       kernel A     body 0      body 1     epilogue
+   arm F  (shipped)    27/26/20     2/ 4/ 1     0/0/0      0/0/0
+   arm G  (NOZ05=1)    33/40/29    28/32/28     2/1/2      0/0/0     <- §222 arm B, reproduced
+   arm H  (NOZ05=2)    33/40/29    28/32/28     2/1/2      0/0/0     <- COLUMN FOR COLUMN = G
+
+   §220/§223 NOZ05 fired counts
+     arm G  3 528 080 | iw9:1176015 iw19:19 iw21:12 iw27:12 iw35:1176007 iw33:8 iw45:1176003 iw39:4
+     arm H  2 352 010 | iw35:1176007 iw45:1176003                       <- EXACTLY 2 ROWS
+
+   D-RAM[05] WRITERS, settled frames
+     arm F   iw9  quiet 5084004..5084004   iw11 quiet 5084004  iw35 4194304  iw45 0
+     arm G   iw11 ONLY,      quiet 8388607..8388607   loud -8388608..8388607
+     arm H   iw9  quiet 8388607..8388607   iw11 quiet 8388607..8388607   loud -8388608..8388607
+```
+
+**`H1` — THE PREDICTED NULL HELD.** `iw11` still deposits the rail. **`H2` PASSES** on the
+pre-registered row count (2, against arm G's 8). **`H3` PASSES** — `iw9` is back, `n = 540 000`.
+**`H4` PASSES** — `28/32/28`, identical to arm G. **`H5` PASSES** — `§54` clean, `§70`/`§211` zero.
+
+⇒ ★★ **`iw9` IS NOT WHY THE RIG RAILS**, exactly as `PREDICT_223` §0.2 forced from the archived
+`§104` rows (arm A and arm B first differ at **`iw8`**, upstream of every store the rig deletes).
+And when `iw9` is restored **it rails too** (`8 388 607` where the shipped build has `5 084 004`),
+because the runaway reaches it cross-frame.
+
+★★★ **AND `§S1` MAKES THE BISECTION ARITHMETIC EXACT:**
+
+```
+   arm G  quiet 14 826 840 clip / 177 922 080 conv     loud 6 592 549 / 79 117 920
+   arm H  quiet 17 651 000 clip / 180 746 240 conv     loud 7 848 173 / 80 373 760
+   H - G  quiet  +2 824 160 clip / +2 824 160 conv     loud +1 255 624 / +1 255 840
+   arm H  iw9 row:  quiet 2 824 160 calls / 2 824 160 clips
+                    loud  1 255 840 calls / 1 255 624 clips
+```
+
+**Arm H = arm G + `iw9`'s conversions, in both buckets, to the unit — and 100 % of `iw9`'s quiet
+conversions CLIP.** ⇒ restoring `iw9` adds **nothing but clipping**. Mode 2 is nevertheless the
+**better rig of record**: it deletes 2 stores instead of 8, and it proves the `28/32/28` result was
+never `iw9`'s or the five incidental LFO words'.
+
+### 4. ⇒ THE BLOCKER IS RE-AIMED, AND IT IS NOT A RIG
+
+§222 named the blocker *"`UPD6383_NOZ05` rails `D-RAM[0x05]`"*. **That is the symptom of a
+shipped-build defect**, and three measurements say so:
+
+1. the shipped build **already** clips `5.303 %` of conversions with **zero** input, quiet rate
+   **above** loud rate;
+2. `iw34` clips a **constant** `1.720 × FS` in **every bucket of every arm**, so no rig, no send
+   and no input can be responsible for it;
+3. `iw92`, in **body 0**, has a pre-clamp **minimum** above the rail on the shipped build.
+
+⇒ ★★★ **THE NEXT QUESTION IS NOT "WHICH STORE TO DELETE". IT IS "WHY IS THE ACCUMULATOR 1.7–2.2 ×
+FULL SCALE WITH NO INPUT".** Two candidates, both measurable, neither adopted here:
+
+* **the `ACT 0x00` bus term.** Register row 26 makes ACTION `0x00` **ADD** `L << 16` to the
+  accumulator. The kernel's bus carries coefficient-magnitude constants (`5 084 004`, `5 033 164`,
+  `5 872 025`, `6 039 795`, `6 553 600`, `4 194 304` = exactly ½ FS), so a run of ACT-`0x00` words
+  sums half-scale terms with no attenuation and passes FS after three of them. **A feedback path
+  with no coefficient has gain 1, and a unity comb fed a DC ramps to the rail** — which is the
+  shape of everything above.
+* **`ACC_SHIFT`.** `>> 16` leaves 4 headroom bits over a 24-bit datum in a 44-bit accumulator.
+  ⚠ **It is CALIBRATED and must not be moved casually**: `§41`'s `0x400000`/`0x178D0B` and
+  `m_rf[0x8D] = 0x009B26 = 2 603 010 048 >> 16` both depend on it and both pass in all three arms.
+  **A change here is a decode change and needs corpus evidence, not a moved number.**
+
+⛔ **NOT the post-update store** (§0, refuted from disk). ⛔ **NOT `iw9`** (§3, refuted by
+running it). ⛔ **NOT `ACT 0x0D` / `m_bx_sel0d` / `iw205`** (§222 §1, closed at the site).
+⛔ **NOT `SRC 0x03` / `ACT 0x03` as a crossbar latch** (§222 §4, two-sided).
+
+### 5. ★★ THE NOP GUARD IS NARROWED — AND IT IS MEASURED INERT ON EVERY NUMBER IN THE REPORT
+
+`BUILD-LANE-QUEUE.md` item 1, shipped. The guard tested `hi12 == 0x000 ∧ class4 == 2 ∧
+lo12 == 0x000` and **not `addr8`**, swallowing 103 corpus words across 28 of 40 streams — 41 of
+them carrying a live signed pointer delta. **The narrower predicate already existed twice in this
+tree** (`decoded()` requires `ad == 0x00`; the listings render the 41 as `?word`); the core was the
+only one of three implementations that swallowed them.
+
+```
+   ★ §223 §NG NOP-GUARD NARROWED (addr8 == 0x00 added): 2 371 200 words handed to exec_alu()
+        that the old guard swallowed, 2 distinct slots | iw213:1189440 iw57:1181760
+        -- IDENTICAL in all three arms.
+   §90 probe, now reached:  iw213 = 0002BA000  cl=2 dd=-70 dp=D0  ptr_postinc=1
+```
+
+**`N1` PASSES** — the count is non-zero, so the change is **tested**, not merely believed inert.
+**`N2` PASSES, and it is the strongest form available:** arm F's whole `upd6383:` report `diff`s
+against `A_pickup_222.log.gz` — **§222's archived arm A, same vehicle, same env** — in **29 lines**,
+and **not one of them is a measured value**:
+
+* the `NOZ05` announcement, reworded by this pass;
+* six lines of the `§90 iw213` probe, which now fires (3 × 2 prints) because the word reaches
+  `exec_alu()` at all — the change's own evidence;
+* `§E1` fired `122 040 000` vs `120 960 000`, **+1 080 000 = 2 × 540 000 settled frames**: the
+  provenance census now *sees* one more word per unit pass. A count, not a value;
+* the additive `§S1` block.
+
+**Every `§104` row, `§54`, `§70`, `§211`, `§41`, `§61`, `§160`, the writer census, the provenance
+census and the delay census are IDENTICAL.** ⇒ the narrowing belongs to the proven-by-construction
+class (7 of 7) and it ships on that, not on a moved number. ⚠ **82 of the 103 remain UNMEASURED**
+— they sit in body images this vehicle never loads. Do not report them as measured-zero.
+
+### 6. ⚠⚠ A LATENT RUNAWAY THE NARROWING SET OFF — AND ITS CLASS IS THE AUDIT'S OWN
+
+The first arm-F build produced a **1 023 208-line** log where the archive's equivalent is **3 186**.
+**1 020 000 of those lines were one `logerror`**:
+
+```c
+   if (m_cur_iw == 213 && m_dbg213 <= 3 && m_frames_run > 420000)     // §90, post-increment probe
+```
+
+`m_dbg213` is incremented **only** by the *other* `§90` probe at the top of `exec_alu()`, whose own
+bound is `< 3`. Once that one stops at 3, **`<= 3` is true forever.** It was harmless only because
+`iw213` was swallowed by the nop guard and never reached `exec_alu()` at all. ⇒ **a bound that
+depends on a counter some OTHER site owns** — `INSTRUMENT-AUDIT_findings.md`'s class A, in its
+purest form. Fixed: its own counter, its own bound, three lines, and the arms were **re-run on the
+final build**. ★ **Every number in this section is from the re-runs.**
+
+### 7. ⇒ WHAT SHIPS
+
+* `upd6383.cpp` / `.h` — **`§S1` SATURATION CENSUS**: read-only, always on, settled frames only
+  (`S1_ARM_FRAME = 420000`, the audit's unified window), pre-clamp min/max and clip counts per
+  `iw` per bucket, totals **and ratios** printed unconditionally, a 48-row cap **with its own
+  overflow counter**, and its known-answer control printed **beside** the result so the two cannot
+  be quoted apart.
+* `upd6383.cpp` / `.h` — **`UPD6383_NOZ05` becomes a MODE**: `0` off, `1` = §220's original
+  (unchanged and **verified bit-identical to §222 arm B**), `2` = `iw35`/`iw45` only. **DEFAULT
+  OFF.** Mode 2 is the **narrow rig of record**.
+* `upd6383.cpp` — **the nop guard narrowed by `addr8 == 0x00`**, with `§NG`'s unconditional fired
+  count and distinct-slot list (§5).
+* `upd6383.cpp` / `.h` — **the `§90` runaway print bounded by its own counter** (§6).
+* `dsp/tools/s104_tally.py` — the region-tally grader, **validated against all four archived §222
+  arms** before use (it reproduces `28/32/28`, `33/40/29`, `2/1/2`, `59/44/49`, `22/19/9` exactly).
+* three logs; `data/PREDICT_223.md`; this section.
+* **No default flip. No mask bit. No decode change. No change to `m_bx_sel0d`, to `ACC_SHIFT` or to
+  any store's datum.** `dsp/verify.py`: **BYTE-MATCH OK.**
+
+### 8. ★★★ THE NEXT EXPERIMENT, PRE-REGISTERED HERE
+
+1. ★★★ **THE BLOCKER IS `iw34`.** It converts a **constant** `14 428 403` = **1.720 × FS** and
+   clips on **1 020 000 of 1 020 000** conversions in **every bucket of every arm**. It is
+   input-independent, rig-independent and arm-independent, so it can be chased with **no rig at
+   all** and its answer cannot be contaminated by the send. Name the words that build that
+   accumulator between `iw30` and `iw34` and grade each one's contribution against full scale.
+   ★ Grade on `§S1`'s per-`iw` clip count, **not** on `§70` — the output stage is a null.
+2. **`ACT 0x00`'s bus term is the leading structural candidate** (§4). A comb whose feedback term
+   is added **unattenuated** has gain 1, and a unity comb fed a DC ramps to the rail. ⚠ Two-sided,
+   env-gated, default OFF, fired count — and the falsifier is `§S1`'s quiet clip rate, which must
+   **fall** on the shipped default without `§41` or `m_rf[0x8D]` moving.
+3. ⛔ **NOT `ACC_SHIFT`** on a moved number: `§41` and `m_rf[0x8D]` calibrate it and both pass.
+4. **body-0's coefficient cursor at `iw112`** — `RISK-TRIAGE_findings.md` §5 has now **resolved**
+   the `coef 0..24` vs `0x1364D9` conflict with zero runs (one cursor step apart, fourth
+   pre-increment occurrence) and the **×24 attenuation STANDS**. Still measurable, still untouched.
+
+### 9. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **§220/§222's post-update bit-4 store** | ⛔ **REFUTED FROM DISK, NO RUN.** `iw35`'s post-update accumulator converts to `13 865 887` and **clips**; `iw45`'s to `8 220 834` = **98.0 % of FS, constant in both buckets**. It deposits the rail it was meant to remove |
+| **"the pedestal is `UPD6383_NOZ05`'s own rail"** | ⚠ **TOO KIND TO THE SHIPPED BUILD.** The shipped default clips **5.303 %** of conversions with the input **exactly zero**, at a rate **higher** than the loud bucket. The rig removes the two stores that were **hiding** it from body 0 |
+| **`iw9` as a suspect in the rig's rail** | ⛔ **REFUTED BY RUNNING IT.** Arm H keeps `iw9` and rails identically; the two rigs' clip counts differ by **exactly** `iw9`'s conversions, in both buckets, **every one of which clips** |
+| **`NOZ05 = 1` as "the two stores §219 named"** | ⚠ **IT DELETES EIGHT.** Its own breakdown always said so. Mode 2 deletes two, reproduces `28/32/28` `33/40/29` `2/1/2` column for column, and is the **narrow rig of record** |
+| **the nop guard's `addr8`-blind predicate** | ★ **NARROWED AND SHIPPED**, `§NG` = 2 371 200 with a 29-line `diff` against the archive in which **no measured value moves** |
+| **`§90`'s `m_dbg213 <= 3` bound** | ⚠ **A LATENT RUNAWAY**, dormant only because the word it watched was unreachable. 1 020 000 lines. Its own counter now |
+| **`PREDICT_223 S2` (`iw34` must not clip)** | ⚠ **MY ERROR, not the instrument's** — `§104`'s `acc` is AFTER the slot, the store's datum is BEFORE it. **Off-by-one, fifth occurrence.** State which side of the slot a predicted number came from, **in the prediction** |
+| **"a rig can be built that drives the bodies without railing"** | ⛔ **NOT BY DELETING STORES.** Both rigs rail, the narrow one included, and the shipped build clips already. **The rail is upstream of the send entirely** |
+
+Evidence grade: §0 **FORCED** from an archived log, no run; §1 **MEASURED**, three arms, with a
+pre-registered row count and 0 dropped; §2 a **self-caught prediction failure** plus a
+cross-instrument known-answer control that passed digit for digit; §3 **MEASURED**, a two-sided
+rig bisection whose clip-count difference is **exact in both buckets**; §4 **INFERRED** and
+explicitly not adopted; §5 **PROVEN BY CONSTRUCTION** + **MEASURED INERT** against an archived
+control; §6 **MEASURED** and fixed; §8 **SPECULATIVE**, pre-registered with the blocker re-aimed
+at a word instead of a rig. **`dsp/verify.py`: BYTE-MATCH OK.**
