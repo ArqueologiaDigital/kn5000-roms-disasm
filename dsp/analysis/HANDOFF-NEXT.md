@@ -16,43 +16,55 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Test whether `0x827` carries the per-unit descriptor base — its falsifier already bites.**
+**FIRST fix the `dsc` label (+1 on body consumers), THEN implement the per-unit descriptor ring.**
 
-⛔ **The previous framing of this task was WRONG and §206 corrected it.** It said *"`m_dsc` comes
-only from `ldptr.d`, `0x25` in both header blocks"* as if that were an emulator defect. It is not:
+### ⛔ 0. Before anything: a defect in §202's evidence (§207)
 
-```
-   unit 0   iw42 801.0.70.821   iw43 801.0.6C.827   iw44 801.0.25.825
-   unit 1   iw50 801.0.50.821   iw51 801.0.64.827   iw52 801.0.25.825
+The §200/§204 `dsc` labels are **+1 for body consumers** — §204's own output prints
+`iw46->ix3(dsc29,cell05A0)` and `0x05A0` is cell **`0x28`**. ⇒ **§202's two "bit-exact" matches were
+body-1 consumers reading body-0's block.** §202's *conclusion* stands (the rotation sweeps down);
+**its two numbers must be re-baselined after the fix and NOT read as a regression when they move.**
+⚠ §204 called that label *"harmless for the A/B"* — true, and it was **not** harmless for the
+citation. Fix the label before any run, or the next result is mis-cited too.
 
-   0x821  0x70 / 0x50  DIFFERS     0x827  0x6C / 0x64  DIFFERS     0x825  0x25 / 0x25  IDENTICAL
-```
+### ⛔ 1. `0x827` is ELIMINATED — do not implement it
 
-**The firmware loads the same value into `0x825` for both units.** Giving it a per-unit base would
-invent a split the instruction stream does not contain. ★ `k3-pointers.md` already forced this —
-*"`0x825` is **dead**: loaded with the same value in **both** unit segments … the two units' state
-would alias completely"* — and used it to eliminate `0x825` as the *operand* pointer; the same
-argument eliminates it as the *descriptor* base.
-
-⇒ **`0x827` is the only candidate**: the one pointer-family register that differs per unit, and the
-one `k3-pointers.md` explicitly left **"not excluded"**.
-
-### ⚠ Its falsifier bites BEFORE any build — check this first
-
-`0x6C − 0x64 = 8`, so if `0x827` is the descriptor base the two units' blocks sit **8 cells apart**.
-But §189's live bank puts unit-1 descriptors at `0x00..0x1F` and CHORUS's at `0x26..0x2F` — a gap
-far larger than 8. **Either the base is scaled, or `0x827` is not it.** Resolve that on paper; a
-candidate already in tension with a measurement is not a fix.
-
-### ★ And the number that gates the whole delay path (§205)
+A base register means `base_u = s·F_u + b (mod 256)`; subtracting the units **cancels `b`**, so the
+test is `s·d ≡ 38 (mod 256)`, solvable iff `gcd(d,256) | 38`. `38 = 2·19` and the gcd is a power of
+two ⇒ **`d` must be odd or ≡ 2 (mod 4)**.
 
 ```
-   §48 DELAY READ CONSUMED (SRC 0x0B): 22 773 120 times, 0 with a NON-ZERO DATUM
+   0x827  d = 8      0x821  d = 32      w45/w53 addr8  d = 48      ALL IMPOSSIBLE
 ```
 
-While that second field is 0, the kernel's unit-0 send is 0 whatever is done anywhere else. When it
-goes non-zero, `§104`'s `iw46 mem` must leave `0..0` **and** split quiet ≠ loud — if it does not,
-that chain is wrong.
+*"The base is scaled"* is not available — **no integer scale exists**. NULL first: 75 % of deltas
+admit some scale, 6.2 % admit `|s| ≤ 8`, so this could have passed. Also eliminated: the body's
+first D-RAM word (`880.1.30.00B` is consumer 0 on **both** units) and the host write pointer
+(`m_dsc_wp` ends `0x30`, order-dependent, unit 1 uploads first).
+
+### ★ 2. The answer is in `dram-unit-cursor.md` (2026-07-27) — read it, do not re-derive
+
+**4440 survivors of 766 576 machines, every one with `B₁ = 0x00` and `L₁ ≤ 0x26`.** The base is
+**not a register**: it is per-unit state established **at the CALL**, a per-unit **ring** on the one
+shared cursor — so the single immediate `0x25` means *"one below unit 0's base"* to unit 0 and
+*"the last cell of my ring"* to unit 1.
+
+⚠ A hardwired two-entry base table is **observationally TIED** with the ring — separating them needs
+a unit-1 block longer than 38 cells and the maximum is 32. Implement either; **do not claim which**.
+
+### ★ 3. The number that settles it
+
+Body 1's §204 census going from **0 of 16 → 16 of 16**, the sixteen cells reading
+
+```
+   81E7 0000 A3C5 8000 A5FE A276 A8C1 A3C5 ADA3 A5FE B42D A8C1 B60D ADA3 B80D B42D
+   (today: 0000 0190 1041 05A0 0000 09B0 0410 0DC0 0820 8000 0C30 0000 0000 0000 0000 0000)
+```
+
+### ⚠ 4. And the gate on everything downstream (§205)
+
+`§48 DELAY READ CONSUMED (SRC 0x0B): 22 773 120 times, **0** with a non-zero datum.` While that is
+0, the kernel's unit-0 send is 0 whatever else is done.
 
 ### ★ SHIPPED this session — five, all from the PROVEN-BY-CONSTRUCTION audit, each with a control
 
