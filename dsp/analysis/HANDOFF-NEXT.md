@@ -1,11 +1,12 @@
 # HANDOFF — read this first
 
-**§1 rewritten 2026-07-31 by §223.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
-then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§223**, **§222** and **§221**, then
-§§215–220 backwards as needed. Several earlier sections are retracted *in place*; **trust the
+**§1 rewritten 2026-07-31 by §224.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
+then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§224**, **§223** and **§222**, then
+§§215–221 backwards as needed. Several earlier sections are retracted *in place*; **trust the
 register tail over any older summary, including older parts of this file** — §219 found this
-file's own §1 four sections stale (standing rule 3, fifth occurrence), and §223 found §222's
-pre-registered next experiment refutable from a log already on disk.
+file's own §1 four sections stale (standing rule 3, fifth occurrence), §223 found §222's
+pre-registered next experiment refutable from a log already on disk, and §224 found §223's own
+next candidate refutable the same way.
 
 ---
 
@@ -18,94 +19,131 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★★ §223 RE-AIMED THE BLOCKER: THE QUIET-WINDOW RAIL IS NOT THE RIG'S, IT IS THE SHIPPED
-BUILD'S, AND IT HAS A SINGLE CLEANEST HANDLE — `iw34`.**
+**★★★ §224 ANSWERED §223's BLOCKER AND KILLED §223's OWN CANDIDATE WITH IT. THE NEW BLOCKER IS
+KERNEL A's D-RAM CELL `0x06` — AND IT IS A LATCH-UP, NOT A GAIN ERROR.**
 
 ```
-   arm F  (shipped)     data/F_satcen_223.log.gz   PICKUP=1 EPIBUS=1        THE NULL
-   arm G  NOZ05=1       data/G_noz05m1_223.log.gz  §220/§222's rig          regression control
-   arm H  NOZ05=2       data/H_noz05m2_223.log.gz  iw35/iw45 ONLY           the narrow rig
+   arm I  (shipped default)  data/I_s2_224.log.gz    THE NULL
+   arm J  UPD6383_LFOWRAP=1  data/J_lfowrap_224.log.gz  the wrap-word reading (DEFAULT OFF)
 
-   §S1 SATURATION CENSUS (new): acc_to_datum()'s PRE-CLAMP value, per iw, per §54 bucket
-     arm F   quiet  9 884 596 clip / 186 394 560 conversions = 5.303 %   <- THE SHIPPED BUILD
-             loud   4 391 682 clip /  82 885 440             = 5.298 %      WITH ZERO INPUT
-     arm G   quiet 14 826 840 / 177 922 080 = 8.333 %
-     arm H   quiet 17 651 000 / 180 746 240 = 9.766 %   H - G = iw9's rows, EXACT, both buckets
-   SEVEN sites clip on 100 % of QUIET frames in arm F; iw34 converts the CONSTANT 14 428 403
-     = 1.720 x FS in BOTH buckets and in ALL THREE ARMS; iw92 (body 0) has a pre-clamp MINIMUM
-     of 8 388 725 -- above the rail before the range opens.
-   §54  all three arms:  quiet-in 826 040 -> 826 040 SILENT / 0 LOUD (peak 0)
-                         loud-in  313 960 -> 313 960 silent / 0 loud (peak 0)
-   §70/§211 all three arms, BOTH buckets:  mean 0.0  span 0      §61 both ports 0 non-zero
-   §104  arm F 27/26/20 | 2/4/1 | 0/0/0 | 0/0/0     arm G AND arm H  33/40/29 | 28/32/28 | 2/1/2 | 0/0/0
-   §NG  nop guard narrowed: 2 371 200 words, iw213:1189440 iw57:1181760, all three arms
+   iw34 = 000.A.FF.407 -> lo12 0x407 -> SRC 0x10 = THE ACCUMULATOR, ACT 0x07.
+     Its conversion is NOT a store's datum: it is the accumulator placed on the BUS,
+     and its value is §104 row 33's acc >> 16.  §S1's value is ALWAYS the PRE-update
+     accumulator = the PREVIOUS slot's §104 acc (verified 8 of 8 from disk).
+
+   THE LADDER, reproduced to the unit and then confirmed by §S2:
+     iw30  09A.A.00.200  acc = 0 + (C-RAM[9B]<<16) + P(0)             5 033 164   0.600 FS
+     iw32  000.A.FF.207  acc = P(iw30) = C-RAM[9B]^2 >> 6             6 039 795   0.720 FS
+     iw33  412.A.00.200  acc += (C-RAM[9D]<<16) + (C-RAM[9C]^2 >> 6) 14 428 403   1.720 FS
+     iw34  SRC 0x10   -> L = clamp(14 428 403) = 8 388 607
+   ⇒ iw33 is the OVERFLOW SITE.  Both its addends are exactly 1/2 FS and NOT ONE of the
+     three terms is a sample -- a coefficient and two coefficients SQUARED.
+   ⇒ ⛔ ZERO THE ACT-0x00 BUS TERM AND iw33 STILL LEAVES 10 234 099 = 1.220 x FS.  STILL
+     CLIPS.  §223 §8.2 is REFUTED for iw34, from disk, with no build.
 ```
 
-⇒ ⛔ **§222's OWN NEXT EXPERIMENT IS DEAD, AND IT NEEDED NO RUN.** `iw35`'s POST-update
-accumulator is `908 714 800 127`; `acc_to_datum()`'s own `>> 16` makes that **13 865 887**,
-**1.653 × full scale**, clamped to `8 388 607`. A post-update store deposits **the rail** into the
-pickup cell on every quiet frame. `iw45`'s post-value converts to **8 220 834 = 98.0 % of FS,
-constant in both buckets**. **Crossed off. Do not build it.**
+⇒ **AND WHERE THE BUS TERM *IS* THE CAUSE, THE ADDEND HAS A NAME.** `§S1`, both buckets:
+`iw92 − iw91 = 8 388 607` **exactly, at both endpoints**, and `8 388 607 = 0x7FFFFF = C-RAM[0x01]`
+— the constant `upd6383.cpp`'s **own** C-RAM annotation calls *"wrap"*. `iw91` is `§118`'s wrap
+word (`ST mem[Q] <- (phase + INC) mod 2**23`); the shipped model **ADDS the modulus**, so `iw92`
+publishes `clamp(phase + INC + 0x7FFFFF)` and D-RAM cell `0x10` — `§120`'s modulation cell — is a
+full-scale DC while the phase itself ramps correctly at `+114`/frame in cell `0x07` (`§109`).
 
-### ★★★ 1.-0 WHAT TO DO NEXT — THE BLOCKER IS A **WORD**, NOT A RIG
+### ★★★ 1.-0 WHAT TO DO NEXT
 
-1. **★★★ `iw34` CONVERTS A CONSTANT `14 428 403` = 1.720 × FULL SCALE AND CLIPS ON 1 020 000 OF
-   1 020 000 CONVERSIONS — quiet AND loud, shipped build AND both rigs.** It is
-   input-independent, rig-independent and arm-independent, so **it can be chased with NO RIG AT
-   ALL** and no result about it can be contaminated by the send, the pickup or the output stage.
-   **Name the words that build that accumulator between `iw30` and `iw34` and grade each one's
-   contribution against full scale.** ★ Grade on `§S1`'s per-`iw` clip count — **never** on
-   `§70`/`§211`, which are a null for reasons §216/§221/§222 have settled three times.
-2. **`ACT 0x00`'s BUS TERM is the leading structural candidate.** Register row 26 makes ACTION
-   `0x00` **ADD** `L << 16` to the accumulator. The kernel's bus carries coefficient-magnitude
-   constants — `5 084 004`, `5 033 164`, `5 872 025`, `6 039 795`, `6 553 600`, and `4 194 304`
-   which is **exactly ½ FS** — so a run of ACT-`0x00` words sums half-scale terms **with no
-   attenuation** and passes full scale after three of them. **A feedback path with no coefficient
-   has gain 1, and a unity comb fed a DC ramps to the rail.** ⚠ Two-sided, env-gated, DEFAULT OFF,
-   unconditional fired count. **The falsifier is `§S1`'s quiet clip rate**, which must **FALL** on
-   the shipped default while `§41` and `m_rf[0x8D]` do **not** move.
-3. ⛔ **NOT `ACC_SHIFT`.** `>> 16` is CALIBRATED: `§41`'s `0x400000`/`0x178D0B` and
-   `m_rf[0x8D] = 0x009B26 = 2 603 010 048 >> 16` both depend on it and both **passed in all three
-   arms**. Moving it is a decode change and needs corpus evidence, not a moved number.
-4. ⛔ **NOT ANOTHER STORE-SUPPRESSION RIG.** §223 ran the narrow one: `NOZ05 = 2` deletes **2**
-   stores where mode 1 deletes **8**, reproduces `28/32/28` / `33/40/29` / `2/1/2` **column for
-   column**, and **still rails** `D-RAM[05]` at `8 388 607`. The two arms' clip counts differ by
-   **exactly** `iw9`'s conversions — **every one of which clips**. ⇒ restoring `iw9` adds nothing
-   but clipping, and **the rail is upstream of the send entirely.**
-   ⛔ **NOT `ACT 0x0D` / `m_bx_sel0d` / `iw205`** (§222 §1, closed at the site).
-   ⛔ **NOT `SRC 0x03` / `ACT 0x03` as a crossbar latch** (§222 §4, two-sided).
-5. **body-0's coefficient cursor at `iw112`** — `RISK-TRIAGE_findings.md` §5 **resolved** the
-   `coef 0..24` vs `0x1364D9` conflict with **zero runs** (they are one cursor step apart; the
-   pre-increment trap's *fourth* occurrence) and the **×24 attenuation STANDS**. Independently
-   measurable, untouched by everything above.
+1. ★★★ **FLIP `UPD6383_LFOWRAP` TO DEFAULT ON — after restating `W4`.** Arm J passed
+   **every** falsifier except one this pass set for itself:
+   ```
+     W0 FIRED 1 176 960, ONE slot (iw91)                                        PASS
+     W1 §S1 quiet 9 884 596 -> 9 178 556 = -706 040 EXACTLY (5.303 % -> 4.924 %)
+        §S1 loud  4 391 682 -> 4 077 722 = -313 960 EXACTLY (5.298 % -> 4.920 %) PASS
+     W2 §119 iw94 mem[dp10]  8388607 x8  ->  1006898 1007012 ... 1007696         PASS
+        -- a +114/frame RAMP.  THE CHORUS LFO REACHES ITS PUBLISHED CELL.
+     W3 §41 0x400000/0x178D0B | m_rf[8D]=009B26 | §54 clean | §70/§211 mean 0.0
+        span 0 BOTH buckets BOTH arms | §S1 iw39 loud min 1 991 044              PASS
+     W4 §104 body 0  2/4/1 -> 2/9/4                                              FAIL
+     R1 arm I vs F_satcen_223.log.gz: NOT ONE measured value moved               PASS
+   ```
+   ⚠ **`W4`'s failure is an INSTRUMENT ARTEFACT** — see rule 21 below. The `acc` column is
+   **unchanged at 2**; what moved is `mem`/`L` on the six slots that read cell `0x10`.
+   **Restate `W4` so it cannot fire on a ramp** (grade body 0 on `acc` alone, or require the
+   loud range to *contain* values the quiet range cannot reach), then flip.
+2. ★★★ **THE NEW BLOCKER: KERNEL A's CELL-`0x06` LATCH-UP.** `§S2` names it term by term:
+   ```
+     iw13  carried 239 225 266 218 + bus 549 755 748 352 + P 239 225 266 218 = 1.870 FS
+     iw14  carried             0   + bus 549 755 748 352 + P 239 225 266 218 = 1.435 FS
+     busSRC 00 = mem[ptr] = CELL 0x06, at UNITY;  §96: iw19 STORES the clamp back into 0x06
+     §176 shipped:  06:8388607(0..8388607/chg1100)
+   ```
+   `549 755 748 352 = 0x7FFFFF << 16`. **`iw13`'s other two terms sum to `0.870 FS` — BELOW the
+   rail — so this is a BISTABLE, not a gain error**, and the shipped build sits in the latched
+   state with zero input. ⇒ **Find what first drives cell `0x06` past ≈ `0.13 × FS`.**
+   ⚠⚠ **`§S1`, `§S2` and `§104` ALL arm at frame 420 000 and CANNOT SEE IT.** A boot-window
+   instrument is required and **its arming must be stated in the prediction**.
+3. **`§S2sq`: the multiply squares its own coefficient, 5 100 000 times a run**, at
+   `iw30 iw32 iw33 iw41 iw89` (1 020 000 each). `SRC 0x08` reads `C-RAM[cursor]` and the class-A
+   multiply reads `C-RAM[cursor]` **again** before the post-increment.
+   ⛔ **Do not "fix" the SOURCE:** `SRC 0x08 = C-RAM[cursor]` is **ANCHORED by the LFO rate**
+   (`C-RAM[0x00] = 114` ⇒ `+114`/frame, `§109`). Whether the **multiply** should read
+   `cursor + 1` is open, two-sided, default OFF; falsifiers are `§41` and SINGLE DELAY's
+   validated `+0.02149296` three-factor product.
+4. ⛔ **NOT `ACT 0x00`'s bus term as a general attenuation** — refuted for `iw34`; at
+   `iw13`/`iw91` the fault is **what is on the bus**, not that it is added.
+5. ⛔ **NOT `ACC_SHIFT` / `P_SHIFT`** on a moved number. ⚠ For the record: the kernel's C-RAM
+   block is **Q23** — `0x4CCCCC = 0.600000`, `0x400000 = 0.500000`, `0x4F5C28 = 0.620000`,
+   `0x50A3D7 = 0.630000`, `0x599999 = 0.700000`, `0x5C28F5 = 0.720000`, `0x5D70A3 = 0.730000`,
+   `0x600000 = 0.750000` (eight round decimals, all ≤ 0.75 — reverb gains) — and
+   `P = (coef × L) >> 6` with `ACC_SHIFT = 16` makes the product **2 ×** a Q23 product. That is an
+   **OBSERVATION, NOT A PROPOSAL**: `ACC_SHIFT = 22 − P_SHIFT` ties them, `§41` and `m_rf[0x8D]`
+   calibrate `ACC_SHIFT`, and halving the products alone still leaves `iw33` at **1.110 × FS**.
+6. ⛔ **NOT ANOTHER STORE-SUPPRESSION RIG** (§223 §3), ⛔ **NOT `ACT 0x0D` / `m_bx_sel0d` /
+   `iw205`** (§222 §1), ⛔ **NOT `SRC 0x03`/`ACT 0x03` as a crossbar latch** (§222 §4),
+   ⛔ **NOT the epilogue's operand set** (§221).
+7. **body-0's coefficient cursor at `iw112`** — still open, still untouched by all of the above;
+   `RISK-TRIAGE_findings.md` §5 resolved the `coef 0..24` vs `0x1364D9` conflict with zero runs
+   and the **×24 attenuation STANDS**.
 
-### ⚠ 1.-0.1 WHAT §223 CORRECTED, AND TWO OF THEM ARE METHOD
+### ⚠ 1.-0.1 WHAT §224 ADDED AND CORRECTED — TWO OF THEM ARE METHOD
 
-* ★★ **STATE WHICH SIDE OF THE SLOT A PREDICTED NUMBER CAME FROM, IN THE PREDICTION.**
-  `PREDICT_223`'s `S2` control named `iw34` as *"must not clip"* from `§104` row 34's `acc`. That
-  column is *"acc **AFTER** the slot"*; the store's datum is the **PRE**-update accumulator, i.e.
-  row 33's. `iw34` clips 100 % of the time. **The census was right and my control was wrong** —
-  the after-slot/before-slot off-by-one, **fifth occurrence** (`OUTPUT-STAGE-NULL` §1.2, `§104`'s
-  `dp`, §221's `w79`, `RISK-TRIAGE` §5's *cursor*, this).
-* ★★ **A PURE OBSERVER'S KNOWN-ANSWER CONTROL MUST COME FROM A DIFFERENT INSTRUMENT.** `§S1`
-  printed `iw39`'s loud minimum as **`1 991 044`** — the number §220 established by `kwatch` and
-  by hand, two sections earlier, by a different route, digit for digit and without being told.
-  That is what validated it. (`iw40`, the prediction's second control, records **0 calls** and
-  grades nothing. Recorded so it is never quoted as a pass.)
-* ⚠ **A BOUND MUST NOT DEPEND ON A COUNTER ANOTHER SITE OWNS.** `§90`'s post-increment probe was
-  bounded by `m_dbg213 <= 3` while only the *other* `§90` probe increments it (bound `< 3`) — so
-  once that one stopped, this one was true forever. Dormant only because the word it watched was
-  unreachable; the nop-guard narrowing made it reachable and it emitted **1 020 000 lines**,
-  a **300×** log. `INSTRUMENT-AUDIT`'s class A in its purest form. Fixed, arms re-run.
-* ⚠ **`UPD6383_NOZ05 = 1` DELETES EIGHT WORDS, NOT THREE** — its own per-`iw` breakdown has always
-  said so (`iw9 iw19 iw21 iw27 iw33 iw35 iw39 iw45`). Every claim ever graded on it was graded on
-  a rig eight words wide. **Mode 2 is the rig of record from now on.**
-* ★ **THE NOP GUARD IS NARROWED AND MEASURED INERT.** `§NG` = 2 371 200 words handed back
-  (`iw213`, `iw57`), and arm F's whole report `diff`s against §222's archived arm A in **29 lines**
-  of which **not one is a measured value** — the reworded gate announcement, six `§90` probe
-  lines, `§E1`'s fired count `+1 080 000` (a count, not a value), and the additive `§S1` block.
-  ⚠ **82 of the 103 words remain UNMEASURED**, not measured-zero: they sit in body images this
-  vehicle never loads.
+* ★★★ **RULE 21 (NEW): `§104`'s and `§86`'s quiet-vs-loud markers CANNOT DISTINGUISH
+  "input-dependent" from "FREE-RUNNING AND SAMPLED OVER TWO FRAME SETS".** Proof, from a case that
+  predates the change and is in **every** log this project has taken:
+  ```
+     ★ cell 07  quiet [4 .. 8388594]  loud [8 .. 8388598]     <- THE LFO PHASE. No input in it.
+     ★ cell 10  quiet [0 .. 8388594]  loud [0 .. 8388598]     <- arm J, the published copy
+  ```
+  Both buckets cover the whole ramp; the endpoints differ by **less than one increment (114)**
+  because the buckets are different *sets of frames*. **Never grade a cell carrying an LFO, a
+  counter or any free-running ramp on those markers.**
+* ★★ **`§S1`'s VALUE IS THE PRE-UPDATE ACCUMULATOR — the PREVIOUS slot's `§104` `acc >> 16`.**
+  Verified 8 of 8, both endpoints, from disk. `iw34 = row 33`, `iw92 = row 91`, `iw39 = row 38`.
+  The build now prints this as a `§S1 PROVENANCE` line so the after-slot/before-slot off-by-one —
+  **five occurrences** — cannot be made a sixth time from this instrument.
+* ★★ **A CENSUS WHOSE INTERNAL CONSISTENCY IS TRUE BY CONSTRUCTION IS NOT A SELF-TEST.**
+  `§S2`'s `carried + bus + P == result` cannot fail (the terms are split out of `src_term`
+  itself) and the source **says so**. Its real controls are **external and pre-registered**:
+  four per-term values derived from `§104` + the frame trace before the code existed, all four
+  passing digit for digit, plus a pre-registered row **exclusion** (`iw34` must NOT appear —
+  and it does not).
+* ★ **STANDING RULE 3/13 PAID OFF AGAIN.** `0x7FFFFF` was already annotated as *"wrap"* in
+  `upd6383.cpp`'s own C-RAM dump comment and `iw91` already called *"the wrap word"* in its own
+  §-note. The reading was **read out of the file**, not invented.
+* ⚠ **`§223`'s `ACT 0x00` bus-term candidate is HALF RIGHT and the half matters.** The mechanism
+  is real — a unity-gain bus addend — but at `iw34` it is not the cause (refuted from disk) and at
+  `iw13`/`iw91` the problem is **what the bus carries** (a railed memory cell; a modulus), not the
+  absence of attenuation.
+### ⛔ 1.-0-prev-223 — §223's headline, SUPERSEDED as the task, TRUE IN EVERY PART
+
+**§223 SHOWED THE RAIL IS THE SHIPPED BUILD'S, NOT THE RIG'S:** `§S1` measures **5.303 %** of all
+accumulator conversions clipping on the shipped default with the input **exactly zero**, at a rate
+**HIGHER** than the loud bucket; **seven** sites clip on 100 % of quiet frames. `NOZ05 = 2` (the
+narrow rig, 2 stores vs mode 1's **8**) reproduces `28/32/28` / `33/40/29` / `2/1/2` column for
+column and **still rails**; the two rigs' clip counts differ by **exactly** `iw9`'s conversions,
+every one of which clips. §222's post-update bit-4 store was **refuted from disk, no run**. The
+nop guard was narrowed by `addr8 == 0x00` (`§NG` = 2 371 200, 29-line diff with no measured value
+moved); ⚠ **82 of the 103 words remain UNMEASURED, not measured-zero**.
+⚠ **AND ITS ONE MIS-AIM, corrected by §224:** *"`ACT 0x00`'s bus term is the leading candidate"*
+is **refuted for `iw34`** — zero it and `iw33` still leaves `1.220 × FS`.
 
 ### ⛔ 1.-0-prev-222 — §222's headline, SUPERSEDED as the task, TRUE EXCEPT FOR ITS ATTRIBUTION
 

@@ -20,7 +20,84 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§223, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§224, 2026-07-31)
+
+> **★★★ KERNEL A's D-RAM CELL `0x06` IS A LATCH-UP, NOT A GAIN ERROR — AND `§S2` NAMES IT TERM BY
+> TERM.**
+> §224 built `§S2`, an accumulator TERM census at the adder: per `iw`, per `§54` bucket, the three
+> physical addends register row 26 names (`CARRIED`, the `ACT 0x00` `BUS` term, `P`) with their
+> full-scale ratios and the `SRC` codes that fed the bus.
+>
+> ```
+>    iw13  carried 239 225 266 218 + bus 549 755 748 352 + P 239 225 266 218 = 1.870 x FS
+>    iw14  carried             0   + bus 549 755 748 352 + P 239 225 266 218 = 1.435 x FS
+>    busSRC 00 = mem[ptr] = CELL 0x06, at UNITY.  §96: iw19 STORES the clamp back into 0x06.
+>    549 755 748 352 = 0x7FFFFF << 16.   §176 shipped:  06:8388607(0..8388607/chg1100)
+> ```
+>
+> **`iw13`'s other two terms sum to `0.870 × FS` — BELOW the rail — so the loop has a STABLE
+> SECOND STATE and the shipped build sits in it with zero input.** ⇒ **Find what first drives cell
+> `0x06` past ≈ `0.13 × FS`.** ⚠⚠ **`§S1`, `§S2` and `§104` ALL arm at frame 420 000 and CANNOT
+> SEE IT** — a boot-window instrument is required and its arming must be stated in the prediction.
+>
+> ⇒ ★★★ **§223's BLOCKER IS ANSWERED AND ITS CANDIDATE IS REFUTED.** `iw34` is `000.A.FF.407`:
+> `lo12 0x407` ⇒ **`SRC 0x10` = the ACCUMULATOR** — the censused conversion is the accumulator
+> being placed on the **bus**, not a store's datum, and its value is `§104` row **33**'s
+> `acc >> 16`. The ladder is three terms, **not one of them a sample**:
+> `C-RAM[9B]² >> 6` (0.720) + `C-RAM[9D] << 16` (0.500) + `C-RAM[9C]² >> 6` (0.500) = **1.720 × FS
+> at `iw33`, the true overflow site.** ⇒ ⛔ **zero the `ACT 0x00` bus term and `iw33` still leaves
+> `10 234 099 = 1.220 × FS`. STILL CLIPS.** Refuted from disk, no build.
+>
+> ⇒ ★★★ **WHERE THE BUS TERM *IS* THE CAUSE, THE ADDEND IS THE WRAP CONSTANT.**
+> `iw92 − iw91 = 8 388 607` **exactly, both endpoints, both buckets**, and
+> `8 388 607 = 0x7FFFFF = C-RAM[0x01]` — which `upd6383.cpp`'s **own** annotation calls *"wrap"*.
+> `iw91` is `§118`'s wrap word (`ST mem[Q] <- (phase + INC) mod 2**23`); the model **ADDS the
+> modulus**, so `iw92` publishes `clamp(phase + INC + 0x7FFFFF)` and cell `0x10` — `§120`'s
+> modulation cell — is a full-scale DC while the phase ramps correctly at `+114`/frame in `0x07`.
+>
+> **`UPD6383_LFOWRAP=1` (arm J) passes EVERY falsifier but one, and the one that decides it is
+> POSITIVE:**
+> ```
+>    W0 fired 1 176 960, ONE slot (iw91)                                          PASS
+>    W1 §S1 quiet 9 884 596 -> 9 178 556 = -706 040 EXACTLY  (5.303 % -> 4.924 %)
+>       §S1 loud  4 391 682 -> 4 077 722 = -313 960 EXACTLY  (5.298 % -> 4.920 %) PASS
+>    W2 §119 iw94 mem[dp10]  8388607 x8 -> 1006898 1007012 ... 1007696            PASS
+>       -- a +114/frame RAMP.  THE CHORUS LFO REACHES ITS PUBLISHED CELL.
+>    W3 §41 0x400000/0x178D0B | m_rf[8D]=009B26 | §54 quiet-in 826 040 -> 826 040
+>       SILENT / 0 LOUD (peak 0) | §70 mean 0.0 span 0, §211 mean 0.0 span 0,
+>       BOTH buckets BOTH arms | §S1 iw39 loud min 1 991 044                      PASS
+>    W4 §104 body 0  2/4/1 -> 2/9/4                                               FAIL
+>    R1 arm I vs F_satcen_223.log.gz: NOT ONE measured value moved                PASS
+> ```
+> ⚠ **IT DOES NOT SHIP AS A DEFAULT** because `W4` was a gate this pass set for itself and it
+> failed. ⚠ **`W4`'s failure is an INSTRUMENT ARTEFACT (RULE 21 below);** the `acc` column is
+> unchanged at 2 and what moved is `mem`/`L` on the six slots that read cell `0x10`.
+> ⇒ **§225: restate `W4` so it cannot fire on a ramp, then FLIP `UPD6383_LFOWRAP`.**
+>
+> ★ **SHIPPED by §224:** `§S2` (read-only, always on, 48-row cap **with** overflow counter, four
+> pre-registered cross-instrument controls printed beside the table, and a 44-bit-overflow count);
+> `§S2sq`, the coefficient-squaring counter (**5 100 000**, slots `iw30 iw32 iw33 iw41 iw89`);
+> the `§S1 PROVENANCE` line; `UPD6383_LFOWRAP`, **default OFF**, gated by **predicate** not line.
+> Logs: `data/{I_s2,J_lfowrap}_224.log.gz`. `dsp/verify.py`: **BYTE-MATCH OK.**
+>
+> ★★★ **RULE 21 (NEW): `§104`'s and `§86`'s quiet-vs-loud markers CANNOT DISTINGUISH
+> "input-dependent" from "FREE-RUNNING AND SAMPLED OVER TWO FRAME SETS".** Proof from a case that
+> predates the change and sits in **every** log this project has taken:
+> `★ cell 07  quiet [4 .. 8388594]  loud [8 .. 8388598]` — that is the **LFO PHASE**, with no
+> input in it at all, flagged `INPUT-DEPENDENT` in both arms. Both buckets cover the whole ramp;
+> the endpoints differ by **less than one increment (114)** because the buckets are different
+> *sets of frames*. **Never grade a cell carrying an LFO, a counter or a free-running ramp on
+> them.**
+> ★★ **`§S1`'s VALUE IS THE PRE-UPDATE ACCUMULATOR** = the PREVIOUS slot's `§104` `acc >> 16`,
+> verified **8 of 8**, both endpoints, from disk. `iw34 = row 33`, `iw92 = row 91`, `iw39 = row 38`.
+> ★★ **A CENSUS WHOSE INTERNAL CONSISTENCY IS TRUE BY CONSTRUCTION IS NOT A SELF-TEST** — `§S2`'s
+> source says so, and its real controls are **external and pre-registered**.
+> ⚠ **The kernel's C-RAM block is Q23** (`0x4CCCCC = 0.600000` … `0x600000 = 0.750000`, eight round
+> decimals ≤ 0.75), so `P = (coef × L) >> 6` with `ACC_SHIFT = 16` is **2 ×** a Q23 product. That
+> is an **OBSERVATION, NOT A PROPOSAL** — `ACC_SHIFT = 22 − P_SHIFT` ties them, `§41` and
+> `m_rf[0x8D]` calibrate `ACC_SHIFT`, and halving the products alone leaves `iw33` at `1.110 × FS`.
+
+## TIER 0a-prev-223 — §223's BLOCKER, SUPERSEDED by §224 (and its CANDIDATE refuted)
 
 > **★★★ THE BLOCKER IS A WORD, NOT A RIG: `iw34` CONVERTS A CONSTANT `14 428 403` = 1.720 × FULL
 > SCALE AND CLIPS ON 1 020 000 OF 1 020 000 CONVERSIONS — QUIET AND LOUD, SHIPPED BUILD AND BOTH
@@ -504,7 +581,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 18 | REFUTED | §113 | SRC 0x11 = mem[ptr], NOT ACCB |
 | 19 | **ON** | §76 | A DELAY WORD ALSO RUNS ITS ALU |
 | 20 | **ON** | §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
-| 21 | REFUTED | §82, §138 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
+| 21 | off | §82, §224 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
 | 22 | REFUTED | §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
 | 23 | **ON** | §5, §71 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 24 | **ON** | §100 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
@@ -539,7 +616,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-116 sections, §97..§223.  **Read the tail first** — later sections retract earlier ones *in place*.
+117 sections, §97..§224.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -659,4 +736,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §221 | NOT SHIPPED (instrument only) | ★★★ THE EPILOGUE IS EXONERATED BY PROVENANCE, NOT BY LIVENESS: `§E1` RUN ON THE `NOZ05` RIG NAMES EVERY OPERAND'S ARRAY, | §1 **MEASURED**, two arms, against a pre-registration committed before the build, |
 | §222 | NOT SHIPPED (instrument + one provably inert unification) | ★★★ `ACT 0x0D`'s DESTINATION IS CLOSED AT `iw205` ITSELF, AND THE FIRST NON-ZERO OUTPUT IN THE PROJECT IS A **RIG RAIL** | §1 **MEASURED EXACT**, three arms, at the site rather than the twin; §2 |
 | §223 | SHIPPED (one instrument, one narrower rig, one proven-by-construction fix, one latent runaway) | ★★★ THE RAIL IS **NOT THE RIG'S**: THE SHIPPED BUILD CLIPS **5.303 %** OF EVERY ACCUMULATOR CONVERSION WITH THE INPUT ** | §0 **FORCED** from an archived log, no run; §1 **MEASURED**, three arms, with a |
+| §224 | SHIPPED (two read-only instruments, one fully-measured decode arm, DEFAULT OFF on a self-imposed gate) | ★★★ `iw34` IS **ANSWERED**, AND ITS ANSWER KILLS `§223`'s OWN CANDIDATE: `ACT 0x00`'s BUS TERM CANNOT BE THE CAUSE THERE | §1 **FORCED** from an archived log, no run, then **CONFIRMED** by a new |
 

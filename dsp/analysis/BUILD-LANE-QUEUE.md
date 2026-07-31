@@ -12,6 +12,9 @@ supersede items 4 and 5. **Check the tail before starting anything here.**
 **⇒ §223 CONSUMED items 1, 4 and 6, and VOIDED item 3's vehicle assumption.** See the per-item
 banners below and `SPECULATIVE-APPLIED-REGISTER.md` §223.
 
+**⇒ §224 ADDED item 7 (the one thing ready to ship) and item 8, and PART-CONSUMED item 2** (audit
+defects 1 and 2 are now documented in the instruments themselves). See `§224`.
+
 ---
 
 ## 1. ~~Narrow the nop guard~~ — ✅ **SHIPPED by §223**
@@ -158,6 +161,41 @@ later as an unexplained result. Handed to the lane by the pass that found it.
 
 ---
 
+## 7. ★★★ FLIP `UPD6383_LFOWRAP` TO DEFAULT ON — **fully measured, one gate left**
+
+**Grade: MEASURED, two arms, every falsifier but one passing.** Source: `§224` (`I_s2_224.log.gz`
+/ `J_lfowrap_224.log.gz`).
+
+`iw91` — `§118`'s wrap word — **ADDS** its `SRC 0x08` operand, and that operand is
+`C-RAM[0x01] = 0x7FFFFF`, the constant `upd6383.cpp`'s own C-RAM annotation calls **"wrap"**.
+Consequence, measured: `iw92` publishes `clamp(phase + INC + 0x7FFFFF)` and D-RAM cell `0x10`
+(`§120`'s modulation cell) is a full-scale DC. With the arm on it becomes a `+114`/frame ramp
+(`§119`: `8388607 ×8` → `1006898 … 1007696`) and `§S1`'s quiet clip rate falls `5.303 % → 4.924 %`
+by **exactly** `iw92`'s 706 040 conversions.
+
+⚠ **THE ONE GATE LEFT:** `W4` (body 0's `§104` tally, `2/4/1 → 2/9/4`) failed, and §224 §4 shows
+the failure is **RULE 21** — the marker cannot tell a free-running ramp from an input-dependent
+cell, and it has been mis-flagging cell `0x07` (the LFO phase) in **every log ever taken**.
+**Restate `W4`** — grade body 0 on the `acc` column alone, or require the loud range to *contain*
+values the quiet range cannot reach — **then flip.** No other change is needed; the code is
+already in the tree, env-gated, with a fired count.
+
+---
+
+## 8. Kernel A's cell-`0x06` LATCH-UP needs a **BOOT-WINDOW** instrument
+
+**Grade: MEASURED (the latch), UNMEASURABLE with what exists (its cause).** Source: `§224` §2.
+
+`§S2` shows `iw13`/`iw14` taking `mem[0x06]` onto the `ACT 0x00` bus **at unity** while `iw19`
+stores the clamped accumulator back into `0x06`; `iw13`'s other two terms sum to `0.870 × FS`, so
+the rail is a **stable second state**, not a gain error.
+⚠⚠ **`§S1`, `§S2` and `§104` all arm at frame 420 000** (`S1_ARM_FRAME`, the audit's unified
+window) **and therefore CANNOT SEE the transition into it.** Whoever takes this must build a
+boot-window sampler and **state its arming in the prediction** — the opposite trap to §193/§204's
+("a histogram over boot measures boot"), and just as expensive.
+
+---
+
 ## STANDING CONSTRAINTS FOR WHOEVER TAKES THESE
 
 - ⚠ **`UPD6383_NOZ05` is a RIG, NOT A FIX** — and **it deletes EIGHT words, not two**
@@ -167,7 +205,18 @@ later as an unexplained result. Handed to the lane by the pass that found it.
   shipped build: `§S1` measures **5.303 %** of all accumulator conversions clipping on the shipped
   default with the input **exactly zero**, at a rate **higher** than the loud bucket.
   **The rail is upstream of the send entirely.** Treat nothing that rails as evidence.
-- ★★★ **NEW INSTRUMENT — `§S1`, the SATURATION CENSUS.** Read-only, always on, settled frames,
+- ★★★ **NEW INSTRUMENT — `§S2`, the ACCUMULATOR TERM CENSUS (§224).** Read-only, always on,
+  settled frames. Splits `acc <- CARRIED + BUS + P` per `iw` per bucket with FS ratios and the
+  `SRC` codes that fed the bus. **Quote it whenever `§S1` says something clipped** — `§S1` says
+  *whether*, `§S2` says *which term*. ⚠ Its internal `carried + bus + P == result` is **true by
+  construction**; its real controls are the four pre-registered per-term values printed beside it.
+- ★★★ **RULE 21 (§224): `§104`'s and `§86`'s quiet-vs-loud markers CANNOT DISTINGUISH
+  "input-dependent" from "free-running and sampled over two frame sets".** Cell `0x07`, the LFO
+  phase, has been flagged `INPUT-DEPENDENT` in every log ever taken and has no input in it.
+  **Never grade a cell carrying an LFO, a counter or a ramp on them.**
+- ★★ **`§S1`'s value is the PRE-UPDATE accumulator** = the PREVIOUS slot's `§104` `acc >> 16`
+  (verified 8 of 8 from disk; now printed as a `§S1 PROVENANCE` line). `iw34 = row 33`.
+- ★★★ **INSTRUMENT — `§S1`, the SATURATION CENSUS.** Read-only, always on, settled frames,
   pre-clamp min/max and clip counts per `iw` per `§54` bucket, 48-row cap **with** an overflow
   counter. **Quote it beside `§54` in every future pass**: `§54` sees a DC only once it reaches the
   output; `§S1` sees the clamp that makes one.
