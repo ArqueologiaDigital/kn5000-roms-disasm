@@ -1,0 +1,123 @@
+==============================================================================
+== SELF-TEST FIRST (RULE 20).  Known answers from the register; the set
+== algebra is SYNTHETIC, so no limb is retired by a repair (§228).
+==============================================================================
+  S1 SYN identical move-sets compare equal                   PASS  (got True)
+  S2 SYN a strictly larger set is not equal                  PASS  (got False)
+  S3 SYN strict containment detected                         PASS  (got True)
+  S4 NEG SYN containment is not symmetric                    PASS  (got False)
+  E1 §228 arm B §54 quiet 734548 -> 734548 silent, peak 0    PASS  (got (734548, 734548, 0, 0))
+  E2 §228 arm A §54 quiet 826040 -> 826040 silent, peak 0    PASS  (got (826040, 826040, 0, 0))
+  E3 §227 arm N m_rf[0x8D] = 009B26                          PASS  (got 009B26)
+  E4 §227 arm Q m_rf[0x8D] HALVED to 004D93                  PASS  (got 004D93)
+  E5 NEG §227 arm O m_rf[0x8D] ABSENT                        PASS  (got ABSENT)
+  E6 §41 unmoved: arm N = arm Q = 0X400000 / 0X178D0B        PASS  (got (('0X400000', '0X178D0B'), ('0X400000', '0X178D0B')))
+  E7 §228 arms A and B share the §S1 ratios 4.924 / 4.920    PASS  (got (('4.924', '4.920'), ('4.924', '4.920')))
+  E8 §46 send SHUT on the shipped arm, OPEN on the NOZ05 rig PASS  (got (False, True))
+  E9 §225 body-0 D-I = 0/0/0 on the shipped arm              PASS  (got (0, 0, 0))
+  E10 §225 body-0 D-I = 26/28/27 on the NOZ05 rig            PASS  (got (26, 28, 27))
+  E11 §222 epilogue D-I = 22/19/9 on C_xb85_full_222         PASS  (got (22, 19, 9))
+  E12 NEG epilogue D-I = 0/0/0 on the shipped arm            PASS  (got (0, 0, 0))
+  E13 NEG §S3-era instrument absent from the pre-§225 arm A_off_220 PASS  (got None)
+  E14 EXTERNAL audit's 31 modern + §228's 2 new arms = 33    PASS  (got 33)
+  E15 EXTERNAL the legacy family is the audit's NAMED nine   PASS  (got ['bodyonly', 'demux_sweep', 'peq_flat', 'peq_rebase_bit38', 'peq_rebase_confounded', 'peq_trace_base', 'ship_10E446A39B440F', 'ship_46A39B440F', 'stale138'])
+  ---> 19 of 19 PASS
+
+==============================================================================
+== 1. THE MOVE-SETS.  Two controls that are ONE criterion move in the
+==    SAME arms.  Population: 33 modern arms.  Baseline arm: B_44100_228.log.gz
+==============================================================================
+  control     quantity                                       moved  in which arms
+  §54         §54 TRACKING (LOUD + peak, both buckets)           2  C_xb85_full_222, D_xb85_route_222
+  §70         §70 ACCA@w73 min/max, both buckets                 2  C_xb85_full_222, D_xb85_route_222
+  §211        §211 ACCB@w78 min/max, both buckets                2  C_xb85_full_222, D_xb85_route_222
+  rule19      §221 RULE 19 mean + AC span (§70 and §211)         2  C_xb85_full_222, D_xb85_route_222
+  §61         §61 presentation non-zero + peak, both units       2  C_xb85_full_222, D_xb85_route_222
+  §41         §41 level at presentation, both units              1  clean_vehicle_default
+  rf8D        m_rf[0x8D] (§160 register dump)                    4  C_xb85_full_222, D_xb85_route_222, O_227, Q_227
+  epi-D-I     §104 RULE-21 D-I, EPILOGUE (rows 60..82)           2  C_xb85_full_222, D_xb85_route_222
+  body0-DI    §104 RULE-21 D-I, body 0 (rows 84..199)           11  B_epibus_noz05_221, B_pickup_noz05_222, C_noz05_220, C_xb85_full_222, D_noz...
+  §S1         §S1 TOTALS clip RATIOS (quiet, loud)               7  F_satcen_223, G_noz05m1_223, H_noz05m2_223, I_s2_224, L_lfowrap_off_225, O_...
+  §46         §46 delay port returned non-zero (send state)     13  B_epibus_noz05_221, B_pickup_noz05_222, C_noz05_220, C_xb85_full_222, D_noz...
+
+==============================================================================
+== 2. THE COLLAPSE.  Which of these are the SAME move-set?
+==============================================================================
+  moved in  2 arms  §54 = §70 = §211 = rule19 = §61 = epi-D-I      ★★★ ONE CRITERION, counted 6 times
+  moved in  1 arms  §41                                            distinct
+  moved in  4 arms  rf8D                                           distinct
+  moved in  7 arms  §S1                                            distinct
+  moved in 11 arms  body0-DI                                       distinct
+  moved in 13 arms  §46                                            distinct
+
+  ⇒ 6 controls share the OUTPUT-STAGE NULL's move-set exactly: §54 · §70 · §211 · rule19 · §61 · epi-D-I
+    They are ONE criterion. Quoting them as a battery counts one check 6 times.
+
+==============================================================================
+== 3. IS THERE A GENUINELY INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE?
+==============================================================================
+  A second check must (a) live in the output stage and (b) have a move-set
+  that is NOT the null's.  Strict containment is the strongest form: it
+  fires everywhere the null fires AND SOMEWHERE ELSE.
+
+  control     moved     vs null   verdict
+  §41         1         disjoint  independent, disjoint
+  rf8D        4         STRICT ⊃  ★ INDEPENDENT and strictly stronger
+  body0-DI    11        STRICT ⊃  ★ INDEPENDENT and strictly stronger
+  §S1         7         disjoint  independent, disjoint
+  §46         13        STRICT ⊃  ★ INDEPENDENT and strictly stronger
+
+  ⚠ REGION MATTERS. Of the controls above, the ones that live INSIDE the
+    output stage (the epilogue, rows 60..82, and the w61 self-loop
+    accumulator it writes) are: m_rf[0x8D] and §104's epilogue D-I tally.
+    Everything else is upstream (kernel, body 0/1, the send).
+
+==============================================================================
+== 4. §54 AND §70/§211 -- MEAN AND AC SPAN, BOTH BUCKETS, EVERY ARM.
+==    ⚠ THESE ARE ONE CRITERION, NOT FOUR.  §54 arms at frame 300 000
+==    and §70/§211 at 420 000: a SHARED PREDICATE over DIFFERENT
+==    POPULATIONS.  Never compare their frame counts directly.
+==============================================================================
+  arm                            fam §54 quiet/loud (LOUD, peak)        §70 / §211  quiet mean/span | loud mean/span
+  A_48000_228                    mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  A_epibus_221                   mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  A_off_220                      mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  A_pickup_222                   mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  B_44100_228                    mod q734548->0L pk0 | l288451->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  B_epibus_noz05_221             mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  B_mirror06_220                 mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  B_pickup_noz05_222             mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  C_noz05_220                    mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  C_xb85_full_222                mod q826040->826040L pk8388607 | l313960->313960L pk2692742 A 352943168421.0/0 | 352935830162.3/329906836205   B 1212718186496.0/0 | 1212708031370.7/1207096377344
+  D_noz05_drpub_220              mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  D_xb85_route_222               mod q826040->826040L pk8388607 | l313960->313960L pk2692742 A 352943168421.0/0 | 352935830162.3/329906836205   B 1212718186496.0/0 | 1212709732642.8/1245317496832
+  E_xb85_latch_222               mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  F_satcen_223                   mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  G_noz05m1_223                  mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  H_noz05m2_223                  mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  I_s2_224                       mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  J_lfowrap_224                  mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  K_lfowrap_default_225          mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  L_lfowrap_off_225              mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  M_s3_census_225                mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  N_227                          mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  O_227                          mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  P_227                          mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  Q_227                          mod q826040->0L pk0 | l313960->0L pk0  A 0.0/0 | 0.0/0   B 0.0/0 | 0.0/0
+  bodyonly                       leg q2228067->2226759L pk-8388608 | l291193->291193L pk-1543434 -- absent --
+  clean_vehicle_default          mod q777937->0L pk0 | l314063->0L pk0  -- absent --
+  demux_sweep                    leg q2228067->762679L pk-1543434 | l291193->291193L pk1543433 -- absent --
+  drpub_A_off_217                mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  drpub_B_on_217                 mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  drpub_C_on_src0b2_217          mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  kernelA_213                    mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  outstage_211                   mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  peq_flat                       leg q1746850->329780L pk1543433 | l291085->291085L pk1543433 -- absent --
+  peq_rebase_bit38               leg q2228067->772919L pk-1543434 | l291193->291193L pk1543433 -- absent --
+  peq_rebase_confounded          leg q2228067->772918L pk-1543434 | l291193->291193L pk1543433 -- absent --
+  peq_trace_base                 leg q2228067->771739L pk1543433 | l291193->291193L pk1543433 -- absent --
+  ship_10E446A39B440F            leg q2228067->2226759L pk-8388608 | l291193->291193L pk-1543434 -- absent --
+  ship_46A39B440F                leg q2228067->772919L pk-1543434 | l291193->291193L pk1543433 -- absent --
+  src0b2_A_off_215               mod q826142->0L pk0 | l314063->0L pk0  -- absent --
+  src0b2_B_on_215                mod q826040->0L pk0 | l313960->0L pk0  -- absent --
+  stale138                       leg q2228067->2226759L pk-8388608 | l291193->291193L pk-1543434 -- absent --

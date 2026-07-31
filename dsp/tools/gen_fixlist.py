@@ -47,7 +47,11 @@ Usage:  python3 dsp/tools/gen_fixlist.py [--md] [--no-git]
 import os, re, sys, subprocess, collections
 
 MAME_REPO = '/home/fsanches/compartilhado/kn7000_mame'
-DEV       = os.path.join(MAME_REPO, 'src/devices/cpu/upd6383')
+#  ★ §229: overridable for the same reason as gen_ledger.py -- a document that
+#  calls itself DERIVED must state WHICH source it was derived from, and must
+#  not silently absorb another lane's uncommitted working-tree edits.
+DEV       = os.environ.get('UPD6383_SRC_DIR',
+                           os.path.join(MAME_REPO, 'src/devices/cpu/upd6383'))
 DSP       = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REG       = os.path.join(DSP, 'analysis', 'SPECULATIVE-APPLIED-REGISTER.md')
 

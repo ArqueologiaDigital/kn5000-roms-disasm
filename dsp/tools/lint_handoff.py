@@ -105,8 +105,26 @@ def current_clip_rates():
             want[g] = 0
         elif re.fullmatch(r'\d+', v):
             want[g] = int(v)
+    #  ★★ §229: ONLY GIT-TRACKED ARMS COUNT.  This function picks the NEWEST
+    #  matching log by mtime, so before this guard the linter's single authority
+    #  quantity -- "the current shipped-default clip rate" -- was whatever file
+    #  had most recently APPEARED in a shared directory.  On 2026-07-31 that was
+    #  `E_229.log.gz', dropped mid-pass by a concurrent lane whose device is not
+    #  in any commit; the linter graded four documents against an arm nobody
+    #  could reproduce, and said PASS.  An untracked log is not evidence.
+    #  `UPD6383_LINT_UNTRACKED=1' restores the old behaviour for a live bisect.
+    tracked = None
+    if os.environ.get('UPD6383_LINT_UNTRACKED') != '1':
+        try:
+            out = os.popen('git -C %s ls-files -- analysis/data 2>/dev/null'
+                           % os.path.join(DSP)).read().split('\n')
+            tracked = {os.path.basename(x) for x in out if x.strip()}
+        except Exception:
+            tracked = None
     best, rates, arms = None, set(), []
     for p in sorted(glob.glob(os.path.join(DATA, '*.log.gz'))):
+        if tracked is not None and os.path.basename(p) not in tracked:
+            continue                                   # untracked -> not evidence
         try:
             t = gzip.open(p, 'rt', errors='ignore').read()
         except Exception:

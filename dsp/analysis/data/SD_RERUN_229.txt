@@ -1,0 +1,104 @@
+==============================================================================
+== SELF-TEST FIRST (RULE 20).  SYNTHETIC and two-sided -- no limb depends
+==============================================================================
+  T1 synthetic (lag 1001, sample 45074) recovered      PASS  (got (1001, 45074), want (1001, 45074))
+  T1 synthetic (lag 17, sample -3) recovered           PASS  (got (17, -3), want (17, -3))
+  T1 synthetic (lag 640, sample 8388606) recovered     PASS  (got (640, 8388606), want (640, 8388606))
+  T2 NEG all-zero output -> no echo                    PASS  (got [], want [])
+  T3 NEG echo at 500 is not visible at 1001            PASS  (got [], want [])
+  T3b  ... and IS visible at 500                       PASS  (got [(500, 45074)], want [(500, 45074)])
+  T4 cascade total lag = sum of the two taps           PASS  (got 1001, want 1001)
+  T5 stage order: the SRC 0x0B write is stage 1        PASS  (got [0, 1], want [0, 1])
+  T6 head write is the one whose bus is NOT the delay return PASS  (got False, want False)
+  T7 ROM triple in Q0.23 (hand: ((c*c)>>23)*h>>23)     PASS  (got 180297, want 180297)
+  T8 predicted echo sample for amp 1<<21               PASS  (got 45074, want 45074)
+  T9 EXTERNAL p0 derived for incell 0x03 = out_run's old 0x08 PASS  (got 8, want 8)
+  T10 NEG p0 = 0 puts the head write on a cell nobody drives PASS  (got 251, want 251)
+  ---> 13 of 13 PASS
+
+==============================================================================
+== taps -- what the DESCRIPTORS say the delay must be
+==============================================================================
+   algo 9 SINGLE DELAY, 48 words, 6 delay-DRAM accesses
+
+      w0   088013000B  READ  cell  15435
+      w5   08801602D9  WRITE  cell  31871
+      w9   088012064B  READ  cell  31370
+      w28  08801602D9  WRITE  cell      0
+      w32  088012064B  READ  cell  32768
+      w46  0880160000  WRITE  cell  15935
+
+   write/read pairs with a plausible tap length:
+      write w5   cell  31871   read w9   cell  31370   ->  D =  501  ( 11.36 ms)
+      write w46  cell  15935   read w0   cell  15435   ->  D =  500  ( 11.34 ms)
+
+   ★ two taps, 500 and 501 samples -- a STEREO ~11.3 ms delay.  That is the
+   observable: an impulse must come back out of the line 500/501 samples later.
+   The third pairing (write 0 / read 32768) is the unit-0 floor against the
+   0x8000 partition line, which adjudication-round4 sect. 2 shows are MARKERS.
+
+==============================================================================
+== control -- 229's REPAIRED two-sided control (see the module docstring)
+==============================================================================
+   THE DERIVATIONS -- nothing below is written down, all of it is read
+   off the program's own words:
+
+      stage 0   write w46  cell  15935  ->  read w0   cell  15435   D =  500
+      stage 1   write w5   cell  31871  ->  read w9   cell  31370   D =  501
+      CASCADE   the stage-1 write's bus is SRC 0x0B (the delay return),
+                so it is fed by the stage-0 read  =>  total lag D = 1001
+
+      pointer at each delay word, relative to p0: w0:+0, w5:+75, w9:+75, w28:+77, w32:+77, w46:-5
+      head write is w46 at p0-5, so p0 and the input cell are ONE
+      number:  incell 0x03  =>  p0 = 0x08   (229 D1)
+
+      ROM three-factor product, in the harness's own fixed point:
+         (-1739220 * -1739220) >> 23 = 360594 ;  (that * 4194304) >> 23 = 180297  = +0.02149308
+         impulse 2097152  =>  PREDICTED echo sample = 45074
+
+   configuration                  measured                                       verdict   expected?
+   CORRECTED (dram_dir, +1)       lag 1001  sample 45074  gain +0.02149296       ★ ACCEPT  ✔
+   corrected, cursor -1           NO ECHO at lag 1001                            REJECT    ✔
+   round-6 defect: reversed       NO ECHO at lag 1001                            REJECT    ✔
+   reversed + cursor -1           NO ECHO at lag 1001                            REJECT    ✔
+   coefficients SCRAMBLED #1      lag 1001  sample 60691  gain +0.02893972       REJECT    ✔
+   coefficients SCRAMBLED #2      lag 1001  sample -32511  gain -0.01550245      REJECT    ✔
+   coefficients SCRAMBLED #3      lag 1001  sample -46019  gain -0.02194357      REJECT    ✔
+   p0 = 0 (the 229 D1 defect)     NO ECHO at lag 1001                            REJECT    ✔
+
+   ⇒ TWO-SIDED: 1 configuration ACCEPTED, 7 REJECTED, all 8 as expected
+
+   ⚠ AND ONE HONEST NEGATIVE -- the ACT-0x07 calibration limb is INERT
+      for this observable.  It is reported, not counted as a pass:
+
+      dest07 = mem   sample 45074
+      dest07 = tA    sample 45074
+      dest07 = tB    sample 45074
+      dest07 = acc   sample 45074
+      ⇒ all four IDENTICAL: moving the ANCHORED memory writer does not
+        move this observable.  dest07 is NOT a calibration for it.
+
+==============================================================================
+== value -- the ROM's three-factor product, measured (229's repair)
+==============================================================================
+   IDENTITY test, BIT-EXACT.  The old leg asked for E2/E1 in a +/-8 window
+   around 4 + k*500.  There is no feedback (so no second echo) and the echo is
+   at 1001, so it printed NO FIRST ECHO for every configuration -- baseline and
+   nulls alike.  What IS evaluable is the FIRST echo's sample against the value
+   the ROM's own coefficients predict:  45074.
+
+   configuration                      lag      sample       gain          verdict
+   BASELINE                           1001     45074        0.02149296    ★ = the ROM three-factor product
+
+   -- NULL: the ROM's own coefficients, shuffled among the same slots.
+      Note they all DO produce an echo at 1001 -- a PRESENCE test passes
+      every one of them.  Only the VALUE separates them.
+   coefficients SCRAMBLED #1          1001     60691        0.02893972    differs from the ROM product
+   coefficients SCRAMBLED #2          1001     -32511       -0.01550245   differs from the ROM product
+   coefficients SCRAMBLED #3          1001     -46019       -0.02194357   differs from the ROM product
+
+   -- ⚠ INERT LIMB, reported not counted: ACT 0x07's destination.
+   dest07 = mem                       1001     45074        0.02149296    ★ = the ROM three-factor product
+   dest07 = tA                        1001     45074        0.02149296    ★ = the ROM three-factor product
+   dest07 = tB                        1001     45074        0.02149296    ★ = the ROM three-factor product
+   dest07 = acc                       1001     45074        0.02149296    ★ = the ROM three-factor product

@@ -1,0 +1,9 @@
+log                            region    acc  n = I + FREE + UND    mem  n = I + FREE + UND    L    n = I + FREE + UND   
+C_noz05_220.log.gz             kernelA    33 =  33 +   0 +   0    40 =  35 +   5 +   0    29 =  27 +   2 +   0
+C_noz05_220.log.gz             body0      28 =  26 +   0 +   2    32 =  28 +   4 +   0    28 =  27 +   1 +   0
+C_noz05_220.log.gz             body1       2 =   2 +   0 +   0     1 =   1 +   0 +   0     2 =   2 +   0 +   0
+
+src0b2_B_on_215.log.gz         kernelA    35 =  20 +   0 +  15    32 =  24 +   5 +   3    30 =  23 +   2 +   5
+src0b2_B_on_215.log.gz         body0      28 =  17 +   0 +  11    32 =  16 +   4 +  12    28 =  15 +   1 +  12
+src0b2_B_on_215.log.gz         body1       2 =   0 +   0 +   2     1 =   0 +   0 +   1     2 =   1 +   0 +   1
+

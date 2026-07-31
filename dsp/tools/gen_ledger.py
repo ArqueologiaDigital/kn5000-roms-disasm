@@ -16,7 +16,15 @@ Tiers:
 import re, os, sys, collections
 
 DSP  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MAME = '/home/fsanches/compartilhado/kn7000_mame/src/devices/cpu/upd6383'
+#  ★ §229: the source directory is OVERRIDABLE.  Tier 1 is generated from the
+#  C++ "so it cannot drift" -- but it is generated from the WORKING TREE, so an
+#  unrelated uncommitted edit silently becomes part of a document the project
+#  labels DERIVED.  §229 hit exactly that (a concurrent, uncommitted pass had
+#  +211 lines in `upd6383.cpp' when the ledger was due).  Point this at a
+#  pristine checkout to make the derivation reproducible, and SAY which one:
+#      UPD6383_SRC_DIR=/tmp/pristine python3 tools/gen_ledger.py
+MAME = os.environ.get('UPD6383_SRC_DIR',
+                      '/home/fsanches/compartilhado/kn7000_mame/src/devices/cpu/upd6383')
 REG  = os.path.join(DSP, 'analysis', 'SPECULATIVE-APPLIED-REGISTER.md')
 HEAD = os.path.join(DSP, 'analysis', 'LEDGER-HEAD.md')
 OUT  = os.path.join(DSP, 'analysis', 'LEDGER.md')
