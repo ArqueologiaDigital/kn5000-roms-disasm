@@ -13042,3 +13042,53 @@ and **TIED** with the base-table rival; the consequence **MEASURED**, 4 of 4 arm
 a pre-registration committed before the build; the §202 re-baseline **MEASURED**; the multi-tap
 reading **INFERRED and explicitly un-scored** (the statistic is circular); the audio **UNCHANGED and
 still silent**.
+
+---
+
+## §210 — ⚠ §207 OVER-CORRECTED §202, and §209's measurement shows how far
+
+§209 shipped the per-unit ring and hit **16 of 16** on the pre-registered census. In doing so it
+measured the thing §207 had asserted, and §207 was too strong.
+
+**§207 said:** the `dsc` labels are `+1`, therefore §202's two "bit-exact" matches *"were body-1
+consumers reading body-0's block"* — i.e. both the cells and the attribution were wrong.
+
+**§209 measured:** with labels corrected and the ring off, the same machine reports `4161` at cell
+**`0x27`** and `3120` at cell **`0x2F`** — **exactly the cells §202 named.** What was wrong is
+narrower: **the `0x2F` line was body 1's**, not body 0's. CHORUS has ten consumers (`ix 0..9`) and
+`0x2F` needs `ix 10`.
+
+⇒ **§202's cell identifications were RIGHT.** One of its two lines was attributed to the wrong body.
+I took an agent's "+1 label" finding and amplified it into "the numbers were the wrong block", which
+is a stronger claim than the evidence carried — and I wrote it into the register and the handoff as
+though settled.
+
+★ The pattern is worth naming, because it is the mirror of the one this project keeps hitting:
+**over-correcting is as costly as under-correcting.** §207's framing would have sent the next pass
+looking for an error in §202's arithmetic that does not exist.
+
+### What §209 actually bought
+
+* **16 of 16** on the census, the exact sixteen values §207 §4 named, in order; the other three arms
+  score 0 of 16 and each matches its own pre-registered signature.
+* **Unit 1 has fifteen delay lines where it had none** — 7.6 ms to 780 ms.
+* The 23 040 unit-0 wraps were **localised, not explained away**: 0 in a settled frame, last at
+  frame 264 000 of 1 392 430 — the partially-uploaded-I-RAM transient.
+
+### ⚠ And what §209 recorded against itself, correctly
+
+* `age = R − W` is an **identity, not a test**, so its "7 of 15 match a ROM cell difference" carries
+  **no p-value**; only *which* cell each resolves to is informative.
+* The `PRE=0 RING=1` arm returned 1 128 908 non-zero delay reads — and it reads back **the same
+  frame's own write at zero distance**. *"It looks like progress and is not."*
+* §6.3's body-0 "written" tallies were off by one (cell `0x29` is unwritten); the value vectors were
+  right.
+
+### Unchanged
+
+`§70 ACCA min 0 max 0` on the shipped default, quiet **and** loud frames. `§48 DELAY READ CONSUMED`
+is still **0 with a non-zero datum**, so §205's downstream gate has not moved. Correct delay lines
+are not audio.
+
+Evidence grade: §209's census **MEASURED** against a pre-registration committed before the build;
+§207's over-reach **acknowledged**.
