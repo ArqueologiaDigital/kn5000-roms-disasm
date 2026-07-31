@@ -14825,3 +14825,246 @@ addendum committed before the run; §5 **MEASURED**, all four arms, including th
 window; §6 a decision — **nothing behavioural shipped, both gates DEFAULT OFF**; §8 **SPECULATIVE**,
 with the pre-update/post-update accumulator reading stated so the next pass can falsify it.
 **`dsp/verify.py`: BYTE-MATCH OK.**
+
+---
+
+## §221 — ★★★ THE EPILOGUE IS EXONERATED BY PROVENANCE, NOT BY LIVENESS: `§E1` RUN ON THE `NOZ05` RIG NAMES EVERY OPERAND'S ARRAY, INDEX AND LAST WRITER — **`0` OF `14` TRACE TO BODY 0**, AND THE WHOLE CENSUS IS **BYTE-IDENTICAL** TO THE CONTROL WHILE THE BODIES RUN ON LIVE AUDIO
+
+<!-- LEDGER-VERDICT: NOT SHIPPED (instrument only) -->
+
+Scored against `data/PREDICT_221.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@32c8818`). Two arms, one build, the §217/§220 clean vehicle (`coldnotes2.lua`,
+cold boot, isolated NVRAM **and** isolated `-cfg_directory` carrying `:DSPCFG value="3"`, `-log`,
+triad C4/E4/G4 held 21.02–27.51 s, `-seconds_to_run 30`), both **1 440 001 frames / 313 960 loud /
+726 040 quiet**:
+
+* **arm A** `data/A_epibus_221.log.gz` — `UPD6383_EPIBUS=1`, the shipped build;
+* **arm B** `data/B_epibus_noz05_221.log.gz` — `UPD6383_EPIBUS=1 UPD6383_NOZ05=1`, **the rig**.
+
+> **THE QUESTION (`OUTPUT-STAGE-NULL_findings.md` §6, `§E1`):** for every operand the output stage
+> fetches — **which array, which index, and which `iw` last wrote it?** (Standing **RULE 17**:
+> provenance, not liveness. Rule 15 is why: on a live cell every candidate reading scores 4/4.)
+>
+> **THE ANSWER, and it is a NULL of the most useful kind: the epilogue is NOT WIRED TO BODY 0 AT
+> ALL.** `F1` = **0 of 14**. `F2`'s producer is kernel-B `iw54` on **540 000 of 540 000** settled
+> frames (100.00 %), **0** body 0. `F3`'s calibration **PASSES**. And the entire 18-row census —
+> every route, every resolved index, every `L` range, all three provenance columns — is
+> **BYTE-IDENTICAL between the control and the rig**, i.e. **unchanged while body 0 runs its whole
+> ladder on live audio, body 1 too, and the delay line carries 3 494 021 non-zero reads.**
+> ⇒ ★★★ **THE EPILOGUE'S NULL IS STRUCTURAL, NOT STARVATION.** §216 is now localised: the output
+> stage does not lose the signal, **it was never connected to it.**
+
+### 1. THE CENSUS, BOTH ARMS (identical; quoted once)
+
+`m_last_l = L` is the one statement where the operand bus is final, so the hook sits there and the
+route is recorded **inside the `switch` case that ran** — never re-derived afterwards.
+
+```
+   iw  word        SRC  route[idx]                L q..q / l..l          LAST-WRITER  LAST-NONZERO  PRODUCER
+   54  080016000B  00   m_dram[m_dp][FC]          0..0 / 0..0            iw3          NONE          NONE
+   60  009218D15B  05   DEFAULT(no reading)       0..0 / 0..0            NONE         NONE          NONE
+   61  001218D05B  01   DEFAULT(no reading)       0..0 / 0..0            NONE         NONE          NONE
+   63  02A79051C3  07   m_rf[05]                  0..0 / 0..0            HOST         NONE          NONE
+   65  020018F1C1  07   m_rf[8F]                  0..0 / 0..0            iw332        NONE          NONE
+   66  000018C107  04   tempA                     0..0 / 0..0            iw65         iw53          iw53
+   68  009218C19B  06   DEFAULT(no reading)       0..0 / 0..0            NONE         NONE          NONE
+   70  02A61850C7  03   ACCA                      0..0 / 0..0            iw68         iw63          iw54
+   72  0000106087  02   m_rf[06]            4194304..  / 4194304..       iw72         iw72          HOST
+   73  0E30C00404  10   ACCA                      0..0 / 0..0            iw72         iw63          iw54
+   75  082E80F000  00   m_dram[m_dp][00]          0..0 / 0..0            iw73         NONE          NONE
+   78  0A3CD9F287  0A   DEFAULT(no reading)       0..0 / 0..0            NONE         NONE          NONE
+   79  00122FF1CE  07   m_dram[m_dp][FF]          0..0 / 0..0            iw79         NONE          NONE
+   80  01042001CE  07   m_dram[m_dp][FF]          0..0 / 0..0            iw79         NONE          NONE
+   81  0102200000  00   m_dram[m_dp][FF]          0..0 / 0..0            iw79         NONE          NONE
+  152  0880160000  00   m_dram[m_dp][FC]          0..0 / 0..0            iw3          NONE          NONE
+  153  060210E000  00   m_dram[m_dp][FC]          0..0 / 0..0            iw3          NONE          NONE
+  200  088013000B  00   m_dram[m_dp][85]          0..0 / 0..0            IN           NONE          NONE
+        (every row x540 000 evaluations, 226 040 quiet / 313 960 loud, one route each, age stable)
+```
+
+**`N0` PASS** — 18 rows, exactly as pre-registered: **14 of the 22** `iw60..81` slots reach the
+operand fetch and the **8** that do not are `w62 w64 w67 w69 w71 w74 w76 w77` (four C-format, three
+`lo12` bit-11, one class-5), plus **4 of 4** handover slots. **`N1` PASS** — 13 of the 14 epilogue
+fetches are identically `0` in both buckets; the 14th is `w72`. **`N3` PASS** — exactly four slots
+take the literal `default: m_src_unread[]++` route, once per frame each, matching
+`SRC CODES STILL READING ZERO: 0x01:1204800 0x05:1205760 0x06:1204800 0x0A:1203840`.
+
+★ **AND `§104`'s "21 of 22" IS RE-STATED CORRECTLY FOR THE FIRST TIME.** `§104` records `m_last_l`,
+a **member that survives a word which never reaches the bus**, so its `L` column has 22 rows but the
+machine performs **14** fetches. This was pre-registered (`PREDICT_221` §1.1) and confirmed. It is
+the same class of defect as the `D-RAM WRITES (nonzero/total)` counter: **a statistic that cannot
+distinguish "measured zero" from "not measured".**
+
+### 2. ★★★ `F1` — **0 OF 14**, AND THE INSTRUMENT WAS FIXED SO IT *COULD* HAVE FAILED
+
+```
+   §221 F1 : epilogue operands (iw60..81) whose provenance names BODY 0 (iw84..153):  0
+   §221 F1b: ...naming BODY 1 (iw200..332):  1   w65 <- iw332 (last-writer column)
+```
+
+`F1b` **PASSES on the pre-registered number**: `w65` reads `m_rf[0x8F]`, which body 1's **last**
+word `iw332` writes **540 000 of 540 000** settled frames — with **zero**. That is the epilogue
+reading body 1's output register and finding it empty, and it is the *only* body→epilogue link in
+the machine.
+
+★★ **THE METHOD RESULT, and it is the one worth keeping.** The first build graded `F1` on the
+**LAST-NON-ZERO writer** column alone and reported `F1b = 0` — a **FALSE ABSENCE**. `m_rf[0x8F]`
+has *no* non-zero writer, because body 1 writes it with a dead accumulator; the wiring is invisible
+in that column and plain in the last-writer one. ⇒ **a provenance census must report the last
+WRITER, the last NON-ZERO writer, and the last writer that CHANGED the value, and grade over all
+three.** Grading on one column is how "we are not connected" and "we are connected and it is zero"
+become the same answer — the exact failure this whole line of work exists to avoid.
+
+### 3. ★★ `F2` — THE PRODUCER IS `iw54`, 100.00 %, AND THE THIRD COLUMN IS WHY IT COULD BE SAID
+
+```
+   §221 F2: ACCA at w73 -- LAST-NON-ZERO writer: iw63:540000
+                        -- PRODUCER (last writer that CHANGED it): iw54:540000
+                        -- kernel B (iw50..59) 540000 of 540000 (100.00 %) | BODY 0  0
+```
+
+`OUTPUT-STAGE-NULL_findings.md` `F2` predicted the producer is **kernel-B `w54`**. The
+last-non-zero column says `iw63` — because `iw63` **re-writes the same constant `2 603 010 048`**
+and produces nothing. A single-hop "last non-zero writer" is confounded by exactly that, so the
+census gained a third column — *last writer that changed the operand to a different non-zero value*
+— and it names **`iw54`, on 540 000 of 540 000 frames.** ⇒ **`F2` PASSES, in substance and in
+number, and the letter of its prediction (`w54`) is recovered rather than fudged.**
+⚠ **ONE HOP.** Neither column traces a chain; both are stated with that limit attached.
+
+### 4. ★★★ `F3` — THE CALIBRATION PASSES, AND ONE HALF OF THE FINDINGS' `N2` IS A PRE-REGISTERED MISS
+
+```
+   §221 F3 CALIBRATION: w72  route m_rf[addr8]  idx 06  L quiet 4194304 loud 4194304  ==> PASS
+```
+
+`OUTPUT-STAGE-NULL_findings.md` §6.2 `N2` predicted `w72`'s provenance is **HOST**. Measured:
+**last writer `iw72` itself** (age **1..1** frames — `w72` re-stores the level it just read, §100's
+identity), with **HOST** correctly appearing in the **PRODUCER** column. `PREDICT_221` §3 called
+this half a miss **before the run**, from `§99 MODE-1 STORES 06:1203840` = exactly one store per
+presentation. **The value is the calibration and it passed; the provenance is an observation and it
+was refined.**
+
+### 5. ★★★ `N6` — THE RIG CHANGES **NOTHING** IN THE OUTPUT STAGE. THIS IS THE HEADLINE
+
+```
+   diff  armA §E1 census  armB §E1 census   ->  EMPTY
+   diff  armA §104 rows 54..81/152/153/200  ->  EMPTY
+   arm A  s104  acc 27 | mem 21 | L 18   body 0: 0 / 0 / 0
+   arm B  s104  acc 63 | mem 73 | L 59   body 0: 28 / 32 / 28   body 1: 2 / 1 / 2   (kernel A 33/40/29)
+   arm B  §220 NOZ05 fired 3 528 080 | iw9:1 176 015 iw35:1 176 007 iw45:1 176 003 (+55 drift)
+   arm B  §46 3 494 021 non-zero delay reads (arm A: 0) | §75 2 351 009 (arm A: 1 175 999)
+```
+
+Body 0 goes from **0/0/0 to 28/32/28**, reproducing §220 arm C digit for digit, the delay line
+fills — **and not one byte of the epilogue's operand picture moves.** Every route, every index,
+every `L` range, every provenance `iw`, every age, in all 18 rows.
+⇒ **The epilogue's operand set is DISJOINT from the signal path.** It is not starved; it is
+elsewhere. `§216` said the output stage is a null independent of its input; `§221` says **why**:
+*there is no input to be independent of.*
+
+### 6. ★★ `§E1b` — §5.1'S NEGATIVE RESULT IS NOW MEASURED, NOT ARGUED
+
+`OUTPUT-STAGE-NULL_findings.md` §5.1 argues **statically** that decoding `SRC 0x01/0x05/0x06/0x0A`
+could not help, partly from the `D-RAM WRITES (nonzero/total)` counter — **which is broken** (it
+counts visits, and tests `L`, not the cell). `§E1b` records what each gap slot **would** have read
+under all three candidate addressings, with provenance, both arms, identical:
+
+```
+   iw60 SRC 05 | m_rf[8D] 39718..39718 both buckets prov iw61 | m_dram[8D] 0..0 prov iw324
+                                                              | m_dram[m_dp=00] 0..0 prov iw79
+   iw61 SRC 01 | same three cells, same values
+   iw68 SRC 06 | m_rf[8C] 0..0 prov iw66 | m_dram[8C] 0..0 prov iw202 | m_dram[00] 0..0 prov iw79
+   iw78 SRC 0A | m_rf[9F] 0..0 prov NONE | m_dram[9F] 0..0 prov IN    | m_dram[00] 0..0 prov iw78
+```
+
+**All twelve counterfactual operands are CONSTANT in both buckets, in both arms.** `m_rf[0x8D]` is
+`39 718` — the epilogue's own accumulator constant, written by `w61`, a self-loop. ⇒ **`N5` PASS:
+the decode gap is REAL and NOT LOAD-BEARING, and that is now a measurement.**
+★ It also *adds* something §5.1 did not have: the D-RAM twins `0x8C`/`0x8D`/`0x9F` are **not
+untouched** — they are written by **body-1 words `iw324`/`iw202`** and by the **input latch**, every
+frame, **with zero**. The cells are wired; the values are empty.
+
+### 7. ★ `iw200`'s OPERAND IS `D-RAM[0x85]`, AND ITS ONLY WRITER IS THE INPUT LATCH
+
+Pre-registered in `PREDICT_221` §1.2 as a second application of the `e49da4b` pre-increment
+correction. Measured: `iw200` (body-1 entry, a delay READ) fetches `m_dram[m_dp]` with `m_dp = 0x85`
+— the cell `e49da4b` proved has **ZERO I-RAM writers** — and its last writer is **`IN`**, the
+per-frame input-latch deposit, **668 640 .. 1 208 639 frames ago**. So `0x85` is written only when
+the input window **drifts** onto it (§36's 1.69 % of frames), never in the settled window.
+⇒ **`D-RAM[0x85]` having no producer is confirmed a third time, by a third instrument.**
+★ And the same correction lands again: `w79` reads cell **`0x00`**, not `0xFF`
+(`OUTPUT-STAGE-NULL_findings.md` §2's table row is wrong); `w80`/`w81` read `0xFF`. The operand is
+fetched **before** the word's own post-increment, and `w79`'s `addr8 = 0xFF` is what *parks* the
+pointer for `w80`. **Third occurrence of this exact trap.**
+
+### 8. ★★★ STANDING RULE 19 IS NOW ENFORCED BY THE PRINTOUT
+
+```
+   §221 RULE 19 -- MEAN vs AC SPAN (a DC is |mean| >> span):
+        §70  ACCA@w73  quiet mean 0.0 span 0 | loud mean 0.0 span 0
+        §211 ACCB@w78  quiet mean 0.0 span 0 | loud mean 0.0 span 0
+   §70/§211 min == max == 0, both buckets, BOTH ARMS.  §54 VERDICT: SILENT.  §61 DO1/DO2 peak 0.
+```
+
+`OUTPUT-STAGE-NULL_findings.md` §6.5(ii) constructed, **without a run**, a `w78` pedestal of
+`79 438 ± 90` that passes standing rule 1 **and** §211's translation rule and is a DC at **−59 dB**.
+Rather than leave that as a note a future reader must remember, `§70`/`§211` now print the **mean**
+and the **AC span** beside the min/max. Read-only, always on, no behavioural change.
+**`R1` PASS: nothing in this pass produced audio, and by §216 nothing in it could have.**
+
+### 9. ⇒ WHAT SHIPS
+
+* `upd6383.cpp` / `.h` — **`UPD6383_EPIBUS`, env, DEFAULT OFF**, announced unconditionally, fired
+  count **120 960 000** printed unconditionally with the gate's state (rule 8 as §220 sharpened it).
+  Shadow provenance tables for `m_dram[256]`, `m_rf[256]`, `tempA`, `tempB`, `ACCA`, `ACCB`,
+  maintained **only while the gate is on**, with **three** columns: last writer, last non-zero
+  writer, last writer that CHANGED the value.
+* `upd6383.cpp` — **`§70`/`§211` now print MEAN and AC SPAN** (standing rule 19).
+* `dsp/tools/e1_pred.py` — the static predicate walk that produced `N0`; it is what caught the
+  truncated watch list.
+* Two logs, `data/PREDICT_221.md`, this section.
+* **No default flip. No mask bit. No decode change. `UPD6383_NOZ05` stays DEFAULT OFF** — §220 §6's
+  three reasons are untouched by anything measured here, and its cell `0x05` still rails.
+  **`dsp/verify.py`: BYTE-MATCH OK.**
+
+### 10. ★★★ THE NEXT EXPERIMENT, PRE-REGISTERED HERE
+
+`§E1`'s own decision rule (`OUTPUT-STAGE-NULL_findings.md` §6.4) says what follows from `F1` and
+`F2` both holding, and it now holds **with the bodies live**, which is strictly stronger:
+
+1. **★★★ `body-1 iw205` — `ACT 0x0D`'s DESTINATION (mask bits 42-44, currently selector 1).**
+   It kills **128 of body 1's 133 slots**, and the twelve reverbs are unit 1 (§98 §3).
+   ⚠ **`m_bx_sel0d` is FROZEN at 1** and changing it globally breaks body 0's only working pickup
+   (§e49da4b) — so any arm here must be **`iw`-scoped or unit-scoped**, two-sided, env-gated,
+   default OFF, with a fired count. ⚠ And `OUTPUT-STAGE-NULL_findings.md` §6.5(ii) names the wrong
+   number in advance: a naive fix gives `w78` a **DC of `79 438 ± 90`** that passes rules 1 and
+   §211. The rule-19 line now prints the mean and the span, so that failure is caught by the log.
+2. **body-0's coefficient cursor at `iw112` (`coef 0..24`, §52 / register row 25)** — a
+   **3 × 10⁻⁶** attenuation on the one real audio pickup, `−111 dB`.
+3. ⛔ **NOT the epilogue.** `§221` closes it: `F1 = 0`, the census is byte-identical under the rig,
+   and all twelve counterfactual operands are constant. **Any pass that proposes decoding
+   `SRC 0x01/0x05/0x06/0x0A` to make the output stage input-dependent must first explain
+   `§E1b`.**
+
+### 11. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **`§E1`, `F1`, `F2`, `F3` — the whole pre-registered experiment** | **RUN, on the rig.** `F1` = 0 of 14, `F2`'s producer `iw54` at 100.00 %, `F3` PASS. `OUTPUT-STAGE-NULL_findings.md` §5.1 is **UPHELD**, and by measurement instead of by a static argument built partly on a broken counter |
+| **"the epilogue might be starved rather than disconnected"** | ⛔ **DEAD.** Body 0 at `28/32/28`, body 1 live, 3 494 021 non-zero delay reads — and the epilogue census is **byte-identical**, all 18 rows, all three provenance columns |
+| **`OUTPUT-STAGE-NULL_findings.md` §2's "`w79` reads `m_dram[0xFF]`"** | ⛔ **CORRECTED: `w79` reads cell `0x00`.** The operand is fetched before the word's own post-increment; `w79`'s `addr8 = 0xFF` parks the pointer for `w80`. Third occurrence of this trap (`iw205`, `§104`'s `dp` column, now this) |
+| **§6.2 `N2`'s "`w72`'s provenance is HOST"** | ⚠ **HALF-MISS, pre-registered as one.** Last writer is **`iw72` itself**, age 1 frame, the §100 identity; **HOST** is the PRODUCER. The *value* calibration (`4 194 304`) passed |
+| **"21 of 22 epilogue slots fetch zero"** | ⚠ **RE-STATED: 13 of 14 FETCHES.** `§104`'s `L` column is `m_last_l`, a member that survives a word which never reaches the bus — it has 22 rows, the machine has 14 fetches |
+| **grading a provenance census on ONE column** | ⛔ **REFUTED BY ITS OWN FIRST RUN.** The last-non-zero column reported `F1b = 0` — a false absence — while the last-writer column showed `w65 <- iw332` on 540 000 of 540 000 frames. **Report all three columns and grade over all three** |
+| **`E1_SLOTS = 24`, i.e. an instrument that silently truncates its own watch list** | ⚠ Two handover rows (`iw153`, `iw200`) were dropped by a `break` and simply did not print. **Caught only because `PREDICT_221` `N0` pre-registered the ROW COUNT.** An instrument with no predicted shape cannot report its own omissions |
+| **standing rule 19 as a note** | ★ **MECHANISED.** `§70`/`§211` print MEAN and AC SPAN beside min/max, so §6.5(ii)'s `79 438 ± 90` counter-example is caught by the log and not by memory |
+
+Evidence grade: §1 **MEASURED**, two arms, against a pre-registration committed before the build,
+`N0`/`N1`/`N3` PASS; §2 **MEASURED**, with the one-column defect **FORCED** from the instrument's
+own first run and recorded as such; §3 **MEASURED**, `F2`'s letter recovered by a third column
+whose one-hop limit is stated; §4 **MEASURED**, `F3` PASS and `N2`'s provenance half a
+pre-registered miss; §5 **MEASURED** — a byte-for-byte diff of two logs; §6 **MEASURED**, replacing
+a static argument; §7 **MEASURED** and it is the third confirmation of `D-RAM[0x85]`'s missing
+producer; §8 an instrument change, read-only; §9 a decision — **nothing behavioural shipped, every
+gate DEFAULT OFF**; §10 **SPECULATIVE**, pre-registered with its named wrong number.
+**`dsp/verify.py`: BYTE-MATCH OK.**

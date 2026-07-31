@@ -1,8 +1,8 @@
 # HANDOFF — read this first
 
-**§1 rewritten 2026-07-31 by §220.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
-then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§220**, then §§215–219 backwards as
-needed. Several earlier sections are retracted *in place*; **trust the register tail over any older
+**§1 rewritten 2026-07-31 by §221.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
+then this file's §1, then `SPECULATIVE-APPLIED-REGISTER.md` **§221** and **§220**, then §§215–219
+backwards as needed. Several earlier sections are retracted *in place*; **trust the register tail over any older
 summary, including older parts of this file** — §219 found this file's own §1 to be four sections
 stale (standing rule 3, fifth occurrence), and §220 refuted a claim §219 §8 had made about its own
 null.
@@ -18,57 +18,109 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★★ §220 DECIDED THE SEND BY EXPERIMENT, AND THE SEND IS NO LONGER THE BLOCKER.
-CELL `0x05` **IS** BODY 0's INPUT PICKUP: suppress the two kernel-A stores that overwrite it
-(`iw35`, `iw45`) and body 0's `§104` columns go from `0/0/0` input-dependent slots to
-**`28/32/28` — slot for slot IDENTICAL to the §215 `SRC0B2` calibration arm** — the delay line
-fills (`§46` non-zero reads **0 → 3 494 021**, `§75` writes-with-content 1 175 999 → **2 351 009**),
-and `§70`/`§211` are **STILL `min == max == 0`**.
-⇒ ★★★ **EVERY UPSTREAM LINK IS NOW DEMONSTRABLY ALIVE AND THE OUTPUT IS STILL A HARD NULL.
-THE OUTPUT STAGE (§216) IS THE WHOLE REMAINING PROBLEM.**
+**★★★ §221 CLOSED THE EPILOGUE BY PROVENANCE. IT IS NOT STARVED — IT IS NOT CONNECTED.**
+`§E1`, the operand-provenance census, was run on the `NOZ05` rig and names, for every operand the
+output stage fetches, **which array, which index, and which `iw` last wrote it** (standing RULE 17;
+rule 15 is why liveness could never have decided it).
 
 ```
-   arm C  UPD6383_NOZ05=1   data/C_noz05_220.log.gz
-          §220 NOZ05 fired 3 528 080 | iw9:1 176 015 iw35:1 176 007 iw45:1 176 003 (+55 drift)
-          §104 iw84 mem  8 388 607 ‖ -8 388 608..8 388 607  *      (arm A: 0 ‖ 0)
-          s104 acc 63 (body0 28) | mem 73 (body0 32) | L 59 (body0 28)
-          §70/§211  min 0 max 0, quiet AND loud.  NO AUDIO -- exactly as §216 predicts
+   arm A  UPD6383_EPIBUS=1                 data/A_epibus_221.log.gz    (shipped build)
+   arm B  UPD6383_EPIBUS=1 NOZ05=1         data/B_epibus_noz05_221.log.gz  (THE RIG)
+
+   §221 F1 : epilogue operands (iw60..81) tracing to BODY 0 (iw84..153):  0 of 14
+   §221 F1b: ...tracing to BODY 1:  1  -- w65 <- iw332 via m_rf[0x8F], 540 000/540 000, VALUE ZERO
+   §221 F2 : ACCA at w73, PRODUCER = kernel-B iw54 on 540 000 of 540 000 (100.00 %), BODY 0 = 0
+   §221 F3 : CALIBRATION PASS -- w72 resolves to m_rf[06] = 4 194 304 in both buckets
+   diff(armA §E1 census, armB §E1 census) = EMPTY   <- and THIS is the headline
+   arm B  s104 body 0: 28 / 32 / 28  (arm A: 0 / 0 / 0) | §46 3 494 021 nz reads | §75 2 351 009
+   BOTH   §70/§211  min 0 max 0, MEAN 0.0, AC SPAN 0, quiet AND loud
 ```
 
+⇒ ★★★ **BODY 0 RUNS ITS WHOLE LADDER ON LIVE AUDIO AND NOT ONE BYTE OF THE EPILOGUE'S OPERAND
+PICTURE MOVES.** Every route, every index, every `L` range, every provenance `iw`, every age, in
+all 18 rows. **The epilogue's operand set is DISJOINT from the signal path.** §216 said the output
+stage is a null independent of its input; §221 says why — **there is no input to be independent
+of.**
+
+### ★★★ 1.-0 WHAT TO DO NEXT — AND IT IS NO LONGER "THE OUTPUT STAGE" IN GENERAL
+
+1. **★★★ `body-1 iw205` — `ACT 0x0D`'s DESTINATION (mask bits 42-44, currently selector 1).**
+   It kills **128 of body 1's 133 slots**, and the twelve reverbs are unit 1 (§98 §3).
+   ⚠⚠ **`m_bx_sel0d` is FROZEN at 1** — MEASURED exact on the unit-0 twin `iw85`, and it is
+   **global**, so changing it breaks body 0's only working pickup and the `79 438 ± 90` DC that
+   defeats rule 1 **IS that regression**. Any arm here must be **`iw`-scoped or unit-scoped**,
+   two-sided, env-gated, DEFAULT OFF, with an unconditional fired count.
+   ⚠ **The wrong number is already named**: `OUTPUT-STAGE-NULL_findings.md` §6.5(ii) predicts a
+   naive fix gives `w78` a DC of **`79 438 ± 90`** (−59 dB) that passes standing rule 1 **and**
+   §211's translation rule. **§221 now prints MEAN and AC SPAN on `§70`/`§211`**, so grade on those.
+2. **body-0's COEFFICIENT CURSOR at `iw112`** — `§175 PER-SITE 0202A071D5` reports `coef 0..24`
+   against a 24-bit scale: a **3 × 10⁻⁶** attenuation (**−111 dB**) on the ONE real audio pickup.
+   §52 / register row 25. This is the second-order half of the same problem and it is measurable.
+3. ⛔ **NOT THE EPILOGUE, AND NOT ITS DECODE GAP.** `§221 §E1b` measured what
+   `SRC 0x01/0x05/0x06/0x0A` **would** have read under all three candidate addressings: **twelve
+   operands, all CONSTANT in both buckets, in both arms**, `m_rf[0x8D] = 39 718` being the
+   epilogue's own accumulator in a self-loop. Any proposal to decode those four sources must
+   explain `§E1b` first.
+4. **The send's residual question is unchanged and still open** — see §1.-0-prev-220 below.
+   `UPD6383_NOZ05` remains **THE RIG** for any output-stage work: it is the only arm in which the
+   presentation stage is fed on both units without touching a `SRC` decode. **It is not a fix.**
+
+### ⚠ 1.-0.1 WHAT §221 CORRECTED, AND TWO OF THEM ARE METHOD
+
+* ⛔ ~~"21 of 22 epilogue slots fetch `L = 0`"~~ — **13 of 14 FETCHES.** `§104`'s `L` column is
+  `m_last_l`, a **member that survives a word which never reaches the bus**; it has 22 rows and the
+  machine performs **14** fetches (8 slots return early: 4 C-format, 3 `lo12` bit-11, 1 class-5).
+* ⛔ ~~`OUTPUT-STAGE-NULL_findings.md` §2: "`w79` reads `m_dram[0xFF]`"~~ — **`w79` reads cell
+  `0x00`.** The operand is fetched **before** the word's own post-increment and `w79`'s
+  `addr8 = 0xFF` is what *parks* the pointer for `w80`. **Third occurrence of this exact trap**
+  (`iw205` → `e49da4b`, `§104`'s `dp` column, now this). **Check it on every new operand claim.**
+* ⚠ ~~§6.2 `N2`: "`w72`'s provenance is HOST"~~ — last writer is **`iw72` itself**, age 1 frame
+  (§100's identity); **HOST** is the PRODUCER. Pre-registered as a miss before the run.
+* ★★ **A PROVENANCE CENSUS MUST REPORT THREE COLUMNS AND GRADE OVER ALL THREE.** §221's first
+  build graded `F1` on the *last-non-zero writer* alone and reported `F1b = 0` — **a FALSE
+  ABSENCE**: `m_rf[0x8F]` has no non-zero writer because body 1 writes it with a dead accumulator,
+  so the link `w65 <- iw332` (540 000/540 000) was invisible. **last WRITER / last NON-ZERO writer /
+  last writer that CHANGED the value.** One column makes "not connected" and "connected and zero"
+  the same answer.
+* ★ **A PRE-REGISTERED ROW COUNT CATCHES A TRUNCATED INSTRUMENT.** `E1_SLOTS = 24` against a
+  26-entry watch list silently dropped `iw153` and `iw200`; nothing in the log said so. It was
+  caught only because `PREDICT_221` `N0` predicted **18 rows**. **Predict the SHAPE of the output,
+  not only its values.**
+* ★ **STANDING RULE 19 IS NOW IN THE PRINTOUT**, not in a note: `§70`/`§211` emit **mean** and
+  **AC span** beside min/max.
+
+### ⛔ 1.-0-prev-220 — §220's headline, SUPERSEDED as the task, TRUE IN EVERY PART
+
+**§220 DECIDED THE SEND BY EXPERIMENT. CELL `0x05` **IS** BODY 0's INPUT PICKUP:** suppress the two
+kernel-A stores that overwrite it (`iw35`, `iw45`) and body 0's `§104` columns go from `0/0/0`
+input-dependent slots to **`28/32/28` — slot for slot IDENTICAL to the §215 `SRC0B2` calibration
+arm** — the delay line fills (`§46` non-zero reads **0 → 3 494 021**, `§75` writes-with-content
+1 175 999 → **2 351 009**), and `§70`/`§211` are **STILL `min == max == 0`**.
 ⛔ **AND MASK BIT 26 IS DEAD-END 30.** It **fired 5 881 351 times** (5 per kernel-A pass, exactly as
 predicted from the words: `iw19/21/27/33/39`, and *not* `iw72`, whose mode is 1) and moved `iw84`
 **not at all** — every mirror site is upstream of `iw45` — while making kernel A **strictly worse**
 (`acc 27→22, mem 21→10, L 18→12`) through a cross-frame path via cell `0x06`. **Never flip it.**
-⚠ §219 §8's own reading — *"a null would mean the gate never fired"* — is **WRONG**, and §220
-pre-registered it as wrong before running.
+⚠ §219 §8's own reading — *"a null would mean the gate never fired"* — is **WRONG**.
 
-### ★★★ 1.-0 WHAT TO DO NEXT
+★ **THE SEND'S REMAINING QUESTION IS THE STORE'S DATUM, NOT ITS ADDRESS.** Why does the kernel
+write `0x05` four times a frame — `iw9` (constant `5 084 004`), `iw11` (**the real deposit**),
+`iw35` (constant `4 194 304`), `iw45` (`0`)? The pointer walk that lands on `0x05` is deliberate
+(`iw32`: `dp 07→06`, `iw34`: `dp 06→05`), so *"the pointer is one cell low"* is not available.
+★ **The live candidate:** the bit-4 store writes the **PRE-update** accumulator (verified —
+`iw39` stores `acc_to_datum(130 485 107 904) = 1 991 044`, `iw38`'s post-value). At `iw35` the
+**POST-update** accumulator is `908 714 800 127 ‖ 227 691 099 135..1 125 285 262 335`, **INPUT
+DEPENDENT** — so a post-update store would make `iw35` DEPOSIT audio instead of destroying it.
+⚠ `iw45`'s post-value is still the constant `538 760 587 509`, so this does not finish the job
+alone. **Two-sided arm, default OFF, fired count. Do not adopt it on the model.**
+⛔ **CLOSED as a candidate:** `§109`'s CO-EQUAL bit-4 store gate (mask bit 29, `b7 && f31 != 2`).
+**Neither `iw35` nor `iw45` carries bit 7**, so `guard7_would_refuse()` is false under *both*
+readings.
 
-1. **★★★ THE OUTPUT STAGE, AND IT IS NOW THE ONLY THING LEFT.** Nothing connects body 0's
-   accumulator to `w73`/`w78`. `UPD6383_NOZ05=1` is **the standing rig**: the only arm in which the
-   presentation stage is fed on both units without touching a `SRC` decode. Work it *with the gate
-   on*, so a fix is not masked by a zero input. ⚠ Grade with `§70`/`§211` **min vs max** and a
-   no-stimulus window; two "IC311 outputs audio" claims have already been retracted.
-2. **★ THE SEND'S REMAINING QUESTION IS THE STORE'S DATUM, NOT ITS ADDRESS.** Why does the kernel
-   write `0x05` four times a frame — `iw9` (constant `5 084 004`), `iw11` (**the real deposit**),
-   `iw35` (constant `4 194 304`), `iw45` (`0`)? The pointer walk that lands on `0x05` is deliberate
-   (`iw32`: `dp 07→06`, `iw34`: `dp 06→05`), so *"the pointer is one cell low"* is not available.
-   ★ **The live candidate:** the bit-4 store writes the **PRE-update** accumulator (verified —
-   `iw39` stores `acc_to_datum(130 485 107 904) = 1 991 044`, `iw38`'s post-value). At `iw35` the
-   **POST-update** accumulator is `908 714 800 127 ‖ 227 691 099 135..1 125 285 262 335`, **INPUT
-   DEPENDENT** — so a post-update store would make `iw35` DEPOSIT audio instead of destroying it.
-   ⚠ `iw45`'s post-value is still the constant `538 760 587 509`, so this does not finish the job
-   alone. **Two-sided arm, default OFF, fired count. Do not adopt it on the model.**
-   ⛔ **CLOSED as a candidate:** `§109`'s CO-EQUAL bit-4 store gate (mask bit 29, `b7 && f31 != 2`).
-   **Neither `iw35` nor `iw45` carries bit 7**, so `guard7_would_refuse()` is false under *both*
-   readings.
-3. **`UPD6383_NOZ05` stays DEFAULT OFF and so does `UPD6383_DRPUB`.** NOZ05 deletes two stores the
-   corpus says are there and its cell `0x05` **rails** (`§86` quiet `[8 388 607 .. 8 388 607]`, the
-   positive 24-bit rail with no notes playing — §176's warning, third occurrence). DRPUB now has a
-   measurable consequence (arm D: `m_dr` non-zero at `iw25` on **1 174 369** of 1 211 520,
-   provenance `iw12` age 0, liveness appearing at `iw25/iw27/iw39/iw40/iw41..44` and nowhere else —
-   the behavioural confirmation §215's corpus anchoring never had) **but only with NOZ05 on**, and
-   §219 §1.-0 item 3's condition names the **SHIPPED** build.
+**`UPD6383_NOZ05` stays DEFAULT OFF and so does `UPD6383_DRPUB` and `UPD6383_EPIBUS`.** NOZ05
+deletes two stores the corpus says are there and its cell `0x05` **rails** (`§86` quiet
+`[8 388 607 .. 8 388 607]`, the positive 24-bit rail with no notes playing — §176's warning, third
+occurrence). DRPUB has a measurable consequence only with NOZ05 on (§220 arm D). EPIBUS is a
+read-only census whose shadow tables should not be maintained on a shipped run.
 
 ### ⚠ 1.-0.2 WHAT §220 CORRECTED IN THIS FILE
 
@@ -120,8 +172,14 @@ lines with `iw12 ↔ iw98` paired exactly as `§79` says.
   moment it was written down. Before building on a §-numbered claim, check the sections that came
   after it.
 
-### ★★★ 1.-1 READ THIS BEFORE PLANNING — §216 AND §217 TOGETHER BOUND WHAT IS LEFT
+### ★★★ 1.-1 READ THIS BEFORE PLANNING — §216, §217 AND §221 TOGETHER BOUND WHAT IS LEFT
 
+* ★★★ **§221 SUPPLIES THE MISSING TERM: the epilogue's operands are DISJOINT from the signal
+  path.** `§E1`, run on the rig, gives every output-stage operand its array, its index and its last
+  writer: `F1 = 0 of 14` trace to body 0, the only body link is `w65 <- iw332` (`m_rf[0x8F]`,
+  540 000/540 000, **value zero**), `w73`'s producer is kernel-B `iw54` at **100.00 %**, and the
+  **entire census is byte-identical between the shipped build and the rig** while body 0 runs at
+  `28/32/28`. ⇒ the output stage is not losing a signal it receives; **it receives none.**
 * **The output stage is a NULL independent of the send** (§216: send forced open, body 0 ran its
   whole ladder on live audio, `w73`/`w78` still `min 0 max 0`). §217 re-measured it in **three**
   more arms including the no-stimulus window: still `min 0 max 0`, all six readings.
