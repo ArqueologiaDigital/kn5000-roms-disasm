@@ -13297,3 +13297,68 @@ over all 285 executed slots; §2 **MEASURED** (the store witness, fired-count 1 
 to the bit; §6 **MEASURED** (two independent instruments) for the cell-`0x05` history, the double
 store **MEASURED** and its net effect **INFERRED (strong)** from the two sites' order in one
 function; §7 **MEASURED** (the identity control).
+
+---
+
+## §212 — ⛔ §205's "single number that matters" was WRONG. §48 is not a gate, and §141's `w73` does not hold.
+
+§211 answered the discrimination it was asked for, and the answer retires two things I had been
+repeating — one of them in every handoff for the last several passes.
+
+### 1. ⛔ `§48` is NOT the operative constraint
+
+I wrote, and re-wrote into `HANDOFF-NEXT.md` and the memory file: *"`§48 DELAY READ CONSUMED`'s
+second field is the single number that matters — while it is 0, the send is 0 whatever else is
+done."* The statement is **true and not the constraint.**
+
+§211 MEASURED, exhaustively over all 285 executed slots: **27 accumulators are input-dependent and
+every one is in kernel A (`iw 9..38`)** — kernel B **0**, epilogue **0**, body 0 **0**, body 1 **0**.
+And **95.04 % of delay writes write `0`**, the remaining 5 % writing the constant `0x7D70`, forced
+from source and matched to the bit.
+
+⇒ **Opening `§48` would deliver a DC.** The input never reaches either body at all; it dies in
+kernel A. I had promoted a true downstream fact into the headline blocker, and it would have sent
+the next pass to unblock a path that carries nothing.
+
+### 2. ⛔ §141's localisation of the silence to `w73` does not hold on the shipped build
+
+§141 measured **with mask bit 55 (the §138 guard) ON**. That bit is **0** in the shipped default and
+this run reports it firing **0 times**. On the current build the epilogue accumulator is the constant
+`2 603 010 048` from `w54`→`w64` and `0` from **`w65`** — eight slots earlier than `w73`.
+
+★ And what `w73` would have destroyed under that arm was **a constant in quiet and loud alike** —
+the exact DC shape standing rule 1 exists to catch. Rule 10 again: a blocker is a measurement, and
+measurements expire.
+
+⇒ **`w73` is innocent.** Its bit-4 store fires **1 020 000×**, unsuppressed, writing `0` to D-RAM
+cell `0x00` — a cell nothing reads. §150 §3's store-and-clear suspect is **MOOT, not refuted**:
+there is nothing to clear, and all three of §150's rival readings give the same observable on a zero
+datum, so **no experiment at that word can separate them.** `bit11-family.md` item B's
+undecidability of the presentation codes is now not merely true but **irrelevant**.
+
+★ §150 §4 named the instrument that settles this — *"point the §109 store witness at slot 73"* —
+**sixty sections ago**, and nobody aimed it until now.
+
+### 3. ★ What §211 added that had never been measured
+
+`§70` had only ever watched **ACCA**. `w78` presents **ACCB**, so standing rule 1 had **never been
+applied to DO2 at all**. Now it is:
+
+```
+   §70  ACCA at w73:  quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+   §211 ACCB at w78:  quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+```
+
+Both hard zeros. **No non-zero output was found and no claim of audio is made.**
+
+### 4. The redirect — recorded, not acted on
+
+The input reaches unit 0's entry cell `0x05` and is **overwritten twice before the body runs**
+(`4 194 304` at `iw35`, `0` at `iw45`); body 0 reads `0` at its own `iw84/85` every frame. The one
+gradeable lead is `iw39` storing **twice** to cell `0x06` — the input-bearing accumulator, then an
+empty tempA, same fully-decoded word, second one last.
+
+⚠ §211 flags *"suppress one store"* as an **anchor-value fix at a symptom** and declines it. Correct.
+
+Evidence grade: §1 and §2 **MEASURED** (exhaustive over 285 slots; the store witness aimed for the
+first time); §3 **MEASURED**; my §205 framing **RETRACTED**.
