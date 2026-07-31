@@ -39,6 +39,19 @@ def mask_bits():
                 v = int(h, 16)
                 for b in range(64):
                     if v >> b & 1: hit.add(b)
+            #  ★ THE SHIFT FORM (BOOKKEEPING-REPAIR P6b): `(m_specmask >> N) & M'
+            #  matches no hex literal, so a literal-only census is blind to bits
+            #  35-37 (§121's ACT 0x0D selector) and 42-51 (m_bx_sel0d / sel0e /
+            #  f4 / f5) -- the exact blindness HANDOFF-NEXT.md §4 warns about in
+            #  prose while this generator committed it in code.  Standing rule 7:
+            #  match the BIT, not the spelling.  gen_fixlist.py self-test T8
+            #  fails if the regression returns.
+            for n, msk in re.findall(r'm_specmask\s*>>\s*(\d+)\s*\)?\s*&\s*(\w+)', ln):
+                n = int(n)
+                try:    w = int(msk, 0)
+                except ValueError: w = 1
+                for k in range(max(1, w.bit_length())):
+                    hit.add(n + k)
             if not hit: continue
             # look backwards for the nearest "§NNN" and a headline in the comment block
             #  ★ Attribute to the OWNING section, not merely the last one mentioned:
@@ -158,4 +171,10 @@ def main():
     open(OUT, 'w').write('\n'.join(w) + '\n')
     print('wrote %s: %d mask bits, %d sections, default 0x%X' % (OUT, len(bits), len(secs), dm))
 
-main()
+#  ★★ §228 / BOOKKEEPING-REPAIR P6a -- THIS IS A HAZARD FIX, NOT A STYLE FIX.
+#  Without the guard, `main()' runs at MODULE SCOPE, so ANY `import gen_ledger'
+#  -- from a tool, a test, a REPL, a doc generator -- SILENTLY REWRITES
+#  LEDGER.md.  All three tools delivered by BOOKKEEPING-REPAIR_findings.md
+#  re-implement this file's parsing rather than import it, purely to avoid that.
+if __name__ == '__main__':
+    main()

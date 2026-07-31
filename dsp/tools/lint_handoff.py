@@ -35,10 +35,17 @@ SUPERSESSION IS RESPECTED.  A finding inside a heading marked ⛔ / SUPERSEDED /
 prev- / RETRACTED is reported as INFO, not FAIL: those blocks are kept ON PURPOSE
 so a closure stays legible, exactly like the register's tail-retraction rule.
 
-★ RULE 20 APPLIES TO THIS TOOL TOO.  Its detectors are validated against four
-defects already established on 2026-07-31 (and against one thing it must NOT
-flag), and the self-test is printed FIRST.  A linter that reports a clean zero is
-indistinguishable from a linter whose regex never matched.
+★ RULE 20 APPLIES TO THIS TOOL TOO, AND IT CAUGHT THIS TOOL ONCE ALREADY.
+Its first five controls were the five LIVE defects of 2026-07-31.  §228 applied
+the patch plan that repaired them, and the self-test promptly fell from 8/8 to
+3/8 -- because its known answers had been fixed.  ⇒ a tool whose controls are the
+bugs it exists to find is validated exactly once, and is unvalidated from the
+moment it succeeds.  The controls are now SYNTHETIC FIXTURES (see `DIRTY_FIXTURE'
+/ `CLEAN_FIXTURE'), linted through the same `lint()' the report uses, and they are
+TWO-SIDED: the repaired fixture must produce ZERO findings, or a linter that
+flagged every line would score full marks.  The self-test is printed FIRST.
+A linter that reports a clean zero is indistinguishable from a linter whose regex
+never matched.
 
 Exit status: 1 if any FAIL, else 0.
 Usage:  python3 dsp/tools/lint_handoff.py [--all] [--quiet]
@@ -241,43 +248,117 @@ def lint(path, mask, mask_txt, gates, rates, ruleset):
 
 # ------------------------------------------------------------------- self-test
 
-def self_test(findings, rates, best, ruleset, mask_txt):
-    """★ RULE 20.  Four defects established on 2026-07-31 are the known answers;
-    one non-defect is the known negative.  Printed BEFORE the report."""
+#  ★★★★ §228 REBUILT THIS FUNCTION, AND WHY IS THE POINT.
+#
+#  Its first four controls were the four LIVE defects of 2026-07-31.  §228 then
+#  applied the patch plan that fixes all four -- and the linter's self-test
+#  collapsed from 8/8 to 3/8, because its known answers had been REPAIRED.  A
+#  tool whose controls are the bugs it exists to find is validated exactly once,
+#  and is unvalidated from the moment it succeeds.
+#
+#  That is verbatim the failure mode of the rule this same pass DEFINED:
+#  ⇒ TIER 0c rule 20 -- "a control must be a case whose answer is known
+#    INDEPENDENTLY of the thing under test."
+#
+#  So the controls are now SYNTHETIC FIXTURES: a scratch document written here,
+#  with one planted defect per check, linted through the SAME `lint()' the real
+#  report uses.  They are two-sided -- a CLEAN fixture must produce ZERO
+#  findings, or the checks are firing on everything and prove nothing.
+DIRTY_FIXTURE = """\
+# fixture — a synthetic handover document with one planted defect per check
+
+* Default is now **`0x46A39B440F`**, `m_specmask` is u64.
+* `§S1` measures **5.303 %** of all accumulator conversions clipping on the shipped default.
+* `UPD6383_LFOWRAP` (DEFAULT OFF) — the wrap word's operand as a modulus.
+* This follows from standing rule 97, which nothing defines.
+
+### ★ SHIPPED this session — five, each with a control
+
+| § | what | control |
+|---|---|---|
+| §188 | a | b |
+| §197 | a | b |
+| §201 | a | b |
+| §202 | a | b |
+| §204 | a | b |
+| §208 | a | b |
+| §209 | a | b |
+"""
+
+CLEAN_FIXTURE = """\
+# fixture — the same document with every defect repaired
+
+* The default is **`%s`**, `m_specmask` is u64.
+* `§S1` measures **%s %%** quiet of all accumulator conversions clipping on the shipped default.
+* `UPD6383_LFOWRAP` (DEFAULT ON) — the wrap word's operand as a modulus.
+* This follows from standing rule 20, which TIER 0c defines.
+
+### ★ SHIPPED this session — two, each with a control
+
+| § | what | control |
+|---|---|---|
+| §188 | a | b |
+| §197 | a | b |
+"""
+
+
+def _fixture_findings(text, mask, mask_txt, gates, rates, ruleset):
+    """Lint a scratch document through the REAL lint(), and return its FAILs."""
+    import tempfile
+    d = tempfile.mkdtemp(prefix='lint_handoff_fixture_')
+    p = os.path.join(d, 'FIXTURE.md')
+    open(p, 'w').write(text)
+    try:
+        return [f for f in lint(p, mask, mask_txt, gates, rates, ruleset) if f[1] == 'FAIL']
+    finally:
+        try: os.remove(p); os.rmdir(d)
+        except OSError: pass
+
+
+def self_test(findings, rates, best, ruleset, mask_txt, mask, gates):
+    """★ RULE 20.  Controls are SYNTHETIC and two-sided, so they stay valid after
+    the live corpus is repaired.  Printed BEFORE the report."""
     R = []
 
     def chk(tag, ok, said, want):
         R.append((tag, 'PASS' if ok else '**FAIL**', str(said)[:90], want))
 
-    F = [f for f in findings if f[1] == 'FAIL']
-    has = lambda **kw: any(all(f[j] == v for j, v in kw.items()) for f in F)
-    # findings tuple: (file, sev, check, line, predicate, said, want)
-    ck = lambda c: {f for f in F if f[2].startswith(c)}
-    fl = lambda c, fn: {f for f in F if f[2].startswith(c) and f[0] == fn}
+    quiet_rate = sorted(rates)[0] if rates else '4.924'
+    D = _fixture_findings(DIRTY_FIXTURE, mask, mask_txt, gates, rates, ruleset)
+    C = _fixture_findings(CLEAN_FIXTURE % (mask_txt, quiet_rate),
+                          mask, mask_txt, gates, rates, ruleset)
+    dck = lambda c: [f for f in D if f[2].startswith(c)]
+    cck = lambda c: [f for f in C if f[2].startswith(c)]
 
-    chk('T1  C1 flags HANDOFF-NEXT.md\'s stale `0x46A39B440F` "Default is now"',
-        bool(fl('C1', 'HANDOFF-NEXT.md')),
-        sorted(f[5] for f in fl('C1', 'HANDOFF-NEXT.md')), 'at least one')
-    chk('T2  C2 flags BUILD-LANE-QUEUE.md\'s standing-constraints 5.303 %',
-        any(f[5].startswith('5.303') for f in fl('C2', 'BUILD-LANE-QUEUE.md')),
-        sorted(f[5] for f in fl('C2', 'BUILD-LANE-QUEUE.md')), '5.303 % present')
-    chk('T3  C4 flags rules 19/20/21 as cited-but-undefined',
-        {19, 20, 21}.isdisjoint(ruleset) and bool(ck('C4')),
-        'TIER 0c defines %s' % (sorted(ruleset)[-3:] if ruleset else '—'),
-        '19/20/21 absent from TIER 0c and reported')
-    chk('T4  C5 flags HANDOFF-NEXT.md\'s "SHIPPED this session — five" over 7 rows',
-        bool(fl('C5', 'HANDOFF-NEXT.md')),
-        sorted(f[5] + ' vs ' + f[6] for f in fl('C5', 'HANDOFF-NEXT.md')), 'flagged')
-    chk('T5  ⛔ the REGISTER is not linted (the tool\'s kill-condition)',
+    chk('T1  C1 fires on a planted stale mask literal (`0x46A39B440F`)',
+        bool(dck('C1')), sorted(f[5] for f in dck('C1')) or 'nothing', 'at least one')
+    chk('T2  C2 fires on a planted stale clip rate (`5.303 %`)',
+        any(f[5].startswith('5.303') for f in dck('C2')),
+        sorted(f[5] for f in dck('C2')) or 'nothing', '5.303 % flagged')
+    chk('T3  C3 fires on a planted wrong gate default (LFOWRAP DEFAULT OFF)',
+        bool(dck('C3')), sorted(f[5] for f in dck('C3')) or 'nothing', 'flagged')
+    chk('T4  C4 fires on a planted undefined rule number (rule 97)',
+        any('97' in f[5] for f in dck('C4')),
+        sorted(f[5] for f in dck('C4')) or 'nothing', 'rule 97 flagged')
+    chk('T5  C5 fires on a planted count ("five" over 7 rows)',
+        bool(dck('C5')), sorted(f[5] + ' vs ' + f[6] for f in dck('C5')) or 'nothing',
+        'flagged')
+    #  ★ THE OTHER SIDE.  Without this, every check above is satisfied by a linter
+    #  that flags EVERY line.
+    chk('T6  ⚠ THE NEGATIVE SIDE: the REPAIRED fixture produces ZERO findings',
+        not C, '%d findings: %s' % (len(C), sorted({f[2] for f in C})), '0')
+    chk('T7  ⛔ the REGISTER is not linted (the tool\'s kill-condition)',
         FORBIDDEN not in TARGETS and not any(f[0] == FORBIDDEN for f in findings),
         'targets=%s' % TARGETS, 'register absent')
-    chk('T6  the current clip rate came from a FORCIBLY-identified default arm',
+    chk('T8  the current clip rate came from a FORCIBLY-identified default arm',
         best is not None, best[1] if best else 'none found', 'a shipped-default log')
-    chk('T7  the mask is read from the .h, not from a doc',
+    chk('T9  the mask is read from the .h, not from a doc',
         mask_txt.lower().startswith('0x') and len(mask_txt) >= 10,
         mask_txt, "upd6383.h's initialiser")
-    chk('T8  the linter can say NO (it found >0 findings on a corpus known dirty)',
-        len(F) > 0, '%d FAIL findings' % len(F), '>0')
+    chk('T10 TIER 0c defines rules 19/20/21 (the §228 repair, and it CAN regress)',
+        {19, 20, 21} <= set(ruleset),
+        'TIER 0c defines 1..%d' % (max(ruleset) if ruleset else 0),
+        '19, 20 and 21 all present')
     return R
 
 
@@ -306,7 +387,7 @@ def main():
     print()
     print('## 0. RULE 20 — the self-test, printed BEFORE the report')
     print()
-    R = self_test(findings, rates, best, ruleset, mask_txt)
+    R = self_test(findings, rates, best, ruleset, mask_txt, mask, gates)
     print('| check | result | what it read | what it demanded |')
     print('|---|---|---|---|')
     for tag, res, said, want in R:

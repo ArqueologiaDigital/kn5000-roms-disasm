@@ -333,6 +333,17 @@ must move store #1357's `1 650 061` and #1360's `6 039 795`, and `§S1`'s 4.924 
 
 ---
 
+**⇒ §228 CONSUMED the strategic review's action 2 (the frame clock) and its action 5 (the
+bookkeeping repair, P1–P9), and it did NOT touch items 12 or 13, which remain the blocker and the
+cheap next thing.** The DSP frame clock now runs at **44 100 Hz**, decoupled from the 48 kHz
+rendering stream by an exact 147/160 phase accumulator; `UPD6383_FRAMEHZ=48000` is the two-sided
+control. ⚠ **Every frame count in a pre-§228 log is on the 48 000 clock** — a `-seconds_to_run 30`
+vehicle gave 1 440 001 frames and now gives 1 323 000. **Compare ratios, never counts.**
+⛔ **`§196`'s LFO wrap census is SUPERSEDED** by `§228`'s RISE CENSUS; it printed 0.5000 Hz on every
+arm ever run. See **§228**.
+
+---
+
 ## 12. ★★★★ WHAT DOES THE COEFFICIENT BASE `0x90` **MEAN**? **THE BLOCKER.**
 
 **Grade: the MEASUREMENT is settled (§227); the reading is UNDECIDED.**
@@ -374,8 +385,15 @@ attributions against the **right** preset.
   (`iw9 iw19 iw21 iw27 iw33 iw35 iw39 iw45`; its own per-`iw` breakdown always said so).
   ★ **Use `NOZ05 = 2` from now on** (§223): `iw35`/`iw45` only, **2** stores, and it reproduces
   `28/32/28` / `33/40/29` / `2/1/2` **column for column**. ⚠ **It still rails**, and so does the
-  shipped build: `§S1` measures **5.303 %** of all accumulator conversions clipping on the shipped
-  default with the input **exactly zero**, at a rate **higher** than the loud bucket.
+  shipped build: `§S1` measures **4.924 %** quiet / **4.920 %** loud of all accumulator conversions
+  clipping on the shipped default with the input **exactly zero**, at a rate **higher** than the
+  loud bucket in the pre-§225 arm and level with it now.
+  ⚠ **`5.303 %` / `5.298 %` are the `UPD6383_LFOWRAP=0` CONTROL ARM's numbers** (§223/§224,
+  `L_lfowrap_off_225.log.gz`), NOT the shipped build's — §225's `LFOWRAP` ship removed exactly
+  `iw92`'s 706 040 quiet / 313 960 loud conversions. **Quote the arm with the number.**
+  ★ **§228 RE-CONFIRMED 4.924 % / 4.920 % ON BOTH FRAME CLOCKS** (48 000 and 44 100), to three
+  decimals, while the raw counts scaled with the frame count — which is what a pure clock change
+  must do, and is the inertness proof for that pass.
   **The rail is upstream of the send entirely.** Treat nothing that rails as evidence.
 - ★★★ **NEW INSTRUMENT — `§S2`, the ACCUMULATOR TERM CENSUS (§224).** Read-only, always on,
   settled frames. Splits `acc <- CARRIED + BUS + P` per `iw` per bucket with FS ratios and the
@@ -431,5 +449,21 @@ attributions against the **right** preset.
 - ★★★ **RULE 19 is mechanised**: `§70`/`§211` print **mean and AC span**. `79 438 ± 90` passes
   min-vs-max, the no-stimulus check *and* the translation rule, and is a **DC at −59 dB**. Report
   mean AND AC span, both buckets, both arms, before calling anything audio.
+- ★★★ **RUN `python3 dsp/tools/lint_handoff.py` BEFORE HANDING OFF.** It exits non-zero when
+  `HANDOFF-NEXT.md`, `LEDGER.md` or this file quotes a mask literal, clip rate, gate default,
+  rule number or declared count that disagrees with `upd6383.h` or with the current
+  shipped-default log. ⚠ It is scoped to those three files and **NEVER** the register, whose
+  older sections legitimately quote superseded values — **do not widen that scope**, it is the
+  tool's kill-condition. Findings inside a ⛔/SUPERSEDED heading are INFO by design.
+  ⚠ `LEDGER.md`'s tier 0 is a verbatim copy of `LEDGER-HEAD.md` — **edit the HEAD and regenerate.**
+- ★★★★ **THE DSP FRAME CLOCK IS 44 100 Hz (§228), NOT THE TONE GENERATOR'S 48 000.** The
+  rendering stream is still 48 000 and is load-bearing (the EG law, the voice LP coefficient and
+  the pitch step are all expressed against it); `run_frame()` is gated by a 147/160 phase
+  accumulator instead. `UPD6383_FRAMEHZ=48000` restores the pre-§228 clock as the two-sided
+  control. ⚠ **EVERY FRAME COUNT IN A PRE-§228 LOG IS ON THE 48 000 CLOCK**: a
+  `-seconds_to_run 30` vehicle gave **1 440 001** frames and now gives **1 323 000**. The
+  arming gates (`S1_ARM_FRAME` 420 000, `§54`'s 300 000, `§38`'s 264 002) are FRAME counts and
+  did not move, so their WALL-CLOCK times did (420 000 = 8.75 s → 9.52 s). **Compare RATIOS
+  across the clock change, never counts.**
 - **Do not ship a default flip on a moved number or a model argument alone.** §217–§221 all correctly
   declined. **A NULL is a fine outcome.**

@@ -237,26 +237,47 @@ def self_test(recs, df, idx, nana, idx_self=None):
                 return r
         return None
 
-    # --- KNOWN ABSENT: the KN7000 cross-model correlation, 2026-07-22
+    # --- ★★★★ §228 FLIPPED T1's POLARITY, AND THAT IS THE RESULT, NOT A REPAIR.
+    #
+    #  T1 used to demand the KN7000 cross-model verdict be reported ABSENT.  §228
+    #  FILED IT -- it is TIER 0b dead-end row 31 -- so T1 immediately started
+    #  failing, for the one reason a control must never fail: the thing it asserted
+    #  had been FIXED.  The same thing happened to `lint_handoff.py' in the same
+    #  hour, whose five controls were the five live defects the patch plan repaired.
+    #
+    #  ⇒ TIER 0c RULE 20, THE CLAUSE THIS EARNED: a control must be a case whose
+    #    answer is known INDEPENDENTLY of the thing under test.  A control that is
+    #    ITSELF the open defect is validated exactly once, and is invalidated by
+    #    its own success.
+    #
+    #  The pair is now polarity-STABLE and still two-sided:
+    #    T1  the FILED verdict must come back PRESENT   (and it can regress: unfile
+    #        row 31 and this fails, which is the point)
+    #    T1c a SYNTHETIC fingerprint of tokens that occur nowhere must come back
+    #        ABSENT -- so "PRESENT" can never mean "this detector matches anything".
     kn = find('kn5000-dsp-coefficients.md', 'KN7000 correlation')
     if kn:
         fp = fingerprint(kn, df, kn.get('_sib'))
         f, n = represented(fp, idx)
-        chk('T1  the KN7000 cross-model NEGATIVE is reported ABSENT (the known miss)',
-            f is None, 'best analysis file=%s with %d shared tokens' % (f, n),
-            'None (< 2 discriminating tokens anywhere)')
-        chk('T2  ...and its fingerprint is not empty (an empty one would fake absence)',
+        chk('T1  the KN7000 cross-model NEGATIVE is reported PRESENT — §228 FILED it '
+            'as TIER 0b row 31 (was "must be ABSENT" until 2026-07-31)',
+            f is not None, 'best analysis file=%s with %d shared tokens' % (f, n),
+            'not None -- the filing must be visible to the detector')
+        chk('T2  ...and its fingerprint is not empty (an empty one would fake either verdict)',
             len(fp) >= 5, '%d discriminating tokens: %s'
             % (len(fp), sorted(fp)[:6]), '>= 5')
-        #  ★ THE OTHER SIDE OF T1.  Same verdict, same fingerprint, index rebuilt WITH
-        #  the drafts counted: the detector must flip to PRESENT.  Without this, "ABSENT"
-        #  could mean "this detector never matches anything".
+        #  ★ THE OTHER SIDE, and it is now SYNTHETIC so no repair can consume it.
+        bogus = {'zzq%04dxx' % k for k in range(11)}
+        fb, nb = represented(bogus, idx)
+        chk('T1c ⚠ THE NEGATIVE SIDE: a SYNTHETIC fingerprint present in no file is '
+            'reported ABSENT (so PRESENT cannot mean "matches anything")',
+            fb is None, 'best=%s (%d shared)' % (fb, nb), 'None')
         if idx_self is not None:
             f2, n2 = represented(fp, idx_self)
-            chk('T1b ...and the SAME detector reports it PRESENT once the drafted rows '
-                'are counted (the two-sided control)',
+            chk('T1b ...and the verdict is ALSO visible with the drafts counted '
+                '(consistency of the two index builds)',
                 f2 is not None, 'best=%s (%d shared)' % (f2, n2),
-                'not None -- proves the detector can see a filing')
+                'not None')
     else:
         chk('T1  the KN7000 cross-model NEGATIVE was EXTRACTED', False,
             'not found by the extractor', 'a record from kn5000-dsp-coefficients.md')
@@ -328,11 +349,14 @@ def main():
     print()
     print('⚠ **`%s` is EXCLUDED from the index by design** — it quotes the missing verdicts in '
           'order to DRAFT them, and a report about the gap must not close the gap on paper. '
-          'The gap closes when TIER 0b carries the rows. Self-tests **T1/T1b** are the two-sided '
-          'control for this exclusion.' % ', '.join(sorted(SELF)))
+          'The gap closes when TIER 0b carries the rows -- §228 filed eleven (rows 31-41). '
+          'Self-tests **T1/T1c** are the two-sided control for this exclusion.' % ', '.join(sorted(SELF)))
     print()
-    print('⚠ **GRADE:** the KN7000 cross-model absence is **MEASURED** (hand-confirmed: '
-          '`0.5614`, `0.618`, `0.876`, `0.2435` return zero hits under `dsp/analysis/`). '
+    print('⚠ **GRADE:** the KN7000 cross-model case was **MEASURED** absent (hand-confirmed: '
+          '`0.5614`, `0.618`, `0.876`, `0.2435` returned zero hits under `dsp/analysis/`) and '
+          'is now **FILED** as TIER 0b row 31 -- which is why T1 asserts PRESENT, and why the '
+          'negative side had to become SYNTHETIC (T1c): a control that IS the open defect is '
+          'invalidated by its own repair (rule 20). '
           'The aggregate count is **INFERRED** -- the threshold is calibrated on two '
           'controls, so read it as a LOWER-BOUND WORK QUEUE, not a statistic.')
     print()
@@ -367,7 +391,7 @@ def main():
     print('⇒ **%d DSP-relevant graded verdicts live only in `kn7000_mame/notes/` and have '
           'no representation in the analysis tree.** `gen_ledger.py` reads neither, so '
           'none of them can ever reach TIER 0b. The KN7000 cross-model NEGATIVE is one '
-          'of them, and it is the one that cost a re-proposal.' % len(dmiss))
+          'of them; §228 filed it and the count fell by one, which is what progress looks like here.' % len(dmiss))
     print()
 
     print('## 2. THE ABSENT DSP VERDICTS (draft TIER 0b rows)')

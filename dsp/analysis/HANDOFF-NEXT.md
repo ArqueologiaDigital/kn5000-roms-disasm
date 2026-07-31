@@ -20,6 +20,91 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
+**★★★★ §228 SHIPPED THE 44 100 Hz DSP FRAME CLOCK. THE OLD ONE WAS 48 000, MEASURED FROM DISK
+(1 440 001 FRAMES / 30 s ON EVERY ARCHIVED ARM), SO EVERY EMULATED DELAY, REVERB TIME AND LFO WAS
++8.844 % FAST. THE CHORUS LFO NOW LANDS ON 0.599313 Hz AND THE TONE GENERATOR IS BYTE-IDENTICAL.
+⚠ BUT THE "CONFIRMING MEASUREMENT ALREADY IN THE REPO" DID NOT EXIST — §196 PRINTED 0.5000 Hz AND
+THE 0.652 EVERYONE QUOTED HAD NEVER BEEN MEASURED BY ANYTHING.
+⛔ THE BLOCKER IS UNMOVED: IT IS STILL *WHAT THE BASE `0x90` MEANS* (§227, queue item 12).**
+
+### ★★★★ 1.-0.NEW.A THE CLOCK, AND THE TWO NUMBERS THAT GRADE IT
+
+```
+   arm A  UPD6383_FRAMEHZ=48000  (the two-sided control)   data/A_48000_228.log.gz
+   arm B  (none) -- THE NEW DEFAULT, 44 100 Hz            data/B_44100_228.log.gz
+
+                                          arm A            arm B
+   §228 T2 frames run                     1440001          1323000  = 30 x 44100 exactly
+   §228 T4 MEASURED frames / emul. second 47985.602        44086.742
+   §228 T5 relative error                 0.000300 PASS    0.000301 PASS
+   §228 LFO RISE cell 07  step            114..114 CONSTANT   114..114 CONSTANT   <- INVARIANT
+                          period          73584.3 frames      73584.3 frames      <- INVARIANT
+                          rate            0.652313 Hz         0.599313 Hz
+```
+
+⚠⚠ **DO NOT GRADE A CLOCK CHANGE ON THE LFO's Hz — THAT CRITERION CANNOT FAIL.** The census's Hz
+is `wraps/frames × DECLARED rate` and `wraps/frames` is rate-invariant, so **changing the
+declaration alone moves it with nothing measured** (rule 8). Grade on **T4**, frames per *emulated*
+second against the machine's own clock, and on the **step/period staying invariant**.
+
+### ⛔ 1.-0.NEW.B `§196`'s WRAP CENSUS IS SUPERSEDED. DO NOT QUOTE IT.
+
+It printed **`0.5000 Hz`** on every arm ever run, biased low **two ways**: its denominator includes
+the **264 001** frames before the program upload, during which the ramp is **frozen**
+(`1 440 001 − 1 176 000 = 264 001` exactly = the §38 boot-transient end at frame 264 002), and its
+numerator **truncates the last partial wrap**. At 44 100 it gets *worse* (`0.4667`). Use the
+**§228 RISE CENSUS**, which measures the per-frame step and has neither defect.
+★★ **AND THE LESSON IS NOW RULE 20's NEWEST CLAUSE:** `LEDGER.md` carried `0.652 Hz` for weeks in
+the register of a measurement and **no log line ever printed it**. *Before quoting a figure as
+MEASURED, find the log line it came from.*
+
+### ★ 1.-0.NEW.C WHAT IT MEANS FOR EVERY OLDER LOG, AND FOR EVERY FUTURE ARM
+
+* **Every frame count in a pre-§228 log is on the 48 000 clock.** `-seconds_to_run 30` gave
+  **1 440 001** and now gives **1 323 000**. ⇒ **COMPARE RATIOS ACROSS THE CHANGE, NEVER COUNTS.**
+  `§S1` is `4.924 % / 4.920 %` in **both** arms to three decimals while its conversion count falls
+  `186 394 560 → 162 240 672` — that invariance is this pass's inertness proof.
+* **The arming gates are FRAME counts and did not move**, so their wall-clock times did:
+  `S1_ARM_FRAME` 420 000 = 8.75 s → **9.52 s**; `§54` arms at 300 000; `§38` at 264 002.
+* **`§200`'s DELAY AGE ms figures in every older log are 8.84 % HIGH** — it divided frames by a
+  hard-coded 44 100 while the clock ran at 48 000. Never load-bearing; do not compare across.
+* **`UPD6383_FRAMEHZ=48000` restores the old clock** as a two-sided control. ⛔ It is **not** a knob
+  for tuning audio.
+
+### ★ 1.-0.NEW.D THE TONE GENERATOR DID NOT REGRESS, AND THE TEST COULD HAVE FAILED
+
+`W1` (insert **OFF** — the shipping configuration), `W2` (ON at 44 100) and `W3` (ON at 48 000) are
+**BYTE-IDENTICAL**, md5 `baffbeee660a7ea68deac866b46b3c6e`, over 1 440 001 frames — with the
+**mandatory positive control passing**: peak **21 796**, **626 738 non-zero samples (14.5 %)**, so
+it is a comparison of real audio and not of two silences. The stream still renders at 48 000 (its
+rate is load-bearing for the EG law, the voice LP coefficient and the pitch step); `run_frame()` is
+gated by a **147/160 phase accumulator**, exact and drift-free.
+
+### ⚠ 1.-0.NEW.E FS = 44 100 HAS **FOUR** PROOFS, NOT FIVE — DROP THE CRYSTAL
+
+All four are **inside the ROM**: `ms × 0xAC44/0x3E8`; the double **`π/44100`** at `0x012F57` that
+the **SOLVED PARAMETRIC EQ validates against at 0.198 dB**; `NO OPERATION`'s `D = 4410 = 100.000 ms`;
+and 29 LFO blocks × 9 increments `= floor(f·2²³/44100)`, joint null `3.1e-12`.
+⛔ *"33.8688 MHz = 768×44100"* is **INFERRED** — the 1996 scan prints **`36.8688 MHz`**, which
+divides to **neither** rate. Felipe reading X301 settles it; nothing waits on it.
+
+### ★★ 1.-0.NEW.F THE BOOKKEEPING REPAIR LANDED (P1–P9), AND IT BROKE TWO TOOLS' SELF-TESTS
+
+TIER 0c now **defines rules 19, 20 and 21** (20 had **17 invocations and zero definitions**);
+TIER 0b grew **30 → 41 rows**, covering §221–§227 and the two repo-external verdicts;
+`gen_ledger.py`'s unguarded module-scope `main()` — which made **any `import` rewrite `LEDGER.md`** —
+is fixed, and it now sees SHIFT-extracted mask bits 35–37 / 42–51. `lint_handoff.py`: **0 FAIL**.
+Derived, never counted: `SHIPPED-FIX-LIST.md` (**8 GATES across 11 SECTIONS**) and
+`EXTERNAL-VERDICTS-UNFILED.md` (**111** still unfiled).
+★★ **AND THE INSTRUMENT LESSON, WHICH COST TWO TOOLS:** `lint_handoff.py` fell **8/8 → 3/8** and
+`gen_ledger_ext.py`'s T1 failed — **because this pass repaired the defects they used as controls.**
+⇒ **a control that IS the open defect is validated exactly once and is invalidated by its own
+success.** Both now use synthetic, two-sided controls (`10/10`, `8/8`). Copy that shape.
+
+---
+
+### ⛔ 1.-0-prev-227 — §227's headline, STILL THE BLOCKER, TRUE IN EVERY PART
+
 **★★★★ §227 REFUTED BOTH HALVES OF §226's PRE-REGISTERED BISECTION — ONE FROM DISK, ONE AS A
 MEASURED NO-OP — AND THE REVERB CAPTURE §226 ASKED FOR REFUTED §226's OWN POSITIVE HALF.
 `C-RAM[0x90..0xB4]` IS NOT A BOOT-FIXED BANK: IT IS UNIT 1's (THE REVERB's) PARAMETER BANK.
@@ -775,7 +860,16 @@ cold-boot capture → 84/42, 200/50) · the five **MALFORMED** streams `{79,88,8
 for the **second** DSP (MN19413/IC310), which Felipe wants inspected · `f31 = 4/5` is
 **UNDECIDABLE** with existing instruments and `f31 = 4` fires **zero** times in the clean vehicle.
 
-### ★ SHIPPED this session — five, all from the PROVEN-BY-CONSTRUCTION audit, each with a control
+### ★ SHIPPED in the §188–§209 session — SEVEN, all from the PROVEN-BY-CONSTRUCTION audit, each with a control
+
+⚠ **DO NOT QUOTE THIS AS THE PROJECT TOTAL.** It is one session. The authoritative enumerated list
+is **derived, never counted**: `python3 dsp/tools/gen_fixlist.py`. As of 2026-07-31 it reports
+**8 forced GATES across 11 SECTIONS** (denominators: 19 `getenv` sites — 7 bool gates default
+`true`, 6 default `false`, 6 non-bool knobs at baseline; 258 `logerror` calls; 119 register
+sections). ★ **A shipped-fix count is meaningless without its UNIT**: §209 ships two gates, §200
+and §202 share one. That ambiguity is why this figure has been published as five, seven, "7 of 7",
+eight and nine simultaneously. ⚠ §228 adds one more **default-behaviour** change that is not an
+env gate at all (the 44 100 Hz frame clock) — re-run the tool rather than incrementing anything.
 
 | § | what | control |
 |---|---|---|
@@ -1000,9 +1094,17 @@ any enumeration must A/B against the *alias*, not against a trap — and the ali
 
 * **NEVER `-video none`.** Always `timeout`-wrap. Always play notes.
 * **COMPUTE masks in python, never type them, AND verify your bit is CLEAR IN THE DEFAULT.**
-  Default is now **`0x46A39B440F`**, `m_specmask` is u64. Bits 0–34 are used-in-code or
-  set-in-default, **bits 35–37 are §121's `ACT 0x0D` selector** (extracted by shift, so a grep for
-  the hex misses them) and **bit 38 is §130's rebase** — the lowest genuinely free bit is **39**.
+  ⛔ **THE u64 SPEC MASK IS EXHAUSTED — DO NOT LOOK FOR A FREE BIT.** The default is
+  **`0xb910e446a39b440f`** (`upd6383.h`, its ONE initialiser; ⚠ the `0x46A39B440F` this paragraph
+  carried until 2026-07-31 was **§130's** default, superseded FOUR times: §144 → §156 → §161 →
+  §188, so this line was ~96 sections stale and its conclusion *"the lowest genuinely free bit is
+  39"* was actively harmful advice).
+  **61 of 64 bits are referenced; the only three unreferenced (1, 2, 3) are SET.**
+  New gates are **env vars, default OFF, with an unconditional fired count**.
+  ★ **Bits 35–37 (§121's `ACT 0x0D` selector) and 42–51 are extracted by SHIFT**
+  (`(m_specmask >> 42) & 7`), so a census that matches only hex literals is blind to them —
+  which `gen_ledger.py`'s own `mask_bits()` was until §228 taught it the shift form.
+  `dsp/tools/gen_fixlist.py` implements it too and self-test **T8** fails if the regression returns.
   ★ Enumerate bits **programmatically from every mask literal**. Checking "is this bit clear in the
   default" is not enough: §130's audit grepped `0x40000\b`, which does not match `0x40000u`, and
   so missed a second site and produced a confounded run. **Match the bit, not the spelling.**

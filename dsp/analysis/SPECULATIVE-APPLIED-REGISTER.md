@@ -16714,3 +16714,219 @@ NOT ONE is a measured value.**
 **GRADES.** §0 items A **FORCED**; B, C, D, E, F, G, H **MEASURED**; §5.1's re-attributions
 **MEASURED**; §9.1's three readings **SPECULATIVE, pre-registered, and required to be separated
 before any of them is tried**. `dsp/verify.py`: **BYTE-MATCH OK.**
+
+## §228 — ★★★★ THE DSP FRAME CLOCK WAS **48 000 Hz AGAINST AN Fs OF 44 100**, MEASURED FROM DISK BEFORE ANYTHING WAS BUILT (1 440 001 FRAMES / 30 s ON EVERY ARCHIVED ARM); IT NOW SHIPS AT **44 100**, THE CHORUS LFO LANDS ON **0.599313 Hz**, AND THE TONE GENERATOR IS **BYTE-IDENTICAL** OVER 1 440 001 FRAMES. ⚠ BUT THE "CONFIRMING MEASUREMENT ALREADY IN THE REPO" **DID NOT EXIST**: `§196` PRINTED **0.5000 Hz**, AND THE `0.652` EVERYONE QUOTED HAD NEVER BEEN MEASURED
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-07-31**. Register head **§228**.
+Build lane. **ONE DEFAULT CHANGE SHIPS** (the frame clock), two-sided, with the old behaviour
+reachable as `UPD6383_FRAMEHZ=48000`. Two MAME arms + three WAV captures.
+
+| arm | env | log |
+|---|---|---|
+| **A** | `UPD6383_FRAMEHZ=48000` — the pre-§228 clock, **the two-sided control** | `data/A_48000_228.log.gz` |
+| **B** | *(none)* — **the new default, 44 100 Hz** | `data/B_44100_228.log.gz` |
+| **W1** | DSP insert **OFF** (fresh cfg ⇒ `DSPCFG` 0) — **the shipping configuration** | `W1_dspoff.wav` |
+| **W2** | DSP insert ON, 44 100 | `W2_dspon_44100.wav` |
+| **W3** | DSP insert ON, 48 000 | `W3_dspon_48000.wav` |
+
+Vehicle unchanged: `scratchpad/coldnotes2.lua`, cold boot, isolated NVRAM, `:DSPCFG value="3"`,
+triad C4/E4/G4 held 21.02–27.51 s, `-seconds_to_run 30`, `-log`, visible video, one run at a time.
+New instruments: **§228 FRAME CLOCK** (5 printed checks incl. one external) and the
+**§228 LFO RISE CENSUS**. `dsp/verify.py`: **BYTE-MATCH OK**.
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ★★★★ **THE CLAIM IS TRUE AND IT WAS MEASURABLE FROM DISK WITH NO RUN.** `kn5000_tonegen`'s stream is allocated at **48 000** and `run_frame()` was called once per rendered sample, so the DSP frame clock ran at 48 000/s. The proof needed no build: **every archived arm through §227 reports `1 440 001` frames on a `-seconds_to_run 30` vehicle** — exactly `30 × 48 000`, and its settled window `1 440 000 − 420 000 = 1 020 000` is precisely the `706 040` quiet + `313 960` loud that `§S1` splits. Against **Fs = 44 100**, every emulated delay, reverb time and LFO rate was **+8.844 %** fast. | **MEASURED**, from disk |
+| **B** | ⚠⚠ **BUT THE BRIEF'S "CONFIRMING MEASUREMENT ALREADY IN THE REPO" DOES NOT EXIST, AND THE `0.652 Hz` IT RESTS ON HAD NEVER BEEN MEASURED.** `LEDGER.md`'s *"0.652 Hz against the panel's 0.599"* is **derived** from the increment `114`. The only instrument that could have produced it, `§196`'s wrap census, prints **`07:15 wraps → period 96 000 frames (0.5000 Hz)`** — and printed that on every arm anyone ever ran. It is biased low **two independent ways**: its denominator is `m_frames_run`, which includes the **264 001** frames before the program is uploaded and during which the ramp is **frozen** (`chg` = `1 176 000` of `1 440 001`, and `1 440 001 − 1 176 000 = 264 001` EXACTLY — the §38 boot-transient end at frame **264 002**), and its numerator **truncates the partial 16th wrap** (`15` counted where the running window predicts `15.98`). | **MEASURED** |
+| **C** | ★★★★ **SO THE FIRST JOB WAS AN INSTRUMENT, AND IT MEASURED `0.652313 Hz` FOR THE FIRST TIME IN THE PROJECT.** The §228 **RISE CENSUS** measures the per-frame *rise* instead of the rare *wrap*: no window, no truncation. Arm A: **`07: rises 1 175 985 of 1 440 001 frames, step 114..114 CONSTANT, mean 114.0000, first rise at frame 264 001, period 2²³/step = 73 584.3 frames = 0.652313 Hz`.** That is `114 × 48000 / 2²³` to six figures. **The brief's arithmetic was right; the repo's measurement of it was not.** | **MEASURED** |
+| **D** | ★★★★ **THE KILL CONDITION PASSED, ON AN INSTRUMENT THAT COULD HAVE FAILED.** Arm B: **`0.599313 Hz`**, with the **step still `114..114 CONSTANT`** and the **period still `73 584.3` frames — bit-identical to arm A**. That invariance is the whole proof: the step and the period in frames are properties of the MICROCODE and must not move; only the seconds-per-frame did. ⚠ The brief's *"0.59934"* is wrong in the fifth digit — `114 × 44100 / 2²³ = 0.5993128`. | **MEASURED** |
+| **E** | ⚠⚠ **AND THE OBVIOUS KILL CONDITION CANNOT FAIL, SO IT WAS NOT USED.** *"Does the LFO census read 0.599 Hz?"* is **circular**: the census's Hz column is `wraps/frames × DECLARED rate`, `wraps/frames` is rate-invariant, so **changing the declaration alone moves that column to 0.599 with nothing measured** (rule 8). What is graded instead is **frames per EMULATED second**, taken from the device's frame counter against the machine's own clock — neither term under the declaration's control. Arm A **`47 985.602`**, arm B **`44 086.742`**, relative error `0.000300` / `0.000301` (the shared `30.009022 s` overshoot), **PASS** both. | **FORCED** (the criterion) + **MEASURED** |
+| **F** | ★★★★ **THE TONE GENERATOR DID NOT REGRESS, AND THE TEST COULD HAVE FAILED.** `W1` (insert OFF — the shipping configuration), `W2` (ON at 44 100) and `W3` (ON at 48 000) are **BYTE-IDENTICAL**, md5 `baffbeee660a7ea68deac866b46b3c6e`, over **1 440 001 frames**. ★ **The mandatory positive control passed**: peak **21 796**, **626 738 non-zero samples (14.5 %)** — the triad really sounded, so this is a comparison of real audio and not of two silences (rule 13). The dry mix is untouched **by construction** too: the whole §228 path is inside `if (dsp_on)`, which is false by default. | **MEASURED** |
+| **G** | ★★★★ **THE PASS IS INERT ON EVERYTHING THAT IS NOT A CLOCK, AND THE RATIOS PROVE IT.** `§S1 TOTALS` are **`4.924 %` quiet / `4.920 %` loud in BOTH arms**, to three decimals, while the raw counts scale with the frame count (`186 394 560 → 162 240 672` conversions). `§S1 iw34` datum **`14 428 403`** unchanged; `m_rf[0x8D] = 0x009B26` unchanged; `§41 = 0x400000 / 0x178D0B` unchanged; `§160`'s 41 non-zero cells identical cell for cell; `rule21_all` identical — kernel A `27/21/18`, **body 0 `0/0/0`**. | **MEASURED** |
+| **H** | ⚠ **A FIFTH "PROOF" OF Fs = 44 100 IS ROUTINELY QUOTED AND IT IS NOT MEASURED.** `ROADMAP:47` says *"33.8688 MHz = 768×44100"*. The 1996 scan prints **`36.8688 MHz`**, which divides to **neither** rate; `33.8688` is inferred from a shared digit string. ⇒ **grade it INFERRED and drop it from the count.** The four that survive are all **inside the ROM**: `ms × 0xAC44/0x3E8`; the double **`π/44100`** at `0x012F57` that the **SOLVED PARAMETRIC EQ validates against at 0.198 dB**; `NO OPERATION`'s `D = 4410 = 100.000 ms`; and 29 LFO blocks × 9 increments = `floor(f·2²³/44100)`, joint null `3.1e-12`. | **MEASURED** (the four) |
+| **I** | ★★ **TWO TOOLS FAILED THEIR OWN SELF-TESTS *BECAUSE THIS PASS FIXED THE DEFECTS THEY USED AS CONTROLS*, AND THAT IS A RULE.** `lint_handoff.py` fell **8/8 → 3/8** the moment P1–P5 landed; `gen_ledger_ext.py`'s T1 fell the moment the KN7000 verdict was filed as TIER 0b row 31. ⇒ **a control that IS the open defect is validated exactly once and is invalidated by its own success.** Both now use **synthetic, two-sided** controls: `10/10` and `8/8`. | **MEASURED**, twice |
+
+**VERDICT — `THE FRAME CLOCK SHIPS AT 44 100 Hz.` No audio claim of any kind is made.**
+
+---
+
+## 1. RULE 20 — the self-tests, printed BEFORE any interpretation
+
+```
+   §228 FRAME CLOCK                                    arm A          arm B
+   T1 DECLARED frame rate (set_frame_hz)               48000 Hz       44100 Hz
+   T2 frames run                                       1440001        1323000
+   T3 emulated wall time                               30.009022 s    30.009022 s
+   T4 MEASURED frames / emulated second                47985.602      44086.742
+   T5 |T4 - T1| / T1                                   0.000300 PASS  0.000301 PASS
+   T6 EXTERNAL known answer: the archived pre-§228 arms read 1 440 001 frames / 30 s
+      = 48 000.0/s.  UPD6383_FRAMEHZ=48000 must reproduce that.        ✔ 1 440 001
+```
+
+★ **T6 is the external control and it is the strong one**: it is an answer produced by a
+*different* instrument (§S1's own frame accounting, in seven archived logs) and the arm
+reproduces it **exactly**, not approximately.
+⚠ **T4 is not 48 000.000 and must not be**: `-seconds_to_run 30` stops the machine at
+`30.009022 s`, by which time the stream has already delivered its 1 440 001 samples. The
+**identical** relative error in both arms is the signature of that overshoot, not of drift.
+
+---
+
+## 2. THE INSTRUMENT THAT WAS WRONG FOR AS LONG AS IT HAS EXISTED
+
+```
+   §196 WRAP CENSUS      arm A  07:15 wraps -> period 96000 frames (0.5000 Hz)
+                         arm B  07:14 wraps -> period 94500 frames (0.4667 Hz)
+
+   §228 RISE CENSUS      arm A  07: rises 1175985 of 1440001, step 114..114 CONSTANT,
+                                mean 114.0000, first rise frame 264001,
+                                period 73584.3 frames = 1.53301 s = 0.652313 Hz @48000
+                         arm B  07: rises 1080436 of 1323000, step 114..114 CONSTANT,
+                                mean 114.0000, first rise frame 242550,
+                                period 73584.3 frames = 1.66858 s = 0.599313 Hz @44100
+```
+
+⚠ **Note arm B's wrap census gets *worse*, not better** (`0.4667`): with fewer frames in the same
+30 s it loses another partial wrap. **A rare-event census over a run that also contains a long
+dead window cannot measure a rate**, and quantisation at 14–15 events is ±7 % — more than the
+8.844 % effect being tested. It is kept in the log for continuity with §164/§196 and **banner-marked
+SUPERSEDED in the source**.
+
+★★ **THE TRANSFERABLE LESSON, and it is now TIER 0c rule 20's newest clause:** the `0.652` was
+quoted in `LEDGER.md` for weeks in the register of a measurement. **Nobody could have pointed at
+the log line, because there was none.** ⇒ *before quoting a figure as MEASURED, find the log line
+it came from. A number nobody can point at in a log is a derivation.*
+
+---
+
+## 3. WHAT SHIPPED, AND WHY IT IS A DECOUPLING RATHER THAN A RATE MOVE
+
+The tone generator still **renders** at 48 000, because that rate is load-bearing three ways —
+the EG rate law (`SAMPLE_RATE = 48000.0`), the per-voice low-pass coefficient and the pitch step
+are all expressed against it. Moving the stream would have dragged all three. Instead
+`run_frame()` is gated by a **phase accumulator**: `44100/48000 = 147/160` **exactly**, so the
+accumulator is periodic in 160 samples, issues 147 frames, and **drifts by nothing** — which is
+why arm B's frame count is `1 323 000 = 30 × 44 100` and not "about that".
+
+**Two declared approximations, both confined to the wet path** (which measures exactly zero today,
+`§54` peak 0): the send is **decimated without a filter** — the chip's serial receiver simply never
+sees the 13 samples in 160 that fall between LRCK edges — and the return is **held zero-order**
+until the next frame. Neither touches the dry mix, which is finished before the block runs.
+
+Also corrected, all of them previously hard-coding 48 000 or 44 100 in the wrong place:
+`§128`'s arm time, the `LOG_FRAME` "one per second" heartbeat, the `§196` Hz column, and
+**`§200`'s DELAY AGE, which converted frames to ms with a hard-coded `44100.0` while the clock
+ran at 48 000 — so every ms figure it has ever printed was 8.84 % HIGH.**
+
+⚠ **AN ORDERING DEFECT THE FIRST ARM CAUGHT.** The DSP device starts *before* the tone generator,
+so `§128` printed the *initialiser* (44 100) inside a 48 000 arm. `set_frame_hz()` now
+re-announces. **A device that is TOLD its clock must say so when it is told, not when it is
+constructed.**
+
+---
+
+## 4. THE ARM, QUOTED — `§54` FIRST, THEN RULE 19, BOTH BUCKETS, BOTH ARMS
+
+⚠ **`§54` GRADED FIRST, AS INSTRUCTED. A NULL in both arms:**
+
+```
+   arm A  §54  quiet-in 826 040 -> 826 040 SILENT / 0 LOUD (peak 0)
+               loud-in  313 960 -> 313 960 silent / 0 loud (peak 0)
+   arm B  §54  quiet-in 734 548 -> 734 548 SILENT / 0 LOUD (peak 0)
+               loud-in  288 451 -> 288 451 silent / 0 loud (peak 0)
+```
+
+The quiet window is **not** full scale (peak `0`) and the loud peak does **not** exceed the quiet
+peak (both `0`). **There is no output to claim and none is claimed.**
+⚠ The bucket counts fall by `44100/48000`; `§54` arms at frame 300 000, so its window is
+`frames_run − 300 000` — `1 140 000` and `1 022 999`. **Compare ratios, never counts.**
+
+```
+   RULE 19, mean AND AC span, both buckets, both arms:
+   §70  ACCA@w73   A / B   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   §211 ACCB@w78   A / B   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+```
+
+```
+   RULE 21 (dsp/tools/rule21_all.py), IDENTICAL IN BOTH ARMS:
+   kernel A   acc 27 = I 27 + FREE 0 | mem 26 = I 21 + FREE 5 | L 20 = I 18 + FREE 2   -> 27/21/18
+   body 0     acc  2 = I  0 + FREE 2 | mem  9 = I  0 + FREE 9 | L  4 = I  0 + FREE 4   -> 0/0/0
+```
+
+★ Kernel A's `27/21/18` matches §225's `W4′-c`; **body 0's shipped null `0/0/0` HOLDS**.
+⚠ `26/28/27` belongs to the `NOZ05` send-open rig and **no arm here touched it**.
+
+```
+   THE CALIBRATIONS, both arms, unchanged:
+   §S1 TOTALS      A  quiet 9 178 556/186 394 560 4.924 %  loud 4 077 722/82 885 440 4.920 %
+                   B  quiet 7 989 156/162 240 672 4.924 %  loud 3 746 410/76 151 064 4.920 %
+   §S1 iw34 datum  14 428 403 (1.720 FS), clips q/q l/l          BOTH ARMS
+   m_rf[0x8D]      0x009B26 = 39 718                             BOTH ARMS   <- the guard that fires
+   §41             unit0 0x400000  unit1 0x178D0B                BOTH ARMS
+   §160            41 non-zero cells, identical cell for cell    BOTH ARMS
+```
+
+★★ **`4.924 % / 4.920 %` surviving a change that moved every count is the inertness proof.** A
+clock change must move counts and leave ratios; anything else would have meant it moved arithmetic.
+
+---
+
+## 5. THE BOOKKEEPING REPAIR — P1..P9 ALL LANDED
+
+| patch | what | verification |
+|---|---|---|
+| **P6a** | `gen_ledger.py` called `main()` at module scope ⇒ **any `import gen_ledger` silently rewrote `LEDGER.md`** | `import` leaves the mtime unchanged — **PASS** |
+| **P6b** | `mask_bits()` was blind to the SHIFT form `(m_specmask >> N) & M` | TIER 1 gained bits **35–37 and 42–51**; `gen_fixlist` T8 still PASS |
+| **P4** | TIER 0c had **17 invocations of RULE 20 and zero definitions** | rules **19, 20, 21** defined; linter C4 **21 → 0** |
+| **P5** | TIER 0b stopped at §220 and was repo-scoped | rows **31–41** filed — 30 → **41**, covering §221–§227 **and** the two repo-external verdicts; entry 4 consolidated |
+| **P1** | `BUILD-LANE-QUEUE`'s standing constraints said the shipped build clips **5.303 %** | now `4.924 / 4.920 %` **with the arm named**; C2 **1 → 0** |
+| **P2** | `HANDOFF-NEXT` §4 said `Default is now 0x46A39B440F` — **§130's default, superseded four times** — while the same file twice says the mask is EXHAUSTED | replaced with the EXHAUSTED statement and the real literal; C1 **1 → 0** |
+| **P3** | *"SHIPPED this session — five"* over a **7-row** table | scoped to §188–§209, **7**, plus "derive it, never count it"; C5 **1 → 0** |
+| **P7** | the memory files' *eight* / *nine* | already **`8 GATES ACROSS 11 SECTIONS`** — verified, no edit needed |
+| **P8** | nothing ran the linter | `lint_handoff.py` wired into the standing constraints |
+
+**Published, both derived and regenerable, never hand-counted:**
+`dsp/analysis/SHIPPED-FIX-LIST.md` (**8 forced GATES across 11 SECTIONS**, 17/17 self-tests) and
+`dsp/analysis/EXTERNAL-VERDICTS-UNFILED.md` (**111** DSP-relevant repo-external verdicts still
+unfiled, down from 112 — 8/8 self-tests). `lint_handoff.py`: **0 FAIL**, 12 INFO.
+
+---
+
+## 6. WHAT THIS PASS IS BLIND TO
+
+* **It changes a RATE, not an ARITHMETIC.** Nothing here touches the `1.720 × FS` ladder, the
+  `4.924 %` rail, the `0x90` base question (queue item 12) or the output-stage null. The rail is
+  exactly where §227 left it.
+* **The audible consequence is UNMEASURABLE TODAY.** Every delay and reverb time is now 8.844 %
+  shorter — and the wet path emits exactly zero, so **no capture can show it**. The claim is about
+  the clock, not about sound.
+* **`§200`'s DELAY AGE ms figures in every log before this one are 8.84 % high.** They were never
+  load-bearing, but do not compare them across the change.
+* **Fs = 44 100 is established from the ROM, not from the board.** Felipe reading X301's marking
+  would settle it physically; the scan says `36.8688 MHz`, which is neither.
+* **The frame-count arming gates did not move** (`S1_ARM_FRAME` 420 000, `§54`'s 300 000, `§38`'s
+  264 002 are FRAME counts), so their **wall-clock** times did: 420 000 = 8.75 s → **9.52 s**.
+  Nothing in this vehicle is affected (the notes start at 21.02 s), but a shorter vehicle would be.
+
+---
+
+## 7. THE NEXT EXPERIMENT, PRE-REGISTERED
+
+1. ★★★★ **THE BLOCKER IS UNCHANGED AND IS STILL QUEUE ITEM 12** — *what does the coefficient base
+   `0x90` MEAN*, with a falsifier that **distinguishes** its three readings. §228 did not touch it.
+2. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS** (queue item 13), one command each, no build.
+3. ★★ **RE-DERIVE ANY SECONDS-DOMAIN PREDICTION THAT WAS COMPUTED AT 48 000.** The pre-registered
+   early reflections for Felipe's capture (254/870/978/366/1044 samples) are **sample** counts and
+   are unaffected; their millisecond renderings (5.760/19.728/22.177/8.299/23.673 ms) were computed
+   at 44 100 and are now **consistent with the emulator for the first time**.
+4. ⛔ **NOT a further rate change.** `UPD6383_FRAMEHZ` exists as a two-sided control, not as a knob
+   to tune audio with. `ROADMAP` P1.3's own falsifier still stands: *"if the displayed delay time
+   and the audible one disagree at 44 100 too, the descriptor→address chain is wrong and the clock
+   is not the problem — do not tune the rate to make audio match."*
+
+**GRADES.** §0 items A, B, C, D, F, G, H, I **MEASURED**; item E's criterion **FORCED**;
+§7's items **pre-registered**. `dsp/verify.py`: **BYTE-MATCH OK**.

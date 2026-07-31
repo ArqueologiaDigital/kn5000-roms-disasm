@@ -20,10 +20,45 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§227, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228, 2026-07-31)
 
-> **★★★★ THE BLOCKER IS: *WHAT DOES THE COEFFICIENT BASE `0x90` MEAN?* BOTH CANDIDATE BASES ARE
-> NOW MEASURED TO BE SOMEBODY's PER-ALGORITHM PARAMETER BANK.**
+> ### ★★★★ §228 SHIPPED FIRST, AND IT IS NOT THE BLOCKER — IT IS A CLOCK
+>
+> **THE DSP FRAME CLOCK RAN AT 48 000 Hz AGAINST AN Fs OF 44 100.** Measured from disk before
+> anything was built: every archived arm reports **1 440 001 frames on a `-seconds_to_run 30`
+> vehicle** = exactly `30 × 48 000`, and its settled window `1 440 000 − 420 000 = 1 020 000` is
+> precisely `§S1`'s `706 040` quiet + `313 960` loud. **Every emulated delay, reverb time and LFO
+> was +8.844 % fast.** It now ships at **44 100**, by decoupling `run_frame()` from the 48 kHz
+> rendering stream with an exact **147/160** phase accumulator.
+> `UPD6383_FRAMEHZ=48000` restores the old clock as the two-sided control.
+>
+> ```
+>                       arm A (48000, control)   arm B (44100, DEFAULT)
+>    frames run          1440001                  1323000 = 30 x 44100 exactly
+>    §228 T4 meas. Hz    47985.602                44086.742   (T5 err 3.0e-4, PASS both)
+>    LFO step / period   114..114 / 73584.3 fr    114..114 / 73584.3 fr   <- INVARIANT
+>    LFO rate            0.652313 Hz              0.599313 Hz
+>    §S1 TOTALS          4.924 % / 4.920 %        4.924 % / 4.920 %       <- INVARIANT
+> ```
+>
+> ⚠⚠ **NEVER GRADE A CLOCK CHANGE ON THE LFO's Hz — IT CANNOT FAIL** (the census's Hz is
+> `wraps/frames × DECLARED rate` and `wraps/frames` is rate-invariant; rule 8). Grade on **T4**,
+> frames per emulated second against the machine's clock, and on the step/period staying invariant.
+> ⛔ **`§196`'s WRAP CENSUS IS SUPERSEDED** — it printed **0.5000 Hz** on every arm ever run
+> (denominator included the 264 001 pre-upload frames; numerator truncated the last partial wrap).
+> ★★ **And `LEDGER`'s own `0.652 Hz` had never been measured by anything** — it was derived from
+> the increment. **Before quoting a figure as MEASURED, find the log line it came from** (rule 20).
+> ★ **NO TONE-GENERATOR REGRESSION**: insert-OFF / ON-at-44100 / ON-at-48000 are **byte-identical**
+> over 1 440 001 frames (md5 `baffbeee…`), with the positive control passing (peak 21 796,
+> 14.5 % non-zero).
+> ⇒ ⚠ **EVERY FRAME COUNT IN A PRE-§228 LOG IS ON THE 48 000 CLOCK. COMPARE RATIOS, NEVER COUNTS.**
+> Arming gates are FRAME counts and did not move; their wall-clock times did (420 000 = 8.75 →
+> **9.52 s**). `§200`'s DELAY AGE ms figures in older logs are **8.84 % high**.
+>
+> ---
+>
+> **★★★★ THE BLOCKER, UNCHANGED BY §228, IS: *WHAT DOES THE COEFFICIENT BASE `0x90` MEAN?* BOTH
+> CANDIDATE BASES ARE NOW MEASURED TO BE SOMEBODY's PER-ALGORITHM PARAMETER BANK.**
 >
 > **§227 took the reverb-preset capture §226 asked for, and it REFUTED §226's own positive half.**
 > `C-RAM[0x90..0xB4]` is **NOT** a boot-fixed bank — it is **UNIT 1's (the reverb's) parameter
@@ -589,6 +624,16 @@ silently returns 0 (`upd6383.cpp` SRC evaluator default). `SRC 0x13` is the tabl
 
 Each cost at least one full pass. The refutation is worth more than the hypothesis was.
 
+★★ **TWO KINDS OF ENTRY LIVE HERE NOW.** Entries 1–30 come from `SPECULATIVE-APPLIED-REGISTER.md`,
+which `gen_ledger.py` reads. Entries **31+** include **REPO-EXTERNAL** verdicts from
+`kn7000_mame/notes/`, which **NO GENERATOR READS** — they are filed by hand and they must be,
+because the index is repo-scoped while the evidence is not. `python3 dsp/tools/gen_ledger_ext.py`
+sweeps the notes and reports what is still unfiled: **112 DSP-relevant graded verdicts** as of
+2026-07-31 (⚠ INFERRED aggregate — a lower-bound work queue, not a statistic).
+⚠ **And entries 1–30 stopped at §220.** Nothing from §221–§227 was filed for eleven days while
+those seven sections refuted six distinct candidates. **File the refutation in the same pass that
+earns it.**
+
 ⚠ #1 and #2 were aimed at §163's *"kernel `iw32` pins the phase"* blocker, which §165 then
 measured out of existence. They stay listed: the refutations are still sound, and the ideas are
 the ones a reader would reach for again.
@@ -598,7 +643,7 @@ the ones a reader would reach for again.
 | 1 | Fix the phase clobber by changing **`DRAM_UNIT_BASE`** | **FORCED**: kernel A's walk begins where the previous frame *closed*, so base and window are coupled and `iw32` follows the cell wherever it moves. Bit 27 ran it — gate fires, `dp` `0x07`→`0x08`, **every value bit-identical** | §108 §5 |
 | 2 | Decode `040.0.**.C63` / `012.4.01.1CE` as the missing phase producers | Both **already modelled**: `SRC 0x11/ACT 0x03` = `tempB ← ACCB`, `SRC 0x07/ACT 0x0E` = `P ← mem[ptr]`. Their presence in the roadmap's *"no reading of any kind"* list is a **corpus statistic, not a statement about the emulator** | §163 |
 | 3 | `addr8` on the class-6 word = the **table extent** | The `0x28` sites are fed by scale `0x000010` = 16; `0x000028` does not occur in the coefficient corpus at all. The `24`/`0x18` agreement was coincidence | `lfo-ramp.md` P-16 |
-| 4 | Implement the class-6 lookup **now** | Every index candidate is constant (`acc 0..0 \| m_dp 12..12 \| cursor 9..9`, 1 129 389 hits). A frozen lookup returns one entry forever, and that reads as *refuting the sine* against the "226 not 240" test | §162 |
+| 4 | Implement the class-6 lookup **now** | Every index candidate is constant (`acc 0..0 \| m_dp 12..12 \| cursor 9..9`, 1 129 389 hits). A frozen lookup returns one entry forever, and that reads as *refuting the sine* against the "226 not 240" test. ★ **CONFIRMED DOWNSTREAM (§158):** the settled tap modulation is **CONSTANT per voice** — `§104` gives `iw96 15729946 \| iw105 15729540 \| iw137 −15727740 \| iw146 −15727740`, **all `min == max`** in quiet *and* loud — *because the lookup is a no-op*. ⇒ rule 4: the consumer cannot be validated until its index varies. See also entries 3 and 9 | §162, §158 |
 | 5 | `SRC 0x08` = **unity** | The rival reading saturates the accumulator on the LFO's very first word. `SRC 0x08 = the COEFFICIENT` reproduces the ROM ramp constant exactly (`mem[0x04]` 1000→1228, step +228 = `0x0000E4`) in 11 of 19 corpus constants | `upd6383.cpp:2124` |
 | 6 | The brief's anchors **`SRC 0x1C` = "LFO out"**, **`SRC 0x08` = "LFO phase"** | Neither is anchored anywhere in this repository, the MAME device, or its disassembler. A *word*-level landmark was read as a *field*-level one | `lfo-ramp.md` §11 |
 | 7 | `st_gate = always` | 0 survivors of 276 480 | `lfo-ramp.md` P-9 |
@@ -625,6 +670,17 @@ the ones a reader would reach for again.
 | 29 | "the delay line is **EMPTY**" as an independent fact | ⚠ **IMPRECISE §219.** `§75` in the same report as `§46`: **1 175 999 writes carry content** (one per settled frame — the kernel's `iw46` writing the DC `0x7D70`), and `§200` reports reads resolving with 0..4401-frame ages. The reads return zero because the **bodies** write zero, because their input cell `0x05` is zeroed by `iw45`. "Empty" names a symptom of dead-end 28's replacement, not a cause | §219 |
 | 30 | **Mask bit 26** (`0x4000000`, `m_mirror06_n`) — mirror the kernel's `0x06` result into `0x05` to fix the DEPOSIT ADDRESS | ⛔ **REFUTED §220, by running it.** It **fired 5 881 351 times** — exactly 5 per kernel-A pass (`iw19/21/27/33/39`, mode 2; **not** `iw72`, whose mode is 1) — and body 0's `§104` pickup at `iw84` stayed `0 ‖ 0`, because **every mirror site is upstream of `iw45`**, whose zero store is the last write to `0x05` before the CALL. Worse, it made kernel A **strictly less input-dependent** (`acc 27→22, mem 21→10, L 18→12`) via a cross-frame path through cell `0x06`. ⇒ **the mirror destroys input dependence, it does not create it.** ⚠ And §219 §8's reading *"a null means the gate never fired"* is wrong: this is a null with a fired count of 5.9 M | §220 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
+| 31 | Open the **KN7000 / SHARC effects engine as a cross-model oracle** for IC311's coefficients | ⛔ **RUN 2026-07-22, VERDICT: NEGATIVE.** **Zero** arbitrary coefficient is shared. 208 KN5000 constants vs 548 KN7000 floats: 12 shared two-decimal round values against ~5 expected from an independent draw of the same ~100-value pool (shared **habit**, not shared **data**), and the only two non-round shared values are **±0.125 = 2⁻³**, a shift. KN5000's signature **2/π = 0.63662 (53 occurrences)** appears nowhere in the KN7000 records; KN7000's **0.618 / 0.5614 / 0.876 / 0.2435 / 0.111 / 0.243** appear nowhere in the KN5000 set. ⚠ A naive float-set baseline predicts 1.8 ± 1.3 against 16 observed and **looks significant** — it is wrong, because both real sets are biased toward round decimals; split the sets and the signal vanishes. ★ **The note flagged its own trap in advance**: *"recording this because it is exactly the sort of number that could have been reported as a correlation"* | `kn7000_mame/notes/kn5000-dsp-coefficients.md` §5 / §5.1 |
+| 32 | **Delay tap lengths survive the change of chip** — "N milliseconds is the same physical quantity on either instrument", so KN7000 taps should locate KN5000's (Felipe's strongest cross-model hypothesis) | ⛔ **FALSIFIED 2026-07-22.** Raw intersection of the two tap sets is **`{200}`** — one value, and it is round. Over **26 × 37 = 962 pairs** with a ±0.3 ms window spanning 5–500 ms: **2 of 26** at 32 kHz, **7 of 26** at 44.1 kHz, **4 of 26** at 48 kHz — consistent with chance, and **the test cannot even pin the sample rate**. ★ **The reason is the transferable part: both machines design their delay lines in round SAMPLE counts, not round milliseconds** (KN5000: 160 200 520 600 640 720 840 1100 1160 1240 1550 1760 12800; KN7000: 200 250 400 512 800 1000 4000 5000 8000 32768). A tap is an **address in a delay buffer**; a designer moving to a new chip with a new buffer geometry re-picks them from scratch. The physical-quantity argument holds for a spec sheet, not for an implementation | `kn7000_mame/notes/kn5000-dsp-coefficients.md` §5.2 |
+| 33 | **Seed the coefficient cursor at frame start** (`UPD6383_CURSEED`, base `0x00`) — "the cursor is never seeded, so the header runs on whatever the previous frame's unit-1 body left behind" | ⛔ **REFUTED §226, FROM DISK, NO RUN — and both halves of the premise are wrong.** (a) **The base IS seeded, by an instruction**: the epilogue's own `iw69 = 801.0.90.821 ldptr #$90` reaches register row 25's `is_ldptr` branch (`m_cursor = ad` under `!(m_specmask & 0x1000)`; **bit 12 is CLEAR in the default**), and the epilogue contains **ZERO** cursor-advancing words, so the next frame's `w0` starts at **exactly `0x90`, every frame**. (b) **Base `0x00` is the UNIT-0 EFFECT's own per-effect parameter bank** — selecting PARAMETRIC EQ rewrites `0x00..0x1E` wholesale and moves **every one of `0x00..0x13`** while writing nothing at or above `0x50`; the header is a **literal canned image in Sub CPU ROM** and cannot read a per-effect bank. (c) At base `0x00` the same ladder reaches **`2.733 × FS`** with PEQ loaded — **1.6× WORSE**. ⇒ ★★★★ **A CLIP RATE THAT FALLS BECAUSE A COEFFICIENT BECAME *SOMEBODY ELSE'S* IS ALSO A REGRESSION.** ⚠ And *"set it to the value it already has"* **cannot fail** — rule 8 | §226, `HEADER-BANK_findings.md` item E |
+| 34 | **`ACT 0x00`'s bus term is a missing general attenuation** — the unity-gain bus addend is what overflows the kernel ladder, so attenuate it | ⛔ **REFUTED §224, FROM DISK, FOR `iw34`.** Zero the `ACT 0x00` bus term and `iw33` **still leaves 10 234 099 = 1.220 × FS. It still clips.** ⚠ **HALF RIGHT, AND THE HALF MATTERS**: the mechanism IS real — a unity-gain bus addend exists — but at `iw34` it is not the cause, and at `iw13`/`iw91` the fault is **WHAT THE BUS CARRIES** (a railed memory cell; a modulus), not that it is added. The named addend at `iw91` is `iw92 − iw91 = 8 388 607 = 0x7FFFFF = C-RAM[0x01]` **exactly, at both endpoints** — the constant `upd6383.cpp`'s **own** C-RAM annotation calls *"wrap"*, which §225 then shipped as `UPD6383_LFOWRAP`. ⇒ **do not re-propose "attenuate the bus"; ask what is ON it** | §224, superseding §223 §8.2 |
+| 35 | **`SRC 0x03` / `ACT 0x03` as an epilogue crossbar latch** (`§E-D85`) | ⛔ **REFUTED §222 by a two-sided bisection.** Arm E fired 1 204 800 / 1 203 840 and its `diff`s are **EMPTY**; arm D equals arm C in every column. `iw205` is a **MESSENGER** — its operand `547 518 .. 8 388 607` gives `ACCB 35 882 139 648 .. 549 755 748 352 = L × 65536` at both endpoints — and **`m_bx_sel0d` stays FROZEN at 1**, where changing it breaks body 0's only working pickup and the regression **IS** the `79 438 ± 90` rule-19 DC. ⚠ **`D-RAM[0x85]` has NO WRITER AT ALL** on settled frames, measured by an instrument that names `iw70` the instant one exists | §222 |
+| 36 | **A store-suppression rig will produce a non-railing vehicle** | ⛔ **REFUTED §223.** The narrow rig (`NOZ05 = 2`, `iw35`/`iw45` only, 2 stores) reproduces `28/32/28` / `33/40/29` / `2/1/2` column for column **and still rails** — and so does the shipped build, which clips **4.924 %** quiet / **4.920 %** loud of all accumulator conversions with the input **exactly zero** (⚠ **5.303 % is the `LFOWRAP=0` CONTROL arm's number**, not the shipped build's, since §225). ⇒ **the rail is upstream of the send entirely**; the rig removes the two stores that were HIDING it from body 0, it does not create it. **Treat nothing that rails as evidence**, and do not build another suppression rig looking for a clean vehicle | §223, correcting §222's attribution |
+| 37 | **Kernel A's cell `0x06` is a BISTABLE / a latch-up with a stable second state** | ⛔ **RETIRED §225. `0` IS NOT A FIXED POINT.** `§S3` — read-only, always on, **no frame gate** — reports `SETTLING`: cell `0x06` is 0 before any instruction writes it, **stores #1..#1356 write exactly 0** (measured: the ladder's lowest rung is *"val ≥ 1"* and first fires at #1357), then `iw19`'s **first ever execution** at frame 264 002 puts `1 650 061 = 0.1967 × FS` **into an empty cell** — already **1.52 ×** the `0.129 703 × FS` threshold — and the rail follows **on the next frame**. **There is no second state.** The rail needs a **FORWARD GAIN** explained, not an ENTRY. ⚠ **`§106`'s writer list was 5 names of 12** and `5 881 351` was never divisible by 5 — quote `nz`, never just the count | §225, retiring §224 §2 |
+| 38 | **The multiply should read `C-RAM[cursor + 1]`** (`§S2sq`, the coefficient squaring) | ⛔ **CLOSED WITHOUT A BUILD, TWICE.** (a) `SQUARING-MULTIPLY_findings.md`: the multiply has **one hardwired coefficient port** (`C-RAM[ccur]`; no instruction field selects it) and **one** operand bus, so a word routing the coefficient onto that bus has **no second port for a sample** — the squaring is **FAITHFUL**. Census `123 / 893 = 13.77 %` against a `0.05 %` null, `z = +90`: **evidence FOR the decode.** (b) The re-attribution to the cursor BASE is refuted by §226 (entry 33). ⛔ **`SRC 0x08 = C-RAM[cursor]` is ANCHORED** by the CHORUS LFO (`C-RAM[0x00] = 114` ⇒ `+114`/frame; ★ §228 MEASURED the resulting ramp at **step 114..114 CONSTANT** over 1 175 985 frames) — **do not touch the source read** | `SQUARING-MULTIPLY_findings.md`, §226 |
+| 39 | **`iw33`'s `f31 = 1` should not carry** (`UPD6383_NOCARRY`) — "the kernel ladder overflows because a term is being added that should not be" | ⛔ **REFUTED §227, FROM DISK BEFORE IT RAN, AND THEN MEASURED INERT.** `f31 == 1` is `HI_ACC_ADD`, **1309 of 2989** non-C-format corpus words and **695 of 1178** ALU-decoded; op 0 LOADs, op 2 HOLDs *without a product*, op 3 gets HOLD's behaviour ⇒ **it is the only accumulate the ISA has**, and the **PARAMETRIC EQ** biquad (grade SOLVED, validated at **0.198 dB** against its designer) sums five products through `f31 == 1` words `w6..w10`. Without the carry `H(z)` = `makeup · (−a2) · z⁻²`. **AND IT DOES NOT FIX THE CLIP:** `iw34` becomes `8 388 608` = `2²³` = **FS + 1** and clips `706040/706040` quiet, `313960/313960` loud — **unmoved from shipped.** ⇒ ★★★★ its `§S1` `4.924 % → 0.379 %` is **117 655 680 accumulate steps refusing to add**: **a clip rate that falls because a term stopped being added is a REGRESSION wearing a good number.** Collateral: `§104` body-0 goes 100 % input-INDEPENDENT and **`m_rf[0x8D]` vanishes** | §227 |
+| 40 | **`P_SHIFT = 7` is the Q-consistent shift** — "`>> 6` is one bit short" | ⛔ **REFUTED §227, and the phrase had TWO meanings which are different experiments.** The core's own header records coefficients **Q1.22 (MEASURED from the firmware's scale constants)** and data Q0.23 ⇒ the Q-consistent TOTAL is **22**, which is what ships. **TIED (7/15, total still 22) is a MEASURED NO-OP** — the entire `§S1` block is BIT-IDENTICAL to the default over **269 279 999** conversions, the only differing line being the header text `>> 16` vs `>> 15`. **UNTIED (7/16, total 23) halves `m_rf[0x8D]` `0x009B26 → 0x004D93`** and *still* clips at `1.110 × FS`. ⚠⚠ **AND `§41` DOES NOT GUARD `P_SHIFT`** — it reads C-RAM *levels* `0x06`/`0x86` and is UNMOVED by a 2× product rescale; **`m_rf[0x8D] = 39 718` is the guard that fires.** Fix the three-guard phrase wherever it is quoted | §227 |
+| 41 | **`C-RAM[0x90..0xB4]` is the header's BOOT-FIXED coefficient bank** (§226 item D, in its strong form) | ⛔ **REFUTED §227 BY THE CAPTURE §226 ITSELF ASKED FOR.** A preset change **CONCERT REVERB 1 → ROOM REVERB 1** rewrites **23 cells, every one inside `0x90..0xB4` and NOTHING else in the 256-cell C-RAM**: `[00..4F]` 0 of 80, `[50..8F]` 0 of 64, the header's own walk `[90..A3]` **13 of 20**, the ladder cells `[9B..9D]` **2 of 3**. ⇒ **it is UNIT 1's per-algorithm parameter bank**; it looked fixed only because both §226 captures carried the **same** reverb. ★ The control that makes it proof-grade: an independent 45 s panel run landing on CONCERT REVERB 1 reproduces the archived cold-boot capture on **all 256 cells, 0 differ** ⇒ **the cold-boot default reverb is CONCERT REVERB 1**, so every *"CHORUS + RR1"* label in §226 names the wrong preset. ⛔ **This does NOT re-open base `0x00`** (entry 33) | §227 |
 
 ---
 
@@ -723,3 +779,54 @@ the ones a reader would reach for again.
     statistic (§218 reproduced `register-space.md` §4's `82`/`50` split digit-for-digit).
     ⇒ **And when a re-derived number disagrees with the source comment beside the counter, the
     comment is evidence — reconcile before building on the new number.** *(§218)*
+
+19. **★ REPORT MEAN AND AC SPAN SEPARATELY, BOTH BUCKETS, BOTH ARMS, BEFORE CALLING ANYTHING
+    AUDIO.** `min != max` is not signal: `79 438 ± 90` passes min-vs-max, the no-stimulus check
+    *and* the translation rule, and is a **DC at −59 dB**. Mechanised — `§70`/`§211` print both.
+    ⚠ `m_bx_sel0d` is FROZEN at 1 globally because the regression from moving it **IS** this DC.
+    *(§221; and rule 1's two retracted "IC311 outputs audio" claims are the same shape)*
+
+20. **★★ A NEW DETECTOR IS NOT EVIDENCE UNTIL IT HAS REPRODUCED AN ANSWER ALREADY ON RECORD —
+    AND THE SELF-TEST IS PRINTED FIRST, NOT APPENDED.** A census printing a clean zero is
+    indistinguishable from a correct negative, and a classifier agreeing with itself is
+    indistinguishable from a correct one. Before interpreting ANY output of a new instrument:
+    * validate it against known answers, **at least one of which would FAIL if the detector were
+      broken** — a control every arm passes is rule 15's reach test, not a test;
+    * prefer at least ONE **EXTERNAL** control — an answer produced by a *different* instrument.
+      §225's `§S3` earned its keep this way: mask bit 26 counts the identical predicate at the
+      identical hook and §220 measured **5 881 351**; `§S3` reported **5 881 351**;
+    * ⚠ **internal consistency that is TRUE BY CONSTRUCTION IS NOT A SELF-TEST.** `§S2`'s
+      `carried + bus + P == result` cannot fail — the terms are split out of `src_term` itself —
+      and the source says so; its real controls are four pre-registered per-term values;
+    * ⚠ **a control must be a case whose answer is known INDEPENDENTLY of the thing under test.**
+      *(new, 2026-07-31: a sweep's "known PRESENT" control was itself one of the known-ABSENT
+      cases, and demanded the opposite of the right answer);*
+    * ⚠⚠ **AND AN INSTRUMENT CAN BE WRONG WHILE EVERY ARM AGREES WITH IT** *(new, §228)*: the
+      `§196` LFO wrap census printed **0.5000 Hz** on every arm anyone ever ran, because its
+      denominator included the **264 001** frames before the program is uploaded (during which
+      the ramp is frozen) and its numerator truncated the last partial wrap. The rate it was
+      hiding — **0.652313 Hz** — had been quoted in `LEDGER.md` for weeks as if measured; it had
+      only ever been **derived from the increment**. ⇒ **before quoting a figure as MEASURED,
+      find the log line it came from.** A number nobody can point at in a log is a derivation.
+    * **print the result of every check, PASS or FAIL, before the finding** — reporting only the
+      passes is how `§121` ran seven arms that were all the same arm.
+    ⇒ **Report your failed controls out loud.** `UNWRITTEN-CELLS_findings.md` §2 opens *"two of
+    them FAILED"*, and that is what makes the other five worth reading.
+    *(named across §224/§225/§226; `hdrbase.py` 10 self-tests + 3 external, `f31carry.py`,
+    `SQUARING-MULTIPLY_findings.md` §1, `HEADER-BANK_findings.md` §1 — all invoked it, none
+    defined it, for 17 citations across 10 files; DEFINED HERE by §228)*
+
+21. **★★ `§104`'s AND `§86`'s QUIET-VS-LOUD MARKERS CANNOT DISTINGUISH "INPUT-DEPENDENT" FROM
+    "FREE-RUNNING AND SAMPLED OVER TWO FRAME SETS" — BUT THE SPLIT IS COMPUTABLE.**
+    Proof, from a case in every log this project has ever taken: cell `07` quiet `[4 .. 8388594]`
+    loud `[8 .. 8388598]` — the LFO phase, with no input in it; the endpoints differ by **less
+    than one increment (114)** because the buckets are different *sets of frames*.
+    ★ **The discriminator is FORCED by the instrument's own bucket predicate**
+    (`nz = (m_in_val[0] != 0) || (m_in_val[1] != 0)`): the quiet bucket is the frames where the
+    input latch reads **EXACTLY ZERO**, the same value on all 706 040 of them, so a **DEGENERATE
+    quiet range (`min == max`) PROVES input dependence** and a non-degenerate one proves
+    free-running state. `dsp/tools/rule21_all.py <log>` does it in one line.
+    ⛔ **NEVER QUOTE A `§104`/`§86` COUNT AGAIN WITHOUT ITS `D-I` SPLIT.** Under it, `28/32/28`
+    survives as `26/28/27` proof-grade + `0/4/1` free-running, and the shipped build's `2/4/1`
+    "null" is **100 % free-running — body 0 is `0/0/0`**. Damage is confined to rows reading cell
+    `0x07` or `0x10`; every other published tally is proof-grade. *(§224, operational §225)*
