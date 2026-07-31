@@ -13362,3 +13362,237 @@ empty tempA, same fully-decoded word, second one last.
 
 Evidence grade: §1 and §2 **MEASURED** (exhaustive over 285 slots; the store witness aimed for the
 first time); §3 **MEASURED**; my §205 framing **RETRACTED**.
+
+---
+
+## §213 — ⛔⛔ §211's GRADEABLE LEAD WAS A PROBE ARTEFACT. The input dies at `iw36`, and the SEND is decided by ONE corpus-unique word whose SRC is a GUESS
+
+Scored against `data/PREDICT_213.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@251c513`). Run: `data/kernelA_213.log.gz` — shipped default
+`0xB910E446A39B440F`, all env gates ON (`UPD6383_STPROBE = 1`), clean vehicle
+(`kn7000_mame/scratchpad/coldnotes2.lua`, cold boot, isolated NVRAM **and isolated
+`-cfg_directory`**, triad C4/E4/G4 held 21.0–27.5 s, `-seconds_to_run 30`), 1 440 001 frames,
+**313 960 loud**.
+
+⚠ **VEHICLE NOTE, and it cost one run:** `DSPCFG` is a `PORT_CONFNAME` that defaults to **Off**,
+so a run with a *fresh* `-cfg_directory` executes **no DSP frames at all** and `device_stop()`
+prints nothing (`m_frames_run != 0` guards the whole report). Copy
+`kn7000-emulator/cfg/kn5000.cfg` (which carries `:DSPCFG value="3"`) into the isolated cfg
+directory. A silent report is this, not a crash.
+
+### 0. The calibration passed, so the run counts
+
+`coldnotes2.lua` printed `located=true`, `NOTE ON t=21.02`, `NOTE OFF t=27.51`; `§54 TRACKING`
+reports **313 960 loud** against the pre-registered 250 000–380 000. And the control held:
+`dsp/tools/s104_score.py` scores this run and `data/outstage_211.log.gz` **identically in all
+three columns** — `acc 27/2` (slots 9..31, 35..38), `mem 21/9`, `L 18/3`. The build is
+**read-only**, as pre-registered.
+
+### 1. ⛔⛔ §211 §6's "iw39 STORES TWICE" IS A PROBE ARTEFACT. THERE IS NO SECOND STORE
+
+`upd6383.cpp`'s ACTION-0x07 site had an **unbraced `else`** in front of `store_mode()`:
+
+```
+    else
+    store_mode(mode07, u8(d07), u32(L));     <- the ONLY statement the else guards
+        kwatch(...); watch_store(..., 3);
+        if (!lvl_hit && !ab_hit) store_probe(..., 3);
+    m_dwr[d07]++; ...                        <- all of these ran on every VISIT
+```
+
+The `!lvl_hit && !ab_hit` guard is the hand-patch that covered the **two** suppressors named in
+the comment above it. The **third** — §112's class-A latch arm (mask bit 25, ON in the shipped
+default), which latches `P` and stores nothing — was added 100 sections later and never got it.
+So the §109 witness reported three stores per frame that the machine does not perform.
+
+★ **It was already MEASURED, in §211's own log, before this build existed.** `iw34`
+(`000.A.FF.407`, class A, ACT 0x07) was logged storing `8 388 607` to cell `0x06` — yet §104's
+residency column shows `0x06` still holding **`6 039 795`**, what `iw33`'s bit-4 store put there,
+at `iw38` **and** at `iw39`, with nothing writing it in between. The store did not happen.
+
+**Shipped: `UPD6383_STPROBE` (default 1), with a fired count.** Every prediction held:
+
+| # | prediction | result |
+|---|---|---|
+| P1 | no site-3 store at `iw32`, `iw34`, `iw39` | ✅ `iw32` and `iw34` now print **`(NO STORE)`**; `iw39` prints only `[site2 addr 06 val 1 991 044..8 388 607]` |
+| P2 | `iw72` (class 1) and `iw78` (class 0xD) KEEP theirs | ✅ both unchanged; `iw78` still shows a genuine site2+site3 pair |
+| P3 | §96 loses `cell 07 by iw32` and `cell 06 by iw34`, keeps `iw19/21/27/33/39` and `iw9/11/35/45` | ✅ exactly that |
+| P4 | fired count **equals** the §112 latch count | ✅ **3 630 720 = 3 630 720**, to the unit |
+| — | (unpredicted corroboration) | §86 cell 06 writes `8 160 000 → 6 120 000` (−2/frame: `iw34` **and** `iw39`'s site 3) and cell 07 `2 040 000 → 1 020 000` (−1/frame: `iw32`) |
+
+⇒ **`iw39` performs exactly ONE store**, of the input-bearing accumulator, into cell `0x06`.
+⇒ §211 §6's *"the live value is destroyed by the second store"* is **RETRACTED**, and *"suppress
+one of the two stores"* would have been a **NO-OP on the machine** that silenced a probe line.
+Declining it (§211, §212 §4) was right for the wrong reason.
+
+### 2. ★★ AND THE §112 LATCH IS IRRELEVANT AT `iw39` ANYWAY — the MULTIPLY overwrites it
+
+§213's new per-slot `pw` column (who last wrote `P`) reads **`0x40` = bit 6 = THE MULTIPLY** at
+`iw39`, not bit 5 (§112). Reading the source with that in hand: `iw39` is class A, so
+`coeff_consumer()` fires **after** the ACTION switch and executes
+`m_p = (sext(coef,24) * L) >> P_SHIFT; m_pw = 6` (`upd6383.cpp:3645`) — overwriting the latch in
+the same word. ⇒ **`P5c`'s value prediction held and its MECHANISM was refuted** (rule 10 again:
+the measurement answered a different question). The `HI_ST`-plus-`ACT 0x07` decode question §211
+posed as prerequisite (a) is therefore **doubly moot** at this word: one arm is a phantom and the
+other is overwritten before anything can read it.
+
+⇒ **The operative fact at `iw39` is simply that the multiplier's multiplicand is the bus `L`, and
+`L` is `tempA`, and `tempA` is `0`.**
+
+### 3. ★★★ WHERE THE INPUT ACTUALLY DIES — `iw36`, one word earlier than §211 implied
+
+The new `P` census, quiet ‖ loud, kernel A (`data/kernelA_213.log.gz`):
+
+```
+   iw35  012.A.00.1C0   P  280 183 750 068  ‖  -292 505 928 512 .. 462 303 209 657   *  INPUT
+   iw36  400.A.00.000   P -126 764 777 472  ‖  -126 764 777 472 .. -126 764 777 472  =  CONSTANT
+   iw37  092.A.01.1C0   P  401 321 689 088  ‖   401 321 689 088                      =
+   iw38  809.0.00.839   P  401 321 689 088  (bit-11 word: no ALU, no multiply)
+   iw39  410.A.FF.647   P            0      ‖             0                          =
+   iw41  400.A.00.21A   P  538 760 587 509  ‖   538 760 587 509                      =
+```
+
+★ **`P` stops depending on the input at `iw36`.** ⚠ `P5b` predicted `iw37`; **half-refuted, and
+the correction is sharper.** The mechanism, FORCED from `upd6383.cpp:3645` and matched to the
+table:
+
+* `iw35` carries **`HI_ST`**, and the bit-4 store runs **before** the adder. It writes
+  `acc_to_datum(m_acc)` — the accumulator `iw34` leaves, `2^38 → 4 194 304` — into **mode-2
+  destination `m_dp` = cell `0x05`**, the cell it is itself about to read. The read happens
+  first, so `iw35`'s own bus is still the input (`L` `-5 307 593..8 388 607`) and its multiply is
+  input-bearing.
+* `iw36` and `iw37` re-read the **same parked cell** (`dp` stays `0x05`; `SRC 0x00` then
+  `SRC 0x07`, both `mem[ptr]`), so from `iw36` on the multiplicand is the constant `4 194 304`
+  and `P` is a constant. §104's `L` column: `4 194 304..4 194 304` in **both** buckets at `iw36`
+  and `iw37`.
+* `iw39` has `hi12[3:1] == 0`, i.e. **`acc ← P`** — it discards the accumulator and loads that
+  constant. That is exactly §211's "last input-dependent slot = `iw38`", and §81's probe
+  `after iw39 SRC19: IDENTICAL 401 321 689 088` names the same word.
+
+⚠ **`iw35`'s store is NOT being called a defect.** "Store the running result at `X+6`, then
+re-read it" is an ordinary two-operand idiom, and the input is not lost by it — see §5.
+
+### 4. ★★★ THE SEND: `tempA` IS NOT "EMPTY", IT IS **ZEROED AT `iw25` BY THE DELAY READ**
+
+`§213`'s `tempA` column settles §211's prerequisite (b) outright:
+
+```
+   iw6    tempA  5 084 004      ‖  5 084 004                    =   (a constant)
+   iw7 .. iw24   tempA  0..0    ‖  -5 579 776 .. 4 994 816      *   INPUT-DEPENDENT, 18 slots
+   iw25   000.2.00.2D9          tempA  0..0  ‖  0..0            =   ⛔ ZEROED HERE
+   iw26 .. iw52  tempA  0..0    ‖  0..0                         =   and it never recovers
+```
+
+`iw25` is `SRC 0x0B` (the delay-read data register `m_dr`) with `ACT 0x19` (`tempA ← bus`).
+§46/§80 measure `m_dr`: **24 922 560 reads, 24 922 552 latched, ZERO non-zero**, and §48
+**23 733 120 consumptions, 0 with a non-zero datum**. §104's `L` column at `iw25` is `0..0` in
+both buckets, and at `iw27` — the next word that SOURCES `tempA` — likewise. `iw7` is the first
+input-bearing writer (`ACT 0x08`, blanket capture), `iw19`/`iw21` refresh it, and `iw25` replaces
+all of it with the delay port's zero.
+
+⇒ **ANSWER to §211's (b): `tempA` being empty is a CORRECT CONSEQUENCE of §48, not a defect of
+its own and not a decode hole.** Given the shipped `SRC 0x0B` and `ACT 0x19` readings, `iw25`
+does precisely what its fields say.
+
+And that zero is what the send carries:
+
+```
+   iw39  L = tempA = 0   ->  multiply: P = coef x 0 = 0
+   iw41  400.A.00.21A    ->  hi12[3:1] = 0  =>  acc <- P = 0        (§104: acc 0..0 from here)
+   iw45  010.A.00.20C    ->  HI_ST, mode 2, dp = 0x05 = THE UNIT-0 SEND, stores acc = 0
+   iw46  800.1.60.00B    ->  the kernel's delay WRITE takes acc = 538 760 587 509 -> 0x7D70
+```
+
+★ **So the send's datum is `m_dr` at `iw25`, four registers upstream, and it is a hard zero.**
+
+### 5. ⚠ TWO CORRECTIONS TO THINGS I HAVE WRITTEN
+
+**5.1 `§212 §1` OVER-RETRACTED `§48`.** I wrote that §48 is "true and **not** the constraint",
+because the input dies in kernel A. §4 shows §48 **is** in the kernel's own send path, upstream of
+`iw45`. What survives of §212 §1 is the part that matters: **opening §48 alone still cannot deliver
+audio**, because the loop is closed on itself —
+`iw25 (delay read) → tempA → P → acc → iw45 send → iw46 delay write → next frame's iw25`.
+The only non-zero datum ever written to the line is `iw46`'s `0x7D70`, which is `acc` at `iw45`,
+which is that same zero one hop later. **A DC in, a DC out.** Nothing external enters the loop.
+
+**5.2 Cell `0x06` is NOT dead, and §98's `06w` understates it.** §98 marks kernel-A cell `0x06`
+write-only, but `pwatch()`'s READ hook sits only on the anchored `SRC 0x07` evaluator
+(`upd6383.cpp:2658`); `SRC 0x00`'s reading of `mem[ptr]` is invisible to it. §104's residency
+column shows `dp = 0x06` at `iw12..iw27` holding `8 388 607` quiet ‖ **`1 991 044..8 388 607`**
+loud — *exactly* the range `iw39`'s bit-4 store deposits — and `iw13`/`iw14` read it as
+`mem[ptr]`. ⇒ **`0x06` is a CROSS-FRAME CARRY**: `iw39` parks the last input-bearing accumulator
+there and the next frame's mix block picks it up. MEASURED (residency + range identity);
+INFERRED that the datum is specifically `iw39`'s (nothing else writes `0x06` after it).
+⚠ And §176 says what is actually parked: `06: 8 388 607 (0..8 388 607 / chg 1100)` over 1 440 001
+frames — the deposit is at the **24-bit rail** on all but ~1100 frames. §211 called this datum
+"the INPUT-BEARING accumulator"; it is input-dependent in range and **clipped nearly always**.
+
+### 6. ⚠ STANDING RULE 1 — applied, and the answer is unchanged
+
+```
+   §70  ACCA AT w73:  quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+   §211 ACCB AT w78:  quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+   §61  unit0/DO1 1 203 840 exec, 0 non-zero, peak 0 | unit1/DO2 1 203 840 exec, 0 non-zero, peak 0
+   §54  quiet-in 826 040 -> 826 040 silent / 0 LOUD | loud-in 313 960 -> 313 960 silent / 0 loud
+```
+
+**min == max == 0 in both accumulators, in both buckets. NO non-zero output was produced and NO
+claim of audio is made.** The NULL (P7) held: this pass changed nothing audible, by construction.
+
+### 7. ★★★ THE NEXT INSTRUMENT — and it is a DECODE question, not an anchor value
+
+The send is decided by **one word**, and that word is **unique in the corpus**. Census over all
+41 committed listings (3057 words), bit-11 words excluded because they carry no `SRC` field:
+
+```
+   SRC 0x0B words:  106
+      class 1, addr8 0x20 (delay READ)     49
+      class 1, addr8 0x60 (delay WRITE)    50     <- the 99 that motivated the reading
+      class 2, addr8 0x00                   7
+         020.2.00.2C7  ACT 0x07   x6   ENSEMBLE w14/24/34/72/82/92
+         000.2.00.2D9  ACT 0x19   x1   THE RESIDENT KERNEL, iw25  <- ONE OCCURRENCE, EVER
+```
+
+`SRC 0x0B = the delay-DRAM data register` is labelled in the source itself as *"★ SPECULATIVE …
+It is a GUESS; register row 14"*, and its motivation is the 99 class-1 delay words — **none of
+which is `iw25`**. `iw25` performs **no delay access at all** (class 2, `addr8 = 0x00`), it has
+**no corpus twin**, and it is the sole determinant of what the unit-0 send carries.
+
+★ **The two-sided experiment, pre-computable and stated now.** `iw25`'s pointer is on cell `0x06`,
+whose §104 residency is `0..0` quiet ‖ `-5 579 776..4 994 816` loud — **INPUT-DEPENDENT**. So a
+rival reading of `SRC 0x0B` *at a class-2 word* (`mem[ptr]` is the obvious one) predicts, in
+advance:
+
+* `tempA` at `iw27` stops being `0..0` and becomes input-dependent;
+* `P` at `iw39` stops being `0` and becomes input-dependent;
+* `acc` at `iw41` and `iw45` likewise, so §104's LAST input-dependent slot moves from **`iw38`**
+  to at least **`iw45`**;
+* body 0 stops reading `0` at its own `iw84`/`iw85`.
+
+Four independent ways to fail, and `s104_score.py` scores all of them from one log.
+⚠ **And a fifth thing must be checked before any of it counts**: `§70 ACCA` / `§211 ACCB`
+`min` vs `max`, plus a no-stimulus window. Two "IC311 outputs audio" claims have been retracted
+here and one was a DC; a send that carries the input is still not audio until the ladder is
+measured.
+⛔ It must ship **default OFF, with a fired count**, and only ENSEMBLE's six `020.2.00.2C7`
+words share the family, so the corpus can grade the rival on a second program.
+
+### 8. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **§211 §6's "`iw39` stores TWICE, second one wins"** | the second record is a **phantom**; MEASURED by cell `0x06`'s residency in §211's own log, and now by the fixed probe |
+| **prerequisite (a): "does `HI_ST` + `ACT 0x07` really do two stores?"** | moot twice over — the ACT-07 arm stores nothing on a class-A word, and its `P` write is overwritten by the multiply in the same word |
+| **prerequisite (b): "why is `tempA` empty?"** | **ANSWERED**: it is not empty, it is **zeroed at `iw25`** by a capture of the delay-read register. A correct consequence of §48 |
+| **"the input dies at `iw39`"** | the *accumulator*'s does; **`P`'s dies at `iw36`**, on the multiplicand `mem[0x05]` that `iw35`'s own store parked there |
+| **"cell `0x06` is written and never read" (§98)** | §98's read hook only sees `SRC 0x07`; `0x06` is a **cross-frame carry** read by `iw13`/`iw14` |
+| **§212 §1's blanket "§48 is not the constraint"** | **half-retracted**: §48 *is* in the send path. What stands is that opening it alone delivers a DC, because the path is a closed loop |
+
+Evidence grade: §1 **MEASURED** against four predictions committed before the build, with an exact
+fired-count identity, plus an independent pre-existing measurement (§211's cell-`0x06` residency);
+§2 **MEASURED** (the `pw` column) and **FORCED** from `upd6383.cpp:3645`; §3 **MEASURED** (the `P`
+census) with the mechanism **FORCED** from source and matched to §104's `L` column; §4
+**MEASURED** (the `tempA` census, two independent instruments with §104's `L`); §5.1 **INFERRED
+(strong)** from §4 plus §46/§48/§75; §5.2 **MEASURED** for the residency and range identity,
+**INFERRED** for the attribution to `iw39`; §6 **MEASURED**; §7's corpus census **MEASURED** over
+3057 words, the rival reading **SPECULATIVE and NOT SHIPPED**.
