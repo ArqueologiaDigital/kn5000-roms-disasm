@@ -236,7 +236,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 7 | REFUTED | §43 | w72 / w77 ARE LEVEL-SELECT WORDS, NOT ACCUMULATOR OPERATIONS |
 | 8 | off | §44 | C-RAM 0x50..0x8B IS A DELAY-TAP TABLE, NOT COEFFICIENTS. Dumped, the space has three clearly distinct regions: |
 | 9 | off | §47 | TAKE THE DESCRIPTOR FROM THE PER-UNIT C-RAM BANK, NOT FROM D-RAM AT m_dsc |
-| 10 | **ON** | §49, §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
+| 10 | **ON** | §49, §217 |  |
 | 11 | off | §50 | LAND IT IN tempA TOO |
 | 12 | off | §52 | row 25 seeds the coefficient cursor from ldptr -- and this file already records that it is "⛔ STILL AGAINST K3, which pr |
 | 13 | off | §53 | READ THE RAMP BANK AT Q0.16, NOT Q0.23 |
@@ -282,7 +282,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-108 sections, §97..§215.  **Read the tail first** — later sections retract earlier ones *in place*.
+110 sections, §97..§217.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -394,4 +394,6 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §213 | REFUTED/RETRACTED | ⛔⛔ §211's GRADEABLE LEAD WAS A PROBE ARTEFACT. The input dies at `iw36`, and the SEND is decided by ONE corpus-unique wo |  |
 | §214 | REFUTED/RETRACTED | the lead I handed forward was an INSTRUMENT ARTEFACT, and §212 §1 is half-retracted | §1 **FORCED** (the fired-count identity, and the contradiction inside §211's own |
 | §215 | REFUTED/RETRACTED | ⛔ THE RIVAL IS REFUTED BY THE CORPUS AND THE FALSIFIERS ALL PASSED ANYWAY. `SRC 0x0B` SURVIVES AT `iw25`, AND THE SEND W | §0 **MEASURED** (corpus census over 41 listings / 3057 words, plus the 1.0064 |
+| §216 | REFUTED/RETRACTED | the rival is refuted, my "suspicious loop" is retracted, and the OUTPUT STAGE NULL IS NOW PROVEN BY FEEDING IT | §1 **MEASURED** (41 listings, 13/13, two independent programs); §2 **FORCED** — the |
+| §217 | REFUTED/RETRACTED | ⛔★★★ THE `§78` BLOCKER IS REFUTED: THE DATUM IS NOT LOST, IT IS DELIVERED TO `iw98`. The LINE INDEX is a RED HERRING and | §0 **MEASURED** (both censuses are in `src0b2_B_on_215.log.gz`; the boot-sample |
 

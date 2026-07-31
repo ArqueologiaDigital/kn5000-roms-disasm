@@ -13888,3 +13888,191 @@ pre-§215 control in all three score columns.
 Evidence grade: §1 **MEASURED** (41 listings, 13/13, two independent programs); §2 **FORCED** — the
 criterion was unfalsifiable and a pre-arm control shows it; §3 **MEASURED**, and the strongest form
 of the output-stage null yet; §4 my framing **retracted**.
+
+---
+
+## §217 — ⛔★★★ THE `§78` BLOCKER IS REFUTED: THE DATUM IS NOT LOST, IT IS DELIVERED TO `iw98`. The LINE INDEX is a RED HERRING and `§46`'s dump is a BOOT SAMPLE. `UPD6383_DRPUB` NOT SHIPPED
+
+Scored against `data/PREDICT_217.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@d4f1467`). Three runs, one build, same clean vehicle
+(`kn7000_mame/scratchpad/coldnotes2.lua`, cold boot, isolated NVRAM **and** isolated
+`-cfg_directory` carrying `:DSPCFG value="3"`, `-log`, triad C4/E4/G4 held 21.02–27.51 s,
+`-seconds_to_run 30`), all three **1 440 001 frames / 313 960 loud / 726 040 quiet**:
+
+* **arm A** `data/drpub_A_off_217.log.gz` — `UPD6383_DRPUB=0 UPD6383_SRC0B2=0`, the shipped build;
+* **arm B** `data/drpub_B_on_217.log.gz` — `UPD6383_DRPUB=1 UPD6383_SRC0B2=0`;
+* **arm C** `data/drpub_C_on_src0b2_217.log.gz` — `UPD6383_DRPUB=1 UPD6383_SRC0B2=1`, which is
+  `data/src0b2_B_on_215.log.gz` **plus** `DRPUB` and nothing else.
+
+### 0. ⛔ FIRST, THE PREMISE I WAS HANDED IS WRONG — "every kernel delay word shares line 0"
+
+`§215 §4` and both handoffs attribute the loss to `line = descriptor_value & 0x3f` with *"§46's own
+dump shows the kernel's descriptors resolving to `0000`, i.e. every kernel delay word shares line
+0"*. **`§46`'s descriptor list is an UNGUARDED BOOT-TIME SAMPLE.** `upd6383.cpp`'s §46 block fills
+`m_dly_dsc[]/m_dly_val[]` with the first 8 **distinct** cells ever seen, with no `m_frames_run`
+guard, so it freezes the pre-upload state in which every cell reads `0000` — and then prints it in
+the final report as though it were steady state. It is the same defect `§204`'s own comment warns
+about (*"the first version recorded the first 16 consumers EVER — all from boot"*) and `§193`
+caught in its first probe: **third occurrence, standing rule 10.**
+
+`§204`'s census **is** guarded (`> 900 000`) and sits **in the same log**:
+
+```
+   iw12  cell 0x1041 -> line 0x01        iw98  cell 0x1041 -> line 0x01   <- iw12's PAIR
+   iw26  cell 0x05A0 -> line 0x20        iw102 cell 0x05A0 -> line 0x20   <- iw26's pair
+   iw46  cell 0x0000 -> line 0x00        iw54  cell 0x0C30 -> line 0x30
+```
+
+⇒ the kernel's four delay words carry **three distinct lines**, and `iw12 ↔ iw98` is `§79`'s
+stride-5 pairing working **exactly as designed**. **The line index is a RED HERRING.** MEASURED
+(the numbers are in `src0b2_B_on_215.log.gz`, which four passes read without noticing).
+
+### 1. ★★★ WHERE THE DATUM GOES, MEASURED TO THE WORD
+
+The publish lives **inside the `is_dram` branch**, so only a **delay word** can fire it. `iw25` is
+`000.2.00.2D9` — class 2, no delay access — so it can never trigger one and only ever reads a
+residue. And `iw12` **latches after it publishes**, so its datum waits in `m_dr_line[0x01]` for the
+next line-0x01 delay word:
+
+```
+  arm A   §217 WHERE A DATUM TAGGED `iw12' IS PUBLISHED (settled):
+               published at iw98   x540 000          <- 540 000 of 540 000.  ONE HUNDRED PERCENT
+          §217 publishes strictly between iw12 and iw25:  0
+```
+
+⇒ **The datum `iw12` fetches is not lost. It is delivered, intact and on schedule, to `iw98` —
+73 slots and one body-CALL too late for `iw25`.** MEASURED, 540 000 / 540 000, `P2` passed.
+
+### 2. ★★ THE CRITERION: PROVENANCE, NOT LIVENESS — and it is what dead-end 22 demanded
+
+Standing rule 15 retired the previous four falsifiers because **any live operand passed them**.
+This instrument does not ask *did something arrive*; every latch is tagged with the **`iw` that
+performed the read** and the **frame**, the tag travels with the datum, and it is histogrammed at
+`iw25`. A wrong source reports a **wrong `iw` number**, which liveness cannot fake. Read-only, and
+it runs in every arm.
+
+```
+  arm A (shipped)        540 000 evaluations | age 1..1 frames | read by iw289  x540 000  (0 nz)
+  arm B (DRPUB=1)        540 000 evaluations | age 0..0 frames | read by iw12   x540 000  (0 nz)
+  arm C (DRPUB=1,+line)  540 000 evaluations | age 0..0 frames | read by iw12   x540 000  (60 507 nz)
+```
+
+★ **The shipped build feeds `iw25` a UNIT-1 delay read from the PREVIOUS FRAME**, on 100 % of
+settled evaluations — `iw289`, a word in the other unit's reverb, with no relationship to the
+kernel whatsoever. That is not a delay line with a wrong lag; it is an unrelated register residue.
+
+★ **`P1` FAILED ON THE WORD AND PASSED ON THE SHAPE.** I pre-registered `iw247`, hand-traced from
+`§79`'s read/write offsets. The answer is **`iw289`** — because `§204`'s census caps at 16
+consumers and stops at `iw269`, so my trace could not see past it. All three *structural* claims of
+P1 held: it is a **unit-1** word, the age is **exactly 1 frame**, and `iw12` holds **0 %**.
+The instrument was right and the hand-trace was one word short; recorded rather than smoothed over.
+
+★ **`N3` MISSED.** I predicted 400 000–500 000 settled evaluations from 0.836 body-0 executions per
+frame; the answer is **540 000 = 1.000 per frame** over the settled window. The ~16 % of frames
+that never reach the wait word (`§38`) are a **boot-phase** population, not a steady-state one.
+
+### 3. ★★★ `F1` — THE RIGHT DATUM, NAMED, WITH EVERY VALUE COUNTER STILL AT ZERO
+
+`UPD6383_DRPUB` (new, env, **DEFAULT OFF**, fired count): a delay READ *also* writes the bus
+register `m_dr` immediately, in addition to its per-line latch. It sits **after** `exec_alu`, so a
+fused read+capture word still does not see its own datum (`dram-datapath.md` item A survives), and
+`m_dr_line[]` is untouched.
+
+```
+  arm B   fired 24 922 560   = §80's latch count and §46's read count, EXACTLY
+          provenance at iw25 -> iw12, age 0, 540 000 of 540 000            F1 PASS
+          §215 m_dr non-zero at iw25 ->  STILL 0                           F2 as pre-declared
+          §80 latched 24 922 560 (0 nz) | hits 24 922 552 (0 nz)  = arm A  N4 PASS
+          s104_score.py acc 27/2, mem 21/9, L 18/3, last slots iw38/iw35/iw35
+                                              = BIT-IDENTICAL to arm A and to §215 arm A
+```
+
+★★★ **This is the demonstration the previous four falsifiers could not give: the provenance flipped
+from `iw289`/age-1 to `iw12`/age-0 while EVERY value counter stayed at zero.** The right datum
+arrives, and it is zero, because the delay line is empty (`§46`: 0 non-zero of 24 922 560 reads).
+**A decode was graded without a single number becoming non-zero.**
+
+### 4. `F3` — the value test, and the arithmetic closes exactly
+
+Arm C is `§215` arm B **plus `DRPUB`**, nothing else:
+
+```
+                                     §215 arm B (DRPUB=0)      §217 arm C (DRPUB=1)
+   §80 latched / hits                24 922 560 / 24 922 552   IDENTICAL, 181 521 nz both
+   §75 delay writes with content     1 236 506                 1 236 506   IDENTICAL
+   §48 SRC 0x0B with a nz datum        121 014                   181 521   +60 507
+   §215 m_dr nz AT iw25                       0                    60 507   <- F3 PASS
+   s104 acc/mem/L, last slots        65/65/60, iw204/202/325   IDENTICAL
+```
+
+★ `60 507 × 3 = 181 521` **exactly**, and `121 014 = 60 507 × 2` **exactly**. The 181 521 non-zero
+delay reads are three words hitting 60 507 times each; the shipped build consumed two of them and
+threw the third away. `DRPUB`'s **entire** effect is that third one — the class-1 delay words'
+consumption count did not move by one. **The blast radius is one word.**
+
+### 5. ★ THE CORPUS SAYS `DRPUB` REPRODUCES `dram-datapath.md` ITEM A, IT DOES NOT FIGHT IT
+
+All **9** class-2 `SRC 0x0B` words in the 41-listing corpus, and where each sits:
+
+```
+   ENSEMBLE   020.2.00.2C7  x6   w14/24/34/72/82/92, each exactly +4 after its 2D9 delay READ
+   MULTI TAP  000.2.09.40B  x1   w25, +1 after the delay word at w24
+   ENSEMBLE   000.2.00.40B  x1   w62, 2 slots BEFORE the read at w64  (the kernel's twin)
+   KERNEL     000.2.00.2D9  x1   iw25, 1 slot BEFORE the read at iw26
+```
+
+★ **6 of 6 ENSEMBLE `2C7` sites are at `+4` — item A's corpus MODE and upper bound (`land ∈ [1,4]`,
+4 the mode over 111 reads).** And because **no read intervenes** between a producing read and its
+class-2 consumer at any of these sites, `land = 4` and an immediate publish are
+**observationally identical** at every one of them: `m_dr` is a hold register, so a datum that
+lands at `iw16` is still there at `iw25`. `DRPUB` therefore reproduces item A's schedule **without
+a latency parameter**, rather than contradicting it.
+
+⚠ **The honest residue:** `ENSEMBLE w62` is 23 slots after a delay *WRITE* and 2 slots *before* a
+READ, so `DRPUB` leaves it reading a stale datum from `w30`. 7 of 9 class-2 sites get item A's
+schedule; `w62` and (arguably) `iw25` remain a shape no latency model explains.
+
+### 6. ★★★ STANDING RULE 1 — read in ALL THREE ARMS, including the no-stimulus window
+
+```
+   arm A / arm B / arm C, all three identical:
+       §70  ACCA AT w73   quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+       §211 ACCB AT w78   quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+```
+
+`min == max` in the loud bucket **and** in the 726 040-frame no-stimulus window, in **both**
+accumulators, in **all three** arms. **NO non-zero output was produced and NO audio claim is
+made.** This is exactly what `§216` predicts: the output stage is a null independent of the send,
+and §217 does not touch the output stage.
+
+### 7. ⇒ VERDICT: `UPD6383_DRPUB` STAYS **DEFAULT OFF**, and the reason is not doubt
+
+`F1` passed on identity, `N4` and `s104` show zero blast radius, and §5 shows the corpus agrees.
+What shipping would buy is **nothing measurable**: on the shipped build (`SRC0B2=0`) arm B is
+**bit-identical to arm A in every column**, because the datum it correctly delivers is zero. A
+default flip with no observable consequence is not a fix, it is a claim awaiting a use.
+
+**The one remaining check before flipping it, stated so it is gradeable:** decide `ENSEMBLE w62`
+and `kernel iw25` — the two `000.2.00.*` words that sit *ahead* of their read. If the pipeline is
+one-deep and *cross-frame* (the class-2 word capturing the datum of the read that follows it, from
+the previous frame), then the correct model is not "publish at the read" but "publish at the read
+**of the previous frame**" — and `DRPUB`'s `age 0` would be wrong by exactly one frame, which the
+§217 provenance census already measures and would show as `age 1..1` with tag `iw26`.
+
+### 8. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **"the §78 per-line publish schedule is the blocker" / "the kernel's delay words all share line 0"** | **REFUTED.** `§46`'s descriptor dump is an unguarded BOOT-TIME sample; `§204`'s guarded census, in the same log, gives lines `0x01`/`0x20`/`0x00` and the `iw12 ↔ iw98` pair. The line index is CORRECT |
+| **"the datum `iw12` fetches is LOST"** | **It is not lost.** It is published at `iw98`, 540 000 of 540 000 settled frames, intact |
+| **"widen `m_dr` / it is a single-register problem" (§215 §4's option (c))** | **MOOT.** One register is enough: nothing overwrites it between `iw12` and `iw25`. The fault is *when* it is written, not *how many* there are |
+| **the four falsifiers, one more time** | not reused. The criterion here is the **tag**, and arm B passed it with every value counter still at zero |
+
+Evidence grade: §0 **MEASURED** (both censuses are in `src0b2_B_on_215.log.gz`; the boot-sample
+diagnosis is **FORCED** from the source, `m_dly_dsc[]` has no frame guard); §1 **MEASURED**,
+540 000/540 000; §2 **MEASURED**, and `P1`'s word-level miss recorded as a miss; §3 **MEASURED**
+against a pre-registration committed before the build, `F1`/`N4` held, `N3` MISSED, `P1` PARTIAL;
+§4 **MEASURED**, arm C against `§215` arm B, one variable; §5 **MEASURED** (corpus census over 41
+listings), the "observationally identical" claim **FORCED** from the no-intervening-read structure;
+§6 **MEASURED**, including the no-stimulus window; §7 a decision, **not shipped**.
+`UPD6383_DRPUB` is **DEFAULT OFF**.

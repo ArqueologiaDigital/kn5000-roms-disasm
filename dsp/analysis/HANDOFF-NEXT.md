@@ -16,15 +16,43 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★★ §215 CLOSED THE `iw25` DECODE. `SRC 0x0B` = the delay-read data register IS RIGHT, at a
-class-2 word as at a class-1 one, and the rival is REFUTED by the corpus. The blocker moves ONE
-HOP UPSTREAM: the datum `iw12` fetches NEVER REACHES `iw25`. In the arm where the delay line was
-full of audio, `m_dr` at `iw25` was non-zero on `0` of `1 211 520` evaluations while `§80`
-published `181 521` non-zero data. THE NEXT TASK IS THE §78 PER-LINE PUBLISH SCHEDULE.**
+**★★★ §217 CLOSED THE `iw25` DELIVERY QUESTION, AND THE ANSWER RETIRES THE PREVIOUS BLOCKER.
+The datum `iw12` fetches is NOT LOST — it is published, intact, to `iw98`, on `540 000` of
+`540 000` settled frames. The `§78` PER-LINE SCHEDULE IS CORRECT and the LINE INDEX IS A RED
+HERRING: `§46`'s "the kernel's descriptors resolve to `0000`" is an UNGUARDED BOOT-TIME SAMPLE,
+and `§204`'s guarded census — in the same log — gives the kernel three distinct lines
+(`iw12` 0x01, `iw26` 0x20, `iw46` 0x00) with `iw12 ↔ iw98` paired exactly as `§79` says.
+THE FAULT IS THAT THE PUBLISH ONLY FIRES AT A DELAY WORD, AND `iw25` IS NOT ONE — it reads a
+UNIT-1 residue (`iw289`) from the PREVIOUS FRAME, 100 % of the time.**
 
-Runs: `data/src0b2_A_off_215.log.gz` (shipped) and `data/src0b2_B_on_215.log.gz` (rival forced
-on), both `-log`, clean vehicle, 1 440 001 frames, ~314 000 loud — **cite the run, not the
-section**.
+Runs: `data/drpub_A_off_217.log.gz` (shipped), `data/drpub_B_on_217.log.gz` (`UPD6383_DRPUB=1`),
+`data/drpub_C_on_src0b2_217.log.gz` (`DRPUB=1` + `SRC0B2=1`), one build, clean vehicle, `-log`,
+1 440 001 frames / 313 960 loud / 726 040 quiet — **cite the run, not the section**.
+Older: `data/src0b2_{A_off,B_on}_215.log.gz`.
+
+### ★★★ 1.-1 READ THIS BEFORE PLANNING — §216 AND §217 TOGETHER BOUND WHAT IS LEFT
+
+* **The output stage is a NULL independent of the send** (§216: send forced open, body 0 ran its
+  whole ladder on live audio, `w73`/`w78` still `min 0 max 0`). §217 re-measured it in **three**
+  more arms including the no-stimulus window: still `min 0 max 0`, all six readings.
+* **`UPD6383_DRPUB` (new, env, DEFAULT OFF, fired count 24 922 560) makes `iw25` receive `iw12`'s
+  datum** — provenance `iw12`, age 0, 540 000/540 000 — and on the shipped build it is
+  **BIT-IDENTICAL to the control in every column**, because the datum it correctly delivers is
+  **zero**. Not shipped: a default flip with no observable consequence is a claim, not a fix.
+* ⇒ **The chain is: right datum now deliverable → it is zero because the line is empty → the line
+  is empty because the send is closed → and even forced open, the output stage is a null.**
+  Every link is MEASURED. Do not re-derive any of them.
+
+### ★★ 1.-0.5 THE ONE GRADEABLE QUESTION §217 HANDS FORWARD
+
+**Decide `ENSEMBLE w62` and `kernel iw25`** — the two `000.2.00.*` class-2 `SRC 0x0B` words that
+sit a couple of slots *AHEAD* of a delay READ rather than after one. §217 §5 censused all 9
+class-2 `SRC 0x0B` words: ENSEMBLE's six `2C7` are each **exactly +4** after their `2D9` read
+(= `dram-datapath.md` item A's corpus mode), MULTI TAP's is +1 — but these two are ahead of theirs.
+If the pipeline is one-deep and **cross-frame** (a class-2 word capturing the datum of the read
+that FOLLOWS it, from the previous frame), then `DRPUB`'s `age 0` is wrong by exactly one frame.
+**The §217 provenance census already measures this**: the rival predicts tag `iw26`, `age 1..1`.
+⚠ Aim the instrument that exists (standing rule 13) — do not build a new one.
 
 ### ⚠ 1.0 VEHICLE: TWO traps, both of which have now cost a run each
 
@@ -73,7 +101,16 @@ ran its whole ladder on live audio (28 input-dependent slots), fed body 1 (2 slo
 ⇒ **The output stage is a null INDEPENDENTLY of what the send carries.** §211 could not prove
 that; §215 did, by feeding it.
 
-### ★★★ 1.2 THE NEXT EXPERIMENT — the §78 publish, and the number that names it
+### ⛔ 1.2 — ANSWERED AND RETRACTED BY §217. Kept only so the retraction is legible
+
+⛔ **The paragraph below is WRONG in its diagnosis and its remedies, and §217 measured each out.**
+(a) `iw12`'s datum **does** reach a consumer — `iw98`, 540 000/540 000. (b) It is **not** the line
+index: `§46`'s `0000` descriptors are an **unguarded boot-time sample**, and `§204`'s guarded
+census gives the kernel three distinct lines with `iw12 ↔ iw98` correctly paired. (c) Widening
+`m_dr` is **MOOT** — nothing overwrites it between `iw12` and `iw25`; the fault is *when* it is
+written (only at a delay word, and `iw25` is not one), not *how many* registers there are.
+
+### ★★★ 1.2 (superseded) THE NEXT EXPERIMENT — the §78 publish, and the number that names it
 
 ```
    arm B  §46  24 922 560 reads, 181 521 returned NON-ZERO
