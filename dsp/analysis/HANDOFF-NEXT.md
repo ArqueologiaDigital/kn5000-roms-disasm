@@ -16,51 +16,61 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Decode `lo12 = 0x921` — `050.0.00.921`, MULTI TAP DELAY `w33`, ONE word — because two of its
-three siblings are already decoded and one of those is proven from the firmware's own assembly.**
+**Pre-register and test the SELECTOR + VALUE reading of the alternate encoding (§185).**
 
-### The decomposition that makes it tractable (§184)
+⚠ **Do NOT implement it first.** §166 §3 applied a decode across an encoding boundary and was
+wrong; this is the same kind of step and needs its falsifier written down before the build.
 
-`k3-pointers.md` §1.1 item 2 proves **by construction** that the firmware builds
-`lo12 = 0x800 | X` (`INC 8, WA` adds a literal 8 to byte 3 *after* the address nibble). Applying
-that across all 90 bit-11 words:
+### The reading, and where each half comes from
 
 ```
-   lo12  =  FLAG(bit 11) | SUB[10:8] | PAYLOAD[7:0]          sub in {0, 1, 4}
-
-   sub 0  x36   821 822 825 827 839 864 8BC      (all 28 register loads are here)
-   sub 1  x1    921                              <- THE TARGET
-   sub 4  x53   C63                              (the only occupant)
+   lo12  =  FLAG(11) | SUB[10:8] | SELECTOR[7:0]          §184, MEASURED
+   addr8 =  THE VALUE WRITTEN                             k3-pointers §1.1 item 1, PROVEN BY CONSTRUCTION
 ```
 
-### ★★★ The payload-`0x21` triple — the ONLY payload collision in the corpus
-
 ```
-   0x021   flag 0  sub 0   x1   rstcur  — DECODED (k3 item K)              prog39 w58
-   0x821   flag 1  sub 0   x3   ldptr   — PROVEN BY CONSTRUCTION (k3 A)    kernel w42/w50, epilogue w69
-   0x921   flag 1  sub 1   x1   ⚠ UNDECODED                               prog10_multi_tap_delay w33
+  selector  sub  sites   addr8 (the VALUE)      carriers
+    0x21     0      3    50  70  90             801        ldptr -- real pointer values
+    0x21     1      1    00                     050        ★ 0x921, MULTI TAP DELAY w33
+    0x63     4     53    00                     040 142    ★ C63 -- ALWAYS zero
+    0xBC     0     24    00  30                 040 050 880
+    (0x22 x1 = 86, 0x25 x3 = 25/26, 0x27 x2 = 64/6C, 0x39 x2 = 00, 0x64 x1 = 00)
 ```
 
-Nothing else in the corpus offers a decoded pair constraining an undecoded sibling. **`0x021` is
-*reset the cursor* and `0x821` is *load the pointer*** — two pointer/cursor operations on the same
-payload, distinguished by the flag. ⇒ SPECULATIVE but sharp: `0x921` is a **third pointer/cursor
-operation**, and its effect should be on pointer state and **nothing else** — measurable against
-the §164/§176 D-RAM census, which is a criterion that can fail.
+★ `addr8` is non-zero **only** on the `0x80x` carriers, and on `880.1.30.8BC` where `0x30` is the
+delay **direction** (FORCED). On `040`/`050`/`142` it is **identically zero across all 62 sites**.
 
-### ⚠ And this reframes `C63` — do NOT chase it first
+⇒ **INFERRED: those words write ZERO — they are RESETS.** And that independently explains
+`bit11-family.md` item E, which recorded as a puzzle that **`C63` is exactly 2 in 20 of its 25
+images — "the shape of a per-channel constant"**. ⇒ **`C63` resets register `0x63` once per
+channel.**
 
-`C63` is `sub 4 / payload 0x63`; `8BC` is `sub 0 / payload 0xBC`. **They differ in BOTH fields**, so
-they are not siblings and §6.2's once-vs-twice pairing cannot bound `C63`. §183's
-`040.0.00.C63` / `040.0.00.8BC` minimal pair is a real *carrier* control but varies two fields at
-once. Decode `sub` where two of three values are known, **then** apply it to `C63`'s `sub = 4`.
+### ★ THE FALSIFIER — write it down before building
 
-### Also established (§184 §1)
+If `C63` zeroes a register twice per frame per image, then once modelled that register must show
+**exactly two writes of 0 per frame** in the existing `§164`/`§176` census.
 
-Stripping the flag finds only **1 of 9** payloads elsewhere in the corpus, against a null of 0.3 —
-the alternate encoding's payloads are **disjoint** from the ALU encoding's values. Third
-independent support for `bit11-family.md` §9's *"second encoding"*.
+* a different count ⇒ refuted
+* a **non-zero** value written ⇒ refuted (`addr8` is not the value)
+* the register never appears in the census ⇒ the selector does not name a D-RAM cell, and the
+  selector space is elsewhere — also a real result
+
+### ⚠ The limitation, stated
+
+`k3-pointers.md` proves its construction for `hi12 = 0x801`. `C63` and `0x921` sit on
+`040`/`050`/`142`. Transferring the reading across carriers is **INFERRED, not FORCED**, and rests
+on §183's measurement that the payload is carrier-independent (the same `8BC` rides class 0 and
+class 1).
+
+### Corroborating, and independent of the above — `0x921` at a section boundary
+
+MULTI TAP DELAY `w33`: the C-RAM **role annotation changes from tap to filter exactly there**, the
+word is bracketed by a **symmetric `−3`/`+3`** pointer excursion, and its selector `0x21` is the
+register `ldptr` loads and `rstcur` resets. ⇒ it resets the pointer between the tap bank and the
+damping filter — which is what a multi-tap delay needs there.
 
 ### ⛔ Dead, do not retry
+
 
 
 
