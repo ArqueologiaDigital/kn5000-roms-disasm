@@ -16,60 +16,48 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Pre-register and test the SELECTOR + VALUE reading of the alternate encoding (§185).**
+**Check whether `m_dscbank` truncates a 24-bit descriptor payload to 16 bits — it is one line.**
 
-⚠ **Do NOT implement it first.** §166 §3 applied a decode across an encoding boundary and was
-wrong; this is the same kind of step and needs its falsifier written down before the build.
-
-### The reading, and where each half comes from
-
-```
-   lo12  =  FLAG(11) | SUB[10:8] | SELECTOR[7:0]          §184, MEASURED
-   addr8 =  THE VALUE WRITTEN                             k3-pointers §1.1 item 1, PROVEN BY CONSTRUCTION
+```cpp
+   upd6383.cpp:961    m_dscbank[m_dsc_wp] = u16(v & 0xffff);      // v is 24-bit
 ```
 
-```
-  selector  sub  sites   addr8 (the VALUE)      carriers
-    0x21     0      3    50  70  90             801        ldptr -- real pointer values
-    0x21     1      1    00                     050        ★ 0x921, MULTI TAP DELAY w33
-    0x63     4     53    00                     040 142    ★ C63 -- ALWAYS zero
-    0xBC     0     24    00  30                 040 050 880
-    (0x22 x1 = 86, 0x25 x3 = 25/26, 0x27 x2 = 64/6C, 0x39 x2 = 00, 0x64 x1 = 00)
-```
+★ **Every unit-1 descriptor cell in the live bank has bit 15 set** (`81E7 A3C5 A5FE A8C1 ADA3
+B42D …`), which is what a lost high byte looks like. And §189 searched every pairwise difference
+among the 32 non-zero cells for P16's corrected reverb ladder `255 / 869 / 979 / 366 / 1044 / 8905`
+**and for its halves** — **0 of 6 either way**.
 
-★ `addr8` is non-zero **only** on the `0x80x` carriers, and on `880.1.30.8BC` where `0x30` is the
-delay **direction** (FORCED). On `040`/`050`/`142` it is **identically zero across all 62 sites**.
+⚠ Three readings, none chosen (§189 §3): the cold-boot unit-1 program has never been identified the
+way §170 identified unit 0's; the ladder may not be a difference of descriptor cells; or the
+payload is being truncated. **The third is the cheap one — check it first.**
 
-⇒ **INFERRED: those words write ZERO — they are RESETS.** And that independently explains
-`bit11-family.md` item E, which recorded as a puzzle that **`C63` is exactly 2 in 20 of its 25
-images — "the shape of a per-channel constant"**. ⇒ **`C63` resets register `0x63` once per
-channel.**
+### Why it matters — `adjudication-round4.md` item D
 
-### ★ THE FALSIFIER — write it down before building
+> P16 *"matters operationally: a control or an impulse test sized against the halved numbers
+> **amputates the feedback of every line**"* — and it names **7 LIVE sites**, of which §188 fixed
+> one.
 
-If `C63` zeroes a register twice per frame per image, then once modelled that register must show
-**exactly two writes of 0 per frame** in the existing `§164`/`§176` census.
+### What is already good
 
-* a different count ⇒ refuted
-* a **non-zero** value written ⇒ refuted (`addr8` is not the value)
-* the register never appears in the census ⇒ the selector does not name a D-RAM cell, and the
-  selector space is elsewhere — also a real result
+* **§188 SHIPPED** — the host payload's LSB is restored, default now **`0xB910E446A39B440F`**.
+  Verified against the LFO sine with every number pre-registered: max err `2 → 1` LSB,
+  RMS `1.291 → 0.707` (`= 1/√2`, pure rounding), and the 12 moved cells match the capture's
+  tag-bit-7 pattern **bit-for-bit**. Descriptors and C-RAM inherit the same fix.
+* **§189** — the descriptor bank pairs `k ↔ k+5` **nine times with no exceptions** (the delay
+  READ/WRITE pairing, confirmed live), and CHORUS's block reads `400` and `1040`, exactly §152's
+  ROM-derived tap position and line length. The bank is being read correctly.
 
-### ⚠ The limitation, stated
+### Still open, from earlier ticks
 
-`k3-pointers.md` proves its construction for `hi12 = 0x801`. `C63` and `0x921` sit on
-`040`/`050`/`142`. Transferring the reading across carriers is **INFERRED, not FORCED**, and rests
-on §183's measurement that the payload is carrier-independent (the same `8BC` rides class 0 and
-class 1).
-
-### Corroborating, and independent of the above — `0x921` at a section boundary
-
-MULTI TAP DELAY `w33`: the C-RAM **role annotation changes from tap to filter exactly there**, the
-word is bracketed by a **symmetric `−3`/`+3`** pointer excursion, and its selector `0x21` is the
-register `ldptr` loads and `rstcur` resets. ⇒ it resets the pointer between the tap bank and the
-damping filter — which is what a multi-tap delay needs there.
+* **`0x921`** (`050.0.00.921`, MULTI TAP DELAY `w33`, **TYPE 8**) — the only payload collision in
+  the corpus, two of three siblings decoded. §187 FORCED that the selector space is the chip's
+  **internal control registers**, not `m_rf`, so `0x921`'s effect (`m_dp`) is the one that is
+  observable.
+* **PTRD-A** (mask bit 62, off) — unique best of 21 364 736 delta rules; takes CHORUS's index
+  multiply from `L` identically zero to live. Unshipped: `m_tb` still frozen, C1–C3 unexplained.
 
 ### ⛔ Dead, do not retry
+
 
 
 
