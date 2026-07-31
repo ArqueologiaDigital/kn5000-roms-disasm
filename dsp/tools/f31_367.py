@@ -194,8 +194,13 @@ def main():
           % b020)
     print("     the %d bit-5 words and %d of the %d {3,6,7} occurrences, and it"
           % (len(cw), tot367[0x020], sum(tot367.values())))
-    print("     carries %d of the eight f31 codes on ONE routing (`.2.00.000')."
-          % len(by[0x020]))
+    one = collections.Counter(F(w).f31 for n, i, w in nc
+                              if base(w) == 0x020 and F(w).class4 == 2
+                              and F(w).addr8 == 0 and F(w).lo12 == 0)
+    print("     carries ALL %d f31 codes across its routings, and %d of the eight on"
+          % (len(by[0x020]), len(one)))
+    print("     the SINGLE routing `.2.00.000' (%s)."
+          % " ".join("%d:%d" % kv for kv in sorted(one.items())))
     print("     No other base in the corpus carries more than %d."
           % max(len(v) for k, v in by.items() if k != 0x020))
     print("   ⇒ `f31 3/6/7 requires bit 5' therefore reduces to `the only base on")
@@ -281,11 +286,11 @@ def main():
     for gg, k in sorted(c3.items(), key=lambda t: -t[1]):
         print("      %4d words  guard %-2d  %s" % (k, gg, GUARD.get(gg, "?")))
     print()
-    print("   ⇒ THE OPERATION FIELD IS NOT WHERE COVERAGE LIVES.  All eight f31")
-    print("     codes together are worth at most %d words (+%.1f %%); the")
-    print("     ROUTING guard holds %d (%.1f %% of everything undecoded)."
-          % (c3.get(3, 0), 100.0 * c3.get(3, 0) / 3057, c3.get(23, 0),
-             100.0 * c3.get(23, 0) / (3057 - dec)))
+    print("   ⇒ THE OPERATION FIELD IS NOT WHERE COVERAGE LIVES.")
+    print("     all eight f31 codes together are worth at most %d words (+%.1f %%)"
+          % (c3.get(3, 0), 100.0 * c3.get(3, 0) / 3057))
+    print("     the ROUTING guard alone holds %d = %.1f %% of everything undecoded"
+          % (c3.get(23, 0), 100.0 * c3.get(23, 0) / (3057 - dec)))
 
 
 if __name__ == "__main__":
