@@ -16,47 +16,51 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Check whether `m_dscbank` truncates a 24-bit descriptor payload to 16 bits — it is one line.**
+**Decode `lo12 = 0x921` — `050.0.00.921`, MULTI TAP DELAY `w33`, TYPE 8. One word.**
 
-```cpp
-   upd6383.cpp:961    m_dscbank[m_dsc_wp] = u16(v & 0xffff);      // v is 24-bit
+The descriptor line is closed for now (§190): two of its three readings are refuted and the third
+needs a *different capture*, not more analysis of this one. `0x921` is the tractable target and its
+reason is stated.
+
+### Why it, specifically
+
+```
+   0x021   flag 0  sub 0   rstcur  — DECODED (k3 item K)              prog39 w58
+   0x821   flag 1  sub 0   ldptr   — PROVEN BY CONSTRUCTION (k3 A)    kernel w42/w50, epilogue w69
+   0x921   flag 1  sub 1   ⚠ UNDECODED                               prog10_multi_tap_delay w33
 ```
 
-★ **Every unit-1 descriptor cell in the live bank has bit 15 set** (`81E7 A3C5 A5FE A8C1 ADA3
-B42D …`), which is what a lost high byte looks like. And §189 searched every pairwise difference
-among the 32 non-zero cells for P16's corrected reverb ladder `255 / 869 / 979 / 366 / 1044 / 8905`
-**and for its halves** — **0 of 6 either way**.
+**The only payload collision in the corpus** (§184), with two of three siblings decoded. And §187
+FORCED that the selector space is the chip's **internal control registers**, not `m_rf` — proven by
+collision, since selector `0x21` is the pointer register while `m_rf[0x21]` is wavetable index 4.
+⇒ selector `0x21`'s effect is **`m_dp`**, which is already instrumented at every site (§162, §176),
+so `0x921` is the one family member whose predicted effect can be measured.
 
-⚠ Three readings, none chosen (§189 §3): the cold-boot unit-1 program has never been identified the
-way §170 identified unit 0's; the ladder may not be a difference of descriptor cells; or the
-payload is being truncated. **The third is the cheap one — check it first.**
+### The context, which is three-way consistent (§185 §3)
 
-### Why it matters — `adjudication-round4.md` item D
+```
+   w30  202.A.0C.1D5   mac (p),c+,(p)+12    C-RAM[0x06]  role mix/TAP
+   w32  000.2.FD.407   ld.st acc,(p)-3
+   w33  050.0.00.921   <- selector 0x21, value 0 (addr8), STORE bit set
+   w34  002.A.03.1D5   mac (p),c+,(p)+3     C-RAM[0x07]  role FILTER
+```
 
-> P16 *"matters operationally: a control or an impulse test sized against the halved numbers
-> **amputates the feedback of every line**"* — and it names **7 LIVE sites**, of which §188 fixed
-> one.
+The C-RAM role annotation changes tap→filter exactly there, the word sits inside a symmetric
+`−3`/`+3` pointer bracket, and its selector is the register `ldptr` loads. ⇒ **INFERRED: it resets
+the pointer at a section boundary** — what a multi-tap delay needs between its tap bank and its
+damping filter.
 
-### What is already good
+### ⚠ Requirements before building
 
-* **§188 SHIPPED** — the host payload's LSB is restored, default now **`0xB910E446A39B440F`**.
-  Verified against the LFO sine with every number pre-registered: max err `2 → 1` LSB,
-  RMS `1.291 → 0.707` (`= 1/√2`, pure rounding), and the 12 moved cells match the capture's
-  tag-bit-7 pattern **bit-for-bit**. Descriptors and C-RAM inherit the same fix.
-* **§189** — the descriptor bank pairs `k ↔ k+5` **nine times with no exceptions** (the delay
-  READ/WRITE pairing, confirmed live), and CHORUS's block reads `400` and `1040`, exactly §152's
-  ROM-derived tap position and line length. The bank is being read correctly.
-
-### Still open, from earlier ticks
-
-* **`0x921`** (`050.0.00.921`, MULTI TAP DELAY `w33`, **TYPE 8**) — the only payload collision in
-  the corpus, two of three siblings decoded. §187 FORCED that the selector space is the chip's
-  **internal control registers**, not `m_rf`, so `0x921`'s effect (`m_dp`) is the one that is
-  observable.
-* **PTRD-A** (mask bit 62, off) — unique best of 21 364 736 delta rules; takes CHORUS's index
-  multiply from `L` identically zero to live. Unshipped: `m_tb` still frozen, C1–C3 unexplained.
+* **Vehicle**: MULTI TAP DELAY is **TYPE 8** (§170's map). It is not the cold-boot effect, so the
+  word never executes in the current vehicle — a run without navigation measures nothing.
+* **Falsifier**: state it as *"`m_dp` at `w33` becomes X"* with X predicted, **and do not
+  pre-register which side moves** (§180's rule). A fired-count is mandatory.
+* ⚠ §185's arithmetic (`addr8` = value, `lo12[7:0]` = selector) is **INFERRED across carriers**;
+  `k3-pointers` proves it for `hi12 = 0x801` and this word is `0x050`.
 
 ### ⛔ Dead, do not retry
+
 
 
 

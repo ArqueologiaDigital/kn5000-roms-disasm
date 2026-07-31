@@ -72,6 +72,8 @@ the ones a reader would reach for again.
 | 7 | `st_gate = always` | 0 survivors of 276 480 | `lfo-ramp.md` P-9 |
 | 8 | Remap the three internal writes onto **output ports 0/1** | Reverted: the resulting wet was rms 1.0 — a ±1 LSB constant present *even in silence* | `upd6383.cpp:2011` |
 | 10 | **Bit 54** (latch to `m_k`) and **bit 54 + bit 4** (§40 reads it) to route the phase | §136's *"the pair has never been evaluated together"* is discharged: bit 54 alone is **bit-identical to control in every cell**; the pair produces `§70 ACCA min = max = 176 471 605 248`, the exact DC §137 retracted | §165 §4 |
+| 17 | The descriptor payload is truncated 24→16 bits (`m_dscbank = u16(v & 0xffff)`) | ⛔ **REFUTED §190.** `r3-delaydram.md` P5, MEASURED over 870 cells: the delay map is `[0x0000,0x10000)` and no firmware address reaches 2¹⁶ (max 64 899). 16 bits is correct, and "every unit-1 cell has bit 15 set" is just unit 1's range `[0x8000,0x10000)` | §190 |
+| 18 | The cold-boot unit-1 program is not ROOM REVERB 1 | ⛔ **REFUTED §190.** §170's 16-word fingerprint applied to load address 200: `prog16_room_reverb_1`, loaded once at transfer 18 | §190 |
 | 15 | Model the bit-11 `lo12` words on an **ALU route** | ⛔ There is no ALU route to model — `bit11-family.md` §9 establishes bit 11 selects a **second encoding** with no `SRC` and no `ACTION` field (bits 11/5 co-vary 90 of 90; the ALU reading needs 4 field values attested nowhere else). `alu_decoded()` refusing them is correct | §182 |
 | 16 | `ACT 0x03`, `ACT 0x04`, `ACT 0x1C`, `SRC 0x02`, `SRC 0x04` | ⛔ **These codes do not exist** — parse artefacts of applying the bit-11-clear encoding to bit-11 words (`bit11-family.md` §9.3, 2026-07-27). ⚠ One genuine exception: `epilogue w63 = 2A7.9.05.1C3` carries `ACT 0x03` with bit 11 clear, in the output stage | §182 |
 | 13 | `C63` writes the index register `m_tb` via `SRC 0x11 / ACT 0x03` (**§166 §3**) | ⛔ **REFUTED §181.** `lo12 = 0xC63` has bit 11 set, and `upd6383d.h:609` routes those words to *addressing only, no ALU effect*. It never writes `m_tb`. §166's 53/53 bijection is a measurement and stands | §181 |
@@ -121,7 +123,7 @@ the ones a reader would reach for again.
 
 ## TIER 1 — the mask-bit register  (generated from `upd6383.cpp/.h`; authoritative)
 
-Default `m_specmask` = **`0x3910E446A39B440F`**.  `ON` = in the shipped default; `off` = implemented
+Default `m_specmask` = **`0xB910E446A39B440F`**.  `ON` = in the shipped default; `off` = implemented
 but not armed.  ⚠ `REFUTED` means **stop**; `⚠ UNTESTED` means **this is owed a run**;
 plain `off` means the classifier found neither marker — read the section.
 
@@ -151,7 +153,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 20 | **ON** | §76 | THE PIPELINE IS KEYED TO THE PORT, NOT TO THE SLOT COUNTER. dram-datapath.md item A: "THE DRAM PORT IS A ONE-DEEP PIPELI |
 | 21 | REFUTED | §82, §138 | A DELAY WORD'S ACTION PUTS ITS DATUM ON THE ACCUMULATOR |
 | 22 | REFUTED | §138 | THE SAME ERASURE, AT THE OUTPUT STAGE |
-| 23 | **ON** | §71, §94 | THE HOST PAYLOAD IS 2x THE RAW THREE BYTES. r3-delaydram.md states it; §71/A3 reproduced it as a control that could have |
+| 23 | **ON** | §71, §94 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 24 | **ON** | §100 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 25 | **ON** | §101, §112 | DO NOT LET AN UNSUPPORTED SOURCE OVERWRITE A HOST-PROGRAMMED REGISTER |
 | 26 | off | §94 |  |
@@ -178,12 +180,13 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 60 | **ON** | §47, §50 | TAKE THE DESCRIPTOR FROM THE PER-UNIT C-RAM BANK, NOT FROM D-RAM AT m_dsc |
 | 61 | **ON** | §160, §161 | A DELAY WORD'S `addr8' IS A DIRECTION FIELD, NOT A REGISTER ADDRESS -- so ACTION 0x07 must not store to it |
 | 62 | off | §174, §180 | PTRD-A -- `lo12 == 0x1C0' DOES NOT MOVE THE POINTER |
+| 63 | **ON** | §188 | RESTORE THE PAYLOAD'S LSB. `k5-output-stage.md' item 9 and `k3-pointers.md' |
 
 ---
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-75 sections, §97..§182.  **Read the tail first** — later sections retract earlier ones *in place*.
+83 sections, §97..§190.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -262,4 +265,12 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §180 | SHIPPED | PTRD-A: the dead multiply comes ALIVE, by moving the DATA rather than the pointer. Not shipped. | §1 **MEASURED**; §2 the mis-specification **acknowledged**, the coincidence |
 | §181 | REFUTED/RETRACTED | ⛔ `C63` NEVER WRITES `m_tb`. Three experiments were aimed at the operand of a word the device does not route to the ALU. | §1 **MEASURED**; §2 **FORCED** (read at source), §166 §3's SPECULATIVE half |
 | §182 | REFUTED/RETRACTED | ⛔ my own next-task was misconceived, and `bit11-family.md` had refuted §166 §3 FOUR DAYS EARLY | §1 **FORCED** (two independent measurements in the owning note, re-read not |
+| §183 | OPEN | the bit-11 family rides exactly TWO carriers, and that gives it the minimal pair §7.2 said it lacks | §1 **MEASURED** (null computed first, a pre-registered MISS); §2 **MEASURED**, |
+| §184 | OPEN | the alternate `lo12` decomposes, and there is exactly ONE payload with a decoded sibling | §1 **MEASURED** (null computed first); §2 **MEASURED**, exhaustive over all 90; |
+| §185 | OPEN | reading the alternate encoding as SELECTOR + VALUE: `C63` is a per-channel RESET | §1 **MEASURED**, exhaustive; §2 **INFERRED** from a FORCED construction, with the |
+| §186 | CORRECTION | two corrections, both caught BEFORE a build: my own falsifier was circular, and the roadmap's headline defect is fixed | §1 **FORCED** (the circularity is structural); §2 **MEASURED** (read at source); |
+| §187 | OPEN | the selector space is NOT `m_rf`, and a collision proves it | §1 **MEASURED**; §2 the artefact **acknowledged**; §3 **FORCED** by the collision |
+| §188 | SHIPPED | the host payload's LSB was being dropped. SHIPPED, default → `0xB910E446A39B440F`. | §1 **FORCED** (two notes, by construction); §2 **FORCED**; §3 **MEASURED**, all four |
+| §189 | SHIPPED | §188 reached the descriptors too; the read/write pairing confirms; P16's ladder does not appear | §1 **FORCED** (the arithmetic) ; §2 **MEASURED** (9 of 9 pairs; the CHORUS control); |
+| §190 | REFUTED/RETRACTED | two of §189's three readings are REFUTED, both statically. The third is narrowed, not settled. | §1 **FORCED** (P5 is MEASURED and the arithmetic is decisive), with two bit-exact |
 
