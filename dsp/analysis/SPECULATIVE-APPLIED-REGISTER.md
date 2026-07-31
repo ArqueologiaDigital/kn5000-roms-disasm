@@ -11532,3 +11532,70 @@ value, the reading is refuted. **Do not implement it without that pre-registrati
 Evidence grade: §1 **MEASURED**, exhaustive; §2 **INFERRED** from a FORCED construction, with the
 independent corroboration of item E's per-channel count; §3 **INFERRED** (three independent
 alignments); §4 the limitation **stated**; §5 **SPECULATIVE**.
+
+---
+
+## §186 — two corrections, both caught BEFORE a build: my own falsifier was circular, and the roadmap's headline defect is fixed
+
+### 1. ⛔ §185's falsifier cannot fail — caught before running it
+
+§185 proposed: *"once modelled, that register must show exactly two writes of 0 per frame."*
+
+**That returns its own input.** `C63` appears exactly twice per image **in the static corpus** — that
+is where the per-channel reading came from (`bit11-family.md` item E). Modelling the word and
+counting its writes measures the disassembly, not the machine.
+
+And the *effect* is nil: **register `0x63` is in no non-zero census.** `m_rf` non-zero cells are
+`06` and `1D..40`; D-RAM's are `01 02 04 06 07 0E 92`. Writing 0 over 0 changes nothing, so
+"bit-identical" would also be the outcome if `C63` were a no-op — which is the current model.
+
+⇒ **The selector/value reading is, as posed, UNTESTABLE in this emulator.** ★ Fifth
+criterion-that-cannot-fail on this project, and the second caught *before* the run rather than
+after.
+
+★ What the reading *does* have is a **known-answer control that could have failed and did not**: on
+the `0x80x` carriers it predicts `0x821` with `addr8 = 0x70` loads `0x70` into register `0x21` —
+which is exactly what `k3-pointers.md` decodes `ldptr` to do. The reading is well supported
+*where it is checkable* and unobservable *where it is new*. That is worth stating plainly rather
+than dressing up as a result.
+
+### 2. ⛔⛔ AND THE ROADMAP'S ITEM (a) IS STALE — verified at source, not repeated
+
+Chasing "what would make it observable" led to `ROADMAP-2026-07-29.md`, whose **first** listed
+defect is:
+
+> *"(a) INGRESS — the host poke port is unimplemented … all 881 tag-`0x15` D-RAM writes and all 870
+> tag-`0x4C` descriptor writes are dropped … no per-effect parameter (delay time, reverb time,
+> feedback, high-damp, LFO waveform table, ER level) has ever reached the chip."*
+
+That would explain the silence, the empty D-RAM and the zero descriptors **at one stroke**, and I
+was one step from reporting it as the live blocker.
+
+**It is fixed.** `upd6383.cpp:872` implements the poke port (§59 P1.1); the comment there describes
+the former bug **in the past tense**, and the code decodes the 5-byte packet stream and routes tags
+`0x15` → `m_rf`, `0x4C` → `m_dscbank`, `0x26` → `m_cram`.
+
+★ **Rule 10 again — "a blocker is a MEASUREMENT and measurements expire" — this time applied to
+another document rather than my own.** §165 earned that rule by finding a stale blocker still
+believed; this is the mirror case, a stale *defect report* that would have sent a whole tick
+backwards. **Verifying at source instead of repeating the citation is the entire difference.**
+
+⚠ The roadmap is dated 2026-07-29 and is quoted elsewhere in this register. **Every claim taken
+from it needs the same treatment before use.**
+
+### 3. ⇒ The constructive redirect
+
+The reading predicts `C63` resets a register. **A reset presupposes a writer.** Tag-`0x15` host
+writes land at `m_rf[m_dram_wp & 0xff]` on a walking pointer, and the roadmap counts **65 cells**
+written — while the census shows non-zero only at `06` and `1D..40`, about 37.
+
+⇒ **Next: instrument which `m_rf` cells the host actually writes — all of them, not just the ones
+that end non-zero.** Two-sided and it decides something:
+
+* `0x63` **is** in the host's write range ⇒ the selector plausibly names that register, the reset
+  has something to reset, and the reading becomes testable by clearing it.
+* `0x63` is **not** ⇒ the selector space is not `m_rf`, and §185 §2's identification is wrong even
+  though its arithmetic (`addr8` = value) survives on the `0x80x` control.
+
+Evidence grade: §1 **FORCED** (the circularity is structural); §2 **MEASURED** (read at source);
+§3 procedural, with both arms stated.
