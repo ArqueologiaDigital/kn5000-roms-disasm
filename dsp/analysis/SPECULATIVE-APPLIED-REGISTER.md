@@ -11599,3 +11599,67 @@ that end non-zero.** Two-sided and it decides something:
 
 Evidence grade: §1 **FORCED** (the circularity is structural); §2 **MEASURED** (read at source);
 §3 procedural, with both arms stated.
+
+---
+
+## §187 — the selector space is NOT `m_rf`, and a collision proves it
+
+§186 §3 asked which `m_rf` cells the host actually writes, two-sided: if selector `0x63` is in the
+host's range the §185 reading becomes testable; if not, the selector space is something else.
+
+### 1. MEASURED — the host tag-`0x15` write targets
+
+```
+  59 writes over 55 cells (38 ever non-zero)     |  0x63 written 0 times
+  05 06 07 0E 10 11 | 1D..40 (36 cells) | 50 51 52 53 | 85 86 87 8A 8B 94 | D0 D1 D2
+```
+
+★ The contiguous `1D..40` block is **exactly §161's wavetable window**, 36 cells — the sine's
+provenance confirmed from the host side for the first time.
+
+### 2. ⚠ A near-miss I nearly filed as support
+
+Five of the eight selectors — `0x21 0x22 0x25 0x27 0x39` — **are** in the host's written set, which
+reads as evidence for the `m_rf` identification. It is not: all five lie inside `0x1D..0x40`, i.e.
+inside the wavetable block. **Coincidence of numeric range.** My first script printed "5 of 8 IN"
+and I nearly reported it.
+
+### 3. ★★★ AND THE COLLISION IS THE PROOF — the spaces are different
+
+```
+   selector 0x21  =  THE POINTER REGISTER     k3-pointers.md, PROVEN BY CONSTRUCTION (ldptr)
+   m_rf[0x21]     =  wavetable index 4        §161, part of a bit-exact 36-entry sine
+```
+
+**A pointer register is not a sine-table entry.** Two independent, differently-grounded
+identifications of index `0x21` cannot both be `m_rf`.
+
+⇒ **FORCED: the alternate encoding's `lo12[7:0]` selector space is NOT `m_rf`.** It is the chip's
+internal control-register file — which is exactly what `k3-pointers.md` means by *"the `0x_2x`
+selector block"*, and what `ldptr`/`rstcur` target.
+
+★ Note this is proven by a **collision**, not by `0x63`'s absence. Absence would have been weak;
+two contradictory decodes at one index is not.
+
+### 4. ⇒ Consequences, in both directions
+
+* **§185 §2's identification is REFUTED**: "`C63` resets register `0x63`" cannot mean an `m_rf`
+  cell. ⚠ §185's *arithmetic* — `addr8` is the value, `lo12[7:0]` the selector — is untouched: it
+  rests on the `0x80x` known-answer control (`ldptr` loading `0x70`), which this does not disturb.
+* **§186 §1's objection dissolves too.** I argued the reading was untestable because "writing 0
+  over 0 changes nothing". That assumed the target was in a memory census. Control registers are
+  in no census at all, so the objection was aimed at the wrong space — and so was the falsifier.
+
+### 5. ⇒ The tractable target is still `0x921`, and now for a stated reason
+
+Selector `0x21` is the **pointer** register, and the pointer's effect is **observable** — `m_dp` is
+instrumented at every site (§162, §176). So `0x921` is the one family member whose predicted effect
+can be measured. It sits in MULTI TAP DELAY, **TYPE 8** in §170's map, reachable by navigation.
+
+⚠ **Open discrepancy, flagged not asserted:** this run counts **59** tag-`0x15` writes;
+`ROADMAP-2026-07-29.md` counts **881 / 65 cells**. Different captures (cold-boot CHORUS here vs
+cold-boot + PARAMETRIC EQ there) — but a factor of 15 is too large to leave unexamined, and §186
+already found that roadmap's headline item stale.
+
+Evidence grade: §1 **MEASURED**; §2 the artefact **acknowledged**; §3 **FORCED** by the collision
+of two independently-grounded decodes; §4 follows; §5 procedural, with the discrepancy flagged.
