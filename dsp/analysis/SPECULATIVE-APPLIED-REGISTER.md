@@ -11279,3 +11279,91 @@ class 6 is a measurement and stands; the *name* does not.
 Evidence grade: §1 **FORCED** (two independent measurements in the owning note, re-read not
 re-derived); §2 **MEASURED**; §3 **MEASURED**, and new — the wider population is this pass's
 contribution; §4 procedural.
+
+---
+
+## §183 — the bit-11 family rides exactly TWO carriers, and that gives it the minimal pair §7.2 said it lacks
+
+`bit11-family.md` §7 is a decidability census: two routes closed, **one open** — the `w000` slot,
+*"the only controlled comparison the bit-11 family has."* Tested here, and the structure underneath
+turns out to be different from what that comparison assumes.
+
+### 1. The `w000` test — a MISS, and the miss is informative
+
+**Pre-registered:** `8BC` at `w000` ⟺ the image contains `C63`. **NULL** computed first: 19 of 28
+images carry `C63` (0.679), so chance predicts 11.5 of the 17.
+
+```
+                  has C63   no C63
+   w000 = 8BC        16        1          observed 16 vs null 11.5
+   w000 = 00B         3        8          4 exceptions
+```
+
+Enriched, not a rule. The exceptions: **FLANGER, ENSEMBLE and MIX UP have `C63` with `00B` at
+`w000`**, and AUTO WAH+S.DELAY has `8BC` with no `C63`.
+
+★ And FLANGER and ENSEMBLE **do** carry `8BC` — just not at `w000`. Which is the whole point.
+
+### 2. ★★★ ALL 90 bit-11 words sit on exactly TWO carriers. Zero on any other.
+
+```
+   class 0, addr8 0x00     73 words
+   class 1, addr8 0x30     17 words   -- all seventeen are ONE form, 880.1.30.8BC
+   anything else            0
+```
+
+and the class-0 side resolves into three groups:
+
+```
+   040.0.00.C63 x46   142.0.00.C63 x7                      <- C63, 53
+   040.0.00.8BC x6    050.0.00.8BC x1                      <- 8BC on the CLASS-0 carrier, 7
+   040.0.00.864 x1    050.0.00.921 x1
+   80x.0.**.{821,822,825,827,839} x11                      <- the register-load family, encoding
+                                                              PROVEN by construction (k3-pointers A)
+```
+
+⇒ **The same payload `8BC` rides two different carriers** — a class-0 word and a class-1 delay
+access. **The bit-11 payload is therefore carrier-independent**: its meaning cannot depend on
+`class4`, because the identical twelve bits appear under two different ones. That is a real
+constraint on what the alternate encoding can be, obtained without decoding it.
+
+### 3. ⇒ §7.3's controlled comparison is comparing the wrong axis
+
+`880.1.30.8BC` vs `880.1.30.00B` holds `hi12`/`class4`/`addr8`/position fixed and varies `lo12` —
+but `8BC` is a **bit-11 payload** and `00B` is an **ALU `lo12`**. They are not two values of one
+field; they are two different *encodings*. The comparison can isolate "which encoding is used
+here", never "what the payload means".
+
+⚠ That also explains §1's exceptions without any new hypothesis: FLANGER and ENSEMBLE put the same
+payload on the class-0 carrier instead. **The `w000` split is about the CARRIER, not the payload.**
+
+### 4. ★★ And the family DOES have a minimal pair — §7.2 looked across the flag, not within it
+
+§7.2 tested each bit-11 word against itself with bit 11 **cleared**: 0 of 8 present. Correct, and it
+closes comparison *across* the flag. But **within** the flag the same carrier hosts three payloads:
+
+```
+   040.0.00.C63   x46          040.0.00.8BC   x6          040.0.00.864   x1
+   ^ identical hi12, class4 and addr8 -- differing in NOTHING BUT lo12, all three bit-11 set
+```
+
+⇒ **A true minimal set across the alternate encoding's own payload field**, on 53 sites against 6
+against 1. Whatever `lo12` encodes under bit 11, `C63` and `8BC` differ *only* in it, on a carrier
+that is otherwise byte-identical. **This is the comparison §7 concluded did not exist**, and it is
+strictly better posed than the `w000` one because both sides are in the same encoding.
+
+### 5. SPECULATIVE
+
+* **S7.** `8BC` is once per image and `C63` twice (the note's §6.2, "setup + per-channel use").
+  Under §2's carrier-independence, the natural reading is that the alternate `lo12` is a **small
+  operation selector** and the carrier supplies its operand — a delay access for `880.1.30.8BC`, a
+  bare class-0 word for `040.0.00.8BC`. **SPECULATIVE**, but it predicts that the class-0 and
+  class-1 `8BC` sites should behave differently in exactly the way their carriers differ, which is
+  measurable.
+* **S8.** The `80x` register-load group is *already decoded by construction* and is in the same
+  encoding. It is the only bit-11 group whose meaning is known — so it is the **Rosetta candidate**:
+  whatever rule explains `821`/`825`/`827`/`839` must also parse `C63` and `8BC`. That constraint
+  has not been applied. **SPECULATIVE**, and the cheapest next test.
+
+Evidence grade: §1 **MEASURED** (null computed first, a pre-registered MISS); §2 **MEASURED**,
+exhaustive over all 90; §3 **FORCED** by §2; §4 **MEASURED**; §5 **SPECULATIVE**.
