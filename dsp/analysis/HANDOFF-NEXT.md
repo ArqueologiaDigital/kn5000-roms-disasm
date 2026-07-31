@@ -49,16 +49,41 @@ code §166 §3 used to claim `C63` does `m_tb = L`** — refuted twice over, and
 `epilogue w63 = 2A7.9.05.1C3`, `SRC 0x07` `ACT 0x03`, bit 11 **clear** — and it is in the
 **OUTPUT STAGE**, the one place this chip's signal must emerge and does not.
 
-### The concrete lead — §6 item 2
+### ★★ THE LEAD — apply the ROSETTA constraint (§183 S8)
 
-**`8BC` co-occurs with `C63` in 23 of 24 of its images and is EXACTLY ONE per image**, against
-`C63`'s **exactly two in 20 of its 25**. *"A once-per-program word alongside a twice-per-program one
-is the shape of setup + per-channel use. That pairing is testable against the pointer state, which
-is decoded."*
+The bit-11 family has **one group whose meaning is already known**, and it is in the same encoding:
 
-⚠ And item E is a standing correction: `C63` count == LFO count in only 11 of 16 images, never
-fewer — *"the shape of a per-channel constant, not a per-LFO one. `C63` is not the LFO's table
-read."* §166 §2's 53/53 bijection with class 6 is a measurement and stands; the **name** does not.
+```
+   80x.0.**.{821, 822, 825, 827, 839}  x11   <- the pointer/register loads.
+   `k3-pointers.md' item A decodes these BY CONSTRUCTION from the firmware's own assembly
+   (`INC 8, WA' into byte 3's low nibble).
+```
+
+⇒ **Whatever rule parses `821`/`825`/`827`/`839` must also parse `C63` and `8BC`.** That constraint
+has never been applied, and it is the cheapest test available.
+
+### And the family DOES have a minimal pair — §7.2 looked across the flag, not within it
+
+§7.2 tested each bit-11 word against itself with bit 11 **cleared** (0 of 8, correct — that closes
+comparison *across* the flag). **Within** the flag, one carrier hosts three payloads:
+
+```
+   040.0.00.C63  x46      040.0.00.8BC  x6      040.0.00.864  x1
+   ^ identical hi12, class4 and addr8 -- differing in NOTHING BUT lo12, all bit-11 set
+```
+
+Better posed than the `w000` comparison, because both sides are in the **same encoding**.
+
+### ⛔ And `w000` is NOT the discriminator — §7.3's open route is comparing the wrong axis
+
+All 90 bit-11 words sit on exactly **two carriers** (class 0/`addr8 00` ×73, class 1/`addr8 30`
+×17) and none on any other. **The same payload `8BC` rides both**, so the payload is
+**carrier-independent** and its meaning cannot depend on `class4`.
+
+⇒ `880.1.30.8BC` vs `880.1.30.00B` varies `lo12` — but `8BC` is a bit-11 payload and `00B` is an
+ALU `lo12`. Two *encodings*, not two values of one field. Tested: the `w000` split predicts `C63`
+at 16/17 vs 3/11 against a null of 11.5 — **enriched but not a rule, 4 exceptions**, and FLANGER
+and ENSEMBLE carry `8BC` on the *class-0* carrier instead. The split is about the **carrier**.
 
 ### ⛔ Dead, do not retry
 
