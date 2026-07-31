@@ -16,45 +16,51 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**THE DELAY ROTATION SIGN IS INVERTED — every delay line in the machine is `65536 − D`.**
+**Build the WRITE-TIMESTAMP probe, then flip the delay rotation sign. In that order.**
 
-From the DRAM audit (`data/AUDIT_DRAM_findings.md`), the highest-value finding of the whole sweep:
+The fix is **one operator** (`upd6383.cpp:1894`, `cellv + m_frames_run` → `−`). It is not applied
+because **no existing instrument can grade it** (§199).
 
-```cpp
-   upd6383.cpp:1850-1882   addr = (cellv + m_frames_run) & 0xffff       with G counting UP
+### Why the obvious falsifiers are all blind
+
+`G` is added to **both** the read and the write address, so it **cancels** in `R − W`: measured 335
+under either sign at every `G`. Every probe this project has — descriptor census, delay-port census,
+tap-modulation census — reports **addresses**, and will be **bit-identical** across the change.
+
+⚠ A change every existing probe reports as bit-identical is exactly the kind that gets shipped on
+reasoning and retracted later.
+
+### The delay is TEMPORAL, and that is both why the fix is right and how to test it
+
+```
+   G RISING (device)   read at R+T returns the sample written at T' = T + 335   -- FUTURE
+                       => the only consistent reading is 65536 - 335 = 65201 = 1.478 s
+   G FALLING (round5)  read at R-T returns the sample written at T' = T - 335   -- PAST
+                       => delay 335 samples = 7.60 ms  ✓
 ```
 
-`adjudication-round5.md` §3 **FORCES** `delay = READ_CELL − WRITE_CELL`. The two are arithmetically
-incompatible: the shipped sign yields **`65536 − D` on every line**, turning ROOM REVERB 1's
-**18.1 ms pre-delay into 1.468 s**.
+★ **The instrument:** tag each delay-line address with the frame it was last written; at each read,
+report `frames_since_written`.
 
-### ★ It has TWO independent controls
+★ **Pre-register these — both are ROM-derived and already confirmed live:**
 
-1. The host's own evaluator `cell = round(ms × 44100/1000) + BASE24` (`LABEL_03925E`, **PROVEN BY
-   CONSTRUCTION**) requires the delay to **grow** as the knob turns. The shipped sign makes it shrink.
-2. **The device's own disassembler mirror already prints the corrected relation**
-   (`upd6383d.cpp:468`) — the two halves of the same device disagree with each other.
+```
+   that line       335 with the fix   |  65201 without
+   CHORUS's line  1040 with the fix   |  64496 without      (§152 from the ROM;
+                                                             §189 live at descriptor 0x2B = 0x0410)
+```
 
-⚠ The device comment cites `r3 §5.1`, whose sign rests on the retracted `i+1` pairing **and** the
-retracted polarity. Check that before trusting it.
+⇒ two-sided, bit-exact, and it cannot come out inconclusive.
 
-### Two more FORCED claims absent, on the same six lines
+### Then the other three FORCED gaps (§198, all with controls)
 
-* **Per-body descriptor map** — `m_delay_ix` is frame-global, reset only at frame end, so the
-  unit-1 reverb draws cells `0x33..0x4E` instead of `0x00..0x1F`: **mostly never-written cells, i.e.
-  no delay line at all.**
-* **`C40.1.80.000` must consume a cell** (r3 §6.1, all 8 exact solutions; verified arithmetically:
-  28 non-C consumers + 4 C-format = 32 = *n*). **The cursor runs 4 short inside every reverb.**
-
-### ★ And §189/§190's OPEN discrepancy is CLOSED by the same audit
-
-The cold-boot unit-1 preset is **CONCERT REVERB 1 (algo 20)**, not ROOM REVERB 1. Its ROM ladder
-reproduces §189's measured chain `569 707 1250 1674 480 512 870 678 900 840` **exactly, 10 of 10 in
-order**, and its cell `0x02 = 41925` is §190's live value. §190 fingerprinted the *body image* —
-which **all twelve reverbs share byte for byte**; the preset lives only in the descriptors. ⇒ my
-§190 identification method was sound for unit 0 and **cannot identify a reverb**.
+* per-unit **call vectors** written and read by nothing — the device runs a body the firmware
+  disconnected (controls: four Sub CPU ROM constants; the cold-boot capture → 84/42, 200/50)
+* **per-body descriptor map** absent — the unit-1 reverb draws never-written cells
+* **`C40.1.80.000` must consume a cell** — the cursor runs 4 short in every reverb
 
 ### ⛔ Dead, do not retry
+
 
 
 
