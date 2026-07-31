@@ -12854,3 +12854,191 @@ Body 1's §204 census going from **0 of 16 to 16 of 16**, with the sixteen cells
 
 Evidence grade: §1 **FORCED** (§204's own output); §2 **FORCED** (the gcd argument, null computed);
 §3 **MEASURED** in the owning note, the ring-vs-table distinction **UNRESOLVED and labelled tied**.
+
+---
+
+## §208 — the §204 probe stops printing a DERIVED cell label. Housekeeping, recorded so §209 has a baseline.
+
+§207 §1 showed the `dsc%02X` column was `u8(m_dsc + m_delay_ix)` **recomputed at print time**, which
+is `+1` for body consumers (`:1927` increments before `:1950` reads) and, worse, recomputed from an
+`m_dsc` of `0x26` — the *epilogue's* value — while the bodies ran with `0x25`.
+
+⇒ the column was deleted rather than corrected, because at that moment **no correction existed**:
+under a per-unit ring `m_dsc + ix` is not the cell for unit 1 under *any* offset. The probe printed
+`iw%u:ix%u,val%04X` and derived nothing.
+
+⚠ **A probe that prints a wrong label is worse than one that prints none** — §202 quoted two
+numbers through this one and they became the session's headline control. Shipped as
+`53dc6e8`. Evidence grade: **MEASURED** (§204's own output was the proof).
+
+---
+
+## §209 — ★★★ THE PER-UNIT DESCRIPTOR RING. 16 of 16, all four arms bit-exact, and §202 re-baselined.
+
+The descriptor **base** is not a register. §207 §2 closed that family by arithmetic and
+`data/DSCBASE_findings.md` closed the rest; what survives is `dram-unit-cursor.md`'s per-unit
+**ring** on the one shared cursor. This is the build, and the measurement.
+
+### 1. The change — two INDEPENDENT env gates, each with a fired count
+
+⚠ The u64 spec mask is **exhausted**; `UPD6383_BODYIX`/`UPD6383_CFMTIX` precedent.
+
+```
+   UPD6383_DSCPRE    pre-increment: the cell is m_dsc + m_delay_ix + 1
+   UPD6383_DSCRING   the per-unit ring: [0x00,0x26) unit 1, [0x26,0x40) unit 0
+```
+
+Both default **ON**. The unit is the one the device **already** establishes at the CALL for the
+per-unit D-RAM rebase (`DRAM_UNIT_BASE`) — no new chip-boundary violation, nothing reaches into
+another device's memory. In this corpus the census's own `m_cur_iw >= 200` partition is identical,
+so the choice is not load-bearing for any number below.
+
+★ **The wrap fires only on passing the ring TOP.** A cursor loaded *below* its own base — unit 0's
+`0x25` — is **not** clamped up. That asymmetry *is* the mechanism: one immediate, two bases.
+
+And every probe now takes the **one** cell computed at the access site, so §207's `+1` cannot recur.
+
+### 2. ★★★ THE RESULT — the pre-registered settling number, and it lands
+
+Pre-registered in `data/DSCBASE_findings.md` §6.3/§6.4 and committed (`d565f5d`) **before this
+build**. Vehicle: cold boot, CHORUS on unit 0, CONCERT REVERB 1 on unit 1, notes at 21–27.5 s
+(rule 12). Census: the §204 consumer-to-cell map, unit-1 bucket, first 16 consumers, frame > 900 k.
+
+| PRE | RING | body-1 cells | body-1 values | settling |
+|---|---|---|---|---|
+| 0 | 0 | `25 26 27 … 34` | `0000 0190 1041 05A0 0000 09B0 0410 0DC0 0820 8000 0C30 0000×5` | **0 / 16** ← the NULL |
+| 1 | 0 | `26 27 28 … 35` | `0190 1041 05A0 0000 09B0 0410 0DC0 0820 8000 0C30 0000×6` | **0 / 16** |
+| 0 | 1 | `25 00 01 … 0E` | `0000 81E7 0000 A3C5 8000 A5FE A276 A8C1 A3C5 ADA3 A5FE B42D A8C1 B60D ADA3 B80D` | **0 / 16** |
+| **1** | **1** | **`00 01 02 … 0F`** | **`81E7 0000 A3C5 8000 A5FE A276 A8C1 A3C5 ADA3 A5FE B42D A8C1 B60D ADA3 B80D B42D`** | ★★★ **16 / 16** |
+
+★ **All four arms reproduced their pre-registered cell list *and* value vector EXACTLY** — the null
+included, so the instrument was shown able to say **no** before it said yes. The shipped default
+(no env vars set) reproduces arm D identically, and body 1's sixteen values are the sixteen §207 §4
+named, in order.
+
+**Body 0 — CHORUS, the arm that separates `PRE` from `RING`:**
+
+```
+   PRE=0 (RING 0 or 1)  cells 25 26 27 28 29 2A 2B 2C 2D 2E   10/10 as predicted
+   PRE=1 (RING 0 or 1)  cells 26 27 28 29 2A 2B 2C 2D 2E 2F   10/10 as predicted
+```
+
+⇒ **the 2 × 2 identifies the two halves independently rather than shipping a bundle**, and
+falsifier 4 does **not** fire: body 0 is bit-identical between `RING=0` and `RING=1` at the same
+`PRE`. Nor does falsifier 3: the `PRE=0 RING=1` arm *does* show the single stray `0x25` at the
+head, which independently confirms `m_dsc = 0x25` when body 1 runs — the `ldptr.d` decode at `w52`.
+
+### 3. ⚠ The one number that had to be localised, and was
+
+The first run reported **23 040 unit-0 wraps**, and unit 0's ring is supposed to be unreachable.
+A fired count that is neither zero nor explained is a defect until it is localised, so a probe was
+added rather than a story:
+
+```
+   §209 UNIT-0 WRAPS: 23 040 total, 0 in a SETTLED frame (> 900 k)
+   last at frame 264 000 of 1 392 430 | I-RAM 54..331 | raw cursor reached 0x46
+```
+
+⇒ every one is in the **partially-uploaded-I-RAM transient** (frame 264 000 = 5.5 s, before the
+host finishes writing the programs). Unit 0's ring is unreachable in every settled frame, as
+designed. ★ Had this been left as "23 040, probably boot", it would have been exactly the kind of
+unexamined counter this project keeps being bitten by.
+
+### 4. ⚠ RE-BASELINE OF §202 — its numbers MOVED, as §207 said they would
+
+With the labels corrected and the ring **OFF** (the null arm — the same machine §202 measured):
+
+```
+   §202 published   dsc 28 -> 0..4161      dsc 30 -> 0..3120
+   §209 null arm    cell 27 -> 0..4161     cell 2F -> 0..3120
+```
+
+⇒ **§207's diagnosis is confirmed at the label level**: the *values* were right and the *labels*
+were `+1`. And its stronger claim holds too — the `0x2F` line had 1 140 909 hits, and `0x2F` is
+reachable only at `ix 10`, which CHORUS (ten consumers, `ix 0..9`) never reaches. **It was body 1's,
+reading body 0's block.**
+
+**THE NEW BASELINE, shipped default:**
+
+```
+   unit 0 (CHORUS)      cell 27  0..4401     cell 28  0..1440    cell 29    0..240
+                        cell 2B  400..1040   cell 2D  160..2080
+                        cell 2F  GONE -- unit 1 no longer touches it
+
+   unit 1 (CONCERT REVERB 1) -- fifteen lines where there were NONE:
+        cell 00 (81E7)  247..33015    cell 02 (A3C5)     0..335     7.60 ms
+        cell 04 (A5FE)    0..664      cell 06 (A8C1)     0..1036
+        cell 08 (ADA3)    0..1717     cell 0A (B42D)     0..2684
+        cell 0C (B60D)    0..1914     cell 0E (B80D)     0..992
+        cell 10 (BB73)    0..1862     cell 12 (BE19)   438..2540
+        cell 14 (C19D)  660..3440     cell 16 (C4E5)   600..4280
+        cell 18 (874A) 1626..34394    cell 1B (8616)  1318..34086
+        cell 1E (7FFF) 29007..32767
+```
+
+★ `4161 -> 4401` on the surviving unit-0 line, and `3120` is gone from unit 0's census entirely.
+**Expected, and not a regression** (§207). ⚠ The `cell 27` line pools two consumers (kernel `iw12`
+and body-0 `iw98`) and pooled a *different* pair before the shift, so `+240` is a re-pairing and is
+**NOT** offered as the CHORUS modulation depth; `m_tapmod` is gated off in this build.
+
+**§202's CONCLUSION stands and is strengthened.** It rests on the temporal argument, and the fifteen
+unit-1 lines are **7.6–780 ms**, not complements near 1.48 s.
+
+★ **Five of the reverb's lines resolve to ONE shared write cell** (`0x0A`/`0x0F` = `0xB42D`), at
+monotonically increasing distances — 992, 1862, 2540, 3440, 4280 frames = 22.5, 42.2, 57.6, 78.0,
+97.1 ms. That is the *shape* of a multi-tap comb.
+⛔ **AND IT CARRIES NO p-VALUE, WHICH IS WHY IT IS SAID HERE RATHER THAN SCORED.** `age = R − W` is
+true **by construction** for any read that resolves at all — every write address is some cell's
+value plus the same rotation — so "the age equals a ROM cell difference" is an identity, not a test.
+What is genuinely informative is only *which* cell it resolves to: 7 of 15 land inside unit 1's own
+block instead of somewhere else. **INFERRED, weakly.** I computed the null (`15 × 32/65536 = 0.007`)
+before noticing the identity, and it is printed so the next pass does not re-derive the same
+circularity.
+
+⚠ Three lines (`0x00`, `0x18`, `0x1B`) peak near 33–34 k, about half the 65 536-frame buffer, which
+is what an **unresolved** pairing looks like. Not claimed as taps.
+
+### 5. ⚠ What is NOT claimed, and it is the important part
+
+* ⛔ **RING vs a HARDWIRED TWO-ENTRY BASE TABLE is TIED, and neither is claimed.** Both produce
+  every number in §2 identically. Separating them needs a unit-1 block longer than **38** cells and
+  the corpus maximum is **32** (all twelve reverbs). The ring is implemented because it gives the
+  immediate `0x25` a job — parsimony, **not evidence**. `dram-unit-cursor.md` §2.4 and
+  `DSCBASE_findings.md` item F say the same and this section does not improve on them.
+* **THE CHIP IS STILL SILENT.** `§70 ACCA min 0 max 0`, quiet **and** loud, on the shipped default.
+  A correct descriptor map is not a working reverb; the output stage (`w73`, §141/§150) is a
+  separate, untouched defect and this fix was never expected to move it.
+* **§205's gate is unmoved**: `§48 DELAY READ CONSUMED (SRC 0x0B): 22 781 700 times, **0** with a
+  non-zero datum`. While that is 0 the kernel's unit-0 send is 0 whatever else is done.
+  ⚠ The `PRE=0 RING=1` arm is the **only** one that ever returned data (1 128 908 non-zero delay
+  reads, 960 consumed) — it reads back *the same frame's own write* at zero distance, which is a
+  degenerate line, not a delay. Recorded because it looks like progress and is not.
+* **`L₁` inside `0x20..0x26`, `B₀` inside `0x00..0x26` and `L₀` inside `0x3A..0x41` are FREE.**
+  No shipped algorithm reaches any of those bounds, so no run can move them. `0x00/0x26/0x40` is
+  `dram-unit-cursor.md` item G's 38 + 26 = 64 partition and is a *choice within the class*.
+* **Whether the kernel's own consumers run in unit 0's ring or unit 1's** is still open
+  (`dram-unit-cursor.md` §2.5 prints both and picks neither). This build puts them in unit 0's,
+  because that is what `m_cur_unit1` says; nothing measured here depends on it.
+
+### 6. ⚠ One defect in the pre-registration, found by the run
+
+`DSCBASE_findings.md` §6.3's body-0 lines end `-> 9 of 10` and `-> 10 of 10` **written** cells. The
+truth is **8 of 10** and **9 of 10**: descriptor cell `0x29` is `0x0000`, unwritten. The prediction's
+own *value* vectors already show that second zero, so the cells and values were right 4/4 and only
+the derived tally was off by one. **Recorded rather than quietly corrected** — the same class of
+error as §207's, in a document written to fix §207's.
+
+### 7. Fired counts (shipped default, one cold-boot run)
+
+```
+   §209 DSCPRE  applied 46 665 909
+   §209 DSCRING evaluated 46 665 909, wrapped 31 734 252 (unit 1 31 711 212, unit 0 23 040)
+   §201 per-body index reset  2 736 860      §203 C-format consumption  5 698 785
+   §202 rotation sign FALLING 46 665 909
+```
+
+Evidence grade: the implementation **FORCED within `dram-unit-cursor.md`'s printed model class**
+and **TIED** with the base-table rival; the consequence **MEASURED**, 4 of 4 arms bit-exact against
+a pre-registration committed before the build; the §202 re-baseline **MEASURED**; the multi-tap
+reading **INFERRED and explicitly un-scored** (the statistic is circular); the audio **UNCHANGED and
+still silent**.

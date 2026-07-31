@@ -16,55 +16,62 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**FIRST fix the `dsc` label (+1 on body consumers), THEN implement the per-unit descriptor ring.**
+**★★ §209 SHIPPED THE PER-UNIT DESCRIPTOR RING. Body 1's census went 0 of 16 → 16 of 16, all four
+arms bit-exact against a pre-registration committed before the build. §202 is re-baselined.
+⇒ THE DESCRIPTOR PATH IS DONE. The next task is the OUTPUT STAGE.**
 
-### ⛔ 0. Before anything: a defect in §202's evidence (§207)
+### ⛔ 0. DO NOT RE-OPEN THE DESCRIPTOR BASE — every branch of it is closed
 
-The §200/§204 `dsc` labels are **+1 for body consumers** — §204's own output prints
-`iw46->ix3(dsc29,cell05A0)` and `0x05A0` is cell **`0x28`**. ⇒ **§202's two "bit-exact" matches were
-body-1 consumers reading body-0's block.** §202's *conclusion* stands (the rotation sweeps down);
-**its two numbers must be re-baselined after the fix and NOT read as a regression when they move.**
-⚠ §204 called that label *"harmless for the A/B"* — true, and it was **not** harmless for the
-citation. Fix the label before any run, or the next result is mis-cited too.
+* **A base REGISTER is dead by arithmetic** (§207 §2 / `data/DSCBASE_findings.md`):
+  `base_u = s·F_u + b (mod 256)` cancels `b`, so the test is `s·d ≡ 38 (mod 256)`, solvable iff
+  `gcd(d,256) | 38`. `38 = 2·19` ⇒ `d` odd or `≡ 2 (mod 4)`. `0x827` (`d=8`), `0x821` (`d=32`),
+  `w45/w53 addr8` (`d=48`) — **all impossible for any integer scale**. Also dead: the body's own
+  first D-RAM word and the host write pointer.
+* **What shipped instead**: a per-unit **ring** on the one shared cursor, `[0x00,0x26)` for unit 1
+  and `[0x26,0x40)` for unit 0, the unit taken at the CALL. `UPD6383_DSCPRE` and `UPD6383_DSCRING`,
+  both default ON, both with fired counts.
+* ⚠ **RING vs a HARDWIRED TWO-ENTRY BASE TABLE is TIED and NEITHER is claimed.** Separating them
+  needs a unit-1 block longer than 38 cells; the corpus maximum is 32. **Do not try to break the
+  tie with this ROM — it cannot be done.**
+* ⚠ **FREE, and no run can move them:** `L₁ ∈ 0x20..0x26`, `B₀ ∈ 0x00..0x26`, `L₀ ∈ 0x3A..0x41`.
+  No shipped algorithm reaches any bound.
 
-### ⛔ 1. `0x827` is ELIMINATED — do not implement it
-
-A base register means `base_u = s·F_u + b (mod 256)`; subtracting the units **cancels `b`**, so the
-test is `s·d ≡ 38 (mod 256)`, solvable iff `gcd(d,256) | 38`. `38 = 2·19` and the gcd is a power of
-two ⇒ **`d` must be odd or ≡ 2 (mod 4)**.
-
-```
-   0x827  d = 8      0x821  d = 32      w45/w53 addr8  d = 48      ALL IMPOSSIBLE
-```
-
-*"The base is scaled"* is not available — **no integer scale exists**. NULL first: 75 % of deltas
-admit some scale, 6.2 % admit `|s| ≤ 8`, so this could have passed. Also eliminated: the body's
-first D-RAM word (`880.1.30.00B` is consumer 0 on **both** units) and the host write pointer
-(`m_dsc_wp` ends `0x30`, order-dependent, unit 1 uploads first).
-
-### ★ 2. The answer is in `dram-unit-cursor.md` (2026-07-27) — read it, do not re-derive
-
-**4440 survivors of 766 576 machines, every one with `B₁ = 0x00` and `L₁ ≤ 0x26`.** The base is
-**not a register**: it is per-unit state established **at the CALL**, a per-unit **ring** on the one
-shared cursor — so the single immediate `0x25` means *"one below unit 0's base"* to unit 0 and
-*"the last cell of my ring"* to unit 1.
-
-⚠ A hardwired two-entry base table is **observationally TIED** with the ring — separating them needs
-a unit-1 block longer than 38 cells and the maximum is 32. Implement either; **do not claim which**.
-
-### ★ 3. The number that settles it
-
-Body 1's §204 census going from **0 of 16 → 16 of 16**, the sixteen cells reading
+### ★ 1. §202 IS RE-BASELINED — quote the NEW numbers
 
 ```
-   81E7 0000 A3C5 8000 A5FE A276 A8C1 A3C5 ADA3 A5FE B42D A8C1 B60D ADA3 B80D B42D
-   (today: 0000 0190 1041 05A0 0000 09B0 0410 0DC0 0820 8000 0C30 0000 0000 0000 0000 0000)
+   published (mislabelled)   dsc 28 -> 0..4161      dsc 30 -> 0..3120
+   same machine, labels fixed cell 27 -> 0..4161     cell 2F -> 0..3120   (0x2F was BODY 1's)
+   SHIPPED, ring ON          cell 27 -> 0..4401     0x2F gone from unit 0 entirely
 ```
 
-### ⚠ 4. And the gate on everything downstream (§205)
+and unit 1 has **fifteen delay lines where it had none**, `7.6 .. 780 ms`. §202's *conclusion* (the
+rotation sweeps down) stands and is strengthened. ⛔ `age = R − W` is an **identity**, not a test —
+do not score "the age equals a ROM cell difference"; only *which* cell it resolves to is
+informative (7 of 15 land inside unit 1's own block).
 
-`§48 DELAY READ CONSUMED (SRC 0x0B): 22 773 120 times, **0** with a non-zero datum.` While that is
-0, the kernel's unit-0 send is 0 whatever else is done.
+### ★★ 2. THE NEXT TASK: THE OUTPUT STAGE, and the gate in front of it
+
+**`§70 ACCA min 0 max 0`, quiet and loud, on the shipped default. The chip is SILENT and the
+descriptor fix did not change that — it was never expected to.** Localised to `w73` (§141/§150).
+
+⚠ **AND THE GATE THAT IS STILL SHUT** (§205 §1, unchanged by §209):
+
+```
+   §48 DELAY READ CONSUMED (SRC 0x0B): 22 781 700 times, 0 with a non-zero datum
+```
+
+While that is 0, the kernel's unit-0 send is 0 whatever else is done. ⇒ the two live questions are
+**why a resolved delay read still returns zero data** and **what `w73` does**, in that order.
+⚠ The `PRE=0 RING=1` arm was the only one that ever returned data (1 128 908 non-zero reads) and it
+is a **degenerate** line — it reads back the same frame's own write at zero distance. It looks like
+progress and is not.
+
+### Also still open, unchanged
+
+per-unit **CALL VECTORS** written and read by nothing (controls: four Sub CPU ROM constants;
+cold-boot capture → 84/42, 200/50) · the five **MALFORMED** streams `{79,88,89,90,91}` = programs
+for the **second** DSP (MN19413/IC310), which Felipe wants inspected · `f31 = 4/5` is
+**UNDECIDABLE** with existing instruments and `f31 = 4` fires **zero** times in the clean vehicle.
 
 ### ★ SHIPPED this session — five, all from the PROVEN-BY-CONSTRUCTION audit, each with a control
 
@@ -73,11 +80,14 @@ Body 1's §204 census going from **0 of 16 → 16 of 16**, the sixteen cells rea
 | **188** | host payload LSB (default `0xB910E446A39B440F`) | LFO sine: max err 2→1 LSB, RMS 1.291→0.707 = 1/√2 |
 | **197** | accept `0x0B` poke packets (leading nibble is a flag) | 2 recovered values bit-exact vs the descriptor space |
 | **201** | per-body descriptor index | delay lines got LENGTH: `0..0` on every line → 240/480/640 |
-| **202** | rotation **sweeps DOWN** | delays became `4161 = 0x1041`, `3120 = 0x0C30` = cells `0x27`/`0x2F` **bit-exact** |
+| **202** | rotation **sweeps DOWN** | delays = the ROM's own cells — ⚠ **numbers RE-BASELINED by §209**, see §1.1 |
 | **204** | `C40.1.80.000` consumes a cell | consumer-to-cell census: a duplicate-cell collision removed |
+| **208** | the §204 probe stops printing a derived cell label | §207: it was `+1` for every body consumer |
+| **209** | ★★★ the **per-unit descriptor RING** | body 1's census **0 of 16 → 16 of 16**; all four arms bit-exact vs a pre-registration committed before the build; the null said **no** |
 
 ⚠ **The u64 spec mask is EXHAUSTED.** New gates are env vars + fired-count:
-`UPD6383_ROTSIGN` (ON), `UPD6383_BODYIX` (ON), `UPD6383_CFMTIX` (ON).
+`UPD6383_ROTSIGN` (ON), `UPD6383_BODYIX` (ON), `UPD6383_CFMTIX` (ON),
+`UPD6383_DSCPRE` (ON), `UPD6383_DSCRING` (ON).
 
 ### ⛔ Two long-standing tasks CLOSED by §205 — do not reopen
 

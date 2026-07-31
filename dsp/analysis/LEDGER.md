@@ -144,7 +144,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 11 | off | §50 | LAND IT IN tempA TOO |
 | 12 | off | §52 | row 25 seeds the coefficient cursor from ldptr -- and this file already records that it is "⛔ STILL AGAINST K3, which pr |
 | 13 | off | §53 | READ THE RAMP BANK AT Q0.16, NOT Q0.23 |
-| 14 | **ON** | §50, §62 | SELECTOR 0x27 LOADS THE PER-UNIT OVERFLOW / MODE REGISTER (m_ovc) |
+| 14 | **ON** | §62, §68 | SELECTOR 0x27 LOADS THE PER-UNIT OVERFLOW / MODE REGISTER (m_ovc) |
 | 15 | off | §116 | SELECTOR 0x27 LOADS THE PER-UNIT OVERFLOW / MODE REGISTER (m_ovc) |
 | 16 | **ON** | §69 |  |
 | 17 | **ON** | §44, §72 | C-RAM 0x50..0x8B IS A DELAY-TAP TABLE, NOT COEFFICIENTS. Dumped, the space has three clearly distinct regions: |
@@ -177,7 +177,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 57 | off | §142, §148 | `coef' only where f98 == 1 AND the word consumes a coefficient. §146 localised the railing to four words -- kernel iw14/ |
 | 58 | off | §145, §148 | `coef' only where f98 == 1 AND the word consumes a coefficient. §146 localised the railing to four words -- kernel iw14/ |
 | 59 | **ON** | §145, §148 | `coef' only where f98 == 1 AND the word consumes a coefficient. §146 localised the railing to four words -- kernel iw14/ |
-| 60 | **ON** | §47, §50 | TAKE THE DESCRIPTOR FROM THE PER-UNIT C-RAM BANK, NOT FROM D-RAM AT m_dsc |
+| 60 | **ON** | §153, §200 | LAND IT IN tempA TOO |
 | 61 | **ON** | §160, §161 | A DELAY WORD'S `addr8' IS A DIRECTION FIELD, NOT A REGISTER ADDRESS -- so ACTION 0x07 must not store to it |
 | 62 | off | §174, §180 | PTRD-A -- `lo12 == 0x1C0' DOES NOT MOVE THE POINTER |
 | 63 | **ON** | §188 | RESTORE THE PAYLOAD'S LSB. `k5-output-stage.md' item 9 and `k3-pointers.md' |
@@ -186,7 +186,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-88 sections, §97..§195.  **Read the tail first** — later sections retract earlier ones *in place*.
+102 sections, §97..§209.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -278,4 +278,18 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §193 | OPEN | the f31 run is VOID: the navigation vehicle loaded the wrong program. The control caught it. | §1 **MEASURED** (the symptom is diagnostic); §2 **FORCED** by the word sequence |
 | §194 | OPEN | the transport is FIXED and §170's map has an off-by-one. The f31 comparison then FAILS its own input control. | §1 **MEASURED** (both arms fingerprinted), the map defect **FORCED** by the +1 on |
 | §195 | OPEN | the three-way f31 test also fails: bit identity is confounded with program similarity | §1 **MEASURED** (all three fingerprinted); §2 the pooling **MEASURED** and its |
+| §196 | SHIPPED | §114 §3's "the modulus is exactly half" does NOT apply to the shipped build. Measured, no gate. | §1 **FORCED** (the arithmetic); §2 **MEASURED**, with the range agreement as an |
+| §197 | SHIPPED | the poke packet's leading nibble is a FLAG, not a constant. Two-character fix, SHIPPED. | the packet form **PROVEN BY CONSTRUCTION** (two notes); the fix's effect |
+| §198 | SHIPPED | the three-way PROVEN-BY-CONSTRUCTION audit: four gaps, two note defects, and a correction to §182 | §1 gaps **MEASURED/FORCED** per the linked audits, none implemented here; |
+| §199 | REFUTED/RETRACTED | the rotation sign: I nearly refuted a correct finding by checking the wrong quantity | §1 **MEASURED** (the cancellation); §2 **FORCED** (the temporal argument, matching |
+| §200 | OPEN | the delay lines have ZERO LENGTH, so the rotation sign is ungradeable. And §199's arithmetic paired the wrong cells. | §1 **MEASURED**; §2 **FORCED** by §189's nine exceptionless pairs; §3 **MEASURED**, |
+| §201 | SHIPPED | ★★★ THE DELAY LINES HAVE LENGTH. Per-body descriptor index, SHIPPED ON. | the decode **FORCED** (round5 §1); the consequence **MEASURED**, with §189's |
+| §202 | SHIPPED | ★★★ THE ROTATION SWEEPS DOWN, and the proof is the ROM's own numbers. SHIPPED. | **MEASURED**, bit-exact at two lines against an independently-taken dump; the |
+| §203 | SHIPPED | `C40.1.80.000` consuming a descriptor cell is INERT by the only instrument that could grade it. Not shipped. | the claim **FORCED** (r3 §6.1, plus the 28 + 4 = 32 arithmetic); the run |
+| §204 | SHIPPED | the CONSUMER-TO-CELL census grades §203. It was right. SHIPPED. | the decode **FORCED** (r3 §6.1 + the 28 + 4 = 32 arithmetic); the consequence |
+| §205 | OPEN | both standing tasks return NOT-AS-NAMED. One is 93 sections stale; the other is undecidable. | §1 **FORCED** (the datapath) with the corpus census **MEASURED**; §2 the closures |
+| §206 | OPEN | the descriptor base is not missing from the emulator; it is absent from `0x825`. Look at `0x827`. | the header values **MEASURED**; "the firmware does not split `0x825`" **FORCED**; |
+| §207 | REFUTED/RETRACTED | ⛔ the `dsc` labels are OFF BY ONE, so §202's "bit-exact" numbers were the wrong block. And the answer was written four d | §1 **FORCED** (§204's own output); §2 **FORCED** (the gcd argument, null computed); |
+| §208 | SHIPPED | the §204 probe stops printing a DERIVED cell label. Housekeeping, recorded so §209 has a baseline. | **MEASURED** (§204's own output was the proof). |
+| §209 | OPEN | ★★★ THE PER-UNIT DESCRIPTOR RING. 16 of 16, all four arms bit-exact, and §202 re-baselined. | the implementation **FORCED within `dram-unit-cursor.md`'s printed model class** |
 
