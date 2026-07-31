@@ -425,7 +425,30 @@ matching the static walk). Grade: **MEASURED corpus statistic**; the reading
 
 ---
 
-## 6. THE PRE-REGISTERED EXPERIMENT
+## 6. THE PRE-REGISTERED EXPERIMENT — ★ **RUN IN §222 (2026-07-31). F1, F2 AND F3 ALL HOLD.**
+
+> **⇒ §222 RAN `§E-D0` (`UPD6383_PICKUP`, env, DEFAULT OFF, read-only) IN FIVE ARMS.**
+> **`F1` HOLDS** — the audit reports `iw205`'s operand address as **`0x85`** and prints `0xD0`
+> in a SEPARATE `dpPOST` column, `var = 0/0/0` over 540 205 settled frames. The named wrong
+> number was the right one to name.
+> **`F2` HOLDS, and it is now MEASURED rather than INFERRED** — `D-RAM[0x85]` has **NO WRITER
+> AT ALL** on settled frames in the shipped arm *and* on the `NOZ05` rig where body 0 runs its
+> whole ladder live. The instrument is not blind: it names `iw70`, site 3, 540 205, the instant
+> an arm creates one.
+> **`F3` HOLDS EXACTLY** — arm B `iw85`: `L −8 388 608..8 388 607`, `ACCA` after
+> `−549 755 813 888..549 755 748 352`, both endpoints `= L × 65536`.
+> ★ **AND §222 REPLICATED §3.3'S CALIBRATION AT `iw205` ITSELF**, not at the twin: with the cell
+> filled, `iw205`'s `ACCB` after the slot is exactly its own operand `× 65536`
+> (`1 111 532 × 65536 = 72 845 361 152`). §9's standing constraint stands and is now measured
+> twice.
+> ⚠ **§2.1'S WRITER MAP OVER-COUNTS.** `writers85.py` lists **six** writers of `D-RAM[0x05]`;
+> the machine performs **four** (one on the rig). `iw37` and `iw111` carry `hi12` bit 7 and
+> `§109`'s store gate suppresses them. **A static write-site map that ignores the store GATES
+> over-counts.**
+> ⇒ §2.3's classification is CONFIRMED: **NO PRODUCER, on a correctly decoded and correctly
+> addressed word.** `iw205` is a MESSENGER and comes off the worklist for good.
+
+### 6.0 the pre-registration, as written
 
 Most of the question is decided statically, so the run below is deliberately small: it
 exists to close the one thing static analysis cannot — *is there an un-modelled route

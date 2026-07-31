@@ -442,7 +442,30 @@ negative**.
 * ⛔ **Do not re-open `DRAM_UNIT_BASE`/`STRIDE`.** FORCED, and `§220` measured
   `0x05 | unit<<7` correct at unit 0.
 
-### 5.1 §E-D85 — THE EPILOGUE CROSSBAR ARM (one env var, two words, two fired counts)
+### 5.1 §E-D85 — THE EPILOGUE CROSSBAR ARM — ★ **RUN IN §222. STEPS 1 AND 2 ARE REFUTED; ONLY STEP 3 HAS ANY CONSEQUENCE — AND IT PUBLISHES THE RIG'S RAIL.**
+
+> **⇒ §222 RAN IT (`UPD6383_XB85`, env, DEFAULT OFF), WITH THE BISECTION §5.4 REQUIRED.**
+> **`F2` "held"** — body 1 went `2/1/2 → 58/44/47`, the epilogue `0/0/0 → 22/19/9`, and
+> `§70`/`§211` left zero for the first time in the project.
+> ⛔ **AND THE RUN IS VOID AS AN AUDIO CLAIM, on five gates:** `§54` reports **826 142 of
+> 826 142 SILENT-INPUT frames driving a FULL-SCALE output**, with the **silent peak
+> `8 388 607` EXCEEDING the loud peak `2 692 742`**; `F1`'s `m_rf[0x8D]` railed `009B26 →
+> 7FFFFF`; `F3` failed (body 0 `28/32/28 → 28/27/24`, via the epilogue's writes to
+> `D-RAM[0x00]`/`[0xFF]`, where kernel A's walk starts); `w65`'s operand is a railed constant
+> in BOTH buckets; and the pedestal is **`NOZ05`'s own rail** — `D-RAM[0x05]` already reads
+> `8 388 607` on every quiet frame in the CONTROL arm. **`F4`'s constant-fill trap fired with a
+> constant this note did not name: `8 388 607`.**
+> ⛔ **THE BISECTION REFUTES STEPS 1 AND 2.** Arm E (latch + load only) fired **1 204 800** and
+> **1 203 840** times and was **BIT-IDENTICAL to the control**; arm D (array route only)
+> reproduced the compound arm's quiet means **digit for digit**. ⇒ `ACT 0x03` as a latch and
+> `SRC 0x03` as its reader do **nothing**. The whole effect is **`w63`'s READ**, i.e. the
+> narrow one-word form of the bit-23 question — and §5.0's "do not clear bit 23" stands.
+> ★ **§4.3'S STRUCTURAL RESULT SURVIVES AND §2 IS UPHELD**: `§221 F1` is **still 0 with the
+> link open**, because the operand the crossbar delivers has provenance **`iw11` — kernel A's
+> DRY DEPOSIT**, not body 0. And §3.3's `:2914`/`:3491` divergence is now **DECIDED and
+> UNIFIED** (0 disagreements in 5 977 025 resolutions).
+
+#### 5.1.0 the pre-registration, as written
 
 **`UPD6383_XB85`, default 0.** Two coupled changes, each with its **own,
 UNCONDITIONALLY printed** fired count (rule 8 as sharpened by §220 — never print

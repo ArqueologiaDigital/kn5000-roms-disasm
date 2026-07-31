@@ -20,7 +20,53 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§221, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§222, 2026-07-31)
+
+> **★★★ THE BLOCKER IS NOW THE RIG ITSELF: `UPD6383_NOZ05` RAILS `D-RAM[0x05]` AT `8 388 607` ON
+> EVERY QUIET FRAME, AND IT IS THE ONLY ARM THAT MAKES UNIT 0 LIVE.**
+> §222 forced unit 1's empty input cell open (the epilogue-crossbar arm, `UPD6383_XB85`), and the
+> output stage **left zero for the first time in the project** — `§70`/`§211` went from
+> `min 0 max 0` to means of `3.53e11` / `1.21e12`, body 1 from `2/1/2` to `58/44/47`, the epilogue
+> from `0/0/0` to `22/19/9`. ⛔ **AND IT IS NOT AUDIO:**
+>
+> ```
+>    §54 arm C   quiet-in 826 142 -> 0 silent / 826 142 LOUD (peak 8 388 607)   <- THE FATAL CASE
+>                loud-in  314 063 -> 0 silent / 314 063 loud (peak 2 692 742)   <- LOWER than quiet
+>    §70  quiet mean 352 943 168 421.0 span 0 | loud mean 352 936 790 122.1 span 306 176 449 480
+>    §211 quiet mean 1 212 718 186 496.0 span 0 | loud mean 1 212 702 694 236.0 span 1 239 924 867 072
+>    m_rf[8D] 009B26 -> 7FFFFF ; body 0 28/32/28 -> 28/27/24 ; w65's operand a RAILED CONSTANT
+>    arm D (route only)  reproduces arm C's quiet means DIGIT FOR DIGIT
+>    arm E (latch only)  fired 1 204 800 + 1 203 840 times and is BIT-IDENTICAL to the control
+> ```
+>
+> ⇒ **The pedestal is the rig's own rail — `D-RAM[0x05]` reads `8 388 607` on every quiet frame in
+> the CONTROL arm, before any crossbar exists.** ⇒ ⛔ **NOTHING SHIPPED BEHAVIOURALLY.**
+> ⇒ **NEXT: (1) STOP THE RIG RAILING** — §220's residual: the bit-4 store writes the PRE-update
+> accumulator; at `iw35` the POST-update accumulator is INPUT-DEPENDENT, so a post-update store
+> would DEPOSIT audio instead of destroying it, **without deleting a store the corpus contains**.
+> Grade it on `§54` first (`quiet-in → LOUD-out` must stay **0**). **(2)** `w63`'s READ is the
+> narrow one-word form of the bit-23 question and §222 §4 proves it is the *entire* mechanism —
+> re-ask it **only on a non-railing rig**. **(3)** body-0's coefficient cursor at `iw112`
+> (`coef 0..24`, −111 dB).
+> ⛔ **NOT `ACT 0x0D` / `m_bx_sel0d` / `iw205`** — §222 closed the destination **at the site**:
+> `iw205`'s own `ACCB` = its own operand `× 65536`, both endpoints (`1 111 532 × 65536 =
+> 72 845 361 152` EXACT). `m_bx_sel0d` is FROZEN at 1 and is now a regression control.
+> ⛔ **NOT `SRC 0x03` / `ACT 0x03` as a crossbar latch** — REFUTED by the two-sided bisection.
+> ⛔ **NOT the epilogue's operand set** — `§221 F1` is **still 0 with the link open**; the operand
+> the crossbar delivers is provenance `iw11`, **kernel A's dry deposit**, not body 0.
+>
+> ★ **`D-RAM[0x85]` HAS NO WRITER AT ALL — now MEASURED**, not inferred, by an audit that names
+> `iw70` the instant one exists. ★ **The `:2914`/`:3491` mode-1 unit-rebase divergence is DECIDED
+> and UNIFIED**: corpus body images unit-relative **7 of 7**, `iw332 → m_rf[0x8F]` measured, and
+> **0 disagreements in 5 977 025 resolutions**; it also closes a latent cross-unit corruption in
+> `a04 FLANGER` / `a05 PHASER`.
+> ⚠ `UPD6383_XB85` and `UPD6383_PICKUP` are **DEFAULT OFF**, fired counts printed unconditionally.
+> Logs: `data/{A_pickup,B_pickup_noz05,C_xb85_full,D_xb85_route,E_xb85_latch}_222.log.gz`.
+> ★★ **METHOD, and it cost a falsifier:** a regression control must be **UPSTREAM** of the arm.
+> `m_rf[0x8D]` is `acc_to_datum(ACCA)` written by `iw60`/`iw61` — downstream — so when it railed it
+> could not tell "the gate leaked" from "the arm worked". `§41` was upstream and passed everywhere.
+
+## TIER 0a-prev — §221's BLOCKER, TRUE IN EVERY PART (and §222 could not refute it)
 
 > **★★★ THE OUTPUT STAGE IS NOT STARVED — IT IS NOT CONNECTED, AND THAT IS MEASURED BY PROVENANCE.**
 > §221 ran `§E1`, the operand-provenance census, on the `NOZ05` rig: for every operand the output

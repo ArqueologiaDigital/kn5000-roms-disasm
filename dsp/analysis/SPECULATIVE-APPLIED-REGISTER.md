@@ -15075,3 +15075,267 @@ a static argument; §7 **MEASURED** and it is the third confirmation of `D-RAM[0
 producer; §8 an instrument change, read-only; §9 a decision — **nothing behavioural shipped, every
 gate DEFAULT OFF**; §10 **SPECULATIVE**, pre-registered with its named wrong number.
 **`dsp/verify.py`: BYTE-MATCH OK.**
+
+## §222 — ★★★ `ACT 0x0D`'s DESTINATION IS CLOSED AT `iw205` ITSELF, AND THE FIRST NON-ZERO OUTPUT IN THE PROJECT IS A **RIG RAIL**: `§54` REPORTS **826 142 OF 826 142 SILENT-INPUT FRAMES DRIVING A FULL-SCALE OUTPUT**, AND THE BISECTION SHOWS THE SPECULATIVE LATCH CONTRIBUTES **EXACTLY NOTHING**
+
+<!-- LEDGER-VERDICT: NOT SHIPPED (instrument + one provably inert unification) -->
+
+Scored against `data/PREDICT_222.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@9f27562`). **Five arms, one build**, the §217/§220/§221 clean vehicle
+(`coldnotes2.lua`, cold boot, isolated NVRAM **and** isolated `-cfg_directory` carrying
+`:DSPCFG value="3"`, `-log`, triad C4/E4/G4 held 21.02–27.51 s, `-seconds_to_run 30`, visible
+video):
+
+| arm | log | env |
+|---|---|---|
+| **A** | `data/A_pickup_222.log.gz` | `PICKUP=1 EPIBUS=1` — shipped default |
+| **B** | `data/B_pickup_noz05_222.log.gz` | `+ NOZ05=1` — **the rig control, the NULL** |
+| **C** | `data/C_xb85_full_222.log.gz` | `+ XB85=1` — the full crossbar |
+| **D** | `data/D_xb85_route_222.log.gz` | `XB85=2` — **array route ONLY** |
+| **E** | `data/E_xb85_latch_222.log.gz` | `XB85=3` — **latch + load ONLY** |
+
+> **THE TASK (§221 §10.1):** *body-1 `iw205` — `ACT 0x0D`'s DESTINATION.*
+>
+> **THE ANSWER, and it needed no new decode: the destination is the ACCUMULATOR, and §222
+> measured it ON `iw205` ITSELF for the first time** rather than on its unit-0 twin. In arm C
+> `iw205`'s operand is `1 111 532 .. 8 388 607` and `ACCB` after the slot is
+> `72 845 361 152 .. 549 755 748 352` — **`L × 65536` to the unit, both endpoints.** `m_bx_sel0d = 1`
+> is CORRECT, `iw205` is a **MESSENGER**, and the destination question is **CLOSED**.
+>
+> **AND THE HEAD OF THE CHAIN — the empty cell — WAS FORCED OPEN, WITH A RESULT THAT MUST NOT BE
+> MISREAD.** Routing the epilogue's `w63` to pointer space lit the whole machine: body 1 went
+> **`2/1/2` → `58/44/47`**, the epilogue **`0/0/0` → `22/19/9`**, and `§70`/`§211` left zero for the
+> first time in the project. ⛔ **AND IT IS NOT AUDIO.** `§54` — the always-on DC detector — reports
+> **`quiet-in 826 142 frames → 0 silent / 826 142 LOUD (peak 8 388 607)`**, i.e. **100 % of
+> SILENT-INPUT frames produce a FULL-SCALE output**, and the **silent-input peak `8 388 607`
+> EXCEEDS the loud-input peak `2 692 742`**. The output is louder with no notes than with notes.
+> ⇒ ★★★ **THE PEDESTAL IS `UPD6383_NOZ05`'s OWN RAIL, PROPAGATED.** `D-RAM[0x05]` reads
+> `8 388 607 .. 8 388 607` on every quiet frame in arm **B**, *before any crossbar exists*.
+> **The only rig that makes unit 0 live is the rig that makes its output cell rail — so the
+> crossbar cannot be evaluated on it. NOTHING SHIPS.**
+
+### 1. ★★★ `ACT 0x0D` — DECIDED AT THE SITE, NOT AT THE TWIN
+
+`§E-D0`'s row for `iw205`, arm C, beside arms A/B where the cell is empty:
+
+```
+   iw205 = 020224B1CD    dpPRE 85   dpPOST D0   route m_dram[m_dp][85]   226142 q / 314063 l
+     arm A/B   L 0..0 / 0..0                 ACCB after 0..0 / 0..0
+     arm C     L 8388607..8388607 / 1111532..8388607
+               ACCB after 549755748352..549755748352 / 72845361152..549755748352
+        8 388 607 x 65536 = 549 755 748 352   EXACT
+        1 111 532 x 65536 =  72 845 361 152   EXACT
+```
+
+Same word, same decode, three arms, and the accumulator follows the cell **to the unit** exactly
+when the cell is filled. That is `bx_acc_w(L, false)` and nothing else in the eight-value menu.
+⇒ `IW205-DRAM-D0_findings.md` §3.3's twin calibration is now **replicated at `iw205` itself**;
+`m_bx_sel0d` stays **FROZEN at 1** and moves permanently onto the regression-control list.
+
+★ `§E-D0` also measured what the *shipped* build does to that accumulator: `ACCB` **before**
+`iw205` is `5 206 020 096` (arm A) and `5 212 375 101 .. 5 199 506 215` (arm B, input-dependent) —
+so `iw205` does not merely fail to deliver, **it destroys a live term** by loading an empty cell.
+
+### 2. ★★★ `§E-D0` — `D-RAM[0x85]` HAS **NO WRITER AT ALL**, AND THE INSTRUMENT PROVES IT COULD HAVE FOUND ONE
+
+```
+   §222 §E-D0 PICKUP AUDIT: fetches 2 701 025, post-increment records 2 701 025,
+                            rows 5 (PREDICTED 5), dropped 0
+     iw   word         dpPRE dpPOST  var(pre/post/route)   route[idx]
+      85  000020E1CD     05     13        0 / 0 / 0        m_dram[m_dp][05]
+     130  020220A1CD     03     0D        0 / 0 / 0        m_dram[m_dp][03]
+     205  020224B1CD     85     D0        0 / 0 / 0        m_dram[m_dp][85]
+     319  02022081CD     85     8D        0 / 0 / 0        m_dram[m_dp][85]
+     330  020227B1CD     85     00        0 / 0 / 0        m_dram[m_dp][85]
+
+   WRITERS OF THE TWO PICKUP CELLS, settled frames (> 900 000):
+     arm A   D-RAM[05]  iw9(site2) iw11(site3) iw35(site2) iw45(site2), each 540 205
+             D-RAM[85]  NO WRITER AT ALL      m_rf[85]  iw70 site3 540 205  val 0..0 / 0..0
+     arm B   D-RAM[05]  iw11 ONLY, quiet 8388607..8388607  loud -8388608..8388607
+             D-RAM[85]  NO WRITER AT ALL      m_rf[85]  iw70 site3 540 205  val 0..0 / 0..0
+     arm C   D-RAM[85]  iw70 site3 540 205  quiet 8388607..8388607 loud 1111532..8388607
+             m_rf [85]  NO WRITER AT ALL
+```
+
+**`P0` PASS** — 5 rows, exactly the pre-registered count, 0 dropped. **`P1`/`P2`/`P3` PASS** — every
+`var` column is **0**, so the addresses are constant on 100 % of settled frames. ★ **And `0xD0` is
+now MACHINE-REPORTED as the PARKED pointer, in its own column, beside the operand address `0x85`.**
+The pre-increment trap that cost `OUTPUT-STAGE-NULL_findings.md` §1.2, `§104`'s `dp` column and
+§221's `w79` is now structurally impossible to repeat at this site.
+
+**`P5` PASS, and it is the result the audit existed for:** `D-RAM[0x85]` has **NO WRITER AT ALL** on
+settled frames — in arm A *and* in arm B, where body 0 runs its whole ladder on live audio. The
+instrument is not blind to writers: **it names `iw70`, site 3, 540 205, the moment one exists**
+(arms C/D). ⇒ `IW205-DRAM-D0_findings.md` §2.1's **INFERRED** "no un-modelled route fills it" is now
+**MEASURED**, and `PREDICT_D0_producer.md` §5.2's `N3`/`N4` are confirmed.
+
+⚠ **`P4` IS A MISS, AND A USEFUL ONE.** Predicted **6** writers of `D-RAM[0x05]` in arm A and **3**
+on the rig; measured **4** and **1**. `iw37` and `iw111` never store: both carry `hi12` bit 7 and
+`§109`'s store gate suppresses them. ⇒ **on the rig, `iw11` is the ONLY writer of unit 0's input
+cell** — which corrects `PREDICT_222` §1's own mechanism sketch, written from
+`writers85.py`'s static map, which named `iw111`. **A static write-site map that ignores the store
+GATES over-counts.**
+
+### 3. ★★★ THE ARM MOVED THE OUTPUT — AND `§54` KILLED IT IN THE SAME LOG
+
+```
+                       body 0        body 1        epilogue      kernel A
+   arm B  (control)    28/32/28      2 / 1 / 2      0/ 0/ 0       33/40/29
+   arm C  (XB85=1)     28/27/24     58/44/47       22/19/ 9       32/40/28
+   arm D  (XB85=2)     28/27/24     59/44/49       22/19/ 9       33/42/29
+   arm E  (XB85=3)     28/32/28      2 / 1 / 2      0/ 0/ 0       33/40/29     <- BIT-IDENTICAL to B
+
+   §70  ACCA@w73    arm C  quiet mean 352 943 168 421.0  span 0
+                           loud  mean 352 936 790 122.1  span 306 176 449 480
+   §211 ACCB@w78    arm C  quiet mean 1 212 718 186 496.0  span 0
+                           loud  mean 1 212 702 694 236.0  span 1 239 924 867 072
+   §70/§211         arms A, B, E   mean 0.0  span 0   quiet AND loud
+   §54 arm C   quiet-in 826 142 -> 0 silent / 826 142 LOUD (peak 8 388 607)
+               loud-in  314 063 -> 0 silent / 314 063 loud (peak 2 692 742)
+   §61 arm C   unit1/DO2 peak 8 388 607  (the positive 24-bit RAIL)
+```
+
+**`F2` "held" — and it does not matter.** Five independent gates void it, and three of them were
+pre-registered:
+
+1. ⛔ **`§54` IS THE FATAL CASE, AT 100 %.** Its own definition in `upd6383.h` reads
+   *"quiet-in / LOUD-out = ★ DC EVIDENCE. Any large count here is fatal."* The count is
+   **826 142 of 826 142**. And the **silent-input peak `8 388 607` EXCEEDS the loud-input peak
+   `2 692 742`** — the presentation is *anti-correlated* with the stimulus.
+2. ⛔ **`F3` FAILS.** Body 0 regresses `28/32/28 → 28/27/24`. The arm is **not** confined to two
+   words: the epilogue writes `D-RAM[0x00]`/`[0xFF]` (`iw75`, `iw79`–`81`) and kernel A's walk
+   **starts** at `0xFF`, so a live epilogue feeds back into the next frame's kernel. `iw85`'s
+   operand goes from `−8 388 608..8 388 607` to `1 111 532..8 388 607` — **the negative half of
+   unit 0's signal is gone.**
+3. ⛔ **`F1`'s `m_rf[0x8D]` control FAILS:** `0x009B26` → **`0x7FFFFF`**, and `8C`/`8F` rail with
+   it. `§160` goes 42 non-zero cells → 44.
+4. ⛔ **`w65`'s operand is a RAILED CONSTANT IN BOTH BUCKETS** (`m_rf[0x8F]`,
+   `8 388 607..8 388 607` quiet *and* loud, provenance `iw332` on all three columns). Unit 1 is
+   **saturated**, not working.
+5. ⛔ **The pedestal is the RIG's.** `D-RAM[0x05]` already reads `8 388 607..8 388 607` on every
+   quiet frame in **arm B**, before any crossbar exists — §220 §6's third-occurrence warning,
+   measured again. A reverb fed a full-scale DC produces a full-scale DC.
+
+★ **`F4`'s constant-fill trap fired with a constant `PREDICT_222` did not name.** It named `39 718`
+and `4 194 304`; the constant that actually arrived is **`8 388 607`, the rig's own rail.**
+The `F1` half that *was* upstream — `§41 unit0 0x400000 / unit1 0x178D0B` on 1 172 365 of
+1 172 365 presentations — **PASSED in every arm**, including C and D.
+
+### 4. ★★★ THE BISECTION IS TWO-SIDED AND IT REFUTES THE SPECULATIVE HALF
+
+This is the part worth keeping, and `PREDICT_222` §5 required it before any promotion.
+
+```
+   arm E  XB85=3  LATCH + LOAD only, ARRAY ROUTE OFF
+          w63 ACT-03 latch  FIRED 1 204 800     w70 SRC-03 load  FIRED 1 203 840
+          §70/§211 min 0 max 0 | §54 826 040 silent / 0 LOUD | m_rf[8D] = 009B26
+          body 0 28/32/28   body 1 2/1/2   -> BIT-IDENTICAL to the control
+
+   arm D  XB85=2  ARRAY ROUTE only, LATCH AND LOAD OFF
+          §70  quiet mean 352 943 168 421.0 span 0    <- DIGIT FOR DIGIT arm C
+          §211 quiet mean 1 212 718 186 496.0 span 0  <- DIGIT FOR DIGIT arm C
+          §54  826 040 of 826 040 quiet-in -> LOUD, peak 8 388 607
+```
+
+⇒ ⛔ **`ACT 0x03` AS A LATCH AND `SRC 0x03` AS ITS READER ARE REFUTED.** They fire **1.2 million
+times each** — rule 8: the counts prove they ran — and move **not one number**. The entire effect
+is the **ARRAY ROUTE**, and the source of the non-zero is **`w63`'s READ alone**: in arm D the
+latch is off, yet `w70`'s bit-25 accumulator datum has already become `8 388 607`, because `w63`'s
+read lit `ACCA`. `PREDICT_D0_producer.md` §5.1's steps **1 and 2 are DEAD**; only step 3 has any
+consequence, and it is the **narrow bit-23 question on ONE word**.
+⚠ One-hop limit: arm D shows the route's two halves are *jointly* necessary for body 1 to see
+anything (`w70`'s store must also move arrays); it is `w63`'s read that supplies the non-zero.
+
+### 5. ★★★ `§E1` UNDER RULE 17 — THE NEW LINK NAMES **KERNEL A**, NOT BODY 0
+
+```
+   arm B   w63  m_rf  [addr8][05]  0..0 / 0..0            prov HOST | NONE | NONE
+   arm C   w63  m_dram[addr8][05]  8388607.. / 1111532..  prov iw11 | iw11 | iw11   *
+   arm C   w65  m_rf  [addr8][8F]  8388607.. / 8388607..  prov iw332 (all 3 columns)  =
+   arm C  iw200 m_dram[m_dp][85]   8388607.. / 1111532..  prov iw70  (all 3 columns)  *
+   §221 F1  epilogue operands tracing to BODY 0 (iw84..153):  0    <- IN EVERY ARM, C AND D INCLUDED
+   §221 F2  ACCA at w73, PRODUCER: kernel B iw54 100 % (arm B) -> iw72 100 % (arms C/D), BODY 0 = 0
+   §E1b     iw70 | m_rf[85] 0..0 prov HOST | m_dram[85] 8388607../1111532.. prov iw70
+```
+
+★★ **`F1` IS STILL `0` — WITH THE LINK OPEN.** The operand the crossbar delivers is provenance
+**`iw11`**: **kernel A's dry deposit**, not body 0's processed output. ⇒ even taken at face value
+this is a **parallel send** (input → unit 1), not the serial chain `PREDICT_222` §1 sketched, and
+**body 0's ladder still reaches the presentation through nothing at all.** §221's structural
+finding survives its own attempted refutation.
+
+### 6. ★★ THE `:2914` / `:3491` DIVERGENCE — **DECIDED, UNIFIED, AND MEASURED INERT**
+
+`PREDICT_D0_producer.md` §3.3 found that the mode-1 bit-4 store and the mode-1 READ both resolve
+`addr8 | (m_cur_unit1 ? 0x80 : 0)` while the ACT-07 store took a **bare `addr8`**, under
+`store_mode()`'s own banner *"one rule for both store sites"*. Decided on three legs, none of them
+a model argument:
+
+* **the corpus** (`dsp/tools/rebase_census.py`, new): body images name mode-1 destinations
+  **UNIT-RELATIVE 7 of 7, ABSOLUTE 0 of 7** — 5 bit-4 (`a08 w101`, `a09 w47`, `a10 w67`,
+  `a16 w132`, `a72 w53`) and 2 non-ESC ACT-07 (`a04 FLANGER w64`, `a05 PHASER w105`, both
+  `addr8 = 0x0E`). A shared image cannot address unit 1 absolutely;
+* **a measurement**: the one resident unit-1 case is `iw332` = `a16 ROOM REVERB 1 w132`,
+  `addr8 = 0x0F` → `m_rf[0x8F]`, **which §221 measured `w65` reading back on 540 000/540 000
+  settled frames**. The rebase is not merely plausible, it is the reason that link exists;
+* **inertness, PRINTED not asserted**: both readings are now computed side by side and every
+  disagreement counted unconditionally —
+  **`ACT-07 mode-1 destinations resolved 5 977 025, DISAGREED 0`, in all five arms.**
+
+⇒ **UNIFIED.** It also closes a latent **cross-unit corruption**: left alone, `a04 FLANGER` or
+`a05 PHASER` selected on unit 1 would write **unit 0's** cell `0x0E`. Not observable on the
+resident frame, which is exactly why it needed the corpus to decide it.
+
+### 7. ⇒ WHAT SHIPS
+
+* `upd6383.cpp` / `.h` — **`UPD6383_XB85`** (env, **DEFAULT OFF**, four fired counts printed
+  unconditionally with the gate's state, values 1/2/3 = full / route-only / latch-only so the
+  bisection needs no rebuild) and **`UPD6383_PICKUP`** (env, **DEFAULT OFF**, READ-ONLY, fired
+  count and **row count vs the prediction** printed unconditionally).
+* `upd6383.cpp` — the **mode-1 unit-rebase unification** plus its unconditional divergence counter
+  (§6). `store_mode()` gains a `site` and a `force_dram` argument so the writer census is taken
+  **inside the branch that ran**.
+* `dsp/tools/rebase_census.py`; five logs; `data/PREDICT_222.md`; this section.
+* **No default flip. No mask bit. No decode change. No change to `m_bx_sel0d`.**
+  `UPD6383_NOZ05` stays **DEFAULT OFF**. **`dsp/verify.py`: BYTE-MATCH OK.**
+
+### 8. ★★★ THE NEXT EXPERIMENT, PRE-REGISTERED HERE
+
+1. ★★★ **THE BLOCKER IS NOW A RIG, AND IT IS NAMED: `UPD6383_NOZ05` RAILS `D-RAM[0x05]` AT
+   `8 388 607` ON EVERY QUIET FRAME.** It is the only arm that makes unit 0 live, so **no
+   end-to-end claim about this machine can be graded until it stops railing.** The fix is §220's
+   own residual: the bit-4 store writes the **PRE-update** accumulator, and at `iw35` the
+   **POST-update** accumulator is INPUT-DEPENDENT (`908 714 800 127 ‖ 227 691 099 135 ..
+   1 125 285 262 335`), so a post-update store would make `iw35` **deposit** audio instead of
+   destroying it — **without deleting a store the corpus contains.** Two-sided, default OFF,
+   fired count. ⚠ `iw45`'s post-value is still constant, so this does not finish the job alone.
+2. **`w63`'s READ is now the narrow, one-word form of the bit-23 question**, and §4 shows it is
+   the *entire* mechanism. It is worth re-asking **on a non-railing rig** — and only there.
+   ⛔ Not on `NOZ05`. ⛔ And not by clearing bit 23, which remains CONFOUNDED across six sites.
+3. **body-0's coefficient cursor at `iw112`** (`§175 PER-SITE 0202A071D5`, `coef 0..24` against a
+   24-bit scale — a **3 × 10⁻⁶** attenuation, **−111 dB**) is untouched by all of this and still
+   measurable. §52 / register row 25.
+4. ⛔ **NOT `ACT 0x0D`, NOT `m_bx_sel0d`, NOT `iw205`.** §1 closes them at the site.
+   ⛔ **NOT `SRC 0x03` / `ACT 0x03` as a crossbar latch.** §4 refutes them by a two-sided run.
+
+### 9. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **`ACT 0x0D`'s destination as an open question** | ⛔ **CLOSED AT THE SITE.** `iw205`'s own `ACCB` follows its own operand at exactly `× 65536`, both endpoints, arm C. `m_bx_sel0d = 1` is a REGRESSION CONTROL now, not a worklist item |
+| **`D-RAM[0x85]` "NO PRODUCER" as an INFERENCE** | ★ **MEASURED.** An instrument that names `iw70` the instant one exists reports **NO WRITER AT ALL** in arms A and B |
+| **`SRC 0x03` / `ACT 0x03` = the epilogue crossbar latch** | ⛔ **REFUTED BY A TWO-SIDED RUN.** Latch fired 1 204 800, load 1 203 840, result **bit-identical to the control**; the route alone reproduces the compound arm **digit for digit** |
+| **`PREDICT_D0_producer.md` §5.1 steps 1 and 2** | ⛔ **DEAD.** Only step 3 (the array route) has any consequence |
+| **"a non-zero `w73`/`w78` would be progress"** | ⛔ **NO.** Both moved, by 11 orders of magnitude, in a run where `§54` reports **100 % of silent-input frames driving full scale** and the silent peak **exceeds** the loud peak |
+| **the `:2914`/`:3491` mode-1 rebase divergence** | ★ **DECIDED AND UNIFIED**, corpus 7 of 7 + `iw332` measured + **0 disagreements over 5 977 025 evaluations**. Also closes a latent cross-unit corruption in `a04`/`a05` |
+| **`PREDICT_222` §1's mechanism sketch ("`iw111` fills `0x05`")** | ⚠ **WRONG, and caught by the audit.** `iw37` and `iw111` carry `hi12` bit 7 and never store. On the rig **`iw11` is the ONLY writer.** A static write-site map that ignores the store GATES over-counts |
+| **`m_rf[0x8D] = 39 718` as a leak detector** | ⚠ **MIS-CHOSEN CONTROL.** It is `acc_to_datum(ACCA)` stored by `iw60`/`iw61` — **downstream** of the arm — so it cannot distinguish "leaked" from "worked". ★ **A regression control must be UPSTREAM of the arm.** The `§41` half was, and passed in all five arms |
+
+Evidence grade: §1 **MEASURED EXACT**, three arms, at the site rather than the twin; §2
+**MEASURED**, against a pre-registered ROW COUNT, with one pre-registered quantity MISSED and the
+miss explained; §3 **MEASURED**, five gates, three of them pre-registered as falsifiers; §4
+**MEASURED**, a two-sided bisection whose fired counts prove both halves ran; §5 **MEASURED**,
+`§E1` re-run under the arm; §6 **PROVEN BY CONSTRUCTION** (corpus) + **MEASURED** (`iw332`, and 0
+disagreements); §7 a decision — **nothing behavioural shipped except a unification measured inert
+5 977 025 times**; §8 **SPECULATIVE**, pre-registered with the rig named as the blocker.
+**`dsp/verify.py`: BYTE-MATCH OK.**
