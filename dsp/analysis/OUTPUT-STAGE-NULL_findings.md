@@ -7,6 +7,24 @@
 > decoded and correctly addressed, and faithfully loads a cell that has **no producer**.
 > ⇒ **`m_bx_sel0d` is FROZEN at 1** (MEASURED exact on the unit-0 twin `iw85`); the `79 438 ± 90`
 > DC this file names as the rule-1 counter-example **is that regression**.
+>
+> ## ★★★ AND §6's EXPERIMENT HAS NOW BEEN RUN — SEE REGISTER §221
+> **`§E1` was built and run on the `NOZ05` rig** (`data/{A_epibus,B_epibus_noz05}_221.log.gz`).
+> **`F1` = 0 of 14, `F2`'s producer is kernel-B `iw54` at 100.00 %, `F3` PASS**, and the entire
+> census is **byte-identical between the shipped build and the rig** while body 0 runs at
+> `28/32/28`. ⇒ **§5.1 is UPHELD, and by measurement** (`§E1b`: all twelve counterfactual operands
+> constant in both buckets, in both arms) rather than by a static argument built partly on the
+> broken `D-RAM WRITES (nonzero/total)` counter.
+> **Three rows of this file are CORRECTED by that run:**
+> * ⛔ §2's *"`w79` … → `m_dram[0xFF]`"* — **`w79` reads cell `0x00`**; the operand is fetched
+>   **before** the word's own post-increment (the same trap as `iw205`, third occurrence).
+> * ⚠ §6.2 `N2`'s *"`w72` … provenance **HOST**"* — the **last writer is `iw72` itself**, age 1
+>   frame (§100's identity); **HOST** is the PRODUCER. The *value* calibration passed.
+> * ⚠ §2's *"21 of 22 executing epilogue slots"* — that is **22 `§104` ROWS**, and `§104`'s `L`
+>   column is `m_last_l`, a member that survives a word which never reaches the bus. The machine
+>   performs **14** fetches; **13 of 14** are identically zero.
+> ★ §6.5's **proposed standing rule 19 is ADOPTED and MECHANISED**: `§70`/`§211` now print the
+> **mean** and the **AC span** beside min/max.
 
 # OUTPUT-STAGE NULL — where the value dies between body 0 and `w73`/`w78`
 

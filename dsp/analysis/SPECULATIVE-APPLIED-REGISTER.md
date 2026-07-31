@@ -14991,7 +14991,14 @@ correction. Measured: `iw200` (body-1 entry, a delay READ) fetches `m_dram[m_dp]
 — the cell `e49da4b` proved has **ZERO I-RAM writers** — and its last writer is **`IN`**, the
 per-frame input-latch deposit, **668 640 .. 1 208 639 frames ago**. So `0x85` is written only when
 the input window **drifts** onto it (§36's 1.69 % of frames), never in the settled window.
-⇒ **`D-RAM[0x85]` having no producer is confirmed a third time, by a third instrument.**
+⇒ **`D-RAM[0x85]` has NO PRODUCER IN THE SETTLED WINDOW, confirmed a third time by a third
+instrument, and this run names its only writer ever: the input latch, under §36's pointer drift.**
+⚠ **Read it with `PREDICT_D0_producer.md` (`64d1cb0`, written in parallel with this pass), which
+sharpens the claim and is right to:** under §97's forced two-array split, *register* `0x85` **does**
+have one producer — `iw70`, 1 020 000 stores per settled run, **every one of them zero** — while
+*pointer-space* `D-RAM[0x85]`, the cell `iw205` and `iw200` read, has none. They are different
+cells by construction, and `§E1`'s route column reports the pointer-space one (`m_dram[m_dp]`),
+which is why the two results agree rather than compete.
 ★ And the same correction lands again: `w79` reads cell **`0x00`**, not `0xFF`
 (`OUTPUT-STAGE-NULL_findings.md` §2's table row is wrong); `w80`/`w81` read `0xFF`. The operand is
 fetched **before** the word's own post-increment, and `w79`'s `addr8 = 0xFF` is what *parks* the
