@@ -11740,3 +11740,76 @@ to the corrupted data is what made F2 a real criterion.
 
 Evidence grade: §1 **FORCED** (two notes, by construction); §2 **FORCED**; §3 **MEASURED**, all four
 falsifiers pre-registered and exact; §5 the artefact **acknowledged**.
+
+---
+
+## §189 — §188 reached the descriptors too; the read/write pairing confirms; P16's ladder does not appear
+
+`adjudication-round4.md` item D says §188's retraction leaves **7 live sites**, and flags premise
+**P16** as the one that *"matters operationally: a control or an impulse test sized against the
+halved numbers **amputates the feedback of every line**."*
+
+### 1. ★ §188 already covers the descriptors, and the correction has the right SHAPE
+
+The LSB restoration sits **before** the tag switch, so it applies to tag `0x4C` (descriptors) and
+`0x26` (C-RAM) as well as `0x15`. And P16's correction is exactly `×2 + LSB`:
+
+```
+   raw   corrected    2n?   2n+1?
+   127      255              yes
+   489      979              yes
+   183      366       yes
+   522     1044       yes
+  4452     8905              yes
+   435      869              --     (435 is itself round(869/2); the raw was 434)
+```
+
+⇒ §111's bit 31 (`×2`, already in the default) **plus** §188's LSB is precisely r3's correction.
+Both are now shipped.
+
+### 2. ★★ A structural confirmation that came free
+
+The descriptor bank pairs exactly:
+
+```
+   02==07   04==09   06==0B   08==0D   0A==0F   0C==11   0E==13   10==15   12==17
+```
+
+**Nine `k ↔ k+5` pairs, no exceptions** — the delay READ/WRITE descriptor pairing, confirmed from
+the live bank for the first time. (Direction itself is FORCED elsewhere by `addr8` bit 6.)
+
+★ And CHORUS's own block reads out correctly: `26:0190` = **400** and `2B:0410` = **1040** — exactly
+the nominal tap position and line length `§152` computed **from the ROM alone**. A positive control
+that the bank is being read right.
+
+### 3. ⛔ But P16's ladder is NOT in this bank — neither corrected nor halved
+
+Searching every pairwise difference among the 32 non-zero cells for
+`255 / 869 / 979 / 366 / 1044 / 8905` — and for their halves:
+
+```
+   corrected ladder :  0 of 6 found
+   halved ladder    :  0 of 6 found
+```
+
+The unit-1 chain's consecutive differences are `569 707 1250 1674 480 512 870 678 900 840`. Only
+`480` coincides with `adjudicate4`'s doubled partition, and `870` is one away from `869` — **not
+enough to claim anything**.
+
+⇒ **Recorded as an open discrepancy, not forced.** Three readings, none chosen:
+* the cold-boot unit-1 effect is not ROOM REVERB 1 (the vehicle's unit-1 program has never been
+  identified the way §170 identified unit 0's);
+* the ladder is not a difference of descriptor cells but is computed some other way;
+* `m_dscbank[..] = u16(v & 0xffff)` **truncates a 24-bit payload to 16 bits** — and every unit-1
+  cell here has bit 15 set, which is what a lost high byte would look like.
+
+★ The third is checkable in one line and should be checked first.
+
+### 4. What is NOT claimed
+
+§188 shipped on its own evidence (a bit-exact wavetable control). **Nothing here corroborates or
+undermines it** — the descriptor path simply inherits the same fix. And no claim is made that the
+reverb's delay lines are now correct: P16's numbers were not found, so that remains open.
+
+Evidence grade: §1 **FORCED** (the arithmetic) ; §2 **MEASURED** (9 of 9 pairs; the CHORUS control);
+§3 **MEASURED** as a negative, the three readings **ENUMERATED, not chosen**.
