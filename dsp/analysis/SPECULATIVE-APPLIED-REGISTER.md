@@ -12797,3 +12797,60 @@ measurement is not a fix; it is the next thing to check.**
 
 Evidence grade: the header values **MEASURED**; "the firmware does not split `0x825`" **FORCED**;
 the `0x827` candidate **INFERRED and already in tension with §189**.
+
+---
+
+## §207 — ⛔ the `dsc` labels are OFF BY ONE, so §202's "bit-exact" numbers were the wrong block. And the answer was written four days early.
+
+### 1. ⛔⛔ A defect in §202's EVIDENCE — proved by §204's own printed output
+
+The §200/§204 `dsc` labels are **+1 for body consumers**. §204 printed
+`iw46->ix3(dsc29,cell05A0)` — and `0x05A0` is descriptor cell **`0x28`**, not `0x29`.
+
+⇒ **§202's two "bit-exact" matches were body-1 consumers reading body-0's block** — the very defect
+§201/§204 were repairing. ★ §202's *conclusion* (the rotation sweeps DOWN) stands: it rests on the
+temporal argument and on delays equalling ROM-stored descriptor values at all. But **its two
+headline numbers must be re-baselined after the base fix, not quoted as they stand, and not read as
+a regression when they move.**
+
+I reported those numbers as the strongest control of the session. They were computed through a
+mislabelled index. **The label defect was flagged in §204 as "harmless for the A/B" — it was not
+harmless for the citation.**
+
+### 2. `0x827` is eliminated by arithmetic, not by preference
+
+A base register means `base_u = s·F_u + b (mod 256)`. Subtracting the units **cancels `b`**, so the
+whole test is whether `s·d ≡ 38 (mod 256)` is solvable — i.e. whether `gcd(d,256) | 38`. As
+`38 = 2·19` and `gcd(d,256)` is a power of two, **`d` must be odd or ≡ 2 (mod 4)**.
+
+```
+   0x827  d = 8   gcd 8 ∤ 38     0x821  d = 32      w45/w53 addr8  d = 48     ALL IMPOSSIBLE
+```
+
+⇒ *"the base is scaled"* is **not available** — no integer scale whatsoever, not merely no small
+one. ★ NULL computed first: 75 % of the 256 possible deltas admit *some* scale and 6.2 % admit
+`|s| ≤ 8`, so the criterion could have passed. Also eliminated: the body's own first D-RAM word
+(`880.1.30.00B` is consumer 0 on **both** units — the same 36 bits cannot yield `0x26` and `0x00`)
+and the host write pointer (`m_dsc_wp` ends at `0x30`, is order-dependent, and unit 1 uploads first).
+
+### 3. ★ AND `dram-unit-cursor.md` ANSWERED THIS ON 2026-07-27 — four days before §206
+
+Its sweep gives **4440 survivors of 766 576 machines, every one with `B₁ = 0x00` and `L₁ ≤ 0x26`**:
+the base is **not a register at all** but **per-unit state established at the CALL**, carried by a
+per-unit *ring* on the one shared cursor — so the single immediate `0x25` means *"one below unit 0's
+base"* to unit 0 and *"the last cell of my ring"* to unit 1.
+
+⚠ Neither §206 nor `HANDOFF-NEXT.md` cited it. **Trap #3 again, and this time it is mine**, in a
+section I wrote specifically to correct a stale premise.
+
+⚠ A hardwired two-entry base table is **observationally tied** with the ring; separating them needs
+a unit-1 block longer than 38 cells and the maximum is 32. Recorded as tied rather than resolved.
+
+### 4. The number that settles the fix
+
+Body 1's §204 census going from **0 of 16 to 16 of 16**, with the sixteen cells reading
+`81E7 0000 A3C5 8000 A5FE A276 A8C1 A3C5 ADA3 A5FE B42D A8C1 B60D ADA3 B80D B42D`
+(today: `0000 0190 1041 05A0 0000 09B0 0410 0DC0 0820 8000 0C30 0000 0000 0000 0000 0000`).
+
+Evidence grade: §1 **FORCED** (§204's own output); §2 **FORCED** (the gcd argument, null computed);
+§3 **MEASURED** in the owning note, the ring-vs-table distinction **UNRESOLVED and labelled tied**.
