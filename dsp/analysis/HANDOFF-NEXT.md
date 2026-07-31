@@ -16,50 +16,38 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Build the WRITE-TIMESTAMP probe, then flip the delay rotation sign. In that order.**
+**Fix the PER-BODY DESCRIPTOR MAP (§198 gap #3). Everything else in the delay path is downstream.**
 
-The fix is **one operator** (`upd6383.cpp:1894`, `cellv + m_frames_run` → `−`). It is not applied
-because **no existing instrument can grade it** (§199).
+`m_delay_ix` is frame-global, reset only at frame end, so the unit-1 reverb draws descriptor cells
+`0x33..0x4E` instead of `0x00..0x1F` — **mostly never-written cells.**
 
-### Why the obvious falsifiers are all blind
+★ **MEASURED, §200** — the descriptor indices actually in use are `0x29 0x2B 0x2D 0x2F 0x31` and,
+with **1 135 149 hits (two orders of magnitude above the rest)**, `0x33`. And the write-timestamp
+census reports `frames_since_written` **`0..0` on every line**: read address == write address, so
+**the delay lines have ZERO LENGTH**. The audit's *"no delay line at all"* is measured, not inferred.
 
-`G` is added to **both** the read and the write address, so it **cancels** in `R − W`: measured 335
-under either sign at every `G`. Every probe this project has — descriptor census, delay-port census,
-tap-modulation census — reports **addresses**, and will be **bit-identical** across the change.
+### ⛔ The rotation sign is downstream — do NOT ship it
 
-⚠ A change every existing probe reports as bit-identical is exactly the kind that gets shipped on
-reasoning and retracted later.
+Implemented and gated OFF (`UPD6383_ROTSIGN`; the u64 spec mask is **exhausted**). It is
+**ungradeable** until the map is fixed: with zero-length lines both signs give age 0. ⚠ And §199's
+predictions (335 / 1040) were computed from cells that are **not a read/write pair** — §189 measured
+the pairing as `k ↔ k+5` with **equal** values, nine pairs, no exceptions, so `R − W = 0`.
 
-### The delay is TEMPORAL, and that is both why the fix is right and how to test it
+### ★ The instrument is already built and is the right one
 
-```
-   G RISING (device)   read at R+T returns the sample written at T' = T + 335   -- FUTURE
-                       => the only consistent reading is 65536 - 335 = 65201 = 1.478 s
-   G FALLING (round5)  read at R-T returns the sample written at T' = T - 335   -- PAST
-                       => delay 335 samples = 7.60 ms  ✓
-```
+The §200 write-timestamp census is the **only** probe that can grade a delay — `G` cancels in
+`R − W`, so every address-reporting probe is blind. Re-use it after the map fix and pre-register the
+descriptor difference the ROM designs.
 
-★ **The instrument:** tag each delay-line address with the frame it was last written; at each read,
-report `frames_since_written`.
-
-★ **Pre-register these — both are ROM-derived and already confirmed live:**
-
-```
-   that line       335 with the fix   |  65201 without
-   CHORUS's line  1040 with the fix   |  64496 without      (§152 from the ROM;
-                                                             §189 live at descriptor 0x2B = 0x0410)
-```
-
-⇒ two-sided, bit-exact, and it cannot come out inconclusive.
-
-### Then the other three FORCED gaps (§198, all with controls)
+### Then, in order (§198, all with controls)
 
 * per-unit **call vectors** written and read by nothing — the device runs a body the firmware
-  disconnected (controls: four Sub CPU ROM constants; the cold-boot capture → 84/42, 200/50)
-* **per-body descriptor map** absent — the unit-1 reverb draws never-written cells
+  disconnected (controls: four Sub CPU ROM constants; cold-boot capture → 84/42, 200/50)
 * **`C40.1.80.000` must consume a cell** — the cursor runs 4 short in every reverb
+* **the rotation sign**, once there is a delay to measure
 
 ### ⛔ Dead, do not retry
+
 
 
 
