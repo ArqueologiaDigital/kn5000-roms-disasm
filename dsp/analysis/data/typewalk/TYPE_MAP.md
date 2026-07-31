@@ -13,6 +13,13 @@ mislabelled four entries.
 ★ KNOWN-ANSWER CONTROLS, both passing: TYPE 0 = CHORUS and TYPE 15 = PARAMETRIC EQ,
 both measured independently before this table existed (`peq_select.lua`).
 
+⛔ **OFF BY ONE ABOVE INDEX 8 — §194.** This table was built from *distinct consecutive*
+programs, so **two adjacent TYPE slots sharing one program image collapse into a single row**,
+shifting every later index down by one. Measured: asking for map-index 28 lands on map-index 29's
+program. TYPE 8 is verified correct, so the duplicate lies above it. Until the walk is re-run
+without deduplication, **add 1 to any index above 8**, and always verify the loaded program from
+the upload fingerprint in the same run (`tools/type_select.lua`, `TYPELAST=36`).
+
 | TYPE | program | effect |
 |-----:|---|---|
 | 0 | `prog01_chorus` | CHORUS |

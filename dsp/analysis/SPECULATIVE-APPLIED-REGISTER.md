@@ -12073,3 +12073,74 @@ and possibly a neighbour, not the minimal pair, and are not reported as results.
 
 Evidence grade: §1 **MEASURED** (the symptom is diagnostic); §2 **FORCED** by the word sequence
 alone; §3 procedural.
+
+---
+
+## §194 — the transport is FIXED and §170's map has an off-by-one. The f31 comparison then FAILS its own input control.
+
+### 1. ★ The transport, fixed and verified
+
+§193 diagnosed `peq_select.lua` as dropping steps over long walks. `tools/type_select.lua`
+saturates **UP** to the end of the list and steps **DOWN** to the target, turning 28–30 presses into
+6–8 — the regime that was verified to work.
+
+First attempt still missed, **by exactly +1 on both arms**: asked 28 → `prog72_peq_s_delay`
+(map 29); asked 30 → `prog74_peq_vibrato` (map 31). Systematic, not dropped steps.
+
+⇒ **§170's TYPE map is off by one above index 8, and the cause is my own instrument.** It built the
+map from *distinct consecutive* programs (`if not seen or seen[-1] != lbl`), so **two adjacent TYPE
+slots sharing one program image collapse into a single row**, shortening the map and shifting every
+later index. TYPE 8 was verified live and is correct, so the duplicate lies above it. *(The twelve
+NAMED effects that ship a program byte-identical to NO OPERATION are exactly what collapses.)*
+
+With `LAST = 36`:
+
+```
+   asked TYPE 28 -> prog71_peq_chorus     ✔        asked TYPE 30 -> prog73_peq_flanger   ✔
+```
+
+**Both correct** — the minimal pair, verified by upload fingerprint in the same run.
+
+### 2. ⛔ AND THE COMPARISON IS CONFOUNDED — its own control says so
+
+Window aligned, correct words at `+3` (`0020A061D5` vs `0028A061D5`). Accumulator change-counts:
+
+```
+   off   f31=0    f31=4   ratio
+   +0       45       43    1.0x   input control
+   +1       41       39    1.1x   input control
+   +2     1013       50   20.3x   ★ 20x DIVERGENCE, ONE WORD BEFORE THE f31 BIT
+   +3     1022       57   17.9x   the f31 word
+   +4       57       47    1.2x
+   +5..+8   ~equal
+```
+
+**The two programs already diverge at `+2`, upstream of the bit under test.** §193's input control
+was written precisely to detect this, and it fired.
+
+⇒ **No claim about `f31 = 4`.** The `+3` difference cannot be attributed to the bit when `+2`
+already differs 20-fold.
+
+### 3. ⇒ The "decidable vehicle" is not decidable as designed
+
+The claim was that these three programs are byte-identical for nine words and the result is
+observable one word later *"with no `f31 = 0` barrier, no biquad, no store-gate dependence."* The
+**code** is byte-identical — that part is exactly right and re-verified. But:
+
+> **Byte-identical code with divergent input state is not a controlled comparison.** The nine words
+> are a shared *subroutine*, not a shared *experiment*; what reaches them differs.
+
+★ That is a general correction to how minimal pairs have been proposed on this project: a minimal
+pair in the **instruction stream** bounds what a field can *encode*; it does not by itself give a
+**controlled measurement**, because the machine state entering the window is not part of the pair.
+
+### 4. What would rescue it
+
+The divergence enters at `+2` (`00922FA700`). Either find a window whose input control holds, or
+instrument further upstream until the two programs' states agree and take that as the true window
+start. ⚠ The window may not exist: the two effects are a chorus and a flanger, and they may simply
+never present the same state to this code.
+
+Evidence grade: §1 **MEASURED** (both arms fingerprinted), the map defect **FORCED** by the +1 on
+both arms plus the dedup in the generator; §2 **MEASURED**, the control **FAILED**; §3 **FORCED**
+by §2; §4 procedural.
