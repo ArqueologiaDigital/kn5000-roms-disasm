@@ -20,7 +20,108 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§224, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§225, 2026-07-31)
+
+> **★★★★ `§S2sq` — THE COEFFICIENT SQUARING — IS THE BLOCKER, AND §225 GAVE IT A MEASURED
+> CONSEQUENCE.**
+> `SRC 0x08` resolves to `C-RAM[m_cursor]`; on a class-A word the multiply reads
+> `C-RAM[m_cursor]` **again**, before the post-increment, so the product is the coefficient
+> **SQUARED**. It fires **5 100 000** times a run at `iw30 iw32 iw33 iw41 iw89`.
+> ★★★ **The FIRST non-zero datum ever placed in D-RAM cell `0x06`** — caught by `§S3` at store
+> **#1360**, frame 264 002 — is **`iw33`'s `6 039 795` = `C-RAM[0x9B]² >> 6` = `0.720 × FS`**,
+> a coefficient squared and **not a sample**; and `§224` §1 showed `iw33`'s two product terms
+> **alone exceed full scale** (`1.720 × FS`; zeroing the `ACT 0x00` bus term still leaves
+> `1.220 × FS`). ⇒ **the cell-`0x06` rail and `§S2sq` are the same defect.**
+>
+> **THE QUESTION:** should the **multiply** read `C-RAM[cursor + 1]` while `SRC 0x08` reads
+> `C-RAM[cursor]`?
+> ⛔ **DO NOT TOUCH THE SOURCE READ** — ANCHORED by the LFO rate (`C-RAM[0x00] = 114` ⇒
+> `+114`/frame, `§109`; `§196` measures the wrap period at 96 000 frames = **0.5000 Hz**).
+> **Two-sided, DEFAULT OFF, unconditional fired count.** Falsifiers: `§41`, SINGLE DELAY's
+> validated `+0.02149296` three-factor product, **and now `§S3`'s ladder** — a correct reading
+> must move store #1357's `1 650 061` and #1360's `6 039 795`, and `§S1`'s 4.924 % with them.
+>
+> ⇒ ★★★★ **AND §224's "CELL-`0x06` LATCH-UP" IS ANSWERED AND ITS FRAMING RETIRED.** `§S3` — a
+> boot-window recorder with **NO FRAME GATE**, ladder unbounded in time — reports `SETTLING`:
+> ```
+>    §S3 EPOCH-0 (the PRE-EXECUTION state, 0 prior writes): frame 204731 iw73 pre 0 val 0
+>    stores #1..#1356 write EXACTLY ZERO   (the ladder's lowest rung is "val >= 1"
+>                                           and it first fires at #1357 -- MEASURED)
+>    #1357  frame 264002  iw19  pre 0        val 1 650 061  (0.1967 FS)  <- THE ENTRY
+>    #1360  frame 264002  iw33  pre 0        val 6 039 795  (0.720  FS)
+>    #1362  frame 264003  iw19  pre 8217878  val 8 388 607   RAILED
+> ```
+> ⇒ ⛔ **`0` IS NOT A FIXED POINT. There is NO second state; "BISTABLE" is RETIRED.** `iw19`'s
+> **first ever** store, from an **EMPTY** cell, is already **1.52 ×** the `0.129 703 × FS`
+> threshold and the rail follows **on the next frame**. The rail needs a **FORWARD GAIN**
+> explained, not an entry.
+> ★ **HOW `§S3` BEAT RULE 16, and this is the transferable part:** it does **not** sample a time
+> window. It records **STORES** and splits them by a property of the **DATUM** — the first
+> store's `pre` is *by construction* the state before any instruction wrote the cell, every later
+> `pre` is *by construction* an instruction's result — and prints the verdict as the **RELATION**
+> between them (`RESET-STATE` / `SETTLING` / `NO CROSSING`, unconditional).
+> ★ **External control passed to the unit:** mask bit 26 counts the identical predicate at the
+> identical hook and `§220` measured **5 881 351**; `§S3` reports **5 881 351**.
+> ★ **`S3-C4` passed:** **0** host tag-`0x15` writes reach D-RAM `0x06` (mask bit 23 SET ⇒
+> `m_rf[0x06]`) — the entry is **not** the host's `+0.5` level poke.
+> ⚠ **`§106`'s cell-`0x06` writer list is WRONG** — 5 names of **12**, and `5 881 351` was never
+> divisible by `5`. **Quote `nz`, never just the count:**
+> ```
+>    RAILS IT   (nz on ~every frame INCLUDING all 706 040 SILENT ones)
+>       iw19:1176011(nz 1175999)  iw33:1176007(nz 1175999)  iw39:1176003(nz 1175999)
+>    INPUT-DEPENDENT (nz 313 127 ~ the 313 960 loud frames) -- NOT what rails it
+>       iw21:1176011(nz 313127)   iw27:1176011(nz 313127)
+>    ZEROS ONLY (1308 stores -- the traffic holding the cell at 0 for 1356 stores)
+>       iw73:98  iw78:196  iw9:23  iw11:19  iw35:8  iw45:4  iw321:960     all nz 0
+> ```
+>
+> ⇒ ★★★★ **AND RULE 21's BLAST RADIUS IS NOW BOUNDED — `28/32/28` SURVIVES.** The discriminator
+> is **forced by the instrument's own bucket predicate**
+> (`nz = (m_in_val[0] != 0) || (m_in_val[1] != 0)`): the quiet bucket is frames where the input
+> is **EXACTLY ZERO**, the same value on all 706 040 of them, so a **DEGENERATE quiet range
+> (`min == max`) PROVES input dependence** — nothing free-running can be a point over 706 040
+> frames — and a non-degenerate one proves free-running state.
+> ```
+>    body 0  NOZ05 (send OPEN)   28/32/28 = I 26/28/27 + FREE 0/4/1 + UND 2/0/0
+>    body 0  shipped (send SHUT)  2/4/1   = I  0/0/0   + FREE 2/4/1      <- 100 % ARTEFACT
+>    body 1  2/1/2 = I 2/1/2  |  XB85 59/44/49 = I 59/44/49  |  epilogue 22/19/9 = I 22/19/9
+>    kernel A NOZ05 33/40/29 = I 33/35/27 + FREE 0/5/2
+> ```
+> ⇒ **`26/28/27` is proof-grade; the free part is EXACTLY the four cell-`0x07` rows.**
+> ⇒ ⚠⚠ **`2/4/1` — the shipped-build "null" — IS 100 % FREE-RUNNING. Body 0 on the shipped build
+> is `0/0/0`**, so `28/32/28`'s true delta is `26/28/27` over `0/0/0` and the *"the rig delivers
+> signal to the bodies"* claim comes out **STRONGER**, not weaker.
+> ★ **The two controls that make this more than a criterion somebody invented:** opening the send
+> is the *only* difference between arms A and C and a ramp is present in **both**, so the slots
+> newly `*` in C cannot be free-running — **the differential and the classifier agree
+> `26 = 26 / 28 = 28 / 27 = 27`, and the `mem`/`L` sets coincide element for element.**
+> ⛔ **NEVER QUOTE A `§104`/`§86` COUNT AGAIN WITHOUT ITS `D-I` SPLIT.**
+> `dsp/tools/rule21_all.py <log>` does it in one line.
+> ⚠ Region boundaries, from the device's own labels (`upd6383.cpp:630`): kernel A `0..49`,
+> kernel B `50..59`, **epilogue `60..82`**, body 0 `84..199`, body 1 `200..332`. The epilogue is
+> INSIDE the low range; a naïve `333..` slice reports `0/0/0` for `22/19/9` forever.
+>
+> ★ **SHIPPED by §225:** `UPD6383_LFOWRAP` **DEFAULT ON** — `iw91` applies `C-RAM[0x01] =
+> 0x7FFFFF` (the constant the source's own annotation calls *"wrap"*) as a **MODULUS**, at the
+> adder only, so cell `0x10` carries the chorus LFO instead of a full-scale DC. The gate `W4`
+> was **restated** to grade degenerate-quiet markers only (which **cannot** fire on a ramp, and
+> which **can** still fail — the XB85 arms score body-0 `D-I` = `26/23/23`) and it is
+> `0/0/0` → `0/0/0`; `K1` diffs arm K (no env) against §224's arm J in **7 lines, not one a
+> measured value**; `K2` shows `=0` still reproduces arm I exactly. Also shipped: **`§S3`**, and
+> `dsp/tools/{parse104,rule21,rule21_detail,rule21_all}.py`.
+> Logs: `data/{K_lfowrap_default,L_lfowrap_off,M_s3_census}_225.log.gz`.
+> `dsp/verify.py`: **BYTE-MATCH OK.**
+>
+> ★★★ **METHOD, §225's three:** (1) **RULE 21 is now OPERATIONAL, not a warning** — and its
+> `1 %` `X-ramp` threshold is **not load-bearing** (worst FREE extra-reach across 33 logs is
+> **0.000048 % of span**, a 20 971 × margin). (2) **A gate must be able to fail, and saying so
+> means NAMING AN ARM WHERE IT DOES.** (3) **A boot-window instrument need not trade off RULE 16**
+> if it splits epochs by a property of the datum rather than by a time threshold.
+> ⚠ **The overflow counter earned its keep on its first run**: `§S3`'s 8-slot writer census
+> overflowed **2 352 974** times and *said so* — without it the truncated 8-name list would have
+> looked complete and would have "confirmed" `§106`.
+
+## TIER 0a-prev-224 — §224's BLOCKER, SUPERSEDED by §225 (the latch-up framing is RETIRED)
 
 > **★★★ KERNEL A's D-RAM CELL `0x06` IS A LATCH-UP, NOT A GAIN ERROR — AND `§S2` NAMES IT TERM BY
 > TERM.**

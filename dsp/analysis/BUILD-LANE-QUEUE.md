@@ -15,6 +15,11 @@ banners below and `SPECULATIVE-APPLIED-REGISTER.md` §223.
 **⇒ §224 ADDED item 7 (the one thing ready to ship) and item 8, and PART-CONSUMED item 2** (audit
 defects 1 and 2 are now documented in the instruments themselves). See `§224`.
 
+**⇒ §225 CONSUMED items 7 and 8** — `UPD6383_LFOWRAP` **SHIPPED** on a restated gate, and the
+cell-`0x06` question is **ANSWERED** by the new `§S3` boot-window recorder (`0` is not a fixed
+point; the "latch-up" framing is retired). **§225 ADDED item 9**, which is the blocker.
+See `SPECULATIVE-APPLIED-REGISTER.md` **§225**.
+
 ---
 
 ## 1. ~~Narrow the nop guard~~ — ✅ **SHIPPED by §223**
@@ -161,7 +166,20 @@ later as an unexplained result. Handed to the lane by the pass that found it.
 
 ---
 
-## 7. ★★★ FLIP `UPD6383_LFOWRAP` TO DEFAULT ON — **fully measured, one gate left**
+## 7. ~~FLIP `UPD6383_LFOWRAP` TO DEFAULT ON~~ — ✅ **SHIPPED by §225**
+
+> **DONE.** `W4` was restated to grade body 0 on **degenerate-quiet markers only** — which by the
+> bucket predicate **cannot fire on a ramp**, and which **can still fail** (the XB85 arms score
+> body-0 `D-I` = `26/23/23` on the same instrument, column and vehicle). It is `0/0/0` → `0/0/0`.
+> Two further limbs added and passed: every body-0 FREE marker sits at cell `0x07`/`0x10` and
+> nowhere else, and kernel A's `D-I` is unmoved at `27/21/18`.
+> **`K1`: arm K, the new default reached with NO ENV, vs §224's arm J — 7 diff lines, NOT ONE a
+> measured value.** **`K2`: `UPD6383_LFOWRAP=0` still reproduces §224's arm I exactly**, so the
+> arm stays bisectable in both directions. `dsp/verify.py` BYTE-MATCH OK.
+
+<details><summary>original entry</summary>
+
+### FLIP `UPD6383_LFOWRAP` TO DEFAULT ON — **fully measured, one gate left**
 
 **Grade: MEASURED, two arms, every falsifier but one passing.** Source: `§224` (`I_s2_224.log.gz`
 / `J_lfowrap_224.log.gz`).
@@ -182,7 +200,29 @@ already in the tree, env-gated, with a fired count.
 
 ---
 
-## 8. Kernel A's cell-`0x06` LATCH-UP needs a **BOOT-WINDOW** instrument
+</details>
+
+---
+
+## 8. ~~Kernel A's cell-`0x06` LATCH-UP needs a BOOT-WINDOW instrument~~ — ✅ **BUILT AND ANSWERED by §225**
+
+> **DONE, and the answer retires the question's own premise.** `§S3` — read-only, always on,
+> **no frame gate**, ladder unbounded in time — reports `SETTLING`: cell `0x06` is **0** before
+> any instruction writes it; **stores #1..#1356 write exactly 0** (measured — the ladder's lowest
+> rung is *"val ≥ 1"* and first fires at #1357); then `iw19`'s **first ever execution**, frame
+> 264 002, puts `1 650 061 = 0.1967 × FS` **into an empty cell** — already **1.52 ×** the
+> `0.129 703 × FS` threshold — and the rail follows **on the next frame**.
+> ⇒ ⛔ **`0` IS NOT A FIXED POINT. There is no second state; "BISTABLE" is RETIRED.** The rail
+> needs a **forward gain** explained, not an entry.
+> ★ **How it beat RULE 16:** it splits epochs by a property of the **datum** (had an instruction
+> already written this cell?), not by a time threshold, and prints the verdict as the RELATION
+> between them. **External control passed to the unit** — mask bit 26 counts the identical
+> predicate at the identical hook and §220 measured 5 881 351; `§S3` reports 5 881 351.
+> ⚠ **`§106`'s writer list was 5 names of 12** and `5 881 351` was never divisible by 5.
+
+<details><summary>original entry</summary>
+
+### Kernel A's cell-`0x06` LATCH-UP needs a **BOOT-WINDOW** instrument
 
 **Grade: MEASURED (the latch), UNMEASURABLE with what exists (its cause).** Source: `§224` §2.
 
@@ -193,6 +233,34 @@ the rail is a **stable second state**, not a gain error.
 window) **and therefore CANNOT SEE the transition into it.** Whoever takes this must build a
 boot-window sampler and **state its arming in the prediction** — the opposite trap to §193/§204's
 ("a histogram over boot measures boot"), and just as expensive.
+
+---
+
+</details>
+
+---
+
+## 9. ★★★★ `§S2sq` — THE COEFFICIENT SQUARING. **THE BLOCKER.**
+
+**Grade: MEASURED (the population), UNDECIDED (the reading).** Source: `§224` §3, `§225` §4/§7.
+
+`SRC 0x08` resolves to `C-RAM[m_cursor]`; on a class-A word the multiply then reads
+`C-RAM[m_cursor]` **again**, before the post-increment, so the product is the coefficient
+**squared**. It fires **5 100 000** times a run at `iw30 iw32 iw33 iw41 iw89` (1 020 000 each).
+
+★★★ **§225 GAVE IT A MEASURED CONSEQUENCE.** The **first non-zero datum ever placed in D-RAM
+cell `0x06`** is `iw33`'s **`6 039 795` = `C-RAM[0x9B]² >> 6` = `0.720 × FS`** — a coefficient
+squared, not a sample — and `§224` §1 showed `iw33`'s two product terms **alone exceed full
+scale** (`1.720 × FS`; zeroing the `ACT 0x00` bus term still leaves `1.220 × FS`).
+⇒ **the cell-`0x06` rail and `§S2sq` are the same defect.**
+
+**The question:** should the **multiply** read `C-RAM[cursor + 1]` while `SRC 0x08` reads
+`C-RAM[cursor]`?
+⛔ **DO NOT TOUCH THE SOURCE READ.** It is ANCHORED by the LFO rate (`C-RAM[0x00] = 114` ⇒
+`+114`/frame, `§109`; `§196` measures the wrap period at 96 000 frames = **0.5000 Hz**).
+**Two-sided, default OFF, unconditional fired count.** Falsifiers: `§41`, SINGLE DELAY's
+validated `+0.02149296` three-factor product, **and now `§S3`'s ladder** — a correct reading
+must move store #1357's `1 650 061` and #1360's `6 039 795`, and `§S1`'s 4.924 % with them.
 
 ---
 
@@ -210,10 +278,32 @@ boot-window sampler and **state its arming in the prediction** — the opposite 
   `SRC` codes that fed the bus. **Quote it whenever `§S1` says something clipped** — `§S1` says
   *whether*, `§S2` says *which term*. ⚠ Its internal `carried + bus + P == result` is **true by
   construction**; its real controls are the four pre-registered per-term values printed beside it.
-- ★★★ **RULE 21 (§224): `§104`'s and `§86`'s quiet-vs-loud markers CANNOT DISTINGUISH
-  "input-dependent" from "free-running and sampled over two frame sets".** Cell `0x07`, the LFO
-  phase, has been flagged `INPUT-DEPENDENT` in every log ever taken and has no input in it.
-  **Never grade a cell carrying an LFO, a counter or a ramp on them.**
+- ★★★ **RULE 21 (§224), NOW OPERATIONAL (§225): `§104`'s and `§86`'s quiet-vs-loud markers
+  CANNOT DISTINGUISH "input-dependent" from "free-running and sampled over two frame sets" —
+  BUT THE SPLIT IS COMPUTABLE, and `dsp/tools/rule21_all.py <log>` does it in one line.**
+  The discriminator is **forced by the instrument's own bucket predicate**
+  (`nz = (m_in_val[0] != 0) || (m_in_val[1] != 0)`): the quiet bucket is frames where the input
+  is **EXACTLY ZERO**, so a **DEGENERATE quiet range proves input dependence** and a
+  non-degenerate one proves free-running state.
+  ★ **`28/32/28` SURVIVES — `26/28/27` proof-grade**, free part `0/4/1` = the cell-`0x07` rows.
+  ★ **`2/1/2`, `59/44/49` and `22/19/9` are 100 % input-dependent.**
+  ⚠⚠ **`2/4/1` — the shipped-build "null" — IS 100 % FREE-RUNNING. Body 0 on the shipped build
+  is `0/0/0`.** ⛔ **NEVER QUOTE A `§104`/`§86` COUNT AGAIN WITHOUT ITS `D-I` SPLIT.**
+  ⚠ Region boundaries, from the device's own labels (`upd6383.cpp:630`): kernel A `0..49`,
+  kernel B `50..59`, **epilogue `60..82`**, body 0 `84..199`, body 1 `200..332`.
+- ★★★ **NEW INSTRUMENT — `§S3`, THE CELL-`0x06` BOOT-WINDOW RECORDER (§225).** Read-only,
+  always on, **NO FRAME GATE**; ladder unbounded in time. It beats RULE 16 **by construction**:
+  it records STORES and splits them by a property of the DATUM (had an instruction already
+  written this cell?), not by a time threshold, and prints the verdict as the RELATION between
+  the two. **Copy this shape for any other boot-window question.**
+  ⇒ **`0` IS NOT A FIXED POINT and the "latch-up / stable second state" framing is RETIRED**:
+  `iw19`'s FIRST store, from an EMPTY cell, is `1 650 061 = 0.1967 × FS` — **1.52 ×** the
+  `0.129 703` threshold — and the rail follows on the next frame.
+  ⚠ **`§106`'s cell-`0x06` writer list is WRONG** (5 names of 12; `5 881 351` is not divisible
+  by 5). Use `§S3`'s census, and **quote `nz`, never just the count**: `iw19`/`iw33`/`iw39`
+  are non-zero on ~every frame **including all 706 040 SILENT ones** — they are what rails it;
+  `iw21`/`iw27` are non-zero on 313 127 ≈ the loud-frame count; the other **seven store only
+  zeros**.
 - ★★ **`§S1`'s value is the PRE-UPDATE accumulator** = the PREVIOUS slot's `§104` `acc >> 16`
   (verified 8 of 8 from disk; now printed as a `§S1 PROVENANCE` line). `iw34 = row 33`.
 - ★★★ **INSTRUMENT — `§S1`, the SATURATION CENSUS.** Read-only, always on, settled frames,

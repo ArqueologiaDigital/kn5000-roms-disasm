@@ -15946,3 +15946,315 @@ and a pre-registered row-exclusion (`iw34`) holding; §3 **MEASURED** and explic
 §4 **MEASURED**, two arms, with the deciding falsifier positive and the one failed gate diagnosed
 against a case that predates the change; §5 **a self-imposed decline**; §7 **SPECULATIVE**,
 pre-registered. **`dsp/verify.py`: BYTE-MATCH OK.**
+
+---
+
+## §225 — ★★★ `28/32/28` **SURVIVES, AND THE DISCRIMINATOR IS A PROOF**: `26/28/27` of it is input-dependent by the instrument's own bucket predicate, and the free-running remainder is **exactly the `2/4/1` that was already the null**. `W4` RESTATED AND PASSED; `UPD6383_LFOWRAP` **SHIPS**. AND THE CELL-`0x06` "LATCH-UP" IS **NOT BISTABLE** — `0` IS NOT A FIXED POINT
+
+<!-- LEDGER-VERDICT: SHIPPED (one default flip on a restated gate that CAN fail, one boot-window instrument, one from-disk result that needed no run) -->
+
+Scored against `data/PREDICT_225.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@4b4f600`). **Three arms, two builds** (the second widens one census cap
+and is otherwise a zero-diff rebuild), the §217–§224 clean vehicle (`coldnotes2.lua`, cold boot,
+isolated NVRAM **and** isolated `-cfg_directory` carrying `:DSPCFG value="3"`, `-log`, triad
+C4/E4/G4, `-seconds_to_run 30`, visible video, one run at a time):
+
+| arm | log | env |
+|---|---|---|
+| **K** | `data/K_lfowrap_default_225.log.gz` | *(none)* — **the NEW shipped default, `LFOWRAP` ON** |
+| **L** | `data/L_lfowrap_off_225.log.gz` | `UPD6383_LFOWRAP=0` — the two-sided OFF control |
+| **M** | `data/M_s3_census_225.log.gz` | *(none)*, wider `§S3` slot cap — **0 diff lines vs arm K** |
+
+> **THE TASK (§224 §5/§7):** *"restate `W4` so it cannot fire on a ramp, then flip"*, and
+> *"kernel A's cell-`0x06` latch-up is the new blocker; a boot-window instrument is needed."*
+> Ahead of both, the question `§224`'s RULE 21 forced: **how much of `28/32/28` is free-running?**
+>
+> ### ★★★★ THE ANSWER TO THAT ONE NEEDED NO RUN, AND `28/32/28` SURVIVES.
+>
+> **THE DISCRIMINATOR IS FORCED BY THE INSTRUMENT'S OWN BUCKET PREDICATE** (`upd6383.cpp`,
+> cited as a predicate not a line): `const bool nz = (m_in_val[0] != 0) || (m_in_val[1] != 0);`
+> The quiet bucket is **not** "small input" — it is the frames on which the input latch reads
+> **exactly zero on both channels**, the *same* value on all **706 040** of them. Therefore a
+> slot whose **quiet range is DEGENERATE** (`quiet_min == quiet_max`) holds ONE value whenever
+> the input is exactly zero and a different one when it is not — and **nothing free-running can
+> do that**: a ramp sampled over 706 040 frames sweeps, so its quiet range cannot be a point.
+>
+> ```
+>                              acc          mem           L
+>    arm C  NOZ05, send OPEN    28  =  I 26 + FREE 0 + UND 2 | 32 = I 28 + FREE 4 | 28 = I 27 + FREE 1
+>    arm A  shipped, send SHUT   2  =  I  0 + FREE 2        |  4 = I  0 + FREE 4 |  1 = I  0 + FREE 1
+> ```
+>
+> ⇒ ★★★ **`26/28/27` OF `28/32/28` IS INPUT-DEPENDENT, PROOF-GRADE.** The free-running
+> contamination is **`0/4/1` — 5 markers of 88, 5.7 %** — and it is **exactly the four `iw89..92`
+> rows at cell `0x07` (the LFO phase) plus `iw90`'s `L`**, i.e. **exactly the `2/4/1` that was
+> already the shipped null being subtracted.** The two `UND` acc rows are `iw90`/`iw91`, ramp
+> carriers whose **loud bucket goes NEGATIVE** (`−1 033 008 709 429`) where the quiet bucket
+> never does — **a ramp cannot change sign**, so that is evidence *for* input, not against.
+>
+> ⇒ ★★★★ **AND THE CORRECTION RUNS THE OTHER WAY FROM THE ONE I WAS BRACED FOR: `2/4/1` IS
+> 100 % FREE-RUNNING.** The shipped build's body-0 input dependence is **`0/0/0`**, not `2/4/1`
+> — all seven of its markers sit at cell `0x07` and none is input-dependent. So `28/32/28`'s
+> true delta over the null is **`26/28/27` over `0/0/0`**, and *"the rig delivers signal to the
+> bodies"* comes out **STRONGER**, not weaker.
+>
+> **AND THE FLIP SHIPS.** `W4` restated to grade **degenerate-quiet markers only** — which by
+> the predicate above **cannot fire on a ramp** — is `0/0/0` → `0/0/0`. Every other gate passed
+> in §224 and passed again on the run.
+>
+> **AND THE `0x06` BLOCKER IS ANSWERED, WITH ITS FRAMING RETIRED.** `§S3`, a boot-window
+> recorder with **no frame gate**, reports `SETTLING`: cell `0x06` is **0** before any
+> instruction writes it, then **1356 consecutive stores write 0 into 0**, and then store
+> **#1357** — `iw19`'s **first ever execution**, frame 264 002 — puts **`1 650 061 = 0.1967 × FS`
+> into an EMPTY cell**, already **1.52 ×** the 0.1297 threshold. Two frames later it is at
+> `8 388 607`. ⇒ ⛔ **`0` IS NOT A FIXED POINT. THERE IS NO SECOND STATE and §224's "BISTABLE"
+> reading is RETIRED** — the rail does not need an *entry* explained, it needs the **forward
+> gain** explained, and `§S2`'s own ladder already names it.
+
+### 1. ★★★★ `T1` — THE BLAST RADIUS, AND FOUR CONTROLS INCLUDING TWO THAT USE NO CRITERION OF MINE
+
+The classifier ships as `dsp/tools/parse104.py` + `rule21.py` (+ `rule21_detail.py`,
+`rule21_all.py`). ★ **RULE 20, done §224's way: validated against known answers FIRST.**
+
+**`T1-C0` — an INDEPENDENT parser must reproduce the published tallies before it is used for
+anything.** It does, **digit for digit, eight of eight**, across 33 archived logs:
+
+```
+   body 0   28/32/28  (§215 B, §217 C, §220 C, §221 B, §222 B, §223 G+H)   2/4/1 (shipped)
+            28/27/24  (§222 C/D, the XB85 arms)                            2/9/4 (§224 J)
+   body 1    2/1/2 (NOZ05)    59/44/49 (XB85)
+   kernel A 33/40/29 (NOZ05)  27/26/20 (shipped)
+   epilogue 22/19/9  (XB85)
+```
+
+⚠ It also **corrected the region boundaries** the earlier passes used: the device's own labels
+(`upd6383.cpp:630`) are kernel A `0..49`, kernel B `50..59`, **epilogue `60..82`**, body 0
+`84..199`, body 1 `200..332` — the epilogue is *inside* the low range, not after body 1, and a
+naïve `333..` slice reports `0/0/0` for `22/19/9` forever.
+
+**`T1-C1` — cell `0x07` is the LFO phase and has no input in it (§224, §109).** Every one of
+its rows classifies **FREE**, in every arm, never `I`. **PASS.**
+
+★★★ **`T1-C2`/`T1-C3` ARE THE SHARP ONES AND THEY USE NO CRITERION OF MINE AT ALL.** Opening
+the send is the *only* difference between arms A and C, and **a free-running ramp is present in
+BOTH arms** — so the slots that are `*` in C but `=` in A cannot be free-running. Two entirely
+independent routes to the same number:
+
+```
+                    the DIFFERENTIAL (arm C minus arm A)     the CLASSIFIER (degenerate quiet)
+      acc      NEW 26   SHARED  2                              I 26   non-I 2
+      mem      NEW 28   SHARED  4                              I 28   FREE 4
+      L        NEW 27   SHARED  1                              I 27   FREE 1
+   and SET-WISE:  SHARED(mem) = {89,90,91,92} == FREE(mem)     SHARED(L) = {90} == FREE(L)
+```
+
+**26 = 26, 28 = 28, 27 = 27, and the mem/L sets coincide element for element.** ⇒ the
+classifier is not a criterion I tuned; it recovers the experiment's own answer.
+
+⚠ **THE `1 %` THRESHOLD IN `X-ramp` IS NOT LOAD-BEARING.** Across all 33 logs the **worst**
+extra-reach of any FREE-classified marker is **0.000048 % of its span** (4 units of 8 388 590)
+— a **20 971 ×** margin. The classification is effectively binary.
+
+⚠ **WHAT `D-I` DOES AND DOES NOT PROVE.** It proves the value differs between zero-input and
+non-zero-input frames. **It does not prove the value is audio**, and nothing here reopens
+`§221`'s provenance result that the epilogue's operands are disjoint from the bodies.
+
+### 2. ⚠⚠ RULE 21's REAL BLAST RADIUS — SMALL, AND NOW BOUNDED
+
+| tally | free-running part | verdict |
+|---|---|---|
+| **body 0 `28/32/28`** (NOZ05) | `0/4/1` — cell `0x07` only | ★ **SURVIVES**; `26/28/27` proof-grade |
+| **body 0 `2/4/1`** (shipped null) | **`2/4/1` — ALL OF IT** | ⚠⚠ **100 % ARTEFACT.** Body 0 is `0/0/0` |
+| **body 0 `2/9/4`** (§224 arm J) | **`2/9/4` — ALL OF IT** | ⚠⚠ **100 % ARTEFACT**; the 8 new markers are cell `0x10` |
+| **body 1 `2/1/2`** (NOZ05) | `0/0/0` | ★ **SURVIVES INTACT — 100 % input-dependent** |
+| **body 1 `59/44/49`** (XB85) | `0/0/0` | ★ **SURVIVES INTACT** |
+| **epilogue `22/19/9`** (XB85) | `0/0/0` | ★ **SURVIVES INTACT — 100 %** |
+| **kernel A `33/40/29`** | `0/5/2` | `33/35/27` proof-grade; the 7 are cell `0x07` (`iw28..32`) |
+| **kernel A `27/26/20`** (shipped) | `0/5/2` | `27/21/18` proof-grade |
+
+⇒ ★★★ **RULE 21's damage is confined to the rows that read cell `0x07` or cell `0x10`.** Every
+other published tally in this project is proof-grade input dependence. **The `28/32/28` control
+that §220–§223 leaned on is sound, and it is the *null* it was compared against that was noise.**
+
+### 3. ★★★ `T2` — `W4` RESTATED SO IT CANNOT FIRE ON A RAMP, AND IT CAN STILL FAIL
+
+> **`W4′`** grades body 0 on **`D-I` markers only**. **PRE-REGISTERED: `0/0/0` in both arms.**
+> **It FAILS if any body-0 slot acquires a degenerate-quiet `*`.**
+> ⚠ **It demonstrably CAN fail on this exact instrument, column and vehicle**: the `§222` XB85
+> arms score body-0 `D-I` = `26/23/23` and the `NOZ05` arms `26/28/27`. A gate that scores 26 on
+> one arm of the same log family and 0 on this one is a gate.
+> **`W4′-b`** every FREE body-0 marker must sit at cell `0x07` or `0x10`. **FAILS elsewhere.**
+> **`W4′-c`** kernel A's `D-I` must not move.
+
+```
+   W0  FIRED 1 176 960 adder steps, 1 distinct slot | iw91:1176960              PASS
+   W1  §S1  quiet 9 178 556 / 186 394 560 = 4.924 %  (was 5.303 %)              PASS
+            loud  4 077 722 /  82 885 440 = 4.920 %  (was 5.298 %)
+   W2  §119 iw94 mem[dp10] 1006898 1007012 1007126 1007240 1007354 1007468
+                           1007582 1007696  -- the +114/frame CHORUS LFO         PASS
+   W3  §54 quiet-in 826 040 -> 826 040 SILENT / 0 LOUD (peak 0)  |  §70 mean 0.0
+       span 0 both buckets  |  §211 mean 0.0 span 0 both buckets  |  §41
+       0x400000 / 0x178D0B  |  m_rf[0x8D] = 0x009B26                             PASS
+   W4′ §104 body 0 D-I   arm L 0/0/0   ->  arm K 0/0/0                           PASS
+   W4′-b body-0 FREE markers, arm K: pointer cells {07, 10} and nothing else      PASS
+   W4′-c kernel A D-I    27/21/18  ->  27/21/18                                  PASS
+   K1  arm K vs §224 arm J: 7 diff lines, NOT ONE a measured value               PASS
+   K2  arm L vs §224 arm I: 6 diff lines, NOT ONE a measured value               PASS
+   K3  dsp/verify.py BYTE-MATCH OK                                               PASS
+   R   arm M vs arm K: 0 diff lines outside the widened census                   PASS
+```
+
+★★★ **`K1` IS THE ONE THAT LICENSES THE FLIP.** Arm K is the *default* reached with **no env at
+all**; arm J was `UPD6383_LFOWRAP=1` on the previous build. They are the same computation
+reached two different ways, and **not one measured value differs** — the 7 lines are a BOM, the
+reworded announcement and the reworded fired-count line carrying **identical numbers**.
+`K2` is its mirror: `UPD6383_LFOWRAP=0` still reproduces §224's arm I exactly, so **the arm
+remains bisectable in both directions.**
+
+⇒ **`UPD6383_LFOWRAP` SHIPS AS THE DEFAULT.** `iw91` — `§118`'s wrap word — applies its
+`SRC 0x08` operand (`C-RAM[0x01] = 0x7FFFFF`, the constant this file's own C-RAM annotation
+calls *"wrap"*) as a **MODULUS**, at the adder only. D-RAM cell `0x10`, `§120`'s modulation
+cell, stops being a full-scale DC and **carries the chorus LFO**.
+
+### 4. ★★★★ `T3` — `§S3`, AND HOW IT BEATS RULE 16 **BY CONSTRUCTION**
+
+⚠⚠ **THE TENSION:** `§S1`/`§S2`/`§104` arm at frame 420 000 and cannot see the transition, but
+**RULE 16 exists because a boot-time sample measures the RESET STATE** (`§46`'s descriptor claim
+was exactly that error; `§193`/`§204`'s *"a histogram over boot measures boot"* is its twin).
+**An instrument that merely samples earlier repeats it.**
+
+★★★ **`§S3` DOES NOT SAMPLE A TIME WINDOW. IT RECORDS STORES AND SPLITS THEM BY A PROPERTY OF
+THE DATUM.** The `pre` value of the **first** store to `0x06` is, by construction, the state of
+the cell **before any instruction ever wrote it**; every later entry's `pre` is, by
+construction, the result of a previous instruction. **The verdict is the relation between the
+two**, printed unconditionally as `RESET-STATE` / `SETTLING` / `NO CROSSING`.
+**ARMING, STATED: there is NO FRAME GATE** — it arms on the first D-RAM store to `0x06`, and the
+ladder is **unbounded in time**, so a crossing at frame 800 000 is caught as surely as one at
+frame 3. The only bound is the 96-entry trajectory and it has **its own overflow counter**.
+
+**★ ITS FIRST CONTROL IS EXTERNAL, AND IT PASSED TO THE UNIT.** Mask bit 26 (`§106`) counts the
+**identical predicate** (`mode != 1 && dest == 0x06`) at the **identical hook** (`store_mode()`),
+and `§220` arm B measured it firing **5 881 351** times. `§S3`'s unbounded total: **5 881 351**.
+A different instrument, a different pass, a different arm, counting the same thing.
+**`S3-C4` PASSED too**: **0** host tag-`0x15` writes reach D-RAM `0x06` (default mask bit 23 is
+SET, so the host's `+0.5` cold-boot level lands in `m_rf[0x06]` — corroborated independently by
+`UNWRITTEN-CELLS_findings.md` §2.2). **The entry is not the host's level write.**
+
+**THE RESULT:**
+
+```
+   §S3 EPOCH-0 (pre-execution state, 0 prior writes): frame 204731  iw73  pre 0  val 0
+   §S3 VERDICT: SETTLING.  store #1357 IS THE ENTRY:
+                frame 264002  iw19  site 2  pre 0  val 1 650 061  (0.1967 x FS)
+   §S3 LADDER   >= 1        store #1357  frame 264002  iw19  pre 0        val 1650061
+                >= 0.500 FS store #1360  frame 264002  iw33  pre 0        val 6039795
+                >= 0.990 FS store #1362  frame 264003  iw19  pre 8217878  val 8388607
+   §S3 APPROACH the 16 stores before it: frames 263986..264000, iw321, pre 0 val 0
+```
+
+⇒ ★★★★ **`0` IS NOT A FIXED POINT, AND `§224`'s "BISTABLE / STABLE SECOND STATE" IS RETIRED.**
+The ladder's lowest rung is *"val ≥ 1"* and it was first reached at store **#1357** — so stores
+**#1..#1356 wrote EXACTLY ZERO**, measured, not inferred. Then `iw19` runs for the first time and
+its store **from an empty cell** is already `0.1967 × FS`, **1.52 × the 0.129 703 threshold**.
+The rail follows **on the next frame**. There is no metastable basin and no second state: the
+rail is the **only** attractor, so the defect is not an *entry* to be found but a **forward
+gain** to be explained — and `§S2` already named its terms.
+
+★★★ **AND THE SECOND STORE INTO THE CELL NAMES THE CULPRIT.** Store #1360 is `iw33` writing
+**`6 039 795`** — **exactly `§224`'s ladder value `C-RAM[0x9B]² >> 6 = 0.720 × FS`**, digit for
+digit, a **coefficient SQUARED and not a sample**. ⇒ **the cell-`0x06` rail and `§S2sq`'s
+coefficient-squaring question (`§224` §3/§7.3, 5 100 000 squarings a run at
+`iw30/32/33/41/89`) ARE THE SAME DEFECT.** §224 deferred `§S2sq` deliberately; it now has a
+measured consequence and is the live blocker.
+
+### 5. ⚠ `S3-C2` FAILED AS PRE-REGISTERED — AND ITS FAILURE IS A REAL CORRECTION TO `§106`
+
+I pre-registered *"the writers of `0x06` are exactly `{19,21,27,33,39}`, 5 slots, 1 176 270
+each"*, from `§106`'s own note (*"exactly 5 per kernel-A pass"*). **It is wrong, and it was
+arithmetically impossible all along: `5 881 351` is not divisible by `5`.** The first run
+overflowed an 8-slot cap **2 352 974 times** — *caught by the overflow counter the audit's
+`store_probe()` finding says to add*, not silently truncated. Arm M, cap 32:
+
+```
+   12 DISTINCT WRITERS, 0 overflows, and the counts reconcile to 5 881 351 EXACTLY:
+     iw19:1176011(nz 1175999)   iw33:1176007(nz 1175999)   iw39:1176003(nz 1175999)
+     iw21:1176011(nz  313127)   iw27:1176011(nz  313127)
+     iw73:98(nz 0)  iw78:196(nz 0)  iw9:23(nz 0)  iw11:19(nz 0)
+     iw35:8(nz 0)   iw45:4(nz 0)    iw321:960(nz 0)
+```
+
+★★★ **AND THE NON-ZERO COLUMN SPLITS THE WRITERS INTO TWO POPULATIONS:**
+* `iw19`/`iw33`/`iw39` write non-zero on **1 175 999** of ~1 176 00x stores — **essentially every
+  frame, including all 706 040 SILENT ones.** ⇒ **this population is what rails the cell, and it
+  has no input in it.**
+* `iw21`/`iw27` write non-zero on **313 127** — and **`313 960` is the loud-frame count**. ⇒
+  these two are the input-dependent writers, and they are *not* the ones that rail it.
+* The remaining **seven** writers — the epilogue (`iw73`/`iw78`), body 1 (`iw321`) and kernel A's
+  `iw9`/`iw11`/`iw35`/`iw45` — **store ONLY ZEROS**, 1308 times between them, and are exactly
+  the traffic that keeps the cell at 0 for the first 1356 stores.
+
+⇒ ⚠ **`§106`'s writer list was five names out of twelve and named no datum.** Any future claim
+about cell `0x06` must quote **this** census, and must say `nz`, not just the count.
+
+### 6. ⇒ WHAT SHIPS
+
+* `upd6383.cpp` / `.h` — **`UPD6383_LFOWRAP` DEFAULT FLIPPED TO ON**, on the restated gate,
+  with the env var kept as a **two-sided control** (`=0` reproduces §224's arm I exactly) and
+  the announcement + fired count still unconditional.
+* `upd6383.cpp` / `.h` — **`§S3`, THE CELL-`0x06` BOOT-WINDOW RECORDER**: read-only, always on,
+  **no frame gate**, EPOCH-0 / VERDICT / LADDER / TRAJECTORY / APPROACH / per-writer totals with
+  non-zero counts, **two overflow counters**, and an **external** known-answer control printed
+  beside it.
+* `dsp/tools/parse104.py`, `rule21.py`, `rule21_detail.py`, `rule21_all.py` — the RULE-21
+  classifier, with the region boundaries taken from the device's own labels.
+* three logs; `data/PREDICT_225.md`; this section.
+* **No mask bit. No change to `ACC_SHIFT`, `P_SHIFT`, `m_bx_sel0d`, mask bit 23, mask bit 26,
+  any store's datum, or any decode on the shipped path. No `0x06` "fix".**
+  `dsp/verify.py`: **BYTE-MATCH OK.**
+
+### 7. ★★★ THE NEXT EXPERIMENT, PRE-REGISTERED HERE
+
+1. ★★★★ **`§S2sq` IS NOW THE BLOCKER, AND IT HAS A MEASURED CONSEQUENCE.** `§S3` caught the
+   very first non-zero content of cell `0x06` being `iw33`'s `6 039 795` = `C-RAM[0x9B]² >> 6`,
+   and `§224` §1 showed `iw33`'s **two product terms alone exceed full scale** with no sample
+   among them. The open question is whether the class-A multiply should read `C-RAM[cursor + 1]`
+   while `SRC 0x08` reads `C-RAM[cursor]`.
+   ⛔ **Do NOT touch the SOURCE read** — it is ANCHORED by the LFO rate (`C-RAM[0x00] = 114` ⇒
+   `+114`/frame, `§109`, and `§196` now measures the wrap period at `96 000` frames = `0.5000 Hz`).
+   Two-sided, **default OFF**, unconditional fired count; falsifiers are `§41`, SINGLE DELAY's
+   validated `+0.02149296` three-factor product, **and now `§S3`'s ladder** — a correct reading
+   should move store #1357's `1 650 061` and #1360's `6 039 795`, and `§S1`'s 4.924 % with them.
+2. ★★ **`§S3` SHOULD BE POINTED AT CELL `0x05` AND `0x07` TOO.** It is one predicate away, it
+   already validated against an external control, and `§219`'s send question (*"why does the
+   kernel write `0x05` four times a frame"*) is exactly a first-store / per-writer-datum
+   question. ⚠ **Re-derive its external control for the new cell** — `§220`'s 5 881 351 is
+   `0x06`-specific and does not transfer.
+3. ⚠ **RE-READ EVERY PUBLISHED TALLY THROUGH `rule21.py` BEFORE QUOTING IT.** §2's table covers
+   the ones in the register; there are older ones in `LEDGER.md` and in two blog posts.
+   ⛔ **Never quote a `§104`/`§86` count again without its `D-I` split.**
+4. ⛔ **NOT `ACT 0x00`'s bus term as a general attenuation** (refuted for `iw34`, §224);
+   ⛔ **NOT `ACC_SHIFT`/`P_SHIFT` on a moved number**; ⛔ **NOT another store-suppression rig**
+   (§223 §3); ⛔ **NOT `ACT 0x0D`/`m_bx_sel0d`/`iw205`** (§222 §1); ⛔ **NOT the epilogue's
+   operand set** (§221); ⛔ **NOT mask bit 23** (confounded) **or bit 26** (dead end 30).
+5. **body-0's coefficient cursor at `iw112`** — still open, still untouched by all of the above.
+
+### 8. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **`28/32/28` as *"possibly a free-running artefact"*** | ★★★ **SURVIVES. `26/28/27` is proof-grade**, by a discriminator forced by the bucket predicate and confirmed by the experiment's own differential, **26 = 26 / 28 = 28 / 27 = 27**, sets coinciding |
+| **`2/4/1` as the shipped-build NULL** | ⚠⚠ **IT IS 100 % FREE-RUNNING.** Body 0 on the shipped build is `0/0/0` input-dependent; all 7 markers are cell `0x07`. The `28/32/28` claim gets **STRONGER** |
+| **`W4` as *"a gate that failed"*** | ★ **IT WAS MEASURING A RAMP.** Restated to degenerate-quiet markers — which **cannot** fire on a ramp and demonstrably **can** still fail (26 on the XB85 arms) — it is `0/0/0` → `0/0/0`. **PASS** |
+| **`UPD6383_LFOWRAP` at DEFAULT OFF** | ★★★ **SHIPPED.** `K1`: arm K (no env) vs §224's arm J — **7 diff lines, not one a measured value.** `K2`: the OFF arm still reproduces arm I exactly |
+| **the cell-`0x06` rail as a *"LATCH-UP / stable second state"*** | ⛔ **RETIRED. `0` IS NOT A FIXED POINT.** `iw19`'s FIRST store, from an EMPTY cell, is `0.1967 × FS` — **1.52 ×** the threshold — and the rail follows next frame. One attractor, not two |
+| **"a boot-window instrument must trade off RULE 16"** | ★★★ **IT DOES NOT.** `§S3` splits epochs by **whether an instruction had already written the cell** — a property of the datum, not a time threshold — and prints the verdict as the *relation* between them |
+| **`§106`'s writer list for cell `0x06`** | ⚠ **FIVE NAMES OUT OF TWELVE, and `5 881 351` was never divisible by `5`.** The full census reconciles exactly, and **seven of the twelve writers store only zeros** |
+| **"cell `0x06`'s rail might be the host's `+0.5` level poke"** | ⛔ **REFUTED, measured: `0` host writes reach D-RAM `0x06`** (mask bit 23 SET ⇒ `m_rf[0x06]`), corroborated independently by `UNWRITTEN-CELLS_findings.md` §2.2 |
+| **`§S2sq` as a deferred curiosity** | ★★★ **IT IS THE BLOCKER.** The first non-zero datum ever placed in cell `0x06` is `iw33`'s `6 039 795` = a **coefficient squared** |
+
+Evidence grade: §1 **FORCED** from 33 archived logs, **no run**, with two controls that use no
+criterion of mine; §2 **MEASURED**; §3 **MEASURED**, three arms, a restated gate that can still
+fail plus two zero-moved-value diffs against the previous build's arms; §4/§5 **MEASURED**, one
+external known-answer control passing to the unit and one pre-registered control **failing** and
+correcting a nine-section-old note; §7 **SPECULATIVE**, pre-registered.
+**`dsp/verify.py`: BYTE-MATCH OK.**
