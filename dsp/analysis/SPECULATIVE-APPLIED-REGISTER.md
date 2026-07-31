@@ -12144,3 +12144,68 @@ never present the same state to this code.
 Evidence grade: §1 **MEASURED** (both arms fingerprinted), the map defect **FORCED** by the +1 on
 both arms plus the dedup in the generator; §2 **MEASURED**, the control **FAILED**; §3 **FORCED**
 by §2; §4 procedural.
+
+---
+
+## §195 — the three-way f31 test also fails: bit identity is confounded with program similarity
+
+§194 killed the two-way comparison on its input control. The natural repair: PEQ+VIBRATO carries the
+**same nine-word window** and the **same `f31 = 4`**, so the two `f31 = 4` programs can serve as each
+other's control. Verified statically first — **8 of 9 words identical across all three**, the ninth
+being the bit under test.
+
+### 1. Transport and vehicle: all three verified
+
+`type_select.lua` with `TYPELAST=36`, fingerprinted in-run:
+
+```
+   asked 28 -> prog71_peq_chorus    asked 30 -> prog73_peq_flanger    asked 31 -> prog74_peq_vibrato
+```
+
+### 2. ⚠ The probe's own self-check fired on all nine slots
+
+VIBRATO carries the window at program word 31 (I-RAM 115) where the others carry it at 38
+(I-RAM 122), so the probe was re-keyed by **word**. The pooling self-check — *slot min == max* —
+**failed everywhere**: `0182200407` spans slots 109..140, `00124011CE` spans 103..138. These words
+recur throughout the program.
+
+★ But the slot ranges are **identical in all three runs**, so the pooling is a systematic property
+of the corpus, not a per-run artefact. The comparison survives *as a comparison*; what it loses is
+attribution to one window instance.
+
+### 3. ⛔ THE RESULT — the predicted pattern appears, and it is explained by something else
+
+```
+   off    CHORUS(f31=0)   FLANGER(f31=4)   VIBRATO(f31=4)
+   +2            1013               50               52     <- ONE WORD BEFORE THE BIT
+   +3            2654             1689             1691     <- the f31 word
+```
+
+The two `f31 = 4` programs agree at `+3` (1689 vs 1691) while the `f31 = 0` program differs (2654)
+— **exactly the predicted three-way pattern.**
+
+⛔ **And they agree at `+2` as well** (50 vs 52 against 1013), which is *before* the bit. So FLANGER
+and VIBRATO are simply more similar to each other than either is to CHORUS, **throughout the
+window**. ⇒ **Bit identity is confounded with program similarity, and this design cannot separate
+them.** The agreement at `+3` is fully explained without `f31` doing anything.
+
+⇒ **No claim about `f31 = 4`.** Second design, second honest negative.
+
+### 4. ⇒ The route is closed, and the reason generalises
+
+To separate the two you would need a pair differing in the bit but *more* similar to each other
+than the same-bit pair is — and in this corpus that pair does not exist. Combined with §194:
+
+> **An instruction-stream minimal pair bounds what a field can ENCODE. It does not yield a
+> controlled MEASUREMENT, because neither the machine state entering the window nor the overall
+> similarity of the host programs is part of the pair.**
+
+⚠ **Process note, recorded because the pattern is the point:** this probe went through **five**
+revisions — slot-only (boot pollution), a dangling `else`, word-gated, word-keyed, and the pooling
+self-check. Each revision was found by an internal check rather than by the result looking wrong.
+That is the instrumentation working, but it is also five builds for two negatives, and it is worth
+asking for the criterion *and* the confound analysis before the first build, not after the fourth.
+
+Evidence grade: §1 **MEASURED** (all three fingerprinted); §2 the pooling **MEASURED** and its
+uniformity across arms **MEASURED**; §3 **FORCED** — the `+2` agreement is upstream of the bit;
+§4 **FORCED** given §3 and §194.
