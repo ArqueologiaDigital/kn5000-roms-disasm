@@ -16,37 +16,49 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Fix the PER-BODY DESCRIPTOR MAP (§198 gap #3). Everything else in the delay path is downstream.**
+**Build the CONSUMER-TO-CELL census: which descriptor index each class-1 escape consumer reads,
+per body, against round5 §1's identity map.**
 
-`m_delay_ix` is frame-global, reset only at frame end, so the unit-1 reverb draws descriptor cells
-`0x33..0x4E` instead of `0x00..0x1F` — **mostly never-written cells.**
+It is the missing instrument. §203 implemented `C40.1.80.000`'s descriptor consumption — **FORCED**
+by r3 §6.1 and by `28 non-C + 4 C-format = 32 = n` — and it fires **5 698 785** times while the
+delay census stays **byte-identical**. That is *"inert by this probe"*, **not** *"wrong"*: the delay
+census only reports lines that already resolve, and four of six still read `0..0`. Same shape as
+§200 (the rotation sign was ungradeable until §201 gave the lines length).
 
-★ **MEASURED, §200** — the descriptor indices actually in use are `0x29 0x2B 0x2D 0x2F 0x31` and,
-with **1 135 149 hits (two orders of magnitude above the rest)**, `0x33`. And the write-timestamp
-census reports `frames_since_written` **`0..0` on every line**: read address == write address, so
-**the delay lines have ZERO LENGTH**. The audit's *"no delay line at all"* is measured, not inferred.
+⇒ **`UPD6383_CFMTIX` stays OFF until a consumer-to-cell probe exists.** Do not ship it on the
+FORCED argument alone, and do not read the null as a refutation.
 
-### ⛔ The rotation sign is downstream — do NOT ship it
+### ★ SHIPPED this session (all from the PROVEN-BY-CONSTRUCTION audit, each with a control)
 
-Implemented and gated OFF (`UPD6383_ROTSIGN`; the u64 spec mask is **exhausted**). It is
-**ungradeable** until the map is fixed: with zero-length lines both signs give age 0. ⚠ And §199's
-predictions (335 / 1040) were computed from cells that are **not a read/write pair** — §189 measured
-the pairing as `k ↔ k+5` with **equal** values, nine pairs, no exceptions, so `R − W = 0`.
+* **§197** — `0x0B` poke packets accepted (the leading nibble is a flag). Census +4 writes/+4 cells,
+  two values bit-exact against the descriptor space.
+* **§201** — per-body descriptor index. Indices `0x29..0x33` → `0x26..0x30`, the block §189
+  measured live; `frames_since_written` **0..0 on every line → 240/480/640**. The delay lines have
+  length for the first time.
+* **§202** — the rotation **sweeps DOWN**. Measured delays became `4161 = 0x1041` and
+  `3120 = 0x0C30` — **descriptor cells `0x27` and `0x2F`, bit-exactly**, at two independent lines.
+* **§188** — host payload LSB (default `0xB910E446A39B440F`).
 
-### ★ The instrument is already built and is the right one
+⚠ **The u64 spec mask is EXHAUSTED.** New gates are env vars with a fired-count:
+`UPD6383_ROTSIGN` (on), `UPD6383_BODYIX` (on), `UPD6383_CFMTIX` (off).
 
-The §200 write-timestamp census is the **only** probe that can grade a delay — `G` cancels in
-`R − W`, so every address-reporting probe is blind. Re-use it after the map fix and pre-register the
-descriptor difference the ROM designs.
+### Still open, ranked
 
-### Then, in order (§198, all with controls)
+1. **consumer-to-cell census** (above) — unblocks §203
+2. **per-unit descriptor BASE** — `m_dsc` comes only from the in-program `ldptr.d`, `0x25` in
+   **both** header blocks (§198 gap #3's other half)
+3. **per-unit CALL VECTORS written and read by nothing** — the device runs a body the firmware
+   disconnected. Controls: four Sub CPU ROM constants; cold-boot capture → 84/42, 200/50
+4. **the output stage** — the chip is still silent, `§70 ACCA min 0 max 0`, both ports peak 0.
+   §141 localised it to `w73`; §150 corrected the mechanism. A correct delay line is not audio.
 
-* per-unit **call vectors** written and read by nothing — the device runs a body the firmware
-  disconnected (controls: four Sub CPU ROM constants; cold-boot capture → 84/42, 200/50)
-* **`C40.1.80.000` must consume a cell** — the cursor runs 4 short in every reverb
-* **the rotation sign**, once there is a delay to measure
+### Agents in flight (read-only; the main loop holds build/run)
+
+`SRC08_findings.md` — is the `SRC 0x08` clobber real in the current source, and what grades a fix.
+`F31_ROUND2_findings.md` — `f31 = 4/5`, with §194/§195's minimal-pair route closed to it.
 
 ### ⛔ Dead, do not retry
+
 
 
 
