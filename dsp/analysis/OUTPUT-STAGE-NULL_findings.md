@@ -1,3 +1,13 @@
+> ## ⛔ PARTIALLY RETRACTED — read `IW205-DRAM-D0_findings.md` FIRST
+> **`iw205` reads `D-RAM[0x85]`, NOT `0xD0`.** §1.2/§3(c) here took `0xD0` from the frame trace's
+> **post-increment** `dp` column; the operand is fetched *before* the word's own increment
+> (`upd6383.cpp` fetch ~:2806, post-increment last statement of `exec_alu()` :3949), and `0xD0` is
+> the pointer parked for `iw206`. A static walk reproduces `§104`'s `dp` column 29/29.
+> ⇒ **§5.2's "DECODE GAP with a routing consequence" row is RETRACTED**: `iw205` is correctly
+> decoded and correctly addressed, and faithfully loads a cell that has **no producer**.
+> ⇒ **`m_bx_sel0d` is FROZEN at 1** (MEASURED exact on the unit-0 twin `iw85`); the `79 438 ± 90`
+> DC this file names as the rule-1 counter-example **is that regression**.
+
 # OUTPUT-STAGE NULL — where the value dies between body 0 and `w73`/`w78`
 
 **Written 2026-07-31, STATIC + EXISTING LOGS ONLY. No emulator was run, no source was edited.**
