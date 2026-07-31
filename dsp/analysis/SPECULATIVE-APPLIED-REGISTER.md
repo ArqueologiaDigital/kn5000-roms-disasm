@@ -12551,3 +12551,61 @@ the ROM**, not from §199's mis-paired cells.
 Evidence grade: the decode **FORCED** (round5 §1); the consequence **MEASURED**, with §189's
 independent block identification as a passing control; the age *values* **UNEXPLAINED** and the
 `240` coincidence **SPECULATIVE**.
+
+---
+
+## §202 — ★★★ THE ROTATION SWEEPS DOWN, and the proof is the ROM's own numbers. SHIPPED.
+
+§201 gave the delay lines a length, which made §198 gap #1 gradeable for the first time. Flipped
+`UPD6383_ROTSIGN` and measured.
+
+### 1. ⛔ My pre-registration was wrong, and the truth is stronger
+
+I pre-registered: *"if the sign is wrong, flipping it gives the COMPLEMENT, `65536 − D` = 65296 /
+65056 / 64896."* **Neither** — not the complement, not the old values:
+
+```
+   ROTSIGN=0 (was)   dsc 28 -> 0..480       dsc 30 -> 0..640
+   ROTSIGN=1 (now)   dsc 28 -> 0..4161      dsc 30 -> 0..3120
+```
+
+★★★ **And those are the ROM's own descriptor cells, bit-exactly:**
+
+```
+   4161 = 0x1041 = descriptor cell 0x27        3120 = 0x0C30 = descriptor cell 0x2F
+```
+
+against §189's live descriptor dump — taken three ticks ago for an unrelated purpose, from a
+different memory, through a different writer. **Two independent lines, both exact.**
+
+⇒ **The rotation sweeps DOWN.** `adjudication-round5.md` §3's FORCED `delay = READ − WRITE` is
+confirmed, and the measured delay of a line now *equals the number the ROM stores for it* — which
+is what a delay descriptor is for.
+
+⚠ My falsifier assumed the pre-flip ages (240/480/640) were the true delays and the error was a
+simple complement. They were not delays at all; they were an artefact of reading a rising sweep.
+**A wrong pre-registration that the run overturns in the *stronger* direction is still a wrong
+pre-registration** — the third time in this line that a number of mine came from a mis-modelled
+pairing (§199, §200, here).
+
+### 2. SHIPPED — default ON, `UPD6383_ROTSIGN=0` to override
+
+Applied **46 665 909** times. ⚠ The u64 spec mask is exhausted, so this and §201 are env-gated.
+
+### 3. ⚠ What is NOT claimed
+
+* **The chip is still silent** — `§70 ACCA min 0 max 0`, both ports peak 0, verified on the shipped
+  default. A correct delay line is not audio; the output stage (`w73`, §141/§150) is untouched.
+* **Four of six lines still read `0..0`** (`0x26 2A 2C 2E`). Two exact hits is decisive for the
+  *sign*; it is not a working reverb.
+* The **per-unit descriptor base** remains absent (§198 gap #3's other half) and
+  **`C40.1.80.000`** still does not consume a cell (gap #4) — the cursor runs 4 short in every
+  reverb.
+
+### 4. Three shipped this session from one audit
+
+§197 (`0x0B` packets) · §201 (per-body descriptor index) · §202 (rotation sign) — all three from
+the PROVEN-BY-CONSTRUCTION sweep, each with an independent control, none from a hypothesis.
+
+Evidence grade: **MEASURED**, bit-exact at two lines against an independently-taken dump; the
+decode itself **FORCED** (round5 §3). My pre-registration **WRONG**, recorded.
