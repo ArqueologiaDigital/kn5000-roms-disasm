@@ -12317,3 +12317,60 @@ bit.
 
 Evidence grade: the packet form **PROVEN BY CONSTRUCTION** (two notes); the fix's effect
 **MEASURED**, with 2 of 4 values bit-exact against an independent space.
+
+---
+
+## §198 — the three-way PROVEN-BY-CONSTRUCTION audit: four gaps, two note defects, and a correction to §182
+
+Three parallel read-only auditors over disjoint file sets. Deliverables: `data/AUDIT_HOST_findings.md`,
+`AUDIT_DRAM_findings.md`, `AUDIT_ISA_findings.md`. §197 already shipped from the first.
+
+### 1. ★ The ranked gaps, all with controls
+
+| # | gap | control |
+|---|---|---|
+| **1** | **The delay ROTATION SIGN is inverted** — `addr = cell + m_frames_run` with `G` rising, where round5 §3 FORCES `delay = READ − WRITE`. Yields **`65536 − D` on every line**; an 18.1 ms pre-delay becomes **1.468 s** | **two** — the host's own evaluator `cell = round(ms × 44.1) + BASE24` requires the delay to *grow*; and **the device's own disassembler already prints the corrected relation** (`upd6383d.cpp:468`) |
+| **2** | **`setvec`'s per-unit CALL VECTORS are written and read by nothing** — the sequencer uses a hard-coded `{0x0E→84, 0x0F→200}` whose own comment says *"OBSERVED … NOT derived"*. ⇒ the device runs a body **the firmware has deliberately disconnected** | **two** — four literal constants in Sub CPU ROM (`EFF_Link`/`EFF_Disconnect`, indexed by unit), and the cold-boot capture decoded independently to 84/42 and 200/50 |
+| **3** | **Per-body descriptor map absent** — `m_delay_ix` is frame-global, so the unit-1 reverb draws cells `0x33..0x4E` instead of `0x00..0x1F`: **mostly never-written cells, i.e. no delay line at all** | the region split, measured live |
+| **4** | **`C40.1.80.000` must consume a cell** (r3 §6.1, all 8 exact solutions; 28 non-C + 4 C-format = 32 = *n*) — **the cursor runs 4 short inside every reverb** | arithmetic, from the .dsm |
+
+### 2. ★ §189/§190's OPEN discrepancy is CLOSED — and my method was wrong for reverbs
+
+The cold-boot unit-1 preset is **CONCERT REVERB 1 (algo 20)**, not ROOM REVERB 1. Its ROM ladder
+reproduces §189's measured chain `569 707 1250 1674 480 512 870 678 900 840` **exactly, 10 of 10 in
+order**, and its cell `0x02 = 41925` is §190's live value.
+
+⚠ **§190 fingerprinted the BODY IMAGE — and all twelve reverbs share it byte for byte.** The preset
+lives only in the descriptors. ⇒ the identification method §170/§190 rely on is sound for unit 0 and
+**cannot identify a reverb at all**. That limitation was not stated when the method was introduced.
+
+### 3. ⛔ A correction to §182 — I under-reported my own finding
+
+§182 §3 reported *"§9.3 acquires exactly ONE genuine exception"* (`epilogue w63`, `ACT 0x03`).
+Re-reading the same census:
+
+```
+   ACT 0x03  54 sites, 53 bit-11 -> 1 exception   epilogue w63
+   ACT 0x04   2 sites,  1 bit-11 -> 1 exception   epilogue w73 = E30.C.00.404  <- THE DO1 PRESENTATION
+   ACT 0x1C  24 sites, 24 bit-11 -> 0
+   SRC 0x02  25 sites, 24 bit-11 -> 1 exception   epilogue w72
+   SRC 0x04   2 sites,  1 bit-11 -> 1 exception   epilogue w66
+```
+
+**Four of five, not one** — every exception in the **epilogue**, the region `bit11-family.md`'s
+body-scoped census could not see. I had the numbers in front of me and read one row.
+
+⇒ §9.3's *"these five codes do not exist"* is **body-scoped and false for four of five**, and the
+note contradicts its own item A. ★ MAME is unaffected and correct; `dsp_disasm.py`'s
+`PHANTOM_ACT`/`PHANTOM_SRC` carry the defect, latent.
+
+### 4. What the audit also CONFIRMED (no action)
+
+* The `bit 10 = END` falsification **did** reach the executor, in three places, correctly scoped.
+* Most of the host surface is right: §188's packet decode, `addr8 = [19:12]`, the three-tag space
+  separation, unit-step auto-increment, the per-unit C-RAM rebase.
+* ⚠ Two **stale note sites** caught: `host-side.md` §10 item 6 and `register-space.md` §1 still
+  describe the poke port as unreached (it was fixed by §59). Rule 10 again, in the notes.
+
+Evidence grade: §1 gaps **MEASURED/FORCED** per the linked audits, none implemented here;
+§2 **MEASURED** (10 of 10 in order); §3 **MEASURED**, my own under-report **acknowledged**.
