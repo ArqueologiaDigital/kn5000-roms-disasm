@@ -11954,3 +11954,66 @@ and §190 concluded on structural grounds.
 Evidence grade: §1 both defects **acknowledged**; §2 **MEASURED**, with the vehicle's program
 identity as a passing control; §3 **FORCED** by §2 (the pointer is constant, so the motivating
 argument cannot discriminate); §4 **SPECULATIVE**.
+
+---
+
+## §192 — ⛔ §191 §3's "target reversal" needs a vehicle qualifier. The bit-11 family has NO gradeable test.
+
+### 1. The contradiction I went looking for is not there
+
+§166 measured `C63` immediately followed by the class-6 word, 53/53 both ways. `C63` is class 0, so
+it carries no post-increment — the two words must see the **same** pointer. §191 reported `C63`'s
+`m_dp` as **varying** and §162 reported the class-6 word's as **constant 12**, which cannot both
+hold with nothing between them. Run on the cold-boot CHORUS vehicle, both probes in the same run:
+
+```
+   §191  0040000C63   m_dp 12..12  chg 0        §162  class-6 site  m_dp 12..12
+   §191  0142000C63   m_dp 14..14  chg 0        §162  class-6 site  m_dp 14..14
+```
+
+**Perfectly consistent, and pairwise exact.** No contradiction, and nothing resets a pointer here.
+
+### 2. ⛔ Which means §191 §3 was over-stated
+
+§191 concluded *"`C63` is the one bit-11 form whose pointer varies"* from **one vehicle**
+(MULTI TAP DELAY: `5..208` and `13..210`). In CHORUS the same two words are **constant**.
+
+⇒ **Pointer variability is a property of the PROGRAM, not of the word.** MULTI TAP DELAY walks a
+long tap bank; CHORUS does not. The "target reversal" stands only for MTD, and I should have said
+so.
+
+> ★ **RULE: a pointer-state statistic needs a vehicle qualifier, exactly as §148 established for
+> audio statistics.** "Word X's pointer varies" is not a fact about X.
+
+### 3. ★ What the run DID buy — behavioural confirmation of the C63 ↔ class-6 pairing
+
+`C63`'s two carriers sit at `m_dp` **12** and **14**; the two class-6 words sit at **12** and
+**14** — matching **pairwise**. §166 established the pairing structurally (a 53/53 bijection in the
+corpus); this is the first time it has been confirmed **in the running machine**, and it is exact.
+
+### 4. ⇒ THE HONEST POSITION: the family has no gradeable test right now
+
+| candidate | why not |
+|---|---|
+| `0x921` | pointer already constant (552 876 executions); implementing changes `m_dp` 16→0 but **nothing grades which is right** (§191 §3) |
+| `C63` | constant in CHORUS, varying in MTD — and in both cases the value it would be reset *to* has no ground truth |
+| `0x8BC` | constant `m_dp = 5` on all three carriers |
+
+`bit11-family.md` §7's decidability census closed two routes and left `w000` open; §183 showed
+`w000` compares **encodings, not payloads**. ⇒ **All four routes are now closed**, and the family is
+**undecidable by the instruments this project currently has**. That is a result, not a failure —
+and it is what §7 was written to find out.
+
+⚠ **Do not spend further ticks proposing bit-11 experiments without first naming the criterion that
+would grade them.** Three have now been proposed and withdrawn (§185's reset count, §186's
+"bit-identical", §191's pointer reset).
+
+### 5. SPECULATIVE — what a decidable instrument would need
+
+* **S15.** The one thing that *would* grade a pointer reset is an **independent statement of where
+  a section should read** — e.g. a coefficient whose C-RAM index is known and must line up with the
+  cell the pointer names. `dram-bounds.md`'s abutting-buffer arithmetic is the closest existing
+  candidate. **SPECULATIVE**, and it is the shape of instrument to look for, not another A/B.
+
+Evidence grade: §1 **MEASURED**; §2 **FORCED** by §1 (same words, two vehicles, opposite answers);
+§3 **MEASURED**; §4 **FORCED** given §183; §5 **SPECULATIVE**.
