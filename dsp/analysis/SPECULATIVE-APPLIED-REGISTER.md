@@ -13596,3 +13596,74 @@ census) with the mechanism **FORCED** from source and matched to §104's `L` col
 (strong)** from §4 plus §46/§48/§75; §5.2 **MEASURED** for the residency and range identity,
 **INFERRED** for the attribution to `iw39`; §6 **MEASURED**; §7's corpus census **MEASURED** over
 3057 words, the rival reading **SPECULATIVE and NOT SHIPPED**.
+
+---
+
+## §214 — the lead I handed forward was an INSTRUMENT ARTEFACT, and §212 §1 is half-retracted
+
+### 1. ⛔ §211 §6's "one gradeable lead" did not exist
+
+I passed on `iw39`'s double store to cell `0x06` as the single gradeable lead, and §213 disproved it
+**before building anything**, from §211's own log.
+
+`upd6383.cpp`'s ACTION-0x07 site had an **unbraced `else`** before `store_mode()`, so
+`kwatch`/`watch_store`/`store_probe`/`m_dwr` ran on every *visit* while §112's class-A latch arm
+(mask bit 25, **ON**) stored nothing — **three phantom store records per frame.** It was already
+disproven inside §211's own log: `iw34` was logged storing `8 388 607` to cell `0x06`, yet §104's
+residency shows `0x06` still holding `6 039 795` two slots later with nothing writing it between.
+
+Fixed under `UPD6383_STPROBE`; fired count **3 630 720 = the §112 latch count exactly**, and
+`s104_score.py` scores the new run and `outstage_211.log.gz` **identically in all three columns**.
+
+⇒ **"Suppress one store" would have been a no-op on the machine.** ★ §211 declined it as *"an
+anchor-value fix at a symptom"* — right instinct, and it was not even a symptom.
+★ **RULE: a probe that reports a store must be gated on the store having HAPPENED, not on the site
+being reached.** Three sections cited that phantom.
+
+### 2. MEASURED — two distinct deaths, both in kernel A
+
+* **`P` stops depending on the input at `iw36`** (the prediction said `iw37`; half-refuted, and the
+  correction is sharper). `iw35` carries `HI_ST` and its bit-4 store runs *before* the adder,
+  parking `acc_to_datum(2^38) = 4 194 304` in cell `0x05`; `iw36`/`iw37` re-read that parked cell.
+  ⚠ **This is NOT a defect** — store-then-re-read is an ordinary idiom, and `iw39` parks the last
+  live accumulator in `0x06`, which the next frame's `iw13`/`iw14` read back.
+* **The SEND is killed separately at `iw25`.** `tempA` is input-dependent for **18 consecutive
+  slots** (`iw7..iw24`, `−5 579 776..4 994 816` loud) and `iw25` (`000.2.00.2D9`, `SRC 0x0B` +
+  `ACT 0x19`) **overwrites it with the delay-read register**, which is `0` on **24 922 560 of
+  24 922 560** reads. Then `P = coef × 0`, `acc ← P = 0` at `iw41`, and `iw45` sends `0`.
+
+### 3. ⛔ §212 §1 is HALF-RETRACTED — and its conclusion survives for a better reason
+
+I wrote that `§48` is *"not in the send path"*. **It is** — `iw25` consumes exactly that register.
+But §212's conclusion stands, because the path is a **CLOSED LOOP**:
+
+```
+   iw25 → tempA → P → acc → iw45 (send) → iw46 (delay write) → next frame's iw25
+```
+
+⇒ opening `§48` alone still delivers a DC. Right answer, wrong reason — recorded as such rather
+than quietly kept.
+
+### 4. ★ The next instrument, named and not run
+
+The send is decided by a word that is **unique in the corpus**. Of 106 `SRC 0x0B` words, **99 are
+class-1 delay words** (`addr8 0x20`/`0x60`) and 7 are class-2 `addr8 0x00` — ENSEMBLE's
+`020.2.00.2C7` ×6 and the kernel's `000.2.00.2D9` ×1, which is `iw25`.
+
+★★ **`SRC 0x0B = delay-read register` is labelled a GUESS in the source, and it is motivated
+entirely by the 99 — none of which is `iw25`.** `iw25`'s pointer sits on cell `0x06`, whose
+residency **is** input-dependent, so a rival class-2 reading has four pre-computed falsifiers
+(`HANDOFF-NEXT.md` §1.2). Default OFF, fired count, standing rule 1 before any audio claim.
+
+### 5. Unchanged
+
+`§70 ACCA` and `§211 ACCB`: `min 0 max 0`, quiet **and** loud. `§61` both ports 0 non-zero, peak 0.
+**No non-zero output was produced and no audio claim is made.**
+
+⚠ Vehicle trap, now in the handoff: `DSPCFG` is a `PORT_CONFNAME` defaulting to **Off**, so a fresh
+`-cfg_directory` runs **zero DSP frames** and `device_stop()` prints nothing. Copy
+`kn7000-emulator/cfg/kn5000.cfg` in. It cost one run.
+
+Evidence grade: §1 **FORCED** (the fired-count identity, and the contradiction inside §211's own
+log); §2 **MEASURED**; §3 **MEASURED**, my §212 §1 **half-retracted**; §4 **MEASURED** census, the
+rival reading **SPECULATIVE**.
