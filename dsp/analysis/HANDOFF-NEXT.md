@@ -16,19 +16,43 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**The per-unit descriptor BASE — `m_dsc` comes only from the in-program `ldptr.d`, which is `0x25`
-in BOTH header blocks, so both units share one descriptor origin.** (§198 gap #3's other half.)
+**Test whether `0x827` carries the per-unit descriptor base — its falsifier already bites.**
 
-★ **Everything else in the delay path is downstream of it, and §205 proved that independently**:
-the `SRC 0x08` audit traced the kernel's unit-0 send to zero link by link and bottomed out at
+⛔ **The previous framing of this task was WRONG and §206 corrected it.** It said *"`m_dsc` comes
+only from `ldptr.d`, `0x25` in both header blocks"* as if that were an emulator defect. It is not:
+
+```
+   unit 0   iw42 801.0.70.821   iw43 801.0.6C.827   iw44 801.0.25.825
+   unit 1   iw50 801.0.50.821   iw51 801.0.64.827   iw52 801.0.25.825
+
+   0x821  0x70 / 0x50  DIFFERS     0x827  0x6C / 0x64  DIFFERS     0x825  0x25 / 0x25  IDENTICAL
+```
+
+**The firmware loads the same value into `0x825` for both units.** Giving it a per-unit base would
+invent a split the instruction stream does not contain. ★ `k3-pointers.md` already forced this —
+*"`0x825` is **dead**: loaded with the same value in **both** unit segments … the two units' state
+would alias completely"* — and used it to eliminate `0x825` as the *operand* pointer; the same
+argument eliminates it as the *descriptor* base.
+
+⇒ **`0x827` is the only candidate**: the one pointer-family register that differs per unit, and the
+one `k3-pointers.md` explicitly left **"not excluded"**.
+
+### ⚠ Its falsifier bites BEFORE any build — check this first
+
+`0x6C − 0x64 = 8`, so if `0x827` is the descriptor base the two units' blocks sit **8 cells apart**.
+But §189's live bank puts unit-1 descriptors at `0x00..0x1F` and CHORUS's at `0x26..0x2F` — a gap
+far larger than 8. **Either the base is scaled, or `0x827` is not it.** Resolve that on paper; a
+candidate already in tension with a measurement is not a fix.
+
+### ★ And the number that gates the whole delay path (§205)
 
 ```
    §48 DELAY READ CONSUMED (SRC 0x0B): 22 773 120 times, 0 with a NON-ZERO DATUM
 ```
 
-⇒ **That second field is the single number that matters.** While it is 0, the send is 0 whatever is
-done anywhere else. The frame it goes non-zero, `§104`'s `iw46 mem` must leave `0..0` **and** split
-quiet ≠ loud — and if it does not, that chain is wrong.
+While that second field is 0, the kernel's unit-0 send is 0 whatever is done anywhere else. When it
+goes non-zero, `§104`'s `iw46 mem` must leave `0..0` **and** split quiet ≠ loud — if it does not,
+that chain is wrong.
 
 ### ★ SHIPPED this session — five, all from the PROVEN-BY-CONSTRUCTION audit, each with a control
 
