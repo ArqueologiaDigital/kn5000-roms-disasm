@@ -16,50 +16,57 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Decode `lo12 = 0x921` — `050.0.00.921`, MULTI TAP DELAY `w33`, TYPE 8. One word.**
+**Decode `f31 = 4`, using the PEQ+CHORUS / PEQ+FLANGER / PEQ+VIBRATO minimal pair.**
 
-The descriptor line is closed for now (§190): two of its three readings are refuted and the third
-needs a *different capture*, not more analysis of this one. `0x921` is the tractable target and its
-reason is stated.
+★ It is the one open item that arrives **with its grading criterion already stated**, which is
+exactly what §192 says to require before proposing another experiment.
 
-### Why it, specifically
-
-```
-   0x021   flag 0  sub 0   rstcur  — DECODED (k3 item K)              prog39 w58
-   0x821   flag 1  sub 0   ldptr   — PROVEN BY CONSTRUCTION (k3 A)    kernel w42/w50, epilogue w69
-   0x921   flag 1  sub 1   ⚠ UNDECODED                               prog10_multi_tap_delay w33
-```
-
-**The only payload collision in the corpus** (§184), with two of three siblings decoded. And §187
-FORCED that the selector space is the chip's **internal control registers**, not `m_rf` — proven by
-collision, since selector `0x21` is the pointer register while `m_rf[0x21]` is wavetable index 4.
-⇒ selector `0x21`'s effect is **`m_dp`**, which is already instrumented at every site (§162, §176),
-so `0x921` is the one family member whose predicted effect can be measured.
-
-### The context, which is three-way consistent (§185 §3)
+### The vehicle — verified independently
 
 ```
-   w30  202.A.0C.1D5   mac (p),c+,(p)+12    C-RAM[0x06]  role mix/TAP
-   w32  000.2.FD.407   ld.st acc,(p)-3
-   w33  050.0.00.921   <- selector 0x21, value 0 (addr8), STORE bit set
-   w34  002.A.03.1D5   mac (p),c+,(p)+3     C-RAM[0x07]  role FILTER
+   PEQ+CHORUS  w38..w46    TYPE 28
+   PEQ+FLANGER w38..w46    TYPE 30       byte-identical for NINE words, differing at ONE BIT
+   PEQ+VIBRATO w31..w39    TYPE 31
 ```
 
-The C-RAM role annotation changes tap→filter exactly there, the word sits inside a symmetric
-`−3`/`+3` pointer bracket, and its selector is the register `ldptr` loads. ⇒ **INFERRED: it resets
-the pointer at a section boundary** — what a multi-tap delay needs between its tap bank and its
-damping filter.
+```
+   020.A.06.1D5   f31 = 0   (decoded: acc <- P)          PEQ+CHORUS
+   028.A.06.1D5   f31 = 4   ⚠ UNDECODED                  PEQ+FLANGER, PEQ+VIBRATO
+   XOR = bit 27 only
+```
 
-### ⚠ Requirements before building
+Re-verified here from the disassembly: **8 of 9 byte-identical, the ninth differing in exactly one
+bit.** `lfo-ramp.md` §10 independently identifies that slot as the LFO **phase-to-index scale**,
+coefficient `0x18` = 24, and the coefficient is `0x000018` in all three programs' own C-RAM banks.
 
-* **Vehicle**: MULTI TAP DELAY is **TYPE 8** (§170's map). It is not the cold-boot effect, so the
-  word never executes in the current vehicle — a run without navigation measures nothing.
-* **Falsifier**: state it as *"`m_dp` at `w33` becomes X"* with X predicted, **and do not
-  pre-register which side moves** (§180's rule). A fired-count is mandatory.
-* ⚠ §185's arithmetic (`addr8` = value, `lo12[7:0]` = selector) is **INFERRED across carriers**;
-  `k3-pointers` proves it for `hi12 = 0x801` and this word is `0x050`.
+### ★ THE CRITERION — this is why it is the target
+
+**The next word reads the accumulator (`SRC 0x10`) and writes it to memory (`ACT 0x07`)**, so the
+result is observable **one word later**, with no `f31 = 0` barrier, no biquad, and no store-gate
+dependence. Two programs differ only in this bit, so the same slot can be read with `f31 = 0` and
+`f31 = 4` and compared **against each other** — the ground truth is the *other program*, not a
+guess.
+
+⚠ `§139 §1`'s *"no `f31 ∈ {4,5}` word is usable"* was right about PARAMETRIC EQ and AUTO PAN and
+**wrong to generalise**.
+
+### ⛔ The bit-11 family is PARKED — §192
+
+All four decidability routes are closed: `bit11-family.md` §7 shut two, §183 showed the third
+(`w000`) compares **encodings rather than payloads**, and §191/§192 shut the fourth (every
+candidate's pointer is either already constant, or varies with no ground truth for the reset value).
+
+**Three bit-11 experiments have been proposed and withdrawn** — §185's reset count (circular),
+§186's "bit-identical" (cannot fail), §191's pointer reset (no criterion). ⚠ **Do not propose a
+fourth without naming the criterion that would grade it.**
+
+★ What survives from that line, all MEASURED: the `FLAG | SUB[10:8] | SELECTOR[7:0]` decomposition
+(§184); the selector space is the chip's **internal control registers**, not `m_rf`, proven by
+collision (§187); and `C63`'s two carriers sit at `m_dp` 12 and 14 while its two class-6 partners
+sit at 12 and 14 — §166's structural bijection confirmed **pairwise in the running machine** (§192).
 
 ### ⛔ Dead, do not retry
+
 
 
 
