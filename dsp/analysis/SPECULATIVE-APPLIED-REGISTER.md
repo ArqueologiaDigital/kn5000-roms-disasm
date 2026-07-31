@@ -12440,3 +12440,55 @@ write-timestamp probe, pre-register 335 / 1040, then flip the sign.
 Evidence grade: §1 **MEASURED** (the cancellation); §2 **FORCED** (the temporal argument, matching
 the audit's independent figure); §3 **FORCED** by §1 — sign-invariance of `R − W` is exactly why the
 existing instruments are blind.
+
+---
+
+## §200 — the delay lines have ZERO LENGTH, so the rotation sign is ungradeable. And §199's arithmetic paired the wrong cells.
+
+§199 designed the only instrument that could grade the rotation sign: tag each delay address with
+the frame it was written, and report `frames_since_written` at each read. Built (the u64 spec mask
+is **exhausted**, so the gate is the env var `UPD6383_ROTSIGN`, the mechanism §104 used).
+
+### 1. MEASURED — and it is the same under both signs
+
+```
+   ROTSIGN=0 (device)    dsc 29/2B/2D/2F/31/33 : frames_since_written 0..0   (0.00 ms)
+   ROTSIGN=1 (round5)    identical, every line
+```
+
+**Every read returns a sample written in the SAME frame.** ⇒ read address == write address ⇒
+**the delay lines have zero length**, and the rotation sign cannot be graded because there is no
+delay to be right or wrong about.
+
+### 2. ⛔ §199's arithmetic used two cells that are not a pair
+
+§199 computed `R − W = 335` from `R = 41925` (cell `0x02`) and `W = 41590` (cell `0x05`). But §189
+measured the descriptor pairing as **`k ↔ k+5` with EQUAL values** — `02==07`, `04==09`, `06==0B`,
+nine pairs, no exceptions. **The true read/write pairs are equal**, so `R − W = 0`, and both my
+`335 samples` and my `65201` were computed from a mis-paired cell.
+
+⇒ §199's *temporal* reasoning stands (it is why the sign matters at all); its *numbers* do not, and
+the predictions I pre-registered — 335 and 1040 — were unreachable by construction. ★ The probe
+caught that immediately, which is the argument for building the instrument before the fix.
+
+### 3. ★ AND IT CONFIRMS §198's GAP #3, from the other direction
+
+The descriptor indices actually in use are `0x29 0x2B 0x2D 0x2F 0x31` and — with **1 135 149 hits,
+two orders of magnitude above the rest** — `0x33`. The DRAM audit predicted exactly this: *"the
+unit-1 reverb draws cells `0x33..0x4E` instead of `0x00..0x1F`, i.e. mostly never-written cells →
+no delay line at all."* **`no delay line at all` is now measured, not inferred.**
+
+⇒ **Gap #3 comes first.** The rotation sign is downstream of it and cannot be tested until the
+descriptor map is right. ⛔ The sign flip is **implemented and OFF** (`UPD6383_ROTSIGN=0`); do not
+ship it on §199's reasoning alone.
+
+### 4. What survives
+
+* the write-timestamp probe — the only instrument that can grade a delay, and it will still be
+  the right one after gap #3;
+* §199's rule (a difference of addresses is not a delay) — **and now a second edge on it**: it is
+  also not a delay when the two addresses are not a read/write **pair**;
+* `R − W` sign-invariance, so every address-reporting probe stays blind.
+
+Evidence grade: §1 **MEASURED**; §2 **FORCED** by §189's nine exceptionless pairs; §3 **MEASURED**,
+matching the audit's independent prediction.
