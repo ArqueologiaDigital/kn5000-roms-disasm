@@ -186,7 +186,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-83 sections, §97..§190.  **Read the tail first** — later sections retract earlier ones *in place*.
+88 sections, §97..§195.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -273,4 +273,9 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §188 | SHIPPED | the host payload's LSB was being dropped. SHIPPED, default → `0xB910E446A39B440F`. | §1 **FORCED** (two notes, by construction); §2 **FORCED**; §3 **MEASURED**, all four |
 | §189 | SHIPPED | §188 reached the descriptors too; the read/write pairing confirms; P16's ladder does not appear | §1 **FORCED** (the arithmetic) ; §2 **MEASURED** (9 of 9 pairs; the CHORUS control); |
 | §190 | REFUTED/RETRACTED | two of §189's three readings are REFUTED, both statically. The third is narrowed, not settled. | §1 **FORCED** (P5 is MEASURED and the arithmetic is decisive), with two bit-exact |
+| §191 | OPEN | the probe reverses the target: `0x921` sits at a CONSTANT pointer, `C63` is the one that varies | §1 both defects **acknowledged**; §2 **MEASURED**, with the vehicle's program |
+| §192 | REFUTED/RETRACTED | ⛔ §191 §3's "target reversal" needs a vehicle qualifier. The bit-11 family has NO gradeable test. | §1 **MEASURED**; §2 **FORCED** by §1 (same words, two vehicles, opposite answers); |
+| §193 | OPEN | the f31 run is VOID: the navigation vehicle loaded the wrong program. The control caught it. | §1 **MEASURED** (the symptom is diagnostic); §2 **FORCED** by the word sequence |
+| §194 | OPEN | the transport is FIXED and §170's map has an off-by-one. The f31 comparison then FAILS its own input control. | §1 **MEASURED** (both arms fingerprinted), the map defect **FORCED** by the +1 on |
+| §195 | OPEN | the three-way f31 test also fails: bit identity is confounded with program similarity | §1 **MEASURED** (all three fingerprinted); §2 the pooling **MEASURED** and its |
 

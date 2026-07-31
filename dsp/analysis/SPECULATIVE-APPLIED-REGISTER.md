@@ -12209,3 +12209,71 @@ asking for the criterion *and* the confound analysis before the first build, not
 Evidence grade: §1 **MEASURED** (all three fingerprinted); §2 the pooling **MEASURED** and its
 uniformity across arms **MEASURED**; §3 **FORCED** — the `+2` agreement is upstream of the bit;
 §4 **FORCED** given §3 and §194.
+
+---
+
+## §196 — §114 §3's "the modulus is exactly half" does NOT apply to the shipped build. Measured, no gate.
+
+Auditing the **unarmed** mask bits (§168's point: "off because untested" is an opportunity, not a
+verdict) turned up §114, graded **MEASURED**, sitting behind bit 32 with the default clear. Its §3
+flags a live worry:
+
+> *"the modulus is exactly half … my implementation wraps the signed 24-bit datum (`mod 2^24`) and
+> runs the LFO at **exactly half rate**"* — 0.2997 Hz where `lfo-ramp.md` item C anchors
+> **0.5993 Hz across 29 LFO blocks in 16 programs with nine distinct increments.**
+
+★ And the device comment already explains why the bit is off, honestly: the wrap is gated **per
+unit** (`m_ovc` bit 3), so arming it makes unit 0's *audio* non-negative — *"evidence the modulus
+really belongs to the DATAPATH and the OVC bit only selects which units have a wrapping datapath."*
+
+### 1. ★ The discriminator needs no gate and no implementation
+
+A wrap is a large negative step in a rising ramp. **Counting them in the phase cell separates the
+two moduli 2:1**, as a pure measurement against an independently derived number:
+
+```
+   mod 2^23   period  73 584 frames   0.5993 Hz     18.9 cycles in this run
+   mod 2^24   period 147 169 frames   0.2997 Hz      9.5 cycles in this run
+```
+
+### 2. MEASURED
+
+```
+   §196 LFO WRAP CENSUS over 1 392 430 frames:  07: 15 wraps
+```
+
+```
+   all frames        period 92 828 frames -> 0.5171 Hz
+   LFO-active only   period 75 229 frames -> 0.6380 Hz     (§165: the phase changed in 1 128 429)
+```
+
+**`0.5993 Hz` lies between the two estimates.** `mod 2^24` is out by a factor of two on either
+bound. ⇒ **The shipped build already behaves as `mod 2^23`, and §114 §3's factor-of-two concern
+does not apply to it.**
+
+★ An independent corroboration falls out of a measurement made for another purpose: §165 measured
+the phase range as `0..8388598`, and `2^23 = 8388608`. **The ramp never exceeds 2^23** — so the
+modulus is visible in the range as well as in the period, from two unrelated instruments.
+
+### 3. What this is and is not
+
+* **Is:** a factor-of-two worry, raised as a real open question in §114 and repeated in that
+  section's *"three factors of two in one session"* note, **closed against an externally anchored
+  rate**. Cell `0x07` is the only cell in 256 that wraps at all, which also confirms it is the only
+  free-running accumulator in D-RAM.
+* **Is not:** a statement that the rate is *exactly* right. 0.5993 sits inside a bracket
+  0.5171–0.6380 whose width is set by how many frames the LFO is actually active — that is
+  agreement, not a measurement of the rate. Narrowing it needs the LFO-active window measured
+  directly rather than proxied by §165's change-count.
+* **Is not** an argument for arming bit 32. The per-unit gating cost the device comment states is
+  unchanged, and nothing here addresses it.
+
+### 4. ⚠ Method note — the audit found this, not a hypothesis
+
+This came from mechanically listing the 18 unarmed mask bits and reading their sections' evidence
+grades, not from a new idea. **Two of the eighteen are graded MEASURED with pre-registered
+predictions that hit** (§114 and §116). That is the audit class §188 came from, working again —
+and here it *closed* a question rather than finding a defect, which is the cheaper outcome.
+
+Evidence grade: §1 **FORCED** (the arithmetic); §2 **MEASURED**, with the range agreement as an
+independent corroboration; §3 the limits **stated**.
