@@ -28,6 +28,17 @@ OPERAND OF `w78`, WHERE `§211`'s CENTRAL NULL IS MEASURED. AND THE REFUTED ONE 
 SITES — `w63 w70 w75 w78`, THE OUTPUT STAGE'S FOUR UNDECODED WORDS.
 ⛔ THE BLOCKER IS STILL *WHAT THE BASE `0x90` MEANS* (§227, queue item 12).**
 
+**★★★★ AND §230 RAN IN PARALLEL, ON THE CONTROLS. IT REPAIRED THE PROJECT'S WORST ONE — SINGLE
+DELAY's `+0.02149296` NOW **ACCEPTS** THE CORRECTED MACHINE (lag **1001**, sample **45074**,
+PREDICTED BIT-EXACTLY FROM THE ROM's OWN COEFFICIENTS) AND **REJECTS SEVEN**, INCLUDING THE ONE IT
+USED TO ACCEPT — AND IT PROVED, AS A SET IDENTITY OVER 33 ARMS, THAT `§54`/`§70`/`§211`/rule-19/
+`§61`/THE EPILOGUE `D-I` TALLY ARE **ONE CRITERION COUNTED SIX TIMES**.
+⇒ ★★★★★ **THE TWO PASSES MEET, AND NEITHER COULD HAVE SAID IT ALONE: the ONE measurement every
+"still silent" rests on is, at `w78`, PARTLY OUR OWN FABRICATED ZERO.** §229 found the fabrication;
+§230 found that there is only one measurement. ✔ **And §229's census CLEARS `m_rf[0x8D]`** — the
+control §230 nominates as the only genuine independent check on the output stage.
+**Read `1.-0.NEW9.*` (§229) and `1.-0.NEW230.*` (§230) together; they do not contradict.**
+
 ### ★★★★★ 1.-0.NEW9.A QUOTE THIS BESIDE ANY NULL YOU PUBLISH
 
 ```
