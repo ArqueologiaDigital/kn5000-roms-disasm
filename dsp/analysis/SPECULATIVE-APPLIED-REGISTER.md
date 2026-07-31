@@ -12492,3 +12492,62 @@ ship it on §199's reasoning alone.
 
 Evidence grade: §1 **MEASURED**; §2 **FORCED** by §189's nine exceptionless pairs; §3 **MEASURED**,
 matching the audit's independent prediction.
+
+---
+
+## §201 — ★★★ THE DELAY LINES HAVE LENGTH. Per-body descriptor index, SHIPPED ON.
+
+§198 gap #3, measured out of existence by §200 and now fixed. `adjudication-round5.md` §1 **FORCES**
+the IDENTITY map — *"the k-th class-1 format-escape consumer takes the k-th descriptor cell of its
+own body's block"* — and `m_delay_ix` was **frame-global**, reset only at frame end, so body 1
+continued body 0's count.
+
+⚠ The u64 spec mask is **exhausted**; gated on `UPD6383_BODYIX`, the mechanism §104/§200 use.
+
+### Results
+
+| | | |
+|---|---|---|
+| **F1** fires | count > 0 | **2 736 860** |
+| **F2** indices move | onto the body's own block | `0x29 2B 2D 2F 31 33` → **`0x26 28 2A 2C 2E 30`** |
+| **F3** ★ the point | zero-length lines must gain length | **`0..240`, `0..480`, `0..640`** |
+| **F4** rule 1 | `§70 ACCA` min = max | `min 0 max 0` — **still silent** |
+
+```
+  before   dsc 29 2B 2D 2F 31 33   frames_since_written 0..0 on EVERY line
+  after    dsc 26 28 2A 2C 2E 30   0..240 / 0..480 / 0..240 / 0..0 / 0..0 / 0..640
+                                   = 5.44 / 10.88 / 14.51 ms @ 44.1 kHz
+```
+
+★ **`0x26` is exactly where §189 measured CHORUS's descriptor block live** (`26:0190` = 400,
+`28:05A0` = 1440, `2A:09B0` = 2480, `2C:0DC0` = 3520) — an independent measurement, made for
+another purpose, that the corrected indices land on.
+
+⇒ **For the first time in this emulator the delay lines have a length.** §200 measured them at
+**zero** on every line one tick ago; the audit's *"no delay line at all"* is now repaired, not just
+diagnosed.
+
+### ⚠ What is NOT claimed, and it is a lot
+
+* **The chip is still silent.** `min 0 max 0`, both ports peak 0. A delay line is not audio; the
+  output stage (§141/§150, `w73`) is a separate defect and untouched.
+* **Two lines still read `0..0`** (`0x2C`, `0x2E`). Unexplained.
+* **The age maxima are unexplained.** `240 / 480 / 640` against descriptor values
+  `400 / 1440 / 2480 / 3520` — no relation established. ⚠ `240` is CHORUS's modulation depth
+  (§156, the ROM's `C-RAM[0x02]`), and `480 = 2 × 240`, which is **suggestive and nothing more**;
+  recorded **SPECULATIVE**. A tap that sweeps ±240 around a nominal position would also produce an
+  age *range* starting near 0, which is what these look like — but that is a story, not a
+  measurement.
+* **The per-unit descriptor BASE is still absent** (§198 gap #3's other half): `m_dsc` comes only
+  from the in-program `ldptr.d`, which is `0x25` in **both** header blocks. This fixes the index,
+  not the base.
+
+### ⇒ And the rotation sign is now gradeable
+
+§200 could not test it because every line had zero length. There is now a real delay to measure,
+so `UPD6383_ROTSIGN` can finally be scored — **with the descriptor difference pre-registered from
+the ROM**, not from §199's mis-paired cells.
+
+Evidence grade: the decode **FORCED** (round5 §1); the consequence **MEASURED**, with §189's
+independent block identification as a passing control; the age *values* **UNEXPLAINED** and the
+`240` coincidence **SPECULATIVE**.
