@@ -12277,3 +12277,43 @@ and here it *closed* a question rather than finding a defect, which is the cheap
 
 Evidence grade: §1 **FORCED** (the arithmetic); §2 **MEASURED**, with the range agreement as an
 independent corroboration; §3 the limits **stated**.
+
+---
+
+## §197 — the poke packet's leading nibble is a FLAG, not a constant. Two-character fix, SHIPPED.
+
+Found by the parallel PROVEN-BY-CONSTRUCTION audit (`data/AUDIT_HOST_findings.md`), the class §188
+came from.
+
+`upd6383.cpp:886` tested `if (m_poke[0] == 0x0a)`. `k3-pointers.md` §7 item 6 and
+`register-space.md` §1.1 both record `0B .. .. .. 15` as the **same tag-`0x15` packet with one extra
+flag bit**. The device fell through to its instruction-word arm, so the value was discarded **and
+the auto-increment stalled**, shifting the rest of the stream one cell low. **44 of 3456 packets
+(1.3 %)** in the TYPE-walk capture lead with `0x0B`.
+
+### Results against `data/PREDICT_197.md`
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **F1** fires | > 0 | **4** (cold-boot vehicle; the 44 figure is the TYPE walk) | ✔ |
+| **F2** census rises, values appear | 59 writes / 55 cells must grow | **63 writes / 59 cells** — exactly +4/+4 | ✔ |
+| **F3** null half | nothing displaced | +4/+4 with no other cell moved | ✔ |
+| **F4** rule 1 | `§70 ACCA` min = max | `min 0 max 0` | ✔ silent |
+
+★ **The control, and it was already in hand.** Two of the four recovered values match the
+delay-descriptor space **bit-exactly**: `m_rf[0x54] = 0x0009B0 = 2480` and
+`m_rf[0x56] = 0x000DC0 = 3520`, against §189's live descriptor dump `0x2A = 0x09B0` and
+`0x2C = 0x0DC0` — a measurement made two ticks earlier for an unrelated purpose. Different writer,
+different pointer register, different memory. *(`register-space.md` §6.2: "CHORUS writes the same
+four tap lengths twice".)*
+
+⚠ **Stated, not smoothed:** only 2 of the 4 are corroborated here. The other two (`400`, `1440`)
+are not in this vehicle's recovered set — the "four lost values" figure is the auditor's, from a
+different capture. 4 packets in, 4 writes out, 4 cells gained: the *mechanism* is confirmed
+exactly; the *value list* is corroborated 2 of 4.
+
+⚠ And the flag's **meaning** stays undecoded. This accepts the packet; it does not interpret the
+bit.
+
+Evidence grade: the packet form **PROVEN BY CONSTRUCTION** (two notes); the fix's effect
+**MEASURED**, with 2 of 4 values bit-exact against an independent space.
