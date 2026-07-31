@@ -20,45 +20,63 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§219, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§220, 2026-07-31)
+
+> **★★★ THE SEND IS SOLVED AS A DIAGNOSIS AND THE OUTPUT STAGE IS NOW THE WHOLE PROBLEM.**
+> §219 located the unit-0 send at **D-RAM cell `0x05`** and named `iw35`/`iw45` as the two stores
+> that overwrite the audio `iw9`/`iw11` deposit there. **§220 CONFIRMED IT BY INTERVENTION**:
+> suppress those stores (`UPD6383_NOZ05=1`, env, **DEFAULT OFF**) and body 0's `§104` columns go
+> from **`0/0/0`** input-dependent slots to **`28/32/28`, slot for slot identical to the §215
+> `SRC0B2` calibration arm**; the delay line fills (`§46` non-zero reads **0 → 3 494 021**, `§75`
+> writes-with-content 1 175 999 → **2 351 009**) — **and `§70 ACCA at w73` / `§211 ACCB at w78` are
+> STILL `min == max == 0`, quiet and loud, in all four arms.**
+> ⇒ ★★★ **EVERY UPSTREAM LINK IS DEMONSTRABLY ALIVE AND THE OUTPUT IS STILL A HARD NULL.
+> Work the OUTPUT STAGE, with `UPD6383_NOZ05=1` as the rig.**
+
+Decided from `data/{A_off,B_mirror06,C_noz05,D_noz05_drpub}_220.log.gz` — four arms, one build,
+the §217 clean vehicle, 1 440 001 frames each. **Cite the run, not the section** (rule 11):
+
+```
+   arm A  shipped default -- IDENTICAL, slot for slot, to drpub_A_off_217:  body-0 idep 0/0/0
+   arm B  mask bit 26 ON  -- fired 5 881 351, iw84 STILL 0 ‖ 0, kernel A STRICTLY WORSE
+                            (acc 27→22, mem 21→10, L 18→12)              ⛔ DEAD-END 30
+   arm C  UPD6383_NOZ05=1 -- fired 3 528 080 (iw9/iw35/iw45, +55 pointer-drift strays)
+                            §104 iw84 mem 8 388 607 ‖ -8 388 608..8 388 607  *   THE PICKUP, LIVE
+                            s104 acc 63 (body0 28) | mem 73 (body0 32) | L 59 (body0 28)
+   arm D  NOZ05 + DRPUB=1 -- m_dr non-zero at iw25 on 1 174 369 of 1 211 520 (arm C: 0),
+                            provenance iw12 age 0; new live slots ONLY at L iw25/27/39/40 and
+                            acc iw41..44  <- SRC 0x0B at iw25 confirmed BEHAVIOURALLY
+   ALL FOUR:  §70/§211  min 0 max 0  in the loud bucket AND the 726 040-frame quiet window
+```
+
+⚠ **NOTHING SHIPPED. `UPD6383_NOZ05` is a DIAGNOSTIC, DEFAULT OFF**, for three reasons: its cell
+`0x05` **rails** (`§86` quiet `[8 388 607 .. 8 388 607]`, full scale with no notes — §176's warning,
+third occurrence); there is **no decode** under which `iw35`/`iw45` do not store (both carry
+`HI_ST`, both `mode 2`, and **neither carries bit 7**, so `§109`'s CO-EQUAL store-gate ambiguity —
+mask bit 29 — cannot refuse them under either reading); and by §216 it produces no audio.
+
+**⇒ NEXT: (1) THE OUTPUT STAGE, with `UPD6383_NOZ05=1` on so a fix is not masked by a zero input.
+(2) the send's residual question is the store's DATUM, not its address — the bit-4 store writes the
+PRE-update accumulator (`iw39` stores `acc_to_datum(130 485 107 904) = 1 991 044`, `iw38`'s
+post-value); at `iw35` the POST-update accumulator is INPUT-DEPENDENT, so a post-update store would
+DEPOSIT audio there. `iw45`'s post-value is still constant, so it does not finish the job alone.**
+⚠ **`UPD6383_DRPUB`: DEFAULT OFF still.** It now has a measurable consequence (arm D) — but only
+with NOZ05 on, and the shipping condition names the **SHIPPED** build's delay line.
+⚠ **rule 8, SHARPENED by §220:** a fired count that prints only when non-zero makes "0 fires" and
+"never ran" the same log line. **Print it unconditionally with the arm's flag.** Audit a bit before
+arming it with `dsp/tools/bit26_audit.py`.
+
+---
+
+## TIER 0a-prev-219 — the §219 blocker, SUPERSEDED by §220 but TRUE IN EVERY PART
 
 > **★★★ THE SEND IS D-RAM CELL `0x05`, AND `iw35` OVERWRITES THE AUDIO THAT `iw9`/`iw11`
-> DEPOSITED THERE.** §219 decided the assigned frontier STATICALLY and it came out a double
-> negative: `§213 §4`'s *"one corpus-unique word whose `SRC` is a GUESS"* (`iw25`, `SRC 0x0B`)
-> **stopped being a guess in §215**, and **no `SRC` on the send path can decide a stored value
-> anyway** — the delay WRITE (`upd6383.cpp:2081-2090`) and the `HI_ST` store (`:2942`) both take
-> `acc_to_datum(m_acc)`, never the bus, so `SRC 0x0B` reaches the line only as a MULTIPLICAND.
-> ⇒ **DO NOT look for the send defect in a SOURCE-field decode.**
-> **AND, INDEPENDENTLY, THE OUTPUT STAGE IS A NULL EVEN WHEN FED (§216) — so nothing here can
-> produce audio, and `§104`, not `§70`/`§211`, is the falsifier for any send experiment.**
-
-Decided from `data/drpub_{A_off,B_on,C_on_src0b2}_217.log.gz` and
-`data/src0b2_{A_off,B_on}_215.log.gz` — five arms, all agreeing digit-for-digit — plus
-`tools/src0b_census.py sendpath`. **Cite the run, not the section** (rule 11):
-
-```
-   §96  cell 05 written by iw9 / iw11  (DEPOSIT)  and by iw35 / iw45  (OVERWRITE)
-   §86  cell 05  quiet [0..5 084 004]  loud [0..16 760 298]     <- the audio IS deposited
-   §104 mem under dp=05:  iw35  5 084 004 ‖ -5 307 593..8 388 607   *   <- still alive
-                          iw36..iw45   4 194 304 ‖ 4 194 304      =   <- iw35's store landed
-                          iw46 and body 0's iw84   0 ‖ 0          =   <- iw45's store landed
-   4 194 304 = acc_to_datum(274 877 906 944), the accumulator iw34 leaves.  FORCED.
-   CONTROL: in the two SRC0B2=1 arms the SAME iw45 store delivered -8 034 877..7 192 534 to
-            body 0's iw84 -- so cell 0x05 IS the pickup and the instrument can tell them apart.
-```
-
-⚠ **AND "the delay line is EMPTY" is IMPRECISE** (§219 §5, corrected): `§75` in the same report
-says **1 175 999 delay writes carry content** — one per settled frame, the kernel's `iw46` writing
-the DC `0x7D70` — and `§200` reports reads resolving onto written addresses with 0..4401-frame
-ages. The reads return zero because the **bodies** write zero, which is §3's cell `0x05`.
-
-**⇒ NEXT: (1) the SEND — `iw35`'s `HI_ST` store target, with the pre-registered two-sided
-discriminator in §219 §8; ★ the instrument may already exist — mask bit 26 (`0x4000000`,
-`m_mirror06_n`) is 0 in the shipped default and has never been run. (2) the OUTPUT STAGE —
-nothing connects the body accumulator to `w73`/`w78`. They are independent.**
-⚠ **`UPD6383_DRPUB`: model settled, gate present, DEFAULT OFF, fired 24 922 560.** It ships only
-when an arm exists in which the shipped delay line carries content and `DRPUB=1` vs `=0` differ in
-`§104`/`s104_score.py`.
+> DEPOSITED THERE.** `§213 §4`'s *"one corpus-unique word whose `SRC` is a GUESS"* (`iw25`,
+> `SRC 0x0B`) **stopped being a guess in §215**, and **no `SRC` on the send path can decide a
+> stored value anyway** — the delay WRITE and the `HI_ST` store both take `acc_to_datum(m_acc)`,
+> never the bus. ⇒ **DO NOT look for the send defect in a SOURCE-field decode** (dead-end 28).
+> ⚠ **"the delay line is EMPTY" is IMPRECISE** (dead-end 29): `§75` counts **1 175 999 delay
+> writes with content** on the shipped build — the kernel's `iw46` writing the DC `0x7D70`.
 
 ---
 
@@ -216,6 +234,7 @@ the ones a reader would reach for again.
 | 27 | **`ENSEMBLE w62` / `MULTI TAP w25` are class-2 `SRC 0x0B` words** "ahead of their read" (§217 §5's residue) | ⛔ **WRONG FIELD, §218.** `lo12 0x40B` = `SRC 0x10` (**the ACCUMULATOR**, anchored) + `ACT 0x0B`; the `0B` is the ACTION. The corpus has **7** class-2 `SRC 0x0B` words, not 9 — which `upd6383.cpp`'s own `case 0x0B` comment has said since §215. ⇒ §217 §5's "a shape no latency model explains" is **EMPTY**: `w62` is not in the class, and `iw25` at **+13** is *inside* item E's `land ≤ 4` with 0 intervening publishes | §218 |
 | 28 | The **SEND is decided by a guessed `SRC`** (`§213 §7`, `HANDOFF-NEXT.md` §1 item 1) | ⛔ **DOUBLY REFUTED §219, statically.** (a) The guess — `SRC 0x0B` at `iw25` — **stopped being a guess in §215** (13/13 successor identity, the ENSEMBLE/kernel `2D9` twin), was provenance-graded in §217 and its population re-verified in §218. (b) **No `SRC` on the path decides a stored value**: the delay WRITE (`upd6383.cpp:2081-2090`) and the `HI_ST` store (`:2942`) both take `acc_to_datum(m_acc)`, never the bus, so a `SRC` there changes a GAIN OPERAND, never whether anything is injected. `tools/src0b_census.py sendpath` grades all 44 non-C-format words of kernel A | §219 |
 | 29 | "the delay line is **EMPTY**" as an independent fact | ⚠ **IMPRECISE §219.** `§75` in the same report as `§46`: **1 175 999 writes carry content** (one per settled frame — the kernel's `iw46` writing the DC `0x7D70`), and `§200` reports reads resolving with 0..4401-frame ages. The reads return zero because the **bodies** write zero, because their input cell `0x05` is zeroed by `iw45`. "Empty" names a symptom of dead-end 28's replacement, not a cause | §219 |
+| 30 | **Mask bit 26** (`0x4000000`, `m_mirror06_n`) — mirror the kernel's `0x06` result into `0x05` to fix the DEPOSIT ADDRESS | ⛔ **REFUTED §220, by running it.** It **fired 5 881 351 times** — exactly 5 per kernel-A pass (`iw19/21/27/33/39`, mode 2; **not** `iw72`, whose mode is 1) — and body 0's `§104` pickup at `iw84` stayed `0 ‖ 0`, because **every mirror site is upstream of `iw45`**, whose zero store is the last write to `0x05` before the CALL. Worse, it made kernel A **strictly less input-dependent** (`acc 27→22, mem 21→10, L 18→12`) via a cross-frame path through cell `0x06`. ⇒ **the mirror destroys input dependence, it does not create it.** ⚠ And §219 §8's reading *"a null means the gate never fired"* is wrong: this is a null with a fired count of 5.9 M | §220 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
 
 ---
@@ -243,6 +262,15 @@ the ones a reader would reach for again.
    missed `0x40000u` and double-booked bit 18, confounding a whole run. *(§129)*
 8. **A criterion that cannot fail is not a test**, and **compute the NULL before interpreting a
    table, not after**.
+   ★ **SHARPENED, §220: a fired count must be PRINTED UNCONDITIONALLY, with the arm's own flag
+   beside it.** `m_mirror06_n` had an increment *and* a `logerror` and still made "0 fires" and
+   "this code never ran" the same log — because the print sat inside `if (m_mirror06_n)`. That is
+   exactly the ambiguity a fired count exists to remove. Fixed for `§106`; `§220 NOZ05` prints its
+   count **and the per-`iw` breakdown**, which is what caught 55 pointer-drift fires in 3 528 080.
+   ★ **And AUDIT A MASK BIT BEFORE ARMING IT** — `dsp/tools/bit26_audit.py` parses the C++ with
+   comments and string literals stripped, enumerates every mask literal, decides whether the bit
+   is set in the shipped default, counts the sites that test it (two sites = confounded, stop) and
+   checks the fired count reaches a `logerror`. Never grep a spelling (rule 7's constructive form).
 9. **When the fix you reach for is an ANCHOR VALUE, stop.** Every anchor here is pinned by closure
    arithmetic; the defects are per-word **decodes**. *(§108 §5, named as a standing bias)*
 10. **When a measurement surprises you, the first hypothesis is that it answered a DIFFERENT
@@ -344,7 +372,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 23 | **ON** | §71, §94 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 24 | **ON** | §100 | SRC 0x02 = reg[addr8], the MODE-1 ADDRESSED REGISTER. This is item J's own stated escape -- "SRC 0x02, undecoded, might  |
 | 25 | **ON** | §41, §101 | DO NOT LET AN UNSUPPORTED SOURCE OVERWRITE A HOST-PROGRAMMED REGISTER |
-| 26 | off | §94 |  |
+| 26 | REFUTED | §94, §220 |  |
 | 27 | REFUTED | §108 |  |
 | 28 | off | §109 | ACTION 0x07's MODE-2 store lands on the POST-increment cell |
 | 29 | **ON** | §104, §109 |  |
@@ -374,7 +402,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-112 sections, §97..§219.  **Read the tail first** — later sections retract earlier ones *in place*.
+113 sections, §97..§220.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -415,7 +443,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §135 | REFUTED/RETRACTED | TOWARDS SHIPPING §133: the blocker localised to six words, three hypotheses refuted | §1 **MEASURED**; §2 **MEASURED** (three arms); §3 **MEASURED**, three refutations; |
 | §136 | OPEN | /§137 — "SPLIT `m_p`" HAS NO SPLIT TO MAKE; §40 RE-MEASURED AND STILL REFUSED; and a DC I called output | §1 **MEASURED** (site enumeration); §2 **MEASURED** (four arms) with the routing |
 | §139 | OPEN | WHY `f31 = 4/5` WERE BLIND: a POPULATION failure, not a witness failure | §1 **MEASURED** (re-verified) and **FORCED** as to the blindness; §2 **MEASURED** |
-| §140 | OPEN | SPECULATIVE PATTERNS (explicitly not gated; recorded so they accumulate) | §1 **MEASURED**; §2 **MEASURED** (the exclusion is forced by `coeff_fetch`'s own |
+| §140 | OPEN | SPECULATIVE PATTERNS (explicitly not gated; recorded so they accumulate) |  |
 | §141 | OPEN | §138's GUARD WORKED, AND WALKED THE SILENCE TO ITS LAST SLOT: **`w73` erases the accumulator at the door** | §1 **MEASURED**; §2 **MEASURED** (the exclusion is forced by `coeff_fetch`'s own |
 | §143 | CORRECTION | FOUR CORRECTIONS FROM THE PARALLEL PASS, three of them to my own sections | §1 **MEASURED** and a **RETRACTION**; §2 **MEASURED**; §3 **FORCED** (source) and a |
 | §144 | SHIPPED | ★★★ §135's REFUSAL IS OVERTURNED: the railing was my own bug, and the §133 READINGS ARE SHIPPED | **MEASURED** (three pre-registered predictions, one of them a known-answer |
@@ -483,11 +511,12 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §210 | SHIPPED | ⚠ §207 OVER-CORRECTED §202, and §209's measurement shows how far | §209's census **MEASURED** against a pre-registration committed before the build; |
 | §211 | REFUTED/RETRACTED | ⛔⛔ THE OUTPUT STAGE IS NOT WHERE THE SILENCE LIVES. `w73` PRESENTS A ZERO IT WAS HANDED, AND `§48` IS NOT A GATE | §1 **MEASURED** against a scoring rule committed before the run, and **exhaustive** |
 | §212 | REFUTED/RETRACTED | ⛔ §205's "single number that matters" was WRONG. §48 is not a gate, and §141's `w73` does not hold. | §1 and §2 **MEASURED** (exhaustive over 285 slots; the store witness aimed for the |
-| §213 | REFUTED/RETRACTED | ⛔⛔ §211's GRADEABLE LEAD WAS A PROBE ARTEFACT. The input dies at `iw36`, and the SEND is decided by ONE corpus-unique wo |  |
+| §213 | REFUTED/RETRACTED | ⛔⛔ §211's GRADEABLE LEAD WAS A PROBE ARTEFACT. The input dies at `iw36`, and the SEND is decided by ONE corpus-unique wo | §1 **MEASURED** against four predictions committed before the build, with an exact |
 | §214 | REFUTED/RETRACTED | the lead I handed forward was an INSTRUMENT ARTEFACT, and §212 §1 is half-retracted | §1 **FORCED** (the fired-count identity, and the contradiction inside §211's own |
 | §215 | REFUTED/RETRACTED | ⛔ THE RIVAL IS REFUTED BY THE CORPUS AND THE FALSIFIERS ALL PASSED ANYWAY. `SRC 0x0B` SURVIVES AT `iw25`, AND THE SEND W | §0 **MEASURED** (corpus census over 41 listings / 3057 words, plus the 1.0064 |
 | §216 | REFUTED/RETRACTED | the rival is refuted, my "suspicious loop" is retracted, and the OUTPUT STAGE NULL IS NOW PROVEN BY FEEDING IT | §1 **MEASURED** (41 listings, 13/13, two independent programs); §2 **FORCED** — the |
 | §217 | REFUTED/RETRACTED | ⛔★★★ THE `§78` BLOCKER IS REFUTED: THE DATUM IS NOT LOST, IT IS DELIVERED TO `iw98`. The LINE INDEX is a RED HERRING and | §0 **MEASURED** (both censuses are in `src0b2_B_on_215.log.gz`; the boot-sample |
-| §218 | REFUTED/RETRACTED | ⛔★★★ THE CROSS-FRAME RIVAL IS REFUTED WITHOUT A RUN, AND `ENSEMBLE w62` IS NOT AN `SRC 0x0B` WORD AT ALL. §217 §5's CENS |  |
-| §219 | REFUTED/RETRACTED | ⛔★★★ THE SEND'S "GUESSED `SRC`" WAS DECIDED FOUR SECTIONS AGO, AND NO `SRC` ON THE PATH CAN CLOSE THE SEND ANYWAY. THE S |  |
+| §218 | REFUTED/RETRACTED | ⛔★★★ THE CROSS-FRAME RIVAL IS REFUTED WITHOUT A RUN, AND `ENSEMBLE w62` IS NOT AN `SRC 0x0B` WORD AT ALL. §217 §5's CENS | §1 **MEASURED** (three existing logs, single-bin histograms, `m_prov_other` |
+| §219 | REFUTED/RETRACTED | ⛔★★★ THE SEND'S "GUESSED `SRC`" WAS DECIDED FOUR SECTIONS AGO, AND NO `SRC` ON THE PATH CAN CLOSE THE SEND ANYWAY. THE S | §1 **MEASURED** (corpus, §215/§218) and a documentation correction; §2 **FORCED** |
+| §220 | NOT SHIPPED (diagnostic only) | ★★★ THE PICKUP IS DECIDED BY EXPERIMENT: SUPPRESS `iw35`/`iw45` AND BODY 0 RUNS ON LIVE AUDIO, THE DELAY LINE FILLS, AND | §1 **MEASURED** (a parse of the C++, not a grep) with the conditional-print defect |
 

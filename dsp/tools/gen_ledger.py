@@ -72,18 +72,27 @@ def mask_bits():
 def sections():
     out = []
     lines = open(REG).read().split('\n')
-    idx = [(i, l) for i, l in enumerate(lines)]
-    for i, l in idx:
-        m = re.match(r'^## §(\d+)\s*[-—–]*\s*(.*)$', l)
-        if not m: continue
+    heads = [i for i, l in enumerate(lines) if re.match(r'^## §(\d+)', l)]
+    for k, i in enumerate(heads):
+        m = re.match(r'^## §(\d+)\s*[-—–]*\s*(.*)$', lines[i])
         num, title = int(m.group(1)), m.group(2).strip()
-        body = '\n'.join(lines[i:i + 200])
+        #  ★ §220: slice the body at the NEXT section heading, not at a fixed 200
+        #  lines.  The old window silently dropped the `Evidence grade:' line of any
+        #  section longer than 200 lines (§218, §219, §220 all lost theirs) and could
+        #  read the NEXT section's grade for any section shorter than it.
+        end = heads[k + 1] if k + 1 < len(heads) else len(lines)
+        body = '\n'.join(lines[i:end])
         grade = ''
         g = re.search(r'Evidence grade:\s*(.+)', body)
         if g: grade = re.sub(r'\s+', ' ', g.group(1))[:160]
         verdict = 'OPEN'
         t = title.upper()
-        if 'REFUT' in t or 'RETRACT' in t or '⛔' in title: verdict = 'REFUTED/RETRACTED'
+        #  ★ §220: an EXPLICIT marker wins over the keyword heuristic, which called
+        #  §220 "SHIPPED" because arm A's description contains the word "shipped".
+        #  Opt-in, so no existing row moves: <!-- LEDGER-VERDICT: ... -->
+        vm = re.search(r'<!--\s*LEDGER-VERDICT:\s*(.+?)\s*-->', body)
+        if vm: verdict = vm.group(1)
+        elif 'REFUT' in t or 'RETRACT' in t or '⛔' in title: verdict = 'REFUTED/RETRACTED'
         elif 'SHIP' in t or 'SHIPPED' in body[:1200].upper(): verdict = 'SHIPPED'
         elif 'CORRECTION' in t: verdict = 'CORRECTION'
         out.append((num, title, verdict, grade))

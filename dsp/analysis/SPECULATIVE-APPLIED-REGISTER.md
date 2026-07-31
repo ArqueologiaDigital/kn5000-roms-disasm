@@ -14605,3 +14605,223 @@ control **MEASURED** in the two `SRC0B2=1` arms; §4 a method finding; §5 **MEA
 §6 **MEASURED**, including the no-stimulus window; §7 a decision — **nothing behavioural shipped**;
 §8 **SPECULATIVE** as a hypothesis, with a pre-registered two-sided discriminator.
 **No mask bit, no env gate and no default was changed by this pass.**
+
+---
+
+## §220 — ★★★ THE PICKUP IS DECIDED BY EXPERIMENT: SUPPRESS `iw35`/`iw45` AND BODY 0 RUNS ON LIVE AUDIO, THE DELAY LINE FILLS, AND `w73`/`w78` ARE **STILL EXACTLY ZERO**. MASK BIT 26 FIRED 5 881 351 TIMES AND MOVED THE PICKUP NOT AT ALL
+
+<!-- LEDGER-VERDICT: NOT SHIPPED (diagnostic only) -->
+
+Scored against `data/PREDICT_220.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@451f3ce`; arm D's addendum committed before arm D, `@399661e`). Four runs, one
+build, the §217 clean vehicle (`coldnotes2.lua`, cold boot, isolated NVRAM **and** isolated
+`-cfg_directory` carrying `:DSPCFG value="3"`, `-log`, triad C4/E4/G4 held 21.02–27.51 s,
+`-seconds_to_run 30`), all four **1 440 001 frames / 313 960 loud / 726 040 quiet**:
+
+* **arm A** `data/A_off_220.log.gz` — shipped default, the control whose answer was already known;
+* **arm B** `data/B_mirror06_220.log.gz` — `UPD6383_SPEC=b910e446a79b440f`, i.e. **mask bit 26**;
+* **arm C** `data/C_noz05_220.log.gz` — `UPD6383_NOZ05=1`, the new gate;
+* **arm D** `data/D_noz05_drpub_220.log.gz` — `UPD6383_NOZ05=1 UPD6383_DRPUB=1`, one variable off C.
+
+> **THE QUESTION (§219 §8):** is `iw35`/`iw45`'s store into cell `0x05` a **wrong target**, or is
+> cell `0x05` **not** body 0's input pickup?
+>
+> **THE ANSWER: cell `0x05` IS the pickup, decided by experiment and not by model.** Remove the two
+> overwrites and body 0's `§104` columns go from `0/0/0` input-dependent slots to **`28/32/28` —
+> slot for slot IDENTICAL to the §215 `SRC0B2` calibration arm**, `§46`'s delay reads go from
+> **0 non-zero to 3 494 021**, and `§75`'s writes-with-content from 1 175 999 to **2 351 009**.
+> **⇒ §219 §3 is CONFIRMED and dead-end 30 is opened: mask bit 26's mirror is REFUTED as a
+> candidate — it fired 5 881 351 times and left `iw84` reading `0..0` in both buckets.**
+> **⇒ AND `§70`/`§211` STILL READ `min == max == 0`, in all four arms, in both buckets.** The whole
+> reverb now runs on live audio, delay line included, and the output is still exactly zero.
+> **§216 is not merely re-confirmed; it is now the ONLY thing left.**
+
+### 1. ★★ THE THREE PROGRAMMATIC CHECKS ON MASK BIT 26, BEFORE ARMING IT
+
+Run by `dsp/tools/bit26_audit.py`, which **parses the C++** — comments and string literals stripped
+first, so prose can never be mistaken for code — rather than grepping a spelling:
+
+| check | answer |
+|---|---|
+| bit 26 CLEAR in the shipped default? | **YES.** `m_specmask = 0xb910e446a39b440f` is the **only** initialiser (`upd6383.h:1015`) and the only runtime write is the `UPD6383_SPEC` env override (`upd6383.cpp:293`). Set bits: 0,1,2,3,10,14,16,17,19,20,23,24,25,29,31,33,34,38,42,45,46,47,52,56,59,60,61,63 — **26 is not among them**. The brief's spelling of the default MATCHES the source |
+| used at EXACTLY ONE site? | **YES.** `m_specmask & 0x4000000` occurs **once**, `upd6383.cpp:612`. Of the 15 literals in the two files with bit 26 set, exactly **one** equals `0x4000000`; the only non-single-bit mask ever AND-ed with `m_specmask` is `0x4001` (bits 0 + 14), which does not contain it. **Not confounded** |
+| fired count, and is it logged? | **YES**, `m_mirror06_n` → `logerror`. ⚠ **But it was printed under `if (m_mirror06_n)`**, so 0 fires and "the block was never compiled in" looked identical in a log — the exact ambiguity a fired count exists to remove. **Fixed in this pass: it now prints unconditionally, with the bit's own state beside it** |
+| never run? | **CONFIRMED** over all 17 `data/*.log*`: zero occurrences |
+
+⇒ all three pass, so the instrument was usable. **The fourth line is the finding**: rule 8 is about
+*legibility*, not about the increment existing.
+
+### 2. ★★★ ARM C — THE DISCRIMINATOR FIRED, AND IT FIRED ON THE SIDE §219 PREDICTED
+
+`UPD6383_NOZ05` (new, env, **DEFAULT OFF**, fired count **with a per-`iw` breakdown**) suppresses
+the **site-2 bit-4 store when `dest == 0x05` and `pw_region(m_cur_iw) == PW_KERNEL_A`**.
+`iw11`'s DEPOSIT is a **site-3 ACT-0x07** store and is untouched, so the audio still lands.
+
+```
+   §220 NOZ05 fired 3 528 080 | iw9:1 176 015  iw35:1 176 007  iw45:1 176 003
+                              | iw19:19 iw21:12 iw27:12 iw33:8 iw39:4      <- 55 of 3 528 080
+   §104  iw35  mem  8 388 607 ‖ -8 388 608..8 388 607  *      (was 5 084 004 ‖ -5 307 593..8 388 607)
+         iw46  mem  8 388 607 ‖ -8 388 608..8 388 607  *      (was 0 ‖ 0)
+         iw84  mem  8 388 607 ‖ -8 388 608..8 388 607  *      (was 0 ‖ 0)   <- THE PICKUP. LIVE.
+         iw84  acc  902 698 916 773 ‖ -902 699 024 384..902 698 916 773  *
+   s104_score.py   acc 63 idep (kernel A 33, body 0 28, body 1 2)
+                   mem 73 idep (kernel A 40, body 0 32, body 1 1)
+                   L   59 idep (kernel A 29, body 0 28, body 1 2)
+   §86   cell 05 now written ONCE per frame (1 020 000, by iw11 alone; was 4 080 000 by four words)
+         11 of 31 kernel-written cells INPUT-DEPENDENT (was 3): 0C 0E 0F 10 11 13 50 F1 join
+   §46   24 922 560 reads, 3 494 021 returned NON-ZERO      (arm A: 0)
+   §75   DELAY WRITES WITH CONTENT 2 351 009 of 23 693 760  (arm A: 1 175 999)
+```
+
+★★★ **AND THE CONVERGENCE THAT MAKES IT MORE THAN A GATE:** arm C's input-dependent slot sets in
+body 0 **and** body 1 are **identical, slot for slot**, to `data/drpub_C_on_src0b2_217.log.gz` — the
+§215 `SRC0B2=1` calibration arm. Two unrelated interventions (a `SRC` decode at `iw25`; the removal
+of two stores 10–20 slots later) put live data into cell `0x05` by different routes and body 0
+responds with **the same 28 acc / 32 mem / 28 L slots and the same `iw203`/`iw204`, `iw202`,
+`iw202`/`iw325` in body 1**. That is a property of the *program*, not of either gate.
+
+★ **`C1` MISSED ON THE LITERAL, PASSED ON THE SUBSTANCE, and the miss is worth keeping.** I
+pre-registered the breakdown as *exactly* `{iw9, iw35, iw45}`. It is those three at 1 176 00x each
+**plus 55 stray fires** spread over `iw19/21/27/33/39` — 1 in 64 000. Those are the words that
+normally target `0x06`, caught on the frames where the pointer failed to close (`§36`: *"in the
+other 1.69 % the input window lands wherever the pointer failed to return to"*). **Recorded as a
+miss rather than smoothed over**; at 0.0016 % it cannot carry the result.
+
+★ `C2` **PASS**, `C3` **PASS** (predicted mem ≥ 10, got 32), `C5` **PASS** (`iw36`, `iw37`,
+`iw40`..`iw45` all join the mem list).
+
+### 3. ⛔★★ ARM B — MASK BIT 26 IS REFUTED, AND IT IS *WORSE* THAN THE SHIPPED BUILD
+
+```
+   §106 DIAGNOSTIC (mask bit 26 = 1): mirrored 5 881 351 writes of cell 0x06 into 0x05
+        5 881 351 / 5 = 1 176 270 kernel-A passes  ->  EXACTLY 5 fires per pass       B1 PASS
+   §104 iw84 mem 0..0 ‖ 0..0    body-0 idep 0 / 0 / 0                                 B2 PASS
+   s104 acc 22 idep (was 27) | mem 10 (was 21) | L 12 (was 18)   <- STRICTLY WORSE
+```
+
+★ **`B1` passed on the ratio I predicted from the words alone**: the mirror fires on
+`mode != 1 && dest == 0x06`, which is `iw19/21/27/33/39` and **not** `iw72` (mode 1, so §99 routes
+it to the register file). Five per pass, measured.
+
+★★ **`B2` passed, and it refutes §219 §8's own reading of a null.** §219 §8 wrote *"the null is
+`§104` bit-identical to arm A, which would mean the gate never fired — check the fired count
+first"*. The fired count is **5 881 351** and the pickup did not move, because **every mirror site
+is upstream of `iw45`**, whose zero store is the last write to `0x05` before the CALL. A null with
+a large fired count was the *predicted* outcome, and it is a stronger refutation than a null with
+a zero one.
+
+★ **`B3` PARTIAL, and the miss is the interesting half.** Predicted: `iw35` leaves the mem/L lists
+(**correct** — `iw33`'s mirrored constant `6 039 795` lands under the pointer) and `iw40..iw44`
+join it. **They did not.** The reason names a mechanism I had not predicted: with `iw35` dead, the
+accumulator at `iw38` is constant, so `iw39`'s store — the value the mirror copies — is constant
+too, and the constancy then propagates **across the frame boundary** through cell `0x06` into the
+next frame's `iw12..iw21`, which is why mem fell to 10 instead of rising to ~25. **The mirror
+destroys input dependence; it does not create it.** ⇒ **dead-end 30.**
+
+### 4. ★★ ARM D — THE FIRST TIME A NON-ZERO DELAY DATUM HAS EVER REACHED `iw25`
+
+Pre-registered in the addendum, **before the run**. With the line full (arm C) and `DRPUB=1`:
+
+```
+   §215 CLASS-2 SRC 0x0B at iw25:  m_dr non-zero on 1 174 369 of 1 211 520     (arm C: 0)   D1 PASS
+   §217 provenance at iw25:        iw12, age 0..0, 540 000/540 000, fired 24 922 560        D2 PASS
+   §104 vs arm C, the ONLY new input-dependent slots:
+        L   at iw25, iw27, iw39, iw40        <- iw25 IS the SRC 0x0B word
+        acc at iw41, iw42, iw43, iw44                                                       D3 PASS
+   body 0 / body 1 unchanged at 28/32/28 + 2/1/2 (already fully live in arm C)
+```
+
+★★ **This is the behavioural confirmation §215's corpus anchoring never had.** `iw25`'s `SRC 0x0B`
+operand is *consumed*: give it a live datum and the liveness appears at `iw25` itself and then at
+`iw27/iw39/iw40/iw41..44` and nowhere else. A wrong source could not produce that pattern.
+⚠ **It does NOT make `DRPUB` shippable** — §219 §1.-0 item 3 requires the **shipped** build's line
+to carry content, and arm C's line is full only because a diagnostic gate is on. Stated in the
+pre-registration before the run, and unchanged by the result.
+
+### 5. ★★★ STANDING RULE 1 — AND THIS TIME IT IS THE HEADLINE, NOT THE DISCLAIMER
+
+```
+   arm A  §70 ACCA AT w73  quiet 726 040 min 0 max 0 | loud 313 960 min 0 max 0
+   arm B                   quiet 726 040 min 0 max 0 | loud 313 960 min 0 max 0
+   arm C                   quiet 726 040 min 0 max 0 | loud 313 960 min 0 max 0
+   arm D                   quiet 726 040 min 0 max 0 | loud 313 960 min 0 max 0
+   §211 ACCB AT w78 -- the same four lines, the same numbers, min == max == 0 throughout
+   §54 VERDICT in all four arms: SILENT -- chip eats the signal (DC leak 0.00 %, pass-through 0.00 %)
+```
+
+**`min == max == 0` in both accumulators, in both buckets including the 726 040-frame no-stimulus
+window, in all four arms. NO non-zero output. NO audio claim. `R1`/`D4` PASS.**
+★★ And this is now the strongest form of §216 that has ever been measured: in arm C **body 0 runs
+its whole ladder on live audio, body 1 too, the delay line carries 3 494 021 non-zero reads**, and
+the presentation stage still emits exactly zero. **Every upstream link is now demonstrably alive,
+and the output is still a hard null.**
+
+### 6. ⚠ WHY NOTHING SHIPS, AND THE REASON IS NOT DOUBT ABOUT THE MEASUREMENT
+
+**`UPD6383_NOZ05` stays DEFAULT OFF.** It is a **diagnostic that deletes two stores the corpus says
+are there**, and three things say it is not the hardware's mechanism:
+
+1. **It rails.** `§86` cell `0x05` in arm C is `quiet [8 388 607 .. 8 388 607]` — the positive
+   24-bit rail, *constant*, in the no-stimulus window. A pickup that sits at full scale with no
+   notes playing is not a plausible chip state (§176's rail warning, third occurrence).
+2. **There is no decode under which those stores do not happen.** Both `iw35` (`012.A.00.1C0`) and
+   `iw45` (`010.A.00.20C`) carry `HI_ST`, both are `mode 2`, and — checked this pass —
+   **neither carries bit 7**, so `§109`'s CO-EQUAL store-gate ambiguity (mask bit 29,
+   `b7 && f31 != 2`) **cannot** refuse them under either reading. That candidate is CLOSED.
+3. **§216.** Flipping it produces no audio, because nothing downstream of body 0 is connected.
+
+**And bit 26 stays 0 forever: it is now dead-end 30, refuted by measurement.**
+
+### 7. ⇒ WHAT SHIPS
+
+* `upd6383.cpp` / `.h` — **`UPD6383_NOZ05`, env, DEFAULT OFF**, announced unconditionally at start,
+  fired count **plus the per-`iw` breakdown** (which is what caught the 55 drift fires).
+* `upd6383.cpp` — the `§106` fired count now prints **unconditionally with the bit's state**, so
+  "0 fires" and "never ran" are no longer the same log.
+* `dsp/tools/bit26_audit.py` — the programmatic mask-bit audit, reusable for any future bit.
+* Four logs, `data/PREDICT_220.md`, this section.
+* **No default flip. No mask bit. No behavioural change with the gates off** — arm A is
+  **identical, slot for slot in all three `§104` columns**, to `data/drpub_A_off_217.log.gz`.
+
+### 8. ★ THE NEXT EXPERIMENT, PRE-REGISTERED HERE
+
+**The send is now a two-line question, and both lines are `iw`-specific:**
+
+**(a) WHY does the kernel store to `0x05` three times?** `iw9` (constant `5 084 004`), `iw35`
+(constant `4 194 304`), `iw45` (`0`) — plus `iw11`'s real deposit. Four writes to the body's input
+cell in one pass is a lot. The pointer walk is deliberate (`iw32`: `dp 07→06`, `iw34`: `dp 06→05`,
+both `0000AFFx07`), so *"the pointer is one cell low"* is **not** available as an explanation
+without breaking that walk. ★ **The live candidate is the store's DATUM, not its address**: the
+bit-4 store writes the **PRE-update** accumulator (verified: `iw39` stores
+`acc_to_datum(130 485 107 904) = 1 991 044`, which is `iw38`'s post-value). At `iw35` the
+**POST-update** accumulator is `908 714 800 127 ‖ 227 691 099 135..1 125 285 262 335` — **INPUT
+DEPENDENT**. So *"the bit-4 store writes the accumulator AFTER the word's ALU op"* would make
+`iw35` DEPOSIT audio instead of destroying it. ⚠ `iw45`'s post-value is `538 760 587 509`, still a
+constant, so this reading alone does not finish the job — **which is exactly why it must be run as
+a two-sided arm and not adopted.**
+
+**(b) THE OUTPUT STAGE IS NOW THE WHOLE PROBLEM.** With arm C on, everything upstream is alive and
+`w73`/`w78` are still `0`. Any pass that wants audio must work there, and `UPD6383_NOZ05=1` is now
+**the standing rig for it**: it is the only arm in which the presentation stage is fed on both
+units without touching the `SRC` decode.
+
+### 9. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **§219 §8's question — "wrong target, or not the pickup?"** | **ANSWERED: cell `0x05` IS body 0's pickup.** Remove `iw35`/`iw45` and body 0 goes `0/0/0` → `28/32/28`, slot-for-slot identical to the §215 calibration arm, with `iw84` mem `8 388 607 ‖ -8 388 608..8 388 607`. `base = 0x05 \| unit<<7` is CORRECT |
+| **mask bit 26 (`m_mirror06_n`), the §106 mirror** | ⛔ **DEAD-END 30.** Fired **5 881 351** times (5 per kernel-A pass, exactly as predicted from the words), moved `iw84` not at all — every mirror site is upstream of `iw45` — and made kernel A **strictly worse** (`acc 27→22, mem 21→10, L 18→12`) via a cross-frame path through cell `0x06`. **Never flip it** |
+| **§219 §8's reading of a null** (*"a null means the gate never fired"*) | **WRONG, and pre-registered as wrong.** A null with a fired count of 5 881 351 is the outcome the word decode predicts |
+| **"the delay line carries no audio because the bodies write zero"** (§219 §1.-1) | **CONFIRMED by intervention**, not just by inference: unblock the bodies' input and `§46` goes 0 → **3 494 021** non-zero reads, `§75` 1 175 999 → **2 351 009** |
+| **"`DRPUB` delivers the right datum and it is zero"** (§217) | **The "and it is zero" half is now conditional**: with the line full, `m_dr` non-zero at `iw25` on **1 174 369** of 1 211 520, provenance `iw12` age 0, and the liveness appears at `iw25`/`iw27`/`iw39`/`iw40`/`iw41..44` and nowhere else. `SRC 0x0B` at `iw25` is confirmed **behaviourally**. Still not shippable (§219 §1.-0 item 3's condition names the SHIPPED build) |
+| **`§109`'s CO-EQUAL bit-4 store gate (mask bit 29) as a candidate for the `0x05` overwrite** | **CLOSED.** Neither `iw35` nor `iw45` carries bit 7, so `guard7_would_refuse()` is false under **both** readings. It cannot be the reason |
+| **rule 8 as "does the counter exist"** | ⚠ **SHARPENED.** `m_mirror06_n` had a counter *and* a `logerror`, and still made "0 fires" indistinguishable from "never ran" because the print was conditional. **Print fired counts unconditionally, with the arm's own flag beside them** |
+
+Evidence grade: §1 **MEASURED** (a parse of the C++, not a grep) with the conditional-print defect
+**FORCED** from the source; §2 **MEASURED** in one run against a pre-registration committed before
+the build, `C1` MISSED on the literal breakdown and recorded as a miss; §3 **MEASURED**, `B1`/`B2`
+PASS and `B3` PARTIAL with the unpredicted cross-frame mechanism named; §4 **MEASURED** against an
+addendum committed before the run; §5 **MEASURED**, all four arms, including the no-stimulus
+window; §6 a decision — **nothing behavioural shipped, both gates DEFAULT OFF**; §8 **SPECULATIVE**,
+with the pre-update/post-update accumulator reading stated so the next pass can falsify it.
+**`dsp/verify.py`: BYTE-MATCH OK.**
