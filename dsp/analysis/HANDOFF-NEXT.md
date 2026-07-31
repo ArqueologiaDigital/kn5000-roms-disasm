@@ -16,76 +16,52 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Decode `C63`** — *"the highest-value undecoded form on the chip"* (`analysis/bit11-family.md` §6):
-53 sites in 25 of 38 images, *"the single most common thing this chip does that we cannot read."*
+**Decode `lo12 = 0x921` — `050.0.00.921`, MULTI TAP DELAY `w33`, ONE word — because two of its
+three siblings are already decoded and one of those is proven from the firmware's own assembly.**
 
-★ **READ `analysis/bit11-family.md` FIRST — all 447 lines.** It owns this family, and §182 lost a
-tick to not having read it.
+### The decomposition that makes it tractable (§184)
 
-### ⛔ What is NOT the task, and why
-
-The previous entry here — *"model the bit-11 alternate `lo12` encoding on an ALU route"* — is
-**misconceived**. §9 of that note establishes on two independent measurements that **bit 11 selects
-a SECOND ENCODING: on those words there is no `SRC` field and no `ACTION` field**.
-
-* §9.1 bits 11 and 5 co-vary **80 of 80** in the bodies (**90 of 90** including the header, §182).
-* §9.2 the ALU reading needs **four field values attested nowhere else in the corpus**.
-* `k3-pointers.md` item A proves *by construction* that the firmware assembles bit 11 as a
-  **separate flag**.
-
-⇒ `alu_decoded()` refusing every bit-11 word is **CORRECT, not a gap.**
-
-### ⛔ Five codes that DO NOT EXIST (§9.3) — do not build on any of them
+`k3-pointers.md` §1.1 item 2 proves **by construction** that the firmware builds
+`lo12 = 0x800 | X` (`INC 8, WA` adds a literal 8 to byte 3 *after* the address nibble). Applying
+that across all 90 bit-11 words:
 
 ```
-   ACT 0x03    ACT 0x04    ACT 0x1C    SRC 0x02    SRC 0x04
+   lo12  =  FLAG(bit 11) | SUB[10:8] | PAYLOAD[7:0]          sub in {0, 1, 4}
+
+   sub 0  x36   821 822 825 827 839 864 8BC      (all 28 register loads are here)
+   sub 1  x1    921                              <- THE TARGET
+   sub 4  x53   C63                              (the only occupant)
 ```
 
-They are what you get by applying the bit-11-clear encoding to bit-11 words. **`ACT 0x03` is the
-code §166 §3 used to claim `C63` does `m_tb = L`** — refuted twice over, and the note said so on
-2026-07-27, four days before §166 wrote it.
-
-⚠ **One genuine exception, found by §182 and invisible to the note's population**:
-`epilogue w63 = 2A7.9.05.1C3`, `SRC 0x07` `ACT 0x03`, bit 11 **clear** — and it is in the
-**OUTPUT STAGE**, the one place this chip's signal must emerge and does not.
-
-### ★★ THE LEAD — apply the ROSETTA constraint (§183 S8)
-
-The bit-11 family has **one group whose meaning is already known**, and it is in the same encoding:
+### ★★★ The payload-`0x21` triple — the ONLY payload collision in the corpus
 
 ```
-   80x.0.**.{821, 822, 825, 827, 839}  x11   <- the pointer/register loads.
-   `k3-pointers.md' item A decodes these BY CONSTRUCTION from the firmware's own assembly
-   (`INC 8, WA' into byte 3's low nibble).
+   0x021   flag 0  sub 0   x1   rstcur  — DECODED (k3 item K)              prog39 w58
+   0x821   flag 1  sub 0   x3   ldptr   — PROVEN BY CONSTRUCTION (k3 A)    kernel w42/w50, epilogue w69
+   0x921   flag 1  sub 1   x1   ⚠ UNDECODED                               prog10_multi_tap_delay w33
 ```
 
-⇒ **Whatever rule parses `821`/`825`/`827`/`839` must also parse `C63` and `8BC`.** That constraint
-has never been applied, and it is the cheapest test available.
+Nothing else in the corpus offers a decoded pair constraining an undecoded sibling. **`0x021` is
+*reset the cursor* and `0x821` is *load the pointer*** — two pointer/cursor operations on the same
+payload, distinguished by the flag. ⇒ SPECULATIVE but sharp: `0x921` is a **third pointer/cursor
+operation**, and its effect should be on pointer state and **nothing else** — measurable against
+the §164/§176 D-RAM census, which is a criterion that can fail.
 
-### And the family DOES have a minimal pair — §7.2 looked across the flag, not within it
+### ⚠ And this reframes `C63` — do NOT chase it first
 
-§7.2 tested each bit-11 word against itself with bit 11 **cleared** (0 of 8, correct — that closes
-comparison *across* the flag). **Within** the flag, one carrier hosts three payloads:
+`C63` is `sub 4 / payload 0x63`; `8BC` is `sub 0 / payload 0xBC`. **They differ in BOTH fields**, so
+they are not siblings and §6.2's once-vs-twice pairing cannot bound `C63`. §183's
+`040.0.00.C63` / `040.0.00.8BC` minimal pair is a real *carrier* control but varies two fields at
+once. Decode `sub` where two of three values are known, **then** apply it to `C63`'s `sub = 4`.
 
-```
-   040.0.00.C63  x46      040.0.00.8BC  x6      040.0.00.864  x1
-   ^ identical hi12, class4 and addr8 -- differing in NOTHING BUT lo12, all bit-11 set
-```
+### Also established (§184 §1)
 
-Better posed than the `w000` comparison, because both sides are in the **same encoding**.
-
-### ⛔ And `w000` is NOT the discriminator — §7.3's open route is comparing the wrong axis
-
-All 90 bit-11 words sit on exactly **two carriers** (class 0/`addr8 00` ×73, class 1/`addr8 30`
-×17) and none on any other. **The same payload `8BC` rides both**, so the payload is
-**carrier-independent** and its meaning cannot depend on `class4`.
-
-⇒ `880.1.30.8BC` vs `880.1.30.00B` varies `lo12` — but `8BC` is a bit-11 payload and `00B` is an
-ALU `lo12`. Two *encodings*, not two values of one field. Tested: the `w000` split predicts `C63`
-at 16/17 vs 3/11 against a null of 11.5 — **enriched but not a rule, 4 exceptions**, and FLANGER
-and ENSEMBLE carry `8BC` on the *class-0* carrier instead. The split is about the **carrier**.
+Stripping the flag finds only **1 of 9** payloads elsewhere in the corpus, against a null of 0.3 —
+the alternate encoding's payloads are **disjoint** from the ALU encoding's values. Third
+independent support for `bit11-family.md` §9's *"second encoding"*.
 
 ### ⛔ Dead, do not retry
+
 
 
 
