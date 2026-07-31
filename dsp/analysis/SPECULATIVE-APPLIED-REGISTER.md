@@ -11813,3 +11813,76 @@ reverb's delay lines are now correct: P16's numbers were not found, so that rema
 
 Evidence grade: §1 **FORCED** (the arithmetic) ; §2 **MEASURED** (9 of 9 pairs; the CHORUS control);
 §3 **MEASURED** as a negative, the three readings **ENUMERATED, not chosen**.
+
+---
+
+## §190 — two of §189's three readings are REFUTED, both statically. The third is narrowed, not settled.
+
+### 1. ⛔ "the descriptor payload is truncated 24→16" — REFUTED, one grep
+
+`r3-delaydram.md` **P5**, MEASURED over 870 cells across 100 algorithms:
+
+> *"Delay memory map: unit 0 = `[0x00000, 0x08000)`, unit 1 = `[0x08000, 0x10000)` — 32 768 words
+> each. **No address the firmware ever writes reaches 2¹⁶ (max 64 899).**"*
+
+⇒ `m_dscbank[..] = u16(v & 0xffff)` is **CORRECT**, not a defect. And the observation that prompted
+the suspicion — *"every unit-1 cell has bit 15 set"* — is **explained**: unit 1's range **is**
+`[0x8000, 0x10000)`, so bit 15 must be set. Seventeenth application of rule 3, answered in one grep.
+
+★ Two bit-exact corroborations fall out of the same live bank:
+
+```
+   03:8000 = 32768   exactly the unit-1 BASE
+   1E:7FFF = 32767   exactly one below it -- the unit-0 CEILING
+```
+
+Neither was fitted to anything; both are the boundary P5 measured, appearing as literal descriptor
+cells.
+
+### 2. ⛔ "the cold-boot unit-1 program is not ROOM REVERB 1" — REFUTED
+
+§170's method, applied to the other unit for the first time. Program-sized uploads by load address:
+
+```
+   I-RAM[84..]  x37   (unit 0, the TYPE walk)      I-RAM[200..] x1   <- unit 1, loaded ONCE
+   I-RAM[352..] x30   I-RAM[0..] x3   I-RAM[60..] x1
+```
+
+```
+   transfer 18   prog16_room_reverb_1   ROOM REVERB 1
+```
+
+Matched on the same 16-word fingerprint §170 validated. **The unit-1 program is identified for the
+first time**, and it is what the cold-boot notes said.
+
+### 3. ⚠ The third reading survives — and I am NOT claiming the obvious explanation
+
+Only *"the ladder is not a difference of descriptor cells"* remains. The tempting resolution is
+that the capture is at a different **reverb-time** setting:
+
+```
+   long head here   02 - 00 = 41925 - 33255 = 8670        r3's long head 8905   (2.64 % apart)
+   ladder here      569 707 1250 1674 480 512 870 678 900 840
+   r3's ladder      255 869 979 366 1044
+```
+
+⛔ **That does not hold up as stated, and I would rather say so.** The two sets have **different
+element counts** (10 vs 5; `adjudicate4`'s re-derivation has 11), so they are not one set rescaled.
+`480` appears in both and several others are close (`1250`/`1232`, `870`/`856`, `707`/`720`) — which
+is suggestive and is *exactly* the kind of near-match this project has been burned by.
+
+⇒ **SPECULATIVE, and explicitly not adopted.** What would settle it: capture at a **known**
+reverb-time setting and check whether the ladder scales by a single factor. If every element scales
+together, the parameter explanation holds; if the element *count* changes, the ladder is not a
+simple difference chain and P16's numbers are computed some other way.
+
+### 4. Standing
+
+`adjudication-round4.md` item D's **7 live sites** for the halved-payload retraction: §188 fixed
+one (the device's own decode). The remaining six are in *documents*, not in the emulator, and
+`tools/retraction_sweep.py` P16 already detects them — that is a documentation sweep, worth doing
+but not a decode.
+
+Evidence grade: §1 **FORCED** (P5 is MEASURED and the arithmetic is decisive), with two bit-exact
+corroborations; §2 **MEASURED**; §3 **SPECULATIVE and declined**, with the deciding experiment
+stated.
