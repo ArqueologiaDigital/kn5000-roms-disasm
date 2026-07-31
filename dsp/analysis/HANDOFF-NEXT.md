@@ -20,6 +20,233 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
+**★★★★★ §229 RESOLVED THE STRATEGIC REVIEW'S THREE "CHEAP DECODE EXPERIMENTS". TWO WERE REFUTED
+FROM DISK BEFORE ANY BUILD (`f98` NOT VIABLE; `hi12` BIT 5 VOID BY CONFOUND). THE THIRD RAN AND IS
+LOAD-BEARING: 28.492 % OF THE EPILOGUE'S OPERANDS ARE ZEROS *WE* INVENT — INCLUDING THE ONLY
+OPERAND OF `w78`, WHERE `§211`'s CENTRAL NULL IS MEASURED. AND THE REFUTED ONE PAID FOR ITSELF:
+`f31 IN {3,6,7}` IS `hi12`-BIT-5-ONLY, 0 COUNTEREXAMPLES IN 246 952 062 EXECUTIONS, AT EXACTLY FOUR
+SITES — `w63 w70 w75 w78`, THE OUTPUT STAGE'S FOUR UNDECODED WORDS.
+⛔ THE BLOCKER IS STILL *WHAT THE BASE `0x90` MEANS* (§227, queue item 12).**
+
+### ★★★★★ 1.-0.NEW9.A QUOTE THIS BESIDE ANY NULL YOU PUBLISH
+
+```
+   FABRICATED ZEROS -- src_term()'s `default:' returns a literal 0 for six SRC codes
+     kernel A 0.000 %   kernel B 0.000 %   body 1 0.000 %
+     body 0   8.772 %   EPILOGUE 28.492 %  TOTAL 9 832 536 / 246 952 062 = 3.982 %
+     0x05@iw60  0x01@iw61  0x06@iw68  0x0A@iw78 | 0x13@iw99/108/140/149  0x1C@iw111
+
+   f31 x hi12 BIT 5 -- the corpus rule (53 of 53 static), confirmed DYNAMICALLY
+     f31 in {3,6,7}, bit5 = 0 :  0  in 246 952 062 executions
+     f31 in {3,6,7}, bit5 = 1 :  4 424 994 at iw63(3) iw70(3) iw75(7) iw78(6) -- ALL EPILOGUE
+     ⚠ our model runs all four as `op = f31 & 3' => HOLD, NO PRODUCT
+```
+
+⇒ ★★★★★ **`§70` AND `§211` ARE NOT THE SAME KIND OF NULL.** `w73` resolves `SRC 0x10` = the
+accumulator and its `f31` is outside the bit-5 family; `w78`'s **only** operand is a fabricated
+zero **and** its operation code is collapsed. Both print `mean 0.0 span 0`; **only one is a
+statement about the chip.**
+⇒ **`m_rf[0x8C]`'s permanent zero (1 108 254 stores, 0 non-zero) is 100 % OURS.**
+✔ **`m_rf[0x8D] = 0x009B26 SURVIVES** — its non-zero stores come from a third site.
+
+### ⛔ 1.-0.NEW9.B TWO EXPERIMENTS ARE **STRUCK, NOT DEFERRED**
+
+* **`f98` cross-unit A/B** — its `f98 = 2` half is a **structural zero at `iw207` in nine archived
+  arms**, and a minimal pair is **already co-resident, adjacent, in the always-resident KERNEL**
+  (`w16`/`w17`). Restate the closure as **"no discriminator"**, never "no co-resident pair".
+* **ROCK ROTARY `hi12` bit-5 A/B** — `hi12` bit 5 is read in **exactly one place in the device**,
+  the nop guard's `hi12 == 0x000` equality. Remove the guard ⇒ the pair is bit-identical; keep it
+  ⇒ the difference **is** the guard. **The review's own kill-condition cannot fire.**
+  ⚠ Its recipe is `verified: false`, and the pair is co-resident in **two** images, not one.
+
+### ★★★★ 1.-0.NEW9.C THE NEXT ARM IS PRE-REGISTERED — AND IT MUST BE BISECTED
+
+`w78` carries **both** candidate defects (a collapsed operation code **and** a fabricated operand),
+so **a joint arm cannot attribute anything** — §226 and §227 both died of that. Do the **`f31` 3/6/7
+reading FIRST**, env-gated **DEFAULT OFF**, two-sided, unconditional fired count; **`SRC 0x0A`
+SECOND, never together.** Falsifiers, pre-registered in §229 §7.1 before any build:
+`m_rf[0x8D]` must stay `0x009B26`; PARAMETRIC EQ within **0.198 dB**; SINGLE DELAY's
+`+0.02149296` untouched; and **§227's guard** — a clip rate that falls because a term stopped being
+added is a **REGRESSION**. ⛔ **Do NOT implement the six SRC codes** (dead end 4, rule 4).
+
+### ★★★ 1.-0.NEW9.D TWO STRUCTURAL FACTS THAT CHANGE DENOMINATORS
+
+* **`I-RAM[154..199]` IS NEVER UPLOADED.** Body 0's region is **116 slots**; its resident image is
+  **70 words at `[84..153]`** (= `programs.tsv` row 1, CHORUS). **Every body-0 census this project
+  has published has a 46-slot tail nobody declared.**
+* **§38's "frame 264 002" is a 48 000 Hz figure** (5.500 s). The last upload measures frame
+  **246 078 = 5.581 s** on the 44 100 clock. **Convert before comparing.**
+* ★ The upload ledger matches the offline corpus **4 of 4** (KERNEL 60, EPILOGUE 23, CHORUS 84/70,
+  ROOM REVERB 1 200/133) and agrees with §228's LFO rise census **to the frame** (242 550).
+
+---
+
+### ⛔ 1.-0-prev-228 — §228's headline, STILL BINDING
+
+
+**★★★★ §229 REPAIRED THE PROJECT'S WORST CONTROL AND PROVED ITS BIGGEST STRUCTURAL DEFECT.
+SINGLE DELAY's `+0.02149296` NOW ACCEPTS THE CORRECTED MACHINE (lag 1001, sample 45074, PREDICTED
+BIT-EXACTLY FROM THE ROM's OWN COEFFICIENTS) AND REJECTS SEVEN DEFECTIVE ONES — INCLUDING THE ONE
+IT USED TO ACCEPT AND THE THREE COEFFICIENT SCRAMBLES A PRESENCE TEST CANNOT SEE.
+AND `§54`/`§70`/`§211`/rule-19/`§61`/the epilogue `D-I` TALLY ARE **ONE CRITERION COUNTED SIX
+TIMES**, MEASURED AS A SET IDENTITY OVER 33 ARMS.
+⛔ NOTHING WAS BUILT OR RUN: ANOTHER LANE HOLDS `upd6383.cpp` WITH 211 UNCOMMITTED LINES.
+⛔ THE BLOCKER IS UNMOVED: IT IS STILL *WHAT THE BASE `0x90` MEANS* (§227, queue item 12).**
+
+### ⛔⛔ 1.-0.NEW.A READ THIS BEFORE YOU TOUCH THE SOURCE — THE LANE IS CONTESTED
+
+At **17:25:47** on 2026-07-31 `src/devices/cpu/upd6383/upd6383.{cpp,h}` gained **211 uncommitted
+lines** carrying a **`§229 UPLOAD LEDGER`** and a **`§229 FABRICATED-ZERO CENSUS`**, and at
+**17:29** an **untracked** `dsp/analysis/data/D_229.log.gz` appeared. §229 was dispatched with
+*"you hold the build/run lane, no other agent is editing source"* — **that was false.**
+
+* ⛔ **Check `git -C kn7000_mame status` BEFORE any build, and NEVER `git checkout` a shared
+  working tree** — it would have wiped those 211 lines.
+* ⚠ **`D_229.log.gz` is EXCLUDED from every §229 census, by name**, because it was produced by a
+  device nobody can rebuild from the committed repo. `outstage_collapse.py` prints the exclusion.
+  **If that lane lands, re-run the tool: its arms re-enter the population.**
+* ⚠⚠ **THE `§229` LABEL IS DOUBLE-BOOKED.** The other lane stamped it into **C++**. Whoever lands
+  second renumbers, **and it should be the register section** — §229 is prose only, ships no gate
+  and touches no mask bit. Retitle to §230; the cost is a `sed`.
+* ★★ **AND THE GENERAL LESSON:** `gen_ledger.py` and `gen_fixlist.py` call themselves **DERIVED**
+  and both read `upd6383.cpp` **from the working tree**. A routine regeneration would have baked
+  another lane's unreviewed work into two documents whose whole authority is that they are derived.
+  **Both now take `UPD6383_SRC_DIR`**, and `SHIPPED-FIX-LIST.md` was regenerated against a pristine
+  checkout of `HEAD` (`8884d88`). ⇒ **A DOCUMENT THAT CALLS ITSELF DERIVED MUST NAME THE SOURCE IT
+  WAS DERIVED FROM.**
+
+### ★★★★ 1.-0.NEW.B THE REPAIRED SINGLE DELAY CONTROL — USE THIS, THE OLD CITATION IS VOID
+
+```
+   python3 dsp/tools/sd_rerun.py control      # self-test 13/13 printed FIRST, then:
+
+   configuration                  measured                                  verdict   expected?
+   CORRECTED (dram_dir, +1)       lag 1001  sample 45074  gain +0.02149296  ★ ACCEPT  ✔
+   corrected, cursor -1           NO ECHO at lag 1001                       REJECT    ✔
+   round-6 defect: reversed       NO ECHO at lag 1001                       REJECT    ✔
+   reversed + cursor -1           NO ECHO at lag 1001                       REJECT    ✔  <- WAS ACCEPTED
+   coefficients SCRAMBLED #1      lag 1001  sample  60691                   REJECT    ✔
+   coefficients SCRAMBLED #2      lag 1001  sample -32511                   REJECT    ✔
+   coefficients SCRAMBLED #3      lag 1001  sample -46019                   REJECT    ✔
+   p0 = 0 (the D1 defect)         NO ECHO at lag 1001                       REJECT    ✔
+   ⇒ 1 ACCEPTED, 7 REJECTED, 8 of 8 as expected
+```
+
+★ **THE CRITERION IS BIT-EXACT AND COMES OUT OF THE ROM**: `c = 0xE5762C = −0.207331`,
+`h = 0x400000 = +0.500000`, `((c·c) >> 23)·h >> 23 = 180 297`, `180 297 · 2²¹ >> 23 = ` **45 074**,
+and the harness measures **45 074**. `+0.02149296` is **SINGLE DELAY's** three-factor product —
+⛔ **NOT PARAMETRIC EQ's**, whose validation is the separate **0.198 dB** biquad.
+
+★★★ **THE THREE SCRAMBLES ARE THE POINT.** They carry the ROM's own coefficients shuffled among the
+same slots, so they **do** put an echo at exactly 1001. **A presence test passes all three.** Only
+the *value* separates them.
+
+**The three defects were all in the HARNESS, none in any machine:** (D1) the control leg never
+initialised the pointer, so the head-write word `w46` sat at `p0 − 5 = 0xFB`, a cell nobody drives,
+and wrote **zero** into the line every frame; (D2) `reversed + cursor −1` is a **double negation**
+that restores correct addressing — the old control was **mislabelling a differently-correct
+machine** while starving the one it called correct; (D3) `echo_energies` hard-coded `D = 500` but
+the taps are in **CASCADE**, `500 + 501 = 1001`, so the window was empty for all eight
+configurations; (D4) there is no feedback, so its `E2/E1` had no second echo.
+⚠ **`dest07` is INERT for this observable** (all four readings give 45074) and is now printed as
+INERT, not counted as a calibration.
+
+### ★★★ 1.-0.NEW.C THE OUTPUT-STAGE NULL IS **ONE** CRITERION, NOT FOUR — AND NOT SIX EITHER
+
+`python3 dsp/tools/outstage_collapse.py --quote` (19/19 self-tests, 4 synthetic, 12 external):
+
+```
+   MOVE-SETS over the 33 modern arms, baseline B_44100_228:
+     §54  §70  §211  rule19  §61  epilogue-D-I   ALL move in EXACTLY {C_xb85_full_222, D_xb85_route_222}
+     m_rf[0x8D]                                  moves in {C_xb85, D_xb85, O_227, Q_227}   <- STRICT SUPERSET
+```
+
+★ **The source forces five of the six.** In `present()`, `§70` and `§211` read the **same local
+`pacc`** (differing only in `unit`), rule-19 sums that `pacc`, `§61` reads `v` (derived from
+`pacc`), and `§54`'s `m_frame_out_nz` is set from that same `v`. `§41` measures `lvl` non-zero in
+every arm, so `v == 0 ⟺ pacc == 0`. **One number, five prints.**
+
+⛔ **STOP QUOTING THEM AS A BATTERY.** *"§54 clean | §70/§211 mean 0.0 span 0 — PASS"* is **one row**.
+✔ **Keep them** as the output-stage watch they are. They are not wrong; they are not four.
+
+⚠ **AND THEY ARE NOT THE SAME POPULATION.** `§54` arms at frame **300 000**, `§70`/`§211`/`§S1`/
+`§104` at **420 000**. On arm `N_227`, `§54` counts **826 040** quiet frames where `§70` counts
+**706 040** — all 120 000 of the difference is quiet (the loud count 313 960 is identical).
+**Never compare their counts directly.**
+
+### ★★★★ 1.-0.NEW.D IS THERE AN INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE? **YES, ONE**
+
+**`m_rf[0x8D]`.** It reads the `w61` **self-loop accumulator** (`§104` rows 60/61, inside the
+epilogue), its move-set **strictly contains** the null's, and **it has actually failed**:
+`0x009B26 → 0x7FFFFF` (§222 §3), **halved** to `0x004D93` in arm Q, **absent** in arm O. Two-sided,
+demonstrated three ways — **and never once quoted in the regression role while four copies of the
+null were.**
+
+⚠⚠ **BUT SAY IT PRECISELY.** `m_rf[0x8D]` checks the output stage's **ARITHMETIC**. On the
+**presented value** there is **exactly ONE measurement point in the device**. ⇒ **every "the output
+stage is still a null" this project has published rests on a SINGLE measurement**, and the batteries
+quoted beside it have never been corroboration. `§216` makes that null believable by feeding it; it
+does not make it independently measured.
+
+### ★★ 1.-0.NEW.E `W4′` RESTATED — A SEND-STATE DETECTOR, `20 of 20`, AND THE GATE SURVIVES
+
+Body-0 `D-I` is **`(0,0,0)` on 20 of 20** modern arms whose delay port returned no non-zero datum —
+spanning **four mask defaults**, the store-probe fix, `EPIBUS`, `PICKUP`, `PSHIFT`, `NOCARRY` and
+**both LFOWRAP polarities**. It moves only where body 0 receives input: `26/28/27` (NOZ05, 7),
+`26/23/23` (XB85, 2), `17/16/15` (SRC0B2, 2).
+⇒ **Within the class `LFOWRAP` belongs to — an arithmetic change with the send shut — `W4′` has no
+reachable failure.**
+✔ **THE GATE IS NOT AT RISK**: `W0` (fired 1 176 960, one slot), `W1` (`§S1` moves by **exactly**
+−706 040 / −313 960) and `W2` (`§119 iw94` becomes a +114/frame ramp) are two-sided and **did move**.
+What changes is the published strength: it reads **11 of 11** and is really **6 of 11 plus
+`m_rf[0x8D]`**. `SHIPPED-FIX-LIST.md` is unaffected — it derives from gate declarations, and `W4′`
+appears nowhere in the source.
+⚠ **NEW:** `O_227`'s delay port returns non-zero **1 175 999** times and it *still* scores `0/0/0`
+(NOCARRY takes body 0 100 % input-INDEPENDENT). ⇒ **`§46`'s non-zero count is a
+DELAY-LINE-CONTENT detector, not a clean send-state discriminator. Quote the rig, not the port.**
+
+### ★★ 1.-0.NEW.F §220's *"SLOT FOR SLOT IDENTICAL"* — CORRECTED, WITH ITS MECHANISM
+
+`python3 dsp/tools/rule21_all.py data/C_noz05_220.log.gz data/src0b2_B_on_215.log.gz`:
+
+```
+   C_noz05_220     (RIG) body0  acc 28 = 26 + 0 +  2 | mem 32 = 28 + 4 +  0 | L 28 = 27 + 1 +  0
+   src0b2_B_on_215       body0  acc 28 = 17 + 0 + 11 | mem 32 = 16 + 4 + 12 | L 28 = 15 + 1 + 12
+   C_noz05_220           body1  acc  2 =  2 + 0 +  0 | mem  1 =  1 + 0 +  0 | L  2 =  2 + 0 +  0
+   src0b2_B_on_215       body1  acc  2 =  0 + 0 +  2 | mem  1 =  0 + 0 +  1 | L  2 =  1 + 0 +  1
+```
+
+✔ The raw markers **are** identical element for element. ⚠ The RULE-21 content is **not**:
+**`26/28/27` vs `17/16/15`**, body 1 **`2/1/2` vs `0/0/1`**. ★ **The mechanism**: the difference is
+entirely **UNDECIDABLE** slots — `11/12/12` vs `2/0/0`. **The two arms mark the same slots; the rig
+DECIDES them and the calibration arm does not.** Re-word to *"the same slots, with different
+proof-grade content"*, never *"the rig delivers the same signal"*.
+✔ **The send model survives** on §225's independent re-grade; **the corroboration does not.**
+⛔ **AND THE SAME TRAP APPLIES TO BODY 1's `2/1/2`** — `0/0/1` on `src0b2_B_on_215` and
+`drpub_C_on_src0b2_217`, from the identical raw tally. **NEVER QUOTE A `§104` TALLY WITHOUT ITS ARM
+AND ITS `D-I` SPLIT.**
+
+### ⚠ 1.-0.NEW.G FIVE CONTROL REPAIRS ARE SPECIFIED AND **QUEUED**, NOT SHIPPED
+
+All five are SOURCE print-text changes and §229 would not make one while the lane was contested.
+See `BUILD-LANE-QUEUE.md` items 14–18: **A11** (`§S1 CONTROL`'s refuted *"clips = 0"*),
+**A15** (`§S3`'s *"EXTERNAL"* control — the source's own comment admits the predicate is identical),
+**A19** (`§44`'s 0-in-40-of-40), **A2** (mask bit 5's level guard, never observed to fire),
+**A17** (`§S3-C4`, never exercised in the direction that would make it fire). Ship as **one** arm,
+certified by `D1`.
+
+### ⚠ 1.-0.NEW.H ONE CORRECTION TO THE CONTROL AUDIT ITSELF
+
+`§41`'s level is **not** bit-identical in 31 of 31 modern arms. **`clean_vehicle_default` is a
+MODERN-layout arm (285 rows) carrying the pre-§188 `0x178D0A`**, which the audit attributed wholly
+to the pre-§188 *legacy* family. It is **32 of 33**. ✔ The audit's conclusion is untouched — that is
+a host-decode difference, exactly the class `§41` **does** detect. It stays MIS-AIMED as an
+arithmetic guard, and **`m_rf[0x8D] = 0x009B26 = 39 718` is still the guard that fires.**
+
+---
+
+### ⛔ 1.-0-prev-228 — §228's headline, TRUE IN EVERY PART
+
 **★★★★ §228 SHIPPED THE 44 100 Hz DSP FRAME CLOCK. THE OLD ONE WAS 48 000, MEASURED FROM DISK
 (1 440 001 FRAMES / 30 s ON EVERY ARCHIVED ARM), SO EVERY EMULATED DELAY, REVERB TIME AND LFO WAS
 +8.844 % FAST. THE CHORUS LFO NOW LANDS ON 0.599313 Hz AND THE TONE GENERATOR IS BYTE-IDENTICAL.
@@ -27,7 +254,7 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 THE 0.652 EVERYONE QUOTED HAD NEVER BEEN MEASURED BY ANYTHING.
 ⛔ THE BLOCKER IS UNMOVED: IT IS STILL *WHAT THE BASE `0x90` MEANS* (§227, queue item 12).**
 
-### ★★★★ 1.-0.NEW.A THE CLOCK, AND THE TWO NUMBERS THAT GRADE IT
+### ★★★★ 1.-0-prev-228.A THE CLOCK, AND THE TWO NUMBERS THAT GRADE IT
 
 ```
    arm A  UPD6383_FRAMEHZ=48000  (the two-sided control)   data/A_48000_228.log.gz
@@ -47,7 +274,7 @@ is `wraps/frames × DECLARED rate` and `wraps/frames` is rate-invariant, so **ch
 declaration alone moves it with nothing measured** (rule 8). Grade on **T4**, frames per *emulated*
 second against the machine's own clock, and on the **step/period staying invariant**.
 
-### ⛔ 1.-0.NEW.B `§196`'s WRAP CENSUS IS SUPERSEDED. DO NOT QUOTE IT.
+### ⛔ 1.-0-prev-228.B `§196`'s WRAP CENSUS IS SUPERSEDED. DO NOT QUOTE IT.
 
 It printed **`0.5000 Hz`** on every arm ever run, biased low **two ways**: its denominator includes
 the **264 001** frames before the program upload, during which the ramp is **frozen**
@@ -58,7 +285,7 @@ numerator **truncates the last partial wrap**. At 44 100 it gets *worse* (`0.466
 the register of a measurement and **no log line ever printed it**. *Before quoting a figure as
 MEASURED, find the log line it came from.*
 
-### ★ 1.-0.NEW.C WHAT IT MEANS FOR EVERY OLDER LOG, AND FOR EVERY FUTURE ARM
+### ★ 1.-0-prev-228.C WHAT IT MEANS FOR EVERY OLDER LOG, AND FOR EVERY FUTURE ARM
 
 * **Every frame count in a pre-§228 log is on the 48 000 clock.** `-seconds_to_run 30` gave
   **1 440 001** and now gives **1 323 000**. ⇒ **COMPARE RATIOS ACROSS THE CHANGE, NEVER COUNTS.**
@@ -71,7 +298,7 @@ MEASURED, find the log line it came from.*
 * **`UPD6383_FRAMEHZ=48000` restores the old clock** as a two-sided control. ⛔ It is **not** a knob
   for tuning audio.
 
-### ★ 1.-0.NEW.D THE TONE GENERATOR DID NOT REGRESS, AND THE TEST COULD HAVE FAILED
+### ★ 1.-0-prev-228.D THE TONE GENERATOR DID NOT REGRESS, AND THE TEST COULD HAVE FAILED
 
 `W1` (insert **OFF** — the shipping configuration), `W2` (ON at 44 100) and `W3` (ON at 48 000) are
 **BYTE-IDENTICAL**, md5 `baffbeee660a7ea68deac866b46b3c6e`, over 1 440 001 frames — with the
@@ -80,7 +307,7 @@ it is a comparison of real audio and not of two silences. The stream still rende
 rate is load-bearing for the EG law, the voice LP coefficient and the pitch step); `run_frame()` is
 gated by a **147/160 phase accumulator**, exact and drift-free.
 
-### ⚠ 1.-0.NEW.E FS = 44 100 HAS **FOUR** PROOFS, NOT FIVE — DROP THE CRYSTAL
+### ⚠ 1.-0-prev-228.E FS = 44 100 HAS **FOUR** PROOFS, NOT FIVE — DROP THE CRYSTAL
 
 All four are **inside the ROM**: `ms × 0xAC44/0x3E8`; the double **`π/44100`** at `0x012F57` that
 the **SOLVED PARAMETRIC EQ validates against at 0.198 dB**; `NO OPERATION`'s `D = 4410 = 100.000 ms`;
@@ -88,7 +315,7 @@ and 29 LFO blocks × 9 increments `= floor(f·2²³/44100)`, joint null `3.1e-12
 ⛔ *"33.8688 MHz = 768×44100"* is **INFERRED** — the 1996 scan prints **`36.8688 MHz`**, which
 divides to **neither** rate. Felipe reading X301 settles it; nothing waits on it.
 
-### ★★ 1.-0.NEW.F THE BOOKKEEPING REPAIR LANDED (P1–P9), AND IT BROKE TWO TOOLS' SELF-TESTS
+### ★★ 1.-0-prev-228.F THE BOOKKEEPING REPAIR LANDED (P1–P9), AND IT BROKE TWO TOOLS' SELF-TESTS
 
 TIER 0c now **defines rules 19, 20 and 21** (20 had **17 invocations and zero definitions**);
 TIER 0b grew **30 → 41 rows**, covering §221–§227 and the two repo-external verdicts;

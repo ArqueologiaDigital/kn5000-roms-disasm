@@ -467,3 +467,50 @@ attributions against the **right** preset.
   across the clock change, never counts.**
 - **Do not ship a default flip on a moved number or a model argument alone.** §217–§221 all correctly
   declined. **A NULL is a fine outcome.**
+
+---
+
+## 14. ★★★★ THE `f31` 3/6/7 READING — **PRE-REGISTERED BY §229, BISECTED, NOT YET RUN**
+
+**Grade: the POPULATION is MEASURED; the reading is UNDECIDED.**
+
+`f31 ∈ {3,6,7}` occurs only with `hi12` bit 5 set — **53 words, 53 of 53** in the corpus, and
+**0 counterexamples in 246 952 062 live ALU executions**. It fires at **exactly four sites, all in
+the epilogue**: `iw63(3) iw70(3) iw75(7) iw78(6)` — the annotated *"symmetric pair"*, the
+*"class 8 post-sum step, OPERATION UNKNOWN"*, and the machine's **only class-D word**, which is
+where `§211` measures `ACCB`. **Our model runs all four through `op = f31 & 3` ⇒ HOLD, no product.**
+
+⚠⚠ **`w78` CARRIES TWO CANDIDATE DEFECTS AT ONCE** — the collapsed operation code **and** a
+fabricated-zero operand (`SRC 0x0A`, 1 106 028 times). **A joint arm cannot attribute anything.**
+Do the `f31` reading FIRST; `SRC 0x0A` SECOND, never together. §226 and §227 both died of exactly
+this failure mode.
+
+**Required shape:** env gate, **DEFAULT OFF**, two-sided, unconditional fired count.
+**Falsifiers (from §229 §7.1, written before any build):** `m_rf[0x8D]` must stay `0x009B26`;
+PARAMETRIC EQ within **0.198 dB**; SINGLE DELAY's `+0.02149296` untouched; `§54` graded FIRST;
+`§70`/`§211` as mean AND AC span, both buckets. ★ **§227's guard applies with full force:** a clip
+rate that falls because a term stopped being added is a **REGRESSION wearing a good number**.
+**Kill condition:** if the reading leaves `§104`'s body-0 and epilogue columns input-INDEPENDENT,
+the operation field is not the defect and the four words' silence is elsewhere.
+
+---
+
+## 15. ★★★ RE-GRADE EVERY PUBLISHED NULL AGAINST §229's FABRICATED-ZERO TABLE — no build
+
+Any null quoted for **body 0** (8.772 % invented operands) or the **epilogue** (**28.492 %**) must
+now carry that share. **Start with `§211`.** Also **declare the 46-slot body-0 tail**
+(`I-RAM[154..199]` is never uploaded; the resident image is 70 words at `[84..153]`) wherever a
+body-0 denominator is published, and **convert `§38`'s 264 002** to the 44 100 clock (= frame
+246 078 = 5.581 s, measured) wherever it gates an instrument.
+
+---
+
+## ⛔ STRUCK FROM THE STRATEGIC REVIEW'S ACTION LIST — DO NOT DEFER, DO NOT RE-PROPOSE
+
+* **Action 3, the `f98` cross-unit A/B** — ⛔ **NOT VIABLE**, TIER 0b dead end **42**.
+* **Action 6's `hi12` bit 5 via ROCK ROTARY** — ⛔ **VOID BY CONFOUND**, TIER 0b dead end **43**;
+  the review's own kill-condition cannot fire.
+* **Action 6's other two items SHIPPED in §229** (loud fabricated-zero census; unconditional
+  per-upload provenance line).
+* **Action 2, the 44 100 Hz frame clock — SHIPPED in §228.** **Action 5, the bookkeeping repair —
+  SHIPPED in §228** (P1–P9).

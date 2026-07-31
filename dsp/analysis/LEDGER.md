@@ -20,7 +20,48 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229, 2026-07-31)
+
+> ### ★★★★★ §229 — READ THIS BEFORE QUOTING ANY NULL
+>
+> **THE OUTPUT STAGE'S OPERANDS ARE 28.492 % ZEROS *WE* INVENT**, and its four distinctive
+> words are executed as *"hold, no product"*. Both facts land on **`w78`** — the word
+> `§211`'s central null is measured at.
+>
+> ```
+>    FABRICATED ZEROS (src_term()'s `default:'), per REGION -- quote beside any null:
+>      kernel A  0.000 %    kernel B  0.000 %    body 1  0.000 %
+>      body 0    8.772 %    EPILOGUE 28.492 %    TOTAL 9 832 536 / 246 952 062 = 3.982 %
+>      sites: 0x05@iw60  0x01@iw61  0x06@iw68  0x0A@iw78 | 0x13@iw99/108/140/149  0x1C@iw111
+>
+>    f31 x hi12 BIT 5 -- the corpus rule, confirmed DYNAMICALLY:
+>      f31 in {3,6,7} with bit5=0 :  0  in 246 952 062 executions   (corpus: 53 of 53)
+>      f31 in {3,6,7} with bit5=1 :  4 424 994, at EXACTLY FOUR SITES
+>      iw63(3) iw70(3) iw75(7) iw78(6)  -- ALL EPILOGUE, all words the disasm cannot name
+>      ⚠ our model runs all four as `op = f31 & 3' => HOLD, NO PRODUCT
+> ```
+>
+> ⇒ ★★★★★ **`§70` AND `§211` ARE NOT THE SAME KIND OF NULL.** `w73` resolves `SRC 0x10` = the
+> accumulator and its `f31` is outside the bit-5 family. `w78`'s **only** operand is a
+> fabricated zero **and** its operation code is collapsed. Both print `mean 0.0 span 0`;
+> **only one is a statement about the chip.**
+> ⇒ **`m_rf[0x8C]`'s permanent zero (1 108 254 stores, 0 non-zero) is 100 % OURS.**
+> ✔ **`m_rf[0x8D] = 0x009B26` SURVIVES** — its non-zero stores come from a third site.
+> ⛔ **NOT A LICENCE TO IMPLEMENT ANYTHING.** Dead end 4 / rule 4 still forbid the six SRC
+> codes; §7.1 of §229 pre-registers the `f31` 3/6/7 arm with its falsifiers, **default OFF**,
+> and requires `SRC 0x0A` be done **SECOND, never jointly** — `w78` carries both candidates.
+> ★ **UPLOAD LEDGER, and it ends an inference:** 12 runs, **8 distinct images**, matching the
+> offline corpus **4 of 4** (KERNEL 60, EPILOGUE 23, CHORUS load 84/70 w, ROOM REVERB 1 load
+> 200/133 w). ⚠ **Body 0's region is 116 slots holding a 70-word image — `I-RAM[154..199]` is
+> never uploaded.** Declare that 46-slot tail wherever a body-0 denominator is quoted.
+> ⚠ **§38's "frame 264 002" is a 48 000 Hz figure (5.500 s).** The last upload measures frame
+> **246 078 = 5.581 s** on the 44 100 clock. Convert before comparing.
+> ⛔ **STRUCK, NOT DEFERRED:** the `f98` cross-unit A/B (**NOT VIABLE** — its `f98=2` half is a
+> structural zero at `iw207` in nine arms, and a kernel pair `w16`/`w17` is already co-resident)
+> and the ROCK ROTARY `hi12` bit-5 A/B (**VOID BY CONFOUND** — bit 5 is read in exactly ONE
+> place in the device, the nop guard, so the A/B measures our dispatch table and nothing else,
+> and the review's own kill-condition cannot fire).
+
 
 > ### ★★★★ §228 SHIPPED FIRST, AND IT IS NOT THE BLOCKER — IT IS A CLOCK
 >
@@ -681,6 +722,8 @@ the ones a reader would reach for again.
 | 39 | **`iw33`'s `f31 = 1` should not carry** (`UPD6383_NOCARRY`) — "the kernel ladder overflows because a term is being added that should not be" | ⛔ **REFUTED §227, FROM DISK BEFORE IT RAN, AND THEN MEASURED INERT.** `f31 == 1` is `HI_ACC_ADD`, **1309 of 2989** non-C-format corpus words and **695 of 1178** ALU-decoded; op 0 LOADs, op 2 HOLDs *without a product*, op 3 gets HOLD's behaviour ⇒ **it is the only accumulate the ISA has**, and the **PARAMETRIC EQ** biquad (grade SOLVED, validated at **0.198 dB** against its designer) sums five products through `f31 == 1` words `w6..w10`. Without the carry `H(z)` = `makeup · (−a2) · z⁻²`. **AND IT DOES NOT FIX THE CLIP:** `iw34` becomes `8 388 608` = `2²³` = **FS + 1** and clips `706040/706040` quiet, `313960/313960` loud — **unmoved from shipped.** ⇒ ★★★★ its `§S1` `4.924 % → 0.379 %` is **117 655 680 accumulate steps refusing to add**: **a clip rate that falls because a term stopped being added is a REGRESSION wearing a good number.** Collateral: `§104` body-0 goes 100 % input-INDEPENDENT and **`m_rf[0x8D]` vanishes** | §227 |
 | 40 | **`P_SHIFT = 7` is the Q-consistent shift** — "`>> 6` is one bit short" | ⛔ **REFUTED §227, and the phrase had TWO meanings which are different experiments.** The core's own header records coefficients **Q1.22 (MEASURED from the firmware's scale constants)** and data Q0.23 ⇒ the Q-consistent TOTAL is **22**, which is what ships. **TIED (7/15, total still 22) is a MEASURED NO-OP** — the entire `§S1` block is BIT-IDENTICAL to the default over **269 279 999** conversions, the only differing line being the header text `>> 16` vs `>> 15`. **UNTIED (7/16, total 23) halves `m_rf[0x8D]` `0x009B26 → 0x004D93`** and *still* clips at `1.110 × FS`. ⚠⚠ **AND `§41` DOES NOT GUARD `P_SHIFT`** — it reads C-RAM *levels* `0x06`/`0x86` and is UNMOVED by a 2× product rescale; **`m_rf[0x8D] = 39 718` is the guard that fires.** Fix the three-guard phrase wherever it is quoted | §227 |
 | 41 | **`C-RAM[0x90..0xB4]` is the header's BOOT-FIXED coefficient bank** (§226 item D, in its strong form) | ⛔ **REFUTED §227 BY THE CAPTURE §226 ITSELF ASKED FOR.** A preset change **CONCERT REVERB 1 → ROOM REVERB 1** rewrites **23 cells, every one inside `0x90..0xB4` and NOTHING else in the 256-cell C-RAM**: `[00..4F]` 0 of 80, `[50..8F]` 0 of 64, the header's own walk `[90..A3]` **13 of 20**, the ladder cells `[9B..9D]` **2 of 3**. ⇒ **it is UNIT 1's per-algorithm parameter bank**; it looked fixed only because both §226 captures carried the **same** reverb. ★ The control that makes it proof-grade: an independent 45 s panel run landing on CONCERT REVERB 1 reproduces the archived cold-boot capture on **all 256 cells, 0 differ** ⇒ **the cold-boot default reverb is CONCERT REVERB 1**, so every *"CHORUS + RR1"* label in §226 names the wrong preset. ⛔ **This does NOT re-open base `0x00`** (entry 33) | §227 |
+| 42 | **The `f98` CROSS-UNIT A/B** — select GATED REVERB into unit 0 with a reverb preset in unit 1, making `012.A.00.1D5` / `212.A.00.1D5` co-resident in one frame (strategic review action 3) | ⛔ **NOT VIABLE, FROM DISK, NO BUILD.** The `f98 = 2` half sits at **`iw207`, inside body 1's third-death region, measured an EXACT ZERO on every channel in BOTH buckets across NINE archived arms** (§220 A/B/C/D, §221 A, §222 A, §223 F, §224 I, §225 K: `dp = 0xD0`, `acc 0..0`, `mem 0..0`, `L 0..0`) — **you cannot A/B a live number against a structural zero.** ★ And it is **UNNECESSARY**: `KERNEL w16 = 0192A00455` (`f98=1`) and `w17 = 0292A00455` (`f98=2`) differ in `f98` **and nothing else** and run **back-to-back in every frame of every program ever emulated**, already printed by `§104`/`§S1`/`§S2`. ⚠ Even that perfect pair is not a controlled measurement — it is a CHAIN (`iw17`'s carried term IS `iw16`'s result) and the two words necessarily read different coefficients. ⇒ **restate the closure: not *"no co-resident pair"* (falsified four ways) but *"NO DISCRIMINATOR"*.** ⚠ The review's sentence also dropped `a10 MULTI TAP DELAY`, which carries the same word | `PREDICT_F98_CORESIDENT.md`, §229 |
+| 43 | **`hi12` bit 5 via ROCK ROTARY** — `000.2.00.000` vs `020.2.00.000` co-resident in `a15`, "one program load decides whether a `nop` the disassembler prints 62 times is a `nop`" (strategic review action 6) | ⛔ **VOID BY CONFOUND, AND THE CONFOUND IS 100 % OURS.** `000.2.00.000` matches the §223 nop guard on **all four** terms (`hi12 == 0x000 && class4 == 2 && addr8 == 0x00 && lo12 == 0x000`) and is **swallowed**; `020.2.00.000` fails the first term, falls through, and runs a full `exec_alu()` that **clears and reloads the accumulator** (`acc <- 0 + (mem[dp]<<16) + P`). Under `DSPCFG = 1` it **TRAPS** and the frame is discarded instead. §223's `addr8` narrowing does not help — `000.2.00.000` has `addr8 = 0x00` too. ★★★★ **DECISIVE: `hi12` bit 5 is read in EXACTLY ONE PLACE in the whole device — that guard's `hi12 == 0x000` equality.** Remove the guard ⇒ the two words execute **bit-identically**; keep it ⇒ the difference **IS** the guard. ⇒ **the review's own kill-condition (*"measures identical ⇒ bit 5 inert"*) CANNOT FIRE** — rule 8. ⚠ Also: the pair is co-resident in **TWO** images (`a70 AUTO WAH+S.DELAY` too, and `a70` is the one with a written vehicle), and the *"ready recipe"* is `verified: false` (29 of 224 are verified). ★ **STRIKE IT, DO NOT DEFER IT** — but keep §229 §2.1: the corpus DOES constrain bit 5 (`f31 in {3,6,7}` is bit-5-only, **53 of 53** static, **0 counterexamples in 246 952 062** live executions) | §229 |
 
 ---
 
@@ -911,7 +954,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-121 sections, §97..§228.  **Read the tail first** — later sections retract earlier ones *in place*.
+123 sections, §97..§229.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -1036,4 +1079,6 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §226 | NO CHANGE SHIPPED (a from-disk refutation of the pass's own candidate, plus a positive identification that closes a nine-day-old filed open question) | ★★★★ THE HEADER'S COEFFICIENT BANK IS **FOUND**, `headerdecode.md` §7.6 IS **ANSWERED**, AND THE SHIPPED BUILD IS **ALRE | §0/§2/§3 **MEASURED and FORCED**, from two archived captures, the ROM's own |
 | §227 | REFUTED/RETRACTED | ★★★★ BOTH HALVES OF §226's PRE-REGISTERED BISECTION ARE **REFUTED**, ONE FROM DISK AND ONE BY A **MEASURED NO-OP**; AND  |  |
 | §228 | SHIPPED | ★★★★ THE DSP FRAME CLOCK WAS **48 000 Hz AGAINST AN Fs OF 44 100**, MEASURED FROM DISK BEFORE ANYTHING WAS BUILT (1 440  |  |
+| §229 | REFUTED/RETRACTED | ★★★★ THE PROJECT'S WORST CONTROL IS **REPAIRED AND TWO-SIDED**: SINGLE DELAY's `+0.02149296` NOW **ACCEPTS** THE CORRECT |  |
+| §229 | REFUTED/RETRACTED | ★★★★★ THE REVIEW'S **THREE CHEAP DECODE EXPERIMENTS**, RESOLVED. **TWO WERE REFUTED FROM DISK BEFORE ANY BUILD** (`f98`  |  |
 

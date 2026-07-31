@@ -16930,3 +16930,773 @@ unfiled, down from 112 — 8/8 self-tests). `lint_handoff.py`: **0 FAIL**, 12 IN
 
 **GRADES.** §0 items A, B, C, D, F, G, H, I **MEASURED**; item E's criterion **FORCED**;
 §7's items **pre-registered**. `dsp/verify.py`: **BYTE-MATCH OK**.
+
+---
+
+## §229 — ★★★★ THE PROJECT'S WORST CONTROL IS **REPAIRED AND TWO-SIDED**: SINGLE DELAY's `+0.02149296` NOW **ACCEPTS** THE CORRECTED MACHINE (lag **1001**, sample **45074**, PREDICTED BIT-EXACTLY FROM THE ROM's OWN COEFFICIENTS) AND **REJECTS** SEVEN DEFECTIVE ONES INCLUDING THE THREE COEFFICIENT SCRAMBLES A PRESENCE TEST CANNOT SEE. ⚠ AND THE FOUR-TIMES-COUNTED OUTPUT-STAGE NULL IS **SIX**, NOT FOUR — MEASURED AS A SET IDENTITY OVER 33 ARMS. ⛔ NOTHING WAS BUILT AND NOTHING WAS RUN: **ANOTHER LANE IS HOLDING `upd6383.cpp` UNCOMMITTED**
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-07-31**. Register head **§229**.
+**CONTROL-REPAIR pass. NO BUILD, NO MAME RUN, NO SOURCE EDIT, NO AUDIO CLAIM.** Basis:
+`CONTROL-AUDIT_findings.md` (`f601303`), which graded **38 controls 21 SOUND / 9 MIS-AIMED /
+5 CANNOT-FAIL / 3 UNTESTED**. This pass **repairs** them. Every live number below is produced by
+one of two offline instruments, both self-tested first, and both committed.
+
+---
+
+## 0. ⛔⛔ FIRST, THE THING THAT CHANGED THE SHAPE OF THE PASS — **THE LANE IS NOT MINE**
+
+My dispatch brief opened *"You HOLD THE BUILD/RUN LANE. No other agent is editing source."*
+**That is FALSE, and it was falsified during the pass, not before it.**
+
+```
+   17:2x   first `git status' in kn7000_mame      ->  CLEAN, nothing modified
+   17:25:47  src/devices/cpu/upd6383/upd6383.cpp  ->  mtime, +159 lines
+             src/devices/cpu/upd6383/upd6383.h    ->  mtime, +57 lines   (211 total)
+   17:29   dsp/analysis/data/D_229.log.gz         ->  written, UNTRACKED
+   17:30   `grep -c "§229" upd6383.cpp'           ->  10 hits
+```
+
+The uncommitted tree carries a **`§229 UPLOAD LEDGER`** and a **`§229 FABRICATED-ZERO CENSUS`**
+(`TOTAL 9 832 536 fabricated / 246 952 062 operand resolutions, 3.982 %`), and `D_229.log.gz` is
+that build's arm — **1 323 000 frames, so post-§228** — sitting untracked in the archive.
+
+**Consequences, and all three are decisions, not opinions:**
+
+1. ⛔ **NOTHING WAS BUILT, RUN, OR EDITED IN `upd6383.cpp`.** A rebuild would have raced a live
+   lane; a `git checkout` would have **wiped 211 uncommitted lines** (the standing ACUTE warning).
+   Every source-side control repair is filed to `BUILD-LANE-QUEUE.md` instead, specified to the
+   predicate. **The brief's own escape clause applies: *"a pass that ships only controls is a
+   complete success"*.**
+2. ⚠ **`D_229.log.gz` IS EXCLUDED FROM EVERY CENSUS, BY NAME AND IN PRINT.** It was produced by a
+   device nobody can rebuild from the committed repo. Grading it would have put an unattributable
+   arm inside a reproducible result. `outstage_collapse.py` names the exclusion in its source and
+   its output.
+3. ⚠⚠ **THE `§229` LABEL IS DOUBLE-BOOKED.** The other lane has already stamped `§229` into
+   **C++**, which is far more expensive to renumber than this section. **Whoever lands second
+   renumbers, and it should be this document** — it is prose only, it ships no gate, and it
+   touches no mask bit. If that pass lands, retitle this section **§230** and the only cost is a
+   `sed`.
+
+★★ **AND A GENERAL LESSON, which is why this is §0 and not an appendix:**
+`gen_ledger.py` and `gen_fixlist.py` both call themselves **DERIVED, never hand-counted** — and
+both read `upd6383.cpp` **from the working tree**. On this day that tree contained another lane's
+uncommitted work, so a routine regeneration would have silently baked 211 unreviewed lines into two
+documents whose entire authority is that they are derived. ⇒ **both now take
+`UPD6383_SRC_DIR`**, and `SHIPPED-FIX-LIST.md` was regenerated against a **pristine checkout of
+`HEAD` (`8884d88`)** extracted to a scratch directory. **A document that calls itself DERIVED must
+name the source it was derived FROM.**
+
+---
+
+## 1. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ★★★★ **THE WORST CONTROL IS REPAIRED AND IS NOW TWO-SIDED, DEMONSTRATED BOTH WAYS ON EVERY RUN.** SINGLE DELAY's harness **accepts** the corrected machine (`dram_dir` polarity, cursor `+1`, derived `p0`) at lag **1001** with sample **45074**, and **rejects** seven others: `cursor −1`, `reversed`, `reversed + cursor −1` (**the configuration the old control ACCEPTED**), the `p0 = 0` defect, and **all three coefficient scrambles**. **1 ACCEPT / 7 REJECT, 8 of 8 as expected.** | **MEASURED** |
+| **B** | ★★★★ **AND THE CRITERION IS BIT-EXACT, NOT A TOLERANCE.** The ROM's own coefficients predict the echo sample in the harness's own fixed point — `c = 0xE5762C = −0.207331`, `h = 0x400000 = +0.500000`, `((c·c) >> 23) · h >> 23 = 180 297`, `180 297 · 2²¹ >> 23 = ` **`45 074`** — and the harness measures **`45 074`**. **`+0.02149296` is SINGLE DELAY's three-factor product and it has now been evaluated, for the first time in the project.** | **MEASURED** |
+| **C** | ★★★★ **THREE DEFECTS, ALL IN THE HARNESS, NONE A PROPERTY OF ANY MACHINE.** **D1** the control leg never initialised the pointer, so the head-write word `w46` sat at `p0 − 5 = 0xFB`, a cell the harness never drives ⇒ it wrote **zero** into the line every frame, for all five enumerated input cells. **D2** `reversed + cursor −1` is a **double negation** that restores the correct addressing — the old control was not accepting a broken machine, it was **mislabelling a differently-correct one** while starving the one it called correct. **D3** `echo_energies` hard-coded `D = 500`; the taps are in **CASCADE** (`500 + 501`), so the echo is at **1001** and the window was empty — one outcome for eight configurations. **D4** there is no feedback, so the `E2/E1` ratio it computed **has no second echo to divide by**. | **MEASURED** |
+| **D** | ★★★ **THE FOUR-TIMES-COUNTED NULL IS SIX, AND IT IS NOW A MEASURED SET IDENTITY.** Over the **33 modern arms**, `§54`, `§70`, `§211`, the rule-19 mean/span line, **`§61`** and **`§104`'s EPILOGUE `D-I` tally** have the **identical move-set** — `{C_xb85_full_222, D_xb85_route_222}`, the two arms that changed the output stage itself. The audit argued four structurally; the source forces **five** and the archive demonstrates **six**. | **MEASURED** |
+| **E** | ★★★ **AND THE SOURCE FORCES IT: THEY ARE FUNCTIONS OF ONE VARIABLE AT ONE PROGRAM POINT.** In `present()`, `§70` and `§211` read **`pacc`** (differing only in `unit`), rule-19 sums the same `pacc`, `§61` reads **`v = clamp(scaled·lvl >> 23)`** and `§54`'s `m_frame_out_nz` is set from that same `v`. `§41` measures `lvl` non-zero in every arm, so `v == 0 ⟺ pacc == 0`. **This is not five checks agreeing; it is one number printed five ways.** | **FORCED** |
+| **F** | ★★★★ **YES, AN INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE EXISTS — AND IT WAS NEVER QUOTED IN THE REGRESSION ROLE.** `m_rf[0x8D]`'s move-set `{C_xb85, D_xb85, O_227, Q_227}` **STRICTLY CONTAINS** the null's. It lives **inside** the output stage (the `w61` self-loop accumulator, `§104` rows 60/61), it is two-sided, and **it has actually failed** — `0x009B26 → 0x7FFFFF` (§222 §3), **halved** to `0x004D93` in arm Q, **vanished** in arm O. ⚠⚠ **BUT IT CHECKS THE OUTPUT STAGE's ARITHMETIC, NOT ITS PRESENTED VALUE.** On the presented value there is **exactly one measurement point**, and every "still silent" the project has ever published rests on it. | **MEASURED** |
+| **G** | ★★★ **`W4′` IS CONFIRMED A SEND-STATE DETECTOR, MECHANISED: `20 of 20`.** Body-0 `D-I` is **`(0,0,0)` on 20 of 20** modern arms whose delay port returned no non-zero datum, spanning four mask defaults, the store-probe fix, `EPIBUS`, `PICKUP`, `PSHIFT` and **both LFOWRAP polarities**. It moves **only** where body 0 actually receives input: `26/28/27` (NOZ05, 7 arms), `26/23/23` (XB85, 2), `17/16/15` (SRC0B2, 2). ⚠ **NEW, and it corrects the audit's framing:** `O_227` has the delay port returning non-zero **1 175 999** times and still scores `0/0/0` — so `§46`'s non-zero count is a **delay-line-content** detector, **not a clean send-state discriminator**. ✔ **The `UPD6383_LFOWRAP` gate still survives** on `W0`/`W1`/`W2`. | **MEASURED** |
+| **H** | ★★★ **§220's *"slot for slot IDENTICAL"* — CORRECTED, WITH BOTH SPLITS ON ONE SCREEN.** The raw markers **are** equal element for element (body 0 `28/32/28` ≡ `28/32/28`, body 1 `2/1/2` ≡ `2/1/2`). Under RULE 21 they are **not**: body 0 `26/28/27` (rig) vs **`17/16/15`** (SRC0B2), body 1 `2/1/2` vs **`0/0/1`**. ★ **And the mechanism is now visible**: the SRC0B2 arm carries **11/12/12 UNDECIDABLE** body-0 slots against the rig's **2/0/0**. The two arms mark the same slots; the rig **decides** them and the calibration arm does not. ✔ **The send model survives** on §225's independent re-grade; the **corroboration does not**. | **MEASURED** |
+| **I** | ⚠ **ONE CORRECTION TO THE AUDIT ITSELF, AND IT IS SMALL.** `§41`'s level is **not** bit-identical in 31 of 31 modern arms: **`clean_vehicle_default` is a MODERN-layout arm (285 rows) carrying the pre-§188 `0x178D0A`**, which the audit attributed wholly to *"the pre-§188 legacy family"*. It is **32 of 33**. ✔ The audit's **conclusion is untouched** — that is a *vehicle/host-decode* difference, which is precisely the class `§41` **does** detect; it remains MIS-AIMED as an arithmetic guard. | **MEASURED** |
+| **J** | ⚠ **AND ONE HONEST NEGATIVE THE OLD TOOL RECORDED AND THEN IGNORED.** SINGLE DELAY's `dest07` calibration limb is **INERT** for this observable: `mem`/`tA`/`tB`/`acc` all return **45074**. The tool's own comment said *"in the presence test it did not, 4 of 4"* and it was used as a calibration anyway. It now prints as **INERT, reported not counted**. | **MEASURED** |
+
+**VERDICT — `TWO CONTROLS REPAIRED, ONE COLLAPSE PROVEN, ONE INDEPENDENT CHECK FOUND, ZERO
+BEHAVIOUR SHIPPED.` No audio claim of any kind is made.**
+
+---
+
+## 2. RULE 20 — THE SELF-TESTS, PRINTED FIRST, AND **SYNTHETIC** WHERE THEY CAN BE
+
+§228 established the clause this pass had to design around: **a control that IS the open defect is
+validated exactly once and is invalidated by its own success.** Both instruments obey it — every
+limb that could have been written against a defect this pass repaired is instead written against a
+**constructed** answer, so the self-tests **survive the repair**.
+
+```
+   dsp/tools/sd_rerun.py selftest                                      13 of 13 PASS
+     T1  x3 SYNTHETIC (lag,sample) pairs recovered: (1001,45074) (17,-3) (640,8388606)
+     T2  NEG all-zero output -> no echo
+     T3  NEG an echo at 500 is NOT visible at 1001 ... T3b ... and IS visible at 500
+     T4  cascade total lag == sum of the two taps          T5 stage order derived, [0,1]
+     T6  head write is the word whose bus is NOT the delay return
+     T7  ROM triple in Q0.23 == hand computation ((c*c)>>23)*h>>23 == 180297
+     T8  predicted echo sample for amp 1<<21 == 45074
+     T9  EXTERNAL  p0 derived for incell 0x03 == out_run's hard-coded 0x08
+     T10 NEG       p0 = 0 puts the head write at 0xFB, a cell nobody drives
+
+   dsp/tools/outstage_collapse.py                                      19 of 19 PASS
+     S1..S4  SYNTHETIC set algebra (equality, strict containment, asymmetry)
+     E1..E2  §228 arms A/B §54 buckets     E3..E5  §227 m_rf[0x8D] 009B26 / 004D93 / ABSENT
+     E6      §41 unmoved N vs Q            E7      §S1 ratios invariant across the clock change
+     E8      §46 shut vs open              E9..E10 body-0 D-I 0/0/0 shipped vs 26/28/27 rig
+     E11     epilogue 22/19/9 on XB85      E12 NEG epilogue 0/0/0 shipped
+     E13 NEG §S1 absent from A_off_220
+     E14 EXTERNAL  the audit's 31 modern arms + §228's 2 new = 33   <- two independent counts
+     E15 EXTERNAL  the legacy family is the audit's NAMED nine, unchanged
+```
+
+★ **`T9` is the sharpest limb in either tool.** `out_run` has hard-coded `p0 = 0x08` since the day
+it was written, and nobody ever asked why. The repair **derives** it — and the derivation
+reproduces `0x08` without being told. That is an external known answer produced by the tool's own
+history. **`T10` is its negative twin**, and it is the defect, stated as a number.
+★ **`E14` reconciles two counts nobody computed together**: the audit graded **31** modern arms over
+a 40-arm archive; §228 added exactly **two**; the programmatic 285-vs-320-row discriminator finds
+**33**. Neither input came from this script.
+
+---
+
+## 3. THE REPAIR, IN FULL — WHY THE CONTROL WAS **INVERTED**
+
+The audit's reproduction is exact and it reproduced here again before anything was changed:
+
+```
+   BEFORE (f601303, and again at the head of this pass)
+     CORRECTED (dram_dir, +1)     -    NO SIGNAL -- nothing came back
+     corrected, cursor -1         -    NO SIGNAL
+     round-6 defect: reversed     -    NO SIGNAL
+     reversed + cursor -1        500   ★ MATCHES the descriptor      <- the DEFECTIVE one
+     value leg, 8 configurations       NO FIRST ECHO, all eight
+```
+
+**D1 — the pointer.** The walk is `p0`-invariant modulo 256, so every delay word sits at `p0` plus a
+fixed offset. Measured, by executing the program once with no delay port attached:
+
+```
+   w0:+0   w5:+75   w9:+75   w28:+77   w32:+77   w46:-5
+```
+
+`w46` is the **head write** — the word that carries the audio into the line — and it sits at
+`p0 − 5`. `cmd_control` left `st.p` at `State`'s default `0`, putting `w46` on **`mem[0xFB]`**,
+which the harness never drives. So the corrected polarity wrote **zero** into the delay line on
+every frame, for **all five** enumerated input cells. ⇒ **`p0` and the input cell are ONE number,
+not two.** `out_run` had passed `p0 = 0x08` — exactly `0x03 + 5` — since it was written; the
+control leg never got the same treatment.
+
+**D2 — the double negation.** Reversing the polarity makes `w0` the WRITE (whose pointer **is**
+`p0`, which the harness *does* drive) and `w46` the READ; reversing the cursor sign then restores
+the same relative addressing. ⇒ ★ **The old control was not accepting a broken machine. It was
+mislabelling a differently-correct one, while D1 silently starved the machine it called correct.**
+That is why it read as *inverted* rather than as *insensitive* — and it is a distinct failure mode
+worth naming: **a control can be wrong in a way that produces a confident, specific, reproducible
+answer.**
+
+**D3 — the window.** `taps()` had always printed both pairs; the tool then called them *"a STEREO
+~11.3 ms delay"* and looked for the echo at **500**. They are in **CASCADE**, and the order is
+**derivable from the words themselves**: `w5`'s operand bus is `SRC 0x0B` — the delay *return* — so
+`w5` is fed by an earlier read and is a **later stage**; `w46`'s bus is `SRC 0x00` and is the
+**head**. ⇒ `500 + 501 = ` **`1001`**, and `echo_energies`'s `±8` window around `4 + k·500` was
+empty for every configuration ever passed to it.
+
+**D4 — the ratio.** With no feedback there is exactly **one** echo, so `E2/E1` had no second echo
+to divide by. The evaluable identity is the **first echo against the direct path**.
+
+### 3.1 THE REPAIRED CONTROL, QUOTED IN FULL
+
+```
+   configuration                  measured                                  verdict   expected?
+   CORRECTED (dram_dir, +1)       lag 1001  sample 45074  gain +0.02149296  ★ ACCEPT  ✔
+   corrected, cursor -1           NO ECHO at lag 1001                       REJECT    ✔
+   round-6 defect: reversed       NO ECHO at lag 1001                       REJECT    ✔
+   reversed + cursor -1           NO ECHO at lag 1001                       REJECT    ✔   <- was ACCEPTED
+   coefficients SCRAMBLED #1      lag 1001  sample  60691  gain +0.02893972 REJECT    ✔
+   coefficients SCRAMBLED #2      lag 1001  sample -32511  gain -0.01550245 REJECT    ✔
+   coefficients SCRAMBLED #3      lag 1001  sample -46019  gain -0.02194357 REJECT    ✔
+   p0 = 0 (the D1 defect, on purpose)  NO ECHO at lag 1001                  REJECT    ✔
+   ⇒ 1 ACCEPTED, 7 REJECTED, all 8 as expected
+```
+
+★★★ **THE THREE SCRAMBLES ARE THE PART THAT MATTERS.** They carry the ROM's own coefficients,
+shuffled among the same slots, so they **do** put an echo at exactly **1001**. **A presence test
+passes all three.** Only the *value* separates them — which is the whole reason the criterion had to
+be an **identity** and not an arrival. This is the PARAMETRIC EQ methodology (*reproduce the
+designer*) applied to the second of the three contexts whose arithmetic is known independently of
+the DSP.
+
+⚠ **AND THE HONEST NEGATIVE:** `dest07 ∈ {mem, tA, tB, acc}` all return **45074**. The ACT-0x07
+calibration limb is **INERT** for this observable and is now printed as such.
+
+---
+
+## 4. THE COLLAPSE, AS A MEASURED SET IDENTITY
+
+The audit argued the collapse **structurally**. `outstage_collapse.py` turns it into a **measured
+set identity**: for each control, the set of arms in which it differs from the shipped default.
+Two controls that are one criterion have the **same** move-set. Population **33 modern arms**,
+baseline `B_44100_228.log.gz`.
+
+```
+   control      quantity                                        moved  in which arms
+   §54          §54 TRACKING (LOUD + peak, both buckets)            2  C_xb85_full_222, D_xb85_route_222
+   §70          §70 ACCA@w73 min/max, both buckets                  2  C_xb85_full_222, D_xb85_route_222
+   §211         §211 ACCB@w78 min/max, both buckets                 2  C_xb85_full_222, D_xb85_route_222
+   rule19       §221 RULE 19 mean + AC span (§70 and §211)          2  C_xb85_full_222, D_xb85_route_222
+   §61          §61 presentation non-zero + peak, both units        2  C_xb85_full_222, D_xb85_route_222
+   epi-D-I      §104 RULE-21 D-I, EPILOGUE (rows 60..82)            2  C_xb85_full_222, D_xb85_route_222
+   ----------------------------------------------------------------------------------------
+   §41          §41 level at presentation, both units               1  clean_vehicle_default
+   rf8D         m_rf[0x8D] (§160 register dump)                     4  C_xb85, D_xb85, O_227, Q_227
+   §S1          §S1 TOTALS clip RATIOS                              7  F G H I L O Q
+   body0-DI     §104 RULE-21 D-I, body 0                           11
+   §46          §46 delay port returned non-zero                   13
+```
+
+⇒ ★★★ **SIX controls share ONE move-set.** The audit named four; **`§61` and the epilogue `D-I`
+tally are the fifth and sixth**, and both were graded **SOUND** by the audit — `§61` as *"SOUND for
+cadence"* and `B5` as *"SOUND (100 % input-dependent, correctly stated)"*. They **are** sound in
+their own roles. In the **regression role**, quoting them beside `§54`/`§70`/`§211` counts one
+check six times.
+
+★ **And the source forces five of the six**, in `present()`:
+
+```
+   §70    reads  pacc                 (unit 0)
+   §211   reads  pacc                 (unit 1)         <- the SAME LOCAL VARIABLE
+   rule19 sums   pacc                 (m_pa_sum / m_pb_sum, same hook)
+   §61    reads  v = clamp(scaled * lvl >> 23)          <- scaled is derived from pacc
+   §54    sets   m_frame_out_nz  from the same v
+```
+
+`§41` measures `lvl` non-zero in every arm, so `v == 0 ⟺ pacc == 0`. **One number, five prints.**
+The epilogue `D-I` tally is structurally distinct (a `§104` marker census, not the presented value)
+and joins the group by **demonstrated** sensitivity only — which is the weaker claim, and is stated
+as such.
+
+### 4.1 ⚠ `§54` AND `§70`/`§211` — MEAN AND AC SPAN, BOTH BUCKETS, EVERY ARM
+
+**⚠⚠ THESE ARE ONE CRITERION, NOT FOUR.** Reported in full because the standing rule requires it,
+and with the warning attached because the standing rule has been producing a false sense of
+coverage. Full table: `dsp/analysis/data/OUTSTAGE_COLLAPSE_229.txt` §4.
+
+```
+   ALL 20 SEND-SHUT MODERN ARMS, AND 11 OF THE 13 SEND-OPEN ONES, ARE THE SAME LINE:
+      §54   quiet-in N -> N SILENT / 0 LOUD (peak 0)  |  loud-in M -> M silent / 0 loud (peak 0)
+      §70   ACCA@w73   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+      §211  ACCB@w78   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+
+   THE ONLY TWO ARMS THAT MOVE IT, AND THEY ARE THE TWO THAT CHANGED THE OUTPUT STAGE:
+      C_xb85_full_222   §54 q826040->826040 LOUD pk 8388607 | l313960->313960 LOUD pk 2692742
+                        §70  A quiet mean 352 943 168 421.0 span 0 | loud mean 352 935 830 162.3 span 329 906 836 205
+                        §211 B quiet mean 1 212 718 186 496.0 span 0 | loud mean 1 212 708 031 370.7 span 1 207 096 377 344
+      D_xb85_route_222  §54 identical | §70 identical | §211 B loud span 1 245 317 496 832
+
+   ⚠ QUIET SPAN 0 WITH A MEAN OF 3.5e11 IS RULE 19's OWN DEFINITION OF A DC. Even the two arms
+     that move the null do NOT produce audio by rule 19 — they produce a rail.
+```
+
+⚠ **AND THE POPULATIONS ARE NOT THE SAME POPULATION.** `§54` arms at frame **300 000** and
+`§70`/`§211`/`§S1`/`§104` at **420 000**: a **shared predicate over different frame sets**. On arm
+`N_227`, `§54` counts **826 040** quiet frames where `§70` counts **706 040** — all **120 000** of
+the difference is quiet, since the loud count `313 960` is identical. **Never compare their counts
+directly** (the audit's brief-error #5, verified here on arm N).
+
+### 4.2 ★★★★ IS THERE AN INDEPENDENT SECOND CHECK ON THE OUTPUT STAGE? **YES — AND IT WAS NEVER QUOTED**
+
+```
+   control    moved   vs the null   verdict
+   rf8D          4    STRICT ⊃      ★ INDEPENDENT and strictly stronger   <- INSIDE the output stage
+   §46          13    STRICT ⊃      independent, but upstream (the send)
+   body0-DI     11    STRICT ⊃      independent, but upstream (body 0)
+   §S1           7    disjoint      independent, upstream
+   §41           1    disjoint      independent, host-decode
+```
+
+**`m_rf[0x8D]` is the answer.** It reads the `w61` **self-loop accumulator** — `§104` rows 60/61,
+inside the epilogue — so it lives in the output stage; its move-set **strictly contains** the
+null's; and it has **actually failed**: `0x009B26 → 0x7FFFFF` in §222 §3, **halved** to `0x004D93`
+in arm Q, **absent** in arm O. It is two-sided, demonstrated in three directions, and **it was
+never once quoted in the regression role while four copies of the null were.**
+
+⚠⚠ **BUT THE ANSWER HAS TO BE STATED PRECISELY, AND THE PRECISE VERSION IS UNCOMFORTABLE.**
+`m_rf[0x8D]` checks the output stage's **ARITHMETIC**. On the **presented value** — the thing
+"still silent" is actually a claim about — there is **exactly one measurement point in the device**,
+and `§54`, `§70`, `§211`, rule-19 and `§61` are five prints of it. ⇒ **every "the output stage is
+still a null" this project has published rests on a SINGLE measurement**, and the four-row batteries
+quoted beside it have never been corroboration. `§216` makes that null *believable* by feeding it;
+it does not make it *independently measured*.
+
+---
+
+## 5. `W4′` — THE EVIDENCE, RESTATED HONESTLY AND MECHANISED
+
+`W4′` is the falsifier row that shipped **`UPD6383_LFOWRAP`** (§224/§225): *"body 0 `D-I`
+`0/0/0 → 0/0/0`"*.
+
+```
+   body-0 RULE-21 D-I over the 33 modern arms, split by whether body 0 saw any input:
+
+     20 of 20  arms whose delay port returned NO non-zero datum   ->  (0, 0, 0)   ALL OF THEM
+                A_48000_228 A_epibus_221 A_off_220 A_pickup_222 B_44100_228 B_mirror06_220
+                F_satcen_223 I_s2_224 J_lfowrap_224 K_lfowrap_default_225 L_lfowrap_off_225
+                M_s3_census_225 N_227 P_227 Q_227 drpub_A_off_217 drpub_B_on_217
+                kernelA_213 outstage_211 src0b2_A_off_215
+
+     and where body 0 DOES receive input it moves, four ways:
+                (26,28,27)  NOZ05 rig, 7 arms      (26,23,23)  XB85, 2 arms
+                (17,16,15)  SRC0B2, 2 arms         (0,0,0)     O_227, clean_vehicle_default
+```
+
+⇒ **`W4′` IS A SEND-STATE DETECTOR, NOT AN ARITHMETIC ONE.** Those 20 arms span **four different
+mask defaults**, the store-probe fix, `EPIBUS`, `PICKUP`, `PSHIFT`, `NOCARRY` and **both LFOWRAP
+polarities**. Within the class `LFOWRAP` belongs to — an arithmetic change made with the send shut —
+**it has no reachable failure**. §225's defence (*"the XB85 arms score `26/23/23` on the same
+instrument"*) names an arm in a **different class**.
+
+⚠ **NEW, AND IT CORRECTS THE AUDIT'S OWN FRAMING:** `O_227` has the delay port returning non-zero
+**1 175 999** times and still scores `0/0/0` — because `NOCARRY` takes body 0 to 100 %
+input-INDEPENDENT (§227 measured exactly that). ⇒ **`§46`'s non-zero count is a
+DELAY-LINE-CONTENT detector, not a clean send-state discriminator.** Two mechanisms produce
+`0/0/0` and the tally cannot tell them apart. Quote the rig, not the port.
+
+✔ **THE GATE SURVIVES, AND THE SHIPPED-FIX LIST IS UNCHANGED BY THIS RESTATEMENT.** `W0` (fired
+**1 176 960**, one slot), `W1` (`§S1` moves by **exactly** `−706 040` / `−313 960`) and `W2`
+(`§119 iw94` becomes a `+114`/frame ramp — §225's own *"the decider"*) are two-sided, sensitive and
+**did move**. What changes is the **published strength**: the battery reads as **11 of 11** and is
+really **6 of 11 plus `m_rf[0x8D]`**. `SHIPPED-FIX-LIST.md` is derived from the source's **gate
+declarations**, and `W4′` appears nowhere in the source — so the restatement **cannot** move it.
+Verified: regenerated against pristine `HEAD`, the only diff is **§228's** own row, which was
+already stale.
+
+---
+
+## 6. §220's *"SLOT FOR SLOT IDENTICAL"* — CORRECTED, WITH THE MECHANISM
+
+`dsp/tools/rule21_all.py data/C_noz05_220.log.gz data/src0b2_B_on_215.log.gz`, one screen:
+
+```
+   log                       region    acc  n = I + FREE + UND   mem  n = I + FREE + UND   L    n = I + FREE + UND
+   C_noz05_220     (the RIG) body0     28 =  26 +   0 +   2      32 =  28 +   4 +   0      28 =  27 +   1 +   0
+   src0b2_B_on_215 (§215)    body0     28 =  17 +   0 +  11      32 =  16 +   4 +  12      28 =  15 +   1 +  12
+   C_noz05_220               body1      2 =   2 +   0 +   0       1 =   1 +   0 +   0       2 =   2 +   0 +   0
+   src0b2_B_on_215           body1      2 =   0 +   0 +   2       1 =   0 +   0 +   1       2 =   1 +   0 +   1
+```
+
+✔ **The raw-marker claim is LITERALLY TRUE** — `28/32/28 ≡ 28/32/28`, `2/1/2 ≡ 2/1/2`, element for
+element. ⚠ **The proof-grade content is NOT**: body 0 **`26/28/27` vs `17/16/15`**, body 1
+**`2/1/2` vs `0/0/1`**.
+★ **AND THE MECHANISM IS NOW VISIBLE, WHICH THE AUDIT DID NOT HAVE:** the difference is entirely
+**UNDECIDABLE** slots — `11/12/12` on the calibration arm against `2/0/0` on the rig. **The two arms
+mark the same slots; the rig DECIDES them and the calibration arm does not.** The correct wording is
+*"the same slots, with different proof-grade content"* — **never** *"the rig delivers the same
+signal"*.
+✔ **The send model survives** on §225's independent re-grade of the rig (`26/28/27` proof-grade
+against a `0/0/0` null). **The cross-arm corroboration does not.**
+
+⚠ **AND THE IDENTICAL TRAP APPLIES TO BODY 1's `2/1/2`, WHICH NO DOCUMENT RECORDED.** The same raw
+`2/1/2` grades `2/1/2` on the NOZ05 family and **`0/0/1`** on `src0b2_B_on_215` and
+`drpub_C_on_src0b2_217`. ⛔ **NEVER QUOTE A `§104` TALLY WITHOUT ITS ARM *AND* ITS `D-I` SPLIT** —
+this is RULE 21, and `26/28/27` was only ever half the warning.
+
+---
+
+## 7. THE REMAINING MIS-AIMED ENTRIES — DISPOSITION, IN THE AUDIT's RANKED ORDER
+
+| # | control | class | disposition in §229 |
+|---|---|---|---|
+| **C3/C4** | SINGLE DELAY `+0.02149296` | MIS-AIMED (inverted) | ✅ **REPAIRED, two-sided, §3.** The citation is restored, with the criterion restated as **lag 1001 / sample 45074** |
+| **B6** | §220's *"slot for slot IDENTICAL"* | MIS-AIMED | ✅ **CORRECTED, §6**, with the undecidable-slot mechanism added |
+| **B3** | `W4′` | MIS-AIMED | ✅ **RESTATED, §5**, mechanised at 20 of 20; the gate survives |
+| **B4** | body 1's `2/1/2` without its arm | MIS-AIMED | ✅ **RECORDED, §6**, and folded into RULE 21's standing form |
+| **A5–A8** | `§54`/`§70`/`§211`/rule-19 | CANNOT-FAIL | ✅ **COLLAPSED to one, §4**, and the collapse is measured, not argued. Kept as the output-stage watch they are |
+| **A1** | `§41` as a scaling guard | MIS-AIMED | ✅ standing correction already carried by §227 + queue item 10; **§229 adds the arm** (`clean_vehicle_default`, item I) |
+| **A4** | `§221 F3` as corroboration | MIS-AIMED | ✅ **DOCUMENTED**: `w72`'s `L = 4 194 304 = 0x400000 = m_rf[0x06]` — `§41`'s unit-0 level and `F3`'s `L` are **one number read twice**, a second *route*, not a second *datum* |
+| **C1** | `dsp/verify.py` as a gate falsifier | CANNOT-FAIL | ✅ **DEMOTED**: it reads `original_ROMs/*.rom` and `dsp/disasm/*.dsm` and **cannot see `upd6383.cpp` at all**. Keep as a repo invariant; **do not count it as a falsifier row.** For a device change the equivalent is **D1**, the diff-line control |
+| **A15** | `§S3`'s *"EXTERNAL"* control | MIS-AIMED | ⚠ **CONFIRMED FROM COMMITTED SOURCE, and the source ADMITS IT**: `if (mode != 1 && dest == 0x06) s3_boot(...)` and the mask-bit-26 site immediately below carry the **same expression at the same hook**, under a comment that calls the identity *"deliberate"*. It validates **counter plumbing**; it cannot detect a wrong predicate, `pre`, epoch-0, ladder or verdict. **Replacement queued** (§176's `06:8388607(0..8388607/chg1100)`, or `§104` row 19's `acc` — both already printed) |
+| **A11** | `§S1 CONTROL (must be clips = 0)` | MIS-AIMED | ⚠ **SOURCE PRINT-TEXT. QUEUED.** Restate as *"`iw34`'s pre-clamp quiet value must equal **14 428 403**"* — a number the same line already prints, which moved to `9 311 353` (Q) and `8 388 608` (O) |
+| **A19** | `§44` tap-table fetches | UNTESTED | ⚠ **SOURCE PRINT-TEXT. QUEUED.** `0` in 40 of 40 arms; print it as *"0 — UNTESTED in this vehicle"* the way `§NG` already does |
+| **A2** | `§41` LEVEL GUARD (mask bit 5) | UNTESTED | ⚠ **NEEDS ONE ARM. QUEUED.** Until then quote it as UNTESTED, never as clean |
+| **A17** | `§S3-C4` | UNTESTED | ⚠ **NEEDS ONE ARM. QUEUED.** Clear mask bit 23 once to show the count *can* be non-zero |
+| **D1** | the diff-line control | SOUND ⚠ | ⚠ **UNIT STILL UNFIXED. QUEUED.** `K1`'s *"7"* reproduces as neither 6 nor 12; state one-sided or both-sided |
+
+⛔ **All five queued items are SOURCE changes and this pass would not make one** (§0). Each is
+filed to `BUILD-LANE-QUEUE.md` **by predicate, not by line** — the guard that moved
+`:4059 → :4075 → :4538` in one day is why.
+
+---
+
+## 8. WHAT THIS PASS IS BLIND TO
+
+* **It ran nothing.** Every live figure is read out of the **42 committed archived arms** and two
+  offline instruments. No claim here is about audio, and the wet path still measures exactly zero.
+* **A move-set is DEMONSTRATED sensitivity, not PROVED sensitivity.** A control unmoved in 33 arms
+  has never fired; that is not the same as *cannot* fire. Where the source forces the conclusion
+  (§4, item E) it is graded FORCED; elsewhere it is graded MEASURED and the population is named.
+* **The move-set method is baseline-relative.** It is computed against `B_44100_228`, the shipped
+  default. A control that is wrong *in the same way in every arm* is invisible to it — which is
+  precisely how `§196` survived for weeks (§228) and is the one failure mode this method shares
+  with the thing it audits.
+* **`§104`'s epilogue tally joins the collapsed group by demonstration only.** Structurally it is a
+  different quantity from `pacc`; it may separate on an arm nobody has run.
+* ⛔ **The five queued source repairs are UNVERIFIED** — they are specified, not measured. Whoever
+  ships them owes the diff-line control (`D1`) on the arm that certifies them.
+* ⚠ **`D_229.log.gz` was excluded**, so if that lane's instrumentation lands, its arms re-enter the
+  population and every move-set count in §4 must be recomputed. The tool does it in one command.
+
+---
+
+## 9. THE NEXT EXPERIMENT, PRE-REGISTERED
+
+1. ⛔ **THE BLOCKER IS UNCHANGED: *what does the coefficient base `0x90` MEAN*** (queue item 12).
+   §229 did not touch it — but it **repaired the falsifier that item was pre-registered against**.
+   The list now reads: **`§S3`'s ladder** (sound), **SINGLE DELAY's lag-1001 / sample-45074
+   identity** (repaired, two-sided), **`m_rf[0x8D] = 0x009B26`** (sound, and the guard that fires),
+   and **`§S1`'s `4.924 %` rate**. ⛔ **`§41` is struck from it** (§227), and ⛔ **`§54`/`§70`/`§211`
+   count as ONE row, not four** (§229 §4).
+2. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS** (queue item 13), one command each, no build.
+3. ★★ **SHIP THE FIVE QUEUED CONTROL REPAIRS** when the lane is uncontested — A11, A15, A19, A2,
+   A17 — as **one** arm, certified by `D1`.
+4. ⛔ **DO NOT re-add a fourth copy of the output-stage null to any falsifier list.** If a pass
+   needs a second check on the output stage, the answer is **`m_rf[0x8D]`**, and if it needs a
+   check on the presented *value*, **there is only one and it must be quoted as one.**
+
+**GRADES.** §1 items A, B, C, D, F, G, H, I, J **MEASURED**; item E **FORCED**; §7's five queued
+repairs **specified, unrun**; §9 **pre-registered**.
+⛔ `dsp/verify.py` **NOT RUN AS A GATE** — §229 changed no ROM, no `.dsm` and no device source, and
+the audit's **C1** established it cannot see `upd6383.cpp` at all. Quoting it here would be the
+exact CANNOT-FAIL row this pass exists to retire.
+
+## §229 — ★★★★★ THE REVIEW'S **THREE CHEAP DECODE EXPERIMENTS**, RESOLVED. **TWO WERE REFUTED FROM DISK BEFORE ANY BUILD** (`f98` NOT VIABLE, `hi12` bit 5 VOID BY CONFOUND). THE THIRD RAN AND IS **LOAD-BEARING**: **28.492 % OF THE EPILOGUE'S OPERANDS ARE ZEROS *WE* INVENT**. AND THE REFUTED ONE PAID FOR ITSELF — ITS REPLACEMENT CENSUS FINDS **`f31 ∈ {3,6,7}` IS `hi12`-BIT-5-ONLY, 0 COUNTEREXAMPLES IN 246 952 062 EXECUTIONS, AT EXACTLY FOUR SITES: `w63 w70 w75 w78` — THE OUTPUT STAGE'S FOUR UNDECODED WORDS**
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-07-31**. Register head **§229**.
+Build lane. **NO DEFAULT BEHAVIOUR CHANGE. NO DECODE CHANGE. NO MASK BIT.** Three read-only,
+unconditional instruments. Source of the task: `STRATEGIC-REVIEW-2026-07-31.md` **§6.4** —
+*"Three cheap decode experiments are available and unrun"* — and its ranked action 6.
+
+| arm | what | log |
+|---|---|---|
+| **C** | the first two instruments | *superseded by D — one attribution defect, §1.3* |
+| **D** | corrected | `data/D_229.log.gz` |
+| **E** | **+ the `f31` × bit-5 census** — the final build | `data/E_229.log.gz` |
+
+Read-only companions, **no lane**: `PREDICT_F98_CORESIDENT.md` (`1ed20e9`) and the ROCK ROTARY
+audit in §2 below. Vehicle unchanged from §228 (`coldnotes2.lua`, cold boot, isolated NVRAM,
+`:DSPCFG value="3"`, triad C4/E4/G4 21.02–27.51 s, `-seconds_to_run 30`, `-log`, visible video,
+one run at a time, **the §228 44 100 Hz clock**). `dsp/verify.py`: **BYTE-MATCH OK**.
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ⛔ **EXPERIMENT 1 — `f98` CROSS-UNIT A/B — IS *NOT VIABLE*, AND NEEDED NO BUILD.** The `f98 = 2` half sits at **`iw207`, in body 1's third-death region, an EXACT ZERO on every channel in both buckets across NINE archived arms**. You cannot A/B a live number against a structural zero. ★ And it is **unnecessary**: `KERNEL w16 = 0192A00455` (`f98=1`) and `w17 = 0292A00455` (`f98=2`) differ in `f98` **and nothing else**, run **back-to-back in every frame of every program**, and are already printed by `§104`/`§S1`/`§S2`. ⇒ `f98`'s closure is **restated**: not *"no co-resident pair"* (falsified four ways) but **"no discriminator"**. | **MEASURED**, from disk |
+| **B** | ⛔ **EXPERIMENT 2 — `hi12` BIT 5 VIA ROCK ROTARY — IS *VOID BY CONFOUND*, AND THE CONFOUND IS 100 % OURS.** `000.2.00.000` matches the §223 nop guard on **all four** terms and is **swallowed**; `020.2.00.000` has `hi12 = 0x020 ≠ 0x000`, so it falls through to a **full `exec_alu()` that clears and reloads the accumulator** (`acc ← 0 + (mem[dp]<<16) + P`). Under `DSPCFG = 1` it **traps** and the whole frame is discarded instead. ★★★★ **And the decisive fact: `hi12` bit 5 is read in EXACTLY ONE PLACE in the entire device — that guard's `hi12 == 0x000` equality.** Remove the guard and the two words execute **bit-identically**; keep it and the difference **is** the guard. ⇒ ⚠ **the review's own kill-condition (*"measures identical ⇒ bit 5 inert"*) CANNOT FIRE.** | **FORCED**, from source |
+| **C** | ★★★★★ **BUT THE REFUTED EXPERIMENT PAID FOR ITSELF, AND THIS IS THE PASS'S BIGGEST RESULT.** The corpus constrains bit 5 even though our model does not read it: **`f31 ∈ {3,6,7}` occurs ONLY with bit 5 set — 53 words, 53 of 53**; in classes 2/8/A `bit5 = 0` admits only `f31 ∈ {0,1,2,4,5}` while `bit5 = 1` admits **all eight**; and bit 5 is mutually exclusive with `f98` on class-2 words **142 of 142**. The new census tests that **dynamically**: `f31 ∈ {3,6,7}` with `bit5 = 0` fires **0 times in 246 952 062 executions**, and with `bit5 = 1` fires **4 424 994**. **Zero counterexamples, six orders of magnitude beyond the static claim.** | **MEASURED** |
+| **D** | ★★★★★ **AND THE FOUR SITES ARE THE OUTPUT STAGE'S FOUR UNDECODED WORDS.** `iw63 (f31=3)`, `iw70 (f31=3)`, `iw75 (f31=7)`, `iw78 (f31=6)` — **all four in the epilogue**, and they are precisely the words the disassembly cannot name: `w63`/`w70` are the annotated *"symmetric pair"* (`2A7.9.05.1C3` / `2A6.1.85.0C7`), `w75` is *"class 8: post-sum step (rescale/round/saturate?), **OPERATION UNKNOWN**"*, and `w78` is **the machine's ONLY class-D word, where `§211` measures `ACCB`**. ⚠ **Our model routes all four through `op = f31 & 3`** — `6 → 2` (HOLD, *no product*) and `3`/`7 → 3` (given HOLD's behaviour, §227 item A) ⇒ **all four of the output stage's distinctive words are executed as "hold, no product".** | **MEASURED** |
+| **E** | ★★★★★ **EXPERIMENT 3 — THE FABRICATED-ZERO CENSUS — RAN, AND IT LANDS ON THE SAME WORD.** `src_term()`'s `default:` fabricates a zero for every SRC code with no reading: **9 832 536 / 246 952 062 operand resolutions = 3.982 %**. ★ The per-REGION split is the finding: kernel A **0.000 %**, kernel B **0.000 %**, body 1 **0.000 %**, body 0 **8.772 %**, **EPILOGUE 28.492 %** (`4 427 640 / 15 539 958`). **More than a quarter of the output stage's operands are zeros this emulator invents** — and **`w78`'s ONLY operand is one of them**, `1 106 028` times ≈ once per running frame. | **MEASURED** |
+| **F** | ★★★★★ **SO TWO INDEPENDENT, PREVIOUSLY-UNSTATED DEFECTS LAND ON `w78` — THE WORD THIS PROJECT'S HEADLINE NULL IS MEASURED AT.** Its operation code `f31 = 6` is collapsed to "hold, no product", **and** its only operand is a zero we invent. ⚠ **`w73` IS NEITHER**: it resolves `SRC 0x10` = the accumulator, and `f31` is not in the bit-5 family. ⇒ **`§70`'s null and `§211`'s null DO NOT HAVE THE SAME EVIDENTIAL STATUS, and nobody has ever said so.** | **MEASURED** |
+| **G** | ★★★★ **ONE PUBLISHED NULL IS NOW 100 % ATTRIBUTED TO US.** `m_rf[0x8C]`: **1 108 254 stores, 0 non-zero** — and its writer `iw68`'s only operand is a fabricated zero. ⚠ `m_rf[0x8D]` is **not** in that class (`2 187 849` stores, `1 080 450` non-zero, from a third site) ⇒ **§227's calibration guard `m_rf[0x8D] = 0x009B26` SURVIVES.** | **MEASURED** |
+| **H** | ★★★★ **THE CENSUS PASSED TWO EXTERNAL KNOWN-ANSWER CONTROLS, 7 OF 7.** Rescaled to the pre-§228 48 000 Hz clock, all six per-code counts reproduce the review's independently-derived figures **to the digit** (`1 204 800 / 1 205 760 / 1 204 800 / 1 203 840 / 4 705 920 / 1 176 960`, total **10 702 080.0**). And the review's separate claim *"`f31 = 4` fires **zero** times in the clean vehicle"* is reproduced: **`f31 = 4` is 0 in both bit-5 rows.** | **MEASURED** |
+| **I** | ★★★★ **THE UPLOAD LEDGER ENDS AN INFERENCE, AND MATCHES THE OFFLINE CORPUS 4 OF 4.** **12 runs, 8 distinct images**, all inside §38's boot window: `I-RAM[0..59] 60 w` = **KERNEL (60)**; `[60..82] 23 w` = **EPILOGUE (23)**; `[84..153] 70 w` = `programs.tsv` row 1 **CHORUS, unit 0, load 84, 70 words**; `[200..332] 133 w` = row 16 **ROOM REVERB 1, unit 1, load 200, 133 words**. ★ The four single-word runs at `I-RAM 64`/`71` are exactly what the epilogue's own header predicts (*"EXACTLY TWO of its words are ever rewritten by the host"*). | **MEASURED** |
+| **J** | ★★★ **AND A STRUCTURAL FACT FALLS OUT FREE: `I-RAM[154..199]` IS NEVER UPLOADED.** `pw_name()` calls body 0 *"iw 84..199"* — **116 slots** — while the resident image is **70 words at `[84..153]`**. **Every body-0 census this project has published has a 46-slot tail nobody has declared.** | **MEASURED** |
+| **K** | ★★★★ **TWO INDEPENDENT INSTRUMENTS AGREE TO THE FRAME.** The ledger puts CHORUS's upload at frame **242 550**; §228's LFO RISE CENSUS reports *"first rise at frame **242 550**"*. Neither knows the other exists ⇒ **the LFO phase begins advancing on exactly the frame the unit-0 body's image lands.** | **MEASURED** |
+
+**VERDICT — `THREE INSTRUMENTS SHIP; NO DECODE MOVES; NO DEFAULT FLIPS; NO AUDIO CLAIM.`**
+★★ **Two of the three "cheap experiments" were killed from disk before a build** — the §226/§227/§228
+pattern, third occurrence in four days — **and the killed one produced the first falsifiable
+hypothesis `hi12` bit 5 has ever had.**
+
+---
+
+## 1. RULE 20 — THE SELF-TESTS AND THE **FAILED** CONTROL, PRINTED FIRST
+
+### 1.1 The pair-finder, validated blind — 12 of 12
+
+Before any bit-5 claim, the detector reproduced `CORPUS-PATTERNS-SPECULATIVE.md` §2.3's **published**
+table blind (`MALFORMED = {79,88,89,90,91}` excluded), including its own named control
+(`hi12` bit 7 = **12** pairs / **3** co-resident / **9** images):
+
+```
+   distinct 36-bit words: 759  (published 759)   ✔
+   bit:     0   1   2   3   4   5   6   7   8   9  10  11
+   pairs:   0   6   6  10  23   2   0  12   1   4   2   0   ✔ 12 of 12
+   co-res:  0   3   1   2   4   1   0   3   0   0   0   0   ✔ 12 of 12
+   images:  0  11   3   4  10   2   0   9   0   0   0   0   ✔ 12 of 12
+```
+
+### 1.2 The fabricated-zero census, against an EXTERNAL answer — 6 of 6, and it could have failed
+
+```
+   code   §229 @44100    x48000/44100     review's independent figure   match
+   0x01     1 106 910       1 204 800              1 204 800             ✔
+   0x05     1 107 792       1 205 760              1 205 760             ✔
+   0x06     1 106 910       1 204 800              1 204 800             ✔
+   0x0A     1 106 028       1 203 840              1 203 840             ✔
+   0x13     4 323 564       4 705 920              4 705 920             ✔
+   0x1C     1 081 332       1 176 960              1 176 960             ✔
+   TOTAL    9 832 536      10 702 080.0           10 702 080             ✔ EXACT
+```
+
+★★ Two instruments, two clocks, different authors, same numbers — and the rescale factor that
+makes them agree is **§228's measured frame-clock ratio**, so this double-confirms §228 as well.
+⚠ It also confirms the review's own correction: the *"14.7 M"* figure circulating elsewhere is
+**37 % high**.
+
+### 1.3 ⚠ THE CONTROL THAT **FAILED**, ON THE ONE DISTINCTION THE INSTRUMENT EXISTS TO DRAW
+
+Arm **C**'s upload ledger labelled its last image **`★ RUNTIME — an effect was selected`** at frame
+`1 323 000` — **the last frame of the run**. `upl_flush()` stamped a run with the frame it was
+*flushed* (from `dump_frame_report()`, i.e. at exit) instead of the frame its **last word arrived**.
+⇒ **a BOOT upload reported as a runtime effect selection**, which is precisely the inference the
+instrument was built to replace. Fixed (`m_upl_frame`, recorded per word); arm D reports **8 of 8
+as `boot`** with monotone, plausible frames. **Reported out loud, per rule 20's last clause.**
+⚠ Arms C and D are otherwise `diff`-identical on every fabricated-zero and per-region line.
+
+---
+
+## 2. EXPERIMENT 2, KILLED FROM DISK — AND WHAT IT LEFT BEHIND
+
+The pair reproduces exactly: `000.2.00.000` **62 occurrences / 15 images**, `020.2.00.000`
+**2 / 2**, `XOR = 0x20000000`, **popcount 1**, bit 29 = `hi12` bit 5, all 35 other bits equal.
+
+⚠ **TWO OMISSIONS IN THE REVIEW'S SENTENCE.** (a) The co-residency is in **two** images, not one —
+`a70 AUTO WAH+S.DELAY` carries the pair as well as `a15 ROCK ROTARY`, and `a70` is the image with a
+**three-route-confirmed vehicle already written** (`PREDICT_S1_hi12_bench.md` §2, TYPE 28, PASS
+fingerprint 527 bytes / `I-RAM[84..188]`). (b) The recipe the review calls *"ready"* is
+`SoundDSP/RockRotary/Standard`, entry 155 of 224, **`verified: false`** — only 29 of 224 are
+verified. ⚠ **Same omission shape as the `f98` sentence**, which `PREDICT_F98_CORESIDENT.md`
+already flagged: **the review's minimal-pair sentences drop one image each time.**
+
+**Why it is void** — the live predicate, cited as a predicate:
+
+```
+   else if (hi12(word) == 0x000 && class4(word) == 2
+         && addr8(word) == 0x00 && lo12(word) == 0x000)   -> nop, and addr8 = 0 so even
+                                                             the surviving m_dp += addr8 is a no-op
+   else  -> exec_alu(word)                                -> acc <- 0 + (mem[dp]<<16) + P
+```
+
+`000.2.00.000` matches all four terms; `020.2.00.000` fails the first. §223's `addr8 == 0x00`
+narrowing **does not help** — `000.2.00.000` has `addr8 = 0x00` too.
+★★★★ **And `hi12` bit 5 is read NOWHERE ELSE IN THE DEVICE.** Remove the guard ⇒ the two words are
+bit-identical. Keep it ⇒ the difference **is** the guard. There is no third possibility, so no
+configuration of this emulator can say anything about the chip from this pair.
+
+### 2.1 ★★★★★ WHAT THE CORPUS SAYS ABOUT BIT 5 ANYWAY — AND WHAT THE MACHINE SAYS BACK
+
+Five measured distribution facts, none previously recorded:
+
+1. **`f31 ∈ {3, 6, 7}` occurs ONLY with bit 5 set — 53 words, 53 of 53**, zero counterexamples in 3057.
+2. In classes 2/8/A: `bit5 = 0` admits `f31 ∈ {0,1,2,4,5}` only; `bit5 = 1` admits **all eight**.
+3. Bit 5 is **mutually exclusive with `f98`** on class-2 words, **142 of 142**; corpus-wide 168 of 172.
+4. **50 of the 52** distinct bit-5-set words have **no** bit-5-clear partner anywhere.
+5. `KERNEL` carries 2 bit-5 words and `EPILOGUE` 5; **none of the seven has a partner in the corpus.**
+
+⇒ **SPECULATIVE, and the first FALSIFIABLE hypothesis bit 5 has ever had: `hi12` bit 5 EXTENDS THE
+OPERATION FIELD**, `(bit5, f31)` acting as a 4-bit selector whose codes 3/6/7 are reachable only
+with bit 5 set. It comes from the ROM, not from our dispatch table.
+
+**And the machine confirms the constraint far beyond the corpus:**
+
+```
+   §229 f31 x hi12-BIT-5 CENSUS, one 30 s run, 246 952 062 ALU executions
+   bit5 = 0 :  f31=0:114 705 864  f31=1:106 983 954  f31=2:18 619 020
+               f31=3:0   f31=4:0   f31=5:1 112 202   f31=6:0   f31=7:0
+   bit5 = 1 :  f31=0:  1 106 028  f31=1:0            f31=2:0
+               f31=3:2 212 938   f31=4:0   f31=5:0   f31=6:1 106 028  f31=7:1 106 028
+```
+
+★★★★★ **`f31 ∈ {3,6,7}` with `bit5 = 0`: ZERO, in 246 952 062 executions.** The static 53-of-53
+rule holds **dynamically with no counterexample**, six orders of magnitude beyond the corpus claim.
+★ **And `f31 = 4` is 0 everywhere**, reproducing the review's independent statement exactly.
+
+### 2.2 ★★★★★ THE FOUR SITES ARE THE OUTPUT STAGE'S FOUR UNDECODED WORDS
+
+```
+   iw63  02A79051C3  2A7.9.05.1C3  f31=3  "unit-0 half of a symmetric pair with w70"
+   iw70  02A61850C7  2A6.1.85.0C7  f31=3  the unit-1 half of that pair
+   iw75  082E80F000  82E.8.0F.000  f31=7  "class 8: post-sum step (rescale/round/
+                                           saturate?), OPERATION UNKNOWN"
+   iw78  0A3CD9F287  A3C.D.9F.287  f31=6  the machine's ONLY class-D word
+                                          -- and where §211 measures ACCB
+```
+
+**All four are in the epilogue. All four are words the disassembly cannot name. All four carry the
+bit-5-only operation family. And our model executes all four as `op = f31 & 3`** — `6 → 2` = HOLD
+*without a product*, `3` and `7 → 3` = given HOLD's behaviour (§227 item A). ⇒ **every distinctive
+word of the output stage does nothing arithmetically in this emulator.**
+
+⚠⚠ **THIS IS NOT A LICENCE TO IMPLEMENT ANYTHING.** It is a coincidence of populations that is now
+measured instead of unnoticed. §227's guard applies with full force: *a clip rate that falls
+because a term stopped being added — or because a coefficient became somebody else's — is a
+REGRESSION.* Any reading for `f31` 3/6/7 must be **env-gated, default OFF, two-sided, with an
+unconditional fired count**, and must leave `m_rf[0x8D] = 0x009B26`, PARAMETRIC EQ's **0.198 dB**
+and SINGLE DELAY's `+0.02149296` intact. **See §7.1 for the pre-registration.**
+
+---
+
+## 3. EXPERIMENT 3 — THE FABRICATED ZEROS, PER REGION
+
+```
+   region                    fabricated /   all operands   share
+   kernel A  (iw 0..49)               0 /     43 415 568    0.000 %
+   kernel B  (iw 50..59)              0 /      6 514 452    0.000 %
+   body 0    (iw 84..199)     5 404 896 /     61 618 284    8.772 %
+   body 1    (iw 200..332)            0 /    119 863 800    0.000 %
+   epilogue  (iw 60..82)      4 427 640 /     15 539 958   28.492 %   <- THE OUTPUT STAGE
+   TOTAL                      9 832 536 /    246 952 062    3.982 %
+```
+
+★★★★ **The distribution is the finding, not the total.** The two regions this project has spent the
+most passes calling *"zero"* — body 0 and the epilogue — are **the only two receiving invented
+zeros at all**, and the epilogue receives them at **28.5 %**. Kernel A, kernel B and body 1 receive
+**none** across **169 793 820** operand resolutions.
+
+### 3.1 The six slots, decoded
+
+```
+   iw60  009218D15B  SRC 0x05  ACT 0x1B  -> m_rf[0x8D]                 FABRICATED
+   iw61  001218D05B  SRC 0x01  ACT 0x1B  -> m_rf[0x8D]                 FABRICATED
+   iw68  009218C19B  SRC 0x06  ACT 0x1B  -> m_rf[0x8C]                 FABRICATED
+   iw73  0E30C00404  SRC 0x10  ACT 0x04   the ONLY class-C word  -- the ACCUMULATOR, real
+   iw78  0A3CD9F287  SRC 0x0A  ACT 0x07   the ONLY class-D word  -- FABRICATED
+   iw99/108/140/149  SRC 0x13   body 0                                 FABRICATED (3.268/frame)
+   iw111             SRC 0x1C   body 0                                 FABRICATED
+```
+
+★★★★★ **`§70` AND `§211` ARE NOT THE SAME KIND OF NULL.** `§70` reads `ACCA` at `w73`, whose operand
+is the accumulator — a real value this model computes, and whose `f31` is outside the bit-5 family.
+`§211` reads `ACCB` at `w78`, whose **only** operand is a zero we invent **and** whose operation
+code we collapse. **Both print `mean 0.0 span 0`; only one of them is a statement about the chip.**
+
+⚠⚠ **WHAT THIS IS NOT.** It is **not** a claim that reading `SRC 0x0A` produces audio, and it must
+not become one. **Dead end 4 and standing rule 4 forbid implementing a consumer whose index is
+measured constant** (`SRC 0x13`: `acc 0..0 | m_dp 12..12 | cursor 9..9`, 1 129 389 hits). This pass
+**counts**; it does **not** decode.
+
+### 3.2 One published null is now fully attributed to us
+
+```
+   WATCH 0x8C: 1 108 254 stores, 0 NON-ZERO   <- writer iw68's only operand is fabricated
+   WATCH 0x8D: 2 187 849 stores, 1 080 450 non-zero (site 2)
+```
+
+⇒ **`m_rf[0x8C]`'s permanent zero is 100 % OURS.** ⇒ **`m_rf[0x8D] = 0x009B26 = 39 718` SURVIVES.**
+
+---
+
+## 4. THE UPLOAD LEDGER — WHAT THIS MACHINE ACTUALLY LOADS
+
+```
+   §229 UPLOAD LEDGER: 12 runs, 8 DISTINCT IMAGES
+     I-RAM[ 60.. 82]  23 w  hash 9874DC099E0E5A79  x1  frame 187866   boot  = EPILOGUE
+     I-RAM[  0.. 59]  60 w  hash 6A0AAA1FB283374D  x3  213444..241668 boot  = KERNEL
+     I-RAM[ 71.. 71]   1 w  hash 238C18981E6DC6B5  x2  214326..235494 boot  unit-1 link vector
+     I-RAM[ 64.. 64]   1 w  hash 83C5059732EE018C  x2  214326..241668 boot  unit-0 link vector
+     I-RAM[200..332] 133 w  hash 1208280CB21C6D01  x1  frame 237258   boot  = ROOM REVERB 1 (unit 1)
+     I-RAM[ 84..153]  70 w  hash EED7D45634949A61  x1  frame 242550   boot  = CHORUS (unit 0)
+     I-RAM[ 71.. 71]   1 w  hash 96E0DC8D8F2FB724  x1  frame 246078   boot
+     I-RAM[ 64.. 64]   1 w  hash C569699BE023C838  x1  frame 246078   boot
+```
+
+★★★ **CORPUS MATCH 4 OF 4** — KERNEL 60, EPILOGUE 23, CHORUS `load 84 / 70 w`, ROOM REVERB 1
+`load 200 / 133 w`; every one from `programs.tsv` / `dsp/disasm/`, none of which the device can see.
+★ **And the four single-word runs are exactly what the epilogue's own header predicts**: *"EXACTLY
+TWO of its words are ever rewritten by the host — I-RAM 64 (unit 0) and I-RAM 71 (unit 1)."*
+Predicted offline, now measured live.
+
+### 4.1 ★★★ THE 46 SLOTS NOBODY DECLARED
+
+Body 0's region is **116 slots** (`iw 84..199`); its resident image is **70 words, `[84..153]`**.
+**`I-RAM[154..199]` receives no upload at all in this vehicle.** Every body-0 census, tally and null
+this project has published carries a **46-slot tail whose contents are whatever I-RAM held** —
+never stated, never bounded. ⚠ Not necessarily an error; but it **must** be declared wherever a
+body-0 denominator is quoted.
+
+### 4.2 ★★★★ TWO INSTRUMENTS, ONE FRAME — AND A CORRECTION TO §38
+
+```
+   §229 upload ledger : CHORUS lands at I-RAM[84..153] on frame 242 550
+   §228 LFO RISE      : cell 07 "first rise at frame 242 550"
+```
+
+Neither knows the other exists ⇒ **the LFO phase begins advancing on exactly the frame the unit-0
+body's image arrives**, confirming `§164`'s phase cell belongs to that body.
+⚠ **AND IT REFINES §38.** *"All boot transients end by frame 264 002"* is a **48 000 Hz** figure
+(= 5.500 s). Measured here on the 44 100 clock the last upload is frame **246 078 = 5.581 s**.
+**Convert §38 before comparing it to anything post-§228.**
+
+---
+
+## 5. THE ARM, QUOTED — `§54` FIRST, THEN RULE 19
+
+⚠ **`§54` GRADED FIRST. A NULL, identical to §228's arm B:**
+
+```
+   §54  quiet-in 734 548 -> 734 548 SILENT / 0 LOUD (peak 0)
+        loud-in  288 451 -> 288 451 silent / 0 loud (peak 0)
+```
+
+```
+   RULE 19, mean AND AC span, both buckets:
+   §70  ACCA@w73   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   §211 ACCB@w78   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   ⚠ AND SEE §3.1: THESE TWO NULLS NO LONGER HAVE THE SAME EVIDENTIAL STATUS.
+```
+
+```
+   THE CALIBRATIONS -- ALL UNCHANGED FROM §228 ARM B.  THIS PASS IS INERT:
+   §S1 TOTALS   quiet 7 989 156/162 240 672 = 4.924 %   loud 3 746 410/76 151 064 = 4.920 %
+   §228 T4      44 086.742 frames / emulated second
+   §228 LFO     step 114..114 CONSTANT, period 73 584.3 frames, 0.599313 Hz
+   m_rf[0x8D]   0x009B26 = 39 718        §41  unit0 0x400000  unit1 0x178D0B
+```
+
+---
+
+## 6. WHAT SHIPPED
+
+1. **`§229` FABRICATED-ZERO CENSUS** — read-only, unconditional, per-code + per-REGION against an
+   explicit denominator (`m_srcz_fetch` = every operand resolution). ⛔ Counts; does not decode.
+2. **`§229` UPLOAD LEDGER** — read-only, **unconditional** (deliberately not behind `LOG_UPLOAD`),
+   one line per upload run + a distinct-image summary with hashes and arrival frames.
+3. **`§229` `f31` × `hi12` BIT-5 CENSUS** — read-only, unconditional, both bit-5 rows printed in
+   full so a zero cell is visible as a zero, plus the executing bit-5 `{3,6,7}` sites by `iw`.
+4. **The `m_upl_frame` correction** (§1.3), which the instrument's own control caught.
+5. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT.** `dsp/verify.py`: **BYTE-MATCH OK**.
+
+---
+
+## 7. WHAT THIS PASS IS BLIND TO, AND THE NEXT EXPERIMENT
+
+* **One vehicle, one boot, one effect pair (CHORUS + a reverb).** The 8 images, the 46-slot tail and
+  the four `f31` sites are properties of **this** resident frame.
+* **The census counts operand RESOLUTIONS and ALU EXECUTIONS, not stores.** Read the share.
+* **It does not say the fabricated zeros or the `op = f31 & 3` collapse CAUSE the nulls.** It says
+  they are present, where, and in what proportion.
+* **`m_srcz_*` and `m_f31cen` have no frame gate**, deliberately — the boot window is where the
+  uploads are. Their ratios are over the whole run, not over settled frames.
+* **Nothing here touches the blocker** (queue item 12, what base `0x90` means).
+
+### 7.1 ★★★★ PRE-REGISTERED: THE `f31` 3/6/7 READING, AND WHAT WOULD FALSIFY IT
+
+**The claim to test:** `op = f31 & 3` is wrong on the four epilogue sites `w63 w70 w75 w78`.
+**Required shape:** env gate, **DEFAULT OFF**, two-sided, unconditional fired count.
+**Falsifiers, all pre-registered here, before any build:**
+* `m_rf[0x8D]` **must stay `0x009B26 = 39 718`** — §227 proved this is the guard that actually
+  fires, and that `§41` is **not** one;
+* PARAMETRIC EQ must stay within **0.198 dB** of its designer, and SINGLE DELAY's `+0.02149296`
+  three-factor product must be untouched;
+* `§S1` must not "improve" by subtraction — **§227's guard**: a clip rate that falls because a term
+  stopped being added is a REGRESSION;
+* `§54` graded FIRST, and `§70`/`§211` reported as **mean AND AC span, both buckets**.
+**Kill condition:** if a reading for `f31` 3/6/7 leaves `§104`'s body-0 and epilogue columns
+input-INDEPENDENT, the operation field is not the defect and the four words' silence is elsewhere.
+⚠ **And do the `SRC 0x0A` question SECOND, never jointly** — `w78` carries **both** candidate
+defects, so a joint arm cannot attribute anything (§226/§227's repeated failure mode).
+
+### 7.2 The rest
+
+2. ★★★★ **RE-GRADE EVERY PUBLISHED NULL AGAINST §3's TABLE.** Any null quoted for body 0 or the
+   epilogue must now carry its fabricated-operand share. **Start with `§211`.**
+3. ★★★ **DECLARE THE 46-SLOT BODY-0 TAIL** wherever a body-0 denominator is published.
+4. ★★ **CONVERT `§38`'s 264 002** to the 44 100 clock wherever it gates an instrument.
+5. ⛔ **DO NOT re-open the `f98` cross-unit A/B** (not viable, and unnecessary). ⛔ **DO NOT build
+   the ROCK ROTARY bit-5 A/B** — strike it from the review's action list, do not defer it.
+   ⛔ **DO NOT implement the six SRC codes** (dead end 4, rule 4).
+
+**GRADES.** §0 items A **MEASURED from disk**; B **FORCED from source**; C–K **MEASURED**;
+§2.1's *"bit 5 extends the operation field"* **SPECULATIVE, pre-registered**;
+§7.1's falsifiers **pre-registered, unrun**. `dsp/verify.py`: **BYTE-MATCH OK**.
