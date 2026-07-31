@@ -16,66 +16,83 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**★★★ §213 FOUND WHAT KILLS THE SEND, AND IT IS ONE WORD: `iw25 = 000.2.00.2D9`.
-It reads `SRC 0x0B` (the delay-read register, always ZERO) into `tempA`, and `tempA` is what
-the unit-0 SEND ends up carrying. `SRC 0x0B` at a CLASS-2 word is an UNANCHORED GUESS and
-`iw25` is UNIQUE IN THE CORPUS — 1 occurrence in 3057 words. THE NEXT TASK IS THAT DECODE.**
+**★★★ §215 CLOSED THE `iw25` DECODE. `SRC 0x0B` = the delay-read data register IS RIGHT, at a
+class-2 word as at a class-1 one, and the rival is REFUTED by the corpus. The blocker moves ONE
+HOP UPSTREAM: the datum `iw12` fetches NEVER REACHES `iw25`. In the arm where the delay line was
+full of audio, `m_dr` at `iw25` was non-zero on `0` of `1 211 520` evaluations while `§80`
+published `181 521` non-zero data. THE NEXT TASK IS THE §78 PER-LINE PUBLISH SCHEDULE.**
 
-Run `data/kernelA_213.log.gz`, shipped default `0xB910E446A39B440F`, all env gates ON
-(`UPD6383_STPROBE = 1`), clean vehicle (`kn7000_mame/scratchpad/coldnotes2.lua`), 1 440 001
-frames, **313 960 loud** — cite the run, not the section.
+Runs: `data/src0b2_A_off_215.log.gz` (shipped) and `data/src0b2_B_on_215.log.gz` (rival forced
+on), both `-log`, clean vehicle, 1 440 001 frames, ~314 000 loud — **cite the run, not the
+section**.
 
-### ⚠ 1.0 VEHICLE: `-cfg_directory` MUST CARRY `:DSPCFG value="3"` — this cost one run
+### ⚠ 1.0 VEHICLE: TWO traps, both of which have now cost a run each
 
-`DSPCFG` is a `PORT_CONFNAME` defaulting to **Off**. A run with a *fresh* cfg directory executes
-**zero DSP frames**, and `device_stop()`'s `if (m_frames_run != 0)` then prints **no report at
-all** — which looks like a crash and is not. Copy `kn7000-emulator/cfg/kn5000.cfg` into the
-isolated cfg dir before launching. Full recipe in §213's header.
+1. **`-cfg_directory` MUST CARRY `:DSPCFG value="3"`.** `DSPCFG` is a `PORT_CONFNAME` defaulting
+   to **Off**, so a *fresh* cfg directory executes **zero DSP frames** and `device_stop()`'s
+   `if (m_frames_run != 0)` prints **no report at all**. Copy `kn7000-emulator/cfg/kn5000.cfg` in.
+2. **★ PASS `-log`.** The whole `upd6383:` report goes through `logerror`, which MAME discards
+   unless `-log` is given. A silent stderr with `exit=0` and a normal `coldnotes2` trace is THIS,
+   not a crash. (§215 lost a run to it exactly as §213 lost one to `DSPCFG`.)
 
-### ★★★ 1.1 THE CHAIN, MEASURED END TO END (§213 §§3-4)
-
-```
-   iw7 ..iw24   tempA is INPUT-DEPENDENT  (-5 579 776 .. 4 994 816 loud, 0..0 quiet)
-   iw25  000.2.00.2D9   SRC 0x0B (delay read, ALWAYS 0) + ACT 0x19  =>  tempA <- 0   ⛔
-   iw35  012.A.00.1C0   HI_ST fires BEFORE the adder: cell 0x05 <- 4 194 304
-                        (its own read still sees the input; its multiply is the LAST live one)
-   iw36  400.A.00.000   re-reads the parked cell  =>  P becomes a CONSTANT here, not at iw37
-   iw39  410.A.FF.647   hi12[3:1] = 0  =>  acc <- P  (acc's input-dependence ends)
-                        and its multiply takes the bus = tempA = 0  =>  P <- 0
-   iw41  400.A.00.21A   hi12[3:1] = 0  =>  acc <- P = 0
-   iw45  010.A.00.20C   THE UNIT-0 SEND stores acc = 0 into body 0's entry cell 0x05
-   iw46  800.1.60.00B   the delay WRITE takes acc = 538 760 587 509 -> 0x7D70 (§75's constant)
-```
-
-**The loop is CLOSED**: `iw25 → tempA → P → acc → iw45 send → iw46 delay write → next frame's
-iw25`. Nothing external enters it. That is why opening §48 alone delivers a DC (§212 §1 stands
-in its conclusion and is **half-retracted** in its premise: §48 *is* in the send path).
-
-### ★★★ 1.2 THE EXPERIMENT, PRE-COMPUTED — a DECODE question, not an anchor value
-
-`SRC 0x0B = the delay-DRAM data register` is labelled a **GUESS** in the source (register row
-14) and is motivated by 99 class-1 delay words. Corpus census over all 41 listings, 3057 words:
+Working recipe:
 
 ```
-   SRC 0x0B:  106 words   class 1 addr8 0x20 (READ) 49 | class 1 addr8 0x60 (WRITE) 50
-                          class 2 addr8 0x00           7   <- NO delay access at all
-                             020.2.00.2C7  ACT 0x07  x6  ENSEMBLE
-                             000.2.00.2D9  ACT 0x19  x1  THE KERNEL, iw25 -- ONE, EVER
+  cd kn7000-emulator && UPD6383_SRC0B2=0 timeout 900 ./kn7000 kn5000 -rompath ./roms \
+      -skip_gameinfo -log -nvram_directory <iso>/nvram -cfg_directory <iso>/cfg \
+      -pluginspath ./plugins -autoboot_script ../kn7000_mame/scratchpad/coldnotes2.lua \
+      -seconds_to_run 30 -window -resolution 640x480
+  # error.log is written into the CWD; copy it out before the next run.
 ```
 
-`iw25`'s pointer is on cell `0x06`, whose §104 residency is **INPUT-DEPENDENT**
-(`0..0` quiet ‖ `-5 579 776..4 994 816` loud). So a rival reading of `SRC 0x0B` **at a class-2
-word** (`mem[ptr]` being the obvious one) predicts, **in advance**:
+### ★★★ 1.1 WHAT §215 ESTABLISHED, AND WHAT IS LEFT
 
-1. `tempA` at `iw27` becomes input-dependent (it is `0..0` today);
-2. `P` at `iw39` becomes input-dependent (it is `0` today);
-3. §104's LAST input-dependent slot moves from **`iw38`** to at least **`iw45`**;
-4. body 0 stops reading `0` at its own `iw84`/`iw85`.
+**The decode is right (MEASURED, corpus, 41 listings / 3057 words):**
 
-Score all four with `dsp/tools/s104_score.py` and the `§213 KERNEL-A P / tempA` table.
-⛔ Default **OFF**, with a fired count. ⚠ **And none of it is audio** until `§70 ACCA` and
-`§211 ACCB` show `min != max` **and** a no-stimulus window is measured — standing rule 1.
-★ ENSEMBLE's six `020.2.00.2C7` words let the corpus grade the rival on a second program.
+```
+   lo12 0x2D9 = SRC 0x0B + ACT 0x19   36 words: 29 delay WRITE, 6 delay READ, 1 = kernel iw25
+   word 0012201655 = `mac ta,(p)+1'   13 sites, base rate 0.43 %
+   C1  13 of 13 sites of 0012201655 are IMMEDIATELY preceded by a class-1 addr8 0x20 DELAY READ
+   C2  ENSEMBLE w10 (880.1.20.2D9) -> w11 (0012201655)      read AND capture fused
+       KERNEL   w25 (000.2.00.2D9) -> w26 (READ) -> w27     capture split off, SAME successor
+```
+
+⇒ `iw25` is grouped **by its successor** with ENSEMBLE's six class-1 delay reads. The rival would
+need one lo12 to mean two things on two classes **and** would leave the kernel's two delay READs
+(`iw12`, `iw26`) with no consumer at all. **REFUTED. `UPD6383_SRC0B2` stays default OFF.**
+
+**⛔ AND THE FOUR FALSIFIERS ARE RETIRED AS A TEST.** All four passed under the rival — `tempA`
+at `iw25`, `P` at `iw39`, the last input-dependent `acc` slot (`iw38` → **`iw204`**), and body 0's
+`iw84`/`iw85`. They had to: arm A's own counter measured `mem[ptr]` at `iw25` non-zero on
+**313 169** evaluations ≈ the **314 063** loud frames, *before the rival ever ran*. **They grade
+"is the operand alive", not "is the operand `mem[ptr]`".**
+
+**★★★ AND THE ONE RESULT THAT OUTLIVES THE REFUTED READING:** with the send FORCED open, body 0
+ran its whole ladder on live audio (28 input-dependent slots), fed body 1 (2 slots) — and
+`§70 ACCA at w73` and `§211 ACCB at w78` were **still `min 0 max 0`, quiet and loud**.
+⇒ **The output stage is a null INDEPENDENTLY of what the send carries.** §211 could not prove
+that; §215 did, by feeding it.
+
+### ★★★ 1.2 THE NEXT EXPERIMENT — the §78 publish, and the number that names it
+
+```
+   arm B  §46  24 922 560 reads, 181 521 returned NON-ZERO
+          §80  latched 24 922 560 (181 521 nz) | publish hits 24 922 552 (181 521 nz)
+          §215 m_dr non-zero AT iw25:   0 of 1 211 520        <- the whole blocker, in one line
+```
+
+Non-zero data are latched and published into `m_dr`, and `iw25` never sees one. `m_dr` is a
+SINGLE register and `line = descriptor_value & 0x3f`; §46's dump shows the kernel's own
+descriptors resolving to `0000`, i.e. **every kernel delay word shares line 0**. So every non-zero
+publish lands at a body delay word *after* `iw25` has run, and a zero publish overwrites `m_dr`
+before the next frame's `iw25`.
+
+**Ask, in this order:** (a) does `iw12`'s datum ever reach `iw25` — instrument the publish that
+immediately precedes `iw25`, per frame; (b) if not, is the fault the **line index**, the
+**ordering**, or the **single register**; (c) only then consider widening `m_dr`.
+⚠ New gates are **env vars, default OFF, with a fired count** — the u64 spec mask is EXHAUSTED.
+⚠ And none of it is audio until `§70`/`§211` show `min != max` **and** a no-stimulus window is
+measured. §215's arm B is the standing proof that a live send is not enough.
 
 ### ⛔ 1a. DO NOT RE-OPEN — closed by §213
 

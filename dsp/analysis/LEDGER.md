@@ -20,38 +20,54 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§213, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§215, 2026-07-31)
 
-> **THE UNIT-0 SEND IS DECIDED BY ONE WORD — `iw25 = 000.2.00.2D9`. It captures `SRC 0x0B`
-> (the delay-read data register, measured ZERO on 24 922 560 of 24 922 560 reads) into `tempA`,
-> and `tempA` is what the send at `iw45` ends up carrying. `SRC 0x0B` at a CLASS-2 word is an
-> UNANCHORED GUESS, and `iw25` occurs ONCE in the 3057-word corpus. THE BLOCKER IS THAT DECODE.**
+> **THE `iw25` DECODE IS CLOSED — `SRC 0x0B` = the delay-read data register IS RIGHT, on a class-2
+> word as on a class-1 one, REFUTING the rival by the corpus. THE BLOCKER MOVES ONE HOP UPSTREAM:
+> the datum `iw12` fetches NEVER REACHES `iw25`. In the arm where the delay line was FULL of audio,
+> `m_dr` at `iw25` was non-zero on `0` of `1 211 520` evaluations while `§80` published `181 521`
+> non-zero data. THE BLOCKER IS THE §78 PER-LINE PUBLISH SCHEDULE.**
 
-Established by run `data/kernelA_213.log.gz`, the **shipped default** `0xB910E446A39B440F`, all
-env gates ON (`UPD6383_STPROBE = 1`), clean vehicle (`kn7000_mame/scratchpad/coldnotes2.lua`),
-1 440 001 frames, **313 960 loud** — cite the run, not the section (rule 11). Scored against
-`data/PREDICT_213.md`, committed **before the build**.
+Established by runs `data/src0b2_A_off_215.log.gz` (shipped) and `data/src0b2_B_on_215.log.gz`
+(rival forced ON), same build, clean vehicle, `-log`, 1 440 001 frames, ~314 000 loud — cite the
+run, not the section (rule 11). Scored against `data/PREDICT_215.md`, committed **before the
+build**; N1/N2/N3 and the calibration all held.
 
 ```
-   iw7 ..iw24   tempA INPUT-DEPENDENT (0..0 quiet | -5 579 776 .. 4 994 816 loud)
-   iw25         SRC 0x0B (always 0) + ACT 0x19  =>  tempA <- 0        <- THE BLOCKER
-   iw35         HI_ST fires BEFORE the adder: cell 0x05 <- 4 194 304  (its own read is still live)
-   iw36         re-reads that cell  =>  P goes CONSTANT here (NOT iw37)
-   iw39         hi12[3:1] = 0 => acc <- P ; its MULTIPLY takes bus = tempA = 0 => P <- 0
-   iw41         acc <- P = 0
-   iw45         THE UNIT-0 SEND stores acc = 0 into body 0's entry cell 0x05
-   iw46         the delay WRITE takes acc = 538 760 587 509 -> 0x7D70 (§75's 5 % constant)
-   §70 ACCA at w73  min 0 max 0 quiet AND loud  |  §211 ACCB at w78  min 0 max 0 quiet AND loud
+   arm B  §46  24 922 560 reads, 181 521 returned NON-ZERO      (arm A: 0)
+          §80  latched 24 922 560 (181 521 nz) | publish hits 24 922 552 (181 521 nz)
+          §215 m_dr non-zero AT iw25:  0 of 1 211 520           <- the blocker, in one line
+   arm A  §215 mem[ptr] at iw25 non-zero on 313 169 ~= 314 063 loud frames | m_dr non-zero on 0
 ```
 
-**The loop is CLOSED** — `iw25 → tempA → P → acc → iw45 → iw46 → next frame's iw25` — which is why
-opening §48 alone delivers a DC. ⚠ §212 §1's blanket *"§48 is not the constraint"* is
-**half-retracted**: §48 *is* in the send path; it is just not sufficient.
+**THE DECODE, settled by the corpus (41 listings, 3057 words):** `lo12 0x2D9` is 36 words — 29
+delay WRITE, 6 delay READ (ENSEMBLE), 1 = kernel `iw25`. Its consumer `0012201655` (`mac ta`) has
+a **0.43 %** base rate and **13 of 13** of its sites are immediately preceded by a class-1
+`addr8 0x20` DELAY READ. ENSEMBLE fuses read+capture in one `2D9`; the kernel splits the identical
+`2D9` off one word ahead of its read — **same lo12, same idiom, same successor.** The rival would
+need one lo12 to mean two things on two classes and would leave the kernel's two delay READs with
+no consumer. ⇒ `UPD6383_SRC0B2` **default OFF, NOT SHIPPED.**
 
-**Next:** the `SRC 0x0B` decode **at a class-2 word**, default OFF, with a fired count. Corpus:
-106 `SRC 0x0B` words — 99 are class-1 delay words (addr8 `0x20`/`0x60`), 7 are class-2 `addr8 0x00`
-(ENSEMBLE's `020.2.00.2C7` x6 and the kernel's `000.2.00.2D9` x1). Four pre-computed falsifiers in
-`HANDOFF-NEXT.md` §1.2. ⚠ And none of it is audio until standing rule 1 is applied.
+**⛔ THE FOUR FALSIFIERS OF `HANDOFF-NEXT.md` §1.2 ARE RETIRED AS A TEST.** All four passed under
+the rival — and had to: arm A measured `mem[ptr]` at `iw25` non-zero on ≈ the loud-frame count
+*before the rival ever ran*. They grade **"is the operand alive"**, not "is it `mem[ptr]`".
+★ RULE 14: *a criterion that every live operand satisfies is a reach test, not a decode test.*
+
+**★★★ AND THE RESULT THAT OUTLIVES IT:** with the send FORCED open, body 0 ran its whole ladder on
+live audio (28 input-dependent slots, `acc` last-dependent slot `iw38` → **`iw204`**), fed body 1 —
+and `§70 ACCA at w73` / `§211 ACCB at w78` stayed **`min 0 max 0`, quiet AND loud**, `§61` both
+ports 0 non-zero, `§54` 0 loud output frames. ⇒ **The output stage is a null INDEPENDENTLY of what
+the send carries.** §211 asserted it; §215 proved it by feeding it.
+
+**Next:** does `iw12`'s datum ever reach `iw25`? Instrument the publish immediately preceding
+`iw25`, per frame. If it never carries, decide between the **line index**
+(`line = descriptor_value & 0x3f`, and §46 shows the kernel's descriptors resolving to `0000`, so
+every kernel delay word shares line 0), the **ordering**, and the **single `m_dr` register** — in
+that order. Env gates, default OFF, fired counts; the u64 mask is EXHAUSTED.
+
+⚠ **TWO VEHICLE TRAPS, one run each:** the isolated `-cfg_directory` must carry
+`:DSPCFG value="3"`, **and** MAME must be given **`-log`** or the entire `upd6383:` report is
+discarded and the run looks like a crash.
 
 **⛔ RETRACTED by §213 — the previous blocker's "one gradeable lead" was a PROBE ARTEFACT.**
 `upd6383.cpp`'s ACT-0x07 site had an **unbraced `else`**, so `kwatch`/`watch_store`/`store_probe`/
@@ -126,6 +142,9 @@ the ones a reader would reach for again.
 | 12 | "one cause — the frozen cell is just the dead multiply", displacing §168 | ⛔ Premise gone with #11. §168's addressing diagnosis is **confirmed** instead: 7 of 12 multiply sites have `L` identically zero while `coef` is live | §174 |
 | 19 | `iw39` stores TWICE to cell `0x06` and the second store wins (**§211 §6**) | ⛔ **RETRACTED §213.** The site-3 record is a **PHANTOM**: an unbraced `else` at the ACT-0x07 site let `kwatch`/`watch_store`/`store_probe`/`m_dwr` run on every VISIT while §112's latch arm stored nothing. Fired count after the fix = **3 630 720 = the §112 latch count exactly**; §211's own log already contradicted it (`iw34` logged storing 8 388 607 to `0x06` while §104 shows `6 039 795` still there two slots later). "Suppress one store" was a **no-op on the machine** | §213 |
 | 20 | `tempA` is empty at `iw39` because its producer has never been identified (the `SRC 0x13` shape) | ⛔ **ANSWERED §213, not a hole.** `tempA` is INPUT-DEPENDENT `iw7..iw24` and is **zeroed at `iw25`** by `SRC 0x0B` + `ACT 0x19` — the delay-read register, 0 on 24 922 560 of 24 922 560 reads. A correct consequence of §48, and the send inherits it | §213 |
+| 21 | `SRC 0x0B` at a CLASS-2 word is a different code (`mem[ptr]`, or anything but the delay register) | ⛔ **REFUTED §215, by the corpus.** `lo12 0x2D9` is 36 words — 29 delay WRITE, 6 delay READ, 1 = kernel `iw25`. Its consumer `0012201655` (`mac ta`, **0.43 %** base rate) sits within 3 slots of a class-1 `addr8 0x20` DELAY READ at **13 of 13** sites. ENSEMBLE `w10` fuses read+capture in one `2D9`; the kernel splits the identical `2D9` off one word ahead of its read, with the SAME successor. The rival needs one lo12 to mean two things on two classes AND leaves the kernel's two delay READs with no consumer | §215 |
+| 22 | `HANDOFF-NEXT.md` §1.2's FOUR FALSIFIERS as a decode test | ⛔ **RETIRED §215.** All four passed under the refuted rival, and had to: arm A measured `mem[ptr]` at `iw25` non-zero on **313 169** ≈ the **314 063** loud frames *before the rival ran*. `iw25`'s pointer sits on a LIVE cell, so ANY live operand scores 4/4. They grade **reach**, not **identity** | §215 |
+| 23 | "the output-stage null is an artefact of a zero send" | ⛔ **REFUTED §215.** The send was FORCED open: body 0 ran its whole ladder on live audio (28 input-dependent slots, last dependent `acc` slot `iw38` → **`iw204`**), fed body 1 — and `§70 ACCA at w73` / `§211 ACCB at w78` stayed `min 0 max 0` in **both** buckets, `§61` 0 non-zero, `§54` 0 loud frames | §215 |
 | 9 | "the delay tap **sweeps** ±240" / "each voice ramps 0→depth, a **sawtooth**" | Both retracted. The first pooled voices of opposite sign; the second censused across the boot transient. The settled modulation value is **CONSTANT** | §155, §157 → §158 |
 
 ---
@@ -188,6 +207,13 @@ the ones a reader would reach for again.
     cell `0x06` write-only because `pwatch()`'s READ hook sits on the anchored `SRC 0x07`
     evaluator alone; `0x06` is in fact a cross-frame carry read by `SRC 0x00`. Check the hook
     before quoting an absence. *(§213)*
+15. **A CRITERION THAT EVERY LIVE OPERAND SATISFIES IS A REACH TEST, NOT A DECODE TEST.** §215's
+    four pre-computed falsifiers all passed under a reading the corpus refutes — because `iw25`'s
+    pointer sits on a **live cell**, so *any* substitution that puts a live value on the bus scores
+    4/4. The counterfactual was measurable in the DEFAULT arm (`mem[ptr]` non-zero on 313 169
+    ≈ the 314 063 loud frames) **before the rival was ever built**. ⇒ **Count, in the control, how
+    many arms would pass your test. If the answer is "all of them", it is not a test.** And when a
+    decode question has a CORPUS answer, the corpus outranks any run. *(§215)*
 
 ---
 
@@ -256,7 +282,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-106 sections, §97..§213.  **Read the tail first** — later sections retract earlier ones *in place*.
+108 sections, §97..§215.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -366,4 +392,6 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §211 | REFUTED/RETRACTED | ⛔⛔ THE OUTPUT STAGE IS NOT WHERE THE SILENCE LIVES. `w73` PRESENTS A ZERO IT WAS HANDED, AND `§48` IS NOT A GATE | §1 **MEASURED** against a scoring rule committed before the run, and **exhaustive** |
 | §212 | REFUTED/RETRACTED | ⛔ §205's "single number that matters" was WRONG. §48 is not a gate, and §141's `w73` does not hold. | §1 and §2 **MEASURED** (exhaustive over 285 slots; the store witness aimed for the |
 | §213 | REFUTED/RETRACTED | ⛔⛔ §211's GRADEABLE LEAD WAS A PROBE ARTEFACT. The input dies at `iw36`, and the SEND is decided by ONE corpus-unique wo |  |
+| §214 | REFUTED/RETRACTED | the lead I handed forward was an INSTRUMENT ARTEFACT, and §212 §1 is half-retracted | §1 **FORCED** (the fired-count identity, and the contradiction inside §211's own |
+| §215 | REFUTED/RETRACTED | ⛔ THE RIVAL IS REFUTED BY THE CORPUS AND THE FALSIFIERS ALL PASSED ANYWAY. `SRC 0x0B` SURVIVES AT `iw25`, AND THE SEND W | §0 **MEASURED** (corpus census over 41 listings / 3057 words, plus the 1.0064 |
 

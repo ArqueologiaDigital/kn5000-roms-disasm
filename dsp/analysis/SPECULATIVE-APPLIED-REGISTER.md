@@ -13667,3 +13667,165 @@ residency **is** input-dependent, so a rival class-2 reading has four pre-comput
 Evidence grade: §1 **FORCED** (the fired-count identity, and the contradiction inside §211's own
 log); §2 **MEASURED**; §3 **MEASURED**, my §212 §1 **half-retracted**; §4 **MEASURED** census, the
 rival reading **SPECULATIVE**.
+
+---
+
+## §215 — ⛔ THE RIVAL IS REFUTED BY THE CORPUS AND THE FALSIFIERS ALL PASSED ANYWAY. `SRC 0x0B` SURVIVES AT `iw25`, AND THE SEND WAS NEVER THE ONLY BLOCKER
+
+Scored against `data/PREDICT_215.md`, **committed before `build.sh` was run**
+(`kn5000-roms-disasm@575851e`). Two runs, same build, same clean vehicle
+(`kn7000_mame/scratchpad/coldnotes2.lua`, cold boot, isolated NVRAM **and** isolated
+`-cfg_directory` carrying `:DSPCFG value="3"`, triad C4/E4/G4 held 21.0–27.5 s,
+`-seconds_to_run 30`, `-log`):
+
+* **arm A** `data/src0b2_A_off_215.log.gz` — `UPD6383_SRC0B2=0`, the SHIPPED reading, 1 440 205
+  frames, **314 063 loud**;
+* **arm B** `data/src0b2_B_on_215.log.gz` — `UPD6383_SRC0B2=1`, the RIVAL, 1 440 001 frames,
+  **313 960 loud**.
+
+⚠ `logerror` output needs **`-log`**. Without it `device_stop()`'s whole report is discarded and
+the run looks like the `DSPCFG` trap. It cost one run here, the way `DSPCFG` cost §213 one.
+
+### 0. ★★★ THE ANSWER: `SRC 0x0B = the delay-read data register` HOLDS AT `iw25`
+
+**And it is decided by the corpus, not by the four falsifiers — which is why §0 of the
+pre-registration says so in advance.**
+
+```
+   lo12 = 0x2D9  ("SRC 0x0B" + ACT 0x19, tempA <- bus)          36 words of 3057
+        class 1  addr8 0x60   delay WRITE     29    across 14 programs
+        class 1  addr8 0x20   delay READ       6    ENSEMBLE w10/20/30/68/78/88
+        class 2  addr8 0x00   NO ACCESS        1    THE KERNEL, iw25
+   word 0x0012201655  = `mac ta,(p)+1'  -- the one word that MULTIPLIES tempA
+        13 sites of 3057 = 0.43 % base rate
+```
+
+★ **C1 HELD, 13 of 13: every single site of `0012201655` is IMMEDIATELY preceded by a class-1
+`addr8 0x20` DELAY READ** (`880.1.20.2D9` ×6 in ENSEMBLE, `880.1.20.40B` ×7 in the flanger family
+and the kernel). `mac ta` after a delay read is **the** delay-read consumption idiom — which is
+`dram-datapath.md` item H, now at 13/13 instead of n=1.
+
+★ **C2 HELD, and it is the whole argument.** The slot two words before `0012201655` is the
+"load the multiplicand into tempA" slot:
+
+```
+   ENSEMBLE      w10  880.1.20.2D9   READ *and* capture, one word     ->  w11  0012201655
+   THE KERNEL    w25  000.2.00.2D9   capture only  (no access)
+                 w26  880.1.20.40B   the READ, one word later         ->  w27  0012201655
+   flanger x6    ...  000.2.00.44C   capture (SRC 0x11)               ->  w..  0012201655
+```
+
+⇒ **`iw25` is grouped, by its own successor, with the six ENSEMBLE class-1 delay READS** —
+whose `SRC 0x0B` cannot be anything but the fetched delay datum. ENSEMBLE fuses the read and the
+capture into one word; the kernel splits the identical `2D9` off one word *ahead* of its read.
+Same lo12, same idiom, same consumer, two independent programs.
+
+⇒ The rival (`SRC 0x0B` at a class-2 word = `mem[ptr]`) would have to claim **one lo12 means two
+different things on two classes**, and it would leave the kernel's **two delay READs**
+(`iw12 = 880.1.20.2D5`, `iw26 = 880.1.20.40B`) **with no consumer anywhere in the frame**.
+
+★ **My own pre-registered falsifier was checked and did NOT fire:** the §215 counter measures
+**1 211 520 class-2 `SRC 0x0B` evaluations against 1 203 840 body-0 executions = 1.0064 per
+frame** — exactly one word, so `iw25` is the kernel's only class-2 consumer and the grouping
+argument has no competitor. ⇒ **NOT SHIPPED. The gate stays default OFF.**
+
+### 1. THE NULL AND THE CALIBRATION, both computed before the build
+
+| # | pre-registered | measured (arm A) | |
+|---|---|---|---|
+| **N1** | class-2 `SRC 0x0B` = **1 211 520 ± 1 %** (= §48 − §77 in the control) | **1 211 725** (+0.017 %) | ✅ |
+| **N2** | arm A **read-only**: `s104_score.py` identical to `kernelA_213.log.gz` in all three columns | `acc 27/2`, `mem 21/9`, `L 18/3`, **same slot lists, same last slot `iw38`** | ✅ |
+| **N3** | fired count 0 in A, = N1 in B | **0** and **1 211 520** | ✅ |
+| **cal** | loud bucket 250 000–380 000; `located=true`; NOTE ON/OFF | 314 063 / 313 960; `located=true`, ON 21.02 OFF 27.51 | ✅ |
+
+★★ **The counterfactual, measured in the DEFAULT arm for free** (both counters run in both arms):
+
+```
+   §215 arm A:  1 211 725 evaluations | mem[ptr] non-zero on 313 169 | m_dr non-zero on 0
+                                                    ^^^^^^^                       ^^^
+                             313 169 ~= 314 063 = THE LOUD FRAMES        a HARD ZERO
+```
+
+⇒ At `iw25`, `mem[ptr]` is non-zero **exactly when notes sound and never otherwise**, and `m_dr`
+is zero always. So the rival was **guaranteed** to score 4/4 before it was ever run. That is the
+point of §0: **F1–F4 grade "is the substituted operand alive", not "is it `mem[ptr]`".**
+
+### 2. THE FOUR FALSIFIERS: 4 of 4 PASSED — and it changes nothing
+
+| # | control | arm B | verdict |
+|---|---|---|---|
+| **F1** | `tempA` at `iw25..iw52` `0..0 ‖ 0..0` `=` | `iw25` → `0..0 ‖ -5 579 776..4 994 816` `*`, and it stays input-dependent through **`iw44`** | PASS |
+| **F2** | `P` at `iw39` `0..0 ‖ 0..0` | `0..0 ‖ -526 573 661 648..471 369 917 068` `*` | PASS |
+| **F3** | LAST input-dependent `acc` slot = **`iw38`**, kernel A 27 | **`iw204`**; kernel A 27→**35**, body 0 0→**28**, body 1 0→**2** | PASS, far past `iw45` |
+| **F4** | body 0 `iw84`/`iw85` `acc`/`mem`/`L` all `0..0 ‖ 0..0` | all three input-dependent; the unit-0 entry cell `0x05` now reads `-8 034 877..7 192 534` loud | PASS |
+
+And the send itself: `iw45`'s `HI_ST` store (visible as `mem` at `iw46`) carries
+`-8 034 877..7 192 534` in the loud bucket where the control had `0..0`. The delay line then
+carries it: `§46` **181 521 of 24 922 560 reads returned NON-ZERO** (control: **0**), `§48`
+**121 014** consumptions with a non-zero datum (control: **0**), `§75` writes with content
+1 175 999 → **1 236 506**.
+
+⇒ **The unit-0 send was opened, body 0 ran its ladder on live audio, and the delay line filled
+with real data. All four falsifiers passed. It is still not evidence, and the reading is still
+refuted.** ★ This is the sharpest demonstration this project has produced of *"a number becoming
+non-zero is not evidence"*.
+
+### 3. ★ STANDING RULE 1 — applied, and the null HELD exactly as pre-registered
+
+```
+   arm B:  §70  ACCA AT w73   quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+           §211 ACCB AT w78   quiet 726 040  min 0 max 0  |  loud 313 960  min 0 max 0
+           §61  unit0/DO1 1 203 840 exec, 0 non-zero, peak 0 | unit1/DO2 idem
+           §54  quiet-in 826 040 -> 826 040 silent / 0 LOUD | loud-in 313 960 -> 313 960 silent / 0 loud
+```
+
+`min == max` in the loud bucket **and** in the **no-stimulus window** (726 040 quiet frames), in
+both accumulators, in both arms. **NO non-zero output was produced and NO audio claim is made.**
+
+★★★ **AND THIS IS THE RESULT THAT OUTLIVES THE REFUTED READING.** §211 closed the output stage as
+a null *while the send was zero*, so "the null is only because nothing is being sent" was still
+open. **It is now closed:** body 0 was fed 313 960 frames of live audio, ran its whole ladder on
+it (28 input-dependent slots), fed body 1 (2 slots), and `w73`/`w78` still read **exactly zero**.
+⇒ **The output stage is a null independently of what the send carries.** MEASURED, with the send
+FORCED open — which is what §211 could not do.
+
+### 4. ★★★ THE NEXT INSTRUMENT, and §215 hands it a number no earlier pass had
+
+Given §0, the shipped decode is right and `iw25`'s operand *should* be the datum `iw12` fetched.
+**It never is:**
+
+```
+   arm B:  §46  24 922 560 reads, 181 521 returned NON-ZERO
+           §80  latched 24 922 560 (181 521 non-zero) | publish hits 24 922 552 (181 521 non-zero)
+           §215 m_dr non-zero at iw25:  0 of 1 211 520          <- ZERO, in the arm where the
+                                                                   delay line is FULL of audio
+```
+
+181 521 non-zero data were latched **and published into `m_dr`**, and `iw25` saw a non-zero `m_dr`
+**not once in 1 211 520 evaluations**. So the defect is not the decode of `iw25` and not the delay
+port: it is the **§78 per-line publish schedule** — every non-zero publish lands at a body delay
+word *after* `iw25` has run, and `m_dr` is overwritten by a zero publish before the next frame's
+`iw25` reads it. `line = descriptor_value & 0x3f`, and §46's own dump shows the kernel's
+descriptors resolving to `0000` on the early frames, i.e. **every kernel delay word shares line 0**.
+
+★ **That is the next task**: does `iw12`'s datum reach `iw25`, and if not, is the fault the line
+index, the publish ordering, or the one-register `m_dr`? It is gradeable with the instruments that
+already exist (`§80`, `§215`, `§46`), and unlike the send it is not pre-decided by a corpus twin.
+
+### 5. ⇒ WHAT THIS RETIRES
+
+| retired | why |
+|---|---|
+| **"`SRC 0x0B` at `iw25` is an unanchored guess"** | **ANCHORED**: 13/13 successor identity + the ENSEMBLE/kernel `2D9` twin. It is the delay-read register, on a class-2 word as on a class-1 one |
+| **`HANDOFF-NEXT.md` §1.2's four falsifiers as a TEST** | all four pass on any live operand; arm A measured `mem[ptr]` non-zero on 313 169 ≈ the loud-frame count **before** the rival was run. They are a reach test, not a decode test |
+| **"the output-stage null might be an artefact of a zero send"** | **REFUTED**: the send was forced open, body 0 ran on live audio, `w73`/`w78` stayed exactly 0 |
+| **"the closed loop `iw25 → … → iw46 → iw25` is suspicious" (§213 §5.1 / §214 §3)** | it is the **intended architecture** — a feedback comb, `delay read (iw12/iw26) → tempA (iw25) → mac ta (iw27)`. What is broken is that the read's datum never reaches `iw25` |
+| **§48 as "the way in"** | the way in is one hop earlier: the **publish** into `m_dr`, §4 above |
+
+Evidence grade: §0 **MEASURED** (corpus census over 41 listings / 3057 words, plus the 1.0064
+per-frame count that discharges its own falsifier), the verdict **FORCED** from C1+C2; §1
+**MEASURED** against a pre-registration committed before the build, N1/N2/N3 all held; §2
+**MEASURED**, arm B, and **FORCED** as non-discriminating by arm A's own counterfactual counter;
+§3 **MEASURED**, including the no-stimulus window; §4 **MEASURED** (`§80` vs `§215` in the same
+log), the attribution to the publish schedule **INFERRED (strong)**; §5 as noted per row.
+The rival reading is **REFUTED and NOT SHIPPED**; `UPD6383_SRC0B2` stays **default OFF**.
