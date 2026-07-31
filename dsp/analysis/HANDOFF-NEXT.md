@@ -16,48 +16,55 @@ Tiers 1-2 regenerate with `tools/gen_ledger.py`.
 
 ## 1. YOUR NEXT TASK
 
-**Build the CONSUMER-TO-CELL census: which descriptor index each class-1 escape consumer reads,
-per body, against round5 §1's identity map.**
+**The per-unit descriptor BASE — `m_dsc` comes only from the in-program `ldptr.d`, which is `0x25`
+in BOTH header blocks, so both units share one descriptor origin.** (§198 gap #3's other half.)
 
-It is the missing instrument. §203 implemented `C40.1.80.000`'s descriptor consumption — **FORCED**
-by r3 §6.1 and by `28 non-C + 4 C-format = 32 = n` — and it fires **5 698 785** times while the
-delay census stays **byte-identical**. That is *"inert by this probe"*, **not** *"wrong"*: the delay
-census only reports lines that already resolve, and four of six still read `0..0`. Same shape as
-§200 (the rotation sign was ungradeable until §201 gave the lines length).
+★ **Everything else in the delay path is downstream of it, and §205 proved that independently**:
+the `SRC 0x08` audit traced the kernel's unit-0 send to zero link by link and bottomed out at
 
-⇒ **`UPD6383_CFMTIX` stays OFF until a consumer-to-cell probe exists.** Do not ship it on the
-FORCED argument alone, and do not read the null as a refutation.
+```
+   §48 DELAY READ CONSUMED (SRC 0x0B): 22 773 120 times, 0 with a NON-ZERO DATUM
+```
 
-### ★ SHIPPED this session (all from the PROVEN-BY-CONSTRUCTION audit, each with a control)
+⇒ **That second field is the single number that matters.** While it is 0, the send is 0 whatever is
+done anywhere else. The frame it goes non-zero, `§104`'s `iw46 mem` must leave `0..0` **and** split
+quiet ≠ loud — and if it does not, that chain is wrong.
 
-* **§197** — `0x0B` poke packets accepted (the leading nibble is a flag). Census +4 writes/+4 cells,
-  two values bit-exact against the descriptor space.
-* **§201** — per-body descriptor index. Indices `0x29..0x33` → `0x26..0x30`, the block §189
-  measured live; `frames_since_written` **0..0 on every line → 240/480/640**. The delay lines have
-  length for the first time.
-* **§202** — the rotation **sweeps DOWN**. Measured delays became `4161 = 0x1041` and
-  `3120 = 0x0C30` — **descriptor cells `0x27` and `0x2F`, bit-exactly**, at two independent lines.
-* **§188** — host payload LSB (default `0xB910E446A39B440F`).
+### ★ SHIPPED this session — five, all from the PROVEN-BY-CONSTRUCTION audit, each with a control
 
-⚠ **The u64 spec mask is EXHAUSTED.** New gates are env vars with a fired-count:
-`UPD6383_ROTSIGN` (on), `UPD6383_BODYIX` (on), `UPD6383_CFMTIX` (off).
+| § | what | control |
+|---|---|---|
+| **188** | host payload LSB (default `0xB910E446A39B440F`) | LFO sine: max err 2→1 LSB, RMS 1.291→0.707 = 1/√2 |
+| **197** | accept `0x0B` poke packets (leading nibble is a flag) | 2 recovered values bit-exact vs the descriptor space |
+| **201** | per-body descriptor index | delay lines got LENGTH: `0..0` on every line → 240/480/640 |
+| **202** | rotation **sweeps DOWN** | delays became `4161 = 0x1041`, `3120 = 0x0C30` = cells `0x27`/`0x2F` **bit-exact** |
+| **204** | `C40.1.80.000` consumes a cell | consumer-to-cell census: a duplicate-cell collision removed |
 
-### Still open, ranked
+⚠ **The u64 spec mask is EXHAUSTED.** New gates are env vars + fired-count:
+`UPD6383_ROTSIGN` (ON), `UPD6383_BODYIX` (ON), `UPD6383_CFMTIX` (ON).
 
-1. **consumer-to-cell census** (above) — unblocks §203
-2. **per-unit descriptor BASE** — `m_dsc` comes only from the in-program `ldptr.d`, `0x25` in
-   **both** header blocks (§198 gap #3's other half)
-3. **per-unit CALL VECTORS written and read by nothing** — the device runs a body the firmware
-   disconnected. Controls: four Sub CPU ROM constants; cold-boot capture → 84/42, 200/50
-4. **the output stage** — the chip is still silent, `§70 ACCA min 0 max 0`, both ports peak 0.
-   §141 localised it to `w73`; §150 corrected the mechanism. A correct delay line is not audio.
+### ⛔ Two long-standing tasks CLOSED by §205 — do not reopen
 
-### Agents in flight (read-only; the main loop holds build/run)
+* **"Fix the `SRC 0x08` clobber"** — **not real as named**, wrong four ways; §111 §3 had already
+  retracted the attribution and the title outlived it by 93 sections. The store writes the
+  **accumulator**; `SRC 0x08` is not in that datapath. `iw45` **is** the unit-0 send (FORCED, 37×),
+  59 of 71 candidate stores are the LFO idiom, and "rails" is a `peq_gain` vehicle artefact.
+* **`f31 = 4/5`** — **UNDECIDABLE** with existing instruments; for four of six readings nothing
+  outside the emulator depends on the choice. ⚠ `f31 = 4` **fires ZERO times** in the clean vehicle
+  (§205) — any experiment needs a vehicle that exercises it. ★ And `f31-high.md` §6's "14/14 linear"
+  is **circular**; the a-priori replacement gives 69 of 97 vs 36.4, p = 8.4e-12.
+  ★ SPECULATIVE, worth keeping: 46 % of the `f31=4/5` population is operand-free, and for
+  `f31 = 0/1/2` those are the three **MAC writeback modes** ⇒ the shipped `{LOAD,ADD,HOLD}` space is
+  categorically wrong for 45 words.
 
-`SRC08_findings.md` — is the `SRC 0x08` clobber real in the current source, and what grades a fix.
-`F31_ROUND2_findings.md` — `f31 = 4/5`, with §194/§195's minimal-pair route closed to it.
+### Then
+
+per-unit **CALL VECTORS** written and read by nothing (controls: four Sub CPU ROM constants;
+cold-boot capture → 84/42, 200/50) · **the OUTPUT STAGE** — still silent, `§70 ACCA min 0 max 0`,
+both ports peak 0, localised to `w73`.
 
 ### ⛔ Dead, do not retry
+
 
 
 
