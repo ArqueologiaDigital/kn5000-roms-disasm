@@ -1,3 +1,34 @@
+# ⏸ PARKED — 2026-08-01
+
+**The uPD6383GF (IC311) decoding effort is parked, not abandoned.** The autonomous tick has been
+stopped. Everything below remains valid; nothing here is superseded by the park.
+
+**Where everything is**
+- Running record: `SPECULATIVE-APPLIED-REGISTER.md`, §§1–231. **Later sections retract earlier ones
+  in place — trust the tail.**
+- Index, dead ends and standing rules 1–23: `LEDGER.md` (**dead-ends tier first**).
+- Ready work with grades and sources: `BUILD-LANE-QUEUE.md` — **item 0 is the top of the queue.**
+- Findings files: `dsp/analysis/*_findings.md`. Archived arm logs: `dsp/analysis/data/`.
+- The 22-page reverb+kernel dossier, regenerable from `dsp/analysis/dossier/`; rendered PDF and the
+  1989/1992 NEC DSP data books are in `~/compartilhado/KN7000/`.
+- The scratchpad (`/tmp`, a **tmpfs — lost on reboot**) is mirrored to
+  `~/compartilhado/KN7000/tmp-dir/`. **Refresh that mirror before any reboot.**
+
+**The single next action when this resumes** — `BUILD-LANE-QUEUE.md` item 0, the unanchored
+`SRC`/`ACTION` census. §231 measured that the **routing guard blocks 1139 words, 60.6 % of everything
+undecoded**, against **106** for the entire operation field; and that population is **the same set of
+codes** as §229's fabricated-zero census (28.492 % of the output stage's operands). Census first, no
+reading — a constant index *closes* a code.
+
+**State of the machine:** the emulated chip is **silent**; the one silence criterion plus
+`m_rf[0x8D] = 0x009B26` are the checks to quote (§230: the other five are the same measurement).
+**8 gates across 11 sections** have shipped — always state the unit.
+
+⚠ **The device source carries instrumentation, `getenv` gates and speculative readings. It is NOT in
+a state to propose upstream.** See the PR-readiness inventory prepared 2026-08-01.
+
+---
+
 # HANDOFF — read this first
 
 **§1 rewritten 2026-07-31 by §231.** Read `LEDGER.md` (tier 0 = the blocker + the dead ends),
