@@ -1,0 +1,12 @@
+<h1 class="newpage" style="margin-top:0">Part II — The kernel</h1>
+<p class="subtitle">The fixed preamble that runs before every effect, on every frame</p>
+<div class="lede">
+<p>Part I covered the reverb algorithm itself. This part covers the <strong>kernel</strong>: 83
+instruction words that execute on every frame regardless of which effects are selected — 60 in the
+header that runs before either effect body, and 23 in the output stage that runs after both.</p>
+<p>It is included here for a specific reason rather than for completeness. <strong>Every saturation
+site in the emulated machine is in the kernel</strong>, and the kernel's coefficient cursor reads the
+parameter bank belonging to the <em>second effect unit</em> — which is the reverb's. The shared
+preamble therefore computes with the coefficients of whichever reverb preset the player has selected,
+and its arithmetic overflows by an amount that depends on that choice.</p>
+</div>
