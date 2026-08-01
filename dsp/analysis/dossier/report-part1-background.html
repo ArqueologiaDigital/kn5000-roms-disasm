@@ -1,0 +1,161 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Strategic review — Technics SX-KN5000 effects DSP</title>
+<style>
+  @page { size: A4; margin: 19mm 17mm 17mm 17mm; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font: 10.4pt/1.48 "DejaVu Serif", Georgia, serif; color: #14161a; }
+
+  h1 { font: 700 19pt/1.2 "DejaVu Sans", sans-serif; margin: 0 0 2mm; letter-spacing: -0.2pt; }
+  h2 { font: 700 12.5pt/1.25 "DejaVu Sans", sans-serif; margin: 8mm 0 2.5mm;
+       padding-bottom: 1.4mm; border-bottom: 1.1pt solid #14161a; break-after: avoid; }
+  h3 { font: 700 10.6pt/1.3 "DejaVu Sans", sans-serif; margin: 5mm 0 1.6mm; break-after: avoid; }
+  h4 { font: 700 9.8pt/1.3 "DejaVu Sans", sans-serif; margin: 3.6mm 0 1.2mm;
+       color: #333; break-after: avoid; }
+  p { margin: 0 0 2.4mm; }
+  ul, ol { margin: 0 0 2.6mm; padding-left: 5.2mm; }
+  li { margin: 0 0 1.3mm; }
+  code, .m { font-family: "DejaVu Sans Mono", monospace; font-size: 8.7pt; }
+  code { background: #f0f0f2; padding: 0 1px; border-radius: 2px; }
+  pre { font-family: "DejaVu Sans Mono", monospace; font-size: 8.3pt; line-height: 1.36;
+        background: #f5f5f7; border-left: 2.2pt solid #9aa; padding: 2.2mm 3mm;
+        margin: 2.4mm 0 3mm; white-space: pre-wrap; break-inside: avoid; }
+  table { border-collapse: collapse; width: 100%; margin: 2.4mm 0 3.4mm;
+          font-size: 9.2pt; break-inside: avoid; }
+  th { background: #e9e9ed; text-align: left; font-family: "DejaVu Sans", sans-serif;
+       font-size: 8.6pt; font-weight: 700; }
+  th, td { border: 0.6pt solid #b9b9c0; padding: 1.5mm 2.2mm; vertical-align: top; }
+  td.n { font-family: "DejaVu Sans Mono", monospace; font-size: 8.6pt; white-space: nowrap; }
+
+  .subtitle { font: 400 11pt/1.35 "DejaVu Sans", sans-serif; color: #4a4d55; margin: 0 0 1.5mm; }
+  .meta { font: 400 8.6pt/1.4 "DejaVu Sans", sans-serif; color: #666; margin: 0 0 6mm;
+          padding-bottom: 3mm; border-bottom: 0.6pt solid #ccc; }
+  .lede { font-size: 10.8pt; background: #f2f4f7; border: 0.6pt solid #ccd;
+          padding: 3mm 3.4mm; margin: 0 0 5mm; break-inside: avoid; }
+  .lede p:last-child { margin-bottom: 0; }
+  .note { background: #fbf7e8; border-left: 2.4pt solid #c9a227; padding: 2.2mm 3mm;
+          margin: 3mm 0; font-size: 9.6pt; break-inside: avoid; }
+  .note p:last-child, .warn p:last-child { margin-bottom: 0; }
+  .warn { background: #fbeeee; border-left: 2.4pt solid #b03030; padding: 2.2mm 3mm;
+          margin: 3mm 0; font-size: 9.6pt; break-inside: avoid; }
+  .grade { font-family: "DejaVu Sans", sans-serif; font-size: 7.6pt; font-weight: 700;
+           letter-spacing: 0.3pt; padding: 0.3mm 1.1mm; border-radius: 2px; vertical-align: 1px; }
+  .g-meas { background: #d8ecd8; color: #14501a; }
+  .g-forc { background: #d8e4f4; color: #123a66; }
+  .g-infr { background: #f2e6cf; color: #6a4a10; }
+  .g-spec { background: #eee; color: #555; }
+  .newpage { break-before: page; }
+  dl { margin: 0 0 3mm; }
+  dt { font-family: "DejaVu Sans", sans-serif; font-weight: 700; font-size: 9.2pt; margin-top: 2mm; }
+  dd { margin: 0.6mm 0 0 5mm; }
+</style>
+
+<h1>The Technics SX-KN5000 effects processor</h1>
+<p class="subtitle">A strategic review of an autonomous reverse-engineering effort</p>
+<p class="meta">Independent multi-agent review &middot; 31 July 2026 &middot; Prepared for Felipe Correa da Silva Sanches</p>
+
+<div class="lede">
+<p><strong>What this document is.</strong> An independent assessment of a long-running attempt to
+reverse-engineer and emulate an undocumented digital signal processor. It answers four questions:
+how fast the work is actually progressing, whether the effort is stagnating or approaching a
+breakthrough, whether complete decoding of the chip is realistically achievable, and what other
+approaches could unlock progress.</p>
+<p>It assumes no prior knowledge of the project, the hardware, or the techniques involved. Sections
+1 and 2 provide the necessary background; readers already familiar with the work can begin at
+section&nbsp;3.</p>
+</div>
+
+<h2>1. Background: what is being reverse-engineered, and why</h2>
+
+<h3>1.1 The instrument</h3>
+<p>The <strong>Technics SX-KN5000</strong> is a professional arranger keyboard manufactured by
+Matsushita (Panasonic) in the mid-1990s. Like most instruments of its class it is a small computer:
+a main processor running firmware from ROM, a tone generator that synthesises the notes, and a
+dedicated <em>effects processor</em> that adds reverb, chorus, delay, equalisation and similar
+treatments to the sound before it reaches the outputs.</p>
+<p>The goal of the wider project is to preserve these instruments in <strong>MAME</strong>, an open
+source emulator whose purpose is to document computing hardware by reimplementing it precisely
+enough that original software runs unmodified. Preservation here means something stricter than
+"sounds about right": the emulated machine should behave as the original does, for reasons that can
+be demonstrated rather than asserted.</p>
+
+<h3>1.2 The chip at the centre of this review</h3>
+<p>The effects processor is <strong>IC311</strong>, an <strong>NEC&nbsp;uPD6383GF</strong>. It is
+undocumented. No datasheet for it is publicly available, no programming manual survives, and its
+instruction set has never been published. Everything known about it has been inferred from three
+sources:</p>
+<ul>
+  <li>the <strong>firmware ROM</strong> of the KN5000, which contains roughly one hundred effect
+      programs that the main processor uploads into the chip at runtime;</li>
+  <li>the <strong>service manual</strong> and a pin-compatible appearance of the same part in an
+      unrelated product, which together establish the pinout;</li>
+  <li>the <strong>behaviour of the emulator itself</strong> when a candidate interpretation is
+      implemented and measured.</li>
+</ul>
+<p>The chip executes a small program every audio frame. Each instruction is a
+<strong>36-bit word</strong> divided into fields:</p>
+<pre>  hi12[35:24]  .  class4[23:20]  .  addr8[19:12]  .  lo12[11:0]
+
+  within lo12:   SRC = bits[10:6]      (where the operand comes from)
+                 ACT = bits[4:0]       (what the instruction does)
+  within hi12:   bit 4  = store        bit 10 = end-of-program
+                 bit 11 = format escape
+                 f98 = bits[9:8]       f31 = bits[3:1]     (meaning unknown)</pre>
+<p>"Decoding the DSP" means establishing what each field value <em>means</em>&nbsp;— which operand
+source each <span class="m">SRC</span> code selects, what arithmetic each <span class="m">ACT</span>
+code performs, how memory is addressed, and how the results reach the audio outputs. The
+instruction stream is known exactly; its semantics are not.</p>
+
+<h3>1.3 What "correct" would look like</h3>
+<p>The chip's programs implement named studio effects — <span class="m">CONCERT REVERB 1</span>,
+<span class="m">CHORUS</span>, <span class="m">MULTI TAP DELAY</span> and so on. A correct decoding
+would cause the emulated chip, fed the same audio and the same parameters, to produce the same
+output as the physical instrument. At present it produces <strong>silence</strong>: the two
+registers that present audio to the outputs read exactly zero on every frame measured.</p>
+
+<h2>2. How the work is organised</h2>
+
+<h3>2.1 The autonomous loop</h3>
+<p>The work is carried out by an autonomous agent system on a recurring schedule — a "tick" every
+fifteen minutes. Each tick, the system reads its own handover notes, decides what to do next,
+dispatches work, records results, and updates its documentation. A single emulator run takes about
+ten minutes, which shapes the cadence.</p>
+<p>Work is divided into two kinds of lane:</p>
+<dl>
+  <dt>The build lane (one at a time)</dt>
+  <dd>The only agent permitted to modify the emulator source, recompile, or run the emulator.
+      Serialised deliberately: two agents editing the same device would corrupt each other's
+      measurements.</dd>
+  <dt>Read-only passes (several in parallel)</dt>
+  <dd>Agents that may read anything — the instruction corpus, archived emulator logs, the notes,
+      the source — but change nothing. These have repeatedly found errors the main line missed,
+      including defects in the project's own measuring instruments.</dd>
+</dl>
+
+<h3>2.2 The evidence discipline</h3>
+<p>Every claim carries a grade, and these grades appear throughout this report:</p>
+<p>
+<span class="grade g-meas">MEASURED</span> observed directly in a run or in the instruction corpus &nbsp;
+<span class="grade g-forc">FORCED</span> follows necessarily from something already established &nbsp;
+<span class="grade g-infr">INFERRED</span> a reasonable reading, not compelled &nbsp;
+<span class="grade g-spec">SPECULATIVE</span> a pattern noted for later testing
+</p>
+<p>Alongside the grades, the project operates a set of numbered standing rules, each adopted after
+a specific mistake. Several are referenced later in this report; the most consequential are:</p>
+<ul>
+  <li><strong>Pre-register predictions and falsifiers before running an experiment</strong>, and
+      compute the expected null result first. A criterion that cannot fail is not a test.</li>
+  <li><strong>Run a control whose answer is already known.</strong> If the control fails, the
+      instrument is wrong and the experiment decides nothing.</li>
+  <li><strong>Compare minimum against maximum before reporting any output.</strong> A constant
+      appears as "output" in every summary statistic. Two claims that the chip had begun producing
+      audio were published and retracted on this basis; one was a direct-current offset.</li>
+  <li><strong>A census printing a clean zero is indistinguishable from a correct negative.</strong>
+      Any new detector must first be validated against a case whose answer is known.</li>
+</ul>
+
+<h3>2.3 The public record</h3>
+<p>The work is documented continuously in three places: a numbered technical register of roughly
+225 sections (in which later sections retract earlier ones in place), a set of handover and index
+documents designed so that work can resume after any interruption, and a public blog series which
+has reached part&nbsp;117.</p>

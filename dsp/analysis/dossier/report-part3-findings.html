@@ -1,0 +1,209 @@
+<h2 class="newpage">4. How this review was conducted</h2>
+
+<p>The review was carried out by twelve independent agents in four stages, none of which could
+modify anything:</p>
+
+<ol>
+  <li><strong>Measure</strong> — three parallel factual audits: the rate of progress over time, the
+      decode coverage with denominators, and a census of the project's failure modes.</li>
+  <li><strong>Assess</strong> — four independent lenses over that shared evidence. Two of them were
+      deliberately opposed: one required to build the strongest possible case that the effort is
+      <em>stagnating and the strategy is wrong</em>, the other the strongest case that this is a
+      <em>healthy plateau preceding a breakthrough</em>. The remaining two examined complementary
+      approaches never tried, and the machinery of the work itself.</li>
+  <li><strong>Challenge</strong> — each assessment handed to a separate agent instructed to refute
+      it at file-and-line level, and to flag where an assessment was <em>too weak</em>.</li>
+  <li><strong>Synthesize</strong> — one answer, required to drop anything the challenge refuted and
+      to say what it dropped.</li>
+</ol>
+
+<p>Both opposed lenses carried the same constraint: <em>if the evidence does not support your case,
+say so plainly — a lens that cannot return "the case is weak" is not a lens.</em> All figures below
+were re-derived by the review directly against the repositories, not taken from the project's own
+summaries.</p>
+
+<h2>5. Rate of progress</h2>
+
+<h3>5.1 What moved</h3>
+<p>Two always-on measurements changed for the first time in the project's history, both within the
+last 36 hours. The saturation rate in the zero-input bucket fell from 5.303&nbsp;% to 4.924&nbsp;% of
+186,394,560 conversions — a difference of <strong>exactly 706,040</strong>, which is precisely one
+conversion per silent frame. And a memory cell moved from a stuck full-scale value to the chorus
+oscillator's designed <span class="m">+114</span>-per-frame ramp: the modulation reaching its
+intended destination for the first time.</p>
+
+<h3>5.2 What did not move</h3>
+<p>The end-to-end reading is unchanged: every one of 826,040 quiet frames and 313,960 loud frames
+produces a peak output of zero. That has held from section 77 through section 226.</p>
+
+<p>More importantly — and this is the review's central measurement — <strong>the decode itself has
+not advanced</strong>:</p>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th style="width:20%">Value</th><th style="width:28%">Last changed</th></tr>
+  <tr><td>Corpus words executable without guessing</td><td class="n">1178 / 3057 = 38.5 %</td><td>2026-07-29 (unchanged)</td></tr>
+  <tr><td>Corpus words decoded (broader test)</td><td class="n">1247 / 3057 = 40.8 %</td><td>2026-07-29 (unchanged)</td></tr>
+  <tr><td>The disassembler source</td><td class="n">1031 lines</td><td>2026-07-27</td></tr>
+  <tr><td>The instruction-set document</td><td class="n">&mdash;</td><td>2026-07-27</td></tr>
+  <tr><td>The emulator device source</td><td class="n">~3400 &rarr; 7781 lines</td><td>continuously</td></tr>
+</table>
+
+<div class="warn">
+<p><strong>No field reading has changed in four days, across roughly 300 commits and 175 register
+sections.</strong> The emulator source more than doubled in size over the same period. The growth is
+instrumentation, analysis and documentation — not decoding.</p>
+</div>
+
+<h3>5.3 Where the machine actually is</h3>
+<p>The review decomposed the saturation census itself and found something the project had not
+stated. <strong>Every clipping site in the shipped build is in the fixed 60-word preamble</strong>
+that runs before any effect, on every frame of every preset — six instructions, each saturating on
+<strong>100&nbsp;% of the 706,040 frames where the input is exactly zero</strong>. Their counts sum
+to 9,178,520; adding one further site gives 9,178,556, which is the entire quiet-bucket total,
+exactly.</p>
+
+<p>Real audio does enter the chip — an input audit records 2,880,002 samples with a peak of 21,796
+out of 32,768. But before that audio reaches any effect at all, the machine's own fixed preamble
+computes a constant <strong>1.720 times full scale</strong> from boot-fixed coefficients and
+saturates. Everything downstream is zero.</p>
+
+<h2>6. Stagnation, or a plateau?</h2>
+
+<p>The review declined to answer this as a single question, and split it into three parts with
+different verdicts. That split is the most useful thing in the report.</p>
+
+<h3>6.1 The behavioural work: a genuine converging plateau</h3>
+<p>The chain of the last eight sections is a real bisection, in which each step consumed the output
+of the previous one: the input cell is the send &rarr; forcing it open activates the first effect
+body &rarr; the output block is exonerated by provenance rather than by liveness &rarr; the first
+non-zero output is an artefact of the test rig &rarr; the rail is in the shipped build, not the rig
+&rarr; the site is one instruction at 1.720&nbsp;&times; full scale &rarr; the suspected multiply is
+faithful &rarr; the coefficient base is correct. The current blocker is a single named, untested
+reading with five pre-registered falsifiers.</p>
+<p class="ge"><strong>Verdict: a plateau one decision from moving, not stagnation.</strong></p>
+
+<h3>6.2 The decode work: genuinely stagnant, and measurably so</h3>
+<p>38.5&nbsp;% has not moved in four days. What the decode effort produced in that time was
+<em>closures</em> — fields declared undecidable, candidate readings refuted. These are real results
+that lower the ceiling, but they do not raise the score.</p>
+<div class="note">
+<p>The review's phrasing is worth quoting exactly: <em>"a project that only produces them is not
+decoding, and nothing in the read path flags the difference."</em> The project's own documentation
+does not distinguish between a section that decoded something and a section that closed a route,
+so the distinction was invisible to the loop making the decisions.</p>
+</div>
+
+<h3>6.3 A third thing, neither stagnant nor progressing: the bookkeeping is degrading</h3>
+<p>The review found the project's own records drifting out of agreement with each other:</p>
+<ul>
+  <li>The count of shipped fixes reads <strong>five, seven, "7 of 7", eight and nine</strong> across
+      five different documents. There is no enumerated list of them anywhere.</li>
+  <li>The index of standing rules stops at rule 18, while rules 19, 20 and 21 are cited by number in
+      at least eight files. <strong>Rule 20 has no definition anywhere</strong> — it is only ever
+      invoked.</li>
+  <li>A standing-constraints block still quotes the pre-fix saturation rate after the fix shipped.</li>
+</ul>
+
+<div class="warn">
+<p><strong>The most serious instance.</strong> A cross-model comparison against a sibling instrument
+— proposed independently during this very review as the highest-value unopened channel — was
+<strong>already run on 22 July, with a negative verdict</strong>: zero shared coefficients, delay
+lengths falsified, an intersection of one value across 962 pairs. That result exists in a notes
+directory the project's index does not sweep, and appears nowhere in its analysis tree. The review
+counts this as the eleventh occurrence of exactly the failure the index was built to prevent — and
+diagnoses the cause precisely: <em>the index is repo-scoped while the evidence is not.</em></p>
+</div>
+
+<h3>6.4 The verdict</h3>
+<div class="lede">
+<p><strong>The method is sound and the current tactical target is correct. The strategy is wrong in
+its allocation.</strong> Three cheap decode experiments are available and unrun; one fix that is
+proven by construction has sat unshipped for two days; and the hardware channel has never been
+dispatched in nine days.</p>
+</div>
+
+<h2 class="newpage">7. Prospects for complete decoding</h2>
+
+<p>"100&nbsp;%" turns out to mean three different things here, with very different answers.</p>
+
+<table>
+  <tr><th style="width:12%">Target</th><th style="width:44%">Definition</th><th style="width:14%">Today</th><th style="width:30%">Reachable?</th></tr>
+  <tr>
+    <td><strong>D1</strong></td>
+    <td>Every corpus word executable without guessing</td>
+    <td class="n">38.5 %</td>
+    <td><strong>No.</strong> The ceiling from this ROM alone is about <span class="m">93.3 %</span>;
+        205 words carry a formally closed field.</td>
+  </tr>
+  <tr>
+    <td><strong>D2</strong></td>
+    <td>Every field of every word read</td>
+    <td class="n">21.8 %</td>
+    <td><strong>No.</strong> One two-bit field alone appears in <span class="m">1280 of 3057</span>
+        words (41.9 %). One of its three observed values <em>is</em> read by a shipped gate; the
+        rest are not.</td>
+  </tr>
+  <tr>
+    <td><strong>D3</strong></td>
+    <td>Every word graded as proven, measured, or arbitrary-within-a-known-class, with no plain
+        guess load-bearing in the audio path</td>
+    <td class="n">&mdash;</td>
+    <td><strong>Yes</strong>, and largely by relabelling rather than new discovery.</td>
+  </tr>
+</table>
+
+<p>The structure of what remains is also unhelpful for anyone hoping for a single breakthrough. The
+review ran the project's own leverage analysis: <strong>86 unexecutable slots depend on 40 distinct
+unknowns, and no single unknown blocks more than seven slots.</strong> The best available bundle
+unlocks 25 slots for three unknowns. There is no one big win left; it is a bundle problem.</p>
+
+<h3>7.1 The finding that changes the picture &mdash; and its correction</h3>
+
+<div class="note">
+<p><strong>The review reported that a field covering 41.9&nbsp;% of the corpus had been closed on a
+technicality.</strong> It argued the closure rested on no single <em>program image</em> containing
+both halves of a minimal pair &mdash; while the machine loads two images at once &mdash; and proposed
+selecting one effect into the first unit and a reverb preset into the second to bring a pair into a
+single frame.</p>
+<p><strong>A follow-up pass, commissioned to pre-compute the experiment before building it, found
+the proposal not viable and the diagnosis wrong &mdash; in a way that produces a better result.</strong></p>
+</div>
+
+<p><strong>Why the proposed experiment fails.</strong> The two instructions sit at 83.3&nbsp;% and
+5.3&nbsp;% through their respective program ladders, twenty cursor advances deep against three, a
+factor of 12.1 apart in executed instructions, on different accumulators with different coefficient
+banks. A difference measured there could not be attributed to the field under test. Worse, one half
+of the pair reads exactly zero in both input conditions across <strong>nine archived
+experiments</strong> &mdash; it is dead code, three slots downstream of a known failure.</p>
+
+<p><strong>Why the closure is nonetheless wrong, for a different reason.</strong> The tool that
+searched for minimal pairs counted <em>one-bit</em> transitions across a <em>two-bit</em> field, so
+one of the three transitions was invisible to it. Counting properly yields <strong>17 pairs, three
+of them co-resident within a single image</strong> &mdash; the best being two <strong>adjacent
+instructions in the kernel header that runs on every frame of every preset</strong>. All three
+observed values of the field have been present together in <strong>every run this project has ever
+made</strong>. No effect selection is required, and none ever was.</p>
+
+<div class="warn">
+<p><strong>The real blocker is not co-residency but the absence of a hypothesis.</strong> Every
+instrument the project owns already prints both kernel sites. What is missing is a candidate meaning
+to test them against &mdash; and the one perfect pair is a <em>chain</em>, in which the second
+instruction's input is the first one's result, so the two cannot be made to read the same
+coefficient.</p>
+<p>The honest restatement is therefore <strong>"no discriminator"</strong>, not "no co-resident
+pair". Those are different claims and only the first is true. The productive route is to extend the
+partial reading that already exists for one of the field's values, not to run a cross-unit
+comparison.</p>
+</div>
+
+<p>A second, genuinely cheap instance of the original shape does survive: another undecoded bit has
+both halves of a pair inside a single image, with a ready-made selection recipe. One program load
+would decide whether an instruction the disassembler prints 62 times as a no-operation actually is
+one.</p>
+
+<h3>7.2 The honest answer</h3>
+<p><strong>Complete decoding in the strictest sense is not achievable from this ROM and should be
+formally abandoned as a goal.</strong> The achievable target is the third definition plus roughly
+45&ndash;50&nbsp;% on the first — and, in the review's words, the difference between <em>"we stalled
+at 38.5&nbsp;%"</em> and <em>"we reached the honest ceiling"</em> is currently three unrun
+experiments and a relabelling pass.</p>

@@ -1,0 +1,161 @@
+<h2 class="newpage">3. What the work has established</h2>
+
+<p>This section states the technical position as of 31 July 2026, independently of any judgement
+about whether that position represents good progress. Every figure here was measured by the project
+and is cited in its technical register.</p>
+
+<h3>3.1 The signal path, traced end to end</h3>
+
+<p>The chip processes each audio frame by running a fixed sequence of 285 instruction slots: a
+kernel, two effect bodies (one per effect unit), and a final block that presents the result to the
+outputs. Where the audio is lost along that path is now known precisely.</p>
+
+<table>
+  <tr><th style="width:26%">Stage</th><th style="width:44%">Finding</th><th style="width:30%">Evidence</th></tr>
+  <tr>
+    <td>Input reaches the chip</td>
+    <td>Audio arrives and is deposited into the first unit's input cell by two instructions.</td>
+    <td><span class="grade g-meas">MEASURED</span> input-dependent values observed</td>
+  </tr>
+  <tr>
+    <td>Input is destroyed before use</td>
+    <td>Two <em>later</em> instructions overwrite that cell before the effect body is called. The
+        body then reads a constant, and afterwards zero.</td>
+    <td><span class="grade g-meas">MEASURED</span> slot-by-slot residency census</td>
+  </tr>
+  <tr>
+    <td>Second unit never receives input</td>
+    <td>Its input cell has <strong>no writer at all</strong>. The equivalent cell in the first unit
+        has six.</td>
+    <td><span class="grade g-meas">MEASURED</span> two instruments, four experimental arms</td>
+  </tr>
+  <tr>
+    <td>Second unit's accumulator dies</td>
+    <td>One instruction loads that empty cell into the accumulator, killing <strong>128 of the
+        unit's 133 slots</strong>. All twelve reverb programs run in this unit.</td>
+    <td><span class="grade g-forc">FORCED</span> from the instruction order</td>
+  </tr>
+  <tr>
+    <td>The only link to the output</td>
+    <td>Exactly one instruction carries a body result to the final block. It runs
+        <span class="m">540,000</span> times out of <span class="m">540,000</span> and carries
+        <strong>zero every time</strong>.</td>
+    <td><span class="grade g-meas">MEASURED</span> provenance-tagged census</td>
+  </tr>
+  <tr>
+    <td>The output block is disconnected</td>
+    <td>Its operand census is <strong>byte-identical</strong> between an experiment where signal
+        flows through the bodies and one where it does not — every route, index, range and
+        provenance column, all 18 rows.</td>
+    <td><span class="grade g-meas">MEASURED</span> differential census</td>
+  </tr>
+</table>
+
+<div class="note">
+<p><strong>The significance of the last row.</strong> The output block was long assumed to be
+<em>starved</em> — correctly wired, waiting for input that never came. An identical census across an
+arm where the effect bodies demonstrably carry live audio proves something stronger and worse: its
+operands do not come from the signal path at all. It is not waiting for input; it is not connected
+to one.</p>
+</div>
+
+<h3>3.2 A defect that is visible without any signal at all</h3>
+
+<p>A census of arithmetic <em>before</em> the saturation clamp is applied — a distinction that
+matters, because after clamping a saturated value is indistinguishable from a legitimate full-scale
+one — found the following in the shipped emulator:</p>
+
+<pre>  input exactly zero    9,884,596 of 186,394,560 conversions saturate    5.303 %
+  input loud                                                             5.298 %</pre>
+
+<p><strong>The emulated chip clips more often with no input than with input.</strong> Seven
+instruction sites saturate on 100&nbsp;% of silent frames. This is not an artefact of a test
+apparatus: it is present in the default build, and a second, narrower apparatus deleting one quarter
+as much reproduces the effect whole.</p>
+
+<h3>3.3 What has been fixed</h3>
+
+<p><strong>Eight gates, across eleven register sections</strong>, have changed the emulator's
+behaviour and been kept. Every one belongs to a single category: <strong>a claim already proven
+elsewhere in the project's own notes or source which the emulator simply failed to
+implement</strong>. Representative examples:</p>
+
+<div class="note">
+<p><strong>That figure was itself a bookkeeping casualty, and is stated here with its unit for a
+reason.</strong> The project's own documents give the count as five, seven, "7 of 7", eight and nine
+in five different places, with no enumerated list anywhere. An audit commissioned during this review
+found the cause: <em>no published figure states what it is counting.</em> One section ships two
+gates; two other sections share one. Counted as gates the answer is eight; counted as sections,
+eleven. Every previously published figure — including one in an earlier draft of this report — was
+wrong for both units. The list is now generated from the source's own declarations rather than
+maintained by hand.</p>
+</div>
+
+<ul>
+  <li>A host communication packet decoded with its least significant bit dropped, so that a third of
+      every parameter in the machine was one unit low. Two notes contained the correct formula.
+      After the fix, the residual error was exactly <span class="m">1/&radic;2</span> — pure
+      rounding.</li>
+  <li>An index that was never reset between the two effect units, so the second unit read memory
+      nobody had written. Delay lines had, measurably, <em>no length at all</em> before this;
+      afterwards they had the lengths the ROM designs for them, matching the stored values exactly.</li>
+  <li>A modulo operation that <strong>added</strong> its modulus instead of applying it — proven by
+      a difference of exactly <span class="m">0x7FFFFF</span> at both endpoints, which is the
+      constant the emulator's own source annotation names "wrap".</li>
+  <li>A no-operation guard testing three of the four instruction fields, swallowing 103 instructions
+      the disassembler and the generated listings both handled correctly. The emulator core was the
+      only one of three implementations that got it wrong.</li>
+</ul>
+
+<div class="warn">
+<p><strong>The pattern worth noticing:</strong> not one of these fixes originated in a hypothesis
+the project invented. Every one was a correction of the emulator against knowledge the project had
+already written down. Whether this is a strength of the method or a limitation of it is one of the
+questions this review was commissioned to answer.</p>
+</div>
+
+<h3>3.4 The measuring apparatus, audited</h3>
+
+<p>Because the conclusions rest entirely on instrumentation the project wrote itself, that
+instrumentation was swept: <strong>203 diagnostic instruments across 266 print sites</strong>. The
+audit found defects in five classes, including counters that report visits rather than the events
+they are named for, a column header listing thirteen names over twelve values, and — universally —
+<strong>48 of 48 sampling instruments that arm once and never reset</strong>, pooling measurements
+across program changes.</p>
+
+<p>A follow-up triage then quantified the damage: of <strong>2,163 live measurement-bearing
+conclusions across 96 files</strong>, the confirmed defects touch <strong>fourteen</strong>, and
+none of them is an open load-bearing claim. Both defects proved to be bounded to specific date
+ranges, and the central "the chip is silent" measurement was confirmed sound and independently
+corroborated by a second instrument.</p>
+
+<div class="note">
+<p><strong>A near miss worth recording.</strong> The instrument that reports silence stores its
+running minimum in a sentinel value. A sibling instrument's sentinel <em>is</em> reset by the
+device's reset routine. Had the silence instrument's been treated the same way, its minimum would
+have been pinned at zero permanently and every "the chip is silent" statement in this project would
+have been an artefact of its own reset code. It is not — and both defects it does carry bias it
+toward reporting a <em>non-zero</em> result, so they cannot manufacture the null.</p>
+</div>
+
+<h3>3.5 What remains undecoded</h3>
+
+<p>Several instruction fields have resisted decoding, and it is important to distinguish two very
+different reasons:</p>
+
+<dl>
+  <dt>Undecidable by the method used</dt>
+  <dd>The primary technique is the <em>minimal pair</em> — find two programs identical except for
+      one bit, and compare. One field has five such pairs but <strong>no single loaded program ever
+      contains both halves of any pair</strong>, so no experiment of this shape can ever exhibit a
+      difference. This is a limit of the method, not of the field.</dd>
+  <dt>Closed on evidence</dt>
+  <dd>Other candidate readings have been positively refuted — for instance an entire alternate
+      instruction encoding whose four routes to decidability were each closed, and a proposed
+      operand-latch mechanism refuted by a two-sided experiment in which one arm produced a census
+      byte-identical to its control.</dd>
+</dl>
+
+<p>A search space that was once a 64-bit configuration mask of candidate behaviours is now
+<strong>exhausted</strong>: 61 of its 64 bits are referenced by the code, and the three that are not
+are set by default. New hypotheses now require new mechanisms rather than new combinations.</p>

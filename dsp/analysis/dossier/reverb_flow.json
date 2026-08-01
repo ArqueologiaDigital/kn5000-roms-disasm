@@ -1,0 +1,2227 @@
+{
+ "subject": "Technics SX-KN5000 effects DSP (NEC uPD6383GF, IC311) -- the REVERB tank, image rep algo 16 'ROOM REVERB 1', unit 1, I-RAM load 200, 133 words. The ONLY unit-1 image; shared byte-for-byte by the twelve reverb presets, algos 16..27.",
+ "generated_by": "scratchpad/build_flow.py (independent re-extraction; see scratchpad/rev_extract.py for the self-test)",
+ "frame_rate_hz": 44100,
+ "ms_warning": "EVERY millisecond figure in this file is computed at 44 100 Hz. Figures in project logs older than register sect 228 are 8.84 % high (they assumed 48 000 Hz) -- do not mix them.",
+ "grades": {
+  "MEASURED": "read out of the ROM, the corpus, or an archived capture",
+  "FORCED": "every survivor of an exhaustive enumeration agrees",
+  "INFERRED": "reasonable, not compelled",
+  "SPECULATIVE": "a reading with no discriminating evidence",
+  "UNDECODED": "no reading at all",
+  "NOTE": "on a node or edge whose type is 'undecoded', the grade refers to the OBSERVATION that the words are undecoded (that is MEASURED), never to any reading of what they compute."
+ },
+ "coefficient_scale_warning": "The reverb bank is NOT read at one uniform Q, and the two readings in circulation differ by exactly 2x. (1) The nine diffuser gains must be Q0.23 (cell/2**23): read that way 0 of 108 (12 presets x 9 stages) have |g| >= 1; read at Q1.22 (cell/2**22) 85 of 108 do, and a single-multiplier all-pass or comb stage with |g| >= 1 is unstable. (2) The DECAY cell 0x97 must be Q1.22: the firmware explicitly divides the gain by 2 before storing it (evaluator 0x039D98), so the gain the designer intends is 2 x cell/2**23. (3) The shipped MAME device applies ONE global shift, P_SHIFT + ACC_SHIFT = 22, i.e. Q1.22 everywhere -- which makes ROOM REVERB 1's first diffuser gain 1.50. (4) Register sect 227 sect 5 and any brief quoting it ('CONCERT 1.200/1.000/1.000, ROOM 1.000/0.800/1.000') are reading cells 0x9B/0x9C/0x9D at Q1.22; at Q0.23 those same three cells are 0.600/0.500/0.500 and 0.500/0.400/0.500 and they are, respectively, diffuser ladder-0 stage 4, diffuser ladder-0 stage 5 and separator-1's DRAM tap gain.",
+ "self_test": {
+  "tool": "scratchpad/rev_extract.py",
+  "result": "23 of 24 known answers reproduced; the 1 miss was MY OWN pairing guess for r3 sect 7.3's delay table and it is what exposed that table as a stride-2 artefact",
+  "two_sided_controls": [
+   "ladder gains read at Q1.22 instead of Q0.23 -> 1.50 1.26 1.04 1.00 0.80, DIFFERS from the published table (control fires)",
+   "delay payload read as raw 3 bytes instead of poke24 -> -127 -264 -435 -626 -489, DIFFERS (control fires)"
+  ]
+ },
+ "populations": {
+  "image": "133 words (w0..w132), 33 class-A coefficient multiplies, 28 delay-DRAM port words, 4 C-format words",
+  "decode_coverage_of_THIS_image": "dsp/tools/dsp_coverage.py, run 2026-07-31: tier-1 EXECUTABLE 69 of 133 = 51.9 %; tier-1 + tier-2 (operation known but not executable) 101 of 133 = 75.9 %; so 64 of 133 words carry no mnemonic and 32 of 133 carry NO READING AT ALL. The published flowchart page's '7 instructions still opaque' is a much weaker predicate -- the generator's landmark count, which exempts every class-A coefficient consumer and every word carrying a prose annotation.",
+  "corpus_decode_coverage": "TWO different denominators are in circulation and they must not be mixed: (a) dsp_coverage.py tier-1 executable over the 38 distinct body images = 1234 of 2974 = 41.5 %; (b) the ALU-decoded count the register quotes = 1178 of 3057 (= 38.5 %), whose population is the whole 40-blob corpus and whose predicate is 'the ALU operation is decoded', not 'the word is executable'.",
+  "descriptor_cells": "32 (13 writes, 19 reads), all inside unit 1's delay region [0x8000, 0x10000)",
+  "coefficient_bank": "37 cells C-RAM[0x90..0xB4]; the image's 33 class-A words consume 0x90..0xB0, so 0xB1..0xB4 are written and consumed by NO word of this image",
+  "presets": "12 (algos 16..27), one image, twelve parameter sets"
+ },
+ "topology_verdict": {
+  "identified": "input mix -> damping filter -> a chain of 11 delay-line stages (9 BLOCK A + 2 BLOCK B) laid out B A^5 B A^4 B C C -> two mirrored 3-tap early-reflection output mixers. Every stage owns exactly one delay-DRAM write and one read.",
+  "grade": "MEASURED at the PORT level (which word touches which line at what offset). The per-stage TRANSFER FUNCTION is OPEN.",
+  "comb_vs_allpass": "CONSISTENT with a comb family (pipe-comb / series comb cascade), NOT FORCED. First-order all-pass, parallel comb bank, Moorer, nested all-pass and Gray-Markel lattice all score 0 -- in the topology-NEUTRAL pool as well. BUT every survivor sits at the blocking read, which the output tail falsifies 24/24 vs 0/24, and in the required read regime the search returns 0 of 400.",
+  "early_reflections": "YES, MEASURED: six taps (three per channel) off ONE buffer, plus the pre-delay tap off the same buffer. Cross-channel ratio cell0x18/cell0x1B = 1.2006 +- 0.0032 over twelve independently canned presets -- one design quantity, the L/R decorrelation.",
+  "diffusion_network": "NOT identified as such. What is measured is a SERIES chain of 11 lines whose reads run two stages upstream of their writes; that is a recirculating network, but no reference topology survives in the admissible read regime.",
+  "biquad_9_word_splice": "ABSENT from this image. The 9-word biquad splice unit documented for PARAMETRIC EQ (lo12 0x1D3) occurs 0 times in algo 16. The reverb's three damping units are a DIFFERENT, 4-word / 3-coefficient shape (1D5 / 415 / 1D5 / 407)."
+ },
+ "decay_path": {
+  "loop_gain_cell": "C-RAM[0x97]",
+  "consumed_at": "w17 (000.A.0A.1D5), cursor position 0x97",
+  "law": "cell = int( -(10 ** (-4.816 * K / T)) / 2 * 2**23 ); chip gain = 2 * cell/2**23 = -10**(-4.816*K/T)",
+  "law_grade": "PROVEN BY CONSTRUCTION (evaluator 0x039D98, constants 0x012E07..0x012F03, softfloat pow at 0x03D533) + MEASURED (the live runtime poke 0xE8F713 is reproduced EXACTLY, all 24 bits, for CONCERT REVERB 1 at REVERB TIME = 2.000 s; 1 hit in 1600 candidates)",
+  "per_preset": {
+   "ROOM REVERB 1": {
+    "cell_0x97_boot": "0x199999",
+    "boot_q023": 0.2,
+    "chip_gain_magnitude": 0.4
+   },
+   "ROOM REVERB 2": {
+    "cell_0x97_boot": "0x0CCCCC",
+    "boot_q023": 0.1,
+    "chip_gain_magnitude": 0.2
+   },
+   "PLATE REVERB 1": {
+    "cell_0x97_boot": "0x0E147A",
+    "boot_q023": 0.11,
+    "chip_gain_magnitude": 0.22
+   },
+   "PLATE REVERB 2": {
+    "cell_0x97_boot": "0x0E147A",
+    "boot_q023": 0.11,
+    "chip_gain_magnitude": 0.22
+   },
+   "CONCERT REVERB 1": {
+    "cell_0x97_boot": "0x170A3D",
+    "boot_q023": 0.18,
+    "chip_gain_magnitude": 0.36
+   },
+   "CONCERT REVERB 2": {
+    "cell_0x97_boot": "0x147AE1",
+    "boot_q023": 0.16,
+    "chip_gain_magnitude": 0.32
+   },
+   "DARK REVERB 1": {
+    "cell_0x97_boot": "0x199999",
+    "boot_q023": 0.2,
+    "chip_gain_magnitude": 0.4
+   },
+   "DARK REVERB 2": {
+    "cell_0x97_boot": "0x199999",
+    "boot_q023": 0.2,
+    "chip_gain_magnitude": 0.4
+   },
+   "BRIGHT REVERB 1": {
+    "cell_0x97_boot": "0x199999",
+    "boot_q023": 0.2,
+    "chip_gain_magnitude": 0.4
+   },
+   "BRIGHT REVERB 2": {
+    "cell_0x97_boot": "0x400000",
+    "boot_q023": 0.5,
+    "chip_gain_magnitude": 1.0
+   },
+   "WAVE REVERB 1": {
+    "cell_0x97_boot": "0x199999",
+    "boot_q023": 0.2,
+    "chip_gain_magnitude": 0.4
+   },
+   "WAVE REVERB 2": {
+    "cell_0x97_boot": "0x199999",
+    "boot_q023": 0.2,
+    "chip_gain_magnitude": 0.4
+   }
+  },
+  "T60_status": "NOT ESTABLISHED. The single-comb identity T60 = 3D / (-log10 g) does not recover any measured line length: DARK 1, DARK 2 and BRIGHT 1 carry the SAME K over tanks that differ by 25 %, so K is not a loop length. The gain is known; the loop it closes is not, because the stage transfer function is open (ALU_OPEN). This project has guessed this quantity wrong three times; it is left OPEN here."
+ },
+ "ui_parameter_map": {
+  "source": "the Sub CPU's own level-2 destination table T2 at 0x0001F22C and the default records at 0x0001F09C, identical in all twelve reverbs; UI names captured live (notes/kn5000-dsp-paramlist.md sect 4)",
+  "grade": "MEASURED",
+  "slots": [
+   {
+    "slot": 0,
+    "name": "REVERB TIME (s)",
+    "op": "0x75",
+    "targets": [
+     "C-RAM 0x97"
+    ]
+   },
+   {
+    "slot": 1,
+    "name": "PRE DELAY (ms)",
+    "op": "0x67",
+    "targets": [
+     "descriptor 0x00",
+     "0x19",
+     "0x1A",
+     "0x1B",
+     "0x1C",
+     "0x1D",
+     "0x1E"
+    ],
+    "caveat": "the T1 list is off by one above entry 0; a uniform -1 makes all six taps land inside the pre-delay buffer, 72 of 72 (reverb-head-tail item H)"
+   },
+   {
+    "slot": 2,
+    "name": "HIGH DAMP GAIN",
+    "op": "0x76",
+    "targets": [
+     "C-RAM 0x9E",
+     "C-RAM 0xA6"
+    ],
+    "note": "damping triple #1 (0x93..0x95) is NOT reachable from the UI"
+   },
+   {
+    "slot": 3,
+    "name": "ER.LEVEL",
+    "op": "0x66",
+    "targets": [
+     "C-RAM 0xA9",
+     "0xAA",
+     "0xAB",
+     "0xAC",
+     "0xAF",
+     "0xB0",
+     "0xB1",
+     "0xB2"
+    ]
+   },
+   {
+    "slot": 4,
+    "name": "VOLUME",
+    "op": "0x63",
+    "targets": [
+     "C-RAM 0x86"
+    ],
+    "note": "0x86 is inside the 0x50..0x8B region that no algorithm writes in the canned banks"
+   }
+  ]
+ },
+ "nodes": [
+  {
+   "id": "IN",
+   "label": "AUDIO INPUT (host-written D-RAM)",
+   "type": "input",
+   "grade": "INFERRED",
+   "evidence": "w1 = 0000289415 'ld acc,(p)-119' is decoded; that the cell it loads carries the effect-send audio is INFERRED -- no word in this image names an input port",
+   "words": [
+    "w1"
+   ]
+  },
+  {
+   "id": "PD_BUF",
+   "label": "PRE-DELAY / EARLY-REFLECTION BUFFER (delay-DRAM)\nbase = descriptor cell 0x03 = 32768 (unit-1 floor)\nONE buffer, SEVEN taps",
+   "type": "delay",
+   "grade": "MEASURED",
+   "evidence": "descriptor cells 0x03 (base) and 0x00,0x18,0x19,0x1A,0x1B,0x1C,0x1D read off it; independently reproduced here and in reverb-topology-round7 sect 2.1 and reverb-head-tail sect 3",
+   "base_address": 32768,
+   "taps_samples": {
+    "w0 (PRE DELAY)": 800,
+    "w105 (L-ER1)": 650,
+    "w111 (L-ER2)": 1084,
+    "w112 (L-ER3)": 1625,
+    "w114 (R-ER1)": 540,
+    "w122 (R-ER2)": 975,
+    "w123 (R-ER3)": 1082
+   },
+   "taps_ms": {
+    "w0": 18.141,
+    "w105": 14.739,
+    "w111": 24.58,
+    "w112": 36.848,
+    "w114": 12.245,
+    "w122": 22.109,
+    "w123": 24.535
+   },
+   "ui_parameter": "PRE DELAY (ms) -- level-2 op 0x67 -> descriptor cells 0x00,0x19,0x1A,0x1B,0x1C,0x1D,0x1E (T1 map is off by one; a uniform -1 makes all six taps valid, 72/72, reverb-head-tail H)"
+  },
+  {
+   "id": "PD_READ",
+   "label": "w0  880.1.30.00B  DELAY READ, cell 0x00, D = 800 samples (18.14 ms @44.1 kHz)",
+   "type": "delay_read",
+   "grade": "MEASURED",
+   "evidence": "addr8 0x30 = first DRAM access of a body (37/38 images, r3 P7); cell 0x00 - cell 0x03 = 800, reproduced here",
+   "words": [
+    "w0"
+   ],
+   "delay_samples": 800,
+   "delay_ms": 18.141
+  },
+  {
+   "id": "INMIX",
+   "label": "INPUT MIX -- 3 coefficient multiplies\nC[0x90]=0.250  C[0x91]=0.500  C[0x92]=0.500",
+   "type": "multiply",
+   "grade": "MEASURED",
+   "evidence": "w2/w3/w4 are class-A 'mac (p),c+' at cursor 0x90/0x91/0x92; values from the canned parameter stream at Q0.23; INVARIANT in 11 of 12 presets",
+   "words": [
+    "w2",
+    "w3",
+    "w4"
+   ],
+   "cells": [
+    "0x90",
+    "0x91",
+    "0x92"
+   ],
+   "values_q023": [
+    0.25,
+    0.5,
+    0.5
+   ],
+   "caveat": "WHICH of the three operands is the input, which is the pre-delay tap and which is a feedback term is NOT established -- the three MACs differ only in their pointer displacements (-127, -3, -7)"
+  },
+  {
+   "id": "UND_HEAD",
+   "label": "UNDECODED  w5 202.2.4B.1CD | w6 000.2.00.40E",
+   "type": "undecoded",
+   "grade": "MEASURED",
+   "evidence": "rendered '?word' by the generated listing; w5 is the emulator's iw205, the word whose D-RAM cell 0x4B has no producer and which kills 128 of body 1's 133 slots in the shipped device",
+   "words": [
+    "w5",
+    "w6"
+   ]
+  },
+  {
+   "id": "DAMP1",
+   "label": "DAMPING FILTER #1 -- 3 coefficients\nC[0x93]=0.384  C[0x94]=0.198  C[0x95]=-0.206",
+   "type": "multiply",
+   "grade": "MEASURED",
+   "evidence": "w7/w8/w9 class-A at cursor 0x93/0x94/0x95, w10 'mac.st acc'; the 4-word 1D5/415/1D5/407 shape is BLOCK B positions [6..9] (reverb-topology-round7 sect 2.2)",
+   "words": [
+    "w7",
+    "w8",
+    "w9",
+    "w10"
+   ],
+   "cells": [
+    "0x93",
+    "0x94",
+    "0x95"
+   ],
+   "values_q023": [
+    0.3837,
+    0.1979,
+    -0.2061
+   ],
+   "caveat": "'one-pole damping' is INFERRED from the 3-coefficient shape and the op-0x76 HIGH DAMP GAIN naming of the OTHER two triples; triple #1 is NOT written by any UI parameter (op 0x76 targets 0x9E and 0xA6 only)"
+  },
+  {
+   "id": "PRIME_W",
+   "label": "w11  880.1.60.2DA  DELAY WRITE, cell 0x01 = 45464 -- the PRIME / LIMIT; no read is above it, so nothing ever reads it",
+   "type": "delay_write",
+   "grade": "MEASURED",
+   "evidence": "cell 0x01 = 45464 is above every read address in the image; r3 sect 5 / reverb-head-tail item G call it the PRIME write",
+   "words": [
+    "w11"
+   ]
+  },
+  {
+   "id": "SEP0",
+   "label": "SEPARATOR 0 -- DRAM tap gain C[0x96] = 0.500",
+   "type": "multiply",
+   "grade": "MEASURED",
+   "evidence": "w12 = 000.A.00.695 'ld tb,c+' at cursor 0x96; the same word occurs at w60 (0x9D) and w102 (0xA5), all three valued 0.500 in 11 of 12 presets",
+   "words": [
+    "w12"
+   ],
+   "cells": [
+    "0x96"
+   ],
+   "values_q023": [
+    0.5
+   ]
+  },
+  {
+   "id": "UND_SEP0",
+   "label": "UNDECODED  w13 000.2.BA.000 | w14 212.2.00.419 | w16 nop | w18 202.2.00.000",
+   "type": "undecoded",
+   "grade": "MEASURED",
+   "evidence": "w13/w18 render '?word'; w14 decodes to 'mac.ta2 acc' but its ALU role in the block is not settled",
+   "words": [
+    "w13",
+    "w14",
+    "w16",
+    "w18"
+   ]
+  },
+  {
+   "id": "L1_READ",
+   "label": "w15  880.1.20.64B  DELAY READ, cell 0x02 -- line L1, D = 83 (1.88 ms)",
+   "type": "delay_read",
+   "grade": "MEASURED",
+   "evidence": "cell 0x02 = 41673 sits 83 above line L1's base (cell 0x05 = 41590)",
+   "words": [
+    "w15"
+   ],
+   "delay_samples": 83,
+   "delay_ms": 1.882
+  },
+  {
+   "id": "DECAY",
+   "label": "REVERB DECAY / LOOP GAIN -- C[0x97]\nboot bank +0.200 (Q0.23); RUNTIME poke -0.17996 -> chip gain -2*cell = -0.400",
+   "type": "multiply",
+   "grade": "MEASURED",
+   "evidence": "w17 = 000.A.0A.1D5 at cursor 0x97. The firmware COMPUTES this cell: UI slot 0 'REVERB TIME (s)' -> level-2 op 0x75 -> evaluator 0x039D98 -> writer 0x0387E6 -> C-RAM 0x97, with cell = int(-(10**(-4.816*K/T))/2 * 2**23). dsp/tools/reverb_time.py solves T back to the discrete UI list for 12 of 12 presets, none missing by >2 %; the live capture's runtime poke '0A 74 7B 89 A6' decodes to 0xE8F713 = -0.17996, EXACT for CONCERT REVERB 1 at REVERB TIME = 2.000 s (register sect 72)",
+   "words": [
+    "w17"
+   ],
+   "cells": [
+    "0x97"
+   ],
+   "boot_value_q023": 0.2,
+   "runtime_value_q023": -0.17996,
+   "chip_gain_room1": -0.4,
+   "chip_gain_concert1": -0.36,
+   "ui_parameter": "REVERB TIME (s), 0.10 .. 32.00 s (5 piecewise ranges)",
+   "caveat": "MEASURED SIGN DISAGREEMENT: the canned boot bulk load writes the cell POSITIVE (+0.200 ROOM 1 / +0.180 CONCERT 1) and the runtime refresh writes it NEGATIVE (-0.180). Both are in the SAME archived capture (transfer 25 vs transfer 26). Which sign the tank runs on is therefore a function of whether any parameter has been refreshed since boot"
+  },
+  {
+   "id": "STAGE1",
+   "label": "BLOCK A rep 1/9 (ladder run A)  w19..w26\n  slot0 w19  880.1.60.2D4  DELAY WRITE -> L0 (= the PRE-DELAY buffer) (base cell 0x03)\n  slot1 w20  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w21  000.2.00.419\n  slot3 w22  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w23  880.1.20.655  DELAY READ  <- L2, D = 172 (3.90 ms)\n  slot5 w24  102.A.00.64B  THE MULTIPLY, C[0x98] = +0.750\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w19",
+    "w20",
+    "w21",
+    "w22",
+    "w23",
+    "w24",
+    "w25",
+    "w26"
+   ],
+   "write_cell": "0x03",
+   "read_cell": "0x04",
+   "line_written": "L0 (= the PRE-DELAY buffer)",
+   "line_read": "L2",
+   "read_delay_samples": 172,
+   "read_delay_ms": 3.9,
+   "coeff_cell": "0x98",
+   "coeff_q023": 0.75,
+   "coeff_q122": 1.5,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE2",
+   "label": "BLOCK A rep 2/9 (ladder run A)  w27..w34\n  slot0 w27  880.1.60.2D4  DELAY WRITE -> L1 (base cell 0x05)\n  slot1 w28  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w29  000.2.00.419\n  slot3 w30  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w31  880.1.20.655  DELAY READ  <- L3, D = 356 (8.07 ms)\n  slot5 w32  102.A.00.64B  THE MULTIPLY, C[0x99] = +0.630\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w27",
+    "w28",
+    "w29",
+    "w30",
+    "w31",
+    "w32",
+    "w33",
+    "w34"
+   ],
+   "write_cell": "0x05",
+   "read_cell": "0x06",
+   "line_written": "L1",
+   "line_read": "L3",
+   "read_delay_samples": 356,
+   "read_delay_ms": 8.073,
+   "coeff_cell": "0x99",
+   "coeff_q023": 0.63,
+   "coeff_q122": 1.26,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE3",
+   "label": "BLOCK A rep 3/9 (ladder run A)  w35..w42\n  slot0 w35  880.1.60.2D4  DELAY WRITE -> L2 (base cell 0x07)\n  slot1 w36  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w37  000.2.00.419\n  slot3 w38  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w39  880.1.20.655  DELAY READ  <- L4, D = 513 (11.63 ms)\n  slot5 w40  102.A.00.64B  THE MULTIPLY, C[0x9A] = +0.520\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w35",
+    "w36",
+    "w37",
+    "w38",
+    "w39",
+    "w40",
+    "w41",
+    "w42"
+   ],
+   "write_cell": "0x07",
+   "read_cell": "0x08",
+   "line_written": "L2",
+   "line_read": "L4",
+   "read_delay_samples": 513,
+   "read_delay_ms": 11.633,
+   "coeff_cell": "0x9A",
+   "coeff_q023": 0.52,
+   "coeff_q122": 1.04,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE4",
+   "label": "BLOCK A rep 4/9 (ladder run A)  w43..w50\n  slot0 w43  880.1.60.2D4  DELAY WRITE -> L3 (base cell 0x09)\n  slot1 w44  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w45  000.2.00.419\n  slot3 w46  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w47  880.1.20.655  DELAY READ  <- L5, D = 739 (16.76 ms)\n  slot5 w48  102.A.00.64B  THE MULTIPLY, C[0x9B] = +0.500\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w43",
+    "w44",
+    "w45",
+    "w46",
+    "w47",
+    "w48",
+    "w49",
+    "w50"
+   ],
+   "write_cell": "0x09",
+   "read_cell": "0x0A",
+   "line_written": "L3",
+   "line_read": "L5",
+   "read_delay_samples": 739,
+   "read_delay_ms": 16.757,
+   "coeff_cell": "0x9B",
+   "coeff_q023": 0.5,
+   "coeff_q122": 1.0,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE5",
+   "label": "BLOCK A rep 5/9 (ladder run A)  w51..w58\n  slot0 w51  880.1.60.2D4  DELAY WRITE -> L4 (base cell 0x0B)\n  slot1 w52  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w53  000.2.00.419\n  slot3 w54  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w55  880.1.20.655  DELAY READ  <- L6, D = 240 (5.44 ms)\n  slot5 w56  102.A.00.64B  THE MULTIPLY, C[0x9C] = +0.400\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w51",
+    "w52",
+    "w53",
+    "w54",
+    "w55",
+    "w56",
+    "w57",
+    "w58"
+   ],
+   "write_cell": "0x0B",
+   "read_cell": "0x0C",
+   "line_written": "L4",
+   "line_read": "L6",
+   "read_delay_samples": 240,
+   "read_delay_ms": 5.442,
+   "coeff_cell": "0x9C",
+   "coeff_q023": 0.4,
+   "coeff_q122": 0.8,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE6",
+   "label": "BLOCK A rep 6/9 (ladder run B)  w69..w76\n  slot0 w69  880.1.60.2D4  DELAY WRITE -> L6 (base cell 0x0F)\n  slot1 w70  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w71  000.2.00.419\n  slot3 w72  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w73  880.1.20.655  DELAY READ  <- L8, D = 247 (5.60 ms)\n  slot5 w74  102.A.BA.64B  THE MULTIPLY, C[0xA1] = +0.630\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w69",
+    "w70",
+    "w71",
+    "w72",
+    "w73",
+    "w74",
+    "w75",
+    "w76"
+   ],
+   "write_cell": "0x0F",
+   "read_cell": "0x10",
+   "line_written": "L6",
+   "line_read": "L8",
+   "read_delay_samples": 247,
+   "read_delay_ms": 5.601,
+   "coeff_cell": "0xA1",
+   "coeff_q023": 0.63,
+   "coeff_q122": 1.26,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE7",
+   "label": "BLOCK A rep 7/9 (ladder run B)  w77..w84\n  slot0 w77  880.1.60.2D4  DELAY WRITE -> L7 (base cell 0x11)\n  slot1 w78  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w79  000.2.00.419\n  slot3 w80  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w81  880.1.20.655  DELAY READ  <- L9, D = 428 (9.71 ms)\n  slot5 w82  102.A.00.64B  THE MULTIPLY, C[0xA2] = +0.620\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w77",
+    "w78",
+    "w79",
+    "w80",
+    "w81",
+    "w82",
+    "w83",
+    "w84"
+   ],
+   "write_cell": "0x11",
+   "read_cell": "0x12",
+   "line_written": "L7",
+   "line_read": "L9",
+   "read_delay_samples": 428,
+   "read_delay_ms": 9.705,
+   "coeff_cell": "0xA2",
+   "coeff_q023": 0.62,
+   "coeff_q122": 1.24,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE8",
+   "label": "BLOCK A rep 8/9 (ladder run B)  w85..w92\n  slot0 w85  880.1.60.2D4  DELAY WRITE -> L8 (base cell 0x13)\n  slot1 w86  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w87  000.2.00.419\n  slot3 w88  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w89  880.1.20.655  DELAY READ  <- L10, D = 616 (13.97 ms)\n  slot5 w90  102.A.00.64B  THE MULTIPLY, C[0xA3] = +0.520\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w85",
+    "w86",
+    "w87",
+    "w88",
+    "w89",
+    "w90",
+    "w91",
+    "w92"
+   ],
+   "write_cell": "0x13",
+   "read_cell": "0x14",
+   "line_written": "L8",
+   "line_read": "L10",
+   "read_delay_samples": 616,
+   "read_delay_ms": 13.968,
+   "coeff_cell": "0xA3",
+   "coeff_q023": 0.52,
+   "coeff_q122": 1.04,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "STAGE9",
+   "label": "BLOCK A rep 9/9 (ladder run B)  w93..w100\n  slot0 w93  880.1.60.2D4  DELAY WRITE -> L9 (base cell 0x15)\n  slot1 w94  104.2.00.000  UNDECODED (the 'all-pass marker')\n  slot2 w95  000.2.00.419\n  slot3 w96  012.2.00.680  hi12 bit4 = store acc -> mem[ptr]\n  slot4 w97  880.1.20.655  DELAY READ  <- L11, D = 360 (8.16 ms)\n  slot5 w98  102.A.00.64B  THE MULTIPLY, C[0xA4] = +0.400\n  slot6/7 nop nop",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "the 6-word core matches at 9 sites in this image and 114 sites over 13 programs corpus-wide (re-counted here, 9/9 and 114/13); the write/read cell assignment is the descriptor cursor in program order (r3 P6), reproduced here and identical to reverb-topology-round7 sect 2.1",
+   "words": [
+    "w93",
+    "w94",
+    "w95",
+    "w96",
+    "w97",
+    "w98",
+    "w99",
+    "w100"
+   ],
+   "write_cell": "0x15",
+   "read_cell": "0x16",
+   "line_written": "L9",
+   "line_read": "L11",
+   "read_delay_samples": 360,
+   "read_delay_ms": 8.163,
+   "coeff_cell": "0xA4",
+   "coeff_q023": 0.4,
+   "coeff_q122": 0.8,
+   "alu_semantics": "NOT ESTABLISHED -- see node ALU_OPEN"
+  },
+  {
+   "id": "ALU_OPEN",
+   "label": "UNDECODED: WHAT THE 6-WORD CORE COMPUTES\nTwo rival readings, and they are NOT reconciled:\n (a) r1-allpass-motif (2026-07-26): a software-pipelined ONE-MULTIPLIER ALL-PASS; 36 machines survive an exhaustive search, all reproduce a textbook all-pass cascade at max|err| = 0; TWO role families (A and B) survive and the numbers cannot separate them.\n (b) schroeder-topology + reverb-topology-round7 (2026-07-27): re-run in the DEVICE'S OWN ACTION/SRC vocabulary the FIRST-ORDER ALL-PASS scores ZERO and COMB families score non-zero (pipe-comb 335, series comb cascade 208 of 400 sampled from an exhaustive 82 632). The all-pass, parallel comb bank, Moorer, nested all-pass and Gray-Markel lattice are at 0 in the topology-NEUTRAL pool too.\n (c) BUT round7 sect 7.2b: every one of those survivors sits at land = -1 (the BLOCKING read), which reverb-head-tail item B FALSIFIES at the output tail 24/24 vs 0/24 on disagreement sites; in the read regime the rest of the program requires, the topology search returns ZERO of 400, all three drain conventions.\n=> THE STAGE TRANSFER FUNCTION IS OPEN. Comb-family is CONSISTENT, not FORCED.",
+   "type": "undecoded",
+   "grade": "MEASURED",
+   "evidence": "r1-allpass-motif sect 5-7; schroeder-topology sect 0; reverb-topology-round7 sect 0 E/F/G and sect 7.2/7.2b/7.3; reverb-head-tail item B"
+  },
+  {
+   "id": "MARKER_OPEN",
+   "label": "UNDECODED: slot1 = 104.2.00.000 (x9 here, 122 corpus-wide over 16 programs)\nr1 family A gives it NO JOB AT ALL (free in 24 of 36 machines); r1 family B gives it 'acc <- acc + P'. Not settled.",
+   "type": "undecoded",
+   "grade": "MEASURED",
+   "evidence": "r1-allpass-motif sect 5.1/5.2/5.3"
+  },
+  {
+   "id": "SEP1",
+   "label": "BLOCK B (10 words, FOUR class-A multiplies)  w59..w68\n  w59  880.1.60.2DA  DELAY WRITE -> L5 (base cell 0x0D)\n  w60  000.A.00.695  DRAM tap gain C[0x9D] = +0.500\n  w63  880.1.20.64B  DELAY READ  <- L7, D = 119 (2.70 ms)\n  damping triple C[0x9E..0xA0] = +0.4385 +0.3630 -0.4153  (op 0x76 = HIGH DAMP GAIN writes the FIRST cell)",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "block signature and the 12 write/read pairs: reverb-topology-round7 sect 2/2.1, reproduced here; op-0x76 -> {0x9E, 0xA6} read out of the level-2 destination table T2[0x76] of every reverb",
+   "words": [
+    "w59",
+    "w60",
+    "w61",
+    "w62",
+    "w63",
+    "w64",
+    "w65",
+    "w66",
+    "w67",
+    "w68"
+   ],
+   "write_cell": "0x0D",
+   "read_cell": "0x0E",
+   "line_written": "L5",
+   "line_read": "L7",
+   "read_delay_samples": 119,
+   "read_delay_ms": 2.698,
+   "tap_cell": "0x9D",
+   "tap_q023": 0.5,
+   "damping_cells": [
+    "0x9E",
+    "0x9F",
+    "0xA0"
+   ],
+   "damping_q023": [
+    0.4385,
+    0.363,
+    -0.4153
+   ],
+   "note": "damping triple #2 (0x9E..0xA0) is BYTE-IDENTICAL to triple #3 (0xA6..0xA8) in 12 of 12 presets -- the stereo mirror"
+  },
+  {
+   "id": "SEP2",
+   "label": "BLOCK B (10 words, FOUR class-A multiplies)  w101..w110\n  w101  880.1.60.2DA  DELAY WRITE -> L10 (base cell 0x17)\n  w102  000.A.00.695  DRAM tap gain C[0xA5] = +0.500\n  w105  880.1.20.64B  DELAY READ  <- L12 (an ER tap, 650 off the pre-delay base), D = 650 (14.74 ms)\n  damping triple C[0xA6..0xA8] = +0.4385 +0.3630 -0.4153  (op 0x76 = HIGH DAMP GAIN writes the FIRST cell)",
+   "type": "stage",
+   "grade": "MEASURED",
+   "evidence": "block signature and the 12 write/read pairs: reverb-topology-round7 sect 2/2.1, reproduced here; op-0x76 -> {0x9E, 0xA6} read out of the level-2 destination table T2[0x76] of every reverb",
+   "words": [
+    "w101",
+    "w102",
+    "w103",
+    "w104",
+    "w105",
+    "w106",
+    "w107",
+    "w108",
+    "w109",
+    "w110"
+   ],
+   "write_cell": "0x17",
+   "read_cell": "0x18",
+   "line_written": "L10",
+   "line_read": "L12 (an ER tap, 650 off the pre-delay base)",
+   "read_delay_samples": 650,
+   "read_delay_ms": 14.739,
+   "tap_cell": "0xA5",
+   "tap_q023": 0.5,
+   "damping_cells": [
+    "0xA6",
+    "0xA7",
+    "0xA8"
+   ],
+   "damping_q023": [
+    0.4385,
+    0.363,
+    -0.4153
+   ],
+   "note": "damping triple #2 (0x9E..0xA0) is BYTE-IDENTICAL to triple #3 (0xA6..0xA8) in 12 of 12 presets -- the stereo mirror"
+  },
+  {
+   "id": "PROLOGUE_NOTE",
+   "label": "STRUCTURAL: w7..w17 is BLOCK B ROTATED BY SIX with its two anchored 'M <- bus' carry-copies (lo12 0x407) replaced by ACTION-0x00 words -- 9 of 11 positions match. That is the literal signature of a software-pipelined loop's prologue.",
+   "type": "note",
+   "grade": "MEASURED",
+   "evidence": "reverb-topology-round7 sect 2.2 (PROVEN BY CONSTRUCTION there)"
+  },
+  {
+   "id": "TAIL_L",
+   "label": "LEFT OUTPUT TAIL -- 11-word template, 3 early reflections + the tank\n  w111/w112  C40.1.80.000  C-FORMAT, each consumes a descriptor cell (0x19, 0x1A) -- ALU role UNDECODED\n  w114  880.1.20.2D5  DELAY READ cell 0x1B\n  coefficients C[0xA9..0xAC] = +0.3580 +0.5000 +0.4930 +0.3900   (op 0x66 = ER.LEVEL)",
+   "type": "output",
+   "grade": "MEASURED",
+   "evidence": "reverb-head-tail item A: the two tails agree in lo12 at 11 of 11 word positions; the ER tap values are descriptor cells 0x18..0x1D",
+   "words": [
+    "w111",
+    "w112",
+    "w113",
+    "w114",
+    "w115",
+    "w116",
+    "w117",
+    "w118",
+    "w119",
+    "w120",
+    "w121"
+   ],
+   "coeff_cells": [
+    "0xA9",
+    "0xAA",
+    "0xAB",
+    "0xAC"
+   ],
+   "coeff_q023": [
+    0.358,
+    0.5,
+    0.493,
+    0.39
+   ],
+   "er_taps_samples": [
+    650,
+    1084,
+    1625
+   ],
+   "er_taps_ms": [
+    14.739,
+    24.58,
+    36.848
+   ],
+   "caveat": "WHICH coefficient multiplies WHICH tap is INFERRED, not measured -- only w117/w118 and w128/w129 are decoded, and they name mem[ptr], not the delay-read register (reverb-head-tail sect 1.2). The datum standing at each consumer is the PREVIOUS slot's fetch (one-deep pipeline, MEASURED 24/24 vs 0/24)"
+  },
+  {
+   "id": "TAIL_R",
+   "label": "RIGHT OUTPUT TAIL -- 11-word template, 3 early reflections + the tank\n  w122/w123  C40.1.80.000  C-FORMAT, each consumes a descriptor cell (0x1C, 0x1D) -- ALU role UNDECODED\n  w125  880.1.20.2D5  DELAY READ cell 0x1E\n  coefficients C[0xAD..0xB0] = +0.2000 +0.2000 +0.4500 +0.5000   (op 0x66 = ER.LEVEL)",
+   "type": "output",
+   "grade": "MEASURED",
+   "evidence": "reverb-head-tail item A: the two tails agree in lo12 at 11 of 11 word positions; the ER tap values are descriptor cells 0x18..0x1D",
+   "words": [
+    "w122",
+    "w123",
+    "w124",
+    "w125",
+    "w126",
+    "w127",
+    "w128",
+    "w129",
+    "w130",
+    "w131",
+    "w132"
+   ],
+   "coeff_cells": [
+    "0xAD",
+    "0xAE",
+    "0xAF",
+    "0xB0"
+   ],
+   "coeff_q023": [
+    0.2,
+    0.2,
+    0.45,
+    0.5
+   ],
+   "er_taps_samples": [
+    540,
+    975,
+    1082
+   ],
+   "er_taps_ms": [
+    12.245,
+    22.109,
+    24.535
+   ],
+   "caveat": "WHICH coefficient multiplies WHICH tap is INFERRED, not measured -- only w117/w118 and w128/w129 are decoded, and they name mem[ptr], not the delay-read register (reverb-head-tail sect 1.2). The datum standing at each consumer is the PREVIOUS slot's fetch (one-deep pipeline, MEASURED 24/24 vs 0/24)"
+  },
+  {
+   "id": "FLUSH",
+   "label": "w125's fetch of descriptor cell 0x1E = 32767 is DISCARDED (the FLUSH read; 32767 is one below unit 1's floor, i.e. outside its region)",
+   "type": "note",
+   "grade": "MEASURED",
+   "evidence": "cell 0x1E = 32767 in 12 of 12 presets; reverb-head-tail item G/K"
+  },
+  {
+   "id": "L11_W",
+   "label": "w131  880.1.60.40E  DELAY WRITE -> line L11 (base cell 0x1F = 45103) -- the RIGHT tail's word does double duty",
+   "type": "delay_write",
+   "grade": "MEASURED",
+   "evidence": "reverb-head-tail sect 1: 'the RIGHT block's 0x40E word is ALSO the delay-DRAM write of line 11's base'",
+   "words": [
+    "w131"
+   ]
+  },
+  {
+   "id": "END",
+   "label": "w132  612.1.0F.000  END OF BLOCK, unit 1 (CALL/RETURN) -- and still performs the rest of the word",
+   "type": "output",
+   "grade": "MEASURED",
+   "evidence": "hi12 bit 10 = END; addr8 0x0F = the unit index; the 'bit 4 = store yet addr8 is the unit index' is flagged UNEXPLAINED in the generated listing",
+   "words": [
+    "w132"
+   ]
+  },
+  {
+   "id": "OUT",
+   "label": "STEREO OUTPUT L / R",
+   "type": "output",
+   "grade": "INFERRED",
+   "evidence": "the two mirrored tails and the op-0x66 ER.LEVEL naming; no word in this image names an output port"
+  }
+ ],
+ "edges": [
+  {
+   "from": "IN",
+   "to": "INMIX",
+   "grade": "INFERRED",
+   "evidence": "w1 loads a D-RAM cell, w2..w4 accumulate three coefficient products; which operand is the input is not established"
+  },
+  {
+   "from": "PD_BUF",
+   "to": "PD_READ",
+   "grade": "MEASURED",
+   "evidence": "descriptor cell 0x00 = base + 800",
+   "delay_samples": 800,
+   "delay_ms": 18.141
+  },
+  {
+   "from": "PD_READ",
+   "to": "INMIX",
+   "grade": "INFERRED",
+   "evidence": "w0 is the first word and w2..w4 the next multiplies; that the pre-delay tap enters the input mix is round7 sect 2.3 reading (i). Reading (ii) -- the tap goes only to the output -- is equally live and NOTHING decides between them"
+  },
+  {
+   "from": "INMIX",
+   "to": "UND_HEAD",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "UND_HEAD",
+   "to": "DAMP1",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "DAMP1",
+   "to": "PRIME_W",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "PRIME_W",
+   "to": "SEP0",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "SEP0",
+   "to": "UND_SEP0",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "UND_SEP0",
+   "to": "L1_READ",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "L1_READ",
+   "to": "DECAY",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "DECAY",
+   "to": "STAGE1",
+   "grade": "MEASURED",
+   "evidence": "program order",
+   "gain": "-2*C[0x97] = -0.400 at REVERB TIME 0.70 s (ROOM 1); the SIGN is boot-vs-runtime dependent, see node DECAY"
+  },
+  {
+   "from": "STAGE1",
+   "to": "STAGE2",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run A",
+   "caveat": "the SIGNAL carried on this edge is not established -- see ALU_OPEN"
+  },
+  {
+   "from": "STAGE2",
+   "to": "STAGE3",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run A",
+   "caveat": "the SIGNAL carried on this edge is not established -- see ALU_OPEN"
+  },
+  {
+   "from": "STAGE3",
+   "to": "STAGE4",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run A",
+   "caveat": "the SIGNAL carried on this edge is not established -- see ALU_OPEN"
+  },
+  {
+   "from": "STAGE4",
+   "to": "STAGE5",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run A",
+   "caveat": "the SIGNAL carried on this edge is not established -- see ALU_OPEN"
+  },
+  {
+   "from": "STAGE5",
+   "to": "SEP1",
+   "grade": "MEASURED",
+   "evidence": "program order (the interlude BLOCK B sits BETWEEN the two BLOCK A runs -- reverb-topology-round7 item A)"
+  },
+  {
+   "from": "SEP1",
+   "to": "STAGE6",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "STAGE6",
+   "to": "STAGE7",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run B",
+   "caveat": "see ALU_OPEN"
+  },
+  {
+   "from": "STAGE7",
+   "to": "STAGE8",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run B",
+   "caveat": "see ALU_OPEN"
+  },
+  {
+   "from": "STAGE8",
+   "to": "STAGE9",
+   "grade": "MEASURED",
+   "evidence": "program order inside ladder run B",
+   "caveat": "see ALU_OPEN"
+  },
+  {
+   "from": "STAGE9",
+   "to": "SEP2",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "SEP2",
+   "to": "TAIL_L",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "TAIL_L",
+   "to": "TAIL_R",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "TAIL_R",
+   "to": "L11_W",
+   "grade": "MEASURED",
+   "evidence": "w131 is inside the RIGHT tail template"
+  },
+  {
+   "from": "TAIL_R",
+   "to": "END",
+   "grade": "MEASURED",
+   "evidence": "program order"
+  },
+  {
+   "from": "TAIL_L",
+   "to": "OUT",
+   "grade": "INFERRED",
+   "evidence": "the op-0x66 ER.LEVEL naming"
+  },
+  {
+   "from": "TAIL_R",
+   "to": "OUT",
+   "grade": "INFERRED",
+   "evidence": "the op-0x66 ER.LEVEL naming"
+  },
+  {
+   "from": "PD_BUF",
+   "to": "TAIL_L",
+   "grade": "MEASURED",
+   "evidence": "cells 0x18/0x19/0x1A are 650/1084/1625 off the pre-delay base",
+   "delay_samples": [
+    650,
+    1084,
+    1625
+   ],
+   "delay_ms": [
+    14.739,
+    24.58,
+    36.848
+   ]
+  },
+  {
+   "from": "PD_BUF",
+   "to": "TAIL_R",
+   "grade": "MEASURED",
+   "evidence": "cells 0x1B/0x1C/0x1D are 540/975/1082 off the pre-delay base",
+   "delay_samples": [
+    540,
+    975,
+    1082
+   ],
+   "delay_ms": [
+    12.245,
+    22.109,
+    24.535
+   ]
+  },
+  {
+   "from": "PD_BUF",
+   "to": "SEP2",
+   "grade": "MEASURED",
+   "evidence": "w105 reads cell 0x18 = 650 off the pre-delay base -- the tail separator's read is an EARLY-REFLECTION tap, not a ladder line",
+   "delay_samples": 650,
+   "delay_ms": 14.739
+  },
+  {
+   "from": "STAGE1",
+   "to": "PD_BUF",
+   "grade": "MEASURED",
+   "evidence": "w19's slot-0 write targets descriptor cell 0x03 = 32768, the SAME base the head's pre-delay tap and all six ER taps read from. Reproduced here; reverb-topology-round7 sect 2.3",
+   "kind": "FEEDBACK / delay write",
+   "note": "THIS IS THE ONLY CANDIDATE GLOBAL LOOP IN THE PROGRAM: a value the ladder computes at repetition 1 of frame n re-enters at w0 in frame n+800 (18.14 ms). Whether it closes a SIGNAL loop depends on the undecided reading (i)/(ii) at PD_READ->INMIX"
+  },
+  {
+   "from": "STAGE2",
+   "to": "L1_READ",
+   "grade": "MEASURED",
+   "evidence": "line L1: written by STAGE2, read 83 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L1",
+   "delay_samples": 83,
+   "delay_ms": 1.882,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE3",
+   "to": "STAGE1",
+   "grade": "MEASURED",
+   "evidence": "line L2: written by STAGE3, read 172 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L2",
+   "delay_samples": 172,
+   "delay_ms": 3.9,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE4",
+   "to": "STAGE2",
+   "grade": "MEASURED",
+   "evidence": "line L3: written by STAGE4, read 356 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L3",
+   "delay_samples": 356,
+   "delay_ms": 8.073,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE5",
+   "to": "STAGE3",
+   "grade": "MEASURED",
+   "evidence": "line L4: written by STAGE5, read 513 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L4",
+   "delay_samples": 513,
+   "delay_ms": 11.633,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "SEP1",
+   "to": "STAGE4",
+   "grade": "MEASURED",
+   "evidence": "line L5: written by SEP1, read 739 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L5",
+   "delay_samples": 739,
+   "delay_ms": 16.757,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE6",
+   "to": "STAGE5",
+   "grade": "MEASURED",
+   "evidence": "line L6: written by STAGE6, read 240 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L6",
+   "delay_samples": 240,
+   "delay_ms": 5.442,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE7",
+   "to": "SEP1",
+   "grade": "MEASURED",
+   "evidence": "line L7: written by STAGE7, read 119 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L7",
+   "delay_samples": 119,
+   "delay_ms": 2.698,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE8",
+   "to": "STAGE6",
+   "grade": "MEASURED",
+   "evidence": "line L8: written by STAGE8, read 247 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L8",
+   "delay_samples": 247,
+   "delay_ms": 5.601,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "STAGE9",
+   "to": "STAGE7",
+   "grade": "MEASURED",
+   "evidence": "line L9: written by STAGE9, read 428 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L9",
+   "delay_samples": 428,
+   "delay_ms": 9.705,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "SEP2",
+   "to": "STAGE8",
+   "grade": "MEASURED",
+   "evidence": "line L10: written by SEP2, read 616 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L10",
+   "delay_samples": 616,
+   "delay_ms": 13.968,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "L11_W",
+   "to": "STAGE9",
+   "grade": "MEASURED",
+   "evidence": "line L11: written by L11_W, read 360 samples later by the block TWO repetitions UPSTREAM (wtrail = 2 in port slots). Cell values are ROM constants; the pairing is the contiguous tiling and matches reverb-topology-round7 sect 2.1 exactly",
+   "kind": "FEEDBACK / delay line",
+   "line": "L11",
+   "delay_samples": 360,
+   "delay_ms": 8.163,
+   "note": "the read happens EARLIER in program order than the write, so the datum re-enters the ladder two stages upstream -- a recirculation, not a forward tap. What the loop GAIN is depends on ALU_OPEN"
+  },
+  {
+   "from": "ALU_OPEN",
+   "to": "STAGE1",
+   "grade": "MEASURED",
+   "evidence": "applies to all nine BLOCK A repetitions",
+   "kind": "annotation"
+  },
+  {
+   "from": "MARKER_OPEN",
+   "to": "STAGE1",
+   "grade": "MEASURED",
+   "evidence": "applies to all nine BLOCK A repetitions",
+   "kind": "annotation"
+  },
+  {
+   "from": "FLUSH",
+   "to": "TAIL_R",
+   "grade": "MEASURED",
+   "evidence": "w125's own fetch",
+   "kind": "annotation"
+  },
+  {
+   "from": "PROLOGUE_NOTE",
+   "to": "SEP0",
+   "grade": "MEASURED",
+   "evidence": "w7..w17",
+   "kind": "annotation"
+  }
+ ],
+ "per_preset_delay_and_coefficients": {
+  "ROOM REVERB 1": {
+   "lines_L1_to_L11_samples": [
+    83,
+    172,
+    356,
+    513,
+    739,
+    240,
+    119,
+    247,
+    428,
+    616,
+    360
+   ],
+   "lines_L1_to_L11_ms": [
+    1.882,
+    3.9,
+    8.073,
+    11.633,
+    16.757,
+    5.442,
+    2.698,
+    5.601,
+    9.705,
+    13.968,
+    8.163
+   ],
+   "tank_total_samples": 3873,
+   "tank_total_ms": 87.823,
+   "predelay_buffer_taps_samples": [
+    540,
+    650,
+    800,
+    975,
+    1082,
+    1084,
+    1625
+   ],
+   "predelay_buffer_taps_ms": [
+    12.245,
+    14.739,
+    18.141,
+    22.109,
+    24.535,
+    24.58,
+    36.848
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.3837,
+    "0x94": 0.1979,
+    "0x95": -0.2061,
+    "0x96": 0.5,
+    "0x97": 0.2,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.4385,
+    "0x9F": 0.363,
+    "0xA0": -0.4153,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.4385,
+    "0xA7": 0.363,
+    "0xA8": -0.4153,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.39,
+    "0xAD": 0.2,
+    "0xAE": 0.2,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.39,
+    "0xB3": 0.2,
+    "0xB4": 0.2
+   }
+  },
+  "ROOM REVERB 2": {
+   "lines_L1_to_L11_samples": [
+    166,
+    344,
+    713,
+    1027,
+    1478,
+    400,
+    239,
+    495,
+    856,
+    1232,
+    600
+   ],
+   "lines_L1_to_L11_ms": [
+    3.764,
+    7.8,
+    16.168,
+    23.288,
+    33.515,
+    9.07,
+    5.42,
+    11.224,
+    19.41,
+    27.937,
+    13.605
+   ],
+   "tank_total_samples": 7550,
+   "tank_total_ms": 171.202,
+   "predelay_buffer_taps_samples": [
+    20,
+    780,
+    934,
+    1403,
+    1558,
+    1560,
+    2340
+   ],
+   "predelay_buffer_taps_ms": [
+    0.454,
+    17.687,
+    21.179,
+    31.814,
+    35.329,
+    35.374,
+    53.061
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.4334,
+    "0x94": 0.2191,
+    "0x95": -0.348,
+    "0x96": 0.5,
+    "0x97": 0.1,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3745,
+    "0x9F": 0.3723,
+    "0xA0": -0.3315,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3745,
+    "0xA7": 0.3723,
+    "0xA8": -0.3315,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.305,
+    "0xAD": 0.16,
+    "0xAE": 0.16,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.305,
+    "0xB3": 0.16,
+    "0xB4": 0.16
+   }
+  },
+  "PLATE REVERB 1": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    1107,
+    1074,
+    2495,
+    600,
+    512,
+    870,
+    1078,
+    1669,
+    800
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    25.102,
+    24.354,
+    56.576,
+    13.605,
+    11.61,
+    19.728,
+    24.444,
+    37.846,
+    18.141
+   ],
+   "tank_total_samples": 11109,
+   "tank_total_ms": 251.905,
+   "predelay_buffer_taps_samples": [
+    1558,
+    1866,
+    2000,
+    2205,
+    2418,
+    3014,
+    3479
+   ],
+   "predelay_buffer_taps_ms": [
+    35.329,
+    42.313,
+    45.351,
+    50.0,
+    54.83,
+    68.345,
+    78.889
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.3745,
+    "0x94": 0.2819,
+    "0x95": -0.2775,
+    "0x96": 0.5,
+    "0x97": 0.11,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3217,
+    "0x9F": 0.3484,
+    "0xA0": -0.2441,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.62,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3217,
+    "0xA7": 0.3484,
+    "0xA8": -0.2441,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.75,
+    "0xAD": 0.395,
+    "0xAE": 0.395,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.75,
+    "0xB3": 0.395,
+    "0xB4": 0.395
+   }
+  },
+  "PLATE REVERB 2": {
+   "lines_L1_to_L11_samples": [
+    335,
+    1274,
+    1007,
+    569,
+    2095,
+    800,
+    2469,
+    870,
+    1678,
+    512,
+    1800
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    28.889,
+    22.834,
+    12.902,
+    47.506,
+    18.141,
+    55.986,
+    19.728,
+    38.05,
+    11.61,
+    40.816
+   ],
+   "tank_total_samples": 13409,
+   "tank_total_ms": 304.059,
+   "predelay_buffer_taps_samples": [
+    1558,
+    1866,
+    2000,
+    2805,
+    3114,
+    3118,
+    4079
+   ],
+   "predelay_buffer_taps_ms": [
+    35.329,
+    42.313,
+    45.351,
+    63.605,
+    70.612,
+    70.703,
+    92.494
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.3745,
+    "0x94": 0.3386,
+    "0x95": -0.3148,
+    "0x96": 0.5,
+    "0x97": 0.11,
+    "0x98": 0.75,
+    "0x99": 0.5,
+    "0x9A": 0.52,
+    "0x9B": 0.63,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3217,
+    "0x9F": 0.3484,
+    "0xA0": -0.2441,
+    "0xA1": 0.4,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.63,
+    "0xA5": 0.5,
+    "0xA6": 0.3217,
+    "0xA7": 0.3484,
+    "0xA8": -0.2441,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.755,
+    "0xAD": 0.395,
+    "0xAE": 0.395,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.755,
+    "0xB3": 0.395,
+    "0xB4": 0.395
+   }
+  },
+  "CONCERT REVERB 1": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    707,
+    1250,
+    1674,
+    480,
+    512,
+    870,
+    678,
+    900,
+    840
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    16.032,
+    28.345,
+    37.959,
+    10.884,
+    11.61,
+    19.728,
+    15.374,
+    20.408,
+    19.048
+   ],
+   "tank_total_samples": 8815,
+   "tank_total_ms": 199.887,
+   "predelay_buffer_taps_samples": [
+    500,
+    1558,
+    1866,
+    2805,
+    3114,
+    3118,
+    4079
+   ],
+   "predelay_buffer_taps_ms": [
+    11.338,
+    35.329,
+    42.313,
+    63.605,
+    70.612,
+    70.703,
+    92.494
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.4656,
+    "0x94": 0.359,
+    "0x95": -0.4521,
+    "0x96": 0.5,
+    "0x97": 0.18,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.62,
+    "0x9B": 0.6,
+    "0x9C": 0.5,
+    "0x9D": 0.5,
+    "0x9E": 0.2734,
+    "0x9F": 0.3573,
+    "0xA0": -0.1829,
+    "0xA1": 0.73,
+    "0xA2": 0.72,
+    "0xA3": 0.7,
+    "0xA4": 0.6,
+    "0xA5": 0.5,
+    "0xA6": 0.2734,
+    "0xA7": 0.3573,
+    "0xA8": -0.1829,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.6,
+    "0xAD": 0.45,
+    "0xAE": 0.45,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.6,
+    "0xB3": 0.45,
+    "0xB4": 0.45
+   }
+  },
+  "CONCERT REVERB 2": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    707,
+    1264,
+    2095,
+    1000,
+    512,
+    870,
+    1878,
+    2869,
+    1800
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    16.032,
+    28.662,
+    47.506,
+    22.676,
+    11.61,
+    19.728,
+    42.585,
+    65.057,
+    40.816
+   ],
+   "tank_total_samples": 13899,
+   "tank_total_ms": 315.17,
+   "predelay_buffer_taps_samples": [
+    1000,
+    2077,
+    2487,
+    3738,
+    4148,
+    4148,
+    4827
+   ],
+   "predelay_buffer_taps_ms": [
+    22.676,
+    47.098,
+    56.395,
+    84.762,
+    94.059,
+    94.059,
+    109.456
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.4176,
+    "0x94": 0.6188,
+    "0x95": -0.4334,
+    "0x96": 0.5,
+    "0x97": 0.16,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3217,
+    "0x9F": 0.3202,
+    "0xA0": -0.2215,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3217,
+    "0xA7": 0.3202,
+    "0xA8": -0.2215,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.3,
+    "0xAD": 0.225,
+    "0xAE": 0.225,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.3,
+    "0xB3": 0.225,
+    "0xB4": 0.225
+   }
+  },
+  "DARK REVERB 1": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    707,
+    1274,
+    1895,
+    1200,
+    512,
+    870,
+    1878,
+    2869,
+    1800
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    16.032,
+    28.889,
+    42.971,
+    27.211,
+    11.61,
+    19.728,
+    42.585,
+    65.057,
+    40.816
+   ],
+   "tank_total_samples": 13909,
+   "tank_total_ms": 315.397,
+   "predelay_buffer_taps_samples": [
+    1039,
+    1245,
+    1871,
+    2000,
+    2077,
+    2080,
+    3121
+   ],
+   "predelay_buffer_taps_ms": [
+    23.56,
+    28.231,
+    42.426,
+    45.351,
+    47.098,
+    47.166,
+    70.771
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.4334,
+    "0x94": 0.1505,
+    "0x95": -0.2788,
+    "0x96": 0.5,
+    "0x97": 0.2,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3745,
+    "0x9F": 0.5,
+    "0xA0": -0.3745,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3745,
+    "0xA7": 0.5,
+    "0xA8": -0.3745,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.7,
+    "0xAD": 0.5,
+    "0xAE": 0.5,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.7,
+    "0xB3": 0.5,
+    "0xB4": 0.5
+   }
+  },
+  "DARK REVERB 2": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    707,
+    1274,
+    1895,
+    800,
+    512,
+    870,
+    1878,
+    2869,
+    1200
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    16.032,
+    28.889,
+    42.971,
+    18.141,
+    11.61,
+    19.728,
+    42.585,
+    65.057,
+    27.211
+   ],
+   "tank_total_samples": 12909,
+   "tank_total_ms": 292.721,
+   "predelay_buffer_taps_samples": [
+    1558,
+    1866,
+    2000,
+    2405,
+    2814,
+    2918,
+    3879
+   ],
+   "predelay_buffer_taps_ms": [
+    35.329,
+    42.313,
+    45.351,
+    54.535,
+    63.81,
+    66.168,
+    87.959
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.4334,
+    "0x94": 0.0921,
+    "0x95": -0.1382,
+    "0x96": 0.5,
+    "0x97": 0.2,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3217,
+    "0x9F": 0.38,
+    "0xA0": -0.2654,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3217,
+    "0xA7": 0.38,
+    "0xA8": -0.2654,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.56,
+    "0xAD": 0.44,
+    "0xAE": 0.44,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.56,
+    "0xB3": 0.44,
+    "0xB4": 0.44
+   }
+  },
+  "BRIGHT REVERB 1": {
+   "lines_L1_to_L11_samples": [
+    2095,
+    569,
+    1469,
+    1274,
+    335,
+    600,
+    512,
+    870,
+    1278,
+    707,
+    1000
+   ],
+   "lines_L1_to_L11_ms": [
+    47.506,
+    12.902,
+    33.311,
+    28.889,
+    7.596,
+    13.605,
+    11.61,
+    19.728,
+    28.98,
+    16.032,
+    22.676
+   ],
+   "tank_total_samples": 10709,
+   "tank_total_ms": 242.834,
+   "predelay_buffer_taps_samples": [
+    1000,
+    1039,
+    1245,
+    1871,
+    2077,
+    2080,
+    3121
+   ],
+   "predelay_buffer_taps_ms": [
+    22.676,
+    23.56,
+    28.231,
+    42.426,
+    47.098,
+    47.166,
+    70.771
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.3745,
+    "0x94": 0.5,
+    "0x95": -0.3745,
+    "0x96": 0.5,
+    "0x97": 0.2,
+    "0x98": 0.6,
+    "0x99": 0.63,
+    "0x9A": 0.3,
+    "0x9B": 0.4,
+    "0x9C": 0.75,
+    "0x9D": 0.5,
+    "0x9E": 0.3217,
+    "0x9F": 0.4155,
+    "0xA0": -0.2854,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.42,
+    "0xA4": 0.52,
+    "0xA5": 0.5,
+    "0xA6": 0.3217,
+    "0xA7": 0.4155,
+    "0xA8": -0.2854,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.5275,
+    "0xAD": 0.3985,
+    "0xAE": 0.3985,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.5275,
+    "0xB3": 0.3985,
+    "0xB4": 0.3985
+   }
+  },
+  "BRIGHT REVERB 2": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    707,
+    1274,
+    1895,
+    1000,
+    512,
+    870,
+    1878,
+    2869,
+    1400
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    16.032,
+    28.889,
+    42.971,
+    22.676,
+    11.61,
+    19.728,
+    42.585,
+    65.057,
+    31.746
+   ],
+   "tank_total_samples": 13309,
+   "tank_total_ms": 301.791,
+   "predelay_buffer_taps_samples": [
+    1000,
+    1558,
+    1866,
+    2805,
+    3114,
+    3118,
+    4679
+   ],
+   "predelay_buffer_taps_ms": [
+    22.676,
+    35.329,
+    42.313,
+    63.605,
+    70.612,
+    70.703,
+    106.1
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.25,
+    "0x94": 0.2968,
+    "0x95": 0.81,
+    "0x96": -0.3745,
+    "0x97": 0.5,
+    "0x98": 0.2,
+    "0x99": 0.75,
+    "0x9A": 0.63,
+    "0x9B": 0.52,
+    "0x9C": 0.5,
+    "0x9D": 0.4,
+    "0x9E": 0.5,
+    "0x9F": 0.2734,
+    "0xA0": 0.4579,
+    "0xA1": -0.2526,
+    "0xA2": 0.63,
+    "0xA3": 0.62,
+    "0xA4": 0.52,
+    "0xA5": 0.4,
+    "0xA6": 0.5,
+    "0xA7": 0.2734,
+    "0xA8": 0.4579,
+    "0xA9": -0.2526,
+    "0xAA": 0.358,
+    "0xAB": 0.5,
+    "0xAC": 0.493,
+    "0xAD": 0.75,
+    "0xAE": 0.565,
+    "0xAF": 0.565,
+    "0xB0": 0.45,
+    "0xB1": 0.5,
+    "0xB2": 0.321,
+    "0xB3": 0.75,
+    "0xB4": 0.565
+   }
+  },
+  "WAVE REVERB 1": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    1107,
+    1874,
+    2295,
+    6000,
+    512,
+    870,
+    1678,
+    2669,
+    5400
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    25.102,
+    42.494,
+    52.041,
+    136.054,
+    11.61,
+    19.728,
+    38.05,
+    60.522,
+    122.449
+   ],
+   "tank_total_samples": 23309,
+   "tank_total_ms": 528.549,
+   "predelay_buffer_taps_samples": [
+    2000,
+    2077,
+    2487,
+    3738,
+    4149,
+    4149,
+    6227
+   ],
+   "predelay_buffer_taps_ms": [
+    45.351,
+    47.098,
+    56.395,
+    84.762,
+    94.082,
+    94.082,
+    141.202
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.3745,
+    "0x94": 0.3386,
+    "0x95": -0.3148,
+    "0x96": 0.5,
+    "0x97": 0.2,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3745,
+    "0x9F": 0.3723,
+    "0xA0": -0.3315,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3745,
+    "0xA7": 0.3723,
+    "0xA8": -0.3315,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.335,
+    "0xAD": 0.255,
+    "0xAE": 0.255,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.335,
+    "0xB3": 0.255,
+    "0xB4": 0.255
+   }
+  },
+  "WAVE REVERB 2": {
+   "lines_L1_to_L11_samples": [
+    335,
+    569,
+    1107,
+    1674,
+    2295,
+    4000,
+    512,
+    870,
+    1478,
+    2669,
+    3400
+   ],
+   "lines_L1_to_L11_ms": [
+    7.596,
+    12.902,
+    25.102,
+    37.959,
+    52.041,
+    90.703,
+    11.61,
+    19.728,
+    33.515,
+    60.522,
+    77.098
+   ],
+   "tank_total_samples": 18909,
+   "tank_total_ms": 428.776,
+   "predelay_buffer_taps_samples": [
+    2000,
+    2596,
+    3109,
+    4673,
+    5186,
+    5186,
+    7784
+   ],
+   "predelay_buffer_taps_ms": [
+    45.351,
+    58.866,
+    70.499,
+    105.964,
+    117.596,
+    117.596,
+    176.508
+   ],
+   "coefficients_q023": {
+    "0x90": 0.25,
+    "0x91": 0.5,
+    "0x92": 0.5,
+    "0x93": 0.3745,
+    "0x94": 0.5,
+    "0x95": -0.3745,
+    "0x96": 0.5,
+    "0x97": 0.2,
+    "0x98": 0.75,
+    "0x99": 0.63,
+    "0x9A": 0.52,
+    "0x9B": 0.5,
+    "0x9C": 0.4,
+    "0x9D": 0.5,
+    "0x9E": 0.3217,
+    "0x9F": 0.38,
+    "0xA0": -0.2654,
+    "0xA1": 0.63,
+    "0xA2": 0.62,
+    "0xA3": 0.52,
+    "0xA4": 0.4,
+    "0xA5": 0.5,
+    "0xA6": 0.3217,
+    "0xA7": 0.38,
+    "0xA8": -0.2654,
+    "0xA9": 0.358,
+    "0xAA": 0.5,
+    "0xAB": 0.493,
+    "0xAC": 0.475,
+    "0xAD": 0.355,
+    "0xAE": 0.355,
+    "0xAF": 0.45,
+    "0xB0": 0.5,
+    "0xB1": 0.321,
+    "0xB2": 0.475,
+    "0xB3": 0.355,
+    "0xB4": 0.355
+   }
+  }
+ }
+}

@@ -1,0 +1,84 @@
+iram	region	frame_slot	raw36	hi12	class4	addr8	lo12	SRC	ACT	f31	f98	ESC	END	ST	cur+	ptr+	cram_cell	mnemonic	alu_decoded	decoded	status_project	decode_status	blocking_field	role
+0	kernel A	0	0x009220120D	0x092	0x2	0x01	0x20D	0x08	0x0D	1	0	0	0	1	0	+1		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored SRC 0x08 + ACT 0x0D	frame entry; ST mem[X+0]
+1	kernel A	1	0x0C0A0E0000	0xC0A	-	-	0x000	-	-	5	0	1	0	0	0	0		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	c-format	C-format A=7 -> start of input block B
+2	kernel A	2	0x0084202680	0x084	0x2	0x02	0x680	0x1A	0x00	2	0	0	0	0	0	+2		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	operation f31	reads X+1, the one-frame feedback cell w79 wrote
+3	kernel A	3	0x00122FF1CE	0x012	0x2	0xFF	0x1CE	0x07	0x0E	1	0	0	0	1	0	-1		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored ACT 0x0E	= epilogue w79 (same word)
+4	kernel A	4	0x02042021CE	0x204	0x2	0x02	0x1CE	0x07	0x0E	2	2	0	0	0	0	+2		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored ACT 0x0E	*** AUDIO INPUT LATCH, block A ***
+5	kernel A	5	0x0202A00448	0x202	0xA	0x00	0x448	0x11	0x08	1	2	0	0	0	1	+0	0x90	~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored SRC 0x11 + ACT 0x08	coef walk +0x00 (C-RAM[0x90])
+6	kernel A	6	0x0400A00419	0x400	0xA	0x00	0x419	0x10	0x19	0	0	0	1	0	1	+0	0x91	ld.ta2  acc,c+,(p)+0	1	1	DECODED	FULLY-DECODED		coef walk +0x01; END OF BLOCK A
+7	kernel A	7	0x0090A011C8	0x090	0xA	0x01	0x1C8	0x07	0x08	0	0	0	0	1	1	+1	0x92	~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored ACT 0x08	ST mem[X+4]; coef walk +0x02
+8	kernel A	8	0x00842011C0	0x084	0x2	0x01	0x1C0	0x07	0x00	2	0	0	0	0	0	+1		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	operation f31	*** AUDIO INPUT LATCH, block B ***
+9	kernel A	9	0x00122FF1D5	0x012	0x2	0xFF	0x1D5	0x07	0x15	1	0	0	0	1	0	-1		mac     (p),(p)-1	1	1	DECODED	FULLY-DECODED		DEPOSIT -> D-RAM[0x05], the unit-0 send
+10	kernel A	10	0x0282A01417	0x282	0xA	0x01	0x417	0x10	0x17	1	2	0	0	0	1	+1	0x93	~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored ACT 0x17	second read of the block-B latch
+11	kernel A	11	0x0400201447	0x400	0x2	0x01	0x447	0x11	0x07	0	0	0	1	0	0	+1		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored SRC 0x11	DEPOSIT -> D-RAM[0x05]; END OF BLOCK B
+12	kernel A	12	0x08801202D5	0x880	0x1	0x20	0x2D5	0x0B	0x15	0	0	1	0	0	0	0		?word	0	0	DETERMINED	PARTIAL(operation known, operand encoding open)	delay-DRAM address	delay READ, dsc 0x27 = 0x1041, line 0x01 -> body-0 iw98
+13	kernel A	13	0x0282200000	0x282	0x2	0x00	0x000	0x00	0x00	1	2	0	0	0	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	bus term = cell 0x06 at unity: 1.870 x FS
+14	kernel A	14	0x0400A00000	0x400	0xA	0x00	0x000	0x00	0x00	0	0	0	1	0	1	+0	0x94	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	1.435 x FS; coef walk +0x04
+15	kernel A	15	0x0C0A292820	0xC0A	-	-	0x820	-	-	5	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+16	kernel A	16	0x0192A00455	0x192	0xA	0x00	0x455	0x11	0x15	1	1	0	0	1	1	+0	0x95	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x11	coef walk +0x05; CLIPS 100 % of quiet frames
+17	kernel A	17	0x0292A00455	0x292	0xA	0x00	0x455	0x11	0x15	1	2	0	0	1	1	+0	0x96	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x11	coef walk +0x06; CLIPS 100 % of quiet frames
+18	kernel A	18	0x0182A00415	0x182	0xA	0x00	0x415	0x10	0x15	1	1	0	0	0	1	+0	0x97	mac     acc,c+,(p)+0	1	1	DECODED	FULLY-DECODED		coef walk +0x07; CLIPS 100 % of quiet frames
+19	kernel A	19	0x051220044D	0x512	0x2	0x00	0x44D	0x11	0x0D	1	1	0	1	1	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x11 + ACT 0x0D	store -> D-RAM[0x06]; CLIPS 100 %, 5 conv/frame
+20	kernel A	20	0x0000A0064D	0x000	0xA	0x00	0x64D	0x19	0x0D	0	0	0	0	0	1	+0	0x98	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored ACT 0x0D	coef walk +0x08
+21	kernel A	21	0x0410A0040E	0x410	0xA	0x00	0x40E	0x10	0x0E	0	0	0	1	1	1	+0	0x99	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored ACT 0x0E	store -> D-RAM[0x06]
+22	kernel A	22	0x0C04312820	0xC04	-	-	0x820	-	-	2	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+23	kernel A	23	0x0692A00415	0x692	0xA	0x00	0x415	0x10	0x15	1	2	0	1	1	1	+0	0x9A	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	guard 7 (bit-7 store gate)	coef walk +0x0A
+24	kernel A	24	0x0692200415	0x692	0x2	0x00	0x415	0x10	0x15	1	2	0	1	1	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	guard 7 (bit-7 store gate)	
+25	kernel A	25	0x00002002D9	0x000	0x2	0x00	0x2D9	0x0B	0x19	0	0	0	0	0	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x0B	SRC 0x0B: consumes the published delay datum
+26	kernel A	26	0x088012040B	0x880	0x1	0x20	0x40B	0x10	0x0B	0	0	1	0	0	0	0		?word	0	0	DETERMINED	PARTIAL(operation known, operand encoding open)	delay-DRAM address	delay READ, dsc 0x28 = 0x05A0, line 0x20
+27	kernel A	27	0x0012201655	0x012	0x2	0x01	0x655	0x19	0x15	1	0	0	0	1	0	+1		mac     ta,(p)+1	1	1	DECODED	FULLY-DECODED		store -> D-RAM[0x06]
+28	kernel A	28	0x05042001D5	0x504	0x2	0x00	0x1D5	0x07	0x15	2	1	0	1	0	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	operation f31	
+29	kernel A	29	0x0C42457820	0xC42	-	-	0x820	-	-	1	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+30	kernel A	30	0x009AA00200	0x09A	0xA	0x00	0x200	0x08	0x00	5	0	0	0	1	1	+0	0x9B	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x08	LADDER 1: acc <- C-RAM[0x9B]<<16 = 0.600 FS; forms P = C-RAM[0x9B]^2
+31	kernel A	31	0x0C0A4B1820	0xC0A	-	-	0x820	-	-	5	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	C-format (pointer-load immediate)
+32	kernel A	32	0x0000AFF207	0x000	0xA	0xFF	0x207	0x08	0x07	0	0	0	0	0	1	-1	0x9C	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x08	LADDER 2: acc <- P(iw30) = 0.720 FS; forms P = C-RAM[0x9C]^2
+33	kernel A	33	0x0412A00200	0x412	0xA	0x00	0x200	0x08	0x00	1	0	0	1	1	1	+0	0x9D	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x08	LADDER 3: acc += C-RAM[0x9D]<<16 + P(iw32) = 1.720 x FS *** OVERFLOW ***; stores 6 039 795 -> 0x06
+34	kernel A	34	0x0000AFF407	0x000	0xA	0xFF	0x407	0x10	0x07	0	0	0	0	0	1	-1	0x9E	ld.st   acc,c+,(p)-1	1	1	DECODED	FULLY-DECODED		L = clamp(14 428 403) = 8 388 607 *** THE CLIP ***; acc <- P(iw33) = 2^38
+35	kernel A	35	0x0012A001C0	0x012	0xA	0x00	0x1C0	0x07	0x00	1	0	0	0	1	1	+0	0x9F	mac.b   (p),c+,(p)+0	1	1	DECODED	FULLY-DECODED		stores acc_to_datum(2^38) = 4 194 304 -> 0x05: OVERWRITES the audio
+36	kernel A	36	0x0400A00000	0x400	0xA	0x00	0x000	0x00	0x00	0	0	0	1	0	1	+0	0xA0	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	coef walk +0x10
+37	kernel A	37	0x0092A011C0	0x092	0xA	0x01	0x1C0	0x07	0x00	1	0	0	0	1	1	+1	0xA1	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	guard 7 (bit-7 store gate)	coef walk +0x11
+38	kernel A	38	0x0809000839	0x809	0x0	0x00	0x839	0x00	0x19	4	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	lo12 0x839 selector OPEN, 2 sites in 3057
+39	kernel A	39	0x0410AFF647	0x410	0xA	0xFF	0x647	0x19	0x07	0	0	0	1	1	1	-1	0xA2	ld.st   ta,c+,(p)-1	1	1	DECODED	FULLY-DECODED		store -> D-RAM[0x06]; CLIPS 100 %, 4 conv/frame
+40	kernel A	40	0x0C4A1C0820	0xC4A	-	-	0x820	-	-	5	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+41	kernel A	41	0x0400A0021A	0x400	0xA	0x00	0x21A	0x08	0x1A	0	0	0	1	0	1	+0	0xA3	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x08 + ACT 0x1A	coef walk +0x13 -- last cell of the header walk
+42	kernel A	42	0x0801070821	0x801	0x0	0x70	0x821	0x00	0x01	0	0	1	0	0	0	0		ldptr   #$70	0	1	DECODED	FULLY-DECODED		RE-AIMS the cursor; unit-0 DISCONNECT vector target
+43	kernel A	43	0x080106C827	0x801	0x0	0x6C	0x827	0x00	0x07	0	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+44	kernel A	44	0x0801025825	0x801	0x0	0x25	0x825	0x00	0x05	0	0	1	0	0	0	0		ldptr.d #$25	0	1	DECODED	FULLY-DECODED		delay-descriptor pointer
+45	kernel A	45	0x0010A0020C	0x010	0xA	0x00	0x20C	0x08	0x0C	0	0	0	0	1	1	+0	0x70	?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x08 + ACT 0x0C	stores 0 -> D-RAM[0x05]: ZEROES the send before the CALL
+46	kernel A	46	0x080016000B	0x800	0x1	0x60	0x00B	0x00	0x0B	0	0	1	0	0	0	0		?word	0	0	DETERMINED	PARTIAL(operation known, operand encoding open)	delay-DRAM address	delay WRITE, dsc 0x29 = 0x0000, line 0x00
+47	kernel A	47	0x080080C000	0x800	0x8	0x0C	0x000	0x00	0x00	0	0	1	0	0	0	0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	
+48	kernel A	48	0x0C645A2000	0xC64	-	-	0x000	-	-	2	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+49	kernel A	49	0x040010E000	0x400	0x1	0x0E	0x000	0x00	0x00	0	0	0	1	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	CALL unit-0 body at I-RAM 84 (tag 0x0E)
+50	kernel B	120	0x0801050821	0x801	0x0	0x50	0x821	0x00	0x01	0	0	1	0	0	0	0		ldptr   #$50	0	1	DECODED	FULLY-DECODED		unit-1 pointer setup; unit-1 DISCONNECT vector target
+51	kernel B	121	0x0801064827	0x801	0x0	0x64	0x827	0x00	0x07	0	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+52	kernel B	122	0x0801025825	0x801	0x0	0x25	0x825	0x00	0x05	0	0	1	0	0	0	0		ldptr.d #$25	0	1	DECODED	FULLY-DECODED		delay-descriptor pointer
+53	kernel B	123	0x00109D020C	0x010	0x9	0xD0	0x20C	0x08	0x0C	0	0	0	0	1	0	0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	class	register 0xD0 = unit-1 STATE-BLOCK BASE; forms 2 603 010 048
+54	kernel B	124	0x080016000B	0x800	0x1	0x60	0x00B	0x00	0x0B	0	0	1	0	0	0	0		?word	0	0	DETERMINED	PARTIAL(operation known, operand encoding open)	delay-DRAM address	delay WRITE, dsc 0x2F = 0x0C30, line 0x30
+55	kernel B	125	0x0000201007	0x000	0x2	0x01	0x007	0x00	0x07	0	0	0	0	0	0	+1		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	
+56	kernel B	126	0x0C646A2007	0xC64	-	-	0x007	-	-	2	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+57	kernel B	127	0x0000201000	0x000	0x2	0x01	0x000	0x00	0x00	0	0	0	0	0	0	+1		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	
+58	kernel B	128	0x000018A007	0x000	0x1	0x8A	0x007	0x00	0x07	0	0	0	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+59	kernel B	129	0x040010F007	0x400	0x1	0x0F	0x007	0x00	0x07	0	0	0	1	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	CALL unit-1 body at I-RAM 200 (tag 0x0F)
+60	epilogue	263	0x009218D15B	0x092	0x1	0x8D	0x15B	0x05	0x1B	1	0	0	0	1	0	0		?word	0	0	UNKNOWN	UNDECODED	class	runs after BOTH bodies returned; SRC 0x05 = DECODE GAP
+61	epilogue	264	0x001218D05B	0x012	0x1	0x8D	0x05B	0x01	0x1B	1	0	0	0	1	0	0		?word	0	0	UNKNOWN	UNDECODED	class	SRC 0x01 = DECODE GAP; writes m_rf[0x8D] = 0x009B26
+62	epilogue	265	0x0801026825	0x801	0x0	0x26	0x825	0x00	0x05	0	0	1	0	0	0	0		ldptr.d #$26	0	1	DECODED	FULLY-DECODED		unit-0 delay-descriptor region base
+63	epilogue	266	0x02A79051C3	0x2A7	0x9	0x05	0x1C3	0x07	0x03	3	2	0	0	0	0	0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	class	
+64	epilogue	267	0x001190E445	0x011	0x9	0x0E	0x445	0x11	0x05	0	0	0	0	1	0	0		?word	0	0	MEASURED	PARTIAL(destination known, source field open)	class	UNIT-0 CALL VECTOR -- one of two host-rewritten words
+65	epilogue	268	0x020018F1C1	0x200	0x1	0x8F	0x1C1	0x07	0x01	0	2	0	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	SECOND DEATH: ACCA 2 603 010 048 -> 0
+66	epilogue	269	0x000018C107	0x000	0x1	0x8C	0x107	0x04	0x07	0	0	0	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+67	epilogue	270	0x0980520402	0x980	0x5	0x20	0x402	0x10	0x02	0	1	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+68	epilogue	271	0x009218C19B	0x092	0x1	0x8C	0x19B	0x06	0x1B	1	0	0	0	1	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+69	epilogue	272	0x0801090821	0x801	0x0	0x90	0x821	0x00	0x01	0	0	1	0	0	0	0		ldptr   #$90	0	1	DECODED	FULLY-DECODED		SEEDS the coefficient cursor for the NEXT frame
+70	epilogue	273	0x02A61850C7	0x2A6	0x1	0x85	0x0C7	0x03	0x07	3	2	0	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+71	epilogue	274	0x001190F446	0x011	0x9	0x0F	0x446	0x11	0x06	0	0	0	0	1	0	0		?word	0	0	MEASURED	PARTIAL(destination known, source field open)	class	UNIT-1 CALL VECTOR -- the other host-rewritten word
+72	epilogue	275	0x0000106087	0x000	0x1	0x06	0x087	0x02	0x07	0	0	0	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	the host's unit-0 level 0x400000 -- the only non-zero epilogue operand
+73	epilogue	276	0x0E30C00404	0xE30	0xC	0x00	0x404	0x10	0x04	0	2	1	0	0	0	0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	class	PRESENTATION, unit 0 / DO1 -- min 0 max 0, both buckets
+74	epilogue	277	0x0C169AB000	0xC16	-	-	0x000	-	-	3	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+75	epilogue	278	0x082E80F000	0x82E	0x8	0x0F	0x000	0x00	0x00	7	0	1	0	0	0	0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	
+76	epilogue	279	0x0C00984000	0xC00	-	-	0x000	-	-	0	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	
+77	epilogue	280	0x0859086822	0x859	0x0	0x86	0x822	0x00	0x02	4	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	class	
+78	epilogue	281	0x0A3CD9F287	0xA3C	0xD	0x9F	0x287	0x0A	0x07	6	2	1	0	0	0	0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	class	PRESENTATION, unit 1 / DO2 -- min 0 max 0, both buckets
+79	epilogue	282	0x00122FF1CE	0x012	0x2	0xFF	0x1CE	0x07	0x0E	1	0	0	0	1	0	-1		~word	0	0	PARTIAL	PARTIAL(addressing only; ALU open)	unanchored ACT 0x0E	= header w3 (K6)
+80	epilogue	283	0x01042001CE	0x104	0x2	0x00	0x1CE	0x07	0x0E	2	1	0	0	0	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored ACT 0x0E	
+81	epilogue	284	0x0102200000	0x102	0x2	0x00	0x000	0x00	0x00	1	1	0	0	0	0	+0		?word	0	0	UNKNOWN	PARTIAL(addressing executes; ALU open)	unanchored SRC 0x00	
+82	epilogue (not executed)	-1	0x0C00A47407	0xC00	-	-	0x407	-	-	0	0	1	0	0	0	0		?word	0	0	UNKNOWN	UNDECODED	c-format	FRAME TERMINATOR / WAIT -- NOT one of the 285 slots

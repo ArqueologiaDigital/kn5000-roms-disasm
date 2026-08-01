@@ -1,0 +1,162 @@
+<h2 class="newpage">8. Recommended actions, ranked</h2>
+
+<p>Separated by who can carry them out, which is the distinction that matters most: the autonomous
+system has been unable to act on category&nbsp;(b) at all.</p>
+
+<h3>8.1 What the autonomous agents can do alone</h3>
+
+<h4>Action 1 &mdash; Decide the current blocker</h4>
+<p>The preamble's saturating arithmetic, with one named untested reading, bisected so that the two
+candidate changes are graded separately. <em>Cost:</em> one to two build passes; falsifiers already
+written. <em>Kill condition:</em> if the saturation rate does not move and the site stays at
+1.720&nbsp;&times; full scale with a non-zero fired count, the reading is not the defect and the
+rail is elsewhere among the six sites.</p>
+
+<h4>Action 2 &mdash; Fix a sample-rate error affecting everything <span class="grade g-meas">DONE</span></h4>
+<div class="note">
+<p>The emulator ran the DSP's frame clock at <strong>48,000&nbsp;Hz</strong>, because the routine
+advancing it was driven from the tone generator's audio stream. The chip's actual rate is
+<strong>44,100&nbsp;Hz</strong>. Proven with no run at all: every archived experiment reports
+<span class="m">1,440,001</span> frames on a thirty-second vehicle, which is exactly
+<span class="m">30 &times; 48,000</span>. <strong>Every emulated delay, reverb and oscillator was
+8.844&nbsp;% fast.</strong></p>
+<p><strong>The review's supporting evidence for this was wrong, and so was the brief derived from
+it.</strong> Both claimed the project had already measured the discrepancy and filed it as an
+unexplained residual. It had not: that figure was <em>derived</em> from the oscillator's increment,
+never measured. The only instrument capable of measuring it prints 0.5000&nbsp;Hz and always has —
+its denominator includes the 264,001 frames before the program is uploaded, during which the ramp is
+frozen, and its numerator truncates a partial wrap.</p>
+<p>The implementing pass also found that the kill condition it had been given <strong>could not
+fail</strong>: that census computes frequency as <span class="m">wraps/frames &times; declared
+rate</span>, and the ratio is rate-invariant, so editing the declaration alone would have moved the
+number to the target with nothing measured. It replaced the criterion before building.</p>
+</div>
+<p><strong>Result, measured with a purpose-built instrument:</strong></p>
+<pre>  0.652313 Hz  ->  0.599313 Hz
+  step 114..114 CONSTANT, period 73,584.3 frames  --  BIT-IDENTICAL between arms
+  frames per second   47,985.602  ->  44,086.742
+  frames run  1,440,001  ->  1,323,000  =  30 x 44,100 exactly</pre>
+<p>The invariance is the proof: the oscillator's step and period are unchanged to the bit, so only
+the clock moved. The tone generator, which is audible and shipping, was regression-tested three ways
+and returned byte-identical output with a positive control that could have failed. A consequence
+worth noting for anyone reading older material: <strong>every delay-age figure in milliseconds in
+every previous log is 8.84&nbsp;% high.</strong></p>
+
+<h4>Action 3 &mdash; Run the cross-unit experiment on the largest undecoded field</h4>
+<p>Select GATED REVERB into unit 0 with a reverb preset resident in unit 1, making both halves of a
+minimal pair co-resident in one frame (section 7.1). <em>Cost:</em> one read-only pass to choose the
+discriminator, then two build arms. <em>Kill condition:</em> if the two images differ in too many
+other fields to isolate the pair, abort before building — and restate the field's closure honestly as
+"no clean discriminator" rather than "no co-resident pair".</p>
+
+<h4>Action 5 &mdash; Repair the bookkeeping</h4>
+<p>Generate the shipped-fix list from the source's own declarations rather than maintaining it by
+hand; add a check that fails when a handover document quotes a configuration value that disagrees
+with the source; complete the rules index and either define rule 20 or delete it; and
+<strong>extend the index generator to sweep the notes directory it currently ignores</strong>, so
+that results like the negative cross-model comparison cannot go missing again. <em>Cost:</em> two to
+three agent-hours, no emulator runs.</p>
+
+<h4>Action 6 &mdash; Bundle three cheap items into one pass</h4>
+<p>The single-image minimal pair from section 7.1; loud diagnostic banners for six instruction
+sources that currently inject <strong>10,702,080 silent zeros per run</strong> without saying so;
+and one log line per program upload naming its address, size and hash, so that "how many programs
+have ever executed" stops being an inference. <em>Kill condition:</em> if the minimal pair measures
+identical on every channel, the no-operation reading is <em>confirmed</em> — still a result, and the
+first field decision in five days.</p>
+
+<h3>8.2 What needs Felipe and the physical instrument</h3>
+
+<div class="warn">
+<p><strong>This is the only channel with zero data after nine days.</strong> There is no recording of
+the real KN5000 anywhere in the three repositories — no <span class="m">.wav</span>,
+<span class="m">.flac</span>, <span class="m">.aif</span> or <span class="m">.mp3</span>. The
+request has been filed since 22 July and has not been touched since.</p>
+</div>
+
+<p>A measured reverb decay time yields the per-pass loop gain <em>numerically</em> — the one quantity
+the project has guessed wrong three times.</p>
+
+<h4>Action 4 &mdash; One thirty-minute sitting, with a prerequisite</h4>
+<p><strong>The agents must first publish a table mapping each front-panel effect name to its
+algorithm slot, to which chip handles it, and to the program image's hash.</strong> Without it a
+recording may capture the wrong chip: "ROOM" names both an effect on this DSP and a master reverb on
+a <em>second</em> processor in the same machine. The raw material for the table already exists.</p>
+<p>Then, in one sitting:</p>
+<ol>
+  <li><strong>Take A.</strong> Select CONCERT REVERB 1 at factory depth, master and panel reverb at
+      minimum, everything else silent. Play <em>one short percussive note</em> and let it ring for at
+      least six seconds. The dry note must be visible in the recording — this is the positive
+      control.</li>
+  <li><strong>Take B (mandatory).</strong> Identical, but with the DSP effect switched
+      <strong>off</strong>. Same gain, same session. If A and B are not audibly different, the wrong
+      chip or the wrong output was captured and the session is void.</li>
+  <li><strong>Take C.</strong> Change <em>only</em> the effect name to SLOW ATTACKER and play the
+      same note. (The project predicts this effect does nothing at all — it ships a program
+      byte-identical to "no operation".)</li>
+  <li><strong>Photographs:</strong> the marking on crystal X301, and the marking on IC311.</li>
+  <li><strong>One part number:</strong> the DRAM chip next to IC311.</li>
+</ol>
+<p>Line output preferred, 24-bit, 44.1 or 48&nbsp;kHz. A phone recording is better than nothing. The
+agents will commit their predicted early-reflection times and decay band to version control
+<em>before</em> you record, so the comparison is a genuine test rather than a fitting exercise.</p>
+
+<h3>8.3 What needs external resources</h3>
+<ul>
+  <li><strong>A DRAM datasheet</strong> for the part beside the chip. Minutes of effort; no search
+      has ever been run. It settles the delay memory's real organisation and upgrades a load-bearing
+      inference to a measurement. The cheapest external item available.</li>
+  <li><strong>A firmware dump from a Pioneer CDJ-500</strong>, which uses the same DSP. This is the
+      <em>only</em> route to six instruction sources that occur exactly once each in the KN5000
+      corpus — none of them reachable by any method internal to this machine. Community-dependent,
+      latency in weeks: dispatch it and then ignore it, because it can never be on the critical
+      path.</li>
+  <li><strong>Patent searches</strong> are largely exhausted — the part number returns nothing. One
+      residual lead is worth an hour and no more. The review explicitly warns against re-attempting a
+      cross-decode from a related part number: its word length differs and the divergence is
+      verified.</li>
+</ul>
+
+<h2>9. What the review rejected</h2>
+
+<p>The adversarial stage discarded a number of proposals, including several the project itself had
+been entertaining. These are listed because a review that only adds recommendations is less useful
+than one that also removes them.</p>
+
+<ul>
+  <li><strong>"The silence metric is manufactured by a fallback branch in the code."</strong>
+      Refuted at source: the presentation routine reads the accumulator, not the bus that the
+      fallback feeds.</li>
+  <li><strong>"Retire the silence measurement as the goal metric."</strong> It already is not one —
+      the project's own ledger directs grading onto the per-instruction saturation count instead.</li>
+  <li><strong>Seeding a coefficient pointer at frame start.</strong> Refuted 26 minutes after the
+      commit it was built on; the pointer is already seeded, and the proposed change is
+      1.6&nbsp;&times; worse with a different effect loaded.</li>
+  <li><strong>A proposed coverage metric</strong> in which 26 of its 32 denominator slots can never
+      score — it would read zero whether the project were healthy or dead. The review notes this is
+      exactly the "criterion that cannot fail" failure the project has caught thirteen times.</li>
+  <li><strong>Using the sibling instrument's working DSP as a semantic oracle</strong> — already run
+      on 22 July, negative.</li>
+  <li><strong>A second concurrent emulator lane</strong>, and <strong>implementing one of the unread
+      instruction sources</strong> — both refused on the project's own existing evidence.</li>
+</ul>
+
+<h2>10. Conclusion</h2>
+
+<div class="lede">
+<p>The review's own one-sentence answer:</p>
+<p><em>"The method is better than the field standard and the lane's current target is correct — but
+the project has stopped decoding while telling itself it is decoding, has left a
+4&nbsp;%-of-everything clock error and three one-selection experiments on the table, and has never
+once asked the instrument in your living room a question."</em></p>
+</div>
+
+<p>The discipline is not the problem, and should not be relaxed: it caught three false "the chip
+produces audio" claims, one of which passed every test the project owned at the time. The problem is
+allocation. Four of the six recommended actions cost a single pass each and have been available for
+days; the fifth is bookkeeping; and the sixth needs thirty minutes with a microphone.</p>
+
+<p class="meta" style="border:0;border-top:0.6pt solid #ccc;padding-top:3mm;margin-top:6mm">
+Prepared by an independent twelve-agent review, 31 July 2026. All figures re-derived read-only
+against <span class="m">kn5000-roms-disasm@9b9fc7f</span> and
+<span class="m">kn7000_mame@0d37100</span>.</p>

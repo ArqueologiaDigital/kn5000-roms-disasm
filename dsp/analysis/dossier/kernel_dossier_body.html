@@ -1,0 +1,746 @@
+<h2 class="newpage">Part K — The shared kernel</h2>
+
+<p class="lede">Every effect on the SX-KN5000 is a guest. The <span class="m">uPD6383GF</span> runs
+<b>285 microcode slots per frame</b>, and <b>83 of them are the same words in every preset ever
+selected</b> — a 60-word header and a 23-word output stage, both literal canned images in Sub CPU
+ROM, uploaded once and never recomputed. This part of the dossier is about those 83 words. It
+matters for one specific reason: <b>eleven of the shipped emulator's twelve saturation sites — and
+99.9996 % of its clips — are inside the header</b>. The audio is destroyed there before any effect
+sees it, and the constants it is destroyed with are read out of <b>the reverb's own parameter
+bank</b>, which means the overflow changes when the user changes reverb preset.</p>
+
+<p class="warn"><b>Read this before any number below.</b> Everything measured here is measured on
+the MAME model <span class="m">upd6383.cpp</span>, not on hardware. A grade of
+<span class="grade g-meas">MEASURED</span> means "measured in the model"; where the model and the
+chip could differ that is said explicitly. All frame counts and clip counts come from
+<span class="m">dsp/analysis/data/B_44100_228.log.gz</span> — the shipped default arm on the
+<b>44 100 Hz</b> frame clock adopted in §228. <b>Pre-§228 logs ran at 48 000 Hz; their frame counts
+are 8.844 % high and must be re-derived, never quoted.</b> Two figures in the brief that generated
+this document are pre-§228 counts; see <a href="#errata">the errata</a>.</p>
+
+<h3>K1. What the kernel is, and what actually runs</h3>
+
+<p>The kernel is two op-3 uC-IF records in the Sub CPU ROM, both literals — nothing in either is
+computed by the firmware (<span class="grade g-forc">FORCED</span>, proven by construction):</p>
+
+<dl>
+<dt><span class="m">0x01E496</span> — the <b>header</b>, 60 words, loaded at I-RAM 0</dt>
+<dd>shipped by <span class="m">EFF_WriteHeader</span> as one <span class="m">cmd 0x01</span> record
+to I-RAM word address <span class="m">0x0000</span>.</dd>
+<dt><span class="m">0x01E63C</span> — the <b>output stage</b>, 23 words, loaded at I-RAM 60</dt>
+<dd>shipped by <span class="m">DSP_AlgorithmChange</span>. <b>Exactly two of its words are ever
+rewritten by the host</b> — I-RAM 64 and 71, the per-unit link/disconnect call vectors.</dd>
+</dl>
+
+<p>The 60-word header does <b>not</b> run as one block. It is cut in two by the unit-0 CALL at
+I-RAM 49, so the frame's slot order is:</p>
+
+<table>
+<tr><th>slots</th><th>I-RAM</th><th>n</th><th>region</th><th>accumulator</th><th>what it is</th></tr>
+<tr><td>0..49</td><td>0..49</td><td>50</td><td><b>kernel A</b></td><td>ACCA</td><td>input stage, the coefficient walk, the ladder, unit-0 setup, CALL</td></tr>
+<tr><td>50..119</td><td>84..153</td><td>70</td><td>body 0</td><td>ACCA</td><td>the unit-0 effect (cold boot: CHORUS)</td></tr>
+<tr><td>120..129</td><td>50..59</td><td>10</td><td><b>kernel B</b></td><td>ACCA</td><td>unit-1 setup, CALL</td></tr>
+<tr><td>130..262</td><td>200..332</td><td>133</td><td>body 1</td><td>ACCB</td><td>the unit-1 effect (cold boot: CONCERT REVERB 1)</td></tr>
+<tr><td>263..284</td><td>60..81</td><td>22</td><td><b>epilogue</b></td><td>ACCA</td><td>output stage; <span class="m">w73</span> at slot 276, <span class="m">w78</span> at slot 281</td></tr>
+</table>
+
+<p>50 + 70 + 10 + 133 + 22 = <b>285</b>. <span class="grade g-meas">MEASURED</span> — the log's own
+<span class="m">TIME-ORDERED FRAME TRACE, 285 slots</span>, whose boundary rows read
+<span class="m">129/iw59</span>, <span class="m">130/iw200</span>, <span class="m">262/iw332</span>,
+<span class="m">263/iw60</span>, <span class="m">284/iw81</span>.</p>
+
+<p class="note"><b>Two corrections to the framing this document was commissioned with.</b>
+(i) <b>Kernel A is I-RAM 0..49, not 0..59.</b> I-RAM 50..59 is the same canned image but it is
+<i>kernel B</i>, and it runs 70 slots later. (ii) <b>The epilogue image is I-RAM 60..82 (23 words)
+but only 60..81 execute as slots.</b> I-RAM 82 is <span class="m">C00.A.47.407</span>, the
+frame-wait terminator whose 13-bit immediate encodes its own address (82×32 + 7); it ends the
+frame rather than occupying one of the 285. Both are arithmetic facts, not judgement calls: any
+other split does not sum to 285.</p>
+
+<p><b>What runs regardless of the effect selection?</b> All 83 kernel + epilogue words. The call
+vectors at I-RAM 64 / 71 take exactly four values — 84 and 42 for unit 0, 200 and 50 for unit 1.
+84 and 200 are the load addresses of every unit-0 and unit-1 body across all 91 IC311 streams; 42
+and 50 are the first words of that unit's own header setup block, so an <i>unlinked</i> unit does
+not skip the header — it re-enters it, runs the setup block and returns.
+<span class="grade g-forc">FORCED</span>.</p>
+
+<p class="note"><b>Checked, because the brief asked:</b> <span class="m">I-RAM[154..199]</span> is
+never uploaded — but that 46-slot hole is <b>body 0's tail</b>, between CHORUS's 70-word image and
+body 1's load address. <b>It does not touch the kernel (0..59) or the epilogue (60..82).</b>
+<span class="grade g-meas">MEASURED</span> — upload ledger, 12 runs, 8 distinct images, matching the
+offline corpus 4 of 4 (KERNEL 60, EPILOGUE 23, CHORUS 84/70, ROOM REVERB 1 200/133).</p>
+
+<h3>K2. The input path — and the two words that erase it</h3>
+
+<p>There is no "read the input port" opcode on this chip. <b>The port-ness is entirely in the
+address</b>, which is why every opcode-level search for an I/O instruction came up empty. Two
+D-RAM cells are read and never written by any of the 3057 corpus words; those are the audio input
+latches. Exactly <b>two</b> kernel words read them, and a third re-reads one of the two:</p>
+
+<table>
+<tr><th>I-RAM</th><th>raw</th><th>fields</th><th>role</th><th>grade</th></tr>
+<tr><td>4</td><td><span class="m">02042021CE</span></td><td><span class="m">204.2.02.1CE</span></td><td>input latch, block A (cell X+2), p += 2</td><td><span class="grade g-meas">MEASURED</span></td></tr>
+<tr><td>8</td><td><span class="m">00842011C0</span></td><td><span class="m">084.2.01.1C0</span></td><td>input latch, block B (cell X+5), p += 1</td><td><span class="grade g-meas">MEASURED</span></td></tr>
+<tr><td>10</td><td><span class="m">0282A01417</span></td><td><span class="m">282.A.01.417</span></td><td>reads the block-B latch a <i>second</i> time</td><td><span class="grade g-meas">MEASURED</span></td></tr>
+</table>
+
+<p>The audio is then deposited into <b>D-RAM cell <span class="m">0x05</span></b>, unit 0's input
+cell — the "send" that body 0 picks up. A writer census over the whole run names <b>four</b>
+writers of that cell and no others:</p>
+
+<pre>  §96 cell 05 written by iw9   0122FF1D5   bit-4 store, acc_to_datum(pre-update ACCA)  &lt;- THE AUDIO
+  §96 cell 05 written by iw11  400201447   ACT-0x07 store of the bus operand           &lt;- THE AUDIO
+  §96 cell 05 written by iw35  012A001C0   bit-4 store, constant 4 194 304             &lt;- OVERWRITE
+  §96 cell 05 written by iw45  010A0020C   bit-4 store, constant 0                     &lt;- ERASE</pre>
+
+<p>Residency, read off the per-slot census in the same log (<span class="m">mem</span> = the cell
+under the pointer, sampled <b>before</b> each word; quiet/loud are the buckets of the instrument's
+own predicate <span class="m">const bool nz = (m_in_val[0] != 0) || (m_in_val[1] != 0);</span>):</p>
+
+<table>
+<tr><th>after</th><th>cell <span class="m">0x05</span> holds</th><th>quiet bucket</th><th>loud bucket</th><th>grade</th></tr>
+<tr><td><span class="m">iw9</span>, <span class="m">iw11</span></td><td>the audio</td><td><span class="m">0 .. 5 084 004</span></td><td><span class="m">0 .. 16 760 298</span></td><td><span class="grade g-meas">MEASURED</span> input-dependent</td></tr>
+<tr><td><span class="m">iw35</span></td><td><span class="m">4 194 304</span></td><td>constant</td><td>constant</td><td><span class="grade g-meas">MEASURED</span></td></tr>
+<tr><td><span class="m">iw45</span></td><td><span class="m">0</span></td><td>constant</td><td>constant</td><td><span class="grade g-meas">MEASURED</span></td></tr>
+<tr><td><span class="m">iw84</span> (body 0 reads it)</td><td><span class="m">0</span></td><td><span class="m">0 .. 0</span></td><td><span class="m">0 .. 0</span></td><td><span class="grade g-meas">MEASURED</span></td></tr>
+</table>
+
+<p class="warn"><b>The constant is not arbitrary and it is not the host's.</b>
+<span class="m">4 194 304 = 0x400000 = acc_to_datum(2<sup>38</sup>)</span>, and
+<span class="m">2<sup>38</sup></span> is <b>exactly the accumulator that <span class="m">iw34</span>
+leaves</b> — the word one slot after the ladder overflows. <span class="m">iw35</span> carries
+<span class="m">hi12</span> bit 4, and a bit-4 store writes <span class="m">acc_to_datum(acc)</span>
+<b>before</b> the accumulator update, so what it deposits in the input cell is the ladder's own
+residue. <span class="grade g-forc">FORCED</span> from the trace: slot 34's accumulator column reads
+<span class="m">274 877 906 944 = 2<sup>38</sup></span> and <span class="m">2<sup>38</sup> &gt;&gt;
+16 = 4 194 304</span>. ⇒ <b>The overwrite that kills the send is a by-product of the overflow.</b>
+It was independently corroborated as a <i>value</i> by the epilogue (<span class="m">§41</span>
+reports the unit-0 presentation level as <span class="m">0x400000</span>), but the two are different
+paths that happen to carry the same number — do not conflate them.</p>
+
+<p class="note"><b>Ruled out:</b> the host's level poke is not the source — <b>0</b> host
+tag-<span class="m">0x15</span> writes reach D-RAM <span class="m">0x05</span> or
+<span class="m">0x06</span>. <span class="grade g-meas">MEASURED</span>.</p>
+
+<h3>K3. ★ The saturating ladder — the headline defect</h3>
+
+<p>Over the settled window (frames &gt; 420 000 of 1 323 000) the saturation census counts
+<b>7 989 156 clips in 162 240 672 conversions = 4.924 %</b> in the quiet bucket and
+<b>3 746 410 in 76 151 064 = 4.920 %</b> in the loud one. The quiet bucket is <b>614 548</b> frames
+on which the input latch reads <b>exactly zero</b> — the same value on every one of them — and the
+loud bucket is <b>288 451</b>. <span class="grade g-meas">MEASURED</span>.</p>
+
+<p><b>Six words clip on 100 % of the quiet frames</b>, and all six are in kernel A:</p>
+
+<table>
+<tr><th>I-RAM</th><th>conv./frame</th><th>quiet clips / conversions</th><th>pre-clamp value</th><th>× FS</th></tr>
+<tr><td><span class="m">iw16</span></td><td>1</td><td>614 548 / 614 548</td><td><span class="m">12 038 894</span></td><td>1.435</td></tr>
+<tr><td><span class="m">iw17</span></td><td>1</td><td>614 548 / 614 548</td><td><span class="m">18 061 870</span></td><td>2.153</td></tr>
+<tr><td><span class="m">iw18</span></td><td>1</td><td>614 548 / 614 548</td><td><span class="m">10 477 265</span></td><td>1.249</td></tr>
+<tr><td><span class="m">iw19</span></td><td>5</td><td>3 072 740 / 3 072 740</td><td><span class="m">18 865 872</span></td><td>2.249</td></tr>
+<tr><td><b><span class="m">iw34</span></b></td><td>1</td><td>614 548 / 614 548</td><td><b><span class="m">14 428 403</span></b></td><td><b>1.720</b></td></tr>
+<tr><td><span class="m">iw39</span></td><td>4</td><td>2 458 192 / 2 458 192</td><td><span class="m">10 729 595</span></td><td>1.279</td></tr>
+</table>
+
+<p class="note"><b>The count, exactly.</b> Those six sum to <b>7 989 124</b> of the quiet bucket's
+<b>7 989 156</b> clips — <b>99.9996 %</b>, not 100 %. The residue is <b>32</b> clips at body-0
+<span class="m">iw91</span> (the chorus wrap word), which is the twelfth and only non-kernel row of
+the census. So <i>"every saturation site is in the kernel"</i> is true by clip count to four decimal
+places and <b>false as a statement about sites</b>: 11 of the 12 census rows are kernel A, one is
+body 0. <span class="grade g-meas">MEASURED</span>.</p>
+
+<h4>K3.1 The ladder, word by word</h4>
+
+<p>The chip's product register is <b>one word deep</b>: the accumulator update at slot <i>N</i>
+consumes the product formed at slot <i>N</i>−1. That is visible directly in the frame trace's
+<span class="m">P</span> column and it is what makes the ladder legible. Fixed point:
+<span class="m">P = (coef × L) &gt;&gt; P_SHIFT</span> with <b><span class="m">P_SHIFT = 6</span></b>
+and <b><span class="m">ACC_SHIFT = 16</span></b>; the datum is
+<span class="m">acc_to_datum(acc) = acc &gt;&gt; ACC_SHIFT</span> then clamped to ±(2<sup>23</sup>−1).
+<b>The Q-consistent <i>total</i> is 22</b>, coefficients being Q1.22 and data Q0.23 —
+<span class="m">P_SHIFT</span> itself is <b>6</b>, and 6 + 16 = 22. <span class="grade g-forc">FORCED</span>
+(the core's own header) and <span class="grade g-meas">MEASURED</span> (a 7/15 split is
+bit-identical over 269 279 999 conversions; a 7/16 split breaks the
+<span class="m">m_rf[0x8D] = 0x009B26</span> calibration).</p>
+
+<pre>  slot 30   iw30  09A.A.00.200   f31=5  SRC 0x08  ACT 0x00   cursor 0x9B
+            acc  <- 0 + (C-RAM[0x9B] &lt;&lt; 16) + 0        = 329 853 435 904   datum 5 033 164 = 0.600 FS
+            P    <- C-RAM[0x9B]^2 &gt;&gt; 6                  = 395 824 060 170
+
+  slot 31   iw31  C0A.4.B1.820   C-FORMAT -- no accumulator effect, no cursor advance
+
+  slot 32   iw32  000.A.FF.207   f31=0  SRC 0x08  ACT 0x07   cursor 0x9C
+            acc  <- P(iw30)                              = 395 824 060 170   datum 6 039 795 = 0.720 FS
+            P    <- C-RAM[0x9C]^2 &gt;&gt; 6                  = 274 877 906 944
+
+  slot 33   iw33  412.A.00.200   f31=1  SRC 0x08  ACT 0x00   cursor 0x9D   hi12 bit 4 SET
+            store  mem[0x06] <- acc_to_datum(pre)        = 6 039 795
+            acc  <- acc + (C-RAM[0x9D] &lt;&lt; 16) + P(iw32)
+                  = 395 824 060 170 + 274 877 906 944 + 274 877 906 944
+                  = 945 579 874 058                      datum 14 428 403 = 1.720 x FS   *** OVERFLOW ***
+            P    <- C-RAM[0x9D]^2 &gt;&gt; 6                  = 274 877 906 944
+
+  slot 34   iw34  000.A.FF.407   f31=0  SRC 0x10  ACT 0x07   cursor 0x9E
+            L    <- clamp(acc_to_datum(acc)) = clamp(14 428 403) = 8 388 607   *** THE CLIP ***
+            acc  <- P(iw33) = 2^38                       datum 4 194 304 = 0.500 FS
+
+  slot 35   iw35  012.A.00.1C0   hi12 bit 4 SET
+            store  mem[0x05] <- acc_to_datum(2^38) = 4 194 304    *** THE AUDIO IS GONE ***</pre>
+
+<p><b>Not one of the three terms is a sample.</b> They are, in order:</p>
+<ol>
+<li>the carried term <span class="m">C-RAM[0x9B]<sup>2</sup> &gt;&gt; 22</span> = <b>a coefficient
+squared</b>, 0.720 FS;</li>
+<li>the bus term <span class="m">C-RAM[0x9D]</span> = <b>a coefficient</b>, delivered by
+<span class="m">ACTION 0x00</span> as <span class="m">L &lt;&lt; 16</span>, 0.500 FS;</li>
+<li>the product term <span class="m">C-RAM[0x9C]<sup>2</sup> &gt;&gt; 22</span> = <b>a second
+coefficient squared</b>, 0.500 FS.</li>
+</ol>
+<p>Sum 1.720 × full scale. <span class="grade g-meas">MEASURED</span> for every value; the
+<i>attribution</i> of terms 2 and 3 to <span class="m">0x9D</span> versus <span class="m">0x9C</span>
+is <span class="grade g-forc">FORCED</span> rather than measured, because on the cold-boot preset
+both cells hold <span class="m">0x400000</span> and are numerically indistinguishable — the
+distinguishing evidence is the <i>other</i> preset (see K4), where the alternative assignment
+predicts 1.400 FS and the measured value is 1.320.</p>
+
+<p class="warn"><b>Three fixes have already been tried and refuted.</b> (i) Removing the accumulate
+makes <span class="m">iw34</span> read <span class="m">2<sup>23</sup> = FS + 1</span> and it still
+clips 614 548/614 548 — and the apparent 13× census improvement is the store gate refusing to fire
+117 655 680 times. (ii) Zeroing <span class="m">ACTION 0x00</span>'s bus term leaves
+<span class="m">iw33</span> at <b>1.220 × FS</b>. (iii) Halving the products leaves it at
+<b>1.110 × FS</b> and breaks a calibration. <span class="grade g-meas">MEASURED</span>, all three.</p>
+
+<p class="warn">★★ <b>And here is the fact that should govern every attempt to fix it.</b>
+<span class="m">iw30</span>, <span class="m">iw32</span> and <span class="m">iw33</span> are
+<b>UNDECODED</b>. All three fail the project's own <span class="m">alu_decoded()</span> on the
+<i>routing</i> guard, because <span class="m">SRC 0x08</span> (C-RAM[cursor]) is not one of the four
+anchored sources. The device runs them anyway, through the speculative catch-all path
+(<span class="m">path 1</span> in the store-site probe, <span class="m">gfail 23</span>). <b>The
+emulator's headline defect is produced by three words whose arithmetic the project does not claim to
+have decoded.</b> The one word in the chain that <i>is</i> fully decoded is
+<span class="m">iw34</span> — the clip itself. <span class="grade g-forc">FORCED</span>, from the
+predicate.</p>
+
+<h3>K4. ★★ The kernel ↔ reverb link</h3>
+
+<p>The header's coefficient cursor is <b>seeded by an instruction, not by a frame-start
+assignment</b>. The corpus contains exactly three <span class="m">ldptr</span> words —
+<span class="m">iw42 → 0x70</span>, <span class="m">iw50 → 0x50</span>,
+<span class="m">iw69 → 0x90</span> — and <span class="m">iw69</span> is in the <b>epilogue</b>, which
+runs last, and the epilogue contains <b>zero</b> cursor-advancing words. So the cursor at the next
+frame's <span class="m">w0</span> is <span class="m">0x90</span> <i>exactly</i>, every frame.
+<span class="grade g-forc">FORCED</span> (source + corpus), and
+<span class="grade g-meas">MEASURED</span> live: the frame trace's cursor column reads
+<span class="m">0xB1</span> at slot 263 (left behind by body 1) and <span class="m">0x90</span> at
+slot 284.</p>
+
+<p>The header block proper then walks <b>20 cells</b>, <span class="m">base+0x00 .. base+0x13</span>,
+before <span class="m">iw42</span> re-aims the cursor:</p>
+
+<pre>  w5:+00  w6:+01  w7:+02  w10:+03  w14:+04  w16:+05  w17:+06  w18:+07  w20:+08  w21:+09
+  w23:+0A  w30:+0B  w32:+0C  w33:+0D  w34:+0E  w35:+0F  w36:+10  w37:+11  w39:+12  w41:+13
+  ---- w42  ldptr #$70  RE-AIMS THE CURSOR ----     w45:+14 (reads 0x70)</pre>
+
+<p>With <span class="m">base = 0x90</span> the ladder's cells are <span class="m">0x9B / 0x9C /
+0x9D</span>, which is exactly where the live measurement puts them.
+<span class="grade g-forc">FORCED</span>.</p>
+
+<p class="warn"><b>And <span class="m">C-RAM[0x90..0xB4]</span> is unit 1's per-algorithm parameter
+bank — the reverb's.</b> Changing the reverb preset from <b>CONCERT REVERB 1</b> (the cold-boot
+default) to <b>ROOM REVERB 1</b> rewrites <b>23 cells, every one of them inside
+<span class="m">0x90..0xB4</span> and nothing else in the 256-cell C-RAM</b>:</p>
+
+<pre>   [00..4F]   0 of 80 differ          [50..8F]   0 of 64 differ
+   [90..A3]  13 of 20 differ   &lt;- the header's own 20-cell walk
+   [9B..9D]   2 of  3 differ   &lt;- 0x9B and 0x9C, two of the three LADDER cells
+
+   CONCERT REVERB 1   0x9B/0x9C/0x9D = 4CCCCC / 400000 / 400000   ->  iw33 = +1.720 FS   CLIPS
+   ROOM    REVERB 1   0x9B/0x9C/0x9D = 400000 / 333333 / 400000   ->  iw33 = +1.320 FS   CLIPS
+   in Q1.22 these read as reverb gains: 1.200/1.000/1.000  and  1.000/0.800/1.000</pre>
+
+<p><span class="grade g-meas">MEASURED</span>, and proof-grade because of its control: an
+independent 45 s panel run (boot → SOUND → REVERB page → 40 DOWN → 4 UP) landing on CONCERT REVERB 1
+reproduces the archived 2026-07-22 cold-boot capture on <b>all 256 C-RAM cells, 0 differ</b> — so
+the replayer is faithful, the navigation perturbs nothing, and <b>the cold-boot default reverb is
+CONCERT REVERB 1</b>.</p>
+
+<p>⇒ <b>The shared, effect-independent, canned kernel computes with the user's reverb coefficients,
+and its overflow is preset-dependent.</b> This is the most interesting structural fact the kernel
+has. It is also a <i>reproduced</i> fact, not merely a quoted one: running the ladder offline from
+the ROM words and the ROOM REVERB 1 bank gives <b>1.320 × FS</b> to three decimals, which is what
+fixes the term attribution in K3.1 — the rival assignment predicts 1.400.</p>
+
+<p class="note"><b>What this does and does not license.</b> It does <b>not</b> mean the base is
+wrong. Three readings remain separable and no falsifier distinguishes them yet: (1) the base is
+seeded elsewhere and row 25's <span class="m">ldptr → cursor</span> rule is wrong; (2) the base is
+right and a canned header <i>legitimately</i> reads the reverb's gains, since it runs immediately
+before the reverb's own CALL; (3) the cursor-advance map is wrong. ⛔ Aiming the header at
+<span class="m">0x00</span> is <b>refuted</b>: that is <i>unit 0's</i> bank (PARAMETRIC EQ rewrites
+all 20 cells), and the same ladder run there with PEQ loaded reaches <b>+2.733 FS</b> — 1.6× worse.
+<span class="grade g-meas">MEASURED</span>. ⚠ <span class="m">kernel.dsm</span>'s printed
+<i>"base 0x00 MEASURED"</i> is a generator default, not a measurement of the header.</p>
+
+<h3>K5. Delay memory, and the publish schedule</h3>
+
+<p>The kernel touches external delay DRAM with <b>four</b> words, two reads and two writes. The
+family predicate is <i>addressing mode 1 with the <span class="m">hi12</span> format-escape bit</i>,
+exceptionless over the corpus; <span class="m">addr8</span> bit 6 is the direction field.
+<b>The address is not in the word</b>: it is
+<span class="m">(DESCRIPTOR_CELL[k] + G) mod 2<sup>N</sup></span>, taken from a host-written 24-bit
+descriptor bank reached through pointer register <span class="m">…825</span> / host-poke tag
+<span class="m">0x4C</span>, and the <i>k</i>-th class-1 escape word of a body takes the <i>k</i>-th
+cell of that body's own descriptor block. <span class="grade g-forc">FORCED</span> /
+<span class="grade g-meas">MEASURED</span> (guarded census, in-run).</p>
+
+<table>
+<tr><th>I-RAM</th><th>raw</th><th>dir</th><th>descriptor cell</th><th>value</th><th>line = <span class="m">dsc &amp; 0x3f</span></th></tr>
+<tr><td><span class="m">iw12</span></td><td><span class="m">08801202D5</span></td><td>READ</td><td><span class="m">0x27</span></td><td><span class="m">0x1041</span></td><td><span class="m">0x01</span></td></tr>
+<tr><td><span class="m">iw26</span></td><td><span class="m">088012040B</span></td><td>READ</td><td><span class="m">0x28</span></td><td><span class="m">0x05A0</span></td><td><span class="m">0x20</span></td></tr>
+<tr><td><span class="m">iw46</span></td><td><span class="m">080016000B</span></td><td>WRITE</td><td><span class="m">0x29</span></td><td><span class="m">0x0000</span></td><td><span class="m">0x00</span></td></tr>
+<tr><td><span class="m">iw54</span></td><td><span class="m">080016000B</span></td><td>WRITE</td><td><span class="m">0x2F</span></td><td><span class="m">0x0C30</span></td><td><span class="m">0x30</span></td></tr>
+</table>
+
+<p><b>The publish schedule works.</b> A delay read latches its datum and the per-line publish makes
+it visible to the next consumer of that line. <span class="m">iw12</span>'s datum is <b>not lost</b>:
+it is published intact to body-0 <span class="m">iw98</span>, which resolves to the <i>same</i>
+descriptor cell <span class="m">0x27</span> / value <span class="m">0x1041</span>, on
+<b>100 % of settled frames</b>. <span class="grade g-meas">MEASURED</span>.</p>
+
+<p class="warn"><b>Quote the ratio, not the count.</b> That measurement is
+<span class="m">540 000 / 540 000</span> in its source log — but that log predates §228 and ran on
+the <b>48 000 Hz</b> clock. The clock-invariant statement is <b>100 %</b>; the raw 540 000 must not
+be carried into a 44 100 Hz context. Same for any figure quoted as "706 040 quiet frames": on the
+shipped clock the §S1 quiet bucket is <b>614 548</b> of <b>902 999</b> settled frames.</p>
+
+<p><span class="m">iw25</span> is <span class="m">000.2.00.2D9</span> — <span class="m">SRC
+0x0B</span> (the published delay datum) + <span class="m">ACT 0x19</span>. It is the <b>one</b>
+class-2 word in the whole 36-site <span class="m">lo12 0x2D9</span> population that is not itself a
+delay word (29 are delay writes, 6 are delay reads). It is grouped by its <b>successor</b>: all 13
+sites of <span class="m">0012201655</span> (<span class="m">mac ta,(p)+1</span>) are immediately
+preceded by a class-1 delay read, and the kernel's <span class="m">w25 → w26(READ) → w27</span> is
+the same motif with the capture split off. <span class="grade g-forc">FORCED</span>, 13/13.</p>
+
+<p class="note"><b>Two retractions, because both are still repeated.</b> (i) The <i>line index loses
+the datum</i> reading is <b>refuted</b> — it came from an <b>unguarded boot-time sample</b> of the
+descriptor array, which freezes the pre-upload state where every cell reads
+<span class="m">0000</span>; the guarded census, in the same log, gives three distinct lines.
+(ii) The <i>cross-frame pipeline</i> rival is refuted three ways with no run. ⇒ <b>The delay path is
+not where the audio is lost.</b> The datum <span class="m">iw12</span> delivers is correct and it is
+<b>zero</b>, because the line carries no audio, because the bodies write zero, because cell
+<span class="m">0x05</span> was erased in K2.</p>
+
+<h3>K6. The LFO</h3>
+
+<p class="warn"><b>Attribution first: the LFO is not a kernel object.</b> The phase ramp lives in
+<b>body 0</b> — words <span class="m">iw89</span>, <span class="m">iw91</span>,
+<span class="m">iw92</span>, <span class="m">iw94</span>, i.e. CHORUS — and its two constants come
+from <b>unit 0's</b> parameter bank at <span class="m">C-RAM[0x00]</span> and
+<span class="m">C-RAM[0x01]</span>, not from the header's bank at <span class="m">0x90</span>. It is
+in this dossier because the kernel-focused instruments found it and because it anchors the
+fixed-point regime, not because the kernel owns it.</p>
+
+<pre>   C-RAM[0x00] = 0x000072 = 114        the RATE      -- iw89 puts it on the bus:  acc = 114 &lt;&lt; 16
+   C-RAM[0x01] = 0x7FFFFF = 8 388 607  the WRAP      -- iw91's SRC-0x08 operand; upd6383.cpp's own
+                                                       C-RAM annotation calls this cell "wrap"
+   D-RAM[0x07]  the PHASE       ramp, quiet [4 .. 8 388 594], 1 080 450 writes, step 114..114 CONSTANT
+   D-RAM[0x10]  the MODULATION  published by iw92</pre>
+
+<p><b>The defect and its fix.</b> <span class="m">iw91</span> is the wrap word. The model applied
+<span class="m">ACTION 0x00</span> to it literally — i.e. it <b>added</b> the operand to the
+accumulator — so <span class="m">iw92</span> published
+<span class="m">clamp(phase + INC + 0x7FFFFF)</span> and D-RAM <span class="m">0x10</span> was a
+full-scale DC on every frame while the phase itself ramped correctly. The difference between the two
+slots was <b>exactly <span class="m">8 388 607 = 0x7FFFFF</span></b> at both endpoints of both
+buckets — the wrap constant itself. The fix applies the operand as a <b>modulus</b> at the adder
+only: <span class="m">acc ← (datum(acc) &amp; L) &lt;&lt; ACC_SHIFT</span>. It is now the default
+(<span class="m">UPD6383_LFOWRAP = 1</span>, 1 081 332 wrap steps per run taking the modulus path,
+one distinct slot) and the two-sided OFF control is kept.
+<span class="grade g-meas">MEASURED</span>: after the flip, <span class="m">iw94</span>'s cell
+reads <span class="m">1 006 898, 1 007 012, … 1 007 696</span> on eight consecutive frames — a
++114/frame ramp. <b>The chorus LFO reaches its published cell for the first time.</b></p>
+
+<p><b>The rate.</b> The step is <b>114 per frame</b> and the phase is 23-bit, so the period is
+<span class="m">2<sup>23</sup> / 114 = 73 584.3 frames</span> and</p>
+
+<pre>   f = 114 x 44 100 / 2^23 = 5 027 400 / 8 388 608 = <b>0.599313 Hz</b>   (period 1.66858 s)</pre>
+
+<p class="note"><b>Do not grade a clock change on this number.</b> The census's Hz is
+<span class="m">wraps/frames × DECLARED rate</span> and <span class="m">wraps/frames</span> is
+rate-invariant, so changing the declaration alone moves it with nothing measured — a criterion that
+cannot fail is not a pass. The clock is graded instead on <b>frames per emulated second against the
+machine's own clock</b> (44 086.742 against 44 100 declared, relative error 0.000301) and on the step
+and period staying invariant, which they do. ⚠ The older wrap census that printed
+<span class="m">0.5000 Hz</span> is <b>superseded and biased low two ways</b>. <b>Fs = 44 100 has
+four proofs, all inside the ROM</b>; the "33.8688 MHz = 768 × 44 100" crystal argument is
+<span class="grade g-infr">INFERRED</span> only — the 1996 scan prints
+<span class="m">36.8688 MHz</span>, which divides to neither rate.</p>
+
+<h3>K7. What is decoded, and what is not</h3>
+
+<p>Two predicates, and the difference between them matters.
+<span class="m">alu_decoded()</span> is the executable arithmetic predicate — five guards, each with
+its own evidence and nothing outside their conjunction. <span class="m">decoded()</span> is
+<span class="m">alu_decoded()</span> <i>plus</i> the pointer-load family
+(<span class="m">ldptr</span>, <span class="m">ldptr.d</span>, <span class="m">rstcur</span>,
+<span class="m">setvec</span>) and <span class="m">nop</span>. Coverage is normally quoted with the
+first.</p>
+
+<table>
+<tr><th>population</th><th>words</th><th><span class="m">alu_decoded()</span></th><th><span class="m">decoded()</span></th><th>rate (<span class="m">decoded()</span>)</th></tr>
+<tr><td>whole IC311 corpus</td><td>3057</td><td>1178</td><td>1247</td><td>40.8 % (<span class="m">alu</span>: <b>38.5 %</b>)</td></tr>
+<tr><td>kernel A</td><td>50</td><td>7</td><td>9</td><td>18.0 %</td></tr>
+<tr><td>kernel B</td><td>10</td><td><b>0</b></td><td>2</td><td>20.0 %</td></tr>
+<tr><td>epilogue</td><td>23</td><td><b>0</b></td><td>2</td><td>8.7 %</td></tr>
+<tr><td><b>kernel + epilogue</b></td><td><b>83</b></td><td><b>7</b></td><td><b>13</b></td><td><b>15.7 %</b></td></tr>
+</table>
+
+<p><b>The kernel is decoded worse than the corpus average</b>, and the two regions that decide what
+the machine emits — kernel B and the epilogue — contain <b>not one</b> ALU-decoded word between
+them. The 13 decoded words are seven ALU words
+(<span class="m">iw6, 9, 18, 27, 34, 35, 39</span>) and six pointer loads
+(<span class="m">iw42, 44, 50, 52, 62, 69</span>). Using the project's own
+<span class="m">status()</span> tiering over the 83:</p>
+
+<pre>   DECODED     13   a real mnemonic; a core can execute it
+   PARTIAL     11   K6 -- the input stage: ADDRESSING decoded and executed, ALU open
+   DETERMINED   4   the delay-DRAM accesses: OPERATION known, operand ENCODING open
+   MEASURED     2   the two call-vector words: DESTINATION known, source field open
+   UNKNOWN     53   nothing about the word's job is established
+                    ...of which 28 still execute an addressing effect (pointer or cursor)
+                    ...and 25 execute NOTHING AT ALL</pre>
+
+<p><b>Which fields block the rest.</b> Of the 70 kernel + epilogue words that are not
+<span class="m">decoded()</span>:</p>
+
+<pre>   class4 outside {2, 8, A}                     25   (mode-1 register-file and delay words)
+   C-FORMAT (class4/addr8 are immediate data)   11
+   unanchored SRC / ACT routing                 28   <- THE dominant blocker
+        SRC 0x00  8      SRC 0x08  6 *      SRC 0x11  5      SRC 0x0B  1
+        ACT 0x0E  5      ACT 0x0D  3        ACT 0x08  2      ACT 0x0C 1  ACT 0x17 1  ACT 0x1A 1
+   hi12[3:1] operation not one the biquad determines   3
+   guard 7 (the bit-7 store gate)                      3
+   * the LADDER's three words are in this row</pre>
+
+<p>Corpus-wide the same picture holds: 1077 words blocked on unanchored routing, 539 on class, 106
+on the operation field, 68 C-format, 20 on guard 7.
+<span class="grade g-meas">MEASURED</span> — reproduced here by a transcription of
+<span class="m">upd6383d.h alu_decoded()</span>'s guard order, self-tested against the device's own
+<span class="m">gfail</span> column.</p>
+
+<p class="warn"><b>Do not close this document believing the kernel is understood.</b> Fewer than one
+word in six has a mnemonic. The header's arithmetic is reconstructed from what the model computes
+and from constants that can be checked against the ROM — <b>not</b> from a decoded instruction set.
+The ladder is the clearest case: its numbers are reproducible to the unit, and none of the three
+words that produce them is decoded.</p>
+
+<h3>K8. The kernel's signal path</h3>
+
+<svg viewBox="0 0 1102 682" width="100%" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Signal path through the KN5000 effects-DSP shared kernel"
+     font-family="'DejaVu Sans', sans-serif" font-size="9px" fill="currentColor">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+    markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="currentColor" stroke="none"/></marker></defs>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="12" y="24" width="239" height="64" rx="3"/>
+  <text x="21" y="40" font-size="10.5px" font-weight="bold">AUDIO INPUT LATCHES</text>
+  <text x="21" y="52.5">D-RAM X+2 and X+5 — read, never written</text>
+  <text x="21" y="65.0">by iw4, iw8 and iw10</text>
+  <text x="21" y="77.5" font-size="8.5px" opacity="0.8">no I/O opcode: the port-ness is the ADDRESS</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="12" y="114" width="190" height="64" rx="3"/>
+  <text x="21" y="130" font-size="10.5px" font-weight="bold">DEPOSIT</text>
+  <text x="21" y="142.5">iw9   bit-4 store of ACCA</text>
+  <text x="21" y="155.0">iw11  ACT-0x07 store of the bus</text>
+  <text x="21" y="167.5" font-size="8.5px" opacity="0.8">both target D-RAM[0x05]</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="12" y="204" width="229" height="51" rx="3"/>
+  <text x="21" y="220" font-size="10.5px" font-weight="bold">D-RAM[0x05] — the unit-0 send</text>
+  <text x="21" y="232.5">quiet 0..5 084 004  loud 0..16 760 298</text>
+  <text x="21" y="245.0" font-size="8.5px" opacity="0.8">3 611 996 writes, 4 writers, no others</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.75" x="285" y="24" width="279" height="164" rx="3"/>
+  <text x="294" y="40" font-size="10.5px" font-weight="bold">THE LADDER — UNDECODED</text>
+  <text x="294" y="52.5">iw30 &#183; acc &#8592; C-RAM[0x9B] &lt;&lt; 16 &#183; datum 0.600 FS</text>
+  <text x="294" y="65.0">iw30 &#183; forms P = C-RAM[0x9B]&#178; &gt;&gt; 6</text>
+  <text x="294" y="77.5">iw32 &#183; acc &#8592; P(iw30) &#183; datum 0.720 FS</text>
+  <text x="294" y="90.0">iw32 &#183; forms P = C-RAM[0x9C]&#178; &gt;&gt; 6</text>
+  <text x="294" y="102.5">iw33 &#183; acc += C-RAM[0x9D] &lt;&lt; 16 + P(iw32)</text>
+  <text x="294" y="115.0">iw33 &#183; = 14 428 403 = 1.720 &#215; FS &#183; OVERFLOW</text>
+  <text x="294" y="127.5">iw34 &#183; L = clamp(...) = 8 388 607 &#183; THE CLIP</text>
+  <text x="294" y="140.0">iw34 &#183; acc &#8592; P(iw33) = 2&#179;&#8312; &#183; datum 0.500 FS</text>
+  <text x="294" y="152.5" font-size="8.5px" opacity="0.8">all three producers fail alu_decoded() on the</text>
+  <text x="294" y="165.0" font-size="8.5px" opacity="0.8">routing guard — unanchored SRC 0x08</text>
+  <text x="294" y="177.5" font-size="8.5px" opacity="0.8">the device runs them on the catch-all path</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="285" y="214" width="251" height="64" rx="3"/>
+  <text x="294" y="230" font-size="10.5px" font-weight="bold">THE OVERWRITE</text>
+  <text x="294" y="242.5">iw35  stores acc_to_datum(2&#179;&#8312;) = 4 194 304</text>
+  <text x="294" y="255.0">iw45  stores 0</text>
+  <text x="294" y="267.5" font-size="8.5px" opacity="0.8">both into D-RAM[0x05] — the audio is gone</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="680" y="24" width="214" height="101" rx="3"/>
+  <text x="689" y="40" font-size="10.5px" font-weight="bold">C-RAM[0x90..0xB4]</text>
+  <text x="689" y="52.5">UNIT 1's per-algorithm bank</text>
+  <text x="689" y="65.0">= THE REVERB's coefficients</text>
+  <text x="689" y="77.5">a preset change moves 23 cells:</text>
+  <text x="689" y="90.0">13 of the header's 20-cell walk,</text>
+  <text x="689" y="102.5">2 of the 3 ladder cells (9B, 9C)</text>
+  <text x="689" y="115.0" font-size="8.5px" opacity="0.8">CONCERT 1 +1.720 FS / ROOM 1 +1.320 FS</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="928" y="24" width="162" height="76" rx="3"/>
+  <text x="937" y="40" font-size="10.5px" font-weight="bold">CURSOR SEED</text>
+  <text x="937" y="52.5">epilogue iw69 ldptr #$90</text>
+  <text x="937" y="65.0">runs last, every frame</text>
+  <text x="937" y="77.5" font-size="8.5px" opacity="0.8">epilogue has 0 cursor words,</text>
+  <text x="937" y="90.0" font-size="8.5px" opacity="0.8">so the base cannot drift</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.75" x="12" y="308" width="212" height="76" rx="3"/>
+  <text x="21" y="324" font-size="10.5px" font-weight="bold">BODY 0 — slots 50..119</text>
+  <text x="21" y="336.5">I-RAM 84..153 (cold boot: CHORUS)</text>
+  <text x="21" y="349.0">picks up D-RAM[0x05] at iw84:</text>
+  <text x="21" y="361.5">operand measured 0..0, both buckets</text>
+  <text x="21" y="374.0" font-size="8.5px" opacity="0.8">also holds the LFO — iw89/91/92/94</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.75" x="285" y="308" width="262" height="76" rx="3"/>
+  <text x="294" y="324" font-size="10.5px" font-weight="bold">EXTERNAL DELAY DRAM</text>
+  <text x="294" y="336.5">iw12 READ  line 0x01 &#8594; iw98, 100 % of frames</text>
+  <text x="294" y="349.0">iw26 READ  line 0x20</text>
+  <text x="294" y="361.5">iw46 / iw54 WRITE  lines 0x00 / 0x30</text>
+  <text x="294" y="374.0" font-size="8.5px" opacity="0.8">address = DESCRIPTOR[k] + G — not in the word</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="680" y="308" width="201" height="76" rx="3"/>
+  <text x="689" y="324" font-size="10.5px" font-weight="bold">KERNEL B — slots 120..129</text>
+  <text x="689" y="336.5">I-RAM 50..59; 0 ALU words decoded</text>
+  <text x="689" y="349.0">iw53 forms 2 603 010 048 = 39 718</text>
+  <text x="689" y="361.5">iw59 CALLs unit 1 (tag 0x0F)</text>
+  <text x="689" y="374.0" font-size="8.5px" opacity="0.8">a coefficient &#215; coefficient product</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.75" x="680" y="410" width="201" height="64" rx="3"/>
+  <text x="689" y="426" font-size="10.5px" font-weight="bold">BODY 1 — slots 130..262</text>
+  <text x="689" y="438.5">I-RAM 200..332 (CONCERT REVERB 1)</text>
+  <text x="689" y="451.0">ACCB dies at iw205 (ACT 0x0D)</text>
+  <text x="689" y="463.5" font-size="8.5px" opacity="0.8">128 of its 133 slots run on zero</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.75" x="202" y="500" width="340" height="114" rx="3"/>
+  <text x="211" y="516" font-size="10.5px" font-weight="bold">EPILOGUE — slots 263..284, I-RAM 60..81</text>
+  <text x="211" y="528.5">21 of 22 executing slots have an operand of EXACTLY 0,</text>
+  <text x="211" y="541.0">every settled frame, in both buckets</text>
+  <text x="211" y="553.5">the 22nd is iw72 = the host's unit-0 level, 4 194 304</text>
+  <text x="211" y="566.0">iw65 kills a CONSTANT (2 603 010 048), not body 0's signal</text>
+  <text x="211" y="578.5">4 of the 21 zero fetches are literal DECODE GAPS:</text>
+  <text x="211" y="591.0">SRC 0x05, 0x01, 0x06 and 0x0A leave L = 0 unread</text>
+  <text x="211" y="603.5" font-size="8.5px" opacity="0.8">0 ALU-decoded words; iw69 re-seeds the cursor to 0x90</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="572" y="512" width="223" height="76" rx="3"/>
+  <text x="581" y="528" font-size="10.5px" font-weight="bold">PRESENTATION</text>
+  <text x="581" y="540.5">iw73 &#8594; DO1 (unit 0)   min 0  max 0</text>
+  <text x="581" y="553.0">iw78 &#8594; DO2 (unit 1)   min 0  max 0</text>
+  <text x="581" y="565.5">1 106 028 executions each, 0 non-zero</text>
+  <text x="581" y="578.0" font-size="8.5px" opacity="0.8">peak 0 in every arm, quiet and loud</text>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M132,88 L132,114"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M107,178 L107,204"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M126,255 L126,308"/>
+  <text x="132" y="284" font-size="8.5px" opacity="0.8">value 0</text>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M680,64 L564,64"/>
+  <text x="578" y="58" font-size="8.5px" opacity="0.8">SRC 0x08 reads it</text>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M928,54 L894,54"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M424,188 L424,214"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M285,236 L241,222"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#ar)" opacity="0.75" d="M224,338 L285,338"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M547,338 L680,338"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M780,384 L780,410"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M680,460 L472,500"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#ar)" opacity="0.75" d="M118,384 L118,557 L202,557"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M542,550 L572,550"/>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="12" y="636" width="1078" height="34" rx="3"/>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" x="24" y="646" width="26" height="14"/>
+  <text x="58" y="657">decoded or measured region</text>
+  <rect fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.75" x="248" y="646" width="26" height="14"/>
+  <text x="282" y="657">contains UNDECODED words — the arithmetic is not established</text>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" marker-end="url(#ar)" d="M772,653 L804,653"/>
+  <text x="812" y="657">measured data flow</text>
+  <path fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#ar)" opacity="0.75" d="M942,653 L974,653"/>
+  <text x="982" y="657">inferred</text>
+</svg>
+
+<h3 id="errata">K9. Errata in the commissioning brief</h3>
+
+<p>Reporting these is a deliverable, not a complaint. Six statements in the brief are wrong or
+stale; all six are checkable from the committed data.</p>
+
+<table>
+<tr><th>#</th><th>the brief says</th><th>the data say</th></tr>
+<tr><td>1</td><td>"kernel A (I-RAM 0..59) … epilogue (60..82)"</td><td><b>Kernel A is I-RAM 0..49</b> (50 slots); 50..59 is kernel B, 70 slots later. The epilogue image is 60..82 but only <b>60..81</b> execute; I-RAM 82 is the frame-wait terminator. Only this split sums to 285.</td></tr>
+<tr><td>2</td><td>"<span class="m">P_SHIFT</span> is 22"</td><td><b><span class="m">P_SHIFT</span> is 6.</b> 22 is the <i>total</i>, <span class="m">P_SHIFT + ACC_SHIFT = 6 + 16</span>, which is what Q1.22 coefficients against Q0.23 data force. Using 22 as <span class="m">P_SHIFT</span> does not reproduce a single ladder value.</td></tr>
+<tr><td>3</td><td>"706 040 frames where the input is exactly zero"</td><td>A <b>pre-§228 (48 000 Hz) count</b>. On the shipped 44 100 Hz clock the census's quiet bucket is <b>614 548</b> frames and the loud bucket <b>288 451</b>, of 902 999 settled frames. The brief's own rule — recompute, never quote — applies to its own number.</td></tr>
+<tr><td>4</td><td>"their counts sum to the entire quiet-bucket total"</td><td>They sum to <b>7 989 124 of 7 989 156</b>. The missing <b>32</b> are body-0 <span class="m">iw91</span>. Likewise "every saturation site is in the kernel" is <b>11 of 12 census rows</b>, not 12.</td></tr>
+<tr><td>5</td><td>"<span class="m">iw12</span> … publishes to <span class="m">iw98</span> (540 000/540 000 settled frames)"</td><td>The <b>ratio</b> (100 %) survives; the <b>count</b> is again pre-§228. Do not carry 540 000 into a 44 100 Hz context.</td></tr>
+<tr><td>6</td><td>the LFO listed among the kernel's properties</td><td>The LFO is <b>body 0's</b> (CHORUS): <span class="m">iw89/91/92/94</span>, reading <b>unit 0's</b> bank at <span class="m">C-RAM[0x00]</span> (rate 114) and <span class="m">[0x01]</span> (wrap <span class="m">0x7FFFFF</span>). No kernel word touches it. The <i>fix</i> was found by kernel instruments; the <i>object</i> is not kernel.</td></tr>
+</table>
+
+<p class="note">Two of the brief's warnings were checked and are <b>correct</b>: <span class="m">f31
+== 1</span> is the ISA's only accumulate (1309 of 2989 non-C-format corpus words; op 0 loads, op 2
+holds without a product, op 3 gets hold's behaviour, so no second accumulate exists), and the
+squaring multiply is faithful — <span class="m">SRC 0x08</span> is anchored by the chorus LFO
+(<span class="m">acc = 114 &lt;&lt; 16</span> exactly) and must not be touched. The
+<span class="m">I-RAM[154..199]</span> check also came back clean for the kernel.</p>
+
+<h3>K10. The full per-word listing</h3>
+
+<p>All 83 words that run in every frame of every preset: the 60-word header
+(<span class="m">kernel A</span> I-RAM 0..49 + <span class="m">kernel B</span> I-RAM 50..59) and the
+23-word output stage (I-RAM 60..82). Raw words are the ROM's own bytes, 36 bits right-aligned in 5.
+<b>Rows shaded and marked <span class="m">und</span> are UNDECODED</b> — nothing about the word's job
+is established, and for 25 of them nothing executes at all.</p>
+
+<p><b>Field key.</b> <span class="m">hi12</span> = bits 35..24, a horizontal microword of
+independent enable bits, <b>not</b> an opcode; <span class="m">class4</span> = 23..20;
+<span class="m">addr8</span> = 19..12; <span class="m">lo12</span> = 11..0. In the C-format family
+(<span class="m">hi12[11:8] == 0xC</span>) bits 24..12 are one 13-bit immediate reaching into
+<span class="m">hi12</span> bit 0, so <span class="m">class4</span> / <span class="m">addr8</span>
+do not exist there and print as <span class="m">–</span>. <span class="m">SRC</span> =
+<span class="m">lo12[10:6]</span>, <span class="m">ACT</span> = <span class="m">lo12[4:0]</span> —
+the operand routing, always taken from the disassembler's own accessors and never by eye, since 11
+distinct <span class="m">lo12</span> values occur on both class-1 delay words and class-2 words.
+<span class="m">f31</span> = <span class="m">hi12[3:1]</span>, the accumulator operation
+(0 = load <span class="m">P</span>, 1 = <b>accumulate</b>, 2 = hold); <span class="m">f98</span> =
+<span class="m">hi12[9:8]</span>, an arity field of unestablished meaning. Flags:
+<span class="m">ESC</span> = format escape (bit 11), <span class="m">END</span> = end of block
+(bit 10, only when <span class="m">ESC</span> is clear), <span class="m">ST</span> = write
+accumulator to <span class="m">mem[ptr]</span> (bit 4), <span class="m">cur+</span> = advances the
+coefficient cursor (<span class="m">class4 == 0xA</span>, not C-format), <span class="m">p±n</span>
+= signed pointer post-increment by <span class="m">addr8</span>
+(<span class="m">class4 &amp; 7 == 2</span>). <span class="m">C-RAM</span> = the absolute cell this
+word's multiply consumes, from the frame-start base <span class="m">0x90</span> and the in-block
+<span class="m">ldptr</span>s.</p>
+
+<table class="listing">
+<thead><tr><th>I-RAM</th><th>slot</th><th>raw 36-bit</th><th>hi12</th><th>cl</th><th>addr8</th><th>lo12</th><th>SRC</th><th>ACT</th><th>f31</th><th>f98</th><th>flags</th><th>C-RAM</th><th>mnemonic</th><th>decode status / blocking field</th></tr></thead>
+<tbody>
+<tr class="sec"><td colspan="15"><b>KERNEL A</b> &mdash; 50 words, 9 <span class="m">decoded()</span>, 7 <span class="m">alu_decoded()</span></td></tr>
+<tr><td>0</td><td>0</td><td class="m" style="white-space:nowrap">009220120D</td><td class="m">092</td><td class="m">2</td><td class="m">01</td><td class="m">20D</td><td class="m">08</td><td class="m">0D</td><td>1</td><td>0</td><td class="m">ST p+1</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[SRC 0x08 + ACT 0x0D]</small><br><small>&#183; frame entry; ST mem[X+0]</small></td></tr>
+<tr><td>1</td><td>1</td><td class="m" style="white-space:nowrap">0C0A0E0000</td><td class="m">C0A</td><td class="m">-</td><td class="m">-</td><td class="m">000</td><td class="m">-</td><td class="m">-</td><td>5</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[c-format]</small><br><small>&#183; C-format A=7 -&gt; start of input block B</small></td></tr>
+<tr><td>2</td><td>2</td><td class="m" style="white-space:nowrap">0084202680</td><td class="m">084</td><td class="m">2</td><td class="m">02</td><td class="m">680</td><td class="m">1A</td><td class="m">00</td><td>2</td><td>0</td><td class="m">p+2</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[operation f31]</small><br><small>&#183; reads X+1, the one-frame feedback cell w79 wrote</small></td></tr>
+<tr><td>3</td><td>3</td><td class="m" style="white-space:nowrap">00122FF1CE</td><td class="m">012</td><td class="m">2</td><td class="m">FF</td><td class="m">1CE</td><td class="m">07</td><td class="m">0E</td><td>1</td><td>0</td><td class="m">ST p-1</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[ACT 0x0E]</small><br><small>&#183; = epilogue w79 (same word)</small></td></tr>
+<tr><td>4</td><td>4</td><td class="m" style="white-space:nowrap">02042021CE</td><td class="m">204</td><td class="m">2</td><td class="m">02</td><td class="m">1CE</td><td class="m">07</td><td class="m">0E</td><td>2</td><td>2</td><td class="m">p+2</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[ACT 0x0E]</small><br><small>&#183; *** AUDIO INPUT LATCH, block A ***</small></td></tr>
+<tr><td>5</td><td>5</td><td class="m" style="white-space:nowrap">0202A00448</td><td class="m">202</td><td class="m">A</td><td class="m">00</td><td class="m">448</td><td class="m">11</td><td class="m">08</td><td>1</td><td>2</td><td class="m">cur+ p+0</td><td class="m">0x90</td><td class="m">~word</td><td>partial: ALU open <small>[SRC 0x11 + ACT 0x08]</small><br><small>&#183; coef walk +0x00 (C-RAM[0x90])</small></td></tr>
+<tr><td>6</td><td>6</td><td class="m" style="white-space:nowrap">0400A00419</td><td class="m">400</td><td class="m">A</td><td class="m">00</td><td class="m">419</td><td class="m">10</td><td class="m">19</td><td>0</td><td>0</td><td class="m">END cur+ p+0</td><td class="m">0x91</td><td class="m">ld.ta2  acc,c+,(p)+0</td><td>fully decoded<br><small>&#183; coef walk +0x01; END OF BLOCK A</small></td></tr>
+<tr><td>7</td><td>7</td><td class="m" style="white-space:nowrap">0090A011C8</td><td class="m">090</td><td class="m">A</td><td class="m">01</td><td class="m">1C8</td><td class="m">07</td><td class="m">08</td><td>0</td><td>0</td><td class="m">ST cur+ p+1</td><td class="m">0x92</td><td class="m">~word</td><td>partial: ALU open <small>[ACT 0x08]</small><br><small>&#183; ST mem[X+4]; coef walk +0x02</small></td></tr>
+<tr><td>8</td><td>8</td><td class="m" style="white-space:nowrap">00842011C0</td><td class="m">084</td><td class="m">2</td><td class="m">01</td><td class="m">1C0</td><td class="m">07</td><td class="m">00</td><td>2</td><td>0</td><td class="m">p+1</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[operation f31]</small><br><small>&#183; *** AUDIO INPUT LATCH, block B ***</small></td></tr>
+<tr><td>9</td><td>9</td><td class="m" style="white-space:nowrap">00122FF1D5</td><td class="m">012</td><td class="m">2</td><td class="m">FF</td><td class="m">1D5</td><td class="m">07</td><td class="m">15</td><td>1</td><td>0</td><td class="m">ST p-1</td><td class="m">&mdash;</td><td class="m">mac     (p),(p)-1</td><td>fully decoded<br><small>&#183; DEPOSIT -&gt; D-RAM[0x05], the unit-0 send</small></td></tr>
+<tr><td>10</td><td>10</td><td class="m" style="white-space:nowrap">0282A01417</td><td class="m">282</td><td class="m">A</td><td class="m">01</td><td class="m">417</td><td class="m">10</td><td class="m">17</td><td>1</td><td>2</td><td class="m">cur+ p+1</td><td class="m">0x93</td><td class="m">~word</td><td>partial: ALU open <small>[ACT 0x17]</small><br><small>&#183; second read of the block-B latch</small></td></tr>
+<tr><td>11</td><td>11</td><td class="m" style="white-space:nowrap">0400201447</td><td class="m">400</td><td class="m">2</td><td class="m">01</td><td class="m">447</td><td class="m">11</td><td class="m">07</td><td>0</td><td>0</td><td class="m">END p+1</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[SRC 0x11]</small><br><small>&#183; DEPOSIT -&gt; D-RAM[0x05]; END OF BLOCK B</small></td></tr>
+<tr><td>12</td><td>12</td><td class="m" style="white-space:nowrap">08801202D5</td><td class="m">880</td><td class="m">1</td><td class="m">20</td><td class="m">2D5</td><td class="m">0B</td><td class="m">15</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: operation known, address open <small>[delay-DRAM address]</small><br><small>&#183; delay READ, dsc 0x27 = 0x1041, line 0x01 -&gt; body-0 iw98</small></td></tr>
+<tr><td>13</td><td>13</td><td class="m" style="white-space:nowrap">0282200000</td><td class="m">282</td><td class="m">2</td><td class="m">00</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>1</td><td>2</td><td class="m">p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small><br><small>&#183; bus term = cell 0x06 at unity: 1.870 x FS</small></td></tr>
+<tr><td>14</td><td>14</td><td class="m" style="white-space:nowrap">0400A00000</td><td class="m">400</td><td class="m">A</td><td class="m">00</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>0</td><td>0</td><td class="m">END cur+ p+0</td><td class="m">0x94</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small><br><small>&#183; 1.435 x FS; coef walk +0x04</small></td></tr>
+<tr class="und"><td>15</td><td>15</td><td class="m" style="white-space:nowrap">0C0A292820</td><td class="m">C0A</td><td class="m">-</td><td class="m">-</td><td class="m">820</td><td class="m">-</td><td class="m">-</td><td>5</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr><td>16</td><td>16</td><td class="m" style="white-space:nowrap">0192A00455</td><td class="m">192</td><td class="m">A</td><td class="m">00</td><td class="m">455</td><td class="m">11</td><td class="m">15</td><td>1</td><td>1</td><td class="m">ST cur+ p+0</td><td class="m">0x95</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x11]</small><br><small>&#183; coef walk +0x05; CLIPS 100 % of quiet frames</small></td></tr>
+<tr><td>17</td><td>17</td><td class="m" style="white-space:nowrap">0292A00455</td><td class="m">292</td><td class="m">A</td><td class="m">00</td><td class="m">455</td><td class="m">11</td><td class="m">15</td><td>1</td><td>2</td><td class="m">ST cur+ p+0</td><td class="m">0x96</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x11]</small><br><small>&#183; coef walk +0x06; CLIPS 100 % of quiet frames</small></td></tr>
+<tr><td>18</td><td>18</td><td class="m" style="white-space:nowrap">0182A00415</td><td class="m">182</td><td class="m">A</td><td class="m">00</td><td class="m">415</td><td class="m">10</td><td class="m">15</td><td>1</td><td>1</td><td class="m">cur+ p+0</td><td class="m">0x97</td><td class="m">mac     acc,c+,(p)+0</td><td>fully decoded<br><small>&#183; coef walk +0x07; CLIPS 100 % of quiet frames</small></td></tr>
+<tr><td>19</td><td>19</td><td class="m" style="white-space:nowrap">051220044D</td><td class="m">512</td><td class="m">2</td><td class="m">00</td><td class="m">44D</td><td class="m">11</td><td class="m">0D</td><td>1</td><td>1</td><td class="m">END ST p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x11 + ACT 0x0D]</small><br><small>&#183; store -&gt; D-RAM[0x06]; CLIPS 100 %, 5 conv/frame</small></td></tr>
+<tr><td>20</td><td>20</td><td class="m" style="white-space:nowrap">0000A0064D</td><td class="m">000</td><td class="m">A</td><td class="m">00</td><td class="m">64D</td><td class="m">19</td><td class="m">0D</td><td>0</td><td>0</td><td class="m">cur+ p+0</td><td class="m">0x98</td><td class="m">?word</td><td>partial: ALU open <small>[ACT 0x0D]</small><br><small>&#183; coef walk +0x08</small></td></tr>
+<tr><td>21</td><td>21</td><td class="m" style="white-space:nowrap">0410A0040E</td><td class="m">410</td><td class="m">A</td><td class="m">00</td><td class="m">40E</td><td class="m">10</td><td class="m">0E</td><td>0</td><td>0</td><td class="m">END ST cur+ p+0</td><td class="m">0x99</td><td class="m">?word</td><td>partial: ALU open <small>[ACT 0x0E]</small><br><small>&#183; store -&gt; D-RAM[0x06]</small></td></tr>
+<tr class="und"><td>22</td><td>22</td><td class="m" style="white-space:nowrap">0C04312820</td><td class="m">C04</td><td class="m">-</td><td class="m">-</td><td class="m">820</td><td class="m">-</td><td class="m">-</td><td>2</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr><td>23</td><td>23</td><td class="m" style="white-space:nowrap">0692A00415</td><td class="m">692</td><td class="m">A</td><td class="m">00</td><td class="m">415</td><td class="m">10</td><td class="m">15</td><td>1</td><td>2</td><td class="m">END ST cur+ p+0</td><td class="m">0x9A</td><td class="m">?word</td><td>partial: ALU open <small>[guard 7]</small><br><small>&#183; coef walk +0x0A</small></td></tr>
+<tr><td>24</td><td>24</td><td class="m" style="white-space:nowrap">0692200415</td><td class="m">692</td><td class="m">2</td><td class="m">00</td><td class="m">415</td><td class="m">10</td><td class="m">15</td><td>1</td><td>2</td><td class="m">END ST p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[guard 7]</small></td></tr>
+<tr><td>25</td><td>25</td><td class="m" style="white-space:nowrap">00002002D9</td><td class="m">000</td><td class="m">2</td><td class="m">00</td><td class="m">2D9</td><td class="m">0B</td><td class="m">19</td><td>0</td><td>0</td><td class="m">p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x0B]</small><br><small>&#183; SRC 0x0B: consumes the published delay datum</small></td></tr>
+<tr><td>26</td><td>26</td><td class="m" style="white-space:nowrap">088012040B</td><td class="m">880</td><td class="m">1</td><td class="m">20</td><td class="m">40B</td><td class="m">10</td><td class="m">0B</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: operation known, address open <small>[delay-DRAM address]</small><br><small>&#183; delay READ, dsc 0x28 = 0x05A0, line 0x20</small></td></tr>
+<tr><td>27</td><td>27</td><td class="m" style="white-space:nowrap">0012201655</td><td class="m">012</td><td class="m">2</td><td class="m">01</td><td class="m">655</td><td class="m">19</td><td class="m">15</td><td>1</td><td>0</td><td class="m">ST p+1</td><td class="m">&mdash;</td><td class="m">mac     ta,(p)+1</td><td>fully decoded<br><small>&#183; store -&gt; D-RAM[0x06]</small></td></tr>
+<tr><td>28</td><td>28</td><td class="m" style="white-space:nowrap">05042001D5</td><td class="m">504</td><td class="m">2</td><td class="m">00</td><td class="m">1D5</td><td class="m">07</td><td class="m">15</td><td>2</td><td>1</td><td class="m">END p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[operation f31]</small></td></tr>
+<tr class="und"><td>29</td><td>29</td><td class="m" style="white-space:nowrap">0C42457820</td><td class="m">C42</td><td class="m">-</td><td class="m">-</td><td class="m">820</td><td class="m">-</td><td class="m">-</td><td>1</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr><td>30</td><td>30</td><td class="m" style="white-space:nowrap">009AA00200</td><td class="m">09A</td><td class="m">A</td><td class="m">00</td><td class="m">200</td><td class="m">08</td><td class="m">00</td><td>5</td><td>0</td><td class="m">ST cur+ p+0</td><td class="m">0x9B</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x08]</small><br><small>&#183; LADDER 1: acc &lt;- C-RAM[0x9B]&lt;&lt;16 = 0.600 FS; forms P = C-RAM[0x9B]^2</small></td></tr>
+<tr class="und"><td>31</td><td>31</td><td class="m" style="white-space:nowrap">0C0A4B1820</td><td class="m">C0A</td><td class="m">-</td><td class="m">-</td><td class="m">820</td><td class="m">-</td><td class="m">-</td><td>5</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small><br><small>&#183; C-format (pointer-load immediate)</small></td></tr>
+<tr><td>32</td><td>32</td><td class="m" style="white-space:nowrap">0000AFF207</td><td class="m">000</td><td class="m">A</td><td class="m">FF</td><td class="m">207</td><td class="m">08</td><td class="m">07</td><td>0</td><td>0</td><td class="m">cur+ p-1</td><td class="m">0x9C</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x08]</small><br><small>&#183; LADDER 2: acc &lt;- P(iw30) = 0.720 FS; forms P = C-RAM[0x9C]^2</small></td></tr>
+<tr><td>33</td><td>33</td><td class="m" style="white-space:nowrap">0412A00200</td><td class="m">412</td><td class="m">A</td><td class="m">00</td><td class="m">200</td><td class="m">08</td><td class="m">00</td><td>1</td><td>0</td><td class="m">END ST cur+ p+0</td><td class="m">0x9D</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x08]</small><br><small>&#183; LADDER 3: acc += C-RAM[0x9D]&lt;&lt;16 + P(iw32) = 1.720 x FS *** OVERFLOW ***; stores 6 039 795 -&gt; 0x06</small></td></tr>
+<tr><td>34</td><td>34</td><td class="m" style="white-space:nowrap">0000AFF407</td><td class="m">000</td><td class="m">A</td><td class="m">FF</td><td class="m">407</td><td class="m">10</td><td class="m">07</td><td>0</td><td>0</td><td class="m">cur+ p-1</td><td class="m">0x9E</td><td class="m">ld.st   acc,c+,(p)-1</td><td>fully decoded<br><small>&#183; L = clamp(14 428 403) = 8 388 607 *** THE CLIP ***; acc &lt;- P(iw33) = 2^38</small></td></tr>
+<tr><td>35</td><td>35</td><td class="m" style="white-space:nowrap">0012A001C0</td><td class="m">012</td><td class="m">A</td><td class="m">00</td><td class="m">1C0</td><td class="m">07</td><td class="m">00</td><td>1</td><td>0</td><td class="m">ST cur+ p+0</td><td class="m">0x9F</td><td class="m">mac.b   (p),c+,(p)+0</td><td>fully decoded<br><small>&#183; stores acc_to_datum(2^38) = 4 194 304 -&gt; 0x05: OVERWRITES the audio</small></td></tr>
+<tr><td>36</td><td>36</td><td class="m" style="white-space:nowrap">0400A00000</td><td class="m">400</td><td class="m">A</td><td class="m">00</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>0</td><td>0</td><td class="m">END cur+ p+0</td><td class="m">0xA0</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small><br><small>&#183; coef walk +0x10</small></td></tr>
+<tr><td>37</td><td>37</td><td class="m" style="white-space:nowrap">0092A011C0</td><td class="m">092</td><td class="m">A</td><td class="m">01</td><td class="m">1C0</td><td class="m">07</td><td class="m">00</td><td>1</td><td>0</td><td class="m">ST cur+ p+1</td><td class="m">0xA1</td><td class="m">?word</td><td>partial: ALU open <small>[guard 7]</small><br><small>&#183; coef walk +0x11</small></td></tr>
+<tr class="und"><td>38</td><td>38</td><td class="m" style="white-space:nowrap">0809000839</td><td class="m">809</td><td class="m">0</td><td class="m">00</td><td class="m">839</td><td class="m">00</td><td class="m">19</td><td>4</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; lo12 0x839 selector OPEN, 2 sites in 3057</small></td></tr>
+<tr><td>39</td><td>39</td><td class="m" style="white-space:nowrap">0410AFF647</td><td class="m">410</td><td class="m">A</td><td class="m">FF</td><td class="m">647</td><td class="m">19</td><td class="m">07</td><td>0</td><td>0</td><td class="m">END ST cur+ p-1</td><td class="m">0xA2</td><td class="m">ld.st   ta,c+,(p)-1</td><td>fully decoded<br><small>&#183; store -&gt; D-RAM[0x06]; CLIPS 100 %, 4 conv/frame</small></td></tr>
+<tr class="und"><td>40</td><td>40</td><td class="m" style="white-space:nowrap">0C4A1C0820</td><td class="m">C4A</td><td class="m">-</td><td class="m">-</td><td class="m">820</td><td class="m">-</td><td class="m">-</td><td>5</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr><td>41</td><td>41</td><td class="m" style="white-space:nowrap">0400A0021A</td><td class="m">400</td><td class="m">A</td><td class="m">00</td><td class="m">21A</td><td class="m">08</td><td class="m">1A</td><td>0</td><td>0</td><td class="m">END cur+ p+0</td><td class="m">0xA3</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x08 + ACT 0x1A]</small><br><small>&#183; coef walk +0x13 -- last cell of the header walk</small></td></tr>
+<tr><td>42</td><td>42</td><td class="m" style="white-space:nowrap">0801070821</td><td class="m">801</td><td class="m">0</td><td class="m">70</td><td class="m">821</td><td class="m">00</td><td class="m">01</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">ldptr   #$70</td><td>fully decoded<br><small>&#183; RE-AIMS the cursor; unit-0 DISCONNECT vector target</small></td></tr>
+<tr class="und"><td>43</td><td>43</td><td class="m" style="white-space:nowrap">080106C827</td><td class="m">801</td><td class="m">0</td><td class="m">6C</td><td class="m">827</td><td class="m">00</td><td class="m">07</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr><td>44</td><td>44</td><td class="m" style="white-space:nowrap">0801025825</td><td class="m">801</td><td class="m">0</td><td class="m">25</td><td class="m">825</td><td class="m">00</td><td class="m">05</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">ldptr.d #$25</td><td>fully decoded<br><small>&#183; delay-descriptor pointer</small></td></tr>
+<tr><td>45</td><td>45</td><td class="m" style="white-space:nowrap">0010A0020C</td><td class="m">010</td><td class="m">A</td><td class="m">00</td><td class="m">20C</td><td class="m">08</td><td class="m">0C</td><td>0</td><td>0</td><td class="m">ST cur+ p+0</td><td class="m">0x70</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x08 + ACT 0x0C]</small><br><small>&#183; stores 0 -&gt; D-RAM[0x05]: ZEROES the send before the CALL</small></td></tr>
+<tr><td>46</td><td>46</td><td class="m" style="white-space:nowrap">080016000B</td><td class="m">800</td><td class="m">1</td><td class="m">60</td><td class="m">00B</td><td class="m">00</td><td class="m">0B</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: operation known, address open <small>[delay-DRAM address]</small><br><small>&#183; delay WRITE, dsc 0x29 = 0x0000, line 0x00</small></td></tr>
+<tr><td>47</td><td>47</td><td class="m" style="white-space:nowrap">080080C000</td><td class="m">800</td><td class="m">8</td><td class="m">0C</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small></td></tr>
+<tr class="und"><td>48</td><td>48</td><td class="m" style="white-space:nowrap">0C645A2000</td><td class="m">C64</td><td class="m">-</td><td class="m">-</td><td class="m">000</td><td class="m">-</td><td class="m">-</td><td>2</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr class="und"><td>49</td><td>49</td><td class="m" style="white-space:nowrap">040010E000</td><td class="m">400</td><td class="m">1</td><td class="m">0E</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>0</td><td>0</td><td class="m">END</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; CALL unit-0 body at I-RAM 84 (tag 0x0E)</small></td></tr>
+<tr class="sec"><td colspan="15"><b>KERNEL B</b> &mdash; 10 words, 2 <span class="m">decoded()</span>, 0 <span class="m">alu_decoded()</span></td></tr>
+<tr><td>50</td><td>120</td><td class="m" style="white-space:nowrap">0801050821</td><td class="m">801</td><td class="m">0</td><td class="m">50</td><td class="m">821</td><td class="m">00</td><td class="m">01</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">ldptr   #$50</td><td>fully decoded<br><small>&#183; unit-1 pointer setup; unit-1 DISCONNECT vector target</small></td></tr>
+<tr class="und"><td>51</td><td>121</td><td class="m" style="white-space:nowrap">0801064827</td><td class="m">801</td><td class="m">0</td><td class="m">64</td><td class="m">827</td><td class="m">00</td><td class="m">07</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr><td>52</td><td>122</td><td class="m" style="white-space:nowrap">0801025825</td><td class="m">801</td><td class="m">0</td><td class="m">25</td><td class="m">825</td><td class="m">00</td><td class="m">05</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">ldptr.d #$25</td><td>fully decoded<br><small>&#183; delay-descriptor pointer</small></td></tr>
+<tr><td>53</td><td>123</td><td class="m" style="white-space:nowrap">00109D020C</td><td class="m">010</td><td class="m">9</td><td class="m">D0</td><td class="m">20C</td><td class="m">08</td><td class="m">0C</td><td>0</td><td>0</td><td class="m">ST</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[class]</small><br><small>&#183; register 0xD0 = unit-1 STATE-BLOCK BASE; forms 2 603 010 048</small></td></tr>
+<tr><td>54</td><td>124</td><td class="m" style="white-space:nowrap">080016000B</td><td class="m">800</td><td class="m">1</td><td class="m">60</td><td class="m">00B</td><td class="m">00</td><td class="m">0B</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: operation known, address open <small>[delay-DRAM address]</small><br><small>&#183; delay WRITE, dsc 0x2F = 0x0C30, line 0x30</small></td></tr>
+<tr><td>55</td><td>125</td><td class="m" style="white-space:nowrap">0000201007</td><td class="m">000</td><td class="m">2</td><td class="m">01</td><td class="m">007</td><td class="m">00</td><td class="m">07</td><td>0</td><td>0</td><td class="m">p+1</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small></td></tr>
+<tr class="und"><td>56</td><td>126</td><td class="m" style="white-space:nowrap">0C646A2007</td><td class="m">C64</td><td class="m">-</td><td class="m">-</td><td class="m">007</td><td class="m">-</td><td class="m">-</td><td>2</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr><td>57</td><td>127</td><td class="m" style="white-space:nowrap">0000201000</td><td class="m">000</td><td class="m">2</td><td class="m">01</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>0</td><td>0</td><td class="m">p+1</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small></td></tr>
+<tr class="und"><td>58</td><td>128</td><td class="m" style="white-space:nowrap">000018A007</td><td class="m">000</td><td class="m">1</td><td class="m">8A</td><td class="m">007</td><td class="m">00</td><td class="m">07</td><td>0</td><td>0</td><td class="m">&mdash;</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr class="und"><td>59</td><td>129</td><td class="m" style="white-space:nowrap">040010F007</td><td class="m">400</td><td class="m">1</td><td class="m">0F</td><td class="m">007</td><td class="m">00</td><td class="m">07</td><td>0</td><td>0</td><td class="m">END</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; CALL unit-1 body at I-RAM 200 (tag 0x0F)</small></td></tr>
+<tr class="sec"><td colspan="15"><b>EPILOGUE</b> &mdash; 22 words, 2 <span class="m">decoded()</span>, 0 <span class="m">alu_decoded()</span></td></tr>
+<tr class="und"><td>60</td><td>263</td><td class="m" style="white-space:nowrap">009218D15B</td><td class="m">092</td><td class="m">1</td><td class="m">8D</td><td class="m">15B</td><td class="m">05</td><td class="m">1B</td><td>1</td><td>0</td><td class="m">ST</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; runs after BOTH bodies returned; SRC 0x05 = DECODE GAP</small></td></tr>
+<tr class="und"><td>61</td><td>264</td><td class="m" style="white-space:nowrap">001218D05B</td><td class="m">012</td><td class="m">1</td><td class="m">8D</td><td class="m">05B</td><td class="m">01</td><td class="m">1B</td><td>1</td><td>0</td><td class="m">ST</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; SRC 0x01 = DECODE GAP; writes m_rf[0x8D] = 0x009B26</small></td></tr>
+<tr><td>62</td><td>265</td><td class="m" style="white-space:nowrap">0801026825</td><td class="m">801</td><td class="m">0</td><td class="m">26</td><td class="m">825</td><td class="m">00</td><td class="m">05</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">ldptr.d #$26</td><td>fully decoded<br><small>&#183; unit-0 delay-descriptor region base</small></td></tr>
+<tr><td>63</td><td>266</td><td class="m" style="white-space:nowrap">02A79051C3</td><td class="m">2A7</td><td class="m">9</td><td class="m">05</td><td class="m">1C3</td><td class="m">07</td><td class="m">03</td><td>3</td><td>2</td><td class="m">&mdash;</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[class]</small></td></tr>
+<tr><td>64</td><td>267</td><td class="m" style="white-space:nowrap">001190E445</td><td class="m">011</td><td class="m">9</td><td class="m">0E</td><td class="m">445</td><td class="m">11</td><td class="m">05</td><td>0</td><td>0</td><td class="m">ST</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: destination known, source open <small>[class]</small><br><small>&#183; UNIT-0 CALL VECTOR -- one of two host-rewritten words</small></td></tr>
+<tr class="und"><td>65</td><td>268</td><td class="m" style="white-space:nowrap">020018F1C1</td><td class="m">200</td><td class="m">1</td><td class="m">8F</td><td class="m">1C1</td><td class="m">07</td><td class="m">01</td><td>0</td><td>2</td><td class="m">&mdash;</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; SECOND DEATH: ACCA 2 603 010 048 -&gt; 0</small></td></tr>
+<tr class="und"><td>66</td><td>269</td><td class="m" style="white-space:nowrap">000018C107</td><td class="m">000</td><td class="m">1</td><td class="m">8C</td><td class="m">107</td><td class="m">04</td><td class="m">07</td><td>0</td><td>0</td><td class="m">&mdash;</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr class="und"><td>67</td><td>270</td><td class="m" style="white-space:nowrap">0980520402</td><td class="m">980</td><td class="m">5</td><td class="m">20</td><td class="m">402</td><td class="m">10</td><td class="m">02</td><td>0</td><td>1</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr class="und"><td>68</td><td>271</td><td class="m" style="white-space:nowrap">009218C19B</td><td class="m">092</td><td class="m">1</td><td class="m">8C</td><td class="m">19B</td><td class="m">06</td><td class="m">1B</td><td>1</td><td>0</td><td class="m">ST</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr><td>69</td><td>272</td><td class="m" style="white-space:nowrap">0801090821</td><td class="m">801</td><td class="m">0</td><td class="m">90</td><td class="m">821</td><td class="m">00</td><td class="m">01</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">ldptr   #$90</td><td>fully decoded<br><small>&#183; SEEDS the coefficient cursor for the NEXT frame</small></td></tr>
+<tr class="und"><td>70</td><td>273</td><td class="m" style="white-space:nowrap">02A61850C7</td><td class="m">2A6</td><td class="m">1</td><td class="m">85</td><td class="m">0C7</td><td class="m">03</td><td class="m">07</td><td>3</td><td>2</td><td class="m">&mdash;</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr><td>71</td><td>274</td><td class="m" style="white-space:nowrap">001190F446</td><td class="m">011</td><td class="m">9</td><td class="m">0F</td><td class="m">446</td><td class="m">11</td><td class="m">06</td><td>0</td><td>0</td><td class="m">ST</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: destination known, source open <small>[class]</small><br><small>&#183; UNIT-1 CALL VECTOR -- the other host-rewritten word</small></td></tr>
+<tr class="und"><td>72</td><td>275</td><td class="m" style="white-space:nowrap">0000106087</td><td class="m">000</td><td class="m">1</td><td class="m">06</td><td class="m">087</td><td class="m">02</td><td class="m">07</td><td>0</td><td>0</td><td class="m">&mdash;</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small><br><small>&#183; the host&#x27;s unit-0 level 0x400000 -- the only non-zero epilogue operand</small></td></tr>
+<tr><td>73</td><td>276</td><td class="m" style="white-space:nowrap">0E30C00404</td><td class="m">E30</td><td class="m">C</td><td class="m">00</td><td class="m">404</td><td class="m">10</td><td class="m">04</td><td>0</td><td>2</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[class]</small><br><small>&#183; PRESENTATION, unit 0 / DO1 -- min 0 max 0, both buckets</small></td></tr>
+<tr class="und"><td>74</td><td>277</td><td class="m" style="white-space:nowrap">0C169AB000</td><td class="m">C16</td><td class="m">-</td><td class="m">-</td><td class="m">000</td><td class="m">-</td><td class="m">-</td><td>3</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr><td>75</td><td>278</td><td class="m" style="white-space:nowrap">082E80F000</td><td class="m">82E</td><td class="m">8</td><td class="m">0F</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>7</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small></td></tr>
+<tr class="und"><td>76</td><td>279</td><td class="m" style="white-space:nowrap">0C00984000</td><td class="m">C00</td><td class="m">-</td><td class="m">-</td><td class="m">000</td><td class="m">-</td><td class="m">-</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small></td></tr>
+<tr class="und"><td>77</td><td>280</td><td class="m" style="white-space:nowrap">0859086822</td><td class="m">859</td><td class="m">0</td><td class="m">86</td><td class="m">822</td><td class="m">00</td><td class="m">02</td><td>4</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[class]</small></td></tr>
+<tr><td>78</td><td>281</td><td class="m" style="white-space:nowrap">0A3CD9F287</td><td class="m">A3C</td><td class="m">D</td><td class="m">9F</td><td class="m">287</td><td class="m">0A</td><td class="m">07</td><td>6</td><td>2</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[class]</small><br><small>&#183; PRESENTATION, unit 1 / DO2 -- min 0 max 0, both buckets</small></td></tr>
+<tr><td>79</td><td>282</td><td class="m" style="white-space:nowrap">00122FF1CE</td><td class="m">012</td><td class="m">2</td><td class="m">FF</td><td class="m">1CE</td><td class="m">07</td><td class="m">0E</td><td>1</td><td>0</td><td class="m">ST p-1</td><td class="m">&mdash;</td><td class="m">~word</td><td>partial: ALU open <small>[ACT 0x0E]</small><br><small>&#183; = header w3 (K6)</small></td></tr>
+<tr><td>80</td><td>283</td><td class="m" style="white-space:nowrap">01042001CE</td><td class="m">104</td><td class="m">2</td><td class="m">00</td><td class="m">1CE</td><td class="m">07</td><td class="m">0E</td><td>2</td><td>1</td><td class="m">p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[ACT 0x0E]</small></td></tr>
+<tr><td>81</td><td>284</td><td class="m" style="white-space:nowrap">0102200000</td><td class="m">102</td><td class="m">2</td><td class="m">00</td><td class="m">000</td><td class="m">00</td><td class="m">00</td><td>1</td><td>1</td><td class="m">p+0</td><td class="m">&mdash;</td><td class="m">?word</td><td>partial: ALU open <small>[SRC 0x00]</small></td></tr>
+<tr class="sec"><td colspan="15"><b>EPILOGUE (NOT EXECUTED)</b> &mdash; 1 words, 0 <span class="m">decoded()</span>, 0 <span class="m">alu_decoded()</span></td></tr>
+<tr class="und"><td>82</td><td>&mdash;</td><td class="m" style="white-space:nowrap">0C00A47407</td><td class="m">C00</td><td class="m">-</td><td class="m">-</td><td class="m">407</td><td class="m">-</td><td class="m">-</td><td>0</td><td>0</td><td class="m">ESC</td><td class="m">&mdash;</td><td class="m">?word</td><td><b>UNDECODED</b> <small>[c-format]</small><br><small>&#183; FRAME TERMINATOR / WAIT -- NOT one of the 285 slots</small></td></tr>
+</tbody></table>
+<p class="note"><b>Listing totals.</b> 83 words &mdash; <b>13</b> fully decoded (7 by <span class="m">alu_decoded()</span>, 6 pointer loads), <b>25</b> UNDECODED with nothing executing, and the remainder partial: the addressing executes, the arithmetic does not. Region rates: kernel A 9/50, kernel B 2/10, epilogue 2/23.</p>
+
+<h3>K11. Method, provenance and self-test</h3>
+
+<p>This part was produced <b>read-only</b>: no repo file was edited, no build was run, no emulator
+was launched. Four committed sources: the generated disassembly
+<span class="m">dsp/disasm/{kernel,epilogue}.dsm</span> (the ROM's own bytes); the vendored ISA
+mirror <span class="m">dsp/tools/dsp_disasm.py</span>, a byte-faithful copy of MAME's
+<span class="m">upd6383d.{cpp,h}</span>, whose <span class="m">alu_decoded()</span> and
+<span class="m">decoded()</span> are the predicates quoted throughout; the shipped-default run log
+<span class="m">dsp/analysis/data/B_44100_228.log.gz</span> (44 100 Hz, 1 323 000 frames) for every
+measured value; and the archived host captures of C-RAM under CONCERT REVERB 1 and ROOM REVERB 1.</p>
+
+<p><b>RULE 20 — the self-test, run before any interpretation: 22 of 22 PASS.</b> Nine of the
+twenty-two are <i>external</i> known answers reached by an independent path — the field extraction
+is checked against the disassembly's own rendering, the guard reproduction against the device's
+<span class="m">gfail</span> column, and the ladder is <b>recomputed offline from the ROM words plus
+a C-RAM capture</b> and must land on §224's four values to the unit:</p>
+
+<pre>   kernel words 60 / epilogue words 23                                  PASS
+   w4 fields = 204.2.02.1CE   w25 fields = 000.2.00.2D9                 PASS
+   w25 SRC = 0x0B, ACT = 0x19                                           PASS
+   w33 f31 = HI_ACC_ADD and carries HI_ST                               PASS
+   w34 SRC = 0x10 (the accumulator)                                     PASS
+   w42 = ldptr #$70   w69 = ldptr #$90                                  PASS
+   cursor-advancing words before w42 = 20; epilogue = 0                 PASS
+   w30/w32/w33 cursor offsets = 0x0B / 0x0C / 0x0D                      PASS
+   w34 decoded, w33 not (matches the log's dec column)                  PASS
+   ladder iw30 datum  =  5 033 164                                      PASS  <- external
+   ladder iw32 datum  =  6 039 795                                      PASS  <- external
+   ladder iw33 datum  = 14 428 403                                      PASS  <- external
+   iw34 accumulator   = 2^38                                            PASS  <- external
+   ROOM REVERB 1 iw33 = 1.320 x FS                                      PASS  <- external
+   corpus size 3057                                                     PASS
+   114 x 44100 / 2^23 = 0.599313 Hz                                     PASS</pre>
+
+<p class="note"><b>What the self-test does not cover.</b> The offline ladder model reproduces the
+device; it does not validate the device against hardware. The one-word product pipeline,
+<span class="m">P_SHIFT</span>, <span class="m">ACC_SHIFT</span> and the clamp are the model's, each
+separately evidenced (the biquad at 0.198 dB, the chorus LFO's <span class="m">acc = 114 &lt;&lt;
+16</span>, <span class="m">m_rf[0x8D] = 0x009B26</span>, SINGLE DELAY's
+<span class="m">+0.02149296</span> three-factor product) but none a hardware measurement.
+<span class="grade g-meas">MEASURED</span> here means measured in the model;
+<span class="grade g-forc">FORCED</span> means forced by the ROM bytes or the source, independent of
+any run.</p>
+
+<p class="warn"><b>Scope.</b> Five microcode streams (algorithms 79, 88, 89, 90, 91) and algorithms
+57–60 are programs for the <b>second</b> DSP, the MN19413 at IC310. They are excluded from every
+count here; the IC311 population is 91 of 100 algorithm slots, and the corpus denominator 3057 is
+IC311's alone.</p>
