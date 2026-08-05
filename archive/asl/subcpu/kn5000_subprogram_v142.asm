@@ -292,7 +292,7 @@ INT_HANDLER_13:
 	RET
 
 INT_HANDLER_14:
-	JP LABEL_01FB41
+	JP Timer_AudioTick_Handler
 	RET
 
 INT_HANDLER_15:
@@ -300,7 +300,7 @@ INT_HANDLER_15:
 	RET
 
 INT_HANDLER_16:
-	JP LABEL_01FDC8
+	JP INT16_TaskSwitch_Handler
 	RET
 
 INT_HANDLER_17:
@@ -391,7 +391,7 @@ INT_HANDLER_2C:
 	JP MUTE_AND_HALT
 	RET
 
-LABEL_0004E1:
+InternalRAM_PadFF:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
@@ -399,7 +399,7 @@ LABEL_0004E1:
 
 
 	org 0F000h
-LABEL_00F000:
+IRAM_FirmwareConfig:
 	db 08Eh, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 000h, 000h, 000h, 0FFh, 000h, 0FFh
@@ -533,16 +533,16 @@ LABEL_00F000:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FEh, 07Fh, 0F7h, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 07Fh, 000h, 000h
 
-LABEL_00F420:
+FPConst_MaxNorm:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0EFh, 07Fh
 
-LABEL_00F428:
+FPConst_Zero:
 	dd 00000000h
 
-LABEL_00F42C:
+FPConst_Ln2:
 	db 0CDh, 03Bh, 07Fh, 066h, 09Eh, 0A0h, 0F6h, 03Fh
 
-LABEL_00F434:				; Struct do buffer de transmissão da serial #1
+Serial1_TxBuf_Struct:				; Struct do buffer de transmissão da serial #1
 	dd 00000A00h	;  0  <-- start
 	dd 00000DFFh	;  4  <-- end
 	dd 00000A00h	;  8  <-- current_write_pointer
@@ -550,7 +550,7 @@ LABEL_00F434:				; Struct do buffer de transmissão da serial #1
 	dd 00000A00h	; 10
 	dw 03FFh		; 14  <-- counter
 
-LABEL_00F44A:				; Struct do buffer de recepção da serial #1
+Serial1_RxBuf_Struct:				; Struct do buffer de recepção da serial #1
 	dd 00000E16h	;  0
 	dd 00001015h	;  4
 	dd 00000E16h	;  8
@@ -563,9 +563,9 @@ OFFSETS_F460:
 	dw 0000h  ; Audio_PlayNote_Variant_1
 	dw 0008h  ; Audio_PlayNote_Variant_2
 	dw 000Ch  ; Audio_PlayNote_Variant_3
-	dw 0010h  ; LABEL_01FB86
-	dw 0018h  ; LABEL_01FB8E
-	dw 0021h  ; LABEL_01FB97
+	dw 0010h  ; AudioTick_Variant_4
+	dw 0018h  ; AudioTick_Variant_5
+	dw 0021h  ; AudioTick_Variant_6
 
 
 ; ----------------------------------------------------------------------------
@@ -736,35 +736,35 @@ Voice_SFX_ModulationTable:
 	db 002h, 005h, 028h, 0F6h, 000h, 000h, 002h, 005h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 
-LABEL_00F693:
+PitchBend_DispatchTable:
 	db 004h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 003h, 000h
 	db 006h, 000h, 009h, 000h
 
-LABEL_00F6A7:
+Voice_GroupOffsets_A:
 	db 00Ch, 000h, 00Fh, 000h, 000h, 000h, 017h, 000h
 	db 01Eh, 000h, 025h, 000h
 
-LABEL_00F6B3:
+Voice_GroupOffsets_B:
 	db 02Ch, 000h, 033h, 000h, 000h, 000h, 013h, 000h
 	db 013h, 000h, 01Bh, 000h
 
-LABEL_00F6BF:
+Voice_GroupOffsets_C:
 	db 036h, 000h, 03Eh, 000h, 000h, 000h, 013h, 000h
 	db 013h, 000h, 01Bh, 000h
 
-LABEL_00F6CB:
+Voice_BitMask_ChannelType:
 	db 036h, 000h, 03Eh, 000h, 001h, 004h, 010h, 040h
 	db 002h, 008h, 020h, 080h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 00Bh, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 080h, 060h, 080h, 062h, 080h, 064h, 080h, 065h
 
-LABEL_00F6F3:
+MIDI_NoteFreqTable:
 	db 080h, 067h, 080h, 069h, 080h, 06Bh, 080h, 06Ch
 	db 000h, 000h, 005h, 000h, 00Ah, 000h, 00Fh, 000h
 
-LABEL_00F703:
+Voice_EnvelopeRateTable:
 	db 01Ah, 000h, 025h, 000h, 030h, 000h, 03Bh, 000h
 	db 046h, 000h, 051h, 000h, 05Ch, 000h, 067h, 000h
 	db 072h, 000h, 07Dh, 000h, 088h, 000h, 093h, 000h
@@ -773,12 +773,12 @@ LABEL_00F703:
 	db 0F6h, 000h, 001h, 001h, 00Ch, 001h, 0E5h, 000h
 	db 0F0h, 000h, 0E2h, 001h, 0FCh, 000h
 
-LABEL_00F739:
+Voice_PolyphonyConfig:
 	db 0E2h, 001h, 0E2h, 001h, 0E2h, 001h, 0E2h, 001h
 	db 017h, 001h, 02Dh, 001h, 051h, 001h, 008h, 000h
 	db 010h, 000h, 018h, 000h, 01Eh, 000h
 
-LABEL_00F74F:
+Voice_ParamScaleTable:
 	db 0F6h, 000h, 024h, 000h, 02Ch, 000h, 034h, 000h
 	db 04Fh, 000h, 052h, 000h, 05Eh, 000h, 06Ah, 000h
 	db 076h, 000h, 082h, 000h, 08Eh, 000h, 09Ah, 000h
@@ -786,13 +786,13 @@ LABEL_00F74F:
 	db 0D9h, 000h, 0E6h, 000h, 0EEh, 000h, 000h, 001h
 	db 006h, 003h, 005h, 008h, 002h, 004h
 
-LABEL_00F77D:
+Const_ChannelMax:
 	db 007h
 
-LABEL_00F77E:
+Const_Zero_Byte:
 	db 000h
 
-LABEL_00F77F:
+PitchDetune_OffsetTable:
 	db 000h, 000h, 000h, 0FFh, 0FFh, 0FEh, 0FFh, 0FDh, 0FFh
 	db 0FCh, 0FFh, 0FBh, 0FFh, 0FAh, 0FFh, 0F9h, 0FFh
 	db 0F8h, 0FFh, 000h, 0F4h, 000h, 000h, 000h, 007h
@@ -9220,11 +9220,11 @@ Audio_DMA_RingBuffer_To_Maincpu:
 	PUSH IZ
 	LD IZ, 0
 
-LABEL_01F859:
+Audio_DMA_RingBuf_ReadLoop:
 	LD XWA, 00000e00h
 	CALR READ_BYTE_FROM_RING_BUFFER
 	CP HL, 0ffffh
-	JR Z, LABEL_01F87B
+	JR Z, Audio_DMA_RingBuf_CheckSend
 	LD WA, IZ
 	INC 1, IZ
 	LDA XBC, 0600h
@@ -9232,18 +9232,18 @@ LABEL_01F859:
 	ADD XWA, XBC
 	LD (XWA), L
 	CP IZ, 0400h
-	JR C, LABEL_01F859
+	JR C, Audio_DMA_RingBuf_ReadLoop
 
-LABEL_01F87B:
+Audio_DMA_RingBuf_CheckSend:
 	CP IZ, 0
-	JR Z, LABEL_01F88E
+	JR Z, Audio_DMA_RingBuf_Done
 	EI 0
 	LD WA, 4
 	LD BC, IZ
 	LD XDE, 00000600h
 	CALL InterCPU_DMA_Send
 
-LABEL_01F88E:
+Audio_DMA_RingBuf_Done:
 	POP IZ
 	RET
 
@@ -9251,20 +9251,20 @@ Serial1_DataTransmit_Loop:
 	LD A, (XSP + 004h)
 	DEC 1, (XSP + 004h)
 	CP A, 0
-	JR Z, LABEL_01F8D2
+	JR Z, Serial1_TX_Done
 
-LABEL_01F89A:
+Serial1_TX_LoopBody:
 	BIT 2, (SERIAL_1_VAR_1034)
-	JR NZ, LABEL_01F8B2
+	JR NZ, Serial1_TX_ViaRingBuf
 	LD XWA, (XSP + 006h)
 	LD C, (XWA+)
 	LD (XSP + 006h), XWA
 	EXTZ BC
 	LD WA, BC
 	CALR Serial1_CommandHandler_RX_F4F5
-	JR T, LABEL_01F8C8
+	JR T, Serial1_TX_CheckNext
 
-LABEL_01F8B2:
+Serial1_TX_ViaRingBuf:
 	LD XWA, (XSP + 006h)
 	LD C, (XWA+)
 	LD (XSP + 006h), XWA
@@ -9273,13 +9273,13 @@ LABEL_01F8B2:
 	CALR SAVE_BYTE_TO_RING_BUFFER
 	CALR Serial1_Enable_TX_Interrupt
 
-LABEL_01F8C8:
+Serial1_TX_CheckNext:
 	LD A, (XSP + 004h)
 	DEC 1, (XSP + 004h)
 	CP A, 0
-	JR NZ, LABEL_01F89A
+	JR NZ, Serial1_TX_LoopBody
 
-LABEL_01F8D2:
+Serial1_TX_Done:
 	LD HL, 0
 	RET
 
@@ -9294,11 +9294,11 @@ INIT_RING_BUFFERS:
 	LD (SERIAL_1_VAR_1034), 000h
 	SET 0, (SERIAL_1_VAR_1034)
 	LD (SERIAL_1_VAR_1038), 000h
-	LD XIY, LABEL_00F434
+	LD XIY, Serial1_TxBuf_Struct
 	LD XIX, 00000e00h
 	LD BC, 000bh
 	LDIRW_95
-	LD XIY, LABEL_00f44a
+	LD XIY, Serial1_RxBuf_Struct
 	LD XIX, 00001016h
 	LD BC, 000bh
 	LDIRW_95
@@ -9418,18 +9418,18 @@ RESET:  ; 01F924
 	LD (IIMC), 000h
 	LD XWA, 0
 	LD (1040h), XWA
-	CALR LABEL_01FC01
+	CALR MemClear_DRAM_And_ExtRAM
 
-LABEL_01FAA6:
+PostReset_InitAudio:
 	LDA XWA, 04069Ah
 	LD XSP, XWA
-	CALL LABEL_01FDDA
+	CALL TaskSched_Init
 	LDA XBC, INTET01
 	LD A, (XBC)
 	AND A, 08fh
 	OR A, 030h
 	LD (XBC), A
-	CALR LABEL_01FC70
+	CALR Audio_InitRingBuffers
 	EI 0
 	LDW (103Ch), 0000h
 	JR T, Audio_System_Init
@@ -9460,12 +9460,12 @@ Audio_Main_Loop:
 AudioLoop_UnmuteAfterBoot:
 	LD XWA, (1040h)
 	CP XWA, 000003e8h
-	JR ULE, LABEL_01FAFF
+	JR ULE, AudioLoop_CheckPeriodicReinit
 	SET 0, (PE)          ; unmute (?) (here I'm assuming "MUTE" it is an active low signal)
 
-LABEL_01FAFF:
+AudioLoop_CheckPeriodicReinit:
 	BIT 1, (103Eh)
-	JR Z, LABEL_01FB2F
+	JR Z, AudioLoop_CallProcessors
 	RES 1, (103Eh)
 	CALL Cmd_Check_E2_Pending
 	CALL Audio_Process_Init
@@ -9474,15 +9474,15 @@ LABEL_01FAFF:
 	INC 1, WA
 	LD (0F012h), WA
 	CP BC, 000ah
-	JR LT, LABEL_01FB29
+	JR LT, AudioLoop_DecrementDelay
 	LDW (0F012h), 0000h
 
-LABEL_01FB29:
+AudioLoop_DecrementDelay:
 	CP IZ, 0
-	JR Z, LABEL_01FB2F
+	JR Z, AudioLoop_CallProcessors
 	DEC 1, IZ
 
-LABEL_01FB2F:
+AudioLoop_CallProcessors:
 	CALL ToneGen_Process_Notes
 	CALL MIDI_Dispatch
 	CALL Audio_Process_DSP
@@ -9490,7 +9490,7 @@ LABEL_01FB2F:
 	JR T, Audio_Main_Loop
 
 
-LABEL_01FB41:
+Timer_AudioTick_Handler:
 	PUSH BC
 	PUSH XWA
 	PUSH XIX
@@ -9502,9 +9502,9 @@ LABEL_01FB41:
 	LD (0F014h), A
 	EXTZ BC
 	CP BC, 0
-	JR MI, LABEL_01FBB8
+	JR MI, AudioTick_Done
 	CP BC, 5
-	JR GT, LABEL_01FBB8
+	JR GT, AudioTick_Done
 	ADD BC, BC
 	LDA XIX, OFFSETS_F460:24
 	LD BC, (XIX + BC)
@@ -9515,41 +9515,41 @@ LABEL_01FB41:
 Audio_PlayNote_Variant_1:
 	SET 4, (103Eh)
 	LD_A 001h
-	JR T, LABEL_01FB90
+	JR T, AudioTick_StoreTick
 
 Audio_PlayNote_Variant_2:
 	LD_A 003h
-	JR T, LABEL_01FB90
+	JR T, AudioTick_StoreTick
 
 Audio_PlayNote_Variant_3:
 	LD_A 002h
-	JR T, LABEL_01FB90
+	JR T, AudioTick_StoreTick
 
-LABEL_01FB86:
+AudioTick_Variant_4:
 	SET 4, (103Eh)
 	LD_A 000h
-	JR T, LABEL_01FB90
+	JR T, AudioTick_StoreTick
 
-LABEL_01FB8E:
+AudioTick_Variant_5:
 	LD_A 003h
 
-LABEL_01FB90:
+AudioTick_StoreTick:
 	SCF
 	STCF A, (103Eh)
-	JR T, LABEL_01FBB8
+	JR T, AudioTick_Done
 
-LABEL_01FB97:
+AudioTick_Variant_6:
 	SET 2, (103Eh)
 	LD (0F014h), 000h
 	LD A, (0F016h)
 	INC 1, A
 	LD (0F016h), A
 	CP A, 008h
-	JR C, LABEL_01FBB8
+	JR C, AudioTick_Done
 	SET 5, (103Eh)
 	LD (0F016h), 000h
 
-LABEL_01FBB8:
+AudioTick_Done:
 	POP XIX
 	POP XWA
 	POP BC
@@ -9565,7 +9565,7 @@ EMPTY_HANDLER_WITH_RESET:  ; 01FBBD
 	RETI
 
 
-LABEL_01FBC1:
+PrevBank_RegHelper:
 	db 0D7h, 0FAh, 004h, 0C2h, 0EEh, 0FEh, 0FFh, 03Fh
 	db 0FFh, 06Eh, 024h, 0C7h, 0FBh, 0A8h, 0C7h, 0FBh
 	db 089h, 0D8h, 012h, 0C7h, 0FBh, 08Bh, 0D9h, 012h
@@ -9581,74 +9581,74 @@ MUTE_AND_HALT:  ; 01FBF4
 	HALT
 
 
-LABEL_01FBF8:
+Timer_StatusHelper:
 	db 068h, 0FDh, 0C1h, 03Ah, 010h, 027h, 0DBh, 012h
 	RET
 
 
-LABEL_01FC01:
+MemClear_DRAM_And_ExtRAM:
 	LD XDE, 0003ee76h
 	LD XBC, 000066f2h
 	LD IX, BC
 	SRL 1, XBC
-	JR Z, LABEL_01FC2E
+	JR Z, MemClear_DRAM_OddByte
 	LD XHL, XDE
 	LDW (XDE+), 0000h
 	DEC 1, XBC
 	OR XBC, XBC
-	JR Z, LABEL_01FC2E
+	JR Z, MemClear_DRAM_OddByte
 	LDIRW_93
 	CP QBC, 0
-	JR Z, LABEL_01FC2E
+	JR Z, MemClear_DRAM_OddByte
 	LD WA, QBC
 
-LABEL_01FC29:
+MemClear_DRAM_BulkLoop:
 	LDIRW_93
-	DJNZ WA, LABEL_01FC29
+	DJNZ WA, MemClear_DRAM_BulkLoop
 
-LABEL_01FC2E:
+MemClear_DRAM_OddByte:
 	BIT 0, IX
-	JR Z, LABEL_01FC36
+	JR Z, MemClear_ExtRAM
 	LD (XDE), 000h
 
-LABEL_01FC36:
+MemClear_ExtRAM:
 	LD XDE, 00000600h
 	LD XBC, 000044cbh
 	LD IX, BC
 	SRL 1, XBC
-	JR Z, LABEL_01FC63
+	JR Z, MemClear_ExtRAM_OddByte
 	LD XHL, XDE
 	LDW (XDE+), 0000h
 	DEC 1, XBC
 	OR XBC, XBC
-	JR Z, LABEL_01FC63
+	JR Z, MemClear_ExtRAM_OddByte
 	LDIRW_93
 	CP QBC, 0
-	JR Z, LABEL_01FC63
+	JR Z, MemClear_ExtRAM_OddByte
 	LD WA, QBC
 
-LABEL_01FC5E:
+MemClear_ExtRAM_BulkLoop:
 	LDIRW_93
-	DJNZ WA, LABEL_01FC5E
+	DJNZ WA, MemClear_ExtRAM_BulkLoop
 
-LABEL_01FC63:
+MemClear_ExtRAM_OddByte:
 	BIT 0, IX
-	JR Z, LABEL_01FC6B
+	JR Z, MemClear_ExtRAM_Finish
 	LD (XDE), 000h
 
-LABEL_01FC6B:
-	JRL T, LABEL_01FAA6
+MemClear_ExtRAM_Finish:
+	JRL T, PostReset_InitAudio
 	RET
 
 
-LABEL_01FC6F:
+Const_0x0E:
 	db 00Eh
 
 
-LABEL_01FC70:
-	CALL LABEL_0208B8
-	CALL LABEL_020966
-	JP LABEL_020A14
+Audio_InitRingBuffers:
+	CALL RingBuf_Init_1K
+	CALL RingBuf_Init_256
+	JP RingBuf_Init_512
 
 
 Audio_CmdHandler_20_3F:
@@ -9660,15 +9660,15 @@ Audio_CmdHandler_40_5F:
 	LD A, C
 	DEC 1, C
 	CP A, 0
-	JR Z, LABEL_01FC92
+	JR Z, AudioCmd_40_5F_Done
 
-LABEL_01FC8A:
+AudioCmd_40_5F_SkipLoop:
 	LD A, C
 	DEC 1, C
 	CP A, 0
-	JR NZ, LABEL_01FC8A
+	JR NZ, AudioCmd_40_5F_SkipLoop
 
-LABEL_01FC92:
+AudioCmd_40_5F_Done:
 	LD HL, 0
 	RET
 
@@ -9740,7 +9740,7 @@ DSP_Write_Channel_Loop:
 	RET
 
 
-LABEL_01FCFB:
+DSP_WriteAllChannelRegs:
 	db 039h, 03Ah, 00Bh, 001h, 000h, 01Eh, 024h, 000h
 	db 0AFh, 00Ah, 021h, 0EEh, 08Ah, 00Bh, 000h, 000h
 	db 01Eh, 019h, 000h, 0E8h, 089h, 0EBh, 08Ah, 00Bh
@@ -9767,23 +9767,23 @@ LABEL_01FCFB:
 	db 000h, 09Ch, 00Ah, 004h, 000h, 000h, 088h, 003h
 	db 000h, 001h, 001h, 001h, 001h, 001h, 001h
 
-LABEL_01FDC2:
+Task_DequeueDispatch_Prio3:
 	LD_A 003h
-	JRL T, LABEL_020109
+	JRL T, TaskQueue_Dequeue
 	RET
 
 
-LABEL_01FDC8:
+INT16_TaskSwitch_Handler:
 	INCW 1, (10D2h)
 	INC 1, (1045h)
 	PUSH WA
 	PUSH BC
-	CALR LABEL_01FDC2
+	CALR Task_DequeueDispatch_Prio3
 	POP BC
 	POP WA
-	JRL T, LABEL_01FFD0
+	JRL T, TaskSwitch_Countdown
 
-LABEL_01FDDA:
+TaskSched_Init:
 	LD XSP, 00040b1eh
 	XOR WA, WA
 	LD (1046h), WA
@@ -9795,31 +9795,31 @@ LABEL_01FDDA:
 	LD DE, 4
 	LD_B 003h
 
-LABEL_01FDF7:
+TaskSched_Init_QueueHeaders:
 	LD IX, HL
 	LD (XHL+), IX
 	LD (XHL+), IX
-	DJNZ B, LABEL_01FDF7
+	DJNZ B, TaskSched_Init_QueueHeaders
 	LD IX, 1048h
 	EXTZ XIX
 	LD_B 003h
 	LD_A 000h
 
-LABEL_01FE0B:
+TaskSched_Init_TaskDescriptors:
 	LD (XIX + 009h), A
 	LD (XIX + 00ah), 000h
 	LD (XIX + 00bh), 000h
 	ADD IX, 000ch
-	DJNZ B, LABEL_01FE0B
+	DJNZ B, TaskSched_Init_TaskDescriptors
 	LD IX, 10cah
 	EXTZ XIX
 	LD_B 001h
 	LD XWA, 0ffffffffh
 
-LABEL_01FE29:
+TaskSched_Init_FreeList_A:
 	LD (XIX + 004h), XWA
 	ADD IX, 0008h
-	DJNZ B, LABEL_01FE29
+	DJNZ B, TaskSched_Init_FreeList_A
 	LD XHL, 0001fdbch
 	LD DE, 1080h
 	EXTZ XDE
@@ -9829,11 +9829,11 @@ LABEL_01FE29:
 	EXTZ XHL
 	LD_B 002h
 
-LABEL_01FE48:
+TaskSched_Init_QueueGroup_B:
 	LD IX, HL
 	LD (XHL+), IX
 	LD (XHL+), IX
-	DJNZ B, LABEL_01FE48
+	DJNZ B, TaskSched_Init_QueueGroup_B
 	LD XHL, 0001fdbeh
 	LD DE, 1092h
 	EXTZ XDE
@@ -9843,20 +9843,20 @@ LABEL_01FE48:
 	EXTZ XHL
 	LD_B 004h
 
-LABEL_01FE68:
+TaskSched_Init_QueueGroup_C:
 	LD IX, HL
 	LD (XHL+), IX
 	LD (XHL+), IX
-	DJNZ B, LABEL_01FE68
+	DJNZ B, TaskSched_Init_QueueGroup_C
 	LD HL, 10a6h
 	EXTZ XHL
 	LD_B 004h
 	LD XWA, 0ffffffffh
 
-LABEL_01FE7F:
+TaskSched_Init_FreeList_B:
 	LD (XHL + 004h), XWA
 	ADD HL, 0008h
-	DJNZ B, LABEL_01FE7F
+	DJNZ B, TaskSched_Init_FreeList_B
 	LD IY, 10c6h
 	EXTZ XIY
 	LD (XIY + 000h:8), IY
@@ -9864,7 +9864,7 @@ LABEL_01FE7F:
 	LD IX, 10a6h
 	LD_B 004h
 
-LABEL_01FE99:
+TaskSched_Init_LinkFreeNodes:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
@@ -9874,64 +9874,64 @@ LABEL_01FE99:
 	LD (XWA), IX
 	LD (XIY + 002h), IX
 	ADD IX, 0008h
-	DJNZ B, LABEL_01FE99
+	DJNZ B, TaskSched_Init_LinkFreeNodes
 	LD HL, 1096h
 	EXTZ XHL
 	LD_B 002h
 
-LABEL_01FEBB:
+TaskSched_Init_QueueGroup_D:
 	LD IX, HL
 	LD (XHL+), IX
 	LD (XHL+), IX
-	DJNZ B, LABEL_01FEBB
+	DJNZ B, TaskSched_Init_QueueGroup_D
 	LD HL, 109eh
 	EXTZ XHL
 	LD_B 002h
 
-LABEL_01FECD:
+TaskSched_Init_QueueGroup_E:
 	LD IX, HL
 	LD (XHL+), IX
 	LD (XHL+), IX
-	DJNZ B, LABEL_01FECD
-	LD XWA, LABEL_01FEDF
-	JR T, LABEL_01FEE7
+	DJNZ B, TaskSched_Init_QueueGroup_E
+	LD XWA, TaskSched_Init_ConfigData
+	JR T, TaskSched_ConfigAndDispatch
 
-LABEL_01FEDF:
+TaskSched_Init_ConfigData:
 	db 001h, 000h, 001h, 000h, 0c7h, 0fdh, 001h, 000h
 
-LABEL_01FEE7:
-	CALL LABEL_02072A
-	CALR LABEL_02084D
+TaskSched_ConfigAndDispatch:
+	CALL Task_ConfigTimer
+	CALR IntMask_ClearBit3
 	LD (TREG3), 01dh
 	LD A, (INTET23)
 	AND A, 00fh
 	OR A, 020h
 	LD (INTET23), A
-	CALR LABEL_020849
+	CALR IntMask_SetBit3
 	LD_A 001h
-	CALR LABEL_01FFFD
+	CALR TaskSched_SpawnTask
 	EI 6
 	LD (1044h), 000h
 	XOR WA, WA
 	LDC_INTNEST_WA
 	LD (10D2h), WA
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 
-LABEL_01FF18:
+TaskSched_Halt:
 	EI 0
 	LD (DAREG1), 0ffh
 
-LABEL_01FF1F:
-	JR T, LABEL_01FF1F
+TaskSched_HaltLoop:
+	JR T, TaskSched_HaltLoop
 
-LABEL_01FF21:
+TaskSched_Dispatch:
 	LD (DAREG1), 000h
 	LD WA, (10D2h)
 	OR WA, WA
-	JR NZ, LABEL_01FF72
+	JR NZ, TaskSched_ContextRestore
 	XOR WA, WA
 	CP (1046h), WA
-	JR Z, LABEL_01FF4A
+	JR Z, TaskSched_Dispatch_ScanQueues
 	LD IY, (1046h)
 	EXTZ XIY
 	LD (XIY + 004h), XSP
@@ -9939,20 +9939,20 @@ LABEL_01FF21:
 	XOR WA, WA
 	LD (1046h), WA
 
-LABEL_01FF4A:
+TaskSched_Dispatch_ScanQueues:
 	LD_B 003h
 	LD IX, 106ch
 	EXTZ XIX
 
-LABEL_01FF51:
+TaskSched_Dispatch_ScanLoop:
 	LD HL, (XIX + 000h:8)
 	CP HL, IX
-	JR NZ, LABEL_01FF5F
+	JR NZ, TaskSched_Dispatch_SwitchTo
 	INC 4, IX
-	DJNZ B, LABEL_01FF51
-	JR T, LABEL_01FF18
+	DJNZ B, TaskSched_Dispatch_ScanLoop
+	JR T, TaskSched_Halt
 
-LABEL_01FF5F:
+TaskSched_Dispatch_SwitchTo:
 	LD (1046h), HL
 	EXTZ XHL
 	LD A, (XHL + 00bh)
@@ -9960,7 +9960,7 @@ LABEL_01FF5F:
 	LD (DAREG1), A
 	LD XSP, (XHL + 004h)
 
-LABEL_01FF72:
+TaskSched_ContextRestore:
 	POP XIZ
 	POP XIY
 	POP XIX
@@ -9984,18 +9984,18 @@ TaskSched_SoftTimer_Service:
 	db 000h, 050h, 0F2h, 0A8h, 0FFh, 001h, 030h, 038h
 	db 0ACh, 004h, 020h, 0B0h, 0D8h
 
-LABEL_01FFD0:
+TaskSwitch_Countdown:
 	PUSH WA
 	LD WA, (10D2h)
 	CP WA, 1
-	JR Z, LABEL_01FFE4
+	JR Z, TaskSwitch_Expired
 	DEC 1, WA
 	LD (10D2h), WA
 	LDC_INTNEST_WA
 	POP WA
 	RETI
 
-LABEL_01FFE4:
+TaskSwitch_Expired:
 	XOR WA, WA
 	LD (10D2h), WA
 	LDC_INTNEST_WA
@@ -10010,9 +10010,9 @@ LABEL_01FFE4:
 	PUSH XIX
 	PUSH XIY
 	PUSH XIZ
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 
-LABEL_01FFFD:
+TaskSched_SpawnTask:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10034,7 +10034,7 @@ LABEL_01FFFD:
 	LD XIX, XBC
 	LD A, (XIX + 009h)
 	CP A, 0
-	JRL NZ, LABEL_01FF72
+	JRL NZ, TaskSched_ContextRestore
 	LD (XIX + 00bh), W
 	LD XIY, (XHL + 004h)
 	SUB XIY, 00000022h
@@ -10060,7 +10060,7 @@ LABEL_01FFFD:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 	EI 6
 	LD XSP, 00040b1eh
 	LD IX, (1046h)
@@ -10076,10 +10076,10 @@ LABEL_01FFFD:
 	LD HL, (XIX + 002h)
 	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 	LD HL, (10D2h)
 	OR HL, HL
-	JR NZ, LABEL_0200BD
+	JR NZ, TaskSched_ReturnZero
 	PUSH XIX
 	LD IX, (1046h)
 	EXTZ XIX
@@ -10088,11 +10088,11 @@ LABEL_01FFFD:
 	POP XIX
 	RET
 
-LABEL_0200BD:
+TaskSched_ReturnZero:
 	XOR HL, HL
 	RET
 
-LABEL_0200C0:
+TaskSched_PreemptiveYield:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10109,7 +10109,7 @@ LABEL_0200C0:
 	EXTZ XIY
 	LD IX, (XIY + 000h:8)
 	CP IX, (XIY + 002h)
-	JRL Z, LABEL_01FF72
+	JRL Z, TaskSched_ContextRestore
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10125,9 +10125,9 @@ LABEL_0200C0:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 
-LABEL_020109:
+TaskQueue_Dequeue:
 	PUSH XWA
 	PUSH XIX
 	PUSH XIY
@@ -10139,7 +10139,7 @@ LABEL_020109:
 	EXTZ XIY
 	LD IX, (XIY + 000h:8)
 	CP IX, (XIY + 002h)
-	JR Z, LABEL_020148
+	JR Z, TaskQueue_Dequeue_Return
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10156,7 +10156,7 @@ LABEL_020109:
 	LD (XWA), IX
 	LD (XIY + 002h), IX
 
-LABEL_020148:
+TaskQueue_Dequeue_Return:
 	POP XHL
 	POP XIY
 	POP XIX
@@ -10234,7 +10234,7 @@ TaskQueue_Operations_Opaque:
 	db 07Fh, 010h, 0E8h, 012h, 002h, 006h, 006h, 0B0h
 	db 0B0h, 003h, 00Eh
 
-LABEL_020370:
+TaskSched_PreemptiveYield_INT:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10252,19 +10252,19 @@ LABEL_020370:
 	EXTZ XIY
 	LD IX, (XIY + 000h:8)
 	CP IX, IY
-	JR NZ, LABEL_0203A3
+	JR NZ, TaskSched_PreemptiveYield_INT_Dequeue
 	EXTZ HL
 	ADD HL, 1091h
 	EXTZ XHL
 	LD A, (XHL)
 	INC 1, A
-	JR Z, LABEL_0203A0
+	JR Z, TaskSched_PreemptiveYield_INT_Empty
 	LD (XHL), A
 
-LABEL_0203A0:
-	JRL T, LABEL_01FF72
+TaskSched_PreemptiveYield_INT_Empty:
+	JRL T, TaskSched_ContextRestore
 
-LABEL_0203A3:
+TaskSched_PreemptiveYield_INT_Dequeue:
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10286,7 +10286,7 @@ LABEL_0203A3:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 	PUSH XWA
 	PUSH XIX
 	PUSH XIY
@@ -10301,16 +10301,16 @@ LABEL_0203A3:
 	EI 6
 	LD IX, (XIY + 000h:8)
 	CP IX, IY
-	JR NZ, LABEL_020411
+	JR NZ, TaskQueue_Dequeue_Guard_Dequeue
 	EXTZ HL
 	ADD HL, 1091h
 	EXTZ XHL
 	LD A, (XHL)
 	INC 1, A
-	JR Z, LABEL_02040B
+	JR Z, TaskQueue_Dequeue_Guard_Empty
 	LD (XHL), A
 
-LABEL_02040B:
+TaskQueue_Dequeue_Guard_Empty:
 	POP SR
 	POP XHL
 	POP XIY
@@ -10318,7 +10318,7 @@ LABEL_02040B:
 	POP XWA
 	RET
 
-LABEL_020411:
+TaskQueue_Dequeue_Guard_Dequeue:
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10347,7 +10347,7 @@ LABEL_020411:
 	POP XWA
 	RET
 
-LABEL_02044F:
+TaskSched_Wait:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10362,11 +10362,11 @@ LABEL_02044F:
 	ADD WA, 1091h
 	EXTZ XWA
 	CP (XWA), 000h
-	JR Z, LABEL_02046D
+	JR Z, TaskSched_Wait_Block
 	DEC 1, (XWA)
-	JRL T, LABEL_01FF72
+	JRL T, TaskSched_ContextRestore
 
-LABEL_02046D:
+TaskSched_Wait_Block:
 	LD IX, (1046h)
 	EXTZ XIX
 	XOR XWA, XWA
@@ -10388,22 +10388,22 @@ LABEL_02046D:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 	EXTZ WA
 	ADD WA, 1091h
 	EXTZ XWA
 	PUSH SR
 	EI 6
 	CP (XWA), 000h
-	JR Z, LABEL_0204BF
+	JR Z, TaskSem_TryDec_WouldBlock
 	DEC 1, (XWA)
 	XOR HL, HL
-	JR T, LABEL_0204C2
+	JR T, TaskSem_TryDec_Return
 
-LABEL_0204BF:
+TaskSem_TryDec_WouldBlock:
 	LD HL, 0ffffh
 
-LABEL_0204C2:
+TaskSem_TryDec_Return:
 	POP SR
 	RET
 
@@ -10411,7 +10411,7 @@ TaskSem_AddrCalc_Opaque:
 	db 0D8h, 012h, 0D8h, 0C8h, 091h, 010h, 0E8h, 012h
 	db 080h, 027h, 0DBh, 012h, 00Eh
 
-LABEL_0204D1:
+TaskMsgQ_Send:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10430,12 +10430,12 @@ LABEL_0204D1:
 	EXTZ XIY
 	LD IX, (XIY + 000h:8)
 	CP IX, IY
-	JR NZ, LABEL_020542
+	JR NZ, TaskMsgQ_Send_DirectDeliver
 	LD IX, (10C6h)
 	EXTZ XIX
 	LD IY, (XIX + 000h:8)
 	CP IY, IX
-	JRL Z, LABEL_02053A
+	JRL Z, TaskMsgQ_Send_PoolEmpty
 	LDW (XSP + 018h), 0000h
 	EXTZ XIX
 	XOR XWA, XWA
@@ -10456,13 +10456,13 @@ LABEL_0204D1:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF72
+	JRL T, TaskSched_ContextRestore
 
-LABEL_02053A:
+TaskMsgQ_Send_PoolEmpty:
 	LDW (XSP + 018h), 0ffffh
-	JRL T, LABEL_01FF72
+	JRL T, TaskSched_ContextRestore
 
-LABEL_020542:
+TaskMsgQ_Send_DirectDeliver:
 	LDW (XSP + 018h), 0000h
 	EXTZ XIX
 	XOR XWA, XWA
@@ -10487,7 +10487,7 @@ LABEL_020542:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 	PUSH XWA
 	PUSH XIX
 	PUSH XIY
@@ -10505,12 +10505,12 @@ LABEL_020542:
 	EI 6
 	LD IX, (XIY + 000h:8)
 	CP IX, IY
-	JR NZ, LABEL_0205FC
+	JR NZ, TaskMsgQ_Send_Guard_DirectDeliver
 	LD IX, (10C6h)
 	EXTZ XIX
 	LD IY, (XIX + 000h:8)
 	CP IY, IX
-	JRL Z, LABEL_0205F5
+	JRL Z, TaskMsgQ_Send_Guard_PoolEmpty
 	LDW (XSP + 004h), 0000h
 	EXTZ XIX
 	XOR XWA, XWA
@@ -10532,7 +10532,7 @@ LABEL_020542:
 	LD (XWA), IX
 	LD (XIY + 002h), IX
 
-LABEL_0205ED:
+TaskMsgQ_Send_Guard_Return:
 	POP SR
 	POP XBC
 	POP XHL
@@ -10542,11 +10542,11 @@ LABEL_0205ED:
 	POP XWA
 	RET
 
-LABEL_0205F5:
+TaskMsgQ_Send_Guard_PoolEmpty:
 	LDW (XSP + 004h), 0ffffh
-	JR T, LABEL_0205ED
+	JR T, TaskMsgQ_Send_Guard_Return
 
-LABEL_0205FC:
+TaskMsgQ_Send_Guard_DirectDeliver:
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10579,7 +10579,7 @@ LABEL_0205FC:
 	POP XWA
 	RET
 
-LABEL_020642:
+TaskMsgQ_Receive:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10597,7 +10597,7 @@ LABEL_020642:
 	EXTZ XIY
 	LD IX, (XIY + 000h:8)
 	CP IX, IY
-	JR Z, LABEL_02069C
+	JR Z, TaskMsgQ_Receive_Empty
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10618,9 +10618,9 @@ LABEL_020642:
 	LD (XWA), IX
 	LD (XIY + 002h), IX
 	LD (XSP + 018h), XIZ
-	JRL T, LABEL_01FF72
+	JRL T, TaskSched_ContextRestore
 
-LABEL_02069C:
+TaskMsgQ_Receive_Empty:
 	LD IX, (1046h)
 	EXTZ XIX
 	XOR XWA, XWA
@@ -10640,9 +10640,9 @@ LABEL_02069C:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 
-LABEL_0206D3:
+TaskMsgQ_TryReceive:
 	PUSH XIX
 	PUSH XIZ
 	SLL 2, A
@@ -10654,7 +10654,7 @@ LABEL_0206D3:
 	EXTZ XIY
 	LD IX, (XIY + 000h:8)
 	CP IX, IY
-	JR Z, LABEL_020724
+	JR Z, TaskMsgQ_TryReceive_Empty
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10675,18 +10675,18 @@ LABEL_0206D3:
 	LD (XWA), IX
 	LD (XIY + 002h), IX
 	LD XHL, XIZ
-	JR T, LABEL_020726
+	JR T, TaskMsgQ_TryReceive_Return
 
-LABEL_020724:
+TaskMsgQ_TryReceive_Empty:
 	XOR XHL, XHL
 
-LABEL_020726:
+TaskMsgQ_TryReceive_Return:
 	POP SR
 	POP XIZ
 	POP XIX
 	RET
 
-LABEL_02072A:
+Task_ConfigTimer:
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10707,7 +10707,7 @@ LABEL_02072A:
 	LD (XIY + 002h), WA
 	LD XWA, (XIX + 004h)
 	LD (XIY + 004h), XWA
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 	PUSH SR
 	EI 6
 	PUSH XHL
@@ -10723,7 +10723,7 @@ LABEL_02072A:
 	LD IX, WA
 	EXTZ XIX
 	CP (XIX + 009h), 004h
-	JR NZ, LABEL_0207AA
+	JR NZ, Task_Reassign_NotRunning
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10744,11 +10744,11 @@ LABEL_02072A:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JRL T, LABEL_01FF21
+	JRL T, TaskSched_Dispatch
 
-LABEL_0207AA:
+Task_Reassign_NotRunning:
 	LD (XIX + 008h), E
-	JRL T, LABEL_01FF72
+	JRL T, TaskSched_ContextRestore
 	PUSH XWA
 	PUSH XIX
 	PUSH XIY
@@ -10762,7 +10762,7 @@ LABEL_0207AA:
 	PUSH SR
 	EI 6
 	CP (XIX + 009h), 004h
-	JR NZ, LABEL_020801
+	JR NZ, Task_Reassign_Guard_NotRunning
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -10783,12 +10783,12 @@ LABEL_0207AA:
 	LD (XIX + 002h), WA
 	LD (XWA), IX
 	LD (XIY + 002h), IX
-	JR T, LABEL_020804
+	JR T, Task_Reassign_Guard_Return
 
-LABEL_020801:
+Task_Reassign_Guard_NotRunning:
 	LD (XIX + 008h), E
 
-LABEL_020804:
+Task_Reassign_Guard_Return:
 	POP SR
 	POP DE
 	POP XHL
@@ -10807,11 +10807,11 @@ RingBuf_Access_Opaque_A:
 	db 0D8h, 0EFh, 001h, 0D1h, 040h, 010h, 080h, 0D1h
 	db 040h, 010h, 0F0h, 06Ah, 0FAh, 00Eh
 
-LABEL_020849:
+IntMask_SetBit3:
 	SET 3, (T8RUN)
 	RET
 
-LABEL_02084D:
+IntMask_ClearBit3:
 	RES 3, (T8RUN)
 	RET
 
@@ -10830,11 +10830,11 @@ RingBuf_Control_Opaque:
 	db 0F3h, 0DBh, 0A8h, 066h, 003h, 033h, 0FFh, 0FFh
 	db 00Eh, 0D2h, 02Ch, 00Ch, 004h, 023h, 00Eh
 
-LABEL_0208B8:
+RingBuf_Init_1K:
 	PUSH IX
 	PUSH XDE
 	LDA XDE, 040C2Eh
-	CALL LABEL_020B83
+	CALL RingBuf_Reset_1K
 	POP XDE
 	POP IX
 	RET
@@ -10861,11 +10861,11 @@ RingBuf_ReadWrite_Opaque_A:
 	db 004h, 0F3h, 0DBh, 0A8h, 066h, 003h, 033h, 0FFh
 	db 0FFh, 00Eh, 0D2h, 036h, 010h, 004h, 023h, 00Eh
 
-LABEL_020966:
+RingBuf_Init_256:
 	PUSH IX
 	PUSH XDE
 	LDA XDE, 041038h
-	CALL LABEL_020A65
+	CALL RingBuf_Reset_256
 	POP XDE
 	POP IX
 	RET
@@ -10892,11 +10892,11 @@ RingBuf_ReadWrite_Opaque_B:
 	db 004h, 0F3h, 0DBh, 0A8h, 066h, 003h, 033h, 0FFh
 	db 0FFh, 00Eh, 0D2h, 040h, 011h, 004h, 023h, 00Eh
 
-LABEL_020A14:
+RingBuf_Init_512:
 	PUSH IX
 	PUSH XDE
 	LDA XDE, 041142h
-	CALL LABEL_020AF4
+	CALL RingBuf_Reset_512
 	POP XDE
 	POP IX
 	RET
@@ -10912,7 +10912,7 @@ AudioBuf_PtrUtils:
 	db 03Eh, 011h, 004h, 023h, 0F2h, 03Ch, 011h, 004h
 	db 053h, 04Bh, 00Eh
 
-LABEL_020A65:
+RingBuf_Reset_256:
 	LDW (XDE - 10), 0000h
 	LDW (XDE - 8), 0000h
 	LDW (XDE - 4), 0000h
@@ -10920,7 +10920,7 @@ LABEL_020A65:
 	LDW (XDE - 2), 00ffh
 	RET
 
-LABEL_020A7F:
+RingBuf_WrappedRead_Opaque_A:
 	db 09Ah, 0F8h, 024h, 09Ah, 0FCh, 0F4h, 06Eh, 004h
 	db 033h, 0FFh, 0FFh, 00Eh, 0DBh, 0D3h, 0C3h, 007h
 	db 0E8h, 0F0h, 027h, 0DCh, 038h, 0FFh, 000h, 0BAh
@@ -10937,7 +10937,7 @@ LABEL_020A7F:
 	db 038h, 0FFh, 000h, 0BAh, 0FCh, 054h, 09Ah, 0FEh
 	db 069h, 09Ah, 0FEh, 023h, 00Eh
 
-LABEL_020AF4:
+RingBuf_Reset_512:
 	LDW (XDE - 10), 0000h
 	LDW (XDE - 8), 0000h
 	LDW (XDE - 4), 0000h
@@ -10945,7 +10945,7 @@ LABEL_020AF4:
 	LDW (XDE - 2), 01ffh
 	RET
 
-LABEL_020B0E:
+RingBuf_WrappedRead_Opaque_B:
 	db 09Ah, 0F8h, 024h, 09Ah, 0FCh, 0F4h, 06Eh, 004h
 	db 033h, 0FFh, 0FFh, 00Eh, 0DBh, 0D3h, 0C3h, 007h
 	db 0E8h, 0F0h, 027h, 0DCh, 038h, 0FFh, 001h, 0BAh
@@ -10962,7 +10962,7 @@ LABEL_020B0E:
 	db 038h, 0FFh, 001h, 0BAh, 0FCh, 054h, 09Ah, 0FEh
 	db 069h, 09Ah, 0FEh, 023h, 00Eh
 
-LABEL_020B83:
+RingBuf_Reset_1K:
 	LDW (XDE - 10), 0000h
 	LDW (XDE - 8), 0000h
 	LDW (XDE - 4), 0000h
@@ -10970,7 +10970,7 @@ LABEL_020B83:
 	LDW (XDE - 2), 03ffh
 	RET
 
-LABEL_020B9D:
+RingBuf_WrappedRead_Opaque_C:
 	db 09Ah, 0F8h, 024h, 09Ah, 0FCh, 0F4h, 06Eh, 004h
 	db 033h, 0FFh, 0FFh, 00Eh, 0DBh, 0D3h, 0C3h, 007h
 	db 0E8h, 0F0h, 027h, 0DCh, 038h, 0FFh, 003h, 0BAh
@@ -11560,60 +11560,60 @@ RingBuf_SetOffsetLo:
 	LD (27E6h), A
 	RET
 
-LABEL_02103B:
+RingBuf_CheckOffset_ClearFlags:
 	CP (27E6h), 000h
-	JR Z, LABEL_021063
+	JR Z, RingBuf_CheckOffset_LoZero
 	CPW (27E7h), 0030h
-	JR C, LABEL_021054
+	JR C, RingBuf_CheckOffset_Level1
 	RES 7, (XWA + 003h)
 	RES 7, (XWA + 004h)
 	RES 7, (XWA + 005h)
 	RET
 
-LABEL_021054:
+RingBuf_CheckOffset_Level1:
 	CPW (27E7h), 0020h
 	RET C
 	RES 7, (XWA + 004h)
 	RES 7, (XWA + 005h)
 	RET
 
-LABEL_021063:
+RingBuf_CheckOffset_LoZero:
 	CPW (27E7h), 0050h
-	JR C, LABEL_021075
+	JR C, RingBuf_CheckOffset_LoZero_Level1
 	RES 7, (XWA + 003h)
 	RES 7, (XWA + 004h)
 	RES 7, (XWA + 005h)
 	RET
 
-LABEL_021075:
+RingBuf_CheckOffset_LoZero_Level1:
 	CPW (27E7h), 0040h
 	RET C
 	RES 7, (XWA + 004h)
 	RES 7, (XWA + 005h)
 	RET
 
-LABEL_021084:
+Quad_Decode_A_To_L:
 	CP A, 040h
-	JR NC, LABEL_02108D
+	JR NC, Quad_Decode_Quarter2
 	LD_L 000h
-	JR T, LABEL_0210A1
+	JR T, Quad_Decode_Return
 
-LABEL_02108D:
+Quad_Decode_Quarter2:
 	CP A, 080h
-	JR NC, LABEL_021096
+	JR NC, Quad_Decode_Quarter3
 	LD_L 004h
-	JR T, LABEL_0210A1
+	JR T, Quad_Decode_Return
 
-LABEL_021096:
+Quad_Decode_Quarter3:
 	CP A, 0c0h
-	JR NC, LABEL_02109F
+	JR NC, Quad_Decode_Quarter4
 	LD_L 008h
-	JR T, LABEL_0210A1
+	JR T, Quad_Decode_Return
 
-LABEL_02109F:
+Quad_Decode_Quarter4:
 	LD_L 000h
 
-LABEL_0210A1:
+Quad_Decode_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -11628,33 +11628,33 @@ LABEL_0210A1:
 ExtVoice_Fold_SlotNumber:	; 0210A2h
 	AND C, 003h
 	CP C, 3
-	JR Z, LABEL_0210C6
+	JR Z, SlotPair_Decode_Case3
 	CP C, 2
-	JR Z, LABEL_0210BC
+	JR Z, SlotPair_Decode_Case2
 	CP C, 1
-	JR Z, LABEL_0210B5
+	JR Z, SlotPair_Decode_Case1
 	CP C, 0
 	RET NZ
 
-LABEL_0210B5:
+SlotPair_Decode_Case1:
 	AND A, 03fh
 	LD L, A
-	JR T, LABEL_0210CB
+	JR T, SlotPair_Decode_Return
 
-LABEL_0210BC:
+SlotPair_Decode_Case2:
 	SUB A, 040h
 	LD L, A
 	RES 7, L
-	JR T, LABEL_0210CB
+	JR T, SlotPair_Decode_Return
 
-LABEL_0210C6:
+SlotPair_Decode_Case3:
 	LD L, A
 	RES 7, L
 
-LABEL_0210CB:
+SlotPair_Decode_Return:
 	RET
 
-LABEL_0210CC:
+VoiceState_SwapSlot_DE_BC:
 	LD E, C
 	EXTZ DE
 	LD IX, DE
@@ -11737,7 +11737,7 @@ LABEL_0210CC:
 	LD (XDE), A
 	RET
 
-LABEL_021185:
+VoiceState_SwapSlot_HL_IY:
 	LD L, C
 	EXTZ HL
 	LD IY, HL
@@ -11861,7 +11861,7 @@ LABEL_021185:
 	LD (XDE), A
 	RET
 
-LABEL_02129C:
+VoiceState_SwapSlot_Guarded:
 	DEC 8, XSP
 	LD (XSP + 004h), E
 	LD (XSP + 006h), C
@@ -11880,39 +11880,39 @@ LABEL_02129C:
 	LD E, (XBC + DE)
 	LD C, E
 	CP C, 0c0h
-	JR NC, LABEL_02130A
+	JR NC, VoiceState_SwapSlot_Guarded_WriteDst
 	LD C, E
 	EXTZ BC
 	MULS_BC 0005h
 	LDA XDE, 2126h
 	LDA XIX, XDE + BC
 	CP (XIX + 004h), A
-	JR NZ, LABEL_02130A
+	JR NZ, VoiceState_SwapSlot_Guarded_WriteDst
 	LD C, (XSP + 006h)
 	LD E, C
 	EXTZ DE
 	LD XBC, (XSP)
 	CP (XBC + DE), A
-	JR Z, LABEL_021306
+	JR Z, VoiceState_SwapSlot_Guarded_MarkInactive
 	LD C, (XSP + 006h)
 	LD E, C
 	EXTZ DE
 	LD XBC, (XSP)
 	LD C, (XBC + DE)
 	LD (XIX + 004h), C
-	JR T, LABEL_02130A
+	JR T, VoiceState_SwapSlot_Guarded_WriteDst
 
-LABEL_021306:
+VoiceState_SwapSlot_Guarded_MarkInactive:
 	LD (XIX + 004h), 0ffh
 
-LABEL_02130A:
+VoiceState_SwapSlot_Guarded_WriteDst:
 	LD C, (XSP + 004h)
 	EXTZ BC
 	MULS_BC 0005h
 	LDA XDE, 2126h
 	LDA XIX, XDE + BC
 	CP (XIX + 004h), 040h
-	JR ULE, LABEL_021337
+	JR ULE, VoiceState_SwapSlot_Guarded_UseHL_IY
 	LD (XIX + 004h), A
 	LD E, A
 	EXTZ DE
@@ -11920,10 +11920,10 @@ LABEL_02130A:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0210CC
-	JR T, LABEL_02134E
+	CALR VoiceState_SwapSlot_DE_BC
+	JR T, VoiceState_SwapSlot_Guarded_Return
 
-LABEL_021337:
+VoiceState_SwapSlot_Guarded_UseHL_IY:
 	LD L, A
 	EXTZ HL
 	LD A, (XSP + 006h)
@@ -11933,9 +11933,9 @@ LABEL_021337:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_021185
+	CALR VoiceState_SwapSlot_HL_IY
 
-LABEL_02134E:
+VoiceState_SwapSlot_Guarded_Return:
 	LD A, (XSP + 006h)
 	EXTZ WA
 	LD DE, WA
@@ -11946,7 +11946,7 @@ LABEL_02134E:
 	INC 8, XSP
 	RET
 
-LABEL_021364:
+VoiceRow_FetchPair_WA_SP:
 	LD C, A
 	EXTZ BC
 	MULS_BC 0005h
@@ -11979,7 +11979,7 @@ LABEL_021364:
 	LD (XDE + BC), A
 	RET
 
-LABEL_0213CB:
+VoiceRow_FetchPair_DE_WA:
 	LD E, A
 	EXTZ DE
 	MULS_DE 0005h
@@ -12026,7 +12026,7 @@ LABEL_0213CB:
 	LD (XDE + BC), A
 	RET
 
-LABEL_021463:
+VoiceSlot_UpdateNoteSource:
 	DEC 4, XSP
 	PUSH XIZ
 	LD (XSP + 004h), E
@@ -12045,20 +12045,20 @@ LABEL_021463:
 	LD C, E
 	EXTZ BC
 	CP (XHL + BC), A
-	JR NZ, LABEL_0214B6
+	JR NZ, VoiceSlot_UpdateNoteSource_WriteCurrent
 	CP (XIZ), A
-	JR Z, LABEL_0214AC
+	JR Z, VoiceSlot_UpdateNoteSource_MarkInactive
 	EXTZ DE
 	LD C, (XIZ)
 	LD (XHL + DE), C
-	JR T, LABEL_0214B6
+	JR T, VoiceSlot_UpdateNoteSource_WriteCurrent
 
-LABEL_0214AC:
+VoiceSlot_UpdateNoteSource_MarkInactive:
 	LD C, E
 	EXTZ BC
 	LD (XHL + BC), 0ffh
 
-LABEL_0214B6:
+VoiceSlot_UpdateNoteSource_WriteCurrent:
 	LD C, (XSP + 006h)
 	EXTZ BC
 	MULS_BC 001bh
@@ -12067,15 +12067,15 @@ LABEL_0214B6:
 	LD C, (XSP + 004h)
 	EXTZ BC
 	CP (XHL + BC), 0c0h
-	JR ULE, LABEL_0214E6
+	JR ULE, VoiceSlot_UpdateNoteSource_UseDE_WA
 	LD C, (XSP + 004h)
 	EXTZ BC
 	LD (XHL + BC), A
 	EXTZ WA
-	CALR LABEL_021364
-	JR T, LABEL_0214FD
+	CALR VoiceRow_FetchPair_WA_SP
+	JR T, VoiceSlot_UpdateNoteSource_Return
 
-LABEL_0214E6:
+VoiceSlot_UpdateNoteSource_UseDE_WA:
 	LD E, A
 	EXTZ DE
 	LD A, (XSP + 004h)
@@ -12084,9 +12084,9 @@ LABEL_0214E6:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0213CB
+	CALR VoiceRow_FetchPair_DE_WA
 
-LABEL_0214FD:
+VoiceSlot_UpdateNoteSource_Return:
 	LD A, (XSP + 006h)
 	LD (XIZ + 002h), A
 	LD A, (XSP + 004h)
@@ -12095,7 +12095,7 @@ LABEL_0214FD:
 	INC 4, XSP
 	RET
 
-LABEL_02150D:
+Voice_ScanSlots_ReassignSources:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 008h), A
@@ -12108,9 +12108,9 @@ LABEL_02150D:
 	LD (XSP + 004h), XWA
 	LD QIZH, 0
 	CP QIZH, 4
-	JRL NC, LABEL_0215D6
+	JRL NC, Voice_ScanSlots_Return
 
-LABEL_021530:
+Voice_ScanSlots_LoopBody:
 	LD A, QIZH
 	EXTZ WA
 	LD BC, WA
@@ -12119,7 +12119,7 @@ LABEL_021530:
 	LD L, (XWA + BC)
 	LD A, L
 	CP A, 0c0h
-	JRL NC, LABEL_0215CD
+	JRL NC, Voice_ScanSlots_LoopNext
 	LD A, L
 	EXTZ WA
 	MULS_WA 005h
@@ -12127,37 +12127,37 @@ LABEL_021530:
 	LDA XDE, XBC + WA
 	LD A, (XDE + 004h)
 	CP A, (XSP + 008h)
-	JR NZ, LABEL_0215A8
+	JR NZ, Voice_ScanSlots_MarkSlotInactive
 	LD A, QIZH
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + BC)
 	CP A, (XSP + 008h)
-	JR Z, LABEL_02158A
+	JR Z, Voice_ScanSlots_PromoteSource
 	LD A, QIZH
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + BC)
 	LD (XDE + 004h), A
-	JR T, LABEL_0215A8
+	JR T, Voice_ScanSlots_MarkSlotInactive
 
-LABEL_02158A:
+Voice_ScanSlots_PromoteSource:
 	LD (XDE + 004h), 0ffh
 	LD IZL, L
 	EXTZ IZ
 	LD A, L
 	EXTZ WA
-	CALR LABEL_021084
+	CALR Quad_Decode_A_To_L
 	LD C, L
 	EXTZ BC
 	LD WA, IZ
 	LD DE, BC
 	LD BC, 001ah
-	CALR LABEL_021463
+	CALR VoiceSlot_UpdateNoteSource
 
-LABEL_0215A8:
+Voice_ScanSlots_MarkSlotInactive:
 	LD A, (XSP + 008h)
 	LD E, A
 	EXTZ DE
@@ -12165,7 +12165,7 @@ LABEL_0215A8:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_0210CC
+	CALR VoiceState_SwapSlot_DE_BC
 	LD A, QIZH
 	EXTZ WA
 	LD BC, WA
@@ -12173,28 +12173,28 @@ LABEL_0215A8:
 	LD XWA, (XSP + 004h)
 	LD (XWA + BC), 0ffh
 
-LABEL_0215CD:
+Voice_ScanSlots_LoopNext:
 	INC 1, QIZH
 	CP QIZH, 4
-	JRL C, LABEL_021530
+	JRL C, Voice_ScanSlots_LoopBody
 
-LABEL_0215D6:
+Voice_ScanSlots_Return:
 	POP XIZ
 	INC 6, XSP
 	RET
 
-LABEL_0215DA:
+VoiceState_FullReset:
 	PUSH XIZ
 	LD QIZH, 0
 	CP QIZH, 040h
-	JR NC, LABEL_021661
+	JR NC, VoiceState_FullReset_Phase2
 
-LABEL_0215E4:
+VoiceState_FullReset_Phase1_SlotLoop:
 	LD_C 000h
 	CP C, 4
-	JR NC, LABEL_021658
+	JR NC, VoiceState_FullReset_Phase1_Next
 
-LABEL_0215EA:
+VoiceState_FullReset_Phase1_ColLoop:
 	LD A, C
 	EXTZ WA
 	LD HL, WA
@@ -12240,19 +12240,19 @@ LABEL_0215EA:
 	LD (XDE), A
 	INC 1, C
 	CP C, 4
-	JR C, LABEL_0215EA
+	JR C, VoiceState_FullReset_Phase1_ColLoop
 
-LABEL_021658:
+VoiceState_FullReset_Phase1_Next:
 	INC 1, QIZH
 	CP QIZH, 040h
-	JR C, LABEL_0215E4
+	JR C, VoiceState_FullReset_Phase1_SlotLoop
 
-LABEL_021661:
+VoiceState_FullReset_Phase2:
 	LD QIZH, 0
 	CP QIZH, 0c0h
-	JR NC, LABEL_0216DA
+	JR NC, VoiceState_FullReset_Phase3
 
-LABEL_02166A:
+VoiceState_FullReset_Phase2_Body:
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 005h
@@ -12284,19 +12284,19 @@ LABEL_02166A:
 	LD (XBC + WA), 0ffh
 	INC 1, QIZH
 	CP QIZH, 0c0h
-	JR C, LABEL_02166A
+	JR C, VoiceState_FullReset_Phase2_Body
 
-LABEL_0216DA:
+VoiceState_FullReset_Phase3:
 	LD QIZH, 0
 	CP QIZH, 01bh
-	JR NC, LABEL_02171A
+	JR NC, VoiceState_FullReset_Phase3_InitSlots
 
-LABEL_0216E3:
+VoiceState_FullReset_Phase3_ClearLoop:
 	LD_C 000h
 	CP C, 01bh
-	JR NC, LABEL_021711
+	JR NC, VoiceState_FullReset_Phase3_ClearNext
 
-LABEL_0216EA:
+VoiceState_FullReset_Phase3_ClearInner:
 	LD A, C
 	EXTZ WA
 	LD HL, WA
@@ -12312,36 +12312,36 @@ LABEL_0216EA:
 	LD (XDE), 0ffh
 	INC 1, C
 	CP C, 01bh
-	JR C, LABEL_0216EA
+	JR C, VoiceState_FullReset_Phase3_ClearInner
 
-LABEL_021711:
+VoiceState_FullReset_Phase3_ClearNext:
 	INC 1, QIZH
 	CP QIZH, 01bh
-	JR C, LABEL_0216E3
+	JR C, VoiceState_FullReset_Phase3_ClearLoop
 
-LABEL_02171A:
+VoiceState_FullReset_Phase3_InitSlots:
 	LD QIZH, 0
 	CP QIZH, 0c0h
-	JR NC, LABEL_02174A
+	JR NC, VoiceState_FullReset_Phase3_Return
 
-LABEL_021723:
+VoiceState_FullReset_Phase3_InitBody:
 	LD A, QIZH
 	LD IZL, A
 	EXTZ IZ
 	LD A, QIZH
 	EXTZ WA
-	CALR LABEL_021084
+	CALR Quad_Decode_A_To_L
 	LD C, L
 	EXTZ BC
 	LD WA, IZ
 	LD DE, BC
 	LD BC, 001ah
-	CALR LABEL_021463
+	CALR VoiceSlot_UpdateNoteSource
 	INC 1, QIZH
 	CP QIZH, 0c0h
-	JR C, LABEL_021723
+	JR C, VoiceState_FullReset_Phase3_InitBody
 
-LABEL_02174A:
+VoiceState_FullReset_Phase3_Return:
 	POP XIZ
 	RET
 
@@ -12358,31 +12358,31 @@ ExtVoice_Lookup_SlotFallback:	; 02174Ch
 	LDA XBC, 210Bh
 	AND WA, 0003h
 	CP WA, 3
-	JR Z, LABEL_02177A
+	JR Z, NoteSource_SelectRow_Case3
 	CP WA, 2
-	JR Z, LABEL_02176D
+	JR Z, NoteSource_SelectRow_Case2
 	CP WA, 1
-	JR Z, LABEL_021768
+	JR Z, NoteSource_SelectRow_Case1
 	CP WA, 0
 	RET NZ
 	LD L, (XBC)
-	JR T, LABEL_02177D
+	JR T, NoteSource_SelectRow_Return
 
-LABEL_021768:
+NoteSource_SelectRow_Case1:
 	LD L, (XBC + 004h)
-	JR T, LABEL_02177D
+	JR T, NoteSource_SelectRow_Return
 
-LABEL_02176D:
+NoteSource_SelectRow_Case2:
 	LD L, (XBC + 008h)
 	CP L, 0c0h
 	RET ULE
 	LD L, (XBC + 004h)
-	JR T, LABEL_02177D
+	JR T, NoteSource_SelectRow_Return
 
-LABEL_02177A:
+NoteSource_SelectRow_Case3:
 	LD L, (XBC + 008h)
 
-LABEL_02177D:
+NoteSource_SelectRow_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -12397,7 +12397,7 @@ LABEL_02177D:
 ;        caller ships to register +0x440 increments by exactly 1 per note-on and
 ;        is INDEPENDENT of pitch (C3/C4/C5 -> 0x40/0x41/0x42).
 ;        INFERRED that the tables are voice/DMA slot occupancy maps.  Decisive
-;        tell: the helpers LABEL_02129C and LABEL_021463 WRITE them, which a ROM
+;        tell: the helpers VoiceState_SwapSlot_Guarded and VoiceSlot_UpdateNoteSource WRITE them, which a ROM
 ;        lookup table never does, and ExtVoice_SlotPool_Entries has a
 ;        next/prev/.../slot free-list shape with slot 0xFF meaning free.
 ;        CORRECTION: A is the PART index - both descriptor builders write the part
@@ -12416,19 +12416,19 @@ ExtVoice_Alloc_StreamSlot:	; 02177Eh
 	LD (XSP + 008h), A
 	AND (XSP + 004h), 03fh
 	CP (XSP + 006h), 040h
-	JR NC, LABEL_02179C
+	JR NC, VoiceSlot_Assign_NoMatch
 	CP (XSP + 008h), 01ah
-	JR C, LABEL_0217AD
+	JR C, VoiceSlot_Assign_Search
 
-LABEL_02179C:
+VoiceSlot_Assign_NoMatch:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLL 8, WA
 	LD HL, WA
 	OR HL, 00ffh
-	JRL T, LABEL_021976
+	JRL T, VoiceSlot_Assign_Return
 
-LABEL_0217AD:
+VoiceSlot_Assign_Search:
 	LD A, (XSP + 004h)
 	AND A, 01fh
 	EXTZ WA
@@ -12451,7 +12451,7 @@ LABEL_0217AD:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 0c0h
-	JR NC, LABEL_021846
+	JR NC, VoiceSlot_Assign_FallbackFB
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 005h
@@ -12459,10 +12459,10 @@ LABEL_0217AD:
 	LDA XBC, XBC + WA
 	LD A, (XBC + 002h)
 	CP A, (XSP + 008h)
-	JR NZ, LABEL_021846
+	JR NZ, VoiceSlot_Assign_FallbackFB
 	LD A, (XBC + 003h)
 	CP A, (XSP + 002h)
-	JR NZ, LABEL_021846
+	JR NZ, VoiceSlot_Assign_FallbackFB
 	LD A, QIZH
 	LD E, A
 	EXTZ DE
@@ -12479,18 +12479,18 @@ LABEL_0217AD:
 	SLL 8, WA
 	LD HL, WA
 	OR HL, BC
-	JRL T, LABEL_021976
+	JRL T, VoiceSlot_Assign_Return
 
-LABEL_021846:
+VoiceSlot_Assign_FallbackFB:
 	BIT 5, (XSP + 004h)
-	JR Z, LABEL_0218AD
+	JR Z, VoiceSlot_Assign_TryNoteSourceTable
 	LD A, QIZL
 	EXTZ WA
 	CALR ExtVoice_Lookup_SlotFallback
 	LD QIZH, L
 	LD A, QIZH
 	CP A, 0c0h
-	JR NC, LABEL_0218A8
+	JR NC, VoiceSlot_Assign_FallbackFB_Inactive
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -12501,7 +12501,7 @@ LABEL_021846:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_021463
+	CALR VoiceSlot_UpdateNoteSource
 	LD A, (XSP + 006h)
 	LD L, A
 	EXTZ HL
@@ -12512,7 +12512,7 @@ LABEL_021846:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_02129C
+	CALR VoiceState_SwapSlot_Guarded
 	LD A, QIZH
 	LD E, A
 	EXTZ DE
@@ -12521,13 +12521,13 @@ LABEL_021846:
 	EXTZ BC
 	LD WA, DE
 	CALR ExtVoice_Fold_SlotNumber
-	JRL T, LABEL_021966
+	JRL T, VoiceSlot_Assign_PackResult
 
-LABEL_0218A8:
+VoiceSlot_Assign_FallbackFB_Inactive:
 	LD_L 0ffh
-	JRL T, LABEL_021966
+	JRL T, VoiceSlot_Assign_PackResult
 
-LABEL_0218AD:
+VoiceSlot_Assign_TryNoteSourceTable:
 	LD A, (XSP + 002h)
 	EXTZ WA
 	LD DE, WA
@@ -12543,7 +12543,7 @@ LABEL_0218AD:
 	LD A, (XBC)
 	LD QIZH, A
 	CP QIZH, 0c0h
-	JR NC, LABEL_021908
+	JR NC, VoiceSlot_Assign_FallbackFA
 	LD A, (XSP + 006h)
 	LD L, A
 	EXTZ HL
@@ -12554,7 +12554,7 @@ LABEL_0218AD:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_02129C
+	CALR VoiceState_SwapSlot_Guarded
 	LD A, QIZH
 	LD E, A
 	EXTZ DE
@@ -12564,16 +12564,16 @@ LABEL_0218AD:
 	LD WA, DE
 	CALR ExtVoice_Fold_SlotNumber
 	SET 7, (XSP + 004h)
-	JR T, LABEL_021966
+	JR T, VoiceSlot_Assign_PackResult
 
-LABEL_021908:
+VoiceSlot_Assign_FallbackFA:
 	LD A, QIZL
 	EXTZ WA
 	CALR ExtVoice_Lookup_SlotFallback
 	LD QIZH, L
 	LD A, QIZH
 	CP A, 0c0h
-	JR NC, LABEL_021964
+	JR NC, VoiceSlot_Assign_FA_Inactive
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -12584,7 +12584,7 @@ LABEL_021908:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_021463
+	CALR VoiceSlot_UpdateNoteSource
 	LD A, (XSP + 006h)
 	LD L, A
 	EXTZ HL
@@ -12595,7 +12595,7 @@ LABEL_021908:
 	LD E, A
 	EXTZ DE
 	LD WA, HL
-	CALR LABEL_02129C
+	CALR VoiceState_SwapSlot_Guarded
 	LD A, QIZH
 	LD E, A
 	EXTZ DE
@@ -12604,12 +12604,12 @@ LABEL_021908:
 	EXTZ BC
 	LD WA, DE
 	CALR ExtVoice_Fold_SlotNumber
-	JR T, LABEL_021966
+	JR T, VoiceSlot_Assign_PackResult
 
-LABEL_021964:
+VoiceSlot_Assign_FA_Inactive:
 	LD_L 0ffh
 
-LABEL_021966:
+VoiceSlot_Assign_PackResult:
 	LD C, L
 	EXTZ BC
 	LD A, (XSP + 004h)
@@ -12618,7 +12618,7 @@ LABEL_021966:
 	LD HL, WA
 	OR HL, BC
 
-LABEL_021976:
+VoiceSlot_Assign_Return:
 	POP QIZ
 	INC 8, XSP
 	RET
@@ -12660,7 +12660,7 @@ VoiceState_OpaqueData1:
 	db 06Bh, 028h, 033h, 0D7h, 0FAh, 005h, 0BFh, 00Ch
 	db 037h, 00Eh
 
-LABEL_021A8E:
+Voice_BuildOutputList:
 	LDA XSP, XSP - 12
 	PUSH QIZ
 	CPL E
@@ -12677,9 +12677,9 @@ LABEL_021A8E:
 	LD (XSP + 00ah), XWA
 	LD QIZL, 0
 	CP QIZL, 01bh
-	JR NC, LABEL_021B2D
+	JR NC, Voice_BuildOutputList_Return
 
-LABEL_021AC0:
+Voice_BuildOutputList_Loop:
 	LD A, QIZL
 	LD C, A
 	EXTZ BC
@@ -12687,7 +12687,7 @@ LABEL_021AC0:
 	LD E, (XWA + BC)
 	LD A, E
 	CP A, 0c0h
-	JR NC, LABEL_021B24
+	JR NC, Voice_BuildOutputList_Next
 	LD A, QIZL
 	EXTZ WA
 	LDA XBC, 0F4ECh:24
@@ -12695,7 +12695,7 @@ LABEL_021AC0:
 	LD QIZH, A
 	AND A, (XSP + 008h)
 	CP A, (XSP + 006h)
-	JR NZ, LABEL_021B24
+	JR NZ, Voice_BuildOutputList_Next
 	LD A, QIZH
 	AND A, 01fh
 	EXTZ WA
@@ -12716,12 +12716,12 @@ LABEL_021AC0:
 	LD (XWA+), DE
 	LD (XSP + 00ah), XWA
 
-LABEL_021B24:
+Voice_BuildOutputList_Next:
 	INC 1, QIZL
 	CP QIZL, 01bh
-	JR C, LABEL_021AC0
+	JR C, Voice_BuildOutputList_Loop
 
-LABEL_021B2D:
+Voice_BuildOutputList_Return:
 	LD XWA, (XSP + 00ah)
 	LDW (XWA), 0ffffh
 	LDA XHL, 27E9h
@@ -12754,7 +12754,7 @@ VoiceState_OpaqueData2:
 	db 0CFh, 01Bh, 077h, 073h, 0FFh, 0B3h, 000h, 0FFh
 	db 0F1h, 0EDh, 028h, 033h, 04Eh, 00Eh
 
-LABEL_021BF5:
+Voice_AdvanceSlotIterator:
 	DEC 2, XSP
 	PUSH XIZ
 	LD_C 030h
@@ -12763,47 +12763,47 @@ LABEL_021BF5:
 	LD (XSP + 004h), IZ
 	ADDW (XSP + 004h), 0030h
 	CP IZ, (XSP + 004h)
-	JR NC, LABEL_021C57
+	JR NC, Voice_AdvanceSlotIterator_Return
 
-LABEL_021C0B:
+Voice_AdvanceSlotIterator_Loop:
 	LD WA, IZ
 	MUL_WA 005h
 	LDA XBC, 212Ah
 	EXTZ XWA
 	ADD XWA, XBC
 	CP (XWA), 040h
-	JR ULE, LABEL_021C50
+	JR ULE, Voice_AdvanceSlotIterator_Next
 	LD WA, IZ
 	MUL_WA 005h
 	LDA XBC, 2128h
 	EXTZ XWA
 	ADD XWA, XBC
 	CP (XWA), 01ah
-	JR Z, LABEL_021C50
+	JR Z, Voice_AdvanceSlotIterator_Next
 	LD A, IZL
 	EXTZ WA
 	LD QIZ, WA
 	LD A, IZL
 	EXTZ WA
-	CALR LABEL_021084
+	CALR Quad_Decode_A_To_L
 	LD C, L
 	EXTZ BC
 	LD WA, QIZ
 	LD DE, BC
 	LD BC, 001ah
-	CALR LABEL_021463
+	CALR VoiceSlot_UpdateNoteSource
 
-LABEL_021C50:
+Voice_AdvanceSlotIterator_Next:
 	INC 1, IZ
 	CP IZ, (XSP + 004h)
-	JR C, LABEL_021C0B
+	JR C, Voice_AdvanceSlotIterator_Loop
 
-LABEL_021C57:
+Voice_AdvanceSlotIterator_Return:
 	POP XIZ
 	INC 2, XSP
 	RET
 
-LABEL_021C5B:
+DList_Unlink_SelfLink:
 	LD XDE, (XWA)
 	LD XBC, (XWA + 004h)
 	LD (XBC), XDE
@@ -12812,7 +12812,7 @@ LABEL_021C5B:
 	LD (XWA + 004h), XWA
 	RET
 
-LABEL_021C6B:
+DList_InsertAfter_Offsets0:
 	LD XHL, (XWA)
 	LD XDE, (XWA + 004h)
 	LD (XDE), XHL
@@ -12849,9 +12849,9 @@ Voice_List_MoveToPool:	; 021C83h
 	SLA 2, WA
 	INC 2, WA
 	CP (XDE + WA), XIZ
-	JR NZ, LABEL_021CCE
+	JR NZ, VoiceNode_PriorityList_InsertOrLink
 	CP (XIZ), XIZ
-	JR Z, LABEL_021CBC
+	JR Z, VoiceNode_PriorityList_SelfLink
 	LD A, C
 	EXTZ WA
 	SLA 2, WA
@@ -12859,9 +12859,9 @@ Voice_List_MoveToPool:	; 021C83h
 	INC 2, BC
 	LD XWA, (XIZ)
 	LD (XDE + BC), XWA
-	JR T, LABEL_021CCE
+	JR T, VoiceNode_PriorityList_InsertOrLink
 
-LABEL_021CBC:
+VoiceNode_PriorityList_SelfLink:
 	LD A, C
 	EXTZ WA
 	SLA 2, WA
@@ -12870,7 +12870,7 @@ LABEL_021CBC:
 	LD XWA, 0
 	LD (XDE + BC), XWA
 
-LABEL_021CCE:
+VoiceNode_PriorityList_InsertOrLink:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLA 2, WA
@@ -12879,7 +12879,7 @@ LABEL_021CCE:
 	LD XWA, (XSP + 006h)
 	LD XWA, (XWA + BC)
 	OR XWA, XWA
-	JR NZ, LABEL_021D01
+	JR NZ, VoiceNode_PriorityList_Insert
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLA 2, WA
@@ -12888,10 +12888,10 @@ LABEL_021CCE:
 	LD XWA, (XSP + 006h)
 	LD (XWA + BC), XIZ
 	LD XWA, XIZ
-	CALR LABEL_021C5B
-	JR T, LABEL_021D1A
+	CALR DList_Unlink_SelfLink
+	JR T, VoiceNode_PriorityList_Return
 
-LABEL_021D01:
+VoiceNode_PriorityList_Insert:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLA 2, WA
@@ -12900,9 +12900,9 @@ LABEL_021D01:
 	LD XWA, XIZ
 	LD XBC, (XSP + 006h)
 	LD XBC, (XBC + DE)
-	CALR LABEL_021C6B
+	CALR DList_InsertAfter_Offsets0
 
-LABEL_021D1A:
+VoiceNode_PriorityList_Return:
 	LD XWA, (XSP + 006h)
 	LD (XIZ + 01dh), XWA
 	LD A, (XSP + 004h)
@@ -12911,7 +12911,7 @@ LABEL_021D1A:
 	INC 6, XSP
 	RET
 
-LABEL_021D2A:
+DList_Unlink_SelfLink_Offsets8:
 	LD XDE, (XWA + 008h)
 	LD XBC, (XWA + 00ch)
 	LD (XBC + 008h), XDE
@@ -12920,7 +12920,7 @@ LABEL_021D2A:
 	LD (XWA + 00ch), XWA
 	RET
 
-LABEL_021D3D:
+DList_InsertAfter_Offsets8:
 	LD XHL, (XWA + 008h)
 	LD XDE, (XWA + 00ch)
 	LD (XDE + 008h), XHL
@@ -12956,9 +12956,9 @@ Voice_List_MoveToPartList:	; 021D59h
 	SLA 2, WA
 	INC 4, WA
 	CP (XDE + WA), XIZ
-	JR NZ, LABEL_021DA6
+	JR NZ, VoiceNode_SecondList_InsertOrLink
 	CP (XIZ + 008h), XIZ
-	JR Z, LABEL_021D94
+	JR Z, VoiceNode_SecondList_SelfLink
 	LD A, C
 	EXTZ WA
 	SLA 2, WA
@@ -12966,9 +12966,9 @@ Voice_List_MoveToPartList:	; 021D59h
 	INC 4, BC
 	LD XWA, (XIZ + 008h)
 	LD (XDE + BC), XWA
-	JR T, LABEL_021DA6
+	JR T, VoiceNode_SecondList_InsertOrLink
 
-LABEL_021D94:
+VoiceNode_SecondList_SelfLink:
 	LD A, C
 	EXTZ WA
 	SLA 2, WA
@@ -12977,7 +12977,7 @@ LABEL_021D94:
 	LD XWA, 0
 	LD (XDE + BC), XWA
 
-LABEL_021DA6:
+VoiceNode_SecondList_InsertOrLink:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLA 2, WA
@@ -12986,7 +12986,7 @@ LABEL_021DA6:
 	LD XWA, (XSP + 006h)
 	LD XWA, (XWA + BC)
 	OR XWA, XWA
-	JR NZ, LABEL_021DD9
+	JR NZ, VoiceNode_SecondList_Insert
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLA 2, WA
@@ -12995,10 +12995,10 @@ LABEL_021DA6:
 	LD XWA, (XSP + 006h)
 	LD (XWA + BC), XIZ
 	LD XWA, XIZ
-	CALR LABEL_021D2A
-	JR T, LABEL_021DF2
+	CALR DList_Unlink_SelfLink_Offsets8
+	JR T, VoiceNode_SecondList_Return
 
-LABEL_021DD9:
+VoiceNode_SecondList_Insert:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLA 2, WA
@@ -13007,9 +13007,9 @@ LABEL_021DD9:
 	LD XWA, XIZ
 	LD XBC, (XSP + 006h)
 	LD XBC, (XBC + DE)
-	CALR LABEL_021D3D
+	CALR DList_InsertAfter_Offsets8
 
-LABEL_021DF2:
+VoiceNode_SecondList_Return:
 	LD XWA, (XSP + 006h)
 	LD (XIZ + 018h), XWA
 	LD A, (XSP + 004h)
@@ -13078,14 +13078,14 @@ Voice_Retire_ToFreePool:	; 021E31h
 	PUSH XIZ
 	LD XIZ, XWA
 	BIT 0, (XIZ + 022h)
-	JR NZ, LABEL_021E81
+	JR NZ, VoiceNode_Activate_Return
 	LD XWA, (XIZ + 01dh)
 	CP (XWA + 001h), 000h
-	JR Z, LABEL_021E48
+	JR Z, VoiceNode_Activate_InsertLists
 	LD XWA, (XIZ + 01dh)
 	DEC 1, (XWA + 001h)
 
-LABEL_021E48:
+VoiceNode_Activate_InsertLists:
 	LDA XWA, 132Bh
 	LD XBC, XWA
 	LD XWA, XIZ
@@ -13104,11 +13104,11 @@ LABEL_021E48:
 	LD XBC, XWA
 	LD A, (XWA + 001h)
 	CP A, (XBC)
-	JR NC, LABEL_021E81
+	JR NC, VoiceNode_Activate_Return
 	LD XWA, (XIZ + 01dh)
 	INC 1, (XWA + 001h)
 
-LABEL_021E81:
+VoiceNode_Activate_Return:
 	POP XIZ
 	RET
 
@@ -13173,7 +13173,7 @@ Voice_Reprioritise:	; 021EA1h
 ; Notes: Seven steps, in order:
 ;        1. Scan the four words of TONEGEN_ACTIVE_PREV (0x292E).  If ANY bank
 ;           still shows sounding voices, panic-silence all 64 channels with the
-;           pair +0x840 = 0xA200, +0x800 = 0xA280 (LABEL_021F08 is that loop's
+;           pair +0x840 = 0xA200, +0x800 = 0xA280 (ToneGen_EmitCommandLoop_PhaseA_Body is that loop's
 ;           body label, not a separate routine), then write +0x0C0 = 0x0000 and
 ;           +0x000 = 0x7E00 for all 64.
 ;        2. Seed the 18 voice pools at 0x112D (stride 0x1E): pool.quota from
@@ -13188,7 +13188,7 @@ Voice_Reprioritise:	; 021EA1h
 ;           node+0x1d = 0x112D, node+0x21 = 6, node+0x25 = 0.
 ;        5. Retire every node with Voice_Retire_ToFreePool.
 ;        6. Zero TONEGEN_ACTIVE_PREV (0x292E) and TONEGEN_HOLD_MASK (0x2936).
-;        7. Tail call LABEL_0215DA.
+;        7. Tail call VoiceState_FullReset.
 ;        Callers: boot (A = 0, asm L38142) and the mode switch Voice_SetPolyphonyMode.
 ;        CORRECTION: notes/kn5000-envelope-engine.md described this routine as an
 ;        envelope-state initialiser copying 'seven-stage accumulators'.  The seven
@@ -13201,27 +13201,27 @@ Voice_Reset_Engine:	; 021ECBh
 	LD (XSP + 006h), A
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 004h
-	JR NC, LABEL_021EF8
+	JR NC, ToneGen_EmitCommandLoop_PhaseA
 
-LABEL_021EDB:
+ToneGen_EmitCommandLoop_FindStart:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	ADD WA, WA
 	LDA XBC, 292Eh
 	CPW (XBC + WA), 0000h
-	JR NZ, LABEL_021EF8
+	JR NZ, ToneGen_EmitCommandLoop_PhaseA
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 004h
-	JR C, LABEL_021EDB
+	JR C, ToneGen_EmitCommandLoop_FindStart
 
-LABEL_021EF8:
+ToneGen_EmitCommandLoop_PhaseA:
 	CP (XSP + 004h), 004h
-	JR NC, LABEL_021F53
+	JR NC, ToneGen_EmitCommandLoop_PhaseB
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, LABEL_021F53
+	JR NC, ToneGen_EmitCommandLoop_PhaseB
 
-LABEL_021F08:
+ToneGen_EmitCommandLoop_PhaseA_Body:
 	RES 7, (P6)
 	LD A, (XSP + 004h)
 	EXTZ WA
@@ -13230,9 +13230,9 @@ LABEL_021F08:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0a200h
-	JR T, LABEL_021F26
+	JR T, ToneGen_EmitCommandLoop_PhaseA_Nop
 
-LABEL_021F26:
+ToneGen_EmitCommandLoop_PhaseA_Nop:
 	NOP
 	NOP
 	NOP
@@ -13244,24 +13244,24 @@ LABEL_021F26:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0a280h
-	JR T, LABEL_021F47
+	JR T, ToneGen_EmitCommandLoop_PhaseA_Nop2
 
-LABEL_021F47:
+ToneGen_EmitCommandLoop_PhaseA_Nop2:
 	NOP
 	NOP
 	NOP
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, LABEL_021F08
+	JR C, ToneGen_EmitCommandLoop_PhaseA_Body
 
-LABEL_021F53:
+ToneGen_EmitCommandLoop_PhaseB:
 	CP (XSP + 004h), 004h
-	JR NC, LABEL_021FA9
+	JR NC, ToneGen_EmitCommandLoop_PhaseC
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, LABEL_021FA9
+	JR NC, ToneGen_EmitCommandLoop_PhaseC
 
-LABEL_021F63:
+ToneGen_EmitCommandLoop_PhaseB_Body:
 	RES 7, (P6)
 	LD A, (XSP + 004h)
 	ADD A, 0c0h
@@ -13270,9 +13270,9 @@ LABEL_021F63:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0000h
-	JR T, LABEL_021F80
+	JR T, ToneGen_EmitCommandLoop_PhaseB_Nop
 
-LABEL_021F80:
+ToneGen_EmitCommandLoop_PhaseB_Nop:
 	NOP
 	NOP
 	NOP
@@ -13283,24 +13283,24 @@ LABEL_021F80:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 7e00h
-	JR T, LABEL_021F9D
+	JR T, ToneGen_EmitCommandLoop_PhaseB_Nop2
 
-LABEL_021F9D:
+ToneGen_EmitCommandLoop_PhaseB_Nop2:
 	NOP
 	NOP
 	NOP
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, LABEL_021F63
+	JR C, ToneGen_EmitCommandLoop_PhaseB_Body
 
-LABEL_021FA9:
+ToneGen_EmitCommandLoop_PhaseC:
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 012h
-	JRL NC, LABEL_02204F
+	JRL NC, ChanStruct_Init_Loop
 
-LABEL_021FB4:
+CmdTable_InitEntry_Loop:
 	CP (XSP + 006h), 000h
-	JR NZ, LABEL_021FDF
+	JR NZ, CmdTable_InitEntry_AltPtr
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 01eh
@@ -13311,9 +13311,9 @@ LABEL_021FB4:
 	LDA XBC, 0F507h:24
 	LD A, (XBC + WA)
 	LD (XHL + DE), A
-	JR T, LABEL_022002
+	JR T, CmdTable_InitEntry_ZeroFields
 
-LABEL_021FDF:
+CmdTable_InitEntry_AltPtr:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 01eh
@@ -13325,7 +13325,7 @@ LABEL_021FDF:
 	LD A, (XBC + WA)
 	LD (XHL + DE), A
 
-LABEL_022002:
+CmdTable_InitEntry_ZeroFields:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 01eh
@@ -13333,9 +13333,9 @@ LABEL_022002:
 	LD (XBC + WA), 000h
 	LD_E 000h
 	CP E, 7
-	JR NC, LABEL_022045
+	JR NC, CmdTable_InitEntry_Next
 
-LABEL_02201B:
+CmdTable_InitEntry_ZeroLoop:
 	LD A, E
 	EXTZ WA
 	SLA 2, WA
@@ -13350,21 +13350,21 @@ LABEL_02201B:
 	LD (XBC + HL), XWA
 	INC 1, E
 	CP E, 7
-	JR C, LABEL_02201B
+	JR C, CmdTable_InitEntry_ZeroLoop
 
-LABEL_022045:
+CmdTable_InitEntry_Next:
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 012h
-	JRL C, LABEL_021FB4
+	JRL C, CmdTable_InitEntry_Loop
 
-LABEL_02204F:
+ChanStruct_Init_Loop:
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 01bh
-	JRL NC, LABEL_0220E8
+	JRL NC, VoiceNode_Init_Loop
 
-LABEL_02205A:
+ChanStruct_Init_Entry:
 	CP (XSP + 006h), 000h
-	JR NZ, LABEL_022088
+	JR NZ, ChanStruct_Init_Entry_AltPtr
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 00ch
@@ -13376,9 +13376,9 @@ LABEL_02205A:
 	LDA XBC, 0F52Bh:24
 	LD XWA, (XBC + WA)
 	LD (XHL + DE), XWA
-	JR T, LABEL_0220AE
+	JR T, ChanStruct_Init_ZeroSub
 
-LABEL_022088:
+ChanStruct_Init_Entry_AltPtr:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 00ch
@@ -13391,12 +13391,12 @@ LABEL_022088:
 	LD XWA, (XBC + WA)
 	LD (XHL + DE), XWA
 
-LABEL_0220AE:
+ChanStruct_Init_ZeroSub:
 	LD_E 000h
 	CP E, 2
-	JR NC, LABEL_0220DE
+	JR NC, ChanStruct_Init_Next
 
-LABEL_0220B4:
+ChanStruct_Init_ZeroLoop:
 	LD A, E
 	EXTZ WA
 	SLA 2, WA
@@ -13411,19 +13411,19 @@ LABEL_0220B4:
 	LD (XBC + HL), XWA
 	INC 1, E
 	CP E, 2
-	JR C, LABEL_0220B4
+	JR C, ChanStruct_Init_ZeroLoop
 
-LABEL_0220DE:
+ChanStruct_Init_Next:
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 01bh
-	JRL C, LABEL_02205A
+	JRL C, ChanStruct_Init_Entry
 
-LABEL_0220E8:
+VoiceNode_Init_Loop:
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, LABEL_022142
+	JR NC, VoiceNode_Activate_All
 
-LABEL_0220F2:
+VoiceNode_Init_Body:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 027h
@@ -13447,28 +13447,28 @@ LABEL_0220F2:
 	LD (XIZ + 025h), 000h
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, LABEL_0220F2
+	JR C, VoiceNode_Init_Body
 
-LABEL_022142:
+VoiceNode_Activate_All:
 	LDA XIZ, 148Dh
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, LABEL_022161
+	JR NC, IntMask_Clear_Loop
 
-LABEL_022150:
+VoiceNode_Activate_All_Loop:
 	LD XWA, XIZ
 	CALR Voice_Retire_ToFreePool
 	LDA XIZ, XIZ + 027h
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, LABEL_022150
+	JR C, VoiceNode_Activate_All_Loop
 
-LABEL_022161:
+IntMask_Clear_Loop:
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 004h
-	JR NC, LABEL_022198
+	JR NC, AudioState_Init_Return
 
-LABEL_02216B:
+IntMask_Clear_Body:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	ADD WA, WA
@@ -13481,10 +13481,10 @@ LABEL_02216B:
 	LDW (XBC + WA), 0000h
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 004h
-	JR C, LABEL_02216B
+	JR C, IntMask_Clear_Body
 
-LABEL_022198:
-	CALR LABEL_0215DA
+AudioState_Init_Return:
+	CALR VoiceState_FullReset
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -13501,11 +13501,11 @@ LABEL_022198:
 ;        For each of the 16 channels ch = 16b + i:
 ;          edge bit i set and node+0x22 bit0 clear (voice not already free) ->
 ;              Voice_Retire_ToFreePool, ToneGen_SilenceChannel(ch),
-;              LABEL_02150D(ch)     <- the 'was sounding, now silent' teardown
+;              Voice_ScanSlots_ReassignSources(ch)     <- the 'was sounding, now silent' teardown
 ;          else, when node+0x22 & 0x81 == 0 ->
 ;              node+0x25 = (read(0x0180+ch) & 0x3FFF) >> 5   (bits 12:5)
 ;              if node+0x25 < 0x80 and node+0x22 bit2: Voice_Demote_Decayed
-;        Finishes with LABEL_021BF5(b).
+;        Finishes with Voice_AdvanceSlotIterator(b).
 ;        MEASURED: the chip's own active bitmap is the SOLE trigger for reclaim;
 ;        a captured 0x7E00 teardown followed a status read returning 0 by 56 us
 ;        (notes/audit/kn5000-audit-voicelife.md S1.5).
@@ -13570,7 +13570,7 @@ AudioTick_UpdateVoice_SlotLoop:
 	CALL ToneGen_SilenceChannel
 	LD A, (XSP + 008h)
 	EXTZ WA
-	CALR LABEL_02150D
+	CALR Voice_ScanSlots_ReassignSources
 	JR T, AudioTick_UpdateVoice_Next
 
 AudioTick_UpdateVoice_DecayCheck:
@@ -13602,7 +13602,7 @@ AudioTick_UpdateVoice_Next:
 AudioTick_UpdateVoice_Return:
 	LD A, (1128h)
 	EXTZ WA
-	CALR LABEL_021BF5
+	CALR Voice_AdvanceSlotIterator
 	POP XIZ
 	INC 6, XSP
 	RET
@@ -13743,7 +13743,7 @@ NoteOn_Dispatch_SlotLoop:
 	CP QIZH, 01ah
 	JRL NC, NoteOn_Dispatch_AllInactive
 	LD XWA, (XSP + 010h)
-	CALR LABEL_02103B
+	CALR RingBuf_CheckOffset_ClearFlags
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 00ch
@@ -13913,7 +13913,7 @@ NoteOn_Dispatch_WalkNext:
 NoteOn_Dispatch_WriteSlot:
 	LD A, (XSP + 00eh)
 	EXTZ WA
-	CALR LABEL_02150D
+	CALR Voice_ScanSlots_ReassignSources
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD DE, WA
@@ -18650,7 +18650,7 @@ Voice_Chan_ComputeParams_NoAlgoSelect:
 ;        ExtVoice_SlotRecords + 0x1B*slot and stores the voice's velocity
 ;        (desc+0x0C with bit 7 cleared) at its +0x06.
 ;        For ordinary voices this routine is never reached, so register +0x440
-;        stays 0 - confirming that LABEL_024CAB was mis-read as a wave-number
+;        stays 0 - confirming that ExtVoice_Store_SlotNumber was mis-read as a wave-number
 ;        writer in the earlier notes.
 ; ----------------------------------------------------------------------------
 ExtVoice_Store_SlotNumber:	; 024CABh
@@ -22942,7 +22942,7 @@ Voice_LoadPitchTable_Ch_ScanLoop:
 	EXTZ WA
 	LD BC, 000dh
 	LD DE, 0
-	CALL LABEL_021A8E
+	CALL Voice_BuildOutputList
 	LD (XSP + 002h), XHL
 	LD IZ, 0
 	JR T, Voice_LoadPitchTable_Ch_LoopCheck
@@ -22988,7 +22988,7 @@ Voice_LoadPitchTable_All:
 	EXTZ WA
 	LD BC, 000dh
 	LD DE, 0
-	CALL LABEL_021A8E
+	CALL Voice_BuildOutputList
 	LD (XSP), XHL
 	LDW (XSP + 004h), 0000h
 	JR T, Voice_LoadPitchTable_All_LoopCheck
@@ -23077,7 +23077,7 @@ Voice_LoadFilterTable_Ch_ScanFilter:
 	EXTZ WA
 	LD BC, 000ch
 	LD DE, 0
-	CALL LABEL_021A8E
+	CALL Voice_BuildOutputList
 	LD (XSP + 002h), XHL
 	LD IZ, 0
 	JR T, Voice_LoadFilterTable_Ch_LoopCheck
@@ -23123,7 +23123,7 @@ Voice_LoadFilterTable_All:
 	EXTZ WA
 	LD BC, 000ch
 	LD DE, 0
-	CALL LABEL_021A8E
+	CALL Voice_BuildOutputList
 	LD (XSP), XHL
 	LDW (XSP + 004h), 0000h
 	JR T, Voice_LoadFilterTable_All_LoopCheck
@@ -23189,7 +23189,7 @@ Voice_LoadToneTable_Ch_ScanLoop:
 	EXTZ WA
 	LD BC, 0010h
 	LD DE, 0
-	CALL LABEL_021A8E
+	CALL Voice_BuildOutputList
 	LD (XSP), XHL
 	LDW (XSP + 004h), 0000h
 	JR T, Voice_LoadToneTable_Ch_LoopCheck
@@ -23228,7 +23228,7 @@ Voice_LoadToneTable_All:
 	EXTZ WA
 	LD BC, 0010h
 	LD DE, 0
-	CALL LABEL_021A8E
+	CALL Voice_BuildOutputList
 	LD (XSP), XHL
 	LDW (XSP + 004h), 0000h
 	JR T, Voice_LoadToneTable_All_LoopCheck
@@ -25635,7 +25635,7 @@ AudioChannel_Dispatch:
 	LD HL, (XIX + HL)
 	LDA XIX, 029E5Bh
 	JP T, XIX + HL
-LABEL_029E5B:
+AudioChannel_DispatchTable:
 	db 0D8h, 012h, 078h, 087h, 0F2h, 0D8h, 012h, 078h
 	db 00Dh, 0F3h, 0D8h, 012h, 078h, 0CAh, 0F2h, 0D8h
 	db 012h, 0D9h, 012h, 00Bh, 000h, 000h, 01Eh, 07Ah
@@ -26552,7 +26552,7 @@ Voice_SystemMsg:
 	CP C, 091h
 	JR Z, Voice_SystemMsg_DispatchEntry0
 	CP C, 009h
-	JR Z, LABEL_02A7FC
+	JR Z, Voice_SystemMsg_DispatchTable
 	EXTZ BC
 	SUB BC, 0080h
 	CP BC, 0
@@ -26572,7 +26572,7 @@ Voice_SystemMsg_DispatchJump:
 	LDA XIX, 02A7FCh
 	JP T, XIX + BC
 
-LABEL_02A7FC:
+Voice_SystemMsg_DispatchTable:
 	LD A, (XWA + 003h)
 	EXTZ WA
 	JRL T, Voice_SetPolyphonyMode
@@ -27789,7 +27789,7 @@ ToneGen_SilenceChannel_NopCont2:
 ;        Builder order: WaveSel_StageB_Build_Reg040, Pitch_Apply_Partial_Detune,
 ;        Pitch_Emit_Reg400, Voice_Level_ComputeTriplet, TVF_Build_Dispatch, TVF_Emit_Registers,
 ;        Voice_StereoLevel_Compute, Voice_PortaLevel_Compute, ExtVoice_Build_SlotRegisters, Voice_SubVoice_ComputeAndTrigger, Voice2_UpdatePitch,
-;        Level_Build_Reg0C0, LABEL_025589, LABEL_025636, Voice_WriteChPanShift, Voice_ComputePitch,
+;        Level_Build_Reg0C0, Voice_Build_GateCommand, Voice_Calc_LevelPair_PatchAtk, Voice_WriteChPanShift, Voice_ComputePitch,
 ;        Voice_ApplyPortamento.  MEASURED.
 ; ----------------------------------------------------------------------------
 Voice_Build_Register_Set:		; 02B4E3h
@@ -29790,7 +29790,7 @@ Voice_SetVelocity_Type0_SlotLoop:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 040h
-	JR NC, LABEL_02C9F1
+	JR NC, Voice_SetVelocity_Type0_BranchB
 	RES 7, (P6)
 	LD A, QIZH
 	EXTZ WA
@@ -29799,9 +29799,9 @@ Voice_SetVelocity_Type0_SlotLoop:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, LABEL_02C9A3
+	JR T, Voice_SetVelocity_Type0_NopCont1
 
-LABEL_02C9A3:
+Voice_SetVelocity_Type0_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -29813,9 +29813,9 @@ LABEL_02C9A3:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, LABEL_02C9C4
+	JR T, Voice_SetVelocity_Type0_NopCont2
 
-LABEL_02C9C4:
+Voice_SetVelocity_Type0_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -29829,14 +29829,14 @@ LABEL_02C9C4:
 	LD A, QIZH
 	EXTZ WA
 	CALR Voice_Init_Type2
-	JR T, LABEL_02C9F1
+	JR T, Voice_SetVelocity_Type0_BranchB
 
 Voice_SetVelocity_Type0_BranchA:
 	LD A, QIZH
 	EXTZ WA
 	CALR Voice_Build_Register_Set
 
-LABEL_02C9F1:
+Voice_SetVelocity_Type0_BranchB:
 	INC 1, QIZL
 	CP QIZL, 4
 	JRL C, Voice_SetVelocity_Type0_SlotLoop
@@ -29846,13 +29846,13 @@ Voice_SetVelocity_Type0_Loop2Start:
 	CP QIZL, 4
 	JR NC, Voice_SetVelocity_Type0_Loop2Exit
 
-LABEL_02CA02:
+Voice_SetVelocity_Type0_Loop2Body:
 	LD A, QIZL
 	EXTZ WA
 	ADD WA, 000ah
 	LDA XBC, XSP + 002h
 	CP (XBC + WA), 040h
-	JR NC, LABEL_02CA78
+	JR NC, Voice_SetVelocity_Type0_Loop2Step
 	LD A, QIZL
 	EXTZ WA
 	ADD WA, 000ah
@@ -29863,14 +29863,14 @@ LABEL_02CA02:
 	MULS_WA 047h
 	LDA XBC, 0430BDh
 	CPW (XBC + WA), 0000h
-	JR NZ, LABEL_02CA78
+	JR NZ, Voice_SetVelocity_Type0_Loop2Step
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 047h
 	LDA XBC, 04308Fh
 	LD WA, (XBC + WA)
 	BIT 8, WA
-	JR NZ, LABEL_02CA78
+	JR NZ, Voice_SetVelocity_Type0_Loop2Step
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -29883,10 +29883,10 @@ LABEL_02CA02:
 	LD BC, (XDE + BC)
 	CALL ToneGen_WriteSingleReg
 
-LABEL_02CA78:
+Voice_SetVelocity_Type0_Loop2Step:
 	INC 1, QIZL
 	CP QIZL, 4
-	JR C, LABEL_02CA02
+	JR C, Voice_SetVelocity_Type0_Loop2Body
 
 Voice_SetVelocity_Type0_Loop2Exit:
 	LD A, (XSP + 014h)
@@ -29921,9 +29921,9 @@ Voice_SetVelocity_Type40_Entry:
 	CALR Voice_NoteOn_Type2
 	LD QIZL, 0
 	CP QIZL, 4
-	JR NC, LABEL_02CB3B
+	JR NC, Voice_SetVelocity_Type40_Loop2Start
 
-LABEL_02CACF:
+Voice_SetVelocity_Type40_SlotLoop:
 	LD A, QIZL
 	EXTZ WA
 	ADD WA, 000ah
@@ -29931,7 +29931,7 @@ LABEL_02CACF:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 040h
-	JR NC, LABEL_02CB33
+	JR NC, Voice_SetVelocity_Type40_LoopStep
 	RES 7, (P6)
 	LD A, QIZH
 	EXTZ WA
@@ -29940,9 +29940,9 @@ LABEL_02CACF:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, LABEL_02CB07
+	JR T, Voice_SetVelocity_Type40_NopCont1
 
-LABEL_02CB07:
+Voice_SetVelocity_Type40_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -29954,9 +29954,9 @@ LABEL_02CB07:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, LABEL_02CB28
+	JR T, Voice_SetVelocity_Type40_NopCont2
 
-LABEL_02CB28:
+Voice_SetVelocity_Type40_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -29964,17 +29964,17 @@ LABEL_02CB28:
 	EXTZ WA
 	CALR Voice_Release_Type4
 
-LABEL_02CB33:
+Voice_SetVelocity_Type40_LoopStep:
 	INC 1, QIZL
 	CP QIZL, 4
-	JR C, LABEL_02CACF
+	JR C, Voice_SetVelocity_Type40_SlotLoop
 
-LABEL_02CB3B:
+Voice_SetVelocity_Type40_Loop2Start:
 	LD QIZL, 0
 	CP QIZL, 4
-	JR NC, LABEL_02CB87
+	JR NC, Voice_SetVelocity_Type40_Loop2Exit
 
-LABEL_02CB43:
+Voice_SetVelocity_Type40_Loop2Body:
 	LD A, QIZL
 	EXTZ WA
 	ADD WA, 000ah
@@ -29982,7 +29982,7 @@ LABEL_02CB43:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 040h
-	JR NC, LABEL_02CB7F
+	JR NC, Voice_SetVelocity_Type40_Loop2Step
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -29995,12 +29995,12 @@ LABEL_02CB43:
 	LD BC, (XDE + BC)
 	CALL ToneGen_WriteSingleReg
 
-LABEL_02CB7F:
+Voice_SetVelocity_Type40_Loop2Step:
 	INC 1, QIZL
 	CP QIZL, 4
-	JR C, LABEL_02CB43
+	JR C, Voice_SetVelocity_Type40_Loop2Body
 
-LABEL_02CB87:
+Voice_SetVelocity_Type40_Loop2Exit:
 	LD A, (XSP + 014h)
 	EXTZ WA
 	CALL Voice_ClearLFO_ActiveFlag
@@ -30022,9 +30022,9 @@ Voice_SetVelocity_Type80_Entry:
 	CALR Voice_NoteOn_Type1
 	LD QIZL, 0
 	CP QIZL, 2
-	JRL NC, LABEL_02CC3A
+	JRL NC, Voice_SetVelocity_Type80_Loop2Start
 
-LABEL_02CBBA:
+Voice_SetVelocity_Type80_SlotLoop:
 	LD A, QIZL
 	EXTZ WA
 	ADD WA, 000ah
@@ -30032,7 +30032,7 @@ LABEL_02CBBA:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 040h
-	JR NC, LABEL_02CC32
+	JR NC, Voice_SetVelocity_Type80_LoopStep
 	LD A, (XSP + 014h)
 	LD E, A
 	EXTZ DE
@@ -30049,9 +30049,9 @@ LABEL_02CBBA:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, LABEL_02CC06
+	JR T, Voice_SetVelocity_Type80_NopCont1
 
-LABEL_02CC06:
+Voice_SetVelocity_Type80_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -30063,9 +30063,9 @@ LABEL_02CC06:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, LABEL_02CC27
+	JR T, Voice_SetVelocity_Type80_NopCont2
 
-LABEL_02CC27:
+Voice_SetVelocity_Type80_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -30073,17 +30073,17 @@ LABEL_02CC27:
 	EXTZ WA
 	CALR Voice_Init_Type2
 
-LABEL_02CC32:
+Voice_SetVelocity_Type80_LoopStep:
 	INC 1, QIZL
 	CP QIZL, 2
-	JR C, LABEL_02CBBA
+	JR C, Voice_SetVelocity_Type80_SlotLoop
 
-LABEL_02CC3A:
+Voice_SetVelocity_Type80_Loop2Start:
 	LD QIZL, 0
 	CP QIZL, 2
-	JR NC, LABEL_02CC86
+	JR NC, Voice_SetVelocity_Type80_Loop2Exit
 
-LABEL_02CC42:
+Voice_SetVelocity_Type80_Loop2Body:
 	LD A, QIZL
 	EXTZ WA
 	ADD WA, 000ah
@@ -30091,7 +30091,7 @@ LABEL_02CC42:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 040h
-	JR NC, LABEL_02CC7E
+	JR NC, Voice_SetVelocity_Type80_Loop2Step
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -30104,12 +30104,12 @@ LABEL_02CC42:
 	LD BC, (XDE + BC)
 	CALL ToneGen_WriteSingleReg
 
-LABEL_02CC7E:
+Voice_SetVelocity_Type80_Loop2Step:
 	INC 1, QIZL
 	CP QIZL, 2
-	JR C, LABEL_02CC42
+	JR C, Voice_SetVelocity_Type80_Loop2Body
 
-LABEL_02CC86:
+Voice_SetVelocity_Type80_Loop2Exit:
 	LD A, (XSP + 014h)
 	EXTZ WA
 	CALL Voice_ClearLFO_ActiveFlag
@@ -30225,8 +30225,8 @@ Voice_Query_AllChannels:	; 02CD55h
 ;          bit8 clear -> Voice_Calc_LevelPair_EGA/EGB/EGC then the six-write
 ;              burst ToneGen_WriteLevelBurst.
 ;        When slot+0x01 bit15 is clear AND the part word part_struct+0x0a bit0
-;        (SUSTAIN PEDAL) is set, the mirror pair at LABEL_02CDFC/LABEL_02CE34 is
-;        used instead.  LABEL_02CDDA is an inner branch target, not an entry.
+;        (SUSTAIN PEDAL) is set, the mirror pair at Voice_Release_BranchC/Voice_Release_BranchD is
+;        used instead.  Voice_Release_BranchB is an inner branch target, not an entry.
 ; ----------------------------------------------------------------------------
 Voice_Reload_Levels:	; 02CD71h
 	DEC 2, XSP
@@ -30241,16 +30241,16 @@ Voice_Reload_Levels:	; 02CD71h
 	LD WA, (XIZ + 001h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR NZ, LABEL_02CDA2
+	JR NZ, Voice_Release_BranchA
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 00ah)
 	BIT 0, WA
-	JR NZ, LABEL_02CDFC
+	JR NZ, Voice_Release_BranchC
 
-LABEL_02CDA2:
+Voice_Release_BranchA:
 	LD WA, (XIZ + 001h)
 	BIT 8, WA
-	JR Z, LABEL_02CDDA
+	JR Z, Voice_Release_BranchB
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 	LD A, (XSP + 004h)
@@ -30265,9 +30265,9 @@ LABEL_02CDA2:
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
-	JR T, LABEL_02CE48
+	JR T, Voice_Release_Exit
 
-LABEL_02CDDA:
+Voice_Release_BranchB:
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 	LD XWA, XIZ
@@ -30278,12 +30278,12 @@ LABEL_02CDDA:
 	EXTZ WA
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteLevelBurst
-	JR T, LABEL_02CE48
+	JR T, Voice_Release_Exit
 
-LABEL_02CDFC:
+Voice_Release_BranchC:
 	LD WA, (XIZ + 001h)
 	BIT 8, WA
-	JR Z, LABEL_02CE34
+	JR Z, Voice_Release_BranchD
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 	LD A, (XSP + 004h)
@@ -30298,9 +30298,9 @@ LABEL_02CDFC:
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
-	JR T, LABEL_02CE48
+	JR T, Voice_Release_Exit
 
-LABEL_02CE34:
+Voice_Release_BranchD:
 	LD XWA, XIZ
 	CALL Voice_Stage_EnvSegments
 	LD A, (XSP + 004h)
@@ -30308,7 +30308,7 @@ LABEL_02CE34:
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteEnvSegments
 
-LABEL_02CE48:
+Voice_Release_Exit:
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -30329,32 +30329,32 @@ Voice_Cut:
 	LD WA, (XWA + 00ah)
 	LD (XSP + 008h), WA
 	CP (XIZ + 003h), 003h
-	JR NZ, LABEL_02CE85
+	JR NZ, Voice_Cut_BranchA
 	LD XWA, (XSP + 004h)
 	ANDW (XWA + 00ah), 0fffeh
 
-LABEL_02CE85:
+Voice_Cut_BranchA:
 	LD WA, (XIZ + 001h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR NZ, LABEL_02CE9A
+	JR NZ, Voice_Cut_BranchB
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 00ah)
 	BIT 0, WA
-	JR NZ, LABEL_02CEC8
+	JR NZ, Voice_Cut_Exit
 
-LABEL_02CE9A:
+Voice_Cut_BranchB:
 	CP (XIZ + 003h), 003h
-	JR NC, LABEL_02CEA8
+	JR NC, Voice_Cut_BranchC
 	LD XWA, XIZ
 	CALL Voice_ComputeVolume_CappedLFO
-	JR T, LABEL_02CEAE
+	JR T, Voice_Cut_BranchD
 
-LABEL_02CEA8:
+Voice_Cut_BranchC:
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 
-LABEL_02CEAE:
+Voice_Cut_BranchD:
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGB
 	LD XWA, XIZ
@@ -30364,7 +30364,7 @@ LABEL_02CEAE:
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteLevelBurst
 
-LABEL_02CEC8:
+Voice_Cut_Exit:
 	LD XWA, (XSP + 004h)
 	LD BC, (XSP + 008h)
 	LD (XWA + 00ah), BC
@@ -30383,14 +30383,14 @@ Voice_ReleaseSingle:
 	ADD XWA, XBC
 	RES 7, (XWA + 005h)
 	CP (XWA + 046h), 000h
-	JR Z, LABEL_02CF04
+	JR Z, Voice_ReleaseSingle_Exit
 	CALL Voice_Calc_LevelPair_Silence
 	LD A, (XSP)
 	EXTZ WA
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteLevelBurst
 
-LABEL_02CF04:
+Voice_ReleaseSingle_Exit:
 	INC 2, XSP
 	RET
 
@@ -30402,9 +30402,9 @@ Voice_ParamInit:
 	LDA XWA, 04308Eh
 	LD (XSP + 004h), XWA
 	CP (XIZ), 040h
-	JR NC, LABEL_02CF93
+	JR NC, Voice_ParamInit_LoopStep
 
-LABEL_02CF1B:
+Voice_ParamInit_LoopBody:
 	LD A, (XIZ)
 	EXTZ WA
 	MULS_WA 047h
@@ -30415,54 +30415,54 @@ LABEL_02CF1B:
 	LD WA, (XBC + 001h)
 	AND WA, 003ch
 	CP WA, 0020h
-	JR Z, LABEL_02CF85
+	JR Z, Voice_ParamInit_BranchE
 	CP WA, 0010h
-	JR Z, LABEL_02CF7C
+	JR Z, Voice_ParamInit_BranchD
 	CP WA, 0008h
-	JR Z, LABEL_02CF73
+	JR Z, Voice_ParamInit_BranchC
 	CP WA, 4
-	JR NZ, LABEL_02CF8C
+	JR NZ, Voice_ParamInit_BranchF
 	CPW (XBC + 02fh), 0000h
-	JR Z, LABEL_02CF57
+	JR Z, Voice_ParamInit_BranchA
 	ORW (XBC + 02fh), 0080h
-	JR T, LABEL_02CF8C
+	JR T, Voice_ParamInit_BranchF
 
-LABEL_02CF57:
+Voice_ParamInit_BranchA:
 	CPW (XBC + 031h), 00ffh
-	JR Z, LABEL_02CF6A
+	JR Z, Voice_ParamInit_BranchB
 	ANDW (XBC + 031h), 9fffh
 	ORW (XBC + 031h), 1000h
-	JR T, LABEL_02CF8C
+	JR T, Voice_ParamInit_BranchF
 
-LABEL_02CF6A:
+Voice_ParamInit_BranchB:
 	LD A, (XIZ)
 	EXTZ WA
 	CALR Voice_Reload_Levels
-	JR T, LABEL_02CF8C
+	JR T, Voice_ParamInit_BranchF
 
-LABEL_02CF73:
+Voice_ParamInit_BranchC:
 	LD A, (XIZ)
 	EXTZ WA
 	CALR Voice_Cut
-	JR T, LABEL_02CF8C
+	JR T, Voice_ParamInit_BranchF
 
-LABEL_02CF7C:
+Voice_ParamInit_BranchD:
 	LD A, (XIZ)
 	EXTZ WA
 	CALR Voice_ReleaseSingle
-	JR T, LABEL_02CF8C
+	JR T, Voice_ParamInit_BranchF
 
-LABEL_02CF85:
+Voice_ParamInit_BranchE:
 	LD A, (XIZ)
 	EXTZ WA
 	CALR Voice_Reload_Levels
 
-LABEL_02CF8C:
+Voice_ParamInit_BranchF:
 	INC 1, XIZ
 	CP (XIZ), 040h
-	JR C, LABEL_02CF1B
+	JR C, Voice_ParamInit_LoopBody
 
-LABEL_02CF93:
+Voice_ParamInit_LoopStep:
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -30485,14 +30485,14 @@ Voice_NoteOn:
 	PUSH XIZ
 	LD XIZ, XWA
 	CP (XIZ + 001h), 01ah
-	JR GE, LABEL_02D009
+	JR GE, Voice_NoteOn_Exit
 	LD A, (XIZ)
 	AND A, 007h
 	LD (XSP + 004h), A
 	LD A, (XIZ + 003h)
 	RES 7, A
 	CP A, 0
-	JR Z, LABEL_02CFE7
+	JR Z, Voice_NoteOn_ZeroVelocity
 	LD A, (XIZ)
 	AND A, 008h
 	CALL RingBuf_SetOffsetLo
@@ -30512,9 +30512,9 @@ Voice_NoteOn:
 	PUSH WA
 	LD A, L
 	CALR Voice_SetPitch
-	JR T, LABEL_02D009
+	JR T, Voice_NoteOn_Exit
 
-LABEL_02CFE7:
+Voice_NoteOn_ZeroVelocity:
 	LD A, (XIZ + 001h)
 	LD C, (XIZ + 002h)
 	CALR Voice_Allocate
@@ -30529,7 +30529,7 @@ LABEL_02CFE7:
 	LD A, L
 	CALR Voice_NoteOff
 
-LABEL_02D009:
+Voice_NoteOn_Exit:
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -30549,7 +30549,7 @@ Voice_SetPanning:
 	LD XWA, XIZ
 	CALL Voice_Allocate_Nodes
 	CP (XIZ + 00ah), 040h
-	JR NC, LABEL_02D0B8
+	JR NC, Voice_SetPanning_Exit
 	LD A, (XIZ + 00ah)
 	EXTZ WA
 	MULS_WA 047h
@@ -30585,7 +30585,7 @@ Voice_SetPanning:
 	LDW (XBC + 03ah), 0000h
 	LDW (XBC + 038h), 0000h
 
-LABEL_02D0B8:
+Voice_SetPanning_Exit:
 	POP XIZ
 	RET
 
@@ -30609,9 +30609,9 @@ ToneGen_WriteVoicePitch:		; 02D0BAh
 	SET 7, (P6)
 	LD WA, (XIZ + 00eh)
 	LD (100002h), WA
-	JR T, LABEL_02D0D7
+	JR T, ToneGen_WritePanReg_NopCont
 
-LABEL_02D0D7:
+ToneGen_WritePanReg_NopCont:
 	NOP
 	NOP
 	NOP
@@ -30666,9 +30666,9 @@ ToneGen_WriteVoiceParams:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 002h)
 	LD (100002h), WA
-	JR T, LABEL_02D12A
+	JR T, ToneGen_WriteVoiceParams_NopCont01
 
-LABEL_02D12A:
+ToneGen_WriteVoiceParams_NopCont01:
 	NOP
 	NOP
 	NOP
@@ -30682,9 +30682,9 @@ LABEL_02D12A:
 	LD WA, (XWA + 004h)
 	SET 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02D14F
+	JR T, ToneGen_WriteVoiceParams_NopCont02
 
-LABEL_02D14F:
+ToneGen_WriteVoiceParams_NopCont02:
 	NOP
 	NOP
 	NOP
@@ -30697,9 +30697,9 @@ LABEL_02D14F:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 006h)
 	LD (100002h), WA
-	JR T, LABEL_02D171
+	JR T, ToneGen_WriteVoiceParams_NopCont03
 
-LABEL_02D171:
+ToneGen_WriteVoiceParams_NopCont03:
 	NOP
 	NOP
 	NOP
@@ -30712,9 +30712,9 @@ LABEL_02D171:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 008h)
 	LD (100002h), WA
-	JR T, LABEL_02D193
+	JR T, ToneGen_WriteVoiceParams_NopCont04
 
-LABEL_02D193:
+ToneGen_WriteVoiceParams_NopCont04:
 	NOP
 	NOP
 	NOP
@@ -30727,9 +30727,9 @@ LABEL_02D193:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 00ah)
 	LD (100002h), WA
-	JR T, LABEL_02D1B5
+	JR T, ToneGen_WriteVoiceParams_NopCont05
 
-LABEL_02D1B5:
+ToneGen_WriteVoiceParams_NopCont05:
 	NOP
 	NOP
 	NOP
@@ -30742,9 +30742,9 @@ LABEL_02D1B5:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 00ch)
 	LD (100002h), WA
-	JR T, LABEL_02D1D7
+	JR T, ToneGen_WriteVoiceParams_NopCont06
 
-LABEL_02D1D7:
+ToneGen_WriteVoiceParams_NopCont06:
 	NOP
 	NOP
 	NOP
@@ -30757,9 +30757,9 @@ LABEL_02D1D7:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 00eh)
 	LD (100002h), WA
-	JR T, LABEL_02D1F9
+	JR T, ToneGen_WriteVoiceParams_NopCont07
 
-LABEL_02D1F9:
+ToneGen_WriteVoiceParams_NopCont07:
 	NOP
 	NOP
 	NOP
@@ -30772,9 +30772,9 @@ LABEL_02D1F9:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 010h)
 	LD (100002h), WA
-	JR T, LABEL_02D21B
+	JR T, ToneGen_WriteVoiceParams_NopCont08
 
-LABEL_02D21B:
+ToneGen_WriteVoiceParams_NopCont08:
 	NOP
 	NOP
 	NOP
@@ -30787,9 +30787,9 @@ LABEL_02D21B:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 012h)
 	LD (100002h), WA
-	JR T, LABEL_02D23D
+	JR T, ToneGen_WriteVoiceParams_NopCont09
 
-LABEL_02D23D:
+ToneGen_WriteVoiceParams_NopCont09:
 	NOP
 	NOP
 	NOP
@@ -30802,9 +30802,9 @@ LABEL_02D23D:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 014h)
 	LD (100002h), WA
-	JR T, LABEL_02D25F
+	JR T, ToneGen_WriteVoiceParams_NopCont10
 
-LABEL_02D25F:
+ToneGen_WriteVoiceParams_NopCont10:
 	NOP
 	NOP
 	NOP
@@ -30817,9 +30817,9 @@ LABEL_02D25F:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 016h)
 	LD (100002h), WA
-	JR T, LABEL_02D281
+	JR T, ToneGen_WriteVoiceParams_NopCont11
 
-LABEL_02D281:
+ToneGen_WriteVoiceParams_NopCont11:
 	NOP
 	NOP
 	NOP
@@ -30832,9 +30832,9 @@ LABEL_02D281:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 018h)
 	LD (100002h), WA
-	JR T, LABEL_02D2A3
+	JR T, ToneGen_WriteVoiceParams_NopCont12
 
-LABEL_02D2A3:
+ToneGen_WriteVoiceParams_NopCont12:
 	NOP
 	NOP
 	NOP
@@ -30844,9 +30844,9 @@ LABEL_02D2A3:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02D2BD
+	JR T, ToneGen_WriteVoiceParams_NopCont13
 
-LABEL_02D2BD:
+ToneGen_WriteVoiceParams_NopCont13:
 	NOP
 	NOP
 	NOP
@@ -30859,9 +30859,9 @@ LABEL_02D2BD:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01ah)
 	LD (100002h), WA
-	JR T, LABEL_02D2DF
+	JR T, ToneGen_WriteVoiceParams_NopCont14
 
-LABEL_02D2DF:
+ToneGen_WriteVoiceParams_NopCont14:
 	NOP
 	NOP
 	NOP
@@ -30874,9 +30874,9 @@ LABEL_02D2DF:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01ch)
 	LD (100002h), WA
-	JR T, LABEL_02D301
+	JR T, ToneGen_WriteVoiceParams_NopCont15
 
-LABEL_02D301:
+ToneGen_WriteVoiceParams_NopCont15:
 	NOP
 	NOP
 	NOP
@@ -30889,9 +30889,9 @@ LABEL_02D301:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01eh)
 	LD (100002h), WA
-	JR T, LABEL_02D323
+	JR T, ToneGen_WriteVoiceParams_NopCont16
 
-LABEL_02D323:
+ToneGen_WriteVoiceParams_NopCont16:
 	NOP
 	NOP
 	NOP
@@ -30904,9 +30904,9 @@ LABEL_02D323:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 020h)
 	LD (100002h), WA
-	JR T, LABEL_02D345
+	JR T, ToneGen_WriteVoiceParams_NopCont17
 
-LABEL_02D345:
+ToneGen_WriteVoiceParams_NopCont17:
 	NOP
 	NOP
 	NOP
@@ -30919,9 +30919,9 @@ LABEL_02D345:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 022h)
 	LD (100002h), WA
-	JR T, LABEL_02D367
+	JR T, ToneGen_WriteVoiceParams_NopCont18
 
-LABEL_02D367:
+ToneGen_WriteVoiceParams_NopCont18:
 	NOP
 	NOP
 	NOP
@@ -30934,9 +30934,9 @@ LABEL_02D367:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 024h)
 	LD (100002h), WA
-	JR T, LABEL_02D389
+	JR T, ToneGen_WriteVoiceParams_NopCont19
 
-LABEL_02D389:
+ToneGen_WriteVoiceParams_NopCont19:
 	NOP
 	NOP
 	NOP
@@ -30949,9 +30949,9 @@ LABEL_02D389:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 026h)
 	LD (100002h), WA
-	JR T, LABEL_02D3AB
+	JR T, ToneGen_WriteVoiceParams_NopCont20
 
-LABEL_02D3AB:
+ToneGen_WriteVoiceParams_NopCont20:
 	NOP
 	NOP
 	NOP
@@ -30964,9 +30964,9 @@ LABEL_02D3AB:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 028h)
 	LD (100002h), WA
-	JR T, LABEL_02D3CD
+	JR T, ToneGen_WriteVoiceParams_NopCont21
 
-LABEL_02D3CD:
+ToneGen_WriteVoiceParams_NopCont21:
 	NOP
 	NOP
 	NOP
@@ -30979,9 +30979,9 @@ LABEL_02D3CD:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02ah)
 	LD (100002h), WA
-	JR T, LABEL_02D3EF
+	JR T, ToneGen_WriteVoiceParams_NopCont22
 
-LABEL_02D3EF:
+ToneGen_WriteVoiceParams_NopCont22:
 	NOP
 	NOP
 	NOP
@@ -30995,9 +30995,9 @@ LABEL_02D3EF:
 	LD WA, (XWA + 004h)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02D414
+	JR T, ToneGen_WriteVoiceParams_Exit
 
-LABEL_02D414:
+ToneGen_WriteVoiceParams_Exit:
 	NOP
 	NOP
 	NOP
@@ -31013,9 +31013,9 @@ ToneGen_WriteSingleReg:
 	NOP
 	SET 7, (P6)
 	LD (100002h), IZ
-	JR T, LABEL_02D431
+	JR T, ToneGen_WriteSingleReg_NopCont
 
-LABEL_02D431:
+ToneGen_WriteSingleReg_NopCont:
 	NOP
 	NOP
 	NOP
@@ -31052,9 +31052,9 @@ ToneGen_WriteLevelBurst:	; 02D436h
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, LABEL_02D45D
+	JR T, ToneGen_WriteNote_NopCont1
 
-LABEL_02D45D:
+ToneGen_WriteNote_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31067,9 +31067,9 @@ LABEL_02D45D:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 032h)
 	LD (100002h), WA
-	JR T, LABEL_02D47F
+	JR T, ToneGen_WriteNote_NopCont2
 
-LABEL_02D47F:
+ToneGen_WriteNote_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31082,9 +31082,9 @@ LABEL_02D47F:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 036h)
 	LD (100002h), WA
-	JR T, LABEL_02D4A1
+	JR T, ToneGen_WriteNote_NopCont3
 
-LABEL_02D4A1:
+ToneGen_WriteNote_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31097,9 +31097,9 @@ LABEL_02D4A1:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02ch)
 	LD (100002h), WA
-	JR T, LABEL_02D4C3
+	JR T, ToneGen_WriteNote_NopCont4
 
-LABEL_02D4C3:
+ToneGen_WriteNote_NopCont4:
 	NOP
 	NOP
 	NOP
@@ -31112,9 +31112,9 @@ LABEL_02D4C3:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 030h)
 	LD (100002h), WA
-	JR T, LABEL_02D4E5
+	JR T, ToneGen_WriteNote_NopCont5
 
-LABEL_02D4E5:
+ToneGen_WriteNote_NopCont5:
 	NOP
 	NOP
 	NOP
@@ -31127,9 +31127,9 @@ LABEL_02D4E5:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 034h)
 	LD (100002h), WA
-	JR T, LABEL_02D507
+	JR T, ToneGen_WriteNote_NopCont6
 
-LABEL_02D507:
+ToneGen_WriteNote_NopCont6:
 	NOP
 	NOP
 	NOP
@@ -31158,9 +31158,9 @@ ToneGen_WriteLevelPair:	; 02D50Eh
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, LABEL_02D535
+	JR T, ToneGen_WriteNote_2Regs_NopCont1
 
-LABEL_02D535:
+ToneGen_WriteNote_2Regs_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31173,9 +31173,9 @@ LABEL_02D535:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02ch)
 	LD (100002h), WA
-	JR T, LABEL_02D557
+	JR T, ToneGen_WriteNote_2Regs_NopCont2
 
-LABEL_02D557:
+ToneGen_WriteNote_2Regs_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31222,9 +31222,9 @@ ToneGen_WriteEnvSegments:	; 02D5D0h
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01ah)
 	LD (100002h), WA
-	JR T, LABEL_02D5F7
+	JR T, ToneGen_WriteNote_Stereo_NopCont1
 
-LABEL_02D5F7:
+ToneGen_WriteNote_Stereo_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31237,9 +31237,9 @@ LABEL_02D5F7:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01ch)
 	LD (100002h), WA
-	JR T, LABEL_02D619
+	JR T, ToneGen_WriteNote_Stereo_NopCont2
 
-LABEL_02D619:
+ToneGen_WriteNote_Stereo_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31270,9 +31270,9 @@ ToneGen_WriteSegRegs_SameLevel:	; 02D620h
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, LABEL_02D647
+	JR T, ToneGen_WriteNote_Hold_NopCont1
 
-LABEL_02D647:
+ToneGen_WriteNote_Hold_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31285,9 +31285,9 @@ LABEL_02D647:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, LABEL_02D669
+	JR T, ToneGen_WriteNote_Hold_NopCont2
 
-LABEL_02D669:
+ToneGen_WriteNote_Hold_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31313,9 +31313,9 @@ ToneGen_WriteExprReg:	; 02D670h
 	NOP
 	SET 7, (P6)
 	LD (100002h), IZ
-	JR T, LABEL_02D68A
+	JR T, ToneGen_WriteSingleReg_180_NopCont
 
-LABEL_02D68A:
+ToneGen_WriteSingleReg_180_NopCont:
 	NOP
 	NOP
 	NOP
@@ -31337,9 +31337,9 @@ ToneGen_WriteVoiceParams_Ext:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ch)
 	LD (100002h), WA
-	JR T, LABEL_02D6B9
+	JR T, ToneGen_WriteVoiceParams_Ext_NopCont1
 
-LABEL_02D6B9:
+ToneGen_WriteVoiceParams_Ext_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31349,9 +31349,9 @@ LABEL_02D6B9:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02D6D3
+	JR T, ToneGen_WriteVoiceParams_Ext_NopCont2
 
-LABEL_02D6D3:
+ToneGen_WriteVoiceParams_Ext_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31364,9 +31364,9 @@ LABEL_02D6D3:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03eh)
 	LD (100002h), WA
-	JR T, LABEL_02D6F5
+	JR T, ToneGen_WriteVoiceParams_Ext_NopCont3
 
-LABEL_02D6F5:
+ToneGen_WriteVoiceParams_Ext_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31380,9 +31380,9 @@ LABEL_02D6F5:
 	LD WA, (XWA + 004h)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02D71A
+	JR T, ToneGen_WriteVoiceParams_Ext_NopCont4
 
-LABEL_02D71A:
+ToneGen_WriteVoiceParams_Ext_NopCont4:
 	NOP
 	NOP
 	NOP
@@ -31394,9 +31394,9 @@ LABEL_02D71A:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02dh)
 	LD (100002h), WA
-	JR T, LABEL_02D738
+	JR T, ToneGen_WriteVoiceParams_Ext_NopCont5
 
-LABEL_02D738:
+ToneGen_WriteVoiceParams_Ext_NopCont5:
 	NOP
 	NOP
 	NOP
@@ -31418,9 +31418,9 @@ ToneGen_WriteVoiceParams_Ext2:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ch)
 	LD (100002h), WA
-	JR T, LABEL_02D766
+	JR T, ToneGen_WriteVoiceParams_Ext2_NopCont1
 
-LABEL_02D766:
+ToneGen_WriteVoiceParams_Ext2_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31430,9 +31430,9 @@ LABEL_02D766:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02D780
+	JR T, ToneGen_WriteVoiceParams_Ext2_NopCont2
 
-LABEL_02D780:
+ToneGen_WriteVoiceParams_Ext2_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31445,9 +31445,9 @@ LABEL_02D780:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03eh)
 	LD (100002h), WA
-	JR T, LABEL_02D7A2
+	JR T, ToneGen_WriteVoiceParams_Ext2_NopCont3
 
-LABEL_02D7A2:
+ToneGen_WriteVoiceParams_Ext2_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31459,9 +31459,9 @@ LABEL_02D7A2:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02dh)
 	LD (100002h), WA
-	JR T, LABEL_02D7C0
+	JR T, ToneGen_WriteVoiceParams_Ext2_NopCont4
 
-LABEL_02D7C0:
+ToneGen_WriteVoiceParams_Ext2_NopCont4:
 	NOP
 	NOP
 	NOP
@@ -31474,23 +31474,23 @@ ToneGen_WriteGlobalConfig:
 	LD XIZ, XWA
 	LD WA, (041343h)
 	BIT 3, WA
-	JR Z, LABEL_02D7DA
+	JR Z, ToneGen_WriteGlobalConfig_BranchA
 	ANDW (XIZ), 0fff7h
-	JR T, LABEL_02D7DE
+	JR T, ToneGen_WriteGlobalConfig_BranchB
 
-LABEL_02D7DA:
+ToneGen_WriteGlobalConfig_BranchA:
 	ORW (XIZ), 0008h
 
-LABEL_02D7DE:
+ToneGen_WriteGlobalConfig_BranchB:
 	RES 7, (P6)
 	LDW (100000h), 0200h
 	NOP
 	SET 7, (P6)
 	LD WA, (XIZ)
 	LD (100002h), WA
-	JR T, LABEL_02D7F5
+	JR T, ToneGen_WriteGlobalConfig_NopCont01
 
-LABEL_02D7F5:
+ToneGen_WriteGlobalConfig_NopCont01:
 	NOP
 	NOP
 	NOP
@@ -31500,9 +31500,9 @@ LABEL_02D7F5:
 	SET 7, (P6)
 	LD WA, (XIZ + 002h)
 	LD (100002h), WA
-	JR T, LABEL_02D810
+	JR T, ToneGen_WriteGlobalConfig_NopCont02
 
-LABEL_02D810:
+ToneGen_WriteGlobalConfig_NopCont02:
 	NOP
 	NOP
 	NOP
@@ -31512,9 +31512,9 @@ LABEL_02D810:
 	SET 7, (P6)
 	LD WA, (XIZ + 004h)
 	LD (100002h), WA
-	JR T, LABEL_02D82B
+	JR T, ToneGen_WriteGlobalConfig_NopCont03
 
-LABEL_02D82B:
+ToneGen_WriteGlobalConfig_NopCont03:
 	NOP
 	NOP
 	NOP
@@ -31524,9 +31524,9 @@ LABEL_02D82B:
 	SET 7, (P6)
 	LD WA, (XIZ + 006h)
 	LD (100002h), WA
-	JR T, LABEL_02D846
+	JR T, ToneGen_WriteGlobalConfig_NopCont04
 
-LABEL_02D846:
+ToneGen_WriteGlobalConfig_NopCont04:
 	NOP
 	NOP
 	NOP
@@ -31536,9 +31536,9 @@ LABEL_02D846:
 	SET 7, (P6)
 	LD WA, (XIZ + 008h)
 	LD (100002h), WA
-	JR T, LABEL_02D861
+	JR T, ToneGen_WriteGlobalConfig_NopCont05
 
-LABEL_02D861:
+ToneGen_WriteGlobalConfig_NopCont05:
 	NOP
 	NOP
 	NOP
@@ -31548,9 +31548,9 @@ LABEL_02D861:
 	SET 7, (P6)
 	LD WA, (XIZ + 00ah)
 	LD (100002h), WA
-	JR T, LABEL_02D87C
+	JR T, ToneGen_WriteGlobalConfig_NopCont06
 
-LABEL_02D87C:
+ToneGen_WriteGlobalConfig_NopCont06:
 	NOP
 	NOP
 	NOP
@@ -31560,9 +31560,9 @@ LABEL_02D87C:
 	SET 7, (P6)
 	LD WA, (XIZ + 00ch)
 	LD (100002h), WA
-	JR T, LABEL_02D897
+	JR T, ToneGen_WriteGlobalConfig_NopCont07
 
-LABEL_02D897:
+ToneGen_WriteGlobalConfig_NopCont07:
 	NOP
 	NOP
 	NOP
@@ -31572,9 +31572,9 @@ LABEL_02D897:
 	SET 7, (P6)
 	LD WA, (XIZ + 00eh)
 	LD (100002h), WA
-	JR T, LABEL_02D8B2
+	JR T, ToneGen_WriteGlobalConfig_NopCont08
 
-LABEL_02D8B2:
+ToneGen_WriteGlobalConfig_NopCont08:
 	NOP
 	NOP
 	NOP
@@ -31584,9 +31584,9 @@ LABEL_02D8B2:
 	SET 7, (P6)
 	LD WA, (XIZ + 010h)
 	LD (100002h), WA
-	JR T, LABEL_02D8CD
+	JR T, ToneGen_WriteGlobalConfig_NopCont09
 
-LABEL_02D8CD:
+ToneGen_WriteGlobalConfig_NopCont09:
 	NOP
 	NOP
 	NOP
@@ -31596,9 +31596,9 @@ LABEL_02D8CD:
 	SET 7, (P6)
 	LD WA, (XIZ + 012h)
 	LD (100002h), WA
-	JR T, LABEL_02D8E8
+	JR T, ToneGen_WriteGlobalConfig_NopCont10
 
-LABEL_02D8E8:
+ToneGen_WriteGlobalConfig_NopCont10:
 	NOP
 	NOP
 	NOP
@@ -31608,9 +31608,9 @@ LABEL_02D8E8:
 	SET 7, (P6)
 	LD WA, (XIZ + 014h)
 	LD (100002h), WA
-	JR T, LABEL_02D903
+	JR T, ToneGen_WriteGlobalConfig_NopCont11
 
-LABEL_02D903:
+ToneGen_WriteGlobalConfig_NopCont11:
 	NOP
 	NOP
 	NOP
@@ -31620,9 +31620,9 @@ LABEL_02D903:
 	SET 7, (P6)
 	LD WA, (XIZ + 016h)
 	LD (100002h), WA
-	JR T, LABEL_02D91E
+	JR T, ToneGen_WriteGlobalConfig_NopCont12
 
-LABEL_02D91E:
+ToneGen_WriteGlobalConfig_NopCont12:
 	NOP
 	NOP
 	NOP
@@ -31632,9 +31632,9 @@ LABEL_02D91E:
 	SET 7, (P6)
 	LD WA, (XIZ + 018h)
 	LD (100002h), WA
-	JR T, LABEL_02D939
+	JR T, ToneGen_WriteGlobalConfig_NopCont13
 
-LABEL_02D939:
+ToneGen_WriteGlobalConfig_NopCont13:
 	NOP
 	NOP
 	NOP
@@ -31678,7 +31678,7 @@ ToneGen_WriteExtParams_56:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ch)
 	BIT 0fh, WA
-	JR Z, LABEL_02DA4B
+	JR Z, ToneGen_WriteExtParams_56_BranchSkip
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0580h
@@ -31688,14 +31688,14 @@ ToneGen_WriteExtParams_56:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ch)
 	LD (100002h), WA
-	JR T, LABEL_02DA48
+	JR T, ToneGen_WriteExtParams_56_NopCont1
 
-LABEL_02DA48:
+ToneGen_WriteExtParams_56_NopCont1:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DA4B:
+ToneGen_WriteExtParams_56_BranchSkip:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0600h
@@ -31705,9 +31705,9 @@ LABEL_02DA4B:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 040h)
 	LD (100002h), WA
-	JR T, LABEL_02DA6A
+	JR T, ToneGen_WriteExtParams_56_NopCont2
 
-LABEL_02DA6A:
+ToneGen_WriteExtParams_56_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31721,9 +31721,9 @@ LABEL_02DA6A:
 	LD WA, (XWA + 03ch)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DA8F
+	JR T, ToneGen_WriteExtParams_56_NopCont3
 
-LABEL_02DA8F:
+ToneGen_WriteExtParams_56_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31741,9 +31741,9 @@ ToneGen_WriteExtParam_600:
 	SET 7, (P6)
 	LD WA, (XIZ + 040h)
 	LD (100002h), WA
-	JR T, LABEL_02DAB3
+	JR T, ToneGen_WriteExtParam_600_NopCont
 
-LABEL_02DAB3:
+ToneGen_WriteExtParam_600_NopCont:
 	NOP
 	NOP
 	NOP
@@ -31758,7 +31758,7 @@ ToneGen_WriteExtParams_56_Alt:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ch)
 	BIT 0fh, WA
-	JR Z, LABEL_02DAED
+	JR Z, ToneGen_WriteExtParams_56_Alt_ClearPath
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0580h
@@ -31768,14 +31768,14 @@ ToneGen_WriteExtParams_56_Alt:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ch)
 	LD (100002h), WA
-	JR T, LABEL_02DAEA
+	JR T, ToneGen_WriteExtParams_56_Alt_NopCont1
 
-LABEL_02DAEA:
+ToneGen_WriteExtParams_56_Alt_NopCont1:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DAED:
+ToneGen_WriteExtParams_56_Alt_ClearPath:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0580h
@@ -31786,9 +31786,9 @@ LABEL_02DAED:
 	LD WA, (XWA + 03ch)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DB0F
+	JR T, ToneGen_WriteExtParams_56_Alt_NopCont2
 
-LABEL_02DB0F:
+ToneGen_WriteExtParams_56_Alt_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31803,9 +31803,9 @@ ToneGen_WriteExtParam_600_Mute:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02DB2F
+	JR T, ToneGen_WriteExtParam_600_Mute_NopCont
 
-LABEL_02DB2F:
+ToneGen_WriteExtParam_600_Mute_NopCont:
 	NOP
 	NOP
 	NOP
@@ -31819,7 +31819,7 @@ ToneGen_WriteExtParams_56b:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03eh)
 	BIT 0fh, WA
-	JR Z, LABEL_02DB68
+	JR Z, ToneGen_WriteExtParams_56b_ClearPath
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 05c0h
@@ -31829,14 +31829,14 @@ ToneGen_WriteExtParams_56b:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03eh)
 	LD (100002h), WA
-	JR T, LABEL_02DB65
+	JR T, ToneGen_WriteExtParams_56b_NopCont1
 
-LABEL_02DB65:
+ToneGen_WriteExtParams_56b_NopCont1:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DB68:
+ToneGen_WriteExtParams_56b_ClearPath:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0640h
@@ -31846,9 +31846,9 @@ LABEL_02DB68:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 042h)
 	LD (100002h), WA
-	JR T, LABEL_02DB87
+	JR T, ToneGen_WriteExtParams_56b_NopCont2
 
-LABEL_02DB87:
+ToneGen_WriteExtParams_56b_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31862,9 +31862,9 @@ LABEL_02DB87:
 	LD WA, (XWA + 03eh)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DBAC
+	JR T, ToneGen_WriteExtParams_56b_NopCont3
 
-LABEL_02DBAC:
+ToneGen_WriteExtParams_56b_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31902,7 +31902,7 @@ ToneGen_WriteExtParams_15:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ah)
 	BIT 0fh, WA
-	JR Z, LABEL_02DC85
+	JR Z, ToneGen_WriteExtParams_15_ClearPath
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0540h
@@ -31912,14 +31912,14 @@ ToneGen_WriteExtParams_15:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ah)
 	LD (100002h), WA
-	JR T, LABEL_02DC82
+	JR T, ToneGen_WriteExtParams_15_NopCont1
 
-LABEL_02DC82:
+ToneGen_WriteExtParams_15_NopCont1:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DC85:
+ToneGen_WriteExtParams_15_ClearPath:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 01c0h
@@ -31929,9 +31929,9 @@ LABEL_02DC85:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 038h)
 	LD (100002h), WA
-	JR T, LABEL_02DCA4
+	JR T, ToneGen_WriteExtParams_15_NopCont2
 
-LABEL_02DCA4:
+ToneGen_WriteExtParams_15_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31945,9 +31945,9 @@ LABEL_02DCA4:
 	LD WA, (XWA + 03ah)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DCC9
+	JR T, ToneGen_WriteExtParams_15_NopCont3
 
-LABEL_02DCC9:
+ToneGen_WriteExtParams_15_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31965,9 +31965,9 @@ ToneGen_WriteExtParam_1C0_Single:
 	SET 7, (P6)
 	LD WA, (XIZ + 038h)
 	LD (100002h), WA
-	JR T, LABEL_02DCED
+	JR T, ToneGen_WriteExtParam_1C0_Single_NopCont
 
-LABEL_02DCED:
+ToneGen_WriteExtParam_1C0_Single_NopCont:
 	NOP
 	NOP
 	NOP
@@ -31982,7 +31982,7 @@ ToneGen_WriteExtParams_15_Alt:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ah)
 	BIT 0fh, WA
-	JR Z, LABEL_02DD27
+	JR Z, ToneGen_WriteExtParams_15_Alt_ClearPath
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0540h
@@ -31992,14 +31992,14 @@ ToneGen_WriteExtParams_15_Alt:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ah)
 	LD (100002h), WA
-	JR T, LABEL_02DD24
+	JR T, ToneGen_WriteExtParams_15_Alt_NopCont1
 
-LABEL_02DD24:
+ToneGen_WriteExtParams_15_Alt_NopCont1:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DD27:
+ToneGen_WriteExtParams_15_Alt_ClearPath:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0540h
@@ -32010,9 +32010,9 @@ LABEL_02DD27:
 	LD WA, (XWA + 03ah)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DD49
+	JR T, ToneGen_WriteExtParams_15_Alt_NopCont2
 
-LABEL_02DD49:
+ToneGen_WriteExtParams_15_Alt_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -32027,9 +32027,9 @@ ToneGen_WriteExtParam_540_Mute:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02DD69
+	JR T, ToneGen_WriteExtParam_540_Mute_NopCont
 
-LABEL_02DD69:
+ToneGen_WriteExtParam_540_Mute_NopCont:
 	NOP
 	NOP
 	NOP
@@ -32073,7 +32073,7 @@ ToneGen_WriteExtParam_TypeDispatch_Single:
 	PUSH XIZ
 	LD XIZ, XBC
 	CP WA, 0040h
-	JR NC, LABEL_02DE91
+	JR NC, ToneGen_WriteExtParam_TypeDispatch_Single_HiPath
 	RES 7, (P6)
 	ADD WA, 01c0h
 	LD (100000h), WA
@@ -32081,15 +32081,15 @@ ToneGen_WriteExtParam_TypeDispatch_Single:
 	SET 7, (P6)
 	LD WA, (XIZ + 038h)
 	LD (100002h), WA
-	JR T, LABEL_02DE8C
+	JR T, ToneGen_WriteExtParam_TypeDispatch_Single_NopCont1
 
-LABEL_02DE8C:
+ToneGen_WriteExtParam_TypeDispatch_Single_NopCont1:
 	NOP
 	NOP
 	NOP
-	JR T, LABEL_02DEAE
+	JR T, ToneGen_WriteExtParam_TypeDispatch_Single_Exit
 
-LABEL_02DE91:
+ToneGen_WriteExtParam_TypeDispatch_Single_HiPath:
 	RES 7, (P6)
 	ADD WA, 0600h
 	LD (100000h), WA
@@ -32097,14 +32097,14 @@ LABEL_02DE91:
 	SET 7, (P6)
 	LD WA, (XIZ + 042h)
 	LD (100002h), WA
-	JR T, LABEL_02DEAB
+	JR T, ToneGen_WriteExtParam_TypeDispatch_Single_NopCont2
 
-LABEL_02DEAB:
+ToneGen_WriteExtParam_TypeDispatch_Single_NopCont2:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DEAE:
+ToneGen_WriteExtParam_TypeDispatch_Single_Exit:
 	POP XIZ
 	RET
 
@@ -32114,11 +32114,11 @@ ToneGen_WriteExtParams_TypeDispatch:
 	LD (XSP + 002h), XBC
 	LD IZ, WA
 	CP IZ, 0040h
-	JR NC, LABEL_02DF12
+	JR NC, ToneGen_WriteExtParams_TypeDispatch_HiPath
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ah)
 	BIT 0fh, WA
-	JR Z, LABEL_02DEEB
+	JR Z, ToneGen_WriteExtParams_TypeDispatch_LoClearPath
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0540h
@@ -32128,14 +32128,14 @@ ToneGen_WriteExtParams_TypeDispatch:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03ah)
 	LD (100002h), WA
-	JR T, LABEL_02DEE8
+	JR T, ToneGen_WriteExtParams_TypeDispatch_NopCont1
 
-LABEL_02DEE8:
+ToneGen_WriteExtParams_TypeDispatch_NopCont1:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DEEB:
+ToneGen_WriteExtParams_TypeDispatch_LoClearPath:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0540h
@@ -32146,19 +32146,19 @@ LABEL_02DEEB:
 	LD WA, (XWA + 03ah)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DF0D
+	JR T, ToneGen_WriteExtParams_TypeDispatch_NopCont2
 
-LABEL_02DF0D:
+ToneGen_WriteExtParams_TypeDispatch_NopCont2:
 	NOP
 	NOP
 	NOP
-	JR T, LABEL_02DF64
+	JR T, ToneGen_WriteExtParams_TypeDispatch_Exit
 
-LABEL_02DF12:
+ToneGen_WriteExtParams_TypeDispatch_HiPath:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03eh)
 	BIT 0fh, WA
-	JR Z, LABEL_02DF3F
+	JR Z, ToneGen_WriteExtParams_TypeDispatch_HiClearPath
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0580h
@@ -32168,14 +32168,14 @@ LABEL_02DF12:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 03eh)
 	LD (100002h), WA
-	JR T, LABEL_02DF3C
+	JR T, ToneGen_WriteExtParams_TypeDispatch_NopCont3
 
-LABEL_02DF3C:
+ToneGen_WriteExtParams_TypeDispatch_NopCont3:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DF3F:
+ToneGen_WriteExtParams_TypeDispatch_HiClearPath:
 	RES 7, (P6)
 	LD WA, IZ
 	ADD WA, 0580h
@@ -32186,45 +32186,45 @@ LABEL_02DF3F:
 	LD WA, (XWA + 03eh)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, LABEL_02DF61
+	JR T, ToneGen_WriteExtParams_TypeDispatch_NopCont4
 
-LABEL_02DF61:
+ToneGen_WriteExtParams_TypeDispatch_NopCont4:
 	NOP
 	NOP
 	NOP
 
-LABEL_02DF64:
+ToneGen_WriteExtParams_TypeDispatch_Exit:
 	POP IZ
 	INC 4, XSP
 	RET
 
 ToneGen_WriteExtParam_Mute_TypeDispatch:
 	CP WA, 0040h
-	JR NC, LABEL_02DF8B
+	JR NC, ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath
 	RES 7, (P6)
 	ADD WA, 0540h
 	LD (100000h), WA
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02DF87
+	JR T, ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont1
 
-LABEL_02DF87:
+ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont1:
 	NOP
 	NOP
 	NOP
 	RET
 
-LABEL_02DF8B:
+ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath:
 	RES 7, (P6)
 	ADD WA, 0580h
 	LD (100000h), WA
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 8100h
-	JR T, LABEL_02DFA4
+	JR T, ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont2
 
-LABEL_02DFA4:
+ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -32243,7 +32243,7 @@ DSP_Config_Init:
 	LDIRW_95
 	LD IZ, 0
 	CP IZ, 0040h
-	JRL NC, LABEL_02E0B2
+	JRL NC, ToneGen_ConfigInit_Return
 
 ToneGen_Config_Init:
 	RES 7, (P6)
@@ -32253,9 +32253,9 @@ ToneGen_Config_Init:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, LABEL_02DFEA
+	JR T, ToneGen_Config_Init_NopCont1
 
-LABEL_02DFEA:
+ToneGen_Config_Init_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -32266,9 +32266,9 @@ LABEL_02DFEA:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, LABEL_02E008
+	JR T, ToneGen_ConfigInit_WriteVoiceRegs
 
-LABEL_02E008:
+ToneGen_ConfigInit_WriteVoiceRegs:
 	NOP
 	NOP
 	NOP
@@ -32286,9 +32286,9 @@ LABEL_02E008:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, LABEL_02E038
+	JR T, ToneGen_ConfigInit_WriteAddr800
 
-LABEL_02E038:
+ToneGen_ConfigInit_WriteAddr800:
 	NOP
 	NOP
 	NOP
@@ -32299,9 +32299,9 @@ LABEL_02E038:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, LABEL_02E056
+	JR T, ToneGen_ConfigInit_WriteAddrC0
 
-LABEL_02E056:
+ToneGen_ConfigInit_WriteAddrC0:
 	NOP
 	NOP
 	NOP
@@ -32312,9 +32312,9 @@ LABEL_02E056:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0000h
-	JR T, LABEL_02E074
+	JR T, ToneGen_ConfigInit_WriteAddr00
 
-LABEL_02E074:
+ToneGen_ConfigInit_WriteAddr00:
 	NOP
 	NOP
 	NOP
@@ -32324,9 +32324,9 @@ LABEL_02E074:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 7e00h
-	JR T, LABEL_02E08E
+	JR T, ToneGen_ConfigInit_WriteExtParams
 
-LABEL_02E08E:
+ToneGen_ConfigInit_WriteExtParams:
 	NOP
 	NOP
 	NOP
@@ -32343,7 +32343,7 @@ LABEL_02E08E:
 	CP IZ, 0040h
 	JRL C, ToneGen_Config_Init
 
-LABEL_02E0B2:
+ToneGen_ConfigInit_Return:
 	POP IZ
 	INC 4, XSP
 	RET
@@ -32391,9 +32391,9 @@ ToneGen_ReadPitch_AndScale:
 	LD XWA, (XSP + 006h)
 	LD WA, (XWA + 006h)
 	LD (100002h), WA
-	JR T, LABEL_02E1B4
+	JR T, ToneGen_ReadPitch_Compute
 
-LABEL_02E1B4:
+ToneGen_ReadPitch_Compute:
 	NOP
 	NOP
 	NOP
@@ -32414,9 +32414,9 @@ LABEL_02E1B4:
 	RES 0fh, BC
 	LD XWA, (XSP + 002h)
 	LD (XWA), BC
-	JR T, LABEL_02E1ED
+	JR T, ToneGen_ReadPitch_Return
 
-LABEL_02E1ED:
+ToneGen_ReadPitch_Return:
 	NOP
 	NOP
 	NOP
@@ -32459,12 +32459,12 @@ BlockCopy_Words_BC_to_HL:
 	CP IX, DE
 	RET NC
 
-LABEL_02E27B:
+BlockCopy_Words_BC_to_HL_Loop:
 	LD C, (XWA+)
 	LD (XHL+), C
 	INC 1, IX
 	CP IX, DE
-	JR C, LABEL_02E27B
+	JR C, BlockCopy_Words_BC_to_HL_Loop
 	RET
 
 VoiceStruct_BulkInit:
@@ -32483,9 +32483,9 @@ VoiceStruct_BulkInit:
 	CALR BlockCopy_Words_BC_to_HL
 	LD QIZH, 0
 	CP QIZH, 4
-	JR NC, LABEL_02E308
+	JR NC, VoiceStruct_BulkInit_Return
 
-LABEL_02E2BA:
+VoiceStruct_BulkInit_SubSlotLoop:
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 025h
@@ -32511,9 +32511,9 @@ LABEL_02E2BA:
 	CALR BlockCopy_Words_BC_to_HL
 	INC 1, QIZH
 	CP QIZH, 4
-	JR C, LABEL_02E2BA
+	JR C, VoiceStruct_BulkInit_SubSlotLoop
 
-LABEL_02E308:
+VoiceStruct_BulkInit_Return:
 	POP QIZ
 	INC 2, XSP
 	RET
@@ -32577,9 +32577,9 @@ VoiceParam_FullSetup:
 	CALR VoiceStruct_BulkInit
 	LD QIZH, 0
 	CP QIZH, 4
-	JR NC, LABEL_02E41A
+	JR NC, VoiceParam_FullSetup_SetRoutingBit
 
-LABEL_02E3FF:
+VoiceParam_FullSetup_SubSlotInitLoop:
 	LD A, (XSP + 004h)
 	LD E, A
 	EXTZ DE
@@ -32590,9 +32590,9 @@ LABEL_02E3FF:
 	CALR VoiceSubSlot_Init
 	INC 1, QIZH
 	CP QIZH, 4
-	JR C, LABEL_02E3FF
+	JR C, VoiceParam_FullSetup_SubSlotInitLoop
 
-LABEL_02E41A:
+VoiceParam_FullSetup_SetRoutingBit:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	MULS_WA 011fh
@@ -32600,19 +32600,19 @@ LABEL_02E41A:
 	LD WA, (XBC + WA)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, LABEL_02E43B
+	JR Z, VoiceParam_FullSetup_ClearRoutingBit
 	SET 7, (04502Bh)
-	JR T, LABEL_02E440
+	JR T, VoiceParam_FullSetup_CopyLUT
 
-LABEL_02E43B:
+VoiceParam_FullSetup_ClearRoutingBit:
 	RES 7, (04502Bh)
 
-LABEL_02E440:
+VoiceParam_FullSetup_CopyLUT:
 	LD QIZH, 0
 	CP QIZH, 008h
-	JR NC, LABEL_02E476
+	JR NC, VoiceParam_FullSetup_CountActive
 
-LABEL_02E449:
+VoiceParam_FullSetup_CopyLUT_Body:
 	LD A, QIZH
 	EXTZ WA
 	LD DE, WA
@@ -32625,15 +32625,15 @@ LABEL_02E449:
 	LD (XHL + DE), A
 	INC 1, QIZH
 	CP QIZH, 008h
-	JR C, LABEL_02E449
+	JR C, VoiceParam_FullSetup_CopyLUT_Body
 
-LABEL_02E476:
+VoiceParam_FullSetup_CountActive:
 	LD_C 000h
 	LD QIZH, 0
 	CP QIZH, 4
-	JR NC, LABEL_02E4BF
+	JR NC, VoiceParam_FullSetup_CheckAllActive
 
-LABEL_02E480:
+VoiceParam_FullSetup_CountActive_Loop:
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 051h
@@ -32641,32 +32641,32 @@ LABEL_02E480:
 	LDA XDE, 044FD4h
 	LD A, (XDE + WA)
 	AND A, 0c0h
-	JR NZ, LABEL_02E4B7
+	JR NZ, VoiceParam_FullSetup_CountActive_Next
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 051h
 	ADD WA, 0066h
 	LDA XDE, 044FD4h
 	BIT 5, (XDE + WA)
-	JR NZ, LABEL_02E4B7
+	JR NZ, VoiceParam_FullSetup_CountActive_Next
 	INC 1, C
 
-LABEL_02E4B7:
+VoiceParam_FullSetup_CountActive_Next:
 	INC 1, QIZH
 	CP QIZH, 4
-	JR C, LABEL_02E480
+	JR C, VoiceParam_FullSetup_CountActive_Loop
 
-LABEL_02E4BF:
+VoiceParam_FullSetup_CheckAllActive:
 	CP C, 4
-	JR Z, LABEL_02E4C9
+	JR Z, VoiceParam_FullSetup_CopySlotParams
 	LD (0451A7h), 000h
 
-LABEL_02E4C9:
+VoiceParam_FullSetup_CopySlotParams:
 	LD QIZH, 0
 	CP QIZH, 4
-	JRL NC, LABEL_02E57D
+	JRL NC, VoiceParam_FullSetup_Return
 
-LABEL_02E4D2:
+VoiceParam_FullSetup_CopySlotParams_Body:
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 025h
@@ -32690,9 +32690,9 @@ LABEL_02E4D2:
 	LD (XBC + WA), E
 	LD_C 000h
 	CP C, 4
-	JR NC, LABEL_02E574
+	JR NC, VoiceParam_FullSetup_CopySlotParams_OuterNext
 
-LABEL_02E51D:
+VoiceParam_FullSetup_CopySlotParams_Inner:
 	LD L, C
 	EXTZ HL
 	LD A, QIZH
@@ -32720,14 +32720,14 @@ LABEL_02E51D:
 	LD (XHL + DE), A
 	INC 1, C
 	CP C, 4
-	JR C, LABEL_02E51D
+	JR C, VoiceParam_FullSetup_CopySlotParams_Inner
 
-LABEL_02E574:
+VoiceParam_FullSetup_CopySlotParams_OuterNext:
 	INC 1, QIZH
 	CP QIZH, 4
-	JRL C, LABEL_02E4D2
+	JRL C, VoiceParam_FullSetup_CopySlotParams_Body
 
-LABEL_02E57D:
+VoiceParam_FullSetup_Return:
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -40977,7 +40977,7 @@ DSP2_Init:
 	LD (3B60h), WA
 	RET
 
-LABEL_03582E:
+Voice_Poly_NoteOn_Data:
 	db 00Eh, 00Eh
 
 DSP_RingBuf_Read:
@@ -41003,7 +41003,7 @@ DSP_RingBuf_Read_Empty:
 DSP_RingBuf_Read_Return:
 	RET
 
-LABEL_035859:
+DSP_RingBuf_Read_Data:
 	db 0F1h, 060h, 03Bh, 030h, 068h, 0D1h
 
 DSP_RingBuf_Skip:
@@ -41883,7 +41883,7 @@ DSP_Reset:
 	POP IZ
 	RET
 
-LABEL_03611D:
+DSP_ApplyAlgoForVoiceType_Data:
 	db 00Eh
 
 DSP_SlotState_DisplayRestore:
@@ -42044,7 +42044,7 @@ DSP_WaitForDelay:
 
 DSP_WaitForTaskSlot_Loop:
 	LD WA, 3
-	CALL LABEL_0200C0
+	CALL TaskSched_PreemptiveYield
 	CP (1040h), XIZ
 	JR C, DSP_WaitForTaskSlot_Loop
 
@@ -42052,12 +42052,12 @@ DSP_WaitForTaskSlot_Epilogue:
 	POP XIZ
 	RET
 
-LABEL_036327:
+DSP_WaitForTaskSlot_Data:
 	db 01Bh, 00Fh, 08Eh, 003h
 
 DSP_WakeAudioTask:
 	LD WA, 1
-	JP LABEL_02044F
+	JP TaskSched_Wait
 
 ; ----------------------------------------------------------------------------
 ; DSP_Send_Command - Send a command byte to DSP chip
@@ -42151,228 +42151,228 @@ DSP_Send_Cmd_Cleanup:
 
 DSP2_SPI_ClockPulseHigh:
 	SET 2, (PF)
-	JR T, LABEL_03640F
+	JR T, DSP2_ClkHigh_Nop01
 
-LABEL_03640F:
+DSP2_ClkHigh_Nop01:
 	NOP
-	JR T, LABEL_036412
+	JR T, DSP2_ClkHigh_Nop02
 
-LABEL_036412:
+DSP2_ClkHigh_Nop02:
 	NOP
-	JR T, LABEL_036415
+	JR T, DSP2_ClkHigh_Nop03
 
-LABEL_036415:
+DSP2_ClkHigh_Nop03:
 	NOP
-	JR T, LABEL_036418
+	JR T, DSP2_ClkHigh_Nop04
 
-LABEL_036418:
+DSP2_ClkHigh_Nop04:
 	NOP
-	JR T, LABEL_03641B
+	JR T, DSP2_ClkHigh_Nop05
 
-LABEL_03641B:
+DSP2_ClkHigh_Nop05:
 	NOP
-	JR T, LABEL_03641E
+	JR T, DSP2_ClkHigh_Nop06
 
-LABEL_03641E:
+DSP2_ClkHigh_Nop06:
 	NOP
-	JR T, LABEL_036421
+	JR T, DSP2_ClkHigh_Nop07
 
-LABEL_036421:
+DSP2_ClkHigh_Nop07:
 	NOP
-	JR T, LABEL_036424
+	JR T, DSP2_ClkHigh_Nop08
 
-LABEL_036424:
+DSP2_ClkHigh_Nop08:
 	NOP
-	JR T, LABEL_036427
+	JR T, DSP2_ClkHigh_Nop09
 
-LABEL_036427:
+DSP2_ClkHigh_Nop09:
 	NOP
-	JR T, LABEL_03642A
+	JR T, DSP2_ClkHigh_Nop10
 
-LABEL_03642A:
+DSP2_ClkHigh_Nop10:
 	NOP
-	JR T, LABEL_03642D
+	JR T, DSP2_ClkHigh_Nop11
 
-LABEL_03642D:
+DSP2_ClkHigh_Nop11:
 	NOP
-	JR T, LABEL_036430
+	JR T, DSP2_ClkHigh_Nop12
 
-LABEL_036430:
+DSP2_ClkHigh_Nop12:
 	NOP
-	JR T, LABEL_036433
+	JR T, DSP2_ClkHigh_Nop13
 
-LABEL_036433:
+DSP2_ClkHigh_Nop13:
 	NOP
-	JR T, LABEL_036436
+	JR T, DSP2_ClkHigh_Nop14
 
-LABEL_036436:
+DSP2_ClkHigh_Nop14:
 	NOP
-	JR T, LABEL_036439
+	JR T, DSP2_ClkHigh_Nop15
 
-LABEL_036439:
+DSP2_ClkHigh_Nop15:
 	NOP
-	JR T, LABEL_03643C
+	JR T, DSP2_ClkHigh_Nop16
 
-LABEL_03643C:
+DSP2_ClkHigh_Nop16:
 	NOP
-	JR T, LABEL_03643F
+	JR T, DSP2_ClkHigh_Nop17
 
-LABEL_03643F:
+DSP2_ClkHigh_Nop17:
 	NOP
-	JR T, LABEL_036442
+	JR T, DSP2_ClkHigh_Nop18
 
-LABEL_036442:
+DSP2_ClkHigh_Nop18:
 	NOP
-	JR T, LABEL_036445
+	JR T, DSP2_ClkHigh_Nop19
 
-LABEL_036445:
+DSP2_ClkHigh_Nop19:
 	NOP
 	SET 0, (PF)
-	JR T, LABEL_03644B
+	JR T, DSP2_ClkHigh_Nop20
 
-LABEL_03644B:
+DSP2_ClkHigh_Nop20:
 	NOP
 	RES 0, (PF)
-	JR T, LABEL_036451
+	JR T, DSP2_ClkHigh_Nop21
 
-LABEL_036451:
+DSP2_ClkHigh_Nop21:
 	NOP
-	JR T, LABEL_036454
+	JR T, DSP2_ClkHigh_Nop22
 
-LABEL_036454:
+DSP2_ClkHigh_Nop22:
 	NOP
-	JR T, LABEL_036457
+	JR T, DSP2_ClkHigh_Nop23
 
-LABEL_036457:
+DSP2_ClkHigh_Nop23:
 	NOP
-	JR T, LABEL_03645A
+	JR T, DSP2_ClkHigh_Nop24
 
-LABEL_03645A:
+DSP2_ClkHigh_Nop24:
 	NOP
-	JR T, LABEL_03645D
+	JR T, DSP2_ClkHigh_Nop25
 
-LABEL_03645D:
+DSP2_ClkHigh_Nop25:
 	NOP
-	JR T, LABEL_036460
+	JR T, DSP2_ClkHigh_Nop26
 
-LABEL_036460:
+DSP2_ClkHigh_Nop26:
 	NOP
-	JR T, LABEL_036463
+	JR T, DSP2_ClkHigh_Nop27
 
-LABEL_036463:
+DSP2_ClkHigh_Nop27:
 	NOP
-	JR T, LABEL_036466
+	JR T, DSP2_ClkHigh_Nop28
 
-LABEL_036466:
+DSP2_ClkHigh_Nop28:
 	NOP
-	JR T, LABEL_036469
+	JR T, DSP2_ClkHigh_Nop29
 
-LABEL_036469:
+DSP2_ClkHigh_Nop29:
 	NOP
-	JR T, LABEL_03646C
+	JR T, DSP2_ClkHigh_Nop30
 
-LABEL_03646C:
+DSP2_ClkHigh_Nop30:
 	NOP
-	JR T, LABEL_03646F
+	JR T, DSP2_ClkHigh_Nop31
 
-LABEL_03646F:
+DSP2_ClkHigh_Nop31:
 	NOP
-	JR T, LABEL_036472
+	JR T, DSP2_ClkHigh_Nop32
 
-LABEL_036472:
+DSP2_ClkHigh_Nop32:
 	NOP
-	JR T, LABEL_036475
+	JR T, DSP2_ClkHigh_Nop33
 
-LABEL_036475:
+DSP2_ClkHigh_Nop33:
 	NOP
-	JR T, LABEL_036478
+	JR T, DSP2_ClkHigh_Nop34
 
-LABEL_036478:
+DSP2_ClkHigh_Nop34:
 	NOP
-	JR T, LABEL_03647B
+	JR T, DSP2_ClkHigh_Nop35
 
-LABEL_03647B:
+DSP2_ClkHigh_Nop35:
 	NOP
-	JR T, LABEL_03647E
+	JR T, DSP2_ClkHigh_Nop36
 
-LABEL_03647E:
+DSP2_ClkHigh_Nop36:
 	NOP
 	RES 2, (PF)
-	JR T, LABEL_036484
+	JR T, DSP2_ClkHigh_Nop37
 
-LABEL_036484:
+DSP2_ClkHigh_Nop37:
 	NOP
-	JR T, LABEL_036487
+	JR T, DSP2_ClkHigh_Nop38
 
-LABEL_036487:
+DSP2_ClkHigh_Nop38:
 	NOP
-	JR T, LABEL_03648A
+	JR T, DSP2_ClkHigh_Nop39
 
-LABEL_03648A:
+DSP2_ClkHigh_Nop39:
 	NOP
-	JR T, LABEL_03648D
+	JR T, DSP2_ClkHigh_Nop40
 
-LABEL_03648D:
+DSP2_ClkHigh_Nop40:
 	NOP
-	JR T, LABEL_036490
+	JR T, DSP2_ClkHigh_Nop41
 
-LABEL_036490:
+DSP2_ClkHigh_Nop41:
 	NOP
-	JR T, LABEL_036493
+	JR T, DSP2_ClkHigh_Nop42
 
-LABEL_036493:
+DSP2_ClkHigh_Nop42:
 	NOP
-	JR T, LABEL_036496
+	JR T, DSP2_ClkHigh_Nop43
 
-LABEL_036496:
+DSP2_ClkHigh_Nop43:
 	NOP
-	JR T, LABEL_036499
+	JR T, DSP2_ClkHigh_Nop44
 
-LABEL_036499:
+DSP2_ClkHigh_Nop44:
 	NOP
-	JR T, LABEL_03649C
+	JR T, DSP2_ClkHigh_Nop45
 
-LABEL_03649C:
+DSP2_ClkHigh_Nop45:
 	NOP
-	JR T, LABEL_03649F
+	JR T, DSP2_ClkHigh_Nop46
 
-LABEL_03649F:
+DSP2_ClkHigh_Nop46:
 	NOP
-	JR T, LABEL_0364A2
+	JR T, DSP2_ClkHigh_Nop47
 
-LABEL_0364A2:
+DSP2_ClkHigh_Nop47:
 	NOP
-	JR T, LABEL_0364A5
+	JR T, DSP2_ClkHigh_Nop48
 
-LABEL_0364A5:
+DSP2_ClkHigh_Nop48:
 	NOP
-	JR T, LABEL_0364A8
+	JR T, DSP2_ClkHigh_Nop49
 
-LABEL_0364A8:
+DSP2_ClkHigh_Nop49:
 	NOP
-	JR T, LABEL_0364AB
+	JR T, DSP2_ClkHigh_Nop50
 
-LABEL_0364AB:
+DSP2_ClkHigh_Nop50:
 	NOP
-	JR T, LABEL_0364AE
+	JR T, DSP2_ClkHigh_Nop51
 
-LABEL_0364AE:
+DSP2_ClkHigh_Nop51:
 	NOP
-	JR T, LABEL_0364B1
+	JR T, DSP2_ClkHigh_Nop52
 
-LABEL_0364B1:
+DSP2_ClkHigh_Nop52:
 	NOP
-	JR T, LABEL_0364B4
+	JR T, DSP2_ClkHigh_Nop53
 
-LABEL_0364B4:
+DSP2_ClkHigh_Nop53:
 	NOP
-	JR T, LABEL_0364B7
+	JR T, DSP2_ClkHigh_Nop54
 
-LABEL_0364B7:
+DSP2_ClkHigh_Nop54:
 	NOP
-	JR T, LABEL_0364BA
+	JR T, DSP2_ClkHigh_Nop55
 
-LABEL_0364BA:
+DSP2_ClkHigh_Nop55:
 	NOP
 	LDA XWA, 01220Dh
 	JP Debug_Print_String
@@ -42380,543 +42380,543 @@ LABEL_0364BA:
 DSP2_SPI_BusIdle:
 	RES 2, (PF)
 	RES 0, (PF)
-	JR T, LABEL_0364CC
+	JR T, DSP2_BusIdle_Nop01
 
-LABEL_0364CC:
+DSP2_BusIdle_Nop01:
 	NOP
-	JR T, LABEL_0364CF
+	JR T, DSP2_BusIdle_Nop02
 
-LABEL_0364CF:
+DSP2_BusIdle_Nop02:
 	NOP
-	JR T, LABEL_0364D2
+	JR T, DSP2_BusIdle_Nop03
 
-LABEL_0364D2:
+DSP2_BusIdle_Nop03:
 	NOP
-	JR T, LABEL_0364D5
+	JR T, DSP2_BusIdle_Nop04
 
-LABEL_0364D5:
+DSP2_BusIdle_Nop04:
 	NOP
-	JR T, LABEL_0364D8
+	JR T, DSP2_BusIdle_Nop05
 
-LABEL_0364D8:
+DSP2_BusIdle_Nop05:
 	NOP
-	JR T, LABEL_0364DB
+	JR T, DSP2_BusIdle_Nop06
 
-LABEL_0364DB:
+DSP2_BusIdle_Nop06:
 	NOP
-	JR T, LABEL_0364DE
+	JR T, DSP2_BusIdle_Nop07
 
-LABEL_0364DE:
+DSP2_BusIdle_Nop07:
 	NOP
-	JR T, LABEL_0364E1
+	JR T, DSP2_BusIdle_Nop08
 
-LABEL_0364E1:
+DSP2_BusIdle_Nop08:
 	NOP
-	JR T, LABEL_0364E4
+	JR T, DSP2_BusIdle_Nop09
 
-LABEL_0364E4:
+DSP2_BusIdle_Nop09:
 	NOP
-	JR T, LABEL_0364E7
+	JR T, DSP2_BusIdle_Nop10
 
-LABEL_0364E7:
+DSP2_BusIdle_Nop10:
 	NOP
-	JR T, LABEL_0364EA
+	JR T, DSP2_BusIdle_Nop11
 
-LABEL_0364EA:
+DSP2_BusIdle_Nop11:
 	NOP
-	JR T, LABEL_0364ED
+	JR T, DSP2_BusIdle_Nop12
 
-LABEL_0364ED:
+DSP2_BusIdle_Nop12:
 	NOP
-	JR T, LABEL_0364F0
+	JR T, DSP2_BusIdle_Nop13
 
-LABEL_0364F0:
+DSP2_BusIdle_Nop13:
 	NOP
-	JR T, LABEL_0364F3
+	JR T, DSP2_BusIdle_Nop14
 
-LABEL_0364F3:
+DSP2_BusIdle_Nop14:
 	NOP
-	JR T, LABEL_0364F6
+	JR T, DSP2_BusIdle_Nop15
 
-LABEL_0364F6:
+DSP2_BusIdle_Nop15:
 	NOP
-	JR T, LABEL_0364F9
+	JR T, DSP2_BusIdle_Nop16
 
-LABEL_0364F9:
+DSP2_BusIdle_Nop16:
 	NOP
-	JR T, LABEL_0364FC
+	JR T, DSP2_BusIdle_Nop17
 
-LABEL_0364FC:
+DSP2_BusIdle_Nop17:
 	NOP
-	JR T, LABEL_0364FF
+	JR T, DSP2_BusIdle_Nop18
 
-LABEL_0364FF:
+DSP2_BusIdle_Nop18:
 	NOP
-	JR T, LABEL_036502
+	JR T, DSP2_BusIdle_Nop19
 
-LABEL_036502:
+DSP2_BusIdle_Nop19:
 	NOP
 	SET 2, (PF)
-	JR T, LABEL_036508
+	JR T, DSP2_BusIdle_Nop20
 
-LABEL_036508:
+DSP2_BusIdle_Nop20:
 	NOP
-	JR T, LABEL_03650B
+	JR T, DSP2_BusIdle_Nop21
 
-LABEL_03650B:
+DSP2_BusIdle_Nop21:
 	NOP
-	JR T, LABEL_03650E
+	JR T, DSP2_BusIdle_Nop22
 
-LABEL_03650E:
+DSP2_BusIdle_Nop22:
 	NOP
-	JR T, LABEL_036511
+	JR T, DSP2_BusIdle_Nop23
 
-LABEL_036511:
+DSP2_BusIdle_Nop23:
 	NOP
-	JR T, LABEL_036514
+	JR T, DSP2_BusIdle_Nop24
 
-LABEL_036514:
+DSP2_BusIdle_Nop24:
 	NOP
-	JR T, LABEL_036517
+	JR T, DSP2_BusIdle_Nop25
 
-LABEL_036517:
+DSP2_BusIdle_Nop25:
 	NOP
-	JR T, LABEL_03651A
+	JR T, DSP2_BusIdle_Nop26
 
-LABEL_03651A:
+DSP2_BusIdle_Nop26:
 	NOP
-	JR T, LABEL_03651D
+	JR T, DSP2_BusIdle_Nop27
 
-LABEL_03651D:
+DSP2_BusIdle_Nop27:
 	NOP
-	JR T, LABEL_036520
+	JR T, DSP2_BusIdle_Nop28
 
-LABEL_036520:
+DSP2_BusIdle_Nop28:
 	NOP
-	JR T, LABEL_036523
+	JR T, DSP2_BusIdle_Nop29
 
-LABEL_036523:
+DSP2_BusIdle_Nop29:
 	NOP
-	JR T, LABEL_036526
+	JR T, DSP2_BusIdle_Nop30
 
-LABEL_036526:
+DSP2_BusIdle_Nop30:
 	NOP
-	JR T, LABEL_036529
+	JR T, DSP2_BusIdle_Nop31
 
-LABEL_036529:
+DSP2_BusIdle_Nop31:
 	NOP
-	JR T, LABEL_03652C
+	JR T, DSP2_BusIdle_Nop32
 
-LABEL_03652C:
+DSP2_BusIdle_Nop32:
 	NOP
-	JR T, LABEL_03652F
+	JR T, DSP2_BusIdle_Nop33
 
-LABEL_03652F:
+DSP2_BusIdle_Nop33:
 	NOP
-	JR T, LABEL_036532
+	JR T, DSP2_BusIdle_Nop34
 
-LABEL_036532:
+DSP2_BusIdle_Nop34:
 	NOP
-	JR T, LABEL_036535
+	JR T, DSP2_BusIdle_Nop35
 
-LABEL_036535:
+DSP2_BusIdle_Nop35:
 	NOP
-	JR T, LABEL_036538
+	JR T, DSP2_BusIdle_Nop36
 
-LABEL_036538:
+DSP2_BusIdle_Nop36:
 	NOP
-	JR T, LABEL_03653B
+	JR T, DSP2_BusIdle_Nop37
 
-LABEL_03653B:
+DSP2_BusIdle_Nop37:
 	NOP
-	JR T, LABEL_03653E
+	JR T, DSP2_BusIdle_Nop38
 
-LABEL_03653E:
+DSP2_BusIdle_Nop38:
 	NOP
 	SET 0, (PF)
-	JR T, LABEL_036544
+	JR T, DSP2_BusIdle_Nop39
 
-LABEL_036544:
+DSP2_BusIdle_Nop39:
 	NOP
-	JR T, LABEL_036547
+	JR T, DSP2_BusIdle_Nop40
 
-LABEL_036547:
+DSP2_BusIdle_Nop40:
 	NOP
-	JR T, LABEL_03654A
+	JR T, DSP2_BusIdle_Nop41
 
-LABEL_03654A:
+DSP2_BusIdle_Nop41:
 	NOP
-	JR T, LABEL_03654D
+	JR T, DSP2_BusIdle_Nop42
 
-LABEL_03654D:
+DSP2_BusIdle_Nop42:
 	NOP
-	JR T, LABEL_036550
+	JR T, DSP2_BusIdle_Nop43
 
-LABEL_036550:
+DSP2_BusIdle_Nop43:
 	NOP
-	JR T, LABEL_036553
+	JR T, DSP2_BusIdle_Nop44
 
-LABEL_036553:
+DSP2_BusIdle_Nop44:
 	NOP
-	JR T, LABEL_036556
+	JR T, DSP2_BusIdle_Nop45
 
-LABEL_036556:
+DSP2_BusIdle_Nop45:
 	NOP
-	JR T, LABEL_036559
+	JR T, DSP2_BusIdle_Nop46
 
-LABEL_036559:
+DSP2_BusIdle_Nop46:
 	NOP
-	JR T, LABEL_03655C
+	JR T, DSP2_BusIdle_Nop47
 
-LABEL_03655C:
+DSP2_BusIdle_Nop47:
 	NOP
-	JR T, LABEL_03655F
+	JR T, DSP2_BusIdle_Nop48
 
-LABEL_03655F:
+DSP2_BusIdle_Nop48:
 	NOP
-	JR T, LABEL_036562
+	JR T, DSP2_BusIdle_Nop49
 
-LABEL_036562:
+DSP2_BusIdle_Nop49:
 	NOP
-	JR T, LABEL_036565
+	JR T, DSP2_BusIdle_Nop50
 
-LABEL_036565:
+DSP2_BusIdle_Nop50:
 	NOP
-	JR T, LABEL_036568
+	JR T, DSP2_BusIdle_Nop51
 
-LABEL_036568:
+DSP2_BusIdle_Nop51:
 	NOP
-	JR T, LABEL_03656B
+	JR T, DSP2_BusIdle_Nop52
 
-LABEL_03656B:
+DSP2_BusIdle_Nop52:
 	NOP
-	JR T, LABEL_03656E
+	JR T, DSP2_BusIdle_Nop53
 
-LABEL_03656E:
+DSP2_BusIdle_Nop53:
 	NOP
-	JR T, LABEL_036571
+	JR T, DSP2_BusIdle_Nop54
 
-LABEL_036571:
+DSP2_BusIdle_Nop54:
 	NOP
-	JR T, LABEL_036574
+	JR T, DSP2_BusIdle_Nop55
 
-LABEL_036574:
+DSP2_BusIdle_Nop55:
 	NOP
-	JR T, LABEL_036577
+	JR T, DSP2_BusIdle_Nop56
 
-LABEL_036577:
+DSP2_BusIdle_Nop56:
 	NOP
-	JR T, LABEL_03657A
+	JR T, DSP2_BusIdle_Nop57
 
-LABEL_03657A:
+DSP2_BusIdle_Nop57:
 	NOP
-	JR T, LABEL_03657D
+	JR T, DSP2_BusIdle_Nop58
 
-LABEL_03657D:
+DSP2_BusIdle_Nop58:
 	NOP
-	JR T, LABEL_036580
+	JR T, DSP2_BusIdle_Nop59
 
-LABEL_036580:
+DSP2_BusIdle_Nop59:
 	NOP
-	JR T, LABEL_036583
+	JR T, DSP2_BusIdle_Nop60
 
-LABEL_036583:
+DSP2_BusIdle_Nop60:
 	NOP
-	JR T, LABEL_036586
+	JR T, DSP2_BusIdle_Nop61
 
-LABEL_036586:
+DSP2_BusIdle_Nop61:
 	NOP
-	JR T, LABEL_036589
+	JR T, DSP2_BusIdle_Nop62
 
-LABEL_036589:
+DSP2_BusIdle_Nop62:
 	NOP
-	JR T, LABEL_03658C
+	JR T, DSP2_BusIdle_Nop63
 
-LABEL_03658C:
+DSP2_BusIdle_Nop63:
 	NOP
-	JR T, LABEL_03658F
+	JR T, DSP2_BusIdle_Nop64
 
-LABEL_03658F:
+DSP2_BusIdle_Nop64:
 	NOP
-	JR T, LABEL_036592
+	JR T, DSP2_BusIdle_Nop65
 
-LABEL_036592:
+DSP2_BusIdle_Nop65:
 	NOP
-	JR T, LABEL_036595
+	JR T, DSP2_BusIdle_Nop66
 
-LABEL_036595:
+DSP2_BusIdle_Nop66:
 	NOP
-	JR T, LABEL_036598
+	JR T, DSP2_BusIdle_Nop67
 
-LABEL_036598:
+DSP2_BusIdle_Nop67:
 	NOP
-	JR T, LABEL_03659B
+	JR T, DSP2_BusIdle_Nop68
 
-LABEL_03659B:
+DSP2_BusIdle_Nop68:
 	NOP
-	JR T, LABEL_03659E
+	JR T, DSP2_BusIdle_Nop69
 
-LABEL_03659E:
+DSP2_BusIdle_Nop69:
 	NOP
-	JR T, LABEL_0365A1
+	JR T, DSP2_BusIdle_Nop70
 
-LABEL_0365A1:
+DSP2_BusIdle_Nop70:
 	NOP
-	JR T, LABEL_0365A4
+	JR T, DSP2_BusIdle_Nop71
 
-LABEL_0365A4:
+DSP2_BusIdle_Nop71:
 	NOP
-	JR T, LABEL_0365A7
+	JR T, DSP2_BusIdle_Nop72
 
-LABEL_0365A7:
+DSP2_BusIdle_Nop72:
 	NOP
-	JR T, LABEL_0365AA
+	JR T, DSP2_BusIdle_Nop73
 
-LABEL_0365AA:
+DSP2_BusIdle_Nop73:
 	NOP
-	JR T, LABEL_0365AD
+	JR T, DSP2_BusIdle_Nop74
 
-LABEL_0365AD:
+DSP2_BusIdle_Nop74:
 	NOP
-	JR T, LABEL_0365B0
+	JR T, DSP2_BusIdle_Nop75
 
-LABEL_0365B0:
+DSP2_BusIdle_Nop75:
 	NOP
-	JR T, LABEL_0365B3
+	JR T, DSP2_BusIdle_Nop76
 
-LABEL_0365B3:
+DSP2_BusIdle_Nop76:
 	NOP
-	JR T, LABEL_0365B6
+	JR T, DSP2_BusIdle_Nop77
 
-LABEL_0365B6:
+DSP2_BusIdle_Nop77:
 	NOP
-	JR T, LABEL_0365B9
+	JR T, DSP2_BusIdle_Nop78
 
-LABEL_0365B9:
+DSP2_BusIdle_Nop78:
 	NOP
-	JR T, LABEL_0365BC
+	JR T, DSP2_BusIdle_Nop79
 
-LABEL_0365BC:
+DSP2_BusIdle_Nop79:
 	NOP
-	JR T, LABEL_0365BF
+	JR T, DSP2_BusIdle_Nop80
 
-LABEL_0365BF:
+DSP2_BusIdle_Nop80:
 	NOP
-	JR T, LABEL_0365C2
+	JR T, DSP2_BusIdle_Nop81
 
-LABEL_0365C2:
+DSP2_BusIdle_Nop81:
 	NOP
-	JR T, LABEL_0365C5
+	JR T, DSP2_BusIdle_Nop82
 
-LABEL_0365C5:
+DSP2_BusIdle_Nop82:
 	NOP
-	JR T, LABEL_0365C8
+	JR T, DSP2_BusIdle_Nop83
 
-LABEL_0365C8:
+DSP2_BusIdle_Nop83:
 	NOP
-	JR T, LABEL_0365CB
+	JR T, DSP2_BusIdle_Nop84
 
-LABEL_0365CB:
+DSP2_BusIdle_Nop84:
 	NOP
-	JR T, LABEL_0365CE
+	JR T, DSP2_BusIdle_Nop85
 
-LABEL_0365CE:
+DSP2_BusIdle_Nop85:
 	NOP
-	JR T, LABEL_0365D1
+	JR T, DSP2_BusIdle_Nop86
 
-LABEL_0365D1:
+DSP2_BusIdle_Nop86:
 	NOP
-	JR T, LABEL_0365D4
+	JR T, DSP2_BusIdle_Nop87
 
-LABEL_0365D4:
+DSP2_BusIdle_Nop87:
 	NOP
-	JR T, LABEL_0365D7
+	JR T, DSP2_BusIdle_Nop88
 
-LABEL_0365D7:
+DSP2_BusIdle_Nop88:
 	NOP
-	JR T, LABEL_0365DA
+	JR T, DSP2_BusIdle_Nop89
 
-LABEL_0365DA:
+DSP2_BusIdle_Nop89:
 	NOP
-	JR T, LABEL_0365DD
+	JR T, DSP2_BusIdle_Nop90
 
-LABEL_0365DD:
+DSP2_BusIdle_Nop90:
 	NOP
-	JR T, LABEL_0365E0
+	JR T, DSP2_BusIdle_Nop91
 
-LABEL_0365E0:
+DSP2_BusIdle_Nop91:
 	NOP
-	JR T, LABEL_0365E3
+	JR T, DSP2_BusIdle_Nop92
 
-LABEL_0365E3:
+DSP2_BusIdle_Nop92:
 	NOP
-	JR T, LABEL_0365E6
+	JR T, DSP2_BusIdle_Nop93
 
-LABEL_0365E6:
+DSP2_BusIdle_Nop93:
 	NOP
-	JR T, LABEL_0365E9
+	JR T, DSP2_BusIdle_Nop94
 
-LABEL_0365E9:
+DSP2_BusIdle_Nop94:
 	NOP
-	JR T, LABEL_0365EC
+	JR T, DSP2_BusIdle_Nop95
 
-LABEL_0365EC:
+DSP2_BusIdle_Nop95:
 	NOP
-	JR T, LABEL_0365EF
+	JR T, DSP2_BusIdle_Nop96
 
-LABEL_0365EF:
+DSP2_BusIdle_Nop96:
 	NOP
-	JR T, LABEL_0365F2
+	JR T, DSP2_BusIdle_Nop97
 
-LABEL_0365F2:
+DSP2_BusIdle_Nop97:
 	NOP
-	JR T, LABEL_0365F5
+	JR T, DSP2_BusIdle_Nop98
 
-LABEL_0365F5:
+DSP2_BusIdle_Nop98:
 	NOP
-	JR T, LABEL_0365F8
+	JR T, DSP2_BusIdle_Nop99
 
-LABEL_0365F8:
+DSP2_BusIdle_Nop99:
 	NOP
-	JR T, LABEL_0365FB
+	JR T, DSP2_BusIdle_Nop100
 
-LABEL_0365FB:
+DSP2_BusIdle_Nop100:
 	NOP
-	JR T, LABEL_0365FE
+	JR T, DSP2_BusIdle_Nop101
 
-LABEL_0365FE:
+DSP2_BusIdle_Nop101:
 	NOP
-	JR T, LABEL_036601
+	JR T, DSP2_BusIdle_Nop102
 
-LABEL_036601:
+DSP2_BusIdle_Nop102:
 	NOP
-	JR T, LABEL_036604
+	JR T, DSP2_BusIdle_Nop103
 
-LABEL_036604:
+DSP2_BusIdle_Nop103:
 	NOP
-	JR T, LABEL_036607
+	JR T, DSP2_BusIdle_Nop104
 
-LABEL_036607:
+DSP2_BusIdle_Nop104:
 	NOP
-	JR T, LABEL_03660A
+	JR T, DSP2_BusIdle_Nop105
 
-LABEL_03660A:
+DSP2_BusIdle_Nop105:
 	NOP
-	JR T, LABEL_03660D
+	JR T, DSP2_BusIdle_Nop106
 
-LABEL_03660D:
+DSP2_BusIdle_Nop106:
 	NOP
-	JR T, LABEL_036610
+	JR T, DSP2_BusIdle_Nop107
 
-LABEL_036610:
+DSP2_BusIdle_Nop107:
 	NOP
-	JR T, LABEL_036613
+	JR T, DSP2_BusIdle_Nop108
 
-LABEL_036613:
+DSP2_BusIdle_Nop108:
 	NOP
-	JR T, LABEL_036616
+	JR T, DSP2_BusIdle_Nop109
 
-LABEL_036616:
+DSP2_BusIdle_Nop109:
 	NOP
-	JR T, LABEL_036619
+	JR T, DSP2_BusIdle_Nop110
 
-LABEL_036619:
+DSP2_BusIdle_Nop110:
 	NOP
-	JR T, LABEL_03661C
+	JR T, DSP2_BusIdle_Nop111
 
-LABEL_03661C:
+DSP2_BusIdle_Nop111:
 	NOP
-	JR T, LABEL_03661F
+	JR T, DSP2_BusIdle_Nop112
 
-LABEL_03661F:
+DSP2_BusIdle_Nop112:
 	NOP
-	JR T, LABEL_036622
+	JR T, DSP2_BusIdle_Nop113
 
-LABEL_036622:
+DSP2_BusIdle_Nop113:
 	NOP
-	JR T, LABEL_036625
+	JR T, DSP2_BusIdle_Nop114
 
-LABEL_036625:
+DSP2_BusIdle_Nop114:
 	NOP
-	JR T, LABEL_036628
+	JR T, DSP2_BusIdle_Nop115
 
-LABEL_036628:
+DSP2_BusIdle_Nop115:
 	NOP
-	JR T, LABEL_03662B
+	JR T, DSP2_BusIdle_Nop116
 
-LABEL_03662B:
+DSP2_BusIdle_Nop116:
 	NOP
-	JR T, LABEL_03662E
+	JR T, DSP2_BusIdle_Nop117
 
-LABEL_03662E:
+DSP2_BusIdle_Nop117:
 	NOP
-	JR T, LABEL_036631
+	JR T, DSP2_BusIdle_Nop118
 
-LABEL_036631:
+DSP2_BusIdle_Nop118:
 	NOP
-	JR T, LABEL_036634
+	JR T, DSP2_BusIdle_Nop119
 
-LABEL_036634:
+DSP2_BusIdle_Nop119:
 	NOP
-	JR T, LABEL_036637
+	JR T, DSP2_BusIdle_Nop120
 
-LABEL_036637:
+DSP2_BusIdle_Nop120:
 	NOP
-	JR T, LABEL_03663A
+	JR T, DSP2_BusIdle_Nop121
 
-LABEL_03663A:
+DSP2_BusIdle_Nop121:
 	NOP
-	JR T, LABEL_03663D
+	JR T, DSP2_BusIdle_Nop122
 
-LABEL_03663D:
+DSP2_BusIdle_Nop122:
 	NOP
-	JR T, LABEL_036640
+	JR T, DSP2_BusIdle_Nop123
 
-LABEL_036640:
+DSP2_BusIdle_Nop123:
 	NOP
-	JR T, LABEL_036643
+	JR T, DSP2_BusIdle_Nop124
 
-LABEL_036643:
+DSP2_BusIdle_Nop124:
 	NOP
-	JR T, LABEL_036646
+	JR T, DSP2_BusIdle_Nop125
 
-LABEL_036646:
+DSP2_BusIdle_Nop125:
 	NOP
-	JR T, LABEL_036649
+	JR T, DSP2_BusIdle_Nop126
 
-LABEL_036649:
+DSP2_BusIdle_Nop126:
 	NOP
-	JR T, LABEL_03664C
+	JR T, DSP2_BusIdle_Nop127
 
-LABEL_03664C:
+DSP2_BusIdle_Nop127:
 	NOP
-	JR T, LABEL_03664F
+	JR T, DSP2_BusIdle_Nop128
 
-LABEL_03664F:
+DSP2_BusIdle_Nop128:
 	NOP
-	JR T, LABEL_036652
+	JR T, DSP2_BusIdle_Nop129
 
-LABEL_036652:
+DSP2_BusIdle_Nop129:
 	NOP
-	JR T, LABEL_036655
+	JR T, DSP2_BusIdle_Nop130
 
-LABEL_036655:
+DSP2_BusIdle_Nop130:
 	NOP
-	JR T, LABEL_036658
+	JR T, DSP2_BusIdle_Nop131
 
-LABEL_036658:
+DSP2_BusIdle_Nop131:
 	NOP
-	JR T, LABEL_03665B
+	JR T, DSP2_BusIdle_Nop132
 
-LABEL_03665B:
+DSP2_BusIdle_Nop132:
 	NOP
-	JR T, LABEL_03665E
+	JR T, DSP2_BusIdle_Nop133
 
-LABEL_03665E:
+DSP2_BusIdle_Nop133:
 	NOP
-	JR T, LABEL_036661
+	JR T, DSP2_BusIdle_Nop134
 
-LABEL_036661:
+DSP2_BusIdle_Nop134:
 	NOP
 	LDA XWA, 012215h
 	JP Debug_Print_String
@@ -42948,368 +42948,368 @@ DSP2_SendCmd_BitClear:
 	RES 0, (PF)
 
 DSP2_SendCmd_BitSet_Done:
-	JR T, LABEL_0366A6
+	JR T, DSP2_SendCmd_ClkHigh_Nop01
 
-LABEL_0366A6:
+DSP2_SendCmd_ClkHigh_Nop01:
 	NOP
 	SLL 1, QIZH
 	SET 2, (PF)
-	JR T, LABEL_0366B0
+	JR T, DSP2_SendCmd_ClkHigh_Nop02
 
-LABEL_0366B0:
+DSP2_SendCmd_ClkHigh_Nop02:
 	NOP
-	JR T, LABEL_0366B3
+	JR T, DSP2_SendCmd_ClkHigh_Nop03
 
-LABEL_0366B3:
+DSP2_SendCmd_ClkHigh_Nop03:
 	NOP
-	JR T, LABEL_0366B6
+	JR T, DSP2_SendCmd_ClkHigh_Nop04
 
-LABEL_0366B6:
+DSP2_SendCmd_ClkHigh_Nop04:
 	NOP
-	JR T, LABEL_0366B9
+	JR T, DSP2_SendCmd_ClkHigh_Nop05
 
-LABEL_0366B9:
+DSP2_SendCmd_ClkHigh_Nop05:
 	NOP
-	JR T, LABEL_0366BC
+	JR T, DSP2_SendCmd_ClkHigh_Nop06
 
-LABEL_0366BC:
+DSP2_SendCmd_ClkHigh_Nop06:
 	NOP
-	JR T, LABEL_0366BF
+	JR T, DSP2_SendCmd_ClkHigh_Nop07
 
-LABEL_0366BF:
+DSP2_SendCmd_ClkHigh_Nop07:
 	NOP
-	JR T, LABEL_0366C2
+	JR T, DSP2_SendCmd_ClkHigh_Nop08
 
-LABEL_0366C2:
+DSP2_SendCmd_ClkHigh_Nop08:
 	NOP
-	JR T, LABEL_0366C5
+	JR T, DSP2_SendCmd_ClkHigh_Nop09
 
-LABEL_0366C5:
+DSP2_SendCmd_ClkHigh_Nop09:
 	NOP
-	JR T, LABEL_0366C8
+	JR T, DSP2_SendCmd_ClkHigh_Nop10
 
-LABEL_0366C8:
+DSP2_SendCmd_ClkHigh_Nop10:
 	NOP
-	JR T, LABEL_0366CB
+	JR T, DSP2_SendCmd_ClkHigh_Nop11
 
-LABEL_0366CB:
+DSP2_SendCmd_ClkHigh_Nop11:
 	NOP
-	JR T, LABEL_0366CE
+	JR T, DSP2_SendCmd_ClkHigh_Nop12
 
-LABEL_0366CE:
+DSP2_SendCmd_ClkHigh_Nop12:
 	NOP
-	JR T, LABEL_0366D1
+	JR T, DSP2_SendCmd_ClkHigh_Nop13
 
-LABEL_0366D1:
+DSP2_SendCmd_ClkHigh_Nop13:
 	NOP
-	JR T, LABEL_0366D4
+	JR T, DSP2_SendCmd_ClkHigh_Nop14
 
-LABEL_0366D4:
+DSP2_SendCmd_ClkHigh_Nop14:
 	NOP
-	JR T, LABEL_0366D7
+	JR T, DSP2_SendCmd_ClkHigh_Nop15
 
-LABEL_0366D7:
+DSP2_SendCmd_ClkHigh_Nop15:
 	NOP
-	JR T, LABEL_0366DA
+	JR T, DSP2_SendCmd_ClkHigh_Nop16
 
-LABEL_0366DA:
+DSP2_SendCmd_ClkHigh_Nop16:
 	NOP
-	JR T, LABEL_0366DD
+	JR T, DSP2_SendCmd_ClkLow_Nop01
 
-LABEL_0366DD:
+DSP2_SendCmd_ClkLow_Nop01:
 	NOP
 	RES 2, (PF)
-	JR T, LABEL_0366E3
+	JR T, DSP2_SendCmd_ClkLow_Nop02
 
-LABEL_0366E3:
+DSP2_SendCmd_ClkLow_Nop02:
 	NOP
-	JR T, LABEL_0366E6
+	JR T, DSP2_SendCmd_ClkLow_Nop03
 
-LABEL_0366E6:
+DSP2_SendCmd_ClkLow_Nop03:
 	NOP
-	JR T, LABEL_0366E9
+	JR T, DSP2_SendCmd_ClkLow_Nop04
 
-LABEL_0366E9:
+DSP2_SendCmd_ClkLow_Nop04:
 	NOP
-	JR T, LABEL_0366EC
+	JR T, DSP2_SendCmd_ClkLow_Nop05
 
-LABEL_0366EC:
+DSP2_SendCmd_ClkLow_Nop05:
 	NOP
-	JR T, LABEL_0366EF
+	JR T, DSP2_SendCmd_ClkLow_Nop06
 
-LABEL_0366EF:
+DSP2_SendCmd_ClkLow_Nop06:
 	NOP
-	JR T, LABEL_0366F2
+	JR T, DSP2_SendCmd_ClkLow_Nop07
 
-LABEL_0366F2:
+DSP2_SendCmd_ClkLow_Nop07:
 	NOP
-	JR T, LABEL_0366F5
+	JR T, DSP2_SendCmd_ClkLow_Nop08
 
-LABEL_0366F5:
+DSP2_SendCmd_ClkLow_Nop08:
 	NOP
-	JR T, LABEL_0366F8
+	JR T, DSP2_SendCmd_ClkLow_Nop09
 
-LABEL_0366F8:
+DSP2_SendCmd_ClkLow_Nop09:
 	NOP
-	JR T, LABEL_0366FB
+	JR T, DSP2_SendCmd_ClkLow_Nop10
 
-LABEL_0366FB:
+DSP2_SendCmd_ClkLow_Nop10:
 	NOP
-	JR T, LABEL_0366FE
+	JR T, DSP2_SendCmd_ClkLow_Nop11
 
-LABEL_0366FE:
+DSP2_SendCmd_ClkLow_Nop11:
 	NOP
-	JR T, LABEL_036701
+	JR T, DSP2_SendCmd_ClkLow_Nop12
 
-LABEL_036701:
+DSP2_SendCmd_ClkLow_Nop12:
 	NOP
-	JR T, LABEL_036704
+	JR T, DSP2_SendCmd_ClkLow_Nop13
 
-LABEL_036704:
+DSP2_SendCmd_ClkLow_Nop13:
 	NOP
-	JR T, LABEL_036707
+	JR T, DSP2_SendCmd_ClkLow_Nop14
 
-LABEL_036707:
+DSP2_SendCmd_ClkLow_Nop14:
 	NOP
-	JR T, LABEL_03670A
+	JR T, DSP2_SendCmd_ClkLow_Nop15
 
-LABEL_03670A:
+DSP2_SendCmd_ClkLow_Nop15:
 	NOP
-	JR T, LABEL_03670D
+	JR T, DSP2_SendCmd_ClkLow_Nop16
 
-LABEL_03670D:
+DSP2_SendCmd_ClkLow_Nop16:
 	NOP
-	JR T, LABEL_036710
+	JR T, DSP2_SendCmd_ClkLow_Nop17
 
-LABEL_036710:
+DSP2_SendCmd_ClkLow_Nop17:
 	NOP
-	JR T, LABEL_036713
+	JR T, DSP2_SendCmd_ClkLow_Nop18
 
-LABEL_036713:
+DSP2_SendCmd_ClkLow_Nop18:
 	NOP
-	JR T, LABEL_036716
+	JR T, DSP2_SendCmd_ClkLow_Nop19
 
-LABEL_036716:
+DSP2_SendCmd_ClkLow_Nop19:
 	NOP
-	JR T, LABEL_036719
+	JR T, DSP2_SendCmd_ClkLow_Nop20
 
-LABEL_036719:
+DSP2_SendCmd_ClkLow_Nop20:
 	NOP
 	SUB IZ, 0001h
 	JRL GT, DSP2_SendCmd_BitLoop
 
 DSP2_SendCmd_PostLoop_Entry:
-	JR T, LABEL_036723
+	JR T, DSP2_SendCmd_PostLoop_Nop01
 
-LABEL_036723:
+DSP2_SendCmd_PostLoop_Nop01:
 	NOP
 	SET 2, (PF)
-	JR T, LABEL_036729
+	JR T, DSP2_SendCmd_PostLoop_Nop02
 
-LABEL_036729:
+DSP2_SendCmd_PostLoop_Nop02:
 	NOP
-	JR T, LABEL_03672C
+	JR T, DSP2_SendCmd_PostLoop_Nop03
 
-LABEL_03672C:
+DSP2_SendCmd_PostLoop_Nop03:
 	NOP
-	JR T, LABEL_03672F
+	JR T, DSP2_SendCmd_PostLoop_Nop04
 
-LABEL_03672F:
+DSP2_SendCmd_PostLoop_Nop04:
 	NOP
-	JR T, LABEL_036732
+	JR T, DSP2_SendCmd_PostLoop_Nop05
 
-LABEL_036732:
+DSP2_SendCmd_PostLoop_Nop05:
 	NOP
-	JR T, LABEL_036735
+	JR T, DSP2_SendCmd_PostLoop_Nop06
 
-LABEL_036735:
+DSP2_SendCmd_PostLoop_Nop06:
 	NOP
-	JR T, LABEL_036738
+	JR T, DSP2_SendCmd_PostLoop_Nop07
 
-LABEL_036738:
+DSP2_SendCmd_PostLoop_Nop07:
 	NOP
-	JR T, LABEL_03673B
+	JR T, DSP2_SendCmd_PostLoop_Nop08
 
-LABEL_03673B:
+DSP2_SendCmd_PostLoop_Nop08:
 	NOP
-	JR T, LABEL_03673E
+	JR T, DSP2_SendCmd_PostLoop_Nop09
 
-LABEL_03673E:
+DSP2_SendCmd_PostLoop_Nop09:
 	NOP
-	JR T, LABEL_036741
+	JR T, DSP2_SendCmd_PostLoop_Nop10
 
-LABEL_036741:
+DSP2_SendCmd_PostLoop_Nop10:
 	NOP
-	JR T, LABEL_036744
+	JR T, DSP2_SendCmd_PostLoop_Nop11
 
-LABEL_036744:
+DSP2_SendCmd_PostLoop_Nop11:
 	NOP
-	JR T, LABEL_036747
+	JR T, DSP2_SendCmd_PostLoop_Nop12
 
-LABEL_036747:
+DSP2_SendCmd_PostLoop_Nop12:
 	NOP
-	JR T, LABEL_03674A
+	JR T, DSP2_SendCmd_PostLoop_Nop13
 
-LABEL_03674A:
+DSP2_SendCmd_PostLoop_Nop13:
 	NOP
-	JR T, LABEL_03674D
+	JR T, DSP2_SendCmd_PostLoop_Nop14
 
-LABEL_03674D:
+DSP2_SendCmd_PostLoop_Nop14:
 	NOP
-	JR T, LABEL_036750
+	JR T, DSP2_SendCmd_PostLoop_Nop15
 
-LABEL_036750:
+DSP2_SendCmd_PostLoop_Nop15:
 	NOP
-	JR T, LABEL_036753
+	JR T, DSP2_SendCmd_PostLoop_Nop16
 
-LABEL_036753:
+DSP2_SendCmd_PostLoop_Nop16:
 	NOP
-	JR T, LABEL_036756
+	JR T, DSP2_SendCmd_PostLoop_Nop17
 
-LABEL_036756:
+DSP2_SendCmd_PostLoop_Nop17:
 	NOP
 	RES 2, (PF)
-	JR T, LABEL_03675C
+	JR T, DSP2_SendCmd_PostClkLow_Nop01
 
-LABEL_03675C:
+DSP2_SendCmd_PostClkLow_Nop01:
 	NOP
-	JR T, LABEL_03675F
+	JR T, DSP2_SendCmd_PostClkLow_Nop02
 
-LABEL_03675F:
+DSP2_SendCmd_PostClkLow_Nop02:
 	NOP
-	JR T, LABEL_036762
+	JR T, DSP2_SendCmd_PostClkLow_Nop03
 
-LABEL_036762:
+DSP2_SendCmd_PostClkLow_Nop03:
 	NOP
-	JR T, LABEL_036765
+	JR T, DSP2_SendCmd_PostClkLow_Nop04
 
-LABEL_036765:
+DSP2_SendCmd_PostClkLow_Nop04:
 	NOP
-	JR T, LABEL_036768
+	JR T, DSP2_SendCmd_PostClkLow_Nop05
 
-LABEL_036768:
+DSP2_SendCmd_PostClkLow_Nop05:
 	NOP
-	JR T, LABEL_03676B
+	JR T, DSP2_SendCmd_PostClkLow_Nop06
 
-LABEL_03676B:
+DSP2_SendCmd_PostClkLow_Nop06:
 	NOP
-	JR T, LABEL_03676E
+	JR T, DSP2_SendCmd_PostClkLow_Nop07
 
-LABEL_03676E:
+DSP2_SendCmd_PostClkLow_Nop07:
 	NOP
-	JR T, LABEL_036771
+	JR T, DSP2_SendCmd_PostClkLow_Nop08
 
-LABEL_036771:
+DSP2_SendCmd_PostClkLow_Nop08:
 	NOP
-	JR T, LABEL_036774
+	JR T, DSP2_SendCmd_PostClkLow_Nop09
 
-LABEL_036774:
+DSP2_SendCmd_PostClkLow_Nop09:
 	NOP
-	JR T, LABEL_036777
+	JR T, DSP2_SendCmd_PostClkLow_Nop10
 
-LABEL_036777:
+DSP2_SendCmd_PostClkLow_Nop10:
 	NOP
-	JR T, LABEL_03677A
+	JR T, DSP2_SendCmd_PostClkLow_Nop11
 
-LABEL_03677A:
+DSP2_SendCmd_PostClkLow_Nop11:
 	NOP
-	JR T, LABEL_03677D
+	JR T, DSP2_SendCmd_PostClkLow_Nop12
 
-LABEL_03677D:
+DSP2_SendCmd_PostClkLow_Nop12:
 	NOP
-	JR T, LABEL_036780
+	JR T, DSP2_SendCmd_PostClkLow_Nop13
 
-LABEL_036780:
+DSP2_SendCmd_PostClkLow_Nop13:
 	NOP
-	JR T, LABEL_036783
+	JR T, DSP2_SendCmd_PostClkLow_Nop14
 
-LABEL_036783:
+DSP2_SendCmd_PostClkLow_Nop14:
 	NOP
-	JR T, LABEL_036786
+	JR T, DSP2_SendCmd_PostClkLow_Nop15
 
-LABEL_036786:
+DSP2_SendCmd_PostClkLow_Nop15:
 	NOP
-	JR T, LABEL_036789
+	JR T, DSP2_SendCmd_PostClkLow_Nop16
 
-LABEL_036789:
+DSP2_SendCmd_PostClkLow_Nop16:
 	NOP
-	JR T, LABEL_03678C
+	JR T, DSP2_SendCmd_PostClkLow_Nop17
 
-LABEL_03678C:
+DSP2_SendCmd_PostClkLow_Nop17:
 	NOP
-	JR T, LABEL_03678F
+	JR T, DSP2_SendCmd_PostClkLow_Nop18
 
-LABEL_03678F:
+DSP2_SendCmd_PostClkLow_Nop18:
 	NOP
-	JR T, LABEL_036792
+	JR T, DSP2_SendCmd_PostClkLow_Nop19
 
-LABEL_036792:
+DSP2_SendCmd_PostClkLow_Nop19:
 	NOP
 	LD WA, (XSP + 006h)
 	CALL DSP_Deselect_Chip
-	JR T, LABEL_03679C
+	JR T, DSP2_SendCmd_Epilogue_Nop01
 
-LABEL_03679C:
+DSP2_SendCmd_Epilogue_Nop01:
 	NOP
-	JR T, LABEL_03679F
+	JR T, DSP2_SendCmd_Epilogue_Nop02
 
-LABEL_03679F:
+DSP2_SendCmd_Epilogue_Nop02:
 	NOP
-	JR T, LABEL_0367A2
+	JR T, DSP2_SendCmd_Epilogue_Nop03
 
-LABEL_0367A2:
+DSP2_SendCmd_Epilogue_Nop03:
 	NOP
-	JR T, LABEL_0367A5
+	JR T, DSP2_SendCmd_Epilogue_Nop04
 
-LABEL_0367A5:
+DSP2_SendCmd_Epilogue_Nop04:
 	NOP
-	JR T, LABEL_0367A8
+	JR T, DSP2_SendCmd_Epilogue_Nop05
 
-LABEL_0367A8:
+DSP2_SendCmd_Epilogue_Nop05:
 	NOP
-	JR T, LABEL_0367AB
+	JR T, DSP2_SendCmd_Epilogue_Nop06
 
-LABEL_0367AB:
+DSP2_SendCmd_Epilogue_Nop06:
 	NOP
-	JR T, LABEL_0367AE
+	JR T, DSP2_SendCmd_Epilogue_Nop07
 
-LABEL_0367AE:
+DSP2_SendCmd_Epilogue_Nop07:
 	NOP
-	JR T, LABEL_0367B1
+	JR T, DSP2_SendCmd_Epilogue_Nop08
 
-LABEL_0367B1:
+DSP2_SendCmd_Epilogue_Nop08:
 	NOP
-	JR T, LABEL_0367B4
+	JR T, DSP2_SendCmd_Epilogue_Nop09
 
-LABEL_0367B4:
+DSP2_SendCmd_Epilogue_Nop09:
 	NOP
-	JR T, LABEL_0367B7
+	JR T, DSP2_SendCmd_Epilogue_Nop10
 
-LABEL_0367B7:
+DSP2_SendCmd_Epilogue_Nop10:
 	NOP
-	JR T, LABEL_0367BA
+	JR T, DSP2_SendCmd_Epilogue_Nop11
 
-LABEL_0367BA:
+DSP2_SendCmd_Epilogue_Nop11:
 	NOP
-	JR T, LABEL_0367BD
+	JR T, DSP2_SendCmd_Epilogue_Nop12
 
-LABEL_0367BD:
+DSP2_SendCmd_Epilogue_Nop12:
 	NOP
-	JR T, LABEL_0367C0
+	JR T, DSP2_SendCmd_Epilogue_Nop13
 
-LABEL_0367C0:
+DSP2_SendCmd_Epilogue_Nop13:
 	NOP
-	JR T, LABEL_0367C3
+	JR T, DSP2_SendCmd_Epilogue_Nop14
 
-LABEL_0367C3:
+DSP2_SendCmd_Epilogue_Nop14:
 	NOP
-	JR T, LABEL_0367C6
+	JR T, DSP2_SendCmd_Epilogue_Nop15
 
-LABEL_0367C6:
+DSP2_SendCmd_Epilogue_Nop15:
 	NOP
-	JR T, LABEL_0367C9
+	JR T, DSP2_SendCmd_Epilogue_Nop16
 
-LABEL_0367C9:
+DSP2_SendCmd_Epilogue_Nop16:
 	NOP
 	EI 0
 	LDA XWA, 01221Dh
@@ -43435,368 +43435,368 @@ DSP2_SendData_BitClear:
 	RES 0, (PF)
 
 DSP2_SendData_BitSet_Done:
-	JR T, LABEL_0368EF
+	JR T, DSP2_SendData_ClkHigh_Nop01
 
-LABEL_0368EF:
+DSP2_SendData_ClkHigh_Nop01:
 	NOP
 	SLL 1, QIZH
 	SET 2, (PF)
-	JR T, LABEL_0368F9
+	JR T, DSP2_SendData_ClkHigh_Nop02
 
-LABEL_0368F9:
+DSP2_SendData_ClkHigh_Nop02:
 	NOP
-	JR T, LABEL_0368FC
+	JR T, DSP2_SendData_ClkHigh_Nop03
 
-LABEL_0368FC:
+DSP2_SendData_ClkHigh_Nop03:
 	NOP
-	JR T, LABEL_0368FF
+	JR T, DSP2_SendData_ClkHigh_Nop04
 
-LABEL_0368FF:
+DSP2_SendData_ClkHigh_Nop04:
 	NOP
-	JR T, LABEL_036902
+	JR T, DSP2_SendData_ClkHigh_Nop05
 
-LABEL_036902:
+DSP2_SendData_ClkHigh_Nop05:
 	NOP
-	JR T, LABEL_036905
+	JR T, DSP2_SendData_ClkHigh_Nop06
 
-LABEL_036905:
+DSP2_SendData_ClkHigh_Nop06:
 	NOP
-	JR T, LABEL_036908
+	JR T, DSP2_SendData_ClkHigh_Nop07
 
-LABEL_036908:
+DSP2_SendData_ClkHigh_Nop07:
 	NOP
-	JR T, LABEL_03690B
+	JR T, DSP2_SendData_ClkHigh_Nop08
 
-LABEL_03690B:
+DSP2_SendData_ClkHigh_Nop08:
 	NOP
-	JR T, LABEL_03690E
+	JR T, DSP2_SendData_ClkHigh_Nop09
 
-LABEL_03690E:
+DSP2_SendData_ClkHigh_Nop09:
 	NOP
-	JR T, LABEL_036911
+	JR T, DSP2_SendData_ClkHigh_Nop10
 
-LABEL_036911:
+DSP2_SendData_ClkHigh_Nop10:
 	NOP
-	JR T, LABEL_036914
+	JR T, DSP2_SendData_ClkHigh_Nop11
 
-LABEL_036914:
+DSP2_SendData_ClkHigh_Nop11:
 	NOP
-	JR T, LABEL_036917
+	JR T, DSP2_SendData_ClkHigh_Nop12
 
-LABEL_036917:
+DSP2_SendData_ClkHigh_Nop12:
 	NOP
-	JR T, LABEL_03691A
+	JR T, DSP2_SendData_ClkHigh_Nop13
 
-LABEL_03691A:
+DSP2_SendData_ClkHigh_Nop13:
 	NOP
-	JR T, LABEL_03691D
+	JR T, DSP2_SendData_ClkHigh_Nop14
 
-LABEL_03691D:
+DSP2_SendData_ClkHigh_Nop14:
 	NOP
-	JR T, LABEL_036920
+	JR T, DSP2_SendData_ClkHigh_Nop15
 
-LABEL_036920:
+DSP2_SendData_ClkHigh_Nop15:
 	NOP
-	JR T, LABEL_036923
+	JR T, DSP2_SendData_ClkHigh_Nop16
 
-LABEL_036923:
+DSP2_SendData_ClkHigh_Nop16:
 	NOP
-	JR T, LABEL_036926
+	JR T, DSP2_SendData_ClkHigh_Nop17
 
-LABEL_036926:
+DSP2_SendData_ClkHigh_Nop17:
 	NOP
 	RES 2, (PF)
-	JR T, LABEL_03692C
+	JR T, DSP2_SendData_ClkLow_Nop01
 
-LABEL_03692C:
+DSP2_SendData_ClkLow_Nop01:
 	NOP
-	JR T, LABEL_03692F
+	JR T, DSP2_SendData_ClkLow_Nop02
 
-LABEL_03692F:
+DSP2_SendData_ClkLow_Nop02:
 	NOP
-	JR T, LABEL_036932
+	JR T, DSP2_SendData_ClkLow_Nop03
 
-LABEL_036932:
+DSP2_SendData_ClkLow_Nop03:
 	NOP
-	JR T, LABEL_036935
+	JR T, DSP2_SendData_ClkLow_Nop04
 
-LABEL_036935:
+DSP2_SendData_ClkLow_Nop04:
 	NOP
-	JR T, LABEL_036938
+	JR T, DSP2_SendData_ClkLow_Nop05
 
-LABEL_036938:
+DSP2_SendData_ClkLow_Nop05:
 	NOP
-	JR T, LABEL_03693B
+	JR T, DSP2_SendData_ClkLow_Nop06
 
-LABEL_03693B:
+DSP2_SendData_ClkLow_Nop06:
 	NOP
-	JR T, LABEL_03693E
+	JR T, DSP2_SendData_ClkLow_Nop07
 
-LABEL_03693E:
+DSP2_SendData_ClkLow_Nop07:
 	NOP
-	JR T, LABEL_036941
+	JR T, DSP2_SendData_ClkLow_Nop08
 
-LABEL_036941:
+DSP2_SendData_ClkLow_Nop08:
 	NOP
-	JR T, LABEL_036944
+	JR T, DSP2_SendData_ClkLow_Nop09
 
-LABEL_036944:
+DSP2_SendData_ClkLow_Nop09:
 	NOP
-	JR T, LABEL_036947
+	JR T, DSP2_SendData_ClkLow_Nop10
 
-LABEL_036947:
+DSP2_SendData_ClkLow_Nop10:
 	NOP
-	JR T, LABEL_03694A
+	JR T, DSP2_SendData_ClkLow_Nop11
 
-LABEL_03694A:
+DSP2_SendData_ClkLow_Nop11:
 	NOP
-	JR T, LABEL_03694D
+	JR T, DSP2_SendData_ClkLow_Nop12
 
-LABEL_03694D:
+DSP2_SendData_ClkLow_Nop12:
 	NOP
-	JR T, LABEL_036950
+	JR T, DSP2_SendData_ClkLow_Nop13
 
-LABEL_036950:
+DSP2_SendData_ClkLow_Nop13:
 	NOP
-	JR T, LABEL_036953
+	JR T, DSP2_SendData_ClkLow_Nop14
 
-LABEL_036953:
+DSP2_SendData_ClkLow_Nop14:
 	NOP
-	JR T, LABEL_036956
+	JR T, DSP2_SendData_ClkLow_Nop15
 
-LABEL_036956:
+DSP2_SendData_ClkLow_Nop15:
 	NOP
-	JR T, LABEL_036959
+	JR T, DSP2_SendData_ClkLow_Nop16
 
-LABEL_036959:
+DSP2_SendData_ClkLow_Nop16:
 	NOP
-	JR T, LABEL_03695C
+	JR T, DSP2_SendData_ClkLow_Nop17
 
-LABEL_03695C:
+DSP2_SendData_ClkLow_Nop17:
 	NOP
-	JR T, LABEL_03695F
+	JR T, DSP2_SendData_ClkLow_Nop18
 
-LABEL_03695F:
+DSP2_SendData_ClkLow_Nop18:
 	NOP
-	JR T, LABEL_036962
+	JR T, DSP2_SendData_ClkLow_Nop19
 
-LABEL_036962:
+DSP2_SendData_ClkLow_Nop19:
 	NOP
 	SUB IZ, 0001h
 	JRL GT, DSP2_SendData_BitLoop
 
 DSP2_SendData_PostLoop_Entry:
-	JR T, LABEL_03696C
+	JR T, DSP2_SendData_PostLoop_Nop01
 
-LABEL_03696C:
+DSP2_SendData_PostLoop_Nop01:
 	NOP
 	SET 2, (PF)
-	JR T, LABEL_036972
+	JR T, DSP2_SendData_PostLoop_Nop02
 
-LABEL_036972:
+DSP2_SendData_PostLoop_Nop02:
 	NOP
-	JR T, LABEL_036975
+	JR T, DSP2_SendData_PostLoop_Nop03
 
-LABEL_036975:
+DSP2_SendData_PostLoop_Nop03:
 	NOP
-	JR T, LABEL_036978
+	JR T, DSP2_SendData_PostLoop_Nop04
 
-LABEL_036978:
+DSP2_SendData_PostLoop_Nop04:
 	NOP
-	JR T, LABEL_03697B
+	JR T, DSP2_SendData_PostLoop_Nop05
 
-LABEL_03697B:
+DSP2_SendData_PostLoop_Nop05:
 	NOP
-	JR T, LABEL_03697E
+	JR T, DSP2_SendData_PostLoop_Nop06
 
-LABEL_03697E:
+DSP2_SendData_PostLoop_Nop06:
 	NOP
-	JR T, LABEL_036981
+	JR T, DSP2_SendData_PostLoop_Nop07
 
-LABEL_036981:
+DSP2_SendData_PostLoop_Nop07:
 	NOP
-	JR T, LABEL_036984
+	JR T, DSP2_SendData_PostLoop_Nop08
 
-LABEL_036984:
+DSP2_SendData_PostLoop_Nop08:
 	NOP
-	JR T, LABEL_036987
+	JR T, DSP2_SendData_PostLoop_Nop09
 
-LABEL_036987:
+DSP2_SendData_PostLoop_Nop09:
 	NOP
-	JR T, LABEL_03698A
+	JR T, DSP2_SendData_PostLoop_Nop10
 
-LABEL_03698A:
+DSP2_SendData_PostLoop_Nop10:
 	NOP
-	JR T, LABEL_03698D
+	JR T, DSP2_SendData_PostLoop_Nop11
 
-LABEL_03698D:
+DSP2_SendData_PostLoop_Nop11:
 	NOP
-	JR T, LABEL_036990
+	JR T, DSP2_SendData_PostLoop_Nop12
 
-LABEL_036990:
+DSP2_SendData_PostLoop_Nop12:
 	NOP
-	JR T, LABEL_036993
+	JR T, DSP2_SendData_PostLoop_Nop13
 
-LABEL_036993:
+DSP2_SendData_PostLoop_Nop13:
 	NOP
-	JR T, LABEL_036996
+	JR T, DSP2_SendData_PostLoop_Nop14
 
-LABEL_036996:
+DSP2_SendData_PostLoop_Nop14:
 	NOP
-	JR T, LABEL_036999
+	JR T, DSP2_SendData_PostLoop_Nop15
 
-LABEL_036999:
+DSP2_SendData_PostLoop_Nop15:
 	NOP
-	JR T, LABEL_03699C
+	JR T, DSP2_SendData_PostLoop_Nop16
 
-LABEL_03699C:
+DSP2_SendData_PostLoop_Nop16:
 	NOP
-	JR T, LABEL_03699F
+	JR T, DSP2_SendData_PostLoop_Nop17
 
-LABEL_03699F:
+DSP2_SendData_PostLoop_Nop17:
 	NOP
 	RES 2, (PF)
-	JR T, LABEL_0369A5
+	JR T, DSP2_SendData_PostClkLow_Nop01
 
-LABEL_0369A5:
+DSP2_SendData_PostClkLow_Nop01:
 	NOP
-	JR T, LABEL_0369A8
+	JR T, DSP2_SendData_PostClkLow_Nop02
 
-LABEL_0369A8:
+DSP2_SendData_PostClkLow_Nop02:
 	NOP
-	JR T, LABEL_0369AB
+	JR T, DSP2_SendData_PostClkLow_Nop03
 
-LABEL_0369AB:
+DSP2_SendData_PostClkLow_Nop03:
 	NOP
-	JR T, LABEL_0369AE
+	JR T, DSP2_SendData_PostClkLow_Nop04
 
-LABEL_0369AE:
+DSP2_SendData_PostClkLow_Nop04:
 	NOP
-	JR T, LABEL_0369B1
+	JR T, DSP2_SendData_PostClkLow_Nop05
 
-LABEL_0369B1:
+DSP2_SendData_PostClkLow_Nop05:
 	NOP
-	JR T, LABEL_0369B4
+	JR T, DSP2_SendData_PostClkLow_Nop06
 
-LABEL_0369B4:
+DSP2_SendData_PostClkLow_Nop06:
 	NOP
-	JR T, LABEL_0369B7
+	JR T, DSP2_SendData_PostClkLow_Nop07
 
-LABEL_0369B7:
+DSP2_SendData_PostClkLow_Nop07:
 	NOP
-	JR T, LABEL_0369BA
+	JR T, DSP2_SendData_PostClkLow_Nop08
 
-LABEL_0369BA:
+DSP2_SendData_PostClkLow_Nop08:
 	NOP
-	JR T, LABEL_0369BD
+	JR T, DSP2_SendData_PostClkLow_Nop09
 
-LABEL_0369BD:
+DSP2_SendData_PostClkLow_Nop09:
 	NOP
-	JR T, LABEL_0369C0
+	JR T, DSP2_SendData_PostClkLow_Nop10
 
-LABEL_0369C0:
+DSP2_SendData_PostClkLow_Nop10:
 	NOP
-	JR T, LABEL_0369C3
+	JR T, DSP2_SendData_PostClkLow_Nop11
 
-LABEL_0369C3:
+DSP2_SendData_PostClkLow_Nop11:
 	NOP
-	JR T, LABEL_0369C6
+	JR T, DSP2_SendData_PostClkLow_Nop12
 
-LABEL_0369C6:
+DSP2_SendData_PostClkLow_Nop12:
 	NOP
-	JR T, LABEL_0369C9
+	JR T, DSP2_SendData_PostClkLow_Nop13
 
-LABEL_0369C9:
+DSP2_SendData_PostClkLow_Nop13:
 	NOP
-	JR T, LABEL_0369CC
+	JR T, DSP2_SendData_PostClkLow_Nop14
 
-LABEL_0369CC:
+DSP2_SendData_PostClkLow_Nop14:
 	NOP
-	JR T, LABEL_0369CF
+	JR T, DSP2_SendData_PostClkLow_Nop15
 
-LABEL_0369CF:
+DSP2_SendData_PostClkLow_Nop15:
 	NOP
-	JR T, LABEL_0369D2
+	JR T, DSP2_SendData_PostClkLow_Nop16
 
-LABEL_0369D2:
+DSP2_SendData_PostClkLow_Nop16:
 	NOP
-	JR T, LABEL_0369D5
+	JR T, DSP2_SendData_PostClkLow_Nop17
 
-LABEL_0369D5:
+DSP2_SendData_PostClkLow_Nop17:
 	NOP
-	JR T, LABEL_0369D8
+	JR T, DSP2_SendData_PostClkLow_Nop18
 
-LABEL_0369D8:
+DSP2_SendData_PostClkLow_Nop18:
 	NOP
-	JR T, LABEL_0369DB
+	JR T, DSP2_SendData_PostClkLow_Nop19
 
-LABEL_0369DB:
+DSP2_SendData_PostClkLow_Nop19:
 	NOP
 	LD WA, (XSP + 006h)
 	CALL DSP_Deselect_Chip
-	JR T, LABEL_0369E5
+	JR T, DSP2_SendData_Epilogue_Nop01
 
-LABEL_0369E5:
+DSP2_SendData_Epilogue_Nop01:
 	NOP
-	JR T, LABEL_0369E8
+	JR T, DSP2_SendData_Epilogue_Nop02
 
-LABEL_0369E8:
+DSP2_SendData_Epilogue_Nop02:
 	NOP
-	JR T, LABEL_0369EB
+	JR T, DSP2_SendData_Epilogue_Nop03
 
-LABEL_0369EB:
+DSP2_SendData_Epilogue_Nop03:
 	NOP
-	JR T, LABEL_0369EE
+	JR T, DSP2_SendData_Epilogue_Nop04
 
-LABEL_0369EE:
+DSP2_SendData_Epilogue_Nop04:
 	NOP
-	JR T, LABEL_0369F1
+	JR T, DSP2_SendData_Epilogue_Nop05
 
-LABEL_0369F1:
+DSP2_SendData_Epilogue_Nop05:
 	NOP
-	JR T, LABEL_0369F4
+	JR T, DSP2_SendData_Epilogue_Nop06
 
-LABEL_0369F4:
+DSP2_SendData_Epilogue_Nop06:
 	NOP
-	JR T, LABEL_0369F7
+	JR T, DSP2_SendData_Epilogue_Nop07
 
-LABEL_0369F7:
+DSP2_SendData_Epilogue_Nop07:
 	NOP
-	JR T, LABEL_0369FA
+	JR T, DSP2_SendData_Epilogue_Nop08
 
-LABEL_0369FA:
+DSP2_SendData_Epilogue_Nop08:
 	NOP
-	JR T, LABEL_0369FD
+	JR T, DSP2_SendData_Epilogue_Nop09
 
-LABEL_0369FD:
+DSP2_SendData_Epilogue_Nop09:
 	NOP
-	JR T, LABEL_036A00
+	JR T, DSP2_SendData_Epilogue_Nop10
 
-LABEL_036A00:
+DSP2_SendData_Epilogue_Nop10:
 	NOP
-	JR T, LABEL_036A03
+	JR T, DSP2_SendData_Epilogue_Nop11
 
-LABEL_036A03:
+DSP2_SendData_Epilogue_Nop11:
 	NOP
-	JR T, LABEL_036A06
+	JR T, DSP2_SendData_Epilogue_Nop12
 
-LABEL_036A06:
+DSP2_SendData_Epilogue_Nop12:
 	NOP
-	JR T, LABEL_036A09
+	JR T, DSP2_SendData_Epilogue_Nop13
 
-LABEL_036A09:
+DSP2_SendData_Epilogue_Nop13:
 	NOP
-	JR T, LABEL_036A0C
+	JR T, DSP2_SendData_Epilogue_Nop14
 
-LABEL_036A0C:
+DSP2_SendData_Epilogue_Nop14:
 	NOP
-	JR T, LABEL_036A0F
+	JR T, DSP2_SendData_Epilogue_Nop15
 
-LABEL_036A0F:
+DSP2_SendData_Epilogue_Nop15:
 	NOP
-	JR T, LABEL_036A12
+	JR T, DSP2_SendData_Epilogue_Nop16
 
-LABEL_036A12:
+DSP2_SendData_Epilogue_Nop16:
 	NOP
 	EI 0
 	LD A, (XSP + 008h)
@@ -44266,7 +44266,7 @@ DSP_Config_ClampNext:
 	JR C, DSP_Config_ClampApply
 	RET
 	
-LABEL_036DEA:
+DSP_Config_ClampData:
 	db 0D2h, 066h, 055h, 004h, 023h, 0D2h, 044h, 054h
 	db 004h, 083h, 00Eh
 
@@ -47656,15 +47656,15 @@ DSP_TuneOffset_WriteSequence:
 
 DSP_State_DmaLoadPresets:
 	LD WA, 3
-	CALL LABEL_01FFFD
+	CALL TaskSched_SpawnTask
 	LDA XWA, 045324h
 	LD XBC, XWA
 	LD WA, 1
-	CALL LABEL_0204D1
+	CALL TaskMsgQ_Send
 	LDA XWA, 045446h
 	LD XBC, XWA
 	LD WA, 1
-	JP LABEL_0204D1
+	JP TaskMsgQ_Send
 DSP_State_InlineData:
 	db 03Eh, 0D8h, 0AAh, 01Dh, 042h, 006h, 002h, 0EBh
 	db 08Eh, 0EEh, 088h, 01Dh, 03Dh, 06Eh, 003h, 0F3h
@@ -47676,12 +47676,12 @@ DSP_State_ApplyBuf:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD WA, 2
-	CALL LABEL_0206D3
+	CALL TaskMsgQ_TryReceive
 	LD (4A3Ah), XHL
 	OR XHL, XHL
 	JR NZ, DSP_State_ApplyBuf_DoCopy
 	LD WA, 1
-	CALL LABEL_020642
+	CALL TaskMsgQ_Receive
 	LD (4A3Ah), XHL
 
 DSP_State_ApplyBuf_DoCopy:
@@ -47693,7 +47693,7 @@ DSP_State_ApplyBuf_DoCopy:
 	LDW (XWA + 0120h), 0001h
 	LD XBC, (4A3Ah)
 	LD WA, 2
-	CALL LABEL_0204D1
+	CALL TaskMsgQ_Send
 	POP XIZ
 	RET
 
@@ -52037,7 +52037,7 @@ DSP_WriteParam_Return:
 
 DSP_Bytecode_NotifyStateChange:
 	LD WA, 1
-	JP LABEL_020370
+	JP TaskSched_PreemptiveYield_INT
 
 DSP_BytecodeInterpreter_Init:
 	LDA XSP, XSP - 012h
@@ -53595,7 +53595,7 @@ FP_DP_CmpAndCopy_Negate:
 	CALL FP_DP_CopyOrNegate8
 	RET
 
-LABEL_03D44B:
+FP_DP_CmpAndCopy_Pad:
 	db 0FFh
 
 FP_SP_Decode_ReadSign:
@@ -53611,7 +53611,7 @@ FP_SP_Decode_ReadSign:
 	POP XIZ
 	RET
 
-LABEL_03D465:
+FP_SP_Decode_ReadSign_Pad:
 	db 0FFh
 
 FP_DP_CmpZero64:
@@ -54123,7 +54123,7 @@ FP_DP_Sub_Done:
 	POP XIZ
 	RET
 
-LABEL_03D92B:
+FP_SP_Sub_Pad:
 	db 0FFh
 
 FP_SP_Sub:
@@ -54537,7 +54537,7 @@ FP_DP_Raw8Copy:
 	LD (XWA + 004h), XIY
 	RET
 
-LABEL_03DCF1:
+FP_DP_Raw8Copy_Pad:
 	db 0FFh
 
 FP_DP_NegMantissaLS:
@@ -54570,7 +54570,7 @@ FP_DP_NegMantissaLS_Store:
 	POP XIZ
 	RET
 
-LABEL_03DD35:
+FP_ScalarToDP_Pad:
 	db 0FFh
 
 FP_ScalarToDP:
@@ -54631,7 +54631,7 @@ FP_DP_NormalizeMantissa_Encode:
 	POP XIZ
 	RET
 
-LABEL_03DDC3:
+FP_SP_Raw4Copy_Pad:
 	db 0FFh
 
 FP_SP_Raw4Copy:
@@ -54639,7 +54639,7 @@ FP_SP_Raw4Copy:
 	LD (XWA), XIX
 	RET
 
-LABEL_03DDC9:
+FP_SP_CallWithBuf8_Pad:
 	db 0FFh
 
 FP_SP_CallWithBuf8:
@@ -54675,7 +54675,7 @@ FP_DP_DecodeToInt:
 	POP XIZ
 	RET
 
-LABEL_03DE19:
+FP_DP_Normalize_Pad:
 	db 0FFh
 
 FP_DP_Normalize:
@@ -54744,7 +54744,7 @@ FP_DP_NormCore_Zero:
 	LD (XIY + 002h), 001h
 	RET
 
-LABEL_03DE8D:
+FP_DP_ShiftDecode_Pad:
 	db 0FFh
 
 FP_DP_ShiftDecode:
@@ -54848,7 +54848,7 @@ FP_SP_AddMantissa_Store:
 	LD (XWA + 004h), XIX
 	RET
 
-LABEL_03DF5F:
+FP_DP_Decode_Pad:
 	db 0FFh
 
 FP_DP_Decode:
@@ -55015,12 +55015,12 @@ FP_DP_Encode_Overflow:
 	JR T, FP_DP_Encode_NormCheck
 
 FP_DP_Encode_NormCheck:
-	LD XBC, (LABEL_00F428:24)
+	LD XBC, (FPConst_Zero:24)
 	OR XBC, XBC
 	CALL NZ, XBC
 	RET
 
-LABEL_03E0AF:
+FP_SP_Encode_Pad:
 	db 0FFh
 
 FP_SP_Encode:
@@ -55063,7 +55063,7 @@ FP_SP_Encode_Overflow:
 FP_SP_Encode_Overflow_Store:
 	LDW (040C22h), 0022h
 	LD (XWA), XDE
-	LD XBC, (LABEL_00F428:24)
+	LD XBC, (FPConst_Zero:24)
 	OR XBC, XBC
 	CALL NZ, XBC
 	RET
@@ -55105,7 +55105,7 @@ FP_DP_Mul_Encode:
 	POP XIZ
 	RET
 
-LABEL_03E159:
+FP_SP_Mul_Pad:
 	db 0FFh
 
 FP_SP_Mul:
@@ -55257,7 +55257,7 @@ FP_DP_FreqAdjust_Return:
 	INC 8, XSP
 	RET
 
-LABEL_03E28F:
+FP_DP_Add_Outer_Pad:
 	db 0FFh
 
 FP_DP_Add_Outer:
@@ -55383,7 +55383,7 @@ FP_DP_AlignMantissa_MaxShift:
 	LD (XWA + 002h), 001h
 	RET
 
-LABEL_03E39F:
+FP_SP_AlignMantissa_Pad:
 	db 0FFh
 
 FP_SP_AlignMantissa:
@@ -55508,7 +55508,7 @@ FP_DP_MulMantissaCore_Store:
 	POP XIZ
 	RET
 
-LABEL_03E4B3:
+FP_SP_Mul_Outer_Pad:
 	db 0FFh
 
 FP_SP_Mul_Outer:
@@ -55932,7 +55932,7 @@ VoiceAmp_ConvergeEngine_Epilog:
 	LDA XSP, XSP + 066h
 	RET
 
-LABEL_03E883:
+FP_NaN_Handler_Pad:
 	db 0FFh
 
 FP_NaN_Handler:
@@ -56100,7 +56100,7 @@ DSP_VoiceRegUpdate_Return:
 	LDA XSP, XSP + 01ch
 	RET
 
-LABEL_03EA01:
+FP_CopyVariant_Pad:
 	db 0FFh
 
 FP_DP_CopyNoSign:
@@ -56133,7 +56133,7 @@ FP_DP_Copy3Words:
 	LD (XWA + 008h), XHL
 	RET
 
-LABEL_03EA33:
+FP_SP_DecodeToInt_Pad:
 	db 0FFh
 
 FP_SP_DecodeToInt:
@@ -56337,7 +56337,7 @@ VoiceFreq_EnvelopeStep_Epilog:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_03EBCD:
+FP_DP_MulAdd_Pad:
 	db 0FFh
 
 FP_DP_MulAdd:
@@ -56638,14 +56638,14 @@ FP_DP_Neg3Words:
 	XOR (XWA + 003h), 080h
 	RET
 
-LABEL_03EE6F:
+FP_Overflow_Handler_Pad:
 	db 0FFh
 
 FP_Overflow_Handler:
 	LD (XWA + 002h), 001h
 	RET
 
-LABEL_03EE75:
+FP_Library_End_Pad:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
