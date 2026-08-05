@@ -1254,7 +1254,7 @@ Voice_SetKeyShiftEnable 0x028B3B
 Voice_SetKeyShiftRange 0x028B58
 Voice_SetKeyShiftRange_BranchA 0x028B80
 Voice_SetKeyShiftRange_BranchB 0x028B83
-Voice_SetParam_04134D 0x028B90
+ScaleTune_Set_Global_Mode 0x028B90
 ScaleTune_Get_Global_Mode 0x028B96
 Voice_SetRhythmMode 0x028B9C
 Voice_SetRhythmMode_BranchA 0x028BA9
@@ -1264,7 +1264,7 @@ Voice_SetRhythmMode_BranchD 0x028BE5
 Voice_SetParam_04134B 0x028BF9
 Voice_SetCCMaxFlag 0x028BFF
 Voice_SetCCMaxFlag_Clear 0x028C0C
-Voice_WriteChannelAssign 0x028C14
+ScaleTune_Set_User_Offset 0x028C14
 ScaleTune_Get_User_Offset 0x028C28
 Voice_AllVoices_UpdateVelocity 0x028C39
 Voice_AllVoices_UpdateVelocity_LoopStart 0x028C4F
@@ -1274,8 +1274,8 @@ Voice_AllVoices_UpdateVelocity_TypeB 0x028CE6
 Voice_AllVoices_UpdateVelocity_NextOuter 0x028D10
 Voice_AllVoices_UpdateVelocity_InnerStep 0x028D20
 Voice_AllVoices_UpdateVelocity_Exit 0x028D2A
-Voice_SetMonoMode 0x028D2E
-Voice_SetMonoMode_Clear 0x028D3A
+ScaleTune_Set_Global_Enabled 0x028D2E
+ScaleTune_Set_Global_Enabled_Clear 0x028D3A
 ScaleTune_Is_Global_Enabled 0x028D42
 Pitch_Refresh_Sounding_Voices 0x028D4C
 Pitch_Refresh_Sounding_Voices_LoopBody 0x028D60

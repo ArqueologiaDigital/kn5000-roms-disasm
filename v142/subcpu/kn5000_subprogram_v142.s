@@ -16793,7 +16793,7 @@ Voice_SetKeyShiftRange_BranchB:
 ; A -> byte 0x04134D.  Reached from SysEx dispatch entry 6 and from
 ; Voice_ResetAllControllers with A = 0.  The reference file calls the getter
 ; ScaleTune_Get_Global_Mode; see [UNCERTAIN].
-Voice_SetParam_04134D:
+ScaleTune_Set_Global_Mode:
 	stb_da 0x04134d, a
 	ret
 
@@ -16872,7 +16872,7 @@ Voice_SetCCMaxFlag_Clear:
 ; and 12 entries is one per pitch class -- which is why the reference file calls the reader
 ; ScaleTune_Get_User_Offset.  See [UNCERTAIN]: I believe the reference name is the correct
 ; one and "ChannelAssign" is wrong, but I have not renamed anything.
-Voice_WriteChannelAssign:
+ScaleTune_Set_User_Offset:
 	extz wa
 	add wa, 0xC
 	lda_24 xde, 0x041342
@@ -17005,14 +17005,14 @@ Voice_AllVoices_UpdateVelocity_Exit:
 
 ; A == 0 SETS bit 9 (0x0200) of the global flag word 0x041343; any other value clears it.
 ; The inverted sense makes the "MonoMode" reading doubtful -- see [UNCERTAIN].
-Voice_SetMonoMode:
+ScaleTune_Set_Global_Enabled:
 	cps a, 0
-	jr nz, Voice_SetMonoMode_Clear
+	jr nz, ScaleTune_Set_Global_Enabled_Clear
 	ordi16_24 267075, 512
 	ret
 
-; Clear of Voice_SetMonoMode.
-Voice_SetMonoMode_Clear:
+; Clear of ScaleTune_Set_Global_Enabled.
+ScaleTune_Set_Global_Enabled_Clear:
 	anddi16_24 267075, 65023
 	ret
 
@@ -19038,7 +19038,7 @@ Voice_SystemMsg_DispatchJump:
 ;   index 3 (0x83)         offset 0x001E -> 0x02A81A Voice_SetPitchBendRange
 ;   index 4 (0x84)         offset 0x00F6 -> 0x02A8F2 a bare `ret` (sub-command ignored)
 ;   index 5 (0x85)         offset 0x0024 -> 0x02A820 Voice_SetKeyShiftEnable
-;   index 6 (0x86)         offset 0x002C -> 0x02A828 Voice_SetParam_04134D
+;   index 6 (0x86)         offset 0x002C -> 0x02A828 ScaleTune_Set_Global_Mode
 ;   index 7 (0x87)         offset 0x0034 -> 0x02A830 Voice_SetRhythmMode
 ; Indices 8..0x16 (sub-commands 0xA3..0xB1) resolve past 0x02A838 into the three named
 ; DispatchEntry stubs and the code that follows them; index > 0x16 is rejected by the caller.
@@ -19061,7 +19061,7 @@ Voice_SystemMsg_DispatchTable:
 	jrl Voice_SetKeyShiftEnable
 	ld a, (xwa + 3)
 	extz wa
-	jrl Voice_SetParam_04134D
+	jrl ScaleTune_Set_Global_Mode
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetRhythmMode
@@ -19076,8 +19076,8 @@ Voice_SystemMsg_DispatchEntry0:
 Voice_SystemMsg_DispatchEntry1:
 	jrl Voice_AllVoices_PortamentoUpdate
 
-; Sub-command 0x99 -> a small group ending in Voice_WriteChannelAssign with WA = 0x0B,
-; Voice_AllVoices_UpdateVelocity and Voice_SetMonoMode.
+; Sub-command 0x99 -> a small group ending in ScaleTune_Set_User_Offset with WA = 0x0B,
+; Voice_AllVoices_UpdateVelocity and ScaleTune_Set_Global_Enabled.
 Voice_SystemMsg_DispatchEntry2:
 	ld a, (xwa + 3)
 	extz wa
@@ -19087,68 +19087,68 @@ Voice_SystemMsg_DispatchEntry2:
 	extz wa
 	ld bc, wa
 	lds wa, 0
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 1
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 2
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 3
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 4
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 5
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 6
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	lds wa, 7
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0x8
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0x9
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0xA
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0xB
-	jrl Voice_WriteChannelAssign
+	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_AllVoices_UpdateVelocity
 	ld a, (xwa + 3)
 	extz wa
-	jrl Voice_SetMonoMode
+	jrl ScaleTune_Set_Global_Enabled
 	ret
 
 ; Full audio-side reset.  Reached by `jp` from the audio init sequence (right after
@@ -19161,10 +19161,10 @@ Voice_SystemMsg_DispatchEntry2:
 ; delay enable 0, delay feedback 0.
 ; Then globally: Voice_SetPolyphonyMode(2), the two ret-stubs with 0x7F,
 ; Voice_SetPitchBendRangeAndApply(0x40), Voice_SetPitchBendRange(0), Voice_SetKeyShiftEnable(0),
-; Voice_SetParam_04134D(0), Voice_SetRhythmMode(0), Voice_SetParam_04134B(0),
+; ScaleTune_Set_Global_Mode(0), Voice_SetRhythmMode(0), Voice_SetParam_04134B(0),
 ; Voice_AllVoices_PortamentoUpdate, Voice_SetCCMaxFlag(0), Voice_AllVoices_PortamentoReset,
-; Voice_WriteChannelAssign(index 0..0x0B, value 0), Voice_AllVoices_UpdateVelocity(1),
-; Voice_SetMonoMode(0).
+; ScaleTune_Set_User_Offset(index 0..0x0B, value 0), Voice_AllVoices_UpdateVelocity(1),
+; ScaleTune_Set_Global_Enabled(0).
 ; ★ The 0..0x0B loop is TWELVE iterations, not 26 -- one per pitch class, which is the
 ; strongest evidence that the 0x04134E array is a scale-tune table.
 Voice_ResetAllControllers:
@@ -19271,7 +19271,7 @@ Voice_ResetAllControllers_PostLoop:
 	lds wa, 0
 	calr Voice_SetKeyShiftEnable
 	lds wa, 0
-	calr Voice_SetParam_04134D
+	calr ScaleTune_Set_Global_Mode
 	lds wa, 0
 	calr Voice_SetRhythmMode
 	lds wa, 0
@@ -19289,7 +19289,7 @@ Voice_ResetAllControllers_ChanModeLoop:
 	stb_erp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr Voice_WriteChannelAssign
+	calr ScaleTune_Set_User_Offset
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x0C
 	jr c, Voice_ResetAllControllers_ChanModeLoop
@@ -19299,7 +19299,7 @@ Voice_ResetAllControllers_ChanModeExit:
 	lds wa, 1
 	calr Voice_AllVoices_UpdateVelocity
 	lds wa, 0
-	calr Voice_SetMonoMode
+	calr ScaleTune_Set_Global_Enabled
 	popw_erp 0xFA
 	ret
 
@@ -39433,7 +39433,7 @@ CmdHandler2C_Global_MixParamA:
 CmdHandler2C_Global_MixParamB:
 	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12
 	.byte 0x1d, 0x1c, 0x62, 0x03, 0x78, 0x3a, 0x02
-; ★ NEW NAME. Table entry 3: calls Voice_SetMonoMode (0x028D2E).
+; ★ NEW NAME. Table entry 3: calls ScaleTune_Set_Global_Enabled (0x028D2E).
 CmdHandler2C_Global_MonoMode:
 	.byte 0xc1
 	.byte 0x70, 0x43, 0x21, 0xd8, 0x12, 0x1d, 0x2e, 0x8d

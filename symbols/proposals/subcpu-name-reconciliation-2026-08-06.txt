@@ -256,3 +256,33 @@
 # Voice_Release_Type4, _BranchA and _BranchB share a prefix with Voice_Release but sit
 # 0x109B bytes away and are an independent routine. They keep their names; the
 # re-parenting pass explicitly skips children further than 0x400 from their parent.
+
+## ---------------------------------------------------------------------------
+## H. Setters orphaned by section D's getter renames
+## ---------------------------------------------------------------------------
+# Renaming the three scale-tune GETTERS left their SETTERS -- 6 to 0x14 bytes
+# earlier, on the identical storage -- carrying the pre-analysis names, so the
+# source would have read a bit through ScaleTune_Is_Global_Enabled and written the
+# same bit through Voice_SetMonoMode. Verified pairs:
+#   0x028B90 `ld (0x04134D),A`            <-> 0x028B96 `ld L,(0x04134D)`
+#   0x028C14 `ld (0x041342+0x0C+WA),C-0x80` <-> 0x028C28 `ld L,(0x041342+0x0C+WA)`
+#   0x028D2E or/and 0x0200 of (0x041343)  <-> 0x028D42 `(0x041343) & 0x0200`
+0x028B90  Voice_SetParam_04134D     -> ScaleTune_Set_Global_Mode
+0x028C14  Voice_WriteChannelAssign  -> ScaleTune_Set_User_Offset
+0x028D2E  Voice_SetMonoMode         -> ScaleTune_Set_Global_Enabled
+
+## ---------------------------------------------------------------------------
+## HONEST BACKLOG -- deliberately NOT named
+## ---------------------------------------------------------------------------
+# * 0 LABEL_xxxxxx placeholders remain in any artifact.
+# * 492 addresses carry a symbol in the LLVM source and the reference but have no
+#   label at all in the ASL archive (mostly the DSP effect-parameter and
+#   Audio_Cmd_* command handlers). They are NOT unnamed -- the ASL mirror simply
+#   lacks a label line there. Adding them means inserting lines at computed source
+#   positions, which is mechanical but earns nothing for the byte-level cross-check,
+#   so it is left as a separate, reviewable job.
+# * 62 UPPER_SNAKE reference entries and 51 reference-only data/RAM symbols have no
+#   counterpart label in either source, so nothing dictates their spelling yet.
+# * Names still carrying a raw address because no analysis justifies better:
+#   Voice_SetParam_04134B (0x028BF9) among them. A guessed name would launder a
+#   guess into the permanent record; these stay as they are.

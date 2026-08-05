@@ -24684,7 +24684,7 @@ Voice_SetKeyShiftRange_BranchB:
 	LDW (04135Ch), 0000h
 	RET
 
-Voice_SetParam_04134D:
+ScaleTune_Set_Global_Mode:
 	LD (04134Dh), A
 	RET
 
@@ -24750,7 +24750,7 @@ Voice_SetCCMaxFlag_Clear:
 	ANDW (041343h), 0fffdh
 	RET
 
-Voice_WriteChannelAssign:
+ScaleTune_Set_User_Offset:
 	EXTZ WA
 	ADD WA, 000ch
 	LDA XDE, 041342h
@@ -24870,13 +24870,13 @@ Voice_AllVoices_UpdateVelocity_Exit:
 	INC 2, XSP
 	RET
 
-Voice_SetMonoMode:
+ScaleTune_Set_Global_Enabled:
 	CP A, 0
-	JR NZ, Voice_SetMonoMode_Clear
+	JR NZ, ScaleTune_Set_Global_Enabled_Clear
 	ORW (041343h), 0200h
 	RET
 
-Voice_SetMonoMode_Clear:
+ScaleTune_Set_Global_Enabled_Clear:
 	ANDW (041343h), 0fdffh
 	RET
 
@@ -26591,7 +26591,7 @@ Voice_SystemMsg_DispatchTable:
 	JRL T, Voice_SetKeyShiftEnable
 	LD A, (XWA + 003h)
 	EXTZ WA
-	JRL T, Voice_SetParam_04134D
+	JRL T, ScaleTune_Set_Global_Mode
 	LD A, (XWA + 003h)
 	EXTZ WA
 	JRL T, Voice_SetRhythmMode
@@ -26613,68 +26613,68 @@ Voice_SystemMsg_DispatchEntry2:
 	EXTZ WA
 	LD BC, WA
 	LD WA, 0
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 1
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 2
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 3
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 4
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 5
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 6
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 7
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 0008h
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 0009h
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 000ah
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	LD BC, WA
 	LD WA, 000bh
-	JRL T, Voice_WriteChannelAssign
+	JRL T, ScaleTune_Set_User_Offset
 	LD A, (XWA + 003h)
 	EXTZ WA
 	JRL T, Voice_AllVoices_UpdateVelocity
 	LD A, (XWA + 003h)
 	EXTZ WA
-	JRL T, Voice_SetMonoMode
+	JRL T, ScaleTune_Set_Global_Enabled
 	RET
 
 Voice_ResetAllControllers:
@@ -26779,7 +26779,7 @@ Voice_ResetAllControllers_PostLoop:
 	LD WA, 0
 	CALR Voice_SetKeyShiftEnable
 	LD WA, 0
-	CALR Voice_SetParam_04134D
+	CALR ScaleTune_Set_Global_Mode
 	LD WA, 0
 	CALR Voice_SetRhythmMode
 	LD WA, 0
@@ -26796,7 +26796,7 @@ Voice_ResetAllControllers_ChanModeLoop:
 	LD A, QIZH
 	EXTZ WA
 	LD BC, 0
-	CALR Voice_WriteChannelAssign
+	CALR ScaleTune_Set_User_Offset
 	INC 1, QIZH
 	CP QIZH, 00ch
 	JR C, Voice_ResetAllControllers_ChanModeLoop
@@ -26805,7 +26805,7 @@ Voice_ResetAllControllers_ChanModeExit:
 	LD WA, 1
 	CALR Voice_AllVoices_UpdateVelocity
 	LD WA, 0
-	CALR Voice_SetMonoMode
+	CALR ScaleTune_Set_Global_Enabled
 	POP QIZ
 	RET
 
