@@ -18,7 +18,7 @@ CLANG=$(LLVM_BIN)/clang
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
 .SECONDARY:
 
-.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
+.PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
 .PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
@@ -704,25 +704,6 @@ ASL_PATH=../tools/asl
 ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
-# Preset data assembly -> uncompressed binary -> LZSS compressed
-# Uses --reference option to replay original compression decisions for byte-identical output.
-PRESET_DATA_SRC=archive/asl/table_data/preset_data.asm
-PRESET_DATA_DIR=table_data/includes
-
-$(PRESET_DATA_DIR)/preset_data.p: $(PRESET_DATA_SRC) $(PRESET_DATA_DIR)/preset_data_uncompressed.bin
-	$(ASL) $(PRESET_DATA_SRC) -o $(PRESET_DATA_DIR)/preset_data.p
-
-$(PRESET_DATA_DIR)/preset_data.bin: $(PRESET_DATA_DIR)/preset_data.p
-	$(P2BIN) $(PRESET_DATA_DIR)/preset_data.p $(PRESET_DATA_DIR)/preset_data.bin
-
-$(PRESET_DATA_DIR)/preset_data_compressed.bin: $(PRESET_DATA_DIR)/preset_data.bin
-	python scripts/build/compress_lzss.py $(PRESET_DATA_DIR)/preset_data.bin $(PRESET_DATA_DIR)/preset_data_compressed.bin --reference original_ROMs/preset_data_compressed.original.bin
-
-rebuild-preset-data: $(PRESET_DATA_DIR)/preset_data_compressed.bin
-
-recompress-lzss:
-	python scripts/build/compress_lzss.py $(PRESET_DATA_DIR)/preset_data_uncompressed.bin $(PRESET_DATA_DIR)/preset_data_compressed.bin --reference original_ROMs/preset_data_compressed.original.bin
-
 # ----------------------------------------------------------------------------
 # Demo song presets (19 SLIDE4K-compressed blocks)
 # ----------------------------------------------------------------------------
@@ -789,7 +770,7 @@ rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p: archive/asl/tmp94c241.inc archive
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 	$(ASL) archive/asl/subcpu/kn5000_subprogram_v142.asm -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 
-rebuilt_ROMs/kn5000_table_data.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/table_data/kn5000_table_data.asm $(PRESET_DATA_DIR)/preset_data_compressed.bin
+rebuilt_ROMs/kn5000_table_data.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/table_data/kn5000_table_data.asm $(DEMO_PRESET_COMPRESSED)
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.p
 	$(ASL) archive/asl/table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
@@ -874,10 +855,6 @@ clean-asl:
 	rm -f part_a.rom part_b.rom
 
 clean-all: clean clean-asl
-
-clean-preset-data:
-	rm -f table_data/includes/preset_data.p
-	rm -f table_data/includes/preset_data.bin
 
 # ============================================================================
 # Effects-DSP (NEC uPD6383GF, IC311) microprogram disassembly tree -- dsp/
