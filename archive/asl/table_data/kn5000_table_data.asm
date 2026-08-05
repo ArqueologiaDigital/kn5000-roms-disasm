@@ -1,12 +1,6 @@
-; NOTE (2026-08): this archived ASL source does NOT currently assemble. Its
-; binclude paths are relative to this directory, which has no includes/ or
-; images/ subdirectory, and it refers to ../maincpu/images/... where the
-; maintained LLVM source uses ../v10/maincpu/images/... -- i.e. it was written
-; for an older layout and never migrated. The authoritative, byte-matching build
-; is table_data/kn5000_table_data.s (make rebuilt_ROMs/kn5000_table_data.llvm.rom).
-; The demo-preset blocks below were updated to stay consistent with it, but could
-; not be verified by assembling.
-;
+; NOTE (2026-08): assemble with `asl -i table_data` so binclude paths resolve
+; against table_data/, exactly as the LLVM build does with `llvm-mc -I table_data`.
+; Verified to rebuild the table data ROM byte-identically.
 	cpu	96c141	; Actual CPU is 94c241f
 	page	0
 	maxmode	on
@@ -356,28 +350,28 @@ BootscreenSlideMarker:
 	db "SLIDE", 000h
 
 Bitmap_1bit_Flash_Memory_Update:	; 9FA156
-	binclude "../maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
 
 Bitmap_1bit_Now_Erasing:		; 9FA3BE
-	binclude "../maincpu/images/Bitmap_1bit_Now_Erasing.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Now_Erasing.bin"
 
 Bitmap_1bit_FD_to_Flash_Memory:		; 9FA626
-	binclude "../maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
 
 Bitmap_1bit_Completed:			; 9FA88E
-	binclude "../maincpu/images/Bitmap_1bit_Completed.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Completed.bin"
 
 Bitmap_1bit_Please_Wait:		; 9FAAF6
-	binclude "../maincpu/images/Bitmap_1bit_Please_Wait.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Please_Wait.bin"
 
 Bitmap_1bit_Change_FD_2_of_2:		; 9FAD5E
-	binclude "../maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
 
 Bitmap_1bit_Illegal_Disk:		; 9FAFC6
-	binclude "../maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
 
 Bitmap_1bit_Turn_On_AGAIN:		; 9FB22E
-	binclude "../maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
+	binclude "../v10/maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 ; Boot initialization data tables (0x9FB496 - 0x9FB4D1)
 ; TODO: determine purpose of these tables

@@ -760,25 +760,30 @@ demo-sidecars: decompress-demo-presets
 
 asl-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 
+# NOTE: this target does not build. The archived ASL source bincludes
+# includes/e0176c_e01f7f.bin, which no longer exists -- the maintained LLVM
+# source (v10/maincpu/kn5000_v10_program.s) disassembles that range instead of
+# embedding it. That is a content divergence, not a path problem. Every other
+# ASL target builds and matches its original ROM byte-for-byte.
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/maincpu/kn5000_v10_program.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.p
-	$(ASL) archive/asl/maincpu/kn5000_v10_program.asm -o rebuilt_ROMs/kn5000_v10_program.rebuilt.p
+	$(ASL) -i v10/maincpu archive/asl/maincpu/kn5000_v10_program.asm -o rebuilt_ROMs/kn5000_v10_program.rebuilt.p
 
 rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/subcpu/kn5000_subprogram_v142.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
-	$(ASL) archive/asl/subcpu/kn5000_subprogram_v142.asm -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
+	$(ASL) -i v142/subcpu archive/asl/subcpu/kn5000_subprogram_v142.asm -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 
 rebuilt_ROMs/kn5000_table_data.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/table_data/kn5000_table_data.asm $(DEMO_PRESET_COMPRESSED)
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.p
-	$(ASL) archive/asl/table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
+	$(ASL) -i table_data archive/asl/table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
 
 rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/subcpu/boot/kn5000_subcpu_boot.asm subcpu/boot/subcpu_boot_data_8000.bin
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
-	$(ASL) archive/asl/subcpu/boot/kn5000_subcpu_boot.asm -o rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
+	$(ASL) -i subcpu/boot archive/asl/subcpu/boot/kn5000_subcpu_boot.asm -o rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.rom: rebuilt_ROMs/kn5000_v10_program.rebuilt.p
 	$(P2BIN) rebuilt_ROMs/kn5000_v10_program.rebuilt.p rebuilt_ROMs/kn5000_v10_program.rebuilt.rom
@@ -798,12 +803,12 @@ rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom: rebuilt_ROMs/kn5000_subcpu_boot.reb
 rebuilt_ROMs/kn5000_custom_data.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/custom_data/kn5000_custom_data.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_custom_data.rebuilt.p
-	$(ASL) archive/asl/custom_data/kn5000_custom_data.asm -o rebuilt_ROMs/kn5000_custom_data.rebuilt.p
+	$(ASL) -i custom_data archive/asl/custom_data/kn5000_custom_data.asm -o rebuilt_ROMs/kn5000_custom_data.rebuilt.p
 
 rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/hdae5000/hd-ae5000_v2_06i.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p
-	$(ASL) archive/asl/hdae5000/hd-ae5000_v2_06i.asm -o rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p
+	$(ASL) -i hdae5000 archive/asl/hdae5000/hd-ae5000_v2_06i.asm -o rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p
 
 rebuilt_ROMs/kn5000_custom_data.rebuilt.rom: rebuilt_ROMs/kn5000_custom_data.rebuilt.p
 	$(P2BIN) rebuilt_ROMs/kn5000_custom_data.rebuilt.p rebuilt_ROMs/kn5000_custom_data.rebuilt.rom
