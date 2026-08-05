@@ -45,6 +45,32 @@ clear are its data.
 | `0x9n` | 5 (repeatable) | note: `pos, note, velocity, dur_ticks, dur_beats` |
 | `0xBn` `0xCn` `0xDn` | 2-5 | not decoded |
 
+### Confirmed from the firmware
+
+The note-event layout is not inferred -- it is read out of the firmware's own event
+queue. `f56EED` parses an event into `0x342D..0x3432`, and `f57040` queues the
+fields in order: status, note, velocity, duration-low, duration-high.
+
+* `0x342F` is the **note**: `f57006` compares it against a note register (`(0x3558) & 0x7F`).
+* `0x3431` is the **duration low byte**: `f5706F` applies an explicit "if zero then one".
+* **96 ticks per beat** is the literal `0x60` in the timing routine `f570BB`.
+
+`data[0]` is the tick within the current beat for *every* event family, not just
+notes -- verified across all 19 songs: 10,330 of 10,330 non-note events have
+`data[0] <= 95`, with zero exceptions.
+
+### Still inferred
+
+* `0xCn` looks like a **program change**: `data[2]` is always 0 (one distinct value
+  in 286 events) and `data[3]` spans 0-127 with 82 distinct values. Not emitted by
+  default -- KN5000 tone numbers are not General MIDI, so emitting them would make
+  playback sound confidently wrong. Use `--program-changes`.
+* `0xBn` looks like a **parameter change**: `data[2]` has only 9 distinct values
+  (max 10), so it is an internal parameter index, *not* a MIDI CC number. No
+  mapping is invented.
+* `0xDn` may be **pitch bend or a centred controller**: `data[1]` takes only 3
+  values (`00`/`40`/`7F`) and `data[2]` clusters tightly around `0x40`.
+
 Timing is **96 ticks per beat**: `pos` is the tick within the current beat and
 `absolute tick = beat * 96 + pos`; `duration = dur_beats * 96 + dur_ticks`. Both
 `pos` and `dur_ticks` are bounded by 95, which is why this is base-96 rather than a
@@ -85,6 +111,30 @@ Caveats, so nothing here is mistaken for decoded fact:
   type `0x0C` parts have a median note range of 82 semitones (vs 39-57 for other
   types) and the highest note counts. That is suggestive, not confirmed. Use
   `--drum-track N` to override per part index.
+
+## Lossless round-trip
+
+Every non-note event is also written verbatim into a **sequencer-specific meta
+event** (`FF 7F <len> <status> <data...>`) at its correct tick, so nothing is
+discarded just because it is not understood yet. Measured over all 19 songs,
+reading the `.mid` files back recovers:
+
+| | recovered |
+|---|---|
+| note events | 32,548 / 32,548 (100%) |
+| other events | 10,800 / 10,800 (100%) |
+
+So the **event stream** is fully recoverable from the MIDI. What is still *not* in
+the `.mid`, and would be needed before MIDI could become the build source:
+
+* the song header `+0x00..+0x800` (track types, present flags, the `+0x30..+0xD0`
+  region) -- not musical data; needs a sidecar or deterministic regeneration
+* the cell allocation and link topology
+* trailing beat markers after the final event of a track
+
+A MIDI -> preset stage would have to reproduce `demo_preset_NN.bin` **byte-for-byte**
+as a build gate; until that passes for all 19, the `.bin` files remain the source of
+truth for reproducing the factory ROM.
 
 ## An easter egg
 

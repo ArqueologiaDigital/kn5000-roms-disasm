@@ -71,28 +71,38 @@ def split_events(stream):
 
 
 def parse_track(song, start_cell):
-    """Return (notes, markers, total_beats).
+    """Return (notes, others, total_beats).
 
-    notes:   list of (tick, note, velocity, duration_ticks)
-    markers: list of (tick, text)
+    notes:  (tick, note, velocity, duration_ticks)   -- firmware-confirmed layout
+    others: (tick, status, data)                     -- every non-note event, verbatim
+
+    Field layout is confirmed from the firmware's own event queue (f57040), which
+    stores status, then note (0x342F, compared against a note register at f57006),
+    then velocity (0x3430), then duration low (0x3431 -- with an explicit "if zero
+    then one") and duration high (0x3432). The 96-ticks-per-beat base is the literal
+    0x60 in the timing routine f570BB.
     """
-    notes, markers, beat = [], [], 0
+    notes, others, beat = [], [], 0
     for st, data in split_events(bytes(cells(song, start_cell))):
         if st == 0x81:
             beat += 1
-        elif st == 0x83:
+            continue
+        if st == 0x83:
             break
-        elif st & 0xF0 == 0x90:
+        # data[0] is the tick within the current beat for EVERY event family
+        # (verified: 100% of 10,330 non-note events have data[0] <= 95).
+        tick = beat * TICKS_PER_BEAT + (data[0] if data else 0)
+        if st & 0xF0 == 0x90:
             # One status byte can introduce several 5-byte note records.
             for k in range(0, len(data) - 4, 5):
                 pos, note, vel, durl, durh = data[k:k + 5]
                 dur = durh * TICKS_PER_BEAT + durl
                 notes.append((beat * TICKS_PER_BEAT + pos, note, vel, max(1, dur)))
-        elif st == 0x82 and len(data) > 8:
-            text = bytes(b for b in data if 32 <= b < 127).strip()
-            if len(text) >= 8:
-                markers.append((beat * TICKS_PER_BEAT, text.decode('ascii')))
-    return notes, markers, beat
+            if (len(data) % 5) and len(data) >= 5:
+                others.append((tick, st, bytes(data)))   # trailing partial record
+        else:
+            others.append((tick, st, bytes(data)))
+    return notes, others, beat
 
 
 def vlq(n):
@@ -143,7 +153,8 @@ def looks_like_preset(song):
     return present > 0
 
 
-def convert(song, bpm=120, drum_tracks=(), title='KN5000 demo song', drum_types=()):
+def convert(song, bpm=120, drum_tracks=(), title='KN5000 demo song', drum_types=(),
+            program_changes=False):
     mask = struct.unpack_from('<H', song, 0x1E)[0]
     tracks_out = []
 
@@ -162,15 +173,24 @@ def convert(song, bpm=120, drum_tracks=(), title='KN5000 demo song', drum_types=
             continue
         start = struct.unpack_from('<H', song, 0xD0 + t * 3 + 1)[0]
         ttype = song[0x20 + t]
-        notes, markers, _beats = parse_track(song, start)
-        if not notes and not markers:
+        notes, others, _beats = parse_track(song, start)
+        if not notes and not others:
             continue
 
         ch = 9 if (t in drum_tracks or ttype in drum_types) else t
         ev = [(0, 0, meta_text(0x03, 'Part %d (type 0x%02X)%s'
                                % (t, ttype, ' [drums]' if ch == 9 else '')))]
-        for tick, text in markers:
-            ev.append((tick, 1, meta_text(0x06, text)))
+        for tick, st, data in others:
+            if st == 0x82:
+                text = bytes(b for b in data if 32 <= b < 127).strip()
+                if len(text) >= 8:
+                    ev.append((tick, 1, meta_text(0x06, text.decode('ascii'))))
+            if program_changes and st & 0xF0 == 0xC0 and len(data) >= 4:
+                ev.append((tick, 1, bytes([0xC0 | ch, data[3] & 0x7F])))
+            # Preserve EVERY non-note event verbatim in a sequencer-specific meta
+            # event (FF 7F) so a MIDI -> preset converter can round-trip losslessly.
+            raw = bytes([st]) + data
+            ev.append((tick, 1, b'\xFF\x7F' + vlq(len(raw)) + raw))
         for tick, note, vel, dur in notes:
             note &= 0x7F
             ev.append((tick, 3, bytes([0x90 | ch, note, vel & 0x7F])))
@@ -190,6 +210,11 @@ def main():
                     help='tempo (the ROM tempo field is not decoded yet; default 120)')
     ap.add_argument('--drum-track', type=int, action='append', default=[],
                     help='route this part index to MIDI channel 10 (repeatable)')
+    ap.add_argument('--program-changes', action='store_true',
+                    help='emit MIDI Program Change from 0xCn events. OFF by default: the '
+                         'value looks like an instrument number (data[2] is always 0, '
+                         'data[3] spans 0-127) but KN5000 tone numbers are NOT General '
+                         'MIDI, so this makes playback sound confidently wrong.')
     ap.add_argument('--drum-type', type=lambda x: int(x, 0), action='append', default=[],
                     help='route parts with this type byte to MIDI channel 10. Type 0x0C is '
                          'the strongest percussion candidate (median note range 82 vs 39-57 '
@@ -209,7 +234,8 @@ def main():
             rc = 1
             continue
         mid, mask = convert(song, args.bpm, tuple(args.drum_track), title=name,
-                            drum_types=tuple(args.drum_type))
+                            drum_types=tuple(args.drum_type),
+                            program_changes=args.program_changes)
         out = os.path.join(args.output_dir, name + '.mid')
         with open(out, 'wb') as f:
             f.write(mid)
