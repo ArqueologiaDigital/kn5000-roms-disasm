@@ -745,7 +745,7 @@ decompress-demo-presets: original_ROMs/kn5000_table_data.rom
 # Verify every preset recompresses byte-identically to the factory stream.
 verify-demo-presets: $(DEMO_PRESET_COMPRESSED)
 	@for i in $(DEMO_PRESET_IDS); do \
-		cmp -s $(DEMO_PRESET_DIR)/demo_preset_$$i_compressed.bin \
+		cmp -s $(DEMO_PRESET_DIR)/demo_preset_$${i}_compressed.bin \
 		       original_ROMs/demo_preset_$${i}_compressed.original.bin \
 		  && echo "  preset $$i OK" || echo "  preset $$i MISMATCH"; \
 	done
