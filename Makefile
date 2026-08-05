@@ -760,11 +760,6 @@ demo-sidecars: decompress-demo-presets
 
 asl-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 
-# NOTE: this target does not build. The archived ASL source bincludes
-# includes/e0176c_e01f7f.bin, which no longer exists -- the maintained LLVM
-# source (v10/maincpu/kn5000_v10_program.s) disassembles that range instead of
-# embedding it. That is a content divergence, not a path problem. Every other
-# ASL target builds and matches its original ROM byte-for-byte.
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: archive/asl/tmp94c241.inc archive/asl/maincpu/kn5000_v10_program.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.p
