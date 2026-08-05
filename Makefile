@@ -14,7 +14,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
-.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi
+.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars verify-midi-roundtrip
 .PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
@@ -744,6 +744,25 @@ demo-midi:
 	python3 scripts/build/demo_preset_to_midi.py \
 		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
 		-o $(DEMO_PRESET_MIDI_DIR) --drum-type 0x0C
+
+# Sidecars carry everything a MIDI file cannot: the song header, cell allocation
+# and link topology, padding, the exact stream order, and the handful of durations
+# MIDI cannot represent. Regenerate only if the extraction itself changes.
+DEMO_PRESET_SIDECAR_DIR=$(DEMO_PRESET_DIR)/sidecar
+demo-sidecars:
+	python3 scripts/build/preset_sidecar.py \
+		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
+		-o $(DEMO_PRESET_SIDECAR_DIR)
+
+# BUILD GATE: rebuilding each preset from its .mid + sidecar must reproduce the
+# checked-in .bin byte-for-byte. Fails loudly rather than shipping different music.
+verify-midi-roundtrip:
+	@rc=0; for i in $(DEMO_PRESET_IDS); do \
+		python3 scripts/build/midi_to_preset.py \
+			--midi $(DEMO_PRESET_MIDI_DIR)/demo_preset_$$i.mid \
+			--sidecar $(DEMO_PRESET_SIDECAR_DIR)/demo_preset_$$i.json \
+			--verify $(DEMO_PRESET_DIR)/demo_preset_$$i.bin || rc=1; \
+	done; exit $$rc
 
 # Regenerate the decompressed sources + the recompression references from the
 # factory ROM. Only needed if the extraction itself changes -- the results are

@@ -132,9 +132,34 @@ the `.mid`, and would be needed before MIDI could become the build source:
 * the cell allocation and link topology
 * trailing beat markers after the final event of a track
 
-A MIDI -> preset stage would have to reproduce `demo_preset_NN.bin` **byte-for-byte**
-as a build gate; until that passes for all 19, the `.bin` files remain the source of
-truth for reproducing the factory ROM.
+## MIDI -> preset (the reverse stage)
+
+This now exists and passes for all 19 songs:
+
+```
+make demo-sidecars           # regenerate the sidecars (only if extraction changes)
+make verify-midi-roundtrip    # BUILD GATE: .mid + sidecar -> .bin, byte-for-byte
+```
+
+`midi_to_preset.py` takes note values (pitch, velocity, in-beat position, duration)
+from the **MIDI**, so DAW edits are honoured. The sidecar supplies everything a MIDI
+file cannot represent:
+
+* the song header `+0x00..+0x800`, cell allocation and link topology, cell prefix
+  bytes, unreached cells and padding (51-91% of each `.bin` comes from the MIDI;
+  the rest is sidecar residue)
+* the exact stream order -- the factory streams are **not** strictly time-sorted
+  (~200 of 43,348 events, e.g. two notes at position `0x5F` then `0x5E` in one beat)
+* which status bytes were explicit vs **running status** (`81 22 4C 6C 0C 00` is a
+  beat marker followed by a note reusing the previous `0x9n`)
+* 320 of 32,575 note durations (0.98%) that MIDI cannot round-trip: same-pitch
+  overlaps on one channel (note-off pairing is FIFO, so crossing durations come
+  back swapped), and a few records whose duration low byte exceeds 95, which the
+  base-96 split cannot regenerate
+
+The `.bin` files remain the checked-in source of truth for reproducing the factory
+ROM; the MIDI path is what makes the songs editable, gated so it can never silently
+diverge.
 
 ## An easter egg
 

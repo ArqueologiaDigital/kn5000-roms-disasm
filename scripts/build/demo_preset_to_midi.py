@@ -53,21 +53,54 @@ def cells(song, start):
         c = nxt
 
 
-def split_events(stream):
-    """Split a byte stream into (status, data[]) pairs using the bit-7 rule."""
+def split_events_ex(stream):
+    """Split a byte stream into (status, data, status_was_explicit) triples.
+
+    The stream uses MIDI-style RUNNING STATUS: a data run with no preceding status
+    byte repeats the last non-structural status. 0x81 (beat) and 0x83 (end) are
+    structural -- they carry no data and do not clear the running status, so
+    `81 22 4C 6C 0C 00` is a beat marker followed by a note that reuses the
+    previous 0x9n status. Note records are 5 bytes, so a run is split accordingly.
+    """
     out, i, n = [], 0, len(stream)
+    running = None
     while i < n and not (stream[i] & 0x80):
-        i += 1
+        i += 1                                  # leading data with no status
     while i < n:
-        st = stream[i]
-        i += 1
+        b = stream[i]
+        if b & 0x80:
+            i += 1
+            if b in (0x81, 0x83):
+                out.append((b, b'', True))
+                if b == 0x83:
+                    return out
+                continue
+            running = st = b
+            explicit = True
+        else:
+            st = running
+            explicit = False
+            if st is None:
+                i += 1
+                continue
         start = i
         while i < n and not (stream[i] & 0x80):
             i += 1
-        out.append((st, stream[start:i]))
-        if st == 0x83:
-            break
+        data = stream[start:i]
+        if st & 0xF0 == 0x90 and len(data) >= 5:
+            for k in range(0, len(data) - 4, 5):
+                out.append((st, data[k:k + 5], explicit and k == 0))
+            rem = len(data) % 5
+            if rem:
+                out.append((st, data[len(data) - rem:], False))
+        else:
+            out.append((st, data, explicit))
     return out
+
+
+def split_events(stream):
+    """Pairs-only view of split_events_ex, for callers that ignore running status."""
+    return [(st, d) for st, d, _ in split_events_ex(stream)]
 
 
 def parse_track(song, start_cell):
@@ -92,14 +125,10 @@ def parse_track(song, start_cell):
         # data[0] is the tick within the current beat for EVERY event family
         # (verified: 100% of 10,330 non-note events have data[0] <= 95).
         tick = beat * TICKS_PER_BEAT + (data[0] if data else 0)
-        if st & 0xF0 == 0x90:
-            # One status byte can introduce several 5-byte note records.
-            for k in range(0, len(data) - 4, 5):
-                pos, note, vel, durl, durh = data[k:k + 5]
-                dur = durh * TICKS_PER_BEAT + durl
-                notes.append((beat * TICKS_PER_BEAT + pos, note, vel, max(1, dur)))
-            if (len(data) % 5) and len(data) >= 5:
-                others.append((tick, st, bytes(data)))   # trailing partial record
+        if st & 0xF0 == 0x90 and len(data) == 5:
+            pos, note, vel, durl, durh = data
+            dur = durh * TICKS_PER_BEAT + durl
+            notes.append((beat * TICKS_PER_BEAT + pos, note, vel, max(1, dur)))
         else:
             others.append((tick, st, bytes(data)))
     return notes, others, beat
