@@ -1,0 +1,791 @@
+# region 14: 0x038CF9..0x03A932
+# The operand-decoder library of the DSP parameter BYTE-CODE INTERPRETER: 27 leaf routines
+# that each pull one field out of a packed parameter stream, run it through a fixed curve /
+# interpolation / floating-point formula, and hand the resulting DSP coefficient back to the
+# interpreter arm that called them.  Plus the four DSP_State_* routines that own the 0x91-word
+# DSP configuration image and hand it to a background task.  No hardware is touched here except
+# by DSP_TuneOffset_WriteSequence and DSP_BiquadWarp_FP, which emit through DSP_DispatchCommand
+# / DSP_DispatchData / DSP_WriteOscParam.
+#
+# INTEGRATION NOTE -- READ FIRST, IT SAVES A WASTED PASS
+#   The AUTHORITATIVE LLVM build already carries a real name for EVERY address in this range:
+#   115 symbols, ZERO LABEL_ placeholders (verified with
+#     llvm-nm -n rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf
+#   after `make llvm-all` + `python3 scripts/build/compare_roms.py` = 100.00% on all 14 ROMs).
+#   symbols/subcpu_symbols_reference.txt is the file that LAGS: all 115 of its entries in this
+#   range are still LABEL_xxxxxx.  Those need no thought -- copy the ELF name verbatim; the
+#   `replaces=` field below gives the exact placeholder for each.
+#   What this file CONTRIBUTES is (a) doc headers for the existing names, (b) exactly ONE
+#   genuinely new label (0x038E10, the top of a task's forever-loop, which is a branch target
+#   with no symbol in either source), and (c) the decoded opcode->decoder map and the decoded
+#   curve formulas.  NOTHING in this file renames an existing non-LABEL_ symbol; the names I
+#   believe are actively WRONG are listed, with evidence, under [UNCERTAIN].
+#
+# HOW THE REGION IS REACHED (all verified from the disassembly)
+#   DSP_Translator_ReadOpcode (0x03CB18) reads one opcode byte from the effect-program stream.
+#   Opcodes 0x61..0x79 index a signed word table at 0x014745 (25 entries) added to base
+#   0x03CB8E; opcodes 0x21 / 0x24 / 0x40 are special-cased ahead of the table; 0x7A terminates
+#   (DSP_Translator_CheckEnd, 0x03CBB6).  Decoded map, opcode -> arm -> decoder in THIS region:
+#     0x61 0x03CB8E DSP_State_LoadAndApply_InlineData   -> DSP_WriteOscParam
+#     0x62 0x03CBDE DSP_ParamFetch_SingleTable          -> DSP_WriteOscParam
+#     0x63 0x03CBFA DSP_ParamFetch_AlgoTypeTable        -> DSP_WriteFreqParam_AlgoType
+#     0x64 0x03CC33 DSP_PitchParam_Scale                -> DSP_WriteFreqParam
+#     0x65 0x03CC50 DSP_VolumeParam_Scale               -> DSP_WriteOscParam
+#     0x66 0x03CC6D DSP_ParamInterp_2Point              -> DSP_WriteOscParam
+#     0x67 0x03CC8A DSP_ParamInterp_FPScale             -> DSP_WriteOscParam_Offset
+#     0x68 0x03CCAB DSP_ParamInterp_Div0xB4             -> DSP_WriteFreqParam
+#     0x69 0x03CCC8 DSP_VolumeCurve_FP                  -> DSP_WriteOscParam
+#     0x6A 0x03CCE5 DSP_FreqCurve_FP                    -> DSP_WriteFreqParam
+#     0x6B 0x03CD02 DSP_FreqInterp_2Point               -> DSP_WriteFreqParam
+#     0x6C 0x03CD1F DSP_ParamInterp_3Point_WithOffset   -> DSP_WriteFreqParam
+#     0x6D 0x03CD3F DSP_ReverbCurve_FP                  -> DSP_WriteOscParam
+#     0x6E 0x03CD5C DSP_ParamInterp_FPComplex           -> DSP_WriteOscParam
+#     0x6F 0x03CD79 DSP_PanCurve_PiecewiseLin           -> DSP_WriteOscParam
+#     0x70 0x03CD96 DSP_BiquadCoeff_Compute (0x03A933, region 15; calls DSP_FilterLUT_Fetch)
+#     0x71 0x03CDB9 DSP_DetuneCurve_SignedFP            -> DSP_WriteOscParam
+#     0x72 0x03CDD6 DSP_BiquadWarp_FP  (emits by itself)
+#     0x73 0x03CDF3 DSP_ParamInterp_Div0xC6             -> DSP_WriteOscParam
+#     0x74 0x03CE10 DSP_WriteLUTParamSet (0x03869B, outside)
+#     0x75 0x03CE25 DSP_ParamEQ_Curve_FP                -> DSP_WriteOscParam
+#     0x76 0x03CE42 DSP_SOS_Coeff_Compute (0x03B646, outside)
+#     0x77 0x03CE65 DSP_ParamInterp_2Point_B            -> DSP_WriteOscParam
+#     0x78 0x03CE82 DSP_VolScale_B                      -> DSP_WriteOscParam
+#     0x79 0x03CC16 DSP_AlgoParam_Decode                -> DSP_WriteOscParam
+#     0x21 0x03CEE2 DSP_ParamInterp_2Point              -> DSP_WriteOscParam
+#     0x24 0x03CEBC DSP_ParamInterp_MultiStep           -> DSP_WriteOscParam
+#     0x40 0x03CE9F DSP_PanScale_Simple                 -> DSP_WriteOscParam
+#
+# THE PARAMETER STREAM FORMAT (proved from DSP_StreamDecode_3ByteWord, 0x03CF07)
+#   A "value" in the stream is THREE bytes b0,b1,b2 assembled as
+#       v = (b0<<24) | (b1<<16) | (b2<<8)          (24-bit signed, left-justified in 32 bits)
+#   and the routine returns the advanced cursor in XHL.  That is why every decoder here does
+#   `sra 8,XWA` to get the 24-bit value back, and `sra 8 / and 0xFF` to get just b0.
+#   Every decoder in this region takes XWA = address of the caller's stream CURSOR (a long in
+#   the interpreter's frame), reads *cursor, consumes fields, and writes the advanced cursor
+#   back through that same pointer before returning.  The scalar result is returned in XHL.
+#
+# SHIFT-COUNT-0 WARNING (this bit everything below)
+#   On TLCS-900H a shift count field of 0 means SIXTEEN.  `sla 0x07,XBC` + `sla 0x00,XBC` is
+#   therefore XBC<<23, not XBC<<7.  Confirmed three independent ways: (a) the alternate arms of
+#   the same routine spell the same thing as `sla 0x0f` + a later `sla 0x08`; (b)
+#   DSP_StreamDecode_3ByteWord uses `sla 8` + `sla 0` to build a <<24 field mask 0xFF000000;
+#   (c) it is the only reading under which the piecewise curves below join up continuously.
+#   The <<23 is a Q23 fixed-point scaling: 2^23 == 1.0 in the DSP's coefficient format.
+#
+# EXTERNAL TABLES THIS REGION READS (all in the program image, outside the region)
+#   0x012397  27 x float32  ISO 1/3-octave centre frequencies, 40 Hz .. 16 kHz  (EQ freq LUT)
+#   0x012403  32 x float32  0.1,0.2..1.0,1.5,2.0..4.0,5.0..20.0                 (EQ Q/BW LUT)
+#   0x012483  100 x uint32  algorithm-type-0 coefficient table
+#   0x012613  100 x uint32  algorithm-type-1 coefficient table
+#   0x0127A3  128 x uint32  algorithm-type-2 coefficient table (also used by AlgoParam_Decode)
+#   0x0129A3  100 x uint32  coefficient table for opcode 0x61
+#   0x012B33  100 x uint32  coefficient table for opcode 0x62
+#   0x012CC3..0x012F57      the float32 / float64 constant pool for every FP curve below.
+#                           Recurring values: 44100 (the sample rate), 441000, 220500, 1000,
+#                           99, 2, 8388608 (=2^23), 32768, 65536, 0.5, -12.
+#   The 100-entry stride and the recurring /99 and /198 divisors say the user-facing parameter
+#   range on this instrument is 0..99.
+#
+# NO HARDWARE IS TOUCHED except:
+#   DSP_TuneOffset_WriteSequence -> DSP_DispatchCommand/DSP_DispatchData (0x036A2E/0x036A4F),
+#   DSP_BiquadWarp_FP            -> DSP_WriteOscParam (0x0387E6) and
+#                                   DSP_WriteCoeffData_5B_Direct (0x0388B3).
+#   Both funnel into DSP_Send_Command / DSP_Send_Data, which select DSP1 (uPD6383 / IC311) when
+#   the chip selector is 0 and DSP2 (MN19413 / IC310) when it is 1.  See [UNCERTAIN] for the
+#   bug-relevant note about who can block.
+
+[LABEL] 0x038CF9 DSP_TuneOffset_WriteSequence  replaces=LABEL_038CF9  confidence=high
+; Tail of the unnamed routine that starts at 0x038CBE (which has NO symbol in either source --
+; see [UNCERTAIN]).  Emits a fixed 15-transfer packet to the DSP selected by IZ:
+;   cmd 0x01, data 0x01, 0x60, 0x00, 0x00,
+;   data ((t>>4)&0x0F)+0x10, data (t<<4)&0xF0,     t = the byte fetched by DSP_TableWalk_Search
+;   data 0x00, data 0x0A,
+;   data (P>>17)&0x7F, data (P>>9)&0xFF, data (P>>1)&0xFF, data ((P<<7)&0x80)+0x15,
+;   cmd 0x03
+; where P is the 32-bit parameter the caller passed in XWA.  Note the coefficient wire format:
+; a 24-bit value split MSB-first over four bytes as P[23:17] / P[16:9] / P[8:1] / P[0]<<7, with
+; 0x15 OR-ed into the last byte as a tag.  The word at (XSP+4) accumulates the status returned
+; by each DSP_DispatchCommand / DSP_DispatchData call and is the routine's return value in HL.
+; Falls in from DSP_TuneOffset_Increment (0x038CF6) and from the +/-1 adjustment above it.
+
+[ROUTINE] 0x038DEF DSP_State_DmaLoadPresets  replaces=LABEL_038DEF  confidence=high
+; Seeds the DSP configuration-buffer POOL and starts the task that consumes it.
+;   TaskSched_SpawnTask(3)
+;   TaskMsgQ_Send(queue 1, 0x045324)
+;   TaskMsgQ_Send(queue 1, 0x045446)     [tail-jump]
+; i.e. exactly TWO 0x122-byte buffers are ever in circulation.  Called once, from DSP_Reset
+; (0x0360F9).  Task 3's body is the loop at 0x038E0F, reached through the thunk
+; DSP_WaitForTaskSlot_Data (0x036327) = `jp 0x038E0F`.
+; The pool size of two is the reason DSP_State_ApplyBuf can wedge -- see [UNCERTAIN].
+
+[ROUTINE] 0x038E0F DSP_State_InlineData  replaces=LABEL_038E0F  confidence=high
+; TASK BODY (task id 3), not data -- the name is wrong, see [UNCERTAIN].  Never returns:
+;   forever {
+;     XIZ = TaskMsgQ_Receive(queue 2);        // BLOCKING, no timeout
+;     DSP_State_ApplyAll(XIZ);                // 0x036E3D: pushes the image to the DSPs
+;     XIZ->[0x0120] = 0;                      // clear the "request pending" flag
+;     TaskMsgQ_Send(queue 1, XIZ);            // return the buffer to the free pool
+;   }
+; The only producer for queue 2 is DSP_State_ApplyBuf (0x038E31); the only consumer of queue 1
+; is DSP_State_ApplyBuf.  Entered through the thunk at 0x036327.
+
+[LABEL] 0x038E10 DSP_State_ApplyTask_Loop  confidence=high
+; Top of the task's forever-loop; target of the `jr T,0x038E10` at 0x038E2F.  This is the only
+; branch target in the whole region with no symbol in the LLVM build -- genuinely new.
+
+[ROUTINE] 0x038E31 DSP_State_ApplyBuf  replaces=LABEL_038E31  confidence=high
+; Hands the caller's 0x91-word (290-byte) DSP configuration image to the apply task.
+; In: XWA = address of the caller's image (callers pass 0x00448E, the live config block).
+; Grabs a buffer:  XHL = TaskMsgQ_TryReceive(queue 2)   -- non-blocking; if a request is still
+; queued it is RE-USED, i.e. the older request is silently overwritten.
+;                  if zero, XHL = TaskMsgQ_Receive(queue 1)  -- BLOCKING, NO TIMEOUT.
+; The chosen buffer address is parked in the global at 0x004A3A.  Then ldirw 0x91 words from
+; the caller's image into it, set buf[0x0120] = 1 ("request pending"), TaskMsgQ_Send(queue 2).
+; Callers: DSP_ApplyAlgoForVoiceType (0x03608C), DSP_ApplyConfig (0x03616A, three call sites)
+; and DSP_ReconfigAndStatus (0x0361C5).
+; ** The blocking Receive at 0x038E44 is the one unbounded wait in this region. **
+
+[LABEL] 0x038E4C DSP_State_ApplyBuf_DoCopy  replaces=LABEL_038E4C  confidence=high
+; Join point: a buffer has been obtained (from either queue); copy, flag, and post it.
+
+[ROUTINE] 0x038E6E DSP_State_LoadAndApplyAll  replaces=LABEL_038E6E  confidence=high
+; Synchronous variant used only at reset (called from 0x0360EF).  Copies the caller's image
+; (XWA) straight into the fixed buffer 0x045324, parks that address in the global 0x004A3E,
+; sets buf[0x0120] = 1, calls DSP_State_ApplyAll (0x036E3D) INLINE on the caller's stack -- no
+; task, no message queue -- then clears buf[0x0120] and returns.  This is the path that cannot
+; block, which is why reset uses it.
+
+[ROUTINE] 0x038E9F DSP_State_LoadAndApply_InlineData  replaces=LABEL_038E9F  confidence=high
+; NOT data -- a five-instruction table fetch, twin of DSP_ParamFetch_SingleTable.  The name is
+; wrong (see [UNCERTAIN]).
+;   XHL = *(uint32*)(0x0129A3 + 4*XBC)
+; XBC is the 0..99 parameter value; the table has 100 entries.  This is the decoder for
+; byte-code opcode 0x61 (arm 0x03CB8E), whose result goes straight to DSP_WriteOscParam.
+
+[ROUTINE] 0x038EAC DSP_ParamFetch_SingleTable  replaces=LABEL_038EAC  confidence=high
+; XHL = *(uint32*)(0x012B33 + 4*XBC).  100-entry table; XBC = 0..99 parameter value.
+; Decoder for opcode 0x62.  The table is monotonically increasing and roughly exponential
+; (0, 74, 83, 93, 105, 118, 132, 148, ... 4194304, 4706086, 5280316, 5924612), i.e. a
+; log-spaced Q23 coefficient ladder ending just under 2^23 * 0.706.
+
+[ROUTINE] 0x038EB9 DSP_ParamFetch_AlgoTypeTable  replaces=LABEL_038EB9  confidence=high
+; Same idea as above but the table is chosen by an algorithm-type byte read from the stream.
+; In:  XWA = address of the caller's stream cursor, XBC = 0..99 parameter value.
+; Out: XHL = the 32-bit coefficient; the cursor is advanced by ONE byte (the type byte).
+;   type 0 -> 0x012483[XBC]   (100 entries)
+;   type 1 -> 0x012613[XBC]   (100 entries)
+;   type 2 -> 0x0127A3[XBC]   (128 entries)
+;   anything else -> XHL is left UNDEFINED (fall straight through to the epilogue).
+; Decoder for opcode 0x63; result goes to DSP_WriteFreqParam_AlgoType (0x03846C).
+
+[LABEL] 0x038ED7 DSP_ParamFetch_AlgoType1  replaces=LABEL_038ED7  confidence=high
+; type == 1 arm: fetch from the 0x012613 table.
+
+[LABEL] 0x038EE5 DSP_ParamFetch_AlgoType2  replaces=LABEL_038EE5  confidence=high
+; type == 2 arm: fetch from the 0x0127A3 table.
+
+[LABEL] 0x038EF1 DSP_ParamFetch_AlgoTypeReturn  replaces=LABEL_038EF1  confidence=high
+; Common epilogue: advance the caller's cursor past the type byte and return.
+
+[ROUTINE] 0x038EF6 DSP_AlgoParam_Decode  replaces=LABEL_038EF6  confidence=medium
+; Decoder for opcode 0x79.  Reads a type byte from the stream, fetches 0x0127A3[XBC], and runs
+; it through the double-precision helpers before converting back to an integer.
+; In: XWA = &cursor, XBC = 0..99 parameter value.  Out: XHL = 32-bit result; cursor += 1.
+;   type != 1 : the fetched word is two's-complement NEGATED first, then
+;               FP_SP_CallWithBuf8 -> FP_DP_NegMantissaLS -> FP_DP_Add_Outer(const 0x012CC3)
+;               -> FP_DP_DecodeToInt
+;   type == 1 : same chain, no negation, constant 0x012CCB
+; Both constants decode as the double 0.552.  I have NOT proved the exact arithmetic because
+; the FP helper names are suspect (see [UNCERTAIN]); the control flow and the operands are
+; certain, the formula is not.
+
+[LABEL] 0x038F50 DSP_AlgoParam_Decode_Type1  replaces=LABEL_038F50  confidence=high
+; type == 1 arm: no negation, constant pool entry 0x012CCB.
+
+[LABEL] 0x038F86 DSP_AlgoParam_Decode_Return  replaces=LABEL_038F86  confidence=high
+; Advance the caller's cursor by one byte, load the result into XHL, unwind the 0x1C-byte frame.
+
+[ROUTINE] 0x038F9B DSP_PitchParam_Scale  replaces=LABEL_038F9B  confidence=high
+; Decoder for opcode 0x64; result goes to DSP_WriteFreqParam (0x038539).
+; In: XWA = &cursor, XBC = 0..99 parameter value.
+; Consumes ONE 3-byte stream value v (DSP_StreamDecode_3ByteWord); takes only its top byte
+; d = (v>>8) & 0xFF, then
+;       XHL = ((XBC << 23) / d) - 0x00800000
+; i.e. a Q23 signed quantity centred on zero: parameter/d relative to 1.0, minus 1.0.  The
+; `sla 5 / sla 0` pair is <<21 and the later `sla 2` completes the <<23 after the divide.
+; Writes the advanced cursor back through XWA.
+
+[ROUTINE] 0x038FE8 DSP_VolumeParam_Scale  replaces=LABEL_038FE8  confidence=high
+; Decoder for opcode 0x65 (result -> DSP_WriteOscParam).  BYTE-FOR-BYTE IDENTICAL to
+; DSP_VolScale_B (0x03A282); see [UNCERTAIN] about the "Volume" in the name.
+; In: XWA = &cursor, XBC = 0..99 parameter value.  Out: XHL = Q23 coefficient; cursor += 1.
+; Consumes ONE byte (the curve family) and evaluates a continuous 4- or 5-segment piecewise
+; rational curve.  With f = 44100 * numerator / denominator (44100 == 0xAC44 == the sample
+; rate, and the <<23 is the Q23 scaling):
+;   family 0  (divisors 441000 = 44100*10 and 220500 = 44100*5)  -- 0.1 Hz steps then 0.2 Hz:
+;       x<=50  f = x/10           x<=75  f = (x-25)/5
+;       x<=88  f = (4x-250)/5     else   f = (9x-690)/5          => 0 .. 40.2 Hz
+;   family 1  (divisor 44100)     -- direct Hz:
+;       x<=10  f = x             x<=19  f = 10x-90    x<=64  f = 20x-280
+;       x<=87  f = 400x-24800    else   f = 800x-59600            => 0 .. 19600 Hz
+;   family 2  (denominator varies with x, so this is a warped / bilinear mapping):
+;       x<=50  f = 44100*x/(4000-2x)          x<=75  f = 44100*(x-25)/(2050-2x)
+;       x<=88  f = 44100*(4x-250)/(2500-8x)   else   f = 44100*(9x-690)/(3380-18x)
+;                                                                => 0 .. ~5.5 kHz
+; Families 0 and 2 are continuous at every knot; family 1 has a 200 Hz step at x=64.
+; Any family byte other than 0/1/2 falls through with XHL undefined.
+
+[LABEL] 0x039021 DSP_VolScale_Algo0_Seg2  replaces=LABEL_039021  confidence=high
+; family 0, 50 < x <= 75: ((x-25)<<23) / 220500.
+
+[LABEL] 0x039043 DSP_VolScale_Algo0_Seg3  replaces=LABEL_039043  confidence=high
+; family 0, 75 < x <= 88: ((4x-250)<<23) / 220500.
+
+[LABEL] 0x039068 DSP_VolScale_Algo0_Seg4  replaces=LABEL_039068  confidence=high
+; family 0, x > 88: ((9x-690)<<23) / 220500.
+
+[LABEL] 0x039087 DSP_VolScale_Algo1_Seg1  replaces=LABEL_039087  confidence=high
+; family 1 entry, x <= 10: (x<<23) / 44100.
+
+[LABEL] 0x0390A3 DSP_VolScale_Algo1_Seg2  replaces=LABEL_0390A3  confidence=high
+; family 1, 10 < x <= 19: ((10x-90)<<23) / 44100.
+
+[LABEL] 0x0390CC DSP_VolScale_Algo1_Seg3  replaces=LABEL_0390CC  confidence=high
+; family 1, 19 < x <= 64: ((20x-280)<<15) / 44100, then <<8 (the split <<23).
+
+[LABEL] 0x0390F6 DSP_VolScale_Algo1_Seg4  replaces=LABEL_0390F6  confidence=high
+; family 1, 64 < x <= 87: ((400x-24800)<<15) / 44100, then <<8.  Uses FP_MulAccum64 for 400*x.
+
+[LABEL] 0x039123 DSP_VolScale_Algo1_Seg5  replaces=LABEL_039123  confidence=high
+; family 1, x > 87: ((800x-59600)<<15) / 44100, then <<8.  Top of range = 19.6 kHz.
+
+[LABEL] 0x039148 DSP_VolScale_Algo2_Seg1  replaces=LABEL_039148  confidence=high
+; family 2 entry, x <= 50: (x<<23) / (4000 - 2x).  Note the varying denominator.
+
+[LABEL] 0x03916C DSP_VolScale_Algo2_Seg2  replaces=LABEL_03916C  confidence=high
+; family 2, 50 < x <= 75: ((x-25)<<23) / (2050 - 2x).
+
+[LABEL] 0x03919B DSP_VolScale_Algo2_Seg3  replaces=LABEL_03919B  confidence=high
+; family 2, 75 < x <= 88: ((4x-250)<<23) / (2500 - 8x).
+
+[LABEL] 0x0391CE DSP_VolScale_Algo2_Seg4  replaces=LABEL_0391CE  confidence=high
+; family 2, x > 88: ((9x-690)<<23) / (3380 - 18x).
+
+[LABEL] 0x0391FD DSP_VolScale_Return  replaces=LABEL_0391FD  confidence=high
+; Common epilogue: write the advanced cursor back through the caller's pointer and return.
+; NOTE the fall-through hazard: on an unrecognised family byte XHL is whatever the callee
+; chain left there.
+
+[ROUTINE] 0x039206 DSP_ParamInterp_2Point  replaces=LABEL_039206  confidence=high
+; Decoder for opcodes 0x66 and 0x21 (result -> DSP_WriteOscParam).  Plain linear interpolation
+; between two 24-bit endpoints held in the stream.
+; In: XWA = &cursor, XBC = 0..99 blend value.  Out: XHL; cursor += 6 (two 3-byte values).
+;       A = value[0], B = value[1]
+;       XHL = (A>>8) + ((((B - A) >> 8) * XBC) / 99)
+; The >>8 undoes the left-justification applied by DSP_StreamDecode_3ByteWord; the /99 (0x63)
+; is the 0..99 parameter normalisation.
+; BYTE-FOR-BYTE IDENTICAL to DSP_FreqInterp_2Point (0x0394CD) and DSP_ParamInterp_2Point_B
+; (0x03A22A) -- three copies of the same 0x58-byte function, verified by memcmp.
+
+[ROUTINE] 0x03925E DSP_ParamInterp_FPScale  replaces=LABEL_03925E  confidence=high
+; Decoder for opcode 0x67; result -> DSP_WriteOscParam_Offset (0x038922).
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 3.
+;       base = (value[0] >> 8) & 0xFF
+;       XHL  = (XBC * 44100) / 1000 + base
+; 44100/1000 = 44.1 samples per millisecond, so this is "base plus XBC milliseconds expressed
+; in samples at the 44.1 kHz DSP rate".
+
+[ROUTINE] 0x0392AC DSP_ParamInterp_Div0xB4  replaces=LABEL_0392AC  confidence=high
+; Decoder for opcode 0x68; result -> DSP_WriteFreqParam.
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 3.
+;       XHL = (XBC * ((value[0] >> 8) & 0xFF)) / 180
+; The /180 (0xB4) rather than /99 is unusual -- 180 reads as degrees, which would make this a
+; phase parameter, but I have not confirmed that from the DSP side.
+
+[ROUTINE] 0x0392F2 DSP_VolumeCurve_FP  replaces=LABEL_0392F2  confidence=medium
+; Decoder for opcode 0x69; result -> DSP_WriteOscParam.  Takes NO stream field -- it works
+; purely on XBC (the 0..99 value), which is stashed at (XSP+0x40) and converted to float by
+; FP_SP_CallWithBuf8.
+; Two branches on the value: x <= 75 (0x4B) uses the constant group at 0x012CD3..0x012CE7
+; (30, 44100, 3307500 = 44100*75, 75, 1800, and the double 2.0); x > 75 uses 0x012CEF..0x012D03
+; (30, 44100, 65091600, 24, 576, 2.0).  Both branches end in the same five-push call to
+; VoiceFloat_CompareAndConvert with the double 2.0 as one operand -- which is almost certainly
+; pow(2.0, y) (see [UNCERTAIN]) -- then FP_DP_NormalizeMantissa, then a shared finalisation.
+; Frame is 0x44 bytes; returns XHL = the 32-bit result read back from (XSP+0x38).
+; I am naming the SHAPE (two-range exponential curve driven by the sample rate 44100) with
+; confidence; I am NOT claiming the routine controls "volume".
+
+[LABEL] 0x039391 DSP_VolumeCurve_FP_HighRange  replaces=LABEL_039391  confidence=high
+; x > 75 arm; constant group 0x012CEF..0x012D03.
+
+[LABEL] 0x03941B DSP_VolumeCurve_FP_Finalize  replaces=LABEL_03941B  confidence=high
+; Shared tail: FP_SP_Add_Outer with the constant at 0x012D0B, then FP_SP_Decode_ReadSign to
+; produce the integer result at (XSP+0x38); unwind the 0x44-byte frame.
+
+[ROUTINE] 0x03943B DSP_FreqCurve_FP  replaces=LABEL_03943B  confidence=high
+; Decoder for opcode 0x6A; result -> DSP_WriteFreqParam.  Despite the _FP suffix this routine
+; is pure INTEGER arithmetic -- there is no floating point in it at all.
+; In: XBC = 0..99 value (copied to IZ).  Out: XHL.  Consumes nothing from the stream.
+;   x <= 20  XHL = (x<<23)          / (4000 - 2x)
+;   x <= 50  XHL = ((x-10)<<23)     / (2020 - 2x)
+;   else     XHL = ((11x-390)<<15)  / (8780 - 22x), then <<8
+; Continuous at both knots (checked: x=20 gives 10/1980 == 20/3960; x=50 gives 40/1920 ==
+; 160/7680).  Full range 0 .. 0.1059 in Q23, i.e. 0 .. ~4.67 kHz if read as f/44100.
+
+[LABEL] 0x039461 DSP_FreqCurve_FP_Seg2  replaces=LABEL_039461  confidence=high
+; 20 < x <= 50 segment.
+
+[LABEL] 0x03948E DSP_FreqCurve_FP_Seg3  replaces=LABEL_03948E  confidence=high
+; x > 50 segment; the only one that needs FP_MulAccum64 (22*x and 11*x) and a two-part shift.
+
+[LABEL] 0x0394C9 DSP_FreqCurve_FP_Return  replaces=LABEL_0394C9  confidence=high
+; Common epilogue (pop IZ, release the 4-byte frame).
+
+[ROUTINE] 0x0394CD DSP_FreqInterp_2Point  replaces=LABEL_0394CD  confidence=high
+; Decoder for opcode 0x6B; result -> DSP_WriteFreqParam.
+; BYTE-FOR-BYTE IDENTICAL to DSP_ParamInterp_2Point (0x039206) -- verified by memcmp over all
+; 0x58 bytes.  Same contract: two 3-byte stream values, XHL = A>>8 + ((B-A)>>8)*XBC/99,
+; cursor += 6.  A separate copy exists only because the compiler emitted it per call site.
+
+[ROUTINE] 0x039525 DSP_ParamInterp_3Point_WithOffset  replaces=LABEL_039525  confidence=high
+; Decoder for opcode 0x6C; result -> DSP_WriteFreqParam.  Interpolates between the TOP BYTES of
+; two stream values and then adds a caller-supplied bias.
+; In: XWA = &cursor, XBC = 0..99 value, XDE = bias.  Out: XHL; cursor += 6.
+;       a = (value[0]>>8)&0xFF ;  b = (value[1]>>8)&0xFF
+;       XHL = (XDE + a + ((b - a) * XBC) / 99) << 8
+; The final <<8 re-left-justifies the result into the 24-bit-in-32 stream format.
+
+[ROUTINE] 0x039599 DSP_ReverbCurve_FP  replaces=LABEL_039599  confidence=medium
+; Decoder for opcode 0x6D; result -> DSP_WriteOscParam.  Same shape as DSP_VolumeCurve_FP:
+; no stream field, branch at x > 89 (0x59), a chain of single- and double-precision helpers
+; over the constant groups 0x012D0F..0x012D2B (low range: 1, 441, 10, 0.427042, 1) and
+; 0x012D33..0x012D4F (high range: 44100, 3924900 = 44100*89, 10, 0.427042, 1), both ending in
+; the VoiceFloat_CompareAndConvert / FP_DP_NormalizeMantissa pair and a shared finalisation.
+; The 441 / 44100 / 3924900 constants and the 0.427042 exponent-like factor say this is a
+; time-constant or decay curve computed against the sample rate; "reverb" is plausible from the
+; opcode's neighbours but is NOT proved here.  Frame 0x44 bytes; result in XHL.
+
+[LABEL] 0x039627 DSP_ReverbCurve_FP_HighRange  replaces=LABEL_039627  confidence=high
+; x > 89 arm; constant group 0x012D33..0x012D4F.
+
+[LABEL] 0x0396A2 DSP_ReverbCurve_FP_Finalize  replaces=LABEL_0396A2  confidence=high
+; Shared tail: FP_SP_Add_Outer(0x012D4F), FP_SP_Decode_ReadSign, result from (XSP+0x38).
+
+[ROUTINE] 0x0396C2 DSP_ParamInterp_FPComplex  replaces=LABEL_0396C2  confidence=medium
+; Decoder for opcode 0x6E; result -> DSP_WriteOscParam.  The most elaborate decoder here:
+; it consumes TWO 3-byte stream values AND the 0..99 value, and mixes them in floating point.
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 6.
+; Sequence (operands certain, arithmetic inferred from the helper names):
+;   value[0] -> float, combined with the constants at 0x012D53 (32768) and 0x012D57 (65536)
+;   value[1] -> float, top byte kept as an integer at (XSP+0x24)
+;   XBC      -> float
+;   the three are combined through FP_SP_Sub / FP_SP_Add_Outer / FP_SP_Mul against
+;   0x012D5B (99), 0x012D5F (44100), 0x012D63 (99), 0x012D67 (2376)
+;   -> promoted to double, VoiceFloat_CompareAndConvert with the double at 0x012D6B (2.0)
+;   -> FP_DP_NormalizeMantissa, then FP_SP_Add_Outer(0x012D73) and FP_SP_Decode_ReadSign.
+; The 32768/65536/99/44100 group is the same normalisation vocabulary as the rest of the file.
+; The advanced cursor is written back BEFORE the finalisation (at 0x0397CD).
+
+[ROUTINE] 0x0397F3 DSP_PanCurve_PiecewiseLin  replaces=LABEL_0397F3  confidence=high
+; Decoder for opcode 0x6F; result -> DSP_WriteOscParam.  Consumes NOTHING from the stream.
+; In: XBC = 0..99 value.  Out: XHL = a sample count.
+; Five continuous linear segments, all of the form XHL = 44100 * g(x) / 1000, i.e. 44.1 samples
+; per millisecond -- so g(x) is a time in MILLISECONDS:
+;   x <=  20   g =   2x +   10        (  10 ..   50 ms)
+;   x <=  30   g =   5x -   50        (  50 ..  100 ms)
+;   x <=  70   g =  10x -  200        ( 100 ..  500 ms)
+;   x <=  80   g =  50x - 3000        ( 500 .. 1000 ms)
+;   else       g = 100x - 7000        (1000 .. 2900 ms)
+; Every knot joins exactly (checked at x = 20, 30, 70, 80).  The constants are
+; 0x0006BAA8 = 441000, 0x0021A548 = 2205000, 0x00869520 = 8820000, 0x07E2BCE0 = 132300000,
+; 0x12666360 = 308700000, all exact multiples of 44100.
+; This is a DELAY-TIME curve, 10 ms .. 2.9 s.  See [UNCERTAIN] about the name "Pan".
+
+[LABEL] 0x03981C DSP_PanCurve_Seg2  replaces=LABEL_03981C  confidence=high
+; 20 < x <= 30: 44.1 * (5x - 50) samples.
+
+[LABEL] 0x039848 DSP_PanCurve_Seg3  replaces=LABEL_039848  confidence=high
+; 30 < x <= 70: 44.1 * (10x - 200) samples.
+
+[LABEL] 0x039875 DSP_PanCurve_Seg4  replaces=LABEL_039875  confidence=high
+; 70 < x <= 80: 44.1 * (50x - 3000) samples.
+
+[LABEL] 0x0398A6 DSP_PanCurve_Seg5  replaces=LABEL_0398A6  confidence=high
+; x > 80: 44.1 * (100x - 7000) samples; tops out at 2900 ms for x = 99.
+
+[LABEL] 0x0398CD DSP_PanCurve_Return  replaces=LABEL_0398CD  confidence=high
+; A bare `ret` shared by all five segments.
+
+[ROUTINE] 0x0398CE DSP_DetuneCurve_SignedFP  replaces=LABEL_0398CE  confidence=high
+; Decoder for opcode 0x71; result -> DSP_WriteOscParam.  Consumes nothing from the stream.
+; In: XBC = a SIGNED value (copied to IZ).  Out: XHL.
+; Works on |x| and re-applies the sign at the end -- the only decoder in the region that is
+; explicitly bipolar, which is what makes "detune" a believable reading.
+;   |x| <= 10   -> float(|x|), + const 0x012D77 (2)
+;   |x| <= 19   -> float(|x|), + 0x012D7B (20),  - 0x012D7F (180)
+;   |x| <= 31   -> float(|x|), + 0x012D83 (100), - 0x012D87 (1700)
+;   else        -> float(|x|), + 0x012D8B (200), - 0x012D8F (4800)
+; then, if x < 0, FP_SP_CopyOrNegate4 flips the sign (DSP_DetuneCurve_ApplySign), and the shared
+; finalisation runs the value through VoiceFloat_SubSP(0x012D93), a promotion to double,
+; VoiceFloat_CompareAndConvert against the double at 0x012D97 (2.0), FP_DP_Sub(0x012D9F, 1.0),
+; VoiceFloat_SubDP(0x012DA7, 2400.0), FP_DP_NormalizeMantissa, FP_SP_Add_Outer(0x012DAF) and
+; FP_SP_Decode_ReadSign.  The 2400 is cents-per-octave x 2, and the 2.0 base again points at a
+; pow(2, cents/2400) pitch-ratio computation.  Frame 0x48 bytes.
+
+[LABEL] 0x0398E0 DSP_DetuneCurve_NegateInput  replaces=LABEL_0398E0  confidence=high
+; x < 0: XWA = -IZ, to get the magnitude for the range test.
+
+[LABEL] 0x0398E9 DSP_DetuneCurve_CheckMagnitude  replaces=LABEL_0398E9  confidence=high
+; Join point with |x| in XWA; first range test, |x| <= 10.
+
+[LABEL] 0x0398FE DSP_DetuneCurve_Range1_NegArm  replaces=LABEL_0398FE  confidence=high
+; Range 1, negative input: store the magnitude at (XSP+0x3C).
+
+[LABEL] 0x03990A DSP_DetuneCurve_Range1_Compute  replaces=LABEL_03990A  confidence=high
+; Range 1 body: int->float, + the constant at 0x012D77.
+
+[LABEL] 0x039926 DSP_DetuneCurve_CheckRange2  replaces=LABEL_039926  confidence=high
+; Recompute |x| for the second range test.
+
+[LABEL] 0x039932 DSP_DetuneCurve_Range2_NegArm  replaces=LABEL_039932  confidence=high
+; Negate to get the magnitude before the |x| <= 19 test.
+
+[LABEL] 0x03993B DSP_DetuneCurve_CheckRange2Limit  replaces=LABEL_03993B  confidence=high
+; The |x| <= 19 (0x13) comparison itself.
+
+[LABEL] 0x039950 DSP_DetuneCurve_Range2_NegStore  replaces=LABEL_039950  confidence=high
+; Range 2, negative input: store the magnitude at (XSP+0x38).
+
+[LABEL] 0x03995C DSP_DetuneCurve_Range2_Compute  replaces=LABEL_03995C  confidence=high
+; Range 2 body: + 0x012D7B (20), - 0x012D7F (180).
+
+[LABEL] 0x039987 DSP_DetuneCurve_CheckRange3  replaces=LABEL_039987  confidence=high
+; Recompute |x| for the third range test.
+
+[LABEL] 0x039993 DSP_DetuneCurve_Range3_NegArm  replaces=LABEL_039993  confidence=high
+; Negate to get the magnitude before the |x| <= 31 test.
+
+[LABEL] 0x03999C DSP_DetuneCurve_CheckRange3Limit  replaces=LABEL_03999C  confidence=high
+; The |x| <= 31 (0x1F) comparison itself.
+
+[LABEL] 0x0399B1 DSP_DetuneCurve_Range3_NegStore  replaces=LABEL_0399B1  confidence=high
+; Range 3, negative input: store the magnitude at (XSP+0x34).
+
+[LABEL] 0x0399BD DSP_DetuneCurve_Range3_Compute  replaces=LABEL_0399BD  confidence=high
+; Range 3 body: + 0x012D83 (100), - 0x012D87 (1700).
+
+[LABEL] 0x0399E7 DSP_DetuneCurve_Range4_CheckSign  replaces=LABEL_0399E7  confidence=high
+; Fall-through range (|x| > 31): sign test only.
+
+[LABEL] 0x0399F4 DSP_DetuneCurve_Range4_NegStore  replaces=LABEL_0399F4  confidence=high
+; Range 4, negative input: store the magnitude at (XSP+0x30).
+
+[LABEL] 0x039A00 DSP_DetuneCurve_Range4_Compute  replaces=LABEL_039A00  confidence=high
+; Range 4 body: + 0x012D8B (200), - 0x012D8F (4800).
+
+[LABEL] 0x039A28 DSP_DetuneCurve_ApplySign  replaces=LABEL_039A28  confidence=high
+; If the ORIGINAL input was negative, negate the accumulated float via FP_SP_CopyOrNegate4.
+
+[LABEL] 0x039A3A DSP_DetuneCurve_Finalize  replaces=LABEL_039A3A  confidence=high
+; Shared tail described in the routine header; note the 2400.0 (cents per octave x 2) at
+; 0x012DA7 and the 2.0 base at 0x012D97.
+
+[ROUTINE] 0x039ABD DSP_BiquadWarp_FP  replaces=LABEL_039ABD  confidence=medium
+; Decoder for opcode 0x72 (arm 0x03CDD6).  Unlike every other routine in the region this one
+; EMITS TO THE DSP ITSELF instead of returning a value for the interpreter to send.
+; Stack args (retd 0x0008, so two longs are popped): (XSP+0x5E) and (XSP+0x62)/(XSP+0x64) carry
+; the DSP channel / chip selectors that are handed to DSP_WriteOscParam and
+; DSP_WriteCoeffData_5B_Direct.  XWA = &cursor, XBC = base of a word array, DE = an index.
+; Step 1 -- pick two table entries.  It reads ONE byte from the stream (post-increment, cursor
+;   written back at the very end) and tests its HIGH nibble:
+;     high nibble == 0 : HL = word[DE],   IZ = word[DE+1]
+;     otherwise        : HL = word[DE-1], IZ = word[DE]
+;   (same "which field of the group does the index point at" convention as
+;   DSP_FilterLUT_Fetch and DSP_ParamInterp_MultiStep).
+; Step 2 -- clamp: HL to <= 0x59 (89), IZ to <= 0x58 (88).
+; Step 3 -- for each of the two, compute (99 - v) as a signed int, promote to double, add the
+;   constant at 0x012DB3 / 0x012DCB (-0.0697), call VoiceFloat_CompareAndConvert against the
+;   double 10.0 at 0x012DBB / 0x012DD3 -- i.e. pow(10, -0.0697*(99-v)), a dB-to-linear
+;   conversion with a 0.697 dB step -- then FP_DP_Add_Outer with 0.9999 (0x012DC3 / 0x012DDB)
+;   and normalise to a float.  Results land at (XSP+0x52) and (XSP+0x4A).
+; Step 4 -- with the literal 3.0 (0x40400000) at (XSP+0x4E) it computes five coefficient floats
+;   through FP_SP_Sub / FP_SP_Add_Outer / FP_SP_Mul / VoiceFloat_SubSP against the constants
+;   0x012DE3..0x012E03 (2, 2, 1, 3, 2097152, 8388608, 4194304, 2097152, 2097152 -- note
+;   2^21/2^23/2^22, the Q23 scalings).
+; Step 5 -- emits: one DSP_WriteOscParam then FOUR DSP_WriteCoeffData_5B_Direct calls, i.e. a
+;   complete 5-coefficient biquad section.
+; Returns XHL = the accumulated write status; writes the advanced cursor back through XWA.
+; The dB step, the 10.0 base and the five-coefficient emission are solid; the exact algebra of
+; step 4 depends on the FP helper semantics I could not confirm (see [UNCERTAIN]).
+
+[LABEL] 0x039AF2 DSP_BiquadWarp_ReadPrevEntry  replaces=LABEL_039AF2  confidence=high
+; High nibble non-zero: use word[DE-1] and word[DE] instead of word[DE] and word[DE+1].
+
+[LABEL] 0x039B08 DSP_BiquadWarp_ClampHL  replaces=LABEL_039B08  confidence=high
+; Clamp the first table value to 0x59 (89).
+
+[LABEL] 0x039B11 DSP_BiquadWarp_ClampIZ  replaces=LABEL_039B11  confidence=high
+; Clamp the second table value to 0x58 (88).
+
+[LABEL] 0x039B1A DSP_BiquadWarp_ComputeCoeffs  replaces=LABEL_039B1A  confidence=high
+; Steps 3-5 of the header: the two pow(10, -0.0697*(99-v)) gains, the five coefficient floats,
+; and the five DSP writes.
+
+[ROUTINE] 0x039D26 DSP_ParamInterp_Div0xC6  replaces=LABEL_039D26  confidence=high
+; Decoder for opcode 0x73; result -> DSP_WriteOscParam.  A BIPOLAR two-point interpolation:
+; the blend value is offset by +99 and divided by 198, so XBC = -99..+99 maps to 0..1.
+; In: XWA = &cursor, XBC = signed blend.  Out: XHL; cursor += 6.
+;       A = value[0], B = value[1]
+;       t   = ((B - A) >> 8) / 198                       (198 == 0xC6 == 2*99)
+;       XHL = (A >> 8) + t * (XBC + 99)
+; Note the divide happens BEFORE the multiply here (unlike DSP_ParamInterp_2Point), so the
+; result is coarser -- that is in the ROM, not a transcription slip.
+
+[ROUTINE] 0x039D98 DSP_ParamEQ_Curve_FP  replaces=LABEL_039D98  confidence=medium
+; Decoder for opcode 0x75; result -> DSP_WriteOscParam.  A five-range floating-point curve.
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 3.
+; Consumes ONE 3-byte stream value, converts it to float and pre-scales it against the
+; constants at 0x012E07 (32768) and 0x012E0B (65536) -- the second copy is kept at (XSP+0x50)
+; and reused by every range.  Then it branches on XBC:
+;       XBC <= 15 (0x0F)  range 1, constants 0x012E0F..0x012E3F
+;       XBC <= 23 (0x17)  range 2, constants 0x012E63..0x012E87  (bias 16)
+;       XBC <= 55 (0x37)  range 3, constants 0x012E8F..0x012EB3  (bias 24)
+;       XBC <= 75 (0x4B)  range 4, constants 0x012EBB..0x012EDF  (bias 56)
+;       else              range 5, constants 0x012EE7..0x012EFB  (bias 67)
+; The biases 16/24/56/67 are subtracted from XBC by the FP_SP_Sub at the head of each range, so
+; each range restarts its curve from zero.  Range 1 additionally calls ToneGen_Compare_Voice
+; (0x03D2AC -- an FP COMPARISON helper, not a voice routine; see [UNCERTAIN]) against the
+; constant at 0x012E2F and takes a separate arm when the coefficient is non-zero.
+; Every range converges on DSP_ParamEQ_Finalize.  Frame 0x64 bytes.
+
+[LABEL] 0x039EDA DSP_ParamEQ_Range1_NonzeroCoeff  replaces=LABEL_039EDA  confidence=high
+; Range 1, taken when the FP comparison at 0x039E81 reports non-zero: multiplies by the
+; constant at 0x012E47 (7.0) and runs the pow-style helper against 0x012E4B instead.
+
+[LABEL] 0x039F49 DSP_ParamEQ_Range2  replaces=LABEL_039F49  confidence=high
+; 15 < XBC <= 23; bias 16 (0x012E63).
+
+[LABEL] 0x03A003 DSP_ParamEQ_Range3  replaces=LABEL_03A003  confidence=high
+; 23 < XBC <= 55; bias 24 (0x012E8F).
+
+[LABEL] 0x03A0BD DSP_ParamEQ_Range4  replaces=LABEL_03A0BD  confidence=high
+; 55 < XBC <= 75; bias 56 (0x012EBB).
+
+[LABEL] 0x03A177 DSP_ParamEQ_Range5  replaces=LABEL_03A177  confidence=high
+; XBC > 75; bias 67 (0x012EE7).  The only range with no FP_DP_Mul step.
+
+[LABEL] 0x03A204 DSP_ParamEQ_Finalize  replaces=LABEL_03A204  confidence=high
+; Shared tail: write the advanced cursor back through the caller's pointer, then
+; FP_SP_Add_Outer(0x012F03 = 8388608.0 = 2^23) and FP_SP_Decode_ReadSign to land the result as
+; a Q23 integer in XHL.  The 2^23 here is the same Q23 convention used by the integer decoders.
+
+[ROUTINE] 0x03A22A DSP_ParamInterp_2Point_B  replaces=LABEL_03A22A  confidence=high
+; Decoder for opcode 0x77; result -> DSP_WriteOscParam.
+; BYTE-FOR-BYTE IDENTICAL to DSP_ParamInterp_2Point (0x039206) and DSP_FreqInterp_2Point
+; (0x0394CD) -- all three 0x58-byte bodies verified equal by memcmp.  Same contract.
+
+[ROUTINE] 0x03A282 DSP_VolScale_B  replaces=LABEL_03A282  confidence=high
+; Decoder for opcode 0x78; result -> DSP_WriteOscParam.
+; BYTE-FOR-BYTE IDENTICAL to DSP_VolumeParam_Scale (0x038FE8) over all 0x21E bytes, verified by
+; memcmp.  See that routine's header for the three curve families and their formulas.
+
+[LABEL] 0x03A2BB DSP_VolScale_B_Algo0_Seg2  replaces=LABEL_03A2BB  confidence=high
+; Duplicate of DSP_VolScale_Algo0_Seg2: ((x-25)<<23) / 220500.
+
+[LABEL] 0x03A2DD DSP_VolScale_B_Algo0_Seg3  replaces=LABEL_03A2DD  confidence=high
+; Duplicate of DSP_VolScale_Algo0_Seg3: ((4x-250)<<23) / 220500.
+
+[LABEL] 0x03A302 DSP_VolScale_B_Algo0_Seg4  replaces=LABEL_03A302  confidence=high
+; Duplicate of DSP_VolScale_Algo0_Seg4: ((9x-690)<<23) / 220500.
+
+[LABEL] 0x03A321 DSP_VolScale_B_Algo1_Seg1  replaces=LABEL_03A321  confidence=high
+; Duplicate of DSP_VolScale_Algo1_Seg1: (x<<23) / 44100.
+
+[LABEL] 0x03A33D DSP_VolScale_B_Algo1_Seg2  replaces=LABEL_03A33D  confidence=high
+; Duplicate of DSP_VolScale_Algo1_Seg2: ((10x-90)<<23) / 44100.
+
+[LABEL] 0x03A366 DSP_VolScale_B_Algo1_Seg3  replaces=LABEL_03A366  confidence=high
+; Duplicate of DSP_VolScale_Algo1_Seg3: ((20x-280)<<15) / 44100, then <<8.
+
+[LABEL] 0x03A390 DSP_VolScale_B_Algo1_Seg4  replaces=LABEL_03A390  confidence=high
+; Duplicate of DSP_VolScale_Algo1_Seg4: ((400x-24800)<<15) / 44100, then <<8.
+
+[LABEL] 0x03A3BD DSP_VolScale_B_Algo1_Seg5  replaces=LABEL_03A3BD  confidence=high
+; Duplicate of DSP_VolScale_Algo1_Seg5: ((800x-59600)<<15) / 44100, then <<8.
+
+[LABEL] 0x03A3E2 DSP_VolScale_B_Algo2_Seg1  replaces=LABEL_03A3E2  confidence=high
+; Duplicate of DSP_VolScale_Algo2_Seg1: (x<<23) / (4000 - 2x).
+
+[LABEL] 0x03A406 DSP_VolScale_B_Algo2_Seg2  replaces=LABEL_03A406  confidence=high
+; Duplicate of DSP_VolScale_Algo2_Seg2: ((x-25)<<23) / (2050 - 2x).
+
+[LABEL] 0x03A435 DSP_VolScale_B_Algo2_Seg3  replaces=LABEL_03A435  confidence=high
+; Duplicate of DSP_VolScale_Algo2_Seg3: ((4x-250)<<23) / (2500 - 8x).
+
+[LABEL] 0x03A468 DSP_VolScale_B_Algo2_Seg4  replaces=LABEL_03A468  confidence=high
+; Duplicate of DSP_VolScale_Algo2_Seg4: ((9x-690)<<23) / (3380 - 18x).
+
+[LABEL] 0x03A497 DSP_VolScale_B_Return  replaces=LABEL_03A497  confidence=high
+; Duplicate epilogue: write the advanced cursor back and return.
+
+[ROUTINE] 0x03A4A0 DSP_PanScale_Simple  replaces=LABEL_03A4A0  confidence=high
+; Decoder for opcode 0x40 (arm 0x03CE9F); result -> DSP_WriteOscParam.  Six instructions:
+;       XHL = (XBC * 44100) / 1000
+; That is 44.1 samples per millisecond -- a plain MILLISECONDS-TO-SAMPLES converter covering
+; 0..99 ms.  It is the degenerate case of DSP_PanCurve_PiecewiseLin's first segment.
+; See [UNCERTAIN] about the name "PanScale".
+
+[ROUTINE] 0x03A4B7 DSP_ParamInterp_MultiStep  replaces=LABEL_03A4B7  confidence=high
+; Decoder for opcode 0x24 (arm 0x03CEBC); result -> DSP_WriteOscParam.  Two-point interpolation
+; where WHICH pair of endpoints is used comes out of a side table.
+; In: XWA = &cursor, XBC = 0..99 blend, XDE = base of a word array; (XSP+0x1C) = a word index
+;     pushed by the caller.  Out: XHL; cursor += 18 (SIX 3-byte values are always consumed).
+; It reads ONE byte from the stream (post-increment) and looks at its HIGH nibble:
+;       0x20 -> order = word[index - 2]
+;       0x10 -> order = word[index - 1]
+;       else -> order = XBC (the caller's value)
+; then selects an arm by order:
+;       order == 0 : the 1st and 2nd of the six stream values are the endpoints
+;       order == 1 : the 3rd and 4th
+;       order == 2 : the 5th and 6th
+; In every arm all six values are decoded (the unused ones are decoded into the same scratch
+; slot at XSP+0x0C and thrown away), so the cursor always advances by the same 18 bytes.
+; The arithmetic is then identical to DSP_ParamInterp_2Point:
+;       XHL = (A>>8) + (((B - A) >> 8) * XBC) / 99
+; The high-nibble convention (0x00/0x10/0x20 = "the index points at field 0 / 1 / 2 of a
+; three-word group") is the same one used by DSP_FilterLUT_Fetch and DSP_BiquadWarp_FP.
+
+[LABEL] 0x03A4DB DSP_ParamInterp_MultiStep_Mode0x10  replaces=LABEL_03A4DB  confidence=high
+; High nibble 0x10: order = word[index - 1].
+
+[LABEL] 0x03A4EA DSP_ParamInterp_MultiStep_Mode0x20  replaces=LABEL_03A4EA  confidence=high
+; High nibble 0x20: order = word[index - 2].
+
+[LABEL] 0x03A4F7 DSP_ParamInterp_MultiStep_Dispatch  replaces=LABEL_03A4F7  confidence=high
+; Join point; selects the order-0 / order-1 / order-2 arm.  Order 0 falls through.
+
+[LABEL] 0x03A551 DSP_ParamInterp_MultiStep_Order1  replaces=LABEL_03A551  confidence=high
+; order == 1: discard values 1-2, keep 3 and 4 as the endpoints, discard 5-6.
+
+[LABEL] 0x03A5A1 DSP_ParamInterp_MultiStep_Order2  replaces=LABEL_03A5A1  confidence=high
+; order == 2: discard values 1-4, keep 5 and 6 as the endpoints.
+
+[LABEL] 0x03A5EF DSP_ParamInterp_MultiStep_Compute  replaces=LABEL_03A5EF  confidence=high
+; Shared tail: the /99 interpolation, cursor write-back, and `retd 0x0004`.
+
+[ROUTINE] 0x03A620 DSP_FilterLUT_Fetch  replaces=LABEL_03A620  confidence=high
+; Decodes ONE parametric-EQ band descriptor.  NOT a byte-code arm -- it is reached only by the
+; `calr` at 0x03A962 inside DSP_BiquadCoeff_Compute (0x03A933, opcode 0x70), which is the first
+; routine of region 15.
+; In:  WA (-> IZ) = word index into the caller's array
+;      XBC = float* out: centre frequency
+;      XDE = float* out: Q / bandwidth
+;      stack args (retd 0x0010, four longs):
+;        (XSP+0x38) = the parameter-stream cursor -- read, advanced by one byte, RETURNED in XHL
+;        (XSP+0x3C) = base of a word array (the band's three fields live in it consecutively)
+;        (XSP+0x40) = uint16* out: the filter TYPE (low nibble of the stream byte)
+;        (XSP+0x44) = float* out: the gain-derived scalar
+; The stream byte splits into two nibbles:
+;   LOW nibble = filter type
+;     0 : full band -- freq from the 27-entry Hz LUT at 0x012397, Q from the 32-entry LUT at
+;         0x012403, gain from the third word
+;     1 : Q is FORCED to the literal 0.1 (0x3DCCCCCD); only the frequency word is read
+;     2 : Q is FORCED to the literal 2.0 (0x40000000); frequency and gain are read
+;     other : nothing is computed, the three output pointers get whatever was on the stack
+;   HIGH nibble = which field of the three-word group the index currently points at
+;     0x00 : freq = arr[i],   Q = arr[i+1], gain = arr[i+2]
+;     0x10 : freq = arr[i-1], Q = arr[i],   gain = arr[i+1]
+;     0x20 : freq = arr[i-2], Q = arr[i-1], gain = arr[i]
+;     (for type 2 the high nibble only distinguishes "gain at i+1" from "gain at i")
+; The gain word is sign-extended, promoted to double, combined with 0.5 (0x012F07 etc.) and
+; -12.0 (0x012F0F etc.) -- the same pair repeated for all five arms -- and normalised to a
+; float.  The 27-entry LUT is the ISO 1/3-octave series 40 Hz..16 kHz and the 32-entry LUT runs
+; 0.1..20.0, which is what makes "parametric EQ band" certain rather than inferred.
+
+[LABEL] 0x03A6F5 DSP_FilterLUT_Mode0x10  replaces=LABEL_03A6F5  confidence=high
+; Type 0, high nibble 0x10: freq = arr[i-1], Q = arr[i], gain = arr[i+1].
+
+[LABEL] 0x03A77C DSP_FilterLUT_Mode0x20  replaces=LABEL_03A77C  confidence=high
+; Type 0, high nibble 0x20: freq = arr[i-2], Q = arr[i-1], gain = arr[i].
+
+[LABEL] 0x03A803 DSP_FilterLUT_ModeType1  replaces=LABEL_03A803  confidence=high
+; Type 1: Q := 0.1 (0x3DCCCCCD), freq = arr[i], no gain term.  Jumps straight to the store.
+
+[LABEL] 0x03A82D DSP_FilterLUT_ModeType2  replaces=LABEL_03A82D  confidence=high
+; Type 2: Q := 2.0 (0x40000000); high nibble 0x00 uses freq = arr[i], gain = arr[i+1].
+
+[LABEL] 0x03A8A6 DSP_FilterLUT_ModeType2_SubMode  replaces=LABEL_03A8A6  confidence=high
+; Type 2, high nibble 0x10 or 0x20: freq = arr[i-1], gain = arr[i].
+
+[LABEL] 0x03A909 DSP_FilterLUT_StoreResults  replaces=LABEL_03A909  confidence=high
+; Common tail: store type, frequency, Q and the gain scalar through the four caller pointers,
+; return the advanced stream cursor in XHL, `retd 0x0010`.  Note that on an unrecognised type
+; the three float outputs are written from UNINITIALISED stack slots.
+
+[UNCERTAIN] The routine that OWNS 0x038CF9 starts at 0x038CBE and has NO symbol in either the
+LLVM build or the reference file, and I could not find its caller.  Its body is unmistakable
+(`dec 0,xsp` / `push IZ` / save XWA / `ld BC,0x79` / `call DSP_TableWalk_Search` / ... /
+`retd 0x000A`), and DSP_TuneOffset_Increment (0x038CF6) and DSP_TuneOffset_WriteSequence
+(0x038CF9) are its inner labels.  I scanned the whole ROM for a 24-bit little-endian 0x038CBE
+and for every `calr` whose displacement resolves to it -- zero hits.  It is therefore reached
+through an offset table like the interpreter's (base + signed word), or it is dead code.  I did
+NOT propose a name for it because it is outside the assigned range and because naming a routine
+whose caller I cannot find would be a guess.  Someone should decode the remaining dispatch
+tables in 0x0147xx and settle it.
+
+[UNCERTAIN] "DSP_State_InlineData" (0x038E0F) and "DSP_State_LoadAndApply_InlineData"
+(0x038E9F) are both MISNOMERS left over from the ASL->LLVM bootstrap, exactly like the
+"*_TableData" / "*_Data" labels flagged in region 11.  Neither is data.  0x038E0F is a task
+body (an infinite receive/apply/release loop, entered through the `jp` thunk at 0x036327);
+0x038E9F is a five-instruction table fetch identical in shape to DSP_ParamFetch_SingleTable.
+I have LEFT BOTH ALONE per the rules and propagated the existing names so the two sources stay
+in step.  If the project wants them fixed, the honest names would be something like
+DSP_State_ApplyTask and DSP_ParamFetch_Table129A3, and the rename must be done in
+v142/subcpu/kn5000_subprogram_v142.s and archive/asl/subcpu/kn5000_subprogram_v142.asm at the
+same time, then re-verified with compare_roms.py.
+
+[UNCERTAIN] Three names in this region look wrong on the evidence, and I have left all three
+alone.  (a) "DSP_PanScale_Simple" (0x03A4A0) computes x*44100/1000 = x milliseconds expressed
+in samples -- a time converter, not a pan law.  (b) "DSP_PanCurve_PiecewiseLin" (0x0397F3) is
+the five-segment version of the same thing, mapping 0..99 to 10 ms .. 2900 ms with every knot
+joining exactly; a pan law would not be built out of exact multiples of 44100.  (c)
+"DSP_VolumeParam_Scale" / "DSP_VolScale_B" produce normalised FREQUENCIES (family 0 tops out at
+40.2 Hz -- an LFO rate; family 1 at 19.6 kHz -- a filter/EQ cutoff), not gains.  Better names
+would be DSP_MillisecToSamples, DSP_DelayTimeCurve and DSP_RateCurve_ByFamily.  I did not
+rename them because the rules forbid it and because I would rather the project make one
+coordinated change across both toolchains than have the sources drift.
+
+[UNCERTAIN] The floating-point helper names this region calls are, I believe, systematically
+wrong, and that is why several routine headers above stop short of giving a formula.  The
+evidence, all from call sites in this region: FP_SP_CallWithBuf8 (0x03DDCA) is called as
+(XWA = dst buffer, XBC = pointer to an INT) and every consumer then treats the destination as a
+float -- it is an int-to-float conversion, not a "call with buffer".  FP_DP_NegMantissaLS
+(0x03DCF2) is called as (XBC = a 4-byte float, XWA = an 8-byte destination) and the destination
+is subsequently pushed as a double -- it is a float-to-double promotion; its body does a
+3-bit right shift of a 64-bit pair through the carry, which is mantissa alignment, not
+negation.  FP_DP_NormalizeMantissa (0x03DD6C) is the inverse (double -> float).
+VoiceFloat_CompareAndConvert (0x03D533) is invoked with a five-push sequence -- two doubles and
+a result pointer, 20 bytes cleaned up by `lda XSP,XSP+0x14` -- and one of the two doubles is
+always a literal base (2.0 in the volume/detune/reverb curves, 10.0 in DSP_BiquadWarp_FP).
+That is pow(base, exponent).  It has nothing to do with voices.  Likewise
+ToneGen_Compare_Voice (0x03D2AC) is used by DSP_ParamEQ_Curve_FP and by
+VoiceFloat_CompareAndConvert itself as a floating-point comparison primitive.  All of these are
+outside my range; I am recording the evidence rather than touching them.
+
+[UNCERTAIN] I could not resolve what DSP_ParamInterp_Div0xB4's /180 divisor means physically.
+180 is not the 99 or 198 used everywhere else in the region, and the result feeds
+DSP_WriteFreqParam.  Degrees of phase is the obvious guess and I have deliberately not written
+it into the label.
+
+[UNCERTAIN] DSP_VolumeCurve_FP, DSP_ReverbCurve_FP, DSP_ParamInterp_FPComplex and
+DSP_ParamEQ_Curve_FP are documented by their CONSTANTS and control flow only.  I can prove
+which constant pool entry each branch reads and where each branch converges, but not the closed
+form, because that depends on the helper semantics in the previous note.  Anyone finishing
+these should decode 0x03D8E0 / 0x03E290 / 0x03E15A / 0x03D92C first and then re-read this
+region -- the four routines will fall out in an afternoon.
+
+[UNCERTAIN] The three exact code duplicates in this region (DSP_ParamInterp_2Point ==
+DSP_FreqInterp_2Point == DSP_ParamInterp_2Point_B, 0x58 bytes each; DSP_VolumeParam_Scale ==
+DSP_VolScale_B, 0x21E bytes) are almost certainly the same C static function emitted once per
+translation unit.  That is worth knowing before anyone "fixes" one of them: a change to one
+copy will break the byte-match unless the same change is made to the other(s).

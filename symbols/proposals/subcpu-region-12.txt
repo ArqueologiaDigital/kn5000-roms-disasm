@@ -1,0 +1,1418 @@
+# region 12: 0x0354CA..0x0370BE
+# The DSP command pipeline: the 2 KB ring buffer at 0x3B60 that every inter-CPU command in
+# the 0x60..0x7F class is copied into, the consumer (Audio_Process_DSP) that reframes it into
+# 0x2B/0x2C/0x2D messages and dispatches them, the effect-configuration buffer at 0x448E and
+# its change-detection ("diff") machinery, the two DSP transports (IC311 parallel with
+# handshake, IC310 two-wire bit-bang with hand-counted nop delays), and the 8-slot auxiliary
+# tone-generator voice pool driven by internal 0xF0-status pseudo-MIDI packets.
+#
+# INTEGRATION NOTE -- READ FIRST, IT SAVES A WASTED PASS
+#   The AUTHORITATIVE LLVM build already carries a real name for EVERY address in this range:
+#   585 symbols, ZERO LABEL_ placeholders (verified with
+#     /home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm -n \
+#       rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf
+#   filtered to 0x0354CA..0x0370BE; the 585 are exactly the non-__jrt_nop symbols).
+#   symbols/subcpu_symbols_reference.txt is the file that lags: 551 of its 585 entries in this
+#   range are still LABEL_xxxxxx, and the ELF and the reference file agree 1:1 on addresses.
+#   So 551 of the 585 need no thought at all -- copy the ELF name verbatim against the
+#   matching LABEL_. This proposal therefore does NOT re-propose those 551 one at a time.
+#   What it contributes is:
+#     (a) doc headers for the substantive routines (the region has 220 non-nop symbols;
+#         the other 365 are pure delay-chain labels, see [DATA] "nop chains" below),
+#     (b) 23 genuinely NEW names for subroutines and dispatch stubs that live INSIDE two
+#         blocks the converter emitted as `.byte` data and that therefore have no symbol at
+#         all in either file,
+#     (c) three existing names I believe are wrong, in [UNCERTAIN], left alone as required.
+#
+# BUILD VERIFIED BEFORE WRITING THIS: `python3 scripts/build/compare_roms.py` reports
+#   100.00% on all 8 LLVM ROMs and all 6 ASL ROMs. Address base confirmed: ROM file offset
+#   = address - 0x0EF00 for offsets >= 256; every disassembly quoted below was produced with
+#   `unidasm <dd'd bytes> -arch tlcs900 -basepc 0x<addr>` and matches the .s source.
+#
+# ★ THE BLOCK NAMED DSP_StateTable_DefaultData (0x036205-0x036304, 256 bytes) IS NOT DATA.
+#   It is TEN complete subroutines. Proof: CmdHandler2C's jump table at ROM 0x0121BD holds
+#   offsets that, added to the table base 0x035DD2, land on thirteen 13-byte stubs, and each
+#   of those stubs does `ld A,(0x4370) / extz WA / call 0x0362xx / jrl 0x036033`. Ten distinct
+#   0x0362xx targets are called, all inside the "DefaultData" block, and all disassemble
+#   cleanly from their first byte and end in `ret` or a tail `jp`. Named below.
+#   The block named CmdHandler2C_TableData (0x035DD2-0x035E7A) is likewise CODE -- it is the
+#   thirteen dispatch stubs themselves.
+#
+# ================= STRUCTURES USED THROUGHOUT (all derived from code in this region) =======
+#
+# DSP COMMAND RING -- control block at 0x3B60, cleared by DSP2_Init:
+#     0x3B60 write index (w)   0x3B62 read index (w)   0x3B64 byte count (w)
+#     0x3B66..0x3E65 2048-byte data area, both indices masked with 0x7FF.
+#   Producer: DSP_RingBuf_Enqueue (0x035910), reached from Audio_CmdHandler_60_7F, which is
+#   entry 3 of CMD_DISPATCH_TABLE (subcpu_data_tables.s:191), i.e. inter-CPU commands
+#   0x60..0x7F. Consumer: Audio_Process_DSP (0x035AC8), called once per pass of
+#   Audio_Main_Loop (0x01FAE6) between MIDI_Dispatch and Audio_Process_Final.
+#
+# MESSAGE FRAMING inside the ring: [type][7 header bytes][payload].
+#   DSP_Process_ReadNext reads the type byte; DSP_Cmd_DequeueHeader copies the 7 header bytes
+#   into 0x4369..0x436F; the payload is read into the scratch buffer at 0x4370 by
+#   DSP_RingBuf_ReadAndCompare. The type byte is saved at 0x4368, so 0x4368..0x436F+payload is
+#   a contiguous verbatim copy of the message -- which is exactly what the reply path sends
+#   back to the main CPU.
+#     0x4368 type: 0x2B voice/effect parameter, 0x2C channel+global config, 0x2D effect
+#                  preset / slot configuration. Anything else -> DSP_Cmd_DefaultSkip.
+#     0x4369 target selector: 0x00 = global, 0x30..0x3F = DSP voice channel (low nibble =
+#                  channel 0..15), 0x40 = "consume and drop".
+#     0x436A sub-length / 0x7F marker (0x08, 0x09, 0x0A..0x0E, 0x7F are all tested)
+#     0x436B sub-command / parameter id
+#     0x436C,0x436D 14-bit value field (7 bits per byte)
+#     0x436E payload byte count
+#     0x436F reply/status byte; 0xFF means "no reply unless the payload actually changed"
+#   0x4366 holds the ring byte count sampled at the top of each Audio_Process_DSP pass
+#   (DSP_StoreBufferCount).
+#
+# BULK-STREAM STATE (0x60..0x7F class), the only three words that gate the consumer:
+#     0x4488 total expected byte count of the stream in flight
+#     0x448A bytes accumulated so far
+#     0x448C stream-active flag / chunk counter  ** see [UNCERTAIN] and the wedge note **
+#   A stream opens with a 32-byte chunk whose bytes +5,+6 are a two-byte length:
+#   total = (b5 << 7) + b6 + 8, stored in 0x4488. (The `and WA,0x07FF` in the source is a
+#   no-op on an already zero-extended byte, so this is NOT a 7-bit-per-byte MIDI packing --
+#   b5 contributes its full 8 bits shifted left by 7.) Chunks accumulate into 0x448A until it
+#   reaches 0x4488, at which point both are cleared and 0x448C returns to 0.
+#
+# EFFECT CONFIGURATION BUFFER at 0x448E, exactly 0x122 = 290 bytes, ending at 0x45AF.
+#   Three independent confirmations of the size: DSP_Reset copies 0x91 words (=290 bytes) from
+#   0xF01E in internal RAM to 0x448E; DSP_StateTable_Reset copies 0x91 words from it to the
+#   shadow at 0x45CA; and DSP_Cmd_LoadEffectPreset refuses any 0x2D preset whose declared
+#   payload size is not exactly 0x122.
+#     0x448E .. 0x4495   8-byte header. +0 = "config not loaded / unchanged" flag written by
+#                        DSP_ApplyConfig; +6 = a 0/1 mode word clamped by DSP_Config_ClampLimits.
+#     0x4496 + n*0x38    effect slot n record, n = 0..4, 56 bytes each (EFF_GetSlotBuffer).
+#   Slot record fields actually touched in this region (offsets from the slot base):
+#     +0x00  algorithm number, clamped to 0..0x63 (0..99) by DSP_Config_ClampApply. Values
+#            0x33/0x34/0x45/0x46 get special treatment in EFF_SlotActive_UpdateFlags.
+#     +0x02  one word, diffed by DSP_EFFParam_DiffMid
+#     +0x04..+0x24  seventeen words, diffed by DSP_EFFParam_DiffInnerBody
+#     +0x1E  word read by EFF_SlotActive_LoopNext as an index (doubled) into the dirty array
+#     +0x28  one word, diffed by DSP_EFFParam_DiffLevel4Body
+#     +0x30  word compared against 0x63 by EFF_SlotActive
+#     +0x36  word, diffed by DSP_EFFParam_DiffAlgoSection
+#   SHADOW COPY of the whole 290 bytes at 0x45CA (DSP_StateTable_Reset writes it at the end of
+#   every DSP_State_ApplyAll, so "shadow" == "state as of the last apply").
+#
+# GLOBAL MIXER / ALGORITHM WORDS just above the config buffer:
+#     0x45B0 voice-type/algorithm selector (copied to 0x44B4 = slot 0 record +0x1E by
+#            DSP_ApplyAlgoForVoiceType)
+#     0x45B2, 0x45B4, 0x45B6  the three arguments of DSP_MixerCoeff_Compute (0x03C067)
+#     0x45B8, 0x45BA  a value/enable pair; 0x45B8 is copied to 0x454A (= slot 3 record +0x0C)
+#            only when 0x45BA != 0
+#     0x45BC + n*2   five words of per-slot pending state, read-and-cleared by
+#                    DSP_SlotMuteState_ReadAndClear
+#     0x45C8 result word of DSP_State_ApplyAll
+#
+# DIRTY-FLAG ARRAYS (one word per flag, all set to 0 or 1, consumed outside this region):
+#     0x4930 + n*2         five per-slot "slot is live" flags
+#     0x493A + i*2         two DSP-link flags (i = 0,1)
+#     0x493E               global "algorithm changed" flag
+#     0x4940 + n*0x32      per-slot dirty block, 50 bytes per slot, n = 0..4:
+#         +0x00 slot changed        +0x02 + i*2  one word
+#         +0x04 + i*2  seventeen coefficient-changed words
+#         +0x10 relative to 0x4958/0x495A/0x495C/0x495E/0x4960 -- five separate "changed"
+#               words, of which the 0x4960 one is the "anything in this slot changed" summary
+#         +0x26 (base 0x4966) one further word
+#
+# TONE-GENERATOR AUXILIARY POOL (Voice_Poly_NoteOn and its two setup routines):
+#     0x3B13 round-robin slot index, masked to 0..7
+#     0x3B14..0x3B1B eight owner bytes, one per slot; bit 7 = "slot in use"
+#     0x3B1C..0x3B5F 68-byte TG staging block, refilled from the ROM template at 0x012115
+#                    (0x22 words) on every note-on
+#     Latch encoding is region 6's: value written to 0x100000 is (register << 6) | voice.
+#     0x800 + slot = register 0x20, voice `slot`;  0x840 + slot = register 0x21, voice `slot`.
+#     Note-on writes 0xFF00 to reg 0x21 then 0xFF80 to reg 0x20; release writes 0xA200 then
+#     0xA280. Every pair is bracketed by res/set 7,(P6) exactly as region 6 documented.
+#
+# ============================================================================================
+
+[LABEL] 0x0354CA DSP_VOICESTATE_DISPATCH_ACTIVEVOICE  replaces=LABEL_0354CA  confidence=high
+; Body of DSP_VoiceState_Dispatch, whose entry (0x035497) is just below this region. For MIDI
+; part `n` (0..0x19, stride 0x11F from the 0x041368 part table) whose byte at +0x1A is 0x10 or
+; 0x50, calls VoiceInit_Dispatcher(WA=n, BC=part[+0x19], DE=part[+0x1A]), then switches on
+; bits 7:6 of tonerec[+0x10] (tonerec = the long at part+0x06): 0x80 or 0 -> next part,
+; 0x40 -> SubPathB, 0xC0 -> SubPathA.
+
+[LABEL] 0x035534 DSP_VOICESTATE_DISPATCH_SUBPATHA  replaces=LABEL_035534  confidence=high
+; tonerec type 0xC0: call VoiceSlot_FullInit(WA = part index), then continue the scan.
+
+[LABEL] 0x03553F DSP_VOICESTATE_DISPATCH_SUBPATHB  replaces=LABEL_03553F  confidence=high
+; tonerec type 0x40: Voice_PortamentoTargets_SetAll(part) then VoiceSlot_AltInit(part).
+
+[LABEL] 0x035551 DSP_VOICESTATE_DISPATCH_LOOPNEXT  replaces=LABEL_035551  confidence=high
+; ++part; loop back to the scan while part < 0x1A.
+
+[LABEL] 0x03555B DSP_VOICESTATE_DISPATCH_EPILOGUE  replaces=LABEL_03555B  confidence=high
+; pop frame, ret. Callers: DSP_Cmd2B_AlgoSelect's neighbourhood (0x026279), CmdHandler2C
+; sub-commands 4 and 6 (0x035EF0, 0x035F0B).
+
+[ROUTINE] 0x03555F DSP_RESETWRITEBUFFERPTR  replaces=LABEL_03555F  confidence=high
+; Resets the two DSP working-buffer write pointers to 0x007800:
+;   (0x045320) = 0x00007800 ; (0x04531C) = 0x00007800
+; Both are 32-bit. Companions set at boot by DSP_System_Init_Continue: (0x045310) and
+; (0x045314) = 0x00050000, (0x045318) = 0x000A0000. So 0x045310..0x045323 is a block of five
+; longword pointers into the DSP's own address space, of which these two are the ones that
+; get rewound. Called from the audio init path (0x032186), right after DSP_Reset. No
+; hardware touched. No inputs, no outputs.
+
+[LABEL] 0x035574 DSP_STUB_RETA  replaces=LABEL_035574  confidence=high
+; Bare `ret`. One of three consecutive 1-byte stubs; all three are still referenced by
+; pointer tables elsewhere, so they are placeholders for removed features, not padding.
+
+[LABEL] 0x035575 DSP_STUB_RETB  replaces=LABEL_035575  confidence=high
+; Bare `ret`.
+
+[LABEL] 0x035576 DSP_STUB_RETC  replaces=LABEL_035576  confidence=high
+; Bare `ret`.
+
+[ROUTINE] 0x035577 DSP_VELOCITYTOVOLUME  replaces=LABEL_035577  confidence=high
+; Square-law velocity -> 12-bit volume curve, computed not tabulated.
+;   HL = ((WA * WA) >> 2) + 0x3F        (mul XBC,WA is a full 16x16->32; only BC is shifted)
+; For the 0..0x7F range the tone generator actually feeds it, that maps 0 -> 0x003F and
+; 0x7F -> 0x0FFF, i.e. exactly the 12-bit full-scale that ToneGen_SetupPercussionVoice
+; hard-codes with `or (0x3B20), 4095`. Entry WA = velocity, exit HL = level. Sole caller
+; ToneGen_SetupPolyVoice, which ORs the result into the staging word at 0x3B20.
+
+[ROUTINE] 0x035585 DSP_GETEFFECTROUTING  replaces=LABEL_035585  confidence=high
+; Builds the per-note effect-send word that both ToneGen setup routines OR into the staging
+; word at 0x3B22. No inputs; reads two global bytes and returns HL.
+;   HL = 0
+;   if (0x041377) != 0 :  HL |= (0x041377) << 8
+;   if (0x04137A) == 0 :  return HL
+;   HL |= (0x041377)                      <-- reads 0x041377 again, NOT 0x04137A
+; The second load really is from 0x041377 -- verified at byte level, 0x0355A3 is
+; `c2 77 13 04 21`, and both toolchains reproduce it. See [UNCERTAIN].
+
+[LABEL] 0x03559B DSP_GETEFFECTROUTING_PATH  replaces=LABEL_03559B  confidence=high
+; Second half of the above: the low-byte send, gated on 0x04137A.
+
+[ROUTINE] 0x0355AD TONEGEN_SETUPPOLYVOICE  replaces=LABEL_0355AD  confidence=high
+; Note-on for the melodic entries of the auxiliary 8-voice pool. Entry: A = tone-generator
+; voice number (== the pool slot 0..7), C = pool channel 0..5, E = MIDI note, one word of
+; velocity pushed by the caller (this routine ends in `retd 0x2`).
+; Steps:
+;   1. refill the 68-byte staging block 0x3B1C..0x3B5F from the ROM template at 0x012115
+;      (0x22 words, `ldirw` with XIX = destination, XIY = source);
+;   2. note += (byte at 0x012171 + channel); clear bit 7; staging word 0x3B2A = note << 8
+;      with bit 7 set;
+;   3. if (0x012177 + channel) != 0 that byte replaces the caller's velocity;
+;   4. OR DSP_VelocityToVolume(velocity) into staging 0x3B20, and DSP_GetEffectRouting()
+;      into staging 0x3B22;
+;   5. staging 0x3B1E = word from the table at 0x01217D indexed by (note / 12) * 2 -- an
+;      octave-indexed pitch/rate constant;
+;   6. ToneGen_WriteVoiceParams(WA = voice, XBC = 0x3B1C) then
+;      ToneGen_WriteSingleReg(WA = voice, XBC = word at 0x3B1C).
+; Hardware: indirectly the tone generator at 0x100000/0x100002 through the two writers.
+; Reached only through the 6-entry dispatch table at ROM 0x012159 (see [DATA]).
+
+[LABEL] 0x035609 TONEGEN_SETUPPOLYVOICE_PATH  replaces=LABEL_035609  confidence=high
+; Join point after the optional velocity override; steps 4-6 above.
+
+[ROUTINE] 0x035656 TONEGEN_SETUPPERCUSSIONVOICE  replaces=LABEL_035656  confidence=high
+; The percussion variant, dispatch-table entry 1. Entry A = tone-generator voice, E = note,
+; one pushed word (`retd 0x2`). Same template refill into 0x3B1C. Differences from the
+; melodic path: the note is split into octave (note/12, kept in C) and pitch class
+; (note - octave, bit 7 cleared); the pitch class goes into staging 0x3B2A << 8, the octave
+; indexes the word table at 0x012195 which is ORed into staging 0x3B1C; the volume is the
+; fixed full-scale 0xFFF rather than a velocity curve; and staging 0x3B1E takes the single
+; word at 0x01217D instead of an octave-indexed one. Then the same two ToneGen writers.
+
+[ROUTINE] 0x0356C9 VOICE_POLY_NOTEON  confidence=high
+; ALREADY NAMED in the reference file -- doc header only, no rename.
+; Handler for internal pseudo-MIDI packets whose status byte is >= 0xF0. Reached from
+; MIDI_Dispatch (0x0323F0 area) with XWA pointing at the 4-byte packet in the MIDI scratch
+; at 0x2AF4: +1 = status (0xF0 | channel), +2 = note, +3 = velocity.
+; The KN5000's own firmware injects such packets: DSP_WriteAlgoInitPreset and
+; DSP_SlotState_DisplayRestore push one of the canned 4-byte messages at ROM 0x0121EB /
+; 0x0121EF / 0x0121F3 (`F0 50 B0 01`, `F0 50 B0 05`, `F0 50 B0 06`) into the MIDI ring via
+; Audio_CmdHandler_00_1F and then call MIDI_Dispatch immediately. So this is the path the
+; DSP subsystem uses to make the tone generator produce its own reference tone.
+; Behaviour:
+;   channel = status & 0xF; if status < 0xF0 return; if channel > 5 force channel = 0
+;   slot = (0x3B13) = ((0x3B13) + 1) & 7        -- pure round robin, the tone generator's
+;                                                  active-voice bitmap is NEVER consulted
+;   velocity = packet[+3] & 0x7F ; note = packet[+2] & 0x7F
+;   if velocity == 0 -> Voice_Poly_NoteOn_ReleasePath (note-off)
+;   else: TG reg 0x21 voice slot <= 0xFF00, TG reg 0x20 voice slot <= 0xFF80, then call
+;         through the 6-entry table at ROM 0x012159 indexed by channel, then mark
+;         (0x3B14 + slot) = note | 0x80.
+; Hardware: writes 0x100000 (address latch) and 0x100002 (data) directly, with the
+; res 7,(P6) / set 7,(P6) address-vs-data strobe and the mandatory settling nops.
+
+[LABEL] 0x0356E3 VOICE_POLY_NOTEON_ROUNDROBIN  replaces=LABEL_0356E3  confidence=high
+; Advances the round-robin index at 0x3B13 and extracts note and velocity from the packet.
+
+[LABEL] 0x035727 VOICE_POLY_NOTEON_SLOTSEARCH  replaces=LABEL_035727  confidence=high
+; Second half of the note-on register pair: settling nops, then TG reg 0x20 voice slot
+; <= 0xFF80. Despite the existing name it does not search anything.
+
+[LABEL] 0x035749 VOICE_POLY_NOTEON_SLOTFOUND  replaces=LABEL_035749  confidence=high
+; Calls the per-channel setup routine through the table at ROM 0x012159 (index = channel * 4)
+; with WA = slot, BC = channel, DE = note and velocity pushed, then records the owner byte
+; (0x3B14 + slot) = note | 0x80.
+
+[LABEL] 0x035799 VOICE_POLY_NOTEON_RELEASEPATH  replaces=LABEL_035799  confidence=high
+; velocity == 0: set bit 7 of the note byte to form the owner key, then scan slots 0..7.
+
+[LABEL] 0x0357A6 VOICE_POLY_NOTEON_RELEASECHECK  replaces=LABEL_0357A6  confidence=high
+; Compares (0x3B14 + slot) against the owner key; on a miss go to AssignSlot (which is really
+; just "next slot"); on a hit write TG reg 0x21 voice slot <= 0xA200.
+
+[LABEL] 0x0357D8 VOICE_POLY_NOTEON_RELEASENEXT  replaces=LABEL_0357D8  confidence=high
+; Second half of the release register pair: TG reg 0x20 voice slot <= 0xA280.
+
+[LABEL] 0x0357F9 VOICE_POLY_NOTEON_RELEASEDONE  replaces=LABEL_0357F9  confidence=high
+; Clears bit 7 of the owner byte (slot now free) and returns. Only ONE slot is ever released
+; per note-off -- the loop exits here, it does not continue scanning for duplicates.
+
+[LABEL] 0x03580D VOICE_POLY_NOTEON_ASSIGNSLOT  replaces=LABEL_03580D  confidence=high
+; ++slot; repeat the release scan while slot < 8. The name is misleading; nothing is assigned.
+
+[LABEL] 0x035816 VOICE_POLY_NOTEON_EPILOGUE  replaces=LABEL_035816  confidence=high
+; pop xiz; ret.
+
+[ROUTINE] 0x035818 DSP_STOREBUFFERCOUNT  replaces=LABEL_035818  confidence=high
+; (0x4366) = WA. Two instructions. Called only from the top of Audio_Process_DSP to publish
+; the ring byte count sampled at the start of the pass; nothing in this region reads 0x4366
+; back, so it exists for the debugger / for code outside the region.
+
+[ROUTINE] 0x03581D DSP2_INIT  confidence=high
+; ALREADY NAMED -- doc header only.
+; Clears the DSP command ring control block: (0x3B64) = 0 (count), (0x3B62) = 0 (read index),
+; (0x3B60) = 0 (write index). Note it does NOT clear the stream-state words 0x4488/0x448A/
+; 0x448C, which is relevant to the wedge described under Audio_Process_DSP. Called once from
+; the boot path (kn5000_subprogram_v142.s:148) after the primary DSP is initialised. The name
+; is a slight misnomer -- the block is the ring for BOTH DSPs' command traffic, not DSP2 state.
+
+[ROUTINE] 0x035830 DSP_RINGBUF_READ  confidence=high
+; ALREADY NAMED -- doc header only.
+; Pops one byte from a 2 KB ring. Entry XWA = control block. Exit HL = byte (0..0xFF), or
+; 0xFFFF when the ring is empty -- callers test with a SIGNED compare (`cps hl,0` / `jr lt`),
+; so 0xFFFF is "empty" and any real byte is >= 0. Advances (XWA+2) and decrements (XWA+4);
+; index masked with 0x7FF; data area starts at XWA+6.
+
+[LABEL] 0x035855 DSP_RINGBUF_READ_EMPTY  replaces=LABEL_035855  confidence=high
+; HL = 0xFFFF.
+
+[LABEL] 0x035858 DSP_RINGBUF_READ_RETURN  replaces=LABEL_035858  confidence=high
+; ret.
+
+[ROUTINE] 0x03585F DSP_RINGBUF_SKIP  confidence=high
+; ALREADY NAMED -- doc header only.
+; Drains the ring until DSP_RingBuf_Read returns 0xFFFF, then FORCES the read index to equal
+; the write index ((XIZ) = (XIZ+2)) -- i.e. it is a hard resynchronise, not a byte skip: the
+; write index is copied over the ring's index-0 word. Entry XWA = control block, no output.
+; This is the recovery action for every malformed or unhandled message in Audio_Process_DSP.
+; Note the consequence: one bad length byte discards everything currently queued.
+
+[LABEL] 0x03586B DSP_RINGBUF_SKIP_LOOP  replaces=LABEL_03586B  confidence=high
+; Read-until-empty loop body.
+
+[LABEL] 0x035874 DSP_RINGBUF_SKIP_EPILOGUE  replaces=LABEL_035874  confidence=high
+; (XIZ) = (XIZ+2); pop; ret.
+
+[ROUTINE] 0x03587B DSP_RINGBUF_WRITE2K  replaces=LABEL_03587B  confidence=high
+; Pushes one byte into a 2 KB ring. Entry XWA = control block, C = byte. Advances (XWA) and
+; increments (XWA+4); index masked with 0x7FF. No caller reaches it by name in this build --
+; Audio_CmdHandler_60_7F has the same code inlined at DSP_RingBuf_Enqueue -- so it is either
+; dead or reached through a pointer table outside this region.
+
+[ROUTINE] 0x035893 AUDIO_CMDHANDLER_60_7F  confidence=high
+; ALREADY NAMED -- doc header only.
+; Entry 3 of CMD_DISPATCH_TABLE, i.e. every inter-CPU command byte in 0x60..0x7F.
+; Entry (stack, set up by the dispatcher): (XSP+4) = byte count, (XSP+6) = pointer to the
+; bytes received from the main CPU. Exit HL = 0 always.
+; It does two things: it maintains the bulk-stream accounting in 0x4488/0x448A/0x448C, and
+; then unconditionally copies all `count` bytes into the DSP ring at 0x3B60.
+;   (0x448C) == 0  -> CmdHandler60_StreamSizeC : this chunk should be a 32-byte stream header
+;   (0x448C) == 1  -> CmdHandler60_StreamSizeA : accumulate
+;   (0x448C) >= 2  -> IX = 0, then falls into StreamSizeA anyway
+; ★ This routine contains the ONLY two instructions in the whole firmware that can clear
+;   0x448C: `ld (0x448C),0x0000` at 0x0358C7 and at 0x035904. See the wedge note under
+;   Audio_Process_DSP.
+
+[LABEL] 0x0358AB CMDHANDLER60_STREAMSIZEA  replaces=LABEL_0358AB  confidence=high
+; Accumulate: if (0x448A) + count >= (0x4488) go to StreamSizeB (stream complete), else
+; (0x448A) += count and ++(0x448C), then enqueue.
+
+[LABEL] 0x0358C1 CMDHANDLER60_STREAMSIZEB  replaces=LABEL_0358C1  confidence=high
+; Stream complete: (0x448A) = 0, (0x448C) = 0, then enqueue. One of the two clear sites.
+
+[LABEL] 0x0358CF CMDHANDLER60_STREAMSIZEC  replaces=LABEL_0358CF  confidence=high
+; Stream header: only accepted when count == 0x20 exactly (otherwise StateReset). Computes
+; (0x4488) = (hdr[5] << 7) + hdr[6] + 8 at 0x0358D5..0x0358EC, then (0x448A) += 32
+; (0x0358F0) and (0x448C) = 1 (0x0358F6), then enqueues.
+
+[LABEL] 0x0358FE DSP_CMDHANDLER_STATERESET  replaces=LABEL_0358FE  confidence=high
+; Malformed opening chunk: (0x448A) = 0, (0x448C) = 0. The other clear site.
+
+[LABEL] 0x03590A DSP_ENQUEUEORRETURN  replaces=LABEL_03590A  confidence=high
+; IX = 0; if count == 0 return HL = 0, else fall into the enqueue loop.
+
+[ROUTINE] 0x035910 DSP_RINGBUF_ENQUEUE  confidence=high
+; ALREADY NAMED -- doc header only.
+; Inlined 2 KB ring writer, byte at a time, source read with `ld A,(XHL+)` (XHL was loaded
+; from the caller's (XSP+6) at entry): (0x3B60) is the write index, masked 0x7FF, data at
+; 0x3B66; (0x3B64) is incremented per byte. Loops until IX reaches the byte count in DE.
+
+[LABEL] 0x035933 DSP_ENQUEUE_RETURNOK  replaces=LABEL_035933  confidence=high
+; HL = 0; ret.
+
+[ROUTINE] 0x035936 EXTRACT_14BIT_PAYLOADSIZE  confidence=high
+; ALREADY NAMED -- doc header only.
+; HL = ((XWA[5] & 0x7F) << 7) | (XWA[6] & 0x7F). Applied to the 8-byte header copy at 0x4368,
+; so it reads header bytes 0x436D and 0x436E. MIDI-style 7-bits-per-byte packing.
+
+[ROUTINE] 0x035950 DSP_PACK3X7BITFIELDS  confidence=high
+; ALREADY NAMED -- doc header only.
+; XHL = (XWA[1] & 0x7F) << 14 | (XWA[2] & 0x7F) << 7 | (XWA[3] & 0x7F), a 21-bit value. Used
+; where a DSP parameter needs more than 14 bits. No caller inside this region.
+
+[ROUTINE] 0x03597D EXTRACT_14BIT_VOICEPARAM  confidence=high
+; ALREADY NAMED -- doc header only.
+; HL = ((XWA[2] & 0x7F) << 7) | (XWA[3] & 0x7F). On the header copy that is bytes 0x436A and
+; 0x436B. Used by DSP_Cmd2B_VoiceParamWrite for the parameter index.
+
+[ROUTINE] 0x035997 DSP_CMD_DEQUEUEHEADER  confidence=high
+; ALREADY NAMED -- doc header only.
+; Pops exactly seven bytes from the ring (XWA = control block) into 0x4369..0x436F. It does
+; NOT check for underflow: DSP_RingBuf_Read's 0xFFFF sentinel is stored as its low byte 0xFF,
+; so a starved ring yields a header of all-0xFF rather than an error. The caller has already
+; range-checked the message length, which is why this is safe in the normal case -- and why
+; it is not safe if the length byte itself is garbage.
+
+[ROUTINE] 0x0359DB DSP_CMD_LOADEFFECTPRESET  confidence=high
+; ALREADY NAMED -- doc header only.
+; Loads a complete 290-byte effect configuration out of the ring into the live config buffer.
+; Entry XWA = ring control block. Exit HL = 0 on success, 0xFFFF on rejection.
+; Guard: ((0x436D) << 7) + (0x436E) must equal 0x122 (290) exactly; otherwise the whole
+; message is discarded with DSP_RingBuf_Skip and 0xFFFF returned.
+; On success it reads, in order: 8 bytes into DSP_GetConfigBuffer() (0x448E), then for each
+; of the five slots 0x38 bytes into EFF_GetSlotBuffer(slot), then two trailing bytes that are
+; read and thrown away. 8 + 5*56 + 2 = 290, which is where the size guard comes from.
+; Called only from DSP_CmdHandler_2D when header byte 0x4369 == 0 and 0x436A == 0x09.
+
+[LABEL] 0x035A0E DSP_LOADEFFPRESET_LOOP1  replaces=LABEL_035A0E  confidence=high
+; The 8 header bytes.
+
+[LABEL] 0x035A24 DSP_LOADEFFPRESET_LOOP1NEXT  replaces=LABEL_035A24  confidence=high
+; Sets the per-slot byte count to 0x38 and starts the slot loop (slot < 5).
+
+[LABEL] 0x035A31 DSP_LOADEFFPRESET_LOOP2  replaces=LABEL_035A31  confidence=high
+; Per-slot: buffer = EFF_GetSlotBuffer(slot).
+
+[LABEL] 0x035A42 DSP_LOADEFFPRESET_LOOP2NEXT  replaces=LABEL_035A42  confidence=high
+; Inner byte loop for one slot.
+
+[LABEL] 0x035A58 DSP_LOADEFFPRESET_LOOP3  replaces=LABEL_035A58  confidence=high
+; ++slot; repeat while slot < 5.
+
+[LABEL] 0x035A60 DSP_LOADEFFPRESET_LOOP3A  replaces=LABEL_035A60  confidence=high
+; Two trailing bytes consumed and discarded; HL = 0.
+
+[LABEL] 0x035A70 DSP_LOADEFFPRESET_LOOP3NEXT  replaces=LABEL_035A70  confidence=high
+; Size-guard failure: DSP_RingBuf_Skip, HL = 0xFFFF.
+
+[LABEL] 0x035A79 DSP_LOADEFFPRESET_EPILOGUE  replaces=LABEL_035A79  confidence=high
+; Restore frame, ret.
+
+[ROUTINE] 0x035A7E DSP_RINGBUF_READANDCOMPARE  confidence=high
+; ALREADY NAMED -- doc header only.
+; Reads (0x436E) payload bytes from the ring into the buffer at XBC, byte by byte, and counts
+; how many DIFFER from what is already there -- note it counts differences but does NOT write
+; the new value; the destination is left untouched. Entry XWA = ring control block,
+; XBC = destination (0x4370 for 0x2B/0x2C, the slot buffer for 0x2D).
+; Exit: HL = (0x436F) if (0x436F) != 0xFF or if two or more bytes differed, else HL = 0.
+; So 0xFF in the header's status byte means "reply only if this is actually a change", with a
+; deliberate one-byte tolerance. The result is discarded by the 0x2B and 0x2C paths and is
+; used only by CmdHandler2D_PathA, which feeds it to DSP_ApplyConfig as E.
+
+[LABEL] 0x035A8B DSP_RINGBUF_COMPARE_LOOP  replaces=LABEL_035A8B  confidence=high
+; Read one byte, compare with (XWA), bump the mismatch counter on inequality.
+
+[LABEL] 0x035A9B DSP_RINGBUF_COMPARE_MATCHPATH  replaces=LABEL_035A9B  confidence=high
+; Advance the destination pointer and the index (taken on both match and mismatch).
+
+[LABEL] 0x035AA6 DSP_RINGBUF_COMPARE_MISMATCHPATH  replaces=LABEL_035AA6  confidence=high
+; Loop condition against (0x436E), then the two result tests. The two "Match"/"Mismatch"
+; names are the wrong way round; see [UNCERTAIN].
+
+[LABEL] 0x035ABC DSP_RINGBUF_COMPARE_LOOPNEXT  replaces=LABEL_035ABC  confidence=high
+; HL = (0x436F) -- the "report the header's status byte" exit.
+
+[LABEL] 0x035AC2 DSP_RINGBUF_COMPARE_FOUNDPATH  replaces=LABEL_035AC2  confidence=high
+; HL = 0 -- the "identical, suppress" exit.
+
+[LABEL] 0x035AC4 DSP_RINGBUF_COMPARE_EPILOGUE  replaces=LABEL_035AC4  confidence=high
+; pop; ret.
+
+[ROUTINE] 0x035AC8 AUDIO_PROCESS_DSP  confidence=high
+; ALREADY NAMED -- doc header only. THIS IS THE ROUTINE THE OPEN BUG SHOULD BE CHECKED
+; AGAINST FIRST; see the wedge note below and 'findings'.
+; The DSP ring consumer. Called unconditionally once per pass of Audio_Main_Loop (0x01FAE6),
+; from the call block at 0x01FB2F, between MIDI_Dispatch and Audio_Process_Final. No entry
+; parameters. Local frame of 10 bytes; (XSP+4) holds the ring control-block pointer 0x3B60
+; and (XSP+12) holds the current message's type byte.
+; Sequence:
+;   (0x4366) = ring byte count                                (DSP_StoreBufferCount)
+;   if (0x448C) != 0  -> jump straight to DSP_Process_Exit    ** the gate **
+;   otherwise -> DSP_Process_ReadNext, which pops one type byte and loops while it is >= 0.
+;
+; ★★ WEDGE (in-region, address-precise). The word at 0x448C gates the entire consumer, and
+;    it is written from exactly five instructions in the firmware (byte-verified with
+;    unidasm; grep the source for 17548 to see the same five):
+;      0x0358BB  ++(0x448C)     Audio_CmdHandler_60_7F, chunk accumulated
+;      0x0358C7  (0x448C) = 0   Audio_CmdHandler_60_7F, stream complete
+;      0x0358F6  (0x448C) = 1   Audio_CmdHandler_60_7F, stream header accepted
+;      0x035904  (0x448C) = 0   Audio_CmdHandler_60_7F, malformed opening chunk
+;      0x035B12  (0x448C) = 1   Audio_Process_DSP itself, TRUNCATED-MESSAGE path
+;    and read from exactly two: 0x035899/0x0358A1 (the handler) and 0x035AD9 (the gate).
+;    The last one is the problem: DSP_Process_NextCmd sets the same flag that means "a bulk
+;    stream is in flight" to mean "the message I am looking at is not fully queued yet".
+;    Once it is set, Audio_Process_DSP does nothing at all on every subsequent pass, forever,
+;    unless a NEW inter-CPU command in the 0x60..0x7F class arrives AND the byte accounting
+;    in 0x4488/0x448A happens to reach completion (or the chunk is malformed). DSP2_Init does
+;    not clear it; DSP_Reset does not clear it; nothing in the audio loop clears it.
+;    Downstream effect: DSP_Cmd2B_PostProcess (0x035D4A) is the ONLY producer of sub->main
+;    traffic in this region, and it is only reachable through this consumer. So the wedge
+;    presents exactly as "the sub-CPU keeps consuming main->sub commands (they are still
+;    enqueued by Audio_CmdHandler_60_7F) but stops replying, at a fixed point".
+
+[LABEL] 0x035AE5 DSP_PROCESS_NEXTCMD  replaces=LABEL_035AE5  confidence=high
+; Message-length pre-check, and the source of the wedge above. Peeks the byte five positions
+; ahead of the ring read index -- that is header byte 0x436D's position, i.e. the message
+; length -- and compares it against the ring's byte count.
+;   length <= count : proceed to Audio_Process_DSP_MsgSizeCheck
+;   length >  count : un-read the type byte (--read index at 0x035B09, ++count at 0x035B0F),
+;                     set (0x448C) = 1 at 0x035B12, exit.
+; Because the length is read from the ring without any sanity limit, one corrupt byte
+; (0x00..0xFF, so up to 255) is enough to take the second branch permanently.
+
+[LABEL] 0x035B1B AUDIO_PROCESS_DSP_MSGSIZECHECK  replaces=LABEL_035B1B  confidence=high
+; The real header decode and dispatch, despite the name (the size was already checked).
+; Calls DSP_Cmd_DequeueHeader, stores the type byte at 0x4368, then:
+;   0x2D -> DSP_CmdHandler_2D    0x2C -> DSP_CmdHandler_2C    0x2B -> falls through
+;   anything else -> DSP_Cmd_DefaultSkip
+; For 0x2B it reads the payload with DSP_RingBuf_ReadAndCompare into 0x4370, then switches on
+; the target selector 0x4369: below 0x30 or above 0x3F -> SkipAndContinue; 0x436A != 0x7F ->
+; VoiceParamWrite; otherwise the channel is 0x4369 & 0xF and the sub-command is 0x436B:
+;   0x30 -> Noop            0x27 -> ReadParam11      0x24 -> SetParam
+;   0x22 -> ReadParam5D     0x20 -> MixSendConfig    0x03 -> StateControl
+;   0x00 -> AlgoSelect      0x10..0x17 -> the eight stubs below, via the offset table at
+;                            ROM 0x0121DB added to the base 0x035BC6
+;   anything else -> UnknownSkip
+
+[LABEL] 0x035BC6 DSP_CMD2B_ALGOSELECT  replaces=LABEL_035BC6  confidence=high
+; Sub-command 0x00. If CheckStatusBits_40(channel) returns 0 it first calls
+; Voice_Slot_CalcArticParams(channel), then DSP_AlgoSelect(WA = channel, BC = payload[0]
+; from 0x4370, XDE = 0x4370). Also the base address the 0x0121DB offset table is added to.
+
+[LABEL] 0x035BD6 DSP_CMD2B_ALGOSELECT_CONTINUE  replaces=LABEL_035BD6  confidence=high
+; Join point that performs the DSP_AlgoSelect call.
+
+[LABEL] 0x035BF1 DSP_CMD2B_STATECONTROL  replaces=LABEL_035BF1  confidence=high
+; Sub-command 0x03: DSP_EffectStateQuery(WA = channel & 0xF, XBC = 0x4370) (0x030618).
+
+[ROUTINE] 0x035C03 DSP_CMD2B_PARAMSTUB0  confidence=high
+; ★ NEW NAME -- this address currently has NO symbol in either the ELF or the reference file.
+; First of eight 20-byte stubs reached through the offset table at ROM 0x0121DB
+; (offsets 0x3D, 0x51, 0x65, 0x79, 0x8D, 0xA1, 0xB5, 0xC9 added to 0x035BC6 give 0x035C03,
+; 0x035C17, 0x035C2B, 0x035C3F, 0x035C53, 0x035C67, 0x035C7B, 0x035C8F). Each stub is
+;   ld A,(XSP+8) / and A,0x0F / extz WA / ld XDE,(XSP+0x0A) / ld BC,<n> / call 0x030F7D
+;   / jrl 0x035D4A
+; i.e. DSP_VoiceParamReadWrite(WA = channel, XDE = 0x4370, BC = n) followed by the common
+; reply path. Sub-command 0x10 selects n = 0. Verified by disassembling 0x035BF1..0x035CA2.
+
+[ROUTINE] 0x035C17 DSP_CMD2B_PARAMSTUB1  confidence=high
+; ★ NEW NAME. As above with BC = 1; sub-command 0x11.
+
+[ROUTINE] 0x035C2B DSP_CMD2B_PARAMSTUB2  confidence=high
+; ★ NEW NAME. BC = 2; sub-command 0x12.
+
+[ROUTINE] 0x035C3F DSP_CMD2B_PARAMSTUB3  confidence=high
+; ★ NEW NAME. BC = 3; sub-command 0x13.
+
+[ROUTINE] 0x035C53 DSP_CMD2B_PARAMSTUB4  confidence=high
+; ★ NEW NAME. BC = 4; sub-command 0x14.
+
+[ROUTINE] 0x035C67 DSP_CMD2B_PARAMSTUB5  confidence=high
+; ★ NEW NAME. BC = 5; sub-command 0x15.
+
+[ROUTINE] 0x035C7B DSP_CMD2B_PARAMSTUB6  confidence=high
+; ★ NEW NAME. BC = 6; sub-command 0x16.
+
+[ROUTINE] 0x035C8F DSP_CMD2B_PARAMSTUB7  confidence=high
+; ★ NEW NAME. BC = 7; sub-command 0x17.
+
+[LABEL] 0x035CA3 DSP_CMD2B_MIXSENDCONFIG  replaces=LABEL_035CA3  confidence=high
+; Sub-command 0x20: DSP_MixSendConfig(WA = payload[0] at 0x4370, BC = payload[1] at 0x4371,
+; XDE = 0x4370).
+
+[LABEL] 0x035CBF DSP_CMD2B_READPARAM5D  replaces=LABEL_035CBF  confidence=high
+; Sub-command 0x22: DSP_ReadVoiceParam5D with the same three arguments.
+
+[LABEL] 0x035CDA DSP_CMD2B_SETPARAM  replaces=LABEL_035CDA  confidence=high
+; Sub-command 0x24: DSP_SetVoiceCoefficients with the same three arguments.
+
+[LABEL] 0x035CF5 DSP_CMD2B_READPARAM11  replaces=LABEL_035CF5  confidence=high
+; Sub-command 0x27: DSP_ReadVoiceParam11 with the same three arguments.
+
+[LABEL] 0x035D10 DSP_CMD2B_NOOP  replaces=LABEL_035D10  confidence=high
+; Sub-command 0x30: HL = 0, i.e. accepted and silently ignored, and (HL == 0) means no reply.
+
+[LABEL] 0x035D14 DSP_CMD2B_UNKNOWNSKIP  replaces=LABEL_035D14  confidence=high
+; Unrecognised sub-command: DSP_RingBuf_Skip (which resynchronises the WHOLE ring), HL = 0.
+
+[LABEL] 0x035D1E DSP_CMD2B_VOICEPARAMWRITE  replaces=LABEL_035D1E  confidence=high
+; Taken when 0x436A != 0x7F: the message carries a 14-bit parameter index
+; (Extract_14Bit_VoiceParam on the header copy) and a 14-bit value
+; (Extract_14Bit_PayloadSize), which are handed to DSP_WriteVoiceParam together with the
+; channel (0x4369 & 0xF) and a pushed pointer to 0x4370.
+
+[LABEL] 0x035D4A DSP_CMD2B_POSTPROCESS  replaces=LABEL_035D4A  confidence=high
+; ★ THE ONLY SUB->MAIN PRODUCER IN THIS REGION. Common tail of every 0x2B sub-command.
+;   if HL == 0 : no reply at all, straight back to DSP_Process_ReadNext
+;   else       : InterCPU_DMA_Send(WA = 3, XDE = 0x4368, BC = HL + 8)
+; XDE = 0x4368 is the verbatim copy of the message just processed (type byte + 7 header bytes
+; + payload), so the reply is an echo of length HL + 8. Command class 3 on the inter-CPU
+; link. Every handler that returns 0 -- DSP_Cmd2B_Noop, DSP_Cmd2B_UnknownSkip, and any
+; handler whose own result is zero -- is silently unacknowledged by design.
+
+[LABEL] 0x035D60 DSP_CMD2B_SKIPANDCONTINUE  replaces=LABEL_035D60  confidence=high
+; Target selector outside 0x30..0x3F: DSP_RingBuf_Skip either way, the 0x40 test only picks
+; which of two identical code paths runs.
+
+[LABEL] 0x035D6F DSP_CMD2B_SKIPPATH  replaces=LABEL_035D6F  confidence=high
+; The other identical skip path.
+
+[ROUTINE] 0x035D78 DSP_CMDHANDLER_2C  confidence=high
+; Message type 0x2C: channel and global configuration. Reads the payload into 0x4370 with
+; DSP_RingBuf_ReadAndCompare, then splits on the target selector 0x4369:
+;   0x4369 == 0 : global. Requires 0x436A == 8, then the sub-command byte 0x436B is mapped to
+;                 a table index: raw 0..8 map to entries 0..8; raw 0x20..0x25 map to entries
+;                 9..14 (the code does `wa -= 0x17` and accepts 9..0x0E); everything else,
+;                 including any negative value, goes to CmdHandler2C_SubCmd0 (discard).
+;   0x4369 != 0 : per-channel, see CmdHandler2C_SubCmd1.
+; No reply is ever produced by the 0x2C path -- every route ends at DSP_Process_ReadNext.
+
+[LABEL] 0x035DBC CMDHANDLER2C_JUMPDISPATCH  replaces=LABEL_035DBC  confidence=high
+; index *= 2; word from ROM 0x0121BD + index; jp (0x035DD2 + that word).
+
+[ROUTINE] 0x035DD2 CMDHANDLER2C_GLOBAL_MASTERTUNE  replaces=LABEL_035DD2  confidence=high
+; ★ NEW MEANING for an address currently labelled as the start of a `.byte` blob.
+; Table entry 0 (sub-command 0x00). `ld A,(0x4370) / exts WA / call Voice_SetMasterTune
+; (0x028B23) / jrl DSP_Process_ReadNext`. SIGN-extended -- master tune is signed.
+; The thirteen stubs at 0x035DD2..0x035E7A are all this shape and are all CODE.
+
+[ROUTINE] 0x035DDF CMDHANDLER2C_GLOBAL_MIXPARAMA  confidence=high
+; ★ NEW NAME. Table entry 1: zero-extends (0x4370) and calls DSP_SET_MIXPARAM_45B2 (0x036205).
+
+[ROUTINE] 0x035DEC CMDHANDLER2C_GLOBAL_MIXPARAMB  confidence=high
+; ★ NEW NAME. Table entry 2: calls DSP_SET_MIXPARAM_45B4 (0x03621C).
+
+[ROUTINE] 0x035DF9 CMDHANDLER2C_GLOBAL_MONOMODE  confidence=high
+; ★ NEW NAME. Table entry 3: calls Voice_SetMonoMode (0x028D2E).
+
+[ROUTINE] 0x035E06 CMDHANDLER2C_GLOBAL_BENDRANGE  confidence=high
+; ★ NEW NAME. Table entry 4: SIGN-extends (0x4370) and calls Voice_SetPitchBendRange
+; (0x028B30).
+
+[ROUTINE] 0x035E13 CMDHANDLER2C_GLOBAL_MIXPARAMC  confidence=high
+; ★ NEW NAME. Table entry 6: calls DSP_SET_MIXPARAM_45B6 (0x036237).
+; (Table entries 5 and 9 point straight at DSP_Process_ReadNext, i.e. accepted and ignored.)
+
+[ROUTINE] 0x035E20 CMDHANDLER2C_GLOBAL_SETVALUE45B8  confidence=high
+; ★ NEW NAME. Table entry 7: calls DSP_SET_VALUE_45B8 (0x036252).
+
+[ROUTINE] 0x035E2D CMDHANDLER2C_GLOBAL_SETENABLE45BA  confidence=high
+; ★ NEW NAME. Table entry 8: calls DSP_SET_ENABLE_45BA (0x03627A).
+
+[ROUTINE] 0x035E3A CMDHANDLER2C_GLOBAL_SETVALUE4504  confidence=high
+; ★ NEW NAME. Table entry 10 (raw sub-command 0x21): calls DSP_SET_CFGWORD_4504 (0x0362A2).
+
+[ROUTINE] 0x035E47 CMDHANDLER2C_GLOBAL_SETVALUE453C  confidence=high
+; ★ NEW NAME. Table entry 11 (raw 0x22): calls DSP_SET_CFGWORD_453C (0x0362B6).
+
+[ROUTINE] 0x035E54 CMDHANDLER2C_GLOBAL_SETALGOTYPE  confidence=high
+; ★ NEW NAME. Table entry 12 (raw 0x23): calls DSP_SET_ALGOTYPE_45B0 (0x0362CA), the one
+; global setter that re-runs DSP_ApplyAlgoForVoiceType instead of DSP_State_ApplyBuf.
+
+[ROUTINE] 0x035E61 CMDHANDLER2C_GLOBAL_SETVALUE4574  confidence=high
+; ★ NEW NAME. Table entry 13 (raw 0x24): calls DSP_SET_CFGWORD_4574 (0x0362DD).
+
+[ROUTINE] 0x035E6E CMDHANDLER2C_GLOBAL_SETVALUE45AC  confidence=high
+; ★ NEW NAME. Table entry 14 (raw 0x25): calls DSP_SET_CFGWORD_45AC (0x0362F1).
+
+[LABEL] 0x035E7B CMDHANDLER2C_SUBCMD0  replaces=LABEL_035E7B  confidence=high
+; Out-of-range global sub-command: DSP_RingBuf_Skip, continue.
+
+[LABEL] 0x035E84 CMDHANDLER2C_SUBCMD1  replaces=LABEL_035E84  confidence=high
+; Per-channel branch. Requires the selector in 0x30..0x3F and 0x436A == 0x7F; channel =
+; 0x4369 & 0xF. Sub-command 0x436B: 0x08 -> SubCmd5, 0x06 -> SubCmd4, 0x04 -> SubCmd3,
+; 0x03 -> ignore, 0x10..0x17 -> ignore, anything above 0x17 -> SubCmd2 (skip).
+
+[LABEL] 0x035ECE CMDHANDLER2C_SUBCMD2  replaces=LABEL_035ECE  confidence=high
+; DSP_RingBuf_Skip, continue.
+
+[LABEL] 0x035ED7 CMDHANDLER2C_SUBCMD3  replaces=LABEL_035ED7  confidence=high
+; Sub-command 0x04: DSP_Reinit_VoiceSlots(WA = payload[0], BC = payload[1]) followed by
+; DSP_VoiceState_Dispatch(WA = 0xFF, BC = 0xFF) -- i.e. rebuild every part.
+
+[LABEL] 0x035EFA CMDHANDLER2C_SUBCMD4  replaces=LABEL_035EFA  confidence=high
+; Sub-command 0x06: DSP_VoiceState_Dispatch(WA = payload[0], BC = payload[1]).
+
+[LABEL] 0x035F13 CMDHANDLER2C_SUBCMD5  replaces=LABEL_035F13  confidence=high
+; Sub-command 0x08: Voice_AllVoices_PortamentoUpdate().
+
+[LABEL] 0x035F1A CMDHANDLER2C_SUBCMD6  replaces=LABEL_035F1A  confidence=high
+; Selector outside 0x30..0x3F: skip either way (the 0x40 test again picks between two
+; identical paths).
+
+[LABEL] 0x035F29 CMDHANDLER2C_EPILOGUE  replaces=LABEL_035F29  confidence=high
+; The other identical skip path.
+
+[ROUTINE] 0x035F32 DSP_CMDHANDLER_2D  confidence=high
+; Message type 0x2D: effect preset and per-slot configuration.
+;   0x4369 == 0 and 0x436A == 0x09 : whole-preset load. DSP_Cmd_LoadEffectPreset; if it
+;        returns 0xFFFF the message is dropped, otherwise DSP_ReconfigAndStatus re-applies
+;        the buffer.
+;   0x4369 == 0 and 0x436A in 0x0A..0x0E : single-slot load, slot = 0x436A - 0x0A, see
+;        CmdHandler2D_PathA.
+;   0x4369 in 0x30..0x3F : per-channel, see CmdHandler2D_PathD.
+;   anything else : skip.
+; Like 0x2C, the 0x2D path never sends a reply.
+
+[LABEL] 0x035F66 CMDHANDLER2D_PATHA  replaces=LABEL_035F66  confidence=high
+; Single-slot preset. buffer = EFF_GetSlotBuffer(0x436A - 0x0A); if that is 0xFFFFFFFF the
+; message is dropped. If the declared payload size (0x436E) exceeds the ring's byte count the
+; message is skipped (PathB). Otherwise DSP_RingBuf_ReadAndCompare reads into the slot buffer
+; and its result L is passed as E to DSP_ApplyConfig(WA = slot, XBC = 0x4370, E = compare
+; result) -- E == 0xFF is the "nothing changed" signal.
+
+[LABEL] 0x035FC3 CMDHANDLER2D_PATHB  replaces=LABEL_035FC3  confidence=high
+; Payload longer than what is queued: skip.
+
+[LABEL] 0x035FCB CMDHANDLER2D_PATHC  replaces=LABEL_035FCB  confidence=high
+; Slot index out of 0x0A..0x0E: skip.
+
+[LABEL] 0x035FD3 CMDHANDLER2D_PATHD  replaces=LABEL_035FD3  confidence=high
+; Per-channel 0x2D. Reads one payload byte into XBC (zero-extended) with
+; DSP_RingBuf_ReadAndCompare; if 0x436A == 0x7F the message is then skipped, otherwise the
+; channel (0x4369 - 0x30) is computed into a local and... nothing further is done with it.
+; This branch has no observable effect beyond consuming the message.
+
+[LABEL] 0x036001 CMDHANDLER2D_MSGSIZEMATCH  replaces=LABEL_036001  confidence=high
+; skip; continue.
+
+[LABEL] 0x036009 CMDHANDLER2D_ENQUEUEORRETURN  replaces=LABEL_036009  confidence=high
+; Selector 0x40: read one payload byte, then skip the rest.
+
+[LABEL] 0x036025 CMDHANDLER2D_QUEUEDPATH  replaces=LABEL_036025  confidence=high
+; Any other selector: skip.
+
+[LABEL] 0x03602D DSP_CMD_DEFAULTSKIP  replaces=LABEL_03602D  confidence=high
+; Unknown message type (not 0x2B/0x2C/0x2D): DSP_RingBuf_Skip, i.e. the ENTIRE queue is
+; resynchronised and discarded.
+
+[LABEL] 0x036033 DSP_PROCESS_READNEXT  replaces=LABEL_036033  confidence=high
+; Loop head: pop the next type byte from the ring; while it is >= 0 (i.e. not the 0xFFFF
+; empty sentinel) go round to DSP_Process_NextCmd. Every handler in the region ends here.
+
+[LABEL] 0x036044 DSP_PROCESS_EXIT  replaces=LABEL_036044  confidence=high
+; pop xiz; unwind the 10-byte frame; ret.
+
+[ROUTINE] 0x036049 DSP_WRITEALGOINITPRESET  replaces=LABEL_036049  confidence=high
+; Emits an audible/internal confirmation for the current algorithm class. Entry WA = the
+; algorithm/voice-type word. Calls DSP_State_LookupAlgoIndex(WA) and, on the result 2 / 1 /
+; anything else, pushes the 4-byte canned message at ROM 0x0121F3 / 0x0121EF / 0x0121EB
+; (`F0 50 B0 06`, `F0 50 B0 05`, `F0 50 B0 01`) into the MIDI ring via
+; Audio_CmdHandler_00_1F(count = 4, ptr) and then tail-jumps to MIDI_Dispatch so the packet
+; is consumed immediately. Because the status byte is 0xF0, MIDI_Dispatch routes it to
+; Voice_Poly_NoteOn, which allocates one of the eight auxiliary tone-generator voices.
+; Called from DSP_Reset. Hardware: the tone generator, indirectly, one note.
+
+[LABEL] 0x036064 DSP_WRITEALGOINITPRESET_PRESETPATH  replaces=LABEL_036064  confidence=high
+; Index 1 -> ROM 0x0121EF.
+
+[LABEL] 0x036079 DSP_WRITEALGOINITPRESET_DEFAULTPATH  replaces=LABEL_036079  confidence=high
+; Any other index -> ROM 0x0121EB.
+
+[LABEL] 0x036088 DSP_WRITEALGOINITPRESET_EPILOGUE  replaces=LABEL_036088  confidence=high
+; jp MIDI_Dispatch (tail call, so MIDI_Dispatch's ret returns to this routine's caller).
+
+[ROUTINE] 0x03608C DSP_APPLYALGOFORVOICETYPE  confidence=high
+; ALREADY NAMED -- doc header only.
+; Entry WA = voice-type word. Returns immediately unless WA is 0x35 or 0x0F. For those two
+; it copies the word (0x45B0) into (0x44B4) -- which is 0x4496 + 0x1E, i.e. SLOT 0's record
+; at offset +0x1E, the same field EFF_SlotActive_LoopNext reads as a dirty-array index --
+; and then calls DSP_State_ApplyBuf(XWA = 0x448E) to push the whole
+; configuration to the DSP. Callers: DSP_Reset, DSP_ApplyConfig, DSP_ReconfigAndStatus, and
+; the global setter DSP_SET_ALGOTYPE_45B0.
+
+[LABEL] 0x036098 DSP_APPLYALGOFORVOICETYPE_TYPEF  replaces=LABEL_036098  confidence=high
+; The shared body for both accepted voice types.
+
+[ROUTINE] 0x0360A7 DSP_RESET  confidence=high
+; ALREADY NAMED -- doc header only. Full DSP subsystem reset; called once from the audio
+; init path at 0x032183. No parameters.
+;   (0x45B0) = 1 ; (0x45B2) = (0x45B4) = (0x45B6) = (0x45B8) = (0x45BA) = 0
+;   DSP_MixerCoeff_Compute(WA = (0x45B2), BC = (0x45B4), DE = (0x45B6))   [0x03C067]
+;   copy 0x91 words (290 bytes) from 0xF01E in internal RAM to 0x448E -- this is where the
+;     default effect configuration comes from, and 290 == the 0x122 size guard elsewhere
+;   DSP_State_LoadAndApplyAll(XWA = 0x448E) ; (0x4492) = 0 ; DSP_State_DmaLoadPresets()
+;   IZ = word at 0xF026 (a firmware-config word in internal RAM);
+;     DSP_WriteAlgoInitPreset(IZ) then DSP_ApplyAlgoForVoiceType(IZ)
+;   DSP_MixerCoeff_Compute again with the (now possibly changed) three words.
+; ★ Does NOT clear 0x4488/0x448A/0x448C, so a DSP reset does not clear the consumer wedge.
+
+[ROUTINE] 0x03611E DSP_SLOTSTATE_DISPLAYRESTORE  replaces=LABEL_03611E  confidence=high
+; Entry: none. Calls DSP_SlotMuteState_ReadAndClear(0) and, on the returned value 3 / 2 / 1,
+; injects the same canned pseudo-MIDI packet as DSP_WriteAlgoInitPreset (ROM 0x0121F3 /
+; 0x0121EF / 0x0121EB) through Audio_CmdHandler_00_1F + MIDI_Dispatch. Value 0 does nothing.
+; Called from Audio_Process_Init (0x032197) when the audio-tick phase byte at 0x041342 is 0,
+; right after Voice_ScanAndCancelNoteOff -- i.e. this is the "re-announce the effect state
+; after a mode change" path.
+
+[LABEL] 0x03613B DSP_SLOTSTATE_DISPLAYRESTORE_ACTIVEPATH  replaces=LABEL_03613B  confidence=high
+; Value 2 -> ROM 0x0121EF.
+
+[LABEL] 0x036152 DSP_SLOTSTATE_DISPLAYRESTORE_EPILOGUE  replaces=LABEL_036152  confidence=high
+; Value 1 -> ROM 0x0121EB; value 0 -> plain ret.
+
+[ROUTINE] 0x03616A DSP_APPLYCONFIG  confidence=high
+; ALREADY NAMED -- doc header only.
+; Applies one effect slot's configuration. Entry WA (low byte A) = slot 0..4, E = the
+; "changed" indicator from DSP_RingBuf_ReadAndCompare, XBC = 0x4370.
+;   (0x448E) = 1 when E == 0xFF (nothing changed), else 0. That header word is therefore the
+;   "this configuration is unchanged / not freshly loaded" flag that DSP_State_ApplyBuf reads.
+; Then, on the slot number: 1, 2 or 4 -> tail-jump DSP_State_ApplyBuf(0x448E);
+;   3 -> BufSelectB (see below); 0 -> DSP_State_ApplyBuf followed by
+;   DSP_ApplyAlgoForVoiceType(word at 0x4496, i.e. slot 0's algorithm number);
+;   anything else -> return without doing anything.
+
+[LABEL] 0x036177 DSP_APPLYCONFIG_ACTIVEPATH  replaces=LABEL_036177  confidence=high
+; (0x448E) = 0 -- "this is a real change".
+
+[LABEL] 0x03617D DSP_APPLYCONFIG_INACTIVEPATH  replaces=LABEL_03617D  confidence=high
+; The slot switch.
+
+[LABEL] 0x0361A0 DSP_APPLYCONFIG_BUFSELECTA  replaces=LABEL_0361A0  confidence=high
+; Slots 1, 2, 4: jp DSP_State_ApplyBuf(0x448E).
+
+[LABEL] 0x0361A8 DSP_APPLYCONFIG_BUFSELECTB  replaces=LABEL_0361A8  confidence=high
+; Slot 3 only: writes (0x454A) = (0x45B8) if (0x45BA) != 0, else 0, and then applies. Same
+; 0x45B8/0x45BA/0x454A relationship as the global setters at 0x036252/0x03627A -- and
+; 0x454A = 0x453E + 0x0C, i.e. SLOT 3's record at offset +0x0C, which is why this is the
+; slot-3 branch. That cross-check is what makes the 0x4496 + n*0x38 slot layout certain.
+
+[LABEL] 0x0361BA DSP_APPLYCONFIG_EPILOGUE  replaces=LABEL_0361BA  confidence=high
+; Stores the selected word and calls DSP_State_ApplyBuf.
+
+[ROUTINE] 0x0361C5 DSP_RECONFIGANDSTATUS  confidence=high
+; ALREADY NAMED -- doc header only. DSP_State_ApplyBuf(0x448E) then
+; DSP_ApplyAlgoForVoiceType(word at 0x4496). The unconditional form of DSP_ApplyConfig's
+; slot-0 case; called after a successful whole-preset load in DSP_CmdHandler_2D.
+
+[ROUTINE] 0x0361D4 DSP_GETCONFIGBUFFER  confidence=high
+; ALREADY NAMED -- doc header only. XHL = 0x448E. Three bytes.
+
+[ROUTINE] 0x0361D9 EFF_GETSLOTBUFFER  confidence=high
+; ALREADY NAMED -- doc header only.
+; Entry WA = slot. Exit XHL = 0x4496 + slot * 0x38 for slot in 0..4, or 0xFFFFFFFF for any
+; other slot. The five explicit `cps bc,n / jr z` tests for 0..4 are the range check; the
+; fall-through to EFF_GetSlotBuffer_LoopBody is the error case.
+
+[LABEL] 0x0361EF EFF_GETSLOTBUFFER_NOSLOT  replaces=LABEL_0361EF  confidence=high
+; The VALID path: XHL = 0x4496 + slot * 0x38. Name is inverted; see [UNCERTAIN].
+
+[LABEL] 0x0361FF EFF_GETSLOTBUFFER_LOOPBODY  replaces=LABEL_0361FF  confidence=high
+; The INVALID path: XHL = 0xFFFFFFFF. Not a loop; name is wrong. See [UNCERTAIN].
+
+[LABEL] 0x036204 EFF_GETSLOTBUFFER_EPILOGUE  replaces=LABEL_036204  confidence=high
+; ret.
+
+[ROUTINE] 0x036205 DSP_SET_MIXPARAM_45B2  confidence=high
+; ★ NEW MEANING. This address is currently labelled DSP_StateTable_DefaultData and its 256
+; bytes are emitted as `.byte`. They are ten subroutines; this is the first.
+; (0x45B2) = zero-extended WA, then tail-jump DSP_MixerCoeff_Compute(WA = (0x45B2),
+; BC = (0x45B4), DE = (0x45B6)) at 0x03C067 -- the identical three-argument call DSP_Reset
+; makes. Reached only from CmdHandler2C global sub-command 0x01.
+; The four bytes at 0x036217 (`ld HL,(0x45B2) / ret`) are UNREACHABLE -- the `jp` above them
+; is unconditional. Same dead tail appears in the next two setters; they look like a
+; hand-optimised `return value` that the compiler/author replaced with a tail call.
+
+[ROUTINE] 0x03621C DSP_SET_MIXPARAM_45B4  confidence=high
+; ★ NEW NAME. (0x45B4) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
+; 0x036232. CmdHandler2C global sub-command 0x02.
+
+[ROUTINE] 0x036237 DSP_SET_MIXPARAM_45B6  confidence=high
+; ★ NEW NAME. (0x45B6) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
+; 0x03624D. CmdHandler2C global sub-command 0x06.
+
+[ROUTINE] 0x036252 DSP_SET_VALUE_45B8  confidence=high
+; ★ NEW NAME. (0x45B8) = WA. Returns immediately if (0x45BA) == 0 -- i.e. the value is only
+; propagated when its enable word is set. Otherwise (0x448E) = 0 ("changed"),
+; (0x454A) = (0x45B8), then DSP_State_ApplyBuf(XWA = 0x448E). Dead tail at 0x036275.
+; CmdHandler2C global sub-command 0x07.
+
+[ROUTINE] 0x03627A DSP_SET_ENABLE_45BA  confidence=high
+; ★ NEW NAME. (0x45BA) = zero-extended A (the enable for the value above). (0x448E) = 0, then
+; (0x454A) = (0x45B8) if A != 0 else 0, then tail-jump DSP_State_ApplyBuf(0x448E).
+; CmdHandler2C global sub-command 0x08. Together with the previous routine this is a classic
+; "depth + on/off" pair where 0x454A is the effective value handed to the DSP.
+
+[ROUTINE] 0x0362A2 DSP_SET_CFGWORD_4504  confidence=high
+; ★ NEW NAME. (0x448E) = 0 ; (0x4504) = WA ; tail-jump DSP_State_ApplyBuf(0x448E).
+; 0x4504 = 0x4496 + 0x6E = slot 1 record + 0x36. CmdHandler2C global sub-command 0x21.
+
+[ROUTINE] 0x0362B6 DSP_SET_CFGWORD_453C  confidence=high
+; ★ NEW NAME. Same shape, target (0x453C) = 0x4496 + 0xA6 = slot 2 record + 0x36.
+; CmdHandler2C global sub-command 0x22.
+
+[ROUTINE] 0x0362CA DSP_SET_ALGOTYPE_45B0  confidence=high
+; ★ NEW NAME. (0x448E) = 0 ; (0x45B0) = WA ; then WA = (0x4496) (slot 0's algorithm number)
+; and a long jump to DSP_ApplyAlgoForVoiceType (0x03608C) -- the only one of the ten setters
+; that goes through the algorithm path rather than straight to DSP_State_ApplyBuf.
+; CmdHandler2C global sub-command 0x23.
+
+[ROUTINE] 0x0362DD DSP_SET_CFGWORD_4574  confidence=high
+; ★ NEW NAME. Target (0x4574) = 0x4496 + 0xDE = slot 3 record + 0x36. Global sub-command 0x24.
+
+[ROUTINE] 0x0362F1 DSP_SET_CFGWORD_45AC  confidence=high
+; ★ NEW NAME. Target (0x45AC) = 0x4496 + 0x116 = slot 4 record + 0x36. Global sub-command
+; 0x25. Note the four addresses 0x4504/0x453C/0x4574/0x45AC together with 0x44CC (slot 0)
+; form the per-slot +0x36 word that DSP_EFFParam_DiffAlgoSection diffs -- so global
+; sub-commands 0x21..0x25 set that one word for slots 1,2,-,3,4 respectively. Slot 0's
+; equivalent is not exposed here.
+
+[ROUTINE] 0x036305 DSP_WAITFORDELAY  confidence=high
+; ALREADY NAMED -- doc header only.
+; Blocking delay measured on the 32-bit free-running tick at 0x1040.
+; Entry WA = delay in half-ticks: target = (0x1040) + ((WA + 1) >> 1). While (0x1040) is
+; below the target it calls TaskSched_PreemptiveYield(3) and re-tests.
+; ★ There is NO iteration cap. If the tick at 0x1040 stops advancing this never returns.
+; Callers are outside the region (0x039128 and a tail jump at 0x039472, both in the DSP
+; microprogram download path).
+
+[LABEL] 0x036319 DSP_WAITFORTASKSLOT_LOOP  replaces=LABEL_036319  confidence=high
+; TaskSched_PreemptiveYield(3); re-test.
+
+[LABEL] 0x036325 DSP_WAITFORTASKSLOT_EPILOGUE  replaces=LABEL_036325  confidence=high
+; pop; ret.
+
+[ROUTINE] 0x03632B DSP_WAKEAUDIOTASK  confidence=high
+; ALREADY NAMED -- doc header only. `TaskSched_Wait(1)` as a tail jump. Called at the top of
+; DSP2_Send_Command so the bit-bang burst starts on a fresh scheduler slice.
+
+[ROUTINE] 0x036331 DSP_SEND_COMMAND  confidence=high
+; ALREADY NAMED -- doc header only. Transport for DSP1 (IC311, the parallel-bus DSP).
+; Entry BC = chip number, A = command byte. Exit HL = 0 on success, 1 on timeout/error.
+; Ready poll: DSP_Deassert_Read, DSP_Deassert_Write, DSP_Select_Chip, DSP_Read_Status,
+; DSP_Deselect_Chip -- all bracketed by `ei 6` / `ei 0`, i.e. interrupts below level 6 are
+; masked for the duration of each poll and re-enabled between polls. Timeout counter starts
+; at 0x1F40 (8000) polls, so this ALWAYS terminates.
+; On ready: DSP_Assert_Write, DSP_Set_Command_Mode, re-read status, and if status is non-zero
+; write the byte to SFR 0x68 (port PZ). Cleanup always runs DSP_Deselect_Chip,
+; DSP_Deassert_Write, DSP_Set_Data_Mode.
+; ★ Unconditionally calls Debug_Print_String(ROM 0x012207 = "\n[") + Debug_Print_Byte(cmd) +
+;   Debug_Print_String(ROM 0x01220A = "]\n") on EVERY byte, success or failure.
+
+[LABEL] 0x03636B DSP_SEND_CMD_WAITLOOP  replaces=LABEL_03636B  confidence=high
+; Timeout decrement; on expiry set result = 1 and go to cleanup.
+
+[LABEL] 0x03637C DSP_SEND_CMD_POLL  replaces=LABEL_03637C  confidence=high
+; One status poll.
+
+[LABEL] 0x0363A3 DSP_SEND_CMD_READY  replaces=LABEL_0363A3  confidence=high
+; DSP reported ready: switch to command mode and write SFR 0x68.
+
+[LABEL] 0x0363D2 DSP_SEND_CMD_ERROR  replaces=LABEL_0363D2  confidence=high
+; Status went back to zero between poll and write: result = 1.
+
+[LABEL] 0x0363D7 DSP_SEND_CMD_CLEANUP  replaces=LABEL_0363D7  confidence=high
+; Deselect, deassert, back to data mode, print, return the result word.
+
+[ROUTINE] 0x03640A DSP2_SPI_CLOCKPULSEHIGH  confidence=high
+; ALREADY NAMED -- doc header only, and see [UNCERTAIN]: this is a START condition, not a
+; clock pulse.
+; Bit-bangs the two-wire link to the second DSP (IC310, MN19413) on port PF (SFR 0x3C):
+;   PF bit 2 = clock, PF bit 0 = data.
+; Sequence, with all delays realised as chains of `nop` + `jr $+2`:
+;   set 2,(PF)        clock high
+;   ~19 nops
+;   set 0,(PF)        data high
+;   1 nop
+;   res 0,(PF)        data LOW while clock is HIGH   <-- this is an I2C-style START
+;   ~16 nops
+;   res 2,(PF)        clock low
+;   ~19 nops
+;   jp Debug_Print_String(ROM 0x01220D = "\n<sta>\n")
+; The trace string "<sta>" is the firmware author's own confirmation that this is "start".
+
+[LABEL] 0x0364C4 DSP2_SPI_BUSIDLE  confidence=high
+; ALREADY NAMED. Same bus, the STOP condition: res 2,(PF), res 0,(PF), ~96 nops,
+; set 2,(PF) (clock high), ~24 nops, set 0,(PF) (data goes HIGH while clock is HIGH = STOP),
+; then ~134 nops of guaranteed bus-idle time, then jp Debug_Print_String(ROM 0x012215 =
+; "\n<stp>\n"). Port writes are at 0x0364C4, 0x0364C7, 0x036538, 0x03656B only.
+
+[ROUTINE] 0x03666B DSP2_SEND_COMMAND  confidence=high
+; ALREADY NAMED -- doc header only. Sends one command byte to DSP2 over the bit-banged
+; two-wire bus. Entry BC = chip number, A = byte. Exit HL = 0 (the result word is initialised
+; to 0 and never set to anything else -- this transport has NO error detection and NO
+; timeout, only fixed delays).
+;   DSP_WakeAudioTask() ; ei 6 ; DSP_Select_Chip(BC) ; DSP2_SPI_ClockPulseHigh() [= START]
+;   8 iterations of: emit bit 7 of the shifting byte on PF.0, ~1 nop, shift left, clock high
+;     (set 2,(PF)), ~16 nops, clock low (res 2,(PF)), ~20 nops
+;   then a 9th clock pulse with the data line left as-is (the acknowledge slot):
+;     ~1 nop, set 2,(PF), ~17 nops, res 2,(PF), ~19 nops
+;   DSP_Deselect_Chip(BC) ; ~16 nops ; ei 0
+;   Debug_Print_Byte(byte) + Debug_Print_String(ROM 0x01221F)
+; The whole burst runs with interrupts below level 6 masked -- roughly 250 nop slots, which
+; is the longest interrupt-masked window in the audio path.
+
+[LABEL] 0x036696 DSP2_SENDCMD_BITLOOP  replaces=LABEL_036696  confidence=high
+; Test bit 7 of the shift register and drive PF.0 accordingly.
+
+[LABEL] 0x0366A1 DSP2_SENDCMD_BITCLEAR  replaces=LABEL_0366A1  confidence=high
+; res 0,(PF) -- data line low.
+
+[LABEL] 0x0366A4 DSP2_SENDCMD_BITSET_DONE  replaces=LABEL_0366A4  confidence=high
+; Join point; the shift and the clock-high edge follow one nop later.
+
+[LABEL] 0x036721 DSP2_SENDCMD_POSTLOOP_ENTRY  replaces=LABEL_036721  confidence=high
+; The 9th (acknowledge) clock pulse after the 8 data bits.
+
+[ROUTINE] 0x0367EE DSP_SEND_DATA  confidence=high
+; ALREADY NAMED -- doc header only. Identical in shape to DSP_Send_Command (same 0x1F40
+; timeout, same ei 6 / ei 0 bracketing, same SFR 0x68 write) except that it calls
+; DSP_Set_Data_Mode instead of DSP_Set_Command_Mode before selecting the chip, and its
+; cleanup does not restore data mode (it is already in it). Trace string ROM 0x012222.
+
+[LABEL] 0x036828 DSP_SEND_DATA_WAITLOOP  replaces=LABEL_036828  confidence=high
+; Timeout decrement.
+
+[LABEL] 0x036839 DSP_SEND_DATA_POLL  replaces=LABEL_036839  confidence=high
+; One status poll.
+
+[LABEL] 0x036860 DSP_SEND_DATA_READY  replaces=LABEL_036860  confidence=high
+; Data mode, assert write, re-check status, write SFR 0x68.
+
+[LABEL] 0x03688F DSP_SEND_DATA_ERROR  replaces=LABEL_03688F  confidence=high
+; result = 1.
+
+[LABEL] 0x036894 DSP_SEND_DATA_CLEANUP  replaces=LABEL_036894  confidence=high
+; Deselect, deassert, print, return the result.
+
+[ROUTINE] 0x0368BA DSP2_SEND_DATA  confidence=high
+; ALREADY NAMED -- doc header only. The DSP2 data-byte transmitter. Byte-for-byte the same
+; bit-bang loop as DSP2_Send_Command with two differences: it does NOT call
+; DSP_WakeAudioTask, and it does NOT emit a START condition -- it just selects the chip and
+; clocks 8 bits plus the acknowledge pulse. So a DSP2 transaction is
+; DSP2_Send_Command (START + opcode) followed by N x DSP2_Send_Data, terminated by
+; DSP2_SPI_BusIdle (STOP) from the caller. Trace string ROM 0x012224. Always returns HL = 0.
+
+[LABEL] 0x0368DF DSP2_SENDDATA_BITLOOP  replaces=LABEL_0368DF  confidence=high
+; Bit test and PF.0 drive.
+
+[LABEL] 0x0368EA DSP2_SENDDATA_BITCLEAR  replaces=LABEL_0368EA  confidence=high
+; res 0,(PF).
+
+[LABEL] 0x0368ED DSP2_SENDDATA_BITSET_DONE  replaces=LABEL_0368ED  confidence=high
+; Join point.
+
+[LABEL] 0x03696A DSP2_SENDDATA_POSTLOOP_ENTRY  replaces=LABEL_03696A  confidence=high
+; The 9th (acknowledge) clock pulse.
+
+[ROUTINE] 0x036A2E DSP_DISPATCHCOMMAND  confidence=high
+; ALREADY NAMED -- doc header only. The one place that knows which DSP is which.
+; Entry BC = chip selector, A = byte. BC == 0 -> DSP_Send_Command (IC311, parallel);
+; BC == 1 -> DSP2_Send_Command (IC310, bit-banged); anything else -> HL = 1 (invalid chip).
+; Exit HL = 0 ok / 1 error. Eight call sites, all in the DSP microprogram loader outside
+; this region.
+
+[LABEL] 0x036A42 DSP_DISPATCHCOMMAND_DSP2PATH  replaces=LABEL_036A42  confidence=high
+; BC == 1.
+
+[LABEL] 0x036A49 DSP_DISPATCHCOMMAND_INVALIDCHIP  replaces=LABEL_036A49  confidence=high
+; ++IZ, i.e. HL = 1.
+
+[LABEL] 0x036A4B DSP_DISPATCHCOMMAND_EPILOGUE  replaces=LABEL_036A4B  confidence=high
+; HL = IZ; pop; ret. NOTE: the transports' own return values are DISCARDED here -- IZ is only
+; ever 0 or 1 from the invalid-chip test -- so a DSP_Send_Command timeout is invisible to the
+; caller of DSP_DispatchCommand.
+
+[ROUTINE] 0x036A4F DSP_DISPATCHDATA  confidence=high
+; ALREADY NAMED -- doc header only. Same shape for data bytes: BC == 0 -> DSP_Send_Data,
+; BC == 1 -> DSP2_Send_Data, else HL = 1. The transports' results are discarded in the same
+; way.
+
+[LABEL] 0x036A63 DSP_DISPATCHDATA_DSP2PATH  replaces=LABEL_036A63  confidence=high
+; BC == 1.
+
+[LABEL] 0x036A6A DSP_DISPATCHDATA_INVALIDCHIP  replaces=LABEL_036A6A  confidence=high
+; ++IZ.
+
+[LABEL] 0x036A6C DSP_DISPATCHDATA_EPILOGUE  replaces=LABEL_036A6C  confidence=high
+; HL = IZ; pop; ret.
+
+[ROUTINE] 0x036A70 DSP_STATETABLE_RESET  confidence=high
+; ALREADY NAMED -- doc header only. Copies 0x91 words (290 bytes) from XWA to 0x45CA, i.e.
+; snapshots the live effect configuration into the shadow that all the diff routines compare
+; against. Called at the end of DSP_State_ApplyAll, so "shadow" means "state as of the last
+; successful apply". Uses `ldirw` with XIX = destination, XIY = source.
+
+[ROUTINE] 0x036A7D DSP_ALGOCHANGE_CHECKANDFLAG  confidence=high
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer (0x448E).
+; Sets the global flag (0x493E) to 0 only when ALL THREE of these hold:
+;   (XWA+6) == (0x45D0)   [config header word 6 equals its shadow]
+;   (XWA+2) != 1
+;   (XWA+4) == 1
+; otherwise (0x493E) = 1. Downstream, (0x493E) == 1 is the "algorithm did NOT change" case
+; that makes EFF_SlotActive_UpdateFlags mark all five slots live and
+; EFF_DspChannel_InitFlags force every dirty bit -- so the polarity of this flag is
+; "1 = full rewrite needed". Note the sense of the name is therefore inverted; see
+; [UNCERTAIN].
+
+[LABEL] 0x036A94 DSP_ALGOCHANGE_NOCHANGE  replaces=LABEL_036A94  confidence=high
+; (0x493E) = 1.
+
+[LABEL] 0x036A9B DSP_ALGOCHANGE_FLAGANDCLEAR  replaces=LABEL_036A9B  confidence=high
+; (0x493E) = 0.
+
+[ROUTINE] 0x036AA2 DSP_SLOTPARAM_DIFFANDFLAG  confidence=high
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
+; For each slot n = 0..4: compares the word at slot-record +0x00 (the algorithm number)
+; against its shadow at 0x45D2 + n*0x38, and writes 1 (differs) or 0 (same) to the per-slot
+; dirty word at 0x4940 + n*0x32. Pure comparison, nothing is copied.
+
+[LABEL] 0x036AA8 DSP_SLOTPARAM_DIFFLOOP  replaces=LABEL_036AA8  confidence=high
+; Body; the address arithmetic `((n*8)-n)*8 + 8` is the compiler's way of writing n*56 + 8.
+
+[LABEL] 0x036AE4 DSP_SLOTPARAM_DIFFMATCH  replaces=LABEL_036AE4  confidence=high
+; Equal: dirty word = 0.
+
+[LABEL] 0x036AF6 DSP_SLOTPARAM_DIFFMISMATCH  replaces=LABEL_036AF6  confidence=high
+; Loop increment. (Both branch names are one step off what they do; the "Mismatch" label is
+; actually the loop tail.)
+
+[ROUTINE] 0x036AFD DSP_EFFPARAM_DIFFALLANDFLAG  confidence=high
+; ALREADY NAMED -- doc header only. The big four-level parameter diff. Entry XWA = live
+; config buffer; no output register, everything lands in the dirty arrays.
+; For each slot n = 0..4 it clears the slot summary word (0x4960 + n*0x32 + 0x10) and then
+; compares, live against shadow, writing per-item 1/0 flags:
+;   slot +0x02                 vs 0x45D4 + n*0x38   -> flag at 0x4942 + n*0x32
+;   slot +0x04 .. +0x24 (17 w) vs 0x45D6 + n*0x38   -> flags at 0x4944 + n*0x32 + i*2
+;   slot +0x28                 vs 0x45FA + n*0x38   -> flag at 0x4966 + n*0x32
+;   slot +0x36                 vs 0x4600 + n*0x38+8 -> flag at 0x495E + n*0x32 + 0x10
+; Any difference also sets the slot summary word to 1. Finally it clears the three words at
+; 0x4958/0x495A/0x495C + n*0x32 + 0x10 for the slot.
+
+[LABEL] 0x036B05 DSP_EFFPARAM_DIFFOUTER  replaces=LABEL_036B05  confidence=high
+; Per-slot entry; clears the slot summary word.
+
+[LABEL] 0x036B22 DSP_EFFPARAM_DIFFMID  replaces=LABEL_036B22  confidence=high
+; The single word at slot +0x02.
+
+[LABEL] 0x036B89 DSP_EFFPARAM_DIFFMIDMATCH  replaces=LABEL_036B89  confidence=high
+; Equal: flag = 0.
+
+[LABEL] 0x036BA1 DSP_EFFPARAM_DIFFMIDNEXT  replaces=LABEL_036BA1  confidence=high
+; Loop tail (the loop bound is 1, so it runs exactly once).
+
+[LABEL] 0x036BA8 DSP_EFFPARAM_DIFFINNER  replaces=LABEL_036BA8  confidence=high
+; Sets up the 17-word coefficient loop.
+
+[LABEL] 0x036BB1 DSP_EFFPARAM_DIFFINNERBODY  replaces=LABEL_036BB1  confidence=high
+; One coefficient: slot +0x04 + i*2 vs shadow 0x45D6 + n*0x38 + i*2.
+
+[LABEL] 0x036C18 DSP_EFFPARAM_DIFFINNERMATCH  replaces=LABEL_036C18  confidence=high
+; Equal: flag = 0.
+
+[LABEL] 0x036C30 DSP_EFFPARAM_DIFFINNERNEXT  replaces=LABEL_036C30  confidence=high
+; ++i while i < 0x11.
+
+[LABEL] 0x036C39 DSP_EFFPARAM_DIFFLEVEL4  replaces=LABEL_036C39  confidence=high
+; Sets up the single-word +0x28 comparison.
+
+[LABEL] 0x036C40 DSP_EFFPARAM_DIFFLEVEL4BODY  replaces=LABEL_036C40  confidence=high
+; slot +0x28 vs shadow 0x45FA + n*0x38.
+
+[LABEL] 0x036CA7 DSP_EFFPARAM_DIFFLEVEL4MATCH  replaces=LABEL_036CA7  confidence=high
+; Equal: flag = 0.
+
+[LABEL] 0x036CBF DSP_EFFPARAM_DIFFLEVEL4NEXT  replaces=LABEL_036CBF  confidence=high
+; Loop tail (bound 1).
+
+[LABEL] 0x036CC6 DSP_EFFPARAM_DIFFALGOSECTION  replaces=LABEL_036CC6  confidence=high
+; slot +0x36 vs shadow 0x4600 + n*0x38 + 8 -- the word the five global setters
+; DSP_SET_CFGWORD_* write.
+
+[LABEL] 0x036D1F DSP_EFFPARAM_ALGOCHANGEPATH  replaces=LABEL_036D1F  confidence=high
+; Equal: flag at 0x495E + n*0x32 + 0x10 = 0. (The name suggests the opposite of what it does.)
+
+[LABEL] 0x036D35 DSP_EFFPARAM_DIFFOUTERNEXT  replaces=LABEL_036D35  confidence=high
+; Clears 0x4958/0x495A/0x495C + n*0x32 + 0x10, then ++n while n < 5.
+
+[LABEL] 0x036D7E DSP_EFFPARAM_DIFFEPILOGUE  replaces=LABEL_036D7E  confidence=high
+; pop; ret.
+
+[ROUTINE] 0x036D80 DSP_STATE_DIFFALL  confidence=high
+; ALREADY NAMED -- doc header only. XWA = live config buffer; runs, in order,
+; DSP_AlgoChange_CheckAndFlag, DSP_SlotParam_DiffAndFlag, DSP_EFFParam_DiffAllAndFlag.
+
+[ROUTINE] 0x036D94 DSP_STATE_DIFFANDPREPARE  confidence=high
+; ALREADY NAMED -- doc header only. DSP_State_DiffAll followed by EFF_StateLoad_Prepare
+; (outside the region), both with XWA = the live config buffer.
+
+[ROUTINE] 0x036DA3 DSP_CONFIG_CLAMPLIMITS  confidence=high
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
+; Clamps the header word at +6 to 0 or 1 (anything above 1 becomes 0), then clamps each of
+; the five slots' word at slot-record +0x00 to a maximum of 0x63 (99). That 0..99 ceiling is
+; the strongest evidence that slot +0x00 is the DSP algorithm NUMBER: it matches the
+; instrument's 0..99 effect numbering, and EFF_SlotActive_UpdateFlags tests it against the
+; specific values 0x33, 0x34, 0x45 and 0x46.
+
+[LABEL] 0x036DAF DSP_CONFIG_CLAMPLOOP  replaces=LABEL_036DAF  confidence=high
+; Slot loop head, n = 0..4.
+
+[LABEL] 0x036DB5 DSP_CONFIG_CLAMPAPPLY  replaces=LABEL_036DB5  confidence=high
+; Reads slot +0x00; if it exceeds 0x63 recomputes the address and writes 0x63 back.
+
+[LABEL] 0x036DE3 DSP_CONFIG_CLAMPNEXT  replaces=LABEL_036DE3  confidence=high
+; ++n while n < 5.
+
+[ROUTINE] 0x036DF5 DSP_SLOTMUTESTATE_READANDCLEAR  confidence=high
+; ALREADY NAMED -- doc header only. Entry WA = index. Returns HL = (0x45BC + index*2) and
+; then writes 0 to the same word -- a destructive read of a five-word pending-state array.
+; Only caller in the firmware is DSP_SlotState_DisplayRestore, with index 0.
+
+[ROUTINE] 0x036E12 CALCSAMPLEADDR  confidence=high
+; ALREADY NAMED -- doc header only. XHL = XWA + ((XWA[0] << 8) + XWA[1]), except that when
+; the resulting offset's high byte equals 0xF0 the add is skipped (a 6-byte forward branch
+; over the add), leaving XHL undefined on that path. No caller anywhere in this build; the
+; existing header comment's "capped at 0xF0" is a fair reading. Kept as-is.
+
+[ROUTINE] 0x036E3D DSP_STATE_APPLYALL  confidence=high
+; ALREADY NAMED -- doc header only. The whole apply pipeline. Entry XWA = live config buffer.
+;   (0x45C8) = 0
+;   DSP_Config_ClampLimits ; DSP_State_DiffAndPrepare ; DSP_State_Dispatcher ;
+;   DSP_StateTable_Reset
+;   HL = (0x45C8)
+; So DSP_State_Dispatcher (outside the region) is what actually pushes bytes at the DSPs, and
+; it reports through 0x45C8. The unconditional DSP_StateTable_Reset at the end means the
+; shadow is updated even if the dispatch failed. Called from 0x040592.
+
+[ROUTINE] 0x036E60 EFF_SLOTACTIVE_UPDATEFLAGS  confidence=high
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
+; If the global flag (0x493E) == 1 (see DSP_AlgoChange_CheckAndFlag) it simply marks all five
+; slots live: (0x4930 + n*2) = 1 for n = 0..4, and returns.
+; Otherwise, per slot n: reads the algorithm number at slot +0x00; if it is 0x33, 0x34, 0x45
+; or 0x46 a local "voice-linked" flag DE is set to 1. Then, if the slot's dirty word
+; (0x4940 + n*0x32) is 1, or the config header word (XWA+0) is 1 and the slot summary
+; (0x4960 + n*0x32 + 0x10) is 1, or the summary is 1 while DE == 1, the slot is marked live
+; and a batch of dirty bits is forced: (0x4930 + n*2) = 1, the coefficient flag indexed by
+; slot +0x1E doubled, and the words at 0x495A / 0x495C / 0x4960 (+ n*0x32 + 0x10) = 1, plus
+; 0x4958 + n*0x32 + 0x10 = 1 unless slot +0x30 equals 0x63. Otherwise (0x4930 + n*2) = 0.
+
+[LABEL] 0x036E70 EFF_SLOTACTIVE_CHECKSLOT  replaces=LABEL_036E70  confidence=high
+; The "mark all five live" loop taken when (0x493E) == 1.
+
+[LABEL] 0x036E87 EFF_SLOTACTIVE_SLOTACTIVE  replaces=LABEL_036E87  confidence=high
+; Per-slot loop set-up (n = 0..4).
+
+[LABEL] 0x036E8D EFF_SLOTACTIVE_SLOTINACTIVE  replaces=LABEL_036E8D  confidence=high
+; Per-slot loop body: reads the algorithm number and tests it against 0x33/0x34/0x45/0x46.
+
+[LABEL] 0x036EB9 EFF_SLOTACTIVE_VOICECHECK  replaces=LABEL_036EB9  confidence=high
+; One of those four algorithms: DE = 1.
+
+[LABEL] 0x036EBB EFF_SLOTACTIVE_VOICEINACTIVE  replaces=LABEL_036EBB  confidence=high
+; The three-way "does this slot need a rewrite" test.
+
+[LABEL] 0x036EED EFF_SLOTACTIVE_ALGOCHECK  replaces=LABEL_036EED  confidence=high
+; Summary-word test combined with the DE flag.
+
+[LABEL] 0x036F0B EFF_SLOTACTIVE_LOOPNEXT  replaces=LABEL_036F0B  confidence=high
+; The "slot is live" body that forces the batch of dirty flags. Not a loop tail.
+
+[LABEL] 0x036FBA EFF_SLOTACTIVE_INNERLOOPNEXT  replaces=LABEL_036FBA  confidence=high
+; The "slot is not live" body: (0x4930 + n*2) = 0.
+
+[LABEL] 0x036FCA EFF_SLOTACTIVE_EPILOGUE  replaces=LABEL_036FCA  confidence=high
+; ++n while n < 5, then ret. This is the actual loop tail.
+
+[ROUTINE] 0x036FD2 EFF_DSPLINK_RESETFLAGS  confidence=high
+; ALREADY NAMED -- doc header only. No parameters.
+; If (0x493E) == 1: (0x493A) = 1 and then (0x493A + i*2) = 0 for i = 1 only, i.e. the pair
+; becomes {1, 0}. Otherwise both words (0x493A) and (0x493C) are cleared.
+; Called from 0x038078, immediately after EFF_SlotActive_UpdateFlags and immediately before
+; EFF_DspChannel_InitFlags -- the three form one "prepare the dirty state" block.
+
+[LABEL] 0x036FE6 EFF_DSPLINK_RESETFLAGS_ZEROPATH  replaces=LABEL_036FE6  confidence=high
+; The i = 1..1 clear loop after (0x493A) = 1.
+
+[LABEL] 0x036FFD EFF_DSPLINK_RESETFLAGS_LOOPNEXT  replaces=LABEL_036FFD  confidence=high
+; The (0x493E) != 1 branch: set up the i = 0..1 clear loop.
+
+[LABEL] 0x037003 EFF_DSPLINK_RESETFLAGS_INNERBODY  replaces=LABEL_037003  confidence=high
+; That loop's body.
+
+[ROUTINE] 0x03701A EFF_DSPCHANNEL_INITFLAGS  confidence=high
+; ALREADY NAMED -- doc header only. Entry: none (it works purely on the dirty arrays).
+; For each slot n = 0..4:
+;   if (0x493E) == 1, force the slot dirty word (0x4940 + n*0x32) = 1
+;   if that word is now 1, set every dirty flag the slot owns:
+;       (0x4944 + n*0x32 + i*2) = 1 for i = 0..0x10   (17 coefficient flags)
+;       (0x4942 + n*0x32 + i*2) = 1 for i = 0..0      (1 flag)
+;       (0x4966 + n*0x32 + i*2) = 1 for i = 0..0      (1 flag)
+;       (0x4958 / 0x495A / 0x495C + n*0x32 + 0x10) = 1
+;   ...continuing past this region's end at 0x0370BF (EFF_DspChannel_Init_MultiTableDirty).
+; This is the "the algorithm changed, so re-send everything" hammer.
+
+[LABEL] 0x037020 EFF_DSPCHANNEL_INIT_ALGOCHECK  replaces=LABEL_037020  confidence=high
+; (0x493E) == 1 -> force this slot's dirty word to 1.
+
+[LABEL] 0x03703A EFF_DSPCHANNEL_INIT_SLOTNEXT  replaces=LABEL_03703A  confidence=high
+; Tests the slot dirty word; if not 1, jump to the outer loop tail (outside this region).
+
+[LABEL] 0x037057 EFF_DSPCHANNEL_INIT_FREQLOOP  replaces=LABEL_037057  confidence=high
+; The 17-iteration loop that sets the coefficient flags at 0x4944 + n*0x32 + i*2.
+
+[LABEL] 0x037077 EFF_DSPCHANNEL_INIT_COEFFLOOP  replaces=LABEL_037077  confidence=high
+; Sets up the single-iteration loop over 0x4942.
+
+[LABEL] 0x03707D EFF_DSPCHANNEL_INIT_COEFFNEXT  replaces=LABEL_03707D  confidence=high
+; That loop's body.
+
+[LABEL] 0x03709B EFF_DSPCHANNEL_INIT_COEFF2LOOP  replaces=LABEL_03709B  confidence=high
+; Sets up the single-iteration loop over 0x4966.
+
+[LABEL] 0x0370A1 EFF_DSPCHANNEL_INIT_COEFF2NEXT  replaces=LABEL_0370A1  confidence=high
+; That loop's body. The region ends at 0x0370BE, one byte before
+; EFF_DspChannel_Init_MultiTableDirty (0x0370BF), which continues the same routine.
+
+[DATA] 0x03582E-0x03582F  Voice_Poly_NoteOn_Data -- two bytes 0x0E 0x0E
+; Two `ret` opcodes stranded between Voice_Poly_NoteOn's epilogue and DSP_RingBuf_Read.
+; Almost certainly alignment padding produced by the original toolchain (0x0E is `ret`), not
+; a table. Not referenced by anything.
+
+[DATA] 0x035859-0x03585E  DSP_RingBuf_Read_Data -- six bytes f1 60 3b 30 68 d1
+; Also not a table. `f1 60 3b 30` is `lda XWA,0x3B60` and `68 xx` is a `jr` -- this is the
+; tail of a routine the linker placed here, or padding that happens to disassemble. Left
+; alone; nothing references it.
+
+[DATA] 0x035DD2-0x035E7A  CmdHandler2C_TableData -- NOT DATA, thirteen 13-byte dispatch stubs
+; Reached by `lda XIX,0x0121BD / ldw WA,(XIX+index*2) / lda XIX,0x035DD2 / jp (XIX+WA)`.
+; The 15-entry offset table itself lives in ROM at 0x0121BD:
+;   0x0000 0x000D 0x001A 0x0027 0x0034 0x0261 0x0041 0x004E
+;   0x005B 0x0261 0x0068 0x0075 0x0082 0x008F 0x009C
+; Adding 0x035DD2 gives 0x035DD2, 0x035DDF, 0x035DEC, 0x035DF9, 0x035E06, 0x036033 (= the
+; "ignore" target DSP_Process_ReadNext), 0x035E13, 0x035E20, 0x035E2D, 0x036033, 0x035E3A,
+; 0x035E47, 0x035E54, 0x035E61, 0x035E6E -- all named above. Verified by disassembly.
+
+[DATA] 0x03611D-0x03611D  DSP_ApplyAlgoForVoiceType_Data -- one byte 0x0E (`ret`) of padding
+
+[DATA] 0x036205-0x036304  DSP_StateTable_DefaultData -- NOT DATA, ten subroutines
+; See the ten [ROUTINE] entries at 0x036205, 0x03621C, 0x036237, 0x036252, 0x03627A,
+; 0x0362A2, 0x0362B6, 0x0362CA, 0x0362DD, 0x0362F1. Reached only from the thirteen stubs
+; above. Includes four unreachable 5-byte tails at 0x036217, 0x036232, 0x03624D and
+; 0x036275.
+
+[DATA] 0x036327-0x03632A  DSP_WaitForTaskSlot_Data -- four bytes 1b 0f 8e 03
+; `jp 0x038E0F` -- an unreachable tail jump left between DSP_WaitForDelay's epilogue and
+; DSP_WakeAudioTask. 0x038E0F is inside the DSP_State_* group.
+
+[DATA] 0x036DEA-0x036DF4  DSP_Config_ClampData -- eleven bytes d2 66 55 04 23 d2 44 54 04 83 0e
+; Disassembles exactly as `ld HL,(0x045566) / add HL,(0x045444) / ret`, i.e. another
+; unreachable routine tail, not a data table.
+
+[DATA] nop chains -- 365 of this region's 585 symbols
+; Twelve delay chains inside the DSP2 bit-bang transport carry one label per `nop`, generated
+; mechanically by the converter. Ranges and counts (name prefix, count, first, last):
+;   DSP2_ClkHigh_Nop01..55            55   0x03640F .. 0x0364BA
+;   DSP2_BusIdle_Nop01..134          134   0x0364CC .. 0x036661
+;   DSP2_SendCmd_ClkHigh_Nop01..16    16   0x0366A6 .. 0x0366DA
+;   DSP2_SendCmd_ClkLow_Nop01..20     20   0x0366DD .. 0x036719
+;   DSP2_SendCmd_PostLoop_Nop01..17   17   0x036723 .. 0x036756
+;   DSP2_SendCmd_PostClkLow_Nop01..19 19   0x03675C .. 0x036792
+;   DSP2_SendCmd_Epilogue_Nop01..16   16   0x03679C .. 0x0367C9
+;   DSP2_SendData_ClkHigh_Nop01..17   17   0x0368EF .. 0x036926
+;   DSP2_SendData_ClkLow_Nop01..19    19   0x03692C .. 0x036962
+;   DSP2_SendData_PostLoop_Nop01..17  17   0x03696C .. 0x03699F
+;   DSP2_SendData_PostClkLow_Nop01..19 19  0x0369A5 .. 0x0369DB
+;   DSP2_SendData_Epilogue_Nop01..16  16   0x0369E5 .. 0x036A12
+; Each label covers `nop` + `jr $+2` (3 bytes), except where a port write is folded in.
+; ★ THESE ARE TIMING, NOT DEAD CODE. They set the bit period of the IC310 two-wire link.
+; Anyone integrating should copy the ELF names verbatim; they are not worth individual
+; attention, and collapsing them would change the ROM.
+
+[UNCERTAIN] DSP2_SPI_ClockPulseHigh (0x03640A) and DSP2_SPI_BusIdle (0x0364C4) are, I believe,
+; misnamed, and I have left them alone as required. The evidence:
+;   - PF.2 and PF.0 are the only two lines either routine touches.
+;   - 0x03640A drives PF.2 high, then PF.0 high, then PF.0 LOW while PF.2 is still high, then
+;     PF.2 low. A falling data edge during a high clock is an I2C START, not a clock pulse.
+;   - 0x0364C4 drives both low, then PF.2 high, then PF.0 HIGH while PF.2 is high. A rising
+;     data edge during a high clock is an I2C STOP, not "bus idle".
+;   - Each routine tail-jumps to Debug_Print_String with, respectively, ROM 0x01220D = "\n<sta>\n"
+;     and ROM 0x012215 = "\n<stp>\n". The firmware's own trace strings say "sta"/"stp".
+; Suggested replacements if the project agrees: DSP2_SERIAL_START / DSP2_SERIAL_STOP. Also
+; "SPI" is the wrong family name for the whole DSP2_* group -- there is one bidirectional data
+; line with START/STOP framing and a 9th (acknowledge) clock per byte, which is I2C-shaped.
+
+[UNCERTAIN] DSP_GetEffectRouting (0x035585) reads 0x041377 TWICE and never reads 0x04137A's
+; value, only its zero/non-zero state. Byte-verified at 0x0355A3 (`c2 77 13 04 21`). Either
+; (a) it is a firmware typo for 0x04137A -- the symmetry of the two halves and the fact that
+; 0x04137A is otherwise only used as a gate strongly suggest this -- or (b) it is deliberate
+; and one control byte feeds two effect sends. I cannot distinguish these from the code. If
+; it is a typo, the emulator must reproduce it, and the note belongs in the docs.
+; This would be a good question for Felipe to answer on real hardware: set the two panel
+; controls that write 0x041377 and 0x04137A to clearly different values and listen to whether
+; the second send tracks the first.
+
+[UNCERTAIN] Several existing branch names in this region are inverted or otherwise wrong. I
+; have NOT renamed any of them. For the record, with what the code actually does:
+;   EFF_GetSlotBuffer_NoSlot (0x0361EF)      -- this is the VALID-slot path (returns the
+;                                               buffer); the invalid path is _LoopBody.
+;   EFF_GetSlotBuffer_LoopBody (0x0361FF)    -- not a loop; returns 0xFFFFFFFF for a bad slot.
+;   DSP_RingBuf_Compare_MatchPath (0x035A9B) -- taken on BOTH match and mismatch (it is the
+;                                               pointer-advance); _MismatchPath (0x035AA6) is
+;                                               the loop condition.
+;   DSP_RingBuf_Compare_FoundPath (0x035AC2) -- the "identical, suppress the reply" exit.
+;   DSP_AlgoChange_NoChange (0x036A94)       -- sets the flag to 1, and 1 is what downstream
+;                                               reads as "rewrite everything".
+;   DSP_EFFParam_AlgoChangePath (0x036D1F)   -- the NO-change path (writes 0).
+;   EFF_SlotActive_LoopNext (0x036F0B)       -- the slot-is-live body, not a loop tail.
+;   Voice_Poly_NoteOn_SlotSearch (0x035727)  -- searches nothing; it is the second half of
+;                                               the note-on register pair.
+;   Voice_Poly_NoteOn_AssignSlot (0x03580D)  -- assigns nothing; it is the release-scan tail.
+;   DSP2_Init (0x03581D)                     -- clears the shared DSP command ring, which is
+;                                               not DSP2-specific state.
+;   DSP_StateTable_DefaultData (0x036205)    -- code, not a default table (see [DATA]).
+;   CmdHandler2C_TableData (0x035DD2)        -- code, not a table.
+
+[UNCERTAIN] The word at 0x448C carries two different meanings ("a 0x60..0x7F bulk stream is
+; in flight" and "the message at the ring's read pointer is not fully queued yet"). I am
+; confident about the mechanism -- all five writers and both readers are listed under
+; Audio_Process_DSP -- but I cannot tell from the code alone whether the overload is
+; intentional (the main CPU may guarantee that a truncated message is always followed by more
+; 0x60..0x7F traffic that completes the accounting) or a genuine firmware defect. It needs a
+; live trace of 0x448C, 0x4488 and 0x448A. See 'findings'.
+
+[UNCERTAIN] The naming style in this region. The authoritative ELF uses MixedCase throughout
+; (DSP_RingBuf_Read, EFF_GetSlotBuffer, ...), while the brief and roughly 55% of
+; symbols/subcpu_symbols_reference.txt use UPPER_SNAKE_CASE. I have written the 23 genuinely
+; new names in UPPER_SNAKE_CASE per the brief, which makes them inconsistent with their
+; immediate neighbours in the .s file. If the project would rather keep the region internally
+; consistent, the MixedCase forms are: Dsp_Cmd2B_ParamStub0..7, CmdHandler2C_Global_MasterTune
+; / _MixParamA / _MixParamB / _MonoMode / _BendRange / _MixParamC / _SetValue45B8 /
+; _SetEnable45BA / _SetValue4504 / _SetValue453C / _SetAlgoType / _SetValue4574 / _SetValue45AC,
+; and DSP_Set_MixParam45B2 / _MixParam45B4 / _MixParam45B6 / _Value45B8 / _Enable45BA /
+; _CfgWord4504 / _CfgWord453C / _AlgoType45B0 / _CfgWord4574 / _CfgWord45AC. Pick one.
+
+[UNCERTAIN] Slot record offsets +0x1E and +0x30. EFF_SlotActive_LoopNext reads slot +0x1E,
+; doubles it and uses it as an index into the 17-word coefficient dirty array, and tests
+; slot +0x30 against 0x63. Both are consistent with "index of the parameter this algorithm
+; considers primary" and "a 0..99 depth", but neither is proven by anything in this region.

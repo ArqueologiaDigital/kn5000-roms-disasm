@@ -777,16 +777,39 @@ TaskSched_ContextRestore:
 	pop	sr
 	ret
 
+; Software one-shot/periodic timer service. Walks the 1-entry timer table at 0x10CA
+; (8 bytes/entry: +0 = down-counter word, +2 = reload word, +4 = 32-bit callback address,
+; 0xFFFFFFFF = slot empty). For each armed slot it decrements +0; when the counter reaches
+; zero it reloads it from +2, pushes the loop-advance address 0x01FFA8 as a return address
+; and jumps to the callback, so the callback returns straight back into the walk.
+; Runs the whole walk inside a scheduler lock: 0x10D2 (the lock-depth word) is incremented
+; and mirrored into control register 0x7C on entry and decremented/mirrored on exit, with
+; the interrupt mask raised to level 0 (all masked) for the walk and back to 6 afterwards.
+; While the lock is non-zero TaskSched_Dispatch refuses to context-switch (see 0x01FF21).
+; No caller was found by a whole-ROM branch-target scan; it is most likely reached through
+; a dynamically installed vector (see Task_ConfigTimer 0x02072A). Register use: WA, XIX, B.
 TaskList_Operations_Opaque:
 	.byte 0xd1, 0xd2, 0x10, 0x20, 0xd8, 0x61, 0xf1, 0xd2
 	.byte 0x10, 0x50, 0xd8, 0x2e, 0x7c, 0x06, 0x00, 0x34
-	.byte 0xca, 0x10, 0xec, 0x12, 0x22, 0x01, 0xac, 0x04
+	.byte 0xca, 0x10, 0xec, 0x12, 0x22, 0x01
+; Top of the per-slot walk; XIX = current 8-byte timer entry, B = slots remaining.
+TASKSCHED_SOFTTIMER_ENTRY:
+	.byte 0xac, 0x04
 	.byte 0x20, 0xe8, 0xcf, 0xff, 0xff, 0xff, 0xff, 0x66
 	.byte 0x0c, 0x9c, 0x00, 0x20, 0xd8, 0x69, 0xbc, 0x00
-	.byte 0x50, 0xd8, 0xe0, 0x66, 0x17, 0xdc, 0xc8, 0x08
-	.byte 0x00, 0xca, 0x1c, 0xe2, 0x06, 0x06, 0xd1, 0xd2
+	.byte 0x50, 0xd8, 0xe0, 0x66, 0x17
+; Advance XIX by 8 and djnz; also the synthetic return address pushed for a fired callback.
+TASKSCHED_SOFTTIMER_NEXT:
+	.byte 0xdc, 0xc8, 0x08
+	.byte 0x00, 0xca, 0x1c, 0xe2
+; Restore interrupt level 6, decrement lock depth 0x10D2, mirror to cr 0x7C, return.
+TASKSCHED_SOFTTIMER_UNLOCK:
+	.byte 0x06, 0x06, 0xd1, 0xd2
 	.byte 0x10, 0x20, 0xd8, 0x69, 0xf1, 0xd2, 0x10, 0x50
-	.byte 0xd8, 0x2e, 0x7c, 0x0e, 0x9c, 0x02, 0x20, 0xbc
+	.byte 0xd8, 0x2e, 0x7c, 0x0e
+; Reload counter from +2, push 0x01FFA8, jp (XIX+4) -- i.e. tail-call the callback.
+TASKSCHED_SOFTTIMER_FIRE:
+	.byte 0x9c, 0x02, 0x20, 0xbc
 	.byte 0x00, 0x50, 0xf2, 0xa8, 0xff, 0x01, 0x30, 0x38
 	.byte 0xac, 0x04, 0x20, 0xb0, 0xd8
 
@@ -969,6 +992,14 @@ TaskQueue_Dequeue_Return:
 	pop xwa
 	ret
 
+; "Wait on my own pending count" - the counting half of a binary rendezvous.
+; Reads the current-task descriptor pointer from 0x1046. If the descriptor's pending count
+; (+0x0A) is non-zero it just decrements it and returns through TaskSched_ContextRestore
+; (0x01FF72). Otherwise it unlinks the descriptor from its ready queue (next at +0, prev at
+; +2), sets state (+0x09) = 3 (BLOCKED) and jumps to TaskSched_Dispatch (0x01FF21), which
+; picks another task. Entered with a full context already pushed (push SR + 7 long pushes),
+; matching the frame TaskSched_ContextRestore pops.
+; Inputs: none. Clobbers: everything (it either reschedules or restores the pushed context).
 TaskQueue_Operations_Opaque:
 	.byte 0x02, 0x06, 0x06
 	.byte 0x3b, 0x38, 0x39, 0x3a, 0x3c
@@ -977,7 +1008,17 @@ TaskQueue_Operations_Opaque:
 	.byte 0x12, 0xe8, 0xd0, 0xeb, 0xd3, 0x9c, 0x00, 0x20
 	.byte 0x9c, 0x02, 0x23, 0xbb, 0x00, 0x50, 0xb8, 0x02
 	.byte 0x53, 0xbc, 0x09, 0x00, 0x03, 0x78, 0xa4, 0xfd
+; Pending count was non-zero: decrement it and fall out through ContextRestore.
+TASKSCHED_BLOCK_SELF_CONSUME:
 	.byte 0xc9, 0x69, 0xbc, 0x0a, 0x41, 0x78, 0xed, 0xfd
+; Wake task A (task-context version; ends by rescheduling).
+; Descriptor = 0x103C + 12*A. If state (+0x09) == 3 (BLOCKED) it is set to 4 (READY) and the
+; descriptor is linked at the tail of the ready queue whose head is 0x1068 + 4*(+0x08), then
+; control goes to TaskSched_Dispatch (0x01FF21) so a higher-priority wakee runs at once.
+; If the task was not blocked the wake is remembered by incrementing its pending count
+; (+0x0A), which TASKSCHED_BLOCK_SELF will consume later.
+; Input: A = task id (1..3). Called with a full context frame already pushed.
+TASKSCHED_WAKE_TASK:
 	.byte 0x02, 0x06, 0x06
 	.byte 0x3b, 0x38, 0x39, 0x3a, 0x3c
 	.byte 0x3d, 0x3e, 0xc9, 0x08, 0x0c, 0xd8, 0xc8, 0x3c
@@ -987,28 +1028,60 @@ TaskQueue_Operations_Opaque:
 	.byte 0xc8, 0x68, 0x10, 0xd8, 0x8d, 0xec, 0x12, 0xed
 	.byte 0x12, 0xe8, 0xd0, 0xbc, 0x00, 0x55, 0x9d, 0x02
 	.byte 0x20, 0xbc, 0x02, 0x50, 0xb0, 0x54, 0xbd, 0x02
-	.byte 0x54, 0x78, 0x58, 0xfd, 0x8c, 0x0a, 0x61, 0x78
-	.byte 0x52, 0xfd, 0x38, 0x3c, 0x3d, 0x02, 0x06, 0x06
+	.byte 0x54, 0x78, 0x58, 0xfd
+; Task was not blocked: bump pending count (+0x0A) and go to Dispatch.
+TASKSCHED_WAKE_TASK_COUNT:
+	.byte 0x8c, 0x0a, 0x61, 0x78
+	.byte 0x52, 0xfd
+; Same wake as 0x020185 but safe from interrupt context: it saves only XWA/XIX/XIY/SR,
+; never touches the scheduler stack and returns with a plain RET instead of dispatching.
+; Input: A = task id. Output: none. Use this one from ISRs; the caller is expected to reach
+; a scheduling point later (TaskSwitch_Countdown at 0x01FFD0 does that on interrupt exit).
+TASKSCHED_WAKE_TASK_NORESCHED:
+	.byte 0x38, 0x3c, 0x3d, 0x02, 0x06, 0x06
 	.byte 0xc9, 0x08, 0x0c, 0xd8, 0xc8, 0x3c, 0x10, 0xd8
 	.byte 0x8c, 0xec, 0x12, 0x8c, 0x09, 0x3f, 0x03, 0x6e
 	.byte 0x2b, 0xbc, 0x09, 0x00, 0x04, 0x8c, 0x08, 0x21
 	.byte 0xc9, 0xee, 0x02, 0xd8, 0x12, 0xd8, 0xc8, 0x68
 	.byte 0x10, 0xd8, 0x8d, 0xec, 0x12, 0xed, 0x12, 0xe8
 	.byte 0xd0, 0xbc, 0x00, 0x55, 0x9d, 0x02, 0x20, 0xbc
-	.byte 0x02, 0x50, 0xb0, 0x54, 0xbd, 0x02, 0x54, 0x03
-	.byte 0x5d, 0x5c, 0x58, 0x0e, 0x8c, 0x0a, 0x61, 0x68
-	.byte 0xf6, 0x02, 0x06, 0x06
+	.byte 0x02, 0x50, 0xb0, 0x54, 0xbd, 0x02, 0x54
+; Common epilogue: pop SR, XIY, XIX, XWA, ret.
+TASKSCHED_WAKE_TASK_NORESCHED_RET:
+	.byte 0x03
+	.byte 0x5d, 0x5c, 0x58, 0x0e
+; Not blocked: bump pending count and take the common epilogue.
+TASKSCHED_WAKE_TASK_NORESCHED_COUNT:
+	.byte 0x8c, 0x0a, 0x61, 0x68
+	.byte 0xf6
+; Reads and clears task A's pending count: L = descriptor(0x103C + 12*A) + 0x0A, then that
+; field is zeroed. Returns through TaskSched_ContextRestore (0x01FF72).
+; Input: A = task id. Output: L = the count that was pending.
+TASKSCHED_TAKE_PENDING_COUNT:
+	.byte 0x02, 0x06, 0x06
 	.byte 0x3b, 0x38, 0x39, 0x3a
 	.byte 0x3c, 0x3d, 0x3e, 0xc9, 0x08, 0x0c, 0xd8, 0xc8
 	.byte 0x3c, 0x10, 0xd8, 0x8c, 0xec, 0x12, 0x8c, 0x0a
 	.byte 0x27, 0xbc, 0x0a, 0x00, 0x00, 0x78, 0x3d, 0xfd
+; Signal event flag A (task-context version; ends by rescheduling).
+; Event A has a self-linked wait-queue head at 0x1074 + 4*A and a one-bit "already signalled"
+; flag in bit 0 of the byte at 0x107F + A. If the wait queue is empty the flag byte's bit 0
+; is set (the signal is latched for a future waiter); otherwise the first waiter is unlinked,
+; its state set to 4 (READY), it is appended to its priority's ready queue and Dispatch runs.
+; Only event ids 1 and 2 exist: TaskSched_Init builds two heads at 0x1078/0x107C and seeds
+; both flag bytes 0x1080/0x1081 to 1 (pre-signalled) by copying the two 0x01 bytes at
+; 0x01FDBC.  Input: A = event id.
+TASKEVENT_SIGNAL:
 	.byte 0x02, 0x06, 0x06
 	.byte 0x3b, 0x38, 0x39, 0x3a, 0x3c
 	.byte 0x3d, 0x3e, 0xc9, 0x8f, 0xc9, 0xee, 0x02, 0xd8
 	.byte 0x12, 0xd8, 0xc8, 0x74, 0x10, 0xd8, 0x8d, 0xed
 	.byte 0x12, 0x9d, 0x00, 0x24, 0xdd, 0xf4, 0x6e, 0x0d
 	.byte 0xdb, 0x12, 0xdb, 0xc8, 0x7f, 0x10, 0xeb, 0x12
-	.byte 0xb3, 0xb8, 0x78, 0x10, 0xfd, 0xec, 0x12, 0xe8
+	.byte 0xb3, 0xb8, 0x78, 0x10, 0xfd
+; Unlink the head waiter, mark it READY, requeue by priority, jump to Dispatch.
+TASKEVENT_SIGNAL_WAKE:
+	.byte 0xec, 0x12, 0xe8
 	.byte 0xd0, 0xeb, 0xd3, 0x9c, 0x00, 0x20, 0x9c, 0x02
 	.byte 0x23, 0xbb, 0x00, 0x50, 0xb8, 0x02, 0x53, 0xbc
 	.byte 0x09, 0x00, 0x04, 0x8c, 0x08, 0x21, 0xc9, 0xee
@@ -1016,14 +1089,23 @@ TaskQueue_Operations_Opaque:
 	.byte 0x8d, 0xec, 0x12, 0xed, 0x12, 0xe8, 0xd0, 0xbc
 	.byte 0x00, 0x55, 0x9d, 0x02, 0x20, 0xbc, 0x02, 0x50
 	.byte 0xb0, 0x54, 0xbd, 0x02, 0x54, 0x78, 0x84, 0xfc
+; Interrupt-safe TASKEVENT_SIGNAL: identical logic, but saves only XWA/XIX/XIY/XHL/SR and
+; returns with RET rather than entering the dispatcher.  Input: A = event id.
+TASKEVENT_SIGNAL_NORESCHED:
 	.byte 0x38, 0x3c, 0x3d, 0x3b
 	.byte 0xc9, 0x8f, 0xc9, 0xee
 	.byte 0x02, 0xd8, 0x12, 0xd8, 0xc8, 0x74, 0x10, 0xd8
 	.byte 0x8d, 0xed, 0x12, 0x02, 0x06, 0x06, 0x9d, 0x00
 	.byte 0x24, 0xdd, 0xf4, 0x6e, 0x10, 0xdb, 0x12, 0xdb
-	.byte 0xc8, 0x7f, 0x10, 0xeb, 0x12, 0xb3, 0xb8, 0x03
+	.byte 0xc8, 0x7f, 0x10, 0xeb, 0x12, 0xb3, 0xb8
+; Common epilogue: pop SR, XHL, XIY, XIX, XWA, ret.
+TASKEVENT_SIGNAL_NORESCHED_RET:
+	.byte 0x03
 	.byte 0x5b, 0x5d, 0x5c, 0x58
-	.byte 0x0e, 0xec, 0x12, 0xe8
+	.byte 0x0e
+; Queue non-empty: unlink waiter, state = 4, requeue on 0x1068 + 4*prio, take the epilogue.
+TASKEVENT_SIGNAL_NORESCHED_WAKE:
+	.byte 0xec, 0x12, 0xe8
 	.byte 0xd0, 0xeb, 0xd3, 0x9c, 0x00, 0x20, 0x9c, 0x02
 	.byte 0x23, 0xbb, 0x00, 0x50, 0xb8, 0x02, 0x53, 0xbc
 	.byte 0x09, 0x00, 0x04, 0x8c, 0x08, 0x21, 0xc9, 0xee
@@ -1031,11 +1113,20 @@ TaskQueue_Operations_Opaque:
 	.byte 0x8d, 0xec, 0x12, 0xed, 0x12, 0xe8, 0xd0, 0xbc
 	.byte 0x00, 0x55, 0x9d, 0x02, 0x20, 0xbc, 0x02, 0x50
 	.byte 0xb0, 0x54, 0xbd, 0x02, 0x54, 0x03, 0x5b, 0x5d
-	.byte 0x5c, 0x58, 0x0e, 0x02, 0x06, 0x06, 0x3b, 0x38
+	.byte 0x5c, 0x58, 0x0e
+; Wait on event flag A. If bit 0 of (0x107F + A) is set the latched signal is consumed
+; (bit cleared) and the caller resumes immediately through TaskSched_ContextRestore.
+; Otherwise the current task (descriptor pointer at 0x1046) is unlinked from its ready
+; queue, state set to 3 (BLOCKED), appended to the event wait queue at 0x1074 + 4*A, and
+; TaskSched_Dispatch is entered.  Input: A = event id. Entered with a full context pushed.
+TASKEVENT_WAIT:
+	.byte 0x02, 0x06, 0x06, 0x3b, 0x38
 	.byte 0x39, 0x3a, 0x3c, 0x3d, 0x3e
 	.byte 0xc9, 0x8d, 0xd8
 	.byte 0x12, 0xd8, 0xc8, 0x7f, 0x10, 0xe8, 0x12, 0xb0
 	.byte 0xc8, 0x66, 0x05, 0xb0, 0xb0, 0x78, 0x4d, 0xfc
+; No latched signal: block the caller on the event queue and dispatch.
+TASKEVENT_WAIT_BLOCK:
 	.byte 0xd1, 0x46, 0x10, 0x24, 0xec, 0x12, 0xe8, 0xd0
 	.byte 0xeb, 0xd3, 0x9c, 0x00, 0x20, 0x9c, 0x02, 0x23
 	.byte 0xbb, 0x00, 0x50, 0xb8, 0x02, 0x53, 0xbc, 0x09
@@ -1043,7 +1134,11 @@ TaskQueue_Operations_Opaque:
 	.byte 0xc8, 0x74, 0x10, 0xda, 0x8d, 0xec, 0x12, 0xed
 	.byte 0x12, 0xe8, 0xd0, 0xbc, 0x00, 0x55, 0x9d, 0x02
 	.byte 0x20, 0xbc, 0x02, 0x50, 0xb0, 0x54, 0xbd, 0x02
-	.byte 0x54, 0x78, 0xc0, 0xfb, 0xd8, 0x12, 0xd8, 0xc8
+	.byte 0x54, 0x78, 0xc0, 0xfb
+; Clears the latched-signal bit for event A: res 0,(0x107F + A), under interrupt level 6.
+; Input: A = event id. Clobbers WA/XWA.
+TASKEVENT_CLEAR:
+	.byte 0xd8, 0x12, 0xd8, 0xc8
 	.byte 0x7f, 0x10, 0xe8, 0x12, 0x02, 0x06, 0x06, 0xb0
 	.byte 0xb0, 0x03, 0x0e
 
@@ -1220,6 +1315,12 @@ TaskSem_TryDec_Return:
 	pop	sr
 	ret
 
+; Non-destructive read of semaphore A's count: HL = zero-extended byte at 0x1091 + A.
+; The four semaphores (ids 1..4) have their counts at 0x1092..0x1095, all seeded to 1 by
+; TaskSched_Init (from the four 0x01 bytes at 0x01FDBE), and their wait-queue heads at
+; 0x107E + 4*A i.e. 0x1082/0x1086/0x108A/0x108E. Siblings: TaskSched_Wait (0x02044F) is the
+; blocking P(), TaskSem_TryDec (0x0204A9) is the non-blocking one.
+; Input: A = semaphore id. Output: HL = current count.
 TaskSem_AddrCalc_Opaque:
 	.byte 0xd8, 0x12, 0xd8, 0xc8, 0x91, 0x10, 0xe8, 0x12
 	.byte 0x80, 0x27, 0xdb, 0x12, 0x0e
@@ -1610,6 +1711,12 @@ Task_Reassign_Guard_Return:
 	pop xwa
 	ret
 
+; Terminate task A. Descriptor = 0x103C + 12*A; the descriptor is unlinked from whatever
+; doubly-linked list it is on (next +0 / prev +2) and both its state byte (+0x09) and its
+; pending count (+0x0A) are zeroed, i.e. the slot returns to the "never spawned" condition
+; that TaskSched_SpawnTask (0x01FFFD) tests for. Runs at interrupt level 6, saves
+; WA/XIX/XIY/XHL, plain RET (it never kills the *running* task's stack, so the caller must
+; not be task A itself).  Input: A = task id.
 RingBuf_Access_Opaque_A:
 	.ascii "(<=;"
 	.byte 0x06, 0x06, 0xc9, 0x08
@@ -1620,6 +1727,11 @@ RingBuf_Access_Opaque_A:
 	.byte 0x00, 0x06, 0x00
 	.byte 0x5b, 0x5d, 0x5c, 0x48
 	.byte 0x0e
+; Busy-wait delay measured in audio ticks. WA is halved, added to the free-running 32-bit
+; tick counter at 0x1040, and the routine spins until 0x1040 reaches that value.
+; Input: WA = 2 * number of ticks to wait. No timeout, no interrupt masking -- it depends
+; entirely on Timer_AudioTick_Handler (0x01FB41) still running.
+TIMER_DELAY_TICKS:
 	.byte 0xd8, 0xef, 0x01, 0xd1, 0x40, 0x10, 0x80, 0xd1
 	.byte 0x40, 0x10, 0xf0, 0x6a, 0xfa, 0x0e
 
@@ -1631,20 +1743,48 @@ IntMask_ClearBit3:
 	res_dd8 3, 0x80
 	ret
 
+; incw 1,(0x10D2) -- take the scheduler lock. While 0x10D2 is non-zero TaskSched_Dispatch
+; (0x01FF21) returns through ContextRestore without switching tasks and TaskSwitch_Countdown
+; (0x01FFD0) merely counts down. Unlike TASKSCHED_SOFTTIMER_SERVICE this pair does NOT
+; mirror the new depth into control register 0x7C.
 RingBuf_Control_Opaque:
-	.byte 0xd1, 0xd2, 0x10, 0x61, 0x0e, 0xd1, 0xd2, 0x10
-	.byte 0x69, 0x0e, 0x2c, 0x3a, 0xf2, 0x2e, 0x0c, 0x04
-	.byte 0x32, 0x1e, 0x38, 0x03, 0x5a, 0x4c, 0x0e, 0xee
+	.byte 0xd1, 0xd2, 0x10, 0x61, 0x0e
+; decw 1,(0x10D2) -- release the scheduler lock. Nesting-safe, no reschedule on release.
+TASKSCHED_UNLOCK:
+	.byte 0xd1, 0xd2, 0x10
+	.byte 0x69, 0x0e
+; Pop one byte from the 1 KB FIFO whose descriptor base is 0x040C2E.
+; Thin wrapper: pushes IX/XDE, XDE = 0x040C2E, calls the 1K engine's GET (0x020B9D).
+; Output: HL = byte (zero-extended) or 0xFFFF when the FIFO is empty.
+FIFO1K_GET:
+	.byte 0x2c, 0x3a, 0xf2, 0x2e, 0x0c, 0x04
+	.byte 0x32, 0x1e, 0x38, 0x03, 0x5a, 0x4c, 0x0e
+; Push one byte onto the 1 KB FIFO. Stack-argument calling convention (link XIZ,0;
+; A = (XIZ+8)), then the 1K engine's PUT (0x020BF1).  Output: HL = free space left,
+; or 0xFFFF if the FIFO was full and the byte was dropped.
+FIFO1K_PUT:
+	.byte 0xee
 	.byte 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08, 0x21
 	.byte 0xf2, 0x2e, 0x0c, 0x04, 0x32, 0x1e, 0x78, 0x03
-	.byte 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c, 0x00
+	.byte 0x5a, 0x4c, 0xee, 0x0d, 0x0e
+; Push BC bytes from (XIY) onto the 1 KB FIFO; both taken from the stack frame
+; ((XIZ+8) = count, (XIZ+0x0A) = source pointer). Loops over the engine's PUT; note it does
+; not stop when PUT reports "full", so overflow silently drops the tail.
+FIFO1K_PUT_BLOCK:
+	.byte 0xee, 0x0c, 0x00
 	.byte 0x00, 0x3d, 0x3c, 0x3a, 0x9e, 0x08, 0x21, 0xae
 	.byte 0x0a, 0x25, 0xf2, 0x2e, 0x0c, 0x04, 0x32, 0x85
 	.byte 0x21, 0x1e, 0x5c, 0x03, 0xed, 0x61, 0xd9, 0x1c
-	.byte 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e, 0xd2
+	.byte 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
+; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
+FIFO1K_IS_EMPTY:
+	.byte 0xd2
 	.byte 0x2a, 0x0c, 0x04, 0x23, 0xd2, 0x26, 0x0c, 0x04
 	.byte 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff, 0xff
-	.byte 0x0e, 0xd2, 0x2c, 0x0c, 0x04, 0x23, 0x0e
+	.byte 0x0e
+; HL = the free-space counter word at 0x040C2C.
+FIFO1K_FREE_SPACE:
+	.byte 0xd2, 0x2c, 0x0c, 0x04, 0x23, 0x0e
 
 RingBuf_Init_1K:
 	pushw ix
@@ -1655,27 +1795,56 @@ RingBuf_Init_1K:
 	popw ix
 	ret
 
+; Copies the read index (0x040C26) into the mark/replay cursor (0x040C24), so the bytes
+; consumed from here on can be re-read from the mark by FIFO1K_GET_MARKED.
 RingBuf_ReadWrite_Opaque_A:
 	.byte 0x2b, 0xd2, 0x26, 0x0c, 0x04, 0x23, 0xf2, 0x24
-	.byte 0x0c, 0x04, 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2
+	.byte 0x0c, 0x04, 0x53, 0x4b, 0x0e
+; Pop one byte using the mark cursor, bounded by the commit index (0x040C28).
+; Engine entry 0x020BBB. Output: HL = byte, or 0xFFFF when the mark has reached the commit.
+FIFO1K_GET_MARKED:
+	.byte 0x2c, 0x3a, 0xf2
 	.byte 0x2e, 0x0c, 0x04, 0x32, 0x1d, 0xbb, 0x0b, 0x02
-	.byte 0x5a, 0x4c, 0x0e, 0x2c, 0x3a, 0xf2, 0x2e, 0x0c
+	.byte 0x5a, 0x4c, 0x0e
+; Pop one byte using the mark cursor, bounded by the write index (0x040C2A).
+; Engine entry 0x020BD6. Output: HL = byte or 0xFFFF.
+FIFO1K_GET_FROM_MARK:
+	.byte 0x2c, 0x3a, 0xf2, 0x2e, 0x0c
 	.byte 0x04, 0x32, 0x1d, 0xd6, 0x0b, 0x02, 0x5a, 0x4c
-	.byte 0x0e, 0x2b, 0xd2, 0x28, 0x0c, 0x04, 0x23, 0xf2
-	.byte 0x26, 0x0c, 0x04, 0x53, 0x4b, 0x0e, 0x2b, 0xd2
+	.byte 0x0e
+; Advances the read index (0x040C26) to the commit index (0x040C28).
+FIFO1K_COMMIT:
+	.byte 0x2b, 0xd2, 0x28, 0x0c, 0x04, 0x23, 0xf2
+	.byte 0x26, 0x0c, 0x04, 0x53, 0x4b, 0x0e
+; Advances the commit index (0x040C28) to the current write index (0x040C2A).
+FIFO1K_SET_COMMIT:
+	.byte 0x2b, 0xd2
 	.byte 0x2a, 0x0c, 0x04, 0x23, 0xf2, 0x28, 0x0c, 0x04
-	.byte 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2, 0x38, 0x10
+	.byte 0x53, 0x4b, 0x0e
+; Same as FIFO1K_GET for the 256-byte FIFO at descriptor base 0x041038 (engine 0x020A7F).
+FIFO256_GET:
+	.byte 0x2c, 0x3a, 0xf2, 0x38, 0x10
 	.byte 0x04, 0x32, 0x1e, 0x6c, 0x01, 0x5a, 0x4c, 0x0e
+; Stack-arg push of one byte onto the 256-byte FIFO (engine 0x020AD3).
+FIFO256_PUT:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
 	.byte 0x21, 0xf2, 0x38, 0x10, 0x04, 0x32, 0x1e, 0xac
-	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c
+	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e
+; Stack-arg push of a count/pointer block onto the 256-byte FIFO.
+FIFO256_PUT_BLOCK:
+	.byte 0xee, 0x0c
 	.byte 0x00, 0x00, 0x3d, 0x3c, 0x3a, 0x9e, 0x08, 0x21
 	.byte 0xae, 0x0a, 0x25, 0xf2, 0x38, 0x10, 0x04, 0x32
 	.byte 0x85, 0x21, 0x1e, 0x90, 0x01, 0xed, 0x61, 0xd9
 	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
+; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
+FIFO256_IS_EMPTY:
 	.byte 0xd2, 0x34, 0x10, 0x04, 0x23, 0xd2, 0x30, 0x10
 	.byte 0x04, 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff
-	.byte 0xff, 0x0e, 0xd2, 0x36, 0x10, 0x04, 0x23, 0x0e
+	.byte 0xff, 0x0e
+; HL = free-space counter at 0x041036.
+FIFO256_FREE_SPACE:
+	.byte 0xd2, 0x36, 0x10, 0x04, 0x23, 0x0e
 
 RingBuf_Init_256:
 	pushw ix
@@ -1686,27 +1855,53 @@ RingBuf_Init_256:
 	popw ix
 	ret
 
+; Read index (0x041030) -> mark cursor (0x04102E).
 RingBuf_ReadWrite_Opaque_B:
 	.byte 0x2b, 0xd2, 0x30, 0x10, 0x04, 0x23, 0xf2, 0x2e
-	.byte 0x10, 0x04, 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2
+	.byte 0x10, 0x04, 0x53, 0x4b, 0x0e
+; Mark-cursor pop bounded by the commit index (engine 0x020A9D).
+FIFO256_GET_MARKED:
+	.byte 0x2c, 0x3a, 0xf2
 	.byte 0x38, 0x10, 0x04, 0x32, 0x1d, 0x9d, 0x0a, 0x02
-	.byte 0x5a, 0x4c, 0x0e, 0x2c, 0x3a, 0xf2, 0x38, 0x10
+	.byte 0x5a, 0x4c, 0x0e
+; Mark-cursor pop bounded by the write index (engine 0x020AB8).
+FIFO256_GET_FROM_MARK:
+	.byte 0x2c, 0x3a, 0xf2, 0x38, 0x10
 	.byte 0x04, 0x32, 0x1d, 0xb8, 0x0a, 0x02, 0x5a, 0x4c
-	.byte 0x0e, 0x2b, 0xd2, 0x32, 0x10, 0x04, 0x23, 0xf2
-	.byte 0x30, 0x10, 0x04, 0x53, 0x4b, 0x0e, 0x2b, 0xd2
+	.byte 0x0e
+; Commit index (0x041032) -> read index (0x041030).
+FIFO256_COMMIT:
+	.byte 0x2b, 0xd2, 0x32, 0x10, 0x04, 0x23, 0xf2
+	.byte 0x30, 0x10, 0x04, 0x53, 0x4b, 0x0e
+; Write index (0x041034) -> commit index (0x041032).
+FIFO256_SET_COMMIT:
+	.byte 0x2b, 0xd2
 	.byte 0x34, 0x10, 0x04, 0x23, 0xf2, 0x32, 0x10, 0x04
-	.byte 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2, 0x42, 0x11
+	.byte 0x53, 0x4b, 0x0e
+; Same as FIFO1K_GET for the 512-byte FIFO at descriptor base 0x041142 (engine 0x020B0E).
+FIFO512_GET:
+	.byte 0x2c, 0x3a, 0xf2, 0x42, 0x11
 	.byte 0x04, 0x32, 0x1e, 0x4d, 0x01, 0x5a, 0x4c, 0x0e
+; Stack-arg push of one byte onto the 512-byte FIFO (engine 0x020B62).
+FIFO512_PUT:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
 	.byte 0x21, 0xf2, 0x42, 0x11, 0x04, 0x32, 0x1e, 0x8d
-	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c
+	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e
+; Stack-arg push of a count/pointer block onto the 512-byte FIFO.
+FIFO512_PUT_BLOCK:
+	.byte 0xee, 0x0c
 	.byte 0x00, 0x00, 0x3d, 0x3c, 0x3a, 0x9e, 0x08, 0x21
 	.byte 0xae, 0x0a, 0x25, 0xf2, 0x42, 0x11, 0x04, 0x32
 	.byte 0x85, 0x21, 0x1e, 0x71, 0x01, 0xed, 0x61, 0xd9
 	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
+; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
+FIFO512_IS_EMPTY:
 	.byte 0xd2, 0x3e, 0x11, 0x04, 0x23, 0xd2, 0x3a, 0x11
 	.byte 0x04, 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff
-	.byte 0xff, 0x0e, 0xd2, 0x40, 0x11, 0x04, 0x23, 0x0e
+	.byte 0xff, 0x0e
+; HL = free-space counter at 0x041140.
+FIFO512_FREE_SPACE:
+	.byte 0xd2, 0x40, 0x11, 0x04, 0x23, 0x0e
 
 RingBuf_Init_512:
 	pushw ix
@@ -1721,12 +1916,15 @@ RingBuf_Init_512:
 ; Five small routines that load/store 16-bit pointer values
 ; from the audio buffer control block at 0x041138-0x041142.
 ; Each routine saves/restores caller registers.
+; Read index (0x04113A) -> mark cursor (0x041138).
 AudioBuf_PtrUtils:
 	pushw	hl
 	ldw_da	hl, 266554
 	stw_da	266552, hl
 	popw	hl
 	ret
+; Mark-cursor pop bounded by the commit index (engine 0x020B2C).
+FIFO512_GET_MARKED:
 	pushw	ix
 	push	xde
 	lda_24	xde, 266562
@@ -1734,6 +1932,8 @@ AudioBuf_PtrUtils:
 	pop	xde
 	popw	ix
 	ret
+; Mark-cursor pop bounded by the write index (engine 0x020B47).
+FIFO512_GET_FROM_MARK:
 	pushw	ix
 	push	xde
 	lda_24	xde, 266562
@@ -1741,11 +1941,15 @@ AudioBuf_PtrUtils:
 	pop	xde
 	popw	ix
 	ret
+; Commit index (0x04113C) -> read index (0x04113A).
+FIFO512_COMMIT:
 	pushw	hl
 	ldw_da	hl, 266556
 	stw_da	266554, hl
 	popw	hl
 	ret
+; Write index (0x04113E) -> commit index (0x04113C).
+FIFO512_SET_COMMIT:
 	pushw	hl
 	ldw_da	hl, 266558
 	stw_da	266556, hl
@@ -1764,14 +1968,24 @@ RingBuf_WrappedRead_Opaque_A:
 	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x00, 0xba
-	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e, 0x9a, 0xf6
+	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+; Engine: pop at the mark cursor (XDE-10), stop when it equals the commit index (XDE-6).
+FIFO_ENGINE256_GET_MARKED:
+	.byte 0x9a, 0xf6
 	.byte 0x24, 0x9a, 0xfa, 0xf4, 0x6e, 0x04, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07, 0xe8, 0xf0
 	.byte 0x27, 0xdc, 0x38, 0xff, 0x00, 0xba, 0xf6, 0x54
-	.byte 0x0e, 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
+	.byte 0x0e
+; Engine: pop at the mark cursor (XDE-10), stop when it equals the write index (XDE-4).
+FIFO_ENGINE256_GET_FROM_MARK:
+	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
 	.byte 0x04, 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3
 	.byte 0x07, 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x00
-	.byte 0xba, 0xf6, 0x54, 0x0e, 0x9a, 0xfe, 0x3f, 0x00
+	.byte 0xba, 0xf6, 0x54, 0x0e
+; Engine: if free count (XDE-2) is zero return HL=0xFFFF; else store A at (XDE + writeidx),
+; advance the write index modulo 0x0FF, decrement the free count, return it in HL.
+FIFO_ENGINE256_PUT:
+	.byte 0x9a, 0xfe, 0x3f, 0x00
 	.byte 0x00, 0x6e, 0x04, 0x33, 0xff, 0xff, 0x0e, 0x9a
 	.byte 0xfc, 0x24, 0xf3, 0x07, 0xe8, 0xf0, 0x41, 0xdc
 	.byte 0x38, 0xff, 0x00, 0xba, 0xfc, 0x54, 0x9a, 0xfe
@@ -1789,14 +2003,23 @@ RingBuf_WrappedRead_Opaque_B:
 	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x01, 0xba
-	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e, 0x9a, 0xf6
+	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+; 512-byte twin of 0x020A9D (wrap mask 0x1FF).
+FIFO_ENGINE512_GET_MARKED:
+	.byte 0x9a, 0xf6
 	.byte 0x24, 0x9a, 0xfa, 0xf4, 0x6e, 0x04, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07, 0xe8, 0xf0
 	.byte 0x27, 0xdc, 0x38, 0xff, 0x01, 0xba, 0xf6, 0x54
-	.byte 0x0e, 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
+	.byte 0x0e
+; 512-byte twin of 0x020AB8 (wrap mask 0x1FF).
+FIFO_ENGINE512_GET_FROM_MARK:
+	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
 	.byte 0x04, 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3
 	.byte 0x07, 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x01
-	.byte 0xba, 0xf6, 0x54, 0x0e, 0x9a, 0xfe, 0x3f, 0x00
+	.byte 0xba, 0xf6, 0x54, 0x0e
+; 512-byte twin of 0x020AD3 (wrap mask 0x1FF).
+FIFO_ENGINE512_PUT:
+	.byte 0x9a, 0xfe, 0x3f, 0x00
 	.byte 0x00, 0x6e, 0x04, 0x33, 0xff, 0xff, 0x0e, 0x9a
 	.byte 0xfc, 0x24, 0xf3, 0x07, 0xe8, 0xf0, 0x41, 0xdc
 	.byte 0x38, 0xff, 0x01, 0xba, 0xfc, 0x54, 0x9a, 0xfe
@@ -1814,14 +2037,23 @@ RingBuf_WrappedRead_Opaque_C:
 	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba
-	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e, 0x9a, 0xf6
+	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+; 1 KB twin of 0x020A9D (wrap mask 0x3FF).
+FIFO_ENGINE1K_GET_MARKED:
+	.byte 0x9a, 0xf6
 	.byte 0x24, 0x9a, 0xfa, 0xf4, 0x6e, 0x04, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07, 0xe8, 0xf0
 	.byte 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba, 0xf6, 0x54
-	.byte 0x0e, 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
+	.byte 0x0e
+; 1 KB twin of 0x020AB8 (wrap mask 0x3FF).
+FIFO_ENGINE1K_GET_FROM_MARK:
+	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
 	.byte 0x04, 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3
 	.byte 0x07, 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03
-	.byte 0xba, 0xf6, 0x54, 0x0e, 0x9a, 0xfe, 0x3f, 0x00
+	.byte 0xba, 0xf6, 0x54, 0x0e
+; 1 KB twin of 0x020AD3 (wrap mask 0x3FF).
+FIFO_ENGINE1K_PUT:
+	.byte 0x9a, 0xfe, 0x3f, 0x00
 	.byte 0x00, 0x6e, 0x04, 0x33, 0xff, 0xff, 0x0e, 0x9a
 	.byte 0xfc, 0x24, 0xf3, 0x07, 0xe8, 0xf0, 0x41, 0xdc
 	.byte 0x38, 0xff, 0x03, 0xba, 0xfc, 0x54, 0x9a, 0xfe
@@ -1973,9 +2205,22 @@ InterCPU_Wait_MSTAT1_Set:
 	set_dd8 0, 0x34	; SSTAT0 - timeout recovery: force ready state before exit
 	ret
 
+; Sends the single command byte 0xE3 to the main CPU over the 0x120000 latch, with the same
+; two-phase MSTAT1 handshake InterCPU_DMA_Send_Chunk uses but no payload and no micro-DMA.
+; Gate 1 (0x020D15): wait for PD bit 4 (MSTAT1, SFR 0x34) to be HIGH; drop SSTAT0 (PD bit 0)
+; and write 0xE3 to 0x120000. Gate 2 (0x020D23): wait for MSTAT1 to go LOW, then raise
+; SSTAT0 and return. Each gate spins through E3_WAIT_MSTAT1_CLEAR (0x020D2C) /
+; E3_WAIT_MSTAT1_SET (0x020D37), which give up after 60001 iterations (compare 0xEA60);
+; on the gate-1 timeout it returns having sent nothing, on the gate-2 timeout it raises
+; SSTAT0 first. BC is used as the retry counter. No caller found by branch-target scan.
 InterCPU_LatchProtocol_Opaque:
-	.byte 0xd9, 0xa8, 0xf0, 0x34, 0xcc, 0x66, 0x12, 0xf0
+	.byte 0xd9, 0xa8
+; Poll MSTAT1 high, then drop SSTAT0 and write 0xE3 to the latch at 0x120000.
+INTERCPU_E3_GATE1:
+	.byte 0xf0, 0x34, 0xcc, 0x66, 0x12, 0xf0
 	.byte 0x34, 0xb0, 0xf2, 0x00, 0x00, 0x12, 0x00, 0xe3
+; Poll MSTAT1 low, then raise SSTAT0 and return.
+INTERCPU_E3_GATE2:
 	.byte 0xf0, 0x34, 0xcc, 0x6e, 0x0f, 0xf0, 0x34, 0xb8
 	.byte 0x0e
 
@@ -2012,7 +2257,11 @@ E2_START_TRANSFER:
 	.byte 0x60, 0xbb, 0x04, 0x62, 0xbb, 0x08, 0x51, 0xeb
 	.byte 0x2e, 0x08, 0x30, 0x0a, 0x00, 0xd8, 0x2e, 0x48
 	.byte 0xf1, 0x02, 0x01, 0x00, 0x16, 0xf0, 0x80, 0xba
-	.byte 0xf1, 0xfe, 0x04, 0xbf, 0xc1, 0xe8, 0x10, 0x3f
+	.byte 0xf1, 0xfe, 0x04, 0xbf
+; Tail of INTERCPU_E2_DMA_TRANSFER: spins on DMA_XFER_STATE (0x10E8) until the micro-DMA
+; channel-2 completion ISR (0x020F01) zeroes it. NO TIMEOUT -- see the findings.
+INTERCPU_E2_WAIT_DMA_DONE:
+	.byte 0xc1, 0xe8, 0x10, 0x3f
 	.byte 0x00, 0xb0, 0xf6, 0xc1, 0xe8, 0x10, 0x3f, 0x00
 	.byte 0x6e, 0xf9, 0x0e
 
@@ -3417,6 +3666,13 @@ VoiceSlot_Assign_Return:
 	inc 8, xsp
 	ret
 
+; Builds the packed 16-bit "part handle" the voice allocator passes around, and refreshes
+; the slot table first when the part index is a real one.
+; Inputs: C = part index (only the low 6 bits are used, saved in a 2-byte stack slot),
+;         A = a selector. If A >= 0x40 the refresh is skipped; otherwise
+;         Voice_ScanSlots_ReassignSources (0x02150D) is called with WA = A.
+; Output: HL = ((C & 0x3F) << 8) | 0x00FF, i.e. part in the high byte and 0xFF ("no slot
+;         yet") in the low byte.  Only caller: 0x0219BB.
 VoiceState_OpaqueData1:
 	.byte 0xef, 0x6a, 0xb7, 0x43, 0x87, 0x3c, 0x3f, 0xc9
 	.byte 0xcf, 0x40, 0x67, 0x0f, 0x87, 0x21, 0xd8, 0x12
@@ -3424,12 +3680,30 @@ VoiceState_OpaqueData1:
 	.byte 0x00, 0x68, 0x12, 0xd8, 0x12, 0x1e, 0x71, 0xfb
 	.byte 0x87, 0x21, 0xd8, 0x12, 0xd8, 0xee, 0x08, 0xd8
 	.byte 0x8b, 0xdb, 0xce, 0xff, 0x00, 0xef, 0x62, 0x0e
+; Stack-argument front end that turns a (part, selector, key) triple into an assigned voice
+; slot: saves C and A in a local frame, calls VOICE_PART_HANDLE_MAKE (0x02197C) with
+; C = E, then calls VoiceSlot_Assign (0x02177E) with WA = the saved A, C = the saved C and
+; E = the caller's argument at (XSP+8). Returns with 'retd 2', i.e. it pops one word of
+; caller-pushed argument. No caller found by branch-target scan (candidate for a call
+; through one of the dispatch tables).
+VOICE_PART_ASSIGN:
 	.byte 0xef, 0x6c, 0xb7, 0x43, 0xbf, 0x02, 0x41, 0x87
 	.byte 0x21, 0xd8, 0x12, 0xcd, 0x8b, 0xd9, 0x12, 0x1e
 	.byte 0xbe, 0xff, 0x8f, 0x02, 0x21, 0xc9, 0x8f, 0xdb
 	.byte 0x12, 0x87, 0x21, 0xc9, 0x8b, 0xd9, 0x12, 0x8f
 	.byte 0x08, 0x21, 0xc9, 0x8d, 0xda, 0x12, 0xdb, 0x88
 	.byte 0x1e, 0xa7, 0xfd, 0xef, 0x64, 0x0f, 0x02, 0x00
+; Builds a 0xFFFF-terminated word list at 0x00286B describing the up-to-four sounding
+; sub-slots of one tone entry.
+; Inputs: A = tone/part row index, C = a group id, E = a group mask (the routine keeps
+;         ~E in its frame and matches (table_byte & ~E) against (C & ~E)).
+; Walks i = 0..3 over the bytes at (0x0024E6 + 12*A + 8 + i). A byte >= 0xC0 means "slot
+; unused" and is skipped. Otherwise the byte indexes a 5-byte-stride table at 0x002129,
+; whose first byte indexes VOICE_COMMANDINDEXTABLE (0x00F4EC); that result is the value
+; matched against the group and is also the high byte of the emitted word. The low byte is
+; whatever SlotPair_Decode_C_To_L (0x0210A2) returns for (WA = the raw byte, BC = i).
+; Output: XHL = 0x00286B (the list). No caller found by branch-target scan.
+VOICE_BUILD_PARTSLOT_LIST:
 	.byte 0xbf, 0xf4, 0x37, 0xd7, 0xfa, 0x04, 0xcd, 0x06
 	.byte 0xbf, 0x08, 0x45, 0x8f, 0x08, 0xc3, 0xbf, 0x06
 	.byte 0x43, 0xd8, 0x12, 0xd8, 0x09, 0x0c, 0x00, 0xf1
@@ -3523,6 +3797,17 @@ Voice_BuildOutputList_Return:
 	lda xsp, (xsp + 12)
 	ret
 
+; Builds a 0xFF-terminated byte list at 0x0028ED of the voice ids currently sounding for a
+; part group. Inputs: A = row selector (row base = 0x001E4D + 27*A), C = group id,
+; E = group mask (E is complemented and ANDed into C on entry, so the test is on the bits
+; NOT in the mask). For each of the 27 part indices B: the row byte is skipped when >= 0xC0;
+; VOICE_COMMANDINDEXTABLE[B] (0x00F4EC) must match the group; the row byte then indexes the
+; 5-byte-stride table at 0x00212A to give a voice id, which must be < 0x40 to be emitted.
+; After emitting, VOICE_POLYPHONYLIMITS_TABLE (0x00F48C) indexed by the command byte & 0x1F
+; gives a stride used to chain forward through 0x0024E6 + 12*voice, emitting further ids
+; until the chain byte repeats. Output: XHL = 0x0028ED.
+; LOW confidence: the chain walk at 0x021BB7..0x021BE2 is understood mechanically but its
+; purpose (layer chaining? unison? drum-map expansion?) is not proven. No caller found.
 VoiceState_OpaqueData2:
 	.byte 0x2e, 0xcd, 0x06, 0xcd, 0xc3, 0xd8, 0x12, 0xd8
 	.byte 0x09, 0x1b, 0x00, 0xf1, 0x4d, 0x1e, 0x33, 0xf3
@@ -4179,6 +4464,34 @@ AudioState_Init_Return:
 	inc 4, xsp
 	ret
 
+; PER-TICK TONE-GENERATOR VOICE POLL. Services ONE bank of 16 hardware voices per
+; call and is the ONLY place in the firmware where a voice is handed back to the
+; software free pool.
+; Caller: Audio_Process_Init (0x034CDB) at 0x034CED, on alternate ticks only - that
+; routine toggles the byte at 0x041342 with 'xor 0xFF' and only calls us when it is
+; non-zero. With the internal bank counter this means each of the 4 banks is polled
+; once every 8 ticks.
+; State: byte (0x1128) = bank counter, inc'd then masked to 0..3 on entry.
+;   word (0x292E + bank*2) = shadow copy of the previous poll's active-voice bitmap.
+;   word (0x2936 + bank*2) = software 'held / do not reap' bitmap, set by
+;                            NoteOn_Dispatch (0x02243D) and cleared by
+;                            VoiceSlot_Release (0x0225BB).
+; Hardware: calls 0x021023 (ELF name DAC_Write_Sample - see [UNCERTAIN]) which writes
+;   the TG register-address latch at 0x100000 and reads the word back. Latch value
+;   0..3 returns the 16-bit active-voice bitmap for that bank; latch 0x180+ch returns
+;   that channel's envelope level.
+; Edge detection (0x2219F..0x02220A):
+;     new  = TG_bitmap | held_bitmap        ; 0x221C5
+;     hits = (new ^ prev) & prev            ; 0x221E9 / 0x221F1
+;     prev = new                            ; 0x22200
+;   so 'hits' are exactly the voices that were marked active last poll and are now
+;   reported silent by the TG and are not software-held. Only those get reaped.
+; Per-voice loop (see AudioTick_UpdateVoice_SlotLoop): voice index = bank*16 + i,
+;   voice record = 0x148D + index*0x27 (39-byte records, 64 voices, 0x148D..0x1E4C).
+; Exit: calls Voice_AdvanceSlotIterator (0x021BF5) with WA = bank.
+; *** BUG-RELEVANT: if the tone generator never clears active bits (e.g. a sine-wave
+; diagnostic renderer that has no end-of-sample / no auto-free), 'hits' is
+; permanently zero, no voice is ever retired, and the free pool drains to empty. ***
 AudioTick_UpdateVoice:
 	dec 6, xsp
 	push xiz
@@ -4223,6 +4536,8 @@ AudioTick_UpdateVoice:
 	cpw (xsp + 6), 0x0
 	jr z, AudioTick_UpdateVoice_Return
 
+; Loop over the 16 voices of the bank; (XSP+6) is a walking one-hot mask that doubles
+; each pass and terminates when it shifts out of the word.
 AudioTick_UpdateVoice_SlotLoop:
 	ld wa, (xsp + 4)
 	and wa, (xsp + 6)
@@ -4239,6 +4554,10 @@ AudioTick_UpdateVoice_SlotLoop:
 	calr Voice_ScanSlots_ReassignSources
 	jr AudioTick_UpdateVoice_Next
 
+; Not a freshly-silent voice: skip entirely if flags (voice+0x22) & 0x81 (bit0 = in the
+; free pool, bit7 = held/retrigger). Otherwise read the TG envelope level for this
+; channel (latch 0x180+index), keep bits 13..0, >>5, store the low byte in (voice+0x25),
+; and if it is < 0x80 and flag bit2 is set call VoiceNode_BeginRelease (0x021E83).
 AudioTick_UpdateVoice_DecayCheck:
 	ld a, (xiz + 34)
 	and a, 0x81
@@ -4258,6 +4577,7 @@ AudioTick_UpdateVoice_DecayCheck:
 	ld xwa, xiz
 	calr VoiceNode_BeginRelease
 
+; Advance to the next voice: index++, record pointer += 0x27, mask <<= 1.
 AudioTick_UpdateVoice_Next:
 	incm8 1, (xsp + 8)
 	lda xiz, (xiz + 39)
@@ -4265,6 +4585,7 @@ AudioTick_UpdateVoice_Next:
 	add (xsp + 6), wa
 	jr nz, AudioTick_UpdateVoice_SlotLoop
 
+; Tail: WA = bank, call Voice_AdvanceSlotIterator (0x021BF5), restore and return.
 AudioTick_UpdateVoice_Return:
 	ldb_d8 a, 4392
 	extz wa
@@ -4273,6 +4594,19 @@ AudioTick_UpdateVoice_Return:
 	inc 6, xsp
 	ret
 
+; FREE-VOICE / CANDIDATE-NODE SEARCH, primary form.
+; In:  XWA = pointer to the 12-byte part descriptor (array base 0x1349, stride 0x0C).
+;      XBC = pointer to a 0xFF-terminated byte list of pool indices in priority order
+;            (the ROM lists live at 0x00F60B / 0x00F61A / 0x00F628).
+; Out: XHL = pointer to a voice node, or 0 if every listed pool is empty.
+; Fast path: if the 32-bit global at 0x1345 is non-zero it is returned unconditionally
+;   (a forced/override node).
+; Walk: for each byte b of the list - if bit7 is set the pool head is read from the
+;   global pointer array at 0x130F indexed by (b & 0x7F)*4, otherwise from the array
+;   embedded in the part descriptor at (*XWA)+2 indexed by b*4. First non-null wins.
+; Called only from NoteOn_Dispatch (0x0223CF).
+; *** BUG-RELEVANT: this returning 0 is how 'stops allocating voices' manifests; it is
+; silent - the caller just writes 0xFF into the slot and no error is reported. ***
 NoteChain_FindNode_A:
 	ldda32 xde, 4933
 	or xde, xde
@@ -4280,6 +4614,7 @@ NoteChain_FindNode_A:
 	ldda32 xhl, 4933
 	ret
 
+; Set up the walk: XDE = 0x112D+0x1E2 = 0x130F (global pool-head array), XHL = local array at (*XWA)+2, bail out immediately if the list is empty (first byte 0xFF).
 NoteChain_FindNode_A_Walk:
 	lda_d16 xde, 4397
 	stb_dri B, 0xE9, 0xE2, 0x01
@@ -4288,6 +4623,7 @@ NoteChain_FindNode_A_Walk:
 	cp (xbc), 0xFF
 	jr z, NoteChain_FindNode_NotFound
 
+; List entry with bit7 set: look the pool head up in the GLOBAL array at 0x130F.
 NoteChain_FindNode_A_Secondary:
 	bitm 7, (xbc)
 	jr z, NoteChain_FindNode_A_Primary
@@ -4305,6 +4641,7 @@ NoteChain_FindNode_A_Secondary:
 	ld_sril3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
+; List entry with bit7 clear: look the pool head up in the part-descriptor-local array.
 NoteChain_FindNode_A_Primary:
 	ld a, (xbc)
 	extz wa
@@ -4318,15 +4655,24 @@ NoteChain_FindNode_A_Primary:
 	ld_sril3 XHL, 0x07, 0xEC, 0xE0
 	ret
 
+; Pool was empty - advance to the next byte of the priority list, stop on 0xFF.
 NoteChain_FindNode_A_Advance:
 	inc 1, xbc
 	cp (xbc), 0xFF
 	jr nz, NoteChain_FindNode_A_Secondary
 
+; Shared not-found exit: XHL = 0.
 NoteChain_FindNode_NotFound:
 	lds32 xhl, 0
 	ret
 
+; FREE-VOICE / CANDIDATE-NODE SEARCH, secondary form (voice stealing).
+; In:  XWA = part descriptor; the local pool array is at XWA+2.
+; Out: XHL = first non-empty pool head, or 0.
+; Uses the fixed ROM priority list at 0x00F603 (06 05 02 04 03 01 00 FF) and, unlike
+; NoteChain_FindNode_A, has no bit7 escape to the global array and no 0x1345 override.
+; Called from NoteOn_Dispatch_WalkNext (0x0224DF) when the part is already at its
+; polyphony limit, i.e. this is the steal-a-voice search.
 NoteChain_FindNode_B:
 	inc 2, xwa
 	ld xde, xwa
@@ -4335,6 +4681,7 @@ NoteChain_FindNode_B:
 	cp (xbc), 0xFF
 	jr z, NoteChain_FindNode_B_NotFound
 
+; Walk the 0x00F603 list, returning the first non-null local pool head.
 NoteChain_FindNode_B_Walk:
 	ld a, (xbc)
 	extz wa
@@ -4348,15 +4695,38 @@ NoteChain_FindNode_B_Walk:
 	ld_sril3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
+; Advance to the next list byte, stop on the 0xFF terminator.
 NoteChain_FindNode_B_Advance:
 	inc 1, xbc
 	cp (xbc), 0xFF
 	jr nz, NoteChain_FindNode_B_Walk
 
+; Not-found exit: XHL = 0.
 NoteChain_FindNode_B_NotFound:
 	lds32 xhl, 0
 	ret
 
+; NOTE-ON: ALLOCATE UP TO FOUR VOICE NODES FOR ONE NOTE EVENT.
+; In: XWA = note-event record (kept in local (XSP+0x10)):
+;       +0x00 word  bits 0..6  = MIDI note number
+;                   bits 8..12 = part index, must be < 0x1A
+;       +0x02..+0x05  one byte per layer slot: bit7 = slot enabled,
+;                     bits 0..3 = index into the 6-byte ROM table at 0x00F633
+;       +0x06 bit6  = 'continue chain' - if clear, the global chain head (0x1129) is
+;                     reset to 0 first
+;       +0x06..+0x09  per-slot bit7 = hold / retrigger flag
+;       +0x0A..+0x0D  OUTPUT: allocated hardware voice index per slot, 0xFF = none
+; Callers: 0x02BB66, 0x02C033, 0x02C349, 0x02C665, 0x02D034.
+; Calls RingBuf_CheckOffset_ClearFlags (0x02103B) first, which clears the enable bit of
+; slots 1..3 according to the polyphony/mode values at 0x27E6/0x27E7 - i.e. that is the
+; layer limiter.
+; Part descriptor = 0x1349 + part*0x0C. Each 0x00F633 entry is {u32 candidate-list ptr,
+; u8 priority key, u8 node param}.
+; *** BUG-RELEVANT: (voice+0x25) is forced to 0xFF here (0x0223FC) and the flag byte
+; (voice+0x22) is set to 0x88 (held) or 0x08 (non-held) - bit2 is NOT set in either
+; case. AudioTick_UpdateVoice's envelope-based release path requires level < 0x80 AND
+; bit2, and its 'and A,0x81' guard also skips anything with bit7 set. So a voice that
+; the TG never reports silent has NO second escape route out of the pool. ***
 NoteOn_Dispatch:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -4367,6 +4737,7 @@ NoteOn_Dispatch:
 	lds32 xwa, 0
 	stda32 4393, xwa
 
+; Extract the part index (event word bits 8..12); >= 0x1A jumps to the all-slots-fail exit. Then run the layer limiter and compute the part descriptor pointer.
 NoteOn_Dispatch_SlotLoop:
 	ld xwa, (xsp + 16)
 	ld wa, (xwa)
@@ -4388,6 +4759,7 @@ NoteOn_Dispatch_SlotLoop:
 	cp (xsp + 12), 0x4
 	jrl nc, NoteOn_Dispatch_Return
 
+; Per-slot body (slot = 0..3): if the slot's enable bit7 is clear go mark it 0xFF; else fetch its 6-byte 0x00F633 entry and ask NoteChain_FindNode_A for a node.
 NoteOn_Dispatch_ProcessSlot:
 	ld a, (xsp + 12)
 	extz wa
@@ -4424,6 +4796,7 @@ NoteOn_Dispatch_ProcessSlot:
 	ld xwa, (xiz + 29)
 	decm8 1, (xwa + 1)
 
+; Node obtained: (node+0x23) = note number, (node+0x25) = 0xFF (envelope max), (node+0x26) = entry byte +5; then branch on the slot's hold flag at event+6+slot.
 NoteOn_Dispatch_ActivateNode:
 	ld xwa, (xsp + 16)
 	ld wa, (xwa)
@@ -4448,6 +4821,7 @@ NoteOn_Dispatch_ActivateNode:
 	jr z, NoteOn_Dispatch_RetriggerActive
 	slla de
 
+; Held/retrigger branch tail: OR this channel's bit into the 'held' bitmap (0x2936 + (chan>>4)*2) so AudioTick_UpdateVoice will never reap it.
 NoteOn_Dispatch_RetriggerActive:
 	ld a, (xsp + 14)
 	srl a, 4
@@ -4457,6 +4831,7 @@ NoteOn_Dispatch_RetriggerActive:
 	or_sriw_mr DE, 0x07, 0xE4, 0xE0
 	jr NoteOn_Dispatch_UpdateLists
 
+; Non-held branch: flags = 0x08, then clear this channel's bit in the held bitmap 0x2936 ...
 NoteOn_Dispatch_Retrigger:
 	ld (xiz + 34), 0x8
 	ld a, (xsp + 14)
@@ -4466,6 +4841,7 @@ NoteOn_Dispatch_Retrigger:
 	jr z, NoteOn_Dispatch_RetriggerMask
 	slla bc
 
+; ... using the complement mask, and ...
 NoteOn_Dispatch_RetriggerMask:
 	ld wa, bc
 	cpl wa
@@ -4483,6 +4859,7 @@ NoteOn_Dispatch_RetriggerMask:
 	jr z, NoteOn_Dispatch_RetriggerOrMask
 	slla de
 
+; ... SET the bit in the shadow bitmap 0x292E so that the next poll sees a 1->0 transition once the TG finishes the note. This is what arms the reaper.
 NoteOn_Dispatch_RetriggerOrMask:
 	ld a, (xsp + 14)
 	srl a, 4
@@ -4491,6 +4868,7 @@ NoteOn_Dispatch_RetriggerOrMask:
 	lda_d16 xbc, 10542
 	or_sriw_mr DE, 0x07, 0xE4, 0xE0
 
+; Link the node into the part's priority list (VoiceNode_PriorityList_Update, key = entry byte +4) and its secondary list, then splice it into the global note chain rooted at (0x1129).
 NoteOn_Dispatch_UpdateLists:
 	ld xwa, (xsp + 8)
 	ld e, (xwa + 4)
@@ -4510,11 +4888,13 @@ NoteOn_Dispatch_UpdateLists:
 	calr DList_InsertAfter_Offsets16
 	jr NoteOn_Dispatch_AdvancePriority
 
+; Global chain was empty: this node becomes the head (0x1129) and self-links.
 NoteOn_Dispatch_SetGlobalHead:
 	stda32 4393, xiz
 	ld xwa, xiz
 	calr DList_Unlink_SelfLink_Offsets16
 
+; Polyphony accounting: part active count is (part_desc+1), limit is (part_desc+0); if below the limit just increment it.
 NoteOn_Dispatch_AdvancePriority:
 	ld xwa, (xiz + 29)
 	ld xbc, xwa
@@ -4525,6 +4905,7 @@ NoteOn_Dispatch_AdvancePriority:
 	incm8 1, (xwa + 1)
 	jr NoteOn_Dispatch_WriteSlot
 
+; At the limit - steal: NoteChain_FindNode_B picks a victim node, it is re-keyed into the list at 0x130D with its own (node+0x21) key, the count is bumped and flag bit4 is set on it.
 NoteOn_Dispatch_WalkNext:
 	ld xwa, (xiz + 29)
 	calr NoteChain_FindNode_B
@@ -4543,6 +4924,7 @@ NoteOn_Dispatch_WalkNext:
 	incm8 1, (xwa + 1)
 	setm 4, (xiz + 34)
 
+; Publish the result: Voice_ScanSlots_ReassignSources (0x02150D) for the channel, then event[0x0A+slot] = channel index.
 NoteOn_Dispatch_WriteSlot:
 	ld a, (xsp + 14)
 	extz wa
@@ -4556,6 +4938,7 @@ NoteOn_Dispatch_WriteSlot:
 	lda_dri XHL, 0x07, 0xE0, 0xE8
 	jr NoteOn_Dispatch_SlotNext
 
+; No node was available for this slot: event[0x0A+slot] = 0xFF.
 NoteOn_Dispatch_SlotNoNode:
 	ld a, (xsp + 12)
 	extz wa
@@ -4565,6 +4948,7 @@ NoteOn_Dispatch_SlotNoNode:
 	stib_ind 0x07, 0xE0, 0xE4, 0xFF
 	jr NoteOn_Dispatch_SlotNext
 
+; Slot was disabled: event[0x0A+slot] = 0xFF.
 NoteOn_Dispatch_SlotInactive:
 	ld a, (xsp + 12)
 	extz wa
@@ -4573,17 +4957,20 @@ NoteOn_Dispatch_SlotInactive:
 	ld xwa, (xsp + 16)
 	stib_ind 0x07, 0xE0, 0xE4, 0xFF
 
+; Next slot; four slots per event.
 NoteOn_Dispatch_SlotNext:
 	incm8 1, (xsp + 12)
 	cp (xsp + 12), 0x4
 	jrl c, NoteOn_Dispatch_ProcessSlot
 	jr NoteOn_Dispatch_Return
 
+; Part index out of range (>= 0x1A): reject the whole event.
 NoteOn_Dispatch_AllInactive:
 	ld (xsp + 12), 0x0
 	cp (xsp + 12), 0x4
 	jr nc, NoteOn_Dispatch_Return
 
+; Fill all four output bytes with 0xFF.
 NoteOn_Dispatch_AllInactive_Loop:
 	ld a, (xsp + 12)
 	extz wa
@@ -4595,11 +4982,23 @@ NoteOn_Dispatch_AllInactive_Loop:
 	cp (xsp + 12), 0x4
 	jr c, NoteOn_Dispatch_AllInactive_Loop
 
+; Frame teardown and return.
 NoteOn_Dispatch_Return:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
 
+; RELEASE ONE HARDWARE VOICE (clear its 'held' state).
+; In: A = hardware voice index 0..63.
+; Clears bit7 of the byte at 0x14AF + index*0x27 (i.e. (voice_record+0x22) - the record
+; base is 0x148D and 0x14AF = 0x148D+0x22), clears the channel's bit in the held bitmap
+; at 0x2936 + (index>>4)*2, then TAIL-JUMPS into VoiceNode_UpdateEnvState (0x021EA1)
+; with XWA = the voice record.
+; 12 call sites, all outside the region (0x026E94, 0x026FC6, 0x0270D1, 0x027AA2,
+; 0x027B5D, 0x027B7E, 0x027C08, 0x027C29, 0x028EBB, 0x028F1C, 0x02CDCF, 0x02CE29).
+; *** BUG-RELEVANT: this is the ONLY writer that clears a bit of the 0x2936 held
+; bitmap. If the note-off path that calls it is bypassed, held voices are pinned
+; active forever from AudioTick_UpdateVoice's point of view. ***
 VoiceSlot_Release:
 	ld c, a
 	ld a, c
@@ -4614,6 +5013,7 @@ VoiceSlot_Release:
 	jr z, VoiceSlot_Release_ApplyMask
 	slla de
 
+; Build the complement of the channel's one-hot bit and AND it into the held bitmap word.
 VoiceSlot_Release_ApplyMask:
 	ld wa, de
 	cpl wa
@@ -4632,6 +5032,13 @@ VoiceSlot_Release_ApplyMask:
 	add xwa, xbc
 	jrl VoiceNode_UpdateEnvState
 
+; NOTE-OFF FOR ONE VOICE SLOT.
+; In: A = hardware voice index; indices >= 0x40 are ignored.
+; Voice record = 0x148D + index*0x27. Moves the node onto the list whose head is at
+; (node+0x18) via VoiceNode_SecondList_Update (DE=1), runs VoiceNode_UpdateEnvState
+; (0x021EA1) to start the release, and unlinks it from the 0x10/0x14 doubly-linked
+; chain unless it is already self-linked.
+; Single caller: 0x02C8D7.
 VoiceSlot_NoteOff:
 	push xiz
 	cp a, 0x40
@@ -4651,22 +5058,33 @@ VoiceSlot_NoteOff:
 	ld xwa, xiz
 	calr DList_Unlink_SelfLink_Offsets16
 
+; Common exit.
 VoiceSlot_NoteOff_Return:
 	pop xiz
 	ret
 
+; ENUMERATE A VOICE CHAIN INTO A BYTE BUFFER (non-destructive).
+; In: XWA = pointer to the output cursor (a 32-bit pointer variable, auto-advanced),
+;     XBC = chain head (0 = nothing to do), E = note number to match,
+;     stacked word arg (XSP+0x04) = 'emit unconditionally' flag.
+; Walks the chain through link (node+0x08) until it returns to the head, appending
+; (node+0x24) - the hardware voice index - for every node whose (node+0x23) equals E
+; (or for all nodes when the flag is non-zero). Terminates the buffer with 0xFF.
+; 'retd 2' pops the stacked argument. Called only from NoteOn_RoutePacket.
 OutputBuf_Flush_A:
 	ld xhl, xbc
 	or xhl, xhl
 	jr z, OutputBuf_Flush_A_Done
 	ld xiy, xhl
 
+; Chain walk: emit unconditionally when the flag is set, otherwise only when (node+0x23) == E.
 OutputBuf_Flush_A_Loop:
 	cp (xsp + 4), 0x0
 	jr nz, OutputBuf_Flush_A_Emit
 	cp (xiy + 35), e
 	jr nz, OutputBuf_Flush_A_Next
 
+; Append (node+0x24) at the cursor and advance the cursor by one.
 OutputBuf_Flush_A_Emit:
 	ld xix, (xwa)
 	ld c, (xiy + 36)
@@ -4674,16 +5092,24 @@ OutputBuf_Flush_A_Emit:
 	lds32 xbc, 1
 	add (xwa), xbc
 
+; Follow (node+0x08); stop when the walk wraps to the head.
 OutputBuf_Flush_A_Next:
 	ld xiy, (xiy + 8)
 	cp xiy, xhl
 	jr nz, OutputBuf_Flush_A_Loop
 
+; Write the 0xFF terminator at the cursor and return.
 OutputBuf_Flush_A_Done:
 	ld xwa, (xwa)
 	ld (xwa), 0xFF
 	retd 0x2
 
+; ENUMERATE A VOICE CHAIN INTO A BYTE BUFFER *AND RELEASE* EACH MATCH (destructive).
+; Same interface as OutputBuf_Flush_A but for every match it first calls
+; VoiceNode_SecondList_Update (0x021D59, DE=1) and VoiceNode_UpdateEnvState (0x021EA1)
+; to put the voice into release, then appends (node+0x24) and unlinks the node from the
+; 0x10/0x14 chain, resuming from the saved successor.
+; This is the note-off enumerator; OutputBuf_Flush_A is the query-only one.
 OutputBuf_Flush_B:
 	dec 8, xsp
 	push xiz
@@ -4692,12 +5118,14 @@ OutputBuf_Flush_B:
 	jr z, OutputBuf_Flush_B_Done
 	ld xiz, xbc
 
+; Chain walk with the same match rule as OutputBuf_Flush_A_Loop.
 OutputBuf_Flush_B_Loop:
 	cp (xsp + 16), 0x0
 	jr nz, OutputBuf_Flush_B_Emit
 	cp (xiz + 35), e
 	jr nz, OutputBuf_Flush_B_Next
 
+; Release the matched node, append its voice index, unlink it and continue from (node+0x10).
 OutputBuf_Flush_B_Emit:
 	ld xwa, xiz
 	ld xbc, (xiz + 24)
@@ -4721,11 +5149,13 @@ OutputBuf_Flush_B_Emit:
 	ld xiz, (xsp + 4)
 	jr OutputBuf_Flush_B_Emit
 
+; Follow (node+0x08); stop when the walk wraps to the head.
 OutputBuf_Flush_B_Next:
 	ld xiz, (xiz + 8)
 	cp xiz, xbc
 	jr nz, OutputBuf_Flush_B_Loop
 
+; Write the 0xFF terminator at the cursor and return (retd 2).
 OutputBuf_Flush_B_Done:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa)
@@ -4734,6 +5164,19 @@ OutputBuf_Flush_B_Done:
 	inc 8, xsp
 	retd 0x2
 
+; ROUTE A NOTE-OFF / VOICE-QUERY PACKET AND RETURN THE AFFECTED VOICE LIST.
+; In: XWA = packet:  +0x00 flag byte (bit7, bit6 select which chains to visit)
+;                    +0x01 word: bits0..6 = note A, bits 8..12 = part index
+;                    +0x03 word: bits0..6 = note B, bits 8..12 = broadcast selector
+;                    +0x05.. = output buffer, filled with hardware voice indices and
+;                              terminated by 0xFF
+; If (packet+0x03) bits 8..12 are non-zero the request is a BROADCAST: every one of the
+; 64 voice records at 0x148D whose flag bit0 is clear (i.e. not in the free pool) is
+; listed. Otherwise the part index selects two descriptor arrays - 0x134D + part*0x0C
+; and 0x1351 + part*0x0C - and flag bits 7/6 plus bit7 of each note word choose which
+; of the two chains are walked and whether the destructive (Flush_B) or query-only
+; (Flush_A) enumerator is used. Part indices >= 0x1A return an empty list.
+; Six callers, all in 0x02CCCB..0x02CD69.
 NoteOn_RoutePacket:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -4753,6 +5196,7 @@ NoteOn_RoutePacket:
 	cp e, 0x40
 	jr nc, NoteOn_RoutePacket_BroadcastDone
 
+; Broadcast body: list every voice record that is not in the free pool (flag bit0 clear).
 NoteOn_RoutePacket_BroadcastLoop:
 	bitm 0, (xiz + 34)
 	jr nz, NoteOn_RoutePacket_BroadcastNext
@@ -4762,17 +5206,20 @@ NoteOn_RoutePacket_BroadcastLoop:
 	ld a, (xiz + 36)
 	ld (xbc), a
 
+; Next of the 64 records (stride 0x27).
 NoteOn_RoutePacket_BroadcastNext:
 	lda xiz, (xiz + 39)
 	inc 1, e
 	cp e, 0x40
 	jr c, NoteOn_RoutePacket_BroadcastLoop
 
+; Terminate the broadcast list with 0xFF.
 NoteOn_RoutePacket_BroadcastDone:
 	ld xwa, (xsp + 16)
 	ld (xwa), 0xFF
 	jrl NoteOn_RoutePacket_Return
 
+; Targeted request: derive the two per-part descriptor pointers (0x134D / 0x1351 + part*0x0C) and validate part < 0x1A.
 NoteOn_RoutePacket_Targeted:
 	ld bc, (xwa + 1)
 	and bc, 0x1F00
@@ -4805,6 +5252,7 @@ NoteOn_RoutePacket_Targeted:
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
 
+; Destructive drain of the primary chain: repeat OutputBuf_Flush_B until the chain head goes null or stops changing.
 NoteOn_RoutePacket_Targeted_Loop:
 	ld a, (xsp + 12)
 	ld e, a
@@ -4824,11 +5272,13 @@ NoteOn_RoutePacket_Targeted_Loop:
 	cp (xwa), xiz
 	jr nz, NoteOn_RoutePacket_Targeted_Loop
 
+; Terminate the output list with 0xFF.
 NoteOn_RoutePacket_Targeted_Done:
 	ld xwa, (xsp + 16)
 	ld (xwa), 0xFF
 	jrl NoteOn_RoutePacket_Return
 
+; Note B is zero: single destructive pass matching note A instead.
 NoteOn_RoutePacket_Targeted_NoteZero:
 	ld a, (xsp + 12)
 	ld e, a
@@ -4842,6 +5292,7 @@ NoteOn_RoutePacket_Targeted_NoteZero:
 	calr OutputBuf_Flush_B
 	jrl NoteOn_RoutePacket_Return
 
+; Flag bit7 clear: query-only paths; bit6 selects the 0x1351 chain alone.
 NoteOn_RoutePacket_Targeted_SecondaryOnly:
 	bitm 6, (xwa)
 	jr z, NoteOn_RoutePacket_Targeted_BothLists_BitB
@@ -4857,6 +5308,7 @@ NoteOn_RoutePacket_Targeted_SecondaryOnly:
 	calr OutputBuf_Flush_A
 	jr NoteOn_RoutePacket_Return
 
+; Flags 7 and 6 both clear, note-B word bit7 set: query BOTH chains (0x134D then 0x1351).
 NoteOn_RoutePacket_Targeted_BothLists_BitB:
 	ld bc, (xwa + 3)
 	bit 7, bc
@@ -4883,6 +5335,7 @@ NoteOn_RoutePacket_Targeted_BothLists_BitB:
 	calr OutputBuf_Flush_A
 	jr NoteOn_RoutePacket_Return
 
+; Note-B bit7 clear but note-A bit7 set: query the 0x134D chain only.
 NoteOn_RoutePacket_Targeted_PrimaryOnly_BitA:
 	ld wa, (xwa + 1)
 	bit 7, wa
@@ -4899,6 +5352,7 @@ NoteOn_RoutePacket_Targeted_PrimaryOnly_BitA:
 	calr OutputBuf_Flush_A
 	jr NoteOn_RoutePacket_Return
 
+; Neither note word has bit7: query the 0x1351 chain only.
 NoteOn_RoutePacket_Targeted_SecondaryOnly_B:
 	ld a, (xsp + 12)
 	ld e, a
@@ -4912,15 +5366,21 @@ NoteOn_RoutePacket_Targeted_SecondaryOnly_B:
 	calr OutputBuf_Flush_A
 	jr NoteOn_RoutePacket_Return
 
+; Part index >= 0x1A: emit an empty (0xFF-only) list.
 NoteOn_RoutePacket_InvalidChannel:
 	ld xwa, (xsp + 16)
 	ld (xwa), 0xFF
 
+; Frame teardown and return.
 NoteOn_RoutePacket_Return:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
 
+; QUANTISE A 7-BIT VELOCITY INTO ONE OF FOUR BANDS.
+; In: A = velocity (bit7 forced clear), XBC = pointer to three ascending threshold
+; bytes. Out: L = 0..3, the first band whose threshold is >= the velocity.
+; Single caller 0x02B76D. Byte-for-byte identical to VelocityQuantise_B.
 VelocityQuantise_A:
 	res 7, a
 	cp a, (xbc)
@@ -4932,20 +5392,26 @@ VelocityQuantise_A:
 	ldb l, 0x3
 	jr VelocityQuantise_A_Return
 
+; Third band: L = 2.
 VelocityQuantise_A_Level2:
 	ldb l, 0x2
 	jr VelocityQuantise_A_Return
 
+; Second band: L = 1.
 VelocityQuantise_A_Level1:
 	ldb l, 0x1
 	jr VelocityQuantise_A_Return
 
+; Lowest band: L = 0.
 VelocityQuantise_A_Level0:
 	ldb l, 0x0
 
+; Return.
 VelocityQuantise_A_Return:
 	ret
 
+; Second, identical copy of VelocityQuantise_A (same code, same semantics).
+; Callers 0x02B617, 0x02C1B2, 0x02C520. The duplication is in the original ROM.
 VelocityQuantise_B:
 	res 7, a
 	cp a, (xbc)
@@ -4957,30 +5423,57 @@ VelocityQuantise_B:
 	ldb l, 0x3
 	jr VelocityQuantise_B_Return
 
+; Third band: L = 2.
 VelocityQuantise_B_Level2:
 	ldb l, 0x2
 	jr VelocityQuantise_B_Return
 
+; Second band: L = 1.
 VelocityQuantise_B_Level1:
 	ldb l, 0x1
 	jr VelocityQuantise_B_Return
 
+; Lowest band: L = 0.
 VelocityQuantise_B_Level0:
 	ldb l, 0x0
 
+; Return.
 VelocityQuantise_B_Return:
 	ret
 
+; DECODE A 2-BIT FIELD OUT OF THE 0x47-BYTE PER-VOICE PARAMETER RECORD.
+; In: A = record index. Reads the first word of the record at 0x04308F + index*0x47,
+; masks bits 6..7 and maps 0x00/0x40/0x80/0xC0 to L = 0/1/2/3; leaves L untouched for
+; any other value (dead case). No caller found by absolute or relative call scan.
+; Held as raw .byte in the LLVM source, so its internal branch targets are unlabelled
+; (see the four [LABEL] proposals at 0x022892..0x02289C).
 VoiceDispatch_OpaqueData:
 	.byte 0xd8, 0x12, 0xd8, 0x09, 0x47, 0x00, 0xf2, 0x8f
 	.byte 0x30, 0x04, 0x31, 0xd3, 0x07, 0xe4, 0xe0, 0x20
 	.byte 0xd8, 0xcc, 0xc0, 0x00, 0xd8, 0xcf, 0xc0, 0x00
 	.byte 0x66, 0x1c, 0xd8, 0xcf, 0x80, 0x00, 0x66, 0x12
 	.byte 0xd8, 0xcf, 0x40, 0x00, 0x66, 0x08, 0xd8, 0xd8
-	.byte 0xb0, 0xfe, 0x27, 0x00, 0x68, 0x0a, 0x27, 0x01
-	.byte 0x68, 0x06, 0x27, 0x02, 0x68, 0x02, 0x27, 0x03
+	.byte 0xb0, 0xfe, 0x27, 0x00, 0x68, 0x0a
+; Field value 0x40: L = 1. Inside a raw .byte blob in the LLVM source, hence unlabelled.
+VoiceDispatch_Field_Is1:
+	.byte 0x27, 0x01
+	.byte 0x68, 0x06
+; Field value 0x80: L = 2.
+VoiceDispatch_Field_Is2:
+	.byte 0x27, 0x02, 0x68, 0x02
+; Field value 0xC0: L = 3.
+VoiceDispatch_Field_Is3:
+	.byte 0x27, 0x03
+; Shared return of the 2-bit field decoder at 0x022864.
+VoiceDispatch_OpaqueData_Return:
 	.byte 0x0e
 
+; COPY THE HIGH NIBBLE OF A PATCH'S BYTE +0x2A INTO THE PER-PART PROGRAM BYTE.
+; In: A = part index. Record stride is 0x011F bytes throughout this family:
+;   0x04136E + part*0x011F holds a 32-bit pointer to the patch parameter block;
+;   (block+0x2A) high nibble is used as an index into the byte table at 0x011ACF;
+;   the looked-up byte is stored at 0x0413D5 + part*0x011F.
+; Called from Voice_Env_VelocityDispatch_Gate (0x0234CC).
 Instrument_LookupProgram_HiNibble:
 	ld c, a
 	extz bc
@@ -5001,6 +5494,8 @@ Instrument_LookupProgram_HiNibble:
 	lda_dri XBC, 0x07, 0xEC, 0xE8
 	ret
 
+; As Instrument_LookupProgram_HiNibble but takes the LOW nibble of (block+0x2A).
+; Called from Voice_Env_Type2_Gate (0x02357E).
 Instrument_LookupProgram_LoNibble:
 	ld c, a
 	extz bc
@@ -5020,58 +5515,77 @@ Instrument_LookupProgram_LoNibble:
 	lda_dri XBC, 0x07, 0xEC, 0xE8
 	ret
 
+; L = bit0 of A. One of four near-identical predicate helpers used by the velocity dispatchers.
 BitTest_Bit0_L:
 	bit 0, a
 	jr z, BitTest_Bit0_L_Clear
 	ldb l, 0x1
 	ret
 
+; Bit clear: L = 0.
 BitTest_Bit0_L_Clear:
 	ldb l, 0x0
 	ret
 
+; L = 1 only if bit1 of A is clear and bit0 is set; otherwise 0.
 BitTest_Mode2_L:
 	bit 1, a
 	jr z, BitTest_Mode2_L_Bit1Clear
 	ldb l, 0x0
 	ret
 
+; bit1 clear - fall through to the bit0 test.
 BitTest_Mode2_L_Bit1Clear:
 	bit 0, a
 	jr z, BitTest_Mode2_L_AllClear
 	ldb l, 0x1
 	ret
 
+; Both bits clear: L = 0.
 BitTest_Mode2_L_AllClear:
 	ldb l, 0x0
 	ret
 
+; Duplicate of BitTest_Bit0_L (identical code), used by the Type2 dispatcher.
 BitTest_Bit0_L_v2:
 	bit 0, a
 	jr z, BitTest_Bit0_L_v2_Clear
 	ldb l, 0x1
 	ret
 
+; Bit clear: L = 0.
 BitTest_Bit0_L_v2_Clear:
 	ldb l, 0x0
 	ret
 
+; Duplicate of BitTest_Mode2_L, used by the Type2 dispatcher.
 BitTest_Mode2_L_v2:
 	bit 1, a
 	jr z, BitTest_Mode2_L_v2_Bit1Clear
 	ldb l, 0x0
 	ret
 
+; bit1 clear - fall through to the bit0 test.
 BitTest_Mode2_L_v2_Bit1Clear:
 	bit 0, a
 	jr z, BitTest_Mode2_L_v2_AllClear
 	ldb l, 0x1
 	ret
 
+; Both bits clear: L = 0.
 BitTest_Mode2_L_v2_AllClear:
 	ldb l, 0x0
 	ret
 
+; PATCH TRANSPOSE / OCTAVE-SHIFT LOOKUP (returns a signed 8.8 semitone offset).
+; In: WA = a selector byte, C = a patch byte. Out: XHL = offset, 0 when disabled.
+; If bit1 of the global audio-mode word at 0x041343 is set the function returns 0,
+; i.e. that bit is a global disable for this contribution.
+; Otherwise WA-0x10 in 0..9 indexes the 10-entry u16 offset table at 0x00F693 whose
+; values are added to 0x022982 to form the jump target; in v142 nine of the ten
+; entries point at the 'return 0' stub and only selector 0x14 reaches the fallback.
+; Fallback: (C & 0x0F) indexes the byte table at 0x011ACF, sign-extends and shifts
+; left 8 (one semitone = 0x100). Called from Voice_Pitch_Compute (0x0235F1).
 PitchBend_Process:
 	ldw_da xde, 0x041343
 	bit 1, de
@@ -5079,6 +5593,7 @@ PitchBend_Process:
 	lds hl, 0
 	jr PitchBend_Process_Return
 
+; Range-check the selector and dispatch through the 0x00F693 offset table.
 PitchBend_Process_Dispatch:
 	extz wa
 	sub wa, 0x10
@@ -5092,12 +5607,14 @@ PitchBend_Process_Dispatch:
 	lda_24 xix, 0x022982
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; Jump-table base AND the case body for offset 0: XHL = 0.
 PitchBend_Process_JumpTable:
 	.byte 0xdb
 	.byte 0xa8
 	.byte 0x68
 	.byte 0x16
 
+; Fallback case: signed semitone from the 0x011ACF table, scaled to 8.8.
 PitchBend_Process_Fallback:
 	and c, 0xF
 	ld a, c
@@ -5107,9 +5624,16 @@ PitchBend_Process_Fallback:
 	exts hl
 	sla hl, 8
 
+; Return.
 PitchBend_Process_Return:
 	ret
 
+; CLAMP A PITCH ACCUMULATOR INTO A KEY RANGE (saturating, no folding).
+; In: WA = signed 16-bit pitch value, C = low key limit, E = high key limit.
+; Out: XHL. Negative inputs are first saturated: values <= 0xC000 become 0x7FFF, the
+; rest become 0. Then the result is clamped to [C*256+0x80, E*256+0x80], i.e. the key
+; limits expressed in the same 8.8 units used everywhere in the pitch chain.
+; Called from Voice_Pitch_ApplyFineTune_LegatoB (0x0237FB); also 0x02B431.
 PitchBend_Saturate:
 	ld hl, wa
 	bit 15, wa
@@ -5119,9 +5643,11 @@ PitchBend_Saturate:
 	lds hl, 0
 	jr PitchBend_Saturate_CompareLo
 
+; Wrapped-negative case: clamp to 0x7FFF.
 PitchBend_Saturate_Clamp7FFF:
 	ldw hl, 0x7FFF
 
+; Low-limit comparison against C*256+0x80.
 PitchBend_Saturate_CompareLo:
 	ld a, c
 	extz wa
@@ -5136,6 +5662,7 @@ PitchBend_Saturate_CompareLo:
 	add hl, 0x80
 	jr PitchBend_Saturate_Return
 
+; High-limit comparison against E*256+0x80.
 PitchBend_Saturate_CompareHi:
 	ld a, e
 	extz wa
@@ -5149,31 +5676,43 @@ PitchBend_Saturate_CompareHi:
 	sla hl, 8
 	add hl, 0x80
 
+; Return.
 PitchBend_Saturate_Return:
 	ret
 
+; FOLD A PITCH VALUE INTO A KEY RANGE BY WHOLE OCTAVES.
+; In: WA = signed 16-bit pitch (8.8 semitones), C = low key limit, E = high key limit.
+; Out: XHL. Adds or subtracts 0x0C00 (twelve semitones) until the value lies inside
+; [C*256+0x80, E*256+0x80]. This is the transpose-into-range used when a sample zone
+; cannot cover the played key. Callers: Voice_Pitch_ApplyFineTune (0x0237DA),
+; Voice_Pitch_CopyBase (0x023841), 0x02B481.
 PitchBend_AlignLoop_Init:
 	ld hl, wa
 	jr PitchBend_AlignLoop_CheckSign
 
+; Value has wrapped negative: step by +/- one octave to recover.
 PitchBend_AlignLoop_CheckWrapped:
 	cp hl, 0xC000
 	jr le, PitchBend_AlignLoop_SubStep
 	add hl, 0xC00
 	jr PitchBend_AlignLoop_CheckSign
 
+; Subtract one octave.
 PitchBend_AlignLoop_SubStep:
 	sub hl, 0xC00
 
+; Sign test that drives the recovery loop.
 PitchBend_AlignLoop_CheckSign:
 	ld wa, hl
 	bit 15, wa
 	jr nz, PitchBend_AlignLoop_CheckWrapped
 	jr PitchBend_AlignLoop_LoCheck
 
+; Add one octave (raising loop).
 PitchBend_AlignLoop_AddStep:
 	add hl, 0xC00
 
+; Keep adding octaves while below the low limit.
 PitchBend_AlignLoop_LoCheck:
 	ld a, c
 	extz wa
@@ -5183,9 +5722,11 @@ PitchBend_AlignLoop_LoCheck:
 	jr lt, PitchBend_AlignLoop_AddStep
 	jr PitchBend_AlignLoop_HiCheck
 
+; Subtract one octave (lowering loop).
 PitchBend_AlignLoop_SubFinal:
 	sub hl, 0xC00
 
+; Keep subtracting octaves while above the high limit.
 PitchBend_AlignLoop_HiCheck:
 	ld a, e
 	extz wa
@@ -5195,12 +5736,23 @@ PitchBend_AlignLoop_HiCheck:
 	jr gt, PitchBend_AlignLoop_SubFinal
 	ret
 
+; INDEX A BYTE TABLE BY THE TOP 7 BITS OF A WORD.
+; In: XWA = table base, BC = word. Out: L = table[(BC & 0x7F00) >> 8] (arithmetic
+; shift). Used by Voice_Pitch_InterpDispatch (0x023880) to turn the current pitch into
+; a key-zone number.
 ChanBitField_ExtractHi7:
 	and bc, 0x7F00
 	sra bc, 8
 	ldb_sri L, 0x07, 0xE0, 0xE4
 	ret
 
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0F.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0F, stores that pointer at (XWA+0x0F), ORs the type code 0x7000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at +0x0D to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
 SlotParam_Write_Stride0F:
 	extz de
 	muls de, 0xF
@@ -5213,6 +5765,13 @@ SlotParam_Write_Stride0F:
 	stda16 10558, xwa
 	ret
 
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0C.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0C, stores that pointer at (XWA+0x0F), ORs the type code 0x5000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at +0x0A to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
 SlotParam_Write_Stride0C:
 	extz de
 	muls de, 0xC
@@ -5225,6 +5784,13 @@ SlotParam_Write_Stride0C:
 	stda16 10558, xwa
 	ret
 
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0D.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0D, stores that pointer at (XWA+0x0F), ORs the type code 0x3000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at none (0 is written) to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
 SlotParam_Write_Stride0D:
 	extz de
 	muls de, 0xD
@@ -5236,6 +5802,13 @@ SlotParam_Write_Stride0D:
 	stdi16 10558, 0
 	ret
 
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0A.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0A, stores that pointer at (XWA+0x0F), ORs the type code 0x1000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at none (0 is written) to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
 SlotParam_Write_Stride0A:
 	extz de
 	muls de, 0xA
@@ -5247,6 +5820,13 @@ SlotParam_Write_Stride0A:
 	stdi16 10558, 0
 	ret
 
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x06.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x06, stores that pointer at (XWA+0x0F), ORs the type code 0x4000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at +0x04 to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
 SlotParam_Write_Stride06:
 	extz de
 	muls de, 0x6
@@ -5259,6 +5839,9 @@ SlotParam_Write_Stride06:
 	stda16 10558, xwa
 	ret
 
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 4 (index shifted left 2 instead of a
+; multiply). Unlike the other five variants it writes NO type code into (XWA+0x01) and
+; always zeroes 0x293E. This is the base/default zone format.
 SlotParam_Write_Stride04_SLA:
 	extz de
 	sla de, 2
@@ -5269,6 +5852,10 @@ SlotParam_Write_Stride04_SLA:
 	stdi16 10558, 0
 	ret
 
+; SATURATE A SIGNED 16-BIT PITCH VALUE TO [0, 0x7FFF].
+; In: WA. Out: WA and XHL. Values with bit15 set become 0x7FFF if <= 0xC000 (treated as
+; a wrap of a large positive) and 0 otherwise. Used all over the pitch chain
+; (0x02373A, 0x023A85, 0x023AC7) and from 0x02B431.
 SaturateS16_WA:
 	ld bc, wa
 	bit 15, bc
@@ -5278,28 +5865,40 @@ SaturateS16_WA:
 	lds wa, 0
 	jr SaturateS16_WA_Return
 
+; Wrapped-positive case: 0x7FFF.
 SaturateS16_WA_Clamp7FFF:
 	ldw wa, 0x7FFF
 
+; Copy the result to XHL and return.
 SaturateS16_WA_Return:
 	ld hl, wa
 	ret
 
+; CLAMP WA INTO [DE, BC] (signed). Out: WA and XHL. Callers 0x03079E, 0x0307E9 and the
+; level packer at 0x023C44 / 0x023C92 / 0x023CA2 / 0x023CB2 / 0x023CC0.
 ClampS16_WA_To_DEBC:
 	cp wa, bc
 	jr le, ClampS16_WA_To_DEBC_CheckLo
 	ld wa, bc
 	jr ClampS16_WA_To_DEBC_Return
 
+; Low-bound test against DE.
 ClampS16_WA_To_DEBC_CheckLo:
 	cp wa, de
 	jr ge, ClampS16_WA_To_DEBC_Return
 	ld wa, de
 
+; Copy to XHL and return.
 ClampS16_WA_To_DEBC_Return:
 	ld hl, wa
 	ret
 
+; SCALE A SIGNED DEPTH BY A CURVE-TABLE COEFFICIENT.
+; In: A = signed depth, C = curve index (bit7 forced clear), E = shift amount in its
+; low nibble. Negative depths are re-mapped through the ROM byte table at 0x00FEE4
+; before being negated; the coefficient itself comes from the ROM byte table at
+; 0x00FF64 indexed by C. Out: XHL = (coeff * |depth|) >> (E & 0x0F).
+; Called from Voice_Level_Triplet_ModByEnv (0x023B3D).
 PitchBend_Scale:
 	res 7, c
 	cps a, 0
@@ -5311,6 +5910,7 @@ PitchBend_Scale:
 	cpl a
 	inc 1, a
 
+; Signed multiply of the coefficient by the depth, then the optional right shift.
 PitchBend_Scale_Multiply:
 	ldb_erp A, 0xF0
 	exts ix
@@ -5328,6 +5928,10 @@ PitchBend_Scale_Multiply:
 	sraa hl
 	ret
 
+; SYMMETRIC DETUNE CURVE LOOKUP.
+; In: WA = signed amount. |WA| is clamped to 0x32 (50) and used to index the byte table
+; at 0x0119C8; the result is negated again for negative inputs. Out: XHL.
+; Called from the level packer (0x023C4D, 0x023CC9, 0x023CD2).
 Detune_ScaleSymmetric:
 	cps wa, 0
 	jr ge, Detune_ScaleSymmetric_PosArm
@@ -5337,6 +5941,7 @@ Detune_ScaleSymmetric:
 	jr le, Detune_ScaleSymmetric_NegArm
 	ldw wa, 0x32
 
+; Negative arm: table lookup then two's-complement negate.
 Detune_ScaleSymmetric_NegArm:
 	extz wa
 	lda_24 xbc, 0x0119c8
@@ -5346,21 +5951,25 @@ Detune_ScaleSymmetric_NegArm:
 	inc 1, wa
 	jr Detune_ScaleSymmetric_Return
 
+; Positive arm: clamp to 0x32.
 Detune_ScaleSymmetric_PosArm:
 	cp wa, 0x32
 	jr le, Detune_ScaleSymmetric_PosClamp
 	ldw wa, 0x32
 
+; Positive arm table lookup.
 Detune_ScaleSymmetric_PosClamp:
 	extz wa
 	lda_24 xbc, 0x0119c8
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 
+; Copy to XHL and return.
 Detune_ScaleSymmetric_Return:
 	ld hl, wa
 	ret
 
+; Unsigned variant: XHL = byte table 0x0119C8 indexed directly by WA, no clamp, no sign handling.
 Detune_ScaleUnsigned:
 	extz wa
 	lda_24 xbc, 0x0119c8
@@ -5369,6 +5978,11 @@ Detune_ScaleUnsigned:
 	ld hl, wa
 	ret
 
+; INTERPOLATE A PARAMETER BETWEEN TWO LIMITS AND SCALE BY A SIGNED DEPTH.
+; In: WA = word whose bits 8..14 hold the control value, BC = baseline, E = low limit,
+; two stacked args: (XSP+0x06) = high limit, (XSP+0x04) = signed depth.
+; Out: XHL = ((clamp(ctrl, E, hi) - BC) * depth) >> 5. 'retd 4' pops both arguments.
+; Called from Voice_Level_ApplyVelocityMod (0x023C36) and 0x023C83.
 Pan_ScaleWithVelocity:
 	and wa, 0x7F00
 	srl wa, 8
@@ -5380,6 +5994,7 @@ Pan_ScaleWithVelocity:
 	extz wa
 	jr Pan_ScaleWithVelocity_Multiply
 
+; Low-limit clamp against E.
 Pan_ScaleWithVelocity_ClampLo:
 	ld l, e
 	extz hl
@@ -5388,6 +6003,7 @@ Pan_ScaleWithVelocity_ClampLo:
 	ld a, e
 	extz wa
 
+; Signed multiply by the stacked depth, then >> 5.
 Pan_ScaleWithVelocity_Multiply:
 	extz bc
 	ld de, wa
@@ -5400,21 +6016,39 @@ Pan_ScaleWithVelocity_Multiply:
 	sra hl, 5
 	retd 0x4
 
+; CLAMP A FILTER-CUTOFF VALUE TO [0, 0x78] (0..120). Out: WA and XHL.
+; Called by Portamento_CalcContrib_A/_B and from 0x0306C4, 0x03070D, 0x030753.
 ClampS8_0_to_78:
 	cp wa, 0x78
 	jr le, ClampS8_0_to_78_CheckLo
 	ldw wa, 0x78
 	jr ClampS8_0_to_78_Return
 
+; Low-bound test.
 ClampS8_0_to_78_CheckLo:
 	cps wa, 0
 	jr ge, ClampS8_0_to_78_Return
 	lds wa, 0
 
+; Copy to XHL and return.
 ClampS8_0_to_78_Return:
 	ld hl, wa
 	ret
 
+; COMPUTE A FILTER-CUTOFF CONTRIBUTION WITH KEY FOLLOW AND LEVEL SCALING.
+; In: XWA = voice work record, BC = running accumulator, DE = key-follow depth,
+;     stacked byte (XSP+0x04) = level-scaling depth. Out: XHL = value in 0..0x78.
+; XIX = (XWA+0x17) = the patch parameter block.
+; Key follow (when DE != 0): curve = (patch+0x36) >> 5 selects one of eight 128-byte
+;   curves in the table at 0x011519; the key number (XWA+0x0C) & 0x7F indexes inside it;
+;   the signed byte is multiplied by DE and added as (product >> 5).
+; Level scaling (when the stacked depth != 0): the control value (XWA+0x08) bits 8..14
+;   is clamped between (patch+0x3A) and (patch+0x3B), (patch+0x39) is subtracted, the
+;   difference is multiplied by the depth and added as (product >> 5).
+; Finally +0x18 of bias and ClampS8_0_to_78. 'retd 2' pops the stacked argument.
+; Called from all five filter builders at 0x023D42, 0x023E04, 0x023E76, 0x023F11,
+; 0x023F80, 0x024002.
+; See [UNCERTAIN]: this is a TVF (filter) computation, not portamento.
 Portamento_CalcContrib_A:
 	ld hl, de
 	ld xix, (xwa + 23)
@@ -5442,6 +6076,7 @@ Portamento_CalcContrib_A:
 	sra hl, 5
 	add bc, hl
 
+; Level-scaling stage: clamp (XWA+0x08) hi-byte between (patch+0x3A) and (patch+0x3B).
 Portamento_CalcContrib_A_DepthScale:
 	cp (xsp + 4), 0x0
 	jr z, Portamento_CalcContrib_A_AddBaseline
@@ -5457,6 +6092,7 @@ Portamento_CalcContrib_A_DepthScale:
 	extz de
 	jr Portamento_CalcContrib_A_Multiply
 
+; Lower clamp arm against (patch+0x3A).
 Portamento_CalcContrib_A_ClampHi:
 	ld a, (xix + 58)
 	extz wa
@@ -5466,6 +6102,7 @@ Portamento_CalcContrib_A_ClampHi:
 	ld e, a
 	extz de
 
+; Subtract the (patch+0x39) reference, multiply by the stacked depth, >> 5.
 Portamento_CalcContrib_A_Multiply:
 	ld a, (xix + 57)
 	extz wa
@@ -5476,12 +6113,18 @@ Portamento_CalcContrib_A_Multiply:
 	sra wa, 5
 	add bc, wa
 
+; Add the +0x18 bias and clamp to 0..0x78.
 Portamento_CalcContrib_A_AddBaseline:
 	add bc, 0x18
 	ld wa, bc
 	calr ClampS8_0_to_78
 	retd 0x2
 
+; SECOND CUTOFF CONTRIBUTION VARIANT - same shape as Portamento_CalcContrib_A but the
+; key-follow depth comes from (patch+0x10) and the curve selector from (patch+0x0F),
+; and there is no level-scaling stage and no stacked argument. Ends with the same +0x18
+; bias and ClampS8_0_to_78 (reached by tail jump). No in-ROM caller was found by a
+; call/calr scan, so it may be reachable only through a table this pass did not decode.
 Portamento_CalcContrib_B:
 	ld xix, (xwa + 23)
 	ld e, (xix + 16)
@@ -5511,21 +6154,33 @@ Portamento_CalcContrib_B:
 	ld wa, hl
 	add bc, wa
 
+; Add the +0x18 bias and tail-jump into ClampS8_0_to_78.
 Portamento_CalcContrib_B_AddBaseline:
 	add bc, 0x18
 	ld wa, bc
 	jrl ClampS8_0_to_78
 
+; Add the +0x18 bias to WA and clamp the result to at most 0x78 (no lower clamp).
+; Out: WA and XHL. Used by the filter builders for the second register field.
 Portamento_ClampAdd18:
 	add wa, 0x18
 	cp wa, 0x78
 	jr le, Portamento_ClampAdd18_Return
 	ldw wa, 0x78
 
+; Copy to XHL and return.
 Portamento_ClampAdd18_Return:
 	ld hl, wa
 	ret
 
+; LOOK UP A THREE-BYTE FILTER COEFFICIENT RECORD.
+; In: A - low nibble selects the record, bit7 selects the table:
+;     bit7 set   -> records at 0x011A25 (byte0), 0x011A26 (byte1), 0x011A27 (byte2)
+;     bit7 clear -> records at 0x0119FB / 0x0119FC / 0x0119FD
+;   (three parallel byte arrays with a stride of 3, i.e. one 3-byte record per index).
+; Out: XHL = (byte1 << 8) | byte0-in-IX; byte2 is sign-extended into the global word at
+; 0x2940. Called from the filter builders at 0x023D7C, 0x023DA2, 0x023E33, 0x023EAF,
+; 0x023F3D.
 PitchBend_LookupCoeff:
 	ld c, a
 	and c, 0xF
@@ -5566,6 +6221,7 @@ PitchBend_LookupCoeff:
 	stda16 10560, xwa
 	jr PitchBend_LookupCoeff_Return
 
+; bit7-clear arm: use the 0x0119FB/FC/FD record set.
 PitchBend_LookupCoeff_SetA:
 	ld wa, de
 	extz xwa
@@ -5599,30 +6255,41 @@ PitchBend_LookupCoeff_SetA:
 	exts wa
 	stda16 10560, xwa
 
+; Merge the two halves into XHL and return.
 PitchBend_LookupCoeff_Return:
 	or hl, ix
 	ret
 
+; FILTER BYPASS: write the neutral pair (XWA+0x42) = 0x017F and (XWA+0x44) = 0x7F7F.
+; This is entry 0 of the filter-mode dispatch table at 0x02412B, selected when
+; (patch+0x36) & 7 == 0. XWA = voice work record.
 NoteState_InitDefaults:
 	ldw (xwa + 66), 0x17F
 	ldw (xwa + 68), 0x7F7F
 	ret
 
+; Clamp WA into [DE, BC]; identical code to ClampS16_WA_To_DEBC. Callers 0x03083D, 0x03086D, 0x03089D, 0x0308CD, 0x030901, 0x03093F.
 ClampS16_WA_Short:
 	cp wa, bc
 	jr le, ClampS16_WA_Short_CheckLo
 	ld wa, bc
 	jr ClampS16_WA_Short_Return
 
+; Low-bound test against DE.
 ClampS16_WA_Short_CheckLo:
 	cp wa, de
 	jr ge, ClampS16_WA_Short_Return
 	ld wa, de
 
+; Copy to XHL and return.
 ClampS16_WA_Short_Return:
 	ld hl, wa
 	ret
 
+; ZERO ONE 9-BYTE ENVELOPE SUB-RECORD.
+; In: WA = sub-record number (0..2), C = voice/part index. Address is
+; 0x04424E + index*0x1B + sub*9; bytes +0..+5 and +7 are cleared (+6 and +8 are left
+; alone). Called from 0x034C23. The 0x1B-byte record is exactly three of these.
 NoteState_ClearRecord:
 	extz wa
 	muls wa, 0x9
@@ -5643,6 +6310,11 @@ NoteState_ClearRecord:
 	ld (xwa + 7), 0x0
 	ret
 
+; CAP AN ENVELOPE DEPTH BY A NORMALISED (0x7F - x) FACTOR.
+; In: XWA = value, C and E = two 0..0x7F parameters. Uses FP_MulAccum64 (0x03D8CA)
+; twice: t = (0x7F - C) * E, then result = (value * t) >> 12, finally capped at the
+; original value. Out: XHL. Called by every EG/frequency computation in this region
+; (0x022E85, 0x022F97, 0x0230A8, 0x023127).
 EnvDepth_Cap:
 	dec 4, xsp
 	push xiz
@@ -5663,11 +6335,21 @@ EnvDepth_Cap:
 	jr ule, EnvDepth_Cap_Return
 	ld xhl, (xsp + 4)
 
+; Restore and return.
 EnvDepth_Cap_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; COMPUTE ENVELOPE VALUE A FOR ONE VOICE (rate/level pair, formatted for the TG).
+; In: WA = index. Record = 0x04424E + index*0x1B.
+;   (rec+0x01) indexes the u16 table at 0x010A64 -> base value;
+;   base is multiplied by (rec+0x02) through FP_MulAccum64;
+;   if (rec+0x05) != 0 the EnvDepth_Cap of ((rec+0x05),(rec+0x06)) is subtracted;
+;   the accumulator is >> 7 and clamped to 0x1FFF;
+;   finally (rec+0x00) & 3 indexes the u16 table at 0x011511 and those bits are OR'ed
+;   in, producing the 16-bit word the TG expects. Out: XHL.
+; Callers 0x0293B9, 0x02F5F0.
 EGEnv_Compute_A:
 	dec 4, xsp
 	push xiz
@@ -5706,12 +6388,14 @@ EGEnv_Compute_A:
 	calr EnvDepth_Cap
 	sub xiz, xhl
 
+; >> 7 and clamp the accumulator to 0x1FFF.
 EGEnv_Compute_A_Normalise:
 	srl xiz, 7
 	cp xiz, 0x1FFF
 	jr ule, EGEnv_Compute_A_FormatBits
 	ld xiz, 0x1FFF
 
+; OR in the 2-bit mode field fetched from the 0x011511 table.
 EGEnv_Compute_A_FormatBits:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -5727,6 +6411,9 @@ EGEnv_Compute_A_FormatBits:
 	inc 4, xsp
 	ret
 
+; SIMPLE ENVELOPE VALUE: (rec+0x03) indexes the u16 table at 0x010964, the value is
+; multiplied by (rec+0x04), >> 7 and clamped to 0x3FFF. No depth cap, no mode bits.
+; Record base 0x04424E, stride 0x1B. Callers 0x0295C8, 0x02F5FE.
 EGEnv_Compute_A_Simple:
 	extz wa
 	muls wa, 0x1B
@@ -5749,6 +6436,8 @@ EGEnv_Compute_A_Simple:
 	ld xhl, 0x3FFF
 	ret
 
+; BYTE-IDENTICAL DUPLICATE of EGEnv_Compute_A_Simple (0x022EBA) - same table, same
+; shift, same clamp. No caller found by a call/calr scan over the whole ROM.
 EGEnv_OpaqueData:
 	.byte 0xd8, 0x12, 0xd8, 0x09, 0x1b, 0x00, 0xf2, 0x4e
 	.byte 0x42, 0x04, 0x31, 0xf3, 0x07, 0xe4, 0xe0, 0x32
@@ -5760,6 +6449,9 @@ EGEnv_OpaqueData:
 	.byte 0x00, 0xb0, 0xf3, 0x43, 0xff, 0x3f, 0x00, 0x00
 	.byte 0x0e
 
+; Envelope value B: identical structure to EGEnv_Compute_A but the record base is
+; 0x044257 (= 0x04424E + 9, the second 9-byte sub-record) and the base-value table is
+; 0x010B64 instead of 0x010A64. Callers 0x0297CD, 0x02F6F6.
 EGEnv_Compute_B:
 	dec 4, xsp
 	push xiz
@@ -5798,12 +6490,14 @@ EGEnv_Compute_B:
 	calr EnvDepth_Cap
 	sub xiz, xhl
 
+; >> 7 and clamp the accumulator to 0x1FFF.
 EGEnv_Compute_B_Normalise:
 	srl xiz, 7
 	cp xiz, 0x1FFF
 	jr ule, EGEnv_Compute_B_FormatBits
 	ld xiz, 0x1FFF
 
+; OR in the 2-bit mode field fetched from the 0x011511 table.
 EGEnv_Compute_B_FormatBits:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -5819,6 +6513,8 @@ EGEnv_Compute_B_FormatBits:
 	inc 4, xsp
 	ret
 
+; Simple envelope value for sub-record B: base 0x044257, table 0x010964, clamp 0x3FFF.
+; Callers 0x0299DF, 0x02F704.
 EGEnv_Compute_B_Simple:
 	extz wa
 	muls wa, 0x1B
@@ -5843,6 +6539,10 @@ EGEnv_Compute_B_Simple:
 	ld xhl, 0x3FFF
 	ret
 
+; RAW FREQUENCY/CUTOFF VALUE FROM SUB-RECORD B, without clamping or a register write.
+; In: WA = index; record 0x044257 + index*0x1B; (rec+0x03) indexes the u16 table at
+; 0x010964, multiplied by (rec+0x04) via FP_MulAccum64, >> 7. Out: XHL.
+; No caller found by a call/calr scan.
 Voice_Freq_ComputeLeft_Raw:
 	.byte 0xd8, 0x12, 0xd8, 0x09, 0x1b, 0x00, 0xf2, 0x57
 	.byte 0x42, 0x04, 0x31, 0xe8, 0x13, 0xe9, 0x80, 0xe8
@@ -5852,6 +6552,13 @@ Voice_Freq_ComputeLeft_Raw:
 	.byte 0xa8, 0xc9, 0x8b, 0xeb, 0x88, 0x1d, 0xca, 0xd8
 	.byte 0x03, 0xeb, 0xef, 0x07, 0x0e
 
+; COMPUTE AND STORE THE LEFT-CHANNEL FREQUENCY WORD.
+; In: A = index (0..0x7F). Record = 0x044260 + index*0x1B (the third 9-byte
+; sub-record). Same pipeline as EGEnv_Compute_A - base from the u16 table at 0x010C64
+; indexed by (rec+0x01), multiplied by (rec+0x02), optional EnvDepth_Cap subtraction,
+; >> 7, clamp 0x1FFF, OR the 0x011511 mode bits - then stores the result in the staging
+; word at 0x045204 for indices < 0x40 and 0x04520E for indices >= 0x40.
+; Callers 0x029BEB, 0x02F7FB.
 Voice_Freq_WriteLeft:
 	dec 4, xsp
 	push xiz
@@ -5894,12 +6601,14 @@ Voice_Freq_WriteLeft:
 	calr EnvDepth_Cap
 	sub xiz, xhl
 
+; Low range: >> 7 and clamp to 0x1FFF.
 Voice_Freq_WriteLeft_Clamp:
 	srl xiz, 7
 	cp xiz, 0x1FFF
 	jr ule, Voice_Freq_WriteLeft_Store
 	ld xiz, 0x1FFF
 
+; Low range: OR the mode bits and store to 0x045204.
 Voice_Freq_WriteLeft_Store:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -5913,6 +6622,7 @@ Voice_Freq_WriteLeft_Store:
 	stw_da 0x045204, xbc
 	jr Voice_Freq_WriteLeft_Return
 
+; Index >= 0x40: the identical computation for the upper voice bank.
 Voice_Freq_WriteLeft_HiRange:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 1)
@@ -5944,12 +6654,14 @@ Voice_Freq_WriteLeft_HiRange:
 	calr EnvDepth_Cap
 	sub xiz, xhl
 
+; High range: >> 7 and clamp to 0x1FFF.
 Voice_Freq_WriteLeft_HiRange_Clamp:
 	srl xiz, 7
 	cp xiz, 0x1FFF
 	jr ule, Voice_Freq_WriteLeft_HiRange_Store
 	ld xiz, 0x1FFF
 
+; High range: OR the mode bits and store to 0x04520E.
 Voice_Freq_WriteLeft_HiRange_Store:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -5962,11 +6674,18 @@ Voice_Freq_WriteLeft_HiRange_Store:
 	or bc, wa
 	stw_da 0x04520e, xbc
 
+; Restore and return.
 Voice_Freq_WriteLeft_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; COMPUTE AND STORE THE RIGHT-CHANNEL FREQUENCY WORD.
+; In: A = index. Record = 0x044260 + index*0x1B; (rec+0x03) indexes the u16 table at
+; 0x010964, multiplied by (rec+0x04), >> 7, clamped to 0x3FFF. For indices < 0x40 bit15
+; is forced when (rec+0x00) bit5 is set and the value goes to 0x045206; for indices
+; >= 0x40 it goes to 0x04520A with no bit15 handling.
+; Callers 0x029DFF, 0x02F804.
 Voice_Freq_WriteRight:
 	dec 2, xsp
 	push xiz
@@ -5996,6 +6715,7 @@ Voice_Freq_WriteRight:
 	jr ule, Voice_Freq_WriteRight_FlagSet
 	ld xhl, 0x3FFF
 
+; (rec+0x00) bit5 set: force bit15 of the result before storing.
 Voice_Freq_WriteRight_FlagSet:
 	bitm 5, (xiz)
 	jr z, Voice_Freq_WriteRight_Store
@@ -6003,23 +6723,32 @@ Voice_Freq_WriteRight_FlagSet:
 	stw_da 0x045206, xhl
 	jr Voice_Freq_WriteRight_Return
 
+; Store to the low-bank staging word 0x045206.
 Voice_Freq_WriteRight_Store:
 	stw_da 0x045206, xhl
 	jr Voice_Freq_WriteRight_Return
 
+; Index >= 0x40: clamp for the upper bank.
 Voice_Freq_WriteRight_HiRange:
 	cp xhl, 0x3FFF
 	jr ule, Voice_Freq_WriteRight_HiRange_Store
 	ld xhl, 0x3FFF
 
+; Store to the high-bank staging word 0x04520A.
 Voice_Freq_WriteRight_HiRange_Store:
 	stw_da 0x04520a, xhl
 
+; Restore and return.
 Voice_Freq_WriteRight_Return:
 	pop xiz
 	inc 2, xsp
 	ret
 
+; Same computation as Voice_Freq_WriteRight but without the (rec+0x00) bit5 handling;
+; stores to 0x045206 (index < 0x40) or 0x04520A. No caller found by a call/calr scan.
+; Emitted as raw .byte in the LLVM source, so its internal branch targets and the small
+; clamp helper that follows it at 0x023242 carry no symbols - see the [LABEL] and
+; [ROUTINE] proposals for 0x023226..0x02324B.
 Voice_Freq_ComputeRight_Raw:
 	.byte 0xef, 0x6a, 0xb7, 0x41, 0x87, 0x21, 0xd8, 0x12
 	.byte 0xd8, 0x09, 0x1b, 0x00, 0xf2, 0x60, 0x42, 0x04
@@ -6030,13 +6759,40 @@ Voice_Freq_ComputeRight_Raw:
 	.byte 0x8b, 0xeb, 0x88, 0x1d, 0xca, 0xd8, 0x03, 0xeb
 	.byte 0xef, 0x07, 0x87, 0x3f, 0x40, 0x6f, 0x14, 0xeb
 	.byte 0xcf, 0xff, 0x3f, 0x00, 0x00, 0x63, 0x05, 0x43
-	.byte 0xff, 0x3f, 0x00, 0x00, 0xf2, 0x06, 0x52, 0x04
-	.byte 0x53, 0x68, 0x12, 0xeb, 0xcf, 0xff, 0x3f, 0x00
+	.byte 0xff, 0x3f, 0x00, 0x00
+; Index < 0x40: store the clamped value to the low-bank staging word 0x045206.
+Voice_Freq_ComputeRight_Raw_StoreLow:
+	.byte 0xf2, 0x06, 0x52, 0x04
+	.byte 0x53, 0x68, 0x12
+; Index >= 0x40: clamp for the upper voice bank.
+Voice_Freq_ComputeRight_Raw_HiRange:
+	.byte 0xeb, 0xcf, 0xff, 0x3f, 0x00
 	.byte 0x00, 0x63, 0x05, 0x43, 0xff, 0x3f, 0x00, 0x00
-	.byte 0xf2, 0x0a, 0x52, 0x04, 0x53, 0xef, 0x62, 0x0e
+; Store the clamped value to the high-bank staging word 0x04520A.
+Voice_Freq_ComputeRight_Raw_StoreHigh:
+	.byte 0xf2, 0x0a, 0x52, 0x04, 0x53
+; Frame teardown and return.
+Voice_Freq_ComputeRight_Raw_Return:
+	.byte 0xef, 0x62, 0x0e
+; Clamp WA to at most 0x00FF using an unsigned compare (no lower bound); the result is
+; also copied to XHL. 12 bytes, ends with 'ret' at 0x02324D.
+; Unreferenced: no call, calr, jp or 24-bit pointer to 0x023242 exists anywhere in the
+; 0x30000-byte image. It sits inside the raw .byte blob that the LLVM source emits for
+; Voice_Freq_ComputeRight_Raw, which is why it carries no symbol at all today.
+; NAMING NOTE: this proposal follows the CamelCase style of its neighbours rather than
+; the UPPER_SNAKE house style - see the last [UNCERTAIN] entry.
+Voice_Clamp_Byte_Unsigned:
 	.byte 0xd8, 0xcf, 0xff, 0x00, 0x63, 0x03, 0x30, 0xff
-	.byte 0x00, 0xd8, 0x8b, 0x0e
+	.byte 0x00
+; Copy the clamped value to XHL and return.
+Voice_Clamp_Byte_Unsigned_Return:
+	.byte 0xd8, 0x8b, 0x0e
 
+; TWO-STAGE LOOKUP OF A TONE-COLOUR / WAVE INDEX.
+; In: XWA = a 0..0xFF value, C = a byte whose top 3 bits select the group.
+; group = C >> 5; the byte table at 0x0106E4 indexed by XWA gives a row offset, and the
+; final byte is read from the ROM table at 0x00FFE4 at (group << 8) + row.
+; Out: XHL (zero-extended byte). Four callers at 0x02B316, 0x02B336, 0x02B475, 0x02B492.
 Voice_Colour_LookupIndex:
 	and c, 0xE0
 	srl c, 5
@@ -6055,6 +6811,7 @@ Voice_Colour_LookupIndex:
 	extz hl
 	ret
 
+; Clamp the control value (WA bits 8..14) against the stacked high limit at (XSP+0x06).
 Voice_Colour_ClampUpper:
 	and wa, 0x7F00
 	srl wa, 8
@@ -6066,6 +6823,7 @@ Voice_Colour_ClampUpper:
 	extz wa
 	jr Voice_Colour_InterpolateDelta
 
+; Clamp against the low limit in E.
 Voice_Colour_ClampLower:
 	ld l, e
 	extz hl
@@ -6074,6 +6832,7 @@ Voice_Colour_ClampLower:
 	ld a, e
 	extz wa
 
+; (clamped - BC) * stacked depth (XSP+0x04), >> 5; 'retd 4' pops both stacked args. Structurally identical to Pan_ScaleWithVelocity.
 Voice_Colour_InterpolateDelta:
 	extz bc
 	ld de, wa
@@ -6086,21 +6845,32 @@ Voice_Colour_InterpolateDelta:
 	sra hl, 5
 	retd 0x4
 
+; Clamp WA to [0, 0xFF] (signed compare). Out: WA and XHL.
 Voice_Clamp_Byte_WA:
 	cp wa, 0xFF
 	jr le, Voice_Clamp_Byte_WA_LowBound
 	ldw wa, 0xFF
 	jr Voice_Clamp_Byte_WA_Return
 
+; Low-bound test.
 Voice_Clamp_Byte_WA_LowBound:
 	cps wa, 0
 	jr ge, Voice_Clamp_Byte_WA_Return
 	lds wa, 0
 
+; Copy to XHL and return.
 Voice_Clamp_Byte_WA_Return:
 	ld hl, wa
 	ret
 
+; BUILD AND STORE THE VOICE OUTPUT-LEVEL / PAN WORD.
+; In: XWA = voice work record, BC = starting level.
+; Adds (record+0x23)->[0x0C] and (record+0x23)->[0x10] and (record+0x33), clamps to
+; 0..0xFF, uses the result*2 to index the u16 table at 0x010764 and doubles that.
+; Pan: if bit7 of (record+0x0F)->[0x02] is set the pan field comes from that byte's
+; bits 4..6 shifted left 8; otherwise from the u16 table at 0x00FBE4 indexed by
+; (record+0x06) >> 8. bit15 is forced and the word is stored in the staging word at
+; 0x0451D0. No caller found by a call/calr scan over the ROM.
 Voice_Colour_Write:
 	push xiz
 	ld xiz, xwa
@@ -6127,6 +6897,7 @@ Voice_Colour_Write:
 	sll wa, 8
 	jr Voice_Colour_Write_Store
 
+; No explicit pan override: take the pan word from the 0x00FBE4 table.
 Voice_Colour_Write_NoPanOverride:
 	ld wa, (xiz + 6)
 	srl wa, 8
@@ -6136,6 +6907,7 @@ Voice_Colour_Write_NoPanOverride:
 	add xde, xwa
 	ld wa, (xde)
 
+; OR level and pan together, force bit15 and store to 0x0451D0.
 Voice_Colour_Write_Store:
 	or bc, wa
 	set 15, bc
@@ -6143,6 +6915,7 @@ Voice_Colour_Write_Store:
 	pop xiz
 	ret
 
+; Clamp WA to [0, 0xFF] using an unsigned upper compare. Out: WA and XHL.
 Voice_Clamp_Byte_HL:
 	ld bc, wa
 	cp bc, 0xFF
@@ -6150,15 +6923,26 @@ Voice_Clamp_Byte_HL:
 	ldw wa, 0xFF
 	jr Voice_Clamp_Byte_HL_Return
 
+; Low-bound test.
 Voice_Clamp_Byte_HL_LowBound:
 	cps wa, 0
 	jr ge, Voice_Clamp_Byte_HL_Return
 	lds wa, 0
 
+; Copy to XHL and return.
 Voice_Clamp_Byte_HL_Return:
 	ld hl, wa
 	ret
 
+; AGE A PART'S RETRIGGER/VELOCITY-PHASE COUNTER AGAINST THE MASTER TICK.
+; In: A = part index. Per-part stride 0x011F:
+;   0x041481 + part*0x011F  = 32-bit timestamp of the last update
+;   0x041485 + part*0x011F  = phase counter byte
+;   0x041486 + part*0x011F  = phase output byte (0x00 / 0x10 / 0x20)
+; Master tick is the 32-bit counter at 0x1040. Delta 0 -> only refresh the timestamp;
+; delta >= 0x19 (25 ticks) -> reset both counter and phase to 0; otherwise bump the
+; counter and map 1 -> 0x10, 0 -> 0x00, anything else -> 0x20.
+; Callers 0x02C734, 0x02C838, 0x02C93C, 0x02CAA5.
 Voice_Env_UpdateVelocityCounters:
 	ld c, a
 	extz bc
@@ -6188,6 +6972,7 @@ Voice_Env_UpdateVelocityCounters:
 	stib_ind 0x07, 0xE8, 0xE4, 0x00
 	jr Voice_Env_UpdateVelocity_Store
 
+; Counter reached 1: phase byte = 0x10.
 Voice_Env_UpdateVelocity_SetPhase1:
 	ld c, a
 	extz bc
@@ -6196,6 +6981,7 @@ Voice_Env_UpdateVelocity_SetPhase1:
 	stib_ind 0x07, 0xE8, 0xE4, 0x10
 	jr Voice_Env_UpdateVelocity_Store
 
+; Counter is neither 0 nor 1: phase byte = 0x20.
 Voice_Env_UpdateVelocity_SetPhase2:
 	ld c, a
 	extz bc
@@ -6204,6 +6990,7 @@ Voice_Env_UpdateVelocity_SetPhase2:
 	stib_ind 0x07, 0xE8, 0xE4, 0x20
 	jr Voice_Env_UpdateVelocity_Store
 
+; Timed out (>= 0x19 ticks): clear both the counter and the phase byte.
 Voice_Env_UpdateVelocity_Reset:
 	ld c, a
 	extz bc
@@ -6216,6 +7003,7 @@ Voice_Env_UpdateVelocity_Reset:
 	lda_24 xde, 0x041486
 	stib_ind 0x07, 0xE8, 0xE4, 0x00
 
+; Refresh the timestamp from the master tick at 0x1040 and return.
 Voice_Env_UpdateVelocity_Store:
 	extz wa
 	muls wa, 0x11F
@@ -6225,6 +7013,15 @@ Voice_Env_UpdateVelocity_Store:
 	stl_dri XWA, 0x07, 0xE8, 0xE4
 	ret
 
+; VELOCITY-SWITCH DISPATCHER, TYPE 0/1 (and entry point for type 2).
+; In: A = part index (0, 1 or 2 selects the variant), C = sub-case 0..3.
+; First clears the per-part program byte at 0x0413D5 + part*0x011F. A == 2 diverts to
+; Voice_Env_ApplyVelocity_Type2. For A == 0 or 1 the sub-case in C picks which flag is
+; tested: cases 0 and 1 test the global config byte at 0x04134B (bit3, then bit0/bit1
+; via BitTest_*), cases 2 and 3 test bit3 / bit0 / bit1 of the per-part byte at
+; 0x04137F + part*0x011F. If the resulting predicate L is non-zero,
+; Instrument_LookupProgram_HiNibble installs the program byte.
+; Callers 0x02C72B, 0x02C82F, 0x02C933, 0x02CA9C.
 Voice_Env_ApplyVelocity_Type0:
 	dec 2, xsp
 	ld (xsp), a
@@ -6241,6 +7038,7 @@ Voice_Env_ApplyVelocity_Type0:
 	cps a, 0
 	jrl nz, Voice_Env_ApplyVelocity_Return
 
+; Sub-case selector for the type-0/1 variant.
 Voice_Env_VelocityDispatch_c1:
 	cps c, 3
 	jr z, Voice_Env_VelocityDispatch_c3
@@ -6255,24 +7053,28 @@ Voice_Env_VelocityDispatch_c1:
 	ldb l, 0x0
 	jrl Voice_Env_VelocityDispatch_Gate
 
+; Case 0, config bit3 clear: predicate = bit0 of the 0x04134B config byte.
 Voice_Env_VelocityDispatch_c0_NoBit3:
 	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Bit0_L
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Case 1: test bit3 of the 0x04134B config byte.
 Voice_Env_VelocityDispatch_c1_Bit1:
 	bitda_24 3, 267083
 	jr z, Voice_Env_VelocityDispatch_c1_NoBit3
 	ldb l, 0x0
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Case 1, bit3 clear: predicate = BitTest_Mode2_L of the config byte.
 Voice_Env_VelocityDispatch_c1_NoBit3:
 	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Mode2_L
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Case 2: test bit3 of the per-part byte at 0x04137F + part*0x011F.
 Voice_Env_VelocityDispatch_c2:
 	ld a, (xsp)
 	extz wa
@@ -6283,6 +7085,7 @@ Voice_Env_VelocityDispatch_c2:
 	ldb l, 0x0
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Case 2, bit3 clear: predicate = bit0 of that per-part byte.
 Voice_Env_VelocityDispatch_c2_Trigger:
 	ld a, (xsp)
 	extz wa
@@ -6293,6 +7096,7 @@ Voice_Env_VelocityDispatch_c2_Trigger:
 	calr BitTest_Bit0_L_v2
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Case 3: test bit3 of the per-part byte.
 Voice_Env_VelocityDispatch_c3:
 	ld a, (xsp)
 	extz wa
@@ -6303,6 +7107,7 @@ Voice_Env_VelocityDispatch_c3:
 	ldb l, 0x0
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Case 3, bit3 clear: predicate = BitTest_Mode2_L of that per-part byte.
 Voice_Env_VelocityDispatch_c3_Trigger:
 	ld a, (xsp)
 	extz wa
@@ -6313,9 +7118,11 @@ Voice_Env_VelocityDispatch_c3_Trigger:
 	calr BitTest_Mode2_L_v2
 	jr Voice_Env_VelocityDispatch_Gate
 
+; Unknown sub-case: predicate = 0.
 Voice_Env_VelocityDispatch_ClearFlag:
 	ldb l, 0x0
 
+; Gate: if the predicate is non-zero install the program byte via Instrument_LookupProgram_HiNibble (high nibble variant).
 Voice_Env_VelocityDispatch_Gate:
 	cps l, 0
 	jrl z, Voice_Env_ApplyVelocity_Return
@@ -6324,6 +7131,10 @@ Voice_Env_VelocityDispatch_Gate:
 	calr Instrument_LookupProgram_HiNibble
 	jrl Voice_Env_ApplyVelocity_Return
 
+; VELOCITY-SWITCH DISPATCHER, TYPE 2. Identical structure to the type-0/1 dispatcher
+; but every flag test uses bit4 instead of bit3, and the gate calls
+; Instrument_LookupProgram_LoNibble (low nibble of the patch byte +0x2A).
+; Entered only by the A == 2 branch of Voice_Env_ApplyVelocity_Type0.
 Voice_Env_ApplyVelocity_Type2:
 	cps c, 3
 	jr z, Voice_Env_Type2_c3
@@ -6338,24 +7149,28 @@ Voice_Env_ApplyVelocity_Type2:
 	ldb l, 0x0
 	jrl Voice_Env_Type2_Gate
 
+; Case 0, bit4 clear: predicate = bit0 of the 0x04134B config byte.
 Voice_Env_Type2_c0_NoBit4:
 	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Bit0_L
 	jr Voice_Env_Type2_Gate
 
+; Case 1: test bit4 of the 0x04134B config byte.
 Voice_Env_Type2_c1:
 	bitda_24 4, 267083
 	jr z, Voice_Env_Type2_c1_NoBit4
 	ldb l, 0x0
 	jr Voice_Env_Type2_Gate
 
+; Case 1, bit4 clear: predicate = BitTest_Mode2_L of the config byte.
 Voice_Env_Type2_c1_NoBit4:
 	ldb_da a, 0x04134b
 	extz wa
 	calr BitTest_Mode2_L
 	jr Voice_Env_Type2_Gate
 
+; Case 2: test bit4 of the per-part byte at 0x04137F + part*0x011F.
 Voice_Env_Type2_c2:
 	ld a, (xsp)
 	extz wa
@@ -6366,6 +7181,7 @@ Voice_Env_Type2_c2:
 	ldb l, 0x0
 	jr Voice_Env_Type2_Gate
 
+; Case 2, bit4 clear: predicate = bit0 of that per-part byte.
 Voice_Env_Type2_c2_Trigger:
 	ld a, (xsp)
 	extz wa
@@ -6376,6 +7192,7 @@ Voice_Env_Type2_c2_Trigger:
 	calr BitTest_Bit0_L_v2
 	jr Voice_Env_Type2_Gate
 
+; Case 3: test bit4 of the per-part byte.
 Voice_Env_Type2_c3:
 	ld a, (xsp)
 	extz wa
@@ -6386,6 +7203,7 @@ Voice_Env_Type2_c3:
 	ldb l, 0x0
 	jr Voice_Env_Type2_Gate
 
+; Case 3, bit4 clear: predicate = BitTest_Mode2_L_v2 of that per-part byte.
 Voice_Env_Type2_c3_Trigger:
 	ld a, (xsp)
 	extz wa
@@ -6396,9 +7214,11 @@ Voice_Env_Type2_c3_Trigger:
 	calr BitTest_Mode2_L_v2
 	jr Voice_Env_Type2_Gate
 
+; Unknown sub-case: predicate = 0.
 Voice_Env_Type2_ClearFlag:
 	ldb l, 0x0
 
+; Gate: install the program byte via Instrument_LookupProgram_LoNibble.
 Voice_Env_Type2_Gate:
 	cps l, 0
 	jr z, Voice_Env_ApplyVelocity_Return
@@ -6406,10 +7226,25 @@ Voice_Env_Type2_Gate:
 	extz wa
 	calr Instrument_LookupProgram_LoNibble
 
+; Shared return for both dispatchers.
 Voice_Env_ApplyVelocity_Return:
 	inc 2, xsp
 	ret
 
+; COMPUTE THE PITCH OF ONE VOICE (the main pitch accumulator).
+; In: XWA = voice work record. Locals: (XSP+0x08) = record, (XSP+0x02) = (record+0x1F)
+; = the pitch/portamento descriptor, (XSP+0x06) = (record+0x04) = part index.
+; IZ accumulates the pitch in 8.8 semitone units:
+;   start  = ((record+0x05) & 0x7F) * 0x100 + 0x80 + (0x041349)   [key + master tune]
+;   += (record+0x23)->[0x16] << 8 and (record+0x23)->[0x6D] << 8   [two transposes]
+;   += PitchBend_Process(WA = (record+0x04), C = (record+0x13)->[0x29])
+; Then Voice_GetMonoMode (0x028D42) decides between the active and inactive paths.
+; Active path: bit3 of the u16 at 0x04136A + part*0x011F enables a bend-type switch
+;   read through Voice_GetParam_04134D (0x028B96); 0x80 = octave/keyboard-follow via
+;   Voice_ReadChannelAssign, 0x40 = fixed offset from (0x041366), 0x41/0x42 = the u16
+;   ROM tables at 0x00FCE4 / 0x00FDE4 indexed by the key, 0 = nothing.
+; Result is written to (record+0x08) and (record+0x06).
+; Callers 0x02B91E, 0x02BEB7.
 Voice_Pitch_Compute:
 	lda xsp, (xsp - 10)
 	pushw iz
@@ -6475,6 +7310,7 @@ Voice_Pitch_Compute:
 	cps a, 0
 	jrl z, Voice_Pitch_ApplyPortamento
 
+; Bend type 0x80: key/12 selects a channel assignment via Voice_ReadChannelAssign (0x028C28), added as whole semitones.
 Voice_Pitch_BendType_Octave:
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
@@ -6490,10 +7326,12 @@ Voice_Pitch_BendType_Octave:
 	add iz, wa
 	jrl Voice_Pitch_ApplyPortamento
 
+; Bend type 0x40: add the fixed global offset word at 0x041366.
 Voice_Pitch_BendType_Fixed:
 	addda16_24 xiz, 267110
 	jrl Voice_Pitch_ApplyPortamento
 
+; Bend type 0x41: add the u16 from the ROM table at 0x00FCE4 indexed by key.
 Voice_Pitch_BendType_TableA:
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
@@ -6505,6 +7343,7 @@ Voice_Pitch_BendType_TableA:
 	add iz, wa
 	jrl Voice_Pitch_ApplyPortamento
 
+; Bend type 0x42: add the u16 from the ROM table at 0x00FDE4 indexed by key.
 Voice_Pitch_BendType_TableB:
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
@@ -6516,6 +7355,7 @@ Voice_Pitch_BendType_TableB:
 	add iz, wa
 	jrl Voice_Pitch_ApplyPortamento
 
+; Inactive/non-mono path: the bend type comes from (patch block)->[0x13] where the block pointer is at 0x04136E + part*0x011F.
 Voice_Pitch_Compute_Inactive:
 	ld a, (xsp + 6)
 	extz wa
@@ -6536,10 +7376,12 @@ Voice_Pitch_Compute_Inactive:
 	jr nz, Voice_Pitch_Inactive_BendType_Chromatic
 	jr Voice_Pitch_ApplyPortamento
 
+; Inactive, type 0x40: add the fixed offset word at 0x041366.
 Voice_Pitch_Inactive_BendType_Fixed:
 	addda16_24 xiz, 267110
 	jr Voice_Pitch_ApplyPortamento
 
+; Inactive, type 0x41: 0x00FCE4 table lookup by key.
 Voice_Pitch_Inactive_BendType_TableA:
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
@@ -6551,6 +7393,7 @@ Voice_Pitch_Inactive_BendType_TableA:
 	add iz, wa
 	jr Voice_Pitch_ApplyPortamento
 
+; Inactive, type 0x42: 0x00FDE4 table lookup by key.
 Voice_Pitch_Inactive_BendType_TableB:
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
@@ -6562,6 +7405,7 @@ Voice_Pitch_Inactive_BendType_TableB:
 	add iz, wa
 	jr Voice_Pitch_ApplyPortamento
 
+; Inactive, any other non-zero type: chromatic map - key/12 gives the row, key%12 the column, in the 12-byte-per-row table at 0x011B68; the signed byte is added as whole semitones.
 Voice_Pitch_Inactive_BendType_Chromatic:
 	ld xwa, (xsp + 8)
 	ld a, (xwa + 5)
@@ -6582,6 +7426,11 @@ Voice_Pitch_Inactive_BendType_Chromatic:
 	add wa, wa
 	add iz, wa
 
+; PORTAMENTO / GLIDE STAGE. Saturates the accumulator into (record+0x08), then reads
+; the glide mode from (record+0x17)->[0x06] & 7. Bit1 of the first byte of the
+; portamento descriptor selects the 'active glide' arm; mode 7 means 'jump straight to
+; the target'; other modes exponentially approach it by right-shifting the difference
+; by (mode & 0x0F).
 Voice_Pitch_ApplyPortamento:
 	ld wa, iz
 	calr SaturateS16_WA
@@ -6607,17 +7456,20 @@ Voice_Pitch_ApplyPortamento:
 	jr z, Voice_Pitch_Portamento_Off_AddOffset
 	sraa iz
 
+; Glide idle: add the target offset word (descriptor+0x0C).
 Voice_Pitch_Portamento_Off_AddOffset:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
 	add iz, wa
 	jr Voice_Pitch_ApplyFineTune
 
+; Glide mode 7: load the target (descriptor+0x0C) directly, no smoothing.
 Voice_Pitch_Portamento_Mode7_Direct:
 	ld xwa, (xsp + 2)
 	ld iz, (xwa + 12)
 	jr Voice_Pitch_ApplyFineTune
 
+; Active glide: work relative to the 0x4280 centre, shift, then restore the bias.
 Voice_Pitch_Portamento_Active_SubBias:
 	cps l, 7
 	jr z, Voice_Pitch_Portamento_Active_SetFixed
@@ -6627,13 +7479,19 @@ Voice_Pitch_Portamento_Active_SubBias:
 	jr z, Voice_Pitch_Portamento_Active_AddBias
 	sraa iz
 
+; Restore the 0x4280 bias after the shift.
 Voice_Pitch_Portamento_Active_AddBias:
 	add iz, 0x4280
 	jr Voice_Pitch_ApplyFineTune
 
+; Active glide, mode 7: snap to the 0x4280 centre.
 Voice_Pitch_Portamento_Active_SetFixed:
 	ldw iz, 0x4280
 
+; FINE-TUNE STAGE: add (record+0x17)->[0x04] and (record+0x27)->[0x20], both signed and
+; scaled by 0x100, then map into the zone's key range - by octave folding
+; (PitchBend_AlignLoop_Init) when the glide mode is 0, or by saturation
+; (PitchBend_Saturate) otherwise - and store the result in (record+0x06).
 Voice_Pitch_ApplyFineTune:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 23)
@@ -6663,6 +7521,7 @@ Voice_Pitch_ApplyFineTune:
 	ld (xwa + 6), hl
 	jr Voice_Pitch_Compute_Return
 
+; Non-zero glide mode: clamp into the key range with PitchBend_Saturate instead of folding.
 Voice_Pitch_ApplyFineTune_LegatoB:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 9)
@@ -6677,11 +7536,18 @@ Voice_Pitch_ApplyFineTune_LegatoB:
 	ld xwa, (xsp + 8)
 	ld (xwa + 6), hl
 
+; Frame teardown and return.
 Voice_Pitch_Compute_Return:
 	popw iz
 	lda xsp, (xsp + 10)
 	ret
 
+; RECOMPUTE THE VOICE'S BASE PITCH FROM THE DESCRIPTOR ONLY (no bend, no glide).
+; In: XWA = voice work record. (record+0x1F)->[0x0C] is copied to (record+0x08); the
+; signed bytes (record+0x17)->[0x03] (semitones) and ->[0x04] (half-steps of 2) are
+; added, and the total is octave-folded into the key range given by the descriptor
+; bytes +0x09 / +0x0A before being stored in (record+0x06).
+; Callers 0x02B6CD, 0x02C278.
 Voice_Pitch_CopyBase:
 	push xiz
 	ld xiz, xwa
@@ -6711,6 +7577,15 @@ Voice_Pitch_CopyBase:
 	pop xiz
 	ret
 
+; SELECT AND EMIT THE KEY-ZONE RECORD FOR THE CURRENT PITCH.
+; In: XWA = voice work record. XIZ = (record+0x1F) = the zone descriptor.
+; Two table pointers are formed by adding the 32-bit DRAM base at 0x045310 to
+; (desc+0x01) and (desc+0x05). ChanBitField_ExtractHi7 turns (record+0x06) - the pitch
+; just computed - into a zone number through the first table; the byte at
+; (table1 + zone + 4) becomes the record index. Descriptor bits 5, 6 and 7 then select
+; one of the six SlotParam_Write_Stride* emitters (record strides 0x0F, 0x0C, 0x0D,
+; 0x0A, 0x06 or 4).
+; Callers 0x02B4FE, 0x02C0D1, 0x02C3E7.
 Voice_Pitch_InterpDispatch:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -6749,6 +7624,7 @@ Voice_Pitch_InterpDispatch:
 	calr SlotParam_Write_Stride0F
 	jr Voice_Pitch_InterpDispatch_Return
 
+; Descriptor bits 7 and 6 set, bit5 clear: stride 0x0C emitter.
 Voice_Pitch_Interp_Bits56:
 	ld xbc, (xsp + 8)
 	extz de
@@ -6756,6 +7632,7 @@ Voice_Pitch_Interp_Bits56:
 	calr SlotParam_Write_Stride0C
 	jr Voice_Pitch_InterpDispatch_Return
 
+; Descriptor bit6 set, bit7 clear: test bit5 to choose stride 0x0D or 0x0A.
 Voice_Pitch_Interp_Bit7_NoB5:
 	bitm 5, (xiz)
 	jr z, Voice_Pitch_Interp_Bits67
@@ -6765,6 +7642,7 @@ Voice_Pitch_Interp_Bit7_NoB5:
 	calr SlotParam_Write_Stride0D
 	jr Voice_Pitch_InterpDispatch_Return
 
+; Descriptor bits 6 and 7 set, bit5 clear on this arm: stride 0x0A emitter.
 Voice_Pitch_Interp_Bits67:
 	ld xbc, (xsp + 8)
 	extz de
@@ -6772,6 +7650,7 @@ Voice_Pitch_Interp_Bits67:
 	calr SlotParam_Write_Stride0A
 	jr Voice_Pitch_InterpDispatch_Return
 
+; Descriptor bit6 clear: bit7 chooses stride 0x06, otherwise the stride-4 base format.
 Voice_Pitch_Interp_Bit7_NoB6:
 	bitm 7, (xiz)
 	jr z, Voice_Pitch_Interp_Base
@@ -6781,17 +7660,27 @@ Voice_Pitch_Interp_Bit7_NoB6:
 	calr SlotParam_Write_Stride06
 	jr Voice_Pitch_InterpDispatch_Return
 
+; No format bits: the stride-4 base emitter.
 Voice_Pitch_Interp_Base:
 	ld xbc, (xsp + 8)
 	extz de
 	ld xwa, (xsp + 12)
 	calr SlotParam_Write_Stride04_SLA
 
+; Frame teardown and return.
 Voice_Pitch_InterpDispatch_Return:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
 
+; ADVANCE THE MULTI-SAMPLE / FOOTAGE SELECTION AND STORE THE OUTPUT REGISTERS.
+; In: XWA = voice work record (kept in XIZ). Base pointer = 0x045310 + (record+0x1F)->
+; [0x05]. The state byte (XIZ+0x03) selects the row source:
+;   0        -> Voice_Slot_CalcAmpNibble (0x02B154)
+;   1 or 2   -> Voice_Slot_FindOctaveOffset (0x02B1E0)
+;   >= 3     -> the u16 routing table at (XIZ+0x23) + 0x0102 + state*2
+; The result is passed through Voice_KeyIndex_Pack3Nibbles (0x02B2C2) and multiplied by
+; 6 to index the record array. Single caller 0x02BCF1.
 Voice_PitchEnv_Advance:
 	dec 4, xsp
 	push xiz
@@ -6824,6 +7713,7 @@ Voice_PitchEnv_Advance:
 	add (xsp + 4), xbc
 	jr Voice_PitchEnv_StoreOutputRegs
 
+; State 1 or 2: use Voice_Slot_FindOctaveOffset instead of the amplitude nibble.
 Voice_PitchEnv_Advance_StateB:
 	cp (xiz + 3), 0x3
 	jr nc, Voice_PitchEnv_Advance_RoutingTable
@@ -6849,6 +7739,7 @@ Voice_PitchEnv_Advance_StateB:
 	add (xsp + 4), xbc
 	jr Voice_PitchEnv_StoreOutputRegs
 
+; State >= 3: take the row directly from the per-patch routing table at (XIZ+0x23)+0x0102.
 Voice_PitchEnv_Advance_RoutingTable:
 	ld a, (xiz + 3)
 	extz wa
@@ -6865,6 +7756,10 @@ Voice_PitchEnv_Advance_RoutingTable:
 	add xbc, xbc
 	add (xsp + 4), xbc
 
+; Store the selected record: pointer to (XIZ+0x0F), type code 0x4000 OR'ed into
+; (XIZ+0x01), record word 0 to the staging word 0x0451CE and record word 4 to 0x293E.
+; If bit2 of the global audio-mode word at 0x041343 is set the top nibble of 0x0451CE
+; is doubled in place (a mode-dependent re-scale of the wave/bank field).
 Voice_PitchEnv_StoreOutputRegs:
 	ld xwa, (xsp + 4)
 	ld (xiz + 15), xwa
@@ -6884,11 +7779,17 @@ Voice_PitchEnv_StoreOutputRegs:
 	anddi16_24 283086, 4095
 	ordm16_24 283086, xwa
 
+; Restore and return.
 Voice_PitchEnv_StoreOutputRegs_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; SCALE THE MASTER TICK BY A FACTOR AND PUBLISH IT AS THE GLOBAL PITCH OFFSET.
+; In: XWA = multiplier. XBC = the 32-bit master tick at 0x1040; FP_MulAccum64 multiplies
+; them, the product is >> 2, truncated to 8 bits, multiplied by 0x0D and >> 7, and the
+; signed result is stored in the global word at 0x041366 that
+; Voice_Pitch_BendType_Fixed reads. Single caller 0x02C940.
 Voice_Vol_ScaleVelocityWord:
 	ldda32 xbc, 4160
 	ld xwa, xbc
@@ -6902,6 +7803,12 @@ Voice_Vol_ScaleVelocityWord:
 	stw_da 0x041366, xwa
 	ret
 
+; COMBINE THE PITCH SOURCES INTO (record+0x0A) AND SET THE 'GLIDE ACTIVE' FLAG.
+; In: XWA = voice work record. DE = (record+0x06) + (0x293E) + (record+0x17)->[0x05]*2
+;   + (record+0x27)->[0x21] + (record+0x23)->[0x14], stored at (record+0x0A).
+; Then bit 0x0400 of (record+0x01) is set only when bit1 of (record+0x23)->[0x0A] AND
+; bit5 of (record+0x13)->[0x10] are both set, and cleared otherwise.
+; Callers 0x02B504, 0x02BCF7.
 Voice_Pitch_WriteOutputReg_Portamento:
 	ld de, (xwa + 6)
 	addda16 xde, 10558
@@ -6927,10 +7834,17 @@ Voice_Pitch_WriteOutputReg_Portamento:
 	ormi16 (xwa + 1), 0x400
 	ret
 
+; Conditions not met: clear bit 0x0400 of (record+0x01).
 Voice_Pitch_WriteOutputReg_Portamento_ClearBit:
 	andmi16 (xwa + 1), 0xFBFF
 	ret
 
+; EMIT THE FINAL PITCH REGISTER (primary channel).
+; In: XWA = voice work record. DE = (record+0x0A) + the global fine-tune word at
+; 0x041347; if bit4 of (record+0x27)->[0x18] is set a detune of (record+0x23)->[0x1D] is
+; added or subtracted according to bit5 of the same word; if bit 0x0400 of (record+0x01)
+; is set the extra offset at 0x04135A is added. The saturated result goes to the staging
+; word at 0x0451DA. Callers 0x028D90, 0x02B50A, 0x02BCFD.
 Voice_Pitch_WriteOutputReg_Legato:
 	ld de, (xwa + 10)
 	addda16_24 xde, 267079
@@ -6946,28 +7860,36 @@ Voice_Pitch_WriteOutputReg_Legato:
 	sub de, (xbc + 29)
 	jr Voice_Pitch_Legato_StoreOutput
 
+; Detune downward variant (bit5 clear): add (record+0x23)->[0x1D].
 Voice_Pitch_Legato_DetuneDown:
 	ld xbc, (xwa + 35)
 	add de, (xbc + 29)
 
+; Optional 0x04135A offset when (record+0x01) bit 0x0400 is set.
 Voice_Pitch_Legato_StoreOutput:
 	ld wa, (xwa + 1)
 	bit 10, wa
 	jr z, Voice_Pitch_Legato_StoreOutput_Return
 	addda16_24 xde, 267098
 
+; Saturate and store to the staging word 0x0451DA.
 Voice_Pitch_Legato_StoreOutput_Return:
 	ld wa, de
 	calr SaturateS16_WA
 	stw_da 0x0451da, xhl
 	ret
 
+; Simple pitch combine: (record+0x0A) = (record+0x06) + (0x293E). No detune, no
+; register write. Callers 0x02C0D7, 0x02C3F6.
 Voice_Pitch_WriteOutputReg_Direct:
 	ld bc, (xwa + 6)
 	addda16 xbc, 10558
 	ld (xwa + 10), bc
 	ret
 
+; EMIT THE FINAL PITCH REGISTER (secondary channel). Same as
+; Voice_Pitch_WriteOutputReg_Legato minus the 0x04135A offset stage; result also goes
+; to 0x0451DA. Callers 0x028DA4, 0x02C0DD, 0x02C3FC.
 Voice_Pitch_WriteOutputReg_Secondary:
 	ld de, (xwa + 10)
 	addda16_24 xde, 267079
@@ -6983,16 +7905,28 @@ Voice_Pitch_WriteOutputReg_Secondary:
 	sub de, (xwa + 29)
 	jr Voice_Pitch_Secondary_StoreOutput
 
+; Detune downward variant: add (record+0x23)->[0x1D].
 Voice_Pitch_Secondary_DetuneDown:
 	ld xwa, (xwa + 35)
 	add de, (xwa + 29)
 
+; Saturate and store to 0x0451DA.
 Voice_Pitch_Secondary_StoreOutput:
 	ld wa, de
 	calr SaturateS16_WA
 	stw_da 0x0451da, xhl
 	ret
 
+; COMPUTE THE THREE OUTPUT LEVELS OF A VOICE AND PACK THEM INTO THREE REGISTERS.
+; In: XWA = voice work record; XIZ = (record+0x17) = the patch parameter block.
+; The sign of (patch+0x07) decides whether the three detune amounts (patch+0x0A/0x0C/
+; 0x0E) are used as-is or negated. If (patch+0x11) != 0 an envelope-scaled offset from
+; PitchBend_Scale is added to each of the three level bytes (patch+0x09/0x0B/0x0D)
+; after they are mapped through the byte table at 0x0118FE.
+; Velocity modulation uses Pan_ScaleWithVelocity with limits (patch+0x13)..0x7F and
+; depths (patch+0x14) / (patch+0x15).
+; Output: three packed words - level<<8 | detune - written to the staging words at
+; 0x0451EC, 0x0451EE and 0x0451F0. Callers 0x02B510, 0x02BD03.
 Voice_Level_ComputeTriplet:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -7018,6 +7952,7 @@ Voice_Level_ComputeTriplet:
 	ld (xsp + 8), wa
 	jr Voice_Level_Triplet_ModByEnv
 
+; (patch+0x07) >= 0: take the three detune bytes with their natural sign.
 Voice_Level_Triplet_Positive:
 	ld a, (xiz + 10)
 	exts wa
@@ -7029,6 +7964,7 @@ Voice_Level_Triplet_Positive:
 	exts wa
 	ld (xsp + 8), wa
 
+; (patch+0x11) != 0: compute the shared envelope-scaled offset via PitchBend_Scale.
 Voice_Level_Triplet_ModByEnv:
 	cp (xiz + 17), 0x0
 	jrl z, Voice_Level_Triplet_Unmodulated
@@ -7054,6 +7990,7 @@ Voice_Level_Triplet_ModByEnv:
 	ld (xsp + 10), wa
 	jr Voice_Level_Ch2_Modulated
 
+; Channel 1 without the envelope offset.
 Voice_Level_Ch1_Unmodulated:
 	ld a, (xiz + 9)
 	extz wa
@@ -7062,6 +7999,7 @@ Voice_Level_Ch1_Unmodulated:
 	extz wa
 	ld (xsp + 10), wa
 
+; Channel 2 with the envelope offset.
 Voice_Level_Ch2_Modulated:
 	cp (xiz + 11), 0x0
 	jr z, Voice_Level_Ch2_Unmodulated
@@ -7075,6 +8013,7 @@ Voice_Level_Ch2_Modulated:
 	ld (xsp + 12), wa
 	jr Voice_Level_Ch3_Modulated
 
+; Channel 2 without the envelope offset.
 Voice_Level_Ch2_Unmodulated:
 	ld a, (xiz + 11)
 	extz wa
@@ -7083,6 +8022,7 @@ Voice_Level_Ch2_Unmodulated:
 	extz wa
 	ld (xsp + 12), wa
 
+; Channel 3 with the envelope offset.
 Voice_Level_Ch3_Modulated:
 	cp (xiz + 13), 0x0
 	jr z, Voice_Level_Ch3_Unmodulated
@@ -7095,6 +8035,7 @@ Voice_Level_Ch3_Modulated:
 	ld (xsp + 14), wa
 	jr Voice_Level_ApplyVelocityMod
 
+; Channel 3 without the envelope offset.
 Voice_Level_Ch3_Unmodulated:
 	ld a, (xiz + 13)
 	extz wa
@@ -7104,6 +8045,7 @@ Voice_Level_Ch3_Unmodulated:
 	ld (xsp + 14), wa
 	jr Voice_Level_ApplyVelocityMod
 
+; (patch+0x11) == 0: all three levels come straight from the 0x0118FE table.
 Voice_Level_Triplet_Unmodulated:
 	ld a, (xiz + 9)
 	extz wa
@@ -7124,6 +8066,7 @@ Voice_Level_Triplet_Unmodulated:
 	extz wa
 	ld (xsp + 14), wa
 
+; Velocity modulation of channel 1 when (patch+0x14) != 0.
 Voice_Level_ApplyVelocityMod:
 	cp (xiz + 20), 0x0
 	jr z, Voice_Level_PackAndStore
@@ -7140,6 +8083,7 @@ Voice_Level_ApplyVelocityMod:
 	calr Pan_ScaleWithVelocity
 	add (xsp + 10), hl
 
+; Clamp channel 1 to 0..0xFF, map its detune through Detune_ScaleSymmetric, pack level<<8|detune and store to 0x0451EC; then optionally velocity-modulate channels 2 and 3 via (patch+0x15).
 Voice_Level_PackAndStore:
 	ld wa, (xsp + 10)
 	ldw bc, 0xFF
@@ -7183,6 +8127,7 @@ Voice_Level_PackAndStore:
 	ld (xsp + 14), hl
 	jr Voice_Level_PackSideChannels
 
+; No channel-2/3 velocity modulation: clamp both levels as they are.
 Voice_Level_PackAndStore_NoVelocityMod:
 	ld wa, (xsp + 12)
 	ldw bc, 0xFF
@@ -7195,6 +8140,7 @@ Voice_Level_PackAndStore_NoVelocityMod:
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 14), hl
 
+; Map the channel-2/3 detunes, pack them with their levels and store to 0x0451EE and 0x0451F0.
 Voice_Level_PackSideChannels:
 	ld wa, (xsp + 6)
 	calr Detune_ScaleSymmetric
@@ -7218,6 +8164,16 @@ Voice_Level_PackSideChannels:
 	lda xsp, (xsp + 16)
 	ret
 
+; FILTER REGISTER BUILDER, MODE 1 (single cutoff + coefficient).
+; In: XWA = voice work record; (XSP+0x02) = (record+0x17) = the patch block.
+; Cutoff seed = (patch+0x4D) + (record+0x23)->[0x67]; Portamento_CalcContrib_A adds key
+; follow ((patch+0x37)) and level scaling ((patch+0x3C)). The slope/mode field
+; (patch+0x4E) is shifted left 13 and bit10 is set, then OR'ed with the cutoff to form
+; (record+0x42). The second register (record+0x44) is Portamento_ClampAdd18 OR
+; PitchBend_LookupCoeff of either the constants 0x48/0x8D (when bit9 of
+; (record+0x23)->[0x02] is set) or the patch bytes (patch+0x4F)/(patch+0x50).
+; Reached through the mode-1 thunk at 0x02412E of the dispatch table selected by
+; (patch+0x36) & 7 - see Voice_PitchPack_Dispatch (0x024102).
 Voice_PitchPack_Mode1:
 	dec 8, xsp
 	pushw iz
@@ -7275,6 +8231,7 @@ Voice_PitchPack_Mode1:
 	ld (xwa + 68), bc
 	jr Voice_PitchPack_Mode1_Return
 
+; Bit9 of (record+0x23)->[0x02] clear: take the resonance/depth pair from (patch+0x4F) and (patch+0x50) instead of the 0x48/0x8D constants.
 Voice_PitchPack_Mode1_UseVoiceLUT:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 79)
@@ -7291,11 +8248,16 @@ Voice_PitchPack_Mode1_UseVoiceLUT:
 	ld xwa, (xsp + 6)
 	ld (xwa + 68), bc
 
+; Restore and return.
 Voice_PitchPack_Mode1_Return:
 	popw iz
 	inc 8, xsp
 	ret
 
+; FILTER REGISTER BUILDER, MODE 2. Same ingredients as mode 1 but computes the pair
+; twice - once with the 0x48/0x8D constants and once from (patch+0x4F)/(patch+0x50) -
+; and packs a different bit layout into (record+0x42) / (record+0x44).
+; Reached through the thunk at 0x024131.
 Voice_PitchPack_Mode2:
 	dec 8, xsp
 	pushw iz
@@ -7354,6 +8316,7 @@ Voice_PitchPack_Mode2:
 	ld (xwa + 68), bc
 	jr Voice_PitchPack_Mode2_Return
 
+; Alternate arm taken when bit9 of (record+0x23)->[0x02] is clear.
 Voice_PitchPack_Mode2_AltPath:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
@@ -7404,11 +8367,14 @@ Voice_PitchPack_Mode2_AltPath:
 	ld xwa, (xsp + 6)
 	ld (xwa + 68), bc
 
+; Restore and return.
 Voice_PitchPack_Mode2_Return:
 	popw iz
 	inc 8, xsp
 	ret
 
+; FILTER REGISTER BUILDER, MODE 3. Structurally the same as mode 2 with a third bit
+; packing of the cutoff and slope fields. Reached through the thunk at 0x024134.
 Voice_PitchPack_Mode3:
 	dec 8, xsp
 	pushw iz
@@ -7466,6 +8432,7 @@ Voice_PitchPack_Mode3:
 	ld (xwa + 68), bc
 	jr Voice_PitchPack_Mode3_Return
 
+; Alternate arm taken when bit9 of (record+0x23)->[0x02] is clear.
 Voice_PitchPack_Mode3_AltPath:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
@@ -7509,11 +8476,18 @@ Voice_PitchPack_Mode3_AltPath:
 	ld (xwa + 68), iz
 	stdi16 10560, 0
 
+; Restore and return.
 Voice_PitchPack_Mode3_Return:
 	popw iz
 	inc 8, xsp
 	ret
 
+; FILTER REGISTER BUILDER, MODE 4 (single-slope form).
+; Cutoff = (patch+0x4D), plus (record+0x23)->[0x67] when bit9 of (record+0x23)->[0x02]
+; is clear. Portamento_CalcContrib_A applies key follow (patch+0x37) and level scaling
+; (patch+0x3C). (patch+0x4E) is placed at both bit10 and bit13, bit7 is forced in both
+; registers, and the coefficient global at 0x2940 is cleared.
+; Reached through the thunk at 0x024137.
 Voice_PitchPack_Mode4_Single:
 	dec 4, xsp
 	push xiz
@@ -7529,6 +8503,7 @@ Voice_PitchPack_Mode4_Single:
 	extz hl
 	jr Voice_PitchPack_Mode4_Finalize
 
+; Bit9 clear: add the tone-record offset (record+0x23)->[0x67] to the cutoff seed.
 Voice_PitchPack_Mode4_AltPath:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 35)
@@ -7538,6 +8513,7 @@ Voice_PitchPack_Mode4_AltPath:
 	extz hl
 	add hl, wa
 
+; Shared tail: key follow, bit packing into (record+0x42)/(record+0x44), and (0x2940) = 0.
 Voice_PitchPack_Mode4_Finalize:
 	ld a, (xiz + 55)
 	ld e, a
@@ -7571,6 +8547,12 @@ Voice_PitchPack_Mode4_Finalize:
 	inc 4, xsp
 	ret
 
+; FILTER REGISTER BUILDER, MODE 5 (dual cutoff). Reads BOTH (patch+0x4D) and
+; (patch+0x4F) as two independent cutoff seeds. Reached through the thunk at 0x02413A,
+; which uses 'calr' rather than 'jrl' so this one returns through the dispatcher.
+; *** THIS ROUTINE EXTENDS PAST THE END OF THE REGION: its body continues at
+; Voice_PitchPack_Mode5_ApplyDetune (0x024069) and
+; Voice_PitchPack_Mode5_Finalize (0x024097), which belong to the next region. ***
 Voice_PitchPack_Mode5_Dual:
 	dec 8, xsp
 	push xiz
@@ -7590,6 +8572,8 @@ Voice_PitchPack_Mode5_Dual:
 	ld (xsp + 6), wa
 	jr Voice_PitchPack_Mode5_Finalize
 
+; Detune arm of Voice_PitchPack_Mode5_Dual: adds the signed byte (tonerec+103) to each of
+; the two zero-extended coarse values (tonerec+77, tonerec+79) into the frames at (xsp+4)/(xsp+6).
 Voice_PitchPack_Mode5_ApplyDetune:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 35)
@@ -7610,6 +8594,10 @@ Voice_PitchPack_Mode5_ApplyDetune:
 	add wa, bc
 	ld (xsp + 6), wa
 
+; Common tail of pitch-pack mode 5. Runs Portamento_CalcContrib_A twice (once per coarse
+; value) then packs word = (tonerec+78)<<13 | (tonerec+78)<<10 | contrib, sets bit 7, and
+; stores the pair to voice+66 / voice+68 (later emitted as TG regs 0x100 / 0x140).
+; Clears the 16-bit flag at 0x2940 on exit, as every pitch-pack mode does.
 Voice_PitchPack_Mode5_Finalize:
 	ld a, (xiz + 55)
 	ld e, a
@@ -7669,6 +8657,10 @@ Voice_PitchPack_Dispatch:
 	lda_24 xix, 0x02412b
 	jp_ind 8, 0x07, 0xF0, 0xE4
 
+; Six-entry computed-goto landing pad for Voice_PitchPack_Dispatch. Entry 0 falls through
+; to NoteState_InitDefaults (0x022DA1, which sets voice+66=0x017F, voice+68=0x7F7F);
+; entries 1..5 reach the mode bodies at 0x023D01, 0x023DB5, 0x023EC2, 0x023FBD, 0x02403D.
+; Offsets come from the word table at 0x00F6A7.
 Voice_PitchPack_Dispatch_Table:
 	jrl NoteState_InitDefaults
 	jrl Voice_PitchPack_Mode1
@@ -7720,6 +8712,11 @@ Voice_PitchPack_RouteA:
 	inc 8, xsp
 	ret
 
+; Pitch-pack route B. In: XWA = per-voice record. Out: voice+66, voice+68.
+; Identical to route A (0x02413E) except that bit 7 is additionally set in the reg-0x100
+; word. voice+66 = Portamento_CalcContrib_B(tonerec+0x11) | (tonerec+0x12)<<13 | bit10 | bit7;
+; voice+68 = Portamento_ClampAdd18(tonerec+0x13) | PitchBend_LookupCoeff(tonerec+0x14).
+; Touches no hardware. Reached only through Voice_PitchReg_WriteDispatch's table.
 Voice_PitchPack_RouteB:
 	dec 8, xsp
 	pushw iz
@@ -7763,6 +8760,10 @@ Voice_PitchPack_RouteB:
 	inc 8, xsp
 	ret
 
+; Pitch-pack route C. In: XWA = per-voice record; XIZ is loaded with the tone record.
+; voice+66 = Portamento_CalcContrib_B(tonerec+0x11) | (tonerec+0x12)<<10 | (tonerec+0x12)<<13;
+; voice+68 = the same contrib value unmodified. Clears 0x2940. No bit-7 set (that is what
+; distinguishes it from route D).
 Voice_PitchPack_RouteC:
 	dec 4, xsp
 	push xiz
@@ -7795,6 +8796,8 @@ Voice_PitchPack_RouteC:
 	inc 4, xsp
 	ret
 
+; Pitch-pack route D. Byte-for-byte route C plus `set 7` on BOTH the reg-0x100 and the
+; reg-0x140 words before they are stored to voice+66 / voice+68.
 Voice_PitchPack_RouteD:
 	dec 4, xsp
 	push xiz
@@ -7829,6 +8832,10 @@ Voice_PitchPack_RouteD:
 	inc 4, xsp
 	ret
 
+; Pitch-pack route E -- the two-source variant. Calls Portamento_CalcContrib_B twice, once
+; with tonerec+0x11 and once with tonerec+0x13, so the two TG pitch registers get
+; independent coarse values. voice+66 = contrib(0x11) | (tonerec+0x14)<<10 |
+; (tonerec+0x12)<<13 | bit7; voice+68 = contrib(0x13). Clears 0x2940.
 Voice_PitchPack_RouteE:
 	dec 6, xsp
 	push xiz
@@ -7885,6 +8892,10 @@ Voice_PitchReg_WriteDispatch:
 	lda_24 xix, 0x02432c
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; Landing pad for the dispatcher at 0x024300 (reference name TVF_BuildEmit_Short_Dispatch,
+; left alone), which switches on (tonerec+0x0F)&7 using the word table at 0x00F6B3. Case 0
+; body is inline here: NoteState_InitDefaults then copy voice+66/voice+68 to
+; 0x0451D4/0x0451D6. Cases 1..5 are two-instruction call stubs to Voice_PitchPack_RouteA..E.
 Voice_PitchReg_WriteDispatch_Table:
 	ld xwa, xiz
 	calr NoteState_InitDefaults
@@ -7908,6 +8919,7 @@ Voice_PitchReg_WriteDispatch_Table:
 	ld xwa, xiz
 	calr Voice_PitchPack_RouteE
 
+; Shared epilogue: pop XIZ, ret.
 Voice_PitchReg_WriteDispatch_Return:
 	pop xiz
 	ret
@@ -7932,6 +8944,7 @@ Voice_Pan_WriteWithDetune:
 	ld wa, bc
 	jr Voice_Pan_WriteWithDetune_Clamp
 
+; Additive arm (bit 7 of ((voice+39)+0x18) clear): field = (voice+66 & 0x7F) + s8(patch+0x1F).
 Voice_Pan_WriteWithDetune_Positive:
 	ld xwa, (xiz + 35)
 	ld a, (xwa + 31)
@@ -7941,6 +8954,8 @@ Voice_Pan_WriteWithDetune_Positive:
 	add bc, wa
 	ld wa, bc
 
+; ClampS8_0_to_78 the 7-bit field to 0..120, merge under mask 0xFF80 back into voice+66 and
+; store to 0x0451D4 (TG reg 0x100).
 Voice_Pan_WriteWithDetune_Clamp:
 	calr ClampS8_0_to_78
 	ld wa, (xiz + 66)
@@ -7949,10 +8964,12 @@ Voice_Pan_WriteWithDetune_Clamp:
 	stw_da 0x0451d4, xwa
 	jr Voice_Pan_WriteSecondary
 
+; Offset disabled (bit 6 of ((voice+39)+0x18) clear): copy voice+66 to 0x0451D4 unchanged.
 Voice_Pan_Write_AsIs:
 	ld wa, (xiz + 66)
 	stw_da 0x0451d4, xwa
 
+; Common tail: copy voice+68 to 0x0451D6 (TG reg 0x140) unchanged, pop XIZ, ret.
 Voice_Pan_WriteSecondary:
 	ld wa, (xiz + 68)
 	stw_da 0x0451d6, xwa
@@ -7979,6 +8996,7 @@ Voice_Pan_WriteBothWithDetune:
 	ld hl, bc
 	jr Voice_Pan_WriteBoth_Clamp
 
+; Additive arm of the "both registers" variant; result kept in HL for the shared clamp.
 Voice_Pan_WriteBoth_Positive:
 	ld xwa, (xiz + 35)
 	ld a, (xwa + 31)
@@ -7988,6 +9006,8 @@ Voice_Pan_WriteBoth_Positive:
 	add bc, wa
 	ld hl, bc
 
+; Clamps the shared 7-bit offset once and merges it into BOTH words: voice+66 under 0xFF80
+; -> 0x0451D4, voice+68 under 0xFF80 -> 0x0451D6.
 Voice_Pan_WriteBoth_Clamp:
 	ld wa, hl
 	calr ClampS8_0_to_78
@@ -8002,12 +9022,14 @@ Voice_Pan_WriteBoth_Clamp:
 	stw_da 0x0451d6, xwa
 	jr Voice_Pan_WriteBoth_Return
 
+; Offset disabled: copy voice+66/voice+68 verbatim to 0x0451D4/0x0451D6.
 Voice_Pan_WriteBoth_AsIs:
 	ld wa, (xiz + 66)
 	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
 	stw_da 0x0451d6, xwa
 
+; pop XIZ, ret.
 Voice_Pan_WriteBoth_Return:
 	pop xiz
 	ret
@@ -8030,6 +9052,10 @@ Voice_PanReg_WriteDispatch:
 	lda_24 xix, 0x024472
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; Six-case landing pad for the (tonerec+54)&7 dispatcher; offsets from the word table at
+; 0x00F6BF. Case 0 = verbatim copy of voice+66/+68; case 1 = Voice_Pan_WriteWithDetune;
+; case 2 = same but gated on bit 9 of (patch+2); cases 3/4 = Voice_Pan_WriteBothWithDetune;
+; case 5 = the inline arms below.
 Voice_PanReg_WriteDispatch_Table:
 	ld wa, (xiz + 66)
 	stw_da 0x0451d4, xwa
@@ -8047,6 +9073,7 @@ Voice_PanReg_WriteDispatch_Table:
 	calr Voice_Pan_WriteWithDetune
 	jrl Voice_PanReg_WriteDispatch_Return
 
+; Bit-9-clear arm of case 2: use the "both registers" offset routine instead.
 Voice_PanReg_Dispatch_Mode2_CheckBit9:
 	ld xwa, xiz
 	calr Voice_Pan_WriteBothWithDetune
@@ -8078,6 +9105,8 @@ Voice_PanReg_Dispatch_Mode2_CheckBit9:
 	ld (xsp + 4), bc
 	jr Voice_PanReg_Dispatch_Mode5_Finalize
 
+; Case-5 additive arm: (voice+66 & 0x7F) + s8(patch+0x1F) into DE, (voice+68 & 0x7F) +
+; s8(patch+0x1F) into (xsp+4).
 Voice_PanReg_Dispatch_Mode5_Positive:
 	ld xwa, (xiz + 35)
 	ld a, (xwa + 31)
@@ -8094,6 +9123,8 @@ Voice_PanReg_Dispatch_Mode5_Positive:
 	add bc, wa
 	ld (xsp + 4), bc
 
+; Clamps both offsets to 0..120 independently, merges each under 0xFF80 and stores to
+; 0x0451D4 / 0x0451D6.
 Voice_PanReg_Dispatch_Mode5_Finalize:
 	ld wa, de
 	calr ClampS8_0_to_78
@@ -8109,17 +9140,25 @@ Voice_PanReg_Dispatch_Mode5_Finalize:
 	stw_da 0x0451d6, xwa
 	jr Voice_PanReg_WriteDispatch_Return
 
+; Case-5 with the offset disabled (bit 6 of ((voice+39)+0x18) clear): verbatim copy.
 Voice_PanReg_Dispatch_Mode5_AsIs:
 	ld wa, (xiz + 66)
 	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
 	stw_da 0x0451d6, xwa
 
+; pop XIZ, inc 2 xsp, ret.
 Voice_PanReg_WriteDispatch_Return:
 	pop xiz
 	inc 2, xsp
 	ret
 
+; Second copy of Voice_PanReg_WriteDispatch (0x024444), instruction-for-instruction
+; identical except that the mode nibble comes from (tonerec+0x0F)&7 instead of
+; (tonerec+0x36)&7 and the offset table is 0x00F6CB instead of 0x00F6BF.
+; In: XWA = per-voice record. Out: 0x0451D4 (TG reg 0x100), 0x0451D6 (TG reg 0x140).
+; The A/B pair mirrors the two independent parameter groups in the tone record
+; (cluster {0x0F..0x16} vs cluster {0x36..0x3C,0x4D..0x50}) -- i.e. the two layers/oscillators.
 Voice_PanReg_WriteDispatchB:
 	dec 2, xsp
 	push xiz
@@ -8138,6 +9177,7 @@ Voice_PanReg_WriteDispatchB:
 	lda_24 xix, 0x024582
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; Landing pad for dispatch B; same six cases as 0x024472.
 Voice_PanReg_WriteDispatchB_Table:
 	ld wa, (xiz + 66)
 	stw_da 0x0451d4, xwa
@@ -8155,6 +9195,7 @@ Voice_PanReg_WriteDispatchB_Table:
 	calr Voice_Pan_WriteWithDetune
 	jrl Voice_PanReg_WriteDispatchB_Return
 
+; Bit-9-clear arm of case 2 in dispatch B.
 Voice_PanReg_DispatchB_Mode2_CheckBit9:
 	ld xwa, xiz
 	calr Voice_Pan_WriteBothWithDetune
@@ -8186,6 +9227,7 @@ Voice_PanReg_DispatchB_Mode2_CheckBit9:
 	ld (xsp + 4), bc
 	jr Voice_PanReg_DispatchB_Mode5_Finalize
 
+; Case-5 additive arm in dispatch B.
 Voice_PanReg_DispatchB_Mode5_Positive:
 	ld xwa, (xiz + 35)
 	ld a, (xwa + 31)
@@ -8202,6 +9244,7 @@ Voice_PanReg_DispatchB_Mode5_Positive:
 	add bc, wa
 	ld (xsp + 4), bc
 
+; Case-5 clamp-and-emit in dispatch B.
 Voice_PanReg_DispatchB_Mode5_Finalize:
 	ld wa, de
 	calr ClampS8_0_to_78
@@ -8217,17 +9260,30 @@ Voice_PanReg_DispatchB_Mode5_Finalize:
 	stw_da 0x0451d6, xwa
 	jr Voice_PanReg_WriteDispatchB_Return
 
+; Case-5 verbatim copy in dispatch B.
 Voice_PanReg_DispatchB_Mode5_AsIs:
 	ld wa, (xiz + 66)
 	stw_da 0x0451d4, xwa
 	ld wa, (xiz + 68)
 	stw_da 0x0451d6, xwa
 
+; pop XIZ, inc 2 xsp, ret.
 Voice_PanReg_WriteDispatchB_Return:
 	pop xiz
 	inc 2, xsp
 	ret
 
+; Builds the three-channel level triple emitted as TG registers 0x9C0 / 0xA00 / 0xA40.
+; In: XWA = per-voice record (tone record via +23). Out: 0x0451F2, 0x0451F4, 0x0451F6.
+; Each channel level starts as a byte from the curve table at 0x0118FE indexed by
+; tonerec+63 / +65 / +67. If tonerec+71 is non-zero the key-scaled term from
+; PitchBend_Scale(tonerec+71, voice+12) is added to all three. tonerec+74 / tonerec+75
+; add an LFO/tremolo term via Pan_ScaleWithVelocity. Each result is clamped 0..0xFF and
+; packed as (level << 8) | Detune_ScaleSymmetric(clamp(tonerec+61 + tonerec+64/66/68,
+; -0x32..+0x32)) -- i.e. an 8-bit level in the high byte and a signed spread coefficient in
+; the low byte, the same layout the mute path uses when it writes 0xFF80.
+; Confidence medium only because the *meaning* of the three destination registers is taken
+; from kn5000-docs/tone-generator.md, not proved here.
 Voice_StereoLevel_Compute:
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -8262,6 +9318,7 @@ Voice_StereoLevel_Compute:
 	ld (xsp + 6), wa
 	jr Voice_StereoLevel_Ch2_Modulated
 
+; Channel-1 level with no key-scaling term: table[0x0118FE + tonerec+63] straight to (xsp+6).
 Voice_StereoLevel_Ch1_Unmodulated:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 63)
@@ -8271,6 +9328,7 @@ Voice_StereoLevel_Ch1_Unmodulated:
 	extz wa
 	ld (xsp + 6), wa
 
+; Channel-2 level plus the key-scaled term still held in HL.
 Voice_StereoLevel_Ch2_Modulated:
 	ld xwa, (xsp + 2)
 	cp (xwa + 65), 0x0
@@ -8286,6 +9344,7 @@ Voice_StereoLevel_Ch2_Modulated:
 	ld (xsp + 8), wa
 	jr Voice_StereoLevel_Ch3_Modulated
 
+; Channel-2 level, table value only.
 Voice_StereoLevel_Ch2_Unmodulated:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 65)
@@ -8295,6 +9354,7 @@ Voice_StereoLevel_Ch2_Unmodulated:
 	extz wa
 	ld (xsp + 8), wa
 
+; Channel-3 level plus the key-scaled term.
 Voice_StereoLevel_Ch3_Modulated:
 	ld xwa, (xsp + 2)
 	cp (xwa + 67), 0x0
@@ -8309,6 +9369,7 @@ Voice_StereoLevel_Ch3_Modulated:
 	ld (xsp + 10), wa
 	jr Voice_StereoLevel_ApplyTremolo
 
+; Channel-3 level, table value only.
 Voice_StereoLevel_Ch3_Unmodulated:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 67)
@@ -8319,6 +9380,7 @@ Voice_StereoLevel_Ch3_Unmodulated:
 	ld (xsp + 10), wa
 	jr Voice_StereoLevel_ApplyTremolo
 
+; Fast path taken when tonerec+71 == 0: all three levels are plain table lookups.
 Voice_StereoLevel_AllUnmodulated:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 63)
@@ -8342,6 +9404,8 @@ Voice_StereoLevel_AllUnmodulated:
 	extz wa
 	ld (xsp + 10), wa
 
+; If tonerec+74 != 0, adds Pan_ScaleWithVelocity(tonerec+73, 0x7F, s8(tonerec+74),
+; (voice+8)) to the channel-1 level.
 Voice_StereoLevel_ApplyTremolo:
 	ld xwa, (xsp + 2)
 	cp (xwa + 74), 0x0
@@ -8361,6 +9425,10 @@ Voice_StereoLevel_ApplyTremolo:
 	calr Pan_ScaleWithVelocity
 	add (xsp + 6), hl
 
+; Clamps channel 1 to 0..0xFF, computes the signed low-byte coefficient from
+; tonerec+61 + tonerec+64 clamped to -0x32..+0x32 through Detune_ScaleSymmetric, and stores
+; (level<<8)|coeff to 0x0451F2 (TG reg 0x9C0). Then optionally applies the tonerec+75
+; modulation to channels 2 and 3.
 Voice_StereoLevel_PackCh1:
 	ld wa, (xsp + 6)
 	ldw bc, 0xFF
@@ -8416,6 +9484,7 @@ Voice_StereoLevel_PackCh1:
 	ld (xsp + 10), hl
 	jr Voice_StereoLevel_PackCh23
 
+; tonerec+75 == 0: clamp channels 2 and 3 to 0..0xFF with no added modulation.
 Voice_StereoLevel_ClampCh23_NoMod:
 	ld wa, (xsp + 8)
 	ldw bc, 0xFF
@@ -8428,6 +9497,8 @@ Voice_StereoLevel_ClampCh23_NoMod:
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 
+; Packs and stores channels 2 and 3 to 0x0451F4 (TG reg 0xA00) and 0x0451F6 (TG reg 0xA40),
+; each with its own Detune_ScaleSymmetric coefficient from tonerec+61 + tonerec+66 / +68.
 Voice_StereoLevel_PackCh23:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 61)
@@ -8472,6 +9543,11 @@ Voice_StereoLevel_PackCh23:
 	lda xsp, (xsp + 14)
 	ret
 
+; Builds the pair emitted as TG registers 0x500 (0x0451E2) and 0x8C0 (0x0451EA).
+; In: XWA = per-voice record. Sign-splits tonerec+7 and tonerec+8: if tonerec+7 is negative
+; both bytes are negated before scaling (Detune_ScaleUnsigned for +7, Detune_ScaleSymmetric
+; for +8), so the routine has a mirrored positive arm at 0x024911. The scaled values are
+; then combined with tonerec+18 and the note number (voice+12) in the tail.
 Voice_PortaLevel_Compute:
 	lda xsp, (xsp - 12)
 	pushw iz
@@ -8497,6 +9573,7 @@ Voice_PortaLevel_Compute:
 	ld (xsp + 6), hl
 	jr Voice_PortaLevel_ScaleAndPack
 
+; Positive/zero arm: scale tonerec+7 and tonerec+8 directly, no negation.
 Voice_PortaLevel_Compute_Positive:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 7)
@@ -8509,6 +9586,8 @@ Voice_PortaLevel_Compute_Positive:
 	calr Detune_ScaleSymmetric
 	ld (xsp + 6), hl
 
+; Shared tail: scales by tonerec+18 against the note number, packs and stores the two words
+; to 0x0451E2 (TG reg 0x500) and 0x0451EA (TG reg 0x8C0).
 Voice_PortaLevel_ScaleAndPack:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 18)
@@ -8568,6 +9647,14 @@ Voice_PortaLevel_ScaleAndPack:
 	lda xsp, (xsp + 12)
 	ret
 
+; Zeroes the whole level/pan half of the staging block: 0x0451EA, 0x0451E2, 0x0451EC,
+; 0x0451EE, 0x0451F0, 0x0451F2, 0x0451F4, 0x0451F6, 0x0451DC, 0x0451DE (TG regs 0x8C0,
+; 0x500, 0x900, 0x940, 0x980, 0x9C0, 0xA00, 0xA40, 0x440, 0x480).
+; In: XWA = per-voice record, XHL = its tone record. Then it selects the reg-0x180 value
+; from the per-voice routing byte at 0x04138E + channel*0x11F: value 1 -> voice+43 = 0,
+; value 2 -> voice+43 = 0x7F, anything else -> voice+43 = tonerec[0]. voice+43 is stored to
+; 0x0451D8 (TG reg 0x180) and 0x0451E0 (TG reg 0x4C0) is zeroed.
+; This is the "silence everything except the mode word" primitive used on voice teardown.
 Voice_Level_ClearAllOutputRegs:
 	ld xhl, (xwa + 23)
 	stiw_da 0x0451ea, 0x0000
@@ -8589,6 +9676,7 @@ Voice_Level_ClearAllOutputRegs:
 	ldw (xwa + 43), 0x0
 	jr Voice_Level_ClearAllOutputRegs_Store
 
+; Second routing-byte comparison (== 2 -> voice+43 = 0x7F).
 Voice_Level_ClearAllOutputRegs_Check2:
 	ld c, (xwa + 4)
 	extz bc
@@ -8599,17 +9687,28 @@ Voice_Level_ClearAllOutputRegs_Check2:
 	ldw (xwa + 43), 0x7F
 	jr Voice_Level_ClearAllOutputRegs_Store
 
+; Default arm: voice+43 = first byte of the tone record.
 Voice_Level_ClearAllOutputRegs_FromTable:
 	ld c, (xhl)
 	extz bc
 	ld (xwa + 43), bc
 
+; Store voice+43 to 0x0451D8 (TG reg 0x180), clear 0x0451E0 (TG reg 0x4C0), ret.
 Voice_Level_ClearAllOutputRegs_Store:
 	ld wa, (xwa + 43)
 	stw_da 0x0451d8, xwa
 	stiw_da 0x0451e0, 0x0000
 	ret
 
+; Writes one operator/slot's envelope parameters into the physical slot record.
+; In: A = channel, E = operator index, C/(xsp+20) = slot number, (xsp+22) = group index,
+; XBC = patch record pointer. Computes three bases: 0x04136E + channel*0x11F (per-voice
+; operator parameters), 0x041368 + channel*0x11F, and 0x04424E + slot*0x1B (the physical
+; slot record, XIZ). Unless the direct path is taken it offsets each parameter by the signed
+; bytes at patch+104/105/106 and clamps (0..0x7F, 0..0x7F, 0..0x1E) before storing to
+; slotrec+1, +3 and +7.
+; The direct/bypass path is chosen when the group index == 2, or the operator index == 0,
+; or the byte at 0x0451A7 == 0xF5 (a global "raw parameters" mode flag).
 Voice_OpSlot_WriteParams:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -8707,6 +9806,8 @@ Voice_OpSlot_WriteParams:
 	ld (xiz + 7), l
 	jr Voice_OpSlot_ApplySustainPedal
 
+; Bypass path: copy the three parameter bytes into slotrec+1/+3/+7 with no patch offset
+; and no clamping.
 Voice_OpSlot_WriteParams_Direct:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -8719,6 +9820,8 @@ Voice_OpSlot_WriteParams_Direct:
 	and a, 0x3F
 	ld (xiz + 7), a
 
+; If the sustain bit is set in the per-voice flag word, forces the release segment of this
+; slot record to the sustain-pedal value instead of the patch value.
 Voice_OpSlot_ApplySustainPedal:
 	ld xwa, (xsp + 8)
 	bitm 1, (xwa)
@@ -8729,9 +9832,11 @@ Voice_OpSlot_ApplySustainPedal:
 	ld (xiz + 7), 0x0
 	jr Voice_OpSlot_ApplySostenuto
 
+; Two-instruction store of the sustain-pedal release value.
 Voice_OpSlot_SustainRelease_Set:
 	ld (xiz + 2), 0x80
 
+; Same test/override for the sostenuto pedal.
 Voice_OpSlot_ApplySostenuto:
 	ld xwa, (xsp + 8)
 	bitm 3, (xwa)
@@ -8742,9 +9847,11 @@ Voice_OpSlot_ApplySostenuto:
 	ld (xiz + 7), 0x0
 	jr Voice_OpSlot_CopyWaveformBits
 
+; Two-instruction store of the sostenuto release value.
 Voice_OpSlot_SostenutoRelease_Set:
 	ld (xiz + 4), 0x80
 
+; Copies the waveform-select bits from the patch record into the slot record.
 Voice_OpSlot_CopyWaveformBits:
 	ld xwa, (xsp + 4)
 	bitm 7, (xwa + 2)
@@ -8752,9 +9859,11 @@ Voice_OpSlot_CopyWaveformBits:
 	setm 5, (xiz)
 	jr Voice_OpSlot_PackEnvelopeBits
 
+; Single `res 5` on the waveform byte.
 Voice_OpSlot_ClearWaveformBit5:
 	resm 5, (xiz)
 
+; Final packing of the envelope-shape bit-field into the slot record; restores XIZ and returns.
 Voice_OpSlot_PackEnvelopeBits:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 3)
@@ -8826,6 +9935,8 @@ Voice_Chan_ComputeParams:
 	call ToneGen_WriteExtParam_600_Mute
 	jr Voice_Chan_ResolveSlot
 
+; Taken when bit 7 of (partrec+2) is clear: identical VoiceSlot_Assign call but the group
+; index passed in E has bit 5 clear, and ToneGen_WriteExtParam_600_Mute is NOT issued first.
 Voice_Chan_ComputeParams_NoAlgoSelect:
 	ld a, (xsp + 16)
 	ld l, a
@@ -8871,6 +9982,9 @@ Voice_Chan_ResolveSlot:
 	and wa, 0xC
 	jr z, Voice_Chan_CheckPitchEnvGate
 
+; Calls Voice_OpSlot_WriteParams for the resolved slot, computes the envelope level with
+; EGEnv_Compute_A_Simple into 0x045208 (TG reg 0x580), then hands the whole block at
+; 0x0451CC to ToneGen_WriteExtParams_56_Alt.
 Voice_Chan_WriteOpSlots:
 	ld a, (xsp + 16)
 	ld c, a
@@ -8893,6 +10007,8 @@ Voice_Chan_WriteOpSlots:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_56_Alt
 
+; Decides whether the pitch-envelope generator has to be re-triggered: slotstate+7 == 0, or
+; bit 13 of (partrec+2) set.
 Voice_Chan_CheckPitchEnvGate:
 	cp (xiz + 7), 0x0
 	jr z, Voice_Chan_PitchEnvGate_CheckBit5
@@ -8901,10 +10017,13 @@ Voice_Chan_CheckPitchEnvGate:
 	bit 13, wa
 	jr nz, Voice_Chan_PitchEnvGate_Trigger
 
+; Secondary condition: bit 5 of slotstate[0].
 Voice_Chan_PitchEnvGate_CheckBit5:
 	bitm 5, (xiz)
 	jr z, Voice_Chan_PitchEnvFreeRun_Check
 
+; Re-trigger: slotstate+8 = 0, slotstate[0] &= 0xF3 then bit 4 set, 0x04520C (TG reg 0x600)
+; = 0, and ToneGen_WriteExtParam_600 emits it.
 Voice_Chan_PitchEnvGate_Trigger:
 	ld (xiz + 8), 0x0
 	andmi8 (xiz), 0xF3
@@ -8915,6 +10034,7 @@ Voice_Chan_PitchEnvGate_Trigger:
 	call ToneGen_WriteExtParam_600
 	jrl Voice_Chan_SecondaryPitch_Trigger
 
+; Free-running arm: slotstate+5 != 0, or bit 15 of the slot word.
 Voice_Chan_PitchEnvFreeRun_Check:
 	cp (xiz + 5), 0x0
 	jr nz, Voice_Chan_PitchEnvFreeRun_Trigger
@@ -8922,6 +10042,8 @@ Voice_Chan_PitchEnvFreeRun_Check:
 	bit 15, wa
 	jr nz, Voice_Chan_ChokeGroup_Trigger
 
+; Computes the envelope level with EGEnv_Compute_A into 0x04520C (TG reg 0x600) and emits it,
+; but only if slotstate[0] & 0x38 == 0.
 Voice_Chan_PitchEnvFreeRun_Trigger:
 	ld a, (xiz)
 	and a, 0x38
@@ -8935,6 +10057,8 @@ Voice_Chan_PitchEnvFreeRun_Trigger:
 	call ToneGen_WriteExtParam_600
 	jrl Voice_Chan_SecondaryPitch_Trigger
 
+; Third trigger arm, gated on (partrec[0] & 0x0C) != 0 -- the exclusive/choke-group bits.
+; Same EGEnv_Compute_A -> 0x04520C -> ToneGen_WriteExtParam_600 sequence.
 Voice_Chan_ChokeGroup_Trigger:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
@@ -8949,6 +10073,9 @@ Voice_Chan_ChokeGroup_Trigger:
 	call ToneGen_WriteExtParam_600
 	jrl Voice_Chan_SecondaryPitch_Trigger
 
+; Entered when (perfrec+26) == 0, i.e. no wave-table assignment for this channel. Bails out
+; entirely unless bit 15 of (partrec+10) is set; otherwise writes a precomputed slot word to
+; 0x0451DC (TG reg 0x440).
 Voice_Chan_Fallback_NoWaveTable:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 10)
@@ -9000,6 +10127,8 @@ Voice_Chan_Fallback_NoWaveTable:
 	bit 2, wa
 	jr z, Voice_Chan_SecondaryPitch_Trigger
 
+; Stores the precomputed envelope words to 0x04520C (TG reg 0x600) and 0x045208 (TG reg
+; 0x580) and emits the block.
 Voice_Chan_Fallback_WritePrecomputed:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 91)
@@ -9011,6 +10140,8 @@ Voice_Chan_Fallback_WritePrecomputed:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_56
 
+; Common tail of Voice_Chan_ComputeParams and the also the bail-out target when no slot was
+; assigned. Writes the secondary slot word to 0x0451DE (TG reg 0x480).
 Voice_Chan_SecondaryPitch_Trigger:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 10)
@@ -9061,6 +10192,8 @@ Voice_Chan_SecondaryPitch_Trigger:
 	bit 2, wa
 	jr z, Voice_Chan_ComputeParams_Return
 
+; Computes the secondary pitch delta into 0x04520E, reloads it, derives 0x04520A (TG reg
+; 0x5C0) from it and emits the block again.
 Voice_Chan_SecondaryPitch_ComputeDelta:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 87)
@@ -9087,11 +10220,17 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_56b
 
+; pop XIZ, unwind 22 bytes of frame, ret.
 Voice_Chan_ComputeParams_Return:
 	pop xiz
 	lda xsp, (xsp + 22)
 	ret
 
+; The sub-voice (second layer) twin of Voice_Chan_ComputeParams. Same shape: read the
+; patch/perf pointers out of the per-voice record, select the algorithm group, call
+; VoiceSlot_Assign, then fill the staging block and emit.
+; The differences are (a) the group index gets `set 2` rather than `set 5`, and (b) the slot
+; record base is 0x044257 (= 0x04424E + 9) with the bound check at 0x40 instead of 0x80.
 Voice_SubVoice_ComputeAndTrigger:
 	lda xsp, (xsp - 24)
 	pushw iz
@@ -9145,6 +10284,7 @@ Voice_SubVoice_ComputeAndTrigger:
 	call ToneGen_WriteExtParam_540_Mute
 	jr Voice_SubVoice_ResolveSlot
 
+; Sub-voice path with algorithm selection disabled.
 Voice_SubVoice_Compute_NoAlgoSelect:
 	ld a, (xsp + 18)
 	ld l, a
@@ -9164,6 +10304,9 @@ Voice_SubVoice_Compute_NoAlgoSelect:
 	ld iz, (xsp + 14)
 	ldib_erp 0xF9, 0
 
+; XIZ = slot number (high byte force-zeroed). Slot record = 0x044257 + slot*0x1B via
+; FP_MulAccum64; stores the note number to slotrec+6 and THEN bounds-checks
+; `cp iz,0x40 / jr nc` -- see [UNCERTAIN], the store precedes the check.
 Voice_SubVoice_ResolveSlot:
 	ld wa, iz
 	extz xwa
@@ -9193,6 +10336,8 @@ Voice_SubVoice_ResolveSlot:
 	and wa, 0xC
 	jr z, Voice1_UpdatePitch_CheckSustain
 
+; Layer-1 pitch update: calls Voice_OpSlot_WriteParams for group 1, computes the envelope
+; with EGEnv_Compute_B_Simple into 0x045206, and emits the block at 0x0451CC.
 Voice1_UpdatePitch_WritePBend:
 	ld a, (xsp + 18)
 	ld c, a
@@ -9215,6 +10360,8 @@ Voice1_UpdatePitch_WritePBend:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_15_Alt
 
+; Tests the per-voice sustain/hold flags before deciding whether the oscillator may be
+; deactivated.
 Voice1_UpdatePitch_CheckSustain:
 	ld xwa, (xsp + 10)
 	cp (xwa + 7), 0x0
@@ -9224,11 +10371,14 @@ Voice1_UpdatePitch_CheckSustain:
 	bit 13, wa
 	jr nz, Voice1_UpdatePitch_DeactivateOsc
 
+; Bit-5 test on the slot state byte.
 Voice1_UpdatePitch_CheckBit5:
 	ld xwa, (xsp + 10)
 	bitm 5, (xwa)
 	jr z, Voice1_UpdatePitch_CheckPhase
 
+; Clears 0x045204 (TG reg 0x1C0) to zero and emits it via ToneGen_WriteExtParam_1C0_Single
+; -- the oscillator-off write.
 Voice1_UpdatePitch_DeactivateOsc:
 	ld xwa, (xsp + 10)
 	ld (xwa + 8), 0x0
@@ -9242,6 +10392,7 @@ Voice1_UpdatePitch_DeactivateOsc:
 	call ToneGen_WriteExtParam_1C0_Single
 	jrl Voice1_UpdatePitch_WriteStereoField
 
+; Phase/segment test that selects between the two frequency-write tails.
 Voice1_UpdatePitch_CheckPhase:
 	ld xwa, (xsp + 10)
 	cp (xwa + 5), 0x0
@@ -9250,6 +10401,7 @@ Voice1_UpdatePitch_CheckPhase:
 	bit 15, wa
 	jr nz, Voice1_UpdatePitch_WriteFreq
 
+; State-flag arm: computes the value into 0x045204 (TG reg 0x1C0) and emits.
 Voice1_UpdatePitch_CheckStateFlags:
 	ld xwa, (xsp + 10)
 	ld a, (xwa)
@@ -9264,6 +10416,8 @@ Voice1_UpdatePitch_CheckStateFlags:
 	call ToneGen_WriteExtParam_1C0_Single
 	jrl Voice1_UpdatePitch_WriteStereoField
 
+; Main frequency write: result of Voice_Freq_WriteLeft into 0x045204 (TG reg 0x1C0),
+; emitted through ToneGen_WriteExtParam_TypeDispatch_Single.
 Voice1_UpdatePitch_WriteFreq:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa)
@@ -9278,6 +10432,7 @@ Voice1_UpdatePitch_WriteFreq:
 	call ToneGen_WriteExtParam_1C0_Single
 	jrl Voice1_UpdatePitch_WriteStereoField
 
+; Alternate entry used when the caller already holds the computed frequency.
 Voice1_UpdatePitch_AltEntry:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
@@ -9322,6 +10477,7 @@ Voice1_UpdatePitch_AltEntry:
 	bit 2, wa
 	jr z, Voice1_UpdatePitch_WriteStereoField
 
+; Writes both 0x045204 (TG reg 0x1C0) and 0x045206 before emitting.
 Voice1_UpdatePitch_WriteAltFreq:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 95)
@@ -9333,6 +10489,8 @@ Voice1_UpdatePitch_WriteAltFreq:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_15
 
+; Shared tail (also the no-slot bail-out target of Voice_SubVoice_ResolveSlot). Reads the
+; per-voice routing byte at 0x04138E + channel*0x11F to pick the reg-0x180 value.
 Voice1_UpdatePitch_WriteStereoField:
 	ld xwa, (xsp + 22)
 	ld a, (xwa + 4)
@@ -9346,6 +10504,7 @@ Voice1_UpdatePitch_WriteStereoField:
 	ld (xwa + 43), bc
 	jr Voice1_UpdatePitch_StoreStereo
 
+; Second routing-byte comparison arm.
 Voice1_UpdatePitch_StereoPart2:
 	ld xwa, (xsp + 22)
 	ld a, (xwa + 4)
@@ -9360,6 +10519,7 @@ Voice1_UpdatePitch_StereoPart2:
 	ld (xwa + 43), bc
 	jr Voice1_UpdatePitch_StoreStereo
 
+; Default arm of the routing selection.
 Voice1_UpdatePitch_StereoFallthrough:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 35)
@@ -9369,6 +10529,7 @@ Voice1_UpdatePitch_StereoFallthrough:
 	ld xwa, (xsp + 22)
 	ld (xwa + 43), bc
 
+; Stores the selected value to 0x0451D8 (TG reg 0x180) and returns.
 Voice1_UpdatePitch_StoreStereo:
 	ld xwa, (xsp + 22)
 	ld wa, (xwa + 43)
@@ -9377,6 +10538,10 @@ Voice1_UpdatePitch_StoreStereo:
 	lda xsp, (xsp + 24)
 	ret
 
+; Layer-2 twin of the Voice1_UpdatePitch family. Seeds 0x0451E0 (TG reg 0x4C0) with the
+; constant 0x4400, then follows the same deactivate / phase / frequency structure.
+; In: XWA = per-voice record. Touches only the staging block; emission is via the
+; ToneGen_WriteExtParam_* helpers.
 Voice2_UpdatePitch:
 	lda xsp, (xsp - 22)
 	pushw iz
@@ -9428,6 +10593,7 @@ Voice2_UpdatePitch:
 	call ToneGen_WriteExtParam_Mute_TypeDispatch
 	jr Voice2_UpdatePitch_ChanEntry
 
+; Arm taken when the oscillator-7 flag is clear.
 Voice2_UpdatePitch_NoOsc7Flag:
 	ld a, (xsp + 16)
 	ld l, a
@@ -9447,6 +10613,7 @@ Voice2_UpdatePitch_NoOsc7Flag:
 	ld iz, (xsp + 14)
 	ldib_erp 0xF9, 0
 
+; Channel-indexed entry; reads the per-channel table at 0x044260 (= 0x04424E + 18).
 Voice2_UpdatePitch_ChanEntry:
 	ld wa, iz
 	extz xwa
@@ -9474,6 +10641,7 @@ Voice2_UpdatePitch_ChanEntry:
 	and wa, 0xC
 	jr z, Voice2_UpdatePitch_CheckSustain
 
+; Layer-2 equivalent of 0x025051: fill and emit the block at 0x0451CC.
 Voice2_UpdatePitch_WritePBend:
 	ld a, (xsp + 16)
 	ld c, a
@@ -9495,6 +10663,7 @@ Voice2_UpdatePitch_WritePBend:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParams_TypeDispatch
 
+; Sustain/hold test before oscillator deactivation.
 Voice2_UpdatePitch_CheckSustain:
 	ld xwa, (xsp + 10)
 	cp (xwa + 7), 0x0
@@ -9504,11 +10673,13 @@ Voice2_UpdatePitch_CheckSustain:
 	bit 13, wa
 	jr nz, Voice2_UpdatePitch_DeactivateOsc
 
+; Bit-5 test on the slot state byte.
 Voice2_UpdatePitch_CheckBit5:
 	ld xwa, (xsp + 10)
 	bitm 5, (xwa)
 	jr z, Voice2_UpdatePitch_CheckPhase
 
+; Clears both 0x045204 (TG reg 0x1C0) and 0x04520E, then emits -- layer-2 oscillator off.
 Voice2_UpdatePitch_DeactivateOsc:
 	ld xwa, (xsp + 10)
 	ld (xwa + 8), 0x0
@@ -9523,6 +10694,7 @@ Voice2_UpdatePitch_DeactivateOsc:
 	call ToneGen_WriteExtParam_TypeDispatch_Single
 	jr Voice2_UpdatePitch_Done
 
+; Phase/segment test.
 Voice2_UpdatePitch_CheckPhase:
 	ld xwa, (xsp + 10)
 	cp (xwa + 5), 0x0
@@ -9531,6 +10703,7 @@ Voice2_UpdatePitch_CheckPhase:
 	bit 15, wa
 	jr nz, Voice2_UpdatePitch_WriteFreq
 
+; State-flag arm; emits the block.
 Voice2_UpdatePitch_CheckStateFlags:
 	ld xwa, (xsp + 10)
 	ld a, (xwa)
@@ -9544,6 +10717,7 @@ Voice2_UpdatePitch_CheckStateFlags:
 	call ToneGen_WriteExtParam_TypeDispatch_Single
 	jr Voice2_UpdatePitch_Done
 
+; Layer-2 frequency write and emit.
 Voice2_UpdatePitch_WriteFreq:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa)
@@ -9556,6 +10730,7 @@ Voice2_UpdatePitch_WriteFreq:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_TypeDispatch_Single
 
+; Frame unwind and ret.
 Voice2_UpdatePitch_Done:
 	popw iz
 	lda xsp, (xsp + 22)
@@ -9574,6 +10749,7 @@ Voice_ComputeExprPitchBend:
 	lds de, 0
 	jr Voice_ComputeExprPitchBend_ApplyDetune
 
+; Global mode byte 0x04134C != 6: DE = zext(patchrec+15).
 Voice_ComputeExprPitchBend_UseCoarse:
 	ld xbc, (xwa + 35)
 	ld c, (xbc + 15)
@@ -9581,12 +10757,16 @@ Voice_ComputeExprPitchBend_UseCoarse:
 	ld de, bc
 	jr Voice_ComputeExprPitchBend_ApplyDetune
 
+; Entered when patchrec+15 == 0 or patchrec+18 == 0; DE = zext(patchrec+15) regardless of
+; the global mode.
 Voice_ComputeExprPitchBend_ZeroCoarse:
 	ld xbc, (xwa + 35)
 	ld c, (xbc + 15)
 	extz bc
 	ld de, bc
 
+; If DE != 0: DE += (partrec+92) - 0x40, DE += s8(patchrec+102); negative results are floored
+; to 0.
 Voice_ComputeExprPitchBend_ApplyDetune:
 	cps de, 0
 	jr z, Voice_ComputeExprPitchBend_CheckExpr
@@ -9603,14 +10783,18 @@ Voice_ComputeExprPitchBend_ApplyDetune:
 	lds de, 0
 	jr Voice_ComputeExprPitchBend_ShiftLeft
 
+; Ceiling at 0x7F.
 Voice_ComputeExprPitchBend_ClampHigh:
 	cp de, 0x7F
 	jr le, Voice_ComputeExprPitchBend_ShiftLeft
 	ldw de, 0x7F
 
+; `sla de, 8` -- the high byte of the reg-0x0C0 word is this 7-bit field.
 Voice_ComputeExprPitchBend_ShiftLeft:
 	sla de, 8
 
+; Selects the low byte: patchrec+18 == 0 -> use patchrec+18 (i.e. 0); global mode 5 or 6 ->
+; force 0x7F; otherwise use patchrec+18.
 Voice_ComputeExprPitchBend_CheckExpr:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
@@ -9621,10 +10805,12 @@ Voice_ComputeExprPitchBend_CheckExpr:
 	cps c, 5
 	jr nz, Voice_ComputeExprPitchBend_PartialExpr
 
+; `or de, 0x7F` -- low byte forced to maximum.
 Voice_ComputeExprPitchBend_FullExpr:
 	or de, 0x7F
 	jr Voice_ComputeExprPitchBend_Write
 
+; Low byte = patchrec+18.
 Voice_ComputeExprPitchBend_PartialExpr:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 18)
@@ -9632,16 +10818,21 @@ Voice_ComputeExprPitchBend_PartialExpr:
 	or de, wa
 	jr Voice_ComputeExprPitchBend_Write
 
+; Low byte = patchrec+18 (reached with the high field left at 0).
 Voice_ComputeExprPitchBend_NoExpr:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 18)
 	extz wa
 	or de, wa
 
+; Stores DE to 0x0451D2 (TG reg 0x0C0) and returns.
 Voice_ComputeExprPitchBend_Write:
 	stw_da 0x0451d2, xde
 	ret
 
+; Second copy of the routine at 0x0253FE, differing only in that it pre-loads the part
+; record pointer (voice+19) into XHL on entry and uses it directly for the +92 term rather
+; than re-loading it. Same output: 0x0451D2 (TG reg 0x0C0).
 Voice_ComputePitchBend2:
 	ld xhl, (xwa + 19)
 	ld xbc, (xwa + 35)
@@ -9656,6 +10847,7 @@ Voice_ComputePitchBend2:
 	lds de, 0
 	jr Voice_ComputePitchBend2_ApplyDetune
 
+; As 0x02541D.
 Voice_ComputePitchBend2_UseCoarse:
 	ld xbc, (xwa + 35)
 	ld c, (xbc + 15)
@@ -9663,12 +10855,14 @@ Voice_ComputePitchBend2_UseCoarse:
 	ld de, bc
 	jr Voice_ComputePitchBend2_ApplyDetune
 
+; As 0x025429.
 Voice_ComputePitchBend2_ZeroCoarse:
 	ld xbc, (xwa + 35)
 	ld c, (xbc + 15)
 	extz bc
 	ld de, bc
 
+; As 0x025433.
 Voice_ComputePitchBend2_ApplyDetune:
 	cps de, 0
 	jr z, Voice_ComputePitchBend2_CheckExpr
@@ -9680,14 +10874,17 @@ Voice_ComputePitchBend2_ApplyDetune:
 	lds de, 0
 	jr Voice_ComputePitchBend2_ShiftLeft
 
+; As 0x025455.
 Voice_ComputePitchBend2_ClampHigh:
 	cp de, 0x7F
 	jr le, Voice_ComputePitchBend2_ShiftLeft
 	ldw de, 0x7F
 
+; As 0x02545E.
 Voice_ComputePitchBend2_ShiftLeft:
 	sla de, 8
 
+; As 0x025461.
 Voice_ComputePitchBend2_CheckExpr:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
@@ -9698,10 +10895,12 @@ Voice_ComputePitchBend2_CheckExpr:
 	cps c, 5
 	jr nz, Voice_ComputePitchBend2_PartialExpr
 
+; As 0x025477.
 Voice_ComputePitchBend2_FullExpr:
 	or de, 0x7F
 	jr Voice_ComputePitchBend2_Write
 
+; As 0x02547D.
 Voice_ComputePitchBend2_PartialExpr:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 18)
@@ -9709,12 +10908,14 @@ Voice_ComputePitchBend2_PartialExpr:
 	or de, wa
 	jr Voice_ComputePitchBend2_Write
 
+; As 0x025489.
 Voice_ComputePitchBend2_NoExpr:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 18)
 	extz wa
 	or de, wa
 
+; Stores DE to 0x0451D2 (TG reg 0x0C0) and returns.
 Voice_ComputePitchBend2_Write:
 	stw_da 0x0451d2, xde
 	ret
@@ -9735,10 +10936,13 @@ Voice_ApplyModeToPitchWord:
 	or bc, 0xE00
 	jr Voice_ApplyModeToPitchWord_HighNibble
 
+; Low-nibble routing value 2: `and bc,0xF1FF` then `set 9,bc` -- forces the [11:9] field to 1.
 Voice_ApplyModeToPitchWord_Mode2:
 	and bc, 0xF1FF
 	set 9, bc
 
+; Second half: re-reads (0x04138D + channel*0x11F) & 0xF0. 0x10 -> leave alone; 0x20 -> jump
+; to the [14:12] override; 0x00 -> `or bc,0x7000`.
 Voice_ApplyModeToPitchWord_HighNibble:
 	extz wa
 	muls wa, 0x11F
@@ -9754,10 +10958,12 @@ Voice_ApplyModeToPitchWord_HighNibble:
 	or bc, 0x7000
 	jr Voice_ApplyModeToPitchWord_Done
 
+; `and bc,0x8FFF` then `set 12,bc` -- forces the [14:12] field to 1.
 Voice_ApplyModeToPitchWord_Mode2High:
 	and bc, 0x8FFF
 	set 12, bc
 
+; `ld hl, bc` / ret -- the patched word is returned in HL.
 Voice_ApplyModeToPitchWord_Done:
 	ld hl, bc
 	ret
@@ -9777,6 +10983,8 @@ Voice_SetPitchWord_Muted:
 	jr z, Voice_SetPitchWord_Muted_CheckExpr
 	set 8, bc
 
+; Selects the high field: patchrec+18 == 0 -> 0xF000; global mode byte 0x04134C in {0,5,6}
+; -> 0xFE00; otherwise 0xF000.
 Voice_SetPitchWord_Muted_CheckExpr:
 	ld xwa, (xiz + 35)
 	cp (xwa + 18), 0x0
@@ -9789,23 +10997,28 @@ Voice_SetPitchWord_Muted_CheckExpr:
 	cps a, 0
 	jr nz, Voice_SetPitchWord_Muted_PartialExpr
 
+; `or wa,0xFE00` and store to voice+45.
 Voice_SetPitchWord_Muted_FullExpr:
 	ld wa, bc
 	or wa, 0xFE00
 	ld (xiz + 45), wa
 	jr Voice_SetPitchWord_Muted_ApplyMode
 
+; `or wa,0xF000` and store to voice+45.
 Voice_SetPitchWord_Muted_PartialExpr:
 	ld wa, bc
 	or wa, 0xF000
 	ld (xiz + 45), wa
 	jr Voice_SetPitchWord_Muted_ApplyMode
 
+; `or wa,0xF000` and store to voice+45 (patchrec+18 == 0 arm).
 Voice_SetPitchWord_Muted_NoExpr:
 	ld wa, bc
 	or wa, 0xF000
 	ld (xiz + 45), wa
 
+; Runs voice+45 through Voice_ApplyModeToPitchWord with A = voice+4 (the channel) and stores
+; the patched word back to voice+45.
 Voice_SetPitchWord_Muted_ApplyMode:
 	ld a, (xiz + 4)
 	extz wa
@@ -9830,17 +11043,21 @@ Voice_SetPitchWord_Unmuted:
 	cps a, 0
 	jr nz, Voice_SetPitchWord_Unmuted_PartialExpr
 
+; Unmuted twin of 0x0255C4.
 Voice_SetPitchWord_Unmuted_FullExpr:
 	ldw (xiz + 45), 0xFE00
 	jr Voice_SetPitchWord_Unmuted_ApplyMode
 
+; Unmuted twin of 0x0255CF.
 Voice_SetPitchWord_Unmuted_PartialExpr:
 	ldw (xiz + 45), 0xF000
 	jr Voice_SetPitchWord_Unmuted_ApplyMode
 
+; Unmuted twin of 0x0255DA.
 Voice_SetPitchWord_Unmuted_NoExpr:
 	ldw (xiz + 45), 0xF000
 
+; Unmuted twin of 0x0255E3.
 Voice_SetPitchWord_Unmuted_ApplyMode:
 	ld a, (xiz + 4)
 	extz wa
@@ -9870,10 +11087,14 @@ Voice_ComputeAndWritePan:
 	andmi16 (xwa + 1), 0x7FFF
 	jr Voice_ComputeAndWritePan_ApplyKeyTrack
 
+; Sets the "inverted" flag in the local frame when the patch record asks for the reversed
+; curve.
 Voice_ComputeAndWritePan_SetInvFlag:
 	ld xwa, (xsp + 14)
 	ormi16 (xwa + 1), 0x8000
 
+; Applies the key-tracking term: PitchBend_Scale(tonerec+46, voice+12) added to the level
+; accumulator in IZ, clamped 0..0xFF.
 Voice_ComputeAndWritePan_ApplyKeyTrack:
 	ld a, (xbc + 107)
 	ld c, a
@@ -9939,6 +11160,7 @@ Voice_ComputeAndWritePan_ApplyKeyTrack:
 	ld iz, hl
 	jr Voice_ComputeAndWritePan_CheckMax
 
+; Arm taken when the pan LFO depth is zero.
 Voice_ComputeAndWritePan_NoPanLFO:
 	ld wa, iz
 	add wa, (xsp + 8)
@@ -9948,6 +11170,7 @@ Voice_ComputeAndWritePan_NoPanLFO:
 	ld iz, hl
 	jr Voice_ComputeAndWritePan_CheckMax
 
+; Arm taken when the oscillator LFO depth is zero.
 Voice_ComputeAndWritePan_NoOscLFO:
 	ld xwa, (xsp + 4)
 	cp (xwa + 46), 0x0
@@ -9971,6 +11194,8 @@ Voice_ComputeAndWritePan_NoOscLFO:
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
+; If bit 0 of the flag word is set and the accumulator is exactly 0xFF, decrement it -- the
+; firmware refuses to emit the 0xFF "hard mute" level on this path.
 Voice_ComputeAndWritePan_CheckMax:
 	ld xwa, (xsp + 10)
 	bitm 0, (xwa)
@@ -9980,6 +11205,9 @@ Voice_ComputeAndWritePan_CheckMax:
 	jr nz, Voice_ComputeAndWritePan_WriteDSP
 	dec 1, iz
 
+; Packs (level << 8) | table[0x011963 + tonerec+40] and stores it to 0x0451E4 (TG reg 0x800,
+; the main volume register) AND caches it in voice+60. Then continues into the per-channel
+; L/R words.
 Voice_ComputeAndWritePan_WriteDSP:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
@@ -10062,6 +11290,7 @@ Voice_ComputeAndWritePan_WriteDSP:
 	ld (xsp + 12), hl
 	jr Voice_ComputeAndWritePan_WriteChans
 
+; No-modulation arm of the per-channel pan computation.
 Voice_ComputeAndWritePan_NoModDepth:
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
@@ -10077,6 +11306,7 @@ Voice_ComputeAndWritePan_NoModDepth:
 	ld (xsp + 12), hl
 	jr Voice_ComputeAndWritePan_WriteChans
 
+; Second no-depth arm.
 Voice_ComputeAndWritePan_NoPanDepth2:
 	ld xwa, (xsp + 4)
 	cp (xwa + 47), 0x0
@@ -10106,6 +11336,8 @@ Voice_ComputeAndWritePan_NoPanDepth2:
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 
+; Falls through into the per-channel writer that fills 0x0451E6 / 0x0451E8 (TG regs 0x840 /
+; 0x880).
 Voice_ComputeAndWritePan_WriteChans:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 42)
@@ -10119,6 +11351,7 @@ Voice_ComputeAndWritePan_WriteChans:
 	jr lt, Voice_ComputeAndWritePan_ClampDepth
 	ld wa, hl
 
+; Clamps the modulation depth before it is applied.
 Voice_ComputeAndWritePan_ClampDepth:
 	ld hl, wa
 	ld xwa, (xsp + 4)
@@ -10146,6 +11379,13 @@ Voice_ComputeAndWritePan_ClampDepth:
 	lda xsp, (xsp + 14)
 	ret
 
+; Emits the per-channel L/R level pair. In: XWA (frame (xsp+6)) = per-voice record.
+; Left value starts from (patchrec+32) added to (voice+62 & 0x7F); right value from the same
+; signed byte added to (voice+64 & 0x7F). Both clamped (right to 0..0x7F, left to 4..0x7F),
+; merged into the cached words voice+62 / voice+64 keeping their high bytes, and stored to
+; 0x0451E6 (TG reg 0x840) and 0x0451E8 (TG reg 0x880).
+; If the "channel" flag in the frame is set, the right word gets bit 15 forced instead of
+; the cached high byte.
 Voice_WriteChPanShift:
 	dec 8, xsp
 	pushw iz
@@ -10187,6 +11427,7 @@ Voice_WriteChPanShift:
 	sub iz, bc
 	jr Voice_WriteChPanShift_ClampAndWrite
 
+; Adds the signed shift byte to both 7-bit channel fields.
 Voice_WriteChPanShift_AddShift:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
@@ -10209,6 +11450,7 @@ Voice_WriteChPanShift_AddShift:
 	ld iz, wa
 	add iz, bc
 
+; Clamps both fields via ClampS16_WA_To_DEBC and branches on the channel flag.
 Voice_WriteChPanShift_ClampAndWrite:
 	ld wa, (xsp + 2)
 	ldw bc, 0x7F
@@ -10227,6 +11469,8 @@ Voice_WriteChPanShift_ClampAndWrite:
 	stw_da 0x0451e8, xwa
 	jr Voice_WriteChPanShift_WriteL
 
+; Channel flag clear: merge the right field under the cached voice+64 high byte before
+; storing to 0x0451E8.
 Voice_WriteChPanShift_NoChanFlag:
 	ld wa, iz
 	ldb w, 0x0
@@ -10237,6 +11481,7 @@ Voice_WriteChPanShift_NoChanFlag:
 	or wa, bc
 	stw_da 0x0451e8, xwa
 
+; Merge and store the left field to 0x0451E6 (TG reg 0x840).
 Voice_WriteChPanShift_WriteL:
 	ld wa, (xsp + 2)
 	ldb w, 0x0
@@ -10248,6 +11493,7 @@ Voice_WriteChPanShift_WriteL:
 	stw_da 0x0451e6, xwa
 	jr Voice_WriteChPanShift_Done
 
+; No-shift path: copy the cached voice+62 / voice+64 words verbatim to 0x0451E6 / 0x0451E8.
 Voice_WriteChPanShift_Passthrough:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 62)
@@ -10256,6 +11502,7 @@ Voice_WriteChPanShift_Passthrough:
 	ld wa, (xwa + 64)
 	stw_da 0x0451e8, xwa
 
+; popw IZ, inc 8 xsp, ret.
 Voice_WriteChPanShift_Done:
 	popw iz
 	inc 8, xsp
@@ -10301,6 +11548,9 @@ Voice_UpdatePan_Simple:
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
+; Packs (level << 8) | 0x7F and stores to 0x0451E4 (TG reg 0x800) and to the cache at
+; voice+60. The low byte is the constant 0x7F here, which is what distinguishes the "simple"
+; path from Voice_ComputeAndWritePan's table lookup.
 Voice_UpdatePan_Simple_WritePan:
 	ld wa, iz
 	sla wa, 8
@@ -10335,6 +11585,7 @@ Voice_UpdatePan_Simple_WritePan:
 	jr lt, Voice_UpdatePan_Simple_WriteChans
 	ld wa, bc
 
+; Per-channel L/R computation for the simple path (table 0x0118FE indexed by tonerec+9/+11).
 Voice_UpdatePan_Simple_WriteChans:
 	ld bc, wa
 	ldb w, 0x0
@@ -10369,6 +11620,7 @@ Voice_UpdatePan_Simple_WriteChans:
 	ld (xwa + 70), c
 	jr Voice_UpdatePan_Simple_Done
 
+; Channel-flag-clear arm of the simple path.
 Voice_UpdatePan_Simple_NoChanFlag:
 	ld bc, de
 	sla bc, 8
@@ -10377,11 +11629,15 @@ Voice_UpdatePan_Simple_NoChanFlag:
 	ld xwa, (xsp + 10)
 	ld (xwa + 70), 0x0
 
+; popw IZ, unwind 12 bytes, ret.
 Voice_UpdatePan_Simple_Done:
 	popw iz
 	lda xsp, (xsp + 12)
 	ret
 
+; Second, instruction-identical copy of Voice_WriteChPanShift (0x02591D). Same inputs, same
+; outputs (0x0451E6 / 0x0451E8 = TG regs 0x840 / 0x880); it exists so the "full" pan path can
+; call it with a `calr` in range.
 Voice_WriteChPanShift2:
 	dec 8, xsp
 	pushw iz
@@ -10423,6 +11679,7 @@ Voice_WriteChPanShift2:
 	sub iz, bc
 	jr Voice_WriteChPanShift2_ClampAndWrite
 
+; As 0x02598A.
 Voice_WriteChPanShift2_AddShift:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
@@ -10445,6 +11702,7 @@ Voice_WriteChPanShift2_AddShift:
 	ld iz, wa
 	add iz, bc
 
+; As 0x0259C2.
 Voice_WriteChPanShift2_ClampAndWrite:
 	ld wa, (xsp + 2)
 	ldw bc, 0x7F
@@ -10463,6 +11721,7 @@ Voice_WriteChPanShift2_ClampAndWrite:
 	stw_da 0x0451e8, xwa
 	jr Voice_WriteChPanShift2_WriteL
 
+; As 0x0259EE.
 Voice_WriteChPanShift2_NoChanFlag:
 	ld wa, iz
 	ldb w, 0x0
@@ -10473,6 +11732,7 @@ Voice_WriteChPanShift2_NoChanFlag:
 	or wa, bc
 	stw_da 0x0451e8, xwa
 
+; As 0x025A03.
 Voice_WriteChPanShift2_WriteL:
 	ld wa, (xsp + 2)
 	ldb w, 0x0
@@ -10484,6 +11744,7 @@ Voice_WriteChPanShift2_WriteL:
 	stw_da 0x0451e6, xwa
 	jr Voice_WriteChPanShift2_Done
 
+; As 0x025A1B.
 Voice_WriteChPanShift2_Passthrough:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 62)
@@ -10492,11 +11753,16 @@ Voice_WriteChPanShift2_Passthrough:
 	ld wa, (xwa + 64)
 	stw_da 0x0451e8, xwa
 
+; As 0x025A31.
 Voice_WriteChPanShift2_Done:
 	popw iz
 	inc 8, xsp
 	ret
 
+; Full level/pan recomputation for one voice; the body runs past the end of this region
+; (to ~0x025F7E). In: XWA = per-voice record. Same shape as Voice_ComputeAndWritePan
+; (0x025636) but with an extra oscillator-table branch at 0x025CCB. Ultimately writes
+; 0x0451E4 / 0x0451E6 / 0x0451E8 (TG regs 0x800 / 0x840 / 0x880) via Voice_WriteChPanShift2.
 Voice_UpdatePan_Full:
 	lda xsp, (xsp - 14)
 	push xiz
@@ -10512,10 +11778,13 @@ Voice_UpdatePan_Full:
 	andmi16 (xwa + 1), 0x7FFF
 	jr Voice_UpdatePan_Full_CheckBit11
 
+; Sets the inverted-curve flag in the local frame.
 Voice_UpdatePan_Full_SetInvFlag:
 	ld xwa, (xsp + 14)
 	ormi16 (xwa + 1), 0x8000
 
+; Bit-11 test that selects between the oscillator-table path (0x025CCB, just past this
+; region) and the direct path.
 Voice_UpdatePan_Full_CheckBit11:
 	ld xwa, (xsp + 14)
 	ld wa, (xwa + 1)
@@ -10526,6 +11795,34 @@ Voice_UpdatePan_Full_CheckBit11:
 	ld iz, wa
 	jrl Voice_UpdatePan_Full_CheckMax
 
+; Not a routine entry -- this is the main body of Voice_UpdatePan_Full, whose entry
+; (0x025C87) sits just below this region's lower boundary. Documented here because the
+; region starts inside it.
+;
+; Voice_UpdatePan_Full(XWA = voice-slot record) computes the THREE (level,rate) register
+; pairs that the sub-CPU keeps for a voice in the tone-generator shadow block, for the
+; "full" voice type -- the one whose tone record carries a per-oscillator trim table.
+; Called from Voice_Release_Type4.
+;
+; This branch is taken when bit 11 of slot+1 is CLEAR. It reads a signed per-oscillator
+; trim byte from tonerec[0x010C] (tonerec = the pointer at slot+35), adds it to
+; paramA+39 (paramA = the pointer at slot+23), clamps the sum to 0..0x64 with
+; ClampS16_WA_To_DEBC, and converts it through the 101-entry curve at 0x011899 into an
+; 8-bit register level. The bit-11-set branch instead takes a fixed level from the byte
+; at 0x0118B3 and jumps straight to _CheckMax.
+;
+; Level modulation then follows: if paramA+51 is non-zero the LFO/velocity scaler
+; Pan_ScaleWithVelocity(paramA+48,+49,+50, depth paramA+51, velocity slot+8) is added,
+; and if paramA+46 is non-zero PitchBend_Scale(depth paramA+46, note slot+12) is added
+; too; each sum is re-clamped to 0..0xFF.
+;
+; Register value format written into the shadow block is (level << 8) | rate, where rate
+; comes from the 0..0x7F curve at 0x011963. Bit 7 of the low byte is a separate "apply
+; immediately" flag that only the per-tick writers (Voice_ComputeAndWriteVolume*) set.
+;
+; Hardware: nothing directly. The results land in RAM at 0x0451E4/E6/E8; they reach the
+; tone generator later, when ToneGen_WriteVoiceParams pushes shadow offsets +24/+26/+28
+; to TG register banks 0x800/0x840/0x880 via the 0x100000/0x100002 latch pair.
 Voice_UpdatePan_Full_OscTablePath:
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 35)
@@ -10593,6 +11890,7 @@ Voice_UpdatePan_Full_OscTablePath:
 	ld iz, hl
 	jr Voice_UpdatePan_Full_CheckMax
 
+; LFO term only (paramA+46 == 0): add the scaler result, clamp 0..0xFF, go to _CheckMax.
 Voice_UpdatePan_Full_NoPanDepth:
 	ld wa, iz
 	add wa, (xsp + 8)
@@ -10602,6 +11900,7 @@ Voice_UpdatePan_Full_NoPanDepth:
 	ld iz, hl
 	jr Voice_UpdatePan_Full_CheckMax
 
+; paramA+51 == 0: skip the LFO scaler; apply only the paramA+46 depth term, if any.
 Voice_UpdatePan_Full_NoPanLFO:
 	ld xwa, (xsp + 4)
 	cp (xwa + 46), 0x0
@@ -10625,6 +11924,9 @@ Voice_UpdatePan_Full_NoPanLFO:
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
+; If bit 0 of the byte pointed to by slot+31 is set and the computed level is exactly
+; 0xFF, decrement it. Reserves 0xFF as a "fully attenuated / voice finished" code -- the
+; portamento ramp uses 0xFF00 as its terminal value and releases the voice there.
 Voice_UpdatePan_Full_CheckMax:
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 31)
@@ -10635,6 +11937,9 @@ Voice_UpdatePan_Full_CheckMax:
 	jr nz, Voice_UpdatePan_Full_WriteDSP
 	dec 1, iz
 
+; Assembles pair 1: rate = table_0x011963[paramA+40], word = (level<<8)|rate, stored to
+; the shadow word 0x0451E4 (TG bank 0x800) and cached in the slot at +60. Then starts
+; pairs 2 and 3 from paramA+41 and paramA+43 through the 101-entry curve at 0x0118FE.
 Voice_UpdatePan_Full_WriteDSP:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
@@ -10717,6 +12022,7 @@ Voice_UpdatePan_Full_WriteDSP:
 	ld (xsp + 12), hl
 	jr Voice_UpdatePan_Full_WriteChDepth
 
+; paramA+47 == 0 while paramA+52 != 0: add only the LFO scaler to pairs 2 and 3.
 Voice_UpdatePan_Full_NoModDepth:
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
@@ -10732,6 +12038,7 @@ Voice_UpdatePan_Full_NoModDepth:
 	ld (xsp + 12), hl
 	jr Voice_UpdatePan_Full_WriteChDepth
 
+; paramA+52 == 0: no LFO term for pairs 2/3; apply only the paramA+47 depth term.
 Voice_UpdatePan_Full_NoPanDepth2:
 	ld xwa, (xsp + 4)
 	cp (xwa + 47), 0x0
@@ -10761,6 +12068,7 @@ Voice_UpdatePan_Full_NoPanDepth2:
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 
+; Rate for pair 2 = table_0x011963[paramA+42], floored at 4 (values below 4 are raised).
 Voice_UpdatePan_Full_WriteChDepth:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 42)
@@ -10774,6 +12082,8 @@ Voice_UpdatePan_Full_WriteChDepth:
 	jr lt, Voice_UpdatePan_Full_WriteCh2
 	ld wa, hl
 
+; Rate for pair 3 = table_0x011963[paramA+44]; writes shadow words 0x0451E6 (TG bank
+; 0x840) and 0x0451E8 (TG bank 0x880) and returns.
 Voice_UpdatePan_Full_WriteCh2:
 	ld hl, wa
 	ld xwa, (xsp + 4)
@@ -10799,6 +12109,21 @@ Voice_UpdatePan_Full_WriteCh2:
 	lda xsp, (xsp + 14)
 	ret
 
+; Voice_UpdatePan_Mono(XWA = voice-slot record) -- the same three-pair computation as
+; Voice_UpdatePan_Full, for the voice type that has no per-oscillator trim on the base
+; pair but does have one on pairs 2 and 3. Called from Voice_Release_Type4_BranchA.
+;
+; Differences from the _Full variant, all verified against the disassembly:
+;   * pair 1 level is table_0x011899[paramA+39] with NO tonerec byte added and no
+;     0..0x64 clamp before the lookup;
+;   * pairs 2 and 3 add the signed tonerec[0x010B] byte to paramA+41 / paramA+43 and
+;     clamp to 0..0x64 before the table_0x0118FE lookup;
+;   * the modulation term for pairs 2/3 is added to BOTH pairs (the _Full variant adds
+;     it to pair 2 and pair 3 separately, without the extra IZ term).
+; The result words and their destinations (0x0451E4/E6/E8) are identical.
+;
+; Note that its tail labels are named "..._Full2_..." in the current build; see
+; [UNCERTAIN] below.
 Voice_UpdatePan_Mono:
 	lda xsp, (xsp - 14)
 	push xiz
@@ -10814,10 +12139,13 @@ Voice_UpdatePan_Mono:
 	andmi16 (xwa + 1), 0x7FFF
 	jr Voice_UpdatePan_Mono_ComputePan
 
+; Bit 4 of tonerec-ish record (slot+19)[+16] clear -> set bit 15 of slot+1; set -> clear
+; it. Same polarity flag the _Full variant maintains.
 Voice_UpdatePan_Mono_SetInvFlag:
 	ld xwa, (xsp + 14)
 	ormi16 (xwa + 1), 0x8000
 
+; Base level = table_0x011899[paramA+39]; then the LFO / depth modulation chain.
 Voice_UpdatePan_Mono_ComputePan:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 39)
@@ -10873,6 +12201,7 @@ Voice_UpdatePan_Mono_ComputePan:
 	ldw_erp HL, 0xFA
 	jr Voice_UpdatePan_Mono_CheckMax
 
+; paramA+46 == 0: add only the Pan_ScaleWithVelocity term, clamp 0..0xFF.
 Voice_UpdatePan_Mono_NoPanDepth:
 	stw_erp WA, 0xFA
 	add wa, (xsp + 8)
@@ -10882,6 +12211,7 @@ Voice_UpdatePan_Mono_NoPanDepth:
 	ldw_erp HL, 0xFA
 	jr Voice_UpdatePan_Mono_CheckMax
 
+; paramA+51 == 0: skip the velocity/LFO scaler entirely.
 Voice_UpdatePan_Mono_NoPanLFO:
 	ld xwa, (xsp + 4)
 	cp (xwa + 46), 0x0
@@ -10905,6 +12235,7 @@ Voice_UpdatePan_Mono_NoPanLFO:
 	calr ClampS16_WA_To_DEBC
 	ldw_erp HL, 0xFA
 
+; Same 0xFF reservation as Voice_UpdatePan_Full_CheckMax.
 Voice_UpdatePan_Mono_CheckMax:
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 31)
@@ -10915,6 +12246,8 @@ Voice_UpdatePan_Mono_CheckMax:
 	jr nz, Voice_UpdatePan_Mono_WriteDSP
 	dec1w_erp 0xFA
 
+; Writes pair 1 to 0x0451E4 and slot+60, then builds pairs 2 and 3 with the tonerec
+; [0x010B] trim added before the 0x0118FE lookup.
 Voice_UpdatePan_Mono_WriteDSP:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
@@ -11021,6 +12354,8 @@ Voice_UpdatePan_Mono_WriteDSP:
 	ld (xsp + 12), hl
 	jr Voice_UpdatePan_Full2_WriteChDepth
 
+; Tail of Voice_UpdatePan_Mono: paramA+47 == 0 -> add only the LFO scaler to pairs 2/3.
+; The "Full2" in the name is a misnomer; this code belongs to _Mono (see [UNCERTAIN]).
 Voice_UpdatePan_Full2_NoModDepth:
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
@@ -11036,6 +12371,7 @@ Voice_UpdatePan_Full2_NoModDepth:
 	ld (xsp + 12), hl
 	jr Voice_UpdatePan_Full2_WriteChDepth
 
+; Tail of Voice_UpdatePan_Mono: paramA+52 == 0 -> apply only the paramA+47 depth term.
 Voice_UpdatePan_Full2_NoPanDepth:
 	ld xwa, (xsp + 4)
 	cp (xwa + 47), 0x0
@@ -11065,6 +12401,7 @@ Voice_UpdatePan_Full2_NoPanDepth:
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 
+; Tail of Voice_UpdatePan_Mono: rate for pair 2, floored at 4.
 Voice_UpdatePan_Full2_WriteChDepth:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 42)
@@ -11078,6 +12415,7 @@ Voice_UpdatePan_Full2_WriteChDepth:
 	jr lt, Voice_UpdatePan_Full2_WriteCh2
 	ld wa, hl
 
+; Tail of Voice_UpdatePan_Mono: rate for pair 3; writes 0x0451E6 and 0x0451E8; returns.
 Voice_UpdatePan_Full2_WriteCh2:
 	ld hl, wa
 	ld xwa, (xsp + 4)
@@ -11103,6 +12441,17 @@ Voice_UpdatePan_Full2_WriteCh2:
 	lda xsp, (xsp + 14)
 	ret
 
+; Voice_InterpolatePanCurve(XWA = voice-slot record, XBC = paramA record) -> HL.
+; Velocity crossfade/zone shaper. Takes the velocity byte from slot+8 (bits 8..14) and
+; four breakpoints from the paramA record:
+;     +30 = plateau low edge      +31 = fade-out low edge
+;     +32 = plateau high edge     +33 = fade-out high edge
+; Returns 0 inside the plateau [+30..+32]; a linear ramp in [0..-64] between +31 and +30
+; and between +32 and +33 (numerator scaled by 0xFFC0 = -64, divided by the breakpoint
+; span with a signed 32/16 divs); and the constant 0xFE00 (-512) outside [+31..+33].
+; Pure computation; no hardware, no memory written.
+; Sole caller: Voice_ComputePitch_ApplyLFO, which ADDS the result into the pitch
+; accumulator -- so despite the "Pan" in the name this is a pitch-domain correction.
 Voice_InterpolatePanCurve:
 	ld hl, (xwa + 8)
 	and hl, 0x7F00
@@ -11118,6 +12467,7 @@ Voice_InterpolatePanCurve:
 	ldw hl, 0xFE00
 	jr Voice_InterpolatePanCurve_Done
 
+; Velocity between +31 and +30: ramp -64 -> 0 as velocity rises.
 Voice_InterpolatePanCurve_LowRange:
 	ld a, (xbc + 31)
 	ld e, a
@@ -11136,6 +12486,7 @@ Voice_InterpolatePanCurve_LowRange:
 	ld hl, wa
 	jr Voice_InterpolatePanCurve_Done
 
+; Velocity at or above +30: test it against the upper plateau edge +32.
 Voice_InterpolatePanCurve_HighCheck:
 	ld a, (xbc + 32)
 	extz wa
@@ -11148,6 +12499,7 @@ Voice_InterpolatePanCurve_HighCheck:
 	ldw hl, 0xFE00
 	jr Voice_InterpolatePanCurve_Done
 
+; Velocity between +32 and +33: ramp 0 -> -64 as velocity rises.
 Voice_InterpolatePanCurve_HighRange:
 	ld a, (xbc + 32)
 	ld e, a
@@ -11168,12 +12520,19 @@ Voice_InterpolatePanCurve_HighRange:
 	ld hl, wa
 	jr Voice_InterpolatePanCurve_Done
 
+; Inside the plateau: return 0 (no correction).
 Voice_InterpolatePanCurve_Zero:
 	lds hl, 0
 
+; Common return.
 Voice_InterpolatePanCurve_Done:
 	ret
 
+; Voice_InterpolateNoteCurve(XWA = voice-slot record, XBC = paramA record) -> HL.
+; Byte-for-byte the same shaper as Voice_InterpolatePanCurve, but keyed on the MIDI note
+; number (slot+12 & 0x7F) and using paramA breakpoints +34/+35/+36/+37 instead of
+; +30..+33. Returns 0 / [0..-64] / -512 with the same meanings.
+; Sole caller: Voice_ComputePitch_ApplyLFO, added to the pitch accumulator.
 Voice_InterpolateNoteCurve:
 	ld a, (xwa + 12)
 	ld l, a
@@ -11190,6 +12549,7 @@ Voice_InterpolateNoteCurve:
 	ldw hl, 0xFE00
 	jr Voice_InterpolateNoteCurve_Done
 
+; Note between +35 and +34: ramp -64 -> 0.
 Voice_InterpolateNoteCurve_LowRange:
 	ld a, (xbc + 35)
 	ld e, a
@@ -11208,6 +12568,7 @@ Voice_InterpolateNoteCurve_LowRange:
 	ld hl, wa
 	jr Voice_InterpolateNoteCurve_Done
 
+; Note at or above +34: test against the upper plateau edge +36.
 Voice_InterpolateNoteCurve_HighCheck:
 	ld a, (xbc + 36)
 	extz wa
@@ -11220,6 +12581,7 @@ Voice_InterpolateNoteCurve_HighCheck:
 	ldw hl, 0xFE00
 	jr Voice_InterpolateNoteCurve_Done
 
+; Note between +36 and +37: ramp 0 -> -64.
 Voice_InterpolateNoteCurve_HighRange:
 	ld a, (xbc + 36)
 	ld e, a
@@ -11240,12 +12602,39 @@ Voice_InterpolateNoteCurve_HighRange:
 	ld hl, wa
 	jr Voice_InterpolateNoteCurve_Done
 
+; Inside the plateau: return 0.
 Voice_InterpolateNoteCurve_Zero:
 	lds hl, 0
 
+; Common return.
 Voice_InterpolateNoteCurve_Done:
 	ret
 
+; Voice_ComputePitch(XWA = voice-slot record). Computes the voice's pitch word and
+; stores it at slot+13; also clears the portamento offset at slot+51.
+; Callers: Voice_Init_Type4, Voice_Release_Type4, Voice_Release_Type4_BranchA.
+;
+; Inputs: slot+12 = MIDI note (bit 7 is a flag, not part of the note -- if set, bit 11
+; of slot+1 is raised); slot+23 = paramA record; slot+15, slot+35 = controller and tone
+; records; global tuning-mode word 0x041343; global master offset dword at 0x045314.
+;
+; Two mutually exclusive note->pitch mappings:
+;   * ALTERNATE mapping, taken when bit 0 of 0x041343 is set (set by
+;     Voice_SetPolyphonyMode with A==1), or bit 1 is set (Voice_SetCCMaxFlag), or
+;     paramA+25 == 0xE0: pitch = table_0x011C96[note] - 0x0C. That table is a plain
+;     128-byte monotonic curve 0x00..0xFF -- a direct, un-detuned note->increment map.
+;   * NORMAL mapping: table_0x00FEE4[note] fed through Voice_Colour_LookupIndex with
+;     paramA+25, minus 0xD0, multiplied by the signed detune paramA+24, arithmetic-
+;     shifted right by 5 and biased by +0xD8.
+;
+; Both paths then converge on _ApplyLFO, which sums: the LFO/velocity scaler
+; (paramA+26..+29 via Voice_Colour_ClampUpper), table_0x011A4F[slot+43 & 0x7F] (a signed
+; +-8 fine-tune curve), the signed byte at (slot+15)+3, the 32-bit global at 0x045314,
+; the constant 0x2940, and the two crossfade corrections from
+; Voice_InterpolatePanCurve / Voice_InterpolateNoteCurve. If bit 7 of paramA[0] is set,
+; tonerec[0x011E] is added on top.
+; Touches no hardware; the result reaches the TG later via Voice_ApplyPortamento ->
+; Voice_Colour_Write.
 Voice_ComputePitch:
 	dec 8, xsp
 	pushw iz
@@ -11262,6 +12651,8 @@ Voice_ComputePitch:
 	ld xwa, (xsp + 6)
 	ormi16 (xwa + 1), 0x800
 
+; Mask the note to 7 bits; select the alternate table if 0x041343 bit 0 is set or
+; paramA+25 == 0xE0.
 Voice_ComputePitch_CheckSysExTune:
 	and bc, 0x7F
 	ldw_da xwa, 0x041343
@@ -11271,6 +12662,7 @@ Voice_ComputePitch_CheckSysExTune:
 	cp (xwa + 25), 0xE0
 	jr nz, Voice_ComputePitch_CheckAltTune
 
+; Alternate mapping: IZ = table_0x011C96[note] - 0x0C.
 Voice_ComputePitch_SysExTable:
 	ld wa, bc
 	extz xwa
@@ -11282,6 +12674,7 @@ Voice_ComputePitch_SysExTable:
 	sub iz, 0xC
 	jrl Voice_ComputePitch_ApplyLFO
 
+; Second entry point to the alternate mapping, gated on 0x041343 bit 1.
 Voice_ComputePitch_CheckAltTune:
 	ldw_da xwa, 0x041343
 	bit 1, wa
@@ -11296,6 +12689,7 @@ Voice_ComputePitch_CheckAltTune:
 	sub iz, 0xC
 	jr Voice_ComputePitch_ApplyLFO
 
+; Normal mapping, negative-detune arm: negate paramA+24 before the multiply.
 Voice_ComputePitch_NormalTune:
 	ld xwa, (xsp + 2)
 	cp (xwa + 24), 0x0
@@ -11326,6 +12720,7 @@ Voice_ComputePitch_NormalTune:
 	ld hl, wa
 	jr Voice_ComputePitch_PortaScale
 
+; Normal mapping, non-negative-detune arm.
 Voice_ComputePitch_PortaPositive:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 25)
@@ -11343,11 +12738,14 @@ Voice_ComputePitch_PortaPositive:
 	muls xwa, xbc
 	ld hl, wa
 
+; Common scaling of the detuned value: >>5 (arithmetic) then bias +0xD8.
 Voice_ComputePitch_PortaScale:
 	sra hl, 5
 	ld iz, hl
 	add iz, 0xD8
 
+; Accumulates every additive pitch term (LFO scaler, 0x011A4F fine tune, controller
+; byte, global 0x045314, +0x2940, velocity and key crossfades, optional tonerec[0x011E]).
 Voice_ComputePitch_ApplyLFO:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 26)
@@ -11403,6 +12801,7 @@ Voice_ComputePitch_ApplyLFO:
 	extz wa
 	add iz, wa
 
+; Store the accumulator to slot+13 and clear the portamento offset slot+51.
 Voice_ComputePitch_WriteDone:
 	ld xwa, (xsp + 6)
 	ld (xwa + 13), iz
@@ -11412,11 +12811,25 @@ Voice_ComputePitch_WriteDone:
 	inc 8, xsp
 	ret
 
+; Despite the name, these 17 bytes are EXECUTABLE CODE, not data. Disassembled:
+;     cp WA,DE / jr GE,+ / ld WA,DE / jr + / cp WA,BC / jr LE,+ / ld WA,BC / ld HL,WA / ret
+; i.e. "clamp WA into [DE..BC], return in HL" -- the same operation as
+; ClampS16_WA_To_DEBC at 0x022B19, with the low bound tested first (that routine tests
+; the high bound first). Nothing in the image references it; it is dead code left between
+; Voice_ComputePitch and Voice_ComputePitch_Mono. It is emitted as .byte in the LLVM
+; source purely so the byte-exact rebuild is preserved.
 Voice_ComputePitch_InlineData:
 	.byte 0xda, 0xf0, 0x69, 0x04, 0xda, 0x88, 0x68, 0x06
 	.byte 0xd9, 0xf0, 0x62, 0x02, 0xd9, 0x88, 0xd8, 0x8b
 	.byte 0x0e
 
+; Voice_ComputePitch_Mono(XWA = voice-slot record). The cut-down pitch computation used
+; by the mono/legato voice types; callers are Voice_Init_Type1 and Voice_Init_Type2.
+; Same two mappings as Voice_ComputePitch (alternate table 0x011C96 gated on 0x041343
+; bits 0/1 or paramA+7 == 0xE0; otherwise the 0x00FEE4 + Voice_Colour_LookupIndex path
+; scaled by the signed detune at paramA+6), but it reads its detune/curve selectors from
+; paramA+6/+7 instead of +24/+25, and its _ApplyLFO tail omits the velocity/key
+; crossfades and the tonerec[0x011E] term. Writes slot+13 and clears slot+51.
 Voice_ComputePitch_Mono:
 	dec 4, xsp
 	push xiz
@@ -11434,6 +12847,7 @@ Voice_ComputePitch_Mono:
 	cp (xiz + 7), 0xE0
 	jr nz, Voice_ComputePitch_Mono_CheckAltTune
 
+; Alternate mapping: HL = table_0x011C96[note] - 0x0C.
 Voice_ComputePitch_Mono_SysExTable:
 	ld wa, de
 	extz xwa
@@ -11445,6 +12859,7 @@ Voice_ComputePitch_Mono_SysExTable:
 	sub hl, 0xC
 	jr Voice_ComputePitch_Mono_ApplyLFO
 
+; Second gate on 0x041343 bit 1 into the alternate mapping.
 Voice_ComputePitch_Mono_CheckAltTune:
 	ldw_da xwa, 0x041343
 	bit 1, wa
@@ -11458,6 +12873,7 @@ Voice_ComputePitch_Mono_CheckAltTune:
 	ld hl, wa
 	sub hl, 0xC
 
+; Normal mapping, negative-detune arm (paramA+6 < 0).
 Voice_ComputePitch_Mono_CheckPorta:
 	cp (xiz + 6), 0x0
 	jr ge, Voice_ComputePitch_Mono_PortaPositive
@@ -11484,6 +12900,7 @@ Voice_ComputePitch_Mono_CheckPorta:
 	ld hl, wa
 	jr Voice_ComputePitch_Mono_PortaScale
 
+; Normal mapping, non-negative-detune arm.
 Voice_ComputePitch_Mono_PortaPositive:
 	ld a, (xiz + 7)
 	ld c, a
@@ -11498,10 +12915,13 @@ Voice_ComputePitch_Mono_PortaPositive:
 	muls xwa, xbc
 	ld hl, wa
 
+; >>5 then bias +0xD8.
 Voice_ComputePitch_Mono_PortaScale:
 	sra hl, 5
 	add hl, 0xD8
 
+; Adds table_0x011A4F[slot+43 & 0x7F], the byte at (slot+15)+3, the global at 0x045314
+; and +0x2940; stores to slot+13 and clears slot+51.
 Voice_ComputePitch_Mono_ApplyLFO:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 43)
@@ -11528,6 +12948,17 @@ Voice_ComputePitch_Mono_ApplyLFO:
 	inc 4, xsp
 	ret
 
+; Voice_ApplyPortamento(XWA = voice-slot record). Takes the pitch computed at slot+13,
+; applies the channel detune and the key-shift correction, and tail-jumps into
+; Voice_Colour_Write (which adds tonerec[+12], tonerec[+16] and the portamento offset
+; slot+51, clamps, and pushes the value at the tone generator).
+; Detune: paramA+23 non-zero -> add (paramA+23 - 0x64); zero -> subtract 0x200.
+; Then always add the signed byte (slot+39)[+34].
+; If bit 1 of the global mode word 0x041343 is set: for slot+4 <= 1 subtract
+; tonerec[+16] and a further 8; otherwise subtract 0x10.
+; Callers: Voice_Init_Type4, Voice_Release_Type4(_BranchA),
+; Voice_AllVoices_WriteAmplitude_BranchA, and both portamento ramp write-backs
+; (Voice_UpdatePortamento_Ascend_WritePitch / _Release_WritePitch).
 Voice_ApplyPortamento:
 	ld de, (xwa + 13)
 	ld xbc, (xwa + 23)
@@ -11540,9 +12971,11 @@ Voice_ApplyPortamento:
 	add de, bc
 	jr Voice_ApplyPortamento_ApplyDetune
 
+; paramA+23 == 0: apply the fixed -0x200 bias instead of a channel detune.
 Voice_ApplyPortamento_NoChanDetune:
 	sub de, 0x200
 
+; Add the signed byte (slot+39)[+34], then test 0x041343 bit 1 for the key-shift arm.
 Voice_ApplyPortamento_ApplyDetune:
 	ld xbc, (xwa + 39)
 	ld c, (xbc + 34)
@@ -11558,13 +12991,22 @@ Voice_ApplyPortamento_ApplyDetune:
 	dec 8, de
 	jr Voice_ApplyPortamento_Done
 
+; slot+4 > 1 arm of the key-shift correction: subtract a flat 0x10.
 Voice_ApplyPortamento_HighNote:
 	sub de, 0x10
 
+; Move the result to BC and tail-jump to Voice_Colour_Write.
 Voice_ApplyPortamento_Done:
 	ld bc, de
 	jrl Voice_Colour_Write
 
+; Voice_ApplyPortamento2(XWA = voice-slot record). The mono/legato counterpart of
+; Voice_ApplyPortamento. Channel detune comes from paramA+5 (not +23), there is no
+; (slot+39)[+34] term, and the key-shift arm additionally subtracts tonerec[+12] and then
+; adds back a vibrato contribution of tonerec[+12] >> 2 -- except when tonerec[+12] is
+; exactly 0xFE00, in which case the raw 0xFE00 is added (a sentinel, the same -512 value
+; the crossfade shapers use). Tail-jumps to Voice_Colour_Write.
+; Callers: Voice_Init_Type1, Voice_Init_Type2, Voice_AllVoices_WriteAmplitude_BranchB.
 Voice_ApplyPortamento2:
 	ld xbc, (xwa + 23)
 	ld de, (xwa + 13)
@@ -11576,9 +13018,11 @@ Voice_ApplyPortamento2:
 	add de, bc
 	jr Voice_ApplyPortamento2_ApplyDetune
 
+; paramA+5 == 0: apply the fixed -0x200 bias.
 Voice_ApplyPortamento2_NoChanDetune:
 	sub de, 0x200
 
+; Key-shift arm gated on 0x041343 bit 1; computes the tonerec[+12] vibrato term.
 Voice_ApplyPortamento2_ApplyDetune:
 	ldw_da xbc, 0x041343
 	bit 1, bc
@@ -11597,13 +13041,27 @@ Voice_ApplyPortamento2_ApplyDetune:
 	sra bc, 2
 	ld hl, bc
 
+; Add the vibrato term (either tonerec[+12]>>2 or the 0xFE00 sentinel).
 Voice_ApplyPortamento2_AddVibrato:
 	add de, hl
 
+; Move to BC and tail-jump to Voice_Colour_Write.
 Voice_ApplyPortamento2_Done:
 	ld bc, de
 	jrl Voice_Colour_Write
 
+; Voice_WriteChPitchWithVib(WA = part index, BC = MIDI channel). Broadcasts one part's
+; note-level register pair to every voice slot currently owned by that channel.
+; Sole caller: Voice_SetVelocity_Type80_SlotLoop.
+;
+; Reads the per-channel record at 0x0430AD + ch*0x47; returns immediately unless bit 3 of
+; its first byte is set. Byte +14 of that record indexes the 0x011AE8 table (a flat table
+; of 0x96), and the result is staged as (v<<8)|0x80 at 0x0451F8 and (v<<8) at 0x0451FA --
+; i.e. TG banks 0x800 and 0x840.
+; It then calls Voice_AllocateForAny's sibling Voice_AllocateForFull to obtain a
+; NUL-list of matching slot indices at (XHL+5) and, for each slot whose channel byte
+; (record 0x0430AD + slot*0x47, offset +14) matches, calls ToneGen_WriteNote_2Regs to
+; push shadow offsets +44/+46 into TG banks 0x800/0x840 through 0x100000/0x100002.
 Voice_WriteChPitchWithVib:
 	dec 2, xsp
 	push xiz
@@ -11636,6 +13094,7 @@ Voice_WriteChPitchWithVib:
 	cp (xiz), 0x40
 	jr nc, Voice_WriteChPitchWithVib_Done
 
+; Per-slot body: match the slot's channel byte, then push the two TG registers.
 Voice_WriteChPitchWithVib_Loop:
 	ld a, (xiz)
 	extz wa
@@ -11650,11 +13109,13 @@ Voice_WriteChPitchWithVib_Loop:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteNote_2Regs
 
+; Advance the slot-list cursor; the list terminates on the first index >= 0x40.
 Voice_WriteChPitchWithVib_NextSlot:
 	inc 1, xiz
 	cp (xiz), 0x40
 	jr c, Voice_WriteChPitchWithVib_Loop
 
+; Restore IZ and return.
 Voice_WriteChPitchWithVib_Done:
 	pop xiz
 	inc 2, xsp
@@ -11709,6 +13170,14 @@ Voice_ComputeAndWriteVolume1:
 	jr gt, Voice_ComputeAndWriteVolume1_ApplyLFO
 	ld iz, wa
 
+; Body of Voice_ComputeAndWriteVolume1 (entry 0x026769, already named -- left alone).
+; That routine computes the level for register pair 1 from tonerec[108] + paramA+45,
+; clamped 0..0x64 and curved through table_0x0118FE, optionally capped by
+; table_0x0118FE[table_0x011ADF[tonerec+24]] when bit 0 of tonerec+10 is set and bit 8 of
+; slot+1 is clear.
+; This label is the modulation stage: if paramA+53 is non-zero, add
+; Pan_ScaleWithVelocity(paramA+48..+50, depth paramA+53, velocity slot+8) and re-clamp
+; through Voice_Clamp_Byte_HL.
 Voice_ComputeAndWriteVolume1_ApplyLFO:
 	ld xwa, (xsp + 2)
 	cp (xwa + 53), 0x0
@@ -11737,6 +13206,9 @@ Voice_ComputeAndWriteVolume1_ApplyLFO:
 	calr Voice_Clamp_Byte_HL
 	ld iz, hl
 
+; Stage the result: 0x0451F8 = (level<<8)|0x0080, 0x0451FA = (level<<8). These are shadow
+; offsets +44/+46, pushed to TG banks 0x800 and 0x840 by ToneGen_WriteNote*. Bit 7 of the
+; low byte is the "apply now" flag that the note-on/full-dump path leaves clear.
 Voice_ComputeAndWriteVolume1_WriteDSP:
 	ld wa, iz
 	sla wa, 8
@@ -11756,6 +13228,10 @@ Voice_WritePan_Passthrough:
 	stw_da 0x0451e8, xwa
 	ret
 
+; Voice_WriteVolume_SetFlag(XWA = voice-slot record). Two-instruction helper: copies the
+; already-computed pair-1 word from slot+64 into shadow 0x0451F8 with bit 7 forced set,
+; and the same word verbatim into 0x0451FA. Used to re-assert an existing level without
+; recomputing it. Sole caller: Voice_AllNotes_SustainRetrigger_BranchE.
 Voice_WriteVolume_SetFlag:
 	ld bc, (xwa + 64)
 	set 7, bc
@@ -11764,6 +13240,13 @@ Voice_WriteVolume_SetFlag:
 	stw_da 0x0451fa, xwa
 	ret
 
+; Voice_ComputeVolume_CappedLFO(XWA = voice-slot record). Variant of
+; Voice_ComputeAndWriteVolume1 used on the voice-cut path (sole caller:
+; Voice_Cut_BranchB). Difference: when bit 0 of tonerec+10 is SET the level is taken as
+; the SMALLER of table_0x0118FE[table_0x011ADF[tonerec+24]] and
+; table_0x0118FE[paramA+45] -- i.e. the oscillator ceiling wins outright rather than only
+; capping. When the bit is clear it falls back to the tonerec[0x010D] + paramA+45 path.
+; Stages the result to 0x0451F8/0x0451FA exactly as Volume1 does.
 Voice_ComputeVolume_CappedLFO:
 	dec 8, xsp
 	pushw iz
@@ -11805,6 +13288,7 @@ Voice_ComputeVolume_CappedLFO:
 	ld iz, wa
 	jr Voice_ComputeVolume_CappedLFO_ApplyLFO
 
+; tonerec+10 bit 0 clear: level = curve(clamp(tonerec[0x010D] + paramA+45, 0..0x64)).
 Voice_ComputeVolume_CappedLFO_UseOscMax:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 35)
@@ -11826,6 +13310,7 @@ Voice_ComputeVolume_CappedLFO_UseOscMax:
 	extz wa
 	ld iz, wa
 
+; Optional paramA+53 velocity/LFO term, then Voice_Clamp_Byte_HL.
 Voice_ComputeVolume_CappedLFO_ApplyLFO:
 	ld xwa, (xsp + 2)
 	cp (xwa + 53), 0x0
@@ -11854,6 +13339,7 @@ Voice_ComputeVolume_CappedLFO_ApplyLFO:
 	calr Voice_Clamp_Byte_HL
 	ld iz, hl
 
+; Stage 0x0451F8 = (level<<8)|0x0080 and 0x0451FA = (level<<8).
 Voice_ComputeVolume_CappedLFO_WriteDSP:
 	ld wa, iz
 	sla wa, 8
@@ -11898,6 +13384,11 @@ Voice_ComputeAndWriteVolume2:
 	jr gt, Voice_ComputeAndWriteVolume2_ApplyLFO
 	ld iz, wa
 
+; Body of Voice_ComputeAndWriteVolume2 (entry 0x026975, already named). That routine
+; builds register pair 2 (shadow +48/+50 -> TG banks 0x900/0x940) from
+; table_0x0118FE[paramA+15], optionally capped by the tonerec+24 oscillator ceiling.
+; This label applies the paramA+22 velocity/LFO depth via Pan_ScaleWithVelocity with a
+; fixed 0x7F ceiling.
 Voice_ComputeAndWriteVolume2_ApplyLFO:
 	ld xwa, (xsp + 2)
 	cp (xwa + 22), 0x0
@@ -11938,6 +13429,7 @@ Voice_ComputeAndWriteVolume2_ApplyLFO:
 	ld iz, hl
 	jr Voice_ComputeAndWriteVolume2_WriteDSP
 
+; paramA+17 == 0: skip the key-tracking term, just clamp 0..0xFF.
 Voice_ComputeAndWriteVolume2_NoKeyTrack:
 	ld wa, iz
 	ldw bc, 0xFF
@@ -11946,6 +13438,8 @@ Voice_ComputeAndWriteVolume2_NoKeyTrack:
 	ld iz, hl
 	jr Voice_ComputeAndWriteVolume2_WriteDSP
 
+; paramA+22 == 0: no velocity term; apply only the paramA+17 key-tracking term via
+; PitchBend_Scale(note = slot+12).
 Voice_ComputeAndWriteVolume2_NoLFO:
 	ld xwa, (xsp + 2)
 	cp (xwa + 17), 0x0
@@ -11968,6 +13462,8 @@ Voice_ComputeAndWriteVolume2_NoLFO:
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
+; Chooses the detune arm from the sign of paramA+7 and scales paramA+16 through
+; Detune_ScaleSymmetric to produce the pair's low byte.
 Voice_ComputeAndWriteVolume2_WriteDSP:
 	ld xwa, (xsp + 2)
 	cp (xwa + 7), 0x0
@@ -11980,12 +13476,15 @@ Voice_ComputeAndWriteVolume2_WriteDSP:
 	calr Detune_ScaleSymmetric
 	jr Voice_ComputeAndWriteVolume2_WriteResult
 
+; paramA+7 >= 0: use paramA+16 unnegated.
 Voice_ComputeAndWriteVolume2_PositiveDetune:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 16)
 	exts wa
 	calr Detune_ScaleSymmetric
 
+; Stage (level<<8)|detune into BOTH 0x0451FC and 0x0451FE (shadow +48/+50, TG banks
+; 0x900 and 0x940 -- the pair is written with the same word twice).
 Voice_ComputeAndWriteVolume2_WriteResult:
 	ldb h, 0x0
 	ld wa, iz
@@ -12029,6 +13528,10 @@ Voice_ComputeAndWriteVolume3:
 	jr gt, Voice_ComputeAndWriteVolume3_ApplyLFO
 	ld iz, wa
 
+; Body of Voice_ComputeAndWriteVolume3 (entry 0x026AAA, already named). Identical in
+; shape to Volume2 but reading paramA+69/+73/+76/+71/+70/+61 instead of
+; +15/+19/+22/+17/+16/+7, and staging to 0x045200/0x045202 (shadow +52/+54, TG banks
+; 0x9C0 and 0xA00).
 Voice_ComputeAndWriteVolume3_ApplyLFO:
 	ld xwa, (xsp + 2)
 	cp (xwa + 76), 0x0
@@ -12069,6 +13572,7 @@ Voice_ComputeAndWriteVolume3_ApplyLFO:
 	ld iz, hl
 	jr Voice_ComputeAndWriteVolume3_WriteDSP
 
+; paramA+71 == 0: skip key tracking, clamp 0..0xFF.
 Voice_ComputeAndWriteVolume3_NoKeyTrack:
 	ld wa, iz
 	ldw bc, 0xFF
@@ -12077,6 +13581,7 @@ Voice_ComputeAndWriteVolume3_NoKeyTrack:
 	ld iz, hl
 	jr Voice_ComputeAndWriteVolume3_WriteDSP
 
+; paramA+76 == 0: key tracking only.
 Voice_ComputeAndWriteVolume3_NoLFO:
 	ld xwa, (xsp + 2)
 	cp (xwa + 71), 0x0
@@ -12099,6 +13604,8 @@ Voice_ComputeAndWriteVolume3_NoLFO:
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
+; Sums paramA+61 and paramA+70, clamps to -0x32..+0x32, scales via
+; Detune_ScaleSymmetric, and stages (level<<8)|detune to 0x045200 and 0x045202.
 Voice_ComputeAndWriteVolume3_WriteDSP:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 61)
@@ -12139,6 +13646,10 @@ Voice_WriteVolume_Muted:
 	stiw_da 0x045202, 0x0000
 	ret
 
+; Voice_WriteVolume_OrPan(XWA = voice-slot record). If bit 5 of (slot+19)[+13] is set,
+; stage pair 1 from table_0x0118FE[paramA+13]: 0x0451FA = (v<<8), 0x0451F8 = (v<<8)|0x80.
+; Otherwise stage silence (0x0451F8 = 0x0080, 0x0451FA = 0x0000).
+; Sole caller: Voice_AllNotes_SustainRetrigger_BranchF.
 Voice_WriteVolume_OrPan:
 	ld xbc, (xwa + 19)
 	ld xwa, (xwa + 23)
@@ -12155,11 +13666,21 @@ Voice_WriteVolume_OrPan:
 	stw_da 0x0451f8, xwa
 	ret
 
+; Muted arm: level 0 with the "apply now" bit set.
 Voice_WriteVolume_OrPan_Muted:
 	stiw_da 0x0451f8, 0x0080
 	stiw_da 0x0451fa, 0x0000
 	ret
 
+; Voice_AdvanceLFOPhase(XWA = 9-byte LFO sub-record) -> HL = phase output.
+; The sub-record fields used are: +0 flags/mode, +7 period, +8 phase counter.
+; Mode = (flags & 0x1C):
+;   0x08 "triangle": ++phase; while phase < period return (phase<<8)/period; when it
+;        reaches the period, reset phase to 0, clear flag bit 3, set bit 2, return 0x100.
+;   0x10 "ramp/hold": ++phase; return 0; when phase reaches the period, reset it, clear
+;        flag bit 4 and set bit 3.
+;   anything else: return 0 (idle).
+; Called only from the three loops of Voice_UpdateAllLFO.
 Voice_AdvanceLFOPhase:
 	ld c, (xwa)
 	and c, 0x1C
@@ -12176,10 +13697,12 @@ Voice_AdvanceLFOPhase:
 	resm 4, (xwa)
 	setm 3, (xwa)
 
+; Ramp/hold mode still running: return 0.
 Voice_AdvanceLFOPhase_IncDone:
 	lds hl, 0
 	jr Voice_AdvanceLFOPhase_Done
 
+; Triangle mode: advance and return the scaled phase (phase<<8)/period.
 Voice_AdvanceLFOPhase_Triangle:
 	lda xbc, (xwa + 8)
 	incm8 1, (xbc)
@@ -12198,6 +13721,7 @@ Voice_AdvanceLFOPhase_Triangle:
 	ld hl, wa
 	jr Voice_AdvanceLFOPhase_Done
 
+; Triangle wrap: phase = 0, flag bit 3 -> bit 2, return 0x100 (full scale).
 Voice_AdvanceLFOPhase_TriangleReset:
 	ld (xwa + 8), 0x0
 	resm 3, (xwa)
@@ -12205,18 +13729,40 @@ Voice_AdvanceLFOPhase_TriangleReset:
 	ldw hl, 0x100
 	jr Voice_AdvanceLFOPhase_Done
 
+; Unrecognised mode: return 0.
 Voice_AdvanceLFOPhase_Idle:
 	lds hl, 0
 
+; Common return.
 Voice_AdvanceLFOPhase_Done:
 	ret
 
+; Voice_UpdateAllLFO(). The per-tick LFO service; the single heaviest thing in the audio
+; tick. Sole caller: Voice_ScanAndCancelNoteOff.
+;
+; Walks the LFO record array at 0x04424E, 27 (0x1B) bytes per slot, as THREE interleaved
+; 9-byte sub-records: base 0x04424E (128 slots), base 0x044257 (64 slots) and base
+; 0x044260 (128 slots) -- 320 iterations per call, each doing a 64-bit multiply
+; (FP_MulAccum64) for the index scaling and, when the LFO is running, a full tone-
+; generator register write.
+;
+; Per slot: skip unless (flags & 0x18); call Voice_AdvanceLFOPhase; skip if the phase
+; output is 0. Otherwise convert the phase through EGEnv_Compute_A (group 1),
+; EGEnv_Compute_B (group 2) or Voice_Freq_WriteLeft (group 3), keep the result in the
+; scratch words 0x04520C / 0x045204 / 0x04520E, and unless the phase was exactly 0x0100
+; fold (result & 0x1FFF) * phase >> 8 back into the low 13 bits of that scratch word.
+; Finally dispatch the value into the TG shadow block at 0x0451CC via
+; ToneGen_WriteExtParam_600 (group 1), ToneGen_WriteExtParam_1C0_Single (group 2) or
+; ToneGen_WriteExtParam_TypeDispatch_Single (group 3).
+; Hardware touched (indirectly, through those writers): the TG address/data latch pair at
+; 0x100000 / 0x100002.
 Voice_UpdateAllLFO:
 	push xiz
 	lds iz, 0
 	cp iz, 0x80
 	jr nc, Voice_UpdateAllLFO_Loop2
 
+; Group 1 body: 128 sub-records at 0x04424E, EGEnv_Compute_A, scratch 0x04520C.
 Voice_UpdateAllLFO_Loop1:
 	ld wa, iz
 	extz xwa
@@ -12249,21 +13795,25 @@ Voice_UpdateAllLFO_Loop1:
 	srl xhl, 8
 	ordm16_24 283148, xhl
 
+; Push the group-1 result for this slot with ToneGen_WriteExtParam_600.
 Voice_UpdateAllLFO_DispatchVoice1:
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_600
 
+; ++slot; loop while slot < 0x80.
 Voice_UpdateAllLFO_NextSlot1:
 	inc 1, iz
 	cp iz, 0x80
 	jr c, Voice_UpdateAllLFO_Loop1
 
+; Group 2 preamble: reset the slot counter, bail out to group 3 if 0x40 slots is none.
 Voice_UpdateAllLFO_Loop2:
 	lds iz, 0
 	cp iz, 0x40
 	jr nc, Voice_UpdateAllLFO_Loop3
 
+; Group 2 body: 64 sub-records at 0x044257, EGEnv_Compute_B, scratch 0x045204.
 Voice_UpdateAllLFO_Loop2_Body:
 	ld wa, iz
 	extz xwa
@@ -12297,21 +13847,25 @@ Voice_UpdateAllLFO_Loop2_Body:
 	srl xhl, 8
 	ordm16_24 283140, xhl
 
+; Push the group-2 result with ToneGen_WriteExtParam_1C0_Single.
 Voice_UpdateAllLFO_DispatchVoice2:
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_1C0_Single
 
+; ++slot; loop while slot < 0x40.
 Voice_UpdateAllLFO_NextSlot2:
 	inc 1, iz
 	cp iz, 0x40
 	jr c, Voice_UpdateAllLFO_Loop2_Body
 
+; Group 3 preamble: reset the slot counter for the 128-slot pass.
 Voice_UpdateAllLFO_Loop3:
 	lds iz, 0
 	cp iz, 0x80
 	jrl nc, Voice_UpdateAllLFO_Done
 
+; Group 3 body: 128 sub-records at 0x044260, converted via Voice_Freq_WriteLeft.
 Voice_UpdateAllLFO_Loop3_Body:
 	ld wa, iz
 	extz xwa
@@ -12347,6 +13901,8 @@ Voice_UpdateAllLFO_Loop3_Body:
 	ordm16_24 283140, xhl
 	jr Voice_UpdateAllLFO_DispatchVoice3
 
+; Slots 0x40..0x7F of group 3 fold their result into scratch 0x04520E instead of
+; 0x045204.
 Voice_UpdateAllLFO_DispatchGroup3_High:
 	ldw_da xhl, 0x04520e
 	extz xhl
@@ -12359,16 +13915,19 @@ Voice_UpdateAllLFO_DispatchGroup3_High:
 	srl xhl, 8
 	ordm16_24 283150, xhl
 
+; Push the group-3 result with ToneGen_WriteExtParam_TypeDispatch_Single.
 Voice_UpdateAllLFO_DispatchVoice3:
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WriteExtParam_TypeDispatch_Single
 
+; ++slot; loop while slot < 0x80.
 Voice_UpdateAllLFO_NextSlot3:
 	inc 1, iz
 	cp iz, 0x80
 	jrl c, Voice_UpdateAllLFO_Loop3_Body
 
+; Restore IZ and return.
 Voice_UpdateAllLFO_Done:
 	pop xiz
 	ret
@@ -12399,6 +13958,16 @@ Voice_UpdateNoteOff:
 	call VoiceSlot_Release
 	res 15, iz
 
+; Body of Voice_UpdateNoteOff (entry 0x026E5B, already named -- left alone). That routine
+; drives the packed 16-bit countdown word at slot+47, which holds TWO independent timers:
+;   high byte, bit 15 = "note-off armed": each tick subtracts 0x100; when the high 7 bits
+;     reach zero it writes slot+45 to the voice's TG register through
+;     ToneGen_WriteSingleReg, calls VoiceSlot_Release, and clears bit 15;
+;   low byte, bit 7 = "release armed": handled at THIS label. Decrement by 1; when the
+;     low 7 bits reach zero, call Voice_Release for the slot and clear bit 7.
+; ★ These two paths are the ONLY way a slot goes back to the free pool during steady-
+; state playback (the other being the portamento terminal state), so any stall upstream
+; of Voice_UpdateNoteOff stops voice reclamation outright.
 Voice_UpdateNoteOff_CheckRelease:
 	bit 7, iz
 	jr z, Voice_UpdateNoteOff_StoreDone
@@ -12412,6 +13981,7 @@ Voice_UpdateNoteOff_CheckRelease:
 	call Voice_Release
 	and iz, 0x7F
 
+; Write the updated countdown word back to slot+47 and return.
 Voice_UpdateNoteOff_StoreDone:
 	ld xwa, (xsp + 2)
 	ld (xwa + 47), iz
@@ -12451,6 +14021,11 @@ Voice_UpdatePortamento:
 	call ToneGen_WriteSingleReg_180
 	jr Voice_UpdatePortamento_DispatchMode
 
+; Body of Voice_UpdatePortamento (entry 0x026EC3, already named -- left alone). That
+; routine drives the per-slot glide/fade state word at slot+49: bits 0..6 are a delay
+; counter, bits 12..14 select the ramp mode, bit 15 marks the state machine active.
+; This label is the second of three arms selecting which TG register-0x180 value to write
+; before dispatching: part-record byte (0x04138E + part*0x11F) == 2.
 Voice_UpdatePortamento_ModeCheck2:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 4)
@@ -12467,6 +14042,8 @@ Voice_UpdatePortamento_ModeCheck2:
 	call ToneGen_WriteSingleReg_180
 	jr Voice_UpdatePortamento_DispatchMode
 
+; Neither part mode 1 nor 2: merge (slot+39)[+36] into the low bits of slot+43 and write
+; that through ToneGen_WriteSingleReg_180.
 Voice_UpdatePortamento_ModeDefault:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -12487,6 +14064,7 @@ Voice_UpdatePortamento_ModeDefault:
 	call ToneGen_WriteSingleReg_180
 	jr Voice_UpdatePortamento_DispatchMode
 
+; Bit 11 of the state word clear: write slot+43 to TG register bank 0x180 unmodified.
 Voice_UpdatePortamento_ZeroState:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -12495,6 +14073,8 @@ Voice_UpdatePortamento_ZeroState:
 	ld bc, (xbc + 43)
 	call ToneGen_WriteSingleReg_180
 
+; Dispatch on (state & 0x7000): 0x1000 -> Release ramp, 0x2000 -> Descend, 0x4000 ->
+; Ascend, anything else -> NullMode (state cleared).
 Voice_UpdatePortamento_DispatchMode:
 	ld wa, (xsp + 2)
 	and wa, 0x7000
@@ -12523,6 +14103,11 @@ Voice_UpdatePortamento_DispatchMode:
 	andmi16 (xsp + 2), 0x6FFF
 	jrl Voice_UpdatePortamento_StoreDone
 
+; Ascend arm, still ramping. Writes TG bank 0x840 = 0xFF00 directly (address latch
+; 0x100000 = slot + 0x840, data latch 0x100002), with the maskable-interrupt gate around
+; the latch pair (res/set bit 7 of SFR 0x18).
+; The terminal value the ramp counts toward is 0xFF00; on reaching it the slot is handed
+; to VoiceSlot_Release + Voice_Release and the mode bits are cleared.
 Voice_UpdatePortamento_Ascend_Tick:
 	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
@@ -12536,6 +14121,7 @@ Voice_UpdatePortamento_Ascend_Tick:
 	jr __jrt_nop_026FFD
 __jrt_nop_026FFD:
 
+; Second half of the same write burst: TG bank 0x800 = 0xFF80.
 Voice_UpdatePortamento_Ascend_Tick2:
 	nop
 	nop
@@ -12552,6 +14138,8 @@ Voice_UpdatePortamento_Ascend_Tick2:
 	jr __jrt_nop_027020
 __jrt_nop_027020:
 
+; Clamp the ramp accumulator at the per-slot floor slot+58; on clamping, clear state bit
+; 14 and set bit 13 (mode 0x4000 -> 0x2000, ascend hands over to descend).
 Voice_UpdatePortamento_Ascend_ClampFloor:
 	nop
 	nop
@@ -12564,6 +14152,8 @@ Voice_UpdatePortamento_Ascend_ClampFloor:
 	resm 6, (xsp + 3)
 	setm 5, (xsp + 3)
 
+; Store the accumulator to slot+51, re-derive the pitch via Voice_ApplyPortamento, then
+; push the whole shadow block with ToneGen_WriteVoiceParams_Ext.
 Voice_UpdatePortamento_Ascend_WritePitch:
 	ld xwa, (xsp + 4)
 	ld (xwa + 51), iz
@@ -12577,6 +14167,7 @@ Voice_UpdatePortamento_Ascend_WritePitch:
 	call ToneGen_WriteVoiceParams_Ext
 	jrl Voice_UpdatePortamento_StoreDone
 
+; Descend arm: TG bank 0x840 = 0xFF00.
 Voice_UpdatePortamento_Descend_Tick:
 	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
@@ -12590,6 +14181,7 @@ Voice_UpdatePortamento_Descend_Tick:
 	jr __jrt_nop_027079
 __jrt_nop_027079:
 
+; Descend arm: TG bank 0x800 = 0xFF80.
 Voice_UpdatePortamento_Descend_Tick2:
 	nop
 	nop
@@ -12606,6 +14198,8 @@ Voice_UpdatePortamento_Descend_Tick2:
 	jr __jrt_nop_02709C
 __jrt_nop_02709C:
 
+; Push the shadow block with ToneGen_WriteVoiceParams_Ext2 (no pitch recompute on this
+; arm).
 Voice_UpdatePortamento_Descend_WritePitch:
 	nop
 	nop
@@ -12617,6 +14211,8 @@ Voice_UpdatePortamento_Descend_WritePitch:
 	call ToneGen_WriteVoiceParams_Ext2
 	jrl Voice_UpdatePortamento_StoreDone
 
+; Release arm: accumulator += slot+56 (the release increment; the ascend arm uses
+; slot+54). On reaching 0xFF00 the slot is released exactly as in the ascend arm.
 Voice_UpdatePortamento_Release_Start:
 	ld xwa, (xsp + 4)
 	ld iz, (xwa + 56)
@@ -12637,6 +14233,7 @@ Voice_UpdatePortamento_Release_Start:
 	andmi16 (xsp + 2), 0x6FFF
 	jrl Voice_UpdatePortamento_StoreDone
 
+; Release arm: TG bank 0x840 = 0xFF00.
 Voice_UpdatePortamento_Release_Tick:
 	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
@@ -12650,6 +14247,7 @@ Voice_UpdatePortamento_Release_Tick:
 	jr __jrt_nop_027108
 __jrt_nop_027108:
 
+; Release arm: TG bank 0x800 = 0xFF80.
 Voice_UpdatePortamento_Release_Tick2:
 	nop
 	nop
@@ -12666,6 +14264,7 @@ Voice_UpdatePortamento_Release_Tick2:
 	jr __jrt_nop_02712B
 __jrt_nop_02712B:
 
+; Store to slot+51, Voice_ApplyPortamento, ToneGen_WriteVoiceParams_Ext.
 Voice_UpdatePortamento_Release_WritePitch:
 	nop
 	nop
@@ -12682,10 +14281,14 @@ Voice_UpdatePortamento_Release_WritePitch:
 	call ToneGen_WriteVoiceParams_Ext
 	jr Voice_UpdatePortamento_StoreDone
 
+; Unrecognised mode bits: zero the state word so the slot stops being serviced.
 Voice_UpdatePortamento_NullMode:
 	ldw (xsp + 2), 0x0
 	jr Voice_UpdatePortamento_StoreDone
 
+; Delay-counter arm, taken when (state & 0x7F) != 0: the ramp has not started yet.
+; When the counter is exactly 1 it emits the "pre-roll" TG values (bank 0x840 = 0xA200,
+; bank 0x800 = 0xA280) before decrementing.
 Voice_UpdatePortamento_ActiveCount:
 	ld wa, (xsp + 2)
 	and wa, 0x7F
@@ -12703,6 +14306,7 @@ Voice_UpdatePortamento_ActiveCount:
 	jr __jrt_nop_027181
 __jrt_nop_027181:
 
+; Second half of the pre-roll burst: TG bank 0x800 = 0xA280.
 Voice_UpdatePortamento_CountTick:
 	nop
 	nop
@@ -12719,6 +14323,7 @@ Voice_UpdatePortamento_CountTick:
 	jr __jrt_nop_0271A4
 __jrt_nop_0271A4:
 
+; Decrement the delay counter and fall through to the store.
 Voice_UpdatePortamento_CountTick2:
 	nop
 	nop
@@ -12726,9 +14331,11 @@ Voice_UpdatePortamento_CountTick2:
 	decm 1, (xsp + 2)
 	jr Voice_UpdatePortamento_StoreDone
 
+; Ordinary delay tick (counter != 1): just decrement.
 Voice_UpdatePortamento_CountDecrement:
 	decm 1, (xsp + 2)
 
+; Write the state word back to slot+49 and return.
 Voice_UpdatePortamento_StoreDone:
 	ld xwa, (xsp + 4)
 	ld bc, (xsp + 2)
@@ -12750,6 +14357,20 @@ Voice_ApplyTuningSysEx:
 	ordi16_24 267075, 5120
 	ret
 
+; Body of Voice_ApplyTuningSysEx (entry 0x0271BC, already named -- left alone). That
+; routine is the once-per-audio-tick step of the KEY SHIFT / transpose ramp, driven
+; entirely by the global mode word at 0x041343:
+;   bit 11 = "shift requested" (set by Voice_SetKeyShiftEnable). Loads the first entry of
+;            the signed semitone table at 0x011C7C, doubles it into the global pitch
+;            offset word 0x04135A, clears bit 11 and sets bits 10 and 12.
+;   bit 12 = "shift engaged". THIS LABEL: bump the step index 0x04135C and clear bit 10.
+;   bit 13 = "ramping"; bit 14 -> step index += 2, bit 15 -> step index += 1. Each step
+;            reloads 0x04135A = table_0x011C7C[index] * 2 and sets bit 10.
+;   bit 10 = "pitch offset changed" -- consumed by Voice_UpdateAllNoteStates, which uses
+;            it to choose the loop arm that re-writes every sounding voice's pitch.
+; The ramp self-terminates when the loaded offset is zero: entries 24 and 25 of the
+; 26-byte table are 0x00, and both the +1 and +2 step sequences from index 0 land on 24.
+; Also read by Voice_ComputePitch (bits 0/1) and Voice_ApplyPortamento (bit 1).
 Voice_ApplyTuningSysEx_Bit12:
 	ldw_da xwa, 0x041343
 	bit 12, wa
@@ -12758,6 +14379,7 @@ Voice_ApplyTuningSysEx_Bit12:
 	anddi16_24 267075, 64511
 	ret
 
+; bit 13 clear -> ClearMode; set -> choose the +2 (bit 14) or +1 (bit 15) step.
 Voice_ApplyTuningSysEx_Bit13Check:
 	ldw_da xwa, 0x041343
 	bit 13, wa
@@ -12777,6 +14399,7 @@ Voice_ApplyTuningSysEx_Bit13Check:
 	ordi16_24 267075, 1024
 	jr Voice_ApplyTuningSysEx_CheckCounter
 
+; bit 14 clear: if bit 15 is set take the +1 step, otherwise zero the offset.
 Voice_ApplyTuningSysEx_Bit14Clear:
 	ldw_da xwa, 0x041343
 	extz xwa
@@ -12794,10 +14417,13 @@ Voice_ApplyTuningSysEx_Bit14Clear:
 	ordi16_24 267075, 1024
 	jr Voice_ApplyTuningSysEx_CheckCounter
 
+; No direction bit set: force the global pitch offset 0x04135A to 0 and raise bit 10.
 Voice_ApplyTuningSysEx_ZeroPitch:
 	stiw_da 0x04135a, 0x0000
 	ordi16_24 267075, 1024
 
+; Termination test: return unless the offset word 0x04135A is now zero; when it is, clear
+; bits 13..15 of 0x041343, reset the step index 0x04135C and raise bit 10 one last time.
 Voice_ApplyTuningSysEx_CheckCounter:
 	cpw_da 267098, 0
 	ret nz
@@ -12806,10 +14432,20 @@ Voice_ApplyTuningSysEx_CheckCounter:
 	ordi16_24 267075, 1024
 	ret
 
+; Ramp inactive: clear bit 10 and return.
 Voice_ApplyTuningSysEx_ClearMode:
 	anddi16_24 267075, 64511
 	ret
 
+; Voice_InitVoiceState(WA = channel index). Loads the whole 22-word tone-generator shadow
+; block at 0x0451CC with power-on defaults, immediately before the caller pushes it to
+; the chip. Sole caller: Voice_TickNoteDecay.
+; Notable defaults: 0x0451E4 = 0xFF7F (register pair 1 = maximum attenuation, maximum
+; rate -- i.e. silent); 0x0451E6 and 0x0451E8 copied from the global word 0x041362 (set
+; to 0x8000 or 0xA000 by Voice_SetRhythmMode); 0x0451DA from 0x041360; 0x0451D4 = 0x017F,
+; 0x0451D6 = 0x7F7F, 0x0451D8 = 0x0040; 0x0451D0 = table_0x010764[0x041364] * 4; every
+; other word zeroed. Finally stores 0xF0 into the per-channel record byte at
+; 0x0430BB + ch*0x47.
 Voice_InitVoiceState:
 	stiw_da 0x0451ce, 0x0000
 	ldw_da xbc, 0x041360
@@ -12846,6 +14482,15 @@ Voice_InitVoiceState:
 	stiw_ind 0x07, 0xE4, 0xE0, 0x00, 0xF0
 	ret
 
+; Voice_TickNoteDecay(). Rhythm/percussion decay tick. Sole caller:
+; Voice_UpdateAllNoteStates (first thing it does).
+; Returns immediately unless the mode byte 0x04135E is non-zero. Decrements the counter
+; at 0x04135F and returns unless it reached zero. On the zero tick it calls
+; Voice_SetPanning on a stack scratch structure and, if the channel index in that
+; structure is below 0x40, calls Voice_InitVoiceState followed by
+; ToneGen_WriteVoiceParams (base 0x0451CC) -- a full 22-register reload of that channel --
+; and then one further ToneGen_WriteSingleReg using the word at 0x0430BB + ch*0x47.
+; 0x04135E/0x04135F are set by Voice_SetRhythmMode.
 Voice_TickNoteDecay:
 	lda xsp, (xsp - 14)
 	pushw_erp 0xFA
@@ -12878,15 +14523,29 @@ Voice_TickNoteDecay:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
+; Reload the divider: decrement the counter at 0x04135E and reset 0x04135F to 4.
 Voice_TickNoteDecay_Reload:
 	decdi8_24 1, 267102
 	stib_da 0x04135f, 0x04
 
+; Restore and return.
 Voice_TickNoteDecay_Done:
 	popw_erp 0xFA
 	lda xsp, (xsp + 14)
 	ret
 
+; Voice_LoadPitchTable_Ch(A = part index, C = ramp position). Despite the name it does
+; not load a table: it SCALES two DSP algorithm parameters by the ramp position and
+; broadcasts the result to every voice of the part.
+; Steps: DSP_AlgoType_Dispatch2(part, 1) * C >> 8, floored at 0x2C, stored to the scratch
+; 0x045208 and to the per-part word 0x0413C5 + part*0x11F; then
+; DSP_AlgoType_Dispatch1(part, 1) * table_0x010DCE[C] >> 8 stored to 0x04520C and to
+; 0x0413C3 + part*0x11F; then Voice_BuildOutputList(part, 0x0D, 0) and, for every entry,
+; ToneGen_WriteExtParams_56 with the shadow base 0x0451CC.
+; The output list is a 16-bit array in the scratch buffer at 0x27E9, terminated by
+; 0xFFFF; the loop runs while (entry & 0xFF) < 0x80, so at most 27 entries.
+; Callers: Voice_ToneTableRamp_Up_Increment, Voice_ToneTableRamp_Down_Decrement,
+; Voice_ToneTableApply_Pitch_Loop, Voice_ToneTableApply_Filter_Loop.
 Voice_LoadPitchTable_Ch:
 	dec 8, xsp
 	pushw iz
@@ -12913,6 +14572,7 @@ Voice_LoadPitchTable_Ch:
 	stiw_ind 0x07, 0xE4, 0xE0, 0x2C, 0x00
 	jr Voice_LoadPitchTable_Ch_ScanLoop
 
+; Scaled value already >= 0x2C: store it unclamped.
 Voice_LoadPitchTable_Ch_NoClamp:
 	ld wa, hl
 	stw_da 0x045208, xwa
@@ -12922,6 +14582,7 @@ Voice_LoadPitchTable_Ch_NoClamp:
 	lda_24 xbc, 0x0413c5
 	stw_dri HL, 0x07, 0xE4, 0xE0
 
+; Second parameter (Dispatch1 * table_0x010DCE[C]) and the output-list build.
 Voice_LoadPitchTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
 	extz wa
@@ -12953,6 +14614,7 @@ Voice_LoadPitchTable_Ch_ScanLoop:
 	lds iz, 0
 	jr Voice_LoadPitchTable_Ch_LoopCheck
 
+; Per-voice broadcast via ToneGen_WriteExtParams_56.
 Voice_LoadPitchTable_Ch_LoopBody:
 	ld wa, iz
 	extz xwa
@@ -12964,6 +14626,7 @@ Voice_LoadPitchTable_Ch_LoopBody:
 	call ToneGen_WriteExtParams_56
 	inc 1, iz
 
+; Continue while the list entry's low byte is < 0x80.
 Voice_LoadPitchTable_Ch_LoopCheck:
 	ld wa, iz
 	extz xwa
@@ -12977,6 +14640,11 @@ Voice_LoadPitchTable_Ch_LoopCheck:
 	inc 8, xsp
 	ret
 
+; Voice_LoadPitchTable_All(A = part index). The ramp-position-independent form of
+; Voice_LoadPitchTable_Ch: stores the raw DSP_AlgoType_Dispatch2/Dispatch1 results to
+; 0x045208 and 0x04520C (no scaling, no per-part write-back) and broadcasts them with the
+; same ToneGen_WriteExtParams_56 loop.
+; Sole caller: Voice_ToneTableRamp_Up, when the pitch ramp has reached its ceiling.
 Voice_LoadPitchTable_All:
 	dec 8, xsp
 	ld (xsp + 6), a
@@ -12999,6 +14667,7 @@ Voice_LoadPitchTable_All:
 	ldw (xsp + 4), 0x0
 	jr Voice_LoadPitchTable_All_LoopCheck
 
+; Per-voice broadcast body.
 Voice_LoadPitchTable_All_LoopBody:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13010,6 +14679,7 @@ Voice_LoadPitchTable_All_LoopBody:
 	call ToneGen_WriteExtParams_56
 	incm 1, (xsp + 4)
 
+; Continue while the list entry's low byte is < 0x80.
 Voice_LoadPitchTable_All_LoopCheck:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13022,6 +14692,12 @@ Voice_LoadPitchTable_All_LoopCheck:
 	inc 8, xsp
 	ret
 
+; Voice_LoadFilterTable_Ch(A = part index, C = ramp position). Same shape as
+; Voice_LoadPitchTable_Ch for the filter parameter set: DSP_AlgoType_Dispatch2(part, 0)
+; scaled by C, floored at 0x1C, into 0x04520A and 0x0413C1 + part*0x11F;
+; DSP_AlgoType_Dispatch1(part, 0) scaled by table_0x010ECE[C] into 0x04520E and
+; 0x0413BF + part*0x11F; broadcast with Voice_BuildOutputList(part, 0x0C, 0) and
+; ToneGen_WriteExtParams_56b.
 Voice_LoadFilterTable_Ch:
 	dec 8, xsp
 	pushw iz
@@ -13048,6 +14724,7 @@ Voice_LoadFilterTable_Ch:
 	stiw_ind 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr Voice_LoadFilterTable_Ch_ScanFilter
 
+; Scaled value already >= 0x1C: store unclamped.
 Voice_LoadFilterTable_Ch_NoClamp:
 	ld wa, hl
 	stw_da 0x04520a, xwa
@@ -13057,6 +14734,7 @@ Voice_LoadFilterTable_Ch_NoClamp:
 	lda_24 xbc, 0x0413c1
 	stw_dri HL, 0x07, 0xE4, 0xE0
 
+; Second filter parameter and the output-list build.
 Voice_LoadFilterTable_Ch_ScanFilter:
 	ld a, (xsp + 8)
 	extz wa
@@ -13088,6 +14766,7 @@ Voice_LoadFilterTable_Ch_ScanFilter:
 	lds iz, 0
 	jr Voice_LoadFilterTable_Ch_LoopCheck
 
+; Per-voice broadcast via ToneGen_WriteExtParams_56b.
 Voice_LoadFilterTable_Ch_LoopBody:
 	ld wa, iz
 	extz xwa
@@ -13099,6 +14778,7 @@ Voice_LoadFilterTable_Ch_LoopBody:
 	call ToneGen_WriteExtParams_56b
 	inc 1, iz
 
+; Continue while the list entry's low byte is < 0x80.
 Voice_LoadFilterTable_Ch_LoopCheck:
 	ld wa, iz
 	extz xwa
@@ -13112,6 +14792,9 @@ Voice_LoadFilterTable_Ch_LoopCheck:
 	inc 8, xsp
 	ret
 
+; Voice_LoadFilterTable_All(A = part index). Unscaled counterpart of
+; Voice_LoadFilterTable_Ch; writes 0x04520A / 0x04520E and broadcasts with
+; ToneGen_WriteExtParams_56b. Sole caller: Voice_ToneTableRamp_Up_CheckFilter.
 Voice_LoadFilterTable_All:
 	dec 8, xsp
 	ld (xsp + 6), a
@@ -13134,6 +14817,7 @@ Voice_LoadFilterTable_All:
 	ldw (xsp + 4), 0x0
 	jr Voice_LoadFilterTable_All_LoopCheck
 
+; Per-voice broadcast body.
 Voice_LoadFilterTable_All_LoopBody:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13145,6 +14829,7 @@ Voice_LoadFilterTable_All_LoopBody:
 	call ToneGen_WriteExtParams_56b
 	incm 1, (xsp + 4)
 
+; Continue while the list entry's low byte is < 0x80.
 Voice_LoadFilterTable_All_LoopCheck:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13157,6 +14842,11 @@ Voice_LoadFilterTable_All_LoopCheck:
 	inc 8, xsp
 	ret
 
+; Voice_LoadToneTable_Ch(A = part index, C = ramp position). Third member of the family.
+; Uses DSP_ChanFreq_WritePacket2(part) as its source value, scales it by C, floors at
+; 0x1C, stores to 0x045206 and to 0x0413C9 + part*0x11F, then broadcasts with
+; Voice_BuildOutputList(part, 0x10, 0) and ToneGen_WriteExtParams_15_Alt.
+; Note its list terminator differs: the loop runs while (entry & 0xFF) < 0x40, not 0x80.
 Voice_LoadToneTable_Ch:
 	lda xsp, (xsp - 10)
 	ld (xsp + 6), c
@@ -13181,6 +14871,7 @@ Voice_LoadToneTable_Ch:
 	stiw_ind 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr Voice_LoadToneTable_Ch_ScanLoop
 
+; Scaled value already >= 0x1C: store unclamped.
 Voice_LoadToneTable_Ch_NoClamp:
 	ld wa, hl
 	stw_da 0x045206, xwa
@@ -13190,6 +14881,7 @@ Voice_LoadToneTable_Ch_NoClamp:
 	lda_24 xbc, 0x0413c9
 	stw_dri HL, 0x07, 0xE4, 0xE0
 
+; Build the output list for mask 0x10.
 Voice_LoadToneTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
 	extz wa
@@ -13200,6 +14892,7 @@ Voice_LoadToneTable_Ch_ScanLoop:
 	ldw (xsp + 4), 0x0
 	jr Voice_LoadToneTable_Ch_LoopCheck
 
+; Per-voice broadcast via ToneGen_WriteExtParams_15_Alt.
 Voice_LoadToneTable_Ch_LoopBody:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13211,6 +14904,7 @@ Voice_LoadToneTable_Ch_LoopBody:
 	call ToneGen_WriteExtParams_15_Alt
 	incm 1, (xsp + 4)
 
+; Continue while the list entry's low byte is < 0x40.
 Voice_LoadToneTable_Ch_LoopCheck:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13223,6 +14917,8 @@ Voice_LoadToneTable_Ch_LoopCheck:
 	lda xsp, (xsp + 10)
 	ret
 
+; Voice_LoadToneTable_All(A = part index). Unscaled counterpart of
+; Voice_LoadToneTable_Ch. Sole caller: Voice_ToneTableRamp_Up_CheckFilter.
 Voice_LoadToneTable_All:
 	dec 8, xsp
 	ld (xsp + 6), a
@@ -13239,6 +14935,7 @@ Voice_LoadToneTable_All:
 	ldw (xsp + 4), 0x0
 	jr Voice_LoadToneTable_All_LoopCheck
 
+; Per-voice broadcast body.
 Voice_LoadToneTable_All_LoopBody:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13250,6 +14947,7 @@ Voice_LoadToneTable_All_LoopBody:
 	call ToneGen_WriteExtParams_15_Alt
 	incm 1, (xsp + 4)
 
+; Continue while the list entry's low byte is < 0x40.
 Voice_LoadToneTable_All_LoopCheck:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13262,6 +14960,17 @@ Voice_LoadToneTable_All_LoopCheck:
 	inc 8, xsp
 	ret
 
+; Voice_ToneTableRamp_Up(A = part index, XBC = part record at 0x041368 + part*0x11F).
+; One step of the "sweep up" of the two DSP-parameter ramps a part owns:
+;   +100 = pitch ramp position, range 0..0x4F (indexes the 80-entry curve 0x010D64)
+;   +101 = filter ramp position, range 0..0x96 (divided by 6 to index the 26-entry curve
+;          0x010DB4)
+;   +99  = the ramp state-flag byte (bits 0..4)
+; If +100 has reached 0x4F it sets flag bit 3 and calls Voice_LoadPitchTable_All;
+; otherwise it increments +100, clears bit 3, and calls Voice_LoadPitchTable_Ch with
+; table_0x010D64[+100]. The filter half behaves the same way against 0x96 / 6, calling
+; Voice_LoadFilterTable_All + Voice_LoadToneTable_All, or _Ch with table_0x010DB4[+101/6].
+; Sole caller: Voice_UpdateAllNoteStates_LFOLoopBody.
 Voice_ToneTableRamp_Up:
 	dec 4, xsp
 	push xiz
@@ -13275,6 +14984,7 @@ Voice_ToneTableRamp_Up:
 	calr Voice_LoadPitchTable_All
 	jr Voice_ToneTableRamp_Up_CheckFilter
 
+; Pitch ramp not yet at 0x4F: ++position, clear flag bit 3, push the new value.
 Voice_ToneTableRamp_Up_Increment:
 	incm8 1, (xiz + 100)
 	resm 3, (xiz + 99)
@@ -13290,6 +15000,7 @@ Voice_ToneTableRamp_Up_Increment:
 	ld wa, de
 	calr Voice_LoadPitchTable_Ch
 
+; Filter ramp: at 0x96 -> Voice_LoadFilterTable_All + Voice_LoadToneTable_All.
 Voice_ToneTableRamp_Up_CheckFilter:
 	cp (xiz + 101), 0x96
 	jr c, Voice_ToneTableRamp_Up_FilterIncrement
@@ -13301,6 +15012,8 @@ Voice_ToneTableRamp_Up_CheckFilter:
 	calr Voice_LoadToneTable_All
 	jr Voice_ToneTableRamp_Up_Done
 
+; ++filter position, clear flag bit 3, push table_0x010DB4[pos/6] to both the filter and
+; tone parameter sets.
 Voice_ToneTableRamp_Up_FilterIncrement:
 	incm8 1, (xiz + 101)
 	resm 3, (xiz + 99)
@@ -13327,11 +15040,21 @@ Voice_ToneTableRamp_Up_FilterIncrement:
 	ld wa, de
 	calr Voice_LoadToneTable_Ch
 
+; Restore and return.
 Voice_ToneTableRamp_Up_Done:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; Voice_ToneTableRamp_Down(A = part index, XBC = part record). The mirror of
+; Voice_ToneTableRamp_Up: when +100 is already 0 it sets flag bit 4 and skips to the
+; filter half; otherwise it decrements +100, clears bit 4, and pushes
+; table_0x010DB4[+100 >> 1]. The filter half decrements +101 and pushes
+; table_0x010DB4[+101 / 5] to both the filter and tone parameter sets.
+; Sole caller: Voice_UpdateAllNoteStates_LFO_CheckRampDown.
+; ⚠ The two halves index the SAME 26-entry table 0x010DB4 with different scales -- >>1
+; (max 0x4F/2 = 39) and /5 (max 0x96/5 = 30) -- both of which exceed the table's 26
+; entries and read into the adjacent table at 0x010DCE. See [UNCERTAIN].
 Voice_ToneTableRamp_Down:
 	dec 4, xsp
 	push xiz
@@ -13342,6 +15065,7 @@ Voice_ToneTableRamp_Down:
 	setm 4, (xiz + 99)
 	jr Voice_ToneTableRamp_Down_CheckFilter
 
+; Pitch ramp above 0: --position, clear flag bit 4, push table_0x010DB4[pos >> 1].
 Voice_ToneTableRamp_Down_Decrement:
 	decm8 1, (xiz + 100)
 	resm 4, (xiz + 99)
@@ -13358,6 +15082,7 @@ Voice_ToneTableRamp_Down_Decrement:
 	ld wa, de
 	calr Voice_LoadPitchTable_Ch
 
+; Filter ramp: return if already 0, else --position and push table_0x010DB4[pos / 5].
 Voice_ToneTableRamp_Down_CheckFilter:
 	cp (xiz + 101), 0x0
 	jr z, Voice_ToneTableRamp_Down_Done
@@ -13386,11 +15111,21 @@ Voice_ToneTableRamp_Down_CheckFilter:
 	ld wa, de
 	calr Voice_LoadToneTable_Ch
 
+; Restore and return.
 Voice_ToneTableRamp_Down_Done:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; Voice_ToneTableApply_Pitch(A = part index, XBC = part record). Jumps the ramp straight
+; to the position that matches the current pitch value, instead of stepping.
+; Clears flag bits 3 and 4 of +99, reads L = table_0x010D64[+100], then searches DOWNWARD
+; from index 0x19 for the largest index whose table_0x010DB4 entry is <= L. That index
+; becomes the new +100; +101 is rescaled from the /6 domain into the /5 domain
+; ((+101 / 6) is discarded and the found index * 5 is stored). Finally it pushes all
+; three parameter sets with Voice_LoadPitchTable_Ch, Voice_LoadFilterTable_Ch and
+; Voice_LoadToneTable_Ch.
+; Sole caller: Voice_UpdateAllNoteStates_LFO_RampDown.
 Voice_ToneTableApply_Pitch:
 	dec 6, xsp
 	pushw_erp 0xFA
@@ -13406,9 +15141,13 @@ Voice_ToneTableApply_Pitch:
 	ldi_erpb 0xFB, 0x19
 	jr Voice_ToneTableApply_Pitch_Loop
 
+; Search step: decrement the candidate index.
 Voice_ToneTableApply_Pitch_Decrement:
 	dec1b_erp 0xFB
 
+; Search test: continue while L < table_0x010DB4[index]. The loop has no explicit lower
+; bound; it is bounded only by table_0x010DB4[0] == 0x00, which no unsigned L can be
+; below, so index 0 always terminates it.
 Voice_ToneTableApply_Pitch_Loop:
 	stb_erp A, 0xFB
 	extz wa
@@ -13461,6 +15200,12 @@ Voice_ToneTableApply_Pitch_Loop:
 	inc 6, xsp
 	ret
 
+; Voice_ToneTableApply_Filter(A = part index, XBC = part record). The mirror of
+; Voice_ToneTableApply_Pitch: reads E = table_0x010DB4[+100 >> 1] and searches UPWARD
+; from index 0 for the first index whose table_0x010D64 entry is >= E. That index becomes
+; +100; +101 is rescaled from the /5 domain into the /6 domain (index * 6). Then pushes
+; all three parameter sets with the three _Ch broadcasters.
+; Sole caller: Voice_UpdateAllNoteStates_LFO_ApplyFilter.
 Voice_ToneTableApply_Filter:
 	dec 6, xsp
 	pushw_erp 0xFA
@@ -13477,9 +15222,13 @@ Voice_ToneTableApply_Filter:
 	ldib_erp 0xFB, 0
 	jr Voice_ToneTableApply_Filter_Loop
 
+; Search step: increment the candidate index.
 Voice_ToneTableApply_Filter_Increment:
 	inc1b_erp 0xFB
 
+; Search test: continue while E > table_0x010D64[index] (unsigned). The loop has no
+; explicit upper bound; it is bounded only by the fact that table_0x010D64 reaches 0xFF
+; at index 78 of its 80 entries.
 Voice_ToneTableApply_Filter_Loop:
 	stb_erp A, 0xFB
 	extz wa
@@ -13542,6 +15291,17 @@ Voice_ScanAndCancelNoteOff:
 	cp (xwa), 0x40
 	jr nc, Voice_ScanAndCancelNoteOff_Done
 
+; Body of Voice_ScanAndCancelNoteOff (entry 0x027A46, already named -- left alone).
+; That routine is the EVEN phase of the audio tick: it calls Voice_UpdateAllLFO once,
+; then Voice_AllocateForAny to obtain the list of sounding slot indices at (XHL+5), and
+; walks it. XIZ is loaded here as 0x04308E + slot*0x47 (the voice-slot record base and
+; stride; the LLVM source spells the instruction as the raw-encoding pseudo-op
+; "stb_dri H, 0x07,0xE4,0xE0", which unidasm decodes as "lda XIZ,XBC+WA").
+; Per slot: if bit 15 of tonerec[+10] is set and (slot+47 & 0x8080) is non-zero, call
+; Voice_UpdateNoteOff; if the bit is clear and the timers are armed, release the slot
+; outright (VoiceSlot_Release + Voice_Release, slot+47 = 0).
+; The routine's remaining labels (_ClearSlot 0x027A91, _NextSlot 0x027AB3,
+; _Done 0x027AC0) fall past this region's upper boundary.
 Voice_ScanAndCancelNoteOff_Loop:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -13562,6 +15322,14 @@ Voice_ScanAndCancelNoteOff_Loop:
 	calr Voice_UpdateNoteOff
 	jr Voice_ScanAndCancelNoteOff_NextSlot
 
+; Release path of Voice_ScanAndCancelNoteOff (entry 0x027A46, just below this region).
+; Reached when the word at [voice+0x23]+0x0A has bit 15 CLEAR, i.e. the voice's tone record
+; says the note is not still being held by the envelope.  If (voice+0x2F) & 0x8080 is non-zero
+; (a note-off or a portamento-off request is pending) the voice is handed back:
+;   call VoiceSlot_Release (0x022587), call Voice_Release (0x02CD71), then (voice+0x2F)=0.
+; If neither request bit is set the voice is left alone and the walk continues.
+; This is one of only two places in the whole sub-CPU where a sounding voice is returned to
+; the free pool during normal play; the other is Voice_UpdateAllNoteStates below.
 Voice_ScanAndCancelNoteOff_ClearSlot:
 	ld wa, (xiz + 47)
 	extz xwa
@@ -13575,6 +15343,7 @@ Voice_ScanAndCancelNoteOff_ClearSlot:
 	call Voice_Release
 	ldw (xiz + 47), 0x0
 
+; Advance the per-part voice-index cursor by 1 and loop while *cursor < 0x40 (0x40 = list end).
 Voice_ScanAndCancelNoteOff_NextSlot:
 	lds32 xwa, 1
 	add (xsp + 4), xwa
@@ -13582,11 +15351,30 @@ Voice_ScanAndCancelNoteOff_NextSlot:
 	cp (xwa), 0x40
 	jr c, Voice_ScanAndCancelNoteOff_Loop
 
+; Restore XIZ and return.
 Voice_ScanAndCancelNoteOff_Done:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; Per-audio-tick voice state machine, phase B.  Called from Audio_Process_Init (0x031F..,
+; `call Voice_UpdateAllNoteStates`) which alternates between this and
+; Voice_ScanAndCancelNoteOff every tick by XORing the byte at 0x041342 with 0xFF.
+; Prologue: calr Voice_TickNoteDecay (0x027363), calr Voice_ApplyTuningSysEx (0x0271BC).
+; Then reads the global flag word 0x041343 and tests bit 10:
+;   bit 10 SET   -> loop A (0x027AE8): additionally re-writes pitch
+;                   (Voice_Pitch_WriteOutputReg_Legato, 0x023A4A) and pan
+;                   (ToneGen_WritePanReg, 0x02D0BA) for every voice whose flags word
+;                   (voice+0x01) has bit 10 set;
+;   bit 10 CLEAR -> loop B (0x027BA0): the same retire/portamento bookkeeping WITHOUT any
+;                   pitch or pan register traffic.
+; Both loops walk the part's voice-index list obtained from Voice_AllocateForAny (0x02CD55),
+; list pointer = XHL+5, terminated by a byte >= 0x40, voice record = 0x04308E + idx*0x47.
+; Per voice: if [voice+0x23]+0x0A bit 15 is SET the note is still held -> Voice_UpdateNoteOff
+; (0x026E5B) or Voice_UpdatePortamento (0x026EC3); if CLEAR, and the matching request bit in
+; (voice+0x2F) mask 0x8080 or (voice+0x31) bit 15 is set, the voice is released
+; (VoiceSlot_Release + Voice_Release) and the request word is zeroed.
+; Ends with the LFO/tone-table scan at 0x027C48.  Touches no hardware directly in loop B.
 Voice_UpdateAllNoteStates:
 	dec 4, xsp
 	push xiz
@@ -13601,6 +15389,7 @@ Voice_UpdateAllNoteStates:
 	cp (xwa), 0x40
 	jrl nc, Voice_UpdateAllNoteStates_ScanLFO
 
+; Loop A body: full update including the tone-generator pitch and pan re-writes.
 Voice_UpdateAllNoteStates_LoopA:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -13619,6 +15408,7 @@ Voice_UpdateAllNoteStates_LoopA:
 	lda_24 xbc, 0x0451cc
 	call ToneGen_WritePanReg
 
+; Load the tone record pointer from voice+0x23 and test bit 15 of its +0x0A word.
 Voice_UpdateAllNoteStates_CheckPortaA:
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 10)
@@ -13633,6 +15423,7 @@ Voice_UpdateAllNoteStates_CheckPortaA:
 	calr Voice_UpdateNoteOff
 	jr Voice_UpdateAllNoteStates_NextSlotA
 
+; Note-off not pending: test the portamento-active word (voice+0x31) bit 15.
 Voice_UpdateAllNoteStates_CheckPortamento2A:
 	ld wa, (xiz + 49)
 	extz xwa
@@ -13642,6 +15433,7 @@ Voice_UpdateAllNoteStates_CheckPortamento2A:
 	calr Voice_UpdatePortamento
 	jr Voice_UpdateAllNoteStates_NextSlotA
 
+; Tone record says "not held": release the voice if (voice+0x2F) & 0x8080, then zero it.
 Voice_UpdateAllNoteStates_ClearNoteOffA:
 	ld wa, (xiz + 47)
 	extz xwa
@@ -13656,6 +15448,7 @@ Voice_UpdateAllNoteStates_ClearNoteOffA:
 	ldw (xiz + 47), 0x0
 	jr Voice_UpdateAllNoteStates_NextSlotA
 
+; Same, driven by the portamento word (voice+0x31) instead; zeroes (voice+0x31).
 Voice_UpdateAllNoteStates_ClearPorta2A:
 	ld wa, (xiz + 49)
 	extz xwa
@@ -13669,6 +15462,7 @@ Voice_UpdateAllNoteStates_ClearPorta2A:
 	call Voice_Release
 	ldw (xiz + 49), 0x0
 
+; Advance the loop-A cursor; loop while *cursor < 0x40.
 Voice_UpdateAllNoteStates_NextSlotA:
 	lds32 xwa, 1
 	add (xsp + 4), xwa
@@ -13677,6 +15471,7 @@ Voice_UpdateAllNoteStates_NextSlotA:
 	jrl c, Voice_UpdateAllNoteStates_LoopA
 	jrl Voice_UpdateAllNoteStates_ScanLFO
 
+; Entry to loop B (global flag 0x041343 bit 10 clear): re-fetch the part voice list.
 Voice_UpdateAllNoteStates_LoopB_Start:
 	call Voice_AllocateForAny
 	lda xwa, (xhl + 5)
@@ -13684,6 +15479,7 @@ Voice_UpdateAllNoteStates_LoopB_Start:
 	cp (xwa), 0x40
 	jrl nc, Voice_UpdateAllNoteStates_ScanLFO
 
+; Loop B body: retire/portamento bookkeeping only, no TG register writes.
 Voice_UpdateAllNoteStates_LoopB:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
@@ -13704,6 +15500,7 @@ Voice_UpdateAllNoteStates_LoopB:
 	calr Voice_UpdateNoteOff
 	jr Voice_UpdateAllNoteStates_NextSlotB
 
+; CheckPortamento2B of Voice_UpdateAllNoteStates.
 Voice_UpdateAllNoteStates_CheckPortamento2B:
 	ld wa, (xiz + 49)
 	extz xwa
@@ -13713,6 +15510,7 @@ Voice_UpdateAllNoteStates_CheckPortamento2B:
 	calr Voice_UpdatePortamento
 	jr Voice_UpdateAllNoteStates_NextSlotB
 
+; ClearNoteOffB of Voice_UpdateAllNoteStates.
 Voice_UpdateAllNoteStates_ClearNoteOffB:
 	ld wa, (xiz + 47)
 	extz xwa
@@ -13727,6 +15525,7 @@ Voice_UpdateAllNoteStates_ClearNoteOffB:
 	ldw (xiz + 47), 0x0
 	jr Voice_UpdateAllNoteStates_NextSlotB
 
+; ClearPorta2B of Voice_UpdateAllNoteStates.
 Voice_UpdateAllNoteStates_ClearPorta2B:
 	ld wa, (xiz + 49)
 	extz xwa
@@ -13740,6 +15539,7 @@ Voice_UpdateAllNoteStates_ClearPorta2B:
 	call Voice_Release
 	ldw (xiz + 49), 0x0
 
+; Loop-B counterparts of the loop-A labels above; identical logic minus the hardware writes.
 Voice_UpdateAllNoteStates_NextSlotB:
 	lds32 xwa, 1
 	add (xsp + 4), xwa
@@ -13747,11 +15547,16 @@ Voice_UpdateAllNoteStates_NextSlotB:
 	cp (xwa), 0x40
 	jrl c, Voice_UpdateAllNoteStates_LoopB
 
+; Second phase: iterate parts 0..0x19 (stride 0x11F from 0x041368) and drive each part's
+; tone-table ramp state machine from the byte at part+0x63.
 Voice_UpdateAllNoteStates_ScanLFO:
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jr nc, Voice_UpdateAllNoteStates_Done
 
+; Decode part+0x63: b0 = enabled, b1/b2/b3/b4 select ramp-up / apply-filter / ramp-down /
+; apply-pitch.  Calls Voice_ToneTableRamp_Up 0x027798, _Down 0x02783D,
+; Voice_ToneTableApply_Filter 0x027987, _Pitch 0x0278CB.
 Voice_UpdateAllNoteStates_LFOLoopBody:
 	stb_erp A, 0xFB
 	extz wa
@@ -13772,6 +15577,7 @@ Voice_UpdateAllNoteStates_LFOLoopBody:
 	calr Voice_ToneTableRamp_Up
 	jr Voice_UpdateAllNoteStates_LFONextSlot
 
+; Sets bit 2 of part+0x63 and calls Voice_ToneTableApply_Filter.
 Voice_UpdateAllNoteStates_LFO_ApplyFilter:
 	setm 2, (xbc + 99)
 	stb_erp A, 0xFB
@@ -13779,6 +15585,7 @@ Voice_UpdateAllNoteStates_LFO_ApplyFilter:
 	calr Voice_ToneTableApply_Filter
 	jr Voice_UpdateAllNoteStates_LFONextSlot
 
+; CheckRampDown of Voice_UpdateAllNoteStates_LFO.
 Voice_UpdateAllNoteStates_LFO_CheckRampDown:
 	bit 2, a
 	jr nz, Voice_UpdateAllNoteStates_LFO_RampDown
@@ -13789,22 +15596,27 @@ Voice_UpdateAllNoteStates_LFO_CheckRampDown:
 	calr Voice_ToneTableRamp_Down
 	jr Voice_UpdateAllNoteStates_LFONextSlot
 
+; Clears bit 2 of part+0x63 and calls Voice_ToneTableApply_Pitch.
 Voice_UpdateAllNoteStates_LFO_RampDown:
 	resm 2, (xbc + 99)
 	stb_erp A, 0xFB
 	extz wa
 	calr Voice_ToneTableApply_Pitch
 
+; LFONextSlot of Voice_UpdateAllNoteStates.
 Voice_UpdateAllNoteStates_LFONextSlot:
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jr c, Voice_UpdateAllNoteStates_LFOLoopBody
 
+; exit path of Voice_UpdateAllNoteStates.
 Voice_UpdateAllNoteStates_Done:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; WA = part index.  ORs 0x0020 into the part flags word at part+0x02 (0x04136A + idx*0x11F).
+; Called once per part from Voice_ResetAllControllers.
 Voice_SetLFO_ActiveFlag:
 	extz wa
 	muls wa, 0x11F
@@ -13812,6 +15624,7 @@ Voice_SetLFO_ActiveFlag:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x20
 	ret
 
+; WA = part index.  ANDs 0xFFDF into the same word.  Inverse of the above.
 Voice_ClearLFO_ActiveFlag:
 	extz wa
 	muls wa, 0x11F
@@ -13828,6 +15641,10 @@ Voice_ClearLFO_ActiveFlag:
 ;        Configures tone generator params via ToneGen_ExtParams56b_DataTable
 ;        Two-pass: first updates 0x04520E, then 0x04520C
 ; ----------------------------------------------------------------------------
+; Emitted as `.byte` in the LLVM source but is ordinary code.  A = voice, C = channel.
+; Walks the voice output list (Voice_BuildOutputList 0x021A8E), consults
+; DSP_AlgoType_Dispatch1 (0x0337D2) and writes the effect-routing shadow words at 0x04520E
+; and then 0x04520C.  Twin of Voice_DSP_OutputConfig2 with different shadow offsets.
 Voice_DSP_OutputConfig:
 	.byte 0xbf, 0xf6, 0x37, 0xbf, 0x06, 0x43, 0xbf, 0x08
 	.byte 0x41, 0x8f, 0x06, 0x3f, 0x00, 0x6e, 0x6e, 0x8f
@@ -13864,6 +15681,8 @@ Voice_DSP_OutputConfig:
 ; Entry: A = voice number, C = channel
 ; Notes: Same algorithm as Voice_DSP_OutputConfig with different table offsets
 ; ----------------------------------------------------------------------------
+; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+; Same body as Voice_DSP_OutputConfig but targets shadow words 0x04520A / 0x045208.
 Voice_DSP_OutputConfig2:
 	.byte 0xbf, 0xf6, 0x37, 0xbf, 0x06, 0x43, 0xbf, 0x08
 	.byte 0x41, 0x8f, 0x06, 0x3f, 0x00, 0x6e, 0x6e, 0x8f
@@ -13901,6 +15720,8 @@ Voice_DSP_OutputConfig2:
 ; Notes: Calls DSP function at 0x033B8B, stores to 0x045204
 ;        Iterates voice output list (max 64 entries)
 ; ----------------------------------------------------------------------------
+; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+; A = voice.  Calls 0x033B8B, stores to 0x045204, iterates the voice output list (<= 64).
 Voice_DSP_SimpleCopy:
 	.byte 0xef, 0x68, 0xbf, 0x06, 0x41, 0x8f, 0x06, 0x21
 	.byte 0xd8, 0x12, 0x1d, 0x8b, 0x3b, 0x03, 0xf2, 0x04
@@ -13919,6 +15740,8 @@ Voice_DSP_SimpleCopy:
 ; Entry: A = voice number
 ; Notes: Same algorithm as Voice_DSP_SimpleCopy with different offsets
 ; ----------------------------------------------------------------------------
+; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+; As above with target 0x045206 and callee 0x033C6B.
 Voice_DSP_SimpleCopy2:
 	.byte 0xef, 0x68, 0xbf, 0x06, 0x41, 0x8f, 0x06, 0x21
 	.byte 0xd8, 0x12, 0x1d, 0x6b, 0x3c, 0x03, 0xf2, 0x06
@@ -13933,6 +15756,12 @@ Voice_DSP_SimpleCopy2:
 	.byte 0xff, 0x00, 0xd8, 0xcf, 0x40, 0x00, 0x67, 0xd2
 	.byte 0xef, 0x60, 0x0e
 
+; Writes ONE tone-generator register: latch = voice + 0x0400 (register 0x10 = PITCH),
+; data = word at XBC+0x0E (normally the staging record 0x0451CC).
+; Entry WA = voice number 0..0x3F, XBC = source record.  Clobbers nothing (XIZ saved).
+; Caller: Pitch_Refresh_Sounding_Voices/Voice_AllVoices_WritePan (0x028D4C) and the sustain
+; retrigger scan.  See the header note: the "DSP_" prefix is wrong, this is the TONE
+; GENERATOR at 0x100000/0x100002, not IC311 at 0x130000.
 DSP_WriteVoiceParam_Long:
 	push xiz
 	ld xiz, xbc
@@ -13946,6 +15775,8 @@ DSP_WriteVoiceParam_Long:
 	jr __jrt_nop_027F91
 __jrt_nop_027F91:
 
+; The mandatory 3-nop settling gap after the data write, entered by a `jr` to the next
+; instruction.  Present after every single TG write in this region -- it is timing, not filler.
 DSP_WriteVoiceParam_Long_NopGap:
 	nop
 	nop
@@ -13953,6 +15784,9 @@ DSP_WriteVoiceParam_Long_NopGap:
 	pop xiz
 	ret
 
+; latch = voice + 0x0080 (register 0x02 = AMPLITUDE / level), data = word at XBC+0x04 with
+; bit 15 forcibly cleared.  Called from Voice_AllVoices_WriteAmplitude, i.e. this is the
+; register that CC 7 (volume) and CC 11 (expression) ultimately reach.
 DSP_WriteVoiceParam_Short:
 	push xiz
 	ld xiz, xbc
@@ -13967,6 +15801,7 @@ DSP_WriteVoiceParam_Short:
 	jr __jrt_nop_027FB6
 __jrt_nop_027FB6:
 
+; NopGap of DSP_WriteVoiceParam_Short.
 DSP_WriteVoiceParam_Short_NopGap:
 	nop
 	nop
@@ -13974,6 +15809,9 @@ DSP_WriteVoiceParam_Short_NopGap:
 	pop xiz
 	ret
 
+; latch = WA + 0x0000 (register 0), data = the 16-bit value already in IZ.  The only writer
+; in the region that sends a caller-supplied literal rather than a staged word; used by the
+; sustain-retrigger path with BC = (voice+0x2D).
 DSP_WriteVoiceParam_Direct:
 	pushw iz
 	ld iz, bc
@@ -13985,6 +15823,7 @@ DSP_WriteVoiceParam_Direct:
 	jr __jrt_nop_027FD1
 __jrt_nop_027FD1:
 
+; NopGap of DSP_WriteVoiceParam_Direct.
 DSP_WriteVoiceParam_Direct_NopGap:
 	nop
 	nop
@@ -13992,6 +15831,12 @@ DSP_WriteVoiceParam_Direct_NopGap:
 	popw iz
 	ret
 
+; Six-register burst for one voice.  WA = voice, XBC = staging record.
+; latch/source pairs, in program order:
+;   0x0840 (reg 0x21) <- +0x2E   0x0940 (reg 0x25) <- +0x32   0x0A00 (reg 0x28) <- +0x36
+;   0x0800 (reg 0x20) <- +0x2C   0x0900 (reg 0x24) <- +0x30   0x09C0 (reg 0x27) <- +0x34
+; i.e. three (even,odd) register pairs, matching the three Voice_ComputeAndWriteVolume1/2/3
+; calls that precede it in Voice_AllNotes_SustainRetrigger_BranchC.
 DSP_WriteVoiceParam_6Words:
 	dec 4, xsp
 	pushw iz
@@ -14009,6 +15854,7 @@ DSP_WriteVoiceParam_6Words:
 	jr __jrt_nop_027FFD
 __jrt_nop_027FFD:
 
+; Word2 of DSP_WriteVoiceParam_6Words.
 DSP_WriteVoiceParam_6Words_Word2:
 	nop
 	nop
@@ -14025,6 +15871,7 @@ DSP_WriteVoiceParam_6Words_Word2:
 	jr __jrt_nop_02801F
 __jrt_nop_02801F:
 
+; NopCont1: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont1:
 	nop
 	nop
@@ -14041,6 +15888,7 @@ ToneGen_WriteNote6ch_NopCont1:
 	jr __jrt_nop_028041
 __jrt_nop_028041:
 
+; NopCont2: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont2:
 	nop
 	nop
@@ -14057,6 +15905,7 @@ ToneGen_WriteNote6ch_NopCont2:
 	jr __jrt_nop_028063
 __jrt_nop_028063:
 
+; NopCont3: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont3:
 	nop
 	nop
@@ -14073,6 +15922,7 @@ ToneGen_WriteNote6ch_NopCont3:
 	jr __jrt_nop_028085
 __jrt_nop_028085:
 
+; NopCont4: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont4:
 	nop
 	nop
@@ -14089,6 +15939,9 @@ ToneGen_WriteNote6ch_NopCont4:
 	jr __jrt_nop_0280A7
 __jrt_nop_0280A7:
 
+; The five continuation points of the six-word burst; each is the settling gap plus the next
+; address/data pair.  Note the existing names call this "6ch" while the code is 6 REGISTERS
+; of ONE voice -- see [UNCERTAIN].
 ToneGen_WriteNote6ch_NopCont5:
 	nop
 	nop
@@ -14097,6 +15950,9 @@ ToneGen_WriteNote6ch_NopCont5:
 	inc 4, xsp
 	ret
 
+; Two-register variant: latch 0x0840 (reg 0x21) <- XBC+0x2E, latch 0x0800 (reg 0x20) <- +0x2C.
+; Same entry convention as DSP_WriteVoiceParam_6Words.  Used where only the first volume/EG
+; pair needs refreshing (Voice_AllNotes_SustainRetrigger branches E and F).
 ToneGen_WriteNote2ch:
 	dec 4, xsp
 	pushw iz
@@ -14114,6 +15970,7 @@ ToneGen_WriteNote2ch:
 	jr __jrt_nop_0280D5
 __jrt_nop_0280D5:
 
+; NopCont1: settling gap plus the next address/data pair of ToneGen_WriteNote2ch.
 ToneGen_WriteNote2ch_NopCont1:
 	nop
 	nop
@@ -14130,6 +15987,7 @@ ToneGen_WriteNote2ch_NopCont1:
 	jr __jrt_nop_0280F7
 __jrt_nop_0280F7:
 
+; NopCont2: settling gap plus the next address/data pair of ToneGen_WriteNote2ch.
 ToneGen_WriteNote2ch_NopCont2:
 	nop
 	nop
@@ -14138,12 +15996,29 @@ ToneGen_WriteNote2ch_NopCont2:
 	inc 4, xsp
 	ret
 
+; --- 0x0280FE-0x028838  VoiceCC_DataTable_0280FE -- MISLABELLED, THIS IS CODE
+; 1851 bytes emitted as `.byte` by the ASL->LLVM converter.  It disassembles cleanly as
+; TLCS-900H from byte 0 and contains 21 subroutines, every one of them reached by `calr`
+; from named code or from the 0x028F75 block.  The 21 entry points are proposed individually
+; below.  Nothing in here is data.
+; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
+; VoiceCC_DataTable_0280FE.  I have left that name alone; applying this one is a decision for
+; the maintainer.  See the matching [UNCERTAIN] at the end.
+; WA = voice 0..0x3F, XBC = source record.  Writes TG register 0x21 (latch = voice + 0x0840)
+; with the word at XBC+0x2E.  Single-register writer, same 5-step strobe as all the others.
 VoiceCC_DataTable_0280FE:
 	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8
 	.byte 0x40, 0x08, 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00
 	.byte 0xf0, 0x18, 0xbf, 0x9e, 0x2e, 0x20, 0xf2, 0x02
 	.byte 0x00, 0x10, 0x50, 0x68, 0x00, 0x00, 0x00, 0x00
-	.byte 0x5e, 0x0e, 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61
+	.byte 0x5e, 0x0e
+; WA = voice, XBC = source record (always 0x0451CC at the call sites).
+; Writes TG register 0x04 (latch voice+0x0100) from XBC+0x08 and register 0x05
+; (latch voice+0x0140) from XBC+0x0A.  Both call sites (0x028FC6, 0x028FDA) invoke it
+; immediately after Voice_PanReg_WriteDispatch (0x024444) / _DispatchB (0x024554), which is
+; what identifies registers 4/5 as the stereo pan pair.
+TONEGEN_WRITEVOICE_PAN_PAIR:
+	.byte 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61
 	.byte 0xd8, 0x8e, 0xf0, 0x18, 0xb7, 0xde, 0x88, 0xd8
 	.byte 0xc8, 0x00, 0x01, 0xf2, 0x00, 0x00, 0x10, 0x50
 	.byte 0x00, 0xf0, 0x18, 0xbf, 0xaf, 0x02, 0x20, 0x98
@@ -14153,7 +16028,13 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf, 0xaf, 0x02
 	.byte 0x20, 0x98, 0x0a, 0x20, 0xf2, 0x02, 0x00, 0x10
 	.byte 0x50, 0x68, 0x00, 0x00, 0x00, 0x00, 0x4e, 0xef
-	.byte 0x64, 0x0e, 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61
+	.byte 0x64, 0x0e
+; WA = voice, XBC = source record.  Writes register 0x21 (voice+0x0840) from XBC+0x1A and
+; register 0x22 (voice+0x0880) from XBC+0x1C.  Called after Voice_WriteChPanShift (0x02591D)
+; and Voice_WriteChPanShift2 (0x025B6F), so the pair is the pan-shift/detune result, but the
+; exact meaning of registers 0x21/0x22 is not proven here.
+TONEGEN_WRITEVOICE_REG21_REG22:
+	.byte 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61
 	.byte 0xd8, 0x8e, 0xf0, 0x18, 0xb7, 0xde, 0x88, 0xd8
 	.byte 0xc8, 0x40, 0x08, 0xf2, 0x00, 0x00, 0x10, 0x50
 	.byte 0x00, 0xf0, 0x18, 0xbf, 0xaf, 0x02, 0x20, 0x98
@@ -14163,36 +16044,64 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf, 0xaf, 0x02
 	.byte 0x20, 0x98, 0x1c, 0x20, 0xf2, 0x02, 0x00, 0x10
 	.byte 0x50, 0x68, 0x00, 0x00, 0x00, 0x00, 0x4e, 0xef
-	.byte 0x64, 0x0e, 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7
+	.byte 0x64, 0x0e
+; WA = voice, XBC = source record.  Writes register 0x06 (latch = voice + 0x0180) from
+; XBC+0x0C.  Register 6 is the per-voice ENVELOPE LEVEL -- the MAME memory map already
+; documents latch 0x0180+ch as the envelope-level read-back address, and this is the write
+; side of the same register.
+TONEGEN_WRITEVOICE_ENVLEVEL:
+	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7
 	.byte 0xd8, 0xc8, 0x80, 0x01, 0xf2, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e, 0x0c, 0x20
 	.byte 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68, 0x00, 0x00
-	.byte 0x00, 0x00, 0x5e, 0x0e, 0x3e, 0xe9, 0x8e, 0xf0
+	.byte 0x00, 0x00, 0x5e, 0x0e
+; Writes register 0x11 (latch voice+0x0440) from XBC+0x10.
+TONEGEN_WRITEVOICE_REG11:
+	.byte 0x3e, 0xe9, 0x8e, 0xf0
 	.byte 0x18, 0xb7, 0xd8, 0xc8, 0x40, 0x04, 0xf2, 0x00
 	.byte 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e
 	.byte 0x10, 0x20, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68
-	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e, 0x3e, 0xe9
+	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; Writes register 0x13 (latch voice+0x04C0) from XBC+0x14.
+TONEGEN_WRITEVOICE_REG13:
+	.byte 0x3e, 0xe9
 	.byte 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0xc0, 0x04
 	.byte 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18
 	.byte 0xbf, 0x9e, 0x14, 0x20, 0xf2, 0x02, 0x00, 0x10
 	.byte 0x50, 0x68, 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; Writes register 0x18 (latch voice+0x0600) from XBC+0x40.
+TONEGEN_WRITEVOICE_REG18:
 	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8
 	.byte 0x00, 0x06, 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00
 	.byte 0xf0, 0x18, 0xbf, 0x9e, 0x40, 0x20, 0xf2, 0x02
 	.byte 0x00, 0x10, 0x50, 0x68, 0x00, 0x00, 0x00, 0x00
-	.byte 0x5e, 0x0e, 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7
+	.byte 0x5e, 0x0e
+; Writes register 0x16 (latch voice+0x0580) from XBC+0x3C.
+TONEGEN_WRITEVOICE_REG16:
+	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7
 	.byte 0xd8, 0xc8, 0x80, 0x05, 0xf2, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e, 0x3c, 0x20
 	.byte 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68, 0x00, 0x00
-	.byte 0x00, 0x00, 0x5e, 0x0e, 0x3e, 0xe9, 0x8e, 0xf0
+	.byte 0x00, 0x00, 0x5e, 0x0e
+; Writes register 0x07 (latch voice+0x01C0) from XBC+0x38.
+TONEGEN_WRITEVOICE_REG07:
+	.byte 0x3e, 0xe9, 0x8e, 0xf0
 	.byte 0x18, 0xb7, 0xd8, 0xc8, 0xc0, 0x01, 0xf2, 0x00
 	.byte 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e
 	.byte 0x38, 0x20, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68
-	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e, 0x3e, 0xe9
+	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; Writes register 0x15 (latch voice+0x0540) from XBC+0x3A.
+TONEGEN_WRITEVOICE_REG15:
+	.byte 0x3e, 0xe9
 	.byte 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0x40, 0x05
 	.byte 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18
 	.byte 0xbf, 0x9e, 0x3a, 0x20, 0xf2, 0x02, 0x00, 0x10
 	.byte 0x50, 0x68, 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; Range-split writer.  If WA < 0x40 it writes register 0x07 from XBC+0x38 (the normal 64
+; voices); otherwise it writes register 0x18 from XBC+0x42.  Proof that the tone generator
+; has addressable slots beyond voice 0x3F for some register groups, and that the software
+; deliberately re-targets them.
+TONEGEN_WRITEVOICE_REG07_OR_REG18:
 	.byte 0x3e, 0xe9, 0x8e, 0xd8, 0xcf, 0x40, 0x00, 0x6f
 	.byte 0x1f, 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0xc0, 0x01
 	.byte 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18
@@ -14201,7 +16110,10 @@ VoiceCC_DataTable_0280FE:
 	.byte 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0x00, 0x06, 0xf2
 	.byte 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf
 	.byte 0x9e, 0x42, 0x20, 0xf2, 0x02, 0x00, 0x10, 0x50
-	.byte 0x68, 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e, 0x3e
+	.byte 0x68, 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; Same shape: WA < 0x40 -> register 0x15 from XBC+0x3A, else register 0x16 from XBC+0x3E.
+TONEGEN_WRITEVOICE_REG15_OR_REG16:
+	.byte 0x3e
 	.byte 0xe9, 0x8e, 0xd8, 0xcf, 0x40, 0x00, 0x6f, 0x1f
 	.byte 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0x40, 0x05, 0xf2
 	.byte 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf
@@ -14210,7 +16122,16 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x18, 0xb7, 0xd8, 0xc8, 0x80, 0x05, 0xf2, 0x00
 	.byte 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e
 	.byte 0x3e, 0x20, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68
-	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e, 0x2e, 0x9f
+	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; A = part index, C = a bus mask, XDE and XIX = bit patterns to set/clear, one word on the
+; stack.  For each of the 4 output buses w = 0..3 it reads two 4-byte mask tables at
+; 0x00F6D7 and 0x00F6DB, tests bit (1<<w) of C against each, and then sets or clears bits in
+; the word at  0x041368 + part*0x11F + 0x6E + w*0x25 + 0x18  (i.e. output-slot record w,
+; field +0x18) using OR / AND-with-complement.  Returns with `retd 2`.
+; This is the routine that turns a "send this modulation to buses X" request into the
+; per-slot enable bitmap.
+AUDIOMOD_APPLY_BUSROUTING:
+	.byte 0x2e, 0x9f
 	.byte 0x06, 0x24, 0x20, 0x00, 0xc8, 0xdc, 0x7f, 0xdb
 	.byte 0x00, 0xc8, 0x8f, 0xdb, 0x12, 0xf2, 0xd7, 0xf6
 	.byte 0x00, 0x35, 0xc3, 0x07, 0xf4, 0xec, 0x27, 0xcb
@@ -14240,6 +16161,14 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x07, 0xec, 0xf8, 0x35, 0xda, 0x8b, 0xdc, 0xe3
 	.byte 0xdb, 0x06, 0x9d, 0x18, 0xcb, 0xc8, 0x61, 0xc8
 	.byte 0xdc, 0x77, 0x25, 0xff, 0x4e, 0x0f, 0x02, 0x00
+; A = part index, BC = controller value, XDE = 3-byte modulation-routing descriptor.
+; Descriptor layout, proven by every user in this block:
+;     +0 : (unused here)
+;     +1 : bit 7 = BIPOLAR flag, bits 0..5 = destination command id (see AudioChannel_Dispatch)
+;     +2 : depth / scale, 0..0x7F
+; Computes  E = ((bipolar ? (BC-0x40)*2 : BC) * depth) >> 6  and stores the byte at
+; 0x041384 + part*0x11F  (part+0x1C).
+AUDIOMOD_SCALE_TO_PART_1C:
 	.byte 0xba, 0x01, 0xcf, 0x66, 0x19, 0x8a, 0x02, 0x25
 	.byte 0xcd, 0x8f, 0xdb, 0x12, 0xd9, 0x12, 0xd9, 0xca
 	.byte 0x40, 0x00, 0xd9, 0x8a, 0xda, 0x82, 0xda, 0x89
@@ -14248,7 +16177,10 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x12, 0xda, 0x89, 0xdb, 0x41, 0xd9, 0x8a, 0xda
 	.byte 0xef, 0x06, 0xd8, 0x12, 0xd8, 0x09, 0x1f, 0x01
 	.byte 0xf2, 0x84, 0x13, 0x04, 0x31, 0xf3, 0x07, 0xe4
-	.byte 0xe0, 0x45, 0x0e, 0xba, 0x01, 0xcf, 0x66, 0x19
+	.byte 0xe0, 0x45, 0x0e
+; Identical to AUDIOMOD_SCALE_TO_PART_1C but stores to 0x041383 + part*0x11F (part+0x1B).
+AUDIOMOD_SCALE_TO_PART_1B:
+	.byte 0xba, 0x01, 0xcf, 0x66, 0x19
 	.byte 0x8a, 0x02, 0x25, 0xcd, 0x8f, 0xdb, 0x12, 0xd9
 	.byte 0x12, 0xd9, 0xca, 0x40, 0x00, 0xd9, 0x8a, 0xda
 	.byte 0x82, 0xda, 0x89, 0xdb, 0x41, 0xd9, 0x8a, 0x68
@@ -14256,7 +16188,17 @@ VoiceCC_DataTable_0280FE:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x89, 0xdb, 0x41
 	.byte 0xd9, 0x8a, 0xda, 0xef, 0x06, 0xd8, 0x12, 0xd8
 	.byte 0x09, 0x1f, 0x01, 0xf2, 0x83, 0x13, 0x04, 0x31
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45, 0x0e, 0xef, 0x6a
+	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45, 0x0e
+; A = part index (saved on the stack), BC = value, XDE = routing descriptor.
+; Bipolar branch subtracts 0x2000 from the sign-extended value, unipolar branch halves it;
+; scales by descriptor+2 via FP_MulAccum64 (0x03D8CA), then, for A-0x10 in 0..9, takes a
+; 10-way jump through the word table at 0x00F6DF with base 0x028500 to apply a per-curve
+; shaping step.  The default path (index out of range) instead scales by the part's
+; portamento-rate byte at 0x04137B.  Result is clamped to +/-0x4000 through
+; Int_SignedDiv_AltEntry (0x03DC5F) and stored as a word at 0x041385 + part*0x11F
+; (part+0x1D).
+AUDIOMOD_APPLY_PORTA_CURVE:
+	.byte 0xef, 0x6a
 	.byte 0xb7, 0x41, 0xba, 0x01, 0xcf, 0x66, 0x0c, 0xd9
 	.byte 0x8b, 0xeb, 0x13, 0xeb, 0xca, 0x00, 0x20, 0x00
 	.byte 0x00, 0x68, 0x07, 0xd9, 0x8b, 0xeb, 0x13, 0xeb
@@ -14267,7 +16209,11 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x09, 0x00, 0x6a, 0x21, 0xd8, 0x80, 0xf2, 0xdf
 	.byte 0xf6, 0x00, 0x34, 0xd3, 0x07, 0xf0, 0xe0, 0x20
 	.byte 0xf2, 0x00, 0x85, 0x02, 0x34, 0xf3, 0x07, 0xf0
-	.byte 0xe0, 0xd8, 0xeb, 0x88, 0xeb, 0x83, 0xe8, 0x83
+	.byte 0xe0, 0xd8
+; Base address of the 10-entry computed jump inside AUDIOMOD_APPLY_PORTA_CURVE; offsets come
+; from the word table at 0x00F6DF.  Entry 0 (this address) triples then shifts left 2.
+AUDIOMOD_PORTA_CURVE_JUMPBASE:
+	.byte 0xeb, 0x88, 0xeb, 0x83, 0xe8, 0x83
 	.byte 0xeb, 0xec, 0x02, 0x68, 0x1c, 0x87, 0x21, 0xd8
 	.byte 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x7b, 0x13
 	.byte 0x04, 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xe9
@@ -14279,7 +16225,11 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x1d, 0x5f, 0xdc, 0x03, 0x87, 0x21, 0xd8, 0x12
 	.byte 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x85, 0x13, 0x04
 	.byte 0x31, 0xf3, 0x07, 0xe4, 0xe0, 0x53, 0xef, 0x62
-	.byte 0x0e, 0xba, 0x01, 0xcf, 0x66, 0x19, 0x8a, 0x02
+	.byte 0x0e
+; Same descriptor convention as AUDIOMOD_SCALE_TO_PART_1C but SIGNED (muls), arithmetic
+; shift right 1, then divided by 0x7F; stores the byte at 0x041387 + part*0x11F (part+0x1F).
+AUDIOMOD_SCALE_TO_PART_1F:
+	.byte 0xba, 0x01, 0xcf, 0x66, 0x19, 0x8a, 0x02
 	.byte 0x25, 0xcd, 0x8f, 0xdb, 0x12, 0xd9, 0x12, 0xd9
 	.byte 0xca, 0x40, 0x00, 0xd9, 0x8a, 0xda, 0x82, 0xda
 	.byte 0x89, 0xdb, 0x49, 0xd9, 0x8a, 0x68, 0x11, 0x8a
@@ -14288,7 +16238,10 @@ VoiceCC_DataTable_0280FE:
 	.byte 0xda, 0xed, 0x01, 0xda, 0x89, 0xe9, 0x13, 0xd9
 	.byte 0x0b, 0x7f, 0x00, 0xd9, 0x8a, 0xd8, 0x12, 0xd8
 	.byte 0x09, 0x1f, 0x01, 0xf2, 0x87, 0x13, 0x04, 0x31
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45, 0x0e, 0xba, 0x01
+	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45, 0x0e
+; As above without the >>1; stores the byte at 0x041388 + part*0x11F (part+0x20).
+AUDIOMOD_SCALE_TO_PART_20:
+	.byte 0xba, 0x01
 	.byte 0xcf, 0x66, 0x19, 0x8a, 0x02, 0x25, 0xcd, 0x8f
 	.byte 0xdb, 0x12, 0xd9, 0x12, 0xd9, 0xca, 0x40, 0x00
 	.byte 0xd9, 0x8a, 0xda, 0x82, 0xda, 0x89, 0xdb, 0x49
@@ -14298,6 +16251,15 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x13, 0xd9, 0x0b, 0x7f, 0x00, 0xd9, 0x8a, 0xd8
 	.byte 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x88, 0x13
 	.byte 0x04, 0x31, 0xf3, 0x07, 0xe4, 0xe0, 0x45, 0x0e
+; A = part, C = controller value, XDE = routing descriptor, plus L and W taken from the
+; caller's stack frame (they select one of the part's four output-slot records and a
+; sub-index).  Bipolar values below 0x40 are forced to zero, otherwise folded to
+; (C-0x40)*2.  Merges the odd/even bit halves (masks 0x55 / 0xAA) of the descriptor byte
+; with the existing per-slot byte at slot+0x28, then writes the byte at slot+0x2A.
+; Slot address = 0x041368 + part*0x11F + 0x6E + (L<<4) + (W<<2).  Returns with `retd 4`.
+; The routine body runs to the `retd 4` at 0x02870C; it has two interior entry points,
+; 0x02860D and 0x0286D9, each taken by exactly one external caller.
+AUDIOMOD_APPLY_SLOT_FIELD2A:
 	.byte 0x2e, 0xea, 0x8c, 0x8f, 0x06, 0x27, 0x8f, 0x08
 	.byte 0x20, 0xbc, 0x01, 0xcf, 0x66, 0x10, 0xcb, 0xcf
 	.byte 0x40, 0x63, 0x09, 0xcb, 0xca, 0x40, 0xcb, 0x8d
@@ -14333,7 +16295,12 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x01, 0xf2, 0x68, 0x13, 0x04, 0x31, 0xe8, 0x13
 	.byte 0xe9, 0x80, 0xf3, 0x07, 0xe0, 0xec, 0x31, 0xc7
 	.byte 0xf4, 0x89, 0xb9, 0x2a, 0x41, 0x4e, 0x0f, 0x04
-	.byte 0x00, 0x2e, 0xea, 0x8c, 0x8f, 0x06, 0x27, 0x8f
+	.byte 0x00
+; Byte-for-byte the same algorithm as AUDIOMOD_APPLY_SLOT_FIELD2A except that the result is
+; stored at slot+0x29 instead of slot+0x2A.  Also returns with `retd 4` (at 0x028825).
+; Six callers, all of them dispatch handlers inside the 0x028F75 block.
+AUDIOMOD_APPLY_SLOT_FIELD29:
+	.byte 0x2e, 0xea, 0x8c, 0x8f, 0x06, 0x27, 0x8f
 	.byte 0x08, 0x20, 0xbc, 0x01, 0xcf, 0x66, 0x10, 0xcb
 	.byte 0xcf, 0x40, 0x63, 0x09, 0xcb, 0xca, 0x40, 0xcb
 	.byte 0x8d, 0xcd, 0x83, 0x68, 0x02, 0x23, 0x00, 0xcb
@@ -14369,12 +16336,21 @@ VoiceCC_DataTable_0280FE:
 	.byte 0x1f, 0x01, 0xf2, 0x68, 0x13, 0x04, 0x31, 0xe8
 	.byte 0x13, 0xe9, 0x80, 0xf3, 0x07, 0xe0, 0xec, 0x31
 	.byte 0xc7, 0xf4, 0x89, 0xb9, 0x29, 0x41, 0x4e, 0x0f
-	.byte 0x04, 0x00, 0xda, 0xf0, 0x69, 0x04, 0xda, 0x88
+	.byte 0x04, 0x00
+; Eleven bytes, no prologue.  HL = min(max(WA, DE), BC), i.e. clamp WA to the inclusive
+; range [DE, BC] using signed comparisons.  Tail utility of the 0x0280FE block.
+AUDIO_CLAMP_TO_RANGE:
+	.byte 0xda, 0xf0, 0x69, 0x04, 0xda, 0x88
 	.byte 0x68, 0x06, 0xd9, 0xf0, 0x62, 0x02, 0xd9, 0x88
 	.byte 0xd8, 0x8b, 0x0e
 
 ; Voice_CC_SetVolume -- CC 0x07: Store volume via lookup table
 ; Uses non-linear lookup table at ROM 0x011D16. Mute value: 0xFE00.
+; WA = part index, BC = CC 7 value 0..0x7F.  Three-way behaviour selected by the global flag
+; word 0x041343: bit 0 set and bit 1 set both map the value through the 128-entry word table
+; at 0x011D16; otherwise the raw path stores (value - 0x7F).  Value 0 takes the mute path.
+; Result is the word at 0x041374 + part*0x11F (part+0x0C).  Does not touch hardware -- the
+; caller (Voice_CC_Volume) follows up with Voice_AllVoices_WriteAmplitude.
 Voice_CC_SetVolume:
 	cps c, 0
 	jr z, VoiceCC_SetVolume_Mute
@@ -14393,6 +16369,7 @@ Voice_CC_SetVolume:
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
+; Bit1Set of VoiceCC_SetVolume.
 VoiceCC_SetVolume_Bit1Set:
 	ldw_da xde, 0x041343
 	bit 1, de
@@ -14409,6 +16386,7 @@ VoiceCC_SetVolume_Bit1Set:
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
+; RawSub of VoiceCC_SetVolume.
 VoiceCC_SetVolume_RawSub:
 	extz wa
 	muls wa, 0x11F
@@ -14420,6 +16398,7 @@ VoiceCC_SetVolume_RawSub:
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
+; Stores 0xFE00 (full attenuation) into the part volume word.
 VoiceCC_SetVolume_Mute:
 	extz wa
 	muls wa, 0x11F
@@ -14428,6 +16407,8 @@ VoiceCC_SetVolume_Mute:
 	ret
 
 ; Voice_CC_SetPan -- CC 0x0A: Store pan value at voice + 0x0E
+; WA = part, C = CC 10 value.  Stores the byte at 0x041376 + part*0x11F (part+0x0E); the
+; hardware side is done by EnvTranspose_UpdateLoop (0x032E1E) from Voice_CC_Pan.
 Voice_CC_SetPan:
 	extz wa
 	muls wa, 0x11F
@@ -14437,6 +16418,9 @@ Voice_CC_SetPan:
 
 ; Voice_CC_SetExpression -- CC 0x0B: Store expression via lookup table
 ; Uses same lookup table as Volume (0x011D16). Mute value: 0xFE00.
+; WA = part, BC = CC 11 value.  Structurally identical to Voice_CC_SetVolume (same 0x041343
+; bit 0 / bit 1 selection, same 0x011D16 table) but the destination is the word at
+; 0x041378 + part*0x11F (part+0x10).  Mute path writes 0xFE00.
 Voice_CC_SetExpression:
 	cps c, 0
 	jr z, VoiceCC_SetExpression_Mute
@@ -14455,6 +16439,7 @@ Voice_CC_SetExpression:
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
+; Bit1Set of VoiceCC_SetExpression.
 VoiceCC_SetExpression_Bit1Set:
 	ldw_da xde, 0x041343
 	bit 1, de
@@ -14471,6 +16456,7 @@ VoiceCC_SetExpression_Bit1Set:
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
+; RawSub of VoiceCC_SetExpression.
 VoiceCC_SetExpression_RawSub:
 	extz wa
 	muls wa, 0x11F
@@ -14482,6 +16468,7 @@ VoiceCC_SetExpression_RawSub:
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ret
 
+; Mute of VoiceCC_SetExpression.
 VoiceCC_SetExpression_Mute:
 	extz wa
 	muls wa, 0x11F
@@ -14490,6 +16477,8 @@ VoiceCC_SetExpression_Mute:
 	ret
 
 ; Voice_CC_SetSustain -- CC 0x40: Set/clear sustain bit 0 at voice+0x0A
+; WA = part, BC = CC 64 value.  Sets (BC != 0) or clears bit 0 of the part flags word 2 at
+; 0x041372 + part*0x11F (part+0x0A).
 Voice_CC_SetSustain:
 	cps c, 0
 	jr z, VoiceCC_SetSustain_ClearBit
@@ -14499,6 +16488,7 @@ Voice_CC_SetSustain:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x01, 0x00
 	ret
 
+; ClearBit of VoiceCC_SetSustain.
 VoiceCC_SetSustain_ClearBit:
 	extz wa
 	muls wa, 0x11F
@@ -14506,6 +16496,7 @@ VoiceCC_SetSustain_ClearBit:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFE, 0xFF
 	ret
 
+; WA = part, C = value.  Stores the byte at 0x041377 + part*0x11F (part+0x0F).
 Voice_CC_SetSostenuto:
 	extz wa
 	muls wa, 0x11F
@@ -14513,6 +16504,7 @@ Voice_CC_SetSostenuto:
 	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
+; WA = part, C = value.  Stores the byte at 0x04137A + part*0x11F (part+0x12).
 Voice_CC_SetSoftPedal:
 	extz wa
 	muls wa, 0x11F
@@ -14520,6 +16512,7 @@ Voice_CC_SetSoftPedal:
 	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
+; WA = part, BC = value.  Sets/clears bit 6 (0x0040) of part flags word 2 (part+0x0A).
 Voice_CC_SetSostenutoFlag:
 	cps c, 0
 	jr z, VoiceCC_SetSostenuto_ClearFlag
@@ -14529,6 +16522,7 @@ Voice_CC_SetSostenutoFlag:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x40
 	ret
 
+; ClearFlag of VoiceCC_SetSostenuto.
 VoiceCC_SetSostenuto_ClearFlag:
 	extz wa
 	muls wa, 0x11F
@@ -14536,6 +16530,8 @@ VoiceCC_SetSostenuto_ClearFlag:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xBF
 	ret
 
+; WA = part, C = rate.  Stores the byte at 0x04137B + part*0x11F (part+0x13).  This is the
+; byte AUDIOMOD_APPLY_PORTA_CURVE falls back to.
 Voice_CC_SetPortamentoRate:
 	extz wa
 	muls wa, 0x11F
@@ -14543,6 +16539,8 @@ Voice_CC_SetPortamentoRate:
 	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
+; WA = part, C = value.  Stores the word ((C - 0x80) * 2) at 0x04137C + part*0x11F
+; (part+0x14) -- a bipolar depth centred on 0x80.
 Voice_CC_SetPortamentoDepth:
 	ld e, c
 	extz de
@@ -14554,6 +16552,8 @@ Voice_CC_SetPortamentoDepth:
 	stw_dri DE, 0x07, 0xE4, 0xE0
 	ret
 
+; WA = part, C = value.  Stores (C - 0x40) at 0x04137E + part*0x11F (part+0x16), bipolar
+; around 0x40.
 Voice_CC_SetPortamentoTime:
 	ld e, c
 	sub e, 0x40
@@ -14563,6 +16563,9 @@ Voice_CC_SetPortamentoTime:
 	lda_dri XIY, 0x07, 0xE4, 0xE0
 	ret
 
+; Emitted as `.byte` (42 bytes) but is ordinary code: if C != 0 stores +2 into the word at
+; 0x041372 + part*0x11F, otherwise stores -3 (0xFFFD).  Two-valued, so "range" is a guess --
+; what it really does is force a small signed constant into part flags word 2.
 Voice_CC_SetModWheelRange:
 	.byte 0xcb, 0xd8, 0x66, 0x13, 0xd8, 0x12, 0xd8, 0x09
 	.byte 0x1f, 0x01, 0xf2, 0x72, 0x13, 0x04, 0x31, 0xd3
@@ -14573,6 +16576,7 @@ Voice_CC_SetModWheelRange:
 
 ; Voice_CC_SetReverbDepth -- CC 0x91: Store reverb depth
 ; Stores value at voice + 0x7F (base 0x04137F). Range 0x00-0x7F.
+; WA = part, C = CC 0x91 value 0..0x7F.  Stores the byte at 0x04137F + part*0x11F (part+0x17).
 Voice_CC_SetReverbDepth:
 	extz wa
 	muls wa, 0x11F
@@ -14581,6 +16585,7 @@ Voice_CC_SetReverbDepth:
 	ret
 
 ; Voice_CC_SetChorusEnable -- CC 0x95: Set/clear chorus bit 2 at voice+0x0A
+; WA = part, BC = CC 0x95 value.  Sets/clears bit 2 (0x0004) of part flags word 2.
 Voice_CC_SetChorusEnable:
 	cps c, 0
 	jr z, VoiceCC_SetChorus_ClearBit
@@ -14590,6 +16595,7 @@ Voice_CC_SetChorusEnable:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x04, 0x00
 	ret
 
+; ClearBit of VoiceCC_SetChorus.
 VoiceCC_SetChorus_ClearBit:
 	extz wa
 	muls wa, 0x11F
@@ -14598,6 +16604,7 @@ VoiceCC_SetChorus_ClearBit:
 	ret
 
 ; Voice_CC_SetChorusDepth -- CC 0x97: Store chorus depth at voice+0x18
+; WA = part, C = CC 0x97 value.  Stores the byte at 0x041380 + part*0x11F (part+0x18).
 Voice_CC_SetChorusDepth:
 	extz wa
 	muls wa, 0x11F
@@ -14606,6 +16613,7 @@ Voice_CC_SetChorusDepth:
 	ret
 
 ; Voice_CC_SetDelayDepth -- CC 0x9B: Store delay depth at voice+0x25
+; WA = part, C = CC 0x9B value.  Stores the byte at 0x04138D + part*0x11F (part+0x25).
 Voice_CC_SetDelayDepth:
 	extz wa
 	muls wa, 0x11F
@@ -14614,6 +16622,8 @@ Voice_CC_SetDelayDepth:
 	ret
 
 ; Voice_CC_SetDelayEnable -- CC 0x9C: Set/clear delay bit 8 at voice+0x02
+; WA = part, BC = CC 0x9C value.  Sets/clears bit 0 of the part flags word at
+; 0x04136A + part*0x11F (part+0x02).
 Voice_CC_SetDelayEnable:
 	cps c, 0
 	jr z, VoiceCC_SetDelay_ClearBit
@@ -14623,6 +16633,7 @@ Voice_CC_SetDelayEnable:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x01
 	ret
 
+; ClearBit of VoiceCC_SetDelay.
 VoiceCC_SetDelay_ClearBit:
 	extz wa
 	muls wa, 0x11F
@@ -14631,6 +16642,7 @@ VoiceCC_SetDelay_ClearBit:
 	ret
 
 ; Voice_CC_SetDelayFeedback -- CC 0x9D: Store delay feedback at voice+0x26
+; WA = part, C = CC 0x9D value.  Stores the byte at 0x04138E + part*0x11F (part+0x26).
 Voice_CC_SetDelayFeedback:
 	extz wa
 	muls wa, 0x11F
@@ -14638,6 +16650,12 @@ Voice_CC_SetDelayFeedback:
 	lda_dri XHL, 0x07, 0xE8, 0xE0
 	ret
 
+; A = mode.  A == 1 sets bit 0 of the global flag word 0x041343 and calls
+; ToneGen_EmitCommandLoop (0x021ECB) with WA = 1; anything else clears bit 0 and calls it
+; with WA = 0.  Then VoiceSlot_ClearAll (0x034B4B) and
+; Voice_PerVoice_PortamentoPitchUpdate for parts 0..0x0F.
+; ★ This is the one routine in the region that both writes a global mode bit AND drops the
+; entire voice-slot allocation on the floor; see [UNCERTAIN]/findings.
 Voice_SetPolyphonyMode:
 	pushw_erp 0xFA
 	cps a, 1
@@ -14647,17 +16665,20 @@ Voice_SetPolyphonyMode:
 	call ToneGen_EmitCommandLoop
 	jr Voice_SetPolyphonyMode_Apply
 
+; Else of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_Else:
 	anddi16_24 267075, 65534
 	lds wa, 0
 	call ToneGen_EmitCommandLoop
 
+; Apply of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_Apply:
 	call VoiceSlot_ClearAll
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x0F
 	jr ugt, Voice_SetPolyphonyMode_LoopExit
 
+; loop body of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_LoopBody:
 	stb_erp A, 0xFB
 	extz wa
@@ -14666,16 +16687,21 @@ Voice_SetPolyphonyMode_LoopBody:
 	cp_erpb 0xFB, 0x0F
 	jr ule, Voice_SetPolyphonyMode_LoopBody
 
+; LoopExit of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_LoopExit:
 	popw_erp 0xFA
 	ret
 
+; A bare `ret`.  Reached from SysEx dispatch-table entry 1 and from
+; Voice_ResetAllControllers_PostLoop with WA = 0x7F.  Deliberate no-op, not padding.
 VoiceCC_Stub_Ret1:
 	ret
 
+; Second bare `ret`, dispatch entry 2, likewise called with WA = 0x7F.
 VoiceCC_Stub_Ret2:
 	ret
 
+; A = raw value.  Stores sign-extended ((A - 0x40) * 2) as a word at 0x041347.
 Voice_SetMasterTune:
 	sub a, 0x40
 	add a, a
@@ -14683,12 +16709,16 @@ Voice_SetMasterTune:
 	stw_da 0x041347, xwa
 	ret
 
+; A = semitones.  Stores (sign-extended A) << 8 at 0x041349.
 Voice_SetPitchBendRange:
 	exts wa
 	sla wa, 8
 	stw_da 0x041349, xwa
 	ret
 
+; A = 0 falls through into Voice_SetKeyShiftRange (disable).  Otherwise, if bit 12 of the
+; global flag word 0x041343 is already set it returns; else it sets bit 11 (0x0800) and
+; zeroes the word at 0x04135C.
 Voice_SetKeyShiftEnable:
 	cps a, 0
 	jr z, Voice_SetKeyShiftRange
@@ -14699,6 +16729,9 @@ Voice_SetKeyShiftEnable:
 	stiw_da 0x04135c, 0x0000
 	ret
 
+; Returns immediately unless global flag 0x041343 bit 12 is set.  Rewrites the flag word:
+; clears bits 12/13 (mask 0xFFFF2FFF), sets bit 13, and then sets bit 15 if the word at
+; 0x04135C is > 20, bit 14 otherwise.  Finally zeroes 0x04135C.
 Voice_SetKeyShiftRange:
 	ldw_da xwa, 0x041343
 	bit 12, wa
@@ -14712,14 +16745,19 @@ Voice_SetKeyShiftRange:
 	set 15, wa
 	jr Voice_SetKeyShiftRange_BranchB
 
+; BranchA of Voice_SetKeyShiftRange.
 Voice_SetKeyShiftRange_BranchA:
 	set 14, wa
 
+; BranchB of Voice_SetKeyShiftRange.
 Voice_SetKeyShiftRange_BranchB:
 	stw_da 0x041343, xwa
 	stiw_da 0x04135c, 0x0000
 	ret
 
+; A -> byte 0x04134D.  Reached from SysEx dispatch entry 6 and from
+; Voice_ResetAllControllers with A = 0.  The reference file calls the getter
+; ScaleTune_Get_Global_Mode; see [UNCERTAIN].
 Voice_SetParam_04134D:
 	stb_da 0x04134d, a
 	ret
@@ -14728,15 +16766,24 @@ Voice_GetParam_04134D:
 	ldb_da l, 0x04134d
 	ret
 
+; A = packed rhythm-mode byte from a SysEx message.  Decodes it into the 0x04135E block:
+;   bit 3      -> 0x04135E = 3 (else 1)
+;                 0x04135F = 1 unconditionally
+;   bits 7..4  -> index x2 into the word table at 0x00F6F3, result -> 0x041360
+;   bit 2      -> 0x041362 = 0x8000 (else 0xA000)
+;   bits 1..0  -> 0x041364 = 0xC8 - ((A & 3) << 3)
+; Pure state; no hardware touched here.
 Voice_SetRhythmMode:
 	bit 3, a
 	jr z, Voice_SetRhythmMode_BranchA
 	stib_da 0x04135e, 0x03
 	jr Voice_SetRhythmMode_BranchB
 
+; BranchA of Voice_SetRhythmMode.
 Voice_SetRhythmMode_BranchA:
 	stib_da 0x04135e, 0x01
 
+; BranchB of Voice_SetRhythmMode.
 Voice_SetRhythmMode_BranchB:
 	stib_da 0x04135f, 0x01
 	ld c, a
@@ -14752,9 +16799,11 @@ Voice_SetRhythmMode_BranchB:
 	stiw_da 0x041362, 0x8000
 	jr Voice_SetRhythmMode_BranchD
 
+; BranchC of Voice_SetRhythmMode.
 Voice_SetRhythmMode_BranchC:
 	stiw_da 0x041362, 0xa000
 
+; BranchD of Voice_SetRhythmMode.
 Voice_SetRhythmMode_BranchD:
 	and a, 0x3
 	sll a, 3
@@ -14765,20 +16814,29 @@ Voice_SetRhythmMode_BranchD:
 	stw_da 0x041364, xwa
 	ret
 
+; A -> byte 0x04134B.  SysEx dispatch entry 0 (sub-command 0x91).
 Voice_SetParam_04134B:
 	stb_da 0x04134b, a
 	ret
 
+; A == 0x7F sets bit 1 of the global flag word 0x041343, anything else clears it.
+; Bit 1 is one of the two selectors Voice_CC_SetVolume / Voice_CC_SetExpression test.
 Voice_SetCCMaxFlag:
 	cp a, 0x7F
 	jr nz, Voice_SetCCMaxFlag_Clear
 	ordi16_24 267075, 2
 	ret
 
+; Clear of Voice_SetCCMaxFlag.
 Voice_SetCCMaxFlag_Clear:
 	anddi16_24 267075, 65533
 	ret
 
+; WA = index, C = value.  Stores (C - 0x80) at 0x041342 + (index + 0x0C), i.e. into the
+; 12-byte array 0x04134E..0x041359.  Voice_ResetAllControllers zeroes exactly indices 0..0x0B,
+; and 12 entries is one per pitch class -- which is why the reference file calls the reader
+; ScaleTune_Get_User_Offset.  See [UNCERTAIN]: I believe the reference name is the correct
+; one and "ChannelAssign" is wrong, but I have not renamed anything.
 Voice_WriteChannelAssign:
 	extz wa
 	add wa, 0xC
@@ -14794,6 +16852,17 @@ Voice_ReadChannelAssign:
 	ldb_sri L, 0x07, 0xE4, 0xE0
 	ret
 
+; A = a 4-bit selector, stored to 0x04134C.  Outer loop over parts 0..0x19; a part is skipped
+; unless bit 1 of its flags word 2 (0x041372 + part*0x11F) is set.  For each such part it
+; walks the voice list from Voice_AllocateForFull (0x02CD36), reads the owning part from
+; voice+0x04 (0x043092 + idx*0x47), follows the patch pointer at part+0x06 (0x04136E) and
+; branches on (patch+0x10) & 0xC0:
+;   0x80          -> Voice_ComputePitchBend2 (0x025499) + Voice_SetPitchWord_Unmuted (0x0255F3)
+;   0x40 or 0xC0  -> Voice_ComputeExprPitchBend (0x0253FE) + Voice_SetPitchWord_Muted (0x025589)
+;   0x00          -> skip
+; and then unconditionally calls ToneGen_ReadPitch_AndScale (0x02E18D) per voice.
+; ★ That last call is a tone-generator READ inside a doubly-nested loop -- relevant to the
+; sine-mode bug, see findings.
 Voice_AllVoices_UpdateVelocity:
 	dec 2, xsp
 	push xiz
@@ -14803,6 +16872,7 @@ Voice_AllVoices_UpdateVelocity:
 	cp (xsp + 4), 0x1A
 	jrl nc, Voice_AllVoices_UpdateVelocity_Exit
 
+; loop head of Voice_AllVoices_UpdateVelocity.
 Voice_AllVoices_UpdateVelocity_LoopStart:
 	ld a, (xsp + 4)
 	extz wa
@@ -14819,6 +16889,7 @@ Voice_AllVoices_UpdateVelocity_LoopStart:
 	cp (xiz), 0x40
 	jrl nc, Voice_AllVoices_UpdateVelocity_InnerStep
 
+; inner loop body of Voice_AllVoices_UpdateVelocity.
 Voice_AllVoices_UpdateVelocity_InnerLoop:
 	ld a, (xiz)
 	extz wa
@@ -14841,6 +16912,7 @@ Voice_AllVoices_UpdateVelocity_InnerLoop:
 	cps a, 0
 	jr nz, Voice_AllVoices_UpdateVelocity_NextOuter
 
+; TypeA case of Voice_AllVoices_UpdateVelocity.
 Voice_AllVoices_UpdateVelocity_TypeA:
 	ld a, (xiz)
 	extz wa
@@ -14858,6 +16930,7 @@ Voice_AllVoices_UpdateVelocity_TypeA:
 	call Voice_SetPitchWord_Muted
 	jr Voice_AllVoices_UpdateVelocity_NextOuter
 
+; TypeB case of Voice_AllVoices_UpdateVelocity.
 Voice_AllVoices_UpdateVelocity_TypeB:
 	ld a, (xiz)
 	extz wa
@@ -14874,6 +16947,7 @@ Voice_AllVoices_UpdateVelocity_TypeB:
 	add xwa, xbc
 	call Voice_SetPitchWord_Unmuted
 
+; Calls ToneGen_ReadPitch_AndScale then advances the inner cursor.
 Voice_AllVoices_UpdateVelocity_NextOuter:
 	ld a, (xiz)
 	extz wa
@@ -14882,31 +16956,44 @@ Voice_AllVoices_UpdateVelocity_NextOuter:
 	cp (xiz), 0x40
 	jrl c, Voice_AllVoices_UpdateVelocity_InnerLoop
 
+; inner loop step of Voice_AllVoices_UpdateVelocity.
 Voice_AllVoices_UpdateVelocity_InnerStep:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x1A
 	jrl c, Voice_AllVoices_UpdateVelocity_LoopStart
 
+; common exit of Voice_AllVoices_UpdateVelocity.
 Voice_AllVoices_UpdateVelocity_Exit:
 	pop xiz
 	inc 2, xsp
 	ret
 
+; A == 0 SETS bit 9 (0x0200) of the global flag word 0x041343; any other value clears it.
+; The inverted sense makes the "MonoMode" reading doubtful -- see [UNCERTAIN].
 Voice_SetMonoMode:
 	cps a, 0
 	jr nz, Voice_SetMonoMode_Clear
 	ordi16_24 267075, 512
 	ret
 
+; Clear of Voice_SetMonoMode.
 Voice_SetMonoMode_Clear:
 	anddi16_24 267075, 65023
 	ret
 
+; Returns HL = 0x041343 & 0x0200.  Getter for the bit the routine above writes.
 Voice_GetMonoMode:
 	ldw_da xhl, 0x041343
 	and hl, 0x200
 	ret
 
+; XWA = the part record whose voice list starts at +5 (as returned by Voice_AllocateFor*).
+; Walks the list; for each voice whose (voice+0x01) & 0x3C is 4, 8 or 0x20 it calls
+; Voice_Pitch_WriteOutputReg_Legato (0x023A4A), and for 0x10 it calls
+; Voice_Pitch_WriteOutputReg_Secondary; in both cases it then calls
+; DSP_WriteVoiceParam_Long -- which writes TG register 0x10, the PITCH register.
+; ★ It writes no pan register at all.  The reference file's Pitch_Refresh_Sounding_Voices is
+; the accurate name; see [UNCERTAIN].
 Voice_AllVoices_WritePan:
 	dec 4, xsp
 	push xiz
@@ -14917,6 +17004,7 @@ Voice_AllVoices_WritePan:
 	cp (xiz), 0x40
 	jr nc, Voice_AllVoices_WritePan_Exit
 
+; loop body of Voice_AllVoices_WritePan.
 Voice_AllVoices_WritePan_LoopBody:
 	ld a, (xiz)
 	extz wa
@@ -14936,6 +17024,7 @@ Voice_AllVoices_WritePan_LoopBody:
 	cps wa, 4
 	jr nz, Voice_AllVoices_WritePan_LoopStep
 
+; BranchA of Voice_AllVoices_WritePan.
 Voice_AllVoices_WritePan_BranchA:
 	ld xwa, xbc
 	call Voice_Pitch_WriteOutputReg_Legato
@@ -14945,6 +17034,7 @@ Voice_AllVoices_WritePan_BranchA:
 	calr DSP_WriteVoiceParam_Long
 	jr Voice_AllVoices_WritePan_LoopStep
 
+; BranchB of Voice_AllVoices_WritePan.
 Voice_AllVoices_WritePan_BranchB:
 	ld xwa, xbc
 	call Voice_Pitch_WriteOutputReg_Secondary
@@ -14953,16 +17043,22 @@ Voice_AllVoices_WritePan_BranchB:
 	lda_24 xbc, 0x0451cc
 	calr DSP_WriteVoiceParam_Long
 
+; loop step of Voice_AllVoices_WritePan.
 Voice_AllVoices_WritePan_LoopStep:
 	inc 1, xiz
 	cp (xiz), 0x40
 	jr c, Voice_AllVoices_WritePan_LoopBody
 
+; common exit of Voice_AllVoices_WritePan.
 Voice_AllVoices_WritePan_Exit:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; XWA = part record (voice list at +5).  Same walk and same (voice+0x01)&0x3C classification
+; as Voice_AllVoices_WritePan, but the hardware call is DSP_WriteVoiceParam_Short, i.e. TG
+; register 0x02 -- amplitude.  This is the routine Voice_CC_Volume and Voice_CC_Expression
+; call to push a new CC 7 / CC 11 value out to every sounding voice of the part.
 Voice_AllVoices_WriteAmplitude:
 	dec 4, xsp
 	push xiz
@@ -14973,6 +17069,7 @@ Voice_AllVoices_WriteAmplitude:
 	cp (xiz), 0x40
 	jr nc, Voice_AllVoices_WriteAmplitude_Exit
 
+; loop body of Voice_AllVoices_WriteAmplitude.
 Voice_AllVoices_WriteAmplitude_LoopBody:
 	ld a, (xiz)
 	extz wa
@@ -14992,15 +17089,18 @@ Voice_AllVoices_WriteAmplitude_LoopBody:
 	cps wa, 4
 	jr nz, Voice_AllVoices_WriteAmplitude_LoopStep
 
+; BranchA of Voice_AllVoices_WriteAmplitude.
 Voice_AllVoices_WriteAmplitude_BranchA:
 	ld xwa, xbc
 	call Voice_ApplyPortamento
 	jr Voice_AllVoices_WriteAmplitude_LoopStep
 
+; BranchB of Voice_AllVoices_WriteAmplitude.
 Voice_AllVoices_WriteAmplitude_BranchB:
 	ld xwa, xbc
 	call Voice_ApplyPortamento2
 
+; loop step of Voice_AllVoices_WriteAmplitude.
 Voice_AllVoices_WriteAmplitude_LoopStep:
 	ld a, (xiz)
 	extz wa
@@ -15010,11 +17110,26 @@ Voice_AllVoices_WriteAmplitude_LoopStep:
 	cp (xiz), 0x40
 	jr c, Voice_AllVoices_WriteAmplitude_LoopBody
 
+; common exit of Voice_AllVoices_WriteAmplitude.
 Voice_AllVoices_WriteAmplitude_Exit:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; The heaviest routine in the region.  Walks a part's voice list and, per voice, decides
+; between five outcomes based on (voice+0x01)&0x3C, bit 15 and bit 8 of (voice+0x01), and
+; bit 0 of [voice+0x23]+0x0A:
+;   BranchB/BranchD -- Voice_ComputeAndWriteVolume1, ToneGen_WriteNote_Hold,
+;                      DSP_WriteVoiceParam_Direct with BC = (voice+0x2D),
+;                      then VoiceSlot_Release (0x022587) and clear bit 8 of (voice+0x01);
+;   BranchC        -- Voice_ComputeAndWriteVolume1/2/3 then DSP_WriteVoiceParam_6Words
+;                      (six TG registers, the full re-trigger);
+;   BranchE        -- only if (voice+0x40) & 0xFF is zero: Voice_WriteVolume_SetFlag then
+;                      ToneGen_WriteNote2ch;
+;   BranchF        -- Voice_WriteVolume_OrPan then ToneGen_WriteNote2ch.
+; ★ BranchB and BranchD call VoiceSlot_Release WITHOUT calling Voice_Release, i.e. they give
+; back the tone-generator slot but keep the software voice -- the asymmetry matters for any
+; voice-leak analysis.
 Voice_AllNotes_SustainRetrigger:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -15026,6 +17141,7 @@ Voice_AllNotes_SustainRetrigger:
 	cp (xwa), 0x40
 	jrl nc, Voice_AllNotes_SustainRetrigger_Exit
 
+; loop body of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_LoopBody:
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
@@ -15045,6 +17161,7 @@ Voice_AllNotes_SustainRetrigger_LoopBody:
 	cps wa, 4
 	jrl nz, Voice_AllNotes_SustainRetrigger_LoopStep
 
+; BranchA of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_BranchA:
 	ld wa, (xiz + 1)
 	extz xwa
@@ -15055,6 +17172,7 @@ Voice_AllNotes_SustainRetrigger_BranchA:
 	bit 0, wa
 	jr nz, Voice_AllNotes_SustainRetrigger_BranchD
 
+; BranchB of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_BranchB:
 	ld wa, (xiz + 1)
 	bit 8, wa
@@ -15078,6 +17196,7 @@ Voice_AllNotes_SustainRetrigger_BranchB:
 	andmi16 (xiz + 1), 0xFEFF
 	jrl Voice_AllNotes_SustainRetrigger_LoopStep
 
+; BranchC of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_BranchC:
 	ld xwa, xiz
 	call Voice_ComputeAndWriteVolume1
@@ -15092,6 +17211,7 @@ Voice_AllNotes_SustainRetrigger_BranchC:
 	calr DSP_WriteVoiceParam_6Words
 	jr Voice_AllNotes_SustainRetrigger_LoopStep
 
+; BranchD of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_BranchD:
 	ld wa, (xiz + 1)
 	bit 8, wa
@@ -15115,6 +17235,7 @@ Voice_AllNotes_SustainRetrigger_BranchD:
 	andmi16 (xiz + 1), 0xFEFF
 	jr Voice_AllNotes_SustainRetrigger_LoopStep
 
+; BranchE of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_BranchE:
 	ld wa, (xiz + 64)
 	and wa, 0xFF
@@ -15128,6 +17249,7 @@ Voice_AllNotes_SustainRetrigger_BranchE:
 	calr ToneGen_WriteNote2ch
 	jr Voice_AllNotes_SustainRetrigger_LoopStep
 
+; BranchF of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_BranchF:
 	cp (xsp + 12), 0x0
 	jr z, Voice_AllNotes_SustainRetrigger_LoopStep
@@ -15139,6 +17261,7 @@ Voice_AllNotes_SustainRetrigger_BranchF:
 	lda_24 xbc, 0x0451cc
 	calr ToneGen_WriteNote2ch
 
+; loop step of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_LoopStep:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
@@ -15146,11 +17269,22 @@ Voice_AllNotes_SustainRetrigger_LoopStep:
 	cp (xwa), 0x40
 	jrl c, Voice_AllNotes_SustainRetrigger_LoopBody
 
+; common exit of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
+; --- 0x028F75-0x029E30  VoiceCC_DataTable_028F75 -- MISLABELLED, THIS IS CODE
+; 3772 bytes emitted as `.byte`.  It is the body of the audio-channel command handlers: the
+; nine entry points below are all reached by `calr`/`jrl` from AudioChannel_DispatchTable at
+; 0x029E5B or by absolute `call` from outside the region.  Nothing in here is data.
+; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
+; VoiceCC_DataTable_028F75.  Left alone; maintainer's call.  See [UNCERTAIN].
+; XWA = part record (voice list at +5).  Walks the list, classifies each voice by
+; (voice+0x01)&0x3C and calls Voice_PanReg_WriteDispatch (0x024444) for 4/0x20 or
+; Voice_PanReg_WriteDispatchB (0x024554) for 0x10, then pushes the result to TG registers
+; 4 and 5 via TONEGEN_WRITEVOICE_PAN_PAIR with XBC = the staging record 0x0451CC.
 VoiceCC_DataTable_028F75:
 	.byte 0xef, 0x6c, 0x3e, 0xf2, 0x8e, 0x30, 0x04, 0x31
 	.byte 0xbf, 0x04, 0x61, 0xe8, 0x65, 0xe8, 0x8e, 0x86
@@ -15167,7 +17301,13 @@ VoiceCC_DataTable_028F75:
 	.byte 0x1d, 0x54, 0x45, 0x02, 0x86, 0x21, 0xd8, 0x12
 	.byte 0xf2, 0xcc, 0x51, 0x04, 0x31, 0x1e, 0x43, 0xf1
 	.byte 0xee, 0x61, 0x86, 0x3f, 0x40, 0x67, 0xa5, 0x5e
-	.byte 0xef, 0x64, 0x0e, 0xef, 0x6c, 0x3e, 0xf2, 0x8e
+	.byte 0xef, 0x64, 0x0e
+; Same walk as above with two extra gates: bit 7 of (voice+0x05) must be set, and for class
+; 0x10 also bit 5 of [voice+0x13]+0x0D.  Calls Voice_WriteChPanShift (0x02591D) or
+; Voice_WriteChPanShift2 (0x025B6F) with BC = 1 and then
+; TONEGEN_WRITEVOICE_REG21_REG22 (registers 0x21/0x22).
+AUDIOCH_ALLVOICES_UPDATE_PANSHIFT:
+	.byte 0xef, 0x6c, 0x3e, 0xf2, 0x8e
 	.byte 0x30, 0x04, 0x31, 0xbf, 0x04, 0x61, 0xe8, 0x65
 	.byte 0xe8, 0x8e, 0x86
 	.ascii "?@oq"
@@ -15186,7 +17326,13 @@ VoiceCC_DataTable_028F75:
 	.byte 0xa9, 0x1d, 0x6f, 0x5b, 0x02, 0x86, 0x21, 0xd8
 	.byte 0x12, 0xf2, 0xcc, 0x51, 0x04, 0x31, 0x1e, 0x0a
 	.byte 0xf1, 0xee, 0x61, 0x86, 0x3f, 0x40, 0x67, 0x8f
-	.byte 0x5e, 0xef, 0x64, 0x0e, 0xef, 0x68, 0x3e, 0xf2
+	.byte 0x5e, 0xef, 0x64, 0x0e
+; Third member of the same family; the ONLY interior address in either code blob that is
+; reached by an absolute `call` (from 0x0304C1).  Uses `lda XIZ,XWA+BC` to form the voice
+; pointer rather than the store-to-XIZ idiom of its siblings, and branches on the same
+; (voice+0x01)&0x3C classes in a different order (0x10 first).
+AUDIOCH_ALLVOICES_UPDATE_VARIANT3:
+	.byte 0xef, 0x68, 0x3e, 0xf2
 	.byte 0x8e, 0x30, 0x04, 0x31, 0xbf, 0x04, 0x61, 0xe8
 	.byte 0x65, 0xbf, 0x08, 0x60, 0x80, 0x3f, 0x40, 0x6f
 	.byte 0x5d, 0xaf, 0x08, 0x20, 0x80, 0x21, 0xd8, 0x12
@@ -15201,7 +17347,12 @@ VoiceCC_DataTable_028F75:
 	.byte 0x12, 0xf2, 0xcc, 0x51, 0x04, 0x31, 0x1e, 0x9a
 	.byte 0xf0, 0xe8, 0xa9, 0xaf, 0x08, 0x88, 0xaf, 0x08
 	.byte 0x20, 0x80, 0x3f, 0x40, 0x67, 0xa3, 0x5e, 0xef
-	.byte 0x60, 0x0e, 0xef, 0x6a, 0x3e, 0xea, 0x8e, 0xbf
+	.byte 0x60, 0x0e
+; Handler for audio-channel command 1.  Reached by `jrl` from dispatch stub 0 (0x029E5B).
+; Entry WA = value, BC = value2, XDE = the 3-byte routing descriptor.  Calls
+; AUDIOMOD_APPLY_BUSROUTING / AUDIOMOD_APPLY_PORTA_CURVE in the 0x0280FE block.
+AUDIOCH_HANDLER_CMD01:
+	.byte 0xef, 0x6a, 0x3e, 0xea, 0x8e, 0xbf
 	.byte 0x04, 0x41, 0xd9, 0x88, 0xe8, 0x12, 0xd8, 0x33
 	.byte 0x0f, 0x66, 0x05, 0xd9, 0x30, 0x0f, 0x68, 0x03
 	.byte 0xd9, 0xee, 0x07, 0x8f, 0x04, 0x21, 0xd8, 0x12
@@ -15210,7 +17361,10 @@ VoiceCC_DataTable_028F75:
 	.byte 0xd9, 0x12, 0x0b, 0x20, 0x00, 0xda, 0x88, 0x32
 	.byte 0x10, 0x00, 0x1e, 0x1a, 0xf2, 0x8f, 0x04, 0x21
 	.byte 0xd8, 0x12, 0x1d, 0x36, 0xcd, 0x02, 0xeb, 0x88
-	.byte 0x1e, 0x1c, 0xfc, 0x5e, 0xef, 0x62, 0x0e, 0xef
+	.byte 0x1e, 0x1c, 0xfc, 0x5e, 0xef, 0x62, 0x0e
+; Handler for audio-channel command 3.  Reached by `jrl` from dispatch stub 2 (0x029E65).
+AUDIOCH_HANDLER_CMD03:
+	.byte 0xef
 	.byte 0x6a, 0x3e, 0xea, 0x8e, 0xbf, 0x04, 0x41, 0x8f
 	.byte 0x04, 0x21, 0xd8, 0x12, 0xd9, 0x12, 0xee, 0x8a
 	.byte 0x1e, 0x17, 0xf4, 0x8f, 0x04, 0x21, 0xc9, 0x8d
@@ -15218,7 +17372,11 @@ VoiceCC_DataTable_028F75:
 	.byte 0x0b, 0x80, 0x00, 0xda, 0x88, 0x32, 0x40, 0x00
 	.byte 0x1e, 0xdc, 0xf1, 0x8f, 0x04, 0x21, 0xd8, 0x12
 	.byte 0x1d, 0x36, 0xcd, 0x02, 0xeb, 0x88, 0x1e, 0x07
-	.byte 0xfe, 0x5e, 0xef, 0x62, 0x0e, 0xef, 0x6e, 0x3e
+	.byte 0xfe, 0x5e, 0xef, 0x62, 0x0e
+; Handler for audio-channel command 2.  Reached by `jrl` from dispatch stub 1 (0x029E60).
+; Note the table order is 1, 2, 3 but the code order is CMD01, CMD03, CMD02.
+AUDIOCH_HANDLER_CMD02:
+	.byte 0xef, 0x6e, 0x3e
 	.byte 0xea, 0x8e, 0xbf, 0x08, 0x41, 0x8f, 0x08, 0x21
 	.byte 0xd8, 0x12, 0xd9, 0x12, 0xee, 0x8a, 0x1e, 0x26
 	.byte 0xf4, 0x8f, 0x08, 0x21, 0xc9, 0x8d, 0xda, 0x12
@@ -15234,7 +17392,14 @@ VoiceCC_DataTable_028F75:
 	.byte 0x63, 0x68, 0x0c, 0x8f, 0x08, 0x21, 0xd8, 0x12
 	.byte 0x1d, 0x36, 0xcd, 0x02, 0xbf, 0x04, 0x63, 0xaf
 	.byte 0x04, 0x20, 0x1e, 0xfe, 0xfd, 0x5e, 0xef, 0x66
-	.byte 0x0e, 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a, 0x43
+	.byte 0x0e
+; Shared body for audio-channel commands 4..7.  The four dispatch stubs at 0x029E6A,
+; 0x029E75, 0x029E80 and 0x029E8B differ only in the sub-index 0..3 they `push` before the
+; `calr`, so the pushed word is the handler's bus/slot selector.
+; Entry: WA = value (zero-extended), BC = value2 (zero-extended), XDE = routing descriptor,
+; (SP+n) = sub-index.
+AUDIOCH_HANDLER_CMD04_07:
+	.byte 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a, 0x43
 	.byte 0xbf, 0x0c, 0x41, 0x8f, 0x12, 0x21, 0xd8, 0x12
 	.byte 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0xdb, 0xc8, 0x27
 	.byte 0x00, 0x8f, 0x0c, 0x21, 0xd8, 0x12, 0xd8, 0x09
@@ -15298,7 +17463,10 @@ VoiceCC_DataTable_028F75:
 	.byte 0xe8, 0x12, 0xe8, 0x80, 0xaf, 0x04, 0x80, 0x90
 	.byte 0x20, 0xd8, 0xcc, 0xff, 0x00, 0xd8, 0xcf, 0x80
 	.byte 0x00, 0x77, 0x68, 0xff, 0x5e, 0xbf, 0x0a, 0x37
-	.byte 0x0f, 0x02, 0x00, 0xbf, 0xf6, 0x37, 0x3e, 0xbf
+	.byte 0x0f, 0x02, 0x00
+; Shared body for commands 0x10..0x13; stubs at 0x029EF5/0x029F00/0x029F0B/0x029F16.
+AUDIOCH_HANDLER_CMD10_13:
+	.byte 0xbf, 0xf6, 0x37, 0x3e, 0xbf
 	.byte 0x0a, 0x43, 0xbf, 0x0c, 0x41, 0x8f, 0x12, 0x21
 	.byte 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0xdb
 	.byte 0xc8, 0x27, 0x00, 0x8f, 0x0c, 0x21, 0xd8, 0x12
@@ -15364,7 +17532,10 @@ VoiceCC_DataTable_028F75:
 	.byte 0x12, 0xe8, 0x80, 0xaf, 0x04, 0x80, 0x90, 0x20
 	.byte 0xd8, 0xcc, 0xff, 0x00, 0xd8, 0xcf, 0x80, 0x00
 	.byte 0x77, 0x5b, 0xff, 0x5e, 0xbf, 0x0a, 0x37, 0x0f
-	.byte 0x02, 0x00, 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a
+	.byte 0x02, 0x00
+; Shared body for commands 8..0x0B; stubs at 0x029E96/0x029EA1/0x029EAC/0x029EB7.
+AUDIOCH_HANDLER_CMD08_0B:
+	.byte 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a
 	.byte 0x43, 0xbf, 0x0c, 0x41, 0x8f, 0x12, 0x21, 0xd8
 	.byte 0x12, 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0xdb, 0xc8
 	.byte 0x37, 0x00, 0x8f, 0x0c, 0x21, 0xd8, 0x12, 0xd8
@@ -15428,7 +17599,10 @@ VoiceCC_DataTable_028F75:
 	.byte 0x61, 0x9f, 0x08, 0x20, 0xe8, 0x12, 0xe8, 0x80
 	.byte 0xaf, 0x04, 0x80, 0x90, 0x20, 0xd8, 0xcc, 0xff
 	.byte 0x00, 0xd8, 0xcf, 0x40, 0x00, 0x77, 0x68, 0xff
-	.byte 0x5e, 0xbf, 0x0a, 0x37, 0x0f, 0x02, 0x00, 0xbf
+	.byte 0x5e, 0xbf, 0x0a, 0x37, 0x0f, 0x02, 0x00
+; Shared body for commands 0x14..0x17; stubs at 0x029F21/0x029F2C/0x029F37/0x029F42.
+AUDIOCH_HANDLER_CMD14_17:
+	.byte 0xbf
 	.byte 0xf6, 0x37, 0x3e, 0xbf, 0x0a, 0x43, 0xbf, 0x0c
 	.byte 0x41, 0x8f, 0x12, 0x21, 0xd8, 0x12, 0xd8, 0xec
 	.byte 0x02, 0xd8, 0x8b, 0xdb, 0xc8, 0x37, 0x00, 0x8f
@@ -15495,7 +17669,10 @@ VoiceCC_DataTable_028F75:
 	.byte 0xe8, 0x80, 0xaf, 0x04, 0x80, 0x90, 0x20, 0xd8
 	.byte 0xcc, 0xff, 0x00, 0xd8, 0xcf, 0x40, 0x00, 0x77
 	.byte 0x5b, 0xff, 0x5e, 0xbf, 0x0a, 0x37, 0x0f, 0x02
-	.byte 0x00, 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a, 0x43
+	.byte 0x00
+; Shared body for commands 0x0C..0x0F; stubs at 0x029EC9/0x029ED4/0x029EDF/0x029EEA.
+AUDIOCH_HANDLER_CMD0C_0F:
+	.byte 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a, 0x43
 	.byte 0xbf, 0x0c, 0x41, 0x8f, 0x12, 0x21, 0xd8, 0x12
 	.byte 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0xdb, 0xc8, 0x47
 	.byte 0x00, 0x8f, 0x0c, 0x21, 0xd8, 0x12, 0xd8, 0x09
@@ -15560,6 +17737,9 @@ VoiceCC_DataTable_028F75:
 	.byte 0x80, 0xaf, 0x04, 0x80, 0x90, 0x20, 0xd8, 0xcc
 	.byte 0xff, 0x00, 0xd8, 0xcf, 0x80, 0x00, 0x77, 0x66
 	.byte 0xff, 0x5e, 0xbf, 0x0a, 0x37, 0x0f, 0x02, 0x00
+; Shared body for commands 0x18..0x1B; stubs at 0x029F4D/0x029F58/0x029F63/0x029F6E.
+; Command 0x1B is the last index the bound check in AudioChannel_Dispatch admits.
+AUDIOCH_HANDLER_CMD18_1B:
 	.byte 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0a, 0x43, 0xbf
 	.byte 0x0c, 0x41, 0x8f, 0x12, 0x21, 0xd8, 0x12, 0xd8
 	.byte 0xec, 0x02, 0xd8, 0x8b, 0xdb, 0xc8, 0x47, 0x00
@@ -15628,6 +17808,13 @@ VoiceCC_DataTable_028F75:
 	.byte 0x80, 0x00, 0x77, 0x59, 0xff, 0x5e, 0xbf, 0x0a
 	.byte 0x37, 0x0f, 0x02, 0x00
 
+; The modulation-routing dispatcher.  Entry XDE = a 3-byte routing descriptor; WA and BC
+; carry the value pair.  Reads L = (XDE+1) & 0x3F, that is the DESTINATION COMMAND ID, and
+; rejects it unless 1 <= id <= 0x1B.  index = id - 1, doubled, used to read a word from the
+; offset table at 0x00F703; that offset is added to the stub-table base 0x029E5B and jumped
+; to.  Bit 7 of (XDE+1) is NOT part of the id -- it is the bipolar flag the handlers test.
+; Callers: Voice_ModWheel_Apply (twice), Voice_ChanPressure (twice), Voice_PitchBend
+; (twice, as a tail `jrl`), and the 0x02A061 block.
 AudioChannel_Dispatch:
 	ld l, (xde + 1)
 	and l, 0x3F
@@ -15648,6 +17835,12 @@ AudioChannel_Dispatch:
 ; calls a common audio handler via calr, then returns.
 ; First 3 entries redirect via jrl to alternate handler routines.
 ; Called from jump table indexed by HL.
+; --- 0x029E5B-0x029F72  AudioChannel_DispatchTable
+; 27 entries.  Entries 0..2 are 5 bytes each (`extz WA` + `jrl` to 0x0290E7 / 0x029172 /
+; 0x029134).  Entries 3..26 are 11 bytes each:
+;     extz WA ; extz BC ; push <sub-index 0..3> ; calr <handler> ; ret
+; giving six handler bodies x four sub-indices.  Indexed indirectly through the word offset
+; table at 0x00F703 (values 0x0000,0x0005,0x000A,0x000F, then +0x000B per entry).
 AudioChannel_DispatchTable:
 	extz	wa
 	jrl	-3449
@@ -15777,6 +17970,13 @@ AudioChannel_DispatchTable:
 	ret
 	ret
 
+; Entry WA = part index, BC = CC 1 value.  Follows the patch pointer at part+0x06
+; (0x04136E + part*0x11F) and switches on (patch+0x10) & 0xC0:
+;   0x80              -> stereo path: descriptors at patch+0x15 + 3*i, i = 0..1
+;   0x40 / 0xC0       -> poly path:   descriptors at patch+0x17 + 3*i, i = 0..1
+;   0x00              -> return
+; Each iteration calls AudioChannel_Dispatch with XDE pointing at the 3-byte descriptor.
+; So a patch declares, per modulation source, up to two destination commands with depths.
 Voice_ModWheel_Apply:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -15798,11 +17998,13 @@ Voice_ModWheel_Apply:
 	cps a, 0
 	jrl nz, Voice_ModWheel_Apply_Exit
 
+; StereoPath of Voice_ModWheel_Apply.
 Voice_ModWheel_Apply_StereoPath:
 	ldw (xsp + 8), 0x0
 	cpw (xsp + 8), 0x2
 	jrl nc, Voice_ModWheel_Apply_Exit
 
+; PolyPath of Voice_ModWheel_Apply.
 Voice_ModWheel_Apply_PolyPath:
 	ld a, (xsp + 12)
 	ldb_erp A, 0xF4
@@ -15832,6 +18034,7 @@ Voice_ModWheel_Apply_PolyPath:
 	jr c, Voice_ModWheel_Apply_PolyPath
 	jr Voice_ModWheel_Apply_Exit
 
+; StereoLoopA of Voice_ModWheel_Apply.
 Voice_ModWheel_Apply_StereoLoopA:
 	ld a, (xsp + 12)
 	extz wa
@@ -15843,6 +18046,7 @@ Voice_ModWheel_Apply_StereoLoopA:
 	cpw (xsp + 8), 0x2
 	jr nc, Voice_ModWheel_Apply_Exit
 
+; StereoLoopB of Voice_ModWheel_Apply.
 Voice_ModWheel_Apply_StereoLoopB:
 	ld a, (xsp + 12)
 	ldb_erp A, 0xF0
@@ -15865,11 +18069,24 @@ Voice_ModWheel_Apply_StereoLoopB:
 	cpw (xsp + 8), 0x2
 	jr c, Voice_ModWheel_Apply_StereoLoopB
 
+; common exit of Voice_ModWheel_Apply.
 Voice_ModWheel_Apply_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
+; --- 0x02A061-0x02A0E8  VoiceModWheel_DataTable_02A061 -- MISLABELLED, THIS IS CODE
+; 136 bytes emitted as `.byte`; a complete routine, documented immediately below.
+; ★ No caller found: an exhaustive scan of the whole 0x30000-byte ROM for CALL (0x1D),
+; CALR (0x1E) and JRL (0x78) encodings targeting 0x02A061 returns nothing.  It is either
+; dead code or reached through a pointer I have not located.
+; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
+; VoiceModWheel_DataTable_02A061.  Left alone; maintainer's call.  See [UNCERTAIN].
+; A = part index, C = value.  Follows the patch pointer at part+0x06, requires
+; (patch+0x10) & 0xC0 to be 0x40, 0xC0 or 0x00, and then for i = 0..1 calls
+; AudioChannel_Dispatch with XDE = patch + 0x1D + 3*i.  Identical in shape to the two loops
+; inside Voice_ModWheel_Apply but with descriptor base 0x1D instead of 0x15 / 0x17 -- i.e.
+; this is the applier for a THIRD modulation source.  See the no-caller warning above.
 VoiceModWheel_DataTable_02A061:
 	.byte 0xef, 0x6c, 0xd7, 0xfa, 0x04, 0xbf, 0x02, 0x43
 	.byte 0xbf, 0x04, 0x41, 0x8f, 0x04, 0x21, 0xd8, 0x12
@@ -15889,6 +18106,9 @@ VoiceModWheel_DataTable_02A061:
 	.byte 0x56, 0xfd, 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xda
 	.byte 0x67, 0xb8, 0xd7, 0xfa, 0x05, 0xef, 0x64, 0x0e
 
+; A = part index, C = CC 0x5E value.  Reads the patch pointer at part+0x06 and takes a
+; different path when (patch+0x10) & 0xC0 == 0xC0.  Updates the part's portamento state and
+; then hands over to Voice_PortamentoSlots_WriteHW.
 Voice_Portamento_OnHandler:
 	dec 4, xsp
 	ld (xsp), c
@@ -15909,6 +18129,7 @@ Voice_Portamento_OnHandler:
 	cps a, 0
 	jr nz, Voice_Portamento_OnHandler_Exit
 
+; C0Mode of Voice_Portamento_OnHandler.
 Voice_Portamento_OnHandler_C0Mode:
 	ld a, (xsp + 2)
 	ld e, a
@@ -15951,10 +18172,18 @@ Voice_Portamento_OnHandler_C0Mode:
 	lda_24 xbc, 0x0413ce
 	lda_dri XSP, 0x07, 0xE4, 0xE0
 
+; common exit of Voice_Portamento_OnHandler.
 Voice_Portamento_OnHandler_Exit:
 	inc 4, xsp
 	ret
 
+; Walks a voice list (cursor on the stack, terminated by a byte >= 0x40) and for every voice
+; writes two LITERAL constants into the tone generator:
+;   register 0x21 (latch voice+0x0840) <- 0xA200
+;   register 0x20 (latch voice+0x0800) <- 0xA280
+; via the standard P6.7 strobe.  A branch at 0x02A22F selects a second, identical constant
+; pair for the other case.  These are the only hard-coded TG data values in the region.
+; Called once per part from Voice_ResetAllControllers.
 Voice_PortamentoSlots_WriteHW:
 	dec 6, xsp
 	ld (xsp + 4), a
@@ -15972,6 +18201,7 @@ Voice_PortamentoSlots_WriteHW:
 	cp (xwa), 0x40
 	jrl nc, Voice_PortamentoSlots_WriteHW_Exit
 
+; loop body of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_LoopBody:
 	ld xwa, (xsp)
 	ld a, (xwa)
@@ -15989,6 +18219,7 @@ Voice_PortamentoSlots_WriteHW_LoopBody:
 	cps wa, 4
 	jrl nz, Voice_PortamentoSlots_WriteHW_LoopStep
 
+; NopCont1: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont1:
 	res_dd8 7, 0x18
 	ld xwa, (xsp)
@@ -16002,6 +18233,7 @@ Voice_PortamentoSlots_WriteHW_NopCont1:
 	jr __jrt_nop_02A208
 __jrt_nop_02A208:
 
+; NopCont2: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont2:
 	nop
 	nop
@@ -16018,12 +18250,14 @@ Voice_PortamentoSlots_WriteHW_NopCont2:
 	jr __jrt_nop_02A22A
 __jrt_nop_02A22A:
 
+; NopCont3: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont3:
 	nop
 	nop
 	nop
 	jr Voice_PortamentoSlots_WriteHW_LoopStep
 
+; BranchSkip of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_BranchSkip:
 	res_dd8 7, 0x18
 	ld xwa, (xsp)
@@ -16037,6 +18271,7 @@ Voice_PortamentoSlots_WriteHW_BranchSkip:
 	jr __jrt_nop_02A24E
 __jrt_nop_02A24E:
 
+; NopCont4: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont4:
 	nop
 	nop
@@ -16053,11 +18288,13 @@ Voice_PortamentoSlots_WriteHW_NopCont4:
 	jr __jrt_nop_02A270
 __jrt_nop_02A270:
 
+; NopCont5: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont5:
 	nop
 	nop
 	nop
 
+; loop step of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_LoopStep:
 	lds32 xwa, 1
 	add (xsp), xwa
@@ -16065,6 +18302,7 @@ Voice_PortamentoSlots_WriteHW_LoopStep:
 	cp (xwa), 0x40
 	jrl c, Voice_PortamentoSlots_WriteHW_LoopBody
 
+; common exit of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_Exit:
 	inc 6, xsp
 	ret
@@ -16082,6 +18320,15 @@ Voice_PortamentoSlots_WriteHW_Exit:
 ;        Expression(11), Sustain(64), Sostenuto(91), Soft(93), Portamento(94)
 ;        Plus proprietary CCs in 0x91-0x9D range for effects depth
 ; ===========================================================================
+; MIDI Control Change entry point, called from MIDI_Dispatch (0x034D93 family).
+; XWA -> 4-byte message: +0 status, +1 part 0..0x19, +2 controller, +3 value.
+; Rejects part >= 0x1A immediately.  Explicit compares route CC 0x9D, 0x9C, 0x9B, 0x97,
+; 0x95, 0x91, 0x5E, 0x5D, 0x5B, 0x40, 0x0B, 0x0A, 0x07 and 0x01 to the handlers below.
+; Everything else falls into the CHANNEL-MODE range check: (cc - 0x78) must be 0..0x0A,
+; then a word from the table at 0x00F739 is added to the base 0x02A306 and jumped to.
+; Decoded targets: 0x78->0x02A3EB, 0x79->0x02A3F6, 0x7B->0x02A402, 0x80->0x02A41D,
+; 0x81->0x02A433, 0x82->0x02A457; 0x7A, 0x7C, 0x7D, 0x7E and 0x7F all land on
+; Voice_CC_Exit, i.e. Local Control and the Omni/Mono/Poly mode messages are ignored.
 Voice_CtrlChange:
 	push xiz
 	ld xiz, xwa
@@ -16128,6 +18375,7 @@ Voice_CtrlChange:
 	lda_24 xix, 0x02a306
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; CC 1.  WA = part, BC = value -> Voice_ModWheel_Apply.
 Voice_CC_ModWheel:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16139,6 +18387,8 @@ Voice_CC_ModWheel:
 	calr Voice_ModWheel_Apply
 	jrl Voice_CC_Exit
 
+; CC 7.  Voice_CC_SetVolume, then Voice_AllocateForFull (0x02CD36) and
+; Voice_AllVoices_WriteAmplitude -- so the new level reaches TG register 2 immediately.
 Voice_CC_Volume:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16155,6 +18405,7 @@ Voice_CC_Volume:
 	calr Voice_AllVoices_WriteAmplitude
 	jrl Voice_CC_Exit
 
+; CC 10.  Voice_CC_SetPan, then EnvTranspose_UpdateLoop (0x032E1E) to push it to hardware.
 Voice_CC_Pan:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16169,6 +18420,7 @@ Voice_CC_Pan:
 	call EnvTranspose_UpdateLoop
 	jrl Voice_CC_Exit
 
+; CC 11.  Voice_CC_SetExpression, then Voice_AllocateForFull + Voice_AllVoices_WriteAmplitude.
 Voice_CC_Expression:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16185,6 +18437,8 @@ Voice_CC_Expression:
 	calr Voice_AllVoices_WriteAmplitude
 	jrl Voice_CC_Exit
 
+; CC 64.  Voice_CC_SetSustain, then Voice_AllocateForSustain (0x02CCF5) and the sustain
+; retrigger scan -- this is the path that re-articulates held notes when the pedal moves.
 Voice_CC_Sustain:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16202,6 +18456,7 @@ Voice_CC_Sustain:
 	calr Voice_AllNotes_SustainRetrigger
 	jrl Voice_CC_Exit
 
+; CC 0x5B.  Voice_CC_SetSostenuto.
 Voice_CC_Sostenuto:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16213,6 +18468,7 @@ Voice_CC_Sostenuto:
 	calr Voice_CC_SetSostenuto
 	jrl Voice_CC_Exit
 
+; CC 0x5D.  Voice_CC_SetSoftPedal.
 Voice_CC_Soft:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16224,6 +18480,7 @@ Voice_CC_Soft:
 	calr Voice_CC_SetSoftPedal
 	jrl Voice_CC_Exit
 
+; CC 0x5E.  Voice_Portamento_OnHandler + Voice_PortamentoSlots_WriteHW.
 Voice_CC_Portamento:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16284,6 +18541,7 @@ Voice_CC_Portamento:
 	calr Voice_CC_SetPortamentoTime
 	jr Voice_CC_Exit
 
+; CC 0x91 (proprietary): reverb depth -> Voice_CC_SetReverbDepth.
 Voice_CC_91:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16295,6 +18553,7 @@ Voice_CC_91:
 	calr Voice_CC_SetReverbDepth
 	jr Voice_CC_Exit
 
+; CC 0x95: chorus on/off -> Voice_CC_SetChorusEnable.
 Voice_CC_95:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16306,6 +18565,7 @@ Voice_CC_95:
 	calr Voice_CC_SetChorusEnable
 	jr Voice_CC_Exit
 
+; CC 0x97: chorus depth -> Voice_CC_SetChorusDepth.
 Voice_CC_97:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16317,6 +18577,7 @@ Voice_CC_97:
 	calr Voice_CC_SetChorusDepth
 	jr Voice_CC_Exit
 
+; CC 0x9B: delay depth -> Voice_CC_SetDelayDepth.
 Voice_CC_9B:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16328,6 +18589,7 @@ Voice_CC_9B:
 	calr Voice_CC_SetDelayDepth
 	jr Voice_CC_Exit
 
+; CC 0x9C: delay on/off -> Voice_CC_SetDelayEnable.
 Voice_CC_9C:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16339,6 +18601,7 @@ Voice_CC_9C:
 	calr Voice_CC_SetDelayEnable
 	jr Voice_CC_Exit
 
+; CC 0x9D: delay feedback -> Voice_CC_SetDelayFeedback.
 Voice_CC_9D:
 	ld a, (xiz + 1)
 	ld e, a
@@ -16349,10 +18612,15 @@ Voice_CC_9D:
 	ld wa, de
 	calr Voice_CC_SetDelayFeedback
 
+; Common exit: pop XIZ, ret.  Also the landing pad for the five ignored channel-mode CCs.
 Voice_CC_Exit:
 	pop xiz
 	ret
 
+; MIDI 0xD0 channel pressure.  XWA -> message (+1 part, +2 value).  Rejects part >= 0x1A,
+; follows the patch pointer at part+0x06 and switches on (patch+0x10) & 0xC0 exactly as
+; Voice_ModWheel_Apply does, then runs two descriptor loops (0x02A530 stereo, 0x02A589 mono)
+; that each call AudioChannel_Dispatch twice.
 Voice_ChanPressure:
 	lda xsp, (xsp - 10)
 	pushw_erp 0xFA
@@ -16378,6 +18646,7 @@ Voice_ChanPressure:
 	cps a, 0
 	jrl nz, Voice_ChanPressure_Exit
 
+; StereoLoopStart of Voice_ChanPressure.
 Voice_ChanPressure_StereoLoopStart:
 	ld a, (xsp + 6)
 	extz wa
@@ -16389,6 +18658,7 @@ Voice_ChanPressure_StereoLoopStart:
 	cpib_erp 0xFB, 2
 	jrl nc, Voice_ChanPressure_Exit
 
+; StereoLoopBody of Voice_ChanPressure.
 Voice_ChanPressure_StereoLoopBody:
 	ld a, (xsp + 6)
 	ldb_erp A, 0xF0
@@ -16412,6 +18682,7 @@ Voice_ChanPressure_StereoLoopBody:
 	jr c, Voice_ChanPressure_StereoLoopBody
 	jr Voice_ChanPressure_Exit
 
+; MonoLoopStart of Voice_ChanPressure.
 Voice_ChanPressure_MonoLoopStart:
 	ld a, (xsp + 6)
 	extz wa
@@ -16423,6 +18694,7 @@ Voice_ChanPressure_MonoLoopStart:
 	cpib_erp 0xFB, 2
 	jr nc, Voice_ChanPressure_Exit
 
+; MonoLoopBody of Voice_ChanPressure.
 Voice_ChanPressure_MonoLoopBody:
 	ld a, (xsp + 6)
 	ldb_erp A, 0xF0
@@ -16445,11 +18717,17 @@ Voice_ChanPressure_MonoLoopBody:
 	cpib_erp 0xFB, 2
 	jr c, Voice_ChanPressure_MonoLoopBody
 
+; common exit of Voice_ChanPressure.
 Voice_ChanPressure_Exit:
 	popw_erp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
+; MIDI 0xE0.  XWA -> message: +1 part, +2 LSB, +3 MSB.  Rejects part >= 0x1A.  Assembles the
+; 14-bit value as ((MSB << 7) | LSB) with bit 15 forced set, follows the patch pointer, and
+; tail-jumps to AudioChannel_Dispatch with XDE = patch+0x14 (classes 0x40/0xC0/0x00) or
+; patch+0x12 (class 0x80).  The forced bit 15 is what marks the value as pitch-bend for the
+; downstream handlers.
 Voice_PitchBend:
 	cp (xwa + 1), 0x1A
 	ret nc
@@ -16478,6 +18756,7 @@ Voice_PitchBend:
 	cps a, 0
 	ret nz
 
+; BranchA of Voice_PitchBend.
 Voice_PitchBend_BranchA:
 	ld l, e
 	extz hl
@@ -16490,6 +18769,7 @@ Voice_PitchBend_BranchA:
 	ld wa, hl
 	jrl AudioChannel_Dispatch
 
+; BranchB of Voice_PitchBend.
 Voice_PitchBend_BranchB:
 	ld a, e
 	extz wa
@@ -16501,12 +18781,16 @@ Voice_PitchBend_BranchB:
 	lda xde, (xhl + 18)
 	jrl AudioChannel_Dispatch
 
+; Calls Voice_NoteState_Clear for parts 0..0x19, then walks the voice list from
+; Voice_AllocateForAny and issues per-voice tone-generator writes with the standard strobe.
+; Called from Voice_ResetAllControllers.
 Voice_AllVoices_PortamentoReset:
 	push xiz
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jr nc, Voice_AllVoices_PortamentoReset_NopCont1
 
+; loop body of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_LoopBody:
 	stb_erp A, 0xFB
 	extz wa
@@ -16515,6 +18799,7 @@ Voice_AllVoices_PortamentoReset_LoopBody:
 	cp_erpb 0xFB, 0x1A
 	jr c, Voice_AllVoices_PortamentoReset_LoopBody
 
+; NopCont1: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_NopCont1:
 	call Voice_AllocateForAny
 	lda xwa, (xhl + 5)
@@ -16522,6 +18807,7 @@ Voice_AllVoices_PortamentoReset_NopCont1:
 	cp (xiz), 0x40
 	jr nc, Voice_AllVoices_PortamentoReset_Exit
 
+; NopCont2: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_NopCont2:
 	res_dd8 7, 0x18
 	ld a, (xiz)
@@ -16534,6 +18820,7 @@ Voice_AllVoices_PortamentoReset_NopCont2:
 	jr __jrt_nop_02A6AF
 __jrt_nop_02A6AF:
 
+; NopCont3: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_NopCont3:
 	nop
 	nop
@@ -16549,6 +18836,7 @@ Voice_AllVoices_PortamentoReset_NopCont3:
 	jr __jrt_nop_02A6CF
 __jrt_nop_02A6CF:
 
+; loop step of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_LoopStep:
 	nop
 	nop
@@ -16557,10 +18845,14 @@ Voice_AllVoices_PortamentoReset_LoopStep:
 	cp (xiz), 0x40
 	jr c, Voice_AllVoices_PortamentoReset_NopCont2
 
+; common exit of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_Exit:
 	pop xiz
 	ret
 
+; A = value.  Stores the global pitch-bend range and then drives
+; Voice_PerVoice_PortamentoPitchUpdate so sounding notes pick it up.  Reached from SysEx
+; dispatch entry 3 and from Voice_ResetAllControllers with WA = 0x40.
 Voice_SetPitchBendRangeAndApply:
 	exts wa
 	calr Voice_SetMasterTune
@@ -16573,6 +18865,8 @@ Voice_SetPitchBendRangeAndApply:
 	ld xwa, xhl
 	jrl Voice_AllVoices_WritePan
 
+; WA = part index.  Recomputes the part's portamento pitch state; two internal branches
+; (0x02A771, 0x02A77B) select between the target-reached and still-gliding cases.
 Voice_PerVoice_PortamentoPitchUpdate:
 	dec 2, xsp
 	ld (xsp), a
@@ -16618,12 +18912,14 @@ Voice_PerVoice_PortamentoPitchUpdate:
 	cps a, 0
 	jr nz, Voice_PerVoice_PortamentoPitchUpdate_Exit
 
+; BranchA of Voice_PerVoice_PortamentoPitchUpdate.
 Voice_PerVoice_PortamentoPitchUpdate_BranchA:
 	ld a, (xsp)
 	extz wa
 	call VoiceSlot_FullInit
 	jr Voice_PerVoice_PortamentoPitchUpdate_Exit
 
+; BranchB of Voice_PerVoice_PortamentoPitchUpdate.
 Voice_PerVoice_PortamentoPitchUpdate_BranchB:
 	ld a, (xsp)
 	extz wa
@@ -16632,16 +18928,20 @@ Voice_PerVoice_PortamentoPitchUpdate_BranchB:
 	extz wa
 	call VoiceSlot_AltInit
 
+; common exit of Voice_PerVoice_PortamentoPitchUpdate.
 Voice_PerVoice_PortamentoPitchUpdate_Exit:
 	inc 2, xsp
 	ret
 
+; Calls Voice_PerVoice_PortamentoPitchUpdate for parts 0..0x19.  Reached from SysEx dispatch
+; entry 1 (sub-command 0x92) and from Voice_ResetAllControllers.
 Voice_AllVoices_PortamentoUpdate:
 	pushw_erp 0xFA
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jr nc, Voice_AllVoices_PortamentoUpdate_Exit
 
+; loop body of Voice_AllVoices_PortamentoUpdate.
 Voice_AllVoices_PortamentoUpdate_LoopBody:
 	stb_erp A, 0xFB
 	extz wa
@@ -16650,10 +18950,18 @@ Voice_AllVoices_PortamentoUpdate_LoopBody:
 	cp_erpb 0xFB, 0x1A
 	jr c, Voice_AllVoices_PortamentoUpdate_LoopBody
 
+; common exit of Voice_AllVoices_PortamentoUpdate.
 Voice_AllVoices_PortamentoUpdate_Exit:
 	popw_erp 0xFA
 	ret
 
+; MIDI 0xF0 / manufacturer sub-command dispatcher.  XWA -> message, C = (XWA+2) is the
+; sub-command byte.  Three sub-commands are special-cased first: 0x99 -> DispatchEntry2,
+; 0x92 -> DispatchEntry1, 0x91 -> DispatchEntry0, 0x09 -> the head of the stub table.
+; Otherwise index = C - 0x80; accepted if 0 <= index <= 7 (sub-commands 0x80..0x87), or,
+; after a further -0x1B, if 8 <= index <= 0x16 (sub-commands 0xA3..0xB1).  Everything else
+; returns.  The accepted index is doubled, used to read a word from the table at 0x00F74F
+; and added to the stub-table base 0x02A7FC.
 Voice_SystemMsg:
 	ld c, (xwa + 2)
 	cp c, 0x99
@@ -16676,6 +18984,7 @@ Voice_SystemMsg:
 	cp bc, 0x16
 	ret gt
 
+; The computed jump itself: BC*2 -> word at 0x00F74F -> jp (0x02A7FC + offset).
 Voice_SystemMsg_DispatchJump:
 	add bc, bc
 	lda_24 xix, 0x00f74f
@@ -16683,6 +18992,21 @@ Voice_SystemMsg_DispatchJump:
 	lda_24 xix, 0x02a7fc
 	jp_ind 8, 0x07, 0xF0, 0xE4
 
+; --- 0x02A7FC-0x02A837  Voice_SystemMsg_DispatchTable
+; Stubs of the form `ld A,(XWA+3) [; extz WA] ; jrl <handler>` -- 8 bytes with the extz,
+; 6 without.  Resolved by adding the word at 0x00F74F + index*2 to this base:
+;   (reached directly when sub-command == 0x09, NOT via the table) 0x02A7FC ->
+;                                             Voice_SetPolyphonyMode
+;   index 0 (sub-cmd 0x80) offset 0x0008 -> 0x02A804 VoiceCC_Stub_Ret1
+;   index 1 (0x81)         offset 0x0010 -> 0x02A80C VoiceCC_Stub_Ret2
+;   index 2 (0x82)         offset 0x0018 -> 0x02A814 Voice_SetPitchBendRangeAndApply
+;   index 3 (0x83)         offset 0x001E -> 0x02A81A Voice_SetPitchBendRange
+;   index 4 (0x84)         offset 0x00F6 -> 0x02A8F2 a bare `ret` (sub-command ignored)
+;   index 5 (0x85)         offset 0x0024 -> 0x02A820 Voice_SetKeyShiftEnable
+;   index 6 (0x86)         offset 0x002C -> 0x02A828 Voice_SetParam_04134D
+;   index 7 (0x87)         offset 0x0034 -> 0x02A830 Voice_SetRhythmMode
+; Indices 8..0x16 (sub-commands 0xA3..0xB1) resolve past 0x02A838 into the three named
+; DispatchEntry stubs and the code that follows them; index > 0x16 is rejected by the caller.
 Voice_SystemMsg_DispatchTable:
 	ld a, (xwa + 3)
 	extz wa
@@ -16707,14 +19031,18 @@ Voice_SystemMsg_DispatchTable:
 	extz wa
 	jrl Voice_SetRhythmMode
 
+; Sub-command 0x91 -> Voice_SetParam_04134B.
 Voice_SystemMsg_DispatchEntry0:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetParam_04134B
 
+; Sub-command 0x92 -> Voice_AllVoices_PortamentoUpdate (no argument).
 Voice_SystemMsg_DispatchEntry1:
 	jrl Voice_AllVoices_PortamentoUpdate
 
+; Sub-command 0x99 -> a small group ending in Voice_WriteChannelAssign with WA = 0x0B,
+; Voice_AllVoices_UpdateVelocity and Voice_SetMonoMode.
 Voice_SystemMsg_DispatchEntry2:
 	ld a, (xwa + 3)
 	extz wa
@@ -16788,12 +19116,29 @@ Voice_SystemMsg_DispatchEntry2:
 	jrl Voice_SetMonoMode
 	ret
 
+; Full audio-side reset.  Reached by `jp` from the audio init sequence (right after
+; DSP_Config_Init, DSP_Reset, ToneGen_EmitCommandLoop(0), DSP_ResetWriteBufferPtr,
+; VoiceSlot_ClearAll and `0x041342 = 0`), and from CC 0x79.
+; Per part 0..0x19 it applies, in order: mod wheel 0, volume 0x7F, pan 0x40, expression 0x7F,
+; sustain 0, sostenuto 0, soft 0, portamento 0, Voice_PortamentoSlots_WriteHW,
+; Voice_NoteState_Clear, Voice_SetLFO_ActiveFlag, portamento rate 2, portamento depth 0x80,
+; portamento time 0x40, reverb depth 0, chorus enable 0, chorus depth 6, delay depth 1,
+; delay enable 0, delay feedback 0.
+; Then globally: Voice_SetPolyphonyMode(2), the two ret-stubs with 0x7F,
+; Voice_SetPitchBendRangeAndApply(0x40), Voice_SetPitchBendRange(0), Voice_SetKeyShiftEnable(0),
+; Voice_SetParam_04134D(0), Voice_SetRhythmMode(0), Voice_SetParam_04134B(0),
+; Voice_AllVoices_PortamentoUpdate, Voice_SetCCMaxFlag(0), Voice_AllVoices_PortamentoReset,
+; Voice_WriteChannelAssign(index 0..0x0B, value 0), Voice_AllVoices_UpdateVelocity(1),
+; Voice_SetMonoMode(0).
+; ★ The 0..0x0B loop is TWELVE iterations, not 26 -- one per pitch class, which is the
+; strongest evidence that the 0x04134E array is a scale-tune table.
 Voice_ResetAllControllers:
 	pushw_erp 0xFA
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jrl nc, Voice_ResetAllControllers_PostLoop
 
+; loop body of Voice_ResetAllControllers.
 Voice_ResetAllControllers_LoopBody:
 	stb_erp A, 0xFB
 	extz wa
@@ -16876,6 +19221,7 @@ Voice_ResetAllControllers_LoopBody:
 	cp_erpb 0xFB, 0x1A
 	jrl c, Voice_ResetAllControllers_LoopBody
 
+; PostLoop of Voice_ResetAllControllers.
 Voice_ResetAllControllers_PostLoop:
 	lds wa, 2
 	calr Voice_SetPolyphonyMode
@@ -16903,6 +19249,7 @@ Voice_ResetAllControllers_PostLoop:
 	cp_erpb 0xFB, 0x0C
 	jr nc, Voice_ResetAllControllers_ChanModeExit
 
+; The twelve-iteration loop; see the note above about its real meaning.
 Voice_ResetAllControllers_ChanModeLoop:
 	stb_erp A, 0xFB
 	extz wa
@@ -16912,6 +19259,7 @@ Voice_ResetAllControllers_ChanModeLoop:
 	cp_erpb 0xFB, 0x0C
 	jr c, Voice_ResetAllControllers_ChanModeLoop
 
+; ChanModeExit of Voice_ResetAllControllers.
 Voice_ResetAllControllers_ChanModeExit:
 	lds wa, 1
 	calr Voice_AllVoices_UpdateVelocity
@@ -16920,6 +19268,12 @@ Voice_ResetAllControllers_ChanModeExit:
 	popw_erp 0xFA
 	ret
 
+; A = part index.  For each of the 4 output slots i = 0..3: computes the slot address
+; part_base + 0x6E + i*0x25 via FP_MulAccum64 (0x03D8CA), dereferences the long pointer at
+; slot+0x00, takes bytes +2 and +3 of that record, assembles them as (b3 << 8) | b2, masks
+; to 12 bits and stores the word at part_base + 0x102 + i*2.
+; So the portamento target for each slot is a 12-bit pitch value copied out of the slot's
+; tone record.  Pure memory; no hardware.
 Voice_PortamentoTargets_SetAll:
 	dec 2, xsp
 	push xiz
@@ -16928,6 +19282,7 @@ Voice_PortamentoTargets_SetAll:
 	cpiw_erp 0xFA, 4
 	jrl nc, Voice_PortamentoTargets_SetAll_Exit
 
+; loop body of Voice_PortamentoTargets_SetAll.
 Voice_PortamentoTargets_SetAll_LoopBody:
 	stw_erp WA, 0xFA
 	extz xwa
@@ -16982,11 +19337,15 @@ Voice_PortamentoTargets_SetAll_LoopBody:
 	cpiw_erp 0xFA, 4
 	jrl c, Voice_PortamentoTargets_SetAll_LoopBody
 
+; common exit of Voice_PortamentoTargets_SetAll.
 Voice_PortamentoTargets_SetAll_Exit:
 	pop xiz
 	inc 2, xsp
 	ret
 
+; A = part, C = slot 0..3.  Stores A into slot+0x00 of part_base + 0x6E + slot*0x25 and
+; installs the constant long pointer 0x00F8B0 at slot+0x04.  0x00F8B0 is therefore the
+; default (ROM) tone record used when no patch record has been bound to the slot.
 Voice_PortamentoTarget_SetSlot:
 	extz bc
 	muls bc, 0x25
@@ -17002,6 +19361,10 @@ Voice_PortamentoTarget_SetSlot:
 	ld (xbc + 4), xwa
 	ret
 
+; A = part, C = slot.  Reads (slotrecord+3) & 0x30 >> 4 as a 2-bit selector, fetches a
+; 32-bit base from [0x045314]+0x70 and a 16-bit multiplier from [0x045314]+0xEC, computes
+; base + multiplier*selector + 0x045310, and stores the 32-bit result at slot+0x08.
+; 0x045314 is a long pointer into the shared DSP/tone parameter block.
 Voice_PortamentoTarget_ComputePitch:
 	ld e, c
 	extz de
@@ -17041,6 +19404,10 @@ Voice_PortamentoTarget_ComputePitch:
 	ld (xbc + 8), xwa
 	ret
 
+; A = part index.  Compares the four words at part_base+0x00, +0x02, +0x04 and +0x06 of the
+; slot-selection block against zero and mirrors the results into bits 0..3 of the part flags
+; word at part_base+0x02.  Set = that slot is in use.  Called first thing by
+; Voice_InitFromSlot (0x02ADC1).
 Voice_UpdateFlagsFromSlot:
 	ld c, a
 	extz bc
@@ -17059,37 +19426,49 @@ Voice_UpdateFlagsFromSlot:
 	ormi16 (xwa), 0x1
 	jr Voice_UpdateFlagsFromSlot_BranchB
 
+; BranchA of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_BranchA:
 	andmi16 (xwa), 0xFFFE
 
+; BranchB of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_BranchB:
 	cpw (xde + 2), 0x0
 	jr z, Voice_UpdateFlagsFromSlot_BranchC
 	ormi16 (xwa), 0x2
 	jr Voice_UpdateFlagsFromSlot_BranchD
 
+; BranchC of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_BranchC:
 	andmi16 (xwa), 0xFFFD
 
+; BranchD of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_BranchD:
 	cpw (xde + 4), 0x0
 	jr z, Voice_UpdateFlagsFromSlot_BranchE
 	ormi16 (xwa), 0x4
 	jr Voice_UpdateFlagsFromSlot_BranchF
 
+; BranchE of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_BranchE:
 	andmi16 (xwa), 0xFFFB
 
+; BranchF of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_BranchF:
 	cpw (xde + 6), 0x0
 	jr z, Voice_UpdateFlagsFromSlot_Exit
 	ormi16 (xwa), 0x8
 	ret
 
+; common exit of Voice_UpdateFlagsFromSlot.
 Voice_UpdateFlagsFromSlot_Exit:
 	andmi16 (xwa), 0xFFF7
 	ret
 
+; E = group number 0..2, BC = a packed word of three 4-bit fields.  For each of the three
+; fields it reads a destination byte-offset from the 3-byte-stride tables at 0x00F77D,
+; 0x00F77E and 0x00F77F (indexed by E*3), and stores (BC & 0x0F) at that offset in the
+; caller's 9-byte stack scratch array, shifting BC right by 4 between fields.
+; Together the three calls expand three packed words into a flat 9-entry priority array.
 Voice_Selector_Unpack3Groups:
 	ld l, e
 	extz hl
@@ -17122,6 +19501,17 @@ Voice_Selector_Unpack3Groups:
 	lda_dri XHL, 0x07, 0xE0, 0xE8
 	ret
 
+; XWA -> three packed words, XDE -> result index byte, XBC -> a counter word, plus a fourth
+; pointer pushed by the caller and read at (XSP+26).
+; Builds the 9-byte array with three Voice_Selector_Unpack3Groups calls, then scans entries
+; d = 0..8 twice over:
+;   * L remembers the FIRST entry whose value is non-zero;
+;   * E remembers the FIRST entry whose value is >= 4, and every such entry increments the
+;     counter word pointed to by XBC.
+; If any entry reached 4 the E candidate wins, otherwise the L candidate is used.  The chosen
+; index goes to *XDE and the corresponding array value to *(XSP+26).  Returns with `retd 4`.
+; ★ Both candidates start at 0xFF and there is NO fallback: if all nine entries are zero,
+; 0xFF is written out as the selected index.  See findings.
 Voice_Selector_FindBestSlot:
 	lda xsp, (xsp - 18)
 	push xiz
@@ -17148,6 +19538,7 @@ Voice_Selector_FindBestSlot:
 	cp d, 0x9
 	jr nc, Voice_Selector_FindBestSlot_InnerStep
 
+; inner loop body of Voice_Selector_FindBestSlot.
 Voice_Selector_FindBestSlot_InnerLoop:
 	cp l, 0xFF
 	jr nz, Voice_Selector_FindBestSlot_SlotCheck
@@ -17158,6 +19549,7 @@ Voice_Selector_FindBestSlot_InnerLoop:
 	jr z, Voice_Selector_FindBestSlot_SlotCheck
 	ld l, d
 
+; SlotCheck of Voice_Selector_FindBestSlot.
 Voice_Selector_FindBestSlot_SlotCheck:
 	ld a, d
 	extz wa
@@ -17170,11 +19562,13 @@ Voice_Selector_FindBestSlot_SlotCheck:
 	jr nz, Voice_Selector_FindBestSlot_Update
 	ld e, d
 
+; Update of Voice_Selector_FindBestSlot.
 Voice_Selector_FindBestSlot_Update:
 	inc 1, d
 	cp d, 0x9
 	jr c, Voice_Selector_FindBestSlot_InnerLoop
 
+; Post-loop: pick E if it is not 0xFF, else fall through to the L candidate.
 Voice_Selector_FindBestSlot_InnerStep:
 	cp e, 0xFF
 	jr z, Voice_Selector_FindBestSlot_OuterStep
@@ -17188,6 +19582,7 @@ Voice_Selector_FindBestSlot_InnerStep:
 	ld (xde), a
 	jr Voice_Selector_FindBestSlot_Exit
 
+; The "no entry reached 4" path -- writes the L candidate, which may still be 0xFF.
 Voice_Selector_FindBestSlot_OuterStep:
 	ld xwa, (xsp + 14)
 	ld (xwa), l
@@ -17198,11 +19593,34 @@ Voice_Selector_FindBestSlot_OuterStep:
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xde), a
 
+; Last symbol inside this region.  Its only caller, Voice_Selector_ComputeMixWeights, begins
+; one byte past the region end at 0x02AD03.
 Voice_Selector_FindBestSlot_Exit:
 	pop xiz
 	lda xsp, (xsp + 18)
 	retd 0x4
 
+; Recomputes the three mix-weight / pitch-offset words of one part from that part's four
+; articulation words.
+; IN : A = part index (0..0x19).  OUT: none in registers.
+; Writes part+0x10E, part+0x110, part+0x112 (0x041476/0x041478/0x04147A + part*0x11F).
+; Body: forms XHL = part+0x102 (the articulation word array) and calls
+; Voice_Selector_FindBestSlot with three output pointers into its own frame --
+; XBC -> COUNT, XDE -> INDEX, pushed arg -> VALUE. FindBestSlot scatters the 3x3 nibbles of
+; artic[0..2] into a 9-byte scratch buffer through the permutation table at
+; 0x00F77D..0x00F785 (3 bytes per group), then returns INDEX = the first scratch entry >= 4
+; (else the first non-zero entry), VALUE = that entry, COUNT = how many entries are >= 4.
+; The three results are then table-mapped:
+;   part+0x10E = u16 [0x00F786 + COUNT*2]            (10-entry table)
+;   part+0x112 = u16 [0x00F79A + INDEX*2]            (9-entry table)
+;   part+0x110 = u16[0x00F7D2 + COUNT*2]
+;              + u16[0x00F7AC + INDEX*2]
+;              + u16[0x00F7BE + VALUE*2]
+; The four tables are exactly 10/9/9/10 entries and butt up against each other
+; (0x00F786+0x14 = 0x00F79A, 0x00F79A+0x12 = 0x00F7AC, 0x00F7AC+0x12 = 0x00F7BE,
+; 0x00F7BE+0x14 = 0x00F7D2), which is what pins COUNT to 0..9 and INDEX to 0..8.
+; Touches no hardware. Only caller: Voice_InitFromSlot (0x02ADC1), i.e. it runs whenever an
+; articulation parameter changes, never per note.
 Voice_Selector_ComputeMixWeights:
 	dec 8, xsp
 	ld (xsp + 6), a
@@ -17264,6 +19682,12 @@ Voice_Selector_ComputeMixWeights:
 	inc 8, xsp
 	ret
 
+; "An articulation parameter of this part changed" -- recompute everything derived from it.
+; IN : A = part index. Calls Voice_UpdateFlagsFromSlot (0x02AB83), which sets/clears bits
+; 0..3 of the part's layer-enable mask (part+0x02) according to whether each of the four
+; articulation words is non-zero, then Voice_Selector_ComputeMixWeights, then zeroes the
+; four articulation depth bytes part+0x10A..+0x10D (0x041472..0x041475).
+; Called from VoiceSlot_AltInit (0x02F7C4 region). Touches no hardware.
 Voice_InitFromSlot:
 	dec 2, xsp
 	ld (xsp), a
@@ -17296,6 +19720,15 @@ Voice_InitFromSlot:
 	inc 2, xsp
 	ret
 
+; NOT a data table -- it is the first of seven articulation-parameter setter routines that
+; run from 0x02AE22 to 0x02AFF6 (see [UNCERTAIN] on the name).
+; IN : A = part index, C = new value byte.
+; This one replaces the LOW BYTE (bits 0..7) of articulation word 0, i.e.
+; part+0x102 = (part+0x102 & 0xFF00) | C. Then calls Voice_UpdateFlagsFromSlot and
+; Voice_Selector_ComputeMixWeights so the derived words are refreshed.
+; Called from VoiceAlloc_CheckAndInit_ExtData+0x102 (0x02EDE7) with A taken from the command
+; record byte +0x01 (part) and C from byte +0x04 (value) -- i.e. it is the handler for one
+; parameter number of the external/SysEx parameter-change dispatcher.
 VoiceSlot_DataTable_02AE22:
 	dec	2, xsp
 	ld	(xsp), a
@@ -17317,6 +19750,13 @@ VoiceSlot_DataTable_02AE22:
 	.byte 0x1e, 0xae, 0xfe
 	inc	2, xsp
 	ret
+; Second of the seven articulation setters. IN: A = part index, C = value byte.
+; part+0x106 = (part+0x106 & 0xFFF0) | (C & 0x0F)   (articulation word 2, bits 0..3)
+; part+0x104 = (part+0x104 & 0xFFF0) | (C >> 4)     (articulation word 1, bits 0..3)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights.
+; Called from 0x02EE06. No symbol exists for this address in either the LLVM build or the
+; reference file -- this is a new name.
+Voice_Artic_SetWord2Word1_Nibble0:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -17343,6 +19783,12 @@ VoiceSlot_DataTable_02AE22:
 	.byte 0x1e, 0x64, 0xfe
 	inc	2, xsp
 	ret
+; Third setter. IN: A = part index, C = value byte.
+; part+0x106 = (part+0x106 & 0xFF0F) | ((C & 0x0F) << 4)
+; part+0x104 = (part+0x104 & 0xFF0F) | (C & 0xF0)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights. Called from 0x02EE25.
+; New name -- no symbol at this address in either source.
+Voice_Artic_SetWord2Word1_Nibble1:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -17369,6 +19815,12 @@ VoiceSlot_DataTable_02AE22:
 	.byte 0x1e, 0x1a, 0xfe
 	inc	2, xsp
 	ret
+; Fourth setter. IN: A = part index, C = value byte.
+; part+0x102 = (part+0x102 & 0xF0FF) | ((C & 0x0F) << 8)
+; part+0x106 = (part+0x106 & 0xF0FF) | ((C & 0xF0) << 4)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights. Called from 0x02EE44.
+; New name -- no symbol at this address in either source.
+Voice_Artic_SetWord0Word2_Nibble2:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -17397,6 +19849,12 @@ VoiceSlot_DataTable_02AE22:
 	.byte 0x1e, 0xcc, 0xfd
 	inc	2, xsp
 	ret
+; Fifth setter. IN: A = part index, C = value byte.
+; part+0x104 = (part+0x104 & 0xF0FF) | ((C & 0x0F) << 8)
+; part+0x108 = C >> 4                               (articulation word 3, whole word)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights. Called from 0x02EE63.
+; New name -- no symbol at this address in either source.
+Voice_Artic_SetWord1Nibble2_And_Word3:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -17423,6 +19881,14 @@ VoiceSlot_DataTable_02AE22:
 	.byte 0x1e, 0x84, 0xfd
 	inc	2, xsp
 	ret
+; Sixth setter, and the first that writes DEPTH bytes rather than articulation nibbles.
+; IN: A = part index, C = packed value byte. Signed, and it does NOT refresh the derived
+; words (no Voice_UpdateFlagsFromSlot / ComputeMixWeights call), unlike the five above.
+;   part+0x10A (0x041472) = ((i8)C >> 4) * 4          [sra 4 then sla 2 on E]
+;   part+0x10B (0x041473) = sign_extend_nibble(C & 0x0F) * 2
+; These two bytes are the depths applied in Voice_Slot_CalcArticParams' i==3 arm.
+; Called from 0x02EEFE. New name -- no symbol at this address in either source.
+Voice_Artic_SetDepthPair_A:
 	ld	e, a
 	extz	de
 	muls	de, 287
@@ -17443,6 +19909,13 @@ VoiceSlot_DataTable_02AE22:
 	add	a, c
 	st_rrb	a, xhl, de
 	ret
+; Seventh setter, the sibling of 0x02AF82 for the other depth pair.
+; IN: A = part index, C = packed value byte.
+;   part+0x10C (0x041474) = ((i8)C >> 4) * 4
+;   part+0x10D (0x041475) = sign_extend_nibble(C & 0x0F) * 8
+; These are the depths applied in Voice_Slot_CalcArticParams' i==0..2 arm.
+; Called from 0x02EF6A. New name -- no symbol at this address in either source.
+Voice_Artic_SetDepthPair_B:
 	ld	e, a
 	extz	de
 	muls	de, 287
@@ -17463,6 +19936,12 @@ VoiceSlot_DataTable_02AE22:
 	st_rrb	a, xhl, de
 	ret
 
+; Read-modify-write of one unsigned byte with a signed delta and a clamp.
+; IN : XWA = address of the byte, C = signed delta (sign-extended to 16 bits),
+;      DE = upper bound, one stacked word = lower bound.  OUT: the byte is updated.
+; value = zero_extend((XWA)); value += (i16)C; if (value > DE) value = DE;
+; if (value < lower) value = lower; (XWA) = (u8)value. Returns with `retd 2` (pops the
+; stacked lower bound). Only callers are the two arms of Voice_Slot_CalcArticParams.
 Voice_SignedClamp:
 	ld l, c
 	exts hl
@@ -17473,15 +19952,34 @@ Voice_SignedClamp:
 	jr le, Voice_SignedClamp_ClampHi
 	ld bc, de
 
+; Upper bound already applied; now test against the stacked lower bound.
 Voice_SignedClamp_ClampHi:
 	cp bc, (xsp + 4)
 	jr ge, Voice_SignedClamp_ClampLo
 	ld bc, (xsp + 4)
 
+; Store the clamped low byte back through XWA and return.
 Voice_SignedClamp_ClampLo:
 	ld (xwa), c
 	retd 0x2
 
+; Applies this part's articulation words and depth bytes to four consecutive 0x51-byte
+; (81) parameter blocks.
+; IN : A = part index. Reads part+0x10C and part+0x10D into locals, and loads the u32
+; pointer at part+0x6E (0x0413D6) into XIZ -- that is the head of the block array.
+; For i = 0..3, with BC = the u16 articulation word at part+0x102+i*2:
+;   (XIZ+0x02) = BC & 0xFF
+;   (XIZ+0x03) = ((XIZ+0x03) & 0xF0) | ((BC >> 8) & 0x0F)
+;   if i < 3 : Voice_SignedClamp(&XIZ+0x27, delta = part+0x10C, 0..0x64)
+;              Voice_SignedClamp(&XIZ+0x2D, delta = part+0x10D, 0..0x64)
+;   if i == 3: Voice_SignedClamp(&XIZ+0x17, delta = part+0x10A, 0..0x7F)
+;              Voice_SignedClamp(&XIZ+0x29, delta = part+0x10B, 0..0x64)
+;              Voice_SignedClamp(&XIZ+0x2B, delta = part+0x10B, 0..0x64)
+;   XIZ += 0x51
+; The 0x51 stride is the same 81 that Voice_KeyIndex_Pack3Nibbles uses as its outer digit
+; weight, so the array being walked is one plane of a 9x9x9 table.
+; Only caller: DSP_Cmd2B_AlgoSelect -- i.e. this runs when the DSP algorithm is (re)selected,
+; not per note. Touches no hardware.
 Voice_Slot_CalcArticParams:
 	dec 8, xsp
 	push xiz
@@ -17507,6 +20005,7 @@ Voice_Slot_CalcArticParams:
 	cpw (xsp + 4), 0x4
 	jrl nc, Voice_Slot_CalcArticParams_Exit
 
+; Top of the i = 0..3 loop; unpacks articulation word i into (XIZ+0x02)/(XIZ+0x03).
 Voice_Slot_CalcArticParams_LoopBody:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -17548,6 +20047,7 @@ Voice_Slot_CalcArticParams_LoopBody:
 	calr Voice_SignedClamp
 	jr Voice_Slot_CalcArticParams_LoopStep
 
+; The i == 3 arm: clamps fields +0x17, +0x29 and +0x2B using depths part+0x10A/+0x10B.
 Voice_Slot_CalcArticParams_Type3Branch:
 	lda xde, (xiz + 23)
 	ld a, (xsp + 10)
@@ -17586,17 +20086,27 @@ Voice_Slot_CalcArticParams_Type3Branch:
 	ldw de, 0x64
 	calr Voice_SignedClamp
 
+; i++, XIZ += 0x51, loop while i < 4.
 Voice_Slot_CalcArticParams_LoopStep:
 	incm 1, (xsp + 4)
 	lda xiz, (xiz + 81)
 	cpw (xsp + 4), 0x4
 	jrl c, Voice_Slot_CalcArticParams_LoopBody
 
+; Restore XIZ and return.
 Voice_Slot_CalcArticParams_Exit:
 	pop xiz
 	inc 8, xsp
 	ret
 
+; Picks/repacks one articulation word according to how low the sounding key is.
+; IN : A = part index, C = physical TG slot, E = which articulation word (0..3).
+; OUT: HL = the resulting word. Touches no hardware.
+; note = (u16 at 0x04308E + C*0x47 + 6) >> 8, i.e. the LIVE slot record's final pitch word,
+; high byte = the key number. If note + 12 >= 0x24 the articulation word is returned
+; unchanged. Otherwise (very low keys) the low nibble n0 = w & 0x0F and the next nibble
+; n1 = (w >> 4) & 0x0F are compared: if n0 < n1 the result is w & 0x0FF0, else it is
+; (w & 0x0F00) | (n0 << 4). Only caller: Voice_PitchEnv_Advance (0x0238F8).
 Voice_Slot_CalcAmpNibble:
 	extz wa
 	muls wa, 0x11F
@@ -17618,6 +20128,7 @@ Voice_Slot_CalcAmpNibble:
 	ldw_sri HL, 0x07, 0xEC, 0xE0
 	jr Voice_Slot_CalcAmpNibble_Exit
 
+; Low-key arm: compare nibble 0 against nibble 1 of the articulation word.
 Voice_Slot_CalcAmpNibble_BranchA:
 	ld a, e
 	extz wa
@@ -17639,6 +20150,7 @@ Voice_Slot_CalcAmpNibble_BranchA:
 	and hl, 0xFF0
 	jr Voice_Slot_CalcAmpNibble_Exit
 
+; n0 >= n1: result = (w & 0x0F00) | (n0 << 4).
 Voice_Slot_CalcAmpNibble_BranchB:
 	sll bc, 4
 	ld a, e
@@ -17648,9 +20160,22 @@ Voice_Slot_CalcAmpNibble_BranchB:
 	and hl, 0xF00
 	or hl, bc
 
+; Single `ret`; HL already holds the result.
 Voice_Slot_CalcAmpNibble_Exit:
 	ret
 
+; The high-key counterpart of Voice_Slot_CalcAmpNibble: selects among the nibbles of one
+; articulation word according to how many octaves above the top break point the key is.
+; IN : A = part index, C = physical TG slot, E = which articulation word (0..3).
+; OUT: HL = the resulting word. Touches no hardware.
+; L counts how many times 12 must be subtracted from (slotpitch >> 8) - 12 before it drops
+; below 0x54; that count is the "octave offset".
+;   L == 0 : return the articulation word unchanged.
+;   L == 1 : with n1 = (w>>4)&0x0F and n2 = (w>>8)&0x0F, return unchanged if n1 >= n2, else
+;            (w & 0x000F) | (n2 << 4).
+;   L >= 2 : with n0 = w & 0x0F, return whichever of n0 / n1 / n2 the two comparisons pick
+;            (effectively the value that survives the highest key range).
+; Only caller: Voice_PitchEnv_Advance_StateB.
 Voice_Slot_FindOctaveOffset:
 	extz wa
 	muls wa, 0x11F
@@ -17668,12 +20193,14 @@ Voice_Slot_FindOctaveOffset:
 	cp wa, 0x54
 	jr c, Voice_Slot_FindOctaveOffset_BranchB
 
+; Octave-counting loop: subtract 12, L++, repeat while the remainder is still >= 0x54.
 Voice_Slot_FindOctaveOffset_BranchA:
 	sub wa, 0xC
 	inc 1, l
 	cp wa, 0x54
 	jr nc, Voice_Slot_FindOctaveOffset_BranchA
 
+; Dispatch on the octave count L: 0, 1 or >= 2.
 Voice_Slot_FindOctaveOffset_BranchB:
 	cps l, 0
 	jr nz, Voice_Slot_FindOctaveOffset_BranchC
@@ -17683,6 +20210,7 @@ Voice_Slot_FindOctaveOffset_BranchB:
 	ldw_sri HL, 0x07, 0xF0, 0xE0
 	jrl Voice_Slot_FindOctaveOffset_Exit
 
+; L == 1 arm.
 Voice_Slot_FindOctaveOffset_BranchC:
 	cps l, 1
 	jr nz, Voice_Slot_FindOctaveOffset_BranchD
@@ -17710,6 +20238,7 @@ Voice_Slot_FindOctaveOffset_BranchC:
 	or hl, wa
 	jr Voice_Slot_FindOctaveOffset_Exit
 
+; L >= 2 arm: extracts all three nibbles for the two comparisons below.
 Voice_Slot_FindOctaveOffset_BranchD:
 	ld a, e
 	extz wa
@@ -17735,18 +20264,26 @@ Voice_Slot_FindOctaveOffset_BranchD:
 	ld hl, wa
 	jr Voice_Slot_FindOctaveOffset_Exit
 
+; Result = nibble 1.
 Voice_Slot_FindOctaveOffset_BranchE:
 	ld hl, bc
 	jr Voice_Slot_FindOctaveOffset_Exit
 
+; n0 >= n1: return unchanged unless n0 < n2, in which case result = nibble 2.
 Voice_Slot_FindOctaveOffset_BranchF:
 	cp hl, wa
 	ret nc
 	ld hl, wa
 
+; Single `ret`; HL holds the result.
 Voice_Slot_FindOctaveOffset_Exit:
 	ret
 
+; Converts three packed 4-bit digits into a linear index of a 9 x 9 x 9 table.
+; IN : WA = the packed word.  OUT: HL = ((WA>>8)&0x0F)*0x51 + ((WA>>4)&0x0F)*9 + (WA&0x0F).
+; 0x51 = 81 = 9*9, so the digits are base-9 and each entry of the outer plane is the same
+; 0x51 stride that Voice_Slot_CalcArticParams steps by. Callers: Voice_PitchEnv_Advance and
+; Voice_PitchEnv_Advance_StateB. Touches no hardware.
 Voice_KeyIndex_Pack3Nibbles:
 	ld hl, wa
 	srl hl, 8
@@ -17763,18 +20300,38 @@ Voice_KeyIndex_Pack3Nibbles:
 	add hl, wa
 	ret
 
+; IN : XWA = live voice-slot record. Adds the u16 at part+0x10E (via the slot's +0x23 part
+; pointer) into the slot's pitch accumulator at +0x0D. That word is the one
+; Voice_Selector_ComputeMixWeights derives from the COUNT result. Called only from
+; Voice_Release_Type4 (0x02BD51).
 Voice_Slot_LoadPitchOffset_A:
 	ld xbc, (xwa + 35)
 	ldw_sri0 BC, (xbc + 0x010e)
 	add (xwa + 13), bc
 	ret
 
+; Same as 0x02B2E9 but adds part+0x110 (the summed mix-weight word) into slot+0x0D.
+; Called only from Voice_Init_Type1 (0x02C434).
 Voice_Slot_LoadPitchOffset_B:
 	ld xbc, (xwa + 35)
 	ldw_sri0 BC, (xbc + 0x0110)
 	add (xwa + 13), bc
 	ret
 
+; Advances one voice slot's portamento by the time elapsed since the part's last stamp.
+; IN : XWA = live voice-slot record. XIZ := (slot+0x23) = the part record.
+; Step 1: slot+0x0D += (i8)part+0x10A  (the coarse per-tick offset).
+; Step 2: if bit 7 of part+0x118 is SET, re-stamp part+0x114 with the current value of the
+;   32-bit free-running counter at 0x001040 (read with interrupts masked to level 6:
+;   `ei 6` ... `ei 0`) and RETURN WITHOUT APPLYING ANY SWEEP. Otherwise:
+;   elapsed = counter - part+0x114, clamped (unsigned) to 0x7FFF;
+;   rate = (i8)part+0x10B + zero_extend((slot+0x17)->+0x29), clamped to 0..0x64 and then to
+;          >= 0 (0x02B37C..0x02B386);
+;   product = FP_MulAccum64(u16 [0x00F7E6 + rate*2], elapsed) >> 10;
+;   if product > 0x0FFF then slot+0x0D = 0xC000 (the "swept out" sentinel) else
+;   slot+0x0D -= product.
+; Only caller: Voice_Release_Type4_BranchA (0x02BD6B). Touches no hardware other than the
+; software tick at 0x001040.
 Voice_Slot_ApplyPortamentoDelta:
 	dec 8, xsp
 	push xiz
@@ -17794,6 +20351,7 @@ Voice_Slot_ApplyPortamentoDelta:
 	ei 0
 	jrl Voice_Slot_ApplyPortamentoDelta_Exit
 
+; part+0x118 bit 7 clear: compute elapsed = tick(0x001040) - part+0x114 under mask level 6.
 Voice_Slot_ApplyPortamentoDelta_BranchA:
 	ei 6
 	ldda32 xwa, 4160
@@ -17807,6 +20365,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchA:
 	ld xwa, 0x7FFF
 	ld (xsp + 4), xwa
 
+; elapsed clamped to 0x7FFF; now build the rate from part+0x10B and (slot+0x17)->+0x29.
 Voice_Slot_ApplyPortamentoDelta_BranchB:
 	ldb_sri0 A, (xiz + 0x010b)
 	ld c, a
@@ -17822,6 +20381,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchB:
 	jr gt, Voice_Slot_ApplyPortamentoDelta_BranchC
 	ld wa, de
 
+; Rate exceeded 0x64: use 0x64.
 Voice_Slot_ApplyPortamentoDelta_BranchC:
 	ld de, wa
 	lds wa, 0
@@ -17829,6 +20389,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchC:
 	jr lt, Voice_Slot_ApplyPortamentoDelta_BranchD
 	ld wa, de
 
+; Rate floored at 0; look the coefficient up in the u16 table at 0x00F7E6 and multiply.
 Voice_Slot_ApplyPortamentoDelta_BranchD:
 	ld de, wa
 	add wa, wa
@@ -17845,16 +20406,24 @@ Voice_Slot_ApplyPortamentoDelta_BranchD:
 	ldw (xwa + 13), 0xC000
 	jr Voice_Slot_ApplyPortamentoDelta_Exit
 
+; Normal case: subtract the scaled product from the slot's pitch accumulator (+0x0D).
 Voice_Slot_ApplyPortamentoDelta_BranchE:
 	ld bc, wa
 	ld xwa, (xsp + 8)
 	sub (xwa + 13), bc
 
+; Restore XIZ and return.
 Voice_Slot_ApplyPortamentoDelta_Exit:
 	pop xiz
 	inc 8, xsp
 	ret
 
+; Adds a 3-bit pseudo-random value to a 16-bit word.
+; IN : XWA = address of the word.  The randomness is the low 3 bits of the free-running
+; 32-bit counter at 0x001040, sampled with interrupts masked to level 6, so the value is
+; (tick & 7) -- a cheap dither, not a real PRNG. (XWA) += that.
+; Only caller: Voice_Init_Type1 (0x02C3F0), where XWA = 0x0451CE, i.e. the WAVEFORM/
+; multisample word of the tone-generator parameter staging block. Touches no hardware.
 Voice_Slot_ApplyPitchJitter:
 	dec 4, xsp
 	pushw iz
@@ -17870,6 +20439,25 @@ Voice_Slot_ApplyPitchJitter:
 	inc 4, xsp
 	ret
 
+; Builds the final and base pitch words for one STAGING voice-slot record.
+; IN : XWA = staging slot record (0x002942 + i*0x47).
+; Reads XBC = slot+0x23 (part record), and the two parameter-block pointers slot+0x17 and
+; slot+0x1F. Accumulates in IZ:
+;   IZ  = ((slot+0x05 & 0x7F) << 8) + 0x80        key, in 1/256-semitone units
+;   IZ += part+0x112                              mix-weight word (INDEX-derived)
+;   IZ += u16 at 0x041349                         a GLOBAL (not part-indexed) master tune
+;   IZ += (i8)(part+0x16) << 8
+;   IZ += (i8)(part+0x6D) << 8
+;   slot+0x08 = SaturateS16_WA(IZ)                the BASE pitch
+;   IZ -= ((slot+0x1F)->+0x0B << 8) + 0x80
+;   IZ += u16 (slot+0x1F)->+0x0C
+;   IZ += (i8)(slot+0x17)->+0x03 << 8
+;   IZ += (i8)(slot+0x17)->+0x04
+;   slot+0x06 = PitchBend_AlignLoop_Init(WA = IZ, BC = (slot+0x1F)->+0x09,
+;                                        DE = (slot+0x1F)->+0x0A)   the FINAL pitch
+; slot+0x06 is exactly the word that Voice_Slot_CalcAmpNibble and
+; Voice_Slot_FindOctaveOffset later read back as the sounding key.
+; Only caller: Voice_Allocate_1of4 (0x02C5A0). Touches no hardware.
 Voice_Slot_ComputePitch:
 	lda xsp, (xsp - 12)
 	pushw iz
@@ -17937,21 +20525,41 @@ Voice_Slot_ComputePitch:
 	lda xsp, (xsp + 12)
 	ret
 
+; Signed three-way clamp. IN: WA = value, DE = lower bound, BC = upper bound.
+; OUT: HL = min(max(WA, DE), BC). Callers: Voice_Setup_Typed_BranchB/BranchC and
+; Voice_Allocate_Type2 -- all three use it to keep a transposed key inside 0..0x7F.
 Voice_Pitch_ClampRange:
 	cp wa, de
 	jr ge, Voice_Pitch_ClampRange_Hi
 	ld wa, de
 	jr Voice_Pitch_ClampRange_Lo
 
+; Lower bound satisfied; now clamp against the upper bound in BC.
 Voice_Pitch_ClampRange_Hi:
 	cp wa, bc
 	jr le, Voice_Pitch_ClampRange_Lo
 	ld wa, bc
 
+; Move the clamped value to HL and return.
 Voice_Pitch_ClampRange_Lo:
 	ld hl, wa
 	ret
 
+; NAME LEFT AS-IS. The reference file already has the real name ToneGen_SilenceChannel here;
+; the LLVM build calls the same address ToneGen_WriteNoteKey. Nothing is renamed by this
+; entry -- it adds documentation only. See [UNCERTAIN]: I believe the reference name is the
+; correct one.
+; RELEASES one physical tone-generator voice.
+; IN : A = physical TG slot (0..0x3F). No outputs. THIS IS THE ONLY VOICE-FREEING PATH IN
+; THE REGION and it is the routine that emits the 0x7E00 "free a voice" word documented in
+; the sub-CPU memory map.
+; Sequence, twice over: clear P6.7 (SFR 0x18 bit 7); write the register number to 0x100000;
+; `nop`; set P6.7; write the data word to 0x100002; three `nop`s reached through a
+; `jr T,<next>`. First pair: register 0xC0 + slot, data 0x0000. Second pair: register
+; 0x0000 + slot, data 0x7E00 (= FREE).
+; Only caller: AudioTick_UpdateVoice_SlotLoop (0x022C58 region), which XORs the freshly read
+; active-voice bitmap from 0x100000 against its previous copy and calls this for every slot
+; whose bit just went 1 -> 0.
 ToneGen_WriteNoteKey:
 	dec 2, xsp
 	ld (xsp), a
@@ -17966,6 +20574,7 @@ ToneGen_WriteNoteKey:
 	jr __jrt_nop_02B4C1
 __jrt_nop_02B4C1:
 
+; Landing pad of the `jr T` bus-settling delay after the first data write (3 nops).
 ToneGen_WriteNoteKey_NopCont1:
 	nop
 	nop
@@ -17980,6 +20589,7 @@ ToneGen_WriteNoteKey_NopCont1:
 	jr __jrt_nop_02B4DD
 __jrt_nop_02B4DD:
 
+; Landing pad of the `jr T` bus-settling delay after the 0x7E00 free write (3 nops).
 ToneGen_WriteNoteKey_NopCont2:
 	nop
 	nop
@@ -17987,6 +20597,20 @@ ToneGen_WriteNoteKey_NopCont2:
 	inc 2, xsp
 	ret
 
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_Init_Type4. Documentation only; nothing is renamed.
+; Full parameter rebuild + emit for one physical TG slot, "type 4" (the 4-layer voice path).
+; IN : A = physical TG slot. XIZ := 0x04308E + A*0x47 (the LIVE slot record).
+; Calls, in order and each with XWA = XIZ: Voice_Pitch_InterpDispatch,
+; Voice_Pitch_WriteOutputReg_Portamento, Voice_Pitch_WriteOutputReg_Legato,
+; Voice_Level_ComputeTriplet, Voice_PitchPack_Dispatch, Voice_PanReg_WriteDispatch,
+; Voice_StereoLevel_Compute, Voice_PortaLevel_Compute, Voice_Chan_ComputeParams,
+; Voice_SubVoice_ComputeAndTrigger, Voice2_UpdatePitch, Voice_ComputeExprPitchBend,
+; Voice_SetPitchWord_Muted, Voice_ComputeAndWritePan, Voice_WriteChPanShift (BC = 0),
+; Voice_ComputePitch, Voice_ApplyPortamento. Every one of those fills part of the 68-byte
+; staging block at 0x0451CC (see the region-4 notes). Finally
+; ToneGen_WriteVoiceParams(WA = slot, XBC = 0x0451CC) walks that block and emits the whole
+; register set to IC303. Only caller: Voice_SetVelocity_Type0_BranchA (0x02C9??).
 Voice_Init_Type4:
 	dec 2, xsp
 	push xiz
@@ -18039,6 +20663,21 @@ Voice_Init_Type4:
 	inc 2, xsp
 	ret
 
+; Builds ONE staging voice-slot record (0x002942 + layer*0x47) for a note-on and marks the
+; layer as "requested" in the caller's note request record.
+; Arguments (mixed registers + stack, `retd 0x0A`): XWA = note request record,
+; C = part index, DE = layer-enable bitmask to test, and stacked words: +0x1E = a packed
+; buffer selector, +0x20 = request priority, +0x22 = key, +0x24 = a sub-index,
+; +0x26 = layer index (0..3).
+; Body: DSP_LookupVoiceBuffer + VoiceParam_WriteDispatchHelper resolve the tone parameter
+; block; if (block+0x0D & DE) == 0 the layer is REFUSED (ExitA). Otherwise
+; VoiceField_ExtractAndWrite + VelocityQuantise_B + VoiceParam_WriteWithOffset_Alt derive
+; the level, and the staging record is filled: +0x01 = velocityindex<<6 | 0x12,
+; +0x03 = layer, +0x04 = part, +0x05 = key | 0x80, +0x0C = priority,
+; +0x23 = &part record, +0x27 = &part layer sub-block (part + 0x6E + layer*0x25),
+; +0x13/+0x17/+0x1B/+0x1F = the four resolved parameter-block pointers. Then
+; Voice_Pitch_CopyBase. Finally requestrec+0x02+layer = 0x80 | selector.
+; Called only from Voice_Setup_Typed. Touches no hardware.
 Voice_Allocate_Typed:
 	lda xsp, (xsp - 24)
 	pushw_erp 0xFA
@@ -18169,6 +20808,7 @@ Voice_Allocate_Typed:
 	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_Allocate_Typed_ExitB
 
+; Refusal path: requestrec+0x02+layer = 0 (this layer will not be allocated).
 Voice_Allocate_Typed_ExitA:
 	ld a, (xsp + 38)
 	extz wa
@@ -18177,6 +20817,7 @@ Voice_Allocate_Typed_ExitA:
 	ld xwa, (xsp + 22)
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
+; Common tail: requestrec+0x06+layer = 0, unwind and `retd 0x0A`.
 Voice_Allocate_Typed_ExitB:
 	ld a, (xsp + 38)
 	extz wa
@@ -18188,6 +20829,28 @@ Voice_Allocate_Typed_ExitB:
 	lda xsp, (xsp + 24)
 	retd 0xA
 
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_Setup_Typed. Documentation only; nothing is renamed.
+; The per-layer note-on worker. Arguments: XWA = note request record, C = part index,
+; DE = the layer bit to test in the part's layer-enable mask, plus stacked words
+; +0x1E = selector, +0x20 = velocity, +0x22 = key, +0x24 = source layer, +0x26 = target
+; layer index. `retd 0x0A`.
+; FIRST TEST (0x02B72A): if (part+0x02 & DE) == 0 the routine jumps straight to ExitA, which
+; writes requestrec+0x02+layer = 0 and requestrec+0x06+layer = 0 and returns. No error is
+; reported anywhere. This is the primary "note silently does nothing" gate.
+; If the key >= 0x78 and bit 1 of the layer parameter block is set, the work is delegated to
+; Voice_Allocate_Typed with the key rebased by -0x78; if the key >= 0x78 and that bit is
+; clear the layer is dropped (BranchA). For keys < 0x78 the staging record at
+; 0x002942 + layer*0x47 is filled inline: +0x01 = velidx<<6 with bit 2 set, +0x03 = layer,
+; +0x04 = part, +0x05 = key | 0x80, +0x0C = velocity (optionally transposed, see BranchB/C),
+; +0x23 = &part record, +0x13 = the u32 at part+0x06 (tone record), +0x17/+0x1B/+0x1F/+0x27
+; = the resolved parameter pointers, then Voice_Pitch_Compute. Algorithm words +0x2F and
+; +0x31 come from Algo_SubTable_Bit15Dispatch and Voice_SecondaryParam_Fetch, and +0x35/
+; +0x36/+0x38/+0x3A are looked up in the ROM tables at 0x012038, 0x012057 and 0x012095 using
+; bytes +0x5E..+0x61 of the tone record.
+; Last: requestrec+0x02+layer = 0x80 | selector, and requestrec+0x06+layer is set to 0x80
+; unless (+0x2F == 0 && +0x31 == 0xFF && bit 15 of (layerblock+0x18) is clear), in which
+; case it is 0. Touches no hardware.
 Voice_Setup_Typed:
 	lda xsp, (xsp - 22)
 	push xiz
@@ -18290,6 +20953,7 @@ Voice_Setup_Typed:
 	calr Voice_Allocate_Typed
 	jrl Voice_Setup_Typed_ExitB
 
+; Key >= 0x78 but the layer block's bit 1 is clear: drop the layer (both request bytes = 0).
 Voice_Setup_Typed_BranchA:
 	ld a, (xsp + 38)
 	extz wa
@@ -18305,6 +20969,7 @@ Voice_Setup_Typed_BranchA:
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	jrl Voice_Setup_Typed_ExitB
 
+; Normal key range: start filling the staging record at 0x002942 + layer*0x47.
 Voice_Setup_Typed_BranchB:
 	ld a, (xsp + 38)
 	extz wa
@@ -18337,6 +21002,7 @@ Voice_Setup_Typed_BranchB:
 	ld (xsp + 32), l
 	jr Voice_Setup_Typed_BranchD
 
+; Global 0x041343 bit 0 set and part == 1: velocity += 0x0C, clamped to 0..0x7F.
 Voice_Setup_Typed_BranchC:
 	cp (xsp + 20), 0x1
 	jr nz, Voice_Setup_Typed_BranchD
@@ -18348,6 +21014,7 @@ Voice_Setup_Typed_BranchC:
 	calr Voice_Pitch_ClampRange
 	ld (xsp + 32), l
 
+; Store the (possibly transposed) velocity to +0x0C and wire up all the record pointers.
 Voice_Setup_Typed_BranchD:
 	ld a, (xsp + 32)
 	ld (xiz + 12), a
@@ -18436,6 +21103,7 @@ Voice_Setup_Typed_BranchD:
 	bit 15, wa
 	jr z, Voice_Setup_Typed_BranchF
 
+; "Layer has real content": requestrec+0x06+layer = 0x80.
 Voice_Setup_Typed_BranchE:
 	ld a, (xsp + 38)
 	extz wa
@@ -18445,6 +21113,7 @@ Voice_Setup_Typed_BranchE:
 	stib_ind 0x07, 0xE0, 0xE4, 0x80
 	jr Voice_Setup_Typed_ExitB
 
+; "Layer is a null algorithm": requestrec+0x06+layer = 0.
 Voice_Setup_Typed_BranchF:
 	ld a, (xsp + 38)
 	extz wa
@@ -18454,6 +21123,7 @@ Voice_Setup_Typed_BranchF:
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 	jr Voice_Setup_Typed_ExitB
 
+; Layer-enable mask test failed: zero BOTH request bytes for this layer and leave.
 Voice_Setup_Typed_ExitA:
 	ld a, (xsp + 38)
 	extz wa
@@ -18468,11 +21138,30 @@ Voice_Setup_Typed_ExitA:
 	ld xwa, (xsp + 22)
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
+; Common tail, `retd 0x0A`.
 Voice_Setup_Typed_ExitB:
 	pop xiz
 	lda xsp, (xsp + 22)
 	retd 0xA
 
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name, which describes the code
+; well). The LLVM build calls this address Voice_NoteOn_Type4. Documentation only.
+; The four-layer note-on body. IN: XWA = note request record, C = part index, E = key,
+; one stacked word = velocity. `retd 0x02`.
+; requestrec+0x00 = key | part<<8 | 0x80. Then Voice_Setup_Typed is called up to five times
+; with different (layer bit, selector, source layer, target layer) tuples chosen by bits
+; 0x0E and 0x0F of the part's layer-enable mask -- that is the 2x2 variant selector.
+; Then NoteOn_Dispatch(requestrec) performs the actual physical allocation and writes the
+; assigned slot numbers into requestrec+0x0A+i.
+; COMMIT LOOP (SlotLoop, i = 0..3): if requestrec+0x0A+i >= 0x40 the layer is skipped
+; entirely -- no record is committed, no register is written, and nothing is reported. Else
+; the 0x47-byte staging record 0x002942 + i*0x47 is block-copied
+; (`ld bc,0x23 / ldirw / ldi`) onto the live record 0x04308E + slot*0x47.
+; For keys < 0x78 (AltSlotPath) three extra fixups run afterwards: live+0x00 = slot,
+; live+0x2F = 0 if staging+0x2F == 0 else (staging+0x2F | (staging+0x2F<<8) | 0x8000), and
+; live+0x31 = 0x00FF if staging+0x31 == 0xFF else (staging+0x31 | 0xC000).
+; Finally bit 8 of live+0x01 is set or cleared depending on bit 15 of the word at
+; ((live+0x27)->+0x18). Only caller: Voice_SetVelocity (0x02C8E4).
 Voice_NoteOn_Type4:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -18514,6 +21203,7 @@ Voice_NoteOn_Type4:
 	calr Voice_Setup_Typed
 	jr Voice_NoteOn_Type4_BranchB
 
+; Mask bit 0x0E clear: first Voice_Setup_Typed call with selector 0 instead of 1.
 Voice_NoteOn_Type4_BranchA:
 	ld a, (xsp + 8)
 	ld c, a
@@ -18531,6 +21221,7 @@ Voice_NoteOn_Type4_BranchA:
 	lds de, 1
 	calr Voice_Setup_Typed
 
+; Re-read the layer-enable mask and branch on bit 0x0F for the second layer pair.
 Voice_NoteOn_Type4_BranchB:
 	ld a, (xsp + 8)
 	extz wa
@@ -18557,6 +21248,7 @@ Voice_NoteOn_Type4_BranchB:
 	calr Voice_Setup_Typed
 	jr Voice_NoteOn_Type4_BranchD
 
+; Mask bit 0x0F clear variant of the second Voice_Setup_Typed call.
 Voice_NoteOn_Type4_BranchC:
 	ld a, (xsp + 8)
 	ld c, a
@@ -18574,6 +21266,7 @@ Voice_NoteOn_Type4_BranchC:
 	lds de, 2
 	calr Voice_Setup_Typed
 
+; Layers 2 and 3 (mask bits 4 and 8), then NoteOn_Dispatch and the commit loop.
 Voice_NoteOn_Type4_BranchD:
 	ld a, (xsp + 8)
 	ld c, a
@@ -18611,6 +21304,7 @@ Voice_NoteOn_Type4_BranchD:
 	cp (xsp + 4), 0x4
 	jrl nc, Voice_NoteOn_Type4_Exit
 
+; Commit loop head: the `cp (requestrec+0x0A+i),0x40 / jr nc` polyphony gate.
 Voice_NoteOn_Type4_SlotLoop:
 	ld a, (xsp + 4)
 	extz wa
@@ -18643,6 +21337,7 @@ Voice_NoteOn_Type4_SlotLoop:
 	ldi85
 	jrl Voice_NoteOn_Type4_BranchI
 
+; Key < 0x78 commit: same block copy plus the live+0x00 / +0x2F / +0x31 fixups.
 Voice_NoteOn_Type4_AltSlotPath:
 	ld a, e
 	extz wa
@@ -18677,9 +21372,11 @@ Voice_NoteOn_Type4_AltSlotPath:
 	or hl, wa
 	jr Voice_NoteOn_Type4_BranchF
 
+; staging+0x2F was zero: live+0x2F = 0.
 Voice_NoteOn_Type4_BranchE:
 	lds hl, 0
 
+; Store the packed +0x2F word into the live record (0x0430BD + slot*0x47).
 Voice_NoteOn_Type4_BranchF:
 	ld a, e
 	extz wa
@@ -18696,9 +21393,11 @@ Voice_NoteOn_Type4_BranchF:
 	or hl, 0xC000
 	jr Voice_NoteOn_Type4_BranchH
 
+; staging+0x31 == 0xFF: live+0x31 = 0x00FF (the "no secondary parameter" sentinel).
 Voice_NoteOn_Type4_BranchG:
 	ldw hl, 0xFF
 
+; Store the +0x31 word into the live record (0x0430BF + slot*0x47).
 Voice_NoteOn_Type4_BranchH:
 	ld a, e
 	extz wa
@@ -18706,6 +21405,7 @@ Voice_NoteOn_Type4_BranchH:
 	lda_24 xbc, 0x0430bf
 	stw_dri HL, 0x07, 0xE4, 0xE0
 
+; Read bit 15 of ((live+0x27)->+0x18) to decide the +0x01 bit-8 flag.
 Voice_NoteOn_Type4_BranchI:
 	ld a, e
 	extz wa
@@ -18723,6 +21423,7 @@ Voice_NoteOn_Type4_BranchI:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x01
 	jr Voice_NoteOn_Type4_BranchK
 
+; Clear bit 8 of live+0x01 (0x04308F + slot*0x47 masked with 0xFEFF).
 Voice_NoteOn_Type4_BranchJ:
 	ld a, e
 	extz wa
@@ -18730,16 +21431,28 @@ Voice_NoteOn_Type4_BranchJ:
 	lda_24 xbc, 0x04308f
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFE
 
+; i++, loop while i < 4. Also the landing point of the "slot >= 0x40" skip.
 Voice_NoteOn_Type4_BranchK:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x4
 	jrl c, Voice_NoteOn_Type4_SlotLoop
 
+; Unwind and `retd 0x02`.
 Voice_NoteOn_Type4_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	retd 0x2
 
+; Per-tick parameter refresh for one already-sounding type-4 voice (the release/decay
+; update, not the note-off itself).
+; IN : A = physical TG slot. XIZ := 0x04308E + A*0x47.
+; Runs Voice_PitchEnv_Advance first (that is what distinguishes it from Voice_Init_Type4)
+; then the same chain of parameter builders down to Voice_SetPitchWord_Muted. It then
+; splits on the record's layer index (+0x03): layers 0..2 take Voice_UpdatePan_Full +
+; Voice_ComputePitch + Voice_Slot_LoadPitchOffset_A + Voice_ApplyPortamento; layer 3 takes
+; Voice_UpdatePan_Mono + Voice_ComputePitch + Voice_Slot_ApplyPortamentoDelta +
+; Voice_ApplyPortamento. Ends with ToneGen_WriteVoiceParams(slot, 0x0451CC), which is the
+; only hardware contact. Only caller: Voice_SetVelocity_Type40_NopCont2.
 Voice_Release_Type4:
 	dec 2, xsp
 	push xiz
@@ -18787,6 +21500,7 @@ Voice_Release_Type4:
 	call Voice_ApplyPortamento
 	jr Voice_Release_Type4_BranchB
 
+; Layer index >= 3: mono pan path and the time-based portamento sweep.
 Voice_Release_Type4_BranchA:
 	ld xwa, xiz
 	call Voice_UpdatePan_Mono
@@ -18797,6 +21511,7 @@ Voice_Release_Type4_BranchA:
 	ld xwa, xiz
 	call Voice_ApplyPortamento
 
+; Join point; emit the staged register block for this slot.
 Voice_Release_Type4_BranchB:
 	ld a, (xsp + 4)
 	extz wa
@@ -18806,6 +21521,19 @@ Voice_Release_Type4_BranchB:
 	inc 2, xsp
 	ret
 
+; Single-layer note-on worker used by the type-2 path -- the leaner sibling of
+; Voice_Setup_Typed. IN: XWA = note request record, C = part index, DE = layer bit to test,
+; plus stacked +0x10 selector, +0x12 velocity (bit 7 = an extra flag), +0x14 key,
+; +0x16 target layer index. `retd 0x08`.
+; Same first gate: if (part+0x02 & DE) == 0 it jumps to ExitA and zeroes both request bytes.
+; Otherwise it fills 0x002942 + layer*0x47 with +0x01 = 0x0008 (| 0x0800 when bit 7 of the
+; velocity argument is set), +0x03 = layer, +0x04 = part, +0x05 = key | 0x80,
+; +0x0C = velocity & 0x7F, +0x23 = &part record, +0x13 = tone record pointer,
+; +0x17/+0x1B/+0x1F/+0x27 = the layer sub-block pointers, calls Voice_Pitch_Compute, and
+; then hard-codes the algorithm fields to the "no algorithm" values: +0x2F = 0,
+; +0x31 = 0x00FF, +0x35 = 0, +0x36 = +0x38 = +0x3A = 0.
+; Finishes with requestrec+0x02+layer = 0x80 | selector and requestrec+0x06+layer = 0.
+; Callers: Voice_NoteOn_Type2_BranchB / _BranchC. Touches no hardware.
 Voice_NoteOn_Type3:
 	dec 8, xsp
 	push xiz
@@ -18878,6 +21606,7 @@ Voice_NoteOn_Type3:
 	jr z, Voice_NoteOn_Type3_BranchA
 	ormi16 (xiz + 1), 0x800
 
+; Past the +0x01 flag word; fill the rest of the staging record.
 Voice_NoteOn_Type3_BranchA:
 	ld a, (xsp + 22)
 	ld (xiz + 3), a
@@ -18924,6 +21653,7 @@ Voice_NoteOn_Type3_BranchA:
 	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_NoteOn_Type3_ExitB
 
+; Layer-enable mask test failed: requestrec+0x02+layer = 0.
 Voice_NoteOn_Type3_ExitA:
 	ld a, (xsp + 22)
 	extz wa
@@ -18932,6 +21662,7 @@ Voice_NoteOn_Type3_ExitA:
 	ld xwa, (xsp + 8)
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
+; Common tail: requestrec+0x06+layer = 0, `retd 0x08`.
 Voice_NoteOn_Type3_ExitB:
 	ld a, (xsp + 22)
 	extz wa
@@ -18943,6 +21674,15 @@ Voice_NoteOn_Type3_ExitB:
 	inc 8, xsp
 	retd 0x8
 
+; Four-layer note-on built out of four Voice_NoteOn_Type3 calls.
+; IN : XWA = note request record, C = part index, E = key, stacked velocity. `retd 0x02`.
+; First it mirrors bit 0x0D of the part's layer-enable mask into bit 7 of part+0x118
+; (0x041480 + part*0x11F) -- that is the same flag Voice_Slot_ApplyPortamentoDelta reads to
+; decide whether to re-stamp the portamento timestamp.
+; requestrec+0x00 = key | part<<8 | 0x80. Then four Voice_NoteOn_Type3 calls with layer bits
+; 1, 2, 4 and (8 or 0, chosen by bit 7 of the stacked velocity). NoteOn_Dispatch follows,
+; then the same commit loop as type 4: skip any layer whose requestrec+0x0A+i >= 0x40, else
+; block-copy staging[i] -> live[slot] and set live+0x00 = slot.
 Voice_NoteOn_Type2:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -18963,6 +21703,7 @@ Voice_NoteOn_Type2:
 	set_dri 7, 0x07, 0xE4, 0xE0
 	jr Voice_NoteOn_Type2_BranchB
 
+; Mask bit 0x0D clear: clear bit 7 of part+0x118.
 Voice_NoteOn_Type2_BranchA:
 	ld a, (xsp + 8)
 	extz wa
@@ -18970,6 +21711,7 @@ Voice_NoteOn_Type2_BranchA:
 	lda_24 xbc, 0x041480
 	res_dri 7, 0x07, 0xE4, 0xE0
 
+; Build the request word and issue the first three Voice_NoteOn_Type3 calls.
 Voice_NoteOn_Type2_BranchB:
 	ld a, (xsp + 6)
 	ld c, a
@@ -19042,6 +21784,7 @@ Voice_NoteOn_Type2_BranchB:
 	calr Voice_NoteOn_Type3
 	jr Voice_NoteOn_Type2_BranchD
 
+; Velocity bit 7 clear: the fourth layer uses mask bit 8 instead of 0.
 Voice_NoteOn_Type2_BranchC:
 	ld a, (xsp + 8)
 	ld c, a
@@ -19058,6 +21801,7 @@ Voice_NoteOn_Type2_BranchC:
 	ldw de, 0x8
 	calr Voice_NoteOn_Type3
 
+; All four layers staged: call NoteOn_Dispatch and enter the commit loop.
 Voice_NoteOn_Type2_BranchD:
 	ld xwa, (xsp + 10)
 	call NoteOn_Dispatch
@@ -19065,6 +21809,7 @@ Voice_NoteOn_Type2_BranchD:
 	cps e, 4
 	jr nc, Voice_NoteOn_Type2_Exit
 
+; Commit loop head with the `cp (requestrec+0x0A+i),0x40 / jr nc` polyphony gate.
 Voice_NoteOn_Type2_BranchE:
 	ld a, e
 	extz wa
@@ -19101,16 +21846,27 @@ Voice_NoteOn_Type2_BranchE:
 	ld a, (xsp + 4)
 	lda_dri XBC, 0x07, 0xEC, 0xE4
 
+; i++, loop while i < 4; also the skip target for an unallocated layer.
 Voice_NoteOn_Type2_LoopStep:
 	inc 1, e
 	cps e, 4
 	jr c, Voice_NoteOn_Type2_BranchE
 
+; Unwind and `retd 0x02`.
 Voice_NoteOn_Type2_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	retd 0x2
 
+; Parameter rebuild + emit for one physical TG slot, type-2 flavour.
+; IN : A = physical TG slot. XIZ := 0x04308E + A*0x47.
+; Chain: Voice_Pitch_InterpDispatch, Voice_Pitch_WriteOutputReg_Direct,
+; Voice_Pitch_WriteOutputReg_Secondary, Voice_PitchReg_WriteDispatch,
+; Voice_PanReg_WriteDispatchB, Voice_ComputePitchBend2, Voice_SetPitchWord_Unmuted,
+; Voice_UpdatePan_Simple, Voice_WriteChPanShift2 (BC = 0), Voice_Level_ClearAllOutputRegs,
+; Voice_ComputePitch_Mono, Voice_ApplyPortamento2, then
+; ToneGen_WriteVoiceParams(slot, 0x0451CC). Callers: Voice_SetVelocity_Type0_NopCont2 and
+; Voice_SetVelocity_Type80_NopCont2.
 Voice_Init_Type2:
 	dec 2, xsp
 	push xiz
@@ -19153,6 +21909,18 @@ Voice_Init_Type2:
 	inc 2, xsp
 	ret
 
+; The type-2 per-layer staging builder -- the counterpart of Voice_Allocate_Typed.
+; IN : XWA = note request record, C = part index, DE = a capability mask, plus stacked
+; +0x22 selector, +0x24 velocity, +0x26 sub-index, +0x28 layer index. `retd 0x08`.
+; Resolves the tone parameter block from part+0x06 through VoiceParam_WriteDispatchHelper;
+; refuses the layer (ExitA) if (block+0x0D & DE) == 0. Otherwise VoiceField_ExtractAndWrite
+; + VelocityQuantise_B + VoiceParam_WriteWithOffset_Alt derive the level, and the staging
+; record 0x002942 + layer*0x47 gets +0x01 = velidx<<6 with bit 4 set, +0x03 = layer,
+; +0x04 = part, +0x05 = subindex | 0x80, +0x0C = velocity (transposed by +0x10 and clamped
+; to 0..0x7F when bit 0 of the global word at 0x041343 is set), +0x23 = &part record,
+; +0x27 = &part layer sub-block, +0x13/+0x17/+0x1B/+0x1F = the resolved pointers, then
+; Voice_Pitch_CopyBase and requestrec+0x02+layer = 0x80 | selector.
+; Only caller: Voice_NoteOn_Type1. Touches no hardware.
 Voice_Allocate_Type2:
 	lda xsp, (xsp - 26)
 	push xiz
@@ -19237,6 +22005,7 @@ Voice_Allocate_Type2:
 	calr Voice_Pitch_ClampRange
 	ld (xsp + 36), l
 
+; Past the optional transpose; store the velocity and wire up the record pointers.
 Voice_Allocate_Type2_BranchA:
 	ld a, (xsp + 36)
 	ld (xiz + 12), a
@@ -19280,6 +22049,7 @@ Voice_Allocate_Type2_BranchA:
 	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_Allocate_Type2_ExitB
 
+; Refusal path: requestrec+0x02+layer = 0.
 Voice_Allocate_Type2_ExitA:
 	ld a, (xsp + 40)
 	extz wa
@@ -19288,6 +22058,7 @@ Voice_Allocate_Type2_ExitA:
 	ld xwa, (xsp + 26)
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
+; Common tail: requestrec+0x06+layer = 0, `retd 0x08`.
 Voice_Allocate_Type2_ExitB:
 	ld a, (xsp + 40)
 	extz wa
@@ -19299,6 +22070,13 @@ Voice_Allocate_Type2_ExitB:
 	lda xsp, (xsp + 26)
 	retd 0x8
 
+; Two-layer note-on. IN: XWA = note request record, C = part index, E = key, stacked
+; velocity. `retd 0x02`.
+; requestrec+0x00 = key | part<<8 | 0x80; two Voice_Allocate_Type2 calls (capability masks 1
+; and 4, selectors 0 and 1); then it explicitly zeroes requestrec+0x04, +0x05, +0x08 and
+; +0x09 so layers 2 and 3 cannot be requested; then NoteOn_Dispatch and a commit loop over
+; i = 0..1 only, with the same `>= 0x40` gate, the same 0x47-byte block copy and
+; live+0x00 = slot. Only caller: Voice_SetVelocity_Type80_Entry.
 Voice_NoteOn_Type1:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -19358,6 +22136,7 @@ Voice_NoteOn_Type1:
 	cps e, 2
 	jr nc, Voice_NoteOn_Type1_Exit
 
+; Commit loop head for i = 0..1, including the `cp (requestrec+0x0A+i),0x40` gate.
 Voice_NoteOn_Type1_LoopBody:
 	ld a, e
 	extz wa
@@ -19394,16 +22173,24 @@ Voice_NoteOn_Type1_LoopBody:
 	ld a, (xsp + 4)
 	lda_dri XBC, 0x07, 0xEC, 0xE4
 
+; i++, loop while i < 2; also the skip target for an unallocated layer.
 Voice_NoteOn_Type1_LoopStep:
 	inc 1, e
 	cps e, 2
 	jr c, Voice_NoteOn_Type1_LoopBody
 
+; Unwind and `retd 0x02`.
 Voice_NoteOn_Type1_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	retd 0x2
 
+; Parameter rebuild + emit for one physical TG slot, type-1 flavour. IN: A = slot.
+; Identical to Voice_Init_Type2 except that (a) right after Voice_Pitch_InterpDispatch it
+; calls Voice_Slot_ApplyPitchJitter(0x0451CE), dithering the staged waveform word by
+; (tick & 7), and (b) it uses Voice_Slot_LoadPitchOffset_B instead of the mono pitch step.
+; Ends with ToneGen_WriteVoiceParams(slot, 0x0451CC). Callers: the tails of Voice_SetPitch
+; and Voice_NoteOff.
 Voice_Init_Type1:
 	dec 2, xsp
 	push xiz
@@ -19450,6 +22237,16 @@ Voice_Init_Type1:
 	inc 2, xsp
 	ret
 
+; Single-layer staging builder for the Voice_NoteOn_Rhythm path.
+; IN : XWA = note request record, C = part index, DE = capability mask, plus stacked
+; +0x1E selector, +0x20 velocity, +0x22 sub-index, +0x24 layer index. `retd 0x08`.
+; Resolves the layer sub-block at part + 0x6E + layer*0x25, follows its +0x08 pointer, and
+; refuses (ExitA) if bit 1 of that block is clear OR if (paramblock+0x0D & DE) == 0.
+; Otherwise it fills 0x002942 + layer*0x47 exactly like Voice_Allocate_Typed does
+; (+0x01 = velidx<<6 | 0x12, +0x03/+0x04/+0x05/+0x0C, +0x23, +0x13/+0x17/+0x1B/+0x1F) and
+; then calls Voice_Slot_ComputePitch to fill +0x06 and +0x08. Sets requestrec+0x02+layer =
+; 0x80 | selector. NOTE it does NOT touch requestrec+0x06+layer on the success path.
+; Callers: Voice_NoteOn_Rhythm and Voice_NoteOn_Rhythm_BranchA. Touches no hardware.
 Voice_Allocate_1of4:
 	lda xsp, (xsp - 24)
 	pushw_erp 0xFA
@@ -19580,6 +22377,7 @@ Voice_Allocate_1of4:
 	lda_dri XIY, 0x07, 0xE0, 0xE4
 	jr Voice_Allocate_1of4_ExitB
 
+; Refusal path: requestrec+0x02+layer = 0.
 Voice_Allocate_1of4_ExitA:
 	ld a, (xsp + 36)
 	extz wa
@@ -19588,11 +22386,25 @@ Voice_Allocate_1of4_ExitA:
 	ld xwa, (xsp + 22)
 	stib_ind 0x07, 0xE0, 0xE4, 0x00
 
+; Unwind and `retd 0x08`.
 Voice_Allocate_1of4_ExitB:
 	popw_erp 0xFA
 	lda xsp, (xsp + 24)
 	retd 0x8
 
+; Allocates and commits ONE physical voice for a single-layer part. Despite the name it is
+; used for both the note-on and the note-off half of a key event -- see [UNCERTAIN].
+; IN : XWA = a caller-owned note request record (both callers put it on their own stack),
+; C = part index, E = key, one stacked byte = velocity. `retd 0x02`.
+; requestrec+0x00 = key | part<<8 | 0x80. Then:
+;   velocity != 0 : layer index 0, Voice_Allocate_1of4(mask 1, selector 3, velocity),
+;                   requestrec+0x06 = 0x40, +0x03 = 0, +0x07 = 0.
+;   velocity == 0 : layer index 1, velocity forced to 0x50,
+;                   requestrec+0x02 = 0, +0x06 = 0,
+;                   Voice_Allocate_1of4(mask 4, selector 3), requestrec+0x07 = 0.
+; Both paths then zero requestrec+0x04/+0x05/+0x08/+0x09, call NoteOn_Dispatch, and commit
+; the one layer: if requestrec+0x0A+layer >= 0x40 the whole event evaporates, else the
+; 0x47-byte staging record is copied to 0x04308E + slot*0x47 and live+0x00 = slot.
 Voice_NoteOn_Rhythm:
 	dec 2, xsp
 	push xiz
@@ -19628,6 +22440,7 @@ Voice_NoteOn_Rhythm:
 	ld (xiz + 7), 0x0
 	jr Voice_NoteOn_Rhythm_BranchB
 
+; Zero-velocity arm: layer index 1, velocity forced to 0x50, capability mask 4.
 Voice_NoteOn_Rhythm_BranchA:
 	ld (xsp + 4), 0x1
 	ldb l, 0x50
@@ -19649,6 +22462,7 @@ Voice_NoteOn_Rhythm_BranchA:
 	calr Voice_Allocate_1of4
 	ld (xiz + 7), 0x0
 
+; Join point: zero the unused request bytes, NoteOn_Dispatch, then the commit gate.
 Voice_NoteOn_Rhythm_BranchB:
 	ld (xiz + 4), 0x0
 	ld (xiz + 8), 0x0
@@ -19685,11 +22499,30 @@ Voice_NoteOn_Rhythm_BranchB:
 	lda_24 xbc, 0x04308e
 	lda_dri XIY, 0x07, 0xE4, 0xE0
 
+; Unwind and `retd 0x02`. Also the landing point of the `slot >= 0x40` skip.
 Voice_NoteOn_Rhythm_Exit:
 	pop xiz
 	inc 2, xsp
 	retd 0x2
 
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_SetPitch; the two agree in meaning. Documentation only.
+; The SECOND half of a real note-on, for parts whose tone record selects this path.
+; IN : A = part index, C = key, E = velocity, one stacked word. `retd 0x02`.
+; Three guards, all of which return silently:
+;   0x02C6EF : (tonerec+0x10 & 0xC0) must equal 0x40, where tonerec = the u32 at part+0x06;
+;   0x02C70E : (part+0x02 & 0x0007) must be non-zero;
+;   0x02C715 : bit 7 of the velocity argument must be CLEAR.
+; Then Voice_Env_ApplyVelocity_Type0 and Voice_Env_UpdateVelocityCounters run, a request
+; record is built on this routine's own stack (at xsp+2) and handed to Voice_NoteOn_Rhythm.
+; The assigned slot is read back from requestrec+0x0A (layer 0) and must be < 0x40.
+; It then talks to IC303 DIRECTLY, twice, with the P6.7 bracket described in the header:
+;   register 0x0840 + slot <- 0xFF00
+;   register 0x0800 + slot <- 0xFF80   (the documented "mute" level word)
+; i.e. the voice is parked silent BEFORE its parameters exist. Voice_Init_Type1(slot) then
+; builds and emits the whole register block, and finally
+; ToneGen_WriteSingleReg(WA = slot, BC = the u16 at 0x0430BB + slot*0x47 = live+0x2D)
+; writes the key-on word. Only caller: Voice_NoteOn (0x02CFDB region).
 Voice_SetPitch:
 	lda xsp, (xsp - 20)
 	pushw_erp 0xFA
@@ -19753,6 +22586,7 @@ Voice_SetPitch:
 	jr __jrt_nop_02C780
 __jrt_nop_02C780:
 
+; Bus-settling pad (3 nops) after writing 0xFF00 to TG register 0x0840 + slot.
 Voice_SetPitch_NopCont1:
 	nop
 	nop
@@ -19768,6 +22602,7 @@ Voice_SetPitch_NopCont1:
 	jr __jrt_nop_02C7A1
 __jrt_nop_02C7A1:
 
+; Bus-settling pad (3 nops) after writing 0xFF80 to TG register 0x0800 + slot.
 Voice_SetPitch_NopCont2:
 	nop
 	nop
@@ -19787,11 +22622,26 @@ Voice_SetPitch_NopCont2:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	call ToneGen_WriteSingleReg
 
+; Common exit for all three guards and the normal path; `retd 0x02`.
 Voice_SetPitch_Exit:
 	popw_erp 0xFA
 	lda xsp, (xsp + 20)
 	retd 0x2
 
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_NoteOff; the two agree in meaning. Documentation only.
+; The note-off body, structurally identical to Voice_SetPitch.
+; IN : A = part index, C = key, E = velocity, one stacked word. `retd 0x02`.
+; Same two guards on (tonerec+0x10 & 0xC0) == 0x40 and (part+0x02 & 0x0007) != 0, but NO
+; velocity-bit-7 guard. Voice_Env_ApplyVelocity_Type0 and Voice_Env_UpdateVelocityCounters
+; run, then a request record on this routine's own stack goes to Voice_NoteOn_Rhythm --
+; which, because a note-off carries velocity 0, takes its layer-1 arm. The slot is therefore
+; read back from requestrec+0x0B (layer 1, one byte further along than Voice_SetPitch reads)
+; and must be < 0x40.
+; Same direct IC303 writes: register 0x0840 + slot <- 0xFF00 and 0x0800 + slot <- 0xFF80,
+; then Voice_Init_Type1(slot), then ToneGen_WriteSingleReg(slot, live+0x2D), and finally
+; VoiceSlot_NoteOff(slot) at 0x0225D3 -- the extra call that distinguishes this routine from
+; Voice_SetPitch. Only caller: Voice_NoteOn_ZeroVelocity.
 Voice_NoteOff:
 	lda xsp, (xsp - 20)
 	pushw_erp 0xFA
@@ -19853,6 +22703,7 @@ Voice_NoteOff:
 	jr __jrt_nop_02C884
 __jrt_nop_02C884:
 
+; Bus-settling pad (3 nops) after writing 0xFF00 to TG register 0x0840 + slot.
 Voice_NoteOff_NopCont1:
 	nop
 	nop
@@ -19868,6 +22719,7 @@ Voice_NoteOff_NopCont1:
 	jr __jrt_nop_02C8A5
 __jrt_nop_02C8A5:
 
+; Bus-settling pad (3 nops) after writing 0xFF80 to TG register 0x0800 + slot.
 Voice_NoteOff_NopCont2:
 	nop
 	nop
@@ -19890,11 +22742,32 @@ Voice_NoteOff_NopCont2:
 	extz wa
 	call VoiceSlot_NoteOff
 
+; Common exit for both guards and the normal path; `retd 0x02`. Last instruction of the
+; region (ends at 0x02C8E3).
 Voice_NoteOff_Exit:
 	popw_erp 0xFA
 	lda xsp, (xsp + 20)
 	retd 0x2
 
+; Already named in symbols/subcpu_symbols_reference.txt and in the LLVM build; entry kept
+; unchanged, this entry only adds documentation.
+; The note-on workhorse. Inputs: A = part index (0..0x19), C = MIDI note, E = velocity,
+; plus one word pushed by the caller (Voice_NoteOn pushes MIDI status & 7 = the "source"
+; tag). Stack frame: 20 bytes of scratch + saved 0xFA/0xFB byte temporaries; the caller's
+; pushed word lands at (XSP+26); returns with retd 2.
+; It reads the part descriptor pointer at 0x04136E + part*0x11F, dereferences it and
+; switches on tone-header byte +0x10 masked with 0xC0 -- the PART MODE:
+;   0xC0 -> falls straight through to VOICE_SETVELOCITY_EXIT: NOTHING IS ALLOCATED AND NO TG
+;           REGISTER IS TOUCHED. This is a silent no-op path.
+;   0x80 -> VOICE_SETVELOCITY_MODE80 (2 voice slots, Voice_NoteOn_Type1 @0x02C2C0)
+;   0x40 -> VOICE_SETVELOCITY_MODE40 (4 slots, Voice_NoteOn_Type2 @0x02BF1B)
+;   0x00 -> in-line mode-00 path      (4 slots, Voice_NoteOn_Type4 @0x02BA2C)
+;   anything else -> exit, also a no-op.
+; The chosen Voice_NoteOn_TypeN fills the 20-byte scratch frame; scratch[0x0A + i] is the TG
+; channel allocated for slot i (0xFF/>=0x40 means "no slot"). Two loops then follow: see
+; VOICE_SETVELOCITY_MODE00_KEYON_LOOP and VOICE_SETVELOCITY_MODE00_PITCHFIX_LOOP.
+; On exit it clears bits 2..3 of the part word at 0x041368 + part*0x11F.
+; Callers: VOICE_NOTEON (0x02CF97) and the MIDI/keybed note path.
 Voice_SetVelocity:
 	lda xsp, (xsp - 20)
 	pushw_erp 0xFA
@@ -19945,6 +22818,10 @@ Voice_SetVelocity:
 	cpib_erp 0xFA, 4
 	jrl nc, Voice_SetVelocity_Type0_Loop2Start
 
+; For each of the 4 allocated slots (channel = scratch[0x0A+i], skipped when >= 0x40): mute the
+; voice by writing TG reg 0x0840+ch = 0xFF00 and reg 0x0800+ch = 0xFF80, then call
+; Voice_Init_Type2 (0x02C0B6) or Voice_Init_Type4 (0x02B4E3) depending on bit1 of the voice
+; struct word at 0x04308F + ch*0x47.
 Voice_SetVelocity_Type0_SlotLoop:
 	stb_erp A, 0xFA
 	extz wa
@@ -19996,6 +22873,7 @@ Voice_SetVelocity_Type0_NopCont2:
 	calr Voice_Init_Type2
 	jr Voice_SetVelocity_Type0_BranchB
 
+; Bit1 of voicestruct+1 clear -> Voice_Init_Type4 instead of Voice_Init_Type2.
 Voice_SetVelocity_Type0_BranchA:
 	stb_erp A, 0xFB
 	extz wa
@@ -20006,6 +22884,11 @@ Voice_SetVelocity_Type0_BranchB:
 	cpib_erp 0xFA, 4
 	jrl c, Voice_SetVelocity_Type0_SlotLoop
 
+; Second pass over the same 4 slots. For each channel < 0x40 whose voice struct has word
+; +0x2F == 0 and word +0x01 bit8 clear, it calls TONEGEN_WRITESINGLEREG(ch, voicestruct+0x2D),
+; i.e. it writes TG register (0x0000 + ch) with the stored key-on word. THIS IS THE ACTUAL
+; KEY-ON: bank 0x0000 is the per-voice note/key register (writing 0x7E00 there frees a voice).
+; Slots whose +0x2F word is non-zero are deliberately left un-keyed.
 Voice_SetVelocity_Type0_Loop2Start:
 	ldib_erp 0xFA, 0
 	cpib_erp 0xFA, 4
@@ -20053,12 +22936,16 @@ Voice_SetVelocity_Type0_Loop2Step:
 	cpib_erp 0xFA, 4
 	jr c, Voice_SetVelocity_Type0_Loop2Body
 
+; Calls Voice_ClearLFO_ActiveFlag(part) (0x027CD1) and jumps to the common exit.
 Voice_SetVelocity_Type0_Loop2Exit:
 	ld a, (xsp + 20)
 	extz wa
 	call Voice_ClearLFO_ActiveFlag
 	jrl Voice_SetVelocity_Exit
 
+; Part-mode 0x40 branch of VOICE_SETVELOCITY. Same shape as the mode-00 path but it uses
+; Voice_NoteOn_Type2 and, in the per-slot loop, Voice_Release_Type4 (0x02BCD6) instead of the
+; Init_Type2/Type4 pair. Falls into the same key-on loop and the same exit.
 Voice_SetVelocity_Type40_Entry:
 	ld a, (xsp + 20)
 	ld e, a
@@ -20173,6 +23060,9 @@ Voice_SetVelocity_Type40_Loop2Exit:
 	call Voice_ClearLFO_ActiveFlag
 	jrl Voice_SetVelocity_Exit
 
+; Part-mode 0x80 branch. Only TWO slots (loop bound 2, not 4) and it additionally calls
+; Voice_WriteChPitchWithVib (0x0266D8) per slot before muting, then Voice_Init_Type2.
+; Voice allocation is done by Voice_NoteOn_Type1 (0x02C2C0).
 Voice_SetVelocity_Type80_Entry:
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -20283,6 +23173,9 @@ Voice_SetVelocity_Type80_Loop2Exit:
 	extz wa
 	call Voice_ClearLFO_ActiveFlag
 
+; Common tail: clears bits 2-3 (mask 0xF3FF) of the part status word at 0x041368+part*0x11F,
+; restores the frame and returns with retd 2. Note that the 0xC0 part-mode reaches this point
+; without having touched the tone generator at all.
 Voice_SetVelocity_Exit:
 	ld a, (xsp + 20)
 	extz wa
@@ -20293,6 +23186,15 @@ Voice_SetVelocity_Exit:
 	lda xsp, (xsp + 20)
 	retd 0x2
 
+; Already named in the reference file; kept, documentation only.
+; Despite the name this does NOT allocate: it builds a 5-byte request packet in the DRAM
+; scratch at 0x2A5E and calls NoteOn_RoutePacket (0x022691), which WALKS the 0x40-entry voice
+; table at 0x00148D (stride 0x27) and writes the list of matching channel numbers, 0xFF
+; terminated, into packet+5. Returns XHL = the packet.
+; Packet layout: [0] = filter mode byte, [1..2] = selector word (bits 0-6 note, bits 8-12 part
+; index, bit15 = flag), [3..4] = mask word (bits 8-12 non-zero means "match every voice").
+; This variant: mode 0x80, selector = (A<<8) | C | 0x8000, mask 0x0000; A = part, C = note.
+; The five siblings below differ only in those three constants.
 Voice_Allocate:
 	push xiz
 	lda_d16 xiz, 10846
@@ -20310,6 +23212,9 @@ Voice_Allocate:
 	pop xiz
 	ret
 
+; Same packet builder as VOICE_ALLOCATE: mode 0x80, selector = (A<<8) | 0x8000 (no note),
+; mask 0x007F. A = part index. Returns XHL = packet at 0x2A5E, packet+5 = 0xFF-terminated
+; list of matching TG channels.
 Voice_AllocateForRelease:
 	push xiz
 	lda_d16 xiz, 10846
@@ -20325,6 +23230,9 @@ Voice_AllocateForRelease:
 	pop xiz
 	ret
 
+; Packet builder: mode 0x40, selector = (A<<8) (bit15 clear), mask 0x007F.
+; Called from VOICEPARAM_SET_TONE_OPTION case 6 (0x02E90C) before
+; Voice_AllNotes_SustainRetrigger (0x028E26).
 Voice_AllocateForSustain:
 	push xiz
 	lda_d16 xiz, 10846
@@ -20339,6 +23247,13 @@ Voice_AllocateForSustain:
 	pop xiz
 	ret
 
+; ** MISIDENTIFIED AS DATA. ** The LLVM source emits this as ".byte" under the name
+; VoiceAllocate_DataTable_02CD14, but it is live code: it is CALLed from 0x0291CF and the
+; only pointer to it in the whole ROM is that call.
+; Packet builder: mode 0x00, selector = (A<<8) | 0x8000, mask 0x007F. A = part index.
+; The caller at 0x02919E selects between this routine and VOICE_QUERY_REQ_MODE00_MASKFF
+; (0x02CD36) on the part mode: mode 0x00 -> here, mode 0x80 -> 0x02CD36, modes 0x40/0xC0 ->
+; neither (the query is skipped entirely).
 VoiceAllocate_DataTable_02CD14:
 	.byte 0x3e, 0xf1, 0x5e, 0x2a, 0x36, 0xb6, 0x00, 0x00
 	.byte 0xd8, 0x12, 0xd8, 0xee, 0x08, 0xd8, 0x31, 0x07
@@ -20346,6 +23261,7 @@ VoiceAllocate_DataTable_02CD14:
 	.byte 0xee, 0x88, 0x1d, 0x91, 0x26, 0x02, 0xee, 0x8b
 	.byte 0x5e, 0x0e
 
+; Packet builder: mode 0x00, selector = (A<<8), mask 0x00FF. Called from 0x0291DD.
 Voice_AllocateForFull:
 	push xiz
 	lda_d16 xiz, 10846
@@ -20360,6 +23276,11 @@ Voice_AllocateForFull:
 	pop xiz
 	ret
 
+; Existing curated name is correct and is kept. Packet builder with mode 0x00, selector 0x0000
+; and mask 0x1FFF; because mask bits 8-12 are non-zero, NoteOn_RoutePacket takes its
+; "enumerate everything" path and returns every voice channel whose table entry +0x22 bit0 is
+; set. NOTE: the LLVM build calls this Voice_AllocateForAny, which is the misleading name of
+; the two -- see [UNCERTAIN].
 Voice_AllocateForAny:
 	push xiz
 	lda_d16 xiz, 10846
@@ -20372,6 +23293,17 @@ Voice_AllocateForAny:
 	pop xiz
 	ret
 
+; Existing curated name kept; documentation only. A = TG channel. Points XIZ at the voice
+; struct 0x04308E + ch*0x47, clears bit7 of +0x05 (the "active" flag) and then picks one of
+; four teardown shapes from struct word +0x01 bit15, the owning part record's word +0x0A bit0,
+; and struct word +0x01 bit8:
+;   bit8 set  -> Voice_ComputeAndWriteVolume1, ToneGen_WriteNote_Hold(ch, 0x0451CC),
+;                TONEGEN_WRITESINGLEREG(ch, struct+0x2D), VoiceSlot_Release(ch), then clears
+;                bit8 of struct+0x01.
+;   bit8 clear-> the three Voice_ComputeAndWriteVolume{1,2,3} calls then
+;                ToneGen_WriteNote(ch, 0x0451CC), or (branch D) Voice_WritePan_Passthrough and
+;                ToneGen_WriteNote_Stereo.
+; All four paths end at 0x02CE48. The LLVM build calls this Voice_Release.
 Voice_Release:
 	dec 2, xsp
 	push xiz
@@ -20457,6 +23389,11 @@ Voice_Release_Exit:
 	inc 2, xsp
 	ret
 
+; A = TG channel. Same preamble as 0x02CD71 (XIZ = voice struct, clear +0x05 bit7) but it
+; SAVES the owning part record's word +0x0A across the call and restores it at 0x02CEC8, so
+; the part-level state is deliberately left unchanged. When struct byte +0x03 == 3 it also
+; clears bit0 of the part word before running. Writes the three volume registers and then
+; ToneGen_WriteNote(ch, 0x0451CC). Named Voice_Cut in the LLVM build.
 Voice_Cut:
 	dec 8, xsp
 	push xiz
@@ -20516,6 +23453,9 @@ Voice_Cut_Exit:
 	inc 8, xsp
 	ret
 
+; A = TG channel. The cheapest teardown: clears bit7 of voice struct +0x05, and only if
+; struct byte +0x46 is non-zero calls Voice_WriteVolume_Muted followed by
+; ToneGen_WriteNote(ch, 0x0451CC). Does not touch the part record at all.
 Voice_ReleaseSingle:
 	dec 2, xsp
 	ld (xsp), a
@@ -20538,6 +23478,16 @@ Voice_ReleaseSingle_Exit:
 	inc 2, xsp
 	ret
 
+; Existing name kept; documentation only. XWA = pointer to a packet as returned by the
+; VOICE_QUERY_* builders; the routine advances it by 5 to reach the 0xFF-terminated channel
+; list and walks it until a byte >= 0x40 is seen. For each listed channel it reads the voice
+; struct word +0x01 masked with 0x3C and dispatches the correct teardown:
+;   0x20 -> Voice_Reload_Levels     0x10 -> VOICE_RELEASE_SINGLE
+;   0x08 -> VOICE_CUT               0x04 -> if struct word +0x2F != 0 set bit7 of it; else if
+;                                          word +0x31 != 0xFF rewrite it as (v & 0x9FFF)|0x1000
+;                                          else Voice_Reload_Levels
+;   other -> nothing.
+; This is the routine that turns a "which channels belong to this part" query into note-offs.
 Voice_ParamInit:
 	dec 4, xsp
 	push xiz
@@ -20624,6 +23574,11 @@ Voice_ParamInit_LoopStep:
 ;        Sets velocity via Voice_SetVelocity
 ;        Velocity 0 triggers note-off via Voice_NoteOff
 ; ===========================================================================
+; Existing name kept; the LLVM source already carries a good header. XWA points at a 4-byte
+; MIDI-ish record: +0 status, +1 part/channel (rejected when >= 0x1A), +2 note, +3 velocity.
+; Velocity != 0 -> RingBuf_SetOffsetLo(status & 8), then VOICE_SETVELOCITY and VOICE_SETPITCH.
+; Velocity == 0 -> VOICE_ALLOCATE(part, note), VOICE_PARAMINIT on the returned packet, then
+; VOICE_NOTEOFF. The pushed word for all four calls is (status & 7).
 Voice_NoteOn:
 	dec 2, xsp
 	push xiz
@@ -20678,6 +23633,15 @@ Voice_NoteOn_Exit:
 	inc 2, xsp
 	ret
 
+; XWA = a request packet buffer. Fills it with selector = (word at 0x041360 >> 8) | 0x1480,
+; +2 = 0x80, +3..+6 = 0, calls NoteOn_Dispatch (0x022340), and reads the granted TG channel
+; back from packet+10. If that channel is < 0x40 it initialises the whole voice struct at
+; 0x04308E + ch*0x47 from scratch: +0x00 = ch, +0x01 = 1, +0x03 = 0, +0x04 = 0x14,
+; +0x05 = high byte of 0x041360, +0x06 and +0x08 = the 0x041360 word, +0x0C = 0,
+; +0x13/+0x17/+0x1B/+0x1F/+0x27 = 0 (longs), +0x2F = 0, +0x31 = 0x00FF, +0x35 = 0,
+; +0x36/+0x38/+0x3A = 0.
+; The LLVM build calls this Voice_SetPanning; nothing in the body supports that -- it is an
+; acquire-and-zero-the-struct routine. See [UNCERTAIN].
 Voice_SetPanning:
 	push xiz
 	ld xiz, xwa
@@ -20733,6 +23697,9 @@ Voice_SetPanning_Exit:
 	pop xiz
 	ret
 
+; Existing curated name kept. WA = TG channel, XBC = shadow block. Writes exactly one
+; register: 0x0400 + ch <- shadow +0x0E. Neither the curated name ("pitch") nor the LLVM name
+; ("pan") is provable from the body; see [UNCERTAIN].
 ToneGen_WritePanReg:
 	push xiz
 	ld xiz, xbc
@@ -20753,6 +23720,12 @@ ToneGen_WritePanReg_NopCont:
 	pop xiz
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM emits it as ToneGen_PanTable_02D0DC .byte). ** It is a
+; standard single-register writer: WA = TG channel, XBC = shadow block; writes
+; 0x0080 + ch <- (shadow +0x04) with bit15 CLEARED. Bit15 of the 0x0080 bank is the "load"
+; strobe: ToneGen_WriteVoiceParams writes +0x04 with bit15 SET at 0x02D136 and re-writes it
+; with bit15 clear at 0x02D3F2. So this routine performs the "clear the strobe" half alone.
+; Unreferenced in v142 (no call and no pointer to it anywhere in the ROM).
 ToneGen_PanTable_02D0DC:
 	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8
 	.byte 0x80, 0x00, 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00
@@ -20760,6 +23733,14 @@ ToneGen_PanTable_02D0DC:
 	.byte 0x0f, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68, 0x00
 	.byte 0x00, 0x00, 0x00, 0x5e, 0x0e
 
+; Existing name kept; documentation only. WA = TG channel, XBC = 0x44-byte shadow block.
+; Writes 23 registers in this order (see the offset->register map in the file header):
+;   0x0040,0x0080(bit15 set),0x00C0,0x0100,0x0140,0x0180,0x0400,0x0440,0x0480,0x04C0,0x0500,
+;   0x0800, then register (0x0000+ch) <- 0x8100, then 0x0840,0x0880,0x08C0,0x0900,0x0940,
+;   0x0980,0x09C0,0x0A00,0x0A40, and finally 0x0080 again with bit15 CLEARED.
+; The 0x8100 write to bank 0x0000 in the middle is a mid-sequence key/gate command; the
+; bit15 set/clear pair around the whole burst is the load strobe. This is the single biggest
+; consumer of TG bandwidth in the firmware.
 ToneGen_WriteVoiceParams:
 	dec 4, xsp
 	pushw iz
@@ -21137,6 +24118,9 @@ ToneGen_WriteVoiceParams_Exit:
 	inc 4, xsp
 	ret
 
+; Existing name kept. WA = full TG register address (NOT offset by a bank base), BC = 16-bit
+; value. The generic primitive; used to write bank 0x0000 (the key-on word) from
+; VOICE_SETVELOCITY, Voice_Reload_Levels and ToneGen_Config_Init.
 ToneGen_WriteSingleReg:
 	pushw iz
 	ld iz, bc
@@ -21155,6 +24139,10 @@ ToneGen_WriteSingleReg_NopCont:
 	popw iz
 	ret
 
+; Existing curated name kept. WA = channel, XBC = shadow. Writes six envelope/level registers:
+;   0x0840 <- +0x2E, 0x0940 <- +0x32, 0x0A00 <- +0x36, 0x0800 <- +0x2C, 0x0900 <- +0x30,
+;   0x09C0 <- +0x34.
+; (The LLVM build calls this ToneGen_WriteNote, which does not match the register set.)
 ToneGen_WriteNote:
 	dec 4, xsp
 	pushw iz
@@ -21260,6 +24248,8 @@ ToneGen_WriteNote_NopCont6:
 	inc 4, xsp
 	ret
 
+; Existing curated name kept. Writes 0x0840+ch <- +0x2E and 0x0800+ch <- +0x2C. The two-register
+; subset of ToneGen_WriteLevelBurst.
 ToneGen_WriteNote_2Regs:
 	dec 4, xsp
 	pushw iz
@@ -21301,6 +24291,8 @@ ToneGen_WriteNote_2Regs_NopCont2:
 	inc 4, xsp
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_NoteTable_02D55E .byte). ** Single-register writer:
+; WA = channel, XBC = shadow; 0x0840 + ch <- shadow +0x2E. Unreferenced in v142.
 ToneGen_NoteTable_02D55E:
 	push xiz
 	ld	xiz, xbc
@@ -21317,6 +24309,10 @@ ToneGen_NoteTable_02D55E:
 	nop
 	pop xiz
 	ret
+; ** Not present in either symbol source; it lives inside the same misidentified .byte blob. **
+; WA = channel, XBC = shadow; writes 0x0100 + ch <- +0x08 and 0x0140 + ch <- +0x0A.
+; Unreferenced in v142.
+TONEGEN_WRITE_REGS0100_0140:
 	dec	4, xsp
 	pushw iz
 	ld	(xsp+2), xbc
@@ -21351,6 +24347,7 @@ ToneGen_NoteTable_02D55E:
 	.byte 0xef
 	jr	ov, 0x0e
 
+; Existing curated name kept. Writes 0x0840+ch <- +0x1A and 0x0880+ch <- +0x1C.
 ToneGen_WriteNote_Stereo:
 	dec 4, xsp
 	pushw iz
@@ -21392,6 +24389,8 @@ ToneGen_WriteNote_Stereo_NopCont2:
 	inc 4, xsp
 	ret
 
+; Existing curated name kept, and it is accurate: 0x0840+ch and 0x0880+ch are BOTH written
+; with the same shadow word +0x2E.
 ToneGen_WriteNote_Hold:
 	dec 4, xsp
 	pushw iz
@@ -21433,6 +24432,9 @@ ToneGen_WriteNote_Hold_NopCont2:
 	inc 4, xsp
 	ret
 
+; Existing curated name kept. WA = channel, BC = value; writes 0x0180 + ch <- BC. Bank 0x0180
+; is the same bank the hardware exposes for per-voice envelope-level READBACK (memory map:
+; latch 0x0180+ch, read 0x100000).
 ToneGen_WriteSingleReg_180:
 	pushw iz
 	ld iz, bc
@@ -21452,6 +24454,10 @@ ToneGen_WriteSingleReg_180_NopCont:
 	popw iz
 	ret
 
+; WA = channel, XDE = shadow A, XBC = shadow B. Four writes:
+;   0x0800+ch <- A+0x3C, (0x0000+ch) <- 0x8100, 0x0840+ch <- A+0x3E,
+;   0x0080+ch <- (B+0x04 with bit15 cleared), (0x0000+ch) <- A+0x2D.
+; The last write is a real key-on: it pushes a 16-bit note word into bank 0x0000.
 ToneGen_WriteVoiceParams_Ext:
 	dec 8, xsp
 	pushw iz
@@ -21539,6 +24545,8 @@ ToneGen_WriteVoiceParams_Ext_NopCont5:
 	inc 8, xsp
 	ret
 
+; One-shadow variant of the above: 0x0800+ch <- +0x3C, (0x0000+ch) <- 0x8100,
+; 0x0840+ch <- +0x3E, (0x0000+ch) <- +0x2D. No 0x0080 write.
 ToneGen_WriteVoiceParams_Ext2:
 	dec 4, xsp
 	pushw iz
@@ -21608,6 +24616,13 @@ ToneGen_WriteVoiceParams_Ext2_NopCont4:
 	inc 4, xsp
 	ret
 
+; Existing name kept. XWA = pointer to a 0x1A-byte GLOBAL config block (not per-voice).
+; First it tests bit3 of the DRAM word at 0x041343 and forces bit3 of block word 0 to match
+; (set when the flag is clear, cleared when it is set). Then it writes 13 global registers:
+;   0x0200<-+0x00 0x0201<-+0x02 0x0202<-+0x04 0x0203<-+0x06 0x0204<-+0x08 0x0205<-+0x0A
+;   0x0C00<-+0x0C 0x0C01<-+0x0E 0x0C02<-+0x10 0x0C03<-+0x12 0x0C04<-+0x14 0x0C05<-+0x16
+;   0x0E00<-+0x18
+; Called once, from DSP_CONFIG_INIT, with the ROM block at 0x00F8BB.
 ToneGen_WriteGlobalConfig:
 	push xiz
 	ld xiz, xwa
@@ -21793,6 +24808,9 @@ ToneGen_WriteGlobalConfig_NopCont13:
 	pop xiz
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_GlobalConfigTable_02D93E .byte). It is not a table;
+; it is the first of five single/double register writers packed into that blob. **
+; WA = channel, XBC = shadow; writes 0x0440+ch <- +0x10 and 0x0480+ch <- +0x12. Unreferenced.
 ToneGen_GlobalConfigTable_02D93E:
 	.byte 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61, 0xd8, 0x8e
 	.byte 0xf0, 0x18, 0xb7, 0xde, 0x88, 0xd8, 0xc8, 0x40
@@ -21804,24 +24822,43 @@ ToneGen_GlobalConfigTable_02D93E:
 	.byte 0x00, 0xf0, 0x18, 0xbf, 0xaf, 0x02, 0x20, 0x98
 	.byte 0x12, 0x20, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68
 	.byte 0x00, 0x00, 0x00, 0x00, 0x4e, 0xef, 0x64, 0x0e
+; Inside the same misidentified blob; no symbol in either source. WA = channel, XBC = shadow;
+; writes 0x0180 + ch <- +0x0C. Unreferenced in v142.
+TONEGEN_WRITE_REG0180:
 	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8
 	.byte 0x80, 0x01, 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00
 	.byte 0xf0, 0x18, 0xbf, 0x9e, 0x0c, 0x20, 0xf2, 0x02
 	.byte 0x00, 0x10, 0x50, 0x68, 0x00, 0x00, 0x00, 0x00
-	.byte 0x5e, 0x0e, 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7
+	.byte 0x5e, 0x0e
+; Same blob. Writes 0x0440 + ch <- shadow +0x10. Unreferenced in v142.
+TONEGEN_WRITE_REG0440:
+	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7
 	.byte 0xd8, 0xc8, 0x40, 0x04, 0xf2, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e, 0x10, 0x20
 	.byte 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68, 0x00, 0x00
-	.byte 0x00, 0x00, 0x5e, 0x0e, 0x3e, 0xe9, 0x8e, 0xf0
+	.byte 0x00, 0x00, 0x5e, 0x0e
+; Same blob. Writes 0x0480 + ch <- shadow +0x12. Unreferenced in v142.
+TONEGEN_WRITE_REG0480:
+	.byte 0x3e, 0xe9, 0x8e, 0xf0
 	.byte 0x18, 0xb7, 0xd8, 0xc8, 0x80, 0x04, 0xf2, 0x00
 	.byte 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf, 0x9e
 	.byte 0x12, 0x20, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68
-	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e, 0x3e, 0xe9
+	.byte 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
+; Same blob. Writes 0x04C0 + ch <- shadow +0x14. Unreferenced in v142.
+TONEGEN_WRITE_REG04C0:
+	.byte 0x3e, 0xe9
 	.byte 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0xc0, 0x04
 	.byte 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18
 	.byte 0xbf, 0x9e, 0x14, 0x20, 0xf2, 0x02, 0x00, 0x10
 	.byte 0x50, 0x68, 0x00, 0x00, 0x00, 0x00, 0x5e, 0x0e
 
+; Existing name kept. WA = channel, XBC = shadow. The "strobed pair" pattern used by every
+; ExtParams routine:
+;   if (shadow+0x3C) bit15 is set:  0x0580+ch <- +0x3C  (strobe asserted)
+;   always:                         0x0600+ch <- +0x40
+;   always:                         0x0580+ch <- +0x3C with bit15 CLEARED (strobe released)
+; So bit15 of the 0x0540/0x0580/0x05C0 banks is a load/trigger bit that software raises and
+; lowers around the companion register write.
 ToneGen_WriteExtParams_56:
 	dec 4, xsp
 	pushw iz
@@ -21886,6 +24923,7 @@ ToneGen_WriteExtParams_56_NopCont3:
 	inc 4, xsp
 	ret
 
+; WA = channel, XBC = shadow; writes 0x0600 + ch <- +0x40 only.
 ToneGen_WriteExtParam_600:
 	push xiz
 	ld xiz, xbc
@@ -21906,6 +24944,8 @@ ToneGen_WriteExtParam_600_NopCont:
 	pop xiz
 	ret
 
+; ToneGen_WriteExtParams_56 without the 0x0600 write: raises then releases the bit15 strobe on
+; 0x0580 + ch using shadow +0x3C.
 ToneGen_WriteExtParams_56_Alt:
 	dec 4, xsp
 	pushw iz
@@ -21954,6 +24994,9 @@ ToneGen_WriteExtParams_56_Alt_NopCont2:
 	inc 4, xsp
 	ret
 
+; WA = channel. Writes the literal 0x8100 to 0x0580 + ch. 0x8100 is the constant this whole
+; family uses to mean "release/mute this slot"; it also appears mid-burst in
+; ToneGen_WriteVoiceParams and in the EXT writers, always aimed at a strobed bank.
 ToneGen_WriteExtParam_600_Mute:
 	res_dd8 7, 0x18
 	add wa, 0x580
@@ -21970,6 +25013,8 @@ ToneGen_WriteExtParam_600_Mute_NopCont:
 	nop
 	ret
 
+; Existing name kept. Identical to ToneGen_WriteExtParams_56 but on the second bank pair:
+; strobe on 0x05C0 + ch from shadow +0x3E, companion write 0x0640 + ch <- +0x42.
 ToneGen_WriteExtParams_56b:
 	dec 4, xsp
 	pushw iz
@@ -22034,12 +25079,19 @@ ToneGen_WriteExtParams_56b_NopCont3:
 	inc 4, xsp
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ExtParams56b_DataTable .byte) BUT IT IS LIVE: it is
+; CALLed from 0x027D43 and that call is the only reference to it in the ROM. **
+; WA = channel, XBC = shadow; writes 0x0640 + ch <- shadow +0x42.
 ToneGen_ExtParams56b_DataTable:
 	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8
 	.byte 0x40, 0x06, 0xf2, 0x00, 0x00, 0x10, 0x50, 0x00
 	.byte 0xf0, 0x18, 0xbf, 0x9e, 0x42, 0x20, 0xf2, 0x02
 	.byte 0x00, 0x10, 0x50, 0x68, 0x00, 0x00, 0x00, 0x00
-	.byte 0x5e, 0x0e, 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61
+	.byte 0x5e, 0x0e
+; Second routine inside the 0x02DBB3 blob; no symbol in either source. Raises then releases the
+; bit15 strobe on 0x05C0 + ch using shadow +0x3E (the 0x05C0 twin of 0x02DAB8). Unreferenced.
+TONEGEN_WRITE_EXTPARAM_05C0_STROBE:
+	.byte 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61
 	.byte 0xd8, 0x8e, 0xaf, 0x02, 0x20, 0x98, 0x3e, 0x20
 	.byte 0xd8, 0x33, 0x0f, 0x66, 0x22, 0xf0, 0x18, 0xb7
 	.byte 0xde, 0x88, 0xd8, 0xc8, 0xc0, 0x05, 0xf2, 0x00
@@ -22051,11 +25103,15 @@ ToneGen_ExtParams56b_DataTable:
 	.byte 0xbf, 0xaf, 0x02, 0x20, 0x98, 0x3e, 0x20, 0xd8
 	.byte 0x30, 0x0f, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68
 	.byte 0x00, 0x00, 0x00, 0x00, 0x4e, 0xef, 0x64, 0x0e
+; Third routine in the same blob. Writes 0x8100 to 0x05C0 + ch. Unreferenced in v142.
+TONEGEN_MUTE_REG05C0:
 	.byte 0xf0, 0x18, 0xb7, 0xd8, 0xc8, 0xc0, 0x05, 0xf2
 	.byte 0x00, 0x00, 0x10, 0x50, 0x00, 0xf0, 0x18, 0xbf
 	.byte 0xf2, 0x02, 0x00, 0x10, 0x02, 0x00, 0x81, 0x68
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0e
 
+; Existing name kept. Strobe on 0x0540 + ch from shadow +0x3A, companion write
+; 0x01C0 + ch <- shadow +0x38.
 ToneGen_WriteExtParams_15:
 	dec 4, xsp
 	pushw iz
@@ -22120,6 +25176,7 @@ ToneGen_WriteExtParams_15_NopCont3:
 	inc 4, xsp
 	ret
 
+; WA = channel, XBC = shadow; writes 0x01C0 + ch <- +0x38 only.
 ToneGen_WriteExtParam_1C0_Single:
 	push xiz
 	ld xiz, xbc
@@ -22140,6 +25197,7 @@ ToneGen_WriteExtParam_1C0_Single_NopCont:
 	pop xiz
 	ret
 
+; Raises then releases the bit15 strobe on 0x0540 + ch from shadow +0x3A; no companion write.
 ToneGen_WriteExtParams_15_Alt:
 	dec 4, xsp
 	pushw iz
@@ -22188,6 +25246,7 @@ ToneGen_WriteExtParams_15_Alt_NopCont2:
 	inc 4, xsp
 	ret
 
+; Writes 0x8100 to 0x0540 + ch.
 ToneGen_WriteExtParam_540_Mute:
 	res_dd8 7, 0x18
 	add wa, 0x540
@@ -22204,6 +25263,13 @@ ToneGen_WriteExtParam_540_Mute_NopCont:
 	nop
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ExtParams15_DataTable .byte) BUT IT IS LIVE: CALLed
+; from 0x02F80F, the only reference to it in the ROM. **
+; WA = channel, XBC = shadow. Channel-banked version of ToneGen_WriteExtParams_15:
+;   ch <  0x40 -> strobe 0x0540+ch from +0x3A, companion 0x01C0+ch <- +0x38
+;   ch >= 0x40 -> strobe 0x0580+ch from +0x3E, companion 0x0600+ch <- +0x42
+; This is the clearest statement in the firmware that the TG has TWO channel banks split at
+; channel 0x40 and that the second bank uses a different register-base set.
 ToneGen_ExtParams15_DataTable:
 	.byte 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x61, 0xd8, 0x8e
 	.byte 0xde, 0xcf, 0x40, 0x00, 0x6f, 0x76, 0xaf, 0x02
@@ -22238,6 +25304,7 @@ ToneGen_ExtParams15_DataTable:
 	.byte 0x00, 0x10, 0x50, 0x68, 0x00, 0x00, 0x00, 0x00
 	.byte 0x4e, 0xef, 0x64, 0x0e
 
+; WA = channel, XBC = shadow. ch < 0x40 -> 0x01C0+ch <- +0x38; ch >= 0x40 -> 0x0600+ch <- +0x42.
 ToneGen_WriteExtParam_TypeDispatch_Single:
 	push xiz
 	ld xiz, xbc
@@ -22279,6 +25346,8 @@ ToneGen_WriteExtParam_TypeDispatch_Single_Exit:
 	pop xiz
 	ret
 
+; WA = channel, XBC = shadow. Strobe-only banked writer: ch < 0x40 strobes 0x0540 from +0x3A,
+; ch >= 0x40 strobes 0x0580 from +0x3E. No companion register write in either path.
 ToneGen_WriteExtParams_TypeDispatch:
 	dec 4, xsp
 	pushw iz
@@ -22373,6 +25442,7 @@ ToneGen_WriteExtParams_TypeDispatch_Exit:
 	inc 4, xsp
 	ret
 
+; WA = channel. Writes 0x8100 to 0x0540 + ch (ch < 0x40) or to 0x0580 + ch (ch >= 0x40).
 ToneGen_WriteExtParam_Mute_TypeDispatch:
 	cp wa, 0x40
 	jr nc, ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath
@@ -22407,6 +25477,11 @@ ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont2:
 	nop
 	ret
 
+; Existing name kept, but see [UNCERTAIN] -- this routine initialises the TONE GENERATOR, not a
+; DSP. Called once, from 0x034CBA.
+; Sequence: ToneGen_WriteGlobalConfig(ROM 0x00F8BB) to program the 13 global registers, then
+; ldirw 0x22 words from ROM 0x00F8D5 into DRAM 0x2AA4 (the default voice-parameter shadow),
+; then loop channel 0..0x3F running ToneGen_Config_Init.
 DSP_Config_Init:
 	dec 4, xsp
 	pushw iz
@@ -22422,6 +25497,15 @@ DSP_Config_Init:
 	cp iz, 0x40
 	jrl nc, ToneGen_ConfigInit_Return
 
+; Existing name kept. The per-channel body of DSP_CONFIG_INIT (IZ = channel, (XSP+2) = the
+; 0x2AA4 template). For each channel:
+;   mute       0x0840+ch <- 0xFF00, 0x0800+ch <- 0xFF80
+;   program    ToneGen_WriteVoiceParams(ch, 0x2AA4); ToneGen_WriteSingleReg(ch, word@0x2AA4)
+;   mute again 0x0840+ch <- 0xFF00, 0x0800+ch <- 0xFF80
+;   clear      0x00C0+ch <- 0x0000
+;   FREE       (0x0000+ch) <- 0x7E00      <-- the documented "free a voice" command
+;   then ToneGen_WriteExtParams_15, _56 and _56b on the same channel.
+; After this runs, all 64 TG voices are silent, freed and holding the default parameter set.
 ToneGen_Config_Init:
 	res_dd8 7, 0x18
 	ld wa, iz
@@ -22531,6 +25615,20 @@ ToneGen_ConfigInit_Return:
 	inc 4, xsp
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ConfigInit_AltData .byte). It is code, and it is the
+; only bounded TG-status polling loop in this region. It is UNREFERENCED in v142 -- no call
+; and no pointer to it anywhere in the ROM -- so it is dormant diagnostic code. **
+; Takes no argument, returns HL = an iteration count. Body:
+;   1. mute voice 0: 0x0840 <- 0xFF00, 0x0800 <- 0xFF80
+;   2. ToneGen_WriteVoiceParams(ch 0, ROM block 0x00F919); ToneGen_WriteSingleReg(0, 0xF000)
+;   3. poll up to 0x3E8 (1000) times: call 0x021023 with WA = 0; if it returns HL != 0 (i.e.
+;      the TG reports voice 0 active) re-mute voice 0 and leave the loop; otherwise increment
+;      the counter and retry. IZ starts at 0xFFFF and the counter lives in QIZ.
+;   4. 0x00C0 <- 0x0000, then (0x0000) <- 0x7E00 to free voice 0.
+;   5. return HL = the number of polls consumed (0x3E8 == the TG never reported the voice).
+; 0x021023 is the ONLY place the TG active-voice bitmap re-enters sub-CPU software; the LLVM
+; build misnames it DAC_Write_Sample. This routine is the firmware's own "is the tone
+; generator alive?" probe and is worth re-enabling in a debug build. See [UNCERTAIN]/findings.
 ToneGen_ConfigInit_AltData:
 	.byte 0x3e, 0x36, 0xff, 0xff, 0xf0, 0x18, 0xb7, 0xf2
 	.byte 0x00, 0x00, 0x10, 0x02, 0x40, 0x08, 0x00, 0xf0
@@ -22560,6 +25658,14 @@ ToneGen_ConfigInit_AltData:
 	.byte 0x02, 0x00, 0x10, 0x02, 0x00, 0x7e, 0x68, 0x00
 	.byte 0x00, 0x00, 0x00, 0xde, 0x8b, 0x5e, 0x0e
 
+; WA = TG channel, XBC = shadow block. Two writes, no reads of any kind:
+;   0x00C0 + ch <- shadow +0x06
+;   (0x0000 + ch) <- the word at 0x0430BB + ch*0x47 (voice struct +0x2D) with bit15 CLEARED
+; The second write is performed by loading the constant 0x00100002 into a register and storing
+; through it, which is why an automatic pass could mistake it for a read. The channel-to-struct
+; index multiply uses FP_MulAccum64 (0x03D8CA) with XBC = 0x47.
+; The LLVM name ToneGen_ReadPitch_AndScale is wrong on both counts; see [UNCERTAIN].
+; Called from 0x028D14.
 ToneGen_ReadPitch_AndScale:
 	dec 8, xsp
 	pushw iz
@@ -22612,6 +25718,9 @@ ToneGen_ReadPitch_Return:
 ; --- CheckStatusBits_Zero: Check if status bits [7:6] are zero ---
 ; Entry: WA = index
 ; Exit: HL = 1 if status bits are 0b00, else HL = 0
+; WA = part index. Computes 0x04136E + part*0x11F via FP_MulAccum64(0x11F), dereferences the
+; long stored there (the tone-header pointer), reads header byte +0x10, masks 0xC0 and returns
+; HL = 1 when the part mode is 0x00, else 0 (scc Z,HL). Unreferenced in v142.
 CheckStatusBits_Zero:
 	extz	xwa
 	ld	xbc, 287
@@ -22625,6 +25734,8 @@ CheckStatusBits_Zero:
 	scc16	z, hl
 	ret
 
+; Identical predicate for part mode 0x40. Called from 0x0317F2 and 0x035BC8 -- the only member
+; of this family of four with live callers.
 CheckStatusBits_40:
 	extz xwa
 	ld xbc, 0x11F
@@ -22641,6 +25752,7 @@ CheckStatusBits_40:
 ; --- CheckStatusBits_80: Check if status bits [7:6] are 0b10 ---
 ; Entry: WA = index
 ; Exit: HL = 1 if status bits are 0x80, else HL = 0
+; Identical predicate for part mode 0x80. Unreferenced in v142.
 CheckStatusBits_80:
 	extz	xwa
 	ld	xbc, 287
@@ -22654,6 +25766,10 @@ CheckStatusBits_80:
 	scc16	z, hl
 	ret
 ; --- CheckStatusBits_C0: Check if status bits [7:6] are 0b11 ---
+; ** Has no symbol in the reference file OR the LLVM build -- it is the fourth, unnamed member
+; of the part-mode predicate family. ** Identical predicate for part mode 0xC0.
+; Unreferenced in v142.
+VOICE_PART_MODE_IS_C0:
 	extz	xwa
 	ld	xbc, 287
 	call	252106
@@ -22666,6 +25782,10 @@ CheckStatusBits_80:
 	scc16	z, hl
 	ret
 
+; The region's block-copy helper. XWA = source, XBC = destination, DE = BYTE count (returns
+; immediately when DE == 0). Copies with post-incrementing byte loads/stores through XHL.
+; The LLVM name BlockCopy_Words_BC_to_HL is doubly wrong -- the transfers are byte-sized and
+; the destination is XBC, not XHL. Used by all five VOICEPARAM_*_LOAD_* routines below.
 BlockCopy_Words_BC_to_HL:
 	ld xhl, xbc
 	lds ix, 0
@@ -22680,6 +25800,10 @@ BlockCopy_Words_BC_to_HL_Loop:
 	jr c, BlockCopy_Words_BC_to_HL_Loop
 	ret
 
+; A = part index. Populates the tone staging buffer at 0x044FCE:
+;   0x66 bytes from the pointer at part+0x06        -> 0x044FCE + 0x0000
+;   for i = 0..3: 0x51 bytes from the pointer at part + 0x6E + i*0x25 -> 0x044FCE + 0x66 + i*0x51
+; That fixes the staging layout used everywhere else in the region.
 VoiceStruct_BulkInit:
 	dec 2, xsp
 	pushw_erp 0xFA
@@ -22731,6 +25855,12 @@ VoiceStruct_BulkInit_Return:
 	inc 2, xsp
 	ret
 
+; ** MISIDENTIFIED AS DATA in the reference file / emitted with decimal literals in the LLVM
+; source under the name VoiceStruct_BulkInit_AltData; it is ordinary code. ** Called from
+; 0x02EA1F.
+; A = catalogue index, C = a second index, E = custom-tone slot (saved on the stack). Calls
+; VoiceBuf_Lookup_0x20Flag (0x032A08) to obtain XHL = the source record, then copies
+; (0x045314)[0xEE] bytes into (0x04531C) + slot*0x50 + 0x4AA7 using MEMCPY_BYTES_XWA_TO_XBC.
 VoiceStruct_BulkInit_AltData:
 	dec	2, xsp
 	ld	(xsp), e
@@ -22758,6 +25888,9 @@ VoiceStruct_BulkInit_AltData:
 	inc	2, xsp
 	ret
 
+; A = part index, C = sub-slot (0..3). Calls VoiceChanCopy_Main (0x0325FC) to obtain XHL = the
+; source record, then copies (0x045314)[0xEA] bytes into 0x044FCE + 0x1AA + slot*0x0B.
+; Named VoiceSubSlot_Init in the LLVM build.
 VoiceSubSlot_Init:
 	dec 2, xsp
 	ld (xsp), c
@@ -22783,6 +25916,11 @@ VoiceSubSlot_Init:
 	inc 2, xsp
 	ret
 
+; ** MISIDENTIFIED AS DATA (LLVM: VoiceSubSlot_Init_AltData .byte); it is code. ** Called from
+; 0x02EA60 and 0x02EB53. A = sub-unit index, BC/DE = selectors, (XSP+6) = custom-tone slot;
+; returns with retd 2. Calls SlotParam_WriteDispatch (0x03248B) for XHL = the source record and
+; copies (0x045314)[0xF0] bytes into
+; (0x04531C) + slot*0x50 + unit*0x0B + 0x4AE1.
 VoiceSubSlot_Init_AltData:
 	.byte 0xef, 0x6a, 0xb7, 0x41, 0x87, 0x21, 0xc9, 0x8f
 	.byte 0xdb, 0x12, 0xd9, 0x12, 0xda, 0x12, 0x8f, 0x06
@@ -22797,6 +25935,19 @@ VoiceSubSlot_Init_AltData:
 	.byte 0x22, 0x1e, 0x8f, 0xfe, 0xef, 0x62, 0x0f, 0x02
 	.byte 0x00
 
+; A = part index. The full "prepare this part's tone for the TG" pass, and the only writer of
+; several staging fields. Steps:
+;   1. VOICEPARAM_LOAD_TONE_RECORD(part), then VOICEPARAM_LOAD_SUBSLOT_RECORD(part, i) for i<4.
+;   2. Reads the part routing word at 0x041372 + part*0x11F; bit15 set -> set bit7 of the DRAM
+;      byte at 0x04506B, clear -> clear it.
+;   3. Copies the 8 default tone-option bytes from the ROM table at 0x00F95D into
+;      0x044FCE + 0x1D8 + k (k = 0..7).
+;   4. Counts "usable" slots: a slot i counts when (0x044FD4 + 0x66 + i*0x51) & 0xC0 == 0 AND
+;      bit5 of the same byte is clear. If the count is not exactly 4 it forces the staging byte
+;      at 0x0451A7 (= staging +0x1D9, tone-option[1]) to 0.
+;   5. For each slot i: takes (part sub-slot +0x36) & 7 and copies four bytes from the part
+;      sub-slot's +0x4D..+0x50 into 0x0451AF + i*5 + j (= staging +0x1E1 + ...).
+; Called from 0x02EC7D and 0x030996.
 VoiceParam_FullSetup:
 	dec 2, xsp
 	push xiz
@@ -22961,6 +26112,18 @@ VoiceParam_FullSetup_Return:
 	inc 2, xsp
 	ret
 
+; ** Start of a 1672-byte run (0x02E581..0x02EC09) that BOTH symbol sources treat as data
+; (LLVM: VoiceParam_FullSetup_ExtData). It is eight live routines; every one of them is CALLed
+; from the dispatcher at 0x02EDC9..0x02EFF6. **
+; A = part index, C = a boolean. Returns immediately if the part status word at
+; 0x041368 + part*0x11F has (value & 3) == 0, i.e. the part is not loaded.
+; Otherwise: C == 0 -> clear bit0 and set bit1; C != 0 -> clear bit1 and set bit0; then set
+; bit2 unconditionally. Calls Voice_NoteState_Clear (0x0347B7) and Voice_SetLFO_ActiveFlag
+; (0x027CBE), then VoiceInit_Dispatcher (0x032938) with the two part bytes at +0x19 and +0x1A.
+; Then tone-header byte +0x5D bit7 -> set (else clear) bit14 of the part routing word +0x0A.
+; Finally dispatches on the part mode (tone-header +0x10 & 0xC0):
+;   0x80 -> nothing;  0x40 -> VoiceSlot_AltInit (0x034968);  0x00 and 0xC0 ->
+;   VoiceSlot_FullInit (0x034890).
 VoiceParam_FullSetup_ExtData:
 	dec	2, xsp
 	ld	(xsp), a
@@ -23067,6 +26230,15 @@ VoiceParam_FullSetup_ExtData:
 	call	215400
 	inc	2, xsp
 	ret
+; ** Inside the same misidentified blob; unnamed in both sources. ** Called from 0x02EE97.
+; A = part index, E low nibble = sub-slot, BC = wave-catalogue index. The catalogue is
+; (0x045310) + (0x045314)[0x50], entries are 0x10 bytes. Writes catalogue entry byte +0x0E into
+; the sub-slot descriptor's +0x02 and byte +0x0F into +0x03 (the descriptor is the long at
+; part + 0x6E + slot*0x25). Then calls VOICEPARAM_LOAD_SUBSLOT_RECORD(part, slot) and
+; VoiceParam_WriteWithOffset_3Arg (0x0328E2) for j = 0..3.
+; The +0x0E/+0x0F pair recurs in all four "catalogue" routines below and is almost certainly
+; the wave/sample selector; that reading is inference, not proof.
+VOICEPARAM_SUBSLOT_APPLY_CATALOG50:
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a
@@ -23140,6 +26312,12 @@ VoiceParam_FullSetup_ExtData:
 	pop qiz
 	inc	2, xsp
 	ret
+; ** Same blob; unnamed in both sources. ** Called from 0x02EECA. Catalogue is
+; (0x045310) + (0x045314)[0x64]. E low nibble = sub-slot, E high nibble = a pair index k,
+; A = part, BC = catalogue index. Writes catalogue entry +0x0E into (sub-slot record +0x04)
+; indexed by 3 + 2*k, and entry +0x0F into the following byte, then tail-jumps into
+; VoiceParam_WriteWithOffset_3Arg (0x0328E2).
+VOICEPARAM_SUBSLOT_APPLY_CATALOG64:
 	ldl_da	xhl, 283412
 	ld	xhl, (xhl+100)
 	ldl_da	xix, 283408
@@ -23206,6 +26384,23 @@ VoiceParam_FullSetup_ExtData:
 	extz	de
 	ld	wa, hl
 	jp	207074
+; ** Same blob; unnamed in both sources. ** Called from 0x02EF20.
+; E = new value, (XSP+2) = part index, C = tone-option index (0..6). Stores E into the staging
+; tone-option array at 0x044FCE + 0x1D8 + C, then dispatches through the 7-entry, 2-byte
+; jump-offset table at ROM 0x00F965 relative to base 0x02E89B. C outside 0..6 falls straight to
+; the exit. The seven handlers are NOT a fall-through chain; each ends with a jump to 0x02E918:
+;   0 -> Voice_ActiveFlag_CheckAndLoad (0x034491)
+;   1 -> 0x034503, then 0x034606 unless the new value is 0xF5, then 0x02F52A(part, 0)
+;   2 -> 0x034651 then 0x02F52A(part, 0)
+;   3 -> 0x03469C then 0x02F52A(part, 0)
+;   4 -> 0x0346E7
+;   5 -> 0x034732
+;   6 -> 0x034732, then VOICE_QUERY_REQ_MODE40_MASK7F(part) and
+;        Voice_AllNotes_SustainRetrigger (0x028E26) with BC = 1
+; Note that the 8-byte option array these indices address is initialised from ROM 0x00F95D by
+; VOICEPARAM_BUILD_TONE_STAGING, and that option[1] is the byte
+; VOICEPARAM_BUILD_TONE_STAGING zeroes when fewer than 4 slots are usable.
+VOICEPARAM_SET_TONE_OPTION:
 	dec	4, xsp
 	ld	(xsp), e
 	ld	(xsp+2), a
@@ -23227,6 +26422,8 @@ VoiceParam_FullSetup_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 190619
 	jp_rr	8, xix, wa
+; Base of the 7-way jump table at ROM 0x00F965; also the handler for option index 0.
+VOICEPARAM_SET_TONE_OPTION_CASE0:
 	ld	a, (xsp+2)
 	extz	wa
 	call	214161
@@ -23272,6 +26469,12 @@ VoiceParam_FullSetup_ExtData:
 	call	167462
 	inc	4, xsp
 	ret
+; ** Same blob; unnamed in both sources. ** Called from 0x02EF7B.
+; A = custom-tone slot. Latches it into the byte at (0x04531C) + 0x72A7 -- the "currently
+; selected custom tone" global that the next three routines all read back. Then for k = 0..1 it
+; copies from (0x04531C) + slot*0x50 + k*0x15 + 0x4AB7 into 0x044FCE + 0x1F4 + k*5:
+;   dest[0] = src[0x0F] & 7 ; dest[1..4] = src[0x11..0x14].
+VOICEPARAM_CUSTOMTONE_SELECT:
 	dec	2, xsp
 	push xiz
 	ld	(xsp+4), a
@@ -23326,6 +26529,14 @@ VoiceParam_FullSetup_ExtData:
 	pop xiz
 	inc	2, xsp
 	ret
+; ** Same blob; unnamed in both sources. ** Called from 0x02EF96. WA = wave-catalogue index;
+; the custom-tone slot comes from the (0x04531C)+0x72A7 latch, not from an argument.
+; Catalogue = (0x045310) + (0x045314)[0x80], 0x10-byte entries. Calls
+; VOICEPARAM_CUSTOMTONE_LOAD_HEADER with entry +0x0E / +0x0F, then for k = 0..1 calls
+; VOICEPARAM_CUSTOMTONE_LOAD_SUBUNIT for the sub-record at base + 0x10 + k*0x15 and rewrites
+; that record's +0x02 as (value & 0x0F) | 0x50. Finally stores entry +0x0E and
+; (entry +0x0F & 0x1F) | 0x60 into (0x04531C) + slot*2 + 0x49A7.
+VOICEPARAM_CUSTOMTONE_APPLY_CATALOG80:
 	.byte 0xbf, 0xf2, 0x37
 	push xiz
 	ld	(xsp+16), wa
@@ -23423,6 +26634,11 @@ VoiceParam_FullSetup_ExtData:
 	pop xiz
 	lda	xsp, (xsp+14)
 	ret
+; ** Same blob; unnamed in both sources. ** Called from 0x02EFC6. WA = catalogue index,
+; C low nibble = unit index; catalogue = (0x045310) + (0x045314)[0x8C]. Calls
+; VOICEPARAM_CUSTOMTONE_LOAD_SUBUNIT, then writes catalogue entry +0x0E into
+; (0x04531C) + slot*0x50 + unit*0x15 + 0x4AB7 + 1 and (entry +0x0F & 0x0F) | 0x50 into +2.
+VOICEPARAM_CUSTOMTONE_APPLY_CATALOG8C:
 	dec	6, xsp
 	push xiz
 	ld	(xsp+8), wa
@@ -23493,6 +26709,12 @@ VoiceParam_FullSetup_ExtData:
 	pop xiz
 	inc	6, xsp
 	ret
+; ** Same blob; unnamed in both sources. ** Called from 0x02EFF6. WA = catalogue index,
+; C low nibble = sub-unit (stride 0x0B), C high nibble = pair index k;
+; catalogue = (0x045310) + (0x045314)[0x94]. Writes entry +0x0E into
+; (0x04531C) + slot*0x50 + unit*0x0B + 0x4AE1 + 3 + 2*k and entry +0x0F into the next byte.
+; No copy and no further calls -- the smallest of the four catalogue appliers.
+VOICEPARAM_CUSTOMTONE_APPLY_CATALOG94:
 	ldl_da	xde, 283420
 	ld	b, (xde+29351)
 	ldl_da	xde, 283412
@@ -23538,6 +26760,17 @@ VoiceParam_FullSetup_ExtData:
 	ld	(xbc+1), a
 	ret
 
+; A = part index. Only the first 0x2E bytes of this routine fall inside region 8 (it continues
+; past 0x02EC37 to 0x02ECBD); documented here for its GUARD, which is the part everyone using
+; this region needs to know about:
+;     if (byte at DRAM 0x0451A4) != A            -> return immediately, doing nothing
+;     if A > 2 and (part status word & 3) != 3   -> return immediately, doing nothing
+; 0x0451A4 is a single global "part currently being edited/loaded" latch. Because it is a
+; plain equality test with no timeout and no fallback, every one of the 13 call sites
+; (0x02EDD4, 0x02EDF3, 0x02EE12, 0x02EE31, 0x02EE50, 0x02EE6F, 0x02EEA2, 0x02EF0A, 0x02F513,
+; 0x031AAE, 0x031ABE, 0x031AEA and 0x02EC7D's neighbourhood) silently becomes a no-op whenever
+; that latch does not match. Beyond the guard the routine calls
+; VOICEPARAM_BUILD_TONE_STAGING (0x02EC7D) and continues into 0x02EC38.
 VoiceAlloc_CheckAndInit:
 	dec 2, xsp
 	ld (xsp), a
@@ -23555,6 +26788,10 @@ VoiceAlloc_CheckAndInit:
 	cps wa, 3
 	jrl nz, VoiceAlloc_CheckAndInit_Return
 
+; Second stage of VoiceAlloc_CheckAndInit (0x02EC0A).  Re-reads the part's flag word at
+; PART+0x00; if bit 0 is already set the part is merely re-marked (OR 0x0001) and the routine
+; returns; otherwise control falls to VoiceAlloc_InitNewAllocation.  Part index is on the
+; stack at (XSP).
 VoiceAlloc_SetFlagBit0:
 	ld a, (xsp)
 	extz wa
@@ -23570,6 +26807,10 @@ VoiceAlloc_SetFlagBit0:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x01, 0x00
 	jr VoiceAlloc_CheckAndInit_Return
 
+; First-time allocation of a part: set PART+0x00 bit 0, call VoiceParam_FullSetup (0x02E3E9)
+; with the part index, then call VoiceInit_Dispatcher (0x032938) with
+; WA = part, BC = PART+0x19 (Part_UserToneIndex), DE = PART+0x1A.  This is the only path in
+; this region that actually creates voices.
 VoiceAlloc_InitNewAllocation:
 	ld a, (xsp)
 	extz wa
@@ -23600,10 +26841,19 @@ VoiceAlloc_InitNewAllocation:
 	ld bc, ix
 	call VoiceInit_Dispatcher
 
+; Pop the one-word part-index frame and return.
 VoiceAlloc_CheckAndInit_Return:
 	inc 2, xsp
 	ret
 
+; Register-argument twin of VoiceAlloc_CheckAndInit: entry with XWA = pointer to the 6-byte
+; command record; the part index is taken from (XWA+1) into E and kept there throughout.
+; Unlike VoiceAlloc_CheckAndInit it does NOT consult the current-edit-part byte 0x0451A4 --
+; it goes straight to the (PART+0x00 & 3) == 3 test for parts > 2.
+; After marking the part it reads PART+0x1A; if that byte is in [0x40,0x50) it calls
+; DSP_FlushAllSlots_Data (0x0351B3) with the part index, otherwise it just returns.
+; Single caller: tone-edit opcode 0x13 at 0x02EF71.  Despite the "_ExtData" suffix this is
+; ordinary code, not a data table.
 VoiceAlloc_CheckAndInit_ExtData:
 	ld	e, (xwa+1)
 	cps	e, 2
@@ -23616,6 +26866,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	and	wa, 3
 	cps	wa, 3
 	ret	nz
+; Common continuation for parts 0..2 and for parts that passed the (flags & 3) == 3 test:
+; re-read PART+0x00 and branch on bit 0.
+VOICEALLOC_CMD_MARKPRESENT:
 	ld	a, e
 	extz	wa
 	muls	wa, 287
@@ -23629,6 +26882,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	lda_24	xbc, 267112
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x01, 0x00
 	ret
+; Part was not yet allocated: set PART+0x00 bit 0, then range-check PART+0x1A against
+; [0x40,0x50) before calling DSP_FlushAllSlots_Data.
+VOICEALLOC_CMD_FIRSTALLOC:
 	ld	a, e
 	extz	wa
 	muls	wa, 287
@@ -23647,6 +26903,15 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	wa
 	call	217523
 	ret
+; Ships one whole tone-edit buffer from sub to main.  Input: A = edit-buffer index.
+;   src = (ToneDB_RamBankA) + 0x4AA7 + index*0x50
+;   dst = 0x001E0000  + 0x4AA7 + index*0x50      (the main CPU's window)
+;   len = 0x01D6 (470 bytes), hard-coded in HL
+; Tail-jumps to InterCPU_E1_DMA_Transfer (0x020DB3), so its timeout behaviour is this
+; routine's timeout behaviour.  Called from tone-edit opcodes 0x14, 0x15 and 0x16
+; (0x02EFA5, 0x02EFD5, 0x02F005), each of which first fetches the index from
+; (ToneDB_RamBankA + 0x72A7).  NOTE the stride/length mismatch flagged in [UNCERTAIN].
+INTERCPU_REPLY_EDITBUFFER_BLOCK:
 	ld	xix, 1966080
 	ldw	hl, 470
 	ld	c, a
@@ -23667,6 +26932,14 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	xde, xbc
 	ld	bc, hl
 	jp	134579
+; Primary tone-edit command dispatcher.  Entry XWA = command record; saves it in XIZ.
+; Accepts opcodes 0x00..0x0D directly, and 0x13..0x18 after subtracting 5; everything else
+; falls through to the return.  (The `cp WA,0 / jrl M` at 0x02ED88 is dead: WA was just
+; zero-extended from a byte.)  Jumps through AUDIO_CMD_TONEEDIT_JUMPTABLE (0x00F973) with
+; base 0x02EDB9.  Nine of the sixteen live cases begin by calling VoiceAlloc_CheckAndInit,
+; which is why almost every one of them is a no-op unless 0x0451A4 already names this part.
+; Sole caller: 0x031AA3, inside DSP_SetCoeff_MasterConfig's command tree.
+AUDIO_CMD_TONEEDIT_DISPATCH:
 	push xiz
 	ld	xiz, xwa
 	ld	a, (xiz+2)
@@ -23680,11 +26953,16 @@ VoiceAlloc_CheckAndInit_ExtData:
 	jrl	lt, 626
 	cp	wa, 19
 	jrl	gt, 619
+; Common tail of the range checks: WA*2 indexes AUDIO_CMD_TONEEDIT_JUMPTABLE, the fetched
+; offset is added to 0x02EDB9 and jumped to.
+AUDIO_CMD_TONEEDIT_TABLEJUMP:
 	add	wa, wa
 	lda_24	xix, 63859
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 191929
 	jp_rr	8, xix, wa
+; Opcode 0x00: VoiceParam_FullSetup_ExtData(WA = part from rec+1, BC = value from rec+4).
+AUDIO_CMD_TONEEDIT_OP00:
 	ld	a, (xiz+1)
 	ld	e, a
 	extz	de
@@ -23693,6 +26971,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	.byte 0x1e, 0xb5, 0xf7, 0x78, 0x3f, 0x02
+; Opcode 0x04: VoiceAlloc_CheckAndInit(part) then 0x02AE22 (VoiceSlot_DataTable_02AE22)
+; with WA = part, BC = rec+4.
+AUDIO_CMD_TONEEDIT_OP04:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0x33, 0xfe
@@ -23705,6 +26986,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	175650
 	jrl	t, 544
+; Opcode 0x05: VoiceAlloc_CheckAndInit(part) then 0x02AE58 with WA = part, BC = rec+4.
+AUDIO_CMD_TONEEDIT_OP05:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0x14, 0xfe
@@ -23717,6 +27000,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	175704
 	jrl	t, 513
+; Opcode 0x06: VoiceAlloc_CheckAndInit(part) then 0x02AEA2 with WA = part, BC = rec+4.
+AUDIO_CMD_TONEEDIT_OP06:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xf5, 0xfd
@@ -23729,6 +27014,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	175778
 	jrl	t, 482
+; Opcode 0x07: VoiceAlloc_CheckAndInit(part) then 0x02AEEC with WA = part, BC = rec+4.
+AUDIO_CMD_TONEEDIT_OP07:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xd6, 0xfd
@@ -23741,6 +27028,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	175852
 	jrl	t, 451
+; Opcode 0x08: VoiceAlloc_CheckAndInit(part) then 0x02AF3A with WA = part, BC = rec+4.
+AUDIO_CMD_TONEEDIT_OP08:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xb7, 0xfd
@@ -23753,6 +27042,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	175930
 	jrl	t, 420
+; Opcode 0x09: VoiceAlloc_CheckAndInit(part), then 0x02E6D4 with WA = part,
+; BC = (rec+3)<<8 | (rec+4) -- the only opcodes that carry a 16-bit value -- and DE = rec+5.
+AUDIO_CMD_TONEEDIT_OP09:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0x98, 0xfd
@@ -23773,6 +27065,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, bc
 	ld	bc, hl
 	.byte 0x1e, 0x3a, 0xf8, 0x78, 0x71, 0x01
+; Opcode 0x0A: same 16-bit decode as opcode 0x09 but the callee is 0x02E7A0.
+AUDIO_CMD_TONEEDIT_OP0A:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0x65, 0xfd
@@ -23793,6 +27087,10 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, bc
 	ld	bc, hl
 	.byte 0x1e, 0xd3, 0xf8, 0x78, 0x3e, 0x01
+; Opcode 0x0B: reads the patch record (PART+0x06) and tests (patch+0x10) & 0xC0 == 0x40.
+; If so, calls 0x02AF82(WA = part, BC = rec+4) and returns; otherwise falls through to
+; AUDIO_CMD_TONEEDIT_OP0B_ALT.
+AUDIO_CMD_TONEEDIT_OP0B:
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -23811,6 +27109,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	176002
 	jrl	t, 265
+; Opcode 0x0B, ordinary patch: VoiceAlloc_CheckAndInit(part) then 0x02E85A with
+; WA = part, BC = rec+3, E = rec+4.
+AUDIO_CMD_TONEEDIT_OP0B_ALT:
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xfd, 0xfc
@@ -23823,11 +27124,19 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	e, (xiz+4)
 	ld	wa, hl
 	.byte 0x1e, 0x37, 0xf9, 0x78, 0xe8, 0x00
+; Opcode 0x0D -- SELECT THE PART TO EDIT.  Copies 0x0451A4 to 0x0451A5 and then stores
+; (rec+1) into 0x0451A4.  This is the ONLY writer of 0x0451A4 apart from the 0xFF
+; initialisation at 0x034C3B, and 0x0451A5 is never read anywhere in the ROM.  Everything
+; gated on VoiceAlloc_CheckAndInit is inert until this opcode arrives.
+AUDIO_CMD_TONEEDIT_OP0D_SELECTPART:
 	ldb_da	a, 283044
 	stb_da	283045, a
 	ld	a, (xiz+1)
 	stb_da	283044, a
 	jrl	t, 211
+; Opcode 0x0C: only acts when (patch+0x10) & 0xC0 == 0x40; then calls 0x02AFBD with
+; WA = part, BC = rec+4.  No allocation, no reply.
+AUDIO_CMD_TONEEDIT_OP0C:
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -23846,11 +27155,18 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	wa, de
 	call	176061
 	jrl	t, 157
+; Opcode 0x13: VoiceAlloc_CheckAndInit_ExtData(XWA = record) followed by 0x02E91B with
+; WA = rec+4.
+AUDIO_CMD_TONEEDIT_OP13:
 	ld	xwa, xiz
 	.byte 0x1e, 0x48, 0xfd
 	ld	a, (xiz+4)
 	extz	wa
 	.byte 0x1e, 0x9d, 0xf9, 0x78, 0x8d, 0x00
+; Opcode 0x14: 0x02E9B1 with the 16-bit value (rec+3)<<8|(rec+4), then reads the edit-buffer
+; index from (ToneDB_RamBankA + 0x72A7) and calls INTERCPU_REPLY_EDITBUFFER_BLOCK.
+; One of only three opcodes in this dispatcher that produce sub->main traffic.
+AUDIO_CMD_TONEEDIT_OP14:
 	ld	a, (xiz+4)
 	ld	c, a
 	extz	bc
@@ -23865,6 +27181,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xwa+29351)
 	extz	wa
 	.byte 0x1e, 0x9c, 0xfd, 0x68, 0x64
+; Opcode 0x15: 0x02EACE with the 16-bit value and BC = rec+5, then the same
+; INTERCPU_REPLY_EDITBUFFER_BLOCK reply.
+AUDIO_CMD_TONEEDIT_OP15:
 	ld	a, (xiz+4)
 	ld	c, a
 	extz	bc
@@ -23882,6 +27201,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xwa+29351)
 	extz	wa
 	.byte 0x1e, 0x6c, 0xfd, 0x68, 0x34
+; Opcode 0x16: 0x02EB8A with the 16-bit value and BC = rec+5, then the same
+; INTERCPU_REPLY_EDITBUFFER_BLOCK reply.
+AUDIO_CMD_TONEEDIT_OP16:
 	ld	a, (xiz+4)
 	ld	c, a
 	extz	bc
@@ -23899,9 +27221,19 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xwa+29351)
 	extz	wa
 	.byte 0x1e, 0x3c, 0xfd, 0x68, 0x04
+; Opcode 0x17: calls DSP_Stub_RetB (0x035575) -- a stub.  Opcode 0x18 and opcodes 0x01..0x03
+; jump straight to the return.
+AUDIO_CMD_TONEEDIT_OP17:
 	call	218485
+; Restore XIZ and return.  Every case joins here.
+AUDIO_CMD_TONEEDIT_RETURN:
 	pop xiz
 	ret
+; First of eight near-identical copiers.  Input WA = part, C = descriptor index.
+; XDE = the part's patch record (from PART+0x06); XBC = DSP_EFFECT_DESCRIPTOR_TABLE +
+; index*0x27.  Copies descriptor fields into patch+0x5E..+0x65; this variant takes
+; +0x00,+0x01,+0x1A,+0x1C,+0x1B,(skip +0x63),+0x0E,+0x12.  No hardware access.
+DSP_EFFPARAM_COPY_V0:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -23928,6 +27260,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Same shape; fields +0x00,+0x01,+0x03,+0x04,+0x1A,+0x1C,+0x0E,+0x12 into patch+0x5E..+0x65.
+DSP_EFFPARAM_COPY_V1:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -23956,6 +27290,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Fields +0x06,+0x07,+0x08,+0x1B then two zero bytes then +0x0E,+0x12.
+DSP_EFFPARAM_COPY_V2:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -23982,6 +27318,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Fields +0x00,+0x01,+0x03,+0x04 then two zero bytes then +0x0E,+0x12.
+DSP_EFFPARAM_COPY_V3:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -24008,6 +27346,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Fields +0x1C,+0x1A,+0x19,+0x1B then two zero bytes then +0x0E,+0x12.
+DSP_EFFPARAM_COPY_V4:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -24034,6 +27374,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Fields +0x09,+0x0A,+0x0B,+0x0C then two zero bytes then +0x0E,+0x12.
+DSP_EFFPARAM_COPY_V5:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -24060,6 +27402,10 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Different in kind: patch+0x5E is set to 1 or 0 from bit 7 of descriptor+0x13,
+; patch+0x5F = descriptor+0x02 & 0x3F, patch+0x60 = descriptor+0x00, patch+0x61..+0x64 = 0,
+; patch+0x65 = descriptor+0x12.
+DSP_EFFPARAM_COPY_V6:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -24075,7 +27421,11 @@ VoiceAlloc_CheckAndInit_ExtData:
 	jr	z, 6
 	ld	(xde+94), 1
 	jr	t, 4
+; Descriptor+0x13 bit 7 clear -> patch+0x5E = 0.
+DSP_EFFPARAM_COPY_V6_FLAGCLEAR:
 	ld	(xde+94), 0
+; Common tail: the +0x02/&0x3F, +0x00, four zeros, +0x12 stores.
+DSP_EFFPARAM_COPY_V6_TAIL:
 	ld	a, (xbc+2)
 	and	a, 63
 	ld	(xde+95), a
@@ -24088,6 +27438,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; As V6 but patch+0x64 takes descriptor+0x0E instead of zero.
+DSP_EFFPARAM_COPY_V7:
 	extz	wa
 	muls	wa, 287
 	lda_24	xde, 267118
@@ -24103,7 +27455,11 @@ VoiceAlloc_CheckAndInit_ExtData:
 	jr	z, 6
 	ld	(xde+94), 1
 	jr	t, 4
+; Descriptor+0x13 bit 7 clear -> patch+0x5E = 0.
+DSP_EFFPARAM_COPY_V7_FLAGCLEAR:
 	ld	(xde+94), 0
+; Common tail of V7.
+DSP_EFFPARAM_COPY_V7_TAIL:
 	ld	a, (xbc+2)
 	and	a, 63
 	ld	(xde+95), a
@@ -24117,6 +27473,14 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xbc+18)
 	ld	(xde+101), a
 	ret
+; Input A = part.  Reads the part's algorithm type ((patch+0x5D) & 0x0F); if it is outside
+; 0..0x0B it returns.  Otherwise jumps through DSP_EFFPARAM_APPLY_JUMPTABLE (0x00F99B, base
+; 0x02F2D9); each of the twelve cases loads BC with a descriptor index and tail-jumps to one
+; of the DSP_EFFPARAM_COPY_Vn routines:
+;   type 0->V0/0  1->V0/1  2->V0/2  3->V0/3  4->V1/4  5->V1/5  6->V2/6  7->V3/7
+;   type 8->V4/8  9->V5/9  A->V6/0x0A  B->V7/0x0B
+; Called from 0x02FC2D (opcode 0x5D with rec+5 == 0x0F).
+DSP_EFFPARAM_APPLY_BY_ALGOTYPE:
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -24134,43 +27498,72 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld_rrw	bc, xix, bc
 	lda_24	xix, 193241
 	jp_rr	8, xix, bc
+; Algorithm type 0: DSP_EFFPARAM_COPY_V0 with descriptor 0.
+DSP_EFFPARAM_APPLY_T0:
 	extz	wa
 	lds	bc, 0
 	jrl	t, 16776496
+; Algorithm type 1: DSP_EFFPARAM_COPY_V0 with descriptor 1.
+DSP_EFFPARAM_APPLY_T1:
 	extz	wa
 	lds	bc, 1
 	jrl	t, 16776489
+; Algorithm type 2: DSP_EFFPARAM_COPY_V0 with descriptor 2.
+DSP_EFFPARAM_APPLY_T2:
 	extz	wa
 	lds	bc, 2
 	jrl	t, 16776482
+; Algorithm type 3: DSP_EFFPARAM_COPY_V0 with descriptor 3.
+DSP_EFFPARAM_APPLY_T3:
 	extz	wa
 	lds	bc, 3
 	jrl	t, 16776475
+; Algorithm type 4: DSP_EFFPARAM_COPY_V1 with descriptor 4.
+DSP_EFFPARAM_APPLY_T4:
 	extz	wa
 	lds	bc, 4
 	jrl	t, 16776545
+; Algorithm type 5: DSP_EFFPARAM_COPY_V1 with descriptor 5.
+DSP_EFFPARAM_APPLY_T5:
 	extz	wa
 	lds	bc, 5
 	jrl	t, 16776538
+; Algorithm type 6: DSP_EFFPARAM_COPY_V2 with descriptor 6.
+DSP_EFFPARAM_APPLY_T6:
 	extz	wa
 	lds	bc, 6
 	jrl	t, 16776614
+; Algorithm type 7: DSP_EFFPARAM_COPY_V3 with descriptor 7.
+DSP_EFFPARAM_APPLY_T7:
 	extz	wa
 	lds	bc, 7
 	jrl	t, 16776687
+; Algorithm type 8: DSP_EFFPARAM_COPY_V4 with descriptor 8.
+DSP_EFFPARAM_APPLY_T8:
 	extz	wa
 	ldw	bc, 8
 	jrl	t, 16776758
+; Algorithm type 9: DSP_EFFPARAM_COPY_V5 with descriptor 9.
+DSP_EFFPARAM_APPLY_T9:
 	extz	wa
 	ldw	bc, 9
 	jrl	t, 16776830
+; Algorithm type 0x0A: DSP_EFFPARAM_COPY_V6 with descriptor 0x0A.
+DSP_EFFPARAM_APPLY_TA:
 	extz	wa
 	ldw	bc, 10
 	jrl	t, 16776902
+; Algorithm type 0x0B: DSP_EFFPARAM_COPY_V7 with descriptor 0x0B.
+DSP_EFFPARAM_APPLY_TB:
 	extz	wa
 	ldw	bc, 11
 	jrl	t, 16776981
 	ret
+; Input A = part.  Re-runs the part's DSP output routing after a parameter change.
+; Reads the algorithm type; types outside 0..7 do nothing.  Dispatches through
+; VOICE_DSPOUT_A_JUMPTABLE (0x00F9B3, base 0x02F36E) onto Voice_DSP_OutputConfig (0x027CE4)
+; and Voice_DSP_SimpleCopy (0x027EBE).  Called from 0x02FC6A and 0x02FCE2.
+VOICE_DSPOUT_APPLY_A:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -24190,6 +27583,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 193390
 	jp_rr	8, xix, wa
+; Algorithm types 0..3: Voice_DSP_OutputConfig(part, 0) then (part, 1).
+VOICE_DSPOUT_A_TYPE0TO3:
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
@@ -24199,15 +27594,21 @@ VoiceAlloc_CheckAndInit_ExtData:
 	lds	bc, 1
 	call	163044
 	jr	t, 55
+; Algorithm types 4..5: Voice_DSP_OutputConfig(part, 0) only.
+VOICE_DSPOUT_A_TYPE4TO5:
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
 	call	163044
 	jr	t, 43
+; Algorithm type 6: Voice_DSP_SimpleCopy(part).
+VOICE_DSPOUT_A_TYPE6:
 	ld	a, (xsp)
 	extz	wa
 	call	163518
 	jr	t, 33
+; Algorithm type 7: only if PART+0x0A bit 14 is set, Voice_DSP_OutputConfig(part, 0).
+VOICE_DSPOUT_A_TYPE7:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -24219,8 +27620,14 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	wa
 	lds	bc, 0
 	call	163044
+; Pop the one-word frame and return.
+VOICE_DSPOUT_A_RETURN:
 	inc	2, xsp
 	ret
+; Twin of VOICE_DSPOUT_APPLY_A driving the second output bank: Voice_DSP_OutputConfig2
+; (0x027DD1) and Voice_DSP_SimpleCopy2 (0x027F19), table VOICE_DSPOUT_B_JUMPTABLE
+; (0x00F9C3, base 0x02F3FA).  Called from 0x02FC75 and 0x02FCF0.
+VOICE_DSPOUT_APPLY_B:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -24242,6 +27649,8 @@ VoiceAlloc_CheckAndInit_ExtData:
 	.byte 0xf0, 0xe0, 0x20
 	lda_24	xix, 193530
 	jp_rr	8, xix, wa
+; Algorithm types 0..3: Voice_DSP_OutputConfig2(part, 0) then (part, 1).
+VOICE_DSPOUT_B_TYPE0TO3:
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
@@ -24251,15 +27660,22 @@ VoiceAlloc_CheckAndInit_ExtData:
 	lds	bc, 1
 	call	163281
 	jr	t, 63
+; Algorithm types 4..5: Voice_DSP_OutputConfig2(part, 0) only.
+VOICE_DSPOUT_B_TYPE4TO5:
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
 	call	163281
 	jr	t, 51
+; Algorithm type 6: Voice_DSP_SimpleCopy2(part).
+VOICE_DSPOUT_B_TYPE6:
 	ld	a, (xsp)
 	extz	wa
 	call	163609
 	jr	t, 41
+; Algorithm type 7: only if PART+0x0A bit 14 is set, Voice_DSP_OutputConfig2(part, 0)
+; followed by Voice_DSP_SimpleCopy2(part).
+VOICE_DSPOUT_B_TYPE7:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -24274,8 +27690,14 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xsp)
 	extz	wa
 	call	163609
+; Pop the one-word frame and return.
+VOICE_DSPOUT_B_RETURN:
 	inc	2, xsp
 	ret
+; Input A = part.  Applies the SECOND output slot only, and only for algorithm types 4..0x0B
+; ((patch+0x5D & 0x0F) - 4 must be in 0..7).  Table VOICE_DSPOUT_SECOND_A_JUMPTABLE
+; (0x00F9D3, base 0x02F48C).  Called from 0x02FC80 and 0x02FD09.
+VOICE_DSPOUT_SECOND_A:
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -24296,11 +27718,17 @@ VoiceAlloc_CheckAndInit_ExtData:
 	.byte 0xf0, 0xe4, 0x21
 	lda_24	xix, 193676
 	jp_rr	8, xix, bc
+; Types 4..5: tail-jump Voice_DSP_OutputConfig(part, 1).
+VOICE_DSPOUT_SECOND_A_SLOT1:
 	extz	wa
 	lds	bc, 1
 	jp	163044
+; Type 6: tail-jump Voice_DSP_SimpleCopy(part).
+VOICE_DSPOUT_SECOND_A_SIMPLE:
 	extz	wa
 	jp	163518
+; Type 7: return unless PART+0x0A bit 14 is set, then Voice_DSP_OutputConfig(part, 1).
+VOICE_DSPOUT_SECOND_A_GATED:
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -24311,10 +27739,18 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	wa
 	lds	bc, 1
 	jp	163044
+; Types 0x0A..0x0B: tail-jump Voice_DSP_OutputConfig(part, 0).
+VOICE_DSPOUT_SECOND_A_SLOT0:
 	extz	wa
 	lds	bc, 0
 	jp	163044
+; Types 8..9: bare return.
+VOICE_DSPOUT_SECOND_A_NONE:
 	ret
+; Second-bank twin of VOICE_DSPOUT_SECOND_A, written as an if-chain instead of a table:
+; algorithm types 4 and 5 -> Voice_DSP_OutputConfig2(part, 1); type 7 -> the same but only
+; when PART+0x0A bit 14 is set; every other type returns.  Called from 0x02FC8B, 0x02FD22.
+VOICE_DSPOUT_SECOND_B:
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -24328,9 +27764,13 @@ VoiceAlloc_CheckAndInit_ExtData:
 	jr	z, 4
 	cps	c, 4
 	ret	nz
+; Tail-jump Voice_DSP_OutputConfig2(part, 1).
+VOICE_DSPOUT_SECOND_B_SLOT1:
 	extz	wa
 	lds	bc, 1
 	jp	163281
+; Algorithm type 7: gate on PART+0x0A bit 14 before the same call.
+VOICE_DSPOUT_SECOND_B_GATED:
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -24342,6 +27782,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	lds	bc, 1
 	jp	163281
 
+; Input A = part, C = flag.  Calls VoiceAlloc_CheckAndInit(part) and then sets or clears
+; bit 7 of the parameter-shadow byte 0x04502B (= UserTone_VelSplit_Base + 0x5D, i.e. the
+; cached value of opcode 0x5D) according to C.  Single caller: 0x02A148.
 VoiceAlloc_WithRoutingFlag:
 	dec 2, xsp
 	ld (xsp), c
@@ -24352,13 +27795,28 @@ VoiceAlloc_WithRoutingFlag:
 	setda_24 7, 282667
 	jr VoiceAlloc_WithRoutingFlag_Return
 
+; C == 0 -> res 7,(0x04502B).
 VoiceAlloc_WithRoutingFlag_Clear:
 	resda_24 7, 282667
 
+; Pop the frame and return.
 VoiceAlloc_WithRoutingFlag_Return:
 	inc 2, xsp
 	ret
 
+; ALGORITHM GROUP 0 APPLY.  Input A = part, C = algorithm slot 0..3.  Not data: this is the
+; first of three structurally identical routines (the others are 0x02F630 and 0x02F735).
+; Steps:
+;   1. AlgoFlag_Write(WA=part, DE=slot, BC=0) and AlgoFlag_Write_Bit3(same, BC=0)
+;   2. EFF_RoutingInit(WA=part, BC=0..3, DE=0) for all four routing slots
+;   3. Voice_BuildOutputList(WA=part, BC=slot, DE=0) -> XHL = word list of voice numbers
+;   4. for each entry: Voice_OpSlot_WriteParams(part, PART record, slot, voice, group=0),
+;      EGEnv_Compute_A (0x022E2A) -> 0x04520C, EGEnv_Compute_A_Simple (0x022EBA) -> 0x045208,
+;      then ToneGen_WriteExtParams_56 (0x02DA16) with XBC = TG_Scratch_Base (0x0451CC).
+;   Loop terminator: stop when (list word & 0x00FF) >= 0x80.
+; This is the only place group 0 parameters reach the tone generator after an edit.
+; Callers verified by disassembly: 0x02E8C4 and 0x02E8D9 (both with BC = 0), and the four
+; opcode-group cases at 0x02FB65, 0x02FB75, 0x02FB85, 0x02FB95 (slots 0..3).
 VoiceAlloc_WithRoutingFlag_ExtData:
 	.byte 0xbf, 0xf6, 0x37
 	push xiz
@@ -24387,6 +27845,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ldib_erp	251, 0
 	cpib_erp	251, 4
 	jr	nc, 30
+; Body of the four-iteration EFF_RoutingInit loop, counter in QIZH.
+VOICEALLOC_APPLY_GRP0_ROUTINGLOOP:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -24399,6 +27859,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	incb_erp	251, 1
 	cpib_erp	251, 4
 	jr	c, 16777186
+; Routing done: call Voice_BuildOutputList and stash the list pointer at (XSP+0x04),
+; cursor at (XSP+0x08).
+VOICEALLOC_APPLY_GRP0_BUILDLIST:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -24412,6 +27875,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0
 	jr	t, 105
+; Per-voice body: fetch list[cursor] into IZ, write the op-slot parameters, compute both
+; envelopes and push the result to the tone generator.
+VOICEALLOC_APPLY_GRP0_VOICELOOP:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -24447,6 +27913,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lda_24	xbc, 283084
 	call	186902
 	.byte 0x9f, 0x08, 0x61
+; Loop condition: re-read list[cursor] and continue while (word & 0xFF) < 0x80.
+VOICEALLOC_APPLY_GRP0_VOICELOOP_TEST:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -24458,6 +27926,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	pop xiz
 	lda	xsp, (xsp+10)
 	ret
+; ALGORITHM GROUP 1 APPLY.  Same five steps as 0x02F52A with group = 1 throughout:
+; AlgoFlag_Write(...,BC=1), AlgoFlag_Write_Bit3(...,BC=1), EFF_RoutingInit(...,DE=1),
+; Voice_BuildOutputList with the slot number OR 4 (`set 2,WA`), Voice_OpSlot_WriteParams
+; with group 1, EGEnv_Compute_B (0x022F3C) -> 0x045204, EGEnv_Compute_B_Simple (0x022FCC)
+; -> 0x045206, ToneGen_WriteExtParams_15 (0x02DC50).
+; ★ Its voice-list loop terminates on (word & 0xFF) >= 0x40, not >= 0x80 like the other two.
+; Callers: opcodes 0x2F..0x32 (0x02FBA5..0x02FBD5).
+VOICEALLOC_APPLY_ALGO_GROUP1:
 	dec	0, xsp
 	push xiz
 	ld	(xsp+8), c
@@ -24485,6 +27961,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ldib_erp	251, 0
 	cpib_erp	251, 4
 	jr	nc, 30
+; Four-iteration EFF_RoutingInit loop with DE = 1.
+VOICEALLOC_APPLY_GRP1_ROUTINGLOOP:
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24497,6 +27975,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	incb_erp	251, 1
 	cpib_erp	251, 4
 	jr	c, 16777186
+; Voice_BuildOutputList with selector = slot | 4.
+VOICEALLOC_APPLY_GRP1_BUILDLIST:
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24511,6 +27991,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xsp+4), xhl
 	ld	qiz, 0
 	jr	t, 105
+; Per-voice body for group 1.
+VOICEALLOC_APPLY_GRP1_VOICELOOP:
 	ld	wa, qiz
 	extz	xwa
 	add	xwa, xwa
@@ -24546,6 +28028,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lda_24	xbc, 283084
 	call	187472
 	inc	1, qiz
+; Loop condition: continue while (list word & 0xFF) < 0x40.
+VOICEALLOC_APPLY_GRP1_VOICELOOP_TEST:
 	ld	wa, qiz
 	extz	xwa
 	add	xwa, xwa
@@ -24557,6 +28041,11 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	pop xiz
 	inc	0, xsp
 	ret
+; ALGORITHM GROUP 2 APPLY.  Group = 2 throughout; Voice_BuildOutputList selector = slot | 8
+; (`set 3,WA`); per voice it calls Voice_OpSlot_WriteParams(group 2), Voice_Freq_WriteLeft
+; (0x023043), Voice_Freq_WriteRight (0x02315F) and ToneGen_ExtParams15_DataTable (0x02DD6D).
+; Loop terminator (word & 0xFF) >= 0x80.  Callers: opcodes 0x33..0x36 (0x02FBE5..0x02FC15).
+VOICEALLOC_APPLY_ALGO_GROUP2:
 	dec	0, xsp
 	push xiz
 	ld	(xsp+8), c
@@ -24584,6 +28073,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ldib_erp	251, 0
 	cpib_erp	251, 4
 	jr	nc, 30
+; Four-iteration EFF_RoutingInit loop with DE = 2.
+VOICEALLOC_APPLY_GRP2_ROUTINGLOOP:
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24596,6 +28087,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	incb_erp	251, 1
 	cpib_erp	251, 4
 	jr	c, 16777186
+; Voice_BuildOutputList with selector = slot | 8.
+VOICEALLOC_APPLY_GRP2_BUILDLIST:
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24610,6 +28103,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xsp+4), xhl
 	ld	qiz, 0
 	jr	t, 95
+; Per-voice body for group 2 (frequency writes rather than envelope writes).
+VOICEALLOC_APPLY_GRP2_VOICELOOP:
 	ld	wa, qiz
 	extz	xwa
 	add	xwa, xwa
@@ -24643,6 +28138,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lda_24	xbc, 283084
 	call	187757
 	inc	1, qiz
+; Loop condition: continue while (list word & 0xFF) < 0x80.
+VOICEALLOC_APPLY_GRP2_VOICELOOP_TEST:
 	ld	wa, qiz
 	extz	xwa
 	add	xwa, xwa
@@ -24654,6 +28151,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	pop xiz
 	inc	0, xsp
 	ret
+; Second command dispatcher.  Entry XWA = command record; part goes to QIZH.
+; Stage 1 accepts opcodes 0x15..0x27 through AUDIO_CMD_EFFECTPARAM_JUMPTABLE (0x00FA76,
+; base 0x02F86F); only every third opcode has a handler, and each handler forwards to
+; AudioChannel_Dispatch (0x029E31) with XDE pointing at one of the seven 3-byte parameter
+; groups inside the patch record.  All handlers then fall into
+; AUDIO_CMD_EFFPARAM_CACHE_AND_DISPATCH2, which caches the value and runs a much larger
+; second stage.  Sole caller: 0x031AB3.
+AUDIO_CMD_EFFECTPARAM_DISPATCH:
 	dec	4, xsp
 	push qiz
 	ld	(xsp+2), xwa
@@ -24673,6 +28178,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 194671
 	jp_rr	8, xix, wa
+; Opcode 0x15: AudioChannel_Dispatch(WA=part, XDE=&patch[0x14], BC=0).
+AUDIO_CMD_EFFPARAM_GRP0:
 	stb_erp	a, 251
 	ld	l, a
 	extz	hl
@@ -24686,6 +28193,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 258
+; Opcode 0x18: AudioChannel_Dispatch(WA=part, XDE=&patch[0x17], BC=0).
+AUDIO_CMD_EFFPARAM_GRP1:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24701,6 +28210,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 214
+; Opcode 0x1B: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1A], BC=0).
+AUDIO_CMD_EFFPARAM_GRP2:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24716,6 +28227,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 170
+; Opcode 0x1E: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1D], BC=0).
+AUDIO_CMD_EFFPARAM_GRP3:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24731,6 +28244,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jr	t, 127
+; Opcode 0x21: AudioChannel_Dispatch(WA=part, XDE=&patch[0x20], BC=0).
+AUDIO_CMD_EFFPARAM_GRP4:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24746,6 +28261,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jr	t, 84
+; Opcode 0x24: AudioChannel_Dispatch(WA=part, XDE=&patch[0x23], BC=0).
+AUDIO_CMD_EFFPARAM_GRP5:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24761,6 +28278,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jr	t, 41
+; Opcode 0x27: AudioChannel_Dispatch(WA=part, XDE=&patch[0x26], BC=0).
+AUDIO_CMD_EFFPARAM_GRP6:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24775,6 +28294,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
+; Common tail of stage 1 and the entry to stage 2.  Stores (rec+4) into the parameter shadow
+; at UserTone_VelSplit_Base + opcode (0x044FCE + opcode), then range-checks the opcode:
+; 0x00..0x10 exit, 0x11..0x65 continue.
+AUDIO_CMD_EFFPARAM_CACHE_AND_DISPATCH2:
 	lda_24	xwa, 282574
 	ld	xbc, xwa
 	ld	xwa, (xsp+2)
@@ -24790,6 +28313,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	ugt, 5
 	cps	a, 0
 	jrl	nc, 954
+; Two-level lookup: AUDIO_CMD_EFFPARAM_CASEMAP (0x00F9E3) maps opcode-0x11 to a case number,
+; which indexes AUDIO_CMD_EFFPARAM_JUMPTABLE (0x00FA38) with base 0x02F9FA.
+AUDIO_CMD_EFFPARAM_TABLEJUMP:
 	extz	wa
 	sub	wa, 17
 	cps	wa, 0
@@ -24805,6 +28331,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lda_24	xix, 195066
 	jp_rr	8, xix, wa
 	jrl	t, 898
+; Opcode 0x11: VoiceFlags_Aggregate(part) then EnvTranspose_UpdateLoop(part).
+AUDIO_CMD_EFFPARAM_OP11:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -24814,11 +28342,15 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	call	208414
 	jrl	t, 871
+; Opcode 0x12: VoiceFlags_Aggregate(part) only.
+AUDIO_CMD_EFFPARAM_OP12:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	207646
 	jrl	t, 856
+; Opcode 0x14: AudioChannel_Dispatch(part, &patch[0x1D], 0).
+AUDIO_CMD_EFFPARAM_OP14:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24834,6 +28366,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 812
+; Opcode 0x17: AudioChannel_Dispatch(part, &patch[0x17], 0).
+AUDIO_CMD_EFFPARAM_OP17:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24849,6 +28383,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 768
+; Opcode 0x1A: AudioChannel_Dispatch(part, &patch[0x1A], 0).
+AUDIO_CMD_EFFPARAM_OP1A:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24864,6 +28400,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 724
+; Opcode 0x1D: AudioChannel_Dispatch(part, &patch[0x1D], 0).
+AUDIO_CMD_EFFPARAM_OP1D:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24879,6 +28417,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 680
+; Opcode 0x20: AudioChannel_Dispatch(part, &patch[0x20], 0).
+AUDIO_CMD_EFFPARAM_OP20:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24894,6 +28434,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 636
+; Opcode 0x23: AudioChannel_Dispatch(part, &patch[0x23], 0).
+AUDIO_CMD_EFFPARAM_OP23:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24909,6 +28451,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 592
+; Opcode 0x26: AudioChannel_Dispatch(part, &patch[0x26], 0).
+AUDIO_CMD_EFFPARAM_OP26:
 	stb_erp	a, 251
 	ld	e, a
 	extz	de
@@ -24924,66 +28468,99 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	call	171569
 	jrl	t, 548
+; Opcodes 0x2B..0x2E: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 0) -- group 0 apply.
+; Note all four opcodes of the run share this case and therefore share slot 0; the per-slot
+; distinction is carried by the next three cases, not by the opcode's low bits.
+AUDIO_CMD_EFFPARAM_GRP0_SLOT0:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 0
 	.byte 0x1e, 0xc2, 0xf9, 0x78, 0x14, 0x02
+; Opcodes 0x2F..0x32: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 1).
+AUDIO_CMD_EFFPARAM_GRP0_SLOT1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 1
 	.byte 0x1e, 0xb2, 0xf9, 0x78, 0x04, 0x02
+; Opcodes 0x33..0x36: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 2).
+AUDIO_CMD_EFFPARAM_GRP0_SLOT2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 2
 	.byte 0x1e, 0xa2, 0xf9, 0x78, 0xf4, 0x01
+; Opcodes 0x37..0x3A: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 3).
+AUDIO_CMD_EFFPARAM_GRP0_SLOT3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 3
 	.byte 0x1e, 0x92, 0xf9, 0x78, 0xe4, 0x01
+; Opcodes 0x3B..0x3E: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 0).
+AUDIO_CMD_EFFPARAM_GRP1_SLOT0:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 0
 	.byte 0x1e, 0x88, 0xfa, 0x78, 0xd4, 0x01
+; Opcodes 0x3F..0x42: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 1).
+AUDIO_CMD_EFFPARAM_GRP1_SLOT1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 1
 	.byte 0x1e, 0x78, 0xfa, 0x78, 0xc4, 0x01
+; Opcodes 0x43..0x46: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 2).
+AUDIO_CMD_EFFPARAM_GRP1_SLOT2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 2
 	.byte 0x1e, 0x68, 0xfa, 0x78, 0xb4, 0x01
+; Opcodes 0x47..0x4A: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 3).
+AUDIO_CMD_EFFPARAM_GRP1_SLOT3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 3
 	.byte 0x1e, 0x58, 0xfa, 0x78, 0xa4, 0x01
+; Opcodes 0x4B..0x4E: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 0).
+AUDIO_CMD_EFFPARAM_GRP2_SLOT0:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 0
 	.byte 0x1e, 0x4d, 0xfb, 0x78, 0x94, 0x01
+; Opcodes 0x4F..0x52: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 1).
+AUDIO_CMD_EFFPARAM_GRP2_SLOT1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 1
 	.byte 0x1e, 0x3d, 0xfb, 0x78, 0x84, 0x01
+; Opcodes 0x53..0x56: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 2).
+AUDIO_CMD_EFFPARAM_GRP2_SLOT2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 2
 	.byte 0x1e, 0x2d, 0xfb, 0x78, 0x74, 0x01
+; Opcodes 0x57..0x5A: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 3).
+AUDIO_CMD_EFFPARAM_GRP2_SLOT3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	lds	bc, 3
 	.byte 0x1e, 0x1d, 0xfb, 0x78, 0x64, 0x01
+; Opcode 0x5D with (rec+5) == 0x0F: the heaviest case in the region.  In order:
+; DSP_EFFPARAM_APPLY_BY_ALGOTYPE, AlgoType_StateWrite(part, 0), VoiceFlags_Aggregate,
+; EnvTranspose_UpdateLoop, VoiceNoteParam_UpdateLoop, VOICE_DSPOUT_APPLY_A,
+; VOICE_DSPOUT_APPLY_B, VOICE_DSPOUT_SECOND_A, VOICE_DSPOUT_SECOND_B,
+; Voice_ActiveFlag_CheckAndLoad, Voice_SecondaryParam_Epilogue, and finally L is stored into
+; PART+0x66 (0x0413CE + part*0x11F).
+AUDIO_CMD_EFFPARAM_OP5D_FULLREBUILD:
 	ld	xwa, (xsp+2)
 	cp	(xwa+5), 15
 	jrl	nz, 154
@@ -25039,6 +28616,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lda_24	xbc, 267214
 	st_rrb	l, xbc, wa
 	jrl	t, 192
+; Opcode 0x5D with (rec+5) != 0x0F: only VoiceFlags_Aggregate + EnvTranspose_UpdateLoop.
+AUDIO_CMD_EFFPARAM_OP5D_LIGHT:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25048,10 +28627,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	call	208414
 	jrl	t, 165
+; Opcode 0x5E: VOICE_DSPOUT_APPLY_A(part).
+AUDIO_CMD_EFFPARAM_OP5E:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	.byte 0x1e, 0x4d, 0xf6, 0x78, 0x97, 0x00
+; Opcode 0x5F: VOICE_DSPOUT_APPLY_B(part) then VoiceNoteParam_UpdateLoop(part).
+AUDIO_CMD_EFFPARAM_OP5F:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25061,6 +28644,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	call	213775
 	jr	t, 126
+; Opcode 0x60: VOICE_DSPOUT_SECOND_A(part) then VoiceNoteParam_UpdateLoop(part).
+AUDIO_CMD_EFFPARAM_OP60:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25070,6 +28655,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	call	213775
 	jr	t, 101
+; Opcode 0x61: VOICE_DSPOUT_SECOND_B(part) then VoiceNoteParam_UpdateLoop(part).
+AUDIO_CMD_EFFPARAM_OP61:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25079,21 +28666,29 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	call	213775
 	jr	t, 76
+; Opcode 0x62: VoiceNoteParam_UpdateLoop(part) only.
+AUDIO_CMD_EFFPARAM_OP62:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
 	jr	t, 62
+; Opcode 0x63: identical to opcode 0x62 (duplicated case body).
+AUDIO_CMD_EFFPARAM_OP63:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
 	jr	t, 48
+; Opcode 0x64: Voice_ActiveFlag_CheckAndLoad(part).
+AUDIO_CMD_EFFPARAM_OP64:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	214161
 	jr	t, 34
+; Opcode 0x65: Voice_SecondaryParam_Epilogue(part), then L into PART+0x66.
+AUDIO_CMD_EFFPARAM_OP65:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25104,9 +28699,18 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	muls	wa, 287
 	lda_24	xbc, 267214
 	st_rrb	l, xbc, wa
+; Restore QIZ, drop the 4-byte frame, return.  Every stage-1 and stage-2 case joins here.
+AUDIO_CMD_EFFPARAM_RETURN:
 	pop qiz
 	inc	4, xsp
 	ret
+; Input WA = part, C = slot 0..3.  XDE = the slot descriptor pointed to by
+; PART + 0x6E + slot*0x25; XBC = the 5-byte cache at UserTone_VelSplit_Base + 0x1E0 + slot*5.
+; If (descriptor+0x36 & 7) equals cache[0] the four cached bytes are copied straight into
+; descriptor+0x4D..+0x50.  Otherwise it re-maps them according to the pair
+; (cache[0], descriptor shape), which is what the branch tree below does.
+; Called from AUDIO_CMD_DSPUNIT_PARAM opcode 0x36 (0x030167), gated on (rec+5) == 7.
+DSP_SLOTPARAM_WRITE_FROM_CACHE:
 	ld	e, c
 	extz	de
 	muls	de, 37
@@ -25131,6 +28735,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
+; Shapes agree: copy cache[1..4] to descriptor+0x4D..+0x50 in a 4-iteration loop.
+DSP_SLOTPARAM_WRITE_MATCH_LOOP:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, 77
@@ -25146,6 +28752,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	hl, 4
 	jr	c, 16777184
 	ret
+; Shapes differ: switch on cache[0] (1/3 -> 0x02FE05, 2/4 -> 0x02FE4B, 5 -> 0x02FE91,
+; anything else -> return).
+DSP_SLOTPARAM_WRITE_REMAP:
 	ld	a, (xbc)
 	cps	a, 5
 	jrl	z, 156
@@ -25157,6 +28766,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	z, 4
 	cps	a, 1
 	ret	nz
+; cache[0] in {1,3}: if the descriptor's shape is 5, write the fixed pattern
+; {0x00, 0x01, cache[1], cache[2]}; otherwise fall back to the plain 4-byte copy.
+DSP_SLOTPARAM_WRITE_SHAPE1OR3:
 	ld	a, (xde+54)
 	and	a, 7
 	cps	a, 5
@@ -25168,9 +28780,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xbc+2)
 	ld	(xde+80), a
 	ret
+; Plain 4-byte copy fallback for the {1,3} branch.
+DSP_SLOTPARAM_WRITE_SHAPE1OR3_PLAIN:
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
+; Loop body of that fallback.
+DSP_SLOTPARAM_WRITE_SHAPE1OR3_LOOP:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, 77
@@ -25186,6 +28802,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	hl, 4
 	jr	c, 16777184
 	ret
+; cache[0] in {2,4}: if the descriptor's shape is 5, write {cache[1], cache[2], 0x7F, 0x01};
+; otherwise plain copy.
+DSP_SLOTPARAM_WRITE_SHAPE2OR4:
 	ld	a, (xde+54)
 	and	a, 7
 	cps	a, 5
@@ -25197,9 +28816,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xde+79), 127
 	ld	(xde+80), 1
 	ret
+; Plain 4-byte copy fallback for the {2,4} branch.
+DSP_SLOTPARAM_WRITE_SHAPE2OR4_PLAIN:
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
+; Loop body of that fallback.
+DSP_SLOTPARAM_WRITE_SHAPE2OR4_LOOP:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, 77
@@ -25215,6 +28838,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	hl, 4
 	jr	c, 16777184
 	ret
+; cache[0] == 5: descriptor shape 1 or 3 -> write {cache[3], cache[4], 0x40, 0x87};
+; shape 2 or 4 -> write {cache[1], cache[2], 0x40, 0x07}; other shapes -> return.
+DSP_SLOTPARAM_WRITE_SHAPE5:
 	ld	a, (xde+54)
 	and	a, 7
 	cps	a, 4
@@ -25225,6 +28851,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	z, 4
 	cps	a, 1
 	ret	nz
+; Shape-5 source, shape-1/3 destination.
+DSP_SLOTPARAM_WRITE_SHAPE5_TO13:
 	ld	a, (xbc+3)
 	ld	(xde+77), a
 	ld	a, (xbc+4)
@@ -25232,6 +28860,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xde+79), 64
 	ld	(xde+80), 135
 	ret
+; Shape-5 source, shape-2/4 destination.
+DSP_SLOTPARAM_WRITE_SHAPE5_TO24:
 	ld	a, (xbc+1)
 	ld	(xde+77), a
 	ld	a, (xbc+2)
@@ -25239,6 +28869,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xde+79), 64
 	ld	(xde+80), 7
 	ret
+; Inverse of DSP_SLOTPARAM_WRITE_FROM_CACHE.  Same addressing; returns immediately unless
+; (descriptor+0x36 & 7) equals cache[0], then copies descriptor+0x4D..+0x50 into cache[1..4].
+; Called from AUDIO_CMD_DSPUNIT_PARAM opcodes 0x4D..0x50 (0x0301DC).
+DSP_SLOTPARAM_READ_TO_CACHE:
 	ld	e, c
 	extz	de
 	muls	de, 37
@@ -25263,6 +28897,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	cps	bc, 4
 	ret	nc
+; 4-iteration copy loop.
+DSP_SLOTPARAM_READ_LOOP:
 	ld	wa, bc
 	extz	xwa
 	inc	1, xwa
@@ -25278,6 +28914,16 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	bc, 4
 	jr	c, 16777184
 	ret
+; Third command dispatcher, one instance per DSP unit.  Input C = unit 0..3,
+; XWA = command record.  The opcode is taken from (rec+2) with bit 7 forced low; the value
+; (rec+4) is stored into the parameter shadow at
+; UserTone_VelSplit_Base + 0x66 + unit*0x51 + opcode.
+; Opcodes 0x4D..0x50 short-circuit to DSP_SLOTPARAM_READ_TO_CACHE.  Opcode 0x17 short-
+; circuits to the amplitude path.  Opcodes 0x07..0x16, 0x39..0x4C and >0x4C are ignored.
+; Everything else goes through AUDIO_CMD_DSPUNIT_CASEMAP (0x00FA9C) /
+; AUDIO_CMD_DSPUNIT_JUMPTABLE (0x00FAB6), base 0x02FFF9.
+; Four callers: 0x031AD5, 0x031ADF, 0x031B01, 0x031B0B.  Produces no sub->main traffic.
+AUDIO_CMD_DSPUNIT_PARAM:
 	dec	6, xsp
 	pushw iz
 	ld	(xsp+2), c
@@ -25317,12 +28963,17 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	ugt, 6
 	cp	a, 24
 	jrl	nc, 564
+; Opcode < 0x17: reject 0x07..0x16, accept 0x00..0x06.
+AUDIO_CMD_DSPUNIT_CHECK_LOW:
 	cp	a, 23
 	jrl	z, 271
 	cp	a, 22
 	jr	ugt, 5
 	cps	a, 7
 	jrl	nc, 548
+; Fold the two accepted opcode windows into one index: 0..6 stay, 0x26..0x38 become
+; 7..0x19; anything else exits.
+AUDIO_CMD_DSPUNIT_NORMALISE:
 	extz	wa
 	cps	wa, 0
 	.byte 0x75, 0x1d, 0x02
@@ -25333,6 +28984,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jrl	lt, 528
 	cp	wa, 25
 	jrl	gt, 521
+; Two-level lookup into the case map and jump table.
+AUDIO_CMD_DSPUNIT_TABLEJUMP:
 	lda_24	xix, 64156
 	ld_rrw	wa, xix, wa
 	extz	wa
@@ -25341,11 +28994,16 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 196601
 	jp_rr	8, xix, wa
+; Opcode 0x01: EnvTranspose_UpdateLoop(part).
+AUDIO_CMD_DSPUNIT_OP01:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
 	call	208414
 	jrl	t, 471
+; Opcodes 0x02 and 0x03: VoiceBufPtr_Update(part, unit) then
+; VoiceParam_WriteWithOffset_3Arg(part, unit, slot) for slots 0..3.
+AUDIO_CMD_DSPUNIT_OP02:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25358,6 +29016,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	iz, 0
 	cps	iz, 4
 	jrl	nc, 441
+; Four-iteration slot loop of opcode 0x02/0x03.
+AUDIO_CMD_DSPUNIT_OP02_SLOTLOOP:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	l, a
@@ -25374,6 +29034,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	iz, 4
 	jr	c, 16777180
 	jrl	t, 402
+; Opcode 0x05: Voice_AllocateForFull(part) then Voice_AllVoices_WritePan (0x028D4C).
+AUDIO_CMD_DSPUNIT_OP05:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25381,9 +29043,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xwa, xhl
 	call	167244
 	jrl	t, 381
+; Opcode 0x06: for slots 0..3 AlgoFlag_Write_Bit3(part, slot, 0) and
+; AlgoFlag_Write(part, slot, 0), then EFF_RoutingInit(part, unit, 0).
+AUDIO_CMD_DSPUNIT_OP06:
 	lds	iz, 0
 	cps	iz, 4
 	jr	nc, 60
+; Four-iteration slot loop of opcode 0x06.
+AUDIO_CMD_DSPUNIT_OP06_SLOTLOOP:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25409,6 +29076,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	inc	1, iz
 	cps	iz, 4
 	jr	c, 16777156
+; Tail of opcode 0x06: the single EFF_RoutingInit call with DE = 0.
+AUDIO_CMD_DSPUNIT_OP06_ROUTING:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25420,6 +29089,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	de, 0
 	call	209854
 	jrl	t, 287
+; Opcode 0x17 (special-cased before the table): Voice_AllocateForFull(part) then
+; Voice_AllVoices_WriteAmplitude (0x028DBF).
+AUDIO_CMD_DSPUNIT_OP17:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25427,9 +29099,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xwa, xhl
 	call	167359
 	jrl	t, 266
+; Opcode 0x26: the opcode-0x06 sequence with group 1 -- AlgoFlag_Write_Bit3(...,1),
+; AlgoFlag_Write(...,1) for four slots, then EFF_RoutingInit(part, unit, 1).
+AUDIO_CMD_DSPUNIT_OP26:
 	lds	iz, 0
 	cps	iz, 4
 	jr	nc, 60
+; Four-iteration slot loop of opcode 0x26.
+AUDIO_CMD_DSPUNIT_OP26_SLOTLOOP:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25455,6 +29132,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	inc	1, iz
 	cps	iz, 4
 	jr	c, 16777156
+; Tail of opcode 0x26: EFF_RoutingInit with DE = 1.
+AUDIO_CMD_DSPUNIT_OP26_ROUTING:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25466,6 +29145,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	de, 1
 	call	209854
 	jrl	t, 172
+; Opcode 0x2D: Voice_AllocateForSustain(part) then
+; Voice_AllNotes_SustainRetrigger(list, BC = 1).
+AUDIO_CMD_DSPUNIT_OP2D:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25474,6 +29156,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 1
 	call	167462
 	jrl	t, 149
+; Opcode 0x36: only when (rec+5) == 7, DSP_SLOTPARAM_WRITE_FROM_CACHE(part, unit).
+AUDIO_CMD_DSPUNIT_OP36:
 	ld	xwa, (xsp+4)
 	cp	(xwa+5), 7
 	jrl	nz, 139
@@ -25486,9 +29170,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	bc
 	ld	wa, de
 	.byte 0x1e, 0x1b, 0xfc, 0x68, 0x73
+; Opcode 0x38: the opcode-0x06 sequence with group 2, then EFF_RoutingInit(part, unit, 2).
+AUDIO_CMD_DSPUNIT_OP38:
 	lds	iz, 0
 	cps	iz, 4
 	jr	nc, 60
+; Four-iteration slot loop of opcode 0x38.
+AUDIO_CMD_DSPUNIT_OP38_SLOTLOOP:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25514,6 +29202,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	inc	1, iz
 	cps	iz, 4
 	jr	c, 16777156
+; Tail of opcode 0x38: EFF_RoutingInit with DE = 2.
+AUDIO_CMD_DSPUNIT_OP38_ROUTING:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25525,6 +29215,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	de, 2
 	call	209854
 	jr	t, 22
+; Opcodes 0x4D..0x50: DSP_SLOTPARAM_READ_TO_CACHE(part, unit).  Read-back only.
+AUDIO_CMD_DSPUNIT_OP4D_TO_50:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25534,9 +29226,16 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	bc
 	ld	wa, de
 	.byte 0x1e, 0xf2, 0xfc
+; Restore IZ, drop the 6-byte frame, return.
+AUDIO_CMD_DSPUNIT_RETURN:
 	popw iz
 	inc	6, xsp
 	ret
+; Input XWA = command record.  Pure shadow-RAM write, no side effects: stores (rec+4) into
+; UserTone_VelSplit_Base + 0x1AA + (opcode >> 6)*0x0B + (opcode & 0x3F).  The trailing
+; `cp A,0x0A / ret UGT` before the final `ret` computes a flag nothing consumes.
+; Caller: 0x031B1B.
+AUDIO_CMD_DSPGLOBAL_PARAM_STORE:
 	ld	c, (xwa+2)
 	and	c, 192
 	srl	c, 6
@@ -25558,6 +29257,11 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cp	a, 10
 	ret	ugt
 	ret
+; Input XWA = command record.  Writes (rec+4) into the part's patch record at byte offset
+; (rec+2), then tail-jumps to InterCPU_E1_DMA_Transfer with
+; src = &patch[opcode], dst = 0x001E0000 + 0x4980 + opcode, len = 1.
+; A one-byte write-through to the main CPU's mirror of the patch record.  Caller: 0x031B23.
+AUDIO_CMD_PATCHBYTE_WRITE_AND_ECHO:
 	ld	c, (xwa+1)
 	extz	bc
 	muls	bc, 287
@@ -25580,6 +29284,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xwa, xhl
 	lds	bc, 1
 	jp	134579
+; Bank-buffer flavour of DSP_SLOTPARAM_WRITE_FROM_CACHE.  Input A = record index.
+; Target record = ToneDB_RamBankA + 0x4AB7 + (editIndex*0x50) + index*0x15, where editIndex
+; is the byte at ToneDB_RamBankA + 0x72A7.  Cache = UserTone_VelSplit_Base + 0x1F4 + index*5.
+; Shape byte is at record+0x0F and the four data bytes at record+0x11..+0x14.  The remap
+; tree is byte-for-byte the same decision structure as the 0x02FD85 version.
+; Called twice from AUDIO_CMD_TONEEDIT_WRITE_AND_REPLY (0x0304E2, 0x0304EF) with index 0/1.
+DSP_SLOTPARAM_WRITE_FROM_CACHE_B:
 	ld	c, a
 	extz	bc
 	muls	bc, 21
@@ -25605,6 +29316,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
+; Shapes agree: copy cache[1..4] into record+0x11..+0x14.
+DSP_SLOTPARAM_WRITE_B_MATCH_LOOP:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, 17
@@ -25620,6 +29333,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	hl, 4
 	jr	c, 16777184
 	ret
+; Shapes differ: switch on cache[0] exactly as at 0x02FDEE.
+DSP_SLOTPARAM_WRITE_B_REMAP:
 	ld	a, (xde)
 	cps	a, 5
 	jrl	z, 156
@@ -25631,6 +29346,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	z, 4
 	cps	a, 1
 	ret	nz
+; cache[0] in {1,3}: record shape 5 -> {0x00, 0x01, cache[1], cache[2]}, else plain copy.
+DSP_SLOTPARAM_WRITE_B_SHAPE1OR3:
 	ld	a, (xbc+15)
 	and	a, 7
 	cps	a, 5
@@ -25642,9 +29359,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xde+2)
 	ld	(xbc+20), a
 	ret
+; Plain copy fallback.
+DSP_SLOTPARAM_WRITE_B_SHAPE1OR3_PLAIN:
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
+; Loop body of that fallback.
+DSP_SLOTPARAM_WRITE_B_SHAPE1OR3_LOOP:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, 17
@@ -25660,6 +29381,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	hl, 4
 	jr	c, 16777184
 	ret
+; cache[0] in {2,4}: record shape 5 -> {cache[1], cache[2], 0x7F, 0x01}, else plain copy.
+DSP_SLOTPARAM_WRITE_B_SHAPE2OR4:
 	ld	a, (xbc+15)
 	and	a, 7
 	cps	a, 5
@@ -25671,9 +29394,13 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xbc+19), 127
 	ld	(xbc+20), 1
 	ret
+; Plain copy fallback.
+DSP_SLOTPARAM_WRITE_B_SHAPE2OR4_PLAIN:
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
+; Loop body of that fallback.
+DSP_SLOTPARAM_WRITE_B_SHAPE2OR4_LOOP:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, 17
@@ -25689,6 +29416,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	hl, 4
 	jr	c, 16777184
 	ret
+; cache[0] == 5: shape 1/3 -> {cache[3], cache[4], 0x40, 0x87}; shape 2/4 ->
+; {cache[1], cache[2], 0x40, 0x07}.
+DSP_SLOTPARAM_WRITE_B_SHAPE5:
 	ld	a, (xbc+15)
 	and	a, 7
 	cps	a, 4
@@ -25699,6 +29429,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	z, 4
 	cps	a, 1
 	ret	nz
+; Shape-5 source, shape-1/3 destination.
+DSP_SLOTPARAM_WRITE_B_SHAPE5_TO13:
 	ld	a, (xde+3)
 	ld	(xbc+17), a
 	ld	a, (xde+4)
@@ -25706,6 +29438,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xbc+19), 64
 	ld	(xbc+20), 135
 	ret
+; Shape-5 source, shape-2/4 destination.
+DSP_SLOTPARAM_WRITE_B_SHAPE5_TO24:
 	ld	a, (xde+1)
 	ld	(xbc+17), a
 	ld	a, (xde+2)
@@ -25713,6 +29447,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xbc+19), 64
 	ld	(xbc+20), 7
 	ret
+; Inverse of DSP_SLOTPARAM_WRITE_FROM_CACHE_B; input C = record index.  Returns unless
+; (record+0x0F & 7) == cache[0], then copies record+0x11..+0x14 into cache[1..4].
+; Called twice from 0x0304FB and 0x030505.
+DSP_SLOTPARAM_READ_TO_CACHE_B:
 	ld	a, c
 	extz	wa
 	muls	wa, 21
@@ -25739,6 +29477,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 0
 	cps	bc, 4
 	ret	nc
+; 4-iteration copy loop.
+DSP_SLOTPARAM_READ_B_LOOP:
 	ld	wa, bc
 	extz	xwa
 	inc	1, xwa
@@ -25754,6 +29494,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	cps	bc, 4
 	jr	c, 16777184
 	ret
+; Fourth command dispatcher, and the one that ALWAYS answers the main CPU.
+; Input XWA = command record (kept in XIZ).  Obtains the part's working buffer via
+; VoiceParam_WriteDispatchHelper (0x032AE0) called with WA = patch pointer, BC = the edit
+; index at ToneDB_RamBankA+0x72A7, DE = part; keeps the returned XHL at (XSP+0x04).
+; Stores (rec+4) at buffer[opcode].  Then dispatches opcodes 0x19..0x24 and 0x2B..0x36 via
+; AUDIO_CMD_TONEEDIT_REPLY_CASEMAP / _JUMPTABLE (base 0x0304B6).  ALL paths, including the
+; ignored opcodes, converge on AUDIO_CMD_TONEEDIT_REPLY_SEND.  Caller: 0x031B2B.
+AUDIO_CMD_TONEEDIT_WRITE_AND_REPLY:
 	dec	4, xsp
 	push xiz
 	ld	xiz, xwa
@@ -25791,6 +29539,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	jr	lt, 123
 	cp	wa, 23
 	jr	gt, 117
+; Fold opcodes 0x19..0x24 and 0x2B..0x36 into one 0..0x17 index and jump.
+AUDIO_CMD_TONEEDIT_REPLY_TABLEJUMP:
 	lda_24	xix, 64200
 	ld_rrw	wa, xix, wa
 	extz	wa
@@ -25799,12 +29549,16 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 197814
 	jp_rr	8, xix, wa
+; Voice_AllocateForFull(part) then 0x029071 over the returned voice list.
+AUDIO_CMD_TONEEDIT_REPLY_CASE_PAN:
 	ld	a, (xiz+1)
 	extz	wa
 	call	183606
 	ld	xwa, xhl
 	call	168049
 	jr	t, 65
+; Voice_AllocateForSustain(part) then Voice_AllNotes_SustainRetrigger(list, 1).
+AUDIO_CMD_TONEEDIT_REPLY_CASE_SUSTAIN:
 	ld	a, (xiz+1)
 	extz	wa
 	call	183541
@@ -25812,22 +29566,37 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	bc, 1
 	call	167462
 	jr	t, 46
+; Only when (rec+5) == 7: DSP_SLOTPARAM_WRITE_FROM_CACHE_B(index 0).
+AUDIO_CMD_TONEEDIT_REPLY_CASE_SLOT0:
 	cp	(xiz+5), 7
 	jr	nz, 40
 	lds	wa, 0
 	.byte 0x1e, 0x7a, 0xfd, 0x68, 0x21
+; Only when (rec+5) == 7: DSP_SLOTPARAM_WRITE_FROM_CACHE_B(index 1).
+AUDIO_CMD_TONEEDIT_REPLY_CASE_SLOT1:
 	cp	(xiz+5), 7
 	jr	nz, 27
 	lds	wa, 1
 	.byte 0x1e, 0x6d, 0xfd, 0x68, 0x14
+; DSP_SLOTPARAM_READ_TO_CACHE_B for indices 0 and 1.
+AUDIO_CMD_TONEEDIT_REPLY_CASE_READBACK:
 	ld	a, (xiz+1)
 	extz	wa
 	lds	bc, 0
 	.byte 0x1e, 0xb6, 0xfe
+; Table entry that enters the read-back pair at its second call only (index 1).
+AUDIO_CMD_TONEEDIT_REPLY_CASE_READBACK1:
 	ld	a, (xiz+1)
 	extz	wa
 	lds	bc, 1
 	.byte 0x1e, 0xac, 0xfe
+; ★ The unconditional sub->main reply.  Builds
+;   dst = 0x001E0000 + 0x4AA7 + editIndex*0x50   (editIndex = [ToneDB_RamBankA + 0x72A7])
+;   src = the buffer pointer saved at (XSP+0x04)
+;   len = 0x3A (58 bytes)
+; and calls InterCPU_E1_DMA_Transfer (0x020DB3).  If that call times out the command is
+; still acknowledged locally and the main CPU simply never sees the update.
+AUDIO_CMD_TONEEDIT_REPLY_SEND:
 	ld	xde, 1966080
 	ldw	bc, 58
 	ldl_da	xwa, 283420
@@ -25843,6 +29612,15 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	pop xiz
 	inc	4, xsp
 	ret
+; Sibling of 0x030428 for the sub-field form of the command.  The opcode's top two bits
+; select a group 0..3 (kept in QIZH) and its low six bits select a byte within that group.
+; After VoiceParam_WriteDispatchHelper it advances the buffer pointer by group*0x15 + 0x10,
+; calls VoiceField_ExtractAndWrite (0x032682) with WA = group, XBC = buffer, DE = editIndex
+; and the part pushed on the stack, stores (rec+4) at buffer[opcode & 0x3F], and then
+; DMAs that single byte to
+;   0x001E0000 + 0x4AE1 + editIndex*0x50 + group*0x0B + (opcode & 0x3F)
+; via InterCPU_E1_DMA_Transfer.  Caller: 0x031B33.
+AUDIO_CMD_TONEEDIT_FIELD_WRITE_AND_REPLY:
 	dec	4, xsp
 	push qiz
 	ld	(xsp+2), xwa
@@ -25924,6 +29702,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 
 ; DSP_EffectStateQuery -- Query whether effect is active for a voice
 ; Reads bit 0 of voice struct at 0x041368; returns 1 (active) or 0.
+; Input WA = part, XBC = one-byte result buffer.  Writes 1 if PART+0x00 bit 0 is set
+; (the part is allocated), 0 otherwise, and returns HL = 1.
+; Called from DSP_SetCoeff_MasterConfig at 0x0317E2 with XBC = 0x045216, and from
+; AUDIO_PROCESS_DSP at 0x035BFC.
 DSP_EffectStateQuery:
 	extz wa
 	muls wa, 0x11F
@@ -25934,13 +29716,26 @@ DSP_EffectStateQuery:
 	ld (xbc), 0x1
 	jr DSP_EffectStateQuery_SetResult
 
+; Part not allocated: store 0.
 DSP_EffectStateQuery_WriteZero:
 	ld (xbc), 0x0
 
+; Return HL = 1 (success).
 DSP_EffectStateQuery_SetResult:
 	lds hl, 1
 	ret
 
+; Input XWA = PART record base.  Applies the five global offset bytes at 0x0451A6..0x0451AC
+; to a part's four operator slots and to the part's patch record:
+;   0x0451A6 << 2  -> slot+0x4D (and slot+0x4F for shape 5), clamped by ClampS8_0_to_78
+;   0x0451AB << 2  -> slot+0x27, clamped 0..0xFF by ClampS16_WA_To_DEBC
+;   0x0451AC << 2  -> slot+0x2D, same clamp
+;   0x0451A7 << 1  -> patch+0x2B and patch+0x3B, clamped 0..0x7F (skipped when 0x0451A7
+;                     reads 0xF5, the "unset" sentinel)
+;   0x0451A8 << 1  -> patch+0x2C and patch+0x3C, clamped 0..0x7F
+;   0x0451A9 << 1  -> the low 6 bits of patch+0x2E and patch+0x3E, clamped 0..0x1E
+; Slot addressing is FP_MulAccum64(index, 0x25) + 0x6E + PART, then a long pointer fetch.
+; Called only from DSP_AlgoSelect_AlreadyAllocated (0x0309BD).
 DSP_AdjustVoiceParams:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -25961,6 +29756,7 @@ DSP_AdjustVoiceParams:
 	cpiw_erp 0xFA, 4
 	jrl nc, DSP_AdjustVoiceParams_Vibrato
 
+; Four-iteration loop over the part's operator slots; QIZ is the slot counter.
 DSP_AdjustVoiceParams_SlotLoop:
 	stw_erp WA, 0xFA
 	extz xwa
@@ -25982,6 +29778,7 @@ DSP_AdjustVoiceParams_SlotLoop:
 	cps a, 1
 	jrl nz, DSP_AdjustVoiceParams_ReverbChorus
 
+; Slot shapes 1..4: adjust slot+0x4D only.
 DSP_AdjustVoiceParams_Type1to4:
 	stw_erp WA, 0xFA
 	extz xwa
@@ -26006,6 +29803,7 @@ DSP_AdjustVoiceParams_Type1to4:
 	ld (xwa + 77), c
 	jrl DSP_AdjustVoiceParams_ReverbChorus
 
+; Slot shape 5: adjust both slot+0x4D and slot+0x4F.
 DSP_AdjustVoiceParams_Type5:
 	stw_erp WA, 0xFA
 	extz xwa
@@ -26050,6 +29848,8 @@ DSP_AdjustVoiceParams_Type5:
 	stb_erp C, 0xF8
 	ld (xwa + 79), c
 
+; Common per-slot tail: the 0x0451AB -> slot+0x27 and 0x0451AC -> slot+0x2D adjustments,
+; then loop back to the slot loop.
 DSP_AdjustVoiceParams_ReverbChorus:
 	stw_erp WA, 0xFA
 	extz xwa
@@ -26101,6 +29901,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	cpiw_erp 0xFA, 4
 	jrl c, DSP_AdjustVoiceParams_SlotLoop
 
+; After all four slots: the 0x0451A7 pair, skipped entirely when 0x0451A7 == 0xF5.
 DSP_AdjustVoiceParams_Vibrato:
 	cpib_da 0x0451a7, 0xf5
 	jr z, DSP_AdjustVoiceParams_Filter
@@ -26139,6 +29940,8 @@ DSP_AdjustVoiceParams_Vibrato:
 	stb_erp C, 0xF8
 	ld (xwa + 59), c
 
+; The 0x0451A8 and 0x0451A9 adjustments; the latter is a read-modify-write that preserves
+; the top two bits of patch+0x2E / patch+0x3E.
 DSP_AdjustVoiceParams_Filter:
 	ldb_da a, 0x0451a8
 	sla a, 1
@@ -26228,6 +30031,14 @@ DSP_AdjustVoiceParams_Filter:
 ; to mark as allocated, configures the DSP processing chain.
 ; Validates algo sub-type < 0x28 (40); returns error code 2 on failure.
 ; Called from DSP_Cmd2B_AlgoSelect (sub-command 0x00 in Audio_Process_DSP).
+; Input A = part, BC = algorithm number, XDE = one-byte status buffer.
+; Rejects algorithm numbers >= 0x28 by writing status 2.  Otherwise, if the part is not yet
+; allocated it allocates it exactly like VoiceAlloc_InitNewAllocation (set PART+0x00 bit 0,
+; VoiceParam_FullSetup, VoiceInit_Dispatcher with PART+0x19 / PART+0x1A); if it already was
+; allocated it instead calls DSP_AdjustVoiceParams.  Either way it then calls
+; DSP_WriteAlgoBuffer (0x03522E) and DSP_VoiceState_Dispatch (0x035490) with WA = BC = 0xFF,
+; writes status 0 and returns HL = 1.
+; Callers: 0x031822 (DSP_SetCoeff_MasterConfig) and 0x035BEA (AUDIO_PROCESS_DSP).
 DSP_AlgoSelect:
 	dec 8, xsp
 	push xiz
@@ -26260,6 +30071,8 @@ DSP_AlgoSelect:
 	ld wa, hl
 	call VoiceInit_Dispatcher
 
+; Part already had bit 0 set: apply the global offsets via DSP_AdjustVoiceParams instead of
+; re-initialising.
 DSP_AlgoSelect_AlreadyAllocated:
 	ld wa, (xiz)
 	bit 0, wa
@@ -26267,6 +30080,7 @@ DSP_AlgoSelect_AlreadyAllocated:
 	ld xwa, xiz
 	calr DSP_AdjustVoiceParams
 
+; Push the algorithm to the DSP and report status 0.
 DSP_AlgoSelect_WriteAndDispatch:
 	ld a, (xsp + 10)
 	extz wa
@@ -26279,10 +30093,12 @@ DSP_AlgoSelect_WriteAndDispatch:
 	ld (xwa), 0x0
 	jr DSP_AlgoSelect_Return
 
+; Algorithm number out of range: status byte = 2.
 DSP_AlgoSelect_InvalidParam:
 	ld xwa, (xsp + 4)
 	ld (xwa), 0x2
 
+; HL = 1, restore XIZ, return.
 DSP_AlgoSelect_Return:
 	lds hl, 1
 	pop xiz
@@ -26291,6 +30107,9 @@ DSP_AlgoSelect_Return:
 
 ; DSP_MixSendConfig -- Configure DSP mix/send routing
 ; Copies 0x11 bytes of routing data via DSP_LookupVoiceBuffer.
+; Input XDE = destination buffer.  Calls DSP_LookupVoiceBuffer (0x03206F) and copies the
+; first 0x11 bytes of the returned buffer into the caller's buffer.  Callers: 0x031847 and
+; AUDIO_PROCESS_DSP at 0x035CB8.
 DSP_MixSendConfig:
 	push xiz
 	ld xiz, xde
@@ -26301,6 +30120,7 @@ DSP_MixSendConfig:
 	cp de, hl
 	jr nc, DSP_MixSendConfig_Return
 
+; 0x11-byte post-increment copy loop.
 DSP_MixSendConfig_CopyLoop:
 	ldb_spi A, 0xE4
 	lda_dpi XBC, 0xF8
@@ -26308,6 +30128,7 @@ DSP_MixSendConfig_CopyLoop:
 	cp de, hl
 	jr c, DSP_MixSendConfig_CopyLoop
 
+; Restore XIZ and return.
 DSP_MixSendConfig_Return:
 	pop xiz
 	ret
@@ -26321,23 +30142,45 @@ DSP_MixSendConfig_Return:
 ;        Computes index: (channel << 7 + voice) * 2
 ;        Copies 13 bytes from source to DSP buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Input WA = a 7-bit index, BC = a selector whose bits 7:6 pick one of four descriptor
+; pointers and whose bits 3:0 form the high part of a table index.
+; Reads a long pointer from (0x045314)+0x44/+0x48/+0x4C (bits 7:6 = 0/1/2, and 3 aliases 0),
+; adds the window base (0x045310), fetches a word at ((BC & 0x0F) << 7 | WA) * 2, and uses
+; that word as a 16-byte-stride row index into the block at (0x045314)+0x50.  Copies 0x0D
+; bytes of the selected row into the staging buffer at 0x045210+6.
+; Caller: 0x031865.
 DSP_RouteCoeffs_TypeA:
 	.byte 0x3e, 0xd8, 0xcc, 0x7f, 0x00, 0xd9, 0x8a, 0xd9
 	.byte 0xcc, 0x0f, 0x00, 0xda, 0xcc, 0xc0, 0x00, 0xda
 	.byte 0xcf, 0xc0, 0x00, 0x66, 0x2e, 0xda, 0xcf, 0x80
 	.byte 0x00, 0x66, 0x1e, 0xda, 0xcf, 0x40, 0x00, 0x66
 	.byte 0x0e, 0xda, 0xd8, 0x6e, 0x26, 0xe2, 0x14, 0x53
-	.byte 0x04, 0x22, 0xaa, 0x44, 0x23, 0x68, 0x1c, 0xe2
+	.byte 0x04, 0x22, 0xaa, 0x44, 0x23, 0x68, 0x1c
+; Selector bits 7:6 == 01 -> descriptor pointer at (0x045314)+0x4C.
+DSP_RouteCoeffs_TypeA_Sel1:
+	.byte 0xe2
 	.byte 0x14, 0x53, 0x04, 0x22, 0xaa, 0x4c, 0x23, 0x68
-	.byte 0x12, 0xe2, 0x14, 0x53, 0x04, 0x22, 0xaa, 0x48
-	.byte 0x23, 0x68, 0x08, 0xe2, 0x14, 0x53, 0x04, 0x22
-	.byte 0xaa, 0x44, 0x23, 0xd9, 0xee, 0x07, 0xd8, 0x81
+	.byte 0x12
+; Selector bits 7:6 == 10 -> descriptor pointer at (0x045314)+0x48.
+DSP_RouteCoeffs_TypeA_Sel2:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x22, 0xaa, 0x48
+	.byte 0x23, 0x68, 0x08
+; Selector bits 7:6 == 11 -> same pointer as selector 00, (0x045314)+0x44.
+DSP_RouteCoeffs_TypeA_Sel3:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x22
+	.byte 0xaa, 0x44, 0x23
+; Common tail: compute the row number and set up the 0x0D-byte copy.
+DSP_RouteCoeffs_TypeA_Fetch:
+	.byte 0xd9, 0xee, 0x07, 0xd8, 0x81
 	.byte 0xd9, 0x81, 0xd9, 0x88, 0xe8, 0x12, 0xeb, 0x80
 	.byte 0xe2, 0x10, 0x53, 0x04, 0x80, 0xa0, 0x20, 0xd8
 	.byte 0x8c, 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8, 0x50
 	.byte 0x23, 0xe2, 0x10, 0x53, 0x04, 0x25, 0xeb, 0x85
 	.byte 0x33, 0x0d, 0x00, 0xda, 0xa8, 0xdb, 0xf2, 0x6f
-	.byte 0x28, 0xda, 0x89, 0xe9, 0x12, 0xdc, 0x88, 0xe8
+	.byte 0x28
+; 0x0D-byte copy into 0x045210+6.
+DSP_RouteCoeffs_TypeA_CopyLoop:
+	.byte 0xda, 0x89, 0xe9, 0x12, 0xdc, 0x88, 0xe8
 	.byte 0x12, 0xe8, 0xee, 0x04, 0xe9, 0x80, 0xe8, 0x89
 	.byte 0xed, 0x81, 0xda, 0x88, 0xd8, 0x66, 0xe8, 0x12
 	.byte 0x46, 0x10, 0x52, 0x04, 0x00, 0xe8, 0x86, 0x81
@@ -26348,23 +30191,42 @@ DSP_RouteCoeffs_TypeA:
 ; Entry: Same as TypeA
 ; Notes: Same algorithm as TypeA with different table offsets (0x58-0x64)
 ; ----------------------------------------------------------------------------
+; Structural twin of DSP_RouteCoeffs_TypeA using the second descriptor set:
+; pointers at (0x045314)+0x58/+0x5C/+0x60 and the row block at (0x045314)+0x64.
+; Caller: 0x031883.  The ELF already carries this name; the reference file simply lacks the
+; line, so this is an "add", not a supersede.
 DSP_RouteCoeffs_TypeB:
 	.byte 0x3e, 0xd8, 0xcc, 0x7f, 0x00, 0xd9, 0x8a, 0xd9
 	.byte 0xcc, 0x0f, 0x00, 0xda, 0xcc, 0xc0, 0x00, 0xda
 	.byte 0xcf, 0xc0, 0x00, 0x66, 0x2e, 0xda, 0xcf, 0x80
 	.byte 0x00, 0x66, 0x1e, 0xda, 0xcf, 0x40, 0x00, 0x66
 	.byte 0x0e, 0xda, 0xd8, 0x6e, 0x26, 0xe2, 0x14, 0x53
-	.byte 0x04, 0x22, 0xaa, 0x58, 0x23, 0x68, 0x1c, 0xe2
+	.byte 0x04, 0x22, 0xaa, 0x58, 0x23, 0x68, 0x1c
+; Selector bits 7:6 == 01 -> (0x045314)+0x60.
+DSP_RouteCoeffs_TypeB_Sel1:
+	.byte 0xe2
 	.byte 0x14, 0x53, 0x04, 0x22, 0xaa, 0x60, 0x23, 0x68
-	.byte 0x12, 0xe2, 0x14, 0x53, 0x04, 0x22, 0xaa, 0x5c
-	.byte 0x23, 0x68, 0x08, 0xe2, 0x14, 0x53, 0x04, 0x22
-	.byte 0xaa, 0x58, 0x23, 0xd9, 0xee, 0x07, 0xd8, 0x81
+	.byte 0x12
+; Selector bits 7:6 == 10 -> (0x045314)+0x5C.
+DSP_RouteCoeffs_TypeB_Sel2:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x22, 0xaa, 0x5c
+	.byte 0x23, 0x68, 0x08
+; Selector bits 7:6 == 11 -> (0x045314)+0x58.
+DSP_RouteCoeffs_TypeB_Sel3:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x22
+	.byte 0xaa, 0x58, 0x23
+; Common tail: row number and copy setup.
+DSP_RouteCoeffs_TypeB_Fetch:
+	.byte 0xd9, 0xee, 0x07, 0xd8, 0x81
 	.byte 0xd9, 0x81, 0xd9, 0x88, 0xe8, 0x12, 0xeb, 0x80
 	.byte 0xe2, 0x10, 0x53, 0x04, 0x80, 0xa0, 0x20, 0xd8
 	.byte 0x8c, 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8, 0x64
 	.byte 0x23, 0xe2, 0x10, 0x53, 0x04, 0x25, 0xeb, 0x85
 	.byte 0x33, 0x0d, 0x00, 0xda, 0xa8, 0xdb, 0xf2, 0x6f
-	.byte 0x28, 0xda, 0x89, 0xe9, 0x12, 0xdc, 0x88, 0xe8
+	.byte 0x28
+; 0x0D-byte copy into 0x045210+6.
+DSP_RouteCoeffs_TypeB_CopyLoop:
+	.byte 0xda, 0x89, 0xe9, 0x12, 0xdc, 0x88, 0xe8
 	.byte 0x12, 0xe8, 0xee, 0x04, 0xe9, 0x80, 0xe8, 0x89
 	.byte 0xed, 0x81, 0xda, 0x88, 0xd8, 0x66, 0xe8, 0x12
 	.byte 0x46, 0x10, 0x52, 0x04, 0x00, 0xe8, 0x86, 0x81
@@ -26376,32 +30238,49 @@ DSP_RouteCoeffs_TypeB:
 ; Notes: Direct copy without 4-way dispatch, uses offset 0x50
 ;        Copies 13 bytes from source to DSP buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Input WA = row number.  Copies 0x0D bytes of that row out of the block at (0x045314)+0x50
+; (16-byte stride, offset by the window base at 0x045310) into the staging buffer at
+; 0x045210+6.  Same arithmetic as DSP_RouteCoeffs_TypeA but with the row supplied directly
+; instead of looked up through a descriptor.  Caller: 0x0318A2.
 DSP_CopyCoeffs_TypeA:
 	.byte 0x3e, 0xe2, 0x14, 0x53, 0x04, 0x21, 0xa9, 0x50
 	.byte 0x21, 0xe2, 0x10, 0x53, 0x04, 0x25, 0xe9, 0x85
 	.byte 0x33, 0x0d, 0x00, 0xdc, 0xa8, 0xdb, 0xf4, 0x6f
-	.byte 0x28, 0xdc, 0x8a, 0xea, 0x12, 0xd8, 0x89, 0xe9
+	.byte 0x28
+; 0x0D-byte copy loop, counter in IX.
+DSP_CopyCoeffs_TypeA_Loop:
+	.byte 0xdc, 0x8a, 0xea, 0x12, 0xd8, 0x89, 0xe9
 	.byte 0x12, 0xe9, 0xee, 0x04, 0xea, 0x81, 0xe9, 0x8a
 	.byte 0xed, 0x82, 0xdc, 0x89, 0xd9, 0x66, 0xe9, 0x12
 	.byte 0x46, 0x10, 0x52, 0x04, 0x00, 0xe9, 0x86, 0x82
 	.byte 0x23, 0xb6, 0x43, 0xdc, 0x61, 0xdb, 0xf4, 0x67
-	.byte 0xd8, 0x5e, 0x0e
+	.byte 0xd8
+; Restore XIZ and return.
+DSP_CopyCoeffs_TypeA_Return:
+	.byte 0x5e, 0x0e
 ; ----------------------------------------------------------------------------
 ; DSP_CopyCoeffs_TypeB - Direct coefficient copy (type B)
 ; Entry: WA = voice parameter
 ; Notes: Direct copy without 4-way dispatch, uses offset 0x64
 ;        Copies 13 bytes from source to DSP buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; The (0x045314)+0x64 flavour of DSP_CopyCoeffs_TypeA.  Caller: 0x0318C1.
 DSP_CopyCoeffs_TypeB:
 	.byte 0x3e, 0xe2, 0x14, 0x53, 0x04, 0x21, 0xa9, 0x64
 	.byte 0x21, 0xe2, 0x10, 0x53, 0x04, 0x25, 0xe9, 0x85
 	.byte 0x33, 0x0d, 0x00, 0xdc, 0xa8, 0xdb, 0xf4, 0x6f
-	.byte 0x28, 0xdc, 0x8a, 0xea, 0x12, 0xd8, 0x89, 0xe9
+	.byte 0x28
+; 0x0D-byte copy loop, counter in IX.
+DSP_CopyCoeffs_TypeB_Loop:
+	.byte 0xdc, 0x8a, 0xea, 0x12, 0xd8, 0x89, 0xe9
 	.byte 0x12, 0xe9, 0xee, 0x04, 0xea, 0x81, 0xe9, 0x8a
 	.byte 0xed, 0x82, 0xdc, 0x89, 0xd9, 0x66, 0xe9, 0x12
 	.byte 0x46, 0x10, 0x52, 0x04, 0x00, 0xe9, 0x86, 0x82
 	.byte 0x23, 0xb6, 0x43, 0xdc, 0x61, 0xdb, 0xf4, 0x67
-	.byte 0xd8, 0x5e, 0x0e
+	.byte 0xd8
+; Restore XIZ and return.
+DSP_CopyCoeffs_TypeB_Return:
+	.byte 0x5e, 0x0e
 ; ----------------------------------------------------------------------------
 ; DSP_VoiceCoeffRoute - Voice-specific coefficient routing
 ; Entry: A = voice number, C = channel (low 4 bits)
@@ -26411,6 +30290,11 @@ DSP_CopyCoeffs_TypeB:
 ;        Copies 13 coefficient bytes + 3 extra config bytes
 ;        Extra bytes: voice DE value (low, 0x00, high >> 8)
 ; ----------------------------------------------------------------------------
+; Input A = part, C = slot (low nibble).  Resolves the slot descriptor at
+; PART + 0x6E + slot*0x25 (long pointer), takes the row index from descriptor bytes +0x02
+; (low 7 bits) and +0x03 (low nibble), selects a descriptor pointer from (0x045314)+0x44/
+; +0x48/+0x4C according to bits 7:6 of descriptor+0x03, and copies 0x0D coefficient bytes
+; plus three trailing bytes into 0x045210+6.  Caller: 0x0318DF.
 DSP_VoiceCoeffRoute:
 	.byte 0x3e, 0xcb, 0x8d, 0xcd, 0xcc, 0x0f, 0xcd, 0x8b
 	.byte 0xd9, 0x12, 0xd9, 0x09, 0x25, 0x00, 0xd9, 0x8d
@@ -26434,21 +30318,41 @@ DSP_VoiceCoeffRoute:
 	.byte 0xcf, 0x80, 0x00, 0x66, 0x1e, 0xd8, 0xcf, 0x40
 	.byte 0x00, 0x66, 0x0e, 0xd8, 0xd8, 0x6e, 0x26, 0xe2
 	.byte 0x14, 0x53, 0x04, 0x20, 0xa8, 0x44, 0x23, 0x68
-	.byte 0x1c, 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8, 0x4c
-	.byte 0x23, 0x68, 0x12, 0xe2, 0x14, 0x53, 0x04, 0x20
-	.byte 0xa8, 0x48, 0x23, 0x68, 0x08, 0xe2, 0x14, 0x53
-	.byte 0x04, 0x20, 0xa8, 0x44, 0x23, 0xdd, 0xee, 0x07
+	.byte 0x1c
+; Inside DSP_VoiceCoeffRoute: slot descriptor byte +0x03, bits 7:6 == 01 ->
+; descriptor pointer (0x045314)+0x4C.
+DSP_VoiceCoeffRoute_Sel1:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8, 0x4c
+	.byte 0x23, 0x68, 0x12
+; Bits 7:6 == 10 -> (0x045314)+0x48.
+DSP_VoiceCoeffRoute_Sel2:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x20
+	.byte 0xa8, 0x48, 0x23, 0x68, 0x08
+; Bits 7:6 == 11 -> (0x045314)+0x44.
+DSP_VoiceCoeffRoute_Sel3:
+	.byte 0xe2, 0x14, 0x53
+	.byte 0x04, 0x20, 0xa8, 0x44, 0x23
+; Common tail: row = ((desc+0x03 & 0x0F) << 7 | (desc+0x02 & 0x7F)) * 2.
+DSP_VoiceCoeffRoute_Fetch:
+	.byte 0xdd, 0xee, 0x07
 	.byte 0xdc, 0x85, 0xdd, 0x85, 0xdd, 0x88, 0xe8, 0x12
 	.byte 0xeb, 0x80, 0xe2, 0x10, 0x53, 0x04, 0x80, 0xa0
 	.byte 0x20, 0xd8, 0x8a, 0xe2, 0x14, 0x53, 0x04, 0x20
 	.byte 0xa8, 0x50, 0x23, 0xe2, 0x10, 0x53, 0x04, 0x24
 	.byte 0xeb, 0x84, 0x33, 0x0d, 0x00, 0xdd, 0xa8, 0xdb
-	.byte 0xf5, 0x6f, 0x28, 0xdd, 0x89, 0xe9, 0x12, 0xda
+	.byte 0xf5, 0x6f, 0x28
+; 0x0D-byte copy into 0x045210+6, followed by three extra bytes: row+0x0D, then the row
+; number's low and high halves -- i.e. the reply carries the row index back to the caller.
+DSP_VoiceCoeffRoute_CopyLoop:
+	.byte 0xdd, 0x89, 0xe9, 0x12, 0xda
 	.byte 0x88, 0xe8, 0x12, 0xe8, 0xee, 0x04, 0xe9, 0x80
 	.byte 0xe8, 0x89, 0xec, 0x81, 0xdd, 0x88, 0xd8, 0x66
 	.byte 0xe8, 0x12, 0x46, 0x10, 0x52, 0x04, 0x00, 0xe8
 	.byte 0x86, 0x81, 0x21, 0xb6, 0x41, 0xdd, 0x61, 0xdb
-	.byte 0xf5, 0x67, 0xd8, 0xdb, 0x88, 0xd8, 0x66, 0xe8
+	.byte 0xf5, 0x67, 0xd8
+; The three trailing bytes described above.
+DSP_VoiceCoeffRoute_Epilogue:
+	.byte 0xdb, 0x88, 0xd8, 0x66, 0xe8
 	.byte 0x12, 0x41, 0x10, 0x52, 0x04, 0x00, 0xe8, 0x81
 	.byte 0xda, 0x88, 0xe8, 0x12, 0xe8, 0xee, 0x04, 0xec
 	.byte 0x80, 0x88, 0x0d, 0x21, 0xb1, 0x41, 0xdb, 0x61
@@ -26467,6 +30371,10 @@ DSP_VoiceCoeffRoute:
 ;        Multiple nested table lookups with different coefficient sets
 ;        Includes filter and vibrato coefficient routing
 ; ----------------------------------------------------------------------------
+; Input A = part, C = packed (slot in the low nibble, sub-index in the high nibble).
+; Follows the slot record's SECOND pointer (slotrec+0x04) and indexes it by
+; sub-index*2 + 3 to obtain the row index, then does the DSP_VoiceCoeffRoute copy through the
+; (0x045314)+0x58/+0x5C/+0x60 descriptor set and the +0x64 row block.  Caller: 0x0318FD.
 DSP_VoiceCoeffRoute2:
 	.byte 0x3e, 0xcb, 0x8f, 0xcf, 0xcc, 0x0f, 0xcb, 0xcc
 	.byte 0xf0, 0xcb, 0xef, 0x04, 0xcb, 0x8d, 0xcf, 0x8b
@@ -26498,21 +30406,38 @@ DSP_VoiceCoeffRoute2:
 	.byte 0x80, 0x00, 0x66, 0x1e, 0xd8, 0xcf, 0x40, 0x00
 	.byte 0x66, 0x0e, 0xd8, 0xd8, 0x6e, 0x26, 0xe2, 0x14
 	.byte 0x53, 0x04, 0x20, 0xa8, 0x58, 0x24, 0x68, 0x1c
+; Inside DSP_VoiceCoeffRoute2: bits 7:6 == 01 -> (0x045314)+0x60.
+DSP_VoiceCoeffRoute2_Sel1:
 	.byte 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8, 0x60, 0x24
-	.byte 0x68, 0x12, 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8
-	.byte 0x5c, 0x24, 0x68, 0x08, 0xe2, 0x14, 0x53, 0x04
-	.byte 0x20, 0xa8, 0x58, 0x24, 0xde, 0xee, 0x07, 0xdd
+	.byte 0x68, 0x12
+; Bits 7:6 == 10 -> (0x045314)+0x5C.
+DSP_VoiceCoeffRoute2_Sel2:
+	.byte 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8
+	.byte 0x5c, 0x24, 0x68, 0x08
+; Bits 7:6 == 11 -> (0x045314)+0x58.
+DSP_VoiceCoeffRoute2_Sel3:
+	.byte 0xe2, 0x14, 0x53, 0x04
+	.byte 0x20, 0xa8, 0x58, 0x24
+; Common tail; row block is (0x045314)+0x64.
+DSP_VoiceCoeffRoute2_Fetch:
+	.byte 0xde, 0xee, 0x07, 0xdd
 	.byte 0x86, 0xde, 0x86, 0xde, 0x88, 0xe8, 0x12, 0xec
 	.byte 0x80, 0xe2, 0x10, 0x53, 0x04, 0x80, 0xa0, 0x20
 	.byte 0xd8, 0x8a, 0xe2, 0x14, 0x53, 0x04, 0x20, 0xa8
 	.byte 0x64, 0x24, 0xe2, 0x10, 0x53, 0x04, 0x20, 0xec
 	.byte 0x80, 0xe8, 0x8c, 0x33, 0x0d, 0x00, 0xdd, 0xa8
-	.byte 0xdb, 0xf5, 0x6f, 0x28, 0xdd, 0x89, 0xe9, 0x12
+	.byte 0xdb, 0xf5, 0x6f, 0x28
+; 0x0D-byte copy into 0x045210+6.
+DSP_VoiceCoeffRoute2_CopyLoop:
+	.byte 0xdd, 0x89, 0xe9, 0x12
 	.byte 0xda, 0x88, 0xe8, 0x12, 0xe8, 0xee, 0x04, 0xe9
 	.byte 0x80, 0xe8, 0x89, 0xec, 0x81, 0xdd, 0x88, 0xd8
 	.byte 0x66, 0xe8, 0x12, 0x46, 0x10, 0x52, 0x04, 0x00
 	.byte 0xe8, 0x86, 0x81, 0x21, 0xb6, 0x41, 0xdd, 0x61
-	.byte 0xdb, 0xf5, 0x67, 0xd8, 0xdb, 0x88, 0xd8, 0x66
+	.byte 0xdb, 0xf5, 0x67, 0xd8
+; The same three trailing bytes (row+0x0D and the row index) as DSP_VoiceCoeffRoute.
+DSP_VoiceCoeffRoute2_Epilogue:
+	.byte 0xdb, 0x88, 0xd8, 0x66
 	.byte 0xe8, 0x12, 0x41, 0x10, 0x52, 0x04, 0x00, 0xe8
 	.byte 0x81, 0xda, 0x88, 0xe8, 0x12, 0xe8, 0xee, 0x04
 	.byte 0xec, 0x80, 0x88, 0x0d, 0x21, 0xb1, 0x41, 0xdb
@@ -26530,6 +30455,9 @@ DSP_VoiceCoeffRoute2:
 ;        Reads entry count from byte 2 of selected table entry
 ;        Copies coefficient data to DSP buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Input A = bank 0..4.  Selects one of five descriptor blocks hanging off (0x045314) and
+; copies (block+0x02)+3 bytes of it into the staging buffer at 0x045210+6 -- i.e. the block
+; carries its own length in its third byte.  Caller: 0x03190D.
 DSP_AlgoCoeffLookup:
 	cps	a, 4
 	jr	z, 60
@@ -26544,20 +30472,33 @@ DSP_AlgoCoeffLookup:
 	ldl_da	xwa, 283412
 	ld	xix, (xwa+84)
 	jr	t, 54
+; Bank 1 -> (0x045314)+0x68.
+DSP_AlgoCoeffLookup_Bank1:
 	ldl_da	xwa, 283412
 	ld	xix, (xwa+104)
 	jr	t, 44
+; Bank 2 -> (0x045314)+0x0084.
+DSP_AlgoCoeffLookup_Bank2:
 	ldl_da	xwa, 283412
 	ld	xix, (xwa+132)
 	jr	t, 32
+; Bank 3 -> (0x045314)+0x0090.
+DSP_AlgoCoeffLookup_Bank3:
 	ldl_da	xwa, 283412
 	ld	xix, (xwa+144)
 	jr	t, 20
+; Bank 4 -> (0x045314)+0x0098.
+DSP_AlgoCoeffLookup_Bank4:
 	ldl_da	xwa, 283412
 	ld	xix, (xwa+152)
 	jr	t, 8
+; Bank 0 or out of range -> (0x045314)+0x54.
+DSP_AlgoCoeffLookup_BankDefault:
 	ldl_da	xwa, 283412
 	ld	xix, (xwa+84)
+; Copies (block+0x02)+3 bytes from the selected block into 0x045210+6; the length is stored
+; in the block's own third byte.
+DSP_AlgoCoeffLookup_CopyLoop:
 	ldl_da	xwa, 283408
 	add	xwa, xix
 	ld	xix, xwa
@@ -26593,6 +30534,12 @@ DSP_AlgoCoeffLookup:
 ; Args: wa = voice number (0-15), bc = param index (0-7),
 ;       xde = pointer to voice parameter data area
 ; Called from: sub-commands 0x10-0x17 (DSP param set) in Audio_Process_DSP
+; Input WA = part, BC = parameter index, XDE = one-byte result buffer.
+; If PART+0x00 bit 0 is set (part allocated), the answer is simply the shadow byte at
+; UserTone_VelSplit_Base + 0x1D8 + index.  If the part is NOT allocated it instead surveys
+; the part's four operator slots (DSP_VoiceParam_MultiSlot) and only reports a value when
+; all four agree.  Called from 0x03193B and from eight consecutive sites in
+; AUDIO_PROCESS_DSP (0x035C10..0x035C9C), i.e. it is the main query primitive.
 DSP_VoiceParamReadWrite:
 	lda xsp, (xsp - 14)
 	push xiz
@@ -26619,11 +30566,14 @@ DSP_VoiceParamReadWrite:
 	ld (xwa), c
 	jrl DSP_VoiceParamReadWrite_Return
 
+; Part not allocated: zero the match counter at (XSP+0x08) and walk the four slots.
 DSP_VoiceParam_MultiSlot:
 	ldw (xsp + 6), 0x0
 	cpw (xsp + 6), 0x4
 	jr nc, DSP_VoiceParam_MultiSlot_CheckResult
 
+; Per slot: skip the slot if (slotptr+0x06) & 0xC0 is non-zero or bit 5 of (slotptr+0x06) is
+; set; otherwise increment the match counter.
 DSP_VoiceParam_MultiSlot_LoopBody:
 	ld wa, (xsp + 6)
 	extz xwa
@@ -26660,11 +30610,14 @@ DSP_VoiceParam_MultiSlot_LoopBody:
 	jr nz, DSP_VoiceParam_MultiSlot_LoopNext
 	incm 1, (xsp + 8)
 
+; Advance the slot counter and loop while < 4.
 DSP_VoiceParam_MultiSlot_LoopNext:
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x4
 	jr c, DSP_VoiceParam_MultiSlot_LoopBody
 
+; Result = 0 unless all four slots matched, in which case the answer comes from
+; DSP_VOICEPARAM_DEFAULT_TABLE (0x00F95D) indexed by the parameter index.
 DSP_VoiceParam_MultiSlot_CheckResult:
 	ld xde, (xsp + 10)
 	ldb a, 0x0
@@ -26676,15 +30629,20 @@ DSP_VoiceParam_MultiSlot_CheckResult:
 	add xbc, xwa
 	ld a, (xbc)
 
+; Store the byte into the caller's buffer.
 DSP_VoiceParam_MultiSlot_StoreResult:
 	ld (xde), a
 
+; HL = (XSP+0x04), unwind and return.
 DSP_VoiceParamReadWrite_Return:
 	ld hl, (xsp + 4)
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
 
+; Input XDE = one-byte result buffer.  Calls DSP_LookupVoiceBuffer (0x03206F) and returns
+; byte +0x5D of that buffer -- the algorithm-type byte this whole region dispatches on.
+; Returns HL = 1.  Callers: 0x031966 and AUDIO_PROCESS_DSP 0x035CD4.
 DSP_ReadVoiceParam5D:
 	push xiz
 	ld xiz, xde
@@ -26704,6 +30662,12 @@ DSP_ReadVoiceParam5D:
 ;        uses 4-way dispatch on BC bits 7:6 for coefficient table selection
 ;        Computes routing index and copies parameters
 ; ----------------------------------------------------------------------------
+; Input WA = 7-bit index, BC = selector, XDE = destination buffer.  If BC bit 5 is set the
+; source is DSP_LookupVoiceBuffer's buffer; if BC bits 5 is clear it is a coefficient row
+; selected exactly like DSP_RouteCoeffs_TypeA but through the pointer at (0x045314)+0x7C and
+; the row block at (0x045314)+0x0080; any other value of (BC & 0x20) leaves XHL untouched
+; from the caller.  Either way 0x0D bytes are copied to the caller's buffer and HL = 0x0D is
+; returned.  Caller: 0x03198B.
 DSP_VoiceParam_Dispatch:
 	.byte 0x3e, 0xea, 0x8e, 0xd9, 0x8c, 0xdc, 0xcc, 0x20
 	.byte 0x00, 0xdc, 0xcf, 0x20, 0x00, 0x66, 0x68, 0xdc
@@ -26711,23 +30675,64 @@ DSP_VoiceParam_Dispatch:
 	.byte 0x8b, 0xdb, 0xcc, 0x1f, 0x00, 0xd9, 0xcc, 0xc0
 	.byte 0x00, 0xd9, 0xcf, 0xc0, 0x00, 0x66, 0x10, 0xd9
 	.byte 0xcf, 0x80, 0x00, 0x66, 0x0a, 0xd9, 0xcf, 0x40
-	.byte 0x00, 0x66, 0x04, 0xd9, 0xd8, 0x6e, 0x08, 0xe2
-	.byte 0x14, 0x53, 0x04, 0x21, 0xa9, 0x7c, 0x22, 0xdb
+	.byte 0x00, 0x66, 0x04, 0xd9, 0xd8, 0x6e, 0x08
+; All four values of (BC & 0xC0) load the same pointer, (0x045314)+0x7C -- the four-way
+; compare is vestigial.
+DSP_VoiceParam_Dispatch_LoadRowBase:
+	.byte 0xe2
+	.byte 0x14, 0x53, 0x04, 0x21, 0xa9, 0x7c, 0x22
+; row = ((BC & 0x1F) << 7 | (WA & 0x7F)) * 2, then a 16-byte-stride row address.
+DSP_VoiceParam_Dispatch_ComputeRow:
+	.byte 0xdb
 	.byte 0x89, 0xd9, 0xee, 0x07, 0xd8, 0x81, 0xd9, 0x81
 	.byte 0xd9, 0x88, 0xe8, 0x12, 0xea, 0x80, 0xe2, 0x10
 	.byte 0x53, 0x04, 0x80, 0xa0, 0x20, 0xd8, 0x89, 0xe2
 	.byte 0x14, 0x53, 0x04, 0x20, 0xe3, 0xe1, 0x80, 0x00
 	.byte 0x22, 0xe2, 0x10, 0x53, 0x04, 0x20, 0xea, 0x80
 	.byte 0xe8, 0x8a, 0xd9, 0x88, 0xe8, 0x12, 0xe8, 0xee
-	.byte 0x04, 0xea, 0x80, 0xe8, 0x8b, 0x68, 0x04, 0x1d
-	.byte 0x6f, 0x20, 0x03, 0x30, 0x0d, 0x00, 0xdc, 0xa8
-	.byte 0xd8, 0xf4, 0x6f, 0x13, 0xf5, 0xf8, 0x32, 0xdc
+	.byte 0x04, 0xea, 0x80, 0xe8, 0x8b, 0x68, 0x04
+; (BC & 0x20) == 0x20: source is DSP_LookupVoiceBuffer's buffer instead.
+DSP_VoiceParam_Dispatch_UseVoiceBuffer:
+	.byte 0x1d
+	.byte 0x6f, 0x20, 0x03
+; Copy 0x0D bytes from XHL to the caller's buffer (post-increment through XIZ).
+DSP_VoiceParam_Dispatch_Copy:
+	.byte 0x30, 0x0d, 0x00, 0xdc, 0xa8
+	.byte 0xd8, 0xf4, 0x6f, 0x13
+; Loop body of that copy.
+DSP_VoiceParam_Dispatch_CopyLoop:
+	.byte 0xf5, 0xf8, 0x32, 0xdc
 	.byte 0x89, 0xe9, 0x12, 0xeb, 0x81, 0x81, 0x23, 0xb2
-	.byte 0x43, 0xdc, 0x61, 0xd8, 0xf4, 0x67, 0xed, 0xd8
+	.byte 0x43, 0xdc, 0x61, 0xd8, 0xf4, 0x67, 0xed
+; HL = 0x0D, restore XIZ, return.  This is the last instruction pair of the region.
+DSP_VoiceParam_Dispatch_Return:
+	.byte 0xd8
 	.byte 0x8b, 0x5e, 0x0e
 
 ; DSP_SetVoiceCoefficients -- Write DSP voice coefficients
 ; Complex parameter setter using voice+0x27 region with coefficient lookups.
+; Resolve one of a patch record's sub-tone references and copy the 10-byte
+; ToneDB record it names into a caller-supplied buffer.
+; Entry: A  = part index (0..25)
+;        C  = sub-tone index i
+;        XDE = destination buffer (the inter-CPU reply payload 0x045216 when
+;              called from DSP_Cmd2B_SetParam)
+; Exit:  HL = 10 (the byte count produced -- see the note on the reply protocol
+;        in Voice_ParamFinalize / DSP_Cmd2B_PostProcess), XIZ = source record.
+; Body: the part's 16-bit tone selector is Part_UserToneIndex[part] =
+;       {byte 0x041381+part*0x11F, byte 0x041382+part*0x11F} (lo,hi); it is
+;       handed to ToneDB_Find_ToneRecord (0x03206F) to get the patch record.
+;       The sub-tone reference is the {lo,hi} pair at patchrec+0x27+2*i.
+;         hi & 0x20 set -> ToneDB_Find_SubToneRecord (0x032AE0) with DE=0xFF
+;                          supplies the source record directly.
+;         otherwise     -> idx = ((hi & 0x1F) << 7) + (lo & 0x7F)
+;                          e   = u16[ ToneDB_RelBase + Root->+0x7C + 2*idx ]
+;                          src = ToneDB_RelBase + Root->+0xB0 + 10*e
+;       Ten bytes are then copied src -> XDE.
+; Touches no hardware; reads ToneDB_RelBase (0x045310) and ToneDB_RootPtr
+; (0x045314).  Sole caller: DSP_Cmd2B_SetParam 0x035CEF.
+; NOTE: the LLVM source currently calls this DSP_SetVoiceCoefficients; nothing
+; in the body touches a DSP, so that name is misleading (see [UNCERTAIN]).
 DSP_SetVoiceCoefficients:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -26787,11 +30792,13 @@ DSP_SetVoiceCoefficients:
 	cps wa, 0
 	jr nz, DSP_SetCoeff_ComputeIndex
 
+; Load ToneDB_RootPtr->+0x7C (the sub-tone index table) into the frame slot.
 DSP_SetCoeff_LoadTableBase:
 	ldl_da xwa, 0x045314
 	ld xwa, (xwa + 124)
 	ld (xsp + 4), xwa
 
+; idx=(hi&0x1F)<<7 | lo; u16 lookup; then Root->+0xB0 + 10*e -> XIZ.
 DSP_SetCoeff_ComputeIndex:
 	ld wa, de
 	sll wa, 7
@@ -26812,6 +30819,7 @@ DSP_SetCoeff_ComputeIndex:
 	add xiz, xwa
 	jr DSP_SetCoeff_CopyLoop
 
+; hi bit 5 set: source comes from ToneDB_Find_SubToneRecord instead.
 DSP_SetCoeff_DirectLookup:
 	ld a, (xsp + 12)
 	ld c, a
@@ -26821,12 +30829,14 @@ DSP_SetCoeff_DirectLookup:
 	call VoiceParam_WriteDispatchHelper
 	ld xiz, xhl
 
+; Set the 10-byte copy count in HL (this value is also the return value).
 DSP_SetCoeff_CopyLoop:
 	ldw hl, 0xA
 	lds de, 0
 	cp de, hl
 	jr nc, DSP_SetCoeff_Return
 
+; Byte copy XIZ+ -> (XSP+8)+, 10 iterations.
 DSP_SetCoeff_CopyLoop_Body:
 	ld xwa, (xsp + 8)
 	ldb_spi C, 0xF8
@@ -26836,6 +30846,7 @@ DSP_SetCoeff_CopyLoop_Body:
 	cp de, hl
 	jr c, DSP_SetCoeff_CopyLoop_Body
 
+; Frame teardown; HL still holds 10.
 DSP_SetCoeff_Return:
 	pop xiz
 	lda xsp, (xsp + 10)
@@ -26846,6 +30857,12 @@ DSP_SetCoeff_Return:
 ; Notes: Reads routing config from (0x45314), adds base from (0x45310)
 ;        Copies to DSP coefficient buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Copy a 13-byte row out of the ToneDB table at Root->+0x80 into the inter-CPU
+; reply payload.
+; Entry: WA = row index.
+; Exit:  HL = 13 (bytes written), payload at 0x045216..0x045222.
+; src = ToneDB_RelBase + Root->+0x80 + 16*WA; the row stride is 16 but only 13
+; bytes are shipped.  Reached only from ToneDB_Query_Dispatch case 15 (0x031993).
 DSP_SetCoeff_CopyDirect:
 	.byte 0x3e, 0xe2, 0x14, 0x53, 0x04, 0x21, 0xe3, 0xe5
 	.byte 0x80, 0x00, 0x21, 0xe2, 0x10, 0x53, 0x04, 0x25
@@ -26862,6 +30879,19 @@ DSP_SetCoeff_CopyDirect:
 ;        Extended routing with coefficient transformation
 ;        Writes to coefficient buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Answer a query for the 13+3 byte coefficient row selected by one sub-tone
+; reference of a part's patch record.
+; Entry: WA = part index, C = sub-tone index i.
+; Exit:  HL = 16, payload 0x045216..0x045225.
+; Body: patchrec = Part_PatchRecord_Ptr[part]; {lo,hi} = patchrec+0x27+2*i.
+;       row = u32[ ToneDB_RelBase + Root->+0x7C + 2*(((hi&0x1F)<<7)+(lo&0x7F)) ]
+;       If hi & 0x20 == 0: 13 bytes are copied from
+;         ToneDB_RelBase + Root->+0x80 + 16*row.
+;       If hi & 0x20 == 0x20: 13 bytes are copied from
+;         ToneDB_RamBankA + 0x4AA7 + 0x50*i  (the RAM kit/user area).
+;       Three extra bytes follow: table[16*row + 0x0D], then row's low and high
+;       halves (row & 0xFF, row >> 8).  Hence 16 payload bytes.
+; Reached only from ToneDB_Query_Dispatch case 16 (0x0319B2).
 DSP_SetCoeff_RouteComplex:
 	dec	4, xsp
 	push xiz
@@ -27001,6 +31031,9 @@ DSP_SetCoeff_RouteComplex:
 ; DSP_SetCoeff_CopyDirect2 - Copy coefficients directly (variant 2)
 ; Notes: Same pattern as DSP_SetCoeff_CopyDirect with different offsets
 ; ----------------------------------------------------------------------------
+; Same shape as 0x03122F but reads the table at Root->+0x8C.
+; Entry: WA = row index.  Exit: HL = 13, payload 0x045216..0x045222.
+; Reached only from ToneDB_Query_Dispatch case 17 (0x0319D0).
 DSP_SetCoeff_CopyDirect2:
 	.byte 0x3e, 0xe2, 0x14, 0x53, 0x04, 0x21, 0xe3, 0xe5
 	.byte 0x8c, 0x00, 0x21, 0xe2, 0x10, 0x53, 0x04, 0x25
@@ -27017,6 +31050,17 @@ DSP_SetCoeff_CopyDirect2:
 ;        Routes coefficients via (0x45314) tables
 ;        Uses (0x45310) base for address computation
 ; ----------------------------------------------------------------------------
+; Answer a query for a coefficient row reached through ToneDB_Find_SubToneRecord.
+; Entry: A = sub-tone index, C = 0, E = part index in bits 0..3 (E&0x0F is kept
+;        in QIZH; the caller passes ToneDB_RamBankA[+0x72A7] in C).
+; Exit:  HL = 16, payload 0x045216..0x045225.
+; Body: patchrec = Part_PatchRecord_Ptr[E & 0x0F]; ToneDB_Find_SubToneRecord
+;       (0x032AE0) resolves a named record; the 0x15-byte partial slot at
+;       record+0x10+0x15*QIZH supplies {lo=slot[+1]&0x7F, hi=slot[+2]}.
+;       idx = ((slot[+2]&0x0F) << 7) + lo; row = u32[Root->+0x4C + 2*idx];
+;       then 13 bytes from Root->+0x8C + 16*row plus the same three trailer
+;       bytes as 0x031274.
+; Reached only from ToneDB_Query_Dispatch case 18 (0x0319EE).
 DSP_SetCoeff_RouteWithCallback:
 	.byte 0xef, 0x6c, 0x3e, 0xc7, 0xfb, 0x9d, 0xc7, 0xfb
 	.byte 0xcc, 0x0f, 0xc9, 0x8d, 0xda, 0x12, 0xda, 0x09
@@ -27062,6 +31106,17 @@ DSP_SetCoeff_RouteWithCallback:
 ;        Full routing table lookup chain via (0x45314)/(0x45310)
 ;        Writes computed coefficients to DSP buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Answer a query for the coefficient row of one partial of one part, going
+; through the Stage-A1 velocity-split lookup.
+; Entry: A = part index, C = zone/partial argument, E = nibble pair
+;        (E & 0x0F -> QIZH = partial index, E >> 4 -> secondary index).
+; Exit:  HL = 16, payload 0x045216..0x045225.
+; Body: patchrec = Part_PatchRecord_Ptr[part]; ToneDB_Find_SubToneRecord and
+;       WaveSel_StageA1_FromToneSlot (0x032682) are both invoked, then the
+;       {lo,hi} pair at record+0x10+0x15*QIZH+3+2*(E>>4) drives the same
+;       u16-index / 16-byte-row lookup, this time through Root->+0x60 and
+;       Root->+0x94.  Three trailer bytes as above.
+; Reached only from ToneDB_Query_Dispatch case 19 (0x031A19).
 DSP_SetCoeff_FullPipeline:
 	.byte 0xbf, 0xf6, 0x37
 	push xiz
@@ -27215,6 +31270,12 @@ DSP_SetCoeff_FullPipeline:
 ; Notes: Loads from (0x45314), dispatches by routing type
 ;        Copies coefficients to DSP buffer at 0x45210
 ; ----------------------------------------------------------------------------
+; Copy 13 bytes from Root->+0x8C + 16*row where row = u32[Root->+0x4C +
+; 2*(((BC&0x0F)<<7) + (WA&0x7F))].
+; Entry: WA = fine byte, BC = set byte.  Exit: HL = 13, payload 0x045216+.
+; MEASURED: this routine has NO caller anywhere in the sub-CPU image (checked
+; against a full-image call/jump scan).  It is dead code, most likely an
+; earlier revision of 0x031411.  Documented for completeness only.
 DSP_SetCoeff_WithDispatch:
 	push xiz
 	and	wa, 127
@@ -27273,6 +31334,12 @@ DSP_SetCoeff_WithDispatch:
 ; Notes: Writes directly to DSP coefficient bytes at 0x045216/0x045217
 ;        Handles special parameter formatting
 ; ----------------------------------------------------------------------------
+; Two-byte query: the part's patch-record format byte and, for one particular
+; format, an extra descriptor byte.
+; Entry: A = part index.  Exit: HL = 2, payload 0x045216..0x045217.
+; 0x045216 = Part_PatchRecord_Ptr[part][+0x10].
+; 0x045217 = patchrec[+0x5F] if (patchrec[+0x5D] & 0x0F) == 0x0C, else 0.
+; Reached only from ToneDB_Query_Dispatch case 23 (0x031A44).
 DSP_SetCoeff_WriteParams:
 	.byte 0xdb, 0xaa, 0xc9, 0x8b, 0xd9, 0x12, 0xd9, 0x09
 	.byte 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x32, 0xe3
@@ -27294,6 +31361,27 @@ DSP_SetCoeff_WriteParams:
 ;        Full DSP state setup with all coefficient types
 ;        Writes to coefficient output table at 0x45210
 ; ----------------------------------------------------------------------------
+; The 24-opcode query interpreter behind status bytes 0x80..0x87 opcode 0.
+; Entry: XWA = pointer to the 6-byte request packet (0x002AE8 or 0x002AEE).
+;        request[+1] = part/slot index, request[+2] = opcode (bit 7 ignored),
+;        request[+3] = a secondary index, request[+4] = reply tag.
+; Exit:  HL = number of payload bytes deposited at 0x045216 (0 = nothing).
+; Opcode is range-checked 0..0x17; out-of-range and opcodes 2,3,20,21,22 fall
+; straight through to the epilogue with IZ still 0, i.e. an empty payload.
+; Case map (callee -> payload length is that callee's HL):
+;   0  DSP_EffectStateQuery 0x030618 (1 byte: part flags bit 0)
+;   1  CheckStatusBits_40 0x02E213 [+ Voice_Slot_CalcArticParams 0x02B014]
+;      then DSP_AlgoSelect 0x030960
+;   4  DSP_MixSendConfig 0x0309EA        5  DSP_RouteCoeffs_TypeA 0x030A0A
+;   6  DSP_RouteCoeffs_TypeB 0x030AAD    7  DSP_CopyCoeffs_TypeA 0x030B50
+;   8  DSP_CopyCoeffs_TypeB 0x030B93     9  DSP_VoiceCoeffRoute 0x030BD6
+;   10 DSP_VoiceCoeffRoute2 0x030D43     11 DSP_AlgoCoeffLookup 0x030EF1
+;   12 eight calls to DSP_VoiceParamReadWrite 0x030F7D (payload = 8 bytes)
+;   13 DSP_ReadVoiceParam5D 0x03106F     14 DSP_VoiceParam_Dispatch 0x03107F
+;   15 0x03122F  16 0x031274  17 0x0313CC  18 0x031411  19 0x031534  23 0x03173B
+; Cases 18 and 19 first fetch ToneDB_RamBankA[+0x72A7] and pass it as the
+; "current part" argument.  Sole caller: 0x031B5D (query family case 0).
+; The LLVM source calls this DSP_SetCoeff_MasterConfig.
 DSP_SetCoeff_MasterConfig:
 	dec	6, xsp
 	pushw iz
@@ -27563,12 +31651,21 @@ DSP_SetCoeff_MasterConfig:
 	inc	6, xsp
 	ret
 
+; Unbounded byte block copy used by the whole query family.
+; Entry: XBC = source, XDE = destination, WA = byte count (0..0xFFFF).
+; Exit:  memory copied; no register contract beyond the caller reloading HL.
+; NOTE: the count is taken verbatim from the request packet's length byte
+; (request[+3], 0..255) and the destination is always the 0x045216 reply
+; payload, whose next allocated neighbour is ToneDB_RelBase at 0x045310 --
+; only 0xFA bytes away.  See [UNCERTAIN]/findings: a length byte >= 0xFA
+; overwrites ToneDB_RelBase / ToneDB_RootPtr.
 DSP_ParamWrite_BlockCopy:
 	ld xhl, xbc
 	lds ix, 0
 	cp ix, wa
 	ret nc
 
+; ld C,(XHL+) / ld (XDE+),C with IX as the counter.
 DSP_ParamWrite_BlockCopy_Loop:
 	ldb_spi C, 0xEC
 	lda_dpi XHL, 0xE8
@@ -27577,9 +31674,30 @@ DSP_ParamWrite_BlockCopy_Loop:
 	jr c, DSP_ParamWrite_BlockCopy_Loop
 	ret
 
+; Six consecutive 'ret' bytes; alignment padding, no caller.
 DSP_ParamWrite_NopPad:
 	.fill 6, 1, 0x0e
 
+; Service one 6-byte tone/parameter command taken from the audio command ring.
+; This is the main sub->main reply producer in this region.
+; Entry: XWA -> 6-byte packet: [0]=status byte, [1]=part index, [2]=offset,
+;        [3]=length, [4]=reply tag, [5]=spare.
+; Exit:  HL = payload length actually produced (query family) or the callee's
+;        status (action family).
+; Dispatch: A = status & 7 selects one of 8 cases; bit 3 of the status selects
+;   WHICH table:
+;     bit 3 SET   -> table 0x00FB2E, bodies at 0x031AA1.. -- "actions".  Each
+;                    case ends with an unconditional jump to 0x031E68 and
+;                    therefore emits NO inter-CPU reply.
+;     bit 3 CLEAR -> table 0x00FB1E, bodies at 0x031B5B.. -- "queries".  Every
+;                    case falls into 0x031E2D, which ALWAYS sends a reply.
+; Callers: MIDI_Dispatch_ParseStatus 0x034E1A (statuses 0x80..0x87, packet
+; assembled at 0x002AE8) and MIDI_Status_NoteOn_Extended 0x034E56 (statuses
+; 0x88..0x8F, packet at 0x002AEE).  Despite the MIDI_* names of the callers,
+; the 0x8x status range on this internal ring is NOT MIDI note-off: the low
+; nibble is an opcode/table selector consumed here.
+; Hardware: reaches the inter-CPU latch window (0x120000) indirectly through
+; InterCPU_DMA_Send 0x020C6B.
 Voice_ParamFinalize:
 	push xiz
 	ld xiz, xwa
@@ -27604,16 +31722,22 @@ Voice_ParamFinalize:
 ; Dispatches to velocity handlers, channel assignment (BC=0-3),
 ; note-on/off routing, and special command handlers.
 ; Each dispatch path exits via jrl to common return.
+; Action case 0: call 0x02ED80 with XWA = packet, then return (no reply).
 ToneCmd_DispatchTable_Body:
 	ld	xwa, xiz
 	calr	53978
 	jrl	959
+; Action case 1: VoiceAlloc_CheckAndInit 0x02EC0A on packet[+1], then 0x02F830.
+VOICEPARAM_ACTION_CASE1:
 	ld	a, (xiz+1)
 	extz	wa
 	calr	53593
 	ld	xwa, xiz
 	calr	56698
 	jrl	943
+; Action case 2: VoiceAlloc_CheckAndInit, then 0x02FF3A with BC = 0 or 1
+; depending on bit 7 of packet[+2].
+VOICEPARAM_ACTION_CASE2:
 	ld	a, (xiz+1)
 	extz	wa
 	calr	53577
@@ -27631,6 +31755,8 @@ ToneCmd_DispatchTable_Body:
 	lds	bc, 1
 	calr	58456
 	jrl	899
+; Action case 3: same as case 2 but with BC = 2 or 3.
+VOICEPARAM_ACTION_CASE3:
 	ld	a, (xiz+1)
 	extz	wa
 	calr	53533
@@ -27648,22 +31774,31 @@ ToneCmd_DispatchTable_Body:
 	lds	bc, 3
 	calr	58412
 	jrl	855
+; Action case 4: VoiceAlloc_CheckAndInit then 0x0301E3.
+VOICEPARAM_ACTION_CASE4:
 	ld	a, (xiz+1)
 	extz	wa
 	calr	53489
 	ld	xwa, xiz
 	calr	59077
 	jrl	839
+; Action case 5: 0x03021F with XWA = packet.
+VOICEPARAM_ACTION_CASE5:
 	ld	xwa, xiz
 	calr	59129
 	jrl	831
+; Action case 6: 0x030428 with XWA = packet.
+VOICEPARAM_ACTION_CASE6:
 	ld	xwa, xiz
 	calr	59642
 	jrl	823
+; Action case 7: 0x030535 with XWA = packet.
+VOICEPARAM_ACTION_CASE7:
 	ld	xwa, xiz
 	calr	59903
 	jrl	815
 
+; Range-check status&7 against 0..7 and jump through table 0x00FB1E.
 VoiceParamFinalize_SecondaryDispatch:
 	extz wa
 	cps wa, 0
@@ -27676,8 +31811,13 @@ VoiceParamFinalize_SecondaryDispatch:
 	lda_24 xix, 0x031b5b
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; Query case 0: hand the whole packet to ToneDB_Query_Dispatch 0x031795.
 VoiceParamFinalize_SecondaryBody:
 	.byte 0xee, 0x88, 0x1e, 0x35, 0xfc, 0x78, 0xca, 0x02
+; Query case 1: copy packet[+3] bytes from Part_PatchRecord_Ptr[part]+packet[+2]
+; into the payload.  Special case for offset 0x5D: bit 7 of the returned byte is
+; cleared and then re-set from bit 14 of Part_Flags0A[part].
+VOICEPARAM_QUERY_CASE1_PATCHREC:
 	.byte 0x8e, 0x01, 0x21, 0xd8, 0x12, 0xd8, 0x09, 0x1f
 	.byte 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x31, 0xe3, 0x07
 	.byte 0xe4, 0xe0, 0x21, 0x8e, 0x02, 0x21, 0xd8, 0x12
@@ -27701,6 +31841,9 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, 613
+; Query case 2: source is Part_Slot_Sub_Base[part][0] (0x0413D6) when bit 7 of
+; packet[+2] is clear, or [1] (0x0413FB) when set; offset = packet[+2] & 0x7F.
+VOICEPARAM_QUERY_CASE2_PARTIAL01:
 	ld	a, (xiz+2)
 	and	a, 128
 	cp	a, 128
@@ -27733,6 +31876,9 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, 519
+; Query case 3: same, but slot pointers at 0x041420 (partial 2) / 0x041445
+; (partial 3).
+VOICEPARAM_QUERY_CASE3_PARTIAL23:
 	ld	a, (xiz+2)
 	and	a, 128
 	cp	a, 128
@@ -27765,6 +31911,9 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, 425
+; Query case 4: bits 6-7 of packet[+2] pick the partial (0x0413D6 / 0x0413FF /
+; 0x041424 / 0x041449); offset = packet[+2] & 0x3F.
+VOICEPARAM_QUERY_CASE4_PARTIALANY:
 	ld	a, (xiz+2)
 	and	a, 192
 	cp	a, 192
@@ -27813,6 +31962,8 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, 279
+; Query case 5: like case 1 but with no 0x5D fixup.
+VOICEPARAM_QUERY_CASE5_PATCHREC2:
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27832,6 +31983,9 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, 224
+; Query case 6: ToneDB_Find_SubToneRecord (0x032AE0) resolves the record, then
+; packet[+3] bytes from record+packet[+2] are shipped.
+VOICEPARAM_QUERY_CASE6_SUBTONE:
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27861,6 +32015,10 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, 140
+; Query case 7: ToneDB_Find_SubToneRecord then WaveSel_StageA1_FromToneSlot on
+; the 0x15-byte partial slot selected by bits 6-7 of packet[+2]; ships
+; packet[+3] bytes from slot+(packet[+2] & 0x3F).
+VOICEPARAM_QUERY_CASE7_PARTIALSLOT:
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27910,11 +32068,13 @@ VoiceParamFinalize_SecondaryBody:
 	ld	l, (xiz+3)
 	extz	hl
 
+; Common tail of the query family: copy the 6 request bytes to 0x045210.
 VoiceParamFinalize_CopyToWorkArea:
 	lds ix, 0
 	cps ix, 6
 	jr nc, VoiceParamFinalize_CallDispatch
 
+; The 6-iteration header copy packet[i] -> 0x045210+i.
 VoiceParamFinalize_CopyLoop:
 	ld wa, ix
 	extz xwa
@@ -27930,6 +32090,11 @@ VoiceParamFinalize_CopyLoop:
 	cps ix, 6
 	jr c, VoiceParamFinalize_CopyLoop
 
+; Emit the reply: InterCPU_DMA_Send(A = packet[+4] reply tag, BC = HL+6,
+; XDE = 0x045210).  HL is the payload length returned by the case body, so a
+; case that produced nothing still sends a bare 6-byte echo.  This is the ONLY
+; sub->main transmission in region 10 -- address 0x031E64 is the call site to
+; breakpoint when sub->main traffic disappears.
 VoiceParamFinalize_CallDispatch:
 	ld a, (xiz + 4)
 	ld c, a
@@ -27941,12 +32106,22 @@ VoiceParamFinalize_CallDispatch:
 	ld bc, hl
 	call InterCPU_DMA_Send
 
+; Shared exit; also the direct (reply-less) exit of every action case.
 VoiceParamFinalize_Return:
 	pop xiz
 	ret
 
 ; DSP_WriteVoiceParam -- Write DSP voice parameter by mode
 ; Dispatches on voice+16 bits 7:6 for 4 modes (0x00/0x40/0x80/0xC0).
+; Copy a run of bytes out of a part's patch record, gated on the record format.
+; Entry: WA = part index, BC = byte offset inside the record, DE = length,
+;        stacked long at (XSP+0x0A) = destination pointer.
+; Exit:  HL = bytes copied, or 0 when the record is rejected.  'retd 4'.
+; Gate: A = patchrec[+0x10] & 0xC0.  0x00 and 0x80 copy; 0x40 and 0xC0 return 0.
+; Sole caller: DSP_Cmd2B_VoiceParamWrite 0x035D46, whose caller
+; DSP_Cmd2B_PostProcess (0x035D4A) DROPS the reply entirely when HL == 0 --
+; see findings.  Uses FP_MulAccum64 0x03D8CA as a plain 32-bit multiply for
+; part*0x11F.
 DSP_WriteVoiceParam:
 	dec 4, xsp
 	pushw iz
@@ -27986,10 +32161,12 @@ DSP_WriteVoiceParam:
 	ld hl, (xsp + 2)
 	jr DSP_WriteVoiceParam_Return
 
+; Format byte 0x40: HL = 0, nothing copied.
 DSP_WriteVoiceParam_Mode40:
 	lds hl, 0
 	jr DSP_WriteVoiceParam_Return
 
+; Format byte 0x80: identical copy path to the 0x00 case.
 DSP_WriteVoiceParam_Mode80:
 	ld wa, iz
 	extz xwa
@@ -28007,14 +32184,21 @@ DSP_WriteVoiceParam_Mode80:
 	ld hl, (xsp + 2)
 	jr DSP_WriteVoiceParam_Return
 
+; Format byte 0xC0: HL = 0, nothing copied.
 DSP_WriteVoiceParam_ModeC0:
 	lds hl, 0
 
+; Frame teardown and 'retd 0x0004'.
 DSP_WriteVoiceParam_Return:
 	popw iz
 	inc 4, xsp
 	retd 0x4
 
+; Return the partial-present byte of a tone record.
+; Entry: WA/BC = the {lo,hi} tone selector, XDE = 1-byte destination.
+; Exit:  *XDE = tonerec[+0x11]; HL = 1.
+; Calls ToneDB_Find_ToneRecord 0x03206F.  Sole caller: DSP_Cmd2B_ReadParam11
+; 0x035D0A.  tonerec+0x11 is the bit-per-partial presence byte (bits 0/2/4/6).
 DSP_ReadVoiceParam11:
 	push xiz
 	ld xiz, xde
@@ -28025,6 +32209,17 @@ DSP_ReadVoiceParam11:
 	pop xiz
 	ret
 
+; The alternate preset resolver selected by ToneGen_GlobalFlags (0x041343) bit 0.
+; Entry: WA = selector low byte, BC = selector high byte.
+; Exit:  XHL = patch-record pointer.
+; Identical arithmetic to ToneDB_Find_PatchRecord_Preset (0x031F87) except that
+; the bank table comes from ToneDB_RootPtr->+0x6C instead of ->+0x04:
+;   C   = byte[RelBase + Root->+0x6C + hi]
+;   idx = (C << 7) + lo
+;   k   = u16[RelBase + Root->+0x6C + 0x80 + 2*idx]
+;   rec = RelBase + u32[RelBase + Root->+0x08 + 4*k]
+; There is NO bank validity filter on this path (unlike 0x031F71), and no
+; fallback to record #0.  Root->+0x6C is referenced nowhere else in the image.
 DSP_LookupVoiceBuffer_CoeffPath:
 	ld de, bc
 	extz xde
@@ -28162,12 +32357,26 @@ DSP_LookupVoiceBuffer:
 	calr DSP_LookupVoiceBuffer_CoeffPath
 	jr VoiceBuf_TypeSelector_NoMatch
 
+; ToneGen_GlobalFlags bit 0 clear: use ToneDB_Find_PatchRecord 0x031F71.
 VoiceBuf_TypeSelector_EFFMatch:
 	calr DSP_LookupVoiceBuffer_ParamPath
 
+; Shared 'ret'; XHL already holds the record pointer.
 VoiceBuf_TypeSelector_NoMatch:
 	ret
 
+; Map a logical partial index to its packed position inside a tone record, or
+; report that the partial is absent.
+; Entry: WA = part index, BC = partial index p (0..3).
+; Exit:  L = packed rank, or 0xFF when partial p is not present.
+; Body: if the part's selector-high byte (0x041382+part*0x11F) >= 0x10 and
+;       p != 0, L = p is returned unchanged (RAM user tones / kits are not
+;       packed).  Otherwise mask = table[0x00FB4E + 2*p]; if
+;       (Part_PatchRecord_Ptr[part][+0x11] & mask) == 0 the partial is absent
+;       (L = 0xFF); else L = the number of present partials among indices
+;       1..p.  Callers pass the result straight into the 0x51-byte partial
+;       block address patchrec + 0x66 + 0x51*L.
+; Callers: 0x032253 and 0x032345 (both inside WaveSel_Bind_PartRecords).
 VoiceBuf_TypeSelector_MatchEpilogue:
 	ld e, a
 	extz de
@@ -28178,6 +32387,7 @@ VoiceBuf_TypeSelector_MatchEpilogue:
 	cps c, 0
 	jr nz, VoiceChanScan_Data
 
+; Test mask[p] against tonerec+0x11; jump to the absent path if clear.
 VoiceChanScan_LoopBody:
 	ld e, c
 	extz de
@@ -28200,6 +32410,7 @@ VoiceChanScan_LoopBody:
 	cp b, e
 	jr nc, VoiceChanScan_LoopNext
 
+; Count loop body: B = 1..p, W += 1 for each present partial.
 VoiceChanScan_MatchFound:
 	ld e, b
 	extz de
@@ -28217,6 +32428,7 @@ VoiceChanScan_MatchFound:
 	jr z, VoiceChanScan_NoMatch
 	inc 1, w
 
+; Count loop increment and termination test.
 VoiceChanScan_NoMatch:
 	inc 1, b
 	ld e, c
@@ -28224,17 +32436,43 @@ VoiceChanScan_NoMatch:
 	cp b, e
 	jr c, VoiceChanScan_MatchFound
 
+; C = W (the accumulated rank).
 VoiceChanScan_LoopNext:
 	ld c, w
 	jr VoiceChanScan_Data
 
+; C = 0xFF -- partial not present in this tone record.
 VoiceChanScan_Epilogue:
 	ldb c, 0xFF
 
+; L = C; ret.
 VoiceChanScan_Data:
 	ld l, c
 	ret
 
+; (Re)bind a part's cached tone-record pointer and its four partial-block
+; pointers.  This is the routine that makes a part playable: every downstream
+; consumer dereferences Part_PatchRecord_Ptr[part] and
+; Part_Slot_Sub_Base[part][p] without re-checking them.
+; Entry: A = part index (0..25), BC = selector low byte, DE = selector high byte.
+; Exit:  nothing; writes Part_PatchRecord_Ptr (0x04136E+part*0x11F) and
+;        Part_Slot_Sub_Base + 0x25*p (0x0413D6/0x0413FB/0x041420/0x041445).
+; Body:
+;   Part flags word (0x041368+part*0x11F) bit 0 SET = RAM user tone:
+;     hi in {0x40,0x41,0x50} -> record pointer = ToneDB_RamBankA + 0x4980,
+;                               partial pointers left alone;
+;     otherwise              -> record pointer = UserTone_VelSplit_Base
+;                               (0x044FCE) and each partial p is bound to
+;                               record + 0x66 + 0x51*p.
+;   bit 0 CLEAR = ROM tone: part <= 0x0F uses ToneDB_Find_ToneRecord (which
+;     honours ToneGen_GlobalFlags bit 0), part > 0x0F uses
+;     ToneDB_Find_PatchRecord directly.  Each partial p is then bound to
+;     patchrec + 0x66 + 0x51*PARTIAL_FIND_RANK(part,p), or, when the partial is
+;     absent (rank 0xFF), to the shared default block
+;     ToneDB_RelBase + Root->+0xAC.
+;   Bit 1 of the same flags word selects between two byte-identical copies of
+;   the ROM path (0x0321FE.. and 0x0322F0..).
+; Caller: WaveSel_Rebuild_PartCaches 0x032949.
 VoiceParam_Update:
 	dec 2, xsp
 	pushw_erp 0xFA
@@ -28253,6 +32491,7 @@ VoiceParam_Update:
 	cp de, 0x50
 	jr nz, VoiceParam_Update_ActiveEFF
 
+; RAM path, banks 0x40/0x41/0x50: record pointer = ToneDB_RamBankA + 0x4980.
 VoiceParam_Update_ActivePath:
 	ld a, (xsp + 2)
 	extz wa
@@ -28264,6 +32503,7 @@ VoiceParam_Update_ActivePath:
 	stl_dri XWA, 0x07, 0xE8, 0xE4
 	jrl EFFSlotScan_Epilogue
 
+; RAM path, other banks: record pointer = 0x044FCE, then bind 4 partials.
 VoiceParam_Update_ActiveEFF:
 	ld a, (xsp + 2)
 	extz wa
@@ -28276,6 +32516,7 @@ VoiceParam_Update_ActiveEFF:
 	cpib_erp 0xFB, 4
 	jrl nc, EFFSlotScan_Epilogue
 
+; p = 0..3: Part_Slot_Sub_Base[part][p] = record + 0x66 + 0x51*p.
 VoiceParam_Update_ActiveMain:
 	stb_erp A, 0xFB
 	extz wa
@@ -28305,6 +32546,7 @@ VoiceParam_Update_ActiveMain:
 	jr c, VoiceParam_Update_ActiveMain
 	jrl EFFSlotScan_Epilogue
 
+; ROM path taken when flags bit 1 is set; resolves and stores the record ptr.
 VoiceParam_Update_InactivePath:
 	ld a, (xsp + 2)
 	extz wa
@@ -28325,6 +32567,7 @@ VoiceParam_Update_InactivePath:
 	stl_dri XHL, 0x07, 0xE4, 0xE0
 	jr VoiceParam_Update_InactiveEpilogue
 
+; part > 0x0F: bypass ToneDB_Find_ToneRecord and call ToneDB_Find_PatchRecord.
 VoiceParam_Update_InactiveSub:
 	ld wa, bc
 	ld bc, de
@@ -28335,11 +32578,13 @@ VoiceParam_Update_InactiveSub:
 	lda_24 xbc, 0x04136e
 	stl_dri XHL, 0x07, 0xE4, 0xE0
 
+; Initialise the p = 0..3 partial-binding loop counter (QIZH).
 VoiceParam_Update_InactiveEpilogue:
 	ldib_erp 0xFB, 0
 	cpib_erp 0xFB, 4
 	jrl nc, EFFSlotScan_Epilogue
 
+; Absent partial: bind to the shared default block RelBase + Root->+0xAC.
 EFFSlotScan_LoopBody:
 	ld a, (xsp + 2)
 	ld e, a
@@ -28368,6 +32613,7 @@ EFFSlotScan_LoopBody:
 	stl_dri XWA, 0x07, 0xEC, 0xE8
 	jr EFFSlotScan_LoopNext
 
+; Present partial: bind to patchrec + 0x66 + 0x51*rank.
 EFFSlotScan_AssignPath:
 	stb_erp A, 0xFB
 	extz wa
@@ -28393,12 +32639,14 @@ EFFSlotScan_AssignPath:
 	stb_dri W, 0x07, 0xE0, 0xEC
 	stl_dri XWA, 0x07, 0xF0, 0xE8
 
+; p++ and loop while p < 4.
 EFFSlotScan_LoopNext:
 	inc1b_erp 0xFB
 	cpib_erp 0xFB, 4
 	jrl c, EFFSlotScan_LoopBody
 	jrl EFFSlotScan_Epilogue
 
+; Duplicate ROM path taken when flags bit 1 is clear.
 EFFSlotScan_AltLoopBody:
 	cp (xsp + 2), 0xF
 	jr ugt, EFFSlotScan_AltMatchPath
@@ -28412,6 +32660,7 @@ EFFSlotScan_AltLoopBody:
 	stl_dri XHL, 0x07, 0xE4, 0xE0
 	jr EFFSlotScan_AltAssign
 
+; part > 0x0F variant of the duplicate path.
 EFFSlotScan_AltMatchPath:
 	ld wa, bc
 	ld bc, de
@@ -28422,11 +32671,13 @@ EFFSlotScan_AltMatchPath:
 	lda_24 xbc, 0x04136e
 	stl_dri XHL, 0x07, 0xE4, 0xE0
 
+; Duplicate partial-binding loop init.
 EFFSlotScan_AltAssign:
 	ldib_erp 0xFB, 0
 	cpib_erp 0xFB, 4
 	jrl nc, EFFSlotScan_Epilogue
 
+; Duplicate loop head (absent-partial branch follows).
 EFFSlotScan_AltLoopNext:
 	ld a, (xsp + 2)
 	ld e, a
@@ -28455,6 +32706,7 @@ EFFSlotScan_AltLoopNext:
 	stl_dri XWA, 0x07, 0xEC, 0xE8
 	jr EFFSlotScan_OuterNext
 
+; Duplicate present-partial binding.
 EFFSlotScan_AltEpilogue:
 	stb_erp A, 0xFB
 	extz wa
@@ -28480,11 +32732,13 @@ EFFSlotScan_AltEpilogue:
 	stb_dri W, 0x07, 0xE0, 0xEC
 	stl_dri XWA, 0x07, 0xF0, 0xE8
 
+; Duplicate loop increment.
 EFFSlotScan_OuterNext:
 	inc1b_erp 0xFB
 	cpib_erp 0xFB, 4
 	jrl c, EFFSlotScan_AltLoopNext
 
+; Shared exit for every path above.
 EFFSlotScan_Epilogue:
 	popw_erp 0xFA
 	inc 2, xsp
@@ -28507,6 +32761,8 @@ VoiceBufIdx_Decode:
 	ldw_sri0 IY, (xde + 0x00ea)
 	jr VoiceBufIdx_TableD
 
+; SET family 0x40: index table Root->+0x14, VSEL array Root->+0x20,
+; stride Root->+0xF0.
 VoiceBufIdx_TableA:
 	ldl_da xde, 0x045314
 	ld xhl, (xde + 20)
@@ -28516,6 +32772,7 @@ VoiceBufIdx_TableA:
 	ldw_sri0 IY, (xde + 0x00f0)
 	jr VoiceBufIdx_TableD
 
+; SET family 0x80: Root->+0x10 / Root->+0x1C / stride Root->+0xEA.
 VoiceBufIdx_TableB:
 	ldl_da xde, 0x045314
 	ld xhl, (xde + 16)
@@ -28525,6 +32782,7 @@ VoiceBufIdx_TableB:
 	ldw_sri0 IY, (xde + 0x00ea)
 	jr VoiceBufIdx_TableD
 
+; SET family 0xC0: same triple as family 0x00 (Root->+0x0C / +0x18 / +0xEA).
 VoiceBufIdx_TableC:
 	ldl_da xde, 0x045314
 	ld xhl, (xde + 12)
@@ -28594,6 +32852,8 @@ SlotParam_WriteType1:
 	cps bc, 0
 	jrl nz, SlotParam_WriteDispatch_Epilogue
 
+; User-tone path, SET family 0x00/0x80/0xC0: choose RAM bank by comparing
+; Part_PatchRecord_Ptr[part] against ToneDB_RamBankB (0x045318).
 SlotParam_WriteType2:
 	ld c, a
 	extz bc
@@ -28606,6 +32866,7 @@ SlotParam_WriteType2:
 	cp a, 0xFF
 	jr nz, SlotParam_WriteType4
 
+; XHL = ToneDB_RamBankA + 0x1D6*utidx + 0x1BA + 0x0B*p.
 SlotParam_WriteType3:
 	ld a, (xsp + 2)
 	ld c, a
@@ -28621,6 +32882,7 @@ SlotParam_WriteType3:
 	stb_dri C, 0xED, 0xBA, 0x01
 	jrl SlotParam_WriteDispatch_Epilogue
 
+; XHL = ToneDB_RamBankB + 0x1D6*utidx + 0x1BA + 0x0B*p.
 SlotParam_WriteType4:
 	ld a, (xsp + 2)
 	ld c, a
@@ -28636,6 +32898,7 @@ SlotParam_WriteType4:
 	stb_dri C, 0xED, 0xBA, 0x01
 	jrl SlotParam_WriteDispatch_Epilogue
 
+; User-tone path, SET family 0x40 (drum kit): same bank comparison.
 SlotParam_WriteType5:
 	ld c, a
 	extz bc
@@ -28648,6 +32911,7 @@ SlotParam_WriteType5:
 	cp a, 0xFF
 	jr nz, SlotParam_WriteType7
 
+; XHL = ToneDB_RamBankA + 0x50*utidx + 0x4AE1 + 0x0B*p.
 SlotParam_WriteType6:
 	ld a, (xsp + 2)
 	ld c, a
@@ -28663,6 +32927,8 @@ SlotParam_WriteType6:
 	stb_dri C, 0xED, 0xE1, 0x4A
 	jr SlotParam_WriteDispatch_Epilogue
 
+; XHL = ToneDB_RamBankB + 0x2927*Part_UserToneIndex[part] + 0x50*utidx
+; + 0x4AE1 + 0x0B*p.  Uses FP_MulAccum64 for the 0x2927 multiply.
 SlotParam_WriteType7:
 	ld c, w
 	extz bc
@@ -28801,6 +33067,8 @@ VoiceBufPtr_Update:
 	ld (xde + 4), xwa
 	jr VoiceBufPtr_Update_Path1
 
+; Part flags bit 0 clear: the VSEL pointer comes from
+; WaveSel_StageA1_FromPatchBlock 0x0325FC instead of the fixed RAM formula.
 VoiceBufPtr_Update_Path0:
 	ld a, (xsp + 2)
 	ld e, a
@@ -28824,6 +33092,7 @@ VoiceBufPtr_Update_Path0:
 	stb_dri W, 0x07, 0xE0, 0xE8
 	ld (xwa + 4), xhl
 
+; Frame teardown.
 VoiceBufPtr_Update_Path1:
 	inc 4, xsp
 	ret
@@ -28848,6 +33117,8 @@ VoiceBufPtr_Update_Common:
 	cps wa, 0
 	jrl nz, VoiceSlotAddr_Multiply
 
+; SET families 0x00 and 0xC0; ToneGen_GlobalFlags bit 2 chooses Root->+0x9C
+; over Root->+0x24.
 VoiceTablePtr_Select:
 	ldw_da xwa, 0x041343
 	bit 2, wa
@@ -28856,10 +33127,12 @@ VoiceTablePtr_Select:
 	ld_sril XIX, (xwa + 0x009c)
 	jr VoiceTablePtr_SelectB
 
+; Standard index table Root->+0x24.
 VoiceTablePtr_SelectA:
 	ldl_da xwa, 0x045314
 	ld xix, (xwa + 36)
 
+; SET array Root->+0x30, stride Root->+0xEC.
 VoiceTablePtr_SelectB:
 	ldl_da xwa, 0x045314
 	ld xiy, (xwa + 48)
@@ -28867,6 +33140,7 @@ VoiceTablePtr_SelectB:
 	ldw_sri0 IZ, (xwa + 0x00ec)
 	jr VoiceSlotAddr_Multiply
 
+; SET family 0x40; bit 2 chooses Root->+0xA4 over Root->+0x2C.
 VoiceTablePtr_SelectC:
 	ldw_da xwa, 0x041343
 	bit 2, wa
@@ -28875,10 +33149,12 @@ VoiceTablePtr_SelectC:
 	ld_sril XIX, (xwa + 0x00a4)
 	jr VoiceTablePtr_Common
 
+; Standard index table Root->+0x2C.
 VoiceTablePtr_SelectD:
 	ldl_da xwa, 0x045314
 	ld xix, (xwa + 44)
 
+; SET array Root->+0x38, stride Root->+0xF2.
 VoiceTablePtr_Common:
 	ldl_da xwa, 0x045314
 	ld xiy, (xwa + 56)
@@ -28886,6 +33162,7 @@ VoiceTablePtr_Common:
 	ldw_sri0 IZ, (xwa + 0x00f2)
 	jr VoiceSlotAddr_Multiply
 
+; SET family 0x80; bit 2 chooses Root->+0xA0 over Root->+0x28.
 VoiceTablePtr_Epilogue:
 	ldw_da xwa, 0x041343
 	bit 2, wa
@@ -28894,10 +33171,12 @@ VoiceTablePtr_Epilogue:
 	ld_sril XIX, (xwa + 0x00a0)
 	jr VoiceTablePtr_Select2
 
+; Standard index table Root->+0x28.
 VoiceTablePtr_Data:
 	ldl_da xwa, 0x045314
 	ld xix, (xwa + 40)
 
+; SET array Root->+0x34, stride Root->+0xEC.
 VoiceTablePtr_Select2:
 	ldl_da xwa, 0x045314
 	ld xiy, (xwa + 52)
@@ -29055,6 +33334,7 @@ VoiceInit_Dispatcher:
 	cpib_erp 0xFB, 4
 	jr nc, VoiceInit_Epilogue
 
+; p = 0..3: WaveSel_Cache_VelSplitPtr 0x0326B6 for each partial.
 VoiceInit_EFFScanLoop:
 	ld a, (xsp + 2)
 	ld e, a
@@ -29068,6 +33348,7 @@ VoiceInit_EFFScanLoop:
 	cpib_erp 0xFA, 4
 	jr nc, VoiceInit_EFFScanNext
 
+; z = 0..3 inside each partial: WaveSel_Cache_SetDescPtr 0x0328E2.
 VoiceInit_EFFScanMatch:
 	ld a, (xsp + 2)
 	ld l, a
@@ -29084,17 +33365,22 @@ VoiceInit_EFFScanMatch:
 	cpib_erp 0xFA, 4
 	jr c, VoiceInit_EFFScanMatch
 
+; p++ and loop while p < 4.
 VoiceInit_EFFScanNext:
 	inc1b_erp 0xFB
 	cpib_erp 0xFB, 4
 	jr c, VoiceInit_EFFScanLoop
 	jr VoiceInit_Epilogue
 
+; Patch-record format byte (+0x10) & 0xC0 == 0x40: skip the cache rebuild and
+; run the portamento-target refresh instead.
 VoiceInit_AltPath:
 	ldib_erp 0xFB, 0
 	cpib_erp 0xFB, 4
 	jr nc, VoiceInit_Epilogue
 
+; p = 0..3: Voice_PortamentoTarget_SetSlot 0x02AAE7 then
+; Voice_PortamentoTarget_ComputePitch 0x02AB10.
 VoiceInit_AltPath2:
 	ld a, (xsp + 2)
 	ld e, a
@@ -29116,6 +33402,7 @@ VoiceInit_AltPath2:
 	cpib_erp 0xFB, 4
 	jr c, VoiceInit_AltPath2
 
+; Shared exit; also taken directly for format bytes 0x80 and 0xC0.
 VoiceInit_Epilogue:
 	popw_erp 0xFA
 	inc 2, xsp
@@ -29168,6 +33455,7 @@ VoiceBuf_Lookup_FlagSet:
 	cp l, 0xFF
 	jr nz, VoiceBuf_Lookup_Common
 
+; XIX = ToneDB_RamBankA + 0x4AA7 + 0x50*E.
 VoiceBuf_Lookup_FlagClear:
 	ld a, e
 	extz wa
@@ -29178,6 +33466,7 @@ VoiceBuf_Lookup_FlagClear:
 	stb_dri D, 0x07, 0xE0, 0xE4
 	jr VoiceBuf_Lookup_Epilogue
 
+; XIX = ToneDB_RamBankB + 0x2927*Part_UserToneIndex[part] + 0x4AA7 + 0x50*E.
 VoiceBuf_Lookup_Common:
 	ld a, e
 	extz wa
@@ -29282,6 +33571,7 @@ VoiceFlags_Bit0Check:
 	jr c, VoiceFlags_Bit0Set
 	or de, 0x4001
 
+; (tonerec[+0x12] & 0x03) == 1 -> Part_Slot_Flags[0] (0x0413EE) |= 0x8000.
 VoiceFlags_Bit0Set:
 	ld c, l
 	and c, 0x3
@@ -29294,6 +33584,7 @@ VoiceFlags_Bit0Set:
 	or_sriw_im 0x07, 0xF0, 0xE4, 0x00, 0x80
 	jr VoiceFlags_Bit1Set
 
+; Otherwise Part_Slot_Flags[0] &= 0x7FFF.
 VoiceFlags_Bit1Check:
 	ld c, a
 	extz bc
@@ -29301,6 +33592,7 @@ VoiceFlags_Bit1Check:
 	lda_24 xix, 0x0413ee
 	and_sriw_im 0x07, 0xF0, 0xE4, 0xFF, 0x7F
 
+; tonerec[+0x11] bit 2 -> set bit 1 of the present word.
 VoiceFlags_Bit1Set:
 	ld c, a
 	extz bc
@@ -29341,6 +33633,7 @@ VoiceFlags_Bit2Check:
 	jr c, VoiceFlags_Bit2Set
 	or de, 0x8002
 
+; (tonerec[+0x12] & 0x0C) == 4 -> Part_Slot_Flags[1] (0x041413) |= 0x8000.
 VoiceFlags_Bit2Set:
 	ld c, l
 	and c, 0xC
@@ -29353,6 +33646,7 @@ VoiceFlags_Bit2Set:
 	or_sriw_im 0x07, 0xF0, 0xE4, 0x00, 0x80
 	jr VoiceFlags_Bit3Set
 
+; Otherwise Part_Slot_Flags[1] &= 0x7FFF.
 VoiceFlags_Bit3Check:
 	ld c, a
 	extz bc
@@ -29360,6 +33654,7 @@ VoiceFlags_Bit3Check:
 	lda_24 xix, 0x041413
 	and_sriw_im 0x07, 0xF0, 0xE4, 0xFF, 0x7F
 
+; tonerec[+0x11] bit 4 -> set bit 2 of the present word.
 VoiceFlags_Bit3Set:
 	ld c, a
 	extz bc
@@ -29370,6 +33665,7 @@ VoiceFlags_Bit3Set:
 	jr z, VoiceFlags_Bit4Check
 	set 2, de
 
+; (tonerec[+0x12] & 0x30) == 0x10 -> Part_Slot_Flags[2] (0x041438) |= 0x8000.
 VoiceFlags_Bit4Check:
 	ld c, l
 	and c, 0x30
@@ -29382,6 +33678,7 @@ VoiceFlags_Bit4Check:
 	or_sriw_im 0x07, 0xF0, 0xE4, 0x00, 0x80
 	jr VoiceFlags_Bit5Check
 
+; Otherwise Part_Slot_Flags[2] &= 0x7FFF.
 VoiceFlags_Bit4Set:
 	ld c, a
 	extz bc
@@ -29389,6 +33686,7 @@ VoiceFlags_Bit4Set:
 	lda_24 xix, 0x041438
 	and_sriw_im 0x07, 0xF0, 0xE4, 0xFF, 0x7F
 
+; tonerec[+0x11] bit 6 -> set bit 3 of the present word.
 VoiceFlags_Bit5Check:
 	ld c, a
 	extz bc
@@ -29399,6 +33697,7 @@ VoiceFlags_Bit5Check:
 	jr z, VoiceFlags_Bit5Set
 	set 3, de
 
+; (tonerec[+0x12] & 0xC0) == 0x40 -> Part_Slot_Flags[3] (0x04145D) |= 0x8000.
 VoiceFlags_Bit5Set:
 	ld c, l
 	and c, 0xC0
@@ -29411,6 +33710,7 @@ VoiceFlags_Bit5Set:
 	or_sriw_im 0x07, 0xEC, 0xE4, 0x00, 0x80
 	jr VoiceFlags_Bit6Set
 
+; Otherwise Part_Slot_Flags[3] &= 0x7FFF.
 VoiceFlags_Bit6Check:
 	ld c, a
 	extz bc
@@ -29418,6 +33718,11 @@ VoiceFlags_Bit6Check:
 	lda_24 xhl, 0x04145d
 	and_sriw_im 0x07, 0xEC, 0xE4, 0xFF, 0x7F
 
+; Write the assembled word back to Part_PresentWord (0x04136A+part*0x11F).
+; Bits 0..3 = "partial p present"; bit 14 = partial 0 is unison-substituted by
+; partial 1; bit 15 = partial 1 is unison-substituted by partial 0.  The
+; substitution is only taken when Part_Flags0A bit 15 is set, the OTHER
+; partial is present, and (tonerec[+0x5D] & 0x0F) is in 0..8.
 VoiceFlags_Bit6Set:
 	extz wa
 	muls wa, 0x11F
@@ -29425,21 +33730,35 @@ VoiceFlags_Bit6Set:
 	stw_dri DE, 0x07, 0xE4, 0xE0
 	ret
 
+; Clamp a signed 16-bit value to 0..0x7F.
+; Entry: WA = value.  Exit: HL = clamped value.
+; Used only by Part_Apply_KeyTranspose (5 call sites).
 SignedClamp_Zero:
 	cp wa, 0x7F
 	jr le, SignedClamp_Max
 	ldw wa, 0x7F
 	jr SignedClamp_InRange
 
+; Negative -> 0.
 SignedClamp_Max:
 	cps wa, 0
 	jr ge, SignedClamp_InRange
 	lds wa, 0
 
+; HL = WA; ret.
 SignedClamp_InRange:
 	ld hl, wa
 	ret
 
+; Fetch the base key number of one partial from its cached partial-block
+; pointer, honouring the unison substitution recorded in Part_PresentWord.
+; Entry: WA = part index, C = partial index p (0..3).
+; Exit:  HL = block[+1] (a 0..0x7F key number, 0x80 = "no key" sentinel).
+; p == 0: Part_PresentWord bit 14 set -> read partial 1's block (0x0413FB),
+;         else partial 0's (0x0413D6).
+; p == 1: Part_PresentWord bit 15 set -> read partial 0's block, else 1's.
+; p == 2 / 3: read 0x041420 / 0x041445 directly.
+; Sole caller: Part_Apply_KeyTranspose 0x032E6E.
 AlgoType_TableLookup:
 	cps c, 3
 	jrl z, AlgoType_TableCommon
@@ -29464,6 +33783,7 @@ AlgoType_TableLookup:
 	extz hl
 	ret
 
+; Non-unison p = 0: read Part_Slot_Sub_Base[0] (0x0413D6).
 AlgoType_Table0:
 	extz wa
 	muls wa, 0x11F
@@ -29473,6 +33793,7 @@ AlgoType_Table0:
 	extz hl
 	ret
 
+; p = 1 entry; test Part_PresentWord bit 15.
 AlgoType_Table1:
 	ld c, a
 	extz bc
@@ -29490,6 +33811,7 @@ AlgoType_Table1:
 	extz hl
 	ret
 
+; Non-unison p = 1: read Part_Slot_Sub_Base[1] (0x0413FB).
 AlgoType_Table2:
 	extz wa
 	muls wa, 0x11F
@@ -29499,6 +33821,7 @@ AlgoType_Table2:
 	extz hl
 	ret
 
+; p = 2: read Part_Slot_Sub_Base[2] (0x041420).
 AlgoType_Table3:
 	extz wa
 	muls wa, 0x11F
@@ -29508,6 +33831,7 @@ AlgoType_Table3:
 	extz hl
 	ret
 
+; p = 3: read Part_Slot_Sub_Base[3] (0x041445).
 AlgoType_TableCommon:
 	extz wa
 	muls wa, 0x11F
@@ -29517,6 +33841,28 @@ AlgoType_TableCommon:
 	extz hl
 	ret
 
+; Recompute the cached key-range of every partial of one part after a
+; transpose change, then apply the two-partial key spread.
+; Entry: A = part index.  Exit: nothing.
+; Writes Part_Struct_Base + part*0x11F + 0x6E + 0x25*p + 0x23 and + 0x24 for
+; p = 0..3 (the partial's key-range low/high bytes).
+; Step 1: t = byte[0x041376 + part*0x11F] - 0x40 (signed transpose).  For each
+;   partial, k = Partial_Get_BaseKey; if k != 0x80 then k = clamp(k + t); both
+;   +0x23 and +0x24 receive k.
+; Step 2 (0x032F09): if Part_Struct[+0x0A] bit 15 is set, patchrec[+0x5D] bit 6
+;   is set, the two saved keys of partials 0 and 1 are EQUAL and not 0x80, the
+;   pair is spread apart: k < 0x40 -> lo = clamp(k-0x10), hi = clamp(lo+0x28);
+;   k >= 0x40 -> lo = clamp(k+0x10), hi = clamp(lo-0x28).
+;   (patchrec[+0x5D] & 0x0F) == 9  -> both partials get {+0x23 = lo,
+;                                     +0x24 = hi};
+;   (patchrec[+0x5D] & 0x0F) <  0x0A -> partial 0 gets +0x23 = lo and
+;                                     partial 1 gets +0x23 = hi;
+;   otherwise nothing is written.
+; Callers: Voice_Portamento_OnHandler_C0Mode 0x02A15A, Voice_CC_Pan 0x02A358,
+; VoiceAlloc_WithRoutingFlag_ExtData (x4), VoiceSlot_FullInit 0x0348DD,
+; VoiceSlot_AltInit 0x0349B8.
+; The LLVM source calls this EnvTranspose_UpdateLoop; nothing here touches an
+; envelope generator (see [UNCERTAIN]).
 EnvTranspose_UpdateLoop:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -29540,6 +33886,7 @@ EnvTranspose_UpdateLoop:
 	cpib_erp 0xFB, 4
 	jrl nc, EnvTranspose_SubPath1
 
+; p = 0..3: fetch base key, add the transpose, clamp, stash in the frame.
 EnvTranspose_ApplyPath:
 	ld a, (xsp + 18)
 	ld e, a
@@ -29569,6 +33916,7 @@ EnvTranspose_ApplyPath:
 	lda xbc, (xsp + 10)
 	stw_dri HL, 0x07, 0xE4, 0xE0
 
+; Store the result to the partial block's +0x23 and +0x24.
 EnvTranspose_LoopNext:
 	stb_erp A, 0xFB
 	extz wa
@@ -29602,6 +33950,7 @@ EnvTranspose_LoopNext:
 	cpib_erp 0xFB, 4
 	jrl c, EnvTranspose_ApplyPath
 
+; Gate and entry of the partial-0/partial-1 key spread.
 EnvTranspose_SubPath1:
 	ld a, (xsp + 18)
 	extz wa
@@ -29635,6 +33984,7 @@ EnvTranspose_SubPath1:
 	calr SignedClamp_Zero
 	jr EnvTranspose_SubPath3
 
+; k >= 0x40: lo = clamp(k+0x10), hi = clamp(lo-0x28).
 EnvTranspose_SubPath2:
 	ld wa, iz
 	add wa, 0x10
@@ -29644,6 +33994,7 @@ EnvTranspose_SubPath2:
 	sub wa, 0x28
 	calr SignedClamp_Zero
 
+; (patchrec[+0x5D] & 0x0F) == 9: write both +0x23 and +0x24 of both partials.
 EnvTranspose_SubPath3:
 	stb_erp A, 0xFB
 	and a, 0xF
@@ -29662,6 +34013,7 @@ EnvTranspose_SubPath3:
 	lda_dri XSP, 0xE1, 0xB7, 0x00
 	jr EnvTranspose_Epilogue
 
+; (patchrec[+0x5D] & 0x0F) < 0x0A: write only +0x23 of both partials.
 EnvTranspose_SubPath4:
 	stb_erp A, 0xFB
 	and a, 0xF
@@ -29673,11 +34025,27 @@ EnvTranspose_SubPath4:
 	ld xwa, (xsp + 4)
 	lda_dri XSP, 0xE1, 0xB6, 0x00
 
+; Frame teardown.
 EnvTranspose_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
 
+; Recompute bits 0 and 1 of one entry of a part's 4-byte routing-flag record by
+; polling all four partial blocks.
+; Entry: A = part index, C = group selector (0/1/2), E = value to match (0..3).
+; Exit:  nothing; updates one byte in the part structure.
+; Target byte = Part_Struct_Base + part*0x11F + 0x27 + 0x10*C + 4*E.
+; The byte's low two bits are cleared first.  If (target+3) != 0 and
+; (target+1) & 0x55 != 0, bit 1 is set and the routine returns.  Otherwise all
+; four partials are scanned: b = block_p[+0x06] for C == 0, block_p[+0x26] for
+; C == 1, block_p[+0x38] for C == 2, where block_p = Part_Slot_Sub_Base[part][p].
+; If b bit 5 is set and (b >> 6) == E, bit 0 of the target is set.
+; MEASURED but not interpreted: what the three group offsets select is not
+; established; b bits 6-7 are clearly a 2-bit destination code and bit 5 an
+; enable.  The XHL load of Part_PatchRecord_Ptr at 0x033007..0x033014 is dead.
+; Callers: VoiceCC_DataTable_028F75 (6 sites), VoiceAlloc_WithRoutingFlag_ExtData
+; (6 sites), Voice_ProgChange_TableData (2), VoiceSlot_FullInit/AltInit (2).
 AlgoFlag_Write:
 	pushw iz
 	ld l, e
@@ -29711,11 +34079,13 @@ AlgoFlag_Write:
 	setm 1, (xix)
 	jrl AlgoFlag_Write_Epilogue
 
+; Initialise the p = 0..3 partial scan counter (W).
 AlgoFlag_Write_OuterStart:
 	ldb w, 0x0
 	cps w, 4
 	jrl nc, AlgoFlag_Write_Epilogue
 
+; Group selector C == 0: b = Part_Slot_Sub_Base[part][p] -> [+0x06].
 AlgoFlag_Write_InnerLoop:
 	ld l, c
 	cps l, 2
@@ -29739,6 +34109,7 @@ AlgoFlag_Write_InnerLoop:
 	ld b, (xhl + 6)
 	jr AlgoFlag_Write_OuterMatch
 
+; C == 1: b = block[+0x26].
 AlgoFlag_Write_InnerMatch:
 	ld l, w
 	extz hl
@@ -29755,6 +34126,7 @@ AlgoFlag_Write_InnerMatch:
 	ld b, (xhl + 38)
 	jr AlgoFlag_Write_OuterMatch
 
+; C == 2: b = block[+0x38].
 AlgoFlag_Write_InnerNext:
 	ld l, w
 	extz hl
@@ -29770,6 +34142,7 @@ AlgoFlag_Write_InnerNext:
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
 	ld b, (xhl + 56)
 
+; b bit 5 set and (b >> 6) == E -> set bit 0 of the target byte.
 AlgoFlag_Write_OuterMatch:
 	bit 5, b
 	jr z, AlgoFlag_Write_OuterNext
@@ -29780,15 +34153,22 @@ AlgoFlag_Write_OuterMatch:
 	jr nz, AlgoFlag_Write_OuterNext
 	setm 0, (xix)
 
+; p++ and loop while p < 4.
 AlgoFlag_Write_OuterNext:
 	inc 1, w
 	cps w, 4
 	jrl c, AlgoFlag_Write_InnerLoop
 
+; Shared exit.
 AlgoFlag_Write_Epilogue:
 	popw iz
 	ret
 
+; Byte-for-byte twin of 0x032FD5 operating on bits 2 and 3 of the same target
+; byte: the mask is 0xF3 instead of 0xFC, the "already forced" probe reads
+; (target+2) instead of (target+3), and the bits set are 3 (forced) and 2
+; (matched) instead of 1 and 0.  Same entry contract, same callers (a different
+; set of 16 call sites), same dead XHL load at 0x033107..0x033114.
 AlgoFlag_Write_Bit3:
 	pushw iz
 	ld l, e
@@ -29822,11 +34202,13 @@ AlgoFlag_Write_Bit3:
 	setm 3, (xix)
 	jrl AlgoFlag_Write_Bit3_Epilogue
 
+; Initialise the p = 0..3 partial scan counter (W).
 AlgoFlag_Write_Bit3_OuterStart:
 	ldb w, 0x0
 	cps w, 4
 	jrl nc, AlgoFlag_Write_Bit3_Epilogue
 
+; Group selector C == 0: b = block[+0x06].
 AlgoFlag_Write_Bit3_InnerLoop:
 	ld l, c
 	cps l, 2
@@ -29850,6 +34232,7 @@ AlgoFlag_Write_Bit3_InnerLoop:
 	ld b, (xhl + 6)
 	jr AlgoFlag_Write_Bit3_OuterMatch
 
+; C == 1: b = block[+0x26].
 AlgoFlag_Write_Bit3_InnerMatch:
 	ld l, w
 	extz hl
@@ -29866,6 +34249,7 @@ AlgoFlag_Write_Bit3_InnerMatch:
 	ld b, (xhl + 38)
 	jr AlgoFlag_Write_Bit3_OuterMatch
 
+; C == 2: b = block[+0x38].
 AlgoFlag_Write_Bit3_InnerNext:
 	ld l, w
 	extz hl
@@ -29881,6 +34265,7 @@ AlgoFlag_Write_Bit3_InnerNext:
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
 	ld b, (xhl + 56)
 
+; b bit 5 set and (b >> 6) == E -> set bit 2 of the target byte.
 AlgoFlag_Write_Bit3_OuterMatch:
 	bit 5, b
 	jr z, AlgoFlag_Write_Bit3_OuterNext
@@ -29891,15 +34276,32 @@ AlgoFlag_Write_Bit3_OuterMatch:
 	jr nz, AlgoFlag_Write_Bit3_OuterNext
 	setm 2, (xix)
 
+; p++ and loop while p < 4.
 AlgoFlag_Write_Bit3_OuterNext:
 	inc 1, w
 	cps w, 4
 	jrl c, AlgoFlag_Write_Bit3_InnerLoop
 
+; Shared exit; last instruction of region 10.
 AlgoFlag_Write_Bit3_Epilogue:
 	popw iz
 	ret
 
+; Writes ONE 16-bit routing word into an output-slot record.
+; Inputs: XWA = base address of the output-slot record (part+0x6E+0x25*slot),
+;         E   = the DSP channel/slot selector used for the mask tests,
+;         XBC = pointer to the slot's gate record; only (XBC+1) -- an 8-bit enable byte -- is
+;               read,
+;         stack arg at (XSP+0x0C) = the 8-bit payload value,
+;         stack arg at (XSP+0x0E) = L = which of the three routing words to write (0/1/2).
+; Output: (XWA + 0x1A + 2*L) = payload | one of six constants.  Nothing else is touched.
+; Mechanism: (XBC+1) is ANDed with SlotEnableMaskA[E] (0x00FB56 = {1,4,0x10,0x40}).  If that
+; is zero the routine returns without writing anything -- that is the "slot not routed" case.
+; It is then ANDed with SlotEnableMaskB[E] (0x00FB5E = {2,8,0x20,0x80}); non-zero selects the
+; constants {0x00C0, 0xC000, 0x3300} for L = {0,1,2}, zero selects {0x0040, 0x4000, 0x1100}.
+; So the enable byte carries TWO bits per slot: bit(2s) = routed at all, bit(2s+1) = which of
+; the two level/pan encodings to stamp into the word.
+; Caller: EFF_RoutingInit only (0x033463).  Callee-cleans 4 bytes of arguments (retd 0x0004).
 RoutingFlag_Encode:
 	dec 4, xsp
 	push xiz
@@ -29941,6 +34343,7 @@ RoutingFlag_Encode:
 	stw_dri DE, 0x07, 0xE0, 0xE4
 	jrl RoutingFlag_Epilogue
 
+; MaskB set, L==1: writes payload | 0xC000.
 RoutingFlag_Chan0:
 	ld c, l
 	extz bc
@@ -29953,6 +34356,7 @@ RoutingFlag_Chan0:
 	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
+; MaskB set, L==2: writes payload | 0x3300.
 RoutingFlag_Chan1:
 	ld c, l
 	extz bc
@@ -29965,6 +34369,7 @@ RoutingFlag_Chan1:
 	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
+; MaskB clear: re-tests L and takes the second constant set; L==0 writes payload with bit 6 set.
 RoutingFlag_Chan2:
 	ld c, l
 	cps c, 2
@@ -29984,6 +34389,7 @@ RoutingFlag_Chan2:
 	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
+; MaskB clear, L==1: writes payload with bit 14 set (0x4000).
 RoutingFlag_Chan0B:
 	ld c, l
 	extz bc
@@ -29996,6 +34402,7 @@ RoutingFlag_Chan0B:
 	stw_dri DE, 0x07, 0xE0, 0xE4
 	jr RoutingFlag_Epilogue
 
+; MaskB clear, L==2: writes payload | 0x1100.
 RoutingFlag_Chan1B:
 	ld c, l
 	extz bc
@@ -30007,11 +34414,20 @@ RoutingFlag_Chan1B:
 	ld xwa, (xsp + 4)
 	stw_dri DE, 0x07, 0xE0, 0xE4
 
+; Common exit; also the "nothing to route" early-out.  pop XIZ / inc 4,XSP / retd 4.
 RoutingFlag_Epilogue:
 	pop xiz
 	inc 4, xsp
 	retd 0x4
 
+; Routing-word writer #0 of three near-identical siblings (see also 0x033327 and 0x033372).
+; Inputs: XWA = output-slot record base, BC = the payload index, E = the expected 2-bit
+;         "section" value, stack arg (XSP+4) = B = the slot's descriptor flag byte.
+; Writes (XWA + 0x1A + 2*BC) = E | 0x00C0 (if B bit4 set) or E with bit 6 set (if clear),
+; but ONLY when B bit5 is set AND (B>>6) == E.  Otherwise it writes nothing.
+; That guard -- bit5 = "slot enabled", bits 7:6 = "which effect section owns the slot" -- is
+; repeated verbatim in all three siblings; only the constants and the target word differ.
+; Caller: EFF_RoutingInit_SlotPath (0x0334BF).  retd 0x0002.
 SlotRouting_WriteSingle:
 	ld b, (xsp + 4)
 	bit 5, b
@@ -30033,6 +34449,7 @@ SlotRouting_WriteSingle:
 	stw_dri BC, 0x07, 0xE0, 0xEC
 	jr SlotRouting_Chan1PreWrite
 
+; B bit4 clear branch of SlotRouting_WriteSingle: value = E with bit 6 set.
 SlotRouting_Chan0:
 	extz bc
 	add bc, bc
@@ -30043,9 +34460,13 @@ SlotRouting_Chan0:
 	set 6, bc
 	stw_dri BC, 0x07, 0xE0, 0xEC
 
+; Exit of SlotRouting_WriteSingle (retd 0x0002); also its "guard failed" target.
 SlotRouting_Chan1PreWrite:
 	retd 0x2
 
+; Routing-word writer #1.  Same guard and same argument layout as SlotRouting_WriteSingle;
+; the payload constants are 0xC000 (B bit4 set) and bit 14 (clear).
+; Caller: EFF_RoutingInit_LoopNext (0x033502), which supplies slot-record byte +0x26.
 SlotRouting_Chan1:
 	ld b, (xsp + 4)
 	bit 5, b
@@ -30067,6 +34488,7 @@ SlotRouting_Chan1:
 	stw_dri BC, 0x07, 0xE0, 0xEC
 	jr SlotRouting_Chan3PreWrite
 
+; B bit4 clear branch of SlotRouting_Chan1: value = E with bit 14 set.
 SlotRouting_Chan2:
 	extz bc
 	add bc, bc
@@ -30077,9 +34499,12 @@ SlotRouting_Chan2:
 	set 14, bc
 	stw_dri BC, 0x07, 0xE0, 0xEC
 
+; Exit of SlotRouting_Chan1 (retd 0x0002).
 SlotRouting_Chan3PreWrite:
 	retd 0x2
 
+; Routing-word writer #2.  Constants 0x3300 (B bit4 set) and 0x1100 (clear).
+; Caller: EFF_RoutingInit_SubLoop (0x033544), which supplies slot-record byte +0x38.
 SlotRouting_Chan3:
 	ld b, (xsp + 4)
 	bit 5, b
@@ -30101,6 +34526,7 @@ SlotRouting_Chan3:
 	stw_dri BC, 0x07, 0xE0, 0xEC
 	jr SlotRouting_Epilogue
 
+; B bit4 clear branch of SlotRouting_Chan3: value = E | 0x1100.
 SlotRouting_Chan4:
 	extz bc
 	add bc, bc
@@ -30111,9 +34537,24 @@ SlotRouting_Chan4:
 	or bc, 0x1100
 	stw_dri BC, 0x07, 0xE0, 0xEC
 
+; Exit of SlotRouting_Chan3 (retd 0x0002).
 SlotRouting_Epilogue:
 	retd 0x2
 
+; Rebuilds the routing words of ONE output slot of ONE part for all four DSP sub-slots.
+; Inputs: A = part index (0..0x19), C = output-slot index (0..3), E = routing word selector
+;         (0/1/2), i.e. which of the slot's three routing words this pass owns.
+; Effects: zeroes (part + 0x6E + 0x25*C + 0x1A + 2*E) first, then loops i = 0..3 and, per i,
+;   reads the gate byte at (part + 0x11F-scaled base + (E<<4) + (i<<2)) + 0x27:
+;     - if (gate & 0x0A) != 0  -> RoutingFlag_Encode(payload=i, word=E)
+;     - else if (gate & 0x05) != 0 -> one of the SlotRouting_* writers chosen by E:
+;         E==0 -> SlotRouting_WriteSingle with slot-record byte +0x06
+;         E==1 -> SlotRouting_Chan1        with slot-record byte +0x26
+;         E==2 -> SlotRouting_Chan3        with slot-record byte +0x38
+;     - else nothing.
+; Callers: Voice_ProgChange_TableData (0x0345F9), VoiceSlot_FullInit_Loop2Next (0x034949)
+; and VoiceSlot_AltInit_Loop2Next (0x034A28) -- always inside a 4x3 (slot x word) double loop,
+; so a full rebuild of a part costs 12 calls.
 EFF_RoutingInit:
 	lda xsp, (xsp - 10)
 	pushw_erp 0xFA
@@ -30144,6 +34585,7 @@ EFF_RoutingInit:
 	cpib_erp 0xFB, 4
 	jrl nc, EFF_RoutingInit_Epilogue
 
+; i-loop body: computes the gate-record address and branches on (gate & 0x0A).
 EFF_RoutingInit_LoopBody:
 	stb_erp A, 0xFB
 	extz wa
@@ -30178,6 +34620,7 @@ EFF_RoutingInit_LoopBody:
 	calr RoutingFlag_Encode
 	jrl EFF_RoutingInit_SubLoopNext
 
+; (gate & 0x0A)==0 path: tests (gate & 0x05) then dispatches on E to the SlotRouting_* writers.
 EFF_RoutingInit_SlotPath:
 	ld a, (xbc)
 	and a, 0x5
@@ -30214,6 +34657,7 @@ EFF_RoutingInit_SlotPath:
 	calr SlotRouting_WriteSingle
 	jrl EFF_RoutingInit_SubLoopNext
 
+; E==1 arm: pushes slot-record byte +0x26 and calls SlotRouting_Chan1.
 EFF_RoutingInit_LoopNext:
 	ld a, (xsp + 6)
 	ld c, a
@@ -30240,6 +34684,7 @@ EFF_RoutingInit_LoopNext:
 	calr SlotRouting_Chan1
 	jr EFF_RoutingInit_SubLoopNext
 
+; E==2 arm: pushes slot-record byte +0x38 and calls SlotRouting_Chan3.
 EFF_RoutingInit_SubLoop:
 	ld a, (xsp + 6)
 	ld c, a
@@ -30265,16 +34710,34 @@ EFF_RoutingInit_SubLoop:
 	ld xwa, (xsp + 4)
 	calr SlotRouting_Chan3
 
+; i-loop increment and back-edge (i < 4).
 EFF_RoutingInit_SubLoopNext:
 	inc1b_erp 0xFB
 	cpib_erp 0xFB, 4
 	jrl c, EFF_RoutingInit_LoopBody
 
+; pop QIZ / lda XSP,XSP+0x0A / ret.
 EFF_RoutingInit_Epilogue:
 	popw_erp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
+; The master "an algorithm changed, recompute everything" entry for one part.
+; Input: A = part index; C = a flag (0 = full recompute, non-zero = refresh only).
+; Reads the algorithm type = descriptor[0x5D] & 0x0F and splits three ways:
+;   type == 7 and C == 0 : sets part+0x0A bit 15, then writes the coefficient triple
+;       part+0x63/0x64/0x65 = {0x0F,0x4F,0x96} if part+0x0A bit 14 is set, else {1,1,1}, then
+;       runs the full six-call recompute (Dispatch1/2 for channels 0 and 1, then
+;       DSP_ChanFreq_WritePacket1 and 2).
+;   type == 7 and C != 0 : refresh only -- masks part+0x63 with 0x05 and optionally sets bit 1.
+;   type != 7            : sets part+0x0A bit 15 only if bit 14 is set, runs the same six-call
+;       recompute, then sets part+0x02 bit 9 when the type is 0x0A and clears it otherwise;
+;       if bit 14 was clear it instead CLEARS part+0x0A bit 15, clears part+0x02 bit 9 and
+;       zeroes the coefficient triple.
+; So part+0x0A bit 14 ("a real algorithm is loaded") is the master enable and bit 15 is the
+; derived "engaged" flag that every other routine in this region tests.
+; Callers: VoiceSlot_FullInit (0x03489D), VoiceSlot_AltInit (0x034977) and one site outside
+; the region.
 AlgoType_StateWrite:
 	dec 4, xsp
 	ld (xsp + 2), a
@@ -30319,6 +34782,7 @@ AlgoType_StateWrite:
 	stib_ind 0x07, 0xE4, 0xE0, 0x96
 	jr AlgoType_StateWrite_NonType7
 
+; type 7, part+0x0A bit 14 clear: coefficient triple := {1,1,1}.
 AlgoType_StateWrite_Type7:
 	ld a, (xsp + 2)
 	extz wa
@@ -30336,6 +34800,8 @@ AlgoType_StateWrite_Type7:
 	lda_24 xbc, 0x0413cd
 	stib_ind 0x07, 0xE4, 0xE0, 0x01
 
+; The six-call recompute: Dispatch1(ch0), Dispatch2(ch0), Dispatch1(ch1), Dispatch2(ch1),
+; ChanFreq_WritePacket1, ChanFreq_WritePacket2.
 AlgoType_StateWrite_NonType7:
 	ld a, (xsp + 2)
 	extz wa
@@ -30361,6 +34827,7 @@ AlgoType_StateWrite_NonType7:
 	calr DSP_ChanFreq_WritePacket2
 	jr AlgoType_StateWrite_RefreshC
 
+; C != 0 refresh path for type 7: part+0x63 &= 0x05, then bit 1 set if part+0x0A bit 14 set.
 AlgoType_StateWrite_RefreshA:
 	ld a, (xsp + 2)
 	extz wa
@@ -30381,6 +34848,7 @@ AlgoType_StateWrite_RefreshA:
 	set_dri 1, 0x07, 0xE4, 0xE0
 	jr AlgoType_StateWrite_RefreshC
 
+; Same but bit 14 clear: part+0x63 &= 0x05 only.
 AlgoType_StateWrite_RefreshB:
 	ld a, (xsp + 2)
 	extz wa
@@ -30388,6 +34856,7 @@ AlgoType_StateWrite_RefreshB:
 	lda_24 xbc, 0x0413cb
 	and_srib_im 0x07, 0xE4, 0xE0, 0x05
 
+; Clears part+0x02 bit 9 and falls into the epilogue.
 AlgoType_StateWrite_RefreshC:
 	ld a, (xsp + 2)
 	extz wa
@@ -30396,6 +34865,7 @@ AlgoType_StateWrite_RefreshC:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFD
 	jrl AlgoType_StateWrite_Epilogue
 
+; Entry for algorithm type != 7: tests part+0x0A bit 14 and runs the recompute if set.
 AlgoType_StateWrite_RefreshD:
 	ld a, (xsp + 2)
 	extz wa
@@ -30440,6 +34910,7 @@ AlgoType_StateWrite_RefreshD:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x02
 	jr AlgoType_StateWrite_RefreshG
 
+; type != 0x0A: clears part+0x02 bit 9.
 AlgoType_StateWrite_RefreshE:
 	ld a, (xsp + 2)
 	extz wa
@@ -30448,6 +34919,7 @@ AlgoType_StateWrite_RefreshE:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFD
 	jr AlgoType_StateWrite_RefreshG
 
+; bit 14 clear: clears part+0x0A bit 15 and part+0x02 bit 9, then zeroes the coefficient triple.
 AlgoType_StateWrite_RefreshF:
 	ld a, (xsp + 2)
 	extz wa
@@ -30460,6 +34932,7 @@ AlgoType_StateWrite_RefreshF:
 	lda_24 xbc, 0x04136a
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFD
 
+; Writes part+0x63/0x64/0x65 = 0,0,0.
 AlgoType_StateWrite_RefreshG:
 	ld a, (xsp + 2)
 	extz wa
@@ -30477,10 +34950,20 @@ AlgoType_StateWrite_RefreshG:
 	lda_24 xbc, 0x0413cd
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 
+; inc 4,XSP / ret.
 AlgoType_StateWrite_Epilogue:
 	inc 4, xsp
 	ret
 
+; Computes DSP coefficient word #1 for (part, channel) and stores it at part+0x57+4*channel.
+; Inputs: A = part index, C = channel (0 or 1).  Output: HL, and the store.
+; Reads algorithm type = descriptor[0x5D] & 0x0F into B.  Types outside 0..0x0B fall straight
+; through to the store with HL = 0 (i.e. "no coefficient").  Otherwise it takes a computed
+; jump: `jp T, 0x033812 + AlgoJumpTable1[type]` with AlgoJumpTable1 at 0x00FB66.
+; Each arm reads a per-algorithm selector byte from 0x010FCE + 6*type + 2*channel, then uses
+; it as a 0x66-byte stride into the word table at 0x011346, sub-indexed by 2*descriptor[0x5E]
+; (or [0x60] for the second channel), and optionally ORs in a word from 0x011511.
+; Callers: AlgoType_StateWrite (four call sites, channels 0 and 1 on both paths).
 DSP_AlgoType_Dispatch1:
 	lds hl, 0
 	ld e, a
@@ -30502,6 +34985,8 @@ DSP_AlgoType_Dispatch1:
 	lda_24 xix, 0x033812
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
+; NOT DATA -- this is the arm block of the computed jump above, entered at +0x00, +0x52,
+; +0xE1 or +0x16C.  Arm at +0x00 serves algorithm types 0..3.
 DSP_AlgoType_Dispatch1_TableData:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84
 	.byte 0xca, 0x8d, 0xda, 0x12, 0xda, 0x09, 0x06, 0x00
@@ -30513,7 +34998,12 @@ DSP_AlgoType_Dispatch1_TableData:
 	.byte 0x84, 0xc8, 0x8d, 0xda, 0x12, 0xda, 0x09, 0x66
 	.byte 0x00, 0xf2, 0x46, 0x13, 0x01, 0x33, 0xea, 0x13
 	.byte 0xeb, 0x82, 0xd3, 0x07, 0xe8, 0xf0, 0x23, 0x78
-	.byte 0x1a, 0x01, 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8d
+	.byte 0x1a, 0x01
+; Arm for algorithm types 4, 5 and 7 (AlgoJumpTable1 offset 0x52).  Splits on the channel:
+; channel 0 uses descriptor[0x5E], channel 1 uses descriptor[0x60]; any other channel returns
+; HL = 0.  No symbol exists here because the block was emitted as .byte.
+DSP_ALGOTYPE_D1_ARM_TYPE457:
+	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8d
 	.byte 0xdd, 0x85, 0xca, 0x8d, 0xda, 0x12, 0xda, 0x09
 	.byte 0x06, 0x00, 0xf2, 0xce, 0x0f, 0x01, 0x34, 0xea
 	.byte 0x13, 0xec, 0x82, 0xc3, 0x07, 0xe8, 0xf4, 0x20
@@ -30524,6 +35014,8 @@ DSP_AlgoType_Dispatch1_TableData:
 	.byte 0x8d, 0xda, 0x12, 0xda, 0x09, 0x66, 0x00, 0xf2
 	.byte 0x46, 0x13, 0x01, 0x33, 0xea, 0x13, 0xeb, 0x82
 	.byte 0xd3, 0x07, 0xe8, 0xf0, 0x23, 0x78, 0xc4, 0x00
+; Channel-1 half of the type-4/5/7 arm.
+DSP_ALGOTYPE_D1_ARM_TYPE457_CH1:
 	.byte 0xcb, 0xd9, 0x7e, 0xbf, 0x00, 0xc9, 0x8d, 0xda
 	.byte 0x12, 0xda, 0x09, 0x1f, 0x01, 0xf2, 0x6e, 0x13
 	.byte 0x04, 0x33, 0xe3, 0x07, 0xec, 0xe8, 0x22, 0x8a
@@ -30531,7 +35023,13 @@ DSP_AlgoType_Dispatch1_TableData:
 	.byte 0xc8, 0x8d, 0xda, 0x12, 0xda, 0x09, 0x66, 0x00
 	.byte 0xf2, 0x46, 0x13, 0x01, 0x33, 0xea, 0x13, 0xeb
 	.byte 0x82, 0xd3, 0x07, 0xe8, 0xf0, 0x23, 0x78, 0x8b
-	.byte 0x00, 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8d, 0xdd
+	.byte 0x00
+; Arm for algorithm types 0x0A and 0x0B (AlgoJumpTable1 offset 0xE1).  If the selector byte is
+; 0xFF the coefficient lookup is skipped; either way it then ORs in a word from 0x011511
+; indexed by the top two bits of the algorithm-descriptor byte at 0x011E16 + 0x27*type +
+; 3*channel + 0x02.
+DSP_ALGOTYPE_D1_ARM_TYPEAB:
+	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8d, 0xdd
 	.byte 0x85, 0xca, 0x8d, 0xda, 0x12, 0xda, 0x09, 0x06
 	.byte 0x00, 0xf2, 0xce, 0x0f, 0x01, 0x34, 0xea, 0x13
 	.byte 0xec, 0x82, 0xc3, 0x07, 0xe8, 0xf4, 0x20, 0xc8
@@ -30541,7 +35039,10 @@ DSP_AlgoType_Dispatch1_TableData:
 	.byte 0x25, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84, 0xc8
 	.byte 0x8d, 0xda, 0x12, 0xda, 0x09, 0x66, 0x00, 0xf2
 	.byte 0x46, 0x13, 0x01, 0x33, 0xea, 0x13, 0xeb, 0x82
-	.byte 0xd3, 0x07, 0xe8, 0xf0, 0x23, 0xcb, 0x8d, 0xda
+	.byte 0xd3, 0x07, 0xe8, 0xf0, 0x23
+; The OR-in-from-0x011511 tail of the type-0x0A/0x0B arm (also the 0xFF-selector target).
+DSP_ALGOTYPE_D1_ARM_TYPEAB_OR:
+	.byte 0xcb, 0x8d, 0xda
 	.byte 0x12, 0xda, 0x09, 0x03, 0x00, 0xda, 0x8d, 0xca
 	.byte 0x8d, 0xda, 0x12, 0xda, 0x09, 0x27, 0x00, 0xf2
 	.byte 0x16, 0x1e, 0x01, 0x34, 0xea, 0x13, 0xec, 0x82
@@ -30550,6 +35051,8 @@ DSP_AlgoType_Dispatch1_TableData:
 	.byte 0xda, 0x82, 0xf2, 0x11, 0x15, 0x01, 0x34, 0xd3
 	.byte 0x07, 0xf0, 0xe8, 0xe3
 
+; Common store: (part + 0x57 + 4*channel) = HL.  Also the no-op arm for types 6, 8 and 9
+; (AlgoJumpTable1 offset 0x16C lands exactly here, leaving HL = 0).
 DSP_AlgoType_Dispatch1_Store:
 	extz bc
 	sla bc, 2
@@ -30563,6 +35066,11 @@ DSP_AlgoType_Dispatch1_Store:
 	stw_dri HL, 0x07, 0xE0, 0xE8
 	ret
 
+; Coefficient word #2 for (part, channel); stored at part+0x59+4*channel.  Structurally
+; identical to DSP_AlgoType_Dispatch1 but reads the SECOND selector byte of the 6-byte record
+; at 0x010FCE (offset +1), looks up in the 0x66-stride table at 0x011016, and sub-indexes with
+; descriptor[0x5F] (channel 0) / descriptor[0x61] (channel 1).
+; Jump-offset table: 0x00FB7E, arm base 0x0339DE.
 DSP_AlgoType_Dispatch2:
 	lds hl, 0
 	ld e, a
@@ -30584,6 +35092,7 @@ DSP_AlgoType_Dispatch2:
 	lda_24 xix, 0x0339de
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
+; NOT DATA -- arm block of the computed jump; +0x00 serves algorithm types 0..3.
 DSP_AlgoType_Dispatch2_TableData:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84
 	.byte 0xca, 0x8d, 0xda, 0x12, 0xda, 0x09, 0x06, 0x00
@@ -30595,7 +35104,11 @@ DSP_AlgoType_Dispatch2_TableData:
 	.byte 0xda, 0x8c, 0xdc, 0x84, 0xc8, 0x8d, 0xda, 0x12
 	.byte 0xda, 0x09, 0x66, 0x00, 0xf2, 0x16, 0x10, 0x01
 	.byte 0x33, 0xea, 0x13, 0xeb, 0x82, 0xd3, 0x07, 0xe8
-	.byte 0xf0, 0x23, 0x78, 0xf6, 0x00, 0xcb, 0x8d, 0xda
+	.byte 0xf0, 0x23, 0x78, 0xf6, 0x00
+; Arm for algorithm types 4, 5 and 7 (offset 0x55).  Channel 0 -> descriptor[0x5F],
+; channel 1 -> descriptor[0x61].
+DSP_ALGOTYPE_D2_ARM_TYPE457:
+	.byte 0xcb, 0x8d, 0xda
 	.byte 0x12, 0xda, 0x8d, 0xdd, 0x85, 0xca, 0x8d, 0xda
 	.byte 0x12, 0xda, 0x09, 0x06, 0x00, 0xf2, 0xce, 0x0f
 	.byte 0x01, 0x34, 0xea, 0x13, 0xec, 0x82, 0xf3, 0x07
@@ -30606,14 +35119,22 @@ DSP_AlgoType_Dispatch2_TableData:
 	.byte 0x12, 0xda, 0x8c, 0xdc, 0x84, 0xc8, 0x8d, 0xda
 	.byte 0x12, 0xda, 0x09, 0x66, 0x00, 0xf2, 0x16, 0x10
 	.byte 0x01, 0x33, 0xea, 0x13, 0xeb, 0x82, 0xd3, 0x07
-	.byte 0xe8, 0xf0, 0x23, 0x78, 0x9d, 0x00, 0xcb, 0xd9
+	.byte 0xe8, 0xf0, 0x23, 0x78, 0x9d, 0x00
+; Channel-1 half of the type-4/5/7 arm of Dispatch2.
+DSP_ALGOTYPE_D2_ARM_TYPE457_CH1:
+	.byte 0xcb, 0xd9
 	.byte 0x7e, 0x98, 0x00, 0xc9, 0x8d, 0xda, 0x12, 0xda
 	.byte 0x09, 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x33
 	.byte 0xe3, 0x07, 0xec, 0xe8, 0x22, 0x8a, 0x61, 0x25
 	.byte 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84, 0xc8, 0x8d
 	.byte 0xda, 0x12, 0xda, 0x09, 0x66, 0x00, 0xf2, 0x16
 	.byte 0x10, 0x01, 0x33, 0xea, 0x13, 0xeb, 0x82, 0xd3
-	.byte 0x07, 0xe8, 0xf0, 0x23, 0x68, 0x65, 0xcb, 0x8d
+	.byte 0x07, 0xe8, 0xf0, 0x23, 0x68, 0x65
+; Arm for algorithm types 0x0A and 0x0B (offset 0xE6).  Selector byte 0xFF aborts to the
+; store; otherwise it sub-indexes with the algorithm-descriptor byte at
+; 0x011E16 + 0x27*type + 3*channel + 0x01.
+DSP_ALGOTYPE_D2_ARM_TYPEAB:
+	.byte 0xcb, 0x8d
 	.byte 0xda, 0x12, 0xda, 0x8d, 0xdd, 0x85, 0xca, 0x8d
 	.byte 0xda, 0x12, 0xda, 0x09, 0x06, 0x00, 0xf2, 0xce
 	.byte 0x0f, 0x01, 0x34, 0xea, 0x13, 0xec, 0x82, 0xf3
@@ -30628,6 +35149,7 @@ DSP_AlgoType_Dispatch2_TableData:
 	.byte 0x01, 0x33, 0xea, 0x13, 0xeb, 0x82, 0xd3, 0x07
 	.byte 0xe8, 0xf0, 0x23
 
+; Common store: (part + 0x57 + 4*channel + 0x02) = HL.  Also the no-op arm for types 6, 8, 9.
 DSP_AlgoType_Dispatch2_Store:
 	extz bc
 	sla bc, 2
@@ -30642,6 +35164,10 @@ DSP_AlgoType_Dispatch2_Store:
 	ld (xwa + 2), hl
 	ret
 
+; Input A = part index.  Returns HL = descriptor[0x5F] & 0x3F when the part's algorithm type is
+; 0x0A or 0x0B, and returns with HL = 0 (and the flags from the compare) for every other type.
+; Used by callers outside the region to ask "is this part running one of the two multi-tap
+; algorithms, and if so which variant".
 AlgoType_AB_Checker:
 	lds hl, 0
 	ld c, a
@@ -30656,6 +35182,7 @@ AlgoType_AB_Checker:
 	cp c, 0xA
 	ret nz
 
+; The type-0x0A/0x0B path: HL = descriptor[0x5F] & 0x3F.
 AlgoType_AB_LoadIndex:
 	extz wa
 	muls wa, 0x11F
@@ -30667,6 +35194,13 @@ AlgoType_AB_LoadIndex:
 	extz hl
 	ret
 
+; Input A = part index.  Stores a 16-bit word at part+0x5F (0x0413C7).
+; Only algorithm types 6 and 7 produce a value; every other type stores 0.
+;   type 6: selector = byte at 0x010FD2 + 6*type; word = table[0x011478 + 0x66*selector +
+;           2*descriptor[0x5E]] OR'd with the word at 0x011511 + 2*descriptor[0x60].
+;   type 7: same but the sub-index comes from the algorithm-descriptor byte at
+;           0x011E1C + 0x27*type, and no OR is applied.
+; Called from both recompute paths of AlgoType_StateWrite.
 DSP_ChanFreq_WritePacket1:
 	ld c, a
 	extz bc
@@ -30713,6 +35247,7 @@ DSP_ChanFreq_WritePacket1:
 	or_sriw_rm HL, 0x07, 0xE8, 0xE4
 	jr DSP_ChanFreq_WritePacket1_Epilogue
 
+; The algorithm-type-7 variant described above.
 DSP_ChanFreq_WritePacket1_Algo7:
 	ld c, l
 	extz bc
@@ -30736,9 +35271,11 @@ DSP_ChanFreq_WritePacket1_Algo7:
 	ldw_sri HL, 0x07, 0xE4, 0xEC
 	jr DSP_ChanFreq_WritePacket1_Epilogue
 
+; All other algorithm types: HL = 0.
 DSP_ChanFreq_WritePacket1_Zero:
 	lds hl, 0
 
+; Store to part+0x5F and return.
 DSP_ChanFreq_WritePacket1_Epilogue:
 	extz wa
 	muls wa, 0x11F
@@ -30746,6 +35283,9 @@ DSP_ChanFreq_WritePacket1_Epilogue:
 	stw_dri HL, 0x07, 0xE4, 0xE0
 	ret
 
+; Input A = part index.  Stores a 16-bit word at part+0x61 (0x0413C9).
+; Types 6 and 7 share one path here: selector = byte at 0x010FD3 + 6*type, word =
+; table[0x011016 + 0x66*selector + 2*descriptor[0x5F]].  All other types store 0.
 DSP_ChanFreq_WritePacket2:
 	ld c, a
 	extz bc
@@ -30760,6 +35300,7 @@ DSP_ChanFreq_WritePacket2:
 	cps c, 6
 	jr nz, DSP_ChanFreq_WritePacket2_PathB
 
+; The type-6/7 lookup path.
 DSP_ChanFreq_WritePacket2_PathA:
 	ld c, e
 	extz bc
@@ -30784,9 +35325,11 @@ DSP_ChanFreq_WritePacket2_PathA:
 	ldw_sri HL, 0x07, 0xE4, 0xEC
 	jr DSP_ChanFreq_WritePacket2_Epilogue
 
+; All other algorithm types: HL = 0.
 DSP_ChanFreq_WritePacket2_PathB:
 	lds hl, 0
 
+; Store to part+0x61 and return.
 DSP_ChanFreq_WritePacket2_Epilogue:
 	extz wa
 	muls wa, 0x11F
@@ -30794,6 +35337,10 @@ DSP_ChanFreq_WritePacket2_Epilogue:
 	stw_dri HL, 0x07, 0xE4, 0xE0
 	ret
 
+; Input A = part index.  Returns L.
+; Returns 0xFF unless part+0x0A bit 15 is set AND the algorithm type is exactly 9; in that case
+; it returns the byte at 0x012038 + descriptor[0x5E].  The 0xFF is a sentinel meaning "this
+; part has no secondary parameter", not a value.
 Voice_SecondaryParam_Fetch:
 	ld c, a
 	extz bc
@@ -30822,16 +35369,25 @@ Voice_SecondaryParam_Fetch:
 	ldb_sri L, 0x07, 0xE4, 0xE0
 	jr Voice_SecondaryParam_FallbackC
 
+; Algorithm type != 9: L = 0xFF.
 Voice_SecondaryParam_FallbackA:
 	ldb l, 0xFF
 	jr Voice_SecondaryParam_FallbackC
 
+; part+0x0A bit 15 clear: L = 0xFF.
 Voice_SecondaryParam_FallbackB:
 	ldb l, 0xFF
 
+; Shared `ret`.
 Voice_SecondaryParam_FallbackC:
 	ret
 
+; Input A = part index.  Returns L = 0 when part+0x0A bit 15 is clear.
+; For algorithm types 0x0A/0x0B it returns the algorithm-descriptor byte at 0x011E24+0x27*type
+; if bit 7 of the byte at 0x011E23+0x27*type is set, otherwise descriptor[0x64];
+; for every other type it returns descriptor[0x64].
+; Caller: Voice_ActiveFlag_CheckAndLoad (0x0344E4), which ADDS the result to its own accumulator
+; -- i.e. this is an additive offset applied to a per-part DSP parameter.
 Voice_SecondaryParam_Fetch2:
 	ldb l, 0x0
 	ld c, a
@@ -30855,6 +35411,7 @@ Voice_SecondaryParam_Fetch2:
 	cp c, 0xA
 	jr nz, Voice_SecondaryParam_Path3
 
+; The type-0x0A/0x0B branch: tests bit 7 of 0x011E23 + 0x27*type.
 Voice_SecondaryParam_AlgoAB:
 	ld c, l
 	extz bc
@@ -30869,6 +35426,7 @@ Voice_SecondaryParam_AlgoAB:
 	ldb_sri L, 0x07, 0xE4, 0xE0
 	jr Voice_SecondaryParam_Path4
 
+; Bit 7 clear: L = descriptor[0x64].
 Voice_SecondaryParam_Path2:
 	extz wa
 	muls wa, 0x11F
@@ -30877,6 +35435,7 @@ Voice_SecondaryParam_Path2:
 	ld l, (xwa + 100)
 	jr Voice_SecondaryParam_Path4
 
+; All other algorithm types: L = descriptor[0x64].
 Voice_SecondaryParam_Path3:
 	extz wa
 	muls wa, 0x11F
@@ -30884,9 +35443,13 @@ Voice_SecondaryParam_Path3:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 100)
 
+; Shared `ret`.
 Voice_SecondaryParam_Path4:
 	ret
 
+; NOT an epilogue -- this is a separate one-line accessor with its own entry point.
+; Input A = part index; returns L = descriptor[0x65] when part+0x0A bit 15 is set, else 0.
+; See [UNCERTAIN]: the name is misleading but I am leaving it alone per the rules.
 Voice_SecondaryParam_Epilogue:
 	ldb l, 0x0
 	ld c, a
@@ -30904,6 +35467,12 @@ Voice_SecondaryParam_Epilogue:
 	ld l, (xwa + 101)
 	ret
 
+; Input A = part index, C = channel, E = a sub-selector.  Returns HL = 0x0000, 0x0040 or
+; 0x00C0 -- a two-bit routing/level field for the effect's send.
+; Computed jump `jp T, 0x033E44 + AlgoJumpTable3[type]`, table at 0x00FB96; types 6, 8 and 9
+; land on the bare `ret` at 0x033F73 (HL = 0).
+; Every arm reads a flag byte out of the algorithm-descriptor sub-record at
+; 0x011E16 + 0x27*type + 0x13 + 5*channel and combines it with descriptor[0x5D] bit 6.
 DSP_AlgoType_Dispatch3:
 	lds hl, 0
 	ldb_erp A, 0xF0
@@ -30926,6 +35495,7 @@ DSP_AlgoType_Dispatch3:
 	lda_24 xix, 0x033e44
 	jp_ind 8, 0x07, 0xF0, 0xF4
 
+; NOT DATA -- arm block for algorithm types 0..5 and 7.  Splits immediately on E == 0.
 DSP_AlgoType_Dispatch3_TableData:
 	cps	e, 0
 	jr	nz, 115
@@ -30966,6 +35536,9 @@ DSP_AlgoType_Dispatch3_TableData:
 	jrl	t, 190
 	ldw	hl, 64
 	jrl	t, 184
+; The E != 0 half of the types-0..5/7 arm: uses sub-record bit 6 (instead of bit 7) and
+; sub-record bit 2 (instead of bit 3).
+DSP_ALGOTYPE_D3_ARM_TYPE05_SUBNZ:
 	ld	e, c
 	extz	de
 	muls	de, 5
@@ -31000,7 +35573,11 @@ DSP_AlgoType_Dispatch3_TableData:
 	ldw	hl, 0x00c0
 	.asciz "hR3@"
 	.asciz "hM3@"
-	.byte 0x68, 0x48, 0xcd
+	.byte 0x68, 0x48
+; Arm for algorithm types 0x0A and 0x0B (AlgoJumpTable3 offset 0xE7).  Returns immediately for
+; E != 0 or descriptor[0x5E] == 0; otherwise 0x00C0 / 0x0040 on sub-record bit 3.
+DSP_ALGOTYPE_D3_ARM_TYPEAB:
+	.byte 0xcd
 	.byte 0xd8, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09, 0x1f
 	.byte 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x32, 0xe3, 0x07
 	.byte 0xe8, 0xe0, 0x20, 0x88, 0x5e, 0x3f, 0x00, 0xb0
@@ -31009,8 +35586,17 @@ DSP_AlgoType_Dispatch3_TableData:
 	.byte 0x89, 0xd8, 0x12, 0xd8, 0x09, 0x27, 0x00, 0xf2
 	.byte 0x16, 0x1e, 0x01, 0x31, 0xe8, 0x13, 0xe9, 0x80
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0xcb, 0x66, 0x05, 0x33
-	.byte 0xc0, 0x00, 0x68, 0x03, 0x33, 0x40, 0x00, 0x0e
+	.byte 0xc0, 0x00, 0x68, 0x03, 0x33, 0x40, 0x00
+; The shared `ret`; also the no-op arm for algorithm types 6, 8 and 9.
+DSP_ALGOTYPE_D3_RETURN:
+	.byte 0x0e
 
+; Input A = part index, C = channel.  Returns HL = 0x0000, 0x4000 or 0xC000 -- the same kind of
+; two-bit field as Dispatch3 but placed in the HIGH byte.
+; Only algorithm types 6 and 7 do anything; everything else returns HL = 0.
+; Gate: bit 5 of the sub-record byte at 0x011E16 + 0x27*type + 0x13 + 5*channel.  Then
+; descriptor[0x5D] bit 6 selects between "always 0x4000" and "0xC000 / 0x4000 on sub-record
+; bit 1".
 Algo67_LUTOffset_Check:
 	lds hl, 0
 	ld e, a
@@ -31026,6 +35612,7 @@ Algo67_LUTOffset_Check:
 	cps e, 6
 	ret nz
 
+; The type-6/7 body described above.
 Algo67_LUTOffset_Read:
 	ld e, c
 	extz de
@@ -31062,16 +35649,24 @@ Algo67_LUTOffset_Read:
 	ldw hl, 0xC000
 	jr Algo_SubTable_FlagC000
 
+; sub-record bit 1 clear: HL = 0x4000.
 Algo67_LUTOffset_Flag4000:
 	ldw hl, 0x4000
 	jr Algo_SubTable_FlagC000
 
+; descriptor[0x5D] bit 6 clear: HL = 0x4000.  (The name says 0x8000; the code loads 0x4000 --
+; see [UNCERTAIN].)
 Algo_SubTable_Flag8000:
 	ldw hl, 0x4000
 
+; Shared `ret` of Algo67_LUTOffset_Check.
 Algo_SubTable_FlagC000:
 	ret
 
+; Input A = part index, C = sub-slot (0..3).  Returns L = the FIRST parameter byte of the
+; algorithm sub-record: 0x011E16 + 0x27*type + 0x13 + 5*C + 0x01.
+; Special case: for algorithm type 8 with C == 1 it returns descriptor[0x60] instead.
+; Caller: VoiceNoteParam_LoopBody (0x03434B); the result lands in output-slot byte +0x20.
 Algo_SubTable_DispatchA:
 	ld e, a
 	extz de
@@ -31106,6 +35701,12 @@ Algo_SubTable_DispatchA:
 	ld l, (xwa + 96)
 	ret
 
+; Same shape as DispatchA but reads sub-record byte +0x02, then post-processes it through a
+; computed jump `jp T, 0x0340CC + AlgoJumpTable4[type]` (table 0x00FBAE, 9 entries).
+; The arms replace L with 2*descriptor[0x60] (types 0..3), 2*descriptor[0x62] (types 4/5),
+; 2*descriptor[0x5F] (type 8), or leave the sub-record byte untouched (types 6/7).
+; All arms require C == 1; for any other sub-slot the sub-record byte is returned as-is.
+; Caller: VoiceNoteParam_LoopBody (0x034387); result lands in output-slot byte +0x21.
 Algo_SubTable_DispatchB:
 	ld e, a
 	extz de
@@ -31140,18 +35741,37 @@ Algo_SubTable_DispatchB:
 	lda_24 xix, 0x0340cc
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
+; NOT DATA -- the arm block of DispatchB's computed jump; +0x00 serves algorithm types 0..3.
 Algo_SubTable_JumpTable1:
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09
 	.byte 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x31, 0xe3
 	.byte 0x07, 0xe4, 0xe0, 0x20, 0x88, 0x60, 0x21, 0xc9
-	.byte 0x8f, 0xc9, 0x87, 0x68, 0x38, 0xcb, 0xd9, 0xb0
+	.byte 0x8f, 0xc9, 0x87, 0x68, 0x38
+; DispatchB arm for algorithm types 4 and 5: L = 2 * descriptor[0x62].
+ALGO_SUBTABLE_DB_ARM_TYPE45:
+	.byte 0xcb, 0xd9, 0xb0
 	.byte 0xfe, 0xd8, 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2
 	.byte 0x6e, 0x13, 0x04, 0x31, 0xe3, 0x07, 0xe4, 0xe0
 	.byte 0x20, 0x88, 0x62, 0x21, 0xc9, 0x8f, 0xc9, 0x87
-	.byte 0x68, 0x1b, 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12
+	.byte 0x68, 0x1b
+; DispatchB arm for algorithm type 8: L = 2 * descriptor[0x5F].
+ALGO_SUBTABLE_DB_ARM_TYPE8:
+	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12
 	.byte 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04
 	.byte 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x88, 0x5f
-	.byte 0x21, 0xc9, 0x8f, 0xc9, 0x87, 0x0e, 0xd8, 0x12
+	.byte 0x21, 0xc9, 0x8f, 0xc9, 0x87
+; Shared `ret` of DispatchB; also the no-op arm for algorithm types 6 and 7.
+ALGO_SUBTABLE_DB_RETURN:
+	.byte 0x0e
+; A small leaf helper with no symbol of its own -- it sits between the DispatchB arm block and
+; Algo_SubTable_DispatchC and is reached only by `calr 0x034122` from two arms of
+; Algo_SubTable_JumpTable2 (0x0341E1 and 0x0341F2).
+; Input A = part index, C = sub-slot.  Returns L = 0xFC (C==0), 0xF0 (C==1) or 0x00, but only
+; when part+0x02 (the flags word, zero-extended to 32 bits) has any of bits 0x00C000 set;
+; otherwise L = 0.  Signed offsets, so this reads as a small negative trim applied to the
+; DispatchC parameter when a particular part flag pair is engaged.
+ALGO_SUBTABLE_PANTRIM_FROM_PARTFLAGS:
+	.byte 0xd8, 0x12
 	.byte 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x6a, 0x13, 0x04
 	.byte 0x32, 0xd3, 0x07, 0xe8, 0xe0, 0x20, 0xe8, 0x12
 	.byte 0xe8, 0xcc, 0x00, 0xc0, 0x00, 0x00, 0x66, 0x14
@@ -31159,6 +35779,15 @@ Algo_SubTable_JumpTable1:
 	.byte 0x27, 0xfc, 0x68, 0x0a, 0x27, 0xf0, 0x68, 0x06
 	.byte 0x27, 0x00, 0x68, 0x02, 0x27, 0x00, 0x0e
 
+; Input A = part index, C = sub-slot.  Returns L.
+; Base value = sub-record byte +0x03 (0x011E16 + 0x27*type + 0x13 + 5*C + 0x03), then a
+; computed jump `jp T, 0x0341BE + AlgoJumpTable5[type]` (table 0x00FBC0, 9 entries) adjusts it:
+;   types 0..3 : if C == 1 the base is replaced by descriptor[0x62] - 0x64, then
+;                ALGO_SUBTABLE_PANTRIM_FROM_PARTFLAGS is ADDED
+;   types 4/5  : the base is REPLACED by ALGO_SUBTABLE_PANTRIM_FROM_PARTFLAGS
+;   types 6/8  : if C == 1 the base is replaced by descriptor[0x61] - 0x64
+;   type 7     : no adjustment
+; Caller: VoiceNoteParam_LoopBody (0x0343C3); result lands in output-slot byte +0x22.
 Algo_SubTable_DispatchC:
 	pushw_erp 0xFA
 	ld e, a
@@ -31195,25 +35824,41 @@ Algo_SubTable_DispatchC:
 	lda_24 xix, 0x0341be
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
+; NOT DATA -- DispatchC's arm block; +0x00 serves algorithm types 0..3.
 Algo_SubTable_JumpTable2:
 	.byte 0xcb, 0xd9, 0x6e, 0x1b, 0xc9, 0x8d, 0xda, 0x12
 	.byte 0xda, 0x09, 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04
 	.byte 0x33, 0xe3, 0x07, 0xec, 0xe8, 0x22, 0x8a, 0x62
-	.byte 0x25, 0xcd, 0xca, 0x64, 0xc7, 0xfb, 0x9d, 0xd8
+	.byte 0x25, 0xcd, 0xca, 0x64, 0xc7, 0xfb, 0x9d
+; Tail of the types-0..3 arm: adds ALGO_SUBTABLE_PANTRIM_FROM_PARTFLAGS to the accumulator.
+ALGO_SUBTABLE_DC_ARM03_ADDTRIM:
+	.byte 0xd8
 	.byte 0x12, 0xd9, 0x12, 0x1e, 0x3e, 0xff, 0xc7, 0xfb
 	.byte 0x89, 0xcf, 0x81, 0xc7, 0xfb, 0x99, 0x68, 0x29
+; DispatchC arm for algorithm types 4 and 5: the value is the pan trim alone.
+ALGO_SUBTABLE_DC_ARM_TYPE45:
 	.byte 0xd8, 0x12, 0xd9, 0x12, 0x1e, 0x2d, 0xff, 0xc7
-	.byte 0xfb, 0x9f, 0x68, 0x1d, 0xcb, 0xd9, 0x6e, 0x19
+	.byte 0xfb, 0x9f, 0x68, 0x1d
+; DispatchC arm for algorithm types 6 and 8: C == 1 -> descriptor[0x61] - 0x64.
+ALGO_SUBTABLE_DC_ARM_TYPE68:
+	.byte 0xcb, 0xd9, 0x6e, 0x19
 	.byte 0xd8, 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x6e
 	.byte 0x13, 0x04, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	.byte 0x88, 0x61, 0x21, 0xc9, 0xca, 0x64, 0xc7, 0xfb
 	.byte 0x99
 
+; L = accumulator, pop QIZ, ret.  Also the no-op arm for algorithm type 7.
 Algo_SubTable_Epilogue:
 	stb_erp L, 0xFB
 	popw_erp 0xFA
 	ret
 
+; Input A = part index, C = sub-slot.  Returns L = 0 immediately unless part+0x0A bit 15 is set.
+; Otherwise: base = sub-record byte +0x04, then a computed jump
+; `jp T, 0x03429D + AlgoJumpTable6[type]` (table 0x00FBD2, 9 entries) may replace it with a
+; byte from the 0x0114DE lookup table indexed by descriptor[0x61] (types 0..3),
+; descriptor[0x63] (types 4/5) or descriptor[0x5E] (type 8); types 6 and 7 return the base.
+; Every replacement arm requires C == 1.
 Algo_SubTable_Bit15Dispatch:
 	ld e, a
 	extz de
@@ -31256,26 +35901,40 @@ Algo_SubTable_Bit15Dispatch:
 	lda_24 xix, 0x03429d
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
+; NOT DATA -- the arm block; +0x00 serves algorithm types 0..3 (descriptor[0x61] -> 0x0114DE).
 Algo_SubTable_JumpTable3:
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09
 	.byte 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x31, 0xe3
 	.byte 0x07, 0xe4, 0xe0, 0x20, 0x88, 0x61, 0x21, 0xd8
 	.byte 0x12, 0xf2, 0xde, 0x14, 0x01, 0x31, 0xc3, 0x07
-	.byte 0xe4, 0xe0, 0x27, 0x68, 0x4c, 0xcb, 0xd9, 0xb0
+	.byte 0xe4, 0xe0, 0x27, 0x68, 0x4c
+; Bit15Dispatch arm for algorithm types 4 and 5: 0x0114DE[descriptor[0x63]].
+ALGO_SUBTABLE_B15_ARM_TYPE45:
+	.byte 0xcb, 0xd9, 0xb0
 	.byte 0xfe, 0xd8, 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2
 	.byte 0x6e, 0x13, 0x04, 0x31, 0xe3, 0x07, 0xe4, 0xe0
 	.byte 0x20, 0x88, 0x63, 0x21, 0xd8, 0x12, 0xf2, 0xde
 	.byte 0x14, 0x01, 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x27
-	.byte 0x68, 0x27, 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12
+	.byte 0x68, 0x27
+; Bit15Dispatch arm for algorithm type 8: 0x0114DE[descriptor[0x5E]].
+ALGO_SUBTABLE_B15_ARM_TYPE8:
+	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12
 	.byte 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04
 	.byte 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x88, 0x5e
 	.byte 0x21, 0xd8, 0x12, 0xf2, 0xde, 0x14, 0x01, 0x31
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x27, 0x68, 0x02
 
+; part+0x0A bit 15 clear: L = 0, then the shared `ret` at 0x03430E (also the no-op arm for
+; algorithm types 6 and 7).
 Algo_SubTable_ZeroReturn:
 	ldb l, 0x0
 	ret
 
+; Input A = part index.  Recomputes output-slot bytes +0x20, +0x21 and +0x22 for all four
+; output slots of the part by calling Algo_SubTable_DispatchA / DispatchB / DispatchC once each
+; per slot (12 calls).  If part+0x0A bit 15 is clear it instead ZEROES all twelve bytes.
+; Callers: VoiceSlot_FullInit_Epilogue (0x034961) and VoiceSlot_AltInit_Epilogue (0x034A41),
+; i.e. it is always the last step of a part re-init.
 VoiceNoteParam_UpdateLoop:
 	dec 2, xsp
 	pushw_erp 0xFA
@@ -31292,6 +35951,7 @@ VoiceNoteParam_UpdateLoop:
 	cpib_erp 0xFB, 4
 	jrl nc, VoiceNoteParam_Epilogue
 
+; Per-slot body: three dispatch calls, three stores to slot+0x20/+0x21/+0x22.
 VoiceNoteParam_LoopBody:
 	ld a, (xsp + 2)
 	ld e, a
@@ -31361,11 +36021,13 @@ VoiceNoteParam_LoopBody:
 	jrl c, VoiceNoteParam_LoopBody
 	jrl VoiceNoteParam_Epilogue
 
+; part+0x0A bit 15 clear: enter the zero-fill loop.
 VoiceNoteParam_FallbackPath:
 	ldib_erp 0xFB, 0
 	cpib_erp 0xFB, 4
 	jrl nc, VoiceNoteParam_Epilogue
 
+; Zero-fill loop body: slot+0x20 = slot+0x21 = slot+0x22 = 0.
 VoiceNoteParam_LoopNext:
 	stb_erp A, 0xFB
 	extz wa
@@ -31410,11 +36072,19 @@ VoiceNoteParam_LoopNext:
 	cpib_erp 0xFB, 4
 	jrl c, VoiceNoteParam_LoopNext
 
+; pop QIZ / inc 2,XSP / ret.
 VoiceNoteParam_Epilogue:
 	popw_erp 0xFA
 	inc 2, xsp
 	ret
 
+; Input A = part index.  Writes one byte to part+0x67 (0x0413CF).
+; The value is built as: if part+0x00 bit 0 is set AND the global at 0x0451A4 equals this part
+; index, start from (byte at 0x0451A6) << 2, else 0; then, if part+0x0A bit 15 is set, ADD
+; Voice_SecondaryParam_Fetch2(part).
+; 0x0451A4 is the "part currently selected in the effect edit UI" and 0x0451A6 one of its live
+; edit values, so part+0x67 is "the DSP parameter with the front-panel override folded in".
+; Callers: VoiceSlot_FullInit (0x0348A5), VoiceSlot_AltInit (0x03497F).
 Voice_ActiveFlag_CheckAndLoad:
 	dec 4, xsp
 	ld (xsp + 2), a
@@ -31433,6 +36103,7 @@ Voice_ActiveFlag_CheckAndLoad:
 	sla a, 2
 	ld (xsp), a
 
+; Joins after the panel-override test; adds the secondary parameter if bit 15 is set.
 Voice_ActiveFlag_ActivePath:
 	ld a, (xsp + 2)
 	extz wa
@@ -31447,6 +36118,7 @@ Voice_ActiveFlag_ActivePath:
 	calr Voice_SecondaryParam_Fetch2
 	add (xsp), l
 
+; The single store to part+0x67 and the return.
 Voice_ActiveFlag_InactivePath:
 	ld a, (xsp + 2)
 	extz wa
@@ -31458,6 +36130,20 @@ Voice_ActiveFlag_InactivePath:
 	inc 4, xsp
 	ret
 
+; ★ THIS IS CODE, not a table.  The ELF calls it Voice_ProgChange_TableData; that name is a
+; converter artifact (the whole body was emitted as `.byte`).  I propose the new name because
+; the existing one asserts something false; see [UNCERTAIN] if you would rather keep it.
+; Input A = part index.  Two variants selected by the global byte at 0x0451A7:
+;   0x0451A7 == 0xF5 : for each of the four output slots, dereference slot+0x04 and mask the
+;                      pointed-to byte +0x06 with 0x07 (keep only the low three flag bits).
+;   otherwise        : same masking PLUS `set 5` on the same byte.
+; Both variants then call AlgoFlag_Write_Bit3 (0x0330D5) and AlgoFlag_Write (0x032FD5) with
+; channel 0 / word 0, and finally run EFF_RoutingInit for all four output slots with word
+; selector 0.
+; NO CALLER references it -- neither a direct call nor a table entry (grep across the whole
+; authoritative source).  It is either dead code from an earlier firmware revision or reached
+; from the boot ROM; I could not resolve which.  Confidence is therefore medium on the ROLE,
+; high on the BEHAVIOUR.
 Voice_ProgChange_TableData:
 	.byte 0xef, 0x6a, 0x2e, 0xbf, 0x02, 0x41, 0xc2, 0xa7
 	.byte 0x51, 0x04, 0x3f, 0xf5, 0x66, 0x7f, 0xde, 0xa8
@@ -31493,6 +36179,15 @@ Voice_ProgChange_TableData:
 	.byte 0xed, 0xde, 0x61, 0xde, 0xdc, 0x67, 0xe5, 0x4e
 	.byte 0xef, 0x62, 0x0e
 
+; Input A = part index.  Writes part+0x68 (0x0413D0).
+; If part+0x00 bit 0 is set AND 0x0451A4 == this part, the value is (0x0451A7) << 1;
+; otherwise 0.  Identical in shape to the four siblings below -- the same panel-override gate,
+; a different destination byte, a different source global and a different shift.
+;   slot 0 -> part+0x68 from 0x0451A7 << 1     slot 1 -> part+0x69 from 0x0451A8 << 1
+;   slot 2 -> part+0x6A from 0x0451A9 << 1     slot 3 -> part+0x6B from 0x0451AB << 2
+;   slot 4 -> part+0x6C from 0x0451AC << 2
+; Note there are FIVE of these but only FOUR output-slot records; the fifth is a separate
+; global send.  Callers: VoiceSlot_FullInit and VoiceSlot_AltInit, all five in sequence.
 DSP_SlotParam_Write_Slot0:
 	ld c, a
 	extz bc
@@ -31512,6 +36207,7 @@ DSP_SlotParam_Write_Slot0:
 	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
+; Gate failed: part+0x68 = 0.
 DSP_SlotParam_Write_Slot0_Path:
 	extz wa
 	muls wa, 0x11F
@@ -31519,6 +36215,7 @@ DSP_SlotParam_Write_Slot0_Path:
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
+; As slot 0 but destination part+0x69 (0x0413D1) and source global 0x0451A8, shifted left 1.
 DSP_SlotParam_Write_Slot1:
 	ld c, a
 	extz bc
@@ -31538,6 +36235,7 @@ DSP_SlotParam_Write_Slot1:
 	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
+; Gate failed: part+0x69 = 0.
 DSP_SlotParam_Write_Slot1_Path:
 	extz wa
 	muls wa, 0x11F
@@ -31545,6 +36243,7 @@ DSP_SlotParam_Write_Slot1_Path:
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
+; As slot 0 but destination part+0x6A (0x0413D2) and source global 0x0451A9, shifted left 1.
 DSP_SlotParam_Write_Slot2:
 	ld c, a
 	extz bc
@@ -31564,6 +36263,7 @@ DSP_SlotParam_Write_Slot2:
 	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
+; Gate failed: part+0x6A = 0.
 DSP_SlotParam_Write_Slot2_Path:
 	extz wa
 	muls wa, 0x11F
@@ -31571,6 +36271,7 @@ DSP_SlotParam_Write_Slot2_Path:
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
+; As slot 0 but destination part+0x6B (0x0413D3) and source global 0x0451AB, shifted left 2.
 DSP_SlotParam_Write_Slot3:
 	ld c, a
 	extz bc
@@ -31590,6 +36291,7 @@ DSP_SlotParam_Write_Slot3:
 	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
+; Gate failed: part+0x6B = 0.
 DSP_SlotParam_Write_Slot3_Path:
 	extz wa
 	muls wa, 0x11F
@@ -31597,6 +36299,7 @@ DSP_SlotParam_Write_Slot3_Path:
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
+; As slot 0 but destination part+0x6C (0x0413D4) and source global 0x0451AC, shifted left 2.
 DSP_SlotParam_Write_Slot4:
 	ld c, a
 	extz bc
@@ -31616,6 +36319,7 @@ DSP_SlotParam_Write_Slot4:
 	lda_dri XBC, 0x07, 0xE8, 0xE4
 	ret
 
+; Gate failed: part+0x6C = 0.
 DSP_SlotParam_Write_Slot4_Path:
 	extz wa
 	muls wa, 0x11F
@@ -31623,6 +36327,10 @@ DSP_SlotParam_Write_Slot4_Path:
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
+; Input A = part index.  part+0x00 &= 0xFFFC then |= 0x0004, and part+0x04 = 0.
+; I.e. it clears the two low status bits (including the bit-0 panel-target gate that
+; Voice_ActiveFlag_CheckAndLoad and the five DSP_SlotParam_Write_SlotN routines test) and sets
+; bit 2 instead.  Caller: Voice_ProgChange_Path2 (0x034AD2).
 Voice_ActiveFlag_Set:
 	ld c, a
 	extz bc
@@ -31640,6 +36348,12 @@ Voice_ActiveFlag_Set:
 	stib_ind 0x07, 0xE4, 0xE0, 0x00
 	ret
 
+; Input A = part index.  Early-outs if bit 0 of the global word at 0x041343 is set (a global
+; "audio engine suspended" latch also written by DSP_System_Init).
+; Otherwise zeroes part+0x1D (word), part+0x1F, part+0x20, sets part+0x1B and part+0x1C to
+; 0x40 (mid-scale), and then clears bytes +0x29 and +0x2A of all twelve 4-byte note-state
+; records (i = 0..3 x j = 0..2 at part + 0x10*j + 4*i).
+; Callers: 6 sites including Voice_ProgChange_Path2 and VoiceSlot_ClearAll_MidNext.
 Voice_NoteState_Clear:
 	ldw_da xbc, 0x041343
 	bit 0, bc
@@ -31673,11 +36387,13 @@ Voice_NoteState_Clear:
 	cps ix, 4
 	ret nc
 
+; Outer (i) loop head of the 4x3 note-state clear.
 Voice_NoteState_InnerLoopA:
 	lds hl, 0
 	cps hl, 3
 	jr nc, Voice_NoteState_Epilogue
 
+; Inner (j) loop body: clears record bytes +0x29 and +0x2A.
 Voice_NoteState_InnerLoopB:
 	ld bc, ix
 	extz xbc
@@ -31717,12 +36433,20 @@ Voice_NoteState_InnerLoopB:
 	cps hl, 3
 	jr c, Voice_NoteState_InnerLoopB
 
+; Outer-loop increment and back-edge, then ret.
 Voice_NoteState_Epilogue:
 	inc 1, ix
 	cps ix, 4
 	jr c, Voice_NoteState_InnerLoopA
 	ret
 
+; Full re-initialisation of one part's effect/routing state.  Input A = part index.
+; Sequence: AlgoType_StateWrite(part, C=0) -> Voice_ActiveFlag_CheckAndLoad ->
+; DSP_SlotParam_Write_Slot0..Slot4 -> VoiceFlags_Aggregate (0x032B1E) ->
+; EnvTranspose_UpdateLoop (0x032E1E) -> a 3 x 4 double loop calling AlgoFlag_Write_Bit3
+; (0x0330D5) and AlgoFlag_Write (0x032FD5) -> a second 3 x 4 loop calling EFF_RoutingInit ->
+; VoiceNoteParam_UpdateLoop.
+; Entered from Voice_ProgChange_InnerDispatch1 when descriptor[0x10] & 0xC0 == 0xC0.
 VoiceSlot_FullInit:
 	dec 4, xsp
 	pushw iz
@@ -31759,11 +36483,13 @@ VoiceSlot_FullInit:
 	cpw (xsp + 2), 0x3
 	jr nc, VoiceSlot_FullInit_Epilogue
 
+; Head of the inner (0..3) loop of the AlgoFlag_Write pass.
 VoiceSlot_FullInit_Loop1:
 	lds iz, 0
 	cps iz, 4
 	jr nc, VoiceSlot_FullInit_Loop2
 
+; Body: AlgoFlag_Write_Bit3 then AlgoFlag_Write for (word, slot).
 VoiceSlot_FullInit_Loop1Next:
 	ld a, (xsp + 4)
 	ld l, a
@@ -31791,11 +36517,13 @@ VoiceSlot_FullInit_Loop1Next:
 	cps iz, 4
 	jr c, VoiceSlot_FullInit_Loop1Next
 
+; Head of the inner (0..3) loop of the EFF_RoutingInit pass.
 VoiceSlot_FullInit_Loop2:
 	lds iz, 0
 	cps iz, 4
 	jr nc, VoiceSlot_FullInit_Loop3
 
+; Body: EFF_RoutingInit(part, slot, word).
 VoiceSlot_FullInit_Loop2Next:
 	ld a, (xsp + 4)
 	ld l, a
@@ -31812,11 +36540,13 @@ VoiceSlot_FullInit_Loop2Next:
 	cps iz, 4
 	jr c, VoiceSlot_FullInit_Loop2Next
 
+; Outer (word 0..2) increment and back-edge.
 VoiceSlot_FullInit_Loop3:
 	incm 1, (xsp + 2)
 	cpw (xsp + 2), 0x3
 	jr c, VoiceSlot_FullInit_Loop1
 
+; VoiceNoteParam_UpdateLoop, then pop IZ / inc 4,XSP / ret.
 VoiceSlot_FullInit_Epilogue:
 	ld a, (xsp + 4)
 	extz wa
@@ -31825,6 +36555,11 @@ VoiceSlot_FullInit_Epilogue:
 	inc 4, xsp
 	ret
 
+; The second re-init variant, entered from Voice_ProgChange_InnerDispatch2 when
+; descriptor[0x10] & 0xC0 == 0x40.  Identical to VoiceSlot_FullInit except that
+; VoiceFlags_Aggregate is replaced by Voice_InitFromSlot (0x02ADC1) -- i.e. the tone-generator
+; voice records are rebuilt from the slot instead of being merely re-aggregated -- and the loop
+; counters live in QIZH rather than IZ.
 VoiceSlot_AltInit:
 	dec 4, xsp
 	pushw_erp 0xFA
@@ -31861,11 +36596,13 @@ VoiceSlot_AltInit:
 	cp (xsp + 2), 0x3
 	jr nc, VoiceSlot_AltInit_Epilogue
 
+; Head of the inner (0..3) AlgoFlag_Write loop.
 VoiceSlot_AltInit_Loop1:
 	ldib_erp 0xFB, 0
 	cpib_erp 0xFB, 4
 	jr nc, VoiceSlot_AltInit_Loop2
 
+; Body: AlgoFlag_Write_Bit3 then AlgoFlag_Write.
 VoiceSlot_AltInit_Loop1Next:
 	ld a, (xsp + 4)
 	ld l, a
@@ -31893,11 +36630,13 @@ VoiceSlot_AltInit_Loop1Next:
 	cpib_erp 0xFB, 4
 	jr c, VoiceSlot_AltInit_Loop1Next
 
+; Head of the inner (0..3) EFF_RoutingInit loop.
 VoiceSlot_AltInit_Loop2:
 	ldib_erp 0xFB, 0
 	cpib_erp 0xFB, 4
 	jr nc, VoiceSlot_AltInit_Loop3
 
+; Body: EFF_RoutingInit(part, slot, word).
 VoiceSlot_AltInit_Loop2Next:
 	ld a, (xsp + 4)
 	ld l, a
@@ -31914,11 +36653,13 @@ VoiceSlot_AltInit_Loop2Next:
 	cpib_erp 0xFB, 4
 	jr c, VoiceSlot_AltInit_Loop2Next
 
+; Outer (word 0..2) increment and back-edge.
 VoiceSlot_AltInit_Loop3:
 	incm8 1, (xsp + 2)
 	cp (xsp + 2), 0x3
 	jr c, VoiceSlot_AltInit_Loop1
 
+; VoiceNoteParam_UpdateLoop, then pop QIZ / inc 4,XSP / ret.
 VoiceSlot_AltInit_Epilogue:
 	ld a, (xsp + 4)
 	extz wa
@@ -31927,6 +36668,22 @@ VoiceSlot_AltInit_Epilogue:
 	inc 4, xsp
 	ret
 
+; MIDI program-change handler.  Input XWA = pointer to the 6-byte staging buffer at 0x2AFC
+; filled by MIDI_Status_ProgChange:  +0x01 = part index, +0x02 and +0x03 = the two program
+; bytes, +0x04 = a flag.
+; Returns immediately if part index >= 0x1A (26 parts).
+; Stores +0x02 into part+0x19 (0x041381) and +0x03 into part+0x1A (0x041382); sets or clears
+; part+0x0A bit 14 from +0x04 (this is the "algorithm loaded" master enable that
+; AlgoType_StateWrite keys on); then Voice_ActiveFlag_Set, Voice_NoteState_Clear,
+; Voice_SetLFO_ActiveFlag (0x027CBE) and VoiceInit_Dispatcher (0x032938).
+; Finally it dereferences part+0x06 and switches on descriptor[0x10] & 0xC0:
+;   0xC0 -> VoiceSlot_FullInit
+;   0x40 -> Voice_PortamentoTargets_SetAll (0x02AA38) then VoiceSlot_AltInit
+;   0x80 or 0x00 -> nothing
+; Sole caller: MIDI_Status_ProgChange (0x034F1E).
+; ★ This is where a bad or unmapped program number silently leaves the part with NO algorithm
+;   engaged (bit 14 clear) -- AlgoType_StateWrite will then clear bit 15 and zero every
+;   coefficient, and every routine in this region becomes a no-op for that part.
 Voice_ProgChange:
 	dec 4, xsp
 	pushw_erp 0xFA
@@ -31962,6 +36719,7 @@ Voice_ProgChange:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x40
 	jr Voice_ProgChange_Path2
 
+; Staging byte +0x04 == 0: clears part+0x0A bit 14.
 Voice_ProgChange_Path1:
 	stb_erp A, 0xFB
 	extz wa
@@ -31969,6 +36727,8 @@ Voice_ProgChange_Path1:
 	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xBF
 
+; Common tail: Voice_ActiveFlag_Set, Voice_NoteState_Clear, Voice_SetLFO_ActiveFlag,
+; VoiceInit_Dispatcher, then the descriptor[0x10] switch.
 Voice_ProgChange_Path2:
 	stb_erp A, 0xFB
 	extz wa
@@ -32004,12 +36764,14 @@ Voice_ProgChange_Path2:
 	cps a, 0
 	jr nz, Voice_ProgChange_InnerDispatch3
 
+; descriptor[0x10] & 0xC0 == 0xC0: VoiceSlot_FullInit.
 Voice_ProgChange_InnerDispatch1:
 	stb_erp A, 0xFB
 	extz wa
 	calr VoiceSlot_FullInit
 	jr Voice_ProgChange_InnerDispatch3
 
+; descriptor[0x10] & 0xC0 == 0x40: Voice_PortamentoTargets_SetAll then VoiceSlot_AltInit.
 Voice_ProgChange_InnerDispatch2:
 	stb_erp A, 0xFB
 	extz wa
@@ -32018,11 +36780,21 @@ Voice_ProgChange_InnerDispatch2:
 	extz wa
 	calr VoiceSlot_AltInit
 
+; Shared exit (also the >= 0x1A and 0x80/0x00 early-outs).
 Voice_ProgChange_InnerDispatch3:
 	popw_erp 0xFA
 	inc 4, xsp
 	ret
 
+; Global reset of all per-part effect state.  No arguments.
+; Pass 1: for every part 0..0x19, for every i 0..3 and j 0..2, zero the note-state byte at
+;   part + 0x10*j + 4*i + 0x27 and the ROUTING WORD at part + 0x6E + 0x25*i + 0x1A + 2*j
+;   (the code writes offset 0x88 + 0x25*i + 2*j, and 0x88 = 0x6E + 0x1A); then call
+;   Voice_NoteState_Clear for the part.
+; Pass 2: for every hardware voice 0..0x3F and every j 0..2, call NoteState_ClearRecord
+;   (0x022DBD).
+; Finally sets the panel-target global 0x0451A4 to 0xFF ("no part selected").
+; Callers: DSP_System_Init (0x034CCC) and one site outside the region.
 VoiceSlot_ClearAll:
 	dec 6, xsp
 	push xiz
@@ -32030,16 +36802,19 @@ VoiceSlot_ClearAll:
 	cp (xsp + 8), 0x1A
 	jrl nc, VoiceSlot_ClearAll_OuterNext
 
+; Per-part head; initialises the i (output-slot) counter.
 VoiceSlot_ClearAll_OuterLoop:
 	ldw (xsp + 4), 0x0
 	cpw (xsp + 4), 0x4
 	jrl nc, VoiceSlot_ClearAll_MidNext
 
+; Per-i head; initialises the j counter.
 VoiceSlot_ClearAll_MidLoop:
 	ldw (xsp + 6), 0x0
 	cpw (xsp + 6), 0x3
 	jr nc, VoiceSlot_ClearAll_InnerNext
 
+; Body: zero note-state byte +0x27+4i+0x10j and routing word +0x88+0x25i+2j.
 VoiceSlot_ClearAll_InnerLoop:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -32079,11 +36854,13 @@ VoiceSlot_ClearAll_InnerLoop:
 	cpw (xsp + 6), 0x3
 	jr c, VoiceSlot_ClearAll_InnerLoop
 
+; i-loop increment and back-edge.
 VoiceSlot_ClearAll_InnerNext:
 	incm 1, (xsp + 4)
 	cpw (xsp + 4), 0x4
 	jrl c, VoiceSlot_ClearAll_MidLoop
 
+; Voice_NoteState_Clear for the part, then the part-loop increment and back-edge.
 VoiceSlot_ClearAll_MidNext:
 	ld a, (xsp + 8)
 	extz wa
@@ -32092,16 +36869,19 @@ VoiceSlot_ClearAll_MidNext:
 	cp (xsp + 8), 0x1A
 	jrl c, VoiceSlot_ClearAll_OuterLoop
 
+; Head of pass 2 (the 64-voice loop).
 VoiceSlot_ClearAll_OuterNext:
 	ldw (xsp + 4), 0x0
 	cpw (xsp + 4), 0x40
 	jr nc, VoiceSlot_ClearAll_Epilogue
 
+; Per-voice head; initialises the j counter.
 VoiceSlot_ClearAll_SubLoop1:
 	ldw (xsp + 6), 0x0
 	cpw (xsp + 6), 0x3
 	jr nc, VoiceSlot_ClearAll_SubLoop2
 
+; Body: NoteState_ClearRecord(voice, j).
 VoiceSlot_ClearAll_SubLoop1Next:
 	ld wa, (xsp + 4)
 	ld e, a
@@ -32115,11 +36895,13 @@ VoiceSlot_ClearAll_SubLoop1Next:
 	cpw (xsp + 6), 0x3
 	jr c, VoiceSlot_ClearAll_SubLoop1Next
 
+; Voice-loop increment and back-edge.
 VoiceSlot_ClearAll_SubLoop2:
 	incm 1, (xsp + 4)
 	cpw (xsp + 4), 0x40
 	jr c, VoiceSlot_ClearAll_SubLoop1
 
+; 0x0451A4 = 0xFF, pop XIZ, inc 6,XSP, ret.
 VoiceSlot_ClearAll_Epilogue:
 	stib_da 0x0451a4, 0xff
 	pop xiz
@@ -32135,30 +36917,45 @@ VoiceSlot_ClearAll_Epilogue:
 ;        Checks PH.3 hardware pin for configuration variant
 ;        Then calls DSP reset and audio initialization routines
 ; ----------------------------------------------------------------------------
+; Cold-start of the whole audio-side state.  Already named in the reference file.
+; Zeroes 0x26 bytes at 0x041342 (the global audio flags), then 0x1D26 bytes at 0x041368 --
+; note that is only 26 x 0x11F = 0x1D26 exactly, i.e. the ENTIRE 26-entry part table.
+; Resets the MIDI ring: (0x2B11) count = 0, (0x2B0F) read = 0, (0x2B0D) write = 0.
+; Reads SFR 0x44 bit 3 (a hardware strap) and sets or clears bit 3 of the global word
+; 0x041343 accordingly.
+; Installs three long pointers: (0x045310) and (0x045314) = 0x00050000, (0x045318) = 0x0A0000.
+; Then: DSP_Config_Init (0x02DFA8), DSP_Reset (0x0360A7), ToneGen_EmitCommandLoop (0x021ECB),
+; DSP_ResetWriteBufferPtr (0x03555F), VoiceSlot_ClearAll, (0x041342) = 0, and tail-jumps to
+; Voice_ResetAllControllers (0x02A8F3).
 DSP_System_Init:	; 034C45h
 	lds bc, 0
 	lda_24 xwa, 0x041342                  ; DSP state buffer 1
 	cp bc, 0x26	; 38 bytes
 	jr nc, DSP_System_Init_Clear2
 
+; Zero-fill loop over 0x041342..0x041367 (0x26 bytes of global audio flags).
 DSP_System_Init_Clear1:
 	stib_dsp 0xE0, 0x00	; Clear byte
 	inc 1, bc
 	cp bc, 0x26
 	jr c, DSP_System_Init_Clear1
 
+; Head of the part-table zero-fill (0x1D26 bytes at 0x041368).
 DSP_System_Init_Clear2:
 	lds bc, 0
 	lda_24 xwa, 0x041368                  ; DSP state buffer 2
 	cp bc, 0x1D26	; 7462 bytes
 	jr nc, DSP_System_Init_Vars
 
+; Body of the part-table zero-fill.
 DSP_System_Init_Clear2_Loop:
 	stib_dsp 0xE0, 0x00
 	inc 1, bc
 	cp bc, 0x1D26
 	jr c, DSP_System_Init_Clear2_Loop
 
+; ★ Resets the MIDI event ring (write 0x2B0D, read 0x2B0F, count 0x2B11 all zero) and reads
+; the SFR-0x44 bit-3 strap.
 DSP_System_Init_Vars:
 	stdi16 11025, 0	; Clear DSP control variable
 	lds wa, 0
@@ -32169,9 +36966,11 @@ DSP_System_Init_Vars:
 	anddi16_24 267075, 65527	; Clear bit 3 of DSP config
 	jr DSP_System_Init_Continue
 
+; Strap clear: sets bit 3 of the global word at 0x041343.
 DSP_System_Init_SetBit:
 	ordi16_24 267075, 8	; Set bit 3 of DSP config
 
+; Installs the three long pointers and runs the six-call init chain.
 DSP_System_Init_Continue:
 	ld xwa, 0x50000
 	stl_da 0x045310, xwa
@@ -32187,9 +36986,19 @@ DSP_System_Init_Continue:
 	call VoiceSlot_ClearAll
 	stib_da 0x041342, 0x00
 	jp Voice_ResetAllControllers
+; A stray one-byte `ret` immediately after DSP_System_Init's tail-jump.  No caller and no
+; table reference anywhere in the authoritative source -- alignment padding or dead code.
 Audio_Process_Init_Data:
 	.byte 0x0e
 
+; The per-tick audio housekeeping alternator.  Already named in the reference file.
+; Reads the global byte 0x041342 and runs ONE of two halves per call, then flips every bit of
+; 0x041342 with `xor (0x041342),0xFF` so the next call takes the other half:
+;   0x041342 == 0 : Voice_ScanAndCancelNoteOff (0x027A46) + DSP_SlotState_DisplayRestore
+;                   (0x03611E)
+;   otherwise     : AudioTick_UpdateVoice (0x02219F) + Voice_UpdateAllNoteStates (0x027AC4)
+; Note the toggle is an XOR with 0xFF, not an increment, so the alternation only holds while
+; nothing else writes 0x041342.  DSP_System_Init sets it back to 0.
 Audio_Process_Init:
 	cpib_da 0x041342, 0x00
 	jr nz, Audio_Process_Init_BranchA
@@ -32197,10 +37006,12 @@ Audio_Process_Init:
 	call DSP_SlotState_DisplayRestore
 	jr Audio_Process_Init_BranchB
 
+; The "0x041342 != 0" half: AudioTick_UpdateVoice + Voice_UpdateAllNoteStates.
 Audio_Process_Init_BranchA:
 	call AudioTick_UpdateVoice
 	call Voice_UpdateAllNoteStates
 
+; The shared tail: xor (0x041342),0xFF.
 Audio_Process_Init_BranchB:
 	xordi8_24 267074, 255
 	ret
@@ -32217,6 +37028,13 @@ Audio_Process_Init_BranchB:
 ; Notes: Uses 12-bit circular index (0xFFF mask = 4KB buffer)
 ;        Decrements byte count after successful read
 ; ===========================================================================
+; Pops one byte from a ring buffer.  Already named in the reference file.
+; Input XWA = ring descriptor base (always 0x2B0D in practice: +0x00 write index, +0x02 read
+; index, +0x04 byte count, +0x06 payload).
+; Returns HL = the byte (0..0xFF) or 0xFFFF when the count is zero -- callers test the SIGN of
+; HL, not equality, so any value >= 0x8000 reads as "empty".
+; Side effects: increments the read index (masked to 0x0FFF, so a 4096-byte payload) and
+; decrements the count.  32 call sites, all in MIDI_Dispatch and RingBuf_SkipToEnd.
 RingBuf_ReadByte:
 	cpw (xwa + 4), 0x0
 	jr z, RingBuf_ReadByte_Empty
@@ -32234,15 +37052,27 @@ RingBuf_ReadByte:
 	decm 1, (xwa + 4)
 	jr RingBuf_ReadByte_Return
 
+; Count == 0: HL = 0xFFFF.
 RingBuf_ReadByte_Empty:
 	ldw hl, 0xFFFF
 
+; Shared `ret`.
 RingBuf_ReadByte_Return:
 	ret
 
+; A two-instruction convenience wrapper: `lda XWA,0x2B0D` then fall into RINGBUF_READBYTE,
+; i.e. "read one byte from THE MIDI ring".  It has no caller in the authoritative source.
+; The ELF name RingBuf_ReadByte_Data implies data; it is code.
 RingBuf_ReadByte_Data:
 	.byte 0xf1, 0x0d, 0x2b, 0x30, 0x68, 0xd1
 
+; Drains a ring buffer completely and then RESETS THE WRITE INDEX to the read index.
+; Input XWA = ring descriptor base.  Calls RINGBUF_READBYTE until it returns a negative value,
+; then does (XIZ+0x00) = (XIZ+0x02), i.e. write := read.
+; ★ This is the MIDI parser's error recovery: every "message truncated" branch of
+; MIDI_Dispatch jumps here, so ONE malformed or short event discards the ENTIRE ring content
+; (up to 4096 bytes of queued MIDI), not just the bad message.  8 call sites, all in
+; MIDI_Dispatch.
 RingBuf_SkipToEnd:
 	push xiz
 	ld xiz, xwa
@@ -32251,12 +37081,14 @@ RingBuf_SkipToEnd:
 	cps hl, 0
 	jr lt, RingBuf_SkipToEnd_Epilogue
 
+; Drain loop; exits when RINGBUF_READBYTE returns negative.
 RingBuf_SkipToEnd_Loop:
 	ld xwa, xiz
 	calr RingBuf_ReadByte
 	cps hl, 0
 	jr ge, RingBuf_SkipToEnd_Loop
 
+; write index := read index, pop XIZ, ret.
 RingBuf_SkipToEnd_Epilogue:
 	ld wa, (xiz + 2)
 	ld (xiz), wa
@@ -32268,6 +37100,13 @@ RingBuf_SkipToEnd_Epilogue:
 ;        C = byte to write
 ; Buffer layout: [0]=write_ptr(16), [4]=count(16), [6+]=data area
 ; Write pointer wraps at 4095 (AND 0x0FFF).
+; ★ CODE, not const data.  The mirror image of RINGBUF_READBYTE: input XWA = ring descriptor
+; base, C = the byte.  Stores C at payload[write index], increments the write index (masked
+; 0x0FFF) and increments the count at +0x04.
+; It performs NO capacity check -- nothing stops the count exceeding 0x1000.
+; No caller anywhere in the authoritative source; Audio_CmdHandler_00_1F open-codes the same
+; sequence against the fixed 0x2B0D ring instead.  Proposed rename because the existing name
+; asserts "const data"; see [UNCERTAIN] if you would rather keep it.
 Audio_CmdHandler_ConstData:
 	ld	xde, xwa
 	ld	hl, (xde)
@@ -32293,11 +37132,20 @@ Audio_CmdHandler_ConstData:
 ;        Uses 12-bit index (0xFFF mask = 4KB buffer capacity)
 ;        Called from CMD_DISPATCH_TABLE for commands 0x00-0x1F
 ; ===========================================================================
+; Inter-CPU command handler for command classes 0x00..0x1F: copies N bytes from the main CPU's
+; message body into the MIDI event ring.  Already named in the reference file.
+; Inputs: stack (XSP+0x04) = DE = byte count, (XSP+0x06) = long pointer to the source bytes.
+; Per byte it open-codes the ring push against the fixed globals: write index at 0x2B0D
+; (post-incremented, masked 0x0FFF), payload base 0x2B13, count at 0x2B11 (incremented).
+; Returns HL = 0.  6 call sites, all in the inter-CPU command dispatch table.
+; ★ There is NO check that the count at 0x2B11 stays below 0x1000, and no check that the write
+; index has not lapped the read index.  See the note under MIDI_Dispatch.
 Audio_CmdHandler_00_1F:
 	ld de, (xsp + 4)
 	cps de, 0
 	jr z, Audio_CmdHandler_00_1F_Done
 
+; Per-byte body: ring push plus source-pointer advance.
 Audio_CmdHandler_00_1F_Loop:
 	lda_d16 xwa, 11021
 	ld bc, (xwa)
@@ -32316,6 +37164,7 @@ Audio_CmdHandler_00_1F_Loop:
 	cps de, 0
 	jr nz, Audio_CmdHandler_00_1F_Loop
 
+; HL = 0, ret.
 Audio_CmdHandler_00_1F_Done:
 	lds hl, 0
 	ret
@@ -32334,6 +37183,29 @@ Audio_CmdHandler_00_1F_Done:
 ;        0xF0 = System Message -> Voice_SystemMsg
 ;        Loops until buffer is empty (RingBuf_ReadByte returns 0xFFFF)
 ; ===========================================================================
+; The MIDI event dispatcher.  Already named in the reference file.  Called once per pass of
+; Audio_Main_Loop (0x01FAE6) via the unconditional call at 0x01FB2F.
+; It first publishes the ring's current byte count to 0x27E7 via RingBuf_SetOffsetHi
+; (0x021031) -- that global is the MIDI BACKLOG GAUGE, see the findings note below -- then
+; loops: read one byte; if it is negative the ring is empty and the routine returns; otherwise
+; treat it as a status byte and switch on its top nibble.
+; Each arm first checks that the ring still holds enough bytes for a complete event (5 for
+; note-off, 3 for note-on/CC/channel-pressure/pitch-bend/system, 4 for program change); if not
+; it calls RINGBUF_SKIPTOEND, which throws away the whole ring.  Otherwise it copies the fixed
+; number of following bytes into that class's 6-byte staging buffer and calls the handler:
+;   0x80 note-off        -> 0x2AE8 / 0x2AEE (extended)  -> Voice_ParamFinalize (0x031A72)
+;   0x90 note-on         -> 0x2AF4  -> Voice_NoteOn (0x02CF97) or Voice_Poly_NoteOn (0x0356C9)
+;                           when staging byte +0x01 >= 0xF0
+;   0xB0 control change  -> 0x2AF8  -> Voice_CtrlChange (0x02A282)
+;   0xC0 program change  -> 0x2AFC  -> Voice_ProgChange (0x034A4A)
+;   0xD0 channel press.  -> 0x2B01  -> Voice_ChanPressure (0x02A4EA)
+;   0xE0 pitch bend      -> 0x2B05  -> Voice_PitchBend (0x02A5E6)
+;   0xF0 system          -> 0x2B09  -> Voice_SystemMsg (0x02A7AF)
+;   anything else        -> RINGBUF_SKIPTOEND
+; Note the events in the ring are FIXED-WIDTH internal records (status + 3..5 bytes), not raw
+; MIDI wire bytes; running status is never handled.
+; ★ THE DRAIN LOOP IS UNBOUNDED.  There is no iteration cap and no "stop after N events" check;
+; MIDI_Dispatch returns only when the count at 0x2B11 reaches zero.  See findings.
 MIDI_Dispatch:
 	push xiz
 	lda_d16 xiz, 11021
@@ -32341,6 +37213,7 @@ MIDI_Dispatch:
 	call RingBuf_SetOffsetHi
 	jrl MIDI_Dispatch_NextByte
 
+; Status-byte switch (top nibble), tried from 0xF0 downwards.
 MIDI_Dispatch_ParseStatus:
 	ld wa, hl
 	and wa, 0xF0
@@ -32382,6 +37255,7 @@ MIDI_Dispatch_ParseStatus:
 	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
+; Note-off variant taken when bit 3 of the status byte is set: 6-byte record staged at 0x2AEE.
 MIDI_Status_NoteOn_Extended:
 	stb_d8 10990, l
 	ld xwa, xiz
@@ -32403,11 +37277,13 @@ MIDI_Status_NoteOn_Extended:
 	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
+; Fewer than 5 bytes left for a note-off: discard the whole ring via RINGBUF_SKIPTOEND.
 MIDI_Status_Incomplete:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jrl MIDI_Dispatch_NextByte
 
+; 0x90: stage 4 bytes at 0x2AF4; staging byte +0x01 >= 0xF0 selects the poly handler.
 MIDI_Status_NoteOn:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_NoteOn_Skip
@@ -32428,16 +37304,19 @@ MIDI_Status_NoteOn:
 	call Voice_NoteOn
 	jrl MIDI_Dispatch_Exit
 
+; Voice_Poly_NoteOn (0x0356C9) path.
 MIDI_Status_NoteOn_Poly:
 	lda_d16 xwa, 10996
 	call Voice_Poly_NoteOn
 	jrl MIDI_Dispatch_Exit
 
+; Truncated note-on: discard the ring.
 MIDI_Status_NoteOn_Skip:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jrl MIDI_Dispatch_NextByte
 
+; 0xB0: stage 4 bytes at 0x2AF8, call Voice_CtrlChange.
 MIDI_Status_CtrlChange:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_CtrlChange_Skip
@@ -32455,11 +37334,13 @@ MIDI_Status_CtrlChange:
 	call Voice_CtrlChange
 	jrl MIDI_Dispatch_Exit
 
+; Truncated control change: discard the ring.
 MIDI_Status_CtrlChange_Skip:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jrl MIDI_Dispatch_NextByte
 
+; 0xC0: stage 5 bytes at 0x2AFC, call Voice_ProgChange.
 MIDI_Status_ProgChange:
 	cpw (xiz + 4), 0x4
 	jr c, MIDI_Status_ProgChange_Skip
@@ -32480,11 +37361,13 @@ MIDI_Status_ProgChange:
 	call Voice_ProgChange
 	jrl MIDI_Dispatch_Exit
 
+; Truncated program change: discard the ring.
 MIDI_Status_ProgChange_Skip:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jrl MIDI_Dispatch_NextByte
 
+; 0xD0: stage 4 bytes at 0x2B01, call Voice_ChanPressure.
 MIDI_Status_ChanPressure:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_ChanPressure_Skip
@@ -32502,11 +37385,13 @@ MIDI_Status_ChanPressure:
 	call Voice_ChanPressure
 	jrl MIDI_Dispatch_Exit
 
+; Truncated channel pressure: discard the ring.
 MIDI_Status_ChanPressure_Skip:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jr MIDI_Dispatch_NextByte
 
+; 0xE0: stage 4 bytes at 0x2B05, call Voice_PitchBend.
 MIDI_Status_PitchBend:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_PitchBend_Skip
@@ -32524,11 +37409,13 @@ MIDI_Status_PitchBend:
 	call Voice_PitchBend
 	jr MIDI_Dispatch_Exit
 
+; Truncated pitch bend: discard the ring.
 MIDI_Status_PitchBend_Skip:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jr MIDI_Dispatch_NextByte
 
+; 0xF0: stage 4 bytes at 0x2B09, call Voice_SystemMsg.
 MIDI_Status_System:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_System_Skip
@@ -32546,15 +37433,18 @@ MIDI_Status_System:
 	call Voice_SystemMsg
 	jr MIDI_Dispatch_Exit
 
+; Truncated system message: discard the ring.
 MIDI_Status_System_Skip:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 	jr MIDI_Dispatch_NextByte
 
+; Status byte with an unrecognised top nibble (< 0x80): discard the ring.
 MIDI_Status_Unknown:
 	ld xwa, xiz
 	calr RingBuf_SkipToEnd
 
+; ★ The unbounded drain back-edge: read one byte, and if it is non-negative go round again.
 MIDI_Dispatch_NextByte:
 	ld xwa, xiz
 	calr RingBuf_ReadByte
@@ -32562,10 +37452,16 @@ MIDI_Dispatch_NextByte:
 	cps wa, 0
 	jrl ge, MIDI_Dispatch_ParseStatus
 
+; pop XIZ, ret.
 MIDI_Dispatch_Exit:
 	pop xiz
 	ret
 
+; Computes the checksum word that trails the DSP1 image before it is DMAed out.
+; No arguments.  Sums 0x24B8 words (0x4970 / 2) starting at (0x04531C) + 0x10 and returns
+; HL = the one's complement (`cpl`) of the 16-bit total.
+; Every caller immediately stores it at (0x04531C) + 0x72A8, i.e. the last word of the image.
+; 4 call sites: DSP_WriteAlgoBuffer_Epilogue and three inside DSP_Reinit_VoiceSlots.
 DSP_WriteCount_Compute:
 	ldw bc, 0x4970
 	srl bc, 1
@@ -32575,16 +37471,27 @@ DSP_WriteCount_Compute:
 	cps bc, 0
 	jr z, DSP_WriteCount_Next
 
+; The `add DE,(XWA+)` / `djnz` accumulation loop.
 DSP_WriteCount_Loop:
 	add_spiw DE, 0xE1
 	djnz xbc, DSP_WriteCount_Loop
 
+; HL = ~sum.
 DSP_WriteCount_Next:
 	ld wa, de
 	cpl wa
 	ld hl, wa
 	ret
 
+; Builds one 0x50-byte DSP channel record inside the DSP1 image.
+; Inputs: XWA = source parameter block, BC = channel index (0..0x7F).
+; Destination = (0x04531C) + 0x4AA7 + 0x50*channel  (the 0x50 comes from ((ch*4)+ch)*16).
+; Steps: VoiceParam_WriteDispatchHelper (0x032AE0) with mask 0x00FF produces a source pointer;
+; 0x1D words are block-copied into the record; then VoiceField_ExtractAndWrite (0x032682) is
+; run twice (selectors 0 and 1) and its result block-copied to record+0x3A and record+0x45
+; (5 words + 1 byte each); finally the flag byte at record+0x12 and record+0x27 gets
+; `and 0xCF` / `set 4` -- i.e. its 2-bit mode field is forced to 1.
+; Callers: DSP_FlushAllSlots_Loop2 and two sites in DSP_Reinit_VoiceSlots.
 DSP_InitChannelSlot:
 	dec 6, xsp
 	push xiz
@@ -32676,6 +37583,14 @@ DSP_InitChannelSlot:
 	inc 6, xsp
 	ret
 
+; Rebuilds the entire DSP1 image and ships it to the main CPU.
+; Inputs: WA and BC identify the voice buffer (passed to DSP_LookupVoiceBuffer, 0x03206F).
+; Steps: 0x93 words + 1 byte are copied from the located buffer to (0x04531C)+0x4980; then for
+; all 128 voices, bit 5 of the word at (0x04531C)+0x49A7+2*v is cleared and immediately set
+; again (a deliberate toggle, presumably an edge the DSP latches); then DSP_InitChannelSlot is
+; run for all 128 channels; then 16 bytes are copied from the constant table at 0x0120F4 to
+; (0x04531C)+0x4980..+0x498F; finally InterCPU_E1_DMA_Transfer(0x007800, 0x72AA, 0x001E0000).
+; Sole direct caller: DSP_Reinit_VoiceSlots_OuterNext (0x03546B).
 DSP_FlushAllSlots:
 	dec 4, xsp
 	pushw iz
@@ -32694,6 +37609,7 @@ DSP_FlushAllSlots:
 	cp iz, 0x80
 	jr nc, DSP_FlushAllSlots_Loop1Next
 
+; The 128-voice clear-then-set of bit 5 at (0x04531C)+0x49A7+2*v.
 DSP_FlushAllSlots_Loop1:
 	ld wa, iz
 	extz xwa
@@ -32711,11 +37627,13 @@ DSP_FlushAllSlots_Loop1:
 	cp iz, 0x80
 	jr c, DSP_FlushAllSlots_Loop1
 
+; Head of the 128-channel DSP_InitChannelSlot loop.
 DSP_FlushAllSlots_Loop1Next:
 	lds iz, 0
 	cp iz, 0x80
 	jr nc, DSP_FlushAllSlots_Loop2Next
 
+; Body: DSP_InitChannelSlot(buffer, channel).
 DSP_FlushAllSlots_Loop2:
 	ld xwa, (xsp + 2)
 	ld bc, iz
@@ -32724,11 +37642,13 @@ DSP_FlushAllSlots_Loop2:
 	cp iz, 0x80
 	jr c, DSP_FlushAllSlots_Loop2
 
+; Head of the 16-byte constant copy from 0x0120F4.
 DSP_FlushAllSlots_Loop2Next:
 	lds iz, 0
 	cp iz, 0x10
 	jr nc, DSP_FlushAllSlots_Loop3Next
 
+; Body of the 16-byte constant copy.
 DSP_FlushAllSlots_Loop3:
 	ld wa, iz
 	extz xwa
@@ -32745,6 +37665,7 @@ DSP_FlushAllSlots_Loop3:
 	cp iz, 0x10
 	jr c, DSP_FlushAllSlots_Loop3
 
+; ★ InterCPU_E1_DMA_Transfer(src 0x007800, len 0x72AA, dst 0x001E0000) -- the sub->main push.
 DSP_FlushAllSlots_Loop3Next:
 	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
@@ -32754,6 +37675,11 @@ DSP_FlushAllSlots_Loop3Next:
 	inc 4, xsp
 	ret
 
+; ★ CODE, not data (the ELF calls it DSP_FlushAllSlots_Data).
+; Input A = part index.  Loads WA = part+0x19 (0x041381) and BC = part+0x1A (0x041382) -- the
+; two program-change bytes stored by Voice_ProgChange -- and tail-jumps into DSP_FlushAllSlots.
+; So this is "flush the DSP using the program currently assigned to this part".
+; It has no caller in the authoritative source; either dead or reached from the boot ROM.
 DSP_FlushAllSlots_Data:
 	.byte 0xc9, 0x8b, 0xd9, 0x12, 0xd9, 0x09, 0x1f, 0x01
 	.byte 0xf2, 0x81, 0x13, 0x04, 0x32, 0xc3, 0x07, 0xe8
@@ -32762,6 +37688,11 @@ DSP_FlushAllSlots_Data:
 	.byte 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xc9, 0x8b
 	.byte 0xd9, 0x12, 0xda, 0x88, 0x78, 0x18, 0xff
 
+; Resolves one DSP1 microprogram/parameter stream out of the blob whose base is the constant
+; 0x00050000 (also installed at 0x045310/0x045314 by DSP_System_Init).
+; Input WA = stream index.  Reads a bias word from base+0x88, adds it to WA, then indexes the
+; 32-bit table at base + (word at base+0x08) by 4*index and returns XHL = base + entry,
+; XBC = base.  3 call sites, all in DSP_Reinit_VoiceSlots.
 DSP1_ResolveStreamPtr:
 	ld xhl, 0x50000
 	ld_sril XBC, (xhl + 0x0088)
@@ -32777,11 +37708,14 @@ DSP1_ResolveStreamPtr:
 	add xhl, xwa
 	ret
 
+; Copies the 16 default bytes at 0x0120E3 to the first 16 bytes of the DSP1 image at
+; (0x04531C).  No arguments.  Sole caller: DSP_Reinit_VoiceSlots_Loop3A (0x035427).
 DSP_ResetAlgoDefaults:
 	lds hl, 0
 	cp hl, 0x10
 	ret nc
 
+; The 16-byte copy loop.
 DSP_ResetAlgoDefaults_Loop:
 	ld wa, hl
 	extz xwa
@@ -32798,6 +37732,15 @@ DSP_ResetAlgoDefaults_Loop:
 	jr c, DSP_ResetAlgoDefaults_Loop
 	ret
 
+; Loads one part's effect algorithm into one DSP1 slot and ships the image.
+; Inputs: A = part index, C = DSP slot index.  Returns L = 0 on success, 2 on rejection.
+; Rejects (L = 2) if A >= 0x1A or C >= 0x28 -- 26 parts, 40 DSP slots.
+; Otherwise it block-copies 0xD5 words from the part's descriptor (part+0x06 dereferenced) to
+; (0x04531C) + 0x10 + 0x01D6*slot, then for each of the four output slots copies 5 words + 1
+; byte from the pointer at output-slot+0x04 to slotbase + 0x0B*i + 0x01BA, and forces the
+; 2-bit mode field of the byte at slotbase + 0x51*i + 0x79 to 1 unless it is already 3.
+; Finally: DSP_WriteCount_Compute, store the checksum at (0x04531C)+0x72A8, and
+; InterCPU_E1_DMA_Transfer(0x007800, 0x72AA, 0x001E0000).
 DSP_WriteAlgoBuffer:
 	push xiz
 	ld e, c
@@ -32806,10 +37749,12 @@ DSP_WriteAlgoBuffer:
 	cp e, 0x28
 	jr c, DSP_WriteAlgoBuffer_PathB
 
+; Rejection path: L = 2, straight to the exit (no DMA, no image change).
 DSP_WriteAlgoBuffer_PathA:
 	ldb l, 0x2
 	jrl DSP_WriteAlgoBuffer_Data
 
+; Accepted: the 0xD5-word descriptor copy into the slot's algorithm block.
 DSP_WriteAlgoBuffer_PathB:
 	ld c, e
 	extz bc
@@ -32829,6 +37774,7 @@ DSP_WriteAlgoBuffer_PathB:
 	cps l, 4
 	jrl nc, DSP_WriteAlgoBuffer_Epilogue
 
+; Per-output-slot body: the 5-word+1-byte copy and the mode-field fixup.
 DSP_WriteAlgoBuffer_Loop:
 	ld c, l
 	extz bc
@@ -32877,11 +37823,13 @@ DSP_WriteAlgoBuffer_Loop:
 	andmi8 (xix), 0xCF
 	setm 4, (xix)
 
+; Output-slot loop increment and back-edge (i < 4).
 DSP_WriteAlgoBuffer_LoopNext:
 	inc 1, l
 	cps l, 4
 	jrl c, DSP_WriteAlgoBuffer_Loop
 
+; ★ Checksum, store at image+0x72A8, then InterCPU_E1_DMA_Transfer -- the sub->main push.
 DSP_WriteAlgoBuffer_Epilogue:
 	calr DSP_WriteCount_Compute
 	ldl_da xwa, 0x04531c
@@ -32892,10 +37840,22 @@ DSP_WriteAlgoBuffer_Epilogue:
 	call InterCPU_E1_DMA_Transfer
 	ldb l, 0x0
 
+; Not data: the shared `pop XIZ / ret` exit, reached from the rejection path by `jrl`.
 DSP_WriteAlgoBuffer_Data:
 	pop xiz
 	ret
 
+; The general "re-stage part of the DSP1 image and push it" entry.  Inputs A and C are a
+; two-level selector; every path ends at the same DMA push.
+;   A < 0x40 and C != 0xFF : re-stage the single stream (A*0x14 + C)
+;   A < 0x40 and C == 0xFF : re-stage the 0x14 streams A*0x14 .. A*0x14+0x13
+;   A == 0xFF              : DSP_ResetAlgoDefaults, re-stage streams 0..0x27, then
+;                            DSP_FlushAllSlots(0, 0x40) -- the full rebuild
+;   otherwise, C != 0xFF   : DSP_InitChannelSlot for channel C only
+;   otherwise, C == 0xFF   : DSP_InitChannelSlot for all 128 channels
+; Re-staging one stream = DSP1_ResolveStreamPtr(index) then a 0xD5-word copy to
+; (0x04531C) + 0x10 + 0x01D6*index.
+; All paths converge on DSP_WriteCount_Compute + the checksum store + the DMA push.
 DSP_Reinit_VoiceSlots:
 	dec 4, xsp
 	push xiz
@@ -32924,6 +37884,7 @@ DSP_Reinit_VoiceSlots:
 	ldirw
 	jr DSP_Reinit_VoiceSlots_Loop2
 
+; C == 0xFF: set up the 0x14-stream range for part A.
 DSP_Reinit_VoiceSlots_Loop1:
 	ldb_erp A, 0xF8
 	extz iz
@@ -32937,6 +37898,7 @@ DSP_Reinit_VoiceSlots_Loop1:
 	cp wa, bc
 	jr nc, DSP_Reinit_VoiceSlots_Loop2
 
+; Body: resolve one stream and copy 0xD5 words into its slot.
 DSP_Reinit_VoiceSlots_Loop1Next:
 	stw_erp WA, 0xFA
 	calr DSP1_ResolveStreamPtr
@@ -32959,12 +37921,14 @@ DSP_Reinit_VoiceSlots_Loop1Next:
 	cp wa, bc
 	jr c, DSP_Reinit_VoiceSlots_Loop1Next
 
+; Checksum + store, then jump to the DMA flush.
 DSP_Reinit_VoiceSlots_Loop2:
 	calr DSP_WriteCount_Compute
 	ldl_da xwa, 0x04531c
 	stw_dri HL, 0xE1, 0xA8, 0x72
 	jrl DSP_Reinit_VoiceSlots_DMAFlush
 
+; A >= 0x40 entry: distinguishes the A == 0xFF full rebuild from the channel-slot paths.
 DSP_Reinit_VoiceSlots_Loop2A:
 	cp a, 0xFF
 	jr z, DSP_Reinit_VoiceSlots_Loop3A
@@ -32976,11 +37940,13 @@ DSP_Reinit_VoiceSlots_Loop2A:
 	calr DSP_InitChannelSlot
 	jr DSP_Reinit_VoiceSlots_Loop3
 
+; C == 0xFF: head of the 128-channel DSP_InitChannelSlot loop.
 DSP_Reinit_VoiceSlots_Loop2B:
 	ldw_erp IZ, 0xFA
 	cp_erpw 0xFA, 0x80, 0x00
 	jr nc, DSP_Reinit_VoiceSlots_Loop3
 
+; Body of the 128-channel loop.
 DSP_Reinit_VoiceSlots_Loop2Next:
 	ldl_da xwa, 0x04531c
 	stb_dri W, 0xE1, 0x80, 0x49
@@ -32990,18 +37956,21 @@ DSP_Reinit_VoiceSlots_Loop2Next:
 	cp_erpw 0xFA, 0x80, 0x00
 	jr c, DSP_Reinit_VoiceSlots_Loop2Next
 
+; Checksum + store for the channel-slot paths.
 DSP_Reinit_VoiceSlots_Loop3:
 	calr DSP_WriteCount_Compute
 	ldl_da xwa, 0x04531c
 	stw_dri HL, 0xE1, 0xA8, 0x72
 	jr DSP_Reinit_VoiceSlots_DMAFlush
 
+; A == 0xFF full rebuild: DSP_ResetAlgoDefaults then the 0x28-stream re-stage loop.
 DSP_Reinit_VoiceSlots_Loop3A:
 	calr DSP_ResetAlgoDefaults
 	lds iz, 0
 	cp iz, 0x28
 	jr nc, DSP_Reinit_VoiceSlots_OuterNext
 
+; Body of the 0x28-stream re-stage loop.
 DSP_Reinit_VoiceSlots_Loop3Next:
 	ld wa, iz
 	calr DSP1_ResolveStreamPtr
@@ -33021,6 +37990,7 @@ DSP_Reinit_VoiceSlots_Loop3Next:
 	cp iz, 0x28
 	jr c, DSP_Reinit_VoiceSlots_Loop3Next
 
+; Full-rebuild tail: DSP_FlushAllSlots(0, 0x40), then checksum + store.
 DSP_Reinit_VoiceSlots_OuterNext:
 	lds wa, 0
 	ldw bc, 0x40
@@ -33029,6 +37999,7 @@ DSP_Reinit_VoiceSlots_OuterNext:
 	ldl_da xwa, 0x04531c
 	stw_dri HL, 0xE1, 0xA8, 0x72
 
+; ★ The common exit: InterCPU_E1_DMA_Transfer(0x007800, 0x72AA, 0x001E0000).
 DSP_Reinit_VoiceSlots_DMAFlush:
 	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
@@ -33038,12 +38009,21 @@ DSP_Reinit_VoiceSlots_DMAFlush:
 	inc 4, xsp
 	ret
 
+; Scans all 26 parts and acts on the program byte at part+0x1A (0x041382).
+; Only the head of the scan is inside this region: it compares part+0x1A against 0x10 and 0x50
+; and branches to the per-part body at 0x0354CA (just past the region boundary) when either
+; matches, otherwise to the loop-increment at 0x035551.  3 call sites outside the region.
+; The 0x10 / 0x50 constants are program-byte class markers, matching the two "voice active"
+; encodings used by Voice_ProgChange.
 DSP_VoiceState_Dispatch:
 	pushw_erp 0xFA
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
 	jrl nc, DSP_VoiceState_Dispatch_Epilogue
 
+; Per-part test of part+0x1A against 0x10 then 0x50.  The rest of the routine (the
+; DSP_VoiceState_Dispatch_ActiveVoice body at 0x0354CA and the loop tail at 0x035551) lies
+; beyond 0x0354C9 and belongs to the next region.
 DSP_VoiceState_Dispatch_Scan:
 	stb_erp A, 0xFB
 	extz wa
@@ -33058,6 +38038,11 @@ DSP_VoiceState_Dispatch_Scan:
 	cpib_sri 0x07, 0xE4, 0xE0, 0x50
 	jrl nz, DSP_VoiceState_Dispatch_LoopNext
 
+; Body of DSP_VoiceState_Dispatch, whose entry (0x035497) is just below this region. For MIDI
+; part `n` (0..0x19, stride 0x11F from the 0x041368 part table) whose byte at +0x1A is 0x10 or
+; 0x50, calls VoiceInit_Dispatcher(WA=n, BC=part[+0x19], DE=part[+0x1A]), then switches on
+; bits 7:6 of tonerec[+0x10] (tonerec = the long at part+0x06): 0x80 or 0 -> next part,
+; 0x40 -> SubPathB, 0xC0 -> SubPathA.
 DSP_VoiceState_Dispatch_ActiveVoice:
 	stb_erp A, 0xFB
 	ld l, a
@@ -33095,12 +38080,14 @@ DSP_VoiceState_Dispatch_ActiveVoice:
 	cps a, 0
 	jr nz, DSP_VoiceState_Dispatch_LoopNext
 
+; tonerec type 0xC0: call VoiceSlot_FullInit(WA = part index), then continue the scan.
 DSP_VoiceState_Dispatch_SubPathA:
 	stb_erp A, 0xFB
 	extz wa
 	call VoiceSlot_FullInit
 	jr DSP_VoiceState_Dispatch_LoopNext
 
+; tonerec type 0x40: Voice_PortamentoTargets_SetAll(part) then VoiceSlot_AltInit(part).
 DSP_VoiceState_Dispatch_SubPathB:
 	stb_erp A, 0xFB
 	extz wa
@@ -33109,15 +38096,25 @@ DSP_VoiceState_Dispatch_SubPathB:
 	extz wa
 	call VoiceSlot_AltInit
 
+; ++part; loop back to the scan while part < 0x1A.
 DSP_VoiceState_Dispatch_LoopNext:
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jrl c, DSP_VoiceState_Dispatch_Scan
 
+; pop frame, ret. Callers: DSP_Cmd2B_AlgoSelect's neighbourhood (0x026279), CmdHandler2C
+; sub-commands 4 and 6 (0x035EF0, 0x035F0B).
 DSP_VoiceState_Dispatch_Epilogue:
 	popw_erp 0xFA
 	ret
 
+; Resets the two DSP working-buffer write pointers to 0x007800:
+;   (0x045320) = 0x00007800 ; (0x04531C) = 0x00007800
+; Both are 32-bit. Companions set at boot by DSP_System_Init_Continue: (0x045310) and
+; (0x045314) = 0x00050000, (0x045318) = 0x000A0000. So 0x045310..0x045323 is a block of five
+; longword pointers into the DSP's own address space, of which these two are the ones that
+; get rewound. Called from the audio init path (0x032186), right after DSP_Reset. No
+; hardware touched. No inputs, no outputs.
 DSP_ResetWriteBufferPtr:
 	lda_24 xwa, 0x007800
 	stl_da 0x045320, xwa
@@ -33125,15 +38122,25 @@ DSP_ResetWriteBufferPtr:
 	stl_da 0x04531c, xwa
 	ret
 
+; Bare `ret`. One of three consecutive 1-byte stubs; all three are still referenced by
+; pointer tables elsewhere, so they are placeholders for removed features, not padding.
 DSP_Stub_RetA:
 	ret
 
+; Bare `ret`.
 DSP_Stub_RetB:
 	ret
 
+; Bare `ret`.
 DSP_Stub_RetC:
 	ret
 
+; Square-law velocity -> 12-bit volume curve, computed not tabulated.
+;   HL = ((WA * WA) >> 2) + 0x3F        (mul XBC,WA is a full 16x16->32; only BC is shifted)
+; For the 0..0x7F range the tone generator actually feeds it, that maps 0 -> 0x003F and
+; 0x7F -> 0x0FFF, i.e. exactly the 12-bit full-scale that ToneGen_SetupPercussionVoice
+; hard-codes with `or (0x3B20), 4095`. Entry WA = velocity, exit HL = level. Sole caller
+; ToneGen_SetupPolyVoice, which ORs the result into the staging word at 0x3B20.
 DSP_VelocityToVolume:
 	ld bc, wa
 	mul xbc, xwa
@@ -33142,6 +38149,14 @@ DSP_VelocityToVolume:
 	add hl, 0x3F
 	ret
 
+; Builds the per-note effect-send word that both ToneGen setup routines OR into the staging
+; word at 0x3B22. No inputs; reads two global bytes and returns HL.
+;   HL = 0
+;   if (0x041377) != 0 :  HL |= (0x041377) << 8
+;   if (0x04137A) == 0 :  return HL
+;   HL |= (0x041377)                      <-- reads 0x041377 again, NOT 0x04137A
+; The second load really is from 0x041377 -- verified at byte level, 0x0355A3 is
+; `c2 77 13 04 21`, and both toolchains reproduce it. See [UNCERTAIN].
 DSP_GetEffectRouting:
 	lds hl, 0
 	cpib_da 0x041377, 0x00
@@ -33151,6 +38166,7 @@ DSP_GetEffectRouting:
 	sll wa, 8
 	or hl, wa
 
+; Second half of the above: the low-byte send, gated on 0x04137A.
 DSP_GetEffectRouting_Path:
 	cpib_da 0x04137a, 0x00
 	ret z
@@ -33159,6 +38175,23 @@ DSP_GetEffectRouting_Path:
 	or hl, wa
 	ret
 
+; Note-on for the melodic entries of the auxiliary 8-voice pool. Entry: A = tone-generator
+; voice number (== the pool slot 0..7), C = pool channel 0..5, E = MIDI note, one word of
+; velocity pushed by the caller (this routine ends in `retd 0x2`).
+; Steps:
+;   1. refill the 68-byte staging block 0x3B1C..0x3B5F from the ROM template at 0x012115
+;      (0x22 words, `ldirw` with XIX = destination, XIY = source);
+;   2. note += (byte at 0x012171 + channel); clear bit 7; staging word 0x3B2A = note << 8
+;      with bit 7 set;
+;   3. if (0x012177 + channel) != 0 that byte replaces the caller's velocity;
+;   4. OR DSP_VelocityToVolume(velocity) into staging 0x3B20, and DSP_GetEffectRouting()
+;      into staging 0x3B22;
+;   5. staging 0x3B1E = word from the table at 0x01217D indexed by (note / 12) * 2 -- an
+;      octave-indexed pitch/rate constant;
+;   6. ToneGen_WriteVoiceParams(WA = voice, XBC = 0x3B1C) then
+;      ToneGen_WriteSingleReg(WA = voice, XBC = word at 0x3B1C).
+; Hardware: indirectly the tone generator at 0x100000/0x100002 through the two writers.
+; Reached only through the 6-entry dispatch table at ROM 0x012159 (see [DATA]).
 ToneGen_SetupPolyVoice:
 	dec 4, xsp
 	ld (xsp), e
@@ -33191,6 +38224,7 @@ ToneGen_SetupPolyVoice:
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	ld (xsp + 8), a
 
+; Join point after the optional velocity override; steps 4-6 above.
 ToneGen_SetupPolyVoice_Path:
 	ld a, (xsp + 8)
 	extz wa
@@ -33218,6 +38252,13 @@ ToneGen_SetupPolyVoice_Path:
 	inc 4, xsp
 	retd 0x2
 
+; The percussion variant, dispatch-table entry 1. Entry A = tone-generator voice, E = note,
+; one pushed word (`retd 0x2`). Same template refill into 0x3B1C. Differences from the
+; melodic path: the note is split into octave (note/12, kept in C) and pitch class
+; (note - octave, bit 7 cleared); the pitch class goes into staging 0x3B2A << 8, the octave
+; indexes the word table at 0x012195 which is ORed into staging 0x3B1C; the volume is the
+; fixed full-scale 0xFFF rather than a velocity curve; and staging 0x3B1E takes the single
+; word at 0x01217D instead of an octave-indexed one. Then the same two ToneGen writers.
 ToneGen_SetupPercussionVoice:
 	dec 2, xsp
 	ld (xsp), a
@@ -33257,6 +38298,26 @@ ToneGen_SetupPercussionVoice:
 	inc 2, xsp
 	retd 0x2
 
+; ALREADY NAMED in the reference file -- doc header only, no rename.
+; Handler for internal pseudo-MIDI packets whose status byte is >= 0xF0. Reached from
+; MIDI_Dispatch (0x0323F0 area) with XWA pointing at the 4-byte packet in the MIDI scratch
+; at 0x2AF4: +1 = status (0xF0 | channel), +2 = note, +3 = velocity.
+; The KN5000's own firmware injects such packets: DSP_WriteAlgoInitPreset and
+; DSP_SlotState_DisplayRestore push one of the canned 4-byte messages at ROM 0x0121EB /
+; 0x0121EF / 0x0121F3 (`F0 50 B0 01`, `F0 50 B0 05`, `F0 50 B0 06`) into the MIDI ring via
+; Audio_CmdHandler_00_1F and then call MIDI_Dispatch immediately. So this is the path the
+; DSP subsystem uses to make the tone generator produce its own reference tone.
+; Behaviour:
+;   channel = status & 0xF; if status < 0xF0 return; if channel > 5 force channel = 0
+;   slot = (0x3B13) = ((0x3B13) + 1) & 7        -- pure round robin, the tone generator's
+;                                                  active-voice bitmap is NEVER consulted
+;   velocity = packet[+3] & 0x7F ; note = packet[+2] & 0x7F
+;   if velocity == 0 -> Voice_Poly_NoteOn_ReleasePath (note-off)
+;   else: TG reg 0x21 voice slot <= 0xFF00, TG reg 0x20 voice slot <= 0xFF80, then call
+;         through the 6-entry table at ROM 0x012159 indexed by channel, then mark
+;         (0x3B14 + slot) = note | 0x80.
+; Hardware: writes 0x100000 (address latch) and 0x100002 (data) directly, with the
+; res 7,(P6) / set 7,(P6) address-vs-data strobe and the mandatory settling nops.
 Voice_Poly_NoteOn:
 	push xiz
 	ld e, (xwa + 1)
@@ -33269,6 +38330,7 @@ Voice_Poly_NoteOn:
 	jr ule, Voice_Poly_NoteOn_RoundRobin
 	ldib_erp 0xFB, 0
 
+; Advances the round-robin index at 0x3B13 and extracts note and velocity from the packet.
 Voice_Poly_NoteOn_RoundRobin:
 	ldb_d8 c, 15123
 	inc 1, c
@@ -33293,6 +38355,8 @@ Voice_Poly_NoteOn_RoundRobin:
 	jr __jrt_nop_035727
 __jrt_nop_035727:
 
+; Second half of the note-on register pair: settling nops, then TG reg 0x20 voice slot
+; <= 0xFF80. Despite the existing name it does not search anything.
 Voice_Poly_NoteOn_SlotSearch:
 	nop
 	nop
@@ -33308,6 +38372,9 @@ Voice_Poly_NoteOn_SlotSearch:
 	jr __jrt_nop_035749
 __jrt_nop_035749:
 
+; Calls the per-channel setup routine through the table at ROM 0x012159 (index = channel * 4)
+; with WA = slot, BC = channel, DE = note and velocity pushed, then records the owner byte
+; (0x3B14 + slot) = note | 0x80.
 Voice_Poly_NoteOn_SlotFound:
 	nop
 	nop
@@ -33344,12 +38411,15 @@ Voice_Poly_NoteOn_SlotFound:
 	ld (xde), a
 	jr Voice_Poly_NoteOn_Epilogue
 
+; velocity == 0: set bit 7 of the note byte to form the owner key, then scan slots 0..7.
 Voice_Poly_NoteOn_ReleasePath:
 	set_erpb 0xFA, 0x07
 	ldib_erp 0xFB, 0
 	cp_erpb 0xFB, 0x08
 	jr nc, Voice_Poly_NoteOn_Epilogue
 
+; Compares (0x3B14 + slot) against the owner key; on a miss go to AssignSlot (which is really
+; just "next slot"); on a hit write TG reg 0x21 voice slot <= 0xA200.
 Voice_Poly_NoteOn_ReleaseCheck:
 	stb_erp A, 0xFB
 	extz wa
@@ -33370,6 +38440,7 @@ Voice_Poly_NoteOn_ReleaseCheck:
 	jr __jrt_nop_0357D8
 __jrt_nop_0357D8:
 
+; Second half of the release register pair: TG reg 0x20 voice slot <= 0xA280.
 Voice_Poly_NoteOn_ReleaseNext:
 	nop
 	nop
@@ -33385,6 +38456,8 @@ Voice_Poly_NoteOn_ReleaseNext:
 	jr __jrt_nop_0357F9
 __jrt_nop_0357F9:
 
+; Clears bit 7 of the owner byte (slot now free) and returns. Only ONE slot is ever released
+; per note-off -- the loop exits here, it does not continue scanning for duplicates.
 Voice_Poly_NoteOn_ReleaseDone:
 	nop
 	nop
@@ -33397,15 +38470,20 @@ Voice_Poly_NoteOn_ReleaseDone:
 	resm 7, (xwa)
 	jr Voice_Poly_NoteOn_Epilogue
 
+; ++slot; repeat the release scan while slot < 8. The name is misleading; nothing is assigned.
 Voice_Poly_NoteOn_AssignSlot:
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x08
 	jr c, Voice_Poly_NoteOn_ReleaseCheck
 
+; pop xiz; ret.
 Voice_Poly_NoteOn_Epilogue:
 	pop xiz
 	ret
 
+; (0x4366) = WA. Two instructions. Called only from the top of Audio_Process_DSP to publish
+; the ring byte count sampled at the start of the pass; nothing in this region reads 0x4366
+; back, so it exists for the debugger / for code outside the region.
 DSP_StoreBufferCount:
 	stda16 17254, xwa
 	ret
@@ -33418,6 +38496,12 @@ DSP_StoreBufferCount:
 ; Notes: Clears DSP2 control variables at 0x3B60-0x3B64
 ;        Called during Audio_System_Init after primary DSP initialization
 ; ===========================================================================
+; ALREADY NAMED -- doc header only.
+; Clears the DSP command ring control block: (0x3B64) = 0 (count), (0x3B62) = 0 (read index),
+; (0x3B60) = 0 (write index). Note it does NOT clear the stream-state words 0x4488/0x448A/
+; 0x448C, which is relevant to the wedge described under Audio_Process_DSP. Called once from
+; the boot path (kn5000_subprogram_v142.s:148) after the primary DSP is initialised. The name
+; is a slight misnomer -- the block is the ring for BOTH DSPs' command traffic, not DSP2 state.
 DSP2_Init:
 	stdi16 15204, 0
 	lds wa, 0
@@ -33425,9 +38509,18 @@ DSP2_Init:
 	stda16 15200, xwa
 	ret
 
+; --- 0x03582E-0x03582F  Voice_Poly_NoteOn_Data -- two bytes 0x0E 0x0E
+; Two `ret` opcodes stranded between Voice_Poly_NoteOn's epilogue and DSP_RingBuf_Read.
+; Almost certainly alignment padding produced by the original toolchain (0x0E is `ret`), not
+; a table. Not referenced by anything.
 Voice_Poly_NoteOn_Data:
 	.byte 0x0e, 0x0e
 
+; ALREADY NAMED -- doc header only.
+; Pops one byte from a 2 KB ring. Entry XWA = control block. Exit HL = byte (0..0xFF), or
+; 0xFFFF when the ring is empty -- callers test with a SIGNED compare (`cps hl,0` / `jr lt`),
+; so 0xFFFF is "empty" and any real byte is >= 0. Advances (XWA+2) and decrements (XWA+4);
+; index masked with 0x7FF; data area starts at XWA+6.
 DSP_RingBuf_Read:
 	cpw (xwa + 4), 0x0
 	jr z, DSP_RingBuf_Read_Empty
@@ -33445,17 +38538,29 @@ DSP_RingBuf_Read:
 	decm 1, (xwa + 4)
 	jr DSP_RingBuf_Read_Return
 
+; HL = 0xFFFF.
 DSP_RingBuf_Read_Empty:
 	ldw hl, 0xFFFF
 
+; ret.
 DSP_RingBuf_Read_Return:
 	ret
 
+; --- 0x035859-0x03585E  DSP_RingBuf_Read_Data -- six bytes f1 60 3b 30 68 d1
+; Also not a table. `f1 60 3b 30` is `lda XWA,0x3B60` and `68 xx` is a `jr` -- this is the
+; tail of a routine the linker placed here, or padding that happens to disassemble. Left
+; alone; nothing references it.
 DSP_RingBuf_Read_Data:
 	.byte 0xf1
 	.ascii "`;0h"
 	.byte 0xd1
 
+; ALREADY NAMED -- doc header only.
+; Drains the ring until DSP_RingBuf_Read returns 0xFFFF, then FORCES the read index to equal
+; the write index ((XIZ) = (XIZ+2)) -- i.e. it is a hard resynchronise, not a byte skip: the
+; write index is copied over the ring's index-0 word. Entry XWA = control block, no output.
+; This is the recovery action for every malformed or unhandled message in Audio_Process_DSP.
+; Note the consequence: one bad length byte discards everything currently queued.
 DSP_RingBuf_Skip:
 	push xiz
 	ld xiz, xwa
@@ -33464,12 +38569,14 @@ DSP_RingBuf_Skip:
 	cps hl, 0
 	jr lt, DSP_RingBuf_Skip_Epilogue
 
+; Read-until-empty loop body.
 DSP_RingBuf_Skip_Loop:
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
 	cps hl, 0
 	jr ge, DSP_RingBuf_Skip_Loop
 
+; (XIZ) = (XIZ+2); pop; ret.
 DSP_RingBuf_Skip_Epilogue:
 	ld wa, (xiz + 2)
 	ld (xiz), wa
@@ -33480,6 +38587,10 @@ DSP_RingBuf_Skip_Epilogue:
 ; Entry: XWA = pointer to buffer control block
 ;        C = byte to write
 ; Same as RingBuffer_Write4K but wraps at 2047 (AND 0x07FF).
+; Pushes one byte into a 2 KB ring. Entry XWA = control block, C = byte. Advances (XWA) and
+; increments (XWA+4); index masked with 0x7FF. No caller reaches it by name in this build --
+; Audio_CmdHandler_60_7F has the same code inlined at DSP_RingBuf_Enqueue -- so it is either
+; dead or reached through a pointer table outside this region.
 DSP_RingBuf_Write2K:
 	ld	xde, xwa
 	ld	hl, (xde)
@@ -33493,6 +38604,18 @@ DSP_RingBuf_Write2K:
 	incm	1, (xwa+4)
 	ret
 
+; ALREADY NAMED -- doc header only.
+; Entry 3 of CMD_DISPATCH_TABLE, i.e. every inter-CPU command byte in 0x60..0x7F.
+; Entry (stack, set up by the dispatcher): (XSP+4) = byte count, (XSP+6) = pointer to the
+; bytes received from the main CPU. Exit HL = 0 always.
+; It does two things: it maintains the bulk-stream accounting in 0x4488/0x448A/0x448C, and
+; then unconditionally copies all `count` bytes into the DSP ring at 0x3B60.
+;   (0x448C) == 0  -> CmdHandler60_StreamSizeC : this chunk should be a 32-byte stream header
+;   (0x448C) == 1  -> CmdHandler60_StreamSizeA : accumulate
+;   (0x448C) >= 2  -> IX = 0, then falls into StreamSizeA anyway
+; ★ This routine contains the ONLY two instructions in the whole firmware that can clear
+;   0x448C: `ld (0x448C),0x0000` at 0x0358C7 and at 0x035904. See the wedge note under
+;   Audio_Process_DSP.
 Audio_CmdHandler_60_7F:
 	ld xhl, (xsp + 6)
 	ld de, (xsp + 4)
@@ -33502,6 +38625,8 @@ Audio_CmdHandler_60_7F:
 	jr ule, CmdHandler60_StreamSizeA
 	lds ix, 0
 
+; Accumulate: if (0x448A) + count >= (0x4488) go to StreamSizeB (stream complete), else
+; (0x448A) += count and ++(0x448C), then enqueue.
 CmdHandler60_StreamSizeA:
 	ldw_d16 xwa, 17546
 	add wa, de
@@ -33511,11 +38636,15 @@ CmdHandler60_StreamSizeA:
 	incdi16 1, 17548
 	jr DSP_EnqueueOrReturn
 
+; Stream complete: (0x448A) = 0, (0x448C) = 0, then enqueue. One of the two clear sites.
 CmdHandler60_StreamSizeB:
 	stdi16 17546, 0
 	stdi16 17548, 0
 	jr DSP_EnqueueOrReturn
 
+; Stream header: only accepted when count == 0x20 exactly (otherwise StateReset). Computes
+; (0x4488) = (hdr[5] << 7) + hdr[6] + 8 at 0x0358D5..0x0358EC, then (0x448A) += 32
+; (0x0358F0) and (0x448C) = 1 (0x0358F6), then enqueues.
 CmdHandler60_StreamSizeC:
 	cp de, 0x20
 	jr nz, DSP_CmdHandler_StateReset
@@ -33533,15 +38662,21 @@ CmdHandler60_StreamSizeC:
 	stdi16 17548, 1
 	jr DSP_EnqueueOrReturn
 
+; Malformed opening chunk: (0x448A) = 0, (0x448C) = 0. The other clear site.
 DSP_CmdHandler_StateReset:
 	stdi16 17546, 0
 	stdi16 17548, 0
 
+; IX = 0; if count == 0 return HL = 0, else fall into the enqueue loop.
 DSP_EnqueueOrReturn:
 	lds ix, 0
 	cp ix, de
 	jr nc, DSP_Enqueue_ReturnOK
 
+; ALREADY NAMED -- doc header only.
+; Inlined 2 KB ring writer, byte at a time, source read with `ld A,(XHL+)` (XHL was loaded
+; from the caller's (XSP+6) at entry): (0x3B60) is the write index, masked 0x7FF, data at
+; 0x3B66; (0x3B64) is incremented per byte. Loops until IX reaches the byte count in DE.
 DSP_RingBuf_Enqueue:
 	lda_d16 xwa, 15200
 	ld bc, (xwa)
@@ -33557,10 +38692,14 @@ DSP_RingBuf_Enqueue:
 	cp ix, de
 	jr c, DSP_RingBuf_Enqueue
 
+; HL = 0; ret.
 DSP_Enqueue_ReturnOK:
 	lds hl, 0
 	ret
 
+; ALREADY NAMED -- doc header only.
+; HL = ((XWA[5] & 0x7F) << 7) | (XWA[6] & 0x7F). Applied to the 8-byte header copy at 0x4368,
+; so it reads header bytes 0x436D and 0x436E. MIDI-style 7-bits-per-byte packing.
 Extract_14Bit_PayloadSize:
 	ld c, (xwa + 6)
 	extz bc
@@ -33579,6 +38718,9 @@ Extract_14Bit_PayloadSize:
 ;   byte[2] bits 6:0 -> XHL bits 13:7
 ;   byte[3] bits 6:0 -> XHL bits 6:0
 ; Exit: XHL = packed 21-bit value
+; ALREADY NAMED -- doc header only.
+; XHL = (XWA[1] & 0x7F) << 14 | (XWA[2] & 0x7F) << 7 | (XWA[3] & 0x7F), a 21-bit value. Used
+; where a DSP parameter needs more than 14 bits. No caller inside this region.
 DSP_Pack3x7bitFields:
 	ld	c, (xwa+2)
 	res	7, c
@@ -33600,6 +38742,9 @@ DSP_Pack3x7bitFields:
 	or	xhl, xbc
 	ret
 
+; ALREADY NAMED -- doc header only.
+; HL = ((XWA[2] & 0x7F) << 7) | (XWA[3] & 0x7F). On the header copy that is bytes 0x436A and
+; 0x436B. Used by DSP_Cmd2B_VoiceParamWrite for the parameter index.
 Extract_14Bit_VoiceParam:
 	ld c, (xwa + 3)
 	extz bc
@@ -33612,6 +38757,12 @@ Extract_14Bit_VoiceParam:
 	or hl, bc
 	ret
 
+; ALREADY NAMED -- doc header only.
+; Pops exactly seven bytes from the ring (XWA = control block) into 0x4369..0x436F. It does
+; NOT check for underflow: DSP_RingBuf_Read's 0xFFFF sentinel is stored as its low byte 0xFF,
+; so a starved ring yields a header of all-0xFF rather than an error. The caller has already
+; range-checked the message length, which is why this is safe in the normal case -- and why
+; it is not safe if the length byte itself is garbage.
 DSP_Cmd_DequeueHeader:
 	push xiz
 	ld xiz, xwa
@@ -33639,6 +38790,15 @@ DSP_Cmd_DequeueHeader:
 	pop xiz
 	ret
 
+; ALREADY NAMED -- doc header only.
+; Loads a complete 290-byte effect configuration out of the ring into the live config buffer.
+; Entry XWA = ring control block. Exit HL = 0 on success, 0xFFFF on rejection.
+; Guard: ((0x436D) << 7) + (0x436E) must equal 0x122 (290) exactly; otherwise the whole
+; message is discarded with DSP_RingBuf_Skip and 0xFFFF returned.
+; On success it reads, in order: 8 bytes into DSP_GetConfigBuffer() (0x448E), then for each
+; of the five slots 0x38 bytes into EFF_GetSlotBuffer(slot), then two trailing bytes that are
+; read and thrown away. 8 + 5*56 + 2 = 290, which is where the size guard comes from.
+; Called only from DSP_CmdHandler_2D when header byte 0x4369 == 0 and 0x436A == 0x09.
 DSP_Cmd_LoadEffectPreset:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -33659,6 +38819,7 @@ DSP_Cmd_LoadEffectPreset:
 	cp iz, (xsp + 4)
 	jr nc, DSP_LoadEffPreset_Loop1Next
 
+; The 8 header bytes.
 DSP_LoadEffPreset_Loop1:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
@@ -33669,12 +38830,14 @@ DSP_LoadEffPreset_Loop1:
 	cp iz, (xsp + 4)
 	jr c, DSP_LoadEffPreset_Loop1
 
+; Sets the per-slot byte count to 0x38 and starts the slot loop (slot < 5).
 DSP_LoadEffPreset_Loop1Next:
 	ldw (xsp + 4), 0x38
 	ldiw_erp 0xFA, 0
 	cpi3_erpw 5, 0xFA
 	jr nc, DSP_LoadEffPreset_Loop3A
 
+; Per-slot: buffer = EFF_GetSlotBuffer(slot).
 DSP_LoadEffPreset_Loop2:
 	stw_erp WA, 0xFA
 	call EFF_GetSlotBuffer
@@ -33683,6 +38846,7 @@ DSP_LoadEffPreset_Loop2:
 	cp iz, (xsp + 4)
 	jr nc, DSP_LoadEffPreset_Loop3
 
+; Inner byte loop for one slot.
 DSP_LoadEffPreset_Loop2Next:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
@@ -33693,11 +38857,13 @@ DSP_LoadEffPreset_Loop2Next:
 	cp iz, (xsp + 4)
 	jr c, DSP_LoadEffPreset_Loop2Next
 
+; ++slot; repeat while slot < 5.
 DSP_LoadEffPreset_Loop3:
 	inc1w_erp 0xFA
 	cpi3_erpw 5, 0xFA
 	jr c, DSP_LoadEffPreset_Loop2
 
+; Two trailing bytes consumed and discarded; HL = 0.
 DSP_LoadEffPreset_Loop3A:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
@@ -33706,16 +38872,27 @@ DSP_LoadEffPreset_Loop3A:
 	lds hl, 0
 	jr DSP_LoadEffPreset_Epilogue
 
+; Size-guard failure: DSP_RingBuf_Skip, HL = 0xFFFF.
 DSP_LoadEffPreset_Loop3Next:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Skip
 	ldw hl, 0xFFFF
 
+; Restore frame, ret.
 DSP_LoadEffPreset_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
+; ALREADY NAMED -- doc header only.
+; Reads (0x436E) payload bytes from the ring into the buffer at XBC, byte by byte, and counts
+; how many DIFFER from what is already there -- note it counts differences but does NOT write
+; the new value; the destination is left untouched. Entry XWA = ring control block,
+; XBC = destination (0x4370 for 0x2B/0x2C, the slot buffer for 0x2D).
+; Exit: HL = (0x436F) if (0x436F) != 0xFF or if two or more bytes differed, else HL = 0.
+; So 0xFF in the header's status byte means "reply only if this is actually a change", with a
+; deliberate one-byte tolerance. The result is discarded by the 0x2B and 0x2C paths and is
+; used only by CmdHandler2D_PathA, which feeds it to DSP_ApplyConfig as E.
 DSP_RingBuf_ReadAndCompare:
 	dec 8, xsp
 	push xiz
@@ -33724,6 +38901,7 @@ DSP_RingBuf_ReadAndCompare:
 	lds iz, 0
 	jr DSP_RingBuf_Compare_MismatchPath
 
+; Read one byte, compare with (XWA), bump the mismatch counter on inequality.
 DSP_RingBuf_Compare_Loop:
 	ld xwa, (xsp + 8)
 	calr DSP_RingBuf_Read
@@ -33732,12 +38910,15 @@ DSP_RingBuf_Compare_Loop:
 	jr z, DSP_RingBuf_Compare_MatchPath
 	inc1w_erp 0xFA
 
+; Advance the destination pointer and the index (taken on both match and mismatch).
 DSP_RingBuf_Compare_MatchPath:
 	ld xwa, (xsp + 4)
 	lda_dpi XSP, 0xE0
 	ld (xsp + 4), xwa
 	inc 1, iz
 
+; Loop condition against (0x436E), then the two result tests. The two "Match"/"Mismatch"
+; names are the wrong way round; see [UNCERTAIN].
 DSP_RingBuf_Compare_MismatchPath:
 	ldb_d8 a, 17262
 	extz wa
@@ -33748,13 +38929,16 @@ DSP_RingBuf_Compare_MismatchPath:
 	cpi3_erpw 2, 0xFA
 	jr c, DSP_RingBuf_Compare_FoundPath
 
+; HL = (0x436F) -- the "report the header's status byte" exit.
 DSP_RingBuf_Compare_LoopNext:
 	ldb_d8 l, 17263
 	jr DSP_RingBuf_Compare_Epilogue
 
+; HL = 0 -- the "identical, suppress" exit.
 DSP_RingBuf_Compare_FoundPath:
 	ldb l, 0x0
 
+; pop; ret.
 DSP_RingBuf_Compare_Epilogue:
 	pop xiz
 	inc 8, xsp
@@ -33783,6 +38967,36 @@ DSP_RingBuf_Compare_Epilogue:
 ;   0x10-0x17 -> DSP_VoiceParamReadWrite (set param 0-7)
 ;   0x20 -> DSP_MixSendConfig (mix/send routing)
 ; Jump table for params 0-7 at Sub CPU ROM 0x0121DB.
+; ALREADY NAMED -- doc header only. THIS IS THE ROUTINE THE OPEN BUG SHOULD BE CHECKED
+; AGAINST FIRST; see the wedge note below and 'findings'.
+; The DSP ring consumer. Called unconditionally once per pass of Audio_Main_Loop (0x01FAE6),
+; from the call block at 0x01FB2F, between MIDI_Dispatch and Audio_Process_Final. No entry
+; parameters. Local frame of 10 bytes; (XSP+4) holds the ring control-block pointer 0x3B60
+; and (XSP+12) holds the current message's type byte.
+; Sequence:
+;   (0x4366) = ring byte count                                (DSP_StoreBufferCount)
+;   if (0x448C) != 0  -> jump straight to DSP_Process_Exit    ** the gate **
+;   otherwise -> DSP_Process_ReadNext, which pops one type byte and loops while it is >= 0.
+;
+; ★★ WEDGE (in-region, address-precise). The word at 0x448C gates the entire consumer, and
+;    it is written from exactly five instructions in the firmware (byte-verified with
+;    unidasm; grep the source for 17548 to see the same five):
+;      0x0358BB  ++(0x448C)     Audio_CmdHandler_60_7F, chunk accumulated
+;      0x0358C7  (0x448C) = 0   Audio_CmdHandler_60_7F, stream complete
+;      0x0358F6  (0x448C) = 1   Audio_CmdHandler_60_7F, stream header accepted
+;      0x035904  (0x448C) = 0   Audio_CmdHandler_60_7F, malformed opening chunk
+;      0x035B12  (0x448C) = 1   Audio_Process_DSP itself, TRUNCATED-MESSAGE path
+;    and read from exactly two: 0x035899/0x0358A1 (the handler) and 0x035AD9 (the gate).
+;    The last one is the problem: DSP_Process_NextCmd sets the same flag that means "a bulk
+;    stream is in flight" to mean "the message I am looking at is not fully queued yet".
+;    Once it is set, Audio_Process_DSP does nothing at all on every subsequent pass, forever,
+;    unless a NEW inter-CPU command in the 0x60..0x7F class arrives AND the byte accounting
+;    in 0x4488/0x448A happens to reach completion (or the chunk is malformed). DSP2_Init does
+;    not clear it; DSP_Reset does not clear it; nothing in the audio loop clears it.
+;    Downstream effect: DSP_Cmd2B_PostProcess (0x035D4A) is the ONLY producer of sub->main
+;    traffic in this region, and it is only reachable through this consumer. So the wedge
+;    presents exactly as "the sub-CPU keeps consuming main->sub commands (they are still
+;    enqueued by Audio_CmdHandler_60_7F) but stops replying, at a fixed point".
 Audio_Process_DSP:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -33794,6 +39008,14 @@ Audio_Process_DSP:
 	jrl z, DSP_Process_ReadNext
 	jrl DSP_Process_Exit
 
+; Message-length pre-check, and the source of the wedge above. Peeks the byte five positions
+; ahead of the ring read index -- that is header byte 0x436D's position, i.e. the message
+; length -- and compares it against the ring's byte count.
+;   length <= count : proceed to Audio_Process_DSP_MsgSizeCheck
+;   length >  count : un-read the type byte (--read index at 0x035B09, ++count at 0x035B0F),
+;                     set (0x448C) = 1 at 0x035B12, exit.
+; Because the length is read from the ring without any sanity limit, one corrupt byte
+; (0x00..0xFF, so up to 255) is enough to take the second branch permanently.
 DSP_Process_NextCmd:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
@@ -33815,6 +39037,18 @@ DSP_Process_NextCmd:
 	stdi16 17548, 1
 	jrl DSP_Process_Exit
 
+; The real header decode and dispatch, despite the name (the size was already checked).
+; Calls DSP_Cmd_DequeueHeader, stores the type byte at 0x4368, then:
+;   0x2D -> DSP_CmdHandler_2D    0x2C -> DSP_CmdHandler_2C    0x2B -> falls through
+;   anything else -> DSP_Cmd_DefaultSkip
+; For 0x2B it reads the payload with DSP_RingBuf_ReadAndCompare into 0x4370, then switches on
+; the target selector 0x4369: below 0x30 or above 0x3F -> SkipAndContinue; 0x436A != 0x7F ->
+; VoiceParamWrite; otherwise the channel is 0x4369 & 0xF and the sub-command is 0x436B:
+;   0x30 -> Noop            0x27 -> ReadParam11      0x24 -> SetParam
+;   0x22 -> ReadParam5D     0x20 -> MixSendConfig    0x03 -> StateControl
+;   0x00 -> AlgoSelect      0x10..0x17 -> the eight stubs below, via the offset table at
+;                            ROM 0x0121DB added to the base 0x035BC6
+;   anything else -> UnknownSkip
 Audio_Process_DSP_MsgSizeCheck:
 	ld xwa, (xsp + 4)
 	calr DSP_Cmd_DequeueHeader
@@ -33871,6 +39105,9 @@ Audio_Process_DSP_MsgSizeCheck:
 	lda_24 xix, 0x035bc6
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
+; Sub-command 0x00. If CheckStatusBits_40(channel) returns 0 it first calls
+; Voice_Slot_CalcArticParams(channel), then DSP_AlgoSelect(WA = channel, BC = payload[0]
+; from 0x4370, XDE = 0x4370). Also the base address the 0x0121DB offset table is added to.
 DSP_Cmd2B_AlgoSelect:
 	ld wa, iz
 	call CheckStatusBits_40
@@ -33879,6 +39116,7 @@ DSP_Cmd2B_AlgoSelect:
 	ld wa, iz
 	call Voice_Slot_CalcArticParams
 
+; Join point that performs the DSP_AlgoSelect call.
 DSP_Cmd2B_AlgoSelect_Continue:
 	stb_erp A, 0xF8
 	ld e, a
@@ -33891,6 +39129,7 @@ DSP_Cmd2B_AlgoSelect_Continue:
 	call DSP_AlgoSelect
 	jrl DSP_Cmd2B_PostProcess
 
+; Sub-command 0x03: DSP_EffectStateQuery(WA = channel & 0xF, XBC = 0x4370) (0x030618).
 DSP_Cmd2B_StateControl:
 	ld a, (xsp + 8)
 	and a, 0xF
@@ -33898,6 +39137,15 @@ DSP_Cmd2B_StateControl:
 	ld xbc, (xsp + 10)
 	call DSP_EffectStateQuery
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME -- this address currently has NO symbol in either the ELF or the reference file.
+; First of eight 20-byte stubs reached through the offset table at ROM 0x0121DB
+; (offsets 0x3D, 0x51, 0x65, 0x79, 0x8D, 0xA1, 0xB5, 0xC9 added to 0x035BC6 give 0x035C03,
+; 0x035C17, 0x035C2B, 0x035C3F, 0x035C53, 0x035C67, 0x035C7B, 0x035C8F). Each stub is
+;   ld A,(XSP+8) / and A,0x0F / extz WA / ld XDE,(XSP+0x0A) / ld BC,<n> / call 0x030F7D
+;   / jrl 0x035D4A
+; i.e. DSP_VoiceParamReadWrite(WA = channel, XDE = 0x4370, BC = n) followed by the common
+; reply path. Sub-command 0x10 selects n = 0. Verified by disassembling 0x035BF1..0x035CA2.
+DSP_CMD2B_PARAMSTUB0:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33905,6 +39153,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 0
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. As above with BC = 1; sub-command 0x11.
+DSP_CMD2B_PARAMSTUB1:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33912,6 +39162,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 1
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. BC = 2; sub-command 0x12.
+DSP_CMD2B_PARAMSTUB2:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33919,6 +39171,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 2
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. BC = 3; sub-command 0x13.
+DSP_CMD2B_PARAMSTUB3:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33926,6 +39180,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. BC = 4; sub-command 0x14.
+DSP_CMD2B_PARAMSTUB4:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33933,6 +39189,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 4
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. BC = 5; sub-command 0x15.
+DSP_CMD2B_PARAMSTUB5:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33940,6 +39198,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 5
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. BC = 6; sub-command 0x16.
+DSP_CMD2B_PARAMSTUB6:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33947,6 +39207,8 @@ DSP_Cmd2B_StateControl:
 	lds bc, 6
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
+; ★ NEW NAME. BC = 7; sub-command 0x17.
+DSP_CMD2B_PARAMSTUB7:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
@@ -33955,6 +39217,8 @@ DSP_Cmd2B_StateControl:
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 
+; Sub-command 0x20: DSP_MixSendConfig(WA = payload[0] at 0x4370, BC = payload[1] at 0x4371,
+; XDE = 0x4370).
 DSP_Cmd2B_MixSendConfig:
 	ldb_d8 a, 17264
 	ld e, a
@@ -33967,6 +39231,7 @@ DSP_Cmd2B_MixSendConfig:
 	call DSP_MixSendConfig
 	jrl DSP_Cmd2B_PostProcess
 
+; Sub-command 0x22: DSP_ReadVoiceParam5D with the same three arguments.
 DSP_Cmd2B_ReadParam5D:
 	ldb_d8 a, 17264
 	ld e, a
@@ -33979,6 +39244,7 @@ DSP_Cmd2B_ReadParam5D:
 	call DSP_ReadVoiceParam5D
 	jr DSP_Cmd2B_PostProcess
 
+; Sub-command 0x24: DSP_SetVoiceCoefficients with the same three arguments.
 DSP_Cmd2B_SetParam:
 	ldb_d8 a, 17264
 	ld e, a
@@ -33991,6 +39257,7 @@ DSP_Cmd2B_SetParam:
 	call DSP_SetVoiceCoefficients
 	jr DSP_Cmd2B_PostProcess
 
+; Sub-command 0x27: DSP_ReadVoiceParam11 with the same three arguments.
 DSP_Cmd2B_ReadParam11:
 	ldb_d8 a, 17264
 	ld e, a
@@ -34003,16 +39270,22 @@ DSP_Cmd2B_ReadParam11:
 	call DSP_ReadVoiceParam11
 	jr DSP_Cmd2B_PostProcess
 
+; Sub-command 0x30: HL = 0, i.e. accepted and silently ignored, and (HL == 0) means no reply.
 DSP_Cmd2B_Noop:
 	lds hl, 0
 	jr DSP_Cmd2B_PostProcess
 
+; Unrecognised sub-command: DSP_RingBuf_Skip (which resynchronises the WHOLE ring), HL = 0.
 DSP_Cmd2B_UnknownSkip:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	lds hl, 0
 	jr DSP_Cmd2B_PostProcess
 
+; Taken when 0x436A != 0x7F: the message carries a 14-bit parameter index
+; (Extract_14Bit_VoiceParam on the header copy) and a 14-bit value
+; (Extract_14Bit_PayloadSize), which are handed to DSP_WriteVoiceParam together with the
+; channel (0x4369 & 0xF) and a pushed pointer to 0x4370.
 DSP_Cmd2B_VoiceParamWrite:
 	stb_erp A, 0xFB
 	extz wa
@@ -34030,6 +39303,13 @@ DSP_Cmd2B_VoiceParamWrite:
 	ld de, hl
 	call DSP_WriteVoiceParam
 
+; ★ THE ONLY SUB->MAIN PRODUCER IN THIS REGION. Common tail of every 0x2B sub-command.
+;   if HL == 0 : no reply at all, straight back to DSP_Process_ReadNext
+;   else       : InterCPU_DMA_Send(WA = 3, XDE = 0x4368, BC = HL + 8)
+; XDE = 0x4368 is the verbatim copy of the message just processed (type byte + 7 header bytes
+; + payload), so the reply is an echo of length HL + 8. Command class 3 on the inter-CPU
+; link. Every handler that returns 0 -- DSP_Cmd2B_Noop, DSP_Cmd2B_UnknownSkip, and any
+; handler whose own result is zero -- is silently unacknowledged by design.
 DSP_Cmd2B_PostProcess:
 	cps hl, 0
 	jrl z, DSP_Process_ReadNext
@@ -34040,6 +39320,8 @@ DSP_Cmd2B_PostProcess:
 	call InterCPU_DMA_Send
 	jrl DSP_Process_ReadNext
 
+; Target selector outside 0x30..0x3F: DSP_RingBuf_Skip either way, the 0x40 test only picks
+; which of two identical code paths runs.
 DSP_Cmd2B_SkipAndContinue:
 	cp_erpb 0xFB, 0x40
 	jr nz, DSP_Cmd2B_SkipPath
@@ -34047,11 +39329,20 @@ DSP_Cmd2B_SkipAndContinue:
 	calr DSP_RingBuf_Skip
 	jrl DSP_Process_ReadNext
 
+; The other identical skip path.
 DSP_Cmd2B_SkipPath:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jrl DSP_Process_ReadNext
 
+; Message type 0x2C: channel and global configuration. Reads the payload into 0x4370 with
+; DSP_RingBuf_ReadAndCompare, then splits on the target selector 0x4369:
+;   0x4369 == 0 : global. Requires 0x436A == 8, then the sub-command byte 0x436B is mapped to
+;                 a table index: raw 0..8 map to entries 0..8; raw 0x20..0x25 map to entries
+;                 9..14 (the code does `wa -= 0x17` and accepts 9..0x0E); everything else,
+;                 including any negative value, goes to CmdHandler2C_SubCmd0 (discard).
+;   0x4369 != 0 : per-channel, see CmdHandler2C_SubCmd1.
+; No reply is ever produced by the 0x2C path -- every route ends at DSP_Process_ReadNext.
 DSP_CmdHandler_2C:
 	lda_d16 xwa, 17264
 	ld xbc, xwa
@@ -34075,41 +39366,96 @@ DSP_CmdHandler_2C:
 	cp wa, 0xE
 	jrl gt, CmdHandler2C_SubCmd0
 
+; index *= 2; word from ROM 0x0121BD + index; jp (0x035DD2 + that word).
 CmdHandler2C_JumpDispatch:
 	add wa, wa
 	lda_24 xix, 0x0121bd
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x035dd2
 	jp_ind 8, 0x07, 0xF0, 0xE0
+; ★ NEW MEANING for an address currently labelled as the start of a `.byte` blob.
+; Table entry 0 (sub-command 0x00). `ld A,(0x4370) / exts WA / call Voice_SetMasterTune
+; (0x028B23) / jrl DSP_Process_ReadNext`. SIGN-extended -- master tune is signed.
+; The thirteen stubs at 0x035DD2..0x035E7A are all this shape and are all CODE.
+; --- 0x035DD2-0x035E7A  CmdHandler2C_TableData -- NOT DATA, thirteen 13-byte dispatch stubs
+; Reached by `lda XIX,0x0121BD / ldw WA,(XIX+index*2) / lda XIX,0x035DD2 / jp (XIX+WA)`.
+; The 15-entry offset table itself lives in ROM at 0x0121BD:
+;   0x0000 0x000D 0x001A 0x0027 0x0034 0x0261 0x0041 0x004E
+;   0x005B 0x0261 0x0068 0x0075 0x0082 0x008F 0x009C
+; Adding 0x035DD2 gives 0x035DD2, 0x035DDF, 0x035DEC, 0x035DF9, 0x035E06, 0x036033 (= the
+; "ignore" target DSP_Process_ReadNext), 0x035E13, 0x035E20, 0x035E2D, 0x036033, 0x035E3A,
+; 0x035E47, 0x035E54, 0x035E61, 0x035E6E -- all named above. Verified by disassembly.
 CmdHandler2C_TableData:
 	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x13, 0x1d, 0x23
-	.byte 0x8b, 0x02, 0x78, 0x54, 0x02, 0xc1, 0x70, 0x43
+	.byte 0x8b, 0x02, 0x78, 0x54, 0x02
+; ★ NEW NAME. Table entry 1: zero-extends (0x4370) and calls DSP_SET_MIXPARAM_45B2 (0x036205).
+CMDHANDLER2C_GLOBAL_MIXPARAMA:
+	.byte 0xc1, 0x70, 0x43
 	.byte 0x21, 0xd8, 0x12, 0x1d, 0x05, 0x62, 0x03, 0x78
-	.byte 0x47, 0x02, 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12
-	.byte 0x1d, 0x1c, 0x62, 0x03, 0x78, 0x3a, 0x02, 0xc1
+	.byte 0x47, 0x02
+; ★ NEW NAME. Table entry 2: calls DSP_SET_MIXPARAM_45B4 (0x03621C).
+CMDHANDLER2C_GLOBAL_MIXPARAMB:
+	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12
+	.byte 0x1d, 0x1c, 0x62, 0x03, 0x78, 0x3a, 0x02
+; ★ NEW NAME. Table entry 3: calls Voice_SetMonoMode (0x028D2E).
+CMDHANDLER2C_GLOBAL_MONOMODE:
+	.byte 0xc1
 	.byte 0x70, 0x43, 0x21, 0xd8, 0x12, 0x1d, 0x2e, 0x8d
-	.byte 0x02, 0x78, 0x2d, 0x02, 0xc1, 0x70, 0x43, 0x21
+	.byte 0x02, 0x78, 0x2d, 0x02
+; ★ NEW NAME. Table entry 4: SIGN-extends (0x4370) and calls Voice_SetPitchBendRange
+; (0x028B30).
+CMDHANDLER2C_GLOBAL_BENDRANGE:
+	.byte 0xc1, 0x70, 0x43, 0x21
 	.byte 0xd8, 0x13, 0x1d, 0x30, 0x8b, 0x02, 0x78, 0x20
-	.byte 0x02, 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12, 0x1d
-	.byte 0x37, 0x62, 0x03, 0x78, 0x13, 0x02, 0xc1, 0x70
+	.byte 0x02
+; ★ NEW NAME. Table entry 6: calls DSP_SET_MIXPARAM_45B6 (0x036237).
+; (Table entries 5 and 9 point straight at DSP_Process_ReadNext, i.e. accepted and ignored.)
+CMDHANDLER2C_GLOBAL_MIXPARAMC:
+	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12, 0x1d
+	.byte 0x37, 0x62, 0x03, 0x78, 0x13, 0x02
+; ★ NEW NAME. Table entry 7: calls DSP_SET_VALUE_45B8 (0x036252).
+CMDHANDLER2C_GLOBAL_SETVALUE45B8:
+	.byte 0xc1, 0x70
 	.byte 0x43, 0x21, 0xd8, 0x12, 0x1d, 0x52, 0x62, 0x03
-	.byte 0x78, 0x06, 0x02, 0xc1, 0x70, 0x43, 0x21, 0xd8
+	.byte 0x78, 0x06, 0x02
+; ★ NEW NAME. Table entry 8: calls DSP_SET_ENABLE_45BA (0x03627A).
+CMDHANDLER2C_GLOBAL_SETENABLE45BA:
+	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8
 	.byte 0x12, 0x1d, 0x7a, 0x62, 0x03, 0x78, 0xf9, 0x01
+; ★ NEW NAME. Table entry 10 (raw sub-command 0x21): calls DSP_SET_CFGWORD_4504 (0x0362A2).
+CMDHANDLER2C_GLOBAL_SETVALUE4504:
 	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12, 0x1d, 0xa2
-	.byte 0x62, 0x03, 0x78, 0xec, 0x01, 0xc1, 0x70, 0x43
+	.byte 0x62, 0x03, 0x78, 0xec, 0x01
+; ★ NEW NAME. Table entry 11 (raw 0x22): calls DSP_SET_CFGWORD_453C (0x0362B6).
+CMDHANDLER2C_GLOBAL_SETVALUE453C:
+	.byte 0xc1, 0x70, 0x43
 	.byte 0x21, 0xd8, 0x12, 0x1d, 0xb6, 0x62, 0x03, 0x78
-	.byte 0xdf, 0x01, 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12
-	.byte 0x1d, 0xca, 0x62, 0x03, 0x78, 0xd2, 0x01, 0xc1
+	.byte 0xdf, 0x01
+; ★ NEW NAME. Table entry 12 (raw 0x23): calls DSP_SET_ALGOTYPE_45B0 (0x0362CA), the one
+; global setter that re-runs DSP_ApplyAlgoForVoiceType instead of DSP_State_ApplyBuf.
+CMDHANDLER2C_GLOBAL_SETALGOTYPE:
+	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x12
+	.byte 0x1d, 0xca, 0x62, 0x03, 0x78, 0xd2, 0x01
+; ★ NEW NAME. Table entry 13 (raw 0x24): calls DSP_SET_CFGWORD_4574 (0x0362DD).
+CMDHANDLER2C_GLOBAL_SETVALUE4574:
+	.byte 0xc1
 	.byte 0x70, 0x43, 0x21, 0xd8, 0x12, 0x1d, 0xdd, 0x62
-	.byte 0x03, 0x78, 0xc5, 0x01, 0xc1, 0x70, 0x43, 0x21
+	.byte 0x03, 0x78, 0xc5, 0x01
+; ★ NEW NAME. Table entry 14 (raw 0x25): calls DSP_SET_CFGWORD_45AC (0x0362F1).
+CMDHANDLER2C_GLOBAL_SETVALUE45AC:
+	.byte 0xc1, 0x70, 0x43, 0x21
 	.byte 0xd8, 0x12, 0x1d, 0xf1, 0x62, 0x03, 0x78, 0xb8
 	.byte 0x01
 
+; Out-of-range global sub-command: DSP_RingBuf_Skip, continue.
 CmdHandler2C_SubCmd0:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jrl DSP_Process_ReadNext
 
+; Per-channel branch. Requires the selector in 0x30..0x3F and 0x436A == 0x7F; channel =
+; 0x4369 & 0xF. Sub-command 0x436B: 0x08 -> SubCmd5, 0x06 -> SubCmd4, 0x04 -> SubCmd3,
+; 0x03 -> ignore, 0x10..0x17 -> ignore, anything above 0x17 -> SubCmd2 (skip).
 CmdHandler2C_SubCmd1:
 	cp_erpb 0xFB, 0x30
 	jrl c, CmdHandler2C_SubCmd6
@@ -34137,11 +39483,14 @@ CmdHandler2C_SubCmd1:
 	cp a, 0x10
 	jrl nc, DSP_Process_ReadNext
 
+; DSP_RingBuf_Skip, continue.
 CmdHandler2C_SubCmd2:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jrl DSP_Process_ReadNext
 
+; Sub-command 0x04: DSP_Reinit_VoiceSlots(WA = payload[0], BC = payload[1]) followed by
+; DSP_VoiceState_Dispatch(WA = 0xFF, BC = 0xFF) -- i.e. rebuild every part.
 CmdHandler2C_SubCmd3:
 	ldb_d8 a, 17264
 	ld e, a
@@ -34156,6 +39505,7 @@ CmdHandler2C_SubCmd3:
 	call DSP_VoiceState_Dispatch
 	jrl DSP_Process_ReadNext
 
+; Sub-command 0x06: DSP_VoiceState_Dispatch(WA = payload[0], BC = payload[1]).
 CmdHandler2C_SubCmd4:
 	ldb_d8 a, 17264
 	ld e, a
@@ -34167,10 +39517,13 @@ CmdHandler2C_SubCmd4:
 	call DSP_VoiceState_Dispatch
 	jrl DSP_Process_ReadNext
 
+; Sub-command 0x08: Voice_AllVoices_PortamentoUpdate().
 CmdHandler2C_SubCmd5:
 	call Voice_AllVoices_PortamentoUpdate
 	jrl DSP_Process_ReadNext
 
+; Selector outside 0x30..0x3F: skip either way (the 0x40 test again picks between two
+; identical paths).
 CmdHandler2C_SubCmd6:
 	cp_erpb 0xFB, 0x40
 	jr nz, CmdHandler2C_Epilogue
@@ -34178,11 +39531,21 @@ CmdHandler2C_SubCmd6:
 	calr DSP_RingBuf_Skip
 	jrl DSP_Process_ReadNext
 
+; The other identical skip path.
 CmdHandler2C_Epilogue:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jrl DSP_Process_ReadNext
 
+; Message type 0x2D: effect preset and per-slot configuration.
+;   0x4369 == 0 and 0x436A == 0x09 : whole-preset load. DSP_Cmd_LoadEffectPreset; if it
+;        returns 0xFFFF the message is dropped, otherwise DSP_ReconfigAndStatus re-applies
+;        the buffer.
+;   0x4369 == 0 and 0x436A in 0x0A..0x0E : single-slot load, slot = 0x436A - 0x0A, see
+;        CmdHandler2D_PathA.
+;   0x4369 in 0x30..0x3F : per-channel, see CmdHandler2D_PathD.
+;   anything else : skip.
+; Like 0x2C, the 0x2D path never sends a reply.
 DSP_CmdHandler_2D:
 	ldb_d8 a, 17257
 	ldb_erp A, 0xFB
@@ -34201,6 +39564,11 @@ DSP_CmdHandler_2D:
 	call DSP_ReconfigAndStatus
 	jrl DSP_Process_ReadNext
 
+; Single-slot preset. buffer = EFF_GetSlotBuffer(0x436A - 0x0A); if that is 0xFFFFFFFF the
+; message is dropped. If the declared payload size (0x436E) exceeds the ring's byte count the
+; message is skipped (PathB). Otherwise DSP_RingBuf_ReadAndCompare reads into the slot buffer
+; and its result L is passed as E to DSP_ApplyConfig(WA = slot, XBC = 0x4370, E = compare
+; result) -- E == 0xFF is the "nothing changed" signal.
 CmdHandler2D_PathA:
 	cp_erpb 0xFB, 0x0A
 	jr c, CmdHandler2D_PathC
@@ -34235,16 +39603,22 @@ CmdHandler2D_PathA:
 	call DSP_ApplyConfig
 	jr DSP_Process_ReadNext
 
+; Payload longer than what is queued: skip.
 CmdHandler2D_PathB:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
+; Slot index out of 0x0A..0x0E: skip.
 CmdHandler2D_PathC:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
+; Per-channel 0x2D. Reads one payload byte into XBC (zero-extended) with
+; DSP_RingBuf_ReadAndCompare; if 0x436A == 0x7F the message is then skipped, otherwise the
+; channel (0x4369 - 0x30) is computed into a local and... nothing further is done with it.
+; This branch has no observable effect beyond consuming the message.
 CmdHandler2D_PathD:
 	cp_erpb 0xFB, 0x30
 	jr c, CmdHandler2D_EnqueueOrReturn
@@ -34263,11 +39637,13 @@ CmdHandler2D_PathD:
 	extz iz
 	jr DSP_Process_ReadNext
 
+; skip; continue.
 CmdHandler2D_MsgSizeMatch:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
+; Selector 0x40: read one payload byte, then skip the rest.
 CmdHandler2D_EnqueueOrReturn:
 	cp_erpb 0xFB, 0x40
 	jr nz, CmdHandler2D_QueuedPath
@@ -34280,15 +39656,20 @@ CmdHandler2D_EnqueueOrReturn:
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
+; Any other selector: skip.
 CmdHandler2D_QueuedPath:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
+; Unknown message type (not 0x2B/0x2C/0x2D): DSP_RingBuf_Skip, i.e. the ENTIRE queue is
+; resynchronised and discarded.
 DSP_Cmd_DefaultSkip:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 
+; Loop head: pop the next type byte from the ring; while it is >= 0 (i.e. not the 0xFFFF
+; empty sentinel) go round to DSP_Process_NextCmd. Every handler in the region ends here.
 DSP_Process_ReadNext:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Read
@@ -34297,11 +39678,20 @@ DSP_Process_ReadNext:
 	cps wa, 0
 	jrl ge, DSP_Process_NextCmd
 
+; pop xiz; unwind the 10-byte frame; ret.
 DSP_Process_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
+; Emits an audible/internal confirmation for the current algorithm class. Entry WA = the
+; algorithm/voice-type word. Calls DSP_State_LookupAlgoIndex(WA) and, on the result 2 / 1 /
+; anything else, pushes the 4-byte canned message at ROM 0x0121F3 / 0x0121EF / 0x0121EB
+; (`F0 50 B0 06`, `F0 50 B0 05`, `F0 50 B0 01`) into the MIDI ring via
+; Audio_CmdHandler_00_1F(count = 4, ptr) and then tail-jumps to MIDI_Dispatch so the packet
+; is consumed immediately. Because the status byte is 0xF0, MIDI_Dispatch routes it to
+; Voice_Poly_NoteOn, which allocates one of the eight auxiliary tone-generator voices.
+; Called from DSP_Reset. Hardware: the tone generator, indirectly, one note.
 DSP_WriteAlgoInitPreset:
 	call DSP_State_LookupAlgoIndex
 	ld wa, hl
@@ -34314,6 +39704,7 @@ DSP_WriteAlgoInitPreset:
 	inc 6, xsp
 	jr DSP_WriteAlgoInitPreset_Epilogue
 
+; Index 1 -> ROM 0x0121EF.
 DSP_WriteAlgoInitPreset_PresetPath:
 	cps wa, 1
 	jr nz, DSP_WriteAlgoInitPreset_DefaultPath
@@ -34324,6 +39715,7 @@ DSP_WriteAlgoInitPreset_PresetPath:
 	inc 6, xsp
 	jr DSP_WriteAlgoInitPreset_Epilogue
 
+; Any other index -> ROM 0x0121EB.
 DSP_WriteAlgoInitPreset_DefaultPath:
 	lda_24 xwa, 0x0121eb
 	push xwa
@@ -34331,21 +39723,41 @@ DSP_WriteAlgoInitPreset_DefaultPath:
 	call Audio_CmdHandler_00_1F
 	inc 6, xsp
 
+; jp MIDI_Dispatch (tail call, so MIDI_Dispatch's ret returns to this routine's caller).
 DSP_WriteAlgoInitPreset_Epilogue:
 	jp MIDI_Dispatch
 
+; ALREADY NAMED -- doc header only.
+; Entry WA = voice-type word. Returns immediately unless WA is 0x35 or 0x0F. For those two
+; it copies the word (0x45B0) into (0x44B4) -- which is 0x4496 + 0x1E, i.e. SLOT 0's record
+; at offset +0x1E, the same field EFF_SlotActive_LoopNext reads as a dirty-array index --
+; and then calls DSP_State_ApplyBuf(XWA = 0x448E) to push the whole
+; configuration to the DSP. Callers: DSP_Reset, DSP_ApplyConfig, DSP_ReconfigAndStatus, and
+; the global setter DSP_SET_ALGOTYPE_45B0.
 DSP_ApplyAlgoForVoiceType:
 	cp wa, 0x35
 	jr z, DSP_ApplyAlgoForVoiceType_TypeF
 	cp wa, 0xF
 	ret nz
 
+; The shared body for both accepted voice types.
 DSP_ApplyAlgoForVoiceType_TypeF:
 	ldmm16 17588, 17840	; LDW_16_16 (044b4h), (045b0h)
 	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
 	ret
 
+; ALREADY NAMED -- doc header only. Full DSP subsystem reset; called once from the audio
+; init path at 0x032183. No parameters.
+;   (0x45B0) = 1 ; (0x45B2) = (0x45B4) = (0x45B6) = (0x45B8) = (0x45BA) = 0
+;   DSP_MixerCoeff_Compute(WA = (0x45B2), BC = (0x45B4), DE = (0x45B6))   [0x03C067]
+;   copy 0x91 words (290 bytes) from 0xF01E in internal RAM to 0x448E -- this is where the
+;     default effect configuration comes from, and 290 == the 0x122 size guard elsewhere
+;   DSP_State_LoadAndApplyAll(XWA = 0x448E) ; (0x4492) = 0 ; DSP_State_DmaLoadPresets()
+;   IZ = word at 0xF026 (a firmware-config word in internal RAM);
+;     DSP_WriteAlgoInitPreset(IZ) then DSP_ApplyAlgoForVoiceType(IZ)
+;   DSP_MixerCoeff_Compute again with the (now possibly changed) three words.
+; ★ Does NOT clear 0x4488/0x448A/0x448C, so a DSP reset does not clear the consumer wedge.
 DSP_Reset:
 	pushw iz
 	stdi16 17840, 1
@@ -34381,6 +39793,12 @@ DSP_Reset:
 DSP_ApplyAlgoForVoiceType_Data:
 	.byte 0x0e
 
+; Entry: none. Calls DSP_SlotMuteState_ReadAndClear(0) and, on the returned value 3 / 2 / 1,
+; injects the same canned pseudo-MIDI packet as DSP_WriteAlgoInitPreset (ROM 0x0121F3 /
+; 0x0121EF / 0x0121EB) through Audio_CmdHandler_00_1F + MIDI_Dispatch. Value 0 does nothing.
+; Called from Audio_Process_Init (0x032197) when the audio-tick phase byte at 0x041342 is 0,
+; right after Voice_ScanAndCancelNoteOff -- i.e. this is the "re-announce the effect state
+; after a mode change" path.
 DSP_SlotState_DisplayRestore:
 	lds wa, 0
 	call DSP_SlotMuteState_ReadAndClear
@@ -34393,6 +39811,7 @@ DSP_SlotState_DisplayRestore:
 	inc 6, xsp
 	jp MIDI_Dispatch
 
+; Value 2 -> ROM 0x0121EF.
 DSP_SlotState_DisplayRestore_ActivePath:
 	cps hl, 2
 	jr nz, DSP_SlotState_DisplayRestore_Epilogue
@@ -34403,6 +39822,7 @@ DSP_SlotState_DisplayRestore_ActivePath:
 	inc 6, xsp
 	jp MIDI_Dispatch
 
+; Value 1 -> ROM 0x0121EB; value 0 -> plain ret.
 DSP_SlotState_DisplayRestore_Epilogue:
 	cps hl, 1
 	ret nz
@@ -34414,15 +39834,26 @@ DSP_SlotState_DisplayRestore_Epilogue:
 	call MIDI_Dispatch
 	ret
 
+; ALREADY NAMED -- doc header only.
+; Applies one effect slot's configuration. Entry WA (low byte A) = slot 0..4, E = the
+; "changed" indicator from DSP_RingBuf_ReadAndCompare, XBC = 0x4370.
+;   (0x448E) = 1 when E == 0xFF (nothing changed), else 0. That header word is therefore the
+;   "this configuration is unchanged / not freshly loaded" flag that DSP_State_ApplyBuf reads.
+; Then, on the slot number: 1, 2 or 4 -> tail-jump DSP_State_ApplyBuf(0x448E);
+;   3 -> BufSelectB (see below); 0 -> DSP_State_ApplyBuf followed by
+;   DSP_ApplyAlgoForVoiceType(word at 0x4496, i.e. slot 0's algorithm number);
+;   anything else -> return without doing anything.
 DSP_ApplyConfig:
 	cp e, 0xFF
 	jr nz, DSP_ApplyConfig_ActivePath
 	stdi16 17550, 1
 	jr DSP_ApplyConfig_InactivePath
 
+; (0x448E) = 0 -- "this is a real change".
 DSP_ApplyConfig_ActivePath:
 	stdi16 17550, 0
 
+; The slot switch.
 DSP_ApplyConfig_InactivePath:
 	cps a, 3
 	jr z, DSP_ApplyConfig_BufSelectB
@@ -34439,10 +39870,15 @@ DSP_ApplyConfig_InactivePath:
 	ldw_d16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
+; Slots 1, 2, 4: jp DSP_State_ApplyBuf(0x448E).
 DSP_ApplyConfig_BufSelectA:
 	lda_d16 xwa, 17550
 	jp DSP_State_ApplyBuf
 
+; Slot 3 only: writes (0x454A) = (0x45B8) if (0x45BA) != 0, else 0, and then applies. Same
+; 0x45B8/0x45BA/0x454A relationship as the global setters at 0x036252/0x03627A -- and
+; 0x454A = 0x453E + 0x0C, i.e. SLOT 3's record at offset +0x0C, which is why this is the
+; slot-3 branch. That cross-check is what makes the 0x4496 + n*0x38 slot layout certain.
 DSP_ApplyConfig_BufSelectB:
 	lda_d16 xbc, 17738
 	lds wa, 0
@@ -34450,22 +39886,31 @@ DSP_ApplyConfig_BufSelectB:
 	jr z, DSP_ApplyConfig_Epilogue
 	ldw_d16 xwa, 17848
 
+; Stores the selected word and calls DSP_State_ApplyBuf.
 DSP_ApplyConfig_Epilogue:
 	ld (xbc), wa
 	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
 	ret
 
+; ALREADY NAMED -- doc header only. DSP_State_ApplyBuf(0x448E) then
+; DSP_ApplyAlgoForVoiceType(word at 0x4496). The unconditional form of DSP_ApplyConfig's
+; slot-0 case; called after a successful whole-preset load in DSP_CmdHandler_2D.
 DSP_ReconfigAndStatus:
 	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
 	ldw_d16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
+; ALREADY NAMED -- doc header only. XHL = 0x448E. Three bytes.
 DSP_GetConfigBuffer:
 	lda_d16 xhl, 17550
 	ret
 
+; ALREADY NAMED -- doc header only.
+; Entry WA = slot. Exit XHL = 0x4496 + slot * 0x38 for slot in 0..4, or 0xFFFFFFFF for any
+; other slot. The five explicit `cps bc,n / jr z` tests for 0..4 are the range check; the
+; fall-through to EFF_GetSlotBuffer_LoopBody is the error case.
 EFF_GetSlotBuffer:
 	ld bc, wa
 	cps bc, 4
@@ -34479,6 +39924,7 @@ EFF_GetSlotBuffer:
 	cps bc, 0
 	jr nz, EFF_GetSlotBuffer_LoopBody
 
+; The VALID path: XHL = 0x4496 + slot * 0x38. Name is inverted; see [UNCERTAIN].
 EFF_GetSlotBuffer_NoSlot:
 	mul wa, 0x38
 	lda_d16 xbc, 17558
@@ -34487,46 +39933,111 @@ EFF_GetSlotBuffer_NoSlot:
 	ld xhl, xwa
 	jr EFF_GetSlotBuffer_Epilogue
 
+; The INVALID path: XHL = 0xFFFFFFFF. Not a loop; name is wrong. See [UNCERTAIN].
 EFF_GetSlotBuffer_LoopBody:
 	ld xhl, 0xFFFFFFFF
 
+; ret.
 EFF_GetSlotBuffer_Epilogue:
 	ret
 
+; ★ NEW MEANING. This address is currently labelled DSP_StateTable_DefaultData and its 256
+; bytes are emitted as `.byte`. They are ten subroutines; this is the first.
+; (0x45B2) = zero-extended WA, then tail-jump DSP_MixerCoeff_Compute(WA = (0x45B2),
+; BC = (0x45B4), DE = (0x45B6)) at 0x03C067 -- the identical three-argument call DSP_Reset
+; makes. Reached only from CmdHandler2C global sub-command 0x01.
+; The four bytes at 0x036217 (`ld HL,(0x45B2) / ret`) are UNREACHABLE -- the `jp` above them
+; is unconditional. Same dead tail appears in the next two setters; they look like a
+; hand-optimised `return value` that the compiler/author replaced with a tail call.
+; --- 0x036205-0x036304  DSP_StateTable_DefaultData -- NOT DATA, ten subroutines
+; See the ten [ROUTINE] entries at 0x036205, 0x03621C, 0x036237, 0x036252, 0x03627A,
+; 0x0362A2, 0x0362B6, 0x0362CA, 0x0362DD, 0x0362F1. Reached only from the thirteen stubs
+; above. Includes four unreachable 5-byte tails at 0x036217, 0x036232, 0x03624D and
+; 0x036275.
 DSP_StateTable_DefaultData:
 	.byte 0xd8, 0x12, 0xf1, 0xb2, 0x45, 0x50, 0xd1, 0xb4
 	.byte 0x45, 0x21, 0xd1, 0xb6, 0x45, 0x22, 0x1b, 0x67
-	.byte 0xc0, 0x03, 0xd1, 0xb2, 0x45, 0x23, 0x0e, 0xd8
+	.byte 0xc0, 0x03, 0xd1, 0xb2, 0x45, 0x23, 0x0e
+; ★ NEW NAME. (0x45B4) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
+; 0x036232. CmdHandler2C global sub-command 0x02.
+DSP_SET_MIXPARAM_45B4:
+	.byte 0xd8
 	.byte 0x12, 0xf1, 0xb4, 0x45, 0x50, 0xd1, 0xb2, 0x45
 	.byte 0x20, 0xd1, 0xb4, 0x45, 0x21, 0xd1, 0xb6, 0x45
 	.byte 0x22, 0x1b, 0x67, 0xc0, 0x03, 0xd1, 0xb4, 0x45
-	.byte 0x23, 0x0e, 0xd8, 0x12, 0xf1, 0xb6, 0x45, 0x50
+	.byte 0x23, 0x0e
+; ★ NEW NAME. (0x45B6) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
+; 0x03624D. CmdHandler2C global sub-command 0x06.
+DSP_SET_MIXPARAM_45B6:
+	.byte 0xd8, 0x12, 0xf1, 0xb6, 0x45, 0x50
 	.byte 0xd1, 0xb2, 0x45, 0x20, 0xd1, 0xb4, 0x45, 0x21
 	.byte 0xd1, 0xb6, 0x45, 0x22, 0x1b, 0x67, 0xc0, 0x03
-	.byte 0xd1, 0xb6, 0x45, 0x23, 0x0e, 0xd8, 0x12, 0xf1
+	.byte 0xd1, 0xb6, 0x45, 0x23, 0x0e
+; ★ NEW NAME. (0x45B8) = WA. Returns immediately if (0x45BA) == 0 -- i.e. the value is only
+; propagated when its enable word is set. Otherwise (0x448E) = 0 ("changed"),
+; (0x454A) = (0x45B8), then DSP_State_ApplyBuf(XWA = 0x448E). Dead tail at 0x036275.
+; CmdHandler2C global sub-command 0x07.
+DSP_SET_VALUE_45B8:
+	.byte 0xd8, 0x12, 0xf1
 	.byte 0xb8, 0x45, 0x50, 0xd1, 0xba, 0x45, 0x3f, 0x00
 	.byte 0x00, 0xb0, 0xf6, 0xf1, 0x8e, 0x44, 0x02, 0x00
 	.byte 0x00, 0xd1, 0xb8, 0x45, 0x19, 0x4a, 0x45, 0xf1
 	.byte 0x8e, 0x44, 0x30, 0x1d, 0x31, 0x8e, 0x03, 0x0e
-	.byte 0xd1, 0xb8, 0x45, 0x23, 0x0e, 0xc9, 0x8b, 0xd9
+	.byte 0xd1, 0xb8, 0x45, 0x23, 0x0e
+; ★ NEW NAME. (0x45BA) = zero-extended A (the enable for the value above). (0x448E) = 0, then
+; (0x454A) = (0x45B8) if A != 0 else 0, then tail-jump DSP_State_ApplyBuf(0x448E).
+; CmdHandler2C global sub-command 0x08. Together with the previous routine this is a classic
+; "depth + on/off" pair where 0x454A is the effective value handed to the DSP.
+DSP_SET_ENABLE_45BA:
+	.byte 0xc9, 0x8b, 0xd9
 	.byte 0x12, 0xf1, 0xba, 0x45, 0x51, 0xf1, 0x8e, 0x44
 	.byte 0x02, 0x00, 0x00, 0xc9, 0xd8, 0x66, 0x08, 0xd1
 	.byte 0xb8, 0x45, 0x19, 0x4a, 0x45, 0x68, 0x06, 0xf1
 	.byte 0x4a, 0x45, 0x02, 0x00, 0x00, 0xf1, 0x8e, 0x44
-	.byte 0x30, 0x1b, 0x31, 0x8e, 0x03, 0xf1, 0x8e, 0x44
+	.byte 0x30, 0x1b, 0x31, 0x8e, 0x03
+; ★ NEW NAME. (0x448E) = 0 ; (0x4504) = WA ; tail-jump DSP_State_ApplyBuf(0x448E).
+; 0x4504 = 0x4496 + 0x6E = slot 1 record + 0x36. CmdHandler2C global sub-command 0x21.
+DSP_SET_CFGWORD_4504:
+	.byte 0xf1, 0x8e, 0x44
 	.byte 0x02, 0x00, 0x00, 0xd8, 0x12, 0xf1, 0x04, 0x45
 	.byte 0x50, 0xf1, 0x8e, 0x44, 0x30, 0x1b, 0x31, 0x8e
-	.byte 0x03, 0xf1, 0x8e, 0x44, 0x02, 0x00, 0x00, 0xd8
+	.byte 0x03
+; ★ NEW NAME. Same shape, target (0x453C) = 0x4496 + 0xA6 = slot 2 record + 0x36.
+; CmdHandler2C global sub-command 0x22.
+DSP_SET_CFGWORD_453C:
+	.byte 0xf1, 0x8e, 0x44, 0x02, 0x00, 0x00, 0xd8
 	.byte 0x12, 0xf1, 0x3c, 0x45, 0x50, 0xf1, 0x8e, 0x44
-	.byte 0x30, 0x1b, 0x31, 0x8e, 0x03, 0xf1, 0x8e, 0x44
+	.byte 0x30, 0x1b, 0x31, 0x8e, 0x03
+; ★ NEW NAME. (0x448E) = 0 ; (0x45B0) = WA ; then WA = (0x4496) (slot 0's algorithm number)
+; and a long jump to DSP_ApplyAlgoForVoiceType (0x03608C) -- the only one of the ten setters
+; that goes through the algorithm path rather than straight to DSP_State_ApplyBuf.
+; CmdHandler2C global sub-command 0x23.
+DSP_SET_ALGOTYPE_45B0:
+	.byte 0xf1, 0x8e, 0x44
 	.byte 0x02, 0x00, 0x00, 0xd8, 0x12, 0xf1, 0xb0, 0x45
 	.byte 0x50, 0xd1, 0x96, 0x44, 0x20, 0x78, 0xaf, 0xfd
+; ★ NEW NAME. Target (0x4574) = 0x4496 + 0xDE = slot 3 record + 0x36. Global sub-command 0x24.
+DSP_SET_CFGWORD_4574:
 	.byte 0xf1, 0x8e, 0x44, 0x02, 0x00, 0x00, 0xd8, 0x12
 	.byte 0xf1, 0x74, 0x45, 0x50, 0xf1, 0x8e, 0x44, 0x30
-	.byte 0x1b, 0x31, 0x8e, 0x03, 0xf1, 0x8e, 0x44, 0x02
+	.byte 0x1b, 0x31, 0x8e, 0x03
+; ★ NEW NAME. Target (0x45AC) = 0x4496 + 0x116 = slot 4 record + 0x36. Global sub-command
+; 0x25. Note the four addresses 0x4504/0x453C/0x4574/0x45AC together with 0x44CC (slot 0)
+; form the per-slot +0x36 word that DSP_EFFParam_DiffAlgoSection diffs -- so global
+; sub-commands 0x21..0x25 set that one word for slots 1,2,-,3,4 respectively. Slot 0's
+; equivalent is not exposed here.
+DSP_SET_CFGWORD_45AC:
+	.byte 0xf1, 0x8e, 0x44, 0x02
 	.byte 0x00, 0x00, 0xd8, 0x12, 0xf1, 0xac, 0x45, 0x50
 	.byte 0xf1, 0x8e, 0x44, 0x30, 0x1b, 0x31, 0x8e, 0x03
 
+; ALREADY NAMED -- doc header only.
+; Blocking delay measured on the 32-bit free-running tick at 0x1040.
+; Entry WA = delay in half-ticks: target = (0x1040) + ((WA + 1) >> 1). While (0x1040) is
+; below the target it calls TaskSched_PreemptiveYield(3) and re-tests.
+; ★ There is NO iteration cap. If the tick at 0x1040 stops advancing this never returns.
+; Callers are outside the region (0x039128 and a tail jump at 0x039472, both in the DSP
+; microprogram download path).
 DSP_WaitForDelay:
 	push xiz
 	extz xwa
@@ -34537,19 +40048,26 @@ DSP_WaitForDelay:
 	cpdm32 4160, xiz
 	jr nc, DSP_WaitForTaskSlot_Epilogue
 
+; TaskSched_PreemptiveYield(3); re-test.
 DSP_WaitForTaskSlot_Loop:
 	lds wa, 3
 	call TaskSched_PreemptiveYield
 	cpdm32 4160, xiz
 	jr c, DSP_WaitForTaskSlot_Loop
 
+; pop; ret.
 DSP_WaitForTaskSlot_Epilogue:
 	pop xiz
 	ret
 
+; --- 0x036327-0x03632A  DSP_WaitForTaskSlot_Data -- four bytes 1b 0f 8e 03
+; `jp 0x038E0F` -- an unreachable tail jump left between DSP_WaitForDelay's epilogue and
+; DSP_WakeAudioTask. 0x038E0F is inside the DSP_State_* group.
 DSP_WaitForTaskSlot_Data:
 	.byte 0x1b, 0x0f, 0x8e, 0x03
 
+; ALREADY NAMED -- doc header only. `TaskSched_Wait(1)` as a tail jump. Called at the top of
+; DSP2_Send_Command so the bit-bang burst starts on a fresh scheduler slice.
 DSP_WakeAudioTask:
 	lds wa, 1
 	jp TaskSched_Wait
@@ -34562,6 +40080,17 @@ DSP_WakeAudioTask:
 ; Notes: Polls DSP status with timeout of 0x1F40 iterations (~8000)
 ;        Writes command byte to port PZ when DSP is ready
 ; ----------------------------------------------------------------------------
+; ALREADY NAMED -- doc header only. Transport for DSP1 (IC311, the parallel-bus DSP).
+; Entry BC = chip number, A = command byte. Exit HL = 0 on success, 1 on timeout/error.
+; Ready poll: DSP_Deassert_Read, DSP_Deassert_Write, DSP_Select_Chip, DSP_Read_Status,
+; DSP_Deselect_Chip -- all bracketed by `ei 6` / `ei 0`, i.e. interrupts below level 6 are
+; masked for the duration of each poll and re-enabled between polls. Timeout counter starts
+; at 0x1F40 (8000) polls, so this ALWAYS terminates.
+; On ready: DSP_Assert_Write, DSP_Set_Command_Mode, re-read status, and if status is non-zero
+; write the byte to SFR 0x68 (port PZ). Cleanup always runs DSP_Deselect_Chip,
+; DSP_Deassert_Write, DSP_Set_Data_Mode.
+; ★ Unconditionally calls Debug_Print_String(ROM 0x012207 = "\n[") + Debug_Print_Byte(cmd) +
+;   Debug_Print_String(ROM 0x01220A = "]\n") on EVERY byte, success or failure.
 DSP_Send_Command:	; 036331h
 	dec 8, xsp
 	pushw iz
@@ -34583,6 +40112,7 @@ DSP_Send_Command:	; 036331h
 	cps iz, 0
 	jr nz, DSP_Send_Cmd_Ready
 
+; Timeout decrement; on expiry set result = 1 and go to cleanup.
 DSP_Send_Cmd_WaitLoop:
 	ld wa, (xsp + 2)	; Get timeout counter
 	decm 1, (xsp + 2)	; Decrement
@@ -34591,6 +40121,7 @@ DSP_Send_Cmd_WaitLoop:
 	ldw (xsp + 4), 0x1	; Timeout - set error
 	jr DSP_Send_Cmd_Cleanup
 
+; One status poll.
 DSP_Send_Cmd_Poll:
 	ei 6
 	call DSP_Deassert_Read
@@ -34606,6 +40137,7 @@ DSP_Send_Cmd_Poll:
 	cps iz, 0
 	jr z, DSP_Send_Cmd_WaitLoop	; Still not ready, keep waiting
 
+; DSP reported ready: switch to command mode and write SFR 0x68.
 DSP_Send_Cmd_Ready:
 	ei 6
 	ld wa, (xsp + 6)
@@ -34623,9 +40155,11 @@ DSP_Send_Cmd_Ready:
 	st_dd8b A, 0x68	; Write to DSP data port
 	jr DSP_Send_Cmd_Cleanup
 
+; Status went back to zero between poll and write: result = 1.
 DSP_Send_Cmd_Error:
 	ldw (xsp + 4), 0x1	; Set error flag
 
+; Deselect, deassert, back to data mode, print, return the result word.
 DSP_Send_Cmd_Cleanup:
 	ld wa, (xsp + 6)
 	call DSP_Deselect_Chip
@@ -34644,6 +40178,21 @@ DSP_Send_Cmd_Cleanup:
 	inc 8, xsp
 	ret
 
+; ALREADY NAMED -- doc header only, and see [UNCERTAIN]: this is a START condition, not a
+; clock pulse.
+; Bit-bangs the two-wire link to the second DSP (IC310, MN19413) on port PF (SFR 0x3C):
+;   PF bit 2 = clock, PF bit 0 = data.
+; Sequence, with all delays realised as chains of `nop` + `jr $+2`:
+;   set 2,(PF)        clock high
+;   ~19 nops
+;   set 0,(PF)        data high
+;   1 nop
+;   res 0,(PF)        data LOW while clock is HIGH   <-- this is an I2C-style START
+;   ~16 nops
+;   res 2,(PF)        clock low
+;   ~19 nops
+;   jp Debug_Print_String(ROM 0x01220D = "\n<sta>\n")
+; The trace string "<sta>" is the firmware author's own confirmation that this is "start".
 DSP2_SPI_ClockPulseHigh:
 	set_dd8 2, 0x3C
 	jr __jrt_nop_03640F
@@ -34927,6 +40476,10 @@ DSP2_ClkHigh_Nop55:
 	lda_24 xwa, 0x01220d
 	jp Debug_Print_String
 
+; ALREADY NAMED. Same bus, the STOP condition: res 2,(PF), res 0,(PF), ~96 nops,
+; set 2,(PF) (clock high), ~24 nops, set 0,(PF) (data goes HIGH while clock is HIGH = STOP),
+; then ~134 nops of guaranteed bus-idle time, then jp Debug_Print_String(ROM 0x012215 =
+; "\n<stp>\n"). Port writes are at 0x0364C4, 0x0364C7, 0x036538, 0x03656B only.
 DSP2_SPI_BusIdle:
 	res_dd8 2, 0x3C
 	res_dd8 0, 0x3C
@@ -35605,6 +41158,19 @@ DSP2_BusIdle_Nop134:
 	lda_24 xwa, 0x012215
 	jp Debug_Print_String
 
+; ALREADY NAMED -- doc header only. Sends one command byte to DSP2 over the bit-banged
+; two-wire bus. Entry BC = chip number, A = byte. Exit HL = 0 (the result word is initialised
+; to 0 and never set to anything else -- this transport has NO error detection and NO
+; timeout, only fixed delays).
+;   DSP_WakeAudioTask() ; ei 6 ; DSP_Select_Chip(BC) ; DSP2_SPI_ClockPulseHigh() [= START]
+;   8 iterations of: emit bit 7 of the shifting byte on PF.0, ~1 nop, shift left, clock high
+;     (set 2,(PF)), ~16 nops, clock low (res 2,(PF)), ~20 nops
+;   then a 9th clock pulse with the data line left as-is (the acknowledge slot):
+;     ~1 nop, set 2,(PF), ~17 nops, res 2,(PF), ~19 nops
+;   DSP_Deselect_Chip(BC) ; ~16 nops ; ei 0
+;   Debug_Print_Byte(byte) + Debug_Print_String(ROM 0x01221F)
+; The whole burst runs with interrupts below level 6 masked -- roughly 250 nop slots, which
+; is the longest interrupt-masked window in the audio path.
 DSP2_Send_Command:
 	dec 6, xsp
 	push xiz
@@ -35622,15 +41188,18 @@ DSP2_Send_Command:
 	cps iz, 0
 	jrl le, DSP2_SendCmd_PostLoop_Entry
 
+; Test bit 7 of the shift register and drive PF.0 accordingly.
 DSP2_SendCmd_BitLoop:
 	bit_erpb 0xFB, 0x07
 	jr z, DSP2_SendCmd_BitClear
 	set_dd8 0, 0x3C
 	jr DSP2_SendCmd_BitSet_Done
 
+; res 0,(PF) -- data line low.
 DSP2_SendCmd_BitClear:
 	res_dd8 0, 0x3C
 
+; Join point; the shift and the clock-high edge follow one nop later.
 DSP2_SendCmd_BitSet_Done:
 	jr __jrt_nop_0366A6
 __jrt_nop_0366A6:
@@ -35818,6 +41387,7 @@ DSP2_SendCmd_ClkLow_Nop20:
 	sub iz, 0x1
 	jrl gt, DSP2_SendCmd_BitLoop
 
+; The 9th (acknowledge) clock pulse after the 8 data bits.
 DSP2_SendCmd_PostLoop_Entry:
 	jr __jrt_nop_036723
 __jrt_nop_036723:
@@ -36103,6 +41673,10 @@ DSP2_SendCmd_Epilogue_Nop16:
 ; Exit:  HL = 0 on success, 1 on timeout
 ; Notes: Similar to DSP_Send_Command but uses data mode
 ; ----------------------------------------------------------------------------
+; ALREADY NAMED -- doc header only. Identical in shape to DSP_Send_Command (same 0x1F40
+; timeout, same ei 6 / ei 0 bracketing, same SFR 0x68 write) except that it calls
+; DSP_Set_Data_Mode instead of DSP_Set_Command_Mode before selecting the chip, and its
+; cleanup does not restore data mode (it is already in it). Trace string ROM 0x012222.
 DSP_Send_Data:	; 0367EEh
 	dec 8, xsp
 	pushw iz
@@ -36124,6 +41698,7 @@ DSP_Send_Data:	; 0367EEh
 	cps iz, 0
 	jr nz, DSP_Send_Data_Ready
 
+; Timeout decrement.
 DSP_Send_Data_WaitLoop:
 	ld wa, (xsp + 2)
 	decm 1, (xsp + 2)
@@ -36132,6 +41707,7 @@ DSP_Send_Data_WaitLoop:
 	ldw (xsp + 4), 0x1	; Timeout error
 	jr DSP_Send_Data_Cleanup
 
+; One status poll.
 DSP_Send_Data_Poll:
 	ei 6
 	call DSP_Deassert_Read
@@ -36147,6 +41723,7 @@ DSP_Send_Data_Poll:
 	cps iz, 0
 	jr z, DSP_Send_Data_WaitLoop
 
+; Data mode, assert write, re-check status, write SFR 0x68.
 DSP_Send_Data_Ready:
 	ei 6
 	call DSP_Set_Data_Mode	; Set data mode (unlike command routine)
@@ -36164,9 +41741,11 @@ DSP_Send_Data_Ready:
 	st_dd8b A, 0x68	; Write to DSP data port
 	jr DSP_Send_Data_Cleanup
 
+; result = 1.
 DSP_Send_Data_Error:
 	ldw (xsp + 4), 0x1
 
+; Deselect, deassert, print, return the result.
 DSP_Send_Data_Cleanup:
 	ld wa, (xsp + 6)
 	call DSP_Deselect_Chip
@@ -36182,6 +41761,12 @@ DSP_Send_Data_Cleanup:
 	inc 8, xsp
 	ret
 
+; ALREADY NAMED -- doc header only. The DSP2 data-byte transmitter. Byte-for-byte the same
+; bit-bang loop as DSP2_Send_Command with two differences: it does NOT call
+; DSP_WakeAudioTask, and it does NOT emit a START condition -- it just selects the chip and
+; clocks 8 bits plus the acknowledge pulse. So a DSP2 transaction is
+; DSP2_Send_Command (START + opcode) followed by N x DSP2_Send_Data, terminated by
+; DSP2_SPI_BusIdle (STOP) from the caller. Trace string ROM 0x012224. Always returns HL = 0.
 DSP2_Send_Data:
 	dec 6, xsp
 	push xiz
@@ -36197,15 +41782,18 @@ DSP2_Send_Data:
 	cps iz, 0
 	jrl le, DSP2_SendData_PostLoop_Entry
 
+; Bit test and PF.0 drive.
 DSP2_SendData_BitLoop:
 	bit_erpb 0xFB, 0x07
 	jr z, DSP2_SendData_BitClear
 	set_dd8 0, 0x3C
 	jr DSP2_SendData_BitSet_Done
 
+; res 0,(PF).
 DSP2_SendData_BitClear:
 	res_dd8 0, 0x3C
 
+; Join point.
 DSP2_SendData_BitSet_Done:
 	jr __jrt_nop_0368EF
 __jrt_nop_0368EF:
@@ -36393,6 +41981,7 @@ DSP2_SendData_ClkLow_Nop19:
 	sub iz, 0x1
 	jrl gt, DSP2_SendData_BitLoop
 
+; The 9th (acknowledge) clock pulse.
 DSP2_SendData_PostLoop_Entry:
 	jr __jrt_nop_03696C
 __jrt_nop_03696C:
@@ -36669,6 +42258,11 @@ DSP2_SendData_Epilogue_Nop16:
 	inc 6, xsp
 	ret
 
+; ALREADY NAMED -- doc header only. The one place that knows which DSP is which.
+; Entry BC = chip selector, A = byte. BC == 0 -> DSP_Send_Command (IC311, parallel);
+; BC == 1 -> DSP2_Send_Command (IC310, bit-banged); anything else -> HL = 1 (invalid chip).
+; Exit HL = 0 ok / 1 error. Eight call sites, all in the DSP microprogram loader outside
+; this region.
 DSP_DispatchCommand:
 	pushw iz
 	lds iz, 0
@@ -36681,19 +42275,27 @@ DSP_DispatchCommand:
 	calr DSP_Send_Command
 	jr DSP_DispatchCommand_Epilogue
 
+; BC == 1.
 DSP_DispatchCommand_DSP2Path:
 	extz wa
 	calr DSP2_Send_Command
 	jr DSP_DispatchCommand_Epilogue
 
+; ++IZ, i.e. HL = 1.
 DSP_DispatchCommand_InvalidChip:
 	inc 1, iz
 
+; HL = IZ; pop; ret. NOTE: the transports' own return values are DISCARDED here -- IZ is only
+; ever 0 or 1 from the invalid-chip test -- so a DSP_Send_Command timeout is invisible to the
+; caller of DSP_DispatchCommand.
 DSP_DispatchCommand_Epilogue:
 	ld hl, iz
 	popw iz
 	ret
 
+; ALREADY NAMED -- doc header only. Same shape for data bytes: BC == 0 -> DSP_Send_Data,
+; BC == 1 -> DSP2_Send_Data, else HL = 1. The transports' results are discarded in the same
+; way.
 DSP_DispatchData:
 	pushw iz
 	lds iz, 0
@@ -36706,19 +42308,26 @@ DSP_DispatchData:
 	calr DSP_Send_Data
 	jr DSP_DispatchData_Epilogue
 
+; BC == 1.
 DSP_DispatchData_DSP2Path:
 	extz wa
 	calr DSP2_Send_Data
 	jr DSP_DispatchData_Epilogue
 
+; ++IZ.
 DSP_DispatchData_InvalidChip:
 	inc 1, iz
 
+; HL = IZ; pop; ret.
 DSP_DispatchData_Epilogue:
 	ld hl, iz
 	popw iz
 	ret
 
+; ALREADY NAMED -- doc header only. Copies 0x91 words (290 bytes) from XWA to 0x45CA, i.e.
+; snapshots the live effect configuration into the shadow that all the diff routines compare
+; against. Called at the end of DSP_State_ApplyAll, so "shadow" means "state as of the last
+; successful apply". Uses `ldirw` with XIX = destination, XIY = source.
 DSP_StateTable_Reset:
 	ld xiy, xwa
 	ld xix, 0x45CA
@@ -36726,6 +42335,16 @@ DSP_StateTable_Reset:
 	ldirw
 	ret
 
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer (0x448E).
+; Sets the global flag (0x493E) to 0 only when ALL THREE of these hold:
+;   (XWA+6) == (0x45D0)   [config header word 6 equals its shadow]
+;   (XWA+2) != 1
+;   (XWA+4) == 1
+; otherwise (0x493E) = 1. Downstream, (0x493E) == 1 is the "algorithm did NOT change" case
+; that makes EFF_SlotActive_UpdateFlags mark all five slots live and
+; EFF_DspChannel_InitFlags force every dirty bit -- so the polarity of this flag is
+; "1 = full rewrite needed". Note the sense of the name is therefore inverted; see
+; [UNCERTAIN].
 DSP_AlgoChange_CheckAndFlag:
 	ld bc, (xwa + 6)
 	cpda16 xbc, 17872
@@ -36735,19 +42354,26 @@ DSP_AlgoChange_CheckAndFlag:
 	cpw (xwa + 4), 0x1
 	jr nz, DSP_AlgoChange_FlagAndClear
 
+; (0x493E) = 1.
 DSP_AlgoChange_NoChange:
 	stdi16 18750, 1
 	ret
 
+; (0x493E) = 0.
 DSP_AlgoChange_FlagAndClear:
 	stdi16 18750, 0
 	ret
 
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
+; For each slot n = 0..4: compares the word at slot-record +0x00 (the algorithm number)
+; against its shadow at 0x45D2 + n*0x38, and writes 1 (differs) or 0 (same) to the per-slot
+; dirty word at 0x4940 + n*0x32. Pure comparison, nothing is copied.
 DSP_SlotParam_DiffAndFlag:
 	lds hl, 0
 	cps hl, 5
 	ret nc
 
+; Body; the address arithmetic `((n*8)-n)*8 + 8` is the compiler's way of writing n*56 + 8.
 DSP_SlotParam_DiffLoop:
 	ld bc, hl
 	mul bc, 0x38
@@ -36774,6 +42400,7 @@ DSP_SlotParam_DiffLoop:
 	ldw (xbc), 0x1
 	jr DSP_SlotParam_DiffMismatch
 
+; Equal: dirty word = 0.
 DSP_SlotParam_DiffMatch:
 	ld bc, hl
 	mul bc, 0x32
@@ -36782,18 +42409,31 @@ DSP_SlotParam_DiffMatch:
 	add xbc, xde
 	ldw (xbc), 0x0
 
+; Loop increment. (Both branch names are one step off what they do; the "Mismatch" label is
+; actually the loop tail.)
 DSP_SlotParam_DiffMismatch:
 	inc 1, hl
 	cps hl, 5
 	jr c, DSP_SlotParam_DiffLoop
 	ret
 
+; ALREADY NAMED -- doc header only. The big four-level parameter diff. Entry XWA = live
+; config buffer; no output register, everything lands in the dirty arrays.
+; For each slot n = 0..4 it clears the slot summary word (0x4960 + n*0x32 + 0x10) and then
+; compares, live against shadow, writing per-item 1/0 flags:
+;   slot +0x02                 vs 0x45D4 + n*0x38   -> flag at 0x4942 + n*0x32
+;   slot +0x04 .. +0x24 (17 w) vs 0x45D6 + n*0x38   -> flags at 0x4944 + n*0x32 + i*2
+;   slot +0x28                 vs 0x45FA + n*0x38   -> flag at 0x4966 + n*0x32
+;   slot +0x36                 vs 0x4600 + n*0x38+8 -> flag at 0x495E + n*0x32 + 0x10
+; Any difference also sets the slot summary word to 1. Finally it clears the three words at
+; 0x4958/0x495A/0x495C + n*0x32 + 0x10 for the slot.
 DSP_EFFParam_DiffAllAndFlag:
 	push xiz
 	lds de, 0
 	cps de, 5
 	jrl nc, DSP_EFFParam_DiffEpilogue
 
+; Per-slot entry; clears the slot summary word.
 DSP_EFFParam_DiffOuter:
 	ld bc, de
 	mul bc, 0x32
@@ -36806,6 +42446,7 @@ DSP_EFFParam_DiffOuter:
 	cps hl, 1
 	jrl nc, DSP_EFFParam_DiffInner
 
+; The single word at slot +0x02.
 DSP_EFFParam_DiffMid:
 	ld ix, hl
 	add ix, ix
@@ -36849,6 +42490,7 @@ DSP_EFFParam_DiffMid:
 	ldw (xbc), 0x1
 	jr DSP_EFFParam_DiffMidNext
 
+; Equal: flag = 0.
 DSP_EFFParam_DiffMidMatch:
 	ld ix, hl
 	add ix, ix
@@ -36860,16 +42502,19 @@ DSP_EFFParam_DiffMidMatch:
 	add xbc, xix
 	ldw (xbc), 0x0
 
+; Loop tail (the loop bound is 1, so it runs exactly once).
 DSP_EFFParam_DiffMidNext:
 	inc 1, hl
 	cps hl, 1
 	jrl c, DSP_EFFParam_DiffMid
 
+; Sets up the 17-word coefficient loop.
 DSP_EFFParam_DiffInner:
 	lds hl, 0
 	cp hl, 0x11
 	jrl nc, DSP_EFFParam_DiffLevel4
 
+; One coefficient: slot +0x04 + i*2 vs shadow 0x45D6 + n*0x38 + i*2.
 DSP_EFFParam_DiffInnerBody:
 	ld ix, hl
 	add ix, ix
@@ -36913,6 +42558,7 @@ DSP_EFFParam_DiffInnerBody:
 	ldw (xbc), 0x1
 	jr DSP_EFFParam_DiffInnerNext
 
+; Equal: flag = 0.
 DSP_EFFParam_DiffInnerMatch:
 	ld ix, hl
 	add ix, ix
@@ -36924,16 +42570,19 @@ DSP_EFFParam_DiffInnerMatch:
 	add xbc, xix
 	ldw (xbc), 0x0
 
+; ++i while i < 0x11.
 DSP_EFFParam_DiffInnerNext:
 	inc 1, hl
 	cp hl, 0x11
 	jrl c, DSP_EFFParam_DiffInnerBody
 
+; Sets up the single-word +0x28 comparison.
 DSP_EFFParam_DiffLevel4:
 	lds hl, 0
 	cps hl, 1
 	jrl nc, DSP_EFFParam_DiffAlgoSection
 
+; slot +0x28 vs shadow 0x45FA + n*0x38.
 DSP_EFFParam_DiffLevel4Body:
 	ld ix, hl
 	add ix, ix
@@ -36977,6 +42626,7 @@ DSP_EFFParam_DiffLevel4Body:
 	ldw (xbc), 0x1
 	jr DSP_EFFParam_DiffLevel4Next
 
+; Equal: flag = 0.
 DSP_EFFParam_DiffLevel4Match:
 	ld ix, hl
 	add ix, ix
@@ -36988,11 +42638,14 @@ DSP_EFFParam_DiffLevel4Match:
 	add xbc, xix
 	ldw (xbc), 0x0
 
+; Loop tail (bound 1).
 DSP_EFFParam_DiffLevel4Next:
 	inc 1, hl
 	cps hl, 1
 	jrl c, DSP_EFFParam_DiffLevel4Body
 
+; slot +0x36 vs shadow 0x4600 + n*0x38 + 8 -- the word the five global setters
+; DSP_SET_CFGWORD_* write.
 DSP_EFFParam_DiffAlgoSection:
 	ld bc, de
 	mul bc, 0x38
@@ -37028,6 +42681,7 @@ DSP_EFFParam_DiffAlgoSection:
 	ldw (xbc), 0x1
 	jr DSP_EFFParam_DiffOuterNext
 
+; Equal: flag at 0x495E + n*0x32 + 0x10 = 0. (The name suggests the opposite of what it does.)
 DSP_EFFParam_AlgoChangePath:
 	ld bc, de
 	mul bc, 0x32
@@ -37037,6 +42691,7 @@ DSP_EFFParam_AlgoChangePath:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Clears 0x4958/0x495A/0x495C + n*0x32 + 0x10, then ++n while n < 5.
 DSP_EFFParam_DiffOuterNext:
 	ld bc, de
 	mul bc, 0x32
@@ -37063,10 +42718,13 @@ DSP_EFFParam_DiffOuterNext:
 	cps de, 5
 	jrl c, DSP_EFFParam_DiffOuter
 
+; pop; ret.
 DSP_EFFParam_DiffEpilogue:
 	pop xiz
 	ret
 
+; ALREADY NAMED -- doc header only. XWA = live config buffer; runs, in order,
+; DSP_AlgoChange_CheckAndFlag, DSP_SlotParam_DiffAndFlag, DSP_EFFParam_DiffAllAndFlag.
 DSP_State_DiffAll:
 	push xiz
 	ld xiz, xwa
@@ -37079,6 +42737,8 @@ DSP_State_DiffAll:
 	pop xiz
 	ret
 
+; ALREADY NAMED -- doc header only. DSP_State_DiffAll followed by EFF_StateLoad_Prepare
+; (outside the region), both with XWA = the live config buffer.
 DSP_State_DiffAndPrepare:
 	push xiz
 	ld xiz, xwa
@@ -37089,16 +42749,24 @@ DSP_State_DiffAndPrepare:
 	pop xiz
 	ret
 
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
+; Clamps the header word at +6 to 0 or 1 (anything above 1 becomes 0), then clamps each of
+; the five slots' word at slot-record +0x00 to a maximum of 0x63 (99). That 0..99 ceiling is
+; the strongest evidence that slot +0x00 is the DSP algorithm NUMBER: it matches the
+; instrument's 0..99 effect numbering, and EFF_SlotActive_UpdateFlags tests it against the
+; specific values 0x33, 0x34, 0x45 and 0x46.
 DSP_Config_ClampLimits:
 	cpw (xwa + 6), 0x1
 	jr ule, DSP_Config_ClampLoop
 	ldw (xwa + 6), 0x0
 
+; Slot loop head, n = 0..4.
 DSP_Config_ClampLoop:
 	lds hl, 0
 	cps hl, 5
 	ret nc
 
+; Reads slot +0x00; if it exceeds 0x63 recomputes the address and writes 0x63 back.
 DSP_Config_ClampApply:
 	ld bc, hl
 	extz xbc
@@ -37120,16 +42788,23 @@ DSP_Config_ClampApply:
 	add xde, xwa
 	ldw (xde), 0x63
 
+; ++n while n < 5.
 DSP_Config_ClampNext:
 	inc 1, hl
 	cps hl, 5
 	jr c, DSP_Config_ClampApply
 	ret
 
+; --- 0x036DEA-0x036DF4  DSP_Config_ClampData -- eleven bytes d2 66 55 04 23 d2 44 54 04 83 0e
+; Disassembles exactly as `ld HL,(0x045566) / add HL,(0x045444) / ret`, i.e. another
+; unreachable routine tail, not a data table.
 DSP_Config_ClampData:
 	.byte 0xd2, 0x66, 0x55, 0x04, 0x23, 0xd2, 0x44, 0x54
 	.byte 0x04, 0x83, 0x0e
 
+; ALREADY NAMED -- doc header only. Entry WA = index. Returns HL = (0x45BC + index*2) and
+; then writes 0 to the same word -- a destructive read of a five-word pending-state array.
+; Only caller in the firmware is DSP_SlotState_DisplayRestore, with index 0.
 DSP_SlotMuteState_ReadAndClear:
 	ld bc, wa
 	add bc, bc
@@ -37148,6 +42823,10 @@ DSP_SlotMuteState_ReadAndClear:
 ; Entry: XWA = pointer to structure with byte[0] and byte[1]
 ; Exit: XHL = XWA + computed offset (address into sample data)
 ;   offset = (byte[0] << 8) + byte[1], capped at 0xF0
+; ALREADY NAMED -- doc header only. XHL = XWA + ((XWA[0] << 8) + XWA[1]), except that when
+; the resulting offset's high byte equals 0xF0 the add is skipped (a 6-byte forward branch
+; over the add), leaving XHL undefined on that path. No caller anywhere in this build; the
+; existing header comment's "capped at 0xF0" is a fair reading. Kept as-is.
 CalcSampleAddr:
 	ld	c, (xwa+1)
 	and	c, 255
@@ -37169,6 +42848,14 @@ CalcSampleAddr:
 	ld	xhl, xwa
 	ret
 
+; ALREADY NAMED -- doc header only. The whole apply pipeline. Entry XWA = live config buffer.
+;   (0x45C8) = 0
+;   DSP_Config_ClampLimits ; DSP_State_DiffAndPrepare ; DSP_State_Dispatcher ;
+;   DSP_StateTable_Reset
+;   HL = (0x45C8)
+; So DSP_State_Dispatcher (outside the region) is what actually pushes bytes at the DSPs, and
+; it reports through 0x45C8. The unconditional DSP_StateTable_Reset at the end means the
+; shadow is updated even if the dispatch failed. Called from 0x040592.
 DSP_State_ApplyAll:
 	push xiz
 	ld xiz, xwa
@@ -37185,6 +42872,16 @@ DSP_State_ApplyAll:
 	pop xiz
 	ret
 
+; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
+; If the global flag (0x493E) == 1 (see DSP_AlgoChange_CheckAndFlag) it simply marks all five
+; slots live: (0x4930 + n*2) = 1 for n = 0..4, and returns.
+; Otherwise, per slot n: reads the algorithm number at slot +0x00; if it is 0x33, 0x34, 0x45
+; or 0x46 a local "voice-linked" flag DE is set to 1. Then, if the slot's dirty word
+; (0x4940 + n*0x32) is 1, or the config header word (XWA+0) is 1 and the slot summary
+; (0x4960 + n*0x32 + 0x10) is 1, or the summary is 1 while DE == 1, the slot is marked live
+; and a batch of dirty bits is forced: (0x4930 + n*2) = 1, the coefficient flag indexed by
+; slot +0x1E doubled, and the words at 0x495A / 0x495C / 0x4960 (+ n*0x32 + 0x10) = 1, plus
+; 0x4958 + n*0x32 + 0x10 = 1 unless slot +0x30 equals 0x63. Otherwise (0x4930 + n*2) = 0.
 EFF_SlotActive_UpdateFlags:
 	lds de, 0
 	cpdi16 18750, 1
@@ -37193,6 +42890,7 @@ EFF_SlotActive_UpdateFlags:
 	cps hl, 5
 	ret nc
 
+; The "mark all five live" loop taken when (0x493E) == 1.
 EFF_SlotActive_CheckSlot:
 	ld wa, hl
 	add wa, wa
@@ -37205,11 +42903,13 @@ EFF_SlotActive_CheckSlot:
 	jr c, EFF_SlotActive_CheckSlot
 	ret
 
+; Per-slot loop set-up (n = 0..4).
 EFF_SlotActive_SlotActive:
 	lds hl, 0
 	cps hl, 5
 	ret nc
 
+; Per-slot loop body: reads the algorithm number and tests it against 0x33/0x34/0x45/0x46.
 EFF_SlotActive_SlotInactive:
 	ld bc, hl
 	extz xbc
@@ -37229,9 +42929,11 @@ EFF_SlotActive_SlotInactive:
 	cp bc, 0x46
 	jr nz, EFF_SlotActive_VoiceInactive
 
+; One of those four algorithms: DE = 1.
 EFF_SlotActive_VoiceCheck:
 	lds de, 1
 
+; The three-way "does this slot need a rewrite" test.
 EFF_SlotActive_VoiceInactive:
 	ld bc, hl
 	mul bc, 0x32
@@ -37251,6 +42953,7 @@ EFF_SlotActive_VoiceInactive:
 	cpw (xbc), 0x1
 	jr z, EFF_SlotActive_LoopNext
 
+; Summary-word test combined with the DE flag.
 EFF_SlotActive_AlgoCheck:
 	ld bc, hl
 	mul bc, 0x32
@@ -37263,6 +42966,7 @@ EFF_SlotActive_AlgoCheck:
 	cps de, 1
 	jrl nz, EFF_SlotActive_InnerLoopNext
 
+; The "slot is live" body that forces the batch of dirty flags. Not a loop tail.
 EFF_SlotActive_LoopNext:
 	ld bc, hl
 	add bc, bc
@@ -37327,6 +43031,7 @@ EFF_SlotActive_LoopNext:
 	ldw (xbc), 0x1
 	jr EFF_SlotActive_Epilogue
 
+; The "slot is not live" body: (0x4930 + n*2) = 0.
 EFF_SlotActive_InnerLoopNext:
 	ld bc, hl
 	add bc, bc
@@ -37335,12 +43040,18 @@ EFF_SlotActive_InnerLoopNext:
 	add xbc, xix
 	ldw (xbc), 0x0
 
+; ++n while n < 5, then ret. This is the actual loop tail.
 EFF_SlotActive_Epilogue:
 	inc 1, hl
 	cps hl, 5
 	jrl c, EFF_SlotActive_SlotInactive
 	ret
 
+; ALREADY NAMED -- doc header only. No parameters.
+; If (0x493E) == 1: (0x493A) = 1 and then (0x493A + i*2) = 0 for i = 1 only, i.e. the pair
+; becomes {1, 0}. Otherwise both words (0x493A) and (0x493C) are cleared.
+; Called from 0x038078, immediately after EFF_SlotActive_UpdateFlags and immediately before
+; EFF_DspChannel_InitFlags -- the three form one "prepare the dirty state" block.
 EFF_DSPLink_ResetFlags:
 	cpdi16 18750, 1
 	jr nz, EFF_DSPLink_ResetFlags_LoopNext
@@ -37349,6 +43060,7 @@ EFF_DSPLink_ResetFlags:
 	cps de, 2
 	ret nc
 
+; The i = 1..1 clear loop after (0x493A) = 1.
 EFF_DSPLink_ResetFlags_ZeroPath:
 	ld wa, de
 	add wa, wa
@@ -37361,11 +43073,13 @@ EFF_DSPLink_ResetFlags_ZeroPath:
 	jr c, EFF_DSPLink_ResetFlags_ZeroPath
 	ret
 
+; The (0x493E) != 1 branch: set up the i = 0..1 clear loop.
 EFF_DSPLink_ResetFlags_LoopNext:
 	lds de, 0
 	cps de, 2
 	ret nc
 
+; That loop's body.
 EFF_DSPLink_ResetFlags_InnerBody:
 	ld wa, de
 	add wa, wa
@@ -37378,11 +43092,22 @@ EFF_DSPLink_ResetFlags_InnerBody:
 	jr c, EFF_DSPLink_ResetFlags_InnerBody
 	ret
 
+; ALREADY NAMED -- doc header only. Entry: none (it works purely on the dirty arrays).
+; For each slot n = 0..4:
+;   if (0x493E) == 1, force the slot dirty word (0x4940 + n*0x32) = 1
+;   if that word is now 1, set every dirty flag the slot owns:
+;       (0x4944 + n*0x32 + i*2) = 1 for i = 0..0x10   (17 coefficient flags)
+;       (0x4942 + n*0x32 + i*2) = 1 for i = 0..0      (1 flag)
+;       (0x4966 + n*0x32 + i*2) = 1 for i = 0..0      (1 flag)
+;       (0x4958 / 0x495A / 0x495C + n*0x32 + 0x10) = 1
+;   ...continuing past this region's end at 0x0370BF (EFF_DspChannel_Init_MultiTableDirty).
+; This is the "the algorithm changed, so re-send everything" hammer.
 EFF_DspChannel_InitFlags:
 	lds de, 0
 	cps de, 5
 	ret nc
 
+; (0x493E) == 1 -> force this slot's dirty word to 1.
 EFF_DspChannel_Init_AlgoCheck:
 	cpdi16 18750, 1
 	jr nz, EFF_DspChannel_Init_SlotNext
@@ -37393,6 +43118,7 @@ EFF_DspChannel_Init_AlgoCheck:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
+; Tests the slot dirty word; if not 1, jump to the outer loop tail (outside this region).
 EFF_DspChannel_Init_SlotNext:
 	ld bc, de
 	mul bc, 0x32
@@ -37405,6 +43131,7 @@ EFF_DspChannel_Init_SlotNext:
 	cp ix, 0x11
 	jr nc, EFF_DspChannel_Init_CoeffLoop
 
+; The 17-iteration loop that sets the coefficient flags at 0x4944 + n*0x32 + i*2.
 EFF_DspChannel_Init_FreqLoop:
 	ld hl, ix
 	add hl, hl
@@ -37419,11 +43146,13 @@ EFF_DspChannel_Init_FreqLoop:
 	cp ix, 0x11
 	jr c, EFF_DspChannel_Init_FreqLoop
 
+; Sets up the single-iteration loop over 0x4942.
 EFF_DspChannel_Init_CoeffLoop:
 	lds ix, 0
 	cps ix, 1
 	jr nc, EFF_DspChannel_Init_Coeff2Loop
 
+; That loop's body.
 EFF_DspChannel_Init_CoeffNext:
 	ld hl, ix
 	add hl, hl
@@ -37438,11 +43167,14 @@ EFF_DspChannel_Init_CoeffNext:
 	cps ix, 1
 	jr c, EFF_DspChannel_Init_CoeffNext
 
+; Sets up the single-iteration loop over 0x4966.
 EFF_DspChannel_Init_Coeff2Loop:
 	lds ix, 0
 	cps ix, 1
 	jr nc, EFF_DspChannel_Init_MultiTableDirty
 
+; That loop's body. The region ends at 0x0370BE, one byte before
+; EFF_DspChannel_Init_MultiTableDirty (0x0370BF), which continues the same routine.
 EFF_DspChannel_Init_Coeff2Next:
 	ld hl, ix
 	add hl, hl
@@ -37457,6 +43189,14 @@ EFF_DspChannel_Init_Coeff2Next:
 	cps ix, 1
 	jr c, EFF_DspChannel_Init_Coeff2Next
 
+; Body of EFF_DspChannel_InitFlags, inside its slot loop (DE = slot, 0..4). Marks the five
+; multi-table / auxiliary dirty words of the slot unconditionally dirty:
+; 0x004968, 0x00496A, 0x00496C, 0x00496E (link) and 0x004970 (volume), each + 50*DE.
+; Then, ONLY when DE == 1, it reaches across into SLOT 0's flags: it takes slot 0's volume
+; parameter index n = block[+0x2E] (= record 0 field +0x26) and marks slot 0's parameter
+; n+1 dirty at 0x004946 + 2*n -- or n+2 (0x004948 + 2*n) when slot 0's effect is 0x35 or
+; 0x0F. This cross-slot dependency is the only place in the region where one slot's flags
+; are written from another slot's iteration.
 EFF_DspChannel_Init_MultiTableDirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37510,6 +43250,8 @@ EFF_DspChannel_Init_MultiTableDirty:
 	ldw (xbc), 0x1
 	jr EFF_DspChannel_Init_OuterNext
 
+; The "+2 instead of +1" arm of the cross-slot marking above, taken when slot 0's effect
+; number is 0x35 or 0x0F (the two algorithms with a reordered parameter list).
 EFF_DspChannel_Init_AlgoTypePath:
 	inc 1, bc
 	add bc, bc
@@ -37519,6 +43261,9 @@ EFF_DspChannel_Init_AlgoTypePath:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
+; Join point: loads the slot's effect number from block+8+56*DE and, if it is 0x27, falls
+; into the five three-parameter coalescing blocks below; otherwise jumps straight to the
+; 0x4F test at EFF_DspChanInit_AlgoType9_Dirty.
 EFF_DspChannel_Init_OuterNext:
 	ld bc, de
 	extz xbc
@@ -37555,6 +43300,11 @@ EFF_DspChannel_Init_OuterNext:
 	cpw (xbc), 0x1
 	jr nz, EFF_DspChanInit_AlgoType1_Dirty
 
+; Effect 0x27, band 0: if any of param[0..2] is dirty, mark param[0] dirty and clear
+; param[1] and param[2]. Five such blocks follow, covering param[0..14] in groups of
+; three -- five bands of three values each (frequency / Q / gain), which is the shape of
+; the PARAMETRIC EQ described in kn5000-docs/effects-dsp.md. Coalescing to the first flag
+; is what makes the DSP-side biquad get designed once per band instead of three times.
 EFF_DspChanInit_AlgoType0_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37578,6 +43328,7 @@ EFF_DspChanInit_AlgoType0_Dirty:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x27, band 1 test: is any of param[3..5] dirty?
 EFF_DspChanInit_AlgoType1_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37604,6 +43355,7 @@ EFF_DspChanInit_AlgoType1_Dirty:
 	cpw (xbc), 0x1
 	jr nz, EFF_DspChanInit_AlgoType3_Dirty
 
+; Effect 0x27, band 1 coalesce: set param[3], clear param[4] and param[5].
 EFF_DspChanInit_AlgoType2_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37627,6 +43379,7 @@ EFF_DspChanInit_AlgoType2_Dirty:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x27, band 2 test: is any of param[6..8] dirty?
 EFF_DspChanInit_AlgoType3_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37653,6 +43406,7 @@ EFF_DspChanInit_AlgoType3_Dirty:
 	cpw (xbc), 0x1
 	jr nz, EFF_DspChanInit_AlgoType5_Dirty
 
+; Effect 0x27, band 2 coalesce: set param[6], clear param[7] and param[8].
 EFF_DspChanInit_AlgoType4_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37676,6 +43430,7 @@ EFF_DspChanInit_AlgoType4_Dirty:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x27, band 3 test: is any of param[9..11] dirty?
 EFF_DspChanInit_AlgoType5_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37702,6 +43457,7 @@ EFF_DspChanInit_AlgoType5_Dirty:
 	cpw (xbc), 0x1
 	jr nz, EFF_DspChanInit_AlgoType7_Dirty
 
+; Effect 0x27, band 3 coalesce: set param[9], clear param[10] and param[11].
 EFF_DspChanInit_AlgoType6_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37725,6 +43481,7 @@ EFF_DspChanInit_AlgoType6_Dirty:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x27, band 4 test: is any of param[12..14] dirty?
 EFF_DspChanInit_AlgoType7_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37751,6 +43508,7 @@ EFF_DspChanInit_AlgoType7_Dirty:
 	cpw (xbc), 0x1
 	jr nz, EFF_DspChanInit_AlgoType9_Dirty
 
+; Effect 0x27, band 4 coalesce: set param[12], clear param[13] and param[14].
 EFF_DspChanInit_AlgoType8_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37774,6 +43532,10 @@ EFF_DspChanInit_AlgoType8_Dirty:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x4F path. If the slot's effect number is 0x4F, coalesce four PAIRS instead of
+; five triples: param[1]->param[0], param[3]->param[2], param[5]->param[4],
+; param[7]->param[6]; in each pair the odd flag is cleared. Otherwise jump to the 0x35 /
+; 0x0F test at EFF_DspChanInit_AlgoType4F_Epilogue.
 EFF_DspChanInit_AlgoType9_Dirty:
 	ld bc, de
 	extz xbc
@@ -37808,6 +43570,7 @@ EFF_DspChanInit_AlgoType9_Dirty:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x4F, pair 2: if param[3] is dirty, set param[2] and clear param[3].
 EFF_DspChanInit_AlgoType4F_SubA:
 	ld bc, de
 	mul bc, 0x32
@@ -37832,6 +43595,7 @@ EFF_DspChanInit_AlgoType4F_SubA:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x4F, pair 3: if param[5] is dirty, set param[4] and clear param[5].
 EFF_DspChanInit_AlgoType4F_SubB:
 	ld bc, de
 	mul bc, 0x32
@@ -37856,6 +43620,7 @@ EFF_DspChanInit_AlgoType4F_SubB:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Effect 0x4F, pair 4: if param[7] is dirty, set param[6] and clear param[7].
 EFF_DspChanInit_AlgoType4F_SubC:
 	ld bc, de
 	mul bc, 0x32
@@ -37880,6 +43645,9 @@ EFF_DspChanInit_AlgoType4F_SubC:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
+; Dispatch on the slot's effect number for the remaining special cases: 0x35 and 0x0F go
+; to EFF_DspChanInit_AlgoType35_Dirty, everything else falls through to the 0x3F test at
+; EFF_DspChanInit_AlgoType35_SubC.
 EFF_DspChanInit_AlgoType4F_Epilogue:
 	ld bc, de
 	extz xbc
@@ -37902,6 +43670,10 @@ EFF_DspChanInit_AlgoType4F_Epilogue:
 	cpw (xhl), 0xF
 	jrl nz, EFF_DspChanInit_AlgoType35_SubC
 
+; Effects 0x35 / 0x0F. Gate: only if param[13] is dirty. Then, depending on the record's
+; variant flag (+0x1E == 1), mark either {param[3], param[8], param[5], param[10]} or
+; {param[4], param[9], param[6], param[11]} dirty -- the two interleaved halves that the
+; two parameter-order lists at 0x0122A6 / 0x0122B1 walk.
 EFF_DspChanInit_AlgoType35_Dirty:
 	ld bc, de
 	mul bc, 0x32
@@ -37951,6 +43723,7 @@ EFF_DspChanInit_AlgoType35_Dirty:
 	ldw (xbc), 0x1
 	jr EFF_DspChanInit_AlgoType35_SubB
 
+; The variant-flag == 0 half: mark param[4], param[9], param[6], param[11] dirty.
 EFF_DspChanInit_AlgoType35_SubA:
 	ld bc, de
 	mul bc, 0x32
@@ -37981,6 +43754,7 @@ EFF_DspChanInit_AlgoType35_SubA:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
+; Join of the two halves: also mark the slot's VOLUME dirty flag (0x004970 + 50*slot).
 EFF_DspChanInit_AlgoType35_SubB:
 	ld bc, de
 	mul bc, 0x32
@@ -37991,6 +43765,8 @@ EFF_DspChanInit_AlgoType35_SubB:
 	ldw (xbc), 0x1
 	jr EFF_DspChanInit_AlgoType35_SubF
 
+; Effect 0x3F path: if param[1] or param[2] is dirty, mark param[0] (the level) dirty.
+; param[0] is the value EFF_VolumeLoop later rewrites through the 0x0122C4 table.
 EFF_DspChanInit_AlgoType35_SubC:
 	ld bc, de
 	extz xbc
@@ -38019,6 +43795,7 @@ EFF_DspChanInit_AlgoType35_SubC:
 	cpw (xbc), 0x1
 	jr nz, EFF_DspChanInit_AlgoType35_SubE
 
+; Effect 0x3F: perform that param[0] marking.
 EFF_DspChanInit_AlgoType35_SubD:
 	ld bc, de
 	mul bc, 0x32
@@ -38028,6 +43805,8 @@ EFF_DspChanInit_AlgoType35_SubD:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
+; Common tail for effect 0x3F and for every effect that took none of the special paths:
+; mark the slot's VOLUME dirty flag (0x004970 + 50*slot).
 EFF_DspChanInit_AlgoType35_SubE:
 	ld bc, de
 	mul bc, 0x32
@@ -38037,6 +43816,10 @@ EFF_DspChanInit_AlgoType35_SubE:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
+; If the slot's LINK dirty flag (0x00496E + 50*slot) is set, also mark the parameter that
+; the record names as the volume parameter (record +0x26) dirty, at
+; 0x004944 + 50*slot + 2*record[+0x26]. A link change therefore always forces the level to
+; be re-sent, which is what stops a re-linked slot coming back at the wrong gain.
 EFF_DspChanInit_AlgoType35_SubF:
 	ld bc, de
 	mul bc, 0x32
@@ -38064,12 +43847,19 @@ EFF_DspChanInit_AlgoType35_SubF:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
+; Slot-loop step: DE += 1, repeat while DE < 5, then return from EFF_DspChannel_InitFlags.
 EFF_DspChanInit_AlgoType35_Epilogue:
 	inc 1, de
 	cps de, 5
 	jrl c, EFF_DspChannel_Init_AlgoCheck
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = pointer to the new 290-byte config block (in practice 0x045324).
+; Runs the three flag-preparation passes in order, re-supplying XWA to each because they
+; clobber it: EFF_SlotActive_UpdateFlags (rebuild 0x004930[]), EFF_DSPLink_ResetFlags, and
+; EFF_DspChannel_InitFlags (the dirty-flag coalescing documented above). Called only from
+; DSP_State_DiffAndPrepare, which is itself called only from DSP_State_ApplyAll.
 EFF_StateLoad_Prepare:
 	push xiz
 	ld xiz, xwa
@@ -38081,6 +43871,18 @@ EFF_StateLoad_Prepare:
 	pop xiz
 	ret
 
+; Mute every ACTIVE effect slot before the reprogramming burst.
+; Entry: XWA = new config block (accepted but NOT used -- see below). Uses IZ = slot 0..4.
+; For each slot whose EFF_SlotActive word (0x004930 + 2*slot) is 1:
+;   - if the slot's "needs programming" flag (0x004940 + 50*slot) is 1 AND the effect
+;     number taken from the SHADOW block (0x0045D2 + 56*slot, i.e. shadow+8+56*slot)
+;     has a non-zero entry in the class table at 0x012226, then latch
+;     0x0045BC + 2*slot = 1;
+;   - unconditionally call EFF_Mute_WithDebug(slot) and remember that something was muted.
+; If anything was muted, finish with DSP_ScheduleDelay(0x14) = a 20 ms settle.
+; NOTE, measured: this routine reads the SHADOW copy of the effect number while every
+; other loop in the dispatcher reads the NEW block. That asymmetry is deliberate -- you
+; have to mute what is currently loaded, not what is about to be.
 EFF_MuteLoop:
 	pushw iz
 	lds de, 0
@@ -38088,6 +43890,8 @@ EFF_MuteLoop:
 	cps iz, 5
 	jr nc, EFF_MuteLoop_Epilogue
 
+; Per-slot body: the EFF_SlotActive test, the dirty + class-table test, and the
+; 0x0045BC latch.
 EFF_MuteLoop_SlotBody:
 	ld wa, iz
 	add wa, wa
@@ -38121,32 +43925,43 @@ EFF_MuteLoop_SlotBody:
 	add xwa, xbc
 	ldw (xwa), 0x1
 
+; Fall-through target: issues EFF_Mute_WithDebug(slot) and sets the "something was muted"
+; flag. Reached whether or not the 0x0045BC latch was taken -- the name in the build is
+; slightly misleading, this path DOES mute.
 EFF_MuteLoop_NoMute:
 	ld wa, iz
 	call EFF_Mute_WithDebug
 	lds de, 1
 
+; Slot-loop step: IZ += 1, repeat while IZ < 5.
 EFF_MuteLoop_SlotNext:
 	inc 1, iz
 	cps iz, 5
 	jr c, EFF_MuteLoop_SlotBody
 
+; If at least one slot was muted, DSP_ScheduleDelay(20 ms).
 EFF_MuteLoop_Epilogue:
 	cps de, 1
 	jr nz, EFF_MuteLoop_NoFlush
 	ldw wa, 0x14
 	call DSP_ScheduleDelay
 
+; Nothing was muted: skip the settle delay and return.
 EFF_MuteLoop_NoFlush:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Hardware-resets both DSP chips: DSP_Reset_WithDebug(0), DSP_Reset_WithDebug(1).
+; Taken instead of EFF_MuteLoop when the config block's flagC (+0x04) is 1, i.e. on a cold
+; or full reload. Note that DSP_Reset_WithDebug ignores its argument for the pin sequence.
 DSP_ResetLoop:
 	pushw iz
 	lds iz, 0
 	cps iz, 2
 	jr nc, DSP_ResetLoop_Epilogue
 
+; Chip loop body, IZ = 0..1.
 DSP_ResetLoop_Body:
 	ld wa, iz
 	call DSP_Reset_WithDebug
@@ -38154,16 +43969,22 @@ DSP_ResetLoop_Body:
 	cps iz, 2
 	jr c, DSP_ResetLoop_Body
 
+; Restore IZ and return.
 DSP_ResetLoop_Epilogue:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; For each chip c in 0..1 whose DSP_ChipActive word (0x00493A + 2*c) is 1, call
+; DSP_Mute_WithDebug(c), which uploads the chip-mute bytecode program selected from the
+; pointer table at 0x01F3D0.
 DSP_MuteLoop:
 	pushw iz
 	lds iz, 0
 	cps iz, 2
 	jr nc, DSP_MuteLoop_Epilogue
 
+; Chip loop body: the 0x00493A + 2*c test and the DSP_Mute_WithDebug call.
 DSP_MuteLoop_Body:
 	ld wa, iz
 	add wa, wa
@@ -38175,21 +43996,27 @@ DSP_MuteLoop_Body:
 	ld wa, iz
 	call DSP_Mute_WithDebug
 
+; Chip-loop step.
 DSP_MuteLoop_Next:
 	inc 1, iz
 	cps iz, 2
 	jr c, DSP_MuteLoop_Body
 
+; Restore IZ and return.
 DSP_MuteLoop_Epilogue:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Mirror of DSP_MuteLoop using DSP_Unmute_WithDebug and the pointer table at 0x01F3E0.
+; The firmware's own debug string for this operation is "DSP %d antimute".
 DSP_UnmuteLoop:
 	pushw iz
 	lds iz, 0
 	cps iz, 2
 	jr nc, DSP_UnmuteLoop_Epilogue
 
+; Chip loop body: same 0x00493A + 2*c gate.
 DSP_UnmuteLoop_Body:
 	ld wa, iz
 	add wa, wa
@@ -38201,30 +44028,57 @@ DSP_UnmuteLoop_Body:
 	ld wa, iz
 	call DSP_Unmute_WithDebug
 
+; Chip-loop step.
 DSP_UnmuteLoop_Next:
 	inc 1, iz
 	cps iz, 2
 	jr c, DSP_UnmuteLoop_Body
 
+; Restore IZ and return.
 DSP_UnmuteLoop_Epilogue:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; If the global "algorithm change pending" word at 0x00493E is 1, tail-call
+; DSP_AlgorithmChange (0x03800D) with XWA still pointing at the config block; otherwise
+; return immediately. The flag is set by DSP_AlgoChange_CheckAndFlag, outside this region.
 DSP_AlgorithmChangeCheck:
 	cpdi16 18750, 1
 	ret nz
 	call DSP_AlgorithmChange
 	ret
 
+; Already correctly named in both sources; documented here only.
+; HL = max(WA, BC), unsigned (`cp bc,wa / jr ule` keeps WA when BC <= WA). Used only to
+; reduce the per-slot settle times from 0x01ED72 down to a single worst case that is then
+; handed to DSP_ScheduleDelay.
 Unsigned_Max_Select:
 	cp bc, wa
 	jr ule, Unsigned_Max_Select_Return
 	ld wa, bc
 
+; Move the winner into HL and return.
 Unsigned_Max_Select_Return:
 	ld hl, wa
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Send every dirty parameter of one slot to its DSP.
+; Entry: WA = slot, XBC = config block. Frame of 6 bytes; slot at (xsp+8), block at
+; (xsp+4).
+; Two paths, chosen on the slot's effect number:
+;  - GENERIC: iterate i = 0 .. min(record[+0x2C], 17) - 1. Skip i if the parameter's dirty
+;    flag (0x004944 + 50*slot + 2*i) is not 1, and skip i if i equals the record's volume
+;    parameter index (record[+0x26]) -- EFF_VolumeLoop owns that one. Otherwise call
+;    EFF_ParamEdit_WithDebug(slot, effectnumber, i, block).
+;  - ORDERED, for effect 0x0F and effect 0x35 only: walk a byte list instead of a counter.
+;    XIZ = 0x0122A6 + 11 * (record[+0x1E] & 1), i.e. list A or list B; the list is walked
+;    until the byte 0x0C is found. Same dirty-flag test, same EFF_ParamEdit_WithDebug call.
+;    The two lists differ only in their middle four entries, which is how the firmware
+;    programs the "other half" of that algorithm's paired parameters.
+; Calls out to: EFF_ParamEdit_WithDebug (0x038200) -> DSP_WriteParameter (bytecode
+; interpreter, outside the region).
 EFF_ParamIterator_Process:
 	dec 6, xsp
 	push xiz
@@ -38257,11 +44111,15 @@ EFF_ParamIterator_Process:
 	jr ule, EFF_ParamIter_CountClamp
 	ldi_erpw 0xFA, 0x11, 0x00
 
+; The parameter count from record[+0x2C] has just been clamped to 0x11 = 17; start the
+; generic loop with IZ = 0.
 EFF_ParamIter_CountClamp:
 	lds iz, 0
 	cpw_erp IZ, 0xFA
 	jrl nc, EFF_ParamIter_Epilogue
 
+; Generic-path loop body: dirty test at 0x004944 + 50*slot + 2*IZ, volume-index skip, and
+; the EFF_ParamEdit_WithDebug call.
 EFF_ParamIter_StdLoop:
 	ld bc, iz
 	add bc, bc
@@ -38298,12 +44156,16 @@ EFF_ParamIter_StdLoop:
 	ld de, iz
 	call EFF_ParamEdit_WithDebug
 
+; Generic-path loop step: IZ += 1, repeat while IZ < the clamped count.
 EFF_ParamIter_StdLoopNext:
 	inc 1, iz
 	cpw_erp IZ, 0xFA
 	jr c, EFF_ParamIter_StdLoop
 	jr EFF_ParamIter_Epilogue
 
+; Effects 0x0F / 0x35: select the parameter-order list, XIZ = 0x0122A6 + 11*(rec[+0x1E]&1)
+; (encoded as `lda XIZ,XBC+WA`), and bail out immediately if the first byte is the 0x0C
+; terminator.
 EFF_ParamIter_SpecialAlgoPath:
 	ld wa, (xsp + 8)
 	extz xwa
@@ -38321,6 +44183,8 @@ EFF_ParamIter_SpecialAlgoPath:
 	cp (xiz), 0xC
 	jr z, EFF_ParamIter_Epilogue
 
+; Ordered-path loop body: parameter index comes from (XIZ), same dirty test, same
+; EFF_ParamEdit_WithDebug call.
 EFF_ParamIter_SpecialLoop:
 	ld a, (xiz)
 	extz wa
@@ -38351,16 +44215,24 @@ EFF_ParamIter_SpecialLoop:
 	ld bc, (xbc)
 	call EFF_ParamEdit_WithDebug
 
+; Ordered-path loop step: advance XIZ, stop on the 0x0C terminator.
 EFF_ParamIter_SpecialLoopNext:
 	inc 1, xiz
 	cp (xiz), 0xC
 	jr nz, EFF_ParamIter_SpecialLoop
 
+; Restore XIZ, drop the 6-byte frame, return.
 EFF_ParamIter_Epilogue:
 	pop xiz
 	inc 6, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, XBC = config block. If the slot's VOLUME dirty word
+; (0x004970 + 50*slot) is 1, run EFF_ParamIterator_Process for that slot; otherwise return
+; without touching the DSP. Called from EFF_Change_Handler's epilogue, so a parameter
+; sweep only happens for slots whose volume word was marked -- which is why
+; EFF_DspChannel_InitFlags is so careful to set 0x004970.
 EFF_VolumeChange_Check:
 	ld de, wa
 	mul de, 0x32
@@ -38373,6 +44245,17 @@ EFF_VolumeChange_Check:
 	calr EFF_ParamIterator_Process
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Apply one slot's algorithm/data change.
+; Entry: WA = slot, XBC = config block. Returns nothing.
+; 1. Do nothing at all unless the slot's "needs programming" flag (0x004940 + 50*slot)
+;    is 1.
+; 2. Disconnect the slot first: EFF_Disconnect(slot, block[+0x06]) -- unconditionally for
+;    slots != 2, and for slot 2 only when block[+0x04] (cold reload) is not 1.
+; 3. Dispatch: slots 2, 3, 4 take the "algo vs data" fork -- EFF_Change_WithDebug when
+;    block[+0x04] == 1, EFF_DataChange_WithDebug otherwise. Slots 0 and 1 always take
+;    EFF_Change_WithDebug.
+; 4. Finish with EFF_VolumeChange_Check(slot, block).
 EFF_Change_Handler:
 	dec 4, xsp
 	pushw iz
@@ -38397,12 +44280,14 @@ EFF_Change_Handler:
 	call EFF_Disconnect
 	jr EFF_Change_Handler_SlotDispatch
 
+; Slots other than 2: disconnect unconditionally.
 EFF_Change_Handler_NonSlot2:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
 	call EFF_Disconnect
 
+; Post-disconnect fork on the slot number (2, 3, 4 vs 0, 1).
 EFF_Change_Handler_SlotDispatch:
 	ld wa, iz
 	cps wa, 4
@@ -38424,6 +44309,7 @@ EFF_Change_Handler_SlotDispatch:
 	call EFF_Change_WithDebug
 	jr EFF_Change_Handler_Epilogue
 
+; Slots 2/3/4 with block[+0x04] == 1: full algorithm upload via EFF_Change_WithDebug.
 EFF_Change_Handler_Slot234_AlgoPath:
 	ld xwa, (xsp + 2)
 	cpw (xwa + 4), 0x1
@@ -38441,6 +44327,7 @@ EFF_Change_Handler_Slot234_AlgoPath:
 	call EFF_Change_WithDebug
 	jr EFF_Change_Handler_Epilogue
 
+; Slots 2/3/4 otherwise: coefficient-only upload via EFF_DataChange_WithDebug.
 EFF_Change_Handler_Slot234_AltPath:
 	ld wa, iz
 	extz xwa
@@ -38454,6 +44341,7 @@ EFF_Change_Handler_Slot234_AltPath:
 	ld bc, (xbc)
 	call EFF_DataChange_WithDebug
 
+; Tail: EFF_VolumeChange_Check(slot, block), restore IZ, drop the 4-byte frame.
 EFF_Change_Handler_Epilogue:
 	ld wa, iz
 	ld xbc, (xsp + 2)
@@ -38462,6 +44350,19 @@ EFF_Change_Handler_Epilogue:
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; The main reprogramming sweep. Entry: XWA = config block. Frame of 4 bytes; block at
+; (xsp+4). Uses QIZ (the alternate register bank word, `ldiw_erp 0xFA`) as the running
+; worst-case settle time, initialised to 0.
+; Walks slots from 4 DOWN TO 0 (the descending order matters: the chain is torn down from
+; the tail). For each slot:
+;   - if block[+0x02] == 1 (algorithm changed) or block[+0x04] == 1 (cold reload), first
+;     call EFF_WriteHeader(slot);
+;   - if the slot is dirty (0x004940 + 50*slot == 1) or block[+0x00] == 1, fold the slot's
+;     settle time byte from 0x01ED72 into the running maximum via Unsigned_Max_Select;
+;   - call EFF_Change_Handler(slot, block).
+; When the sweep ends, if the accumulated maximum is non-zero, DSP_ScheduleDelay(max)
+; blocks the task for that many milliseconds. With the shipped table the worst case is 46.
 EFF_HeaderChangeDataLoop:
 	dec 4, xsp
 	push xiz
@@ -38471,6 +44372,7 @@ EFF_HeaderChangeDataLoop:
 	cp iz, 0xFFFF
 	jr le, EFF_HeaderChangeLoop_Epilogue
 
+; Slot body: the two header-rewrite tests on block[+0x02] and block[+0x04].
 EFF_HeaderChangeLoop_Body:
 	ld xwa, (xsp + 4)
 	cpw (xwa + 2), 0x1
@@ -38479,10 +44381,12 @@ EFF_HeaderChangeLoop_Body:
 	cpw (xwa + 4), 0x1
 	jr nz, EFF_HeaderChangeLoop_PostAlgo
 
+; Issue EFF_WriteHeader(slot).
 EFF_HeaderChangeLoop_CallAlgo:
 	ld wa, iz
 	call EFF_WriteHeader
 
+; Dirty test on 0x004940 + 50*slot, then the block[+0x00] fallback test.
 EFF_HeaderChangeLoop_PostAlgo:
 	ld wa, iz
 	mul wa, 0x32
@@ -38495,6 +44399,8 @@ EFF_HeaderChangeLoop_PostAlgo:
 	cpw (xwa), 0x1
 	jr nz, EFF_HeaderChangeLoop_CallChange
 
+; Fold this slot's settle time -- byte (0x01ED72 + slot), read with `ld A,(XWA+IZ)` -- into
+; the QIZ running maximum through Unsigned_Max_Select.
 EFF_HeaderChangeLoop_ActiveSlot:
 	lda_24 xwa, 0x01ed72
 	ldb_sri A, 0x07, 0xE0, 0xF8
@@ -38504,6 +44410,7 @@ EFF_HeaderChangeLoop_ActiveSlot:
 	calr Unsigned_Max_Select
 	ldw_erp HL, 0xFA
 
+; Call EFF_Change_Handler(slot, block) and step the descending slot counter.
 EFF_HeaderChangeLoop_CallChange:
 	ld wa, iz
 	ld xbc, (xsp + 4)
@@ -38512,17 +44419,24 @@ EFF_HeaderChangeLoop_CallChange:
 	cp iz, 0xFFFF
 	jr gt, EFF_HeaderChangeLoop_Body
 
+; If the accumulated maximum settle time is non-zero, DSP_ScheduleDelay(max).
 EFF_HeaderChangeLoop_Epilogue:
 	cpiw_erp 0xFA, 0
 	jr z, EFF_HeaderChangeLoop_SkipApply
 	stw_erp WA, 0xFA
 	call DSP_ScheduleDelay
 
+; No slot asked for a settle: restore XIZ, drop the frame, return.
 EFF_HeaderChangeLoop_SkipApply:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Slots 4 down to 0. For each slot whose LINK dirty flag
+; (0x00496E + 50*slot) is 1 AND whose record field +0x36 is 1, call
+; EFF_Link(slot, block[+0x06]) -- i.e. connect the slot into the effect chain by uploading
+; the link bytecode program from the pointer table at 0x01F404.
 EFF_LinkLoop:
 	dec 4, xsp
 	pushw iz
@@ -38531,6 +44445,8 @@ EFF_LinkLoop:
 	cp iz, 0xFFFF
 	jr le, EFF_LinkLoop_Epilogue
 
+; Slot body: the 0x00496E + 50*slot test, then `lda XWA,XWA+BC` to reach
+; block + 8 + 56*slot and test its +0x36 link flag.
 EFF_LinkLoop_Body:
 	ld wa, iz
 	mul wa, 0x32
@@ -38553,16 +44469,29 @@ EFF_LinkLoop_Body:
 	ld bc, (xbc + 6)
 	call EFF_Link
 
+; Descending slot step.
 EFF_LinkLoop_Next:
 	dec 1, iz
 	cp iz, 0xFFFF
 	jr gt, EFF_LinkLoop_Body
 
+; Restore IZ, drop the frame, return.
 EFF_LinkLoop_Epilogue:
 	popw iz
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; The mirror of EFF_LinkLoop for slots that are being taken OUT of the chain
+; (record +0x36 == 0). Entry: XWA = config block. Two descending passes over slots 4..0,
+; the slot counter living in QIZ:
+;  - Pass 1 only measures: for every slot with the LINK dirty flag set and +0x36 == 0,
+;    max-reduce a constant 0x14 (20 ms). If anything matched, DSP_ScheduleDelay(20).
+;  - Pass 2 acts: same predicate, but slots 2 and 3 are EXEMPT (they are the pair whose
+;    disconnect is handled by EFF_Change_Handler instead). Everything else gets
+;    EFF_Disconnect(slot, block[+0x06]). Each matching slot folds its own settle time from
+;    0x01ED72 into a second maximum, and pass 2 ends with another DSP_ScheduleDelay.
+; So an unlink costs up to two scheduled delays, 20 ms plus up to 46 ms.
 EFF_SecondaryLinkPath:
 	dec 4, xsp
 	push xiz
@@ -38572,6 +44501,7 @@ EFF_SecondaryLinkPath:
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr le, EFF_SecLinkPath_Pass1Epilogue
 
+; Pass 1 body: link-dirty test plus the +0x36 == 0 test, then max-reduce 0x14.
 EFF_SecLinkPath_Pass1Body:
 	stw_erp WA, 0xFA
 	mul wa, 0x32
@@ -38594,23 +44524,27 @@ EFF_SecLinkPath_Pass1Body:
 	calr Unsigned_Max_Select
 	ld iz, hl
 
+; Pass 1 descending step (decrements the QIZ slot counter).
 EFF_SecLinkPath_Pass1Next:
 	dec1w_erp 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr gt, EFF_SecLinkPath_Pass1Body
 
+; If pass 1 matched anything, DSP_ScheduleDelay(20 ms) before pass 2 runs.
 EFF_SecLinkPath_Pass1Epilogue:
 	cps iz, 0
 	jr z, EFF_SecLinkPath_Pass2Start
 	ld wa, iz
 	call DSP_ScheduleDelay
 
+; Reset the accumulator and the QIZ slot counter for pass 2.
 EFF_SecLinkPath_Pass2Start:
 	lds iz, 0
 	ldiw_erp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr le, EFF_SecLinkPath_Pass2Epilogue
 
+; Pass 2 body: same predicate; slots 3 and 2 skip the EFF_Disconnect call.
 EFF_SecLinkPath_Pass2Body:
 	stw_erp WA, 0xFA
 	mul wa, 0x32
@@ -38637,6 +44571,8 @@ EFF_SecLinkPath_Pass2Body:
 	ld bc, (xbc + 6)
 	call EFF_Disconnect
 
+; Fold this slot's settle time byte (0x01ED72 + slot) into the pass-2 maximum. The build's
+; name is a little off -- this is a settle-time reduction, not a volume one.
 EFF_SecLinkPath_Pass2MaxVol:
 	ld de, iz
 	lda_24 xwa, 0x01ed72
@@ -38647,22 +44583,35 @@ EFF_SecLinkPath_Pass2MaxVol:
 	calr Unsigned_Max_Select
 	ld iz, hl
 
+; Pass 2 descending step.
 EFF_SecLinkPath_Pass2Next:
 	dec1w_erp 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr gt, EFF_SecLinkPath_Pass2Body
 
+; If pass 2 matched anything, DSP_ScheduleDelay(max).
 EFF_SecLinkPath_Pass2Epilogue:
 	cps iz, 0
 	jr z, EFF_SecLinkPath_Epilogue
 	ld wa, iz
 	call DSP_ScheduleDelay
 
+; Restore XIZ, drop the frame, return.
 EFF_SecLinkPath_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Slots 0..4 ascending. For each slot, look up its volume
+; parameter index v = record[+0x26] and test that parameter's dirty flag
+; (0x004944 + 50*slot + 2*v). If it is set:
+;   - SPECIAL CASE effect 0x3F: recompute the level in place. Read the byte
+;     table[0x0122C4 + record[+0x06]] (values 99,70,50,40,20,10,5,0), subtract it from
+;     record[+0x04] (= param[0]) and store the difference back into record[+0x04],
+;     flooring at 0. This is the only place in the region that MUTATES the config block.
+;   - Then call EFF_VolumeUpdate_WithDebug(slot, effectnumber, v, block).
+; The mutation matters for emulation: the block the caller handed in is not read-only.
 EFF_VolumeLoop:
 	dec 4, xsp
 	pushw iz
@@ -38671,6 +44620,7 @@ EFF_VolumeLoop:
 	cps iz, 5
 	jrl nc, EFF_VolumeLoop_Epilogue
 
+; Slot body: the record[+0x26] lookup, the dirty test, and the effect-0x3F fork.
 EFF_VolumeLoop_Body:
 	ld wa, iz
 	extz xwa
@@ -38761,6 +44711,7 @@ EFF_VolumeLoop_Body:
 	add xbc, (xsp + 2)
 	ldw (xbc + 4), 0x0
 
+; Join point: push the block pointer and call EFF_VolumeUpdate_WithDebug.
 EFF_VolumeLoop_ApplyDelta:
 	ld wa, iz
 	extz xwa
@@ -38776,16 +44727,22 @@ EFF_VolumeLoop_ApplyDelta:
 	ld bc, (xbc)
 	call EFF_VolumeUpdate_WithDebug
 
+; Ascending slot step, repeat while slot < 5.
 EFF_VolumeLoop_Next:
 	inc 1, iz
 	cps iz, 5
 	jrl c, EFF_VolumeLoop_Body
 
+; Restore IZ, drop the frame, return.
 EFF_VolumeLoop_Epilogue:
 	popw iz
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Slots 4 down to 0, SKIPPING slots 3 and 2, calls
+; EFF_Disconnect(slot, block[+0x06]). Reached only on the cold-reload / header-rewrite
+; path of DSP_State_Dispatcher, right after a header write with slot argument 0.
 EFF_DisconnectLoop:
 	dec 4, xsp
 	pushw iz
@@ -38794,6 +44751,7 @@ EFF_DisconnectLoop:
 	cp iz, 0xFFFF
 	jr le, EFF_DisconnectLoop_Epilogue
 
+; Slot body: the slot == 3 and slot == 2 skips, then EFF_Disconnect.
 EFF_DisconnectLoop_Body:
 	cps iz, 3
 	jr z, EFF_DisconnectLoop_Next
@@ -38804,16 +44762,37 @@ EFF_DisconnectLoop_Body:
 	ld bc, (xbc + 6)
 	call EFF_Disconnect
 
+; Descending slot step.
 EFF_DisconnectLoop_Next:
 	dec 1, iz
 	cp iz, 0xFFFF
 	jr gt, EFF_DisconnectLoop_Body
 
+; Restore IZ, drop the frame, return.
 EFF_DisconnectLoop_Epilogue:
 	popw iz
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; THE ORCHESTRATOR OF THIS ENTIRE REGION. Entry: XWA = the new 290-byte config block,
+; kept in XIZ throughout. Called only from DSP_State_ApplyAll, which is called only from
+; DSP_State_LoadAndApplyAll (0x038DEF area) -- it is NOT in the Audio_Main_Loop hot path.
+; Exact order of operations:
+;   1. block[+0x04] == 1 (cold reload) ? DSP_ResetLoop : EFF_MuteLoop
+;   2. DSP_MuteLoop            (per-chip mute)
+;   3. DSP_AlgorithmChangeCheck (uploads the common header set if 0x00493E is pending)
+;   4. if block[+0x04] == 1 or block[+0x02] != 1:
+;        EFF_WriteHeader(0), then EFF_DisconnectLoop
+;   5. DSP_UnmuteLoop
+;   6. EFF_HeaderChangeDataLoop   (the per-slot reprogramming sweep)
+;   7. EFF_LinkLoop               (connect slots whose +0x36 is 1)
+;   8. EFF_VolumeLoop             (levels)
+;   9. EFF_SecondaryLinkPath      (disconnect slots whose +0x36 is 0)
+;  10. refresh the per-slot class cache: for slots 4..0, if the slot is dirty
+;      (0x004940 + 50*slot == 1), write 0x0045BC + 2*slot = classtable[effectnumber] + 1,
+;      or 0 when the class byte is 0.
+; Everything the chips see comes out of steps 1-9; step 10 is bookkeeping only.
 DSP_State_Dispatcher:
 	push xiz
 	ld xiz, xwa
@@ -38822,10 +44801,12 @@ DSP_State_Dispatcher:
 	calr DSP_ResetLoop
 	jr DSP_StateDispatcher_PostMute
 
+; Warm path: EFF_MuteLoop instead of a hardware reset.
 DSP_StateDispatcher_MutePath:
 	ld xwa, xiz
 	calr EFF_MuteLoop
 
+; Join: DSP_MuteLoop then DSP_AlgorithmChangeCheck.
 DSP_StateDispatcher_PostMute:
 	calr DSP_MuteLoop
 	ld xwa, xiz
@@ -38835,12 +44816,15 @@ DSP_StateDispatcher_PostMute:
 	cpw (xiz + 2), 0x1
 	jr nz, DSP_StateDispatcher_UnmutePath
 
+; EFF_WriteHeader(0) followed by EFF_DisconnectLoop -- the chain teardown.
 DSP_StateDispatcher_DisconnectPath:
 	lds wa, 0
 	call EFF_WriteHeader
 	ld xwa, xiz
 	calr EFF_DisconnectLoop
 
+; The five application loops in sequence: DSP_UnmuteLoop, EFF_HeaderChangeDataLoop,
+; EFF_LinkLoop, EFF_VolumeLoop, EFF_SecondaryLinkPath.
 DSP_StateDispatcher_UnmutePath:
 	calr DSP_UnmuteLoop
 	ld xwa, xiz
@@ -38855,6 +44839,9 @@ DSP_StateDispatcher_UnmutePath:
 	cp de, 0xFFFF
 	jr le, DSP_StateDispatcher_Epilogue
 
+; Class-cache refresh loop, slots 4..0: reads the NEW block's effect number at
+; block + 8 + 56*slot, indexes the class table at 0x012226, stores value+1 into
+; 0x0045BC + 2*slot.
 DSP_StateDispatcher_AlgoLoop:
 	ld wa, de
 	muls wa, 0x38
@@ -38889,6 +44876,7 @@ DSP_StateDispatcher_AlgoLoop:
 	ld (xhl), wa
 	jr DSP_StateDispatcher_AlgoNext
 
+; Class byte was 0 (the effect needs no DSP program): clear 0x0045BC + 2*slot.
 DSP_StateDispatcher_AlgoClear:
 	ld wa, de
 	add wa, wa
@@ -38897,15 +44885,21 @@ DSP_StateDispatcher_AlgoClear:
 	add xwa, xbc
 	ldw (xwa), 0x0
 
+; Descending slot step of the class-cache loop.
 DSP_StateDispatcher_AlgoNext:
 	dec 1, de
 	cp de, 0xFFFF
 	jr gt, DSP_StateDispatcher_AlgoLoop
 
+; Restore XIZ and return.
 DSP_StateDispatcher_Epilogue:
 	pop xiz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; HL = byte at 0x012226 + WA, zero-extended: the DSP class of an effect number. 0 means
+; "this effect has no DSP program at all"; the shipped table has 46 zeros, 71 ones and
+; 11 twos over effect numbers 0..127.
 DSP_State_LookupAlgoIndex:
 	extz xwa
 	ld xbc, 0x12226
@@ -38914,13 +44908,36 @@ DSP_State_LookupAlgoIndex:
 	extz hl
 	ret
 
+; NAME LEFT UNCHANGED per the rules (it is a real, non-LABEL_ name in both sources), but
+; it is WRONG: this is not data, it is a complete 18-byte routine, and the 18 bytes after
+; it are a second one. See [UNCERTAIN] for the rename argument.
+; What it actually does: XIY = 0x0046EC (source), XIX = 0x00480E (destination), BC = 0x91,
+; LDIRW -- i.e. copy 145 words = 290 bytes, exactly one config block, from 0x0046EC to
+; 0x00480E. Returns HL = 0. A config-block SNAPSHOT/SAVE.
+; It has NO caller: an exhaustive search of the payload's disassembly for the address
+; 0x037E3E (and for the 3-byte little-endian pointer) returns nothing. Dead code.
 DSP_State_Dispatcher_Data:
 	.byte 0x45, 0xec, 0x46, 0x00, 0x00, 0x44, 0x0e, 0x48
 	.byte 0x00, 0x00, 0x31, 0x91, 0x00, 0x95, 0x11, 0xdb
-	.byte 0xa8, 0x0e, 0x45, 0x0e, 0x48, 0x00, 0x00, 0x44
+	.byte 0xa8, 0x0e
+; No symbol at this address in symbols/subcpu_symbols_reference.txt -- genuinely new.
+; The exact inverse of the routine above: XIY = 0x00480E (source), XIX = 0x0046EC
+; (destination), BC = 0x91, LDIRW, return HL = 0. Copies 290 bytes back.
+; Also has no caller anywhere in the payload -- dead code. Note that 0x0046EC is exactly
+; 0x0045CA + 290, i.e. the block immediately after the live shadow block, and 0x00480E is
+; 290 bytes after that; this pair is almost certainly a vestige of an earlier RAM layout
+; in which the shadow was double-buffered.
+EFF_ConfigSnapshot_Restore:
+	.byte 0x45, 0x0e, 0x48, 0x00, 0x00, 0x44
 	.byte 0xec, 0x46, 0x00, 0x00, 0x31, 0x91, 0x00, 0x95
 	.byte 0x11, 0xdb, 0xa8, 0x0e
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip number, used ONLY for the debug trace ("DSP %d reset", strings at
+; 0x0122CC / 0x0122D2). The pin sequence is fixed and hits BOTH chips regardless of the
+; argument: DSP1_Deassert_Reset, DSP2_Deassert_Reset, DSP1_Assert_Reset,
+; DSP2_Assert_Reset, DSP1_Deassert_Reset. Net effect: DSP1 comes out of reset, DSP2 is
+; LEFT ASSERTED (held in reset) until DSP_AntiReset_WithDebug releases it.
 DSP_Reset_WithDebug:
 	pushw iz
 	ld iz, wa
@@ -38938,6 +44955,11 @@ DSP_Reset_WithDebug:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip number (trace only; strings 0x0122DA / 0x0122E0, "DSP %d anti reset").
+; Body is a single DSP2_Deassert_Reset -- the release of the reset that
+; DSP_Reset_WithDebug deliberately left asserted. Called from DSP_AlgorithmChange when
+; block[+0x04] == 1.
 DSP_AntiReset_WithDebug:
 	pushw iz
 	ld iz, wa
@@ -38951,6 +44973,11 @@ DSP_AntiReset_WithDebug:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = effect slot 0..4. Traces "EFF %d mute" (slot+1 is printed, so the firmware's
+; own logs are 1-based) and then uploads the slot's mute bytecode program:
+; XBC = *(0x01F3BC + 4*slot), then DSP_WriteEFFConfig(slot, program).
+; The five programs are at 0x01EAB4, 0x01EAC8, 0x01EADC, 0x01EAE6, 0x01EAF0.
 EFF_Mute_WithDebug:
 	pushw iz
 	ld iz, wa
@@ -38972,6 +44999,10 @@ EFF_Mute_WithDebug:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip 0..1. Traces "DSP %d mute" and uploads *(0x01F3D0 + 4*chip) via
+; DSP_WriteGlobalConfig(chip, program). Programs at 0x01EA24, 0x01EA39, 0x01EA4E,
+; 0x01EA63 -- the table holds four entries although only two chips exist.
 DSP_Mute_WithDebug:
 	pushw iz
 	ld iz, wa
@@ -38992,6 +45023,9 @@ DSP_Mute_WithDebug:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip 0..1. Traces "DSP %d antimute" and uploads *(0x01F3E0 + 4*chip) via
+; DSP_WriteGlobalConfig. Programs at 0x01EA78, 0x01EA87, 0x01EA96, 0x01EAA5.
 DSP_Unmute_WithDebug:
 	pushw iz
 	ld iz, wa
@@ -39012,6 +45046,16 @@ DSP_Unmute_WithDebug:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = effect slot 0..4, BC = mode (the config block's +0x06, 0 or 1).
+; Traces "EFF %d disconnect", then:
+;   chip = byte(0x01ED6D + slot)                      -- 0,0,1,1,1
+;   program = *(0x01F3F0 + 12*mode + 4*slot)
+;   DSP_WriteGlobalConfig(chip, program)
+; NOTE THE STRIDE. The pointer table is laid out as two contiguous runs of five 32-bit
+; pointers -- disconnect at 0x01F3F0..0x01F403 and link at 0x01F404..0x01F417 -- i.e. a
+; natural mode stride of 20, but the code computes 12 (`xde = mode*3; sll 2`). See
+; [UNCERTAIN]; with mode == 1 slots 2..4 read pointers out of the link run.
 EFF_Disconnect:
 	dec 2, xsp
 	pushw iz
@@ -39051,6 +45095,10 @@ EFF_Disconnect:
 	inc 2, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Byte-for-byte the same shape as EFF_Disconnect with the trace string "EFF %d link" and
+; the base 0x01F404, including the same 12-per-mode stride. Programs at 0x01E602,
+; 0x01E60D, 0x01E618, 0x01E624, 0x01E630.
 EFF_Link:
 	dec 2, xsp
 	pushw iz
@@ -39090,6 +45138,11 @@ EFF_Link:
 	inc 2, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Traces "argo change %d" (the firmware's own typo for "algo")
+; with block[+0x06] as the argument. Uploads the fixed common-header program at 0x01E63C
+; to chip 0; if block[+0x04] == 1, releases DSP2 from reset via DSP_AntiReset_WithDebug;
+; then falls into EFF_LoadConfigs_ForChannel.
 DSP_AlgorithmChange:
 	dec 4, xsp
 	pushw iz
@@ -39110,6 +45163,12 @@ DSP_AlgorithmChange:
 	ld wa, iz
 	calr DSP_AntiReset_WithDebug
 
+; The fixed boot-time program sequence, in order:
+;   chip 0: 0x01E6BE
+;   chip 1: 0x01E996, 0x01EA12
+;   DSP_WaitForDelay(1 ms)
+;   chip 1: 0x01E7C5, 0x01E8A7, 0x01E891, 0x01E947
+; These seven programs are the resident microcode that everything else assumes is loaded.
 EFF_LoadConfigs_ForChannel:
 	lda_24 xwa, 0x01e6be
 	ld xbc, xwa
@@ -39146,6 +45205,11 @@ EFF_LoadConfigs_ForChannel:
 	inc 4, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = effect slot. Traces "EFF %d headder" (sic). Looks up chip =
+; byte(0x01ED6D + slot) and, ONLY IF that chip is 0, uploads the header program at
+; 0x01E496 via DSP_WriteGlobalConfig(0, ...). Slots 2, 3 and 4 map to chip 1 and therefore
+; do nothing here at all -- the per-sample common header is an IC311 concept only.
 EFF_WriteHeader:
 	pushw iz
 	ld iz, wa
@@ -39170,10 +45234,19 @@ EFF_WriteHeader:
 	ld wa, de
 	call DSP_WriteGlobalConfig
 
+; Chip was not 0: return without touching hardware.
 EFF_WriteHeader_Return:
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number. Traces "EFF %d change %02X".
+; Uploads TWO programs per effect: the algorithm from *(0x01ED7C + 4*eff) and the
+; parameter/coefficient set from *(0x01EF0C + 4*eff), both via DSP_WriteEFFConfig(slot,..).
+; Slot 1 has two hard-coded overrides that bypass the tables entirely:
+;   effect 0x09 -> programs 0x01DFA5 and 0x01E0B9
+;   effect 0x0A -> programs 0x01E1DE and 0x01E342
+; Those two are the only effects in the whole firmware with slot-specific microcode.
 EFF_Change_WithDebug:
 	dec 2, xsp
 	pushw iz
@@ -39204,6 +45277,7 @@ EFF_Change_WithDebug:
 	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
+; Slot 1 / effect 0x0A override: upload 0x01E1DE then 0x01E342.
 EFF_Change_Case0xA:
 	ld wa, iz
 	lda_24 xbc, 0x01e1de
@@ -39213,6 +45287,7 @@ EFF_Change_Case0xA:
 	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
+; Slot 1, any other effect: the normal 0x01ED7C + 0x01EF0C table pair.
 EFF_Change_GenericLookup:
 	ld wa, (xsp + 2)
 	extz xwa
@@ -39232,6 +45307,8 @@ EFF_Change_GenericLookup:
 	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
+; Slots other than 1: the normal 0x01ED7C + 0x01EF0C table pair (a duplicate of the code
+; above, not a shared tail).
 EFF_Change_ChannelNot1:
 	ld wa, (xsp + 2)
 	extz xwa
@@ -39250,11 +45327,17 @@ EFF_Change_ChannelNot1:
 	ld xbc, (xbc)
 	call DSP_WriteEFFConfig
 
+; Restore IZ, drop the 2-byte frame, return.
 EFF_Change_Return:
 	popw iz
 	inc 2, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number. Traces "EFF %d data change %02X". Uploads ONLY the
+; coefficient/parameter program *(0x01EF0C + 4*eff) -- the algorithm microcode is left
+; alone. This is the cheap path taken by EFF_Change_Handler for slots 2/3/4 when the
+; config block is not asking for a cold reload.
 EFF_DataChange_WithDebug:
 	dec 2, xsp
 	pushw iz
@@ -39281,6 +45364,13 @@ EFF_DataChange_WithDebug:
 	inc 2, xsp
 	ret
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number, DE = parameter index, plus the config block PUSHED
+; by the caller (read at (xsp+10)); returns with `retd 0x4`, i.e. it pops that argument.
+; Traces "EFF %d para. edit %02X %04X", the last field being the parameter's current value
+; read from block + 12 + 56*slot + 2*paramindex. Then calls DSP_WriteParameter(slot, eff,
+; paramindex, block) -- the bytecode interpreter that walks the effect's parameter
+; descriptor and emits the DSP_Write* sequences documented at the end of this region.
 EFF_ParamEdit_WithDebug:
 	dec 4, xsp
 	pushw iz
@@ -39322,6 +45412,16 @@ EFF_ParamEdit_WithDebug:
 	inc 4, xsp
 	retd 0x4
 
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number, DE = parameter index, config block pushed by the
+; caller; `retd 0x4`. Returns immediately (doing nothing) when DE == 0x63 (99), which is
+; the "no volume parameter" sentinel.
+; Traces "EFF %d vol %04X". Then the important part:
+;   - if the record's link flag (+0x36) is non-zero, just DSP_WriteParameter(...);
+;   - if it is ZERO (the slot is being unlinked), the value is TEMPORARILY forced to 0,
+;     DSP_WriteParameter is called with that 0, and the original value is written back
+;     into the block afterwards. That is how a slot is faded out of the chain without
+;     losing the user's level setting.
 EFF_VolumeUpdate_WithDebug:
 	dec 6, xsp
 	pushw iz
@@ -39370,6 +45470,7 @@ EFF_VolumeUpdate_WithDebug:
 	call DSP_WriteParameter
 	jr EFF_VolumeUpdate_Return
 
+; The unlinked branch: save the value, store 0, send it, restore the value.
 EFF_VolumeUpdate_ZeroAndReload:
 	ld wa, (xsp + 4)
 	extz xwa
@@ -39419,6 +45520,7 @@ EFF_VolumeUpdate_ZeroAndReload:
 	ld wa, (xsp + 2)
 	ld (xde + 12), wa
 
+; Restore IZ, drop the 6-byte frame, `retd 0x4`.
 EFF_VolumeUpdate_Return:
 	popw iz
 	inc 6, xsp
@@ -39468,6 +45570,15 @@ Debug_Print_Word:	; 038375h
 	popw iz
 	ret
 
+; Already correctly named in both sources; documented here only.
+; A one-instruction thunk: `jp 0x036305` (DSP_WaitForDelay). Entry: WA = milliseconds.
+; DSP_WaitForDelay computes target = (WA + 1) >> 1 added to the 32-bit tick counter at
+; 0x001040 and then loops calling TaskSched_PreemptiveYield(3) until 0x001040 reaches it.
+; This is a COOPERATIVE BLOCK, not a spin: the calling task is descheduled. It is the only
+; thing in this region that can suspend the caller for a bounded-by-a-timer amount of
+; time -- see the findings note about the sub->main stall.
+; Call sites in this region: 0x0377D2 (20 ms after muting), 0x037ADE (up to 46 ms after
+; the reprogramming sweep), 0x037B9C and 0x037C1D (the two unlink passes).
 DSP_ScheduleDelay:
 	jp DSP_WaitForDelay
 
@@ -39588,6 +45699,9 @@ DSP_Read_Status:	; 0383F7h
 	extz hl
 	ret
 
+; Entry: XWA = 16-bit value, BC = chip number. Sends the value to the chip as two DATA
+; bytes, LOW byte first then HIGH byte, each through DSP_DispatchData. Used only by
+; DSP_WriteParamCmd30, i.e. only on the chip-1 protocol.
 DSP_WriteParamWord:
 	dec 2, xsp
 	push xiz
@@ -39609,6 +45723,10 @@ DSP_WriteParamWord:
 	inc 2, xsp
 	ret
 
+; The chip-1 (IC310 / "DSP2") parameter protocol, and it is completely different from the
+; IC311 one. Entry: WA = chip, BC = register index, XDE = 16-bit value.
+; Emits: COMMAND 0x30, DATA 0x00, DATA (index & 0xFF), then DSP_WriteParamWord(value).
+; Every DSP_Write*Param routine below funnels into this whenever its chip argument is 1.
 DSP_WriteParamCmd30:
 	dec 6, xsp
 	pushw iz
@@ -39632,6 +45750,15 @@ DSP_WriteParamCmd30:
 	inc 6, xsp
 	ret
 
+; Entry: DE = chip, XBC = 24-bit coefficient, WA = index, plus a base index pushed by the
+; caller at (xsp+12); `retd 0x2`.
+; If chip == 1 it delegates to DSP_WriteParamCmd30. On chip 0 it emits an 11-byte
+; sequence: DATA 0x00, 0x00, then the index split as
+;   ((base+index) >> 4 & 0x0F) + 0x10   and   ((base+index) << 4 & 0xF0),
+; then DATA 0x00, DATA 0x0A, and finally the 24-bit value packed into four bytes:
+;   (v >> 17) & 0x7F, (v >> 9) & 0xFF, (v >> 1) & 0xFF, ((v << 7) & 0x80) + 0x15.
+; That 7+8+8+1 split with the 0x15 tag in the last byte is the 36-bit-word packing
+; described in kn5000-docs/effects-dsp.md; the tag distinguishes the destination bank.
 DSP_WriteFreqParam_AlgoType:
 	dec 6, xsp
 	pushw iz
@@ -39696,17 +45823,24 @@ DSP_WriteFreqParam_AlgoType:
 	call DSP_DispatchData
 	jr DSP_WriteFreqParam_AlgoType_Return
 
+; chip == 1: delegate to DSP_WriteParamCmd30.
 DSP_WriteFreqParam_AlgoType_UseCmd30:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
 	calr DSP_WriteParamCmd30
 
+; Restore IZ, drop the 6-byte frame, `retd 0x2`.
 DSP_WriteFreqParam_AlgoType_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x2
 
+; Identical body to DSP_WriteFreqParam_AlgoType (same 0x10 index bias, same 0x0A opener,
+; same 0x15 tag), differing only in which stack slot supplies the base index. It is the
+; heavily used one: five call sites at 0x0455xx in the parameter interpreter plus the LUT
+; writer at 0x038764, and the pointer 0x038539 appears five times in the ROM's dispatch
+; data (0x03CC47, 0x03CCBF, 0x03CCF9, 0x03CD16, 0x03CD36).
 DSP_WriteFreqParam:
 	dec 6, xsp
 	pushw iz
@@ -39771,17 +45905,23 @@ DSP_WriteFreqParam:
 	call DSP_DispatchData
 	jr DSP_WriteFreqParam_Return
 
+; chip == 1: delegate to DSP_WriteParamCmd30.
 DSP_WriteFreqParam_UseCmd30:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
 	calr DSP_WriteParamCmd30
 
+; Restore IZ, drop the 6-byte frame, `retd 0x2`.
 DSP_WriteFreqParam_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x2
 
+; Entry: XWA = 24-bit coefficient, BC = chip. Emits exactly five DATA bytes and nothing
+; else: 0x0A, (v >> 17) & 0x7F, (v >> 9) & 0xFF, (v >> 1) & 0xFF, ((v << 7) & 0x80) + 0x15.
+; This is the "bare" coefficient write -- the same tail DSP_WriteFreqParam uses, without
+; the index header. It is what streams a coefficient bank into the chip.
 DSP_WriteCoeffData_5B:
 	dec 2, xsp
 	push xiz
@@ -39820,6 +45960,11 @@ DSP_WriteCoeffData_5B:
 	inc 2, xsp
 	ret
 
+; The 24-bit BIG-ENDIAN stream reader. Entry: XWA = address of a 32-bit cursor variable.
+; Reads three bytes b0,b1,b2 at *cursor and returns XHL = (b0 << 16) | (b1 << 8) | b2,
+; then advances *cursor by 3. Clobbers XIX, XIY, XBC, XDE.
+; This is the decoder for the 3-byte Q0.23 coefficient format; every coefficient in the
+; DSP program blobs is stored big-endian even though the CPU is little-endian.
 DSP_UnpackParam3B:
 	ld xix, (xwa)
 	lds32 xbc, 0
@@ -39839,6 +45984,22 @@ DSP_UnpackParam3B:
 	ld (xwa), xbc
 	ret
 
+; Uploads one of six fixed lookup-table programs. Entry: XWA = address of a 32-bit stream
+; cursor, BC = chip, XDE = variant (0, 1 or 2), plus stacked arguments; frame of 18 bytes;
+; `retd 0x4`. Returns HL.
+; The table it uploads does NOT come from the caller's stream -- the caller's cursor value
+; is saved on entry and written back verbatim at DSP_WriteLUT_MainLoop_Done, so the caller
+; sees no advance. Instead a ROM address is chosen from (chip, variant):
+;   chip 0 (36 words): variant 0 -> 0x01EAFA, 1 -> 0x01EB67, 2 -> 0x01EBD4
+;   chip 1 (32 words): variant 0 -> 0x01EC41, 1 -> 0x01ECA5, 2 -> 0x01ED09
+; The first byte of the chosen blob is a base index. The loop then runs size/4 times
+; (9 iterations for chip 0, 8 for chip 1) and per iteration emits:
+;   (except on the first) COMMAND 0x01, DATA 0x01, DATA 0x60
+;   DSP_WriteFreqParam(base + 4*i, next 3-byte coefficient, chip)
+;   three x DSP_WriteCoeffData_5B(next 3-byte coefficient, chip)
+;   COMMAND 0x03
+; So each entry is one indexed word plus three raw coefficients -- a four-coefficient
+; lookup-table row. Only one caller, at 0x045692.
 DSP_WriteLUTParamSet:
 	lda xsp, (xsp - 18)
 	pushw iz
@@ -39860,16 +46021,19 @@ DSP_WriteLUTParamSet:
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
+; chip 0, variant 1: select the blob at 0x01EB67.
 DSP_WriteLUT_AlgoC0_TypeDE1:
 	lda_24 xwa, 0x01eb67
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
+; chip 0, variant 2: select the blob at 0x01EBD4.
 DSP_WriteLUT_AlgoC0_TypeDE2:
 	lda_24 xwa, 0x01ebd4
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
+; chip 1: table size becomes 0x20 words; select among 0x01EC41 / 0x01ECA5 / 0x01ED09.
 DSP_WriteLUT_AlgoC1:
 	ldw (xsp + 2), 0x20
 	cp xde, 0x2
@@ -39880,15 +46044,19 @@ DSP_WriteLUT_AlgoC1:
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
+; chip 1, variant 1: select the blob at 0x01ECA5.
 DSP_WriteLUT_AlgoC1_TypeDE1:
 	lda_24 xwa, 0x01eca5
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
+; chip 1, variant 2: select the blob at 0x01ED09.
 DSP_WriteLUT_AlgoC1_TypeDE2:
 	lda_24 xwa, 0x01ed09
 	ld (xsp + 10), xwa
 
+; Read the blob's first byte as the base index, advance the local cursor past it, zero the
+; iteration counter, and compute the trip count as size/4.
 DSP_WriteLUT_MainLoop_Init:
 	ld xbc, (xsp + 10)
 	lds32 xwa, 1
@@ -39902,6 +46070,7 @@ DSP_WriteLUT_MainLoop_Init:
 	cp (xsp + 4), wa
 	jrl nc, DSP_WriteLUT_MainLoop_Done
 
+; Non-first iterations only: the COMMAND 0x01 / DATA 0x01 / DATA 0x60 row separator.
 DSP_WriteLUT_MainLoop_Body:
 	cpw (xsp + 4), 0x0
 	jr z, DSP_WriteLUT_MainLoop_FirstEntry
@@ -39918,6 +46087,8 @@ DSP_WriteLUT_MainLoop_Body:
 	call DSP_DispatchData
 	ld iz, hl
 
+; The four coefficient writes for one row (one DSP_WriteFreqParam plus three
+; DSP_WriteCoeffData_5B), then the COMMAND 0x03 row terminator and the loop step.
 DSP_WriteLUT_MainLoop_FirstEntry:
 	ld wa, (xsp + 4)
 	sll wa, 2
@@ -39961,6 +46132,8 @@ DSP_WriteLUT_MainLoop_FirstEntry:
 	cp (xsp + 4), wa
 	jrl c, DSP_WriteLUT_MainLoop_Body
 
+; Restore the caller's stream cursor to its entry value, return HL, unwind the 18-byte
+; frame, `retd 0x4`.
 DSP_WriteLUT_MainLoop_Done:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 6)
@@ -39970,6 +46143,15 @@ DSP_WriteLUT_MainLoop_Done:
 	lda xsp, (xsp + 18)
 	retd 0x4
 
+; The oscillator/LFO variant of DSP_WriteFreqParam and by far the most used routine in the
+; region -- its address appears 24 times in the ROM's dispatch data between 0x039C72 and
+; 0x03CEF6. Entry: DE = chip, XBC = 24-bit value, WA = index, base index pushed at
+; (xsp+12); `retd 0x2`. chip == 1 delegates to DSP_WriteParamCmd30.
+; On chip 0 it emits: DATA 0x08, DATA 0x01, then the index as
+;   ((base+index) >> 4 & 0x0F)   and   ((base+index) << 4 & 0xF0) + 8,
+; then DATA 0x21, DATA 0x0A, then the same four value bytes as DSP_WriteCoeffData_5B but
+; with the tag 0x26 instead of 0x15. The 0x08/0x01 opener and the 0x21 selector are what
+; distinguish this address space from the 0x00/0x00 + 0x10-biased one above.
 DSP_WriteOscParam:
 	dec 6, xsp
 	pushw iz
@@ -40034,17 +46216,21 @@ DSP_WriteOscParam:
 	call DSP_DispatchData
 	jr DSP_WriteOscParam_Return
 
+; chip == 1: delegate to DSP_WriteParamCmd30.
 DSP_WriteOscParam_UseCmd30:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
 	calr DSP_WriteParamCmd30
 
+; Restore IZ, drop the 6-byte frame, `retd 0x2`.
 DSP_WriteOscParam_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x2
 
+; Identical to DSP_WriteCoeffData_5B except the trailing tag is 0x26 instead of 0x15, i.e.
+; the bare-coefficient writer for the oscillator address space.
 DSP_WriteCoeffData_5B_Direct:
 	dec 2, xsp
 	push xiz
@@ -40083,6 +46269,11 @@ DSP_WriteCoeffData_5B_Direct:
 	inc 2, xsp
 	ret
 
+; A third variant: same 0x08 / 0x01 / index / (index<<4)+8 opener as DSP_WriteOscParam but
+; the selector byte is 0x25 (not 0x21), the 24-bit value has a stacked OFFSET added to it
+; before packing, and the trailing tag is 0x4C. `retd 0x6`. Has no chip-1 fallback -- it
+; is chip-0 only. One caller, at 0x045560; the pointer 0x038922 also appears once in the
+; dispatch data at 0x03CCA2.
 DSP_WriteOscParam_Offset:
 	dec 6, xsp
 	pushw iz
@@ -40147,6 +46338,21 @@ DSP_WriteOscParam_Offset:
 	popw iz
 	inc 6, xsp
 	retd 0x6
+; 0x0389E1 -- UNNAMED ROUTINE ENTRY.  The DSP_AlgoSelect_* labels just below
+; (0x038A95 / 0x038ACD / 0x038B10 / 0x038B64) are this routine's internal branch
+; targets, so its body is labelled but its entry is not.  It cannot take the bare
+; name DSP_AlgoSelect: that already belongs to the unrelated routine at 0x030960.
+; Frame of 8 bytes, `retd 0xA`, returns HL.  Entry: DE = chip, BC = a sub-index,
+; WA = an index, plus stacked arguments -- a table pointer at (xsp+20) and a type
+; at (xsp+18).
+; Body: calls DSP_TableWalk_Search(table, type, 0x78) to locate a descriptor, forms
+; value = descriptor[0] + 3*subindex, then emits COMMAND 0x01, DATA 0x00, DATA
+; value++, then either a five-DATA "type 0x63" sequence (0x00, 0x00, 0x20, 0x00,
+; 0x00) or the normal index-carrying one, and finally a five-byte header that is
+; either the fixed 0x08, 0x00, 0x80, 0xB4, 0x07 (sub-index 0) or a computed
+; ((value >> 7) & 2) + 0x0C, (value >> 7) & 1, value*2, 0x04, 0x07.
+; DEAD CODE: neither this address nor any of its labels is reachable -- a search of
+; the payload disassembly and of the raw ROM finds no call, no jump and no pointer.
 	dec 8, xsp
 	pushw iz
 	ld iz, de
@@ -40213,6 +46419,7 @@ DSP_WriteOscParam_Offset:
 	ld (xsp + 4), hl
 	jr DSP_AlgoSelect_WriteHeader
 
+; The type == 0x63 arm: emit DATA 0x00, 0x00, 0x20, 0x00, 0x00 instead of the index pair.
 DSP_AlgoSelect_TypeEq63:
 	ld bc, iz
 	lds wa, 0
@@ -40235,6 +46442,7 @@ DSP_AlgoSelect_TypeEq63:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 
+; Sub-index 0: emit the fixed header 0x08, 0x00, 0x80, 0xB4, 0x07.
 DSP_AlgoSelect_WriteHeader:
 	cpw (xsp + 6), 0x0
 	jr nz, DSP_AlgoSelect_WriteHeaderNonZero
@@ -40260,6 +46468,7 @@ DSP_AlgoSelect_WriteHeader:
 	ld (xsp + 4), hl
 	jr DSP_AlgoSelect_HeaderReturn
 
+; Sub-index non-zero: emit the computed header derived from bit 7 of the descriptor value.
 DSP_AlgoSelect_WriteHeaderNonZero:
 	ld wa, (xsp + 2)
 	srl wa, 7
@@ -40291,11 +46500,20 @@ DSP_AlgoSelect_WriteHeaderNonZero:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 
+; Return the accumulated status in HL, unwind the 8-byte frame, `retd 0xA`.
 DSP_AlgoSelect_HeaderReturn:
 	ld hl, (xsp + 4)
 	popw iz
 	inc 8, xsp
 	retd 0xA
+; No symbol at this address in EITHER source -- genuinely new; the existing
+; DSP_OscAlgoSelect_* labels at 0x038C60 / 0x038CB5 are its internal branch targets.
+; The oscillator-address-space twin of DSP_AlgoSelect: same DSP_TableWalk_Search(.., 0x78)
+; descriptor lookup and the same value = descriptor[0] + 3*subindex, but after COMMAND
+; 0x01 / DATA 0x00 / DATA value++ it emits the 0x08 / 0x01 / index-pair / 0x21 opener that
+; DSP_WriteOscParam uses, and its fixed header ends 0x08 rather than 0x07.
+; DEAD CODE: unreferenced anywhere in the payload, same evidence as DSP_AlgoSelect.
+DSP_OscAlgoSelect:
 	dec 8, xsp
 	pushw iz
 	ld iz, de
@@ -40383,6 +46601,7 @@ DSP_AlgoSelect_HeaderReturn:
 	ld (xsp + 4), hl
 	jr DSP_OscAlgoSelect_Return
 
+; Sub-index non-zero: the computed five-byte header, terminating in 0x08.
 DSP_OscAlgoSelect_WriteHeaderNonZero:
 	ld wa, (xsp + 2)
 	srl wa, 7
@@ -40414,11 +46633,24 @@ DSP_OscAlgoSelect_WriteHeaderNonZero:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 
+; Return HL, unwind the 8-byte frame, `retd 0xA`.
 DSP_OscAlgoSelect_Return:
 	ld hl, (xsp + 4)
 	popw iz
 	inc 8, xsp
 	retd 0xA
+; No symbol at this address in EITHER source -- genuinely new; DSP_TuneOffset_Increment
+; (0x038CF6) and DSP_TuneOffset_WriteSequence (0x038CF9, just past this region's end) are
+; its internal branch targets.
+; Entry: BC = chip, XDE = a table pointer, plus stacked arguments; frame of 8 bytes.
+; Calls DSP_TableWalk_Search(table, arg, 0x79) -- note 0x79, one more than the 0x78 the
+; two AlgoSelect routines use -- takes the first byte of the descriptor as a base value,
+; and then adjusts it by +1, -1 or not at all depending on two stacked flags before
+; emitting the write sequence (COMMAND 0x01, DATA 0x01, DATA 0x60, ...) that continues
+; past 0x038CF8. Confidence is medium only because the write sequence itself falls outside
+; this region and was not read line by line.
+; DEAD CODE: unreferenced anywhere in the payload, same evidence as the two above.
+DSP_TuneOffset:
 	dec 8, xsp
 	pushw iz
 	ld iz, bc
@@ -40443,9 +46675,22 @@ DSP_OscAlgoSelect_Return:
 	decm 1, (xsp + 2)
 	jr DSP_TuneOffset_WriteSequence
 
+; The "+1" adjustment arm of DSP_TuneOffset.
 DSP_TuneOffset_Increment:
 	incm 1, (xsp + 2)
 
+; Tail of the unnamed routine that starts at 0x038CBE (which has NO symbol in either source --
+; see [UNCERTAIN]).  Emits a fixed 15-transfer packet to the DSP selected by IZ:
+;   cmd 0x01, data 0x01, 0x60, 0x00, 0x00,
+;   data ((t>>4)&0x0F)+0x10, data (t<<4)&0xF0,     t = the byte fetched by DSP_TableWalk_Search
+;   data 0x00, data 0x0A,
+;   data (P>>17)&0x7F, data (P>>9)&0xFF, data (P>>1)&0xFF, data ((P<<7)&0x80)+0x15,
+;   cmd 0x03
+; where P is the 32-bit parameter the caller passed in XWA.  Note the coefficient wire format:
+; a 24-bit value split MSB-first over four bytes as P[23:17] / P[16:9] / P[8:1] / P[0]<<7, with
+; 0x15 OR-ed into the last byte as a tag.  The word at (XSP+4) accumulates the status returned
+; by each DSP_DispatchCommand / DSP_DispatchData call and is the routine's return value in HL.
+; Falls in from DSP_TuneOffset_Increment (0x038CF6) and from the +/-1 adjustment above it.
 DSP_TuneOffset_WriteSequence:
 	ld bc, iz
 	lds wa, 1
@@ -40529,6 +46774,14 @@ DSP_TuneOffset_WriteSequence:
 	inc 8, xsp
 	retd 0x4
 
+; Seeds the DSP configuration-buffer POOL and starts the task that consumes it.
+;   TaskSched_SpawnTask(3)
+;   TaskMsgQ_Send(queue 1, 0x045324)
+;   TaskMsgQ_Send(queue 1, 0x045446)     [tail-jump]
+; i.e. exactly TWO 0x122-byte buffers are ever in circulation.  Called once, from DSP_Reset
+; (0x0360F9).  Task 3's body is the loop at 0x038E0F, reached through the thunk
+; DSP_WaitForTaskSlot_Data (0x036327) = `jp 0x038E0F`.
+; The pool size of two is the reason DSP_State_ApplyBuf can wedge -- see [UNCERTAIN].
 DSP_State_DmaLoadPresets:
 	lds wa, 3
 	call TaskSched_SpawnTask
@@ -40540,8 +46793,20 @@ DSP_State_DmaLoadPresets:
 	ld xbc, xwa
 	lds wa, 1
 	jp TaskMsgQ_Send
+; TASK BODY (task id 3), not data -- the name is wrong, see [UNCERTAIN].  Never returns:
+;   forever {
+;     XIZ = TaskMsgQ_Receive(queue 2);        // BLOCKING, no timeout
+;     DSP_State_ApplyAll(XIZ);                // 0x036E3D: pushes the image to the DSPs
+;     XIZ->[0x0120] = 0;                      // clear the "request pending" flag
+;     TaskMsgQ_Send(queue 1, XIZ);            // return the buffer to the free pool
+;   }
+; The only producer for queue 2 is DSP_State_ApplyBuf (0x038E31); the only consumer of queue 1
+; is DSP_State_ApplyBuf.  Entered through the thunk at 0x036327.
 DSP_State_InlineData:
 	push xiz
+; Top of the task's forever-loop; target of the `jr T,0x038E10` at 0x038E2F.  This is the only
+; branch target in the whole region with no symbol in the LLVM build -- genuinely new.
+DSP_State_ApplyTask_Loop:
 	lds	wa, 2
 	call	132674
 	ld	xiz, xhl
@@ -40554,6 +46819,16 @@ DSP_State_InlineData:
 	call	132305
 	jr	t, 0xdf
 
+; Hands the caller's 0x91-word (290-byte) DSP configuration image to the apply task.
+; In: XWA = address of the caller's image (callers pass 0x00448E, the live config block).
+; Grabs a buffer:  XHL = TaskMsgQ_TryReceive(queue 2)   -- non-blocking; if a request is still
+; queued it is RE-USED, i.e. the older request is silently overwritten.
+;                  if zero, XHL = TaskMsgQ_Receive(queue 1)  -- BLOCKING, NO TIMEOUT.
+; The chosen buffer address is parked in the global at 0x004A3A.  Then ldirw 0x91 words from
+; the caller's image into it, set buf[0x0120] = 1 ("request pending"), TaskMsgQ_Send(queue 2).
+; Callers: DSP_ApplyAlgoForVoiceType (0x03608C), DSP_ApplyConfig (0x03616A, three call sites)
+; and DSP_ReconfigAndStatus (0x0361C5).
+; ** The blocking Receive at 0x038E44 is the one unbounded wait in this region. **
 DSP_State_ApplyBuf:
 	push xiz
 	ld xiz, xwa
@@ -40566,6 +46841,7 @@ DSP_State_ApplyBuf:
 	call TaskMsgQ_Receive
 	stda32 19002, xhl
 
+; Join point: a buffer has been obtained (from either queue); copy, flag, and post it.
 DSP_State_ApplyBuf_DoCopy:
 	ldda32 xix, 19002
 	ld xiy, xiz
@@ -40579,6 +46855,11 @@ DSP_State_ApplyBuf_DoCopy:
 	pop xiz
 	ret
 
+; Synchronous variant used only at reset (called from 0x0360EF).  Copies the caller's image
+; (XWA) straight into the fixed buffer 0x045324, parks that address in the global 0x004A3E,
+; sets buf[0x0120] = 1, calls DSP_State_ApplyAll (0x036E3D) INLINE on the caller's stack -- no
+; task, no message queue -- then clears buf[0x0120] and returns.  This is the path that cannot
+; block, which is why reset uses it.
 DSP_State_LoadAndApplyAll:
 	lda_24 xde, 0x045324
 	stda32 19006, xde
@@ -40594,10 +46875,19 @@ DSP_State_LoadAndApplyAll:
 	stiw_ind 0xE1, 0x20, 0x01, 0x00, 0x00
 	ret
 
+; NOT data -- a five-instruction table fetch, twin of DSP_ParamFetch_SingleTable.  The name is
+; wrong (see [UNCERTAIN]).
+;   XHL = *(uint32*)(0x0129A3 + 4*XBC)
+; XBC is the 0..99 parameter value; the table has 100 entries.  This is the decoder for
+; byte-code opcode 0x61 (arm 0x03CB8E), whose result goes straight to DSP_WriteOscParam.
 DSP_State_LoadAndApply_InlineData:
 	.byte 0xe9, 0xee, 0x02, 0x40, 0xa3, 0x29, 0x01, 0x00
 	.byte 0xe9, 0x80, 0xa0, 0x23, 0x0e
 
+; XHL = *(uint32*)(0x012B33 + 4*XBC).  100-entry table; XBC = 0..99 parameter value.
+; Decoder for opcode 0x62.  The table is monotonically increasing and roughly exponential
+; (0, 74, 83, 93, 105, 118, 132, 148, ... 4194304, 4706086, 5280316, 5924612), i.e. a
+; log-spaced Q23 coefficient ladder ending just under 2^23 * 0.706.
 DSP_ParamFetch_SingleTable:
 	sll xbc, 2
 	ld xwa, 0x12B33
@@ -40605,6 +46895,14 @@ DSP_ParamFetch_SingleTable:
 	ld xhl, (xwa)
 	ret
 
+; Same idea as above but the table is chosen by an algorithm-type byte read from the stream.
+; In:  XWA = address of the caller's stream cursor, XBC = 0..99 parameter value.
+; Out: XHL = the 32-bit coefficient; the cursor is advanced by ONE byte (the type byte).
+;   type 0 -> 0x012483[XBC]   (100 entries)
+;   type 1 -> 0x012613[XBC]   (100 entries)
+;   type 2 -> 0x0127A3[XBC]   (128 entries)
+;   anything else -> XHL is left UNDEFINED (fall straight through to the epilogue).
+; Decoder for opcode 0x63; result goes to DSP_WriteFreqParam_AlgoType (0x03846C).
 DSP_ParamFetch_AlgoTypeTable:
 	ld xix, (xwa)
 	ld e, (xix)
@@ -40620,6 +46918,7 @@ DSP_ParamFetch_AlgoTypeTable:
 	ld xhl, (xde)
 	jr DSP_ParamFetch_AlgoTypeReturn
 
+; type == 1 arm: fetch from the 0x012613 table.
 DSP_ParamFetch_AlgoType1:
 	sll xbc, 2
 	ld xde, 0x12613
@@ -40627,17 +46926,29 @@ DSP_ParamFetch_AlgoType1:
 	ld xhl, (xde)
 	jr DSP_ParamFetch_AlgoTypeReturn
 
+; type == 2 arm: fetch from the 0x0127A3 table.
 DSP_ParamFetch_AlgoType2:
 	sll xbc, 2
 	ld xde, 0x127A3
 	add xde, xbc
 	ld xhl, (xde)
 
+; Common epilogue: advance the caller's cursor past the type byte and return.
 DSP_ParamFetch_AlgoTypeReturn:
 	inc 1, xix
 	ld (xwa), xix
 	ret
 
+; Decoder for opcode 0x79.  Reads a type byte from the stream, fetches 0x0127A3[XBC], and runs
+; it through the double-precision helpers before converting back to an integer.
+; In: XWA = &cursor, XBC = 0..99 parameter value.  Out: XHL = 32-bit result; cursor += 1.
+;   type != 1 : the fetched word is two's-complement NEGATED first, then
+;               FP_SP_CallWithBuf8 -> FP_DP_NegMantissaLS -> FP_DP_Add_Outer(const 0x012CC3)
+;               -> FP_DP_DecodeToInt
+;   type == 1 : same chain, no negation, constant 0x012CCB
+; Both constants decode as the double 0.552.  I have NOT proved the exact arithmetic because
+; the FP helper names are suspect (see [UNCERTAIN]); the control flow and the operands are
+; certain, the formula is not.
 DSP_AlgoParam_Decode:
 	lda xsp, (xsp - 28)
 	push xiz
@@ -40671,6 +46982,7 @@ DSP_AlgoParam_Decode:
 	call FP_DP_DecodeToInt
 	jr DSP_AlgoParam_Decode_Return
 
+; type == 1 arm: no negation, constant pool entry 0x012CCB.
 DSP_AlgoParam_Decode_Type1:
 	sll xbc, 2
 	ld xiz, 0x127A3
@@ -40689,6 +47001,7 @@ DSP_AlgoParam_Decode_Type1:
 	lda xwa, (xsp + 24)
 	call FP_DP_DecodeToInt
 
+; Advance the caller's cursor by one byte, load the result into XHL, unwind the 0x1C-byte frame.
 DSP_AlgoParam_Decode_Return:
 	lds32 xwa, 1
 	add (xsp + 4), xwa
@@ -40700,6 +47013,14 @@ DSP_AlgoParam_Decode_Return:
 	lda xsp, (xsp + 28)
 	ret
 
+; Decoder for opcode 0x64; result goes to DSP_WriteFreqParam (0x038539).
+; In: XWA = &cursor, XBC = 0..99 parameter value.
+; Consumes ONE 3-byte stream value v (DSP_StreamDecode_3ByteWord); takes only its top byte
+; d = (v>>8) & 0xFF, then
+;       XHL = ((XBC << 23) / d) - 0x00800000
+; i.e. a Q23 signed quantity centred on zero: parameter/d relative to 1.0, minus 1.0.  The
+; `sla 5 / sla 0` pair is <<21 and the later `sla 2` completes the <<23 after the divide.
+; Writes the advanced cursor back through XWA.
 DSP_PitchParam_Scale:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -40729,6 +47050,24 @@ DSP_PitchParam_Scale:
 	lda xsp, (xsp + 12)
 	ret
 
+; Decoder for opcode 0x65 (result -> DSP_WriteOscParam).  BYTE-FOR-BYTE IDENTICAL to
+; DSP_VolScale_B (0x03A282); see [UNCERTAIN] about the "Volume" in the name.
+; In: XWA = &cursor, XBC = 0..99 parameter value.  Out: XHL = Q23 coefficient; cursor += 1.
+; Consumes ONE byte (the curve family) and evaluates a continuous 4- or 5-segment piecewise
+; rational curve.  With f = 44100 * numerator / denominator (44100 == 0xAC44 == the sample
+; rate, and the <<23 is the Q23 scaling):
+;   family 0  (divisors 441000 = 44100*10 and 220500 = 44100*5)  -- 0.1 Hz steps then 0.2 Hz:
+;       x<=50  f = x/10           x<=75  f = (x-25)/5
+;       x<=88  f = (4x-250)/5     else   f = (9x-690)/5          => 0 .. 40.2 Hz
+;   family 1  (divisor 44100)     -- direct Hz:
+;       x<=10  f = x             x<=19  f = 10x-90    x<=64  f = 20x-280
+;       x<=87  f = 400x-24800    else   f = 800x-59600            => 0 .. 19600 Hz
+;   family 2  (denominator varies with x, so this is a warped / bilinear mapping):
+;       x<=50  f = 44100*x/(4000-2x)          x<=75  f = 44100*(x-25)/(2050-2x)
+;       x<=88  f = 44100*(4x-250)/(2500-8x)   else   f = 44100*(9x-690)/(3380-18x)
+;                                                                => 0 .. ~5.5 kHz
+; Families 0 and 2 are continuous at every knot; family 1 has a 200 Hz step at x=64.
+; Any family byte other than 0/1/2 falls through with XHL undefined.
 DSP_VolumeParam_Scale:
 	dec 4, xsp
 	push xiz
@@ -40751,6 +47090,7 @@ DSP_VolumeParam_Scale:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 0, 50 < x <= 75: ((x-25)<<23) / 220500.
 DSP_VolScale_Algo0_Seg2:
 	cp xbc, 0x4B
 	jr gt, DSP_VolScale_Algo0_Seg3
@@ -40762,6 +47102,7 @@ DSP_VolScale_Algo0_Seg2:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 0, 75 < x <= 88: ((4x-250)<<23) / 220500.
 DSP_VolScale_Algo0_Seg3:
 	cp xbc, 0x58
 	jr gt, DSP_VolScale_Algo0_Seg4
@@ -40774,6 +47115,7 @@ DSP_VolScale_Algo0_Seg3:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 0, x > 88: ((9x-690)<<23) / 220500.
 DSP_VolScale_Algo0_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
@@ -40785,6 +47127,7 @@ DSP_VolScale_Algo0_Seg4:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 1 entry, x <= 10: (x<<23) / 44100.
 DSP_VolScale_Algo1_Seg1:
 	cp xbc, 0xA
 	jr gt, DSP_VolScale_Algo1_Seg2
@@ -40795,6 +47138,7 @@ DSP_VolScale_Algo1_Seg1:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 1, 10 < x <= 19: ((10x-90)<<23) / 44100.
 DSP_VolScale_Algo1_Seg2:
 	cp xbc, 0x13
 	jr gt, DSP_VolScale_Algo1_Seg3
@@ -40809,6 +47153,7 @@ DSP_VolScale_Algo1_Seg2:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 1, 19 < x <= 64: ((20x-280)<<15) / 44100, then <<8 (the split <<23).
 DSP_VolScale_Algo1_Seg3:
 	cp xbc, 0x40
 	jr gt, DSP_VolScale_Algo1_Seg4
@@ -40823,6 +47168,7 @@ DSP_VolScale_Algo1_Seg3:
 	sla xhl, 8
 	jrl DSP_VolScale_Return
 
+; family 1, 64 < x <= 87: ((400x-24800)<<15) / 44100, then <<8.  Uses FP_MulAccum64 for 400*x.
 DSP_VolScale_Algo1_Seg4:
 	cp xbc, 0x57
 	jr gt, DSP_VolScale_Algo1_Seg5
@@ -40837,6 +47183,7 @@ DSP_VolScale_Algo1_Seg4:
 	sla xhl, 8
 	jrl DSP_VolScale_Return
 
+; family 1, x > 87: ((800x-59600)<<15) / 44100, then <<8.  Top of range = 19.6 kHz.
 DSP_VolScale_Algo1_Seg5:
 	ld xwa, xbc
 	ld xbc, 0x320
@@ -40849,6 +47196,7 @@ DSP_VolScale_Algo1_Seg5:
 	sla xhl, 8
 	jrl DSP_VolScale_Return
 
+; family 2 entry, x <= 50: (x<<23) / (4000 - 2x).  Note the varying denominator.
 DSP_VolScale_Algo2_Seg1:
 	cp xbc, 0x32
 	jr gt, DSP_VolScale_Algo2_Seg2
@@ -40863,6 +47211,7 @@ DSP_VolScale_Algo2_Seg1:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
 
+; family 2, 50 < x <= 75: ((x-25)<<23) / (2050 - 2x).
 DSP_VolScale_Algo2_Seg2:
 	cp xbc, 0x4B
 	jr gt, DSP_VolScale_Algo2_Seg3
@@ -40879,6 +47228,7 @@ DSP_VolScale_Algo2_Seg2:
 	call Int_SignedDiv_AltEntry
 	jr DSP_VolScale_Return
 
+; family 2, 75 < x <= 88: ((4x-250)<<23) / (2500 - 8x).
 DSP_VolScale_Algo2_Seg3:
 	cp xbc, 0x58
 	jr gt, DSP_VolScale_Algo2_Seg4
@@ -40896,6 +47246,7 @@ DSP_VolScale_Algo2_Seg3:
 	call Int_SignedDiv_AltEntry
 	jr DSP_VolScale_Return
 
+; family 2, x > 88: ((9x-690)<<23) / (3380 - 18x).
 DSP_VolScale_Algo2_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
@@ -40913,6 +47264,9 @@ DSP_VolScale_Algo2_Seg4:
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
 
+; Common epilogue: write the advanced cursor back through the caller's pointer and return.
+; NOTE the fall-through hazard: on an unrecognised family byte XHL is whatever the callee
+; chain left there.
 DSP_VolScale_Return:
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
@@ -40920,6 +47274,15 @@ DSP_VolScale_Return:
 	inc 4, xsp
 	ret
 
+; Decoder for opcodes 0x66 and 0x21 (result -> DSP_WriteOscParam).  Plain linear interpolation
+; between two 24-bit endpoints held in the stream.
+; In: XWA = &cursor, XBC = 0..99 blend value.  Out: XHL; cursor += 6 (two 3-byte values).
+;       A = value[0], B = value[1]
+;       XHL = (A>>8) + ((((B - A) >> 8) * XBC) / 99)
+; The >>8 undoes the left-justification applied by DSP_StreamDecode_3ByteWord; the /99 (0x63)
+; is the 0..99 parameter normalisation.
+; BYTE-FOR-BYTE IDENTICAL to DSP_FreqInterp_2Point (0x0394CD) and DSP_ParamInterp_2Point_B
+; (0x03A22A) -- three copies of the same 0x58-byte function, verified by memcmp.
 DSP_ParamInterp_2Point:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -40955,6 +47318,12 @@ DSP_ParamInterp_2Point:
 	lda xsp, (xsp + 16)
 	ret
 
+; Decoder for opcode 0x67; result -> DSP_WriteOscParam_Offset (0x038922).
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 3.
+;       base = (value[0] >> 8) & 0xFF
+;       XHL  = (XBC * 44100) / 1000 + base
+; 44100/1000 = 44.1 samples per millisecond, so this is "base plus XBC milliseconds expressed
+; in samples at the 44.1 kHz DSP rate".
 DSP_ParamInterp_FPScale:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -40984,6 +47353,11 @@ DSP_ParamInterp_FPScale:
 	lda xsp, (xsp + 12)
 	ret
 
+; Decoder for opcode 0x68; result -> DSP_WriteFreqParam.
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 3.
+;       XHL = (XBC * ((value[0] >> 8) & 0xFF)) / 180
+; The /180 (0xB4) rather than /99 is unusual -- 180 reads as degrees, which would make this a
+; phase parameter, but I have not confirmed that from the DSP side.
 DSP_ParamInterp_Div0xB4:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -41011,6 +47385,17 @@ DSP_ParamInterp_Div0xB4:
 	lda xsp, (xsp + 12)
 	ret
 
+; Decoder for opcode 0x69; result -> DSP_WriteOscParam.  Takes NO stream field -- it works
+; purely on XBC (the 0..99 value), which is stashed at (XSP+0x40) and converted to float by
+; FP_SP_CallWithBuf8.
+; Two branches on the value: x <= 75 (0x4B) uses the constant group at 0x012CD3..0x012CE7
+; (30, 44100, 3307500 = 44100*75, 75, 1800, and the double 2.0); x > 75 uses 0x012CEF..0x012D03
+; (30, 44100, 65091600, 24, 576, 2.0).  Both branches end in the same five-push call to
+; VoiceFloat_CompareAndConvert with the double 2.0 as one operand -- which is almost certainly
+; pow(2.0, y) (see [UNCERTAIN]) -- then FP_DP_NormalizeMantissa, then a shared finalisation.
+; Frame is 0x44 bytes; returns XHL = the 32-bit result read back from (XSP+0x38).
+; I am naming the SHAPE (two-range exponential curve driven by the sample rate 44100) with
+; confidence; I am NOT claiming the routine controls "volume".
 DSP_VolumeCurve_FP:
 	lda xsp, (xsp - 68)
 	ld (xsp + 64), xbc
@@ -41062,6 +47447,7 @@ DSP_VolumeCurve_FP:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_VolumeCurve_FP_Finalize
 
+; x > 75 arm; constant group 0x012CEF..0x012D03.
 DSP_VolumeCurve_FP_HighRange:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 36)
@@ -41107,6 +47493,8 @@ DSP_VolumeCurve_FP_HighRange:
 	lda xwa, (xsp + 60)
 	call FP_DP_NormalizeMantissa
 
+; Shared tail: FP_SP_Add_Outer with the constant at 0x012D0B, then FP_SP_Decode_ReadSign to
+; produce the integer result at (XSP+0x38); unwind the 0x44-byte frame.
 DSP_VolumeCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
 	lda_24 xde, 0x012d0b
@@ -41119,6 +47507,14 @@ DSP_VolumeCurve_FP_Finalize:
 	lda xsp, (xsp + 68)
 	ret
 
+; Decoder for opcode 0x6A; result -> DSP_WriteFreqParam.  Despite the _FP suffix this routine
+; is pure INTEGER arithmetic -- there is no floating point in it at all.
+; In: XBC = 0..99 value (copied to IZ).  Out: XHL.  Consumes nothing from the stream.
+;   x <= 20  XHL = (x<<23)          / (4000 - 2x)
+;   x <= 50  XHL = ((x-10)<<23)     / (2020 - 2x)
+;   else     XHL = ((11x-390)<<15)  / (8780 - 22x), then <<8
+; Continuous at both knots (checked: x=20 gives 10/1980 == 20/3960; x=50 gives 40/1920 ==
+; 160/7680).  Full range 0 .. 0.1059 in Q23, i.e. 0 .. ~4.67 kHz if read as f/44100.
 DSP_FreqCurve_FP:
 	dec 4, xsp
 	push xiz
@@ -41135,6 +47531,7 @@ DSP_FreqCurve_FP:
 	call Int_SignedDiv_AltEntry
 	jr DSP_FreqCurve_FP_Return
 
+; 20 < x <= 50 segment.
 DSP_FreqCurve_FP_Seg2:
 	cp xiz, 0x32
 	jr gt, DSP_FreqCurve_FP_Seg3
@@ -41150,6 +47547,7 @@ DSP_FreqCurve_FP_Seg2:
 	call Int_SignedDiv_AltEntry
 	jr DSP_FreqCurve_FP_Return
 
+; x > 50 segment; the only one that needs FP_MulAccum64 (22*x and 11*x) and a two-part shift.
 DSP_FreqCurve_FP_Seg3:
 	ld xwa, xiz
 	ld xbc, 0x16
@@ -41168,11 +47566,16 @@ DSP_FreqCurve_FP_Seg3:
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
 
+; Common epilogue (pop IZ, release the 4-byte frame).
 DSP_FreqCurve_FP_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
+; Decoder for opcode 0x6B; result -> DSP_WriteFreqParam.
+; BYTE-FOR-BYTE IDENTICAL to DSP_ParamInterp_2Point (0x039206) -- verified by memcmp over all
+; 0x58 bytes.  Same contract: two 3-byte stream values, XHL = A>>8 + ((B-A)>>8)*XBC/99,
+; cursor += 6.  A separate copy exists only because the compiler emitted it per call site.
 DSP_FreqInterp_2Point:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -41208,6 +47611,12 @@ DSP_FreqInterp_2Point:
 	lda xsp, (xsp + 16)
 	ret
 
+; Decoder for opcode 0x6C; result -> DSP_WriteFreqParam.  Interpolates between the TOP BYTES of
+; two stream values and then adds a caller-supplied bias.
+; In: XWA = &cursor, XBC = 0..99 value, XDE = bias.  Out: XHL; cursor += 6.
+;       a = (value[0]>>8)&0xFF ;  b = (value[1]>>8)&0xFF
+;       XHL = (XDE + a + ((b - a) * XBC) / 99) << 8
+; The final <<8 re-left-justifies the result into the 24-bit-in-32 stream format.
 DSP_ParamInterp_3Point_WithOffset:
 	lda xsp, (xsp - 20)
 	push xiz
@@ -41251,6 +47660,14 @@ DSP_ParamInterp_3Point_WithOffset:
 	lda xsp, (xsp + 20)
 	ret
 
+; Decoder for opcode 0x6D; result -> DSP_WriteOscParam.  Same shape as DSP_VolumeCurve_FP:
+; no stream field, branch at x > 89 (0x59), a chain of single- and double-precision helpers
+; over the constant groups 0x012D0F..0x012D2B (low range: 1, 441, 10, 0.427042, 1) and
+; 0x012D33..0x012D4F (high range: 44100, 3924900 = 44100*89, 10, 0.427042, 1), both ending in
+; the VoiceFloat_CompareAndConvert / FP_DP_NormalizeMantissa pair and a shared finalisation.
+; The 441 / 44100 / 3924900 constants and the 0.427042 exponent-like factor say this is a
+; time-constant or decay curve computed against the sample rate; "reverb" is plausible from the
+; opcode's neighbours but is NOT proved here.  Frame 0x44 bytes; result in XHL.
 DSP_ReverbCurve_FP:
 	lda xsp, (xsp - 68)
 	ld (xsp + 64), xbc
@@ -41298,6 +47715,7 @@ DSP_ReverbCurve_FP:
 	call FP_DP_NormalizeMantissa
 	jr DSP_ReverbCurve_FP_Finalize
 
+; x > 89 arm; constant group 0x012D33..0x012D4F.
 DSP_ReverbCurve_FP_HighRange:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 28)
@@ -41339,6 +47757,7 @@ DSP_ReverbCurve_FP_HighRange:
 	lda xwa, (xsp + 60)
 	call FP_DP_NormalizeMantissa
 
+; Shared tail: FP_SP_Add_Outer(0x012D4F), FP_SP_Decode_ReadSign, result from (XSP+0x38).
 DSP_ReverbCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
 	lda_24 xde, 0x012d4f
@@ -41351,6 +47770,19 @@ DSP_ReverbCurve_FP_Finalize:
 	lda xsp, (xsp + 68)
 	ret
 
+; Decoder for opcode 0x6E; result -> DSP_WriteOscParam.  The most elaborate decoder here:
+; it consumes TWO 3-byte stream values AND the 0..99 value, and mixes them in floating point.
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 6.
+; Sequence (operands certain, arithmetic inferred from the helper names):
+;   value[0] -> float, combined with the constants at 0x012D53 (32768) and 0x012D57 (65536)
+;   value[1] -> float, top byte kept as an integer at (XSP+0x24)
+;   XBC      -> float
+;   the three are combined through FP_SP_Sub / FP_SP_Add_Outer / FP_SP_Mul against
+;   0x012D5B (99), 0x012D5F (44100), 0x012D63 (99), 0x012D67 (2376)
+;   -> promoted to double, VoiceFloat_CompareAndConvert with the double at 0x012D6B (2.0)
+;   -> FP_DP_NormalizeMantissa, then FP_SP_Add_Outer(0x012D73) and FP_SP_Decode_ReadSign.
+; The 32768/65536/99/44100 group is the same normalisation vocabulary as the rest of the file.
+; The advanced cursor is written back BEFORE the finalisation (at 0x0397CD).
 DSP_ParamInterp_FPComplex:
 	lda xsp, (xsp - 52)
 	push xiz
@@ -41451,6 +47883,19 @@ DSP_ParamInterp_FPComplex:
 	lda xsp, (xsp + 52)
 	ret
 
+; Decoder for opcode 0x6F; result -> DSP_WriteOscParam.  Consumes NOTHING from the stream.
+; In: XBC = 0..99 value.  Out: XHL = a sample count.
+; Five continuous linear segments, all of the form XHL = 44100 * g(x) / 1000, i.e. 44.1 samples
+; per millisecond -- so g(x) is a time in MILLISECONDS:
+;   x <=  20   g =   2x +   10        (  10 ..   50 ms)
+;   x <=  30   g =   5x -   50        (  50 ..  100 ms)
+;   x <=  70   g =  10x -  200        ( 100 ..  500 ms)
+;   x <=  80   g =  50x - 3000        ( 500 .. 1000 ms)
+;   else       g = 100x - 7000        (1000 .. 2900 ms)
+; Every knot joins exactly (checked at x = 20, 30, 70, 80).  The constants are
+; 0x0006BAA8 = 441000, 0x0021A548 = 2205000, 0x00869520 = 8820000, 0x07E2BCE0 = 132300000,
+; 0x12666360 = 308700000, all exact multiples of 44100.
+; This is a DELAY-TIME curve, 10 ms .. 2.9 s.  See [UNCERTAIN] about the name "Pan".
 DSP_PanCurve_PiecewiseLin:
 	cp xbc, 0x14
 	jr gt, DSP_PanCurve_Seg2
@@ -41464,6 +47909,7 @@ DSP_PanCurve_PiecewiseLin:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_PanCurve_Return
 
+; 20 < x <= 30: 44.1 * (5x - 50) samples.
 DSP_PanCurve_Seg2:
 	cp xbc, 0x1E
 	jr gt, DSP_PanCurve_Seg3
@@ -41478,6 +47924,7 @@ DSP_PanCurve_Seg2:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_PanCurve_Return
 
+; 30 < x <= 70: 44.1 * (10x - 200) samples.
 DSP_PanCurve_Seg3:
 	cp xbc, 0x46
 	jr gt, DSP_PanCurve_Seg4
@@ -41493,6 +47940,7 @@ DSP_PanCurve_Seg3:
 	call Int_SignedDiv_AltEntry
 	jr DSP_PanCurve_Return
 
+; 70 < x <= 80: 44.1 * (50x - 3000) samples.
 DSP_PanCurve_Seg4:
 	cp xbc, 0x50
 	jr gt, DSP_PanCurve_Seg5
@@ -41508,6 +47956,7 @@ DSP_PanCurve_Seg4:
 	call Int_SignedDiv_AltEntry
 	jr DSP_PanCurve_Return
 
+; x > 80: 44.1 * (100x - 7000) samples; tops out at 2900 ms for x = 99.
 DSP_PanCurve_Seg5:
 	ld xwa, xbc
 	ld xbc, 0x64
@@ -41520,9 +47969,24 @@ DSP_PanCurve_Seg5:
 	ld xbc, 0x3E8
 	call Int_SignedDiv_AltEntry
 
+; A bare `ret` shared by all five segments.
 DSP_PanCurve_Return:
 	ret
 
+; Decoder for opcode 0x71; result -> DSP_WriteOscParam.  Consumes nothing from the stream.
+; In: XBC = a SIGNED value (copied to IZ).  Out: XHL.
+; Works on |x| and re-applies the sign at the end -- the only decoder in the region that is
+; explicitly bipolar, which is what makes "detune" a believable reading.
+;   |x| <= 10   -> float(|x|), + const 0x012D77 (2)
+;   |x| <= 19   -> float(|x|), + 0x012D7B (20),  - 0x012D7F (180)
+;   |x| <= 31   -> float(|x|), + 0x012D83 (100), - 0x012D87 (1700)
+;   else        -> float(|x|), + 0x012D8B (200), - 0x012D8F (4800)
+; then, if x < 0, FP_SP_CopyOrNegate4 flips the sign (DSP_DetuneCurve_ApplySign), and the shared
+; finalisation runs the value through VoiceFloat_SubSP(0x012D93), a promotion to double,
+; VoiceFloat_CompareAndConvert against the double at 0x012D97 (2.0), FP_DP_Sub(0x012D9F, 1.0),
+; VoiceFloat_SubDP(0x012DA7, 2400.0), FP_DP_NormalizeMantissa, FP_SP_Add_Outer(0x012DAF) and
+; FP_SP_Decode_ReadSign.  The 2400 is cents-per-octave x 2, and the 2.0 base again points at a
+; pow(2, cents/2400) pitch-ratio computation.  Frame 0x48 bytes.
 DSP_DetuneCurve_SignedFP:
 	lda xsp, (xsp - 72)
 	push xiz
@@ -41532,12 +47996,14 @@ DSP_DetuneCurve_SignedFP:
 	ld xwa, xiz
 	jr DSP_DetuneCurve_CheckMagnitude
 
+; x < 0: XWA = -IZ, to get the magnitude for the range test.
 DSP_DetuneCurve_NegateInput:
 	ld xwa, xiz
 	cpl wa
 	cplw_erp 0xE2
 	inc 1, xwa
 
+; Join point with |x| in XWA; first range test, |x| <= 10.
 DSP_DetuneCurve_CheckMagnitude:
 	cp xwa, 0xA
 	jr gt, DSP_DetuneCurve_CheckRange2
@@ -41546,6 +48012,7 @@ DSP_DetuneCurve_CheckMagnitude:
 	ld (xsp + 60), xiz
 	jr DSP_DetuneCurve_Range1_Compute
 
+; Range 1, negative input: store the magnitude at (XSP+0x3C).
 DSP_DetuneCurve_Range1_NegArm:
 	ld xwa, xiz
 	cpl wa
@@ -41553,6 +48020,7 @@ DSP_DetuneCurve_Range1_NegArm:
 	inc 1, xwa
 	ld (xsp + 60), xwa
 
+; Range 1 body: int->float, + the constant at 0x012D77.
 DSP_DetuneCurve_Range1_Compute:
 	lda xbc, (xsp + 60)
 	lda xwa, (xsp + 36)
@@ -41563,18 +48031,21 @@ DSP_DetuneCurve_Range1_Compute:
 	call FP_SP_Add_Outer
 	jrl DSP_DetuneCurve_ApplySign
 
+; Recompute |x| for the second range test.
 DSP_DetuneCurve_CheckRange2:
 	cp xiz, 0x0
 	jr lt, DSP_DetuneCurve_Range2_NegArm
 	ld xwa, xiz
 	jr DSP_DetuneCurve_CheckRange2Limit
 
+; Negate to get the magnitude before the |x| <= 19 test.
 DSP_DetuneCurve_Range2_NegArm:
 	ld xwa, xiz
 	cpl wa
 	cplw_erp 0xE2
 	inc 1, xwa
 
+; The |x| <= 19 (0x13) comparison itself.
 DSP_DetuneCurve_CheckRange2Limit:
 	cp xwa, 0x13
 	jr gt, DSP_DetuneCurve_CheckRange3
@@ -41583,6 +48054,7 @@ DSP_DetuneCurve_CheckRange2Limit:
 	ld (xsp + 56), xiz
 	jr DSP_DetuneCurve_Range2_Compute
 
+; Range 2, negative input: store the magnitude at (XSP+0x38).
 DSP_DetuneCurve_Range2_NegStore:
 	ld xwa, xiz
 	cpl wa
@@ -41590,6 +48062,7 @@ DSP_DetuneCurve_Range2_NegStore:
 	inc 1, xwa
 	ld (xsp + 56), xwa
 
+; Range 2 body: + 0x012D7B (20), - 0x012D7F (180).
 DSP_DetuneCurve_Range2_Compute:
 	lda xbc, (xsp + 56)
 	lda xwa, (xsp + 36)
@@ -41604,18 +48077,21 @@ DSP_DetuneCurve_Range2_Compute:
 	call FP_SP_Sub
 	jrl DSP_DetuneCurve_ApplySign
 
+; Recompute |x| for the third range test.
 DSP_DetuneCurve_CheckRange3:
 	cp xiz, 0x0
 	jr lt, DSP_DetuneCurve_Range3_NegArm
 	ld xwa, xiz
 	jr DSP_DetuneCurve_CheckRange3Limit
 
+; Negate to get the magnitude before the |x| <= 31 test.
 DSP_DetuneCurve_Range3_NegArm:
 	ld xwa, xiz
 	cpl wa
 	cplw_erp 0xE2
 	inc 1, xwa
 
+; The |x| <= 31 (0x1F) comparison itself.
 DSP_DetuneCurve_CheckRange3Limit:
 	cp xwa, 0x1F
 	jr gt, DSP_DetuneCurve_Range4_CheckSign
@@ -41624,6 +48100,7 @@ DSP_DetuneCurve_CheckRange3Limit:
 	ld (xsp + 52), xiz
 	jr DSP_DetuneCurve_Range3_Compute
 
+; Range 3, negative input: store the magnitude at (XSP+0x34).
 DSP_DetuneCurve_Range3_NegStore:
 	ld xwa, xiz
 	cpl wa
@@ -41631,6 +48108,7 @@ DSP_DetuneCurve_Range3_NegStore:
 	inc 1, xwa
 	ld (xsp + 52), xwa
 
+; Range 3 body: + 0x012D83 (100), - 0x012D87 (1700).
 DSP_DetuneCurve_Range3_Compute:
 	lda xbc, (xsp + 52)
 	lda xwa, (xsp + 36)
@@ -41645,12 +48123,14 @@ DSP_DetuneCurve_Range3_Compute:
 	call FP_SP_Sub
 	jr DSP_DetuneCurve_ApplySign
 
+; Fall-through range (|x| > 31): sign test only.
 DSP_DetuneCurve_Range4_CheckSign:
 	cp xiz, 0x0
 	jr lt, DSP_DetuneCurve_Range4_NegStore
 	ld (xsp + 48), xiz
 	jr DSP_DetuneCurve_Range4_Compute
 
+; Range 4, negative input: store the magnitude at (XSP+0x30).
 DSP_DetuneCurve_Range4_NegStore:
 	ld xwa, xiz
 	cpl wa
@@ -41658,6 +48138,7 @@ DSP_DetuneCurve_Range4_NegStore:
 	inc 1, xwa
 	ld (xsp + 48), xwa
 
+; Range 4 body: + 0x012D8B (200), - 0x012D8F (4800).
 DSP_DetuneCurve_Range4_Compute:
 	lda xbc, (xsp + 48)
 	lda xwa, (xsp + 36)
@@ -41671,6 +48152,7 @@ DSP_DetuneCurve_Range4_Compute:
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
 
+; If the ORIGINAL input was negative, negate the accumulated float via FP_SP_CopyOrNegate4.
 DSP_DetuneCurve_ApplySign:
 	cp xiz, 0x0
 	jr ge, DSP_DetuneCurve_Finalize
@@ -41678,6 +48160,8 @@ DSP_DetuneCurve_ApplySign:
 	lda xwa, (xsp + 68)
 	call FP_SP_CopyOrNegate4
 
+; Shared tail described in the routine header; note the 2400.0 (cents per octave x 2) at
+; 0x012DA7 and the 2.0 base at 0x012D97.
 DSP_DetuneCurve_Finalize:
 	lda xbc, (xsp + 68)
 	lda_24 xde, 0x012d93
@@ -41723,6 +48207,32 @@ DSP_DetuneCurve_Finalize:
 	lda xsp, (xsp + 72)
 	ret
 
+; Decoder for opcode 0x72 (arm 0x03CDD6).  Unlike every other routine in the region this one
+; EMITS TO THE DSP ITSELF instead of returning a value for the interpreter to send.
+; Stack args (retd 0x0008, so two longs are popped): (XSP+0x5E) and (XSP+0x62)/(XSP+0x64) carry
+; the DSP channel / chip selectors that are handed to DSP_WriteOscParam and
+; DSP_WriteCoeffData_5B_Direct.  XWA = &cursor, XBC = base of a word array, DE = an index.
+; Step 1 -- pick two table entries.  It reads ONE byte from the stream (post-increment, cursor
+;   written back at the very end) and tests its HIGH nibble:
+;     high nibble == 0 : HL = word[DE],   IZ = word[DE+1]
+;     otherwise        : HL = word[DE-1], IZ = word[DE]
+;   (same "which field of the group does the index point at" convention as
+;   DSP_FilterLUT_Fetch and DSP_ParamInterp_MultiStep).
+; Step 2 -- clamp: HL to <= 0x59 (89), IZ to <= 0x58 (88).
+; Step 3 -- for each of the two, compute (99 - v) as a signed int, promote to double, add the
+;   constant at 0x012DB3 / 0x012DCB (-0.0697), call VoiceFloat_CompareAndConvert against the
+;   double 10.0 at 0x012DBB / 0x012DD3 -- i.e. pow(10, -0.0697*(99-v)), a dB-to-linear
+;   conversion with a 0.697 dB step -- then FP_DP_Add_Outer with 0.9999 (0x012DC3 / 0x012DDB)
+;   and normalise to a float.  Results land at (XSP+0x52) and (XSP+0x4A).
+; Step 4 -- with the literal 3.0 (0x40400000) at (XSP+0x4E) it computes five coefficient floats
+;   through FP_SP_Sub / FP_SP_Add_Outer / FP_SP_Mul / VoiceFloat_SubSP against the constants
+;   0x012DE3..0x012E03 (2, 2, 1, 3, 2097152, 8388608, 4194304, 2097152, 2097152 -- note
+;   2^21/2^23/2^22, the Q23 scalings).
+; Step 5 -- emits: one DSP_WriteOscParam then FOUR DSP_WriteCoeffData_5B_Direct calls, i.e. a
+;   complete 5-coefficient biquad section.
+; Returns XHL = the accumulated write status; writes the advanced cursor back through XWA.
+; The dB step, the 10.0 base and the five-coefficient emission are solid; the exact algebra of
+; step 4 depends on the FP helper semantics I could not confirm (see [UNCERTAIN]).
 DSP_BiquadWarp_FP:
 	lda xsp, (xsp - 88)
 	pushw iz
@@ -41748,6 +48258,7 @@ DSP_BiquadWarp_FP:
 	ld iz, (xwa)
 	jr DSP_BiquadWarp_ClampHL
 
+; High nibble non-zero: use word[DE-1] and word[DE] instead of word[DE] and word[DE+1].
 DSP_BiquadWarp_ReadPrevEntry:
 	ld wa, de
 	dec 1, wa
@@ -41761,16 +48272,20 @@ DSP_BiquadWarp_ReadPrevEntry:
 	add xwa, xbc
 	ld iz, (xwa)
 
+; Clamp the first table value to 0x59 (89).
 DSP_BiquadWarp_ClampHL:
 	cp hl, 0x59
 	jr le, DSP_BiquadWarp_ClampIZ
 	ldw hl, 0x59
 
+; Clamp the second table value to 0x58 (88).
 DSP_BiquadWarp_ClampIZ:
 	cp iz, 0x58
 	jr le, DSP_BiquadWarp_ComputeCoeffs
 	ldw iz, 0x58
 
+; Steps 3-5 of the header: the two pow(10, -0.0697*(99-v)) gains, the five coefficient floats,
+; and the five DSP writes.
 DSP_BiquadWarp_ComputeCoeffs:
 	ldw wa, 0x63
 	sub wa, hl
@@ -41936,6 +48451,14 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xsp, (xsp + 88)
 	retd 0x8
 
+; Decoder for opcode 0x73; result -> DSP_WriteOscParam.  A BIPOLAR two-point interpolation:
+; the blend value is offset by +99 and divided by 198, so XBC = -99..+99 maps to 0..1.
+; In: XWA = &cursor, XBC = signed blend.  Out: XHL; cursor += 6.
+;       A = value[0], B = value[1]
+;       t   = ((B - A) >> 8) / 198                       (198 == 0xC6 == 2*99)
+;       XHL = (A >> 8) + t * (XBC + 99)
+; Note the divide happens BEFORE the multiply here (unlike DSP_ParamInterp_2Point), so the
+; result is coarser -- that is in the ROM, not a transcription slip.
 DSP_ParamInterp_Div0xC6:
 	lda xsp, (xsp - 24)
 	push xiz
@@ -41978,6 +48501,21 @@ DSP_ParamInterp_Div0xC6:
 	lda xsp, (xsp + 24)
 	ret
 
+; Decoder for opcode 0x75; result -> DSP_WriteOscParam.  A five-range floating-point curve.
+; In: XWA = &cursor, XBC = 0..99 value.  Out: XHL; cursor += 3.
+; Consumes ONE 3-byte stream value, converts it to float and pre-scales it against the
+; constants at 0x012E07 (32768) and 0x012E0B (65536) -- the second copy is kept at (XSP+0x50)
+; and reused by every range.  Then it branches on XBC:
+;       XBC <= 15 (0x0F)  range 1, constants 0x012E0F..0x012E3F
+;       XBC <= 23 (0x17)  range 2, constants 0x012E63..0x012E87  (bias 16)
+;       XBC <= 55 (0x37)  range 3, constants 0x012E8F..0x012EB3  (bias 24)
+;       XBC <= 75 (0x4B)  range 4, constants 0x012EBB..0x012EDF  (bias 56)
+;       else              range 5, constants 0x012EE7..0x012EFB  (bias 67)
+; The biases 16/24/56/67 are subtracted from XBC by the FP_SP_Sub at the head of each range, so
+; each range restarts its curve from zero.  Range 1 additionally calls ToneGen_Compare_Voice
+; (0x03D2AC -- an FP COMPARISON helper, not a voice routine; see [UNCERTAIN]) against the
+; constant at 0x012E2F and takes a separate arm when the coefficient is non-zero.
+; Every range converges on DSP_ParamEQ_Finalize.  Frame 0x64 bytes.
 DSP_ParamEQ_Curve_FP:
 	lda xsp, (xsp - 100)
 	push xiz
@@ -42080,6 +48618,8 @@ DSP_ParamEQ_Curve_FP:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_ParamEQ_Finalize
 
+; Range 1, taken when the FP comparison at 0x039E81 reports non-zero: multiplies by the
+; constant at 0x012E47 (7.0) and runs the pow-style helper against 0x012E4B instead.
 DSP_ParamEQ_Range1_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda_24 xde, 0x012e47
@@ -42118,6 +48658,7 @@ DSP_ParamEQ_Range1_NonzeroCoeff:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_ParamEQ_Finalize
 
+; 15 < XBC <= 23; bias 16 (0x012E63).
 DSP_ParamEQ_Range2:
 	ld xwa, (xsp + 96)
 	cp xwa, 0x17
@@ -42177,6 +48718,7 @@ DSP_ParamEQ_Range2:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_ParamEQ_Finalize
 
+; 23 < XBC <= 55; bias 24 (0x012E8F).
 DSP_ParamEQ_Range3:
 	ld xwa, (xsp + 96)
 	cp xwa, 0x37
@@ -42236,6 +48778,7 @@ DSP_ParamEQ_Range3:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_ParamEQ_Finalize
 
+; 55 < XBC <= 75; bias 56 (0x012EBB).
 DSP_ParamEQ_Range4:
 	ld xwa, (xsp + 96)
 	cp xwa, 0x4B
@@ -42295,6 +48838,7 @@ DSP_ParamEQ_Range4:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_ParamEQ_Finalize
 
+; XBC > 75; bias 67 (0x012EE7).  The only range with no FP_DP_Mul step.
 DSP_ParamEQ_Range5:
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
@@ -42342,6 +48886,9 @@ DSP_ParamEQ_Range5:
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
 
+; Shared tail: write the advanced cursor back through the caller's pointer, then
+; FP_SP_Add_Outer(0x012F03 = 8388608.0 = 2^23) and FP_SP_Decode_ReadSign to land the result as
+; a Q23 integer in XHL.  The 2^23 here is the same Q23 convention used by the integer decoders.
 DSP_ParamEQ_Finalize:
 	ld xwa, (xsp + 100)
 	ld (xwa), xiz
@@ -42357,6 +48904,9 @@ DSP_ParamEQ_Finalize:
 	lda xsp, (xsp + 100)
 	ret
 
+; Decoder for opcode 0x77; result -> DSP_WriteOscParam.
+; BYTE-FOR-BYTE IDENTICAL to DSP_ParamInterp_2Point (0x039206) and DSP_FreqInterp_2Point
+; (0x0394CD) -- all three 0x58-byte bodies verified equal by memcmp.  Same contract.
 DSP_ParamInterp_2Point_B:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -42392,6 +48942,9 @@ DSP_ParamInterp_2Point_B:
 	lda xsp, (xsp + 16)
 	ret
 
+; Decoder for opcode 0x78; result -> DSP_WriteOscParam.
+; BYTE-FOR-BYTE IDENTICAL to DSP_VolumeParam_Scale (0x038FE8) over all 0x21E bytes, verified by
+; memcmp.  See that routine's header for the three curve families and their formulas.
 DSP_VolScale_B:
 	dec 4, xsp
 	push xiz
@@ -42414,6 +48967,7 @@ DSP_VolScale_B:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo0_Seg2: ((x-25)<<23) / 220500.
 DSP_VolScale_B_Algo0_Seg2:
 	cp xbc, 0x4B
 	jr gt, DSP_VolScale_B_Algo0_Seg3
@@ -42425,6 +48979,7 @@ DSP_VolScale_B_Algo0_Seg2:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo0_Seg3: ((4x-250)<<23) / 220500.
 DSP_VolScale_B_Algo0_Seg3:
 	cp xbc, 0x58
 	jr gt, DSP_VolScale_B_Algo0_Seg4
@@ -42437,6 +48992,7 @@ DSP_VolScale_B_Algo0_Seg3:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo0_Seg4: ((9x-690)<<23) / 220500.
 DSP_VolScale_B_Algo0_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
@@ -42448,6 +49004,7 @@ DSP_VolScale_B_Algo0_Seg4:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo1_Seg1: (x<<23) / 44100.
 DSP_VolScale_B_Algo1_Seg1:
 	cp xbc, 0xA
 	jr gt, DSP_VolScale_B_Algo1_Seg2
@@ -42458,6 +49015,7 @@ DSP_VolScale_B_Algo1_Seg1:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo1_Seg2: ((10x-90)<<23) / 44100.
 DSP_VolScale_B_Algo1_Seg2:
 	cp xbc, 0x13
 	jr gt, DSP_VolScale_B_Algo1_Seg3
@@ -42472,6 +49030,7 @@ DSP_VolScale_B_Algo1_Seg2:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo1_Seg3: ((20x-280)<<15) / 44100, then <<8.
 DSP_VolScale_B_Algo1_Seg3:
 	cp xbc, 0x40
 	jr gt, DSP_VolScale_B_Algo1_Seg4
@@ -42486,6 +49045,7 @@ DSP_VolScale_B_Algo1_Seg3:
 	sla xhl, 8
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo1_Seg4: ((400x-24800)<<15) / 44100, then <<8.
 DSP_VolScale_B_Algo1_Seg4:
 	cp xbc, 0x57
 	jr gt, DSP_VolScale_B_Algo1_Seg5
@@ -42500,6 +49060,7 @@ DSP_VolScale_B_Algo1_Seg4:
 	sla xhl, 8
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo1_Seg5: ((800x-59600)<<15) / 44100, then <<8.
 DSP_VolScale_B_Algo1_Seg5:
 	ld xwa, xbc
 	ld xbc, 0x320
@@ -42512,6 +49073,7 @@ DSP_VolScale_B_Algo1_Seg5:
 	sla xhl, 8
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo2_Seg1: (x<<23) / (4000 - 2x).
 DSP_VolScale_B_Algo2_Seg1:
 	cp xbc, 0x32
 	jr gt, DSP_VolScale_B_Algo2_Seg2
@@ -42526,6 +49088,7 @@ DSP_VolScale_B_Algo2_Seg1:
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo2_Seg2: ((x-25)<<23) / (2050 - 2x).
 DSP_VolScale_B_Algo2_Seg2:
 	cp xbc, 0x4B
 	jr gt, DSP_VolScale_B_Algo2_Seg3
@@ -42542,6 +49105,7 @@ DSP_VolScale_B_Algo2_Seg2:
 	call Int_SignedDiv_AltEntry
 	jr DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo2_Seg3: ((4x-250)<<23) / (2500 - 8x).
 DSP_VolScale_B_Algo2_Seg3:
 	cp xbc, 0x58
 	jr gt, DSP_VolScale_B_Algo2_Seg4
@@ -42559,6 +49123,7 @@ DSP_VolScale_B_Algo2_Seg3:
 	call Int_SignedDiv_AltEntry
 	jr DSP_VolScale_B_Return
 
+; Duplicate of DSP_VolScale_Algo2_Seg4: ((9x-690)<<23) / (3380 - 18x).
 DSP_VolScale_B_Algo2_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
@@ -42576,6 +49141,7 @@ DSP_VolScale_B_Algo2_Seg4:
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
 
+; Duplicate epilogue: write the advanced cursor back and return.
 DSP_VolScale_B_Return:
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
@@ -42583,6 +49149,11 @@ DSP_VolScale_B_Return:
 	inc 4, xsp
 	ret
 
+; Decoder for opcode 0x40 (arm 0x03CE9F); result -> DSP_WriteOscParam.  Six instructions:
+;       XHL = (XBC * 44100) / 1000
+; That is 44.1 samples per millisecond -- a plain MILLISECONDS-TO-SAMPLES converter covering
+; 0..99 ms.  It is the degenerate case of DSP_PanCurve_PiecewiseLin's first segment.
+; See [UNCERTAIN] about the name "PanScale".
 DSP_PanScale_Simple:
 	ld xwa, xbc
 	ld xbc, 0xAC44
@@ -42592,6 +49163,24 @@ DSP_PanScale_Simple:
 	call Int_SignedDiv_AltEntry
 	ret
 
+; Decoder for opcode 0x24 (arm 0x03CEBC); result -> DSP_WriteOscParam.  Two-point interpolation
+; where WHICH pair of endpoints is used comes out of a side table.
+; In: XWA = &cursor, XBC = 0..99 blend, XDE = base of a word array; (XSP+0x1C) = a word index
+;     pushed by the caller.  Out: XHL; cursor += 18 (SIX 3-byte values are always consumed).
+; It reads ONE byte from the stream (post-increment) and looks at its HIGH nibble:
+;       0x20 -> order = word[index - 2]
+;       0x10 -> order = word[index - 1]
+;       else -> order = XBC (the caller's value)
+; then selects an arm by order:
+;       order == 0 : the 1st and 2nd of the six stream values are the endpoints
+;       order == 1 : the 3rd and 4th
+;       order == 2 : the 5th and 6th
+; In every arm all six values are decoded (the unused ones are decoded into the same scratch
+; slot at XSP+0x0C and thrown away), so the cursor always advances by the same 18 bytes.
+; The arithmetic is then identical to DSP_ParamInterp_2Point:
+;       XHL = (A>>8) + (((B - A) >> 8) * XBC) / 99
+; The high-nibble convention (0x00/0x10/0x20 = "the index points at field 0 / 1 / 2 of a
+; three-word group") is the same one used by DSP_FilterLUT_Fetch and DSP_BiquadWarp_FP.
 DSP_ParamInterp_MultiStep:
 	lda xsp, (xsp - 20)
 	push xiz
@@ -42608,6 +49197,7 @@ DSP_ParamInterp_MultiStep:
 	ld xwa, (xsp + 16)
 	jr DSP_ParamInterp_MultiStep_Dispatch
 
+; High nibble 0x10: order = word[index - 1].
 DSP_ParamInterp_MultiStep_Mode0x10:
 	ld wa, (xsp + 28)
 	dec 1, wa
@@ -42617,6 +49207,7 @@ DSP_ParamInterp_MultiStep_Mode0x10:
 	ld wa, (xwa)
 	jr DSP_ParamInterp_MultiStep_Dispatch
 
+; High nibble 0x20: order = word[index - 2].
 DSP_ParamInterp_MultiStep_Mode0x20:
 	ld wa, (xsp + 28)
 	dec 2, wa
@@ -42625,6 +49216,7 @@ DSP_ParamInterp_MultiStep_Mode0x20:
 	add xwa, xde
 	ld wa, (xwa)
 
+; Join point; selects the order-0 / order-1 / order-2 arm.  Order 0 falls through.
 DSP_ParamInterp_MultiStep_Dispatch:
 	cps wa, 2
 	jrl z, DSP_ParamInterp_MultiStep_Order2
@@ -42662,6 +49254,7 @@ DSP_ParamInterp_MultiStep_Dispatch:
 	ld xiz, xhl
 	jrl DSP_ParamInterp_MultiStep_Compute
 
+; order == 1: discard values 1-2, keep 3 and 4 as the endpoints, discard 5-6.
 DSP_ParamInterp_MultiStep_Order1:
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
@@ -42695,6 +49288,7 @@ DSP_ParamInterp_MultiStep_Order1:
 	ld xiz, xhl
 	jr DSP_ParamInterp_MultiStep_Compute
 
+; order == 2: discard values 1-4, keep 5 and 6 as the endpoints.
 DSP_ParamInterp_MultiStep_Order2:
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
@@ -42727,6 +49321,7 @@ DSP_ParamInterp_MultiStep_Order2:
 	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 
+; Shared tail: the /99 interpolation, cursor write-back, and `retd 0x0004`.
 DSP_ParamInterp_MultiStep_Compute:
 	ld xwa, (xsp + 4)
 	sub xwa, (xsp + 8)
@@ -42746,6 +49341,33 @@ DSP_ParamInterp_MultiStep_Compute:
 	lda xsp, (xsp + 20)
 	retd 0x4
 
+; Decodes ONE parametric-EQ band descriptor.  NOT a byte-code arm -- it is reached only by the
+; `calr` at 0x03A962 inside DSP_BiquadCoeff_Compute (0x03A933, opcode 0x70), which is the first
+; routine of region 15.
+; In:  WA (-> IZ) = word index into the caller's array
+;      XBC = float* out: centre frequency
+;      XDE = float* out: Q / bandwidth
+;      stack args (retd 0x0010, four longs):
+;        (XSP+0x38) = the parameter-stream cursor -- read, advanced by one byte, RETURNED in XHL
+;        (XSP+0x3C) = base of a word array (the band's three fields live in it consecutively)
+;        (XSP+0x40) = uint16* out: the filter TYPE (low nibble of the stream byte)
+;        (XSP+0x44) = float* out: the gain-derived scalar
+; The stream byte splits into two nibbles:
+;   LOW nibble = filter type
+;     0 : full band -- freq from the 27-entry Hz LUT at 0x012397, Q from the 32-entry LUT at
+;         0x012403, gain from the third word
+;     1 : Q is FORCED to the literal 0.1 (0x3DCCCCCD); only the frequency word is read
+;     2 : Q is FORCED to the literal 2.0 (0x40000000); frequency and gain are read
+;     other : nothing is computed, the three output pointers get whatever was on the stack
+;   HIGH nibble = which field of the three-word group the index currently points at
+;     0x00 : freq = arr[i],   Q = arr[i+1], gain = arr[i+2]
+;     0x10 : freq = arr[i-1], Q = arr[i],   gain = arr[i+1]
+;     0x20 : freq = arr[i-2], Q = arr[i-1], gain = arr[i]
+;     (for type 2 the high nibble only distinguishes "gain at i+1" from "gain at i")
+; The gain word is sign-extended, promoted to double, combined with 0.5 (0x012F07 etc.) and
+; -12.0 (0x012F0F etc.) -- the same pair repeated for all five arms -- and normalised to a
+; float.  The 27-entry LUT is the ISO 1/3-octave series 40 Hz..16 kHz and the 32-entry LUT runs
+; 0.1..20.0, which is what makes "parametric EQ band" certain rather than inferred.
 DSP_FilterLUT_Fetch:
 	lda xsp, (xsp - 50)
 	pushw iz
@@ -42821,6 +49443,7 @@ DSP_FilterLUT_Fetch:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_FilterLUT_StoreResults
 
+; Type 0, high nibble 0x10: freq = arr[i-1], Q = arr[i], gain = arr[i+1].
 DSP_FilterLUT_Mode0x10:
 	ld wa, iz
 	dec 1, wa
@@ -42867,6 +49490,7 @@ DSP_FilterLUT_Mode0x10:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_FilterLUT_StoreResults
 
+; Type 0, high nibble 0x20: freq = arr[i-2], Q = arr[i-1], gain = arr[i].
 DSP_FilterLUT_Mode0x20:
 	ld wa, iz
 	dec 2, wa
@@ -42913,6 +49537,7 @@ DSP_FilterLUT_Mode0x20:
 	call FP_DP_NormalizeMantissa
 	jrl DSP_FilterLUT_StoreResults
 
+; Type 1: Q := 0.1 (0x3DCCCCCD), freq = arr[i], no gain term.  Jumps straight to the store.
 DSP_FilterLUT_ModeType1:
 	ld xwa, 0x3DCCCCCD
 	ld (xsp + 36), xwa
@@ -42928,6 +49553,7 @@ DSP_FilterLUT_ModeType1:
 	call FP_SP_Raw4Copy
 	jrl DSP_FilterLUT_StoreResults
 
+; Type 2: Q := 2.0 (0x40000000); high nibble 0x00 uses freq = arr[i], gain = arr[i+1].
 DSP_FilterLUT_ModeType2:
 	ld xwa, 0x40000000
 	ld (xsp + 36), xwa
@@ -42970,6 +49596,7 @@ DSP_FilterLUT_ModeType2:
 	call FP_DP_NormalizeMantissa
 	jr DSP_FilterLUT_StoreResults
 
+; Type 2, high nibble 0x10 or 0x20: freq = arr[i-1], gain = arr[i].
 DSP_FilterLUT_ModeType2_SubMode:
 	ld wa, iz
 	dec 1, wa
@@ -43004,6 +49631,9 @@ DSP_FilterLUT_ModeType2_SubMode:
 	lda xwa, (xsp + 32)
 	call FP_DP_NormalizeMantissa
 
+; Common tail: store type, frequency, Q and the gain scalar through the four caller pointers,
+; return the advanced stream cursor in XHL, `retd 0x0010`.  Note that on an unrecognised type
+; the three float outputs are written from UNINITIALISED stack slots.
 DSP_FilterLUT_StoreResults:
 	ld xbc, (xsp + 64)
 	ld wa, (xsp + 2)
@@ -43022,6 +49652,29 @@ DSP_FilterLUT_StoreResults:
 	lda xsp, (xsp + 50)
 	retd 0x10
 
+; Designs one bilinear-transform biquad from the DSP parameter stream and writes its five
+; coefficients to the DSP.  Reached only from the opcode-0x70 dispatch arm (0x03CD96).
+; Frame: 236 bytes of locals + `push IZ`.  Register args WA / BC / DE are forwarded to
+; DSP_FilterLUT_Fetch.  Five stack args, popped with `retd 0x10` (16 bytes), pushed by the arm
+; in this order: (1) long = the parameter-stream pointer, (2) word = the caller's running
+; status accumulator (IZ), (3) long, (4) word, (5) long = pointer to the caller's status word.
+; Returns XHL = the ADVANCED stream pointer; also stores the accumulated write status (IZ)
+; through arg 5.
+; Flow:
+;   1. calls DSP_FilterLUT_Fetch (0x03A620) which consumes the stream header, writes the
+;      ALGORITHM SELECTOR (the low nibble of the header byte) into a local, hands back the band
+;      frequency and gain as floats, and returns the advanced stream pointer (kept at frame
+;      +0x00FE and returned verbatim by the epilogue).
+;   2. three-way switch on that selector: 2 -> DSP_BiquadCoeff_Algo2, 1 -> ..._Algo1,
+;      0 -> falls through to the Algo0 body.  ★ ANY OTHER VALUE JUMPS STRAIGHT TO
+;      DSP_BiquadCoeff_Epilogue AND WRITES NOTHING TO THE DSP -- silently.
+;   3. Algo0 body: widen the cutoff to double; w = f * (pi/44100) [FP_DP_Add_Outer = multiply];
+;      K = tan(w) [VoiceFloat_MulAddDispatch]; narrow to float; build the {1,-2,1}-shaped
+;      numerator from the float literals at 0x012F5F..0x012F6B; A = 10^(gain_dB/20) via
+;      VoiceFloat_SubSP (divide by 20.0) then VoiceFloat_CompareAndConvert (pow, base 10.0 at
+;      0x012F73); combine into b0,b1,b2,a1,a2.
+; Hardware: no direct MMIO -- everything goes through DSP_WriteOscParam (0x0387E6) and
+; DSP_WriteCoeffData_5B_Direct (0x0388B3) in the Fixup block.
 DSP_BiquadCoeff_Compute:
 	stb_dri L, 0xFD, 0x14, 0xFF
 	pushw iz
@@ -43106,11 +49759,13 @@ DSP_BiquadCoeff_Compute:
 	stl_dri XWA, 0xFD, 0x8A, 0x00
 	jr DSP_BiquadCoeff_Algo0_AfterSign
 
+; Algo0: gain term compared zero, so take the |x| copy path (FP_SP_CopyOrNegate4).
 DSP_BiquadCoeff_Algo0_SignZero:
 	stb_dri A, 0xFD, 0xDE, 0x00
 	stb_dri W, 0xFD, 0x8A, 0x00
 	call FP_SP_CopyOrNegate4
 
+; Algo0: join point; divides the dB gain by 20.0 and calls pow(10, dB/20).
 DSP_BiquadCoeff_Algo0_AfterSign:
 	stb_dri A, 0xFD, 0x8A, 0x00
 	lda_24 xde, 0x012f6f
@@ -43165,11 +49820,13 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	ld (xsp + 126), xwa
 	jr DSP_BiquadCoeff_Algo0_AfterSign2
 
+; Algo0: second sign test (on the intermediate a-term) took the negate path.
 DSP_BiquadCoeff_Algo0_Sign2Zero:
 	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 126)
 	call FP_SP_CopyOrNegate4
 
+; Algo0: join point after the second sign test; continues assembling the denominator.
 DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda xbc, (xsp + 126)
 	lda_24 xde, 0x012f83
@@ -43246,6 +49903,8 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	call VoiceFloat_SubSP
 	jr DSP_BiquadCoeff_Algo0_Assembly
 
+; Algo0: negative-argument arm of the denominator chain (sign-corrected duplicate of the
+; positive arm; it carries its own copy of the same literals).
 DSP_BiquadCoeff_Algo0_NegBranch:
 	stb_dri A, 0xFD, 0xD6, 0x00
 	stb_dri B, 0xFD, 0xCA, 0x00
@@ -43274,6 +49933,11 @@ DSP_BiquadCoeff_Algo0_NegBranch:
 	stb_dri W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
 
+; Algo0: assembles the five raw taps from K and A before normalisation.  Ends with a guard at
+; 0x03AD0C: it compares the computed a0 against the float 1.0 at 0x012F9B (via
+; ToneGen_Compare_Voice_32 with kind DE=0, "equal") and, on a match, forces the normalisation
+; factor to the literal 0x3F800000 -- IEEE-754 single 1.0 -- before falling into the Fixup
+; block.  That literal is independent confirmation that this code is plain IEEE-754.
 DSP_BiquadCoeff_Algo0_Assembly:
 	stb_dri A, 0xFD, 0xBE, 0x00
 	stb_dri B, 0xFD, 0xBA, 0x00
@@ -43304,6 +49968,13 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	ld xwa, 0x3F800000
 	stl_dri XWA, 0xFD, 0x9E, 0x00
 
+; ★ The store block, and the clearest evidence for what the whole routine is.  For each of the
+; five taps it does: tap = tap * something [FP_SP_Add_Outer = multiply], tap = tap / a0
+; [VoiceFloat_SubSP = divide], tap = tap * 2^22 (0x012FAB/AF/B3/B7) -- the FIFTH tap by 2^23
+; (0x012FBB) -- then FP_SP_Decode_ReadSign to convert float->int, then writes it:
+;   tap 1 via DSP_WriteOscParam (0x0387E6), taps 2..5 via DSP_WriteCoeffData_5B_Direct
+;   (0x0388B3).  Each write's HL status is accumulated in IZ.
+; So the DSP's biquad registers are Q22 (Q23 for the last), five per section.
 DSP_BiquadCoeff_Algo0_Fixup:
 	stb_dri A, 0xFD, 0x9E, 0x00
 	stb_dri B, 0xFD, 0xBE, 0x00
@@ -43392,6 +50063,11 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	ld iz, hl
 	jrl DSP_BiquadCoeff_Epilogue
 
+; Algorithm 1 of DSP_BiquadCoeff_Compute (selector nibble == 1).  Same shape as Algo0 --
+; prewarp with pi/44100 (its own copy at 0x012FBF), {1,-2,1} numerator literals at
+; 0x012FC7..0x012FCF, Q22/Q23 scaling at 0x012FD7..0x012FE7 -- but a different tap topology;
+; it has no separate _Assembly stage and falls straight into its own store chain.
+; Not a routine in the ABI sense: entered by `jrl`, exits via DSP_BiquadCoeff_Epilogue.
 DSP_BiquadCoeff_Algo1:
 	stb_dri A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
@@ -43530,6 +50206,9 @@ DSP_BiquadCoeff_Algo1:
 	ld iz, hl
 	jrl DSP_BiquadCoeff_Epilogue
 
+; Algorithm 2 (selector nibble == 2).  The most branchy of the three: five separate copies of
+; pi/44100 (0x012FEB, 0x012FF3, 0x012FFB, 0x013003, 0x01300B), one per basic block, plus two
+; sign tests.  Entered by `jrl` from DSP_BiquadCoeff_Compute, exits via the shared epilogue.
 DSP_BiquadCoeff_Algo2:
 	stb_dri A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
@@ -43622,11 +50301,13 @@ DSP_BiquadCoeff_Algo2:
 	ld (xsp + 38), xwa
 	jr DSP_BiquadCoeff_Algo2_AfterSign1
 
+; Algo2: first sign test took the negate path.
 DSP_BiquadCoeff_Algo2_Sign1Zero:
 	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 38)
 	call FP_SP_CopyOrNegate4
 
+; Algo2: join point after the first sign test; divides the dB gain by 20.0.
 DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda xbc, (xsp + 38)
 	lda_24 xde, 0x013023
@@ -43681,11 +50362,13 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	ld (xsp + 26), xwa
 	jr DSP_BiquadCoeff_Algo2_AfterSign2
 
+; Algo2: second sign test took the negate path.
 DSP_BiquadCoeff_Algo2_Sign2Zero:
 	stb_dri A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 26)
 	call FP_SP_CopyOrNegate4
 
+; Algo2: join point after the second sign test.
 DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xbc, (xsp + 26)
 	lda_24 xde, 0x013037
@@ -43762,6 +50445,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	call VoiceFloat_SubSP
 	jr DSP_BiquadCoeff_Algo2_WriteParams
 
+; Algo2: negative-argument arm of the final chain.
 DSP_BiquadCoeff_Algo2_NegBranch:
 	stb_dri A, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 2)
@@ -43790,6 +50474,9 @@ DSP_BiquadCoeff_Algo2_NegBranch:
 	stb_dri W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
 
+; Algo2's store block: scales by 2^22 (0x01304B, 0x01304F, 0x013057, 0x01305B) and 2^23
+; (0x013053), converts to integer and emits five coefficients exactly like
+; DSP_BiquadCoeff_Algo0_Fixup.
 DSP_BiquadCoeff_Algo2_WriteParams:
 	stb_dri A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x01304b
@@ -43849,6 +50536,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 
+; Common exit for all three algorithms AND for the "unknown selector" fall-through.
+;   *(arg5 pointer at frame+0x00F2) = IZ  (accumulated DSP write status)
+;   XHL = the stream pointer saved at frame+0x00FE by the DSP_FilterLUT_Fetch call
+;   pop IZ, lda XSP,XSP+0xEC, retd 0x10.
 DSP_BiquadCoeff_Epilogue:
 	ld_sril XWA, (xsp + 0x00f2)
 	ld (xwa), iz
@@ -43857,6 +50548,23 @@ DSP_BiquadCoeff_Epilogue:
 	stb_dri L, 0xFD, 0xEC, 0x00
 	retd 0x10
 
+; Parses one second-order-section header out of the DSP parameter stream and returns the band
+; frequency and the band gain as floats.  Called only by DSP_SOS_Coeff_Compute (`calr`).
+; In:  WA = parameter index (kept in IZ), XBC and XDE = out-pointers for the two floats,
+;      3 stack args (retd 0x0C): the stream pointer, the caller's per-parameter word array,
+;      and the out-pointer for the TYPE nibble.
+; Out: XHL = advanced stream pointer; *(type ptr) = header_byte & 0x0F -- this is the value
+;      DSP_SOS_Coeff_Compute switches on to pick algorithm 0/1/2.
+; Body: reads the header byte, keeps its low nibble as the type and its high nibble as the
+;   indexing mode.  Mode 0x10 (DSP_SOS_LUT_Mode0x10) uses word[IZ-1] for the frequency and
+;   word[IZ] for the gain; every other mode uses word[IZ] and word[IZ+1].  The frequency word
+;   indexes the ISO 1/3-octave float table at 0x012397 (copied out with FP_SP_Raw4Copy).  The
+;   gain word is widened with FP_ScalarToDP then mapped to dB as raw*0.5 - 12.0
+;   (FP_DP_Add_Outer with 0.5 at 0x01305F = multiply, then FP_DP_Mul with -12.0 at 0x013067 =
+;   add) and narrowed back to a float.
+; If the type nibble is 2 it consumes ONE MORE stream byte, masks it with 0x1F and re-fetches
+; the frequency float from 0x012397 with that index -- i.e. indices 27..31 select the
+; 0.1/0.2/0.3/0.4/0.5 constants that follow the frequency table.
 DSP_SOS_LUT_Fetch:
 	lda xsp, (xsp - 34)
 	pushw iz
@@ -43909,6 +50617,8 @@ DSP_SOS_LUT_Fetch:
 	call FP_DP_NormalizeMantissa
 	jr DSP_SOS_LUT_CheckType2
 
+; Alternate indexing when the header's high nibble is 0x10: frequency from word[IZ-1], gain
+; from word[IZ]; own copies of the 0.5 / -12.0 dB literals at 0x01306F / 0x013077.
 DSP_SOS_LUT_Mode0x10:
 	ld wa, iz
 	dec 1, wa
@@ -43943,6 +50653,8 @@ DSP_SOS_LUT_Mode0x10:
 	lda xwa, (xsp + 20)
 	call FP_DP_NormalizeMantissa
 
+; Join point; if the type nibble is 2, consume one extra stream byte and re-fetch the float
+; from 0x012397 masked with 0x1F.
 DSP_SOS_LUT_CheckType2:
 	ld wa, (xsp + 2)
 	cps wa, 2
@@ -43959,6 +50671,8 @@ DSP_SOS_LUT_CheckType2:
 	lda xwa, (xsp + 24)
 	call FP_SP_Raw4Copy
 
+; Writes the type nibble, the frequency float and the gain float through the three
+; out-pointers, returns XHL = stream pointer, `retd 0x0C`.
 DSP_SOS_LUT_StoreResults:
 	ld xbc, (xsp + 48)
 	ld wa, (xsp + 2)
@@ -43974,6 +50688,16 @@ DSP_SOS_LUT_StoreResults:
 	lda xsp, (xsp + 34)
 	retd 0xC
 
+; Designs one RBJ-cookbook second-order section and writes its coefficients to the DSP.
+; Reached only from the opcode-0x76 dispatch arm (0x03CE42).  Same five-stack-arg convention
+; as DSP_BiquadCoeff_Compute (`retd 0x10`), same "return the advanced stream pointer in XHL
+; and the accumulated write status through the last pointer arg" contract.
+; Differs from the biquad family in the prewarp: it uses the FULL angle
+;   w0 = f * 2*pi/44100  (literal 1.424758573e-04 at 0x01308B and its per-block copies)
+; rather than the half angle, which is the signature of the sin(w0)/cos(w0) cookbook form.
+; Selector: the type nibble returned by DSP_SOS_LUT_Fetch; 2 -> DSP_SOS_Algo2,
+; 1 -> DSP_SOS_Algo1, 0 -> falls through, anything else -> DSP_SOS_Coeff_Epilogue with NO
+; writes at all.
 DSP_SOS_Coeff_Compute:
 	stb_dri L, 0xFD, 0x2E, 0xFF
 	push xiz
@@ -44101,6 +50825,8 @@ DSP_SOS_Coeff_Compute:
 	call VoiceFloat_SubSP
 	jrl DSP_SOS_Algo0_FinalChain
 
+; Algo0: arm taken when the tested coefficient is non-zero (the zero arm skips a whole
+; multiply chain).
 DSP_SOS_Algo0_NonzeroCoeff:
 	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
@@ -44177,6 +50903,9 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	stb_dri W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
+; Algo0's store block: normalises by a0 (VoiceFloat_SubSP = divide), scales by 2^22
+; (0x0130E3, 0x0130E7), converts float->int and emits the taps through DSP_WriteOscParam /
+; DSP_WriteCoeffData_5B_Direct, accumulating status in IZ.
 DSP_SOS_Algo0_FinalChain:
 	lda_24 xbc, 0x0130db
 	stb_dri B, 0xFD, 0xCA, 0x00
@@ -44234,6 +50963,10 @@ DSP_SOS_Algo0_FinalChain:
 	ldw_erp HL, 0xFA
 	jrl DSP_SOS_Coeff_Epilogue
 
+; Second-order-section algorithm 1 (type nibble == 1).  Own literal block at
+; 0x0130EF..0x01315B; note the 2^21 scale (2097152.0 at 0x013153 / 0x01315B) instead of 2^22,
+; i.e. this topology's coefficients need one more headroom bit.
+; Entered by `jrl`, exits via DSP_SOS_Coeff_Epilogue.
 DSP_SOS_Algo1:
 	stb_dri A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x0130ef
@@ -44340,6 +51073,7 @@ DSP_SOS_Algo1:
 	call VoiceFloat_SubSP
 	jrl DSP_SOS_Algo1_FinalChain
 
+; Algo1: non-zero-coefficient arm.
 DSP_SOS_Algo1_NonzeroCoeff:
 	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
@@ -44416,6 +51150,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	stb_dri W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
+; Algo1's normalise / scale / float->int / write chain.
 DSP_SOS_Algo1_FinalChain:
 	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x01314b
@@ -44473,6 +51208,9 @@ DSP_SOS_Algo1_FinalChain:
 	ldw_erp HL, 0xFA
 	jrl DSP_SOS_Coeff_Epilogue
 
+; Second-order-section algorithm 2 (type nibble == 2) -- the variant that also consumed the
+; extra stream byte in DSP_SOS_LUT_Fetch.  Literal block 0x01315F..0x0131CB, 2^22 scaling.
+; Entered by `jrl`, exits via DSP_SOS_Coeff_Epilogue.
 DSP_SOS_Algo2:
 	stb_dri A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x01315f
@@ -44579,6 +51317,7 @@ DSP_SOS_Algo2:
 	call VoiceFloat_SubSP
 	jrl DSP_SOS_Algo2_FinalChain
 
+; Algo2: non-zero-coefficient arm.
 DSP_SOS_Algo2_NonzeroCoeff:
 	stb_dri A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
@@ -44655,6 +51394,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	stb_dri W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
+; Algo2's normalise / scale / float->int / write chain.
 DSP_SOS_Algo2_FinalChain:
 	stb_dri A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x0131bb
@@ -44711,6 +51451,8 @@ DSP_SOS_Algo2_FinalChain:
 	call DSP_WriteCoeffData_5B_Direct
 	ldw_erp HL, 0xFA
 
+; Common exit: *(status-out pointer at frame+0x00DC) = IZ; XHL = advanced stream pointer from
+; frame+0x00E6; pop XIZ; lda XSP,XSP+0xD2; retd 0x10.
 DSP_SOS_Coeff_Epilogue:
 	ld_sril XBC, (xsp + 0x00dc)
 	stw_erp WA, 0xFA
@@ -44720,6 +51462,22 @@ DSP_SOS_Coeff_Epilogue:
 	stb_dri L, 0xFD, 0xD2, 0x00
 	retd 0x10
 
+; Computes a two-stage integer mixer gain and writes it to DSP registers 0xD0 and 0xD3.
+; Called twice from region 11 (0x034360-area, the output-routing layer).
+; In:  WA = index A, BC = curve index, DE = index B.  32 bytes of locals + `push XIZ`, `ret`
+;      (no stack args).
+; Body: g = long[0x000131CF + 4*BC] >> 15;  g = MulAccum64(g, long[0x00F140 + 4*WA] >> 16);
+;       g = MulAccum64(g, long[0x00F140 + 4*DE] >> 15)  -- FP_MulAccum64 at 0x03D8CA is a
+;       32x32 -> 64 fixed-point multiply-accumulate, so this is Q15/Q16 arithmetic on the
+;       live per-slot volume array in DRAM at 0x00F140.
+;       The same slot is then run through FP_SP_CallWithBuf8 / FP_SP_Decode_ReadSign to get a
+;       second, float-derived integer.
+; Writes, for each of the two results, the sequence
+;       DSP_DispatchCommand(0x30) ; DispatchData(0x00) ; DispatchData(0xD0 or 0xD3) ;
+;       DispatchData(hi byte) ; DispatchData(lo byte) ; DSP2_SPI_BusIdle ;
+;       DSP_Bytecode_NotifyStateChange
+; on chip 1 (DSP2 / MN19413).  ★ Note the two NotifyStateChange calls: each is a preemptive
+; task yield in the MIDDLE of the register-write sequence (see [UNCERTAIN]).
 DSP_MixerCoeff_Compute:
 	lda xsp, (xsp - 20)
 	push xiz
@@ -44809,6 +51567,11 @@ DSP_MixerCoeff_Compute:
 	lda xsp, (xsp + 20)
 	ret
 
+; Already named in both the ELF and the reference file; documented here for completeness.
+; In:  WA = effect-slot index, XBC = pointer to the bytecode stream for this slot.
+; Looks the slot's CHIP ID up in the byte table at 0x01ED6D, then runs
+; DSP_BytecodeInterpreter_Init(WA = chip, BC = slot = program index, XDE = 0x014777 program
+; table, pushed XBC = bytecode stream).  Ten callers in region 11's effect layer.
 DSP_WriteEFFConfig:
 	ld de, wa
 	extz xde
@@ -44824,6 +51587,8 @@ DSP_WriteEFFConfig:
 	call DSP_BytecodeInterpreter_Init
 	ret
 
+; Already named.  Runs program 0 of the descriptor table at 0x0147B3 on the chip in WA, with
+; the caller's XBC as the bytecode stream.  Thirteen callers.
 DSP_WriteGlobalConfig:
 	lds de, 0
 	push xbc
@@ -44832,6 +51597,14 @@ DSP_WriteGlobalConfig:
 	call DSP_BytecodeInterpreter_Init
 	ret
 
+; Already named.  Front door for "write parameter set N of effect M".
+; In:  WA = chip/kind selector, BC = effect id, DE = word passed through, XIX = a stack arg
+;      that is the base of a 56-BYTE-PER-ENTRY parameter-block array (the address computed is
+;      XIX + 56*WA + 12).
+; If WA==1 and BC is 9 or 0x0A it uses the fixed descriptor pairs 0x01E17F/0x01E19E (9) or
+; 0x01E40A/0x01E42D (0x0A); otherwise it looks the pair up in the long tables at 0x0001F22C
+; (indexed by BC) and 0x0001F09C.  Either way it ends in
+; DSP_ParameterWriteEngine(XDE = descriptor table, XBC = 0x014777, + 3 pushed args).
 DSP_WriteParameter:
 	ld xix, (xsp + 4)
 	cps wa, 1
@@ -44841,6 +51614,7 @@ DSP_WriteParameter:
 	cp bc, 0xA
 	jr nz, DSP_WriteParam_Generic
 
+; The WA==1 arm; re-tests BC and routes to the 0x0A case or the 9 case.
 DSP_WriteParam_EFFCase:
 	cp bc, 0xA
 	jr z, DSP_WriteParam_EFFCase0xA
@@ -44865,6 +51639,7 @@ DSP_WriteParam_EFFCase:
 	call DSP_ParameterWriteEngine
 	jr DSP_WriteParam_Return
 
+; Effect id 0x0A: descriptor tables 0x01E40A / 0x01E42D.
 DSP_WriteParam_EFFCase0xA:
 	lda_24 xhl, 0x01e40a
 	lda_24 xbc, 0x01e42d
@@ -44885,6 +51660,7 @@ DSP_WriteParam_EFFCase0xA:
 	call DSP_ParameterWriteEngine
 	jr DSP_WriteParam_Return
 
+; Generic arm: descriptor pointers from long tables 0x0001F22C[BC] and 0x0001F09C[..].
 DSP_WriteParam_Generic:
 	ld hl, bc
 	extz xhl
@@ -44913,14 +51689,28 @@ DSP_WriteParam_Generic:
 	ld xde, xhl
 	call DSP_ParameterWriteEngine
 
+; `retd 0x4` -- pops the single long stack argument.
 DSP_WriteParam_Return:
 	retd 0x4
 	ret
 
+; Already named.  Two instructions: `lds wa,1` then `jp TaskSched_PreemptiveYield_INT`
+; (0x020370).  It is a TAIL JUMP, so it re-enters the scheduler with priority 1 and only comes
+; back when this task is next dispatched.  Called after every DSP2_SPI_BusIdle in the bytecode
+; interpreter, the translator and DSP_MixerCoeff_Compute -- i.e. the DSP write path
+; deliberately yields between register groups.
 DSP_Bytecode_NotifyStateChange:
 	lds wa, 1
 	jp TaskSched_PreemptiveYield_INT
 
+; Already named.  Sets up and runs a canned DSP register-write program.
+; In:  WA = chip id (0 = DSP1/uPD6383, 1 = DSP2/MN19413), BC = program index,
+;      XDE = 12-byte-descriptor table base (0x014777 or 0x0147B3), one pushed long = the
+;      BYTECODE STREAM pointer.  `retd 0x4`.  Out: HL = last dispatch status.
+; Copies descriptor fields +0/+2/+4/+6 (words) and +8 (long) into the frame, then enters
+; DSP_BytecodeInterpreter_CheckEnd.  Frame layout used by every handler:
+;   (XSP+0x04) loop counter    (XSP+0x06) group length    (XSP+0x14) CHIP ID
+;   (XSP+0x1A) bytecode stream pointer (auto-incremented)  IZ = error accumulator.
 DSP_BytecodeInterpreter_Init:
 	lda xsp, (xsp - 18)
 	push xiz
@@ -44972,6 +51762,12 @@ DSP_BytecodeInterpreter_Init:
 	ld (xsp + 16), xwa
 	jrl DSP_BytecodeInterpreter_CheckEnd
 
+; Already named.  Fetches one 2-byte bytecode instruction:
+;   opcode  = byte0 >> 4
+;   length  = ((byte0 & 0x0F) << 8) + byte1 - 2
+; then advances the stream by 2 and dispatches: 0xE -> DSP_Bytecode_Op0E_SendCommand,
+; 0xD -> DSP_Bytecode_Op0D_StateChange, > 5 -> ignored (straight to CheckEnd), 0..5 ->
+; computed `jp` through the offset table at 0x014739 with base 0x03C32E.
 DSP_BytecodeInterpreter_Loop:
 	ld xwa, (xsp + 26)
 	ld a, (xwa)
@@ -45036,6 +51832,12 @@ DSP_BytecodeInterpreter_Loop:
 // Handler 5 (offset 0x48D, 448 bytes): Command + 2 preamble + groups-of-5
 //   2-way branch: 0x08=addr (with IZH mask), else=param-modified
 //   Variant of Handler 0 with different branching and accumulator at stack[0x0C]
+; Already named; the name covers the whole 1613-byte `.byte` run 0x03C32E..0x03C97A, which is
+; CODE, not data -- six opcode handlers.  This address is also handler 0's entry.
+; Handler 0 (570 B): command byte + 2 preamble bytes + groups of 5; three-way branch per group
+; (0x00 = static address, 0x0A = raw, else = parameter-modified, mixing a 32-bit runtime
+; parameter into the template coefficient).  The source file's own comment block above this
+; label documents all six handlers and was cross-checked against the offset table here.
 DSP_Bytecode_Programs:
 	.byte 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23, 0xbf, 0x1a
 	.byte 0x60, 0xcb, 0x89, 0xd8, 0x12, 0x9f, 0x14, 0x21
@@ -45108,7 +51910,16 @@ DSP_Bytecode_Programs:
 	.byte 0xbf, 0x1a, 0x60, 0x9f, 0x04, 0x61, 0x9f, 0x06
 	.byte 0x20, 0xd8, 0x6b, 0xe8, 0x12, 0xd8, 0x0a, 0x05
 	.byte 0x00, 0x9f, 0x04, 0xf8, 0x73, 0x16, 0xfe, 0x78
-	.byte 0x66, 0x04, 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23
+	.byte 0x66, 0x04
+; Bytecode handler 1 (offset 0x23A, 249 bytes).  Entered ONLY by the computed jump in
+; DSP_BytecodeInterpreter_Loop when the opcode nibble is 1; no symbol existed for it.
+; Verified head: fetch one byte from the stream at (XSP+0x1A) with post-increment, extend it
+; and send it as a COMMAND -- DSP_DispatchCommand(WA = byte, BC = (XSP+0x14) = chip id) -- and
+; accumulate the returned status into IZ.  Then two preamble bytes and groups of five, with a
+; 12-bit address computation (4-bit shift) and its accumulator at frame+0x08.
+; Exits by `jrl` to DSP_BytecodeInterpreter_CheckEnd (0x03C9CE).
+DSP_Bytecode_Op01_Groups5_Addr12:
+	.byte 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23
 	.byte 0xbf, 0x1a, 0x60, 0xcb, 0x89, 0xd8, 0x12, 0x9f
 	.byte 0x14, 0x21, 0x1d, 0x2e, 0x6a, 0x03, 0xd7, 0xfa
 	.byte 0x9b, 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23, 0xbf
@@ -45139,7 +51950,12 @@ DSP_Bytecode_Programs:
 	.byte 0x03, 0xd7, 0xfa, 0x9b, 0x9f, 0x04, 0x61, 0x9f
 	.byte 0x06, 0x20, 0xd8, 0x6b, 0xe8, 0x12, 0xd8, 0x0a
 	.byte 0x05, 0x00, 0x9f, 0x04, 0xf8, 0x73, 0x57, 0xff
-	.byte 0x78, 0x6d, 0x03, 0xaf, 0x1a, 0x20, 0xc5, 0xe0
+	.byte 0x78, 0x6d, 0x03
+; Bytecode handler 2 (offset 0x333, 167 bytes).  Same command-byte prologue as handler 1, then
+; two preamble bytes and groups of THREE raw data bytes with no address computation -- a plain
+; block copy into consecutive DSP registers.  Exits to DSP_BytecodeInterpreter_CheckEnd.
+DSP_Bytecode_Op02_Groups3_Raw:
+	.byte 0xaf, 0x1a, 0x20, 0xc5, 0xe0
 	.byte 0x23, 0xbf, 0x1a, 0x60, 0xcb, 0x89, 0xd8, 0x12
 	.byte 0x9f, 0x14, 0x21, 0x1d, 0x2e, 0x6a, 0x03, 0xd7
 	.byte 0xfa, 0x9b, 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23
@@ -45160,7 +51976,12 @@ DSP_Bytecode_Programs:
 	.byte 0x03, 0xd7, 0xfa, 0x9b, 0x9f, 0x04, 0x61, 0x9f
 	.byte 0x06, 0x20, 0xd8, 0x6b, 0xe8, 0x12, 0xd8, 0x0a
 	.byte 0x03, 0x00, 0x9f, 0x04, 0xf8, 0x63, 0xa8, 0x78
-	.byte 0xc6, 0x02, 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23
+	.byte 0xc6, 0x02
+; Bytecode handler 3 (offset 0x3DA, 153 bytes).  Command byte, then a 16-bit address built
+; from two stream bytes (8-bit shift; the `ld A,(XWA+0x01)` at 0x03C722 is the second address
+; byte), then a raw tail.  Accumulator at frame+0x0E.  Exits to CheckEnd.
+DSP_Bytecode_Op03_Addr16_RawTail:
+	.byte 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23
 	.byte 0xbf, 0x1a, 0x60, 0xcb, 0x89, 0xd8, 0x12, 0x9f
 	.byte 0x14, 0x21, 0x1d, 0x2e, 0x6a, 0x03, 0xd7, 0xfa
 	.byte 0x9b, 0xaf, 0x1a, 0x20, 0x88, 0x01, 0x21, 0xc9
@@ -45179,10 +52000,24 @@ DSP_Bytecode_Programs:
 	.byte 0x12, 0x9f, 0x14, 0x21, 0x1d, 0x4f, 0x6a, 0x03
 	.byte 0xd7, 0xfa, 0x9b, 0x9f, 0x04, 0x61, 0x9f, 0x06
 	.byte 0x20, 0xd8, 0x6b, 0x9f, 0x04, 0xf8, 0x63, 0xdc
-	.byte 0x78, 0x2d, 0x02, 0xaf, 0x1a, 0x20, 0xc5, 0xe0
+	.byte 0x78, 0x2d, 0x02
+; Bytecode handler 4 (offset 0x473, 26 bytes) -- the whole handler, fully decoded:
+;   XWA = (XSP+0x1A); C = (XWA+) ; (XSP+0x1A) = XWA        ; fetch one stream byte
+;   WA = zero-extend(C) ; BC = (XSP+0x14)                  ; chip id
+;   call DSP_DispatchCommand (0x036A2E) ; IZ = HL          ; accumulate status
+;   jrl DSP_BytecodeInterpreter_CheckEnd (0x03C9CE)
+; i.e. "emit one command byte, no data".  This is the block that proves the frame layout used
+; by all six handlers.
+DSP_Bytecode_Op04_CommandOnly:
+	.byte 0xaf, 0x1a, 0x20, 0xc5, 0xe0
 	.byte 0x23, 0xbf, 0x1a, 0x60, 0xcb, 0x89, 0xd8, 0x12
 	.byte 0x9f, 0x14, 0x21, 0x1d, 0x2e, 0x6a, 0x03, 0xd7
-	.byte 0xfa, 0x9b, 0x78, 0x13, 0x02, 0xaf, 0x1a, 0x20
+	.byte 0xfa, 0x9b, 0x78, 0x13, 0x02
+; Bytecode handler 5 (offset 0x48D, 448 bytes).  A variant of handler 0: command byte, two
+; preamble bytes, groups of five, but a TWO-way branch (0x08 = address, masked with IZH; else
+; parameter-modified) and its accumulator at frame+0x0C.  Exits to CheckEnd.
+DSP_Bytecode_Op05_Groups5_Masked:
+	.byte 0xaf, 0x1a, 0x20
 	.byte 0xc5, 0xe0, 0x23, 0xbf, 0x1a, 0x60, 0xcb, 0x89
 	.byte 0xd8, 0x12, 0x9f, 0x14, 0x21, 0x1d, 0x2e, 0x6a
 	.byte 0x03, 0xd7, 0xfa, 0x9b, 0xaf, 0x1a, 0x20, 0xc5
@@ -45240,11 +52075,16 @@ DSP_Bytecode_Programs:
 	.byte 0x12, 0xd8, 0x0a, 0x05, 0x00, 0x9f, 0x04, 0xf8
 	.byte 0x73, 0x8f, 0xfe, 0x68, 0x53
 
+; Already named.  Opcode nibble 0xD: `DSP2_SPI_BusIdle` then `DSP_Bytecode_NotifyStateChange`
+; (a task yield) then CheckEnd.  Emits no data at all -- it exists purely to release the SPI
+; bus and let other tasks run between register groups.
 DSP_Bytecode_Op0D_StateChange:
 	call DSP2_SPI_BusIdle
 	calr DSP_Bytecode_NotifyStateChange
 	jr DSP_BytecodeInterpreter_CheckEnd
 
+; Already named.  Opcode nibble 0xE: sends one stream byte as a COMMAND, then, if the decoded
+; group length > 1, falls into DSP_Bytecode_Op0E_DataLoop for the remaining bytes.
 DSP_Bytecode_Op0E_SendCommand:
 	ld xwa, (xsp + 26)
 	ldb_spi C, 0xE0
@@ -45260,6 +52100,8 @@ DSP_Bytecode_Op0E_SendCommand:
 	cp (xsp + 4), wa
 	jr ugt, DSP_BytecodeInterpreter_CheckEnd
 
+; Already named.  Sends stream bytes as DATA via DSP_DispatchData until the frame counter
+; at (XSP+0x04) reaches the group length at (XSP+0x06).
 DSP_Bytecode_Op0E_DataLoop:
 	ld xwa, (xsp + 26)
 	ldb_spi C, 0xE0
@@ -45275,6 +52117,10 @@ DSP_Bytecode_Op0E_DataLoop:
 	cp (xsp + 4), wa
 	jr ule, DSP_Bytecode_Op0E_DataLoop
 
+; Already named.  Peeks the next stream byte WITHOUT consuming it; if (byte & 0xF0) != 0xF0
+; loops back to DSP_BytecodeInterpreter_Loop, else returns HL = IZ (accumulated status),
+; pop XIZ, `retd 0x4`.  ★ 0xFx is the only terminator -- a stream that lacks one runs off the
+; end of the program image (see [UNCERTAIN]).
 DSP_BytecodeInterpreter_CheckEnd:
 	ld xwa, (xsp + 26)
 	ld a, (xwa)
@@ -45286,6 +52132,17 @@ DSP_BytecodeInterpreter_CheckEnd:
 	lda xsp, (xsp + 18)
 	retd 0x4
 
+; Already named.  Walks a tagged table of parameter records and hands each one to
+; DSP_PerParameterTranslator, framing the whole run with DSP1 bracket commands.
+; In:  WA = effect-slot index, BC/DE forwarded, plus 5 stack args (`retd 0x0A`): the record
+;      table pointer, an end pointer, the opcode-descriptor table and two pass-throughs.
+; The CHIP ID is byte[0x0001ED6D + WA] and lives at frame+0x04 for the whole run.
+; Uses DSP_TableWalk_SearchWithState to position XIZ at the first record; if that reports a
+; non-zero status it calls DSP_NopReturn (a stub! the error is swallowed) and returns.
+; Per record, ONLY when the chip id is 0 (DSP1 / uPD6383), it brackets the record with
+;   DispatchCommand(1) ; DispatchData(1) ; DispatchData(0x60)   ... record ...
+;   DispatchCommand(3)
+; The loop terminates when XIZ reaches the end pointer at frame+0x06.
 DSP_ParameterWriteEngine:
 	lda xsp, (xsp - 18)
 	push xiz
@@ -45315,10 +52172,12 @@ DSP_ParameterWriteEngine:
 	calr DSP_NopReturn
 	jr DSP_ParamLoop_Return
 
+; Bounds test before the first iteration: if XIZ >= end pointer, return immediately.
 DSP_ParamLoop_CheckBound:
 	cp xiz, (xsp + 6)
 	jr nc, DSP_ParamLoop_Return
 
+; Top of the per-record loop; emits the DSP1-only opening bracket (cmd 1 / data 1 / data 0x60).
 DSP_ParamLoop_Iterate:
 	cpw (xsp + 4), 0x0
 	jr nz, DSP_ParamLoop_CallTranslator
@@ -45335,6 +52194,8 @@ DSP_ParamLoop_Iterate:
 	call DSP_DispatchData
 	ld (xsp + 10), hl
 
+; Pushes the five translator arguments and `calr DSP_PerParameterTranslator`; XIZ = returned
+; stream pointer.  A non-zero status routes to DSP_NopReturn and aborts the loop.
 DSP_ParamLoop_CallTranslator:
 	push xiz
 	ld xwa, (xsp + 16)
@@ -45356,6 +52217,7 @@ DSP_ParamLoop_CallTranslator:
 	calr DSP_NopReturn
 	jr DSP_ParamLoop_Return
 
+; DSP1-only closing bracket: DispatchCommand(3).
 DSP_ParamLoop_PostCall:
 	cpw (xsp + 4), 0x0
 	jr nz, DSP_ParamLoop_SendEndCmd
@@ -45364,15 +52226,26 @@ DSP_ParamLoop_PostCall:
 	call DSP_DispatchCommand
 	ld (xsp + 10), hl
 
+; Loop back-edge: continue while XIZ < the end pointer at frame+0x06.
 DSP_ParamLoop_SendEndCmd:
 	cp xiz, (xsp + 6)
 	jr c, DSP_ParamLoop_Iterate
 
+; pop XIZ, lda XSP,XSP+0x12, `retd 0x0A`.
 DSP_ParamLoop_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	retd 0xA
 
+; Already named.  ★ The heart of the region: interprets ONE parameter record as a little
+; opcode stream, and for each opcode calls a curve/interpolation function and then a DSP
+; register writer.
+; In:  WA / BC / DE plus 6 stack args (`retd 0x14`, 20 bytes).  BC indexes a 12-BYTE-PER-ENTRY
+;      descriptor array whose base is the stack arg at +0x1E: fields +0, +2, +4 (words) and +8
+;      (long) are cached into the frame at +0x04, +0x06, +0x08 and +0x0A.
+; Out: XHL = advanced stream pointer; the status word is stored through the pointer at +0x1A.
+; Loop: DSP_Translator_CheckEnd reads one byte; while it is not 0x7A, DSP_Translator_ReadOpcode
+; runs one opcode; 0x7A ends the record.
 DSP_PerParameterTranslator:
 	lda xsp, (xsp - 18)
 	push xiz
@@ -45418,6 +52291,12 @@ DSP_PerParameterTranslator:
 	ld (xsp + 10), xwa
 	jrl DSP_Translator_CheckEnd
 
+; Reads the opcode byte, then calls DSP_TableWalk_Search to locate the matching record field;
+; a non-zero walk status aborts to DSP_Translator_Return.  It then reads a signed word from
+; the caller-supplied word table (stack arg at +0x22, indexed by the loop counter) into DE and
+; dispatches:  0x21 -> DSP_Op_0x21_Interp2Point, 0x24 -> DSP_Op_0x24_MultiStepInterp,
+; 0x40 -> DSP_Op_0x40_PanScale, 0x61..0x79 -> computed `jp (XIX+DE)` with the offset table at
+; 0x014745 and base 0x03CB8E, anything else -> DSP_Op_Unknown_Error.
 DSP_Translator_ReadOpcode:
 	ld xbc, (xsp + 42)
 	lds32 xwa, 1
@@ -45458,18 +52337,27 @@ DSP_Translator_ReadOpcode:
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x03cb8e
 	jp_ind 8, 0x07, 0xF0, 0xE0
+; ⚠ THE ELF NAME IS MISLEADING -- see [UNCERTAIN].  These 26 bytes are the OPCODE 0x61 ARM,
+; not a jump table: DSP_State_LoadAndApply_InlineData (0x038E9F) then DSP_WriteOscParam
+; (0x0387E6), then `jrl DSP_Translator_PostDispatch`.  The real table is at 0x014745.
+; Proposing the existing name unchanged so integration stays mechanical.
 DSP_Translator_JumpTable:
 	.byte 0xbf, 0x2a, 0x30, 0xea, 0x89, 0x1d, 0x9f, 0x8e
 	.byte 0x03, 0x9f, 0x04, 0x04, 0xde, 0x88, 0xeb, 0x89
 	.byte 0x9f, 0x16, 0x22, 0x1d, 0xe6, 0x87, 0x03, 0xbf
 	.byte 0x0e, 0x53
 
+; Common return point for all 27 opcode arms.  If the frame word at +0x14 is 1 it runs
+; DSP2_SPI_BusIdle and DSP_Bytecode_NotifyStateChange (a task yield) before falling into
+; DSP_Translator_CheckEnd.
 DSP_Translator_PostDispatch:
 	cpw (xsp + 20), 0x1
 	jr nz, DSP_Translator_CheckEnd
 	call DSP2_SPI_BusIdle
 	calr DSP_Bytecode_NotifyStateChange
 
+; Consumes one stream byte; loops back to DSP_Translator_ReadOpcode unless it is 0x7A.
+; ★ 0x7A is the ONLY terminator -- see [UNCERTAIN].
 DSP_Translator_CheckEnd:
 	ld xbc, (xsp + 42)
 	lds32 xwa, 1
@@ -45480,6 +52368,7 @@ DSP_Translator_CheckEnd:
 	cp wa, 0x7A
 	jrl nz, DSP_Translator_ReadOpcode
 
+; Stores the status word through the pointer arg, returns XHL = stream pointer, `retd 0x14`.
 DSP_Translator_Return:
 	ld xbc, (xsp + 26)
 	ld wa, (xsp + 14)
@@ -45488,6 +52377,14 @@ DSP_Translator_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	retd 0x14
+; Opcode 0x62 arm (offset 0x0050 in the table at 0x014745).  NEW NAME -- this code lives inside
+; a converter `.byte` run and has no symbol at all.
+; DSP_ParamFetch_SingleTable (0x038EAC) -> DSP_WriteOscParam (0x0387E6) -> PostDispatch.
+; The shape of every arm in this block is identical: load the parameter pointer from
+; (XSP+0x2A), pass the record pointer in XBC, call the CURVE function, then push the curve's
+; result and call the WRITER with WA = IZ (the DSP channel) and DE = (XSP+0x16), storing the
+; writer's HL into the status word at (XSP+0x0E).
+DSP_Op_0x62_ParamFetchSingle:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamFetch_SingleTable
@@ -45498,6 +52395,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jr DSP_Translator_PostDispatch
+; Opcode 0x63 arm.  NEW NAME.
+; DSP_ParamFetch_AlgoTypeTable (0x038EB9) -> DSP_WriteFreqParam_AlgoType (0x03846C).
+DSP_Op_0x63_ParamFetchAlgoType:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamFetch_AlgoTypeTable
@@ -45508,6 +52408,9 @@ DSP_Translator_Return:
 	call DSP_WriteFreqParam_AlgoType
 	ld (xsp + 14), hl
 	jr DSP_Translator_PostDispatch
+; Opcode 0x79 arm (offset 0x0088 -- note it sits physically BEFORE the 0x64 arm).  NEW NAME.
+; DSP_AlgoParam_Decode (0x038EF6) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x79_AlgoParamDecode:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_AlgoParam_Decode
@@ -45518,6 +52421,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x64 arm.  NEW NAME.
+; DSP_PitchParam_Scale (0x038F9B) -> DSP_WriteFreqParam (0x038539).
+DSP_Op_0x64_PitchParamScale:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_PitchParam_Scale
@@ -45528,6 +52434,9 @@ DSP_Translator_Return:
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x65 arm.  NEW NAME.
+; DSP_VolumeParam_Scale (0x038FE8) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x65_VolumeParamScale:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_VolumeParam_Scale
@@ -45538,6 +52447,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x66 arm.  NEW NAME.
+; DSP_ParamInterp_2Point (0x039206) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x66_Interp2Point:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamInterp_2Point
@@ -45548,6 +52460,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x67 arm.  NEW NAME.  The only arm that uses the offset writer.
+; DSP_ParamInterp_FPScale (0x03925E) -> DSP_WriteOscParam_Offset (0x038922).
+DSP_Op_0x67_InterpFPScale:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamInterp_FPScale
@@ -45560,6 +52475,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam_Offset
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x68 arm.  NEW NAME.
+; DSP_ParamInterp_Div0xB4 (0x0392AC) -> DSP_WriteFreqParam (0x038539).
+DSP_Op_0x68_InterpDiv0xB4:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamInterp_Div0xB4
@@ -45570,6 +52488,9 @@ DSP_Translator_Return:
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x69 arm.  NEW NAME.
+; DSP_VolumeCurve_FP (0x0392F2) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x69_VolumeCurve:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_VolumeCurve_FP
@@ -45580,6 +52501,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x6A arm.  NEW NAME.
+; DSP_FreqCurve_FP (0x03943B) -> DSP_WriteFreqParam (0x038539).
+DSP_Op_0x6A_FreqCurve:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_FreqCurve_FP
@@ -45590,6 +52514,9 @@ DSP_Translator_Return:
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x6B arm.  NEW NAME.
+; DSP_FreqInterp_2Point (0x0394CD) -> DSP_WriteFreqParam (0x038539).
+DSP_Op_0x6B_FreqInterp2Point:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_FreqInterp_2Point
@@ -45600,6 +52527,9 @@ DSP_Translator_Return:
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x6C arm.  NEW NAME.  Takes one extra stack argument before the call.
+; DSP_ParamInterp_3Point_WithOffset (0x039525) -> DSP_WriteFreqParam (0x038539).
+DSP_Op_0x6C_Interp3Point:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	ld xde, (xsp + 10)
@@ -45611,6 +52541,9 @@ DSP_Translator_Return:
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x6D arm.  NEW NAME.
+; DSP_ReverbCurve_FP (0x039599) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x6D_ReverbCurve:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ReverbCurve_FP
@@ -45621,6 +52554,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x6E arm.  NEW NAME.
+; DSP_ParamInterp_FPComplex (0x0396C2) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x6E_InterpFPComplex:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamInterp_FPComplex
@@ -45631,6 +52567,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x6F arm.  NEW NAME.
+; DSP_PanCurve_PiecewiseLin (0x0397F3) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x6F_PanCurve:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_PanCurve_PiecewiseLin
@@ -45641,6 +52580,13 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x70 arm.  NEW NAME.  ★ The ONLY caller of DSP_BiquadCoeff_Compute (0x03A933).
+; Unlike the curve arms it has no separate writer: it pushes five arguments -- the parameter
+; stream pointer from (XSP+0x2A), IZ, the long at (XSP+0x28), the word at (XSP+0x0E) and a
+; pointer to the local at XSP+0x1A -- passes WA/BC/DE from (XSP+0x24)/(XSP+0x22)/(XSP+0x20),
+; and stores the returned XHL back into (XSP+0x2A) as the new stream pointer.
+; The coefficient routine does its own DSP writes.
+DSP_Op_0x70_BiquadCoeff:
 	ld xwa, (xsp + 42)
 	push xwa
 	pushw iz
@@ -45655,6 +52601,9 @@ DSP_Translator_Return:
 	call DSP_BiquadCoeff_Compute
 	ld (xsp + 42), xhl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x71 arm.  NEW NAME.
+; DSP_DetuneCurve_SignedFP (0x0398CE) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x71_DetuneCurve:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_DetuneCurve_SignedFP
@@ -45665,6 +52614,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x72 arm.  NEW NAME.  Four pushed arguments, no separate writer.
+; DSP_BiquadWarp_FP (0x039ABD) does its own writing.
+DSP_Op_0x72_BiquadWarp:
 	pushm (xsp + 16)
 	pushw iz
 	pushm (xsp + 24)
@@ -45675,6 +52627,9 @@ DSP_Translator_Return:
 	call DSP_BiquadWarp_FP
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x73 arm.  NEW NAME.
+; DSP_ParamInterp_Div0xC6 (0x039D26) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x73_InterpDiv0xC6:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamInterp_Div0xC6
@@ -45685,6 +52640,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x74 arm.  NEW NAME.  Two pushed argument groups, no separate writer.
+; DSP_WriteLUTParamSet (0x03869B) writes a whole LUT-driven parameter set itself.
+DSP_Op_0x74_LUTParamSet:
 	pushm (xsp + 20)
 	pushm (xsp + 8)
 	lda xwa, (xsp + 46)
@@ -45692,6 +52650,9 @@ DSP_Translator_Return:
 	call DSP_WriteLUTParamSet
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x75 arm.  NEW NAME.
+; DSP_ParamEQ_Curve_FP (0x039D98) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x75_ParamEQCurve:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamEQ_Curve_FP
@@ -45702,6 +52663,10 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x76 arm.  NEW NAME.  ★ The ONLY caller of DSP_SOS_Coeff_Compute (0x03B646).
+; Same five-argument shape as the 0x70 arm; stores the returned stream pointer back into
+; (XSP+0x2A).
+DSP_Op_0x76_SOSCoeff:
 	ld xwa, (xsp + 42)
 	push xwa
 	pushw iz
@@ -45716,6 +52681,9 @@ DSP_Translator_Return:
 	call DSP_SOS_Coeff_Compute
 	ld (xsp + 42), xhl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x77 arm.  NEW NAME.
+; DSP_ParamInterp_2Point_B (0x03A22A) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x77_Interp2PointB:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamInterp_2Point_B
@@ -45726,6 +52694,9 @@ DSP_Translator_Return:
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
+; Opcode 0x78 arm.  NEW NAME.
+; DSP_VolScale_B (0x03A282) -> DSP_WriteOscParam (0x0387E6).
+DSP_Op_0x78_VolScaleB:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_VolScale_B
@@ -45737,6 +52708,8 @@ DSP_Translator_Return:
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
 
+; Opcode 0x40 arm (special-cased before the jump table).
+; DSP_PanScale_Simple (0x03A4A0) -> DSP_WriteOscParam (0x0387E6).
 DSP_Op_0x40_PanScale:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
@@ -45749,6 +52722,8 @@ DSP_Op_0x40_PanScale:
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
 
+; Opcode 0x24 arm (special-cased).  Pushes two extra argument groups.
+; DSP_ParamInterp_MultiStep (0x03A4B7) -> DSP_WriteOscParam (0x0387E6).
 DSP_Op_0x24_MultiStepInterp:
 	pushm (xsp + 18)
 	pushm (xsp + 18)
@@ -45764,6 +52739,8 @@ DSP_Op_0x24_MultiStepInterp:
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
 
+; Opcode 0x21 arm (special-cased).
+; DSP_ParamInterp_2Point (0x039206) -> DSP_WriteOscParam (0x0387E6).
 DSP_Op_0x21_Interp2Point:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
@@ -45776,10 +52753,19 @@ DSP_Op_0x21_Interp2Point:
 	ld (xsp + 14), hl
 	jrl DSP_Translator_PostDispatch
 
+; Unrecognised opcode: sets the status word at (XSP+0x0E) to 5 and `jrl`s to
+; DSP_Translator_Return -- ★ it ABORTS THE WHOLE PARAMETER RECORD, so one bad opcode silently
+; drops every remaining parameter of that effect.
 DSP_Op_Unknown_Error:
 	ldw (xsp + 14), 0x5
 	jrl DSP_Translator_Return
 
+; Decodes a 24-bit BIG-ENDIAN signed coefficient out of a byte stream, left-justified into a
+; 32-bit word.  34 call sites across regions 12-14 -- the standard way DSP coefficients are
+; unpacked from the effect ROM images.
+; In:  XWA = stream pointer, XBC = destination.   Out: (XBC) = (b0<<24)|(b1<<16)|(b2<<8),
+;      each byte sign-extended before shifting (only b0's sign survives); XHL = XWA + 3.
+; No hardware access.  Fully decoded at 0x03CF07..0x03CF52.
 DSP_StreamDecode_3ByteWord:
 	ld xde, xwa
 	stb_dpi W, 0xE8
@@ -45811,10 +52797,25 @@ DSP_StreamDecode_3ByteWord:
 	ld xhl, xde
 	ret
 
+; Linear search through a table of TAGGED VARIABLE-LENGTH records, returning a pointer to a
+; field inside the matching record.
+; Record layout, read off the code:
+;     +0  byte  length high  }  entry length in bytes = (b0<<8)|b1
+;     +1  byte  length low   }
+;     +2  byte  record ID
+;     +3.. payload
+;   A record whose FIRST BYTE is 0xF0 terminates the table.
+; In:  XWA = table base, BC = wanted record ID, DE = field offset within the record,
+;      one pushed long = pointer to a status word.  `retd 0x4`.
+; Out: XHL = &record[3 + DE] (see below); status = 0 found, 3 hit the 0xF0 sentinel,
+;      4 the requested field lies past the record's own length.
+; Four callers: three in region 12 and DSP_Translator_ReadOpcode here.
 DSP_TableWalk_Search:
 	ld xhl, xwa
 	jr DSP_TableWalk_ReadHeader
 
+; Computes the next-record address (XIX = XHL + length), reads the ID byte at +2 and compares
+; it with BC; on a match advances XHL by DE+1 and range-checks it against XIX.
 DSP_TableWalk_CheckEntry:
 	ld ix, iy
 	extz xix
@@ -45833,13 +52834,16 @@ DSP_TableWalk_CheckEntry:
 	lds bc, 4
 	jr DSP_TableWalk_Return
 
+; Match, field inside the record: status 0.
 DSP_TableWalk_FoundInRange:
 	lds bc, 0
 	jr DSP_TableWalk_Return
 
+; ID mismatch: XHL = next record.
 DSP_TableWalk_SkipEntry:
 	ld xhl, xix
 
+; Reads the 2-byte length header and tests the 0xF0 end-of-table sentinel.
 DSP_TableWalk_ReadHeader:
 	ld a, (xhl + 1)
 	ldb_erp A, 0xF0
@@ -45855,15 +52859,26 @@ DSP_TableWalk_ReadHeader:
 	jr nz, DSP_TableWalk_CheckEntry
 	lds bc, 3
 
+; Stores the status through the pushed pointer and `retd 0x4`.
 DSP_TableWalk_Return:
 	ld xwa, (xsp + 4)
 	ld (xwa), bc
 	retd 0x4
 
+; Positional variant of the same walk: instead of matching an ID it SKIPS BC records and
+; returns the address of the next one.
+; In:  XWA = table base, BC = records to skip, XDE = pointer to a status word,
+;      one pushed long = pointer that receives (record address + record length).  `retd 0x4`.
+; Out: XHL = XWA advanced past the skipped records; status = 0 normally, 2 if the 0xF0
+;      sentinel was reached first.
+; Sole caller: DSP_ParameterWriteEngine, which uses the pushed out-pointer as the loop's END
+; POINTER.
 DSP_TableWalk_SearchWithState:
 	ld xhl, xde
 	jr DSP_TableWalk_State_ReadHeader
 
+; If the skip count has reached zero, publish (base + length) through the out-pointer, advance
+; XWA by 2 and return.
 DSP_TableWalk_State_CheckEntry:
 	cps bc, 0
 	jr nz, DSP_TableWalk_State_Advance
@@ -45876,12 +52891,14 @@ DSP_TableWalk_State_CheckEntry:
 	inc 2, xwa
 	jr DSP_TableWalk_State_Return
 
+; Otherwise XWA += record length and BC -= 1.
 DSP_TableWalk_State_Advance:
 	ld de, iy
 	extz xde
 	add xwa, xde
 	dec 1, bc
 
+; Reads the 2-byte length header and tests the 0xF0 sentinel.
 DSP_TableWalk_State_ReadHeader:
 	ld e, (xwa + 1)
 	ldb_erp E, 0xF0
@@ -45897,15 +52914,29 @@ DSP_TableWalk_State_ReadHeader:
 	jr nz, DSP_TableWalk_State_CheckEntry
 	lds ix, 2
 
+; Stores the status through XDE(saved in XHL), returns XHL = XWA, `retd 0x4`.
 DSP_TableWalk_State_Return:
 	ld (xhl), ix
 	ld xhl, xwa
 	retd 0x4
 
+; A single `ret`.  ★ It is the project's ERROR HOOK: DSP_ParameterWriteEngine calls it with
+; WA = the failing status code at two places (after the table walk and after the translator)
+; and DSP_ParamLoop_Return then bails out.  The status is therefore never reported anywhere --
+; DSP parameter-write failures are silent by design in v142.
 DSP_NopReturn:
 	ret
 
 
+; Already named (the reference file spells it AUDIO_CMDHANDLER_A0_BF).  Entry 5 of
+; CMD_DISPATCH_TABLE, i.e. main->sub inter-CPU commands 0xA0..0xBF.
+; In:  one pushed long = pointer to the 2-byte command payload.  Out: HL = 0 always.
+;   payload[0] == 1 and payload[1] <= 9  ->  (0x004A48) = payload[1]
+;   payload[0] == 0 and payload[1] == 1  ->  (0x004A4A) = 1
+;   anything else -> no effect.
+; ★ 0x004A48 is the keybed TOUCH-CURVE index used by ToneGen_Calc_Pitch; 0x004A4A is the
+; KEYBED->MAIN FORWARDING ENABLE flag tested by ToneGen_Process_Notes.  These two bytes are
+; the sub-CPU's entire "local control" state and they are only ever written from here.
 Audio_CmdHandler_A0_BF:
 	ld xbc, (xsp + 6)
 	ld a, (xbc)
@@ -45918,11 +52949,13 @@ Audio_CmdHandler_A0_BF:
 	stdi8 19018, 1
 	jr CmdA0BF_Return
 
+; payload[0]==1 arm: range-check payload[1] against 9 and store it to (0x004A48).
 CmdA0BF_CheckSubByte:
 	cp (xbc + 1), 0x9
 	jr ugt, CmdA0BF_Return
 	mrdb5 0x89, 0x01, 0x19, 0x48, 0x4A	; LD (4A48h), (XBC + 001h)
 
+; `lds hl,0 ; ret` -- the handler always reports success.
 CmdA0BF_Return:
 	lds hl, 0
 	ret
@@ -45935,6 +52968,9 @@ CmdA0BF_Return:
 ;        Tone generator is memory-mapped at 0x00110000
 ;        State buffer at 0x4A42-0x4A5C
 ; ----------------------------------------------------------------------------
+; Already named (reference: TONEGEN_INIT).  ⚠ MISNOMER: this is the KEYBED, not the tone
+; generator -- see [UNCERTAIN].  Two instructions: (0x004A48) = 6 (default touch curve) then
+; `jrl ToneGen_Poll_Init`.  Called once from the sub-CPU boot path.
 ToneGen_Init:	; 03D016h
 	stdi8 19016, 6	; Set tone gen mode to 6
 	jrl ToneGen_Poll_Init	; Continue to main processing
@@ -45946,6 +52982,16 @@ ToneGen_Init:	; 03D016h
 ; Notes: Reads notes via ToneGen_Read_Voice_Data, manages voice allocation
 ;        at 0x4A4C-0x4A5C (16 voice slots), sends to DMA at 0x4A42
 ; ----------------------------------------------------------------------------
+; Already named (reference: TONEGEN_PROCESS_NOTES).  ★ THIS IS THE KEYBED SERVICE that
+; Audio_Main_Loop calls unconditionally every pass (the brief's "keybed (0x03D01E)").
+; Drains the keybed FIFO and forwards every key event to the MAIN CPU as MIDI.
+; Per event (ToneGen_Read_Voice_Data gives note in byte 0, velocity in byte 1):
+;   velocity != 0 -> mark (0x004A4C + note) = 0xFF, build 0x90 / note / velocity at
+;                    0x004A42..0x004A44
+;   velocity == 0 -> only if (0x004A4C + note) was 0xFF: clear it and build the same 3 bytes
+;   then, ONLY IF (0x004A4A) == 1, call InterCPU_DMA_Send(XDE = 0x004A42, WA = 2, BC = 3).
+; Loops until ToneGen_Read_Voice_Data returns HL == 0xFFFF ("no more data").
+; ★ Two properties matter for the open sub->main bug -- see the [UNCERTAIN] notes.
 ToneGen_Process_Notes:	; 03D01Eh
 	dec 2, xsp	; Allocate 2 bytes for result
 	lds wa, 0
@@ -45954,6 +53000,7 @@ ToneGen_Process_Notes:	; 03D01Eh
 	cp hl, 0xFFFF
 	jrl z, ToneGen_Note_Done
 
+; Already named.  Body of the drain loop; back-edge at ToneGen_Note_Continue.
 ToneGen_Note_Loop:	; 03D02Eh
 	cp (xsp + 1), 0x0	; Check velocity
 	jr z, ToneGen_Note_Off_Slot
@@ -45976,6 +53023,8 @@ ToneGen_Note_Loop:	; 03D02Eh
 	call InterCPU_DMA_Send	; Send via DMA
 	jr ToneGen_Note_Continue
 
+; Already named.  Note-off arm; suppresses the message unless the per-note byte at
+; 0x004A4C + note was 0xFF, so a key-up without a matching key-down sends nothing.
 ToneGen_Note_Off_Slot:	; 03D06Dh
 	ld a, (xsp + 256)
 	extz wa
@@ -46002,12 +53051,14 @@ ToneGen_Note_Off_Slot:	; 03D06Dh
 	lds bc, 3
 	call InterCPU_DMA_Send
 
+; Already named.  Fetches the next event and loops while HL != 0xFFFF.
 ToneGen_Note_Continue:	; 03D0B6h
 	lda xwa, (xsp)
 	calr ToneGen_Read_Voice_Data
 	cp hl, 0xFFFF
 	jrl nz, ToneGen_Note_Loop
 
+; Already named.  `inc 2,xsp ; ret`.
 ToneGen_Note_Done:	; 03D0C2h
 	inc 2, xsp
 	ret
@@ -46020,6 +53071,15 @@ ToneGen_Note_Done:	; 03D0C2h
 ;        Reads status from 0x110002, data from 0x110000
 ;        Extracts note (low byte) and velocity (high byte)
 ; ----------------------------------------------------------------------------
+; Already named (reference: TONEGEN_READ_VOICE_DATA).  Reads ONE key event from the keybed
+; port and decodes it.  ★ The A23 multiplex is the interesting hardware detail:
+;   set bit 7 of SFR 0x18  -> A23 high -> read (0x110002) = STATUS word
+;   res bit 7 of SFR 0x18  -> A23 low  -> read (0x110000) = DATA word
+; (each toggle followed by a NOP for setup time).  Status bit 0 = data ready, bit 1 = note-on
+; qualifier.  Data low byte = note (bit 7 = release flag), high byte = velocity; velocity 0xFF
+; also means note-off.
+; In:  XWA = pointer to a 2-byte result buffer.  Out: HL = 0 on an event, 0xFFFF when the FIFO
+; is empty; the buffer holds the transposed note and the curve-mapped velocity.
 ToneGen_Read_Voice_Data:	; 03D0C5h
 	push xiz
 	ld xiz, xwa
@@ -46041,12 +53101,14 @@ ToneGen_Read_Voice_Data:	; 03D0C5h
 	bit 1, bc	; Check status bit 1
 	jr z, ToneGen_Read_NoteOn
 
+; Already named.  Note-off path; a set bit 7 in the note byte means "release, ignore".
 ToneGen_Read_NoteOff:	; 03D0F6h
 	bit 7, l	; Check note high bit (release flag)
 	jr z, ToneGen_Read_Release
 	ldw hl, 0xFFFF	; Return not ready
 	jr ToneGen_Read_Done
 
+; Already named.  Runs the pitch/velocity mapping then forces velocity to 0.
 ToneGen_Read_Release:	; 03D100h
 	ld c, l
 	ld xwa, xiz
@@ -46055,6 +53117,7 @@ ToneGen_Read_Release:	; 03D100h
 	lds hl, 0
 	jr ToneGen_Read_Done
 
+; Already named.  Runs the pitch/velocity mapping and keeps the velocity.
 ToneGen_Read_NoteOn:	; 03D10Fh
 	ld c, l
 	ld xwa, xiz
@@ -46062,9 +53125,11 @@ ToneGen_Read_NoteOn:	; 03D10Fh
 	lds hl, 0
 	jr ToneGen_Read_Done
 
+; Already named.  Status bit 0 clear -> HL = 0xFFFF, which is what ends the drain loop.
 ToneGen_Read_Not_Ready:	; 03D11Ah
 	ldw hl, 0xFFFF
 
+; Already named.  `pop xiz ; ret`.
 ToneGen_Read_Done:	; 03D11Dh
 	pop xiz
 	ret
@@ -46076,6 +53141,19 @@ ToneGen_Read_Done:	; 03D11Dh
 ; Notes: Uses lookup tables at 0x01F43E (note map), 0x01F420 (mode params)
 ;        Mode stored at 0x4A48, calculation uses MULS/DIVS
 ; ----------------------------------------------------------------------------
+; Already named in the ELF; the reference file calls this address KEYBED_DECODE_EVENT -- see
+; [UNCERTAIN], the reference name is the accurate one and BOTH are already real names, so
+; nothing is proposed here beyond documentation.
+; Maps a raw keybed event to a MIDI note number and a curved velocity.
+; In:  C = raw key byte (bit 7 = release), E = raw velocity, XWA = 2-byte output buffer.
+; Note number: (C & 0x7F) + 0x24, i.e. the keybed's key 0 is MIDI note 36 (C2).
+; Velocity: raw -> table 0x01F43E[E]; subtract the word at 0x01F418; multiply by
+;   byte[0x01F420 + 3*curve]; divide by the word at 0x01F41A; add byte[0x01F421 + 3*curve];
+;   for note classes 1, 3, 6, 8 and 10 of the octave (the BLACK KEYS -- note%12) subtract
+;   byte[0x01F422 + 3*curve]; clamp to 0..255; final value = byte table 0x01F53E[result].
+;   `curve` is the byte at 0x004A48 set by Audio_CmdHandler_A0_BF, default 6.
+; This is the KN5000's touch-sensitivity curve, and the black-key correction is a real
+; mechanical compensation for the different key leverage.
 ToneGen_Calc_Pitch:	; 03D11Fh
 	ld l, c
 	res 7, l	; Clear release flag
@@ -46128,6 +53206,7 @@ ToneGen_Calc_Pitch:	; 03D11Fh
 	cps c, 1
 	jr nz, ToneGen_Pitch_Clamp
 
+; Already named.  The black-key correction arm (note%12 in {1,3,6,8,10}).
 ToneGen_Pitch_Adjust:	; 03D1AAh - apply mode-specific pitch offset
 	ldb_d8 c, 19016	; Get tone gen mode
 	extz bc
@@ -46138,12 +53217,14 @@ ToneGen_Pitch_Adjust:	; 03D1AAh - apply mode-specific pitch offset
 	extz xbc
 	sub xde, xbc	; Apply offset
 
+; Already named.  Upper clamp to 255.
 ToneGen_Pitch_Clamp:	; 03D1C4h - clamp pitch to 0-255 range
 	ld xbc, 0xFF
 	cp xde, 0xFF
 	jr gt, ToneGen_Pitch_ClampHi
 	ld xbc, xde
 
+; Already named.
 ToneGen_Pitch_ClampHi:	; 03D1D3h
 	ld xde, xbc
 	lds32 xbc, 0
@@ -46151,6 +53232,7 @@ ToneGen_Pitch_ClampHi:	; 03D1D3h
 	jr lt, ToneGen_Pitch_ClampLo
 	ld xbc, xde
 
+; Already named.  Lower clamp to 0, then the final 0x01F53E lookup.
 ToneGen_Pitch_ClampLo:	; 03D1E1h
 	ld xde, xbc
 	ld c, e
@@ -46160,10 +53242,13 @@ ToneGen_Pitch_ClampLo:	; 03D1E1h
 	ld (xwa + 1), c	; Store velocity
 	ret
 
+; Already named.  Release event: store velocity 0 and return.
 ToneGen_Calc_NoVel:	; 03D1F5h - note-off, no velocity
 	ld (xwa + 1), 0x0
 	ret
 
+; --- 0x03D1FA-0x03D1FA  ToneGen_Poll_Padding -- one alignment byte 0x0E
+; Already named.  Not executed.
 ToneGen_Poll_Padding:	; 03D1FAh
 	.byte 0x0e
 
@@ -46173,11 +53258,15 @@ ToneGen_Poll_Padding:	; 03D1FAh
 ; Exit:  Voice status updated in buffer at (0x01F41C)
 ; Notes: Clears 8 voice buffers, then polls 16 iterations
 ; ----------------------------------------------------------------------------
+; Already named (reference: TONEGEN_POLL_INIT).  The keybed's power-on scan, entered by `jrl`
+; from ToneGen_Init and never called again.  Clears 8 bytes of voice-status at 0x01F41C
+; (address 128028 = 0x01F41C) then falls into ToneGen_Poll_All.
 ToneGen_Poll_Init:	; 03D1FBh
 	lds hl, 0
 	cp hl, 0x8
 	jr nc, ToneGen_Poll_All
 
+; Already named.  Zeroes the 8 status bytes.
 ToneGen_Clear_Voice_Loop:	; 03D203h
 	ld wa, hl
 	extz xwa
@@ -46193,22 +53282,32 @@ ToneGen_Clear_Voice_Loop:	; 03D203h
 ; Exit:  Voice status bits updated
 ; Notes: Reads from 0x110000/0x110002, uses P6.7 for control
 ; ----------------------------------------------------------------------------
+; Already named.  16 polling iterations, one per keybed scan group.
 ToneGen_Poll_All:	; 03D217h
 	lds hl, 0
 	cp hl, 0x10	; 16 iterations (one per MIDI channel)
 	ret nc
 
+; Already named.  Per-iteration entry; sets up the 10000-step settling delay.
 ToneGen_Poll_Channel:	; 03D21Fh
 	lds wa, 0
 	cp wa, 0x2710	; 10000 delay cycles
 	jr nc, ToneGen_Poll_Read
 
+; Already named.  ★ A 10000-iteration NOP busy-wait, run 16 times = 160,000 NOPs of dead time
+; during boot with interrupts still enabled.  Bounded, so it cannot wedge, but it is a real
+; multi-millisecond stall on the audio CPU's startup path.
 ToneGen_Poll_Delay:	; 03D227h
 	nop
 	inc 1, wa
 	cp wa, 0x2710
 	jr c, ToneGen_Poll_Delay
 
+; Already named.  Same A23 multiplex as ToneGen_Read_Voice_Data (SFR 0x18 bit 7): dummy-read
+; (0x110002), then read (0x110000).  Splits the low byte into a group index (bits 3-5) and a
+; bit position (bits 0-2), and sets or clears that bit in the status bitmap at 0x01F41C
+; according to bit 7 of the byte.  The source's own comment records that A23 is tied to the
+; tone generator's D5VNAD / NAD / EXADL0 pins.
 ToneGen_Poll_Read:	; 03D230h
 	set_dd8 7, 0x18	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	nop
@@ -46239,10 +53338,12 @@ ToneGen_Poll_Read:	; 03D230h
 	jr z, ToneGen_Poll_SetBit
 	slaa de	; Create bit mask
 
+; Already named.  Key-down: OR the mask into the bitmap byte.
 ToneGen_Poll_SetBit:	; 03D27Ah
 	or_srib_mr E, 0x07, 0xE4, 0xF0	; Set voice active bit
 	jr ToneGen_Poll_Next
 
+; Already named.  Key-up arm.
 ToneGen_Poll_NoteOff:	; 03D281h - Note OFF - clear voice bit
 	ld a, e
 	ldb_erp A, 0xF0
@@ -46254,17 +53355,21 @@ ToneGen_Poll_NoteOff:	; 03D281h - Note OFF - clear voice bit
 	jr z, ToneGen_Poll_ClearBit
 	slaa de
 
+; Already named.  AND the complemented mask into the bitmap byte.
 ToneGen_Poll_ClearBit:	; 03D298h
 	ld wa, de
 	cpl wa	; Invert mask
 	and_srib_mr A, 0x07, 0xE4, 0xF0	; Clear voice bit
 
+; Already named.  Loop back for 16 iterations, then `ret`.
 ToneGen_Poll_Next:	; 03D2A1h
 	inc 1, hl
 	cp hl, 0x10
 	jrl c, ToneGen_Poll_Channel
 	ret
 
+; --- 0x03D2AB-0x03D2AB  ToneGen_Voice_Padding -- one alignment byte 0xFF
+; Already named.  Not executed.
 ToneGen_Voice_Padding:	; 03D2ABh
 	.byte 0xff
 
@@ -46275,6 +53380,16 @@ ToneGen_Voice_Padding:	; 03D2ABh
 ; Notes: Compares 8-byte voice blocks at XWA and XBC
 ;        Uses lookup table at 0x03D978 for result mapping
 ; ----------------------------------------------------------------------------
+; Already named (reference: TONEGEN_COMPARE_VOICE).  ⚠ Nothing to do with voices: this is the
+; FLOAT-COMPARE PREDICATE of the FP library -- 11 of its 12 call sites are in
+; subcpu_fp_math.s (the 12th is in region 13's curve code).
+; In:  XWA / XBC = the two 8-byte operands, DE = the comparison-kind code.
+; Out: HL = the boolean result.
+;   Equal operands -> HL = byte table 0x03D978[kind].
+;   kind 4 -> 0, kind 5 -> 1 (the "unordered/NaN" answers).
+;   Otherwise it compares the high longs, then the low longs, taking sign into account, and
+;   returns byte table 0x03D97E[kind] for "less" or 0x03D984[kind] for "greater" (each XORed
+;   into L, which is how a single table serves <, <=, >, >=, ==, !=).
 ToneGen_Compare_Voice:	; 03D2ACh
 	ld xix, (xwa + 4)	; Compare high 4 bytes
 	cp xix, (xbc + 4)
@@ -46287,9 +53402,11 @@ ToneGen_Compare_Voice:	; 03D2ACh
 	ldb h, 0x0
 	ret
 
+; Already named.  High halves differ; reload the low half and fall through.
 ToneGen_Compare_Diff:	; 03D2C7h
 	ld xiy, (xwa)
 
+; Already named.  The kind-4 / kind-5 early answers.
 ToneGen_Compare_Result:	; 03D2C9h
 	lds hl, 0
 	cps de, 4
@@ -46304,6 +53421,7 @@ ToneGen_Compare_Result:	; 03D2C9h
 	xorcf_erpw 0xE2, 0x0F
 	scc16 nc, hl
 
+; Already named.  Signed magnitude comparison of the two operands.
 ToneGen_Compare_Sign:	; 03D2E6h
 	cp xix, xwa
 	jr gt, ToneGen_Cmp_Greater
@@ -46311,11 +53429,13 @@ ToneGen_Compare_Sign:	; 03D2E6h
 	cp xiy, (xbc)
 	jr ugt, ToneGen_Cmp_Greater
 
+; Already named.  Result from the 0x03D97E table.
 ToneGen_Cmp_Less:	; 03D2F0h - voice 1 < voice 2
 	lda_24 xix, 0x03d97e                  ; Less-than lookup table
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
+; Already named.  Result from the 0x03D984 table.
 ToneGen_Cmp_Greater:	; 03D2FBh - voice 1 > voice 2
 	lda_24 xix, 0x03d984                  ; Greater-than lookup table
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
@@ -46327,6 +53447,9 @@ ToneGen_Cmp_Greater:	; 03D2FBh - voice 1 > voice 2
 ; Exit:  HL = comparison result
 ; Notes: Simplified version comparing only first 4 bytes
 ; ----------------------------------------------------------------------------
+; Already named (reference: TONEGEN_COMPARE_VOICE_32).  The 32-bit (single-precision) form of
+; the same predicate; same three result tables at 0x03D978 / 0x03D97E / 0x03D984.
+; Exactly one call site, at 0x03AD0C inside DSP_BiquadCoeff_Algo0_Assembly, testing a0 == 1.0.
 ToneGen_Compare_Voice_32:	; 03D306h
 	lds hl, 0
 	ld xwa, (xwa)	; Load 32-bit value from voice 1
@@ -46337,6 +53460,7 @@ ToneGen_Compare_Voice_32:	; 03D306h
 	ldb_sri L, 0x07, 0xF0, 0xE8
 	ret
 
+; Already named.  kind-4 / kind-5 early answers for the 32-bit form.
 ToneGen_Cmp32_NotEqual:	; 03D31Bh
 	cps de, 4
 	ret z
@@ -46349,6 +53473,7 @@ ToneGen_Cmp32_NotEqual:	; 03D31Bh
 	xorcf_erpw 0xE6, 0x0F
 	scc16 nc, hl
 
+; Already named.
 ToneGen_Cmp32_Sign:	; 03D333h
 	cp xwa, xbc
 	jr gt, ToneGen_Cmp32_Greater
@@ -46356,11 +53481,21 @@ ToneGen_Cmp32_Sign:	; 03D333h
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
+; Already named.
 ToneGen_Cmp32_Greater:	; 03D342h
 	lda_24 xix, 0x03d984
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
+; A double-precision transcendental wrapper, almost certainly cos(x) implemented as
+; sin(pi/2 - x) -- called once from the FP library (subcpu_fp_math.s:127).
+; In:  one 8-byte double pushed by the caller plus a destination pointer; 48 bytes of frame.
+; Body: FP_DP_CmpAndCopy to fetch/normalise the argument; then
+;       FP_DP_Mul(dest, 0x00F3CA = 1.5707963267948966 = pi/2, arg)  -- FP_DP_Mul is ADD/SUB,
+;       so this is the pi/2 - x fold; then VoiceFloat_BlendAndMerge (0x03D98A), which is the
+;       polynomial/series evaluator; then FP_DP_Raw8Copy to publish the result.
+; Medium confidence because the series constants inside VoiceFloat_BlendAndMerge were not
+; decoded in this pass; the pi/2 fold and the call graph are certain.
 VoiceFloat_DispatchMulAdd:
 	lda xsp, (xsp - 48)
 	pushw 0x0
@@ -46397,6 +53532,13 @@ VoiceFloat_DispatchMulAdd:
 	lda xsp, (xsp + 48)
 	ret
 
+; ⚠ NOT a subtraction: this is DOUBLE-PRECISION DIVIDE.  27 call sites (7 in the FP library,
+; 20 in the DSP curve/coefficient code).
+; In:  XWA = destination (8-byte double), XBC = dividend pointer, XDE = divisor pointer.
+; Body: FP_DP_Decode both operands into 12-byte scratch buffers on the stack, call
+;       FP_DP_Mul_Outer (0x03E3F6) -- which SUBTRACTS the exponents and XORs the signs, i.e.
+;       divides -- then FP_DP_Encode the result to *(XWA).
+; No hardware access.  See [UNCERTAIN] for the naming.
 VoiceFloat_SubDP:
 	push xiz
 	lda xsp, (xsp - 28)
@@ -46418,6 +53560,11 @@ VoiceFloat_SubDP:
 	pop xiz
 	ret
 
+; ⚠ NOT a subtraction: SINGLE-PRECISION DIVIDE.  74 call sites -- it is how every coefficient
+; in this region gets normalised by a0 and how every dB value gets divided by 20.0.
+; In:  XWA = destination (4-byte float), XBC = dividend pointer, XDE = divisor pointer.
+; Body: FP_SP_Decode both operands, FP_SP_Mul_Outer (0x03E4B4) = divide, FP_SP_Encode.
+; Region 15 ends at 0x03D403, the last byte of this routine.
 VoiceFloat_SubSP:
 	push xiz
 	lda xsp, (xsp - 20)

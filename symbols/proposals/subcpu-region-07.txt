@@ -1,0 +1,810 @@
+# region 7: 0x02AD03..0x02C8E3
+# The note-on / note-off front end: articulation-parameter setters, the per-slot pitch and
+# articulation math, and the four "typed" note-on bodies that build voice-slot records,
+# ask NoteOn_Dispatch for physical tone-generator slots, and commit the records.
+#
+# METHOD (read before integrating). Every address in this region already carries a real,
+# hand-maintained symbol in the AUTHORITATIVE LLVM build
+# (rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf; 124 symbols in range, dumped with
+# `llvm-nm -n`). symbols/subcpu_symbols_reference.txt still shows LABEL_xxxxxx at 103 of
+# them. The [ROUTINE]/[LABEL] entries below therefore adopt the build's names VERBATIM so
+# the two stop disagreeing -- integration is a pure text substitution, zero semantic risk.
+# The documentation is the new work. Six addresses in the 0x02AE58..0x02AFBD run have NO
+# symbol in EITHER source; those are genuinely new names and are marked as such (no
+# `replaces=`). Six further addresses carry conflicting non-LABEL_ names in the reference
+# file; per the rules those are left alone and argued in [UNCERTAIN].
+# Verified before proposing: `python3 scripts/build/compare_roms.py` => 100.00% on all 8
+# LLVM ROMs and all 6 ASL ROMs; disassembly done with
+# `unidasm <slice> -arch tlcs900 -basepc 0x02AD03` on the 0x30000-byte payload at file
+# offset 0x1BE03 (address 0x02AD03 - 0x00EF00), and 0x02AD03 decodes to the exact
+# `dec 8,xsp / ld (xsp+6),a` prologue that the LLVM source shows for
+# Voice_Selector_ComputeMixWeights, which is the base check.
+#
+# THE THREE DATA STRUCTURES THAT EXPLAIN THE WHOLE REGION (all measured, not assumed):
+#
+# (A) PART RECORD -- 0x041368 + part*0x11F (287 bytes). Every one of the ~70 distinct
+#     absolute constants the firmware uses with `muls wa,0x11F` lies in
+#     0x041342..0x041486; taking 0x041368 as the base (it is the most-used constant, 90
+#     occurrences) puts the highest one, 0x041486, at +0x11E -- exactly the last byte of a
+#     287-byte record. No other base fits. Confirmed independently: routines that receive a
+#     slot record load its +0x23 pointer and then address it at +0x0102/+0x010A/+0x010B/
+#     +0x010E/+0x0110/+0x0112/+0x0114/+0x0118, all < 0x11F (0x02B30D, 0x02B411, 0x02B31C).
+#     Layout established in this region:
+#       +0x02  (0x04136A) u16 LAYER-ENABLE MASK. Bits 0..3 = the four layers; bits 13/14/15
+#              select which note-on variant runs. Tested at 0x02B72A, 0x02BA5D, 0x02BABF,
+#              0x02BD95, 0x02BF31, 0x02C704, 0x02C80E. If this word is zero the whole
+#              note-on becomes a silent no-op -- see [UNCERTAIN]/findings.
+#       +0x06  (0x04136E) u32 pointer to the tone/patch record for the part.
+#       +0x16, +0x6D  i8 transpose contributions (0x02B41B, 0x02B425).
+#       +0x6E .. +0x101  four 0x25-byte (37) LAYER SUB-BLOCKS, indexed layer*0x25 + 0x6E
+#              (0x02B73E, 0x02BDA9, 0x02C23A, 0x02C471). 4*0x25 = 0x94 and 0x6E+0x94 =
+#              0x102, i.e. the array ends exactly where (B) begins -- that is the proof of
+#              the entry size. Sub-block fields used: +0x00/+0x04/+0x08 u32 pointers,
+#              +0x08 (=part+0x76 for layer 0) u32 pointer.
+#       +0x102 .. +0x109  four u16 ARTICULATION WORDS. Written nibble-wise by the
+#              0x02AE22 setter family, consumed by Voice_Slot_CalcArticParams,
+#              Voice_Slot_CalcAmpNibble, Voice_Slot_FindOctaveOffset and
+#              Voice_Selector_FindBestSlot.
+#       +0x10A..+0x10D (0x041472..0x041475) four i8 articulation DEPTH bytes.
+#       +0x10E (0x041476), +0x110 (0x041478), +0x112 (0x04147A) three u16 mix-weight /
+#              pitch-offset words, produced by Voice_Selector_ComputeMixWeights.
+#       +0x114 (0x04147C) u32 tick timestamp;  +0x118 (0x041480) flags, bit 7 = "restart
+#              the portamento timestamp", bit 7 also set/cleared by Voice_NoteOn_Type2.
+#
+# (B) VOICE-SLOT RECORD -- 0x47 bytes (71). TWO arrays share this layout:
+#       0x002942 + i*0x47   STAGING array, i = 0..3, one entry per layer of the note that
+#                           is currently being built.
+#       0x04308E + s*0x47   LIVE array, s = PHYSICAL TG SLOT 0..0x3F.
+#     The note-on bodies fill the staging array, call NoteOn_Dispatch, and then copy
+#     0x47 bytes (`ld bc,0x23 / ldirw / ldi` = 35 words + 1 byte) staging[i] -> live[slot].
+#     That copy is at 0x02BBCB, 0x02BBFB, 0x02C08A, 0x02C3A0, 0x02C6AE. Fields:
+#       +0x00 u8 = own slot number (written back after the copy);  +0x01 u16 flags/priority
+#       (velocity<<6 | small code: |0x12, |0x08, set bit 2, set bit 4);  +0x03 u8 layer
+#       index;  +0x04 u8 part index;  +0x05 u8 key | 0x80;  +0x06 u16 final pitch;
+#       +0x08 u16 base pitch;  +0x0C u8 velocity;  +0x0D u16 pitch accumulator (portamento);
+#       +0x13/+0x17/+0x1B/+0x1F u32 parameter-block pointers;  +0x23 u32 -> the PART RECORD;
+#       +0x27 u32 -> the layer sub-block;  +0x2D/+0x2F/+0x31/+0x35/+0x36/+0x38/+0x3A
+#       algorithm/effect words.
+#
+# (C) THE NOTE REQUEST RECORD -- the caller-supplied struct that every note-on body
+#     receives in XWA. +0x00 u16 = key | part<<8 | 0x80; +0x02+i u8 = "layer i requested"
+#     (0x80 | priority, or 0x00 = not requested); +0x06+i u8 = a second per-layer flag
+#     (0x00 or 0x80); +0x0A+i u8 = THE SLOT NoteOn_Dispatch ASSIGNED, or >= 0x40 for
+#     "none available". Every commit site tests `cp (rec+0x0A+i),0x40 / jr nc` and skips
+#     silently on failure. That 0x40 is where the 64-voice polyphony limit lives.
+#
+# TONE-GENERATOR BUS PROTOCOL, as used by the two direct-access routines in this region
+# (0x02B4A1, and the identical inline sequences at 0x02C762/0x02C866): clear bit 7 of SFR
+# 0x18 (= PORT 6 on the TMP94C241), write the register number to 0x100000, `nop`, set bit 7
+# of SFR 0x18, write the data word to 0x100002, then a 3-cycle `nop` pad reached via a
+# `jr T` to the next instruction. Reads (DAC_Write_Sample, 0x022384) clear P6.7 and leave it
+# low. So P6 bit 7 is the address/data phase line of the IC303 bus. MAME's
+# src/mame/matsushita/kn5000.cpp does not model port 6 at all.
+
+[ROUTINE] 0x02AD03 Voice_Selector_ComputeMixWeights  replaces=LABEL_02AD03  confidence=high
+; Recomputes the three mix-weight / pitch-offset words of one part from that part's four
+; articulation words.
+; IN : A = part index (0..0x19).  OUT: none in registers.
+; Writes part+0x10E, part+0x110, part+0x112 (0x041476/0x041478/0x04147A + part*0x11F).
+; Body: forms XHL = part+0x102 (the articulation word array) and calls
+; Voice_Selector_FindBestSlot with three output pointers into its own frame --
+; XBC -> COUNT, XDE -> INDEX, pushed arg -> VALUE. FindBestSlot scatters the 3x3 nibbles of
+; artic[0..2] into a 9-byte scratch buffer through the permutation table at
+; 0x00F77D..0x00F785 (3 bytes per group), then returns INDEX = the first scratch entry >= 4
+; (else the first non-zero entry), VALUE = that entry, COUNT = how many entries are >= 4.
+; The three results are then table-mapped:
+;   part+0x10E = u16 [0x00F786 + COUNT*2]            (10-entry table)
+;   part+0x112 = u16 [0x00F79A + INDEX*2]            (9-entry table)
+;   part+0x110 = u16[0x00F7D2 + COUNT*2]
+;              + u16[0x00F7AC + INDEX*2]
+;              + u16[0x00F7BE + VALUE*2]
+; The four tables are exactly 10/9/9/10 entries and butt up against each other
+; (0x00F786+0x14 = 0x00F79A, 0x00F79A+0x12 = 0x00F7AC, 0x00F7AC+0x12 = 0x00F7BE,
+; 0x00F7BE+0x14 = 0x00F7D2), which is what pins COUNT to 0..9 and INDEX to 0..8.
+; Touches no hardware. Only caller: Voice_InitFromSlot (0x02ADC1), i.e. it runs whenever an
+; articulation parameter changes, never per note.
+
+[ROUTINE] 0x02ADC1 Voice_InitFromSlot  replaces=LABEL_02ADC1  confidence=high
+; "An articulation parameter of this part changed" -- recompute everything derived from it.
+; IN : A = part index. Calls Voice_UpdateFlagsFromSlot (0x02AB83), which sets/clears bits
+; 0..3 of the part's layer-enable mask (part+0x02) according to whether each of the four
+; articulation words is non-zero, then Voice_Selector_ComputeMixWeights, then zeroes the
+; four articulation depth bytes part+0x10A..+0x10D (0x041472..0x041475).
+; Called from VoiceSlot_AltInit (0x02F7C4 region). Touches no hardware.
+
+[ROUTINE] 0x02AE22 VoiceSlot_DataTable_02AE22  replaces=LABEL_02AE22  confidence=high
+; NOT a data table -- it is the first of seven articulation-parameter setter routines that
+; run from 0x02AE22 to 0x02AFF6 (see [UNCERTAIN] on the name).
+; IN : A = part index, C = new value byte.
+; This one replaces the LOW BYTE (bits 0..7) of articulation word 0, i.e.
+; part+0x102 = (part+0x102 & 0xFF00) | C. Then calls Voice_UpdateFlagsFromSlot and
+; Voice_Selector_ComputeMixWeights so the derived words are refreshed.
+; Called from VoiceAlloc_CheckAndInit_ExtData+0x102 (0x02EDE7) with A taken from the command
+; record byte +0x01 (part) and C from byte +0x04 (value) -- i.e. it is the handler for one
+; parameter number of the external/SysEx parameter-change dispatcher.
+
+[ROUTINE] 0x02AE58 Voice_Artic_SetWord2Word1_Nibble0  confidence=high
+; Second of the seven articulation setters. IN: A = part index, C = value byte.
+; part+0x106 = (part+0x106 & 0xFFF0) | (C & 0x0F)   (articulation word 2, bits 0..3)
+; part+0x104 = (part+0x104 & 0xFFF0) | (C >> 4)     (articulation word 1, bits 0..3)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights.
+; Called from 0x02EE06. No symbol exists for this address in either the LLVM build or the
+; reference file -- this is a new name.
+
+[ROUTINE] 0x02AEA2 Voice_Artic_SetWord2Word1_Nibble1  confidence=high
+; Third setter. IN: A = part index, C = value byte.
+; part+0x106 = (part+0x106 & 0xFF0F) | ((C & 0x0F) << 4)
+; part+0x104 = (part+0x104 & 0xFF0F) | (C & 0xF0)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights. Called from 0x02EE25.
+; New name -- no symbol at this address in either source.
+
+[ROUTINE] 0x02AEEC Voice_Artic_SetWord0Word2_Nibble2  confidence=high
+; Fourth setter. IN: A = part index, C = value byte.
+; part+0x102 = (part+0x102 & 0xF0FF) | ((C & 0x0F) << 8)
+; part+0x106 = (part+0x106 & 0xF0FF) | ((C & 0xF0) << 4)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights. Called from 0x02EE44.
+; New name -- no symbol at this address in either source.
+
+[ROUTINE] 0x02AF3A Voice_Artic_SetWord1Nibble2_And_Word3  confidence=high
+; Fifth setter. IN: A = part index, C = value byte.
+; part+0x104 = (part+0x104 & 0xF0FF) | ((C & 0x0F) << 8)
+; part+0x108 = C >> 4                               (articulation word 3, whole word)
+; Then Voice_UpdateFlagsFromSlot + Voice_Selector_ComputeMixWeights. Called from 0x02EE63.
+; New name -- no symbol at this address in either source.
+
+[ROUTINE] 0x02AF82 Voice_Artic_SetDepthPair_A  confidence=high
+; Sixth setter, and the first that writes DEPTH bytes rather than articulation nibbles.
+; IN: A = part index, C = packed value byte. Signed, and it does NOT refresh the derived
+; words (no Voice_UpdateFlagsFromSlot / ComputeMixWeights call), unlike the five above.
+;   part+0x10A (0x041472) = ((i8)C >> 4) * 4          [sra 4 then sla 2 on E]
+;   part+0x10B (0x041473) = sign_extend_nibble(C & 0x0F) * 2
+; These two bytes are the depths applied in Voice_Slot_CalcArticParams' i==3 arm.
+; Called from 0x02EEFE. New name -- no symbol at this address in either source.
+
+[ROUTINE] 0x02AFBD Voice_Artic_SetDepthPair_B  confidence=high
+; Seventh setter, the sibling of 0x02AF82 for the other depth pair.
+; IN: A = part index, C = packed value byte.
+;   part+0x10C (0x041474) = ((i8)C >> 4) * 4
+;   part+0x10D (0x041475) = sign_extend_nibble(C & 0x0F) * 8
+; These are the depths applied in Voice_Slot_CalcArticParams' i==0..2 arm.
+; Called from 0x02EF6A. New name -- no symbol at this address in either source.
+
+[ROUTINE] 0x02AFF7 Voice_SignedClamp  replaces=LABEL_02AFF7  confidence=high
+; Read-modify-write of one unsigned byte with a signed delta and a clamp.
+; IN : XWA = address of the byte, C = signed delta (sign-extended to 16 bits),
+;      DE = upper bound, one stacked word = lower bound.  OUT: the byte is updated.
+; value = zero_extend((XWA)); value += (i16)C; if (value > DE) value = DE;
+; if (value < lower) value = lower; (XWA) = (u8)value. Returns with `retd 2` (pops the
+; stacked lower bound). Only callers are the two arms of Voice_Slot_CalcArticParams.
+
+[LABEL] 0x02B007 Voice_SignedClamp_ClampHi  replaces=LABEL_02B007  confidence=high
+; Upper bound already applied; now test against the stacked lower bound.
+
+[LABEL] 0x02B00F Voice_SignedClamp_ClampLo  replaces=LABEL_02B00F  confidence=high
+; Store the clamped low byte back through XWA and return.
+
+[ROUTINE] 0x02B014 Voice_Slot_CalcArticParams  replaces=LABEL_02B014  confidence=high
+; Applies this part's articulation words and depth bytes to four consecutive 0x51-byte
+; (81) parameter blocks.
+; IN : A = part index. Reads part+0x10C and part+0x10D into locals, and loads the u32
+; pointer at part+0x6E (0x0413D6) into XIZ -- that is the head of the block array.
+; For i = 0..3, with BC = the u16 articulation word at part+0x102+i*2:
+;   (XIZ+0x02) = BC & 0xFF
+;   (XIZ+0x03) = ((XIZ+0x03) & 0xF0) | ((BC >> 8) & 0x0F)
+;   if i < 3 : Voice_SignedClamp(&XIZ+0x27, delta = part+0x10C, 0..0x64)
+;              Voice_SignedClamp(&XIZ+0x2D, delta = part+0x10D, 0..0x64)
+;   if i == 3: Voice_SignedClamp(&XIZ+0x17, delta = part+0x10A, 0..0x7F)
+;              Voice_SignedClamp(&XIZ+0x29, delta = part+0x10B, 0..0x64)
+;              Voice_SignedClamp(&XIZ+0x2B, delta = part+0x10B, 0..0x64)
+;   XIZ += 0x51
+; The 0x51 stride is the same 81 that Voice_KeyIndex_Pack3Nibbles uses as its outer digit
+; weight, so the array being walked is one plane of a 9x9x9 table.
+; Only caller: DSP_Cmd2B_AlgoSelect -- i.e. this runs when the DSP algorithm is (re)selected,
+; not per note. Touches no hardware.
+
+[LABEL] 0x02B066 Voice_Slot_CalcArticParams_LoopBody  replaces=LABEL_02B066  confidence=high
+; Top of the i = 0..3 loop; unpacks articulation word i into (XIZ+0x02)/(XIZ+0x03).
+
+[LABEL] 0x02B0D3 Voice_Slot_CalcArticParams_Type3Branch  replaces=LABEL_02B0D3  confidence=high
+; The i == 3 arm: clamps fields +0x17, +0x29 and +0x2B using depths part+0x10A/+0x10B.
+
+[LABEL] 0x02B142 Voice_Slot_CalcArticParams_LoopStep  replaces=LABEL_02B142  confidence=high
+; i++, XIZ += 0x51, loop while i < 4.
+
+[LABEL] 0x02B150 Voice_Slot_CalcArticParams_Exit  replaces=LABEL_02B150  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x02B154 Voice_Slot_CalcAmpNibble  replaces=LABEL_02B154  confidence=high
+; Picks/repacks one articulation word according to how low the sounding key is.
+; IN : A = part index, C = physical TG slot, E = which articulation word (0..3).
+; OUT: HL = the resulting word. Touches no hardware.
+; note = (u16 at 0x04308E + C*0x47 + 6) >> 8, i.e. the LIVE slot record's final pitch word,
+; high byte = the key number. If note + 12 >= 0x24 the articulation word is returned
+; unchanged. Otherwise (very low keys) the low nibble n0 = w & 0x0F and the next nibble
+; n1 = (w >> 4) & 0x0F are compared: if n0 < n1 the result is w & 0x0FF0, else it is
+; (w & 0x0F00) | (n0 << 4). Only caller: Voice_PitchEnv_Advance (0x0238F8).
+
+[LABEL] 0x02B195 Voice_Slot_CalcAmpNibble_BranchA  replaces=LABEL_02B195  confidence=high
+; Low-key arm: compare nibble 0 against nibble 1 of the articulation word.
+
+[LABEL] 0x02B1CB Voice_Slot_CalcAmpNibble_BranchB  replaces=LABEL_02B1CB  confidence=high
+; n0 >= n1: result = (w & 0x0F00) | (n0 << 4).
+
+[LABEL] 0x02B1DF Voice_Slot_CalcAmpNibble_Exit  replaces=LABEL_02B1DF  confidence=high
+; Single `ret`; HL already holds the result.
+
+[ROUTINE] 0x02B1E0 Voice_Slot_FindOctaveOffset  replaces=LABEL_02B1E0  confidence=high
+; The high-key counterpart of Voice_Slot_CalcAmpNibble: selects among the nibbles of one
+; articulation word according to how many octaves above the top break point the key is.
+; IN : A = part index, C = physical TG slot, E = which articulation word (0..3).
+; OUT: HL = the resulting word. Touches no hardware.
+; L counts how many times 12 must be subtracted from (slotpitch >> 8) - 12 before it drops
+; below 0x54; that count is the "octave offset".
+;   L == 0 : return the articulation word unchanged.
+;   L == 1 : with n1 = (w>>4)&0x0F and n2 = (w>>8)&0x0F, return unchanged if n1 >= n2, else
+;            (w & 0x000F) | (n2 << 4).
+;   L >= 2 : with n0 = w & 0x0F, return whichever of n0 / n1 / n2 the two comparisons pick
+;            (effectively the value that survives the highest key range).
+; Only caller: Voice_PitchEnv_Advance_StateB.
+
+[LABEL] 0x02B216 Voice_Slot_FindOctaveOffset_BranchA  replaces=LABEL_02B216  confidence=high
+; Octave-counting loop: subtract 12, L++, repeat while the remainder is still >= 0x54.
+
+[LABEL] 0x02B222 Voice_Slot_FindOctaveOffset_BranchB  replaces=LABEL_02B222  confidence=high
+; Dispatch on the octave count L: 0, 1 or >= 2.
+
+[LABEL] 0x02B234 Voice_Slot_FindOctaveOffset_BranchC  replaces=LABEL_02B234  confidence=high
+; L == 1 arm.
+
+[LABEL] 0x02B278 Voice_Slot_FindOctaveOffset_BranchD  replaces=LABEL_02B278  confidence=high
+; L >= 2 arm: extracts all three nibbles for the two comparisons below.
+
+[LABEL] 0x02B2B7 Voice_Slot_FindOctaveOffset_BranchE  replaces=LABEL_02B2B7  confidence=high
+; Result = nibble 1.
+
+[LABEL] 0x02B2BB Voice_Slot_FindOctaveOffset_BranchF  replaces=LABEL_02B2BB  confidence=high
+; n0 >= n1: return unchanged unless n0 < n2, in which case result = nibble 2.
+
+[LABEL] 0x02B2C1 Voice_Slot_FindOctaveOffset_Exit  replaces=LABEL_02B2C1  confidence=high
+; Single `ret`; HL holds the result.
+
+[ROUTINE] 0x02B2C2 Voice_KeyIndex_Pack3Nibbles  replaces=LABEL_02B2C2  confidence=high
+; Converts three packed 4-bit digits into a linear index of a 9 x 9 x 9 table.
+; IN : WA = the packed word.  OUT: HL = ((WA>>8)&0x0F)*0x51 + ((WA>>4)&0x0F)*9 + (WA&0x0F).
+; 0x51 = 81 = 9*9, so the digits are base-9 and each entry of the outer plane is the same
+; 0x51 stride that Voice_Slot_CalcArticParams steps by. Callers: Voice_PitchEnv_Advance and
+; Voice_PitchEnv_Advance_StateB. Touches no hardware.
+
+[ROUTINE] 0x02B2E9 Voice_Slot_LoadPitchOffset_A  replaces=LABEL_02B2E9  confidence=high
+; IN : XWA = live voice-slot record. Adds the u16 at part+0x10E (via the slot's +0x23 part
+; pointer) into the slot's pitch accumulator at +0x0D. That word is the one
+; Voice_Selector_ComputeMixWeights derives from the COUNT result. Called only from
+; Voice_Release_Type4 (0x02BD51).
+
+[ROUTINE] 0x02B2F5 Voice_Slot_LoadPitchOffset_B  replaces=LABEL_02B2F5  confidence=high
+; Same as 0x02B2E9 but adds part+0x110 (the summed mix-weight word) into slot+0x0D.
+; Called only from Voice_Init_Type1 (0x02C434).
+
+[ROUTINE] 0x02B301 Voice_Slot_ApplyPortamentoDelta  replaces=LABEL_02B301  confidence=high
+; Advances one voice slot's portamento by the time elapsed since the part's last stamp.
+; IN : XWA = live voice-slot record. XIZ := (slot+0x23) = the part record.
+; Step 1: slot+0x0D += (i8)part+0x10A  (the coarse per-tick offset).
+; Step 2: if bit 7 of part+0x118 is SET, re-stamp part+0x114 with the current value of the
+;   32-bit free-running counter at 0x001040 (read with interrupts masked to level 6:
+;   `ei 6` ... `ei 0`) and RETURN WITHOUT APPLYING ANY SWEEP. Otherwise:
+;   elapsed = counter - part+0x114, clamped (unsigned) to 0x7FFF;
+;   rate = (i8)part+0x10B + zero_extend((slot+0x17)->+0x29), clamped to 0..0x64 and then to
+;          >= 0 (0x02B37C..0x02B386);
+;   product = FP_MulAccum64(u16 [0x00F7E6 + rate*2], elapsed) >> 10;
+;   if product > 0x0FFF then slot+0x0D = 0xC000 (the "swept out" sentinel) else
+;   slot+0x0D -= product.
+; Only caller: Voice_Release_Type4_BranchA (0x02BD6B). Touches no hardware other than the
+; software tick at 0x001040.
+
+[LABEL] 0x02B333 Voice_Slot_ApplyPortamentoDelta_BranchA  replaces=LABEL_02B333  confidence=high
+; part+0x118 bit 7 clear: compute elapsed = tick(0x001040) - part+0x114 under mask level 6.
+
+[LABEL] 0x02B359 Voice_Slot_ApplyPortamentoDelta_BranchB  replaces=LABEL_02B359  confidence=high
+; elapsed clamped to 0x7FFF; now build the rate from part+0x10B and (slot+0x17)->+0x29.
+
+[LABEL] 0x02B37C Voice_Slot_ApplyPortamentoDelta_BranchC  replaces=LABEL_02B37C  confidence=high
+; Rate exceeded 0x64: use 0x64.
+
+[LABEL] 0x02B386 Voice_Slot_ApplyPortamentoDelta_BranchD  replaces=LABEL_02B386  confidence=high
+; Rate floored at 0; look the coefficient up in the u16 table at 0x00F7E6 and multiply.
+
+[LABEL] 0x02B3B4 Voice_Slot_ApplyPortamentoDelta_BranchE  replaces=LABEL_02B3B4  confidence=high
+; Normal case: subtract the scaled product from the slot's pitch accumulator (+0x0D).
+
+[LABEL] 0x02B3BC Voice_Slot_ApplyPortamentoDelta_Exit  replaces=LABEL_02B3BC  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x02B3C0 Voice_Slot_ApplyPitchJitter  replaces=LABEL_02B3C0  confidence=high
+; Adds a 3-bit pseudo-random value to a 16-bit word.
+; IN : XWA = address of the word.  The randomness is the low 3 bits of the free-running
+; 32-bit counter at 0x001040, sampled with interrupts masked to level 6, so the value is
+; (tick & 7) -- a cheap dither, not a real PRNG. (XWA) += that.
+; Only caller: Voice_Init_Type1 (0x02C3F0), where XWA = 0x0451CE, i.e. the WAVEFORM/
+; multisample word of the tone-generator parameter staging block. Touches no hardware.
+
+[ROUTINE] 0x02B3DD Voice_Slot_ComputePitch  replaces=LABEL_02B3DD  confidence=high
+; Builds the final and base pitch words for one STAGING voice-slot record.
+; IN : XWA = staging slot record (0x002942 + i*0x47).
+; Reads XBC = slot+0x23 (part record), and the two parameter-block pointers slot+0x17 and
+; slot+0x1F. Accumulates in IZ:
+;   IZ  = ((slot+0x05 & 0x7F) << 8) + 0x80        key, in 1/256-semitone units
+;   IZ += part+0x112                              mix-weight word (INDEX-derived)
+;   IZ += u16 at 0x041349                         a GLOBAL (not part-indexed) master tune
+;   IZ += (i8)(part+0x16) << 8
+;   IZ += (i8)(part+0x6D) << 8
+;   slot+0x08 = SaturateS16_WA(IZ)                the BASE pitch
+;   IZ -= ((slot+0x1F)->+0x0B << 8) + 0x80
+;   IZ += u16 (slot+0x1F)->+0x0C
+;   IZ += (i8)(slot+0x17)->+0x03 << 8
+;   IZ += (i8)(slot+0x17)->+0x04
+;   slot+0x06 = PitchBend_AlignLoop_Init(WA = IZ, BC = (slot+0x1F)->+0x09,
+;                                        DE = (slot+0x1F)->+0x0A)   the FINAL pitch
+; slot+0x06 is exactly the word that Voice_Slot_CalcAmpNibble and
+; Voice_Slot_FindOctaveOffset later read back as the sounding key.
+; Only caller: Voice_Allocate_1of4 (0x02C5A0). Touches no hardware.
+
+[ROUTINE] 0x02B490 Voice_Pitch_ClampRange  replaces=LABEL_02B490  confidence=high
+; Signed three-way clamp. IN: WA = value, DE = lower bound, BC = upper bound.
+; OUT: HL = min(max(WA, DE), BC). Callers: Voice_Setup_Typed_BranchB/BranchC and
+; Voice_Allocate_Type2 -- all three use it to keep a transposed key inside 0..0x7F.
+
+[LABEL] 0x02B498 Voice_Pitch_ClampRange_Hi  replaces=LABEL_02B498  confidence=high
+; Lower bound satisfied; now clamp against the upper bound in BC.
+
+[LABEL] 0x02B49E Voice_Pitch_ClampRange_Lo  replaces=LABEL_02B49E  confidence=high
+; Move the clamped value to HL and return.
+
+[ROUTINE] 0x02B4A1 ToneGen_SilenceChannel  confidence=high
+; NAME LEFT AS-IS. The reference file already has the real name ToneGen_SilenceChannel here;
+; the LLVM build calls the same address ToneGen_WriteNoteKey. Nothing is renamed by this
+; entry -- it adds documentation only. See [UNCERTAIN]: I believe the reference name is the
+; correct one.
+; RELEASES one physical tone-generator voice.
+; IN : A = physical TG slot (0..0x3F). No outputs. THIS IS THE ONLY VOICE-FREEING PATH IN
+; THE REGION and it is the routine that emits the 0x7E00 "free a voice" word documented in
+; the sub-CPU memory map.
+; Sequence, twice over: clear P6.7 (SFR 0x18 bit 7); write the register number to 0x100000;
+; `nop`; set P6.7; write the data word to 0x100002; three `nop`s reached through a
+; `jr T,<next>`. First pair: register 0xC0 + slot, data 0x0000. Second pair: register
+; 0x0000 + slot, data 0x7E00 (= FREE).
+; Only caller: AudioTick_UpdateVoice_SlotLoop (0x022C58 region), which XORs the freshly read
+; active-voice bitmap from 0x100000 against its previous copy and calls this for every slot
+; whose bit just went 1 -> 0.
+
+[LABEL] 0x02B4C1 ToneGen_WriteNoteKey_NopCont1  replaces=LABEL_02B4C1  confidence=high
+; Landing pad of the `jr T` bus-settling delay after the first data write (3 nops).
+
+[LABEL] 0x02B4DD ToneGen_WriteNoteKey_NopCont2  replaces=LABEL_02B4DD  confidence=high
+; Landing pad of the `jr T` bus-settling delay after the 0x7E00 free write (3 nops).
+
+[ROUTINE] 0x02B4E3 Voice_Build_Register_Set  confidence=high
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_Init_Type4. Documentation only; nothing is renamed.
+; Full parameter rebuild + emit for one physical TG slot, "type 4" (the 4-layer voice path).
+; IN : A = physical TG slot. XIZ := 0x04308E + A*0x47 (the LIVE slot record).
+; Calls, in order and each with XWA = XIZ: Voice_Pitch_InterpDispatch,
+; Voice_Pitch_WriteOutputReg_Portamento, Voice_Pitch_WriteOutputReg_Legato,
+; Voice_Level_ComputeTriplet, Voice_PitchPack_Dispatch, Voice_PanReg_WriteDispatch,
+; Voice_StereoLevel_Compute, Voice_PortaLevel_Compute, Voice_Chan_ComputeParams,
+; Voice_SubVoice_ComputeAndTrigger, Voice2_UpdatePitch, Voice_ComputeExprPitchBend,
+; Voice_SetPitchWord_Muted, Voice_ComputeAndWritePan, Voice_WriteChPanShift (BC = 0),
+; Voice_ComputePitch, Voice_ApplyPortamento. Every one of those fills part of the 68-byte
+; staging block at 0x0451CC (see the region-4 notes). Finally
+; ToneGen_WriteVoiceParams(WA = slot, XBC = 0x0451CC) walks that block and emits the whole
+; register set to IC303. Only caller: Voice_SetVelocity_Type0_BranchA (0x02C9??).
+
+[ROUTINE] 0x02B576 Voice_Allocate_Typed  replaces=LABEL_02B576  confidence=high
+; Builds ONE staging voice-slot record (0x002942 + layer*0x47) for a note-on and marks the
+; layer as "requested" in the caller's note request record.
+; Arguments (mixed registers + stack, `retd 0x0A`): XWA = note request record,
+; C = part index, DE = layer-enable bitmask to test, and stacked words: +0x1E = a packed
+; buffer selector, +0x20 = request priority, +0x22 = key, +0x24 = a sub-index,
+; +0x26 = layer index (0..3).
+; Body: DSP_LookupVoiceBuffer + VoiceParam_WriteDispatchHelper resolve the tone parameter
+; block; if (block+0x0D & DE) == 0 the layer is REFUSED (ExitA). Otherwise
+; VoiceField_ExtractAndWrite + VelocityQuantise_B + VoiceParam_WriteWithOffset_Alt derive
+; the level, and the staging record is filled: +0x01 = velocityindex<<6 | 0x12,
+; +0x03 = layer, +0x04 = part, +0x05 = key | 0x80, +0x0C = priority,
+; +0x23 = &part record, +0x27 = &part layer sub-block (part + 0x6E + layer*0x25),
+; +0x13/+0x17/+0x1B/+0x1F = the four resolved parameter-block pointers. Then
+; Voice_Pitch_CopyBase. Finally requestrec+0x02+layer = 0x80 | selector.
+; Called only from Voice_Setup_Typed. Touches no hardware.
+
+[LABEL] 0x02B6EA Voice_Allocate_Typed_ExitA  replaces=LABEL_02B6EA  confidence=high
+; Refusal path: requestrec+0x02+layer = 0 (this layer will not be allocated).
+
+[LABEL] 0x02B6FC Voice_Allocate_Typed_ExitB  replaces=LABEL_02B6FC  confidence=high
+; Common tail: requestrec+0x06+layer = 0, unwind and `retd 0x0A`.
+
+[ROUTINE] 0x02B717 Voice_Build_Partial_Descriptor  confidence=high
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_Setup_Typed. Documentation only; nothing is renamed.
+; The per-layer note-on worker. Arguments: XWA = note request record, C = part index,
+; DE = the layer bit to test in the part's layer-enable mask, plus stacked words
+; +0x1E = selector, +0x20 = velocity, +0x22 = key, +0x24 = source layer, +0x26 = target
+; layer index. `retd 0x0A`.
+; FIRST TEST (0x02B72A): if (part+0x02 & DE) == 0 the routine jumps straight to ExitA, which
+; writes requestrec+0x02+layer = 0 and requestrec+0x06+layer = 0 and returns. No error is
+; reported anywhere. This is the primary "note silently does nothing" gate.
+; If the key >= 0x78 and bit 1 of the layer parameter block is set, the work is delegated to
+; Voice_Allocate_Typed with the key rebased by -0x78; if the key >= 0x78 and that bit is
+; clear the layer is dropped (BranchA). For keys < 0x78 the staging record at
+; 0x002942 + layer*0x47 is filled inline: +0x01 = velidx<<6 with bit 2 set, +0x03 = layer,
+; +0x04 = part, +0x05 = key | 0x80, +0x0C = velocity (optionally transposed, see BranchB/C),
+; +0x23 = &part record, +0x13 = the u32 at part+0x06 (tone record), +0x17/+0x1B/+0x1F/+0x27
+; = the resolved parameter pointers, then Voice_Pitch_Compute. Algorithm words +0x2F and
+; +0x31 come from Algo_SubTable_Bit15Dispatch and Voice_SecondaryParam_Fetch, and +0x35/
+; +0x36/+0x38/+0x3A are looked up in the ROM tables at 0x012038, 0x012057 and 0x012095 using
+; bytes +0x5E..+0x61 of the tone record.
+; Last: requestrec+0x02+layer = 0x80 | selector, and requestrec+0x06+layer is set to 0x80
+; unless (+0x2F == 0 && +0x31 == 0xFF && bit 15 of (layerblock+0x18) is clear), in which
+; case it is 0. Touches no hardware.
+
+[LABEL] 0x02B83A Voice_Setup_Typed_BranchA  replaces=LABEL_02B83A  confidence=high
+; Key >= 0x78 but the layer block's bit 1 is clear: drop the layer (both request bytes = 0).
+
+[LABEL] 0x02B861 Voice_Setup_Typed_BranchB  replaces=LABEL_02B861  confidence=high
+; Normal key range: start filling the staging record at 0x002942 + layer*0x47.
+
+[LABEL] 0x02B8BA Voice_Setup_Typed_BranchC  replaces=LABEL_02B8BA  confidence=high
+; Global 0x041343 bit 0 set and part == 1: velocity += 0x0C, clamped to 0..0x7F.
+
+[LABEL] 0x02B8D3 Voice_Setup_Typed_BranchD  replaces=LABEL_02B8D3  confidence=high
+; Store the (possibly transposed) velocity to +0x0C and wire up all the record pointers.
+
+[LABEL] 0x02B9D9 Voice_Setup_Typed_BranchE  replaces=LABEL_02B9D9  confidence=high
+; "Layer has real content": requestrec+0x06+layer = 0x80.
+
+[LABEL] 0x02B9ED Voice_Setup_Typed_BranchF  replaces=LABEL_02B9ED  confidence=high
+; "Layer is a null algorithm": requestrec+0x06+layer = 0.
+
+[LABEL] 0x02BA01 Voice_Setup_Typed_ExitA  replaces=LABEL_02BA01  confidence=high
+; Layer-enable mask test failed: zero BOTH request bytes for this layer and leave.
+
+[LABEL] 0x02BA25 Voice_Setup_Typed_ExitB  replaces=LABEL_02BA25  confidence=high
+; Common tail, `retd 0x0A`.
+
+[ROUTINE] 0x02BA2C Voice_Build_Four_Partials  confidence=high
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name, which describes the code
+; well). The LLVM build calls this address Voice_NoteOn_Type4. Documentation only.
+; The four-layer note-on body. IN: XWA = note request record, C = part index, E = key,
+; one stacked word = velocity. `retd 0x02`.
+; requestrec+0x00 = key | part<<8 | 0x80. Then Voice_Setup_Typed is called up to five times
+; with different (layer bit, selector, source layer, target layer) tuples chosen by bits
+; 0x0E and 0x0F of the part's layer-enable mask -- that is the 2x2 variant selector.
+; Then NoteOn_Dispatch(requestrec) performs the actual physical allocation and writes the
+; assigned slot numbers into requestrec+0x0A+i.
+; COMMIT LOOP (SlotLoop, i = 0..3): if requestrec+0x0A+i >= 0x40 the layer is skipped
+; entirely -- no record is committed, no register is written, and nothing is reported. Else
+; the 0x47-byte staging record 0x002942 + i*0x47 is block-copied
+; (`ld bc,0x23 / ldirw / ldi`) onto the live record 0x04308E + slot*0x47.
+; For keys < 0x78 (AltSlotPath) three extra fixups run afterwards: live+0x00 = slot,
+; live+0x2F = 0 if staging+0x2F == 0 else (staging+0x2F | (staging+0x2F<<8) | 0x8000), and
+; live+0x31 = 0x00FF if staging+0x31 == 0xFF else (staging+0x31 | 0xC000).
+; Finally bit 8 of live+0x01 is set or cleared depending on bit 15 of the word at
+; ((live+0x27)->+0x18). Only caller: Voice_SetVelocity (0x02C8E4).
+
+[LABEL] 0x02BA92 Voice_NoteOn_Type4_BranchA  replaces=LABEL_02BA92  confidence=high
+; Mask bit 0x0E clear: first Voice_Setup_Typed call with selector 0 instead of 1.
+
+[LABEL] 0x02BAB6 Voice_NoteOn_Type4_BranchB  replaces=LABEL_02BAB6  confidence=high
+; Re-read the layer-enable mask and branch on bit 0x0F for the second layer pair.
+
+[LABEL] 0x02BAF6 Voice_NoteOn_Type4_BranchC  replaces=LABEL_02BAF6  confidence=high
+; Mask bit 0x0F clear variant of the second Voice_Setup_Typed call.
+
+[LABEL] 0x02BB1A Voice_NoteOn_Type4_BranchD  replaces=LABEL_02BB1A  confidence=high
+; Layers 2 and 3 (mask bits 4 and 8), then NoteOn_Dispatch and the commit loop.
+
+[LABEL] 0x02BB75 Voice_NoteOn_Type4_SlotLoop  replaces=LABEL_02BB75  confidence=high
+; Commit loop head: the `cp (requestrec+0x0A+i),0x40 / jr nc` polyphony gate.
+
+[LABEL] 0x02BBD5 Voice_NoteOn_Type4_AltSlotPath  replaces=LABEL_02BBD5  confidence=high
+; Key < 0x78 commit: same block copy plus the live+0x00 / +0x2F / +0x31 fixups.
+
+[LABEL] 0x02BC38 Voice_NoteOn_Type4_BranchE  replaces=LABEL_02BC38  confidence=high
+; staging+0x2F was zero: live+0x2F = 0.
+
+[LABEL] 0x02BC3A Voice_NoteOn_Type4_BranchF  replaces=LABEL_02BC3A  confidence=high
+; Store the packed +0x2F word into the live record (0x0430BD + slot*0x47).
+
+[LABEL] 0x02BC6A Voice_NoteOn_Type4_BranchG  replaces=LABEL_02BC6A  confidence=high
+; staging+0x31 == 0xFF: live+0x31 = 0x00FF (the "no secondary parameter" sentinel).
+
+[LABEL] 0x02BC6D Voice_NoteOn_Type4_BranchH  replaces=LABEL_02BC6D  confidence=high
+; Store the +0x31 word into the live record (0x0430BF + slot*0x47).
+
+[LABEL] 0x02BC7F Voice_NoteOn_Type4_BranchI  replaces=LABEL_02BC7F  confidence=high
+; Read bit 15 of ((live+0x27)->+0x18) to decide the +0x01 bit-8 flag.
+
+[LABEL] 0x02BCB1 Voice_NoteOn_Type4_BranchJ  replaces=LABEL_02BCB1  confidence=high
+; Clear bit 8 of live+0x01 (0x04308F + slot*0x47 masked with 0xFEFF).
+
+[LABEL] 0x02BCC5 Voice_NoteOn_Type4_BranchK  replaces=LABEL_02BCC5  confidence=high
+; i++, loop while i < 4. Also the landing point of the "slot >= 0x40" skip.
+
+[LABEL] 0x02BCCF Voice_NoteOn_Type4_Exit  replaces=LABEL_02BCCF  confidence=high
+; Unwind and `retd 0x02`.
+
+[ROUTINE] 0x02BCD6 Voice_Release_Type4  replaces=LABEL_02BCD6  confidence=high
+; Per-tick parameter refresh for one already-sounding type-4 voice (the release/decay
+; update, not the note-off itself).
+; IN : A = physical TG slot. XIZ := 0x04308E + A*0x47.
+; Runs Voice_PitchEnv_Advance first (that is what distinguishes it from Voice_Init_Type4)
+; then the same chain of parameter builders down to Voice_SetPitchWord_Muted. It then
+; splits on the record's layer index (+0x03): layers 0..2 take Voice_UpdatePan_Full +
+; Voice_ComputePitch + Voice_Slot_LoadPitchOffset_A + Voice_ApplyPortamento; layer 3 takes
+; Voice_UpdatePan_Mono + Voice_ComputePitch + Voice_Slot_ApplyPortamentoDelta +
+; Voice_ApplyPortamento. Ends with ToneGen_WriteVoiceParams(slot, 0x0451CC), which is the
+; only hardware contact. Only caller: Voice_SetVelocity_Type40_NopCont2.
+
+[LABEL] 0x02BD5D Voice_Release_Type4_BranchA  replaces=LABEL_02BD5D  confidence=high
+; Layer index >= 3: mono pan path and the time-based portamento sweep.
+
+[LABEL] 0x02BD75 Voice_Release_Type4_BranchB  replaces=LABEL_02BD75  confidence=high
+; Join point; emit the staged register block for this slot.
+
+[ROUTINE] 0x02BD87 Voice_NoteOn_Type3  replaces=LABEL_02BD87  confidence=high
+; Single-layer note-on worker used by the type-2 path -- the leaner sibling of
+; Voice_Setup_Typed. IN: XWA = note request record, C = part index, DE = layer bit to test,
+; plus stacked +0x10 selector, +0x12 velocity (bit 7 = an extra flag), +0x14 key,
+; +0x16 target layer index. `retd 0x08`.
+; Same first gate: if (part+0x02 & DE) == 0 it jumps to ExitA and zeroes both request bytes.
+; Otherwise it fills 0x002942 + layer*0x47 with +0x01 = 0x0008 (| 0x0800 when bit 7 of the
+; velocity argument is set), +0x03 = layer, +0x04 = part, +0x05 = key | 0x80,
+; +0x0C = velocity & 0x7F, +0x23 = &part record, +0x13 = tone record pointer,
+; +0x17/+0x1B/+0x1F/+0x27 = the layer sub-block pointers, calls Voice_Pitch_Compute, and
+; then hard-codes the algorithm fields to the "no algorithm" values: +0x2F = 0,
+; +0x31 = 0x00FF, +0x35 = 0, +0x36 = +0x38 = +0x3A = 0.
+; Finishes with requestrec+0x02+layer = 0x80 | selector and requestrec+0x06+layer = 0.
+; Callers: Voice_NoteOn_Type2_BranchB / _BranchC. Touches no hardware.
+
+[LABEL] 0x02BE62 Voice_NoteOn_Type3_BranchA  replaces=LABEL_02BE62  confidence=high
+; Past the +0x01 flag word; fill the rest of the staging record.
+
+[LABEL] 0x02BEF1 Voice_NoteOn_Type3_ExitA  replaces=LABEL_02BEF1  confidence=high
+; Layer-enable mask test failed: requestrec+0x02+layer = 0.
+
+[LABEL] 0x02BF03 Voice_NoteOn_Type3_ExitB  replaces=LABEL_02BF03  confidence=high
+; Common tail: requestrec+0x06+layer = 0, `retd 0x08`.
+
+[ROUTINE] 0x02BF1B Voice_NoteOn_Type2  replaces=LABEL_02BF1B  confidence=high
+; Four-layer note-on built out of four Voice_NoteOn_Type3 calls.
+; IN : XWA = note request record, C = part index, E = key, stacked velocity. `retd 0x02`.
+; First it mirrors bit 0x0D of the part's layer-enable mask into bit 7 of part+0x118
+; (0x041480 + part*0x11F) -- that is the same flag Voice_Slot_ApplyPortamentoDelta reads to
+; decide whether to re-stamp the portamento timestamp.
+; requestrec+0x00 = key | part<<8 | 0x80. Then four Voice_NoteOn_Type3 calls with layer bits
+; 1, 2, 4 and (8 or 0, chosen by bit 7 of the stacked velocity). NoteOn_Dispatch follows,
+; then the same commit loop as type 4: skip any layer whose requestrec+0x0A+i >= 0x40, else
+; block-copy staging[i] -> live[slot] and set live+0x00 = slot.
+
+[LABEL] 0x02BF55 Voice_NoteOn_Type2_BranchA  replaces=LABEL_02BF55  confidence=high
+; Mask bit 0x0D clear: clear bit 7 of part+0x118.
+
+[LABEL] 0x02BF68 Voice_NoteOn_Type2_BranchB  replaces=LABEL_02BF68  confidence=high
+; Build the request word and issue the first three Voice_NoteOn_Type3 calls.
+
+[LABEL] 0x02C00E Voice_NoteOn_Type2_BranchC  replaces=LABEL_02C00E  confidence=high
+; Velocity bit 7 clear: the fourth layer uses mask bit 8 instead of 0.
+
+[LABEL] 0x02C030 Voice_NoteOn_Type2_BranchD  replaces=LABEL_02C030  confidence=high
+; All four layers staged: call NoteOn_Dispatch and enter the commit loop.
+
+[LABEL] 0x02C03D Voice_NoteOn_Type2_BranchE  replaces=LABEL_02C03D  confidence=high
+; Commit loop head with the `cp (requestrec+0x0A+i),0x40 / jr nc` polyphony gate.
+
+[LABEL] 0x02C0A9 Voice_NoteOn_Type2_LoopStep  replaces=LABEL_02C0A9  confidence=high
+; i++, loop while i < 4; also the skip target for an unallocated layer.
+
+[LABEL] 0x02C0AF Voice_NoteOn_Type2_Exit  replaces=LABEL_02C0AF  confidence=high
+; Unwind and `retd 0x02`.
+
+[ROUTINE] 0x02C0B6 Voice_Init_Type2  replaces=LABEL_02C0B6  confidence=high
+; Parameter rebuild + emit for one physical TG slot, type-2 flavour.
+; IN : A = physical TG slot. XIZ := 0x04308E + A*0x47.
+; Chain: Voice_Pitch_InterpDispatch, Voice_Pitch_WriteOutputReg_Direct,
+; Voice_Pitch_WriteOutputReg_Secondary, Voice_PitchReg_WriteDispatch,
+; Voice_PanReg_WriteDispatchB, Voice_ComputePitchBend2, Voice_SetPitchWord_Unmuted,
+; Voice_UpdatePan_Simple, Voice_WriteChPanShift2 (BC = 0), Voice_Level_ClearAllOutputRegs,
+; Voice_ComputePitch_Mono, Voice_ApplyPortamento2, then
+; ToneGen_WriteVoiceParams(slot, 0x0451CC). Callers: Voice_SetVelocity_Type0_NopCont2 and
+; Voice_SetVelocity_Type80_NopCont2.
+
+[ROUTINE] 0x02C12B Voice_Allocate_Type2  replaces=LABEL_02C12B  confidence=high
+; The type-2 per-layer staging builder -- the counterpart of Voice_Allocate_Typed.
+; IN : XWA = note request record, C = part index, DE = a capability mask, plus stacked
+; +0x22 selector, +0x24 velocity, +0x26 sub-index, +0x28 layer index. `retd 0x08`.
+; Resolves the tone parameter block from part+0x06 through VoiceParam_WriteDispatchHelper;
+; refuses the layer (ExitA) if (block+0x0D & DE) == 0. Otherwise VoiceField_ExtractAndWrite
+; + VelocityQuantise_B + VoiceParam_WriteWithOffset_Alt derive the level, and the staging
+; record 0x002942 + layer*0x47 gets +0x01 = velidx<<6 with bit 4 set, +0x03 = layer,
+; +0x04 = part, +0x05 = subindex | 0x80, +0x0C = velocity (transposed by +0x10 and clamped
+; to 0..0x7F when bit 0 of the global word at 0x041343 is set), +0x23 = &part record,
+; +0x27 = &part layer sub-block, +0x13/+0x17/+0x1B/+0x1F = the resolved pointers, then
+; Voice_Pitch_CopyBase and requestrec+0x02+layer = 0x80 | selector.
+; Only caller: Voice_NoteOn_Type1. Touches no hardware.
+
+[LABEL] 0x02C21A Voice_Allocate_Type2_BranchA  replaces=LABEL_02C21A  confidence=high
+; Past the optional transpose; store the velocity and wire up the record pointers.
+
+[LABEL] 0x02C295 Voice_Allocate_Type2_ExitA  replaces=LABEL_02C295  confidence=high
+; Refusal path: requestrec+0x02+layer = 0.
+
+[LABEL] 0x02C2A7 Voice_Allocate_Type2_ExitB  replaces=LABEL_02C2A7  confidence=high
+; Common tail: requestrec+0x06+layer = 0, `retd 0x08`.
+
+[ROUTINE] 0x02C2C0 Voice_NoteOn_Type1  replaces=LABEL_02C2C0  confidence=high
+; Two-layer note-on. IN: XWA = note request record, C = part index, E = key, stacked
+; velocity. `retd 0x02`.
+; requestrec+0x00 = key | part<<8 | 0x80; two Voice_Allocate_Type2 calls (capability masks 1
+; and 4, selectors 0 and 1); then it explicitly zeroes requestrec+0x04, +0x05, +0x08 and
+; +0x09 so layers 2 and 3 cannot be requested; then NoteOn_Dispatch and a commit loop over
+; i = 0..1 only, with the same `>= 0x40` gate, the same 0x47-byte block copy and
+; live+0x00 = slot. Only caller: Voice_SetVelocity_Type80_Entry.
+
+[LABEL] 0x02C353 Voice_NoteOn_Type1_LoopBody  replaces=LABEL_02C353  confidence=high
+; Commit loop head for i = 0..1, including the `cp (requestrec+0x0A+i),0x40` gate.
+
+[LABEL] 0x02C3BF Voice_NoteOn_Type1_LoopStep  replaces=LABEL_02C3BF  confidence=high
+; i++, loop while i < 2; also the skip target for an unallocated layer.
+
+[LABEL] 0x02C3C5 Voice_NoteOn_Type1_Exit  replaces=LABEL_02C3C5  confidence=high
+; Unwind and `retd 0x02`.
+
+[ROUTINE] 0x02C3CC Voice_Init_Type1  replaces=LABEL_02C3CC  confidence=high
+; Parameter rebuild + emit for one physical TG slot, type-1 flavour. IN: A = slot.
+; Identical to Voice_Init_Type2 except that (a) right after Voice_Pitch_InterpDispatch it
+; calls Voice_Slot_ApplyPitchJitter(0x0451CE), dithering the staged waveform word by
+; (tick & 7), and (b) it uses Voice_Slot_LoadPitchOffset_B instead of the mono pitch step.
+; Ends with ToneGen_WriteVoiceParams(slot, 0x0451CC). Callers: the tails of Voice_SetPitch
+; and Voice_NoteOff.
+
+[ROUTINE] 0x02C450 Voice_Allocate_1of4  replaces=LABEL_02C450  confidence=high
+; Single-layer staging builder for the Voice_NoteOn_Rhythm path.
+; IN : XWA = note request record, C = part index, DE = capability mask, plus stacked
+; +0x1E selector, +0x20 velocity, +0x22 sub-index, +0x24 layer index. `retd 0x08`.
+; Resolves the layer sub-block at part + 0x6E + layer*0x25, follows its +0x08 pointer, and
+; refuses (ExitA) if bit 1 of that block is clear OR if (paramblock+0x0D & DE) == 0.
+; Otherwise it fills 0x002942 + layer*0x47 exactly like Voice_Allocate_Typed does
+; (+0x01 = velidx<<6 | 0x12, +0x03/+0x04/+0x05/+0x0C, +0x23, +0x13/+0x17/+0x1B/+0x1F) and
+; then calls Voice_Slot_ComputePitch to fill +0x06 and +0x08. Sets requestrec+0x02+layer =
+; 0x80 | selector. NOTE it does NOT touch requestrec+0x06+layer on the success path.
+; Callers: Voice_NoteOn_Rhythm and Voice_NoteOn_Rhythm_BranchA. Touches no hardware.
+
+[LABEL] 0x02C5BD Voice_Allocate_1of4_ExitA  replaces=LABEL_02C5BD  confidence=high
+; Refusal path: requestrec+0x02+layer = 0.
+
+[LABEL] 0x02C5CF Voice_Allocate_1of4_ExitB  replaces=LABEL_02C5CF  confidence=high
+; Unwind and `retd 0x08`.
+
+[ROUTINE] 0x02C5D8 Voice_NoteOn_Rhythm  replaces=LABEL_02C5D8  confidence=high
+; Allocates and commits ONE physical voice for a single-layer part. Despite the name it is
+; used for both the note-on and the note-off half of a key event -- see [UNCERTAIN].
+; IN : XWA = a caller-owned note request record (both callers put it on their own stack),
+; C = part index, E = key, one stacked byte = velocity. `retd 0x02`.
+; requestrec+0x00 = key | part<<8 | 0x80. Then:
+;   velocity != 0 : layer index 0, Voice_Allocate_1of4(mask 1, selector 3, velocity),
+;                   requestrec+0x06 = 0x40, +0x03 = 0, +0x07 = 0.
+;   velocity == 0 : layer index 1, velocity forced to 0x50,
+;                   requestrec+0x02 = 0, +0x06 = 0,
+;                   Voice_Allocate_1of4(mask 4, selector 3), requestrec+0x07 = 0.
+; Both paths then zero requestrec+0x04/+0x05/+0x08/+0x09, call NoteOn_Dispatch, and commit
+; the one layer: if requestrec+0x0A+layer >= 0x40 the whole event evaporates, else the
+; 0x47-byte staging record is copied to 0x04308E + slot*0x47 and live+0x00 = slot.
+
+[LABEL] 0x02C625 Voice_NoteOn_Rhythm_BranchA  replaces=LABEL_02C625  confidence=high
+; Zero-velocity arm: layer index 1, velocity forced to 0x50, capability mask 4.
+
+[LABEL] 0x02C653 Voice_NoteOn_Rhythm_BranchB  replaces=LABEL_02C653  confidence=high
+; Join point: zero the unused request bytes, NoteOn_Dispatch, then the commit gate.
+
+[LABEL] 0x02C6C7 Voice_NoteOn_Rhythm_Exit  replaces=LABEL_02C6C7  confidence=high
+; Unwind and `retd 0x02`. Also the landing point of the `slot >= 0x40` skip.
+
+[ROUTINE] 0x02C6CD VOICE_SETPITCH  confidence=high
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_SetPitch; the two agree in meaning. Documentation only.
+; The SECOND half of a real note-on, for parts whose tone record selects this path.
+; IN : A = part index, C = key, E = velocity, one stacked word. `retd 0x02`.
+; Three guards, all of which return silently:
+;   0x02C6EF : (tonerec+0x10 & 0xC0) must equal 0x40, where tonerec = the u32 at part+0x06;
+;   0x02C70E : (part+0x02 & 0x0007) must be non-zero;
+;   0x02C715 : bit 7 of the velocity argument must be CLEAR.
+; Then Voice_Env_ApplyVelocity_Type0 and Voice_Env_UpdateVelocityCounters run, a request
+; record is built on this routine's own stack (at xsp+2) and handed to Voice_NoteOn_Rhythm.
+; The assigned slot is read back from requestrec+0x0A (layer 0) and must be < 0x40.
+; It then talks to IC303 DIRECTLY, twice, with the P6.7 bracket described in the header:
+;   register 0x0840 + slot <- 0xFF00
+;   register 0x0800 + slot <- 0xFF80   (the documented "mute" level word)
+; i.e. the voice is parked silent BEFORE its parameters exist. Voice_Init_Type1(slot) then
+; builds and emits the whole register block, and finally
+; ToneGen_WriteSingleReg(WA = slot, BC = the u16 at 0x0430BB + slot*0x47 = live+0x2D)
+; writes the key-on word. Only caller: Voice_NoteOn (0x02CFDB region).
+
+[LABEL] 0x02C780 Voice_SetPitch_NopCont1  replaces=LABEL_02C780  confidence=high
+; Bus-settling pad (3 nops) after writing 0xFF00 to TG register 0x0840 + slot.
+
+[LABEL] 0x02C7A1 Voice_SetPitch_NopCont2  replaces=LABEL_02C7A1  confidence=high
+; Bus-settling pad (3 nops) after writing 0xFF80 to TG register 0x0800 + slot.
+
+[LABEL] 0x02C7CE Voice_SetPitch_Exit  replaces=LABEL_02C7CE  confidence=high
+; Common exit for all three guards and the normal path; `retd 0x02`.
+
+[ROUTINE] 0x02C7D7 VOICE_NOTEOFF  confidence=high
+; NAME LEFT AS-IS (the reference file's existing non-LABEL_ name). The LLVM build calls this
+; address Voice_NoteOff; the two agree in meaning. Documentation only.
+; The note-off body, structurally identical to Voice_SetPitch.
+; IN : A = part index, C = key, E = velocity, one stacked word. `retd 0x02`.
+; Same two guards on (tonerec+0x10 & 0xC0) == 0x40 and (part+0x02 & 0x0007) != 0, but NO
+; velocity-bit-7 guard. Voice_Env_ApplyVelocity_Type0 and Voice_Env_UpdateVelocityCounters
+; run, then a request record on this routine's own stack goes to Voice_NoteOn_Rhythm --
+; which, because a note-off carries velocity 0, takes its layer-1 arm. The slot is therefore
+; read back from requestrec+0x0B (layer 1, one byte further along than Voice_SetPitch reads)
+; and must be < 0x40.
+; Same direct IC303 writes: register 0x0840 + slot <- 0xFF00 and 0x0800 + slot <- 0xFF80,
+; then Voice_Init_Type1(slot), then ToneGen_WriteSingleReg(slot, live+0x2D), and finally
+; VoiceSlot_NoteOff(slot) at 0x0225D3 -- the extra call that distinguishes this routine from
+; Voice_SetPitch. Only caller: Voice_NoteOn_ZeroVelocity.
+
+[LABEL] 0x02C884 Voice_NoteOff_NopCont1  replaces=LABEL_02C884  confidence=high
+; Bus-settling pad (3 nops) after writing 0xFF00 to TG register 0x0840 + slot.
+
+[LABEL] 0x02C8A5 Voice_NoteOff_NopCont2  replaces=LABEL_02C8A5  confidence=high
+; Bus-settling pad (3 nops) after writing 0xFF80 to TG register 0x0800 + slot.
+
+[LABEL] 0x02C8DB Voice_NoteOff_Exit  replaces=LABEL_02C8DB  confidence=high
+; Common exit for both guards and the normal path; `retd 0x02`. Last instruction of the
+; region (ends at 0x02C8E3).
+
+[DATA] 0x00F77D-0x00F785  VOICE_SELECTOR_NIBBLE_PERMUTATION (outside this region)
+; Nine bytes, read as three interleaved 3-byte columns (0x00F77D/0x00F77E/0x00F77F stepped
+; by 3). Voice_Selector_Unpack3Groups uses column k, row g to decide which of the nine
+; scratch slots receives nibble k of articulation word g. Consumed only through
+; Voice_Selector_FindBestSlot / Voice_Selector_ComputeMixWeights.
+
+[DATA] 0x00F786-0x00F7E5  VOICE_SELECTOR_MIXWEIGHT_TABLES (outside this region)
+; Four adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights, sized exactly to
+; their index ranges: 0x00F786 (10 entries, indexed by COUNT 0..9) -> part+0x10E;
+; 0x00F79A (9 entries, indexed by INDEX 0..8) -> part+0x112;
+; 0x00F7AC (9 entries, INDEX) and 0x00F7BE (10 entries, VALUE) and 0x00F7D2 (10 entries,
+; COUNT) -> summed into part+0x110.
+
+[DATA] 0x00F7E6-...  VOICE_PORTAMENTO_RATE_COEFFS (outside this region)
+; u16 table indexed by the 0..0x64 portamento rate computed in
+; Voice_Slot_ApplyPortamentoDelta; the entry is multiplied by the elapsed tick count with
+; FP_MulAccum64 and the 64-bit product is shifted right by 10.
+
+[DATA] 0x002942-...  VOICESLOT_STAGING_ARRAY (DRAM, not ROM -- listed for reference only)
+; Four 0x47-byte voice-slot records, indexed by layer 0..3. Every note-on body in this
+; region fills these and then block-copies the chosen ones into the live array.
+
+[DATA] 0x04308E-...  VOICESLOT_LIVE_ARRAY (DRAM, not ROM -- listed for reference only)
+; 0x47-byte voice-slot records indexed by PHYSICAL TG SLOT 0..0x3F. 0x04308E+0x01 = flags,
+; +0x06 = final pitch (0x043094), +0x27 = layer-block pointer (0x0430B5), +0x2D = key-on
+; word (0x0430BB), +0x2F (0x0430BD) and +0x31 (0x0430BF) = algorithm words.
+
+[UNCERTAIN] Every address in this region is already named in the authoritative LLVM build; nothing here was virgin territory except the six setter routines at 0x02AE58/0x02AEA2/0x02AEEC/0x02AF3A/0x02AF82/0x02AFBD, which have no symbol in either source. The value added here is documentation plus the structure map, not new labels.
+
+[UNCERTAIN] 0x02AE22 VoiceSlot_DataTable_02AE22 is a misnomer: the bytes at 0x02AE22 are CODE (`dec 2,xsp / ld (xsp),a / ... / ret`), not a table, and the address is reached by a real `call 0x02AE22` at 0x02EDE7. I adopted the build name so the reference file stops disagreeing with the ROM that is actually built, but the honest name is something like Voice_Artic_SetWord0_LowByte. Renaming it must be done in BOTH v142/subcpu/kn5000_subprogram_v142.s and archive/asl/subcpu/kn5000_subprogram_v142.asm; I did not touch either.
+
+[UNCERTAIN] 0x02B4A1: the build calls this ToneGen_WriteNoteKey, the reference file calls it ToneGen_SilenceChannel. I believe the REFERENCE name is the better one and the build name is wrong: the routine's payload is `(0x100002) <- 0x7E00` with the latch set to the slot number, which the sub-CPU memory map documents as "FREE a voice", and its only caller frees slots whose active-voice bit just fell to 0. It does not write a key. Left alone per the rules; flagged because a wrong name here actively misleads anyone chasing the voice-allocation bug.
+
+[UNCERTAIN] Five further build-vs-reference name collisions, all left alone: 0x02B4E3 (build Voice_Init_Type4 / ref Voice_Build_Register_Set), 0x02B717 (Voice_Setup_Typed / Voice_Build_Partial_Descriptor), 0x02BA2C (Voice_NoteOn_Type4 / Voice_Build_Four_Partials), 0x02C6CD (Voice_SetPitch / VOICE_SETPITCH), 0x02C7D7 (Voice_NoteOff / VOICE_NOTEOFF). For 0x02B717 and 0x02BA2C the reference names describe the code better than the build names do. For 0x02C6CD/0x02C7D7 the two agree in meaning and I confirmed both from the caller: Voice_NoteOn calls Voice_SetVelocity then Voice_SetPitch for a real note-on, and Voice_NoteOn_ZeroVelocity calls Voice_NoteOff.
+
+[UNCERTAIN] 0x02C5D8 Voice_NoteOn_Rhythm: I could not justify "Rhythm". The routine is the shared allocate-and-commit helper for BOTH Voice_SetPitch (velocity != 0) and Voice_NoteOff (velocity == 0), and its two arms differ only in which layer index and capability mask they use. Nothing in it references the rhythm/style subsystem. A name like Voice_Request_CommitOneSlot would be defensible; I left the build name alone.
+
+[UNCERTAIN] The "_Type1/_Type2/_Type3/_Type4" suffixes across this region are the build's invention and are NOT a tone-generator concept -- they distinguish how many layers the note-on stages (2, 4-via-Type3, 1, and 4-with-algorithms respectively). They are self-consistent, so I kept them, but a reader should not expect a "type" field in the data.
+
+[UNCERTAIN] Part-record base. Region 4's notes state the per-voice software record is at 0x041300 + channel*0x11F. My measurement says 0x041368. Under a 0x041300 base the highest constant the firmware actually uses with `muls wa,0x11F`, 0x041486, sits at field offset +0x186, which is larger than the 0x11F stride and therefore impossible; under 0x041368 it sits at +0x11E, the last byte of the record. Three independent confirmations: the +0x6E layer array is exactly 4*0x25 bytes and ends at +0x102 where the articulation words begin; routines that receive a slot record dereference its +0x23 pointer at +0x0102..+0x0118, all inside 287 bytes; and 0x041368 is by far the most-used constant (90 sites) as one would expect of field 0. I did not edit region 4's file.
+
+[UNCERTAIN] Voice_Slot_CalcArticParams walks a 0x51-stride array reached through the u32 at part+0x6E, i.e. it reinterprets the first four bytes of layer sub-block 0 as a pointer. That is consistent with the sub-block's +0x00 being a pointer everywhere else, but I could not prove what the 81-byte entries ARE. The 0x51 = 9*9 coincidence with Voice_KeyIndex_Pack3Nibbles is suggestive of a 9x9x9 lookup, not proven.
+
+[UNCERTAIN] SFR 0x18 is P6 on the TMP94C241 (MAME src/devices/cpu/tlcs900/tmp94c241.cpp line 1633). I am confident bit 7 is a tone-generator bus phase/strobe line because every single IC303 access in the firmware brackets itself with it, but I have no schematic confirmation of what the pin drives.
+
+[UNCERTAIN] Voice_Selector_FindBestSlot (0x02AC54, just outside this region) can return INDEX = 0xFF when all nine unpacked nibbles are zero -- it initialises both candidate registers to 0xFF and only overwrites them on a hit. Voice_Selector_ComputeMixWeights then uses that 0xFF as a word-table subscript. I could not determine whether the all-zero case is actually reachable at run time, so I have not called it a defect, but see the findings.

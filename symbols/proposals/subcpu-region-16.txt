@@ -1,0 +1,1320 @@
+# region 16: 0x03D404..0x03EEFF
+# The complete C-runtime soft-float / libm library (IEEE-754 single + double), plus the
+# libm entry points pow/sin/cos/tan/exp/log/modf/frexp/ldexp and the integer 64-bit
+# divide helpers. It contains NO audio, voice or tone-generator code: its only clients
+# are the DSP effect-parameter curve routines at 0x038F00..0x03BFFF (DSP_VolumeCurve_FP,
+# DSP_ReverbCurve_FP, DSP_ParamEQ_Curve_FP, DSP_BiquadWarp_FP, ...) which are entered
+# from the dispatch block at 0x03CC38..0x03CECA. Region ends at FP_Library_End_Pad
+# 0x03EE75; 0x03EE76..0x03EEFF is 0xFF fill.
+#
+# IMPORTANT, READ FIRST: every address in this region is still LABEL_xxxxxx in
+# symbols/subcpu_symbols_reference.txt, but the authoritative LLVM source
+# (v142/subcpu/subcpu_fp_math.s) already carries names for all 308 of them. Per the
+# "never rename a real name" rule this file proposes the EXISTING LLVM names verbatim so
+# the two sources converge mechanically. Several of those names are provably WRONG
+# (multiply/add/divide are mutually swapped, single/double are swapped in the
+# conversion helpers, and eight libm functions carry audio-sounding Voice*/DSP_*
+# prefixes). Each such case is documented in its header and collected in the
+# [UNCERTAIN] block at the end for a human to decide.
+#
+# THE UNPACKED WORKING RECORD used throughout (built by FP_DP_Decode / FP_SP_Decode,
+# consumed by FP_DP_Encode / FP_SP_Encode), verified against every producer/consumer:
+#   +0 int16   unbiased exponent
+#   +2 uint8   "special" flag: 1 = zero/underflow, 8 = NaN/overflow marker
+#   +3 uint8   sign (bit 7)
+#   +4 uint32  mantissa low
+#   +8 uint32  mantissa high   (double only; the single-precision record is 8 bytes)
+#
+# CALLING CONVENTION, verified across ~30 call sites: leaf helpers take XWA = destination
+# pointer, XBC = source A pointer, XDE = source B pointer, and return nothing (result via
+# *XWA). The libm entry points are ordinary C functions returning a double, i.e. the
+# caller pushes, right to left, the arguments and then a pointer to an 8-byte result
+# buffer, and cleans up.
+#
+# ERRNO: all range/domain errors write the word at 0x040C22 with 0x21 (EDOM=33) or
+# 0x22 (ERANGE=34). Measured: the ONLY code that ever READS 0x040C22 is pow() itself
+# (0x03D72F and 0x03D751). No DSP/audio caller checks it, so every domain and range
+# error in this library is silently converted into 0.0, 1.0 or DBL_MAX.
+
+[ROUTINE] 0x03D404 FP_DP_CopyOrNegate8  replaces=LABEL_03D404  confidence=high
+; *(double*)XWA = -*(double*)XBC. Copies the 8 bytes low half first, then flips bit 7 of
+; the top byte (the IEEE-754 double sign bit) via the xor_erpb pseudo-op before storing
+; the high half. If XWA == XBC it tail-jumps to FP_DP_NegateInPlace8 instead of copying.
+; Touches no hardware. Used everywhere a negated constant or a sign flip is needed:
+; pow() 0x03D66B/0x03D6B7/0x03D7ED, sin kernel 0x03DAB8/0x03DBFD, ldexp 0x03EAE9/0x03EB5F,
+; and the DSP curve code.
+
+[LABEL] 0x03D417 FP_DP_NegateInPlace8  replaces=LABEL_03D417  confidence=high
+; In-place double negate: xor (XWA+7),0x80; ret. Also a standalone entry point.
+
+[ROUTINE] 0x03D41C FP_SP_CopyOrNegate4  replaces=LABEL_03D41C  confidence=high
+; *(float*)XWA = -*(float*)XBC. Single-precision twin of FP_DP_CopyOrNegate8; flips bit 7
+; of the top byte of the 4-byte word. Falls through to FP_SP_NegateInPlace4 when
+; XWA == XBC.
+
+[LABEL] 0x03D429 FP_SP_NegateInPlace4  replaces=LABEL_03D429  confidence=high
+; In-place float negate: xor (XWA+3),0x80; ret.
+
+[ROUTINE] 0x03D42E FP_DP_CmpAndCopy  replaces=LABEL_03D42E  confidence=high
+; fabs(double). C signature f(double *result, double x): result pointer at (XSP+4),
+; the 8-byte argument at (XSP+8). Calls FP_DP_CmpZero64 with BC = 1 (the "< 0" relation,
+; see [DATA] 0x03D978) and, if x < 0, negate-copies via FP_DP_CopyOrNegate8, otherwise
+; raw-copies via FP_DP_Raw8Copy. Caller pops 12 bytes. Callers: the sin kernel
+; 0x03DA2F / 0x03DA6C / 0x03DAE9 and cos 0x03D361.
+; NOTE: the name is a mechanical description of the body; the routine is fabs().
+
+[LABEL] 0x03D446 FP_DP_CmpAndCopy_Negate  replaces=LABEL_03D446  confidence=high
+; x < 0 arm of fabs(): result = -x.
+
+[DATA] 0x03D44B-0x03D44B  FP_DP_CmpAndCopy_Pad (0xFF alignment byte)
+; One 0xFF pad byte inserted by the linker between routines. There are ~14 of these in
+; the region; each is already named *_Pad and none is reachable code.
+
+[ROUTINE] 0x03D44C FP_SP_Decode_ReadSign  replaces=LABEL_03D44C  confidence=high
+; (int32)(float) conversion. XWA = pointer to the int32 result, XBC = pointer to the
+; float. Allocates an 8-byte unpacked record on the stack, calls FP_SP_Decode to unpack
+; the float, then FP_DP_ShiftDecode to shift the mantissa to integer position, and
+; stores XHL to *XIZ. Sets ERANGE (via FP_DP_ShiftDecode) on out-of-range.
+; NOTE: the name describes the first instruction, not the function; this is __ftoi.
+
+[ROUTINE] 0x03D466 FP_DP_CmpZero64  replaces=LABEL_03D466  confidence=high
+; Relational compare of a double against 0.0, returning a C boolean in HL.
+; XWA = pointer to the double, BC = relation selector 0..5 (see [DATA] 0x03D978).
+; Compares the high 4 bytes against 0 first, then the low 4; picks one of the three
+; 6-byte result rows (equal / less / greater) and returns row[BC]. Called ~15 times
+; inside this region (pow, exp, ldexp, frexp, sin, modf) and never from outside.
+
+[LABEL] 0x03D484 FP_DP_CmpZero64_Less  replaces=LABEL_03D484  confidence=high
+; x < 0: return LessRow[BC].
+
+[LABEL] 0x03D48F FP_DP_CmpZero64_Greater  replaces=LABEL_03D48F  confidence=high
+; x > 0 (and the "high words differ" shortcut): return GreaterRow[BC].
+
+[ROUTINE] 0x03D49A FP_SP_CmpZero32  replaces=LABEL_03D49A  confidence=high
+; Single-precision twin of FP_DP_CmpZero64: relational compare of *(float*)XWA against
+; 0.0 with relation BC, result in HL. Uses the same three 6-byte rows at 0x03D978.
+; No caller inside this region; reached only from the DSP curve code.
+
+[LABEL] 0x03D4B3 FP_SP_CmpZero32_Less  replaces=LABEL_03D4B3  confidence=high
+; x < 0 arm.
+
+[LABEL] 0x03D4BE FP_SP_CmpZero32_Greater  replaces=LABEL_03D4BE  confidence=high
+; x > 0 arm.
+
+[ROUTINE] 0x03D4C9 VoiceFloat_MulAddDispatch  replaces=LABEL_03D4C9  confidence=high
+; tan(double). C signature f(double *result, double x). Loads the exponent word of x
+; ((XSP+0x3A), i.e. bytes 6..7 of the argument), masks 0x7FF0 and compares against
+; 0x41E0: if |x| >= 2^31 the argument cannot be reduced, so errno=ERANGE and the result
+; is the constant 0.0 at 0x01F63E. Otherwise it calls VoiceFloat_DispatchMulAdd
+; (= cos, 0x03D34D) and VoiceFloat_MulAddVariant2 (= sin, 0x03D84F) on the same x and
+; divides with VoiceFloat_SubDP (= double divide, 0x03D3A4): result = sin(x)/cos(x).
+; 3 callers, all in the DSP curve block: 0x03A9A9, 0x03AE9B, 0x03B0B3.
+; NOTE: nothing in this routine multiplies, adds or dispatches; the name is wrong.
+
+[LABEL] 0x03D4F1 VoiceFloat_MulAddDispatch_InRange  replaces=LABEL_03D4F1  confidence=high
+; |x| < 2^31 arm of tan(): compute cos into the local at entrySP-0x10, sin into
+; entrySP-0x18, then divide sin by cos.
+
+[LABEL] 0x03D52E VoiceFloat_MulAddDispatch_Epilog  replaces=LABEL_03D52E  confidence=high
+; tan() epilogue: pop XIZ, release the 0x28-byte frame.
+
+[ROUTINE] 0x03D533 VoiceFloat_CompareAndConvert  replaces=LABEL_03D533  confidence=high
+; pow(double x, double y). C signature f(double *result, double x, double y); result
+; pointer at entrySP+4, x at entrySP+8, y at entrySP+0x10. Structure, all arms verified:
+;   (1) if y is outside [-2147483647, +2147483647] (constants 0x01F646 / 0x01F64E) the
+;       integer form n is set to 0xFFFFFFFF, otherwise n = (int)y via FP_DP_DecodeToInt.
+;   (2) if x < 0 and (double)n != y  -> errno = EDOM (0x21), result = 1.0 (0x01F656).
+;       This is the textbook "negative base with non-integer exponent" domain error and
+;       is what identifies the routine.
+;   (3) if y <= 0 and x == 0         -> errno = EDOM, result = 1.0 (0x01F65E).
+;   (4) if (double)n == y (integer exponent) -> binary exponentiation, see
+;       VoiceFloat_IterationLoop.
+;   (5) otherwise -> exp(y * log(x)) via VoiceFloat_ConvergenceLoop.
+; 21 callers, all in the DSP curve block (0x03937D ... 0x03BA14) - this is the single
+; most-used libm function in the firmware.
+; NOTE: the name is wrong; it is pow().
+
+[LABEL] 0x03D567 VoiceFloat_CompareAndConvert_Invalid  replaces=LABEL_03D567  confidence=high
+; y not representable as int32: store n = 0xFFFFFFFF so the integer test below fails.
+
+[LABEL] 0x03D56F VoiceFloat_CompareAndConvert_AfterRange  replaces=LABEL_03D56F  confidence=high
+; pow(): x < 0 branch - reject a non-integer exponent with EDOM.
+
+[LABEL] 0x03D5AC VoiceFloat_CompareAndConvert_AltPath  replaces=LABEL_03D5AC  confidence=high
+; pow(): x >= 0 branch - reject pow(0, y<=0) with EDOM.
+
+[LABEL] 0x03D5DC VoiceFloat_CompareAndConvert_AltPath2  replaces=LABEL_03D5DC  confidence=high
+; pow(): choose between the integer-exponent path and the exp/log path by testing
+; (double)n == y; then take |n| and seed the accumulator with 1.0 (0x01F666).
+
+[LABEL] 0x03D60F VoiceFloat_SignedDelta_Positive  replaces=LABEL_03D60F  confidence=high
+; pow(): n was already >= 0; seed the accumulator with 1.0 and enter the loop test.
+
+[ROUTINE] 0x03D61E VoiceFloat_IterationLoop  replaces=LABEL_03D61E  confidence=high
+; pow() integer-exponent kernel: classic square-and-multiply over |n|.
+; Each pass calls FP_DP_FreqAdjust (= frexp) on the running base to get its exponent,
+; doubles that exponent and compares against -1021 (0xFC03) and +1024 (0x0400) to detect
+; the next squaring overflowing or underflowing BEFORE it happens; on overflow it sets
+; errno=ERANGE and returns +/-DBL_MAX (0x00F420), on underflow +/-0.0. If bit 0 of the
+; remaining exponent is set the accumulator is multiplied by the base
+; (FP_DP_Add_Outer, which is the double MULTIPLY), then the base is squared and the
+; exponent is shifted right by one (sra 1). Terminates in at most 32 passes.
+
+[LABEL] 0x03D671 VoiceFloat_IterationLoop_GreaterPath  replaces=LABEL_03D671  confidence=high
+; Overflow with a positive base: result = +DBL_MAX.
+
+[LABEL] 0x03D67A VoiceFloat_IterationLoop_LessPath  replaces=LABEL_03D67A  confidence=high
+; Underflow: result = 0.0 (0x01F66E).
+
+[LABEL] 0x03D686 VoiceFloat_IterationLoop_CopyResult  replaces=LABEL_03D686  confidence=high
+; Store the saturated result to *result and return.
+
+[LABEL] 0x03D693 VoiceFloat_IterationLoop_LargeStep  replaces=LABEL_03D693  confidence=high
+; 2*exponent >= -1021: check the upper limit (+1024) before squaring.
+
+[LABEL] 0x03D6BD VoiceFloat_IterationLoop_LargeStep_NegPath  replaces=LABEL_03D6BD  confidence=high
+; Overflow with a negative base: result = -DBL_MAX.
+
+[LABEL] 0x03D6C9 VoiceFloat_IterationLoop_LargeStep_Copy  replaces=LABEL_03D6C9  confidence=high
+; Store the ERANGE-saturated result and return.
+
+[LABEL] 0x03D6D6 VoiceFloat_IterationLoop_SmallStep  replaces=LABEL_03D6D6  confidence=high
+; Exponent in range: test bit 0 of the remaining integer exponent.
+
+[LABEL] 0x03D6E7 VoiceFloat_IterationLoop_SmallStep_Add  replaces=LABEL_03D6E7  confidence=high
+; Square the base (base = base * base) and shift the exponent right one bit.
+
+[LABEL] 0x03D6FB VoiceFloat_IterationLoop_CheckContinue  replaces=LABEL_03D6FB  confidence=high
+; Loop while the remaining exponent is non-zero; then, if the ORIGINAL exponent was
+; negative, take the reciprocal (1.0 / acc) via VoiceFloat_SubDP.
+
+[LABEL] 0x03D71D VoiceFloat_IterationLoop_DifferentPath  replaces=LABEL_03D71D  confidence=high
+; Negative integer exponent: result = 1.0 (0x01F676) / accumulator.
+
+[ROUTINE] 0x03D72F VoiceFloat_ConvergenceLoop  replaces=LABEL_03D72F  confidence=high
+; pow() general path: result = exp(y * log(x)). Saves errno (0x040C22) in IZ, clears it,
+; calls VoiceAmp_ConvergeEngine (= log, 0x03E731) on x, and if log() set EDOM returns
+; 0.0 (0x01F67E). Otherwise it restores errno and does the over/underflow pre-check in
+; exponent space: frexp(log(x)) and frexp(y) via FP_DP_FreqAdjust, adds the two
+; exponents, and if the sum exceeds +1024 -> ERANGE and +/-DBL_MAX, if below -1021 ->
+; ERANGE and 0.0 (0x01F686). Only when the product is representable does it multiply
+; y*log(x) (FP_DP_Add_Outer) and call VoicePitch_SlideEngine (= exp, 0x03E64B).
+; This exponent pre-check is why pow() never actually feeds a huge argument to exp().
+
+[LABEL] 0x03D768 VoiceFloat_ConvergenceLoop_Body  replaces=LABEL_03D768  confidence=high
+; Restore errno and frexp both operands into (XSP+0x24) and (XSP+0x22).
+
+[LABEL] 0x03D7B2 VoiceFloat_ConvergenceLoop_SumCheck  replaces=LABEL_03D7B2  confidence=high
+; IZ = exponent(log x) + exponent(y), negated when y < 0.
+
+[LABEL] 0x03D7CB VoiceFloat_ConvergenceLoop_RangeCheck  replaces=LABEL_03D7CB  confidence=high
+; IZ > 1024 -> ERANGE, result = +/-DBL_MAX.
+
+[LABEL] 0x03D7F3 VoiceFloat_ConvergenceLoop_NegResult  replaces=LABEL_03D7F3  confidence=high
+; Overflow with a negative sign: copy DBL_MAX unnegated.
+
+[LABEL] 0x03D7F7 VoiceFloat_ConvergenceLoop_StoreResult  replaces=LABEL_03D7F7  confidence=high
+; Store the saturated result and return.
+
+[LABEL] 0x03D803 VoiceFloat_ConvergenceLoop_Clamp  replaces=LABEL_03D803  confidence=high
+; IZ < -1021 -> ERANGE, result = 0.0 (0x01F686).
+
+[LABEL] 0x03D81E VoiceFloat_ConvergenceLoop_CrossZero  replaces=LABEL_03D81E  confidence=high
+; In range: t = y * log(x) (FP_DP_Add_Outer = multiply), result = exp(t).
+
+[LABEL] 0x03D84A VoiceFloat_CompareAndConvert_Epilog  replaces=LABEL_03D84A  confidence=high
+; pow() epilogue: pop IZ, release the 0x38-byte frame.
+
+[ROUTINE] 0x03D84F VoiceFloat_MulAddVariant2  replaces=LABEL_03D84F  confidence=high
+; sin(double). C signature f(double *result, double x). Computes the sign flag
+; (x < 0) with FP_DP_CmpZero64 relation 2 (">= 0") and calls the shared kernel
+; VoiceFloat_BlendAndMerge(result, x, |x|, x<0). The |x| is produced by
+; FP_DP_CopyOrNegate8 on the negative arm. 7 call sites, 6 of them in the DSP curve
+; block (0x03B73E, 0x03B84E, 0x03BA8D, 0x03BB95, 0x03BDC6, 0x03BECE) plus tan().
+; NOTE: the name is wrong; it is sin().
+
+[LABEL] 0x03D89A VoiceFloat_MulAddVariant2_AltPath  replaces=LABEL_03D89A  confidence=high
+; x >= 0 arm: kernel(result, x, x, flag=0).
+
+[LABEL] 0x03D8C5 VoiceFloat_MulAddVariant2_Epilog  replaces=LABEL_03D8C5  confidence=high
+; sin() epilogue.
+
+[ROUTINE] 0x03D8CA FP_MulAccum64  replaces=LABEL_03D8CA  confidence=high
+; 64x64 -> 64 unsigned integer multiply used by the C runtime for `long long`.
+; Inputs XWA:QWA and XBC:QBC (each a 32-bit value plus its high extension register),
+; result in XHL. Three `mul` instructions plus the cross-term adds; no rounding, no
+; exponent handling - this is an integer helper, not floating point.
+
+[ROUTINE] 0x03D8E0 FP_DP_Sub  replaces=LABEL_03D8E0  confidence=high
+; Double SUBTRACTION: *(double*)XWA = *(double*)XBC - *(double*)XDE.
+; Unpacks both operands with FP_DP_Decode into two 12-byte stack records, aligns their
+; exponents with FP_DP_AlignMantissa, and then - because it is a subtract - adds the
+; mantissas when the operand signs DIFFER (FP_DP_AddMantissa) and subtracts them when
+; they are EQUAL (FP_DP_SubMantissa). Repacks with FP_DP_Encode. The zero flag at +2 of
+; the first record short-circuits the sign test. 21 call sites (11 external).
+; This is the reference for the whole arithmetic quartet: compare it against
+; FP_DP_Mul 0x03E10E, which is byte-for-byte identical apart from the inverted sign
+; test and is therefore the ADDITION.
+
+[LABEL] 0x03D919 FP_DP_Sub_SameSign  replaces=LABEL_03D919  confidence=high
+; Equal signs (or a zero operand): magnitudes subtract.
+
+[LABEL] 0x03D91D FP_DP_Sub_Done  replaces=LABEL_03D91D  confidence=high
+; Repack the unpacked result into *XWA with FP_DP_Encode.
+
+[ROUTINE] 0x03D92C FP_SP_Sub  replaces=LABEL_03D92C  confidence=high
+; Single-precision SUBTRACTION: *(float*)XWA = *(float*)XBC - *(float*)XDE.
+; Same shape as FP_DP_Sub using FP_SP_Decode / FP_SP_AlignMantissa /
+; FP_SP_AddMantissa / FP_SP_SubMantissa / FP_SP_Encode and 8-byte unpacked records.
+
+[LABEL] 0x03D965 FP_SP_Sub_SameSign  replaces=LABEL_03D965  confidence=high
+; Equal signs: magnitudes subtract.
+
+[LABEL] 0x03D969 FP_SP_Sub_Done  replaces=LABEL_03D969  confidence=high
+; Repack with FP_SP_Encode.
+
+[DATA] 0x03D978-0x03D989  ToneGen_Compare_Tables - relational-operator result rows
+; Three 6-byte rows of C booleans, indexed by the relation selector passed in BC (to
+; FP_DP_CmpZero64 / FP_SP_CmpZero32) or DE (to the two-operand comparators at 0x03D2AC
+; and 0x03D306). Row base addresses: 0x03D978 = "operands equal", 0x03D97E = "a < b",
+; 0x03D984 = "a > b". Contents, read out of the ROM:
+;   equal   : 01 00 01 00 01 00
+;   less    : 01 01 00 00 00 01
+;   greater : 00 00 01 01 00 01
+; which decodes the selector as 0 = LE, 1 = LT, 2 = GE, 3 = GT, 4 = EQ, 5 = NE.
+; Every relation index used in this region agrees with that decoding (e.g. fabs() uses
+; 1 = LT, exp() uses 5 = NE for its "x != 0" test, pow() uses 4 = EQ for its
+; "(double)n == y" integer test). The existing name TONEGEN_COMPARE_TABLES in
+; symbols/subcpu_symbols_reference.txt is misleading: the table has nothing to do with
+; the tone generator. 0x03D977 is a 0xFF pad byte.
+
+[ROUTINE] 0x03D98A VoiceFloat_BlendAndMerge  replaces=LABEL_03D98A  confidence=high
+; The shared sin/cos kernel. C signature f(double *result, double x, double a, int neg),
+; where a = |x| for sin() and |x| + pi/2 for cos() - which is exactly why one kernel
+; serves both (sin(|x| + pi/2) = cos(x), cos being even). Body:
+;   (1) if |x| >= 2^31 (exponent word test against 0x41E0) -> errno = ERANGE,
+;       result = 0.0 (0x01F68E). Argument reduction is impossible past that point.
+;   (2) n = round(a * (1/pi)): multiplies by the constant 0.3183098861837907 at
+;       0x00F396 (= 1/pi), splits with DSP_VoiceBlend (= modf), and rounds up when the
+;       fraction is >= 0.5 (constants 0.5 at 0x01F696 and 1.0 at 0x01F69E).
+;   (3) if n is odd, the sign flag at (XSP+0x9C) is toggled - i.e. sin(x + n*pi) =
+;       (-1)^n sin(x).
+;   (4) Cody-Waite two-step reduction: z = (a - n*pi_hi) - n*pi_lo, using
+;       pi_hi = 3.1416015625 at 0x00F39E and pi_lo = pi_hi - pi = 8.908910e-06 at
+;       0x00F38E (negated through FP_DP_CopyOrNegate8).
+;   (5) if |z| <= 2.3283e-10 (0x00F3A6) the polynomial is skipped and z is returned.
+;   (6) otherwise Horner on z^2 with the eight coefficients 1/3! .. 1/17! at
+;       0x00F34E, F356, F35E, F366, F36E, F376, F37E, F386, then result = z + z*poly.
+;   (7) finally, if the sign flag is set, negate.
+; The coefficient values read out of the ROM (0.16666666666666666, 0.008333333333333165,
+; 1.984126984120184e-04, 2.7557319210152756e-06, 2.5052106798274583e-08,
+; 1.605893649037159e-10, 7.642917806891047e-13, 2.7204790957888847e-15) are the odd
+; reciprocal factorials to double precision and are what identifies this as sin.
+; Callers: only sin() 0x03D888/0x03D8B5 and cos() 0x03D38F.
+; NOTE: the name is wrong; nothing here blends or merges anything.
+
+[LABEL] 0x03D9B5 VoiceFloat_BlendAndMerge_InRange  replaces=LABEL_03D9B5  confidence=high
+; |x| < 2^31: begin argument reduction, a * (1/pi) then modf.
+
+[LABEL] 0x03D9FF VoiceFloat_BlendAndMerge_Phase2  replaces=LABEL_03D9FF  confidence=high
+; Convert the (rounded) quadrant count to int32 and test its parity.
+
+[LABEL] 0x03DA1F VoiceFloat_BlendAndMerge_Phase3  replaces=LABEL_03DA1F  confidence=high
+; Take |n| and, on the half-quadrant case, subtract 0.5 (0x01F6A6).
+
+[LABEL] 0x03DA56 VoiceFloat_BlendAndMerge_Phase4  replaces=LABEL_03DA56  confidence=high
+; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
+; (XSP+0x7C); then the |z| <= 2.3283e-10 shortcut test.
+
+[LABEL] 0x03DBEF VoiceFloat_BlendAndMerge_FinalCheck  replaces=LABEL_03DBEF  confidence=high
+; Apply the accumulated sign flag: if non-zero, negate the polynomial result.
+
+[LABEL] 0x03DC01 VoiceFloat_BlendAndMerge_FinalCopy  replaces=LABEL_03DC01  confidence=high
+; Copy the kernel result to the caller's result pointer.
+
+[LABEL] 0x03DC0D VoiceFloat_BlendAndMerge_Epilog  replaces=LABEL_03DC0D  confidence=high
+; Kernel epilogue: pop XIZ, release the 0x80-byte frame.
+
+[ROUTINE] 0x03DC14 Int_SignedDiv  replaces=LABEL_03DC14  confidence=high
+; Signed 64-bit divide/modulo helper for the C runtime. Inputs XWA:QWA (dividend) and
+; XBC:QBC (divisor); D selects quotient (0) or remainder (1) and is set by the two
+; alternate entry points below. Records the operand signs in E, takes absolute values,
+; calls FP_UnsignedDiv, and re-applies the sign to the quotient (sign(a) xor sign(b))
+; or to the remainder (sign(a)). Result in XHL. Not floating point despite the
+; neighbours.
+
+[LABEL] 0x03DC25 Int_SignedDiv_AfterSignA  replaces=LABEL_03DC25  confidence=high
+; Dividend sign captured; now normalise the divisor.
+
+[LABEL] 0x03DC35 Int_SignedDiv_CallUnsigned  replaces=LABEL_03DC35  confidence=high
+; Push the sign bits, call FP_UnsignedDiv, pop them back.
+
+[LABEL] 0x03DC47 Int_SignedDiv_ResultCorr  replaces=LABEL_03DC47  confidence=high
+; Remainder selected: sign follows the dividend only.
+
+[LABEL] 0x03DC4B Int_SignedDiv_NegResult  replaces=LABEL_03DC4B  confidence=high
+; Negate the 64-bit result when the computed sign says so (and it is non-zero).
+
+[LABEL] 0x03DC5B Int_SignedDiv_ConstData  replaces=LABEL_03DC5B  confidence=high
+; Entry point "signed quotient": D = 0, jump to Int_SignedDiv. Despite the name this is
+; executable code, not data.
+
+[LABEL] 0x03DC5F Int_SignedDiv_AltEntry  replaces=LABEL_03DC5F  confidence=high
+; Entry point "signed remainder": D = 1, jump to Int_SignedDiv. The three bytes at
+; 0x03DC63 are a fourth entry point ("unsigned remainder"): call FP_UnsignedDiv and
+; return XDE in XHL.
+
+[ROUTINE] 0x03DC69 FP_UnsignedDiv  replaces=LABEL_03DC69  confidence=high
+; Unsigned 64-bit divide. Dividend in XWA:QWA, divisor in XBC:QBC; returns quotient in
+; XHL and remainder in XDE. Special cases first: divisor == 1 (copy), divisor == 0
+; (quotient = 0xFFFFFFFF, remainder 0), dividend <= divisor. When the divisor fits in
+; 32 bits it uses the hardware `div` instruction, with a two-step fallback on overflow;
+; otherwise it falls back to the shift-and-subtract restoring loop below.
+
+[LABEL] 0x03DC8C FP_UnsignedDiv_Overflow  replaces=LABEL_03DC8C  confidence=high
+; Hardware `div` overflowed: redo it as two 16-bit-at-a-time divisions.
+
+[LABEL] 0x03DCA2 FP_UnsignedDiv_ByOne  replaces=LABEL_03DCA2  confidence=high
+; Divisor == 1: quotient = dividend, remainder = 0.
+
+[LABEL] 0x03DCA7 FP_UnsignedDiv_Zero  replaces=LABEL_03DCA7  confidence=high
+; Divisor == 0: quotient = 0xFFFFFFFF, remainder = 0. No trap, no errno.
+
+[LABEL] 0x03DCAE FP_UnsignedDiv_SmallDividend  replaces=LABEL_03DCAE  confidence=high
+; dividend <= divisor: quotient is 0 or 1, remainder is the dividend.
+
+[LABEL] 0x03DCB9 FP_UnsignedDiv_General  replaces=LABEL_03DCB9  confidence=high
+; General case: normalise the divisor by left-shifting, counting the shift in D.
+
+[LABEL] 0x03DCBB FP_UnsignedDiv_ShiftLoop  replaces=LABEL_03DCBB  confidence=high
+; Shift the divisor left until it exceeds the dividend; bounded by the carry out of XBC.
+
+[LABEL] 0x03DCCD FP_UnsignedDiv_ShiftLoopDone  replaces=LABEL_03DCCD  confidence=high
+; Back off one shift.
+
+[LABEL] 0x03DCD0 FP_UnsignedDiv_Subtract  replaces=LABEL_03DCD0  confidence=high
+; Clear the quotient accumulator.
+
+[LABEL] 0x03DCD2 FP_UnsignedDiv_SubtractLoop  replaces=LABEL_03DCD2  confidence=high
+; Restoring-division inner loop, `djnz D` bounded by the shift count.
+
+[LABEL] 0x03DCDD FP_UnsignedDiv_Done  replaces=LABEL_03DCDD  confidence=high
+; Shift the divisor back down and loop; remainder ends up in XDE.
+
+[ROUTINE] 0x03DCE6 FP_DP_Raw8Copy  replaces=LABEL_03DCE6  confidence=high
+; memcpy of 8 bytes: *(double*)XWA = *(double*)XBC, via two 32-bit loads/stores. No sign
+; or exponent handling. 51 call sites, all inside this region - it is how every libm
+; entry point returns its result and how every constant is loaded.
+
+[ROUTINE] 0x03DCF2 FP_DP_NegMantissaLS  replaces=LABEL_03DCF2  confidence=high
+; float -> double conversion. XWA = pointer to the double result, XBC = pointer to the
+; float. Unpacks with FP_SP_Decode; if the value is not zero it shifts the 24-bit
+; mantissa right by 3 into the 53-bit double layout (three srl/rrc pairs building the
+; low word in XDE and the high word in XHL) and repacks with FP_DP_Encode.
+; NOTE: nothing is negated here; the name is wrong.
+
+[LABEL] 0x03DD28 FP_DP_NegMantissaLS_Store  replaces=LABEL_03DD28  confidence=high
+; Repack the widened value with FP_DP_Encode and return.
+
+[ROUTINE] 0x03DD36 FP_ScalarToDP  replaces=LABEL_03DD36  confidence=high
+; (double)(int32) conversion. XWA = pointer to the double result, XBC = pointer to the
+; int32 source. Loads the int, normalises it into a 12-byte unpacked record with
+; FP_SP_Normalize (which, despite its name, is the DOUBLE normaliser - it uses the
+; 20-bit split and writes the mantissa to +4/+8), then FP_DP_Encode. 14 call sites; used
+; by pow() to test whether the exponent is an integer, and by exp() and log() to build
+; the term denominators.
+
+[ROUTINE] 0x03DD51 FP_DP_CallWithBuf12  replaces=LABEL_03DD51  confidence=high
+; (double)(uint32) conversion. Identical to FP_ScalarToDP except that it calls
+; FP_SP_NormCore directly, skipping the sign-extraction step, so the source is treated
+; as unsigned.
+
+[ROUTINE] 0x03DD6C FP_DP_NormalizeMantissa  replaces=LABEL_03DD6C  confidence=high
+; double -> float conversion. XWA = pointer to the float result, XBC = pointer to the
+; double. Unpacks with FP_DP_Decode; if non-zero, shifts the 53-bit mantissa LEFT by 3
+; (three sll/rlc pairs) to reach the 24-bit float layout, rounds to nearest using the
+; discarded byte (compare against 0x80) and re-normalises if the round carried out of
+; bit 23; repacks with FP_SP_Encode.
+; NOTE: the name describes an internal step; this is __dtof.
+
+[LABEL] 0x03DDB3 FP_DP_NormalizeMantissa_StoreHL  replaces=LABEL_03DDB3  confidence=high
+; Store the rounded 24-bit mantissa back into the unpacked record.
+
+[LABEL] 0x03DDB6 FP_DP_NormalizeMantissa_Encode  replaces=LABEL_03DDB6  confidence=high
+; Repack with FP_SP_Encode and return.
+
+[ROUTINE] 0x03DDC4 FP_SP_Raw4Copy  replaces=LABEL_03DDC4  confidence=high
+; memcpy of 4 bytes: *(float*)XWA = *(float*)XBC. Single-precision twin of
+; FP_DP_Raw8Copy.
+
+[ROUTINE] 0x03DDCA FP_SP_CallWithBuf8  replaces=LABEL_03DDCA  confidence=high
+; (float)(int32) conversion: FP_DP_Normalize (the SINGLE-precision normaliser, 23-bit
+; split) followed by FP_SP_Encode, using an 8-byte unpacked record.
+
+[ROUTINE] 0x03DDE5 FP_SP_CallWithBuf8b  replaces=LABEL_03DDE5  confidence=high
+; (float)(uint32) conversion: FP_DP_NormCore (no sign extraction) followed by
+; FP_SP_Encode.
+
+[ROUTINE] 0x03DE00 FP_DP_DecodeToInt  replaces=LABEL_03DE00  confidence=high
+; (int32)(double) conversion. XWA = pointer to the int32 result, XBC = pointer to the
+; double. FP_DP_Decode into a 12-byte record, then FP_SP_DecodeToInt (which is the
+; DOUBLE record-to-integer shifter) and store XHL. Sets ERANGE on out-of-range.
+; Used by pow() (integer-exponent test) and by the sin kernel (quadrant count).
+
+[DATA] 0x03DE19-0x03DE19  FP_DP_Normalize_Pad (0xFF alignment byte)
+; Linker pad.
+
+[ROUTINE] 0x03DE1A FP_DP_Normalize  replaces=LABEL_03DE1A  confidence=high
+; Signed int32 -> unpacked SINGLE-precision record. XWA = pointer to the 8-byte record,
+; XBC = the integer value. Extracts the sign into E, takes the absolute value, calls
+; FP_DP_NormCore, and stores the sign at record+3.
+; NOTE: SP/DP are swapped here - the core it calls uses the 23-bit (single) split.
+
+[LABEL] 0x03DE2C FP_DP_Normalize_StoreSign  replaces=LABEL_03DE2C  confidence=high
+; Call the core, then write the saved sign byte to (XIY+3).
+
+[ROUTINE] 0x03DE33 FP_DP_NormCore  replaces=LABEL_03DE33  confidence=high
+; Unsigned int32 -> unpacked SINGLE-precision record. Uses `bs1b` (bit-search-1
+; backwards) to find the highest set bit, writes that as the exponent, and shifts the
+; value so the mantissa lands at bit 23 (0x17), rounding up and re-normalising when the
+; shifted-out bit was set. A zero input sets the +2 "zero" flag and returns.
+
+[LABEL] 0x03DE43 FP_DP_NormCore_Overflow  replaces=LABEL_03DE43  confidence=high
+; Value fits in the low 16 bits: repeat the bit search on BC alone.
+
+[LABEL] 0x03DE45 FP_DP_NormCore_Shift  replaces=LABEL_03DE45  confidence=high
+; Store the exponent, then choose left shift, right shift or no shift against 23.
+
+[LABEL] 0x03DE6F FP_DP_NormCore_ShiftLeft  replaces=LABEL_03DE6F  confidence=high
+; Shift left, 16 bits at a time then the remainder.
+
+[LABEL] 0x03DE82 FP_DP_NormCore_ShiftLeftLoop  replaces=LABEL_03DE82  confidence=high
+; Final variable left shift.
+
+[LABEL] 0x03DE84 FP_DP_NormCore_StoreResult  replaces=LABEL_03DE84  confidence=high
+; Store the mantissa at record+4.
+
+[LABEL] 0x03DE88 FP_DP_NormCore_Zero  replaces=LABEL_03DE88  confidence=high
+; Input was zero: set the record's zero flag (+2 = 1).
+
+[ROUTINE] 0x03DE8E FP_DP_ShiftDecode  replaces=LABEL_03DE8E  confidence=high
+; Unpacked SINGLE-precision record -> int32, returned in XHL. XWA = pointer to the
+; record. Rejects the NaN/overflow marker, returns 0 for a negative exponent
+; (magnitude < 1), and sets ERANGE with 0xFFFFFFFF for an exponent above 31. Otherwise
+; it shifts the 24-bit mantissa to align bit 23 with the requested exponent and applies
+; the sign by two's complement. Called only from FP_SP_Decode_ReadSign.
+
+[LABEL] 0x03DEB3 FP_DP_ShiftDecode_ShiftRight  replaces=LABEL_03DEB3  confidence=high
+; Exponent below 23: shift right by (23 - exponent).
+
+[LABEL] 0x03DEC6 FP_DP_ShiftDecode_ShiftRightLoop  replaces=LABEL_03DEC6  confidence=high
+; Final variable right shift.
+
+[LABEL] 0x03DEC8 FP_DP_ShiftDecode_SignCorrect  replaces=LABEL_03DEC8  confidence=high
+; Apply the sign byte by negating XIX.
+
+[LABEL] 0x03DED4 FP_DP_ShiftDecode_Return  replaces=LABEL_03DED4  confidence=high
+; Move the result to XHL and return.
+
+[LABEL] 0x03DED7 FP_DP_ShiftDecode_Underflow  replaces=LABEL_03DED7  confidence=high
+; |x| < 1: result 0, then set ERANGE.
+
+[LABEL] 0x03DEDB FP_DP_ShiftDecode_Overflow  replaces=LABEL_03DEDB  confidence=high
+; |x| >= 2^32: result 0xFFFFFFFF, then set ERANGE.
+
+[LABEL] 0x03DEDF FP_DP_ShiftDecode_SetError  replaces=LABEL_03DEDF  confidence=high
+; errno (0x040C22) = 0x22 (ERANGE).
+
+[LABEL] 0x03DEE7 FP_DP_ShiftDecode_Zero  replaces=LABEL_03DEE7  confidence=high
+; NaN/overflow marker in the record: return 0 without touching errno.
+
+[ROUTINE] 0x03DEEA FP_DP_AddMantissa  replaces=LABEL_03DEEA  confidence=high
+; Adds the 53-bit mantissa of the unpacked record at XBC into the one at XWA (the
+; exponents must already be equal - the caller has run FP_DP_AlignMantissa). If the sum
+; carries out of bit 53 it shifts right one and increments the exponent, propagating the
+; rounding bit. If either record carries a special flag it jumps to FP_DP_CopyWithSign.
+; Called by FP_DP_Sub (different signs) and FP_DP_Mul (equal signs).
+
+[LABEL] 0x03DF31 FP_DP_AddMantissa_Store  replaces=LABEL_03DF31  confidence=high
+; Store the 64-bit mantissa back into the record.
+
+[ROUTINE] 0x03DF38 FP_SP_AddMantissa  replaces=LABEL_03DF38  confidence=high
+; Single-precision twin of FP_DP_AddMantissa, on 8-byte records with a 24-bit mantissa.
+; Special-flag path jumps to FP_DP_CopyNoSign.
+
+[LABEL] 0x03DF5B FP_SP_AddMantissa_Store  replaces=LABEL_03DF5B  confidence=high
+; Store the 32-bit mantissa back into the record.
+
+[ROUTINE] 0x03DF60 FP_DP_Decode  replaces=LABEL_03DF60  confidence=high
+; Unpack an IEEE-754 double into the 12-byte working record. XWA = record, XBC = the
+; double. Extracts the 11-bit biased exponent, subtracts the bias 0x03FF, restores the
+; hidden mantissa bit (set bit 4 of the high word, i.e. bit 52), and stores the sign
+; nibble at record+3. A zero exponent takes the zero path.
+; The bias 0x03FF and the 4-bit high-word exponent split confirm this operates on
+; doubles.
+
+[LABEL] 0x03DF92 FP_DP_Decode_Zero  replaces=LABEL_03DF92  confidence=high
+; Zero input: set record+2 = 1 (zero flag), record+3 = 0.
+
+[ROUTINE] 0x03DF9C FP_SP_Decode  replaces=LABEL_03DF9C  confidence=high
+; Unpack an IEEE-754 float into the 8-byte working record. Bias 0x007F, hidden bit at
+; bit 7 of the high byte. Twin of FP_DP_Decode.
+
+[LABEL] 0x03DFC5 FP_SP_Decode_Store  replaces=LABEL_03DFC5  confidence=high
+; Store exponent and mantissa into the record; return the special flag in L.
+
+[LABEL] 0x03DFCE FP_SP_Decode_Zero  replaces=LABEL_03DFCE  confidence=high
+; Zero input: mantissa 0, zero flag 1.
+
+[ROUTINE] 0x03DFD6 FP_SP_Normalize  replaces=LABEL_03DFD6  confidence=high
+; Signed int32 -> unpacked DOUBLE-precision record. Sign extraction plus
+; FP_SP_NormCore, then the sign byte at record+3.
+; NOTE: SP/DP are swapped - the core uses the 20-bit (double) split and writes a 64-bit
+; mantissa to +4/+8. Called by FP_ScalarToDP, i.e. by int-to-double conversion.
+
+[LABEL] 0x03DFE8 FP_SP_Normalize_StoreSign  replaces=LABEL_03DFE8  confidence=high
+; Call the core, then write the saved sign byte.
+
+[ROUTINE] 0x03DFEF FP_SP_NormCore  replaces=LABEL_03DFEF  confidence=high
+; Unsigned int32 -> unpacked DOUBLE-precision record. `bs1b` to find the top set bit,
+; store it as the exponent, then shift so the mantissa lands at bit 20 (0x14) of the
+; high word, spilling the low bits into XIX (record+4). Zero input sets the zero flag.
+
+[LABEL] 0x03DFFF FP_SP_NormCore_Overflow  replaces=LABEL_03DFFF  confidence=high
+; Value fits in 16 bits: repeat the bit search on BC alone.
+
+[LABEL] 0x03E001 FP_SP_NormCore_Shift  replaces=LABEL_03E001  confidence=high
+; Store the exponent and select the shift direction against 20.
+
+[LABEL] 0x03E017 FP_SP_NormCore_ShiftRight  replaces=LABEL_03E017  confidence=high
+; Bit-at-a-time right shift, spilling into the low mantissa word.
+
+[LABEL] 0x03E025 FP_SP_NormCore_ShiftLeft  replaces=LABEL_03E025  confidence=high
+; Left shift, 16 bits at a time then the remainder.
+
+[LABEL] 0x03E038 FP_SP_NormCore_ShiftLeftLoop  replaces=LABEL_03E038  confidence=high
+; Final variable left shift.
+
+[LABEL] 0x03E03A FP_SP_NormCore_StoreResult  replaces=LABEL_03E03A  confidence=high
+; Store the 64-bit mantissa to record+4 / record+8.
+
+[LABEL] 0x03E041 FP_SP_NormCore_Zero  replaces=LABEL_03E041  confidence=high
+; Input was zero: set the record's zero flag.
+
+[ROUTINE] 0x03E046 FP_DP_Encode  replaces=LABEL_03E046  confidence=high
+; Repack a 12-byte working record into an IEEE-754 double at *XWA. Re-applies the bias
+; 0x03FF, clears the hidden bit, shifts the exponent into position and ORs in the sign.
+; Exponent above +1023 -> FP_DP_Encode_Overflow (errno = ERANGE, result = +/-DBL_MAX);
+; below -1022 -> flush to zero; special flag set -> zero or overflow depending on bit 0.
+
+[LABEL] 0x03E073 FP_DP_Encode_Store  replaces=LABEL_03E073  confidence=high
+; Write the packed 8 bytes to *XWA.
+
+[LABEL] 0x03E079 FP_DP_Encode_Zero  replaces=LABEL_03E079  confidence=high
+; Flush to +0.0.
+
+[LABEL] 0x03E07F FP_DP_Encode_NaN  replaces=LABEL_03E07F  confidence=high
+; Special flag set: bit 0 means "zero", anything else falls into the overflow path.
+
+[LABEL] 0x03E085 FP_DP_Encode_Overflow  replaces=LABEL_03E085  confidence=high
+; Double overflow: errno = ERANGE (0x22) and the result is set to 0x7FEFFFFFFFFFFFFF
+; (DBL_MAX) with the operand's sign ORed back in.
+
+[LABEL] 0x03E0A5 FP_DP_Encode_NormCheck  replaces=LABEL_03E0A5  confidence=high
+; The FP exception hook. Loads the 32-bit word at 0x00F428 and, if it is non-zero,
+; performs an INDIRECT CALL through it (`call NZ,XBC`). In the shipped image that word
+; is 0x00000000, so the hook is disabled. See [UNCERTAIN] - the existing symbol
+; FPConst_Zero at 0x00F428 is a function pointer, not a constant, and it lives in the
+; program's writable DRAM image. The identical hook appears at 0x03E0FB for singles.
+; (The alias symbol __jrt_nop_03E0A5 refers to the same address.)
+
+[ROUTINE] 0x03E0B0 FP_SP_Encode  replaces=LABEL_03E0B0  confidence=high
+; Repack an 8-byte working record into an IEEE-754 float at *XWA. Bias 0x007F, limits
+; +127 / -126, overflow result 0x7F7FFFFF (FLT_MAX) with errno = ERANGE.
+
+[LABEL] 0x03E0DE FP_SP_Encode_NaN  replaces=LABEL_03E0DE  confidence=high
+; Special flag 8 (NaN/overflow marker) -> the overflow store; anything else -> zero.
+
+[LABEL] 0x03E0EA FP_SP_Encode_Zero  replaces=LABEL_03E0EA  confidence=high
+; Flush to +0.0f.
+
+[LABEL] 0x03E0EF FP_SP_Encode_Overflow  replaces=LABEL_03E0EF  confidence=high
+; Build FLT_MAX with the operand's sign.
+
+[LABEL] 0x03E0FB FP_SP_Encode_Overflow_Store  replaces=LABEL_03E0FB  confidence=high
+; errno = ERANGE, store the saturated value, then the same indirect hook call through
+; the pointer at 0x00F428.
+
+[ROUTINE] 0x03E10E FP_DP_Mul  replaces=LABEL_03E10E  confidence=high
+; Double ADDITION: *(double*)XWA = *(double*)XBC + *(double*)XDE.
+; The body is identical to FP_DP_Sub (0x03D8E0) except for the polarity of the sign
+; test: here EQUAL signs take FP_DP_AddMantissa and DIFFERENT signs take
+; FP_DP_SubMantissa, which is addition, not multiplication. It calls
+; FP_DP_AlignMantissa, which only exists to line up exponents for add/subtract; a
+; multiply would never need it. The real double multiply is FP_DP_Add_Outer 0x03E290.
+; 29 call sites (17 external). NOTE: the name is wrong; this is __dadd.
+
+[LABEL] 0x03E13C FP_DP_Mul_SameSign  replaces=LABEL_03E13C  confidence=high
+; Equal signs: magnitudes add.
+
+[LABEL] 0x03E142 FP_DP_Mul_DiffSign  replaces=LABEL_03E142  confidence=high
+; Different signs (and neither operand zero): magnitudes subtract.
+
+[LABEL] 0x03E14B FP_DP_Mul_Encode  replaces=LABEL_03E14B  confidence=high
+; Repack with FP_DP_Encode.
+
+[ROUTINE] 0x03E15A FP_SP_Mul  replaces=LABEL_03E15A  confidence=high
+; Single-precision ADDITION: *(float*)XWA = *(float*)XBC + *(float*)XDE. Same argument
+; as FP_DP_Mul. 32 call sites, all external (the DSP curve code does most of its work in
+; single precision). NOTE: the name is wrong; this is __fadd.
+
+[LABEL] 0x03E188 FP_SP_Mul_SameSign  replaces=LABEL_03E188  confidence=high
+; Equal signs: magnitudes add.
+
+[LABEL] 0x03E18E FP_SP_Mul_DiffSign  replaces=LABEL_03E18E  confidence=high
+; Different signs: magnitudes subtract.
+
+[LABEL] 0x03E197 FP_SP_Mul_Encode  replaces=LABEL_03E197  confidence=high
+; Repack with FP_SP_Encode.
+
+[ROUTINE] 0x03E1A5 DSP_VoiceBlend  replaces=LABEL_03E1A5  confidence=high
+; modf(double x, double *iptr). C signature f(double *result, double x, double *iptr).
+; Calls DSP_VoiceRegUpdate (the integer-part extractor, 0x03E894) to produce the
+; integral part, stores it through the caller's *iptr, and returns x minus that part -
+; i.e. the fractional part - through *result. The 0.0 constant at 0x01F6AE is copied
+; into the scratch buffer first as the default. Only callers: the sin kernel
+; (0x03D9D8, 0x03DA81) for its quadrant reduction.
+; NOTE: nothing here touches the DSP or a voice; the name is wrong.
+
+[ROUTINE] 0x03E1F1 FP_DP_FreqAdjust  replaces=LABEL_03E1F1  confidence=high
+; frexp(double x, int *exp). C signature f(double *result, double x, int *exp).
+; Copies x to a scratch buffer, sets *exp = 0, and returns x unchanged when x == 0
+; (FP_DP_CmpZero64 relation 5 = NE). Otherwise it reads the 11-bit biased exponent out
+; of bytes 6..7 of the copy, computes *exp = biased - 0x03FE, and then forces the
+; stored exponent field to 0x03FE by the loop at 0x03E256/0x03E263 (a compiler-generated
+; count-down/count-up rather than a subtract). The result therefore has magnitude in
+; [0.5, 1.0), which is exactly frexp's contract. Sign bit is preserved (0x03E27A).
+; Callers: pow()'s overflow pre-checks (0x03D630, 0x03D77F, 0x03D795) and log()
+; (0x03E779). The loops are bounded by the exponent value, at most 2047 iterations.
+; NOTE: nothing here adjusts a frequency; the name is wrong.
+
+[LABEL] 0x03E220 FP_DP_FreqAdjust_NonZeroExp  replaces=LABEL_03E220  confidence=high
+; Extract the biased exponent from bytes 6..7 and compute *exp = biased - 0x3FE.
+
+[LABEL] 0x03E256 FP_DP_FreqAdjust_DecLoop  replaces=LABEL_03E256  confidence=high
+; Count the stored exponent down toward 0x3FE (positive *exp case).
+
+[LABEL] 0x03E25A FP_DP_FreqAdjust_DecCheck  replaces=LABEL_03E25A  confidence=high
+; Loop test for the count-down.
+
+[LABEL] 0x03E263 FP_DP_FreqAdjust_IncLoop  replaces=LABEL_03E263  confidence=high
+; Count the stored exponent up toward 0x3FE (negative *exp case).
+
+[LABEL] 0x03E267 FP_DP_FreqAdjust_IncCheck  replaces=LABEL_03E267  confidence=high
+; Loop test for the count-up.
+
+[LABEL] 0x03E26E FP_DP_FreqAdjust_Combine  replaces=LABEL_03E26E  confidence=high
+; Merge the new exponent back with the top mantissa nibble and restore the sign bit.
+
+[LABEL] 0x03E281 FP_DP_FreqAdjust_StoreResult  replaces=LABEL_03E281  confidence=high
+; Write the patched exponent word and copy the mantissa to *result.
+
+[LABEL] 0x03E28B FP_DP_FreqAdjust_Return  replaces=LABEL_03E28B  confidence=high
+; frexp epilogue.
+
+[ROUTINE] 0x03E290 FP_DP_Add_Outer  replaces=LABEL_03E290  confidence=high
+; Double MULTIPLICATION: *(double*)XWA = *(double*)XBC * *(double*)XDE.
+; Unpacks both operands with FP_DP_Decode and calls FP_DP_MulAdd (0x03EBCE), which adds
+; the exponents, XORs the signs and does a 64x64 mantissa multiply - there is no
+; FP_DP_AlignMantissa call, because multiplication needs no exponent alignment. Three
+; independent confirmations: (a) the callee's structure, (b) pow()'s square-and-multiply
+; at 0x03D6E7 uses it as `base = base * base`, (c) the sin kernel uses it to form z^2
+; at 0x03DB0B. 69 call sites (48 external) - the most-used arithmetic routine in the
+; firmware. NOTE: the name is wrong; this is __dmul.
+
+[ROUTINE] 0x03E2C0 FP_SP_Add_Outer  replaces=LABEL_03E2C0  confidence=high
+; Single-precision MULTIPLICATION via FP_SP_MulAdd (0x03EC9E). 58 call sites, all
+; external. NOTE: the name is wrong; this is __fmul.
+
+[ROUTINE] 0x03E2F0 FP_DP_AlignMantissa  replaces=LABEL_03E2F0  confidence=high
+; Pre-alignment step for double add/subtract. Compares the two records' exponents,
+; raises the smaller one to match the larger, and shifts that record's 53-bit mantissa
+; right by the difference (32/16/8/1 bits at a time), keeping a guard byte and rounding
+; to nearest at the end. A shift beyond 53 (0x35) bits zeroes the operand entirely and
+; marks it as zero. Called only by FP_DP_Sub and FP_DP_Mul (= double add).
+
+[LABEL] 0x03E30D FP_DP_AlignMantissa_ShiftA  replaces=LABEL_03E30D  confidence=high
+; The first operand has the smaller exponent: shift it instead.
+
+[LABEL] 0x03E314 FP_DP_AlignMantissa_Shift  replaces=LABEL_03E314  confidence=high
+; Load the mantissa with a guard byte and start the shift ladder.
+
+[LABEL] 0x03E332 FP_DP_AlignMantissa_Shift16  replaces=LABEL_03E332  confidence=high
+; Shift by 16 bits.
+
+[LABEL] 0x03E34A FP_DP_AlignMantissa_Shift8  replaces=LABEL_03E34A  confidence=high
+; Shift by 8 bits.
+
+[LABEL] 0x03E35F FP_DP_AlignMantissa_ShiftBit  replaces=LABEL_03E35F  confidence=high
+; Bit-at-a-time remainder, `djnz IX` bounded by the exponent difference.
+
+[LABEL] 0x03E36B FP_DP_AlignMantissa_Round  replaces=LABEL_03E36B  confidence=high
+; Drop the guard byte, rounding to nearest when it is >= 0x80.
+
+[LABEL] 0x03E389 FP_DP_AlignMantissa_Store  replaces=LABEL_03E389  confidence=high
+; Store the aligned mantissa.
+
+[LABEL] 0x03E390 FP_DP_AlignMantissa_MaxShift  replaces=LABEL_03E390  confidence=high
+; Exponent difference > 53: the smaller operand vanishes; zero it and set its zero flag.
+
+[ROUTINE] 0x03E3A0 FP_SP_AlignMantissa  replaces=LABEL_03E3A0  confidence=high
+; Single-precision twin of FP_DP_AlignMantissa; the vanishing threshold is 24 (0x18).
+
+[LABEL] 0x03E3B8 FP_SP_AlignMantissa_ShiftA  replaces=LABEL_03E3B8  confidence=high
+; Swap so that the operand to be shifted is the one with the smaller exponent.
+
+[LABEL] 0x03E3BA FP_SP_AlignMantissa_Shift  replaces=LABEL_03E3BA  confidence=high
+; Compute the difference and shift.
+
+[LABEL] 0x03E3D7 FP_SP_AlignMantissa_Shift_Odd  replaces=LABEL_03E3D7  confidence=high
+; Variable-count shift path.
+
+[LABEL] 0x03E3DB FP_SP_AlignMantissa_Round  replaces=LABEL_03E3DB  confidence=high
+; Drop the guard byte with round-to-nearest.
+
+[LABEL] 0x03E3E7 FP_SP_AlignMantissa_Store  replaces=LABEL_03E3E7  confidence=high
+; Store the aligned mantissa.
+
+[LABEL] 0x03E3EB FP_SP_AlignMantissa_MaxShift  replaces=LABEL_03E3EB  confidence=high
+; Exponent difference > 24: zero the operand and set its zero flag.
+
+[ROUTINE] 0x03E3F6 FP_DP_Mul_Outer  replaces=LABEL_03E3F6  confidence=high
+; Double DIVISION mantissa core, operating on two unpacked 12-byte records: XWA is the
+; dividend record (updated in place), XBC the divisor. SUBTRACTS the exponents
+; (0x03E40A) and XORs the signs, short-circuits when the divisor mantissa is exactly
+; 1.0, and otherwise runs a restoring long division through FP_Div_Step_Bit3 /
+; FP_Div_Step4Bits, 4 quotient bits per call, 8 rounds (C = 8). This is the callee of
+; VoiceFloat_SubDP 0x03D3A4, which is the public double divide.
+; NOTE: exponent SUBTRACTION is the giveaway - a multiply adds them (compare
+; FP_DP_MulAdd 0x03EBCE). The name is wrong; this is the divide core.
+
+[LABEL] 0x03E41F FP_DP_MulMantissaCore  replaces=LABEL_03E41F  confidence=high
+; The long-division body proper: two 4-bit-per-round passes producing the 53-bit
+; quotient, then normalise-by-one if the leading bit did not land.
+
+[LABEL] 0x03E459 FP_DP_MulMantissaCore_Round  replaces=LABEL_03E459  confidence=high
+; Re-pack the quotient into the record's 53-bit layout and round to nearest on the
+; discarded byte, re-normalising if the round carries.
+
+[LABEL] 0x03E4A8 FP_DP_MulMantissaCore_Store  replaces=LABEL_03E4A8  confidence=high
+; Store the quotient mantissa back into the record.
+
+[ROUTINE] 0x03E4B4 FP_SP_Mul_Outer  replaces=LABEL_03E4B4  confidence=high
+; Single-precision DIVISION mantissa core. Subtracts exponents, XORs signs, then runs a
+; classic restoring division that resolves four quotient bits per iteration by keeping
+; the divisor pre-shifted by 1, 2 and 3 (XIX, XIY, XIZ) and comparing against each.
+; Eight iterations give 32 bits. Callee of VoiceFloat_SubSP 0x03D3D4.
+; NOTE: the name is wrong; this is the single-precision divide core.
+
+[LABEL] 0x03E4EF FP_SP_MulMantissaCore_Loop  replaces=LABEL_03E4EF  confidence=high
+; Quotient bit 3: compare against divisor<<3.
+
+[LABEL] 0x03E4F8 FP_SP_MulMantissaCore_Bit2  replaces=LABEL_03E4F8  confidence=high
+; Quotient bit 2: compare against divisor<<2.
+
+[LABEL] 0x03E501 FP_SP_MulMantissaCore_Bit1  replaces=LABEL_03E501  confidence=high
+; Quotient bit 1: compare against divisor<<1.
+
+[LABEL] 0x03E50A FP_SP_MulMantissaCore_Bit0  replaces=LABEL_03E50A  confidence=high
+; Quotient bit 0: compare against the divisor.
+
+[LABEL] 0x03E513 FP_SP_MulMantissaCore_IterDone  replaces=LABEL_03E513  confidence=high
+; Eight-round loop counter in E; shift both accumulators left by 4 and repeat.
+
+[LABEL] 0x03E51F FP_SP_MulMantissaCore_Round  replaces=LABEL_03E51F  confidence=high
+; Normalise by one bit if the leading quotient bit did not land, then round to nearest.
+
+[LABEL] 0x03E52C FP_SP_MulMantissaCore_RoundUp  replaces=LABEL_03E52C  confidence=high
+; Round-to-nearest on the guard byte, with carry re-normalisation.
+
+[LABEL] 0x03E53F FP_SP_MulMantissaCore_Shift8  replaces=LABEL_03E53F  confidence=high
+; Drop the guard byte.
+
+[LABEL] 0x03E542 FP_SP_MulMantissaCore_Store  replaces=LABEL_03E542  confidence=high
+; Store the quotient mantissa.
+
+[LABEL] 0x03E547 FP_SP_MulMantissaCore_Divisor1  replaces=LABEL_03E547  confidence=high
+; Divisor mantissa is exactly 1.0: the quotient is the dividend unchanged.
+
+[ROUTINE] 0x03E54C FP_DP_SubMantissa  replaces=LABEL_03E54C  confidence=high
+; Subtracts the 53-bit mantissa of the record at XBC from the one at XWA (exponents
+; already aligned), records a borrow as a sign flip in B, takes the magnitude, and then
+; RE-NORMALISES the difference: `bs1b` finds the new leading bit and the mantissa is
+; shifted left (or right) with the exponent adjusted. A result of exactly zero sets the
+; record's zero flag. Special flags divert to FP_DP_NegWithSign. Called by FP_DP_Sub
+; (equal signs) and FP_DP_Mul (different signs).
+
+[LABEL] 0x03E57F FP_DP_SubMantissa_NoBorrow  replaces=LABEL_03E57F  confidence=high
+; No borrow: test for an exactly-zero result.
+
+[LABEL] 0x03E585 FP_DP_SubMantissa_Normalize  replaces=LABEL_03E585  confidence=high
+; If bit 52 is already set, skip renormalisation.
+
+[LABEL] 0x03E590 FP_DP_SubMantissa_NormLoop  replaces=LABEL_03E590  confidence=high
+; Bit-search the high word; when it is empty, shift 16 bits at a time and retry.
+; Terminates because the zero case was excluded above.
+
+[LABEL] 0x03E5A6 FP_DP_SubMantissa_Shift  replaces=LABEL_03E5A6  confidence=high
+; Shift right by (bitpos - 4) with exponent correction.
+
+[LABEL] 0x03E5C2 FP_DP_SubMantissa_ShiftBit  replaces=LABEL_03E5C2  confidence=high
+; Bit-at-a-time right shift, `djnz A` bounded.
+
+[LABEL] 0x03E5D0 FP_DP_SubMantissa_ShiftLeft  replaces=LABEL_03E5D0  confidence=high
+; Shift left until bit 52 is set, decrementing the exponent each pass.
+
+[LABEL] 0x03E5E2 FP_DP_SubMantissa_StoreExp  replaces=LABEL_03E5E2  confidence=high
+; Write the corrected exponent back.
+
+[LABEL] 0x03E5E7 FP_DP_SubMantissa_Store  replaces=LABEL_03E5E7  confidence=high
+; Store the mantissa and XOR the borrow flag into the sign byte.
+
+[LABEL] 0x03E5F1 FP_DP_SubMantissa_Zero  replaces=LABEL_03E5F1  confidence=high
+; Exact cancellation: set the record's zero flag.
+
+[ROUTINE] 0x03E5F6 FP_SP_SubMantissa  replaces=LABEL_03E5F6  confidence=high
+; Single-precision twin of FP_DP_SubMantissa on 8-byte records, with the same borrow /
+; renormalise / zero-flag structure. Special flags divert to FP_DP_NegNoSign.
+
+[LABEL] 0x03E61B FP_SP_SubMantissa_Normalize  replaces=LABEL_03E61B  confidence=high
+; Byte-wise renormalisation: shift left 8 bits while the top byte is empty.
+
+[LABEL] 0x03E627 FP_SP_SubMantissa_AlignBits  replaces=LABEL_03E627  confidence=high
+; Bit-search the top byte and do the final left shift, adjusting the exponent.
+
+[LABEL] 0x03E638 FP_SP_SubMantissa_Store  replaces=LABEL_03E638  confidence=high
+; Store mantissa, exponent and the borrow-derived sign.
+
+[LABEL] 0x03E642 FP_SP_SubMantissa_Zero  replaces=LABEL_03E642  confidence=high
+; Exact cancellation: zero flag.
+
+[ROUTINE] 0x03E64B VoicePitch_SlideEngine  replaces=LABEL_03E64B  confidence=high
+; exp(double). C signature f(double *result, double x). Seeds the accumulator and the
+; term with 1.0 (0x01F6B6 / 0x01F6BE). Guards, in order:
+;   x == 0                 -> return 1.0
+;   x > 709.778 (0x01F6C6) -> errno = ERANGE, return DBL_MAX (0x00F420)
+;   x < -708.396 (0x01F6CE)-> return 0.0 (0x01F6D6)
+; The two thresholds are log(DBL_MAX) and log(DBL_MIN) to full double precision, which
+; is what identifies the function. The kernel is the plain Taylor series: on pass n it
+; forms t = x/n (VoiceFloat_SubDP = divide), term *= t (FP_DP_Add_Outer = multiply),
+; acc += term (FP_DP_Mul = add), and stops as soon as acc stops changing.
+; IMPORTANT: the loop is HARD-BOUNDED at 300 passes (`cp IZ,0x012C; jr LE`) - contrast
+; with log() below, which has no such bound. Only caller: pow() at 0x03D839.
+; NOTE: the name is wrong; nothing here slides a pitch.
+
+[LABEL] 0x03E675 VoicePitch_SlideEngine_NonZero  replaces=LABEL_03E675  confidence=high
+; x != 0: load the term seed and test the overflow threshold.
+
+[LABEL] 0x03E6A9 VoicePitch_SlideEngine_LessPath  replaces=LABEL_03E6A9  confidence=high
+; x <= log(DBL_MAX): test the underflow threshold.
+
+[LABEL] 0x03E6C9 VoicePitch_SlideEngine_StartIter  replaces=LABEL_03E6C9  confidence=high
+; Seed the term index IZ = 1.
+
+[LABEL] 0x03E6CB VoicePitch_SlideEngine_IterLoop  replaces=LABEL_03E6CB  confidence=high
+; Taylor pass: save the previous sum, term *= x/n, sum += term, stop when the sum stops
+; changing or n exceeds 300.
+
+[LABEL] 0x03E722 VoicePitch_SlideEngine_Done  replaces=LABEL_03E722  confidence=high
+; Copy the converged sum to *result.
+
+[LABEL] 0x03E72C VoicePitch_SlideEngine_Epilog  replaces=LABEL_03E72C  confidence=high
+; exp() epilogue.
+
+[ROUTINE] 0x03E731 VoiceAmp_ConvergeEngine  replaces=LABEL_03E731  confidence=high
+; log(double) (natural logarithm). C signature f(double *result, double x).
+; If x <= 0 (FP_DP_CmpZero64 relation 3 = GT fails) -> errno = EDOM (0x21), result 0.0
+; (0x01F6DE). Otherwise:
+;   (1) t = x / sqrt(2) using the constant 1.4142135623730951 at 0x00F42C, then
+;       frexp(t) -> exponent k in the local at (XSP+0x68), and ldexp(1.0, k) via
+;       VoiceFreq_EnvelopeStep; x is divided by that so the reduced argument sits
+;       around 1.0.
+;   (2) z = (x - 1.0) / (x + 1.0), using 1.0 at 0x01F6EE and 0x01F6F6.
+;   (3) the atanh series: acc = z; on pass n (n stepping 1, 3, 5, ...) x *= z^2 and
+;       acc += x/n, until acc stops changing.
+;   (4) result = 2*acc (2.0 at 0x01F6FE) + k*ln2, using 0.6931471805599453 at 0x00F3D2.
+; log(x) = 2*atanh((x-1)/(x+1)) + k*ln2 is the standard construction and the constants
+; read out of the ROM (sqrt(2), ln 2) confirm it exactly.
+; Only caller: pow() at 0x03D749.
+; NOTE 1: the name is wrong; this is log().
+; NOTE 2: the series loop at 0x03E7E6 has NO ITERATION CAP - see [UNCERTAIN] / findings.
+
+[LABEL] 0x03E758 VoiceAmp_ConvergeEngine_InRange  replaces=LABEL_03E758  confidence=high
+; x > 0: argument reduction by sqrt(2) + frexp + ldexp, then form z = (x-1)/(x+1) and
+; z^2, and seed the accumulator with z.
+
+[LABEL] 0x03E7E6 VoiceAmp_ConvergeEngine_IterLoop  replaces=LABEL_03E7E6  confidence=high
+; atanh series pass: x *= z^2, n += 2, acc += x/n; loops while the accumulator still
+; changes. UNBOUNDED - there is no pass counter here, unlike exp()'s 300-pass cap.
+
+[LABEL] 0x03E87E VoiceAmp_ConvergeEngine_Epilog  replaces=LABEL_03E87E  confidence=high
+; log() epilogue: pop XIZ, release the 0x66-byte frame.
+
+[ROUTINE] 0x03E884 FP_NaN_Handler  replaces=LABEL_03E884  confidence=high
+; Special-value propagation for the divide cores. If the divisor record's flag bit 0 is
+; set (divisor is zero) it stamps flag 8 - the "overflow/infinity" marker - into the
+; dividend record so FP_DP_Encode/FP_SP_Encode will emit DBL_MAX/FLT_MAX with ERANGE.
+; Otherwise it returns leaving the dividend's flag alone (0/0 propagates zero).
+; This is the whole of the library's division-by-zero handling: no trap, no exception.
+
+[ROUTINE] 0x03E894 DSP_VoiceRegUpdate  replaces=LABEL_03E894  confidence=high
+; Integer part of a double, i.e. trunc(). C signature f(double *result, double x); it is
+; the worker behind modf (DSP_VoiceBlend 0x03E1A5) and has no other caller.
+; Copies a 4-word template from 0x01F706, then:
+;   - biased exponent 0 or 0x7FF (zero/inf/NaN) -> result = 0.0 (0x01F70E)
+;   - unbiased exponent >= 0x28 goes straight to the large-value test
+;   - otherwise it builds a magic value with exponent field 0x000F, adds it and
+;     subtracts it again (FP_DP_Mul then FP_DP_Sub, i.e. add then subtract) to force
+;     rounding, and re-reads the exponent
+;   - unbiased exponent < 0 (|x| < 1) -> result = 0.0 (0x01F716)
+;   - unbiased exponent >= 0x34 (52) -> x is already integral, copy it through
+;   - otherwise it clears the fractional mantissa bits with the nibble-shift scan loops
+;     at 0x03E96A / 0x03E9C7 (rotate the mantissa down by exponent/8 bytes, mask the
+;     partial nibble, rotate back) and rebuilds the exponent field.
+; NOTE: nothing here touches a DSP register or a voice; the name is wrong.
+
+[LABEL] 0x03E8C7 DSP_VoiceRegUpdate_ZeroOrMax  replaces=LABEL_03E8C7  confidence=high
+; Biased exponent 0 or 0x7FF: return 0.0.
+
+[LABEL] 0x03E8D6 DSP_VoiceRegUpdate_InRange  replaces=LABEL_03E8D6  confidence=high
+; The add-magic/subtract-magic rounding trick, then re-read the exponent.
+
+[LABEL] 0x03E920 DSP_VoiceRegUpdate_NegOffset  replaces=LABEL_03E920  confidence=high
+; Unbiased exponent < 0 (|x| < 1): the integer part is 0.0.
+
+[LABEL] 0x03E933 DSP_VoiceRegUpdate_LargeOffset  replaces=LABEL_03E933  confidence=high
+; Unbiased exponent >= 52: x has no fractional bits, copy it unchanged.
+
+[LABEL] 0x03E946 DSP_VoiceRegUpdate_BlendLoop  replaces=LABEL_03E946  confidence=high
+; Split the exponent into a byte count and a bit remainder (divs by 8) for the
+; nibble-shift masking below.
+
+[LABEL] 0x03E96A DSP_VoiceRegUpdate_ForwardScan  replaces=LABEL_03E96A  confidence=high
+; Rotate the mantissa down one nibble per byte into the scratch buffer.
+
+[LABEL] 0x03E98E DSP_VoiceRegUpdate_FillPad  replaces=LABEL_03E98E  confidence=high
+; Zero the bytes above the retained integer bits.
+
+[LABEL] 0x03E99A DSP_VoiceRegUpdate_BackScan  replaces=LABEL_03E99A  confidence=high
+; Mask the partial byte at the integer/fraction boundary.
+
+[LABEL] 0x03E9B6 DSP_VoiceRegUpdate_MaskLow  replaces=LABEL_03E9B6  confidence=high
+; Apply the computed byte mask.
+
+[LABEL] 0x03E9BA DSP_VoiceRegUpdate_ZeroLow  replaces=LABEL_03E9BA  confidence=high
+; Boundary lands on a byte edge: just zero it.
+
+[LABEL] 0x03E9BD DSP_VoiceRegUpdate_BackScan2  replaces=LABEL_03E9BD  confidence=high
+; Prepare the reverse nibble rotation.
+
+[LABEL] 0x03E9C7 DSP_VoiceRegUpdate_BackScanLoop  replaces=LABEL_03E9C7  confidence=high
+; Rotate the masked mantissa back up one nibble per byte and restore the exponent field.
+
+[LABEL] 0x03E9FC DSP_VoiceRegUpdate_Return  replaces=LABEL_03E9FC  confidence=high
+; trunc() epilogue.
+
+[ROUTINE] 0x03EA02 FP_DP_CopyNoSign  replaces=LABEL_03EA02  confidence=high
+; Special-value copy helper, single-precision entry (D = 0): if the source record at XBC
+; is not flagged, copy 8 bytes from the XBC record to the XWA record. Reached from
+; FP_SP_AddMantissa when either operand carries a special flag.
+
+[ROUTINE] 0x03EA06 FP_DP_CopyWithSign  replaces=LABEL_03EA06  confidence=high
+; Same helper, double-precision entry (D = 1) -> copies 12 bytes. A third entry at
+; 0x03EA0A sets D = 2 but is not referenced anywhere in the image.
+
+[LABEL] 0x03EA0E FP_DP_CopyDispatch  replaces=LABEL_03EA0E  confidence=high
+; Shared body: bail out if the source's zero flag is set, else copy 8 or 12 bytes
+; according to D. (Alias symbol __jrt_nop_03EA0E is the same address.)
+
+[LABEL] 0x03EA22 FP_DP_Copy3Words  replaces=LABEL_03EA22  confidence=high
+; 12-byte record copy (exponent + both mantissa words).
+
+[ROUTINE] 0x03EA34 FP_SP_DecodeToInt  replaces=LABEL_03EA34  confidence=high
+; Unpacked DOUBLE-precision record -> int32, returned in XHL. Rejects the NaN marker,
+; returns 0 for a negative exponent, sets ERANGE with 0xFFFFFFFF above exponent 31, and
+; otherwise shifts the 53-bit mantissa (read from record+6 / record+8) to align bit 20
+; with the requested exponent, then applies the sign. Called only from
+; FP_DP_DecodeToInt.
+; NOTE: SP/DP are swapped - the 0x14 (20-bit) split and the +6/+8 mantissa access are
+; the double layout.
+
+[LABEL] 0x03EA56 FP_SP_DecodeToInt_ShiftLeft  replaces=LABEL_03EA56  confidence=high
+; Exponent above 20: shift left, `djnz E` bounded.
+
+[LABEL] 0x03EA65 FP_SP_DecodeToInt_ShiftRight  replaces=LABEL_03EA65  confidence=high
+; Exponent below 20: shift right by (20 - exponent).
+
+[LABEL] 0x03EA78 FP_SP_DecodeToInt_ShiftRightLoop  replaces=LABEL_03EA78  confidence=high
+; Final variable right shift.
+
+[LABEL] 0x03EA7A FP_SP_DecodeToInt_SignCorrect  replaces=LABEL_03EA7A  confidence=high
+; Two's-complement negate when the record's sign byte is set.
+
+[LABEL] 0x03EA86 FP_SP_DecodeToInt_Return  replaces=LABEL_03EA86  confidence=high
+; Move the result into XHL.
+
+[LABEL] 0x03EA89 FP_SP_DecodeToInt_Underflow  replaces=LABEL_03EA89  confidence=high
+; |x| < 1: result 0 with ERANGE.
+
+[LABEL] 0x03EA8D FP_SP_DecodeToInt_Overflow  replaces=LABEL_03EA8D  confidence=high
+; |x| >= 2^32: result 0xFFFFFFFF with ERANGE.
+
+[LABEL] 0x03EA91 FP_SP_DecodeToInt_SetError  replaces=LABEL_03EA91  confidence=high
+; errno (0x040C22) = 0x22 (ERANGE).
+
+[LABEL] 0x03EA99 FP_SP_DecodeToInt_NaN  replaces=LABEL_03EA99  confidence=high
+; NaN marker: return 0, errno untouched.
+
+[ROUTINE] 0x03EA9C VoiceFreq_EnvelopeStep  replaces=LABEL_03EA9C  confidence=high
+; ldexp(double x, int n) - scale by a power of two. C signature
+; f(double *result, double x, int n); result pointer at entrySP+4, x at entrySP+8,
+; n at entrySP+0x10. Returns the constant at 0x01F71E when x == 0. Rejects n > 0x7FF
+; (errno = ERANGE, +/-DBL_MAX) and n < -0x7FF (errno = ERANGE, 0.0 from 0x01F726).
+; Otherwise it extracts the 11-bit biased exponent out of bytes 6..7 and steps it up or
+; down one at a time (the compiler emitted loops rather than an add), setting ERANGE and
+; saturating on the way if the biased exponent would leave (0, 0x7FF), then writes the
+; exponent field back and copies the result out. Sign bit preserved at 0x03EBB0.
+; Only caller: log() at 0x03E790 (ldexp(1.0, k)).
+; NOTE: the name is wrong; this has nothing to do with envelopes or frequency.
+
+[LABEL] 0x03EAC8 VoiceFreq_EnvelopeStep_InRange  replaces=LABEL_03EAC8  confidence=high
+; x != 0: test n against the +0x7FF upper limit.
+
+[LABEL] 0x03EAF0 VoiceFreq_EnvelopeStep_ClampHigh  replaces=LABEL_03EAF0  confidence=high
+; Positive-sign overflow: copy +DBL_MAX.
+
+[LABEL] 0x03EAF9 VoiceFreq_EnvelopeStep_ClampLow  replaces=LABEL_03EAF9  confidence=high
+; Test n against the -0x7FF lower limit; below it, return 0.0.
+
+[LABEL] 0x03EB0D VoiceFreq_EnvelopeStep_NibbleAdjust  replaces=LABEL_03EB0D  confidence=high
+; Extract the biased exponent from the nibble-split bytes 6..7 into IY.
+
+[LABEL] 0x03EB40 VoiceFreq_EnvelopeStep_IncLoop  replaces=LABEL_03EB40  confidence=high
+; n > 0: increment the biased exponent once per pass, saturating at 0x7FF with ERANGE.
+; Bounded by n, which was already limited to 0x7FF.
+
+[LABEL] 0x03EB65 VoiceFreq_EnvelopeStep_IncClamp_Copy  replaces=LABEL_03EB65  confidence=high
+; Overflow with a positive value: copy +DBL_MAX.
+
+[LABEL] 0x03EB6D VoiceFreq_EnvelopeStep_IncStep  replaces=LABEL_03EB6D  confidence=high
+; One successful increment; loop while IZ < n.
+
+[LABEL] 0x03EB77 VoiceFreq_EnvelopeStep_DecCheck  replaces=LABEL_03EB77  confidence=high
+; n == 0: nothing to do.
+
+[LABEL] 0x03EB7B VoiceFreq_EnvelopeStep_DecLoop  replaces=LABEL_03EB7B  confidence=high
+; n < 0: decrement the biased exponent, flushing to 0.0 with ERANGE at 0 (0x01F72E).
+
+[LABEL] 0x03EB97 VoiceFreq_EnvelopeStep_DecStep  replaces=LABEL_03EB97  confidence=high
+; One successful decrement; loop while IZ > n.
+
+[LABEL] 0x03EB9F VoiceFreq_EnvelopeStep_StoreResult  replaces=LABEL_03EB9F  confidence=high
+; Reassemble the exponent nibbles with the retained top mantissa nibble.
+
+[LABEL] 0x03EBB8 VoiceFreq_EnvelopeStep_SetHighBit  replaces=LABEL_03EBB8  confidence=high
+; Restore the sign bit and write the patched word back, then copy the result out.
+
+[LABEL] 0x03EBC8 VoiceFreq_EnvelopeStep_Epilog  replaces=LABEL_03EBC8  confidence=high
+; ldexp epilogue.
+
+[ROUTINE] 0x03EBCE FP_DP_MulAdd  replaces=LABEL_03EBCE  confidence=high
+; Double MULTIPLY mantissa core, on two unpacked 12-byte records: XWA is updated in
+; place, XBC is the second operand. ADDS the exponents (0x03EBDF), XORs the signs, and
+; forms the 106-bit product as four 32x32 partial products through FP_MulMantissa64x64,
+; accumulating into a 16-byte stack buffer. Then it normalises by at most one bit,
+; re-packs to 53 bits with a 4-bit shift, and rounds to nearest on the discarded byte.
+; Special flags divert to FP_Overflow_Handler. Called only by FP_DP_Add_Outer, which is
+; therefore the public double multiply.
+
+[LABEL] 0x03EC1E FP_DP_MulAdd_Sum1  replaces=LABEL_03EC1E  confidence=high
+; Accumulate the low x high cross product with carry into the third word.
+
+[LABEL] 0x03EC35 FP_DP_MulAdd_Sum2  replaces=LABEL_03EC35  confidence=high
+; Read the 106-bit product back out, normalise by one bit if bit 105 is set.
+
+[LABEL] 0x03EC56 FP_DP_MulAdd_Round  replaces=LABEL_03EC56  confidence=high
+; Shift the product down to 53 bits and round to nearest, re-normalising on carry.
+
+[LABEL] 0x03EC93 FP_DP_MulAdd_Store  replaces=LABEL_03EC93  confidence=high
+; Store the product mantissa back into the record.
+
+[ROUTINE] 0x03EC9E FP_SP_MulAdd  replaces=LABEL_03EC9E  confidence=high
+; Single-precision MULTIPLY mantissa core. Adds exponents, XORs signs, forms the 48-bit
+; product with four hardware `mul` instructions, normalises by at most one bit and
+; rounds to nearest. Called only by FP_SP_Add_Outer.
+
+[LABEL] 0x03ECE6 FP_SP_MulAdd_NormCheck  replaces=LABEL_03ECE6  confidence=high
+; Leading bit did not land: shift left one instead of incrementing the exponent.
+
+[LABEL] 0x03ECF0 FP_SP_MulAdd_Round  replaces=LABEL_03ECF0  confidence=high
+; Round to nearest on the guard byte.
+
+[LABEL] 0x03ED06 FP_SP_MulAdd_Store  replaces=LABEL_03ED06  confidence=high
+; Drop the guard byte and store the product mantissa.
+
+[ROUTINE] 0x03ED0E FP_MulMantissa64x64  replaces=LABEL_03ED0E  confidence=high
+; 32x32 -> 64 unsigned multiply built from four 16x16 `mul` instructions with carry
+; propagation. Inputs XHL and XIY, result in XHL (low) and XDE (high). Called four times
+; per double multiply by FP_DP_MulAdd. Name is accurate about intent though the operand
+; width is 32, not 64.
+
+[ROUTINE] 0x03ED3C FP_Div_Step4Bits  replaces=LABEL_03ED3C  confidence=high
+; Restoring-division engine producing FOUR quotient bits per call, used by the double
+; divide core FP_DP_Mul_Outer. Registers: XIX/XIY = running remainder, XDE/XHL =
+; divisor, XIZ = quotient accumulator, C = remaining rounds. Each of the four unrolled
+; stages shifts the remainder left one bit, trial-subtracts the divisor, and either
+; keeps the subtraction (setting the corresponding bit of IZ) or restores it. The entry
+; at FP_Div_Step_Bit3 (0x03ED64) skips the initial shift for the first call.
+; The loop back-edge at 0x03EE33 is bounded by `dec C` (8 rounds).
+
+[LABEL] 0x03ED64 FP_Div_Step_Bit3  replaces=LABEL_03ED64  confidence=high
+; Alternate entry / bit-3 trial subtraction without a preceding shift.
+
+[LABEL] 0x03ED75 FP_Div_Step_Bit3_Set  replaces=LABEL_03ED75  confidence=high
+; Bit 3 of the quotient nibble is 1.
+
+[LABEL] 0x03ED78 FP_Div_Step_Bit2_Entry  replaces=LABEL_03ED78  confidence=high
+; Shift the remainder and start the bit-2 stage.
+
+[LABEL] 0x03EDA0 FP_Div_Step_Bit2  replaces=LABEL_03EDA0  confidence=high
+; Bit-2 trial subtraction.
+
+[LABEL] 0x03EDB1 FP_Div_Step_Bit2_Set  replaces=LABEL_03EDB1  confidence=high
+; Bit 2 of the quotient nibble is 1.
+
+[LABEL] 0x03EDB4 FP_Div_Step_Bit1_Entry  replaces=LABEL_03EDB4  confidence=high
+; Shift the remainder and start the bit-1 stage.
+
+[LABEL] 0x03EDDC FP_Div_Step_Bit1  replaces=LABEL_03EDDC  confidence=high
+; Bit-1 trial subtraction.
+
+[LABEL] 0x03EDED FP_Div_Step_Bit1_Set  replaces=LABEL_03EDED  confidence=high
+; Bit 1 of the quotient nibble is 1.
+
+[LABEL] 0x03EDF0 FP_Div_Step_Bit0_Entry  replaces=LABEL_03EDF0  confidence=high
+; Shift the remainder and start the bit-0 stage.
+
+[LABEL] 0x03EE18 FP_Div_Step_Bit0  replaces=LABEL_03EE18  confidence=high
+; Bit-0 trial subtraction.
+
+[LABEL] 0x03EE29 FP_Div_Step_Bit0_Set  replaces=LABEL_03EE29  confidence=high
+; Bit 0 of the quotient nibble is 1.
+
+[LABEL] 0x03EE2C FP_Div_Step_Continue  replaces=LABEL_03EE2C  confidence=high
+; `dec C`; return when the round count is exhausted, otherwise shift the quotient
+; accumulator left one nibble and loop.
+
+[ROUTINE] 0x03EE36 FP_DP_NegNoSign  replaces=LABEL_03EE36  confidence=high
+; Special-value negate-copy helper, single-precision entry (D = 0): if the source record
+; is not flagged zero, copy 8 bytes from XBC to XWA and flip the sign byte. Reached from
+; FP_SP_SubMantissa when an operand carries a special flag.
+
+[ROUTINE] 0x03EE3A FP_DP_NegWithSign  replaces=LABEL_03EE3A  confidence=high
+; Same helper, double-precision entry (D = 1) -> 12 bytes. Reached from
+; FP_DP_SubMantissa. A third entry at 0x03EE3E sets D = 2 and is unreferenced.
+
+[LABEL] 0x03EE42 FP_DP_NegDispatch  replaces=LABEL_03EE42  confidence=high
+; Shared body: bail out on the zero flag, else copy 8 or 12 bytes per D and XOR 0x80
+; into the sign byte. (Alias symbol __jrt_nop_03EE42 is the same address.)
+
+[LABEL] 0x03EE5A FP_DP_Neg3Words  replaces=LABEL_03EE5A  confidence=high
+; 12-byte negate-copy.
+
+[ROUTINE] 0x03EE70 FP_Overflow_Handler  replaces=LABEL_03EE70  confidence=high
+; Special-value handler for the two multiply cores: stamps flag 1 ("zero") into the
+; destination record and returns, so a multiply where either operand is flagged
+; produces zero rather than propagating an infinity. Note the asymmetry with
+; FP_NaN_Handler (0x03E884), which the divide cores use and which stamps flag 8.
+
+[DATA] 0x03EE75-0x03EEFF  FP_Library_End_Pad - end-of-library 0xFF fill
+; 139 bytes of 0xFF. No code, no data; this is the tail padding of the sub-CPU program
+; image and the end of the region.
+
+[UNCERTAIN] The three arithmetic names are mutually swapped in the authoritative LLVM
+source. I did not touch them, but the evidence is conclusive and I recommend a
+human-approved rename:
+  0x03E290 FP_DP_Add_Outer  -> is the double MULTIPLY  (calls FP_DP_MulAdd, which ADDS
+           exponents and does a 64x64 mantissa multiply; never calls AlignMantissa;
+           pow() uses it to square the base at 0x03D6E7; the sin kernel uses it to form
+           z^2 at 0x03DB0B).
+  0x03E2C0 FP_SP_Add_Outer  -> single-precision MULTIPLY, same argument.
+  0x03E10E FP_DP_Mul        -> is the double ADD (byte-identical to FP_DP_Sub except the
+           sign test polarity; calls FP_DP_AlignMantissa, which only add/sub needs).
+  0x03E15A FP_SP_Mul        -> single-precision ADD, same argument.
+  0x03E3F6 FP_DP_Mul_Outer  -> is the double DIVIDE mantissa core (SUBTRACTS exponents,
+           runs FP_Div_Step4Bits restoring division).
+  0x03E4B4 FP_SP_Mul_Outer  -> single-precision DIVIDE core (explicit restoring-division
+           loop at 0x03E4EF).
+  0x03EBCE FP_DP_MulAdd / 0x03EC9E FP_SP_MulAdd -> these are pure MULTIPLY cores; there
+           is no accumulate operand.
+Only FP_DP_Sub (0x03D8E0) and FP_SP_Sub (0x03D92C) are correctly named. The public
+double divide is VoiceFloat_SubDP at 0x03D3A4 and the single divide is VoiceFloat_SubSP
+at 0x03D3D4, both just outside this region (region 15) and both also misnamed.
+
+[UNCERTAIN] Eight libm entry points carry audio-sounding prefixes that they do not earn.
+Recommended renames, all confirmed by their constant tables:
+  0x03D4C9 VoiceFloat_MulAddDispatch   -> FP_DP_Tan      (sin/cos)
+  0x03D533 VoiceFloat_CompareAndConvert-> FP_DP_Pow      (EDOM on negative base with a
+                                                          non-integer exponent)
+  0x03D84F VoiceFloat_MulAddVariant2   -> FP_DP_Sin
+  0x03D98A VoiceFloat_BlendAndMerge    -> FP_DP_SinCos_Kernel (1/pi, pi_hi/pi_lo,
+                                                          1/3!..1/17! at 0x00F34E..F3A6)
+  0x03E1A5 DSP_VoiceBlend              -> FP_DP_Modf
+  0x03E1F1 FP_DP_FreqAdjust            -> FP_DP_Frexp    (forces exponent 0x3FE)
+  0x03E64B VoicePitch_SlideEngine      -> FP_DP_Exp      (thresholds 709.778 /
+                                                          -708.396 = log(DBL_MAX/MIN))
+  0x03E731 VoiceAmp_ConvergeEngine     -> FP_DP_Log      (sqrt(2) reduction, ln2 at
+                                                          0x00F3D2)
+  0x03EA9C VoiceFreq_EnvelopeStep      -> FP_DP_Ldexp
+  0x03E894 DSP_VoiceRegUpdate          -> FP_DP_Trunc
+Also in region 15: 0x03D34D VoiceFloat_DispatchMulAdd is cos() - it calls the sin kernel
+with |x| + pi/2, the constant 1.5707963267948966 at 0x00F3CA.
+
+[UNCERTAIN] SP/DP are swapped in four internal helper names. The record layouts and the
+23-bit (0x17) vs 20-bit (0x14) mantissa splits are unambiguous:
+  0x03DE1A FP_DP_Normalize / 0x03DE33 FP_DP_NormCore     -> operate on SINGLE records
+  0x03DFD6 FP_SP_Normalize / 0x03DFEF FP_SP_NormCore     -> operate on DOUBLE records
+  0x03DE8E FP_DP_ShiftDecode                             -> SINGLE record -> int32
+  0x03EA34 FP_SP_DecodeToInt                             -> DOUBLE record -> int32
+
+[UNCERTAIN] Two symbols just outside the region that this region's evidence contradicts:
+  0x00F428 FPConst_Zero  - is not a constant. It is a 32-bit FUNCTION POINTER read at
+    0x03E0A5 and 0x03E104 and called indirectly (`call NZ,XBC`) whenever a double or
+    float overflows. It is 0x00000000 in the shipped image, so the hook is inert.
+    Suggested: FP_ExceptionHook_Ptr.
+  0x00F42C FPConst_Ln2   - decodes to 1.4142135623730951, i.e. sqrt(2), and is used as
+    the pre-scaling DIVISOR in log(). The real ln 2 (0.6931471805599453) is the unnamed
+    constant at 0x00F3D2. Suggested: FPConst_Sqrt2 for 0x00F42C and FPConst_Ln2 for
+    0x00F3D2.
+  0x03D977 TONEGEN_COMPARE_TABLES - is the C relational-operator result table used by
+    the whole soft-float library; the tone generator never touches it. Suggested:
+    FP_CMP_RESULT_TABLES.
+
+[UNCERTAIN] 0x03E8F9/0x03E90B inside DSP_VoiceRegUpdate (trunc) build a "magic constant"
+by writing 0x000F and then 0x0000 into the exponent slot of a stack record and adding
+then subtracting it. I am confident about the effect (force rounding to integer) but not
+about the exact intended magic value, so I have not written a numeric claim into the
+header.
+
+[UNCERTAIN] I could not identify what selects between the two argument-reduction
+half-quadrant paths in the sin kernel at 0x03DA36..0x03DA52 (the compare of the local at
+(XSP+0x5C) against the caller's second double with relation 4 = EQ, then a subtraction of
+0.5). Everything downstream of it is understood; that one test is not.
+
+[UNCERTAIN] Whether the log() series at 0x03E7E6 can actually fail to terminate on real
+inputs. The terms are z^(2k+1)/(2k+1) with |z| < 1 after the sqrt(2)/frexp reduction, so
+it should converge in a few dozen passes, and a diverging case would saturate to DBL_MAX
+and compare equal. But the loop has no pass counter while its sibling exp() has one
+(300), and the exit condition is an exact bit-equality of two doubles, so a
+round-to-nearest limit cycle cannot be ruled out from static reading alone. This needs a
+run-time check, not more disassembly.

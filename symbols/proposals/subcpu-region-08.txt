@@ -1,0 +1,650 @@
+# region 8: 0x02C8E4..0x02EC37
+# The tone-generator (IC303) register-marshalling layer: velocity/key-on dispatch, the voice
+# "query" packet builders, every ToneGen_Write* primitive, and the VoiceParam_* staging-buffer
+# packers. Everything here talks to exactly one piece of hardware -- the TG at 0x100000
+# (address latch) / 0x100002 (data). Nothing in this region touches the inter-CPU latches
+# (0x120000), the keybed (0x110000) or the DSPs (0x130000); verified by scanning every
+# absolute operand in the range.
+#
+# THE TG ACCESS IDIOM (appears ~110 times; every "*_NopCont*" placeholder is part of it):
+#     res 7,(0x18)                 ; P6 bit 7 low  = address-latch phase
+#     add WA,<regbase>             ; WA = regbase + voice channel
+#     ld (0x100000),WA             ; latch TG register address
+#     nop
+#     set 7,(0x18)                 ; P6 bit 7 high = data phase
+#     ld (0x100002),<value>        ; TG register data
+#     jr $+2 / nop / nop / nop     ; ~4-cycle settle delay before the next access
+# So SFR P6 bit 7 is the TG address/data phase strobe. The "jr $+2" targets are what the
+# converter turned into __jrt_nop_xxxxxx / *_NopCont* labels; they are pure padding and are
+# NOT worth individual names.
+#
+# TG REGISTER BANKS (each bank is 0x40 registers, one per voice channel; channel 0x00-0x3F):
+#   0x0000+ch key-on / note word (0x7E00 = free the voice)   0x0040+ch, 0x0080+ch (bit15 =
+#   load strobe), 0x00C0+ch, 0x0100+ch, 0x0140+ch, 0x0180+ch, 0x01C0+ch, 0x0200..0x0205 and
+#   0x0C00..0x0C05 and 0x0E00 (global, not per-voice), 0x0400/0x0440/0x0480/0x04C0/0x0500+ch,
+#   0x0540/0x0580/0x05C0+ch (bit15 = load strobe), 0x0600/0x0640+ch,
+#   0x0800+ch ... 0x0A40+ch (envelope/level bank).
+#
+# THE VOICE-PARAMETER SHADOW BLOCK (the XBC/XWA argument of every ToneGen_Write*), 0x44 bytes.
+# Offset -> TG register base, established by reading every write site in the region:
+#   +0x02->0x0040  +0x04->0x0080  +0x06->0x00C0  +0x08->0x0100  +0x0A->0x0140  +0x0C->0x0180
+#   +0x0E->0x0400  +0x10->0x0440  +0x12->0x0480  +0x14->0x04C0  +0x16->0x0500  +0x18->0x0800
+#   +0x1A->0x0840  +0x1C->0x0880  +0x1E->0x08C0  +0x20->0x0900  +0x22->0x0940  +0x24->0x0980
+#   +0x26->0x09C0  +0x28->0x0A00  +0x2A->0x0A40  +0x2C->0x0800  +0x2E->0x0840  +0x30->0x0900
+#   +0x32->0x0940  +0x34->0x09C0  +0x36->0x0A00  +0x38->0x01C0  +0x3A->0x0540  +0x3C->0x0580
+#   +0x3E->0x05C0  +0x40->0x0600  +0x42->0x0640
+# The live instance of this block is DRAM 0x0451CC (Voice_Release/Voice_Cut pass it literally);
+# the boot/default instance is DRAM 0x2AA4, filled from ROM 0x00F8D5 by DSP_CONFIG_INIT.
+#
+# DRAM STRUCTURES USED THROUGHOUT (all verified by the index arithmetic in this region):
+#   0x041368 + part*0x11F   part descriptor, 0x11F bytes, part = 0..0x19 (26 parts)
+#       +0x00 w  state bits: bit0/bit1 = layer select, bit2 = loaded, (&3)!=0 means "in use"
+#       +0x06 l  pointer to the 0x66-byte TONE HEADER; header+0x10 & 0xC0 = PART MODE
+#                (0x00 / 0x40 / 0x80 / 0xC0) which selects the voice-layer topology
+#       +0x0A w  routing word: bit15 tested by VOICEPARAM_BUILD_TONE_STAGING, bit14 set from
+#                tone-header +0x5D bit7
+#       +0x19/+0x1A b  two bytes passed to VoiceInit_Dispatcher (0x032938)
+#       +0x6E + i*0x25 (i=0..3)  sub-slot descriptor; +0x00 l = pointer to a 0x51-byte element
+#                record, +0x36 b &7 = element group, +0x4D+j (j=0..3) = per-slot params
+#   0x04308E + ch*0x47      per-voice-channel struct, 0x47 bytes, ch = 0..0x3F
+#       +0x01 w flags (bit8 = "hold" path), +0x03 b stage, +0x05 b bit7 = active,
+#       +0x23 l back-pointer to the owning part record, +0x2D w = the key-on word written to
+#       TG register (0x0000+ch), +0x2F w = 0 gate for the key-on write, +0x46 b
+#   0x044FCE                TONE STAGING BUFFER built by VOICEPARAM_BUILD_TONE_STAGING:
+#       +0x0000 (0x66)          tone header, copied from part+0x06
+#       +0x0066 + i*0x51 (i<4)  element records, copied from part+0x6E+i*0x25
+#       +0x01AA + i*0x0B (i<4)  sub-slot records
+#       +0x01D8 + k (k<8)       tone-option bytes, defaults copied from ROM 0x00F95D
+#       +0x01E0 + i*5 + j       per-slot params, copied from part sub-slot +0x4D
+#       +0x01F4 + k*5           custom-tone unit params
+#       +0x01FE (= 0x0451CC)    the TG shadow block described above
+#   0x045310 / 0x045314 / 0x04531C   three long pointers to the loaded sound-data image; the
+#       0x045314 block is a table of offsets (+0x50, +0x64, +0x80, +0x8C, +0x94 select wave
+#       catalogues; +0xEA/+0xEE/+0xF0 are record LENGTHS), 0x04531C is the custom-tone bank.
+
+[ROUTINE] 0x02C8E4 VOICE_SETVELOCITY  confidence=high
+; Already named in symbols/subcpu_symbols_reference.txt and in the LLVM build; entry kept
+; unchanged, this entry only adds documentation.
+; The note-on workhorse. Inputs: A = part index (0..0x19), C = MIDI note, E = velocity,
+; plus one word pushed by the caller (Voice_NoteOn pushes MIDI status & 7 = the "source"
+; tag). Stack frame: 20 bytes of scratch + saved 0xFA/0xFB byte temporaries; the caller's
+; pushed word lands at (XSP+26); returns with retd 2.
+; It reads the part descriptor pointer at 0x04136E + part*0x11F, dereferences it and
+; switches on tone-header byte +0x10 masked with 0xC0 -- the PART MODE:
+;   0xC0 -> falls straight through to VOICE_SETVELOCITY_EXIT: NOTHING IS ALLOCATED AND NO TG
+;           REGISTER IS TOUCHED. This is a silent no-op path.
+;   0x80 -> VOICE_SETVELOCITY_MODE80 (2 voice slots, Voice_NoteOn_Type1 @0x02C2C0)
+;   0x40 -> VOICE_SETVELOCITY_MODE40 (4 slots, Voice_NoteOn_Type2 @0x02BF1B)
+;   0x00 -> in-line mode-00 path      (4 slots, Voice_NoteOn_Type4 @0x02BA2C)
+;   anything else -> exit, also a no-op.
+; The chosen Voice_NoteOn_TypeN fills the 20-byte scratch frame; scratch[0x0A + i] is the TG
+; channel allocated for slot i (0xFF/>=0x40 means "no slot"). Two loops then follow: see
+; VOICE_SETVELOCITY_MODE00_KEYON_LOOP and VOICE_SETVELOCITY_MODE00_PITCHFIX_LOOP.
+; On exit it clears bits 2..3 of the part word at 0x041368 + part*0x11F.
+; Callers: VOICE_NOTEON (0x02CF97) and the MIDI/keybed note path.
+
+[LABEL] 0x02C96B VOICE_SETVELOCITY_MODE00_KEYON_LOOP  replaces=LABEL_02C96B  confidence=high
+; For each of the 4 allocated slots (channel = scratch[0x0A+i], skipped when >= 0x40): mute the
+; voice by writing TG reg 0x0840+ch = 0xFF00 and reg 0x0800+ch = 0xFF80, then call
+; Voice_Init_Type2 (0x02C0B6) or Voice_Init_Type4 (0x02B4E3) depending on bit1 of the voice
+; struct word at 0x04308F + ch*0x47.
+
+[LABEL] 0x02C9E9 VOICE_SETVELOCITY_MODE00_INIT_TYPE4  replaces=LABEL_02C9E9  confidence=high
+; Bit1 of voicestruct+1 clear -> Voice_Init_Type4 instead of Voice_Init_Type2.
+
+[LABEL] 0x02C9FA VOICE_SETVELOCITY_MODE00_KEYWORD_LOOP  replaces=LABEL_02C9FA  confidence=high
+; Second pass over the same 4 slots. For each channel < 0x40 whose voice struct has word
+; +0x2F == 0 and word +0x01 bit8 clear, it calls TONEGEN_WRITESINGLEREG(ch, voicestruct+0x2D),
+; i.e. it writes TG register (0x0000 + ch) with the stored key-on word. THIS IS THE ACTUAL
+; KEY-ON: bank 0x0000 is the per-voice note/key register (writing 0x7E00 there frees a voice).
+; Slots whose +0x2F word is non-zero are deliberately left un-keyed.
+
+[LABEL] 0x02CA80 VOICE_SETVELOCITY_MODE00_DONE  replaces=LABEL_02CA80  confidence=high
+; Calls Voice_ClearLFO_ActiveFlag(part) (0x027CD1) and jumps to the common exit.
+
+[ROUTINE] 0x02CA8C VOICE_SETVELOCITY_MODE40  replaces=LABEL_02CA8C  confidence=high
+; Part-mode 0x40 branch of VOICE_SETVELOCITY. Same shape as the mode-00 path but it uses
+; Voice_NoteOn_Type2 and, in the per-slot loop, Voice_Release_Type4 (0x02BCD6) instead of the
+; Init_Type2/Type4 pair. Falls into the same key-on loop and the same exit.
+
+[ROUTINE] 0x02CB93 VOICE_SETVELOCITY_MODE80  replaces=LABEL_02CB93  confidence=high
+; Part-mode 0x80 branch. Only TWO slots (loop bound 2, not 4) and it additionally calls
+; Voice_WriteChPitchWithVib (0x0266D8) per slot before muting, then Voice_Init_Type2.
+; Voice allocation is done by Voice_NoteOn_Type1 (0x02C2C0).
+
+[LABEL] 0x02CC8F VOICE_SETVELOCITY_EXIT  replaces=LABEL_02CC8F  confidence=high
+; Common tail: clears bits 2-3 (mask 0xF3FF) of the part status word at 0x041368+part*0x11F,
+; restores the frame and returns with retd 2. Note that the 0xC0 part-mode reaches this point
+; without having touched the tone generator at all.
+
+[ROUTINE] 0x02CCAD VOICE_ALLOCATE  confidence=medium
+; Already named in the reference file; kept, documentation only.
+; Despite the name this does NOT allocate: it builds a 5-byte request packet in the DRAM
+; scratch at 0x2A5E and calls NoteOn_RoutePacket (0x022691), which WALKS the 0x40-entry voice
+; table at 0x00148D (stride 0x27) and writes the list of matching channel numbers, 0xFF
+; terminated, into packet+5. Returns XHL = the packet.
+; Packet layout: [0] = filter mode byte, [1..2] = selector word (bits 0-6 note, bits 8-12 part
+; index, bit15 = flag), [3..4] = mask word (bits 8-12 non-zero means "match every voice").
+; This variant: mode 0x80, selector = (A<<8) | C | 0x8000, mask 0x0000; A = part, C = note.
+; The five siblings below differ only in those three constants.
+
+[ROUTINE] 0x02CCD3 VOICE_QUERY_REQ_MODE80_MASK7F  replaces=LABEL_02CCD3  confidence=medium
+; Same packet builder as VOICE_ALLOCATE: mode 0x80, selector = (A<<8) | 0x8000 (no note),
+; mask 0x007F. A = part index. Returns XHL = packet at 0x2A5E, packet+5 = 0xFF-terminated
+; list of matching TG channels.
+
+[ROUTINE] 0x02CCF5 VOICE_QUERY_REQ_MODE40_MASK7F  replaces=LABEL_02CCF5  confidence=medium
+; Packet builder: mode 0x40, selector = (A<<8) (bit15 clear), mask 0x007F.
+; Called from VOICEPARAM_SET_TONE_OPTION case 6 (0x02E90C) before
+; Voice_AllNotes_SustainRetrigger (0x028E26).
+
+[ROUTINE] 0x02CD14 VOICE_QUERY_REQ_MODE00_SEL15_MASK7F  replaces=LABEL_02CD14  confidence=medium
+; ** MISIDENTIFIED AS DATA. ** The LLVM source emits this as ".byte" under the name
+; VoiceAllocate_DataTable_02CD14, but it is live code: it is CALLed from 0x0291CF and the
+; only pointer to it in the whole ROM is that call.
+; Packet builder: mode 0x00, selector = (A<<8) | 0x8000, mask 0x007F. A = part index.
+; The caller at 0x02919E selects between this routine and VOICE_QUERY_REQ_MODE00_MASKFF
+; (0x02CD36) on the part mode: mode 0x00 -> here, mode 0x80 -> 0x02CD36, modes 0x40/0xC0 ->
+; neither (the query is skipped entirely).
+
+[ROUTINE] 0x02CD36 VOICE_QUERY_REQ_MODE00_MASKFF  replaces=LABEL_02CD36  confidence=medium
+; Packet builder: mode 0x00, selector = (A<<8), mask 0x00FF. Called from 0x0291DD.
+
+[ROUTINE] 0x02CD55 Voice_Query_AllChannels  confidence=high
+; Existing curated name is correct and is kept. Packet builder with mode 0x00, selector 0x0000
+; and mask 0x1FFF; because mask bits 8-12 are non-zero, NoteOn_RoutePacket takes its
+; "enumerate everything" path and returns every voice channel whose table entry +0x22 bit0 is
+; set. NOTE: the LLVM build calls this Voice_AllocateForAny, which is the misleading name of
+; the two -- see [UNCERTAIN].
+
+[ROUTINE] 0x02CD71 Voice_Reload_Levels  confidence=high
+; Existing curated name kept; documentation only. A = TG channel. Points XIZ at the voice
+; struct 0x04308E + ch*0x47, clears bit7 of +0x05 (the "active" flag) and then picks one of
+; four teardown shapes from struct word +0x01 bit15, the owning part record's word +0x0A bit0,
+; and struct word +0x01 bit8:
+;   bit8 set  -> Voice_ComputeAndWriteVolume1, ToneGen_WriteNote_Hold(ch, 0x0451CC),
+;                TONEGEN_WRITESINGLEREG(ch, struct+0x2D), VoiceSlot_Release(ch), then clears
+;                bit8 of struct+0x01.
+;   bit8 clear-> the three Voice_ComputeAndWriteVolume{1,2,3} calls then
+;                ToneGen_WriteNote(ch, 0x0451CC), or (branch D) Voice_WritePan_Passthrough and
+;                ToneGen_WriteNote_Stereo.
+; All four paths end at 0x02CE48. The LLVM build calls this Voice_Release.
+
+[ROUTINE] 0x02CE4C VOICE_CUT  replaces=LABEL_02CE4C  confidence=high
+; A = TG channel. Same preamble as 0x02CD71 (XIZ = voice struct, clear +0x05 bit7) but it
+; SAVES the owning part record's word +0x0A across the call and restores it at 0x02CEC8, so
+; the part-level state is deliberately left unchanged. When struct byte +0x03 == 3 it also
+; clears bit0 of the part word before running. Writes the three volume registers and then
+; ToneGen_WriteNote(ch, 0x0451CC). Named Voice_Cut in the LLVM build.
+
+[ROUTINE] 0x02CED5 VOICE_RELEASE_SINGLE  replaces=LABEL_02CED5  confidence=high
+; A = TG channel. The cheapest teardown: clears bit7 of voice struct +0x05, and only if
+; struct byte +0x46 is non-zero calls Voice_WriteVolume_Muted followed by
+; ToneGen_WriteNote(ch, 0x0451CC). Does not touch the part record at all.
+
+[ROUTINE] 0x02CF07 VOICE_PARAMINIT  confidence=high
+; Existing name kept; documentation only. XWA = pointer to a packet as returned by the
+; VOICE_QUERY_* builders; the routine advances it by 5 to reach the 0xFF-terminated channel
+; list and walks it until a byte >= 0x40 is seen. For each listed channel it reads the voice
+; struct word +0x01 masked with 0x3C and dispatches the correct teardown:
+;   0x20 -> Voice_Reload_Levels     0x10 -> VOICE_RELEASE_SINGLE
+;   0x08 -> VOICE_CUT               0x04 -> if struct word +0x2F != 0 set bit7 of it; else if
+;                                          word +0x31 != 0xFF rewrite it as (v & 0x9FFF)|0x1000
+;                                          else Voice_Reload_Levels
+;   other -> nothing.
+; This is the routine that turns a "which channels belong to this part" query into note-offs.
+
+[ROUTINE] 0x02CF97 VOICE_NOTEON  confidence=high
+; Existing name kept; the LLVM source already carries a good header. XWA points at a 4-byte
+; MIDI-ish record: +0 status, +1 part/channel (rejected when >= 0x1A), +2 note, +3 velocity.
+; Velocity != 0 -> RingBuf_SetOffsetLo(status & 8), then VOICE_SETVELOCITY and VOICE_SETPITCH.
+; Velocity == 0 -> VOICE_ALLOCATE(part, note), VOICE_PARAMINIT on the returned packet, then
+; VOICE_NOTEOFF. The pushed word for all four calls is (status & 7).
+
+[ROUTINE] 0x02D00D VOICE_ACQUIRE_AND_INIT  replaces=LABEL_02D00D  confidence=medium
+; XWA = a request packet buffer. Fills it with selector = (word at 0x041360 >> 8) | 0x1480,
+; +2 = 0x80, +3..+6 = 0, calls NoteOn_Dispatch (0x022340), and reads the granted TG channel
+; back from packet+10. If that channel is < 0x40 it initialises the whole voice struct at
+; 0x04308E + ch*0x47 from scratch: +0x00 = ch, +0x01 = 1, +0x03 = 0, +0x04 = 0x14,
+; +0x05 = high byte of 0x041360, +0x06 and +0x08 = the 0x041360 word, +0x0C = 0,
+; +0x13/+0x17/+0x1B/+0x1F/+0x27 = 0 (longs), +0x2F = 0, +0x31 = 0x00FF, +0x35 = 0,
+; +0x36/+0x38/+0x3A = 0.
+; The LLVM build calls this Voice_SetPanning; nothing in the body supports that -- it is an
+; acquire-and-zero-the-struct routine. See [UNCERTAIN].
+
+[ROUTINE] 0x02D0BA ToneGen_WriteVoicePitch  confidence=medium
+; Existing curated name kept. WA = TG channel, XBC = shadow block. Writes exactly one
+; register: 0x0400 + ch <- shadow +0x0E. Neither the curated name ("pitch") nor the LLVM name
+; ("pan") is provable from the body; see [UNCERTAIN].
+
+[ROUTINE] 0x02D0DC TONEGEN_WRITE_REG0080_NOSTROBE  replaces=LABEL_02D0DC  confidence=high
+; ** MISIDENTIFIED AS DATA (LLVM emits it as ToneGen_PanTable_02D0DC .byte). ** It is a
+; standard single-register writer: WA = TG channel, XBC = shadow block; writes
+; 0x0080 + ch <- (shadow +0x04) with bit15 CLEARED. Bit15 of the 0x0080 bank is the "load"
+; strobe: ToneGen_WriteVoiceParams writes +0x04 with bit15 SET at 0x02D136 and re-writes it
+; with bit15 clear at 0x02D3F2. So this routine performs the "clear the strobe" half alone.
+; Unreferenced in v142 (no call and no pointer to it anywhere in the ROM).
+
+[ROUTINE] 0x02D101 ToneGen_WriteVoiceParams  confidence=high
+; Existing name kept; documentation only. WA = TG channel, XBC = 0x44-byte shadow block.
+; Writes 23 registers in this order (see the offset->register map in the file header):
+;   0x0040,0x0080(bit15 set),0x00C0,0x0100,0x0140,0x0180,0x0400,0x0440,0x0480,0x04C0,0x0500,
+;   0x0800, then register (0x0000+ch) <- 0x8100, then 0x0840,0x0880,0x08C0,0x0900,0x0940,
+;   0x0980,0x09C0,0x0A00,0x0A40, and finally 0x0080 again with bit15 CLEARED.
+; The 0x8100 write to bank 0x0000 in the middle is a mid-sequence key/gate command; the
+; bit15 set/clear pair around the whole burst is the load strobe. This is the single biggest
+; consumer of TG bandwidth in the firmware.
+
+[ROUTINE] 0x02D41B ToneGen_WriteSingleReg  confidence=high
+; Existing name kept. WA = full TG register address (NOT offset by a bank base), BC = 16-bit
+; value. The generic primitive; used to write bank 0x0000 (the key-on word) from
+; VOICE_SETVELOCITY, Voice_Reload_Levels and ToneGen_Config_Init.
+
+[ROUTINE] 0x02D436 ToneGen_WriteLevelBurst  confidence=high
+; Existing curated name kept. WA = channel, XBC = shadow. Writes six envelope/level registers:
+;   0x0840 <- +0x2E, 0x0940 <- +0x32, 0x0A00 <- +0x36, 0x0800 <- +0x2C, 0x0900 <- +0x30,
+;   0x09C0 <- +0x34.
+; (The LLVM build calls this ToneGen_WriteNote, which does not match the register set.)
+
+[ROUTINE] 0x02D50E ToneGen_WriteLevelPair  confidence=high
+; Existing curated name kept. Writes 0x0840+ch <- +0x2E and 0x0800+ch <- +0x2C. The two-register
+; subset of ToneGen_WriteLevelBurst.
+
+[ROUTINE] 0x02D55E TONEGEN_WRITE_REG0840  replaces=LABEL_02D55E  confidence=high
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_NoteTable_02D55E .byte). ** Single-register writer:
+; WA = channel, XBC = shadow; 0x0840 + ch <- shadow +0x2E. Unreferenced in v142.
+
+[ROUTINE] 0x02D580 TONEGEN_WRITE_REGS0100_0140  confidence=high
+; ** Not present in either symbol source; it lives inside the same misidentified .byte blob. **
+; WA = channel, XBC = shadow; writes 0x0100 + ch <- +0x08 and 0x0140 + ch <- +0x0A.
+; Unreferenced in v142.
+
+[ROUTINE] 0x02D5D0 ToneGen_WriteEnvSegments  confidence=high
+; Existing curated name kept. Writes 0x0840+ch <- +0x1A and 0x0880+ch <- +0x1C.
+
+[ROUTINE] 0x02D620 ToneGen_WriteSegRegs_SameLevel  confidence=high
+; Existing curated name kept, and it is accurate: 0x0840+ch and 0x0880+ch are BOTH written
+; with the same shadow word +0x2E.
+
+[ROUTINE] 0x02D670 ToneGen_WriteExprReg  confidence=high
+; Existing curated name kept. WA = channel, BC = value; writes 0x0180 + ch <- BC. Bank 0x0180
+; is the same bank the hardware exposes for per-voice envelope-level READBACK (memory map:
+; latch 0x0180+ch, read 0x100000).
+
+[ROUTINE] 0x02D68F TONEGEN_WRITE_VOICEPARAMS_EXT  replaces=LABEL_02D68F  confidence=high
+; WA = channel, XDE = shadow A, XBC = shadow B. Four writes:
+;   0x0800+ch <- A+0x3C, (0x0000+ch) <- 0x8100, 0x0840+ch <- A+0x3E,
+;   0x0080+ch <- (B+0x04 with bit15 cleared), (0x0000+ch) <- A+0x2D.
+; The last write is a real key-on: it pushes a 16-bit note word into bank 0x0000.
+
+[ROUTINE] 0x02D73F TONEGEN_WRITE_VOICEPARAMS_EXT2  replaces=LABEL_02D73F  confidence=high
+; One-shadow variant of the above: 0x0800+ch <- +0x3C, (0x0000+ch) <- 0x8100,
+; 0x0840+ch <- +0x3E, (0x0000+ch) <- +0x2D. No 0x0080 write.
+
+[ROUTINE] 0x02D7C7 ToneGen_WriteGlobalConfig  confidence=high
+; Existing name kept. XWA = pointer to a 0x1A-byte GLOBAL config block (not per-voice).
+; First it tests bit3 of the DRAM word at 0x041343 and forces bit3 of block word 0 to match
+; (set when the flag is clear, cleared when it is set). Then it writes 13 global registers:
+;   0x0200<-+0x00 0x0201<-+0x02 0x0202<-+0x04 0x0203<-+0x06 0x0204<-+0x08 0x0205<-+0x0A
+;   0x0C00<-+0x0C 0x0C01<-+0x0E 0x0C02<-+0x10 0x0C03<-+0x12 0x0C04<-+0x14 0x0C05<-+0x16
+;   0x0E00<-+0x18
+; Called once, from DSP_CONFIG_INIT, with the ROM block at 0x00F8BB.
+
+[ROUTINE] 0x02D93E TONEGEN_WRITE_REGS0440_0480  replaces=LABEL_02D93E  confidence=high
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_GlobalConfigTable_02D93E .byte). It is not a table;
+; it is the first of five single/double register writers packed into that blob. **
+; WA = channel, XBC = shadow; writes 0x0440+ch <- +0x10 and 0x0480+ch <- +0x12. Unreferenced.
+
+[ROUTINE] 0x02D98E TONEGEN_WRITE_REG0180  confidence=high
+; Inside the same misidentified blob; no symbol in either source. WA = channel, XBC = shadow;
+; writes 0x0180 + ch <- +0x0C. Unreferenced in v142.
+
+[ROUTINE] 0x02D9B0 TONEGEN_WRITE_REG0440  confidence=high
+; Same blob. Writes 0x0440 + ch <- shadow +0x10. Unreferenced in v142.
+
+[ROUTINE] 0x02D9D2 TONEGEN_WRITE_REG0480  confidence=high
+; Same blob. Writes 0x0480 + ch <- shadow +0x12. Unreferenced in v142.
+
+[ROUTINE] 0x02D9F4 TONEGEN_WRITE_REG04C0  confidence=high
+; Same blob. Writes 0x04C0 + ch <- shadow +0x14. Unreferenced in v142.
+
+[ROUTINE] 0x02DA16 ToneGen_WriteExtParams_56  confidence=high
+; Existing name kept. WA = channel, XBC = shadow. The "strobed pair" pattern used by every
+; ExtParams routine:
+;   if (shadow+0x3C) bit15 is set:  0x0580+ch <- +0x3C  (strobe asserted)
+;   always:                         0x0600+ch <- +0x40
+;   always:                         0x0580+ch <- +0x3C with bit15 CLEARED (strobe released)
+; So bit15 of the 0x0540/0x0580/0x05C0 banks is a load/trigger bit that software raises and
+; lowers around the companion register write.
+
+[ROUTINE] 0x02DA96 TONEGEN_WRITE_REG0600  replaces=LABEL_02DA96  confidence=high
+; WA = channel, XBC = shadow; writes 0x0600 + ch <- +0x40 only.
+
+[ROUTINE] 0x02DAB8 TONEGEN_WRITE_EXTPARAM_0580_STROBE  replaces=LABEL_02DAB8  confidence=high
+; ToneGen_WriteExtParams_56 without the 0x0600 write: raises then releases the bit15 strobe on
+; 0x0580 + ch using shadow +0x3C.
+
+[ROUTINE] 0x02DB16 TONEGEN_MUTE_REG0580  replaces=LABEL_02DB16  confidence=high
+; WA = channel. Writes the literal 0x8100 to 0x0580 + ch. 0x8100 is the constant this whole
+; family uses to mean "release/mute this slot"; it also appears mid-burst in
+; ToneGen_WriteVoiceParams and in the EXT writers, always aimed at a strobed bank.
+
+[ROUTINE] 0x02DB33 ToneGen_WriteExtParams_56b  confidence=high
+; Existing name kept. Identical to ToneGen_WriteExtParams_56 but on the second bank pair:
+; strobe on 0x05C0 + ch from shadow +0x3E, companion write 0x0640 + ch <- +0x42.
+
+[ROUTINE] 0x02DBB3 TONEGEN_WRITE_REG0640  replaces=LABEL_02DBB3  confidence=high
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ExtParams56b_DataTable .byte) BUT IT IS LIVE: it is
+; CALLed from 0x027D43 and that call is the only reference to it in the ROM. **
+; WA = channel, XBC = shadow; writes 0x0640 + ch <- shadow +0x42.
+
+[ROUTINE] 0x02DBD5 TONEGEN_WRITE_EXTPARAM_05C0_STROBE  confidence=high
+; Second routine inside the 0x02DBB3 blob; no symbol in either source. Raises then releases the
+; bit15 strobe on 0x05C0 + ch using shadow +0x3E (the 0x05C0 twin of 0x02DAB8). Unreferenced.
+
+[ROUTINE] 0x02DC33 TONEGEN_MUTE_REG05C0  confidence=high
+; Third routine in the same blob. Writes 0x8100 to 0x05C0 + ch. Unreferenced in v142.
+
+[ROUTINE] 0x02DC50 ToneGen_WriteExtParams_15  confidence=high
+; Existing name kept. Strobe on 0x0540 + ch from shadow +0x3A, companion write
+; 0x01C0 + ch <- shadow +0x38.
+
+[ROUTINE] 0x02DCD0 TONEGEN_WRITE_REG01C0  replaces=LABEL_02DCD0  confidence=high
+; WA = channel, XBC = shadow; writes 0x01C0 + ch <- +0x38 only.
+
+[ROUTINE] 0x02DCF2 TONEGEN_WRITE_EXTPARAM_0540_STROBE  replaces=LABEL_02DCF2  confidence=high
+; Raises then releases the bit15 strobe on 0x0540 + ch from shadow +0x3A; no companion write.
+
+[ROUTINE] 0x02DD50 TONEGEN_MUTE_REG0540  replaces=LABEL_02DD50  confidence=high
+; Writes 0x8100 to 0x0540 + ch.
+
+[ROUTINE] 0x02DD6D TONEGEN_WRITE_EXTPARAMS_15_BANKED  replaces=LABEL_02DD6D  confidence=high
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ExtParams15_DataTable .byte) BUT IT IS LIVE: CALLed
+; from 0x02F80F, the only reference to it in the ROM. **
+; WA = channel, XBC = shadow. Channel-banked version of ToneGen_WriteExtParams_15:
+;   ch <  0x40 -> strobe 0x0540+ch from +0x3A, companion 0x01C0+ch <- +0x38
+;   ch >= 0x40 -> strobe 0x0580+ch from +0x3E, companion 0x0600+ch <- +0x42
+; This is the clearest statement in the firmware that the TG has TWO channel banks split at
+; channel 0x40 and that the second bank uses a different register-base set.
+
+[ROUTINE] 0x02DE69 TONEGEN_WRITE_EXTPARAM_BANKED_SINGLE  replaces=LABEL_02DE69  confidence=high
+; WA = channel, XBC = shadow. ch < 0x40 -> 0x01C0+ch <- +0x38; ch >= 0x40 -> 0x0600+ch <- +0x42.
+
+[ROUTINE] 0x02DEB0 TONEGEN_WRITE_EXTPARAMS_BANKED  replaces=LABEL_02DEB0  confidence=high
+; WA = channel, XBC = shadow. Strobe-only banked writer: ch < 0x40 strobes 0x0540 from +0x3A,
+; ch >= 0x40 strobes 0x0580 from +0x3E. No companion register write in either path.
+
+[ROUTINE] 0x02DF68 TONEGEN_MUTE_EXTPARAM_BANKED  replaces=LABEL_02DF68  confidence=high
+; WA = channel. Writes 0x8100 to 0x0540 + ch (ch < 0x40) or to 0x0580 + ch (ch >= 0x40).
+
+[ROUTINE] 0x02DFA8 DSP_CONFIG_INIT  confidence=high
+; Existing name kept, but see [UNCERTAIN] -- this routine initialises the TONE GENERATOR, not a
+; DSP. Called once, from 0x034CBA.
+; Sequence: ToneGen_WriteGlobalConfig(ROM 0x00F8BB) to program the 13 global registers, then
+; ldirw 0x22 words from ROM 0x00F8D5 into DRAM 0x2AA4 (the default voice-parameter shadow),
+; then loop channel 0..0x3F running ToneGen_Config_Init.
+
+[ROUTINE] 0x02DFCF ToneGen_Config_Init  confidence=high
+; Existing name kept. The per-channel body of DSP_CONFIG_INIT (IZ = channel, (XSP+2) = the
+; 0x2AA4 template). For each channel:
+;   mute       0x0840+ch <- 0xFF00, 0x0800+ch <- 0xFF80
+;   program    ToneGen_WriteVoiceParams(ch, 0x2AA4); ToneGen_WriteSingleReg(ch, word@0x2AA4)
+;   mute again 0x0840+ch <- 0xFF00, 0x0800+ch <- 0xFF80
+;   clear      0x00C0+ch <- 0x0000
+;   FREE       (0x0000+ch) <- 0x7E00      <-- the documented "free a voice" command
+;   then ToneGen_WriteExtParams_15, _56 and _56b on the same channel.
+; After this runs, all 64 TG voices are silent, freed and holding the default parameter set.
+
+[ROUTINE] 0x02E0B6 TONEGEN_SELFTEST_VOICE0  replaces=LABEL_02E0B6  confidence=medium
+; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ConfigInit_AltData .byte). It is code, and it is the
+; only bounded TG-status polling loop in this region. It is UNREFERENCED in v142 -- no call
+; and no pointer to it anywhere in the ROM -- so it is dormant diagnostic code. **
+; Takes no argument, returns HL = an iteration count. Body:
+;   1. mute voice 0: 0x0840 <- 0xFF00, 0x0800 <- 0xFF80
+;   2. ToneGen_WriteVoiceParams(ch 0, ROM block 0x00F919); ToneGen_WriteSingleReg(0, 0xF000)
+;   3. poll up to 0x3E8 (1000) times: call 0x021023 with WA = 0; if it returns HL != 0 (i.e.
+;      the TG reports voice 0 active) re-mute voice 0 and leave the loop; otherwise increment
+;      the counter and retry. IZ starts at 0xFFFF and the counter lives in QIZ.
+;   4. 0x00C0 <- 0x0000, then (0x0000) <- 0x7E00 to free voice 0.
+;   5. return HL = the number of polls consumed (0x3E8 == the TG never reported the voice).
+; 0x021023 is the ONLY place the TG active-voice bitmap re-enters sub-CPU software; the LLVM
+; build misnames it DAC_Write_Sample. This routine is the firmware's own "is the tone
+; generator alive?" probe and is worth re-enabling in a debug build. See [UNCERTAIN]/findings.
+
+[ROUTINE] 0x02E18D TONEGEN_WRITE_VOICE_KEYWORD  replaces=LABEL_02E18D  confidence=high
+; WA = TG channel, XBC = shadow block. Two writes, no reads of any kind:
+;   0x00C0 + ch <- shadow +0x06
+;   (0x0000 + ch) <- the word at 0x0430BB + ch*0x47 (voice struct +0x2D) with bit15 CLEARED
+; The second write is performed by loading the constant 0x00100002 into a register and storing
+; through it, which is why an automatic pass could mistake it for a read. The channel-to-struct
+; index multiply uses FP_MulAccum64 (0x03D8CA) with XBC = 0x47.
+; The LLVM name ToneGen_ReadPitch_AndScale is wrong on both counts; see [UNCERTAIN].
+; Called from 0x028D14.
+
+[ROUTINE] 0x02E1F4 VOICE_PART_MODE_IS_00  replaces=LABEL_02E1F4  confidence=high
+; WA = part index. Computes 0x04136E + part*0x11F via FP_MulAccum64(0x11F), dereferences the
+; long stored there (the tone-header pointer), reads header byte +0x10, masks 0xC0 and returns
+; HL = 1 when the part mode is 0x00, else 0 (scc Z,HL). Unreferenced in v142.
+
+[ROUTINE] 0x02E213 VOICE_PART_MODE_IS_40  replaces=LABEL_02E213  confidence=high
+; Identical predicate for part mode 0x40. Called from 0x0317F2 and 0x035BC8 -- the only member
+; of this family of four with live callers.
+
+[ROUTINE] 0x02E233 VOICE_PART_MODE_IS_80  replaces=LABEL_02E233  confidence=high
+; Identical predicate for part mode 0x80. Unreferenced in v142.
+
+[ROUTINE] 0x02E253 VOICE_PART_MODE_IS_C0  confidence=high
+; ** Has no symbol in the reference file OR the LLVM build -- it is the fourth, unnamed member
+; of the part-mode predicate family. ** Identical predicate for part mode 0xC0.
+; Unreferenced in v142.
+
+[ROUTINE] 0x02E273 MEMCPY_BYTES_XWA_TO_XBC  replaces=LABEL_02E273  confidence=high
+; The region's block-copy helper. XWA = source, XBC = destination, DE = BYTE count (returns
+; immediately when DE == 0). Copies with post-incrementing byte loads/stores through XHL.
+; The LLVM name BlockCopy_Words_BC_to_HL is doubly wrong -- the transfers are byte-sized and
+; the destination is XBC, not XHL. Used by all five VOICEPARAM_*_LOAD_* routines below.
+
+[ROUTINE] 0x02E288 VOICEPARAM_LOAD_TONE_RECORD  replaces=LABEL_02E288  confidence=high
+; A = part index. Populates the tone staging buffer at 0x044FCE:
+;   0x66 bytes from the pointer at part+0x06        -> 0x044FCE + 0x0000
+;   for i = 0..3: 0x51 bytes from the pointer at part + 0x6E + i*0x25 -> 0x044FCE + 0x66 + i*0x51
+; That fixes the staging layout used everywhere else in the region.
+
+[ROUTINE] 0x02E30E VOICEPARAM_CUSTOMTONE_LOAD_HEADER  replaces=LABEL_02E30E  confidence=medium
+; ** MISIDENTIFIED AS DATA in the reference file / emitted with decimal literals in the LLVM
+; source under the name VoiceStruct_BulkInit_AltData; it is ordinary code. ** Called from
+; 0x02EA1F.
+; A = catalogue index, C = a second index, E = custom-tone slot (saved on the stack). Calls
+; VoiceBuf_Lookup_0x20Flag (0x032A08) to obtain XHL = the source record, then copies
+; (0x045314)[0xEE] bytes into (0x04531C) + slot*0x50 + 0x4AA7 using MEMCPY_BYTES_XWA_TO_XBC.
+
+[ROUTINE] 0x02E353 VOICEPARAM_LOAD_SUBSLOT_RECORD  replaces=LABEL_02E353  confidence=high
+; A = part index, C = sub-slot (0..3). Calls VoiceChanCopy_Main (0x0325FC) to obtain XHL = the
+; source record, then copies (0x045314)[0xEA] bytes into 0x044FCE + 0x1AA + slot*0x0B.
+; Named VoiceSubSlot_Init in the LLVM build.
+
+[ROUTINE] 0x02E390 VOICEPARAM_CUSTOMTONE_LOAD_SUBUNIT  replaces=LABEL_02E390  confidence=medium
+; ** MISIDENTIFIED AS DATA (LLVM: VoiceSubSlot_Init_AltData .byte); it is code. ** Called from
+; 0x02EA60 and 0x02EB53. A = sub-unit index, BC/DE = selectors, (XSP+6) = custom-tone slot;
+; returns with retd 2. Calls SlotParam_WriteDispatch (0x03248B) for XHL = the source record and
+; copies (0x045314)[0xF0] bytes into
+; (0x04531C) + slot*0x50 + unit*0x0B + 0x4AE1.
+
+[ROUTINE] 0x02E3E9 VOICEPARAM_BUILD_TONE_STAGING  replaces=LABEL_02E3E9  confidence=high
+; A = part index. The full "prepare this part's tone for the TG" pass, and the only writer of
+; several staging fields. Steps:
+;   1. VOICEPARAM_LOAD_TONE_RECORD(part), then VOICEPARAM_LOAD_SUBSLOT_RECORD(part, i) for i<4.
+;   2. Reads the part routing word at 0x041372 + part*0x11F; bit15 set -> set bit7 of the DRAM
+;      byte at 0x04506B, clear -> clear it.
+;   3. Copies the 8 default tone-option bytes from the ROM table at 0x00F95D into
+;      0x044FCE + 0x1D8 + k (k = 0..7).
+;   4. Counts "usable" slots: a slot i counts when (0x044FD4 + 0x66 + i*0x51) & 0xC0 == 0 AND
+;      bit5 of the same byte is clear. If the count is not exactly 4 it forces the staging byte
+;      at 0x0451A7 (= staging +0x1D9, tone-option[1]) to 0.
+;   5. For each slot i: takes (part sub-slot +0x36) & 7 and copies four bytes from the part
+;      sub-slot's +0x4D..+0x50 into 0x0451AF + i*5 + j (= staging +0x1E1 + ...).
+; Called from 0x02EC7D and 0x030996.
+
+[ROUTINE] 0x02E581 VOICEPARAM_PART_SET_MODEBITS_AND_REFRESH  replaces=LABEL_02E581  confidence=medium
+; ** Start of a 1672-byte run (0x02E581..0x02EC09) that BOTH symbol sources treat as data
+; (LLVM: VoiceParam_FullSetup_ExtData). It is eight live routines; every one of them is CALLed
+; from the dispatcher at 0x02EDC9..0x02EFF6. **
+; A = part index, C = a boolean. Returns immediately if the part status word at
+; 0x041368 + part*0x11F has (value & 3) == 0, i.e. the part is not loaded.
+; Otherwise: C == 0 -> clear bit0 and set bit1; C != 0 -> clear bit1 and set bit0; then set
+; bit2 unconditionally. Calls Voice_NoteState_Clear (0x0347B7) and Voice_SetLFO_ActiveFlag
+; (0x027CBE), then VoiceInit_Dispatcher (0x032938) with the two part bytes at +0x19 and +0x1A.
+; Then tone-header byte +0x5D bit7 -> set (else clear) bit14 of the part routing word +0x0A.
+; Finally dispatches on the part mode (tone-header +0x10 & 0xC0):
+;   0x80 -> nothing;  0x40 -> VoiceSlot_AltInit (0x034968);  0x00 and 0xC0 ->
+;   VoiceSlot_FullInit (0x034890).
+
+[ROUTINE] 0x02E6D4 VOICEPARAM_SUBSLOT_APPLY_CATALOG50  confidence=medium
+; ** Inside the same misidentified blob; unnamed in both sources. ** Called from 0x02EE97.
+; A = part index, E low nibble = sub-slot, BC = wave-catalogue index. The catalogue is
+; (0x045310) + (0x045314)[0x50], entries are 0x10 bytes. Writes catalogue entry byte +0x0E into
+; the sub-slot descriptor's +0x02 and byte +0x0F into +0x03 (the descriptor is the long at
+; part + 0x6E + slot*0x25). Then calls VOICEPARAM_LOAD_SUBSLOT_RECORD(part, slot) and
+; VoiceParam_WriteWithOffset_3Arg (0x0328E2) for j = 0..3.
+; The +0x0E/+0x0F pair recurs in all four "catalogue" routines below and is almost certainly
+; the wave/sample selector; that reading is inference, not proof.
+
+[ROUTINE] 0x02E7A0 VOICEPARAM_SUBSLOT_APPLY_CATALOG64  confidence=medium
+; ** Same blob; unnamed in both sources. ** Called from 0x02EECA. Catalogue is
+; (0x045310) + (0x045314)[0x64]. E low nibble = sub-slot, E high nibble = a pair index k,
+; A = part, BC = catalogue index. Writes catalogue entry +0x0E into (sub-slot record +0x04)
+; indexed by 3 + 2*k, and entry +0x0F into the following byte, then tail-jumps into
+; VoiceParam_WriteWithOffset_3Arg (0x0328E2).
+
+[ROUTINE] 0x02E85A VOICEPARAM_SET_TONE_OPTION  confidence=high
+; ** Same blob; unnamed in both sources. ** Called from 0x02EF20.
+; E = new value, (XSP+2) = part index, C = tone-option index (0..6). Stores E into the staging
+; tone-option array at 0x044FCE + 0x1D8 + C, then dispatches through the 7-entry, 2-byte
+; jump-offset table at ROM 0x00F965 relative to base 0x02E89B. C outside 0..6 falls straight to
+; the exit. The seven handlers are NOT a fall-through chain; each ends with a jump to 0x02E918:
+;   0 -> Voice_ActiveFlag_CheckAndLoad (0x034491)
+;   1 -> 0x034503, then 0x034606 unless the new value is 0xF5, then 0x02F52A(part, 0)
+;   2 -> 0x034651 then 0x02F52A(part, 0)
+;   3 -> 0x03469C then 0x02F52A(part, 0)
+;   4 -> 0x0346E7
+;   5 -> 0x034732
+;   6 -> 0x034732, then VOICE_QUERY_REQ_MODE40_MASK7F(part) and
+;        Voice_AllNotes_SustainRetrigger (0x028E26) with BC = 1
+; Note that the 8-byte option array these indices address is initialised from ROM 0x00F95D by
+; VOICEPARAM_BUILD_TONE_STAGING, and that option[1] is the byte
+; VOICEPARAM_BUILD_TONE_STAGING zeroes when fewer than 4 slots are usable.
+
+[LABEL] 0x02E89B VOICEPARAM_SET_TONE_OPTION_CASE0  confidence=high
+; Base of the 7-way jump table at ROM 0x00F965; also the handler for option index 0.
+
+[ROUTINE] 0x02E91B VOICEPARAM_CUSTOMTONE_SELECT  confidence=medium
+; ** Same blob; unnamed in both sources. ** Called from 0x02EF7B.
+; A = custom-tone slot. Latches it into the byte at (0x04531C) + 0x72A7 -- the "currently
+; selected custom tone" global that the next three routines all read back. Then for k = 0..1 it
+; copies from (0x04531C) + slot*0x50 + k*0x15 + 0x4AB7 into 0x044FCE + 0x1F4 + k*5:
+;   dest[0] = src[0x0F] & 7 ; dest[1..4] = src[0x11..0x14].
+
+[ROUTINE] 0x02E9B1 VOICEPARAM_CUSTOMTONE_APPLY_CATALOG80  confidence=medium
+; ** Same blob; unnamed in both sources. ** Called from 0x02EF96. WA = wave-catalogue index;
+; the custom-tone slot comes from the (0x04531C)+0x72A7 latch, not from an argument.
+; Catalogue = (0x045310) + (0x045314)[0x80], 0x10-byte entries. Calls
+; VOICEPARAM_CUSTOMTONE_LOAD_HEADER with entry +0x0E / +0x0F, then for k = 0..1 calls
+; VOICEPARAM_CUSTOMTONE_LOAD_SUBUNIT for the sub-record at base + 0x10 + k*0x15 and rewrites
+; that record's +0x02 as (value & 0x0F) | 0x50. Finally stores entry +0x0E and
+; (entry +0x0F & 0x1F) | 0x60 into (0x04531C) + slot*2 + 0x49A7.
+
+[ROUTINE] 0x02EACE VOICEPARAM_CUSTOMTONE_APPLY_CATALOG8C  confidence=medium
+; ** Same blob; unnamed in both sources. ** Called from 0x02EFC6. WA = catalogue index,
+; C low nibble = unit index; catalogue = (0x045310) + (0x045314)[0x8C]. Calls
+; VOICEPARAM_CUSTOMTONE_LOAD_SUBUNIT, then writes catalogue entry +0x0E into
+; (0x04531C) + slot*0x50 + unit*0x15 + 0x4AB7 + 1 and (entry +0x0F & 0x0F) | 0x50 into +2.
+
+[ROUTINE] 0x02EB8A VOICEPARAM_CUSTOMTONE_APPLY_CATALOG94  confidence=medium
+; ** Same blob; unnamed in both sources. ** Called from 0x02EFF6. WA = catalogue index,
+; C low nibble = sub-unit (stride 0x0B), C high nibble = pair index k;
+; catalogue = (0x045310) + (0x045314)[0x94]. Writes entry +0x0E into
+; (0x04531C) + slot*0x50 + unit*0x0B + 0x4AE1 + 3 + 2*k and entry +0x0F into the next byte.
+; No copy and no further calls -- the smallest of the four catalogue appliers.
+
+[ROUTINE] 0x02EC0A VOICE_PART_GUARD_AND_INIT  replaces=LABEL_02EC0A  confidence=medium
+; A = part index. Only the first 0x2E bytes of this routine fall inside region 8 (it continues
+; past 0x02EC37 to 0x02ECBD); documented here for its GUARD, which is the part everyone using
+; this region needs to know about:
+;     if (byte at DRAM 0x0451A4) != A            -> return immediately, doing nothing
+;     if A > 2 and (part status word & 3) != 3   -> return immediately, doing nothing
+; 0x0451A4 is a single global "part currently being edited/loaded" latch. Because it is a
+; plain equality test with no timeout and no fallback, every one of the 13 call sites
+; (0x02EDD4, 0x02EDF3, 0x02EE12, 0x02EE31, 0x02EE50, 0x02EE6F, 0x02EEA2, 0x02EF0A, 0x02F513,
+; 0x031AAE, 0x031ABE, 0x031AEA and 0x02EC7D's neighbourhood) silently becomes a no-op whenever
+; that latch does not match. Beyond the guard the routine calls
+; VOICEPARAM_BUILD_TONE_STAGING (0x02EC7D) and continues into 0x02EC38.
+
+[UNCERTAIN] 0x02CD55 -- name conflict. The curated reference says Voice_Query_AllChannels, the
+LLVM build says Voice_AllocateForAny. The body builds a query packet with mask 0x1FFF, which
+sends NoteOn_RoutePacket (0x022691) down its "enumerate every voice whose table entry +0x22 bit0
+is set" path. The curated name is the correct one; the whole 0x02CCAD..0x02CD55 family is a set
+of QUERY-request builders, not allocators, and I would rename the LLVM side rather than the
+reference side. Not touched.
+
+[UNCERTAIN] 0x02CD71 -- name conflict. Curated: Voice_Reload_Levels. LLVM: Voice_Release. The
+body clears the voice's active bit and writes the volume/level registers on the way to a
+note-off, so both names are defensible and I could not choose on evidence. Left alone.
+
+[UNCERTAIN] 0x02D00D -- the LLVM name Voice_SetPanning is not supported by the body: the routine
+builds a request packet, calls NoteOn_Dispatch and then zero-initialises a 0x47-byte voice
+struct. No pan register (0x0400 bank) is written anywhere in it. I proposed
+VOICE_ACQUIRE_AND_INIT against the reference file's LABEL_02D00D and left the LLVM name alone,
+but the two sources will now disagree and someone should reconcile them.
+
+[UNCERTAIN] 0x02D0BA -- curated ToneGen_WriteVoicePitch vs LLVM ToneGen_WritePanReg. The body
+writes exactly one register, 0x0400 + ch, from shadow +0x0E. I have no evidence for either
+"pitch" or "pan"; the 0x0400 bank's meaning is not established anywhere in this region. Both
+names are guesses and both were left in place.
+
+[UNCERTAIN] 0x02D436 / 0x02D50E / 0x02D5D0 / 0x02D620 / 0x02D670 -- five more curated-vs-LLVM
+conflicts (WriteLevelBurst vs WriteNote, WriteLevelPair vs WriteNote_2Regs, WriteEnvSegments vs
+WriteNote_Stereo, WriteSegRegs_SameLevel vs WriteNote_Hold, WriteExprReg vs
+WriteSingleReg_180). In each case the curated name matches the register set better than the LLVM
+one: these routines write the 0x0800..0x0A40 envelope/level banks and 0x0180, and none of them
+touches bank 0x0000 (the actual note register). I left all ten names alone.
+
+[UNCERTAIN] 0x02DFA8 -- DSP_CONFIG_INIT / DSP_Config_Init is a misnomer: the routine writes only
+tone-generator registers (0x100000/0x100002) and never touches 0x130000 (DSP1) or any other DSP
+port. TONEGEN_RESET_ALL_VOICES would be accurate. Not renamed because the name is non-LABEL in
+both sources.
+
+[UNCERTAIN] 0x02E18D -- ToneGen_ReadPitch_AndScale (LLVM) performs no read and no scaling; it
+writes 0x00C0+ch and then bank 0x0000+ch. The "read" impression comes from the
+"ld XWA,0x00100002 / ld (XWA),BC" store-through-pointer idiom. Proposed
+TONEGEN_WRITE_VOICE_KEYWORD against the reference LABEL_02E18D.
+
+[UNCERTAIN] 0x02E1F4/0x02E213/0x02E233 -- CheckStatusBits_Zero/_40/_80 (LLVM) do not read any
+status register; they read the PART MODE nibble out of the tone header in DRAM. My proposed
+VOICE_PART_MODE_IS_* names go against the reference file's LABEL_ entries only.
+
+[UNCERTAIN] 0x02E273 -- BlockCopy_Words_BC_to_HL (LLVM) is a BYTE copy from XWA to XBC. Both
+halves of the name are wrong. Proposed MEMCPY_BYTES_XWA_TO_XBC against LABEL_02E273.
+
+[UNCERTAIN] 0x021023 -- outside this region, but the LLVM build names it DAC_Write_Sample while
+the project's own landmark list says it is the TG address-latch write plus status readback (the
+only path by which the active-voice bitmap re-enters software). TONEGEN_READ_STATUS would be
+right. Flagged, not touched.
+
+[UNCERTAIN] The ~80 "*_NopCont*" / "__jrt_nop_*" labels in this region are the "jr $+2; nop; nop;
+nop" TG settle delay and carry no meaning. I deliberately proposed no names for them; if the
+reference file wants them filled, a mechanical TONEGEN_SETTLE_xxxxxx would do, but it would add
+80 lines of noise for no information.
+
+[UNCERTAIN] Register-bank semantics. I established WHICH registers each routine writes and from
+which shadow offset, and that bit15 of banks 0x0080/0x0540/0x0580/0x05C0 is a load strobe and
+0x8100 is a release constant, but I could not establish what banks 0x0040, 0x00C0, 0x0100,
+0x0140, 0x0400-0x0500 or 0x0880-0x0A40 mean musically. Naming them "pitch", "pan", "envelope"
+would be guessing. The one bank whose function IS pinned down is 0x0000 (per-voice key/note
+word; 0x7E00 frees the voice), from the memory map plus the write sites at 0x02CA02, 0x02D2AB,
+0x02D6C1, 0x02D76E, 0x02E07C, 0x02E17D and 0x02E1BC.
+
+[UNCERTAIN] Whether the two "wave catalogue" bytes +0x0E / +0x0F of a 0x10-byte catalogue entry
+really are a wave/sample selector. Every one of the four VOICEPARAM_CUSTOMTONE_APPLY_* routines
+and both VOICEPARAM_SUBSLOT_APPLY_* routines copies exactly that pair, sometimes masking +0x0F
+with 0x0F/0x1F and OR-ing 0x50/0x60, which looks like "index plus a 4-bit type tag" -- but I did
+not follow the catalogue back to a wave ROM, so the names avoid saying "wave".

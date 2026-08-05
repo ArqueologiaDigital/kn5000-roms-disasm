@@ -1,0 +1,767 @@
+# region 4: 0x024069..0x025CCA
+# Per-voice tone-generator parameter marshalling: the code that packs pitch/level/pan
+# words into the IC303 staging block at 0x0451CC and resolves the physical TG slot.
+#
+# NOTE ON METHOD (read before integrating): every address in this region ALREADY carries a
+# real, hand-maintained symbol in the authoritative LLVM build
+# (rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf, 176 symbols in range). The proposals
+# below therefore adopt the authoritative build's names VERBATIM so that
+# symbols/subcpu_symbols_reference.txt (which still shows LABEL_xxxxxx at those addresses)
+# stops disagreeing with the ROM that is actually built. Integration is a pure text
+# substitution, zero semantic risk. The remaining 14 addresses already have non-LABEL_
+# names in the reference file that CONFLICT with the build's names; per the rules those are
+# left alone and argued in [UNCERTAIN] at the bottom.
+#
+# THE ONE STRUCTURAL FACT THAT EXPLAINS THE WHOLE REGION (verified, not inferred):
+# 0x0451CC is a 68-byte tone-generator parameter staging block in DRAM. Nothing in this
+# region touches 0x100000/0x100002 directly. The block is handed to
+# ToneGen_WriteVoiceParams (0x02D0F2 region, `lda_24 xbc, 0x0451cc` appears 47x in the
+# firmware) together with WA = physical TG slot number, and that routine walks the block
+# emitting one address-latch + data pair per word. Word offset -> TG register (all + slot):
+#   +2  0x0451CE -> reg 0x040   waveform / multisample select
+#   +4  0x0451D0 -> reg 0x080   voice mode; written first with bit15 SET and again at the
+#                               end with bit15 CLEAR -- the key-on latch strobe pair
+#   +6  0x0451D2 -> reg 0x0C0
+#   +8  0x0451D4 -> reg 0x100
+#   +10 0x0451D6 -> reg 0x140
+#   +12 0x0451D8 -> reg 0x180
+#   +14 0x0451DA -> reg 0x400   (also written alone by ToneGen_WritePanReg)
+#   +16 0x0451DC -> reg 0x440   +18 0x0451DE -> 0x480   +20 0x0451E0 -> 0x4C0
+#   +22 0x0451E2 -> reg 0x500
+#   +24 0x0451E4 -> reg 0x800   main volume/level (0xFF80 = mute)
+#   +26 0x0451E6 -> reg 0x840   +28 0x0451E8 -> 0x880   +30 0x0451EA -> 0x8C0
+#   +32 0x0451EC -> reg 0x900   +34 0x0451EE -> 0x940   +36 0x0451F0 -> 0x980
+#   +38 0x0451F2 -> reg 0x9C0   +40 0x0451F4 -> 0xA00   +42 0x0451F6 -> 0xA40
+#   +56 0x045204 -> reg 0x1C0   +58 0x045206 -> (ExtParams_15 path)
+#   +60 0x045208 -> reg 0x580   +62 0x04520A -> reg 0x5C0   +64 0x04520C -> reg 0x600
+#   +66 0x04520E -> reg 0x600 (alternate/high path)
+# Per-voice software record: 0x041300 + channel*0x11F. Fields used here: +19/+23/+35/+39
+# are 32-bit pointers (part record, tone record, patch record, performance record);
+# +42/+44 hold the packed reg-0x100 / reg-0x140 pair; +45 the packed reg-0x800 level word;
+# +60/+62/+64 cached level/pan words; +0x4C (0x04134C) is a GLOBAL mode byte (values 5 and
+# 6 select alternate expression handling); +0x8D/+0x8E (0x04138D/0x04138E) are per-voice
+# routing nibbles.
+# Physical TG slot state array: 0x04424E, stride 0x1B (27) bytes, 0x80 entries, ending
+# exactly at 0x044FCE (which the firmware references as a separate variable -- that is the
+# proof of the 0x80 bound). Sub-voice view of the same array is 0x044257 = 0x04424E + 9.
+
+[LABEL] 0x024069 Voice_PitchPack_Mode5_ApplyDetune  replaces=LABEL_024069  confidence=high
+; Detune arm of Voice_PitchPack_Mode5_Dual: adds the signed byte (tonerec+103) to each of
+; the two zero-extended coarse values (tonerec+77, tonerec+79) into the frames at (xsp+4)/(xsp+6).
+
+[LABEL] 0x024097 Voice_PitchPack_Mode5_Finalize  replaces=LABEL_024097  confidence=high
+; Common tail of pitch-pack mode 5. Runs Portamento_CalcContrib_A twice (once per coarse
+; value) then packs word = (tonerec+78)<<13 | (tonerec+78)<<10 | contrib, sets bit 7, and
+; stores the pair to voice+66 / voice+68 (later emitted as TG regs 0x100 / 0x140).
+; Clears the 16-bit flag at 0x2940 on exit, as every pitch-pack mode does.
+
+[LABEL] 0x02412B Voice_PitchPack_Dispatch_Table  replaces=LABEL_02412B  confidence=high
+; Six-entry computed-goto landing pad for Voice_PitchPack_Dispatch. Entry 0 falls through
+; to NoteState_InitDefaults (0x022DA1, which sets voice+66=0x017F, voice+68=0x7F7F);
+; entries 1..5 reach the mode bodies at 0x023D01, 0x023DB5, 0x023EC2, 0x023FBD, 0x02403D.
+; Offsets come from the word table at 0x00F6A7.
+
+[ROUTINE] 0x0241A0 Voice_PitchPack_RouteB  replaces=LABEL_0241A0  confidence=high
+; Pitch-pack route B. In: XWA = per-voice record. Out: voice+66, voice+68.
+; Identical to route A (0x02413E) except that bit 7 is additionally set in the reg-0x100
+; word. voice+66 = Portamento_CalcContrib_B(tonerec+0x11) | (tonerec+0x12)<<13 | bit10 | bit7;
+; voice+68 = Portamento_ClampAdd18(tonerec+0x13) | PitchBend_LookupCoeff(tonerec+0x14).
+; Touches no hardware. Reached only through Voice_PitchReg_WriteDispatch's table.
+
+[ROUTINE] 0x024205 Voice_PitchPack_RouteC  replaces=LABEL_024205  confidence=high
+; Pitch-pack route C. In: XWA = per-voice record; XIZ is loaded with the tone record.
+; voice+66 = Portamento_CalcContrib_B(tonerec+0x11) | (tonerec+0x12)<<10 | (tonerec+0x12)<<13;
+; voice+68 = the same contrib value unmodified. Clears 0x2940. No bit-7 set (that is what
+; distinguishes it from route D).
+
+[ROUTINE] 0x024250 Voice_PitchPack_RouteD  replaces=LABEL_024250  confidence=high
+; Pitch-pack route D. Byte-for-byte route C plus `set 7` on BOTH the reg-0x100 and the
+; reg-0x140 words before they are stored to voice+66 / voice+68.
+
+[ROUTINE] 0x0242A1 Voice_PitchPack_RouteE  replaces=LABEL_0242A1  confidence=high
+; Pitch-pack route E -- the two-source variant. Calls Portamento_CalcContrib_B twice, once
+; with tonerec+0x11 and once with tonerec+0x13, so the two TG pitch registers get
+; independent coarse values. voice+66 = contrib(0x11) | (tonerec+0x14)<<10 |
+; (tonerec+0x12)<<13 | bit7; voice+68 = contrib(0x13). Clears 0x2940.
+
+[LABEL] 0x02432C Voice_PitchReg_WriteDispatch_Table  replaces=LABEL_02432C  confidence=high
+; Landing pad for the dispatcher at 0x024300 (reference name TVF_BuildEmit_Short_Dispatch,
+; left alone), which switches on (tonerec+0x0F)&7 using the word table at 0x00F6B3. Case 0
+; body is inline here: NoteState_InitDefaults then copy voice+66/voice+68 to
+; 0x0451D4/0x0451D6. Cases 1..5 are two-instruction call stubs to Voice_PitchPack_RouteA..E.
+
+[LABEL] 0x024364 Voice_PitchReg_WriteDispatch_Return  replaces=LABEL_024364  confidence=high
+; Shared epilogue: pop XIZ, ret.
+
+[LABEL] 0x024394 Voice_Pan_WriteWithDetune_Positive  replaces=LABEL_024394  confidence=high
+; Additive arm (bit 7 of ((voice+39)+0x18) clear): field = (voice+66 & 0x7F) + s8(patch+0x1F).
+
+[LABEL] 0x0243A7 Voice_Pan_WriteWithDetune_Clamp  replaces=LABEL_0243A7  confidence=high
+; ClampS8_0_to_78 the 7-bit field to 0..120, merge under mask 0xFF80 back into voice+66 and
+; store to 0x0451D4 (TG reg 0x100).
+
+[LABEL] 0x0243BA Voice_Pan_Write_AsIs  replaces=LABEL_0243BA  confidence=high
+; Offset disabled (bit 6 of ((voice+39)+0x18) clear): copy voice+66 to 0x0451D4 unchanged.
+
+[LABEL] 0x0243C2 Voice_Pan_WriteSecondary  replaces=LABEL_0243C2  confidence=high
+; Common tail: copy voice+68 to 0x0451D6 (TG reg 0x140) unchanged, pop XIZ, ret.
+
+[LABEL] 0x0243FA Voice_Pan_WriteBoth_Positive  replaces=LABEL_0243FA  confidence=high
+; Additive arm of the "both registers" variant; result kept in HL for the shared clamp.
+
+[LABEL] 0x02440D Voice_Pan_WriteBoth_Clamp  replaces=LABEL_02440D  confidence=high
+; Clamps the shared 7-bit offset once and merges it into BOTH words: voice+66 under 0xFF80
+; -> 0x0451D4, voice+68 under 0xFF80 -> 0x0451D6.
+
+[LABEL] 0x024432 Voice_Pan_WriteBoth_AsIs  replaces=LABEL_024432  confidence=high
+; Offset disabled: copy voice+66/voice+68 verbatim to 0x0451D4/0x0451D6.
+
+[LABEL] 0x024442 Voice_Pan_WriteBoth_Return  replaces=LABEL_024442  confidence=high
+; pop XIZ, ret.
+
+[LABEL] 0x024472 Voice_PanReg_WriteDispatch_Table  replaces=LABEL_024472  confidence=high
+; Six-case landing pad for the (tonerec+54)&7 dispatcher; offsets from the word table at
+; 0x00F6BF. Case 0 = verbatim copy of voice+66/+68; case 1 = Voice_Pan_WriteWithDetune;
+; case 2 = same but gated on bit 9 of (patch+2); cases 3/4 = Voice_Pan_WriteBothWithDetune;
+; case 5 = the inline arms below.
+
+[LABEL] 0x0244A0 Voice_PanReg_Dispatch_Mode2_CheckBit9  replaces=LABEL_0244A0  confidence=high
+; Bit-9-clear arm of case 2: use the "both registers" offset routine instead.
+
+[LABEL] 0x0244F0 Voice_PanReg_Dispatch_Mode5_Positive  replaces=LABEL_0244F0  confidence=high
+; Case-5 additive arm: (voice+66 & 0x7F) + s8(patch+0x1F) into DE, (voice+68 & 0x7F) +
+; s8(patch+0x1F) into (xsp+4).
+
+[LABEL] 0x024517 Voice_PanReg_Dispatch_Mode5_Finalize  replaces=LABEL_024517  confidence=high
+; Clamps both offsets to 0..120 independently, merges each under 0xFF80 and stores to
+; 0x0451D4 / 0x0451D6.
+
+[LABEL] 0x024540 Voice_PanReg_Dispatch_Mode5_AsIs  replaces=LABEL_024540  confidence=high
+; Case-5 with the offset disabled (bit 6 of ((voice+39)+0x18) clear): verbatim copy.
+
+[LABEL] 0x024550 Voice_PanReg_WriteDispatch_Return  replaces=LABEL_024550  confidence=high
+; pop XIZ, inc 2 xsp, ret.
+
+[ROUTINE] 0x024554 Voice_PanReg_WriteDispatchB  replaces=LABEL_024554  confidence=high
+; Second copy of Voice_PanReg_WriteDispatch (0x024444), instruction-for-instruction
+; identical except that the mode nibble comes from (tonerec+0x0F)&7 instead of
+; (tonerec+0x36)&7 and the offset table is 0x00F6CB instead of 0x00F6BF.
+; In: XWA = per-voice record. Out: 0x0451D4 (TG reg 0x100), 0x0451D6 (TG reg 0x140).
+; The A/B pair mirrors the two independent parameter groups in the tone record
+; (cluster {0x0F..0x16} vs cluster {0x36..0x3C,0x4D..0x50}) -- i.e. the two layers/oscillators.
+
+[LABEL] 0x024582 Voice_PanReg_WriteDispatchB_Table  replaces=LABEL_024582  confidence=high
+; Landing pad for dispatch B; same six cases as 0x024472.
+
+[LABEL] 0x0245B0 Voice_PanReg_DispatchB_Mode2_CheckBit9  replaces=LABEL_0245B0  confidence=high
+; Bit-9-clear arm of case 2 in dispatch B.
+
+[LABEL] 0x024600 Voice_PanReg_DispatchB_Mode5_Positive  replaces=LABEL_024600  confidence=high
+; Case-5 additive arm in dispatch B.
+
+[LABEL] 0x024627 Voice_PanReg_DispatchB_Mode5_Finalize  replaces=LABEL_024627  confidence=high
+; Case-5 clamp-and-emit in dispatch B.
+
+[LABEL] 0x024650 Voice_PanReg_DispatchB_Mode5_AsIs  replaces=LABEL_024650  confidence=high
+; Case-5 verbatim copy in dispatch B.
+
+[LABEL] 0x024660 Voice_PanReg_WriteDispatchB_Return  replaces=LABEL_024660  confidence=high
+; pop XIZ, inc 2 xsp, ret.
+
+[ROUTINE] 0x024664 Voice_StereoLevel_Compute  replaces=LABEL_024664  confidence=medium
+; Builds the three-channel level triple emitted as TG registers 0x9C0 / 0xA00 / 0xA40.
+; In: XWA = per-voice record (tone record via +23). Out: 0x0451F2, 0x0451F4, 0x0451F6.
+; Each channel level starts as a byte from the curve table at 0x0118FE indexed by
+; tonerec+63 / +65 / +67. If tonerec+71 is non-zero the key-scaled term from
+; PitchBend_Scale(tonerec+71, voice+12) is added to all three. tonerec+74 / tonerec+75
+; add an LFO/tremolo term via Pan_ScaleWithVelocity. Each result is clamped 0..0xFF and
+; packed as (level << 8) | Detune_ScaleSymmetric(clamp(tonerec+61 + tonerec+64/66/68,
+; -0x32..+0x32)) -- i.e. an 8-bit level in the high byte and a signed spread coefficient in
+; the low byte, the same layout the mute path uses when it writes 0xFF80.
+; Confidence medium only because the *meaning* of the three destination registers is taken
+; from kn5000-docs/tone-generator.md, not proved here.
+
+[LABEL] 0x0246BC Voice_StereoLevel_Ch1_Unmodulated  replaces=LABEL_0246BC  confidence=high
+; Channel-1 level with no key-scaling term: table[0x0118FE + tonerec+63] straight to (xsp+6).
+
+[LABEL] 0x0246D3 Voice_StereoLevel_Ch2_Modulated  replaces=LABEL_0246D3  confidence=high
+; Channel-2 level plus the key-scaled term still held in HL.
+
+[LABEL] 0x0246F9 Voice_StereoLevel_Ch2_Unmodulated  replaces=LABEL_0246F9  confidence=high
+; Channel-2 level, table value only.
+
+[LABEL] 0x024710 Voice_StereoLevel_Ch3_Modulated  replaces=LABEL_024710  confidence=high
+; Channel-3 level plus the key-scaled term.
+
+[LABEL] 0x024734 Voice_StereoLevel_Ch3_Unmodulated  replaces=LABEL_024734  confidence=high
+; Channel-3 level, table value only.
+
+[LABEL] 0x02474D Voice_StereoLevel_AllUnmodulated  replaces=LABEL_02474D  confidence=high
+; Fast path taken when tonerec+71 == 0: all three levels are plain table lookups.
+
+[LABEL] 0x024792 Voice_StereoLevel_ApplyTremolo  replaces=LABEL_024792  confidence=medium
+; If tonerec+74 != 0, adds Pan_ScaleWithVelocity(tonerec+73, 0x7F, s8(tonerec+74),
+; (voice+8)) to the channel-1 level.
+
+[LABEL] 0x0247BF Voice_StereoLevel_PackCh1  replaces=LABEL_0247BF  confidence=high
+; Clamps channel 1 to 0..0xFF, computes the signed low-byte coefficient from
+; tonerec+61 + tonerec+64 clamped to -0x32..+0x32 through Detune_ScaleSymmetric, and stores
+; (level<<8)|coeff to 0x0451F2 (TG reg 0x9C0). Then optionally applies the tonerec+75
+; modulation to channels 2 and 3.
+
+[LABEL] 0x02484C Voice_StereoLevel_ClampCh23_NoMod  replaces=LABEL_02484C  confidence=high
+; tonerec+75 == 0: clamp channels 2 and 3 to 0..0xFF with no added modulation.
+
+[LABEL] 0x024868 Voice_StereoLevel_PackCh23  replaces=LABEL_024868  confidence=high
+; Packs and stores channels 2 and 3 to 0x0451F4 (TG reg 0xA00) and 0x0451F6 (TG reg 0xA40),
+; each with its own Detune_ScaleSymmetric coefficient from tonerec+61 + tonerec+66 / +68.
+
+[ROUTINE] 0x0248D5 Voice_PortaLevel_Compute  replaces=LABEL_0248D5  confidence=medium
+; Builds the pair emitted as TG registers 0x500 (0x0451E2) and 0x8C0 (0x0451EA).
+; In: XWA = per-voice record. Sign-splits tonerec+7 and tonerec+8: if tonerec+7 is negative
+; both bytes are negated before scaling (Detune_ScaleUnsigned for +7, Detune_ScaleSymmetric
+; for +8), so the routine has a mirrored positive arm at 0x024911. The scaled values are
+; then combined with tonerec+18 and the note number (voice+12) in the tail.
+
+[LABEL] 0x024911 Voice_PortaLevel_Compute_Positive  replaces=LABEL_024911  confidence=high
+; Positive/zero arm: scale tonerec+7 and tonerec+8 directly, no negation.
+
+[LABEL] 0x02492D Voice_PortaLevel_ScaleAndPack  replaces=LABEL_02492D  confidence=medium
+; Shared tail: scales by tonerec+18 against the note number, packs and stores the two words
+; to 0x0451E2 (TG reg 0x500) and 0x0451EA (TG reg 0x8C0).
+
+[ROUTINE] 0x0249BF Voice_Level_ClearAllOutputRegs  replaces=LABEL_0249BF  confidence=high
+; Zeroes the whole level/pan half of the staging block: 0x0451EA, 0x0451E2, 0x0451EC,
+; 0x0451EE, 0x0451F0, 0x0451F2, 0x0451F4, 0x0451F6, 0x0451DC, 0x0451DE (TG regs 0x8C0,
+; 0x500, 0x900, 0x940, 0x980, 0x9C0, 0xA00, 0xA40, 0x440, 0x480).
+; In: XWA = per-voice record, XHL = its tone record. Then it selects the reg-0x180 value
+; from the per-voice routing byte at 0x04138E + channel*0x11F: value 1 -> voice+43 = 0,
+; value 2 -> voice+43 = 0x7F, anything else -> voice+43 = tonerec[0]. voice+43 is stored to
+; 0x0451D8 (TG reg 0x180) and 0x0451E0 (TG reg 0x4C0) is zeroed.
+; This is the "silence everything except the mode word" primitive used on voice teardown.
+
+[LABEL] 0x024A25 Voice_Level_ClearAllOutputRegs_Check2  replaces=LABEL_024A25  confidence=high
+; Second routing-byte comparison (== 2 -> voice+43 = 0x7F).
+
+[LABEL] 0x024A42 Voice_Level_ClearAllOutputRegs_FromTable  replaces=LABEL_024A42  confidence=high
+; Default arm: voice+43 = first byte of the tone record.
+
+[LABEL] 0x024A49 Voice_Level_ClearAllOutputRegs_Store  replaces=LABEL_024A49  confidence=high
+; Store voice+43 to 0x0451D8 (TG reg 0x180), clear 0x0451E0 (TG reg 0x4C0), ret.
+
+[ROUTINE] 0x024A59 Voice_OpSlot_WriteParams  replaces=LABEL_024A59  confidence=medium
+; Writes one operator/slot's envelope parameters into the physical slot record.
+; In: A = channel, E = operator index, C/(xsp+20) = slot number, (xsp+22) = group index,
+; XBC = patch record pointer. Computes three bases: 0x04136E + channel*0x11F (per-voice
+; operator parameters), 0x041368 + channel*0x11F, and 0x04424E + slot*0x1B (the physical
+; slot record, XIZ). Unless the direct path is taken it offsets each parameter by the signed
+; bytes at patch+104/105/106 and clamps (0..0x7F, 0..0x7F, 0..0x1E) before storing to
+; slotrec+1, +3 and +7.
+; The direct/bypass path is chosen when the group index == 2, or the operator index == 0,
+; or the byte at 0x0451A7 == 0xF5 (a global "raw parameters" mode flag).
+
+[LABEL] 0x024B5E Voice_OpSlot_WriteParams_Direct  replaces=LABEL_024B5E  confidence=high
+; Bypass path: copy the three parameter bytes into slotrec+1/+3/+7 with no patch offset
+; and no clamping.
+
+[LABEL] 0x024B7B Voice_OpSlot_ApplySustainPedal  replaces=LABEL_024B7B  confidence=medium
+; If the sustain bit is set in the per-voice flag word, forces the release segment of this
+; slot record to the sustain-pedal value instead of the patch value.
+
+[LABEL] 0x024B91 Voice_OpSlot_SustainRelease_Set  replaces=LABEL_024B91  confidence=medium
+; Two-instruction store of the sustain-pedal release value.
+
+[LABEL] 0x024B95 Voice_OpSlot_ApplySostenuto  replaces=LABEL_024B95  confidence=medium
+; Same test/override for the sostenuto pedal.
+
+[LABEL] 0x024BAB Voice_OpSlot_SostenutoRelease_Set  replaces=LABEL_024BAB  confidence=medium
+; Two-instruction store of the sostenuto release value.
+
+[LABEL] 0x024BAF Voice_OpSlot_CopyWaveformBits  replaces=LABEL_024BAF  confidence=medium
+; Copies the waveform-select bits from the patch record into the slot record.
+
+[LABEL] 0x024BBB Voice_OpSlot_ClearWaveformBit5  replaces=LABEL_024BBB  confidence=high
+; Single `res 5` on the waveform byte.
+
+[LABEL] 0x024BBD Voice_OpSlot_PackEnvelopeBits  replaces=LABEL_024BBD  confidence=medium
+; Final packing of the envelope-shape bit-field into the slot record; restores XIZ and returns.
+
+[LABEL] 0x024C81 Voice_Chan_ComputeParams_NoAlgoSelect  replaces=LABEL_024C81  confidence=high
+; Taken when bit 7 of (partrec+2) is clear: identical VoiceSlot_Assign call but the group
+; index passed in E has bit 5 clear, and ToneGen_WriteExtParam_600_Mute is NOT issued first.
+
+[LABEL] 0x024CF9 Voice_Chan_WriteOpSlots  replaces=LABEL_024CF9  confidence=high
+; Calls Voice_OpSlot_WriteParams for the resolved slot, computes the envelope level with
+; EGEnv_Compute_A_Simple into 0x045208 (TG reg 0x580), then hands the whole block at
+; 0x0451CC to ToneGen_WriteExtParams_56_Alt.
+
+[LABEL] 0x024D31 Voice_Chan_CheckPitchEnvGate  replaces=LABEL_024D31  confidence=medium
+; Decides whether the pitch-envelope generator has to be re-triggered: slotstate+7 == 0, or
+; bit 13 of (partrec+2) set.
+
+[LABEL] 0x024D42 Voice_Chan_PitchEnvGate_CheckBit5  replaces=LABEL_024D42  confidence=high
+; Secondary condition: bit 5 of slotstate[0].
+
+[LABEL] 0x024D46 Voice_Chan_PitchEnvGate_Trigger  replaces=LABEL_024D46  confidence=high
+; Re-trigger: slotstate+8 = 0, slotstate[0] &= 0xF3 then bit 4 set, 0x04520C (TG reg 0x600)
+; = 0, and ToneGen_WriteExtParam_600 emits it.
+
+[LABEL] 0x024D65 Voice_Chan_PitchEnvFreeRun_Check  replaces=LABEL_024D65  confidence=medium
+; Free-running arm: slotstate+5 != 0, or bit 15 of the slot word.
+
+[LABEL] 0x024D73 Voice_Chan_PitchEnvFreeRun_Trigger  replaces=LABEL_024D73  confidence=high
+; Computes the envelope level with EGEnv_Compute_A into 0x04520C (TG reg 0x600) and emits it,
+; but only if slotstate[0] & 0x38 == 0.
+
+[LABEL] 0x024D96 Voice_Chan_ChokeGroup_Trigger  replaces=LABEL_024D96  confidence=medium
+; Third trigger arm, gated on (partrec[0] & 0x0C) != 0 -- the exclusive/choke-group bits.
+; Same EGEnv_Compute_A -> 0x04520C -> ToneGen_WriteExtParam_600 sequence.
+
+[LABEL] 0x024DBE Voice_Chan_Fallback_NoWaveTable  replaces=LABEL_024DBE  confidence=high
+; Entered when (perfrec+26) == 0, i.e. no wave-table assignment for this channel. Bails out
+; entirely unless bit 15 of (partrec+10) is set; otherwise writes a precomputed slot word to
+; 0x0451DC (TG reg 0x440).
+
+[LABEL] 0x024E44 Voice_Chan_Fallback_WritePrecomputed  replaces=LABEL_024E44  confidence=high
+; Stores the precomputed envelope words to 0x04520C (TG reg 0x600) and 0x045208 (TG reg
+; 0x580) and emits the block.
+
+[LABEL] 0x024E66 Voice_Chan_SecondaryPitch_Trigger  replaces=LABEL_024E66  confidence=high
+; Common tail of Voice_Chan_ComputeParams and the also the bail-out target when no slot was
+; assigned. Writes the secondary slot word to 0x0451DE (TG reg 0x480).
+
+[LABEL] 0x024EEA Voice_Chan_SecondaryPitch_ComputeDelta  replaces=LABEL_024EEA  confidence=medium
+; Computes the secondary pitch delta into 0x04520E, reloads it, derives 0x04520A (TG reg
+; 0x5C0) from it and emits the block again.
+
+[LABEL] 0x024F3C Voice_Chan_ComputeParams_Return  replaces=LABEL_024F3C  confidence=high
+; pop XIZ, unwind 22 bytes of frame, ret.
+
+[ROUTINE] 0x024F41 Voice_SubVoice_ComputeAndTrigger  replaces=LABEL_024F41  confidence=high
+; The sub-voice (second layer) twin of Voice_Chan_ComputeParams. Same shape: read the
+; patch/perf pointers out of the per-voice record, select the algorithm group, call
+; VoiceSlot_Assign, then fill the staging block and emit.
+; The differences are (a) the group index gets `set 2` rather than `set 5`, and (b) the slot
+; record base is 0x044257 (= 0x04424E + 9) with the bound check at 0x40 instead of 0x80.
+
+[LABEL] 0x024FD4 Voice_SubVoice_Compute_NoAlgoSelect  replaces=LABEL_024FD4  confidence=high
+; Sub-voice path with algorithm selection disabled.
+
+[LABEL] 0x024FFF Voice_SubVoice_ResolveSlot  replaces=LABEL_024FFF  confidence=high
+; XIZ = slot number (high byte force-zeroed). Slot record = 0x044257 + slot*0x1B via
+; FP_MulAccum64; stores the note number to slotrec+6 and THEN bounds-checks
+; `cp iz,0x40 / jr nc` -- see [UNCERTAIN], the store precedes the check.
+
+[LABEL] 0x025051 Voice1_UpdatePitch_WritePBend  replaces=LABEL_025051  confidence=medium
+; Layer-1 pitch update: calls Voice_OpSlot_WriteParams for group 1, computes the envelope
+; with EGEnv_Compute_B_Simple into 0x045206, and emits the block at 0x0451CC.
+
+[LABEL] 0x025088 Voice1_UpdatePitch_CheckSustain  replaces=LABEL_025088  confidence=medium
+; Tests the per-voice sustain/hold flags before deciding whether the oscillator may be
+; deactivated.
+
+[LABEL] 0x02509C Voice1_UpdatePitch_CheckBit5  replaces=LABEL_02509C  confidence=high
+; Bit-5 test on the slot state byte.
+
+[LABEL] 0x0250A3 Voice1_UpdatePitch_DeactivateOsc  replaces=LABEL_0250A3  confidence=high
+; Clears 0x045204 (TG reg 0x1C0) to zero and emits it via ToneGen_WriteExtParam_1C0_Single
+; -- the oscillator-off write.
+
+[LABEL] 0x0250CA Voice1_UpdatePitch_CheckPhase  replaces=LABEL_0250CA  confidence=medium
+; Phase/segment test that selects between the two frequency-write tails.
+
+[LABEL] 0x0250DB Voice1_UpdatePitch_CheckStateFlags  replaces=LABEL_0250DB  confidence=medium
+; State-flag arm: computes the value into 0x045204 (TG reg 0x1C0) and emits.
+
+[LABEL] 0x025100 Voice1_UpdatePitch_WriteFreq  replaces=LABEL_025100  confidence=high
+; Main frequency write: result of Voice_Freq_WriteLeft into 0x045204 (TG reg 0x1C0),
+; emitted through ToneGen_WriteExtParam_TypeDispatch_Single.
+
+[LABEL] 0x025127 Voice1_UpdatePitch_AltEntry  replaces=LABEL_025127  confidence=medium
+; Alternate entry used when the caller already holds the computed frequency.
+
+[LABEL] 0x025199 Voice1_UpdatePitch_WriteAltFreq  replaces=LABEL_025199  confidence=high
+; Writes both 0x045204 (TG reg 0x1C0) and 0x045206 before emitting.
+
+[LABEL] 0x0251BA Voice1_UpdatePitch_WriteStereoField  replaces=LABEL_0251BA  confidence=medium
+; Shared tail (also the no-slot bail-out target of Voice_SubVoice_ResolveSlot). Reads the
+; per-voice routing byte at 0x04138E + channel*0x11F to pick the reg-0x180 value.
+
+[LABEL] 0x0251DE Voice1_UpdatePitch_StereoPart2  replaces=LABEL_0251DE  confidence=medium
+; Second routing-byte comparison arm.
+
+[LABEL] 0x025206 Voice1_UpdatePitch_StereoFallthrough  replaces=LABEL_025206  confidence=medium
+; Default arm of the routing selection.
+
+[LABEL] 0x025219 Voice1_UpdatePitch_StoreStereo  replaces=LABEL_025219  confidence=high
+; Stores the selected value to 0x0451D8 (TG reg 0x180) and returns.
+
+[ROUTINE] 0x025229 Voice2_UpdatePitch  replaces=LABEL_025229  confidence=medium
+; Layer-2 twin of the Voice1_UpdatePitch family. Seeds 0x0451E0 (TG reg 0x4C0) with the
+; constant 0x4400, then follows the same deactivate / phase / frequency structure.
+; In: XWA = per-voice record. Touches only the staging block; emission is via the
+; ToneGen_WriteExtParam_* helpers.
+
+[LABEL] 0x0252B8 Voice2_UpdatePitch_NoOsc7Flag  replaces=LABEL_0252B8  confidence=medium
+; Arm taken when the oscillator-7 flag is clear.
+
+[LABEL] 0x0252E3 Voice2_UpdatePitch_ChanEntry  replaces=LABEL_0252E3  confidence=medium
+; Channel-indexed entry; reads the per-channel table at 0x044260 (= 0x04424E + 18).
+
+[LABEL] 0x025331 Voice2_UpdatePitch_WritePBend  replaces=LABEL_025331  confidence=medium
+; Layer-2 equivalent of 0x025051: fill and emit the block at 0x0451CC.
+
+[LABEL] 0x025363 Voice2_UpdatePitch_CheckSustain  replaces=LABEL_025363  confidence=medium
+; Sustain/hold test before oscillator deactivation.
+
+[LABEL] 0x025377 Voice2_UpdatePitch_CheckBit5  replaces=LABEL_025377  confidence=high
+; Bit-5 test on the slot state byte.
+
+[LABEL] 0x02537E Voice2_UpdatePitch_DeactivateOsc  replaces=LABEL_02537E  confidence=high
+; Clears both 0x045204 (TG reg 0x1C0) and 0x04520E, then emits -- layer-2 oscillator off.
+
+[LABEL] 0x0253AB Voice2_UpdatePitch_CheckPhase  replaces=LABEL_0253AB  confidence=medium
+; Phase/segment test.
+
+[LABEL] 0x0253BC Voice2_UpdatePitch_CheckStateFlags  replaces=LABEL_0253BC  confidence=medium
+; State-flag arm; emits the block.
+
+[LABEL] 0x0253DB Voice2_UpdatePitch_WriteFreq  replaces=LABEL_0253DB  confidence=high
+; Layer-2 frequency write and emit.
+
+[LABEL] 0x0253F9 Voice2_UpdatePitch_Done  replaces=LABEL_0253F9  confidence=high
+; Frame unwind and ret.
+
+[LABEL] 0x02541D Voice_ComputeExprPitchBend_UseCoarse  replaces=LABEL_02541D  confidence=high
+; Global mode byte 0x04134C != 6: DE = zext(patchrec+15).
+
+[LABEL] 0x025429 Voice_ComputeExprPitchBend_ZeroCoarse  replaces=LABEL_025429  confidence=high
+; Entered when patchrec+15 == 0 or patchrec+18 == 0; DE = zext(patchrec+15) regardless of
+; the global mode.
+
+[LABEL] 0x025433 Voice_ComputeExprPitchBend_ApplyDetune  replaces=LABEL_025433  confidence=high
+; If DE != 0: DE += (partrec+92) - 0x40, DE += s8(patchrec+102); negative results are floored
+; to 0.
+
+[LABEL] 0x025455 Voice_ComputeExprPitchBend_ClampHigh  replaces=LABEL_025455  confidence=high
+; Ceiling at 0x7F.
+
+[LABEL] 0x02545E Voice_ComputeExprPitchBend_ShiftLeft  replaces=LABEL_02545E  confidence=high
+; `sla de, 8` -- the high byte of the reg-0x0C0 word is this 7-bit field.
+
+[LABEL] 0x025461 Voice_ComputeExprPitchBend_CheckExpr  replaces=LABEL_025461  confidence=high
+; Selects the low byte: patchrec+18 == 0 -> use patchrec+18 (i.e. 0); global mode 5 or 6 ->
+; force 0x7F; otherwise use patchrec+18.
+
+[LABEL] 0x025477 Voice_ComputeExprPitchBend_FullExpr  replaces=LABEL_025477  confidence=high
+; `or de, 0x7F` -- low byte forced to maximum.
+
+[LABEL] 0x02547D Voice_ComputeExprPitchBend_PartialExpr  replaces=LABEL_02547D  confidence=high
+; Low byte = patchrec+18.
+
+[LABEL] 0x025489 Voice_ComputeExprPitchBend_NoExpr  replaces=LABEL_025489  confidence=high
+; Low byte = patchrec+18 (reached with the high field left at 0).
+
+[LABEL] 0x025493 Voice_ComputeExprPitchBend_Write  replaces=LABEL_025493  confidence=high
+; Stores DE to 0x0451D2 (TG reg 0x0C0) and returns.
+
+[ROUTINE] 0x025499 Voice_ComputePitchBend2  replaces=LABEL_025499  confidence=high
+; Second copy of the routine at 0x0253FE, differing only in that it pre-loads the part
+; record pointer (voice+19) into XHL on entry and uses it directly for the +92 term rather
+; than re-loading it. Same output: 0x0451D2 (TG reg 0x0C0).
+
+[LABEL] 0x0254BB Voice_ComputePitchBend2_UseCoarse  replaces=LABEL_0254BB  confidence=high
+; As 0x02541D.
+
+[LABEL] 0x0254C7 Voice_ComputePitchBend2_ZeroCoarse  replaces=LABEL_0254C7  confidence=high
+; As 0x025429.
+
+[LABEL] 0x0254D1 Voice_ComputePitchBend2_ApplyDetune  replaces=LABEL_0254D1  confidence=high
+; As 0x025433.
+
+[LABEL] 0x0254E6 Voice_ComputePitchBend2_ClampHigh  replaces=LABEL_0254E6  confidence=high
+; As 0x025455.
+
+[LABEL] 0x0254EF Voice_ComputePitchBend2_ShiftLeft  replaces=LABEL_0254EF  confidence=high
+; As 0x02545E.
+
+[LABEL] 0x0254F2 Voice_ComputePitchBend2_CheckExpr  replaces=LABEL_0254F2  confidence=high
+; As 0x025461.
+
+[LABEL] 0x025508 Voice_ComputePitchBend2_FullExpr  replaces=LABEL_025508  confidence=high
+; As 0x025477.
+
+[LABEL] 0x02550E Voice_ComputePitchBend2_PartialExpr  replaces=LABEL_02550E  confidence=high
+; As 0x02547D.
+
+[LABEL] 0x02551A Voice_ComputePitchBend2_NoExpr  replaces=LABEL_02551A  confidence=high
+; As 0x025489.
+
+[LABEL] 0x025524 Voice_ComputePitchBend2_Write  replaces=LABEL_025524  confidence=high
+; Stores DE to 0x0451D2 (TG reg 0x0C0) and returns.
+
+[LABEL] 0x025551 Voice_ApplyModeToPitchWord_Mode2  replaces=LABEL_025551  confidence=high
+; Low-nibble routing value 2: `and bc,0xF1FF` then `set 9,bc` -- forces the [11:9] field to 1.
+
+[LABEL] 0x025558 Voice_ApplyModeToPitchWord_HighNibble  replaces=LABEL_025558  confidence=high
+; Second half: re-reads (0x04138D + channel*0x11F) & 0xF0. 0x10 -> leave alone; 0x20 -> jump
+; to the [14:12] override; 0x00 -> `or bc,0x7000`.
+
+[LABEL] 0x02557F Voice_ApplyModeToPitchWord_Mode2High  replaces=LABEL_02557F  confidence=high
+; `and bc,0x8FFF` then `set 12,bc` -- forces the [14:12] field to 1.
+
+[LABEL] 0x025586 Voice_ApplyModeToPitchWord_Done  replaces=LABEL_025586  confidence=high
+; `ld hl, bc` / ret -- the patched word is returned in HL.
+
+[LABEL] 0x0255AA Voice_SetPitchWord_Muted_CheckExpr  replaces=LABEL_0255AA  confidence=high
+; Selects the high field: patchrec+18 == 0 -> 0xF000; global mode byte 0x04134C in {0,5,6}
+; -> 0xFE00; otherwise 0xF000.
+
+[LABEL] 0x0255C4 Voice_SetPitchWord_Muted_FullExpr  replaces=LABEL_0255C4  confidence=high
+; `or wa,0xFE00` and store to voice+45.
+
+[LABEL] 0x0255CF Voice_SetPitchWord_Muted_PartialExpr  replaces=LABEL_0255CF  confidence=high
+; `or wa,0xF000` and store to voice+45.
+
+[LABEL] 0x0255DA Voice_SetPitchWord_Muted_NoExpr  replaces=LABEL_0255DA  confidence=high
+; `or wa,0xF000` and store to voice+45 (patchrec+18 == 0 arm).
+
+[LABEL] 0x0255E3 Voice_SetPitchWord_Muted_ApplyMode  replaces=LABEL_0255E3  confidence=high
+; Runs voice+45 through Voice_ApplyModeToPitchWord with A = voice+4 (the channel) and stores
+; the patched word back to voice+45.
+
+[LABEL] 0x025613 Voice_SetPitchWord_Unmuted_FullExpr  replaces=LABEL_025613  confidence=high
+; Unmuted twin of 0x0255C4.
+
+[LABEL] 0x02561A Voice_SetPitchWord_Unmuted_PartialExpr  replaces=LABEL_02561A  confidence=high
+; Unmuted twin of 0x0255CF.
+
+[LABEL] 0x025621 Voice_SetPitchWord_Unmuted_NoExpr  replaces=LABEL_025621  confidence=high
+; Unmuted twin of 0x0255DA.
+
+[LABEL] 0x025626 Voice_SetPitchWord_Unmuted_ApplyMode  replaces=LABEL_025626  confidence=high
+; Unmuted twin of 0x0255E3.
+
+[LABEL] 0x02566A Voice_ComputeAndWritePan_SetInvFlag  replaces=LABEL_02566A  confidence=medium
+; Sets the "inverted" flag in the local frame when the patch record asks for the reversed
+; curve.
+
+[LABEL] 0x025672 Voice_ComputeAndWritePan_ApplyKeyTrack  replaces=LABEL_025672  confidence=medium
+; Applies the key-tracking term: PitchBend_Scale(tonerec+46, voice+12) added to the level
+; accumulator in IZ, clamped 0..0xFF.
+
+[LABEL] 0x025716 Voice_ComputeAndWritePan_NoPanLFO  replaces=LABEL_025716  confidence=medium
+; Arm taken when the pan LFO depth is zero.
+
+[LABEL] 0x025727 Voice_ComputeAndWritePan_NoOscLFO  replaces=LABEL_025727  confidence=medium
+; Arm taken when the oscillator LFO depth is zero.
+
+[LABEL] 0x02575D Voice_ComputeAndWritePan_CheckMax  replaces=LABEL_02575D  confidence=high
+; If bit 0 of the flag word is set and the accumulator is exactly 0xFF, decrement it -- the
+; firmware refuses to emit the 0xFF "hard mute" level on this path.
+
+[LABEL] 0x02576E Voice_ComputeAndWritePan_WriteDSP  replaces=LABEL_02576E  confidence=high
+; Packs (level << 8) | table[0x011963 + tonerec+40] and stores it to 0x0451E4 (TG reg 0x800,
+; the main volume register) AND caches it in voice+60. Then continues into the per-channel
+; L/R words.
+
+[LABEL] 0x025851 Voice_ComputeAndWritePan_NoModDepth  replaces=LABEL_025851  confidence=medium
+; No-modulation arm of the per-channel pan computation.
+
+[LABEL] 0x025875 Voice_ComputeAndWritePan_NoPanDepth2  replaces=LABEL_025875  confidence=medium
+; Second no-depth arm.
+
+[LABEL] 0x0258BE Voice_ComputeAndWritePan_WriteChans  replaces=LABEL_0258BE  confidence=medium
+; Falls through into the per-channel writer that fills 0x0451E6 / 0x0451E8 (TG regs 0x840 /
+; 0x880).
+
+[LABEL] 0x0258DC Voice_ComputeAndWritePan_ClampDepth  replaces=LABEL_0258DC  confidence=medium
+; Clamps the modulation depth before it is applied.
+
+[ROUTINE] 0x02591D Voice_WriteChPanShift  replaces=LABEL_02591D  confidence=high
+; Emits the per-channel L/R level pair. In: XWA (frame (xsp+6)) = per-voice record.
+; Left value starts from (patchrec+32) added to (voice+62 & 0x7F); right value from the same
+; signed byte added to (voice+64 & 0x7F). Both clamped (right to 0..0x7F, left to 4..0x7F),
+; merged into the cached words voice+62 / voice+64 keeping their high bytes, and stored to
+; 0x0451E6 (TG reg 0x840) and 0x0451E8 (TG reg 0x880).
+; If the "channel" flag in the frame is set, the right word gets bit 15 forced instead of
+; the cached high byte.
+
+[LABEL] 0x02598A Voice_WriteChPanShift_AddShift  replaces=LABEL_02598A  confidence=high
+; Adds the signed shift byte to both 7-bit channel fields.
+
+[LABEL] 0x0259C2 Voice_WriteChPanShift_ClampAndWrite  replaces=LABEL_0259C2  confidence=high
+; Clamps both fields via ClampS16_WA_To_DEBC and branches on the channel flag.
+
+[LABEL] 0x0259EE Voice_WriteChPanShift_NoChanFlag  replaces=LABEL_0259EE  confidence=high
+; Channel flag clear: merge the right field under the cached voice+64 high byte before
+; storing to 0x0451E8.
+
+[LABEL] 0x025A03 Voice_WriteChPanShift_WriteL  replaces=LABEL_025A03  confidence=high
+; Merge and store the left field to 0x0451E6 (TG reg 0x840).
+
+[LABEL] 0x025A1B Voice_WriteChPanShift_Passthrough  replaces=LABEL_025A1B  confidence=high
+; No-shift path: copy the cached voice+62 / voice+64 words verbatim to 0x0451E6 / 0x0451E8.
+
+[LABEL] 0x025A31 Voice_WriteChPanShift_Done  replaces=LABEL_025A31  confidence=high
+; popw IZ, inc 8 xsp, ret.
+
+[LABEL] 0x025A9E Voice_UpdatePan_Simple_WritePan  replaces=LABEL_025A9E  confidence=high
+; Packs (level << 8) | 0x7F and stores to 0x0451E4 (TG reg 0x800) and to the cache at
+; voice+60. The low byte is the constant 0x7F here, which is what distinguishes the "simple"
+; path from Voice_ComputeAndWritePan's table lookup.
+
+[LABEL] 0x025AFE Voice_UpdatePan_Simple_WriteChans  replaces=LABEL_025AFE  confidence=medium
+; Per-channel L/R computation for the simple path (table 0x0118FE indexed by tonerec+9/+11).
+
+[LABEL] 0x025B58 Voice_UpdatePan_Simple_NoChanFlag  replaces=LABEL_025B58  confidence=high
+; Channel-flag-clear arm of the simple path.
+
+[LABEL] 0x025B6A Voice_UpdatePan_Simple_Done  replaces=LABEL_025B6A  confidence=high
+; popw IZ, unwind 12 bytes, ret.
+
+[ROUTINE] 0x025B6F Voice_WriteChPanShift2  replaces=LABEL_025B6F  confidence=high
+; Second, instruction-identical copy of Voice_WriteChPanShift (0x02591D). Same inputs, same
+; outputs (0x0451E6 / 0x0451E8 = TG regs 0x840 / 0x880); it exists so the "full" pan path can
+; call it with a `calr` in range.
+
+[LABEL] 0x025BDC Voice_WriteChPanShift2_AddShift  replaces=LABEL_025BDC  confidence=high
+; As 0x02598A.
+
+[LABEL] 0x025C14 Voice_WriteChPanShift2_ClampAndWrite  replaces=LABEL_025C14  confidence=high
+; As 0x0259C2.
+
+[LABEL] 0x025C40 Voice_WriteChPanShift2_NoChanFlag  replaces=LABEL_025C40  confidence=high
+; As 0x0259EE.
+
+[LABEL] 0x025C55 Voice_WriteChPanShift2_WriteL  replaces=LABEL_025C55  confidence=high
+; As 0x025A03.
+
+[LABEL] 0x025C6D Voice_WriteChPanShift2_Passthrough  replaces=LABEL_025C6D  confidence=high
+; As 0x025A1B.
+
+[LABEL] 0x025C83 Voice_WriteChPanShift2_Done  replaces=LABEL_025C83  confidence=high
+; As 0x025A31.
+
+[ROUTINE] 0x025C87 Voice_UpdatePan_Full  replaces=LABEL_025C87  confidence=medium
+; Full level/pan recomputation for one voice; the body runs past the end of this region
+; (to ~0x025F7E). In: XWA = per-voice record. Same shape as Voice_ComputeAndWritePan
+; (0x025636) but with an extra oscillator-table branch at 0x025CCB. Ultimately writes
+; 0x0451E4 / 0x0451E6 / 0x0451E8 (TG regs 0x800 / 0x840 / 0x880) via Voice_WriteChPanShift2.
+
+[LABEL] 0x025CAC Voice_UpdatePan_Full_SetInvFlag  replaces=LABEL_025CAC  confidence=medium
+; Sets the inverted-curve flag in the local frame.
+
+[LABEL] 0x025CB4 Voice_UpdatePan_Full_CheckBit11  replaces=LABEL_025CB4  confidence=medium
+; Bit-11 test that selects between the oscillator-table path (0x025CCB, just past this
+; region) and the direct path.
+
+[DATA] 0x0451CC-0x04520F  TONEGEN_PARAM_STAGING_BLOCK (DRAM, not ROM -- listed for reference only)
+; 68-byte tone-generator parameter block. 16-bit little-endian words; word at offset N is
+; emitted to IC303 register (group(N) + slot) by the ToneGen_Write* family. Full offset ->
+; register map is in the file header above. NOT a ROM table -- do not add it to the symbol
+; file as a ROM symbol; it is named here because ~40 of the entries above write into it.
+
+[DATA] 0x00F6A7-0x00F6D6  VOICE_PITCHPACK_DISPATCH_OFFSET_TABLES (outside this region)
+; Four consecutive 6-entry word tables of jump offsets, one per dispatcher in this region:
+; 0x00F6A7 -> Voice_PitchPack_Dispatch (base 0x02412B)
+; 0x00F6B3 -> Voice_PitchReg_WriteDispatch (base 0x02432C)
+; 0x00F6BF -> Voice_PanReg_WriteDispatch (base 0x024472)
+; 0x00F6CB -> Voice_PanReg_WriteDispatchB (base 0x024582)
+; The reference file currently lists these four as LABEL_00F693/6A7/6B3/6BF/6CB at addresses
+; that are 8 bytes HIGHER than the names claim (e.g. "LABEL_00F6A7 0x00F6AF") -- see [UNCERTAIN].
+
+[UNCERTAIN] The whole region is already fully named in the authoritative LLVM build; nothing here is virgin territory
+; llvm-nm -n on rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf returns 176 symbols in
+; 0x024069..0x025CCA and NONE of them is a LABEL_ placeholder. The 162 proposals above only
+; bring symbols/subcpu_symbols_reference.txt into agreement with the build. If the
+; integration policy is "the reference file mirrors the build", this whole file can be
+; applied mechanically; if the policy is "the reference file is an independent opinion",
+; then apply only the [UNCERTAIN] findings below.
+
+[UNCERTAIN] 14 addresses carry conflicting non-LABEL_ names in the reference file; per the rules I left them alone
+; reference file name                 vs  authoritative LLVM build name
+; 0x024102 TVF_Build_Dispatch             vs Voice_PitchPack_Dispatch
+; 0x02413E TVF_Build_Short                vs Voice_PitchPack_RouteA
+; 0x024300 TVF_BuildEmit_Short_Dispatch   vs Voice_PitchReg_WriteDispatch
+; 0x024366 TVF_Emit_Offset_Reg100         vs Voice_Pan_WriteWithDetune
+; 0x0243CC TVF_Emit_Offset_Both           vs Voice_Pan_WriteBothWithDetune
+; 0x024444 TVF_Emit_Registers             vs Voice_PanReg_WriteDispatch
+; 0x024BE3 ExtVoice_Build_SlotRegisters   vs Voice_Chan_ComputeParams
+; 0x024CAB ExtVoice_Store_SlotNumber      vs Voice_Chan_ResolveSlot
+; 0x0253FE Level_Build_Reg0C0             vs Voice_ComputeExprPitchBend
+; 0x02552A Voice_Apply_GateRouting        vs Voice_ApplyModeToPitchWord
+; 0x025589 Voice_Build_GateCommand        vs Voice_SetPitchWord_Muted
+; 0x0255F3 Voice_Build_GateCommand_NoPartial vs Voice_SetPitchWord_Unmuted
+; 0x025636 Voice_Build_EnvSegments_PatchAtk  vs Voice_ComputeAndWritePan
+; 0x025A35 Voice_Build_EnvSegments_FixedAtk  vs Voice_UpdatePan_Simple
+; Both sets are hand-written guesses and both encode a real observation: the "TVF_/Reg100"
+; family correctly identifies WHICH TG register is being built, the "Voice_*" family
+; correctly identifies the data flow. Neither should be trusted as a semantic claim.
+
+[UNCERTAIN] "Pan" in the 0x024366..0x024660 names is measurably wrong -- those routines build the PITCH pair
+; Voice_Pan_WriteWithDetune, Voice_Pan_WriteBothWithDetune, Voice_PanReg_WriteDispatch and
+; Voice_PanReg_WriteDispatchB all write ONLY 0x0451D4 and 0x0451D6. Per the staging-block
+; walk in ToneGen_WriteVoiceParams those are TG registers 0x100 and 0x140, which
+; kn5000-docs/tone-generator.md documents as "Interpolated pitch (portamento/legato)" and
+; "Secondary pitch offset (detune)". The actual pan/level registers 0x800/0x840/0x880 are
+; written 0x1200 bytes later by Voice_ComputeAndWritePan / Voice_WriteChPanShift.
+; Corroborating arithmetic: the 7-bit field is clamped by ClampS8_0_to_78 (0..120 = a
+; semitone range), the baseline added by Portamento_CalcContrib_B is +0x18 (24 semitones),
+; and NoteState_InitDefaults seeds the pair with 0x017F / 0x7F7F. I would call the family
+; VOICE_PITCH_STAGE_* but have NOT renamed anything.
+
+[UNCERTAIN] Symmetrically, "SetPitchWord"/"ComputeAndWritePan" look swapped
+; Voice_SetPitchWord_Muted/_Unmuted (0x025589 / 0x0255F3) build voice+45 with the constants
+; 0xFE00 / 0xF000 and a low byte of 0xFF - ((tonerec[0]&0x3F)<<2). That is the SAME encoding
+; the documented mute path uses for TG reg 0x800 (0xFF80 = mute, lower = louder), i.e. it is
+; a LEVEL word, not a pitch word. Conversely Voice_ComputeAndWritePan (0x025636) and
+; Voice_UpdatePan_Simple (0x025A35) write 0x0451E4 = TG reg 0x800, the main VOLUME register,
+; with the pan/L-R pair going to 0x840/0x880 only in their tails. Left alone; flagged.
+
+[UNCERTAIN] ToneGen_WritePanReg (0x02D0BE, outside this region) writes TG register 0x400
+; It latches (voice_slot + 0x400) and pushes staging-block word +14. Register 0x400 is
+; documented as the log-pitch / note-key register, not pan. Not renamed -- out of my region --
+; but it is the same misnomer family and worth one line in the record.
+
+[UNCERTAIN] Reference-file address/name skew at 0x00F693..0x00F6CB
+; The reference file lists LABEL_00F693 at 0x00F69B, LABEL_00F6A7 at 0x00F6AF, LABEL_00F6B3
+; at 0x00F6BB, LABEL_00F6BF at 0x00F6C7, LABEL_00F6CB at 0x00F6D3 -- every name is 8 bytes
+; below the address it is bound to. The dispatchers in MY region prove the correct addresses:
+; 0x024118 does `lda XIX,0x00F6A7`, 0x024318 `lda XIX,0x00F6B3`, 0x02445E `lda XIX,0x00F6BF`,
+; 0x02456E `lda XIX,0x00F6CB`. So the NAMES are right and the ADDRESSES are off by +8.
+; Outside my region, so not proposed -- but it should be fixed by whoever owns 0x00F000.
+
+[UNCERTAIN] Voice_ComputeExprPitchBend / Voice_ComputePitchBend2 target register 0x0C0, whose meaning I could not prove
+; They build (7-bit field << 8) | 7-bit field into 0x0451D2 = TG reg 0x0C0, which the docs
+; call "Waveform control (cleared on note-off)". A two-field 7-bit packing does not obviously
+; match "waveform control". The reference file's "Level_Build_Reg0C0" is at least
+; register-correct. I did not name the semantic; the labels I propose describe the arithmetic
+; only.
+
+[UNCERTAIN] DEFECT: both slot resolvers store into the slot record BEFORE bounds-checking the slot index
+; Voice_Chan_ResolveSlot (0x024CAB):
+;     ld wa,(xsp+14) / ld xbc,0x1B / call FP_MulAccum64      ; XHL = slot * 27
+;     lda_24 xiz,0x04424e / add xiz,xhl
+;     ld xwa,(xsp+22) / ld a,(xwa+12) / res 7,a / ld (xiz+6),a   <-- STORE
+;     cpw (xsp+14),0x80 / jrl nc, Voice_Chan_SecondaryPitch_Trigger  <-- BOUNDS CHECK
+; Voice_SubVoice_ResolveSlot (0x024FFF) is the same shape with base 0x044257 and bound 0x40.
+; VoiceSlot_Assign's "no slot available" return (VoiceSlot_Assign_NoMatch, 0x0224xx) puts
+; 0xFF in the low byte, so slot = 0xFF is the ordinary starvation value, not a corner case.
+; 0x04424E + 0xFF*0x1B + 6 = 0x045CD9 and 0x044257 + 0xFF*0x1B + 6 = 0x045CE2, both well past
+; the end of the 0x80-entry array (which ends exactly at 0x044FCE, a separately referenced
+; variable). I have NOT established what lives at 0x045CD9/0x045CE2, so I am not claiming
+; observable damage -- only that the note byte is written out of bounds on every
+; voice-starvation event. Worth a MAME watchpoint.
+
+[UNCERTAIN] The global mode byte at 0x04134C
+; Read by Voice_ComputeExprPitchBend, Voice_ComputePitchBend2, Voice_SetPitchWord_Muted and
+; Voice_SetPitchWord_Unmuted; compared against 0, 5 and 6, and it changes whether the
+; expression field is forced to 0x7F. It sits at per-voice-record offset +0x4C of channel 0
+; but is addressed absolutely, so it is being used as a GLOBAL. I could not find its writer
+; within this region. It deserves a real symbol; I have not invented one.
+
+[UNCERTAIN] Voice_OpSlot_WriteParams reads a second global, the byte at 0x0451A7, compared against 0xF5
+; When it equals 0xF5 the routine bypasses ALL patch-offset arithmetic and clamping and copies
+; raw parameter bytes. That is a diagnostic/raw mode flag of some kind and is worth naming, but
+; I could not find who sets it.

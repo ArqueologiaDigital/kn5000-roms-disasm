@@ -1,13 +1,60 @@
+; --- 0x0004E1-0x00EFFF  InternalRAM_PadFF -- NOT ROM CONTENT; the payload's RAM/BSS window
+; 60,191 bytes. The ROM FILE is 0x30000 bytes and contains only [0x400..0x4FF] at file offset
+; 0..255 and [0x0F000..0x3EEFF] at file offset 256.. -- arithmetic check: 256 + 0x2FF00 = 0x30000.
+; So 0x000500..0x00EFFF is never emitted; the .fill 0xFF in subcpu_data_tables.s exists purely so
+; the .org arithmetic lands 0x0F000 at file offset 256. At run time this window is live DRAM
+; holding the payload's variables. Occupants identified while documenting this region:
+;   0x000A00-0x000DFF  serial-1 TX ring buffer (1 KiB, mask 0x03FF)
+;   0x000E00-0x000E15  serial-1 TX ring descriptor (22 B, template at 0x00F434)
+;   0x000E16-0x001015  serial-1 RX ring buffer (512 B, mask 0x01FF)
+;   0x001016-0x00102B  serial-1 RX ring descriptor (22 B, template at 0x00F44A)
+;   0x001034/0x001038  SERIAL_1_VAR_1034 / _1038 (named in subcpu_vectors.s)
+;   0x0010E8 DMA_XFER_STATE, 0x0010EA CMD_PROCESSING_STATE, 0x0010EC BYTE_FROM_MAINCPU_LATCH
+;   0x0010F0  standard inter-CPU command buffer;  0x001116 E1 buffer;  0x00111C E2 buffer
+;   0x00112D-0x001348  18 x 30-byte voice-POOL/section records (see 0x00F507)
+;   0x001349-0x001454  27 x 12-byte channel records (see 0x00F52B)
+;   0x001040  32-bit free-running tick counter incremented by Timer_AudioTick_Handler
+;   0x003B1C  68-byte tone-generator voice-parameter scratch (template at 0x012115)
+;   0x003B60  DSP command ring consumed by AUDIO_PROCESS_DSP (0x035AC8)
+; (errno lives at 0x040C22, outside this window -- see the FP pool at 0x01F63E)
 InternalRAM_PadFF:
 	.fill 7, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x40, 0x00
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; Currently swallowed by InternalRAM_PadFF; it is the last two bytes the payload image supplies
+; below 0x0500 (0x4E1..0x4FD are 0xFF filler, 0x4FE = 0x40, 0x4FF = 0x00).
+; Bit-flag byte shared with the boot ROM (kn5000_subcpu_boot.s: .equ PAYLOAD_LOADED_FLAG, 0x4FE
+; "Bit 6: payload ready, Bit 7: transfer complete").
+; Payload writers: INT0_HANDLER sets bit 6 on inter-CPU command 0xE3 ("E3 = payload ready",
+; `setda 6, 1278` at 0x020ED4) and CH0_State4_E1_Done clears bit 7 (`resda 7, 1278`).
+; ★ The image ships it PRE-SET to 0x40 (bit 6 already 1) before the main CPU ever sends 0xE3.
+; No payload code READS it -- it exists for the boot ROM / for external inspection only.
+SUBCPU_PAYLOAD_LOADED_FLAG:
+	.byte 0x40, 0x00
 
 
 	.org 0xF000 - 0x400, 0xFF
+; --- 0x00F000-0x00F41F  IRAM_FirmwareConfig -- mixed config block, and it is WRITABLE
+; First 2 bytes = 0x008E. Then a long run of 8-byte rows that are mostly zero/0xFF, followed
+; from about 0x00F0A0 by a monotonically increasing 4-byte-per-entry curve (0x000088C1,
+; 0x0010B244, 0x001A7691, 0x0029F176, 0x00427A83, 0x00695DC3 ...) -- an exponential-looking
+; ramp, almost certainly an envelope/level or frequency curve. I could not find its consumer,
+; so it is NOT named here.  ★ See the next entry: this block is not read-only config.
 IRAM_FirmwareConfig:
-	.byte 0x8e, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0x8e, 0x00
+; 8 bytes (0x00F002-0x00F009) = a 64-bit "this voice is sounding" bitmap, one bit per hardware
+; voice, byte index = voice>>3. It sits inside the block currently labelled IRAM_FirmwareConfig.
+; Reached ONLY indirectly: TONEGEN_VOICE_BITMAP_PTR (0x01F41C) holds the 32-bit pointer 0x0000F002
+; and every access goes `ldl_da xbc, 0x01f41c` first.
+; Writers:  ToneGen_Poll_Set/ClearBit (0x03D27A / 0x03D298) -- OR/AND-NOT of a single bit,
+;           driven by what ToneGen_Poll_Read (0x03D230) reads back from 0x110002 then 0x110000
+;           with port-1 bit 7 (SFR 0x18) toggled to drive A23;
+;           ToneGen_Clear_Voice_Loop (0x03D203) zeroes all 8 bytes (`cp hl,0x8`).
+; ★ In the shipped image these 8 bytes are 0xFF FF FF FF FF FF FF FF -- i.e. all 64 voices are
+;   marked BUSY until something clears them. See FINDINGS.
+TONEGEN_VOICE_ACTIVE_BITMAP:
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -144,15 +191,32 @@ IRAM_FirmwareConfig:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xf7, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f, 0x00, 0x00
 
+; --- 0x00F420-0x00F42B  FPConst_MaxNorm (8 B) + FPConst_Zero (4 B)
+; 0x00F420 = ff ff ff ff ff ff ef 7f = 0x7FEFFFFFFFFFFFFF = DBL_MAX (1.7976931348623157e308).
+; Name is correct. Loaded by subcpu_fp_math.s at 6 sites (lines 262, 295, 301, 419, 2221, 2694,
+; 2744) as the saturation result of overflowing double operations.
+; 0x00F428 = 00 00 00 00, read with `ldl_da` (32-bit) at fp_math lines 1486, 1534 -- a 4-byte
+; zero, not an 8-byte double.
 FPConst_MaxNorm:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0x7f
 
 FPConst_Zero:
 	.long 0x0
 
+; --- 0x00F42C-0x00F433  FPConst_Ln2 (8 B) -- ★ MISNAMED, the value is sqrt(2)
+; cd 3b 7f 66 9e a0 f6 3f = 0x3FF6A09E667F3BCD = 1.4142135623730951 = sqrt(2), NOT ln(2)
+; (= 0.6931471805599453 = 0x3FE62E42FEFA39EF). Single consumer: subcpu_fp_math.s line 2299
+; (`lda_24 xde, 0x00f42c`), the mantissa range-reduction step of the sqrt/exp path.
+; Left alone per the no-rename rule; flagged in UNCERTAIN.
 FPConst_Ln2:
 	.byte 0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0xf6, 0x3f
 
+; --- 0x00F434-0x00F449  Serial1_TxBuf_Struct -- ROM template for the serial-1 TX ring descriptor
+; 22 bytes = 5 x u32 + 1 x u16, copied verbatim to DRAM 0x000E00 by INIT_RING_BUFFERS (0x01F8DF,
+; `ld xiy,0xF434 / ld xix,0xE00 / ldw bc,0xB / ldirw` = 11 words).
+; Fields: +0 base = 0x00000A00, +4 limit = 0x00000DFF, +8/+12/+16 = 0x00000A00 (head, tail and a
+; third cursor, all initialised to base), +20 = 0x03FF (size-1 mask). Ring = 1024 bytes.
+; Consistency check: 0x0A00 + 0x3FF = 0x0DFF exactly.
 Serial1_TxBuf_Struct:	; Struct do buffer de transmissão da serial #1
 	.long 0xA00	;  0  <-- start
 	.long 0xDFF	;  4  <-- end
@@ -161,6 +225,14 @@ Serial1_TxBuf_Struct:	; Struct do buffer de transmissão da serial #1
 	.long 0xA00	; 10
 	.short 0x3FF	; 14  <-- counter
 
+; --- 0x00F44A-0x00F45F  Serial1_RxBuf_Struct -- ROM template for the serial-1 RX ring descriptor
+; Same 22-byte shape, copied to DRAM 0x001016 by INIT_RING_BUFFERS.
+; Fields: base = 0x00000E16, limit = 0x00001015, three cursors = 0x00000E16, mask = 0x01FF.
+; Ring = 512 bytes; 0x0E16 + 0x1FF = 0x1015 exactly. The RX ring starts immediately after the TX
+; descriptor and the RX descriptor immediately after the RX ring -- one contiguous 0x0A00..0x102B
+; serial arena.
+; Both descriptors are consumed by READ_BYTE_FROM_RING_BUFFER (0x01F7B9) and
+; SAVE_BYTE_TO_RING_BUFFER (0x01F7DD).
 Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 	.long 0xE16	;  0
 	.long 0x1015	;  4
@@ -170,6 +242,13 @@ Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 	.short 0x1FF	; 14
 
 
+; --- 0x00F460-0x00F46B  OFFSETS_F460 -- 6 x u16 jump offsets for the audio tick round-robin
+; Read by Timer_AudioTick_Handler (0x01FB41, hardware vector 21 = INTT1): it keeps a byte counter
+; at DRAM 0xF014 (61460), gates it to 0..5, doubles it, indexes this table and jumps to
+; base 0x01FB76 + offset (`lda_24 xix,0x00f460 / ldw_sri BC / lda_24 xix,0x01fb76 / jp_ind`).
+; Contents 0x0000, 0x0008, 0x000C, 0x0010, 0x0018, 0x0021 -- all six resolve exactly onto existing
+; symbols: AUDIO_PLAYNOTE_VARIANT_1 (0x01FB76), _VARIANT_2 (0x01FB7E), _VARIANT_3 (0x01FB82),
+; LABEL_01FB86, LABEL_01FB8E, LABEL_01FB97. That six-way landing is what proves the decoding.
 OFFSETS_F460:
 	.short 0x0	; Audio_PlayNote_Variant_1
 	.short 0x8	; Audio_PlayNote_Variant_2
@@ -184,6 +263,19 @@ OFFSETS_F460:
 ; Indexed by bits 7-5 of command byte (8 entries)
 ; Entry 0 = commands 0x00-0x1F, Entry 1 = commands 0x20-0x3F, etc.
 ; ----------------------------------------------------------------------------
+; --- 0x00F46C-0x00F48B  CMD_DISPATCH_TABLE -- 8 x u32 inter-CPU command handlers
+; Indexed by the TOP 3 BITS of the command byte the main CPU wrote to the latch at 0x120000:
+; MICRODMA_CH0_HANDLER state 1 does `srl c,5 / sla wa,2 / lda_24 xbc,0x00f46c / ld_sril3 / call (xwa)`
+; (0x020F2E..). The low 5 bits of the same byte are the payload length minus 1.
+; Targets, in order (cmd byte range in brackets):
+;   0 [0x00-0x1F] 0x034D5F   4 [0x80-0x9F] 0x01F890  SERIAL1_DATATRANSMIT_LOOP
+;   1 [0x20-0x3F] 0x01FC7C   AUDIO_CMDHANDLER_20_3F
+;   2 [0x40-0x5F] 0x01FC7F   AUDIO_CMDHANDLER_40_5F
+;   3 [0x60-0x7F] 0x035893   AUDIO_CMDHANDLER_60_7F (enqueues into the DSP ring at 0x3B60)
+;   5 [0xA0-0xBF] 0x03CFEE
+;   6 [0xC0-0xDF] 0x020C12   7 [0xE0-0xFF] 0x020C12  (same handler twice)
+; This is the whole main->sub command surface; 0xE1/0xE2/0xE3 are intercepted earlier, in
+; INT0_HANDLER itself, and never reach entry 7.
 CMD_DISPATCH_TABLE:
 	.long Audio_CmdHandler_00_1F
 	.long Audio_CmdHandler_20_3F
@@ -195,12 +287,21 @@ CMD_DISPATCH_TABLE:
 	.long Audio_CmdHandler_C0_FF
 
 
+; --- 0x00F48C-0x00F4AB  Voice_PolyphonyLimits_Table -- 32 bytes, indexed by (part & 0x1F)
+; Read by VoiceSlot_Assign (0x0212xx region) as `and a,0x1F / lda_24 xbc,0x00f48c / ldb_sri A`.
+; Values 00 00 00 00 01 01 01 01 02 02 02 02 03 00 03 00 01 01 01 01 then 12 x 00 -- a group id
+; (0..3) per part rather than a count.
 Voice_PolyphonyLimits_Table:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01
 	.byte 0x02, 0x02, 0x02, 0x02, 0x03, 0x00, 0x03, 0x00
 	.byte 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 
+; --- 0x00F4AC-0x00F4EB  Voice_IndexMapping_Table -- 64 bytes, indexed by the full 6-bit part id
+; Read immediately after the previous table in VoiceSlot_Assign, un-masked (part 0x00..0x3F).
+; Values: 0x00..0x0D for parts 0-13, then 0x0C 0x0D 0x0E 0x0E 0x0E 0x0E for parts 14-19,
+; zeros for parts 20-31, 0x0F..0x1A for parts 32-43, zeros to the end. The two disjoint runs
+; (0x00-0x0E and 0x0F-0x1A) sum to 27 distinct values = the 27 channel records at DRAM 0x1349.
 Voice_IndexMapping_Table:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0c, 0x0d
@@ -211,6 +312,10 @@ Voice_IndexMapping_Table:
 	.zero 8
 	.zero 8
 
+; --- 0x00F4EC-0x00F506  Voice_CommandIndexTable -- 27 bytes
+; 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 10 20 21 22 23 24 25 26 27 28 29 2a 2b.
+; 27 entries, matching the 27 channel records. The jump 0x0D -> 0x10 -> 0x20 mirrors the two
+; disjoint runs in Voice_IndexMapping_Table above.
 Voice_CommandIndexTable:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x10, 0x20
@@ -230,6 +335,15 @@ Voice_Pool_Quota_ModeA:
 // Same meaning; used when Voice_Reset_Engine is called with A != 0.
 // 12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
 // The real parameter->envelope-rate table is at 0x011963.
+; --- 0x00F519-0x00F52A  Voice_Pool_Quota_ModeB -- 18 bytes, per-section polyphony quota, mode B
+; Both read by CmdTable_InitEntry_Loop (subcpu source ~line 3990): it walks i = 0..0x11 (18),
+; computes i*0x1E and stores table[i] into offset 0 of the 30-byte section record at
+; DRAM 0x112D + i*30. Which of the two tables is used is selected by a caller flag at (xsp+6).
+;   mode A: 32 16  4 12  0 0 0 0 0 0 0 0 0 0 0 0   64 64
+;   mode B: 12  6  6  4  4 4 4 4 2 2 2 2 2 2 2  6  64 64
+; ★ Both rows 0..15 sum to exactly 64 -- these are the voice-stealing quotas that partition the
+;   64-voice pool. Entries 16 and 17 are 64 = "the whole pool" (unpartitioned/SFX section).
+;   Mode A concentrates the pool in 4 sections; mode B spreads it over 16 (see 0x00F597).
 Voice_Pool_Quota_ModeB:
 	.byte 0x0c, 0x06, 0x06, 0x04, 0x04, 0x04, 0x04, 0x04
 	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06
@@ -268,6 +382,18 @@ Voice_Part_PoolPtr_ModeA:
 	.byte 0x87, 0x11, 0x00, 0x00
 	.byte 0x2b, 0x13, 0x00, 0x00
 
+; --- 0x00F597-0x00F602  (Voice_Pitch_Table_High) -- 27 x u32 pointers, channel -> section record, mode B
+; ★ 0x00F597 is NOT a pitch table. Both tables have identical shape and are read by the same
+; code, ChanStruct_Init_Entry / _AltPtr (subcpu source ~line 4066/4080): index = channel*4,
+; value = a 32-bit pointer stored at offset 0 of the 12-byte channel record at DRAM 0x1349 + ch*12.
+; Every value is 0x112D + 30*k, i.e. a pointer to one of the 18 section records.
+;   mode A (0x00F52B) section per channel 0..26:
+;     0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 2 3 1 2 3 3 3 17
+;   mode B (0x00F597) section per channel 0..26:
+;     0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 11 12 13 14 15 11 14 15 15 15 17
+; Mode B gives channels 0..15 one section each -- a 16-part (GM-style) allocation; mode A folds
+; everything into 4 sections -- the instrument's own keyboard-part allocation. The two quota
+; tables above are the matching halves.
 Voice_Pitch_Table_High:
 	.byte 0x2d, 0x11, 0x00, 0x00
 	.byte 0x4b, 0x11, 0x00, 0x00
@@ -297,14 +423,61 @@ Voice_Pitch_Table_High:
 	.byte 0xef, 0x12, 0x00, 0x00
 	.byte 0x2b, 0x13, 0x00, 0x00
 
+; --- 0x00F603-0x00F632  (Voice_KeyTable_Remapping) -- FOUR 0xFF-terminated voice search-order lists
+; Not one table: four variable-length lists, each terminated by 0xFF, each element an index that
+; the walker turns into `index<<2` and uses to fetch a chain-head pointer.
+;   0x00F603 (8 B):  06 05 02 04 03 01 00 FF                          -- 7 entries, referenced
+;                    directly by NoteChain_FindNode_B (`lda_24 xwa,0x00f603`)
+;   0x00F60B (15 B): 86 85 06 05 84 83 82 04 03 02 81 80 01 00 FF     -- 14 entries
+;   0x00F61A (14 B): 86 85 06 05 84 83 82 04 03 02 81 80 01 FF        -- 13 entries
+;   0x00F628 (11 B): 86 85 06 05 84 83 82 04 03 02 FF                 -- 10 entries
+; Element values are 0x00..0x06 and 0x80..0x86, i.e. 7 slots x 2 banks; bit 7 selects the second
+; bank. The order is a fixed preference ranking, so these are the voice-stealing / slot-search
+; priority orders. Walkers: NoteChain_FindNode_A / _B, which advance until they hit 0xFF and
+; return the first non-null chain head (or 0 = "not found").
+; --- 0x00F603-0x00F632  Voice-pool priority lists (0xFF-terminated byte lists)
+; Four variable-length lists of pool indices in allocation-priority order:
+;   0x00F603..0x00F60A  06 05 02 04 03 01 00 FF   used by NoteChain_FindNode_B
+;   0x00F60B..0x00F619  86 85 06 05 84 83 82 04 03 02 81 80 01 00 FF
+;   0x00F61A..0x00F627  86 85 06 05 84 83 82 04 03 02 81 80 01 FF
+;   0x00F628..0x00F632  86 85 06 05 84 83 82 04 03 02 FF
+; The last three are referenced by the 0x00F633 table and consumed by
+; NoteChain_FindNode_A (0x02229A). A byte with bit7 set selects the GLOBAL pool-head
+; array at 0x130F, indexed by (byte & 0x7F)*4; a byte with bit7 clear selects the
+; part-descriptor-local array, indexed by byte*4.
 Voice_KeyTable_Remapping:
 	.byte 0x06, 0x05, 0x02, 0x04, 0x03, 0x01, 0x00, 0xff
+; 0xFF-terminated search order, 14 entries, referenced from record 0 of the table at 0x00F633.
+VOICE_SEARCH_ORDER_LIST_1:
 	.byte 0x86, 0x85, 0x06, 0x05, 0x84, 0x83, 0x82, 0x04
-	.byte 0x03, 0x02, 0x81, 0x80, 0x01, 0x00, 0xff, 0x86
+	.byte 0x03, 0x02, 0x81, 0x80, 0x01, 0x00, 0xff
+; 0xFF-terminated search order, 13 entries, referenced from record 1 of the table at 0x00F633.
+VOICE_SEARCH_ORDER_LIST_2:
+	.byte 0x86
 	.byte 0x85, 0x06, 0x05, 0x84, 0x83, 0x82, 0x04, 0x03
-	.byte 0x02, 0x81, 0x80, 0x01, 0xff, 0x86, 0x85, 0x06
+	.byte 0x02, 0x81, 0x80, 0x01, 0xff
+; 0xFF-terminated search order, 10 entries, referenced from records 2..15 of the table at 0x00F633.
+VOICE_SEARCH_ORDER_LIST_3:
+	.byte 0x86, 0x85, 0x06
 	.byte 0x05, 0x84, 0x83, 0x82, 0x04, 0x03, 0x02, 0xff
 
+; --- 0x00F633-0x00F692  (Voice_SFX_ModulationTable) -- 16 x 6-byte slot-type descriptors
+; Indexing proved in NoteOn_Dispatch (subcpu source ~line 4405): it takes the byte at
+; (voice_msg + 2 + slot) & 0x0F, does `muls wa,0x6`, adds base 0x00F633.
+; Record: +0 u32 = pointer to a search-order list (one of 0x00F603 / 0x60B / 0x61A / 0x628)
+;         +4 u8  = a small class code (0x00, 0x01, 0x02)
+;         +5 u8  = copied verbatim into the allocated voice node at node+38
+; Contents: {F60B,0,3}, {F61A,1,3}, {F628,2,4}, then 13 x {F628,2,5}.
+; 0x00F693-0x00F69A is 8 bytes of 0x00 filler between this table and the next.
+; --- 0x00F633-0x00F692  Note-on layer descriptor table, 16 entries of 6 bytes
+; Indexed by the low nibble of a note-event slot byte in NoteOn_Dispatch (0x0223BE).
+; Entry layout: { u32 candidate_list_ptr; u8 priority_key; u8 node_param }.
+;   entry 0  -> 0x0000F60B, key 0x00, param 0x03
+;   entry 1  -> 0x0000F61A, key 0x01, param 0x03
+;   entry 2  -> 0x0000F628, key 0x02, param 0x04
+;   entries 3..15 -> 0x0000F628, key 0x02, param 0x05 (all identical)
+; priority_key is passed to VoiceNode_PriorityList_Update; node_param is stored in
+; (voice+0x26) at 0x022406.
 Voice_SFX_ModulationTable:
 	.byte 0x0b, 0xf6, 0x00, 0x00, 0x00, 0x03, 0x1a, 0xf6
 	.byte 0x00, 0x00, 0x01, 0x03, 0x28, 0xf6, 0x00, 0x00
@@ -373,22 +546,70 @@ Voice_ParamScaleTable:
 Const_ChannelMax:
 	.byte 0x07
 
+; --- 0x00F786-0x00F799  10 x s16, part transpose/trim table A -> DRAM 0x041476
+; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` (subcpu source ~line 17230); the
+; destination is 0x041476 + part*0x11F, i.e. one 287-byte record per part.
+; Values 0, 0, -1, -2, -3, -4, -5, -6, -7, -8.
+; ★ The ELF symbol Const_Zero_Byte sits here and claims a single byte. It is a 20-byte table.
+; --- 0x00F786-0x00F7E5  VOICE_SELECTOR_MIXWEIGHT_TABLES (outside this region)
+; Four adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights, sized exactly to
+; their index ranges: 0x00F786 (10 entries, indexed by COUNT 0..9) -> part+0x10E;
+; 0x00F79A (9 entries, indexed by INDEX 0..8) -> part+0x112;
+; 0x00F7AC (9 entries, INDEX) and 0x00F7BE (10 entries, VALUE) and 0x00F7D2 (10 entries,
+; COUNT) -> summed into part+0x110.
 Const_Zero_Byte:
 	.byte 0x00
 
+; --- 0x00F787-0x012158  (PitchDetune_OffsetTable) -- NOT one table: a 10 KiB mixed data segment
+; The name covers everything between two named symbols; the code indexes at least 60 distinct
+; addresses inside it with independent base registers. Sub-blocks located while working:
+;   0x00F786-0x00F7E5  the five part trim tables documented in the neighbouring entries
+;   0x00F7E6           portamento rate table
+;   0x00FF00 / 0x00FF80  two 128-byte tables, 11 references each (source lines 12535..19767)
+;   0x00FCE4 / 0x00FDE4 / 0x00FEE4 / 0x00FFE4  four 256-byte tables on a clean 0x100 stride
+;   0x010764 / 0x010964 / 0x010A64 / 0x010B64 / 0x010C64 / 0x010D64  six 0x200-strided blocks
+;   0x0118FE  38 references -- by far the hottest object in the segment
+;   0x011963, 0x0119C8, 0x011ACF, 0x011ADF, 0x011D16, 0x011E16  further per-part arrays
+;   0x012115-0x012158  the tone-generator voice template (own entry below)
+; No single name is honest here; it should eventually be split. Listed in UNCERTAIN.
 PitchDetune_OffsetTable:
 	.byte 0x00, 0x00, 0x00, 0xff, 0xff, 0xfe, 0xff, 0xfd, 0xff
 	.byte 0xfc, 0xff, 0xfb, 0xff, 0xfa, 0xff, 0xf9, 0xff
-	.byte 0xf8, 0xff, 0x00, 0xf4, 0x00, 0x00, 0x00, 0x07
+	.byte 0xf8, 0xff
+; 9 x s16 -> DRAM 0x04147A + part*0x11F (subcpu source ~line 17241), same idiom as 0x00F786.
+; Values -3072, 0, 1792, 3072, 4864, 6144, 7168, 7936, 9216 = 256 * (-12, 0, +7, +12, +19, +24,
+; +28, +31, +36) semitones -- an octave/fifth harmonic stack in 1/256-semitone units.
+; Extent 0x00F79A-0x00F7AB.
+VOICE_PART_TRIM_TABLE_B:
+	.byte 0x00, 0xf4, 0x00, 0x00, 0x00, 0x07
 	.byte 0x00, 0x0c, 0x00, 0x13, 0x00, 0x18, 0x00, 0x1c
-	.byte 0x00, 0x1f, 0x00, 0x24, 0x00, 0x00, 0xfb, 0xff
+	.byte 0x00, 0x1f, 0x00, 0x24
+; 9 x s16, extent 0x00F7AC-0x00F7BD. Values 0, -5, -8, -16, -16, -16, -27, -27, -32.
+; Summed with VOICE_PART_TRIM_ADDEND_2 and VOICE_PART_TRIM_BASE into DRAM 0x041478 + part*0x11F.
+; Indexed by the caller's (xsp+2) parameter.
+VOICE_PART_TRIM_ADDEND_1:
+	.byte 0x00, 0x00, 0xfb, 0xff
 	.byte 0xf8, 0xff, 0xf0, 0xff, 0xf0, 0xff, 0xf0, 0xff
-	.byte 0xe5, 0xff, 0xe5, 0xff, 0xe0, 0xff, 0x80, 0xff
+	.byte 0xe5, 0xff, 0xe5, 0xff, 0xe0, 0xff
+; 10 x s16, extent 0x00F7BE-0x00F7D1. Values -128, -67, -51, -39, -27, -19, -11, -5, 0, 0.
+; Indexed by the caller's (xsp+0) parameter; a smooth taper, so a level/attenuation trim.
+VOICE_PART_TRIM_ADDEND_2:
+	.byte 0x80, 0xff
 	.byte 0xbd, 0xff, 0xcd, 0xff, 0xd9, 0xff, 0xe5, 0xff
 	.byte 0xed, 0xff, 0xf5, 0xff, 0xfb, 0xff, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
+	.byte 0x00, 0x00
+; 10 x s16, extent 0x00F7D2-0x00F7E5. Values 0, 0, 2, 4, 6, 8, 10, 12, 14, 16.
+; Loaded first (`ldw_sri DE`) then the two addends above are added to it (`add_sriw_rm DE`).
+VOICE_PART_TRIM_BASE:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0x04, 0x00, 0x06, 0x00, 0x08, 0x00, 0x0a, 0x00
-	.byte 0x0c, 0x00, 0x0e, 0x00, 0x10, 0x00, 0xff, 0xff
+	.byte 0x0c, 0x00, 0x0e, 0x00, 0x10, 0x00
+; u16 table indexed by a clamped delta*2, feeding FP_MulAccum64 and then `srl xwa,10` with a
+; 0xFFF clamp, inside Voice_Slot_ApplyPortamentoDelta (subcpu source ~line 17835). The scaling
+; (>>10, 12-bit clamp) is a pitch-slew rate, hence the name. Length not established -- the first
+; two bytes are 0xFF 0xFF, so the table proper may begin a couple of bytes later.
+VOICE_PORTAMENTO_RATE_TABLE:
+	.byte 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x73, 0xc6
 	.byte 0x60, 0xa5, 0x53, 0x8f
 	.ascii "Fy9c"
@@ -1691,7 +1912,16 @@ PitchDetune_OffsetTable:
 	.asciz "    User Kit    "
 	.byte 0x5f, 0x55, 0x03
 	.byte 0x00, 0x76, 0x55, 0x03, 0x00, 0x76, 0x55, 0x03
-	.byte 0x00, 0x76, 0x55, 0x03, 0x00, 0x00, 0xf0, 0x00
+	.byte 0x00, 0x76, 0x55, 0x03, 0x00
+; 68 bytes (0x22 words) block-copied to DRAM 0x003B1C by both ToneGen_SetupPolyVoice and
+; ToneGen_SetupPercussionVoice (`ld xiy,0x12115 / ld xix,0x3B1C / ldw bc,0x22 / ldirw`).
+; It is the default tone-generator register image for a freshly allocated voice; the callers then
+; OR/overwrite the pitch (0x3B2A), volume (0x3B20), effect routing (0x3B22) and level (0x3B1E)
+; fields before pushing it out through ToneGen_WriteVoiceParams / ToneGen_WriteSingleReg.
+; First words: 0xF000, 0x0000, 0x8000, 0x0000, 0x017C, 0x7F7C, 0x0040, 0x0080 ...
+; Extent 0x012115-0x012158, immediately followed by CALL_TABLE_12159.
+TONEGEN_VOICE_PARAM_TEMPLATE:
+	.byte 0x00, 0xf0, 0x00
 	.byte 0x00, 0x00, 0x80, 0x00, 0x00, 0x7c, 0x01, 0x7c
 	.byte 0x7f, 0x40, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0xa0, 0x7f
@@ -1702,6 +1932,10 @@ PitchDetune_OffsetTable:
 	.zero 8
 	.byte 0x00
 
+; --- 0x012159-0x012170  CALL_TABLE_12159 -- 6 x u32 note-on handler pointers
+; `sla hl,2 / lda_24 xix,0x012159 / add xhl,xix / ld xhl,(xhl) / call (xhl)` in the poly note-on
+; path (subcpu source ~line 33331). Entries: 0x0355AD, 0x035656, then 0x0355AD four more times.
+; So only two distinct handlers; index 1 is the special case.
 CALL_TABLE_12159:
 	.long ToneGen_SetupPolyVoice
 	.long ToneGen_SetupPercussionVoice
@@ -1710,12 +1944,37 @@ CALL_TABLE_12159:
 	.long ToneGen_SetupPolyVoice
 	.long ToneGen_SetupPolyVoice
 
+; --- 0x012171-0x012176  6 bytes, per-voice-type pitch bias
+; `lda_24 xbc,0x012171 / ldb_sri A`, added to the note number in ToneGen_SetupPolyVoice.
+; Values 00 00 18 E8 00 00 (0x18 = +24, 0xE8 = -24 as a signed byte -- octave up / octave down).
+; ★ This is the address the ELF calls Audio_DSP_StateTable_Packed; the "table" is 6 bytes.
+; --- 0x012171-0x014738  (Audio_DSP_StateTable_Packed) -- NOT one packed table
+; Same story as 0x00F787: a 9.6 KiB constant pool whose members are addressed independently.
+; Beyond the four tables named in the neighbouring entries, the code takes ~250 distinct base
+; addresses inside it, densely in 0x0122C4-0x012391 (one per source line, subcpu source
+; 38700-39400) and in 0x012CD3-0x0131CB (subcpu source 41000-44700). The regular spacing there
+; (4 and 8 bytes) says these are arrays of 4- and 8-byte parameter records for the DSP/effect
+; setup code, one base per effect parameter. Listed in UNCERTAIN; splitting it needs the
+; DSP-side pass.
 Audio_DSP_StateTable_Packed:
-	.byte 0x00, 0x00, 0x18, 0xe8, 0x00, 0x00, 0x7f
-	.byte 0x7f, 0x7f, 0x7f, 0x00, 0x5f, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x18, 0xe8, 0x00, 0x00
+; 6 bytes, same index as 0x012171. Values 7F 7F 7F 7F 00 5F. Read with `cpib_sri ...,0x00`
+; first: a zero entry means "keep the caller's value", otherwise this byte replaces it.
+TONEGEN_VOICETYPE_DEFAULT_LEVEL:
+	.byte 0x7f
+	.byte 0x7f, 0x7f, 0x7f, 0x00, 0x5f
+; 12 x u16 indexed by note % 12 (`div a,0xC / ld a,w / add wa,wa`), stored to DRAM 0x3B1E.
+; Values 0x0000, 0x2000, 0x4000, 0x6000, then 8 zeros. Extent 0x01217D-0x012194.
+; Also read as a plain word (`ldw_da xwa,0x01217d`) by ToneGen_SetupPercussionVoice.
+TONEGEN_SEMITONE_PITCH_TABLE:
+	.byte 0x00, 0x00, 0x00
 	.byte 0x20, 0x00, 0x40, 0x00, 0x60, 0x00, 0x00, 0x00
 	.zero 8
-	.zero 8
+	.zero 5
+; u16 indexed by note / 12 (the octave), OR-ed into DRAM 0x3B1C by ToneGen_SetupPercussionVoice.
+; Values 0x0000, 0x0200, 0x0400, 0x0600, 0x0800 ... = octave * 0x200.
+TONEGEN_OCTAVE_PITCH_TABLE:
+	.zero 3
 	.byte 0x02, 0x00, 0x04, 0x00, 0x06, 0x00, 0x08, 0x00
 	.byte 0x0a, 0x00, 0x0c, 0x00, 0x0e, 0x00, 0x0e, 0x00
 	.byte 0x0e, 0x00, 0x0e, 0x00, 0x0e, 0x1d, 0x58, 0x03
@@ -4597,6 +4856,17 @@ Audio_DSP_StateTable_Packed:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01
 	.byte 0x01
 
+; --- 0x014739-0x014744  OFFSETS_14739 -- 6 x u16 jump offsets, base 0x03C32E
+; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Init takes the
+; high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E (SendCommand) and 0x0D
+; (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 / ldw_sri WA /
+; lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613 bytes of hand
+; TLCS-900 code implementing handlers 0..5, kept as raw bytes because of unsupported addressing.
+; --- 0x014739-0x014744  DSP_Bytecode_HandlerOffsetTable
+; 6 signed 16-bit offsets relative to 0x03C32E, indexed by the bytecode opcode's high nibble
+; (0..5).  Decoded: op0 +0x000 -> 0x03C32E, op1 +0x23A -> 0x03C568, op2 +0x333 -> 0x03C661,
+; op3 +0x3DA -> 0x03C708, op4 +0x473 -> 0x03C7A1, op5 +0x48D -> 0x03C7BB.
+; Consumed by the computed `jp (XIX+DE)` at the tail of DSP_BytecodeInterpreter_Loop.
 OFFSETS_14739:
 	.short 0x0
 	.short 0x23A
@@ -4605,6 +4875,21 @@ OFFSETS_14739:
 	.short 0x473
 	.short 0x48D
 
+; --- 0x014745-0x014776  OFFSETS_14745 -- 25 x u16 jump offsets, base 0x03CB8E
+; The DSP bytecode interpreter's SECONDARY dispatch, for opcodes 0x61..0x79: `sub wa,0x61 /
+; reject <0 or >0x18 / add wa,wa / lda_24 xix,0x014745 / ldw_sri WA / lda_24 xix,0x03cb8e /
+; jp_ind`. 0x18+1 = 25 entries = 50 bytes, matching the extent exactly. Opcodes 0x21, 0x24 and
+; 0x40 are handled before this table (Interp2Point, MultiStepInterp, PanScale).
+; --- 0x014745-0x014776  DSP_Translator_OpcodeOffsetTable
+; 25 signed 16-bit offsets relative to 0x03CB8E, indexed by (opcode - 0x61) for opcodes
+; 0x61..0x79.  Decoded targets, in opcode order:
+;   0x61->0x03CB8E 0x62->0x03CBDE 0x63->0x03CBFA 0x64->0x03CC33 0x65->0x03CC50 0x66->0x03CC6D
+;   0x67->0x03CC8A 0x68->0x03CCAB 0x69->0x03CCC8 0x6A->0x03CCE5 0x6B->0x03CD02 0x6C->0x03CD1F
+;   0x6D->0x03CD3F 0x6E->0x03CD5C 0x6F->0x03CD79 0x70->0x03CD96 0x71->0x03CDB9 0x72->0x03CDD6
+;   0x73->0x03CDF3 0x74->0x03CE10 0x75->0x03CE25 0x76->0x03CE42 0x77->0x03CE65 0x78->0x03CE82
+;   0x79->0x03CC16
+; Consumed by the computed `jp (XIX+DE)` at 0x03CB89.  Opcodes 0x21, 0x24 and 0x40 are
+; special-cased BEFORE this table; anything else aborts via DSP_Op_Unknown_Error.
 OFFSETS_14745:
 	.short 0x0
 	.short 0x50
@@ -4632,6 +4917,15 @@ OFFSETS_14745:
 	.short 0x2F4
 	.short 0x88
 
+; NOTE: this address ALREADY carries the ELF name ToneGen_WorkArea -- no rename proposed, this
+; entry documents it. It is the base pointer passed in XBC/XDE to DSP_BytecodeInterpreter_Init
+; and DSP_ParameterWriteEngine at four call sites (DSP_WriteEFFConfig, DSP_WriteGlobalConfig,
+; DSP_WriteParameter x2, subcpu source 44822/44863/44883/44912). It is DSP program+parameter
+; data, not a tone-generator work area. See UNCERTAIN.
+; --- 0x014777-0x0147B2  DSP_EFFBytecode_ProgramTable
+; 12-byte descriptors for DSP_BytecodeInterpreter_Init: +0,+2,+4,+6 = four words copied into
+; the interpreter frame, +8 = long.  Indexed by effect-slot number.  0x0147B3 is the same
+; shape and is the table used by DSP_WriteGlobalConfig (program 0 only).
 ToneGen_WorkArea:
 	.zero 9
 	.zero 8
@@ -4640,7 +4934,11 @@ ToneGen_WorkArea:
 	.zero 8
 	.zero 8
 	.zero 8
-	.zero 8
+	.zero 3
+; Bytecode block passed to DSP_BytecodeInterpreter_Init by DSP_WriteGlobalConfig with de = 0
+; and bc = 0 -- the unconditional "global DSP configuration" program.
+DSP_BYTECODE_GLOBAL_CONFIG:
+	.zero 5
 	.zero 8
 	.zero 8
 	.zero 8
@@ -9675,11 +9973,18 @@ ToneGen_WorkArea:
 	.byte 0x26, 0x66, 0x66, 0x00, 0x00, 0x00, 0x40, 0x00
 	.byte 0x00, 0x23, 0x00, 0x1e, 0x31, 0x8b, 0x12, 0xe5
 	.byte 0x76, 0x2c, 0x23, 0x00, 0x1e, 0x31, 0x8b, 0x12
-	.byte 0xe5, 0x76, 0x2c, 0x40, 0x03, 0x03, 0xf0, 0x00
+	.byte 0xe5, 0x76, 0x2c, 0x40, 0x03, 0x03, 0xf0
+DSP_EFF9_PARAM_DESCRIPTORS:
+	.byte 0x00
 	.byte 0x05, 0x67, 0x00, 0x02, 0x00, 0x07, 0x76, 0x96
 	.byte 0x99, 0x9f, 0xa2, 0x00, 0x07, 0x73, 0x93, 0x94
 	.byte 0x9c, 0x9d, 0x00, 0x04, 0x63, 0x86, 0x00, 0x07
-	.byte 0x74, 0x1d, 0x00, 0x00, 0x00, 0xf0, 0x00, 0x08
+	.byte 0x74, 0x1d, 0x00, 0x00, 0x00, 0xf0
+; The pair pushed by DSP_WriteParam_EFFCase when the effect selector bc == 9: XHL = 0x01E17F
+; (the descriptor stream handed to DSP_ParameterWriteEngine as XDE) and 0x01E19E pushed as the
+; second argument. 0x1E19E - 0x1E17F = 31 bytes of descriptors.
+DSP_EFF9_PARAM_VALUES:
+	.byte 0x00, 0x08
 	.byte 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08
 	.byte 0x67, 0x01, 0x00, 0xbe, 0x41, 0x7a, 0x00, 0x0b
 	.byte 0x73, 0x00, 0xc2, 0x8f, 0x5c, 0x3d, 0x70, 0xa3
@@ -9757,11 +10062,16 @@ ToneGen_WorkArea:
 	.byte 0x00, 0x03, 0x33, 0x33, 0x23, 0x00, 0x1e, 0x27
 	.byte 0x4f, 0x03, 0xef, 0x37, 0x1e, 0x23, 0x00, 0x1e
 	.byte 0x27, 0x4f, 0x03, 0xef, 0x37, 0x1e, 0x40, 0x03
-	.byte 0x03, 0xf0, 0x00, 0x07, 0x66, 0x94, 0x95, 0x96
+	.byte 0x03, 0xf0
+DSP_EFFA_PARAM_DESCRIPTORS:
+	.byte 0x00, 0x07, 0x66, 0x94, 0x95, 0x96
 	.byte 0x97, 0x00, 0x07, 0x67, 0x00, 0x02, 0x03, 0x04
 	.byte 0x00, 0x05, 0x76, 0x99, 0x9c, 0x00, 0x04, 0x73
 	.byte 0x98, 0x00, 0x04, 0x63, 0x86, 0x00, 0x07, 0x74
-	.byte 0x1d, 0x00, 0x00, 0x00, 0xf0, 0x00, 0x08, 0x67
+	.byte 0x1d, 0x00, 0x00, 0x00, 0xf0
+; Same pair for effect selector bc == 0x0A (DSP_WriteParam_EFFCase0xA). 0x1E42D - 0x1E40A = 35.
+DSP_EFFA_PARAM_VALUES:
+	.byte 0x00, 0x08, 0x67
 	.byte 0x00, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08, 0x67
 	.byte 0x01, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08, 0x67
 	.byte 0x02, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08, 0x67
@@ -10166,7 +10476,13 @@ ToneGen_WorkArea:
 	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
 	.byte 0x5e, 0x73, 0x01, 0x00, 0x1a, 0xba, 0x01, 0x00
 	.byte 0xb0, 0xbd, 0x01, 0x00, 0x56, 0xc1, 0x01, 0x00
-	.byte 0x02, 0xc5, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x02, 0xc5, 0x01, 0x00
+; u32 pointer array indexed by the effect id (`sll xbc,2 / ld xiy,0x1F09C / add xiy,xbc /
+; ld xbc,(xiy)`) in DSP_WriteParam_Generic. Entries seen: 0, 0x01561A, 0x01591F, 0x015CD8,
+; 0x015F6C, 0x01633B, 0x017A92, 0, 0x01776C, 0x0180D0, 0x018359, 0 -- all pointing back into the
+; 0x014777.. blob, with 0 meaning "no parameter block".
+DSP_PARAM_BLOCK_PTRS_A:
+	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x1a, 0x56, 0x01, 0x00, 0x1f, 0x59, 0x01, 0x00
 	.byte 0xd8, 0x5c, 0x01, 0x00, 0x6c, 0x5f, 0x01, 0x00
 	.byte 0x3b, 0x63, 0x01, 0x00, 0x92, 0x7a, 0x01, 0x00
@@ -10216,7 +10532,12 @@ ToneGen_WorkArea:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x32, 0xbb, 0x01, 0x00
 	.byte 0xf3, 0xbe, 0x01, 0x00, 0x48, 0xc2, 0x01, 0x00
-	.byte 0x52, 0xc6, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
+	.byte 0x52, 0xc6, 0x01, 0x00
+; The parallel array indexed by the parameter id (`sll xhl,2 / ld xiy,0x1F22C`), same call site.
+; Entries: 0x017425, 0x01564B, 0x015969, 0x015D1B, 0x015FD3, 0x0163A2, 0x017AE3, 0x017425,
+; 0x01779F, 0x01811E, 0x0183CE, 0x017425 -- 0x017425 recurs as the default/fallback block.
+DSP_PARAM_BLOCK_PTRS_B:
+	.byte 0x25, 0x74, 0x01, 0x00
 	.byte 0x4b, 0x56, 0x01, 0x00, 0x69, 0x59, 0x01, 0x00
 	.byte 0x1b, 0x5d, 0x01, 0x00, 0xd3, 0x5f, 0x01, 0x00
 	.byte 0xa2, 0x63, 0x01, 0x00, 0xe3, 0x7a, 0x01, 0x00
@@ -10278,11 +10599,32 @@ ToneGen_WorkArea:
 	.byte 0xf6, 0xe5, 0x01, 0x00, 0x02, 0xe6, 0x01, 0x00
 	.byte 0x0d, 0xe6, 0x01, 0x00, 0x18, 0xe6, 0x01, 0x00
 	.byte 0x24, 0xe6, 0x01, 0x00, 0x30, 0xe6, 0x01, 0x00
-	.byte 0x4d, 0x00, 0x80, 0x00, 0x02, 0xf0, 0x00, 0x00
+; u16 = 0x004D (77). The pivot the velocity curve is scaled about: the touch computation forms
+; (VELCURVE_IN[v] - 77) before applying the per-mode gain. Read with `ldw_da xbc,0x01f418`
+; in ToneGen_Calc (0x03D17x).
+TONEGEN_VELCURVE_PIVOT:
+	.byte 0x4d, 0x00
+; u16 = 0x0080 (128). The `divs xbc,xde` denominator of the same computation, i.e. the per-mode
+; gain byte is a Q8 fixed-point multiplier.
+TONEGEN_VELCURVE_DIVISOR:
+	.byte 0x80, 0x00
+; u32 = 0x0000F002 -- the only pointer to TONEGEN_VOICE_ACTIVE_BITMAP. Loaded by
+; ToneGen_Poll_SetBit / _ClearBit (`ldl_da xbc,0x01f41c`) and, as an add-absolute operand
+; (`addda32_24 xwa,128028`), by ToneGen_Clear_Voice_Loop. 128028 = 0x01F41C.
+; ★ Because it is a pointer in writable DRAM, corrupting these 4 bytes silently redirects every
+;   voice-status update. See FINDINGS.
+TONEGEN_VOICE_BITMAP_PTR:
+	.byte 0x02, 0xf0, 0x00, 0x00
 	.byte 0x00, 0xd0, 0x00, 0x10, 0xc7, 0x03, 0x20, 0xbd
 	.byte 0x06, 0x30, 0xb4, 0x08, 0x40, 0xab, 0x0b, 0x50
 	.byte 0xa1, 0x0e, 0x60, 0x98, 0x10, 0x70, 0x8f, 0x13
-	.byte 0x80, 0x86, 0x16, 0x90, 0x82, 0x18, 0xff, 0xff
+	.byte 0x80, 0x86, 0x16, 0x90, 0x82, 0x18
+; 256 bytes (0x01F43E-0x01F53D) mapping raw MIDI velocity 0..255 to the curve domain.
+; Monotonically DECREASING: 0xFF for inputs 0..8, then 0xFB 0xF6 0xF1 ... down to 0x01 by input
+; 0xE0 and 0x00 at 0xFE/0xFF. The decreasing sense means the tone generator's velocity field is
+; an attenuation, not a level.
+TONEGEN_VELOCITY_INPUT_CURVE:
+	.byte 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfb
 	.byte 0xf6, 0xf1, 0xed, 0xea, 0xe6, 0xe3, 0xe0, 0xdd
 	.byte 0xdb, 0xd8, 0xd6, 0xd3, 0xd1, 0xcf, 0xcd, 0xcb
@@ -10304,7 +10646,12 @@ ToneGen_WorkArea:
 	.fill 8, 1, 0x01
 	.fill 8, 1, 0x01
 	.fill 8, 1, 0x01
-	.byte 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x02
+	.byte 0x01, 0x01, 0x01, 0x01, 0x00, 0x00
+; 256 bytes (0x01F53E-0x01F63D), the second half of the touch mapping; the clamped intermediate
+; indexes it and the result is stored as the voice's velocity byte at (xwa+1).
+; Starts 0x01 then a long run of 0x02 -- a compressive (roughly logarithmic) response.
+TONEGEN_VELOCITY_OUTPUT_CURVE:
+	.byte 0x01, 0x02
 	.fill 8, 1, 0x02
 	.fill 8, 1, 0x02
 	.fill 8, 1, 0x02
@@ -10333,11 +10680,16 @@ ToneGen_WorkArea:
 	nop
 	nop
 	nop
+; -2147483647.0000002 -- returned by the double->long conversion path on negative overflow
+; (subcpu_fp_math.s line 154, via ToneGen_Compare_Voice with de = 1).
+FPCONST_INT32_MIN_AS_DOUBLE:
 	normal
 	nop
 	.byte 0xc0, 0xff, 0xff
 	swi	7
 	.byte 0xdf, 0xc1
+; +2147483647.0000002 -- the positive-overflow counterpart (subcpu_fp_math.s line 160, de = 3).
+FPCONST_INT32_MAX_AS_DOUBLE:
 	normal
 	nop
 	.byte 0xc0, 0xff, 0xff
@@ -10370,8 +10722,14 @@ ToneGen_WorkArea:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x4e, 0x62
-	.byte 0x10, 0x58, 0x39, 0x2e, 0x86, 0x40, 0xba, 0x49
+	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f
+; 709.778 = ln(DBL_MAX). Compared against before exp()/pow() to decide the ERANGE path.
+FPCONST_EXP_OVERFLOW_LIMIT:
+	.byte 0x4e, 0x62
+	.byte 0x10, 0x58, 0x39, 0x2e, 0x86, 0x40
+; -708.396 = ln(DBL_MIN). The underflow counterpart of the above.
+FPCONST_EXP_UNDERFLOW_LIMIT:
+	.byte 0xba, 0x49
 	.byte 0x0c, 0x02, 0x2b, 0x23, 0x86, 0xc0, 0x00, 0x00
 	.zero 8
 	.zero 8

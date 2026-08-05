@@ -1,0 +1,1394 @@
+# region 3: 0x02219F..0x024068
+# Per-tick voice servicing and the note-on/note-off lifecycle: the tone-generator
+# active-voice poll that recycles finished voices, voice allocation across four
+# layer slots, note-off enumeration, velocity/pan/level scaling, the pitch
+# accumulator, and the per-voice filter (TVF) register builder.
+#
+# NOTE FOR THE INTEGRATOR: every address in this region already carries a real
+# name in the authoritative LLVM build (rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf).
+# Nothing below renames anything. The names quoted are exactly the ELF's; the
+# 'replaces=' column exists because symbols/subcpu_symbols_reference.txt is STALE
+# here and still holds LABEL_xxxxxx at most of these addresses. The deliverable is
+# the documentation plus that mechanical curated-file sync. Where the curated file
+# already holds a different real name the disagreement is recorded under
+# [UNCERTAIN] instead - several of those curated names look BETTER than the ELF's.
+# Verified before writing: both toolchains rebuild at 100.00% (compare_roms.py).
+
+[DATA] 0x00F603-0x00F632  Voice-pool priority lists (0xFF-terminated byte lists)
+; Four variable-length lists of pool indices in allocation-priority order:
+;   0x00F603..0x00F60A  06 05 02 04 03 01 00 FF   used by NoteChain_FindNode_B
+;   0x00F60B..0x00F619  86 85 06 05 84 83 82 04 03 02 81 80 01 00 FF
+;   0x00F61A..0x00F627  86 85 06 05 84 83 82 04 03 02 81 80 01 FF
+;   0x00F628..0x00F632  86 85 06 05 84 83 82 04 03 02 FF
+; The last three are referenced by the 0x00F633 table and consumed by
+; NoteChain_FindNode_A (0x02229A). A byte with bit7 set selects the GLOBAL pool-head
+; array at 0x130F, indexed by (byte & 0x7F)*4; a byte with bit7 clear selects the
+; part-descriptor-local array, indexed by byte*4.
+
+[DATA] 0x00F633-0x00F692  Note-on layer descriptor table, 16 entries of 6 bytes
+; Indexed by the low nibble of a note-event slot byte in NoteOn_Dispatch (0x0223BE).
+; Entry layout: { u32 candidate_list_ptr; u8 priority_key; u8 node_param }.
+;   entry 0  -> 0x0000F60B, key 0x00, param 0x03
+;   entry 1  -> 0x0000F61A, key 0x01, param 0x03
+;   entry 2  -> 0x0000F628, key 0x02, param 0x04
+;   entries 3..15 -> 0x0000F628, key 0x02, param 0x05 (all identical)
+; priority_key is passed to VoiceNode_PriorityList_Update; node_param is stored in
+; (voice+0x26) at 0x022406.
+
+[DATA] 0x00F693-0x00F6A6  PitchBend_Process jump table, 10 u16 offsets
+; Offsets added to 0x022982 to form the target of the 'jp' at 0x02297D; the selector is
+; WA-0x10 and must be in 0..9. In v142 nine entries are 0x0000 (they land on the
+; 'ld HL,0 ; ret' stub at 0x022982) and only index 4 (selector 0x14) is 0x0004,
+; reaching PitchBend_Process_Fallback at 0x022986.
+
+[ROUTINE] 0x02219F AudioTick_UpdateVoice  confidence=high
+; PER-TICK TONE-GENERATOR VOICE POLL. Services ONE bank of 16 hardware voices per
+; call and is the ONLY place in the firmware where a voice is handed back to the
+; software free pool.
+; Caller: Audio_Process_Init (0x034CDB) at 0x034CED, on alternate ticks only - that
+; routine toggles the byte at 0x041342 with 'xor 0xFF' and only calls us when it is
+; non-zero. With the internal bank counter this means each of the 4 banks is polled
+; once every 8 ticks.
+; State: byte (0x1128) = bank counter, inc'd then masked to 0..3 on entry.
+;   word (0x292E + bank*2) = shadow copy of the previous poll's active-voice bitmap.
+;   word (0x2936 + bank*2) = software 'held / do not reap' bitmap, set by
+;                            NoteOn_Dispatch (0x02243D) and cleared by
+;                            VoiceSlot_Release (0x0225BB).
+; Hardware: calls 0x021023 (ELF name DAC_Write_Sample - see [UNCERTAIN]) which writes
+;   the TG register-address latch at 0x100000 and reads the word back. Latch value
+;   0..3 returns the 16-bit active-voice bitmap for that bank; latch 0x180+ch returns
+;   that channel's envelope level.
+; Edge detection (0x2219F..0x02220A):
+;     new  = TG_bitmap | held_bitmap        ; 0x221C5
+;     hits = (new ^ prev) & prev            ; 0x221E9 / 0x221F1
+;     prev = new                            ; 0x22200
+;   so 'hits' are exactly the voices that were marked active last poll and are now
+;   reported silent by the TG and are not software-held. Only those get reaped.
+; Per-voice loop (see AudioTick_UpdateVoice_SlotLoop): voice index = bank*16 + i,
+;   voice record = 0x148D + index*0x27 (39-byte records, 64 voices, 0x148D..0x1E4C).
+; Exit: calls Voice_AdvanceSlotIterator (0x021BF5) with WA = bank.
+; *** BUG-RELEVANT: if the tone generator never clears active bits (e.g. a sine-wave
+; diagnostic renderer that has no end-of-sample / no auto-free), 'hits' is
+; permanently zero, no voice is ever retired, and the free pool drains to empty. ***
+
+[LABEL] 0x02222A AudioTick_UpdateVoice_SlotLoop  replaces=LABEL_02222A  confidence=high
+; Loop over the 16 voices of the bank; (XSP+6) is a walking one-hot mask that doubles
+; each pass and terminates when it shifts out of the word.
+
+[LABEL] 0x02224F AudioTick_UpdateVoice_DecayCheck  replaces=LABEL_02224F  confidence=high
+; Not a freshly-silent voice: skip entirely if flags (voice+0x22) & 0x81 (bit0 = in the
+; free pool, bit7 = held/retrigger). Otherwise read the TG envelope level for this
+; channel (latch 0x180+index), keep bits 13..0, >>5, store the low byte in (voice+0x25),
+; and if it is < 0x80 and flag bit2 is set call VoiceNode_BeginRelease (0x021E83).
+
+[LABEL] 0x02227F AudioTick_UpdateVoice_Next  replaces=LABEL_02227F  confidence=high
+; Advance to the next voice: index++, record pointer += 0x27, mask <<= 1.
+
+[LABEL] 0x02228D AudioTick_UpdateVoice_Return  replaces=LABEL_02228D  confidence=high
+; Tail: WA = bank, call Voice_AdvanceSlotIterator (0x021BF5), restore and return.
+
+[ROUTINE] 0x02229A NoteChain_FindNode_A  confidence=high
+; FREE-VOICE / CANDIDATE-NODE SEARCH, primary form.
+; In:  XWA = pointer to the 12-byte part descriptor (array base 0x1349, stride 0x0C).
+;      XBC = pointer to a 0xFF-terminated byte list of pool indices in priority order
+;            (the ROM lists live at 0x00F60B / 0x00F61A / 0x00F628).
+; Out: XHL = pointer to a voice node, or 0 if every listed pool is empty.
+; Fast path: if the 32-bit global at 0x1345 is non-zero it is returned unconditionally
+;   (a forced/override node).
+; Walk: for each byte b of the list - if bit7 is set the pool head is read from the
+;   global pointer array at 0x130F indexed by (b & 0x7F)*4, otherwise from the array
+;   embedded in the part descriptor at (*XWA)+2 indexed by b*4. First non-null wins.
+; Called only from NoteOn_Dispatch (0x0223CF).
+; *** BUG-RELEVANT: this returning 0 is how 'stops allocating voices' manifests; it is
+; silent - the caller just writes 0xFF into the slot and no error is reported. ***
+
+[LABEL] 0x0222A7 NoteChain_FindNode_A_Walk  replaces=LABEL_0222A7  confidence=high
+; Set up the walk: XDE = 0x112D+0x1E2 = 0x130F (global pool-head array), XHL = local array at (*XWA)+2, bail out immediately if the list is empty (first byte 0xFF).
+
+[LABEL] 0x0222BA NoteChain_FindNode_A_Secondary  replaces=LABEL_0222BA  confidence=high
+; List entry with bit7 set: look the pool head up in the GLOBAL array at 0x130F.
+
+[LABEL] 0x0222E2 NoteChain_FindNode_A_Primary  replaces=LABEL_0222E2  confidence=high
+; List entry with bit7 clear: look the pool head up in the part-descriptor-local array.
+
+[LABEL] 0x0222FF NoteChain_FindNode_A_Advance  replaces=LABEL_0222FF  confidence=high
+; Pool was empty - advance to the next byte of the priority list, stop on 0xFF.
+
+[LABEL] 0x022306 NoteChain_FindNode_NotFound  replaces=LABEL_022306  confidence=high
+; Shared not-found exit: XHL = 0.
+
+[ROUTINE] 0x022309 NoteChain_FindNode_B  replaces=LABEL_022309  confidence=high
+; FREE-VOICE / CANDIDATE-NODE SEARCH, secondary form (voice stealing).
+; In:  XWA = part descriptor; the local pool array is at XWA+2.
+; Out: XHL = first non-empty pool head, or 0.
+; Uses the fixed ROM priority list at 0x00F603 (06 05 02 04 03 01 00 FF) and, unlike
+; NoteChain_FindNode_A, has no bit7 escape to the global array and no 0x1345 override.
+; Called from NoteOn_Dispatch_WalkNext (0x0224DF) when the part is already at its
+; polyphony limit, i.e. this is the steal-a-voice search.
+
+[LABEL] 0x022319 NoteChain_FindNode_B_Walk  replaces=LABEL_022319  confidence=high
+; Walk the 0x00F603 list, returning the first non-null local pool head.
+
+[LABEL] 0x022336 NoteChain_FindNode_B_Advance  replaces=LABEL_022336  confidence=high
+; Advance to the next list byte, stop on the 0xFF terminator.
+
+[LABEL] 0x02233D NoteChain_FindNode_B_NotFound  replaces=LABEL_02233D  confidence=high
+; Not-found exit: XHL = 0.
+
+[ROUTINE] 0x022340 NoteOn_Dispatch  confidence=high
+; NOTE-ON: ALLOCATE UP TO FOUR VOICE NODES FOR ONE NOTE EVENT.
+; In: XWA = note-event record (kept in local (XSP+0x10)):
+;       +0x00 word  bits 0..6  = MIDI note number
+;                   bits 8..12 = part index, must be < 0x1A
+;       +0x02..+0x05  one byte per layer slot: bit7 = slot enabled,
+;                     bits 0..3 = index into the 6-byte ROM table at 0x00F633
+;       +0x06 bit6  = 'continue chain' - if clear, the global chain head (0x1129) is
+;                     reset to 0 first
+;       +0x06..+0x09  per-slot bit7 = hold / retrigger flag
+;       +0x0A..+0x0D  OUTPUT: allocated hardware voice index per slot, 0xFF = none
+; Callers: 0x02BB66, 0x02C033, 0x02C349, 0x02C665, 0x02D034.
+; Calls RingBuf_CheckOffset_ClearFlags (0x02103B) first, which clears the enable bit of
+; slots 1..3 according to the polyphony/mode values at 0x27E6/0x27E7 - i.e. that is the
+; layer limiter.
+; Part descriptor = 0x1349 + part*0x0C. Each 0x00F633 entry is {u32 candidate-list ptr,
+; u8 priority key, u8 node param}.
+; *** BUG-RELEVANT: (voice+0x25) is forced to 0xFF here (0x0223FC) and the flag byte
+; (voice+0x22) is set to 0x88 (held) or 0x08 (non-held) - bit2 is NOT set in either
+; case. AudioTick_UpdateVoice's envelope-based release path requires level < 0x80 AND
+; bit2, and its 'and A,0x81' guard also skips anything with bit7 set. So a voice that
+; the TG never reports silent has NO second escape route out of the pool. ***
+
+[LABEL] 0x022355 NoteOn_Dispatch_SlotLoop  replaces=LABEL_022355  confidence=high
+; Extract the part index (event word bits 8..12); >= 0x1A jumps to the all-slots-fail exit. Then run the layer limiter and compute the part descriptor pointer.
+
+[LABEL] 0x022390 NoteOn_Dispatch_ProcessSlot  replaces=LABEL_022390  confidence=high
+; Per-slot body (slot = 0..3): if the slot's enable bit7 is clear go mark it 0xFF; else fetch its 6-byte 0x00F633 entry and ask NoteChain_FindNode_A for a node.
+
+[LABEL] 0x0223F0 NoteOn_Dispatch_ActivateNode  replaces=LABEL_0223F0  confidence=high
+; Node obtained: (node+0x23) = note number, (node+0x25) = 0xFF (envelope max), (node+0x26) = entry byte +5; then branch on the slot's hold flag at event+6+slot.
+
+[LABEL] 0x02242F NoteOn_Dispatch_RetriggerActive  replaces=LABEL_02242F  confidence=high
+; Held/retrigger branch tail: OR this channel's bit into the 'held' bitmap (0x2936 + (chan>>4)*2) so AudioTick_UpdateVoice will never reap it.
+
+[LABEL] 0x022444 NoteOn_Dispatch_Retrigger  replaces=LABEL_022444  confidence=high
+; Non-held branch: flags = 0x08, then clear this channel's bit in the held bitmap 0x2936 ...
+
+[LABEL] 0x022457 NoteOn_Dispatch_RetriggerMask  replaces=LABEL_022457  confidence=high
+; ... using the complement mask, and ...
+
+[LABEL] 0x02247F NoteOn_Dispatch_RetriggerOrMask  replaces=LABEL_02247F  confidence=high
+; ... SET the bit in the shadow bitmap 0x292E so that the next poll sees a 1->0 transition once the TG finishes the note. This is what arms the reaper.
+
+[LABEL] 0x022492 NoteOn_Dispatch_UpdateLists  replaces=LABEL_022492  confidence=high
+; Link the node into the part's priority list (VoiceNode_PriorityList_Update, key = entry byte +4) and its secondary list, then splice it into the global note chain rooted at (0x1129).
+
+[LABEL] 0x0224BF NoteOn_Dispatch_SetGlobalHead  replaces=LABEL_0224BF  confidence=high
+; Global chain was empty: this node becomes the head (0x1129) and self-links.
+
+[LABEL] 0x0224C8 NoteOn_Dispatch_AdvancePriority  replaces=LABEL_0224C8  confidence=high
+; Polyphony accounting: part active count is (part_desc+1), limit is (part_desc+0); if below the limit just increment it.
+
+[LABEL] 0x0224DC NoteOn_Dispatch_WalkNext  replaces=LABEL_0224DC  confidence=high
+; At the limit - steal: NoteChain_FindNode_B picks a victim node, it is re-keyed into the list at 0x130D with its own (node+0x21) key, the count is bumped and flag bit4 is set on it.
+
+[LABEL] 0x022505 NoteOn_Dispatch_WriteSlot  replaces=LABEL_022505  confidence=high
+; Publish the result: Voice_ScanSlots_ReassignSources (0x02150D) for the channel, then event[0x0A+slot] = channel index.
+
+[LABEL] 0x022525 NoteOn_Dispatch_SlotNoNode  replaces=LABEL_022525  confidence=high
+; No node was available for this slot: event[0x0A+slot] = 0xFF.
+
+[LABEL] 0x02253B NoteOn_Dispatch_SlotInactive  replaces=LABEL_02253B  confidence=high
+; Slot was disabled: event[0x0A+slot] = 0xFF.
+
+[LABEL] 0x02254F NoteOn_Dispatch_SlotNext  replaces=LABEL_02254F  confidence=high
+; Next slot; four slots per event.
+
+[LABEL] 0x02255B NoteOn_Dispatch_AllInactive  replaces=LABEL_02255B  confidence=high
+; Part index out of range (>= 0x1A): reject the whole event.
+
+[LABEL] 0x022565 NoteOn_Dispatch_AllInactive_Loop  replaces=LABEL_022565  confidence=high
+; Fill all four output bytes with 0xFF.
+
+[LABEL] 0x022582 NoteOn_Dispatch_Return  replaces=LABEL_022582  confidence=high
+; Frame teardown and return.
+
+[ROUTINE] 0x022587 VoiceSlot_Release  confidence=high
+; RELEASE ONE HARDWARE VOICE (clear its 'held' state).
+; In: A = hardware voice index 0..63.
+; Clears bit7 of the byte at 0x14AF + index*0x27 (i.e. (voice_record+0x22) - the record
+; base is 0x148D and 0x14AF = 0x148D+0x22), clears the channel's bit in the held bitmap
+; at 0x2936 + (index>>4)*2, then TAIL-JUMPS into VoiceNode_UpdateEnvState (0x021EA1)
+; with XWA = the voice record.
+; 12 call sites, all outside the region (0x026E94, 0x026FC6, 0x0270D1, 0x027AA2,
+; 0x027B5D, 0x027B7E, 0x027C08, 0x027C29, 0x028EBB, 0x028F1C, 0x02CDCF, 0x02CE29).
+; *** BUG-RELEVANT: this is the ONLY writer that clears a bit of the 0x2936 held
+; bitmap. If the note-off path that calls it is bypassed, held voices are pinned
+; active forever from AudioTick_UpdateVoice's point of view. ***
+
+[LABEL] 0x0225A8 VoiceSlot_Release_ApplyMask  replaces=LABEL_0225A8  confidence=high
+; Build the complement of the channel's one-hot bit and AND it into the held bitmap word.
+
+[ROUTINE] 0x0225D3 VoiceSlot_NoteOff  replaces=LABEL_0225D3  confidence=high
+; NOTE-OFF FOR ONE VOICE SLOT.
+; In: A = hardware voice index; indices >= 0x40 are ignored.
+; Voice record = 0x148D + index*0x27. Moves the node onto the list whose head is at
+; (node+0x18) via VoiceNode_SecondList_Update (DE=1), runs VoiceNode_UpdateEnvState
+; (0x021EA1) to start the release, and unlinks it from the 0x10/0x14 doubly-linked
+; chain unless it is already self-linked.
+; Single caller: 0x02C8D7.
+
+[LABEL] 0x022601 VoiceSlot_NoteOff_Return  replaces=LABEL_022601  confidence=high
+; Common exit.
+
+[ROUTINE] 0x022603 OutputBuf_Flush_A  replaces=LABEL_022603  confidence=high
+; ENUMERATE A VOICE CHAIN INTO A BYTE BUFFER (non-destructive).
+; In: XWA = pointer to the output cursor (a 32-bit pointer variable, auto-advanced),
+;     XBC = chain head (0 = nothing to do), E = note number to match,
+;     stacked word arg (XSP+0x04) = 'emit unconditionally' flag.
+; Walks the chain through link (node+0x08) until it returns to the head, appending
+; (node+0x24) - the hardware voice index - for every node whose (node+0x23) equals E
+; (or for all nodes when the flag is non-zero). Terminates the buffer with 0xFF.
+; 'retd 2' pops the stacked argument. Called only from NoteOn_RoutePacket.
+
+[LABEL] 0x02260B OutputBuf_Flush_A_Loop  replaces=LABEL_02260B  confidence=high
+; Chain walk: emit unconditionally when the flag is set, otherwise only when (node+0x23) == E.
+
+[LABEL] 0x022616 OutputBuf_Flush_A_Emit  replaces=LABEL_022616  confidence=high
+; Append (node+0x24) at the cursor and advance the cursor by one.
+
+[LABEL] 0x022621 OutputBuf_Flush_A_Next  replaces=LABEL_022621  confidence=high
+; Follow (node+0x08); stop when the walk wraps to the head.
+
+[LABEL] 0x022628 OutputBuf_Flush_A_Done  replaces=LABEL_022628  confidence=high
+; Write the 0xFF terminator at the cursor and return.
+
+[ROUTINE] 0x022630 OutputBuf_Flush_B  replaces=LABEL_022630  confidence=high
+; ENUMERATE A VOICE CHAIN INTO A BYTE BUFFER *AND RELEASE* EACH MATCH (destructive).
+; Same interface as OutputBuf_Flush_A but for every match it first calls
+; VoiceNode_SecondList_Update (0x021D59, DE=1) and VoiceNode_UpdateEnvState (0x021EA1)
+; to put the voice into release, then appends (node+0x24) and unlinks the node from the
+; 0x10/0x14 chain, resuming from the saved successor.
+; This is the note-off enumerator; OutputBuf_Flush_A is the query-only one.
+
+[LABEL] 0x02263C OutputBuf_Flush_B_Loop  replaces=LABEL_02263C  confidence=high
+; Chain walk with the same match rule as OutputBuf_Flush_A_Loop.
+
+[LABEL] 0x022647 OutputBuf_Flush_B_Emit  replaces=LABEL_022647  confidence=high
+; Release the matched node, append its voice index, unlink it and continue from (node+0x10).
+
+[LABEL] 0x02267C OutputBuf_Flush_B_Next  replaces=LABEL_02267C  confidence=high
+; Follow (node+0x08); stop when the walk wraps to the head.
+
+[LABEL] 0x022683 OutputBuf_Flush_B_Done  replaces=LABEL_022683  confidence=high
+; Write the 0xFF terminator at the cursor and return (retd 2).
+
+[ROUTINE] 0x022691 NoteOn_RoutePacket  replaces=LABEL_022691  confidence=high
+; ROUTE A NOTE-OFF / VOICE-QUERY PACKET AND RETURN THE AFFECTED VOICE LIST.
+; In: XWA = packet:  +0x00 flag byte (bit7, bit6 select which chains to visit)
+;                    +0x01 word: bits0..6 = note A, bits 8..12 = part index
+;                    +0x03 word: bits0..6 = note B, bits 8..12 = broadcast selector
+;                    +0x05.. = output buffer, filled with hardware voice indices and
+;                              terminated by 0xFF
+; If (packet+0x03) bits 8..12 are non-zero the request is a BROADCAST: every one of the
+; 64 voice records at 0x148D whose flag bit0 is clear (i.e. not in the free pool) is
+; listed. Otherwise the part index selects two descriptor arrays - 0x134D + part*0x0C
+; and 0x1351 + part*0x0C - and flag bits 7/6 plus bit7 of each note word choose which
+; of the two chains are walked and whether the destructive (Flush_B) or query-only
+; (Flush_A) enumerator is used. Part indices >= 0x1A return an empty list.
+; Six callers, all in 0x02CCCB..0x02CD69.
+
+[LABEL] 0x0226C3 NoteOn_RoutePacket_BroadcastLoop  replaces=LABEL_0226C3  confidence=high
+; Broadcast body: list every voice record that is not in the free pool (flag bit0 clear).
+
+[LABEL] 0x0226D5 NoteOn_RoutePacket_BroadcastNext  replaces=LABEL_0226D5  confidence=high
+; Next of the 64 records (stride 0x27).
+
+[LABEL] 0x0226DF NoteOn_RoutePacket_BroadcastDone  replaces=LABEL_0226DF  confidence=high
+; Terminate the broadcast list with 0xFF.
+
+[LABEL] 0x0226E8 NoteOn_RoutePacket_Targeted  replaces=LABEL_0226E8  confidence=high
+; Targeted request: derive the two per-part descriptor pointers (0x134D / 0x1351 + part*0x0C) and validate part < 0x1A.
+
+[LABEL] 0x022739 NoteOn_RoutePacket_Targeted_Loop  replaces=LABEL_022739  confidence=high
+; Destructive drain of the primary chain: repeat OutputBuf_Flush_B until the chain head goes null or stops changing.
+
+[LABEL] 0x022761 NoteOn_RoutePacket_Targeted_Done  replaces=LABEL_022761  confidence=high
+; Terminate the output list with 0xFF.
+
+[LABEL] 0x02276A NoteOn_RoutePacket_Targeted_NoteZero  replaces=LABEL_02276A  confidence=high
+; Note B is zero: single destructive pass matching note A instead.
+
+[LABEL] 0x022785 NoteOn_RoutePacket_Targeted_SecondaryOnly  replaces=LABEL_022785  confidence=high
+; Flag bit7 clear: query-only paths; bit6 selects the 0x1351 chain alone.
+
+[LABEL] 0x0227A3 NoteOn_RoutePacket_Targeted_BothLists_BitB  replaces=LABEL_0227A3  confidence=high
+; Flags 7 and 6 both clear, note-B word bit7 set: query BOTH chains (0x134D then 0x1351).
+
+[LABEL] 0x0227DD NoteOn_RoutePacket_Targeted_PrimaryOnly_BitA  replaces=LABEL_0227DD  confidence=high
+; Note-B bit7 clear but note-A bit7 set: query the 0x134D chain only.
+
+[LABEL] 0x0227FF NoteOn_RoutePacket_Targeted_SecondaryOnly_B  replaces=LABEL_0227FF  confidence=high
+; Neither note word has bit7: query the 0x1351 chain only.
+
+[LABEL] 0x022819 NoteOn_RoutePacket_InvalidChannel  replaces=LABEL_022819  confidence=high
+; Part index >= 0x1A: emit an empty (0xFF-only) list.
+
+[LABEL] 0x02281F NoteOn_RoutePacket_Return  replaces=LABEL_02281F  confidence=high
+; Frame teardown and return.
+
+[ROUTINE] 0x022824 VelocityQuantise_A  confidence=high
+; QUANTISE A 7-BIT VELOCITY INTO ONE OF FOUR BANDS.
+; In: A = velocity (bit7 forced clear), XBC = pointer to three ascending threshold
+; bytes. Out: L = 0..3, the first band whose threshold is >= the velocity.
+; Single caller 0x02B76D. Byte-for-byte identical to VelocityQuantise_B.
+
+[LABEL] 0x022839 VelocityQuantise_A_Level2  replaces=LABEL_022839  confidence=high
+; Third band: L = 2.
+
+[LABEL] 0x02283D VelocityQuantise_A_Level1  replaces=LABEL_02283D  confidence=high
+; Second band: L = 1.
+
+[LABEL] 0x022841 VelocityQuantise_A_Level0  replaces=LABEL_022841  confidence=high
+; Lowest band: L = 0.
+
+[LABEL] 0x022843 VelocityQuantise_A_Return  replaces=LABEL_022843  confidence=high
+; Return.
+
+[ROUTINE] 0x022844 VelocityQuantise_B  confidence=high
+; Second, identical copy of VelocityQuantise_A (same code, same semantics).
+; Callers 0x02B617, 0x02C1B2, 0x02C520. The duplication is in the original ROM.
+
+[LABEL] 0x022859 VelocityQuantise_B_Level2  replaces=LABEL_022859  confidence=high
+; Third band: L = 2.
+
+[LABEL] 0x02285D VelocityQuantise_B_Level1  replaces=LABEL_02285D  confidence=high
+; Second band: L = 1.
+
+[LABEL] 0x022861 VelocityQuantise_B_Level0  replaces=LABEL_022861  confidence=high
+; Lowest band: L = 0.
+
+[LABEL] 0x022863 VelocityQuantise_B_Return  replaces=LABEL_022863  confidence=high
+; Return.
+
+[LABEL] 0x022864 VoiceDispatch_OpaqueData  replaces=LABEL_022864  confidence=medium
+; DECODE A 2-BIT FIELD OUT OF THE 0x47-BYTE PER-VOICE PARAMETER RECORD.
+; In: A = record index. Reads the first word of the record at 0x04308F + index*0x47,
+; masks bits 6..7 and maps 0x00/0x40/0x80/0xC0 to L = 0/1/2/3; leaves L untouched for
+; any other value (dead case). No caller found by absolute or relative call scan.
+; Held as raw .byte in the LLVM source, so its internal branch targets are unlabelled
+; (see the four [LABEL] proposals at 0x022892..0x02289C).
+
+[LABEL] 0x022892 VoiceDispatch_Field_Is1  confidence=high
+; Field value 0x40: L = 1. Inside a raw .byte blob in the LLVM source, hence unlabelled.
+
+[LABEL] 0x022896 VoiceDispatch_Field_Is2  confidence=high
+; Field value 0x80: L = 2.
+
+[LABEL] 0x02289A VoiceDispatch_Field_Is3  confidence=high
+; Field value 0xC0: L = 3.
+
+[LABEL] 0x02289C VoiceDispatch_OpaqueData_Return  confidence=high
+; Shared return of the 2-bit field decoder at 0x022864.
+
+[ROUTINE] 0x02289D Instrument_LookupProgram_HiNibble  replaces=LABEL_02289D  confidence=high
+; COPY THE HIGH NIBBLE OF A PATCH'S BYTE +0x2A INTO THE PER-PART PROGRAM BYTE.
+; In: A = part index. Record stride is 0x011F bytes throughout this family:
+;   0x04136E + part*0x011F holds a 32-bit pointer to the patch parameter block;
+;   (block+0x2A) high nibble is used as an index into the byte table at 0x011ACF;
+;   the looked-up byte is stored at 0x0413D5 + part*0x011F.
+; Called from Voice_Env_VelocityDispatch_Gate (0x0234CC).
+
+[ROUTINE] 0x0228D9 Instrument_LookupProgram_LoNibble  replaces=LABEL_0228D9  confidence=high
+; As Instrument_LookupProgram_HiNibble but takes the LOW nibble of (block+0x2A).
+; Called from Voice_Env_Type2_Gate (0x02357E).
+
+[ROUTINE] 0x022912 BitTest_Bit0_L  replaces=LABEL_022912  confidence=high
+; L = bit0 of A. One of four near-identical predicate helpers used by the velocity dispatchers.
+
+[LABEL] 0x02291A BitTest_Bit0_L_Clear  replaces=LABEL_02291A  confidence=high
+; Bit clear: L = 0.
+
+[ROUTINE] 0x02291D BitTest_Mode2_L  replaces=LABEL_02291D  confidence=high
+; L = 1 only if bit1 of A is clear and bit0 is set; otherwise 0.
+
+[LABEL] 0x022925 BitTest_Mode2_L_Bit1Clear  replaces=LABEL_022925  confidence=high
+; bit1 clear - fall through to the bit0 test.
+
+[LABEL] 0x02292D BitTest_Mode2_L_AllClear  replaces=LABEL_02292D  confidence=high
+; Both bits clear: L = 0.
+
+[ROUTINE] 0x022930 BitTest_Bit0_L_v2  replaces=LABEL_022930  confidence=high
+; Duplicate of BitTest_Bit0_L (identical code), used by the Type2 dispatcher.
+
+[LABEL] 0x022938 BitTest_Bit0_L_v2_Clear  replaces=LABEL_022938  confidence=high
+; Bit clear: L = 0.
+
+[ROUTINE] 0x02293B BitTest_Mode2_L_v2  replaces=LABEL_02293B  confidence=high
+; Duplicate of BitTest_Mode2_L, used by the Type2 dispatcher.
+
+[LABEL] 0x022943 BitTest_Mode2_L_v2_Bit1Clear  replaces=LABEL_022943  confidence=high
+; bit1 clear - fall through to the bit0 test.
+
+[LABEL] 0x02294B BitTest_Mode2_L_v2_AllClear  replaces=LABEL_02294B  confidence=high
+; Both bits clear: L = 0.
+
+[ROUTINE] 0x02294E PitchBend_Process  confidence=high
+; PATCH TRANSPOSE / OCTAVE-SHIFT LOOKUP (returns a signed 8.8 semitone offset).
+; In: WA = a selector byte, C = a patch byte. Out: XHL = offset, 0 when disabled.
+; If bit1 of the global audio-mode word at 0x041343 is set the function returns 0,
+; i.e. that bit is a global disable for this contribution.
+; Otherwise WA-0x10 in 0..9 indexes the 10-entry u16 offset table at 0x00F693 whose
+; values are added to 0x022982 to form the jump target; in v142 nine of the ten
+; entries point at the 'return 0' stub and only selector 0x14 reaches the fallback.
+; Fallback: (C & 0x0F) indexes the byte table at 0x011ACF, sign-extends and shifts
+; left 8 (one semitone = 0x100). Called from Voice_Pitch_Compute (0x0235F1).
+
+[LABEL] 0x02295C PitchBend_Process_Dispatch  replaces=LABEL_02295C  confidence=high
+; Range-check the selector and dispatch through the 0x00F693 offset table.
+
+[LABEL] 0x022982 PitchBend_Process_JumpTable  replaces=LABEL_022982  confidence=high
+; Jump-table base AND the case body for offset 0: XHL = 0.
+
+[LABEL] 0x022986 PitchBend_Process_Fallback  replaces=LABEL_022986  confidence=high
+; Fallback case: signed semitone from the 0x011ACF table, scaled to 8.8.
+
+[LABEL] 0x02299C PitchBend_Process_Return  replaces=LABEL_02299C  confidence=high
+; Return.
+
+[ROUTINE] 0x02299D PitchBend_Saturate  confidence=high
+; CLAMP A PITCH ACCUMULATOR INTO A KEY RANGE (saturating, no folding).
+; In: WA = signed 16-bit pitch value, C = low key limit, E = high key limit.
+; Out: XHL. Negative inputs are first saturated: values <= 0xC000 become 0x7FFF, the
+; rest become 0. Then the result is clamped to [C*256+0x80, E*256+0x80], i.e. the key
+; limits expressed in the same 8.8 units used everywhere in the pitch chain.
+; Called from Voice_Pitch_ApplyFineTune_LegatoB (0x0237FB); also 0x02B431.
+
+[LABEL] 0x0229AE PitchBend_Saturate_Clamp7FFF  replaces=LABEL_0229AE  confidence=high
+; Wrapped-negative case: clamp to 0x7FFF.
+
+[LABEL] 0x0229B1 PitchBend_Saturate_CompareLo  replaces=LABEL_0229B1  confidence=high
+; Low-limit comparison against C*256+0x80.
+
+[LABEL] 0x0229CF PitchBend_Saturate_CompareHi  replaces=LABEL_0229CF  confidence=high
+; High-limit comparison against E*256+0x80.
+
+[LABEL] 0x0229EB PitchBend_Saturate_Return  replaces=LABEL_0229EB  confidence=high
+; Return.
+
+[ROUTINE] 0x0229EC PitchBend_AlignLoop_Init  confidence=high
+; FOLD A PITCH VALUE INTO A KEY RANGE BY WHOLE OCTAVES.
+; In: WA = signed 16-bit pitch (8.8 semitones), C = low key limit, E = high key limit.
+; Out: XHL. Adds or subtracts 0x0C00 (twelve semitones) until the value lies inside
+; [C*256+0x80, E*256+0x80]. This is the transpose-into-range used when a sample zone
+; cannot cover the played key. Callers: Voice_Pitch_ApplyFineTune (0x0237DA),
+; Voice_Pitch_CopyBase (0x023841), 0x02B481.
+
+[LABEL] 0x0229F0 PitchBend_AlignLoop_CheckWrapped  replaces=LABEL_0229F0  confidence=high
+; Value has wrapped negative: step by +/- one octave to recover.
+
+[LABEL] 0x0229FC PitchBend_AlignLoop_SubStep  replaces=LABEL_0229FC  confidence=high
+; Subtract one octave.
+
+[LABEL] 0x022A00 PitchBend_AlignLoop_CheckSign  replaces=LABEL_022A00  confidence=high
+; Sign test that drives the recovery loop.
+
+[LABEL] 0x022A09 PitchBend_AlignLoop_AddStep  replaces=LABEL_022A09  confidence=high
+; Add one octave (raising loop).
+
+[LABEL] 0x022A0D PitchBend_AlignLoop_LoCheck  replaces=LABEL_022A0D  confidence=high
+; Keep adding octaves while below the low limit.
+
+[LABEL] 0x022A1E PitchBend_AlignLoop_SubFinal  replaces=LABEL_022A1E  confidence=high
+; Subtract one octave (lowering loop).
+
+[LABEL] 0x022A22 PitchBend_AlignLoop_HiCheck  replaces=LABEL_022A22  confidence=high
+; Keep subtracting octaves while above the high limit.
+
+[ROUTINE] 0x022A32 ChanBitField_ExtractHi7  confidence=high
+; INDEX A BYTE TABLE BY THE TOP 7 BITS OF A WORD.
+; In: XWA = table base, BC = word. Out: L = table[(BC & 0x7F00) >> 8] (arithmetic
+; shift). Used by Voice_Pitch_InterpDispatch (0x023880) to turn the current pitch into
+; a key-zone number.
+
+[ROUTINE] 0x022A3F SlotParam_Write_Stride0F  confidence=high
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0F.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0F, stores that pointer at (XWA+0x0F), ORs the type code 0x7000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at +0x0D to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
+
+[ROUTINE] 0x022A61 SlotParam_Write_Stride0C  confidence=high
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0C.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0C, stores that pointer at (XWA+0x0F), ORs the type code 0x5000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at +0x0A to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
+
+[ROUTINE] 0x022A83 SlotParam_Write_Stride0D  confidence=high
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0D.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0D, stores that pointer at (XWA+0x0F), ORs the type code 0x3000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at none (0 is written) to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
+
+[ROUTINE] 0x022AA4 SlotParam_Write_Stride0A  confidence=high
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0A.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x0A, stores that pointer at (XWA+0x0F), ORs the type code 0x1000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at none (0 is written) to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
+
+[ROUTINE] 0x022AC5 SlotParam_Write_Stride06  confidence=high
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x06.
+; In: XWA = voice work record, XBC = record table base, DE = zone index.
+; Computes XBC += DE*0x06, stores that pointer at (XWA+0x0F), ORs the type code 0x4000
+; into the word at (XWA+0x01), copies the record's first word to the staging word at
+; 0x0451CE and its word at +0x04 to 0x293E.
+; One of six stride variants selected by Voice_Pitch_InterpDispatch from three flag
+; bits of the zone descriptor.
+
+[ROUTINE] 0x022AE7 SlotParam_Write_Stride04_SLA  confidence=high
+; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 4 (index shifted left 2 instead of a
+; multiply). Unlike the other five variants it writes NO type code into (XWA+0x01) and
+; always zeroes 0x293E. This is the base/default zone format.
+
+[ROUTINE] 0x022B02 SaturateS16_WA  confidence=high
+; SATURATE A SIGNED 16-BIT PITCH VALUE TO [0, 0x7FFF].
+; In: WA. Out: WA and XHL. Values with bit15 set become 0x7FFF if <= 0xC000 (treated as
+; a wrap of a large positive) and 0 otherwise. Used all over the pitch chain
+; (0x02373A, 0x023A85, 0x023AC7) and from 0x02B431.
+
+[LABEL] 0x022B13 SaturateS16_WA_Clamp7FFF  replaces=LABEL_022B13  confidence=high
+; Wrapped-positive case: 0x7FFF.
+
+[LABEL] 0x022B16 SaturateS16_WA_Return  replaces=LABEL_022B16  confidence=high
+; Copy the result to XHL and return.
+
+[ROUTINE] 0x022B19 ClampS16_WA_To_DEBC  replaces=LABEL_022B19  confidence=high
+; CLAMP WA INTO [DE, BC] (signed). Out: WA and XHL. Callers 0x03079E, 0x0307E9 and the
+; level packer at 0x023C44 / 0x023C92 / 0x023CA2 / 0x023CB2 / 0x023CC0.
+
+[LABEL] 0x022B21 ClampS16_WA_To_DEBC_CheckLo  replaces=LABEL_022B21  confidence=high
+; Low-bound test against DE.
+
+[LABEL] 0x022B27 ClampS16_WA_To_DEBC_Return  replaces=LABEL_022B27  confidence=high
+; Copy to XHL and return.
+
+[ROUTINE] 0x022B2A PitchBend_Scale  replaces=LABEL_022B2A  confidence=high
+; SCALE A SIGNED DEPTH BY A CURVE-TABLE COEFFICIENT.
+; In: A = signed depth, C = curve index (bit7 forced clear), E = shift amount in its
+; low nibble. Negative depths are re-mapped through the ROM byte table at 0x00FEE4
+; before being negated; the coefficient itself comes from the ROM byte table at
+; 0x00FF64 indexed by C. Out: XHL = (coeff * |depth|) >> (E & 0x0F).
+; Called from Voice_Level_Triplet_ModByEnv (0x023B3D).
+
+[LABEL] 0x022B43 PitchBend_Scale_Multiply  replaces=LABEL_022B43  confidence=high
+; Signed multiply of the coefficient by the depth, then the optional right shift.
+
+[ROUTINE] 0x022B68 Detune_ScaleSymmetric  replaces=LABEL_022B68  confidence=high
+; SYMMETRIC DETUNE CURVE LOOKUP.
+; In: WA = signed amount. |WA| is clamped to 0x32 (50) and used to index the byte table
+; at 0x0119C8; the result is negated again for negative inputs. Out: XHL.
+; Called from the level packer (0x023C4D, 0x023CC9, 0x023CD2).
+
+[LABEL] 0x022B79 Detune_ScaleSymmetric_NegArm  replaces=LABEL_022B79  confidence=high
+; Negative arm: table lookup then two's-complement negate.
+
+[LABEL] 0x022B8D Detune_ScaleSymmetric_PosArm  replaces=LABEL_022B8D  confidence=high
+; Positive arm: clamp to 0x32.
+
+[LABEL] 0x022B96 Detune_ScaleSymmetric_PosClamp  replaces=LABEL_022B96  confidence=high
+; Positive arm table lookup.
+
+[LABEL] 0x022BA4 Detune_ScaleSymmetric_Return  replaces=LABEL_022BA4  confidence=high
+; Copy to XHL and return.
+
+[ROUTINE] 0x022BA7 Detune_ScaleUnsigned  replaces=LABEL_022BA7  confidence=high
+; Unsigned variant: XHL = byte table 0x0119C8 indexed directly by WA, no clamp, no sign handling.
+
+[ROUTINE] 0x022BB8 Pan_ScaleWithVelocity  replaces=LABEL_022BB8  confidence=high
+; INTERPOLATE A PARAMETER BETWEEN TWO LIMITS AND SCALE BY A SIGNED DEPTH.
+; In: WA = word whose bits 8..14 hold the control value, BC = baseline, E = low limit,
+; two stacked args: (XSP+0x06) = high limit, (XSP+0x04) = signed depth.
+; Out: XHL = ((clamp(ctrl, E, hi) - BC) * depth) >> 5. 'retd 4' pops both arguments.
+; Called from Voice_Level_ApplyVelocityMod (0x023C36) and 0x023C83.
+
+[LABEL] 0x022BCF Pan_ScaleWithVelocity_ClampLo  replaces=LABEL_022BCF  confidence=high
+; Low-limit clamp against E.
+
+[LABEL] 0x022BDB Pan_ScaleWithVelocity_Multiply  replaces=LABEL_022BDB  confidence=high
+; Signed multiply by the stacked depth, then >> 5.
+
+[ROUTINE] 0x022BF2 ClampS8_0_to_78  confidence=high
+; CLAMP A FILTER-CUTOFF VALUE TO [0, 0x78] (0..120). Out: WA and XHL.
+; Called by Portamento_CalcContrib_A/_B and from 0x0306C4, 0x03070D, 0x030753.
+
+[LABEL] 0x022BFD ClampS8_0_to_78_CheckLo  replaces=LABEL_022BFD  confidence=high
+; Low-bound test.
+
+[LABEL] 0x022C03 ClampS8_0_to_78_Return  replaces=LABEL_022C03  confidence=high
+; Copy to XHL and return.
+
+[ROUTINE] 0x022C06 Portamento_CalcContrib_A  confidence=high
+; COMPUTE A FILTER-CUTOFF CONTRIBUTION WITH KEY FOLLOW AND LEVEL SCALING.
+; In: XWA = voice work record, BC = running accumulator, DE = key-follow depth,
+;     stacked byte (XSP+0x04) = level-scaling depth. Out: XHL = value in 0..0x78.
+; XIX = (XWA+0x17) = the patch parameter block.
+; Key follow (when DE != 0): curve = (patch+0x36) >> 5 selects one of eight 128-byte
+;   curves in the table at 0x011519; the key number (XWA+0x0C) & 0x7F indexes inside it;
+;   the signed byte is multiplied by DE and added as (product >> 5).
+; Level scaling (when the stacked depth != 0): the control value (XWA+0x08) bits 8..14
+;   is clamped between (patch+0x3A) and (patch+0x3B), (patch+0x39) is subtracted, the
+;   difference is multiplied by the depth and added as (product >> 5).
+; Finally +0x18 of bias and ClampS8_0_to_78. 'retd 2' pops the stacked argument.
+; Called from all five filter builders at 0x023D42, 0x023E04, 0x023E76, 0x023F11,
+; 0x023F80, 0x024002.
+; See [UNCERTAIN]: this is a TVF (filter) computation, not portamento.
+
+[LABEL] 0x022C48 Portamento_CalcContrib_A_DepthScale  replaces=LABEL_022C48  confidence=high
+; Level-scaling stage: clamp (XWA+0x08) hi-byte between (patch+0x3A) and (patch+0x3B).
+
+[LABEL] 0x022C6A Portamento_CalcContrib_A_ClampHi  replaces=LABEL_022C6A  confidence=high
+; Lower clamp arm against (patch+0x3A).
+
+[LABEL] 0x022C7A Portamento_CalcContrib_A_Multiply  replaces=LABEL_022C7A  confidence=high
+; Subtract the (patch+0x39) reference, multiply by the stacked depth, >> 5.
+
+[LABEL] 0x022C8D Portamento_CalcContrib_A_AddBaseline  replaces=LABEL_022C8D  confidence=high
+; Add the +0x18 bias and clamp to 0..0x78.
+
+[ROUTINE] 0x022C99 Portamento_CalcContrib_B  confidence=medium
+; SECOND CUTOFF CONTRIBUTION VARIANT - same shape as Portamento_CalcContrib_A but the
+; key-follow depth comes from (patch+0x10) and the curve selector from (patch+0x0F),
+; and there is no level-scaling stage and no stacked argument. Ends with the same +0x18
+; bias and ClampS8_0_to_78 (reached by tail jump). No in-ROM caller was found by a
+; call/calr scan, so it may be reachable only through a table this pass did not decode.
+
+[LABEL] 0x022CDF Portamento_CalcContrib_B_AddBaseline  replaces=LABEL_022CDF  confidence=high
+; Add the +0x18 bias and tail-jump into ClampS8_0_to_78.
+
+[ROUTINE] 0x022CE8 Portamento_ClampAdd18  confidence=high
+; Add the +0x18 bias to WA and clamp the result to at most 0x78 (no lower clamp).
+; Out: WA and XHL. Used by the filter builders for the second register field.
+
+[LABEL] 0x022CF5 Portamento_ClampAdd18_Return  replaces=LABEL_022CF5  confidence=high
+; Copy to XHL and return.
+
+[ROUTINE] 0x022CF8 PitchBend_LookupCoeff  confidence=high
+; LOOK UP A THREE-BYTE FILTER COEFFICIENT RECORD.
+; In: A - low nibble selects the record, bit7 selects the table:
+;     bit7 set   -> records at 0x011A25 (byte0), 0x011A26 (byte1), 0x011A27 (byte2)
+;     bit7 clear -> records at 0x0119FB / 0x0119FC / 0x0119FD
+;   (three parallel byte arrays with a stride of 3, i.e. one 3-byte record per index).
+; Out: XHL = (byte1 << 8) | byte0-in-IX; byte2 is sign-extended into the global word at
+; 0x2940. Called from the filter builders at 0x023D7C, 0x023DA2, 0x023E33, 0x023EAF,
+; 0x023F3D.
+
+[LABEL] 0x022D53 PitchBend_LookupCoeff_SetA  replaces=LABEL_022D53  confidence=high
+; bit7-clear arm: use the 0x0119FB/FC/FD record set.
+
+[LABEL] 0x022D9E PitchBend_LookupCoeff_Return  replaces=LABEL_022D9E  confidence=high
+; Merge the two halves into XHL and return.
+
+[ROUTINE] 0x022DA1 NoteState_InitDefaults  confidence=high
+; FILTER BYPASS: write the neutral pair (XWA+0x42) = 0x017F and (XWA+0x44) = 0x7F7F.
+; This is entry 0 of the filter-mode dispatch table at 0x02412B, selected when
+; (patch+0x36) & 7 == 0. XWA = voice work record.
+
+[ROUTINE] 0x022DAC ClampS16_WA_Short  replaces=LABEL_022DAC  confidence=high
+; Clamp WA into [DE, BC]; identical code to ClampS16_WA_To_DEBC. Callers 0x03083D, 0x03086D, 0x03089D, 0x0308CD, 0x030901, 0x03093F.
+
+[LABEL] 0x022DB4 ClampS16_WA_Short_CheckLo  replaces=LABEL_022DB4  confidence=high
+; Low-bound test against DE.
+
+[LABEL] 0x022DBA ClampS16_WA_Short_Return  replaces=LABEL_022DBA  confidence=high
+; Copy to XHL and return.
+
+[ROUTINE] 0x022DBD NoteState_ClearRecord  replaces=LABEL_022DBD  confidence=high
+; ZERO ONE 9-BYTE ENVELOPE SUB-RECORD.
+; In: WA = sub-record number (0..2), C = voice/part index. Address is
+; 0x04424E + index*0x1B + sub*9; bytes +0..+5 and +7 are cleared (+6 and +8 are left
+; alone). Called from 0x034C23. The 0x1B-byte record is exactly three of these.
+
+[ROUTINE] 0x022DF7 EnvDepth_Cap  replaces=LABEL_022DF7  confidence=high
+; CAP AN ENVELOPE DEPTH BY A NORMALISED (0x7F - x) FACTOR.
+; In: XWA = value, C and E = two 0..0x7F parameters. Uses FP_MulAccum64 (0x03D8CA)
+; twice: t = (0x7F - C) * E, then result = (value * t) >> 12, finally capped at the
+; original value. Out: XHL. Called by every EG/frequency computation in this region
+; (0x022E85, 0x022F97, 0x0230A8, 0x023127).
+
+[LABEL] 0x022E26 EnvDepth_Cap_Return  replaces=LABEL_022E26  confidence=high
+; Restore and return.
+
+[ROUTINE] 0x022E2A EGEnv_Compute_A  replaces=LABEL_022E2A  confidence=high
+; COMPUTE ENVELOPE VALUE A FOR ONE VOICE (rate/level pair, formatted for the TG).
+; In: WA = index. Record = 0x04424E + index*0x1B.
+;   (rec+0x01) indexes the u16 table at 0x010A64 -> base value;
+;   base is multiplied by (rec+0x02) through FP_MulAccum64;
+;   if (rec+0x05) != 0 the EnvDepth_Cap of ((rec+0x05),(rec+0x06)) is subtracted;
+;   the accumulator is >> 7 and clamped to 0x1FFF;
+;   finally (rec+0x00) & 3 indexes the u16 table at 0x011511 and those bits are OR'ed
+;   in, producing the 16-bit word the TG expects. Out: XHL.
+; Callers 0x0293B9, 0x02F5F0.
+
+[LABEL] 0x022E8A EGEnv_Compute_A_Normalise  replaces=LABEL_022E8A  confidence=high
+; >> 7 and clamp the accumulator to 0x1FFF.
+
+[LABEL] 0x022E9A EGEnv_Compute_A_FormatBits  replaces=LABEL_022E9A  confidence=high
+; OR in the 2-bit mode field fetched from the 0x011511 table.
+
+[ROUTINE] 0x022EBA EGEnv_Compute_A_Simple  replaces=LABEL_022EBA  confidence=high
+; SIMPLE ENVELOPE VALUE: (rec+0x03) indexes the u16 table at 0x010964, the value is
+; multiplied by (rec+0x04), >> 7 and clamped to 0x3FFF. No depth cap, no mode bits.
+; Record base 0x04424E, stride 0x1B. Callers 0x0295C8, 0x02F5FE.
+
+[LABEL] 0x022EFB EGEnv_OpaqueData  replaces=LABEL_022EFB  confidence=high
+; BYTE-IDENTICAL DUPLICATE of EGEnv_Compute_A_Simple (0x022EBA) - same table, same
+; shift, same clamp. No caller found by a call/calr scan over the whole ROM.
+
+[ROUTINE] 0x022F3C EGEnv_Compute_B  replaces=LABEL_022F3C  confidence=high
+; Envelope value B: identical structure to EGEnv_Compute_A but the record base is
+; 0x044257 (= 0x04424E + 9, the second 9-byte sub-record) and the base-value table is
+; 0x010B64 instead of 0x010A64. Callers 0x0297CD, 0x02F6F6.
+
+[LABEL] 0x022F9C EGEnv_Compute_B_Normalise  replaces=LABEL_022F9C  confidence=high
+; >> 7 and clamp the accumulator to 0x1FFF.
+
+[LABEL] 0x022FAC EGEnv_Compute_B_FormatBits  replaces=LABEL_022FAC  confidence=high
+; OR in the 2-bit mode field fetched from the 0x011511 table.
+
+[ROUTINE] 0x022FCC EGEnv_Compute_B_Simple  replaces=LABEL_022FCC  confidence=high
+; Simple envelope value for sub-record B: base 0x044257, table 0x010964, clamp 0x3FFF.
+; Callers 0x0299DF, 0x02F704.
+
+[LABEL] 0x02300E Voice_Freq_ComputeLeft_Raw  replaces=LABEL_02300E  confidence=high
+; RAW FREQUENCY/CUTOFF VALUE FROM SUB-RECORD B, without clamping or a register write.
+; In: WA = index; record 0x044257 + index*0x1B; (rec+0x03) indexes the u16 table at
+; 0x010964, multiplied by (rec+0x04) via FP_MulAccum64, >> 7. Out: XHL.
+; No caller found by a call/calr scan.
+
+[ROUTINE] 0x023043 Voice_Freq_WriteLeft  replaces=LABEL_023043  confidence=high
+; COMPUTE AND STORE THE LEFT-CHANNEL FREQUENCY WORD.
+; In: A = index (0..0x7F). Record = 0x044260 + index*0x1B (the third 9-byte
+; sub-record). Same pipeline as EGEnv_Compute_A - base from the u16 table at 0x010C64
+; indexed by (rec+0x01), multiplied by (rec+0x02), optional EnvDepth_Cap subtraction,
+; >> 7, clamp 0x1FFF, OR the 0x011511 mode bits - then stores the result in the staging
+; word at 0x045204 for indices < 0x40 and 0x04520E for indices >= 0x40.
+; Callers 0x029BEB, 0x02F7FB.
+
+[LABEL] 0x0230AD Voice_Freq_WriteLeft_Clamp  replaces=LABEL_0230AD  confidence=high
+; Low range: >> 7 and clamp to 0x1FFF.
+
+[LABEL] 0x0230BD Voice_Freq_WriteLeft_Store  replaces=LABEL_0230BD  confidence=high
+; Low range: OR the mode bits and store to 0x045204.
+
+[LABEL] 0x0230DE Voice_Freq_WriteLeft_HiRange  replaces=LABEL_0230DE  confidence=high
+; Index >= 0x40: the identical computation for the upper voice bank.
+
+[LABEL] 0x02312C Voice_Freq_WriteLeft_HiRange_Clamp  replaces=LABEL_02312C  confidence=high
+; High range: >> 7 and clamp to 0x1FFF.
+
+[LABEL] 0x02313C Voice_Freq_WriteLeft_HiRange_Store  replaces=LABEL_02313C  confidence=high
+; High range: OR the mode bits and store to 0x04520E.
+
+[LABEL] 0x02315B Voice_Freq_WriteLeft_Return  replaces=LABEL_02315B  confidence=high
+; Restore and return.
+
+[ROUTINE] 0x02315F Voice_Freq_WriteRight  replaces=LABEL_02315F  confidence=high
+; COMPUTE AND STORE THE RIGHT-CHANNEL FREQUENCY WORD.
+; In: A = index. Record = 0x044260 + index*0x1B; (rec+0x03) indexes the u16 table at
+; 0x010964, multiplied by (rec+0x04), >> 7, clamped to 0x3FFF. For indices < 0x40 bit15
+; is forced when (rec+0x00) bit5 is set and the value goes to 0x045206; for indices
+; >= 0x40 it goes to 0x04520A with no bit15 handling.
+; Callers 0x029DFF, 0x02F804.
+
+[LABEL] 0x0231AF Voice_Freq_WriteRight_FlagSet  replaces=LABEL_0231AF  confidence=high
+; (rec+0x00) bit5 set: force bit15 of the result before storing.
+
+[LABEL] 0x0231BD Voice_Freq_WriteRight_Store  replaces=LABEL_0231BD  confidence=high
+; Store to the low-bank staging word 0x045206.
+
+[LABEL] 0x0231C4 Voice_Freq_WriteRight_HiRange  replaces=LABEL_0231C4  confidence=high
+; Index >= 0x40: clamp for the upper bank.
+
+[LABEL] 0x0231D1 Voice_Freq_WriteRight_HiRange_Store  replaces=LABEL_0231D1  confidence=high
+; Store to the high-bank staging word 0x04520A.
+
+[LABEL] 0x0231D6 Voice_Freq_WriteRight_Return  replaces=LABEL_0231D6  confidence=high
+; Restore and return.
+
+[LABEL] 0x0231DA Voice_Freq_ComputeRight_Raw  replaces=LABEL_0231DA  confidence=high
+; Same computation as Voice_Freq_WriteRight but without the (rec+0x00) bit5 handling;
+; stores to 0x045206 (index < 0x40) or 0x04520A. No caller found by a call/calr scan.
+; Emitted as raw .byte in the LLVM source, so its internal branch targets and the small
+; clamp helper that follows it at 0x023242 carry no symbols - see the [LABEL] and
+; [ROUTINE] proposals for 0x023226..0x02324B.
+
+[LABEL] 0x023226 Voice_Freq_ComputeRight_Raw_StoreLow  confidence=high
+; Index < 0x40: store the clamped value to the low-bank staging word 0x045206.
+
+[LABEL] 0x02322D Voice_Freq_ComputeRight_Raw_HiRange  confidence=high
+; Index >= 0x40: clamp for the upper voice bank.
+
+[LABEL] 0x02323A Voice_Freq_ComputeRight_Raw_StoreHigh  confidence=high
+; Store the clamped value to the high-bank staging word 0x04520A.
+
+[LABEL] 0x02323F Voice_Freq_ComputeRight_Raw_Return  confidence=high
+; Frame teardown and return.
+
+[ROUTINE] 0x023242 Voice_Clamp_Byte_Unsigned  confidence=high
+; Clamp WA to at most 0x00FF using an unsigned compare (no lower bound); the result is
+; also copied to XHL. 12 bytes, ends with 'ret' at 0x02324D.
+; Unreferenced: no call, calr, jp or 24-bit pointer to 0x023242 exists anywhere in the
+; 0x30000-byte image. It sits inside the raw .byte blob that the LLVM source emits for
+; Voice_Freq_ComputeRight_Raw, which is why it carries no symbol at all today.
+; NAMING NOTE: this proposal follows the CamelCase style of its neighbours rather than
+; the UPPER_SNAKE house style - see the last [UNCERTAIN] entry.
+
+[LABEL] 0x02324B Voice_Clamp_Byte_Unsigned_Return  confidence=high
+; Copy the clamped value to XHL and return.
+
+[ROUTINE] 0x02324E Voice_Colour_LookupIndex  replaces=LABEL_02324E  confidence=high
+; TWO-STAGE LOOKUP OF A TONE-COLOUR / WAVE INDEX.
+; In: XWA = a 0..0xFF value, C = a byte whose top 3 bits select the group.
+; group = C >> 5; the byte table at 0x0106E4 indexed by XWA gives a row offset, and the
+; final byte is read from the ROM table at 0x00FFE4 at (group << 8) + row.
+; Out: XHL (zero-extended byte). Four callers at 0x02B316, 0x02B336, 0x02B475, 0x02B492.
+
+[ROUTINE] 0x023279 Voice_Colour_ClampUpper  replaces=LABEL_023279  confidence=high
+; Clamp the control value (WA bits 8..14) against the stacked high limit at (XSP+0x06).
+
+[LABEL] 0x023290 Voice_Colour_ClampLower  replaces=LABEL_023290  confidence=high
+; Clamp against the low limit in E.
+
+[LABEL] 0x02329C Voice_Colour_InterpolateDelta  replaces=LABEL_02329C  confidence=high
+; (clamped - BC) * stacked depth (XSP+0x04), >> 5; 'retd 4' pops both stacked args. Structurally identical to Pan_ScaleWithVelocity.
+
+[ROUTINE] 0x0232B3 Voice_Clamp_Byte_WA  replaces=LABEL_0232B3  confidence=high
+; Clamp WA to [0, 0xFF] (signed compare). Out: WA and XHL.
+
+[LABEL] 0x0232BE Voice_Clamp_Byte_WA_LowBound  replaces=LABEL_0232BE  confidence=high
+; Low-bound test.
+
+[LABEL] 0x0232C4 Voice_Clamp_Byte_WA_Return  replaces=LABEL_0232C4  confidence=high
+; Copy to XHL and return.
+
+[LABEL] 0x0232C7 Voice_Colour_Write  confidence=medium
+; BUILD AND STORE THE VOICE OUTPUT-LEVEL / PAN WORD.
+; In: XWA = voice work record, BC = starting level.
+; Adds (record+0x23)->[0x0C] and (record+0x23)->[0x10] and (record+0x33), clamps to
+; 0..0xFF, uses the result*2 to index the u16 table at 0x010764 and doubles that.
+; Pan: if bit7 of (record+0x0F)->[0x02] is set the pan field comes from that byte's
+; bits 4..6 shifted left 8; otherwise from the u16 table at 0x00FBE4 indexed by
+; (record+0x06) >> 8. bit15 is forced and the word is stored in the staging word at
+; 0x0451D0. No caller found by a call/calr scan over the ROM.
+
+[LABEL] 0x023309 Voice_Colour_Write_NoPanOverride  replaces=LABEL_023309  confidence=high
+; No explicit pan override: take the pan word from the 0x00FBE4 table.
+
+[LABEL] 0x02331C Voice_Colour_Write_Store  replaces=LABEL_02331C  confidence=high
+; OR level and pan together, force bit15 and store to 0x0451D0.
+
+[ROUTINE] 0x023328 Voice_Clamp_Byte_HL  replaces=LABEL_023328  confidence=high
+; Clamp WA to [0, 0xFF] using an unsigned upper compare. Out: WA and XHL.
+
+[LABEL] 0x023335 Voice_Clamp_Byte_HL_LowBound  replaces=LABEL_023335  confidence=high
+; Low-bound test.
+
+[LABEL] 0x02333B Voice_Clamp_Byte_HL_Return  replaces=LABEL_02333B  confidence=high
+; Copy to XHL and return.
+
+[ROUTINE] 0x02333E Voice_Env_UpdateVelocityCounters  replaces=LABEL_02333E  confidence=high
+; AGE A PART'S RETRIGGER/VELOCITY-PHASE COUNTER AGAINST THE MASTER TICK.
+; In: A = part index. Per-part stride 0x011F:
+;   0x041481 + part*0x011F  = 32-bit timestamp of the last update
+;   0x041485 + part*0x011F  = phase counter byte
+;   0x041486 + part*0x011F  = phase output byte (0x00 / 0x10 / 0x20)
+; Master tick is the 32-bit counter at 0x1040. Delta 0 -> only refresh the timestamp;
+; delta >= 0x19 (25 ticks) -> reset both counter and phase to 0; otherwise bump the
+; counter and map 1 -> 0x10, 0 -> 0x00, anything else -> 0x20.
+; Callers 0x02C734, 0x02C838, 0x02C93C, 0x02CAA5.
+
+[LABEL] 0x023391 Voice_Env_UpdateVelocity_SetPhase1  replaces=LABEL_023391  confidence=high
+; Counter reached 1: phase byte = 0x10.
+
+[LABEL] 0x0233A6 Voice_Env_UpdateVelocity_SetPhase2  replaces=LABEL_0233A6  confidence=high
+; Counter is neither 0 nor 1: phase byte = 0x20.
+
+[LABEL] 0x0233BB Voice_Env_UpdateVelocity_Reset  replaces=LABEL_0233BB  confidence=high
+; Timed out (>= 0x19 ticks): clear both the counter and the phase byte.
+
+[LABEL] 0x0233E1 Voice_Env_UpdateVelocity_Store  replaces=LABEL_0233E1  confidence=high
+; Refresh the timestamp from the master tick at 0x1040 and return.
+
+[ROUTINE] 0x0233F8 Voice_Env_ApplyVelocity_Type0  replaces=LABEL_0233F8  confidence=high
+; VELOCITY-SWITCH DISPATCHER, TYPE 0/1 (and entry point for type 2).
+; In: A = part index (0, 1 or 2 selects the variant), C = sub-case 0..3.
+; First clears the per-part program byte at 0x0413D5 + part*0x011F. A == 2 diverts to
+; Voice_Env_ApplyVelocity_Type2. For A == 0 or 1 the sub-case in C picks which flag is
+; tested: cases 0 and 1 test the global config byte at 0x04134B (bit3, then bit0/bit1
+; via BitTest_*), cases 2 and 3 test bit3 / bit0 / bit1 of the per-part byte at
+; 0x04137F + part*0x011F. If the resulting predicate L is non-zero,
+; Instrument_LookupProgram_HiNibble installs the program byte.
+; Callers 0x02C72B, 0x02C82F, 0x02C933, 0x02CA9C.
+
+[LABEL] 0x02341F Voice_Env_VelocityDispatch_c1  replaces=LABEL_02341F  confidence=high
+; Sub-case selector for the type-0/1 variant.
+
+[LABEL] 0x02343C Voice_Env_VelocityDispatch_c0_NoBit3  replaces=LABEL_02343C  confidence=high
+; Case 0, config bit3 clear: predicate = bit0 of the 0x04134B config byte.
+
+[LABEL] 0x023448 Voice_Env_VelocityDispatch_c1_Bit1  replaces=LABEL_023448  confidence=high
+; Case 1: test bit3 of the 0x04134B config byte.
+
+[LABEL] 0x023453 Voice_Env_VelocityDispatch_c1_NoBit3  replaces=LABEL_023453  confidence=high
+; Case 1, bit3 clear: predicate = BitTest_Mode2_L of the config byte.
+
+[LABEL] 0x02345F Voice_Env_VelocityDispatch_c2  replaces=LABEL_02345F  confidence=high
+; Case 2: test bit3 of the per-part byte at 0x04137F + part*0x011F.
+
+[LABEL] 0x023477 Voice_Env_VelocityDispatch_c2_Trigger  replaces=LABEL_023477  confidence=high
+; Case 2, bit3 clear: predicate = bit0 of that per-part byte.
+
+[LABEL] 0x023490 Voice_Env_VelocityDispatch_c3  replaces=LABEL_023490  confidence=high
+; Case 3: test bit3 of the per-part byte.
+
+[LABEL] 0x0234A8 Voice_Env_VelocityDispatch_c3_Trigger  replaces=LABEL_0234A8  confidence=high
+; Case 3, bit3 clear: predicate = BitTest_Mode2_L of that per-part byte.
+
+[LABEL] 0x0234C1 Voice_Env_VelocityDispatch_ClearFlag  replaces=LABEL_0234C1  confidence=high
+; Unknown sub-case: predicate = 0.
+
+[LABEL] 0x0234C3 Voice_Env_VelocityDispatch_Gate  replaces=LABEL_0234C3  confidence=high
+; Gate: if the predicate is non-zero install the program byte via Instrument_LookupProgram_HiNibble (high nibble variant).
+
+[LABEL] 0x0234D2 Voice_Env_ApplyVelocity_Type2  replaces=LABEL_0234D2  confidence=high
+; VELOCITY-SWITCH DISPATCHER, TYPE 2. Identical structure to the type-0/1 dispatcher
+; but every flag test uses bit4 instead of bit3, and the gate calls
+; Instrument_LookupProgram_LoNibble (low nibble of the patch byte +0x2A).
+; Entered only by the A == 2 branch of Voice_Env_ApplyVelocity_Type0.
+
+[LABEL] 0x0234EF Voice_Env_Type2_c0_NoBit4  replaces=LABEL_0234EF  confidence=high
+; Case 0, bit4 clear: predicate = bit0 of the 0x04134B config byte.
+
+[LABEL] 0x0234FB Voice_Env_Type2_c1  replaces=LABEL_0234FB  confidence=high
+; Case 1: test bit4 of the 0x04134B config byte.
+
+[LABEL] 0x023506 Voice_Env_Type2_c1_NoBit4  replaces=LABEL_023506  confidence=high
+; Case 1, bit4 clear: predicate = BitTest_Mode2_L of the config byte.
+
+[LABEL] 0x023512 Voice_Env_Type2_c2  replaces=LABEL_023512  confidence=high
+; Case 2: test bit4 of the per-part byte at 0x04137F + part*0x011F.
+
+[LABEL] 0x02352A Voice_Env_Type2_c2_Trigger  replaces=LABEL_02352A  confidence=high
+; Case 2, bit4 clear: predicate = bit0 of that per-part byte.
+
+[LABEL] 0x023543 Voice_Env_Type2_c3  replaces=LABEL_023543  confidence=high
+; Case 3: test bit4 of the per-part byte.
+
+[LABEL] 0x02355B Voice_Env_Type2_c3_Trigger  replaces=LABEL_02355B  confidence=high
+; Case 3, bit4 clear: predicate = BitTest_Mode2_L_v2 of that per-part byte.
+
+[LABEL] 0x023574 Voice_Env_Type2_ClearFlag  replaces=LABEL_023574  confidence=high
+; Unknown sub-case: predicate = 0.
+
+[LABEL] 0x023576 Voice_Env_Type2_Gate  replaces=LABEL_023576  confidence=high
+; Gate: install the program byte via Instrument_LookupProgram_LoNibble.
+
+[LABEL] 0x023581 Voice_Env_ApplyVelocity_Return  replaces=LABEL_023581  confidence=high
+; Shared return for both dispatchers.
+
+[ROUTINE] 0x023584 Voice_Pitch_Compute  confidence=high
+; COMPUTE THE PITCH OF ONE VOICE (the main pitch accumulator).
+; In: XWA = voice work record. Locals: (XSP+0x08) = record, (XSP+0x02) = (record+0x1F)
+; = the pitch/portamento descriptor, (XSP+0x06) = (record+0x04) = part index.
+; IZ accumulates the pitch in 8.8 semitone units:
+;   start  = ((record+0x05) & 0x7F) * 0x100 + 0x80 + (0x041349)   [key + master tune]
+;   += (record+0x23)->[0x16] << 8 and (record+0x23)->[0x6D] << 8   [two transposes]
+;   += PitchBend_Process(WA = (record+0x04), C = (record+0x13)->[0x29])
+; Then Voice_GetMonoMode (0x028D42) decides between the active and inactive paths.
+; Active path: bit3 of the u16 at 0x04136A + part*0x011F enables a bend-type switch
+;   read through Voice_GetParam_04134D (0x028B96); 0x80 = octave/keyboard-follow via
+;   Voice_ReadChannelAssign, 0x40 = fixed offset from (0x041366), 0x41/0x42 = the u16
+;   ROM tables at 0x00FCE4 / 0x00FDE4 indexed by the key, 0 = nothing.
+; Result is written to (record+0x08) and (record+0x06).
+; Callers 0x02B91E, 0x02BEB7.
+
+[LABEL] 0x023637 Voice_Pitch_BendType_Octave  replaces=LABEL_023637  confidence=high
+; Bend type 0x80: key/12 selects a channel assignment via Voice_ReadChannelAssign (0x028C28), added as whole semitones.
+
+[LABEL] 0x023658 Voice_Pitch_BendType_Fixed  replaces=LABEL_023658  confidence=high
+; Bend type 0x40: add the fixed global offset word at 0x041366.
+
+[LABEL] 0x023660 Voice_Pitch_BendType_TableA  replaces=LABEL_023660  confidence=high
+; Bend type 0x41: add the u16 from the ROM table at 0x00FCE4 indexed by key.
+
+[LABEL] 0x02367C Voice_Pitch_BendType_TableB  replaces=LABEL_02367C  confidence=high
+; Bend type 0x42: add the u16 from the ROM table at 0x00FDE4 indexed by key.
+
+[LABEL] 0x023698 Voice_Pitch_Compute_Inactive  replaces=LABEL_023698  confidence=high
+; Inactive/non-mono path: the bend type comes from (patch block)->[0x13] where the block pointer is at 0x04136E + part*0x011F.
+
+[LABEL] 0x0236CB Voice_Pitch_Inactive_BendType_Fixed  replaces=LABEL_0236CB  confidence=high
+; Inactive, type 0x40: add the fixed offset word at 0x041366.
+
+[LABEL] 0x0236D2 Voice_Pitch_Inactive_BendType_TableA  replaces=LABEL_0236D2  confidence=high
+; Inactive, type 0x41: 0x00FCE4 table lookup by key.
+
+[LABEL] 0x0236ED Voice_Pitch_Inactive_BendType_TableB  replaces=LABEL_0236ED  confidence=high
+; Inactive, type 0x42: 0x00FDE4 table lookup by key.
+
+[LABEL] 0x023708 Voice_Pitch_Inactive_BendType_Chromatic  replaces=LABEL_023708  confidence=high
+; Inactive, any other non-zero type: chromatic map - key/12 gives the row, key%12 the column, in the 12-byte-per-row table at 0x011B68; the signed byte is added as whole semitones.
+
+[LABEL] 0x023738 Voice_Pitch_ApplyPortamento  replaces=LABEL_023738  confidence=high
+; PORTAMENTO / GLIDE STAGE. Saturates the accumulator into (record+0x08), then reads
+; the glide mode from (record+0x17)->[0x06] & 7. Bit1 of the first byte of the
+; portamento descriptor selects the 'active glide' arm; mode 7 means 'jump straight to
+; the target'; other modes exponentially approach it by right-shifting the difference
+; by (mode & 0x0F).
+
+[LABEL] 0x023774 Voice_Pitch_Portamento_Off_AddOffset  replaces=LABEL_023774  confidence=high
+; Glide idle: add the target offset word (descriptor+0x0C).
+
+[LABEL] 0x02377E Voice_Pitch_Portamento_Mode7_Direct  replaces=LABEL_02377E  confidence=high
+; Glide mode 7: load the target (descriptor+0x0C) directly, no smoothing.
+
+[LABEL] 0x023786 Voice_Pitch_Portamento_Active_SubBias  replaces=LABEL_023786  confidence=high
+; Active glide: work relative to the 0x4280 centre, shift, then restore the bias.
+
+[LABEL] 0x023797 Voice_Pitch_Portamento_Active_AddBias  replaces=LABEL_023797  confidence=high
+; Restore the 0x4280 bias after the shift.
+
+[LABEL] 0x02379D Voice_Pitch_Portamento_Active_SetFixed  replaces=LABEL_02379D  confidence=high
+; Active glide, mode 7: snap to the 0x4280 centre.
+
+[LABEL] 0x0237A0 Voice_Pitch_ApplyFineTune  replaces=LABEL_0237A0  confidence=high
+; FINE-TUNE STAGE: add (record+0x17)->[0x04] and (record+0x27)->[0x20], both signed and
+; scaled by 0x100, then map into the zone's key range - by octave folding
+; (PitchBend_AlignLoop_Init) when the glide mode is 0, or by saturation
+; (PitchBend_Saturate) otherwise - and store the result in (record+0x06).
+
+[LABEL] 0x0237E5 Voice_Pitch_ApplyFineTune_LegatoB  replaces=LABEL_0237E5  confidence=high
+; Non-zero glide mode: clamp into the key range with PitchBend_Saturate instead of folding.
+
+[LABEL] 0x023804 Voice_Pitch_Compute_Return  replaces=LABEL_023804  confidence=high
+; Frame teardown and return.
+
+[ROUTINE] 0x023809 Voice_Pitch_CopyBase  replaces=LABEL_023809  confidence=high
+; RECOMPUTE THE VOICE'S BASE PITCH FROM THE DESCRIPTOR ONLY (no bend, no glide).
+; In: XWA = voice work record. (record+0x1F)->[0x0C] is copied to (record+0x08); the
+; signed bytes (record+0x17)->[0x03] (semitones) and ->[0x04] (half-steps of 2) are
+; added, and the total is octave-folded into the key range given by the descriptor
+; bytes +0x09 / +0x0A before being stored in (record+0x06).
+; Callers 0x02B6CD, 0x02C278.
+
+[ROUTINE] 0x023849 Voice_Pitch_InterpDispatch  confidence=high
+; SELECT AND EMIT THE KEY-ZONE RECORD FOR THE CURRENT PITCH.
+; In: XWA = voice work record. XIZ = (record+0x1F) = the zone descriptor.
+; Two table pointers are formed by adding the 32-bit DRAM base at 0x045310 to
+; (desc+0x01) and (desc+0x05). ChanBitField_ExtractHi7 turns (record+0x06) - the pitch
+; just computed - into a zone number through the first table; the byte at
+; (table1 + zone + 4) becomes the record index. Descriptor bits 5, 6 and 7 then select
+; one of the six SlotParam_Write_Stride* emitters (record strides 0x0F, 0x0C, 0x0D,
+; 0x0A, 0x06 or 4).
+; Callers 0x02B4FE, 0x02C0D1, 0x02C3E7.
+
+[LABEL] 0x0238AC Voice_Pitch_Interp_Bits56  replaces=LABEL_0238AC  confidence=high
+; Descriptor bits 7 and 6 set, bit5 clear: stride 0x0C emitter.
+
+[LABEL] 0x0238B9 Voice_Pitch_Interp_Bit7_NoB5  replaces=LABEL_0238B9  confidence=high
+; Descriptor bit6 set, bit7 clear: test bit5 to choose stride 0x0D or 0x0A.
+
+[LABEL] 0x0238CA Voice_Pitch_Interp_Bits67  replaces=LABEL_0238CA  confidence=high
+; Descriptor bits 6 and 7 set, bit5 clear on this arm: stride 0x0A emitter.
+
+[LABEL] 0x0238D7 Voice_Pitch_Interp_Bit7_NoB6  replaces=LABEL_0238D7  confidence=high
+; Descriptor bit6 clear: bit7 chooses stride 0x06, otherwise the stride-4 base format.
+
+[LABEL] 0x0238E8 Voice_Pitch_Interp_Base  replaces=LABEL_0238E8  confidence=high
+; No format bits: the stride-4 base emitter.
+
+[LABEL] 0x0238F3 Voice_Pitch_InterpDispatch_Return  confidence=high
+; Frame teardown and return.
+
+[ROUTINE] 0x0238F8 Voice_PitchEnv_Advance  confidence=high
+; ADVANCE THE MULTI-SAMPLE / FOOTAGE SELECTION AND STORE THE OUTPUT REGISTERS.
+; In: XWA = voice work record (kept in XIZ). Base pointer = 0x045310 + (record+0x1F)->
+; [0x05]. The state byte (XIZ+0x03) selects the row source:
+;   0        -> Voice_Slot_CalcAmpNibble (0x02B154)
+;   1 or 2   -> Voice_Slot_FindOctaveOffset (0x02B1E0)
+;   >= 3     -> the u16 routing table at (XIZ+0x23) + 0x0102 + state*2
+; The result is passed through Voice_KeyIndex_Pack3Nibbles (0x02B2C2) and multiplied by
+; 6 to index the record array. Single caller 0x02BCF1.
+
+[LABEL] 0x023942 Voice_PitchEnv_Advance_StateB  replaces=LABEL_023942  confidence=high
+; State 1 or 2: use Voice_Slot_FindOctaveOffset instead of the amplitude nibble.
+
+[LABEL] 0x023979 Voice_PitchEnv_Advance_RoutingTable  replaces=LABEL_023979  confidence=high
+; State >= 3: take the row directly from the per-patch routing table at (XIZ+0x23)+0x0102.
+
+[LABEL] 0x02399D Voice_PitchEnv_StoreOutputRegs  confidence=high
+; Store the selected record: pointer to (XIZ+0x0F), type code 0x4000 OR'ed into
+; (XIZ+0x01), record word 0 to the staging word 0x0451CE and record word 4 to 0x293E.
+; If bit2 of the global audio-mode word at 0x041343 is set the top nibble of 0x0451CE
+; is doubled in place (a mode-dependent re-scale of the wave/bank field).
+
+[LABEL] 0x0239DD Voice_PitchEnv_StoreOutputRegs_Return  replaces=LABEL_0239DD  confidence=high
+; Restore and return.
+
+[ROUTINE] 0x0239E1 Voice_Vol_ScaleVelocityWord  replaces=LABEL_0239E1  confidence=high
+; SCALE THE MASTER TICK BY A FACTOR AND PUBLISH IT AS THE GLOBAL PITCH OFFSET.
+; In: XWA = multiplier. XBC = the 32-bit master tick at 0x1040; FP_MulAccum64 multiplies
+; them, the product is >> 2, truncated to 8 bits, multiplied by 0x0D and >> 7, and the
+; signed result is stored in the global word at 0x041366 that
+; Voice_Pitch_BendType_Fixed reads. Single caller 0x02C940.
+
+[ROUTINE] 0x023A05 Voice_Pitch_WriteOutputReg_Portamento  confidence=high
+; COMBINE THE PITCH SOURCES INTO (record+0x0A) AND SET THE 'GLIDE ACTIVE' FLAG.
+; In: XWA = voice work record. DE = (record+0x06) + (0x293E) + (record+0x17)->[0x05]*2
+;   + (record+0x27)->[0x21] + (record+0x23)->[0x14], stored at (record+0x0A).
+; Then bit 0x0400 of (record+0x01) is set only when bit1 of (record+0x23)->[0x0A] AND
+; bit5 of (record+0x13)->[0x10] are both set, and cleared otherwise.
+; Callers 0x02B504, 0x02BCF7.
+
+[LABEL] 0x023A44 Voice_Pitch_WriteOutputReg_Portamento_ClearBit  replaces=LABEL_023A44  confidence=high
+; Conditions not met: clear bit 0x0400 of (record+0x01).
+
+[ROUTINE] 0x023A4A Voice_Pitch_WriteOutputReg_Legato  confidence=high
+; EMIT THE FINAL PITCH REGISTER (primary channel).
+; In: XWA = voice work record. DE = (record+0x0A) + the global fine-tune word at
+; 0x041347; if bit4 of (record+0x27)->[0x18] is set a detune of (record+0x23)->[0x1D] is
+; added or subtracted according to bit5 of the same word; if bit 0x0400 of (record+0x01)
+; is set the extra offset at 0x04135A is added. The saturated result goes to the staging
+; word at 0x0451DA. Callers 0x028D90, 0x02B50A, 0x02BCFD.
+
+[LABEL] 0x023A70 Voice_Pitch_Legato_DetuneDown  replaces=LABEL_023A70  confidence=high
+; Detune downward variant (bit5 clear): add (record+0x23)->[0x1D].
+
+[LABEL] 0x023A76 Voice_Pitch_Legato_StoreOutput  replaces=LABEL_023A76  confidence=high
+; Optional 0x04135A offset when (record+0x01) bit 0x0400 is set.
+
+[LABEL] 0x023A83 Voice_Pitch_Legato_StoreOutput_Return  replaces=LABEL_023A83  confidence=high
+; Saturate and store to the staging word 0x0451DA.
+
+[ROUTINE] 0x023A8E Voice_Pitch_WriteOutputReg_Direct  confidence=high
+; Simple pitch combine: (record+0x0A) = (record+0x06) + (0x293E). No detune, no
+; register write. Callers 0x02C0D7, 0x02C3F6.
+
+[ROUTINE] 0x023A99 Voice_Pitch_WriteOutputReg_Secondary  replaces=LABEL_023A99  confidence=high
+; EMIT THE FINAL PITCH REGISTER (secondary channel). Same as
+; Voice_Pitch_WriteOutputReg_Legato minus the 0x04135A offset stage; result also goes
+; to 0x0451DA. Callers 0x028DA4, 0x02C0DD, 0x02C3FC.
+
+[LABEL] 0x023ABF Voice_Pitch_Secondary_DetuneDown  replaces=LABEL_023ABF  confidence=high
+; Detune downward variant: add (record+0x23)->[0x1D].
+
+[LABEL] 0x023AC5 Voice_Pitch_Secondary_StoreOutput  replaces=LABEL_023AC5  confidence=high
+; Saturate and store to 0x0451DA.
+
+[ROUTINE] 0x023AD0 Voice_Level_ComputeTriplet  replaces=LABEL_023AD0  confidence=high
+; COMPUTE THE THREE OUTPUT LEVELS OF A VOICE AND PACK THEM INTO THREE REGISTERS.
+; In: XWA = voice work record; XIZ = (record+0x17) = the patch parameter block.
+; The sign of (patch+0x07) decides whether the three detune amounts (patch+0x0A/0x0C/
+; 0x0E) are used as-is or negated. If (patch+0x11) != 0 an envelope-scaled offset from
+; PitchBend_Scale is added to each of the three level bytes (patch+0x09/0x0B/0x0D)
+; after they are mapped through the byte table at 0x0118FE.
+; Velocity modulation uses Pan_ScaleWithVelocity with limits (patch+0x13)..0x7F and
+; depths (patch+0x14) / (patch+0x15).
+; Output: three packed words - level<<8 | detune - written to the staging words at
+; 0x0451EC, 0x0451EE and 0x0451F0. Callers 0x02B510, 0x02BD03.
+
+[LABEL] 0x023B09 Voice_Level_Triplet_Positive  replaces=LABEL_023B09  confidence=high
+; (patch+0x07) >= 0: take the three detune bytes with their natural sign.
+
+[LABEL] 0x023B21 Voice_Level_Triplet_ModByEnv  replaces=LABEL_023B21  confidence=high
+; (patch+0x11) != 0: compute the shared envelope-scaled offset via PitchBend_Scale.
+
+[LABEL] 0x023B60 Voice_Level_Ch1_Unmodulated  replaces=LABEL_023B60  confidence=high
+; Channel 1 without the envelope offset.
+
+[LABEL] 0x023B74 Voice_Level_Ch2_Modulated  replaces=LABEL_023B74  confidence=high
+; Channel 2 with the envelope offset.
+
+[LABEL] 0x023B94 Voice_Level_Ch2_Unmodulated  replaces=LABEL_023B94  confidence=high
+; Channel 2 without the envelope offset.
+
+[LABEL] 0x023BA8 Voice_Level_Ch3_Modulated  replaces=LABEL_023BA8  confidence=high
+; Channel 3 with the envelope offset.
+
+[LABEL] 0x023BC6 Voice_Level_Ch3_Unmodulated  replaces=LABEL_023BC6  confidence=high
+; Channel 3 without the envelope offset.
+
+[LABEL] 0x023BDC Voice_Level_Triplet_Unmodulated  replaces=LABEL_023BDC  confidence=high
+; (patch+0x11) == 0: all three levels come straight from the 0x0118FE table.
+
+[LABEL] 0x023C18 Voice_Level_ApplyVelocityMod  replaces=LABEL_023C18  confidence=high
+; Velocity modulation of channel 1 when (patch+0x14) != 0.
+
+[LABEL] 0x023C3C Voice_Level_PackAndStore  replaces=LABEL_023C3C  confidence=high
+; Clamp channel 1 to 0..0xFF, map its detune through Detune_ScaleSymmetric, pack level<<8|detune and store to 0x0451EC; then optionally velocity-modulate channels 2 and 3 via (patch+0x15).
+
+[LABEL] 0x023CAA Voice_Level_PackAndStore_NoVelocityMod  replaces=LABEL_023CAA  confidence=high
+; No channel-2/3 velocity modulation: clamp both levels as they are.
+
+[LABEL] 0x023CC6 Voice_Level_PackSideChannels  replaces=LABEL_023CC6  confidence=high
+; Map the channel-2/3 detunes, pack them with their levels and store to 0x0451EE and 0x0451F0.
+
+[LABEL] 0x023D01 Voice_PitchPack_Mode1  confidence=high
+; FILTER REGISTER BUILDER, MODE 1 (single cutoff + coefficient).
+; In: XWA = voice work record; (XSP+0x02) = (record+0x17) = the patch block.
+; Cutoff seed = (patch+0x4D) + (record+0x23)->[0x67]; Portamento_CalcContrib_A adds key
+; follow ((patch+0x37)) and level scaling ((patch+0x3C)). The slope/mode field
+; (patch+0x4E) is shifted left 13 and bit10 is set, then OR'ed with the cutoff to form
+; (record+0x42). The second register (record+0x44) is Portamento_ClampAdd18 OR
+; PitchBend_LookupCoeff of either the constants 0x48/0x8D (when bit9 of
+; (record+0x23)->[0x02] is set) or the patch bytes (patch+0x4F)/(patch+0x50).
+; Reached through the mode-1 thunk at 0x02412E of the dispatch table selected by
+; (patch+0x36) & 7 - see Voice_PitchPack_Dispatch (0x024102).
+
+[LABEL] 0x023D8D Voice_PitchPack_Mode1_UseVoiceLUT  replaces=LABEL_023D8D  confidence=high
+; Bit9 of (record+0x23)->[0x02] clear: take the resonance/depth pair from (patch+0x4F) and (patch+0x50) instead of the 0x48/0x8D constants.
+
+[LABEL] 0x023DB1 Voice_PitchPack_Mode1_Return  replaces=LABEL_023DB1  confidence=high
+; Restore and return.
+
+[LABEL] 0x023DB5 Voice_PitchPack_Mode2  replaces=LABEL_023DB5  confidence=high
+; FILTER REGISTER BUILDER, MODE 2. Same ingredients as mode 1 but computes the pair
+; twice - once with the 0x48/0x8D constants and once from (patch+0x4F)/(patch+0x50) -
+; and packs a different bit layout into (record+0x42) / (record+0x44).
+; Reached through the thunk at 0x024131.
+
+[LABEL] 0x023E44 Voice_PitchPack_Mode2_AltPath  replaces=LABEL_023E44  confidence=high
+; Alternate arm taken when bit9 of (record+0x23)->[0x02] is clear.
+
+[LABEL] 0x023EBE Voice_PitchPack_Mode2_Return  replaces=LABEL_023EBE  confidence=high
+; Restore and return.
+
+[LABEL] 0x023EC2 Voice_PitchPack_Mode3  replaces=LABEL_023EC2  confidence=high
+; FILTER REGISTER BUILDER, MODE 3. Structurally the same as mode 2 with a third bit
+; packing of the cutoff and slope fields. Reached through the thunk at 0x024134.
+
+[LABEL] 0x023F4E Voice_PitchPack_Mode3_AltPath  replaces=LABEL_023F4E  confidence=high
+; Alternate arm taken when bit9 of (record+0x23)->[0x02] is clear.
+
+[LABEL] 0x023FB9 Voice_PitchPack_Mode3_Return  replaces=LABEL_023FB9  confidence=high
+; Restore and return.
+
+[LABEL] 0x023FBD Voice_PitchPack_Mode4_Single  replaces=LABEL_023FBD  confidence=high
+; FILTER REGISTER BUILDER, MODE 4 (single-slope form).
+; Cutoff = (patch+0x4D), plus (record+0x23)->[0x67] when bit9 of (record+0x23)->[0x02]
+; is clear. Portamento_CalcContrib_A applies key follow (patch+0x37) and level scaling
+; (patch+0x3C). (patch+0x4E) is placed at both bit10 and bit13, bit7 is forced in both
+; registers, and the coefficient global at 0x2940 is cleared.
+; Reached through the thunk at 0x024137.
+
+[LABEL] 0x023FDE Voice_PitchPack_Mode4_AltPath  replaces=LABEL_023FDE  confidence=high
+; Bit9 clear: add the tone-record offset (record+0x23)->[0x67] to the cutoff seed.
+
+[LABEL] 0x023FF0 Voice_PitchPack_Mode4_Finalize  replaces=LABEL_023FF0  confidence=high
+; Shared tail: key follow, bit packing into (record+0x42)/(record+0x44), and (0x2940) = 0.
+
+[ROUTINE] 0x02403D Voice_PitchPack_Mode5_Dual  replaces=LABEL_02403D  confidence=high
+; FILTER REGISTER BUILDER, MODE 5 (dual cutoff). Reads BOTH (patch+0x4D) and
+; (patch+0x4F) as two independent cutoff seeds. Reached through the thunk at 0x02413A,
+; which uses 'calr' rather than 'jrl' so this one returns through the dispatcher.
+; *** THIS ROUTINE EXTENDS PAST THE END OF THE REGION: its body continues at
+; Voice_PitchPack_Mode5_ApplyDetune (0x024069) and
+; Voice_PitchPack_Mode5_Finalize (0x024097), which belong to the next region. ***
+
+[UNCERTAIN] THE REGION IS ALREADY FULLY NAMED IN THE AUTHORITATIVE BUILD. All 282 addresses in
+; 0x02219F..0x024068 carry real names in rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf,
+; so there is no LABEL_xxxxxx to supersede *there*. 251 of the 292 entries below are
+; still LABEL_xxxxxx in symbols/subcpu_symbols_reference.txt - those carry the
+; 'replaces=' column and are a pure mechanical sync. Zero renames are proposed.
+
+[UNCERTAIN] NAME LOOKS WRONG (out of region but load-bearing for it): 0x021023 'DAC_Write_Sample'
+; (curated: 'DAC_WRITE_SAMPLE'). Its entire body is
+;     res 7,(P6) ; ld (0x100000),WA ; ld HL,(0x100000) ; ret
+; i.e. it writes the TONE GENERATOR register-address latch and reads the selected
+; register back into HL. It is exactly the landmark the project already documents at
+; 0x021023 as 'the ONLY point where the TG active-voice bitmap re-enters sub-CPU
+; software'. There is no DAC and no sample anywhere in it. Both consumers in this region
+; (AudioTick_UpdateVoice at 0x0221B1 and 0x022260) use it as a TG register read.
+; A truthful reading would be TONEGEN_SELECT_AND_READ. LEFT ALONE - but note that the
+; current name hides the TG readback from anyone grepping for 'ToneGen'.
+
+[UNCERTAIN] NAME FAMILY LOOKS WRONG: the 'Portamento_*' / 'PitchBend_LookupCoeff' /
+; 'Voice_PitchPack_Mode*' block (0x022BF2, 0x022C06, 0x022C99, 0x022CE8, 0x022CF8,
+; 0x022DA1 and 0x023D01..0x02403D) is a FILTER (TVF) parameter builder, not anything to
+; do with pitch or portamento. Evidence: (a) the dispatcher at 0x024102 chooses among
+; them with (patch+0x36) & 7 and its entry 0 is the neutral pair (record+0x42)=0x017F,
+; (record+0x44)=0x7F7F - a bypass, not a pitch; (b) the SAME byte (patch+0x36) supplies
+; the key-follow curve selector in its top 3 bits at 0x022C0F; (c) every value is
+; clamped to 0..0x78 after a +0x18 bias, a cutoff scale - the genuine pitch chain in
+; this region works in 0x100-per-semitone units throughout; (d) results go to
+; (record+0x42)/(record+0x44), a different register pair from the pitch output at
+; 0x0451DA. The curated reference already names these TVF_Clamp_Cutoff, TVF_Calc_Cutoff,
+; TVF_Calc_Cutoff_NoKeyFollow, TVF_Bias_Clamp_Amount, TVF_Lookup_Depth_Amount,
+; TVF_Set_Bypass and TVF_Build_Full, which the disassembly supports. LEFT ALONE, but the
+; two hand-maintained sources disagree and the curated side looks right.
+
+[UNCERTAIN] THE TWO HAND-MAINTAINED SOURCES DISAGREE ON 33 NAMES IN THIS REGION. Beyond the TVF
+; block above: 0x02219F ELF AudioTick_UpdateVoice vs curated Voice_Manager_PollBank (the
+; curated name is the more accurate - it polls one bank of 16 voices per call); 0x02229A
+; NoteChain_FindNode_A vs Voice_Find_Candidate; 0x022340 NoteOn_Dispatch vs
+; Voice_Allocate_Nodes; 0x022587 VoiceSlot_Release vs Voice_Clear_HoldBit (the curated
+; name describes the body exactly); 0x02294E PitchBend_Process vs
+; Pitch_Get_Patch_Octave_Shift (this routine has nothing to do with MIDI pitch bend - it
+; is a transpose lookup, so the ELF name is actively misleading); 0x022A3F..0x022AE7
+; SlotParam_Write_Stride* vs WaveSel_Emit_ZoneRecord_S*; 0x023849
+; Voice_Pitch_InterpDispatch vs WaveSel_StageB_Build_Reg040; 0x0238F8
+; Voice_PitchEnv_Advance vs WaveSel_StageB_Build_Reg040_Footage. Whoever owns both files
+; should reconcile them; this pass changed neither.
+
+[UNCERTAIN] MISLEADING NAMES ON LIVE CODE: 0x022864 'VoiceDispatch_OpaqueData' and 0x022EFB
+; 'EGEnv_OpaqueData' are executable routines, not data. 0x022EFB is furthermore a
+; byte-for-byte duplicate of EGEnv_Compute_A_Simple (0x022EBA) with no caller. Both are
+; held as raw .byte in the LLVM source, which is presumably where 'OpaqueData' came
+; from. LEFT ALONE.
+
+[UNCERTAIN] UNREFERENCED CODE IN THIS REGION (no call, calr, jp or 24-bit pointer found anywhere
+; in the 0x30000-byte image): 0x022864 VoiceDispatch_OpaqueData, 0x022C99
+; Portamento_CalcContrib_B, 0x022EFB EGEnv_OpaqueData, 0x02300E
+; Voice_Freq_ComputeLeft_Raw, 0x0231DA Voice_Freq_ComputeRight_Raw, 0x023242 (the newly
+; proposed Voice_Clamp_Byte_Unsigned), 0x0232C7 Voice_Colour_Write. Some could be reached
+; through a jump table this pass did not decode, so 'dead' is NOT asserted - only 'no
+; direct reference found'.
+
+[UNCERTAIN] OutputBuf_Flush_A / _B (0x022603 / 0x022630): the stacked word argument acts as 'emit
+; unconditionally' and E as the note number to match, but NoteOn_RoutePacket passes the
+; note number itself as that flag at 0x022745 and passes 0 only on the note-zero path at
+; 0x022776. Mechanically that means 'note B non-zero => list every voice on the chain'.
+; That reads backwards for a note-off and I could not find a reading that makes it
+; obviously intentional. The mechanics above are certain; the intent is not.
+
+[UNCERTAIN] The record bases 0x04424E / 0x044257 / 0x044260 (stride 0x1B) and the words 0x0451CE,
+; 0x0451D0, 0x0451DA, 0x0451EC/EE/F0, 0x045204/06/0A/0E are all in the 1 MB sub-CPU
+; DRAM, not in any hardware window. This region only WRITES them; the code that pushes
+; them out to the tone generator at 0x100000/0x100002 is elsewhere (ToneGen_EmitCommandLoop
+; at 0x021ECB is the obvious candidate). I did not trace that hand-off, so calling them
+; 'staging words' is inferred from the write-only usage here, not proven.
+
+[UNCERTAIN] Voice record layout used throughout: 64 records of 0x27 bytes at 0x148D..0x1E4C.
+; +0x08/+0x0C = list links (byte offsets 8/12 form one doubly-linked chain), +0x10/+0x14
+; = a second chain, +0x1D = pointer to the owning part descriptor, +0x21 = priority key,
+; +0x22 = flag byte (bit0 = in free pool, bit1 = decayed, bit2 = release-eligible,
+; bit3 = just triggered, bit4 = stolen, bit7 = held/retrigger), +0x23 = MIDI note,
+; +0x24 = hardware voice index, +0x25 = last envelope level read from the TG,
+; +0x26 = node param from the 0x00F633 table. Bits 5 and 6 of +0x22 were never observed
+; being written in this region and are unexplained.
+
+[UNCERTAIN] NAMING STYLE: this region is uniformly CamelCase with a subsystem prefix in BOTH
+; sources, so the one genuinely new name proposed above (0x023242
+; Voice_Clamp_Byte_Unsigned, plus its return label) follows its neighbours rather than
+; the UPPER_SNAKE_CASE house style stated in the brief. Uppercasing it is a trivial edit
+; if the reviewer prefers that; flagging rather than silently choosing.

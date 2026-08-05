@@ -1,0 +1,488 @@
+# region 2: 0x01F736..0x02219E
+# System core: Serial-1 (MIDI) ring buffers, RESET/boot, the small preemptive RTOS the
+# audio main loop runs as task 1 of, the inter-CPU micro-DMA link, a generic 3-instance
+# byte-FIFO library, and the tone-generator/voice-slot primitives.
+#
+# Almost every address in this region already carries a real name in the authoritative
+# LLVM build (llvm-nm -n on rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf lists 346 symbols
+# between 0x01F736 and 0x02219E, none of them LABEL_xxxxxx). What is NOT named is the code
+# hiding inside fourteen ".byte" blobs that the LLVM source carries under placeholder cover
+# labels ending in "_Opaque" (plus AudioBuf_PtrUtils). Those blobs are ~1.9 KB of real,
+# reachable code. Everything proposed below is inside one of those blobs, so nothing here
+# renames an analysed symbol. The 'replaces=' fields point at the placeholders that the
+# HAND-CURATED symbols/subcpu_symbols_reference.txt still carries at the blob heads.
+#
+# Blob inventory (start..end taken from the next symbol in the ELF):
+#   0x01FF7B..0x01FFD0  TaskList_Operations_Opaque      -> soft-timer service
+#   0x02014D..0x020370  TaskQueue_Operations_Opaque     -> block/wake/event-flag primitives
+#   0x0204C4..0x0204D1  TaskSem_AddrCalc_Opaque         -> semaphore peek
+#   0x02080B..0x020849  RingBuf_Access_Opaque_A         -> task kill + tick delay
+#   0x020851..0x0208B8  RingBuf_Control_Opaque          -> sched lock + 1K FIFO wrappers
+#   0x0208C6..0x020966  RingBuf_ReadWrite_Opaque_A      -> 1K/256 FIFO wrappers
+#   0x020974..0x020A14  RingBuf_ReadWrite_Opaque_B      -> 256/512 FIFO wrappers
+#   0x020A22..0x020A65  AudioBuf_PtrUtils               -> 512 FIFO wrappers
+#   0x020A7F..0x020AF4  RingBuf_WrappedRead_Opaque_A    -> 256-byte FIFO engine
+#   0x020B0E..0x020B83  RingBuf_WrappedRead_Opaque_B    -> 512-byte FIFO engine
+#   0x020B9D..0x020C12  RingBuf_WrappedRead_Opaque_C    -> 1K FIFO engine
+#   0x020D13..0x020D2C  InterCPU_LatchProtocol_Opaque   -> the 0xE3 send
+#   0x02197C..0x021A8E  VoiceState_OpaqueData1          -> part-handle / slot-list builders
+#   0x021B3F..0x021BF5  VoiceState_OpaqueData2          -> active-voice collector
+#
+# Method: the ROM was re-disassembled with mame/unidasm resynchronised at every ELF symbol
+# (offset = address - 0xEF00 for addresses >= 0x00F000; the first 256 ROM bytes are the
+# 0x0400 vector-jump table), so every listing quoted below starts on a known-good boundary.
+
+[DATA] 0x001034-0x00103F  Serial-1 / audio flag block (in-image RAM)
+; 0x1034 = serial-1 flag byte (bit 0 = "send sync byte 0xFE next", bit 2 = "commands arrive
+;          on the RX ring rather than the immediate F4/F5 handler"), 0x1036 = last SC1CR
+;          value latched on a receive error by INTRX1_HANDLER, 0x1038 = baud-rate mode
+;          (2 or 3, set by the F5/F4 commands), 0x103C = TaskSched task-descriptor array
+;          base (entry for task N at 0x103C + 12*N; task 0 is a hole), 0x103E = audio
+;          request flag word written by Timer_AudioTick_Handler and consumed by
+;          Audio_Main_Loop (bit 1 = run the periodic re-init pass, bit 5 = cleared at the
+;          top of every main-loop pass).
+
+[DATA] 0x001040-0x001047  Audio tick counter and current task
+; 0x1040 = free-running 32-bit tick counter, +1 per Timer_AudioTick_Handler entry, never
+;          reset. Used by AudioLoop_CheckWatchdog (0x01FAF0), Audio_CheckQueuedData_Send
+;          (0x01F836, flushes when 0x1040 - 0x102C >= 0x87) and TIMER_DELAY_TICKS (0x02083B).
+; 0x1044 = cleared by TaskSched_ConfigAndDispatch; 0x1045 = interrupt-nesting counter
+;          bumped by INT16_TaskSwitch_Handler; 0x1046 = word pointer to the running task's
+;          descriptor (0 = none).
+
+[DATA] 0x001048-0x0010D3  TaskSched control block
+; 0x1048/0x1054/0x1060 = the three live task descriptors (tasks 1..3), 12 bytes each:
+;   +0 next, +2 prev (16-bit intra-DRAM list links), +4 saved XSP (32-bit),
+;   +8 priority (1..3), +9 state (0 = free, 3 = blocked, 4 = ready/running),
+;   +0x0A pending-signal count, +0x0B task id.
+; 0x106C/0x1070/0x1074 = ready-queue heads for priorities 1..3 (self-linked next/prev).
+; 0x1074 + 4*id = event-flag wait-queue heads (ids 1..2 -> 0x1078, 0x107C).
+; 0x107E + 4*id = semaphore wait-queue heads (ids 1..4 -> 0x1082/0x1086/0x108A/0x108E).
+; 0x1080-0x1081 = event latched-signal flag bytes (bit 0), both seeded to 1.
+; 0x1091 + id   = semaphore counts (ids 1..4 -> 0x1092..0x1095), all seeded to 1.
+; 0x1096/0x109A and 0x109E/0x10A2 = the two message-queue head pairs used by TaskMsgQ_Send
+;   (0x0204D1) / TaskMsgQ_Receive (0x020642).
+; 0x10A6 = pool of four 8-byte message nodes, free-list head at 0x10C6.
+; 0x10CA = the single soft-timer slot (see TASKSCHED_SOFTTIMER_SERVICE).
+; 0x10D2 = scheduler lock depth (word). Non-zero blocks all context switching.
+
+[DATA] 0x0010E4-0x0010EF  Inter-CPU link state
+; 0x10E4 = micro-DMA channel-0 destination pointer staged by INT0_HANDLER.
+; 0x10E8 = DMA_XFER_STATE. Written 1 or 2 by the senders, decremented 2->1->0 by
+;          MICRODMA_CH2_HANDLER (0x020F01). Every sub->main transmit path spins on it.
+; 0x10EA = CMD_PROCESSING_STATE: 1 = ordinary command in flight, 2 = 0xE1 sequence,
+;          3 = 0xE2 sequence, 4 = 0xE1 second phase. Decoded by MICRODMA_CH0_HANDLER.
+; 0x10EC = the command byte last read from the main CPU latch at 0x120000.
+; 0x10EE = set to 0xFF when a 0xE2 sequence completes.
+
+[DATA] 0x001110-0x001127  Inter-CPU transfer descriptors
+; 0x1110 (+0 source, +4 count) and 0x10DE = the two-phase 0xE1 transfer descriptors;
+; 0x1116 = the 6-byte block INT0 receives for an incoming 0xE1; 0x111C = the 10-byte block
+; received for an incoming 0xE2, replayed by Cmd_Check_E2_Pending (0x020FBC) into
+; InterCPU_E1_DMA_Transfer; 0x1126 bit 7 = "an 0xE2 arrived, replay it from the main loop".
+; 0x10D4 = the 10-byte parameter block staged by INTERCPU_E2_DMA_TRANSFER.
+
+[DATA] 0x00F012-0x00F01D  Main-loop and DMA-watchdog counters (in-image RAM)
+; 0xF012 = periodic-pass counter, wraps at 10 (Audio_Main_Loop).
+; 0xF014 = audio-tick sub-phase 0..5, indexes the 6-entry jump table at 0x00F460 with base
+;          0x01FB76; 0xF016 = counts phase-6 passes, sets bit 5 of 0x103E every 8.
+; 0xF018 = count of forced inter-CPU RX resets performed by Cmd_DMA_Check_Stuck.
+; 0xF01A = consecutive "no progress" polls of the receive micro-DMA counter.
+; 0xF01C = last value read from micro-DMA channel-0's count register (cr 0x40).
+
+[DATA] 0x01FD8C-0x01FDC1  Task creation table (4 entries x 12 bytes) + init seeds
+; Entry for task N at 0x01FD8C + 12*N: +0 = 32-bit entry point, +4 = 32-bit initial stack
+; top, +8 = 16-bit initial SR (0x8800 for all), +0x0A = priority, +0x0B = pad.
+;   task 0: unused/garbage (never spawned).
+;   task 1: entry 0x01FAB1 (the continuation of PostReset_InitAudio, i.e. Audio_System_Init
+;           and Audio_Main_Loop), stack 0x0004069A, priority 3.
+;   task 2: entry 0x01FC6F (a bare RET), stack 0x00040C20, priority 1 -- an empty slot.
+;   task 3: entry 0x00036327 (-> jp 0x00038E0F), stack 0x00040A9C, priority 3.
+; 0x01FDBC-0x01FDBD = the two 0x01 bytes copied to the event flags at 0x1080.
+; 0x01FDBE-0x01FDC1 = the four 0x01 bytes copied to the semaphore counts at 0x1092.
+; TaskSched_SpawnTask builds a 34-byte context frame at (stack top - 0x22): seven long
+; register slots, then the SR word at +0x1C and the 4-byte entry address at +0x1E, which is
+; exactly what TaskSched_ContextRestore (0x01FF72) pops.
+
+[ROUTINE] 0x01FF7B TASKSCHED_SOFTTIMER_SERVICE  replaces=LABEL_01FF7B  confidence=high
+; Software one-shot/periodic timer service. Walks the 1-entry timer table at 0x10CA
+; (8 bytes/entry: +0 = down-counter word, +2 = reload word, +4 = 32-bit callback address,
+; 0xFFFFFFFF = slot empty). For each armed slot it decrements +0; when the counter reaches
+; zero it reloads it from +2, pushes the loop-advance address 0x01FFA8 as a return address
+; and jumps to the callback, so the callback returns straight back into the walk.
+; Runs the whole walk inside a scheduler lock: 0x10D2 (the lock-depth word) is incremented
+; and mirrored into control register 0x7C on entry and decremented/mirrored on exit, with
+; the interrupt mask raised to level 0 (all masked) for the walk and back to 6 afterwards.
+; While the lock is non-zero TaskSched_Dispatch refuses to context-switch (see 0x01FF21).
+; No caller was found by a whole-ROM branch-target scan; it is most likely reached through
+; a dynamically installed vector (see Task_ConfigTimer 0x02072A). Register use: WA, XIX, B.
+
+[LABEL] 0x01FF91 TASKSCHED_SOFTTIMER_ENTRY  confidence=high
+; Top of the per-slot walk; XIX = current 8-byte timer entry, B = slots remaining.
+
+[LABEL] 0x01FFA8 TASKSCHED_SOFTTIMER_NEXT  confidence=high
+; Advance XIX by 8 and djnz; also the synthetic return address pushed for a fired callback.
+
+[LABEL] 0x01FFAF TASKSCHED_SOFTTIMER_UNLOCK  confidence=high
+; Restore interrupt level 6, decrement lock depth 0x10D2, mirror to cr 0x7C, return.
+
+[LABEL] 0x01FFBF TASKSCHED_SOFTTIMER_FIRE  confidence=high
+; Reload counter from +2, push 0x01FFA8, jp (XIX+4) -- i.e. tail-call the callback.
+
+[ROUTINE] 0x02014D TASKSCHED_BLOCK_SELF  replaces=LABEL_02014D  confidence=high
+; "Wait on my own pending count" - the counting half of a binary rendezvous.
+; Reads the current-task descriptor pointer from 0x1046. If the descriptor's pending count
+; (+0x0A) is non-zero it just decrements it and returns through TaskSched_ContextRestore
+; (0x01FF72). Otherwise it unlinks the descriptor from its ready queue (next at +0, prev at
+; +2), sets state (+0x09) = 3 (BLOCKED) and jumps to TaskSched_Dispatch (0x01FF21), which
+; picks another task. Entered with a full context already pushed (push SR + 7 long pushes),
+; matching the frame TaskSched_ContextRestore pops.
+; Inputs: none. Clobbers: everything (it either reschedules or restores the pushed context).
+
+[LABEL] 0x02017D TASKSCHED_BLOCK_SELF_CONSUME  confidence=high
+; Pending count was non-zero: decrement it and fall out through ContextRestore.
+
+[ROUTINE] 0x020185 TASKSCHED_WAKE_TASK  confidence=high
+; Wake task A (task-context version; ends by rescheduling).
+; Descriptor = 0x103C + 12*A. If state (+0x09) == 3 (BLOCKED) it is set to 4 (READY) and the
+; descriptor is linked at the tail of the ready queue whose head is 0x1068 + 4*(+0x08), then
+; control goes to TaskSched_Dispatch (0x01FF21) so a higher-priority wakee runs at once.
+; If the task was not blocked the wake is remembered by incrementing its pending count
+; (+0x0A), which TASKSCHED_BLOCK_SELF will consume later.
+; Input: A = task id (1..3). Called with a full context frame already pushed.
+
+[LABEL] 0x0201C9 TASKSCHED_WAKE_TASK_COUNT  confidence=high
+; Task was not blocked: bump pending count (+0x0A) and go to Dispatch.
+
+[ROUTINE] 0x0201CF TASKSCHED_WAKE_TASK_NORESCHED  confidence=high
+; Same wake as 0x020185 but safe from interrupt context: it saves only XWA/XIX/XIY/SR,
+; never touches the scheduler stack and returns with a plain RET instead of dispatching.
+; Input: A = task id. Output: none. Use this one from ISRs; the caller is expected to reach
+; a scheduling point later (TaskSwitch_Countdown at 0x01FFD0 does that on interrupt exit).
+
+[LABEL] 0x02020C TASKSCHED_WAKE_TASK_NORESCHED_RET  confidence=high
+; Common epilogue: pop SR, XIY, XIX, XWA, ret.
+
+[LABEL] 0x020211 TASKSCHED_WAKE_TASK_NORESCHED_COUNT  confidence=high
+; Not blocked: bump pending count and take the common epilogue.
+
+[ROUTINE] 0x020216 TASKSCHED_TAKE_PENDING_COUNT  confidence=high
+; Reads and clears task A's pending count: L = descriptor(0x103C + 12*A) + 0x0A, then that
+; field is zeroed. Returns through TaskSched_ContextRestore (0x01FF72).
+; Input: A = task id. Output: L = the count that was pending.
+
+[ROUTINE] 0x020235 TASKEVENT_SIGNAL  confidence=high
+; Signal event flag A (task-context version; ends by rescheduling).
+; Event A has a self-linked wait-queue head at 0x1074 + 4*A and a one-bit "already signalled"
+; flag in bit 0 of the byte at 0x107F + A. If the wait queue is empty the flag byte's bit 0
+; is set (the signal is latched for a future waiter); otherwise the first waiter is unlinked,
+; its state set to 4 (READY), it is appended to its priority's ready queue and Dispatch runs.
+; Only event ids 1 and 2 exist: TaskSched_Init builds two heads at 0x1078/0x107C and seeds
+; both flag bytes 0x1080/0x1081 to 1 (pre-signalled) by copying the two 0x01 bytes at
+; 0x01FDBC.  Input: A = event id.
+
+[LABEL] 0x020262 TASKEVENT_SIGNAL_WAKE  confidence=high
+; Unlink the head waiter, mark it READY, requeue by priority, jump to Dispatch.
+
+[ROUTINE] 0x02029D TASKEVENT_SIGNAL_NORESCHED  confidence=high
+; Interrupt-safe TASKEVENT_SIGNAL: identical logic, but saves only XWA/XIX/XIY/XHL/SR and
+; returns with RET rather than entering the dispatcher.  Input: A = event id.
+
+[LABEL] 0x0202C4 TASKEVENT_SIGNAL_NORESCHED_RET  confidence=high
+; Common epilogue: pop SR, XHL, XIY, XIX, XWA, ret.
+
+[LABEL] 0x0202CA TASKEVENT_SIGNAL_NORESCHED_WAKE  confidence=high
+; Queue non-empty: unlink waiter, state = 4, requeue on 0x1068 + 4*prio, take the epilogue.
+
+[ROUTINE] 0x020308 TASKEVENT_WAIT  confidence=high
+; Wait on event flag A. If bit 0 of (0x107F + A) is set the latched signal is consumed
+; (bit cleared) and the caller resumes immediately through TaskSched_ContextRestore.
+; Otherwise the current task (descriptor pointer at 0x1046) is unlinked from its ready
+; queue, state set to 3 (BLOCKED), appended to the event wait queue at 0x1074 + 4*A, and
+; TaskSched_Dispatch is entered.  Input: A = event id. Entered with a full context pushed.
+
+[LABEL] 0x020325 TASKEVENT_WAIT_BLOCK  confidence=high
+; No latched signal: block the caller on the event queue and dispatch.
+
+[ROUTINE] 0x020361 TASKEVENT_CLEAR  confidence=high
+; Clears the latched-signal bit for event A: res 0,(0x107F + A), under interrupt level 6.
+; Input: A = event id. Clobbers WA/XWA.
+
+[ROUTINE] 0x0204C4 TASKSEM_PEEK_COUNT  replaces=LABEL_0204C4  confidence=high
+; Non-destructive read of semaphore A's count: HL = zero-extended byte at 0x1091 + A.
+; The four semaphores (ids 1..4) have their counts at 0x1092..0x1095, all seeded to 1 by
+; TaskSched_Init (from the four 0x01 bytes at 0x01FDBE), and their wait-queue heads at
+; 0x107E + 4*A i.e. 0x1082/0x1086/0x108A/0x108E. Siblings: TaskSched_Wait (0x02044F) is the
+; blocking P(), TaskSem_TryDec (0x0204A9) is the non-blocking one.
+; Input: A = semaphore id. Output: HL = current count.
+
+[ROUTINE] 0x02080B TASKSCHED_KILL_TASK  replaces=LABEL_02080B  confidence=high
+; Terminate task A. Descriptor = 0x103C + 12*A; the descriptor is unlinked from whatever
+; doubly-linked list it is on (next +0 / prev +2) and both its state byte (+0x09) and its
+; pending count (+0x0A) are zeroed, i.e. the slot returns to the "never spawned" condition
+; that TaskSched_SpawnTask (0x01FFFD) tests for. Runs at interrupt level 6, saves
+; WA/XIX/XIY/XHL, plain RET (it never kills the *running* task's stack, so the caller must
+; not be task A itself).  Input: A = task id.
+
+[ROUTINE] 0x02083B TIMER_DELAY_TICKS  confidence=high
+; Busy-wait delay measured in audio ticks. WA is halved, added to the free-running 32-bit
+; tick counter at 0x1040, and the routine spins until 0x1040 reaches that value.
+; Input: WA = 2 * number of ticks to wait. No timeout, no interrupt masking -- it depends
+; entirely on Timer_AudioTick_Handler (0x01FB41) still running.
+
+[ROUTINE] 0x020851 TASKSCHED_LOCK  replaces=LABEL_020851  confidence=high
+; incw 1,(0x10D2) -- take the scheduler lock. While 0x10D2 is non-zero TaskSched_Dispatch
+; (0x01FF21) returns through ContextRestore without switching tasks and TaskSwitch_Countdown
+; (0x01FFD0) merely counts down. Unlike TASKSCHED_SOFTTIMER_SERVICE this pair does NOT
+; mirror the new depth into control register 0x7C.
+
+[ROUTINE] 0x020856 TASKSCHED_UNLOCK  confidence=high
+; decw 1,(0x10D2) -- release the scheduler lock. Nesting-safe, no reschedule on release.
+
+[ROUTINE] 0x02085B FIFO1K_GET  confidence=high
+; Pop one byte from the 1 KB FIFO whose descriptor base is 0x040C2E.
+; Thin wrapper: pushes IX/XDE, XDE = 0x040C2E, calls the 1K engine's GET (0x020B9D).
+; Output: HL = byte (zero-extended) or 0xFFFF when the FIFO is empty.
+
+[ROUTINE] 0x020868 FIFO1K_PUT  confidence=high
+; Push one byte onto the 1 KB FIFO. Stack-argument calling convention (link XIZ,0;
+; A = (XIZ+8)), then the 1K engine's PUT (0x020BF1).  Output: HL = free space left,
+; or 0xFFFF if the FIFO was full and the byte was dropped.
+
+[ROUTINE] 0x02087E FIFO1K_PUT_BLOCK  confidence=high
+; Push BC bytes from (XIY) onto the 1 KB FIFO; both taken from the stack frame
+; ((XIZ+8) = count, (XIZ+0x0A) = source pointer). Loops over the engine's PUT; note it does
+; not stop when PUT reports "full", so overflow silently drops the tail.
+
+[ROUTINE] 0x0208A0 FIFO1K_IS_EMPTY  confidence=high
+; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
+
+[ROUTINE] 0x0208B2 FIFO1K_FREE_SPACE  confidence=high
+; HL = the free-space counter word at 0x040C2C.
+
+[ROUTINE] 0x0208C6 FIFO1K_MARK_SET  replaces=LABEL_0208C6  confidence=high
+; Copies the read index (0x040C26) into the mark/replay cursor (0x040C24), so the bytes
+; consumed from here on can be re-read from the mark by FIFO1K_GET_MARKED.
+
+[ROUTINE] 0x0208D3 FIFO1K_GET_MARKED  confidence=high
+; Pop one byte using the mark cursor, bounded by the commit index (0x040C28).
+; Engine entry 0x020BBB. Output: HL = byte, or 0xFFFF when the mark has reached the commit.
+
+[ROUTINE] 0x0208E1 FIFO1K_GET_FROM_MARK  confidence=high
+; Pop one byte using the mark cursor, bounded by the write index (0x040C2A).
+; Engine entry 0x020BD6. Output: HL = byte or 0xFFFF.
+
+[ROUTINE] 0x0208EF FIFO1K_COMMIT  confidence=high
+; Advances the read index (0x040C26) to the commit index (0x040C28).
+
+[ROUTINE] 0x0208FC FIFO1K_SET_COMMIT  confidence=high
+; Advances the commit index (0x040C28) to the current write index (0x040C2A).
+
+[ROUTINE] 0x020909 FIFO256_GET  confidence=high
+; Same as FIFO1K_GET for the 256-byte FIFO at descriptor base 0x041038 (engine 0x020A7F).
+
+[ROUTINE] 0x020916 FIFO256_PUT  confidence=high
+; Stack-arg push of one byte onto the 256-byte FIFO (engine 0x020AD3).
+
+[ROUTINE] 0x02092C FIFO256_PUT_BLOCK  confidence=high
+; Stack-arg push of a count/pointer block onto the 256-byte FIFO.
+
+[ROUTINE] 0x02094E FIFO256_IS_EMPTY  confidence=high
+; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
+
+[ROUTINE] 0x020960 FIFO256_FREE_SPACE  confidence=high
+; HL = free-space counter at 0x041036.
+
+[ROUTINE] 0x020974 FIFO256_MARK_SET  confidence=high
+; Read index (0x041030) -> mark cursor (0x04102E).
+
+[ROUTINE] 0x020981 FIFO256_GET_MARKED  confidence=high
+; Mark-cursor pop bounded by the commit index (engine 0x020A9D).
+
+[ROUTINE] 0x02098F FIFO256_GET_FROM_MARK  confidence=high
+; Mark-cursor pop bounded by the write index (engine 0x020AB8).
+
+[ROUTINE] 0x02099D FIFO256_COMMIT  confidence=high
+; Commit index (0x041032) -> read index (0x041030).
+
+[ROUTINE] 0x0209AA FIFO256_SET_COMMIT  confidence=high
+; Write index (0x041034) -> commit index (0x041032).
+
+[ROUTINE] 0x0209B7 FIFO512_GET  confidence=high
+; Same as FIFO1K_GET for the 512-byte FIFO at descriptor base 0x041142 (engine 0x020B0E).
+
+[ROUTINE] 0x0209C4 FIFO512_PUT  confidence=high
+; Stack-arg push of one byte onto the 512-byte FIFO (engine 0x020B62).
+
+[ROUTINE] 0x0209DA FIFO512_PUT_BLOCK  confidence=high
+; Stack-arg push of a count/pointer block onto the 512-byte FIFO.
+
+[ROUTINE] 0x0209FC FIFO512_IS_EMPTY  confidence=high
+; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
+
+[ROUTINE] 0x020A0E FIFO512_FREE_SPACE  confidence=high
+; HL = free-space counter at 0x041140.
+
+[ROUTINE] 0x020A22 FIFO512_MARK_SET  confidence=high
+; Read index (0x04113A) -> mark cursor (0x041138).
+
+[ROUTINE] 0x020A2F FIFO512_GET_MARKED  confidence=high
+; Mark-cursor pop bounded by the commit index (engine 0x020B2C).
+
+[ROUTINE] 0x020A3D FIFO512_GET_FROM_MARK  confidence=high
+; Mark-cursor pop bounded by the write index (engine 0x020B47).
+
+[ROUTINE] 0x020A4B FIFO512_COMMIT  confidence=high
+; Commit index (0x04113C) -> read index (0x04113A).
+
+[ROUTINE] 0x020A58 FIFO512_SET_COMMIT  confidence=high
+; Write index (0x04113E) -> commit index (0x04113C).
+
+[LABEL] 0x020A9D FIFO_ENGINE256_GET_MARKED  confidence=high
+; Engine: pop at the mark cursor (XDE-10), stop when it equals the commit index (XDE-6).
+
+[LABEL] 0x020AB8 FIFO_ENGINE256_GET_FROM_MARK  confidence=high
+; Engine: pop at the mark cursor (XDE-10), stop when it equals the write index (XDE-4).
+
+[LABEL] 0x020AD3 FIFO_ENGINE256_PUT  confidence=high
+; Engine: if free count (XDE-2) is zero return HL=0xFFFF; else store A at (XDE + writeidx),
+; advance the write index modulo 0x0FF, decrement the free count, return it in HL.
+
+[LABEL] 0x020B2C FIFO_ENGINE512_GET_MARKED  confidence=high
+; 512-byte twin of 0x020A9D (wrap mask 0x1FF).
+
+[LABEL] 0x020B47 FIFO_ENGINE512_GET_FROM_MARK  confidence=high
+; 512-byte twin of 0x020AB8 (wrap mask 0x1FF).
+
+[LABEL] 0x020B62 FIFO_ENGINE512_PUT  confidence=high
+; 512-byte twin of 0x020AD3 (wrap mask 0x1FF).
+
+[LABEL] 0x020BBB FIFO_ENGINE1K_GET_MARKED  confidence=high
+; 1 KB twin of 0x020A9D (wrap mask 0x3FF).
+
+[LABEL] 0x020BD6 FIFO_ENGINE1K_GET_FROM_MARK  confidence=high
+; 1 KB twin of 0x020AB8 (wrap mask 0x3FF).
+
+[LABEL] 0x020BF1 FIFO_ENGINE1K_PUT  confidence=high
+; 1 KB twin of 0x020AD3 (wrap mask 0x3FF).
+
+[ROUTINE] 0x020D13 INTERCPU_SEND_E3  replaces=LABEL_020D13  confidence=high
+; Sends the single command byte 0xE3 to the main CPU over the 0x120000 latch, with the same
+; two-phase MSTAT1 handshake InterCPU_DMA_Send_Chunk uses but no payload and no micro-DMA.
+; Gate 1 (0x020D15): wait for PD bit 4 (MSTAT1, SFR 0x34) to be HIGH; drop SSTAT0 (PD bit 0)
+; and write 0xE3 to 0x120000. Gate 2 (0x020D23): wait for MSTAT1 to go LOW, then raise
+; SSTAT0 and return. Each gate spins through E3_WAIT_MSTAT1_CLEAR (0x020D2C) /
+; E3_WAIT_MSTAT1_SET (0x020D37), which give up after 60001 iterations (compare 0xEA60);
+; on the gate-1 timeout it returns having sent nothing, on the gate-2 timeout it raises
+; SSTAT0 first. BC is used as the retry counter. No caller found by branch-target scan.
+
+[LABEL] 0x020D15 INTERCPU_E3_GATE1  confidence=high
+; Poll MSTAT1 high, then drop SSTAT0 and write 0xE3 to the latch at 0x120000.
+
+[LABEL] 0x020D23 INTERCPU_E3_GATE2  confidence=high
+; Poll MSTAT1 low, then raise SSTAT0 and return.
+
+[LABEL] 0x020D96 INTERCPU_E2_WAIT_DMA_DONE  confidence=high
+; Tail of INTERCPU_E2_DMA_TRANSFER: spins on DMA_XFER_STATE (0x10E8) until the micro-DMA
+; channel-2 completion ISR (0x020F01) zeroes it. NO TIMEOUT -- see the findings.
+
+[ROUTINE] 0x02197C VOICE_PART_HANDLE_MAKE  replaces=LABEL_02197C  confidence=medium
+; Builds the packed 16-bit "part handle" the voice allocator passes around, and refreshes
+; the slot table first when the part index is a real one.
+; Inputs: C = part index (only the low 6 bits are used, saved in a 2-byte stack slot),
+;         A = a selector. If A >= 0x40 the refresh is skipped; otherwise
+;         Voice_ScanSlots_ReassignSources (0x02150D) is called with WA = A.
+; Output: HL = ((C & 0x3F) << 8) | 0x00FF, i.e. part in the high byte and 0xFF ("no slot
+;         yet") in the low byte.  Only caller: 0x0219BB.
+
+[ROUTINE] 0x0219AC VOICE_PART_ASSIGN  confidence=medium
+; Stack-argument front end that turns a (part, selector, key) triple into an assigned voice
+; slot: saves C and A in a local frame, calls VOICE_PART_HANDLE_MAKE (0x02197C) with
+; C = E, then calls VoiceSlot_Assign (0x02177E) with WA = the saved A, C = the saved C and
+; E = the caller's argument at (XSP+8). Returns with 'retd 2', i.e. it pops one word of
+; caller-pushed argument. No caller found by branch-target scan (candidate for a call
+; through one of the dispatch tables).
+
+[ROUTINE] 0x0219DC VOICE_BUILD_PARTSLOT_LIST  confidence=medium
+; Builds a 0xFFFF-terminated word list at 0x00286B describing the up-to-four sounding
+; sub-slots of one tone entry.
+; Inputs: A = tone/part row index, C = a group id, E = a group mask (the routine keeps
+;         ~E in its frame and matches (table_byte & ~E) against (C & ~E)).
+; Walks i = 0..3 over the bytes at (0x0024E6 + 12*A + 8 + i). A byte >= 0xC0 means "slot
+; unused" and is skipped. Otherwise the byte indexes a 5-byte-stride table at 0x002129,
+; whose first byte indexes VOICE_COMMANDINDEXTABLE (0x00F4EC); that result is the value
+; matched against the group and is also the high byte of the emitted word. The low byte is
+; whatever SlotPair_Decode_C_To_L (0x0210A2) returns for (WA = the raw byte, BC = i).
+; Output: XHL = 0x00286B (the list). No caller found by branch-target scan.
+
+[ROUTINE] 0x021B3F VOICE_COLLECT_ACTIVE_BY_GROUP  replaces=LABEL_021B3F  confidence=low
+; Builds a 0xFF-terminated byte list at 0x0028ED of the voice ids currently sounding for a
+; part group. Inputs: A = row selector (row base = 0x001E4D + 27*A), C = group id,
+; E = group mask (E is complemented and ANDed into C on entry, so the test is on the bits
+; NOT in the mask). For each of the 27 part indices B: the row byte is skipped when >= 0xC0;
+; VOICE_COMMANDINDEXTABLE[B] (0x00F4EC) must match the group; the row byte then indexes the
+; 5-byte-stride table at 0x00212A to give a voice id, which must be < 0x40 to be emitted.
+; After emitting, VOICE_POLYPHONYLIMITS_TABLE (0x00F48C) indexed by the command byte & 0x1F
+; gives a stride used to chain forward through 0x0024E6 + 12*voice, emitting further ids
+; until the chain byte repeats. Output: XHL = 0x0028ED.
+; LOW confidence: the chain walk at 0x021BB7..0x021BE2 is understood mechanically but its
+; purpose (layer chaining? unison? drum-map expansion?) is not proven. No caller found.
+
+[DATA] 0x040C24-0x041341  The three general-purpose byte FIFOs
+; Contiguous: [1 KB FIFO header 0x040C24..0x040C2D, data 0x040C2E..0x04102D]
+;             [256 B header 0x04102E..0x041037, data 0x041038..0x041137]
+;             [512 B header 0x041138..0x041141, data 0x041142..0x041341].
+; Header, relative to the descriptor pointer XDE that the engines take (XDE = data base):
+;   XDE-10 mark/replay cursor, XDE-8 read index, XDE-6 commit index, XDE-4 write index,
+;   XDE-2 free-space counter (seeded to size-1 by the reset routines).
+; All three are reset at boot by Audio_InitRingBuffers (0x01FC70). A whole-ROM
+; branch-target scan found no caller for any of the 30 access wrappers -- only the three
+; init entries are reachable, so this looks like a linked-in library the payload does not
+; actually use. (These are NOT the Serial-1 MIDI rings, which live at 0x0E00/0x1016 and use
+; the completely different descriptor layout documented at READ_BYTE_FROM_RING_BUFFER.)
+
+[UNCERTAIN] The whole region is already named in the authoritative LLVM build -- do not
+; re-propose names for it. symbols/subcpu_symbols_reference.txt is however badly out of date
+; here: it carries 325 symbols in 0x01F736..0x02219E of which 215 are still LABEL_xxxxxx,
+; while the linked ELF has 346 symbols and no placeholders at all. Syncing the reference file
+; from the ELF (by hand, in address order) would retire 215 placeholders on its own and is
+; worth far more than any renaming pass. I deliberately did not touch that file.
+
+[UNCERTAIN] Existing name 0x021023 "DAC_Write_Sample" looks wrong. The routine drives P6
+; bit 7 (SFR 0x18) low, writes WA to the tone-generator register-ADDRESS latch at 0x100000,
+; then reads a word back from 0x100000 into HL. There is no DAC and no sample: this is the
+; TG address-latch write plus status/active-voice readback. Something like
+; TONEGEN_SETADDR_READSTATUS would describe it. Callers: 0x0221B1 and 0x022260 (both inside
+; AudioTick_UpdateVoice) and 0x02E10B. NOT renamed, per the rules.
+
+[UNCERTAIN] Existing names 0x020849 "IntMask_SetBit3" / 0x02084D "IntMask_ClearBit3" look
+; wrong. SFR 0x80 is T8RUN (8-bit timer run register, named in shared/sfr_tmp94c241.s), so
+; these start and stop 8-bit timer 3, they do not mask interrupts. The same register's bit 2
+; is the one the inter-CPU sender starts and MICRODMA_CH2_HANDLER stops (timer 2 paces the
+; micro-DMA burst). TaskSched_ConfigAndDispatch brackets its interrupt-level programming
+; with these two calls, which is consistent with "stop/restart the scheduler tick timer".
+
+[UNCERTAIN] Existing name 0x01FAF0 "AudioLoop_CheckWatchdog" looks wrong. It compares the
+; monotonically increasing 32-bit tick counter 0x1040 against 1000 and, once past it, sets
+; PE bit 0 (SFR 0x38) -- the bit MUTE_AND_HALT (0x01FBF4) clears. Nothing resets 0x1040, so
+; this is a one-shot "un-mute about 1000 ticks after boot", not a watchdog.
+
+[UNCERTAIN] The LLVM source renders the list-link accesses as (XIX+256)/(XIY+256). The raw
+; encoding (bc 00 55 = ld (XIX+0x00),IY) is offset 0, i.e. the "next" link; "+256" is a
+; converter artefact, not a real displacement. Anyone reading kn5000_subprogram_v142.s for
+; the scheduler should treat +256 as +0. Cosmetic only -- the bytes assemble correctly.
+
+[UNCERTAIN] Micro-DMA control-register numbering, inferred from use and not from a
+; datasheet I could consult: DMAS0/DMAS2 = cr 0x00/0x08 (source), DMAD0/DMAD2 = cr 0x20/0x28
+; (destination), DMAC0/DMAC2 = cr 0x40/0x48 (16-bit count), DMAM0/DMAM2 = cr 0x42/0x4A (mode;
+; 0 for the receive channel, 8 for the transmit channel). The byte-wide registers at 0x0100
+; and 0x0102 behave as the channel-0 and channel-2 micro-DMA start-vector registers: 0x0100
+; is loaded with 0x0A to arm the receive channel on the INT0 request and with 0x00 to cancel
+; it, and 0x0102 is loaded with 0x16 to arm the transmit channel on the timer-2 request.
+
+[UNCERTAIN] TASKSCHED_SOFTTIMER_SERVICE, INTERCPU_SEND_E3, VOICE_PART_ASSIGN,
+; VOICE_BUILD_PARTSLOT_LIST, VOICE_COLLECT_ACTIVE_BY_GROUP and all thirty FIFO wrappers have
+; no caller reachable by a whole-ROM branch-target scan of the resynchronised disassembly.
+; They may be genuinely dead, or reached through one of the dispatch tables
+; (CMD_DISPATCH_TABLE at 0x00F46C, CALL_TABLE_12159, the 0x00F460 tick table) whose contents
+; I did not exhaustively resolve. The bodies are still documented from the code itself.

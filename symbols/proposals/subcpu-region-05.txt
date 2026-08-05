@@ -1,0 +1,945 @@
+# region 5: 0x025CCB..0x027A90
+# Per-voice parameter computation and the audio-tick voice walk: EG level/rate pairs, note pitch (incl. the alternate/"SysEx" tuning table), portamento, per-voice LFO phase, the key-shift ramp state machine, the DSP-parameter broadcast helpers, and the note-off scan.
+
+[ROUTINE] 0x025CCB VOICE_UPDATEPAN_FULL_OSCTABLEPATH  replaces=LABEL_025CCB  confidence=high
+; Not a routine entry -- this is the main body of Voice_UpdatePan_Full, whose entry
+; (0x025C87) sits just below this region's lower boundary. Documented here because the
+; region starts inside it.
+;
+; Voice_UpdatePan_Full(XWA = voice-slot record) computes the THREE (level,rate) register
+; pairs that the sub-CPU keeps for a voice in the tone-generator shadow block, for the
+; "full" voice type -- the one whose tone record carries a per-oscillator trim table.
+; Called from Voice_Release_Type4.
+;
+; This branch is taken when bit 11 of slot+1 is CLEAR. It reads a signed per-oscillator
+; trim byte from tonerec[0x010C] (tonerec = the pointer at slot+35), adds it to
+; paramA+39 (paramA = the pointer at slot+23), clamps the sum to 0..0x64 with
+; ClampS16_WA_To_DEBC, and converts it through the 101-entry curve at 0x011899 into an
+; 8-bit register level. The bit-11-set branch instead takes a fixed level from the byte
+; at 0x0118B3 and jumps straight to _CheckMax.
+;
+; Level modulation then follows: if paramA+51 is non-zero the LFO/velocity scaler
+; Pan_ScaleWithVelocity(paramA+48,+49,+50, depth paramA+51, velocity slot+8) is added,
+; and if paramA+46 is non-zero PitchBend_Scale(depth paramA+46, note slot+12) is added
+; too; each sum is re-clamped to 0..0xFF.
+;
+; Register value format written into the shadow block is (level << 8) | rate, where rate
+; comes from the 0..0x7F curve at 0x011963. Bit 7 of the low byte is a separate "apply
+; immediately" flag that only the per-tick writers (Voice_ComputeAndWriteVolume*) set.
+;
+; Hardware: nothing directly. The results land in RAM at 0x0451E4/E6/E8; they reach the
+; tone generator later, when ToneGen_WriteVoiceParams pushes shadow offsets +24/+26/+28
+; to TG register banks 0x800/0x840/0x880 via the 0x100000/0x100002 latch pair.
+
+[LABEL] 0x025D77 VOICE_UPDATEPAN_FULL_NOPANDEPTH  replaces=LABEL_025D77  confidence=high
+; LFO term only (paramA+46 == 0): add the scaler result, clamp 0..0xFF, go to _CheckMax.
+
+[LABEL] 0x025D88 VOICE_UPDATEPAN_FULL_NOPANLFO  replaces=LABEL_025D88  confidence=high
+; paramA+51 == 0: skip the LFO scaler; apply only the paramA+46 depth term, if any.
+
+[LABEL] 0x025DBE VOICE_UPDATEPAN_FULL_CHECKMAX  replaces=LABEL_025DBE  confidence=high
+; If bit 0 of the byte pointed to by slot+31 is set and the computed level is exactly
+; 0xFF, decrement it. Reserves 0xFF as a "fully attenuated / voice finished" code -- the
+; portamento ramp uses 0xFF00 as its terminal value and releases the voice there.
+
+[LABEL] 0x025DD2 VOICE_UPDATEPAN_FULL_WRITEDSP  replaces=LABEL_025DD2  confidence=high
+; Assembles pair 1: rate = table_0x011963[paramA+40], word = (level<<8)|rate, stored to
+; the shadow word 0x0451E4 (TG bank 0x800) and cached in the slot at +60. Then starts
+; pairs 2 and 3 from paramA+41 and paramA+43 through the 101-entry curve at 0x0118FE.
+
+[LABEL] 0x025EB5 VOICE_UPDATEPAN_FULL_NOMODDEPTH  replaces=LABEL_025EB5  confidence=high
+; paramA+47 == 0 while paramA+52 != 0: add only the LFO scaler to pairs 2 and 3.
+
+[LABEL] 0x025ED9 VOICE_UPDATEPAN_FULL_NOPANDEPTH2  replaces=LABEL_025ED9  confidence=high
+; paramA+52 == 0: no LFO term for pairs 2/3; apply only the paramA+47 depth term.
+
+[LABEL] 0x025F22 VOICE_UPDATEPAN_FULL_WRITECHDEPTH  replaces=LABEL_025F22  confidence=high
+; Rate for pair 2 = table_0x011963[paramA+42], floored at 4 (values below 4 are raised).
+
+[LABEL] 0x025F40 VOICE_UPDATEPAN_FULL_WRITECH2  replaces=LABEL_025F40  confidence=high
+; Rate for pair 3 = table_0x011963[paramA+44]; writes shadow words 0x0451E6 (TG bank
+; 0x840) and 0x0451E8 (TG bank 0x880) and returns.
+
+[ROUTINE] 0x025F7F VOICE_UPDATEPAN_MONO  replaces=LABEL_025F7F  confidence=high
+; Voice_UpdatePan_Mono(XWA = voice-slot record) -- the same three-pair computation as
+; Voice_UpdatePan_Full, for the voice type that has no per-oscillator trim on the base
+; pair but does have one on pairs 2 and 3. Called from Voice_Release_Type4_BranchA.
+;
+; Differences from the _Full variant, all verified against the disassembly:
+;   * pair 1 level is table_0x011899[paramA+39] with NO tonerec byte added and no
+;     0..0x64 clamp before the lookup;
+;   * pairs 2 and 3 add the signed tonerec[0x010B] byte to paramA+41 / paramA+43 and
+;     clamp to 0..0x64 before the table_0x0118FE lookup;
+;   * the modulation term for pairs 2/3 is added to BOTH pairs (the _Full variant adds
+;     it to pair 2 and pair 3 separately, without the extra IZ term).
+; The result words and their destinations (0x0451E4/E6/E8) are identical.
+;
+; Note that its tail labels are named "..._Full2_..." in the current build; see
+; [UNCERTAIN] below.
+
+[LABEL] 0x025FA4 VOICE_UPDATEPAN_MONO_SETINVFLAG  replaces=LABEL_025FA4  confidence=high
+; Bit 4 of tonerec-ish record (slot+19)[+16] clear -> set bit 15 of slot+1; set -> clear
+; it. Same polarity flag the _Full variant maintains.
+
+[LABEL] 0x025FAC VOICE_UPDATEPAN_MONO_COMPUTEPAN  replaces=LABEL_025FAC  confidence=high
+; Base level = table_0x011899[paramA+39]; then the LFO / depth modulation chain.
+
+[LABEL] 0x02603A VOICE_UPDATEPAN_MONO_NOPANDEPTH  replaces=LABEL_02603A  confidence=high
+; paramA+46 == 0: add only the Pan_ScaleWithVelocity term, clamp 0..0xFF.
+
+[LABEL] 0x02604D VOICE_UPDATEPAN_MONO_NOPANLFO  replaces=LABEL_02604D  confidence=high
+; paramA+51 == 0: skip the velocity/LFO scaler entirely.
+
+[LABEL] 0x026083 VOICE_UPDATEPAN_MONO_CHECKMAX  replaces=LABEL_026083  confidence=high
+; Same 0xFF reservation as Voice_UpdatePan_Full_CheckMax.
+
+[LABEL] 0x026099 VOICE_UPDATEPAN_MONO_WRITEDSP  replaces=LABEL_026099  confidence=high
+; Writes pair 1 to 0x0451E4 and slot+60, then builds pairs 2 and 3 with the tonerec
+; [0x010B] trim added before the 0x0118FE lookup.
+
+[LABEL] 0x0261BC VOICE_UPDATEPAN_FULL2_NOMODDEPTH  replaces=LABEL_0261BC  confidence=medium
+; Tail of Voice_UpdatePan_Mono: paramA+47 == 0 -> add only the LFO scaler to pairs 2/3.
+; The "Full2" in the name is a misnomer; this code belongs to _Mono (see [UNCERTAIN]).
+
+[LABEL] 0x0261E0 VOICE_UPDATEPAN_FULL2_NOPANDEPTH  replaces=LABEL_0261E0  confidence=medium
+; Tail of Voice_UpdatePan_Mono: paramA+52 == 0 -> apply only the paramA+47 depth term.
+
+[LABEL] 0x026226 VOICE_UPDATEPAN_FULL2_WRITECHDEPTH  replaces=LABEL_026226  confidence=medium
+; Tail of Voice_UpdatePan_Mono: rate for pair 2, floored at 4.
+
+[LABEL] 0x026244 VOICE_UPDATEPAN_FULL2_WRITECH2  replaces=LABEL_026244  confidence=medium
+; Tail of Voice_UpdatePan_Mono: rate for pair 3; writes 0x0451E6 and 0x0451E8; returns.
+
+[ROUTINE] 0x026283 VOICE_INTERPOLATEPANCURVE  replaces=LABEL_026283  confidence=high
+; Voice_InterpolatePanCurve(XWA = voice-slot record, XBC = paramA record) -> HL.
+; Velocity crossfade/zone shaper. Takes the velocity byte from slot+8 (bits 8..14) and
+; four breakpoints from the paramA record:
+;     +30 = plateau low edge      +31 = fade-out low edge
+;     +32 = plateau high edge     +33 = fade-out high edge
+; Returns 0 inside the plateau [+30..+32]; a linear ramp in [0..-64] between +31 and +30
+; and between +32 and +33 (numerator scaled by 0xFFC0 = -64, divided by the breakpoint
+; span with a signed 32/16 divs); and the constant 0xFE00 (-512) outside [+31..+33].
+; Pure computation; no hardware, no memory written.
+; Sole caller: Voice_ComputePitch_ApplyLFO, which ADDS the result into the pitch
+; accumulator -- so despite the "Pan" in the name this is a pitch-domain correction.
+
+[LABEL] 0x0262A4 VOICE_INTERPOLATEPANCURVE_LOWRANGE  replaces=LABEL_0262A4  confidence=high
+; Velocity between +31 and +30: ramp -64 -> 0 as velocity rises.
+
+[LABEL] 0x0262C9 VOICE_INTERPOLATEPANCURVE_HIGHCHECK  replaces=LABEL_0262C9  confidence=high
+; Velocity at or above +30: test it against the upper plateau edge +32.
+
+[LABEL] 0x0262E0 VOICE_INTERPOLATEPANCURVE_HIGHRANGE  replaces=LABEL_0262E0  confidence=high
+; Velocity between +32 and +33: ramp 0 -> -64 as velocity rises.
+
+[LABEL] 0x026309 VOICE_INTERPOLATEPANCURVE_ZERO  replaces=LABEL_026309  confidence=high
+; Inside the plateau: return 0 (no correction).
+
+[LABEL] 0x02630B VOICE_INTERPOLATEPANCURVE_DONE  replaces=LABEL_02630B  confidence=high
+; Common return.
+
+[ROUTINE] 0x02630C VOICE_INTERPOLATENOTECURVE  replaces=LABEL_02630C  confidence=high
+; Voice_InterpolateNoteCurve(XWA = voice-slot record, XBC = paramA record) -> HL.
+; Byte-for-byte the same shaper as Voice_InterpolatePanCurve, but keyed on the MIDI note
+; number (slot+12 & 0x7F) and using paramA breakpoints +34/+35/+36/+37 instead of
+; +30..+33. Returns 0 / [0..-64] / -512 with the same meanings.
+; Sole caller: Voice_ComputePitch_ApplyLFO, added to the pitch accumulator.
+
+[LABEL] 0x02632E VOICE_INTERPOLATENOTECURVE_LOWRANGE  replaces=LABEL_02632E  confidence=high
+; Note between +35 and +34: ramp -64 -> 0.
+
+[LABEL] 0x026353 VOICE_INTERPOLATENOTECURVE_HIGHCHECK  replaces=LABEL_026353  confidence=high
+; Note at or above +34: test against the upper plateau edge +36.
+
+[LABEL] 0x02636A VOICE_INTERPOLATENOTECURVE_HIGHRANGE  replaces=LABEL_02636A  confidence=high
+; Note between +36 and +37: ramp 0 -> -64.
+
+[LABEL] 0x026393 VOICE_INTERPOLATENOTECURVE_ZERO  replaces=LABEL_026393  confidence=high
+; Inside the plateau: return 0.
+
+[LABEL] 0x026395 VOICE_INTERPOLATENOTECURVE_DONE  replaces=LABEL_026395  confidence=high
+; Common return.
+
+[ROUTINE] 0x026396 VOICE_COMPUTEPITCH  replaces=LABEL_026396  confidence=high
+; Voice_ComputePitch(XWA = voice-slot record). Computes the voice's pitch word and
+; stores it at slot+13; also clears the portamento offset at slot+51.
+; Callers: Voice_Init_Type4, Voice_Release_Type4, Voice_Release_Type4_BranchA.
+;
+; Inputs: slot+12 = MIDI note (bit 7 is a flag, not part of the note -- if set, bit 11
+; of slot+1 is raised); slot+23 = paramA record; slot+15, slot+35 = controller and tone
+; records; global tuning-mode word 0x041343; global master offset dword at 0x045314.
+;
+; Two mutually exclusive note->pitch mappings:
+;   * ALTERNATE mapping, taken when bit 0 of 0x041343 is set (set by
+;     Voice_SetPolyphonyMode with A==1), or bit 1 is set (Voice_SetCCMaxFlag), or
+;     paramA+25 == 0xE0: pitch = table_0x011C96[note] - 0x0C. That table is a plain
+;     128-byte monotonic curve 0x00..0xFF -- a direct, un-detuned note->increment map.
+;   * NORMAL mapping: table_0x00FEE4[note] fed through Voice_Colour_LookupIndex with
+;     paramA+25, minus 0xD0, multiplied by the signed detune paramA+24, arithmetic-
+;     shifted right by 5 and biased by +0xD8.
+;
+; Both paths then converge on _ApplyLFO, which sums: the LFO/velocity scaler
+; (paramA+26..+29 via Voice_Colour_ClampUpper), table_0x011A4F[slot+43 & 0x7F] (a signed
+; +-8 fine-tune curve), the signed byte at (slot+15)+3, the 32-bit global at 0x045314,
+; the constant 0x2940, and the two crossfade corrections from
+; Voice_InterpolatePanCurve / Voice_InterpolateNoteCurve. If bit 7 of paramA[0] is set,
+; tonerec[0x011E] is added on top.
+; Touches no hardware; the result reaches the TG later via Voice_ApplyPortamento ->
+; Voice_Colour_Write.
+
+[LABEL] 0x0263BC VOICE_COMPUTEPITCH_CHECKSYSEXTUNE  replaces=LABEL_0263BC  confidence=high
+; Mask the note to 7 bits; select the alternate table if 0x041343 bit 0 is set or
+; paramA+25 == 0xE0.
+
+[LABEL] 0x0263D3 VOICE_COMPUTEPITCH_SYSEXTABLE  replaces=LABEL_0263D3  confidence=high
+; Alternate mapping: IZ = table_0x011C96[note] - 0x0C.
+
+[LABEL] 0x0263EB VOICE_COMPUTEPITCH_CHECKALTTUNE  replaces=LABEL_0263EB  confidence=high
+; Second entry point to the alternate mapping, gated on 0x041343 bit 1.
+
+[LABEL] 0x02640C VOICE_COMPUTEPITCH_NORMALTUNE  replaces=LABEL_02640C  confidence=high
+; Normal mapping, negative-detune arm: negate paramA+24 before the multiply.
+
+[LABEL] 0x026451 VOICE_COMPUTEPITCH_PORTAPOSITIVE  replaces=LABEL_026451  confidence=high
+; Normal mapping, non-negative-detune arm.
+
+[LABEL] 0x026476 VOICE_COMPUTEPITCH_PORTASCALE  replaces=LABEL_026476  confidence=high
+; Common scaling of the detuned value: >>5 (arithmetic) then bias +0xD8.
+
+[LABEL] 0x02647F VOICE_COMPUTEPITCH_APPLYLFO  replaces=LABEL_02647F  confidence=high
+; Accumulates every additive pitch term (LFO scaler, 0x011A4F fine tune, controller
+; byte, global 0x045314, +0x2940, velocity and key crossfades, optional tonerec[0x011E]).
+
+[LABEL] 0x026510 VOICE_COMPUTEPITCH_WRITEDONE  replaces=LABEL_026510  confidence=high
+; Store the accumulator to slot+13 and clear the portamento offset slot+51.
+
+[ROUTINE] 0x026522 VOICE_COMPUTEPITCH_INLINEDATA  replaces=LABEL_026522  confidence=high
+; Despite the name, these 17 bytes are EXECUTABLE CODE, not data. Disassembled:
+;     cp WA,DE / jr GE,+ / ld WA,DE / jr + / cp WA,BC / jr LE,+ / ld WA,BC / ld HL,WA / ret
+; i.e. "clamp WA into [DE..BC], return in HL" -- the same operation as
+; ClampS16_WA_To_DEBC at 0x022B19, with the low bound tested first (that routine tests
+; the high bound first). Nothing in the image references it; it is dead code left between
+; Voice_ComputePitch and Voice_ComputePitch_Mono. It is emitted as .byte in the LLVM
+; source purely so the byte-exact rebuild is preserved.
+
+[ROUTINE] 0x026533 VOICE_COMPUTEPITCH_MONO  replaces=LABEL_026533  confidence=high
+; Voice_ComputePitch_Mono(XWA = voice-slot record). The cut-down pitch computation used
+; by the mono/legato voice types; callers are Voice_Init_Type1 and Voice_Init_Type2.
+; Same two mappings as Voice_ComputePitch (alternate table 0x011C96 gated on 0x041343
+; bits 0/1 or paramA+7 == 0xE0; otherwise the 0x00FEE4 + Voice_Colour_LookupIndex path
+; scaled by the signed detune at paramA+6), but it reads its detune/curve selectors from
+; paramA+6/+7 instead of +24/+25, and its _ApplyLFO tail omits the velocity/key
+; crossfades and the tonerec[0x011E] term. Writes slot+13 and clears slot+51.
+
+[LABEL] 0x02655D VOICE_COMPUTEPITCH_MONO_SYSEXTABLE  replaces=LABEL_02655D  confidence=high
+; Alternate mapping: HL = table_0x011C96[note] - 0x0C.
+
+[LABEL] 0x026574 VOICE_COMPUTEPITCH_MONO_CHECKALTTUNE  replaces=LABEL_026574  confidence=high
+; Second gate on 0x041343 bit 1 into the alternate mapping.
+
+[LABEL] 0x026593 VOICE_COMPUTEPITCH_MONO_CHECKPORTA  replaces=LABEL_026593  confidence=high
+; Normal mapping, negative-detune arm (paramA+6 < 0).
+
+[LABEL] 0x0265CD VOICE_COMPUTEPITCH_MONO_PORTAPOSITIVE  replaces=LABEL_0265CD  confidence=high
+; Normal mapping, non-negative-detune arm.
+
+[LABEL] 0x0265EA VOICE_COMPUTEPITCH_MONO_PORTASCALE  replaces=LABEL_0265EA  confidence=high
+; >>5 then bias +0xD8.
+
+[LABEL] 0x0265F1 VOICE_COMPUTEPITCH_MONO_APPLYLFO  replaces=LABEL_0265F1  confidence=high
+; Adds table_0x011A4F[slot+43 & 0x7F], the byte at (slot+15)+3, the global at 0x045314
+; and +0x2940; stores to slot+13 and clears slot+51.
+
+[ROUTINE] 0x026637 VOICE_APPLYPORTAMENTO  replaces=LABEL_026637  confidence=high
+; Voice_ApplyPortamento(XWA = voice-slot record). Takes the pitch computed at slot+13,
+; applies the channel detune and the key-shift correction, and tail-jumps into
+; Voice_Colour_Write (which adds tonerec[+12], tonerec[+16] and the portamento offset
+; slot+51, clamps, and pushes the value at the tone generator).
+; Detune: paramA+23 non-zero -> add (paramA+23 - 0x64); zero -> subtract 0x200.
+; Then always add the signed byte (slot+39)[+34].
+; If bit 1 of the global mode word 0x041343 is set: for slot+4 <= 1 subtract
+; tonerec[+16] and a further 8; otherwise subtract 0x10.
+; Callers: Voice_Init_Type4, Voice_Release_Type4(_BranchA),
+; Voice_AllVoices_WriteAmplitude_BranchA, and both portamento ramp write-backs
+; (Voice_UpdatePortamento_Ascend_WritePitch / _Release_WritePitch).
+
+[LABEL] 0x026653 VOICE_APPLYPORTAMENTO_NOCHANDETUNE  replaces=LABEL_026653  confidence=high
+; paramA+23 == 0: apply the fixed -0x200 bias instead of a channel detune.
+
+[LABEL] 0x026657 VOICE_APPLYPORTAMENTO_APPLYDETUNE  replaces=LABEL_026657  confidence=high
+; Add the signed byte (slot+39)[+34], then test 0x041343 bit 1 for the key-shift arm.
+
+[LABEL] 0x02667B VOICE_APPLYPORTAMENTO_HIGHNOTE  replaces=LABEL_02667B  confidence=high
+; slot+4 > 1 arm of the key-shift correction: subtract a flat 0x10.
+
+[LABEL] 0x02667F VOICE_APPLYPORTAMENTO_DONE  replaces=LABEL_02667F  confidence=high
+; Move the result to BC and tail-jump to Voice_Colour_Write.
+
+[ROUTINE] 0x026684 VOICE_APPLYPORTAMENTO2  replaces=LABEL_026684  confidence=high
+; Voice_ApplyPortamento2(XWA = voice-slot record). The mono/legato counterpart of
+; Voice_ApplyPortamento. Channel detune comes from paramA+5 (not +23), there is no
+; (slot+39)[+34] term, and the key-shift arm additionally subtracts tonerec[+12] and then
+; adds back a vibrato contribution of tonerec[+12] >> 2 -- except when tonerec[+12] is
+; exactly 0xFE00, in which case the raw 0xFE00 is added (a sentinel, the same -512 value
+; the crossfade shapers use). Tail-jumps to Voice_Colour_Write.
+; Callers: Voice_Init_Type1, Voice_Init_Type2, Voice_AllVoices_WriteAmplitude_BranchB.
+
+[LABEL] 0x02669D VOICE_APPLYPORTAMENTO2_NOCHANDETUNE  replaces=LABEL_02669D  confidence=high
+; paramA+5 == 0: apply the fixed -0x200 bias.
+
+[LABEL] 0x0266A1 VOICE_APPLYPORTAMENTO2_APPLYDETUNE  replaces=LABEL_0266A1  confidence=high
+; Key-shift arm gated on 0x041343 bit 1; computes the tonerec[+12] vibrato term.
+
+[LABEL] 0x0266D1 VOICE_APPLYPORTAMENTO2_ADDVIBRATO  replaces=LABEL_0266D1  confidence=high
+; Add the vibrato term (either tonerec[+12]>>2 or the 0xFE00 sentinel).
+
+[LABEL] 0x0266D3 VOICE_APPLYPORTAMENTO2_DONE  replaces=LABEL_0266D3  confidence=high
+; Move to BC and tail-jump to Voice_Colour_Write.
+
+[ROUTINE] 0x0266D8 VOICE_WRITECHPITCHWITHVIB  replaces=LABEL_0266D8  confidence=high
+; Voice_WriteChPitchWithVib(WA = part index, BC = MIDI channel). Broadcasts one part's
+; note-level register pair to every voice slot currently owned by that channel.
+; Sole caller: Voice_SetVelocity_Type80_SlotLoop.
+;
+; Reads the per-channel record at 0x0430AD + ch*0x47; returns immediately unless bit 3 of
+; its first byte is set. Byte +14 of that record indexes the 0x011AE8 table (a flat table
+; of 0x96), and the result is staged as (v<<8)|0x80 at 0x0451F8 and (v<<8) at 0x0451FA --
+; i.e. TG banks 0x800 and 0x840.
+; It then calls Voice_AllocateForAny's sibling Voice_AllocateForFull to obtain a
+; NUL-list of matching slot indices at (XHL+5) and, for each slot whose channel byte
+; (record 0x0430AD + slot*0x47, offset +14) matches, calls ToneGen_WriteNote_2Regs to
+; push shadow offsets +44/+46 into TG banks 0x800/0x840 through 0x100000/0x100002.
+
+[LABEL] 0x026737 VOICE_WRITECHPITCHWITHVIB_LOOP  replaces=LABEL_026737  confidence=high
+; Per-slot body: match the slot's channel byte, then push the two TG registers.
+
+[LABEL] 0x02675E VOICE_WRITECHPITCHWITHVIB_NEXTSLOT  replaces=LABEL_02675E  confidence=high
+; Advance the slot-list cursor; the list terminates on the first index >= 0x40.
+
+[LABEL] 0x026765 VOICE_WRITECHPITCHWITHVIB_DONE  replaces=LABEL_026765  confidence=high
+; Restore IZ and return.
+
+[LABEL] 0x0267EE VOICE_COMPUTEANDWRITEVOLUME1_APPLYLFO  replaces=LABEL_0267EE  confidence=high
+; Body of Voice_ComputeAndWriteVolume1 (entry 0x026769, already named -- left alone).
+; That routine computes the level for register pair 1 from tonerec[108] + paramA+45,
+; clamped 0..0x64 and curved through table_0x0118FE, optionally capped by
+; table_0x0118FE[table_0x011ADF[tonerec+24]] when bit 0 of tonerec+10 is set and bit 8 of
+; slot+1 is clear.
+; This label is the modulation stage: if paramA+53 is non-zero, add
+; Pan_ScaleWithVelocity(paramA+48..+50, depth paramA+53, velocity slot+8) and re-clamp
+; through Voice_Clamp_Byte_HL.
+
+[LABEL] 0x02682F VOICE_COMPUTEANDWRITEVOLUME1_WRITEDSP  replaces=LABEL_02682F  confidence=high
+; Stage the result: 0x0451F8 = (level<<8)|0x0080, 0x0451FA = (level<<8). These are shadow
+; offsets +44/+46, pushed to TG banks 0x800 and 0x840 by ToneGen_WriteNote*. Bit 7 of the
+; low byte is the "apply now" flag that the note-on/full-dump path leaves clear.
+
+[ROUTINE] 0x02685B VOICE_WRITEVOLUME_SETFLAG  replaces=LABEL_02685B  confidence=high
+; Voice_WriteVolume_SetFlag(XWA = voice-slot record). Two-instruction helper: copies the
+; already-computed pair-1 word from slot+64 into shadow 0x0451F8 with bit 7 forced set,
+; and the same word verbatim into 0x0451FA. Used to re-assert an existing level without
+; recomputing it. Sole caller: Voice_AllNotes_SustainRetrigger_BranchE.
+
+[ROUTINE] 0x02686F VOICE_COMPUTEVOLUME_CAPPEDLFO  replaces=LABEL_02686F  confidence=high
+; Voice_ComputeVolume_CappedLFO(XWA = voice-slot record). Variant of
+; Voice_ComputeAndWriteVolume1 used on the voice-cut path (sole caller:
+; Voice_Cut_BranchB). Difference: when bit 0 of tonerec+10 is SET the level is taken as
+; the SMALLER of table_0x0118FE[table_0x011ADF[tonerec+24]] and
+; table_0x0118FE[paramA+45] -- i.e. the oscillator ceiling wins outright rather than only
+; capping. When the bit is clear it falls back to the tonerec[0x010D] + paramA+45 path.
+; Stages the result to 0x0451F8/0x0451FA exactly as Volume1 does.
+
+[LABEL] 0x0268E3 VOICE_COMPUTEVOLUME_CAPPEDLFO_USEOSCMAX  replaces=LABEL_0268E3  confidence=high
+; tonerec+10 bit 0 clear: level = curve(clamp(tonerec[0x010D] + paramA+45, 0..0x64)).
+
+[LABEL] 0x026919 VOICE_COMPUTEVOLUME_CAPPEDLFO_APPLYLFO  replaces=LABEL_026919  confidence=high
+; Optional paramA+53 velocity/LFO term, then Voice_Clamp_Byte_HL.
+
+[LABEL] 0x02695A VOICE_COMPUTEVOLUME_CAPPEDLFO_WRITEDSP  replaces=LABEL_02695A  confidence=high
+; Stage 0x0451F8 = (level<<8)|0x0080 and 0x0451FA = (level<<8).
+
+[LABEL] 0x0269CE VOICE_COMPUTEANDWRITEVOLUME2_APPLYLFO  replaces=LABEL_0269CE  confidence=high
+; Body of Voice_ComputeAndWriteVolume2 (entry 0x026975, already named). That routine
+; builds register pair 2 (shadow +48/+50 -> TG banks 0x900/0x940) from
+; table_0x0118FE[paramA+15], optionally capped by the tonerec+24 oscillator ceiling.
+; This label applies the paramA+22 velocity/LFO depth via Pan_ScaleWithVelocity with a
+; fixed 0x7F ceiling.
+
+[LABEL] 0x026A2E VOICE_COMPUTEANDWRITEVOLUME2_NOKEYTRACK  replaces=LABEL_026A2E  confidence=high
+; paramA+17 == 0: skip the key-tracking term, just clamp 0..0xFF.
+
+[LABEL] 0x026A3C VOICE_COMPUTEANDWRITEVOLUME2_NOLFO  replaces=LABEL_026A3C  confidence=high
+; paramA+22 == 0: no velocity term; apply only the paramA+17 key-tracking term via
+; PitchBend_Scale(note = slot+12).
+
+[LABEL] 0x026A6E VOICE_COMPUTEANDWRITEVOLUME2_WRITEDSP  replaces=LABEL_026A6E  confidence=high
+; Chooses the detune arm from the sign of paramA+7 and scales paramA+16 through
+; Detune_ScaleSymmetric to produce the pair's low byte.
+
+[LABEL] 0x026A88 VOICE_COMPUTEANDWRITEVOLUME2_POSITIVEDETUNE  replaces=LABEL_026A88  confidence=high
+; paramA+7 >= 0: use paramA+16 unnegated.
+
+[LABEL] 0x026A93 VOICE_COMPUTEANDWRITEVOLUME2_WRITERESULT  replaces=LABEL_026A93  confidence=high
+; Stage (level<<8)|detune into BOTH 0x0451FC and 0x0451FE (shadow +48/+50, TG banks
+; 0x900 and 0x940 -- the pair is written with the same word twice).
+
+[LABEL] 0x026B03 VOICE_COMPUTEANDWRITEVOLUME3_APPLYLFO  replaces=LABEL_026B03  confidence=high
+; Body of Voice_ComputeAndWriteVolume3 (entry 0x026AAA, already named). Identical in
+; shape to Volume2 but reading paramA+69/+73/+76/+71/+70/+61 instead of
+; +15/+19/+22/+17/+16/+7, and staging to 0x045200/0x045202 (shadow +52/+54, TG banks
+; 0x9C0 and 0xA00).
+
+[LABEL] 0x026B63 VOICE_COMPUTEANDWRITEVOLUME3_NOKEYTRACK  replaces=LABEL_026B63  confidence=high
+; paramA+71 == 0: skip key tracking, clamp 0..0xFF.
+
+[LABEL] 0x026B71 VOICE_COMPUTEANDWRITEVOLUME3_NOLFO  replaces=LABEL_026B71  confidence=high
+; paramA+76 == 0: key tracking only.
+
+[LABEL] 0x026BA3 VOICE_COMPUTEANDWRITEVOLUME3_WRITEDSP  replaces=LABEL_026BA3  confidence=high
+; Sums paramA+61 and paramA+70, clamps to -0x32..+0x32, scales via
+; Detune_ScaleSymmetric, and stages (level<<8)|detune to 0x045200 and 0x045202.
+
+[ROUTINE] 0x026C16 VOICE_WRITEVOLUME_ORPAN  replaces=LABEL_026C16  confidence=high
+; Voice_WriteVolume_OrPan(XWA = voice-slot record). If bit 5 of (slot+19)[+13] is set,
+; stage pair 1 from table_0x0118FE[paramA+13]: 0x0451FA = (v<<8), 0x0451F8 = (v<<8)|0x80.
+; Otherwise stage silence (0x0451F8 = 0x0080, 0x0451FA = 0x0000).
+; Sole caller: Voice_AllNotes_SustainRetrigger_BranchF.
+
+[LABEL] 0x026C43 VOICE_WRITEVOLUME_ORPAN_MUTED  replaces=LABEL_026C43  confidence=high
+; Muted arm: level 0 with the "apply now" bit set.
+
+[ROUTINE] 0x026C52 VOICE_ADVANCELFOPHASE  replaces=LABEL_026C52  confidence=high
+; Voice_AdvanceLFOPhase(XWA = 9-byte LFO sub-record) -> HL = phase output.
+; The sub-record fields used are: +0 flags/mode, +7 period, +8 phase counter.
+; Mode = (flags & 0x1C):
+;   0x08 "triangle": ++phase; while phase < period return (phase<<8)/period; when it
+;        reaches the period, reset phase to 0, clear flag bit 3, set bit 2, return 0x100.
+;   0x10 "ramp/hold": ++phase; return 0; when phase reaches the period, reset it, clear
+;        flag bit 4 and set bit 3.
+;   anything else: return 0 (idle).
+; Called only from the three loops of Voice_UpdateAllLFO.
+
+[LABEL] 0x026C75 VOICE_ADVANCELFOPHASE_INCDONE  replaces=LABEL_026C75  confidence=high
+; Ramp/hold mode still running: return 0.
+
+[LABEL] 0x026C79 VOICE_ADVANCELFOPHASE_TRIANGLE  replaces=LABEL_026C79  confidence=high
+; Triangle mode: advance and return the scaled phase (phase<<8)/period.
+
+[LABEL] 0x026C9E VOICE_ADVANCELFOPHASE_TRIANGLERESET  replaces=LABEL_026C9E  confidence=high
+; Triangle wrap: phase = 0, flag bit 3 -> bit 2, return 0x100 (full scale).
+
+[LABEL] 0x026CAB VOICE_ADVANCELFOPHASE_IDLE  replaces=LABEL_026CAB  confidence=high
+; Unrecognised mode: return 0.
+
+[LABEL] 0x026CAD VOICE_ADVANCELFOPHASE_DONE  replaces=LABEL_026CAD  confidence=high
+; Common return.
+
+[ROUTINE] 0x026CAE VOICE_UPDATEALLLFO  replaces=LABEL_026CAE  confidence=high
+; Voice_UpdateAllLFO(). The per-tick LFO service; the single heaviest thing in the audio
+; tick. Sole caller: Voice_ScanAndCancelNoteOff.
+;
+; Walks the LFO record array at 0x04424E, 27 (0x1B) bytes per slot, as THREE interleaved
+; 9-byte sub-records: base 0x04424E (128 slots), base 0x044257 (64 slots) and base
+; 0x044260 (128 slots) -- 320 iterations per call, each doing a 64-bit multiply
+; (FP_MulAccum64) for the index scaling and, when the LFO is running, a full tone-
+; generator register write.
+;
+; Per slot: skip unless (flags & 0x18); call Voice_AdvanceLFOPhase; skip if the phase
+; output is 0. Otherwise convert the phase through EGEnv_Compute_A (group 1),
+; EGEnv_Compute_B (group 2) or Voice_Freq_WriteLeft (group 3), keep the result in the
+; scratch words 0x04520C / 0x045204 / 0x04520E, and unless the phase was exactly 0x0100
+; fold (result & 0x1FFF) * phase >> 8 back into the low 13 bits of that scratch word.
+; Finally dispatch the value into the TG shadow block at 0x0451CC via
+; ToneGen_WriteExtParam_600 (group 1), ToneGen_WriteExtParam_1C0_Single (group 2) or
+; ToneGen_WriteExtParam_TypeDispatch_Single (group 3).
+; Hardware touched (indirectly, through those writers): the TG address/data latch pair at
+; 0x100000 / 0x100002.
+
+[LABEL] 0x026CB7 VOICE_UPDATEALLLFO_LOOP1  replaces=LABEL_026CB7  confidence=high
+; Group 1 body: 128 sub-records at 0x04424E, EGEnv_Compute_A, scratch 0x04520C.
+
+[LABEL] 0x026D1A VOICE_UPDATEALLLFO_DISPATCHVOICE1  replaces=LABEL_026D1A  confidence=high
+; Push the group-1 result for this slot with ToneGen_WriteExtParam_600.
+
+[LABEL] 0x026D25 VOICE_UPDATEALLLFO_NEXTSLOT1  replaces=LABEL_026D25  confidence=high
+; ++slot; loop while slot < 0x80.
+
+[LABEL] 0x026D2D VOICE_UPDATEALLLFO_LOOP2  replaces=LABEL_026D2D  confidence=high
+; Group 2 preamble: reset the slot counter, bail out to group 3 if 0x40 slots is none.
+
+[LABEL] 0x026D35 VOICE_UPDATEALLLFO_LOOP2_BODY  replaces=LABEL_026D35  confidence=high
+; Group 2 body: 64 sub-records at 0x044257, EGEnv_Compute_B, scratch 0x045204.
+
+[LABEL] 0x026D9A VOICE_UPDATEALLLFO_DISPATCHVOICE2  replaces=LABEL_026D9A  confidence=high
+; Push the group-2 result with ToneGen_WriteExtParam_1C0_Single.
+
+[LABEL] 0x026DA5 VOICE_UPDATEALLLFO_NEXTSLOT2  replaces=LABEL_026DA5  confidence=high
+; ++slot; loop while slot < 0x40.
+
+[LABEL] 0x026DAD VOICE_UPDATEALLLFO_LOOP3  replaces=LABEL_026DAD  confidence=high
+; Group 3 preamble: reset the slot counter for the 128-slot pass.
+
+[LABEL] 0x026DB6 VOICE_UPDATEALLLFO_LOOP3_BODY  replaces=LABEL_026DB6  confidence=high
+; Group 3 body: 128 sub-records at 0x044260, converted via Voice_Freq_WriteLeft.
+
+[LABEL] 0x026E1E VOICE_UPDATEALLLFO_DISPATCHGROUP3_HIGH  replaces=LABEL_026E1E  confidence=high
+; Slots 0x40..0x7F of group 3 fold their result into scratch 0x04520E instead of
+; 0x045204.
+
+[LABEL] 0x026E45 VOICE_UPDATEALLLFO_DISPATCHVOICE3  replaces=LABEL_026E45  confidence=high
+; Push the group-3 result with ToneGen_WriteExtParam_TypeDispatch_Single.
+
+[LABEL] 0x026E50 VOICE_UPDATEALLLFO_NEXTSLOT3  replaces=LABEL_026E50  confidence=high
+; ++slot; loop while slot < 0x80.
+
+[LABEL] 0x026E59 VOICE_UPDATEALLLFO_DONE  replaces=LABEL_026E59  confidence=high
+; Restore IZ and return.
+
+[LABEL] 0x026E9B VOICE_UPDATENOTEOFF_CHECKRELEASE  replaces=LABEL_026E9B  confidence=high
+; Body of Voice_UpdateNoteOff (entry 0x026E5B, already named -- left alone). That routine
+; drives the packed 16-bit countdown word at slot+47, which holds TWO independent timers:
+;   high byte, bit 15 = "note-off armed": each tick subtracts 0x100; when the high 7 bits
+;     reach zero it writes slot+45 to the voice's TG register through
+;     ToneGen_WriteSingleReg, calls VoiceSlot_Release, and clears bit 15;
+;   low byte, bit 7 = "release armed": handled at THIS label. Decrement by 1; when the
+;     low 7 bits reach zero, call Voice_Release for the slot and clear bit 7.
+; ★ These two paths are the ONLY way a slot goes back to the free pool during steady-
+; state playback (the other being the portamento terminal state), so any stall upstream
+; of Voice_UpdateNoteOff stops voice reclamation outright.
+
+[LABEL] 0x026EB9 VOICE_UPDATENOTEOFF_STOREDONE  replaces=LABEL_026EB9  confidence=high
+; Write the updated countdown word back to slot+47 and return.
+
+[LABEL] 0x026F1E VOICE_UPDATEPORTAMENTO_MODECHECK2  replaces=LABEL_026F1E  confidence=high
+; Body of Voice_UpdatePortamento (entry 0x026EC3, already named -- left alone). That
+; routine drives the per-slot glide/fade state word at slot+49: bits 0..6 are a delay
+; counter, bits 12..14 select the ramp mode, bit 15 marks the state machine active.
+; This label is the second of three arms selecting which TG register-0x180 value to write
+; before dispatching: part-record byte (0x04138E + part*0x11F) == 2.
+
+[LABEL] 0x026F4A VOICE_UPDATEPORTAMENTO_MODEDEFAULT  replaces=LABEL_026F4A  confidence=high
+; Neither part mode 1 nor 2: merge (slot+39)[+36] into the low bits of slot+43 and write
+; that through ToneGen_WriteSingleReg_180.
+
+[LABEL] 0x026F78 VOICE_UPDATEPORTAMENTO_ZEROSTATE  replaces=LABEL_026F78  confidence=high
+; Bit 11 of the state word clear: write slot+43 to TG register bank 0x180 unmodified.
+
+[LABEL] 0x026F89 VOICE_UPDATEPORTAMENTO_DISPATCHMODE  replaces=LABEL_026F89  confidence=high
+; Dispatch on (state & 0x7000): 0x1000 -> Release ramp, 0x2000 -> Descend, 0x4000 ->
+; Ascend, anything else -> NullMode (state cleared).
+
+[LABEL] 0x026FDD VOICE_UPDATEPORTAMENTO_ASCEND_TICK  replaces=LABEL_026FDD  confidence=high
+; Ascend arm, still ramping. Writes TG bank 0x840 = 0xFF00 directly (address latch
+; 0x100000 = slot + 0x840, data latch 0x100002), with the maskable-interrupt gate around
+; the latch pair (res/set bit 7 of SFR 0x18).
+; The terminal value the ramp counts toward is 0xFF00; on reaching it the slot is handed
+; to VoiceSlot_Release + Voice_Release and the mode bits are cleared.
+
+[LABEL] 0x026FFD VOICE_UPDATEPORTAMENTO_ASCEND_TICK2  replaces=LABEL_026FFD  confidence=high
+; Second half of the same write burst: TG bank 0x800 = 0xFF80.
+
+[LABEL] 0x027020 VOICE_UPDATEPORTAMENTO_ASCEND_CLAMPFLOOR  replaces=LABEL_027020  confidence=high
+; Clamp the ramp accumulator at the per-slot floor slot+58; on clamping, clear state bit
+; 14 and set bit 13 (mode 0x4000 -> 0x2000, ascend hands over to descend).
+
+[LABEL] 0x027037 VOICE_UPDATEPORTAMENTO_ASCEND_WRITEPITCH  replaces=LABEL_027037  confidence=high
+; Store the accumulator to slot+51, re-derive the pitch via Voice_ApplyPortamento, then
+; push the whole shadow block with ToneGen_WriteVoiceParams_Ext.
+
+[LABEL] 0x027059 VOICE_UPDATEPORTAMENTO_DESCEND_TICK  replaces=LABEL_027059  confidence=high
+; Descend arm: TG bank 0x840 = 0xFF00.
+
+[LABEL] 0x027079 VOICE_UPDATEPORTAMENTO_DESCEND_TICK2  replaces=LABEL_027079  confidence=high
+; Descend arm: TG bank 0x800 = 0xFF80.
+
+[LABEL] 0x02709C VOICE_UPDATEPORTAMENTO_DESCEND_WRITEPITCH  replaces=LABEL_02709C  confidence=high
+; Push the shadow block with ToneGen_WriteVoiceParams_Ext2 (no pitch recompute on this
+; arm).
+
+[LABEL] 0x0270B0 VOICE_UPDATEPORTAMENTO_RELEASE_START  replaces=LABEL_0270B0  confidence=high
+; Release arm: accumulator += slot+56 (the release increment; the ascend arm uses
+; slot+54). On reaching 0xFF00 the slot is released exactly as in the ascend arm.
+
+[LABEL] 0x0270E8 VOICE_UPDATEPORTAMENTO_RELEASE_TICK  replaces=LABEL_0270E8  confidence=high
+; Release arm: TG bank 0x840 = 0xFF00.
+
+[LABEL] 0x027108 VOICE_UPDATEPORTAMENTO_RELEASE_TICK2  replaces=LABEL_027108  confidence=high
+; Release arm: TG bank 0x800 = 0xFF80.
+
+[LABEL] 0x02712B VOICE_UPDATEPORTAMENTO_RELEASE_WRITEPITCH  replaces=LABEL_02712B  confidence=high
+; Store to slot+51, Voice_ApplyPortamento, ToneGen_WriteVoiceParams_Ext.
+
+[LABEL] 0x02714F VOICE_UPDATEPORTAMENTO_NULLMODE  replaces=LABEL_02714F  confidence=high
+; Unrecognised mode bits: zero the state word so the slot stops being serviced.
+
+[LABEL] 0x027156 VOICE_UPDATEPORTAMENTO_ACTIVECOUNT  replaces=LABEL_027156  confidence=high
+; Delay-counter arm, taken when (state & 0x7F) != 0: the ramp has not started yet.
+; When the counter is exactly 1 it emits the "pre-roll" TG values (bank 0x840 = 0xA200,
+; bank 0x800 = 0xA280) before decrementing.
+
+[LABEL] 0x027181 VOICE_UPDATEPORTAMENTO_COUNTTICK  replaces=LABEL_027181  confidence=high
+; Second half of the pre-roll burst: TG bank 0x800 = 0xA280.
+
+[LABEL] 0x0271A4 VOICE_UPDATEPORTAMENTO_COUNTTICK2  replaces=LABEL_0271A4  confidence=high
+; Decrement the delay counter and fall through to the store.
+
+[LABEL] 0x0271AC VOICE_UPDATEPORTAMENTO_COUNTDECREMENT  replaces=LABEL_0271AC  confidence=high
+; Ordinary delay tick (counter != 1): just decrement.
+
+[LABEL] 0x0271AF VOICE_UPDATEPORTAMENTO_STOREDONE  replaces=LABEL_0271AF  confidence=high
+; Write the state word back to slot+49 and return.
+
+[LABEL] 0x0271E8 VOICE_APPLYTUNINGSYSEX_BIT12  replaces=LABEL_0271E8  confidence=high
+; Body of Voice_ApplyTuningSysEx (entry 0x0271BC, already named -- left alone). That
+; routine is the once-per-audio-tick step of the KEY SHIFT / transpose ramp, driven
+; entirely by the global mode word at 0x041343:
+;   bit 11 = "shift requested" (set by Voice_SetKeyShiftEnable). Loads the first entry of
+;            the signed semitone table at 0x011C7C, doubles it into the global pitch
+;            offset word 0x04135A, clears bit 11 and sets bits 10 and 12.
+;   bit 12 = "shift engaged". THIS LABEL: bump the step index 0x04135C and clear bit 10.
+;   bit 13 = "ramping"; bit 14 -> step index += 2, bit 15 -> step index += 1. Each step
+;            reloads 0x04135A = table_0x011C7C[index] * 2 and sets bit 10.
+;   bit 10 = "pitch offset changed" -- consumed by Voice_UpdateAllNoteStates, which uses
+;            it to choose the loop arm that re-writes every sounding voice's pitch.
+; The ramp self-terminates when the loaded offset is zero: entries 24 and 25 of the
+; 26-byte table are 0x00, and both the +1 and +2 step sequences from index 0 land on 24.
+; Also read by Voice_ComputePitch (bits 0/1) and Voice_ApplyPortamento (bit 1).
+
+[LABEL] 0x0271FF VOICE_APPLYTUNINGSYSEX_BIT13CHECK  replaces=LABEL_0271FF  confidence=high
+; bit 13 clear -> ClearMode; set -> choose the +2 (bit 14) or +1 (bit 15) step.
+
+[LABEL] 0x02723B VOICE_APPLYTUNINGSYSEX_BIT14CLEAR  replaces=LABEL_02723B  confidence=high
+; bit 14 clear: if bit 15 is set take the +1 step, otherwise zero the offset.
+
+[LABEL] 0x02726E VOICE_APPLYTUNINGSYSEX_ZEROPITCH  replaces=LABEL_02726E  confidence=high
+; No direction bit set: force the global pitch offset 0x04135A to 0 and raise bit 10.
+
+[LABEL] 0x02727C VOICE_APPLYTUNINGSYSEX_CHECKCOUNTER  replaces=LABEL_02727C  confidence=high
+; Termination test: return unless the offset word 0x04135A is now zero; when it is, clear
+; bits 13..15 of 0x041343, reset the step index 0x04135C and raise bit 10 one last time.
+
+[LABEL] 0x02729B VOICE_APPLYTUNINGSYSEX_CLEARMODE  replaces=LABEL_02729B  confidence=high
+; Ramp inactive: clear bit 10 and return.
+
+[ROUTINE] 0x0272A3 VOICE_INITVOICESTATE  replaces=LABEL_0272A3  confidence=high
+; Voice_InitVoiceState(WA = channel index). Loads the whole 22-word tone-generator shadow
+; block at 0x0451CC with power-on defaults, immediately before the caller pushes it to
+; the chip. Sole caller: Voice_TickNoteDecay.
+; Notable defaults: 0x0451E4 = 0xFF7F (register pair 1 = maximum attenuation, maximum
+; rate -- i.e. silent); 0x0451E6 and 0x0451E8 copied from the global word 0x041362 (set
+; to 0x8000 or 0xA000 by Voice_SetRhythmMode); 0x0451DA from 0x041360; 0x0451D4 = 0x017F,
+; 0x0451D6 = 0x7F7F, 0x0451D8 = 0x0040; 0x0451D0 = table_0x010764[0x041364] * 4; every
+; other word zeroed. Finally stores 0xF0 into the per-channel record byte at
+; 0x0430BB + ch*0x47.
+
+[ROUTINE] 0x027363 VOICE_TICKNOTEDECAY  replaces=LABEL_027363  confidence=high
+; Voice_TickNoteDecay(). Rhythm/percussion decay tick. Sole caller:
+; Voice_UpdateAllNoteStates (first thing it does).
+; Returns immediately unless the mode byte 0x04135E is non-zero. Decrements the counter
+; at 0x04135F and returns unless it reached zero. On the zero tick it calls
+; Voice_SetPanning on a stack scratch structure and, if the channel index in that
+; structure is below 0x40, calls Voice_InitVoiceState followed by
+; ToneGen_WriteVoiceParams (base 0x0451CC) -- a full 22-register reload of that channel --
+; and then one further ToneGen_WriteSingleReg using the word at 0x0430BB + ch*0x47.
+; 0x04135E/0x04135F are set by Voice_SetRhythmMode.
+
+[LABEL] 0x0273C6 VOICE_TICKNOTEDECAY_RELOAD  replaces=LABEL_0273C6  confidence=high
+; Reload the divider: decrement the counter at 0x04135E and reset 0x04135F to 4.
+
+[LABEL] 0x0273D1 VOICE_TICKNOTEDECAY_DONE  replaces=LABEL_0273D1  confidence=high
+; Restore and return.
+
+[ROUTINE] 0x0273D8 VOICE_LOADPITCHTABLE_CH  replaces=LABEL_0273D8  confidence=high
+; Voice_LoadPitchTable_Ch(A = part index, C = ramp position). Despite the name it does
+; not load a table: it SCALES two DSP algorithm parameters by the ramp position and
+; broadcasts the result to every voice of the part.
+; Steps: DSP_AlgoType_Dispatch2(part, 1) * C >> 8, floored at 0x2C, stored to the scratch
+; 0x045208 and to the per-part word 0x0413C5 + part*0x11F; then
+; DSP_AlgoType_Dispatch1(part, 1) * table_0x010DCE[C] >> 8 stored to 0x04520C and to
+; 0x0413C3 + part*0x11F; then Voice_BuildOutputList(part, 0x0D, 0) and, for every entry,
+; ToneGen_WriteExtParams_56 with the shadow base 0x0451CC.
+; The output list is a 16-bit array in the scratch buffer at 0x27E9, terminated by
+; 0xFFFF; the loop runs while (entry & 0xFF) < 0x80, so at most 27 entries.
+; Callers: Voice_ToneTableRamp_Up_Increment, Voice_ToneTableRamp_Down_Decrement,
+; Voice_ToneTableApply_Pitch_Loop, Voice_ToneTableApply_Filter_Loop.
+
+[LABEL] 0x027424 VOICE_LOADPITCHTABLE_CH_NOCLAMP  replaces=LABEL_027424  confidence=high
+; Scaled value already >= 0x2C: store it unclamped.
+
+[LABEL] 0x02743E VOICE_LOADPITCHTABLE_CH_SCANLOOP  replaces=LABEL_02743E  confidence=high
+; Second parameter (Dispatch1 * table_0x010DCE[C]) and the output-list build.
+
+[LABEL] 0x027496 VOICE_LOADPITCHTABLE_CH_LOOPBODY  replaces=LABEL_027496  confidence=high
+; Per-voice broadcast via ToneGen_WriteExtParams_56.
+
+[LABEL] 0x0274AE VOICE_LOADPITCHTABLE_CH_LOOPCHECK  replaces=LABEL_0274AE  confidence=high
+; Continue while the list entry's low byte is < 0x80.
+
+[ROUTINE] 0x0274C7 VOICE_LOADPITCHTABLE_ALL  replaces=LABEL_0274C7  confidence=high
+; Voice_LoadPitchTable_All(A = part index). The ramp-position-independent form of
+; Voice_LoadPitchTable_Ch: stores the raw DSP_AlgoType_Dispatch2/Dispatch1 results to
+; 0x045208 and 0x04520C (no scaling, no per-part write-back) and broadcasts them with the
+; same ToneGen_WriteExtParams_56 loop.
+; Sole caller: Voice_ToneTableRamp_Up, when the pitch ramp has reached its ceiling.
+
+[LABEL] 0x027503 VOICE_LOADPITCHTABLE_ALL_LOOPBODY  replaces=LABEL_027503  confidence=high
+; Per-voice broadcast body.
+
+[LABEL] 0x02751C VOICE_LOADPITCHTABLE_ALL_LOOPCHECK  replaces=LABEL_02751C  confidence=high
+; Continue while the list entry's low byte is < 0x80.
+
+[ROUTINE] 0x027534 VOICE_LOADFILTERTABLE_CH  replaces=LABEL_027534  confidence=high
+; Voice_LoadFilterTable_Ch(A = part index, C = ramp position). Same shape as
+; Voice_LoadPitchTable_Ch for the filter parameter set: DSP_AlgoType_Dispatch2(part, 0)
+; scaled by C, floored at 0x1C, into 0x04520A and 0x0413C1 + part*0x11F;
+; DSP_AlgoType_Dispatch1(part, 0) scaled by table_0x010ECE[C] into 0x04520E and
+; 0x0413BF + part*0x11F; broadcast with Voice_BuildOutputList(part, 0x0C, 0) and
+; ToneGen_WriteExtParams_56b.
+
+[LABEL] 0x027580 VOICE_LOADFILTERTABLE_CH_NOCLAMP  replaces=LABEL_027580  confidence=high
+; Scaled value already >= 0x1C: store unclamped.
+
+[LABEL] 0x02759A VOICE_LOADFILTERTABLE_CH_SCANFILTER  replaces=LABEL_02759A  confidence=high
+; Second filter parameter and the output-list build.
+
+[LABEL] 0x0275F2 VOICE_LOADFILTERTABLE_CH_LOOPBODY  replaces=LABEL_0275F2  confidence=high
+; Per-voice broadcast via ToneGen_WriteExtParams_56b.
+
+[LABEL] 0x02760A VOICE_LOADFILTERTABLE_CH_LOOPCHECK  replaces=LABEL_02760A  confidence=high
+; Continue while the list entry's low byte is < 0x80.
+
+[ROUTINE] 0x027623 VOICE_LOADFILTERTABLE_ALL  replaces=LABEL_027623  confidence=high
+; Voice_LoadFilterTable_All(A = part index). Unscaled counterpart of
+; Voice_LoadFilterTable_Ch; writes 0x04520A / 0x04520E and broadcasts with
+; ToneGen_WriteExtParams_56b. Sole caller: Voice_ToneTableRamp_Up_CheckFilter.
+
+[LABEL] 0x02765F VOICE_LOADFILTERTABLE_ALL_LOOPBODY  replaces=LABEL_02765F  confidence=high
+; Per-voice broadcast body.
+
+[LABEL] 0x027678 VOICE_LOADFILTERTABLE_ALL_LOOPCHECK  replaces=LABEL_027678  confidence=high
+; Continue while the list entry's low byte is < 0x80.
+
+[ROUTINE] 0x027690 VOICE_LOADTONETABLE_CH  replaces=LABEL_027690  confidence=high
+; Voice_LoadToneTable_Ch(A = part index, C = ramp position). Third member of the family.
+; Uses DSP_ChanFreq_WritePacket2(part) as its source value, scales it by C, floors at
+; 0x1C, stores to 0x045206 and to 0x0413C9 + part*0x11F, then broadcasts with
+; Voice_BuildOutputList(part, 0x10, 0) and ToneGen_WriteExtParams_15_Alt.
+; Note its list terminator differs: the loop runs while (entry & 0xFF) < 0x40, not 0x80.
+
+[LABEL] 0x0276DA VOICE_LOADTONETABLE_CH_NOCLAMP  replaces=LABEL_0276DA  confidence=high
+; Scaled value already >= 0x1C: store unclamped.
+
+[LABEL] 0x0276F4 VOICE_LOADTONETABLE_CH_SCANLOOP  replaces=LABEL_0276F4  confidence=high
+; Build the output list for mask 0x10.
+
+[LABEL] 0x02770B VOICE_LOADTONETABLE_CH_LOOPBODY  replaces=LABEL_02770B  confidence=high
+; Per-voice broadcast via ToneGen_WriteExtParams_15_Alt.
+
+[LABEL] 0x027724 VOICE_LOADTONETABLE_CH_LOOPCHECK  replaces=LABEL_027724  confidence=high
+; Continue while the list entry's low byte is < 0x40.
+
+[ROUTINE] 0x02773D VOICE_LOADTONETABLE_ALL  replaces=LABEL_02773D  confidence=high
+; Voice_LoadToneTable_All(A = part index). Unscaled counterpart of
+; Voice_LoadToneTable_Ch. Sole caller: Voice_ToneTableRamp_Up_CheckFilter.
+
+[LABEL] 0x027767 VOICE_LOADTONETABLE_ALL_LOOPBODY  replaces=LABEL_027767  confidence=high
+; Per-voice broadcast body.
+
+[LABEL] 0x027780 VOICE_LOADTONETABLE_ALL_LOOPCHECK  replaces=LABEL_027780  confidence=high
+; Continue while the list entry's low byte is < 0x40.
+
+[ROUTINE] 0x027798 VOICE_TONETABLERAMP_UP  replaces=LABEL_027798  confidence=high
+; Voice_ToneTableRamp_Up(A = part index, XBC = part record at 0x041368 + part*0x11F).
+; One step of the "sweep up" of the two DSP-parameter ramps a part owns:
+;   +100 = pitch ramp position, range 0..0x4F (indexes the 80-entry curve 0x010D64)
+;   +101 = filter ramp position, range 0..0x96 (divided by 6 to index the 26-entry curve
+;          0x010DB4)
+;   +99  = the ramp state-flag byte (bits 0..4)
+; If +100 has reached 0x4F it sets flag bit 3 and calls Voice_LoadPitchTable_All;
+; otherwise it increments +100, clears bit 3, and calls Voice_LoadPitchTable_Ch with
+; table_0x010D64[+100]. The filter half behaves the same way against 0x96 / 6, calling
+; Voice_LoadFilterTable_All + Voice_LoadToneTable_All, or _Ch with table_0x010DB4[+101/6].
+; Sole caller: Voice_UpdateAllNoteStates_LFOLoopBody.
+
+[LABEL] 0x0277B3 VOICE_TONETABLERAMP_UP_INCREMENT  replaces=LABEL_0277B3  confidence=high
+; Pitch ramp not yet at 0x4F: ++position, clear flag bit 3, push the new value.
+
+[LABEL] 0x0277DA VOICE_TONETABLERAMP_UP_CHECKFILTER  replaces=LABEL_0277DA  confidence=high
+; Filter ramp: at 0x96 -> Voice_LoadFilterTable_All + Voice_LoadToneTable_All.
+
+[LABEL] 0x0277F2 VOICE_TONETABLERAMP_UP_FILTERINCREMENT  replaces=LABEL_0277F2  confidence=high
+; ++filter position, clear flag bit 3, push table_0x010DB4[pos/6] to both the filter and
+; tone parameter sets.
+
+[LABEL] 0x027839 VOICE_TONETABLERAMP_UP_DONE  replaces=LABEL_027839  confidence=high
+; Restore and return.
+
+[ROUTINE] 0x02783D VOICE_TONETABLERAMP_DOWN  replaces=LABEL_02783D  confidence=high
+; Voice_ToneTableRamp_Down(A = part index, XBC = part record). The mirror of
+; Voice_ToneTableRamp_Up: when +100 is already 0 it sets flag bit 4 and skips to the
+; filter half; otherwise it decrements +100, clears bit 4, and pushes
+; table_0x010DB4[+100 >> 1]. The filter half decrements +101 and pushes
+; table_0x010DB4[+101 / 5] to both the filter and tone parameter sets.
+; Sole caller: Voice_UpdateAllNoteStates_LFO_CheckRampDown.
+; ⚠ The two halves index the SAME 26-entry table 0x010DB4 with different scales -- >>1
+; (max 0x4F/2 = 39) and /5 (max 0x96/5 = 30) -- both of which exceed the table's 26
+; entries and read into the adjacent table at 0x010DCE. See [UNCERTAIN].
+
+[LABEL] 0x027850 VOICE_TONETABLERAMP_DOWN_DECREMENT  replaces=LABEL_027850  confidence=high
+; Pitch ramp above 0: --position, clear flag bit 4, push table_0x010DB4[pos >> 1].
+
+[LABEL] 0x02787A VOICE_TONETABLERAMP_DOWN_CHECKFILTER  replaces=LABEL_02787A  confidence=high
+; Filter ramp: return if already 0, else --position and push table_0x010DB4[pos / 5].
+
+[LABEL] 0x0278C7 VOICE_TONETABLERAMP_DOWN_DONE  replaces=LABEL_0278C7  confidence=high
+; Restore and return.
+
+[ROUTINE] 0x0278CB VOICE_TONETABLEAPPLY_PITCH  replaces=LABEL_0278CB  confidence=high
+; Voice_ToneTableApply_Pitch(A = part index, XBC = part record). Jumps the ramp straight
+; to the position that matches the current pitch value, instead of stepping.
+; Clears flag bits 3 and 4 of +99, reads L = table_0x010D64[+100], then searches DOWNWARD
+; from index 0x19 for the largest index whose table_0x010DB4 entry is <= L. That index
+; becomes the new +100; +101 is rescaled from the /6 domain into the /5 domain
+; ((+101 / 6) is discarded and the found index * 5 is stored). Finally it pushes all
+; three parameter sets with Voice_LoadPitchTable_Ch, Voice_LoadFilterTable_Ch and
+; Voice_LoadToneTable_Ch.
+; Sole caller: Voice_UpdateAllNoteStates_LFO_RampDown.
+
+[LABEL] 0x0278F5 VOICE_TONETABLEAPPLY_PITCH_DECREMENT  replaces=LABEL_0278F5  confidence=high
+; Search step: decrement the candidate index.
+
+[LABEL] 0x0278F8 VOICE_TONETABLEAPPLY_PITCH_LOOP  replaces=LABEL_0278F8  confidence=high
+; Search test: continue while L < table_0x010DB4[index]. The loop has no explicit lower
+; bound; it is bounded only by table_0x010DB4[0] == 0x00, which no unsigned L can be
+; below, so index 0 always terminates it.
+
+[ROUTINE] 0x027987 VOICE_TONETABLEAPPLY_FILTER  replaces=LABEL_027987  confidence=high
+; Voice_ToneTableApply_Filter(A = part index, XBC = part record). The mirror of
+; Voice_ToneTableApply_Pitch: reads E = table_0x010DB4[+100 >> 1] and searches UPWARD
+; from index 0 for the first index whose table_0x010D64 entry is >= E. That index becomes
+; +100; +101 is rescaled from the /5 domain into the /6 domain (index * 6). Then pushes
+; all three parameter sets with the three _Ch broadcasters.
+; Sole caller: Voice_UpdateAllNoteStates_LFO_ApplyFilter.
+
+[LABEL] 0x0279B3 VOICE_TONETABLEAPPLY_FILTER_INCREMENT  replaces=LABEL_0279B3  confidence=high
+; Search step: increment the candidate index.
+
+[LABEL] 0x0279B6 VOICE_TONETABLEAPPLY_FILTER_LOOP  replaces=LABEL_0279B6  confidence=high
+; Search test: continue while E > table_0x010D64[index] (unsigned). The loop has no
+; explicit upper bound; it is bounded only by the fact that table_0x010D64 reaches 0xFF
+; at index 78 of its 80 entries.
+
+[LABEL] 0x027A5B VOICE_SCANANDCANCELNOTEOFF_LOOP  replaces=LABEL_027A5B  confidence=high
+; Body of Voice_ScanAndCancelNoteOff (entry 0x027A46, already named -- left alone).
+; That routine is the EVEN phase of the audio tick: it calls Voice_UpdateAllLFO once,
+; then Voice_AllocateForAny to obtain the list of sounding slot indices at (XHL+5), and
+; walks it. XIZ is loaded here as 0x04308E + slot*0x47 (the voice-slot record base and
+; stride; the LLVM source spells the instruction as the raw-encoding pseudo-op
+; "stb_dri H, 0x07,0xE4,0xE0", which unidasm decodes as "lda XIZ,XBC+WA").
+; Per slot: if bit 15 of tonerec[+10] is set and (slot+47 & 0x8080) is non-zero, call
+; Voice_UpdateNoteOff; if the bit is clear and the timers are armed, release the slot
+; outright (VoiceSlot_Release + Voice_Release, slot+47 = 0).
+; The routine's remaining labels (_ClearSlot 0x027A91, _NextSlot 0x027AB3,
+; _Done 0x027AC0) fall past this region's upper boundary.
+
+[DATA] 0x011899-0x0118FD  Attenuation curve A, 101 bytes, index 0..100
+; Monotonically DECREASING: [0] = 0xFF, [100] = 0x09. Indexed by a 0..100 "amount"
+; parameter to produce the 8-bit high byte of a tone-generator level/rate register pair.
+; Because the curve runs downward and 0xFF is the value the portamento ramp treats as
+; "finished", the high byte behaves as an ATTENUATION, not a level. Used by
+; Voice_UpdatePan_Full and Voice_UpdatePan_Mono for register pair 1.
+; Unnamed in the build -- it sits inside the anonymous blob that follows
+; PitchDetune_OffsetTable (0x00F787) and runs to CALL_TABLE_12159.
+
+[DATA] 0x0118FE-0x011962  Attenuation curve B, 101 bytes, index 0..100
+; Same shape as curve A but with a different knee ([0] = 0xFF, [100] = 0x04). Used for
+; register pairs 2 and 3 in the pan routines and for the level in all three
+; Voice_ComputeAndWriteVolume* routines and Voice_ComputeVolume_CappedLFO.
+
+[DATA] 0x011963-0x0119C7  Rate curve, 101 bytes, index 0..100
+; Monotonically INCREASING 0x00..0x7F. Supplies the low 7 bits of a level/rate register
+; pair. Read by Voice_UpdatePan_Full/_Mono via paramA+40, +42 and +44; the pair-2 result
+; is floored at 4.
+
+[DATA] 0x011ADF-0x011B1E  Oscillator level ceiling, 64 bytes
+; Indexed by tonerec+24; the result is fed back into curve B (0x0118FE) to obtain a
+; per-oscillator maximum level. Almost entirely 0x96 with a 0x31..0x4D ramp in entries
+; 0..8 and a single 0x88 at index 59. Used by Voice_ComputeAndWriteVolume1/2/3 and
+; Voice_ComputeVolume_CappedLFO whenever bit 0 of tonerec+10 is set.
+
+[DATA] 0x011C7C-0x011C95  Key-shift semitone table, 26 signed bytes
+; Stepped by Voice_ApplyTuningSysEx; the entry is sign-extended and doubled into the
+; global pitch offset at 0x04135A. Entries 24 and 25 are 0x00, which is what terminates
+; the ramp.
+
+[DATA] 0x011C96-0x011D15  Alternate note-to-pitch curve, 128 bytes, index = MIDI note
+; Monotonic 0x00..0xFF. Selected by Voice_ComputePitch / _Mono when bit 0 or bit 1 of the
+; global mode word 0x041343 is set, or when paramA+25 (paramA+7 in the mono variant) is
+; 0xE0; the code uses table[note] - 0x0C directly as the pitch, bypassing the detune and
+; Voice_Colour_LookupIndex path entirely. Bit 0 is set by Voice_SetPolyphonyMode(A==1),
+; which also re-runs ToneGen_EmitCommandLoop with argument 1.
+
+[DATA] 0x0430AD-0x0430B?  Per-channel record array, stride 0x47, base of field +14
+; The channel records themselves start at 0x04308E; 0x0430AD is base+0x1F and 0x0430BB is
+; base+0x2D, the two fields this region indexes directly. 0x40 channels.
+
+[DATA] 0x04308E-0x0442??  Voice-slot record array, 0x40 slots of 0x47 bytes
+; Fields referenced from this region: +0 slot index; +1 flag word (bit 8 velocity path,
+; bit 10 legato, bit 11 note bit-7 flag, bit 15 polarity); +4 range selector; +8 velocity
+; word; +12 MIDI note; +13 computed pitch; +15 controller record ptr; +19 part record
+; ptr; +23 paramA record ptr; +31 flag byte ptr; +35 tone record ptr; +39 secondary
+; record ptr; +43 mode word; +45 note-off register value; +47 packed note-off/release
+; countdown; +49 portamento state word; +51 portamento pitch offset; +53 mode byte;
+; +54 ascend increment; +56 release increment; +58 ramp floor; +60 cached pair-1 word;
+; +62/+64 cached pair words used by the passthrough writers.
+
+[DATA] 0x04135A-0x04135F  Global tuning / rhythm scratch
+; 0x04135A = key-shift pitch offset word (added by Voice_Pitch_Legato_StoreOutput when
+; bit 10 of slot+1 is set); 0x04135C = key-shift step index into 0x011C7C;
+; 0x04135E = rhythm decay mode byte; 0x04135F = rhythm decay divider. All driven from
+; this region by Voice_ApplyTuningSysEx and Voice_TickNoteDecay.
+
+[DATA] 0x041342-0x041343  Audio-tick phase byte and global mode word
+; 0x041342 is toggled between 0x00 and 0xFF by Audio_Process_Init on every call, which is
+; what alternates the two halves of the audio tick (Voice_ScanAndCancelNoteOff on one
+; pass, AudioTick_UpdateVoice + Voice_UpdateAllNoteStates on the next). NOTE that
+; 0x041342 + 0x0C onwards is separately used as the channel-assignment array by
+; Voice_WriteChannelAssign / Voice_ReadChannelAssign.
+; 0x041343 is the 16-bit global mode word: bit 0 polyphony/alternate-tuning select,
+; bit 1 CC-max flag, bit 9 mono mode, bit 10 "pitch offset changed", bits 11..15 the
+; key-shift ramp state.
+
+[DATA] 0x0451CC-0x045203  Tone-generator shadow register block, 22+6 words
+; The staging area every writer in this region fills and the ToneGen_* routines push to
+; the chip through the address latch at 0x100000 and the data latch at 0x100002.
+; ToneGen_WriteVoiceParams (full dump) maps offsets +2,+4,+6,+8,+10,+12,+14,+16,+18,+20,
+; +22,+24,+26,+28,+30,+32,+34,+36,+38,+40,+42 to TG register banks 0x40,0x80,0xC0,0x100,
+; 0x140,0x180,0x400,0x440,0x480,0x4C0,0x500,0x800,0x840,0x880,0x8C0,0x900,0x940,0x980,
+; 0x9C0,0xA00,0xA40 (each latched as bank + voice index).
+; ToneGen_WriteNote / ToneGen_WriteNote_2Regs instead map +44,+46,+48,+50,+52,+54 to
+; banks 0x800,0x840,0x900,0x940,0x9C0,0xA00 -- so 0x0451E4/0x0451F8, 0x0451E6/0x0451FA,
+; 0x0451EC/0x0451FC, 0x0451EE/0x0451FE, 0x0451F2/0x045200 and 0x0451F4/0x045202 are
+; parallel shadows of the SAME six chip registers, one filled by the init/full-dump path
+; and one by the per-tick path.
+; Scratch words used by this region that sit just above the block: 0x045204, 0x045206,
+; 0x045208, 0x04520A, 0x04520C, 0x04520E.
+
+[UNCERTAIN] Nine addresses in this region already carry a real (non-LABEL_) name in the hand-curated symbols/subcpu_symbols_reference.txt that DISAGREES with the name in the authoritative LLVM build. I have left both alone and propose nothing for them. They are: 0x026769 ELF Voice_ComputeAndWriteVolume1 vs curated Voice_Calc_LevelPair_EGA; 0x02684A Voice_WritePan_Passthrough vs Voice_Stage_EnvSegments; 0x026975 Voice_ComputeAndWriteVolume2 vs Voice_Calc_LevelPair_EGB; 0x026AAA Voice_ComputeAndWriteVolume3 vs Voice_Calc_LevelPair_EGC; 0x026BDC Voice_WriteVolume_Muted vs Voice_Calc_LevelPair_Silence; 0x026E5B Voice_UpdateNoteOff vs Voice_Step_AmpDelay; 0x026EC3 Voice_UpdatePortamento vs Voice_Step_ExprRamp; 0x0271BC Voice_ApplyTuningSysEx vs Pitch_Bend_Ramp_Tick; 0x027A46 Voice_ScanAndCancelNoteOff vs Audio_Tick_ServiceVoices_A. Integration must pick one set deliberately; the two sources currently contradict each other.
+
+[UNCERTAIN] On the evidence I read, the curated "LevelPair" family of names is the more accurate of the two. Voice_UpdatePan_Full/_Mono and Voice_ComputeAndWriteVolume1/2/3 all produce the SAME thing and target the SAME chip registers: a 16-bit word (attenuation<<8) | (bit7 = apply-now flag) | (bits 0..6 = rate), for three register pairs at TG banks 0x800/0x840, 0x900/0x940 and 0x9C0/0xA00. The paramA fields feed them in (level,rate) couples -- (39,40), (41,42), (43,44) -- which is an envelope-segment layout, and the portamento ramp treats 0xFF00 in those registers as the terminal "silent" value. Nothing in the code computes a left/right balance. I therefore believe "Pan" in Voice_UpdatePan_* / Voice_WritePan_Passthrough / Voice_InterpolatePanCurve is wrong, and that the routines are level/rate (envelope) writers. I have NOT renamed anything; if the project agrees, the rename should be made in the authoritative LLVM source first and this proposal file regenerated.
+
+[UNCERTAIN] Voice_InterpolatePanCurve (0x026283) has no pan behaviour at all: its only caller adds its return value into the PITCH accumulator in Voice_ComputePitch_ApplyLFO. A name in the VOICE_PITCH_* or VOICE_VELCROSSFADE_* family would describe it better. Same for Voice_InterpolateNoteCurve, which is the key-position twin.
+
+[UNCERTAIN] The tail labels of Voice_UpdatePan_Mono (0x0261BC, 0x0261E0, 0x026226, 0x026244) are named "Voice_UpdatePan_Full2_*" in the current build, but they are unambiguously part of Voice_UpdatePan_Mono (0x025F7F) -- Voice_UpdatePan_Full ends at 0x025F7E with its own ret. There is no routine called "Full2". I have kept the existing names so the curated file matches the build, but the prefix is wrong.
+
+[UNCERTAIN] Voice_ComputePitch_InlineData (0x026522) is a misnomer: those 17 bytes are executable code (a clamp of WA into [DE..BC], returning HL) that nothing references. It is emitted as .byte only to preserve the byte-exact rebuild. A name such as VOICE_CLAMP_DEBC_UNREFERENCED would be honest, but again I have not renamed it.
+
+[UNCERTAIN] Voice_LoadPitchTable_*, Voice_LoadFilterTable_* and Voice_LoadToneTable_* do not load tables. They scale a DSP algorithm parameter by a ramp position and broadcast the result to every voice of a part. Their behaviour is closer to VOICE_PARAMBCAST_*.
+
+[UNCERTAIN] Voice_ToneTableRamp_Down indexes the 26-entry table at 0x010DB4 with (+100 >> 1), whose maximum is 0x4F/2 = 39, and with (+101 / 5), whose maximum is 0x96/5 = 30. Both exceed the table and read into the adjacent table at 0x010DCE. Voice_ToneTableRamp_Up uses /6 on the same +101 field, giving a maximum of exactly 25 -- in range. I could not determine whether the /5 is a deliberate second scale domain (Voice_ToneTableApply_Pitch and _Filter do convert +101 between a *5 and a *6 representation) or a firmware defect. It is a wrong-value read, not a crash.
+
+[UNCERTAIN] I could not determine the physical meaning of the tone-generator register banks themselves (0x800/0x840/0x880/0x8C0/0x900/0x940/0x980/0x9C0/0xA00/0xA40) -- the mapping above is what the sub-CPU writes, not what IC303 does with it. Nor could I determine why the init path and the per-tick path keep separate shadow words for the same six registers.
+
+[UNCERTAIN] Voice_AllocateForAny / Voice_AllocateForFull (both outside this region, both called from inside it) do not allocate. They fill a scratch packet at 0x2A5E, call NoteOn_RoutePacket, and return a list of matching slot indices at packet+5. Their names invite exactly the wrong reading when chasing a "voices stop being allocated" bug.
+
+[UNCERTAIN] The four remaining ROM data tables this region reads -- 0x00FEE4 (note pre-map), 0x0119C8 (Detune_ScaleSymmetric curve), 0x010764 (word table, x4, used by Voice_InitVoiceState and Voice_Colour_Write) and 0x011AE8 (flat 0x96 table) -- are all unnamed in the build, buried in the anonymous blob between PitchDetune_OffsetTable (0x00F787) and CALL_TABLE_12159 (0x012159). They are outside this region so I have not proposed names, but that blob is a large documentation gap.

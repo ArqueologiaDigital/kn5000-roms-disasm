@@ -1,0 +1,771 @@
+# region 10: 0x03111A..0x0331D4
+# Tone-database (ToneDB) record resolution and per-part cache binding, plus the
+# 0x8x-opcode inter-CPU "read tone data" service that answers main->sub queries
+# out of the reply staging buffer at 0x045210/0x045216.
+
+[DATA] 0x00FAEE-0x00FB1D  ToneDB_Query_Dispatch jump table (24 x u16)
+; 24 little-endian 16-bit displacements added to 0x0317CF by the switch at
+; 0x0317B9..0x0317CE.  Index = (request[+2] & 0x7F), bounds-checked 0..0x17.
+; Resolved targets: 0->0x0317CF 1->0x0317EA 2,3->0x031A51(nop) 4->0x03182A
+; 5->0x03184F 6->0x03186D 7->0x03188B 8->0x0318AA 9->0x0318C9 10->0x0318E7
+; 11->0x031905 12->0x031915 13->0x031949 14->0x03196E 15->0x031993
+; 16->0x0319B2 17->0x0319D0 18->0x0319EE 19->0x031A19 20,21,22->0x031A51(nop)
+; 23->0x031A44.
+
+[DATA] 0x00FB1E-0x00FB2D  VoiceParam_Query_Dispatch jump table (8 x u16)
+; Displacements added to 0x031B5B.  Index = request[+0] & 7, taken when bit 3 of
+; the status byte is CLEAR (the "query, reply with data" family).
+; 0->0x031B5B 1->0x031B63 2->0x031BC8 3->0x031C26 4->0x031C84 5->0x031D16
+; 6->0x031D4D 7->0x031DA1.
+
+[DATA] 0x00FB2E-0x00FB3D  VoiceParam_Action_Dispatch jump table (8 x u16)
+; Displacements added to 0x031AA1.  Index = request[+0] & 7, taken when bit 3 of
+; the status byte is SET (the "action, no reply" family).
+; 0->0x031AA1 1->0x031AA9 2->0x031AB9 3->0x031AE5 4->0x031B11 5->0x031B21
+; 6->0x031B29 7->0x031B31.
+
+[DATA] 0x00FB4E-0x00FB55  Partial-present bit-mask table (4 x u16, mirrored)
+; { 0x0001, 0x0004, 0x0010, 0x0040 } indexed by partial index * 2, read by
+; Partial_Find_Rank (0x032082) via XIY.  These are bits 0/2/4/6 of the tone
+; record's partial-present byte at tonerec+0x11 -- the same four bits tested
+; individually by Partial_Build_Present_Word (0x032B1E).  The table is stored
+; twice (8 entries) but only indices 0..3 are ever used.
+
+[ROUTINE] 0x03111A TONEDB_COPY_SUBTONE_REC10  replaces=LABEL_03111A  confidence=high
+; Resolve one of a patch record's sub-tone references and copy the 10-byte
+; ToneDB record it names into a caller-supplied buffer.
+; Entry: A  = part index (0..25)
+;        C  = sub-tone index i
+;        XDE = destination buffer (the inter-CPU reply payload 0x045216 when
+;              called from DSP_Cmd2B_SetParam)
+; Exit:  HL = 10 (the byte count produced -- see the note on the reply protocol
+;        in Voice_ParamFinalize / DSP_Cmd2B_PostProcess), XIZ = source record.
+; Body: the part's 16-bit tone selector is Part_UserToneIndex[part] =
+;       {byte 0x041381+part*0x11F, byte 0x041382+part*0x11F} (lo,hi); it is
+;       handed to ToneDB_Find_ToneRecord (0x03206F) to get the patch record.
+;       The sub-tone reference is the {lo,hi} pair at patchrec+0x27+2*i.
+;         hi & 0x20 set -> ToneDB_Find_SubToneRecord (0x032AE0) with DE=0xFF
+;                          supplies the source record directly.
+;         otherwise     -> idx = ((hi & 0x1F) << 7) + (lo & 0x7F)
+;                          e   = u16[ ToneDB_RelBase + Root->+0x7C + 2*idx ]
+;                          src = ToneDB_RelBase + Root->+0xB0 + 10*e
+;       Ten bytes are then copied src -> XDE.
+; Touches no hardware; reads ToneDB_RelBase (0x045310) and ToneDB_RootPtr
+; (0x045314).  Sole caller: DSP_Cmd2B_SetParam 0x035CEF.
+; NOTE: the LLVM source currently calls this DSP_SetVoiceCoefficients; nothing
+; in the body touches a DSP, so that name is misleading (see [UNCERTAIN]).
+
+[LABEL] 0x0311BC TONEDB_SUBTONE_REC10_TABLEBASE  replaces=LABEL_0311BC  confidence=high
+; Load ToneDB_RootPtr->+0x7C (the sub-tone index table) into the frame slot.
+
+[LABEL] 0x0311C7 TONEDB_SUBTONE_REC10_INDEX  replaces=LABEL_0311C7  confidence=high
+; idx=(hi&0x1F)<<7 | lo; u16 lookup; then Root->+0xB0 + 10*e -> XIZ.
+
+[LABEL] 0x0311FD TONEDB_SUBTONE_REC10_NAMEDPATH  replaces=LABEL_0311FD  confidence=high
+; hi bit 5 set: source comes from ToneDB_Find_SubToneRecord instead.
+
+[LABEL] 0x03120F TONEDB_SUBTONE_REC10_COPYSTART  replaces=LABEL_03120F  confidence=high
+; Set the 10-byte copy count in HL (this value is also the return value).
+
+[LABEL] 0x031218 TONEDB_SUBTONE_REC10_COPYLOOP  replaces=LABEL_031218  confidence=high
+; Byte copy XIZ+ -> (XSP+8)+, 10 iterations.
+
+[LABEL] 0x03122A TONEDB_SUBTONE_REC10_RETURN  replaces=LABEL_03122A  confidence=high
+; Frame teardown; HL still holds 10.
+
+[ROUTINE] 0x03122F TONEDB_REPLY_COPY13_ROOT80  replaces=LABEL_03122F  confidence=high
+; Copy a 13-byte row out of the ToneDB table at Root->+0x80 into the inter-CPU
+; reply payload.
+; Entry: WA = row index.
+; Exit:  HL = 13 (bytes written), payload at 0x045216..0x045222.
+; src = ToneDB_RelBase + Root->+0x80 + 16*WA; the row stride is 16 but only 13
+; bytes are shipped.  Reached only from ToneDB_Query_Dispatch case 15 (0x031993).
+
+[ROUTINE] 0x031274 TONEDB_REPLY_PARTIALCOEFF16  confidence=high
+; Answer a query for the 13+3 byte coefficient row selected by one sub-tone
+; reference of a part's patch record.
+; Entry: WA = part index, C = sub-tone index i.
+; Exit:  HL = 16, payload 0x045216..0x045225.
+; Body: patchrec = Part_PatchRecord_Ptr[part]; {lo,hi} = patchrec+0x27+2*i.
+;       row = u32[ ToneDB_RelBase + Root->+0x7C + 2*(((hi&0x1F)<<7)+(lo&0x7F)) ]
+;       If hi & 0x20 == 0: 13 bytes are copied from
+;         ToneDB_RelBase + Root->+0x80 + 16*row.
+;       If hi & 0x20 == 0x20: 13 bytes are copied from
+;         ToneDB_RamBankA + 0x4AA7 + 0x50*i  (the RAM kit/user area).
+;       Three extra bytes follow: table[16*row + 0x0D], then row's low and high
+;       halves (row & 0xFF, row >> 8).  Hence 16 payload bytes.
+; Reached only from ToneDB_Query_Dispatch case 16 (0x0319B2).
+
+[ROUTINE] 0x0313CC TONEDB_REPLY_COPY13_ROOT8C  confidence=high
+; Same shape as 0x03122F but reads the table at Root->+0x8C.
+; Entry: WA = row index.  Exit: HL = 13, payload 0x045216..0x045222.
+; Reached only from ToneDB_Query_Dispatch case 17 (0x0319D0).
+
+[ROUTINE] 0x031411 TONEDB_REPLY_SUBTONECOEFF16  confidence=high
+; Answer a query for a coefficient row reached through ToneDB_Find_SubToneRecord.
+; Entry: A = sub-tone index, C = 0, E = part index in bits 0..3 (E&0x0F is kept
+;        in QIZH; the caller passes ToneDB_RamBankA[+0x72A7] in C).
+; Exit:  HL = 16, payload 0x045216..0x045225.
+; Body: patchrec = Part_PatchRecord_Ptr[E & 0x0F]; ToneDB_Find_SubToneRecord
+;       (0x032AE0) resolves a named record; the 0x15-byte partial slot at
+;       record+0x10+0x15*QIZH supplies {lo=slot[+1]&0x7F, hi=slot[+2]}.
+;       idx = ((slot[+2]&0x0F) << 7) + lo; row = u32[Root->+0x4C + 2*idx];
+;       then 13 bytes from Root->+0x8C + 16*row plus the same three trailer
+;       bytes as 0x031274.
+; Reached only from ToneDB_Query_Dispatch case 18 (0x0319EE).
+
+[ROUTINE] 0x031534 TONEDB_REPLY_PARTIALSETCOEFF16  confidence=high
+; Answer a query for the coefficient row of one partial of one part, going
+; through the Stage-A1 velocity-split lookup.
+; Entry: A = part index, C = zone/partial argument, E = nibble pair
+;        (E & 0x0F -> QIZH = partial index, E >> 4 -> secondary index).
+; Exit:  HL = 16, payload 0x045216..0x045225.
+; Body: patchrec = Part_PatchRecord_Ptr[part]; ToneDB_Find_SubToneRecord and
+;       WaveSel_StageA1_FromToneSlot (0x032682) are both invoked, then the
+;       {lo,hi} pair at record+0x10+0x15*QIZH+3+2*(E>>4) drives the same
+;       u16-index / 16-byte-row lookup, this time through Root->+0x60 and
+;       Root->+0x94.  Three trailer bytes as above.
+; Reached only from ToneDB_Query_Dispatch case 19 (0x031A19).
+
+[ROUTINE] 0x0316B4 TONEDB_REPLY_COPY13_ROOT8C_DIRECT  confidence=medium
+; Copy 13 bytes from Root->+0x8C + 16*row where row = u32[Root->+0x4C +
+; 2*(((BC&0x0F)<<7) + (WA&0x7F))].
+; Entry: WA = fine byte, BC = set byte.  Exit: HL = 13, payload 0x045216+.
+; MEASURED: this routine has NO caller anywhere in the sub-CPU image (checked
+; against a full-image call/jump scan).  It is dead code, most likely an
+; earlier revision of 0x031411.  Documented for completeness only.
+
+[ROUTINE] 0x03173B TONEDB_REPLY_PARTFLAGS2  confidence=high
+; Two-byte query: the part's patch-record format byte and, for one particular
+; format, an extra descriptor byte.
+; Entry: A = part index.  Exit: HL = 2, payload 0x045216..0x045217.
+; 0x045216 = Part_PatchRecord_Ptr[part][+0x10].
+; 0x045217 = patchrec[+0x5F] if (patchrec[+0x5D] & 0x0F) == 0x0C, else 0.
+; Reached only from ToneDB_Query_Dispatch case 23 (0x031A44).
+
+[ROUTINE] 0x031795 TONEDB_QUERY_DISPATCH  confidence=high
+; The 24-opcode query interpreter behind status bytes 0x80..0x87 opcode 0.
+; Entry: XWA = pointer to the 6-byte request packet (0x002AE8 or 0x002AEE).
+;        request[+1] = part/slot index, request[+2] = opcode (bit 7 ignored),
+;        request[+3] = a secondary index, request[+4] = reply tag.
+; Exit:  HL = number of payload bytes deposited at 0x045216 (0 = nothing).
+; Opcode is range-checked 0..0x17; out-of-range and opcodes 2,3,20,21,22 fall
+; straight through to the epilogue with IZ still 0, i.e. an empty payload.
+; Case map (callee -> payload length is that callee's HL):
+;   0  DSP_EffectStateQuery 0x030618 (1 byte: part flags bit 0)
+;   1  CheckStatusBits_40 0x02E213 [+ Voice_Slot_CalcArticParams 0x02B014]
+;      then DSP_AlgoSelect 0x030960
+;   4  DSP_MixSendConfig 0x0309EA        5  DSP_RouteCoeffs_TypeA 0x030A0A
+;   6  DSP_RouteCoeffs_TypeB 0x030AAD    7  DSP_CopyCoeffs_TypeA 0x030B50
+;   8  DSP_CopyCoeffs_TypeB 0x030B93     9  DSP_VoiceCoeffRoute 0x030BD6
+;   10 DSP_VoiceCoeffRoute2 0x030D43     11 DSP_AlgoCoeffLookup 0x030EF1
+;   12 eight calls to DSP_VoiceParamReadWrite 0x030F7D (payload = 8 bytes)
+;   13 DSP_ReadVoiceParam5D 0x03106F     14 DSP_VoiceParam_Dispatch 0x03107F
+;   15 0x03122F  16 0x031274  17 0x0313CC  18 0x031411  19 0x031534  23 0x03173B
+; Cases 18 and 19 first fetch ToneDB_RamBankA[+0x72A7] and pass it as the
+; "current part" argument.  Sole caller: 0x031B5D (query family case 0).
+; The LLVM source calls this DSP_SetCoeff_MasterConfig.
+
+[ROUTINE] 0x031A57 TONEDB_REPLY_COPYBYTES  replaces=LABEL_031A57  confidence=high
+; Unbounded byte block copy used by the whole query family.
+; Entry: XBC = source, XDE = destination, WA = byte count (0..0xFFFF).
+; Exit:  memory copied; no register contract beyond the caller reloading HL.
+; NOTE: the count is taken verbatim from the request packet's length byte
+; (request[+3], 0..255) and the destination is always the 0x045216 reply
+; payload, whose next allocated neighbour is ToneDB_RelBase at 0x045310 --
+; only 0xFA bytes away.  See [UNCERTAIN]/findings: a length byte >= 0xFA
+; overwrites ToneDB_RelBase / ToneDB_RootPtr.
+
+[LABEL] 0x031A5F TONEDB_REPLY_COPYBYTES_LOOP  replaces=LABEL_031A5F  confidence=high
+; ld C,(XHL+) / ld (XDE+),C with IX as the counter.
+
+[LABEL] 0x031A6C ALIGN_RET_PADDING  replaces=LABEL_031A6C  confidence=high
+; Six consecutive 'ret' bytes; alignment padding, no caller.
+
+[ROUTINE] 0x031A72 VOICE_PARAMFINALIZE  confidence=high
+; Service one 6-byte tone/parameter command taken from the audio command ring.
+; This is the main sub->main reply producer in this region.
+; Entry: XWA -> 6-byte packet: [0]=status byte, [1]=part index, [2]=offset,
+;        [3]=length, [4]=reply tag, [5]=spare.
+; Exit:  HL = payload length actually produced (query family) or the callee's
+;        status (action family).
+; Dispatch: A = status & 7 selects one of 8 cases; bit 3 of the status selects
+;   WHICH table:
+;     bit 3 SET   -> table 0x00FB2E, bodies at 0x031AA1.. -- "actions".  Each
+;                    case ends with an unconditional jump to 0x031E68 and
+;                    therefore emits NO inter-CPU reply.
+;     bit 3 CLEAR -> table 0x00FB1E, bodies at 0x031B5B.. -- "queries".  Every
+;                    case falls into 0x031E2D, which ALWAYS sends a reply.
+; Callers: MIDI_Dispatch_ParseStatus 0x034E1A (statuses 0x80..0x87, packet
+; assembled at 0x002AE8) and MIDI_Status_NoteOn_Extended 0x034E56 (statuses
+; 0x88..0x8F, packet at 0x002AEE).  Despite the MIDI_* names of the callers,
+; the 0x8x status range on this internal ring is NOT MIDI note-off: the low
+; nibble is an opcode/table selector consumed here.
+; Hardware: reaches the inter-CPU latch window (0x120000) indirectly through
+; InterCPU_DMA_Send 0x020C6B.
+
+[LABEL] 0x031AA1 VOICEPARAM_ACTION_CASE0  replaces=LABEL_031AA1  confidence=high
+; Action case 0: call 0x02ED80 with XWA = packet, then return (no reply).
+
+[LABEL] 0x031AA9 VOICEPARAM_ACTION_CASE1  confidence=high
+; Action case 1: VoiceAlloc_CheckAndInit 0x02EC0A on packet[+1], then 0x02F830.
+
+[LABEL] 0x031AB9 VOICEPARAM_ACTION_CASE2  confidence=high
+; Action case 2: VoiceAlloc_CheckAndInit, then 0x02FF3A with BC = 0 or 1
+; depending on bit 7 of packet[+2].
+
+[LABEL] 0x031AE5 VOICEPARAM_ACTION_CASE3  confidence=high
+; Action case 3: same as case 2 but with BC = 2 or 3.
+
+[LABEL] 0x031B11 VOICEPARAM_ACTION_CASE4  confidence=high
+; Action case 4: VoiceAlloc_CheckAndInit then 0x0301E3.
+
+[LABEL] 0x031B21 VOICEPARAM_ACTION_CASE5  confidence=high
+; Action case 5: 0x03021F with XWA = packet.
+
+[LABEL] 0x031B29 VOICEPARAM_ACTION_CASE6  confidence=high
+; Action case 6: 0x030428 with XWA = packet.
+
+[LABEL] 0x031B31 VOICEPARAM_ACTION_CASE7  confidence=high
+; Action case 7: 0x030535 with XWA = packet.
+
+[LABEL] 0x031B39 VOICEPARAM_QUERY_DISPATCH  replaces=LABEL_031B39  confidence=high
+; Range-check status&7 against 0..7 and jump through table 0x00FB1E.
+
+[LABEL] 0x031B5B VOICEPARAM_QUERY_CASE0  replaces=LABEL_031B5B  confidence=high
+; Query case 0: hand the whole packet to ToneDB_Query_Dispatch 0x031795.
+
+[LABEL] 0x031B63 VOICEPARAM_QUERY_CASE1_PATCHREC  confidence=high
+; Query case 1: copy packet[+3] bytes from Part_PatchRecord_Ptr[part]+packet[+2]
+; into the payload.  Special case for offset 0x5D: bit 7 of the returned byte is
+; cleared and then re-set from bit 14 of Part_Flags0A[part].
+
+[LABEL] 0x031BC8 VOICEPARAM_QUERY_CASE2_PARTIAL01  confidence=high
+; Query case 2: source is Part_Slot_Sub_Base[part][0] (0x0413D6) when bit 7 of
+; packet[+2] is clear, or [1] (0x0413FB) when set; offset = packet[+2] & 0x7F.
+
+[LABEL] 0x031C26 VOICEPARAM_QUERY_CASE3_PARTIAL23  confidence=high
+; Query case 3: same, but slot pointers at 0x041420 (partial 2) / 0x041445
+; (partial 3).
+
+[LABEL] 0x031C84 VOICEPARAM_QUERY_CASE4_PARTIALANY  confidence=high
+; Query case 4: bits 6-7 of packet[+2] pick the partial (0x0413D6 / 0x0413FF /
+; 0x041424 / 0x041449); offset = packet[+2] & 0x3F.
+
+[LABEL] 0x031D16 VOICEPARAM_QUERY_CASE5_PATCHREC2  confidence=high
+; Query case 5: like case 1 but with no 0x5D fixup.
+
+[LABEL] 0x031D4D VOICEPARAM_QUERY_CASE6_SUBTONE  confidence=high
+; Query case 6: ToneDB_Find_SubToneRecord (0x032AE0) resolves the record, then
+; packet[+3] bytes from record+packet[+2] are shipped.
+
+[LABEL] 0x031DA1 VOICEPARAM_QUERY_CASE7_PARTIALSLOT  confidence=high
+; Query case 7: ToneDB_Find_SubToneRecord then WaveSel_StageA1_FromToneSlot on
+; the 0x15-byte partial slot selected by bits 6-7 of packet[+2]; ships
+; packet[+3] bytes from slot+(packet[+2] & 0x3F).
+
+[LABEL] 0x031E2D VOICEPARAM_REPLY_BUILD  replaces=LABEL_031E2D  confidence=high
+; Common tail of the query family: copy the 6 request bytes to 0x045210.
+
+[LABEL] 0x031E33 VOICEPARAM_REPLY_HEADERLOOP  replaces=LABEL_031E33  confidence=high
+; The 6-iteration header copy packet[i] -> 0x045210+i.
+
+[LABEL] 0x031E50 VOICEPARAM_REPLY_SEND  replaces=LABEL_031E50  confidence=high
+; Emit the reply: InterCPU_DMA_Send(A = packet[+4] reply tag, BC = HL+6,
+; XDE = 0x045210).  HL is the payload length returned by the case body, so a
+; case that produced nothing still sends a bare 6-byte echo.  This is the ONLY
+; sub->main transmission in region 10 -- address 0x031E64 is the call site to
+; breakpoint when sub->main traffic disappears.
+
+[LABEL] 0x031E68 VOICEPARAM_REPLY_RETURN  replaces=LABEL_031E68  confidence=high
+; Shared exit; also the direct (reply-less) exit of every action case.
+
+[ROUTINE] 0x031E6A TONEDB_READ_PATCHBYTES  replaces=LABEL_031E6A  confidence=high
+; Copy a run of bytes out of a part's patch record, gated on the record format.
+; Entry: WA = part index, BC = byte offset inside the record, DE = length,
+;        stacked long at (XSP+0x0A) = destination pointer.
+; Exit:  HL = bytes copied, or 0 when the record is rejected.  'retd 4'.
+; Gate: A = patchrec[+0x10] & 0xC0.  0x00 and 0x80 copy; 0x40 and 0xC0 return 0.
+; Sole caller: DSP_Cmd2B_VoiceParamWrite 0x035D46, whose caller
+; DSP_Cmd2B_PostProcess (0x035D4A) DROPS the reply entirely when HL == 0 --
+; see findings.  Uses FP_MulAccum64 0x03D8CA as a plain 32-bit multiply for
+; part*0x11F.
+
+[LABEL] 0x031ECF TONEDB_READ_PATCHBYTES_REJECT40  replaces=LABEL_031ECF  confidence=high
+; Format byte 0x40: HL = 0, nothing copied.
+
+[LABEL] 0x031ED3 TONEDB_READ_PATCHBYTES_MODE80  replaces=LABEL_031ED3  confidence=high
+; Format byte 0x80: identical copy path to the 0x00 case.
+
+[LABEL] 0x031EFE TONEDB_READ_PATCHBYTES_REJECTC0  replaces=LABEL_031EFE  confidence=high
+; Format byte 0xC0: HL = 0, nothing copied.
+
+[LABEL] 0x031F00 TONEDB_READ_PATCHBYTES_RETURN  replaces=LABEL_031F00  confidence=high
+; Frame teardown and 'retd 0x0004'.
+
+[ROUTINE] 0x031F06 TONEDB_READ_PARTIALPRESENTBYTE  replaces=LABEL_031F06  confidence=high
+; Return the partial-present byte of a tone record.
+; Entry: WA/BC = the {lo,hi} tone selector, XDE = 1-byte destination.
+; Exit:  *XDE = tonerec[+0x11]; HL = 1.
+; Calls ToneDB_Find_ToneRecord 0x03206F.  Sole caller: DSP_Cmd2B_ReadParam11
+; 0x035D0A.  tonerec+0x11 is the bit-per-partial presence byte (bits 0/2/4/6).
+
+[ROUTINE] 0x031F16 TONEDB_FIND_PATCHRECORD_ALTMAP  replaces=LABEL_031F16  confidence=high
+; The alternate preset resolver selected by ToneGen_GlobalFlags (0x041343) bit 0.
+; Entry: WA = selector low byte, BC = selector high byte.
+; Exit:  XHL = patch-record pointer.
+; Identical arithmetic to ToneDB_Find_PatchRecord_Preset (0x031F87) except that
+; the bank table comes from ToneDB_RootPtr->+0x6C instead of ->+0x04:
+;   C   = byte[RelBase + Root->+0x6C + hi]
+;   idx = (C << 7) + lo
+;   k   = u16[RelBase + Root->+0x6C + 0x80 + 2*idx]
+;   rec = RelBase + u32[RelBase + Root->+0x08 + 4*k]
+; There is NO bank validity filter on this path (unlike 0x031F71), and no
+; fallback to record #0.  Root->+0x6C is referenced nowhere else in the image.
+
+[LABEL] 0x03207E TONEDB_FIND_TONERECORD_STDMAP  replaces=LABEL_03207E  confidence=high
+; ToneGen_GlobalFlags bit 0 clear: use ToneDB_Find_PatchRecord 0x031F71.
+
+[LABEL] 0x032081 TONEDB_FIND_TONERECORD_RETURN  replaces=LABEL_032081  confidence=high
+; Shared 'ret'; XHL already holds the record pointer.
+
+[ROUTINE] 0x032082 PARTIAL_FIND_RANK  replaces=LABEL_032082  confidence=high
+; Map a logical partial index to its packed position inside a tone record, or
+; report that the partial is absent.
+; Entry: WA = part index, BC = partial index p (0..3).
+; Exit:  L = packed rank, or 0xFF when partial p is not present.
+; Body: if the part's selector-high byte (0x041382+part*0x11F) >= 0x10 and
+;       p != 0, L = p is returned unchanged (RAM user tones / kits are not
+;       packed).  Otherwise mask = table[0x00FB4E + 2*p]; if
+;       (Part_PatchRecord_Ptr[part][+0x11] & mask) == 0 the partial is absent
+;       (L = 0xFF); else L = the number of present partials among indices
+;       1..p.  Callers pass the result straight into the 0x51-byte partial
+;       block address patchrec + 0x66 + 0x51*L.
+; Callers: 0x032253 and 0x032345 (both inside WaveSel_Bind_PartRecords).
+
+[LABEL] 0x03209B PARTIAL_FIND_RANK_PRESENTTEST  replaces=LABEL_03209B  confidence=high
+; Test mask[p] against tonerec+0x11; jump to the absent path if clear.
+
+[LABEL] 0x0320D2 PARTIAL_FIND_RANK_COUNTBODY  replaces=LABEL_0320D2  confidence=high
+; Count loop body: B = 1..p, W += 1 for each present partial.
+
+[LABEL] 0x0320FF PARTIAL_FIND_RANK_COUNTNEXT  replaces=LABEL_0320FF  confidence=high
+; Count loop increment and termination test.
+
+[LABEL] 0x032109 PARTIAL_FIND_RANK_STORE  replaces=LABEL_032109  confidence=high
+; C = W (the accumulated rank).
+
+[LABEL] 0x03210D PARTIAL_FIND_RANK_ABSENT  replaces=LABEL_03210D  confidence=high
+; C = 0xFF -- partial not present in this tone record.
+
+[LABEL] 0x03210F PARTIAL_FIND_RANK_RETURN  replaces=LABEL_03210F  confidence=high
+; L = C; ret.
+
+[ROUTINE] 0x032112 WAVESEL_BIND_PARTRECORDS  replaces=LABEL_032112  confidence=high
+; (Re)bind a part's cached tone-record pointer and its four partial-block
+; pointers.  This is the routine that makes a part playable: every downstream
+; consumer dereferences Part_PatchRecord_Ptr[part] and
+; Part_Slot_Sub_Base[part][p] without re-checking them.
+; Entry: A = part index (0..25), BC = selector low byte, DE = selector high byte.
+; Exit:  nothing; writes Part_PatchRecord_Ptr (0x04136E+part*0x11F) and
+;        Part_Slot_Sub_Base + 0x25*p (0x0413D6/0x0413FB/0x041420/0x041445).
+; Body:
+;   Part flags word (0x041368+part*0x11F) bit 0 SET = RAM user tone:
+;     hi in {0x40,0x41,0x50} -> record pointer = ToneDB_RamBankA + 0x4980,
+;                               partial pointers left alone;
+;     otherwise              -> record pointer = UserTone_VelSplit_Base
+;                               (0x044FCE) and each partial p is bound to
+;                               record + 0x66 + 0x51*p.
+;   bit 0 CLEAR = ROM tone: part <= 0x0F uses ToneDB_Find_ToneRecord (which
+;     honours ToneGen_GlobalFlags bit 0), part > 0x0F uses
+;     ToneDB_Find_PatchRecord directly.  Each partial p is then bound to
+;     patchrec + 0x66 + 0x51*PARTIAL_FIND_RANK(part,p), or, when the partial is
+;     absent (rank 0xFF), to the shared default block
+;     ToneDB_RelBase + Root->+0xAC.
+;   Bit 1 of the same flags word selects between two byte-identical copies of
+;   the ROM path (0x0321FE.. and 0x0322F0..).
+; Caller: WaveSel_Rebuild_PartCaches 0x032949.
+
+[LABEL] 0x032145 WAVESEL_BIND_RAMKITPATCH  replaces=LABEL_032145  confidence=high
+; RAM path, banks 0x40/0x41/0x50: record pointer = ToneDB_RamBankA + 0x4980.
+
+[LABEL] 0x032167 WAVESEL_BIND_RAMUSERTONE  replaces=LABEL_032167  confidence=high
+; RAM path, other banks: record pointer = 0x044FCE, then bind 4 partials.
+
+[LABEL] 0x03218A WAVESEL_BIND_RAMUSERTONE_LOOP  replaces=LABEL_03218A  confidence=high
+; p = 0..3: Part_Slot_Sub_Base[part][p] = record + 0x66 + 0x51*p.
+
+[LABEL] 0x0321E5 WAVESEL_BIND_ROMPATH  replaces=LABEL_0321E5  confidence=high
+; ROM path taken when flags bit 1 is set; resolves and stores the record ptr.
+
+[LABEL] 0x032220 WAVESEL_BIND_ROMPATH_HIGHPART  replaces=LABEL_032220  confidence=high
+; part > 0x0F: bypass ToneDB_Find_ToneRecord and call ToneDB_Find_PatchRecord.
+
+[LABEL] 0x03223A WAVESEL_BIND_PARTIALS_START  replaces=LABEL_03223A  confidence=high
+; Initialise the p = 0..3 partial-binding loop counter (QIZH).
+
+[LABEL] 0x032243 WAVESEL_BIND_PARTIALS_LOOP  replaces=LABEL_032243  confidence=high
+; Absent partial: bind to the shared default block RelBase + Root->+0xAC.
+
+[LABEL] 0x032295 WAVESEL_BIND_PARTIALS_PRESENT  replaces=LABEL_032295  confidence=high
+; Present partial: bind to patchrec + 0x66 + 0x51*rank.
+
+[LABEL] 0x0322E4 WAVESEL_BIND_PARTIALS_NEXT  replaces=LABEL_0322E4  confidence=high
+; p++ and loop while p < 4.
+
+[LABEL] 0x0322F0 WAVESEL_BIND_ROMPATHB  replaces=LABEL_0322F0  confidence=high
+; Duplicate ROM path taken when flags bit 1 is clear.
+
+[LABEL] 0x032312 WAVESEL_BIND_ROMPATHB_HIGHPART  replaces=LABEL_032312  confidence=high
+; part > 0x0F variant of the duplicate path.
+
+[LABEL] 0x03232C WAVESEL_BIND_PARTIALSB_START  replaces=LABEL_03232C  confidence=high
+; Duplicate partial-binding loop init.
+
+[LABEL] 0x032335 WAVESEL_BIND_PARTIALSB_LOOP  replaces=LABEL_032335  confidence=high
+; Duplicate loop head (absent-partial branch follows).
+
+[LABEL] 0x032387 WAVESEL_BIND_PARTIALSB_PRESENT  replaces=LABEL_032387  confidence=high
+; Duplicate present-partial binding.
+
+[LABEL] 0x0323D6 WAVESEL_BIND_PARTIALSB_NEXT  replaces=LABEL_0323D6  confidence=high
+; Duplicate loop increment.
+
+[LABEL] 0x0323DF WAVESEL_BIND_PARTRECORDS_RETURN  replaces=LABEL_0323DF  confidence=high
+; Shared exit for every path above.
+
+[LABEL] 0x032417 WAVESEL_STAGEA1_TABLES_FAM40  replaces=LABEL_032417  confidence=high
+; SET family 0x40: index table Root->+0x14, VSEL array Root->+0x20,
+; stride Root->+0xF0.
+
+[LABEL] 0x032433 WAVESEL_STAGEA1_TABLES_FAM80  replaces=LABEL_032433  confidence=high
+; SET family 0x80: Root->+0x10 / Root->+0x1C / stride Root->+0xEA.
+
+[LABEL] 0x03244F WAVESEL_STAGEA1_TABLES_FAMC0  replaces=LABEL_03244F  confidence=high
+; SET family 0xC0: same triple as family 0x00 (Root->+0x0C / +0x18 / +0xEA).
+
+[LABEL] 0x0324F7 WAVESEL_STAGEA1_USERTONE_PICKBANK  replaces=LABEL_0324F7  confidence=high
+; User-tone path, SET family 0x00/0x80/0xC0: choose RAM bank by comparing
+; Part_PatchRecord_Ptr[part] against ToneDB_RamBankB (0x045318).
+
+[LABEL] 0x032517 WAVESEL_STAGEA1_USERTONE_BANKA  replaces=LABEL_032517  confidence=high
+; XHL = ToneDB_RamBankA + 0x1D6*utidx + 0x1BA + 0x0B*p.
+
+[LABEL] 0x032540 WAVESEL_STAGEA1_USERTONE_BANKB  replaces=LABEL_032540  confidence=high
+; XHL = ToneDB_RamBankB + 0x1D6*utidx + 0x1BA + 0x0B*p.
+
+[LABEL] 0x032569 WAVESEL_STAGEA1_KIT_PICKBANK  replaces=LABEL_032569  confidence=high
+; User-tone path, SET family 0x40 (drum kit): same bank comparison.
+
+[LABEL] 0x032589 WAVESEL_STAGEA1_KIT_BANKA  replaces=LABEL_032589  confidence=high
+; XHL = ToneDB_RamBankA + 0x50*utidx + 0x4AE1 + 0x0B*p.
+
+[LABEL] 0x0325B1 WAVESEL_STAGEA1_KIT_BANKB  replaces=LABEL_0325B1  confidence=high
+; XHL = ToneDB_RamBankB + 0x2927*Part_UserToneIndex[part] + 0x50*utidx
+; + 0x4AE1 + 0x0B*p.  Uses FP_MulAccum64 for the 0x2927 multiply.
+
+[LABEL] 0x032713 WAVESEL_CACHE_VELSPLITPTR_ROMPATH  replaces=LABEL_032713  confidence=high
+; Part flags bit 0 clear: the VSEL pointer comes from
+; WaveSel_StageA1_FromPatchBlock 0x0325FC instead of the fixed RAM formula.
+
+[LABEL] 0x03274D WAVESEL_CACHE_VELSPLITPTR_RETURN  replaces=LABEL_03274D  confidence=high
+; Frame teardown.
+
+[LABEL] 0x032780 WAVESEL_STAGEA2_TABLES_FAM00C0  replaces=LABEL_032780  confidence=high
+; SET families 0x00 and 0xC0; ToneGen_GlobalFlags bit 2 chooses Root->+0x9C
+; over Root->+0x24.
+
+[LABEL] 0x032796 WAVESEL_STAGEA2_TABLES_FAM00C0_STD  replaces=LABEL_032796  confidence=high
+; Standard index table Root->+0x24.
+
+[LABEL] 0x03279E WAVESEL_STAGEA2_TABLES_FAM00C0_COMMON  replaces=LABEL_03279E  confidence=high
+; SET array Root->+0x30, stride Root->+0xEC.
+
+[LABEL] 0x0327B2 WAVESEL_STAGEA2_TABLES_FAM40  replaces=LABEL_0327B2  confidence=high
+; SET family 0x40; bit 2 chooses Root->+0xA4 over Root->+0x2C.
+
+[LABEL] 0x0327C8 WAVESEL_STAGEA2_TABLES_FAM40_STD  replaces=LABEL_0327C8  confidence=high
+; Standard index table Root->+0x2C.
+
+[LABEL] 0x0327D0 WAVESEL_STAGEA2_TABLES_FAM40_COMMON  replaces=LABEL_0327D0  confidence=high
+; SET array Root->+0x38, stride Root->+0xF2.
+
+[LABEL] 0x0327E4 WAVESEL_STAGEA2_TABLES_FAM80  replaces=LABEL_0327E4  confidence=high
+; SET family 0x80; bit 2 chooses Root->+0xA0 over Root->+0x28.
+
+[LABEL] 0x0327FA WAVESEL_STAGEA2_TABLES_FAM80_STD  replaces=LABEL_0327FA  confidence=high
+; Standard index table Root->+0x28.
+
+[LABEL] 0x032802 WAVESEL_STAGEA2_TABLES_FAM80_COMMON  replaces=LABEL_032802  confidence=high
+; SET array Root->+0x34, stride Root->+0xEC.
+
+[LABEL] 0x032983 WAVESEL_REBUILD_PARTCACHES_PARTIALLOOP  replaces=LABEL_032983  confidence=high
+; p = 0..3: WaveSel_Cache_VelSplitPtr 0x0326B6 for each partial.
+
+[LABEL] 0x03299E WAVESEL_REBUILD_PARTCACHES_ZONELOOP  replaces=LABEL_03299E  confidence=high
+; z = 0..3 inside each partial: WaveSel_Cache_SetDescPtr 0x0328E2.
+
+[LABEL] 0x0329C0 WAVESEL_REBUILD_PARTCACHES_PARTIALNEXT  replaces=LABEL_0329C0  confidence=high
+; p++ and loop while p < 4.
+
+[LABEL] 0x0329CA WAVESEL_REBUILD_PARTCACHES_PORTAMENTOPATH  replaces=LABEL_0329CA  confidence=high
+; Patch-record format byte (+0x10) & 0xC0 == 0x40: skip the cache rebuild and
+; run the portamento-target refresh instead.
+
+[LABEL] 0x0329D2 WAVESEL_REBUILD_PARTCACHES_PORTAMENTOLOOP  replaces=LABEL_0329D2  confidence=high
+; p = 0..3: Voice_PortamentoTarget_SetSlot 0x02AAE7 then
+; Voice_PortamentoTarget_ComputePitch 0x02AB10.
+
+[LABEL] 0x032A02 WAVESEL_REBUILD_PARTCACHES_RETURN  replaces=LABEL_032A02  confidence=high
+; Shared exit; also taken directly for format bytes 0x80 and 0xC0.
+
+[LABEL] 0x032A88 TONEDB_RESOLVE_NAMEDTONERECORD_RAMKITA  replaces=LABEL_032A88  confidence=high
+; XIX = ToneDB_RamBankA + 0x4AA7 + 0x50*E.
+
+[LABEL] 0x032AA2 TONEDB_RESOLVE_NAMEDTONERECORD_RAMKITB  replaces=LABEL_032AA2  confidence=high
+; XIX = ToneDB_RamBankB + 0x2927*Part_UserToneIndex[part] + 0x4AA7 + 0x50*E.
+
+[LABEL] 0x032BC0 PARTIAL_MODEFLAG_SLOT0_TEST  replaces=LABEL_032BC0  confidence=high
+; (tonerec[+0x12] & 0x03) == 1 -> Part_Slot_Flags[0] (0x0413EE) |= 0x8000.
+
+[LABEL] 0x032BDF PARTIAL_MODEFLAG_SLOT0_CLEAR  replaces=LABEL_032BDF  confidence=high
+; Otherwise Part_Slot_Flags[0] &= 0x7FFF.
+
+[LABEL] 0x032BF3 PARTIAL_TEST_PRESENT_SLOT1  replaces=LABEL_032BF3  confidence=high
+; tonerec[+0x11] bit 2 -> set bit 1 of the present word.
+
+[LABEL] 0x032C64 PARTIAL_MODEFLAG_SLOT1_TEST  replaces=LABEL_032C64  confidence=high
+; (tonerec[+0x12] & 0x0C) == 4 -> Part_Slot_Flags[1] (0x041413) |= 0x8000.
+
+[LABEL] 0x032C83 PARTIAL_MODEFLAG_SLOT1_CLEAR  replaces=LABEL_032C83  confidence=high
+; Otherwise Part_Slot_Flags[1] &= 0x7FFF.
+
+[LABEL] 0x032C97 PARTIAL_TEST_PRESENT_SLOT2  replaces=LABEL_032C97  confidence=high
+; tonerec[+0x11] bit 4 -> set bit 2 of the present word.
+
+[LABEL] 0x032CB1 PARTIAL_MODEFLAG_SLOT2_TEST  replaces=LABEL_032CB1  confidence=high
+; (tonerec[+0x12] & 0x30) == 0x10 -> Part_Slot_Flags[2] (0x041438) |= 0x8000.
+
+[LABEL] 0x032CD1 PARTIAL_MODEFLAG_SLOT2_CLEAR  replaces=LABEL_032CD1  confidence=high
+; Otherwise Part_Slot_Flags[2] &= 0x7FFF.
+
+[LABEL] 0x032CE5 PARTIAL_TEST_PRESENT_SLOT3  replaces=LABEL_032CE5  confidence=high
+; tonerec[+0x11] bit 6 -> set bit 3 of the present word.
+
+[LABEL] 0x032CFF PARTIAL_MODEFLAG_SLOT3_TEST  replaces=LABEL_032CFF  confidence=high
+; (tonerec[+0x12] & 0xC0) == 0x40 -> Part_Slot_Flags[3] (0x04145D) |= 0x8000.
+
+[LABEL] 0x032D1F PARTIAL_MODEFLAG_SLOT3_CLEAR  replaces=LABEL_032D1F  confidence=high
+; Otherwise Part_Slot_Flags[3] &= 0x7FFF.
+
+[LABEL] 0x032D33 PARTIAL_BUILD_PRESENT_WORD_STORE  replaces=LABEL_032D33  confidence=high
+; Write the assembled word back to Part_PresentWord (0x04136A+part*0x11F).
+; Bits 0..3 = "partial p present"; bit 14 = partial 0 is unison-substituted by
+; partial 1; bit 15 = partial 1 is unison-substituted by partial 0.  The
+; substitution is only taken when Part_Flags0A bit 15 is set, the OTHER
+; partial is present, and (tonerec[+0x5D] & 0x0F) is in 0..8.
+
+[ROUTINE] 0x032D44 KEY_CLAMP_0_7F  replaces=LABEL_032D44  confidence=high
+; Clamp a signed 16-bit value to 0..0x7F.
+; Entry: WA = value.  Exit: HL = clamped value.
+; Used only by Part_Apply_KeyTranspose (5 call sites).
+
+[LABEL] 0x032D4F KEY_CLAMP_0_7F_LOW  replaces=LABEL_032D4F  confidence=high
+; Negative -> 0.
+
+[LABEL] 0x032D55 KEY_CLAMP_0_7F_RETURN  replaces=LABEL_032D55  confidence=high
+; HL = WA; ret.
+
+[ROUTINE] 0x032D58 PARTIAL_GET_BASEKEY  replaces=LABEL_032D58  confidence=high
+; Fetch the base key number of one partial from its cached partial-block
+; pointer, honouring the unison substitution recorded in Part_PresentWord.
+; Entry: WA = part index, C = partial index p (0..3).
+; Exit:  HL = block[+1] (a 0..0x7F key number, 0x80 = "no key" sentinel).
+; p == 0: Part_PresentWord bit 14 set -> read partial 1's block (0x0413FB),
+;         else partial 0's (0x0413D6).
+; p == 1: Part_PresentWord bit 15 set -> read partial 0's block, else 1's.
+; p == 2 / 3: read 0x041420 / 0x041445 directly.
+; Sole caller: Part_Apply_KeyTranspose 0x032E6E.
+
+[LABEL] 0x032D97 PARTIAL_GET_BASEKEY_SLOT0_OWN  replaces=LABEL_032D97  confidence=high
+; Non-unison p = 0: read Part_Slot_Sub_Base[0] (0x0413D6).
+
+[LABEL] 0x032DAD PARTIAL_GET_BASEKEY_SLOT1  replaces=LABEL_032DAD  confidence=high
+; p = 1 entry; test Part_PresentWord bit 15.
+
+[LABEL] 0x032DDC PARTIAL_GET_BASEKEY_SLOT1_OWN  replaces=LABEL_032DDC  confidence=high
+; Non-unison p = 1: read Part_Slot_Sub_Base[1] (0x0413FB).
+
+[LABEL] 0x032DF2 PARTIAL_GET_BASEKEY_SLOT2  replaces=LABEL_032DF2  confidence=high
+; p = 2: read Part_Slot_Sub_Base[2] (0x041420).
+
+[LABEL] 0x032E08 PARTIAL_GET_BASEKEY_SLOT3  replaces=LABEL_032E08  confidence=high
+; p = 3: read Part_Slot_Sub_Base[3] (0x041445).
+
+[ROUTINE] 0x032E1E PART_APPLY_KEYTRANSPOSE  replaces=LABEL_032E1E  confidence=high
+; Recompute the cached key-range of every partial of one part after a
+; transpose change, then apply the two-partial key spread.
+; Entry: A = part index.  Exit: nothing.
+; Writes Part_Struct_Base + part*0x11F + 0x6E + 0x25*p + 0x23 and + 0x24 for
+; p = 0..3 (the partial's key-range low/high bytes).
+; Step 1: t = byte[0x041376 + part*0x11F] - 0x40 (signed transpose).  For each
+;   partial, k = Partial_Get_BaseKey; if k != 0x80 then k = clamp(k + t); both
+;   +0x23 and +0x24 receive k.
+; Step 2 (0x032F09): if Part_Struct[+0x0A] bit 15 is set, patchrec[+0x5D] bit 6
+;   is set, the two saved keys of partials 0 and 1 are EQUAL and not 0x80, the
+;   pair is spread apart: k < 0x40 -> lo = clamp(k-0x10), hi = clamp(lo+0x28);
+;   k >= 0x40 -> lo = clamp(k+0x10), hi = clamp(lo-0x28).
+;   (patchrec[+0x5D] & 0x0F) == 9  -> both partials get {+0x23 = lo,
+;                                     +0x24 = hi};
+;   (patchrec[+0x5D] & 0x0F) <  0x0A -> partial 0 gets +0x23 = lo and
+;                                     partial 1 gets +0x23 = hi;
+;   otherwise nothing is written.
+; Callers: Voice_Portamento_OnHandler_C0Mode 0x02A15A, Voice_CC_Pan 0x02A358,
+; VoiceAlloc_WithRoutingFlag_ExtData (x4), VoiceSlot_FullInit 0x0348DD,
+; VoiceSlot_AltInit 0x0349B8.
+; The LLVM source calls this EnvTranspose_UpdateLoop; nothing here touches an
+; envelope generator (see [UNCERTAIN]).
+
+[LABEL] 0x032E5E PART_APPLY_KEYTRANSPOSE_LOOP  replaces=LABEL_032E5E  confidence=high
+; p = 0..3: fetch base key, add the transpose, clamp, stash in the frame.
+
+[LABEL] 0x032EAA PART_APPLY_KEYTRANSPOSE_STORE  replaces=LABEL_032EAA  confidence=high
+; Store the result to the partial block's +0x23 and +0x24.
+
+[LABEL] 0x032F09 PART_APPLY_KEYTRANSPOSE_PAIRSPREAD  replaces=LABEL_032F09  confidence=high
+; Gate and entry of the partial-0/partial-1 key spread.
+
+[LABEL] 0x032F69 PART_APPLY_KEYTRANSPOSE_SPREADHIGH  replaces=LABEL_032F69  confidence=high
+; k >= 0x40: lo = clamp(k+0x10), hi = clamp(lo-0x28).
+
+[LABEL] 0x032F7D PART_APPLY_KEYTRANSPOSE_SPREADWRITE2  replaces=LABEL_032F7D  confidence=high
+; (patchrec[+0x5D] & 0x0F) == 9: write both +0x23 and +0x24 of both partials.
+
+[LABEL] 0x032FB2 PART_APPLY_KEYTRANSPOSE_SPREADWRITE1  replaces=LABEL_032FB2  confidence=high
+; (patchrec[+0x5D] & 0x0F) < 0x0A: write only +0x23 of both partials.
+
+[LABEL] 0x032FD0 PART_APPLY_KEYTRANSPOSE_RETURN  replaces=LABEL_032FD0  confidence=high
+; Frame teardown.
+
+[ROUTINE] 0x032FD5 PART_ROUTEFLAGS_UPDATE01  replaces=LABEL_032FD5  confidence=medium
+; Recompute bits 0 and 1 of one entry of a part's 4-byte routing-flag record by
+; polling all four partial blocks.
+; Entry: A = part index, C = group selector (0/1/2), E = value to match (0..3).
+; Exit:  nothing; updates one byte in the part structure.
+; Target byte = Part_Struct_Base + part*0x11F + 0x27 + 0x10*C + 4*E.
+; The byte's low two bits are cleared first.  If (target+3) != 0 and
+; (target+1) & 0x55 != 0, bit 1 is set and the routine returns.  Otherwise all
+; four partials are scanned: b = block_p[+0x06] for C == 0, block_p[+0x26] for
+; C == 1, block_p[+0x38] for C == 2, where block_p = Part_Slot_Sub_Base[part][p].
+; If b bit 5 is set and (b >> 6) == E, bit 0 of the target is set.
+; MEASURED but not interpreted: what the three group offsets select is not
+; established; b bits 6-7 are clearly a 2-bit destination code and bit 5 an
+; enable.  The XHL load of Part_PatchRecord_Ptr at 0x033007..0x033014 is dead.
+; Callers: VoiceCC_DataTable_028F75 (6 sites), VoiceAlloc_WithRoutingFlag_ExtData
+; (6 sites), Voice_ProgChange_TableData (2), VoiceSlot_FullInit/AltInit (2).
+
+[LABEL] 0x03302B PART_ROUTEFLAGS_UPDATE01_SCANSTART  replaces=LABEL_03302B  confidence=high
+; Initialise the p = 0..3 partial scan counter (W).
+
+[LABEL] 0x033032 PART_ROUTEFLAGS_UPDATE01_SCANLOOP  replaces=LABEL_033032  confidence=high
+; Group selector C == 0: b = Part_Slot_Sub_Base[part][p] -> [+0x06].
+
+[LABEL] 0x033069 PART_ROUTEFLAGS_UPDATE01_GROUP1  replaces=LABEL_033069  confidence=high
+; C == 1: b = block[+0x26].
+
+[LABEL] 0x033092 PART_ROUTEFLAGS_UPDATE01_GROUP2  replaces=LABEL_033092  confidence=high
+; C == 2: b = block[+0x38].
+
+[LABEL] 0x0330B9 PART_ROUTEFLAGS_UPDATE01_MATCH  replaces=LABEL_0330B9  confidence=high
+; b bit 5 set and (b >> 6) == E -> set bit 0 of the target byte.
+
+[LABEL] 0x0330CC PART_ROUTEFLAGS_UPDATE01_SCANNEXT  replaces=LABEL_0330CC  confidence=high
+; p++ and loop while p < 4.
+
+[LABEL] 0x0330D3 PART_ROUTEFLAGS_UPDATE01_RETURN  replaces=LABEL_0330D3  confidence=high
+; Shared exit.
+
+[ROUTINE] 0x0330D5 PART_ROUTEFLAGS_UPDATE23  replaces=LABEL_0330D5  confidence=medium
+; Byte-for-byte twin of 0x032FD5 operating on bits 2 and 3 of the same target
+; byte: the mask is 0xF3 instead of 0xFC, the "already forced" probe reads
+; (target+2) instead of (target+3), and the bits set are 3 (forced) and 2
+; (matched) instead of 1 and 0.  Same entry contract, same callers (a different
+; set of 16 call sites), same dead XHL load at 0x033107..0x033114.
+
+[LABEL] 0x03312B PART_ROUTEFLAGS_UPDATE23_SCANSTART  replaces=LABEL_03312B  confidence=high
+; Initialise the p = 0..3 partial scan counter (W).
+
+[LABEL] 0x033132 PART_ROUTEFLAGS_UPDATE23_SCANLOOP  replaces=LABEL_033132  confidence=high
+; Group selector C == 0: b = block[+0x06].
+
+[LABEL] 0x033169 PART_ROUTEFLAGS_UPDATE23_GROUP1  replaces=LABEL_033169  confidence=high
+; C == 1: b = block[+0x26].
+
+[LABEL] 0x033192 PART_ROUTEFLAGS_UPDATE23_GROUP2  replaces=LABEL_033192  confidence=high
+; C == 2: b = block[+0x38].
+
+[LABEL] 0x0331B9 PART_ROUTEFLAGS_UPDATE23_MATCH  replaces=LABEL_0331B9  confidence=high
+; b bit 5 set and (b >> 6) == E -> set bit 2 of the target byte.
+
+[LABEL] 0x0331CC PART_ROUTEFLAGS_UPDATE23_SCANNEXT  replaces=LABEL_0331CC  confidence=high
+; p++ and loop while p < 4.
+
+[LABEL] 0x0331D3 PART_ROUTEFLAGS_UPDATE23_RETURN  replaces=LABEL_0331D3  confidence=high
+; Shared exit; last instruction of region 10.
+
+[UNCERTAIN] Naming-style conflict.  The curated symbols/subcpu_symbols_reference.txt
+uses MIXED case in this region: the 2026-07-26 wave-select pass added
+ToneDB_Find_PatchRecord, WaveSel_StageA1_FindVelSplit, Partial_Build_Present_Word,
+etc.  The brief asks for UPPER_SNAKE_CASE.  I have written every NEW proposal in
+UPPER_SNAKE_CASE with the same subsystem prefixes (TONEDB_, WAVESEL_, PARTIAL_,
+PART_, VOICEPARAM_, KEY_) so it satisfies the brief, but the result will read
+inconsistently next to the existing CamelCase neighbours.  Integrator's call:
+either accept the mix, or lowercase mine to match the 2026-07-26 pass.  I did
+NOT rename any existing non-LABEL_ symbol.
+
+[UNCERTAIN] The LLVM source and the curated symbol file DISAGREE across this whole
+region.  v142/subcpu/kn5000_subprogram_v142.s already carries names such as
+DSP_SetVoiceCoefficients (0x03111A), DSP_SetCoeff_MasterConfig (0x031795),
+AlgoFlag_Write (0x032FD5), EnvTranspose_UpdateLoop (0x032E1E),
+VoiceFlags_Aggregate (0x032B1E), SlotParam_WriteDispatch (0x03248B), while
+symbols/subcpu_symbols_reference.txt still has LABEL_03111A, LABEL_031795,
+LABEL_032FD5, LABEL_032E1E and the BETTER names Partial_Build_Present_Word,
+WaveSel_StageA1_FindVelSplit for the last two.  I proposed against the curated
+file (that is where LABEL_ placeholders live).  The .s names in the "DSP_" and
+"Algo"/"EnvTranspose"/"VoiceFlags" families are, in my reading, WRONG: nothing
+in 0x03111A..0x031A56 touches a DSP register (no access to 0x130000-0x130003 or
+to the tone-generator ports); it is all tone-database table walking feeding the
+inter-CPU reply buffer.  Likewise "EnvTranspose" manipulates key numbers, not
+envelopes, and "SlotParam_WriteType0..7" (0x0324D1..0x0325B1) never write
+anything -- they only COMPUTE a pointer, which the curated file already
+recognises by calling the entry WaveSel_StageA1_FindVelSplit.  I left all of
+them alone and recommend the .s be reconciled to the curated names rather than
+the other way round.
+
+[UNCERTAIN] FP_MulAccum64 (0x03D8CA) is used throughout this region as a plain
+32x32 -> 32 multiply (XWA * XBC -> XHL).  Its body is exactly that: three
+partial products summed.  The "FP" and "Accum64" in the name are not supported
+by the code.  Not renamed.
+
+[UNCERTAIN] Root-struct field meanings.  I identified WHICH ToneDB_RootPtr fields
+each path uses (+0x04, +0x08, +0x0C..+0x38, +0x4C, +0x60, +0x6C, +0x74, +0x78,
++0x7C, +0x80, +0x8C, +0x94, +0x9C..+0xA4, +0xAC, +0xB0, +0xEA..+0xF2) but I did
+NOT dump the shipped ToneDB image to confirm what the +0x4C/+0x60/+0x7C/+0x80/
++0x8C/+0x94/+0xB0 tables actually contain.  The "16-byte row, 13 shipped"
+description of 0x03122F/0x0313CC/0x0316B4 is from the code only.
+
+[UNCERTAIN] 0x032FD5 / 0x0330D5 (PART_ROUTEFLAGS_UPDATE01/23): the semantics of
+the 4-byte record at part+0x27+0x10*C+4*E and of the partial-block bytes
++0x06/+0x26/+0x38 are inferred from the bit manipulation only.  My names claim
+"routing flags"; that is a medium-confidence reading based on the callers being
+control-change and voice-allocation code.  If someone can show these bytes are
+LFO or EG assignments the names should change.
+
+[UNCERTAIN] 0x0316B4 has no caller in the whole sub-CPU image.  I call it dead
+code; it is possible it is reached by a computed jump my scan did not model.
+
+[UNCERTAIN] Part_UserToneIndex (0x041381) is a 2-BYTE tone selector, not a single
+index: 0x041381 = low/program byte and 0x041382 = high/bank byte, and the pair
+is fed to ToneDB_Find_ToneRecord by 0x03111A, 0x031274, 0x0325B1, 0x032AA2 and
+Partial_Find_Rank.  The existing curated name suggests a scalar.  Suggest adding
+Part_ToneSelector_Hi 0x041382 rather than renaming 0x041381.

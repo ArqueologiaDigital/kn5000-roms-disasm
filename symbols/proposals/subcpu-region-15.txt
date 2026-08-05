@@ -1,0 +1,985 @@
+# region 15: 0x03A933..0x03D403
+# The DSP filter-coefficient math (biquad + second-order-section), the DSP bytecode /
+# parameter-write engine that feeds it, and -- despite their names -- the KEYBED scanner and
+# two float helpers.
+#
+# INTEGRATION NOTE (read first):
+#   The AUTHORITATIVE LLVM build already carries a real name for almost every address in this
+#   range (verified with `llvm-nm -n rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf`).
+#   symbols/subcpu_symbols_reference.txt is what lags: ~70 of its entries here are still
+#   LABEL_xxxxxx.  For those this file gives the ELF name verbatim plus the `replaces=` field,
+#   so integration is mechanical, AND the doc header the project actually wants.
+#   What is genuinely NEW here is 29 names for code the converter emitted inside `.byte`
+#   runs and that therefore has NO symbol at all:
+#     * 24 opcode-dispatch arms at 0x03CBDE..0x03CE9E (reached by a computed jump), and
+#     * 5 bytecode-handler entries at 0x03C568..0x03C7BB inside DSP_Bytecode_Programs.
+#   NOTHING in this file renames an existing non-LABEL_ symbol; disagreements are in
+#   [UNCERTAIN] only.
+#
+# ★ WHAT THIS REGION ACTUALLY DOES
+#
+#   1. 0x03A933..0x03C160  Floating-point DSP filter design.  Two families:
+#        DSP_BiquadCoeff_Compute (0x03A933) -- bilinear-transform biquad.  Prewarps with
+#          K = tan(pi*f/Fs) using the double constant pi/44100 = 7.123792865e-05.
+#        DSP_SOS_Coeff_Compute (0x03B646) -- RBJ-cookbook second-order section.  Uses the
+#          full angle w0 = 2*pi*f/Fs = 1.424758573e-04.
+#      Both take the band's centre frequency from the ISO 1/3-octave table at 0x012397
+#      (40, 50, 63, 80 ... 16000 Hz, 27 floats) and a gain in dB formed as
+#      raw*0.5 - 12.0  (so 0.5 dB steps over +/-12 dB), convert it to a linear factor with
+#      A = 10^(dB/20), assemble the five biquad taps, divide them all by a0, scale by
+#      2^22 (=4194304.0) -- the last tap by 2^23 (=8388608.0) -- convert to integer and push
+#      them to the DSP.  ★ SAMPLE RATE IS 44100 Hz, proven by the constants.
+#
+#   2. 0x03C067..0x03C160  DSP_MixerCoeff_Compute -- integer (Q15/Q16) mixer gain, writes DSP
+#      registers 0xD0 and 0xD3.
+#
+#   3. 0x03C161..0x03CFED  The DSP write plumbing: a small BYTECODE INTERPRETER (six opcodes)
+#      that replays canned register-write programs, a PARAMETER-WRITE ENGINE that walks a
+#      tagged variable-length table, and a PER-PARAMETER TRANSLATOR whose 28-way opcode
+#      dispatch calls the curve/interpolation functions of regions 13-14 and then one of
+#      DSP_WriteOscParam / DSP_WriteFreqParam / DSP_WriteCoeffData_5B_Direct.
+#      Every hardware write funnels through DSP_DispatchCommand/DSP_DispatchData (0x036A2E /
+#      0x036A4F) with a chip selector: 0 = DSP1 (uPD6383, IC311, port 0x130000),
+#      1 = DSP2 (MN19413, IC310, bit-banged SPI).  The chip id for an effect slot comes from
+#      the byte table at 0x01ED6D.
+#
+#   4. 0x03CFEE..0x03D342  ★ MISNAMED: this is the KEYBED, not the tone generator.  It reads
+#      0x110002 (status) / 0x110000 (data) -- the KEYBED port per kn5000.cpp -- turns key
+#      events into 3-byte MIDI note-on messages in the buffer at 0x004A42 and DMAs them to the
+#      MAIN CPU.  This is the "keybed service" the brief locates at 0x03D01E.
+#
+#   5. 0x03D34D..0x03D403  Three float helpers used by the filter math.
+#
+# ★★ THE FP LIBRARY'S OPERATION NAMES ARE SYSTEMATICALLY WRONG (measured, see [UNCERTAIN]).
+#   The format is plain little-endian IEEE-754 (double: bias 0x3FF; single: 4 bytes).  What the
+#   routines really do, proven from FP_DP_AlignMantissa / FP_DP_MulAdd / FP_DP_Mul_Outer:
+#       FP_xx_Mul        (0x03E10E/0x03E15A)  = ADD/SUB   (aligns exponents, adds mantissas)
+#       FP_xx_Add_Outer  (0x03E290/0x03E2C0)  = MULTIPLY  (adds exponents, 64x64 mantissa mul)
+#       FP_xx_Mul_Outer  (0x03E3F6/0x03E4B4)  = DIVIDE    (subtracts exponents)
+#       VoiceFloat_SubDP/SubSP (in this region) = DIVIDE   (they wrap *_Mul_Outer)
+#       FP_DP_NegMantissaLS  (0x03DCF2) = float -> double widening
+#       FP_DP_NormalizeMantissa (0x03DD6C) = double -> float narrowing
+#       FP_SP_Decode_ReadSign (0x03D44C) = float -> integer
+#       VoiceFloat_CompareAndConvert (0x03D533) = pow(base, exponent)   [called with 10.0]
+#       VoiceFloat_MulAddDispatch (0x03D4C9) = tan(x)                   [biquad prewarp]
+#   Every doc line below states the REAL operation, not the label.
+
+[DATA] 0x00F3CA-0x00F3D1  FP_Const_HalfPi
+; IEEE-754 double 1.5707963267948966 (pi/2).  Used by VoiceFloat_DispatchMulAdd (0x03D34D) to
+; fold its argument before the series evaluation -- i.e. cos(x) = sin(pi/2 - x).
+
+[DATA] 0x012397-0x012412  DSP_FilterBand_FreqTable -- ISO 1/3-octave centre frequencies
+; 27 IEEE-754 floats (4 bytes each), index 0..26:
+;   40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
+;   2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000 (Hz).
+; Indexed by (word from the caller's parameter array) * 4.  Read by DSP_SOS_LUT_Fetch
+; (0x03B505) at three sites and by DSP_FilterLUT_Fetch (0x03A620, region 14).
+; Immediately followed at 0x012403 by five more floats 0.1, 0.2, 0.3, 0.4, 0.5 -- reached by
+; the same base pointer when the type-2 path masks the stream byte with 0x1F (indices 27..31),
+; so those are the "type 2" sub-parameter (Q/level) values.
+
+[DATA] 0x012F47-0x0130D2  DSP_BiquadCoeff_ConstPool -- literal pool for DSP_BiquadCoeff_Compute
+; Compiler-emitted literals, one copy per use site (that is why the same value repeats).
+; Doubles (8 B): 0x012F47=0.5, 0x012F4F=-12.0 (the gain map raw*0.5-12.0),
+;   0x012F57/0x012FBF/0x012FEB/0x012FF3/0x012FFB/0x013003/0x01300B = 7.123792865e-05 = pi/44100,
+;   0x012F73/0x012F87 = 10.0 (pow base), 0x012F7B/0x012F8F/0x01302F/0x013043 = 1.0.
+; Floats (4 B): 0x012F5F=1.0 0x012F63=1.0 0x012F67=-2.0 0x012F6B=1.0  (the {1,-2,1} numerator),
+;   0x012F6F/0x012F83/0x013023/0x013037 = 20.0 (dB divisor),
+;   0x012F77/0x012F8B=2.5625, 0x012F7F/0x012F93=1.875, 0x012F9F/0x012FA3/0x012FA7=2.0,
+;   0x012FAB/0x012FAF/0x012FB3/0x012FB7 = 4194304.0 = 2^22  (fixed-point scale),
+;   0x012FBB = 8388608.0 = 2^23  (scale for the 5th tap).
+; 0x013013..0x01305B is the same set again for algorithm 2.
+
+[DATA] 0x01305F-0x0131CE  DSP_SOSCoeff_ConstPool -- literal pool for DSP_SOS_Coeff_Compute
+; 0x01305F/0x01306F = 0.5 and 0x013067/0x013077 = -12.0  (the same raw*0.5-12.0 dB map, used
+; by DSP_SOS_LUT_Fetch's two indexing modes).
+; 0x01308B/0x013093/0x0130B3/0x0130BB/0x013123/0x01312B/0x013193/0x01319B = 1.424758573e-04
+;   = 2*pi/44100 (w0 for the RBJ form).
+; 0x01307F/0x0130EF/0x01315F = 20.0; 0x01308F/0x013097 = 0.63544762134552;
+; 0x0130E3/0x0130E7/0x013157/0x0131C3/0x0131C7 = 4194304.0 = 2^22;
+; 0x013153/0x01315B = 2097152.0 = 2^21.
+
+[DATA] 0x014739-0x014744  DSP_Bytecode_HandlerOffsetTable
+; 6 signed 16-bit offsets relative to 0x03C32E, indexed by the bytecode opcode's high nibble
+; (0..5).  Decoded: op0 +0x000 -> 0x03C32E, op1 +0x23A -> 0x03C568, op2 +0x333 -> 0x03C661,
+; op3 +0x3DA -> 0x03C708, op4 +0x473 -> 0x03C7A1, op5 +0x48D -> 0x03C7BB.
+; Consumed by the computed `jp (XIX+DE)` at the tail of DSP_BytecodeInterpreter_Loop.
+
+[DATA] 0x014745-0x014776  DSP_Translator_OpcodeOffsetTable
+; 25 signed 16-bit offsets relative to 0x03CB8E, indexed by (opcode - 0x61) for opcodes
+; 0x61..0x79.  Decoded targets, in opcode order:
+;   0x61->0x03CB8E 0x62->0x03CBDE 0x63->0x03CBFA 0x64->0x03CC33 0x65->0x03CC50 0x66->0x03CC6D
+;   0x67->0x03CC8A 0x68->0x03CCAB 0x69->0x03CCC8 0x6A->0x03CCE5 0x6B->0x03CD02 0x6C->0x03CD1F
+;   0x6D->0x03CD3F 0x6E->0x03CD5C 0x6F->0x03CD79 0x70->0x03CD96 0x71->0x03CDB9 0x72->0x03CDD6
+;   0x73->0x03CDF3 0x74->0x03CE10 0x75->0x03CE25 0x76->0x03CE42 0x77->0x03CE65 0x78->0x03CE82
+;   0x79->0x03CC16
+; Consumed by the computed `jp (XIX+DE)` at 0x03CB89.  Opcodes 0x21, 0x24 and 0x40 are
+; special-cased BEFORE this table; anything else aborts via DSP_Op_Unknown_Error.
+
+[DATA] 0x014777-0x0147B2  DSP_EFFBytecode_ProgramTable
+; 12-byte descriptors for DSP_BytecodeInterpreter_Init: +0,+2,+4,+6 = four words copied into
+; the interpreter frame, +8 = long.  Indexed by effect-slot number.  0x0147B3 is the same
+; shape and is the table used by DSP_WriteGlobalConfig (program 0 only).
+
+[ROUTINE] 0x03A933 DSP_BiquadCoeff_Compute  replaces=LABEL_03A933  confidence=high
+; Designs one bilinear-transform biquad from the DSP parameter stream and writes its five
+; coefficients to the DSP.  Reached only from the opcode-0x70 dispatch arm (0x03CD96).
+; Frame: 236 bytes of locals + `push IZ`.  Register args WA / BC / DE are forwarded to
+; DSP_FilterLUT_Fetch.  Five stack args, popped with `retd 0x10` (16 bytes), pushed by the arm
+; in this order: (1) long = the parameter-stream pointer, (2) word = the caller's running
+; status accumulator (IZ), (3) long, (4) word, (5) long = pointer to the caller's status word.
+; Returns XHL = the ADVANCED stream pointer; also stores the accumulated write status (IZ)
+; through arg 5.
+; Flow:
+;   1. calls DSP_FilterLUT_Fetch (0x03A620) which consumes the stream header, writes the
+;      ALGORITHM SELECTOR (the low nibble of the header byte) into a local, hands back the band
+;      frequency and gain as floats, and returns the advanced stream pointer (kept at frame
+;      +0x00FE and returned verbatim by the epilogue).
+;   2. three-way switch on that selector: 2 -> DSP_BiquadCoeff_Algo2, 1 -> ..._Algo1,
+;      0 -> falls through to the Algo0 body.  ★ ANY OTHER VALUE JUMPS STRAIGHT TO
+;      DSP_BiquadCoeff_Epilogue AND WRITES NOTHING TO THE DSP -- silently.
+;   3. Algo0 body: widen the cutoff to double; w = f * (pi/44100) [FP_DP_Add_Outer = multiply];
+;      K = tan(w) [VoiceFloat_MulAddDispatch]; narrow to float; build the {1,-2,1}-shaped
+;      numerator from the float literals at 0x012F5F..0x012F6B; A = 10^(gain_dB/20) via
+;      VoiceFloat_SubSP (divide by 20.0) then VoiceFloat_CompareAndConvert (pow, base 10.0 at
+;      0x012F73); combine into b0,b1,b2,a1,a2.
+; Hardware: no direct MMIO -- everything goes through DSP_WriteOscParam (0x0387E6) and
+; DSP_WriteCoeffData_5B_Direct (0x0388B3) in the Fixup block.
+
+[LABEL] 0x03AA65 DSP_BiquadCoeff_Algo0_SignZero  replaces=LABEL_03AA65  confidence=high
+; Algo0: gain term compared zero, so take the |x| copy path (FP_SP_CopyOrNegate4).
+
+[LABEL] 0x03AA73 DSP_BiquadCoeff_Algo0_AfterSign  replaces=LABEL_03AA73  confidence=high
+; Algo0: join point; divides the dB gain by 20.0 and calls pow(10, dB/20).
+
+[LABEL] 0x03AB23 DSP_BiquadCoeff_Algo0_Sign2Zero  replaces=LABEL_03AB23  confidence=high
+; Algo0: second sign test (on the intermediate a-term) took the negate path.
+
+[LABEL] 0x03AB2F DSP_BiquadCoeff_Algo0_AfterSign2  replaces=LABEL_03AB2F  confidence=high
+; Algo0: join point after the second sign test; continues assembling the denominator.
+
+[LABEL] 0x03AC3E DSP_BiquadCoeff_Algo0_NegBranch  replaces=LABEL_03AC3E  confidence=medium
+; Algo0: negative-argument arm of the denominator chain (sign-corrected duplicate of the
+; positive arm; it carries its own copy of the same literals).
+
+[LABEL] 0x03ACB1 DSP_BiquadCoeff_Algo0_Assembly  replaces=LABEL_03ACB1  confidence=high
+; Algo0: assembles the five raw taps from K and A before normalisation.  Ends with a guard at
+; 0x03AD0C: it compares the computed a0 against the float 1.0 at 0x012F9B (via
+; ToneGen_Compare_Voice_32 with kind DE=0, "equal") and, on a match, forces the normalisation
+; factor to the literal 0x3F800000 -- IEEE-754 single 1.0 -- before falling into the Fixup
+; block.  That literal is independent confirmation that this code is plain IEEE-754.
+
+[LABEL] 0x03AD1E DSP_BiquadCoeff_Algo0_Fixup  replaces=LABEL_03AD1E  confidence=high
+; ★ The store block, and the clearest evidence for what the whole routine is.  For each of the
+; five taps it does: tap = tap * something [FP_SP_Add_Outer = multiply], tap = tap / a0
+; [VoiceFloat_SubSP = divide], tap = tap * 2^22 (0x012FAB/AF/B3/B7) -- the FIFTH tap by 2^23
+; (0x012FBB) -- then FP_SP_Decode_ReadSign to convert float->int, then writes it:
+;   tap 1 via DSP_WriteOscParam (0x0387E6), taps 2..5 via DSP_WriteCoeffData_5B_Direct
+;   (0x0388B3).  Each write's HL status is accumulated in IZ.
+; So the DSP's biquad registers are Q22 (Q23 for the last), five per section.
+
+[ROUTINE] 0x03AE72 DSP_BiquadCoeff_Algo1  replaces=LABEL_03AE72  confidence=high
+; Algorithm 1 of DSP_BiquadCoeff_Compute (selector nibble == 1).  Same shape as Algo0 --
+; prewarp with pi/44100 (its own copy at 0x012FBF), {1,-2,1} numerator literals at
+; 0x012FC7..0x012FCF, Q22/Q23 scaling at 0x012FD7..0x012FE7 -- but a different tap topology;
+; it has no separate _Assembly stage and falls straight into its own store chain.
+; Not a routine in the ABI sense: entered by `jrl`, exits via DSP_BiquadCoeff_Epilogue.
+
+[ROUTINE] 0x03B08A DSP_BiquadCoeff_Algo2  replaces=LABEL_03B08A  confidence=high
+; Algorithm 2 (selector nibble == 2).  The most branchy of the three: five separate copies of
+; pi/44100 (0x012FEB, 0x012FF3, 0x012FFB, 0x013003, 0x01300B), one per basic block, plus two
+; sign tests.  Entered by `jrl` from DSP_BiquadCoeff_Compute, exits via the shared epilogue.
+
+[LABEL] 0x03B1D9 DSP_BiquadCoeff_Algo2_Sign1Zero  replaces=LABEL_03B1D9  confidence=high
+; Algo2: first sign test took the negate path.
+
+[LABEL] 0x03B1E5 DSP_BiquadCoeff_Algo2_AfterSign1  replaces=LABEL_03B1E5  confidence=high
+; Algo2: join point after the first sign test; divides the dB gain by 20.0.
+
+[LABEL] 0x03B28F DSP_BiquadCoeff_Algo2_Sign2Zero  replaces=LABEL_03B28F  confidence=high
+; Algo2: second sign test took the negate path.
+
+[LABEL] 0x03B29B DSP_BiquadCoeff_Algo2_AfterSign2  replaces=LABEL_03B29B  confidence=high
+; Algo2: join point after the second sign test.
+
+[LABEL] 0x03B3A6 DSP_BiquadCoeff_Algo2_NegBranch  replaces=LABEL_03B3A6  confidence=medium
+; Algo2: negative-argument arm of the final chain.
+
+[LABEL] 0x03B419 DSP_BiquadCoeff_Algo2_WriteParams  replaces=LABEL_03B419  confidence=high
+; Algo2's store block: scales by 2^22 (0x01304B, 0x01304F, 0x013057, 0x01305B) and 2^23
+; (0x013053), converts to integer and emits five coefficients exactly like
+; DSP_BiquadCoeff_Algo0_Fixup.
+
+[LABEL] 0x03B4F0 DSP_BiquadCoeff_Epilogue  replaces=LABEL_03B4F0  confidence=high
+; Common exit for all three algorithms AND for the "unknown selector" fall-through.
+;   *(arg5 pointer at frame+0x00F2) = IZ  (accumulated DSP write status)
+;   XHL = the stream pointer saved at frame+0x00FE by the DSP_FilterLUT_Fetch call
+;   pop IZ, lda XSP,XSP+0xEC, retd 0x10.
+
+[ROUTINE] 0x03B505 DSP_SOS_LUT_Fetch  replaces=LABEL_03B505  confidence=high
+; Parses one second-order-section header out of the DSP parameter stream and returns the band
+; frequency and the band gain as floats.  Called only by DSP_SOS_Coeff_Compute (`calr`).
+; In:  WA = parameter index (kept in IZ), XBC and XDE = out-pointers for the two floats,
+;      3 stack args (retd 0x0C): the stream pointer, the caller's per-parameter word array,
+;      and the out-pointer for the TYPE nibble.
+; Out: XHL = advanced stream pointer; *(type ptr) = header_byte & 0x0F -- this is the value
+;      DSP_SOS_Coeff_Compute switches on to pick algorithm 0/1/2.
+; Body: reads the header byte, keeps its low nibble as the type and its high nibble as the
+;   indexing mode.  Mode 0x10 (DSP_SOS_LUT_Mode0x10) uses word[IZ-1] for the frequency and
+;   word[IZ] for the gain; every other mode uses word[IZ] and word[IZ+1].  The frequency word
+;   indexes the ISO 1/3-octave float table at 0x012397 (copied out with FP_SP_Raw4Copy).  The
+;   gain word is widened with FP_ScalarToDP then mapped to dB as raw*0.5 - 12.0
+;   (FP_DP_Add_Outer with 0.5 at 0x01305F = multiply, then FP_DP_Mul with -12.0 at 0x013067 =
+;   add) and narrowed back to a float.
+; If the type nibble is 2 it consumes ONE MORE stream byte, masks it with 0x1F and re-fetches
+; the frequency float from 0x012397 with that index -- i.e. indices 27..31 select the
+; 0.1/0.2/0.3/0.4/0.5 constants that follow the frequency table.
+
+[LABEL] 0x03B596 DSP_SOS_LUT_Mode0x10  replaces=LABEL_03B596  confidence=high
+; Alternate indexing when the header's high nibble is 0x10: frequency from word[IZ-1], gain
+; from word[IZ]; own copies of the 0.5 / -12.0 dB literals at 0x01306F / 0x013077.
+
+[LABEL] 0x03B5F9 DSP_SOS_LUT_CheckType2  replaces=LABEL_03B5F9  confidence=high
+; Join point; if the type nibble is 2, consume one extra stream byte and re-fetch the float
+; from 0x012397 masked with 0x1F.
+
+[LABEL] 0x03B624 DSP_SOS_LUT_StoreResults  replaces=LABEL_03B624  confidence=high
+; Writes the type nibble, the frequency float and the gain float through the three
+; out-pointers, returns XHL = stream pointer, `retd 0x0C`.
+
+[ROUTINE] 0x03B646 DSP_SOS_Coeff_Compute  replaces=LABEL_03B646  confidence=high
+; Designs one RBJ-cookbook second-order section and writes its coefficients to the DSP.
+; Reached only from the opcode-0x76 dispatch arm (0x03CE42).  Same five-stack-arg convention
+; as DSP_BiquadCoeff_Compute (`retd 0x10`), same "return the advanced stream pointer in XHL
+; and the accumulated write status through the last pointer arg" contract.
+; Differs from the biquad family in the prewarp: it uses the FULL angle
+;   w0 = f * 2*pi/44100  (literal 1.424758573e-04 at 0x01308B and its per-block copies)
+; rather than the half angle, which is the signature of the sin(w0)/cos(w0) cookbook form.
+; Selector: the type nibble returned by DSP_SOS_LUT_Fetch; 2 -> DSP_SOS_Algo2,
+; 1 -> DSP_SOS_Algo1, 0 -> falls through, anything else -> DSP_SOS_Coeff_Epilogue with NO
+; writes at all.
+
+[LABEL] 0x03B7F4 DSP_SOS_Algo0_NonzeroCoeff  replaces=LABEL_03B7F4  confidence=medium
+; Algo0: arm taken when the tested coefficient is non-zero (the zero arm skips a whole
+; multiply chain).
+
+[LABEL] 0x03B901 DSP_SOS_Algo0_FinalChain  replaces=LABEL_03B901  confidence=high
+; Algo0's store block: normalises by a0 (VoiceFloat_SubSP = divide), scales by 2^22
+; (0x0130E3, 0x0130E7), converts float->int and emits the taps through DSP_WriteOscParam /
+; DSP_WriteCoeffData_5B_Direct, accumulating status in IZ.
+
+[ROUTINE] 0x03B9DD DSP_SOS_Algo1  replaces=LABEL_03B9DD  confidence=high
+; Second-order-section algorithm 1 (type nibble == 1).  Own literal block at
+; 0x0130EF..0x01315B; note the 2^21 scale (2097152.0 at 0x013153 / 0x01315B) instead of 2^22,
+; i.e. this topology's coefficients need one more headroom bit.
+; Entered by `jrl`, exits via DSP_SOS_Coeff_Epilogue.
+
+[LABEL] 0x03BB3F DSP_SOS_Algo1_NonzeroCoeff  replaces=LABEL_03BB3F  confidence=medium
+; Algo1: non-zero-coefficient arm.
+
+[LABEL] 0x03BC44 DSP_SOS_Algo1_FinalChain  replaces=LABEL_03BC44  confidence=high
+; Algo1's normalise / scale / float->int / write chain.
+
+[ROUTINE] 0x03BD18 DSP_SOS_Algo2  replaces=LABEL_03BD18  confidence=high
+; Second-order-section algorithm 2 (type nibble == 2) -- the variant that also consumed the
+; extra stream byte in DSP_SOS_LUT_Fetch.  Literal block 0x01315F..0x0131CB, 2^22 scaling.
+; Entered by `jrl`, exits via DSP_SOS_Coeff_Epilogue.
+
+[LABEL] 0x03BE78 DSP_SOS_Algo2_NonzeroCoeff  replaces=LABEL_03BE78  confidence=medium
+; Algo2: non-zero-coefficient arm.
+
+[LABEL] 0x03BF7D DSP_SOS_Algo2_FinalChain  replaces=LABEL_03BF7D  confidence=high
+; Algo2's normalise / scale / float->int / write chain.
+
+[LABEL] 0x03C04F DSP_SOS_Coeff_Epilogue  replaces=LABEL_03C04F  confidence=high
+; Common exit: *(status-out pointer at frame+0x00DC) = IZ; XHL = advanced stream pointer from
+; frame+0x00E6; pop XIZ; lda XSP,XSP+0xD2; retd 0x10.
+
+[ROUTINE] 0x03C067 DSP_MixerCoeff_Compute  replaces=LABEL_03C067  confidence=high
+; Computes a two-stage integer mixer gain and writes it to DSP registers 0xD0 and 0xD3.
+; Called twice from region 11 (0x034360-area, the output-routing layer).
+; In:  WA = index A, BC = curve index, DE = index B.  32 bytes of locals + `push XIZ`, `ret`
+;      (no stack args).
+; Body: g = long[0x000131CF + 4*BC] >> 15;  g = MulAccum64(g, long[0x00F140 + 4*WA] >> 16);
+;       g = MulAccum64(g, long[0x00F140 + 4*DE] >> 15)  -- FP_MulAccum64 at 0x03D8CA is a
+;       32x32 -> 64 fixed-point multiply-accumulate, so this is Q15/Q16 arithmetic on the
+;       live per-slot volume array in DRAM at 0x00F140.
+;       The same slot is then run through FP_SP_CallWithBuf8 / FP_SP_Decode_ReadSign to get a
+;       second, float-derived integer.
+; Writes, for each of the two results, the sequence
+;       DSP_DispatchCommand(0x30) ; DispatchData(0x00) ; DispatchData(0xD0 or 0xD3) ;
+;       DispatchData(hi byte) ; DispatchData(lo byte) ; DSP2_SPI_BusIdle ;
+;       DSP_Bytecode_NotifyStateChange
+; on chip 1 (DSP2 / MN19413).  ★ Note the two NotifyStateChange calls: each is a preemptive
+; task yield in the MIDDLE of the register-write sequence (see [UNCERTAIN]).
+
+[ROUTINE] 0x03C161 DSP_WriteEFFConfig  confidence=high
+; Already named in both the ELF and the reference file; documented here for completeness.
+; In:  WA = effect-slot index, XBC = pointer to the bytecode stream for this slot.
+; Looks the slot's CHIP ID up in the byte table at 0x01ED6D, then runs
+; DSP_BytecodeInterpreter_Init(WA = chip, BC = slot = program index, XDE = 0x014777 program
+; table, pushed XBC = bytecode stream).  Ten callers in region 11's effect layer.
+
+[ROUTINE] 0x03C181 DSP_WriteGlobalConfig  confidence=high
+; Already named.  Runs program 0 of the descriptor table at 0x0147B3 on the chip in WA, with
+; the caller's XBC as the bytecode stream.  Thirteen callers.
+
+[ROUTINE] 0x03C190 DSP_WriteParameter  confidence=high
+; Already named.  Front door for "write parameter set N of effect M".
+; In:  WA = chip/kind selector, BC = effect id, DE = word passed through, XIX = a stack arg
+;      that is the base of a 56-BYTE-PER-ENTRY parameter-block array (the address computed is
+;      XIX + 56*WA + 12).
+; If WA==1 and BC is 9 or 0x0A it uses the fixed descriptor pairs 0x01E17F/0x01E19E (9) or
+; 0x01E40A/0x01E42D (0x0A); otherwise it looks the pair up in the long tables at 0x0001F22C
+; (indexed by BC) and 0x0001F09C.  Either way it ends in
+; DSP_ParameterWriteEngine(XDE = descriptor table, XBC = 0x014777, + 3 pushed args).
+
+[LABEL] 0x03C1A3 DSP_WriteParam_EFFCase  replaces=LABEL_03C1A3  confidence=high
+; The WA==1 arm; re-tests BC and routes to the 0x0A case or the 9 case.
+
+[LABEL] 0x03C1DF DSP_WriteParam_EFFCase0xA  replaces=LABEL_03C1DF  confidence=high
+; Effect id 0x0A: descriptor tables 0x01E40A / 0x01E42D.
+
+[LABEL] 0x03C20E DSP_WriteParam_Generic  replaces=LABEL_03C20E  confidence=high
+; Generic arm: descriptor pointers from long tables 0x0001F22C[BC] and 0x0001F09C[..].
+
+[LABEL] 0x03C24F DSP_WriteParam_Return  replaces=LABEL_03C24F  confidence=high
+; `retd 0x4` -- pops the single long stack argument.
+
+[ROUTINE] 0x03C253 DSP_Bytecode_NotifyStateChange  confidence=high
+; Already named.  Two instructions: `lds wa,1` then `jp TaskSched_PreemptiveYield_INT`
+; (0x020370).  It is a TAIL JUMP, so it re-enters the scheduler with priority 1 and only comes
+; back when this task is next dispatched.  Called after every DSP2_SPI_BusIdle in the bytecode
+; interpreter, the translator and DSP_MixerCoeff_Compute -- i.e. the DSP write path
+; deliberately yields between register groups.
+
+[ROUTINE] 0x03C259 DSP_BytecodeInterpreter_Init  confidence=high
+; Already named.  Sets up and runs a canned DSP register-write program.
+; In:  WA = chip id (0 = DSP1/uPD6383, 1 = DSP2/MN19413), BC = program index,
+;      XDE = 12-byte-descriptor table base (0x014777 or 0x0147B3), one pushed long = the
+;      BYTECODE STREAM pointer.  `retd 0x4`.  Out: HL = last dispatch status.
+; Copies descriptor fields +0/+2/+4/+6 (words) and +8 (long) into the frame, then enters
+; DSP_BytecodeInterpreter_CheckEnd.  Frame layout used by every handler:
+;   (XSP+0x04) loop counter    (XSP+0x06) group length    (XSP+0x14) CHIP ID
+;   (XSP+0x1A) bytecode stream pointer (auto-incremented)  IZ = error accumulator.
+
+[ROUTINE] 0x03C2CB DSP_BytecodeInterpreter_Loop  confidence=high
+; Already named.  Fetches one 2-byte bytecode instruction:
+;   opcode  = byte0 >> 4
+;   length  = ((byte0 & 0x0F) << 8) + byte1 - 2
+; then advances the stream by 2 and dispatches: 0xE -> DSP_Bytecode_Op0E_SendCommand,
+; 0xD -> DSP_Bytecode_Op0D_StateChange, > 5 -> ignored (straight to CheckEnd), 0..5 ->
+; computed `jp` through the offset table at 0x014739 with base 0x03C32E.
+
+[ROUTINE] 0x03C32E DSP_Bytecode_Programs  confidence=high
+; Already named; the name covers the whole 1613-byte `.byte` run 0x03C32E..0x03C97A, which is
+; CODE, not data -- six opcode handlers.  This address is also handler 0's entry.
+; Handler 0 (570 B): command byte + 2 preamble bytes + groups of 5; three-way branch per group
+; (0x00 = static address, 0x0A = raw, else = parameter-modified, mixing a 32-bit runtime
+; parameter into the template coefficient).  The source file's own comment block above this
+; label documents all six handlers and was cross-checked against the offset table here.
+
+[ROUTINE] 0x03C568 DSP_Bytecode_Op01_Groups5_Addr12  confidence=medium
+; Bytecode handler 1 (offset 0x23A, 249 bytes).  Entered ONLY by the computed jump in
+; DSP_BytecodeInterpreter_Loop when the opcode nibble is 1; no symbol existed for it.
+; Verified head: fetch one byte from the stream at (XSP+0x1A) with post-increment, extend it
+; and send it as a COMMAND -- DSP_DispatchCommand(WA = byte, BC = (XSP+0x14) = chip id) -- and
+; accumulate the returned status into IZ.  Then two preamble bytes and groups of five, with a
+; 12-bit address computation (4-bit shift) and its accumulator at frame+0x08.
+; Exits by `jrl` to DSP_BytecodeInterpreter_CheckEnd (0x03C9CE).
+
+[ROUTINE] 0x03C661 DSP_Bytecode_Op02_Groups3_Raw  confidence=medium
+; Bytecode handler 2 (offset 0x333, 167 bytes).  Same command-byte prologue as handler 1, then
+; two preamble bytes and groups of THREE raw data bytes with no address computation -- a plain
+; block copy into consecutive DSP registers.  Exits to DSP_BytecodeInterpreter_CheckEnd.
+
+[ROUTINE] 0x03C708 DSP_Bytecode_Op03_Addr16_RawTail  confidence=medium
+; Bytecode handler 3 (offset 0x3DA, 153 bytes).  Command byte, then a 16-bit address built
+; from two stream bytes (8-bit shift; the `ld A,(XWA+0x01)` at 0x03C722 is the second address
+; byte), then a raw tail.  Accumulator at frame+0x0E.  Exits to CheckEnd.
+
+[ROUTINE] 0x03C7A1 DSP_Bytecode_Op04_CommandOnly  confidence=high
+; Bytecode handler 4 (offset 0x473, 26 bytes) -- the whole handler, fully decoded:
+;   XWA = (XSP+0x1A); C = (XWA+) ; (XSP+0x1A) = XWA        ; fetch one stream byte
+;   WA = zero-extend(C) ; BC = (XSP+0x14)                  ; chip id
+;   call DSP_DispatchCommand (0x036A2E) ; IZ = HL          ; accumulate status
+;   jrl DSP_BytecodeInterpreter_CheckEnd (0x03C9CE)
+; i.e. "emit one command byte, no data".  This is the block that proves the frame layout used
+; by all six handlers.
+
+[ROUTINE] 0x03C7BB DSP_Bytecode_Op05_Groups5_Masked  confidence=medium
+; Bytecode handler 5 (offset 0x48D, 448 bytes).  A variant of handler 0: command byte, two
+; preamble bytes, groups of five, but a TWO-way branch (0x08 = address, masked with IZH; else
+; parameter-modified) and its accumulator at frame+0x0C.  Exits to CheckEnd.
+
+[ROUTINE] 0x03C97B DSP_Bytecode_Op0D_StateChange  confidence=high
+; Already named.  Opcode nibble 0xD: `DSP2_SPI_BusIdle` then `DSP_Bytecode_NotifyStateChange`
+; (a task yield) then CheckEnd.  Emits no data at all -- it exists purely to release the SPI
+; bus and let other tasks run between register groups.
+
+[ROUTINE] 0x03C984 DSP_Bytecode_Op0E_SendCommand  confidence=high
+; Already named.  Opcode nibble 0xE: sends one stream byte as a COMMAND, then, if the decoded
+; group length > 1, falls into DSP_Bytecode_Op0E_DataLoop for the remaining bytes.
+
+[LABEL] 0x03C9AA DSP_Bytecode_Op0E_DataLoop  confidence=high
+; Already named.  Sends stream bytes as DATA via DSP_DispatchData until the frame counter
+; at (XSP+0x04) reaches the group length at (XSP+0x06).
+
+[LABEL] 0x03C9CE DSP_BytecodeInterpreter_CheckEnd  confidence=high
+; Already named.  Peeks the next stream byte WITHOUT consuming it; if (byte & 0xF0) != 0xF0
+; loops back to DSP_BytecodeInterpreter_Loop, else returns HL = IZ (accumulated status),
+; pop XIZ, `retd 0x4`.  ★ 0xFx is the only terminator -- a stream that lacks one runs off the
+; end of the program image (see [UNCERTAIN]).
+
+[ROUTINE] 0x03C9E6 DSP_ParameterWriteEngine  confidence=high
+; Already named.  Walks a tagged table of parameter records and hands each one to
+; DSP_PerParameterTranslator, framing the whole run with DSP1 bracket commands.
+; In:  WA = effect-slot index, BC/DE forwarded, plus 5 stack args (`retd 0x0A`): the record
+;      table pointer, an end pointer, the opcode-descriptor table and two pass-throughs.
+; The CHIP ID is byte[0x0001ED6D + WA] and lives at frame+0x04 for the whole run.
+; Uses DSP_TableWalk_SearchWithState to position XIZ at the first record; if that reports a
+; non-zero status it calls DSP_NopReturn (a stub! the error is swallowed) and returns.
+; Per record, ONLY when the chip id is 0 (DSP1 / uPD6383), it brackets the record with
+;   DispatchCommand(1) ; DispatchData(1) ; DispatchData(0x60)   ... record ...
+;   DispatchCommand(3)
+; The loop terminates when XIZ reaches the end pointer at frame+0x06.
+
+[LABEL] 0x03CA30 DSP_ParamLoop_CheckBound  replaces=LABEL_03CA30  confidence=high
+; Bounds test before the first iteration: if XIZ >= end pointer, return immediately.
+
+[LABEL] 0x03CA35 DSP_ParamLoop_Iterate  replaces=LABEL_03CA35  confidence=high
+; Top of the per-record loop; emits the DSP1-only opening bracket (cmd 1 / data 1 / data 0x60).
+
+[LABEL] 0x03CA61 DSP_ParamLoop_CallTranslator  replaces=LABEL_03CA61  confidence=high
+; Pushes the five translator arguments and `calr DSP_PerParameterTranslator`; XIZ = returned
+; stream pointer.  A non-zero status routes to DSP_NopReturn and aborts the loop.
+
+[LABEL] 0x03CA8F DSP_ParamLoop_PostCall  replaces=LABEL_03CA8F  confidence=high
+; DSP1-only closing bracket: DispatchCommand(3).
+
+[LABEL] 0x03CAA2 DSP_ParamLoop_SendEndCmd  replaces=LABEL_03CAA2  confidence=high
+; Loop back-edge: continue while XIZ < the end pointer at frame+0x06.
+
+[LABEL] 0x03CAA7 DSP_ParamLoop_Return  replaces=LABEL_03CAA7  confidence=high
+; pop XIZ, lda XSP,XSP+0x12, `retd 0x0A`.
+
+[ROUTINE] 0x03CAAE DSP_PerParameterTranslator  confidence=high
+; Already named.  ★ The heart of the region: interprets ONE parameter record as a little
+; opcode stream, and for each opcode calls a curve/interpolation function and then a DSP
+; register writer.
+; In:  WA / BC / DE plus 6 stack args (`retd 0x14`, 20 bytes).  BC indexes a 12-BYTE-PER-ENTRY
+;      descriptor array whose base is the stack arg at +0x1E: fields +0, +2, +4 (words) and +8
+;      (long) are cached into the frame at +0x04, +0x06, +0x08 and +0x0A.
+; Out: XHL = advanced stream pointer; the status word is stored through the pointer at +0x1A.
+; Loop: DSP_Translator_CheckEnd reads one byte; while it is not 0x7A, DSP_Translator_ReadOpcode
+; runs one opcode; 0x7A ends the record.
+
+[LABEL] 0x03CB18 DSP_Translator_ReadOpcode  replaces=LABEL_03CB18  confidence=high
+; Reads the opcode byte, then calls DSP_TableWalk_Search to locate the matching record field;
+; a non-zero walk status aborts to DSP_Translator_Return.  It then reads a signed word from
+; the caller-supplied word table (stack arg at +0x22, indexed by the loop counter) into DE and
+; dispatches:  0x21 -> DSP_Op_0x21_Interp2Point, 0x24 -> DSP_Op_0x24_MultiStepInterp,
+; 0x40 -> DSP_Op_0x40_PanScale, 0x61..0x79 -> computed `jp (XIX+DE)` with the offset table at
+; 0x014745 and base 0x03CB8E, anything else -> DSP_Op_Unknown_Error.
+
+[LABEL] 0x03CB8E DSP_Translator_JumpTable  replaces=LABEL_03CB8E  confidence=high
+; ⚠ THE ELF NAME IS MISLEADING -- see [UNCERTAIN].  These 26 bytes are the OPCODE 0x61 ARM,
+; not a jump table: DSP_State_LoadAndApply_InlineData (0x038E9F) then DSP_WriteOscParam
+; (0x0387E6), then `jrl DSP_Translator_PostDispatch`.  The real table is at 0x014745.
+; Proposing the existing name unchanged so integration stays mechanical.
+
+[LABEL] 0x03CBA8 DSP_Translator_PostDispatch  replaces=LABEL_03CBA8  confidence=high
+; Common return point for all 27 opcode arms.  If the frame word at +0x14 is 1 it runs
+; DSP2_SPI_BusIdle and DSP_Bytecode_NotifyStateChange (a task yield) before falling into
+; DSP_Translator_CheckEnd.
+
+[LABEL] 0x03CBB6 DSP_Translator_CheckEnd  replaces=LABEL_03CBB6  confidence=high
+; Consumes one stream byte; loops back to DSP_Translator_ReadOpcode unless it is 0x7A.
+; ★ 0x7A is the ONLY terminator -- see [UNCERTAIN].
+
+[LABEL] 0x03CBCC DSP_Translator_Return  replaces=LABEL_03CBCC  confidence=high
+; Stores the status word through the pointer arg, returns XHL = stream pointer, `retd 0x14`.
+
+[ROUTINE] 0x03CBDE DSP_Op_0x62_ParamFetchSingle  confidence=high
+; Opcode 0x62 arm (offset 0x0050 in the table at 0x014745).  NEW NAME -- this code lives inside
+; a converter `.byte` run and has no symbol at all.
+; DSP_ParamFetch_SingleTable (0x038EAC) -> DSP_WriteOscParam (0x0387E6) -> PostDispatch.
+; The shape of every arm in this block is identical: load the parameter pointer from
+; (XSP+0x2A), pass the record pointer in XBC, call the CURVE function, then push the curve's
+; result and call the WRITER with WA = IZ (the DSP channel) and DE = (XSP+0x16), storing the
+; writer's HL into the status word at (XSP+0x0E).
+
+[ROUTINE] 0x03CBFA DSP_Op_0x63_ParamFetchAlgoType  confidence=high
+; Opcode 0x63 arm.  NEW NAME.
+; DSP_ParamFetch_AlgoTypeTable (0x038EB9) -> DSP_WriteFreqParam_AlgoType (0x03846C).
+
+[ROUTINE] 0x03CC16 DSP_Op_0x79_AlgoParamDecode  confidence=high
+; Opcode 0x79 arm (offset 0x0088 -- note it sits physically BEFORE the 0x64 arm).  NEW NAME.
+; DSP_AlgoParam_Decode (0x038EF6) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CC33 DSP_Op_0x64_PitchParamScale  confidence=high
+; Opcode 0x64 arm.  NEW NAME.
+; DSP_PitchParam_Scale (0x038F9B) -> DSP_WriteFreqParam (0x038539).
+
+[ROUTINE] 0x03CC50 DSP_Op_0x65_VolumeParamScale  confidence=high
+; Opcode 0x65 arm.  NEW NAME.
+; DSP_VolumeParam_Scale (0x038FE8) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CC6D DSP_Op_0x66_Interp2Point  confidence=high
+; Opcode 0x66 arm.  NEW NAME.
+; DSP_ParamInterp_2Point (0x039206) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CC8A DSP_Op_0x67_InterpFPScale  confidence=high
+; Opcode 0x67 arm.  NEW NAME.  The only arm that uses the offset writer.
+; DSP_ParamInterp_FPScale (0x03925E) -> DSP_WriteOscParam_Offset (0x038922).
+
+[ROUTINE] 0x03CCAB DSP_Op_0x68_InterpDiv0xB4  confidence=high
+; Opcode 0x68 arm.  NEW NAME.
+; DSP_ParamInterp_Div0xB4 (0x0392AC) -> DSP_WriteFreqParam (0x038539).
+
+[ROUTINE] 0x03CCC8 DSP_Op_0x69_VolumeCurve  confidence=high
+; Opcode 0x69 arm.  NEW NAME.
+; DSP_VolumeCurve_FP (0x0392F2) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CCE5 DSP_Op_0x6A_FreqCurve  confidence=high
+; Opcode 0x6A arm.  NEW NAME.
+; DSP_FreqCurve_FP (0x03943B) -> DSP_WriteFreqParam (0x038539).
+
+[ROUTINE] 0x03CD02 DSP_Op_0x6B_FreqInterp2Point  confidence=high
+; Opcode 0x6B arm.  NEW NAME.
+; DSP_FreqInterp_2Point (0x0394CD) -> DSP_WriteFreqParam (0x038539).
+
+[ROUTINE] 0x03CD1F DSP_Op_0x6C_Interp3Point  confidence=high
+; Opcode 0x6C arm.  NEW NAME.  Takes one extra stack argument before the call.
+; DSP_ParamInterp_3Point_WithOffset (0x039525) -> DSP_WriteFreqParam (0x038539).
+
+[ROUTINE] 0x03CD3F DSP_Op_0x6D_ReverbCurve  confidence=high
+; Opcode 0x6D arm.  NEW NAME.
+; DSP_ReverbCurve_FP (0x039599) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CD5C DSP_Op_0x6E_InterpFPComplex  confidence=high
+; Opcode 0x6E arm.  NEW NAME.
+; DSP_ParamInterp_FPComplex (0x0396C2) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CD79 DSP_Op_0x6F_PanCurve  confidence=high
+; Opcode 0x6F arm.  NEW NAME.
+; DSP_PanCurve_PiecewiseLin (0x0397F3) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CD96 DSP_Op_0x70_BiquadCoeff  confidence=high
+; Opcode 0x70 arm.  NEW NAME.  ★ The ONLY caller of DSP_BiquadCoeff_Compute (0x03A933).
+; Unlike the curve arms it has no separate writer: it pushes five arguments -- the parameter
+; stream pointer from (XSP+0x2A), IZ, the long at (XSP+0x28), the word at (XSP+0x0E) and a
+; pointer to the local at XSP+0x1A -- passes WA/BC/DE from (XSP+0x24)/(XSP+0x22)/(XSP+0x20),
+; and stores the returned XHL back into (XSP+0x2A) as the new stream pointer.
+; The coefficient routine does its own DSP writes.
+
+[ROUTINE] 0x03CDB9 DSP_Op_0x71_DetuneCurve  confidence=high
+; Opcode 0x71 arm.  NEW NAME.
+; DSP_DetuneCurve_SignedFP (0x0398CE) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CDD6 DSP_Op_0x72_BiquadWarp  confidence=high
+; Opcode 0x72 arm.  NEW NAME.  Four pushed arguments, no separate writer.
+; DSP_BiquadWarp_FP (0x039ABD) does its own writing.
+
+[ROUTINE] 0x03CDF3 DSP_Op_0x73_InterpDiv0xC6  confidence=high
+; Opcode 0x73 arm.  NEW NAME.
+; DSP_ParamInterp_Div0xC6 (0x039D26) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CE10 DSP_Op_0x74_LUTParamSet  confidence=high
+; Opcode 0x74 arm.  NEW NAME.  Two pushed argument groups, no separate writer.
+; DSP_WriteLUTParamSet (0x03869B) writes a whole LUT-driven parameter set itself.
+
+[ROUTINE] 0x03CE25 DSP_Op_0x75_ParamEQCurve  confidence=high
+; Opcode 0x75 arm.  NEW NAME.
+; DSP_ParamEQ_Curve_FP (0x039D98) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CE42 DSP_Op_0x76_SOSCoeff  confidence=high
+; Opcode 0x76 arm.  NEW NAME.  ★ The ONLY caller of DSP_SOS_Coeff_Compute (0x03B646).
+; Same five-argument shape as the 0x70 arm; stores the returned stream pointer back into
+; (XSP+0x2A).
+
+[ROUTINE] 0x03CE65 DSP_Op_0x77_Interp2PointB  confidence=high
+; Opcode 0x77 arm.  NEW NAME.
+; DSP_ParamInterp_2Point_B (0x03A22A) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CE82 DSP_Op_0x78_VolScaleB  confidence=high
+; Opcode 0x78 arm.  NEW NAME.
+; DSP_VolScale_B (0x03A282) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CE9F DSP_Op_0x40_PanScale  replaces=LABEL_03CE9F  confidence=high
+; Opcode 0x40 arm (special-cased before the jump table).
+; DSP_PanScale_Simple (0x03A4A0) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CEBC DSP_Op_0x24_MultiStepInterp  replaces=LABEL_03CEBC  confidence=high
+; Opcode 0x24 arm (special-cased).  Pushes two extra argument groups.
+; DSP_ParamInterp_MultiStep (0x03A4B7) -> DSP_WriteOscParam (0x0387E6).
+
+[ROUTINE] 0x03CEE2 DSP_Op_0x21_Interp2Point  replaces=LABEL_03CEE2  confidence=high
+; Opcode 0x21 arm (special-cased).
+; DSP_ParamInterp_2Point (0x039206) -> DSP_WriteOscParam (0x0387E6).
+
+[LABEL] 0x03CEFF DSP_Op_Unknown_Error  replaces=LABEL_03CEFF  confidence=high
+; Unrecognised opcode: sets the status word at (XSP+0x0E) to 5 and `jrl`s to
+; DSP_Translator_Return -- ★ it ABORTS THE WHOLE PARAMETER RECORD, so one bad opcode silently
+; drops every remaining parameter of that effect.
+
+[ROUTINE] 0x03CF07 DSP_StreamDecode_3ByteWord  replaces=LABEL_03CF07  confidence=high
+; Decodes a 24-bit BIG-ENDIAN signed coefficient out of a byte stream, left-justified into a
+; 32-bit word.  34 call sites across regions 12-14 -- the standard way DSP coefficients are
+; unpacked from the effect ROM images.
+; In:  XWA = stream pointer, XBC = destination.   Out: (XBC) = (b0<<24)|(b1<<16)|(b2<<8),
+;      each byte sign-extended before shifting (only b0's sign survives); XHL = XWA + 3.
+; No hardware access.  Fully decoded at 0x03CF07..0x03CF52.
+
+[ROUTINE] 0x03CF53 DSP_TableWalk_Search  replaces=LABEL_03CF53  confidence=high
+; Linear search through a table of TAGGED VARIABLE-LENGTH records, returning a pointer to a
+; field inside the matching record.
+; Record layout, read off the code:
+;     +0  byte  length high  }  entry length in bytes = (b0<<8)|b1
+;     +1  byte  length low   }
+;     +2  byte  record ID
+;     +3.. payload
+;   A record whose FIRST BYTE is 0xF0 terminates the table.
+; In:  XWA = table base, BC = wanted record ID, DE = field offset within the record,
+;      one pushed long = pointer to a status word.  `retd 0x4`.
+; Out: XHL = &record[3 + DE] (see below); status = 0 found, 3 hit the 0xF0 sentinel,
+;      4 the requested field lies past the record's own length.
+; Four callers: three in region 12 and DSP_Translator_ReadOpcode here.
+
+[LABEL] 0x03CF57 DSP_TableWalk_CheckEntry  replaces=LABEL_03CF57  confidence=high
+; Computes the next-record address (XIX = XHL + length), reads the ID byte at +2 and compares
+; it with BC; on a match advances XHL by DE+1 and range-checks it against XIX.
+
+[LABEL] 0x03CF77 DSP_TableWalk_FoundInRange  replaces=LABEL_03CF77  confidence=high
+; Match, field inside the record: status 0.
+
+[LABEL] 0x03CF7B DSP_TableWalk_SkipEntry  replaces=LABEL_03CF7B  confidence=high
+; ID mismatch: XHL = next record.
+
+[LABEL] 0x03CF7D DSP_TableWalk_ReadHeader  replaces=LABEL_03CF7D  confidence=high
+; Reads the 2-byte length header and tests the 0xF0 end-of-table sentinel.
+
+[LABEL] 0x03CF9D DSP_TableWalk_Return  replaces=LABEL_03CF9D  confidence=high
+; Stores the status through the pushed pointer and `retd 0x4`.
+
+[ROUTINE] 0x03CFA5 DSP_TableWalk_SearchWithState  replaces=LABEL_03CFA5  confidence=high
+; Positional variant of the same walk: instead of matching an ID it SKIPS BC records and
+; returns the address of the next one.
+; In:  XWA = table base, BC = records to skip, XDE = pointer to a status word,
+;      one pushed long = pointer that receives (record address + record length).  `retd 0x4`.
+; Out: XHL = XWA advanced past the skipped records; status = 0 normally, 2 if the 0xF0
+;      sentinel was reached first.
+; Sole caller: DSP_ParameterWriteEngine, which uses the pushed out-pointer as the loop's END
+; POINTER.
+
+[LABEL] 0x03CFA9 DSP_TableWalk_State_CheckEntry  replaces=LABEL_03CFA9  confidence=high
+; If the skip count has reached zero, publish (base + length) through the out-pointer, advance
+; XWA by 2 and return.
+
+[LABEL] 0x03CFBE DSP_TableWalk_State_Advance  replaces=LABEL_03CFBE  confidence=high
+; Otherwise XWA += record length and BC -= 1.
+
+[LABEL] 0x03CFC6 DSP_TableWalk_State_ReadHeader  replaces=LABEL_03CFC6  confidence=high
+; Reads the 2-byte length header and tests the 0xF0 sentinel.
+
+[LABEL] 0x03CFE6 DSP_TableWalk_State_Return  replaces=LABEL_03CFE6  confidence=high
+; Stores the status through XDE(saved in XHL), returns XHL = XWA, `retd 0x4`.
+
+[ROUTINE] 0x03CFED DSP_NopReturn  replaces=LABEL_03CFED  confidence=high
+; A single `ret`.  ★ It is the project's ERROR HOOK: DSP_ParameterWriteEngine calls it with
+; WA = the failing status code at two places (after the table walk and after the translator)
+; and DSP_ParamLoop_Return then bails out.  The status is therefore never reported anywhere --
+; DSP parameter-write failures are silent by design in v142.
+
+[ROUTINE] 0x03CFEE Audio_CmdHandler_A0_BF  confidence=high
+; Already named (the reference file spells it AUDIO_CMDHANDLER_A0_BF).  Entry 5 of
+; CMD_DISPATCH_TABLE, i.e. main->sub inter-CPU commands 0xA0..0xBF.
+; In:  one pushed long = pointer to the 2-byte command payload.  Out: HL = 0 always.
+;   payload[0] == 1 and payload[1] <= 9  ->  (0x004A48) = payload[1]
+;   payload[0] == 0 and payload[1] == 1  ->  (0x004A4A) = 1
+;   anything else -> no effect.
+; ★ 0x004A48 is the keybed TOUCH-CURVE index used by ToneGen_Calc_Pitch; 0x004A4A is the
+; KEYBED->MAIN FORWARDING ENABLE flag tested by ToneGen_Process_Notes.  These two bytes are
+; the sub-CPU's entire "local control" state and they are only ever written from here.
+
+[LABEL] 0x03D008 CmdA0BF_CheckSubByte  replaces=LABEL_03D008  confidence=high
+; payload[0]==1 arm: range-check payload[1] against 9 and store it to (0x004A48).
+
+[LABEL] 0x03D013 CmdA0BF_Return  replaces=LABEL_03D013  confidence=high
+; `lds hl,0 ; ret` -- the handler always reports success.
+
+[ROUTINE] 0x03D016 ToneGen_Init  confidence=high
+; Already named (reference: TONEGEN_INIT).  ⚠ MISNOMER: this is the KEYBED, not the tone
+; generator -- see [UNCERTAIN].  Two instructions: (0x004A48) = 6 (default touch curve) then
+; `jrl ToneGen_Poll_Init`.  Called once from the sub-CPU boot path.
+
+[ROUTINE] 0x03D01E ToneGen_Process_Notes  confidence=high
+; Already named (reference: TONEGEN_PROCESS_NOTES).  ★ THIS IS THE KEYBED SERVICE that
+; Audio_Main_Loop calls unconditionally every pass (the brief's "keybed (0x03D01E)").
+; Drains the keybed FIFO and forwards every key event to the MAIN CPU as MIDI.
+; Per event (ToneGen_Read_Voice_Data gives note in byte 0, velocity in byte 1):
+;   velocity != 0 -> mark (0x004A4C + note) = 0xFF, build 0x90 / note / velocity at
+;                    0x004A42..0x004A44
+;   velocity == 0 -> only if (0x004A4C + note) was 0xFF: clear it and build the same 3 bytes
+;   then, ONLY IF (0x004A4A) == 1, call InterCPU_DMA_Send(XDE = 0x004A42, WA = 2, BC = 3).
+; Loops until ToneGen_Read_Voice_Data returns HL == 0xFFFF ("no more data").
+; ★ Two properties matter for the open sub->main bug -- see the [UNCERTAIN] notes.
+
+[LABEL] 0x03D02E ToneGen_Note_Loop  confidence=high
+; Already named.  Body of the drain loop; back-edge at ToneGen_Note_Continue.
+
+[LABEL] 0x03D06D ToneGen_Note_Off_Slot  confidence=high
+; Already named.  Note-off arm; suppresses the message unless the per-note byte at
+; 0x004A4C + note was 0xFF, so a key-up without a matching key-down sends nothing.
+
+[LABEL] 0x03D0B6 ToneGen_Note_Continue  confidence=high
+; Already named.  Fetches the next event and loops while HL != 0xFFFF.
+
+[LABEL] 0x03D0C2 ToneGen_Note_Done  confidence=high
+; Already named.  `inc 2,xsp ; ret`.
+
+[ROUTINE] 0x03D0C5 ToneGen_Read_Voice_Data  confidence=high
+; Already named (reference: TONEGEN_READ_VOICE_DATA).  Reads ONE key event from the keybed
+; port and decodes it.  ★ The A23 multiplex is the interesting hardware detail:
+;   set bit 7 of SFR 0x18  -> A23 high -> read (0x110002) = STATUS word
+;   res bit 7 of SFR 0x18  -> A23 low  -> read (0x110000) = DATA word
+; (each toggle followed by a NOP for setup time).  Status bit 0 = data ready, bit 1 = note-on
+; qualifier.  Data low byte = note (bit 7 = release flag), high byte = velocity; velocity 0xFF
+; also means note-off.
+; In:  XWA = pointer to a 2-byte result buffer.  Out: HL = 0 on an event, 0xFFFF when the FIFO
+; is empty; the buffer holds the transposed note and the curve-mapped velocity.
+
+[LABEL] 0x03D0F6 ToneGen_Read_NoteOff  confidence=high
+; Already named.  Note-off path; a set bit 7 in the note byte means "release, ignore".
+
+[LABEL] 0x03D100 ToneGen_Read_Release  confidence=high
+; Already named.  Runs the pitch/velocity mapping then forces velocity to 0.
+
+[LABEL] 0x03D10F ToneGen_Read_NoteOn  confidence=high
+; Already named.  Runs the pitch/velocity mapping and keeps the velocity.
+
+[LABEL] 0x03D11A ToneGen_Read_Not_Ready  confidence=high
+; Already named.  Status bit 0 clear -> HL = 0xFFFF, which is what ends the drain loop.
+
+[LABEL] 0x03D11D ToneGen_Read_Done  confidence=high
+; Already named.  `pop xiz ; ret`.
+
+[ROUTINE] 0x03D11F ToneGen_Calc_Pitch  confidence=high
+; Already named in the ELF; the reference file calls this address KEYBED_DECODE_EVENT -- see
+; [UNCERTAIN], the reference name is the accurate one and BOTH are already real names, so
+; nothing is proposed here beyond documentation.
+; Maps a raw keybed event to a MIDI note number and a curved velocity.
+; In:  C = raw key byte (bit 7 = release), E = raw velocity, XWA = 2-byte output buffer.
+; Note number: (C & 0x7F) + 0x24, i.e. the keybed's key 0 is MIDI note 36 (C2).
+; Velocity: raw -> table 0x01F43E[E]; subtract the word at 0x01F418; multiply by
+;   byte[0x01F420 + 3*curve]; divide by the word at 0x01F41A; add byte[0x01F421 + 3*curve];
+;   for note classes 1, 3, 6, 8 and 10 of the octave (the BLACK KEYS -- note%12) subtract
+;   byte[0x01F422 + 3*curve]; clamp to 0..255; final value = byte table 0x01F53E[result].
+;   `curve` is the byte at 0x004A48 set by Audio_CmdHandler_A0_BF, default 6.
+; This is the KN5000's touch-sensitivity curve, and the black-key correction is a real
+; mechanical compensation for the different key leverage.
+
+[LABEL] 0x03D1AA ToneGen_Pitch_Adjust  confidence=high
+; Already named.  The black-key correction arm (note%12 in {1,3,6,8,10}).
+
+[LABEL] 0x03D1C4 ToneGen_Pitch_Clamp  confidence=high
+; Already named.  Upper clamp to 255.
+
+[LABEL] 0x03D1D3 ToneGen_Pitch_ClampHi  confidence=high
+; Already named.
+
+[LABEL] 0x03D1E1 ToneGen_Pitch_ClampLo  confidence=high
+; Already named.  Lower clamp to 0, then the final 0x01F53E lookup.
+
+[LABEL] 0x03D1F5 ToneGen_Calc_NoVel  confidence=high
+; Already named.  Release event: store velocity 0 and return.
+
+[DATA] 0x03D1FA-0x03D1FA  ToneGen_Poll_Padding -- one alignment byte 0x0E
+; Already named.  Not executed.
+
+[ROUTINE] 0x03D1FB ToneGen_Poll_Init  confidence=high
+; Already named (reference: TONEGEN_POLL_INIT).  The keybed's power-on scan, entered by `jrl`
+; from ToneGen_Init and never called again.  Clears 8 bytes of voice-status at 0x01F41C
+; (address 128028 = 0x01F41C) then falls into ToneGen_Poll_All.
+
+[LABEL] 0x03D203 ToneGen_Clear_Voice_Loop  confidence=high
+; Already named.  Zeroes the 8 status bytes.
+
+[ROUTINE] 0x03D217 ToneGen_Poll_All  confidence=high
+; Already named.  16 polling iterations, one per keybed scan group.
+
+[LABEL] 0x03D21F ToneGen_Poll_Channel  confidence=high
+; Already named.  Per-iteration entry; sets up the 10000-step settling delay.
+
+[LABEL] 0x03D227 ToneGen_Poll_Delay  confidence=high
+; Already named.  ★ A 10000-iteration NOP busy-wait, run 16 times = 160,000 NOPs of dead time
+; during boot with interrupts still enabled.  Bounded, so it cannot wedge, but it is a real
+; multi-millisecond stall on the audio CPU's startup path.
+
+[LABEL] 0x03D230 ToneGen_Poll_Read  confidence=high
+; Already named.  Same A23 multiplex as ToneGen_Read_Voice_Data (SFR 0x18 bit 7): dummy-read
+; (0x110002), then read (0x110000).  Splits the low byte into a group index (bits 3-5) and a
+; bit position (bits 0-2), and sets or clears that bit in the status bitmap at 0x01F41C
+; according to bit 7 of the byte.  The source's own comment records that A23 is tied to the
+; tone generator's D5VNAD / NAD / EXADL0 pins.
+
+[LABEL] 0x03D27A ToneGen_Poll_SetBit  confidence=high
+; Already named.  Key-down: OR the mask into the bitmap byte.
+
+[LABEL] 0x03D281 ToneGen_Poll_NoteOff  confidence=high
+; Already named.  Key-up arm.
+
+[LABEL] 0x03D298 ToneGen_Poll_ClearBit  confidence=high
+; Already named.  AND the complemented mask into the bitmap byte.
+
+[LABEL] 0x03D2A1 ToneGen_Poll_Next  confidence=high
+; Already named.  Loop back for 16 iterations, then `ret`.
+
+[DATA] 0x03D2AB-0x03D2AB  ToneGen_Voice_Padding -- one alignment byte 0xFF
+; Already named.  Not executed.
+
+[ROUTINE] 0x03D2AC ToneGen_Compare_Voice  confidence=high
+; Already named (reference: TONEGEN_COMPARE_VOICE).  ⚠ Nothing to do with voices: this is the
+; FLOAT-COMPARE PREDICATE of the FP library -- 11 of its 12 call sites are in
+; subcpu_fp_math.s (the 12th is in region 13's curve code).
+; In:  XWA / XBC = the two 8-byte operands, DE = the comparison-kind code.
+; Out: HL = the boolean result.
+;   Equal operands -> HL = byte table 0x03D978[kind].
+;   kind 4 -> 0, kind 5 -> 1 (the "unordered/NaN" answers).
+;   Otherwise it compares the high longs, then the low longs, taking sign into account, and
+;   returns byte table 0x03D97E[kind] for "less" or 0x03D984[kind] for "greater" (each XORed
+;   into L, which is how a single table serves <, <=, >, >=, ==, !=).
+
+[LABEL] 0x03D2C7 ToneGen_Compare_Diff  confidence=high
+; Already named.  High halves differ; reload the low half and fall through.
+
+[LABEL] 0x03D2C9 ToneGen_Compare_Result  confidence=high
+; Already named.  The kind-4 / kind-5 early answers.
+
+[LABEL] 0x03D2E6 ToneGen_Compare_Sign  confidence=high
+; Already named.  Signed magnitude comparison of the two operands.
+
+[LABEL] 0x03D2F0 ToneGen_Cmp_Less  confidence=high
+; Already named.  Result from the 0x03D97E table.
+
+[LABEL] 0x03D2FB ToneGen_Cmp_Greater  confidence=high
+; Already named.  Result from the 0x03D984 table.
+
+[ROUTINE] 0x03D306 ToneGen_Compare_Voice_32  confidence=high
+; Already named (reference: TONEGEN_COMPARE_VOICE_32).  The 32-bit (single-precision) form of
+; the same predicate; same three result tables at 0x03D978 / 0x03D97E / 0x03D984.
+; Exactly one call site, at 0x03AD0C inside DSP_BiquadCoeff_Algo0_Assembly, testing a0 == 1.0.
+
+[LABEL] 0x03D31B ToneGen_Cmp32_NotEqual  confidence=high
+; Already named.  kind-4 / kind-5 early answers for the 32-bit form.
+
+[LABEL] 0x03D333 ToneGen_Cmp32_Sign  confidence=high
+; Already named.
+
+[LABEL] 0x03D342 ToneGen_Cmp32_Greater  confidence=high
+; Already named.
+
+[ROUTINE] 0x03D34D VoiceFloat_DispatchMulAdd  replaces=LABEL_03D34D  confidence=medium
+; A double-precision transcendental wrapper, almost certainly cos(x) implemented as
+; sin(pi/2 - x) -- called once from the FP library (subcpu_fp_math.s:127).
+; In:  one 8-byte double pushed by the caller plus a destination pointer; 48 bytes of frame.
+; Body: FP_DP_CmpAndCopy to fetch/normalise the argument; then
+;       FP_DP_Mul(dest, 0x00F3CA = 1.5707963267948966 = pi/2, arg)  -- FP_DP_Mul is ADD/SUB,
+;       so this is the pi/2 - x fold; then VoiceFloat_BlendAndMerge (0x03D98A), which is the
+;       polynomial/series evaluator; then FP_DP_Raw8Copy to publish the result.
+; Medium confidence because the series constants inside VoiceFloat_BlendAndMerge were not
+; decoded in this pass; the pi/2 fold and the call graph are certain.
+
+[ROUTINE] 0x03D3A4 VoiceFloat_SubDP  replaces=LABEL_03D3A4  confidence=high
+; ⚠ NOT a subtraction: this is DOUBLE-PRECISION DIVIDE.  27 call sites (7 in the FP library,
+; 20 in the DSP curve/coefficient code).
+; In:  XWA = destination (8-byte double), XBC = dividend pointer, XDE = divisor pointer.
+; Body: FP_DP_Decode both operands into 12-byte scratch buffers on the stack, call
+;       FP_DP_Mul_Outer (0x03E3F6) -- which SUBTRACTS the exponents and XORs the signs, i.e.
+;       divides -- then FP_DP_Encode the result to *(XWA).
+; No hardware access.  See [UNCERTAIN] for the naming.
+
+[ROUTINE] 0x03D3D4 VoiceFloat_SubSP  replaces=LABEL_03D3D4  confidence=high
+; ⚠ NOT a subtraction: SINGLE-PRECISION DIVIDE.  74 call sites -- it is how every coefficient
+; in this region gets normalised by a0 and how every dB value gets divided by 20.0.
+; In:  XWA = destination (4-byte float), XBC = dividend pointer, XDE = divisor pointer.
+; Body: FP_SP_Decode both operands, FP_SP_Mul_Outer (0x03E4B4) = divide, FP_SP_Encode.
+; Region 15 ends at 0x03D403, the last byte of this routine.
+
+[UNCERTAIN] ★★ The whole 0x03D016..0x03D342 block is named ToneGen_* but it is the KEYBED.
+; The evidence is not marginal: the block reads 0x110000 / 0x110002, which kn5000.cpp's
+; kn5000_state::subcpu_mem documents as "keybed data / status"; the tone generator is at
+; 0x100000 / 0x100002 and is never touched here.  The block produces MIDI 0x90 note messages
+; and DMAs them to the MAIN CPU -- that is a keyboard scanner, not a synthesiser interface.
+; The brief itself lists 0x03D01E as the main loop's KEYBED service.
+; I am NOT proposing renames (they are real, non-LABEL_ names and the rules forbid it), but
+; the correct names would be KEYBED_INIT, KEYBED_SERVICE, KEYBED_READ_EVENT,
+; KEYBED_DECODE_EVENT, KEYBED_SCAN_ALL, ... and the reference file ALREADY uses
+; KEYBED_DECODE_EVENT for 0x03D11F while the ELF uses ToneGen_Calc_Pitch.  ⚠ That is a live
+; DISAGREEMENT between the two authoritative-ish sources at one address; somebody has to
+; decide.  My reading of the code says the reference file is right.
+
+[UNCERTAIN] ★★ The FP library's arithmetic names are swapped, and it matters for this region.
+; Measured from the bodies (addresses are outside region 15, so nothing is proposed):
+;   FP_DP_Mul (0x03E10E) / FP_SP_Mul (0x03E15A) call FP_xx_AlignMantissa then
+;     FP_xx_AddMantissa or FP_xx_SubMantissa depending on an XOR of the two sign bytes.
+;     Aligning exponents and adding mantissas is ADDITION, not multiplication.
+;   FP_DP_Add_Outer (0x03E290) / FP_SP_Add_Outer (0x03E2C0) call FP_xx_MulAdd, whose body at
+;     0x03EBCE ADDS the exponents (`add (XWA+0x00),HL`), XORs the signs and calls
+;     FP_MulMantissa64x64 (0x03ED0E).  That is MULTIPLICATION.
+;   FP_DP_Mul_Outer (0x03E3F6) SUBTRACTS the exponents (`sub (XWA+0x00),HL`) and XORs the
+;     signs, and its mantissa core is the shift-and-subtract loop shared with FP_Div_Step*.
+;     That is DIVISION -- and it is what VoiceFloat_SubDP / VoiceFloat_SubSP wrap.
+; Consequence: read every "call FP_SP_Mul" in this region as "add", every "FP_SP_Add_Outer" as
+; "multiply" and every "VoiceFloat_SubSP" as "divide", or the coefficient formulas make no
+; sense.  I have written the doc headers using the REAL operations.  Fixing the names is a
+; separate, larger change that touches ~200 call sites; flagging, not doing.
+
+[UNCERTAIN] The ELF name DSP_Translator_JumpTable at 0x03CB8E is misleading.
+; Those 26 bytes are the opcode-0x61 dispatch arm (real TLCS-900 code: two calls and a `jrl`),
+; not a table.  The actual offset table is at 0x014745 in the data image.  Same class of
+; problem as the "*_TableData" labels flagged in region 11.  I left the name alone.
+
+[UNCERTAIN] DSP_BiquadCoeff_Algo0/1/2 vs DSP_SOS_Algo0/1/2 -- I could not identify WHICH filter
+; response each algorithm produces (peaking / low-shelf / high-shelf / LPF / HPF).  What is
+; certain: the selector is the low nibble of the parameter-stream header byte, the biquad
+; family prewarps with tan(pi*f/Fs) and the SOS family with 2*pi*f/Fs, all six emit exactly
+; five coefficients, and the {1.0, 1.0, -2.0, 1.0} literal group in the biquad family is the
+; shape of a {1, -2, 1} highpass numerator.  Naming them after a response type would be a
+; guess, so the structural names stand.
+
+[UNCERTAIN] The exact roles of the 3rd and 4th stack arguments of DSP_BiquadCoeff_Compute and
+; DSP_SOS_Coeff_Compute.  Argument 1 (stream pointer), 2 (the caller's IZ status word) and 5
+; (the status-out pointer) are proven by the epilogues; the long at frame+0x00F8 and the word
+; at frame+0x00F6 are forwarded straight into DSP_FilterLUT_Fetch / DSP_SOS_LUT_Fetch and I did
+; not trace them further.
+
+[UNCERTAIN] I did not verify the internal group structure of bytecode handlers 1, 2, 3 and 5
+; myself.  Their entry addresses are proven (decoded from the offset table at 0x014739, and the
+; shared command-byte prologue disassembles cleanly at all five), and the group descriptions in
+; the proposed names come from the analysis comment already present above
+; DSP_Bytecode_Programs in the authoritative source.  Hence confidence=medium for those four;
+; handler 4 (0x03C7A1) is confidence=high because it is 26 bytes and I decoded all of them.
+
+[UNCERTAIN] ★ Relevant to the open sub->main bug -- three unbounded loops in this region.
+; (a) ToneGen_Note_Loop (0x03D02E..0x03D0BF) has NO iteration limit.  It exits only when
+;     ToneGen_Read_Voice_Data returns 0xFFFF, which happens only when bit 0 of the word read
+;     from (0x110002) is clear.  If that status bit is ever stuck set -- a keybed device that
+;     always asserts data-ready, or an unmapped read that returns 0xFFFF -- Audio_Main_Loop
+;     never reaches its other three services and the sub CPU goes permanently quiet on the
+;     main link while INT0 keeps consuming main->sub commands.  Today MAME maps
+;     0x110000-0x110003 as noprw(), so this does not fire in the current driver; it is a
+;     latent trap for whoever implements the keybed.
+; (b) DSP_Translator_CheckEnd (0x03CBB6) walks the parameter stream until it sees the byte
+;     0x7A.  There is no length bound and no sentinel check.
+; (c) DSP_BytecodeInterpreter_CheckEnd (0x03C9CE) walks until (byte & 0xF0) == 0xF0.  Same.
+; Both (b) and (c) run off the end of the program image on a malformed stream.
+
+[UNCERTAIN] ★ Also relevant to the bug: DSP_Bytecode_NotifyStateChange (0x03C253) is a TAIL
+; JUMP into TaskSched_PreemptiveYield_INT (0x020370), not a call.  It is invoked from
+; DSP_Bytecode_Op0D_StateChange, DSP_Translator_PostDispatch, DSP_MixerCoeff_Compute (twice)
+; and two sites in region 12 -- i.e. in the MIDDLE of DSP register-write sequences.  If the
+; scheduler's priority-1 queue is empty or the task is never re-dispatched, the DSP write path
+; stops between register groups with the SPI bus idle, which would look exactly like "the sub
+; CPU stopped producing output but still takes commands".  I did not trace
+; TaskSched_PreemptiveYield_INT far enough to say whether that can actually happen.

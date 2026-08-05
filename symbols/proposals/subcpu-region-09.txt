@@ -1,0 +1,1217 @@
+# region 9: 0x02EC38..0x031119
+# The TONE/EFFECT PARAMETER-EDIT command layer: four separate opcode dispatchers that decode
+# 6-byte command records arriving from the main CPU, write the decoded value into the part
+# record / patch record / DSP parameter shadow RAM, re-apply the affected algorithm to every
+# voice the part owns, and (for three opcode families) DMA the resulting edit buffer BACK to
+# the main CPU.  It also contains the DSP coefficient-window readers that AUDIO_PROCESS_DSP
+# (0x035AC8) uses to answer main-CPU queries.
+#
+# INTEGRATION NOTE (read first):
+#   The AUTHORITATIVE LLVM build already carries a real name for 42 addresses in this range;
+#   symbols/subcpu_symbols_reference.txt carries LABEL_xxxxxx for 36 of them.  Every entry
+#   below that has `replaces=LABEL_xxxxxx` proposes THE EXISTING LLVM NAME UNCHANGED -- it is
+#   a reference-file sync plus a doc header, never a rename.  Entries without `replaces` are
+#   genuinely new: those addresses have no symbol in either file.  6624 bytes of this region
+#   sit inside three converter-produced "_ExtData" blobs that are CODE, not data (see the
+#   [UNCERTAIN] on naming at the end).
+#
+# ★ THE FOUR COMMAND DISPATCHERS (all take XWA = pointer to a 6-byte command record)
+#   record layout, identical in all four:  +0 (unused here)  +1 part index 0..0x19
+#                                          +2 opcode         +3/+4 value (lo/hi or a pair)
+#                                          +5 a "kind" tag checked for 0x07 / 0x0F
+#   0x02ED80  20-way, opcodes 0x00..0x0D and 0x13..0x18   (called from 0x031AA3)
+#   0x02F830  19-way, opcodes 0x15..0x27 step 3, then a 31-way second stage on 0x11..0x65
+#             (called from 0x031AB3)
+#   0x02FF3A  per-DSP-unit, C = unit 0..3, opcodes 0x00..0x06 / 0x17 / 0x26..0x38 / 0x4D..0x50
+#             (called four times from 0x031AD5, 0x031ADF, 0x031B01, 0x031B0B)
+#   0x030428  writes one patch byte then ALWAYS replies to the main CPU (0x031B2B)
+#   All four are ultimately reached from DSP_SetCoeff_MasterConfig (0x031795), the top-level
+#   handler for this command class.
+#
+# ★ DATA STRUCTURES USED THROUGHOUT (all read off the code in this region)
+#   PART table    0x041368, 26 x 0x11F bytes, index = part 0..0x19.
+#                 +0x00 flags word: bit 0 = "part is allocated"; (word & 3) == 3 required for
+#                       parts > 2 before an allocation is honoured
+#                 +0x06 long pointer to the PATCH record (symbol Part_PatchRecord_Ptr)
+#                 +0x0A flags word 2, bit 14 tested by the output-config dispatchers
+#                 +0x19 Part_UserToneIndex   +0x1A tone/bank byte
+#                 +0x66 one byte written with L at the end of two command paths
+#                 +0x6E + slot*0x25, slot 0..3: four operator-slot records whose FIRST 4 bytes
+#                       are a long pointer to a SLOT DESCRIPTOR
+#   PATCH record  (part+0x06)  +0x10 gate byte, (b7:b6)==01 selects an alternate handler
+#                 +0x14/+0x17/+0x1A/+0x1D/+0x20/+0x23/+0x26  seven 3-byte parameter groups
+#                 +0x5D  low nibble = ALGORITHM TYPE 0..0x0B, the key the whole region
+#                        dispatches on
+#                 +0x5E..+0x65  eight effect-parameter bytes filled from the descriptor table
+#   SLOT desc.    +0x27, +0x2B, +0x2C, +0x2D, +0x2E(low 6 bits), +0x3B, +0x3C, +0x3E(low 6)
+#                 +0x36 & 7 = slot "shape" 1..5, selects which of the cached bytes apply
+#                 +0x4D..+0x50  the four bytes the parameter cache reads and writes
+#   PARAM SHADOW  0x044FCE (existing symbol UserTone_VelSplit_Base -- see [UNCERTAIN]).
+#                 One byte array with six disjoint sub-ranges, all indexed differently:
+#                 +0x000 + opcode                     opcodes 0x11..0x65 (0x02F830 family)
+#                 +0x066 + unit*0x51 + (opcode&0x7F)  DSP unit 0..3   (0x02FF3A family)
+#                 +0x1AA + (opcode>>6)*0x0B + (opcode&0x3F)           (0x0301E3)
+#                 +0x1D8 + index                      read back by DSP_VoiceParamReadWrite
+#                 +0x1E0 + slot*5    5-byte per-slot cache (0x02FD85 / 0x02FED1)
+#                 +0x1F4 + index*5   5-byte per-slot cache, bank flavour (0x03025F/0x0303B4)
+#                 Each 5-byte cache entry is [shape, b0, b1, b2, b3].
+#   GLOBALS       0x0451A4 = part currently selected for editing (0xFF = none, set at
+#                 0x034C3B); 0x0451A5 = saved previous value, WRITE-ONLY (see findings);
+#                 0x0451A6..0x0451AC = global transpose/vibrato/filter/pan offsets applied by
+#                 DSP_AdjustVoiceParams; 0x045204..0x04520C = EG scratch;
+#                 0x045210 = 13-byte DSP coefficient staging buffer, +6 is where every reader
+#                 in this region starts writing; 0x045310 / 0x045314 = long pointers to the
+#                 DSP coefficient window base and to its descriptor block;
+#                 0x04531C = ToneDB_RamBankA, and (ToneDB_RamBankA + 0x72A7) is the CURRENT
+#                 EDIT-BUFFER INDEX byte that every reply address in this region is built
+#                 from.  Edit buffers live at ToneDB_RamBankA + 0x4AA7 + index*0x50.
+#
+# ★ SUB->MAIN REPLIES.  Exactly four call sites of InterCPU_E1_DMA_Transfer (0x020DB3) exist
+#   in this region: 0x02ED7C, 0x03025B, 0x03052D, 0x03060E.  All four target the main CPU
+#   window at 0x001E0000.  Nothing else in the region talks to the main CPU.
+#
+# The [DATA] entries whose addresses are below 0x02EC38 are THIS region's dispatch tables;
+# they physically live inside the large unnamed constant pool that runs from
+# PitchDetune_OffsetTable (0x00F787) to CALL_TABLE_12159 (0x012159) and have no symbol today.
+
+[DATA] 0x00F95D-0x00F972  DSP_VOICEPARAM_DEFAULT_TABLE
+; Byte table indexed by the parameter index in BC, read at 0x031057 by
+; DSP_VoiceParam_MultiSlot_CheckResult when all four slots of a part reported "no value".
+; Only entry 1 is non-zero (0xF5); 0xF5 is the firmware's "parameter unset / neutral"
+; sentinel, the same value DSP_AdjustVoiceParams_Vibrato compares 0x0451A7 against.
+; End address is the start of the next table; the highest index actually reachable was not
+; determined, so treat the extent as an upper bound.
+
+[DATA] 0x00F973-0x00F99A  AUDIO_CMD_TONEEDIT_JUMPTABLE
+; 20 x uint16 offsets relative to 0x02EDB9, used by AUDIO_CMD_TONEEDIT_DISPATCH (0x02ED80).
+; Index = opcode for opcodes 0x00..0x0D, and (opcode-5) for opcodes 0x13..0x18.
+; Entries 1,2,3 and 0x13 point at the common return (0x02F00E), i.e. opcodes 0x01..0x03 and
+; 0x18 are accepted and ignored.
+
+[DATA] 0x00F99B-0x00F9B2  DSP_EFFPARAM_APPLY_JUMPTABLE
+; 12 x uint16 offsets relative to 0x02F2D9, indexed by the part's algorithm type
+; ((patch+0x5D) & 0x0F, range 0..0x0B).  Each case selects one of the eight
+; DSP_EFFPARAM_COPY_Vn routines and the descriptor index to feed it.
+
+[DATA] 0x00F9B3-0x00F9C2  VOICE_DSPOUT_A_JUMPTABLE
+; 8 x uint16 offsets relative to 0x02F36E, indexed by algorithm type 0..7, used by
+; VOICE_DSPOUT_APPLY_A (0x02F332).  Types 0..3 share one case, 4..5 another.
+
+[DATA] 0x00F9C3-0x00F9D2  VOICE_DSPOUT_B_JUMPTABLE
+; 8 x uint16 offsets relative to 0x02F3FA; the Voice_DSP_OutputConfig2 twin of the table
+; above, used by VOICE_DSPOUT_APPLY_B (0x02F3BE).  Same grouping.
+
+[DATA] 0x00F9D3-0x00F9E2  VOICE_DSPOUT_SECOND_A_JUMPTABLE
+; 8 x uint16 offsets relative to 0x02F48C, indexed by (algorithm type - 4), used by
+; VOICE_DSPOUT_SECOND_A (0x02F452); algorithm types below 4 return without dispatching.
+
+[DATA] 0x00F9E3-0x00FA37  AUDIO_CMD_EFFPARAM_CASEMAP
+; 0x55 bytes.  Index = opcode - 0x11 (opcodes 0x11..0x65); value = case number 0..0x1E into
+; AUDIO_CMD_EFFPARAM_JUMPTABLE.  Case 2 is the "ignore" case.  The four-opcode runs
+; 0x2B-0x2E, 0x2F-0x32, ... 0x57-0x5A each collapse to one case, which then supplies a fixed
+; algorithm-slot number 0..3 -- twelve (group, slot) combinations in total.
+
+[DATA] 0x00FA38-0x00FA75  AUDIO_CMD_EFFPARAM_JUMPTABLE
+; 31 x uint16 offsets relative to 0x02F9FA, selected through AUDIO_CMD_EFFPARAM_CASEMAP.
+
+[DATA] 0x00FA76-0x00FA9B  AUDIO_CMD_EFFECTPARAM_JUMPTABLE
+; 19 x uint16 offsets relative to 0x02F86F, indexed by (opcode - 0x15) for opcodes
+; 0x15..0x27, used by AUDIO_CMD_EFFECTPARAM_DISPATCH (0x02F830).  Only every third opcode
+; (0x15, 0x18, 0x1B, 0x1E, 0x21, 0x24, 0x27) has a handler; they map one-to-one onto the
+; seven 3-byte parameter groups at patch+0x14, +0x17, +0x1A, +0x1D, +0x20, +0x23, +0x26.
+
+[DATA] 0x00FA9C-0x00FAB5  AUDIO_CMD_DSPUNIT_CASEMAP
+; 26 bytes.  Index = opcode for opcodes 0x00..0x06, and (opcode-0x1F) for opcodes
+; 0x26..0x38; value = case number 0..8 into AUDIO_CMD_DSPUNIT_JUMPTABLE.  Case 1 is "ignore".
+
+[DATA] 0x00FAB6-0x00FAC7  AUDIO_CMD_DSPUNIT_JUMPTABLE
+; 9 x uint16 offsets relative to 0x02FFF9, selected through AUDIO_CMD_DSPUNIT_CASEMAP,
+; used by AUDIO_CMD_DSPUNIT_PARAM (0x02FF3A).
+
+[DATA] 0x00FAC8-0x00FADF  AUDIO_CMD_TONEEDIT_REPLY_CASEMAP
+; 24 bytes.  Index = opcode - 0x19 for opcodes 0x19..0x24, and (opcode-0x22) for opcodes
+; 0x2B..0x36; value = case number 0..6 into AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE.
+
+[DATA] 0x00FAE0-0x00FAED  AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE
+; 7 x uint16 offsets relative to 0x0304B6, used by AUDIO_CMD_TONEEDIT_WRITE_AND_REPLY
+; (0x030428).  Case 1 is the "no side effect, just reply" path.
+
+[DATA] 0x011E16-0x011FE9  DSP_EFFECT_DESCRIPTOR_TABLE
+; 12 records of 0x27 bytes, indexed by the descriptor number chosen in
+; DSP_EFFPARAM_APPLY_BY_ALGOTYPE.  The eight DSP_EFFPARAM_COPY_Vn routines pick different
+; field subsets out of a record and store them into patch+0x5E..+0x65.  Fields actually
+; read: +0x00, +0x01, +0x02 (low 6 bits), +0x03, +0x04, +0x06..+0x0C, +0x0E, +0x12,
+; +0x13 (bit 7 only), +0x19, +0x1A, +0x1B, +0x1C.  The 12-record extent is inferred from the
+; dispatcher's range check (0..0x0B), not from a terminator -- see [UNCERTAIN].
+
+[LABEL] 0x02EC38 VoiceAlloc_SetFlagBit0  replaces=LABEL_02EC38  confidence=high
+; Second stage of VoiceAlloc_CheckAndInit (0x02EC0A).  Re-reads the part's flag word at
+; PART+0x00; if bit 0 is already set the part is merely re-marked (OR 0x0001) and the routine
+; returns; otherwise control falls to VoiceAlloc_InitNewAllocation.  Part index is on the
+; stack at (XSP).
+
+[LABEL] 0x02EC65 VoiceAlloc_InitNewAllocation  replaces=LABEL_02EC65  confidence=high
+; First-time allocation of a part: set PART+0x00 bit 0, call VoiceParam_FullSetup (0x02E3E9)
+; with the part index, then call VoiceInit_Dispatcher (0x032938) with
+; WA = part, BC = PART+0x19 (Part_UserToneIndex), DE = PART+0x1A.  This is the only path in
+; this region that actually creates voices.
+
+[LABEL] 0x02ECBB VoiceAlloc_CheckAndInit_Return  replaces=LABEL_02ECBB  confidence=high
+; Pop the one-word part-index frame and return.
+
+[ROUTINE] 0x02ECBE VoiceAlloc_CheckAndInit_ExtData  replaces=LABEL_02ECBE  confidence=high
+; Register-argument twin of VoiceAlloc_CheckAndInit: entry with XWA = pointer to the 6-byte
+; command record; the part index is taken from (XWA+1) into E and kept there throughout.
+; Unlike VoiceAlloc_CheckAndInit it does NOT consult the current-edit-part byte 0x0451A4 --
+; it goes straight to the (PART+0x00 & 3) == 3 test for parts > 2.
+; After marking the part it reads PART+0x1A; if that byte is in [0x40,0x50) it calls
+; DSP_FlushAllSlots_Data (0x0351B3) with the part index, otherwise it just returns.
+; Single caller: tone-edit opcode 0x13 at 0x02EF71.  Despite the "_ExtData" suffix this is
+; ordinary code, not a data table.
+
+[LABEL] 0x02ECDF VOICEALLOC_CMD_MARKPRESENT  confidence=high
+; Common continuation for parts 0..2 and for parts that passed the (flags & 3) == 3 test:
+; re-read PART+0x00 and branch on bit 0.
+
+[LABEL] 0x02ED0B VOICEALLOC_CMD_FIRSTALLOC  confidence=high
+; Part was not yet allocated: set PART+0x00 bit 0, then range-check PART+0x1A against
+; [0x40,0x50) before calling DSP_FlushAllSlots_Data.
+
+[ROUTINE] 0x02ED44 INTERCPU_REPLY_EDITBUFFER_BLOCK  confidence=high
+; Ships one whole tone-edit buffer from sub to main.  Input: A = edit-buffer index.
+;   src = (ToneDB_RamBankA) + 0x4AA7 + index*0x50
+;   dst = 0x001E0000  + 0x4AA7 + index*0x50      (the main CPU's window)
+;   len = 0x01D6 (470 bytes), hard-coded in HL
+; Tail-jumps to InterCPU_E1_DMA_Transfer (0x020DB3), so its timeout behaviour is this
+; routine's timeout behaviour.  Called from tone-edit opcodes 0x14, 0x15 and 0x16
+; (0x02EFA5, 0x02EFD5, 0x02F005), each of which first fetches the index from
+; (ToneDB_RamBankA + 0x72A7).  NOTE the stride/length mismatch flagged in [UNCERTAIN].
+
+[ROUTINE] 0x02ED80 AUDIO_CMD_TONEEDIT_DISPATCH  confidence=high
+; Primary tone-edit command dispatcher.  Entry XWA = command record; saves it in XIZ.
+; Accepts opcodes 0x00..0x0D directly, and 0x13..0x18 after subtracting 5; everything else
+; falls through to the return.  (The `cp WA,0 / jrl M` at 0x02ED88 is dead: WA was just
+; zero-extended from a byte.)  Jumps through AUDIO_CMD_TONEEDIT_JUMPTABLE (0x00F973) with
+; base 0x02EDB9.  Nine of the sixteen live cases begin by calling VoiceAlloc_CheckAndInit,
+; which is why almost every one of them is a no-op unless 0x0451A4 already names this part.
+; Sole caller: 0x031AA3, inside DSP_SetCoeff_MasterConfig's command tree.
+
+[LABEL] 0x02EDA3 AUDIO_CMD_TONEEDIT_TABLEJUMP  confidence=high
+; Common tail of the range checks: WA*2 indexes AUDIO_CMD_TONEEDIT_JUMPTABLE, the fetched
+; offset is added to 0x02EDB9 and jumped to.
+
+[LABEL] 0x02EDB9 AUDIO_CMD_TONEEDIT_OP00  confidence=high
+; Opcode 0x00: VoiceParam_FullSetup_ExtData(WA = part from rec+1, BC = value from rec+4).
+
+[LABEL] 0x02EDCF AUDIO_CMD_TONEEDIT_OP04  confidence=high
+; Opcode 0x04: VoiceAlloc_CheckAndInit(part) then 0x02AE22 (VoiceSlot_DataTable_02AE22)
+; with WA = part, BC = rec+4.
+
+[LABEL] 0x02EDEE AUDIO_CMD_TONEEDIT_OP05  confidence=high
+; Opcode 0x05: VoiceAlloc_CheckAndInit(part) then 0x02AE58 with WA = part, BC = rec+4.
+
+[LABEL] 0x02EE0D AUDIO_CMD_TONEEDIT_OP06  confidence=high
+; Opcode 0x06: VoiceAlloc_CheckAndInit(part) then 0x02AEA2 with WA = part, BC = rec+4.
+
+[LABEL] 0x02EE2C AUDIO_CMD_TONEEDIT_OP07  confidence=high
+; Opcode 0x07: VoiceAlloc_CheckAndInit(part) then 0x02AEEC with WA = part, BC = rec+4.
+
+[LABEL] 0x02EE4B AUDIO_CMD_TONEEDIT_OP08  confidence=high
+; Opcode 0x08: VoiceAlloc_CheckAndInit(part) then 0x02AF3A with WA = part, BC = rec+4.
+
+[LABEL] 0x02EE6A AUDIO_CMD_TONEEDIT_OP09  confidence=high
+; Opcode 0x09: VoiceAlloc_CheckAndInit(part), then 0x02E6D4 with WA = part,
+; BC = (rec+3)<<8 | (rec+4) -- the only opcodes that carry a 16-bit value -- and DE = rec+5.
+
+[LABEL] 0x02EE9D AUDIO_CMD_TONEEDIT_OP0A  confidence=high
+; Opcode 0x0A: same 16-bit decode as opcode 0x09 but the callee is 0x02E7A0.
+
+[LABEL] 0x02EED0 AUDIO_CMD_TONEEDIT_OP0B  confidence=high
+; Opcode 0x0B: reads the patch record (PART+0x06) and tests (patch+0x10) & 0xC0 == 0x40.
+; If so, calls 0x02AF82(WA = part, BC = rec+4) and returns; otherwise falls through to
+; AUDIO_CMD_TONEEDIT_OP0B_ALT.
+
+[LABEL] 0x02EF05 AUDIO_CMD_TONEEDIT_OP0B_ALT  confidence=high
+; Opcode 0x0B, ordinary patch: VoiceAlloc_CheckAndInit(part) then 0x02E85A with
+; WA = part, BC = rec+3, E = rec+4.
+
+[LABEL] 0x02EF26 AUDIO_CMD_TONEEDIT_OP0D_SELECTPART  confidence=high
+; Opcode 0x0D -- SELECT THE PART TO EDIT.  Copies 0x0451A4 to 0x0451A5 and then stores
+; (rec+1) into 0x0451A4.  This is the ONLY writer of 0x0451A4 apart from the 0xFF
+; initialisation at 0x034C3B, and 0x0451A5 is never read anywhere in the ROM.  Everything
+; gated on VoiceAlloc_CheckAndInit is inert until this opcode arrives.
+
+[LABEL] 0x02EF3B AUDIO_CMD_TONEEDIT_OP0C  confidence=high
+; Opcode 0x0C: only acts when (patch+0x10) & 0xC0 == 0x40; then calls 0x02AFBD with
+; WA = part, BC = rec+4.  No allocation, no reply.
+
+[LABEL] 0x02EF71 AUDIO_CMD_TONEEDIT_OP13  confidence=high
+; Opcode 0x13: VoiceAlloc_CheckAndInit_ExtData(XWA = record) followed by 0x02E91B with
+; WA = rec+4.
+
+[LABEL] 0x02EF81 AUDIO_CMD_TONEEDIT_OP14  confidence=high
+; Opcode 0x14: 0x02E9B1 with the 16-bit value (rec+3)<<8|(rec+4), then reads the edit-buffer
+; index from (ToneDB_RamBankA + 0x72A7) and calls INTERCPU_REPLY_EDITBUFFER_BLOCK.
+; One of only three opcodes in this dispatcher that produce sub->main traffic.
+
+[LABEL] 0x02EFAA AUDIO_CMD_TONEEDIT_OP15  confidence=high
+; Opcode 0x15: 0x02EACE with the 16-bit value and BC = rec+5, then the same
+; INTERCPU_REPLY_EDITBUFFER_BLOCK reply.
+
+[LABEL] 0x02EFDA AUDIO_CMD_TONEEDIT_OP16  confidence=high
+; Opcode 0x16: 0x02EB8A with the 16-bit value and BC = rec+5, then the same
+; INTERCPU_REPLY_EDITBUFFER_BLOCK reply.
+
+[LABEL] 0x02F00A AUDIO_CMD_TONEEDIT_OP17  confidence=high
+; Opcode 0x17: calls DSP_Stub_RetB (0x035575) -- a stub.  Opcode 0x18 and opcodes 0x01..0x03
+; jump straight to the return.
+
+[LABEL] 0x02F00E AUDIO_CMD_TONEEDIT_RETURN  confidence=high
+; Restore XIZ and return.  Every case joins here.
+
+[ROUTINE] 0x02F010 DSP_EFFPARAM_COPY_V0  confidence=high
+; First of eight near-identical copiers.  Input WA = part, C = descriptor index.
+; XDE = the part's patch record (from PART+0x06); XBC = DSP_EFFECT_DESCRIPTOR_TABLE +
+; index*0x27.  Copies descriptor fields into patch+0x5E..+0x65; this variant takes
+; +0x00,+0x01,+0x1A,+0x1C,+0x1B,(skip +0x63),+0x0E,+0x12.  No hardware access.
+
+[ROUTINE] 0x02F05D DSP_EFFPARAM_COPY_V1  confidence=high
+; Same shape; fields +0x00,+0x01,+0x03,+0x04,+0x1A,+0x1C,+0x0E,+0x12 into patch+0x5E..+0x65.
+
+[ROUTINE] 0x02F0B0 DSP_EFFPARAM_COPY_V2  confidence=high
+; Fields +0x06,+0x07,+0x08,+0x1B then two zero bytes then +0x0E,+0x12.
+
+[ROUTINE] 0x02F100 DSP_EFFPARAM_COPY_V3  confidence=high
+; Fields +0x00,+0x01,+0x03,+0x04 then two zero bytes then +0x0E,+0x12.
+
+[ROUTINE] 0x02F14F DSP_EFFPARAM_COPY_V4  confidence=high
+; Fields +0x1C,+0x1A,+0x19,+0x1B then two zero bytes then +0x0E,+0x12.
+
+[ROUTINE] 0x02F19F DSP_EFFPARAM_COPY_V5  confidence=high
+; Fields +0x09,+0x0A,+0x0B,+0x0C then two zero bytes then +0x0E,+0x12.
+
+[ROUTINE] 0x02F1EF DSP_EFFPARAM_COPY_V6  confidence=high
+; Different in kind: patch+0x5E is set to 1 or 0 from bit 7 of descriptor+0x13,
+; patch+0x5F = descriptor+0x02 & 0x3F, patch+0x60 = descriptor+0x00, patch+0x61..+0x64 = 0,
+; patch+0x65 = descriptor+0x12.
+
+[LABEL] 0x02F21D DSP_EFFPARAM_COPY_V6_FLAGCLEAR  confidence=high
+; Descriptor+0x13 bit 7 clear -> patch+0x5E = 0.
+
+[LABEL] 0x02F221 DSP_EFFPARAM_COPY_V6_TAIL  confidence=high
+; Common tail: the +0x02/&0x3F, +0x00, four zeros, +0x12 stores.
+
+[ROUTINE] 0x02F246 DSP_EFFPARAM_COPY_V7  confidence=high
+; As V6 but patch+0x64 takes descriptor+0x0E instead of zero.
+
+[LABEL] 0x02F274 DSP_EFFPARAM_COPY_V7_FLAGCLEAR  confidence=high
+; Descriptor+0x13 bit 7 clear -> patch+0x5E = 0.
+
+[LABEL] 0x02F278 DSP_EFFPARAM_COPY_V7_TAIL  confidence=high
+; Common tail of V7.
+
+[ROUTINE] 0x02F29F DSP_EFFPARAM_APPLY_BY_ALGOTYPE  confidence=high
+; Input A = part.  Reads the part's algorithm type ((patch+0x5D) & 0x0F); if it is outside
+; 0..0x0B it returns.  Otherwise jumps through DSP_EFFPARAM_APPLY_JUMPTABLE (0x00F99B, base
+; 0x02F2D9); each of the twelve cases loads BC with a descriptor index and tail-jumps to one
+; of the DSP_EFFPARAM_COPY_Vn routines:
+;   type 0->V0/0  1->V0/1  2->V0/2  3->V0/3  4->V1/4  5->V1/5  6->V2/6  7->V3/7
+;   type 8->V4/8  9->V5/9  A->V6/0x0A  B->V7/0x0B
+; Called from 0x02FC2D (opcode 0x5D with rec+5 == 0x0F).
+
+[LABEL] 0x02F2D9 DSP_EFFPARAM_APPLY_T0  confidence=high
+; Algorithm type 0: DSP_EFFPARAM_COPY_V0 with descriptor 0.
+
+[LABEL] 0x02F2E0 DSP_EFFPARAM_APPLY_T1  confidence=high
+; Algorithm type 1: DSP_EFFPARAM_COPY_V0 with descriptor 1.
+
+[LABEL] 0x02F2E7 DSP_EFFPARAM_APPLY_T2  confidence=high
+; Algorithm type 2: DSP_EFFPARAM_COPY_V0 with descriptor 2.
+
+[LABEL] 0x02F2EE DSP_EFFPARAM_APPLY_T3  confidence=high
+; Algorithm type 3: DSP_EFFPARAM_COPY_V0 with descriptor 3.
+
+[LABEL] 0x02F2F5 DSP_EFFPARAM_APPLY_T4  confidence=high
+; Algorithm type 4: DSP_EFFPARAM_COPY_V1 with descriptor 4.
+
+[LABEL] 0x02F2FC DSP_EFFPARAM_APPLY_T5  confidence=high
+; Algorithm type 5: DSP_EFFPARAM_COPY_V1 with descriptor 5.
+
+[LABEL] 0x02F303 DSP_EFFPARAM_APPLY_T6  confidence=high
+; Algorithm type 6: DSP_EFFPARAM_COPY_V2 with descriptor 6.
+
+[LABEL] 0x02F30A DSP_EFFPARAM_APPLY_T7  confidence=high
+; Algorithm type 7: DSP_EFFPARAM_COPY_V3 with descriptor 7.
+
+[LABEL] 0x02F311 DSP_EFFPARAM_APPLY_T8  confidence=high
+; Algorithm type 8: DSP_EFFPARAM_COPY_V4 with descriptor 8.
+
+[LABEL] 0x02F319 DSP_EFFPARAM_APPLY_T9  confidence=high
+; Algorithm type 9: DSP_EFFPARAM_COPY_V5 with descriptor 9.
+
+[LABEL] 0x02F321 DSP_EFFPARAM_APPLY_TA  confidence=high
+; Algorithm type 0x0A: DSP_EFFPARAM_COPY_V6 with descriptor 0x0A.
+
+[LABEL] 0x02F329 DSP_EFFPARAM_APPLY_TB  confidence=high
+; Algorithm type 0x0B: DSP_EFFPARAM_COPY_V7 with descriptor 0x0B.
+
+[ROUTINE] 0x02F332 VOICE_DSPOUT_APPLY_A  confidence=high
+; Input A = part.  Re-runs the part's DSP output routing after a parameter change.
+; Reads the algorithm type; types outside 0..7 do nothing.  Dispatches through
+; VOICE_DSPOUT_A_JUMPTABLE (0x00F9B3, base 0x02F36E) onto Voice_DSP_OutputConfig (0x027CE4)
+; and Voice_DSP_SimpleCopy (0x027EBE).  Called from 0x02FC6A and 0x02FCE2.
+
+[LABEL] 0x02F36E VOICE_DSPOUT_A_TYPE0TO3  confidence=high
+; Algorithm types 0..3: Voice_DSP_OutputConfig(part, 0) then (part, 1).
+
+[LABEL] 0x02F384 VOICE_DSPOUT_A_TYPE4TO5  confidence=high
+; Algorithm types 4..5: Voice_DSP_OutputConfig(part, 0) only.
+
+[LABEL] 0x02F390 VOICE_DSPOUT_A_TYPE6  confidence=high
+; Algorithm type 6: Voice_DSP_SimpleCopy(part).
+
+[LABEL] 0x02F39A VOICE_DSPOUT_A_TYPE7  confidence=high
+; Algorithm type 7: only if PART+0x0A bit 14 is set, Voice_DSP_OutputConfig(part, 0).
+
+[LABEL] 0x02F3BB VOICE_DSPOUT_A_RETURN  confidence=high
+; Pop the one-word frame and return.
+
+[ROUTINE] 0x02F3BE VOICE_DSPOUT_APPLY_B  confidence=high
+; Twin of VOICE_DSPOUT_APPLY_A driving the second output bank: Voice_DSP_OutputConfig2
+; (0x027DD1) and Voice_DSP_SimpleCopy2 (0x027F19), table VOICE_DSPOUT_B_JUMPTABLE
+; (0x00F9C3, base 0x02F3FA).  Called from 0x02FC75 and 0x02FCF0.
+
+[LABEL] 0x02F3FA VOICE_DSPOUT_B_TYPE0TO3  confidence=high
+; Algorithm types 0..3: Voice_DSP_OutputConfig2(part, 0) then (part, 1).
+
+[LABEL] 0x02F410 VOICE_DSPOUT_B_TYPE4TO5  confidence=high
+; Algorithm types 4..5: Voice_DSP_OutputConfig2(part, 0) only.
+
+[LABEL] 0x02F41C VOICE_DSPOUT_B_TYPE6  confidence=high
+; Algorithm type 6: Voice_DSP_SimpleCopy2(part).
+
+[LABEL] 0x02F426 VOICE_DSPOUT_B_TYPE7  confidence=high
+; Algorithm type 7: only if PART+0x0A bit 14 is set, Voice_DSP_OutputConfig2(part, 0)
+; followed by Voice_DSP_SimpleCopy2(part).
+
+[LABEL] 0x02F44F VOICE_DSPOUT_B_RETURN  confidence=high
+; Pop the one-word frame and return.
+
+[ROUTINE] 0x02F452 VOICE_DSPOUT_SECOND_A  confidence=high
+; Input A = part.  Applies the SECOND output slot only, and only for algorithm types 4..0x0B
+; ((patch+0x5D & 0x0F) - 4 must be in 0..7).  Table VOICE_DSPOUT_SECOND_A_JUMPTABLE
+; (0x00F9D3, base 0x02F48C).  Called from 0x02FC80 and 0x02FD09.
+
+[LABEL] 0x02F48C VOICE_DSPOUT_SECOND_A_SLOT1  confidence=high
+; Types 4..5: tail-jump Voice_DSP_OutputConfig(part, 1).
+
+[LABEL] 0x02F494 VOICE_DSPOUT_SECOND_A_SIMPLE  confidence=high
+; Type 6: tail-jump Voice_DSP_SimpleCopy(part).
+
+[LABEL] 0x02F49A VOICE_DSPOUT_SECOND_A_GATED  confidence=high
+; Type 7: return unless PART+0x0A bit 14 is set, then Voice_DSP_OutputConfig(part, 1).
+
+[LABEL] 0x02F4B9 VOICE_DSPOUT_SECOND_A_SLOT0  confidence=high
+; Types 0x0A..0x0B: tail-jump Voice_DSP_OutputConfig(part, 0).
+
+[LABEL] 0x02F4C1 VOICE_DSPOUT_SECOND_A_NONE  confidence=high
+; Types 8..9: bare return.
+
+[ROUTINE] 0x02F4C2 VOICE_DSPOUT_SECOND_B  confidence=high
+; Second-bank twin of VOICE_DSPOUT_SECOND_A, written as an if-chain instead of a table:
+; algorithm types 4 and 5 -> Voice_DSP_OutputConfig2(part, 1); type 7 -> the same but only
+; when PART+0x0A bit 14 is set; every other type returns.  Called from 0x02FC8B, 0x02FD22.
+
+[LABEL] 0x02F4E6 VOICE_DSPOUT_SECOND_B_SLOT1  confidence=high
+; Tail-jump Voice_DSP_OutputConfig2(part, 1).
+
+[LABEL] 0x02F4EE VOICE_DSPOUT_SECOND_B_GATED  confidence=high
+; Algorithm type 7: gate on PART+0x0A bit 14 before the same call.
+
+[ROUTINE] 0x02F50D VoiceAlloc_WithRoutingFlag  replaces=LABEL_02F50D  confidence=high
+; Input A = part, C = flag.  Calls VoiceAlloc_CheckAndInit(part) and then sets or clears
+; bit 7 of the parameter-shadow byte 0x04502B (= UserTone_VelSplit_Base + 0x5D, i.e. the
+; cached value of opcode 0x5D) according to C.  Single caller: 0x02A148.
+
+[LABEL] 0x02F522 VoiceAlloc_WithRoutingFlag_Clear  replaces=LABEL_02F522  confidence=high
+; C == 0 -> res 7,(0x04502B).
+
+[LABEL] 0x02F527 VoiceAlloc_WithRoutingFlag_Return  replaces=LABEL_02F527  confidence=high
+; Pop the frame and return.
+
+[ROUTINE] 0x02F52A VoiceAlloc_WithRoutingFlag_ExtData  replaces=LABEL_02F52A  confidence=high
+; ALGORITHM GROUP 0 APPLY.  Input A = part, C = algorithm slot 0..3.  Not data: this is the
+; first of three structurally identical routines (the others are 0x02F630 and 0x02F735).
+; Steps:
+;   1. AlgoFlag_Write(WA=part, DE=slot, BC=0) and AlgoFlag_Write_Bit3(same, BC=0)
+;   2. EFF_RoutingInit(WA=part, BC=0..3, DE=0) for all four routing slots
+;   3. Voice_BuildOutputList(WA=part, BC=slot, DE=0) -> XHL = word list of voice numbers
+;   4. for each entry: Voice_OpSlot_WriteParams(part, PART record, slot, voice, group=0),
+;      EGEnv_Compute_A (0x022E2A) -> 0x04520C, EGEnv_Compute_A_Simple (0x022EBA) -> 0x045208,
+;      then ToneGen_WriteExtParams_56 (0x02DA16) with XBC = TG_Scratch_Base (0x0451CC).
+;   Loop terminator: stop when (list word & 0x00FF) >= 0x80.
+; This is the only place group 0 parameters reach the tone generator after an edit.
+; Callers verified by disassembly: 0x02E8C4 and 0x02E8D9 (both with BC = 0), and the four
+; opcode-group cases at 0x02FB65, 0x02FB75, 0x02FB85, 0x02FB95 (slots 0..3).
+
+[LABEL] 0x02F56C VOICEALLOC_APPLY_GRP0_ROUTINGLOOP  confidence=high
+; Body of the four-iteration EFF_RoutingInit loop, counter in QIZH.
+
+[LABEL] 0x02F58A VOICEALLOC_APPLY_GRP0_BUILDLIST  confidence=high
+; Routing done: call Voice_BuildOutputList and stash the list pointer at (XSP+0x04),
+; cursor at (XSP+0x08).
+
+[LABEL] 0x02F5AC VOICEALLOC_APPLY_GRP0_VOICELOOP  confidence=high
+; Per-voice body: fetch list[cursor] into IZ, write the op-slot parameters, compute both
+; envelopes and push the result to the tone generator.
+
+[LABEL] 0x02F615 VOICEALLOC_APPLY_GRP0_VOICELOOP_TEST  confidence=high
+; Loop condition: re-read list[cursor] and continue while (word & 0xFF) < 0x80.
+
+[ROUTINE] 0x02F630 VOICEALLOC_APPLY_ALGO_GROUP1  confidence=high
+; ALGORITHM GROUP 1 APPLY.  Same five steps as 0x02F52A with group = 1 throughout:
+; AlgoFlag_Write(...,BC=1), AlgoFlag_Write_Bit3(...,BC=1), EFF_RoutingInit(...,DE=1),
+; Voice_BuildOutputList with the slot number OR 4 (`set 2,WA`), Voice_OpSlot_WriteParams
+; with group 1, EGEnv_Compute_B (0x022F3C) -> 0x045204, EGEnv_Compute_B_Simple (0x022FCC)
+; -> 0x045206, ToneGen_WriteExtParams_15 (0x02DC50).
+; ★ Its voice-list loop terminates on (word & 0xFF) >= 0x40, not >= 0x80 like the other two.
+; Callers: opcodes 0x2F..0x32 (0x02FBA5..0x02FBD5).
+
+[LABEL] 0x02F671 VOICEALLOC_APPLY_GRP1_ROUTINGLOOP  confidence=high
+; Four-iteration EFF_RoutingInit loop with DE = 1.
+
+[LABEL] 0x02F68F VOICEALLOC_APPLY_GRP1_BUILDLIST  confidence=high
+; Voice_BuildOutputList with selector = slot | 4.
+
+[LABEL] 0x02F6B2 VOICEALLOC_APPLY_GRP1_VOICELOOP  confidence=high
+; Per-voice body for group 1.
+
+[LABEL] 0x02F71B VOICEALLOC_APPLY_GRP1_VOICELOOP_TEST  confidence=high
+; Loop condition: continue while (list word & 0xFF) < 0x40.
+
+[ROUTINE] 0x02F735 VOICEALLOC_APPLY_ALGO_GROUP2  confidence=high
+; ALGORITHM GROUP 2 APPLY.  Group = 2 throughout; Voice_BuildOutputList selector = slot | 8
+; (`set 3,WA`); per voice it calls Voice_OpSlot_WriteParams(group 2), Voice_Freq_WriteLeft
+; (0x023043), Voice_Freq_WriteRight (0x02315F) and ToneGen_ExtParams15_DataTable (0x02DD6D).
+; Loop terminator (word & 0xFF) >= 0x80.  Callers: opcodes 0x33..0x36 (0x02FBE5..0x02FC15).
+
+[LABEL] 0x02F776 VOICEALLOC_APPLY_GRP2_ROUTINGLOOP  confidence=high
+; Four-iteration EFF_RoutingInit loop with DE = 2.
+
+[LABEL] 0x02F794 VOICEALLOC_APPLY_GRP2_BUILDLIST  confidence=high
+; Voice_BuildOutputList with selector = slot | 8.
+
+[LABEL] 0x02F7B7 VOICEALLOC_APPLY_GRP2_VOICELOOP  confidence=high
+; Per-voice body for group 2 (frequency writes rather than envelope writes).
+
+[LABEL] 0x02F816 VOICEALLOC_APPLY_GRP2_VOICELOOP_TEST  confidence=high
+; Loop condition: continue while (list word & 0xFF) < 0x80.
+
+[ROUTINE] 0x02F830 AUDIO_CMD_EFFECTPARAM_DISPATCH  confidence=high
+; Second command dispatcher.  Entry XWA = command record; part goes to QIZH.
+; Stage 1 accepts opcodes 0x15..0x27 through AUDIO_CMD_EFFECTPARAM_JUMPTABLE (0x00FA76,
+; base 0x02F86F); only every third opcode has a handler, and each handler forwards to
+; AudioChannel_Dispatch (0x029E31) with XDE pointing at one of the seven 3-byte parameter
+; groups inside the patch record.  All handlers then fall into
+; AUDIO_CMD_EFFPARAM_CACHE_AND_DISPATCH2, which caches the value and runs a much larger
+; second stage.  Sole caller: 0x031AB3.
+
+[LABEL] 0x02F86F AUDIO_CMD_EFFPARAM_GRP0  confidence=high
+; Opcode 0x15: AudioChannel_Dispatch(WA=part, XDE=&patch[0x14], BC=0).
+
+[LABEL] 0x02F897 AUDIO_CMD_EFFPARAM_GRP1  confidence=high
+; Opcode 0x18: AudioChannel_Dispatch(WA=part, XDE=&patch[0x17], BC=0).
+
+[LABEL] 0x02F8C3 AUDIO_CMD_EFFPARAM_GRP2  confidence=high
+; Opcode 0x1B: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1A], BC=0).
+
+[LABEL] 0x02F8EF AUDIO_CMD_EFFPARAM_GRP3  confidence=high
+; Opcode 0x1E: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1D], BC=0).
+
+[LABEL] 0x02F91A AUDIO_CMD_EFFPARAM_GRP4  confidence=high
+; Opcode 0x21: AudioChannel_Dispatch(WA=part, XDE=&patch[0x20], BC=0).
+
+[LABEL] 0x02F945 AUDIO_CMD_EFFPARAM_GRP5  confidence=high
+; Opcode 0x24: AudioChannel_Dispatch(WA=part, XDE=&patch[0x23], BC=0).
+
+[LABEL] 0x02F970 AUDIO_CMD_EFFPARAM_GRP6  confidence=high
+; Opcode 0x27: AudioChannel_Dispatch(WA=part, XDE=&patch[0x26], BC=0).
+
+[LABEL] 0x02F999 AUDIO_CMD_EFFPARAM_CACHE_AND_DISPATCH2  confidence=high
+; Common tail of stage 1 and the entry to stage 2.  Stores (rec+4) into the parameter shadow
+; at UserTone_VelSplit_Base + opcode (0x044FCE + opcode), then range-checks the opcode:
+; 0x00..0x10 exit, 0x11..0x65 continue.
+
+[LABEL] 0x02F9C5 AUDIO_CMD_EFFPARAM_TABLEJUMP  confidence=high
+; Two-level lookup: AUDIO_CMD_EFFPARAM_CASEMAP (0x00F9E3) maps opcode-0x11 to a case number,
+; which indexes AUDIO_CMD_EFFPARAM_JUMPTABLE (0x00FA38) with base 0x02F9FA.
+
+[LABEL] 0x02F9FD AUDIO_CMD_EFFPARAM_OP11  confidence=high
+; Opcode 0x11: VoiceFlags_Aggregate(part) then EnvTranspose_UpdateLoop(part).
+
+[LABEL] 0x02FA18 AUDIO_CMD_EFFPARAM_OP12  confidence=high
+; Opcode 0x12: VoiceFlags_Aggregate(part) only.
+
+[LABEL] 0x02FA27 AUDIO_CMD_EFFPARAM_OP14  confidence=high
+; Opcode 0x14: AudioChannel_Dispatch(part, &patch[0x1D], 0).
+
+[LABEL] 0x02FA53 AUDIO_CMD_EFFPARAM_OP17  confidence=high
+; Opcode 0x17: AudioChannel_Dispatch(part, &patch[0x17], 0).
+
+[LABEL] 0x02FA7F AUDIO_CMD_EFFPARAM_OP1A  confidence=high
+; Opcode 0x1A: AudioChannel_Dispatch(part, &patch[0x1A], 0).
+
+[LABEL] 0x02FAAB AUDIO_CMD_EFFPARAM_OP1D  confidence=high
+; Opcode 0x1D: AudioChannel_Dispatch(part, &patch[0x1D], 0).
+
+[LABEL] 0x02FAD7 AUDIO_CMD_EFFPARAM_OP20  confidence=high
+; Opcode 0x20: AudioChannel_Dispatch(part, &patch[0x20], 0).
+
+[LABEL] 0x02FB03 AUDIO_CMD_EFFPARAM_OP23  confidence=high
+; Opcode 0x23: AudioChannel_Dispatch(part, &patch[0x23], 0).
+
+[LABEL] 0x02FB2F AUDIO_CMD_EFFPARAM_OP26  confidence=high
+; Opcode 0x26: AudioChannel_Dispatch(part, &patch[0x26], 0).
+
+[LABEL] 0x02FB5B AUDIO_CMD_EFFPARAM_GRP0_SLOT0  confidence=high
+; Opcodes 0x2B..0x2E: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 0) -- group 0 apply.
+; Note all four opcodes of the run share this case and therefore share slot 0; the per-slot
+; distinction is carried by the next three cases, not by the opcode's low bits.
+
+[LABEL] 0x02FB6B AUDIO_CMD_EFFPARAM_GRP0_SLOT1  confidence=high
+; Opcodes 0x2F..0x32: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 1).
+
+[LABEL] 0x02FB7B AUDIO_CMD_EFFPARAM_GRP0_SLOT2  confidence=high
+; Opcodes 0x33..0x36: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 2).
+
+[LABEL] 0x02FB8B AUDIO_CMD_EFFPARAM_GRP0_SLOT3  confidence=high
+; Opcodes 0x37..0x3A: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 3).
+
+[LABEL] 0x02FB9B AUDIO_CMD_EFFPARAM_GRP1_SLOT0  confidence=high
+; Opcodes 0x3B..0x3E: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 0).
+
+[LABEL] 0x02FBAB AUDIO_CMD_EFFPARAM_GRP1_SLOT1  confidence=high
+; Opcodes 0x3F..0x42: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 1).
+
+[LABEL] 0x02FBBB AUDIO_CMD_EFFPARAM_GRP1_SLOT2  confidence=high
+; Opcodes 0x43..0x46: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 2).
+
+[LABEL] 0x02FBCB AUDIO_CMD_EFFPARAM_GRP1_SLOT3  confidence=high
+; Opcodes 0x47..0x4A: VOICEALLOC_APPLY_ALGO_GROUP1(part, slot 3).
+
+[LABEL] 0x02FBDB AUDIO_CMD_EFFPARAM_GRP2_SLOT0  confidence=high
+; Opcodes 0x4B..0x4E: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 0).
+
+[LABEL] 0x02FBEB AUDIO_CMD_EFFPARAM_GRP2_SLOT1  confidence=high
+; Opcodes 0x4F..0x52: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 1).
+
+[LABEL] 0x02FBFB AUDIO_CMD_EFFPARAM_GRP2_SLOT2  confidence=high
+; Opcodes 0x53..0x56: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 2).
+
+[LABEL] 0x02FC0B AUDIO_CMD_EFFPARAM_GRP2_SLOT3  confidence=high
+; Opcodes 0x57..0x5A: VOICEALLOC_APPLY_ALGO_GROUP2(part, slot 3).
+
+[LABEL] 0x02FC1B AUDIO_CMD_EFFPARAM_OP5D_FULLREBUILD  confidence=high
+; Opcode 0x5D with (rec+5) == 0x0F: the heaviest case in the region.  In order:
+; DSP_EFFPARAM_APPLY_BY_ALGOTYPE, AlgoType_StateWrite(part, 0), VoiceFlags_Aggregate,
+; EnvTranspose_UpdateLoop, VoiceNoteParam_UpdateLoop, VOICE_DSPOUT_APPLY_A,
+; VOICE_DSPOUT_APPLY_B, VOICE_DSPOUT_SECOND_A, VOICE_DSPOUT_SECOND_B,
+; Voice_ActiveFlag_CheckAndLoad, Voice_SecondaryParam_Epilogue, and finally L is stored into
+; PART+0x66 (0x0413CE + part*0x11F).
+
+[LABEL] 0x02FCBF AUDIO_CMD_EFFPARAM_OP5D_LIGHT  confidence=high
+; Opcode 0x5D with (rec+5) != 0x0F: only VoiceFlags_Aggregate + EnvTranspose_UpdateLoop.
+
+[LABEL] 0x02FCDA AUDIO_CMD_EFFPARAM_OP5E  confidence=high
+; Opcode 0x5E: VOICE_DSPOUT_APPLY_A(part).
+
+[LABEL] 0x02FCE8 AUDIO_CMD_EFFPARAM_OP5F  confidence=high
+; Opcode 0x5F: VOICE_DSPOUT_APPLY_B(part) then VoiceNoteParam_UpdateLoop(part).
+
+[LABEL] 0x02FD01 AUDIO_CMD_EFFPARAM_OP60  confidence=high
+; Opcode 0x60: VOICE_DSPOUT_SECOND_A(part) then VoiceNoteParam_UpdateLoop(part).
+
+[LABEL] 0x02FD1A AUDIO_CMD_EFFPARAM_OP61  confidence=high
+; Opcode 0x61: VOICE_DSPOUT_SECOND_B(part) then VoiceNoteParam_UpdateLoop(part).
+
+[LABEL] 0x02FD33 AUDIO_CMD_EFFPARAM_OP62  confidence=high
+; Opcode 0x62: VoiceNoteParam_UpdateLoop(part) only.
+
+[LABEL] 0x02FD41 AUDIO_CMD_EFFPARAM_OP63  confidence=high
+; Opcode 0x63: identical to opcode 0x62 (duplicated case body).
+
+[LABEL] 0x02FD4F AUDIO_CMD_EFFPARAM_OP64  confidence=high
+; Opcode 0x64: Voice_ActiveFlag_CheckAndLoad(part).
+
+[LABEL] 0x02FD5D AUDIO_CMD_EFFPARAM_OP65  confidence=high
+; Opcode 0x65: Voice_SecondaryParam_Epilogue(part), then L into PART+0x66.
+
+[LABEL] 0x02FD7F AUDIO_CMD_EFFPARAM_RETURN  confidence=high
+; Restore QIZ, drop the 4-byte frame, return.  Every stage-1 and stage-2 case joins here.
+
+[ROUTINE] 0x02FD85 DSP_SLOTPARAM_WRITE_FROM_CACHE  confidence=high
+; Input WA = part, C = slot 0..3.  XDE = the slot descriptor pointed to by
+; PART + 0x6E + slot*0x25; XBC = the 5-byte cache at UserTone_VelSplit_Base + 0x1E0 + slot*5.
+; If (descriptor+0x36 & 7) equals cache[0] the four cached bytes are copied straight into
+; descriptor+0x4D..+0x50.  Otherwise it re-maps them according to the pair
+; (cache[0], descriptor shape), which is what the branch tree below does.
+; Called from AUDIO_CMD_DSPUNIT_PARAM opcode 0x36 (0x030167), gated on (rec+5) == 7.
+
+[LABEL] 0x02FDCD DSP_SLOTPARAM_WRITE_MATCH_LOOP  confidence=high
+; Shapes agree: copy cache[1..4] to descriptor+0x4D..+0x50 in a 4-iteration loop.
+
+[LABEL] 0x02FDEE DSP_SLOTPARAM_WRITE_REMAP  confidence=high
+; Shapes differ: switch on cache[0] (1/3 -> 0x02FE05, 2/4 -> 0x02FE4B, 5 -> 0x02FE91,
+; anything else -> return).
+
+[LABEL] 0x02FE05 DSP_SLOTPARAM_WRITE_SHAPE1OR3  confidence=high
+; cache[0] in {1,3}: if the descriptor's shape is 5, write the fixed pattern
+; {0x00, 0x01, cache[1], cache[2]}; otherwise fall back to the plain 4-byte copy.
+
+[LABEL] 0x02FE24 DSP_SLOTPARAM_WRITE_SHAPE1OR3_PLAIN  confidence=high
+; Plain 4-byte copy fallback for the {1,3} branch.
+
+[LABEL] 0x02FE2A DSP_SLOTPARAM_WRITE_SHAPE1OR3_LOOP  confidence=high
+; Loop body of that fallback.
+
+[LABEL] 0x02FE4B DSP_SLOTPARAM_WRITE_SHAPE2OR4  confidence=high
+; cache[0] in {2,4}: if the descriptor's shape is 5, write {cache[1], cache[2], 0x7F, 0x01};
+; otherwise plain copy.
+
+[LABEL] 0x02FE6A DSP_SLOTPARAM_WRITE_SHAPE2OR4_PLAIN  confidence=high
+; Plain 4-byte copy fallback for the {2,4} branch.
+
+[LABEL] 0x02FE70 DSP_SLOTPARAM_WRITE_SHAPE2OR4_LOOP  confidence=high
+; Loop body of that fallback.
+
+[LABEL] 0x02FE91 DSP_SLOTPARAM_WRITE_SHAPE5  confidence=high
+; cache[0] == 5: descriptor shape 1 or 3 -> write {cache[3], cache[4], 0x40, 0x87};
+; shape 2 or 4 -> write {cache[1], cache[2], 0x40, 0x07}; other shapes -> return.
+
+[LABEL] 0x02FEA7 DSP_SLOTPARAM_WRITE_SHAPE5_TO13  confidence=high
+; Shape-5 source, shape-1/3 destination.
+
+[LABEL] 0x02FEBC DSP_SLOTPARAM_WRITE_SHAPE5_TO24  confidence=high
+; Shape-5 source, shape-2/4 destination.
+
+[ROUTINE] 0x02FED1 DSP_SLOTPARAM_READ_TO_CACHE  confidence=high
+; Inverse of DSP_SLOTPARAM_WRITE_FROM_CACHE.  Same addressing; returns immediately unless
+; (descriptor+0x36 & 7) equals cache[0], then copies descriptor+0x4D..+0x50 into cache[1..4].
+; Called from AUDIO_CMD_DSPUNIT_PARAM opcodes 0x4D..0x50 (0x0301DC).
+
+[LABEL] 0x02FF19 DSP_SLOTPARAM_READ_LOOP  confidence=high
+; 4-iteration copy loop.
+
+[ROUTINE] 0x02FF3A AUDIO_CMD_DSPUNIT_PARAM  confidence=high
+; Third command dispatcher, one instance per DSP unit.  Input C = unit 0..3,
+; XWA = command record.  The opcode is taken from (rec+2) with bit 7 forced low; the value
+; (rec+4) is stored into the parameter shadow at
+; UserTone_VelSplit_Base + 0x66 + unit*0x51 + opcode.
+; Opcodes 0x4D..0x50 short-circuit to DSP_SLOTPARAM_READ_TO_CACHE.  Opcode 0x17 short-
+; circuits to the amplitude path.  Opcodes 0x07..0x16, 0x39..0x4C and >0x4C are ignored.
+; Everything else goes through AUDIO_CMD_DSPUNIT_CASEMAP (0x00FA9C) /
+; AUDIO_CMD_DSPUNIT_JUMPTABLE (0x00FAB6), base 0x02FFF9.
+; Four callers: 0x031AD5, 0x031ADF, 0x031B01, 0x031B0B.  Produces no sub->main traffic.
+
+[LABEL] 0x02FFAB AUDIO_CMD_DSPUNIT_CHECK_LOW  confidence=high
+; Opcode < 0x17: reject 0x07..0x16, accept 0x00..0x06.
+
+[LABEL] 0x02FFBB AUDIO_CMD_DSPUNIT_NORMALISE  confidence=high
+; Fold the two accepted opcode windows into one index: 0..6 stay, 0x26..0x38 become
+; 7..0x19; anything else exits.
+
+[LABEL] 0x02FFD6 AUDIO_CMD_DSPUNIT_TABLEJUMP  confidence=high
+; Two-level lookup into the case map and jump table.
+
+[LABEL] 0x02FFF9 AUDIO_CMD_DSPUNIT_OP01  confidence=high
+; Opcode 0x01: EnvTranspose_UpdateLoop(part).
+
+[LABEL] 0x030008 AUDIO_CMD_DSPUNIT_OP02  confidence=high
+; Opcodes 0x02 and 0x03: VoiceBufPtr_Update(part, unit) then
+; VoiceParam_WriteWithOffset_3Arg(part, unit, slot) for slots 0..3.
+
+[LABEL] 0x030026 AUDIO_CMD_DSPUNIT_OP02_SLOTLOOP  confidence=high
+; Four-iteration slot loop of opcode 0x02/0x03.
+
+[LABEL] 0x03004D AUDIO_CMD_DSPUNIT_OP05  confidence=high
+; Opcode 0x05: Voice_AllocateForFull(part) then Voice_AllVoices_WritePan (0x028D4C).
+
+[LABEL] 0x030062 AUDIO_CMD_DSPUNIT_OP06  confidence=high
+; Opcode 0x06: for slots 0..3 AlgoFlag_Write_Bit3(part, slot, 0) and
+; AlgoFlag_Write(part, slot, 0), then EFF_RoutingInit(part, unit, 0).
+
+[LABEL] 0x030068 AUDIO_CMD_DSPUNIT_OP06_SLOTLOOP  confidence=high
+; Four-iteration slot loop of opcode 0x06.
+
+[LABEL] 0x0300A4 AUDIO_CMD_DSPUNIT_OP06_ROUTING  confidence=high
+; Tail of opcode 0x06: the single EFF_RoutingInit call with DE = 0.
+
+[LABEL] 0x0300C0 AUDIO_CMD_DSPUNIT_OP17  confidence=high
+; Opcode 0x17 (special-cased before the table): Voice_AllocateForFull(part) then
+; Voice_AllVoices_WriteAmplitude (0x028DBF).
+
+[LABEL] 0x0300D5 AUDIO_CMD_DSPUNIT_OP26  confidence=high
+; Opcode 0x26: the opcode-0x06 sequence with group 1 -- AlgoFlag_Write_Bit3(...,1),
+; AlgoFlag_Write(...,1) for four slots, then EFF_RoutingInit(part, unit, 1).
+
+[LABEL] 0x0300DB AUDIO_CMD_DSPUNIT_OP26_SLOTLOOP  confidence=high
+; Four-iteration slot loop of opcode 0x26.
+
+[LABEL] 0x030117 AUDIO_CMD_DSPUNIT_OP26_ROUTING  confidence=high
+; Tail of opcode 0x26: EFF_RoutingInit with DE = 1.
+
+[LABEL] 0x030133 AUDIO_CMD_DSPUNIT_OP2D  confidence=high
+; Opcode 0x2D: Voice_AllocateForSustain(part) then
+; Voice_AllNotes_SustainRetrigger(list, BC = 1).
+
+[LABEL] 0x03014A AUDIO_CMD_DSPUNIT_OP36  confidence=high
+; Opcode 0x36: only when (rec+5) == 7, DSP_SLOTPARAM_WRITE_FROM_CACHE(part, unit).
+
+[LABEL] 0x03016C AUDIO_CMD_DSPUNIT_OP38  confidence=high
+; Opcode 0x38: the opcode-0x06 sequence with group 2, then EFF_RoutingInit(part, unit, 2).
+
+[LABEL] 0x030172 AUDIO_CMD_DSPUNIT_OP38_SLOTLOOP  confidence=high
+; Four-iteration slot loop of opcode 0x38.
+
+[LABEL] 0x0301AE AUDIO_CMD_DSPUNIT_OP38_ROUTING  confidence=high
+; Tail of opcode 0x38: EFF_RoutingInit with DE = 2.
+
+[LABEL] 0x0301C9 AUDIO_CMD_DSPUNIT_OP4D_TO_50  confidence=high
+; Opcodes 0x4D..0x50: DSP_SLOTPARAM_READ_TO_CACHE(part, unit).  Read-back only.
+
+[LABEL] 0x0301DF AUDIO_CMD_DSPUNIT_RETURN  confidence=high
+; Restore IZ, drop the 6-byte frame, return.
+
+[ROUTINE] 0x0301E3 AUDIO_CMD_DSPGLOBAL_PARAM_STORE  confidence=high
+; Input XWA = command record.  Pure shadow-RAM write, no side effects: stores (rec+4) into
+; UserTone_VelSplit_Base + 0x1AA + (opcode >> 6)*0x0B + (opcode & 0x3F).  The trailing
+; `cp A,0x0A / ret UGT` before the final `ret` computes a flag nothing consumes.
+; Caller: 0x031B1B.
+
+[ROUTINE] 0x03021F AUDIO_CMD_PATCHBYTE_WRITE_AND_ECHO  confidence=high
+; Input XWA = command record.  Writes (rec+4) into the part's patch record at byte offset
+; (rec+2), then tail-jumps to InterCPU_E1_DMA_Transfer with
+; src = &patch[opcode], dst = 0x001E0000 + 0x4980 + opcode, len = 1.
+; A one-byte write-through to the main CPU's mirror of the patch record.  Caller: 0x031B23.
+
+[ROUTINE] 0x03025F DSP_SLOTPARAM_WRITE_FROM_CACHE_B  confidence=high
+; Bank-buffer flavour of DSP_SLOTPARAM_WRITE_FROM_CACHE.  Input A = record index.
+; Target record = ToneDB_RamBankA + 0x4AB7 + (editIndex*0x50) + index*0x15, where editIndex
+; is the byte at ToneDB_RamBankA + 0x72A7.  Cache = UserTone_VelSplit_Base + 0x1F4 + index*5.
+; Shape byte is at record+0x0F and the four data bytes at record+0x11..+0x14.  The remap
+; tree is byte-for-byte the same decision structure as the 0x02FD85 version.
+; Called twice from AUDIO_CMD_TONEEDIT_WRITE_AND_REPLY (0x0304E2, 0x0304EF) with index 0/1.
+
+[LABEL] 0x0302B0 DSP_SLOTPARAM_WRITE_B_MATCH_LOOP  confidence=high
+; Shapes agree: copy cache[1..4] into record+0x11..+0x14.
+
+[LABEL] 0x0302D1 DSP_SLOTPARAM_WRITE_B_REMAP  confidence=high
+; Shapes differ: switch on cache[0] exactly as at 0x02FDEE.
+
+[LABEL] 0x0302E8 DSP_SLOTPARAM_WRITE_B_SHAPE1OR3  confidence=high
+; cache[0] in {1,3}: record shape 5 -> {0x00, 0x01, cache[1], cache[2]}, else plain copy.
+
+[LABEL] 0x030307 DSP_SLOTPARAM_WRITE_B_SHAPE1OR3_PLAIN  confidence=high
+; Plain copy fallback.
+
+[LABEL] 0x03030D DSP_SLOTPARAM_WRITE_B_SHAPE1OR3_LOOP  confidence=high
+; Loop body of that fallback.
+
+[LABEL] 0x03032E DSP_SLOTPARAM_WRITE_B_SHAPE2OR4  confidence=high
+; cache[0] in {2,4}: record shape 5 -> {cache[1], cache[2], 0x7F, 0x01}, else plain copy.
+
+[LABEL] 0x03034D DSP_SLOTPARAM_WRITE_B_SHAPE2OR4_PLAIN  confidence=high
+; Plain copy fallback.
+
+[LABEL] 0x030353 DSP_SLOTPARAM_WRITE_B_SHAPE2OR4_LOOP  confidence=high
+; Loop body of that fallback.
+
+[LABEL] 0x030374 DSP_SLOTPARAM_WRITE_B_SHAPE5  confidence=high
+; cache[0] == 5: shape 1/3 -> {cache[3], cache[4], 0x40, 0x87}; shape 2/4 ->
+; {cache[1], cache[2], 0x40, 0x07}.
+
+[LABEL] 0x03038A DSP_SLOTPARAM_WRITE_B_SHAPE5_TO13  confidence=high
+; Shape-5 source, shape-1/3 destination.
+
+[LABEL] 0x03039F DSP_SLOTPARAM_WRITE_B_SHAPE5_TO24  confidence=high
+; Shape-5 source, shape-2/4 destination.
+
+[ROUTINE] 0x0303B4 DSP_SLOTPARAM_READ_TO_CACHE_B  confidence=high
+; Inverse of DSP_SLOTPARAM_WRITE_FROM_CACHE_B; input C = record index.  Returns unless
+; (record+0x0F & 7) == cache[0], then copies record+0x11..+0x14 into cache[1..4].
+; Called twice from 0x0304FB and 0x030505.
+
+[LABEL] 0x030407 DSP_SLOTPARAM_READ_B_LOOP  confidence=high
+; 4-iteration copy loop.
+
+[ROUTINE] 0x030428 AUDIO_CMD_TONEEDIT_WRITE_AND_REPLY  confidence=high
+; Fourth command dispatcher, and the one that ALWAYS answers the main CPU.
+; Input XWA = command record (kept in XIZ).  Obtains the part's working buffer via
+; VoiceParam_WriteDispatchHelper (0x032AE0) called with WA = patch pointer, BC = the edit
+; index at ToneDB_RamBankA+0x72A7, DE = part; keeps the returned XHL at (XSP+0x04).
+; Stores (rec+4) at buffer[opcode].  Then dispatches opcodes 0x19..0x24 and 0x2B..0x36 via
+; AUDIO_CMD_TONEEDIT_REPLY_CASEMAP / _JUMPTABLE (base 0x0304B6).  ALL paths, including the
+; ignored opcodes, converge on AUDIO_CMD_TONEEDIT_REPLY_SEND.  Caller: 0x031B2B.
+
+[LABEL] 0x030493 AUDIO_CMD_TONEEDIT_REPLY_TABLEJUMP  confidence=high
+; Fold opcodes 0x19..0x24 and 0x2B..0x36 into one 0..0x17 index and jump.
+
+[LABEL] 0x0304B6 AUDIO_CMD_TONEEDIT_REPLY_CASE_PAN  confidence=high
+; Voice_AllocateForFull(part) then 0x029071 over the returned voice list.
+
+[LABEL] 0x0304C7 AUDIO_CMD_TONEEDIT_REPLY_CASE_SUSTAIN  confidence=high
+; Voice_AllocateForSustain(part) then Voice_AllNotes_SustainRetrigger(list, 1).
+
+[LABEL] 0x0304DA AUDIO_CMD_TONEEDIT_REPLY_CASE_SLOT0  confidence=high
+; Only when (rec+5) == 7: DSP_SLOTPARAM_WRITE_FROM_CACHE_B(index 0).
+
+[LABEL] 0x0304E7 AUDIO_CMD_TONEEDIT_REPLY_CASE_SLOT1  confidence=high
+; Only when (rec+5) == 7: DSP_SLOTPARAM_WRITE_FROM_CACHE_B(index 1).
+
+[LABEL] 0x0304F4 AUDIO_CMD_TONEEDIT_REPLY_CASE_READBACK  confidence=high
+; DSP_SLOTPARAM_READ_TO_CACHE_B for indices 0 and 1.
+
+[LABEL] 0x0304FE AUDIO_CMD_TONEEDIT_REPLY_CASE_READBACK1  confidence=high
+; Table entry that enters the read-back pair at its second call only (index 1).
+
+[LABEL] 0x030508 AUDIO_CMD_TONEEDIT_REPLY_SEND  confidence=high
+; ★ The unconditional sub->main reply.  Builds
+;   dst = 0x001E0000 + 0x4AA7 + editIndex*0x50   (editIndex = [ToneDB_RamBankA + 0x72A7])
+;   src = the buffer pointer saved at (XSP+0x04)
+;   len = 0x3A (58 bytes)
+; and calls InterCPU_E1_DMA_Transfer (0x020DB3).  If that call times out the command is
+; still acknowledged locally and the main CPU simply never sees the update.
+
+[ROUTINE] 0x030535 AUDIO_CMD_TONEEDIT_FIELD_WRITE_AND_REPLY  confidence=high
+; Sibling of 0x030428 for the sub-field form of the command.  The opcode's top two bits
+; select a group 0..3 (kept in QIZH) and its low six bits select a byte within that group.
+; After VoiceParam_WriteDispatchHelper it advances the buffer pointer by group*0x15 + 0x10,
+; calls VoiceField_ExtractAndWrite (0x032682) with WA = group, XBC = buffer, DE = editIndex
+; and the part pushed on the stack, stores (rec+4) at buffer[opcode & 0x3F], and then
+; DMAs that single byte to
+;   0x001E0000 + 0x4AE1 + editIndex*0x50 + group*0x0B + (opcode & 0x3F)
+; via InterCPU_E1_DMA_Transfer.  Caller: 0x031B33.
+
+[ROUTINE] 0x030618 DSP_EffectStateQuery  replaces=LABEL_030618  confidence=high
+; Input WA = part, XBC = one-byte result buffer.  Writes 1 if PART+0x00 bit 0 is set
+; (the part is allocated), 0 otherwise, and returns HL = 1.
+; Called from DSP_SetCoeff_MasterConfig at 0x0317E2 with XBC = 0x045216, and from
+; AUDIO_PROCESS_DSP at 0x035BFC.
+
+[LABEL] 0x030632 DSP_EffectStateQuery_WriteZero  replaces=LABEL_030632  confidence=high
+; Part not allocated: store 0.
+
+[LABEL] 0x030635 DSP_EffectStateQuery_SetResult  replaces=LABEL_030635  confidence=high
+; Return HL = 1 (success).
+
+[ROUTINE] 0x030638 DSP_AdjustVoiceParams  replaces=LABEL_030638  confidence=high
+; Input XWA = PART record base.  Applies the five global offset bytes at 0x0451A6..0x0451AC
+; to a part's four operator slots and to the part's patch record:
+;   0x0451A6 << 2  -> slot+0x4D (and slot+0x4F for shape 5), clamped by ClampS8_0_to_78
+;   0x0451AB << 2  -> slot+0x27, clamped 0..0xFF by ClampS16_WA_To_DEBC
+;   0x0451AC << 2  -> slot+0x2D, same clamp
+;   0x0451A7 << 1  -> patch+0x2B and patch+0x3B, clamped 0..0x7F (skipped when 0x0451A7
+;                     reads 0xF5, the "unset" sentinel)
+;   0x0451A8 << 1  -> patch+0x2C and patch+0x3C, clamped 0..0x7F
+;   0x0451A9 << 1  -> the low 6 bits of patch+0x2E and patch+0x3E, clamped 0..0x1E
+; Slot addressing is FP_MulAccum64(index, 0x25) + 0x6E + PART, then a long pointer fetch.
+; Called only from DSP_AlgoSelect_AlreadyAllocated (0x0309BD).
+
+[LABEL] 0x03066F DSP_AdjustVoiceParams_SlotLoop  replaces=LABEL_03066F  confidence=high
+; Four-iteration loop over the part's operator slots; QIZ is the slot counter.
+
+[LABEL] 0x0306A3 DSP_AdjustVoiceParams_Type1to4  replaces=LABEL_0306A3  confidence=high
+; Slot shapes 1..4: adjust slot+0x4D only.
+
+[LABEL] 0x0306EC DSP_AdjustVoiceParams_Type5  replaces=LABEL_0306EC  confidence=high
+; Slot shape 5: adjust both slot+0x4D and slot+0x4F.
+
+[LABEL] 0x030778 DSP_AdjustVoiceParams_ReverbChorus  replaces=LABEL_030778  confidence=high
+; Common per-slot tail: the 0x0451AB -> slot+0x27 and 0x0451AC -> slot+0x2D adjustments,
+; then loop back to the slot loop.
+
+[LABEL] 0x030817 DSP_AdjustVoiceParams_Vibrato  replaces=LABEL_030817  confidence=high
+; After all four slots: the 0x0451A7 pair, skipped entirely when 0x0451A7 == 0xF5.
+
+[LABEL] 0x03087F DSP_AdjustVoiceParams_Filter  replaces=LABEL_03087F  confidence=high
+; The 0x0451A8 and 0x0451A9 adjustments; the latter is a read-modify-write that preserves
+; the top two bits of patch+0x2E / patch+0x3E.
+
+[ROUTINE] 0x030960 DSP_AlgoSelect  replaces=LABEL_030960  confidence=high
+; Input A = part, BC = algorithm number, XDE = one-byte status buffer.
+; Rejects algorithm numbers >= 0x28 by writing status 2.  Otherwise, if the part is not yet
+; allocated it allocates it exactly like VoiceAlloc_InitNewAllocation (set PART+0x00 bit 0,
+; VoiceParam_FullSetup, VoiceInit_Dispatcher with PART+0x19 / PART+0x1A); if it already was
+; allocated it instead calls DSP_AdjustVoiceParams.  Either way it then calls
+; DSP_WriteAlgoBuffer (0x03522E) and DSP_VoiceState_Dispatch (0x035490) with WA = BC = 0xFF,
+; writes status 0 and returns HL = 1.
+; Callers: 0x031822 (DSP_SetCoeff_MasterConfig) and 0x035BEA (AUDIO_PROCESS_DSP).
+
+[LABEL] 0x0309B4 DSP_AlgoSelect_AlreadyAllocated  replaces=LABEL_0309B4  confidence=high
+; Part already had bit 0 set: apply the global offsets via DSP_AdjustVoiceParams instead of
+; re-initialising.
+
+[LABEL] 0x0309C0 DSP_AlgoSelect_WriteAndDispatch  replaces=LABEL_0309C0  confidence=high
+; Push the algorithm to the DSP and report status 0.
+
+[LABEL] 0x0309DE DSP_AlgoSelect_InvalidParam  replaces=LABEL_0309DE  confidence=high
+; Algorithm number out of range: status byte = 2.
+
+[LABEL] 0x0309E4 DSP_AlgoSelect_Return  replaces=LABEL_0309E4  confidence=high
+; HL = 1, restore XIZ, return.
+
+[ROUTINE] 0x0309EA DSP_MixSendConfig  replaces=LABEL_0309EA  confidence=high
+; Input XDE = destination buffer.  Calls DSP_LookupVoiceBuffer (0x03206F) and copies the
+; first 0x11 bytes of the returned buffer into the caller's buffer.  Callers: 0x031847 and
+; AUDIO_PROCESS_DSP at 0x035CB8.
+
+[LABEL] 0x0309FC DSP_MixSendConfig_CopyLoop  replaces=LABEL_0309FC  confidence=high
+; 0x11-byte post-increment copy loop.
+
+[LABEL] 0x030A08 DSP_MixSendConfig_Return  replaces=LABEL_030A08  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x030A0A DSP_RouteCoeffs_TypeA  replaces=LABEL_030A0A  confidence=high
+; Input WA = a 7-bit index, BC = a selector whose bits 7:6 pick one of four descriptor
+; pointers and whose bits 3:0 form the high part of a table index.
+; Reads a long pointer from (0x045314)+0x44/+0x48/+0x4C (bits 7:6 = 0/1/2, and 3 aliases 0),
+; adds the window base (0x045310), fetches a word at ((BC & 0x0F) << 7 | WA) * 2, and uses
+; that word as a 16-byte-stride row index into the block at (0x045314)+0x50.  Copies 0x0D
+; bytes of the selected row into the staging buffer at 0x045210+6.
+; Caller: 0x031865.
+
+[LABEL] 0x030A39 DSP_RouteCoeffs_TypeA_Sel1  confidence=high
+; Selector bits 7:6 == 01 -> descriptor pointer at (0x045314)+0x4C.
+
+[LABEL] 0x030A43 DSP_RouteCoeffs_TypeA_Sel2  confidence=high
+; Selector bits 7:6 == 10 -> descriptor pointer at (0x045314)+0x48.
+
+[LABEL] 0x030A4D DSP_RouteCoeffs_TypeA_Sel3  confidence=high
+; Selector bits 7:6 == 11 -> same pointer as selector 00, (0x045314)+0x44.
+
+[LABEL] 0x030A55 DSP_RouteCoeffs_TypeA_Fetch  confidence=high
+; Common tail: compute the row number and set up the 0x0D-byte copy.
+
+[LABEL] 0x030A83 DSP_RouteCoeffs_TypeA_CopyLoop  confidence=high
+; 0x0D-byte copy into 0x045210+6.
+
+[ROUTINE] 0x030AAD DSP_RouteCoeffs_TypeB  confidence=high
+; Structural twin of DSP_RouteCoeffs_TypeA using the second descriptor set:
+; pointers at (0x045314)+0x58/+0x5C/+0x60 and the row block at (0x045314)+0x64.
+; Caller: 0x031883.  The ELF already carries this name; the reference file simply lacks the
+; line, so this is an "add", not a supersede.
+
+[LABEL] 0x030ADC DSP_RouteCoeffs_TypeB_Sel1  confidence=high
+; Selector bits 7:6 == 01 -> (0x045314)+0x60.
+
+[LABEL] 0x030AE6 DSP_RouteCoeffs_TypeB_Sel2  confidence=high
+; Selector bits 7:6 == 10 -> (0x045314)+0x5C.
+
+[LABEL] 0x030AF0 DSP_RouteCoeffs_TypeB_Sel3  confidence=high
+; Selector bits 7:6 == 11 -> (0x045314)+0x58.
+
+[LABEL] 0x030AF8 DSP_RouteCoeffs_TypeB_Fetch  confidence=high
+; Common tail: row number and copy setup.
+
+[LABEL] 0x030B26 DSP_RouteCoeffs_TypeB_CopyLoop  confidence=high
+; 0x0D-byte copy into 0x045210+6.
+
+[ROUTINE] 0x030B50 DSP_CopyCoeffs_TypeA  confidence=high
+; Input WA = row number.  Copies 0x0D bytes of that row out of the block at (0x045314)+0x50
+; (16-byte stride, offset by the window base at 0x045310) into the staging buffer at
+; 0x045210+6.  Same arithmetic as DSP_RouteCoeffs_TypeA but with the row supplied directly
+; instead of looked up through a descriptor.  Caller: 0x0318A2.
+
+[LABEL] 0x030B69 DSP_CopyCoeffs_TypeA_Loop  confidence=high
+; 0x0D-byte copy loop, counter in IX.
+
+[LABEL] 0x030B91 DSP_CopyCoeffs_TypeA_Return  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x030B93 DSP_CopyCoeffs_TypeB  confidence=high
+; The (0x045314)+0x64 flavour of DSP_CopyCoeffs_TypeA.  Caller: 0x0318C1.
+
+[LABEL] 0x030BAC DSP_CopyCoeffs_TypeB_Loop  confidence=high
+; 0x0D-byte copy loop, counter in IX.
+
+[LABEL] 0x030BD4 DSP_CopyCoeffs_TypeB_Return  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x030BD6 DSP_VoiceCoeffRoute  confidence=high
+; Input A = part, C = slot (low nibble).  Resolves the slot descriptor at
+; PART + 0x6E + slot*0x25 (long pointer), takes the row index from descriptor bytes +0x02
+; (low 7 bits) and +0x03 (low nibble), selects a descriptor pointer from (0x045314)+0x44/
+; +0x48/+0x4C according to bits 7:6 of descriptor+0x03, and copies 0x0D coefficient bytes
+; plus three trailing bytes into 0x045210+6.  Caller: 0x0318DF.
+
+[LABEL] 0x030C87 DSP_VoiceCoeffRoute_Sel1  confidence=high
+; Inside DSP_VoiceCoeffRoute: slot descriptor byte +0x03, bits 7:6 == 01 ->
+; descriptor pointer (0x045314)+0x4C.
+
+[LABEL] 0x030C91 DSP_VoiceCoeffRoute_Sel2  confidence=high
+; Bits 7:6 == 10 -> (0x045314)+0x48.
+
+[LABEL] 0x030C9B DSP_VoiceCoeffRoute_Sel3  confidence=high
+; Bits 7:6 == 11 -> (0x045314)+0x44.
+
+[LABEL] 0x030CA3 DSP_VoiceCoeffRoute_Fetch  confidence=high
+; Common tail: row = ((desc+0x03 & 0x0F) << 7 | (desc+0x02 & 0x7F)) * 2.
+
+[LABEL] 0x030CD1 DSP_VoiceCoeffRoute_CopyLoop  confidence=high
+; 0x0D-byte copy into 0x045210+6, followed by three extra bytes: row+0x0D, then the row
+; number's low and high halves -- i.e. the reply carries the row index back to the caller.
+
+[LABEL] 0x030CF9 DSP_VoiceCoeffRoute_Epilogue  confidence=high
+; The three trailing bytes described above.
+
+[ROUTINE] 0x030D43 DSP_VoiceCoeffRoute2  confidence=high
+; Input A = part, C = packed (slot in the low nibble, sub-index in the high nibble).
+; Follows the slot record's SECOND pointer (slotrec+0x04) and indexes it by
+; sub-index*2 + 3 to obtain the row index, then does the DSP_VoiceCoeffRoute copy through the
+; (0x045314)+0x58/+0x5C/+0x60 descriptor set and the +0x64 row block.  Caller: 0x0318FD.
+
+[LABEL] 0x030E33 DSP_VoiceCoeffRoute2_Sel1  confidence=high
+; Inside DSP_VoiceCoeffRoute2: bits 7:6 == 01 -> (0x045314)+0x60.
+
+[LABEL] 0x030E3D DSP_VoiceCoeffRoute2_Sel2  confidence=high
+; Bits 7:6 == 10 -> (0x045314)+0x5C.
+
+[LABEL] 0x030E47 DSP_VoiceCoeffRoute2_Sel3  confidence=high
+; Bits 7:6 == 11 -> (0x045314)+0x58.
+
+[LABEL] 0x030E4F DSP_VoiceCoeffRoute2_Fetch  confidence=high
+; Common tail; row block is (0x045314)+0x64.
+
+[LABEL] 0x030E7F DSP_VoiceCoeffRoute2_CopyLoop  confidence=high
+; 0x0D-byte copy into 0x045210+6.
+
+[LABEL] 0x030EA7 DSP_VoiceCoeffRoute2_Epilogue  confidence=high
+; The same three trailing bytes (row+0x0D and the row index) as DSP_VoiceCoeffRoute.
+
+[ROUTINE] 0x030EF1 DSP_AlgoCoeffLookup  confidence=high
+; Input A = bank 0..4.  Selects one of five descriptor blocks hanging off (0x045314) and
+; copies (block+0x02)+3 bytes of it into the staging buffer at 0x045210+6 -- i.e. the block
+; carries its own length in its third byte.  Caller: 0x03190D.
+
+[LABEL] 0x030F0F DSP_AlgoCoeffLookup_Bank1  confidence=high
+; Bank 1 -> (0x045314)+0x68.
+
+[LABEL] 0x030F19 DSP_AlgoCoeffLookup_Bank2  confidence=high
+; Bank 2 -> (0x045314)+0x0084.
+
+[LABEL] 0x030F25 DSP_AlgoCoeffLookup_Bank3  confidence=high
+; Bank 3 -> (0x045314)+0x0090.
+
+[LABEL] 0x030F31 DSP_AlgoCoeffLookup_Bank4  confidence=high
+; Bank 4 -> (0x045314)+0x0098.
+
+[LABEL] 0x030F3D DSP_AlgoCoeffLookup_BankDefault  confidence=high
+; Bank 0 or out of range -> (0x045314)+0x54.
+
+[LABEL] 0x030F45 DSP_AlgoCoeffLookup_CopyLoop  confidence=high
+; Copies (block+0x02)+3 bytes from the selected block into 0x045210+6; the length is stored
+; in the block's own third byte.
+
+[ROUTINE] 0x030F7D DSP_VoiceParamReadWrite  replaces=LABEL_030F7D  confidence=high
+; Input WA = part, BC = parameter index, XDE = one-byte result buffer.
+; If PART+0x00 bit 0 is set (part allocated), the answer is simply the shadow byte at
+; UserTone_VelSplit_Base + 0x1D8 + index.  If the part is NOT allocated it instead surveys
+; the part's four operator slots (DSP_VoiceParam_MultiSlot) and only reports a value when
+; all four agree.  Called from 0x03193B and from eight consecutive sites in
+; AUDIO_PROCESS_DSP (0x035C10..0x035C9C), i.e. it is the main query primitive.
+
+[LABEL] 0x030FC7 DSP_VoiceParam_MultiSlot  replaces=LABEL_030FC7  confidence=high
+; Part not allocated: zero the match counter at (XSP+0x08) and walk the four slots.
+
+[LABEL] 0x030FD3 DSP_VoiceParam_MultiSlot_LoopBody  replaces=LABEL_030FD3  confidence=high
+; Per slot: skip the slot if (slotptr+0x06) & 0xC0 is non-zero or bit 5 of (slotptr+0x06) is
+; set; otherwise increment the match counter.
+
+[LABEL] 0x031041 DSP_VoiceParam_MultiSlot_LoopNext  replaces=LABEL_031041  confidence=high
+; Advance the slot counter and loop while < 4.
+
+[LABEL] 0x03104B DSP_VoiceParam_MultiSlot_CheckResult  replaces=LABEL_03104B  confidence=high
+; Result = 0 unless all four slots matched, in which case the answer comes from
+; DSP_VOICEPARAM_DEFAULT_TABLE (0x00F95D) indexed by the parameter index.
+
+[LABEL] 0x031065 DSP_VoiceParam_MultiSlot_StoreResult  replaces=LABEL_031065  confidence=high
+; Store the byte into the caller's buffer.
+
+[LABEL] 0x031067 DSP_VoiceParamReadWrite_Return  replaces=LABEL_031067  confidence=high
+; HL = (XSP+0x04), unwind and return.
+
+[ROUTINE] 0x03106F DSP_ReadVoiceParam5D  replaces=LABEL_03106F  confidence=high
+; Input XDE = one-byte result buffer.  Calls DSP_LookupVoiceBuffer (0x03206F) and returns
+; byte +0x5D of that buffer -- the algorithm-type byte this whole region dispatches on.
+; Returns HL = 1.  Callers: 0x031966 and AUDIO_PROCESS_DSP 0x035CD4.
+
+[ROUTINE] 0x03107F DSP_VoiceParam_Dispatch  replaces=LABEL_03107F  confidence=high
+; Input WA = 7-bit index, BC = selector, XDE = destination buffer.  If BC bit 5 is set the
+; source is DSP_LookupVoiceBuffer's buffer; if BC bits 5 is clear it is a coefficient row
+; selected exactly like DSP_RouteCoeffs_TypeA but through the pointer at (0x045314)+0x7C and
+; the row block at (0x045314)+0x0080; any other value of (BC & 0x20) leaves XHL untouched
+; from the caller.  Either way 0x0D bytes are copied to the caller's buffer and HL = 0x0D is
+; returned.  Caller: 0x03198B.
+
+[LABEL] 0x0310B6 DSP_VoiceParam_Dispatch_LoadRowBase  confidence=high
+; All four values of (BC & 0xC0) load the same pointer, (0x045314)+0x7C -- the four-way
+; compare is vestigial.
+
+[LABEL] 0x0310BE DSP_VoiceParam_Dispatch_ComputeRow  confidence=high
+; row = ((BC & 0x1F) << 7 | (WA & 0x7F)) * 2, then a 16-byte-stride row address.
+
+[LABEL] 0x0310F6 DSP_VoiceParam_Dispatch_UseVoiceBuffer  confidence=high
+; (BC & 0x20) == 0x20: source is DSP_LookupVoiceBuffer's buffer instead.
+
+[LABEL] 0x0310FA DSP_VoiceParam_Dispatch_Copy  confidence=high
+; Copy 0x0D bytes from XHL to the caller's buffer (post-increment through XIZ).
+
+[LABEL] 0x031103 DSP_VoiceParam_Dispatch_CopyLoop  confidence=high
+; Loop body of that copy.
+
+[LABEL] 0x031116 DSP_VoiceParam_Dispatch_Return  confidence=high
+; HL = 0x0D, restore XIZ, return.  This is the last instruction pair of the region.
+
+[UNCERTAIN] The `replaces=` on the DSP_RouteCoeffs_TypeB entry (0x030AAD) is wrong and I have
+flagged it inline: that address has NO LABEL_ placeholder in
+symbols/subcpu_symbols_reference.txt, so the entry is a pure "add the missing reference-file
+line" request, not a supersede.  The same is true of every other 0x0309EA..0x031119 entry
+without a `replaces=` field.
+
+[UNCERTAIN] INTERCPU_REPLY_EDITBUFFER_BLOCK (0x02ED44) copies 0x01D6 = 470 bytes out of a
+structure whose stride is 0x50 = 80 bytes (index*0x50 + 0x4AA7).  Either the stride is a
+sub-record stride inside a larger 470-byte object, or one reply deliberately ships six
+neighbouring buffers at once, or the length is a bug.  AUDIO_CMD_TONEEDIT_REPLY_SEND
+(0x030508) uses the SAME base arithmetic with length 0x3A, which fits inside 0x50 -- so the
+two are inconsistent with each other.  I could not resolve this from the sub-CPU side; it
+needs the main-CPU receiver at 0x001E4AA7.
+
+[UNCERTAIN] The three "algorithm group" routines pass 0/1/2 as the group argument to
+AlgoFlag_Write, AlgoFlag_Write_Bit3 and EFF_RoutingInit, and 0/1/2 as the fifth argument to
+Voice_OpSlot_WriteParams, and OR 0/4/8 into the Voice_BuildOutputList selector.  I am
+confident about the mechanism but not about what the three groups MEAN musically (they look
+like envelope, secondary envelope and frequency, judging from the callees), so the names
+VOICEALLOC_APPLY_ALGO_GROUP1/2 are deliberately mechanical.
+
+[UNCERTAIN] The names of the twelve algorithm types 0..0x0B are unknown.  Everything in this
+region keys off (patch+0x5D & 0x0F) but nothing here maps a type number to a name; the
+mapping most likely lives in the main-CPU UI.  I named the cases T0..TB rather than guess.
+
+[UNCERTAIN] DSP_EFFECT_DESCRIPTOR_TABLE's extent (0x011E16-0x011FE9) is inferred from the
+dispatcher's 0..0x0B range check times the 0x27 stride.  The constant pool it sits in runs to
+0x012159 with no symbol, so I could not confirm the record count independently.
+
+[UNCERTAIN] 0x02F331 is a lone `ret` between the last case of DSP_EFFPARAM_APPLY_BY_ALGOTYPE
+and the start of VOICE_DSPOUT_APPLY_A.  Every case tail-jumps, so nothing reaches it.  I left
+it unnamed rather than invent a label for dead padding.
+
+[UNCERTAIN] The existing symbol UserTone_VelSplit_Base (0x044FCE) is, on the evidence of this
+region, a misnomer: it is the base of a ~0x210-byte multi-array parameter shadow with six
+independently-indexed sub-ranges (listed in the header above), of which "velocity split" can
+be at most one field.  I have NOT renamed it.  If it is ever renamed, DSP_PARAM_SHADOW_BASE
+would describe what this region actually does with it.
+
+[UNCERTAIN] Naming style.  Existing names in and around this region are CamelCase with a
+subsystem prefix (VoiceAlloc_, DSP_, Voice_); the brief asks for UPPER_SNAKE_CASE.  The new
+names above are UPPER_SNAKE per the brief and will sit beside DSP_AlgoSelect and friends.
+Conversion is mechanical if the integrator prefers local consistency.

@@ -1,0 +1,1233 @@
+# region 6: 0x027A91..0x02AD02
+# MIDI channel-voice application layer: the 26 "part" records, the CC / channel-pressure /
+# pitch-bend / system-message handlers that write them, the per-audio-tick voice state
+# machine that retires and re-triggers notes, and the low-level tone-generator per-voice
+# register-write primitives (0x100000/0x100002) that every one of those paths funnels into.
+#
+# INTEGRATION NOTE (read first, it saves a wasted pass):
+#   The AUTHORITATIVE LLVM build already carries a real name for EVERY address in this range
+#   -- 243 symbols, ZERO LABEL_ placeholders (verified with
+#   `llvm-nm -n rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf`).
+#   symbols/subcpu_symbols_reference.txt is the one that lags: 198 of its 223 entries in this
+#   range are still LABEL_xxxxxx.  Those 198 need no thought -- copy the ELF name verbatim.
+#   This file therefore does NOT re-propose them.  What it contributes is (a) doc headers for
+#   the existing names, (b) genuinely NEW names for the ~30 subroutine entry points that live
+#   INSIDE the three blocks the converter emitted as `.byte` data and that consequently have
+#   no symbol at all, and (c) three ELF symbols missing from the reference file.
+#
+# ★ THE THREE "DataTable" BLOCKS IN THIS REGION ARE NOT DATA, THEY ARE CODE.
+#   VoiceCC_DataTable_0280FE (0x0280FE-0x028838, 1851 bytes),
+#   VoiceCC_DataTable_028F75 (0x028F75-0x029E30, 3772 bytes) and
+#   VoiceModWheel_DataTable_02A061 (0x02A061-0x02A0E8, 136 bytes)
+#   -- 5623 bytes total -- disassemble cleanly as TLCS-900H from their first byte and are
+#   reached by ordinary `calr`/`jrl` from named code.  Names carrying "DataTable" are
+#   actively misleading; see [UNCERTAIN] at the end.
+#
+# STRUCTURES USED THROUGHOUT (all verified from the code in this region):
+#   PART table   0x041368, 26 entries x 0x11F bytes.  Index = MIDI part 0..0x19.
+#                +0x02 flags word (b0 delay-enable, b5 LFO-active)
+#                +0x06 long pointer to the patch/tone descriptor
+#                +0x0A flags word 2 (b0 sustain, b2 chorus, b6 sostenuto)
+#                +0x0F sostenuto  +0x10 expression  +0x12 soft  +0x13 porta rate
+#                +0x14 porta depth (w)  +0x16 porta time  +0x17 reverb depth
+#                +0x18 chorus depth  +0x1B..+0x20 scaled modulation results
+#                +0x25 delay depth  +0x26 delay feedback
+#                +0x63 LFO/ramp state byte  +0x6E.. 4 x 0x25-byte output-slot records
+#                +0x102.. portamento target words  +0x10E/+0x110/+0x112 mix weights
+#   VOICE table  0x04308E, 64 entries x 0x47 bytes.  Index = hardware voice 0..0x3F.
+#                +0x00 voice number  +0x01 flags word (b8 hold, b10 legato, b15)
+#                +0x01 &0x3C = voice "section" selector, values 4/8/0x10/0x20
+#                +0x04 owning part  +0x13 long ptr  +0x23 long ptr to the tone record
+#                +0x2D word  +0x2F note-off/portamento request word (mask 0x8080)
+#                +0x31 portamento-active word (bit 15)  +0x40 byte
+#   TG STAGING   0x0451CC, the scratch record every ToneGen writer reads its payload from.
+#   GLOBALS      0x041342 audio-tick phase byte, 0x041343 global flags word,
+#                0x041347 master tune, 0x041349 pitch-bend range, 0x04134B/4C/4D,
+#                0x04134E..0x041359 twelve per-pitch-class bytes, 0x04135C,
+#                0x04135E..0x041365 rhythm-mode block.
+#
+# ★ TONE-GENERATOR ADDRESS-LATCH ENCODING (measured here, 30+ independent instances):
+#   latch value written to 0x100000 = (register_number << 6) | voice_number,
+#   i.e. 64 voices per register.  Every write is bracketed by
+#       res 7,(0x18)   ; P6 bit 7 low  -- address phase
+#       ld (0x100000),WA
+#       nop
+#       set 7,(0x18)   ; P6 bit 7 high -- data phase
+#       ld (0x100002),WA
+#       jr $+2 / nop / nop / nop        ; fixed settling delay, NOT dead code
+#   This independently confirms the MAME memory-map comment that latch 0x0000-0x0003 is the
+#   active-voice bitmap (register 0, voices 0-63 = 4 words) and that latch 0x0180+ch is the
+#   per-voice envelope level (register 6).  P6.7 is the tone generator's address/data strobe.
+#   Registers seen written from this region: 0x02 amplitude, 0x04/0x05 pan pair,
+#   0x06 envelope level, 0x07, 0x10 pitch, 0x11, 0x13, 0x15, 0x16, 0x18,
+#   0x20/0x21/0x22/0x24/0x25/0x27/0x28 (the three volume/EG pairs).
+
+[ROUTINE] 0x027A91 Voice_ScanAndCancelNoteOff_ClearSlot  confidence=high
+; Release path of Voice_ScanAndCancelNoteOff (entry 0x027A46, just below this region).
+; Reached when the word at [voice+0x23]+0x0A has bit 15 CLEAR, i.e. the voice's tone record
+; says the note is not still being held by the envelope.  If (voice+0x2F) & 0x8080 is non-zero
+; (a note-off or a portamento-off request is pending) the voice is handed back:
+;   call VoiceSlot_Release (0x022587), call Voice_Release (0x02CD71), then (voice+0x2F)=0.
+; If neither request bit is set the voice is left alone and the walk continues.
+; This is one of only two places in the whole sub-CPU where a sounding voice is returned to
+; the free pool during normal play; the other is Voice_UpdateAllNoteStates below.
+
+[LABEL] 0x027AB3 Voice_ScanAndCancelNoteOff_NextSlot  confidence=high
+; Advance the per-part voice-index cursor by 1 and loop while *cursor < 0x40 (0x40 = list end).
+
+[LABEL] 0x027AC0 Voice_ScanAndCancelNoteOff_Done  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x027AC4 Voice_UpdateAllNoteStates  confidence=high
+; Per-audio-tick voice state machine, phase B.  Called from Audio_Process_Init (0x031F..,
+; `call Voice_UpdateAllNoteStates`) which alternates between this and
+; Voice_ScanAndCancelNoteOff every tick by XORing the byte at 0x041342 with 0xFF.
+; Prologue: calr Voice_TickNoteDecay (0x027363), calr Voice_ApplyTuningSysEx (0x0271BC).
+; Then reads the global flag word 0x041343 and tests bit 10:
+;   bit 10 SET   -> loop A (0x027AE8): additionally re-writes pitch
+;                   (Voice_Pitch_WriteOutputReg_Legato, 0x023A4A) and pan
+;                   (ToneGen_WritePanReg, 0x02D0BA) for every voice whose flags word
+;                   (voice+0x01) has bit 10 set;
+;   bit 10 CLEAR -> loop B (0x027BA0): the same retire/portamento bookkeeping WITHOUT any
+;                   pitch or pan register traffic.
+; Both loops walk the part's voice-index list obtained from Voice_AllocateForAny (0x02CD55),
+; list pointer = XHL+5, terminated by a byte >= 0x40, voice record = 0x04308E + idx*0x47.
+; Per voice: if [voice+0x23]+0x0A bit 15 is SET the note is still held -> Voice_UpdateNoteOff
+; (0x026E5B) or Voice_UpdatePortamento (0x026EC3); if CLEAR, and the matching request bit in
+; (voice+0x2F) mask 0x8080 or (voice+0x31) bit 15 is set, the voice is released
+; (VoiceSlot_Release + Voice_Release) and the request word is zeroed.
+; Ends with the LFO/tone-table scan at 0x027C48.  Touches no hardware directly in loop B.
+
+[LABEL] 0x027AE8 Voice_UpdateAllNoteStates_LoopA  confidence=high
+; Loop A body: full update including the tone-generator pitch and pan re-writes.
+
+[LABEL] 0x027B1A Voice_UpdateAllNoteStates_CheckPortaA  confidence=high
+; Load the tone record pointer from voice+0x23 and test bit 15 of its +0x0A word.
+
+[LABEL] 0x027B3B Voice_UpdateAllNoteStates_CheckPortamento2A  confidence=high
+; Note-off not pending: test the portamento-active word (voice+0x31) bit 15.
+
+[LABEL] 0x027B4C Voice_UpdateAllNoteStates_ClearNoteOffA  confidence=high
+; Tone record says "not held": release the voice if (voice+0x2F) & 0x8080, then zero it.
+
+[LABEL] 0x027B70 Voice_UpdateAllNoteStates_ClearPorta2A  confidence=high
+; Same, driven by the portamento word (voice+0x31) instead; zeroes (voice+0x31).
+
+[LABEL] 0x027B8F Voice_UpdateAllNoteStates_NextSlotA  confidence=high
+; Advance the loop-A cursor; loop while *cursor < 0x40.
+
+[LABEL] 0x027BA0 Voice_UpdateAllNoteStates_LoopB_Start  confidence=high
+; Entry to loop B (global flag 0x041343 bit 10 clear): re-fetch the part voice list.
+
+[LABEL] 0x027BB0 Voice_UpdateAllNoteStates_LoopB  confidence=high
+; Loop B body: retire/portamento bookkeeping only, no TG register writes.
+
+[LABEL] 0x027BE6 Voice_UpdateAllNoteStates_CheckPortamento2B  confidence=high
+; CheckPortamento2B of Voice_UpdateAllNoteStates.
+
+[LABEL] 0x027BF7 Voice_UpdateAllNoteStates_ClearNoteOffB  confidence=high
+; ClearNoteOffB of Voice_UpdateAllNoteStates.
+
+[LABEL] 0x027C1B Voice_UpdateAllNoteStates_ClearPorta2B  confidence=high
+; ClearPorta2B of Voice_UpdateAllNoteStates.
+
+[LABEL] 0x027C3A Voice_UpdateAllNoteStates_NextSlotB  confidence=high
+; Loop-B counterparts of the loop-A labels above; identical logic minus the hardware writes.
+
+[LABEL] 0x027C48 Voice_UpdateAllNoteStates_ScanLFO  confidence=high
+; Second phase: iterate parts 0..0x19 (stride 0x11F from 0x041368) and drive each part's
+; tone-table ramp state machine from the byte at part+0x63.
+
+[LABEL] 0x027C51 Voice_UpdateAllNoteStates_LFOLoopBody  confidence=high
+; Decode part+0x63: b0 = enabled, b1/b2/b3/b4 select ramp-up / apply-filter / ramp-down /
+; apply-pitch.  Calls Voice_ToneTableRamp_Up 0x027798, _Down 0x02783D,
+; Voice_ToneTableApply_Filter 0x027987, _Pitch 0x0278CB.
+
+[LABEL] 0x027C85 Voice_UpdateAllNoteStates_LFO_ApplyFilter  confidence=high
+; Sets bit 2 of part+0x63 and calls Voice_ToneTableApply_Filter.
+
+[LABEL] 0x027C92 Voice_UpdateAllNoteStates_LFO_CheckRampDown  confidence=high
+; CheckRampDown of Voice_UpdateAllNoteStates_LFO.
+
+[LABEL] 0x027CA6 Voice_UpdateAllNoteStates_LFO_RampDown  confidence=high
+; Clears bit 2 of part+0x63 and calls Voice_ToneTableApply_Pitch.
+
+[LABEL] 0x027CB1 Voice_UpdateAllNoteStates_LFONextSlot  confidence=high
+; LFONextSlot of Voice_UpdateAllNoteStates.
+
+[LABEL] 0x027CBA Voice_UpdateAllNoteStates_Done  confidence=high
+; exit path of Voice_UpdateAllNoteStates.
+
+[ROUTINE] 0x027CBE Voice_SetLFO_ActiveFlag  confidence=high
+; WA = part index.  ORs 0x0020 into the part flags word at part+0x02 (0x04136A + idx*0x11F).
+; Called once per part from Voice_ResetAllControllers.
+
+[ROUTINE] 0x027CD1 Voice_ClearLFO_ActiveFlag  confidence=high
+; WA = part index.  ANDs 0xFFDF into the same word.  Inverse of the above.
+
+[ROUTINE] 0x027CE4 Voice_DSP_OutputConfig  confidence=medium
+; Emitted as `.byte` in the LLVM source but is ordinary code.  A = voice, C = channel.
+; Walks the voice output list (Voice_BuildOutputList 0x021A8E), consults
+; DSP_AlgoType_Dispatch1 (0x0337D2) and writes the effect-routing shadow words at 0x04520E
+; and then 0x04520C.  Twin of Voice_DSP_OutputConfig2 with different shadow offsets.
+
+[ROUTINE] 0x027DD1 Voice_DSP_OutputConfig2  confidence=medium
+; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+; Same body as Voice_DSP_OutputConfig but targets shadow words 0x04520A / 0x045208.
+
+[ROUTINE] 0x027EBE Voice_DSP_SimpleCopy  confidence=medium
+; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+; A = voice.  Calls 0x033B8B, stores to 0x045204, iterates the voice output list (<= 64).
+
+[ROUTINE] 0x027F19 Voice_DSP_SimpleCopy2  confidence=medium
+; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+; As above with target 0x045206 and callee 0x033C6B.
+
+[ROUTINE] 0x027F74 DSP_WriteVoiceParam_Long  confidence=high
+; Writes ONE tone-generator register: latch = voice + 0x0400 (register 0x10 = PITCH),
+; data = word at XBC+0x0E (normally the staging record 0x0451CC).
+; Entry WA = voice number 0..0x3F, XBC = source record.  Clobbers nothing (XIZ saved).
+; Caller: Pitch_Refresh_Sounding_Voices/Voice_AllVoices_WritePan (0x028D4C) and the sustain
+; retrigger scan.  See the header note: the "DSP_" prefix is wrong, this is the TONE
+; GENERATOR at 0x100000/0x100002, not IC311 at 0x130000.
+
+[LABEL] 0x027F91 DSP_WriteVoiceParam_Long_NopGap  confidence=high
+; The mandatory 3-nop settling gap after the data write, entered by a `jr` to the next
+; instruction.  Present after every single TG write in this region -- it is timing, not filler.
+
+[ROUTINE] 0x027F96 DSP_WriteVoiceParam_Short  confidence=high
+; latch = voice + 0x0080 (register 0x02 = AMPLITUDE / level), data = word at XBC+0x04 with
+; bit 15 forcibly cleared.  Called from Voice_AllVoices_WriteAmplitude, i.e. this is the
+; register that CC 7 (volume) and CC 11 (expression) ultimately reach.
+
+[LABEL] 0x027FB6 DSP_WriteVoiceParam_Short_NopGap  confidence=high
+; NopGap of DSP_WriteVoiceParam_Short.
+
+[ROUTINE] 0x027FBB DSP_WriteVoiceParam_Direct  confidence=high
+; latch = WA + 0x0000 (register 0), data = the 16-bit value already in IZ.  The only writer
+; in the region that sends a caller-supplied literal rather than a staged word; used by the
+; sustain-retrigger path with BC = (voice+0x2D).
+
+[LABEL] 0x027FD1 DSP_WriteVoiceParam_Direct_NopGap  confidence=high
+; NopGap of DSP_WriteVoiceParam_Direct.
+
+[ROUTINE] 0x027FD6 DSP_WriteVoiceParam_6Words  confidence=high
+; Six-register burst for one voice.  WA = voice, XBC = staging record.
+; latch/source pairs, in program order:
+;   0x0840 (reg 0x21) <- +0x2E   0x0940 (reg 0x25) <- +0x32   0x0A00 (reg 0x28) <- +0x36
+;   0x0800 (reg 0x20) <- +0x2C   0x0900 (reg 0x24) <- +0x30   0x09C0 (reg 0x27) <- +0x34
+; i.e. three (even,odd) register pairs, matching the three Voice_ComputeAndWriteVolume1/2/3
+; calls that precede it in Voice_AllNotes_SustainRetrigger_BranchC.
+
+[LABEL] 0x027FFD DSP_WriteVoiceParam_6Words_Word2  confidence=high
+; Word2 of DSP_WriteVoiceParam_6Words.
+
+[LABEL] 0x02801F ToneGen_WriteNote6ch_NopCont1  confidence=high
+; NopCont1: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
+
+[LABEL] 0x028041 ToneGen_WriteNote6ch_NopCont2  confidence=high
+; NopCont2: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
+
+[LABEL] 0x028063 ToneGen_WriteNote6ch_NopCont3  confidence=high
+; NopCont3: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
+
+[LABEL] 0x028085 ToneGen_WriteNote6ch_NopCont4  confidence=high
+; NopCont4: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
+
+[LABEL] 0x0280A7 ToneGen_WriteNote6ch_NopCont5  confidence=high
+; The five continuation points of the six-word burst; each is the settling gap plus the next
+; address/data pair.  Note the existing names call this "6ch" while the code is 6 REGISTERS
+; of ONE voice -- see [UNCERTAIN].
+
+[ROUTINE] 0x0280AE ToneGen_WriteNote2ch  confidence=high
+; Two-register variant: latch 0x0840 (reg 0x21) <- XBC+0x2E, latch 0x0800 (reg 0x20) <- +0x2C.
+; Same entry convention as DSP_WriteVoiceParam_6Words.  Used where only the first volume/EG
+; pair needs refreshing (Voice_AllNotes_SustainRetrigger branches E and F).
+
+[LABEL] 0x0280D5 ToneGen_WriteNote2ch_NopCont1  confidence=high
+; NopCont1: settling gap plus the next address/data pair of ToneGen_WriteNote2ch.
+
+[LABEL] 0x0280F7 ToneGen_WriteNote2ch_NopCont2  confidence=high
+; NopCont2: settling gap plus the next address/data pair of ToneGen_WriteNote2ch.
+
+[DATA] 0x0280FE-0x028838  VoiceCC_DataTable_0280FE -- MISLABELLED, THIS IS CODE
+; 1851 bytes emitted as `.byte` by the ASL->LLVM converter.  It disassembles cleanly as
+; TLCS-900H from byte 0 and contains 21 subroutines, every one of them reached by `calr`
+; from named code or from the 0x028F75 block.  The 21 entry points are proposed individually
+; below.  Nothing in here is data.
+
+[ROUTINE] 0x0280FE TONEGEN_WRITEVOICE_REG21  confidence=high
+; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
+; VoiceCC_DataTable_0280FE.  I have left that name alone; applying this one is a decision for
+; the maintainer.  See the matching [UNCERTAIN] at the end.
+; WA = voice 0..0x3F, XBC = source record.  Writes TG register 0x21 (latch = voice + 0x0840)
+; with the word at XBC+0x2E.  Single-register writer, same 5-step strobe as all the others.
+
+[ROUTINE] 0x028120 TONEGEN_WRITEVOICE_PAN_PAIR  confidence=high
+; WA = voice, XBC = source record (always 0x0451CC at the call sites).
+; Writes TG register 0x04 (latch voice+0x0100) from XBC+0x08 and register 0x05
+; (latch voice+0x0140) from XBC+0x0A.  Both call sites (0x028FC6, 0x028FDA) invoke it
+; immediately after Voice_PanReg_WriteDispatch (0x024444) / _DispatchB (0x024554), which is
+; what identifies registers 4/5 as the stereo pan pair.
+
+[ROUTINE] 0x028170 TONEGEN_WRITEVOICE_REG21_REG22  confidence=medium
+; WA = voice, XBC = source record.  Writes register 0x21 (voice+0x0840) from XBC+0x1A and
+; register 0x22 (voice+0x0880) from XBC+0x1C.  Called after Voice_WriteChPanShift (0x02591D)
+; and Voice_WriteChPanShift2 (0x025B6F), so the pair is the pan-shift/detune result, but the
+; exact meaning of registers 0x21/0x22 is not proven here.
+
+[ROUTINE] 0x0281C0 TONEGEN_WRITEVOICE_ENVLEVEL  confidence=high
+; WA = voice, XBC = source record.  Writes register 0x06 (latch = voice + 0x0180) from
+; XBC+0x0C.  Register 6 is the per-voice ENVELOPE LEVEL -- the MAME memory map already
+; documents latch 0x0180+ch as the envelope-level read-back address, and this is the write
+; side of the same register.
+
+[ROUTINE] 0x0281E2 TONEGEN_WRITEVOICE_REG11  confidence=high
+; Writes register 0x11 (latch voice+0x0440) from XBC+0x10.
+
+[ROUTINE] 0x028204 TONEGEN_WRITEVOICE_REG13  confidence=high
+; Writes register 0x13 (latch voice+0x04C0) from XBC+0x14.
+
+[ROUTINE] 0x028226 TONEGEN_WRITEVOICE_REG18  confidence=high
+; Writes register 0x18 (latch voice+0x0600) from XBC+0x40.
+
+[ROUTINE] 0x028248 TONEGEN_WRITEVOICE_REG16  confidence=high
+; Writes register 0x16 (latch voice+0x0580) from XBC+0x3C.
+
+[ROUTINE] 0x02826A TONEGEN_WRITEVOICE_REG07  confidence=high
+; Writes register 0x07 (latch voice+0x01C0) from XBC+0x38.
+
+[ROUTINE] 0x02828C TONEGEN_WRITEVOICE_REG15  confidence=high
+; Writes register 0x15 (latch voice+0x0540) from XBC+0x3A.
+
+[ROUTINE] 0x0282AE TONEGEN_WRITEVOICE_REG07_OR_REG18  confidence=high
+; Range-split writer.  If WA < 0x40 it writes register 0x07 from XBC+0x38 (the normal 64
+; voices); otherwise it writes register 0x18 from XBC+0x42.  Proof that the tone generator
+; has addressable slots beyond voice 0x3F for some register groups, and that the software
+; deliberately re-targets them.
+
+[ROUTINE] 0x0282F5 TONEGEN_WRITEVOICE_REG15_OR_REG16  confidence=high
+; Same shape: WA < 0x40 -> register 0x15 from XBC+0x3A, else register 0x16 from XBC+0x3E.
+
+[ROUTINE] 0x02833C AUDIOMOD_APPLY_BUSROUTING  confidence=high
+; A = part index, C = a bus mask, XDE and XIX = bit patterns to set/clear, one word on the
+; stack.  For each of the 4 output buses w = 0..3 it reads two 4-byte mask tables at
+; 0x00F6D7 and 0x00F6DB, tests bit (1<<w) of C against each, and then sets or clears bits in
+; the word at  0x041368 + part*0x11F + 0x6E + w*0x25 + 0x18  (i.e. output-slot record w,
+; field +0x18) using OR / AND-with-complement.  Returns with `retd 2`.
+; This is the routine that turns a "send this modulation to buses X" request into the
+; per-slot enable bitmap.
+
+[ROUTINE] 0x028426 AUDIOMOD_SCALE_TO_PART_1C  confidence=high
+; A = part index, BC = controller value, XDE = 3-byte modulation-routing descriptor.
+; Descriptor layout, proven by every user in this block:
+;     +0 : (unused here)
+;     +1 : bit 7 = BIPOLAR flag, bits 0..5 = destination command id (see AudioChannel_Dispatch)
+;     +2 : depth / scale, 0..0x7F
+; Computes  E = ((bipolar ? (BC-0x40)*2 : BC) * depth) >> 6  and stores the byte at
+; 0x041384 + part*0x11F  (part+0x1C).
+
+[ROUTINE] 0x028469 AUDIOMOD_SCALE_TO_PART_1B  confidence=high
+; Identical to AUDIOMOD_SCALE_TO_PART_1C but stores to 0x041383 + part*0x11F (part+0x1B).
+
+[ROUTINE] 0x0284AC AUDIOMOD_APPLY_PORTA_CURVE  confidence=medium
+; A = part index (saved on the stack), BC = value, XDE = routing descriptor.
+; Bipolar branch subtracts 0x2000 from the sign-extended value, unipolar branch halves it;
+; scales by descriptor+2 via FP_MulAccum64 (0x03D8CA), then, for A-0x10 in 0..9, takes a
+; 10-way jump through the word table at 0x00F6DF with base 0x028500 to apply a per-curve
+; shaping step.  The default path (index out of range) instead scales by the part's
+; portamento-rate byte at 0x04137B.  Result is clamped to +/-0x4000 through
+; Int_SignedDiv_AltEntry (0x03DC5F) and stored as a word at 0x041385 + part*0x11F
+; (part+0x1D).
+
+[LABEL] 0x028500 AUDIOMOD_PORTA_CURVE_JUMPBASE  confidence=high
+; Base address of the 10-entry computed jump inside AUDIOMOD_APPLY_PORTA_CURVE; offsets come
+; from the word table at 0x00F6DF.  Entry 0 (this address) triples then shifts left 2.
+
+[ROUTINE] 0x02855F AUDIOMOD_SCALE_TO_PART_1F  confidence=high
+; Same descriptor convention as AUDIOMOD_SCALE_TO_PART_1C but SIGNED (muls), arithmetic
+; shift right 1, then divided by 0x7F; stores the byte at 0x041387 + part*0x11F (part+0x1F).
+
+[ROUTINE] 0x0285AC AUDIOMOD_SCALE_TO_PART_20  confidence=high
+; As above without the >>1; stores the byte at 0x041388 + part*0x11F (part+0x20).
+
+[ROUTINE] 0x0285F6 AUDIOMOD_APPLY_SLOT_FIELD2A  confidence=medium
+; A = part, C = controller value, XDE = routing descriptor, plus L and W taken from the
+; caller's stack frame (they select one of the part's four output-slot records and a
+; sub-index).  Bipolar values below 0x40 are forced to zero, otherwise folded to
+; (C-0x40)*2.  Merges the odd/even bit halves (masks 0x55 / 0xAA) of the descriptor byte
+; with the existing per-slot byte at slot+0x28, then writes the byte at slot+0x2A.
+; Slot address = 0x041368 + part*0x11F + 0x6E + (L<<4) + (W<<2).  Returns with `retd 4`.
+; The routine body runs to the `retd 4` at 0x02870C; it has two interior entry points,
+; 0x02860D and 0x0286D9, each taken by exactly one external caller.
+
+[LABEL] 0x02860D AUDIOMOD_APPLY_SLOT_FIELD2A_ALT1  confidence=low
+; Interior entry taken by one `calr` from 0x026509; the register preconditions at that entry
+; were not established -- do not integrate without checking the caller.
+
+[LABEL] 0x0286D9 AUDIOMOD_APPLY_SLOT_FIELD2A_ALT2  confidence=low
+; Second interior entry, one `calr` from 0x02B9B1; preconditions likewise unverified.
+
+[ROUTINE] 0x02870F AUDIOMOD_APPLY_SLOT_FIELD29  confidence=medium
+; Byte-for-byte the same algorithm as AUDIOMOD_APPLY_SLOT_FIELD2A except that the result is
+; stored at slot+0x29 instead of slot+0x2A.  Also returns with `retd 4` (at 0x028825).
+; Six callers, all of them dispatch handlers inside the 0x028F75 block.
+
+[ROUTINE] 0x028828 AUDIO_CLAMP_TO_RANGE  confidence=high
+; Eleven bytes, no prologue.  HL = min(max(WA, DE), BC), i.e. clamp WA to the inclusive
+; range [DE, BC] using signed comparisons.  Tail utility of the 0x0280FE block.
+
+[ROUTINE] 0x028839 Voice_CC_SetVolume  confidence=high
+; WA = part index, BC = CC 7 value 0..0x7F.  Three-way behaviour selected by the global flag
+; word 0x041343: bit 0 set and bit 1 set both map the value through the 128-entry word table
+; at 0x011D16; otherwise the raw path stores (value - 0x7F).  Value 0 takes the mute path.
+; Result is the word at 0x041374 + part*0x11F (part+0x0C).  Does not touch hardware -- the
+; caller (Voice_CC_Volume) follows up with Voice_AllVoices_WriteAmplitude.
+
+[LABEL] 0x02886A VoiceCC_SetVolume_Bit1Set  confidence=high
+; Bit1Set of VoiceCC_SetVolume.
+
+[LABEL] 0x028897 VoiceCC_SetVolume_RawSub  confidence=high
+; RawSub of VoiceCC_SetVolume.
+
+[LABEL] 0x0288B2 VoiceCC_SetVolume_Mute  confidence=high
+; Stores 0xFE00 (full attenuation) into the part volume word.
+
+[ROUTINE] 0x0288C5 Voice_CC_SetPan  confidence=high
+; WA = part, C = CC 10 value.  Stores the byte at 0x041376 + part*0x11F (part+0x0E); the
+; hardware side is done by EnvTranspose_UpdateLoop (0x032E1E) from Voice_CC_Pan.
+
+[ROUTINE] 0x0288D6 Voice_CC_SetExpression  confidence=high
+; WA = part, BC = CC 11 value.  Structurally identical to Voice_CC_SetVolume (same 0x041343
+; bit 0 / bit 1 selection, same 0x011D16 table) but the destination is the word at
+; 0x041378 + part*0x11F (part+0x10).  Mute path writes 0xFE00.
+
+[LABEL] 0x028907 VoiceCC_SetExpression_Bit1Set  confidence=high
+; Bit1Set of VoiceCC_SetExpression.
+
+[LABEL] 0x028934 VoiceCC_SetExpression_RawSub  confidence=high
+; RawSub of VoiceCC_SetExpression.
+
+[LABEL] 0x02894F VoiceCC_SetExpression_Mute  confidence=high
+; Mute of VoiceCC_SetExpression.
+
+[ROUTINE] 0x028962 Voice_CC_SetSustain  confidence=high
+; WA = part, BC = CC 64 value.  Sets (BC != 0) or clears bit 0 of the part flags word 2 at
+; 0x041372 + part*0x11F (part+0x0A).
+
+[LABEL] 0x028979 VoiceCC_SetSustain_ClearBit  confidence=high
+; ClearBit of VoiceCC_SetSustain.
+
+[ROUTINE] 0x02898C Voice_CC_SetSostenuto  confidence=high
+; WA = part, C = value.  Stores the byte at 0x041377 + part*0x11F (part+0x0F).
+
+[ROUTINE] 0x02899D Voice_CC_SetSoftPedal  confidence=high
+; WA = part, C = value.  Stores the byte at 0x04137A + part*0x11F (part+0x12).
+
+[ROUTINE] 0x0289AE Voice_CC_SetSostenutoFlag  confidence=high
+; WA = part, BC = value.  Sets/clears bit 6 (0x0040) of part flags word 2 (part+0x0A).
+
+[LABEL] 0x0289C5 VoiceCC_SetSostenuto_ClearFlag  confidence=high
+; ClearFlag of VoiceCC_SetSostenuto.
+
+[ROUTINE] 0x0289D8 Voice_CC_SetPortamentoRate  confidence=high
+; WA = part, C = rate.  Stores the byte at 0x04137B + part*0x11F (part+0x13).  This is the
+; byte AUDIOMOD_APPLY_PORTA_CURVE falls back to.
+
+[ROUTINE] 0x0289E9 Voice_CC_SetPortamentoDepth  confidence=high
+; WA = part, C = value.  Stores the word ((C - 0x80) * 2) at 0x04137C + part*0x11F
+; (part+0x14) -- a bipolar depth centred on 0x80.
+
+[ROUTINE] 0x028A04 Voice_CC_SetPortamentoTime  confidence=high
+; WA = part, C = value.  Stores (C - 0x40) at 0x04137E + part*0x11F (part+0x16), bipolar
+; around 0x40.
+
+[ROUTINE] 0x028A1A Voice_CC_SetModWheelRange  confidence=medium
+; Emitted as `.byte` (42 bytes) but is ordinary code: if C != 0 stores +2 into the word at
+; 0x041372 + part*0x11F, otherwise stores -3 (0xFFFD).  Two-valued, so "range" is a guess --
+; what it really does is force a small signed constant into part flags word 2.
+
+[ROUTINE] 0x028A44 Voice_CC_SetReverbDepth  confidence=high
+; WA = part, C = CC 0x91 value 0..0x7F.  Stores the byte at 0x04137F + part*0x11F (part+0x17).
+
+[ROUTINE] 0x028A55 Voice_CC_SetChorusEnable  confidence=high
+; WA = part, BC = CC 0x95 value.  Sets/clears bit 2 (0x0004) of part flags word 2.
+
+[LABEL] 0x028A6C VoiceCC_SetChorus_ClearBit  confidence=high
+; ClearBit of VoiceCC_SetChorus.
+
+[ROUTINE] 0x028A7F Voice_CC_SetChorusDepth  confidence=high
+; WA = part, C = CC 0x97 value.  Stores the byte at 0x041380 + part*0x11F (part+0x18).
+
+[ROUTINE] 0x028A90 Voice_CC_SetDelayDepth  confidence=high
+; WA = part, C = CC 0x9B value.  Stores the byte at 0x04138D + part*0x11F (part+0x25).
+
+[ROUTINE] 0x028AA1 Voice_CC_SetDelayEnable  confidence=high
+; WA = part, BC = CC 0x9C value.  Sets/clears bit 0 of the part flags word at
+; 0x04136A + part*0x11F (part+0x02).
+
+[LABEL] 0x028AB8 VoiceCC_SetDelay_ClearBit  confidence=high
+; ClearBit of VoiceCC_SetDelay.
+
+[ROUTINE] 0x028ACB Voice_CC_SetDelayFeedback  confidence=high
+; WA = part, C = CC 0x9D value.  Stores the byte at 0x04138E + part*0x11F (part+0x26).
+
+[ROUTINE] 0x028ADC Voice_SetPolyphonyMode  confidence=high
+; A = mode.  A == 1 sets bit 0 of the global flag word 0x041343 and calls
+; ToneGen_EmitCommandLoop (0x021ECB) with WA = 1; anything else clears bit 0 and calls it
+; with WA = 0.  Then VoiceSlot_ClearAll (0x034B4B) and
+; Voice_PerVoice_PortamentoPitchUpdate for parts 0..0x0F.
+; ★ This is the one routine in the region that both writes a global mode bit AND drops the
+; entire voice-slot allocation on the floor; see [UNCERTAIN]/findings.
+
+[LABEL] 0x028AF2 Voice_SetPolyphonyMode_Else  confidence=high
+; Else of Voice_SetPolyphonyMode.
+
+[LABEL] 0x028AFF Voice_SetPolyphonyMode_Apply  confidence=high
+; Apply of Voice_SetPolyphonyMode.
+
+[LABEL] 0x028B0C Voice_SetPolyphonyMode_LoopBody  confidence=high
+; loop body of Voice_SetPolyphonyMode.
+
+[LABEL] 0x028B1D Voice_SetPolyphonyMode_LoopExit  confidence=high
+; LoopExit of Voice_SetPolyphonyMode.
+
+[ROUTINE] 0x028B21 VoiceCC_Stub_Ret1  confidence=high
+; A bare `ret`.  Reached from SysEx dispatch-table entry 1 and from
+; Voice_ResetAllControllers_PostLoop with WA = 0x7F.  Deliberate no-op, not padding.
+
+[ROUTINE] 0x028B22 VoiceCC_Stub_Ret2  confidence=high
+; Second bare `ret`, dispatch entry 2, likewise called with WA = 0x7F.
+
+[ROUTINE] 0x028B23 Voice_SetMasterTune  confidence=high
+; A = raw value.  Stores sign-extended ((A - 0x40) * 2) as a word at 0x041347.
+
+[ROUTINE] 0x028B30 Voice_SetPitchBendRange  confidence=high
+; A = semitones.  Stores (sign-extended A) << 8 at 0x041349.
+
+[ROUTINE] 0x028B3B Voice_SetKeyShiftEnable  confidence=high
+; A = 0 falls through into Voice_SetKeyShiftRange (disable).  Otherwise, if bit 12 of the
+; global flag word 0x041343 is already set it returns; else it sets bit 11 (0x0800) and
+; zeroes the word at 0x04135C.
+
+[ROUTINE] 0x028B58 Voice_SetKeyShiftRange  confidence=high
+; Returns immediately unless global flag 0x041343 bit 12 is set.  Rewrites the flag word:
+; clears bits 12/13 (mask 0xFFFF2FFF), sets bit 13, and then sets bit 15 if the word at
+; 0x04135C is > 20, bit 14 otherwise.  Finally zeroes 0x04135C.
+
+[LABEL] 0x028B80 Voice_SetKeyShiftRange_BranchA  confidence=high
+; BranchA of Voice_SetKeyShiftRange.
+
+[LABEL] 0x028B83 Voice_SetKeyShiftRange_BranchB  confidence=high
+; BranchB of Voice_SetKeyShiftRange.
+
+[ROUTINE] 0x028B90 Voice_SetParam_04134D  confidence=high
+; A -> byte 0x04134D.  Reached from SysEx dispatch entry 6 and from
+; Voice_ResetAllControllers with A = 0.  The reference file calls the getter
+; ScaleTune_Get_Global_Mode; see [UNCERTAIN].
+
+[ROUTINE] 0x028B9C Voice_SetRhythmMode  confidence=high
+; A = packed rhythm-mode byte from a SysEx message.  Decodes it into the 0x04135E block:
+;   bit 3      -> 0x04135E = 3 (else 1)
+;                 0x04135F = 1 unconditionally
+;   bits 7..4  -> index x2 into the word table at 0x00F6F3, result -> 0x041360
+;   bit 2      -> 0x041362 = 0x8000 (else 0xA000)
+;   bits 1..0  -> 0x041364 = 0xC8 - ((A & 3) << 3)
+; Pure state; no hardware touched here.
+
+[LABEL] 0x028BA9 Voice_SetRhythmMode_BranchA  confidence=high
+; BranchA of Voice_SetRhythmMode.
+
+[LABEL] 0x028BAF Voice_SetRhythmMode_BranchB  confidence=high
+; BranchB of Voice_SetRhythmMode.
+
+[LABEL] 0x028BDE Voice_SetRhythmMode_BranchC  confidence=high
+; BranchC of Voice_SetRhythmMode.
+
+[LABEL] 0x028BE5 Voice_SetRhythmMode_BranchD  confidence=high
+; BranchD of Voice_SetRhythmMode.
+
+[ROUTINE] 0x028BF9 Voice_SetParam_04134B  confidence=high
+; A -> byte 0x04134B.  SysEx dispatch entry 0 (sub-command 0x91).
+
+[ROUTINE] 0x028BFF Voice_SetCCMaxFlag  confidence=high
+; A == 0x7F sets bit 1 of the global flag word 0x041343, anything else clears it.
+; Bit 1 is one of the two selectors Voice_CC_SetVolume / Voice_CC_SetExpression test.
+
+[LABEL] 0x028C0C Voice_SetCCMaxFlag_Clear  confidence=high
+; Clear of Voice_SetCCMaxFlag.
+
+[ROUTINE] 0x028C14 Voice_WriteChannelAssign  confidence=medium
+; WA = index, C = value.  Stores (C - 0x80) at 0x041342 + (index + 0x0C), i.e. into the
+; 12-byte array 0x04134E..0x041359.  Voice_ResetAllControllers zeroes exactly indices 0..0x0B,
+; and 12 entries is one per pitch class -- which is why the reference file calls the reader
+; ScaleTune_Get_User_Offset.  See [UNCERTAIN]: I believe the reference name is the correct
+; one and "ChannelAssign" is wrong, but I have not renamed anything.
+
+[ROUTINE] 0x028C39 Voice_AllVoices_UpdateVelocity  confidence=high
+; A = a 4-bit selector, stored to 0x04134C.  Outer loop over parts 0..0x19; a part is skipped
+; unless bit 1 of its flags word 2 (0x041372 + part*0x11F) is set.  For each such part it
+; walks the voice list from Voice_AllocateForFull (0x02CD36), reads the owning part from
+; voice+0x04 (0x043092 + idx*0x47), follows the patch pointer at part+0x06 (0x04136E) and
+; branches on (patch+0x10) & 0xC0:
+;   0x80          -> Voice_ComputePitchBend2 (0x025499) + Voice_SetPitchWord_Unmuted (0x0255F3)
+;   0x40 or 0xC0  -> Voice_ComputeExprPitchBend (0x0253FE) + Voice_SetPitchWord_Muted (0x025589)
+;   0x00          -> skip
+; and then unconditionally calls ToneGen_ReadPitch_AndScale (0x02E18D) per voice.
+; ★ That last call is a tone-generator READ inside a doubly-nested loop -- relevant to the
+; sine-mode bug, see findings.
+
+[LABEL] 0x028C4F Voice_AllVoices_UpdateVelocity_LoopStart  confidence=high
+; loop head of Voice_AllVoices_UpdateVelocity.
+
+[LABEL] 0x028C7C Voice_AllVoices_UpdateVelocity_InnerLoop  confidence=high
+; inner loop body of Voice_AllVoices_UpdateVelocity.
+
+[LABEL] 0x028CBA Voice_AllVoices_UpdateVelocity_TypeA  confidence=high
+; TypeA case of Voice_AllVoices_UpdateVelocity.
+
+[LABEL] 0x028CE6 Voice_AllVoices_UpdateVelocity_TypeB  confidence=high
+; TypeB case of Voice_AllVoices_UpdateVelocity.
+
+[LABEL] 0x028D10 Voice_AllVoices_UpdateVelocity_NextOuter  confidence=high
+; Calls ToneGen_ReadPitch_AndScale then advances the inner cursor.
+
+[LABEL] 0x028D20 Voice_AllVoices_UpdateVelocity_InnerStep  confidence=high
+; inner loop step of Voice_AllVoices_UpdateVelocity.
+
+[LABEL] 0x028D2A Voice_AllVoices_UpdateVelocity_Exit  confidence=high
+; common exit of Voice_AllVoices_UpdateVelocity.
+
+[ROUTINE] 0x028D2E Voice_SetMonoMode  confidence=medium
+; A == 0 SETS bit 9 (0x0200) of the global flag word 0x041343; any other value clears it.
+; The inverted sense makes the "MonoMode" reading doubtful -- see [UNCERTAIN].
+
+[LABEL] 0x028D3A Voice_SetMonoMode_Clear  confidence=high
+; Clear of Voice_SetMonoMode.
+
+[ROUTINE] 0x028D42 Voice_GetMonoMode  confidence=high
+; Returns HL = 0x041343 & 0x0200.  Getter for the bit the routine above writes.
+
+[ROUTINE] 0x028D4C Voice_AllVoices_WritePan  confidence=high
+; XWA = the part record whose voice list starts at +5 (as returned by Voice_AllocateFor*).
+; Walks the list; for each voice whose (voice+0x01) & 0x3C is 4, 8 or 0x20 it calls
+; Voice_Pitch_WriteOutputReg_Legato (0x023A4A), and for 0x10 it calls
+; Voice_Pitch_WriteOutputReg_Secondary; in both cases it then calls
+; DSP_WriteVoiceParam_Long -- which writes TG register 0x10, the PITCH register.
+; ★ It writes no pan register at all.  The reference file's Pitch_Refresh_Sounding_Voices is
+; the accurate name; see [UNCERTAIN].
+
+[LABEL] 0x028D60 Voice_AllVoices_WritePan_LoopBody  confidence=high
+; loop body of Voice_AllVoices_WritePan.
+
+[LABEL] 0x028D8E Voice_AllVoices_WritePan_BranchA  confidence=high
+; BranchA of Voice_AllVoices_WritePan.
+
+[LABEL] 0x028DA2 Voice_AllVoices_WritePan_BranchB  confidence=high
+; BranchB of Voice_AllVoices_WritePan.
+
+[LABEL] 0x028DB4 Voice_AllVoices_WritePan_LoopStep  confidence=high
+; loop step of Voice_AllVoices_WritePan.
+
+[LABEL] 0x028DBB Voice_AllVoices_WritePan_Exit  confidence=high
+; common exit of Voice_AllVoices_WritePan.
+
+[ROUTINE] 0x028DBF Voice_AllVoices_WriteAmplitude  confidence=high
+; XWA = part record (voice list at +5).  Same walk and same (voice+0x01)&0x3C classification
+; as Voice_AllVoices_WritePan, but the hardware call is DSP_WriteVoiceParam_Short, i.e. TG
+; register 0x02 -- amplitude.  This is the routine Voice_CC_Volume and Voice_CC_Expression
+; call to push a new CC 7 / CC 11 value out to every sounding voice of the part.
+
+[LABEL] 0x028DD3 Voice_AllVoices_WriteAmplitude_LoopBody  confidence=high
+; loop body of Voice_AllVoices_WriteAmplitude.
+
+[LABEL] 0x028E01 Voice_AllVoices_WriteAmplitude_BranchA  confidence=high
+; BranchA of Voice_AllVoices_WriteAmplitude.
+
+[LABEL] 0x028E09 Voice_AllVoices_WriteAmplitude_BranchB  confidence=high
+; BranchB of Voice_AllVoices_WriteAmplitude.
+
+[LABEL] 0x028E0F Voice_AllVoices_WriteAmplitude_LoopStep  confidence=high
+; loop step of Voice_AllVoices_WriteAmplitude.
+
+[LABEL] 0x028E22 Voice_AllVoices_WriteAmplitude_Exit  confidence=high
+; common exit of Voice_AllVoices_WriteAmplitude.
+
+[ROUTINE] 0x028E26 Voice_AllNotes_SustainRetrigger  confidence=high
+; The heaviest routine in the region.  Walks a part's voice list and, per voice, decides
+; between five outcomes based on (voice+0x01)&0x3C, bit 15 and bit 8 of (voice+0x01), and
+; bit 0 of [voice+0x23]+0x0A:
+;   BranchB/BranchD -- Voice_ComputeAndWriteVolume1, ToneGen_WriteNote_Hold,
+;                      DSP_WriteVoiceParam_Direct with BC = (voice+0x2D),
+;                      then VoiceSlot_Release (0x022587) and clear bit 8 of (voice+0x01);
+;   BranchC        -- Voice_ComputeAndWriteVolume1/2/3 then DSP_WriteVoiceParam_6Words
+;                      (six TG registers, the full re-trigger);
+;   BranchE        -- only if (voice+0x40) & 0xFF is zero: Voice_WriteVolume_SetFlag then
+;                      ToneGen_WriteNote2ch;
+;   BranchF        -- Voice_WriteVolume_OrPan then ToneGen_WriteNote2ch.
+; ★ BranchB and BranchD call VoiceSlot_Release WITHOUT calling Voice_Release, i.e. they give
+; back the tone-generator slot but keep the software voice -- the asymmetry matters for any
+; voice-leak analysis.
+
+[LABEL] 0x028E40 Voice_AllNotes_SustainRetrigger_LoopBody  confidence=high
+; loop body of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028E74 Voice_AllNotes_SustainRetrigger_BranchA  confidence=high
+; BranchA of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028E89 Voice_AllNotes_SustainRetrigger_BranchB  confidence=high
+; BranchB of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028EC7 Voice_AllNotes_SustainRetrigger_BranchC  confidence=high
+; BranchC of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028EEA Voice_AllNotes_SustainRetrigger_BranchD  confidence=high
+; BranchD of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028F27 Voice_AllNotes_SustainRetrigger_BranchE  confidence=high
+; BranchE of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028F47 Voice_AllNotes_SustainRetrigger_BranchF  confidence=high
+; BranchF of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028F62 Voice_AllNotes_SustainRetrigger_LoopStep  confidence=high
+; loop step of Voice_AllNotes_SustainRetrigger.
+
+[LABEL] 0x028F70 Voice_AllNotes_SustainRetrigger_Exit  confidence=high
+; common exit of Voice_AllNotes_SustainRetrigger.
+
+[DATA] 0x028F75-0x029E30  VoiceCC_DataTable_028F75 -- MISLABELLED, THIS IS CODE
+; 3772 bytes emitted as `.byte`.  It is the body of the audio-channel command handlers: the
+; nine entry points below are all reached by `calr`/`jrl` from AudioChannel_DispatchTable at
+; 0x029E5B or by absolute `call` from outside the region.  Nothing in here is data.
+
+[ROUTINE] 0x028F75 AUDIOCH_ALLVOICES_UPDATE_PAN  confidence=high
+; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
+; VoiceCC_DataTable_028F75.  Left alone; maintainer's call.  See [UNCERTAIN].
+; XWA = part record (voice list at +5).  Walks the list, classifies each voice by
+; (voice+0x01)&0x3C and calls Voice_PanReg_WriteDispatch (0x024444) for 4/0x20 or
+; Voice_PanReg_WriteDispatchB (0x024554) for 0x10, then pushes the result to TG registers
+; 4 and 5 via TONEGEN_WRITEVOICE_PAN_PAIR with XBC = the staging record 0x0451CC.
+
+[ROUTINE] 0x028FE8 AUDIOCH_ALLVOICES_UPDATE_PANSHIFT  confidence=high
+; Same walk as above with two extra gates: bit 7 of (voice+0x05) must be set, and for class
+; 0x10 also bit 5 of [voice+0x13]+0x0D.  Calls Voice_WriteChPanShift (0x02591D) or
+; Voice_WriteChPanShift2 (0x025B6F) with BC = 1 and then
+; TONEGEN_WRITEVOICE_REG21_REG22 (registers 0x21/0x22).
+
+[ROUTINE] 0x029071 AUDIOCH_ALLVOICES_UPDATE_VARIANT3  confidence=medium
+; Third member of the same family; the ONLY interior address in either code blob that is
+; reached by an absolute `call` (from 0x0304C1).  Uses `lda XIZ,XWA+BC` to form the voice
+; pointer rather than the store-to-XIZ idiom of its siblings, and branches on the same
+; (voice+0x01)&0x3C classes in a different order (0x10 first).
+
+[ROUTINE] 0x0290E7 AUDIOCH_HANDLER_CMD01  confidence=medium
+; Handler for audio-channel command 1.  Reached by `jrl` from dispatch stub 0 (0x029E5B).
+; Entry WA = value, BC = value2, XDE = the 3-byte routing descriptor.  Calls
+; AUDIOMOD_APPLY_BUSROUTING / AUDIOMOD_APPLY_PORTA_CURVE in the 0x0280FE block.
+
+[ROUTINE] 0x029134 AUDIOCH_HANDLER_CMD03  confidence=medium
+; Handler for audio-channel command 3.  Reached by `jrl` from dispatch stub 2 (0x029E65).
+
+[ROUTINE] 0x029172 AUDIOCH_HANDLER_CMD02  confidence=medium
+; Handler for audio-channel command 2.  Reached by `jrl` from dispatch stub 1 (0x029E60).
+; Note the table order is 1, 2, 3 but the code order is CMD01, CMD03, CMD02.
+
+[ROUTINE] 0x0291EE AUDIOCH_HANDLER_CMD04_07  confidence=high
+; Shared body for audio-channel commands 4..7.  The four dispatch stubs at 0x029E6A,
+; 0x029E75, 0x029E80 and 0x029E8B differ only in the sub-index 0..3 they `push` before the
+; `calr`, so the pushed word is the handler's bus/slot selector.
+; Entry: WA = value (zero-extended), BC = value2 (zero-extended), XDE = routing descriptor,
+; (SP+n) = sub-index.
+
+[ROUTINE] 0x0293F0 AUDIOCH_HANDLER_CMD10_13  confidence=high
+; Shared body for commands 0x10..0x13; stubs at 0x029EF5/0x029F00/0x029F0B/0x029F16.
+
+[ROUTINE] 0x0295FF AUDIOCH_HANDLER_CMD08_0B  confidence=high
+; Shared body for commands 8..0x0B; stubs at 0x029E96/0x029EA1/0x029EAC/0x029EB7.
+
+[ROUTINE] 0x029804 AUDIOCH_HANDLER_CMD14_17  confidence=high
+; Shared body for commands 0x14..0x17; stubs at 0x029F21/0x029F2C/0x029F37/0x029F42.
+
+[ROUTINE] 0x029A16 AUDIOCH_HANDLER_CMD0C_0F  confidence=high
+; Shared body for commands 0x0C..0x0F; stubs at 0x029EC9/0x029ED4/0x029EDF/0x029EEA.
+
+[ROUTINE] 0x029C1D AUDIOCH_HANDLER_CMD18_1B  confidence=high
+; Shared body for commands 0x18..0x1B; stubs at 0x029F4D/0x029F58/0x029F63/0x029F6E.
+; Command 0x1B is the last index the bound check in AudioChannel_Dispatch admits.
+
+[ROUTINE] 0x029E31 AudioChannel_Dispatch  confidence=high
+; The modulation-routing dispatcher.  Entry XDE = a 3-byte routing descriptor; WA and BC
+; carry the value pair.  Reads L = (XDE+1) & 0x3F, that is the DESTINATION COMMAND ID, and
+; rejects it unless 1 <= id <= 0x1B.  index = id - 1, doubled, used to read a word from the
+; offset table at 0x00F703; that offset is added to the stub-table base 0x029E5B and jumped
+; to.  Bit 7 of (XDE+1) is NOT part of the id -- it is the bipolar flag the handlers test.
+; Callers: Voice_ModWheel_Apply (twice), Voice_ChanPressure (twice), Voice_PitchBend
+; (twice, as a tail `jrl`), and the 0x02A061 block.
+
+[DATA] 0x029E5B-0x029F72  AudioChannel_DispatchTable
+; 27 entries.  Entries 0..2 are 5 bytes each (`extz WA` + `jrl` to 0x0290E7 / 0x029172 /
+; 0x029134).  Entries 3..26 are 11 bytes each:
+;     extz WA ; extz BC ; push <sub-index 0..3> ; calr <handler> ; ret
+; giving six handler bodies x four sub-indices.  Indexed indirectly through the word offset
+; table at 0x00F703 (values 0x0000,0x0005,0x000A,0x000F, then +0x000B per entry).
+
+[ROUTINE] 0x029F73 Voice_ModWheel_Apply  confidence=high
+; Entry WA = part index, BC = CC 1 value.  Follows the patch pointer at part+0x06
+; (0x04136E + part*0x11F) and switches on (patch+0x10) & 0xC0:
+;   0x80              -> stereo path: descriptors at patch+0x15 + 3*i, i = 0..1
+;   0x40 / 0xC0       -> poly path:   descriptors at patch+0x17 + 3*i, i = 0..1
+;   0x00              -> return
+; Each iteration calls AudioChannel_Dispatch with XDE pointing at the 3-byte descriptor.
+; So a patch declares, per modulation source, up to two destination commands with depths.
+
+[LABEL] 0x029FAA Voice_ModWheel_Apply_StereoPath  confidence=high
+; StereoPath of Voice_ModWheel_Apply.
+
+[LABEL] 0x029FB7 Voice_ModWheel_Apply_PolyPath  confidence=high
+; PolyPath of Voice_ModWheel_Apply.
+
+[LABEL] 0x02A004 Voice_ModWheel_Apply_StereoLoopA  confidence=high
+; StereoLoopA of Voice_ModWheel_Apply.
+
+[LABEL] 0x02A026 Voice_ModWheel_Apply_StereoLoopB  confidence=high
+; StereoLoopB of Voice_ModWheel_Apply.
+
+[LABEL] 0x02A05C Voice_ModWheel_Apply_Exit  confidence=high
+; common exit of Voice_ModWheel_Apply.
+
+[DATA] 0x02A061-0x02A0E8  VoiceModWheel_DataTable_02A061 -- MISLABELLED, THIS IS CODE
+; 136 bytes emitted as `.byte`; a complete routine, documented immediately below.
+; ★ No caller found: an exhaustive scan of the whole 0x30000-byte ROM for CALL (0x1D),
+; CALR (0x1E) and JRL (0x78) encodings targeting 0x02A061 returns nothing.  It is either
+; dead code or reached through a pointer I have not located.
+
+[ROUTINE] 0x02A061 AUDIOCH_APPLY_DESCRIPTORS_1D  confidence=medium
+; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
+; VoiceModWheel_DataTable_02A061.  Left alone; maintainer's call.  See [UNCERTAIN].
+; A = part index, C = value.  Follows the patch pointer at part+0x06, requires
+; (patch+0x10) & 0xC0 to be 0x40, 0xC0 or 0x00, and then for i = 0..1 calls
+; AudioChannel_Dispatch with XDE = patch + 0x1D + 3*i.  Identical in shape to the two loops
+; inside Voice_ModWheel_Apply but with descriptor base 0x1D instead of 0x15 / 0x17 -- i.e.
+; this is the applier for a THIRD modulation source.  See the no-caller warning above.
+
+[ROUTINE] 0x02A0E9 Voice_Portamento_OnHandler  confidence=high
+; A = part index, C = CC 0x5E value.  Reads the patch pointer at part+0x06 and takes a
+; different path when (patch+0x10) & 0xC0 == 0xC0.  Updates the part's portamento state and
+; then hands over to Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A11C Voice_Portamento_OnHandler_C0Mode  confidence=high
+; C0Mode of Voice_Portamento_OnHandler.
+
+[LABEL] 0x02A18C Voice_Portamento_OnHandler_Exit  confidence=high
+; common exit of Voice_Portamento_OnHandler.
+
+[ROUTINE] 0x02A18F Voice_PortamentoSlots_WriteHW  confidence=high
+; Walks a voice list (cursor on the stack, terminated by a byte >= 0x40) and for every voice
+; writes two LITERAL constants into the tone generator:
+;   register 0x21 (latch voice+0x0840) <- 0xA200
+;   register 0x20 (latch voice+0x0800) <- 0xA280
+; via the standard P6.7 strobe.  A branch at 0x02A22F selects a second, identical constant
+; pair for the other case.  These are the only hard-coded TG data values in the region.
+; Called once per part from Voice_ResetAllControllers.
+
+[LABEL] 0x02A1BA Voice_PortamentoSlots_WriteHW_LoopBody  confidence=high
+; loop body of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A1E9 Voice_PortamentoSlots_WriteHW_NopCont1  confidence=high
+; NopCont1: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A208 Voice_PortamentoSlots_WriteHW_NopCont2  confidence=high
+; NopCont2: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A22A Voice_PortamentoSlots_WriteHW_NopCont3  confidence=high
+; NopCont3: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A22F Voice_PortamentoSlots_WriteHW_BranchSkip  confidence=high
+; BranchSkip of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A24E Voice_PortamentoSlots_WriteHW_NopCont4  confidence=high
+; NopCont4: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A270 Voice_PortamentoSlots_WriteHW_NopCont5  confidence=high
+; NopCont5: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A273 Voice_PortamentoSlots_WriteHW_LoopStep  confidence=high
+; loop step of Voice_PortamentoSlots_WriteHW.
+
+[LABEL] 0x02A27F Voice_PortamentoSlots_WriteHW_Exit  confidence=high
+; common exit of Voice_PortamentoSlots_WriteHW.
+
+[ROUTINE] 0x02A282 Voice_CtrlChange  confidence=high
+; MIDI Control Change entry point, called from MIDI_Dispatch (0x034D93 family).
+; XWA -> 4-byte message: +0 status, +1 part 0..0x19, +2 controller, +3 value.
+; Rejects part >= 0x1A immediately.  Explicit compares route CC 0x9D, 0x9C, 0x9B, 0x97,
+; 0x95, 0x91, 0x5E, 0x5D, 0x5B, 0x40, 0x0B, 0x0A, 0x07 and 0x01 to the handlers below.
+; Everything else falls into the CHANNEL-MODE range check: (cc - 0x78) must be 0..0x0A,
+; then a word from the table at 0x00F739 is added to the base 0x02A306 and jumped to.
+; Decoded targets: 0x78->0x02A3EB, 0x79->0x02A3F6, 0x7B->0x02A402, 0x80->0x02A41D,
+; 0x81->0x02A433, 0x82->0x02A457; 0x7A, 0x7C, 0x7D, 0x7E and 0x7F all land on
+; Voice_CC_Exit, i.e. Local Control and the Omni/Mono/Poly mode messages are ignored.
+
+[ROUTINE] 0x02A306 Voice_CC_ModWheel  confidence=high
+; CC 1.  WA = part, BC = value -> Voice_ModWheel_Apply.
+
+[ROUTINE] 0x02A31C Voice_CC_Volume  confidence=high
+; CC 7.  Voice_CC_SetVolume, then Voice_AllocateForFull (0x02CD36) and
+; Voice_AllVoices_WriteAmplitude -- so the new level reaches TG register 2 immediately.
+
+[ROUTINE] 0x02A340 Voice_CC_Pan  confidence=high
+; CC 10.  Voice_CC_SetPan, then EnvTranspose_UpdateLoop (0x032E1E) to push it to hardware.
+
+[ROUTINE] 0x02A35F Voice_CC_Expression  confidence=high
+; CC 11.  Voice_CC_SetExpression, then Voice_AllocateForFull + Voice_AllVoices_WriteAmplitude.
+
+[ROUTINE] 0x02A383 Voice_CC_Sustain  confidence=high
+; CC 64.  Voice_CC_SetSustain, then Voice_AllocateForSustain (0x02CCF5) and the sustain
+; retrigger scan -- this is the path that re-articulates held notes when the pedal moves.
+
+[ROUTINE] 0x02A3A9 Voice_CC_Sostenuto  confidence=high
+; CC 0x5B.  Voice_CC_SetSostenuto.
+
+[ROUTINE] 0x02A3BF Voice_CC_Soft  confidence=high
+; CC 0x5D.  Voice_CC_SetSoftPedal.
+
+[ROUTINE] 0x02A3D5 Voice_CC_Portamento  confidence=high
+; CC 0x5E.  Voice_Portamento_OnHandler + Voice_PortamentoSlots_WriteHW.
+
+[ROUTINE] 0x02A46C Voice_CC_91  confidence=high
+; CC 0x91 (proprietary): reverb depth -> Voice_CC_SetReverbDepth.
+
+[ROUTINE] 0x02A481 Voice_CC_95  confidence=high
+; CC 0x95: chorus on/off -> Voice_CC_SetChorusEnable.
+
+[ROUTINE] 0x02A496 Voice_CC_97  confidence=high
+; CC 0x97: chorus depth -> Voice_CC_SetChorusDepth.
+
+[ROUTINE] 0x02A4AB Voice_CC_9B  confidence=high
+; CC 0x9B: delay depth -> Voice_CC_SetDelayDepth.
+
+[ROUTINE] 0x02A4C0 Voice_CC_9C  confidence=high
+; CC 0x9C: delay on/off -> Voice_CC_SetDelayEnable.
+
+[ROUTINE] 0x02A4D5 Voice_CC_9D  confidence=high
+; CC 0x9D: delay feedback -> Voice_CC_SetDelayFeedback.
+
+[LABEL] 0x02A4E8 Voice_CC_Exit  confidence=high
+; Common exit: pop XIZ, ret.  Also the landing pad for the five ignored channel-mode CCs.
+
+[ROUTINE] 0x02A4EA Voice_ChanPressure  confidence=high
+; MIDI 0xD0 channel pressure.  XWA -> message (+1 part, +2 value).  Rejects part >= 0x1A,
+; follows the patch pointer at part+0x06 and switches on (patch+0x10) & 0xC0 exactly as
+; Voice_ModWheel_Apply does, then runs two descriptor loops (0x02A530 stereo, 0x02A589 mono)
+; that each call AudioChannel_Dispatch twice.
+
+[LABEL] 0x02A530 Voice_ChanPressure_StereoLoopStart  confidence=high
+; StereoLoopStart of Voice_ChanPressure.
+
+[LABEL] 0x02A54F Voice_ChanPressure_StereoLoopBody  confidence=high
+; StereoLoopBody of Voice_ChanPressure.
+
+[LABEL] 0x02A589 Voice_ChanPressure_MonoLoopStart  confidence=high
+; MonoLoopStart of Voice_ChanPressure.
+
+[LABEL] 0x02A5A7 Voice_ChanPressure_MonoLoopBody  confidence=high
+; MonoLoopBody of Voice_ChanPressure.
+
+[LABEL] 0x02A5DF Voice_ChanPressure_Exit  confidence=high
+; common exit of Voice_ChanPressure.
+
+[ROUTINE] 0x02A5E6 Voice_PitchBend  confidence=high
+; MIDI 0xE0.  XWA -> message: +1 part, +2 LSB, +3 MSB.  Rejects part >= 0x1A.  Assembles the
+; 14-bit value as ((MSB << 7) | LSB) with bit 15 forced set, follows the patch pointer, and
+; tail-jumps to AudioChannel_Dispatch with XDE = patch+0x14 (classes 0x40/0xC0/0x00) or
+; patch+0x12 (class 0x80).  The forced bit 15 is what marks the value as pitch-bend for the
+; downstream handlers.
+
+[LABEL] 0x02A62E Voice_PitchBend_BranchA  confidence=high
+; BranchA of Voice_PitchBend.
+
+[LABEL] 0x02A64C Voice_PitchBend_BranchB  confidence=high
+; BranchB of Voice_PitchBend.
+
+[ROUTINE] 0x02A668 Voice_AllVoices_PortamentoReset  confidence=high
+; Calls Voice_NoteState_Clear for parts 0..0x19, then walks the voice list from
+; Voice_AllocateForAny and issues per-voice tone-generator writes with the standard strobe.
+; Called from Voice_ResetAllControllers.
+
+[LABEL] 0x02A672 Voice_AllVoices_PortamentoReset_LoopBody  confidence=high
+; loop body of Voice_AllVoices_PortamentoReset.
+
+[LABEL] 0x02A684 Voice_AllVoices_PortamentoReset_NopCont1  confidence=high
+; NopCont1: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
+
+[LABEL] 0x02A692 Voice_AllVoices_PortamentoReset_NopCont2  confidence=high
+; NopCont2: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
+
+[LABEL] 0x02A6AF Voice_AllVoices_PortamentoReset_NopCont3  confidence=high
+; NopCont3: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
+
+[LABEL] 0x02A6CF Voice_AllVoices_PortamentoReset_LoopStep  confidence=high
+; loop step of Voice_AllVoices_PortamentoReset.
+
+[LABEL] 0x02A6D9 Voice_AllVoices_PortamentoReset_Exit  confidence=high
+; common exit of Voice_AllVoices_PortamentoReset.
+
+[ROUTINE] 0x02A6DB Voice_SetPitchBendRangeAndApply  confidence=medium
+; A = value.  Stores the global pitch-bend range and then drives
+; Voice_PerVoice_PortamentoPitchUpdate so sounding notes pick it up.  Reached from SysEx
+; dispatch entry 3 and from Voice_ResetAllControllers with WA = 0x40.
+
+[ROUTINE] 0x02A6F7 Voice_PerVoice_PortamentoPitchUpdate  confidence=medium
+; WA = part index.  Recomputes the part's portamento pitch state; two internal branches
+; (0x02A771, 0x02A77B) select between the target-reached and still-gliding cases.
+
+[LABEL] 0x02A771 Voice_PerVoice_PortamentoPitchUpdate_BranchA  confidence=medium
+; BranchA of Voice_PerVoice_PortamentoPitchUpdate.
+
+[LABEL] 0x02A77B Voice_PerVoice_PortamentoPitchUpdate_BranchB  confidence=medium
+; BranchB of Voice_PerVoice_PortamentoPitchUpdate.
+
+[LABEL] 0x02A78B Voice_PerVoice_PortamentoPitchUpdate_Exit  confidence=high
+; common exit of Voice_PerVoice_PortamentoPitchUpdate.
+
+[ROUTINE] 0x02A78E Voice_AllVoices_PortamentoUpdate  confidence=high
+; Calls Voice_PerVoice_PortamentoPitchUpdate for parts 0..0x19.  Reached from SysEx dispatch
+; entry 1 (sub-command 0x92) and from Voice_ResetAllControllers.
+
+[LABEL] 0x02A79A Voice_AllVoices_PortamentoUpdate_LoopBody  confidence=high
+; loop body of Voice_AllVoices_PortamentoUpdate.
+
+[LABEL] 0x02A7AB Voice_AllVoices_PortamentoUpdate_Exit  confidence=high
+; common exit of Voice_AllVoices_PortamentoUpdate.
+
+[ROUTINE] 0x02A7AF Voice_SystemMsg  confidence=high
+; MIDI 0xF0 / manufacturer sub-command dispatcher.  XWA -> message, C = (XWA+2) is the
+; sub-command byte.  Three sub-commands are special-cased first: 0x99 -> DispatchEntry2,
+; 0x92 -> DispatchEntry1, 0x91 -> DispatchEntry0, 0x09 -> the head of the stub table.
+; Otherwise index = C - 0x80; accepted if 0 <= index <= 7 (sub-commands 0x80..0x87), or,
+; after a further -0x1B, if 8 <= index <= 0x16 (sub-commands 0xA3..0xB1).  Everything else
+; returns.  The accepted index is doubled, used to read a word from the table at 0x00F74F
+; and added to the stub-table base 0x02A7FC.
+
+[LABEL] 0x02A7E6 Voice_SystemMsg_DispatchJump  confidence=high
+; The computed jump itself: BC*2 -> word at 0x00F74F -> jp (0x02A7FC + offset).
+
+[DATA] 0x02A7FC-0x02A837  Voice_SystemMsg_DispatchTable
+; Stubs of the form `ld A,(XWA+3) [; extz WA] ; jrl <handler>` -- 8 bytes with the extz,
+; 6 without.  Resolved by adding the word at 0x00F74F + index*2 to this base:
+;   (reached directly when sub-command == 0x09, NOT via the table) 0x02A7FC ->
+;                                             Voice_SetPolyphonyMode
+;   index 0 (sub-cmd 0x80) offset 0x0008 -> 0x02A804 VoiceCC_Stub_Ret1
+;   index 1 (0x81)         offset 0x0010 -> 0x02A80C VoiceCC_Stub_Ret2
+;   index 2 (0x82)         offset 0x0018 -> 0x02A814 Voice_SetPitchBendRangeAndApply
+;   index 3 (0x83)         offset 0x001E -> 0x02A81A Voice_SetPitchBendRange
+;   index 4 (0x84)         offset 0x00F6 -> 0x02A8F2 a bare `ret` (sub-command ignored)
+;   index 5 (0x85)         offset 0x0024 -> 0x02A820 Voice_SetKeyShiftEnable
+;   index 6 (0x86)         offset 0x002C -> 0x02A828 Voice_SetParam_04134D
+;   index 7 (0x87)         offset 0x0034 -> 0x02A830 Voice_SetRhythmMode
+; Indices 8..0x16 (sub-commands 0xA3..0xB1) resolve past 0x02A838 into the three named
+; DispatchEntry stubs and the code that follows them; index > 0x16 is rejected by the caller.
+
+[LABEL] 0x02A838 Voice_SystemMsg_DispatchEntry0  confidence=high
+; Sub-command 0x91 -> Voice_SetParam_04134B.
+
+[LABEL] 0x02A840 Voice_SystemMsg_DispatchEntry1  confidence=high
+; Sub-command 0x92 -> Voice_AllVoices_PortamentoUpdate (no argument).
+
+[LABEL] 0x02A843 Voice_SystemMsg_DispatchEntry2  confidence=high
+; Sub-command 0x99 -> a small group ending in Voice_WriteChannelAssign with WA = 0x0B,
+; Voice_AllVoices_UpdateVelocity and Voice_SetMonoMode.
+
+[ROUTINE] 0x02A8F3 Voice_ResetAllControllers  confidence=high
+; Full audio-side reset.  Reached by `jp` from the audio init sequence (right after
+; DSP_Config_Init, DSP_Reset, ToneGen_EmitCommandLoop(0), DSP_ResetWriteBufferPtr,
+; VoiceSlot_ClearAll and `0x041342 = 0`), and from CC 0x79.
+; Per part 0..0x19 it applies, in order: mod wheel 0, volume 0x7F, pan 0x40, expression 0x7F,
+; sustain 0, sostenuto 0, soft 0, portamento 0, Voice_PortamentoSlots_WriteHW,
+; Voice_NoteState_Clear, Voice_SetLFO_ActiveFlag, portamento rate 2, portamento depth 0x80,
+; portamento time 0x40, reverb depth 0, chorus enable 0, chorus depth 6, delay depth 1,
+; delay enable 0, delay feedback 0.
+; Then globally: Voice_SetPolyphonyMode(2), the two ret-stubs with 0x7F,
+; Voice_SetPitchBendRangeAndApply(0x40), Voice_SetPitchBendRange(0), Voice_SetKeyShiftEnable(0),
+; Voice_SetParam_04134D(0), Voice_SetRhythmMode(0), Voice_SetParam_04134B(0),
+; Voice_AllVoices_PortamentoUpdate, Voice_SetCCMaxFlag(0), Voice_AllVoices_PortamentoReset,
+; Voice_WriteChannelAssign(index 0..0x0B, value 0), Voice_AllVoices_UpdateVelocity(1),
+; Voice_SetMonoMode(0).
+; ★ The 0..0x0B loop is TWELVE iterations, not 26 -- one per pitch class, which is the
+; strongest evidence that the 0x04134E array is a scale-tune table.
+
+[LABEL] 0x02A900 Voice_ResetAllControllers_LoopBody  confidence=high
+; loop body of Voice_ResetAllControllers.
+
+[LABEL] 0x02A9D3 Voice_ResetAllControllers_PostLoop  confidence=high
+; PostLoop of Voice_ResetAllControllers.
+
+[LABEL] 0x02AA17 Voice_ResetAllControllers_ChanModeLoop  confidence=high
+; The twelve-iteration loop; see the note above about its real meaning.
+
+[LABEL] 0x02AA2A Voice_ResetAllControllers_ChanModeExit  confidence=high
+; ChanModeExit of Voice_ResetAllControllers.
+
+[ROUTINE] 0x02AA38 Voice_PortamentoTargets_SetAll  confidence=high
+; A = part index.  For each of the 4 output slots i = 0..3: computes the slot address
+; part_base + 0x6E + i*0x25 via FP_MulAccum64 (0x03D8CA), dereferences the long pointer at
+; slot+0x00, takes bytes +2 and +3 of that record, assembles them as (b3 << 8) | b2, masks
+; to 12 bits and stores the word at part_base + 0x102 + i*2.
+; So the portamento target for each slot is a 12-bit pitch value copied out of the slot's
+; tone record.  Pure memory; no hardware.
+
+[LABEL] 0x02AA47 Voice_PortamentoTargets_SetAll_LoopBody  confidence=high
+; loop body of Voice_PortamentoTargets_SetAll.
+
+[LABEL] 0x02AAE3 Voice_PortamentoTargets_SetAll_Exit  confidence=high
+; common exit of Voice_PortamentoTargets_SetAll.
+
+[ROUTINE] 0x02AAE7 Voice_PortamentoTarget_SetSlot  confidence=high
+; A = part, C = slot 0..3.  Stores A into slot+0x00 of part_base + 0x6E + slot*0x25 and
+; installs the constant long pointer 0x00F8B0 at slot+0x04.  0x00F8B0 is therefore the
+; default (ROM) tone record used when no patch record has been bound to the slot.
+
+[ROUTINE] 0x02AB10 Voice_PortamentoTarget_ComputePitch  confidence=high
+; A = part, C = slot.  Reads (slotrecord+3) & 0x30 >> 4 as a 2-bit selector, fetches a
+; 32-bit base from [0x045314]+0x70 and a 16-bit multiplier from [0x045314]+0xEC, computes
+; base + multiplier*selector + 0x045310, and stores the 32-bit result at slot+0x08.
+; 0x045314 is a long pointer into the shared DSP/tone parameter block.
+
+[ROUTINE] 0x02AB83 Voice_UpdateFlagsFromSlot  confidence=high
+; A = part index.  Compares the four words at part_base+0x00, +0x02, +0x04 and +0x06 of the
+; slot-selection block against zero and mirrors the results into bits 0..3 of the part flags
+; word at part_base+0x02.  Set = that slot is in use.  Called first thing by
+; Voice_InitFromSlot (0x02ADC1).
+
+[LABEL] 0x02ABB7 Voice_UpdateFlagsFromSlot_BranchA  confidence=high
+; BranchA of Voice_UpdateFlagsFromSlot.
+
+[LABEL] 0x02ABBB Voice_UpdateFlagsFromSlot_BranchB  confidence=high
+; BranchB of Voice_UpdateFlagsFromSlot.
+
+[LABEL] 0x02ABC8 Voice_UpdateFlagsFromSlot_BranchC  confidence=high
+; BranchC of Voice_UpdateFlagsFromSlot.
+
+[LABEL] 0x02ABCC Voice_UpdateFlagsFromSlot_BranchD  confidence=high
+; BranchD of Voice_UpdateFlagsFromSlot.
+
+[LABEL] 0x02ABD9 Voice_UpdateFlagsFromSlot_BranchE  confidence=high
+; BranchE of Voice_UpdateFlagsFromSlot.
+
+[LABEL] 0x02ABDD Voice_UpdateFlagsFromSlot_BranchF  confidence=high
+; BranchF of Voice_UpdateFlagsFromSlot.
+
+[LABEL] 0x02ABE9 Voice_UpdateFlagsFromSlot_Exit  confidence=high
+; common exit of Voice_UpdateFlagsFromSlot.
+
+[ROUTINE] 0x02ABEE Voice_Selector_Unpack3Groups  confidence=high
+; E = group number 0..2, BC = a packed word of three 4-bit fields.  For each of the three
+; fields it reads a destination byte-offset from the 3-byte-stride tables at 0x00F77D,
+; 0x00F77E and 0x00F77F (indexed by E*3), and stores (BC & 0x0F) at that offset in the
+; caller's 9-byte stack scratch array, shifting BC right by 4 between fields.
+; Together the three calls expand three packed words into a flat 9-entry priority array.
+
+[ROUTINE] 0x02AC54 Voice_Selector_FindBestSlot  confidence=high
+; XWA -> three packed words, XDE -> result index byte, XBC -> a counter word, plus a fourth
+; pointer pushed by the caller and read at (XSP+26).
+; Builds the 9-byte array with three Voice_Selector_Unpack3Groups calls, then scans entries
+; d = 0..8 twice over:
+;   * L remembers the FIRST entry whose value is non-zero;
+;   * E remembers the FIRST entry whose value is >= 4, and every such entry increments the
+;     counter word pointed to by XBC.
+; If any entry reached 4 the E candidate wins, otherwise the L candidate is used.  The chosen
+; index goes to *XDE and the corresponding array value to *(XSP+26).  Returns with `retd 4`.
+; ★ Both candidates start at 0xFF and there is NO fallback: if all nine entries are zero,
+; 0xFF is written out as the selected index.  See findings.
+
+[LABEL] 0x02AC91 Voice_Selector_FindBestSlot_InnerLoop  confidence=high
+; inner loop body of Voice_Selector_FindBestSlot.
+
+[LABEL] 0x02ACA7 Voice_Selector_FindBestSlot_SlotCheck  confidence=high
+; SlotCheck of Voice_Selector_FindBestSlot.
+
+[LABEL] 0x02ACC2 Voice_Selector_FindBestSlot_Update  confidence=high
+; Update of Voice_Selector_FindBestSlot.
+
+[LABEL] 0x02ACC9 Voice_Selector_FindBestSlot_InnerStep  confidence=high
+; Post-loop: pick E if it is not 0xFF, else fall through to the L candidate.
+
+[LABEL] 0x02ACE6 Voice_Selector_FindBestSlot_OuterStep  confidence=high
+; The "no entry reached 4" path -- writes the L candidate, which may still be 0xFF.
+
+[LABEL] 0x02ACFC Voice_Selector_FindBestSlot_Exit  confidence=high
+; Last symbol inside this region.  Its only caller, Voice_Selector_ComputeMixWeights, begins
+; one byte past the region end at 0x02AD03.
+
+[UNCERTAIN] The DSP_WriteVoiceParam_* prefix is wrong. DSP_WriteVoiceParam_Long (0x027F74),
+_Short (0x027F96), _Direct (0x027FBB) and _6Words (0x027FD6) all write 0x100000 / 0x100002,
+which the MAME memory map documents as the TONE GENERATOR address latch and data port.
+DSP1 (IC311 uPD6383) lives at 0x130000-0x130003 and is never touched by this region. These
+four should logically be TONEGEN_WRITEVOICE_*, matching their siblings ToneGen_WriteNote2ch
+and ToneGen_WriteNote6ch_*. I have NOT renamed them -- they are existing real names.
+
+[UNCERTAIN] Voice_AllVoices_WritePan (0x028D4C) writes no pan register. It calls
+Voice_Pitch_WriteOutputReg_Legato / _Secondary and then DSP_WriteVoiceParam_Long, which is
+TG register 0x10 = pitch. symbols/subcpu_symbols_reference.txt already calls this address
+Pitch_Refresh_Sounding_Voices, and I believe the reference file is right and the LLVM name is
+wrong. Both are real names; neither has been changed. The genuine pan writer is
+AUDIOCH_ALLVOICES_UPDATE_PAN (0x028F75), which really does write TG registers 4 and 5.
+
+[UNCERTAIN] Voice_WriteChannelAssign (0x028C14) / Voice_ReadChannelAssign (0x028C28) do not
+look like channel assignment. They index 0x041342 + (idx + 0x0C), i.e. the 12-byte array
+0x04134E..0x041359, and Voice_ResetAllControllers zeroes exactly indices 0..0x0B. Twelve
+entries is one per pitch class. The reference file names the reader ScaleTune_Get_User_Offset,
+which fits the code far better. Same situation at 0x028B96 (Voice_GetParam_04134D vs
+ScaleTune_Get_Global_Mode) and 0x028D42 (Voice_GetMonoMode vs ScaleTune_Is_Global_Enabled).
+Three of the four name collisions between the two hand-maintained sources are in this cluster,
+which suggests one whole subsystem was interpreted differently in the two passes. Somebody
+should settle it; I have changed nothing.
+
+[UNCERTAIN] Voice_SetMonoMode (0x028D2E) sets global flag 0x041343 bit 9 when A == 0 and
+clears it otherwise. An inverted "mono" flag is possible but the polarity is suspicious, and
+Voice_ResetAllControllers calls it with 0 -- i.e. reset would ENABLE mono. Either the name is
+wrong or bit 9 means "poly disabled" and the getter/setter pair is fine. Not resolved.
+
+[UNCERTAIN] The name ToneGen_WriteNote6ch_NopCont1..5 (0x02801F..0x0280A7) says "6ch" but the
+code writes SIX REGISTERS of ONE voice, not six channels. Same for ToneGen_WriteNote2ch
+(0x0280AE), which writes two registers of one voice. Left alone.
+
+[UNCERTAIN] 0x027AC4 is Voice_UpdateAllNoteStates in the LLVM build and
+Audio_Tick_ServiceVoices_B in symbols/subcpu_symbols_reference.txt. Both are defensible; the
+"_B" suffix usefully records that it is the second of the two alternating audio-tick phases
+(the "_A" phase being Voice_ScanAndCancelNoteOff at 0x027A46). Flagging the collision only.
+
+[UNCERTAIN] AUDIOCH_APPLY_DESCRIPTORS_1D (0x02A061) has no caller. I scanned all 0x30000 ROM
+bytes for CALL (0x1D + 24-bit), CALR (0x1E + signed 16-bit) and JRL (0x78 + signed 16-bit)
+encodings resolving to 0x02A061 and found none. It may be dead code left from an earlier
+firmware revision, or reached via a pointer table I did not find. Confidence on the name is
+therefore only medium even though the body is unambiguous.
+
+[UNCERTAIN] Naming style. This region of the authoritative source is uniformly CamelCase with
+a subsystem prefix (Voice_, ToneGen_, AudioChannel_, DSP_), whereas the brief asks for
+UPPER_SNAKE_CASE. The ~30 new names I propose above are in UPPER_SNAKE per the brief, but
+they will sit immediately beside ToneGen_WriteNote2ch and friends. If the integrator prefers
+local consistency the conversion is mechanical (TONEGEN_WRITEVOICE_PAN_PAIR ->
+ToneGen_WriteVoice_PanPair, AUDIOCH_HANDLER_CMD04_07 -> AudioChannel_Handler_Cmd04_07,
+AUDIOMOD_* -> AudioMod_*).
+
+[UNCERTAIN] The interior entries 0x02860D and 0x0286D9 are `calr` targets from outside the
+blob (0x026509 and 0x02B9B1 respectively) that land in the middle of
+AUDIOMOD_APPLY_SLOT_FIELD2A, after the descriptor-decoding prologue. I did not
+verify what register state those two callers set up, so the names are marked low -- do not
+integrate them without checking the call sites.
+
+[UNCERTAIN] I could not determine the semantics of TG registers 0x07, 0x11, 0x13, 0x15, 0x16,
+0x18, 0x21 and 0x22. Their writers are named by register number, which is honest but not
+informative. Resolving them needs the tone-generator side, not this region.
+
+[UNCERTAIN] Three addresses in this region already carry a real (non-LABEL_) name that I
+believe is wrong, and for which I have proposed a replacement above WITHOUT applying it:
+0x0280FE VoiceCC_DataTable_0280FE, 0x028F75 VoiceCC_DataTable_028F75 and
+0x02A061 VoiceModWheel_DataTable_02A061.  None of the three is a data table -- each is the
+first instruction of a subroutine, and the "DataTable" names were manufactured by the
+ASL->LLVM converter when it gave up disassembling and emitted `.byte`.  Renaming them is a
+maintainer decision because it changes 5623 bytes' worth of listing identity; the byte
+content is untouched either way, so the 100.00% byte-match acceptance test is unaffected.
+

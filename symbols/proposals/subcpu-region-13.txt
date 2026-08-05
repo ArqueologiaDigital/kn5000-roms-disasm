@@ -1,0 +1,1033 @@
+# region 13: 0x0370BF..0x038CF8
+# The effects (EFF) state-application engine and the whole low-level DSP programming
+# layer: the per-slot dirty-flag bookkeeping, the mute/reset/link/volume/parameter
+# application loops driven by DSP_State_Dispatcher, the debug-traced wrappers that push
+# bytecode programs at the two DSP chips, the GPIO bit primitives, and the byte-level
+# packers that turn a 24-bit coefficient into the 5-byte word IC311 expects.
+#
+# METHOD (read before integrating). Every address in this region except five already
+# carries a real, hand-maintained symbol in the AUTHORITATIVE LLVM build
+# (rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf; 178 symbols in range, dumped with
+# `llvm-nm -n`). symbols/subcpu_symbols_reference.txt still shows LABEL_xxxxxx at 133 of
+# them. Those 133 entries below adopt the build's name VERBATIM, so integration is a pure
+# text substitution with zero semantic risk; the documentation is the new work. Twenty
+# further addresses (0x038365..0x0383F7) carry non-LABEL_ names in the reference that
+# differ from the build ONLY in letter case (DEBUG_PRINT_STRING vs Debug_Print_String);
+# per the rules those are LEFT ALONE and argued in [UNCERTAIN]. Five addresses have no
+# symbol in the reference at all and are genuinely new names (no `replaces=`).
+# Verified before proposing: `python3 scripts/build/compare_roms.py` => 100.00% on all 8
+# LLVM ROMs and all 6 ASL ROMs (15 "Similarity: 100.00%" lines, zero others).
+# Disassembly cross-checks done with
+# `/home/fsanches/compartilhado/mame/unidasm <slice> -arch tlcs900 -basepc 0xADDR` on the
+# 0x30000-byte payload at file offset (addr - 0x00EF00); the base check is that 0x0370BF
+# decodes to `ld BC,DE / mul BC,0x0032 / add BC,0x0010 / lda XHL,0x4958`, exactly the
+# prologue the LLVM source shows for EFF_DspChannel_Init_MultiTableDirty.
+# Naming style: the whole region is CamelCase-with-subsystem-prefix (EFF_*, DSP_*) in
+# both sources, so the five new names follow that and not UPPER_SNAKE.
+#
+# THE FOUR DATA STRUCTURES THAT EXPLAIN THE WHOLE REGION (all measured from the code,
+# every address confirmed by unidasm, none assumed):
+#
+# (A) THE CONFIG BLOCK -- 290 bytes (0x91 words; that is the LDIRW count used by
+#     DSP_StateTable_Reset and by the two snapshot routines at 0x037E3E/0x037E50).
+#     Layout, established here:
+#       +0x00 u16 flagA  -- "rewrite the common header" (tested at 0x037A9E, 0x037D8C)
+#       +0x02 u16 flagB  -- "algorithm changed"        (tested at 0x037A78, 0x037D93)
+#       +0x04 u16 flagC  -- "cold / full reload"       (tested at 0x037D72, 0x037A82,
+#                           0x0379C6, 0x037A19, 0x038032)
+#       +0x06 u16 mode   -- 0 or 1; DSP_Config_ClampLimits (outside the region) forces
+#                           anything >1 to 0. Passed to EFF_Disconnect / EFF_Link.
+#       +0x08 + 56*slot  -- five 56-byte PER-SLOT RECORDS (slot = 0..4).
+#     PER-SLOT RECORD (56 = 0x38 bytes; the stride is computed everywhere in this region
+#     by the idiom `xbc=slot; sll 3 (=*8); sub xwa (=*7); sll 3 (=*56); inc 8`):
+#       +0x00 u16  EFFECT NUMBER, 0..127. Index into the class table at 0x012226 and into
+#                  the algorithm/parameter pointer tables at 0x01ED7C / 0x01EF0C.
+#       +0x04 .. +0x24  seventeen u16 PARAMETER VALUES, param[0..16]. Proof: they are read
+#                  as block+12+56*slot+2*param (0x038246, 0x0382AB), i.e. record+4+2*param,
+#                  and the parameter loop is clamped to 0x11 = 17 entries at 0x0378A0.
+#       +0x26 u16  index (into that array) of the VOLUME parameter. Skipped by the normal
+#                  parameter iterator (0x0378D6) precisely because EFF_VolumeLoop owns it.
+#       +0x2C u16  PARAMETER COUNT, clamped to 17.
+#       +0x2E u16  parameter base index (only slot 0's copy is used, see 0x037127).
+#       +0x1E u16  variant flag; bit 0 selects one of the two parameter-edit ORDER lists
+#                  at 0x0122A6 / 0x0122B1 (0x037920).
+#       +0x36 u16  LINK flag: 1 = this slot is linked into the chain, 0 = it is not.
+#     Three instances of this block exist in DRAM: the working copy the caller fills in at
+#     0x045324, the SHADOW ("last applied") copy at 0x0045CA, and a pair at 0x0046EC /
+#     0x00480E that only the two dead snapshot routines touch (see [UNCERTAIN]).
+#
+# (B) THE PER-SLOT DIRTY-FLAG BLOCK -- 5 blocks of 50 bytes (25 u16) based at 0x004940,
+#     block n at 0x004940 + 50*n. Every `mul <r>,0x32` in this region is this stride, and
+#     the highest word any code touches, 0x004960+0x10 = 0x004970, is exactly the 25th and
+#     last word of block n -- that is the proof of the 50-byte size.
+#       +0x00 (0x004940) slot needs (re)programming        (0x037781, 0x0379B2, 0x037A96,
+#                                                           0x037DD2)
+#       +0x02 (0x004942) coefficient block A dirty
+#       +0x04..+0x24 (0x004944..0x004964) seventeen PER-PARAMETER dirty flags,
+#                    param i at 0x004944 + 50*n + 2*i  (0x0378BC, 0x03794E, 0x037C4C)
+#       +0x26 (0x004966) coefficient block B dirty
+#       +0x28..+0x2C (0x004968/0x00496A/0x00496C) three auxiliary dirty flags
+#       +0x2E (0x00496E) LINK dirty          (0x037AFE, 0x037B5F, 0x037BBC)
+#       +0x30 (0x004970) VOLUME dirty        (0x037997, 0x0376F8)
+#
+# (C) THE SMALL GLOBALS just below the shadow block, all 16-bit-direct addressable:
+#       0x004930 + 2*n  EFF_SlotActive[5]   u16, 1 = slot n currently carries an effect
+#       0x00493A + 2*c  DSP_ChipActive[2]   u16, 1 = chip c takes part (c: 0 = IC311
+#                       "DSP1", 1 = IC310 "DSP2"); gates DSP_MuteLoop / DSP_UnmuteLoop
+#       0x00493E        global "algorithm change pending" u16 (DSP_AlgorithmChangeCheck)
+#       0x0045BC + 2*n  per-slot DSP-class cache, written as classtable[eff]+1 or 0
+#       0x0045C8        apply-result word, cleared then returned by DSP_State_ApplyAll
+#       0x001040        32-bit tick counter that DSP_WaitForDelay spins on
+#
+# (D) THE SLOT->HARDWARE TABLES at 0x01ED6D and 0x01ED72 (5 bytes each; see [DATA]).
+#     0x01ED6D = { 0, 0, 1, 1, 1 } maps effect slot -> DSP chip number, and it is that
+#     byte -- not the slot -- that EFF_Disconnect / EFF_Link / EFF_WriteHeader pass to
+#     DSP_WriteGlobalConfig. 0x01ED72 = { 28, 24, 46, 20, 20 } is the per-slot settle time
+#     in milliseconds that the loops max-reduce and hand to DSP_ScheduleDelay.
+
+[LABEL] 0x0370BF EFF_DspChannel_Init_MultiTableDirty  replaces=LABEL_0370BF  confidence=high
+; Body of EFF_DspChannel_InitFlags, inside its slot loop (DE = slot, 0..4). Marks the five
+; multi-table / auxiliary dirty words of the slot unconditionally dirty:
+; 0x004968, 0x00496A, 0x00496C, 0x00496E (link) and 0x004970 (volume), each + 50*DE.
+; Then, ONLY when DE == 1, it reaches across into SLOT 0's flags: it takes slot 0's volume
+; parameter index n = block[+0x2E] (= record 0 field +0x26) and marks slot 0's parameter
+; n+1 dirty at 0x004946 + 2*n -- or n+2 (0x004948 + 2*n) when slot 0's effect is 0x35 or
+; 0x0F. This cross-slot dependency is the only place in the region where one slot's flags
+; are written from another slot's iteration.
+
+[LABEL] 0x037159 EFF_DspChannel_Init_AlgoTypePath  replaces=LABEL_037159  confidence=high
+; The "+2 instead of +1" arm of the cross-slot marking above, taken when slot 0's effect
+; number is 0x35 or 0x0F (the two algorithms with a reordered parameter list).
+
+[LABEL] 0x03716D EFF_DspChannel_Init_OuterNext  replaces=LABEL_03716D  confidence=high
+; Join point: loads the slot's effect number from block+8+56*DE and, if it is 0x27, falls
+; into the five three-parameter coalescing blocks below; otherwise jumps straight to the
+; 0x4F test at EFF_DspChanInit_AlgoType9_Dirty.
+
+[LABEL] 0x0371CE EFF_DspChanInit_AlgoType0_Dirty  replaces=LABEL_0371CE  confidence=high
+; Effect 0x27, band 0: if any of param[0..2] is dirty, mark param[0] dirty and clear
+; param[1] and param[2]. Five such blocks follow, covering param[0..14] in groups of
+; three -- five bands of three values each (frequency / Q / gain), which is the shape of
+; the PARAMETRIC EQ described in kn5000-docs/effects-dsp.md. Coalescing to the first flag
+; is what makes the DSP-side biquad get designed once per band instead of three times.
+
+[LABEL] 0x037210 EFF_DspChanInit_AlgoType1_Dirty  replaces=LABEL_037210  confidence=high
+; Effect 0x27, band 1 test: is any of param[3..5] dirty?
+
+[LABEL] 0x037258 EFF_DspChanInit_AlgoType2_Dirty  replaces=LABEL_037258  confidence=high
+; Effect 0x27, band 1 coalesce: set param[3], clear param[4] and param[5].
+
+[LABEL] 0x03729A EFF_DspChanInit_AlgoType3_Dirty  replaces=LABEL_03729A  confidence=high
+; Effect 0x27, band 2 test: is any of param[6..8] dirty?
+
+[LABEL] 0x0372E2 EFF_DspChanInit_AlgoType4_Dirty  replaces=LABEL_0372E2  confidence=high
+; Effect 0x27, band 2 coalesce: set param[6], clear param[7] and param[8].
+
+[LABEL] 0x037324 EFF_DspChanInit_AlgoType5_Dirty  replaces=LABEL_037324  confidence=high
+; Effect 0x27, band 3 test: is any of param[9..11] dirty?
+
+[LABEL] 0x03736C EFF_DspChanInit_AlgoType6_Dirty  replaces=LABEL_03736C  confidence=high
+; Effect 0x27, band 3 coalesce: set param[9], clear param[10] and param[11].
+
+[LABEL] 0x0373AE EFF_DspChanInit_AlgoType7_Dirty  replaces=LABEL_0373AE  confidence=high
+; Effect 0x27, band 4 test: is any of param[12..14] dirty?
+
+[LABEL] 0x0373F6 EFF_DspChanInit_AlgoType8_Dirty  replaces=LABEL_0373F6  confidence=high
+; Effect 0x27, band 4 coalesce: set param[12], clear param[13] and param[14].
+
+[LABEL] 0x037438 EFF_DspChanInit_AlgoType9_Dirty  replaces=LABEL_037438  confidence=high
+; Effect 0x4F path. If the slot's effect number is 0x4F, coalesce four PAIRS instead of
+; five triples: param[1]->param[0], param[3]->param[2], param[5]->param[4],
+; param[7]->param[6]; in each pair the odd flag is cleared. Otherwise jump to the 0x35 /
+; 0x0F test at EFF_DspChanInit_AlgoType4F_Epilogue.
+
+[LABEL] 0x037495 EFF_DspChanInit_AlgoType4F_SubA  replaces=LABEL_037495  confidence=high
+; Effect 0x4F, pair 2: if param[3] is dirty, set param[2] and clear param[3].
+
+[LABEL] 0x0374D9 EFF_DspChanInit_AlgoType4F_SubB  replaces=LABEL_0374D9  confidence=high
+; Effect 0x4F, pair 3: if param[5] is dirty, set param[4] and clear param[5].
+
+[LABEL] 0x03751D EFF_DspChanInit_AlgoType4F_SubC  replaces=LABEL_03751D  confidence=high
+; Effect 0x4F, pair 4: if param[7] is dirty, set param[6] and clear param[7].
+
+[LABEL] 0x037561 EFF_DspChanInit_AlgoType4F_Epilogue  replaces=LABEL_037561  confidence=high
+; Dispatch on the slot's effect number for the remaining special cases: 0x35 and 0x0F go
+; to EFF_DspChanInit_AlgoType35_Dirty, everything else falls through to the 0x3F test at
+; EFF_DspChanInit_AlgoType35_SubC.
+
+[LABEL] 0x037592 EFF_DspChanInit_AlgoType35_Dirty  replaces=LABEL_037592  confidence=high
+; Effects 0x35 / 0x0F. Gate: only if param[13] is dirty. Then, depending on the record's
+; variant flag (+0x1E == 1), mark either {param[3], param[8], param[5], param[10]} or
+; {param[4], param[9], param[6], param[11]} dirty -- the two interleaved halves that the
+; two parameter-order lists at 0x0122A6 / 0x0122B1 walk.
+
+[LABEL] 0x03761E EFF_DspChanInit_AlgoType35_SubA  replaces=LABEL_03761E  confidence=high
+; The variant-flag == 0 half: mark param[4], param[9], param[6], param[11] dirty.
+
+[LABEL] 0x037676 EFF_DspChanInit_AlgoType35_SubB  replaces=LABEL_037676  confidence=high
+; Join of the two halves: also mark the slot's VOLUME dirty flag (0x004970 + 50*slot).
+
+[LABEL] 0x03768E EFF_DspChanInit_AlgoType35_SubC  replaces=LABEL_03768E  confidence=high
+; Effect 0x3F path: if param[1] or param[2] is dirty, mark param[0] (the level) dirty.
+; param[0] is the value EFF_VolumeLoop later rewrites through the 0x0122C4 table.
+
+[LABEL] 0x0376D6 EFF_DspChanInit_AlgoType35_SubD  replaces=LABEL_0376D6  confidence=high
+; Effect 0x3F: perform that param[0] marking.
+
+[LABEL] 0x0376EC EFF_DspChanInit_AlgoType35_SubE  replaces=LABEL_0376EC  confidence=high
+; Common tail for effect 0x3F and for every effect that took none of the special paths:
+; mark the slot's VOLUME dirty flag (0x004970 + 50*slot).
+
+[LABEL] 0x037702 EFF_DspChanInit_AlgoType35_SubF  replaces=LABEL_037702  confidence=high
+; If the slot's LINK dirty flag (0x00496E + 50*slot) is set, also mark the parameter that
+; the record names as the volume parameter (record +0x26) dirty, at
+; 0x004944 + 50*slot + 2*record[+0x26]. A link change therefore always forces the level to
+; be re-sent, which is what stops a re-linked slot coming back at the wrong gain.
+
+[LABEL] 0x037746 EFF_DspChanInit_AlgoType35_Epilogue  replaces=LABEL_037746  confidence=high
+; Slot-loop step: DE += 1, repeat while DE < 5, then return from EFF_DspChannel_InitFlags.
+
+[ROUTINE] 0x03774E EFF_StateLoad_Prepare  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = pointer to the new 290-byte config block (in practice 0x045324).
+; Runs the three flag-preparation passes in order, re-supplying XWA to each because they
+; clobber it: EFF_SlotActive_UpdateFlags (rebuild 0x004930[]), EFF_DSPLink_ResetFlags, and
+; EFF_DspChannel_InitFlags (the dirty-flag coalescing documented above). Called only from
+; DSP_State_DiffAndPrepare, which is itself called only from DSP_State_ApplyAll.
+
+[ROUTINE] 0x037760 EFF_MuteLoop  confidence=high
+; Mute every ACTIVE effect slot before the reprogramming burst.
+; Entry: XWA = new config block (accepted but NOT used -- see below). Uses IZ = slot 0..4.
+; For each slot whose EFF_SlotActive word (0x004930 + 2*slot) is 1:
+;   - if the slot's "needs programming" flag (0x004940 + 50*slot) is 1 AND the effect
+;     number taken from the SHADOW block (0x0045D2 + 56*slot, i.e. shadow+8+56*slot)
+;     has a non-zero entry in the class table at 0x012226, then latch
+;     0x0045BC + 2*slot = 1;
+;   - unconditionally call EFF_Mute_WithDebug(slot) and remember that something was muted.
+; If anything was muted, finish with DSP_ScheduleDelay(0x14) = a 20 ms settle.
+; NOTE, measured: this routine reads the SHADOW copy of the effect number while every
+; other loop in the dispatcher reads the NEW block. That asymmetry is deliberate -- you
+; have to mute what is currently loaded, not what is about to be.
+
+[LABEL] 0x037769 EFF_MuteLoop_SlotBody  replaces=LABEL_037769  confidence=high
+; Per-slot body: the EFF_SlotActive test, the dirty + class-table test, and the
+; 0x0045BC latch.
+
+[LABEL] 0x0377BD EFF_MuteLoop_NoMute  replaces=LABEL_0377BD  confidence=high
+; Fall-through target: issues EFF_Mute_WithDebug(slot) and sets the "something was muted"
+; flag. Reached whether or not the 0x0045BC latch was taken -- the name in the build is
+; slightly misleading, this path DOES mute.
+
+[LABEL] 0x0377C5 EFF_MuteLoop_SlotNext  replaces=LABEL_0377C5  confidence=high
+; Slot-loop step: IZ += 1, repeat while IZ < 5.
+
+[LABEL] 0x0377CB EFF_MuteLoop_Epilogue  replaces=LABEL_0377CB  confidence=high
+; If at least one slot was muted, DSP_ScheduleDelay(20 ms).
+
+[LABEL] 0x0377D6 EFF_MuteLoop_NoFlush  replaces=LABEL_0377D6  confidence=high
+; Nothing was muted: skip the settle delay and return.
+
+[ROUTINE] 0x0377D8 DSP_ResetLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; Hardware-resets both DSP chips: DSP_Reset_WithDebug(0), DSP_Reset_WithDebug(1).
+; Taken instead of EFF_MuteLoop when the config block's flagC (+0x04) is 1, i.e. on a cold
+; or full reload. Note that DSP_Reset_WithDebug ignores its argument for the pin sequence.
+
+[LABEL] 0x0377DF DSP_ResetLoop_Body  replaces=LABEL_0377DF  confidence=high
+; Chip loop body, IZ = 0..1.
+
+[LABEL] 0x0377EB DSP_ResetLoop_Epilogue  replaces=LABEL_0377EB  confidence=high
+; Restore IZ and return.
+
+[ROUTINE] 0x0377ED DSP_MuteLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; For each chip c in 0..1 whose DSP_ChipActive word (0x00493A + 2*c) is 1, call
+; DSP_Mute_WithDebug(c), which uploads the chip-mute bytecode program selected from the
+; pointer table at 0x01F3D0.
+
+[LABEL] 0x0377F4 DSP_MuteLoop_Body  replaces=LABEL_0377F4  confidence=high
+; Chip loop body: the 0x00493A + 2*c test and the DSP_Mute_WithDebug call.
+
+[LABEL] 0x03780C DSP_MuteLoop_Next  replaces=LABEL_03780C  confidence=high
+; Chip-loop step.
+
+[LABEL] 0x037812 DSP_MuteLoop_Epilogue  replaces=LABEL_037812  confidence=high
+; Restore IZ and return.
+
+[ROUTINE] 0x037814 DSP_UnmuteLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; Mirror of DSP_MuteLoop using DSP_Unmute_WithDebug and the pointer table at 0x01F3E0.
+; The firmware's own debug string for this operation is "DSP %d antimute".
+
+[LABEL] 0x03781B DSP_UnmuteLoop_Body  replaces=LABEL_03781B  confidence=high
+; Chip loop body: same 0x00493A + 2*c gate.
+
+[LABEL] 0x037833 DSP_UnmuteLoop_Next  replaces=LABEL_037833  confidence=high
+; Chip-loop step.
+
+[LABEL] 0x037839 DSP_UnmuteLoop_Epilogue  replaces=LABEL_037839  confidence=high
+; Restore IZ and return.
+
+[ROUTINE] 0x03783B DSP_AlgorithmChangeCheck  confidence=high
+; Already correctly named in both sources; documented here only.
+; If the global "algorithm change pending" word at 0x00493E is 1, tail-call
+; DSP_AlgorithmChange (0x03800D) with XWA still pointing at the config block; otherwise
+; return immediately. The flag is set by DSP_AlgoChange_CheckAndFlag, outside this region.
+
+[ROUTINE] 0x037848 Unsigned_Max_Select  confidence=high
+; Already correctly named in both sources; documented here only.
+; HL = max(WA, BC), unsigned (`cp bc,wa / jr ule` keeps WA when BC <= WA). Used only to
+; reduce the per-slot settle times from 0x01ED72 down to a single worst case that is then
+; handed to DSP_ScheduleDelay.
+
+[LABEL] 0x03784E Unsigned_Max_Select_Return  replaces=LABEL_03784E  confidence=high
+; Move the winner into HL and return.
+
+[ROUTINE] 0x037851 EFF_ParamIterator_Process  confidence=high
+; Already correctly named in both sources; documented here only.
+; Send every dirty parameter of one slot to its DSP.
+; Entry: WA = slot, XBC = config block. Frame of 6 bytes; slot at (xsp+8), block at
+; (xsp+4).
+; Two paths, chosen on the slot's effect number:
+;  - GENERIC: iterate i = 0 .. min(record[+0x2C], 17) - 1. Skip i if the parameter's dirty
+;    flag (0x004944 + 50*slot + 2*i) is not 1, and skip i if i equals the record's volume
+;    parameter index (record[+0x26]) -- EFF_VolumeLoop owns that one. Otherwise call
+;    EFF_ParamEdit_WithDebug(slot, effectnumber, i, block).
+;  - ORDERED, for effect 0x0F and effect 0x35 only: walk a byte list instead of a counter.
+;    XIZ = 0x0122A6 + 11 * (record[+0x1E] & 1), i.e. list A or list B; the list is walked
+;    until the byte 0x0C is found. Same dirty-flag test, same EFF_ParamEdit_WithDebug call.
+;    The two lists differ only in their middle four entries, which is how the firmware
+;    programs the "other half" of that algorithm's paired parameters.
+; Calls out to: EFF_ParamEdit_WithDebug (0x038200) -> DSP_WriteParameter (bytecode
+; interpreter, outside the region).
+
+[LABEL] 0x0378A4 EFF_ParamIter_CountClamp  replaces=LABEL_0378A4  confidence=high
+; The parameter count from record[+0x2C] has just been clamped to 0x11 = 17; start the
+; generic loop with IZ = 0.
+
+[LABEL] 0x0378AC EFF_ParamIter_StdLoop  replaces=LABEL_0378AC  confidence=high
+; Generic-path loop body: dirty test at 0x004944 + 50*slot + 2*IZ, volume-index skip, and
+; the EFF_ParamEdit_WithDebug call.
+
+[LABEL] 0x037903 EFF_ParamIter_StdLoopNext  replaces=LABEL_037903  confidence=high
+; Generic-path loop step: IZ += 1, repeat while IZ < the clamped count.
+
+[LABEL] 0x03790C EFF_ParamIter_SpecialAlgoPath  replaces=LABEL_03790C  confidence=high
+; Effects 0x0F / 0x35: select the parameter-order list, XIZ = 0x0122A6 + 11*(rec[+0x1E]&1)
+; (encoded as `lda XIZ,XBC+WA`), and bail out immediately if the first byte is the 0x0C
+; terminator.
+
+[LABEL] 0x03793A EFF_ParamIter_SpecialLoop  replaces=LABEL_03793A  confidence=high
+; Ordered-path loop body: parameter index comes from (XIZ), same dirty test, same
+; EFF_ParamEdit_WithDebug call.
+
+[LABEL] 0x037980 EFF_ParamIter_SpecialLoopNext  replaces=LABEL_037980  confidence=high
+; Ordered-path loop step: advance XIZ, stop on the 0x0C terminator.
+
+[LABEL] 0x037987 EFF_ParamIter_Epilogue  replaces=LABEL_037987  confidence=high
+; Restore XIZ, drop the 6-byte frame, return.
+
+[ROUTINE] 0x03798B EFF_VolumeChange_Check  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, XBC = config block. If the slot's VOLUME dirty word
+; (0x004970 + 50*slot) is 1, run EFF_ParamIterator_Process for that slot; otherwise return
+; without touching the DSP. Called from EFF_Change_Handler's epilogue, so a parameter
+; sweep only happens for slots whose volume word was marked -- which is why
+; EFF_DspChannel_InitFlags is so careful to set 0x004970.
+
+[ROUTINE] 0x0379A7 EFF_Change_Handler  confidence=high
+; Already correctly named in both sources; documented here only.
+; Apply one slot's algorithm/data change.
+; Entry: WA = slot, XBC = config block. Returns nothing.
+; 1. Do nothing at all unless the slot's "needs programming" flag (0x004940 + 50*slot)
+;    is 1.
+; 2. Disconnect the slot first: EFF_Disconnect(slot, block[+0x06]) -- unconditionally for
+;    slots != 2, and for slot 2 only when block[+0x04] (cold reload) is not 1.
+; 3. Dispatch: slots 2, 3, 4 take the "algo vs data" fork -- EFF_Change_WithDebug when
+;    block[+0x04] == 1, EFF_DataChange_WithDebug otherwise. Slots 0 and 1 always take
+;    EFF_Change_WithDebug.
+; 4. Finish with EFF_VolumeChange_Check(slot, block).
+
+[LABEL] 0x0379E2 EFF_Change_Handler_NonSlot2  replaces=LABEL_0379E2  confidence=high
+; Slots other than 2: disconnect unconditionally.
+
+[LABEL] 0x0379EE EFF_Change_Handler_SlotDispatch  replaces=LABEL_0379EE  confidence=high
+; Post-disconnect fork on the slot number (2, 3, 4 vs 0, 1).
+
+[LABEL] 0x037A19 EFF_Change_Handler_Slot234_AlgoPath  replaces=LABEL_037A19  confidence=high
+; Slots 2/3/4 with block[+0x04] == 1: full algorithm upload via EFF_Change_WithDebug.
+
+[LABEL] 0x037A40 EFF_Change_Handler_Slot234_AltPath  replaces=LABEL_037A40  confidence=high
+; Slots 2/3/4 otherwise: coefficient-only upload via EFF_DataChange_WithDebug.
+
+[LABEL] 0x037A5B EFF_Change_Handler_Epilogue  replaces=LABEL_037A5B  confidence=high
+; Tail: EFF_VolumeChange_Check(slot, block), restore IZ, drop the 4-byte frame.
+
+[ROUTINE] 0x037A67 EFF_HeaderChangeDataLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; The main reprogramming sweep. Entry: XWA = config block. Frame of 4 bytes; block at
+; (xsp+4). Uses QIZ (the alternate register bank word, `ldiw_erp 0xFA`) as the running
+; worst-case settle time, initialised to 0.
+; Walks slots from 4 DOWN TO 0 (the descending order matters: the chain is torn down from
+; the tail). For each slot:
+;   - if block[+0x02] == 1 (algorithm changed) or block[+0x04] == 1 (cold reload), first
+;     call EFF_WriteHeader(slot);
+;   - if the slot is dirty (0x004940 + 50*slot == 1) or block[+0x00] == 1, fold the slot's
+;     settle time byte from 0x01ED72 into the running maximum via Unsigned_Max_Select;
+;   - call EFF_Change_Handler(slot, block).
+; When the sweep ends, if the accumulated maximum is non-zero, DSP_ScheduleDelay(max)
+; blocks the task for that many milliseconds. With the shipped table the worst case is 46.
+
+[LABEL] 0x037A78 EFF_HeaderChangeLoop_Body  replaces=LABEL_037A78  confidence=high
+; Slot body: the two header-rewrite tests on block[+0x02] and block[+0x04].
+
+[LABEL] 0x037A8C EFF_HeaderChangeLoop_CallAlgo  replaces=LABEL_037A8C  confidence=high
+; Issue EFF_WriteHeader(slot).
+
+[LABEL] 0x037A92 EFF_HeaderChangeLoop_PostAlgo  replaces=LABEL_037A92  confidence=high
+; Dirty test on 0x004940 + 50*slot, then the block[+0x00] fallback test.
+
+[LABEL] 0x037AAF EFF_HeaderChangeLoop_ActiveSlot  replaces=LABEL_037AAF  confidence=high
+; Fold this slot's settle time -- byte (0x01ED72 + slot), read with `ld A,(XWA+IZ)` -- into
+; the QIZ running maximum through Unsigned_Max_Select.
+
+[LABEL] 0x037AC6 EFF_HeaderChangeLoop_CallChange  replaces=LABEL_037AC6  confidence=high
+; Call EFF_Change_Handler(slot, block) and step the descending slot counter.
+
+[LABEL] 0x037AD6 EFF_HeaderChangeLoop_Epilogue  replaces=LABEL_037AD6  confidence=high
+; If the accumulated maximum settle time is non-zero, DSP_ScheduleDelay(max).
+
+[LABEL] 0x037AE2 EFF_HeaderChangeLoop_SkipApply  replaces=LABEL_037AE2  confidence=high
+; No slot asked for a settle: restore XIZ, drop the frame, return.
+
+[ROUTINE] 0x037AE6 EFF_LinkLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Slots 4 down to 0. For each slot whose LINK dirty flag
+; (0x00496E + 50*slot) is 1 AND whose record field +0x36 is 1, call
+; EFF_Link(slot, block[+0x06]) -- i.e. connect the slot into the effect chain by uploading
+; the link bytecode program from the pointer table at 0x01F404.
+
+[LABEL] 0x037AF4 EFF_LinkLoop_Body  replaces=LABEL_037AF4  confidence=high
+; Slot body: the 0x00496E + 50*slot test, then `lda XWA,XWA+BC` to reach
+; block + 8 + 56*slot and test its +0x36 link flag.
+
+[LABEL] 0x037B31 EFF_LinkLoop_Next  replaces=LABEL_037B31  confidence=high
+; Descending slot step.
+
+[LABEL] 0x037B39 EFF_LinkLoop_Epilogue  replaces=LABEL_037B39  confidence=high
+; Restore IZ, drop the frame, return.
+
+[ROUTINE] 0x037B3D EFF_SecondaryLinkPath  confidence=high
+; Already correctly named in both sources; documented here only.
+; The mirror of EFF_LinkLoop for slots that are being taken OUT of the chain
+; (record +0x36 == 0). Entry: XWA = config block. Two descending passes over slots 4..0,
+; the slot counter living in QIZ:
+;  - Pass 1 only measures: for every slot with the LINK dirty flag set and +0x36 == 0,
+;    max-reduce a constant 0x14 (20 ms). If anything matched, DSP_ScheduleDelay(20).
+;  - Pass 2 acts: same predicate, but slots 2 and 3 are EXEMPT (they are the pair whose
+;    disconnect is handled by EFF_Change_Handler instead). Everything else gets
+;    EFF_Disconnect(slot, block[+0x06]). Each matching slot folds its own settle time from
+;    0x01ED72 into a second maximum, and pass 2 ends with another DSP_ScheduleDelay.
+; So an unlink costs up to two scheduled delays, 20 ms plus up to 46 ms.
+
+[LABEL] 0x037B4F EFF_SecLinkPath_Pass1Body  replaces=LABEL_037B4F  confidence=high
+; Pass 1 body: link-dirty test plus the +0x36 == 0 test, then max-reduce 0x14.
+
+[LABEL] 0x037B8C EFF_SecLinkPath_Pass1Next  replaces=LABEL_037B8C  confidence=high
+; Pass 1 descending step (decrements the QIZ slot counter).
+
+[LABEL] 0x037B96 EFF_SecLinkPath_Pass1Epilogue  replaces=LABEL_037B96  confidence=high
+; If pass 1 matched anything, DSP_ScheduleDelay(20 ms) before pass 2 runs.
+
+[LABEL] 0x037BA0 EFF_SecLinkPath_Pass2Start  replaces=LABEL_037BA0  confidence=high
+; Reset the accumulator and the QIZ slot counter for pass 2.
+
+[LABEL] 0x037BAC EFF_SecLinkPath_Pass2Body  replaces=LABEL_037BAC  confidence=high
+; Pass 2 body: same predicate; slots 3 and 2 skip the EFF_Disconnect call.
+
+[LABEL] 0x037BF6 EFF_SecLinkPath_Pass2MaxVol  replaces=LABEL_037BF6  confidence=high
+; Fold this slot's settle time byte (0x01ED72 + slot) into the pass-2 maximum. The build's
+; name is a little off -- this is a settle-time reduction, not a volume one.
+
+[LABEL] 0x037C0D EFF_SecLinkPath_Pass2Next  replaces=LABEL_037C0D  confidence=high
+; Pass 2 descending step.
+
+[LABEL] 0x037C17 EFF_SecLinkPath_Pass2Epilogue  replaces=LABEL_037C17  confidence=high
+; If pass 2 matched anything, DSP_ScheduleDelay(max).
+
+[LABEL] 0x037C21 EFF_SecLinkPath_Epilogue  replaces=LABEL_037C21  confidence=high
+; Restore XIZ, drop the frame, return.
+
+[ROUTINE] 0x037C25 EFF_VolumeLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Slots 0..4 ascending. For each slot, look up its volume
+; parameter index v = record[+0x26] and test that parameter's dirty flag
+; (0x004944 + 50*slot + 2*v). If it is set:
+;   - SPECIAL CASE effect 0x3F: recompute the level in place. Read the byte
+;     table[0x0122C4 + record[+0x06]] (values 99,70,50,40,20,10,5,0), subtract it from
+;     record[+0x04] (= param[0]) and store the difference back into record[+0x04],
+;     flooring at 0. This is the only place in the region that MUTATES the config block.
+;   - Then call EFF_VolumeUpdate_WithDebug(slot, effectnumber, v, block).
+; The mutation matters for emulation: the block the caller handed in is not read-only.
+
+[LABEL] 0x037C32 EFF_VolumeLoop_Body  replaces=LABEL_037C32  confidence=high
+; Slot body: the record[+0x26] lookup, the dirty test, and the effect-0x3F fork.
+
+[LABEL] 0x037D16 EFF_VolumeLoop_ApplyDelta  replaces=LABEL_037D16  confidence=high
+; Join point: push the block pointer and call EFF_VolumeUpdate_WithDebug.
+
+[LABEL] 0x037D35 EFF_VolumeLoop_Next  replaces=LABEL_037D35  confidence=high
+; Ascending slot step, repeat while slot < 5.
+
+[LABEL] 0x037D3C EFF_VolumeLoop_Epilogue  replaces=LABEL_037D3C  confidence=high
+; Restore IZ, drop the frame, return.
+
+[ROUTINE] 0x037D40 EFF_DisconnectLoop  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Slots 4 down to 0, SKIPPING slots 3 and 2, calls
+; EFF_Disconnect(slot, block[+0x06]). Reached only on the cold-reload / header-rewrite
+; path of DSP_State_Dispatcher, right after a header write with slot argument 0.
+
+[LABEL] 0x037D4E EFF_DisconnectLoop_Body  replaces=LABEL_037D4E  confidence=high
+; Slot body: the slot == 3 and slot == 2 skips, then EFF_Disconnect.
+
+[LABEL] 0x037D62 EFF_DisconnectLoop_Next  replaces=LABEL_037D62  confidence=high
+; Descending slot step.
+
+[LABEL] 0x037D6A EFF_DisconnectLoop_Epilogue  replaces=LABEL_037D6A  confidence=high
+; Restore IZ, drop the frame, return.
+
+[ROUTINE] 0x037D6E DSP_State_Dispatcher  confidence=high
+; Already correctly named in both sources; documented here only.
+; THE ORCHESTRATOR OF THIS ENTIRE REGION. Entry: XWA = the new 290-byte config block,
+; kept in XIZ throughout. Called only from DSP_State_ApplyAll, which is called only from
+; DSP_State_LoadAndApplyAll (0x038DEF area) -- it is NOT in the Audio_Main_Loop hot path.
+; Exact order of operations:
+;   1. block[+0x04] == 1 (cold reload) ? DSP_ResetLoop : EFF_MuteLoop
+;   2. DSP_MuteLoop            (per-chip mute)
+;   3. DSP_AlgorithmChangeCheck (uploads the common header set if 0x00493E is pending)
+;   4. if block[+0x04] == 1 or block[+0x02] != 1:
+;        EFF_WriteHeader(0), then EFF_DisconnectLoop
+;   5. DSP_UnmuteLoop
+;   6. EFF_HeaderChangeDataLoop   (the per-slot reprogramming sweep)
+;   7. EFF_LinkLoop               (connect slots whose +0x36 is 1)
+;   8. EFF_VolumeLoop             (levels)
+;   9. EFF_SecondaryLinkPath      (disconnect slots whose +0x36 is 0)
+;  10. refresh the per-slot class cache: for slots 4..0, if the slot is dirty
+;      (0x004940 + 50*slot == 1), write 0x0045BC + 2*slot = classtable[effectnumber] + 1,
+;      or 0 when the class byte is 0.
+; Everything the chips see comes out of steps 1-9; step 10 is bookkeeping only.
+
+[LABEL] 0x037D7D DSP_StateDispatcher_MutePath  replaces=LABEL_037D7D  confidence=high
+; Warm path: EFF_MuteLoop instead of a hardware reset.
+
+[LABEL] 0x037D82 DSP_StateDispatcher_PostMute  replaces=LABEL_037D82  confidence=high
+; Join: DSP_MuteLoop then DSP_AlgorithmChangeCheck.
+
+[LABEL] 0x037D98 DSP_StateDispatcher_DisconnectPath  replaces=LABEL_037D98  confidence=high
+; EFF_WriteHeader(0) followed by EFF_DisconnectLoop -- the chain teardown.
+
+[LABEL] 0x037DA3 DSP_StateDispatcher_UnmutePath  replaces=LABEL_037DA3  confidence=high
+; The five application loops in sequence: DSP_UnmuteLoop, EFF_HeaderChangeDataLoop,
+; EFF_LinkLoop, EFF_VolumeLoop, EFF_SecondaryLinkPath.
+
+[LABEL] 0x037DC2 DSP_StateDispatcher_AlgoLoop  replaces=LABEL_037DC2  confidence=high
+; Class-cache refresh loop, slots 4..0: reads the NEW block's effect number at
+; block + 8 + 56*slot, indexes the class table at 0x012226, stores value+1 into
+; 0x0045BC + 2*slot.
+
+[LABEL] 0x037E16 DSP_StateDispatcher_AlgoClear  replaces=LABEL_037E16  confidence=high
+; Class byte was 0 (the effect needs no DSP program): clear 0x0045BC + 2*slot.
+
+[LABEL] 0x037E26 DSP_StateDispatcher_AlgoNext  replaces=LABEL_037E26  confidence=high
+; Descending slot step of the class-cache loop.
+
+[LABEL] 0x037E2E DSP_StateDispatcher_Epilogue  replaces=LABEL_037E2E  confidence=high
+; Restore XIZ and return.
+
+[ROUTINE] 0x037E30 DSP_State_LookupAlgoIndex  confidence=high
+; Already correctly named in both sources; documented here only.
+; HL = byte at 0x012226 + WA, zero-extended: the DSP class of an effect number. 0 means
+; "this effect has no DSP program at all"; the shipped table has 46 zeros, 71 ones and
+; 11 twos over effect numbers 0..127.
+
+[ROUTINE] 0x037E3E DSP_State_Dispatcher_Data  confidence=high
+; NAME LEFT UNCHANGED per the rules (it is a real, non-LABEL_ name in both sources), but
+; it is WRONG: this is not data, it is a complete 18-byte routine, and the 18 bytes after
+; it are a second one. See [UNCERTAIN] for the rename argument.
+; What it actually does: XIY = 0x0046EC (source), XIX = 0x00480E (destination), BC = 0x91,
+; LDIRW -- i.e. copy 145 words = 290 bytes, exactly one config block, from 0x0046EC to
+; 0x00480E. Returns HL = 0. A config-block SNAPSHOT/SAVE.
+; It has NO caller: an exhaustive search of the payload's disassembly for the address
+; 0x037E3E (and for the 3-byte little-endian pointer) returns nothing. Dead code.
+
+[ROUTINE] 0x037E50 EFF_ConfigSnapshot_Restore  confidence=high
+; No symbol at this address in symbols/subcpu_symbols_reference.txt -- genuinely new.
+; The exact inverse of the routine above: XIY = 0x00480E (source), XIX = 0x0046EC
+; (destination), BC = 0x91, LDIRW, return HL = 0. Copies 290 bytes back.
+; Also has no caller anywhere in the payload -- dead code. Note that 0x0046EC is exactly
+; 0x0045CA + 290, i.e. the block immediately after the live shadow block, and 0x00480E is
+; 290 bytes after that; this pair is almost certainly a vestige of an earlier RAM layout
+; in which the shadow was double-buffered.
+
+[ROUTINE] 0x037E62 DSP_Reset_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip number, used ONLY for the debug trace ("DSP %d reset", strings at
+; 0x0122CC / 0x0122D2). The pin sequence is fixed and hits BOTH chips regardless of the
+; argument: DSP1_Deassert_Reset, DSP2_Deassert_Reset, DSP1_Assert_Reset,
+; DSP2_Assert_Reset, DSP1_Deassert_Reset. Net effect: DSP1 comes out of reset, DSP2 is
+; LEFT ASSERTED (held in reset) until DSP_AntiReset_WithDebug releases it.
+
+[ROUTINE] 0x037E93 DSP_AntiReset_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip number (trace only; strings 0x0122DA / 0x0122E0, "DSP %d anti reset").
+; Body is a single DSP2_Deassert_Reset -- the release of the reset that
+; DSP_Reset_WithDebug deliberately left asserted. Called from DSP_AlgorithmChange when
+; block[+0x04] == 1.
+
+[ROUTINE] 0x037EB4 EFF_Mute_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = effect slot 0..4. Traces "EFF %d mute" (slot+1 is printed, so the firmware's
+; own logs are 1-based) and then uploads the slot's mute bytecode program:
+; XBC = *(0x01F3BC + 4*slot), then DSP_WriteEFFConfig(slot, program).
+; The five programs are at 0x01EAB4, 0x01EAC8, 0x01EADC, 0x01EAE6, 0x01EAF0.
+
+[ROUTINE] 0x037EE9 DSP_Mute_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip 0..1. Traces "DSP %d mute" and uploads *(0x01F3D0 + 4*chip) via
+; DSP_WriteGlobalConfig(chip, program). Programs at 0x01EA24, 0x01EA39, 0x01EA4E,
+; 0x01EA63 -- the table holds four entries although only two chips exist.
+
+[ROUTINE] 0x037F1C DSP_Unmute_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = chip 0..1. Traces "DSP %d antimute" and uploads *(0x01F3E0 + 4*chip) via
+; DSP_WriteGlobalConfig. Programs at 0x01EA78, 0x01EA87, 0x01EA96, 0x01EAA5.
+
+[ROUTINE] 0x037F4F EFF_Disconnect  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = effect slot 0..4, BC = mode (the config block's +0x06, 0 or 1).
+; Traces "EFF %d disconnect", then:
+;   chip = byte(0x01ED6D + slot)                      -- 0,0,1,1,1
+;   program = *(0x01F3F0 + 12*mode + 4*slot)
+;   DSP_WriteGlobalConfig(chip, program)
+; NOTE THE STRIDE. The pointer table is laid out as two contiguous runs of five 32-bit
+; pointers -- disconnect at 0x01F3F0..0x01F403 and link at 0x01F404..0x01F417 -- i.e. a
+; natural mode stride of 20, but the code computes 12 (`xde = mode*3; sll 2`). See
+; [UNCERTAIN]; with mode == 1 slots 2..4 read pointers out of the link run.
+
+[ROUTINE] 0x037FAE EFF_Link  confidence=high
+; Already correctly named in both sources; documented here only.
+; Byte-for-byte the same shape as EFF_Disconnect with the trace string "EFF %d link" and
+; the base 0x01F404, including the same 12-per-mode stride. Programs at 0x01E602,
+; 0x01E60D, 0x01E618, 0x01E624, 0x01E630.
+
+[ROUTINE] 0x03800D DSP_AlgorithmChange  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: XWA = config block. Traces "argo change %d" (the firmware's own typo for "algo")
+; with block[+0x06] as the argument. Uploads the fixed common-header program at 0x01E63C
+; to chip 0; if block[+0x04] == 1, releases DSP2 from reset via DSP_AntiReset_WithDebug;
+; then falls into EFF_LoadConfigs_ForChannel.
+
+[LABEL] 0x038044 EFF_LoadConfigs_ForChannel  replaces=LABEL_038044  confidence=high
+; The fixed boot-time program sequence, in order:
+;   chip 0: 0x01E6BE
+;   chip 1: 0x01E996, 0x01EA12
+;   DSP_WaitForDelay(1 ms)
+;   chip 1: 0x01E7C5, 0x01E8A7, 0x01E891, 0x01E947
+; These seven programs are the resident microcode that everything else assumes is loaded.
+
+[ROUTINE] 0x0380AB EFF_WriteHeader  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = effect slot. Traces "EFF %d headder" (sic). Looks up chip =
+; byte(0x01ED6D + slot) and, ONLY IF that chip is 0, uploads the header program at
+; 0x01E496 via DSP_WriteGlobalConfig(0, ...). Slots 2, 3 and 4 map to chip 1 and therefore
+; do nothing here at all -- the per-sample common header is an IC311 concept only.
+
+[LABEL] 0x0380EA EFF_WriteHeader_Return  replaces=LABEL_0380EA  confidence=high
+; Chip was not 0: return without touching hardware.
+
+[ROUTINE] 0x0380EC EFF_Change_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number. Traces "EFF %d change %02X".
+; Uploads TWO programs per effect: the algorithm from *(0x01ED7C + 4*eff) and the
+; parameter/coefficient set from *(0x01EF0C + 4*eff), both via DSP_WriteEFFConfig(slot,..).
+; Slot 1 has two hard-coded overrides that bypass the tables entirely:
+;   effect 0x09 -> programs 0x01DFA5 and 0x01E0B9
+;   effect 0x0A -> programs 0x01E1DE and 0x01E342
+; Those two are the only effects in the whole firmware with slot-specific microcode.
+
+[LABEL] 0x038142 EFF_Change_Case0xA  replaces=LABEL_038142  confidence=high
+; Slot 1 / effect 0x0A override: upload 0x01E1DE then 0x01E342.
+
+[LABEL] 0x03815A EFF_Change_GenericLookup  replaces=LABEL_03815A  confidence=high
+; Slot 1, any other effect: the normal 0x01ED7C + 0x01EF0C table pair.
+
+[LABEL] 0x03818A EFF_Change_ChannelNot1  replaces=LABEL_03818A  confidence=high
+; Slots other than 1: the normal 0x01ED7C + 0x01EF0C table pair (a duplicate of the code
+; above, not a shared tail).
+
+[LABEL] 0x0381B8 EFF_Change_Return  replaces=LABEL_0381B8  confidence=high
+; Restore IZ, drop the 2-byte frame, return.
+
+[ROUTINE] 0x0381BC EFF_DataChange_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number. Traces "EFF %d data change %02X". Uploads ONLY the
+; coefficient/parameter program *(0x01EF0C + 4*eff) -- the algorithm microcode is left
+; alone. This is the cheap path taken by EFF_Change_Handler for slots 2/3/4 when the
+; config block is not asking for a cold reload.
+
+[ROUTINE] 0x038200 EFF_ParamEdit_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number, DE = parameter index, plus the config block PUSHED
+; by the caller (read at (xsp+10)); returns with `retd 0x4`, i.e. it pops that argument.
+; Traces "EFF %d para. edit %02X %04X", the last field being the parameter's current value
+; read from block + 12 + 56*slot + 2*paramindex. Then calls DSP_WriteParameter(slot, eff,
+; paramindex, block) -- the bytecode interpreter that walks the effect's parameter
+; descriptor and emits the DSP_Write* sequences documented at the end of this region.
+
+[ROUTINE] 0x03826E EFF_VolumeUpdate_WithDebug  confidence=high
+; Already correctly named in both sources; documented here only.
+; Entry: WA = slot, BC = effect number, DE = parameter index, config block pushed by the
+; caller; `retd 0x4`. Returns immediately (doing nothing) when DE == 0x63 (99), which is
+; the "no volume parameter" sentinel.
+; Traces "EFF %d vol %04X". Then the important part:
+;   - if the record's link flag (+0x36) is non-zero, just DSP_WriteParameter(...);
+;   - if it is ZERO (the slot is being unlinked), the value is TEMPORARILY forced to 0,
+;     DSP_WriteParameter is called with that 0, and the original value is written back
+;     into the block afterwards. That is how a slot is faded out of the chain without
+;     losing the user's level setting.
+
+[LABEL] 0x0382EA EFF_VolumeUpdate_ZeroAndReload  replaces=LABEL_0382EA  confidence=high
+; The unlinked branch: save the value, store 0, send it, restore the value.
+
+[LABEL] 0x03835F EFF_VolumeUpdate_Return  replaces=LABEL_03835F  confidence=high
+; Restore IZ, drop the 6-byte frame, `retd 0x4`.
+
+[ROUTINE] 0x038392 DSP_ScheduleDelay  confidence=high
+; Already correctly named in both sources; documented here only.
+; A one-instruction thunk: `jp 0x036305` (DSP_WaitForDelay). Entry: WA = milliseconds.
+; DSP_WaitForDelay computes target = (WA + 1) >> 1 added to the 32-bit tick counter at
+; 0x001040 and then loops calling TaskSched_PreemptiveYield(3) until 0x001040 reaches it.
+; This is a COOPERATIVE BLOCK, not a spin: the calling task is descheduled. It is the only
+; thing in this region that can suspend the caller for a bounded-by-a-timer amount of
+; time -- see the findings note about the sub->main stall.
+; Call sites in this region: 0x0377D2 (20 ms after muting), 0x037ADE (up to 46 ms after
+; the reprogramming sweep), 0x037B9C and 0x037C1D (the two unlink passes).
+
+[ROUTINE] 0x038405 DSP_WriteParamWord  replaces=LABEL_038405  confidence=high
+; Entry: XWA = 16-bit value, BC = chip number. Sends the value to the chip as two DATA
+; bytes, LOW byte first then HIGH byte, each through DSP_DispatchData. Used only by
+; DSP_WriteParamCmd30, i.e. only on the chip-1 protocol.
+
+[ROUTINE] 0x038439 DSP_WriteParamCmd30  replaces=LABEL_038439  confidence=high
+; The chip-1 (IC310 / "DSP2") parameter protocol, and it is completely different from the
+; IC311 one. Entry: WA = chip, BC = register index, XDE = 16-bit value.
+; Emits: COMMAND 0x30, DATA 0x00, DATA (index & 0xFF), then DSP_WriteParamWord(value).
+; Every DSP_Write*Param routine below funnels into this whenever its chip argument is 1.
+
+[ROUTINE] 0x03846C DSP_WriteFreqParam_AlgoType  replaces=LABEL_03846C  confidence=high
+; Entry: DE = chip, XBC = 24-bit coefficient, WA = index, plus a base index pushed by the
+; caller at (xsp+12); `retd 0x2`.
+; If chip == 1 it delegates to DSP_WriteParamCmd30. On chip 0 it emits an 11-byte
+; sequence: DATA 0x00, 0x00, then the index split as
+;   ((base+index) >> 4 & 0x0F) + 0x10   and   ((base+index) << 4 & 0xF0),
+; then DATA 0x00, DATA 0x0A, and finally the 24-bit value packed into four bytes:
+;   (v >> 17) & 0x7F, (v >> 9) & 0xFF, (v >> 1) & 0xFF, ((v << 7) & 0x80) + 0x15.
+; That 7+8+8+1 split with the 0x15 tag in the last byte is the 36-bit-word packing
+; described in kn5000-docs/effects-dsp.md; the tag distinguishes the destination bank.
+
+[LABEL] 0x038528 DSP_WriteFreqParam_AlgoType_UseCmd30  replaces=LABEL_038528  confidence=high
+; chip == 1: delegate to DSP_WriteParamCmd30.
+
+[LABEL] 0x038533 DSP_WriteFreqParam_AlgoType_Return  replaces=LABEL_038533  confidence=high
+; Restore IZ, drop the 6-byte frame, `retd 0x2`.
+
+[ROUTINE] 0x038539 DSP_WriteFreqParam  replaces=LABEL_038539  confidence=high
+; Identical body to DSP_WriteFreqParam_AlgoType (same 0x10 index bias, same 0x0A opener,
+; same 0x15 tag), differing only in which stack slot supplies the base index. It is the
+; heavily used one: five call sites at 0x0455xx in the parameter interpreter plus the LUT
+; writer at 0x038764, and the pointer 0x038539 appears five times in the ROM's dispatch
+; data (0x03CC47, 0x03CCBF, 0x03CCF9, 0x03CD16, 0x03CD36).
+
+[LABEL] 0x0385F5 DSP_WriteFreqParam_UseCmd30  replaces=LABEL_0385F5  confidence=high
+; chip == 1: delegate to DSP_WriteParamCmd30.
+
+[LABEL] 0x038600 DSP_WriteFreqParam_Return  replaces=LABEL_038600  confidence=high
+; Restore IZ, drop the 6-byte frame, `retd 0x2`.
+
+[ROUTINE] 0x038606 DSP_WriteCoeffData_5B  replaces=LABEL_038606  confidence=high
+; Entry: XWA = 24-bit coefficient, BC = chip. Emits exactly five DATA bytes and nothing
+; else: 0x0A, (v >> 17) & 0x7F, (v >> 9) & 0xFF, (v >> 1) & 0xFF, ((v << 7) & 0x80) + 0x15.
+; This is the "bare" coefficient write -- the same tail DSP_WriteFreqParam uses, without
+; the index header. It is what streams a coefficient bank into the chip.
+
+[ROUTINE] 0x038675 DSP_UnpackParam3B  replaces=LABEL_038675  confidence=high
+; The 24-bit BIG-ENDIAN stream reader. Entry: XWA = address of a 32-bit cursor variable.
+; Reads three bytes b0,b1,b2 at *cursor and returns XHL = (b0 << 16) | (b1 << 8) | b2,
+; then advances *cursor by 3. Clobbers XIX, XIY, XBC, XDE.
+; This is the decoder for the 3-byte Q0.23 coefficient format; every coefficient in the
+; DSP program blobs is stored big-endian even though the CPU is little-endian.
+
+[ROUTINE] 0x03869B DSP_WriteLUTParamSet  replaces=LABEL_03869B  confidence=high
+; Uploads one of six fixed lookup-table programs. Entry: XWA = address of a 32-bit stream
+; cursor, BC = chip, XDE = variant (0, 1 or 2), plus stacked arguments; frame of 18 bytes;
+; `retd 0x4`. Returns HL.
+; The table it uploads does NOT come from the caller's stream -- the caller's cursor value
+; is saved on entry and written back verbatim at DSP_WriteLUT_MainLoop_Done, so the caller
+; sees no advance. Instead a ROM address is chosen from (chip, variant):
+;   chip 0 (36 words): variant 0 -> 0x01EAFA, 1 -> 0x01EB67, 2 -> 0x01EBD4
+;   chip 1 (32 words): variant 0 -> 0x01EC41, 1 -> 0x01ECA5, 2 -> 0x01ED09
+; The first byte of the chosen blob is a base index. The loop then runs size/4 times
+; (9 iterations for chip 0, 8 for chip 1) and per iteration emits:
+;   (except on the first) COMMAND 0x01, DATA 0x01, DATA 0x60
+;   DSP_WriteFreqParam(base + 4*i, next 3-byte coefficient, chip)
+;   three x DSP_WriteCoeffData_5B(next 3-byte coefficient, chip)
+;   COMMAND 0x03
+; So each entry is one indexed word plus three raw coefficients -- a four-coefficient
+; lookup-table row. Only one caller, at 0x045692.
+
+[LABEL] 0x0386D6 DSP_WriteLUT_AlgoC0_TypeDE1  replaces=LABEL_0386D6  confidence=high
+; chip 0, variant 1: select the blob at 0x01EB67.
+
+[LABEL] 0x0386E0 DSP_WriteLUT_AlgoC0_TypeDE2  replaces=LABEL_0386E0  confidence=high
+; chip 0, variant 2: select the blob at 0x01EBD4.
+
+[LABEL] 0x0386EA DSP_WriteLUT_AlgoC1  replaces=LABEL_0386EA  confidence=high
+; chip 1: table size becomes 0x20 words; select among 0x01EC41 / 0x01ECA5 / 0x01ED09.
+
+[LABEL] 0x038709 DSP_WriteLUT_AlgoC1_TypeDE1  replaces=LABEL_038709  confidence=high
+; chip 1, variant 1: select the blob at 0x01ECA5.
+
+[LABEL] 0x038713 DSP_WriteLUT_AlgoC1_TypeDE2  replaces=LABEL_038713  confidence=high
+; chip 1, variant 2: select the blob at 0x01ED09.
+
+[LABEL] 0x03871B DSP_WriteLUT_MainLoop_Init  replaces=LABEL_03871B  confidence=high
+; Read the blob's first byte as the base index, advance the local cursor past it, zero the
+; iteration counter, and compute the trip count as size/4.
+
+[LABEL] 0x03873B DSP_WriteLUT_MainLoop_Body  replaces=LABEL_03873B  confidence=high
+; Non-first iterations only: the COMMAND 0x01 / DATA 0x01 / DATA 0x60 row separator.
+
+[LABEL] 0x038764 DSP_WriteLUT_MainLoop_FirstEntry  replaces=LABEL_038764  confidence=high
+; The four coefficient writes for one row (one DSP_WriteFreqParam plus three
+; DSP_WriteCoeffData_5B), then the COMMAND 0x03 row terminator and the loop step.
+
+[LABEL] 0x0387D5 DSP_WriteLUT_MainLoop_Done  replaces=LABEL_0387D5  confidence=high
+; Restore the caller's stream cursor to its entry value, return HL, unwind the 18-byte
+; frame, `retd 0x4`.
+
+[ROUTINE] 0x0387E6 DSP_WriteOscParam  replaces=LABEL_0387E6  confidence=high
+; The oscillator/LFO variant of DSP_WriteFreqParam and by far the most used routine in the
+; region -- its address appears 24 times in the ROM's dispatch data between 0x039C72 and
+; 0x03CEF6. Entry: DE = chip, XBC = 24-bit value, WA = index, base index pushed at
+; (xsp+12); `retd 0x2`. chip == 1 delegates to DSP_WriteParamCmd30.
+; On chip 0 it emits: DATA 0x08, DATA 0x01, then the index as
+;   ((base+index) >> 4 & 0x0F)   and   ((base+index) << 4 & 0xF0) + 8,
+; then DATA 0x21, DATA 0x0A, then the same four value bytes as DSP_WriteCoeffData_5B but
+; with the tag 0x26 instead of 0x15. The 0x08/0x01 opener and the 0x21 selector are what
+; distinguish this address space from the 0x00/0x00 + 0x10-biased one above.
+
+[LABEL] 0x0388A2 DSP_WriteOscParam_UseCmd30  replaces=LABEL_0388A2  confidence=high
+; chip == 1: delegate to DSP_WriteParamCmd30.
+
+[LABEL] 0x0388AD DSP_WriteOscParam_Return  replaces=LABEL_0388AD  confidence=high
+; Restore IZ, drop the 6-byte frame, `retd 0x2`.
+
+[ROUTINE] 0x0388B3 DSP_WriteCoeffData_5B_Direct  replaces=LABEL_0388B3  confidence=high
+; Identical to DSP_WriteCoeffData_5B except the trailing tag is 0x26 instead of 0x15, i.e.
+; the bare-coefficient writer for the oscillator address space.
+
+[ROUTINE] 0x038922 DSP_WriteOscParam_Offset  replaces=LABEL_038922  confidence=high
+; A third variant: same 0x08 / 0x01 / index / (index<<4)+8 opener as DSP_WriteOscParam but
+; the selector byte is 0x25 (not 0x21), the 24-bit value has a stacked OFFSET added to it
+; before packing, and the trailing tag is 0x4C. `retd 0x6`. Has no chip-1 fallback -- it
+; is chip-0 only. One caller, at 0x045560; the pointer 0x038922 also appears once in the
+; dispatch data at 0x03CCA2.
+
+[ROUTINE] 0x0389E1 DSP_AlgoSelect  confidence=high
+; No symbol at this address in EITHER source -- genuinely new. It is a routine entry: the
+; existing DSP_AlgoSelect_* labels at 0x038A95 / 0x038ACD / 0x038B10 / 0x038B64 are its
+; internal branch targets, so it has been sitting nameless with its own body labelled.
+; Frame of 8 bytes, `retd 0xA`, returns HL. Entry: DE = chip, BC = a sub-index, WA = an
+; index, plus stacked arguments including a table pointer at (xsp+20) and a type at
+; (xsp+18).
+; Body: calls DSP_TableWalk_Search(table, type, 0x78) to locate a descriptor, forms
+; value = descriptor[0] + 3*subindex, then emits COMMAND 0x01, DATA 0x00, DATA value++,
+; then either a five-DATA "type 0x63" sequence (0x00, 0x00, 0x20, 0x00, 0x00) or the
+; normal index-carrying one, and finally a five-byte header that is either the fixed
+; 0x08, 0x00, 0x80, 0xB4, 0x07 (when the sub-index is 0) or a computed
+; ((value >> 7) & 2) + 0x0C, (value >> 7) & 1, value*2, 0x04, 0x07.
+; DEAD CODE: neither 0x0389E1 nor any of its labels is reachable -- searching the payload
+; disassembly and the raw ROM for the address finds no call, no jump and no pointer.
+
+[LABEL] 0x038A95 DSP_AlgoSelect_TypeEq63  replaces=LABEL_038A95  confidence=high
+; The type == 0x63 arm: emit DATA 0x00, 0x00, 0x20, 0x00, 0x00 instead of the index pair.
+
+[LABEL] 0x038ACD DSP_AlgoSelect_WriteHeader  replaces=LABEL_038ACD  confidence=high
+; Sub-index 0: emit the fixed header 0x08, 0x00, 0x80, 0xB4, 0x07.
+
+[LABEL] 0x038B10 DSP_AlgoSelect_WriteHeaderNonZero  replaces=LABEL_038B10  confidence=high
+; Sub-index non-zero: emit the computed header derived from bit 7 of the descriptor value.
+
+[LABEL] 0x038B64 DSP_AlgoSelect_HeaderReturn  replaces=LABEL_038B64  confidence=high
+; Return the accumulated status in HL, unwind the 8-byte frame, `retd 0xA`.
+
+[ROUTINE] 0x038B6D DSP_OscAlgoSelect  confidence=high
+; No symbol at this address in EITHER source -- genuinely new; the existing
+; DSP_OscAlgoSelect_* labels at 0x038C60 / 0x038CB5 are its internal branch targets.
+; The oscillator-address-space twin of DSP_AlgoSelect: same DSP_TableWalk_Search(.., 0x78)
+; descriptor lookup and the same value = descriptor[0] + 3*subindex, but after COMMAND
+; 0x01 / DATA 0x00 / DATA value++ it emits the 0x08 / 0x01 / index-pair / 0x21 opener that
+; DSP_WriteOscParam uses, and its fixed header ends 0x08 rather than 0x07.
+; DEAD CODE: unreferenced anywhere in the payload, same evidence as DSP_AlgoSelect.
+
+[LABEL] 0x038C60 DSP_OscAlgoSelect_WriteHeaderNonZero  replaces=LABEL_038C60  confidence=high
+; Sub-index non-zero: the computed five-byte header, terminating in 0x08.
+
+[LABEL] 0x038CB5 DSP_OscAlgoSelect_Return  replaces=LABEL_038CB5  confidence=high
+; Return HL, unwind the 8-byte frame, `retd 0xA`.
+
+[ROUTINE] 0x038CBE DSP_TuneOffset  confidence=medium
+; No symbol at this address in EITHER source -- genuinely new; DSP_TuneOffset_Increment
+; (0x038CF6) and DSP_TuneOffset_WriteSequence (0x038CF9, just past this region's end) are
+; its internal branch targets.
+; Entry: BC = chip, XDE = a table pointer, plus stacked arguments; frame of 8 bytes.
+; Calls DSP_TableWalk_Search(table, arg, 0x79) -- note 0x79, one more than the 0x78 the
+; two AlgoSelect routines use -- takes the first byte of the descriptor as a base value,
+; and then adjusts it by +1, -1 or not at all depending on two stacked flags before
+; emitting the write sequence (COMMAND 0x01, DATA 0x01, DATA 0x60, ...) that continues
+; past 0x038CF8. Confidence is medium only because the write sequence itself falls outside
+; this region and was not read line by line.
+; DEAD CODE: unreferenced anywhere in the payload, same evidence as the two above.
+
+[LABEL] 0x038CF6 DSP_TuneOffset_Increment  replaces=LABEL_038CF6  confidence=high
+; The "+1" adjustment arm of DSP_TuneOffset.
+
+[DATA] 0x012222-0x012225  DSP byte-trace suffix string
+; The 4-byte string "> " that DSP_Send_Data appends to every traced byte. Immediately
+; precedes the class table below, which is why the two are easy to confuse.
+
+[DATA] 0x012226-0x0122A5  EFFECT -> DSP CLASS TABLE
+; 128 bytes, one per effect number 0..127, read by DSP_State_LookupAlgoIndex (0x037E30),
+; EFF_MuteLoop (0x037794) and DSP_StateDispatcher_AlgoLoop (0x037DE6).
+; 0 = the effect has no DSP program at all (46 entries); 1 (71 entries) and 2 (11 entries)
+; are two distinct classes. The eleven class-2 effects are 39, 51, 52, 53, 54, 57, 58, 59,
+; 60, 70 and 79. The sub-CPU caches classtable[eff] + 1 at 0x0045BC + 2*slot.
+
+[DATA] 0x0122A6-0x0122BB  PARAMETER-EDIT ORDER LISTS for effects 0x0F and 0x35
+; Two 11-byte lists selected by bit 0 of the slot record's +0x1E field, walked by
+; EFF_ParamIter_SpecialLoop. Terminator is the byte 0x0C.
+;   list A (0x0122A6): 0E 02 04 06 07 09 0B 00 01 0F | 0C
+;   list B (0x0122B1): 0E 02 03 05 07 08 0A 00 01 0F | 0C
+; The lists differ only in entries 2..6, which are the interleaved halves that
+; EFF_DspChanInit_AlgoType35_Dirty marks dirty as a group.
+
+[DATA] 0x0122BC-0x0122C3  eight-entry ramp table 00 0E 1C 2A 38 46 54 63
+; 0, 14, 28, 42, 56, 70, 84, 99 -- a linear 0..99 ramp. Not referenced from this region;
+; recorded because it is contiguous with the table below and the two are easy to split
+; incorrectly.
+
+[DATA] 0x0122C4-0x0122CB  EFFECT 0x3F LEVEL-OFFSET TABLE
+; 63 46 32 28 14 0A 05 00 = 99, 70, 50, 40, 20, 10, 5, 0. Indexed by the slot record's
+; +0x06 field and subtracted from param[0] by EFF_VolumeLoop (0x037CDD), floored at 0.
+
+[DATA] 0x0122CC-0x012395  EFFECTS DEBUG FORMAT STRINGS
+; The null-terminated fragments the *_WithDebug wrappers print, in address order:
+; 0x0122CC "DSP " / 0x0122D2 " reset", 0x0122DA + 0x0122E0 " anti reset",
+; 0x0122ED "EFF " + 0x0122F3 " mute", 0x0122FA + 0x012300 " mute" (DSP),
+; 0x012307 + 0x01230D " antimute", 0x012318 + 0x01231E " disconnect",
+; 0x01232B + 0x012331 " link", 0x012338 "argo change ", 0x012346 + 0x01234C " headder",
+; 0x012355 + 0x01235B " change ", 0x012364 + 0x01236A " data change ",
+; 0x012378 + 0x01237E " para. e" + 0x012384 "dit ", 0x01238B + 0x012391 " vol ".
+; Panasonic's own spelling ("headder", "argo", "antimute") is preserved deliberately.
+
+[DATA] 0x01ED6D-0x01ED71  EFFECT SLOT -> DSP CHIP NUMBER
+; 00 00 01 01 01. Five bytes. Slots 0 and 1 live on chip 0 (IC311, uPD6383); slots 2, 3
+; and 4 live on chip 1 (IC310, MN19413). Read by EFF_Disconnect (0x037F75),
+; EFF_Link (0x037FD4) and EFF_WriteHeader (0x0380C6), and it is this byte -- not the slot
+; number -- that is passed to DSP_WriteGlobalConfig.
+
+[DATA] 0x01ED72-0x01ED76  EFFECT SLOT -> SETTLE TIME IN MILLISECONDS
+; 1C 18 2E 14 14 = 28, 24, 46, 20, 20. Max-reduced by Unsigned_Max_Select in
+; EFF_HeaderChangeDataLoop (0x037AAF) and EFF_SecLinkPath_Pass2MaxVol (0x037BF6), then
+; handed to DSP_ScheduleDelay. Worst case for a full sweep is therefore 46 ms.
+
+[DATA] 0x01F3BC-0x01F3CF  EFF slot MUTE program pointers, 5 x u32
+; 0x01EAB4, 0x01EAC8, 0x01EADC, 0x01EAE6, 0x01EAF0. Indexed by slot in
+; EFF_Mute_WithDebug.
+
+[DATA] 0x01F3D0-0x01F3DF  DSP chip MUTE program pointers, 4 x u32
+; 0x01EA24, 0x01EA39, 0x01EA4E, 0x01EA63. Indexed by chip in DSP_Mute_WithDebug; only the
+; first two are reachable because only two chips exist.
+
+[DATA] 0x01F3E0-0x01F3EF  DSP chip ANTIMUTE program pointers, 4 x u32
+; 0x01EA78, 0x01EA87, 0x01EA96, 0x01EAA5. Indexed by chip in DSP_Unmute_WithDebug.
+
+[DATA] 0x01F3F0-0x01F403  EFF slot DISCONNECT program pointers, 5 x u32
+; 0x01E5C8, 0x01E5D3, 0x01E5DE, 0x01E5EA, 0x01E5F6. Indexed by EFF_Disconnect as
+; base + 12*mode + 4*slot; see [UNCERTAIN] about that 12.
+
+[DATA] 0x01F404-0x01F417  EFF slot LINK program pointers, 5 x u32
+; 0x01E602, 0x01E60D, 0x01E618, 0x01E624, 0x01E630. Indexed by EFF_Link as
+; base + 12*mode + 4*slot. Structurally identical to the disconnect run (the same
+; 11/11/12/12 byte spacing between the programs it points at), which is the evidence that
+; the two runs form one 2 x 5 array with a natural stride of 20.
+
+[UNCERTAIN] 0x037E3E DSP_State_Dispatcher_Data is a WRONG NAME in both sources and I have
+left it alone as the rules require. It is not data: it disassembles cleanly to
+`ld XIY,0x46EC / ld XIX,0x480E / ld BC,0x91 / ldirw / ld HL,0 / ret`, an 18-byte routine
+that copies one 290-byte config block from 0x0046EC to 0x00480E, and the next 18 bytes are
+its inverse (which I have proposed as EFF_ConfigSnapshot_Restore at 0x037E50). I recommend
+renaming it to EFF_ConfigSnapshot_Save. Both are dead code -- no caller exists in the
+payload -- but calling live code "data" hides the fact that 0x0046EC and 0x00480E are two
+more config-block-sized RAM regions.
+
+[UNCERTAIN] EFF_Disconnect (0x037F4F) and EFF_Link (0x037FAE) compute their pointer-table
+index as `base + 12*mode + 4*slot` (verified byte by byte: `xde=mode; xde+=xde; xde+=xwa;
+sll 2,xde` = mode*12). But the two tables are five 32-bit pointers each and lie back to
+back at 0x01F3F0 and 0x01F404, so the natural mode stride is 20, not 12. With mode == 1 --
+a value DSP_Config_ClampLimits explicitly permits, it only rejects >1 -- slot 2 and slot 3
+of a disconnect would fetch the LINK table's first two pointers. Either (a) block[+0x06] is
+never actually 1 on the paths that reach these two routines, or (b) this is a genuine
+firmware indexing defect. I could not settle it from the disassembly alone; it needs a
+trace of block[+0x06] on real hardware or in MAME. Recorded, not acted on.
+
+[UNCERTAIN] The class table at 0x012226 yields 1 or 2 for effects that need a DSP program.
+The obvious reading is "1 = chip 0, 2 = chip 1", and it is consistent with the sub-CPU
+storing value+1 per slot. But it does NOT line up cleanly with the slot->chip table at
+0x01ED6D, which is fixed per slot, so the class byte may instead select which of two
+program FAMILIES an effect uses. The eleven class-2 effects are 39, 51-54, 57-60, 70, 79.
+Note that effects 88-91, which the project's DSP notes flag as "malformed streams", have
+class 0 here, i.e. the firmware says they have no DSP program at all -- that is worth
+reconciling with those notes before either claim is repeated.
+
+[UNCERTAIN] Effect number 0x27 (39) is the one whose parameters are coalesced in five
+groups of three by 0x0371CE..0x037437, which is exactly the shape of the 5-band parametric
+EQ documented in kn5000-docs/effects-dsp.md. I believe 0x27 IS the PARAMETRIC EQ, but I
+have not confirmed it against the effect-name string table, so it is stated as an
+observation rather than a fact.
+
+[UNCERTAIN] Twenty addresses in 0x038365..0x0383F7 have real names in
+symbols/subcpu_symbols_reference.txt that differ from the authoritative LLVM build only in
+letter case: DEBUG_PRINT_STRING/Debug_Print_String, DEBUG_PRINT_BYTE, DEBUG_PRINT_WORD,
+DSP1_ASSERT_RESET, DSP1_DEASSERT_RESET, DSP2_ASSERT_RESET, DSP2_DEASSERT_RESET, DSP_NOP,
+DSP_SET_COMMAND_MODE, DSP_SET_DATA_MODE, DSP_ASSERT_WRITE, DSP_DEASSERT_WRITE,
+DSP_ASSERT_READ_DATA, DSP_DEASSERT_READ, DSP_SELECT_CHIP, DSP_DESELECT_CHIP,
+DSP_READ_STATUS. I have not proposed any change -- they are real names and the rules say
+leave them -- but the two files will keep disagreeing until someone picks one case
+convention for this block.
+
+[UNCERTAIN] Four sub-labels exist in the LLVM build but in neither reference file:
+0x0383D6 DSP_Select_Chip__select_dsp2, 0x0383D9 DSP_Select_Chip__done,
+0x0383F2 DSP_Deselect_Chip__deselect_dsp2, 0x0383F5 DSP_Deselect_Chip__done. They are
+correct and useful (they are the chip-1 arms of the two chip-select routines, asserting
+PE.6 instead of P7.5) but their double-underscore style matches nothing else in the
+reference file, so I have not proposed adding them under those names. If they are wanted,
+DSP_SELECT_CHIP_DSP2 / DSP_SELECT_CHIP_DONE / DSP_DESELECT_CHIP_DSP2 /
+DSP_DESELECT_CHIP_DONE would match the surrounding block.
+
+[UNCERTAIN] DSP_TuneOffset (0x038CBE) is named from its two existing internal labels and
+from the fact that it adjusts a descriptor byte by +1/-1 before writing it. The "tune"
+reading comes from the build's own DSP_TuneOffset_* labels, not from anything I proved;
+the routine is dead code so no behaviour can be observed. Marked confidence=medium for
+that reason.
