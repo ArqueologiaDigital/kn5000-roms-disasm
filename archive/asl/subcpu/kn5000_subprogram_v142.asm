@@ -11140,34 +11140,34 @@ InterCPU_LatchProtocol_Opaque:
 	db 00Eh
 
 ; Retry counter for gate 1 of the 0xE3 send; spins back to 020D15h while MSTAT1 is still low, gives up after 60001 tries.
-E3_WAIT_MSTAT1_CLEAR:
+E3_Wait_MSTAT1_Clear:
 	db 0D9h, 088h, 0D9h, 061h, 0D8h, 0CFh, 060h, 0EAh
 	db 063h, 0DFh, 00Eh
 
 ; Retry counter for gate 2 of the 0xE3 send; spins back to 020D23h while MSTAT1 is still high.
-E3_WAIT_MSTAT1_SET:
+E3_Wait_MSTAT1_Set:
 	db 0D9h, 088h, 0D9h, 061h, 0D8h, 0CFh, 060h, 0EAh
 	db 06Bh, 0E7h, 068h, 0E0h
 
 ; Sends command byte 0xE2 followed by a fixed 10-byte parameter block staged at 010D4h (XWA/XDE/BC) via micro-DMA ch2. Sibling of InterCPU_E1_DMA_Transfer.
-INTERCPU_E2_DMA_TRANSFER:
+InterCPU_E2_DMA_Transfer:
 	db 0DCh, 0A8h, 0C1h, 0E8h, 010h, 03Fh, 000h, 066h
 	db 011h
 
 ; Spins while the TX-state flag (DMA_XFER_STATE) is non-zero, i.e. a previous micro-DMA burst is still running.
-E2_WAIT_DMA_IDLE:
+E2_Wait_DMA_Idle:
 	db 0DCh, 08Bh, 0DCh, 061h, 0DBh, 0CFh, 060h, 0EAh
 	db 0B0h, 0FBh, 0C1h, 0E8h, 010h, 03Fh, 000h, 06Eh
 	db 0EFh
 
 ; TX engine idle: assert SSTAT0, mark busy, push the 0xE2 header into the latch.
-E2_DMA_READY:
+E2_DMA_Ready:
 	db 0F0h, 034h, 0B0h, 0F1h, 0E8h, 010h, 000h, 001h
 	db 0F2h, 000h, 000h, 012h, 000h, 0E2h, 0DCh, 0A8h
 	db 0F0h, 034h, 0CCh, 06Eh, 033h
 
 ; Header acknowledged: stage the 10-byte block at 010D4h, program DMAS2/DMAC2/DMA2V and start timer 2.
-E2_START_TRANSFER:
+E2_Start_Transfer:
 	db 0F0h, 034h, 0B8h, 0F1h, 0D4h, 010h, 033h, 0B3h
 	db 060h, 0BBh, 004h, 062h, 0BBh, 008h, 051h, 0EBh
 	db 02Eh, 008h, 030h, 00Ah, 000h, 0D8h, 02Eh, 048h
@@ -11177,7 +11177,7 @@ E2_START_TRANSFER:
 	db 06Eh, 0F9h, 00Eh
 
 ; Retry counter for the 0xE2 header acknowledge; spins back to 020D6Dh while MSTAT1 is still high.
-E2_WAIT_MSTAT1_SET:
+E2_Wait_MSTAT1_Set:
 	db 0DCh, 08Bh, 0DCh, 061h, 0DBh, 0CFh, 060h, 0EAh
 	db 063h, 0BEh, 0F0h, 034h, 0B8h, 00Eh
 
