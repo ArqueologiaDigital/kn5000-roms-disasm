@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rebuild a decompressed demo preset (.bin) from its MIDI file + sidecar.
 
-    demo_preset_NN.mid + demo_preset_NN.json  ->  demo_preset_NN.bin
+    demo_preset_NN.mid + demo_preset_NN.yaml  ->  demo_preset_NN.bin
 
 Note values (pitch, velocity, in-beat position, duration) come from the MIDI, so
 editing them in a DAW is honoured. Everything that is not music -- the song header,
@@ -14,7 +14,7 @@ shipping different music.
 """
 import argparse
 import base64
-import json
+import yaml
 import os
 import struct
 import sys
@@ -149,7 +149,7 @@ def main():
     ap.add_argument('--verify', help='reference .bin that the result must match exactly')
     args = ap.parse_args()
 
-    sc = json.load(open(args.sidecar))
+    sc = yaml.safe_load(open(args.sidecar))
     song = rebuild(sc, read_midi_notes(args.midi))
     if args.output:
         with open(args.output, 'wb') as f:

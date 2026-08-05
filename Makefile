@@ -10,11 +10,15 @@ LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
 DEMO_PRESET_DIR=table_data/includes/demo_presets
 DEMO_PRESET_IDS=00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
 DEMO_PRESET_COMPRESSED=$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i)_compressed.bin)
+DEMO_PRESET_MIDI_DIR=$(DEMO_PRESET_DIR)/midi
+DEMO_PRESET_SIDECAR_DIR=$(DEMO_PRESET_DIR)/sidecar
 CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
-.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars verify-midi-roundtrip
+.SECONDARY:
+
+.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
 .PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
@@ -722,61 +726,56 @@ recompress-lzss:
 # ----------------------------------------------------------------------------
 # Demo song presets (19 SLIDE4K-compressed blocks)
 # ----------------------------------------------------------------------------
-# Entries 0-17 live at 0x9C4050-0x9F94CB, entry 18 (the Feature Demo/Presentation)
-# at 0x8E0000. Each block is an 8-byte "SLIDE4K\0" magic + 24-bit LE uncompressed
+# Entries 0-17 live at 0x9C4050-0x9F94CB, entry 18 (the Feature Presentation) at
+# 0x8E0000. Each block is an 8-byte "SLIDE4K\0" magic + a 24-bit LE uncompressed
 # size, followed by the LZSS payload.
 #
-# The decompressed data in $(DEMO_PRESET_DIR) is the SOURCE OF TRUTH: the build
-# recompresses it and .incbin's the result into table_data/kn5000_table_data.s.
-# compress_lzss.py --reference replays the original stream's compression decisions,
-# so the rebuilt ROM stays byte-identical to the factory ROM.
+# CHECKED-IN SOURCE: midi/*.mid + sidecar/*.yaml
+#   .mid   the musical content -- editable in any DAW
+#   .yaml  everything MIDI cannot express: song header, cell topology, padding,
+#          the exact stream order, running-status flags, and the few durations
+#          MIDI cannot round-trip
+#
+#   .mid + .yaml -> demo_preset_NN.bin -> demo_preset_NN_compressed.bin -> ROM
+#
+# Both .bin stages are generated (and .gitignore'd). compress_lzss.py --strict
+# aborts the build if a payload stops matching the factory stream, so an edit can
+# never silently ship different music.
+
+$(DEMO_PRESET_DIR)/demo_preset_%.bin: $(DEMO_PRESET_MIDI_DIR)/demo_preset_%.mid $(DEMO_PRESET_SIDECAR_DIR)/demo_preset_%.yaml
+	python3 scripts/build/midi_to_preset.py --midi $< \
+		--sidecar $(DEMO_PRESET_SIDECAR_DIR)/demo_preset_$*.yaml -o $@
 
 $(DEMO_PRESET_DIR)/demo_preset_%_compressed.bin: $(DEMO_PRESET_DIR)/demo_preset_%.bin original_ROMs/demo_preset_%_compressed.original.bin
-	python3 scripts/build/compress_lzss.py $< $@ --reference original_ROMs/demo_preset_$*_compressed.original.bin
+	python3 scripts/build/compress_lzss.py $< $@ --strict --reference original_ROMs/demo_preset_$*_compressed.original.bin
 
 rebuild-demo-presets: $(DEMO_PRESET_COMPRESSED)
 
-# Convert the decompressed presets to Standard MIDI Files so they can be listened
-# to outside the instrument. 96 ticks per beat; the ROM tempo field is not decoded
-# yet, so these render at a nominal 120 BPM.
-DEMO_PRESET_MIDI_DIR=$(DEMO_PRESET_DIR)/midi
-demo-midi:
-	python3 scripts/build/demo_preset_to_midi.py \
-		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
-		-o $(DEMO_PRESET_MIDI_DIR) --drum-type 0x0C
-
-# Sidecars carry everything a MIDI file cannot: the song header, cell allocation
-# and link topology, padding, the exact stream order, and the handful of durations
-# MIDI cannot represent. Regenerate only if the extraction itself changes.
-DEMO_PRESET_SIDECAR_DIR=$(DEMO_PRESET_DIR)/sidecar
-demo-sidecars:
-	python3 scripts/build/preset_sidecar.py \
-		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
-		-o $(DEMO_PRESET_SIDECAR_DIR)
-
-# BUILD GATE: rebuilding each preset from its .mid + sidecar must reproduce the
-# checked-in .bin byte-for-byte. Fails loudly rather than shipping different music.
-verify-midi-roundtrip:
-	@rc=0; for i in $(DEMO_PRESET_IDS); do \
-		python3 scripts/build/midi_to_preset.py \
-			--midi $(DEMO_PRESET_MIDI_DIR)/demo_preset_$$i.mid \
-			--sidecar $(DEMO_PRESET_SIDECAR_DIR)/demo_preset_$$i.json \
-			--verify $(DEMO_PRESET_DIR)/demo_preset_$$i.bin || rc=1; \
-	done; exit $$rc
-
-# Regenerate the decompressed sources + the recompression references from the
-# factory ROM. Only needed if the extraction itself changes -- the results are
-# checked in. Reads the ORIGINAL ROM so it does not depend on the build output.
-decompress-demo-presets: original_ROMs/kn5000_table_data.rom
-	python3 scripts/build/decompress_demo_presets.py --rom $< --output-dir $(DEMO_PRESET_DIR) --emit-references
-
-# Verify every preset recompresses byte-identically to the factory stream.
+# Check every payload against the factory stream byte-for-byte.
 verify-demo-presets: $(DEMO_PRESET_COMPRESSED)
 	@for i in $(DEMO_PRESET_IDS); do \
 		cmp -s $(DEMO_PRESET_DIR)/demo_preset_$${i}_compressed.bin \
 		       original_ROMs/demo_preset_$${i}_compressed.original.bin \
 		  && echo "  preset $$i OK" || echo "  preset $$i MISMATCH"; \
 	done
+
+# --- bootstrap ---------------------------------------------------------------
+# Re-derive the checked-in source from the factory ROM. Only needed if the
+# extraction itself changes; the results are committed.
+
+decompress-demo-presets: original_ROMs/kn5000_table_data.rom
+	python3 scripts/build/decompress_demo_presets.py --rom $< \
+		--output-dir $(DEMO_PRESET_DIR) --emit-references
+
+demo-midi: decompress-demo-presets
+	python3 scripts/build/demo_preset_to_midi.py \
+		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
+		-o $(DEMO_PRESET_MIDI_DIR) --drum-type 0x0C
+
+demo-sidecars: decompress-demo-presets
+	python3 scripts/build/preset_sidecar.py \
+		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
+		-o $(DEMO_PRESET_SIDECAR_DIR)
 
 asl-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 

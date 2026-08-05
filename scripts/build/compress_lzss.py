@@ -16,6 +16,8 @@ import sys
 import os
 import hashlib
 
+STRICT = False
+
 # SLIDE4K parameters
 WINDOW_SIZE = 4096
 WINDOW_MASK = 0xFFF
@@ -229,6 +231,11 @@ def compress_with_reference(data, reference_compressed):
             out = bytes(out) + reference_compressed[len(out):]
         return out
     else:
+        if STRICT:
+            raise SystemExit(
+                "ERROR: input does not match the reference compression decisions.\n"
+                "       The rebuilt preset differs from the factory data, so the ROM\n"
+                "       would not be byte-identical. Refusing to fall back.")
         print("Reference file does not match input - using standard compression")
         return compress_slide4k(data)
 
@@ -245,6 +252,11 @@ def main():
 
     input_file = sys.argv[1]
     output_file = sys.argv[2]
+
+    global STRICT
+    if '--strict' in sys.argv:
+        STRICT = True
+        sys.argv.remove('--strict')
 
     # Check for reference file option
     reference_file = None

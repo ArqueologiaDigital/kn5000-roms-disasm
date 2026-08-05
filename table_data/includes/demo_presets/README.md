@@ -82,13 +82,31 @@ A single `0x9n` status can introduce several consecutive 5-byte note records.
 
 ## Build
 
-`demo_preset_NN.bin` (decompressed) is the **source of truth**. The build
-recompresses it and `.incbin`s the result into `table_data/kn5000_table_data.s`:
+The checked-in source is **`midi/demo_preset_NN.mid` + `sidecar/demo_preset_NN.yaml`**.
+The decompressed `.bin` and its LZSS payload are both generated:
 
 ```
-make rebuild-demo-presets    # regenerate demo_preset_NN_compressed.bin
+midi/*.mid + sidecar/*.json --> demo_preset_NN.bin --> demo_preset_NN_compressed.bin
+                                                              |
+                                                          .incbin --> ROM
+```
+
+`compress_lzss.py --strict` makes a mismatch against the factory stream a hard
+build failure, so a bad edit cannot silently ship different music (verified: a
+one-semitone change to a single note makes `make` exit non-zero and produce no ROM).
+
+```
+make rebuild-demo-presets    # .mid + sidecar -> .bin -> compressed payload
 make verify-demo-presets     # check each matches the factory stream byte-for-byte
-make decompress-demo-presets # re-extract sources + references from the factory ROM
+```
+
+Bootstrap targets, only needed if the extraction itself changes (they re-derive the
+checked-in source from the factory ROM):
+
+```
+make decompress-demo-presets # factory ROM -> .bin + compression references
+make demo-midi               # -> midi/*.mid
+make demo-sidecars           # -> sidecar/*.json
 ```
 
 `compress_lzss.py --reference` replays the original stream's compression
@@ -137,9 +155,12 @@ the `.mid`, and would be needed before MIDI could become the build source:
 This now exists and passes for all 19 songs:
 
 ```
-make demo-sidecars           # regenerate the sidecars (only if extraction changes)
-make verify-midi-roundtrip    # BUILD GATE: .mid + sidecar -> .bin, byte-for-byte
+make rebuild-demo-presets    # .mid + sidecar -> .bin -> compressed payload
+make verify-demo-presets     # check each payload against the factory stream
 ```
+
+The sidecars are commented YAML -- each structure carries a short note saying what
+it is and why MIDI cannot hold it.
 
 `midi_to_preset.py` takes note values (pitch, velocity, in-beat position, duration)
 from the **MIDI**, so DAW edits are honoured. The sidecar supplies everything a MIDI
@@ -157,9 +178,10 @@ file cannot represent:
   back swapped), and a few records whose duration low byte exceeds 95, which the
   base-96 split cannot regenerate
 
-The `.bin` files remain the checked-in source of truth for reproducing the factory
-ROM; the MIDI path is what makes the songs editable, gated so it can never silently
-diverge.
+The `.bin` files are no longer checked in -- keeping both would have stored the same
+songs twice. `original_ROMs/demo_preset_NN_compressed.original.bin` remains the
+byte-exact ground truth from the factory ROM, and `--strict` gates every build
+against it.
 
 ## An easter egg
 

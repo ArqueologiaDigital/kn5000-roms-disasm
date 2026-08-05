@@ -19,7 +19,6 @@ pitch/velocity/timing in a DAW is honoured; only the structure comes from here.
 """
 import argparse
 import base64
-import json
 import os
 import struct
 import sys
@@ -114,13 +113,7 @@ def build(song):
             rank[stream_index] = midi_index
 
         sc['tracks'][str(t)] = {
-            'start_cell': start,
             'chain': chain,
-            'cell_prefix': {str(c): list(song[0x800 + (c - 1) * 256:
-                                              0x800 + (c - 1) * 256 + 3])
-                            for c in chain},
-            'stream_len': len(stream),
-            'used_len': 0,
             'pattern': ''.join(pattern),
             'note_status': note_status,
             'note_order': rank,
@@ -135,7 +128,6 @@ def build(song):
             consumed += (1 if ex else 0) + len(d)
             if st == 0x83:
                 break
-        sc['tracks'][str(t)]['used_len'] = consumed
         left, ci = consumed, 0
         while left > 0 and ci < len(chain):
             base = 0x800 + (chain[ci] - 1) * 256 + 5
@@ -160,6 +152,77 @@ def build(song):
     return sc, covered
 
 
+def dump_yaml(sc, name):
+    """Emit the sidecar as commented YAML. Hand-written so the comments explaining
+    each structure survive; PyYAML would drop them."""
+    L = []
+    A = L.append
+    A('# Sidecar for %s.' % name)
+    A('#')
+    A('# Rebuilding a KN5000 demo preset takes two inputs: the .mid supplies the')
+    A('# musical content, this file supplies everything a MIDI file cannot express.')
+    A('# Written by scripts/build/preset_sidecar.py (make demo-sidecars);')
+    A('# read by scripts/build/midi_to_preset.py.')
+    A('')
+    A('# Size of the decompressed preset, in bytes.')
+    A('size: %d' % sc['size'])
+    A('')
+    A('# Every byte NOT produced from a MIDI event stream, as [offset, base64] runs:')
+    A('# the song header (+0x00..+0x800: track types, present flags, start cells),')
+    A('# the 5-byte header of each cell, unreached cells and trailing padding.')
+    A('residue:')
+    for off, b64 in sc['residue']:
+        A('  - [%d, "%s"]' % (off, b64))
+    A('')
+    A('# One entry per part present in the song, keyed by part index.')
+    A('tracks:')
+    for tk in sorted(sc['tracks'], key=int):
+        tr = sc['tracks'][tk]
+        A('')
+        A('  # ---- part %s ----' % tk)
+        A('  "%s":' % tk)
+        A('')
+        A('    # Cells holding this part\'s event stream, in link order. Cell c lives at')
+        A('    # +0x800 + (c-1)*256, and its payload is the 250 bytes starting at +5.')
+        A('    chain: [%s]' % ', '.join(str(c) for c in tr['chain']))
+        A('')
+        A('    # One character per event, in stream order:')
+        A('    #   B = 0x81 beat marker        E = 0x83 end of track')
+        A('    #   N = note (values come from the MIDI)')
+        A('    #   R = any other event, taken verbatim from `raws` below')
+        A('    pattern: "%s"' % tr['pattern'])
+        A('')
+        A('    # Status byte of each N, in stream order. -1 means the original omitted')
+        A('    # it (MIDI-style running status) and the rebuild must omit it too.')
+        A('    note_status: [%s]' % ', '.join(str(v) for v in tr['note_status']))
+        A('')
+        A('    # For each N in stream order, which note of the MIDI track it is. The')
+        A('    # factory streams are not strictly time-sorted, so this is not always')
+        A('    # the identity permutation.')
+        A('    note_order: [%s]' % ', '.join(str(v) for v in tr['note_order']))
+        A('')
+        A('    # Durations MIDI cannot round-trip, as {note index: [low, high]}:')
+        A('    # same-pitch overlaps on one channel (note-off pairing is FIFO, so')
+        A('    # crossing durations come back swapped), and low bytes above 95 that')
+        A('    # the base-96 split cannot regenerate.')
+        if tr['dur_fix']:
+            A('    dur_fix:')
+            for k in sorted(tr['dur_fix'], key=int):
+                A('      "%s": [%d, %d]' % (k, tr['dur_fix'][k][0], tr['dur_fix'][k][1]))
+        else:
+            A('    dur_fix: {}')
+        A('')
+        A('    # Every non-note event, base64, in stream order -- one per R in pattern.')
+        A('    # Carries the status byte only when it was explicit in the original.')
+        if tr['raws']:
+            A('    raws:')
+            for r in tr['raws']:
+                A('      - "%s"' % r)
+        else:
+            A('    raws: []')
+    return '\n'.join(L) + '\n'
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -171,9 +234,9 @@ def main():
         song = open(path, 'rb').read()
         sc, covered = build(song)
         name = os.path.splitext(os.path.basename(path))[0]
-        out = os.path.join(args.output_dir, name + '.json')
+        out = os.path.join(args.output_dir, name + '.yaml')
         with open(out, 'w') as f:
-            json.dump(sc, f, separators=(',', ':'))
+            f.write(dump_yaml(sc, name))
         cov = sum(covered)
         print('%-20s %6d bytes, %6d from MIDI (%4.1f%%), %5d residue runs -> %s'
               % (name, len(song), cov, 100 * cov / len(song),

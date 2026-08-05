@@ -17,6 +17,10 @@ hdae5000/*.rebuilt.p
 table_data/includes/preset_data.bin
 table_data/includes/preset_data.p
 
+# Demo presets: the checked-in source is midi/ + sidecar/. The decompressed .bin
+# and its LZSS payload are both generated (see the demo-preset rules in Makefile).
+table_data/includes/demo_presets/demo_preset_*.bin
+
 # Test ROM artifacts
 test_ROMs/*.bin
 test_ROMs/*.p

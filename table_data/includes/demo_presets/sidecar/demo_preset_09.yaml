@@ -1,0 +1,260 @@
+# Sidecar for demo_preset_09.
+#
+# Rebuilding a KN5000 demo preset takes two inputs: the .mid supplies the
+# musical content, this file supplies everything a MIDI file cannot express.
+# Written by scripts/build/preset_sidecar.py (make demo-sidecars);
+# read by scripts/build/midi_to_preset.py.
+
+# Size of the decompressed preset, in bytes.
+size: 6912
+
+# Every byte NOT produced from a MIDI event stream, as [offset, base64] runs:
+# the song header (+0x00..+0x800: track types, present flags, start cells),
+# the 5-byte header of each cell, unreached cells and trailing padding.
+residue:
+  - [0, "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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAD//4IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIACAAAAAAAAAAAAAAAAAAAAAAAAgAAA//+CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAcA"]
+  - [2815, "EoAAAP//"]
+  - [3071, "kIAAAP//"]
+  - [3327, "Q4AAAAkA"]
+  - [3583, "CIADAAgA"]
+  - [3839, "RYAHAAoA"]
+  - [4095, "AIAGAAsA"]
+  - [4351, "AIAIAA0A"]
+  - [4607, "CIAJAAwA"]
+  - [4863, "UoALAA8A"]
+  - [5119, "YYAKAA4A"]
+  - [5375, "OYANABAA"]
+  - [5631, "BIAMABEA"]
+  - [5887, "CYAOABMA"]
+  - [6143, "BYAPABIA"]
+  - [6399, "mIARAP//"]
+  - [6655, "BIAQAP//"]
+  - [6911, "kA=="]
+
+# One entry per part present in the song, keyed by part index.
+tracks:
+
+  # ---- part 0 ----
+  "0":
+
+    # Cells holding this part's event stream, in link order. Cell c lives at
+    # +0x800 + (c-1)*256, and its payload is the 250 bytes starting at +5.
+    chain: [3, 7, 8, 10, 13, 14, 16, 19]
+
+    # One character per event, in stream order:
+    #   B = 0x81 beat marker        E = 0x83 end of track
+    #   N = note (values come from the MIDI)
+    #   R = any other event, taken verbatim from `raws` below
+    pattern: "RRRRNNNNRNNNNNNRNBNNNNNNNNNNNBNNNNNNRRNNNNRBRNNNNRRNNNNNNRBNNNNNNNNNNNNBNNNNNNNNNNNNNBNNBRNRNNNNRRNNNBRRNNNNRRNNNNNRRNNNNNRBRNNNNNRNRNBNNNNNRNRNBNNRNNNNNNNNNNBNNNNNNNRNNNNRBRNNNBRNNNRNRNNRNNNBRNNNNRRNNNRRNNNNRRBRNRNNNNRNNNRRNNNNNNNBRNNNRNNNNRBRNRNRNNNNRBNNNNRNNNRNNNBRNNNNRRNNNNRRNNNRBNRNNRNNBNNNRNNNNNRNBNNNNNNBRNNNNNBNNNNNNNBNNNNNNBNNNNNBNNNBNBNNNRNNNBBBBBBRNBNNBBR"
+
+    # Status byte of each N, in stream order. -1 means the original omitted
+    # it (MIDI-style running status) and the rebuild must omit it too.
+    note_status: [152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 144, 144, 144]
+
+    # For each N in stream order, which note of the MIDI track it is. The
+    # factory streams are not strictly time-sorted, so this is not always
+    # the identity permutation.
+    note_order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255]
+
+    # Durations MIDI cannot round-trip, as {note index: [low, high]}:
+    # same-pitch overlaps on one channel (note-off pairing is FIFO, so
+    # crossing durations come back swapped), and low bytes above 95 that
+    # the base-96 split cannot regenerate.
+    dur_fix: {}
+
+    # Every non-note event, base64, in stream order -- one per R in pattern.
+    # Carries the status byte only when it was explicit in the original.
+    raws:
+      - "tAAaBAJ/"
+      - "sBMACEB/"
+      - "wBMAAAAA"
+      - "sBUAA39/"
+      - "sC0ABD0I"
+      - "sFQABDUI"
+      - "sDgABD0I"
+      - "sEUABDUI"
+      - "sFQABD0I"
+      - "sAAENQg="
+      - "sCEABD0I"
+      - "sEIABDUI"
+      - "sFUABD0I"
+      - "mCNlBgA="
+      - "sDkABDUI"
+      - "sEkABD0I"
+      - "sFcABDUI"
+      - "sAMABD0I"
+      - "sBcABDUI"
+      - "sCEABD0I"
+      - "sC8ABDUI"
+      - "sD4ABD0I"
+      - "sE0ABDUI"
+      - "sFgABD0I"
+      - "sBQABDUI"
+      - "sCcABD0I"
+      - "mE48WQo="
+      - "sCYABDUI"
+      - "sDQABD0I"
+      - "sA8ABDUI"
+      - "sEUABD0I"
+      - "sFoABDUI"
+      - "sA8ABD0I"
+      - "sAQABDU="
+      - "sBQABD0I"
+      - "sCsABDUI"
+      - "sDoABD0I"
+      - "sAIABDUI"
+      - "sBEABD0I"
+      - "sCAABDUI"
+      - "sCwABD0I"
+      - "sEIABDUI"
+      - "sE8ABD0I"
+      - "sFQABDUI"
+      - "sAEABD0I"
+      - "sCIABDUI"
+      - "sDAABD0I"
+      - "mEExAgA="
+      - "sFQABDUI"
+      - "sBIABD0I"
+      - "sEYABDUI"
+      - "sFkABD0I"
+      - "sAIABDUI"
+      - "sBIABD0I"
+      - "sC0ABDUI"
+      - "sEEABD0I"
+      - "sDIABDUI"
+      - "sEMABD0I"
+      - "sBwANQg="
+      - "sCkABD0I"
+      - "sDQABDUI"
+      - "sEIABD0I"
+      - "sFIABDUI"
+      - "sF0ABD0I"
+      - "sCwABDUI"
+      - "sDsABD0I"
+      - "sCMABDUI"
+      - "sDgABD0I"
+      - "mANFMQA="
+      - "sEYABDUI"
+      - "gjAqLQoA"
+      - "sAABA3J/"
+
+  # ---- part 1 ----
+  "1":
+
+    # Cells holding this part's event stream, in link order. Cell c lives at
+    # +0x800 + (c-1)*256, and its payload is the 250 bytes starting at +5.
+    chain: [4]
+
+    # One character per event, in stream order:
+    #   B = 0x81 beat marker        E = 0x83 end of track
+    #   N = note (values come from the MIDI)
+    #   R = any other event, taken verbatim from `raws` below
+    pattern: "RRRRBBNNNNNNNNNBNNNNNNBNBBBBBBBBBBBBBBNNNBBBNBNBBBBBBBBBBBBBBRNNNNNNNNBNN"
+
+    # Status byte of each N, in stream order. -1 means the original omitted
+    # it (MIDI-style running status) and the rebuild must omit it too.
+    note_status: [152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 144, 144, 144, 144, 144, 144, 144, 144, 144, 144]
+
+    # For each N in stream order, which note of the MIDI track it is. The
+    # factory streams are not strictly time-sorted, so this is not always
+    # the identity permutation.
+    note_order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+
+    # Durations MIDI cannot round-trip, as {note index: [low, high]}:
+    # same-pitch overlaps on one channel (note-off pairing is FIFO, so
+    # crossing durations come back swapped), and low bytes above 95 that
+    # the base-96 split cannot regenerate.
+    dur_fix: {}
+
+    # Every non-note event, base64, in stream order -- one per R in pattern.
+    # Carries the status byte only when it was explicit in the original.
+    raws:
+      - "tAAaBQJ/"
+      - "sBQBCEB/"
+      - "wBQBAGUE"
+      - "sBUBA2x/"
+      - "ghEA"
+
+  # ---- part 2 ----
+  "2":
+
+    # Cells holding this part's event stream, in link order. Cell c lives at
+    # +0x800 + (c-1)*256, and its payload is the 250 bytes starting at +5.
+    chain: [5]
+
+    # One character per event, in stream order:
+    #   B = 0x81 beat marker        E = 0x83 end of track
+    #   N = note (values come from the MIDI)
+    #   R = any other event, taken verbatim from `raws` below
+    pattern: "RRRRBBNNNBNNBBBRRBNBNNNBNBBBNBBBNNBNNNNBNBNBNBNBNBNBBBBRBBRBBBBBBBBRNNBNNR"
+
+    # Status byte of each N, in stream order. -1 means the original omitted
+    # it (MIDI-style running status) and the rebuild must omit it too.
+    note_status: [152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 144, 144, 144, 144]
+
+    # For each N in stream order, which note of the MIDI track it is. The
+    # factory streams are not strictly time-sorted, so this is not always
+    # the identity permutation.
+    note_order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+
+    # Durations MIDI cannot round-trip, as {note index: [low, high]}:
+    # same-pitch overlaps on one channel (note-off pairing is FIFO, so
+    # crossing durations come back swapped), and low bytes above 95 that
+    # the base-96 split cannot regenerate.
+    dur_fix: {}
+
+    # Every non-note event, base64, in stream order -- one per R in pattern.
+    # Carries the status byte only when it was explicit in the original.
+    raws:
+      - "tAAaBgJ/"
+      - "sBQCCEB/"
+      - "wBQCACgC"
+      - "sBUCA3F/"
+      - "sBsCBE0I"
+      - "sEUCBEUI"
+      - "sBECBE0I"
+      - "sDwCBEUI"
+      - "gg=="
+      - "kBg="
+
+  # ---- part 3 ----
+  "3":
+
+    # Cells holding this part's event stream, in link order. Cell c lives at
+    # +0x800 + (c-1)*256, and its payload is the 250 bytes starting at +5.
+    chain: [6, 9, 11, 12, 15, 17, 18]
+
+    # One character per event, in stream order:
+    #   B = 0x81 beat marker        E = 0x83 end of track
+    #   N = note (values come from the MIDI)
+    #   R = any other event, taken verbatim from `raws` below
+    pattern: "NNNNNBBNNNNNNNNBNNNNNNNBNNNBNNNNNBNNNNNNBNNNNNNRRNNNNNNNBNNNNNNNNNNNNNNNNBNNNNNNNNNNNNBNNNNRNNNNNBNNNNNNNNNNNNBNNNNNNNNNNNNNNNNBNNNNNNNNRNBNNNNNNNNNNNBNNNNNNNNNNNNNNNBNNNNNNNNNNNNNBRNNNNNNNNNNBNNNNNNNNNNNNNNBNNNNNNNNNNNNNBNNNRNNNNNNNNBNNNNNNNNNNNNNNNNBNNNNNNNNNNNBNNNNNNNNNNBNNNNNNNNNNNBNNNNNNNNNNBNNNBBBBBBBBBBRBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBRBBRBNR"
+
+    # Status byte of each N, in stream order. -1 means the original omitted
+    # it (MIDI-style running status) and the rebuild must omit it too.
+    note_status: [152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, -1, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 152, 144]
+
+    # For each N in stream order, which note of the MIDI track it is. The
+    # factory streams are not strictly time-sorted, so this is not always
+    # the identity permutation.
+    note_order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269]
+
+    # Durations MIDI cannot round-trip, as {note index: [low, high]}:
+    # same-pitch overlaps on one channel (note-off pairing is FIFO, so
+    # crossing durations come back swapped), and low bytes above 95 that
+    # the base-96 split cannot regenerate.
+    dur_fix: {}
+
+    # Every non-note event, base64, in stream order -- one per R in pattern.
+    # Carries the status byte only when it was explicit in the original.
+    raws:
+      - "sDkDQH8="
+      - "sDoDCEB/"
+      - "mDphKgQ="
+      - "mCRdNQA="
+      - "mAgjAwA="
+      - "mB4xSAA="
+      - "gg=="
+      - "sAAFBAAI"
+      - "sBIFCD5/"
+      - "kFY8Sw=="
