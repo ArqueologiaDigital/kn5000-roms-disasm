@@ -1,8 +1,30 @@
 # Proposed sub-CPU semantic labels (kn5000_subprogram_v142)
 #
-# Produced 2026-08-05 by the sub-CPU stall analysis. PROPOSALS ONLY -- not yet
-# integrated. A separate pass must add these to
-# symbols/subcpu_symbols_reference.txt and re-verify the 100% byte-match.
+# Produced 2026-08-05 by the sub-CPU stall analysis.
+#
+# STATUS 2026-08-05: INTEGRATED. 7 of 23 landed; byte-match re-verified at 100%
+# on both toolchains. The other 16 were skipped:
+#
+#  * 15 "replaces LABEL_xxxxxx" entries were generated against the LEGACY ASL
+#    archive (archive/asl/), which still carries LABEL_ placeholders at those
+#    addresses. The AUTHORITATIVE source (v142/subcpu/*.s, see CLAUDE.md) had
+#    already named every one of them, so renaming was declined:
+#      0x01F859 Audio_DMA_RingBuf_ReadLoop    0x01F87B Audio_DMA_RingBuf_CheckSend
+#      0x01F88E Audio_DMA_RingBuf_Done        0x01FAF0 AudioLoop_CheckWatchdog
+#      0x01FAFF AudioLoop_CheckPeriodicReinit 0x01FB2F AudioLoop_CallProcessors
+#      0x020D13 InterCPU_LatchProtocol_Opaque 0x035818 DSP_StoreBufferCount
+#      0x035855 DSP_RingBuf_Read_Empty        0x035858 DSP_RingBuf_Read_Return
+#      0x035859 DSP_RingBuf_Read_Data         0x035AE5 DSP_Process_NextCmd
+#      0x035B1B Audio_Process_DSP_MsgSizeCheck 0x036033 DSP_Process_ReadNext
+#      0x036044 DSP_Process_Exit
+#  * MIDI_DISPATCH_LOOP 0x034D98 is a legal instruction boundary but is NOT a
+#    branch target -- it is the 2nd instruction of the already-named
+#    MIDI_Dispatch. The real per-byte loop head is MIDI_Dispatch_NextByte
+#    (0x034FD8), so the proposed name would have been actively misleading.
+#
+# Any future proposal pass must diff against the LLVM source (or the linked ELF
+# symbol table), not against archive/asl/ -- that mismatch is what produced the
+# 15 redundant entries here.
 #
 # Load base VERIFIED: file offset 0 of kn5000_subprogram_v142.rom = sub-CPU 0x00EF00
 # (3267/3278 existing symbols land on instruction boundaries at that base; ~36% at 0).
