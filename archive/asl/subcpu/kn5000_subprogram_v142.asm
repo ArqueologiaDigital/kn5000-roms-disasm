@@ -9454,10 +9454,10 @@ Audio_System_Init:		; 01FACBh
 
 Audio_Main_Loop:
 	BIT 5, (103Eh)
-	JR Z, LABEL_01FAF0
+	JR Z, AudioLoop_UnmuteAfterBoot
 	RES 5, (103Eh)
 
-LABEL_01FAF0:
+AudioLoop_UnmuteAfterBoot:
 	LD XWA, (1040h)
 	CP XWA, 000003e8h
 	JR ULE, LABEL_01FAFF
@@ -9971,7 +9971,7 @@ LABEL_01FF72:
 	POP SR
 	RET
 
-TaskList_Operations_Opaque:
+TaskSched_SoftTimer_Service:
 	db 0D1h, 0D2h, 010h, 020h, 0D8h, 061h, 0F1h, 0D2h
 	db 010h, 050h, 0D8h, 02Eh, 07Ch, 006h, 000h, 034h
 	db 0CAh, 010h, 0ECh, 012h, 022h, 001h, 0ACh, 004h
@@ -11091,7 +11091,7 @@ InterCPU_DMA_Send_Chunk:
 
 DMA_Chunk_Start:
 	BIT 4, (PD)  ; MSTAT1 - test if Main CPU is requesting handshake
-	JR Z, InterCPU_Wait_MSTAT1_Clear
+	JR Z, DMA_Chunk_Wait_MSTAT1_Clear
 	RES 0, (PD)  ; SSTAT0 - clear to acknowledge Main CPU handshake request
 	LD (DMA_XFER_STATE), 001h
 	LD L, C
@@ -11103,7 +11103,7 @@ DMA_Chunk_Start:
 
 DMA_Chunk_Transfer:
 	BIT 4, (PD)  ; MSTAT1 - wait for Main CPU to clear (data ready to receive)
-	JR NZ, InterCPU_Wait_MSTAT1_Set
+	JR NZ, DMA_Chunk_Wait_MSTAT1_Set
 	SET 0, (PD)  ; SSTAT0 - set to signal ready to receive DMA data
 	LDC_DMAS2_XDE
 	EXTZ BC
@@ -11118,14 +11118,14 @@ DMA_Chunk_Wait:
 	JR NZ, DMA_Chunk_Wait
 	RET
 
-InterCPU_Wait_MSTAT1_Clear:
+DMA_Chunk_Wait_MSTAT1_Clear:
 	LD HL, IX
 	INC 1, IX
 	CP HL, 0ea60h
 	JR ULE, DMA_Chunk_Start
 	RET
 
-InterCPU_Wait_MSTAT1_Set:
+DMA_Chunk_Wait_MSTAT1_Set:
 	LD WA, IX
 	INC 1, IX
 	CP WA, 0ea60h
@@ -11533,21 +11533,26 @@ Cmd_DMA_Check_Stuck:		; 021001h
 	RET
 
 ; ===========================================================================
-; DAC_Write_Sample - Write audio sample to DAC interface
+; ToneGen_Read_Register - Read one tone-generator register
 ; ===========================================================================
-; Entry: WA = 16-bit audio sample value
-; Exit:  HL = readback value from DAC
-; Notes: P6.7 controls A23 address line for tone generator/DAC access.
-;        DAC interface is at 0x100000 (memory-mapped).
-;        Readback may be used for verification or status check.
+; (Was DAC_Write_Sample.  0x100000 is the tone generator's register-ADDRESS
+;  latch on write and its status word on read; nothing here writes a sample.)
+; Entry: WA = TG register number to latch.
+; Exit:  HL = the word read back for that register.
+; Notes: clearing P6.7 drives A23 low, selecting the TG side of the multiplex.
+;        Latch 0..3 -> the 16-bit active-voice bitmap for that bank;
+;        latch 0x180+ch -> that channel's envelope level.
 ; ===========================================================================
-DAC_Write_Sample:
+ToneGen_Read_Register:
 	RES 7, (P6)
 	LD (100000h), WA
 	LD HL, (100000h)
 	RET
 
-RingBuf_SetOffsetHi:
+; MIDI_Backlog_Publish(WA = the MIDI ring's byte count) -- was RingBuf_SetOffsetHi.  It
+; stores the count to the MIDI backlog gauge at 0x27E7, which RingBuf_CheckOffset_ClearFlags
+; compares against 0x20/0x30 (or 0x40/0x50) to drop layer slots: a backpressure threshold.
+MIDI_Backlog_Publish:
 	LD (27E7h), WA
 	RET
 
@@ -13490,7 +13495,7 @@ LABEL_022198:
 ; Exit:  none
 ; Notes: Runs on the path-B half of Audio_Process_Init, one bank per call.
 ;        b = ++(*VOICE_POLL_BANK 0x1128) & 3
-;        now  = DAC_Write_Sample(b) | TONEGEN_HOLD_MASK[b]
+;        now  = ToneGen_Read_Register(b) | TONEGEN_HOLD_MASK[b]
 ;        edge = (now ^ TONEGEN_ACTIVE_PREV[b]) & TONEGEN_ACTIVE_PREV[b]
 ;        TONEGEN_ACTIVE_PREV[b] = now
 ;        For each of the 16 channels ch = 16b + i:
@@ -13505,8 +13510,8 @@ LABEL_022198:
 ;        a captured 0x7E00 teardown followed a status read returning 0 by 56 us
 ;        (notes/audit/kn5000-audit-voicelife.md S1.5).
 ;        AudioTick_UpdateVoice_SlotLoop is this routine's per-channel loop body, not an entry.
-;        DAC_Write_Sample (asm L11479) is misnamed - it writes 0x100000 and reads
-;        0x100000 back; it is the only IC303 readback in the payload.
+;        ToneGen_Read_Register (asm L11479) writes the 0x100000 register-address
+;        latch and reads 0x100000 back; it is the only IC303 readback in the payload.
 ; ----------------------------------------------------------------------------
 Voice_Manager_PollBank:	; 02219Fh
 	DEC 6, XSP
@@ -13515,7 +13520,7 @@ Voice_Manager_PollBank:	; 02219Fh
 	AND (1128h), 003h
 	LD A, (1128h)
 	EXTZ WA
-	CALR DAC_Write_Sample
+	CALR ToneGen_Read_Register
 	LD A, (1128h)
 	EXTZ WA
 	ADD WA, WA
@@ -13575,7 +13580,7 @@ AudioTick_UpdateVoice_DecayCheck:
 	LD A, (XSP + 008h)
 	EXTZ WA
 	ADD WA, 0180h
-	CALR DAC_Write_Sample
+	CALR ToneGen_Read_Register
 	AND HL, 3fffh
 	SRL 5, HL
 	LD A, L
@@ -19701,16 +19706,16 @@ Voice_SetPitchWord_Unmuted_ApplyMode:
 	RET
 
 ; ----------------------------------------------------------------------------
-; Voice_Build_EnvSegments_PatchAtk - Build the four EG segment words; attack rate taken from the patch
+; Voice_Calc_LevelPair_PatchAtk - Build the four EG segment words; attack rate taken from the patch
 ; Entry: XWA = pointer to the voice slot
 ; Exit:  slot+0x3c and TONEGEN_REG_SCRATCH+0x18 written; further segment words
 ;        built from tone-record fields +0x29/+0x2b/+0x34
-; Notes: Identical shape to Voice_Build_EnvSegments_FixedAtk except that the
+; Notes: Identical shape to Voice_Calc_LevelPair_FixedAtk except that the
 ;        ATK segment's rate is Voice_EnvRate_Lookup[rec+0x28] instead of the
 ;        literal 0x7F - i.e. this is the path that makes slow-attack patches
 ;        possible.  MEASURED, notes/audit/kn5000-eg-calibration.md S1.1.
 ; ----------------------------------------------------------------------------
-Voice_Build_EnvSegments_PatchAtk:	; 025636h
+Voice_Calc_LevelPair_PatchAtk:	; 025636h
 	LDA XSP, XSP - 14
 	PUSH XIZ
 	LD (XSP + 00eh), XWA
@@ -19725,16 +19730,16 @@ Voice_Build_EnvSegments_PatchAtk:	; 025636h
 	LD XWA, (XSP + 00eh)
 	LD XWA, (XWA + 013h)
 	BIT 4, (XWA + 010h)
-	JR Z, Voice_ComputeAndWritePan_SetInvFlag
+	JR Z, Voice_Calc_LevelPair_PatchAtk_SetInvFlag
 	LD XWA, (XSP + 00eh)
 	ANDW (XWA + 001h), 7fffh
-	JR T, Voice_ComputeAndWritePan_ApplyKeyTrack
+	JR T, Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack
 
-Voice_ComputeAndWritePan_SetInvFlag:
+Voice_Calc_LevelPair_PatchAtk_SetInvFlag:
 	LD XWA, (XSP + 00eh)
 	ORW (XWA + 001h), 8000h
 
-Voice_ComputeAndWritePan_ApplyKeyTrack:
+Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack:
 	LD A, (XBC + 06bh)
 	LD C, A
 	EXTS BC
@@ -19754,7 +19759,7 @@ Voice_ComputeAndWritePan_ApplyKeyTrack:
 	LD IZ, WA
 	LD XWA, (XSP + 004h)
 	CP (XWA + 033h), 000h
-	JR Z, Voice_ComputeAndWritePan_NoOscLFO
+	JR Z, Voice_Calc_LevelPair_PatchAtk_NoOscLFO
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -19777,7 +19782,7 @@ Voice_ComputeAndWritePan_ApplyKeyTrack:
 	LD (XSP + 008h), HL
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02eh), 000h
-	JR Z, Voice_ComputeAndWritePan_NoPanLFO
+	JR Z, Voice_Calc_LevelPair_PatchAtk_NoLFO
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02eh)
 	LD E, A
@@ -19797,21 +19802,21 @@ Voice_ComputeAndWritePan_ApplyKeyTrack:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_ComputeAndWritePan_CheckMax
+	JR T, Voice_Calc_LevelPair_PatchAtk_CheckMax
 
-Voice_ComputeAndWritePan_NoPanLFO:
+Voice_Calc_LevelPair_PatchAtk_NoLFO:
 	LD WA, IZ
 	ADD WA, (XSP + 008h)
 	LD BC, 00ffh
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_ComputeAndWritePan_CheckMax
+	JR T, Voice_Calc_LevelPair_PatchAtk_CheckMax
 
-Voice_ComputeAndWritePan_NoOscLFO:
+Voice_Calc_LevelPair_PatchAtk_NoOscLFO:
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02eh), 000h
-	JR Z, Voice_ComputeAndWritePan_CheckMax
+	JR Z, Voice_Calc_LevelPair_PatchAtk_CheckMax
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02eh)
 	LD E, A
@@ -19831,16 +19836,16 @@ Voice_ComputeAndWritePan_NoOscLFO:
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
 
-Voice_ComputeAndWritePan_CheckMax:
+Voice_Calc_LevelPair_PatchAtk_CheckMax:
 	LD XWA, (XSP + 00ah)
 	BIT 0, (XWA)
-	JR Z, Voice_ComputeAndWritePan_WriteDSP
+	JR Z, Voice_Calc_LevelPair_PatchAtk_WriteDSP
 	LD WA, IZ
 	CP WA, 00ffh
-	JR NZ, Voice_ComputeAndWritePan_WriteDSP
+	JR NZ, Voice_Calc_LevelPair_PatchAtk_WriteDSP
 	DEC 1, IZ
 
-Voice_ComputeAndWritePan_WriteDSP:
+Voice_Calc_LevelPair_PatchAtk_WriteDSP:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 028h)
 	EXTZ WA
@@ -19870,7 +19875,7 @@ Voice_ComputeAndWritePan_WriteDSP:
 	LD (XSP + 00ch), WA
 	LD XWA, (XSP + 004h)
 	CP (XWA + 034h), 000h
-	JRL Z, Voice_ComputeAndWritePan_NoPanDepth2
+	JRL Z, Voice_Calc_LevelPair_PatchAtk_NoDepth2
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -19893,7 +19898,7 @@ Voice_ComputeAndWritePan_WriteDSP:
 	LD (XSP + 008h), HL
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02fh), 000h
-	JR Z, Voice_ComputeAndWritePan_NoModDepth
+	JR Z, Voice_Calc_LevelPair_PatchAtk_NoModDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02fh)
 	LD E, A
@@ -19920,9 +19925,9 @@ Voice_ComputeAndWritePan_WriteDSP:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
-	JR T, Voice_ComputeAndWritePan_WriteChans
+	JR T, Voice_Calc_LevelPair_PatchAtk_WriteChans
 
-Voice_ComputeAndWritePan_NoModDepth:
+Voice_Calc_LevelPair_PatchAtk_NoModDepth:
 	LD WA, (XSP + 00ah)
 	ADD WA, (XSP + 008h)
 	LD BC, 00ffh
@@ -19935,12 +19940,12 @@ Voice_ComputeAndWritePan_NoModDepth:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
-	JR T, Voice_ComputeAndWritePan_WriteChans
+	JR T, Voice_Calc_LevelPair_PatchAtk_WriteChans
 
-Voice_ComputeAndWritePan_NoPanDepth2:
+Voice_Calc_LevelPair_PatchAtk_NoDepth2:
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02fh), 000h
-	JR Z, Voice_ComputeAndWritePan_WriteChans
+	JR Z, Voice_Calc_LevelPair_PatchAtk_WriteChans
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02fh)
 	LD E, A
@@ -19966,7 +19971,7 @@ Voice_ComputeAndWritePan_NoPanDepth2:
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
 
-Voice_ComputeAndWritePan_WriteChans:
+Voice_Calc_LevelPair_PatchAtk_WriteChans:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02ah)
 	EXTZ WA
@@ -19976,10 +19981,10 @@ Voice_ComputeAndWritePan_WriteChans:
 	LD HL, WA
 	LD WA, 4
 	CP HL, 4
-	JR LT, Voice_ComputeAndWritePan_ClampDepth
+	JR LT, Voice_Calc_LevelPair_PatchAtk_ClampDepth
 	LD WA, HL
 
-Voice_ComputeAndWritePan_ClampDepth:
+Voice_Calc_LevelPair_PatchAtk_ClampDepth:
 	LD HL, WA
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02ch)
@@ -20122,7 +20127,7 @@ Voice_WriteChPanShift_Done:
 	RET
 
 ; ----------------------------------------------------------------------------
-; Voice_Build_EnvSegments_FixedAtk - Build the four EG segment words for a voice; attack rate hard-coded
+; Voice_Calc_LevelPair_FixedAtk - Build the four EG segment words for a voice; attack rate hard-coded
 ; Entry: XWA = pointer to the voice slot
 ; Exit:  slot+0x3c/+0x3e/+0x40/+0x46 and TONEGEN_REG_SCRATCH+0x18 written;
 ;        slot+0x01 bit15 set
@@ -20136,10 +20141,10 @@ Voice_WriteChPanShift_Done:
 ;        present only when desc+0x0d bit5 is set (else rate 0 = HOLD).
 ;        slot+0x46 = RELEASE level = LVL[+0x0d].
 ;        LVL = Voice_Level_Fader_Lookup (0x0118FE), RATE = Voice_EnvRate_Lookup
-;        (0x011963).  Voice_UpdatePan_Simple_WritePan is an inner join point of this routine, not
+;        (0x011963).  Voice_Calc_LevelPair_FixedAtk_WriteLevel is an inner join point of this routine, not
 ;        a separate entry.  MEASURED, notes/audit/kn5000-eg-calibration.md S1.1.
 ; ----------------------------------------------------------------------------
-Voice_Build_EnvSegments_FixedAtk:	; 025A35h
+Voice_Calc_LevelPair_FixedAtk:	; 025A35h
 	LDA XSP, XSP - 12
 	PUSH IZ
 	LD (XSP + 00ah), XWA
@@ -20160,7 +20165,7 @@ Voice_Build_EnvSegments_FixedAtk:	; 025A35h
 	LD IZ, WA
 	LD XWA, (XSP + 006h)
 	CP (XWA + 00eh), 000h
-	JR Z, Voice_UpdatePan_Simple_WritePan
+	JR Z, Voice_Calc_LevelPair_FixedAtk_WriteLevel
 	LD XWA, (XSP + 006h)
 	LD A, (XWA + 00eh)
 	LD E, A
@@ -20179,7 +20184,7 @@ Voice_Build_EnvSegments_FixedAtk:	; 025A35h
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
 
-Voice_UpdatePan_Simple_WritePan:
+Voice_Calc_LevelPair_FixedAtk_WriteLevel:
 	LD WA, IZ
 	SLA 8, WA
 	LD BC, WA
@@ -20210,10 +20215,10 @@ Voice_UpdatePan_Simple_WritePan:
 	LD BC, WA
 	LD WA, 4
 	CP BC, 4
-	JR LT, Voice_UpdatePan_Simple_WriteChans
+	JR LT, Voice_Calc_LevelPair_FixedAtk_WriteChans
 	LD WA, BC
 
-Voice_UpdatePan_Simple_WriteChans:
+Voice_Calc_LevelPair_FixedAtk_WriteChans:
 	LD BC, WA
 	LD_W 000h
 	LD BC, HL
@@ -20223,7 +20228,7 @@ Voice_UpdatePan_Simple_WriteChans:
 	LD (XWA + 03eh), BC
 	LD XWA, (XSP + 002h)
 	BIT 5, (XWA + 00dh)
-	JR Z, Voice_UpdatePan_Simple_NoChanFlag
+	JR Z, Voice_Calc_LevelPair_FixedAtk_NoChanFlag
 	LD XWA, (XSP + 006h)
 	LD A, (XWA + 00ch)
 	EXTZ WA
@@ -20245,9 +20250,9 @@ Voice_UpdatePan_Simple_WriteChans:
 	LD C, A
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 046h), C
-	JR T, Voice_UpdatePan_Simple_Done
+	JR T, Voice_Calc_LevelPair_FixedAtk_Done
 
-Voice_UpdatePan_Simple_NoChanFlag:
+Voice_Calc_LevelPair_FixedAtk_NoChanFlag:
 	LD BC, DE
 	SLA 8, BC
 	LD XWA, (XSP + 00ah)
@@ -20255,7 +20260,7 @@ Voice_UpdatePan_Simple_NoChanFlag:
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 046h), 000h
 
-Voice_UpdatePan_Simple_Done:
+Voice_Calc_LevelPair_FixedAtk_Done:
 	POP IZ
 	LDA XSP, XSP + 00ch
 	RET
@@ -20375,7 +20380,7 @@ Voice_WriteChPanShift2_Done:
 	INC 8, XSP
 	RET
 
-Voice_UpdatePan_Full:
+Voice_Calc_LevelPair_Full:
 	LDA XSP, XSP - 14
 	PUSH XIZ
 	LD (XSP + 00eh), XWA
@@ -20385,26 +20390,26 @@ Voice_UpdatePan_Full:
 	LD XWA, (XSP + 00eh)
 	LD XWA, (XWA + 013h)
 	BIT 4, (XWA + 010h)
-	JR Z, Voice_UpdatePan_Full_SetInvFlag
+	JR Z, Voice_Calc_LevelPair_Full_SetInvFlag
 	LD XWA, (XSP + 00eh)
 	ANDW (XWA + 001h), 7fffh
-	JR T, Voice_UpdatePan_Full_CheckBit11
+	JR T, Voice_Calc_LevelPair_Full_CheckBit11
 
-Voice_UpdatePan_Full_SetInvFlag:
+Voice_Calc_LevelPair_Full_SetInvFlag:
 	LD XWA, (XSP + 00eh)
 	ORW (XWA + 001h), 8000h
 
-Voice_UpdatePan_Full_CheckBit11:
+Voice_Calc_LevelPair_Full_CheckBit11:
 	LD XWA, (XSP + 00eh)
 	LD WA, (XWA + 001h)
 	BIT 0bh, WA
-	JR Z, Voice_UpdatePan_Full_OscTablePath
+	JR Z, Voice_Calc_LevelPair_Full_OscTablePath
 	LD A, (0118B3h)
 	EXTZ WA
 	LD IZ, WA
-	JRL T, Voice_UpdatePan_Full_CheckMax
+	JRL T, Voice_Calc_LevelPair_Full_CheckMax
 
-Voice_UpdatePan_Full_OscTablePath:
+Voice_Calc_LevelPair_Full_OscTablePath:
 	LD XWA, (XSP + 00eh)
 	LD XWA, (XWA + 023h)
 	LD A, (XWA + 010ch)
@@ -20426,7 +20431,7 @@ Voice_UpdatePan_Full_OscTablePath:
 	LD IZ, WA
 	LD XWA, (XSP + 004h)
 	CP (XWA + 033h), 000h
-	JR Z, Voice_UpdatePan_Full_NoPanLFO
+	JR Z, Voice_Calc_LevelPair_Full_NoLFO
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -20449,7 +20454,7 @@ Voice_UpdatePan_Full_OscTablePath:
 	LD (XSP + 008h), HL
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02eh), 000h
-	JR Z, Voice_UpdatePan_Full_NoPanDepth
+	JR Z, Voice_Calc_LevelPair_Full_NoDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02eh)
 	LD E, A
@@ -20469,21 +20474,21 @@ Voice_UpdatePan_Full_OscTablePath:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_UpdatePan_Full_CheckMax
+	JR T, Voice_Calc_LevelPair_Full_CheckMax
 
-Voice_UpdatePan_Full_NoPanDepth:
+Voice_Calc_LevelPair_Full_NoDepth:
 	LD WA, IZ
 	ADD WA, (XSP + 008h)
 	LD BC, 00ffh
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_UpdatePan_Full_CheckMax
+	JR T, Voice_Calc_LevelPair_Full_CheckMax
 
-Voice_UpdatePan_Full_NoPanLFO:
+Voice_Calc_LevelPair_Full_NoLFO:
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02eh), 000h
-	JR Z, Voice_UpdatePan_Full_CheckMax
+	JR Z, Voice_Calc_LevelPair_Full_CheckMax
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02eh)
 	LD E, A
@@ -20503,17 +20508,17 @@ Voice_UpdatePan_Full_NoPanLFO:
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
 
-Voice_UpdatePan_Full_CheckMax:
+Voice_Calc_LevelPair_Full_CheckMax:
 	LD XWA, (XSP + 00eh)
 	LD XWA, (XWA + 01fh)
 	BIT 0, (XWA)
-	JR Z, Voice_UpdatePan_Full_WriteDSP
+	JR Z, Voice_Calc_LevelPair_Full_WriteDSP
 	LD WA, IZ
 	CP WA, 00ffh
-	JR NZ, Voice_UpdatePan_Full_WriteDSP
+	JR NZ, Voice_Calc_LevelPair_Full_WriteDSP
 	DEC 1, IZ
 
-Voice_UpdatePan_Full_WriteDSP:
+Voice_Calc_LevelPair_Full_WriteDSP:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 028h)
 	EXTZ WA
@@ -20543,7 +20548,7 @@ Voice_UpdatePan_Full_WriteDSP:
 	LD (XSP + 00ch), WA
 	LD XWA, (XSP + 004h)
 	CP (XWA + 034h), 000h
-	JRL Z, Voice_UpdatePan_Full_NoPanDepth2
+	JRL Z, Voice_Calc_LevelPair_Full_NoDepth2
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -20566,7 +20571,7 @@ Voice_UpdatePan_Full_WriteDSP:
 	LD (XSP + 008h), HL
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02fh), 000h
-	JR Z, Voice_UpdatePan_Full_NoModDepth
+	JR Z, Voice_Calc_LevelPair_Full_NoModDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02fh)
 	LD E, A
@@ -20593,9 +20598,9 @@ Voice_UpdatePan_Full_WriteDSP:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
-	JR T, Voice_UpdatePan_Full_WriteChDepth
+	JR T, Voice_Calc_LevelPair_Full_WriteChDepth
 
-Voice_UpdatePan_Full_NoModDepth:
+Voice_Calc_LevelPair_Full_NoModDepth:
 	LD WA, (XSP + 00ah)
 	ADD WA, (XSP + 008h)
 	LD BC, 00ffh
@@ -20608,12 +20613,12 @@ Voice_UpdatePan_Full_NoModDepth:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
-	JR T, Voice_UpdatePan_Full_WriteChDepth
+	JR T, Voice_Calc_LevelPair_Full_WriteChDepth
 
-Voice_UpdatePan_Full_NoPanDepth2:
+Voice_Calc_LevelPair_Full_NoDepth2:
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02fh), 000h
-	JR Z, Voice_UpdatePan_Full_WriteChDepth
+	JR Z, Voice_Calc_LevelPair_Full_WriteChDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02fh)
 	LD E, A
@@ -20639,7 +20644,7 @@ Voice_UpdatePan_Full_NoPanDepth2:
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
 
-Voice_UpdatePan_Full_WriteChDepth:
+Voice_Calc_LevelPair_Full_WriteChDepth:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02ah)
 	EXTZ WA
@@ -20649,10 +20654,10 @@ Voice_UpdatePan_Full_WriteChDepth:
 	LD HL, WA
 	LD WA, 4
 	CP HL, 4
-	JR LT, Voice_UpdatePan_Full_WriteCh2
+	JR LT, Voice_Calc_LevelPair_Full_WriteCh2
 	LD WA, HL
 
-Voice_UpdatePan_Full_WriteCh2:
+Voice_Calc_LevelPair_Full_WriteCh2:
 	LD HL, WA
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02ch)
@@ -20677,7 +20682,7 @@ Voice_UpdatePan_Full_WriteCh2:
 	LDA XSP, XSP + 00eh
 	RET
 
-Voice_UpdatePan_Mono:
+Voice_Calc_LevelPair_Mono:
 	LDA XSP, XSP - 14
 	PUSH XIZ
 	LD (XSP + 00eh), XWA
@@ -20687,16 +20692,16 @@ Voice_UpdatePan_Mono:
 	LD XWA, (XSP + 00eh)
 	LD XWA, (XWA + 013h)
 	BIT 4, (XWA + 010h)
-	JR Z, Voice_UpdatePan_Mono_SetInvFlag
+	JR Z, Voice_Calc_LevelPair_Mono_SetInvFlag
 	LD XWA, (XSP + 00eh)
 	ANDW (XWA + 001h), 7fffh
-	JR T, Voice_UpdatePan_Mono_ComputePan
+	JR T, Voice_Calc_LevelPair_Mono_ComputeLevel
 
-Voice_UpdatePan_Mono_SetInvFlag:
+Voice_Calc_LevelPair_Mono_SetInvFlag:
 	LD XWA, (XSP + 00eh)
 	ORW (XWA + 001h), 8000h
 
-Voice_UpdatePan_Mono_ComputePan:
+Voice_Calc_LevelPair_Mono_ComputeLevel:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 027h)
 	EXTZ WA
@@ -20706,7 +20711,7 @@ Voice_UpdatePan_Mono_ComputePan:
 	LD QIZ, WA
 	LD XWA, (XSP + 004h)
 	CP (XWA + 033h), 000h
-	JRL Z, Voice_UpdatePan_Mono_NoPanLFO
+	JRL Z, Voice_Calc_LevelPair_Mono_NoLFO
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -20729,7 +20734,7 @@ Voice_UpdatePan_Mono_ComputePan:
 	LD (XSP + 008h), HL
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02eh), 000h
-	JR Z, Voice_UpdatePan_Mono_NoPanDepth
+	JR Z, Voice_Calc_LevelPair_Mono_NoDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02eh)
 	LD E, A
@@ -20749,21 +20754,21 @@ Voice_UpdatePan_Mono_ComputePan:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD QIZ, HL
-	JR T, Voice_UpdatePan_Mono_CheckMax
+	JR T, Voice_Calc_LevelPair_Mono_CheckMax
 
-Voice_UpdatePan_Mono_NoPanDepth:
+Voice_Calc_LevelPair_Mono_NoDepth:
 	LD WA, QIZ
 	ADD WA, (XSP + 008h)
 	LD BC, 00ffh
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD QIZ, HL
-	JR T, Voice_UpdatePan_Mono_CheckMax
+	JR T, Voice_Calc_LevelPair_Mono_CheckMax
 
-Voice_UpdatePan_Mono_NoPanLFO:
+Voice_Calc_LevelPair_Mono_NoLFO:
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02eh), 000h
-	JR Z, Voice_UpdatePan_Mono_CheckMax
+	JR Z, Voice_Calc_LevelPair_Mono_CheckMax
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02eh)
 	LD E, A
@@ -20783,17 +20788,17 @@ Voice_UpdatePan_Mono_NoPanLFO:
 	CALR ClampS16_WA_To_DEBC
 	LD QIZ, HL
 
-Voice_UpdatePan_Mono_CheckMax:
+Voice_Calc_LevelPair_Mono_CheckMax:
 	LD XWA, (XSP + 00eh)
 	LD XWA, (XWA + 01fh)
 	BIT 0, (XWA)
-	JR Z, Voice_UpdatePan_Mono_WriteDSP
+	JR Z, Voice_Calc_LevelPair_Mono_WriteDSP
 	LD WA, QIZ
 	CP WA, 00ffh
-	JR NZ, Voice_UpdatePan_Mono_WriteDSP
+	JR NZ, Voice_Calc_LevelPair_Mono_WriteDSP
 	DEC 1, QIZ
 
-Voice_UpdatePan_Mono_WriteDSP:
+Voice_Calc_LevelPair_Mono_WriteDSP:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 028h)
 	EXTZ WA
@@ -20847,7 +20852,7 @@ Voice_UpdatePan_Mono_WriteDSP:
 	LD (XSP + 00ch), WA
 	LD XWA, (XSP + 004h)
 	CP (XWA + 034h), 000h
-	JRL Z, Voice_UpdatePan_Full2_NoPanDepth
+	JRL Z, Voice_Calc_LevelPair_Mono_NoDepth2
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -20870,7 +20875,7 @@ Voice_UpdatePan_Mono_WriteDSP:
 	LD (XSP + 008h), HL
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02fh), 000h
-	JR Z, Voice_UpdatePan_Full2_NoModDepth
+	JR Z, Voice_Calc_LevelPair_Mono_NoModDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02fh)
 	LD E, A
@@ -20897,9 +20902,9 @@ Voice_UpdatePan_Mono_WriteDSP:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
-	JR T, Voice_UpdatePan_Full2_WriteChDepth
+	JR T, Voice_Calc_LevelPair_Mono_WriteChDepth
 
-Voice_UpdatePan_Full2_NoModDepth:
+Voice_Calc_LevelPair_Mono_NoModDepth:
 	LD WA, (XSP + 00ah)
 	ADD WA, (XSP + 008h)
 	LD BC, 00ffh
@@ -20912,12 +20917,12 @@ Voice_UpdatePan_Full2_NoModDepth:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
-	JR T, Voice_UpdatePan_Full2_WriteChDepth
+	JR T, Voice_Calc_LevelPair_Mono_WriteChDepth
 
-Voice_UpdatePan_Full2_NoPanDepth:
+Voice_Calc_LevelPair_Mono_NoDepth2:
 	LD XWA, (XSP + 004h)
 	CP (XWA + 02fh), 000h
-	JR Z, Voice_UpdatePan_Full2_WriteChDepth
+	JR Z, Voice_Calc_LevelPair_Mono_WriteChDepth
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02fh)
 	LD E, A
@@ -20943,7 +20948,7 @@ Voice_UpdatePan_Full2_NoPanDepth:
 	CALR ClampS16_WA_To_DEBC
 	LD (XSP + 00ch), HL
 
-Voice_UpdatePan_Full2_WriteChDepth:
+Voice_Calc_LevelPair_Mono_WriteChDepth:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02ah)
 	EXTZ WA
@@ -20953,10 +20958,10 @@ Voice_UpdatePan_Full2_WriteChDepth:
 	LD HL, WA
 	LD WA, 4
 	CP HL, 4
-	JR LT, Voice_UpdatePan_Full2_WriteCh2
+	JR LT, Voice_Calc_LevelPair_Mono_WriteCh2
 	LD WA, HL
 
-Voice_UpdatePan_Full2_WriteCh2:
+Voice_Calc_LevelPair_Mono_WriteCh2:
 	LD HL, WA
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 02ch)
@@ -21508,7 +21513,7 @@ Voice_WriteChPitchWithVib:
 	SLL 8, BC
 	LD (0451FAh), BC
 	EXTZ WA
-	CALL Voice_AllocateForFull
+	CALL Voice_Query_PartVoices
 	LDA XWA, XHL + 005h
 	LD XIZ, XWA
 	CP (XIZ), 040h
@@ -22062,7 +22067,7 @@ Voice_ComputeAndWriteVolume3_WriteDSP:
 ; Exit:  TONEGEN_REG_SCRATCH+0x30/+0x32/+0x34/+0x36 = 0;
 ;        +0x2C = (slot+0x46 << 8) | 0x0080, +0x2E = (slot+0x46 << 8)
 ; Notes: slot+0x46 is the RELEASE target level built by
-;        Voice_Build_EnvSegments_FixedAtk.  MEASURED consequence: the firmware
+;        Voice_Calc_LevelPair_FixedAtk.  MEASURED consequence: the firmware
 ;        silences a voice by zeroing the two *send* pairs, NOT by zeroing the
 ;        +0x800 level - so +0x800 is not the mute control
 ;        (notes/audit/kn5000-audit-amplitude.md S1.4).
@@ -23917,7 +23922,7 @@ Voice_DSP_OutputConfig:
 	db 080h, 090h, 020h, 0D8h, 0CCh, 0FFh, 000h, 0D8h
 	db 0CFh, 040h, 000h, 067h, 0D2h, 0EFh, 060h, 00Eh
 
-DSP_WriteVoiceParam_Long:
+ToneGen_WriteVoice_Long:
 	PUSH XIZ
 	LD XIZ, XBC
 	RES 7, (P6)
@@ -23927,16 +23932,16 @@ DSP_WriteVoiceParam_Long:
 	SET 7, (P6)
 	LD WA, (XIZ + 00eh)
 	LD (100002h), WA
-	JR T, DSP_WriteVoiceParam_Long_NopGap
+	JR T, ToneGen_WriteVoice_Long_NopGap
 
-DSP_WriteVoiceParam_Long_NopGap:
+ToneGen_WriteVoice_Long_NopGap:
 	NOP
 	NOP
 	NOP
 	POP XIZ
 	RET
 
-DSP_WriteVoiceParam_Short:
+ToneGen_WriteVoice_Short:
 	PUSH XIZ
 	LD XIZ, XBC
 	RES 7, (P6)
@@ -23947,16 +23952,16 @@ DSP_WriteVoiceParam_Short:
 	LD WA, (XIZ + 004h)
 	RES 0fh, WA
 	LD (100002h), WA
-	JR T, DSP_WriteVoiceParam_Short_NopGap
+	JR T, ToneGen_WriteVoice_Short_NopGap
 
-DSP_WriteVoiceParam_Short_NopGap:
+ToneGen_WriteVoice_Short_NopGap:
 	NOP
 	NOP
 	NOP
 	POP XIZ
 	RET
 
-DSP_WriteVoiceParam_Direct:
+ToneGen_WriteVoice_Direct:
 	PUSH IZ
 	LD IZ, BC
 	RES 7, (P6)
@@ -23964,16 +23969,16 @@ DSP_WriteVoiceParam_Direct:
 	NOP
 	SET 7, (P6)
 	LD (100002h), IZ
-	JR T, DSP_WriteVoiceParam_Direct_NopGap
+	JR T, ToneGen_WriteVoice_Direct_NopGap
 
-DSP_WriteVoiceParam_Direct_NopGap:
+ToneGen_WriteVoice_Direct_NopGap:
 	NOP
 	NOP
 	NOP
 	POP IZ
 	RET
 
-DSP_WriteVoiceParam_6Words:
+ToneGen_WriteVoice_6Words:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XBC
@@ -23987,9 +23992,9 @@ DSP_WriteVoiceParam_6Words:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, DSP_WriteVoiceParam_6Words_Word2
+	JR T, ToneGen_WriteVoice_6Words_Word2
 
-DSP_WriteVoiceParam_6Words_Word2:
+ToneGen_WriteVoice_6Words_Word2:
 	NOP
 	NOP
 	NOP
@@ -24786,7 +24791,7 @@ Voice_AllVoices_UpdateVelocity_LoopStart:
 	JRL Z, Voice_AllVoices_UpdateVelocity_InnerStep
 	LD A, (XSP + 004h)
 	EXTZ WA
-	CALL Voice_AllocateForFull
+	CALL Voice_Query_PartVoices
 	LDA XWA, XHL + 005h
 	LD XIZ, XWA
 	CP (XIZ), 040h
@@ -24933,7 +24938,7 @@ Voice_AllVoices_WritePan_BranchA:
 	LD A, (XIZ)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALR DSP_WriteVoiceParam_Long
+	CALR ToneGen_WriteVoice_Long
 	JR T, Voice_AllVoices_WritePan_LoopStep
 
 Voice_AllVoices_WritePan_BranchB:
@@ -24942,7 +24947,7 @@ Voice_AllVoices_WritePan_BranchB:
 	LD A, (XIZ)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALR DSP_WriteVoiceParam_Long
+	CALR ToneGen_WriteVoice_Long
 
 Voice_AllVoices_WritePan_LoopStep:
 	INC 1, XIZ
@@ -24996,7 +25001,7 @@ Voice_AllVoices_WriteAmplitude_LoopStep:
 	LD A, (XIZ)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALR DSP_WriteVoiceParam_Short
+	CALR ToneGen_WriteVoice_Short
 	INC 1, XIZ
 	CP (XIZ), 040h
 	JR C, Voice_AllVoices_WriteAmplitude_LoopBody
@@ -25061,7 +25066,7 @@ Voice_AllNotes_SustainRetrigger_BranchB:
 	LD A, (XWA)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
-	CALR DSP_WriteVoiceParam_Direct
+	CALR ToneGen_WriteVoice_Direct
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
@@ -25080,7 +25085,7 @@ Voice_AllNotes_SustainRetrigger_BranchC:
 	LD A, (XWA)
 	EXTZ WA
 	LDA XBC, 0451CCh
-	CALR DSP_WriteVoiceParam_6Words
+	CALR ToneGen_WriteVoice_6Words
 	JR T, Voice_AllNotes_SustainRetrigger_LoopStep
 
 Voice_AllNotes_SustainRetrigger_BranchD:
@@ -25098,7 +25103,7 @@ Voice_AllNotes_SustainRetrigger_BranchD:
 	LD A, (XWA)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
-	CALR DSP_WriteVoiceParam_Direct
+	CALR ToneGen_WriteVoice_Direct
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
@@ -25856,7 +25861,7 @@ Voice_PortamentoSlots_WriteHW:
 	CALL Voice_SetLFO_ActiveFlag
 	LD A, (XSP + 004h)
 	EXTZ WA
-	CALL Voice_AllocateForFull
+	CALL Voice_Query_PartVoices
 	LDA XWA, XHL + 005h
 	LD (XSP), XWA
 	CP (XWA), 040h
@@ -26036,7 +26041,7 @@ Voice_CC_Volume:
 	CALR Voice_CC_SetVolume
 	LD A, (XIZ + 001h)
 	EXTZ WA
-	CALL Voice_AllocateForFull
+	CALL Voice_Query_PartVoices
 	LD XWA, XHL
 	CALR Voice_AllVoices_WriteAmplitude
 	JRL T, Voice_CC_Exit
@@ -26066,7 +26071,7 @@ Voice_CC_Expression:
 	CALR Voice_CC_SetExpression
 	LD A, (XIZ + 001h)
 	EXTZ WA
-	CALL Voice_AllocateForFull
+	CALL Voice_Query_PartVoices
 	LD XWA, XHL
 	CALR Voice_AllVoices_WriteAmplitude
 	JRL T, Voice_CC_Exit
@@ -26156,7 +26161,7 @@ Voice_CC_Portamento:
 	CALR Voice_CC_SetPortamentoDepth
 	LD A, (XIZ + 001h)
 	EXTZ WA
-	CALL Voice_AllocateForFull
+	CALL Voice_Query_PartVoices
 	LD XWA, XHL
 	CALR Pitch_Refresh_Sounding_Voices
 	JRL T, Voice_CC_Exit
@@ -27750,9 +27755,9 @@ ToneGen_SilenceChannel:	; 02B4A1h
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0000h
-	JR T, ToneGen_WriteNoteKey_NopCont1
+	JR T, ToneGen_SilenceChannel_NopCont1
 
-ToneGen_WriteNoteKey_NopCont1:
+ToneGen_SilenceChannel_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -27763,9 +27768,9 @@ ToneGen_WriteNoteKey_NopCont1:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 7e00h
-	JR T, ToneGen_WriteNoteKey_NopCont2
+	JR T, ToneGen_SilenceChannel_NopCont2
 
-ToneGen_WriteNoteKey_NopCont2:
+ToneGen_SilenceChannel_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -27823,7 +27828,7 @@ Voice_Build_Register_Set:		; 02B4E3h
 	LD XWA, XIZ
 	CALL Voice_Build_GateCommand
 	LD XWA, XIZ
-	CALL Voice_Build_EnvSegments_PatchAtk
+	CALL Voice_Calc_LevelPair_PatchAtk
 	LD XWA, XIZ
 	LD BC, 0
 	CALL Voice_WriteChPanShift
@@ -28614,7 +28619,7 @@ Voice_Release_Type4:
 	CP (XIZ + 003h), 003h
 	JR NC, Voice_Release_Type4_BranchA
 	LD XWA, XIZ
-	CALL Voice_UpdatePan_Full
+	CALL Voice_Calc_LevelPair_Full
 	LD XWA, XIZ
 	CALL Voice_ComputePitch
 	LD XWA, XIZ
@@ -28625,7 +28630,7 @@ Voice_Release_Type4:
 
 Voice_Release_Type4_BranchA:
 	LD XWA, XIZ
-	CALL Voice_UpdatePan_Mono
+	CALL Voice_Calc_LevelPair_Mono
 	LD XWA, XIZ
 	CALL Voice_ComputePitch
 	LD XWA, XIZ
@@ -28971,7 +28976,7 @@ Voice_Init_Type2:
 	LD XWA, XIZ
 	CALL Voice_Build_GateCommand_NoPartial
 	LD XWA, XIZ
-	CALL Voice_Build_EnvSegments_FixedAtk
+	CALL Voice_Calc_LevelPair_FixedAtk
 	LD XWA, XIZ
 	LD BC, 0
 	CALL Voice_WriteChPanShift2
@@ -29266,7 +29271,7 @@ Voice_Init_Type1:
 	LD XWA, XIZ
 	CALL Voice_Build_GateCommand_NoPartial
 	LD XWA, XIZ
-	CALL Voice_Build_EnvSegments_FixedAtk
+	CALL Voice_Calc_LevelPair_FixedAtk
 	LD XWA, XIZ
 	LD BC, 0
 	CALL Voice_WriteChPanShift2
@@ -30172,7 +30177,7 @@ VoiceAllocate_DataTable_02CD14:
 	db 0EEh, 088h, 01Dh, 091h, 026h, 002h, 0EEh, 08Bh
 	db 05Eh, 00Eh
 
-Voice_AllocateForFull:
+Voice_Query_PartVoices:
 	PUSH XIZ
 	LDA XIZ, 2A5Eh
 	LD (XIZ), 000h
@@ -39889,7 +39894,7 @@ MIDI_Dispatch:
 	PUSH XIZ
 	LDA XIZ, 2B0Dh
 	LD WA, (XIZ + 004h)
-	CALL RingBuf_SetOffsetHi
+	CALL MIDI_Backlog_Publish
 	JRL T, MIDI_Dispatch_NextByte
 
 MIDI_Dispatch_ParseStatus:
@@ -47265,6 +47270,8 @@ DSP_WriteOscParam_Offset:
 	POP IZ
 	INC 6, XSP
 	RETD 0006h
+
+DSP_AlgoDescriptor_Emit:	; 0389E1h
 	DEC 8, XSP
 	PUSH IZ
 	LD IZ, DE
@@ -47300,7 +47307,7 @@ DSP_WriteOscParam_Offset:
 	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	CPW (XSP + 012h), 0063h
-	JR Z, DSP_AlgoSelect_TypeEq63
+	JR Z, DSP_AlgoDescriptor_Emit_TypeEq63
 	LD BC, IZ
 	LD WA, 0
 	CALL DSP_DispatchData
@@ -47329,9 +47336,9 @@ DSP_WriteOscParam_Offset:
 	LD WA, 0
 	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
-	JR T, DSP_AlgoSelect_WriteHeader
+	JR T, DSP_AlgoDescriptor_Emit_WriteHeader
 
-DSP_AlgoSelect_TypeEq63:
+DSP_AlgoDescriptor_Emit_TypeEq63:
 	LD BC, IZ
 	LD WA, 0
 	CALL DSP_DispatchData
@@ -47353,9 +47360,9 @@ DSP_AlgoSelect_TypeEq63:
 	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 
-DSP_AlgoSelect_WriteHeader:
+DSP_AlgoDescriptor_Emit_WriteHeader:
 	CPW (XSP + 006h), 0000h
-	JR NZ, DSP_AlgoSelect_WriteHeaderNonZero
+	JR NZ, DSP_AlgoDescriptor_Emit_WriteHeaderNonZero
 	LD BC, IZ
 	LD WA, 0008h
 	CALL DSP_DispatchData
@@ -47376,9 +47383,9 @@ DSP_AlgoSelect_WriteHeader:
 	LD WA, 7
 	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
-	JR T, DSP_AlgoSelect_HeaderReturn
+	JR T, DSP_AlgoDescriptor_Emit_HeaderReturn
 
-DSP_AlgoSelect_WriteHeaderNonZero:
+DSP_AlgoDescriptor_Emit_WriteHeaderNonZero:
 	LD WA, (XSP + 002h)
 	SRL 7, WA
 	AND WA, 0002h
@@ -47409,7 +47416,7 @@ DSP_AlgoSelect_WriteHeaderNonZero:
 	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 
-DSP_AlgoSelect_HeaderReturn:
+DSP_AlgoDescriptor_Emit_HeaderReturn:
 	LD HL, (XSP + 004h)
 	POP IZ
 	INC 8, XSP
@@ -53027,14 +53034,14 @@ ToneGen_Init:			; 03D016h
 ; ToneGen_Process_Notes - Process incoming note events from tone generator
 ; Entry: Called from main tone gen handler
 ; Exit:  Note events dispatched to appropriate voice slots
-; Notes: Reads notes via ToneGen_Read_Voice_Data, manages voice allocation
+; Notes: Reads notes via Keybed_Read_Event, manages voice allocation
 ;        at 0x4A4C-0x4A5C (16 voice slots), sends to DMA at 0x4A42
 ; ----------------------------------------------------------------------------
 ToneGen_Process_Notes:		; 03D01Eh
 	DEC 2, XSP		; Allocate 2 bytes for result
 	LD WA, 0
 	LDA XWA, XSP
-	CALR ToneGen_Read_Voice_Data
+	CALR Keybed_Read_Event
 	CP HL, 0ffffh
 	JRL Z, ToneGen_Note_Done
 
@@ -53088,7 +53095,7 @@ ToneGen_Note_Off_Slot:		; 03D06Dh
 
 ToneGen_Note_Continue:		; 03D0B6h
 	LDA XWA, XSP
-	CALR ToneGen_Read_Voice_Data
+	CALR Keybed_Read_Event
 	CP HL, 0ffffh
 	JRL NZ, ToneGen_Note_Loop
 
@@ -53097,21 +53104,22 @@ ToneGen_Note_Done:		; 03D0C2h
 	RET
 
 ; ----------------------------------------------------------------------------
-; ToneGen_Read_Voice_Data - Read voice data from tone generator
+; Keybed_Read_Event - Read one key event from the KEYBED port
 ; Entry: XWA = pointer to 2-byte result buffer
-; Exit:  HL = 0 (success) or 0xFFFF (not ready)
-; Notes: P6.7 controls A23 address line to tone generator
-;        Reads status from 0x110002, data from 0x110000
+; Exit:  HL = 0 (success) or 0xFFFF (FIFO empty)
+; Notes: 0x110000 / 0x110002 are the keybed data and status ports, NOT tone-
+;        generator voice state -- the routine was called ToneGen_Read_Voice_Data.
+;        P6.7 selects between the two halves of the A23 multiplex.
 ;        Extracts note (low byte) and velocity (high byte)
 ; ----------------------------------------------------------------------------
-ToneGen_Read_Voice_Data:	; 03D0C5h
+Keybed_Read_Event:	; 03D0C5h
 	PUSH XIZ
 	LD XIZ, XWA
 	SET 7, (P6)		; Assert A23 for status read
 	NOP
 	LD BC, (110002h)	; Read status register
 	BIT 0, BC		; Check data ready bit
-	JR Z, ToneGen_Read_Not_Ready
+	JR Z, Keybed_Read_Event_NotReady
 	RES 7, (P6)		; Deassert A23 for data read
 	NOP
 	LD WA, (110000h)	; Read voice data (16-bit)
@@ -53121,35 +53129,35 @@ ToneGen_Read_Voice_Data:	; 03D0C5h
 	LD E, A			; E = velocity byte (high)
 	AND E, 0ffh
 	CP E, 0ffh		; Check for note-off
-	JR Z, ToneGen_Read_NoteOff
+	JR Z, Keybed_Read_Event_NoteOff
 	BIT 1, BC		; Check status bit 1
-	JR Z, ToneGen_Read_NoteOn
+	JR Z, Keybed_Read_Event_NoteOn
 
-ToneGen_Read_NoteOff:		; 03D0F6h
+Keybed_Read_Event_NoteOff:		; 03D0F6h
 	BIT 7, L		; Check note high bit (release flag)
-	JR Z, ToneGen_Read_Release
+	JR Z, Keybed_Read_Event_Release
 	LD HL, 0ffffh		; Return not ready
-	JR T, ToneGen_Read_Done
+	JR T, Keybed_Read_Event_Done
 
-ToneGen_Read_Release:		; 03D100h
+Keybed_Read_Event_Release:		; 03D100h
 	LD C, L
 	LD XWA, XIZ
 	CALR Keybed_Decode_Event
 	LD (XIZ + 001h), 000h	; Clear velocity for note-off
 	LD HL, 0
-	JR T, ToneGen_Read_Done
+	JR T, Keybed_Read_Event_Done
 
-ToneGen_Read_NoteOn:		; 03D10Fh
+Keybed_Read_Event_NoteOn:		; 03D10Fh
 	LD C, L
 	LD XWA, XIZ
 	CALR Keybed_Decode_Event
 	LD HL, 0
-	JR T, ToneGen_Read_Done
+	JR T, Keybed_Read_Event_Done
 
-ToneGen_Read_Not_Ready:		; 03D11Ah
+Keybed_Read_Event_NotReady:		; 03D11Ah
 	LD HL, 0ffffh
 
-ToneGen_Read_Done:		; 03D11Dh
+Keybed_Read_Event_Done:		; 03D11Dh
 	POP XIZ
 	RET
 
