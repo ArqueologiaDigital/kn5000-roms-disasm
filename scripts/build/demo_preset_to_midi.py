@@ -235,8 +235,14 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('inputs', nargs='+', help='decompressed demo_preset_NN.bin file(s)')
     ap.add_argument('-o', '--output-dir', default='.', help='where to write .mid files')
-    ap.add_argument('--bpm', type=float, default=120.0,
-                    help='tempo (the ROM tempo field is not decoded yet; default 120)')
+    ap.add_argument('--bpm', type=float, default=90.0,
+                    help='tempo. The ROM tempo field is still not decoded, but 90 bpm is '
+                         'MEASURED from the audio, not guessed: an onset-autocorrelation of '
+                         'the emulator output (no MIDI involved) gives a 16th at 90.7 and an '
+                         '8th at 89.3 bpm, and aligning this MIDI against three separate '
+                         'captures peaks at 89.5-90.75 with a half-height width of 1.75 bpm '
+                         'on the sharpest. 6.94 ms/tick, a plausible firmware timer. The old '
+                         'default of 120 was wrong by a factor 1.33.')
     ap.add_argument('--drum-track', type=int, action='append', default=[],
                     help='route this part index to MIDI channel 10 (repeatable)')
     ap.add_argument('--program-changes', action='store_true',
