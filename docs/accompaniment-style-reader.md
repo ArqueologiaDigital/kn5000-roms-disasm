@@ -26,6 +26,39 @@ read = 0x400000 + (0x3285) * 0x10000 + ptr + 6
 cancelled by the `-0x8000` in `AccompStyle_LaneBaseFromRecord`. Note `(XHL+IY)` indexes
 with a **signed** 16-bit offset.
 
+## Finding the style record
+
+`AccompStyle_LookupRecord` (`F53D9A`) turns a (group, style) pair into the address of
+a style record in the rhythm ROM:
+
+```
+F53D77   H &= 7 ; H <<= 1 ; W = 0 ; WA <<= 2 ; L = 0 ; HL = H*256 + A*4
+         XIY = 0xE45142                  ; style directory, 4 bytes per entry
+         WA  = (XIY+HL)                  ; word 0: low byte = 64 KB bank
+         IY  = (XIY+HL+2)                ; word 1: offset within that bank
+F53D9A   calr F53D77 ; call F590B4 ; extz XIY ; add XHL,XIY ; ld XIY,XHL
+```
+
+so
+
+```
+record = 0x400000 + (0x3277) + bank * 0x10000 + offset      ; index (H&7)*512 + style*4
+```
+
+The directory is **8 groups x 128 styles**; 202 distinct records. The caller is
+`F55F9E` with `A = (0x32E5)` (style) and `H = (0x32E6)` (group). `(0x32E6)` is bounded
+to 0..6 by the seven compare sites `F54692..F54AF4`.
+
+Both inputs, and the section request, come from control-panel mirror bytes sampled by
+one routine:
+
+```
+F53367   A = (0xFC5A)              -> (0x32F5)   pending style
+F5336F   A = (0xFC5B) & 0x7F & 7   -> (0x32F7)   pending group
+F533FF   A = (0xFC61) & 0x30 >> 4  -> (0x3305)   section request
+F55EA4   (0x32E6) = (0x32F7) ; (0x32E5) = (0x32F5)      ; commit
+```
+
 ## Selecting a section
 
 ```
@@ -75,13 +108,32 @@ compares `0x342F` against a note register and `F5706F` forces a zero duration to
 which is what identifies those two fields. The beat is **96 ticks** — the literal
 `0x60` in the timing routine `F570BB`.
 
-## Known defect (KN5000 Feature Demo)
+## Where the pattern data really is — and a defect in the ROM DUMP
 
-With the demo running, `(0x32E5)=0x48` → `(0x3285)=0x1A` and section 7's lane pointers
-are `0xE754…0xFD29`, but bank `0x1A`'s data ends at `0xE230`. The reader therefore
-walks `0xFF`, the watchdog trips, and the shared transport stops — which also kills
-the demo song player, since it gates on the same `bit 2,(0x0420)`.
+Every track begins with the six-byte cell header `80 FF FF FF FF 87`, and the reader
+starts exactly 6 bytes past it. That makes lane pointers self-checking: a correct one
+must land 6 bytes after that pattern. Over all 202 records x 48 lane reads:
 
-Open question: whether the style→bank mapping is wrong, or the firmware should have
-clamped the section request for a style that has no section 7.
-Full investigation: `kn7000_mame/notes/HANDOFF-kn5000-demo-playback.md`.
+| rhythm ROM image | correctly framed | landing on 0xFF |
+|---|---|---|
+| `kn5000_rhythm_data_rom.ic14` as dumped | 3439 / 9696 (35.5%) | 409 |
+| same image with bank bits 3 and 5 swapped | **9696 / 9696 (100%)** | **0** |
+
+The declared-bank -> actual-bank relation is a clean deterministic bit swap —
+`0x08-0x0F <-> 0x20-0x27`, `0x18-0x1F <-> 0x30-0x37`, everything else identity — i.e.
+ROM address lines **A19 and A21 are transposed** in the dump we hold. The bank table at
+`F590D1` is strictly linear (all 64 entries `0x400000 + i*0x10000`), so the firmware does
+no scrambling of its own; and the record area (banks 0x00-0x07) has both bits clear, so
+records, style names and the directory all read correctly. Only the pattern data is
+displaced, which is why this hid for so long.
+
+132 of the 202 records sit in banks where bit 3 != bit 5, so about two thirds of the
+factory rhythms read the wrong 64 KB bank. With the KN5000 Feature Demo (group 4,
+style 0x48, section 7) the reader walks `0xFF`, the bad-opcode watchdog trips, and the
+shared transport stops — which also kills the demo song player, since it gates on the
+same `bit 2,(0x0420)`.
+
+It is **not yet settled** whether the dump is wrong or the board routes CPU A19/A21 to
+different IC14 pins; the fix belongs in the ROM in the first case and in the emulator's
+memory map in the second. Full investigation:
+`kn7000_mame/notes/HANDOFF-kn5000-demo-playback.md`.
