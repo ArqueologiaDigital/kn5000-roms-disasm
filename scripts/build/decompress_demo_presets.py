@@ -7,9 +7,15 @@ little-endian pointer to a SLIDE4K-compressed block. Entry 18 (the last) is
 the Feature Demo preset at 0x8E0000.
 
 SLIDE4K format:
-  Header: "SLIDE4K\\0" (8 bytes) + 3 size bytes + 3 metadata bytes = 14 bytes
-  Buffer size (not exact decompressed size) = byte[8] + (byte[9] << 8) + byte[10]
-  Compressed data follows at offset 14.
+  Header: "SLIDE4K\\0" (8 bytes) + 24-bit LE uncompressed size = 11 bytes total.
+  Compressed data follows at offset 11.
+
+  NOTE: this used to be documented as a 14-byte header with "3 metadata bytes".
+  Those three bytes are NOT metadata -- they are the first flag byte and the
+  first two payload bytes of the LZSS stream. Starting at +14 silently dropped
+  them and produced short, corrupted output. Verified against the running
+  firmware's own decompressor in MAME: entry 18 decodes to exactly 38,144
+  bytes (0x9500), matching the size field and the emulator byte-for-byte.
 
 LZSS parameters:
   - 4KB sliding window (0x1000 bytes)
@@ -37,7 +43,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 
 ROM_BASE = 0x800000
 POINTER_TABLE_ADDR = 0x9C4000
-HEADER_SIZE = 14
+HEADER_SIZE = 11
 HEADER_MAGIC = b'SLIDE4K\x00'
 
 
@@ -83,7 +89,8 @@ def decompress_slide4k(compressed_data, max_output=None):
                 i += 2
 
                 offset = ((high & 0xF0) << 4) | low
-                length = (high & 0x0F) + 2
+                # Classic Okumura LZSS: j = nibble + THRESHOLD, copy j+1 bytes.
+                length = (high & 0x0F) + 3
 
                 for _ in range(length):
                     if max_output is not None and len(output) >= max_output:
@@ -94,7 +101,7 @@ def decompress_slide4k(compressed_data, max_output=None):
                     window_pos = (window_pos + 1) & WINDOW_MASK
                     offset = (offset + 1) & WINDOW_MASK
 
-    return bytes(output)
+    return bytes(output), i
 
 
 def parse_pointer_table(rom):
@@ -149,6 +156,10 @@ def main():
     parser.add_argument('--output-dir', default=os.path.join(PROJECT_DIR,
                         'table_data/includes/demo_presets'),
                         help='Output directory for decompressed files')
+    parser.add_argument('--emit-references', action='store_true',
+                        help='Also write the exact compressed payloads used as\n                             byte-identical recompression references')
+    parser.add_argument('--reference-dir', default=os.path.join(PROJECT_DIR, 'original_ROMs'),
+                        help='Where to write compressed reference payloads')
     parser.add_argument('--analyze', type=int, nargs='*',
                         help='Analyze specific preset indices (hex dump)')
     args = parser.parse_args()
@@ -175,8 +186,7 @@ def main():
             print(f"Entry {i:2d}: ERROR - bad header at 0x{addr:08X}: {header[:8]}")
             continue
 
-        buf_size = header[8] + (header[9] << 8) + header[10]
-        metadata = header[11:14]
+        buf_size = header[8] | (header[9] << 8) | (header[10] << 16)
 
         # Get compressed data (from byte 14 to next entry boundary)
         end_addr = get_compressed_block_end(rom, ptrs, i)
@@ -187,7 +197,19 @@ def main():
             comp_data = comp_data[:-1]
 
         # Decompress (use buffer size as limit — firmware stops at buf_size)
-        decompressed = decompress_slide4k(comp_data, buf_size)
+        decompressed, consumed = decompress_slide4k(comp_data, buf_size)
+        # NOTE: do NOT truncate comp_data to `consumed`. The decoder stops as soon as
+        # the declared output size is reached, but the ROM may carry a few more real
+        # (non-0xFF) bytes after that point. They must be preserved verbatim or the
+        # rebuilt ROM will not be byte-identical.
+
+        # Emit the exact compressed payload as the byte-identical recompression reference.
+        if args.emit_references:
+            os.makedirs(args.reference_dir, exist_ok=True)
+            ref_path = os.path.join(args.reference_dir,
+                                    f'demo_preset_{i:02d}_compressed.original.bin')
+            with open(ref_path, 'wb') as rf:
+                rf.write(comp_data)
 
         # Save
         out_path = os.path.join(args.output_dir, f"demo_preset_{i:02d}.bin")
@@ -199,7 +221,7 @@ def main():
 
         print(f"Entry {i:2d}: addr=0x{addr:08X}  buf={buf_size:6d}  decomp={len(decompressed):6d}  "
               f"comp={len(comp_data):6d}  ratio={len(comp_data)*100/len(decompressed):4.1f}%  "
-              f"meta=[{metadata[0]:02X},{metadata[1]:02X},{metadata[2]:02X}]")
+              f"{'OK' if len(decompressed) == buf_size else 'SIZE MISMATCH!'}")
 
     print(f"\nTotal: {total_decomp:,} bytes decompressed from {total_comp:,} bytes compressed")
 

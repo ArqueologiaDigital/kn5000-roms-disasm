@@ -205,15 +205,21 @@ Compressed_Preset_Data_LZSS:
 	; If decompression fails, firmware falls back to data at 0x830000.
 	;
 	; Files:
-	;   includes/preset_data_uncompressed.bin - Decompressed source (32,910 bytes)
-	;   includes/preset_data_compressed.bin   - LZSS compressed (27,953 bytes)
+	;   includes/demo_presets/demo_preset_18.bin            - decompressed source (38,144 bytes)
+	;   includes/demo_presets/demo_preset_18_compressed.bin - LZSS payload (27,956 bytes)
+	;
+	; The header is 11 bytes: 8-byte "SLIDE4K\0" magic + 24-bit LE uncompressed size.
+	; It used to be written here as 14 literal bytes ending 0x7D, 0x5A, 0xEE -- but those
+	; three bytes are the first flag byte and first two payload bytes of the LZSS stream,
+	; not header fields. Verified against the firmware's own decompressor running in MAME.
 	;
 	; Tools:
-	;   Decompress: python scripts/decompress_lzss.py
-	;   Compress:   make recompress-lzss (produces valid but not byte-identical output)
+	;   Decompress: make decompress-demo-presets
+	;   Compress:   make rebuild-demo-presets (byte-identical, via --reference)
+DemoSongPreset18:
 	.asciz "SLIDE4K"
-	.byte 0x00, 0x95, 0x00, 0x7d, 0x5a, 0xee
-	.incbin "includes/preset_data_compressed.bin"
+	.byte 0x00, 0x95, 0x00	; uncompressed size = 38144 bytes
+	.incbin "includes/demo_presets/demo_preset_18_compressed.bin"
 
 	; Unused space after compressed data
 	.fill 25281, 1, 0xff
@@ -329,7 +335,122 @@ IconPixelData:
 ;                       Entry 18 points to 0x8E0000 (Feature Demo, same as LZSS preset data)
 ;   0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17, variable size)
 ; =============================================================================
-	.incbin "includes/icons_to_strings.bin"
+	.incbin "includes/icons_to_strings.bin", 0, 0x7F2D8	; 0x944D78-0x9C404F
+
+; -----------------------------------------------------------------------------
+; SLIDE4K-compressed demo song presets, entries 0-17 (entry 18 is at 0x8E0000).
+; Each block: 8-byte "SLIDE4K\0" magic + 24-bit LE uncompressed size, then the
+; LZSS payload, which the Makefile regenerates from the decompressed source in
+; includes/demo_presets/ (byte-identical via compress_lzss.py --reference).
+; -----------------------------------------------------------------------------
+
+	.org 0x9C4050 - 0x800000, 0xFF
+DemoSongPreset00:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x69, 0x00	; uncompressed size = 26880 bytes
+	.incbin "includes/demo_presets/demo_preset_00_compressed.bin"
+
+	.org 0x9C9018 - 0x800000, 0xFF
+DemoSongPreset01:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x71, 0x00	; uncompressed size = 28928 bytes
+	.incbin "includes/demo_presets/demo_preset_01_compressed.bin"
+
+	.org 0x9CE17C - 0x800000, 0xFF
+DemoSongPreset02:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x4A, 0x00	; uncompressed size = 18944 bytes
+	.incbin "includes/demo_presets/demo_preset_02_compressed.bin"
+
+	.org 0x9D16F2 - 0x800000, 0xFF
+DemoSongPreset03:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x6B, 0x00	; uncompressed size = 27392 bytes
+	.incbin "includes/demo_presets/demo_preset_03_compressed.bin"
+
+	.org 0x9D645C - 0x800000, 0xFF
+DemoSongPreset04:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x56, 0x00	; uncompressed size = 22016 bytes
+	.incbin "includes/demo_presets/demo_preset_04_compressed.bin"
+
+	.org 0x9DA016 - 0x800000, 0xFF
+DemoSongPreset05:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x62, 0x00	; uncompressed size = 25088 bytes
+	.incbin "includes/demo_presets/demo_preset_05_compressed.bin"
+
+	.org 0x9DE072 - 0x800000, 0xFF
+DemoSongPreset06:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x44, 0x00	; uncompressed size = 17408 bytes
+	.incbin "includes/demo_presets/demo_preset_06_compressed.bin"
+
+	.org 0x9E0CE2 - 0x800000, 0xFF
+DemoSongPreset07:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x21, 0x00	; uncompressed size = 8448 bytes
+	.incbin "includes/demo_presets/demo_preset_07_compressed.bin"
+
+	.org 0x9E2358 - 0x800000, 0xFF
+DemoSongPreset08:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x5A, 0x00	; uncompressed size = 23040 bytes
+	.incbin "includes/demo_presets/demo_preset_08_compressed.bin"
+
+	.org 0x9E61C2 - 0x800000, 0xFF
+DemoSongPreset09:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x1B, 0x00	; uncompressed size = 6912 bytes
+	.incbin "includes/demo_presets/demo_preset_09_compressed.bin"
+
+	.org 0x9E72E8 - 0x800000, 0xFF
+DemoSongPreset10:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x44, 0x00	; uncompressed size = 17408 bytes
+	.incbin "includes/demo_presets/demo_preset_10_compressed.bin"
+
+	.org 0x9EA1F2 - 0x800000, 0xFF
+DemoSongPreset11:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x5B, 0x00	; uncompressed size = 23296 bytes
+	.incbin "includes/demo_presets/demo_preset_11_compressed.bin"
+
+	.org 0x9EDFFC - 0x800000, 0xFF
+DemoSongPreset12:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x1B, 0x00	; uncompressed size = 6912 bytes
+	.incbin "includes/demo_presets/demo_preset_12_compressed.bin"
+
+	.org 0x9EEC62 - 0x800000, 0xFF
+DemoSongPreset13:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x2C, 0x00	; uncompressed size = 11264 bytes
+	.incbin "includes/demo_presets/demo_preset_13_compressed.bin"
+
+	.org 0x9F0E72 - 0x800000, 0xFF
+DemoSongPreset14:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x1A, 0x00	; uncompressed size = 6656 bytes
+	.incbin "includes/demo_presets/demo_preset_14_compressed.bin"
+
+	.org 0x9F1C70 - 0x800000, 0xFF
+DemoSongPreset15:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x2D, 0x00	; uncompressed size = 11520 bytes
+	.incbin "includes/demo_presets/demo_preset_15_compressed.bin"
+
+	.org 0x9F3B52 - 0x800000, 0xFF
+DemoSongPreset16:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x1A, 0x00	; uncompressed size = 6656 bytes
+	.incbin "includes/demo_presets/demo_preset_16_compressed.bin"
+
+	.org 0x9F494E - 0x800000, 0xFF
+DemoSongPreset17:
+	.asciz "SLIDE4K"
+	.byte 0x00, 0x17, 0x00	; uncompressed size = 5888 bytes
+	.incbin "includes/demo_presets/demo_preset_17_compressed.bin"
 
 	.org 0x9FA000 - 0x800000, 0xFF
 FileIdentifierStringsTable:
