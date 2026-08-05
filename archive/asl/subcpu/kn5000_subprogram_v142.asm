@@ -12358,31 +12358,31 @@ ExtVoice_Lookup_SlotFallback:	; 02174Ch
 	LDA XBC, 210Bh
 	AND WA, 0003h
 	CP WA, 3
-	JR Z, NoteSource_SelectRow_Case3
+	JR Z, ExtVoice_Lookup_SlotFallback_Case3
 	CP WA, 2
-	JR Z, NoteSource_SelectRow_Case2
+	JR Z, ExtVoice_Lookup_SlotFallback_Case2
 	CP WA, 1
-	JR Z, NoteSource_SelectRow_Case1
+	JR Z, ExtVoice_Lookup_SlotFallback_Case1
 	CP WA, 0
 	RET NZ
 	LD L, (XBC)
-	JR T, NoteSource_SelectRow_Return
+	JR T, ExtVoice_Lookup_SlotFallback_Return
 
-NoteSource_SelectRow_Case1:
+ExtVoice_Lookup_SlotFallback_Case1:
 	LD L, (XBC + 004h)
-	JR T, NoteSource_SelectRow_Return
+	JR T, ExtVoice_Lookup_SlotFallback_Return
 
-NoteSource_SelectRow_Case2:
+ExtVoice_Lookup_SlotFallback_Case2:
 	LD L, (XBC + 008h)
 	CP L, 0c0h
 	RET ULE
 	LD L, (XBC + 004h)
-	JR T, NoteSource_SelectRow_Return
+	JR T, ExtVoice_Lookup_SlotFallback_Return
 
-NoteSource_SelectRow_Case3:
+ExtVoice_Lookup_SlotFallback_Case3:
 	LD L, (XBC + 008h)
 
-NoteSource_SelectRow_Return:
+ExtVoice_Lookup_SlotFallback_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -12416,19 +12416,19 @@ ExtVoice_Alloc_StreamSlot:	; 02177Eh
 	LD (XSP + 008h), A
 	AND (XSP + 004h), 03fh
 	CP (XSP + 006h), 040h
-	JR NC, VoiceSlot_Assign_NoMatch
+	JR NC, ExtVoice_Alloc_StreamSlot_NoMatch
 	CP (XSP + 008h), 01ah
-	JR C, VoiceSlot_Assign_Search
+	JR C, ExtVoice_Alloc_StreamSlot_Search
 
-VoiceSlot_Assign_NoMatch:
+ExtVoice_Alloc_StreamSlot_NoMatch:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	SLL 8, WA
 	LD HL, WA
 	OR HL, 00ffh
-	JRL T, VoiceSlot_Assign_Return
+	JRL T, ExtVoice_Alloc_StreamSlot_Return
 
-VoiceSlot_Assign_Search:
+ExtVoice_Alloc_StreamSlot_Search:
 	LD A, (XSP + 004h)
 	AND A, 01fh
 	EXTZ WA
@@ -12451,7 +12451,7 @@ VoiceSlot_Assign_Search:
 	LD A, (XBC + WA)
 	LD QIZH, A
 	CP QIZH, 0c0h
-	JR NC, VoiceSlot_Assign_FallbackFB
+	JR NC, ExtVoice_Alloc_StreamSlot_FallbackFB
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 005h
@@ -12459,10 +12459,10 @@ VoiceSlot_Assign_Search:
 	LDA XBC, XBC + WA
 	LD A, (XBC + 002h)
 	CP A, (XSP + 008h)
-	JR NZ, VoiceSlot_Assign_FallbackFB
+	JR NZ, ExtVoice_Alloc_StreamSlot_FallbackFB
 	LD A, (XBC + 003h)
 	CP A, (XSP + 002h)
-	JR NZ, VoiceSlot_Assign_FallbackFB
+	JR NZ, ExtVoice_Alloc_StreamSlot_FallbackFB
 	LD A, QIZH
 	LD E, A
 	EXTZ DE
@@ -12479,18 +12479,18 @@ VoiceSlot_Assign_Search:
 	SLL 8, WA
 	LD HL, WA
 	OR HL, BC
-	JRL T, VoiceSlot_Assign_Return
+	JRL T, ExtVoice_Alloc_StreamSlot_Return
 
-VoiceSlot_Assign_FallbackFB:
+ExtVoice_Alloc_StreamSlot_FallbackFB:
 	BIT 5, (XSP + 004h)
-	JR Z, VoiceSlot_Assign_TryNoteSourceTable
+	JR Z, ExtVoice_Alloc_StreamSlot_TryNoteSourceTable
 	LD A, QIZL
 	EXTZ WA
 	CALR ExtVoice_Lookup_SlotFallback
 	LD QIZH, L
 	LD A, QIZH
 	CP A, 0c0h
-	JR NC, VoiceSlot_Assign_FallbackFB_Inactive
+	JR NC, ExtVoice_Alloc_StreamSlot_FallbackFB_Inactive
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -12521,13 +12521,13 @@ VoiceSlot_Assign_FallbackFB:
 	EXTZ BC
 	LD WA, DE
 	CALR ExtVoice_Fold_SlotNumber
-	JRL T, VoiceSlot_Assign_PackResult
+	JRL T, ExtVoice_Alloc_StreamSlot_PackResult
 
-VoiceSlot_Assign_FallbackFB_Inactive:
+ExtVoice_Alloc_StreamSlot_FallbackFB_Inactive:
 	LD_L 0ffh
-	JRL T, VoiceSlot_Assign_PackResult
+	JRL T, ExtVoice_Alloc_StreamSlot_PackResult
 
-VoiceSlot_Assign_TryNoteSourceTable:
+ExtVoice_Alloc_StreamSlot_TryNoteSourceTable:
 	LD A, (XSP + 002h)
 	EXTZ WA
 	LD DE, WA
@@ -12543,7 +12543,7 @@ VoiceSlot_Assign_TryNoteSourceTable:
 	LD A, (XBC)
 	LD QIZH, A
 	CP QIZH, 0c0h
-	JR NC, VoiceSlot_Assign_FallbackFA
+	JR NC, ExtVoice_Alloc_StreamSlot_FallbackFA
 	LD A, (XSP + 006h)
 	LD L, A
 	EXTZ HL
@@ -12564,16 +12564,16 @@ VoiceSlot_Assign_TryNoteSourceTable:
 	LD WA, DE
 	CALR ExtVoice_Fold_SlotNumber
 	SET 7, (XSP + 004h)
-	JR T, VoiceSlot_Assign_PackResult
+	JR T, ExtVoice_Alloc_StreamSlot_PackResult
 
-VoiceSlot_Assign_FallbackFA:
+ExtVoice_Alloc_StreamSlot_FallbackFA:
 	LD A, QIZL
 	EXTZ WA
 	CALR ExtVoice_Lookup_SlotFallback
 	LD QIZH, L
 	LD A, QIZH
 	CP A, 0c0h
-	JR NC, VoiceSlot_Assign_FA_Inactive
+	JR NC, ExtVoice_Alloc_StreamSlot_FA_Inactive
 	LD A, QIZH
 	LD L, A
 	EXTZ HL
@@ -12604,12 +12604,12 @@ VoiceSlot_Assign_FallbackFA:
 	EXTZ BC
 	LD WA, DE
 	CALR ExtVoice_Fold_SlotNumber
-	JR T, VoiceSlot_Assign_PackResult
+	JR T, ExtVoice_Alloc_StreamSlot_PackResult
 
-VoiceSlot_Assign_FA_Inactive:
+ExtVoice_Alloc_StreamSlot_FA_Inactive:
 	LD_L 0ffh
 
-VoiceSlot_Assign_PackResult:
+ExtVoice_Alloc_StreamSlot_PackResult:
 	LD C, L
 	EXTZ BC
 	LD A, (XSP + 004h)
@@ -12618,7 +12618,7 @@ VoiceSlot_Assign_PackResult:
 	LD HL, WA
 	OR HL, BC
 
-VoiceSlot_Assign_Return:
+ExtVoice_Alloc_StreamSlot_Return:
 	POP QIZ
 	INC 8, XSP
 	RET
@@ -13019,14 +13019,14 @@ VoiceNode_SecondList_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
-; Voice_List_UnlinkLru - Unlink a voice node from the third (age) chain
+; DList_Unlink_SelfLink_Offsets16 - Unlink a voice node from the third (age) chain
 ; Entry: XWA = pointer to the voice node
 ; Exit:  none
 ; Notes: Operates on the link pair node+0x10 / node+0x14 and leaves the node
 ;        self-referential.  INFERRED that this chain is the allocation-age order;
 ;        MEASURED only that it is a third, independent doubly-linked chain.
 ; ----------------------------------------------------------------------------
-Voice_List_UnlinkLru:	; 021E02h
+DList_Unlink_SelfLink_Offsets16:	; 021E02h
 	LD XDE, (XWA + 010h)
 	LD XBC, (XWA + 014h)
 	LD (XBC + 010h), XDE
@@ -13036,14 +13036,14 @@ Voice_List_UnlinkLru:	; 021E02h
 	RET
 
 ; ----------------------------------------------------------------------------
-; Voice_List_RelinkLru - Move a voice node to the tail of the third (age) chain
+; DList_Relink_Adjacent_Offsets16 - Move a voice node to the tail of the third (age) chain
 ; Entry: XWA = pointer to the voice node
 ;        XBC = chain anchor
 ; Exit:  none
 ; Notes: Unlinks node+0x10/+0x14 from its current position and inserts it before
-;        XBC.  Same caveat as Voice_List_UnlinkLru.
+;        XBC.  Same caveat as DList_Unlink_SelfLink_Offsets16.
 ; ----------------------------------------------------------------------------
-Voice_List_RelinkLru:	; 021E15h
+DList_Relink_Adjacent_Offsets16:	; 021E15h
 	LD XHL, (XWA + 010h)
 	LD XDE, (XWA + 014h)
 	LD (XDE + 010h), XHL
@@ -13063,7 +13063,7 @@ Voice_List_RelinkLru:	; 021E15h
 ;          if node.pool(+0x1d).count != 0: count--        <- the OLD pool
 ;          Voice_List_MoveToPool(node, VOICE_POOL_FREE 0x132B, 6)
 ;          Voice_List_MoveToPartList(node, VOICE_PARTPOOL_FREE 0x1481, 1)
-;          Voice_List_UnlinkLru(node)
+;          DList_Unlink_SelfLink_Offsets16(node)
 ;          node+0x22 = 0x01 (FREE), node+0x25 = 0
 ;          if node.pool(+0x1d).count < node.pool.quota: count++   <- the NEW pool
 ;        The decrement reads node+0x1d BEFORE the move and the increment AFTER,
@@ -13078,14 +13078,14 @@ Voice_Retire_ToFreePool:	; 021E31h
 	PUSH XIZ
 	LD XIZ, XWA
 	BIT 0, (XIZ + 022h)
-	JR NZ, VoiceNode_Activate_Return
+	JR NZ, Voice_Retire_ToFreePool_Return
 	LD XWA, (XIZ + 01dh)
 	CP (XWA + 001h), 000h
-	JR Z, VoiceNode_Activate_InsertLists
+	JR Z, Voice_Retire_ToFreePool_InsertLists
 	LD XWA, (XIZ + 01dh)
 	DEC 1, (XWA + 001h)
 
-VoiceNode_Activate_InsertLists:
+Voice_Retire_ToFreePool_InsertLists:
 	LDA XWA, 132Bh
 	LD XBC, XWA
 	LD XWA, XIZ
@@ -13097,18 +13097,18 @@ VoiceNode_Activate_InsertLists:
 	LD DE, 1
 	CALR Voice_List_MoveToPartList
 	LD XWA, XIZ
-	CALR Voice_List_UnlinkLru
+	CALR DList_Unlink_SelfLink_Offsets16
 	LD (XIZ + 022h), 001h
 	LD (XIZ + 025h), 000h
 	LD XWA, (XIZ + 01dh)
 	LD XBC, XWA
 	LD A, (XWA + 001h)
 	CP A, (XBC)
-	JR NC, VoiceNode_Activate_Return
+	JR NC, Voice_Retire_ToFreePool_Return
 	LD XWA, (XIZ + 01dh)
 	INC 1, (XWA + 001h)
 
-VoiceNode_Activate_Return:
+Voice_Retire_ToFreePool_Return:
 	POP XIZ
 	RET
 
@@ -13173,7 +13173,7 @@ Voice_Reprioritise:	; 021EA1h
 ; Notes: Seven steps, in order:
 ;        1. Scan the four words of TONEGEN_ACTIVE_PREV (0x292E).  If ANY bank
 ;           still shows sounding voices, panic-silence all 64 channels with the
-;           pair +0x840 = 0xA200, +0x800 = 0xA280 (ToneGen_EmitCommandLoop_PhaseA_Body is that loop's
+;           pair +0x840 = 0xA200, +0x800 = 0xA280 (Voice_Reset_Engine_PhaseA_Body is that loop's
 ;           body label, not a separate routine), then write +0x0C0 = 0x0000 and
 ;           +0x000 = 0x7E00 for all 64.
 ;        2. Seed the 18 voice pools at 0x112D (stride 0x1E): pool.quota from
@@ -13201,27 +13201,27 @@ Voice_Reset_Engine:	; 021ECBh
 	LD (XSP + 006h), A
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 004h
-	JR NC, ToneGen_EmitCommandLoop_PhaseA
+	JR NC, Voice_Reset_Engine_PhaseA
 
-ToneGen_EmitCommandLoop_FindStart:
+Voice_Reset_Engine_FindStart:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	ADD WA, WA
 	LDA XBC, 292Eh
 	CPW (XBC + WA), 0000h
-	JR NZ, ToneGen_EmitCommandLoop_PhaseA
+	JR NZ, Voice_Reset_Engine_PhaseA
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 004h
-	JR C, ToneGen_EmitCommandLoop_FindStart
+	JR C, Voice_Reset_Engine_FindStart
 
-ToneGen_EmitCommandLoop_PhaseA:
+Voice_Reset_Engine_PhaseA:
 	CP (XSP + 004h), 004h
-	JR NC, ToneGen_EmitCommandLoop_PhaseB
+	JR NC, Voice_Reset_Engine_PhaseB
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, ToneGen_EmitCommandLoop_PhaseB
+	JR NC, Voice_Reset_Engine_PhaseB
 
-ToneGen_EmitCommandLoop_PhaseA_Body:
+Voice_Reset_Engine_PhaseA_Body:
 	RES 7, (P6)
 	LD A, (XSP + 004h)
 	EXTZ WA
@@ -13230,9 +13230,9 @@ ToneGen_EmitCommandLoop_PhaseA_Body:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0a200h
-	JR T, ToneGen_EmitCommandLoop_PhaseA_Nop
+	JR T, Voice_Reset_Engine_PhaseA_Nop
 
-ToneGen_EmitCommandLoop_PhaseA_Nop:
+Voice_Reset_Engine_PhaseA_Nop:
 	NOP
 	NOP
 	NOP
@@ -13244,24 +13244,24 @@ ToneGen_EmitCommandLoop_PhaseA_Nop:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0a280h
-	JR T, ToneGen_EmitCommandLoop_PhaseA_Nop2
+	JR T, Voice_Reset_Engine_PhaseA_Nop2
 
-ToneGen_EmitCommandLoop_PhaseA_Nop2:
+Voice_Reset_Engine_PhaseA_Nop2:
 	NOP
 	NOP
 	NOP
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, ToneGen_EmitCommandLoop_PhaseA_Body
+	JR C, Voice_Reset_Engine_PhaseA_Body
 
-ToneGen_EmitCommandLoop_PhaseB:
+Voice_Reset_Engine_PhaseB:
 	CP (XSP + 004h), 004h
-	JR NC, ToneGen_EmitCommandLoop_PhaseC
+	JR NC, Voice_Reset_Engine_PhaseC
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, ToneGen_EmitCommandLoop_PhaseC
+	JR NC, Voice_Reset_Engine_PhaseC
 
-ToneGen_EmitCommandLoop_PhaseB_Body:
+Voice_Reset_Engine_PhaseB_Body:
 	RES 7, (P6)
 	LD A, (XSP + 004h)
 	ADD A, 0c0h
@@ -13270,9 +13270,9 @@ ToneGen_EmitCommandLoop_PhaseB_Body:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0000h
-	JR T, ToneGen_EmitCommandLoop_PhaseB_Nop
+	JR T, Voice_Reset_Engine_PhaseB_Nop
 
-ToneGen_EmitCommandLoop_PhaseB_Nop:
+Voice_Reset_Engine_PhaseB_Nop:
 	NOP
 	NOP
 	NOP
@@ -13283,17 +13283,17 @@ ToneGen_EmitCommandLoop_PhaseB_Nop:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 7e00h
-	JR T, ToneGen_EmitCommandLoop_PhaseB_Nop2
+	JR T, Voice_Reset_Engine_PhaseB_Nop2
 
-ToneGen_EmitCommandLoop_PhaseB_Nop2:
+Voice_Reset_Engine_PhaseB_Nop2:
 	NOP
 	NOP
 	NOP
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, ToneGen_EmitCommandLoop_PhaseB_Body
+	JR C, Voice_Reset_Engine_PhaseB_Body
 
-ToneGen_EmitCommandLoop_PhaseC:
+Voice_Reset_Engine_PhaseC:
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 012h
 	JRL NC, ChanStruct_Init_Loop
@@ -13421,7 +13421,7 @@ ChanStruct_Init_Next:
 VoiceNode_Init_Loop:
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
-	JR NC, VoiceNode_Activate_All
+	JR NC, Voice_Retire_ToFreePool_All
 
 VoiceNode_Init_Body:
 	LD A, (XSP + 004h)
@@ -13449,19 +13449,19 @@ VoiceNode_Init_Body:
 	CP (XSP + 004h), 040h
 	JR C, VoiceNode_Init_Body
 
-VoiceNode_Activate_All:
+Voice_Retire_ToFreePool_All:
 	LDA XIZ, 148Dh
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 040h
 	JR NC, IntMask_Clear_Loop
 
-VoiceNode_Activate_All_Loop:
+Voice_Retire_ToFreePool_All_Loop:
 	LD XWA, XIZ
 	CALR Voice_Retire_ToFreePool
 	LDA XIZ, XIZ + 027h
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 040h
-	JR C, VoiceNode_Activate_All_Loop
+	JR C, Voice_Retire_ToFreePool_All_Loop
 
 IntMask_Clear_Loop:
 	LD (XSP + 004h), 000h
@@ -13509,7 +13509,7 @@ AudioState_Init_Return:
 ;        MEASURED: the chip's own active bitmap is the SOLE trigger for reclaim;
 ;        a captured 0x7E00 teardown followed a status read returning 0 by 56 us
 ;        (notes/audit/kn5000-audit-voicelife.md S1.5).
-;        AudioTick_UpdateVoice_SlotLoop is this routine's per-channel loop body, not an entry.
+;        Voice_Manager_PollBank_SlotLoop is this routine's per-channel loop body, not an entry.
 ;        ToneGen_Read_Register (asm L11479) writes the 0x100000 register-address
 ;        latch and reads 0x100000 back; it is the only IC303 readback in the payload.
 ; ----------------------------------------------------------------------------
@@ -13555,14 +13555,14 @@ Voice_Manager_PollBank:	; 02219Fh
 	LDA XIZ, XBC + WA
 	LDW (XSP + 006h), 0001h
 	CPW (XSP + 006h), 0000h
-	JR Z, AudioTick_UpdateVoice_Return
+	JR Z, Voice_Manager_PollBank_Return
 
-AudioTick_UpdateVoice_SlotLoop:
+Voice_Manager_PollBank_SlotLoop:
 	LD WA, (XSP + 004h)
 	AND WA, (XSP + 006h)
-	JR Z, AudioTick_UpdateVoice_DecayCheck
+	JR Z, Voice_Manager_PollBank_DecayCheck
 	BIT 0, (XIZ + 022h)
-	JR NZ, AudioTick_UpdateVoice_DecayCheck
+	JR NZ, Voice_Manager_PollBank_DecayCheck
 	LD XWA, XIZ
 	CALR Voice_Retire_ToFreePool
 	LD A, (XSP + 008h)
@@ -13571,12 +13571,12 @@ AudioTick_UpdateVoice_SlotLoop:
 	LD A, (XSP + 008h)
 	EXTZ WA
 	CALR Voice_ScanSlots_ReassignSources
-	JR T, AudioTick_UpdateVoice_Next
+	JR T, Voice_Manager_PollBank_Next
 
-AudioTick_UpdateVoice_DecayCheck:
+Voice_Manager_PollBank_DecayCheck:
 	LD A, (XIZ + 022h)
 	AND A, 081h
-	JR NZ, AudioTick_UpdateVoice_Next
+	JR NZ, Voice_Manager_PollBank_Next
 	LD A, (XSP + 008h)
 	EXTZ WA
 	ADD WA, 0180h
@@ -13586,20 +13586,20 @@ AudioTick_UpdateVoice_DecayCheck:
 	LD A, L
 	LD (XIZ + 025h), A
 	CP (XIZ + 025h), 080h
-	JR NC, AudioTick_UpdateVoice_Next
+	JR NC, Voice_Manager_PollBank_Next
 	BIT 2, (XIZ + 022h)
-	JR Z, AudioTick_UpdateVoice_Next
+	JR Z, Voice_Manager_PollBank_Next
 	LD XWA, XIZ
 	CALR Voice_Demote_Decayed
 
-AudioTick_UpdateVoice_Next:
+Voice_Manager_PollBank_Next:
 	INC 1, (XSP + 008h)
 	LDA XIZ, XIZ + 027h
 	LD WA, (XSP + 006h)
 	ADD (XSP + 006h), WA
-	JR NZ, AudioTick_UpdateVoice_SlotLoop
+	JR NZ, Voice_Manager_PollBank_SlotLoop
 
-AudioTick_UpdateVoice_Return:
+Voice_Manager_PollBank_Return:
 	LD A, (1128h)
 	EXTZ WA
 	CALR Voice_AdvanceSlotIterator
@@ -13622,11 +13622,11 @@ AudioTick_UpdateVoice_Return:
 Voice_Find_Candidate:	; 02229Ah
 	LD XDE, (1345h)
 	OR XDE, XDE
-	JR Z, NoteChain_FindNode_A_Walk
+	JR Z, Voice_Find_Candidate_Walk
 	LD XHL, (1345h)
 	RET
 
-NoteChain_FindNode_A_Walk:
+Voice_Find_Candidate_Walk:
 	LDA XDE, 112Dh
 	LDA XDE, XDE + 01e2h
 	LD XWA, (XWA)
@@ -13634,9 +13634,9 @@ NoteChain_FindNode_A_Walk:
 	CP (XBC), 0ffh
 	JR Z, NoteChain_FindNode_NotFound
 
-NoteChain_FindNode_A_Secondary:
+Voice_Find_Candidate_Secondary:
 	BIT 7, (XBC)
-	JR Z, NoteChain_FindNode_A_Primary
+	JR Z, Voice_Find_Candidate_Primary
 	LD A, (XBC)
 	RES 7, A
 	LD IXL, A
@@ -13644,30 +13644,30 @@ NoteChain_FindNode_A_Secondary:
 	SLA 2, WA
 	LD XWA, (XDE + WA)
 	OR XWA, XWA
-	JR Z, NoteChain_FindNode_A_Advance
+	JR Z, Voice_Find_Candidate_Advance
 	LD A, IXL
 	EXTZ WA
 	SLA 2, WA
 	LD XHL, (XDE + WA)
 	RET
 
-NoteChain_FindNode_A_Primary:
+Voice_Find_Candidate_Primary:
 	LD A, (XBC)
 	EXTZ WA
 	SLA 2, WA
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
-	JR Z, NoteChain_FindNode_A_Advance
+	JR Z, Voice_Find_Candidate_Advance
 	LD A, (XBC)
 	EXTZ WA
 	SLA 2, WA
 	LD XHL, (XHL + WA)
 	RET
 
-NoteChain_FindNode_A_Advance:
+Voice_Find_Candidate_Advance:
 	INC 1, XBC
 	CP (XBC), 0ffh
-	JR NZ, NoteChain_FindNode_A_Secondary
+	JR NZ, Voice_Find_Candidate_Secondary
 
 NoteChain_FindNode_NotFound:
 	LD XHL, 0
@@ -13730,18 +13730,18 @@ Voice_Allocate_Nodes:	; 022340h
 	LD (XSP + 010h), XWA
 	LD XWA, (XSP + 010h)
 	BIT 6, (XWA + 006h)
-	JR NZ, NoteOn_Dispatch_SlotLoop
+	JR NZ, Voice_Allocate_Nodes_SlotLoop
 	LD XWA, 0
 	LD (1129h), XWA
 
-NoteOn_Dispatch_SlotLoop:
+Voice_Allocate_Nodes_SlotLoop:
 	LD XWA, (XSP + 010h)
 	LD WA, (XWA)
 	AND WA, 1f00h
 	SRL 8, WA
 	LD QIZH, A
 	CP QIZH, 01ah
-	JRL NC, NoteOn_Dispatch_AllInactive
+	JRL NC, Voice_Allocate_Nodes_AllInactive
 	LD XWA, (XSP + 010h)
 	CALR RingBuf_CheckOffset_ClearFlags
 	LD A, QIZH
@@ -13753,16 +13753,16 @@ NoteOn_Dispatch_SlotLoop:
 	LD (XSP + 004h), XWA
 	LD (XSP + 00ch), 000h
 	CP (XSP + 00ch), 004h
-	JRL NC, NoteOn_Dispatch_Return
+	JRL NC, Voice_Allocate_Nodes_Return
 
-NoteOn_Dispatch_ProcessSlot:
+Voice_Allocate_Nodes_ProcessSlot:
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD BC, WA
 	INC 2, BC
 	LD XWA, (XSP + 010h)
 	BIT 7, (XWA + BC)
-	JRL Z, NoteOn_Dispatch_SlotInactive
+	JRL Z, Voice_Allocate_Nodes_SlotInactive
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD BC, WA
@@ -13782,16 +13782,16 @@ NoteOn_Dispatch_ProcessSlot:
 	LD XIZ, XHL
 	LD XWA, XIZ
 	OR XWA, XWA
-	JRL Z, NoteOn_Dispatch_SlotNoNode
+	JRL Z, Voice_Allocate_Nodes_SlotNoNode
 	LD A, (XIZ + 024h)
 	LD (XSP + 00eh), A
 	LD XWA, (XIZ + 01dh)
 	CP (XWA + 001h), 000h
-	JR Z, NoteOn_Dispatch_ActivateNode
+	JR Z, Voice_Allocate_Nodes_ActivateNode
 	LD XWA, (XIZ + 01dh)
 	DEC 1, (XWA + 001h)
 
-NoteOn_Dispatch_ActivateNode:
+Voice_Allocate_Nodes_ActivateNode:
 	LD XWA, (XSP + 010h)
 	LD WA, (XWA)
 	AND WA, 007fh
@@ -13806,34 +13806,34 @@ NoteOn_Dispatch_ActivateNode:
 	INC 6, BC
 	LD XWA, (XSP + 010h)
 	BIT 7, (XWA + BC)
-	JR Z, NoteOn_Dispatch_Retrigger
+	JR Z, Voice_Allocate_Nodes_Retrigger
 	LD (XIZ + 022h), 088h
 	LD A, (XSP + 00eh)
 	AND A, 00fh
 	LD DE, 1
 	AND A, 00fh
-	JR Z, NoteOn_Dispatch_RetriggerActive
+	JR Z, Voice_Allocate_Nodes_RetriggerActive
 	SLL A, DE
 
-NoteOn_Dispatch_RetriggerActive:
+Voice_Allocate_Nodes_RetriggerActive:
 	LD A, (XSP + 00eh)
 	SRL 4, A
 	EXTZ WA
 	ADD WA, WA
 	LDA XBC, 2936h
 	OR (XBC + WA), DE
-	JR T, NoteOn_Dispatch_UpdateLists
+	JR T, Voice_Allocate_Nodes_UpdateLists
 
-NoteOn_Dispatch_Retrigger:
+Voice_Allocate_Nodes_Retrigger:
 	LD (XIZ + 022h), 008h
 	LD A, (XSP + 00eh)
 	AND A, 00fh
 	LD BC, 1
 	AND A, 00fh
-	JR Z, NoteOn_Dispatch_RetriggerMask
+	JR Z, Voice_Allocate_Nodes_RetriggerMask
 	SLL A, BC
 
-NoteOn_Dispatch_RetriggerMask:
+Voice_Allocate_Nodes_RetriggerMask:
 	LD WA, BC
 	CPL WA
 	LD DE, WA
@@ -13847,10 +13847,10 @@ NoteOn_Dispatch_RetriggerMask:
 	AND A, 00fh
 	LD DE, 1
 	AND A, 00fh
-	JR Z, NoteOn_Dispatch_RetriggerOrMask
+	JR Z, Voice_Allocate_Nodes_RetriggerOrMask
 	SLL A, DE
 
-NoteOn_Dispatch_RetriggerOrMask:
+Voice_Allocate_Nodes_RetriggerOrMask:
 	LD A, (XSP + 00eh)
 	SRL 4, A
 	EXTZ WA
@@ -13858,7 +13858,7 @@ NoteOn_Dispatch_RetriggerOrMask:
 	LDA XBC, 292Eh
 	OR (XBC + WA), DE
 
-NoteOn_Dispatch_UpdateLists:
+Voice_Allocate_Nodes_UpdateLists:
 	LD XWA, (XSP + 008h)
 	LD E, (XWA + 004h)
 	LD XWA, XIZ
@@ -13871,34 +13871,34 @@ NoteOn_Dispatch_UpdateLists:
 	CALR Voice_List_MoveToPartList
 	LD XWA, (1129h)
 	OR XWA, XWA
-	JR Z, NoteOn_Dispatch_SetGlobalHead
+	JR Z, Voice_Allocate_Nodes_SetGlobalHead
 	LD XWA, XIZ
 	LD XBC, (1129h)
-	CALR Voice_List_RelinkLru
-	JR T, NoteOn_Dispatch_AdvancePriority
+	CALR DList_Relink_Adjacent_Offsets16
+	JR T, Voice_Allocate_Nodes_AdvancePriority
 
-NoteOn_Dispatch_SetGlobalHead:
+Voice_Allocate_Nodes_SetGlobalHead:
 	LD (1129h), XIZ
 	LD XWA, XIZ
-	CALR Voice_List_UnlinkLru
+	CALR DList_Unlink_SelfLink_Offsets16
 
-NoteOn_Dispatch_AdvancePriority:
+Voice_Allocate_Nodes_AdvancePriority:
 	LD XWA, (XIZ + 01dh)
 	LD XBC, XWA
 	LD A, (XWA + 001h)
 	CP A, (XBC)
-	JR NC, NoteOn_Dispatch_WalkNext
+	JR NC, Voice_Allocate_Nodes_WalkNext
 	LD XWA, (XIZ + 01dh)
 	INC 1, (XWA + 001h)
-	JR T, NoteOn_Dispatch_WriteSlot
+	JR T, Voice_Allocate_Nodes_WriteSlot
 
-NoteOn_Dispatch_WalkNext:
+Voice_Allocate_Nodes_WalkNext:
 	LD XWA, (XIZ + 01dh)
 	CALR NoteChain_FindNode_B
 	LD XIZ, XHL
 	LD XWA, XIZ
 	OR XWA, XWA
-	JR Z, NoteOn_Dispatch_WriteSlot
+	JR Z, Voice_Allocate_Nodes_WriteSlot
 	LDA XWA, 130Dh
 	LD XBC, XWA
 	LD A, (XIZ + 021h)
@@ -13910,7 +13910,7 @@ NoteOn_Dispatch_WalkNext:
 	INC 1, (XWA + 001h)
 	SET 4, (XIZ + 022h)
 
-NoteOn_Dispatch_WriteSlot:
+Voice_Allocate_Nodes_WriteSlot:
 	LD A, (XSP + 00eh)
 	EXTZ WA
 	CALR Voice_ScanSlots_ReassignSources
@@ -13921,18 +13921,18 @@ NoteOn_Dispatch_WriteSlot:
 	LD XWA, (XSP + 010h)
 	LD C, (XSP + 00eh)
 	LD (XWA + DE), C
-	JR T, NoteOn_Dispatch_SlotNext
+	JR T, Voice_Allocate_Nodes_SlotNext
 
-NoteOn_Dispatch_SlotNoNode:
+Voice_Allocate_Nodes_SlotNoNode:
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD BC, WA
 	ADD BC, 000ah
 	LD XWA, (XSP + 010h)
 	LD (XWA + BC), 0ffh
-	JR T, NoteOn_Dispatch_SlotNext
+	JR T, Voice_Allocate_Nodes_SlotNext
 
-NoteOn_Dispatch_SlotInactive:
+Voice_Allocate_Nodes_SlotInactive:
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD BC, WA
@@ -13940,18 +13940,18 @@ NoteOn_Dispatch_SlotInactive:
 	LD XWA, (XSP + 010h)
 	LD (XWA + BC), 0ffh
 
-NoteOn_Dispatch_SlotNext:
+Voice_Allocate_Nodes_SlotNext:
 	INC 1, (XSP + 00ch)
 	CP (XSP + 00ch), 004h
-	JRL C, NoteOn_Dispatch_ProcessSlot
-	JR T, NoteOn_Dispatch_Return
+	JRL C, Voice_Allocate_Nodes_ProcessSlot
+	JR T, Voice_Allocate_Nodes_Return
 
-NoteOn_Dispatch_AllInactive:
+Voice_Allocate_Nodes_AllInactive:
 	LD (XSP + 00ch), 000h
 	CP (XSP + 00ch), 004h
-	JR NC, NoteOn_Dispatch_Return
+	JR NC, Voice_Allocate_Nodes_Return
 
-NoteOn_Dispatch_AllInactive_Loop:
+Voice_Allocate_Nodes_AllInactive_Loop:
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD BC, WA
@@ -13960,9 +13960,9 @@ NoteOn_Dispatch_AllInactive_Loop:
 	LD (XWA + BC), 0ffh
 	INC 1, (XSP + 00ch)
 	CP (XSP + 00ch), 004h
-	JR C, NoteOn_Dispatch_AllInactive_Loop
+	JR C, Voice_Allocate_Nodes_AllInactive_Loop
 
-NoteOn_Dispatch_Return:
+Voice_Allocate_Nodes_Return:
 	POP XIZ
 	LDA XSP, XSP + 010h
 	RET
@@ -13989,10 +13989,10 @@ Voice_Clear_HoldBit:	; 022587h
 	AND A, 00fh
 	LD DE, 1
 	AND A, 00fh
-	JR Z, VoiceSlot_Release_ApplyMask
+	JR Z, Voice_Clear_HoldBit_ApplyMask
 	SLL A, DE
 
-VoiceSlot_Release_ApplyMask:
+Voice_Clear_HoldBit_ApplyMask:
 	LD WA, DE
 	CPL WA
 	LD HL, WA
@@ -14027,7 +14027,7 @@ VoiceSlot_NoteOff:
 	CP XIZ, (XIZ + 010h)
 	JR Z, VoiceSlot_NoteOff_Return
 	LD XWA, XIZ
-	CALR Voice_List_UnlinkLru
+	CALR DList_Unlink_SelfLink_Offsets16
 
 VoiceSlot_NoteOff_Return:
 	POP XIZ
@@ -14095,7 +14095,7 @@ OutputBuf_Flush_B_Emit:
 	LD XWA, (XIZ + 010h)
 	LD (XSP + 004h), XWA
 	LD XWA, XIZ
-	CALR Voice_List_UnlinkLru
+	CALR DList_Unlink_SelfLink_Offsets16
 	LD XIZ, (XSP + 004h)
 	JR T, OutputBuf_Flush_B_Emit
 
@@ -14312,26 +14312,26 @@ NoteOn_RoutePacket_Return:
 Velocity_Select_Split_Zone:		; 022824h
 	RES 7, A
 	CP A, (XBC)
-	JR ULE, VelocityQuantise_A_Level0
+	JR ULE, Velocity_Select_Split_Zone_Level0
 	CP A, (XBC + 001h)
-	JR ULE, VelocityQuantise_A_Level1
+	JR ULE, Velocity_Select_Split_Zone_Level1
 	CP A, (XBC + 002h)
-	JR ULE, VelocityQuantise_A_Level2
+	JR ULE, Velocity_Select_Split_Zone_Level2
 	LD_L 003h
-	JR T, VelocityQuantise_A_Return
+	JR T, Velocity_Select_Split_Zone_Return
 
-VelocityQuantise_A_Level2:
+Velocity_Select_Split_Zone_Level2:
 	LD_L 002h
-	JR T, VelocityQuantise_A_Return
+	JR T, Velocity_Select_Split_Zone_Return
 
-VelocityQuantise_A_Level1:
+Velocity_Select_Split_Zone_Level1:
 	LD_L 001h
-	JR T, VelocityQuantise_A_Return
+	JR T, Velocity_Select_Split_Zone_Return
 
-VelocityQuantise_A_Level0:
+Velocity_Select_Split_Zone_Level0:
 	LD_L 000h
 
-VelocityQuantise_A_Return:
+Velocity_Select_Split_Zone_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -14343,26 +14343,26 @@ VelocityQuantise_A_Return:
 Velocity_Select_Split_Zone_Alt:		; 022844h
 	RES 7, A
 	CP A, (XBC)
-	JR ULE, VelocityQuantise_B_Level0
+	JR ULE, Velocity_Select_Split_Zone_Alt_Level0
 	CP A, (XBC + 001h)
-	JR ULE, VelocityQuantise_B_Level1
+	JR ULE, Velocity_Select_Split_Zone_Alt_Level1
 	CP A, (XBC + 002h)
-	JR ULE, VelocityQuantise_B_Level2
+	JR ULE, Velocity_Select_Split_Zone_Alt_Level2
 	LD_L 003h
-	JR T, VelocityQuantise_B_Return
+	JR T, Velocity_Select_Split_Zone_Alt_Return
 
-VelocityQuantise_B_Level2:
+Velocity_Select_Split_Zone_Alt_Level2:
 	LD_L 002h
-	JR T, VelocityQuantise_B_Return
+	JR T, Velocity_Select_Split_Zone_Alt_Return
 
-VelocityQuantise_B_Level1:
+Velocity_Select_Split_Zone_Alt_Level1:
 	LD_L 001h
-	JR T, VelocityQuantise_B_Return
+	JR T, Velocity_Select_Split_Zone_Alt_Return
 
-VelocityQuantise_B_Level0:
+Velocity_Select_Split_Zone_Alt_Level0:
 	LD_L 000h
 
-VelocityQuantise_B_Return:
+Velocity_Select_Split_Zone_Alt_Return:
 	RET
 
 VoiceDispatch_OpaqueData:
@@ -14477,36 +14477,36 @@ BitTest_Mode2_L_v2_AllClear:
 ;        18 24 30 3C 48 54 = -96,-84,...,0,...,+84 semitones, i.e. exact OCTAVE steps
 ;        (12 semitones), index 8 = no shift.  MEASURED (ROM bytes, this pass).
 ;        For part indices 0x10..0x19 a 10-entry offset table at 0xF693 dispatches
-;        relative to PitchBend_Process_JumpTable; 9 of the 10 offsets are 0 and one (part 0x14) is 4,
+;        relative to Pitch_Get_Patch_Octave_Shift_JumpTable; 9 of the 10 offsets are 0 and one (part 0x14) is 4,
 ;        and both targets reach the same table lookup.
 ; ----------------------------------------------------------------------------
 Pitch_Get_Patch_Octave_Shift:		; 02294Eh
 	LD DE, (041343h)
 	BIT 1, DE
-	JR Z, PitchBend_Process_Dispatch
+	JR Z, Pitch_Get_Patch_Octave_Shift_Dispatch
 	LD HL, 0
-	JR T, PitchBend_Process_Return
+	JR T, Pitch_Get_Patch_Octave_Shift_Return
 
-PitchBend_Process_Dispatch:
+Pitch_Get_Patch_Octave_Shift_Dispatch:
 	EXTZ WA
 	SUB WA, 0010h
 	CP WA, 0
-	JR LT, PitchBend_Process_Fallback
+	JR LT, Pitch_Get_Patch_Octave_Shift_Fallback
 	CP WA, 0009h
-	JR GT, PitchBend_Process_Fallback
+	JR GT, Pitch_Get_Patch_Octave_Shift_Fallback
 	ADD WA, WA
 	LDA XIX, 0F693h:24
 	LD WA, (XIX + WA)
-	LDA XIX, PitchBend_Process_JumpTable:24
+	LDA XIX, Pitch_Get_Patch_Octave_Shift_JumpTable:24
 	JP T, XIX + WA
 
-PitchBend_Process_JumpTable:
+Pitch_Get_Patch_Octave_Shift_JumpTable:
 	db 0DBh
 	db 0A8h
 	db 068h
 	db 016h
 
-PitchBend_Process_Fallback:
+Pitch_Get_Patch_Octave_Shift_Fallback:
 	AND C, 00fh
 	LD A, C
 	EXTZ WA
@@ -14515,7 +14515,7 @@ PitchBend_Process_Fallback:
 	EXTS HL
 	SLA 8, HL
 
-PitchBend_Process_Return:
+Pitch_Get_Patch_Octave_Shift_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -14530,30 +14530,30 @@ PitchBend_Process_Return:
 Pitch_Clamp_Into_Range:		; 02299Dh
 	LD HL, WA
 	BIT 0fh, WA
-	JR Z, PitchBend_Saturate_CompareLo
+	JR Z, Pitch_Clamp_Into_Range_CompareLo
 	CP HL, 0c000h
-	JR LE, PitchBend_Saturate_Clamp7FFF
+	JR LE, Pitch_Clamp_Into_Range_Clamp7FFF
 	LD HL, 0
-	JR T, PitchBend_Saturate_CompareLo
+	JR T, Pitch_Clamp_Into_Range_CompareLo
 
-PitchBend_Saturate_Clamp7FFF:
+Pitch_Clamp_Into_Range_Clamp7FFF:
 	LD HL, 7fffh
 
-PitchBend_Saturate_CompareLo:
+Pitch_Clamp_Into_Range_CompareLo:
 	LD A, C
 	EXTZ WA
 	SLA 8, WA
 	ADD WA, 0080h
 	CP HL, WA
-	JR GE, PitchBend_Saturate_CompareHi
+	JR GE, Pitch_Clamp_Into_Range_CompareHi
 	LD A, C
 	EXTZ WA
 	LD HL, WA
 	SLA 8, HL
 	ADD HL, 0080h
-	JR T, PitchBend_Saturate_Return
+	JR T, Pitch_Clamp_Into_Range_Return
 
-PitchBend_Saturate_CompareHi:
+Pitch_Clamp_Into_Range_CompareHi:
 	LD A, E
 	EXTZ WA
 	SLA 8, WA
@@ -14566,7 +14566,7 @@ PitchBend_Saturate_CompareHi:
 	SLA 8, HL
 	ADD HL, 0080h
 
-PitchBend_Saturate_Return:
+Pitch_Clamp_Into_Range_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
@@ -14773,16 +14773,16 @@ WaveSel_Emit_ZoneRecord_S4:	; 022AE7h
 Pitch_Saturate_15bit:		; 022B02h
 	LD BC, WA
 	BIT 0fh, BC
-	JR Z, SaturateS16_WA_Return
+	JR Z, Pitch_Saturate_15bit_Return
 	CP WA, 0c000h
-	JR ULE, SaturateS16_WA_Clamp7FFF
+	JR ULE, Pitch_Saturate_15bit_Clamp7FFF
 	LD WA, 0
-	JR T, SaturateS16_WA_Return
+	JR T, Pitch_Saturate_15bit_Return
 
-SaturateS16_WA_Clamp7FFF:
+Pitch_Saturate_15bit_Clamp7FFF:
 	LD WA, 7fffh
 
-SaturateS16_WA_Return:
+Pitch_Saturate_15bit_Return:
 	LD HL, WA
 	RET
 
@@ -14910,16 +14910,16 @@ Pan_ScaleWithVelocity_Multiply:
 ; ----------------------------------------------------------------------------
 TVF_Clamp_Cutoff:		; 022BF2h
 	CP WA, 0078h
-	JR LE, ClampS8_0_to_78_CheckLo
+	JR LE, TVF_Clamp_Cutoff_CheckLo
 	LD WA, 0078h
-	JR T, ClampS8_0_to_78_Return
+	JR T, TVF_Clamp_Cutoff_Return
 
-ClampS8_0_to_78_CheckLo:
+TVF_Clamp_Cutoff_CheckLo:
 	CP WA, 0
-	JR GE, ClampS8_0_to_78_Return
+	JR GE, TVF_Clamp_Cutoff_Return
 	LD WA, 0
 
-ClampS8_0_to_78_Return:
+TVF_Clamp_Cutoff_Return:
 	LD HL, WA
 	RET
 
@@ -14945,7 +14945,7 @@ TVF_Calc_Cutoff:		; 022C06h
 	LD HL, DE
 	LD XIX, (XWA + 017h)
 	CP HL, 0
-	JR Z, Portamento_CalcContrib_A_DepthScale
+	JR Z, TVF_Calc_Cutoff_DepthScale
 	LD E, (XIX + 036h)
 	AND E, 0e0h
 	SRL 5, E
@@ -14968,31 +14968,31 @@ TVF_Calc_Cutoff:		; 022C06h
 	SRA 5, HL
 	ADD BC, HL
 
-Portamento_CalcContrib_A_DepthScale:
+TVF_Calc_Cutoff_DepthScale:
 	CP (XSP + 004h), 000h
-	JR Z, Portamento_CalcContrib_A_AddBaseline
+	JR Z, TVF_Calc_Cutoff_AddBaseline
 	LD DE, (XWA + 008h)
 	AND DE, 7f00h
 	SRL 8, DE
 	LD A, (XIX + 03bh)
 	EXTZ WA
 	CP DE, WA
-	JR ULE, Portamento_CalcContrib_A_ClampHi
+	JR ULE, TVF_Calc_Cutoff_ClampHi
 	LD A, (XIX + 03bh)
 	LD E, A
 	EXTZ DE
-	JR T, Portamento_CalcContrib_A_Multiply
+	JR T, TVF_Calc_Cutoff_Multiply
 
-Portamento_CalcContrib_A_ClampHi:
+TVF_Calc_Cutoff_ClampHi:
 	LD A, (XIX + 03ah)
 	EXTZ WA
 	CP DE, WA
-	JR NC, Portamento_CalcContrib_A_Multiply
+	JR NC, TVF_Calc_Cutoff_Multiply
 	LD A, (XIX + 03ah)
 	LD E, A
 	EXTZ DE
 
-Portamento_CalcContrib_A_Multiply:
+TVF_Calc_Cutoff_Multiply:
 	LD A, (XIX + 039h)
 	EXTZ WA
 	SUB DE, WA
@@ -15002,7 +15002,7 @@ Portamento_CalcContrib_A_Multiply:
 	SRA 5, WA
 	ADD BC, WA
 
-Portamento_CalcContrib_A_AddBaseline:
+TVF_Calc_Cutoff_AddBaseline:
 	ADD BC, 0018h
 	LD WA, BC
 	CALR TVF_Clamp_Cutoff
@@ -15022,7 +15022,7 @@ TVF_Calc_Cutoff_NoKeyFollow:		; 022C99h
 	LD L, E
 	EXTS HL
 	CP HL, 0
-	JR Z, Portamento_CalcContrib_B_AddBaseline
+	JR Z, TVF_Calc_Cutoff_NoKeyFollow_AddBaseline
 	LD E, (XIX + 00fh)
 	AND E, 0e0h
 	SRL 5, E
@@ -15045,7 +15045,7 @@ TVF_Calc_Cutoff_NoKeyFollow:		; 022C99h
 	LD WA, HL
 	ADD BC, WA
 
-Portamento_CalcContrib_B_AddBaseline:
+TVF_Calc_Cutoff_NoKeyFollow_AddBaseline:
 	ADD BC, 0018h
 	LD WA, BC
 	JRL T, TVF_Clamp_Cutoff
@@ -15060,10 +15060,10 @@ Portamento_CalcContrib_B_AddBaseline:
 TVF_Bias_Clamp_Amount:		; 022CE8h
 	ADD WA, 0018h
 	CP WA, 0078h
-	JR LE, Portamento_ClampAdd18_Return
+	JR LE, TVF_Bias_Clamp_Amount_Return
 	LD WA, 0078h
 
-Portamento_ClampAdd18_Return:
+TVF_Bias_Clamp_Amount_Return:
 	LD HL, WA
 	RET
 
@@ -15088,7 +15088,7 @@ TVF_Lookup_Depth_Amount:		; 022CF8h
 	LD E, C
 	EXTZ DE
 	BIT 7, A
-	JR Z, PitchBend_LookupCoeff_SetA
+	JR Z, TVF_Lookup_Depth_Amount_SetA
 	LD WA, DE
 	EXTZ XWA
 	LD XBC, XWA
@@ -15120,9 +15120,9 @@ TVF_Lookup_Depth_Amount:		; 022CF8h
 	LD A, (XWA)
 	EXTS WA
 	LD (2940h), WA
-	JR T, PitchBend_LookupCoeff_Return
+	JR T, TVF_Lookup_Depth_Amount_Return
 
-PitchBend_LookupCoeff_SetA:
+TVF_Lookup_Depth_Amount_SetA:
 	LD WA, DE
 	EXTZ XWA
 	LD XBC, XWA
@@ -15155,7 +15155,7 @@ PitchBend_LookupCoeff_SetA:
 	EXTS WA
 	LD (2940h), WA
 
-PitchBend_LookupCoeff_Return:
+TVF_Lookup_Depth_Amount_Return:
 	OR HL, IX
 	RET
 
@@ -15702,15 +15702,15 @@ Voice_Build_OutputLevel:	; 0232C7h
 	LD BC, WA
 	LD XWA, (XIZ + 00fh)
 	BIT 7, (XWA + 002h)
-	JR Z, Voice_Colour_Write_NoPanOverride
+	JR Z, Voice_Build_OutputLevel_NoPanOverride
 	LD XWA, (XIZ + 00fh)
 	LD A, (XWA + 002h)
 	EXTZ WA
 	AND WA, 0070h
 	SLL 8, WA
-	JR T, Voice_Colour_Write_Store
+	JR T, Voice_Build_OutputLevel_Store
 
-Voice_Colour_Write_NoPanOverride:
+Voice_Build_OutputLevel_NoPanOverride:
 	LD WA, (XIZ + 006h)
 	SRL 8, WA
 	EXTZ XWA
@@ -15719,7 +15719,7 @@ Voice_Colour_Write_NoPanOverride:
 	ADD XDE, XWA
 	LD WA, (XDE)
 
-Voice_Colour_Write_Store:
+Voice_Build_OutputLevel_Store:
 	OR BC, WA
 	SET 0fh, BC
 	LD (0451D0h), BC
@@ -15994,7 +15994,7 @@ Voice_Env_ApplyVelocity_Return:
 	RET
 
 ; ----------------------------------------------------------------------------
-; Pitch_Resolve_Key_Zone - key + transposes -> absolute pitch and folded zone key
+; Voice_Pitch_Compute - key + transposes -> absolute pitch and folded zone key
 ; Entry: XWA = voice descriptor (0x2942+0x47*p staging, or 0x04308E+0x47*ch live)
 ;        desc[+0x05] = played key | 0x80,  desc[+0x1F] = SET descriptor,
 ;        desc[+0x17] = 0x51-byte patch partial block,  desc[+0x23] = part struct
@@ -16033,7 +16033,7 @@ Voice_Env_ApplyVelocity_Return:
 ;        MEASURED end to end: notes/audit/kn5000-audit-pitch.md 1.2/1.4,
 ;        notes/kn5000-variant-model.md 5.1 (+0x400 reproduced 15/16 from ROM bytes).
 ; ----------------------------------------------------------------------------
-Pitch_Resolve_Key_Zone:		; 023584h
+Voice_Pitch_Compute:		; 023584h
 	LDA XSP, XSP - 10
 	PUSH IZ
 	LD (XSP + 008h), XWA
@@ -16464,7 +16464,7 @@ WaveSel_StageB_Build_Reg040_Footage:	; 0238F8h
 	ADD XWA, (045310h)
 	LD (XSP + 004h), XWA
 	CP (XIZ + 003h), 000h
-	JR NZ, Voice_PitchEnv_Advance_StateB
+	JR NZ, WaveSel_StageB_Build_Reg040_Footage_StateB
 	LD A, (XIZ + 004h)
 	LD L, A
 	EXTZ HL
@@ -16487,9 +16487,9 @@ WaveSel_StageB_Build_Reg040_Footage:	; 0238F8h
 	ADD (XSP + 004h), XBC
 	JR T, WaveSel_StageB_Store_Reg040
 
-Voice_PitchEnv_Advance_StateB:
+WaveSel_StageB_Build_Reg040_Footage_StateB:
 	CP (XIZ + 003h), 003h
-	JR NC, Voice_PitchEnv_Advance_RoutingTable
+	JR NC, WaveSel_StageB_Build_Reg040_Footage_RoutingTable
 	LD A, (XIZ + 004h)
 	LD L, A
 	EXTZ HL
@@ -16512,7 +16512,7 @@ Voice_PitchEnv_Advance_StateB:
 	ADD (XSP + 004h), XBC
 	JR T, WaveSel_StageB_Store_Reg040
 
-Voice_PitchEnv_Advance_RoutingTable:
+WaveSel_StageB_Build_Reg040_Footage_RoutingTable:
 	LD A, (XIZ + 003h)
 	EXTZ WA
 	ADD WA, WA
@@ -16551,14 +16551,14 @@ WaveSel_StageB_Store_Reg040:	; 02399Dh
 	LD (293Eh), WA
 	LD WA, (041343h)
 	BIT 2, WA
-	JR Z, Voice_PitchEnv_StoreOutputRegs_Return
+	JR Z, WaveSel_StageB_Store_Reg040_Return
 	LD WA, (0451CEh)
 	AND WA, 0f000h
 	ADD WA, WA
 	ANDW (0451CEh), 0fffh
 	OR (0451CEh), WA
 
-Voice_PitchEnv_StoreOutputRegs_Return:
+WaveSel_StageB_Store_Reg040_Return:
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -16578,7 +16578,7 @@ Voice_Vol_ScaleVelocityWord:
 
 ; ----------------------------------------------------------------------------
 ; Pitch_Apply_Partial_Detune - add the zone trim and the per-partial detunes
-; Entry: XWA = voice descriptor, desc[+0x06] already set by Pitch_Resolve_Key_Zone
+; Entry: XWA = voice descriptor, desc[+0x06] already set by Voice_Pitch_Compute
 ; Exit:  desc[+0x0a] = detuned log pitch; desc[+0x01] bit 10 set/cleared (BEND enable)
 ; Notes: desc[+0x0a] = desc[+0x06]
 ;                    + (WaveSel_Zone_Trim)          per-zone tuning trim, 1/256 semitone,
@@ -16610,14 +16610,14 @@ Pitch_Apply_Partial_Detune:		; 023A05h
 	LD XBC, (XWA + 023h)
 	LD BC, (XBC + 00ah)
 	BIT 2, BC
-	JR Z, Voice_Pitch_WriteOutputReg_Portamento_ClearBit
+	JR Z, Pitch_Apply_Partial_Detune_ClearBit
 	LD XBC, (XWA + 013h)
 	BIT 5, (XBC + 010h)
-	JR Z, Voice_Pitch_WriteOutputReg_Portamento_ClearBit
+	JR Z, Pitch_Apply_Partial_Detune_ClearBit
 	ORW (XWA + 001h), 0400h
 	RET
 
-Voice_Pitch_WriteOutputReg_Portamento_ClearBit:
+Pitch_Apply_Partial_Detune_ClearBit:
 	ANDW (XWA + 001h), 0fbffh
 	RET
 
@@ -16986,7 +16986,7 @@ TVF_Build_Full:		; 023D01h
 	LD XWA, (XWA + 023h)
 	LD WA, (XWA + 002h)
 	BIT 9, WA
-	JR Z, Voice_PitchPack_Mode1_UseVoiceLUT
+	JR Z, TVF_Build_Full_UseVoiceLUT
 	LD WA, 0048h
 	CALR TVF_Bias_Clamp_Amount
 	LD IZ, HL
@@ -16997,9 +16997,9 @@ TVF_Build_Full:		; 023D01h
 	OR BC, HL
 	LD XWA, (XSP + 006h)
 	LD (XWA + 044h), BC
-	JR T, Voice_PitchPack_Mode1_Return
+	JR T, TVF_Build_Full_Return
 
-Voice_PitchPack_Mode1_UseVoiceLUT:
+TVF_Build_Full_UseVoiceLUT:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 04fh)
 	EXTZ WA
@@ -17015,7 +17015,7 @@ Voice_PitchPack_Mode1_UseVoiceLUT:
 	LD XWA, (XSP + 006h)
 	LD (XWA + 044h), BC
 
-Voice_PitchPack_Mode1_Return:
+TVF_Build_Full_Return:
 	POP IZ
 	INC 8, XSP
 	RET
@@ -17395,16 +17395,16 @@ TVF_Build_Dispatch:		; 024102h
 	AND C, 007h
 	EXTZ BC
 	CP BC, 0
-	JR MI, Voice_PitchPack_Dispatch_Table
+	JR MI, TVF_Build_Dispatch_Table
 	CP BC, 5
-	JR GT, Voice_PitchPack_Dispatch_Table
+	JR GT, TVF_Build_Dispatch_Table
 	ADD BC, BC
 	LDA XIX, 0F6A7h:24
 	LD BC, (XIX + BC)
 	LDA XIX, 02412Bh:24
 	JP T, XIX + BC
 
-Voice_PitchPack_Dispatch_Table:
+TVF_Build_Dispatch_Table:
 	JRL T, TVF_Set_Bypass
 	JRL T, TVF_Build_Full
 	JRL T, Voice_PitchPack_Mode2
@@ -17635,39 +17635,39 @@ TVF_BuildEmit_Short_Dispatch:		; 024300h
 	AND A, 007h
 	EXTZ WA
 	CP WA, 0
-	JR MI, Voice_PitchReg_WriteDispatch_Table
+	JR MI, TVF_BuildEmit_Short_Dispatch_Table
 	CP WA, 5
-	JR GT, Voice_PitchReg_WriteDispatch_Table
+	JR GT, TVF_BuildEmit_Short_Dispatch_Table
 	ADD WA, WA
 	LDA XIX, 0F6B3h:24
 	LD WA, (XIX + WA)
 	LDA XIX, 02432Ch
 	JP T, XIX + WA
 
-Voice_PitchReg_WriteDispatch_Table:
+TVF_BuildEmit_Short_Dispatch_Table:
 	LD XWA, XIZ
 	CALR TVF_Set_Bypass
 	LD WA, (XIZ + 042h)
 	LD (0451D4h), WA
 	LD WA, (XIZ + 044h)
 	LD (0451D6h), WA
-	JR T, Voice_PitchReg_WriteDispatch_Return
+	JR T, TVF_BuildEmit_Short_Dispatch_Return
 	LD XWA, XIZ
 	CALR TVF_Build_Short
-	JR T, Voice_PitchReg_WriteDispatch_Return
+	JR T, TVF_BuildEmit_Short_Dispatch_Return
 	LD XWA, XIZ
 	CALR Voice_PitchPack_RouteB
-	JR T, Voice_PitchReg_WriteDispatch_Return
+	JR T, TVF_BuildEmit_Short_Dispatch_Return
 	LD XWA, XIZ
 	CALR Voice_PitchPack_RouteC
-	JR T, Voice_PitchReg_WriteDispatch_Return
+	JR T, TVF_BuildEmit_Short_Dispatch_Return
 	LD XWA, XIZ
 	CALR Voice_PitchPack_RouteD
-	JR T, Voice_PitchReg_WriteDispatch_Return
+	JR T, TVF_BuildEmit_Short_Dispatch_Return
 	LD XWA, XIZ
 	CALR Voice_PitchPack_RouteE
 
-Voice_PitchReg_WriteDispatch_Return:
+TVF_BuildEmit_Short_Dispatch_Return:
 	POP XIZ
 	RET
 
@@ -17689,7 +17689,7 @@ TVF_Emit_Offset_Reg100:		; 024366h
 	LD XWA, (XIZ + 027h)
 	LD WA, (XWA + 018h)
 	BIT 7, WA
-	JR Z, Voice_Pan_WriteWithDetune_Positive
+	JR Z, TVF_Emit_Offset_Reg100_Positive
 	LD XWA, (XIZ + 023h)
 	LD A, (XWA + 01fh)
 	EXTS WA
@@ -17697,9 +17697,9 @@ TVF_Emit_Offset_Reg100:		; 024366h
 	AND BC, 007fh
 	SUB BC, WA
 	LD WA, BC
-	JR T, Voice_Pan_WriteWithDetune_Clamp
+	JR T, TVF_Emit_Offset_Reg100_Clamp
 
-Voice_Pan_WriteWithDetune_Positive:
+TVF_Emit_Offset_Reg100_Positive:
 	LD XWA, (XIZ + 023h)
 	LD A, (XWA + 01fh)
 	EXTS WA
@@ -17708,7 +17708,7 @@ Voice_Pan_WriteWithDetune_Positive:
 	ADD BC, WA
 	LD WA, BC
 
-Voice_Pan_WriteWithDetune_Clamp:
+TVF_Emit_Offset_Reg100_Clamp:
 	CALR TVF_Clamp_Cutoff
 	LD WA, (XIZ + 042h)
 	AND WA, 0ff80h
@@ -17807,39 +17807,39 @@ TVF_Emit_Registers:		; 024444h
 	AND A, 007h
 	EXTZ WA
 	CP WA, 0
-	JR MI, Voice_PanReg_WriteDispatch_Table
+	JR MI, TVF_Emit_Registers_Table
 	CP WA, 5
-	JR GT, Voice_PanReg_WriteDispatch_Table
+	JR GT, TVF_Emit_Registers_Table
 	ADD WA, WA
 	LDA XIX, 0F6BFh:24
 	LD WA, (XIX + WA)
 	LDA XIX, 024472h
 	JP T, XIX + WA
 
-Voice_PanReg_WriteDispatch_Table:
+TVF_Emit_Registers_Table:
 	LD WA, (XIZ + 042h)
 	LD (0451D4h), WA
 	LD WA, (XIZ + 044h)
 	LD (0451D6h), WA
-	JRL T, Voice_PanReg_WriteDispatch_Return
+	JRL T, TVF_Emit_Registers_Return
 	LD XWA, XIZ
 	CALR TVF_Emit_Offset_Reg100
-	JRL T, Voice_PanReg_WriteDispatch_Return
+	JRL T, TVF_Emit_Registers_Return
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 002h)
 	BIT 9, WA
 	JR Z, Voice_PanReg_Dispatch_Mode2_CheckBit9
 	LD XWA, XIZ
 	CALR TVF_Emit_Offset_Reg100
-	JRL T, Voice_PanReg_WriteDispatch_Return
+	JRL T, TVF_Emit_Registers_Return
 
 Voice_PanReg_Dispatch_Mode2_CheckBit9:
 	LD XWA, XIZ
 	CALR TVF_Emit_Offset_Both
-	JRL T, Voice_PanReg_WriteDispatch_Return
+	JRL T, TVF_Emit_Registers_Return
 	LD XWA, XIZ
 	CALR TVF_Emit_Offset_Both
-	JRL T, Voice_PanReg_WriteDispatch_Return
+	JRL T, TVF_Emit_Registers_Return
 	LD XWA, (XIZ + 027h)
 	LD WA, (XWA + 018h)
 	BIT 6, WA
@@ -17893,7 +17893,7 @@ Voice_PanReg_Dispatch_Mode5_Finalize:
 	AND WA, 0ff80h
 	OR WA, HL
 	LD (0451D6h), WA
-	JR T, Voice_PanReg_WriteDispatch_Return
+	JR T, TVF_Emit_Registers_Return
 
 Voice_PanReg_Dispatch_Mode5_AsIs:
 	LD WA, (XIZ + 042h)
@@ -17901,7 +17901,7 @@ Voice_PanReg_Dispatch_Mode5_AsIs:
 	LD WA, (XIZ + 044h)
 	LD (0451D6h), WA
 
-Voice_PanReg_WriteDispatch_Return:
+TVF_Emit_Registers_Return:
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -18601,7 +18601,7 @@ ExtVoice_Build_SlotRegisters:	; 024BE3h
 	LD XWA, (XWA + 013h)
 	LDA XWA, XWA + BC
 	BIT 7, (XWA + 002h)
-	JR Z, Voice_Chan_ComputeParams_NoAlgoSelect
+	JR Z, ExtVoice_Build_SlotRegisters_NoAlgoSelect
 	LD A, (XSP + 010h)
 	LD L, A
 	EXTZ HL
@@ -18623,7 +18623,7 @@ ExtVoice_Build_SlotRegisters:	; 024BE3h
 	CALL ToneGen_WriteExtParam_600_Mute
 	JR T, ExtVoice_Store_SlotNumber
 
-Voice_Chan_ComputeParams_NoAlgoSelect:
+ExtVoice_Build_SlotRegisters_NoAlgoSelect:
 	LD A, (XSP + 010h)
 	LD L, A
 	EXTZ HL
@@ -18824,7 +18824,7 @@ Voice_Chan_SecondaryPitch_Trigger:
 	LD WA, (XWA + 00ah)
 	EXTZ XWA
 	BIT 0fh, WA
-	JRL Z, Voice_Chan_ComputeParams_Return
+	JRL Z, ExtVoice_Build_SlotRegisters_Return
 	LD A, (XSP + 010h)
 	LD E, A
 	EXTZ DE
@@ -18836,7 +18836,7 @@ Voice_Chan_SecondaryPitch_Trigger:
 	CALL DSP_AlgoType_Dispatch3
 	LD (XSP + 014h), HL
 	CPW (XSP + 014h), 0000h
-	JRL Z, Voice_Chan_ComputeParams_Return
+	JRL Z, ExtVoice_Build_SlotRegisters_Return
 	LD A, (XSP + 010h)
 	LD E, A
 	EXTZ DE
@@ -18852,7 +18852,7 @@ Voice_Chan_SecondaryPitch_Trigger:
 	LD_W 000h
 	LD (XSP + 00eh), WA
 	CPW (XSP + 00eh), 0080h
-	JR NC, Voice_Chan_ComputeParams_Return
+	JR NC, ExtVoice_Build_SlotRegisters_Return
 	LD WA, (XSP + 00eh)
 	OR WA, (XSP + 014h)
 	LD (0451DEh), WA
@@ -18867,7 +18867,7 @@ Voice_Chan_SecondaryPitch_Trigger:
 	LD XWA, (XSP + 004h)
 	LD WA, (XWA)
 	BIT 2, WA
-	JR Z, Voice_Chan_ComputeParams_Return
+	JR Z, ExtVoice_Build_SlotRegisters_Return
 
 Voice_Chan_SecondaryPitch_ComputeDelta:
 	LD XWA, (XSP + 004h)
@@ -18895,7 +18895,7 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteExtParams_56b
 
-Voice_Chan_ComputeParams_Return:
+ExtVoice_Build_SlotRegisters_Return:
 	POP XIZ
 	LDA XSP, XSP + 016h
 	RET
@@ -19386,32 +19386,32 @@ Voice2_UpdatePitch_Done:
 Level_Build_Reg0C0:		; 0253FEh
 	LD XBC, (XWA + 023h)
 	CP (XBC + 00fh), 000h
-	JR Z, Voice_ComputeExprPitchBend_ZeroCoarse
+	JR Z, Level_Build_Reg0C0_ZeroCoarse
 	LD XBC, (XWA + 023h)
 	CP (XBC + 012h), 000h
-	JR Z, Voice_ComputeExprPitchBend_ZeroCoarse
+	JR Z, Level_Build_Reg0C0_ZeroCoarse
 	LD C, (04134Ch)
 	CP C, 6
-	JR NZ, Voice_ComputeExprPitchBend_UseCoarse
+	JR NZ, Level_Build_Reg0C0_UseCoarse
 	LD DE, 0
-	JR T, Voice_ComputeExprPitchBend_ApplyDetune
+	JR T, Level_Build_Reg0C0_ApplyDetune
 
-Voice_ComputeExprPitchBend_UseCoarse:
+Level_Build_Reg0C0_UseCoarse:
 	LD XBC, (XWA + 023h)
 	LD C, (XBC + 00fh)
 	EXTZ BC
 	LD DE, BC
-	JR T, Voice_ComputeExprPitchBend_ApplyDetune
+	JR T, Level_Build_Reg0C0_ApplyDetune
 
-Voice_ComputeExprPitchBend_ZeroCoarse:
+Level_Build_Reg0C0_ZeroCoarse:
 	LD XBC, (XWA + 023h)
 	LD C, (XBC + 00fh)
 	EXTZ BC
 	LD DE, BC
 
-Voice_ComputeExprPitchBend_ApplyDetune:
+Level_Build_Reg0C0_ApplyDetune:
 	CP DE, 0
-	JR Z, Voice_ComputeExprPitchBend_CheckExpr
+	JR Z, Level_Build_Reg0C0_CheckExpr
 	LD XBC, (XWA + 013h)
 	LD C, (XBC + 05ch)
 	EXTZ BC
@@ -19421,46 +19421,46 @@ Voice_ComputeExprPitchBend_ApplyDetune:
 	LD C, (XBC + 066h)
 	EXTS BC
 	ADD DE, BC
-	JR GE, Voice_ComputeExprPitchBend_ClampHigh
+	JR GE, Level_Build_Reg0C0_ClampHigh
 	LD DE, 0
-	JR T, Voice_ComputeExprPitchBend_ShiftLeft
+	JR T, Level_Build_Reg0C0_ShiftLeft
 
-Voice_ComputeExprPitchBend_ClampHigh:
+Level_Build_Reg0C0_ClampHigh:
 	CP DE, 007fh
-	JR LE, Voice_ComputeExprPitchBend_ShiftLeft
+	JR LE, Level_Build_Reg0C0_ShiftLeft
 	LD DE, 007fh
 
-Voice_ComputeExprPitchBend_ShiftLeft:
+Level_Build_Reg0C0_ShiftLeft:
 	SLA 8, DE
 
-Voice_ComputeExprPitchBend_CheckExpr:
+Level_Build_Reg0C0_CheckExpr:
 	LD XBC, (XWA + 023h)
 	CP (XBC + 012h), 000h
-	JR Z, Voice_ComputeExprPitchBend_NoExpr
+	JR Z, Level_Build_Reg0C0_NoExpr
 	LD C, (04134Ch)
 	CP C, 6
-	JR Z, Voice_ComputeExprPitchBend_FullExpr
+	JR Z, Level_Build_Reg0C0_FullExpr
 	CP C, 5
-	JR NZ, Voice_ComputeExprPitchBend_PartialExpr
+	JR NZ, Level_Build_Reg0C0_PartialExpr
 
-Voice_ComputeExprPitchBend_FullExpr:
+Level_Build_Reg0C0_FullExpr:
 	OR DE, 007fh
-	JR T, Voice_ComputeExprPitchBend_Write
+	JR T, Level_Build_Reg0C0_Write
 
-Voice_ComputeExprPitchBend_PartialExpr:
+Level_Build_Reg0C0_PartialExpr:
 	LD XWA, (XWA + 023h)
 	LD A, (XWA + 012h)
 	EXTZ WA
 	OR DE, WA
-	JR T, Voice_ComputeExprPitchBend_Write
+	JR T, Level_Build_Reg0C0_Write
 
-Voice_ComputeExprPitchBend_NoExpr:
+Level_Build_Reg0C0_NoExpr:
 	LD XWA, (XWA + 023h)
 	LD A, (XWA + 012h)
 	EXTZ WA
 	OR DE, WA
 
-Voice_ComputeExprPitchBend_Write:
+Level_Build_Reg0C0_Write:
 	LD (0451D2h), DE
 	RET
 
@@ -19560,38 +19560,38 @@ Voice_Apply_GateRouting:	; 02552Ah
 	LD E, (XHL + DE)
 	AND E, 00fh
 	CP E, 1
-	JR Z, Voice_ApplyModeToPitchWord_HighNibble
+	JR Z, Voice_Apply_GateRouting_HighNibble
 	CP E, 2
-	JR Z, Voice_ApplyModeToPitchWord_Mode2
+	JR Z, Voice_Apply_GateRouting_Mode2
 	CP E, 0
-	JR NZ, Voice_ApplyModeToPitchWord_HighNibble
+	JR NZ, Voice_Apply_GateRouting_HighNibble
 	OR BC, 0e00h
-	JR T, Voice_ApplyModeToPitchWord_HighNibble
+	JR T, Voice_Apply_GateRouting_HighNibble
 
-Voice_ApplyModeToPitchWord_Mode2:
+Voice_Apply_GateRouting_Mode2:
 	AND BC, 0f1ffh
 	SET 9, BC
 
-Voice_ApplyModeToPitchWord_HighNibble:
+Voice_Apply_GateRouting_HighNibble:
 	EXTZ WA
 	MULS_WA 011fh
 	LDA XDE, 04138Dh
 	LD A, (XDE + WA)
 	AND A, 0f0h
 	CP A, 010h
-	JR Z, Voice_ApplyModeToPitchWord_Done
+	JR Z, Voice_Apply_GateRouting_Done
 	CP A, 020h
-	JR Z, Voice_ApplyModeToPitchWord_Mode2High
+	JR Z, Voice_Apply_GateRouting_Mode2High
 	CP A, 0
-	JR NZ, Voice_ApplyModeToPitchWord_Done
+	JR NZ, Voice_Apply_GateRouting_Done
 	OR BC, 7000h
-	JR T, Voice_ApplyModeToPitchWord_Done
+	JR T, Voice_Apply_GateRouting_Done
 
-Voice_ApplyModeToPitchWord_Mode2High:
+Voice_Apply_GateRouting_Mode2High:
 	AND BC, 8fffh
 	SET 0ch, BC
 
-Voice_ApplyModeToPitchWord_Done:
+Voice_Apply_GateRouting_Done:
 	LD HL, BC
 	RET
 
@@ -19622,39 +19622,39 @@ Voice_Build_GateCommand:	; 025589h
 	SUB BC, WA
 	LD XWA, (XIZ + 017h)
 	CP (XWA), 000h
-	JR Z, Voice_SetPitchWord_Muted_CheckExpr
+	JR Z, Voice_Build_GateCommand_CheckExpr
 	SET 8, BC
 
-Voice_SetPitchWord_Muted_CheckExpr:
+Voice_Build_GateCommand_CheckExpr:
 	LD XWA, (XIZ + 023h)
 	CP (XWA + 012h), 000h
-	JR Z, Voice_SetPitchWord_Muted_NoExpr
+	JR Z, Voice_Build_GateCommand_NoExpr
 	LD A, (04134Ch)
 	CP A, 6
-	JR Z, Voice_SetPitchWord_Muted_FullExpr
+	JR Z, Voice_Build_GateCommand_FullExpr
 	CP A, 5
-	JR Z, Voice_SetPitchWord_Muted_FullExpr
+	JR Z, Voice_Build_GateCommand_FullExpr
 	CP A, 0
-	JR NZ, Voice_SetPitchWord_Muted_PartialExpr
+	JR NZ, Voice_Build_GateCommand_PartialExpr
 
-Voice_SetPitchWord_Muted_FullExpr:
+Voice_Build_GateCommand_FullExpr:
 	LD WA, BC
 	OR WA, 0fe00h
 	LD (XIZ + 02dh), WA
-	JR T, Voice_SetPitchWord_Muted_ApplyMode
+	JR T, Voice_Build_GateCommand_ApplyMode
 
-Voice_SetPitchWord_Muted_PartialExpr:
+Voice_Build_GateCommand_PartialExpr:
 	LD WA, BC
 	OR WA, 0f000h
 	LD (XIZ + 02dh), WA
-	JR T, Voice_SetPitchWord_Muted_ApplyMode
+	JR T, Voice_Build_GateCommand_ApplyMode
 
-Voice_SetPitchWord_Muted_NoExpr:
+Voice_Build_GateCommand_NoExpr:
 	LD WA, BC
 	OR WA, 0f000h
 	LD (XIZ + 02dh), WA
 
-Voice_SetPitchWord_Muted_ApplyMode:
+Voice_Build_GateCommand_ApplyMode:
 	LD A, (XIZ + 004h)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
@@ -19676,27 +19676,27 @@ Voice_Build_GateCommand_NoPartial:	; 0255F3h
 	LD XWA, (XIZ + 013h)
 	LD XWA, (XIZ + 023h)
 	CP (XWA + 012h), 000h
-	JR Z, Voice_SetPitchWord_Unmuted_NoExpr
+	JR Z, Voice_Build_GateCommand_NoPartial_NoExpr
 	LD A, (04134Ch)
 	CP A, 6
-	JR Z, Voice_SetPitchWord_Unmuted_FullExpr
+	JR Z, Voice_Build_GateCommand_NoPartial_FullExpr
 	CP A, 5
-	JR Z, Voice_SetPitchWord_Unmuted_FullExpr
+	JR Z, Voice_Build_GateCommand_NoPartial_FullExpr
 	CP A, 0
-	JR NZ, Voice_SetPitchWord_Unmuted_PartialExpr
+	JR NZ, Voice_Build_GateCommand_NoPartial_PartialExpr
 
-Voice_SetPitchWord_Unmuted_FullExpr:
+Voice_Build_GateCommand_NoPartial_FullExpr:
 	LDW (XIZ + 02dh), 0fe00h
-	JR T, Voice_SetPitchWord_Unmuted_ApplyMode
+	JR T, Voice_Build_GateCommand_NoPartial_ApplyMode
 
-Voice_SetPitchWord_Unmuted_PartialExpr:
+Voice_Build_GateCommand_NoPartial_PartialExpr:
 	LDW (XIZ + 02dh), 0f000h
-	JR T, Voice_SetPitchWord_Unmuted_ApplyMode
+	JR T, Voice_Build_GateCommand_NoPartial_ApplyMode
 
-Voice_SetPitchWord_Unmuted_NoExpr:
+Voice_Build_GateCommand_NoPartial_NoExpr:
 	LDW (XIZ + 02dh), 0f000h
 
-Voice_SetPitchWord_Unmuted_ApplyMode:
+Voice_Build_GateCommand_NoPartial_ApplyMode:
 	LD A, (XIZ + 004h)
 	EXTZ WA
 	LD BC, (XIZ + 02dh)
@@ -21589,11 +21589,11 @@ Voice_Calc_LevelPair_EGA:	; 026769h
 	LD XWA, (XWA + 023h)
 	LD WA, (XWA + 00ah)
 	BIT 0, WA
-	JR Z, Voice_ComputeAndWriteVolume1_ApplyLFO
+	JR Z, Voice_Calc_LevelPair_EGA_ApplyLFO
 	LD XWA, (XSP + 006h)
 	LD WA, (XWA + 001h)
 	BIT 8, WA
-	JR NZ, Voice_ComputeAndWriteVolume1_ApplyLFO
+	JR NZ, Voice_Calc_LevelPair_EGA_ApplyLFO
 	LD XWA, (XSP + 006h)
 	LD XWA, (XWA + 023h)
 	LD A, (XWA + 018h)
@@ -21605,13 +21605,13 @@ Voice_Calc_LevelPair_EGA:	; 026769h
 	LD A, (XBC + WA)
 	EXTZ WA
 	CP WA, IZ
-	JR GT, Voice_ComputeAndWriteVolume1_ApplyLFO
+	JR GT, Voice_Calc_LevelPair_EGA_ApplyLFO
 	LD IZ, WA
 
-Voice_ComputeAndWriteVolume1_ApplyLFO:
+Voice_Calc_LevelPair_EGA_ApplyLFO:
 	LD XWA, (XSP + 002h)
 	CP (XWA + 035h), 000h
-	JR Z, Voice_ComputeAndWriteVolume1_WriteDSP
+	JR Z, Voice_Calc_LevelPair_EGA_WriteDSP
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 030h)
 	LD C, A
@@ -21636,7 +21636,7 @@ Voice_ComputeAndWriteVolume1_ApplyLFO:
 	CALR Voice_Clamp_Byte_HL
 	LD IZ, HL
 
-Voice_ComputeAndWriteVolume1_WriteDSP:
+Voice_Calc_LevelPair_EGA_WriteDSP:
 	LD WA, IZ
 	SLA 8, WA
 	SET 7, WA
@@ -21805,7 +21805,7 @@ Voice_Calc_LevelPair_EGB:	; 026975h
 	LD XWA, (XWA + 023h)
 	LD WA, (XWA + 00ah)
 	BIT 0, WA
-	JR Z, Voice_ComputeAndWriteVolume2_ApplyLFO
+	JR Z, Voice_Calc_LevelPair_EGB_ApplyLFO
 	LD XWA, (XSP + 006h)
 	LD XWA, (XWA + 023h)
 	LD A, (XWA + 018h)
@@ -21817,13 +21817,13 @@ Voice_Calc_LevelPair_EGB:	; 026975h
 	LD A, (XBC + WA)
 	EXTZ WA
 	CP WA, IZ
-	JR GT, Voice_ComputeAndWriteVolume2_ApplyLFO
+	JR GT, Voice_Calc_LevelPair_EGB_ApplyLFO
 	LD IZ, WA
 
-Voice_ComputeAndWriteVolume2_ApplyLFO:
+Voice_Calc_LevelPair_EGB_ApplyLFO:
 	LD XWA, (XSP + 002h)
 	CP (XWA + 016h), 000h
-	JR Z, Voice_ComputeAndWriteVolume2_NoLFO
+	JR Z, Voice_Calc_LevelPair_EGB_NoLFO
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 013h)
 	LD C, A
@@ -21840,7 +21840,7 @@ Voice_ComputeAndWriteVolume2_ApplyLFO:
 	ADD IZ, HL
 	LD XWA, (XSP + 002h)
 	CP (XWA + 011h), 000h
-	JR Z, Voice_ComputeAndWriteVolume2_NoKeyTrack
+	JR Z, Voice_Calc_LevelPair_EGB_NoKeyTrack
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 011h)
 	LD E, A
@@ -21858,20 +21858,20 @@ Voice_ComputeAndWriteVolume2_ApplyLFO:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_ComputeAndWriteVolume2_WriteDSP
+	JR T, Voice_Calc_LevelPair_EGB_WriteDSP
 
-Voice_ComputeAndWriteVolume2_NoKeyTrack:
+Voice_Calc_LevelPair_EGB_NoKeyTrack:
 	LD WA, IZ
 	LD BC, 00ffh
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_ComputeAndWriteVolume2_WriteDSP
+	JR T, Voice_Calc_LevelPair_EGB_WriteDSP
 
-Voice_ComputeAndWriteVolume2_NoLFO:
+Voice_Calc_LevelPair_EGB_NoLFO:
 	LD XWA, (XSP + 002h)
 	CP (XWA + 011h), 000h
-	JR Z, Voice_ComputeAndWriteVolume2_WriteDSP
+	JR Z, Voice_Calc_LevelPair_EGB_WriteDSP
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 011h)
 	LD E, A
@@ -21890,25 +21890,25 @@ Voice_ComputeAndWriteVolume2_NoLFO:
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
 
-Voice_ComputeAndWriteVolume2_WriteDSP:
+Voice_Calc_LevelPair_EGB_WriteDSP:
 	LD XWA, (XSP + 002h)
 	CP (XWA + 007h), 000h
-	JR GE, Voice_ComputeAndWriteVolume2_PositiveDetune
+	JR GE, Voice_Calc_LevelPair_EGB_PositiveDetune
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 010h)
 	EXTS WA
 	CPL WA
 	INC 1, WA
 	CALR Detune_ScaleSymmetric
-	JR T, Voice_ComputeAndWriteVolume2_WriteResult
+	JR T, Voice_Calc_LevelPair_EGB_WriteResult
 
-Voice_ComputeAndWriteVolume2_PositiveDetune:
+Voice_Calc_LevelPair_EGB_PositiveDetune:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 010h)
 	EXTS WA
 	CALR Detune_ScaleSymmetric
 
-Voice_ComputeAndWriteVolume2_WriteResult:
+Voice_Calc_LevelPair_EGB_WriteResult:
 	LD_H 000h
 	LD WA, IZ
 	SLA 8, WA
@@ -21952,7 +21952,7 @@ Voice_Calc_LevelPair_EGC:	; 026AAAh
 	LD XWA, (XWA + 023h)
 	LD WA, (XWA + 00ah)
 	BIT 0, WA
-	JR Z, Voice_ComputeAndWriteVolume3_ApplyLFO
+	JR Z, Voice_Calc_LevelPair_EGC_ApplyLFO
 	LD XWA, (XSP + 006h)
 	LD XWA, (XWA + 023h)
 	LD A, (XWA + 018h)
@@ -21964,13 +21964,13 @@ Voice_Calc_LevelPair_EGC:	; 026AAAh
 	LD A, (XBC + WA)
 	EXTZ WA
 	CP WA, IZ
-	JR GT, Voice_ComputeAndWriteVolume3_ApplyLFO
+	JR GT, Voice_Calc_LevelPair_EGC_ApplyLFO
 	LD IZ, WA
 
-Voice_ComputeAndWriteVolume3_ApplyLFO:
+Voice_Calc_LevelPair_EGC_ApplyLFO:
 	LD XWA, (XSP + 002h)
 	CP (XWA + 04ch), 000h
-	JR Z, Voice_ComputeAndWriteVolume3_NoLFO
+	JR Z, Voice_Calc_LevelPair_EGC_NoLFO
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 049h)
 	LD C, A
@@ -21987,7 +21987,7 @@ Voice_ComputeAndWriteVolume3_ApplyLFO:
 	ADD IZ, HL
 	LD XWA, (XSP + 002h)
 	CP (XWA + 047h), 000h
-	JR Z, Voice_ComputeAndWriteVolume3_NoKeyTrack
+	JR Z, Voice_Calc_LevelPair_EGC_NoKeyTrack
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 047h)
 	LD E, A
@@ -22005,20 +22005,20 @@ Voice_ComputeAndWriteVolume3_ApplyLFO:
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_ComputeAndWriteVolume3_WriteDSP
+	JR T, Voice_Calc_LevelPair_EGC_WriteDSP
 
-Voice_ComputeAndWriteVolume3_NoKeyTrack:
+Voice_Calc_LevelPair_EGC_NoKeyTrack:
 	LD WA, IZ
 	LD BC, 00ffh
 	LD DE, 0
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
-	JR T, Voice_ComputeAndWriteVolume3_WriteDSP
+	JR T, Voice_Calc_LevelPair_EGC_WriteDSP
 
-Voice_ComputeAndWriteVolume3_NoLFO:
+Voice_Calc_LevelPair_EGC_NoLFO:
 	LD XWA, (XSP + 002h)
 	CP (XWA + 047h), 000h
-	JR Z, Voice_ComputeAndWriteVolume3_WriteDSP
+	JR Z, Voice_Calc_LevelPair_EGC_WriteDSP
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 047h)
 	LD E, A
@@ -22037,7 +22037,7 @@ Voice_ComputeAndWriteVolume3_NoLFO:
 	CALR ClampS16_WA_To_DEBC
 	LD IZ, HL
 
-Voice_ComputeAndWriteVolume3_WriteDSP:
+Voice_Calc_LevelPair_EGC_WriteDSP:
 	LD XWA, (XSP + 002h)
 	LD A, (XWA + 03dh)
 	LD C, A
@@ -22352,11 +22352,11 @@ Voice_Step_AmpDelay:	; 026E5Bh
 	LD WA, IZ
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateNoteOff_CheckRelease
+	JR Z, Voice_Step_AmpDelay_CheckRelease
 	SUB IZ, 0100h
 	LD WA, IZ
 	AND WA, 7f00h
-	JR NZ, Voice_UpdateNoteOff_CheckRelease
+	JR NZ, Voice_Step_AmpDelay_CheckRelease
 	LD XWA, (XSP + 002h)
 	LD A, (XWA)
 	EXTZ WA
@@ -22369,20 +22369,20 @@ Voice_Step_AmpDelay:	; 026E5Bh
 	CALL Voice_Clear_HoldBit
 	RES 0fh, IZ
 
-Voice_UpdateNoteOff_CheckRelease:
+Voice_Step_AmpDelay_CheckRelease:
 	BIT 7, IZ
-	JR Z, Voice_UpdateNoteOff_StoreDone
+	JR Z, Voice_Step_AmpDelay_StoreDone
 	DEC 1, IZ
 	LD WA, IZ
 	AND WA, 007fh
-	JR NZ, Voice_UpdateNoteOff_StoreDone
+	JR NZ, Voice_Step_AmpDelay_StoreDone
 	LD XWA, (XSP + 002h)
 	LD A, (XWA)
 	EXTZ WA
 	CALL Voice_Reload_Levels
 	AND IZ, 007fh
 
-Voice_UpdateNoteOff_StoreDone:
+Voice_Step_AmpDelay_StoreDone:
 	LD XWA, (XSP + 002h)
 	LD (XWA + 02fh), IZ
 	POP IZ
@@ -22418,7 +22418,7 @@ Voice_Step_ExprRamp:	; 026EC3h
 	LD WA, (XWA + 031h)
 	LD (XSP + 002h), WA
 	AND WA, 007fh
-	JRL NZ, Voice_UpdatePortamento_ActiveCount
+	JRL NZ, Voice_Step_ExprRamp_ActiveCount
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 035h)
 	EXTZ WA
@@ -22426,39 +22426,39 @@ Voice_Step_ExprRamp:	; 026EC3h
 	XORW (XSP + 002h), 0800h
 	LD WA, (XSP + 002h)
 	BIT 0bh, WA
-	JRL Z, Voice_UpdatePortamento_ZeroState
+	JRL Z, Voice_Step_ExprRamp_ZeroState
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 004h)
 	EXTZ WA
 	MULS_WA 011fh
 	LDA XBC, 04138Eh
 	CP (XBC + WA), 001h
-	JR NZ, Voice_UpdatePortamento_ModeCheck2
+	JR NZ, Voice_Step_ExprRamp_ModeCheck2
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
 	LD XBC, (XSP + 004h)
 	LD BC, (XBC + 02bh)
 	CALL ToneGen_WriteExprReg
-	JR T, Voice_UpdatePortamento_DispatchMode
+	JR T, Voice_Step_ExprRamp_DispatchMode
 
-Voice_UpdatePortamento_ModeCheck2:
+Voice_Step_ExprRamp_ModeCheck2:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA + 004h)
 	EXTZ WA
 	MULS_WA 011fh
 	LDA XBC, 04138Eh
 	CP (XBC + WA), 002h
-	JR NZ, Voice_UpdatePortamento_ModeDefault
+	JR NZ, Voice_Step_ExprRamp_ModeDefault
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
 	LD XBC, (XSP + 004h)
 	LD BC, (XBC + 02bh)
 	CALL ToneGen_WriteExprReg
-	JR T, Voice_UpdatePortamento_DispatchMode
+	JR T, Voice_Step_ExprRamp_DispatchMode
 
-Voice_UpdatePortamento_ModeDefault:
+Voice_Step_ExprRamp_ModeDefault:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	LD L, A
@@ -22476,9 +22476,9 @@ Voice_UpdatePortamento_ModeDefault:
 	LD WA, HL
 	LD BC, DE
 	CALL ToneGen_WriteExprReg
-	JR T, Voice_UpdatePortamento_DispatchMode
+	JR T, Voice_Step_ExprRamp_DispatchMode
 
-Voice_UpdatePortamento_ZeroState:
+Voice_Step_ExprRamp_ZeroState:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
@@ -22486,21 +22486,21 @@ Voice_UpdatePortamento_ZeroState:
 	LD BC, (XBC + 02bh)
 	CALL ToneGen_WriteExprReg
 
-Voice_UpdatePortamento_DispatchMode:
+Voice_Step_ExprRamp_DispatchMode:
 	LD WA, (XSP + 002h)
 	AND WA, 7000h
 	CP WA, 1000h
-	JRL Z, Voice_UpdatePortamento_Release_Start
+	JRL Z, Voice_Step_ExprRamp_Release_Start
 	CP WA, 2000h
-	JRL Z, Voice_UpdatePortamento_Descend_Tick
+	JRL Z, Voice_Step_ExprRamp_Descend_Tick
 	CP WA, 4000h
-	JRL NZ, Voice_UpdatePortamento_NullMode
+	JRL NZ, Voice_Step_ExprRamp_NullMode
 	LD XWA, (XSP + 004h)
 	LD IZ, (XWA + 036h)
 	LD XWA, (XSP + 004h)
 	ADD IZ, (XWA + 033h)
 	CP IZ, 0ff00h
-	JR GT, Voice_UpdatePortamento_Ascend_Tick
+	JR GT, Voice_Step_ExprRamp_Ascend_Tick
 	LD XWA, (XSP + 004h)
 	LDW (XWA + 033h), 0ff00h
 	LD XWA, (XSP + 004h)
@@ -22512,9 +22512,9 @@ Voice_UpdatePortamento_DispatchMode:
 	EXTZ WA
 	CALL Voice_Reload_Levels
 	ANDW (XSP + 002h), 6fffh
-	JRL T, Voice_UpdatePortamento_StoreDone
+	JRL T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_Ascend_Tick:
+Voice_Step_ExprRamp_Ascend_Tick:
 	RES 7, (P6)
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
@@ -22524,9 +22524,9 @@ Voice_UpdatePortamento_Ascend_Tick:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, Voice_UpdatePortamento_Ascend_Tick2
+	JR T, Voice_Step_ExprRamp_Ascend_Tick2
 
-Voice_UpdatePortamento_Ascend_Tick2:
+Voice_Step_ExprRamp_Ascend_Tick2:
 	NOP
 	NOP
 	NOP
@@ -22539,21 +22539,21 @@ Voice_UpdatePortamento_Ascend_Tick2:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, Voice_UpdatePortamento_Ascend_ClampFloor
+	JR T, Voice_Step_ExprRamp_Ascend_ClampFloor
 
-Voice_UpdatePortamento_Ascend_ClampFloor:
+Voice_Step_ExprRamp_Ascend_ClampFloor:
 	NOP
 	NOP
 	NOP
 	LD XWA, (XSP + 004h)
 	CP IZ, (XWA + 03ah)
-	JR GE, Voice_UpdatePortamento_Ascend_WritePitch
+	JR GE, Voice_Step_ExprRamp_Ascend_WritePitch
 	LD XWA, (XSP + 004h)
 	LD IZ, (XWA + 03ah)
 	RES 6, (XSP + 003h)
 	SET 5, (XSP + 003h)
 
-Voice_UpdatePortamento_Ascend_WritePitch:
+Voice_Step_ExprRamp_Ascend_WritePitch:
 	LD XWA, (XSP + 004h)
 	LD (XWA + 033h), IZ
 	LD XWA, (XSP + 004h)
@@ -22564,9 +22564,9 @@ Voice_UpdatePortamento_Ascend_WritePitch:
 	LDA XBC, 0451CCh
 	LD XDE, (XSP + 004h)
 	CALL ToneGen_WriteVoiceParams_Ext
-	JRL T, Voice_UpdatePortamento_StoreDone
+	JRL T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_Descend_Tick:
+Voice_Step_ExprRamp_Descend_Tick:
 	RES 7, (P6)
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
@@ -22576,9 +22576,9 @@ Voice_UpdatePortamento_Descend_Tick:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, Voice_UpdatePortamento_Descend_Tick2
+	JR T, Voice_Step_ExprRamp_Descend_Tick2
 
-Voice_UpdatePortamento_Descend_Tick2:
+Voice_Step_ExprRamp_Descend_Tick2:
 	NOP
 	NOP
 	NOP
@@ -22591,9 +22591,9 @@ Voice_UpdatePortamento_Descend_Tick2:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, Voice_UpdatePortamento_Descend_WritePitch
+	JR T, Voice_Step_ExprRamp_Descend_WritePitch
 
-Voice_UpdatePortamento_Descend_WritePitch:
+Voice_Step_ExprRamp_Descend_WritePitch:
 	NOP
 	NOP
 	NOP
@@ -22602,15 +22602,15 @@ Voice_UpdatePortamento_Descend_WritePitch:
 	EXTZ WA
 	LD XBC, (XSP + 004h)
 	CALL ToneGen_WriteVoiceParams_Ext2
-	JRL T, Voice_UpdatePortamento_StoreDone
+	JRL T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_Release_Start:
+Voice_Step_ExprRamp_Release_Start:
 	LD XWA, (XSP + 004h)
 	LD IZ, (XWA + 038h)
 	LD XWA, (XSP + 004h)
 	ADD IZ, (XWA + 033h)
 	CP IZ, 0ff00h
-	JR GT, Voice_UpdatePortamento_Release_Tick
+	JR GT, Voice_Step_ExprRamp_Release_Tick
 	LD XWA, (XSP + 004h)
 	LDW (XWA + 033h), 0ff00h
 	LD XWA, (XSP + 004h)
@@ -22622,9 +22622,9 @@ Voice_UpdatePortamento_Release_Start:
 	EXTZ WA
 	CALL Voice_Reload_Levels
 	ANDW (XSP + 002h), 6fffh
-	JRL T, Voice_UpdatePortamento_StoreDone
+	JRL T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_Release_Tick:
+Voice_Step_ExprRamp_Release_Tick:
 	RES 7, (P6)
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
@@ -22634,9 +22634,9 @@ Voice_UpdatePortamento_Release_Tick:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff00h
-	JR T, Voice_UpdatePortamento_Release_Tick2
+	JR T, Voice_Step_ExprRamp_Release_Tick2
 
-Voice_UpdatePortamento_Release_Tick2:
+Voice_Step_ExprRamp_Release_Tick2:
 	NOP
 	NOP
 	NOP
@@ -22649,9 +22649,9 @@ Voice_UpdatePortamento_Release_Tick2:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0ff80h
-	JR T, Voice_UpdatePortamento_Release_WritePitch
+	JR T, Voice_Step_ExprRamp_Release_WritePitch
 
-Voice_UpdatePortamento_Release_WritePitch:
+Voice_Step_ExprRamp_Release_WritePitch:
 	NOP
 	NOP
 	NOP
@@ -22665,17 +22665,17 @@ Voice_UpdatePortamento_Release_WritePitch:
 	LDA XBC, 0451CCh
 	LD XDE, (XSP + 004h)
 	CALL ToneGen_WriteVoiceParams_Ext
-	JR T, Voice_UpdatePortamento_StoreDone
+	JR T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_NullMode:
+Voice_Step_ExprRamp_NullMode:
 	LDW (XSP + 002h), 0000h
-	JR T, Voice_UpdatePortamento_StoreDone
+	JR T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_ActiveCount:
+Voice_Step_ExprRamp_ActiveCount:
 	LD WA, (XSP + 002h)
 	AND WA, 007fh
 	CP WA, 1
-	JR NZ, Voice_UpdatePortamento_CountDecrement
+	JR NZ, Voice_Step_ExprRamp_CountDecrement
 	RES 7, (P6)
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
@@ -22685,9 +22685,9 @@ Voice_UpdatePortamento_ActiveCount:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0a200h
-	JR T, Voice_UpdatePortamento_CountTick
+	JR T, Voice_Step_ExprRamp_CountTick
 
-Voice_UpdatePortamento_CountTick:
+Voice_Step_ExprRamp_CountTick:
 	NOP
 	NOP
 	NOP
@@ -22700,19 +22700,19 @@ Voice_UpdatePortamento_CountTick:
 	NOP
 	SET 7, (P6)
 	LDW (100002h:24), 0a280h
-	JR T, Voice_UpdatePortamento_CountTick2
+	JR T, Voice_Step_ExprRamp_CountTick2
 
-Voice_UpdatePortamento_CountTick2:
+Voice_Step_ExprRamp_CountTick2:
 	NOP
 	NOP
 	NOP
 	DECW 1, (XSP + 002h)
-	JR T, Voice_UpdatePortamento_StoreDone
+	JR T, Voice_Step_ExprRamp_StoreDone
 
-Voice_UpdatePortamento_CountDecrement:
+Voice_Step_ExprRamp_CountDecrement:
 	DECW 1, (XSP + 002h)
 
-Voice_UpdatePortamento_StoreDone:
+Voice_Step_ExprRamp_StoreDone:
 	LD XWA, (XSP + 004h)
 	LD BC, (XSP + 002h)
 	LD (XWA + 031h), BC
@@ -22734,7 +22734,7 @@ Voice_UpdatePortamento_StoreDone:
 Pitch_Bend_Ramp_Tick:		; 0271BCh
 	LD WA, (041343h)
 	BIT 0bh, WA
-	JR Z, Voice_ApplyTuningSysEx_Bit12
+	JR Z, Pitch_Bend_Ramp_Tick_Bit12
 	INCW 1, (04135Ch)
 	LD A, (011C7Ch)
 	EXTS WA
@@ -22744,21 +22744,21 @@ Pitch_Bend_Ramp_Tick:		; 0271BCh
 	ORW (041343h), 1400h
 	RET
 
-Voice_ApplyTuningSysEx_Bit12:
+Pitch_Bend_Ramp_Tick_Bit12:
 	LD WA, (041343h)
 	BIT 0ch, WA
-	JR Z, Voice_ApplyTuningSysEx_Bit13Check
+	JR Z, Pitch_Bend_Ramp_Tick_Bit13Check
 	INCW 1, (04135Ch)
 	ANDW (041343h), 0fbffh
 	RET
 
-Voice_ApplyTuningSysEx_Bit13Check:
+Pitch_Bend_Ramp_Tick_Bit13Check:
 	LD WA, (041343h)
 	BIT 0dh, WA
-	JRL Z, Voice_ApplyTuningSysEx_ClearMode
+	JRL Z, Pitch_Bend_Ramp_Tick_ClearMode
 	LD WA, (041343h)
 	BIT 0eh, WA
-	JR Z, Voice_ApplyTuningSysEx_Bit14Clear
+	JR Z, Pitch_Bend_Ramp_Tick_Bit14Clear
 	INCW 2, (04135Ch)
 	LD WA, (04135Ch)
 	EXTZ XWA
@@ -22769,13 +22769,13 @@ Voice_ApplyTuningSysEx_Bit13Check:
 	ADD WA, WA
 	LD (04135Ah), WA
 	ORW (041343h), 0400h
-	JR T, Voice_ApplyTuningSysEx_CheckCounter
+	JR T, Pitch_Bend_Ramp_Tick_CheckCounter
 
-Voice_ApplyTuningSysEx_Bit14Clear:
+Pitch_Bend_Ramp_Tick_Bit14Clear:
 	LD WA, (041343h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_ApplyTuningSysEx_ZeroPitch
+	JR Z, Pitch_Bend_Ramp_Tick_ZeroPitch
 	INCW 1, (04135Ch)
 	LD WA, (04135Ch)
 	EXTZ XWA
@@ -22786,13 +22786,13 @@ Voice_ApplyTuningSysEx_Bit14Clear:
 	ADD WA, WA
 	LD (04135Ah), WA
 	ORW (041343h), 0400h
-	JR T, Voice_ApplyTuningSysEx_CheckCounter
+	JR T, Pitch_Bend_Ramp_Tick_CheckCounter
 
-Voice_ApplyTuningSysEx_ZeroPitch:
+Pitch_Bend_Ramp_Tick_ZeroPitch:
 	LDW (04135Ah), 0000h
 	ORW (041343h), 0400h
 
-Voice_ApplyTuningSysEx_CheckCounter:
+Pitch_Bend_Ramp_Tick_CheckCounter:
 	CPW (04135Ah), 0000h
 	RET NZ
 	ANDW (041343h), 1fffh
@@ -22800,7 +22800,7 @@ Voice_ApplyTuningSysEx_CheckCounter:
 	ORW (041343h), 0400h
 	RET
 
-Voice_ApplyTuningSysEx_ClearMode:
+Pitch_Bend_Ramp_Tick_ClearMode:
 	ANDW (041343h), 0fbffh
 	RET
 
@@ -23547,9 +23547,9 @@ Audio_Tick_ServiceVoices_A:	; 027A46h
 	LDA XWA, XHL + 005h
 	LD (XSP + 004h), XWA
 	CP (XWA), 040h
-	JR NC, Voice_ScanAndCancelNoteOff_Done
+	JR NC, Audio_Tick_ServiceVoices_A_Done
 
-Voice_ScanAndCancelNoteOff_Loop:
+Audio_Tick_ServiceVoices_A_Loop:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
@@ -23560,20 +23560,20 @@ Voice_ScanAndCancelNoteOff_Loop:
 	LD WA, (XWA + 00ah)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_ScanAndCancelNoteOff_ClearSlot
+	JR Z, Audio_Tick_ServiceVoices_A_ClearSlot
 	LD WA, (XIZ + 02fh)
 	EXTZ XWA
 	AND XWA, 00008080h
-	JR Z, Voice_ScanAndCancelNoteOff_NextSlot
+	JR Z, Audio_Tick_ServiceVoices_A_NextSlot
 	LD XWA, XIZ
 	CALR Voice_Step_AmpDelay
-	JR T, Voice_ScanAndCancelNoteOff_NextSlot
+	JR T, Audio_Tick_ServiceVoices_A_NextSlot
 
-Voice_ScanAndCancelNoteOff_ClearSlot:
+Audio_Tick_ServiceVoices_A_ClearSlot:
 	LD WA, (XIZ + 02fh)
 	EXTZ XWA
 	AND XWA, 00008080h
-	JR Z, Voice_ScanAndCancelNoteOff_NextSlot
+	JR Z, Audio_Tick_ServiceVoices_A_NextSlot
 	LD A, (XIZ)
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
@@ -23582,14 +23582,14 @@ Voice_ScanAndCancelNoteOff_ClearSlot:
 	CALL Voice_Reload_Levels
 	LDW (XIZ + 02fh), 0000h
 
-Voice_ScanAndCancelNoteOff_NextSlot:
+Audio_Tick_ServiceVoices_A_NextSlot:
 	LD XWA, 1
 	ADD (XSP + 004h), XWA
 	LD XWA, (XSP + 004h)
 	CP (XWA), 040h
-	JR C, Voice_ScanAndCancelNoteOff_Loop
+	JR C, Audio_Tick_ServiceVoices_A_Loop
 
-Voice_ScanAndCancelNoteOff_Done:
+Audio_Tick_ServiceVoices_A_Done:
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -23613,14 +23613,14 @@ Audio_Tick_ServiceVoices_B:	; 027AC4h
 	CALR Pitch_Bend_Ramp_Tick
 	LD WA, (041343h)
 	BIT 0ah, WA
-	JRL Z, Voice_UpdateAllNoteStates_LoopB_Start
+	JRL Z, Audio_Tick_ServiceVoices_B_LoopB_Start
 	CALL Voice_Query_AllChannels
 	LDA XWA, XHL + 005h
 	LD (XSP + 004h), XWA
 	CP (XWA), 040h
-	JRL NC, Voice_UpdateAllNoteStates_ScanLFO
+	JRL NC, Audio_Tick_ServiceVoices_B_ScanLFO
 
-Voice_UpdateAllNoteStates_LoopA:
+Audio_Tick_ServiceVoices_B_LoopA:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
@@ -23629,7 +23629,7 @@ Voice_UpdateAllNoteStates_LoopA:
 	LDA XIZ, XBC + WA
 	LD WA, (XIZ + 001h)
 	BIT 0ah, WA
-	JR Z, Voice_UpdateAllNoteStates_CheckPortaA
+	JR Z, Audio_Tick_ServiceVoices_B_CheckPortaA
 	LD XWA, XIZ
 	CALR Pitch_Emit_Reg400
 	LD XWA, (XSP + 004h)
@@ -23638,34 +23638,34 @@ Voice_UpdateAllNoteStates_LoopA:
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteVoicePitch
 
-Voice_UpdateAllNoteStates_CheckPortaA:
+Audio_Tick_ServiceVoices_B_CheckPortaA:
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 00ah)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateAllNoteStates_ClearNoteOffA
+	JR Z, Audio_Tick_ServiceVoices_B_ClearNoteOffA
 	LD WA, (XIZ + 02fh)
 	EXTZ XWA
 	AND XWA, 00008080h
-	JR Z, Voice_UpdateAllNoteStates_CheckPortamento2A
+	JR Z, Audio_Tick_ServiceVoices_B_CheckPortamento2A
 	LD XWA, XIZ
 	CALR Voice_Step_AmpDelay
-	JR T, Voice_UpdateAllNoteStates_NextSlotA
+	JR T, Audio_Tick_ServiceVoices_B_NextSlotA
 
-Voice_UpdateAllNoteStates_CheckPortamento2A:
+Audio_Tick_ServiceVoices_B_CheckPortamento2A:
 	LD WA, (XIZ + 031h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateAllNoteStates_NextSlotA
+	JR Z, Audio_Tick_ServiceVoices_B_NextSlotA
 	LD XWA, XIZ
 	CALR Voice_Step_ExprRamp
-	JR T, Voice_UpdateAllNoteStates_NextSlotA
+	JR T, Audio_Tick_ServiceVoices_B_NextSlotA
 
-Voice_UpdateAllNoteStates_ClearNoteOffA:
+Audio_Tick_ServiceVoices_B_ClearNoteOffA:
 	LD WA, (XIZ + 02fh)
 	EXTZ XWA
 	AND XWA, 00008080h
-	JR Z, Voice_UpdateAllNoteStates_ClearPorta2A
+	JR Z, Audio_Tick_ServiceVoices_B_ClearPorta2A
 	LD A, (XIZ)
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
@@ -23673,13 +23673,13 @@ Voice_UpdateAllNoteStates_ClearNoteOffA:
 	EXTZ WA
 	CALL Voice_Reload_Levels
 	LDW (XIZ + 02fh), 0000h
-	JR T, Voice_UpdateAllNoteStates_NextSlotA
+	JR T, Audio_Tick_ServiceVoices_B_NextSlotA
 
-Voice_UpdateAllNoteStates_ClearPorta2A:
+Audio_Tick_ServiceVoices_B_ClearPorta2A:
 	LD WA, (XIZ + 031h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateAllNoteStates_NextSlotA
+	JR Z, Audio_Tick_ServiceVoices_B_NextSlotA
 	LD A, (XIZ)
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
@@ -23688,22 +23688,22 @@ Voice_UpdateAllNoteStates_ClearPorta2A:
 	CALL Voice_Reload_Levels
 	LDW (XIZ + 031h), 0000h
 
-Voice_UpdateAllNoteStates_NextSlotA:
+Audio_Tick_ServiceVoices_B_NextSlotA:
 	LD XWA, 1
 	ADD (XSP + 004h), XWA
 	LD XWA, (XSP + 004h)
 	CP (XWA), 040h
-	JRL C, Voice_UpdateAllNoteStates_LoopA
-	JRL T, Voice_UpdateAllNoteStates_ScanLFO
+	JRL C, Audio_Tick_ServiceVoices_B_LoopA
+	JRL T, Audio_Tick_ServiceVoices_B_ScanLFO
 
-Voice_UpdateAllNoteStates_LoopB_Start:
+Audio_Tick_ServiceVoices_B_LoopB_Start:
 	CALL Voice_Query_AllChannels
 	LDA XWA, XHL + 005h
 	LD (XSP + 004h), XWA
 	CP (XWA), 040h
-	JRL NC, Voice_UpdateAllNoteStates_ScanLFO
+	JRL NC, Audio_Tick_ServiceVoices_B_ScanLFO
 
-Voice_UpdateAllNoteStates_LoopB:
+Audio_Tick_ServiceVoices_B_LoopB:
 	LD XWA, (XSP + 004h)
 	LD A, (XWA)
 	EXTZ WA
@@ -23714,29 +23714,29 @@ Voice_UpdateAllNoteStates_LoopB:
 	LD WA, (XWA + 00ah)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateAllNoteStates_ClearNoteOffB
+	JR Z, Audio_Tick_ServiceVoices_B_ClearNoteOffB
 	LD WA, (XIZ + 02fh)
 	EXTZ XWA
 	AND XWA, 00008080h
-	JR Z, Voice_UpdateAllNoteStates_CheckPortamento2B
+	JR Z, Audio_Tick_ServiceVoices_B_CheckPortamento2B
 	LD XWA, XIZ
 	CALR Voice_Step_AmpDelay
-	JR T, Voice_UpdateAllNoteStates_NextSlotB
+	JR T, Audio_Tick_ServiceVoices_B_NextSlotB
 
-Voice_UpdateAllNoteStates_CheckPortamento2B:
+Audio_Tick_ServiceVoices_B_CheckPortamento2B:
 	LD WA, (XIZ + 031h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateAllNoteStates_NextSlotB
+	JR Z, Audio_Tick_ServiceVoices_B_NextSlotB
 	LD XWA, XIZ
 	CALR Voice_Step_ExprRamp
-	JR T, Voice_UpdateAllNoteStates_NextSlotB
+	JR T, Audio_Tick_ServiceVoices_B_NextSlotB
 
-Voice_UpdateAllNoteStates_ClearNoteOffB:
+Audio_Tick_ServiceVoices_B_ClearNoteOffB:
 	LD WA, (XIZ + 02fh)
 	EXTZ XWA
 	AND XWA, 00008080h
-	JR Z, Voice_UpdateAllNoteStates_ClearPorta2B
+	JR Z, Audio_Tick_ServiceVoices_B_ClearPorta2B
 	LD A, (XIZ)
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
@@ -23744,13 +23744,13 @@ Voice_UpdateAllNoteStates_ClearNoteOffB:
 	EXTZ WA
 	CALL Voice_Reload_Levels
 	LDW (XIZ + 02fh), 0000h
-	JR T, Voice_UpdateAllNoteStates_NextSlotB
+	JR T, Audio_Tick_ServiceVoices_B_NextSlotB
 
-Voice_UpdateAllNoteStates_ClearPorta2B:
+Audio_Tick_ServiceVoices_B_ClearPorta2B:
 	LD WA, (XIZ + 031h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_UpdateAllNoteStates_NextSlotB
+	JR Z, Audio_Tick_ServiceVoices_B_NextSlotB
 	LD A, (XIZ)
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
@@ -23759,19 +23759,19 @@ Voice_UpdateAllNoteStates_ClearPorta2B:
 	CALL Voice_Reload_Levels
 	LDW (XIZ + 031h), 0000h
 
-Voice_UpdateAllNoteStates_NextSlotB:
+Audio_Tick_ServiceVoices_B_NextSlotB:
 	LD XWA, 1
 	ADD (XSP + 004h), XWA
 	LD XWA, (XSP + 004h)
 	CP (XWA), 040h
-	JRL C, Voice_UpdateAllNoteStates_LoopB
+	JRL C, Audio_Tick_ServiceVoices_B_LoopB
 
-Voice_UpdateAllNoteStates_ScanLFO:
+Audio_Tick_ServiceVoices_B_ScanLFO:
 	LD QIZH, 0
 	CP QIZH, 01ah
-	JR NC, Voice_UpdateAllNoteStates_Done
+	JR NC, Audio_Tick_ServiceVoices_B_Done
 
-Voice_UpdateAllNoteStates_LFOLoopBody:
+Audio_Tick_ServiceVoices_B_LFOLoopBody:
 	LD A, QIZH
 	EXTZ WA
 	MULS_WA 011fh
@@ -23779,47 +23779,47 @@ Voice_UpdateAllNoteStates_LFOLoopBody:
 	LDA XBC, XBC + WA
 	LD A, (XBC + 063h)
 	BIT 0, A
-	JR Z, Voice_UpdateAllNoteStates_LFONextSlot
+	JR Z, Audio_Tick_ServiceVoices_B_LFONextSlot
 	BIT 1, A
-	JR Z, Voice_UpdateAllNoteStates_LFO_CheckRampDown
+	JR Z, Audio_Tick_ServiceVoices_B_LFO_CheckRampDown
 	BIT 2, A
-	JR Z, Voice_UpdateAllNoteStates_LFO_ApplyFilter
+	JR Z, Audio_Tick_ServiceVoices_B_LFO_ApplyFilter
 	BIT 3, A
-	JR NZ, Voice_UpdateAllNoteStates_LFONextSlot
+	JR NZ, Audio_Tick_ServiceVoices_B_LFONextSlot
 	LD A, QIZH
 	EXTZ WA
 	CALR Voice_ToneTableRamp_Up
-	JR T, Voice_UpdateAllNoteStates_LFONextSlot
+	JR T, Audio_Tick_ServiceVoices_B_LFONextSlot
 
-Voice_UpdateAllNoteStates_LFO_ApplyFilter:
+Audio_Tick_ServiceVoices_B_LFO_ApplyFilter:
 	SET 2, (XBC + 063h)
 	LD A, QIZH
 	EXTZ WA
 	CALR Voice_ToneTableApply_Filter
-	JR T, Voice_UpdateAllNoteStates_LFONextSlot
+	JR T, Audio_Tick_ServiceVoices_B_LFONextSlot
 
-Voice_UpdateAllNoteStates_LFO_CheckRampDown:
+Audio_Tick_ServiceVoices_B_LFO_CheckRampDown:
 	BIT 2, A
-	JR NZ, Voice_UpdateAllNoteStates_LFO_RampDown
+	JR NZ, Audio_Tick_ServiceVoices_B_LFO_RampDown
 	BIT 4, A
-	JR NZ, Voice_UpdateAllNoteStates_LFONextSlot
+	JR NZ, Audio_Tick_ServiceVoices_B_LFONextSlot
 	LD A, QIZH
 	EXTZ WA
 	CALR Voice_ToneTableRamp_Down
-	JR T, Voice_UpdateAllNoteStates_LFONextSlot
+	JR T, Audio_Tick_ServiceVoices_B_LFONextSlot
 
-Voice_UpdateAllNoteStates_LFO_RampDown:
+Audio_Tick_ServiceVoices_B_LFO_RampDown:
 	RES 2, (XBC + 063h)
 	LD A, QIZH
 	EXTZ WA
 	CALR Voice_ToneTableApply_Pitch
 
-Voice_UpdateAllNoteStates_LFONextSlot:
+Audio_Tick_ServiceVoices_B_LFONextSlot:
 	INC 1, QIZH
 	CP QIZH, 01ah
-	JR C, Voice_UpdateAllNoteStates_LFOLoopBody
+	JR C, Audio_Tick_ServiceVoices_B_LFOLoopBody
 
-Voice_UpdateAllNoteStates_Done:
+Audio_Tick_ServiceVoices_B_Done:
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -24884,7 +24884,7 @@ Voice_SetMonoMode_Clear:
 ; ScaleTune_Is_Global_Enabled - is scale tuning taken from the panel or from the patch?
 ; Entry: None
 ; Exit:  HL = ToneGen_GlobalFlags & 0x0200 (nonzero = use the global mode)
-; Notes: When zero, Pitch_Resolve_Key_Zone reads the mode from the PATCH RECORD byte
+; Notes: When zero, Voice_Pitch_Compute reads the mode from the PATCH RECORD byte
 ;        +0x13 instead.  MEASURED (this branch is not described in the audit note).
 ; ----------------------------------------------------------------------------
 ScaleTune_Is_Global_Enabled:		; 028D42h
@@ -24911,9 +24911,9 @@ Pitch_Refresh_Sounding_Voices:		; 028D4Ch
 	INC 5, XWA
 	LD XIZ, XWA
 	CP (XIZ), 040h
-	JR NC, Voice_AllVoices_WritePan_Exit
+	JR NC, Pitch_Refresh_Sounding_Voices_Exit
 
-Voice_AllVoices_WritePan_LoopBody:
+Pitch_Refresh_Sounding_Voices_LoopBody:
 	LD A, (XIZ)
 	EXTZ WA
 	MULS_WA 047h
@@ -24924,24 +24924,24 @@ Voice_AllVoices_WritePan_LoopBody:
 	LD WA, (XBC + 001h)
 	AND WA, 003ch
 	CP WA, 0010h
-	JR Z, Voice_AllVoices_WritePan_BranchB
+	JR Z, Pitch_Refresh_Sounding_Voices_BranchB
 	CP WA, 0020h
-	JR Z, Voice_AllVoices_WritePan_BranchA
+	JR Z, Pitch_Refresh_Sounding_Voices_BranchA
 	CP WA, 0008h
-	JR Z, Voice_AllVoices_WritePan_BranchA
+	JR Z, Pitch_Refresh_Sounding_Voices_BranchA
 	CP WA, 4
-	JR NZ, Voice_AllVoices_WritePan_LoopStep
+	JR NZ, Pitch_Refresh_Sounding_Voices_LoopStep
 
-Voice_AllVoices_WritePan_BranchA:
+Pitch_Refresh_Sounding_Voices_BranchA:
 	LD XWA, XBC
 	CALL Pitch_Emit_Reg400
 	LD A, (XIZ)
 	EXTZ WA
 	LDA XBC, 0451CCh
 	CALR ToneGen_WriteVoice_Long
-	JR T, Voice_AllVoices_WritePan_LoopStep
+	JR T, Pitch_Refresh_Sounding_Voices_LoopStep
 
-Voice_AllVoices_WritePan_BranchB:
+Pitch_Refresh_Sounding_Voices_BranchB:
 	LD XWA, XBC
 	CALL Voice_Pitch_WriteOutputReg_Secondary
 	LD A, (XIZ)
@@ -24949,12 +24949,12 @@ Voice_AllVoices_WritePan_BranchB:
 	LDA XBC, 0451CCh
 	CALR ToneGen_WriteVoice_Long
 
-Voice_AllVoices_WritePan_LoopStep:
+Pitch_Refresh_Sounding_Voices_LoopStep:
 	INC 1, XIZ
 	CP (XIZ), 040h
-	JR C, Voice_AllVoices_WritePan_LoopBody
+	JR C, Pitch_Refresh_Sounding_Voices_LoopBody
 
-Voice_AllVoices_WritePan_Exit:
+Pitch_Refresh_Sounding_Voices_Exit:
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -28008,7 +28008,7 @@ Voice_Allocate_Typed_ExitB:
 ;        and writes desc[+0x01] = (q<<6)|0x04, [+0x03] = p, [+0x04] = part,
 ;        [+0x05] = note|0x80, [+0x0c] = velocity, [+0x13] = patch record,
 ;        [+0x17] = blk, [+0x1b] = VSEL, [+0x1f] = SETp, [+0x23] = part struct,
-;        [+0x27] = part_struct + 0x6E + 0x25*p, then calls Pitch_Resolve_Key_Zone.
+;        [+0x27] = part_struct + 0x6E + 0x25*p, then calls Voice_Pitch_Compute.
 ;        Passing a4 != p is how the synthesised UNISON layer reuses partial 0 s wave
 ;        and split with slot 1 s own detune sub-struct.
 ;        When ToneGen_GlobalFlags bit 1 is set the velocity is boosted by +0x28 on
@@ -28027,7 +28027,7 @@ Voice_Build_Partial_Descriptor:		; 02B717h
 	LDA XBC, 04136Ah
 	LD WA, (XBC + WA)
 	AND WA, DE
-	JRL Z, Voice_Setup_Typed_ExitA
+	JRL Z, Voice_Build_Partial_Descriptor_ExitA
 	LD A, (XSP + 024h)
 	EXTZ WA
 	MULS_WA 025h
@@ -28091,10 +28091,10 @@ Voice_Build_Partial_Descriptor:		; 02B717h
 	LDA XWA, XWA + DE
 	LD (XSP + 010h), XWA
 	CP (XSP + 022h), 078h
-	JR C, Voice_Setup_Typed_BranchB
+	JR C, Voice_Build_Partial_Descriptor_BranchB
 	LD XWA, (XSP + 00ch)
 	BIT 1, (XWA)
-	JR Z, Voice_Setup_Typed_BranchA
+	JR Z, Voice_Build_Partial_Descriptor_BranchA
 	LD C, (XSP + 022h)
 	SUB C, 078h
 	LD XWA, (XSP + 00ch)
@@ -28116,9 +28116,9 @@ Voice_Build_Partial_Descriptor:		; 02B717h
 	LD XWA, (XSP + 020h)
 	LD DE, 1
 	CALR Voice_Allocate_Typed
-	JRL T, Voice_Setup_Typed_ExitB
+	JRL T, Voice_Build_Partial_Descriptor_ExitB
 
-Voice_Setup_Typed_BranchA:
+Voice_Build_Partial_Descriptor_BranchA:
 	LD A, (XSP + 026h)
 	EXTZ WA
 	LD BC, WA
@@ -28131,9 +28131,9 @@ Voice_Setup_Typed_BranchA:
 	INC 6, BC
 	LD XWA, (XSP + 016h)
 	LD (XWA + BC), 000h
-	JRL T, Voice_Setup_Typed_ExitB
+	JRL T, Voice_Build_Partial_Descriptor_ExitB
 
-Voice_Setup_Typed_BranchB:
+Voice_Build_Partial_Descriptor_BranchB:
 	LD A, (XSP + 026h)
 	EXTZ WA
 	MULS_WA 047h
@@ -28153,9 +28153,9 @@ Voice_Setup_Typed_BranchB:
 	LD (XIZ + 005h), A
 	LD WA, (041343h)
 	BIT 1, WA
-	JR Z, Voice_Setup_Typed_BranchD
+	JR Z, Voice_Build_Partial_Descriptor_BranchD
 	CP (XSP + 014h), 000h
-	JR NZ, Voice_Setup_Typed_BranchC
+	JR NZ, Voice_Build_Partial_Descriptor_BranchC
 	LD A, (XSP + 020h)
 	ADD A, 028h
 	EXTZ WA
@@ -28163,11 +28163,11 @@ Voice_Setup_Typed_BranchB:
 	LD DE, 0
 	CALR Voice_Pitch_ClampRange
 	LD (XSP + 020h), L
-	JR T, Voice_Setup_Typed_BranchD
+	JR T, Voice_Build_Partial_Descriptor_BranchD
 
-Voice_Setup_Typed_BranchC:
+Voice_Build_Partial_Descriptor_BranchC:
 	CP (XSP + 014h), 001h
-	JR NZ, Voice_Setup_Typed_BranchD
+	JR NZ, Voice_Build_Partial_Descriptor_BranchD
 	LD A, (XSP + 020h)
 	ADD A, 00ch
 	EXTZ WA
@@ -28176,7 +28176,7 @@ Voice_Setup_Typed_BranchC:
 	CALR Voice_Pitch_ClampRange
 	LD (XSP + 020h), L
 
-Voice_Setup_Typed_BranchD:
+Voice_Build_Partial_Descriptor_BranchD:
 	LD A, (XSP + 020h)
 	LD (XIZ + 00ch), A
 	LD A, (XSP + 014h)
@@ -28201,7 +28201,7 @@ Voice_Setup_Typed_BranchD:
 	LD XWA, (XSP + 00ch)
 	LD (XIZ + 01fh), XWA
 	LD XWA, XIZ
-	CALL Pitch_Resolve_Key_Zone
+	CALL Voice_Pitch_Compute
 	LD A, (XSP + 014h)
 	LD E, A
 	EXTZ DE
@@ -28255,34 +28255,34 @@ Voice_Setup_Typed_BranchD:
 	LD XWA, (XSP + 016h)
 	LD (XWA + BC), E
 	CPW (XIZ + 02fh), 0000h
-	JR NZ, Voice_Setup_Typed_BranchE
+	JR NZ, Voice_Build_Partial_Descriptor_BranchE
 	CPW (XIZ + 031h), 00ffh
-	JR NZ, Voice_Setup_Typed_BranchE
+	JR NZ, Voice_Build_Partial_Descriptor_BranchE
 	LD XWA, (XSP + 010h)
 	LD WA, (XWA + 018h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_Setup_Typed_BranchF
+	JR Z, Voice_Build_Partial_Descriptor_BranchF
 
-Voice_Setup_Typed_BranchE:
+Voice_Build_Partial_Descriptor_BranchE:
 	LD A, (XSP + 026h)
 	EXTZ WA
 	LD BC, WA
 	INC 6, BC
 	LD XWA, (XSP + 016h)
 	LD (XWA + BC), 080h
-	JR T, Voice_Setup_Typed_ExitB
+	JR T, Voice_Build_Partial_Descriptor_ExitB
 
-Voice_Setup_Typed_BranchF:
+Voice_Build_Partial_Descriptor_BranchF:
 	LD A, (XSP + 026h)
 	EXTZ WA
 	LD BC, WA
 	INC 6, BC
 	LD XWA, (XSP + 016h)
 	LD (XWA + BC), 000h
-	JR T, Voice_Setup_Typed_ExitB
+	JR T, Voice_Build_Partial_Descriptor_ExitB
 
-Voice_Setup_Typed_ExitA:
+Voice_Build_Partial_Descriptor_ExitA:
 	LD A, (XSP + 026h)
 	EXTZ WA
 	LD BC, WA
@@ -28296,7 +28296,7 @@ Voice_Setup_Typed_ExitA:
 	LD XWA, (XSP + 016h)
 	LD (XWA + BC), 000h
 
-Voice_Setup_Typed_ExitB:
+Voice_Build_Partial_Descriptor_ExitB:
 	POP XIZ
 	LDA XSP, XSP + 016h
 	RETD 000ah
@@ -28337,7 +28337,7 @@ Voice_Build_Four_Partials:		; 02BA2Ch
 	LDA XBC, 04136Ah
 	LD WA, (XBC + WA)
 	BIT 0eh, WA
-	JR Z, Voice_NoteOn_Type4_BranchA
+	JR Z, Voice_Build_Four_Partials_BranchA
 	LD A, (XSP + 008h)
 	LD C, A
 	EXTZ BC
@@ -28353,9 +28353,9 @@ Voice_Build_Four_Partials:		; 02BA2Ch
 	LD XWA, (XSP + 014h)
 	LD DE, 1
 	CALR Voice_Build_Partial_Descriptor
-	JR T, Voice_NoteOn_Type4_BranchB
+	JR T, Voice_Build_Four_Partials_BranchB
 
-Voice_NoteOn_Type4_BranchA:
+Voice_Build_Four_Partials_BranchA:
 	LD A, (XSP + 008h)
 	LD C, A
 	EXTZ BC
@@ -28372,7 +28372,7 @@ Voice_NoteOn_Type4_BranchA:
 	LD DE, 1
 	CALR Voice_Build_Partial_Descriptor
 
-Voice_NoteOn_Type4_BranchB:
+Voice_Build_Four_Partials_BranchB:
 	LD A, (XSP + 008h)
 	EXTZ WA
 	MULS_WA 011fh
@@ -28380,7 +28380,7 @@ Voice_NoteOn_Type4_BranchB:
 	LD WA, (XBC + WA)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_NoteOn_Type4_BranchC
+	JR Z, Voice_Build_Four_Partials_BranchC
 	LD A, (XSP + 008h)
 	LD C, A
 	EXTZ BC
@@ -28396,9 +28396,9 @@ Voice_NoteOn_Type4_BranchB:
 	LD XWA, (XSP + 014h)
 	LD DE, 2
 	CALR Voice_Build_Partial_Descriptor
-	JR T, Voice_NoteOn_Type4_BranchD
+	JR T, Voice_Build_Four_Partials_BranchD
 
-Voice_NoteOn_Type4_BranchC:
+Voice_Build_Four_Partials_BranchC:
 	LD A, (XSP + 008h)
 	LD C, A
 	EXTZ BC
@@ -28415,7 +28415,7 @@ Voice_NoteOn_Type4_BranchC:
 	LD DE, 2
 	CALR Voice_Build_Partial_Descriptor
 
-Voice_NoteOn_Type4_BranchD:
+Voice_Build_Four_Partials_BranchD:
 	LD A, (XSP + 008h)
 	LD C, A
 	EXTZ BC
@@ -28450,16 +28450,16 @@ Voice_NoteOn_Type4_BranchD:
 	CALL Voice_Allocate_Nodes
 	LD (XSP + 004h), 000h
 	CP (XSP + 004h), 004h
-	JRL NC, Voice_NoteOn_Type4_Exit
+	JRL NC, Voice_Build_Four_Partials_Exit
 
-Voice_NoteOn_Type4_SlotLoop:
+Voice_Build_Four_Partials_SlotLoop:
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LD BC, WA
 	ADD BC, 000ah
 	LD XWA, (XSP + 00ah)
 	CP (XWA + BC), 040h
-	JRL NC, Voice_NoteOn_Type4_BranchK
+	JRL NC, Voice_Build_Four_Partials_BranchK
 	LD A, (XSP + 004h)
 	EXTZ WA
 	LD BC, WA
@@ -28467,7 +28467,7 @@ Voice_NoteOn_Type4_SlotLoop:
 	LD XWA, (XSP + 00ah)
 	LD E, (XWA + BC)
 	CP (XSP + 006h), 078h
-	JR C, Voice_NoteOn_Type4_AltSlotPath
+	JR C, Voice_Build_Four_Partials_AltSlotPath
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
@@ -28482,9 +28482,9 @@ Voice_NoteOn_Type4_SlotLoop:
 	LD BC, 0023h
 	LDIRW_95
 	LDI
-	JRL T, Voice_NoteOn_Type4_BranchI
+	JRL T, Voice_Build_Four_Partials_BranchI
 
-Voice_NoteOn_Type4_AltSlotPath:
+Voice_Build_Four_Partials_AltSlotPath:
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
@@ -28510,18 +28510,18 @@ Voice_NoteOn_Type4_AltSlotPath:
 	LDA XBC, 2971h
 	LD HL, (XBC + WA)
 	CP HL, 0
-	JR Z, Voice_NoteOn_Type4_BranchE
+	JR Z, Voice_Build_Four_Partials_BranchE
 	LD WA, HL
 	SLL 8, WA
 	EXTZ XWA
 	SET 0fh, WA
 	OR HL, WA
-	JR T, Voice_NoteOn_Type4_BranchF
+	JR T, Voice_Build_Four_Partials_BranchF
 
-Voice_NoteOn_Type4_BranchE:
+Voice_Build_Four_Partials_BranchE:
 	LD HL, 0
 
-Voice_NoteOn_Type4_BranchF:
+Voice_Build_Four_Partials_BranchF:
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
@@ -28533,21 +28533,21 @@ Voice_NoteOn_Type4_BranchF:
 	LDA XBC, 2973h
 	LD HL, (XBC + WA)
 	CP HL, 00ffh
-	JR Z, Voice_NoteOn_Type4_BranchG
+	JR Z, Voice_Build_Four_Partials_BranchG
 	OR HL, 0c000h
-	JR T, Voice_NoteOn_Type4_BranchH
+	JR T, Voice_Build_Four_Partials_BranchH
 
-Voice_NoteOn_Type4_BranchG:
+Voice_Build_Four_Partials_BranchG:
 	LD HL, 00ffh
 
-Voice_NoteOn_Type4_BranchH:
+Voice_Build_Four_Partials_BranchH:
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
 	LDA XBC, 0430BFh
 	LD (XBC + WA), HL
 
-Voice_NoteOn_Type4_BranchI:
+Voice_Build_Four_Partials_BranchI:
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
@@ -28556,27 +28556,27 @@ Voice_NoteOn_Type4_BranchI:
 	LD WA, (XWA + 018h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_NoteOn_Type4_BranchJ
+	JR Z, Voice_Build_Four_Partials_BranchJ
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
 	LDA XBC, 04308Fh
 	ORW (XBC + WA), 0100h
-	JR T, Voice_NoteOn_Type4_BranchK
+	JR T, Voice_Build_Four_Partials_BranchK
 
-Voice_NoteOn_Type4_BranchJ:
+Voice_Build_Four_Partials_BranchJ:
 	LD A, E
 	EXTZ WA
 	MULS_WA 047h
 	LDA XBC, 04308Fh
 	ANDW (XBC + WA), 0feffh
 
-Voice_NoteOn_Type4_BranchK:
+Voice_Build_Four_Partials_BranchK:
 	INC 1, (XSP + 004h)
 	CP (XSP + 004h), 004h
-	JRL C, Voice_NoteOn_Type4_SlotLoop
+	JRL C, Voice_Build_Four_Partials_SlotLoop
 
-Voice_NoteOn_Type4_Exit:
+Voice_Build_Four_Partials_Exit:
 	POP XIZ
 	LDA XSP, XSP + 00ah
 	RETD 0002h
@@ -28748,7 +28748,7 @@ Voice_NoteOn_Type3_BranchA:
 	LD (XIZ + 01fh), XHL
 	LD (XIZ + 027h), XIX
 	LD XWA, XIZ
-	CALL Pitch_Resolve_Key_Zone
+	CALL Voice_Pitch_Compute
 	LDW (XIZ + 02fh), 0000h
 	LDW (XIZ + 031h), 00ffh
 	LD (XIZ + 035h), 000h
@@ -30225,8 +30225,8 @@ Voice_Query_AllChannels:	; 02CD55h
 ;          bit8 clear -> Voice_Calc_LevelPair_EGA/EGB/EGC then the six-write
 ;              burst ToneGen_WriteLevelBurst.
 ;        When slot+0x01 bit15 is clear AND the part word part_struct+0x0a bit0
-;        (SUSTAIN PEDAL) is set, the mirror pair at Voice_Release_BranchC/Voice_Release_BranchD is
-;        used instead.  Voice_Release_BranchB is an inner branch target, not an entry.
+;        (SUSTAIN PEDAL) is set, the mirror pair at Voice_Reload_Levels_BranchC/Voice_Reload_Levels_BranchD is
+;        used instead.  Voice_Reload_Levels_BranchB is an inner branch target, not an entry.
 ; ----------------------------------------------------------------------------
 Voice_Reload_Levels:	; 02CD71h
 	DEC 2, XSP
@@ -30241,16 +30241,16 @@ Voice_Reload_Levels:	; 02CD71h
 	LD WA, (XIZ + 001h)
 	EXTZ XWA
 	BIT 0fh, WA
-	JR NZ, Voice_Release_BranchA
+	JR NZ, Voice_Reload_Levels_BranchA
 	LD XWA, (XIZ + 023h)
 	LD WA, (XWA + 00ah)
 	BIT 0, WA
-	JR NZ, Voice_Release_BranchC
+	JR NZ, Voice_Reload_Levels_BranchC
 
-Voice_Release_BranchA:
+Voice_Reload_Levels_BranchA:
 	LD WA, (XIZ + 001h)
 	BIT 8, WA
-	JR Z, Voice_Release_BranchB
+	JR Z, Voice_Reload_Levels_BranchB
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 	LD A, (XSP + 004h)
@@ -30265,9 +30265,9 @@ Voice_Release_BranchA:
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
-	JR T, Voice_Release_Exit
+	JR T, Voice_Reload_Levels_Exit
 
-Voice_Release_BranchB:
+Voice_Reload_Levels_BranchB:
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 	LD XWA, XIZ
@@ -30278,12 +30278,12 @@ Voice_Release_BranchB:
 	EXTZ WA
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteLevelBurst
-	JR T, Voice_Release_Exit
+	JR T, Voice_Reload_Levels_Exit
 
-Voice_Release_BranchC:
+Voice_Reload_Levels_BranchC:
 	LD WA, (XIZ + 001h)
 	BIT 8, WA
-	JR Z, Voice_Release_BranchD
+	JR Z, Voice_Reload_Levels_BranchD
 	LD XWA, XIZ
 	CALL Voice_Calc_LevelPair_EGA
 	LD A, (XSP + 004h)
@@ -30298,9 +30298,9 @@ Voice_Release_BranchC:
 	EXTZ WA
 	CALL Voice_Clear_HoldBit
 	ANDW (XIZ + 001h), 0feffh
-	JR T, Voice_Release_Exit
+	JR T, Voice_Reload_Levels_Exit
 
-Voice_Release_BranchD:
+Voice_Reload_Levels_BranchD:
 	LD XWA, XIZ
 	CALL Voice_Stage_EnvSegments
 	LD A, (XSP + 004h)
@@ -30308,7 +30308,7 @@ Voice_Release_BranchD:
 	LDA XBC, 0451CCh
 	CALL ToneGen_WriteEnvSegments
 
-Voice_Release_Exit:
+Voice_Reload_Levels_Exit:
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -30609,9 +30609,9 @@ ToneGen_WriteVoicePitch:		; 02D0BAh
 	SET 7, (P6)
 	LD WA, (XIZ + 00eh)
 	LD (100002h), WA
-	JR T, ToneGen_WritePanReg_NopCont
+	JR T, ToneGen_WriteVoicePitch_NopCont
 
-ToneGen_WritePanReg_NopCont:
+ToneGen_WriteVoicePitch_NopCont:
 	NOP
 	NOP
 	NOP
@@ -31052,9 +31052,9 @@ ToneGen_WriteLevelBurst:	; 02D436h
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_NopCont1
+	JR T, ToneGen_WriteLevelBurst_NopCont1
 
-ToneGen_WriteNote_NopCont1:
+ToneGen_WriteLevelBurst_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31067,9 +31067,9 @@ ToneGen_WriteNote_NopCont1:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 032h)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_NopCont2
+	JR T, ToneGen_WriteLevelBurst_NopCont2
 
-ToneGen_WriteNote_NopCont2:
+ToneGen_WriteLevelBurst_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31082,9 +31082,9 @@ ToneGen_WriteNote_NopCont2:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 036h)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_NopCont3
+	JR T, ToneGen_WriteLevelBurst_NopCont3
 
-ToneGen_WriteNote_NopCont3:
+ToneGen_WriteLevelBurst_NopCont3:
 	NOP
 	NOP
 	NOP
@@ -31097,9 +31097,9 @@ ToneGen_WriteNote_NopCont3:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02ch)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_NopCont4
+	JR T, ToneGen_WriteLevelBurst_NopCont4
 
-ToneGen_WriteNote_NopCont4:
+ToneGen_WriteLevelBurst_NopCont4:
 	NOP
 	NOP
 	NOP
@@ -31112,9 +31112,9 @@ ToneGen_WriteNote_NopCont4:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 030h)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_NopCont5
+	JR T, ToneGen_WriteLevelBurst_NopCont5
 
-ToneGen_WriteNote_NopCont5:
+ToneGen_WriteLevelBurst_NopCont5:
 	NOP
 	NOP
 	NOP
@@ -31127,9 +31127,9 @@ ToneGen_WriteNote_NopCont5:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 034h)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_NopCont6
+	JR T, ToneGen_WriteLevelBurst_NopCont6
 
-ToneGen_WriteNote_NopCont6:
+ToneGen_WriteLevelBurst_NopCont6:
 	NOP
 	NOP
 	NOP
@@ -31158,9 +31158,9 @@ ToneGen_WriteLevelPair:	; 02D50Eh
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_2Regs_NopCont1
+	JR T, ToneGen_WriteLevelPair_NopCont1
 
-ToneGen_WriteNote_2Regs_NopCont1:
+ToneGen_WriteLevelPair_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31173,9 +31173,9 @@ ToneGen_WriteNote_2Regs_NopCont1:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02ch)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_2Regs_NopCont2
+	JR T, ToneGen_WriteLevelPair_NopCont2
 
-ToneGen_WriteNote_2Regs_NopCont2:
+ToneGen_WriteLevelPair_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31222,9 +31222,9 @@ ToneGen_WriteEnvSegments:	; 02D5D0h
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01ah)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_Stereo_NopCont1
+	JR T, ToneGen_WriteEnvSegments_NopCont1
 
-ToneGen_WriteNote_Stereo_NopCont1:
+ToneGen_WriteEnvSegments_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31237,9 +31237,9 @@ ToneGen_WriteNote_Stereo_NopCont1:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 01ch)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_Stereo_NopCont2
+	JR T, ToneGen_WriteEnvSegments_NopCont2
 
-ToneGen_WriteNote_Stereo_NopCont2:
+ToneGen_WriteEnvSegments_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31270,9 +31270,9 @@ ToneGen_WriteSegRegs_SameLevel:	; 02D620h
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_Hold_NopCont1
+	JR T, ToneGen_WriteSegRegs_SameLevel_NopCont1
 
-ToneGen_WriteNote_Hold_NopCont1:
+ToneGen_WriteSegRegs_SameLevel_NopCont1:
 	NOP
 	NOP
 	NOP
@@ -31285,9 +31285,9 @@ ToneGen_WriteNote_Hold_NopCont1:
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 02eh)
 	LD (100002h), WA
-	JR T, ToneGen_WriteNote_Hold_NopCont2
+	JR T, ToneGen_WriteSegRegs_SameLevel_NopCont2
 
-ToneGen_WriteNote_Hold_NopCont2:
+ToneGen_WriteSegRegs_SameLevel_NopCont2:
 	NOP
 	NOP
 	NOP
@@ -31313,9 +31313,9 @@ ToneGen_WriteExprReg:	; 02D670h
 	NOP
 	SET 7, (P6)
 	LD (100002h), IZ
-	JR T, ToneGen_WriteSingleReg_180_NopCont
+	JR T, ToneGen_WriteExprReg_NopCont
 
-ToneGen_WriteSingleReg_180_NopCont:
+ToneGen_WriteExprReg_NopCont:
 	NOP
 	NOP
 	NOP
@@ -35168,7 +35168,7 @@ DSP_ReadVoiceParam11:
 	POP XIZ
 	RET
 
-DSP_LookupVoiceBuffer_CoeffPath:
+ToneDB_Find_ToneRecord_CoeffPath:
 	LD DE, BC
 	EXTZ XDE
 	LD XBC, (045314h)
@@ -35313,7 +35313,7 @@ DSP_LookupVoiceBuffer_CoeffPath:
 ;           table of the referenced patch record (observed 0x00 / 0x08 / 0x10)
 ;    +0x0C  base pitch, 1/256 semitone ... OR, when bit 1 is set, a {lo,hi} tone
 ;           selector - MEASURED: all 13 bit-1 descriptors hold the bytes 7F 41.
-;           Corroborated independently by Pitch_Resolve_Key_Zone, which
+;           Corroborated independently by Voice_Pitch_Compute, which
 ;           substitutes the constant 0x4280 for +0x0C when bit 1 is set.
 ;    +0x0E  0x00
 ;
@@ -35514,14 +35514,14 @@ ToneDB_Find_PatchRecord_Return:	; 03206Eh
 ; Entry: A = selector low byte, C = selector high byte
 ; Exit:  XHL = patch record pointer
 ; Notes: MEASURED.  (ToneGen_GlobalFlags) bit 0 selects the alternate resolver
-;        DSP_LookupVoiceBuffer_CoeffPath; otherwise ToneDB_Find_PatchRecord.  Bit 0 is clear in the
+;        ToneDB_Find_ToneRecord_CoeffPath; otherwise ToneDB_Find_PatchRecord.  Bit 0 is clear in the
 ;        shipped configuration, so the ordinary path is the live one.
 ; ----------------------------------------------------------------------------
 ToneDB_Find_ToneRecord:		; 03206Fh
 	LD DE, (041343h)
 	BIT 0, DE
 	JR Z, VoiceBuf_TypeSelector_EFFMatch
-	CALR DSP_LookupVoiceBuffer_CoeffPath
+	CALR ToneDB_Find_ToneRecord_CoeffPath
 	JR T, VoiceBuf_TypeSelector_NoMatch
 
 VoiceBuf_TypeSelector_EFFMatch:
@@ -36238,7 +36238,7 @@ WaveSel_Cache_VelSplitPtr:	; 0326B6h
 	LDA XBC, 041368h
 	LD WA, (XBC + WA)
 	BIT 0, WA
-	JR Z, VoiceBufPtr_Update_Path0
+	JR Z, WaveSel_Cache_VelSplitPtr_Path0
 	LD A, (XSP)
 	EXTZ WA
 	MULS_WA 025h
@@ -36260,9 +36260,9 @@ WaveSel_Cache_VelSplitPtr:	; 0326B6h
 	EXTS XWA
 	ADD XWA, XBC
 	LD (XDE + 004h), XWA
-	JR T, VoiceBufPtr_Update_Path1
+	JR T, WaveSel_Cache_VelSplitPtr_Path1
 
-VoiceBufPtr_Update_Path0:
+WaveSel_Cache_VelSplitPtr_Path0:
 	LD A, (XSP + 002h)
 	LD E, A
 	EXTZ DE
@@ -36285,7 +36285,7 @@ VoiceBufPtr_Update_Path0:
 	LDA XWA, XWA + DE
 	LD (XWA + 004h), XHL
 
-VoiceBufPtr_Update_Path1:
+WaveSel_Cache_VelSplitPtr_Path1:
 	INC 4, XSP
 	RET
 
@@ -53174,7 +53174,7 @@ Keybed_Read_Event_Done:		; 03D11Dh
 ;        XWA = 2-byte output buffer
 ; Exit:  (XWA+0) = MIDI note = (C & 0x7F) + 0x24 ; (XWA+1) = velocity 1..127,
 ;        or 0 when C bit 7 is set (release)
-; Notes: RENAMED from ToneGen_Calc_Pitch, which was WRONG: this routine computes no
+; Notes: RENAMED from Keybed_Decode_Event, which was WRONG: this routine computes no
 ;        pitch at all.  It converts the key bed s TRAVEL TIME into a MIDI velocity:
 ;          x   = Keybed_Time_To_Strength[E]           (256 bytes, monotone DECREASING)
 ;          m   = Keybed_Touch_Mode                    (0..9, power-on default 6)

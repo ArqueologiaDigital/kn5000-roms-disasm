@@ -1,0 +1,258 @@
+# Sub-CPU name reconciliation, 2026-08-06
+#
+# The three sub-CPU artifacts -- the authoritative LLVM source (v142/subcpu/*.s),
+# the parallel ASL archive (archive/asl/subcpu/kn5000_subprogram_v142.asm) and the
+# hand-curated symbol reference (symbols/subcpu_symbols_reference.txt) -- had
+# drifted apart. Matching was done by ADDRESS (llvm-nm -n on the LLVM ELF against
+# ASL's own `-g map` symbol table), never by name text.
+#
+# Before: 2409 addresses agreed across all three, 899 disagreed.
+# After:  3317 agree, 0 disagree.
+#
+# ORIGIN OF THE DRIFT
+# Three dedicated naming/documentation passes on 2026-07-26 -- 350aa28 (pitch /
+# velocity / TVF), 1ebc634 (amplitude / envelope / voice lifecycle) and 808ad6f
+# (wave / sample selection) -- landed their researched names in the ASL archive and
+# the symbol reference ONLY. They never touched the LLVM source, which kept the
+# older, pre-analysis structural names from 3d87c95. So for these routines the
+# "authoritative" file held the WORSE name, and the two mirrors held the better one.
+# Direction of each fix below was therefore decided per address by reading the
+# machine code, not by preferring a file.
+#
+# Verdict column:  CURATED = adopted the ASL/reference name into the LLVM source
+#                  SOURCE  = adopted the LLVM name into the ASL + reference
+#                  THIRD   = both were wrong; a new name was derived
+# 114 parents were renamed; 235 sub-labels were re-parented to follow them.
+
+## ---------------------------------------------------------------------------
+## A. Keybed vs tone-generator (the block all three artifacts fought over)
+## ---------------------------------------------------------------------------
+# 0x03D0DA reads the hardware latch at 0x110000. The ASL source's own comment
+# already records that "0x110000 / 0x110002 are the keybed data and status ports,
+# NOT tone-gen", and the reference's own curated data symbol at 0x004A48 is
+# Keybed_Touch_Mode. The code at 0x03D11F takes the raw key byte, clears bit 7,
+# adds 0x24 (= MIDI note 36, the bottom key) and stores it at (XWA+0); it then
+# computes a velocity into (XWA+1) via touch-mode tables at 0x01F420/0x01F421,
+# and at 0x03D1AA it subtracts a trim when the note mod 12 is in {1,3,6,8,10} --
+# exactly the black keys. It is keybed note+velocity decoding, not pitch.
+0x03D11F  CURATED  ToneGen_Calc_Pitch          -> Keybed_Decode_Event
+0x03D1AA  THIRD*   ToneGen_Pitch_Adjust        -> Keybed_Vel_BlackKey_Trim   (* reference also fixed)
+0x03D1C4  THIRD*   ToneGen_Pitch_Clamp         -> Keybed_Vel_Clamp
+0x03D1D3  THIRD*   ToneGen_Pitch_ClampHi       -> Keybed_Vel_ClampHi
+0x03D1E1  THIRD*   ToneGen_Pitch_ClampLo       -> Keybed_Vel_ClampLo
+0x03D1F5  THIRD*   ToneGen_Calc_NoVel          -> Keybed_Decode_NoteOff      (stores 0 velocity)
+# reference-only: it still carried the pre-correction TONEGEN_READ_* names
+0x03D0F6  SOURCE   TONEGEN_READ_NOTEOFF        -> Keybed_Read_Event_NoteOff
+0x03D100  SOURCE   TONEGEN_READ_RELEASE        -> Keybed_Read_Event_Release
+0x03D10F  SOURCE   TONEGEN_READ_NOTEON         -> Keybed_Read_Event_NoteOn
+0x03D11A  SOURCE   TONEGEN_READ_NOT_READY      -> Keybed_Read_Event_NotReady
+0x03D11D  SOURCE   TONEGEN_READ_DONE           -> Keybed_Read_Event_Done
+
+## ---------------------------------------------------------------------------
+## B. Reference-only stale names (the source pair was already correct)
+## ---------------------------------------------------------------------------
+# 0x00F507/0x00F519: the ASL header carries an explicit CORRECTION with its proof --
+# 32+16+4+12 = 64 = the machine's full polyphony -- that these are per-pool
+# ALLOCATION QUOTAS, not envelope tables. The reference still held the retracted
+# envelope names.
+0x00F507  SOURCE   VOICE_ATTACKDECAY_WIDTHS    -> Voice_Pool_Quota_ModeA
+0x00F519  SOURCE   VOICE_ENVELOPERATE_LOOKUP   -> Voice_Pool_Quota_ModeB
+# 0x020CFA/0x020D05: these are the MSTAT1 retry gates inside InterCPU_DMA_Send_Chunk,
+# spinning on a 0xEA60 budget and jumping back to DMA_Chunk_Start / _Transfer. The
+# DMA_Chunk_* shape matches their siblings; INTERCPU_WAIT_* broke the family.
+0x020CFA  SOURCE   INTERCPU_WAIT_MSTAT1_CLEAR  -> DMA_Chunk_Wait_MSTAT1_Clear
+0x020D05  SOURCE   INTERCPU_WAIT_MSTAT1_SET    -> DMA_Chunk_Wait_MSTAT1_Set
+
+## ---------------------------------------------------------------------------
+## C. Tone database / wave selection / partials  (0x031F71..0x032C0F, 31 addresses)
+## ---------------------------------------------------------------------------
+# Decisive: the 0x031F71 family touches NO DSP hardware -- no I/O port access, no
+# DSP register addresses, no DMA. It is pointer arithmetic over four RAM long
+# pointers the reference already names ToneDB_RelBase (0x045310), ToneDB_RootPtr
+# (0x045314), ToneDB_RamBankB (0x045318), ToneDB_RamBankA (0x04531C). The DSP_
+# prefix was simply wrong.
+# Second cross-cutting fact: SlotParam_WriteDispatch, VoiceParam_WriteWithOffset,
+# VoiceParam_WriteDispatchHelper and VoiceField_ExtractAndWrite contain no store
+# instruction at all -- they compute and return a pointer in XHL. The verb "Write"
+# was factually false in every one.
+# Also: VoiceFlags_Bit0Check (0x032B6B) is reached when that bit is already CLEAR,
+# and VoiceFlags_Bit2Check (0x032C0F) names the wrong bit; VoiceBufPtr_Update_Common
+# (0x032750) is not a shared tail of 0x0326B6 but an independent routine.
+0x031F71  CURATED  DSP_LookupVoiceBuffer_ParamPath         -> ToneDB_Find_PatchRecord
+0x031F87  CURATED  DSP_LookupVoiceBuffer_ParamPath_Valid   -> ToneDB_Find_PatchRecord_Preset
+0x031FE4  CURATED  DSP_LookupVoiceBuffer_ParamPath_Special -> ToneDB_Find_PatchRecord_UserA
+0x032002  CURATED  VoiceBuf_TypeCheck_0x15                 -> ToneDB_Find_PatchRecord_UserB
+0x032020  CURATED  VoiceBuf_TypeCheck_0x50                 -> ToneDB_Find_PatchRecord_KitA
+0x032032  CURATED  VoiceBuf_TypeCheck_0x55                 -> ToneDB_Find_PatchRecord_KitB
+0x032054  CURATED  VoiceBuf_TypeCheck_Default              -> ToneDB_Find_PatchRecord_Default
+0x03206E  CURATED  VoiceBuf_TypeSelector_Epilogue          -> ToneDB_Find_PatchRecord_Return
+0x03206F  CURATED  DSP_LookupVoiceBuffer                   -> ToneDB_Find_ToneRecord
+0x0323E5  CURATED  VoiceBufIdx_Decode                      -> WaveSel_StageA1_SelectTables
+0x032469  CURATED  VoiceBufIdx_TableD                      -> WaveSel_StageA1_IndexLookup
+0x03248B  CURATED  SlotParam_WriteDispatch                 -> WaveSel_StageA1_FindVelSplit
+0x0324D1  CURATED  SlotParam_WriteType0                    -> WaveSel_StageA1_PresetPath
+0x0324DD  CURATED  SlotParam_WriteType1                    -> WaveSel_StageA1_UserTonePath
+0x0325F6  CURATED  SlotParam_WriteDispatch_Epilogue        -> WaveSel_StageA1_Return
+0x0325FC  CURATED  VoiceChanCopy_Main                      -> WaveSel_StageA1_FromPatchBlock
+0x032682  CURATED  VoiceField_ExtractAndWrite              -> WaveSel_StageA1_FromToneSlot
+0x0326B6  CURATED  VoiceBufPtr_Update                      -> WaveSel_Cache_VelSplitPtr
+0x032750  CURATED  VoiceBufPtr_Update_Common               -> WaveSel_StageA2_FindSetDesc
+0x032814  CURATED  VoiceSlotAddr_Multiply                  -> WaveSel_StageA2_IndexLookup
+0x032839  CURATED  VoiceParam_WriteWithOffset              -> WaveSel_StageA2_FromToneRec
+0x0328B5  CURATED  VoiceParam_WriteWithOffset_Alt          -> WaveSel_StageA2_FromVelZone
+0x0328E2  CURATED  VoiceParam_WriteWithOffset_3Arg         -> WaveSel_Cache_SetDescPtr
+0x032938  CURATED  VoiceInit_Dispatcher                    -> WaveSel_Rebuild_PartCaches
+0x032A08  CURATED  VoiceBuf_Lookup_0x20Flag                -> ToneDB_Resolve_NamedToneRecord
+0x032A68  CURATED  VoiceBuf_Lookup_FlagSet                 -> ToneDB_Resolve_NamedToneRecord_User
+0x032ADA  CURATED  VoiceBuf_Lookup_Epilogue                -> ToneDB_Resolve_NamedToneRecord_Return
+0x032AE0  CURATED  VoiceParam_WriteDispatchHelper          -> ToneDB_Find_SubToneRecord
+0x032B1E  CURATED  VoiceFlags_Aggregate                    -> Partial_Build_Present_Word
+0x032B6B  CURATED  VoiceFlags_Bit0Check                    -> Partial_Try_Unison_Slot0
+0x032C0F  CURATED  VoiceFlags_Bit2Check                    -> Partial_Try_Unison_Slot1
+# Residual uncertainty (recorded, not resolved): the StageA1/StageA2 split is
+# plausible but unproven -- 0x0323E5 and 0x032750 are structurally twins; and the
+# "Named" qualifier in ToneDB_Resolve_NamedToneRecord is unverified.
+
+## ---------------------------------------------------------------------------
+## D. TVF (filter) vs pitch/portamento/pan  (0x022824..0x02399D, 0x023A05..0x024444)
+## ---------------------------------------------------------------------------
+# Decisive register map: the TG scratch base is 0x0451CC, and ToneGen_WriteVoiceParams
+# maps scratch +0x06 -> chip +0x0C0, +0x08 -> +0x100, +0x0A -> +0x140, +0x0E -> +0x400
+# (pitch). The 0x023D01..0x024444 family builds desc[+0x42]/[+0x44] and stores them to
+# 0x0451D4/0x0451D6 = chip +0x100/+0x140 -- a different register block from pitch, and
+# it never touches a pan register. The value is a 7-bit field clamped 0..0x78 with a
+# reserved bypass code 0x7F (which TVF_Set_Bypass writes as 0x017F/0x7F7F). That is a
+# filter cutoff/depth profile. Every "Pitch*"/"Pan*"/"Portamento*"/"PitchBend*" name in
+# this run named the wrong subsystem -- and the LLVM source itself already carried the
+# comment "this is a TVF (filter) computation, not portamento" above one of them.
+0x022824  CURATED  VelocityQuantise_A                -> Velocity_Select_Split_Zone
+0x022844  CURATED  VelocityQuantise_B                -> Velocity_Select_Split_Zone_Alt
+0x02294E  CURATED  PitchBend_Process                 -> Pitch_Get_Patch_Octave_Shift
+0x02299D  CURATED  PitchBend_Saturate                -> Pitch_Clamp_Into_Range
+0x0229EC  CURATED  PitchBend_AlignLoop_Init          -> Pitch_Fold_Octaves_Into_Range
+0x022A32  CURATED  ChanBitField_ExtractHi7           -> WaveSel_KeyTable_Lookup
+0x022A3F  CURATED  SlotParam_Write_Stride0F          -> WaveSel_Emit_ZoneRecord_S15
+0x022A61  CURATED  SlotParam_Write_Stride0C          -> WaveSel_Emit_ZoneRecord_S12
+0x022A83  CURATED  SlotParam_Write_Stride0D          -> WaveSel_Emit_ZoneRecord_S13
+0x022AA4  CURATED  SlotParam_Write_Stride0A          -> WaveSel_Emit_ZoneRecord_S10
+0x022AC5  CURATED  SlotParam_Write_Stride06          -> WaveSel_Emit_ZoneRecord_S6
+0x022AE7  CURATED  SlotParam_Write_Stride04_SLA      -> WaveSel_Emit_ZoneRecord_S4
+0x022B02  CURATED  SaturateS16_WA                    -> Pitch_Saturate_15bit
+0x022BF2  CURATED  ClampS8_0_to_78                   -> TVF_Clamp_Cutoff
+0x022C06  CURATED  Portamento_CalcContrib_A          -> TVF_Calc_Cutoff
+0x022C99  CURATED  Portamento_CalcContrib_B          -> TVF_Calc_Cutoff_NoKeyFollow
+0x022CE8  CURATED  Portamento_ClampAdd18             -> TVF_Bias_Clamp_Amount
+0x022CF8  CURATED  PitchBend_LookupCoeff             -> TVF_Lookup_Depth_Amount
+0x022DA1  CURATED  NoteState_InitDefaults            -> TVF_Set_Bypass
+0x0232C7  CURATED  Voice_Colour_Write                -> Voice_Build_OutputLevel
+0x023849  CURATED  Voice_Pitch_InterpDispatch        -> WaveSel_StageB_Build_Reg040
+0x0238F3  CURATED  Voice_Pitch_InterpDispatch_Return -> WaveSel_StageB_Return
+0x0238F8  CURATED  Voice_PitchEnv_Advance            -> WaveSel_StageB_Build_Reg040_Footage
+0x02399D  CURATED  Voice_PitchEnv_StoreOutputRegs    -> WaveSel_StageB_Store_Reg040
+0x023A05  CURATED  Voice_Pitch_WriteOutputReg_Portamento -> Pitch_Apply_Partial_Detune
+0x023A4A  CURATED  Voice_Pitch_WriteOutputReg_Legato     -> Pitch_Emit_Reg400
+0x023A8E  CURATED  Voice_Pitch_WriteOutputReg_Direct     -> Pitch_Apply_Zone_Trim
+0x023D01  CURATED  Voice_PitchPack_Mode1             -> TVF_Build_Full
+0x024102  CURATED  Voice_PitchPack_Dispatch          -> TVF_Build_Dispatch
+0x02413E  CURATED  Voice_PitchPack_RouteA            -> TVF_Build_Short
+0x024300  CURATED  Voice_PitchReg_WriteDispatch      -> TVF_BuildEmit_Short_Dispatch
+0x024366  CURATED  Voice_Pan_WriteWithDetune         -> TVF_Emit_Offset_Reg100
+0x0243CC  CURATED  Voice_Pan_WriteBothWithDetune     -> TVF_Emit_Offset_Both
+0x024444  CURATED  Voice_PanReg_WriteDispatch        -> TVF_Emit_Registers
+0x0253FE  CURATED  Voice_ComputeExprPitchBend        -> Level_Build_Reg0C0
+0x02552A  CURATED  Voice_ApplyModeToPitchWord        -> Voice_Apply_GateRouting
+0x025589  CURATED  Voice_SetPitchWord_Muted          -> Voice_Build_GateCommand
+0x0255F3  CURATED  Voice_SetPitchWord_Unmuted        -> Voice_Build_GateCommand_NoPartial
+# Scale tuning: 0x028B96 reads 0x04134D and its sole consumer branches on
+# 0x80/0x42/0x41/0x40/0 to pick user-scale or per-key tuning tables (0x00FCE4...).
+0x028B96  CURATED  Voice_GetParam_04134D             -> ScaleTune_Get_Global_Mode
+0x028C28  CURATED  Voice_ReadChannelAssign           -> ScaleTune_Get_User_Offset
+0x028D42  CURATED  Voice_GetMonoMode                 -> ScaleTune_Is_Global_Enabled
+0x028D4C  CURATED  Voice_AllVoices_WritePan          -> Pitch_Refresh_Sounding_Voices
+# THE ONE ADDRESS WHERE THE LLVM SOURCE WON:
+# 0x023584 is mostly a pitch accumulator -- key<<8+0x80 + master tune (0x041349) +
+# part transpose/octave + patch octave shift + scale-tune tables, saturated into
+# desc[+0x08]; the key-zone fold is only its tail. Corroborating: the ASL file already
+# held Voice_Pitch_Compute_Inactive / _Return as this routine's own sub-labels while
+# calling the parent Pitch_Resolve_Key_Zone -- an internal inconsistency this fixes.
+0x023584  SOURCE   Pitch_Resolve_Key_Zone            -> Voice_Pitch_Compute
+
+## ---------------------------------------------------------------------------
+## E. Envelope level pairs, audio tick, tone-generator writers
+## ---------------------------------------------------------------------------
+# 0x026769/0x026975/0x026AAA/0x026BDC never touch 0x100000/0x100002; they only compute
+# (level<<8)|rate words into the RAM scratch at 0x0451F8..0x045202. They are the same
+# kind of code that commit 3b6b7f3 already renamed from Voice_UpdatePan_* to the
+# curated Voice_Calc_LevelPair_* shape, so "ComputeAndWriteVolume" is wrong twice over
+# (it neither writes nor handles volume alone).
+0x026769  CURATED  Voice_ComputeAndWriteVolume1  -> Voice_Calc_LevelPair_EGA
+0x026975  CURATED  Voice_ComputeAndWriteVolume2  -> Voice_Calc_LevelPair_EGB
+0x026AAA  CURATED  Voice_ComputeAndWriteVolume3  -> Voice_Calc_LevelPair_EGC
+0x026BDC  CURATED  Voice_WriteVolume_Muted       -> Voice_Calc_LevelPair_Silence
+0x026E5B  CURATED  Voice_UpdateNoteOff           -> Voice_Step_AmpDelay
+0x026EC3  CURATED  Voice_UpdatePortamento        -> Voice_Step_ExprRamp
+0x0271BC  CURATED  Voice_ApplyTuningSysEx        -> Pitch_Bend_Ramp_Tick
+0x027A46  CURATED  Voice_ScanAndCancelNoteOff    -> Audio_Tick_ServiceVoices_A
+0x027AC4  CURATED  Voice_UpdateAllNoteStates     -> Audio_Tick_ServiceVoices_B
+0x02B4E3  CURATED  Voice_Init_Type4              -> Voice_Build_Register_Set
+0x02B717  CURATED  Voice_Setup_Typed             -> Voice_Build_Partial_Descriptor
+0x02BA2C  CURATED  Voice_NoteOn_Type4            -> Voice_Build_Four_Partials
+0x02CD71  CURATED  Voice_Release                 -> Voice_Reload_Levels
+# TG writers, decided purely by which chip register each one writes:
+0x02D0BA  CURATED  ToneGen_WritePanReg           -> ToneGen_WriteVoicePitch      (reg +0x400)
+0x02D436  CURATED  ToneGen_WriteNote             -> ToneGen_WriteLevelBurst      (0x800/840/900/940/9C0/A00)
+0x02D50E  CURATED  ToneGen_WriteNote_2Regs       -> ToneGen_WriteLevelPair       (0x840, 0x800)
+0x02D5D0  CURATED  ToneGen_WriteNote_Stereo      -> ToneGen_WriteEnvSegments     (0x840, 0x880)
+0x02D620  CURATED  ToneGen_WriteNote_Hold        -> ToneGen_WriteSegRegs_SameLevel
+0x02D670  CURATED  ToneGen_WriteSingleReg_180    -> ToneGen_WriteExprReg         (reg +0x180)
+# 0x026E5B and 0x02D670 are MEDIUM confidence: the curated verb matches, but
+# Voice_Step_ReleaseDelay may be the better name for 0x026E5B, and the "expression"
+# reading of reg +0x180 is inferred from slot+0x2B being a 0..0x7F controller.
+
+## ---------------------------------------------------------------------------
+## F. Voice lifecycle / node lists  (0x0210A2..0x024CAB)
+## ---------------------------------------------------------------------------
+0x0210A2  CURATED  SlotPair_Decode_C_To_L           -> ExtVoice_Fold_SlotNumber
+0x02174C  CURATED  NoteSource_SelectRow             -> ExtVoice_Lookup_SlotFallback
+0x02177E  CURATED  VoiceSlot_Assign                 -> ExtVoice_Alloc_StreamSlot
+0x021C83  CURATED  VoiceNode_PriorityList_Update    -> Voice_List_MoveToPool
+0x021D59  CURATED  VoiceNode_SecondList_Update      -> Voice_List_MoveToPartList
+0x021E31  CURATED  VoiceNode_Activate               -> Voice_Retire_ToFreePool
+#          ^ decrements the owner's active count and sets flags=0x01, level=0 --
+#            retirement, the exact OPPOSITE of "Activate".
+0x021E83  CURATED  VoiceNode_BeginRelease           -> Voice_Demote_Decayed
+0x021EA1  CURATED  VoiceNode_UpdateEnvState         -> Voice_Reprioritise
+0x021ECB  CURATED  ToneGen_EmitCommandLoop          -> Voice_Reset_Engine
+0x02219F  CURATED  AudioTick_UpdateVoice            -> Voice_Manager_PollBank
+0x02229A  CURATED  NoteChain_FindNode_A             -> Voice_Find_Candidate
+0x022340  CURATED  NoteOn_Dispatch                  -> Voice_Allocate_Nodes
+0x022587  CURATED  VoiceSlot_Release                -> Voice_Clear_HoldBit
+#          ^ literally `res 7,(0x14AF + idx*0x27)` = clear bit7 of the voice flags.
+0x024BE3  CURATED  Voice_Chan_ComputeParams         -> ExtVoice_Build_SlotRegisters
+0x024CAB  CURATED  Voice_Chan_ResolveSlot           -> ExtVoice_Store_SlotNumber
+# THE TWO "LRU" MISREADS. The +0x10/+0x14 ring is rooted at 0x1129, which
+# Voice_Allocate_Nodes ZEROES at the start of a note-on when bit6 of request+0x06 is
+# clear, and no code ever moves a node to the ring's tail on use. So it is a per-note
+# voice-group chain, not an age-ordered LRU list, and both curated names were wrong.
+0x021E02  SOURCE   Voice_List_UnlinkLru  -> DList_Unlink_SelfLink_Offsets16
+0x021E15  THIRD    Voice_List_RelinkLru / DList_InsertAfter_Offsets16
+                                        -> DList_Relink_Adjacent_Offsets16
+#          ^ it UNLINKS from the ring and THEN splices next to XBC, so "InsertAfter"
+#            described only half the work while "Lru" was unsupported. New name keeps
+#            the DList_*_Offsets16 shape of its sibling at 0x021E02.
+
+## ---------------------------------------------------------------------------
+## G. Reference case normalisation
+## ---------------------------------------------------------------------------
+# 216 reference entries still held UPPER_SNAKE spellings of names the sources write in
+# MixedCase (VOICE_POLYPHONYLIMITS_TABLE vs Voice_PolyphonyLimits_Table, ...). These
+# were re-cased to the source spelling. 62 UPPER_SNAKE entries remain: they are
+# reference-only data/RAM symbols with no counterpart label in either source, so
+# nothing dictates their case yet.
+
+## ---------------------------------------------------------------------------
+## NOT re-parented
+## ---------------------------------------------------------------------------
+# Voice_Release_Type4, _BranchA and _BranchB share a prefix with Voice_Release but sit
+# 0x109B bytes away and are an independent routine. They keep their names; the
+# re-parenting pass explicitly skips children further than 0x400 from their parent.

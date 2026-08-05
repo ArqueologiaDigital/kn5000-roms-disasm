@@ -288,7 +288,7 @@ CMD_DISPATCH_TABLE:
 
 
 ; --- 0x00F48C-0x00F4AB  Voice_PolyphonyLimits_Table -- 32 bytes, indexed by (part & 0x1F)
-; Read by VoiceSlot_Assign (0x0212xx region) as `and a,0x1F / lda_24 xbc,0x00f48c / ldb_sri A`.
+; Read by ExtVoice_Alloc_StreamSlot (0x0212xx region) as `and a,0x1F / lda_24 xbc,0x00f48c / ldb_sri A`.
 ; Values 00 00 00 00 01 01 01 01 02 02 02 02 03 00 03 00 01 01 01 01 then 12 x 00 -- a group id
 ; (0..3) per part rather than a count.
 Voice_PolyphonyLimits_Table:
@@ -298,7 +298,7 @@ Voice_PolyphonyLimits_Table:
 	.zero 8
 
 ; --- 0x00F4AC-0x00F4EB  Voice_IndexMapping_Table -- 64 bytes, indexed by the full 6-bit part id
-; Read immediately after the previous table in VoiceSlot_Assign, un-masked (part 0x00..0x3F).
+; Read immediately after the previous table in ExtVoice_Alloc_StreamSlot, un-masked (part 0x00..0x3F).
 ; Values: 0x00..0x0D for parts 0-13, then 0x0C 0x0D 0x0E 0x0E 0x0E 0x0E for parts 14-19,
 ; zeros for parts 20-31, 0x0F..0x1A for parts 32-43, zeros to the end. The two disjoint runs
 ; (0x00-0x0E and 0x0F-0x1A) sum to 27 distinct values = the 27 channel records at DRAM 0x1349.
@@ -433,7 +433,7 @@ Voice_Pitch_Table_High:
 ;   0x00F628 (11 B): 86 85 06 05 84 83 82 04 03 02 FF                 -- 10 entries
 ; Element values are 0x00..0x06 and 0x80..0x86, i.e. 7 slots x 2 banks; bit 7 selects the second
 ; bank. The order is a fixed preference ranking, so these are the voice-stealing / slot-search
-; priority orders. Walkers: NoteChain_FindNode_A / _B, which advance until they hit 0xFF and
+; priority orders. Walkers: Voice_Find_Candidate / _B, which advance until they hit 0xFF and
 ; return the first non-null chain head (or 0 = "not found").
 ; --- 0x00F603-0x00F632  Voice-pool priority lists (0xFF-terminated byte lists)
 ; Four variable-length lists of pool indices in allocation-priority order:
@@ -442,7 +442,7 @@ Voice_Pitch_Table_High:
 ;   0x00F61A..0x00F627  86 85 06 05 84 83 82 04 03 02 81 80 01 FF
 ;   0x00F628..0x00F632  86 85 06 05 84 83 82 04 03 02 FF
 ; The last three are referenced by the 0x00F633 table and consumed by
-; NoteChain_FindNode_A (0x02229A). A byte with bit7 set selects the GLOBAL pool-head
+; Voice_Find_Candidate (0x02229A). A byte with bit7 set selects the GLOBAL pool-head
 ; array at 0x130F, indexed by (byte & 0x7F)*4; a byte with bit7 clear selects the
 ; part-descriptor-local array, indexed by byte*4.
 Voice_KeyTable_Remapping:
@@ -462,7 +462,7 @@ Voice_Search_Order_List_3:
 	.byte 0x05, 0x84, 0x83, 0x82, 0x04, 0x03, 0x02, 0xff
 
 ; --- 0x00F633-0x00F692  (Voice_SFX_ModulationTable) -- 16 x 6-byte slot-type descriptors
-; Indexing proved in NoteOn_Dispatch (subcpu source ~line 4405): it takes the byte at
+; Indexing proved in Voice_Allocate_Nodes (subcpu source ~line 4405): it takes the byte at
 ; (voice_msg + 2 + slot) & 0x0F, does `muls wa,0x6`, adds base 0x00F633.
 ; Record: +0 u32 = pointer to a search-order list (one of 0x00F603 / 0x60B / 0x61A / 0x628)
 ;         +4 u8  = a small class code (0x00, 0x01, 0x02)
@@ -470,13 +470,13 @@ Voice_Search_Order_List_3:
 ; Contents: {F60B,0,3}, {F61A,1,3}, {F628,2,4}, then 13 x {F628,2,5}.
 ; 0x00F693-0x00F69A is 8 bytes of 0x00 filler between this table and the next.
 ; --- 0x00F633-0x00F692  Note-on layer descriptor table, 16 entries of 6 bytes
-; Indexed by the low nibble of a note-event slot byte in NoteOn_Dispatch (0x0223BE).
+; Indexed by the low nibble of a note-event slot byte in Voice_Allocate_Nodes (0x0223BE).
 ; Entry layout: { u32 candidate_list_ptr; u8 priority_key; u8 node_param }.
 ;   entry 0  -> 0x0000F60B, key 0x00, param 0x03
 ;   entry 1  -> 0x0000F61A, key 0x01, param 0x03
 ;   entry 2  -> 0x0000F628, key 0x02, param 0x04
 ;   entries 3..15 -> 0x0000F628, key 0x02, param 0x05 (all identical)
-; priority_key is passed to VoiceNode_PriorityList_Update; node_param is stored in
+; priority_key is passed to Voice_List_MoveToPool; node_param is stored in
 ; (voice+0x26) at 0x022406.
 Voice_SFX_ModulationTable:
 	.byte 0x0b, 0xf6, 0x00, 0x00, 0x00, 0x03, 0x1a, 0xf6
