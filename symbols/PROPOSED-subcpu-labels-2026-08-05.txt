@@ -1,0 +1,34 @@
+# Proposed sub-CPU semantic labels (kn5000_subprogram_v142)
+#
+# Produced 2026-08-05 by the sub-CPU stall analysis. PROPOSALS ONLY -- not yet
+# integrated. A separate pass must add these to
+# symbols/subcpu_symbols_reference.txt and re-verify the 100% byte-match.
+#
+# Load base VERIFIED: file offset 0 of kn5000_subprogram_v142.rom = sub-CPU 0x00EF00
+# (3267/3278 existing symbols land on instruction boundaries at that base; ~36% at 0).
+#
+# Format: SYMBOL_NAME 0xADDRESS   [# replaces LABEL_x] [# comment]
+
+AUDIO_MIDIIN_TO_MAINCPU_LOOP             0x01F859   # replaces LABEL_01F859 -- drain the serial-1 RX ring at 0xE00 into the staging buffer at 0x600, up to 0x400 bytes
+AUDIO_MIDIIN_TO_MAINCPU_SEND             0x01F87B   # replaces LABEL_01F87B -- if any bytes were collected, ship them with INTERCPU_DMA_SEND command 4
+AUDIO_MIDIIN_TO_MAINCPU_EXIT             0x01F88E   # replaces LABEL_01F88E
+AUDIO_MAINLOOP_TICK_LIMIT_CHECK          0x01FAF0   # replaces LABEL_01FAF0 -- if the free-running tick at 0x1040 exceeds 1000, raise PORT E bit 0
+AUDIO_MAINLOOP_CHECK_PERIODIC_TASK       0x01FAFF   # replaces LABEL_01FAFF -- tests bit 1 of the timer-event bitmask 0x103e; when set, runs CMD_CHECK_E2_PENDING + AUDIO_PROCESS_INIT
+AUDIO_MAINLOOP_SERVICE_TASKS             0x01FB2F   # replaces LABEL_01FB2F -- unconditional tail of Audio_Main_Loop: keybed, MIDI, DSP command queue, serial-out -- one call each per pass
+INTERCPU_SEND_CMD_E3                     0x020D13   # replaces LABEL_020D13 -- Sends the single command byte 0xE3 to the maincpu latch using the same MSTAT1/SSTAT0 handshake; no payload, no micro-DMA.
+E3_WAIT_MSTAT1_CLEAR                     0x020D2C   # Retry counter for gate 1 of the 0xE3 send; spins back to 0x020D15 while MSTAT1 is still low, gives up after 60001 tries.
+E3_WAIT_MSTAT1_SET                       0x020D37   # Retry counter for gate 2 of the 0xE3 send; spins back to 0x020D23 while MSTAT1 is still high.
+INTERCPU_E2_DMA_TRANSFER                 0x020D43   # Sends command byte 0xE2 followed by a fixed 10-byte parameter block staged at 0x10D4 (XWA/XDE/BC) via micro-DMA ch2. Sibling of INTERCPU_E1_DMA_TRANSFER.
+E2_WAIT_DMA_IDLE                         0x020D4C   # Spins while the TX-state flag (0x10E8) is non-zero, i.e. a previous micro-DMA burst is still running.
+E2_DMA_READY                             0x020D5D   # TX engine idle: assert SSTAT0, mark busy, push the 0xE2 header into the latch.
+E2_START_TRANSFER                        0x020D72   # Header acknowledged: stage the 10-byte block at 0x10D4, program DMAS2/DMAC2/DMA2V and start timer 2.
+E2_WAIT_MSTAT1_SET                       0x020DA5   # Retry counter for the 0xE2 header acknowledge; spins back to 0x020D6D while MSTAT1 is still high.
+MIDI_DISPATCH_LOOP                       0x034D98   # per-byte loop head: publish the queue level for backpressure, then fetch the next byte
+DSP_RINGBUF_SAVE_LEVEL                   0x035818   # replaces LABEL_035818 -- ld (0x4366),WA -- snapshot of the DSP command queue's byte count, refreshed every main-loop pass
+DSP_RINGBUF_READ_EMPTY                   0x035855   # replaces LABEL_035855 -- queue empty: return the 0xFFFF sentinel (negative, so callers test with a signed compare)
+DSP_RINGBUF_READ_EXIT                    0x035858   # replaces LABEL_035858
+DSP_RINGBUF_READ_CMDQUEUE                0x035859   # replaces LABEL_035859 -- convenience entry: DSP_RINGBUF_READ on the command queue at 0x3B60
+AUDIO_PROCESS_DSP_CHECK_MSG_COMPLETE     0x035AE5   # replaces LABEL_035AE5 -- peek the length byte 5 ahead of the read index; if the whole message has not arrived, un-read the opcode and latch 0x448C=1
+AUDIO_PROCESS_DSP_DISPATCH               0x035B1B   # replaces LABEL_035B1B -- whole message present: dequeue the header and switch on opcode 0x2B/0x2C/0x2D
+AUDIO_PROCESS_DSP_FETCH_OPCODE           0x036033   # replaces LABEL_036033 -- read one byte from the command queue; 0xFFFF (negative) falls through to the exit
+AUDIO_PROCESS_DSP_EXIT                   0x036044   # replaces LABEL_036044
