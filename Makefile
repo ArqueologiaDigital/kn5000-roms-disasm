@@ -14,7 +14,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
-.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets
+.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi
 .PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
@@ -735,6 +735,15 @@ $(DEMO_PRESET_DIR)/demo_preset_%_compressed.bin: $(DEMO_PRESET_DIR)/demo_preset_
 	python3 scripts/build/compress_lzss.py $< $@ --reference original_ROMs/demo_preset_$*_compressed.original.bin
 
 rebuild-demo-presets: $(DEMO_PRESET_COMPRESSED)
+
+# Convert the decompressed presets to Standard MIDI Files so they can be listened
+# to outside the instrument. 96 ticks per beat; the ROM tempo field is not decoded
+# yet, so these render at a nominal 120 BPM.
+DEMO_PRESET_MIDI_DIR=$(DEMO_PRESET_DIR)/midi
+demo-midi:
+	python3 scripts/build/demo_preset_to_midi.py \
+		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
+		-o $(DEMO_PRESET_MIDI_DIR) --drum-type 0x0C
 
 # Regenerate the decompressed sources + the recompression references from the
 # factory ROM. Only needed if the extraction itself changes -- the results are

@@ -31,9 +31,28 @@ real (non-`0xFF`) stream bytes can follow that point and are preserved verbatim.
                         [5..255]=250 payload bytes
 ```
 
+Cell bytes `[0..2]` are not used by the reader and their values vary -- byte 0 is
+**not** a fixed marker.
+
 Event stream: a byte with bit 7 set is a status byte; following bytes with bit 7
-clear are its data. `0x81` = advance one beat, `0x83` = end of track,
-`0x9n` + 5 data bytes = note event.
+clear are its data.
+
+| status | data | meaning |
+|---|---|---|
+| `0x81` | 0 | advance one beat |
+| `0x83` | 0 | end of track |
+| `0x82` | n | text / CUE data |
+| `0x9n` | 5 (repeatable) | note: `pos, note, velocity, dur_ticks, dur_beats` |
+| `0xBn` `0xCn` `0xDn` | 2-5 | not decoded |
+
+Timing is **96 ticks per beat**: `pos` is the tick within the current beat and
+`absolute tick = beat * 96 + pos`; `duration = dur_beats * 96 + dur_ticks`. Both
+`pos` and `dur_ticks` are bounded by 95, which is why this is base-96 rather than a
+16-bit little-endian value. Validated on the Feature Presentation: 3842 of 3843 note
+events have a non-decreasing position within their beat, and the pitch-class
+histogram is strongly tonal (C 38.6%, D 20.7%, G 14.9%, every chromatic note < 4%).
+
+A single `0x9n` status can introduce several consecutive 5-byte note records.
 
 ## Build
 
@@ -49,6 +68,37 @@ make decompress-demo-presets # re-extract sources + references from the factory 
 `compress_lzss.py --reference` replays the original stream's compression
 decisions, so the rebuilt ROM stays byte-identical to the factory ROM.
 The references live in `original_ROMs/demo_preset_NN_compressed.original.bin`.
+
+## Listening to them
+
+```
+make demo-midi               # writes midi/demo_preset_NN.mid
+```
+
+Standard MIDI File format 1, 96 ticks per quarter note, one MIDI track per part.
+Caveats, so nothing here is mistaken for decoded fact:
+
+* **Tempo is not decoded.** The files render at a nominal 120 BPM (`--bpm`).
+* **The part -> instrument mapping is not decoded.** No program change is emitted;
+  each part's type byte is carried through in the MIDI track name instead.
+* **Percussion is a guess.** `make demo-midi` passes `--drum-type 0x0C`, because
+  type `0x0C` parts have a median note range of 82 semitones (vs 39-57 for other
+  types) and the highest note counts. That is suggestive, not confirmed. Use
+  `--drum-track N` to override per part index.
+
+## An easter egg
+
+Part 14 of the Feature Presentation carries a developer memo in a `0x82` event:
+
+```
+Memo
+These area meansCUE data
+0xbf00-,0x6e00- also,AcoustIlusndata near 0x9b91 adjusted by
+Harry Nak./EMID '97.07/07
+```
+
+It is also a useful correctness check: a broken decompressor does not produce
+clean English.
 
 ## Note on the previous extraction
 
