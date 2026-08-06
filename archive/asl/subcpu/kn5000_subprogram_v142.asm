@@ -22323,7 +22323,7 @@ Voice_UpdateAllLFO_Done:
 	RET
 
 ; ----------------------------------------------------------------------------
-; Voice_Step_AmpDelay - Per-tick step of a voice's AMPLITUDE-domain delay counter
+; Voice_Step_DelayTimers - Per-tick step of a voice's AMPLITUDE-domain delay counter
 ; Entry: XWA = pointer to the voice slot (VOICE_SLOT_BASE 0x04308E + ch*0x47)
 ; Exit:  none (slot+0x2f updated in place); IZ/XWA clobbered
 ; Notes: Called once per audio tick by Audio_Tick_ServiceVoices_A/_B for every
@@ -22343,7 +22343,7 @@ Voice_UpdateAllLFO_Done:
 ;        claimed a level rewrite every tick; the register capture in
 ;        notes/audit/kn5000-audit-amplitude.md S1.6 shows one write per note.
 ; ----------------------------------------------------------------------------
-Voice_Step_AmpDelay:	; 026E5Bh
+Voice_Step_DelayTimers:	; 026E5Bh
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
@@ -22352,11 +22352,11 @@ Voice_Step_AmpDelay:	; 026E5Bh
 	LD WA, IZ
 	EXTZ XWA
 	BIT 0fh, WA
-	JR Z, Voice_Step_AmpDelay_CheckRelease
+	JR Z, Voice_Step_DelayTimers_LowSlot
 	SUB IZ, 0100h
 	LD WA, IZ
 	AND WA, 7f00h
-	JR NZ, Voice_Step_AmpDelay_CheckRelease
+	JR NZ, Voice_Step_DelayTimers_LowSlot
 	LD XWA, (XSP + 002h)
 	LD A, (XWA)
 	EXTZ WA
@@ -22369,20 +22369,20 @@ Voice_Step_AmpDelay:	; 026E5Bh
 	CALL Voice_Clear_HoldBit
 	RES 0fh, IZ
 
-Voice_Step_AmpDelay_CheckRelease:
+Voice_Step_DelayTimers_LowSlot:
 	BIT 7, IZ
-	JR Z, Voice_Step_AmpDelay_StoreDone
+	JR Z, Voice_Step_DelayTimers_Store
 	DEC 1, IZ
 	LD WA, IZ
 	AND WA, 007fh
-	JR NZ, Voice_Step_AmpDelay_StoreDone
+	JR NZ, Voice_Step_DelayTimers_Store
 	LD XWA, (XSP + 002h)
 	LD A, (XWA)
 	EXTZ WA
 	CALL Voice_Reload_Levels
 	AND IZ, 007fh
 
-Voice_Step_AmpDelay_StoreDone:
+Voice_Step_DelayTimers_Store:
 	LD XWA, (XSP + 002h)
 	LD (XWA + 02fh), IZ
 	POP IZ
@@ -23534,7 +23534,7 @@ Voice_ToneTableApply_Filter_Loop:
 ;        Builds the list of live channels with Voice_Query_AllChannels, then for
 ;        every channel index in it (slot = VOICE_SLOT_BASE + n*0x47):
 ;          if part_struct(slot+0x23)+0x0a bit15 is SET  (delayed-release mode)
-;               and slot+0x2f & 0x8080 -> Voice_Step_AmpDelay(slot)
+;               and slot+0x2f & 0x8080 -> Voice_Step_DelayTimers(slot)
 ;          else if slot+0x2f & 0x8080 -> Voice_Clear_HoldBit(ch),
 ;               Voice_Reload_Levels(ch), slot+0x2f = 0    (immediate release)
 ;        Pass A does NOT touch the expression domain.
@@ -23566,7 +23566,7 @@ Audio_Tick_ServiceVoices_A_Loop:
 	AND XWA, 00008080h
 	JR Z, Audio_Tick_ServiceVoices_A_NextSlot
 	LD XWA, XIZ
-	CALR Voice_Step_AmpDelay
+	CALR Voice_Step_DelayTimers
 	JR T, Audio_Tick_ServiceVoices_A_NextSlot
 
 Audio_Tick_ServiceVoices_A_ClearSlot:
@@ -23649,7 +23649,7 @@ Audio_Tick_ServiceVoices_B_CheckPortaA:
 	AND XWA, 00008080h
 	JR Z, Audio_Tick_ServiceVoices_B_CheckPortamento2A
 	LD XWA, XIZ
-	CALR Voice_Step_AmpDelay
+	CALR Voice_Step_DelayTimers
 	JR T, Audio_Tick_ServiceVoices_B_NextSlotA
 
 Audio_Tick_ServiceVoices_B_CheckPortamento2A:
@@ -23720,7 +23720,7 @@ Audio_Tick_ServiceVoices_B_LoopB:
 	AND XWA, 00008080h
 	JR Z, Audio_Tick_ServiceVoices_B_CheckPortamento2B
 	LD XWA, XIZ
-	CALR Voice_Step_AmpDelay
+	CALR Voice_Step_DelayTimers
 	JR T, Audio_Tick_ServiceVoices_B_NextSlotB
 
 Audio_Tick_ServiceVoices_B_CheckPortamento2B:

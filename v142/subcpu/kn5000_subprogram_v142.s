@@ -13967,7 +13967,7 @@ Voice_UpdateAllLFO_Done:
 	pop xiz
 	ret
 
-Voice_Step_AmpDelay:
+Voice_Step_DelayTimers:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
@@ -13976,11 +13976,11 @@ Voice_Step_AmpDelay:
 	ld wa, iz
 	extz xwa
 	bit 15, wa
-	jr z, Voice_Step_AmpDelay_CheckRelease
+	jr z, Voice_Step_DelayTimers_LowSlot
 	sub iz, 0x100
 	ld wa, iz
 	and wa, 0x7F00
-	jr nz, Voice_Step_AmpDelay_CheckRelease
+	jr nz, Voice_Step_DelayTimers_LowSlot
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
 	extz wa
@@ -13993,7 +13993,28 @@ Voice_Step_AmpDelay:
 	call Voice_Clear_HoldBit
 	res 15, iz
 
-; Body of Voice_Step_AmpDelay (entry 0x026E5B, already named -- left alone). That routine
+; ---------------------------------------------------------------------------
+; Voice_Step_DelayTimers (0x026E5B) -- ticks TWO independent deferred-action
+; timers packed into the single word at (record + 0x2F), once per call.
+;
+;   bit 15      = high slot ARMED      bits 8..14 = high slot countdown
+;   bit  7      = low  slot ARMED      bits 0..6  = low  slot countdown
+;
+; Each armed slot is decremented; when its counter reaches zero the slot fires
+; and DISARMS ITSELF (res 0x0F,IZ / and IZ,0x007F), then the packed word is
+; written back.
+;
+;   high slot expiry -> ToneGen_WriteSingleReg (param from record+0x2D)
+;                    -> Voice_Clear_HoldBit
+;   low  slot expiry -> Voice_Reload_Levels
+;
+; NAMING (2026-08-06): previously Voice_Step_AmpDelay, and a later pass argued
+; for Voice_Step_ReleaseDelay. BOTH described only one slot -- "release" the
+; high one, "amp" the low one -- which is why the two readings disagreed. The
+; routine is a generic two-slot delay timer, so it is named for the mechanism.
+; Sibling: Voice_Step_ExprRamp (0x026EC3).
+; ---------------------------------------------------------------------------
+; Body of Voice_Step_DelayTimers (entry 0x026E5B, already named -- left alone). That routine
 ; drives the packed 16-bit countdown word at slot+47, which holds TWO independent timers:
 ;   high byte, bit 15 = "note-off armed": each tick subtracts 0x100; when the high 7 bits
 ;     reach zero it writes slot+45 to the voice's TG register through
@@ -14002,14 +14023,14 @@ Voice_Step_AmpDelay:
 ;     low 7 bits reach zero, call Voice_Reload_Levels for the slot and clear bit 7.
 ; ★ These two paths are the ONLY way a slot goes back to the free pool during steady-
 ; state playback (the other being the portamento terminal state), so any stall upstream
-; of Voice_Step_AmpDelay stops voice reclamation outright.
-Voice_Step_AmpDelay_CheckRelease:
+; of Voice_Step_DelayTimers stops voice reclamation outright.
+Voice_Step_DelayTimers_LowSlot:
 	bit 7, iz
-	jr z, Voice_Step_AmpDelay_StoreDone
+	jr z, Voice_Step_DelayTimers_Store
 	dec 1, iz
 	ld wa, iz
 	and wa, 0x7F
-	jr nz, Voice_Step_AmpDelay_StoreDone
+	jr nz, Voice_Step_DelayTimers_Store
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
 	extz wa
@@ -14017,7 +14038,7 @@ Voice_Step_AmpDelay_CheckRelease:
 	and iz, 0x7F
 
 ; Write the updated countdown word back to slot+47 and return.
-Voice_Step_AmpDelay_StoreDone:
+Voice_Step_DelayTimers_Store:
 	ld xwa, (xsp + 2)
 	ld (xwa + 47), iz
 	popw iz
@@ -15333,7 +15354,7 @@ Audio_Tick_ServiceVoices_A:
 ; stride; the LLVM source spells the instruction as the raw-encoding pseudo-op
 ; "stb_dri H, 0x07,0xE4,0xE0", which unidasm decodes as "lda XIZ,XBC+WA").
 ; Per slot: if bit 15 of tonerec[+10] is set and (slot+47 & 0x8080) is non-zero, call
-; Voice_Step_AmpDelay; if the bit is clear and the timers are armed, release the slot
+; Voice_Step_DelayTimers; if the bit is clear and the timers are armed, release the slot
 ; outright (Voice_Clear_HoldBit + Voice_Reload_Levels, slot+47 = 0).
 ; The routine's remaining labels (_ClearSlot 0x027A91, _NextSlot 0x027AB3,
 ; _Done 0x027AC0) fall past this region's upper boundary.
@@ -15354,7 +15375,7 @@ Audio_Tick_ServiceVoices_A_Loop:
 	and xwa, 0x8080
 	jr z, Audio_Tick_ServiceVoices_A_NextSlot
 	ld xwa, xiz
-	calr Voice_Step_AmpDelay
+	calr Voice_Step_DelayTimers
 	jr Audio_Tick_ServiceVoices_A_NextSlot
 
 ; Release path of Audio_Tick_ServiceVoices_A (entry 0x027A46, just below this region).
@@ -15405,7 +15426,7 @@ Audio_Tick_ServiceVoices_A_Done:
 ;                   pitch or pan register traffic.
 ; Both loops walk the part's voice-index list obtained from Voice_Query_AllChannels (0x02CD55),
 ; list pointer = XHL+5, terminated by a byte >= 0x40, voice record = 0x04308E + idx*0x47.
-; Per voice: if [voice+0x23]+0x0A bit 15 is SET the note is still held -> Voice_Step_AmpDelay
+; Per voice: if [voice+0x23]+0x0A bit 15 is SET the note is still held -> Voice_Step_DelayTimers
 ; (0x026E5B) or Voice_Step_ExprRamp (0x026EC3); if CLEAR, and the matching request bit in
 ; (voice+0x2F) mask 0x8080 or (voice+0x31) bit 15 is set, the voice is released
 ; (Voice_Clear_HoldBit + Voice_Reload_Levels) and the request word is zeroed.
@@ -15455,7 +15476,7 @@ Audio_Tick_ServiceVoices_B_CheckPortaA:
 	and xwa, 0x8080
 	jr z, Audio_Tick_ServiceVoices_B_CheckPortamento2A
 	ld xwa, xiz
-	calr Voice_Step_AmpDelay
+	calr Voice_Step_DelayTimers
 	jr Audio_Tick_ServiceVoices_B_NextSlotA
 
 ; Note-off not pending: test the portamento-active word (voice+0x31) bit 15.
@@ -15532,7 +15553,7 @@ Audio_Tick_ServiceVoices_B_LoopB:
 	and xwa, 0x8080
 	jr z, Audio_Tick_ServiceVoices_B_CheckPortamento2B
 	ld xwa, xiz
-	calr Voice_Step_AmpDelay
+	calr Voice_Step_DelayTimers
 	jr Audio_Tick_ServiceVoices_B_NextSlotB
 
 ; CheckPortamento2B of Audio_Tick_ServiceVoices_B.
