@@ -12,6 +12,15 @@ DEMO_PRESET_IDS=00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
 DEMO_PRESET_COMPRESSED=$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i)_compressed.bin)
 DEMO_PRESET_MIDI_DIR=$(DEMO_PRESET_DIR)/midi
 DEMO_PRESET_SIDECAR_DIR=$(DEMO_PRESET_DIR)/sidecar
+
+# Help databases: decompressed sources -> recompressed SLIDE8K payloads (see rules below).
+HELP_DB_DIR=table_data/includes/help_databases
+HELP_DB_LANGS=english german french spanish indonesian
+HELP_DB_COMPRESSED=$(foreach l,$(HELP_DB_LANGS),$(HELP_DB_DIR)/help_db_$(l)_compressed.bin)
+# german_stale is a truncated factory remnant: kn5000_table_data.s emits its
+# bytes as a raw slice (see table_data/help_databases.s), so its rebuilt
+# payload is used by verify-help-databases only, never by the ROM build.
+HELP_DB_STALE_COMPRESSED=$(HELP_DB_DIR)/help_db_german_stale_compressed.bin
 CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
@@ -19,6 +28,7 @@ CLANG=$(LLVM_BIN)/clang
 .SECONDARY:
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
+.PHONY: decompress-help-databases rebuild-help-databases verify-help-databases
 .PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
@@ -667,7 +677,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s $(DEMO_PRESET_COMPRESSED)
+rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s table_data/help_databases.s $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ $<
 
@@ -776,6 +786,51 @@ demo-sidecars: decompress-demo-presets
 	python3 scripts/build/preset_sidecar.py \
 		$(foreach i,$(DEMO_PRESET_IDS),$(DEMO_PRESET_DIR)/demo_preset_$(i).bin) \
 		-o $(DEMO_PRESET_SIDECAR_DIR)
+
+# ----------------------------------------------------------------------------
+# Help databases (6 SLIDE8K-compressed multilingual help-text blocks)
+# ----------------------------------------------------------------------------
+# Five live blocks (english/german/french/spanish/indonesian) live at ROM
+# 0x988690/0x98BB3A/0x98F0DA/0x992A0C/0x9963FA inside the region covered by
+# table_data/includes/icons_to_strings.bin (file offsets 0x43918/0x46DC2/
+# 0x4A362/0x4DC94/0x51682); a sixth, german_stale, is a truncated remnant at
+# ROM 0x983B3A (file offset 0x3EDC2).  Each block is an 11-byte "SLIDE8K\0"
+# header + 24-bit BIG-endian decompressed size (always 0x9000) + an LZSS
+# stream + ONE alignment pad byte of arbitrary value.  The checked-in source
+# is the decompressed database in $(HELP_DB_DIR); the compressed payload
+# (stream + pad, no header -- the header is emitted by help_databases.s) is
+# rebuilt with compress_slide8k.py --strict --reference, which replays the
+# factory encoder's decisions so the output is byte-identical (the final flag
+# bytes have nonzero unused bits, so a plain re-encode would NOT byte-match).
+#
+#   help_db_<lang>.bin -> help_db_<lang>_compressed.bin -> ROM
+#
+# The original payload slices live in original_ROMs/help_db_*_compressed.
+# original.bin (sliced once from icons_to_strings.bin at the offsets above,
+# header excluded, pad byte included).
+
+$(HELP_DB_DIR)/help_db_%_compressed.bin: $(HELP_DB_DIR)/help_db_%.bin original_ROMs/help_db_%_compressed.original.bin
+	python3 scripts/build/compress_slide8k.py $< $@ --strict --reference original_ROMs/help_db_$*_compressed.original.bin
+
+rebuild-help-databases: $(HELP_DB_COMPRESSED) $(HELP_DB_STALE_COMPRESSED)
+	@echo "Help databases recompressed (byte-identical via --strict --reference)."
+
+verify-help-databases: $(HELP_DB_COMPRESSED) $(HELP_DB_STALE_COMPRESSED)
+	@for l in $(HELP_DB_LANGS) german_stale; do \
+		cmp -s $(HELP_DB_DIR)/help_db_$${l}_compressed.bin \
+		       original_ROMs/help_db_$${l}_compressed.original.bin \
+		  && echo "  help db $$l OK" || echo "  help db $$l MISMATCH"; \
+	done
+
+# Regenerate the checked-in decompressed sources from the raw dump slice
+# (one-shot; only needed if icons_to_strings.bin or the tooling changes).
+decompress-help-databases:
+	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x3EDC2 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_german_stale.bin
+	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x43918 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_english.bin
+	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x46DC2 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_german.bin
+	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x4A362 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_french.bin
+	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x4DC94 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_spanish.bin
+	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x51682 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_indonesian.bin
 
 asl-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 

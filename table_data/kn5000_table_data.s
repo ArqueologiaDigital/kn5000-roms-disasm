@@ -33,11 +33,13 @@
 ; 0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, variable size per font)
 ; 0x950000-0x95FFFF  Sound Parameter Data (bitmap-like data + preset records)
 ; 0x960000-0x97FFFF  Sound/Voice Name Strings (space-padded, 16 bytes each)
-; 0x980000-0x985FFF  Registration/Panel Memory Defaults
-; 0x986000-0x986FFF  Model-Specific Preset Pointer Table A (KN5000/KN3000)
-; 0x987000-0x987FFF  Model-Specific Preset Pointer Table B (other models)
-; 0x988000-0x98FFFF  Demo Song Index + Data
-; 0x990000-0x99EBFF  Demo Song MIDI/Sequence Data
+; 0x980000-0x983B39  Registration/Panel Memory Defaults
+; 0x983B3A-0x985FFF  Stale truncated SLIDE8K help DB (old German revision)
+; 0x986000-0x986FFF  Effect Preset Pointer Table (model code 0xC2/0xC5)
+; 0x987000-0x987FFF  Effect Preset Pointer Table (other model codes)
+; 0x988000-0x98868F  HELP language index (2 x 6 pointers) + intro strings
+; 0x988690-0x9999CB  SLIDE8K HELP Databases (EN, DE, FR, ES, Indonesian)
+; 0x9999CC-0x99EBFF  Demo Song MIDI/Sequence Data
 ; 0x99EC00-0x99FFFF  Demo Category Names ("Tour Of The 5000", "Accordion", etc.)
 ; 0x9A0000-0x9BFFFF  Tone Generator Configuration Data
 ; 0x9C0000-0x9C3FFF  Tone Generator Parameters
@@ -54,8 +56,9 @@
 ; KEY TABLES (accessed by Main CPU ROM):
 ;   Font Glyph Table @ 0x945C00: 10 fonts, 16 bytes/entry (w,h,desc,asc,glyph_ptr,kern_ptr)
 ;   Demo Presets    @ 0x9C4000: 19 entries, 4 bytes/entry (pointers to SLIDE4K blocks)
-;   Model Presets    @ 0x986000/0x987000: Selected by model code (0xC2/0xC5 vs others)
-;   Demo Song Index  @ 0x988000: 12 entries, 4 bytes/entry (pointers to song data)
+;   Effect Presets   @ 0x986000/0x987000: Selected by model code (0xC2/0xC5 vs others)
+;   Help Lang Index  @ 0x988000: 12 entries, 4 bytes/entry (6 intro-string ptrs
+;                      + 6 SLIDE8K help-database ptrs; slot 4 of each = English)
 ;   Section Directory@ 0x800000: 33 entries indexing preset data banks for floppy I/O
 ; =============================================================================
 
@@ -332,12 +335,15 @@ IconPixelData:
 ;                       ("Easy Listening", "German S...")
 ;   0x960000-0x97FFFF  Sound/Voice Name Tables (space-padded ASCII, 16 bytes/entry)
 ;                       Mixed with demo song parameters and MIDI sequence data
-;   0x980000-0x985FFF  Registration/Panel Memory Default Data
-;   0x986000-0x986FFF  Model Preset Ptr Table A (selected when model=0xC2 or 0xC5)
-;                       16+ entries of 4-byte LE pointers into 0x9510xx range
-;   0x987000-0x987FFF  Model Preset Ptr Table B (selected for other model codes)
-;   0x988000-0x98FFFF  Demo Song Index Table (12 entries x 4 bytes) + song data
-;   0x990000-0x99EBFF  Demo Song MIDI/Sequence Data (compressed binary)
+;   0x980000-0x983B39  Registration/Panel Memory Default Data
+;   0x983B3A-0x9999CB  HELP system + effect-preset pointer tables -- fully
+;                       split out into help_databases.s (stale truncated
+;                       SLIDE8K remnant, EffectPreset_PtrTable_C2C5/_Default,
+;                       HelpIntro_LanguageTable + HelpDB_LanguageTable at
+;                       0x988000/0x988018, five intro strings, five live
+;                       SLIDE8K help databases rebuilt from decompressed
+;                       sources -- see that module's header)
+;   0x9999CC-0x99EBFF  Demo Song MIDI/Sequence Data (compressed binary)
 ;   0x99EC00-0x99FFFF  Demo Category Names: "Tour Of The 5000", "Accordion",
 ;                       "Piano Styles", "Jazz&Rock Organ", "Church & Theatre",
 ;                       "Light Orchestra", "Split Sounds", "Layer Production",
@@ -350,7 +356,21 @@ IconPixelData:
 ;                       Entry 18 points to 0x8E0000 (Feature Demo, same as LZSS preset data)
 ;   0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17, variable size)
 ; =============================================================================
-	.incbin "includes/icons_to_strings.bin", 0, 0x7F2D8	; 0x944D78-0x9C404F
+	; 0x944D78-0x983B39: misc tables, fonts, sound parameter records,
+	; name strings, registration defaults (see region map above)
+	.incbin "includes/icons_to_strings.bin", 0, 0x3EDC2	; 0x944D78-0x983B39
+
+	; HELP system data + effect-preset pointer tables (0x983B3A-0x9999CB):
+	; stale truncated German SLIDE8K remnant, the two live effect-preset
+	; pointer tables that overwrote its tail, the help language index, the
+	; five intro strings, and the five live SLIDE8K help databases (build
+	; products recompressed from decompressed sources, demo-preset style).
+	.include "help_databases.s"
+
+	; 0x9999CC-0x9C404F: 8 leftover bytes after the Indonesian help DB,
+	; 0xFF fill, demo song sequence data, demo category names, and tone
+	; generator configuration/parameters (see region map above)
+	.incbin "includes/icons_to_strings.bin", 0x54C54, 0x2A684	; 0x9999CC-0x9C404F
 
 ; -----------------------------------------------------------------------------
 ; SLIDE4K-compressed demo song presets, entries 0-17 (entry 18 is at 0x8E0000).
