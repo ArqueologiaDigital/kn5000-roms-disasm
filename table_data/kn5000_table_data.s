@@ -725,16 +725,16 @@ __jrt_nop_9FB652:
 	call_24 nz, 0xFFC6B2	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
 
 Boot_SkipFDCCheck:
-	call 0xFFEC63	; Boot_CheckFlash
+	call 0xFFEC63	; Boot_CheckDiskPresent: L=1 disk present (PD6 low)
 	cps l, 0
 	jr z, Boot_PrepareJump
 
-	; === Load and Call Function Pointer ===
-	ldl_da xhl, (0xffec6e)
+	; === Bring up the boot CP-serial link ===
+	ldl_da xhl, (0xffec6e)	; BootSerial_InitVectorTable[0] -> BootSerial_Init
 	call (xhl)
 
-	; === Validate Boot Image ===
-	call 0xFFED0E	; Boot_ValidateImage
+	; === Probe the device on the CP-serial link ===
+	call 0xFFED0E	; Boot_ProbeExternalDevice: HL=device class
 	cps l, 4
 	jr nz, Boot_PrepareJump
 
@@ -4158,7 +4158,9 @@ FDC_ProcessResults:	; Address: 0x9FDF17
 FDC_Error:	; Address: 0x9FE231
 	.incbin "includes/bootcode_flash_handlers.bin", 2444, 101	; 0x9FE231-0x9FE295
 Boot_Delay:	; Address: 0x9FE296
-	.incbin "includes/bootcode_flash_handlers.bin", 2545, 2055	; 0x9FE296-0x9FEA9C
+	.incbin "includes/bootcode_flash_handlers.bin", 2545, 1710	; 0x9FE296-0x9FE943
+FDC_Request:	; Address: 0x9FE944 - public FDC command executor (14-byte request block ptr on stack)
+	.incbin "includes/bootcode_flash_handlers.bin", 4255, 345	; 0x9FE944-0x9FEA9C
 
 ; =============================================================================
 ; BootTimer_InterruptHandler - Timer Counter 3 Interrupt Handler
@@ -4277,17 +4279,8 @@ Handler_INT4__int4_done:
 	pop xiz	; 5e
 	reti	; 07
 
-; =============================================================================
-; Boot ROM Utility Routines
-; Address: 0x9FEB2B-0x9FF228 (1790 bytes)
-;
-; Contains various utility routines:
-;   - Motor control timing
-;   - VGA display routines for update UI
-;   - Disk format detection helpers
-;   - Progress bar updates
-; =============================================================================
-	.incbin "includes/bootcode_utils.bin"
+	.include "boot_disk_probe.s"	; 0x9FEB2B-0x9FEC6D FDC disk-format probe
+	.include "boot_cpserial.s"	; 0x9FEC6E-0x9FF228 boot-time CP-serial driver
 
 ; =============================================================================
 ; Serial Port Interrupt Handlers
@@ -4316,7 +4309,16 @@ Handler_INTA:
 ;   - Packet framing and checksums
 ;   - Error recovery
 ; =============================================================================
-	.incbin "includes/bootcode_serial_state.bin"
+	; Split into segments to expose CALR target labels
+	.incbin "includes/bootcode_serial_state.bin", 0, 790	; 0x9FF2F2-0x9FF607 state handlers
+BootSerial_PollTX:	; Address: 0x9FF608
+	.incbin "includes/bootcode_serial_state.bin", 790, 231	; 0x9FF608-0x9FF6EE
+BootSerial_RX_SetBusy:	; Address: 0x9FF6EF
+	.incbin "includes/bootcode_serial_state.bin", 1021, 7	; 0x9FF6EF-0x9FF6F5
+BootSerial_RX_ParsePackets:	; Address: 0x9FF6F6
+	.incbin "includes/bootcode_serial_state.bin", 1028, 821	; 0x9FF6F6-0x9FFA2A
+BootSerial_RetStub:	; Address: 0x9FFA2B - stubbed-out routine (bare ret)
+	.incbin "includes/bootcode_serial_state.bin", 1849, 299	; 0x9FFA2B-0x9FFB55
 
 ; =============================================================================
 ; Boot C Runtime and Debug Output (formerly includes/bootcode_malloc_and_after.bin)
