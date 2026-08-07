@@ -47,12 +47,12 @@
 ; 0x987000-0x987FFF  Music Stylist pointer table (all other UI states)
 ; 0x988000-0x98868F  HELP language index (2 x 6 pointers) + intro strings
 ; 0x988690-0x9999CB  SLIDE8K HELP Databases (EN, DE, FR, ES, Indonesian)
-; 0x9999CC-0x99EBFF  7 residual bytes after the Indonesian help DB + 0xFF fill
-; 0x99EC00-0x99ECFF  Demo Category Names ("Tour Of The 5000", "Accordion", etc.)
-; 0x99ED00-0x9A9FFF  Tone Generator Configuration Records (26-byte stride)
-; 0x9AA000-0x9B4D77  Mostly 0xFF fill with sparse data islands
-; 0x9B4D78-0x9C3FFF  Tone Generator Parameters (MIDI-event-like note streams
-;                     from 0x9C0000)
+; 0x9999CC-0x9999D2  Stray table residue after the help DBs (7 bytes)
+; 0x9999D3-0x99EBFF  Unused (0xFF fill)
+; 0x99EC00-0x99EC9F  Panel Memory factory bank names (10 x 16 chars)
+; 0x99ECA0-0x9ABF3F  Panel Memory factory presets (80 x 674-byte chunk records)
+; 0x9ABF40-0x9B3FFF  Unused (0xFF fill)
+; 0x9B4000-0x9C3FFF  Composer factory user-style memory image (to RAM 0x94800)
 ; 0x9C4000-0x9C404F  Demo Song Preset Pointer Table (19 entries x 4 bytes + null)
 ;                     Each 4-byte LE pointer -> SLIDE4K compressed preset block
 ;                     Entry 18 (0x008E0000) = Feature Demo preset
@@ -759,16 +759,16 @@ IconPixels_176_Unreferenced:	.incbin "includes/icon_pixel_data.bin", 50688, 288
 ;                       0x988000/0x988018, five intro strings, five live
 ;                       SLIDE8K help databases rebuilt from decompressed
 ;                       sources -- see that module's header)
-;   0x9999CC-0x99EBFF  7 residual data bytes after the Indonesian help DB
-;                       (7f d8 7f e2 7f ec 7e), then 0xFF fill
-;   0x99EC00-0x99ECFF  Demo Category Names: "Tour Of The 5000", "Accordion",
-;                       "Piano Styles", "Jazz&Rock Organ", "Church & Theatre",
-;                       "Light Orchestra", "Split Sounds", "Layer Production",
-;                       "Special DSP FX", "World", "xPiano Atmosphere"
-;   0x99ED00-0x9A9FFF  Tone generator configuration records (26-byte stride)
-;   0x9AA000-0x9B4D77  Mostly 0xFF fill with sparse data islands
-;   0x9B4D78-0x9C3FFF  Tone generator parameter data; MIDI-event-like note
-;                       streams (90 30 24 ...) from 0x9C0000
+;   0x9999CC-0x9999D2  Stray residue bytes after the Indonesian help DB
+;   0x9999D3-0x99EBFF  Unused (0xFF fill)
+;   0x99EC00-0x9ABF3F  Panel Memory factory data -- fully split out into
+;                       panel_memory_presets.s: 10 bank names "Tour Of The
+;                       5000".."World" plus 80 preset records (the old
+;                       "Demo Category Names" reading of this region was
+;                       wrong -- see that module's header)
+;   0x9ABF40-0x9B3FFF  Unused (0xFF fill)
+;   0x9B4000-0x9C3FFF  Composer factory user-style memory image, copied to
+;                       RAM 0x94800 at boot (see Composer_FactoryMemoryImage)
 ;   0x9C4000-0x9C404F  Demo Song Preset Pointer Table (19 x 4-byte LE pointers + null)
 ;                       Accessed by main CPU: sla wa,2; add xwa,0x9C4000; ld xwa,(xwa)
 ;                       Each pointer -> SLIDE4K compressed preset data
@@ -791,10 +791,74 @@ IconPixels_176_Unreferenced:	.incbin "includes/icon_pixel_data.bin", 50688, 288
 	; products recompressed from decompressed sources, demo-preset style).
 	.include "help_databases.s"
 
-	; 0x9999CC-0x9C404F: 7 residual data bytes after the Indonesian help
-	; DB, 0xFF fill, demo category names, and tone generator
-	; configuration/parameters (see region map above)
-	.incbin "includes/icons_to_strings.bin", 0x54C54, 0x2A684	; 0x9999CC-0x9C404F
+	; Seven stray bytes left over after the Indonesian help database: three
+	; (0x7f, N) pairs with N stepping 0xd8/0xe2/0xec (+10 each) plus a lone
+	; 0x7e -- the tail of some stride-10 table from an earlier factory build.
+	; No pointer to this address exists in any program or table-data ROM.
+HelpDB_TrailingResidue:
+	.byte	0x7f, 0xd8, 0x7f, 0xe2, 0x7f, 0xec, 0x7e
+
+	.org 0x99EC00 - 0x800000, 0xFF
+
+	; Panel Memory factory data (0x99EC00-0x9ABF3F): the 10 factory bank
+	; names and 80 chunk-format preset records (10 banks x 8 buttons).
+	; See the module header for the record format and the maincpu loader
+	; routines that copy this block to RAM 0x1ED350/0x1ED360/0x1ED400.
+	.include "panel_memory_presets.s"
+
+	.org 0x9B4000 - 0x800000, 0xFF
+
+; -----------------------------------------------------------------------------
+; COMPOSER FACTORY MEMORY IMAGE (0x9B4000-0x9C3FFF)
+; -----------------------------------------------------------------------------
+; 64KB image of the COMPOSER (user rhythm style) memory, copied wholesale to
+; RAM 0x94800 by the v10 maincpu routine at 0xF6413A (LABEL_F6413A):
+;   ld XIY,0x9b4000 / ld XIX,0x94800 / ld BC,0x8000 / ldirw
+; (0x8000 words = 64KB; v7/v9 carry the same routine at shifted addresses).
+;
+; Observed layout (image offsets):
+;   +0x0000  header (memory-config words, part lists 01 02 03 04, "ZZZ" tag)
+;   +0x0080  30 style-slot records, 0x60 bytes each, 16-char name at +0x20:
+;            " Pop Samba 1".." Pop Samba 4", "GentleSwing 1".."GentleSwing 4",
+;            "German 3/4 1".."German 3/4 4", and 18 x "    Clear       "
+;            (3 factory user styles x 4 variations + 18 empty slots)
+;   +0xC000  rhythm cell streams: 6-byte note events (90 nn vv dd tt 00)
+;            behind 80 xx 00 ff ff 87 cell headers -- the same cell format
+;            the factory rhythms use
+; No code addresses the image interior directly (access goes through the RAM
+; copy), so the block stays a single labeled include.
+; -----------------------------------------------------------------------------
+Composer_FactoryMemoryImage:	.incbin	"includes/icons_to_strings.bin", 0x6f288, 0x10000
+
+	.org 0x9C4000 - 0x800000, 0xFF
+
+; Demo Song preset pointer table: indexed demo-part number * 4 by the
+; Demo_GetPresetBaseForPart family (v7 maincpu/demo/file_demo_proc.s; same
+; code in v9/v10).  A non-null entry means the SLIDE4K block it points to was
+; decompressed to RAM 0x69800; a null index 0-18 falls back to the live
+; preset area at 0x0AB000.  Entry 18 is the Feature Demo preset, stored apart
+; from the others at 0x8E0000.
+DemoSongPreset_PointerTable:
+	.long	DemoSongPreset00
+	.long	DemoSongPreset01
+	.long	DemoSongPreset02
+	.long	DemoSongPreset03
+	.long	DemoSongPreset04
+	.long	DemoSongPreset05
+	.long	DemoSongPreset06
+	.long	DemoSongPreset07
+	.long	DemoSongPreset08
+	.long	DemoSongPreset09
+	.long	DemoSongPreset10
+	.long	DemoSongPreset11
+	.long	DemoSongPreset12
+	.long	DemoSongPreset13
+	.long	DemoSongPreset14
+	.long	DemoSongPreset15
+	.long	DemoSongPreset16
+	.long	DemoSongPreset17
+	.long	DemoSongPreset18
+	.long	0	; terminator
 
 ; -----------------------------------------------------------------------------
 ; SLIDE4K-compressed demo song presets, entries 0-17 (entry 18 is at 0x8E0000).

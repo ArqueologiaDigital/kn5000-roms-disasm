@@ -677,7 +677,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s table_data/preset_banks.s table_data/help_databases.s table_data/fonts.s table_data/style_records.s table_data/style_record_ptr_tables.s $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED)
+rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s table_data/preset_banks.s table_data/help_databases.s table_data/fonts.s table_data/style_records.s table_data/style_record_ptr_tables.s table_data/panel_memory_presets.s $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ $<
 
