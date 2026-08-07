@@ -1,0 +1,1240 @@
+[
+ {
+  "package": "d-tonedb",
+  "pages": [
+   "tone-database.md",
+   "audio-subsystem.md",
+   "tone-generator.md",
+   "table-data-rom.md"
+  ],
+  "claims": [
+   {
+    "claim": "SubCPU_Send_Payload copies ROM 0x830000-0x87FFFF to Sub-CPU RAM 0x050000-0x09FFFF as five 64 KB InterCPU_E1_Bulk_Transfer calls (0x830000->0x50000, 0x840000->0x60000, 0x850000->0x70000, 0x860000->0x80000, 0x870000->0x90000)",
+    "evidence": "v10/maincpu/kn5000_v10_program.s:316 (label) and :326,330,334,338,342 (the five `ld xwa,0x8x0000` sources with matching `ld xde,0x0x0000` destinations and `ld xbc,0x10000` lengths)"
+   },
+   {
+    "claim": "DSP_System_Init on the Sub CPU stores the load base 0x00050000 into BOTH 0x045310 (relative base) and 0x045314 (root pointer), plus 0x0A0000 at 0x045318",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:37031-37037 (`ld xwa,0x50000 / stl_da 0x045310,xwa / ld xwa,0x50000 / stl_da 0x045314,xwa / lda_24 xwa,0x0a0000 / stl_da 0x045318,xwa`); label DSP_System_Init at :36987"
+   },
+   {
+    "claim": "The directory word at ROM 0x830088 is 338 (0x152) and is the DSP1 stream-index bias",
+    "evidence": "I read the ROM myself: struct.unpack('<H', kn5000_table_data.rom[0x30088:0x3008A]) == 338. Also asserted by scripts/generators/gen_tonedb_records.py:35-36 (`bias = ...; assert bias == 0x152`) and consumed at v142/subcpu/kn5000_subprogram_v142.s:37754-37756"
+   },
+   {
+    "claim": "DSP1_ResolveStreamPtr computes ptr = 0x50000 + LE32[0x50000 + word[0x50088] applied as index bias, table at 0x50000+word[0x50008]], i.e. table index = caller stream number + 338, and returns XHL = base + entry",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:37753-37766 (`ld xhl,0x50000 / ld_sril XBC,(xhl+0x0088) / add wa,bc / ld xbc,(xhl+8) / ld xde,xhl / add xde,xbc / extz xwa / sll xwa,2 / add xde,xwa / ld xwa,(xde) / add xhl,xwa / ret`)"
+   },
+   {
+    "claim": "Directory slot +0x08 holds 0x1B00, so the tone-record offset table is at ROM 0x831B00",
+    "evidence": "ROM read: LE32 at kn5000_table_data.rom offset 0x30008 == 0x1B00; 0x830000+0x1B00 = 0x831B00. Matches table_data/tone_database_directory.s:57 and :624 (ToneDB_ToneOffsetTable)"
+   },
+   {
+    "claim": "The offset table has 629 LE32 entries which resolve to 607 distinct offsets and 387 distinct 16-char names",
+    "evidence": "ROM computation over kn5000_table_data.rom: len(set(tbl))==607 for the 629 unpacked entries; len(set of 16-byte stripped names))==387"
+   },
+   {
+    "claim": "579 variable-length tone records tile ROM 0x8324D4-0x855A47 with no gaps, and the only record sizes are 102, 183, 264, 345 and 426 bytes (= 21 + 81*N, N=1..5)",
+    "evidence": "ROM computation: 579 distinct offset-table targets fall in [0x8324D4,0x855A48); successive-difference sizes form exactly {102,183,264,345,426}. Also enforced by scripts/generators/gen_tonedb_records.py:46-48 (`assert (sizes[a]-21)%81==0 and 1<=(sizes[a]-21)//81<=5`)"
+   },
+   {
+    "claim": "All forty offset-table entries 338-377 (stream numbers 0-39) are maximum-size 426-byte five-block records, spanning 0x8517B8-0x85589E",
+    "evidence": "ROM computation: Counter of record sizes for indices 338..377 == {426: 40}; min/max target addresses 0x8517b8 / 0x85589e"
+   },
+   {
+    "claim": "Offset-table entries 378-399 (22 entries) all hold offset 0x24D4, aliasing record 0, \"Piano\"",
+    "evidence": "ROM: tbl[378..399] all == 0x24D4 -> 0x8324D4, name '     Piano      '. Also table_data/tone_database_records.s:105-127 emits `.equ ToneRec_378..399, ToneRec_000`"
+   },
+   {
+    "claim": "Entries 310-335 point at the 26 drum-kit records (first 0x86363C \"Jazz Kit\", last 0x8649D3 \"Special Kit\") and 336/337 at the two drawbar presets 0x8706BD / 0x870867",
+    "evidence": "ROM: 0x830000+tbl[310]=0x86363c name '    Jazz Kit    '; tbl[335]->0x8649d3 '  Special Kit   '; tbl[336]->0x8706bd '<Jazz Drawbars> '; tbl[337]->0x870867 '<Rock Drawbars> '"
+   },
+   {
+    "claim": "Entries 400-628 (stream numbers 62-290) span 0x846016-0x851701 and end with \"Gun Shot\"",
+    "evidence": "ROM: min/max target for indices 400..628 = 0x846016 / 0x851701; name at 0x851701 == '    Gun Shot    '"
+   },
+   {
+    "claim": "ToneDB_ToneNumBanks_Main is 11 banks x 128 LE16 at 0x830180-0x830C7F holding only tone numbers 0-337; ToneDB_ToneNumBanks_Coeff is 14 banks x 128 LE16 at 0x830D00-0x831AFF holding only 311-628",
+    "evidence": "ROM: unpack 11*128 LE16 at 0x830180 -> min 0 max 337, and 0x830180+11*256 == 0x830C80 (= start of the coeff bank map); unpack 14*128 at 0x830D00 -> min 311 max 628, and 0x830D00+14*256 == 0x831B00 (= start of the offset table)"
+   },
+   {
+    "claim": "The factory bank map at 0x830100 contains only values 0-10, with non-zero entries exactly at selectors 0x00-0x07 (banks 0-7), 0x40/0x41 (banks 8/9) and 0x70 (bank 10); the coefficient bank map at 0x830C80 contains values 0-13",
+    "evidence": "ROM: sorted(set(rom[0x830100:0x830180])) == [0..10] and the map rows in table_data/tone_database_directory.s:135-142 show `0,1,2,...,7` at 0x00-0x07, `8,9` at 0x40/0x41, `10` at 0x70, zeros elsewhere. sorted(set(rom[0x830C80:0x830D00])) == [0..13]"
+   },
+   {
+    "claim": "ToneDB_Find_PatchRecord takes the preset path only for selectors <=7, 0x40, 0x41 and 0x70; selectors 0x10/0x15/0x50/0x55 divert to RAM user/edit banks, anything else falls back to record 0",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:32313-32322 (`cps bc,7 / jr ule,Preset / cp bc,0x40 / jr z / cp bc,0x41 / jr z / cp bc,0x70 / jr nz,UserA`), :32356 UserA (cp bc,0x10), :32366 UserB (0x15), :32376 KitA (0x50), :32383 KitB (0x55), :32392 ToneDB_Find_PatchRecord_Default"
+   },
+   {
+    "claim": "ToneDB_Find_ToneRecord_CoeffPath performs the same walk through directory slot +0x6C with no bank-validity filter and no fallback to record 0, and +0x6C is referenced nowhere else in the v1.42 image",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:32268-32311 (the routine, `ld xbc,(xbc+108)` = +0x6C) and the annotation at :32275-32279 stating there is no validity filter and no fallback and that Root->+0x6C is referenced nowhere else"
+   },
+   {
+    "claim": "DSP_Reinit_VoiceSlots is DSP1_ResolveStreamPtr's only caller (3 call sites) and follows each resolution with a 0xD5-word (426-byte) block copy, exactly the maximum record size, so shorter records are over-read",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:37929, :37961, :38033 are the only `calr DSP1_ResolveStreamPtr` sites, all inside DSP_Reinit_VoiceSlots (:37916); the copy is `ldw bc,0xD5 / ldirw` at :37943-37944 and :37969-37970. 0xD5 words = 426 bytes = the largest record size measured from the ROM"
+   },
+   {
+    "claim": "Directory scalar words +0xEA=11, +0xEC=15, +0xEE=58, +0xF0=11, +0xF2=15 are the record strides/copy lengths, and words +0xD0/+0xD4/+0xD8/+0xE0/+0xE8 (3,3,3,28,426) have no reader in the v1.42 Sub-CPU image",
+    "evidence": "table_data/tone_database_directory.s:109-123 (the annotated `.short` tail, five entries marked 'unread in v1.42' and the five stride comments)"
+   },
+   {
+    "claim": "VoiceSubSlot_Init copies word[(0x045314)+0xEA] = 11 bytes of a wave-select/mixer record into 0x044FCE + 0x1AA + slot*0x0B",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:25948-25949 (header comment) and :25951-25973 (the body: `muls wa,0xB / add wa,0x1AA / lda_24 xbc,0x044fce / ... / ldw_sri0 DE,(xde+0x00ea) / calr BlockCopy_Words_BC_to_HL`)"
+   },
+   {
+    "claim": "The auxiliary region 0x855A48-0x87FFEF is fully tiled by the structures listed in the page's region map (ToneDB_DefaultLayerParams 0x855A48 ... PercName_Pack 0x87D322, fill 0x87EAF6)",
+    "evidence": "table_data/tone_database_aux.s:11-58 (the module's own STRUCTURE MAP, address + shape + directory slot per entry), cross-checked against the label positions in the same file (e.g. DrumKit_00_StandardKit:5975, PercInst_000_Silent:6502, DrumKit_NoteMapA:9556, DrawbarPreset_Jazz:10385, PercName_Pack:15192)"
+   },
+   {
+    "claim": "The region ends with 5,370 bytes of 0xFF fill at 0x87EAF6-0x87FFEF",
+    "evidence": "ROM: rom[0x87EAF6-0x800000 : 0x87FFF0-0x800000] is 5370 bytes with byte set == {0xFF}. Matches table_data/tone_database_aux.s:15806 (`ToneDB_UnusedFill: .fill 5370, 1, 0xff`)"
+   },
+   {
+    "claim": "26 drum-kit records of 295 bytes start at 0x863079 and 610 percussion-instrument records of 58 bytes start at 0x864E6F",
+    "evidence": "ROM: name at 0x863079 == '  Standard Kit  '; arithmetic checks the tiling: 0x863079 + 26*295 = 0x864E6F and 0x864E6F + 610*58 = 0x86D8A3 = DrumKit_NoteMapA, exactly as the aux structure map states (tone_database_aux.s:22-24)"
+   },
+   {
+    "claim": "PercName_Pack holds 610 names at a fixed 10-character stride with no terminators; entries 0-423 abbreviate the 424-entry ToneDB_DrumSourceNameList in order",
+    "evidence": "ROM: bytes at 0x87D322 are '          RockBassDr' (entry 0 blank, entry 1 'RockBassDr'); tone_database_aux.s:15187-15191 (the header comment) and the 610 numbered `.ascii` rows ending at entry 609 'Fret Noise'; count check 0x87D322 + 610*10 = 0x87EAF6 = the fill start"
+   },
+   {
+    "claim": "Wave-catalogue row counts are 333 / 339 / 424 / 141 / 144 and each group footer opens with an LE16 equal to its list's record count",
+    "evidence": "table_data/tone_database_aux.s:11957 (`ToneDB_SourceList1_Footer: .short 333`), :12913 (`.short 339`), :13209 (`.short 141`), :14635 (`.short 424`) and the list headers at :11018, :11962, :12918, :13345, :13778"
+   },
+   {
+    "claim": "ToneDB_EnvDescTable is 487 x 15-byte records whose 974 LE32 offsets are all distinct and exactly tile the ToneEnv chunk region 0x85B09D-0x863078",
+    "evidence": "table_data/tone_database_aux.s:690-698 (record layout, 'the 2x487 offsets are all distinct and exactly tile the ToneEnv data region 0x85B09D-0x863078 (974 chunks)') and :2618-2623 (the chunk-region banner)"
+   },
+   {
+    "claim": "Layer block +19 is a semitone offset: \"Piano\"=66, \"Piano 1 Octave\"=54, \"Piano 2 Octave\"=42",
+    "evidence": "table_data/tone_database_records.s:36-38 (FIELD OBSERVATIONS block in the module header)"
+   },
+   {
+    "claim": "The +0x10 five-byte layer-configuration field is not a plain block count: its 2-bit sub-fields are only ever 0 or 1 and their popcount matches the block count for only 311 of the 579 records; byte 4 is 0x55 in all 579",
+    "evidence": "table_data/tone_database_records.s:27-31 (RECORD LAYOUT block, +0x10 description)"
+   },
+   {
+    "claim": "REFUTED: the Sub-CPU executable does not live at 0x830000; no byte of kn5000_subprogram_v142.rom appears in the table-data or custom-data images, and the runtime code-payload source path is unresolved",
+    "evidence": "kn5000-roms-disasm/CLAUDE.md:968 (the errata paragraph landed by commit f7c34d9 'docs errata: ... no subcpu code at 0x830000'). Independently re-checked by me: 197 64-byte windows sampled at stride 997 across kn5000_subprogram_v142.rom, searched in kn5000_table_data.rom and kn5000_custom_data.ic19 -> 0 hits in either"
+   },
+   {
+    "claim": "The tone database was converted to symbolic assembly in Wave 0 as three modules totalling 2,263 new labels, all byte-matched, with deterministic generators kept for provenance",
+    "evidence": "commit f95975b 'table_data: convert the tone database (0x830000-0x87FFEF) to symbolic asm' (adds tone_database_directory.s 1254 lines, tone_database_records.s 13850, tone_database_aux.s 15806, scripts/generators/gen_tonedb_*.py, +2280 lines in symbols/table_data_symbols_reference.txt); wired at table_data/kn5000_table_data.s:106-108"
+   },
+   {
+    "claim": "The build gate has held at 100.00% byte-match across 15 sections after every one of the 24 packages landed so far (waves 0, 1, 2, 3a); waves 3b, 4 and 5 are not started",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:154-158 ('Everything below is not started. Waves 0, 1, 2 and 3a are complete; the build gate has held at 100.00% x 15 sections ... after every one of the 24 packages landed so far')"
+   },
+   {
+    "claim": "table-data-rom.md's existing 'Instrument Patch Data (0x832000-0x850000)' section is factually wrong (name field, pointer-table address, region bounds) and the preset-bank half actually ends at 0x82FFFF",
+    "evidence": "kn5000-docs/table-data-rom.md:156-167 vs. table_data/preset_banks.s:2 ('SECTION DIRECTORY + PRESET DATA BANKS (0x800000 - 0x82FFFF)'), table_data/kn5000_table_data.s:106-108 (tone DB at 0x830000-0x87FFEF), and the ROM facts above (offset table at 0x831B00 holding relative offsets; records 0x8324D4-0x855A47; 16-byte space-padded name at record +0x00)"
+   }
+  ]
+ },
+ {
+  "package": "d-tabledata",
+  "pages": [
+   "table-data-rom.md"
+  ],
+  "claims": [
+   {
+    "claim": "The table-data ROM is 2 MB and spans 0x800000-0x9FFFFF",
+    "evidence": "original_ROMs/kn5000_table_data.rom is 2097152 bytes (ls -l); table_data/kn5000_table_data.s:10 'Address range: 0x800000 - 0x9FFFFF (2MB)'"
+   },
+   {
+    "claim": "The section directory holds 33 pointers + a null terminator (34 entries); entry 7 = 0x82CDA2 points backwards into the same half and entry 6 = 0x91D000 points forward into the UI-bitmap half",
+    "evidence": "Read from the ROM: entries 0-7 = 0x800088, 0x802D10, 0x805998, 0x80607C, 0x807390, 0x8086A4, 0x91D000, 0x82CDA2. Source: table_data/preset_banks.s:35-70 (SectionDirectory_Table, terminator .long 0x00000000 at line 70)"
+   },
+   {
+    "claim": "Section 7 is 983,646 bytes and sections 12-24 are 13 uniform 3,016-byte slots; 25-27 are 3 x 31,968 bytes",
+    "evidence": "table_data/preset_banks.s:42 (entry 7: 983,646 B), :48-60 (entries 12-24: 3,016 B each), :61-63 (entries 25-27: 31,968 B)"
+   },
+   {
+    "claim": "Preset-bank record grids: sec 0/1 = 95x120 B, sec 3-5 = 222x22 B, sec 8 = 25x112 B, sec 9 = 18x80 B, sec 10 = 25x114 B, sec 11 = 20x108 B, sec 12-24 = 52x58 B, sec 25-27 = 108x296 B",
+    "evidence": "table_data/preset_banks.s:29-32 (RECORD GRIDS block, 'dominant autocorrelation stride, all exact size divisors')"
+   },
+   {
+    "claim": "The 0x800000 half is rewritten by 'Technics KN5000 Table    DATA FILE 1/2' update floppies via HANDLE_UPDATE_FILE_TYPE_ID_003h -> Flash_BurnWithProgress + FDC_WriteSectors, and no disassembled code reads an individual directory entry",
+    "evidence": "table_data/preset_banks.s:13-23"
+   },
+   {
+    "claim": "SubCPU_Send_Payload copies ROM 0x830000-0x87FFFF to Sub-CPU RAM 0x050000-0x09FFFF as five 64 KB InterCPU E1 bulk transfers",
+    "evidence": "v10/maincpu/kn5000_v10_program.s:326-344 \u2014 five `ld xwa,0x830000/0x840000/0x850000/0x860000/0x870000` + `ld xbc,0x10000` + `ld xde,0x50000/0x60000/0x70000/0x80000/0x90000` + `call InterCPU_E1_Bulk_Transfer`"
+   },
+   {
+    "claim": "The tone database consists of a directory/bank-map/offset-table head at 0x830000-0x8324D3, 579 tone/voice records at 0x8324D4-0x855A47, and auxiliary tables at 0x855A48-0x87FFEF; the tone-record offset table has 629 entries and sits at 0x831B00",
+    "evidence": "table_data/kn5000_table_data.s:106-108 (the three .include lines with their ranges); table_data/tone_database_directory.s:24 ('0x831B00 ToneDB_ToneOffsetTable 629 LE32 offsets'); table_data/tone_database_records.s:4-6"
+   },
+   {
+    "claim": "hkst_55.ssf metadata sits at 0x87FFF0 and doubles as a version stamp: Boot_ParseSubCPUTimestamp points ParseInt16 at 0x87FFF5, the '55' inside the filename",
+    "evidence": "ROM read at 0x87FFF0 = b'hkst_55.ssf\\x00' followed by 00000000, 0c 00 88 00 (=0x88000C), 0e 00 88 00 (=0x88000E), 1c e0 8c 00 (=0x8CE01C). v10/maincpu/kn5000_v10_program.s:449-451 `Boot_ParseSubCPUTimestamp: ld xwa, 0x87fff5 / push xwa / call ParseInt16`"
+   },
+   {
+    "claim": "The SSF feature-demo script has 27 sequential ACT steps and interleaves the live Accordion (steps 16/17), Drawbar (19/20) and Sdmixer (25) widget pages between slide images",
+    "evidence": "table_data/kn5000_table_data.s:137-167 (Feature_Demo_XML, one .ascii line per ACT, NO=1..27)"
+   },
+   {
+    "claim": "The six feature-demo images are Windows BMP files at 0x880418 (77,878 B), 0x89344E (42,678 B), 0x89DB04 (39,478 B), 0x8A753A (39,478 B), 0x8B0F70 (41,078 B), 0x8BAFE6 (77,878 B)",
+    "evidence": "Read directly from the ROM: each address starts with b'BM' and the BMP header's 32-bit LE size field at +2 reads 77878/42678/39478/39478/41078/77878. Matches table_data/kn5000_table_data.s:172-188 (.org addresses) and :193-227 (FeatureDemo_FileEntry size fields)"
+   },
+   {
+    "claim": "DemoSongPreset_PointerTable at 0x9C4000 holds 19 pointers plus a null terminator, and entry 18 points to 0x8E0000",
+    "evidence": "Read from the ROM at 0x9C4000: 0x9C4050, 0x9C9018, 0x9CE17C, 0x9D16F2, 0x9D645C, 0x9DA016, 0x9DE072, 0x9E0CE2, 0x9E2358, 0x9E61C2, 0x9E72E8, 0x9EA1F2, 0x9EDFFC, 0x9EEC62, 0x9F0E72, 0x9F1C70, 0x9F3B52, 0x9F494E, 0x8E0000, 0x0. Source: table_data/kn5000_table_data.s:844-864"
+   },
+   {
+    "claim": "Demo presets are consumed as sla wa,2; add xwa,0x9C4000; ld xwa,(xwa); a non-null entry means the block is decompressed to RAM 0x69800, a null entry falls back to the live preset area at 0x0AB000",
+    "evidence": "table_data/kn5000_table_data.s:773-776 and :836-842 (DemoSongPreset_PointerTable header comment citing Demo_GetPresetBaseForPart in v7 maincpu/demo/file_demo_proc.s)"
+   },
+   {
+    "claim": "The SLIDE4K header is 11 bytes: 8-byte \"SLIDE4K\\0\" magic + 24-bit BIG-endian decompressed size; the 0x8E0000 block declares 38,144 bytes",
+    "evidence": "ROM read at 0x8E0000 = b'SLIDE4K\\x00\\x00\\x95\\x00' then stream bytes 7d 5a ee...; 0x009500 = 38144. table_data/kn5000_table_data.s:257-261 (BE evidence = v142 update image size field 03 00 00 = 196,608); analysis/binclude-audit-2026-08-07/PLAN.md:46-49"
+   },
+   {
+    "claim": "Demo preset 17's LZSS stream ends at 0x9F5676 and the remaining ~15.9 KB of its slice is non-stream tail carried verbatim",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:45-47. Consistency check: DemoSongPreset17 starts 0x9F494E, stream begins 0x9F4959 after the 11-byte header, 0x9F5676-0x9F4959 = 3357 stream bytes out of the 19314-byte demo_preset_17_compressed.bin, leaving 15957 B (~15.6 KiB) of tail"
+   },
+   {
+    "claim": "All 19 demo presets are build products rebuilt byte-identically from decompressed sources via compress_lzss.py --strict --reference (make rebuild-demo-presets)",
+    "evidence": "table_data/kn5000_table_data.s:263-265 and :866-870; analysis/binclude-audit-2026-08-07/PLAN.md:42-44 ('all 19 demo presets (entries 0-17 + Feature Presentation at 0x8E0000) round-trip')"
+   },
+   {
+    "claim": "Wallpaper_0 (0x8ED000) and Wallpaper_1 (0x900000) are 320x240 8bpp, 76,800 bytes each, referenced by SetWallPaper via the table at 0xEAAE62",
+    "evidence": "ls -l table_data/images/Wallpaper_0.bin, Wallpaper_1.bin = 76800 bytes each; table_data/kn5000_table_data.s:278-285 and :313-315"
+   },
+   {
+    "claim": "Each wallpaper's 1 KB trailer holds a 16-entry {r,g,b,0x00} shade ramp at +0x380, Wallpaper_1's also a bank of four candidate ramps at +0x80, and no code reference to them has been found",
+    "evidence": "table_data/kn5000_table_data.s:287-311 (Wallpaper0_ShadeRamp after .zero 896 = +0x380, 'No code reference found yet, so the RGB interpretation is tentative'); table_data/ui_bitmaps.s:38-49"
+   },
+   {
+    "claim": "BitmapDescriptorTable at 0x913000 has 34 entries plus a null terminator; FrameDescriptorTable at 0x934000 has 53; IconTable at 0x938000 has 176",
+    "evidence": "Walked each table in the ROM until an all-zero {w,h,ptr} entry: counts are 34, 53, 176. First entries read from ROM: 0x913000 = 18 00 18 00 18 31 91 00 (24x24 -> 0x913118); 0x934000 = 01 00 01 00 b0 41 93 00 (1x1 -> 0x9341B0); 0x938000 = 18 00 18 00 88 85 93 00 (24x24 -> 0x938588). Source: table_data/ui_bitmaps.s:139-176, :247-261; table_data/kn5000_table_data.s:371-548"
+   },
+   {
+    "claim": "Bitmap/frame pixel format is 8bpp indexed, 2 pixels per 16-bit word, rows padded to 16-bit alignment, colour 0xF7 transparent, and in frame pieces colour 0xF6 is a template colour replaced at draw time by DrawFrameSP's colour argument",
+    "evidence": "table_data/ui_bitmaps.s:22-28"
+   },
+   {
+    "claim": "DrawBitmap/DrawBitmapFast index *8 into 0x913000 and DrawFrameSP index *8 into 0x934000 (maincpu ui/drawing_primitives.s still uses the numeric addresses)",
+    "evidence": "table_data/ui_bitmaps.s:30-34"
+   },
+   {
+    "claim": "Bitmap entry 0 is a 24x24 green worm in a straw hat, byte-identical to the maincpu copy at 0xEA9F20",
+    "evidence": "table_data/ui_bitmaps.s:179-182"
+   },
+   {
+    "claim": "Section banks 6 and 28-32 hold six factory UI images byte-identical to maincpu copies: Technics wordmark 312x45 @0xE8FFA6, KN5000 picture 100x120 @0xE7BE12, ntedt0k 16x127 @0xE34E78, ntedt0d 240x127 @0xE35668, dredt0k 88x119 @0xE3CD78, dredt0d 168x119 @0xE3F660",
+    "evidence": "table_data/ui_bitmaps.s:232-243. Size cross-check: v10/maincpu/images/BitmapTechnicsLogo.bin = 14040 B = 312*45 and equals directory entry 6's size (preset_banks.s:41); BitmapBmphk.bin = 12000 B = 100*120 and equals entry 28's size (preset_banks.s:64)"
+   },
+   {
+    "claim": "All 176 icons are 24x24 at 4bpp / 288 bytes (12 bytes/row x 24 rows, hardcoded in DrawIcons at 0xFABF9B); icons 173-175 declare 27x27 or 28x28 bounding boxes but still carry 24x24 pixel data",
+    "evidence": "table_data/kn5000_table_data.s:326-338, :545-547 (Icon_173/174/175 desc_entry 27,27 / 27,27 / 28,28), :550-553"
+   },
+   {
+    "claim": "A 177th, unreferenced icon with yellow \"E.L.S.\" lettering follows the last referenced one and no table entry points at it",
+    "evidence": "table_data/kn5000_table_data.s:730-734 (IconPixels_176_Unreferenced, .incbin offset 50688). Size check: includes/icon_pixel_data.bin is 51184 B = 177*288 + 208 pad, matching the '.fill 208' on line 735"
+   },
+   {
+    "claim": "The 4bpp icon palette maps nibbles 0-7 to palette indices 0x00-0x07 and nibbles 8-15 to 0xF8-0xFF, via the lookup table at 0xEAABF2 into the main palette at 0xEB37DE",
+    "evidence": "table_data/kn5000_table_data.s:340-362"
+   },
+   {
+    "claim": "FontDescriptor_Table at 0x945C00 has ten 16-byte entries plus one all-zero unused slot, fields {w,h,descender,ascender,glyph_ptr,kern_ptr}",
+    "evidence": "ROM read at 0x945C00 = 08 00 10 00 04 00 01 00 b0 5c 94 00 00 00 00 00 (w=8,h=16,desc=4,asc=1,glyphs=0x945CB0,kern=0). table_data/fonts.s:5-16, :57-105 (ten entries + 'unused 11th slot' at :103-105)"
+   },
+   {
+    "claim": "TextRender_LoadFontData computes 0x945C00 + 16*font_id",
+    "evidence": "v10/maincpu/kn5000_v10_program.s:1630-1635 \u2014 `TextRender_LoadFontData: ld xwa, 0x945c00 / ld (xsp+4), xwa / ld xwa, xix / sll xwa, 4 / add (xsp+4), xwa`"
+   },
+   {
+    "claim": "Font geometries are 0:8x16, 1:8x16, 2:16x16, 3:6x8, 4:11x16, 5:proportional/16, 6:8x10, 7:8x16, 8:8x16, 9:11x16, with fonts 5/7/8/9 carrying the Latin-1 accent upper page and 0/1/2/3/4/6 a UI-symbol page",
+    "evidence": "table_data/fonts.s:58-102 (per-font .short w,h,desc,asc with the descriptive comments) and :26-33"
+   },
+   {
+    "claim": "Glyphs are stored column-major: ceil(width/8) columns of `height` bytes, MSB = leftmost pixel; every bank covers chars 0x20-0xFF (224 glyphs)",
+    "evidence": "table_data/fonts.s:19-25"
+   },
+   {
+    "claim": "Font 5's kern table holds 224 {u16 char_width, u16 glyph_offset} pairs that tile 0x94B7B0-0x94C61F exactly",
+    "evidence": "table_data/fonts.s:34-38 and :116-122. Address check: Font5_Glyphs is `.incbin includes/icons_to_strings.bin, 0x6A38, 0xE70` (fonts.s:115) and that file's offset 0 = ROM 0x944D78 (fonts.s:107-109), so 0x944D78+0x6A38 = 0x94B7B0 and +0xE70 ends at 0x94C61F"
+   },
+   {
+    "claim": "Font 9's glyph bank runs past 0x950000; chars 0xAD-0xFF occupy 0x950000-0x950A5F, which was previously misfiled as standalone sparse bitmap data",
+    "evidence": "table_data/fonts.s:39-42 and :356 (`Font9_Glyphs: .incbin ..., 0xA0E8, 0x1C00 ; ends 0x950A5F`); 0x944D78+0xA0E8+0x1C00 = 0x950A60"
+   },
+   {
+    "claim": "0x944D78-0x945BFF (3,720 B) and 0x950A60-0x950FFF (1,440 B) are 0xFF fill",
+    "evidence": "Verified in the ROM: set(bytes) == {0xff} over both ranges. table_data/fonts.s:51 and :359"
+   },
+   {
+    "claim": "The Music Stylist database is 1000 records of 198 bytes at 0x951000-0x98156F, reached only via the two 1000-entry pointer tables at 0x986000/0x987000",
+    "evidence": "ROM read at 0x951000: .long 0xC5 (197), .long 0x4D (77), 'Easy Listening  ', 'German Schlager ' \u2014 matching the record layout in table_data/style_records.s:31-49. Record count/grid: style_records.s:4-6; pointer tables: style_record_ptr_tables.s:4-6"
+   },
+   {
+    "claim": "The 0x986000/0x987000 table selector is the current UI state ID in RAM 0x8D38, not a keyboard model code: states 0xC2 and 0xC5 use StyleRec_PtrTable_C2C5, all others StyleRec_PtrTable_Default",
+    "evidence": "table_data/style_record_ptr_tables.s:8-14 (EffectMode_ClampAndLookupPreset, 'NOT a model code, as this table's comments previously claimed'); table_data/style_records.s:21-25"
+   },
+   {
+    "claim": "The HELP index at 0x988000 is two parallel 6-slot pointer tables indexed by the help-language number in RAM 0x0340E4, with slot 4 reusing English; databases at 0x988690 (EN), 0x98BB3A (DE), 0x98F0DA (FR), 0x992A0C (ES), 0x9963FA (ID)",
+    "evidence": "table_data/help_databases.s:14-30 (LAYOUT block + consumer note on HELPLANGCHKMAIN computing 0x988018 + 4*language)"
+   },
+   {
+    "claim": "Each help database is a SLIDE8K container (11-byte header, 8-byte magic + 24-bit BE size) decompressing to exactly 0x9000 bytes into RAM 0x69800; the ring is 0x2000 bytes, write position starts at 0x1FF6, offsets are 13-bit absolute, match lengths 3-10",
+    "evidence": "ROM read at 0x988690 = b'SLIDE8K\\x00\\x00\\x90\\x00' (0x009000 = 36864). table_data/help_databases.s:26-32 and :34-48"
+   },
+   {
+    "claim": "The five live help payloads are build products recompressed from includes/help_databases/ by compress_slide8k.py --strict --reference, verified by `make verify-help-databases`",
+    "evidence": "table_data/help_databases.s:50-57; table_data/help_databases.s:160-180 (the five .incbin lines pointing at includes/help_databases/*_compressed.bin)"
+   },
+   {
+    "claim": "The stale SLIDE8K block at 0x983B3A is a superseded German revision that is TRUNCATED, not merely corrupt: its stream is intact only to 0x985FFF because the Music Stylist pointer tables were written over its tail, and it tracks the live German DB for exactly 0x55E0 output bytes",
+    "evidence": "ROM read at 0x983B3A = b'SLIDE8K\\x00\\x00\\x90\\x00' then stream. table_data/help_databases.s:59-70. Slice check: help_databases.s:78 is `.incbin includes/icons_to_strings.bin, 0x3EDCD, 0x24BB`, and 0x944D78+0x3EDCD = 0x983B45 (= header end) with +0x24BB ending at 0x985FFF"
+   },
+   {
+    "claim": "Seven stray bytes at 0x9999CC (three 0x7F,N pairs stepping by 10 plus a lone 0x7E) follow the Indonesian database and are referenced by nothing",
+    "evidence": "ROM read at 0x9999CC = 7f d8 7f e2 7f ec 7e, then 0xFF. table_data/kn5000_table_data.s:824-829 (HelpDB_TrailingResidue)"
+   },
+   {
+    "claim": "0x9999D3-0x99EBFF (21,037 B) and 0x9ABF40-0x9B3FFF (32,960 B) are 0xFF fill",
+    "evidence": "Verified in the ROM: set(bytes) == {0xff} over both, lengths 21037 and 32960. table_data/kn5000_table_data.s:761 and :764"
+   },
+   {
+    "claim": "0x99EC00 holds ten 16-char Panel Memory bank names (Tour Of The 5000, Accordion, Piano Styles, Jazz&Rock Organ, Church & Theatre, Light Orchestra, Split Sounds, Layer Production, Special DSP FX, World) followed by 80 factory preset records of 674 bytes each at 0x99ECA0",
+    "evidence": "ROM read at 0x99EC00 = b'Tour Of The 5000   Accordion    '. table_data/panel_memory_presets.s:10-13 and :69-79. Size check: 80*674 = 53,920 = 0xD2A0, and 0x99ECA0+0xD2A0 = 0x9ABF40, exactly where the 0xFF fill begins"
+   },
+   {
+    "claim": "Composer_FactoryMemoryImage at 0x9B4000 is a 64 KB image copied wholesale to RAM 0x94800 at boot by the v10 maincpu routine at 0xF6413A",
+    "evidence": "Disassembled the v10 ROM bytes at 0xF6413A (original_ROMs/kn5000_v10_program.rom, base 0xE00000): 45 00 40 9b 00 = LD XIY,0x9B4000; 44 00 48 09 00 = LD XIX,0x94800; 31 00 80 = LD BC,0x8000 (words = 64 KB). Source comment: table_data/kn5000_table_data.s:812-817"
+   },
+   {
+    "claim": "The Composer image holds three factory user styles in four variations each (Pop Samba, GentleSwing, German 3/4) plus 18 'Clear' slots, with rhythm cell streams from image offset +0xC000",
+    "evidence": "table_data/kn5000_table_data.s:818-828 (observed layout block); ROM read at 0x9B4000 shows the header 'H\\x00K\\x00...ZZZ' tag described there"
+   },
+   {
+    "claim": "0x9FA000 holds the eight floppy file-identifier strings",
+    "evidence": "ROM read at 0x9FA000 = b'Technics KN5000 Program  DATA FILE 1/2\\x00'. table_data/kn5000_table_data.s:979-993 (FileIdentifierStringsTable, six aligned_string + two .asciz)"
+   },
+   {
+    "claim": "0x9FA150 holds a \"SLIDE\" marker then eight headerless 1bpp 224x22 (616-byte) boot-screen bitmaps, byte-identical to the maincpu copies at 0xE0018E-0xE0148D and emitted from the same image files",
+    "evidence": "ROM read at 0x9FA150 = b'SLIDE\\x00\\x00\\x00'. table_data/kn5000_table_data.s:1010-1025. Size check: ls -l v10/maincpu/images/Bitmap_1bit_Now_Erasing.bin = 616 B; 0x9FA150 + 6 (asciz \"SLIDE\") + 8*616 = 0x9FB496, exactly where the FDC dispatch tables begin"
+   },
+   {
+    "claim": "0x9FB496-0x9FB4D1 holds three .short FDC dispatch offset tables consumed at boot-time addresses 0xFFD98F, 0xFFDA97 and 0xFFE9F4; the first two are byte-identical to maincpu copies at 0xEA98A6 and 0xEA98B2",
+    "evidence": "ROM read at 0x9FB496 = 0000 1500 2b00 4100 5700 6c00 (ascending offsets). table_data/kn5000_table_data.s:1027-1044 (banner), :1046-1057, :1059-1076, :1078-1095"
+   },
+   {
+    "claim": "0x9FB4D2 holds Boot_BitMaskTable (10 B, copied to RAM 0x1044) and Boot_InitParams (12 B, copied to RAM 0x9998)",
+    "evidence": "ROM read at 0x9FB4D2 = 80 40 20 10 08 04 02 01 00 00 7e 10 (bit masks 7..0 + two zeros, then 0x7e 0x10). table_data/kn5000_table_data.s:1140-1152"
+   },
+   {
+    "claim": "Boot_Init is at 0x9FB4E8 (boot alias 0xFFB4E8), sets the stack pointer from 0x00987E, calls Boot_ClearRAM, detects the region code, and RESET_HANDLER is at 0x9FFEE0 with the TMP94C241F IVT at 0x9FFF00",
+    "evidence": "table_data/kn5000_table_data.s:1155-1200 (Boot_Init body: lda_24 xwa,(0x00987e); ld xsp,xwa; calr Boot_ClearRAM; calr Detect_Region_Code), :4780-4783 (RESET_HANDLER), :4794-4800 (IVT)"
+   },
+   {
+    "claim": "The bootloader contains a VGA register-init block at 0x9FCDFC-0x9FD7E7, an FDC command-layer driver at 0x9FD8A5-0x9FEA9C (previously mislabelled 'flash update handlers'), a disk-format probe at 0x9FEB2B-0x9FEC6D, a CP-serial driver at 0x9FEC6E-0x9FF228 independent of the runtime stack, ISRs at 0x9FF229-0x9FF2F1, state handlers at 0x9FF2F2-0x9FFB2E, a C runtime at 0x9FFB2F-0x9FFE7F and a NOP-patched debug group at 0x9FFE80-0x9FFEDF",
+    "evidence": "table_data/kn5000_table_data.s:4422-4436 (VGA), :4617-4626 (FDC driver + the rename note), :4746-4751 (the four include lines with ranges), :4753-4778 (clib/debug banner). Module headers: boot_disk_probe.s:4-12, boot_cpserial.s:4-14, boot_clib.s:2-5, boot_debug.s:2-9"
+   },
+   {
+    "claim": "Every byte of the table-data ROM is now either symbolic source or a labelled, named binary slice: the only .incbin directives left are named per-object slices (fonts, icons, UI bitmaps/frames, wallpapers, BMPs, boot screens, the Composer image, the two named residues and the compressed build products)",
+    "evidence": "grep -n incbin over table_data/*.s: kn5000_table_data.s has exactly one non-image/non-preset raw slice left (line 831, Composer_FactoryMemoryImage); help_databases.s:78 is HelpDB_German_Stale; style_records.s:20070 is StyleRecords_Residue; all others are per-font, per-icon, per-bitmap or per-frame slices with semantic labels"
+   },
+   {
+    "claim": "The build gate is a 100% byte-match after every merged package, and 24 packages have landed across waves 0, 1, 2 and 3a",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:155-158 ('Waves 0, 1, 2 and 3a are complete; the build gate has held at 100.00% x 15 sections ... after every one of the 24 packages'); WAVE-STATUS.md rows for 2026-08-07 03:09, 04:11, (integration) x2"
+   },
+   {
+    "claim": "Three wave-groups of disassembly work remain: Wave 3b (HD-AE5000 + subcpu boot), Wave 4 (the v7 tree) and Wave 5 (sweep/close-out incl. the maincpu inline .byte audit)",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:181-228 (Wave 3b / Wave 4 / Wave 5 tables), :263 ('Estimated remaining: ~23 worker packages across 3 waves')"
+   },
+   {
+    "claim": "The tail of includes/icons_to_strings.bin beyond file offset 0x7F2D8 is dead weight duplicating the now source-built preset region, and nine orphaned bootcode_*.bin files remain outside the build",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:219-224. Address check: 0x944D78 + 0x7F2D8 = 0x9C4050 = the start of the SLIDE4K demo presets. ls table_data/includes/ shows 13 bootcode_*.bin files present; PLAN.md:220 says 9 are orphans (62 KB)"
+   },
+   {
+    "claim": "The old page's 'Demo Song System' text (demo sequence data from 0x9999CC, demo category names at 0x99EC00) was still present in the live page and is falsified",
+    "evidence": "kn5000-docs/table-data-rom.md lines 97-103 as read at the start of this task. Falsified by: ROM 0x9999CC = 7 residue bytes, 0x9999D3-0x99EBFF verified all-0xFF, 0x99EC00 = b'Tour Of The 5000   Accordion    ' = PanelMemory_BankNames (table_data/panel_memory_presets.s:69-79)"
+   }
+  ]
+ },
+ {
+  "package": "d-stylist-panelmem",
+  "pages": [
+   "music-stylist-database.md",
+   "panel-memory-factory-data.md",
+   "table-data-rom.md"
+  ],
+  "claims": [
+   {
+    "claim": "The Music Stylist record grid is exactly 1000 records of 198 bytes at 0x951000, ending at 0x981570 (last byte 0x98156F).",
+    "evidence": "table_data/style_records.s:1-20 and :61 (`.org 0x951000 - 0x800000`); gen_style_records.py:31-36 (REC_SIZE=198, N_RECORDS=1000, GRID_END=0x981570); independently recomputed from original_ROMs/kn5000_table_data.rom: 0x951000 + 1000*198 = 0x981570"
+   },
+   {
+    "claim": "Every record declares length 197 at +0x00 and parameter-block offset 77 at +0x04; +0x28 is the constant 1; +0x2A is the constant 32; +0xC0..+0xC4 is five 0xFF; the 198th byte (+0xC5) is uncommitted grid padding with 93 distinct values across the grid.",
+    "evidence": "scripts/generators/gen_style_records.py:48-58 (per-record asserts); re-verified for all 1000 records by reading original_ROMs/kn5000_table_data.rom (padding histogram: 93 distinct values, most common 0x00 x249, 0x20 x150, 0xFF x87)"
+   },
+   {
+    "claim": "StyleRec_999 is at ROM 0x9814AA.",
+    "evidence": "symbols/table_data_symbols_reference.txt:3787 `STYLEREC_999 0x9814AA`"
+   },
+   {
+    "claim": "The name fields split as 10 categories / 250 sub categories / 1000 styles, with the per-category record ranges and sub-category counts given in the page's table (Easy Listening 000-123/31 ... Latin / World 884-999/29).",
+    "evidence": "table_data/style_records.s:9-19 (module banner); recomputed independently from original_ROMs/kn5000_table_data.rom \u2014 all four records of each of the 250 groups share bytes [8:40]"
+   },
+   {
+    "claim": "The firmware string 'Explore 1000 Musical Styles with the Music Stylist.' is at main-CPU ROM 0xE14C86 in v7, v9 and v10.",
+    "evidence": "v10/maincpu/ui_widgets/naka_perf_style.c:15935 (.str_898); byte search of original_ROMs/kn5000_{v7,v9,v10}_program.rom finds it at file offset 0x14C86 in all three, i.e. 0xE00000+0x14C86 = 0xE14C86"
+   },
+   {
+    "claim": "The Music Stylist front page labels are 'Music Stylist', '> 1000 Styles of World wide Music !', '> Style explorer by Genre', '> Alphabetical style select', 'STYLE EXPLORER', followed by the ten category labels w166_text..w175_text.",
+    "evidence": "v10/maincpu/ui_widgets/naka_perf_style.c lines 9049, 9068, 9087, 9106, 9128, 9162, 9181, 9200, 9219, 9238, 9257, 9276, 9295, 9314, 9333"
+   },
+   {
+    "claim": "The English help database says 'Each sub category has four different styles, each with a descriptive name' and 'The Music Stylist is your guide to 1000 musical styles in the KN5000.'",
+    "evidence": "strings of table_data/includes/help_databases/help_db_english.bin (Music Stylist / Style Explorer paragraphs)"
+   },
+   {
+    "claim": "The 3-character field at record +0x48 is labelled TEMPO by the Music Stylist list widgets; values span 62..235 with 98 distinct settings; no consumer feeding it to the tempo engine has been traced.",
+    "evidence": "v10/maincpu/ui_widgets/naka_perf_style.c:10708 `.w228_text = ALIGNED_STRING(\"Euro Pop Shuffle:              TEMPO\")` (also 10803, 11183, 11278); value range recomputed from original_ROMs/kn5000_table_data.rom (98 distinct, min ' 62', max '235')"
+   },
+   {
+    "claim": "0x986000 is the identity permutation (entry n -> record n); 0x987000 is a different curated order that keeps each sub category's four styles together; all 2000 pointers land exactly on a grid record.",
+    "evidence": "table_data/style_record_ptr_tables.s:26-32 and the emitted `.long StyleRec_NNN` lines; recomputed from original_ROMs/kn5000_table_data.rom: (p-0x951000)%198==0 for all 2000 entries; 0x986000 index list == range(1000)"
+   },
+   {
+    "claim": "StyleRec_PtrTable_Default (0x987000) contains only 996 distinct records: records 368-371 (Party Music / Dancing Birdies) appear twice, at slots 652-655 and 984-987, and records 160-163 (Rock & Pop / California Pop) appear nowhere.",
+    "evidence": "recomputed from original_ROMs/kn5000_table_data.rom for this page: Counter over the 1000 decoded indices at 0x987000 gives len(set)=996, duplicates {368,369,370,371} at slot pairs (652,984),(653,985),(654,986),(655,987), missing {160,161,162,163}. This CONTRADICTS the 'both tables list all 1000 records' line in table_data/style_record_ptr_tables.s:26"
+   },
+   {
+    "claim": "The 0x987000 table is not sorted alphabetically by category, sub-category or style name.",
+    "evidence": "recomputed from original_ROMs/kn5000_table_data.rom: the decoded name sequences all compare != sorted(); first sub categories in table order are German Schlager, Easy Play 8 Beat, 8 Beat Groove, Rock After Eight, ..."
+   },
+   {
+    "claim": "EffectMode_ClampAndLookupPreset clamps to 0x3E8 (1000), reads RAM 0x8D38, uses 0x986000 for states 0xC2/0xC5 and 0x987000 otherwise, then returns record + record[+4].",
+    "evidence": "v10/maincpu/ui/ui_mode_handlers.s:404-430 (cp wa,0x3e8 / ldb_d8 c,(0x8d38) / ld xbc,0x986000 / ld xbc,0x987000 / sll xwa,2 / add xwa,xbc / ld xwa,(xwa) / add xhl,(xwa+4)); same routine at v9:404 and v7:219"
+   },
+   {
+    "claim": "RAM 0x8D38 is the current UI state ID, not a model code \u2014 the same byte indexes the keymap table in UIState_KeyScan_Dispatch.",
+    "evidence": "v10/maincpu/ui/ui_control_panel.s:1920-1932 (banner: 'reads UI state from 0x8d38, indexes into keymap table at 0xe01f80'; `ldb_d8 a, (0x8d38); Load current UI state ID`)"
+   },
+   {
+    "claim": "EffectMode_DisplayPresetName copies 16 characters from record+43; MssName_EventDispatch reads the length byte at record+42 (=32) and copies that many from record+43, using the 0x987000 table only.",
+    "evidence": "v10/maincpu/ui/ui_mode_handlers.s:481-489 (pushw 0x10 / lda xwa,(xwa+43) / call Strncpy) and :10639-10651 (add xwa,0x987000 / ld xbc,(xwa) / ld a,(xbc+42) / lda xwa,(xbc+43) / call Strncpy)"
+   },
+   {
+    "claim": "0x981570-0x983B39 is unreferenced residue: 8167 bytes of high-entropy data from 0x981570, then a 16-bit ramp remnant from 0x983557 that is cut off by the stale German help DB at 0x983B3A.",
+    "evidence": "table_data/style_records.s:44-56 (module banner) and :20069-20077 (`StyleRecords_Residue: .incbin \"includes/icons_to_strings.bin\", 0x3c7f8, 0x1fe7`, then StyleRecords_ResidueRamp); symbols/table_data_symbols_reference.txt:3788-3789; 0x981570+0x1FE7 = 0x983557"
+   },
+   {
+    "claim": "Both Music Stylist modules are prerequisites of the LLVM table-data object, while the ASL mirror still bincludes the whole 0x944D78-0x9C404F blob.",
+    "evidence": "Makefile:680 (lists table_data/style_records.s and table_data/style_record_ptr_tables.s); archive/asl/table_data/kn5000_table_data.asm:221 (`binclude \"includes/icons_to_strings.bin\", 0, 07F2D8h ; 0x944D78-0x9C404F`)"
+   },
+   {
+    "claim": "Panel Memory factory data occupies 0x99EC00-0x9ABF3F: 10 x 16-char bank names then 80 x 674-byte records; 0x9ABF40-0x9B3FFF is 0xFF fill (32,960 bytes).",
+    "evidence": "table_data/panel_memory_presets.s:4-12 and :53-63; table_data/kn5000_table_data.s:52-55; recomputed from the ROM: 0x99ECA0 + 80*674 = 0x9ABF40, and set(rom[0x9ABF40:0x9B4000]) == {0xFF}"
+   },
+   {
+    "claim": "The ten bank names are 'Tour Of The 5000', '   Accordion    ', '  Piano Styles  ', 'Jazz&Rock Organ ', 'Church & Theatre', 'Light Orchestra ', '  Split Sounds  ', 'Layer Production', ' Special DSP FX ', '     World      '; the 80 preset names are as tabulated on the page.",
+    "evidence": "table_data/panel_memory_presets.s:53-63 for the bank names; all 80 preset names re-read from original_ROMs/kn5000_table_data.rom at 0x99ECA0 + 674*i + 2, 16 bytes each"
+   },
+   {
+    "claim": "Every one of the 80 records is a (tag,len,payload) chunk stream with the identical 34-chunk tag sequence, terminated by 0xFF plus one 0xFF pad byte, totalling exactly 674 bytes.",
+    "evidence": "table_data/panel_memory_presets.s:27-42 (module banner) and the emitted per-record lines; independently walked all 80 records in original_ROMs/kn5000_table_data.rom \u2014 34 chunks each, identical tag list, terminator at offset 672. Byte budget 20 + 13*26 + 78 + 5*26 + 106 + 2 = 674"
+   },
+   {
+    "claim": "Thirteen chunks per record carry 24-byte sound-part payloads (tags 0x00-0x03, 0x0F, 0x10-0x16, 0x19); five further 24-byte chunks (0x61, 0x63-0x66) are not part blocks.",
+    "evidence": "table_data/panel_memory_presets.s:36-42; chunk census over all 80 records from the ROM: 24-byte payload tags are {0,1,2,3,0x0f,0x10..0x16,0x19} plus {0x61,0x63,0x64,0x65,0x66}"
+   },
+   {
+    "claim": "The +13 byte of each sound-part payload is constant per tag across all 80 records: 0x00->0x00, 0x01->0x01, 0x02->0x02, 0x03->0x03, 0x0F->0x0F, 0x10->0xC4, 0x11->0xC8, 0x12->0xC9, 0x13->0xC2, 0x14->0xCE, 0x15->0xC4, 0x16->0xC0, 0x19->0xCF, with exactly one exception: preset 15 (bank 2 button 8, 'Fun Park Reeds') stores 0xC0 in its 0x19 chunk.",
+    "evidence": "census over all 80 records read from original_ROMs/kn5000_table_data.rom (each tag yields a single +13 value with count 80, except tag 0x19: 0xCF x79, 0xC0 x1 at record index 15). Note this REFINES table_data/panel_memory_presets.s:48-50, which states the rule as '0xc0|n for parts 0x10-0x16' \u2014 the measured values are not the tag's low nibble"
+   },
+   {
+    "claim": "0xFC81EF copies 16 bytes from 0xEDBA1C to RAM 0x1ED350, 160 bytes from 0x99EC00 to RAM 0x1ED360, then calls 0xFC7DD8 for i = 0..0x4F.",
+    "evidence": "disassembly of original_ROMs/kn5000_v10_program.rom at fc81ef-fc822c (push 0x10 / push 0x00ed / push 0xba1c / push 0x001e / push 0xd350 / call 0xff0d99; push 0x00a0 / ld XWA,0x0099ec00 / push 0x001e / push 0xd360 / call 0xff0d99; ld IZ,0 ... calr 0xfc7dd8 ... cp IZ,0x0050 / jr C)"
+   },
+   {
+    "claim": "The 16 bytes at program-ROM 0xEDBA1C are 'HK \\0' followed by zeros and c0 03 50.",
+    "evidence": "read from original_ROMs/kn5000_v10_program.rom: 484b2000000000000000000000c00350"
+   },
+   {
+    "claim": "0xFC7E82 bounds-checks the index against 10 and copies 16 bytes from 0x99EC00+16*i to RAM 0x1ED360+16*i.",
+    "evidence": "disassembly of original_ROMs/kn5000_v10_program.rom at fc7e82-fc7ea0 (cp WA,0x000a / ret NC / sll 0x04,WA / add XDE,0x0099ec00 / lda XBC,0x1ed360 / add XBC,XWA / push 0x0010)"
+   },
+   {
+    "claim": "0xFC7DD8 bounds-checks against 0x50, zero-fills a 0x3C0-byte RAM record at 0x1ED400 + 960*i, and assembles it from three sources: ROM record +0x00 length 0x7C, program ROM 0xEDB478 length 0x11E, ROM record +0x7C length 0x226.",
+    "evidence": "disassembly of original_ROMs/kn5000_v10_program.rom at fc7dd8-fc7e81 (cp (XSP+0x04),0x0050; push 0x03c0/0x0000 + call 0xff0ffa; XBC = i*960 via sll4/sub/sll6, ld XWA,0x001ed400; XBC = i*0x2a2 via call 0xff0a5c then add XHL,0x0099eca0; push 0x7c + call 0xff0d99; lda XWA,0xedb3fc + add 0x7c => 0xEDB478, push 0x11e; add XHL,0x7c, lda XWA,XIZ+0x011e, push 0x0226). 0x7C+0x11E+0x226 = 0x3C0 = 960"
+   },
+   {
+    "claim": "The block at program-ROM 0xEDB478 is 286 bytes forming eleven (tag,24,payload) chunks tagged 0x04..0x0E \u2014 the sound parts that the per-preset ROM records do not store.",
+    "evidence": "read 0x11E bytes at 0xEDB478 from original_ROMs/kn5000_v10_program.rom and walked the chunk stream: [(0x4,24),(0x5,24),(0x6,24),(0x7,24),(0x8,24),(0x9,24),(0xa,24),(0xb,24),(0xc,24),(0xd,24),(0xe,24)] = 11*26 = 286 = 0x11E"
+   },
+   {
+    "claim": "The 64 KB at 0x9B4000-0x9C3FFF is the Composer factory memory image, copied to RAM 0x94800 by `ld XIY,0x9B4000 / ld XIX,0x94800 / ld BC,0x8000 / ldirw` at 0xF6413A in v9 and v10 and 0xF63D36 in v7.",
+    "evidence": "table_data/kn5000_table_data.s:809-826 (Composer_FactoryMemoryImage banner + incbin); v7/maincpu/sequencer/accompaniment_engine.s:16703 (label AccWidget_DispatchTable); the immediate 0x009B4000 occurs exactly once in each program ROM \u2014 file offset 0x163D37 in v7 and 0x16413B in v9/v10, so the instruction starts at 0xF63D36 / 0xF6413A; v10 unidasm listing confirms `f6413a: 45 00 40 9b 00  ld XIY,0x009b4000`"
+   },
+   {
+    "claim": "The Composer image holds a header with a 5A5A5A ('ZZZ') tag, 30 style-slot records of 0x60 bytes from image offset +0x80 with a 16-char name at slot +0x20, zero fill 0x0C00-0x12FF, then data to the end; the slot names are ' Pop Samba 1'..'4', 'GentleSwing 1'..'4', 'German 3/4 1'..'4' and 18 x '    Clear       '.",
+    "evidence": "table_data/kn5000_table_data.s:816-826; re-read from original_ROMs/kn5000_table_data.rom \u2014 header hex begins 48004b00...5a5a5a00, the 30 names extracted at +0x80+0x60*i+0x20, and a 256-byte block classification shows data 0x0-0xBFF, zero 0xC00-0x12FF, data 0x1300-0xFFFF"
+   },
+   {
+    "claim": "The 'MIDI-like note streams' in this region are rhythm-cell data: 52 cell headers matching `80 nn 00 FF FF 87` occur in the Composer image, all on 256-byte boundaries, the first at image offset 0xAB00 = ROM 0x9BEB00 \u2014 earlier than the old region map's 0x9C0000 and the module header's '+0xC000'.",
+    "evidence": "regex scan of the 64 KB image read from original_ROMs/kn5000_table_data.rom: 52 matches, first at 0xAB00, all offsets ending in 0x00; contrast table_data/kn5000_table_data.s:823-825 ('+0xC000 rhythm cell streams') and the pre-Wave-2 region map replaced in commit 9510993"
+   },
+   {
+    "claim": "0x9999CC-0x9999D2 is seven stray bytes 7F D8 7F E2 7F EC 7E, and 0x9999D3-0x99EBFF is 0xFF fill (21,037 bytes).",
+    "evidence": "table_data/kn5000_table_data.s:795-800 (HelpDB_TrailingResidue); re-read from the ROM: bytes are 7fd87fe27fec7e and set(rom[0x9999D3:0x99EC00]) == {0xFF}, length 21037"
+   },
+   {
+    "claim": "The 19-entry table at 0x9C4000 points at SLIDE4K-compressed demo-song presets, not PCM waveform samples; entries 0-17 lie in 0x9C4050-0x9F494E and entry 18 is 0x8E0000, followed by a null terminator.",
+    "evidence": "table_data/kn5000_table_data.s:829-857 (DemoSongPreset_PointerTable, symbolic); read from original_ROMs/kn5000_table_data.rom: the 19 pointers are 0x9C4050..0x9F494E plus 0x8E0000 then 0x00000000, and each target begins with the ASCII magic 'SLIDE4K\\0'"
+   },
+   {
+    "claim": "table_data/panel_memory_presets.s is a prerequisite of the LLVM table-data object.",
+    "evidence": "Makefile:680"
+   },
+   {
+    "claim": "The Wave-2 commits that produced these modules are c9bc67f (Music Stylist) and 9510993 (Panel Memory + Composer), both gated on a 100% byte-match rebuild.",
+    "evidence": "git log in kn5000-roms-disasm: c9bc67f 'table_data: source-build the Music Stylist preset database', 9510993 'table_data: source-build the Panel Memory + Composer factory data'; analysis/binclude-audit-2026-08-07/WAVE-STATUS.md line 19 (Wave 2 COMPLETE, 8/8 landed, build 100.00%)"
+   }
+  ]
+ },
+ {
+  "package": "d-lzss",
+  "pages": [
+   "lzss-compression.md"
+  ],
+  "claims": [
+   {
+    "claim": "SLIDE_Parse_Header dispatches on the '4'/'8' character of the magic to SLIDE_Decompress_4K_Init / SLIDE_Decompress_8K_Init",
+    "evidence": "kn5000-roms-disasm/v10/maincpu/boot/system_handlers.s:7091 (label), :7111 `cp a, 0x34`, :7116 `calr SLIDE_Decompress_4K_Init`, :7123 `cp a, 0x38`, :7128 `calr SLIDE_Decompress_8K_Init`"
+   },
+   {
+    "claim": "SLIDE_Parse_Header is at CPU 0xEF41E3, SLIDE_Decompress_4K_Init at 0xEF3FAB, SLIDE_Decompress_8K_Init at 0xEF40C5 in the v10 Main CPU program ROM",
+    "evidence": "llvm-nm rebuilt_ROMs/kn5000_v10_program.llvm.elf -> 00ef41e3 SLIDE_Parse_Header / 00ef3fab / 00ef40c5; cross-checked against the dump: the 32-bit pointer 0x00E00032 (SLIDE_STRING) occurs exactly ONCE in kn5000_v10_program.rom, at 0xEF41ED, i.e. 10 bytes into the routine at 0xEF41E3"
+   },
+   {
+    "claim": "An unrecognised sixth magic character returns success without decompressing; only a missing 'SLIDE' prefix returns 0xFFFF",
+    "evidence": "system_handlers.s:7124 `jr nz, SLIDE_Parse_ReturnOK` (HL=0 at :7119) vs SLIDE_Parse_NotFound :7131-7132 `ldw hl, 0xffff`"
+   },
+   {
+    "claim": "SLIDE8K header is 11 bytes: 'SLIDE8K'+0x00 then a 24-bit BIG-endian decompressed size",
+    "evidence": "scripts/build/decompress_slide8k.py:15-21 + parse_header() lines 98-108; firmware system_handlers.s:6986-6998 builds (hdr[8]<<16)+((hdr[9]<<8)|hdr[10]) then advances the stream pointer by 4 from hdr+7 to hdr+11; all six factory headers read `53 4c 49 44 45 38 4b 00 00 90 00` (verified by reading icons_to_strings.bin at offsets 0x3EDC2/0x43918/0x46DC2/0x4A362/0x4DC94/0x51682)"
+   },
+   {
+    "claim": "SLIDE8K ring is 0x2000 bytes, zero-filled only to 0x1FF5, write position starts at 0x1FF6",
+    "evidence": "kn5000_v10_program.rom.unidasm ef40cc `push 0x2000` / ef40cf `call 0xff0e80` (Malloc) / ef40db `lda XBC,XHL+0x1ff6` / ef40e0-ef40e6 fill loop / ef40e8 `ld BC,0x1ff6`; same lines as system_handlers.s:6972-6983"
+   },
+   {
+    "claim": "SLIDE4K ring is 0x1000 bytes, zero-filled to 0x0FED, write position 0x0FEE",
+    "evidence": "system_handlers.s:6849 `pushw 0x1000`, :6854 fill limit 0x0FEE, :6860 `ldw bc, 0xfee`; independently in the table_data bootloader copy at table_data/kn5000_table_data.s:3907-3930 (`cp xwa, 0xFEE`, `ldw (xsp+10), 0xFEE`)"
+   },
+   {
+    "claim": "SLIDE8K match: offset = ((high & 0xF8) << 5) | low (13-bit absolute ring position), count = (high & 0x07) + 3, i.e. 3..10 bytes",
+    "evidence": "system_handlers.s:7047-7048 `and wa, 0xf8` / `sll wa, 5`; :7052-7053 `and iz, 0x7` / `inc 2, iz`; copy loop :7076-7077 `cp iy, iz` / `jr ule` is INCLUSIVE so it runs iy=0..iz = (high&7)+3 iterations. Matches decompress_slide8k.py:158-159"
+   },
+   {
+    "claim": "SLIDE4K match count base is likewise +3 (max 18): (high & 0x0F) + 3",
+    "evidence": "system_handlers.s:6924-6925 `and wa, 0xf0`/`sll wa, 4`, :6929-6930 `and iz, 0xf`/`inc 2, iz`, inclusive loop :6953-6954"
+   },
+   {
+    "claim": "Flag bytes are LSB-first (1 = literal) and exactly 8 elements are consumed per flag byte because the firmware keeps 0xFF00|flags in a 16-bit word and reloads when the sentinel leaves bit 8",
+    "evidence": "system_handlers.s:7004-7005 `srl_erpw 0x30,0x01` / `bit_erpw 0x30,0x08`, :7013 `or_erpw 0x30,0x00,0xff`, :7017 `bit 0, wa`; documented identically in decompress_slide8k.py:24-29"
+   },
+   {
+    "claim": "Termination is purely by declared output count; the match copy loop is not bounds-checked",
+    "evidence": "system_handlers.s:7007/7019/7036/7041/7080 all `cp xhl, xix` (output count vs declared size); SLIDE_Decompress_8K_CopyLoop :7058-7077 contains no such compare. Stated in decompress_slide8k.py:41-46"
+   },
+   {
+    "claim": "Exactly six SLIDE8K blocks exist in the whole dumped ROM set, all in the table_data ROM at 0x983B3A, 0x988690, 0x98BB3A, 0x98F0DA, 0x992A0C, 0x9963FA",
+    "evidence": "I scanned for b'SLIDE8K\\x00' in original_ROMs/{kn5000_table_data.rom, kn5000_v10_program.rom, kn5000_v9_program.rom, kn5000_v7_program.rom, kn5000_custom_data.ic19, kn5000_subprogram_v142.rom}: hits only in table_data at file offsets 0x183B3A/0x188690/0x18BB3A/0x18F0DA/0x192A0C/0x1963FA (+0x800000 = the ROM addresses above)"
+   },
+   {
+    "claim": "Every SLIDE8K block declares and produces exactly 0x9000 (36,864) bytes; stream lengths are 0x3EEE/0x349E/0x3594/0x3926/0x39E2/0x35C6",
+    "evidence": "python3 scripts/build/decompress_slide8k.py --all --outdir /tmp/s8k output: all six 'declared size 0x9000 / decompressed 0x9000', compressed stream 0x3EEE, 0x349E, 0x3594, 0x3926, 0x39E2, 0x35C6"
+   },
+   {
+    "claim": "Each factory stream is followed by ONE alignment pad byte the decoder never reads, with values 0x20 (EN), 0x7F (DE), 0xCF (FR), 0xCD (ES), 0xCE (ID)",
+    "evidence": "I read icons_to_strings.bin at offset+11+stream_len for each block: 0x20/0x7F/0xCF/0xCD/0xCE (0x00 for the stale block); the original_ROMs/help_db_*_compressed.original.bin sizes (13471/13717/14631/14819/13767/16111) are each exactly stream_len+1. Also table_data/help_databases.s:46-48"
+   },
+   {
+    "claim": "Only the stale German block's final flag byte has nonzero unused bits: 0xA0 with 1 element consumed; the other five end with all unused bits zero",
+    "evidence": "I instrumented the decoder over all six blocks: german_stale last flag 0xA0 / 1 element / unused 0x50; english 0x30 / 6; german 0x00 / 3; french 0x00 / 8; spanish 0x00 / 4; indonesian 0x00 / 5. Handling described in compress_slide8k.py:20-29 and encode_decisions() lines 111-161"
+   },
+   {
+    "claim": "Byte-identical recompression requires --reference decision replay; --strict makes a divergence a hard error",
+    "evidence": "compress_slide8k.py:246-252 (plain compressor 'produces a VALID stream, but not necessarily the same bytes'), :278-312 compress_with_reference, :295-297 verbatim carry-over of trailing bytes, :299-312 STRICT SystemExit; Makefile:812-813 uses `--strict --reference`"
+   },
+   {
+    "claim": "All six SLIDE8K blocks round-trip byte-identically today",
+    "evidence": "I ran compress_slide8k.py --strict --reference for each of english/german/french/spanish/indonesian/german_stale into /tmp and cmp'd against original_ROMs/help_db_*_compressed.original.bin: 6/6 OK (this is what `make verify-help-databases` does, Makefile:818-823)"
+   },
+   {
+    "claim": "All 19 SLIDE4K demo-preset blocks also currently round-trip byte-identically",
+    "evidence": "cmp of table_data/includes/demo_presets/demo_preset_NN_compressed.bin against original_ROMs/demo_preset_NN_compressed.original.bin for NN=00..18: 19/19 OK"
+   },
+   {
+    "claim": "The language pointer table at ROM 0x988018 holds EN, DE, FR, ES, EN(again), ID; slot 4 reuses English",
+    "evidence": "read icons_to_strings.bin at file offset 0x432A0 (= ROM 0x988018): 0x988690, 0x98BB3A, 0x98F0DA, 0x992A0C, 0x988690, 0x9963FA. Source: table_data/help_databases.s:101-107"
+   },
+   {
+    "claim": "The help-language load path reads RAM 0x0340E4, indexes 0x988018, sets XBC=0x00069800 and calls SLIDE_Parse_Header at 0xEF41E3",
+    "evidence": "original_ROMs/kn5000_v10_program.rom.unidasm f4779f `ld A,(0x0340e4)` / f477a4 `sll 0x02,A` / f477ab `add XWA,0x00988018` / f477b1 `ld XWA,(XWA)` / f477b3 `ld XBC,0x00069800` / f477d3 `call 0xef41e3`"
+   },
+   {
+    "claim": "Each decompressed help database begins with 32-bit LE self-pointers based at RAM 0x69800",
+    "evidence": "first 32 bytes of table_data/includes/help_databases/help_db_english.bin decode to 0x69B22, 0x69E5C, 0x6A1B8, 0x6A2F6, 0x6A4D0, 0x6A900, 0x6AADC, 0x6AE06; first plain-text string 'Press the STOP button\u2026' at payload offset 0x549"
+   },
+   {
+    "claim": "The block at 0x983B3A is referenced by nothing",
+    "evidence": "I searched every file in original_ROMs/ for the 4-byte little-endian value 0x983B3A: zero hits (scan covered the v7/v9/v10 program ROMs, table data, custom data, subcpu boot and all subprogram images). Also stated in table_data/help_databases.s:59-62"
+   },
+   {
+    "claim": "The stale block decodes identically to the live German database for exactly 0x55E0 bytes, then garbles because the element at ROM 0x985FFF/0x986000 is the first to read past the surviving stream",
+    "evidence": "byte-compare of /tmp/s8k/slide8k_00_*_german_stale.bin vs slide8k_02_*_german.bin diverges first at index 0x55E0; my instrumented walk shows the element ending at ROM 0x985FFE brings the output to 0x55E0 and the NEXT element reads its two bytes at ROM 0x985FFF-0x986000. The checked-in raw slice is `.incbin \"includes/icons_to_strings.bin\", 0x3EDCD, 0x24BB` = ROM 0x983B45-0x985FFF (table_data/help_databases.s:76-79)"
+   },
+   {
+    "claim": "The overwriting tables at 0x986000/0x987000 are StyleRec_PtrTable_C2C5 and StyleRec_PtrTable_Default (Music Stylist), 1000 x .long each",
+    "evidence": "table_data/help_databases.s:11-13 and :81-84; renamed from EffectPreset_PtrTable_* in commit c9bc67f (WAVE-STATUS.md Wave 2 row)"
+   },
+   {
+    "claim": "The stale block's decoder walk ends with its last stream byte at ROM 0x987A32 (16,111-byte reference slice 0x983B45-0x987A33 includes the pad)",
+    "evidence": "decompress_slide8k.py --all reports 'block ends at 0x42CBB' (exclusive) => last stream byte file 0x42CBA; file->ROM delta is 0x944D78 (0x988690-0x43918), so 0x42CBA -> 0x987A32; slice size on disk 16111 = 0x3EEE stream + 1 pad. Cross-check: table_data/help_databases.s:65-67"
+   },
+   {
+    "claim": "The SLIDE8K region spans ROM 0x983B3A-0x9999CB",
+    "evidence": "table_data/help_databases.s:5; arithmetically confirmed: Indonesian block ends (exclusive) at file 0x54C54 -> ROM 0x9999CC, so the last byte is 0x9999CB"
+   },
+   {
+    "claim": "The Table Data ROM contains exactly 19 SLIDE4K blocks: 0x8E0000 plus entries 0-17 from 0x9C4050, last data byte 0x9F94C9",
+    "evidence": "regex scan of original_ROMs/kn5000_table_data.rom for b'SLIDE4K\\x00' -> 0x8E0000, 0x9C4050, 0x9C9018, 0x9CE17C, 0x9D16F2, 0x9D645C, 0x9DA016, 0x9DE072, 0x9E0CE2, 0x9E2358, 0x9E61C2, 0x9E72E8, 0x9EA1F2, 0x9EDFFC, 0x9EEC62, 0x9F0E72, 0x9F1C70, 0x9F3B52, 0x9F494E (declared sizes 0x1700..0x9500); sum of 18 headers+slices from 0x9C4050 ends at 0x9F94C9 and the ROM bytes from 0x9F94CA are 0xFF"
+   },
+   {
+    "claim": "The 0x8E0000 SLIDE4K block: 11-byte header, 27,881-byte stream, 75 verbatim tail bytes, last payload byte 0x8E6D3E, decompresses to 0x9500",
+    "evidence": "I re-ran a SLIDE4K decode over kn5000_table_data.rom at 0x8E0000: out=0x9500 after 27,881 stream bytes, last stream byte at ROM 0x8E6CF3; original_ROMs/demo_preset_18_compressed.original.bin is 27,956 bytes (27,881+75) and 0x8E000B+27956-1 = 0x8E6D3E. Source comment: table_data/kn5000_table_data.s:235-269"
+   },
+   {
+    "claim": "The only 'SLIDE\\0' strings in the v10 Main CPU program ROM are at 0xE00032 and 0xE00188 \u2014 the page's previous 0xEA2350/0xEA2376 were wrong",
+    "evidence": "regex scan of original_ROMs/kn5000_v10_program.rom for b'SLIDE\\x00' returns exactly [0xE00032, 0xE00188]; bytes at 0xEA2350/0xEA2376 are `ff ff 0f 00 0d 00 \u2026` (not text). symbols/maincpu_symbols_reference.txt:9 `SLIDE_STRING 0xE00032` and :25 `SLIDE_STRING_2 0xE00188`; v10/maincpu/boot/boot_data_tables.s:54,76"
+   },
+   {
+    "claim": "A 'SLIDE\\0' marker also exists at table_data 0x9FA150 and the bootloader's LZSS_ParseHeader memcmps 5 bytes against 0x00FFA150",
+    "evidence": "bytes at kn5000_table_data.rom offset 0x1FA150 are b'SLIDE\\x00'; table_data/kn5000_table_data.s:3848-3852 pushes length 5, 0xFF, 0xA150 and calls the memcmp at 0xFFFBDC"
+   },
+   {
+    "claim": "The table_data bootloader decompressor has no SLIDE8K support: it compares only the 5-char prefix and always uses its 4K decoder",
+    "evidence": "table_data/kn5000_table_data.s LZSS_ParseHeader (:3825-3894) never inspects the 6th character and only reaches LZSS_Decompress (:3902), which mallocs 0x1000 and prefills to 0xFEE (:3908-3930)"
+   },
+   {
+    "claim": "LZSS_* bootloader routine addresses on the page (0x9FCA50 / 0x9FC8C2 / 0x9FC935 / 0x9FC974 / 0x9FC9B3) are still correct",
+    "evidence": "llvm-nm rebuilt_ROMs/kn5000_table_data.llvm.elf: 009fca50 LZSS_Decompress, 009fc8c2 LZSS_ReadByte, 009fc935 LZSS_OutputByte, 009fc974 LZSS_OutputByte_Alt, 009fc9b3 LZSS_ParseHeader"
+   },
+   {
+    "claim": "The Main CPU decompressors stash the malloc'd ring pointer at RAM 0x0622",
+    "evidence": "unidasm ef40d5 `ld (0x0622),XHL`; system_handlers.s:6975 `stda32 1570, xhl` (1570 = 0x622)"
+   },
+   {
+    "claim": "Makefile round-trip targets are decompress/rebuild/verify-help-databases and decompress/rebuild/verify-demo-presets plus demo-midi and demo-sidecars",
+    "evidence": "Makefile:31 (.PHONY), :812-833 (help DB pattern rule, rebuild, verify, decompress), :755-788 (demo preset .mid+.yaml -> .bin -> compressed, rebuild/verify/decompress/demo-midi/demo-sidecars)"
+   },
+   {
+    "claim": "make all rebuilds the v142 update image with compress_lzss.py --strict --with-header --reference and cmp-seals it",
+    "evidence": "Makefile:640-655 (rule for rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom, listed in llvm-all at Makefile:40); commit 2fb8a95"
+   },
+   {
+    "claim": "The demo-preset sources are MIDI + YAML sidecars; table_data/preset_data.asm no longer exists",
+    "evidence": "Makefile:735-757 (checked-in source = midi/*.mid + sidecar/*.yaml, both .bin stages generated and .gitignore'd); `ls table_data/*.asm` -> no such file; grep for 'preset_data' in the Makefile and for 'preset_data.bin' in all .s files -> no hits"
+   },
+   {
+    "claim": "The archived Sub-CPU update images are whole-file SLIDE4K containers of 93,124 / 93,181 / 93,203 bytes for v1.40/v1.41/v1.42",
+    "evidence": "ls -l original_ROMs/kn5000_subprogram_v14{0,1,2}_compressed.rom; first 11 bytes of the v142 image are `53 4c 49 44 45 34 4b 00 03 00 00` = 'SLIDE4K\\0' + 0x030000 BE = 196,608"
+   },
+   {
+    "claim": "v1.41 has no source tree (issue kn5000-v41) and the v1.40 payload was recovered only from its compressed update image",
+    "evidence": "commit 2fb8a95 message; analysis/binclude-audit-2026-08-07/PLAN.md:28-29"
+   },
+   {
+    "claim": "SLIDE8K was undocumented before this work; the tooling landed 2026-08-07",
+    "evidence": "PLAN.md:25 calls it 'a previously undocumented 8 KB-window LZSS variant'; commit f40a93d (2026-08-07 03:03) adds scripts/build/{de,}compress_slide8k.py, 634 new lines, no prior file; WAVE-STATUS.md Wave 0 row"
+   }
+  ]
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "pages": [
+   "effects-dsp.md",
+   "dsp-bytecode-interpreter.md",
+   "subcpu-payload-loading.md",
+   "subcpu-command-format.md"
+  ],
+  "claims": [
+   {
+    "claim": "Exactly 42 of the 100 effect numbers point algorithm, coefficient and parameter-descriptor pointers at the same trio 0x017263 / 0x01735E / 0x017425.",
+    "evidence": "original_ROMs/kn5000_subprogram_v142.rom, pointer arrays at sub-CPU 0x01ED7C / 0x01EF0C / 0x01F22C (file offset = addr - 0x0EF00 for offsets >= 256). Script over the 100 entries: stub set = {0,7,11,12,13,14,28,29,30,31,37,38,40,41,42,43,44,45,46,47,49,51,55,61,62,63,69,76,77,78,80,81,82,83,84,85,86,87,92,93,94,95}, count 42."
+   },
+   {
+    "claim": "The sharing is by POINTER identity, not by a duplicated program: no second copy of the NO OPERATION stream exists in the image.",
+    "evidence": "The little-endian dword 0x017263 occurs exactly 42 times in the whole 196,608-byte kn5000_subprogram_v142.rom (first at file offset 0xFE7C = addr 0x01ED7C), i.e. only as the 42 algorithm-array entries."
+   },
+   {
+    "claim": "The named members of the stub set are effect 0 NO OPERATION plus twelve named effects: 11 MODULATION DELAY, 37 SLOW ATTACKER, 38 NOISE FLANGER, 44 CEL, 45 CELM, 49 PITCH SHIFTER, 51 PEDAL WAH, 55 HARS EFFECT, 63 STRING, 69 PEDAL WAH+DELAY, 80 DS_D, 81 OVER_D; the remaining 29 are unnamed placeholders.",
+    "evidence": "Names decoded from original_ROMs/kn5000_v10_program.rom at 0x033568 - 18*n (16 chars, stride 18 descending; the formula is dsp/tools/host_side.py:99-103). 13 named + 29 blank = 42."
+   },
+   {
+    "claim": "Effect 37 SLOW ATTACKER is the only member of the 42 with a non-zero parameter VALUE pointer (0x0173F2).",
+    "evidence": "Array at 0x01F09C: of the 42 stub indices only index 37 is non-zero, value 0x0173F2. Corroborated by v142/subcpu/subcpu_data_tables.s label DSP_Eff37_Param_Values."
+   },
+   {
+    "claim": "The IC310 (MN19413) partition is NINE effects: 57, 58, 59, 60, 79, 88, 89, 90, 91 \u2014 derived from command byte 0x30 in their streams.",
+    "evidence": "Walked all 200 algorithm+coefficient bytecode streams of kn5000_subprogram_v142.rom with the documented grammar (opcode = b0>>4, len = ((b0&0x0F)<<8)|b1, terminate on peeked high nibble 0xF) and collected effects containing an opcode-0xE record whose first payload byte is 0x30. Result: exactly {57,58,59,60,79,88,89,90,91}. Same set stated in v142/subcpu/subcpu_data_tables.s:4076-4082."
+   },
+   {
+    "claim": "Across the 100 effect numbers there are 41 distinct algorithm bytecode streams, 59 distinct coefficient streams, 41 distinct descriptor tables and 59 non-empty parameter-value tables.",
+    "evidence": "Counted distinct non-zero values in the four arrays at 0x01ED7C / 0x01EF0C / 0x01F22C / 0x01F09C of kn5000_subprogram_v142.rom. No algorithm entry is zero; 41 of 59 non-stub-distinct algorithm values remain after the reverb (12->1), rotary (2->1) and the two IC310 groups (4->1 each) collapse."
+   },
+   {
+    "claim": "Sub-CPU 0x01ED6D is a 5-byte CHIP-ID table (00 00 01 01 01) indexed by effect slot, not an algorithm-type table.",
+    "evidence": "ROM bytes at 0x01ED6D..0x01ED71 of kn5000_subprogram_v142.rom = 00 00 01 01 01. Consumers: v142/subcpu/kn5000_subprogram_v142.s:45109 comment 'chip = byte(0x01ED6D + slot) -- 0,0,1,1,1' with the code at :45130 (EFF_Disconnect), :51629-51635 (DSP_WriteEFFConfig), :52196-52212."
+   },
+   {
+    "claim": "DSP_WriteEFFConfig passes descriptor table 0x014777 and DSP_WriteGlobalConfig passes 0x0147B3 to DSP_BytecodeInterpreter_Init.",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:51632-51643 (`lda_24 xde, 0x014777`) and :51647-51654 (`lda_24 xde, 0x0147b3`)."
+   },
+   {
+    "claim": "The Level-2 translator's descriptor and value records come from the sub-CPU arrays 0x01F22C and 0x01F09C, not from the main-CPU table at 0xEE75F6.",
+    "evidence": "v142/subcpu/kn5000_subprogram_v142.s:51720-51745, DSP_WriteParam_Generic: `ld xiy, 0x1F22C` then `ld xiy, 0x1F09C`, both indexed by BC<<2, results pushed into DSP_ParameterWriteEngine. The 0xEE75F6 table in original_ROMs/kn5000_v10_program.rom holds u32 pointers into 0xEE64DA..0xEE69E8 (main-CPU program ROM)."
+   },
+   {
+    "claim": "CMD_DISPATCH_TABLE at 0x00F46C contains 0x034D5F, 0x01FC7C, 0x01FC7F, 0x035893, 0x01F890, 0x03CFEE, 0x020C12, 0x020C12.",
+    "evidence": "Eight u32 read directly from kn5000_subprogram_v142.rom at sub-CPU 0x00F46C. Names confirmed at those addresses in symbols/subcpu_symbols_reference.txt:60, 598, 637, 638, 774, 2847, 2942, 3920."
+   },
+   {
+    "claim": "Eight addresses in subcpu-command-format.md's Code References table were stale.",
+    "evidence": "Page values vs symbols/subcpu_symbols_reference.txt: Audio_CmdHandler_00_1F 0x039640 -> 0x034D5F (line 2847); _20_3F 0x01FC7B -> 0x01FC7C (637); _60_7F 0x039896 -> 0x035893 (2942); Serial1_DataTransmit_Loop 0x01F226 -> 0x01F890 (598); _A0_BF 0x03D00D -> 0x03CFEE (3920); _C0_FF 0x0200C6 -> 0x020C12 (774); InterCPU_Latch_Setup 0x020B3B -> 0x020C15 (775); Audio_CmdHandler_ConstData 0x039622 -> 0x034D47 (2846)."
+   },
+   {
+    "claim": "There is no exponential pitch table at 0x13318; 0x13318 is mid-curve of DSP_MixerGain_Curve at 0x0131CF, a 128-entry u32 piecewise-exponential amplitude curve spanning 53.5 dB and ending at 0x7FFFFF00.",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:2835-2848 (banner + label DSP_MixerGain_Curve); symbols/subcpu_symbols_reference.txt:233 DSP_MixerGain_Curve 0x0131CF; consumer DSP_MixerCoeff_Compute at 0x03C067 (symbols ref line 3845). Refutation also recorded in analysis/binclude-audit-2026-08-07/PLAN.md:148-150 and commit c5816ae."
+   },
+   {
+    "claim": "The '0x00FF00 / 0x00FF80 two 128-byte tables' reading is retracted: those references are stiw_da 0x100002,0xff00/0xff80 immediates written to the TG address latch.",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:573-575 (RETRACTED entry) and :949 ('The 10 KiB banner formerly placed \"two 128-byte tables\" at 0x00FF00/0x00FF80'); commit 09a82ec message."
+   },
+   {
+    "claim": "Zone A0 = 0x00F7E6-0x012114 (10,543 B), zone A = 0x012195-0x014738 (9,636 B), zone B = 0x0147B3-0x01E17E (39,372 B); together 59,551 B of the 196,608-byte payload image.",
+    "evidence": "Commit messages 09a82ec ('10,543-byte segment'), c5816ae ('9,636-byte DSP/effect-metadata segment'), 85ecca2 ('39,372-byte single-label byte run'); ranges also in analysis/binclude-audit-2026-08-07/PLAN.md:83 and v142/subcpu/subcpu_data_tables.s:4031. 10543+9636+39372 = 59551; 59551/196608 = 30.3%."
+   },
+   {
+    "claim": "The v142 payload image is 196,608 bytes; its first 256 bytes are sub-CPU 0x000400-0x0004FF and from file offset 256 it is 0x00F000-0x03EEFF (256 + 0x2FF00 = 0x30000).",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:2-4 (module banner, states the arithmetic check); file size of original_ROMs/kn5000_subprogram_v142.rom confirmed = 196608 bytes."
+   },
+   {
+    "claim": "ROM 0x830000-0x87FFEF is the tone database (data), not the sub-CPU executable; 629-entry LE32 tone-record offset table at 0x831B00; records start 0x8324D4; sub-CPU stores the RAM base at ToneDB_RelBase 0x045310 / ToneDB_RootPtr 0x045314.",
+    "evidence": "table_data/tone_database_directory.s:1-40 (layout banner, lines 21-30 give the region map; lines 7-9 give the two base variables); table_data/kn5000_table_data.s:21-22, 104-106; commit f95975b. Refutation of the 'subcpu executable at 0x830000' claim recorded in analysis/binclude-audit-2026-08-07/PLAN.md:88."
+   },
+   {
+    "claim": "The v142 executable payload is the LZSS image in Custom Data Flash at 0x3E0000, which decompresses byte-exactly to kn5000_subprogram_v142.rom.",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:27 (List 1 item 3: firmware-update 'File Type 007' payload flashed at custom-data 0x3E0000, decompresses byte-exactly to the already source-built v142 payload); Makefile compress rule landed in Wave 1 commit 2fb8a95."
+   },
+   {
+    "claim": "OFFSETS_14739 at 0x014739 is 6 u16 offsets on base 0x03C32E resolving to 0x03C32E/0x03C568/0x03C661/0x03C708/0x03C7A1/0x03C7BB; OFFSETS_14745 at 0x014745 is 25 u16 offsets on base 0x03CB8E covering opcodes 0x61-0x79 (0x79 -> offset 0x88 -> 0x03CC16).",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:3951-3969 and :3970-4014 (banners list every decoded target and the .short values); symbols/subcpu_symbols_reference.txt:358-359."
+   },
+   {
+    "claim": "Zone-A0 dispatch tables and their addresses/bases as tabulated in subcpu-command-format.md.",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:245 (OFFSETS_F460 0x00F460 base 0x01FB76), :679 (0x00F965 base 0x02E89B), :684 (0x00F973 base 0x02EDB9), :691 (0x00F99B base 0x02F2D9), :697/:704/:709 (DSPOUT A/B/SECOND_A bases 0x02F36E/0x02F3FA/0x02F48C), :714 (EFFPARAM_CASEMAP 85 B), :731 (EFFPARAM_JUMPTABLE base 0x02F9FA), :739 (EFFECTPARAM base 0x02F86F), :746/:756 (DSPUNIT casemap + base 0x02FFF9), :762/:771 (TONEEDIT_REPLY casemap + base 0x0304B6), :776 (SETCOEFF base 0x0317CF), :784/:789 (FINALIZE query/action bases 0x031B5B/0x031AA1), :794 (HandlerParams UNREFERENCED), :820-855 (AlgoJumpTable1-6 bases 0x033812/0x0339DE/0x033E44/0x0340CC/0x0341BE/0x03429D). All 18 addresses cross-checked against symbols/subcpu_symbols_reference.txt."
+   },
+   {
+    "claim": "DSP_AlgoDescriptor_Records at 0x011E16 is 14 records of 39 (0x27) bytes, with types 12 and 13 all zero; DSP_AlgoChannel_SelectorRecords at 0x010FCE is 12 x 6 bytes.",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:1997-2007 and :1456-1462; symbols/subcpu_symbols_reference.txt:161 and :137."
+   },
+   {
+    "claim": "Zone-A parameter metadata complex: EFF_ParamCount_Table 0x0143AD, EFF_ParamRanges_PtrTable 0x014411, EFF_ParamDefaults_PtrTable 0x0145A1, ranges records from 0x0133CF.",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:3724 (count table, 10-per-row), :3739 (ranges ptr table, 100 x u32), :3842 (defaults ptr table); symbols/subcpu_symbols_reference.txt:354-356 and :234 (EffDefault_ParamRanges 0x0133CF)."
+   },
+   {
+    "claim": "Effect 15 is ROCK ROTARY and effect 53 is ROTARY SPEAKER, and they share algorithm stream 0x016ACF; effect 39 is PARAMETRIC EQ.",
+    "evidence": "Names from kn5000_v10_program.rom at 0x033568-18n; algorithm pointers from the 0x01ED7C array (both 0x016ACF). Matches the table in kn5000-docs/dsp-effect-data-zone.md:121 and :149."
+   },
+   {
+    "claim": "Neither retracted claim appears anywhere in the kn5000-docs repository.",
+    "evidence": "`grep -rn \"13318|exponential|pitch table\" --include=*.md` over /home/fsanches/compartilhado/kn5000-docs returns only waveform-rom-format.md:139 (a different table, 0x01217D); `grep -rn \"0x00FF00|0x00FF80|00FF80\"` returns only tone-generator.md:210 and :534, which are TG register VALUES (0xFF00/0xFF80 mute volume), not table addresses."
+   },
+   {
+    "claim": "All four patches apply cleanly and the site builds.",
+    "evidence": "`patch -p1 --dry-run` on each against current kn5000-docs HEAD: 'checking file <name>' with no rejects. `jekyll build` of a scratch copy of the repo with the four files substituted: exit 0, zero warnings, 5.2 s."
+   }
+  ]
+ },
+ {
+  "package": "d-boot",
+  "pages": [
+   "boot-cpserial-link.md",
+   "boot-sequence.md",
+   "fdc-subsystem.md"
+  ],
+  "claims": [
+   {
+    "claim": "The bootloader region ROM 0x9FD8A5-0x9FEA9C (4,600 bytes) is the uPD72068 (IC208) floppy command-layer driver, not the 'Flash Update Type Handlers' it was previously labelled.",
+    "evidence": "kn5000-roms-disasm/table_data/boot_fdc_driver.s:1-10 (module banner states the mislabel and the correction); commit 65c79cb 'table_data: disassemble bootcode_flash_handlers.bin (boot FDC driver)'"
+   },
+   {
+    "claim": "FDC_Request is the driver's single public entry at ROM 0x9FE944 (boot alias 0xFFE944) and takes a pointer to a 14-byte request block: u16 command, u16 drive, u16 head/flag, u16 track/media-type, u16 sector, u16 count, u32 buffer.",
+    "evidence": "table_data/boot_fdc_driver.s:2149-2166 (header) and :2165-2216 (the field-by-field copy to 0x0C6E..); symbol FDC_Request = 0x009FE944 in rebuilt_ROMs/kn5000_table_data.llvm.elf"
+   },
+   {
+    "claim": "A busy latch at RAM 0x0C44 (0xA5 executing / 0x5A done) makes the driver non-re-entrant; a second request fails with error 0xFB, and command 0 always preempts by clearing the latch.",
+    "evidence": "table_data/boot_fdc_driver.s:2166-2183 (cp (0x0c44),0xa5 -> ld WA,0x00fb -> FDC_Error) and :2273 (ld (0x0c44),0x5a at FDC_Request__finish)"
+   },
+   {
+    "claim": "Three 16-bit offset tables sit packed at ROM 0x9FB496 (FDC_DiskTypeStanza_Offsets, 6 entries), 0x9FB4A2 (FDC_ValidateCmd_Offsets, 12) and 0x9FB4BA (FDC_CommandDispatch_Offsets, 12).",
+    "evidence": "table_data/kn5000_table_data.s:1056, 1074, 1098; ELF symbols 0x009FB496 / 0x009FB4A2 / 0x009FB4BA"
+   },
+   {
+    "claim": "The three tables' values in the ROM are: stanzas 0,21,43,65,87,108; validators 0,14,14,14,14,14,8,8,8,11,8,14; dispatch stubs 0,5,10,15,20,25,30,35,40,45,50,55.",
+    "evidence": "read little-endian u16s directly from rebuilt_ROMs/kn5000_table_data.rebuilt.rom at file offsets 0x1FB496/0x1FB4A2/0x1FB4BA; that file is `cmp`-identical to original_ROMs/kn5000_table_data.rom (verified this session)"
+   },
+   {
+    "claim": "Each of the three tables is consumed by a `jp T, XIX+WA` computed jump, at boot addresses 0xFFD98F (media stanza), 0xFFDA97 (validator) and 0xFFE9F4 (command dispatch).",
+    "evidence": "table_data/boot_fdc_driver.s:186-189 (lda XIX,0xffb496 ... jp_ind), :313-315 (lda XIX,0xffb4a2 ... jp_ind), :2221-2223 (lda XIX,0xffb4ba ... jp_ind); table_data/kn5000_table_data.s:1048, 1067, 1091 name the same three consumption addresses"
+   },
+   {
+    "claim": "The bootloader supports 12 commands 0-11: initialize, recalibrate, seek, read sectors, write sectors, format, motor on, motor off, get last error, set disk-changed, controller reset, sense drive status.",
+    "evidence": "table_data/boot_fdc_driver.s:33-37 (header list) and :2229-2267 (the twelve FDC_Dispatch_* stubs with their calr targets and boot addresses)"
+   },
+   {
+    "claim": "The maincpu FDC handler offset table FDC_HANDLER_OFFSETS at 0xEA98CA contains 0,5,13,21,29,37,45,50,55,60,65,70, giving handler entry points 0xF97D8D, F97D92, F97D9A, F97DA2, F97DAA, F97DB2, F97DBA, F97DBF, F97DC4, F97DC9, F97DCE, F97DD3.",
+    "evidence": "read little-endian u16s from rebuilt_ROMs/kn5000_v10_program.rebuilt.rom at file offset 0xEA98CA-0xE00000 (that ROM is `cmp`-identical to original_ROMs/kn5000_v10_program.rom, verified this session); independently matches symbols/maincpu_symbols_reference.txt:29799-29810"
+   },
+   {
+    "claim": "The addresses previously published on fdc-subsystem.md for handlers 1-11 (F97D93, F97D99, F97D9F, F97DA5, F97DAB, F97DB1, F97DB5, F97DB9, F97DBD, F97DC1, F97DC5) are wrong.",
+    "evidence": "compare kn5000-docs/fdc-subsystem.md:529-539 (as committed) against the ROM-derived offsets above and symbols/maincpu_symbols_reference.txt:29800-29810"
+   },
+   {
+    "claim": "The maincpu name FDC_STATUS_HANDLER (0xF97696) is a misnomer: it is the SEEK command handler, twin of the bootloader's FDC_CmdSeek.",
+    "evidence": "v10/maincpu/storage/fdc_routines.s:1406-1407 ('the SEEK command handler at 0xf97696 (.set alias FDC_STATUS_HANDLER -- a misnomer; twin: boot FDC_CmdSeek)'); table_data/kn5000_table_data.s:1100 maps cmd 2 -> FDC_CmdSeek (maincpu FDC_STATUS_HANDLER)"
+   },
+   {
+    "claim": "Nine further maincpu FDC names describe the wrong operation: FDC_CMD_EXEC=read sectors, FDC_SECTOR_XFER=write sectors, FDC_MODE_CONFIG=format, FDC_CMD_ENABLE=motor on, FDC_CMD_DISABLE=motor off, FDC_STATUS_COPY=get last error, FDC_OUTPUT_CTRL=set disk-changed, FDC_CMD_DISPATCH_SUB=controller reset, FDC_INTERRUPT_HANDLER=sense drive status.",
+    "evidence": "table_data/kn5000_table_data.s:1098-1110 (FDC_CommandDispatch_Offsets, each entry commented with the boot handler and its maincpu twin in parentheses); cross-checked against v10/maincpu/storage/fdc_routines.s:2270-2310 which shows which routine each FDC_HANDLER_nn calls"
+   },
+   {
+    "claim": "The bootloader's media geometry presets are: types 0/4/5 = 9x512 B, 80 tracks, gaps 0x1B/0x54; type 2 = 8x1024 B, 77 tracks, gaps 0x53/0x74; type 3 = 18x512 B, 80 tracks, gaps 0x1B/0x6C; unknown types raise error 0xFE.",
+    "evidence": "table_data/boot_fdc_driver.s:439-450 (FDC_SetGeometryForDiskType header) and :451-461 (the low-nibble dispatch); symbol FDC_SetGeometryForDiskType = 0x009FDBAD"
+   },
+   {
+    "claim": "The bootloader driver's sticky error codes are 0x01/0x02/0x03 ready-wait timeouts, 0x08 unspecified, 0x09 result-phase timeout, 0x10 read retries, 0x20 write retries, 0x2F write-protected, 0x31 not ready, 0x32 equipment check, 0x33 no data, 0x34 overrun, 0x35 missing address mark, 0x36 CRC, 0x37 end of cylinder, 0xFB re-entered, 0xFC not present, 0xFE bad parameters, 0xFF no such command.",
+    "evidence": "table_data/boot_fdc_driver.s:73-82 (header table); spot-checked in code at :941-966 (FDC_ProcessResults sets 0x31/0x32/0x35/0x2F/0x33) and :2269-2270 (0xFF)"
+   },
+   {
+    "claim": "FDC_ProbeDiskFormat (ROM 0x9FEB3D) builds five 14-byte request blocks at RAM 0x0D52: command 0 with track field 0x00E0, then four command-3 single-sector reads at tracks 0, 78, 10 and 40, sector 1, count 1, buffer 0x0D62; it then waits 200 ticks and increments a counter at 0x104C.",
+    "evidence": "table_data/boot_disk_probe.s:61-136; ELF symbol FDC_ProbeDiskFormat = 0x009FEB3D"
+   },
+   {
+    "claim": "The alternate track field 0x00D3 in FDC_ProbeDiskFormat's first request is dead code: A is always 0 at that point so the NZ branch never runs.",
+    "evidence": "table_data/boot_disk_probe.s:65 (ldb a,0), :70-75 (cps a,0 / jr nz -> __recal_alt), and the header note at :47-48"
+   },
+   {
+    "claim": "FDC_ProbeDiskFormat and Boot_PulsePD0 have no callers anywhere in the table_data or maincpu ROMs, at either the ROM or the boot-time address; Boot_CheckDiskPresent (ROM 0x9FEC63) by contrast is live and is called from Boot_Init.",
+    "evidence": "table_data/boot_disk_probe.s:28-30 (Boot_PulsePD0 'Callers: NONE FOUND'), :56-59 (FDC_ProbeDiskFormat 'Callers: NONE FOUND'), :143-146 (Boot_CheckDiskPresent callers list); confirmed at the call site table_data/kn5000_table_data.s:1207 'call 0xFFEC63'"
+   },
+   {
+    "claim": "Six former raw blobs of the bootloader are now labelled source and no `.incbin` of any bootcode_* file remains in table_data/*.s.",
+    "evidence": "grep 'incbin \"includes/bootcode' over table_data/*.s returns nothing; commits 22ecfb5 (hdae_to_lzss), 65c79cb (flash_handlers), 72242c0 (utils), 3de6871 (serial_handlers + serial_state), 670077e (malloc_and_after); .include lines at table_data/kn5000_table_data.s:4626, 4746, 4747, 4750, 4751, 4777, 4778"
+   },
+   {
+    "claim": "The six blob files are still present on disk because the archived ASL mirror of the build still bincludes them.",
+    "evidence": "ls table_data/includes/bootcode_*.bin shows all six; archive/asl/table_data/kn5000_table_data.asm:2734, 3691, 3820, 3838, 3849, 3875 still contain their binclude directives; PLAN.md 'Remaining waves' section requires ASL-bincluded blobs to stay byte-identical on disk"
+   },
+   {
+    "claim": "The bootcode_hdae_to_lzss.bin include used to begin mid-instruction: blob byte 0 (0x21) was the final sub-opcode byte of a 5-byte LD A,(0x160002), and the fix emits the instruction whole and slices the blob with `.incbin \"...\", 1, 459`.",
+    "evidence": "commit f79fcb1 diff on table_data/kn5000_table_data.s (extpfx4 0xC2,0x02,0x00,0x16 replaced by ldb_da a,(0x160002); incbin gains the ,1,459 form); commit message; PLAN.md List 2A row calls it 'latent bug: the incbin boundary splits a 5-byte ld A,(0x160002) mid-instruction'"
+   },
+   {
+    "claim": "The boot C runtime lives at ROM 0x9FFB2F-0x9FFE7F with Boot_sbrk 0x9FFB2F, Boot_malloc 0x9FFB56, Boot_memcmp 0x9FFBDC, Boot_SDivMod32 0x9FFC0E, Boot_UMod32 0x9FFC5D, Boot_UDivMod32 0x9FFC63, Boot_free 0x9FFCDD.",
+    "evidence": "table_data/boot_clib.s:2-22 (banner) and each routine's header; ELF symbols from rebuilt_ROMs/kn5000_table_data.llvm.elf confirm all seven addresses"
+   },
+   {
+    "claim": "Every heap block carries a 6-byte header (u32 next, u16 size); Boot_malloc is first-fit and splits a block when the leftover is 10 bytes or more; Boot_free is address-ordered with forward and backward coalescing that reclaims the absorbed header into the size field.",
+    "evidence": "table_data/boot_clib.s:18-21 (layout), :94-110 (cp wa,0x000a then the split), :365-375 (free header) and :410-456 (the two merge arms, each `inc 6, wa` on the size)"
+   },
+   {
+    "claim": "Boot_memcmp has strncmp semantics, not memcmp: a matching 0x00 byte terminates the compare early with HL = 0.",
+    "evidence": "table_data/boot_clib.s:148-153 (header note) and :164-168 (cp (xix),0x00 -> lds hl,0 -> ret)"
+   },
+   {
+    "claim": "The heap is used by exactly two callers: Boot_DetectDiskType (signature buffer) and LZSS_Decompress (the 4 KB sliding window).",
+    "evidence": "table_data/boot_clib.s:68-70 (Boot_malloc callers: boot 0xFFBFCE and 0xFFCA57) and :373-375 (Boot_free callers: boot 0xFFC0D4 and 0xFFCC1F)"
+   },
+   {
+    "claim": "The same 32-bit divide runtime is linked into three builds: the bootloader (Boot_UDivMod32, 0x9FFC63), the main CPU firmware (DivMod32 -> Math_DivideU32) and the HD-AE5000 extension ROM (0x29B8BF / 0x29B8C5). The copies share the algorithm and entry structure but are not byte-identical.",
+    "evidence": "table_data/boot_clib.s:286-356; v10/maincpu/audio/note_voice_mapping.s:28736 (DivMod32) and :28741 (Math_DivideU32); hdae5000/hdae5000_utilities.s:1150 and :1156. Encoding difference: boot_clib.s:340 uses `rr xbc` where hdae5000_utilities.s:1220-1221 uses `stcf16ri 0, bc` + `rrc xbc`"
+   },
+   {
+    "claim": "The HD-AE5000 labels for that runtime are swapped relative to what the code does: HDAE5000_Divide_Signed (0x29B8C5) is the unsigned divide core, and HDAE5000_Divide_Unsigned (0x29B8BF) is its modulo entry (calls the core then copies XDE into XHL).",
+    "evidence": "hdae5000/hdae5000_utilities.s:1150-1154 (the '_Unsigned' entry is calr _Signed; ld xhl,xde; ret) compared with table_data/boot_clib.s:266-269 (Boot_UMod32 = calr Boot_UDivMod32; ld xhl,xde; ret) and the core body at hdae5000_utilities.s:1156-1180 vs boot_clib.s:286-314"
+   },
+   {
+    "claim": "Boot_free_DeadTail9998 (ROM 0x9FFD7D) is unreachable: a byte-for-byte copy of Boot_free's tail with the list head 0x0099A0 replaced by 0x009998, with no prologue and no xref. It is not a callable 'secondary-heap free'.",
+    "evidence": "table_data/boot_clib.s:464-473 (header) and :485 / :495 (the 0x009998 loads); PLAN.md List 2A row for bootcode_malloc_and_after.bin: 'dead code at 0x9FFD7D (the .s claim of a \"secondary-heap free()\" there is wrong)'"
+   },
+   {
+    "claim": "The boot CP-serial driver is explicitly independent of the runtime CPanel_* protocol stack in the program ROM.",
+    "evidence": "table_data/boot_cpserial.s:9-16 ('*** THIS IS THE FIRST-STAGE BOOTLOADER'S OWN CP-SERIAL DRIVER. *** *** IT IS INDEPENDENT OF THE RUNTIME CP-SERIAL IMPLEMENTATION. ***'); table_data/boot_cpserial_isr.s:12-13 repeats it"
+   },
+   {
+    "claim": "The driver's three interrupt handlers are Handler_INTA (ROM 0x9FF229), Handler_INTTX1 (0x9FF2AE) and Handler_INTRX1 (0x9FF2D0), and both SC1 handlers dispatch through BootSerial_StateDispatchTable at 0x9FF282.",
+    "evidence": "table_data/boot_cpserial_isr.s:42, 79, 98, 123 (labels and their Callers: lines quoting the boot-time vector addresses); ELF symbols confirm 0x009FF229 / 0x009FF2AE / 0x009FF2D0 / 0x009FF282"
+   },
+   {
+    "claim": "The link state variable at RAM 0x0F62 is a RAW dispatch-table offset (values 0x00..0x28 in steps of 4, advanced with inc/dec 4), so no scaling is applied before the table lookup.",
+    "evidence": "table_data/boot_cpserial_isr.s:23-26 (header) and :102-106 (ldb_d8 l,(0x0f62); extz xhl; add xhl, BootSerial_StateDispatchTable \u2014 no shift); state handlers use `incdi8 4, (0x0f62)` e.g. boot_cpserial_states.s:57, 89, 112, 153"
+   },
+   {
+    "claim": "The state dispatch table has 11 entries; states 0x00, 0x1C and 0x28 all point at BootSerial_State_Abort.",
+    "evidence": "table_data/boot_cpserial_isr.s:79-90 (the eleven .long entries)"
+   },
+   {
+    "claim": "\u2605 The external-decode hook for RX class-2 packets calls BootStub_ReturnError, which in the shipped ROM is `ldw hl,0xFFFF; ret` (ROM 0x9FB80E, bytes 33 FF FF 0E); the caller treats HL==0xFFFF as decode failure, retreats the control-ring index and drops the packet. So every class-2 packet fails on a stock machine. The class 6/7 variable-length decode arm calls the same wrapper.",
+    "evidence": "table_data/boot_cpserial_states.s:616-635 (BootSerial_CallExternalDecode, whose only body call is `calr BootStub_ReturnError`, and its header stating the consequence), :588-614 (BootSerial_RxPkt_TwoByteDecode: cp hl,0xffff -> CtrlRingRetreatIX -> drop), :625 (callers include RxPkt_VarLengthRun); table_data/kn5000_table_data.s:1424-1431 (BootStub_ReturnError at 0x9FB80E); ROM bytes at file offset 0x1FB80E of kn5000_table_data.rebuilt.rom = 33 ff ff 0e"
+   },
+   {
+    "claim": "BootStub_ReturnError is the fifth of five one-line stubs occupying 0x9FB802-0x9FB811: four return 0 (BootStub_ReturnSuccessSlot1..4) and this one returns 0xFFFF.",
+    "evidence": "table_data/kn5000_table_data.s:1404-1431; ELF symbols BootStub_ReturnSuccessSlot1..4 at 0x009FB802/805/808/80B and BootStub_ReturnError at 0x009FB80E"
+   },
+   {
+    "claim": "The boot driver derives the per-frame byte countdown with the same rule the runtime driver uses for CPANEL_PACKET_BYTE_COUNT: 2 bytes when (first byte & 0x3F) < 0x30, else (first byte & 0x0F) + 3.",
+    "evidence": "table_data/boot_cpserial_states.s:144-151 (State08 TX) and :242-244 (State20 RX header); kn5000-docs/control-panel-protocol.md:426-433 states the identical formula for the runtime driver"
+   },
+   {
+    "claim": "BootSerial_WaitDeviceIdent polls frame (0x20, 0x0B) and encodes the answer as 0x0D if bit 7 is set, else 0x0E if bit 6 is set, else 0x0C \u2014 the same command and the same three codes the runtime driver uses for the data wheel on segment 0x0B.",
+    "evidence": "table_data/boot_cpserial.s:620-643; kn5000-docs/control-panel-protocol.md:808-818 (command 0x20 0x0B, bit 7 -> mode 0xD, bit 6 -> 0xE, neither -> 0xC)"
+   },
+   {
+    "claim": "Boot_ClassifyDeviceID (ROM 0x9FEF89) returns 3 if (0x1036)==0x6C, 2 if (0x1023)==0x70, 1 if (0x1038)==0x38, 4 if (0x1028)==0x0F, else 0; only class 4 (the flash-update service device) diverts the boot into the firmware-update UI.",
+    "evidence": "table_data/boot_cpserial.s:496-533; the gate is at table_data/kn5000_table_data.s:1217-1219 ('call 0xFFED0E ; Boot_ProbeExternalDevice: HL=device class' / 'cps l, 4' / 'jr nz, Boot_PrepareJump')"
+   },
+   {
+    "claim": "The boot CP-serial link is only brought up when a floppy is present: Boot_Init calls Boot_CheckDiskPresent (Port D bit 6, active low) first and jumps straight to the Program ROM when no disk is detected.",
+    "evidence": "table_data/kn5000_table_data.s:1207-1215 ('call 0xFFEC63 ; Boot_CheckDiskPresent: L=1 disk present (PD6 low)' / 'cps l, 0' / 'jr z, Boot_PrepareJump' / then the BootSerial_InitVectorTable[0] fetch)"
+   },
+   {
+    "claim": "The handshake and probe frames sent by the boot driver are 1F DA, then 1F 1A / 1D 00 / DD 03 / 1E 80, then 25 01 / E2 04 / 20 10 / E2 11 for the probe, 20 0B for the ident poll, and 2B 00 / EB 00 / 20 10 / E3 10 for the re-ident \u2014 all of which also appear in the runtime driver's command reference.",
+    "evidence": "table_data/boot_cpserial.s:206-213 (FullInit sends 0x1f,0xda), :268-289 (HandshakeSequence four frames), :572-600 (ProbeSequence four frames), :621-643 (WaitDeviceIdent), :672-696 (ResetAndIdent); kn5000-docs/control-panel-protocol.md:130-158 lists 1F DA, 1F 1A, 1D 00, DD 03, 1E 80, 25 01, E2 04, 20 10, E2 11, E3 10, 2B 00, EB 00"
+   },
+   {
+    "claim": "RX packets are classified by (first byte & 0x38) >> 1 through an 8-entry table at ROM 0x9FF746: classes 0/1 XOR-scrambled 2-byte, class 2 external decode, classes 3/4/5 discard, classes 6/7 variable-length run. TX packets are classified by (tag & 0x30) >> 4 through a 4-entry table at 0x9FF966.",
+    "evidence": "table_data/boot_cpserial_states.s:511-518 and :528-536 (RX); :791-799 and :807-811 (TX); ELF symbols BootSerial_RxPacketDispatchTable = 0x009FF746, BootSerial_TxPacketDispatchTable = 0x009FF966"
+   },
+   {
+    "claim": "The serial rings are RX 0x0F79 (0x5C bytes, tail 0x0F75 / head 0x0F77) and TX 0x0FD9 (0x3C bytes, send index 0x0FD5 / pending count 0x0FD7); the packet-level transfer-control blocks are at 0x988A (RX) and 0x9914 (TX), each a 0x80-byte ring with tail at base-8, head at base-4 and a free-slot count at base-2 initialised to 0x0080.",
+    "evidence": "table_data/boot_cpserial_states.s:20-35 (banner) and boot_cpserial.s:33-42; the initialisation is boot_cpserial.s:218-225 (ldw (xhl-4),0 / (xhl-8),0 / (xhl-2),0x80 for both blocks)"
+   },
+   {
+    "claim": "BootSerial_UnusedIsrEpilogue (ROM 0x9FF5EA) and BootSerial_CtrlRingRetreatIX_Dup have no reference anywhere; BootSerial_ModeSwitch, BootSerial_TestLoopback, BootSerial_SendTwoBytes_Bitbang and BootSerial_PollTX are reachable only through unreferenced thunks.",
+    "evidence": "table_data/boot_cpserial_states.s:348-353, :914, :866-871; table_data/boot_cpserial.s:92-97 (ModeSwitch), :541-543 (TestLoopback), :322-326 (Bitbang), :375 (PollTX thunk itself unreferenced); ELF symbol BootSerial_UnusedIsrEpilogue = 0x009FF5EA"
+   },
+   {
+    "claim": "The last 259 bytes of boot_cpserial_states.s (ROM 0x9FFA2C-0x9FFB2E) are a hardware-channel/memory library shared three ways: table_data bootloader (base 0x150000), maincpu 0xEF17F4-0xEF18F6 (base 0x150000) and subcpu boot ROM 0xFF84A8-0xFF85AA (base 0x130000); the table_data and subcpu copies differ in exactly 3 bytes.",
+    "evidence": "table_data/boot_cpserial_states.s:930-955 (banner, including 'verified by direct comparison (259 bytes, exactly 3 differing bytes)'); ELF symbol AudioMix_Init = 0x009FFA2C; the 0x150000 immediate is visible at :988"
+   },
+   {
+    "claim": "The rebuilt table_data and v10 program ROMs are byte-identical to the original dumps, so ROM values quoted from the rebuilt files are values of the real dumps.",
+    "evidence": "`cmp original_ROMs/kn5000_table_data.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom` and `cmp original_ROMs/kn5000_v10_program.rom rebuilt_ROMs/kn5000_v10_program.rebuilt.rom` both silent (run this session)"
+   },
+   {
+    "claim": "The flash/disk routine groups in the boot region are 0x9FB812 Flash_Reset_16bit .., 0x9FBBF3 Flash_Init_Custom_And_Table, 0x9FBC1D MemBlock_FillWithZeros, 0x9FBC2D Flash_Reset_32bit .., 0x9FBF07 FDC_Reset, 0x9FBF37 FDC_ReadSector, 0x9FBF92 FDC_ReadSectorWrapper, 0x9FBFC4 Boot_DetectDiskType (ending 0x9FC0D3).",
+    "evidence": "llvm-nm on rebuilt_ROMs/kn5000_table_data.llvm.elf, symbols in address order over 0x009FB802-0x009FC0E0"
+   },
+   {
+    "claim": "Boot_DetectDiskType compares eight disk-type signatures using Boot_memcmp.",
+    "evidence": "table_data/boot_clib.s:155-157 (Boot_memcmp 'Callers: Boot_DetectDiskType (8 sites, boot 0xFFBFEC-0xFFC0C1 - disk type signatures)'); ELF symbols Boot_DetectDiskType__check_type2..type8 at 0x009FC001-0x009FC0B7"
+   },
+   {
+    "claim": "Three wave-groups of disassembly work remain unstarted (Wave 3b hdae5000+subcpu boot, Wave 4 the v7 tree, Wave 5), and 24 packages have landed across Waves 0-3a with a 100% byte-match gate after each.",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md, section 'Remaining waves \u2014 resumable plan (saved 2026-08-07)': 'Everything below is not started. Waves 0, 1, 2 and 3a are complete; the build gate has held at 100.00% \u00d7 15 sections ... after every one of the 24 packages landed so far.'; WAVE-STATUS.md rows for Waves 0/1/2/3a"
+   }
+  ]
+ },
+ {
+  "package": "d-status",
+  "pages": [
+   "rom-reconstruction.md",
+   "subcpu-firmware-images.md",
+   "disassembly-workflow.md",
+   "memory-map.md",
+   "reverse-engineering.md"
+  ],
+  "claims": [
+   {
+    "claim": "compare_roms.py reports 15 verification sections, all at 100.00% \u2014 9 from the LLVM build, 6 from the legacy ASL mirror build",
+    "evidence": "Ran `python3 scripts/build/compare_roms.py` in /home/fsanches/compartilhado/kn5000-roms-disasm: 'romset bytematch: 100.00%' plus 9 LLVM sections and 6 'ASL build' sections each 'Similarity: 100.00%'. Section lists at scripts/build/compare_roms.py:11-24 (LLVM) and :81-88 (ASL)."
+   },
+   {
+    "claim": "A new verification section 'subcpu v142 update image' exists, base 0x3E0000, comparing kn5000_subprogram_v142_compressed.rom against itself as rebuilt",
+    "evidence": "scripts/build/compare_roms.py:18-19 (entry tuple with rom_base 0x3E0000)"
+   },
+   {
+    "claim": "The v142 update image is rebuilt by compressing the source-built payload with compress_lzss.py --strict --with-header --reference, then sealed with cmp",
+    "evidence": "Makefile:651-654 (rule rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom); --with-header flag added in commit 2fb8a95"
+   },
+   {
+    "claim": "The SLIDE4K whole-file header is 11 bytes: 8-byte 'SLIDE4K\\0' magic + 24-bit BIG-endian decompressed size (03 00 00 = 196,608 for the v142 payload)",
+    "evidence": "Makefile:641-650 comment block; scripts/build/compress_lzss.py:30 ('8-byte magic + 24-bit big-endian decompressed size = 11 bytes')"
+   },
+   {
+    "claim": "`make verify-help-databases` exists and all six SLIDE8K help databases rebuild byte-identically",
+    "evidence": "Makefile:818-823 (verify-help-databases target). I ran `cmp` for all six: english/german/french/spanish/indonesian/german_stale each identical to original_ROMs/help_db_<lang>_compressed.original.bin"
+   },
+   {
+    "claim": "Each help database decompresses to exactly 0x9000 (36,864) bytes",
+    "evidence": "Makefile:786-789 comment; `ls -l table_data/includes/help_databases/help_db_*.bin` shows 36864 bytes each"
+   },
+   {
+    "claim": "The six SLIDE8K blocks live at ROM 0x988690/0x98BB3A/0x98F0DA/0x992A0C/0x9963FA (live) and 0x983B3A (stale)",
+    "evidence": "Makefile:780-785 comment and the decompress-help-databases rule at Makefile:791-800 (file offsets 0x43918/0x46DC2/0x4A362/0x4DC94/0x51682/0x3EDC2 into icons_to_strings.bin)"
+   },
+   {
+    "claim": "The stale sixth help block is TRUNCATED, not merely corrupt: it decodes identically to the live German DB for exactly 0x55E0 output bytes, and its tail was overwritten by the Music Stylist pointer tables at 0x986000/0x987000",
+    "evidence": "table_data/help_databases.s:59-68 (module header). Note this supersedes the WAVE-STATUS.md wording 'stale corrupt German duplicate'."
+   },
+   {
+    "claim": "All 19 demo presets round-trip from .mid + .yaml and rebuild byte-identically",
+    "evidence": "Makefile:761-769 (pattern rules .mid+.yaml -> .bin -> _compressed.bin) and the verify-demo-presets target. I counted 19 .mid and 19 .yaml files and ran `cmp` for ids 00-18 against original_ROMs/demo_preset_NN_compressed.original.bin: all OK."
+   },
+   {
+    "claim": "Demo preset entries 0-17 occupy 0x9C4050-0x9F94CB; entry 18 (Feature Presentation) is at 0x8E0000",
+    "evidence": "Makefile:735-736 comment in the demo-song-presets section"
+   },
+   {
+    "claim": "The v1.40 sub-CPU payload was committed as original_ROMs/kn5000_subprogram_v140.rom, 196,608 bytes, in commit 2fb8a95",
+    "evidence": "`git show 2fb8a95 --stat` shows 'original_ROMs/kn5000_subprogram_v140.rom | Bin 0 -> 196608 bytes'; commit message states it is 'recoverable only from the compressed update image'"
+   },
+   {
+    "claim": "sha256 of the recovered v1.40 payload is a39025fe7c3968102196c5e20c18c76ec42e31a6c535f48addd58e13dacd7ef0",
+    "evidence": "`sha256sum original_ROMs/kn5000_subprogram_v140.rom` (I ran it); matches the abbreviated hash in commit 2fb8a95's message"
+   },
+   {
+    "claim": "Recompressing the recovered v1.40 payload reproduces the factory 93,124-byte update image byte for byte, and the reference decisions provably decompress to exactly that payload",
+    "evidence": "I ran `python3 scripts/build/compress_lzss.py original_ROMs/kn5000_subprogram_v140.rom /tmp/... --strict --with-header --reference original_ROMs/kn5000_subprogram_v140_compressed.rom` -> 'Reference file matches input - using learned decisions', 93,124 bytes, and `cmp` against the factory image passed. The 'matches input' path is compress_lzss.py:224-236 (decode reference -> verify_decisions(ref_decisions, data))."
+   },
+   {
+    "claim": "v1.41 is internally consistent (image <-> payload) but has no source tree and no compare coverage; tracked as issue kn5000-v41",
+    "evidence": ".beads/issues.jsonl:160 (id kn5000-v41). I independently reproduced the round-trip: compress_lzss.py --strict --with-header --reference on kn5000_subprogram_v141.rom produced 93,181 bytes identical to kn5000_subprogram_v141_compressed.rom."
+   },
+   {
+    "claim": "sha256 of kn5000_subprogram_v141.rom is 04212fa6799e75db64b399242b762ce7377669a0a877984659c78c148453d9fe and of v142 is 16a1b654cea132ac433c16162db4a72ef7227fcc962ff6fae0ce088aa7c6e76e",
+    "evidence": "`sha256sum original_ROMs/kn5000_subprogram_v14{0,1,2}.rom` (I ran it)"
+   },
+   {
+    "claim": "Payload byte-diffs: v140<->v141 = 56,018 bytes in 2,508 runs; v141<->v142 = 124,033 in 2,875 runs; v140<->v142 = 124,032 in 2,590 runs",
+    "evidence": "Computed by me with a Python byte-by-byte comparison over the three 196,608-byte payloads in original_ROMs/. (The '124,033 in 2,875 runs' figure also appears in .beads/issues.jsonl:160.)"
+   },
+   {
+    "claim": "The three compressed sub-CPU payloads were extracted from the system-update floppy disk images on the Internet Archive",
+    "evidence": "Commit 029d5e8 message ('The compressed payloads (v140, v141, v142) were extracted from the system update floppy disk images available on the Internet Archive')"
+   },
+   {
+    "claim": "Compressed image sizes are 93,124 B (v140), 93,181 B (v141), 93,203 B (v142)",
+    "evidence": "`ls -l original_ROMs/kn5000_subprogram_v14*_compressed.rom`"
+   },
+   {
+    "claim": "Before the waves, the table-data LLVM source emitted 1,262,528 bytes (60% of the 2 MB ROM) from anonymous whole-file blob includes",
+    "evidence": "I checked out the pre-wave .s files with `git show 3bfe9fa:table_data/*.s` and parsed every .incbin: initial_data.bin 524,271 + icons_to_strings.bin 520,920 + wallpaper1_to_icons.bin 152,576 + icon_pixel_data.bin 51,184 + icon_table.bin 1,416 + hkst_55.ssf 1,033 + wallpaper_gap.bin 1,024 + six bootcode_*.bin 10,104 = 1,262,528; 1,262,528/2,097,152 = 60.2%"
+   },
+   {
+    "claim": "Today the table-data sources contain no anonymous whole-blob includes: icons_to_strings.bin appears as 13 labelled sized slices (126,674 B), wallpaper1_to_icons.bin as 87 (53,062 B), icon_pixel_data.bin as 177 (50,976 B), and initial_data.bin is not referenced at all",
+    "evidence": "Parsed every .incbin under table_data/*.s (my script). Confirmed textually at table_data/kn5000_table_data.s:96-100 ('includes/initial_data.bin is no longer referenced by the LLVM build; the file stays on disk because the archived ASL mirror still bincludes it in full')."
+   },
+   {
+    "claim": "symbols/table_data_symbols_reference.txt grew from 133 to 4,153 non-comment symbols; symbols/subcpu_symbols_reference.txt from 3,862 to 4,326",
+    "evidence": "`grep -vc '^\\s*#\\|^\\s*$'` on the current files vs `git show 3bfe9fa:symbols/<file>`"
+   },
+   {
+    "claim": "Current .incbin byte totals per ROM tree: v10/maincpu 860,028 (855,100 of it under includes/generated/); v9/maincpu 860,028; v7/maincpu 995,213; v142/subcpu 0; subcpu/boot 656; hdae5000 340,790; table_data 1,113,121; custom_data 667,648",
+    "evidence": "Measured by parsing every `.incbin \"file\"[, off[, len]]` in each tree's .s files (explicit length where given, else file size minus offset). Directive counts cross-checked against `find <tree> -name '*.s' -exec grep -c '\\.incbin' {} +`."
+   },
+   {
+    "claim": "v7/maincpu's 995,213 incbin bytes split into 136,775 bytes of explicitly v7-specific slices (v7_block/v7_fix/v7_data/v7_transplant) and 858,438 bytes under names shared with the v9 tree",
+    "evidence": "Same parse, grouped by filename prefix: v7_block 29,951 + v7_fix 22,073 + v7_data 17,194 + v7_transplant 67,557 = 136,775; remainder 858,438"
+   },
+   {
+    "claim": "scripts/build/extract_v7_bins.py dd-slices the v7 ROM at build time and overwrites C-compiled .bin outputs whenever a >50%-similarity check passes",
+    "evidence": "scripts/build/extract_v7_bins.py:73-86 ('# Check similarity (>50% = same block at same address)' / `if match_pct > 0.5:` writes v7_data over the v7 path, else falls back to the v9 data)"
+   },
+   {
+    "claim": "There are 139 v7_block_*.bin, 24 v7_fix_*.bin and 16 v7_data_*.bin files; the audit's scanner had reported only 23 v7_block files and was corrected by the adversarial verifier",
+    "evidence": "`ls v7/maincpu/includes/generated/v7_block_*.bin | wc -l` = 139 (v7_fix 24, v7_data 16). Correction recorded in analysis/binclude-audit-2026-08-07/findings.json (verdict CONFIRMED whose evidence reads 'The v7_code_blocks list contains 143 v7_block entries (138 unique \u2026)'), and in PLAN.md:72."
+   },
+   {
+    "claim": "subcpu/boot/kn5000_subcpu_boot.s still contains 98,304 lines that are exactly `.byte 0xff`",
+    "evidence": "`grep -c '^\\s*\\.byte 0xff\\s*$' subcpu/boot/kn5000_subcpu_boot.s` = 98304"
+   },
+   {
+    "claim": "Seven of the thirteen table_data/includes/bootcode_*.bin files are referenced by no .s or .asm file; the other six are still bincluded by the ASL mirror",
+    "evidence": "Per-file `grep -rl <name> --include='*.s' --include='*.asm' .` over all 13 bins: refs=0 for bootcode_debug, _division, _free2, _interrupts, _post_clearram, _pre_clearram, _pre_lzss. `grep -o 'binclude \"includes/bootcode[^\"]*\"' archive/asl/table_data/kn5000_table_data.asm` lists exactly six."
+   },
+   {
+    "claim": "The ROM-status diagram PNG on the site is stale (2026-02-07) and its generator points at ASL paths that no longer exist",
+    "evidence": "`ls -l kn5000-docs/assets/images/rom-status-diagram.png` -> Feb 7 14:21. scripts/build/generate_rom_status_diagram.py:302-326 lists 'maincpu/kn5000_v10_program.asm', 'table_data/kn5000_table_data.asm', 'subcpu/kn5000_subprogram_v142.asm' \u2014 all confirmed MISSING from the repo root."
+   },
+   {
+    "claim": "The audit inventoried 598 .incbin/binclude directives of which 505 are honest build products, and produced 55 findings and 24 adversarial verdicts (14 CONFIRMED, 10 REFUTED)",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:11-12 for 598/505; findings.json parsed by me: len(findings)=55, len(verdicts)=24, Counter of verdict field = {CONFIRMED: 14, REFUTED: 10}"
+   },
+   {
+    "claim": "The audit's evidence standard for 'this blob is code' required a clean decode at the claimed base, branch targets on instruction boundaries, at least one call target coinciding with an independently known label, and a shifted-decode control (must NOT decode cleanly at base+1)",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:14-17"
+   },
+   {
+    "claim": "Ten of the 24 verdicts came back REFUTED, mostly as coverage gaps the scanners had declared clean (maincpu inline .byte regions, orphaned reference slices, the v141 payload without build coverage, binaries under dsp/)",
+    "evidence": "findings.json verdicts with verdict=='REFUTED'; their claim strings begin 'gap: \u2026' and name v142/subcpu zone A0, the v7/v9/v10 inline .byte regions, demo_preset_compressed_refs/, hdae5000/includes orphans, kn5000_subprogram_v141.rom, note_voice_mapping_v9_patch.bin, table_data_bootcode.bin, dsp/analysis/data/typewalk/kn5000_dsp1_upload.bin"
+   },
+   {
+    "claim": "24 conversion packages landed across four waves (Wave 0: 7, Wave 1: 6 of 7 with one worker dying without delivering work, Wave 2: 8, Wave 3a: 3), with 0 delivered packages rejected",
+    "evidence": "analysis/binclude-audit-2026-08-07/WAVE-STATUS.md rows for 2026-08-07 03:09, 04:11, Wave 2 integration and Wave 3a integration; PLAN.md:157-158 ('the build gate has held at 100.00% \u00d7 15 sections \u2026 after every one of the 24 packages landed so far')"
+   },
+   {
+    "claim": "Wave 2 was interrupted mid-flight by a session usage limit with three workers finished and nothing integrated; the repository was untouched and the run resumed replaying finished workers from cache",
+    "evidence": "WAVE-STATUS.md rows dated 2026-08-07 04:38 and 06:51"
+   },
+   {
+    "claim": "The manager protocol forbids git checkout/reset/stash for reverts and requires hand, surgical edits",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:169-171"
+   },
+   {
+    "claim": "Every disasm commit must carry an LLVM toolchain provenance line `LLVM: <branch>@<short-hash> (<full-hash>)`, and LLVM history is immutable once it has produced verified ROMs",
+    "evidence": "kn5000-roms-disasm/CLAUDE.md:89-99 ('LLVM Toolchain Provenance Tracking (STRICT POLICY)'); example line in commit 2fb8a95's message"
+   },
+   {
+    "claim": "There is no 'exponential pitch table at 0x13318'; 0x13318 falls inside DSP_MixerGain_Curve at 0x0131CF-0x0133CE, a 128 x u32 monotonic gain curve read by DSP_MixerCoeff_Compute, piecewise-exponential over 53.5 dB and ending at 0x7FFFFF00",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:2836-2848 (comment block and the DSP_MixerGain_Curve label)"
+   },
+   {
+    "claim": "The 0x00FF00/0x00FF80 'two 128-byte tables' claim was retracted: those are immediate values written to the TG address latch (`stiw_da 0x100002,0xff00/0xff80`), not table pointers",
+    "evidence": "v142/subcpu/subcpu_data_tables.s:574-577"
+   },
+   {
+    "claim": "The firmware supports both LZSS window widths: main-CPU SLIDE_Parse_Header compares the magic's digit with 0x34 ('4') -> SLIDE_Decompress_4K_Init and 0x38 ('8') -> SLIDE_Decompress_8K_Init",
+    "evidence": "v10/maincpu/boot/system_handlers.s:7091 (label) and :7111-7128 (cp a,0x34 / calr SLIDE_Decompress_4K_Init; cp a,0x38 / calr SLIDE_Decompress_8K_Init)"
+   },
+   {
+    "claim": "The bootloader's own LZSS_ParseHeader (table_data, 0x9FC9B3) does NOT do the 4K/8K dispatch \u2014 it validates a 6-byte signature against the 0x9FA150 identifier region",
+    "evidence": "table_data/kn5000_table_data.s, LZSS_ParseHeader body: reads 6 bytes then memcmp against 0x9FA150 (pushw 0xA150 / call 0xFFFBDC); no 0x34/0x38 comparison anywhere in the routine"
+   },
+   {
+    "claim": "The LZSS decoder suite spans ROM 0x9FC8C2-0x9FCC29 (872 bytes, five routines); the next routine, Boot_FlashUpdate_Main, starts at 0x9FCC2A",
+    "evidence": "symbols/table_data_symbols_reference.txt: LZSS_READBYTE 0x9FC8C2, LZSS_OUTPUTBYTE 0x9FC935, LZSS_OUTPUTBYTE_ALT 0x9FC974, LZSS_PARSEHEADER 0x9FC9B3, LZSS_DECOMPRESS 0x9FCA50, BOOT_FLASHUPDATE_MAIN 0x9FCC2A. 0x9FCC29-0x9FC8C2+1 = 872. (Corrects the old page, which gave the range as 0x9FC8C2-0x9FCA4F while also saying 872 bytes.)"
+   },
+   {
+    "claim": "bootcode_flash_handlers.bin (ROM 0x9FD8A5-0x9FEA9C, 4,600 B) is the bootloader's uPD72068 FDC command-layer driver, not 'flash update handlers'; it is now table_data/boot_fdc_driver.s (2,316 lines)",
+    "evidence": "table_data/boot_fdc_driver.s:1-10 module header; `wc -l` = 2316"
+   },
+   {
+    "claim": "bootcode_utils.bin was mis-described: 0x9FEB2B-0x9FEC6D is the floppy disk-format probe (Boot_PulsePD0, FDC_ProbeDiskFormat) and the rest is the bootloader's own CP-serial driver, independent of the runtime CPanel_* stack",
+    "evidence": "table_data/boot_disk_probe.s:1-14 module header; table_data/boot_cpserial.s:1-15 header ('THIS IS THE FIRST-STAGE BOOTLOADER'S OWN CP-SERIAL DRIVER. IT IS INDEPENDENT OF THE RUNTIME CP-SERIAL IMPLEMENTATION.')"
+   },
+   {
+    "claim": "Boot module ranges: boot_cpserial.s 0x9FEC6E-0x9FF228, boot_cpserial_isr.s 0x9FF229-0x9FF2F1, boot_cpserial_states.s 0x9FF2F2-0x9FFB2E, boot_clib.s 0x9FFB2F-0x9FFE7F, boot_debug.s 0x9FFE80-0x9FFEDF",
+    "evidence": "Module headers: boot_cpserial.s:4, boot_cpserial_isr.s:4, boot_cpserial_states.s:4-5, boot_clib.s:3-5, boot_debug.s:3"
+   },
+   {
+    "claim": "The boot debug group is present but disabled: the store inside Debug_SendChar is NOP-patched out in the shipped ROM and no caller survives",
+    "evidence": "table_data/boot_debug.s:1-9 module header"
+   },
+   {
+    "claim": "0x9FEA9D-0x9FEB2A holds BootTimer_InterruptHandler (0x9FEA9D) and Handler_INT4 (0x9FEAB2)",
+    "evidence": "symbols/table_data_symbols_reference.txt (BOOTTIMER_INTERRUPTHANDLER 0x9FEA9D, HANDLER_INT4 0x9FEAB2) and source labels at table_data/kn5000_table_data.s:4639 and :4669"
+   },
+   {
+    "claim": "The incbin boundary at 0x9FC6F6 used to cut a 5-byte `ld A,(0x160002)` in half; commit f79fcb1 emits it whole",
+    "evidence": "findings.json verdict (CONFIRMED) whose evidence reads 'ROM bytes at 0x1FC6F2 = c2 02 00 16 21 decode as one 5-byte `ld A,(0x160002)`; kn5000_table_data.s:2876 emits only `extpfx4 0xC2,0x02,0x00,0x16` and the blob's first byte is 0x21'; commit f79fcb1 'table_data: emit the LD A,(0x160002) poll whole, not cut mid-instruction'"
+   },
+   {
+    "claim": "At boot the main CPU copies table-data ROM 0x830000-0x87FFFF into sub-CPU RAM 0x050000-0x09FFFF as five 64KB InterCPU E1 bulk transfers",
+    "evidence": "v10/maincpu/kn5000_v10_program.s:325-344 (SubCPU_Send_Payload: five sequences of `ld xwa,0x83/84/85/86/870000; ld xbc,0x10000; ld xde,0x5/6/7/8/90000; call InterCPU_E1_Bulk_Transfer`)"
+   },
+   {
+    "claim": "DSP_System_Init stores the tone-database RAM base 0x050000 at ToneDB_RelBase (0x045310) and ToneDB_RootPtr (0x045314); all offsets in the database are base-relative, so sub-CPU address = table-data ROM address - 0x7E0000",
+    "evidence": "table_data/tone_database_directory.s:5-12 module header. (The arithmetic direction differs from the older comment at the top of symbols/table_data_symbols_reference.txt, which says 'sub S = main S + 0x7E0000' \u2014 that is inverted; 0x830000 - 0x7E0000 = 0x050000.)"
+   },
+   {
+    "claim": "Tone database sub-regions: directory 0x830000, ToneDB_BankMap_Main 0x830100, ToneDB_ToneNumBanks_Main 0x830180, ToneDB_BankMap_Coeff 0x830C80, ToneDB_ToneNumBanks_Coeff 0x830D00, ToneDB_ToneOffsetTable 0x831B00 (629 LE32 entries), tone records from 0x8324D4",
+    "evidence": "table_data/tone_database_directory.s:20-28 (DATABASE LAYOUT block)"
+   },
+   {
+    "claim": "tone_database_records.s carves 579 tone/voice records",
+    "evidence": "`grep -c '^ToneRec_[0-9]*:' table_data/tone_database_records.s` = 579; also stated at table_data/kn5000_table_data.s:106"
+   },
+   {
+    "claim": "The 196,608-byte sub-CPU payload occupies two disjoint extents in the sub-CPU address space: 0x000400-0x0004FF (256 B) and 0x00F000-0x03EEFF (196,352 B)",
+    "evidence": "v10/maincpu/kn5000_v10_program.s:355-375 (transfers of 0x10000 to 0xF000, 0x10000 to 0x1F000, 0xFF00 to 0x2F000, and 0x100 to 0x400) and Makefile:632-638 (dd count=256 + dd skip=60416; 0x400+60416 = 0xF000). NOTE: v142/subcpu/subcpu.ld's header comment says '0xF000-0x3EAFF', which does not reconcile with either the dd arithmetic or the maincpu transfers; I used the code-derived 0x03EEFF."
+   },
+   {
+    "claim": "Sub-CPU DSP data zones carved in Wave 3a: zone A0 0x00F7E6-0x012114, zone A 0x012195-0x014738, zone B 0x0147B3-0x01E17E (39,372 B); the tone-generator voice template sits at 0x012115-0x012158",
+    "evidence": "WAVE-STATUS.md Wave 3a integration row (commits 09a82ec / c5816ae / 85ecca2 with those ranges); v142/subcpu/subcpu_data_tables.s:563-580 (zone A0 resolution list, including '0x012115-0x012158 the tone-generator voice template') and :4031 ('--- 0x0147B3-0x01E17E DSP effect program + parameter zone')"
+   },
+   {
+    "claim": "The four 100-entry u32 pointer arrays indexing the effect zone are at 0x01ED7C, 0x01EF0C, 0x01F09C and 0x01F22C",
+    "evidence": "Already published on the site at kn5000-docs/dsp-effect-data-zone.md (landed as docs commit 1bd4690); spacing 0x190 = 400 bytes = 100 x u32 is self-consistent"
+   },
+   {
+    "claim": "Table Data ROM top-level layout (0x800000-0x9FFFFF) as given in my memory-map addition",
+    "evidence": "table_data/kn5000_table_data.s:13-71 \u2014 the 'ROM LAYOUT' banner in the module header, which I transcribed region by region; individual regions cross-checked against the .org directives at lines 101, 110, 172-191, 237, 283, 313, 366, 801, 809, 833, 870, 978, 1008, 1140, 1155 and against the per-module headers"
+   },
+   {
+    "claim": "Music Stylist preset records: 1000 records x 198 bytes at 0x951000-0x98156F",
+    "evidence": "table_data/kn5000_table_data.s:41; arithmetic check 1000*198 = 198,000 = 0x30570 and 0x951000+0x30570 = 0x981570 (i.e. last byte 0x98156F)"
+   },
+   {
+    "claim": "Music Stylist pointer-table selection at 0x986000/0x987000 is by the current UI state ID in RAM 0x8D38, not by a model code",
+    "evidence": "table_data/help_databases.s:83-86 ('NOTE: RAM 0x8D38, which selects between the two tables, is the current UI STATE ID (the byte UIState_KeyScan_Dispatch indexes keymaps with), not a model code as previously documented here.')"
+   },
+   {
+    "claim": "The help language index at 0x988000 is two parallel 6-slot pointer tables and slot 4 of each reuses English",
+    "evidence": "table_data/help_databases.s:90-104 (HelpIntro_LanguageTable with the comment 'slot 4: no 5th translation, reuses English')"
+   },
+   {
+    "claim": "Composer_FactoryMemoryImage is a single labelled 64KB include at 0x9B4000-0x9C3FFF, copied wholesale to RAM 0x94800 by the v10 maincpu routine at 0xF6413A",
+    "evidence": "table_data/kn5000_table_data.s:809-831 (banner and `Composer_FactoryMemoryImage: .incbin \"includes/icons_to_strings.bin\", 0x6f288, 0x10000`)"
+   },
+   {
+    "claim": "Panel Memory factory data: bank names 0x99EC00-0x99EC9F (10 x 16 chars), presets 0x99ECA0-0x9ABF3F (80 x 674-byte chunk records)",
+    "evidence": "table_data/kn5000_table_data.s:50-51 (ROM LAYOUT banner)"
+   },
+   {
+    "claim": "Font descriptors: 10 fonts x 16 bytes + a null slot at 0x945C00-0x945CAF, glyph banks 0x945CB0-0x950A5F",
+    "evidence": "table_data/kn5000_table_data.s:37-38; ten `Font<N>_Glyphs: .incbin` directives at table_data/fonts.s:110-115 and :353-356 with explicit sizes"
+   },
+   {
+    "claim": "The ASL mirror still bincludes initial_data.bin, icons_to_strings.bin, wallpaper1_to_icons.bin, icon_pixel_data.bin, icon_table.bin, wallpaper_gap.bin and hkst_55.ssf as whole files, which is why those blobs must remain byte-identical on disk",
+    "evidence": "`grep -o 'binclude \"[^\"]*\"' archive/asl/table_data/kn5000_table_data.asm` (49 binclude directives; each of those blob names appears exactly once, with no offset/length form available in ASL)"
+   },
+   {
+    "claim": "Source-tree sizes: v10/maincpu 155 .s files / 467,674 lines; v9/maincpu 155 / 467,666; v7/maincpu 155 / 337,153; v142/subcpu 5 / 69,520; subcpu/boot 1 / 100,869; hdae5000 7 / 78,359; table_data 26 / 79,177; custom_data 1 / 146",
+    "evidence": "`find <dir> -name '*.s' | wc -l` and `find <dir> -name '*.s' -exec cat {} + | wc -l` for each tree"
+   },
+   {
+    "claim": "Symbol reference file sizes (non-comment lines): maincpu 39,231; subcpu 4,326; table_data 4,153; hdae5000 223; subcpu boot 53",
+    "evidence": "`grep -vc '^\\s*#\\|^\\s*$' symbols/*_symbols_reference.txt`"
+   },
+   {
+    "claim": "The old rom-reconstruction.md source-file table was substantially stale: 9 of the ~50 filenames it lists no longer exist under those names and the paths predate the per-version tree split",
+    "evidence": "I resolved each listed filename with `find v10/maincpu -name <f>`: audio_cmd_encoder.s, mode_screens.s, midi_voice_routing.s, naka_dispatch.s, naka_descriptors.s, style_data_init.s, voice_synth.s, naka_style_bitmap.s, tonegen_voice_ctrl.s, voice_midi_buf.s returned nothing; surviving files are under subdirectories (e.g. storage/fdc_routines.s, 2,569 lines vs the page's 1,403)"
+   },
+   {
+    "claim": "custom_data's 667,648 incbin bytes come from six section blobs (section_1_2, section_3_4, section_5_6 at 188,416 B each, section_0 at 94,208 B, section_7 and registration at 4,096 B each)",
+    "evidence": "My incbin parse of custom_data/*.s"
+   },
+   {
+    "claim": "hdae5000's 340,790 incbin bytes come from four slices of includes/code_29af2d_2fffff.bin, and that file is graphics/palettes/text/pointer tables rather than code, including an unidentified boot-splash at 0x2E61CE",
+    "evidence": "My incbin parse of hdae5000/*.s (one filename, 4 directives); content characterisation from analysis/binclude-audit-2026-08-07/PLAN.md:93 and the Wave 3b package table at PLAN.md:185-188"
+   },
+   {
+    "claim": "The hdae5000 string table around 0x2A7736-0x2A8499 is currently mis-decoded as instructions in hdae5000_data_tables.s",
+    "evidence": "analysis/binclude-audit-2026-08-07/PLAN.md:185 (hdae-strings package scope). Marked in the docs as outstanding work, not as a finished finding."
+   },
+   {
+    "claim": "subcpu_boot_data_8000.bin is 656 bytes at 0xFF8000 and code references six or more addresses inside it",
+    "evidence": "My incbin parse of subcpu/boot/kn5000_subcpu_boot.s (single 656-byte directive); PLAN.md:63 and :189"
+   }
+  ]
+ }
+]
