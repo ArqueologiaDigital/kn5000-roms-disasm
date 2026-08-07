@@ -1,0 +1,597 @@
+[
+ {
+  "claim": "compare_roms.py reports 15 verification sections, all at 100.00% \u2014 9 LLVM + 6 ASL; the 'subcpu v142 update image' section (base 0x3E0000) exists and compares the rebuilt image against the archived original",
+  "verdict": "CONFIRMED",
+  "package": "d-status",
+  "evidence": "Ran `python3 scripts/build/compare_roms.py` in kn5000-roms-disasm this session: 'romset bytematch: 100.00%' + 9 LLVM sections + 6 'ASL build' sections, every one 'Similarity: 100.00%'. Section lists at scripts/build/compare_roms.py:11-24 and :81-88; the update-image tuple is at :18-19 with rom_base 0x3E0000, orig=original_ROMs/..., built=rebuilt_ROMs/... . Note the Wave-2 ledger row's '\u00d716' is a miscount, as PLAN.md:156 itself says.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Every table-data ROM fact asserted from the dump: 34-entry section directory (entries 0-7 = 0x800088/0x802D10/0x805998/0x80607C/0x807390/0x8086A4/0x91D000/0x82CDA2), 19 SLIDE4K + 6 SLIDE8K blocks at the listed addresses, hkst_55.ssf at 0x87FFF0, 0x9999CC residue 7F D8 7F E2 7F EC 7E, 0xFF fills of 21,037 / 32,960 / 3,720 / 1,440 / 5,370 B, PanelMemory_BankNames at 0x99EC00, file-ID strings at 0x9FA000, 'SLIDE' at 0x9FA150, FontDescriptor_Table at 0x945C00, StyleRec grid at 0x951000",
+  "verdict": "CONFIRMED",
+  "package": "d-tabledata",
+  "evidence": "Read directly out of original_ROMs/kn5000_table_data.rom this session with a Python script: directory unpack, regex scan for b'SLIDE4K\\x00' (19 hits) and b'SLIDE8K\\x00' (6 hits) matching the published address lists exactly, set(bytes)=={0xFF} over each declared fill with the stated lengths, and the byte/ASCII content at each named address.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Tone-database facts: 629 LE32 offsets at 0x831B00 resolving to 607 distinct offsets and 387 distinct names; 579 records tiling 0x8324D4-0x855A47 with only sizes {102,183,264,345,426}; indices 338-377 all 426-byte (0x8517B8-0x85589E); 378-399 all offset 0x24D4; 310-335 drum kits (0x86363C 'Jazz Kit' .. 0x8649D3 'Special Kit'); 336/337 drawbars 0x8706BD/0x870867; 400-628 span 0x846016-0x851701 ending 'Gun Shot'; bias word at 0x830088 = 338; slot +0x08 = 0x1B00; Main bank map values 0-10 / tone numbers 0-337 over 11\u00d7128; Coeff bank map 0-13 / tone numbers 311-628 over 14\u00d7128",
+  "verdict": "CONFIRMED",
+  "package": "d-tonedb",
+  "evidence": "Recomputed from original_ROMs/kn5000_table_data.rom this session: len(set(tbl))==607, 387 distinct 16-byte names, 579 targets in [0x8324D4,0x855A48) whose successive differences are exactly {102,183,264,345,426}, Counter for indices 338-377 == {426:40}, tbl[378:400] all 0x24D4, and the named strings read back verbatim at each cited address.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Music Stylist facts: 1000\u00d7198 B grid at 0x951000-0x98156F, +0x00=197 and +0x04=77 in every record, 93 distinct pad values, the ten category ranges and sub-category counts as tabulated, tempo field 62..235 with 98 distinct values, 0x986000 = identity permutation, and 0x987000 covers only 996 distinct records (160-163 missing, 368-371 duplicated at slots 652-655 / 984-987)",
+  "verdict": "CONFIRMED",
+  "package": "d-stylist-panelmem",
+  "evidence": "Recomputed from original_ROMs/kn5000_table_data.rom this session: both 1000-entry tables land on the grid, 0x986000 index list == range(1000); 0x987000 gives len(set)==996 with Counter duplicates {368,369,370,371} at exactly those slot pairs and missing {160,161,162,163}; category boundaries 0-123/124-255/256-323/324-399/400-471/472-591/592-715/716-815/816-883/884-999 with sub-category counts 31/33/17/19/18/30/31/25/17/29; tempo set size 98, min ' 62', max '235'. This anomaly genuinely contradicts table_data/style_record_ptr_tables.s:26 and the draft is right to say so.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Panel Memory / Composer facts: 10\u00d716-char bank names, 80\u00d7674 B records ending exactly at 0x9ABF40, loader routines 0xFC81EF / 0xFC7E82 / 0xFC7DD8 with the 0x7C + 0x11E + 0x226 = 0x3C0 assembly, the 286-byte eleven-chunk block of tags 0x04-0x0E at 0xEDB478, the 'HK ' slot at 0xEDBA1C, and the Composer copy `ld XIY,0x9B4000 / ld XIX,0x94800 / ld BC,0x8000 / ldirw` at 0xF6413A",
+  "verdict": "CONFIRMED",
+  "package": "d-stylist-panelmem",
+  "evidence": "Read/disassembled original_ROMs/kn5000_v10_program.rom this session: 0xEDBA1C = 484b2000000000000000000000c00350; 0xEDB478 walks as 11 chunks of (tag,24) tagged 0x04..0x0E totalling exactly 0x11E; 0xF6413A bytes = 45 00 40 9b 00 / 44 00 48 09 00 / 31 00 80 / 95 11; the 0x009B4000 immediate occurs exactly once in the image; fc81ef/fc7dd8/fc7e82 opcode bytes match the described pushes and bounds checks. symbols/maincpu_symbols_reference.txt lines 34654/34656/34668 confirm those three routines still carry LABEL_* placeholder names, as the draft states.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Boot/FDC/CP-serial addresses: every symbol quoted on boot-cpserial-link.md, fdc-subsystem.md and boot-sequence.md resolves in the rebuilt ELF (FDC_Request 0x9FE944, the twelve FDC_Cmd* handlers, FDC_SetGeometryForDiskType 0x9FDBAD, FDC_ProbeDiskFormat 0x9FEB3D, Boot_CheckDiskPresent 0x9FEC63, Boot_ClassifyDeviceID 0x9FEF89, the three dispatch tables, all seven boot_clib routines, Boot_free_DeadTail9998 0x9FFD7D, the three ISRs, the four packet tables, BootStub_ReturnError 0x9FB80E)",
+  "verdict": "CONFIRMED",
+  "package": "d-boot",
+  "evidence": "llvm-nm on rebuilt_ROMs/kn5000_table_data.llvm.elf this session returned every one of those addresses. ROM bytes at 0x9FB802-0x9FB811 read `dba80e dba80e dba80e dba80e 33ffff0e` \u2014 four 3-byte return-0 stubs then BootStub_ReturnError = 33 ff ff 0e. The three offset tables read 0,21,43,65,87,108 / 0,14,14,14,14,14,8,8,8,11,8,14 / 0,5,10,\u2026,55 exactly as published. FDC_HANDLER_OFFSETS at 0xEA98CA reads 0,5,13,21,29,37,45,50,55,60,65,70 and symbols/maincpu_symbols_reference.txt:29800 gives FDC_HANDLER_01 0xF97D92, confirming base 0xF97D8D and refuting the old page's F97D93-series addresses.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "The 259-byte tail at ROM 0x9FFA2C-0x9FFB2E is shared three ways and the table_data and sub-CPU copies differ in exactly 3 bytes",
+  "verdict": "CONFIRMED",
+  "package": "d-boot",
+  "evidence": "Direct byte comparison this session: table_data 0x9FFA2C-0x9FFB2E vs subcpu boot 0xFF84A8-0xFF85AA \u2014 259 bytes, differing at offsets 51/83/161 only, each 0x15 vs 0x13 (the 0x150000 vs 0x130000 peripheral base). The maincpu copy at 0xEF17F4-0xEF18F6 is byte-identical (0 differences) to the table_data copy.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "DSP facts: exactly 42 effect numbers share the 0x017263/0x01735E/0x017425 trio; 0x017263 occurs exactly 42 times in the image (pointer sharing, no duplicate program); the 13 named members are as tabulated with 29 '----------' placeholders; effect 37 is the only stub with a non-zero value pointer (0x0173F2); 41/59/41/59 distinct algorithm/coefficient/descriptor/value tables; chip-id table at 0x01ED6D = 00 00 01 01 01; CMD_DISPATCH_TABLE at 0x00F46C = 0x034D5F, 0x01FC7C, 0x01FC7F, 0x035893, 0x01F890, 0x03CFEE, 0x020C12, 0x020C12; effects 15 and 53 share algorithm 0x016ACF",
+  "verdict": "CONFIRMED",
+  "package": "d-subcpu-dsp",
+  "evidence": "Recomputed from original_ROMs/kn5000_subprogram_v142.rom this session with the documented file\u2192address mapping: stub set == the published 42, count of struct.pack('<I',0x017263) in the whole image == 42, distinct counts 41/59/41/59, only index 37 has a non-zero value pointer, 0x01ED6D bytes = 0000010101, the eight dispatch u32 read back exactly, algo[15]==algo[53]==0x016ACF. Names decoded from kn5000_v10_program.rom at 0x033568-18n reproduce the thirteen names and 29 blanks. Every DSP symbol address quoted in the two patched pages (0x03C259, 0x03C2CB, 0x03C32E, 0x03C9E6, 0x03CAAE, 0x03CB18, 0x036A2E, 0x036A4F, 0x03666B, 0x0364C4, 0x03C161, 0x03C181, 0x03C190, 0x03C20E, 0x03C067, 0x038439, 0x0387E6, 0x038539, 0x0383F7, 0x0380EC, AlgoJumpTable1-6 at 0x00FB66-0x00FBD2, DSP_AlgoChannel_SelectorRecords 0x010FCE, DSP_AlgoDescriptor_Records 0x011E16, DSP_MixerGain_Curve 0x0131CF, OFFSETS_14739/14745) matches symbols/subcpu_symbols_reference.txt.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Repository measurements on rom-reconstruction.md / disassembly-workflow.md: incbin byte totals per tree (860,028 / 860,028 / 995,213 / 0 / 656 / 340,790 / 1,113,121 / 667,648), the v7 split 136,775 vs 858,438, 139 v7_block + 24 v7_fix + 16 v7_data files, icons_to_strings.bin as 13 slices of 126,674 B, wallpaper1_to_icons.bin as 87, icon_pixel_data.bin as 177, symbol counts 4,153 / 4,326 / 39,231 / 223, 98,304 `.byte 0xff` lines in the sub-CPU boot source, the three payload sha256s and the 93,124/93,181/93,203 image sizes",
+  "verdict": "CONFIRMED",
+  "package": "d-status",
+  "evidence": "All re-measured this session. Note: an incbin parser must resolve paths against the tree root (llvm-mc's -I dir), not the .s file's own directory \u2014 resolving both ways reproduces 860,028 (855,100 of it under includes/generated/) and 995,213 exactly. `sha256sum`, `ls -l`, `grep -c '^\\s*\\.byte 0xff\\s*$'` and `grep -vc` on the symbol files all agree with the published numbers. `grep -rn '\\.incbin' table_data/*.s` shows no anonymous whole-file blob left: initial_data.bin, icon_table.bin, wallpaper_gap.bin and hkst_55.ssf are gone from the LLVM build, and archive/asl/table_data/kn5000_table_data.asm still bincludes 6 bootcode_* files.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "'no `.incbin` of any bootcode_* file remains in table_data/*.s' and 'the first-stage bootloader is fully disassembled'",
+  "verdict": "CONFIRMED",
+  "package": "d-boot",
+  "evidence": "`grep -rn 'bootcode' table_data/*.s` returns only prose comments \u2014 the last one, `.incbin \"includes/bootcode_hdae_to_lzss.bin\", 1, 459`, was replaced by symbolic source in commit 22ecfb5 ('table_data: disassemble bootcode_hdae_to_lzss.bin'). Commit f79fcb1's diff confirms the mid-instruction detail exactly as the drafts describe it, including the 'PPI Port B read, not a store' correction in its message.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "lzss-compression.md: 'Entries 0-17 are contiguous from 0x9C4050 to 0x9F94C9 (0xFF fill follows)'",
+  "verdict": "REFUTED",
+  "package": "d-lzss",
+  "correction": "Entries 0-17 are contiguous from **0x9C4050** to **0x9F94CA** (0xFF fill follows)",
+  "evidence": "ROM bytes at 0x9F94C0 read `52 ff ff ef ac 53 eb 91 00 32 51 ff ff \u2026`, so 0x9F94CA = 0x51 is data and 0x9F94CB is the first 0xFF. Arithmetic agrees: the last block starts 0x9F494E, its stream starts 0x9F4959 after the 11-byte header, and demo_preset_17_compressed.original.bin is 19,314 B, giving an exclusive end of 0x9F94CB. NOTE for the manager: the three drafts give three different ends for this same region \u2014 table-data-rom.md says 0x9F9FFF (the module banner's coarse figure, includes the fill), memory-map.patch says 0x9F94CB (the Makefile's exclusive end), lzss says 0x9F94C9. Harmonise to 0x9F94CA (last data byte).",
+  "checker": "addresses"
+ },
+ {
+  "claim": "table-data-rom.md: 'Section 7 is by far the largest at 983,646 bytes and is mostly erased flash.'",
+  "verdict": "REFUTED",
+  "package": "d-tabledata",
+  "correction": "Section 7 is the largest directory entry, but 983,646 bytes is only its **nominal** address-order extent \u2014 the distance from 0x82CDA2 to the next-higher directory target, 0x91D000 \u2014 so it nominally spans the tone database, feature demo and wallpapers that follow. Only its first 12,894 bytes (up to the tone database at 0x830000) lie in this half, and those are 8bpp-bitmap-like content: ~200-byte-period rows of palette indices 0x22-0x2E over the 0xF7 background `DrawBitmap` treats as transparent. The section's actual save/load span is unverified.",
+  "evidence": "table_data/preset_banks.s, the 'Section 7 (0x82CDA2, 983,646 bytes, head only)' banner immediately above `PresetBank_Sec07` (line 11611), which states all of the above verbatim. The draft drops the source's own caveats and substitutes 'mostly erased flash', which the source does not say. (Also: the d-tabledata claims cite preset_banks.s:42/:48-60/:29-32 for the directory and grids; the actual lines are :44, :50-62 and :30-33 \u2014 a 1-2 line drift throughout that package's citations of this file. Substance unaffected.)",
+  "checker": "addresses"
+ },
+ {
+  "claim": "table-data-rom.md: 'All 19 blocks are build products: the checked-in sources are the decompressed presets under `table_data/includes/demo_presets/`, recompressed byte-identically by `compress_lzss.py --strict --reference`'",
+  "verdict": "REFUTED",
+  "package": "d-tabledata",
+  "correction": "All 19 blocks are build products. The checked-in sources are a MIDI file plus a YAML sidecar per preset (`table_data/includes/demo_presets/midi/demo_preset_NN.mid` + `sidecar/demo_preset_NN.yaml`); `midi_to_preset.py` produces the decompressed `.bin` and `compress_lzss.py --strict --reference` the compressed one. Both `.bin` stages are generated and git-ignored.",
+  "evidence": "`git ls-files table_data/includes/demo_presets` lists 39 files \u2014 a README, 19 .mid and 19 .yaml \u2014 and zero .bin. .gitignore carries `table_data/includes/demo_presets/demo_preset_*.bin` with the comment 'the checked-in source is midi/ + sidecar/'. Makefile:735-757 defines the two-stage rule. The d-lzss and d-status drafts describe this correctly; only the d-tabledata page has it wrong.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "table-data-rom.md: 'nine orphaned `bootcode_*.bin` files remain in `table_data/includes/` outside the build'",
+  "verdict": "REFUTED",
+  "package": "d-tabledata",
+  "correction": "seven orphaned `bootcode_*.bin` files remain in `table_data/includes/` outside the build (the other six are still bincluded by the archived ASL mirror and must stay)",
+  "evidence": "Per-file `grep -rl <name> --include='*.s' --include='*.asm' .` over all 13 files: zero references for bootcode_debug, _division, _free2, _interrupts, _post_clearram, _pre_clearram, _pre_lzss = seven. `grep -o 'binclude \"includes/bootcode[^\"]*\"' archive/asl/table_data/kn5000_table_data.asm | wc -l` = 6. PLAN.md:220's figure of 9 predates the Wave-1/2 conversions; d-status/rom-reconstruction.md already says seven, so the two drafts contradict each other.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "tone-database.md: 'The last 320 KB of the Table Data ROM hold the KN5000's tone database'",
+  "verdict": "REFUTED",
+  "package": "d-tonedb",
+  "correction": "The last 320 KB of the Table Data ROM's **first megabyte** \u2014 0x830000-0x87FFEF \u2014 hold the KN5000's tone database",
+  "evidence": "The ROM spans 0x800000-0x9FFFFF (2 MB, 2,097,152 bytes verified). 0x87FFEF is the end of the first megabyte's data, not of the ROM; everything from 0x880000 to 0x9FFFFF (feature demo, wallpapers, icons, fonts, Music Stylist, help, Panel Memory, Composer, demo presets, bootloader) comes after it. The companion draft (table-data-rom.md) phrases the same fact correctly as 'the upper 320 KB of the first megabyte'.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "subcpu-payload-loading.md patch: 'The Sub CPU's executable comes from the LZSS-compressed image in Custom Data Flash at `0x3E0000` (Phase 2 above) \u2014 the firmware-update \"File Type 007\" payload, which decompresses byte-exactly to `kn5000_subprogram_v142.rom`.'",
+  "verdict": "REFUTED",
+  "package": "d-subcpu-dsp",
+  "correction": "After a File Type 007 firmware update, the Sub CPU's executable is the LZSS-compressed image written to Custom Data Flash `0x3E0000`, which decompresses byte-exactly to `kn5000_subprogram_v142.rom`. **On the machine we hold, that region is erased**, so this cannot be the factory path, and how the code payload reaches the Sub CPU on an un-updated unit remains unresolved.",
+  "evidence": "original_ROMs/kn5000_custom_data.ic19 at file offset 0xE0000 (= CPU 0x3E0000) is 4,096 bytes of 0xFF, and a regex scan of the whole 1 MB dump for b'SLIDE4K\\x00' \u2014 indeed for b'SLIDE' \u2014 returns zero hits. analysis/binclude-audit-2026-08-07/PLAN.md (List 2D) still records 'the runtime code-payload source path is still unresolved'. The paragraph's own following sentence hedges correctly, and the d-tonedb page states the open question properly ('How the Sub CPU code payload reaches the Sub CPU at runtime is still unresolved'); the lead sentence overclaims relative to both.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "subcpu-firmware-images.md: 'on the next boot the main CPU decompresses from there instead of falling back to the table-data ROM copy'",
+  "verdict": "REFUTED",
+  "package": "d-status",
+  "correction": "\u2026instead of taking the `SubCPU_Send_Payload` fallback branch that points at table-data ROM `0x830000`. That region is the **tone database**, not a copy of the Sub-CPU payload; what the machine would do with tone-database bytes on that path has not been analysed.",
+  "evidence": "The phrase 'the table-data ROM copy' reasserts exactly the claim this batch retracts everywhere else (kn5000-roms-disasm/CLAUDE.md:968 errata from commit f7c34d9; PLAN.md List 2D; the d-tonedb and d-subcpu-dsp drafts' own retraction boxes). I independently re-checked: 197 64-byte windows sampled across kn5000_subprogram_v142.rom appear zero times in kn5000_table_data.rom, and the 0x830000 region reads as the tone directory (bias 338 at 0x830088, offset table 0x1B00 at 0x830008).",
+  "checker": "addresses"
+ },
+ {
+  "claim": "subcpu-firmware-images.md: 'The KN5000's sub-CPU has no program flash of its own.'",
+  "verdict": "REFUTED",
+  "package": "d-status",
+  "correction": "The KN5000's sub-CPU has a 128 KB boot ROM of its own (`kn5000_subcpu_boot.ic30`, mapped at 0xFE0000) but no flash holding its 192 KB main firmware payload; that payload lives in the main system and is pushed across the inter-CPU link at every boot.",
+  "evidence": "original_ROMs/kn5000_subcpu_boot.ic30 is a 128 KB dump, is its own 'subcpu boot' verification section in scripts/build/compare_roms.py:20, and rom-reconstruction.md in this same batch documents it (routines SUB_8437, COPY_WORDS, the DMA set at 0xFF8604-0xFF881E). As written the sentence contradicts the sibling page.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "lzss-compression.md: 'The table_data flash update handlers (at 0x9FD800-0x9FEA9C) process compressed ROM images in SLIDE4K form'",
+  "verdict": "REFUTED",
+  "package": "d-lzss",
+  "correction": "The bootloader's flash-update path (`Boot_FlashUpdate_Main`, 0x9FCC2A onward) processes compressed ROM images in SLIDE4K form. The region 0x9FD8A5-0x9FEA9C that older notes called 'flash update handlers' is not part of it \u2014 it is the bootloader's uPD72068 FDC command-layer driver.",
+  "evidence": "table_data/boot_fdc_driver.s:1-10 and commit 65c79cb; llvm-nm gives Boot_FlashUpdate_Main = 0x9FCC2A and FDC_Request = 0x9FE944 inside the cited span. This is stale text surviving in the lzss draft that directly contradicts the correction the d-boot and d-status drafts in the same batch publish (line 795 of lzss-compression.md).",
+  "checker": "addresses"
+ },
+ {
+  "claim": "table-data-rom.md links to the new companion pages as `/music-stylist/` and `/panel-memory/`",
+  "verdict": "REFUTED",
+  "package": "d-tabledata",
+  "correction": "Line 350: `{{ site.baseurl }}/music-stylist-database/` ; line 426: `{{ site.baseurl }}/panel-memory-factory-data/`",
+  "evidence": "The two new pages declare `permalink: /music-stylist-database/` and `permalink: /panel-memory-factory-data/`. Neither `/music-stylist/` nor `/panel-memory/` exists among the 108 permalinks in kn5000-docs, and nothing in this batch creates them. I extracted every `{{ site.baseurl }}\u2026` link from all seven draft packages and diffed against the existing permalinks plus the six being added: these two are the only broken links introduced (the third residual, `/effects-dsp/flowcharts/`, is pre-existing in effects-dsp.md and resolves under flowcharts/).",
+  "checker": "addresses"
+ },
+ {
+  "claim": "tone-database.md: 'The factory bank map agrees exactly: its only non-zero entries are selectors 0x00-0x07 \u2192 banks 0-7, 0x40/0x41 \u2192 banks 8/9 and 0x70 \u2192 bank 10.'",
+  "verdict": "REFUTED",
+  "package": "d-tonedb",
+  "correction": "The factory bank map agrees: the only **mapped** selectors are 0x00-0x07 \u2192 banks 0-7, 0x40/0x41 \u2192 banks 8/9 and 0x70 \u2192 bank 10; the rest of the 128-byte map is zero. (Selector 0x00 maps to bank 0, so its byte is 0x00 and the map alone cannot distinguish it from an unmapped selector \u2014 the `cps bc,7` gate in `ToneDB_Find_PatchRecord` is what admits it.)",
+  "evidence": "Read from the ROM: the non-zero bytes of 0x830100-0x83017F sit at indices 0x01-0x07, 0x40, 0x41 and 0x70 only; index 0x00 holds 0x00. Values range 0-10 as claimed. Small precision fix, not a substantive error.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "lzss-compression.md retains a pre-existing 'Open Questions \u2014 Sub CPU Payload Transfer' block listing '0x830000-0x87FFFF (Table Data ROM, post-remap)' as a candidate location of the ~192 KB Sub-CPU executable, and a memory-map row labelling 0x830000-0x87FFFF 'Factory Sub CPU payload'",
+  "verdict": "REFUTED",
+  "package": "d-lzss",
+  "correction": "Row at line 273: `| 0x830000-0x87FFFF | Table Data ROM (offset 0x30000-0x7FFFF) | Tone database \u2014 data shipped to Sub CPU RAM 0x050000 |`. Lines 340-351: drop 0x830000-0x87FFFF / 0xE30000-0xE7FFFF from the 'potential payload locations' list and state instead that the region is the tone database and that the code-payload source path is unresolved (cross-link the retraction on /subcpu-payload-loading/ and /tone-database/).",
+  "evidence": "This is legacy text the draft left untouched while the rest of the batch retracts precisely that reading (CLAUDE.md:968 errata, commit f7c34d9; PLAN.md List 2D; tone_database_directory.s:1-40). Leaving it presents a refuted hypothesis as still-live on the page most likely to be read alongside the retraction.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "rom-reconstruction.md: 'Before the waves, the LLVM source for the 2 MB table-data ROM pulled 1,262,528 bytes \u2014 60% of the ROM \u2014 out of anonymous blob files'",
+  "verdict": "CONFIRMED",
+  "package": "d-status",
+  "evidence": "Reproduced: at commit 3bfe9fa the table_data .s files incbin initial_data.bin (524,271) + icons_to_strings.bin ',0,0x7F2D8' (520,920) + wallpaper1_to_icons.bin (152,576) + icon_pixel_data.bin (51,184) + icon_table.bin (1,416) + hkst_55.ssf (1,033) + wallpaper_gap.bin (1,024) + the six bootcode bins (10,104) = 1,262,528; /2,097,152 = 60.2%. One nuance the manager may want to reflect: 3bfe9fa is already post-Wave-0 for the boot blobs (flash_handlers is sliced and hdae_to_lzss carries ',1,459' there), so the figure is the baseline *before Waves 1-3*, not literally before all four waves.",
+  "checker": "addresses"
+ },
+ {
+  "claim": "Honesty of the remaining-work statements: every draft states the unfinished parts plainly (three wave-groups not started, v7 tree's >50%-similarity dd-overwrite as a silent-corruption risk, ~676 KB of unclassified maincpu inline .byte, 98,304 .byte lines, hdae5000 string table mis-decoded as instructions, v1.41 with no source tree, stale ROM-status diagram, undecoded parameter blocks)",
+  "verdict": "CONFIRMED",
+  "package": "d-status",
+  "evidence": "Checked against PLAN.md's 'Remaining waves \u2014 resumable plan' (Waves 3b/4/5 tables, ':263 ~23 worker packages across 3 waves') and the Deferred backlog. rom-reconstruction.md \u00a7'Where the source still holds raw ROM slices', table-data-rom.md \u00a7'What is still open', tone-database.md \u00a7'What is still open', music-stylist-database.md and panel-memory-factory-data.md \u00a7'Open items', boot-cpserial-link.md \u00a7'Emulation status' and fdc-subsystem.md's two-driver status table all mark unfinished work explicitly. The drafts also correctly distinguish 'accounted for' from 'understood' (table-data-rom.md:19-22) and describe the verify-* targets accurately as printing one OK/MISMATCH line rather than gating the build, with the actual gate being `compress_*.py --strict` raising SystemExit inside the .bin rules (compress_lzss.py:246-252; Makefile:640-655, :761-769, :812-823).",
+  "checker": "addresses"
+ },
+ {
+  "package": "d-status",
+  "claim": "compare_roms.py reports 15 verification sections, all at 100.00% \u2014 9 LLVM + 6 legacy ASL",
+  "verdict": "CONFIRMED",
+  "evidence": "I ran `python3 scripts/build/compare_roms.py` this session: 'romset bytematch: 100.00%' + 9 LLVM sections + 6 'ASL build' sections, every one 'Similarity: 100.00%'. Section lists at scripts/build/compare_roms.py:11-24 and :81-88.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "COVERAGE CAVEAT (not in any draft): compare_roms.py SKIPS any section whose rebuilt file is missing (`if not os.path.exists(built_path): continue`, compare_roms.py:29-30 and :90-92), and it only byte-compares whatever rebuilt files happen to exist. A build step that fails to emit a file makes its section vanish silently rather than fail.",
+  "verdict": "CONFIRMED",
+  "evidence": "scripts/build/compare_roms.py:28-30 (LLVM loop) and :89-92 (ASL loop). Neither loop errors on a missing built file. Also `make all` = `llvm-all` + compare_roms.py (Makefile:35-40); the ASL sections only appear because rebuilt_ROMs/*.rebuilt.rom happen to be on disk from a prior `make asl-all`. Suggest one sentence on rom-reconstruction.md / disassembly-workflow.md: '15 sections' is the count when every rebuilt image is present.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "A new verification section 'subcpu v142 update image' exists, base 0x3E0000, comparing kn5000_subprogram_v142_compressed.rom against itself as rebuilt",
+  "verdict": "CONFIRMED",
+  "evidence": "scripts/build/compare_roms.py:15-19: tuple ('subcpu v142 update image', 'kn5000_subprogram_v142_compressed.rom', 'kn5000_subprogram_v142_compressed.rom', 0x3E0000); orig_path=original_ROMs/..., built_path=rebuilt_ROMs/... . Section prints 100.00% in my run.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "The v142 update image is rebuilt with compress_lzss.py --strict --with-header --reference then sealed with cmp; the rule is a prerequisite of llvm-all",
+  "verdict": "CONFIRMED",
+  "evidence": "Makefile:40 lists rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom in llvm-all; Makefile:640-655 is the rule with `--strict --with-header --reference` followed by `cmp`.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "`make verify-help-databases` exists and all six SLIDE8K help databases rebuild byte-identically; `make verify-demo-presets` 19/19",
+  "verdict": "CONFIRMED",
+  "evidence": "Makefile:818-823 and :756-762. NUANCE WORTH ADDING TO THE PAGE: both verify-* targets are report-only \u2014 the shell loop echoes 'OK'/'MISMATCH' and the target always exits 0, and neither is a prerequisite of `all`/`llvm-all`. The real gate is upstream: the `%_compressed.bin` pattern rules (Makefile:757, :812-813) run compress_lzss/compress_slide8k with `--strict`, which aborts on divergence, and those .bin files ARE prerequisites of the table-data build. rom-reconstruction.md's 'Check: 19/19 / 6/6' column reads like a pass/fail gate; it is a printed report.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "rom-reconstruction.md table cell: `make verify-help-databases` rebuilds '6 SLIDE8K help databases, from decompressed text'",
+  "verdict": "REFUTED",
+  "evidence": "The checked-in sources are BINARIES, not text: table_data/includes/help_databases/help_db_<lang>.bin (36,864 B each). The record format is explicitly undecoded \u2014 d-lzss's own lzss-compression.md draft says so ('checked in as binaries ... not yet as text sources'). Calling them 'decompressed text' overstates the conversion.",
+  "correction": "6 SLIDE8K help databases, recompressed from the checked-in decompressed database binaries",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "Demo preset entries 0-17 occupy 0x9C4050-0x9F94CB (also in memory-map.patch row '0x9C4050 - 0x9F94CB')",
+  "verdict": "REFUTED",
+  "evidence": "Computed from the source: DemoSongPreset17 is at .org 0x9F494E (table_data/kn5000_table_data.s:972), + 11-byte header + 19,314 B slice = last byte 0x9F94CA. ROM read confirms: rom[0x9F94CA]=0x51 (non-fill), rom[0x9F94CB..0x9F9FFF] is all 0xFF. The Makefile:735 comment carries the same off-by-one and is the likely source of the error.",
+  "correction": "0x9C4050-0x9F94CA",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-lzss",
+  "claim": "The Table Data ROM contains exactly 19 SLIDE4K blocks; entries 0-17 are contiguous from 0x9C4050 to 0x9F94C9 (0xFF fill follows)",
+  "verdict": "REFUTED",
+  "evidence": "Two errors. (a) End address: last data byte is 0x9F94CA, not 0x9F94C9 (0x9F494E + 11 + 19314 - 1; ROM byte at 0x9F94CA = 0x51, fill starts 0x9F94CB). The drafter's arithmetic assumed the 18 blocks are contiguous, which they are not. (b) 'Contiguous' is wrong by one byte: I walked the `.org` directives in table_data/kn5000_table_data.s and found a 1-byte 0xFF pad between DemoSongPreset00 (ends 0x9C9016) and DemoSongPreset01 (.org 0x9C9018) \u2014 i.e. 0x9C9017 is fill. All other blocks abut exactly. The count of 19 blocks and the 0x8E0000 outlier are correct.",
+  "correction": "Entries 0-17 run from 0x9C4050 to 0x9F94CA, abutting except for a single 0xFF pad byte at 0x9C9017; 0xFF fill follows from 0x9F94CB.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-lzss",
+  "claim": "The 0x8E0000 SLIDE4K block: 11-byte header, 27,881-byte stream, 75 verbatim tail bytes, last payload byte 0x8E6D3E, decompresses to 0x9500",
+  "verdict": "CONFIRMED",
+  "evidence": "ls -l original_ROMs/demo_preset_18_compressed.original.bin = 27,956 B = 27,881 + 75; 0x8E0000 + 11 + 27,956 - 1 = 0x8E6D3E. ROM read at 0x8E0000 = b'SLIDE4K\\x00\\x00\\x95\\x00' (0x009500 = 38,144).",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-lzss",
+  "claim": "SLIDE_Parse_Header dispatches on the '4'/'8' magic character; an unrecognised sixth character returns success without decompressing; only a missing 'SLIDE' prefix returns 0xFFFF",
+  "verdict": "CONFIRMED",
+  "evidence": "Read v10/maincpu/boot/system_handlers.s:7091-7133 in full: `cp a,0x34 / jr nz,SLIDE_Parse_Check8K / calr SLIDE_Decompress_4K_Init`; `SLIDE_Parse_Check8K: cp a,0x38 / jr nz,SLIDE_Parse_ReturnOK / calr SLIDE_Decompress_8K_Init`; `SLIDE_Parse_ReturnOK: lds hl,0`; `SLIDE_Parse_NotFound: ldw hl,0xffff` reached only from the String_Compare failure.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-lzss",
+  "claim": "Exactly six SLIDE8K blocks exist in the whole dumped ROM set, all in table_data at 0x983B3A/0x988690/0x98BB3A/0x98F0DA/0x992A0C/0x9963FA, each declaring and producing 0x9000 bytes",
+  "verdict": "CONFIRMED",
+  "evidence": "Independently re-scanned the six original_ROMs images for b'SLIDE8K\\x00': hits only in kn5000_table_data.rom at file offsets 0x183B3A/0x188690/0x18BB3A/0x18F0DA/0x192A0C/0x1963FA. Header at 0x988690 reads 53 4c 49 44 45 38 4b 00 / 00 90 00 = 0x9000 BE.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-lzss",
+  "claim": "The stale block at 0x983B3A is truncated, not corrupt: identical to the live German DB for exactly 0x55E0 output bytes; its tail was overwritten by the Music Stylist pointer tables at 0x986000/0x987000; nothing references it",
+  "verdict": "CONFIRMED",
+  "evidence": "Cross-checked three ways: the checked-in raw slice is `.incbin \"includes/icons_to_strings.bin\", 0x3EDCD, 0x24BB` (table_data/help_databases.s:78), and 0x944D78+0x3EDCD = 0x983B45 with +0x24BB ending at 0x985FFF \u2014 exactly where StyleRec_PtrTable_C2C5 begins. table_data/help_databases.s:59-70 states the 0x55E0 figure. NOTE for the draft: the ROM emits only those 0x24BB bytes from the help slice; the remaining ~13.6 KB of the 16,111-byte round-tripped reference file is the Music Stylist tables' bytes read as stream, so 'a whole-extent reference slice is round-trip-verified to pin the bytes down' should say the extent past 0x985FFF is pinned by style_record_ptr_tables.s, not by the help module.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-lzss",
+  "claim": "Makefile round-trip targets are decompress/rebuild/verify-{help-databases,demo-presets} plus demo-midi and demo-sidecars; demo-preset sources are MIDI + YAML; table_data/preset_data.asm no longer exists",
+  "verdict": "CONFIRMED",
+  "evidence": "Makefile:30-31 (.PHONY), :735-800 (demo presets: .mid + .yaml -> .bin -> _compressed.bin, rebuild/verify/decompress/demo-midi/demo-sidecars), :805-833 (help DBs). `ls table_data/*.asm` -> no such file.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "Section 7 is 983,646 bytes (drafted as 'Section 7 is by far the largest at 983,646 bytes and is mostly erased flash')",
+  "verdict": "REFUTED",
+  "evidence": "983,646 is an artifact of the module's own size heuristic ('a section's size is the distance to the next-higher directory target', preset_banks.s:10-11). I read all 33 directory targets from the ROM: entry 7 = 0x82CDA2, and the next-higher target is entry 6 = 0x91D000, so the heuristic spans 0x82CDA2->0x91D000 = 983,646 bytes \u2014 crossing the tone database, the feature-demo BMPs, both wallpapers and the UI bitmap tables, none of which belong to section 7. The actual in-half extent emitted by PresetBank_Sec07 (preset_banks.s:11611 onward) is 0x82CDA2-0x82FFFF = 12,894 bytes. The source comment at preset_banks.s:42 carries the same artifact and should be flagged upstream.",
+  "correction": "Section 7 begins at 0x82CDA2 and runs to the end of the half at 0x82FFFF \u2014 12,894 bytes. (The directory-derived size heuristic reports 983,646 B for this entry because the next-higher directory target is entry 6 at 0x91D000, in the other half of the ROM; that figure is an artifact, not a section length.)",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "Nine orphaned bootcode_*.bin files remain in table_data/includes/ outside the build (table-data-rom.md:507)",
+  "verdict": "REFUTED",
+  "evidence": "Measured per file: of the 13 table_data/includes/bootcode_*.bin, exactly SEVEN have zero references in any .s or .asm (bootcode_debug, _division, _free2, _interrupts, _post_clearram, _pre_clearram, _pre_lzss); the other six are still bincluded by archive/asl/table_data/kn5000_table_data.asm (6 binclude directives). PLAN.md:220's 'nine' is stale. d-status/rom-reconstruction.md:239-241 already says 'seven of the thirteen' \u2014 the two drafts contradict each other.",
+  "correction": "seven orphaned `bootcode_*.bin` files remain in `table_data/includes/` outside the build (the other six are still bincluded by the archived ASL mirror and must stay)",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "Every byte of the table-data ROM is now either symbolic source or a labelled, named binary slice; no anonymous whole-file blob includes remain",
+  "verdict": "CONFIRMED",
+  "evidence": "Parsed every .incbin under table_data/*.s (323 directives, 1,113,121 B). initial_data.bin, icon_table.bin, wallpaper_gap.bin and hkst_55.ssf are referenced ZERO times; icons_to_strings.bin appears as 13 sized slices (126,674 B), wallpaper1_to_icons.bin as 87 (53,062 B), icon_pixel_data.bin as 177 (50,976 B). `grep 'incbin.*bootcode' table_data/*.s` returns only a comment line (kn5000_table_data.s:4621). The draft's caveat at table-data-rom.md:19-22 ('\"Accounted for\" is not the same as \"fully understood\"') is the right framing and should be kept verbatim \u2014 the 64 KB Composer_FactoryMemoryImage in particular is a labelled slice with an observed-layout comment, not a decoded structure.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "The section directory holds 33 pointers + a null terminator; entry 7 = 0x82CDA2 backwards, entry 6 = 0x91D000 forwards; sections 12-24 are 13 x 3,016 B and 25-27 are 3 x 31,968 B",
+  "verdict": "CONFIRMED",
+  "evidence": "Read all 34 LE32 entries from original_ROMs/kn5000_table_data.rom myself: 0x800088, 0x802D10, 0x805998, 0x80607C, 0x807390, 0x8086A4, 0x91D000, 0x82CDA2, 0x8099B8 \u2026 0x92DDA0, 0x00000000. Spot-checked the strides: 0x81D3E2-0x815702 = 31,968 and 0x82CDA2-0x8250C2 = 31,968; the 12-24 run steps by 0xBC8 = 3,016.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "0x9FA150 holds a 'SLIDE' marker then eight headerless 1bpp 224x22 boot-screen bitmaps, byte-identical to the maincpu copies at 0xE0018E-0xE0148D",
+  "verdict": "CONFIRMED",
+  "evidence": "ROM read: table_data[0x9FA150:0x9FA156] = b'SLIDE\\x00'; I byte-compared table_data[0x9FA156 : +8*616] against v10_program[0xE0018E : +8*616] \u2014 identical. 0x9FA156 + 4928 = 0x9FB496, exactly where the FDC dispatch tables begin.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "The three FDC dispatch offset tables at 0x9FB496/0x9FB4A2/0x9FB4BA and Boot_BitMaskTable/Boot_InitParams at 0x9FB4D2",
+  "verdict": "CONFIRMED",
+  "evidence": "Read the LE16s from the ROM: 0x9FB496 = [0,21,43,65,87,108]; 0x9FB4A2 = [0,14,14,14,14,14,8,8,8,11,8,14]; 0x9FB4BA = [0,5,10,15,20,25,30,35,40,45,50,55]. Sizes check: 0x9FB4D1-0x9FB496+1 = 60 B; 0x9FB4E7-0x9FB4D2+1 = 22 B = 10 + 12.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "The old page's 'Demo Song System' text (demo sequence data from 0x9999CC, demo category names at 0x99EC00) is falsified",
+  "verdict": "CONFIRMED",
+  "evidence": "ROM read: 0x9999CC = 7f d8 7f e2 7f ec 7e (7 bytes), then set(rom[0x9999D3:0x99EC00]) == {0xFF} (21,037 B), and 0x99EC00 = b'Tour Of The 5000   Accordion    ' = PanelMemory_BankNames.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tonedb",
+  "claim": "REFUTED: the Sub-CPU executable does not live at 0x830000; the runtime code-payload source path is unresolved",
+  "verdict": "CONFIRMED",
+  "evidence": "Independently re-verified end to end. (a) kn5000-roms-disasm/CLAUDE.md:960-968 carries the errata. (b) I searched original_ROMs/kn5000_table_data.rom and kn5000_custom_data.ic19 for kn5000_subprogram_v142.rom[0:64] and [256:320] \u2014 zero hits in either. (c) I read SubCPU_Send_Payload (v10/maincpu/kn5000_v10_program.s:316-385): after the five tone-DB transfers it sets XIZ=0x800000, tries `SLIDE_Parse_Header` on 0x3E0000 and only keeps XIZ=0x50000 if HL != 0xFFFF, then ships XIZ+0x100 / +0x10100 / +0x20100 / +0 to sub-CPU 0xF000/0x1F000/0x2F000/0x400. (d) In the dumps we hold, custom_data 0xE0000 (= 0x3E0000) is entirely 0xFF \u2014 no update image \u2014 so the fallback base 0x800000 is what a stock unit would use, and table_data 0x800000 is the section directory (0x800088, 0x802D10, \u2026), not the payload. Neither candidate source contains the executable. tone-database.md:21-29 is the model wording; propagate it.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "claim": "subcpu-payload-loading.md retraction box: 'The Sub CPU's executable comes from the LZSS-compressed image in Custom Data Flash at 0x3E0000 \u2026 which decompresses byte-exactly to kn5000_subprogram_v142.rom'",
+  "verdict": "REFUTED",
+  "evidence": "OVERCLAIM \u2014 states as settled what the repo records as unresolved. CLAUDE.md:968 and PLAN.md:88: 'How the Sub CPU code payload reaches the Sub CPU at runtime is still unresolved; the executable is known only from its own ROM dump and from the compressed update-disc image (which lands at Custom Data Flash 0x3E0000 only after a File Type 007 update).' I confirmed custom_data.ic19 at 0xE0000 is all 0xFF in the dump we hold, so on this machine the 0x3E0000 decompress fails and the code path falls back to base 0x800000 \u2014 which is the preset-bank half, not the payload. The rest of the box (0x830000 = tone database, data not code) is correct and should stay.",
+  "correction": "\u2026That is **wrong** and is withdrawn: the region is the tone database. Where the Sub CPU's executable comes from at run time is a *separate, still-open question*. `SubCPU_Send_Payload` sources the code blocks (Sub CPU `0x400` and `0xF000`-`0x3EEFF`) from base `XIZ`, which is the LZSS image at Custom Data Flash `0x3E0000` if it decompresses, and table-data `0x800000` otherwise. In the images this project holds, neither is the payload: custom-data `0x3E0000` is erased (all `0xFF` \u2014 no File Type 007 update was ever applied to the dumped unit), and no byte of `kn5000_subprogram_v142.rom` appears anywhere in the table-data or custom-data dumps. The executable is known only from its own ROM dump and from the compressed update-disc images. This is flagged as unresolved, not explained.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "subcpu-firmware-images.md opening: 'The KN5000's sub-CPU has no program flash of its own. Its 192 KB firmware payload lives in the main system as data and is pushed across the inter-CPU link at every boot.'",
+  "verdict": "REFUTED",
+  "evidence": "Two problems. (a) The sub-CPU DOES have its own 128 KB boot ROM \u2014 original_ROMs/kn5000_subcpu_boot.ic30, a verification section in compare_roms.py (base 0xFE0000) and listed in the same page-family's own ROM table. 'No program flash of its own' is wrong as written. (b) 'lives in the main system as data' asserts the unresolved question: I confirmed the payload bytes are absent from both candidate source images (see the d-tonedb verdict above). The transfer MECHANISM is confirmed (SubCPU_Send_Payload, v10/maincpu/kn5000_v10_program.s:355-378); the SOURCE is not.",
+  "correction": "The KN5000's sub-CPU has a 128 KB boot ROM (IC30) but no flash of its own holding the 192 KB runtime payload: that payload is pushed across the inter-CPU link at every boot by `SubCPU_Send_Payload`. *Where the main CPU reads it from is still unresolved* \u2014 the routine's two source bases are the LZSS image at Custom Data flash `0x3E0000` and, on failure, table-data `0x800000`, and in the images this project holds neither contains the payload. Three revisions of the payload survive, and they survive in two different shapes \u2026",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "boot-sequence.md post-patch state is accurate about the Sub-CPU payload",
+  "verdict": "REFUTED",
+  "evidence": "boot-sequence.md.patch has four hunks (@@ -58, @@ -129, @@ -233, @@ -1257) and does NOT touch lines 643-687 of the live page. Those lines survive verbatim in d-boot/work/boot-sequence.md:763-790 and say: '### Subprogram Storage Location (RESOLVED)', 'The Sub CPU firmware payload storage is now fully understood', 'Table Data ROM | 0x830000-0x87FFFF | \u2026 | 320KB | Sub CPU 0x050000-0x090000', 'This is the definitive source of the Sub CPU executable', and (live lines 685-687) '~~What data is at 0x830000~~ **RESOLVED:** Sub CPU firmware payload'. That is exactly the claim CLAUDE.md:968 and PLAN.md:88 retract, and it is internally incoherent besides ('192KB \u2026 stored uncompressed at' a 320 KB range). Note the SAME patch's own text at the CLAUDE.md-derived hunk correctly says the executable is NOT at 0x830000 \u2014 the page would ship self-contradictory.",
+  "correction": "Add a fifth hunk replacing lines 643-687: retitle to '### Subprogram Storage Location (PARTLY RESOLVED)'; state that 0x830000-0x87FFFF is the *tone database* copied to the Sub CPU's data window at 0x50000; that the executable blocks (Sub CPU 0x400 and 0xF000-0x3EEFF) come from base XIZ = custom-data 0x3E0000 if the LZSS image decompresses, else table-data 0x800000; and that in the dumped images neither contains the payload, so the runtime code-payload source path is UNRESOLVED. Remove the three '**RESOLVED:**' strikethrough bullets about 0x830000 or requalify them.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tonedb",
+  "claim": "SubCPU_Send_Payload copies ROM 0x830000-0x87FFFF to Sub-CPU RAM 0x050000-0x09FFFF as five 64 KB InterCPU_E1_Bulk_Transfer calls",
+  "verdict": "CONFIRMED",
+  "evidence": "Read v10/maincpu/kn5000_v10_program.s:316-344 directly: `SubCPU_Send_Payload:` then five identical triples `ld xwa,0x830000/0x840000/0x850000/0x860000/0x870000` + `ld xbc,0x10000` + `ld xde,0x50000/0x60000/0x70000/0x80000/0x90000` + `call InterCPU_E1_Bulk_Transfer`.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tonedb",
+  "claim": "The offset table at 0x831B00 has 629 LE32 entries resolving to 607 distinct offsets and 387 distinct 16-char names; 579 records tile 0x8324D4-0x855A47; the only record sizes are 102/183/264/345/426",
+  "verdict": "CONFIRMED",
+  "evidence": "Recomputed from original_ROMs/kn5000_table_data.rom myself: 629 entries -> len(set)=607 offsets, 387 distinct stripped 16-byte names, 579 distinct targets inside [0x8324D4,0x855A48), and the set of successive differences is exactly {102,183,264,345,426}.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tonedb",
+  "claim": "The region ends with 5,370 bytes of 0xFF fill at 0x87EAF6-0x87FFEF, and hkst_55.ssf metadata sits at 0x87FFF0",
+  "verdict": "CONFIRMED",
+  "evidence": "ROM read: set(rom[0x87EAF6:0x87FFF0]) == {0xFF}, length 5,370; rom[0x87FFF0:0x87FFFC] = b'hkst_55.ssf\\x00'.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "claim": "Exactly 42 of the 100 effect numbers share the trio 0x017263/0x01735E/0x017425, sharing is by pointer identity, and only effect 37 has a non-zero parameter-value pointer",
+  "verdict": "CONFIRMED",
+  "evidence": "Recomputed from original_ROMs/kn5000_subprogram_v142.rom myself (file offset = addr-0xF000+256 above 0x500): the four 100-entry arrays at 0x01ED7C/0x01EF0C/0x01F09C/0x01F22C give stub set of size 42, exactly {0,7,11,12,13,14,28,29,30,31,37,38,40,41,42,43,44,45,46,47,49,51,55,61,62,63,69,76,77,78,80,81,82,83,84,85,86,87,92,93,94,95}; the LE32 0x017263 occurs exactly 42 times in the whole 196,608-byte image; of the 42, only index 37 has a non-zero value pointer (0x0173F2). Distinct counts: alg 41, coeff 59, desc 41, non-zero values 59.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "claim": "Sub-CPU 0x01ED6D is a 5-byte chip-id table (00 00 01 01 01) indexed by effect slot; chip 0 = IC311 (uPD6383), chip 1 = IC310 (MN19413)",
+  "verdict": "CONFIRMED",
+  "evidence": "ROM bytes at 0x01ED6D = 00 00 01 01 01. The chip mapping is stated at v142/subcpu/subcpu_data_tables.s:4076-4078 ('0 = IC311 (NEC uPD6383GF, primary effects DSP), 1 = IC310 (MN19413, the second DSP)') with the nine IC310 effect numbers named and marked PROVEN against dsp/analysis/second-dsp-and-ready.md finding B1.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "claim": "CMD_DISPATCH_TABLE at 0x00F46C contains 0x034D5F, 0x01FC7C, 0x01FC7F, 0x035893, 0x01F890, 0x03CFEE, 0x020C12, 0x020C12, and eight addresses in the old subcpu-command-format.md Code References table were stale",
+  "verdict": "CONFIRMED",
+  "evidence": "Read the eight u32 from the ROM myself: ['0x34d5f','0x1fc7c','0x1fc7f','0x35893','0x1f890','0x3cfee','0x20c12','0x20c12']. Names cross-checked in symbols/subcpu_symbols_reference.txt:60, 598, 637, 638, 774, 2846, 2847, 2942, 3920.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "claim": "effects-dsp.md status box: coverage is ~18% of microcode words, the DSP core is not emulated in MAME, and five items need real hardware",
+  "verdict": "CONFIRMED",
+  "evidence": "Read d-subcpu-dsp/final/effects-dsp.md:21-25 and :365-390. This is the most honest status framing in the batch \u2014 it explicitly labels PROVEN/INFERRED/OPEN, caps the claim at ~18%, and says 'nothing above was executed on the chip or in an emulator'. 'PARAMETRIC EQ is fully decoded' at :195 is acceptable because it is immediately qualified as PROVEN BY CONSTRUCTION with the max|err| = 0.000e+00 evidence against the firmware's own arithmetic and item 4 of \u00a77 explicitly says that is not the same as measuring the physical chip. No change needed.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-subcpu-dsp",
+  "claim": "All four d-subcpu-dsp patches apply cleanly",
+  "verdict": "CONFIRMED",
+  "evidence": "`patch -p1 --dry-run --forward` in /home/fsanches/compartilhado/kn5000-docs against current HEAD: effects-dsp.md.patch, dsp-bytecode-interpreter.md.patch, subcpu-command-format.md.patch and subcpu-payload-loading.md.patch each print only 'checking file <name>' with no rejects. I did not re-run jekyll build.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tonedb",
+  "claim": "The d-tonedb patches are applicable as delivered",
+  "verdict": "REFUTED",
+  "evidence": "OPERATIONAL BLOCKER. `patch -p1 --dry-run` against current kn5000-docs HEAD fails on three of the package's four deliverables: d-tonedb/tone-generator.md.patch ('malformed patch at line 15'), d-tonedb/audio-subsystem.md.patch ('malformed patch at line 16'), d-tonedb/table-data-rom.md.OPTIONAL.patch ('malformed patch at line 20'). Cause is wrong hunk line counts, e.g. tone-generator.md.patch's first header reads `@@ -424,6 +424,13 @@` but the hunk body has 6 context + 5 added lines = 11 new lines, so the parser overruns into the next `@@`. All other patches in the batch (d-boot x2, d-lzss, d-stylist-panelmem, d-status x2, d-subcpu-dsp x4) dry-run clean.",
+  "correction": "Manager must recount the hunk headers in the three d-tonedb patches (or re-derive them with `diff -u`) before applying. d-tonedb/tone-database.md is a full new file and is unaffected.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-stylist-panelmem",
+  "claim": "StyleRec_PtrTable_Default (0x987000) contains only 996 distinct records: 368-371 appear twice (slots 652-655 and 984-987) and 160-163 appear nowhere \u2014 contradicting table_data/style_record_ptr_tables.s:26",
+  "verdict": "CONFIRMED",
+  "evidence": "Recomputed from original_ROMs/kn5000_table_data.rom myself: all 1000 pointers satisfy (p-0x951000)%198==0; len(set(indices))=996; Counter shows exactly {368,369,370,371} with count 2 at slot pairs (652,984),(653,985),(654,986),(655,987); missing set is exactly {160,161,162,163}. The 0x986000 table decodes to range(1000) exactly. Worth flagging upstream: the source comment at style_record_ptr_tables.s:26 ('both tables list all 1000 records') is wrong and should be corrected in the disasm repo.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-stylist-panelmem",
+  "claim": "The Music Stylist record grid is 1000 records of 198 bytes at 0x951000-0x98156F",
+  "verdict": "CONFIRMED",
+  "evidence": "0x951000 + 1000*198 = 0x981570, so last byte 0x98156F. Consistent with table_data/style_records.s:61 (`.org 0x951000 - 0x800000`) and the residue module starting at 0x981570.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-stylist-panelmem",
+  "claim": "Panel Memory: 10 x 16-char bank names at 0x99EC00 then 80 x 674 B records at 0x99ECA0; 0x9ABF40-0x9B3FFF is 32,960 B of 0xFF fill",
+  "verdict": "CONFIRMED",
+  "evidence": "ROM read: 0x99EC00 = b'Tour Of The 5000   Accordion    '; 0x99ECA0 + 80*674 = 0x9ABF40; set(rom[0x9ABF40:0x9B4000]) == {0xFF}, length 32,960.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "The bootloader's external-decode hook for RX class-2 packets calls BootStub_ReturnError (ROM 0x9FB80E, bytes 33 FF FF 0E = ldw hl,0xFFFF; ret), so every class-2 packet is dropped on a stock machine",
+  "verdict": "CONFIRMED",
+  "evidence": "Read the code myself. table_data/boot_cpserial_states.s:588-614 (BootSerial_RxPkt_TwoByteDecode: `calr BootSerial_CallExternalDecode / cp hl,0xffff / jr nz,__store` else `calr BootSerial_CtrlRingRetreatIX` and drop); :616-635 (BootSerial_CallExternalDecode's only body call is `calr BootStub_ReturnError`, and its header states the consequence, listing RxPkt_VarLengthRun as a second caller). table_data/kn5000_table_data.s:1426-1431 defines BootStub_ReturnError as `ldw hl,0xFFFF / ret`; ROM bytes at 0x9FB80E read 33 ff ff 0e.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "FDC_Request is the driver's single public entry at ROM 0x9FE944, takes a 14-byte request block, and a busy latch at RAM 0x0C44 (0xA5/0x5A) makes it non-re-entrant with error 0xFB; command 0 preempts",
+  "verdict": "CONFIRMED",
+  "evidence": "Read table_data/boot_fdc_driver.s:2149-2190: header documents the 14-byte block field by field; body is `cpw (xiz),0 / jr nz / stdi8 (0x0c44),0` (cmd 0 preempts), then `cpdi8 (0x0c44),0xa5 / jr nz / ldw wa,0xfb / calr FDC_Error`. Also note the header's Callers line confirms FDC_Request is live (two wrappers at 0x9FBF2F/0x9FBFB1 plus five request builders inside the probe).",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "The maincpu FDC_HANDLER_OFFSETS at 0xEA98CA are 0,5,13,21,29,37,45,50,55,60,65,70 giving handlers 0xF97D8D\u20260xF97DD3, and the addresses currently published on fdc-subsystem.md for handlers 1-11 are wrong",
+  "verdict": "CONFIRMED",
+  "evidence": "Read the twelve LE16 from original_ROMs/kn5000_v10_program.rom at file offset 0xA98CA myself: [0,5,13,21,29,37,45,50,55,60,65,70]; base 0xF97D8D gives F97D8D, F97D92, F97D9A, F97DA2, F97DAA, F97DB2, F97DBA, F97DBF, F97DC4, F97DC9, F97DCE, F97DD3. The live kn5000-docs/fdc-subsystem.md:529-539 list F97D93, F97D99, \u2026 which match none of these.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "Six former bootloader blobs are now labelled source and no .incbin of any bootcode_* file remains in table_data/*.s; the blob files stay on disk because the ASL mirror still bincludes them",
+  "verdict": "CONFIRMED",
+  "evidence": "`grep '\\.incbin' table_data/*.s | grep bootcode` returns only a comment (kn5000_table_data.s:4621). The seven boot_*.s modules contain zero .incbin directives. `grep -o 'binclude \"includes/bootcode[^\"]*\"' archive/asl/table_data/kn5000_table_data.asm` = 6 directives, and my per-file reference count shows exactly those six bins referenced. The boot-sequence draft's 'fully disassembled \u2014 there are no raw .incbin blobs left anywhere in it' is therefore accurate as scoped to the bootloader region.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "The bootloader module ranges (boot_cpserial 0x9FEC6E-0x9FF228, _isr 0x9FF229-0x9FF2F1, _states 0x9FF2F2-0x9FFB2E, boot_clib 0x9FFB2F-0x9FFE7F, boot_debug 0x9FFE80-0x9FFEDF) and the shared 259-byte tail at 0x9FFA2C",
+  "verdict": "CONFIRMED",
+  "evidence": "Module headers at boot_cpserial.s:4, boot_cpserial_isr.s:4, boot_cpserial_states.s:4-5, boot_clib.s:3-5, boot_debug.s:3. Arithmetic check on the shared tail: 0x9FFB2E-0x9FFA2C+1 = 259, matching boot_cpserial_states.s:930-955.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-boot",
+  "claim": "Boot_memcmp has strncmp semantics (a matching 0x00 terminates early with HL=0) and only two callers use the heap",
+  "verdict": "CONFIRMED",
+  "evidence": "table_data/boot_clib.s:148-168 (header note plus `cp (xix),0x00 -> lds hl,0 -> ret`), :68-70 (Boot_malloc callers = boot 0xFFBFCE and 0xFFCA57) and :373-375 (Boot_free callers = boot 0xFFC0D4 and 0xFFCC1F).",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "Per-tree .incbin byte totals: v10 860,028 / v9 860,028 / v7 995,213 / v142 subcpu 0 / subcpu boot 656 / hdae5000 340,790 / table_data 1,113,121 / custom_data 667,648",
+  "verdict": "CONFIRMED",
+  "evidence": "I re-measured all eight independently with my own parser (explicit length where given, else file size minus offset, resolving include paths relative to the tree root): the numbers match to the byte. v7's split also reproduces: v7_fix 22,073 + v7_block 29,951 + v7_transplant 67,557 + v7_data 17,194 = 136,775, remainder 858,438. 855,100 B of v10's total is under includes/generated/.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "There are 139 v7_block_*.bin, 24 v7_fix_*.bin and 16 v7_data_*.bin; the audit's scanner had reported only 23 v7_block files",
+  "verdict": "CONFIRMED",
+  "evidence": "`ls v7/maincpu/**/includes/generated/{v7_block,v7_fix,v7_data}_*.bin | wc -l` = 139 / 24 / 16. PLAN.md:70 records the verifier's correction of the scanner's 23.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "extract_v7_bins.py dd-slices the v7 ROM at build time and overwrites C-compiled .bin outputs whenever a >50%-similarity check passes",
+  "verdict": "CONFIRMED",
+  "evidence": "Read scripts/build/extract_v7_bins.py:70-86: `match_pct = sum(1 for a,b in zip(v7_data, v9_data) if a==b)/v9_size` then `if match_pct > 0.5: write(v7_path, v7_data)` else write v9 data. The draft's characterisation of this as a silent-corruption risk is accurate and correctly labelled as unfixed work.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "Pre-wave the table-data LLVM source emitted 1,262,528 bytes (60% of the ROM) from anonymous whole-file blob includes; today that figure is zero",
+  "verdict": "CONFIRMED",
+  "evidence": "Reconstructed the pre-wave tree with `git show 3bfe9fa:table_data/*.s` and re-parsed: initial_data.bin 524,271 + icons_to_strings.bin 520,920 + wallpaper1_to_icons.bin 152,576 + icon_pixel_data.bin 51,184 + icon_table.bin 1,416 + hkst_55.ssf 1,033 + wallpaper_gap.bin 1,024 + six bootcode_*.bin 10,104 = 1,262,528; /2,097,152 = 60.2%. Today all seven of those names have zero whole-file includes (verified above).",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "symbols/table_data_symbols_reference.txt grew 133 -> 4,153; subcpu 3,862 -> 4,326",
+  "verdict": "CONFIRMED",
+  "evidence": "`grep -vc '^\\s*#\\|^\\s*$'` on the current files = 4,153 and 4,326; on `git show 3bfe9fa:symbols/...` = 133 and 3,862. maincpu = 39,231, hdae5000 = 223.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "subcpu/boot/kn5000_subcpu_boot.s still contains 98,304 lines that are exactly `.byte 0xff`",
+  "verdict": "CONFIRMED",
+  "evidence": "`grep -c '^\\s*\\.byte 0xff\\s*$' subcpu/boot/kn5000_subcpu_boot.s` = 98304.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "The ROM-status diagram PNG is stale (2026-02-07) and its generator points at ASL paths that no longer exist",
+  "verdict": "CONFIRMED",
+  "evidence": "`ls -l kn5000-docs/assets/images/rom-status-diagram.png` -> Feb 7 14:21. scripts/build/generate_rom_status_diagram.py:302-326 names maincpu/kn5000_v10_program.asm, table_data/kn5000_table_data.asm, subcpu/kn5000_subprogram_v142.asm; `ls` on all three from the repo root: 'No such file or directory'. The draft's blockquote flagging the image as historical is the right handling.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "The audit inventoried 598 directives of which 505 are honest build products, and produced 55 findings and 24 verdicts (14 CONFIRMED, 10 REFUTED)",
+  "verdict": "CONFIRMED",
+  "evidence": "I parsed analysis/binclude-audit-2026-08-07/findings.json: len(findings)=55, len(verdicts)=24, Counter of the verdict field = {CONFIRMED: 14, REFUTED: 10}. 598/505 from PLAN.md:11-12.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "sha256 of the recovered v1.40 payload is a39025fe\u2026; v1.41 04212fa6\u2026; v1.42 16a1b654\u2026; compressed images are 93,124 / 93,181 / 93,203 B",
+  "verdict": "CONFIRMED",
+  "evidence": "I ran sha256sum on all three original_ROMs/kn5000_subprogram_v14*.rom and ls -l on the three *_compressed.rom: all six values match the drafts exactly.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "Three wave-groups of disassembly work remain unstarted (Wave 3b, Wave 4, Wave 5); 24 packages landed across Waves 0-3a with a 100% byte-match gate after each",
+  "verdict": "CONFIRMED",
+  "evidence": "PLAN.md:154-158 ('Everything below is not started. Waves 0, 1, 2 and 3a are complete; the build gate has held at 100.00% \u00d7 15 sections (the \"\u00d716\" in one Wave-2 ledger row was a miscount) after every one of the 24 packages landed so far') and the Wave 3b/4/5 tables at PLAN.md:181-260. WAVE-STATUS.md rows corroborate 7+6+8+3 = 24 landed. All six drafts state the remaining work; disassembly-workflow.md and rom-reconstruction.md do so at length and honestly. NOTE: WAVE-STATUS.md's Wave 2 row says '100.00% x16' \u2014 PLAN.md calls that a miscount; the drafts correctly say 15.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "disassembly-workflow.md's account of the two failures (a stalled worker, a session-limit interruption) and the manager protocol",
+  "verdict": "CONFIRMED",
+  "evidence": "WAVE-STATUS.md rows dated 2026-08-07 04:11 ('a4-serial-pair WORKER DIED (API stall, no work delivered) -> retried in Wave 2'), 04:38 ('Wave 2 INTERRUPTED by session usage limit \u2026 Nothing integrated, repo untouched since Wave 1') and 06:51 ('3 ready workers replay from cache'). PLAN.md:169-171 for the no-checkout/reset/stash revert rule; CLAUDE.md:89-99 for the LLVM provenance policy.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "Seven of the thirteen table_data/includes/bootcode_*.bin files are referenced by no .s or .asm file; the other six are still bincluded by the ASL mirror",
+  "verdict": "CONFIRMED",
+  "evidence": "Measured per file with `grep -rl <name> --include='*.s' --include='*.asm'`: refs=0 for bootcode_debug, _division, _free2, _interrupts, _post_clearram, _pre_clearram, _pre_lzss (7); refs>0 for _flash_handlers, _hdae_to_lzss, _malloc_and_after, _serial_handlers, _serial_state, _utils (6); ASL mirror has exactly 6 bootcode bincludes. This is the correct figure \u2014 d-tabledata's 'nine' must be changed to match.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "The 196,608-byte sub-CPU payload occupies sub-CPU 0x000400-0x0004FF and 0x00F000-0x03EEFF; v142/subcpu/subcpu.ld's header comment says 0xF000-0x3EAFF and does not reconcile",
+  "verdict": "CONFIRMED",
+  "evidence": "The code-derived figure is right: v10/maincpu/kn5000_v10_program.s:355-378 ships 0x10000 to 0xF000, 0x10000 to 0x1F000, 0xFF00 to 0x2F000 and 0x100 to 0x400; 0x2F000+0xFF00 = 0x3EF00 exclusive, i.e. last byte 0x03EEFF, and 256 + 0x2FF00 = 0x30000 = the file size. The draft flagging the linker-script comment as an unreconciled discrepancy rather than silently picking one is the right call; worth filing upstream.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "Firmware version history table (maincpu v5 1997-11-12 \u2026 v10 1999-08-02; HD-AE5000 v1.10i/v1.15i/v2.0i) on rom-reconstruction.md",
+  "verdict": "UNVERIFIABLE",
+  "evidence": "Pre-existing page content; no corresponding dates exist anywhere in kn5000-roms-disasm that I could find, and the archive.org item was not fetched. Not introduced by this wave, so no action needed, but it should not be treated as verified by the 2026-08 work.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-status",
+  "claim": "The hdae5000 string table around 0x2A7736-0x2A8499 is currently mis-decoded as instructions in hdae5000_data_tables.s",
+  "verdict": "UNVERIFIABLE",
+  "evidence": "Sourced only from analysis/binclude-audit-2026-08-07/PLAN.md:185 (the Wave 3b `hdae-strings` package scope). I did not re-decode the region. The draft presents it under 'Additional known-unfinished items' rather than as a finding, which is the correct treatment \u2014 keep that framing and do not upgrade it.",
+  "checker": "behaviour"
+ },
+ {
+  "package": "d-tabledata",
+  "claim": "Wallpaper shade ramps, tone-record field semantics, preset-bank section roles and Panel Memory / Music Stylist parameter payloads are still undecoded",
+  "verdict": "CONFIRMED",
+  "evidence": "Each is stated as open in the source it comes from: table_data/kn5000_table_data.s:287-311 ('No code reference found yet, so the RGB interpretation is tentative'), table_data/preset_banks.s:20-23 ('exact mapping still unattributed'), tone_database_records.s:27-38, panel_memory_presets.s:36-50. The drafts' 'What is still open' sections (table-data-rom.md:495-512, tone-database.md:280-296, music-stylist-database.md:291-297, panel-memory-factory-data.md's undecoded chunk column) reproduce these accurately. No overclaiming found in this area.",
+  "checker": "behaviour"
+ }
+]
