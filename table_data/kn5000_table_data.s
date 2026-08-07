@@ -722,7 +722,7 @@ __jrt_nop_9FB652:
 	; === Get Boot Mode and Check FDC ===
 	calr Get_Region_Code
 	cps l, 4
-	call_24 nz, 0xFFC6B2	; CALL NZ, 0xFFC6B2 (Boot_FDCRoutine)
+	call_24 nz, 0xFFC6B2	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
 
 Boot_SkipFDCCheck:
 	call 0xFFEC63	; Boot_CheckFlash
@@ -2964,9 +2964,27 @@ Flash_ProgramHDAE_Payload__phd2_copy_loop:
 	ret	; 0e
 
 ; =============================================================================
-; HDAE5000_InitializeParallelPort - Initialize HDAE5000 PPI interface
-; Address: 0x9FC6B2
-; Sets up 8255 PPI at 0x160000-0x160006
+; HDAE5000_InitializeParallelPort - Factory HDAE5000/custom flash programming
+; Address: 0x9FC6B2 (boot-time alias 0xFFC6B2)
+;
+; Full factory-programming sequence:
+;   1. Set up the 8255 PPI at 0x160000-0x160006 and wait for the Port B bit 0
+;      handshake.
+;   2. Probe the 32-bit table-data flash and the 16-bit custom-data flash
+;      (LED bit 2/3 + halt if either is missing).
+;   3. Chip-erase whichever devices are not blank, blinking the LEDs while the
+;      erase runs.
+;   4. Program HDAE5000 banks 0-3 (Flash_ProgramHDAE_Initialization) and the
+;      custom-data flash (Boot_ProgramCustomFlash), LED bit 0 lit.
+;   5. Verify both devices, LED bit 1 lit (LED_ToggleBit2/3 forever on
+;      mismatch).
+;   6. Check the "hkt_" signature at 0x2FFFC0 (HDAE bank 7 selected), remap
+;      CS2 and jump into the Program ROM at 0xFFFED8.
+;
+; Inputs:  none (QIZ saved on entry; drives PPI/LEDs at 0x160000-0x160006)
+; Outputs: does not return on success - jumps to Program ROM entry 0xFFFED8;
+;          halts in a self-loop with an LED diagnostic on any failure
+; Callers: Boot_Init (call_24 nz at boot alias 0xFFB65C, when region code != 4)
 ; =============================================================================
 HDAE5000_InitializeParallelPort:
 	pushw_erp 0xFA	; PUSH QIZ
@@ -2984,13 +3002,192 @@ HDAE5000_InitializeParallelPort:
 	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
 	calr Boot_DelayLoop	; CALR Boot_DelayLoop
 	stib_da (0x160004), 0x00; LD (0x160004), 0x00 - LEDs off
-	ldb_da a, (0x160002)	; LD A, (0x160002) - poll PPI Port B (code below loops back here until bit 0 clears)
+HDAE5000_InitializeParallelPort__ppi_wait_loop:
+	ldb_da a, (0x160002)	; LD A, (0x160002) - poll PPI Port B handshake
+	extz wa	; EXTZ WA
+	bit 0, wa	; BIT 0, WA - HDAE5000 ready when bit 0 clears
+	jr nz, HDAE5000_InitializeParallelPort__ppi_wait_loop	; 6e f4
 
-; Gap between HDAE init and LZSS (0x9FC6F7 - 0x9FC8C1)
-; TODO: Disassemble this section
-; Blob byte 0 (0x21) is skipped: it is the final sub-opcode byte of the 5-byte
-; LD A, (0x160002) above, which is now emitted whole instead of cut mid-instruction.
-	.incbin "includes/bootcode_hdae_to_lzss.bin", 1, 459	; 0x9FC6F7-0x9FC8C1
+	; === Probe both flash devices; light an LED and halt on failure ===
+	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
+	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
+	jr nz, HDAE5000_InitializeParallelPort__probe_16bit	; 6e 08
+	setda_24 2, (0x160004)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
+	ldib_erp 0xFB, 1	; LD QIZH, 1 - record probe failure
+HDAE5000_InitializeParallelPort__probe_16bit:
+	lds wa, 1	; LD WA, 1 - custom-data flash bank
+	call 0xFFB888	; CALL Flash_ReadID_16bit (boot-time alias of 0x9FB888)
+	cp hl, 0xFFFF	; CP HL, 0xFFFF - no/unknown device?
+	jr nz, HDAE5000_InitializeParallelPort__check_probe_result	; 6e 0a
+	setda_24 3, (0x160004)	; SET 3, (0x160004) - LED bit 3 = custom flash probe failed
+	ldib_erp 0xFB, 1	; LD QIZH, 1
+	jr HDAE5000_InitializeParallelPort__probe_fail_halt	; 68 08
+HDAE5000_InitializeParallelPort__check_probe_result:
+	cpib_erp 0xFB, 1	; CP QIZH, 1 - did the 32-bit probe fail?
+	jr nz, HDAE5000_InitializeParallelPort__erase_flash	; 6e 05
+	popw_erp 0xFA	; POP QIZ - unwind saved register before halting
+HDAE5000_InitializeParallelPort__probe_fail_halt:
+	jr HDAE5000_InitializeParallelPort__probe_fail_halt	; 68 fe - halt with LED diagnostic
+
+	; === Erase both flash devices (only if not already blank) ===
+HDAE5000_InitializeParallelPort__erase_flash:
+	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	ld xwa, 0x800000	; table-data flash start
+	ld xbc, 0xA00000	; table-data flash end
+	calr Flash_SearchFirstNonEmptyBlock
+	or xhl, xhl	; XHL != 0 -> data present, needs erase
+	call_24 nz, 0xFFBD17	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
+	lda_24 xwa, (0x300000)	; custom-data flash start
+	ld xbc, xwa	; LD XBC, XWA
+	add xbc, 0x100000	; custom-data flash end = 0x400000
+	calr Flash_SearchFirstNonEmptyBlock
+	or xhl, xhl
+	jr z, HDAE5000_InitializeParallelPort__wait_erase	; 66 06
+	lds wa, 1	; LD WA, 1
+	call 0xFFB968	; CALL Flash_ChipErase_16bit (boot-time alias of 0x9FB968)
+HDAE5000_InitializeParallelPort__wait_erase:
+	call 0xFFBE85	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
+	cp hl, 0xFFFF	; still busy?
+	jr nz, HDAE5000_InitializeParallelPort__program_flash	; 6e 0d
+HDAE5000_InitializeParallelPort__erase_blink:
+	calr Boot_BlinkLED	; cycle LED pattern while the chip erase runs
+	call 0xFFBE85	; CALL Flash_WaitComplete_32bit
+	cp hl, 0xFFFF
+	jr z, HDAE5000_InitializeParallelPort__erase_blink	; 66 f3
+
+	; === Program initialization image + custom flash (LED bit 0 while busy) ===
+HDAE5000_InitializeParallelPort__program_flash:
+	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	setda_24 0, (0x160004)	; SET 0, (0x160004)
+	calr Flash_ProgramHDAE_Initialization	; program HDAE5000 banks 0-3
+	resda_24 0, (0x160004)	; RES 0, (0x160004)
+	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
+	calr Boot_DelayLoop
+	setda_24 0, (0x160004)	; SET 0, (0x160004)
+	calr Boot_ProgramCustomFlash	; program custom-data flash (2 banks)
+	resda_24 0, (0x160004)	; RES 0, (0x160004)
+
+	; === Verify both devices (LED bit 1; on mismatch toggle bit 2/3 forever) ===
+	setda_24 1, (0x160004)	; SET 1, (0x160004)
+	pushw 0x3	; last bank to verify = 3
+	ld xwa, 0x800000	; reference: table-data image
+	ld xbc, 0x280000	; HDAE5000 banked window
+	lds de, 0	; LD DE, 0 - first bank
+	calr Boot_VerifyFlash
+	or xhl, xhl
+	call_24 nz, 0xFFC54B	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	pushw 0x1	; last bank to verify = 1
+	ld xwa, 0x300000	; reference: custom-data flash
+	ld xbc, 0x200000	; source window
+	lds de, 0	; LD DE, 0 - first bank
+	calr Boot_VerifyFlash
+	or xhl, xhl
+	call_24 nz, 0xFFC55A	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
+
+	; === Check "hkt_" signature, remap CS2 and jump into the Program ROM ===
+	stib_da (0x160000), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
+	ldl_da xwa, (0x2fffc0)	; LD XWA, (0x2FFFC0) - signature dword
+	cp xwa, 0x5F746B68	; CP XWA, 0x5F746B68 - ASCII "hkt_"
+	jr z, HDAE5000_InitializeParallelPort__handoff	; 66 05
+	popw_erp 0xFA	; POP QIZ
+HDAE5000_InitializeParallelPort__sig_fail_halt:
+	jr HDAE5000_InitializeParallelPort__sig_fail_halt	; 68 fe - bad signature, halt
+HDAE5000_InitializeParallelPort__handoff:
+	ei 7	; disable maskable interrupts
+	ld xwa, 0xFFFED8	; entry in Program ROM (Boot_Init's own handoff uses 0xFFFEDC)
+	ldw ix, 0x14B	; CS2 register
+	extz xix
+	sll xbc, 0	; alignment/padding
+	sll xbc, 0
+	ld (xix), 0x80	; CS2 config
+	jp (xwa)	; jump into main program ROM - never returns
+	popw_erp 0xFA	; unreachable canonical epilogue: POP QIZ
+	ret	; 0e
+
+; =============================================================================
+; HDAE5000_ProgramPayloadOnly - Reprogram only the HDAE5000 payload banks 4-7
+; Address: 0x9FC80F (boot-time alias 0xFFC80F)
+;
+; Second factory-programming entry: probes the 32-bit table-data flash, erases
+; it if non-blank (blinking the LEDs while the erase runs), programs HDAE5000
+; banks 4-7 via Flash_ProgramHDAE_Payload, then verifies banks 4-7 of the
+; 0x280000 window against the table-data image at 0x800000.
+; Skips the PPI setup, the 16-bit custom-flash path and the "hkt_" handoff of
+; HDAE5000_InitializeParallelPort.
+;
+; Inputs:  none (drives the HDAE5000 PPI LEDs at 0x160004)
+; Outputs: never returns - halts when done (or LED_ToggleBit2 on mismatch)
+; Callers: HDAE5000_ReinitPPI_ProgramPayload (jrl); no other xref in this ROM
+; =============================================================================
+HDAE5000_ProgramPayloadOnly:
+	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
+	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
+	jr nz, HDAE5000_ProgramPayloadOnly__erase_flash	; 6e 07
+	setda_24 2, (0x160004)	; SET 2, (0x160004) - LED bit 2 = probe failed
+HDAE5000_ProgramPayloadOnly__probe_fail_halt:
+	jr HDAE5000_ProgramPayloadOnly__probe_fail_halt	; 68 fe
+HDAE5000_ProgramPayloadOnly__erase_flash:
+	ld xwa, 0x800000	; table-data flash start
+	ld xbc, 0xA00000	; table-data flash end
+	calr Flash_SearchFirstNonEmptyBlock
+	or xhl, xhl	; XHL != 0 -> data present, needs erase
+	jr z, HDAE5000_ProgramPayloadOnly__program_flash	; 66 21
+	call 0xFFBD17	; CALL Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
+	call 0xFFBE85	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
+	cp hl, 0xFFFF	; still busy?
+	jr nz, HDAE5000_ProgramPayloadOnly__program_flash	; 6e 13
+HDAE5000_ProgramPayloadOnly__erase_blink:
+	calr Boot_BlinkLED	; cycle LED pattern while the chip erase runs
+	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off between patterns
+	call 0xFFBE85	; CALL Flash_WaitComplete_32bit
+	cp hl, 0xFFFF
+	jr z, HDAE5000_ProgramPayloadOnly__erase_blink	; 66 ed
+HDAE5000_ProgramPayloadOnly__program_flash:
+	setda_24 0, (0x160004)	; SET 0, (0x160004) - LED bit 0 while programming
+	calr Flash_ProgramHDAE_Payload	; program HDAE5000 banks 4-7
+	resda_24 0, (0x160004)	; RES 0, (0x160004)
+	setda_24 1, (0x160004)	; SET 1, (0x160004) - LED bit 1 while verifying
+	pushw 0x7	; last bank to verify = 7
+	ld xwa, 0x800000	; reference: table-data image
+	ld xbc, 0x280000	; HDAE5000 banked window
+	lds de, 4	; LD DE, 4 - first bank
+	calr Boot_VerifyFlash
+	or xhl, xhl
+	call_24 nz, 0xFFC54B	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+HDAE5000_ProgramPayloadOnly__done_halt:
+	jr HDAE5000_ProgramPayloadOnly__done_halt	; 68 fe - done, halt
+
+; =============================================================================
+; HDAE5000_ReinitPPI_ProgramPayload - PPI re-init + payload-only programming
+; Address: 0x9FC887 (boot-time alias 0xFFC887)
+;
+; Repeats HDAE5000_InitializeParallelPort's PPI setup (without the SFR
+; interrupt-enable clears), waits for the PPI Port B handshake, then continues
+; at HDAE5000_ProgramPayloadOnly.
+;
+; Inputs:  none
+; Outputs: never returns (tail-jumps into HDAE5000_ProgramPayloadOnly)
+; Callers: NONE in this ROM - the preceding instruction is a self-loop and no
+;          xref exists, so this entry is reachable only externally (factory
+;          jig / ICE). Kept because it is genuine reachable-by-entry code.
+; =============================================================================
+HDAE5000_ReinitPPI_ProgramPayload:
+	stdi8 (0x154), 0x66	; LD (0x0154), 0x66
+	stib_da (0x160006), 0x82	; LD (0x160006), 0x82 - PPI mode
+	stib_da (0x160000), 0x00	; LD (0x160000), 0x00 - Port A
+	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - Port C
+	stib_da (0x160004), 0x0f	; LD (0x160004), 0x0F - LED bits on
+	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
+	calr Boot_DelayLoop
+	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop:
+	ldb_da a, (0x160002)	; LD A, (0x160002) - poll PPI Port B handshake
+	extz wa	; EXTZ WA
+	bit 0, wa	; BIT 0, WA - HDAE5000 ready when bit 0 clears
+	jr nz, HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop	; 6e f4
+	jrl HDAE5000_ProgramPayloadOnly	; 78 4e ff
+	ret	; unreachable - alignment filler before LZSS_ReadByte
 
 
 ; =============================================================================
