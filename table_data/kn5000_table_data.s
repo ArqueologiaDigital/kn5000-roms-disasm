@@ -35,9 +35,9 @@
 ;                     - 0x934000 frame descriptor table (53 x 8 bytes) + pixels
 ; 0x938000-0x944D77  UI Icons (176 x 24x24 4bpp, 288 bytes each) + icon table
 ; 0x944D78-0x945BFF  Unused (0xFF fill)
-; 0x945C00-0x945CAF  Font Descriptor Table (10 font entries x 16 bytes)
-; 0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, variable size per font)
-; 0x950000-0x950FFF  Sparse bit-pattern data (unidentified)
+; 0x945C00-0x945CAF  Font Descriptor Table (10 fonts x 16 bytes + null slot; fonts.s)
+; 0x945CB0-0x950A5F  Font Glyph Bitmaps (1bpp, chars 0x20-0xFF per font; fonts.s)
+; 0x950A60-0x950FFF  Unused (0xFF fill)
 ; 0x951000-0x9808F5  Style/Preset Records (~984 x 198 bytes; 8-byte header +
 ;                     two 16-char space-padded name fields per record)
 ; 0x9808F6-0x983B39  Packed record tail (incl. ascending 16-bit ramp tables)
@@ -380,13 +380,10 @@ IconPixelData:
 ; This 753KB region contains multiple data structures referenced by the main
 ; CPU ROM. Key sub-regions:
 ;
-;   0x944D78-0x945BFF  Unused (0xFF fill, 3,720 bytes)
-;   0x945C00-0x945CAF  Font Descriptor Table (10 fonts x 16 bytes)
-;                       Format: word width, word height, word descent, word ascent,
-;                               long glyph_data_ptr, long kerning_table_ptr
-;                       Referenced by DrawString at 0xFA7E7C
-;   0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, 8 pixels/byte, MSB first)
-;   0x950000-0x950FFF  Sparse bit-pattern data (unidentified, bitmap-like)
+;   0x944D78-0x950FFF  UI text fonts -- fully split out into fonts.s
+;                       (descriptor table @0x945C00, ten 1bpp glyph banks
+;                       covering chars 0x20-0xFF, Font5 kern table, and the
+;                       0xFF fill on either side -- see that module's header)
 ;   0x951000-0x9808F5  Style/preset records: ~984 records x 198 bytes, each an
 ;                       8-byte header + two 16-char space-padded name fields
 ;                       (category + style, e.g. "Easy Listening  " +
@@ -416,9 +413,13 @@ IconPixelData:
 ;                       Entry 18 points to 0x8E0000 (Feature Demo, same as LZSS preset data)
 ;   0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17, variable size)
 ; =============================================================================
-	; 0x944D78-0x983B39: 0xFF fill, font tables, style/preset records
-	; and their packed tail (see region map above)
-	.incbin "includes/icons_to_strings.bin", 0, 0x3EDC2	; 0x944D78-0x983B39
+	; UI text fonts (0x944D78-0x950FFF): descriptor table + 1bpp glyph
+	; banks + Font5 kern table (see that module's header)
+	.include "fonts.s"
+
+	; 0x951000-0x983B39: 198-byte style/preset records and their packed
+	; tail (see region map above)
+	.incbin "includes/icons_to_strings.bin", 0xC288, 0x32B3A	; 0x951000-0x983B39
 
 	; HELP system data + effect-preset pointer tables (0x983B3A-0x9999CB):
 	; stale truncated German SLIDE8K remnant, the two live effect-preset
