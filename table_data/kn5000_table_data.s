@@ -14,11 +14,15 @@
 ; ROM LAYOUT:
 ;
 ; 0x800000-0x800087  Section Directory Table (33 x 4-byte LE pointers + terminator)
-; 0x800088-0x87FFEF  Preset Data Banks (sound presets, registration, panel memory)
+; 0x800088-0x82FFFF  Preset Data Banks (sound presets, registration, panel memory)
 ;                     - 33 sections of varying size (see directory table)
 ;                     - Factory defaults: 0xF7 (erased flash), 0x07, 0x00, or 0xFF
 ;                     - Entries 12-24: 13 x 3,016-byte slots (zero-filled)
 ;                     - Entries 25-27: 3 x 31,968-byte slots (0xFF-filled)
+; 0x830000-0x87FFEF  Tone Database (copied to SubCPU RAM 0x50000 at boot)
+;                     - 0x830000 directory/program maps/offset table (tone_database_directory.s)
+;                     - 0x8324D4 579 tone/voice records (tone_database_records.s)
+;                     - 0x855A48 drum kits, percussion, name lists, env data (tone_database_aux.s)
 ; 0x87FFF0-0x8CFFFF  Feature Demo Data (SSF file, BMP bitmaps, file entries)
 ; 0x8D0000-0x8DFFFF  Unused (0xFF fill)
 ; 0x8E0000-0x8ECFFF  LZSS Compressed Preset Data (SLIDE4K format, ~28KB)
@@ -95,11 +99,21 @@
 SectionDirectory_Table:
 	.byte 0x88	; First byte of section directory (start of 4-byte LE pointer table)
 
-	; Preset data banks and section directory (0x800001 - 0x87FFEF)
+	; Preset data banks and section directory (0x800001 - 0x82FFFF)
 	; Contains the remaining 131 bytes of the directory table (entries 1-32 + terminator),
 	; followed by preset data banks: sound presets, registration memory slots,
 	; panel memory defaults, and waveform/lookup data.
-	.incbin "includes/initial_data.bin"
+	; Only bytes [0, 0x2FFFF) of the file are emitted here: the tone database
+	; that occupies ROM 0x830000-0x87FFEF is now fully symbolic in the three
+	; tone_database_*.s modules below (the file is kept whole on disk because
+	; the archived ASL mirror still bincludes it in full).
+	.incbin "includes/initial_data.bin", 0, 0x2FFFF
+
+	; Tone database (0x830000 - 0x87FFEF): shipped to SubCPU RAM 0x50000 at
+	; boot via five InterCPU E1 bulk transfers (see maincpu SubCPU_Send_Payload).
+	.include "tone_database_directory.s"	; 0x830000-0x8324D3 directory, program maps, offset table
+	.include "tone_database_records.s"	; 0x8324D4-0x855A47 579 tone/voice records
+	.include "tone_database_aux.s"		; 0x855A48-0x87FFEF drum kits, percussion, name lists, env data
 
 	.org 0x87FFF0 - 0x800000, 0xFF
 
