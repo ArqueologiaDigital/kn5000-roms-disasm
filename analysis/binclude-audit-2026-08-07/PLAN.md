@@ -113,10 +113,17 @@ comments, orphaned includes).
 
 **Waves** (each wave = one workflow run, results reviewed between waves):
 
-- **Wave 0 — foundations** (≤4 agents): re-split the mid-instruction incbin
-  boundary at 0x9FC6F6; symbolize the 0x9FB496 dispatch tables; write
+- **Wave 0 — foundations + tone database** (~7 agents; tone DB moved up from
+  Wave 2 at Felipe's request, 2026-08-07 — it feeds the sound emulation
+  directly): re-split the mid-instruction incbin boundary at 0x9FC6F6;
+  symbolize the 0x9FB496 dispatch tables; write
   `compress_slide8k.py`/`decompress_slide8k.py` with `--reference`
-  decision-replay (same technique as `compress_lzss.py`); docs errata batch.
+  decision-replay (same technique as `compress_lzss.py`); docs errata batch;
+  and the tone database in three tiling packages — directory + index + the
+  629-entry offset table (0x830000–0x8324D3), the tone/voice records
+  (0x8324D4–0x855A47), and the aux tables + percussion names + fill
+  (0x855A48–0x87FFEF) — splitting `initial_data.bin` so its left half stays
+  an incbin until Wave 2.
 - **Wave 1 — bootcode + SLIDE8K round-trip** (~8 agents): the six bootcode
   packages (A above, including renames the verifier mandated); split
   `icons_to_strings.bin` at block boundaries, check in decompressed help DBs,
