@@ -1,0 +1,2933 @@
+{
+ "findings": [
+  {
+   "blob": "table_data/includes/initial_data.bin",
+   "size": 524271,
+   "rom_address": "0x800001-0x87FFEF",
+   "content_type": "mixed",
+   "compressed": false,
+   "difficulty": "moderate",
+   "suggested_module": "split into table_data/preset_banks.s (PresetBank_ prefix) + table_data/tone_database.s (ToneDB_ prefix)",
+   "evidence": "First 131 bytes complete the 33-entry LE32 section directory whose first byte (0x88) is already in the .s (pointers 0x800088..0x92DDA0, null-terminated; entries 6,28-32 land inside wallpaper1_to_icons.bin). Fill-pattern census per section: sec0 0xF8/0xF7, sec2 74% 0xF7, sec3-5 56% 0x07, sec12-24 13x3016B slots, sec25-27 83% 0xFF. At +0x2FFFF (ROM 0x830000) a self-relative database begins: header dword table whose entries are offsets from 0x830000 (+0x04=0x100 -> index bytes, +0x08=0x1B00 -> stream table, +0xB0=0x4D322 -> percussion names). Table at 0x831B00 holds 629 LE32 offsets, every probed entry lands on a 16-char space-padded name ('     Piano      ' @0x8324D4, 'Gun Shot' @0x851701); record strides quantized 102/183/264/345/426 (=102+81k). Drum kits 'Standard Kit'..'Sound Effect Kit' @0x863079-0x864D57 (26), drawbar presets @0x8706BD, percussion name pack @0x87D322-0x87EAF1, 0xFF fill 0x87EAF6-0x87FFEF.",
+   "xrefs": [
+    "v10/maincpu/kn5000_v10_program.s:326-345 SubCPU_Send_Payload copies 0x830000-0x87FFFF -> SubCPU RAM 0x50000-0x9FFFF (5 x 64KB E1 bulk transfers)",
+    "v142/subcpu/kn5000_subprogram_v142.s:37032-37036 DSP_System_Init stores base 0x50000 at 0x045310/0x045314",
+    "v142/subcpu/kn5000_subprogram_v142.s:~37754 DSP1_ResolveStreamPtr indexes the LE32 table at base+(word@base+0x08)=0x51B00 with bias word @base+0x88 \u2014 confirms 0x831B00 is the stream/tone-record index",
+    "v10/maincpu/boot/system_handlers.s HANDLE_UPDATE_FILE_TYPE_ID_003h writes 0x800000/0x900000 halves to floppy (section banks are floppy save/load payload)",
+    "0x815554/0x80AAA8 hits in maincpu are AMD flash unlock cycle addresses (command writes), not data reads"
+   ],
+   "subregions": [
+    {
+     "range": "0x800001-0x800087",
+     "what": "remainder of 33-entry LE32 section directory (entries 1-32 + terminator)"
+    },
+    {
+     "range": "0x800088-0x80BDD9",
+     "what": "floppy-I/O preset banks sec0-5,8-11: erased-flash 0xF7/0xF8 and 0x07-default fills with sparse records"
+    },
+    {
+     "range": "0x80BDDA-0x815701",
+     "what": "sec12-24: 13 identical 3016-byte user slots (0x00/0xFE sparse)"
+    },
+    {
+     "range": "0x815702-0x82CDA1",
+     "what": "sec25-27: 3 x 31968-byte slots, ~83% 0xFF"
+    },
+    {
+     "range": "0x82CDA2-0x82FFFF",
+     "what": "sec7 head: sparse smooth-curve bytes (0x22-0x2E ramps) on 0xF7/0xFF background"
+    },
+    {
+     "range": "0x830000-0x8300FF",
+     "what": "ToneDB directory: LE32 offsets relative to 0x830000 (subcpu sees it at 0x50000)"
+    },
+    {
+     "range": "0x830100-0x831AFF",
+     "what": "index byte tables + sorted 16-bit table @0x831000 (0x0190,0x0193,...)"
+    },
+    {
+     "range": "0x831B00-0x8324D3",
+     "what": "629-entry LE32 tone-record offset table (DSP1_ResolveStreamPtr's table)"
+    },
+    {
+     "range": "0x8324D4-0x8558AD",
+     "what": "variable-length tone/voice records, 16-char name first; ~578 name hits 'Piano'..'Under Water'"
+    },
+    {
+     "range": "0x855A48-0x87D321",
+     "what": "aux tables: 0x40-0x5F identity LUT @0x85B071, 26 drum-kit records @0x863079, drawbar presets @0x8706BD"
+    },
+    {
+     "range": "0x87D322-0x87EAF1",
+     "what": "packed percussion-source name strings (directory entry +0xB0)"
+    },
+    {
+     "range": "0x87EAF6-0x87FFEF",
+     "what": "0xFF fill"
+    }
+   ],
+   "recommended_action": "Split at 0x830000 minimum. Left half: document-as-table per the 33 section-directory entries (bank labels, fill notes). Right half (tone database): disassemble the header directory and 0x831B00 offset table into symbolic .long entries and split the record area; label with the SubCPU 0x50000 aliasing documented. This is the sound engine's primary data \u2014 highest documentation value in the blob. NOTE: contradicts CLAUDE.md claim that the SubCPU executable sits uncompressed at 0x830000 \u2014 no byte of kn5000_subprogram_v142.rom (raw or SLIDE4K) exists anywhere in table_data or custom_data dumps; 0x830000 is tone DATA sent to subcpu RAM 0x50000, and the code-payload source path is still unresolved."
+  },
+  {
+   "blob": "table_data/includes/icons_to_strings.bin",
+   "size": 742024,
+   "rom_address": "0x944D78-0x9F9FFF (build uses only bytes 0..0x7F2D8 = up to 0x9C404F)",
+   "content_type": "mixed",
+   "compressed": false,
+   "codec": "contains 6 embedded SLIDE8K LZSS blocks (8KB-window variant, previously undocumented) + dead SLIDE4K tail",
+   "difficulty": "moderate",
+   "suggested_module": "split into table_data/fonts.s, table_data/style_records.s, table_data/help_data.s (Help_ prefix), table_data/tg_config.s",
+   "evidence": "Font descriptor table @0x945C00 parses exactly as documented (font0: w=8 h=16 glyphs=0x945CB0; font5 has kern table 0x94C620). 198-byte records with embedded style names ('Easy Listening','German Schlager','Latin / World') from 0x951000 to ~0x9808F5; measured text-field period at 0x960000 = 34+164=198. Model tables @0x986000/0x987000 hold LE32 pointers 0x951000+198k (both tables identical in first 8 entries). Index @0x988000 = 12 entries: [0-5] multilingual intro strings (En 0x988030 'After pressing the Help button, press any button', De 0x988160, Fr 0x988296, Es 0x988404, En-dup, Id 0x98855E), [6-11] pointers to SLIDE8K blocks. Six 'SLIDE8K\\0' magics at 0x983B3A/0x988690/0x98BB3A/0x98F0DA/0x992A0C/0x9963FA, each header size24=36864; firmware SLIDE_Parse_Header (v10 system_handlers.s) dispatches '4'->SLIDE_Decompress_4K_Init and '8'->SLIDE_Decompress_8K_Init, so the 8K variant is firmware-supported. TG config @0x99ED00-0x9AA000 has dominant autocorrelation stride 26 (2110 matches vs 1889 for 52). 0x9C0000 area contains MIDI-note-on-like streams (90 30 24 32 08 00 ...). Demo preset pointer table @0x9C4000: 19 LE32 entries, entry 18 = 0x008E0000. File bytes beyond 0x7F2D8 duplicate the SLIDE4K demo-preset region (starts 'SLIDE4K\\0' @0x9C4050) which the build now assembles from includes/demo_presets/ \u2014 dead weight in this file.",
+   "xrefs": [
+    "v10/maincpu/kn5000_v10_program.s:1631 + ui/drawing_primitives.s:3908 load 0x945c00 (DrawString font table)",
+    "v10/maincpu/ui/ui_mode_handlers.s:417,421,467,482,10640 select 0x986000 vs 0x987000 by model code",
+    "v7/maincpu/sequencer/sequencer_ui.s:5204 HelpMenuCheck returns 0x988000 \u2014 this region is the HELP subsystem, refining the 'Demo Song Index' doc label",
+    "v7/maincpu/demo/file_demo_proc.s:839,857,875,893,912,1107 'add xwa,0x9c4000' index the demo preset pointer table",
+    "v10/maincpu/boot/system_handlers.s SLIDE_Parse_Header/SLIDE_Decompress_8K_Init consume the SLIDE8K blocks"
+   ],
+   "subregions": [
+    {
+     "range": "0x944D78-0x945BFF",
+     "what": "pure 0xFF fill (3720 B) \u2014 the 'Miscellaneous data tables' comment in kn5000_table_data.s:309 is wrong"
+    },
+    {
+     "range": "0x945C00-0x945CAF",
+     "what": "font descriptor table, 10 x 16B {w16,h16,desc16,asc16,glyphptr32,kernptr32}"
+    },
+    {
+     "range": "0x945CB0-0x94FFFF",
+     "what": "1bpp font glyph bitmaps per table pointers"
+    },
+    {
+     "range": "0x950000-0x950FFF",
+     "what": "sparse bit-pattern data (unidentified, bitmap-like)"
+    },
+    {
+     "range": "0x951000-0x9808F5",
+     "what": "~970 x 198-byte style/preset records with two 16-char name fields each"
+    },
+    {
+     "range": "0x9808F6-0x983B39",
+     "what": "packed record tail incl. ascending 16-bit ramp tables"
+    },
+    {
+     "range": "0x983B3A-0x985FFF",
+     "what": "SLIDE8K block (36864 B uncompressed); no literal pointer to it found in ROMs \u2014 leftover or computed reference"
+    },
+    {
+     "range": "0x986000-0x987FFF",
+     "what": "model preset pointer tables A/B (LE32 -> 0x951000+198k)"
+    },
+    {
+     "range": "0x988000-0x98802F",
+     "what": "12-entry help index: 6 language intro-string ptrs + 6 SLIDE8K block ptrs (entries 4/10 fall back to English)"
+    },
+    {
+     "range": "0x988030-0x98868F",
+     "what": "multilingual help intro strings (En/De/Fr/Es/Id, 8-bit accented chars)"
+    },
+    {
+     "range": "0x988690-0x9999D2",
+     "what": "5 SLIDE8K blocks, 36864 B uncompressed each (per-language help content)"
+    },
+    {
+     "range": "0x9999D3-0x99EBFF",
+     "what": "0xFF fill"
+    },
+    {
+     "range": "0x99EC00-0x99ECB1",
+     "what": "category name strings 'Tour Of The 5000'..'xPiano Atmosphere'"
+    },
+    {
+     "range": "0x99ED00-0x9AA000",
+     "what": "TG configuration records, 26-byte stride"
+    },
+    {
+     "range": "0x9AA000-0x9B4D77",
+     "what": "0xFF fill with sparse data"
+    },
+    {
+     "range": "0x9B4D78-0x9C3FFF",
+     "what": "TG parameter data; 0x9C0000+ contains MIDI-event-like note streams"
+    },
+    {
+     "range": "0x9C4000-0x9C404F",
+     "what": "demo-song preset pointer table, 19 x LE32 + null"
+    },
+    {
+     "range": "file +0x7F2D8..end (ROM 0x9C4050-0x9F9FFF)",
+     "what": "DEAD in build: superseded copy of the SLIDE4K demo-preset region"
+    }
+   ],
+   "recommended_action": "Split at the table boundaries and convert the small tables (font descriptors, model tables, help index, 0x9C4000 table, 0x99EC00 strings) to symbolic .short/.long/.asciz \u2014 trivial and high-value since all have live code xrefs. Document the SLIDE8K format (new finding: 8KB-window sibling of SLIDE4K, dispatched by SLIDE_Parse_Header on magic byte '8'); extending scripts/build/compress_lzss.py to an 8K window would allow decompress-and-roundtrip of the 6 help blocks. Trim or split the dead tail beyond +0x7F2D8 when the maintainer is ready (build already ignores it via the length arg)."
+  },
+  {
+   "blob": "table_data/includes/wallpaper1_to_icons.bin",
+   "size": 152576,
+   "rom_address": "0x912C00-0x937FFF",
+   "content_type": "mixed",
+   "compressed": false,
+   "difficulty": "moderate",
+   "suggested_module": "split into table_data/ui_bitmaps.s (BitmapDesc_/FrameDesc_ prefixes) + preset sections into preset_banks.s",
+   "evidence": "NOT wallpaper data. Bitmap descriptor table @0x913000: 34 x 8B entries {w16,h16,pixptr32}, entry0 24x24 -> 0x913118, entry1 307x45 -> 0x913358, pixel ptr range 0x913118-0x91CA1A; pixel bytes 0xF7-dominant (0xF7 = transparent per DrawBitmap docs) and 0x07-dominant (light-gray bg). Frame descriptor table @0x934000: 53 x 8B entries, pixel range 0x9341B0-0x9370B0, 0xF6-dominant. Section directory entries land here: sec6 @0x91D000 (14040 B, curve-like data on 0xF7), sec28 @0x9206D8 (12000), sec29 @0x9235B8 (2032), sec30 @0x923DA8 (30480), sec31 @0x92B4B8 (10472), sec32 @0x92DDA0 (~25KB) \u2014 secs 29-32 are 90-95% 0xFF. 0xFF fill 0x937100-0x937FFF.",
+   "xrefs": [
+    "v10/maincpu/ui/drawing_primitives.s:2199,2439 DrawBitmap/DrawBitmapFast: 'add xhl,0x913000', 8 B/entry, color 0xF7 transparent",
+    "v10/maincpu/ui/drawing_primitives.s:2702 DrawFrameSP: 'add xbc,0x934000'",
+    "table_data section directory @0x800000 entries 6,28,29,30,31,32 point into this blob (floppy save/load banks)"
+   ],
+   "subregions": [
+    {
+     "range": "0x912C00-0x912FFF",
+     "what": "0xF7-dominant pad/pixel lead-in"
+    },
+    {
+     "range": "0x913000-0x91310F",
+     "what": "bitmap descriptor table, 34 x {w16,h16,ptr32}"
+    },
+    {
+     "range": "0x913118-0x91CFFF",
+     "what": "8bpp bitmap pixel data (0xF7 transparent)"
+    },
+    {
+     "range": "0x91D000-0x920657",
+     "what": "preset section 6 (14040 B)"
+    },
+    {
+     "range": "0x9206D8-0x933FFF",
+     "what": "preset sections 28-32 (mostly 0xFF-erased user slots)"
+    },
+    {
+     "range": "0x934000-0x9341A7",
+     "what": "frame/sprite descriptor table, 53 x 8B"
+    },
+    {
+     "range": "0x9341B0-0x9370FF",
+     "what": "frame pixel data"
+    },
+    {
+     "range": "0x937100-0x937FFF",
+     "what": "0xFF fill"
+    }
+   ],
+   "recommended_action": "Split at 0x913000/0x91D000/0x934000; convert both descriptor tables to symbolic entries with labels into split pixel blobs (mirrors the existing IconTable treatment); rename the file \u2014 its current name ('gap between wallpaper and icons') hides two live UI drawing tables."
+  },
+  {
+   "blob": "table_data/includes/icon_table.bin",
+   "size": 1416,
+   "rom_address": "0x938000-0x938587",
+   "content_type": "pointer-table",
+   "compressed": false,
+   "difficulty": "trivial",
+   "suggested_module": "inline into kn5000_table_data.s as IconTable_ symbolic entries",
+   "evidence": "177 x 8B entries {bbox_w16,bbox_h16,pixptr32}: [0] 24x24 -> 0x938588, [175] 28x28 -> 0x944A68, [176] null terminator. Pointers walk icon_pixel_data.bin in exact 288-byte steps.",
+   "xrefs": [
+    "v10/maincpu/ui/drawing_primitives.s:2568 DrawIcons 'ld xwa,0x938000'"
+   ],
+   "recommended_action": "Convert to assembly .short/.long table with labels per icon (Icon_000..Icon_175 + terminator) referencing split or offset-labelled pixel data; drops the binary entirely."
+  },
+  {
+   "blob": "table_data/includes/icon_pixel_data.bin",
+   "size": 51184,
+   "rom_address": "0x938588-0x944D77",
+   "content_type": "graphics",
+   "compressed": false,
+   "difficulty": "trivial",
+   "suggested_module": "keep as incbin(s) under IconPixelData with per-icon labels",
+   "evidence": "176 x 288B icons (24x24 @4bpp, 2 px/byte) = 50688 B, already extracted to table_data/images/icons/*.png. Tail 496 B: one MORE 288-byte icon at 0x944B88 (4bpp pattern 0x77 bg / 0x88 strokes) that no icon_table entry references (entry 176 is the null terminator), then 208 B 0xFF pad.",
+   "xrefs": [
+    "v10/maincpu/ui/drawing_primitives.s DrawIcons hardcodes 12 bytes/row x 24 rows"
+   ],
+   "recommended_action": "Leave as incbin but document the 177th unreferenced icon at 0x944B88 (extract it to the gallery) and the 0xFF pad; optionally split per icon to match icon_table labels."
+  },
+  {
+   "blob": "table_data/includes/wallpaper_gap.bin",
+   "size": 1024,
+   "rom_address": "0x8FFC00-0x8FFFFF",
+   "content_type": "mostly-zero + small table",
+   "compressed": false,
+   "difficulty": "trivial",
+   "suggested_module": "inline as .zero + labelled .byte table in kn5000_table_data.s",
+   "evidence": "All 0x00 except offsets +0x380-0x3BE (ROM 0x8FFF80-0x8FFFBE): 16 x 4B entries of ascending byte triplets + 0x00 pad (1F 1F 28 00, 1F 1F 2D 00 ... 2B 33 46 00) \u2014 a 16-step gradient/palette-like ramp, plausibly the shade LUT for the adjacent Wallpaper_0.",
+   "xrefs": [],
+   "recommended_action": "Replace with .zero 896 + a labelled 16-entry table + .zero tail; the comment 'gap data' undersells the ramp table."
+  },
+  {
+   "blob": "table_data/images/Wallpaper_0.bin",
+   "size": 76800,
+   "rom_address": "0x8ED000-0x8FFBFF",
+   "content_type": "graphics",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "Exactly 320*240 bytes; stride-320 self-match 27% vs 19% at stride 317 (texture pattern, weakly periodic as expected); already rendered in the gallery as the blue textured wallpaper.",
+   "xrefs": [
+    "SetWallPaper wallpaper table at maincpu 0xEAAE62 (per kn5000_table_data.s:231 comment)"
+   ],
+   "recommended_action": "Leave \u2014 already correctly classified 320x240 8bpp image."
+  },
+  {
+   "blob": "table_data/images/Wallpaper_1.bin",
+   "size": 76800,
+   "rom_address": "0x900000-0x912BFF",
+   "content_type": "graphics",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "320*240 bytes, Technics-branded texture (gallery). The maincpu hits on 0x900000 (system_handlers.s:7709,7723) are FDC_WriteSectors sources during firmware-update disk writes (second half of table ROM), and 0x900090/0x800080 are flash command DATA words (0x90=ID, 0x80=erase) written to unlock addresses 0x815554/0x80AAA8 \u2014 none are pixel reads.",
+   "xrefs": [
+    "v10/maincpu/boot/system_handlers.s:7709,7723 (flash-update sector I/O, not rendering)"
+   ],
+   "recommended_action": "Leave."
+  },
+  {
+   "blob": "table_data/includes/hkst_55.ssf",
+   "size": 1033,
+   "rom_address": "0x88000E-0x880416",
+   "content_type": "text",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "Pure ASCII XML-like SSF action script: <ACTION><ACT NO=1><SHOW OBJ=\"ftdemo01\"></ACT>...<ACT NO=27><SHOW OBJ=\"ftdemo25\"></ACT></ACTION> \u2014 27 slide-show steps naming objects (ftdemoNN, Accordion, Drawbar, Sdmixer) for the feature demo that displays FTBMP01-06.BMP. Bonus xref: the sibling filename string 'hkst_55.ssf' at 0x87FFF0 is ALSO parsed by maincpu Boot_ParseSubCPUTimestamp (kn5000_v10_program.s:450, ld xwa,0x87fff5 -> ParseInt16), i.e. the '55' in the filename doubles as a version stamp.",
+   "xrefs": [
+    "v10/maincpu/kn5000_v10_program.s:450 Boot_ParseSubCPUTimestamp reads 0x87FFF5 ('55' inside the filename record)",
+    "FeatureDemo_FileMetadata table at 0x87FFF0 (kn5000_table_data.s:106)"
+   ],
+   "recommended_action": "Optionally inline as .ascii lines in the .s for readability; document the timestamp double-use of the filename field."
+  },
+  {
+   "blob": "table_data/includes/bootcode_hdae_to_lzss.bin",
+   "size": 460,
+   "rom_address": "0x9FC6F6-0x9FC8C1 (boot-time 0xFFC6F6-0xFFC8C1); ROM file offset 0x1FC6F6-0x1FC8C1",
+   "content_type": "tlcs900-code",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "unidasm -basepc 0xFFC6F6 decodes 127 instructions with ZERO undecodable bytes and ZERO misaligned branch targets. \u2605 THE INCBIN BOUNDARY SPLITS AN INSTRUCTION: ROM bytes at 0x9FC6F2 are `c2 02 00 16 21` = a 5-byte `ld A,(0x160002)`, but kn5000_table_data.s:2876 emits only 4 of them (`extpfx4 0xC2,0x02,0x00,0x16`) and byte 5 (0x21) is the blob's first byte. Correct split point is 0x9FC6F7 (`d8 12 extz WA`), after which the loop `d8 33 00 bit 0,WA / 6e f4 jr NZ,0xffc6f2` closes cleanly back onto the 0xFFC6F2 read -- a PPI port-B handshake poll. Every CALL/CALR target resolves to an existing symbol in symbols/table_data_symbols_reference.txt: 0xFFBC6A FLASH_READID_32BIT, 0xFFB888 FLASH_READID_16BIT, 0xFFBD17 FLASH_CHIPERASE_32BIT, 0xFFB968 FLASH_CHIPERASE_16BIT, 0xFFBE85 FLASH_WAITCOMPLETE_32BIT, 0xFFC4FE BOOT_DELAYLOOP, 0xFFC50B BOOT_BLINKLED, 0xFFC54B/0xFFC55A LED_TOGGLEBIT2/3, 0xFFC569 FLASH_SEARCHFIRSTNONEMPTYBLOCK, 0xFFC58A BOOT_VERIFYFLASH, 0xFFC5BC BOOT_PROGRAMCUSTOMFLASH, 0xFFC60E FLASH_PROGRAMHDAE_INITIALIZATION, 0xFFC660 FLASH_PROGRAMHDAE_PAYLOAD. Signature check at 0xFFC7E2: `ld XWA,(0x2fffc0) / cp XWA,0x5f746b68` = ASCII \"hkt_\". Handoff at 0xFFC7F4: ei 7; XWA=0x00FFFED8; IX=0x14B; ld (XIX),0x80 (CS2 remap); jp (XWA) -- 0xFFFED8 is in the MAIN CPU ROM (maincpu bytes there are `1b 54 4b ef ...`, valid code), not table_data. Note Boot_Init at .s:664 uses 0xFFFEDC for the same handoff; this path uses 0xFFFED8.",
+   "recommended_action": "disassemble -- decode quality is perfect and every xref is already a named symbol. FIRST re-split the incbin at 0x9FC6F7 so the `ld A,(0x160002)` at 0x9FC6F2 is emitted whole (this is a latent correctness bug in the current source even though it byte-matches).",
+   "difficulty": "trivial",
+   "suggested_module": "table_data/hdae5000_factory_program.s, prefix HDAE_Program_ / label HDAE5000_InitializeParallelPort continues here",
+   "xrefs": [
+    "table_data/kn5000_table_data.s:2860 HDAE5000_InitializeParallelPort (the blob is this routine's body, entered via `call NZ,0xFFC6B2` at boot addr 0xFFB65C)",
+    "0xFFC8BE `jrl T,0xFFC80F` -- the only xref into the second half"
+   ],
+   "subregions": [
+    {
+     "range": "0x9FC6F6 (1 byte)",
+     "what": "final byte (0x21) of the 5-byte `ld A,(0x160002)` that begins at 0x9FC6F2 -- MISPLACED SPLIT"
+    },
+    {
+     "range": "0x9FC6F7-0x9FC80E",
+     "what": "HDAE5000_InitializeParallelPort body: PPI handshake poll, flash-ID probe of both 32-bit and 16-bit devices (LED bit2/bit3 on failure + halt), chip-erase 0x800000-0xA00000 and 0x300000-0x400000, program HDAE init image, program custom flash, verify 0x800000 vs 0x280000 (len 3) and 0x300000 vs 0x200000 (len 1), \\\"hkt_\\\" signature check at 0x2FFFC0, then CS2 remap + `jp 0xFFFED8` into maincpu ROM. Epilogue `pop QIZ; ret` at 0x9FC80B."
+    },
+    {
+     "range": "0x9FC80F-0x9FC886",
+     "what": "SECOND entry: HDAE payload-only programming path. Same erase/wait/blink preamble, then FLASH_PROGRAMHDAE_PAYLOAD (0xFFC660), verify 0x800000 vs 0x280000 len 7 / DE=4, then `jr $` halt at 0x9FC885."
+    },
+    {
+     "range": "0x9FC887-0x9FC8C0",
+     "what": "THIRD entry (UNREFERENCED / dead in this build): duplicate PPI re-init (0x0154=0x66, 0x160006=0x82 mode byte, port A/C writes, 900000-tick delay) + port-B bit0 poll, then `jrl T,0xFFC80F`. No xref anywhere in the boot region and the preceding 0x9FC885 is a self-loop, so this is reachable only by external entry (ICE/factory jig)."
+    },
+    {
+     "range": "0x9FC8C1 (1 byte)",
+     "what": "unreachable `0e` (ret) -- alignment filler before LZSS_ReadByte at 0x9FC8C2"
+    }
+   ]
+  },
+  {
+   "blob": "table_data/includes/bootcode_flash_handlers.bin",
+   "size": 4600,
+   "rom_address": "0x9FD8A5-0x9FEA9C (boot-time 0xFFD8A5-0xFFEA9C); ROM file offset 0x1FD8A5-0x1FEA9C",
+   "content_type": "tlcs900-code",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "unidasm decodes 1546 instructions, ZERO undecodable bytes, ZERO misaligned branch targets. All 7 existing slice labels land on genuine function starts. \u2605 THE .s HEADER COMMENT IS WRONG: this is NOT \\\"Flash Update Type Handlers ... Type 1..8 disk types\\\" -- it is the complete FLOPPY DISK DRIVER (uPD765-class FDC command layer). Decisive evidence: (a) the public entry 0xFFE944 copies a 14-byte request block from (XSP+8) into 0x0C6E..0x0C7D as {u16 cmd@+0, u16@+2, u16@+4, u16@+6, u16 sector@+8, u16 count@+0x0A, u32 buffer@+0x0C} with an 0xA5/0x5A re-entrancy guard at (0x0C44); (b) it dispatches on (0x0C6E) 0..11 through an offset table, landing pad 0xFFEA07, giving 12 commands: 0=restart/recalibrate(0xFFE2BD), 1=recalib-track-5(0xFFE2D6), 2=seek(0xFFE31A), 3=READ-sectors(0xFFE368), 4=WRITE-sectors(0xFFE4AA), 5=FORMAT(0xFFE5FE), 6=motor-on(0xFFE89B, `set 3,(0x28)`), 7=motor-off(0xFFE8C5, `res 3,(0x28)`), 8=get-last-error(0xFFE8CE), 9=set-disk-changed(0xFFE8D5), 10=FDC-reset(0xFFDA6A), 11=sense-interrupt-status(0xFFE8F6); (c) 0xFFDD2C/0xFFDD85/0xFFDD9B program DMA channel 3 (unidasm prints `ldc unknown` for CR 0x2C/0x4C/0x4E = DMAD3/DMAC3/DMAM3; CR 0x0C=DMAS3 is named) between the FDC data port 0x120000 and (0x0C7A); (d) 0xFFEA56/0xFFEA8A are the PIO fallback reading/writing 0x120000 one byte at a time; (e) 0xFFE944 is CALLed from 0xFFBF2F (FDC_ReadSector) and 0xFFBFB1 (FDC_ReadSectorWrapper) -- both already named FDC_* in symbols/table_data_symbols_reference.txt. \u2605 MISLABEL: the slice label `Boot_ClearWatchdog` at 0x9FDDED is wrong -- the code is `push XIZ; ld IZ,(0x0C00); ld QIZ,0x0080; loop{ FDC_ReadStatus; and L,0xE0; cp 0x80/0xC0 -> QIZ=0; if (0x0C00)-IZ > 0x1F4 then QIZ=0xFFFF } ; if QIZ!=0 error 2` = an FDC RQM/DIO wait with a 500-tick timeout. Its near-twin at 0x9FDDA3 (uses `res 4,L` instead of `and L,0xE0`) is called from the identical position in FDC_ReadSector at 0xFFD92D.",
+   "recommended_action": "disassemble -- decode is clean and complete. Rename the blob to an FDC driver module, fix the header comment, and rename Boot_ClearWatchdog -> FDC_WaitRQM_Timeout. Requires first documenting the three dispatch offset tables at 0x9FB496 (see separate finding) so the two `jp T,XIX+WA` sites become symbolic.",
+   "difficulty": "moderate",
+   "suggested_module": "table_data/boot_fdc_driver.s, prefix FDC_ (matches the existing FDC_* symbols at 0x9FD7E8-0x9FD894)",
+   "xrefs": [
+    "0xFFBF2F (FDC_READSECTOR) -> 0xFFE944",
+    "0xFFBFB1 (FDC_READSECTORWRAPPER) -> 0xFFE944",
+    "0xFFEB82/0xFFEBB6/0xFFEBEA/0xFFEC1E/0xFFEC52 (bootcode_utils.bin) -> 0xFFE944",
+    "0xFFEAA4/0xFFEAA7 (BootTimer_InterruptHandler, .s:3871-3872) -> 0xFFDD17 / 0xFFDD26",
+    "0xFFEAFB/0xFFEB14 (Handler_INT4, .s:3942/3955) -> 0xFFDDED / 0xFFDF17",
+    "0xFFD84C/0xFFD88F (FDC_WaitComplete/FDC_Seek) -> 0xFFE231",
+    "0xFFD89C (FDC_Seek) / 0xFFEB31 / 0xFFEB3A / 0xFFEC5B -> 0xFFE296 (Boot_Delay)",
+    "calls OUT to already-disassembled FDC primitives 0xFFD7E8 ReadStatus, 0xFFD7EE ReadData, 0xFFD7F4 WriteStatus, 0xFFD7FA SaveCommand, 0xFFD805 WriteData, 0xFFD80B WaitReady, 0xFFD851 WaitComplete, 0xFFD894 Seek"
+   ],
+   "subregions": [
+    {
+     "range": "0x9FD8A5-0x9FDA69",
+     "what": "FDC_RecalibrateAndRetry (slice 0 entry, already labelled by the incbin split). Contains dispatch #1: index=(0x0C9C)&0x0F, range-checked 0..5, offsets from 0x9FB496, landing pad 0x9FD9A2 (6 x 21-byte stanzas setting (0x0C9A) 0..5 and calling FDC_SaveCommand)."
+    },
+    {
+     "range": "0x9FDA6A-0x9FDA85",
+     "what": "FDC_ResetAndCheck: cmd 0x36, delay 2, read status; if 0xFF raise error 0xFC"
+    },
+    {
+     "range": "0x9FDA86-0x9FDBAC",
+     "what": "FDC_ValidateRequest. Dispatch #2: index=(0x0C6E) 0..11, offsets from 0x9FB4A2, landing pad 0x9FDAAB. Per-command parameter range checks (head<=1, sector<=(0x0D36), count 8/0x12/9 by disk type) with error 0xFE."
+    },
+    {
+     "range": "0x9FDBAD-0x9FDCBC",
+     "what": "FDC_SetGeometryForDiskType: (0x0C74)&0x0F -> 3 geometry presets writing (0x0C5C..0x0C63) and (0x0D34..0x0D3B): {sectors 0x09, EOT 0x4F, tracks 0x50, gap 0x1B/0x54}, {0x08, 0x4C, 0x4D, 0x53/0x74}, {0x12, 0x4F, 0x50, 0x1B/0x6C} -- i.e. 2DD-9, 2DD-8 and 2HD-18 formats"
+    },
+    {
+     "range": "0x9FDCBD-0x9FDCF5",
+     "what": "FDC_ValidateHead (0x0C72<=1) and FDC_ValidateDrive; 0x9FDCDE is a bare ret stub"
+    },
+    {
+     "range": "0x9FDCF6-0x9FDD16",
+     "what": "Boot_ShortDelay: 10-nop inner loop, A iterations, stack-frame temp"
+    },
+    {
+     "range": "0x9FDD17-0x9FDD25",
+     "what": "Boot_TimerTick (already labelled): set 0,(0x44); Boot_ShortDelay(10); res 0,(0x44)"
+    },
+    {
+     "range": "0x9FDD26-0x9FDDEC",
+     "what": "Boot_UpdateDisplay (0x9FDD26, `ld (0x0103),0x0c`) + FDC DMA setup 0x9FDD2C/0x9FDD85/0x9FDD9B (DMAS3/DMAD3/DMAC3/DMAM3, FDC port 0x120000) + FDC_WaitRQM_A 0x9FDDA3"
+    },
+    {
+     "range": "0x9FDDED-0x9FDF16",
+     "what": "FDC_WaitRQM_Timeout (currently MISNAMED Boot_ClearWatchdog) 0x9FDDED; FDC_ReadResultPhase 0x9FDE35; five command/result wrapper thunks 0x9FDEAA, 0x9FDEBB, 0x9FDECC, 0x9FDEDD, 0x9FDEF5"
+    },
+    {
+     "range": "0x9FDF17-0x9FE230",
+     "what": "FDC_ProcessResults (already labelled): decodes ST0/ST1/ST2 from the 0x0C8E buffer into error codes 0x31/0x32/0x35/0x2F/0x33/0x34/0x36/0x37/0x08. Then FDC_EnableIntAndDMA 0x9FDFA2; FDC_IssueCommand 0x9FDFC3 (the big per-opcode parameter marshaller); FDC_CommandNeedsNoParams 0x9FE0AB; parameter senders 0x9FE0FA, 0x9FE106, 0x9FE13C, 0x9FE163, 0x9FE16C; update-disk predicates 0x9FE1C8 and 0x9FE216; bare-ret stub 0x9FE230"
+    },
+    {
+     "range": "0x9FE231-0x9FE295",
+     "what": "Boot_SetError 0x9FE231 (already labelled FDC_Error: sticky first-error into (0x0C52)); Boot_ClearError 0x9FE25A; FDC_ClearResultBuf 0x9FE260; FDC_WaitResult 0x9FE266"
+    },
+    {
+     "range": "0x9FE296-0x9FE367",
+     "what": "Boot_Delay 0x9FE296 (already labelled; busy-wait on the 0x0C00 tick counter); Boot_Delay40 0x9FE2B8; cmd0 0x9FE2BD; cmd1 0x9FE2D6; cmd2 0x9FE31A; FDC_SendCmdC6 0x9FE34D"
+    },
+    {
+     "range": "0x9FE368-0x9FE5E2",
+     "what": "cmd3 FDC_ReadSectors 0x9FE368 and cmd4 FDC_WriteSectors 0x9FE4AA -- two near-identical multi-sector loops with 8-retry counters at (0x0C96), head toggling via (0x0C57)^1, buffer advance at (0x0C7A)"
+    },
+    {
+     "range": "0x9FE5E3-0x9FE89A",
+     "what": "FDC_SendCmdC5 0x9FE5E3; cmd5 FDC_FormatDisk 0x9FE5FE; FDC_FormatOneTrack 0x9FE6C9; FDC_BuildFormatFieldBuffer 0x9FE6ED (fills 0x0C9E with C/H/R/N ID fields, count (0x0D38)/2); FDC_SendCmd4D 0x9FE880"
+    },
+    {
+     "range": "0x9FE89B-0x9FE943",
+     "what": "cmd6 motor-on 0x9FE89B; cmd7 motor-off 0x9FE8C5; cmd8 get-last-error 0x9FE8CE; cmd9 set-disk-changed 0x9FE8D5; cmd11 sense-interrupt-status 0x9FE8F6"
+    },
+    {
+     "range": "0x9FE944-0x9FEA55",
+     "what": "FDC_Request -- the PUBLIC entry. Re-entrancy guard (0x0C44)==0xA5 -> error 0xFB; copies the 14-byte request block twice (0x0C6E.. and mirror 0x0C7E..); validates via 0x9FDA86; dispatch #3: index=(0x0C6E) 0..11, offsets from 0x9FB4BA (step 5), landing pad 0x9FEA07 (12 x 5-byte `calr handler / jr done` stanzas); returns L=(0x0C52) sign-extended"
+    },
+    {
+     "range": "0x9FEA56-0x9FEA9C",
+     "what": "FDC_PIO_ReadByte 0x9FEA56 / FDC_PIO_WriteByte 0x9FEA8A -- non-DMA byte-at-a-time transfer through 0x120000, decrementing (0x0C4A); on completion calls Boot_TimerTick + Boot_UpdateDisplay"
+    }
+   ]
+  },
+  {
+   "blob": "table_data/kn5000_table_data.s:516-519 (raw .byte block, not a separate .bin)",
+   "size": 60,
+   "rom_address": "0x9FB496-0x9FB4D1 (boot-time 0xFFB496-0xFFB4D1); ROM file offset 0x1FB496-0x1FB4D1",
+   "content_type": "pointer-table",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "This block is currently emitted as anonymous `.byte` with the comment `TODO: determine purpose of these tables`. It is THREE u16 jump-offset tables consumed by three `lda XIX,<base> / ld WA,(XIX+WA) / lda XIX,<landing> / jp T,XIX+WA` sites inside bootcode_flash_handlers.bin, and it accounts for the range EXACTLY (12+24+24=60=0x3C). Table A @0x9FB496, 6 x u16 = {0x0000,0x0015,0x002B,0x0041,0x0057,0x006C}, read at 0x9FD98E-0x9FD9A1 with index=(0x0C9C)&0x0F clamped 0..5, landing pad 0x9FD9A2 -- every base+offset (0x9FD9A2, 0x9FD9B7, 0x9FD9CD, 0x9FD9E3, 0x9FD9F9, 0x9FDA0E) is a verified instruction start. Table B @0x9FB4A2, 12 x u16 = {0,0x0E,0x0E,0x0E,0x0E,0x0E,0x08,0x08,0x08,0x0B,0x08,0x0E}, read at 0x9FDA97-0x9FDAAA with index=(0x0C6E) UGT 11 -> default, landing pad 0x9FDAAB -- targets 0x9FDAAB/0x9FDAB9/0x9FDAB3/0x9FDAB6 all instruction starts. Table C @0x9FB4BA, 12 x u16 = {0,5,0x0A,0x0F,0x14,0x19,0x1E,0x23,0x28,0x2D,0x32,0x37}, read at 0x9FE9F3-0x9FEA06, landing pad 0x9FEA07 -- all 12 targets (0x9FEA07+5n) are instruction starts of the 5-byte `calr/jr` stanzas.",
+   "recommended_action": "document-as-table -- replace the anonymous .byte block with three named `.short` tables (FDC_DiskTypeStanza_Offsets, FDC_ValidateCmd_Offsets, FDC_CommandDispatch_Offsets) with per-entry comments. This is a prerequisite for making the three `jp T,XIX+WA` sites symbolic when bootcode_flash_handlers.bin is disassembled.",
+   "difficulty": "trivial",
+   "suggested_module": "stays in table_data/kn5000_table_data.s (or move with the FDC module), prefix FDC_*_Offsets",
+   "xrefs": [
+    "0x9FD98E `lda XIX,0xFFB496` (inside bootcode_flash_handlers.bin)",
+    "0x9FDA97 `lda XIX,0xFFB4A2` (inside bootcode_flash_handlers.bin)",
+    "0x9FE9F3 `lda XIX,0xFFB4BA` (inside bootcode_flash_handlers.bin)"
+   ]
+  },
+  {
+   "blob": "table_data/includes/bootcode_utils.bin",
+   "size": 1790,
+   "rom_address": "0x9FEB2B-0x9FF228 (boot-time 0xFFEB2B-0xFFF228); ROM file offset 0x1FEB2B-0x1FF228",
+   "content_type": "mixed",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "unidasm decodes 560 instructions, ZERO undecodable bytes. Exactly ONE misaligned target (0x9FEC5D, from `jrl NZ,0xFFEC5D` at 0x9FEC6E) -- and that 'instruction' is a false decode of the first entry of a 16-byte pointer table, proving the island rather than contradicting the decode. \u2605 THE .s HEADER COMMENT IS WRONG: this is NOT \\\"Motor control timing / VGA display routines / Progress bar updates\\\". It is (a) an FDC disk-format probe and (b) the entire boot-time CONTROL-PANEL SERIAL LINK driver. Evidence for (a): 0x9FEB3D gates on `bit 6,(0x34); ret NZ` then builds five 14-byte FDC request blocks at 0x0D52 with EXACTLY the layout FDC_Request (0x9FE944) unpacks -- {cmd u16@+0, u16@+2, u16@+4, u16@+6, u16@+8, u16@+0x0A, u32 buf@+0x0C} -- one cmd 0 (recalibrate, param 0xE0 or 0xD3) plus four cmd 3 (READ) at params 0x00/0x4E/0x0A/0x28 into buffer 0x0D62, then `lda XSP,XSP+0x14` (5 pushed pointers) and delay 200. Evidence for (b): 0x9FED1E-0x9FF228 touches only SIO/INTE SFRs (0x3A-0x3F mode/baud, 0xD4 TX buffer, 0xD5-0xD7 control, 0xE3/0xEB/0xF8 interrupt-enable, 0xC8) plus the two ring-buffer control blocks at 0x00988A and 0x009914 (fields +0xF8 tail, +0xFC head, +0xFE count) that bootcode_serial_state.bin also drives; and every one of the four Boot_Init entry points into this blob (0x9FEC63, 0x9FEC6E table, 0x9FED0E) sits on the pre-main-ROM handshake path. Xref proof: 0x9FEC63 is CALLed from 0x9FB661 (Boot_Init, .s:617 `call 0xFFEC63`), 0x9FED0E from 0x9FB670 (.s:626 `call 0xFFED0E`), and 0x9FEC6E is read as a 32-bit pointer by 0x9FB669 (.s:622 `ldl_da xhl,(0xffec6e); call (xhl)`).",
+   "recommended_action": "disassemble, and split the pointer table at 0x9FEC6E out as data. Rewrite the header comment: this blob is FDC_ProbeDiskFormat + the CP-serial boot driver, not display/motor code. NOTE for the CP-serial saga: this is boot-time CP protocol code that is independent of the maincpu-payload CP driver.",
+   "difficulty": "moderate",
+   "suggested_module": "split in two: table_data/boot_disk_probe.s (0x9FEB2B-0x9FEC6D) and table_data/boot_cpserial.s (0x9FEC6E-0x9FF228), prefixes Boot_ and BootSerial_",
+   "xrefs": [
+    "0x9FB661 (Boot_Init, .s:617) -> 0x9FEC63",
+    "0x9FB669 (Boot_Init, .s:622) -> reads the .long table at 0x9FEC6E, calls entry[0]=0x9FEC7E",
+    "0x9FB670 (Boot_Init, .s:626) -> 0x9FED0E",
+    "0x9FC383/0x9FC38B/0x9FC39F/0x9FC3A7 (BOOT_WAITDISKINSERT) -> 0x9FEC63",
+    "0x9FCC2D (BOOT_FLASHUPDATE_MAIN) -> 0x9FEC63",
+    "0x9FF33D/0x9FF36C (bootcode_serial_state.bin) -> 0x9FEF18",
+    "calls OUT to 0x9FE296 Boot_Delay, 0x9FE944 FDC_Request, 0x9FF608, 0x9FF6EF, 0x9FF6F6, 0x9FFA2B"
+   ],
+   "subregions": [
+    {
+     "range": "0x9FEB2B-0x9FEB3C",
+     "what": "Boot_StrobePort34Bit0: set/res (0x34) bit0 with 10-tick delays; tail-jumps into Boot_Delay"
+    },
+    {
+     "range": "0x9FEB3D-0x9FEC62",
+     "what": "FDC_ProbeDiskFormat: `ld (0x47),0x1e` INTE setup, no-disk gate on (0x34) bit6, five FDC_Request calls (recalibrate + 4 sector reads into 0x0D62), delay 200, `incw 1,(0x104C)`"
+    },
+    {
+     "range": "0x9FEC63-0x9FEC6D",
+     "what": "Boot_CheckStrap: returns L=0 if (0x34) bit6 set else L=1 (the strap Boot_Init tests before the serial path)"
+    },
+    {
+     "range": "0x9FEC6E-0x9FEC7D",
+     "what": "DATA IN CODE -- 4 x .long init-vector table {0x00FFEC7E, 0x00FFED0D, 0x00FFED0D, 0x00FFEC9C}. Only entry[0] is read (by 0x9FB669). Entries 1/2 point at a bare `ret` (0x9FED0D) and entry 3 at another bare `ret` (0x9FEC9C) -- i.e. three no-op variants. \u2605 SPLIT REQUIRED per the Binary Include Splitting policy."
+    },
+    {
+     "range": "0x9FEC7E-0x9FEC9B",
+     "what": "BootSerial_Init (init-vector entry[0]): ei 0; 3 x 51-tick delay (0x9FEF72); full serial init 0x9FED1E; 4 x 6-tick delay; device-ident wait 0x9FF077"
+    },
+    {
+     "range": "0x9FEC9C / 0x9FED0D",
+     "what": "two bare `ret` no-op stubs (init-vector entries 1-3)"
+    },
+    {
+     "range": "0x9FEC9D-0x9FECF4",
+     "what": "BootSerial_ModeSwitch: (0x0F64)>>6 remapped 0x00->fall, 0x40->0x80, 0x80->0xC0, 0xC0->call 0x9FF0FE; resets the 0x00988A control block (+0xFC=0,+0xF8=0,+0xFE=0x80) and 0x0F75/0x0F77"
+    },
+    {
+     "range": "0x9FECF5-0x9FED1D",
+     "what": "five register-saving thunks: ->0x9FF608, ->0x9FF0FE, ->0x9FEFB8, ->0x9FFA2B, and Boot_ProbeExternalDevice 0x9FED0E (calls handshake 0x9FF00E then classifier 0x9FEF89)"
+    },
+    {
+     "range": "0x9FED1E-0x9FEDD1",
+     "what": "BootSerial_FullInit: resets BOTH ring control blocks (0x00988A and 0x009914), programs SIO SFRs 0x3A-0x3F/0xD5-0xD7/0xE3/0xEB/0xF8/0xC8, clears state vars (0x0F62,0x0F63,0x0F64,0x0F75,0x0F77,0x0FD5,0x0FD7), sends opening frame (0x1F,0xDA)"
+    },
+    {
+     "range": "0x9FEDD2-0x9FEE44",
+     "what": "BootSerial_HandshakeSequence: frames (0x1F,0x1A), (0x1D,0x00), (0xDD,0x03), (0x1E,0x80) separated by 0xBB8-tick gaps; then re-arms interrupts"
+    },
+    {
+     "range": "0x9FEE45-0x9FEF01",
+     "what": "BootSerial_SendTwoBytes_Bitbang: manual clock/data toggling on (0x3E)/(0x3F)/(0xD5) with 0x12C-tick delays, sourcing two bytes from 0x0FD9+(0x0FD5)"
+    },
+    {
+     "range": "0x9FEF02-0x9FEF47",
+     "what": "six busy-delay loops: WA = 2, 6, 10, 0x12C, 0x5DC, 0xBB8"
+    },
+    {
+     "range": "0x9FEF48-0x9FEF88",
+     "what": "three tick-counter delays on (0x0C00) with thresholds 2, 6, 0x33"
+    },
+    {
+     "range": "0x9FEF89-0x9FEFB7",
+     "what": "Boot_ClassifyDeviceID: (0x1036)==0x6C -> 3, (0x1023)==0x70 -> 2, (0x1038)==0x38 -> 1, (0x1028)==0x0F -> 4, else 0. Boot_Init compares the result against 4 to decide whether to run the flash-update UI."
+    },
+    {
+     "range": "0x9FEFB8-0x9FF00D",
+     "what": "BootSerial_TestLoopback: sends (0x20,0x00) and (0xE0,0x00), checks (0x0F77) advanced, accumulates bits 0 and 3 into (0x0F6B)"
+    },
+    {
+     "range": "0x9FF00E-0x9FF076",
+     "what": "BootSerial_ProbeSequence: frames (0x25,0x01), (0xE2,0x04), (0x20,0x10), (0xE2,0x11); ends with 0x9FF6F6"
+    },
+    {
+     "range": "0x9FF077-0x9FF0FD",
+     "what": "BootSerial_WaitDeviceIdent: sends (0x20,0x0B), polls (0x102D) bits 7/6 -> W in {0x0C,0x0D,0x0E}, compares against (0x1042) until stable, then resets both rings"
+    },
+    {
+     "range": "0x9FF0FE-0x9FF172",
+     "what": "BootSerial_ResetAndIdent: frames (0x2B,0x00), (0xEB,0x00), (0x20,0x10), (0xE3,0x10)"
+    },
+    {
+     "range": "0x9FF173-0x9FF1C4",
+     "what": "BootSerial_WaitTxIdle: 200-iteration timeout on (0x0F6F) gated by (0x3C) bit6, (0x38) bit5, (0x0F64) bits 0/1 and (0x0FD7)!=(0x0FD5); on timeout sets abort bit 0x80 in (0x0F6A)"
+    },
+    {
+     "range": "0x9FF1C5-0x9FF228",
+     "what": "BootSerial_SendFrame: resets 0x0FD5/0x0FD7, stores WA into (0x0FD9), (0x0FD7)+=2, sets (0x0F64) bit1, state (0x0F62)=4, arms the SIO and writes A to TX buffer (0xD4)"
+    }
+   ]
+  },
+  {
+   "blob": "table_data/includes/bootcode_serial_handlers.bin",
+   "size": 201,
+   "rom_address": "0x9FF229-0x9FF2F1 (boot-time 0xFFF229-0xFFF2F1); ROM file offset 0x1FF229-0x1FF2F1",
+   "content_type": "mixed",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "unidasm decodes 69 lines with ZERO misaligned branch targets in the code portions. The two 'db'/'swi 7' lines (0x9FF287, 0x9FF28C) are inside a data island, and the island is proven by direct address arithmetic in the code that follows it: 0x9FF2B9 and 0x9FF2DB both compute `ld L,(0x0F62); xor H,H; extz XHL; add XHL,0x00FFF282; ld XHL,(XHL); jp T,XHL`. Dumping 0x9FF282 as 11 x LE32 yields {0xFFF5E2, 0xFFF2F2, 0xFFF3A1, 0xFFF33D, 0xFFF406, 0xFFF36C, 0xFFF46B, 0xFFF5E2, 0xFFF4E3, 0xFFF560, 0xFFF5E2} -- ALL 11 land on verified instruction starts inside bootcode_serial_state.bin, and every one of those handlers terminates with `jrl 0xFFF2C3` or `jrl 0xFFF2E5`, i.e. back into the two ISR epilogues in THIS blob. That closed loop is decisive. Table span 11*4=44 bytes = 0x9FF282-0x9FF2AD, and 0x9FF2AE is exactly the address the .s header already documents as Handler_INTTX1. The state variable (0x0F62) is a raw byte offset (advanced by `inc 4,(0x0F62)` / `dec 4,(0x0F62)`), so states are 0x00,0x04,...,0x28.",
+   "recommended_action": "disassemble the three ISRs and split out the pointer table as `.long` data. This blob and bootcode_serial_state.bin should be handled together -- the dispatch table lives here but every target lives there.",
+   "difficulty": "trivial",
+   "suggested_module": "table_data/boot_cpserial_isr.s, prefix BootSerial_ (labels Handler_INTA, BootSerial_StateDispatchTable, Handler_INTTX1, Handler_INTRX1 already exist/are documented)",
+   "xrefs": [
+    "interrupt vector table at 0x9FFF48 -> 0x00FFF229 (Handler_INTA), 0x9FFF8C -> 0x00FFF2AE (Handler_INTTX1), 0x9FFF88 -> 0x00FFF2D0 (Handler_INTRX1) -- all three confirmed by LE32 pointer search over the ROM",
+    "nine `jrl` sites in bootcode_serial_state.bin (0x9FF31B, 0x9FF33A, 0x9FF369, 0x9FF39E, 0x9FF403, 0x9FF461, 0x9FF468, 0x9FF4B7, 0x9FF4E0) -> 0x9FF2C3",
+    "four `jrl` sites (0x9FF55D, 0x9FF5C2, 0x9FF5DF, 0x9FF5E7) -> 0x9FF2E5"
+   ],
+   "subregions": [
+    {
+     "range": "0x9FF229-0x9FF281",
+     "what": "Handler_INTA (89 B): if (0x0F63)==0 -> initialise receive mode (mask (0x0F66) with 0x9F, program SIO 0x3E/0xD5/0xE3/0xEB/0xD6, state (0x0F62)=0x20, set (0x0F64) bit0); else -> reload the 0x005C-entry ring timeout at (0x0F77), set (0x0F6A) bit6, clear (0x0F64) bit1. Common tail writes 0x12/0x22/0x23 to INTCLR (0xF8) and `reti`."
+    },
+    {
+     "range": "0x9FF282-0x9FF2AD",
+     "what": "DATA IN CODE -- BootSerial_StateDispatchTable, 11 x .long, indexed by the raw byte (0x0F62) (values 0x00..0x28 step 4). \u2605 SPLIT REQUIRED."
+    },
+    {
+     "range": "0x9FF2AE-0x9FF2CF",
+     "what": "Handler_INTTX1: push XWA/XHL/XIY, index the table, `jp T,XHL`. 0x9FF2C3 is the shared epilogue (pop XIY/XHL/XWA, INTCLR 0x12/0x22/0x23, reti) that the TX-side state handlers jump back to."
+    },
+    {
+     "range": "0x9FF2D0-0x9FF2F1",
+     "what": "Handler_INTRX1: identical prologue/dispatch; 0x9FF2E5 is the RX-side shared epilogue."
+    }
+   ]
+  },
+  {
+   "blob": "table_data/includes/bootcode_serial_state.bin",
+   "size": 2148,
+   "rom_address": "0x9FF2F2-0x9FFB55 (boot-time 0xFFF2F2-0xFFFB55); ROM file offset 0x1FF2F2-0x1FFB55",
+   "content_type": "mixed",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "unidasm decodes 714 instructions. Only 3 misaligned targets (0x9FF73F, 0x9FF743, 0x9FF755) and ALL THREE are false decodes inside the two proven data islands -- no misalignment anywhere in real code. Island 1 proven by 0x9FF73A `add XHL,0x00FFF746 / ld XHL,(XHL) / jp T,XHL` with index `(L & 0x38) >> 1` (8 possible values 0,4,...,0x1C); dumping 8 x LE32 at 0x9FF746 gives {0xFFF766, 0xFFF766, 0xFFF7C1, 0xFFF8F1, 0xFFF8F1, 0xFFF8F1, 0xFFF821, 0xFFF821} -- 4 distinct targets, all verified instruction starts, all inside this blob. Island 2 proven by 0x9FF95A `add XHL,0x00FFF966` with index `(A & 0x30) >> 2` (4 values); 4 x LE32 at 0x9FF966 = {0xFFF976, 0xFFF976, 0xFFF976, 0xFFF9A6} -- both targets verified. Two 2-byte non-code gaps precede the islands: 0x9FF744 = `6d 0f` and 0x9FF964 = `20 9e` (alignment filler after the 2-byte `jp T,XHL`). \u2605 SHARED-LIBRARY DISCOVERY: 0x9FFA2C-0x9FFB2E is a hardware-register-write + memcpy/memfill/checksum library that is BYTE-IDENTICAL to code in the SUB-CPU boot ROM, modulo one constant -- verified by direct byte comparison against original_ROMs/kn5000_subcpu_boot.ic30: 0x9FFB0F vs subcpu 0xFF858B (memcpy32, `ldirw`) MATCH exactly; 0x9FFB1F vs 0xFF859B (32-bit checksum, complemented) MATCH exactly; 0x9FFA92 vs 0xFF850E MATCH exactly; 0x9FFA2C vs 0xFF84A8, 0x9FFA75 vs 0xFF84F1 and 0x9FFABE vs 0xFF853A differ ONLY in the peripheral base (`43 00 00 15 00` = 0x150000 on the main CPU vs `43 00 00 13 00` = 0x130000 on the sub CPU). The register protocol is: A = (channel<<5)|0x10, write A to base+0 (address latch), data byte to base+2.",
+   "recommended_action": "disassemble; split the two .long dispatch tables out as data; and factor 0x9FFA2C-0x9FFB2E into a shared/ include used by BOTH table_data and subcpu/boot (parameterised on the peripheral base 0x150000 vs 0x130000), following the existing shared/boot_hw_init.s + shared/boot_routines.s pattern.",
+   "difficulty": "moderate",
+   "suggested_module": "table_data/boot_cpserial_states.s (0x9FF2F2-0x9FFA2B) + shared/boot_reg_lib.s (0x9FFA2C-0x9FFB2E, .equ REG_BASE) + append the sbrk to the malloc module",
+   "xrefs": [
+    "all 11 entries of the 0x9FF282 table (bootcode_serial_handlers.bin) point here",
+    "0x9FECF5 -> 0x9FF608",
+    "0x9FF133/0x9FF149/0x9FF15C/0x9FF16F (bootcode_utils.bin) -> 0x9FF6EF",
+    "0x9FECF1/0x9FF073/0x9FF0A8 (bootcode_utils.bin) -> 0x9FF6F6",
+    "0x9FED09 -> 0x9FFA2B",
+    "0x9FB730 (Boot_CallInitHandlers) -> 0x9FFA75",
+    "0x9FCD90 (INITPROGRESSDISPLAY_FILLREGION) and 0x9FD7CE (VGA_FINALIZEINITIALIZATION) -> 0x9FFB0F (memcpy32)",
+    "0x9FD7BD (VGA_FINALIZEINITIALIZATION) -> 0x9FFB18 (memfill32)",
+    "0x9FFBBF (Boot_malloc, in bootcode_malloc_and_after.bin) -> 0x9FFB2F (sbrk)",
+    "calls OUT to 0x9FB80E BOOTSTUB_RETURNERROR and 0x9FEF18"
+   ],
+   "subregions": [
+    {
+     "range": "0x9FF2F2-0x9FF5E9",
+     "what": "the ten CP-serial state handlers (targets of the 0x9FF282 table): 0x9FF2F2 (state 4), 0x9FF33D (0x0C), 0x9FF36C (0x14), 0x9FF3A1 (0x08), 0x9FF406 (0x10), 0x9FF46B (0x18), 0x9FF4E3 (0x20), 0x9FF560 (0x24), 0x9FF5E2 (states 0x00/0x1C/0x28 = abort, sets (0x0F6A) bit7). Each drives SIO SFRs 0x3E/0x3F/0xD4-0xD7/0xE3/0xEB, advances (0x0F62) by +/-4, walks the 0x005C-entry RX ring at 0x0F79 and the 0x003C-entry TX ring at 0x0FD9, and returns via `jrl 0x9FF2C3` or `jrl 0x9FF2E5`."
+    },
+    {
+     "range": "0x9FF5EA-0x9FF607",
+     "what": "an orphaned ISR tail ending in `reti` (07) at 0x9FF607 -- no xref found; clears (0x0F64) bits 0-1, sets (0x0F6A) bit2, INTCLR sequence. Likely a fourth vector's epilogue or dead code."
+    },
+    {
+     "range": "0x9FF608-0x9FF6EE",
+     "what": "BootSerial_PollTX: 0x2A-iteration timeout at (0x0F72), injects a (0x20,0x10) sync pair into the TX ring, calls the encoder 0x9FF90E, then arms TX if >=2 bytes are pending; retry counter (0x0F70) to 20 then abort bit 0x80 in (0x0F6A)"
+    },
+    {
+     "range": "0x9FF6EF-0x9FF743",
+     "what": "BootSerial_RX_SetBusy 0x9FF6EF (`or (0x0F64),0x04`) falling into BootSerial_RX_ParsePackets 0x9FF6F6: reads the 0x00988A control block (+0xFC head, +0xF8 tail, +0xFE count, gate `count >= 4`), reads bytes from the 0x005C RX ring at 0x0F79, computes `(byte & 0x38) >> 1` and dispatches"
+    },
+    {
+     "range": "0x9FF744-0x9FF745",
+     "what": "2 bytes non-code filler (`6d 0f`)"
+    },
+    {
+     "range": "0x9FF746-0x9FF765",
+     "what": "DATA IN CODE -- 8 x .long RX packet-class dispatch table. \u2605 SPLIT REQUIRED."
+    },
+    {
+     "range": "0x9FF766-0x9FF90D",
+     "what": "the four RX packet handlers: 0x9FF766 (2-byte packet + XOR-scramble through the 0x001022 table), 0x9FF7C1 (2-byte + external decode via the 0x9FF817 wrapper around 0x9FB80E), 0x9FF821 (variable-length run, count = (A & 0x0F)+1, with the same 0x001022 scramble and a (0x0F64) bit4 sentinel), 0x9FF8F1 (2-byte discard, sets (0x0F6A) bit3). Common exit `ret` at 0x9FF90D. 0x9FF817-0x9FF820 is a save-XDE/XIZ/XIX wrapper around `calr 0x9FB80E`."
+    },
+    {
+     "range": "0x9FF90E-0x9FF963",
+     "what": "BootSerial_TX_EncodePackets: mirror direction. Reads the 0x009914 control block, encodes into the 0x003C TX ring at 0x0FD9, dispatch index `(byte & 0x30) >> 2`"
+    },
+    {
+     "range": "0x9FF964-0x9FF965",
+     "what": "2 bytes non-code filler (`20 9e`)"
+    },
+    {
+     "range": "0x9FF966-0x9FF975",
+     "what": "DATA IN CODE -- 4 x .long TX packet-class dispatch table. \u2605 SPLIT REQUIRED."
+    },
+    {
+     "range": "0x9FF976-0x9FF9E8",
+     "what": "the two TX packet encoders (0x9FF976 fixed 2-byte, 0x9FF9A6 variable-length run of (A&0x0F)+2) + common `ret`"
+    },
+    {
+     "range": "0x9FF9E9-0x9FFA2A",
+     "what": "six 11-byte ring-index helpers: advance IY mod 0x5C (RX ring), advance IY mod 0x3C (TX ring), advance IX mod 0x80 (control block), retreat IX mod 0x80, and byte-identical DUPLICATES of the last two at 0x9FFA15/0x9FFA20"
+    },
+    {
+     "range": "0x9FFA2B",
+     "what": "bare `ret` -- a stubbed-out routine reached from 0x9FED09"
+    },
+    {
+     "range": "0x9FFA2C-0x9FFB2E",
+     "what": "SHARED HW-REGISTER LIBRARY (byte-identical to sub-CPU boot ROM 0xFF84A8-0xFF85AA except base 0x150000 vs 0x130000): 0x9FFA2C write-all-4-channels with a 0x5A5A5A5A scratch pattern, 0x9FFA75 write-8-bytes-to-channel, 0x9FFA92 write-all-from-registers, 0x9FFABE write-register-set (8 fields from BC/WA/QBC/DE/QDE), 0x9FFB0F memcpy32 (`ldirw`), 0x9FFB18 memfill32, 0x9FFB1F checksum32 (sum of u32, complemented into HL)"
+    },
+    {
+     "range": "0x9FFB2F-0x9FFB55",
+     "what": "Boot_sbrk: bump allocator over (0x009998) current / (0x00999C) remaining; returns 0xFFFFFFFF on exhaustion. Called by Boot_malloc at 0x9FFBBF."
+    }
+   ]
+  },
+  {
+   "blob": "table_data/includes/bootcode_malloc_and_after.bin",
+   "size": 906,
+   "rom_address": "0x9FFB56-0x9FFEDF (boot-time 0xFFFB56-0xFFFEDF); ROM file offset 0x1FFB56-0x1FFEDF. NOTE the .s header says 0x9FFB56-0x9FFEE0, off by one -- 0x9FFEE0 is RESET_HANDLER.",
+   "content_type": "mixed",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "unidasm decodes 508 lines, ZERO misaligned branch targets. All `swi 7` lines are pure 0xFF filler runs, not failed decodes. The .s header's function map is CONFIRMED CORRECT for the allocator/divide/debug groups: 0x9FFB56 Boot_malloc (free-list head at 0x0099A0, header {u32 next@+0, u16 size@+4}, data at +6, splits blocks when the remainder >= 10, falls back to `call 0x9FFB2F` sbrk on exhaustion) called from 0x9FBFCE and 0x9FCA57; 0x9FFBDC Boot_memcmp (cdecl args (XSP+4)=a, (XSP+8)=b, (XSP+0x0C)=u16 len, returns signed HL) called from NINE sites 0x9FBFEC/0x9FC00B/0x9FC02A/0x9FC049/0x9FC067/0x9FC085/0x9FC0A3/0x9FC0C1/0x9FC9F5; 0x9FFCDD Boot_free (coalescing forward and backward against the 0x0099A0 list) called from 0x9FC0D4 and 0x9FCC1F. The division group is a compiler runtime: 0x9FFC0E is the signed wrapper (sign extraction via `bit 15,QWA` / `bit 15,QBC`, negate, dispatch on the D flag byte), 0x9FFC63 is the unsigned core (uses the hardware `div XWA,BC` when the divisor fits in 16 bits, else a restoring shift-subtract loop counted in D), with entry stubs 0x9FFC55/0x9FFC59 (quotient, D=0/1) and 0x9FFC5D (remainder, returns XDE) called from 0x9FBF76 and 0x9FBF4C. \u2605 TWO NEW FINDINGS the .s does not record: (1) 0x9FFD7D-0x9FFDF9 is ORPHANED DEAD CODE -- a byte-for-byte copy of the tail of Boot_free with 0x009998 substituted for 0x0099A0, but with NO prologue and NO xref (the .s speculates 'Secondary heap routines (pool at 0x009998)'; the entry does not exist in this ROM). (2) 0x9FFEC1 'Debug_SendChar' does NOT send anything -- it is `36 00 fe` (`ld IZ,0xFE00`) followed by THIRTEEN 0x00 NOPs and `ret`. The store instruction has been NOPped out, so the entire debug-output group (0x9FFE80/0x9FFE86/0x9FFEA1) is functionally disabled in shipped firmware.",
+   "recommended_action": "disassemble. Mark 0x9FFDFA-0x9FFE7F (134 B) and 0x9FFED2-0x9FFEDF (14 B) as explicit 0xFF padding; label 0x9FFD7D-0x9FFDF9 as unreachable dead code and DROP the .s claim that a secondary-heap free() exists at 0x9FFD7D; annotate 0x9FFEC1 as a NOP-patched debug stub.",
+   "difficulty": "trivial",
+   "suggested_module": "table_data/boot_clib.s (malloc/free/memcmp/divide) + table_data/boot_debug.s (0x9FFE80-0x9FFED1)",
+   "xrefs": [
+    "0x9FBFCE (BOOT_DETECTDISKTYPE) and 0x9FCA57 (LZSS_DECOMPRESS) -> 0x9FFB56 Boot_malloc",
+    "0x9FBFEC, 0x9FC00B, 0x9FC02A, 0x9FC049, 0x9FC067, 0x9FC085, 0x9FC0A3, 0x9FC0C1, 0x9FC9F5 -> 0x9FFBDC Boot_memcmp",
+    "0x9FBF76 -> 0x9FFC5D (modulo)",
+    "0x9FBF4C -> 0x9FFC63 (divide core)",
+    "0x9FC0D4 and 0x9FCC1F -> 0x9FFCDD Boot_free",
+    "0x9FFBBF (Boot_malloc) -> 0x9FFB2F (sbrk, in bootcode_serial_state.bin)"
+   ],
+   "subregions": [
+    {
+     "range": "0x9FFB56-0x9FFBDB",
+     "what": "Boot_malloc (86 B)"
+    },
+    {
+     "range": "0x9FFBDC-0x9FFC0D",
+     "what": "Boot_memcmp (50 B)"
+    },
+    {
+     "range": "0x9FFC0E-0x9FFC5C",
+     "what": "signed divide wrapper + two entry stubs (D=0 quotient / D=1)"
+    },
+    {
+     "range": "0x9FFC5D-0x9FFC62",
+     "what": "modulo entry (calls the core, returns XDE)"
+    },
+    {
+     "range": "0x9FFC63-0x9FFCDC",
+     "what": "unsigned 32/64-bit division core"
+    },
+    {
+     "range": "0x9FFCDD-0x9FFD7C",
+     "what": "Boot_free with forward/backward coalescing (heap head 0x0099A0)"
+    },
+    {
+     "range": "0x9FFD7D-0x9FFDF9",
+     "what": "DEAD CODE: orphaned duplicate of the Boot_free tail with head 0x009998; no prologue, no xref. Plus a second 18-byte orphan fragment at 0x9FFDE8 ending `pop XIZ; ret`."
+    },
+    {
+     "range": "0x9FFDFA-0x9FFE7F",
+     "what": "0xFF padding (134 bytes)"
+    },
+    {
+     "range": "0x9FFE80-0x9FFE85",
+     "what": "Debug_OutputChar"
+    },
+    {
+     "range": "0x9FFE86-0x9FFEA0",
+     "what": "Debug_OutputHexByte (splits nibbles, two Debug_NibbleToHex + two sends)"
+    },
+    {
+     "range": "0x9FFEA1-0x9FFEB3",
+     "what": "Debug_OutputString (null-terminated, `ld A,(XIX+)`)"
+    },
+    {
+     "range": "0x9FFEB4-0x9FFEC0",
+     "what": "Debug_NibbleToHex (+0x30 / +0x57)"
+    },
+    {
+     "range": "0x9FFEC1-0x9FFED1",
+     "what": "Debug_SendChar -- NOP-PATCHED STUB: `ld IZ,0xFE00` + 13 x `nop` + `ret`. Emits nothing."
+    },
+    {
+     "range": "0x9FFED2-0x9FFEDF",
+     "what": "0xFF padding (14 bytes) up to RESET_HANDLER at 0x9FFEE0"
+    }
+   ]
+  },
+  {
+   "blob": "subcpu/boot/subcpu_boot_data_8000.bin",
+   "size": 656,
+   "rom_address": "0xFF8000-0xFF828F (sub-CPU boot ROM based at 0xFE0000); file offset 0x18000-0x1828F in original_ROMs/kn5000_subcpu_boot.ic30",
+   "content_type": "mixed",
+   "compressed": false,
+   "codec": "none",
+   "evidence": "DATA, not code -- and every subregion has an identified consumer, so this is fully documentable. (1) 0xFF8000-0xFF801F: 8 x LE32 = {0xFF8496, 0xFF849F, 0xFF84A2, 0xFF849C, 0xFF8499, 0xFF84A5, 0xFF85AB, 0xFF85AB}. ALL SEVEN distinct targets decode in original_ROMs/kn5000_subcpu_boot.ic30.unidasm as the two-instruction stub `db a8 (ld HL,0) / 0e (ret)` -- i.e. they are function entry points, which is decisive proof of a handler table. Consumer: kn5000_subcpu_boot.s:99594 `lda_24 xbc,(0xff8000); ld_sril3 XWA,...; call (xwa)` inside CMD_Dispatch_Handler, indexed by the top 3 bits of (0x051A) times 4. (2) 0xFF8020-0xFF8029: exactly ONE 10-byte MEM_TEST config record -- proved by kn5000_subcpu_boot.s:99759 `muls wa,0xA` and :99825 `cp (xsp+4),0x1  ; Only 1 region`. Fields: u32 start=0x00050000, u32 size=0x00050000, u8 err_lo=0x01, u8 err_hi=0x02 (this is the resident tone-database RAM window 0x050000-0x09FFFF). (3) 0xFF802A/0xFF802C: two u16 scalars 0x004D and 0x0080, read at 0xFF8BF7 `ld BC,(0xff802a); sub HL,BC` and 0xFF8C09 `ld HL,(0xff802c); divs XBC,HL`. (4) 0xFF8040-0xFF8042: three u8 coefficients 0x60/0x98/0x10 read at 0xFF8BFE `lda XDE,0xff8040` then (XDE+0)=multiplier, (XDE+1)=offset, (XDE+2)=black-key correction. (5) 0xFF804C-0xFF814B and 0xFF814C-0xFF824B: two 256-byte byte-indexed curves, proved by `lda XDE,0xff804c / ld L,(XDE+BC)` at 0xFF8BEB and `lda XDE,0xff814c / ld C,(XDE+BC)` at 0xFF8C62. Curve 1 is monotonically DECREASING (9 x 0xFF, then 0xFB,0xF6,0xF1,... down to 0x01); curve 2 is monotonically INCREASING 0x00 -> 0x7F, flat-then-linear. \u2605 SEMANTICS PROVEN: the consuming routine is already labelled NOTE_VELOCITY_LOOKUP_CALCULATE (kn5000_subcpu_boot.s:100026, 0xFF8BD2) and computes v = curve1[E]; v -= 0x4D; v = (v * 0x60) / 0x80; v += 0x98; if ((note % 12) in {1,3,6,8,10}) v -= 0x10; clamp to [0,0xFF]; result = curve2[v] and stores it to (XWA+1). The `div C,0x0c` at 0xFF8C23 with the remainder tested against 10,8,6,3,1 is note-mod-12 selecting exactly the BLACK KEYS, and curve2's 0x00-0x7F range is MIDI velocity. So curve1 = key-scan-interval -> raw response, curve2 = response -> velocity, with a black-key mechanical offset.",
+   "recommended_action": "document-as-table -- replace the single opaque .incbin with named tables. This should be split into at least 5 pieces per the Binary Include Splitting policy, since code references addresses INSIDE the blob (0xFF8020, 0xFF802A, 0xFF802C, 0xFF8040, 0xFF804C, 0xFF814C, 0xFF824C). No disassembly is warranted -- none of it is code.",
+   "difficulty": "moderate",
+   "suggested_module": "subcpu/boot/data_tables.s with labels SubBoot_CmdHandlerTable, SubBoot_MemTestConfig, Velocity_Bias/Velocity_Divisor/Velocity_Coeffs, Velocity_ResponseCurve, Velocity_OutputCurve",
+   "xrefs": [
+    "kn5000_subcpu_boot.s:99594 (CMD_Dispatch_Handler) -> 0xFF8000; unidasm 0xFF88F1 `lda XBC,0xff8000`",
+    "kn5000_subcpu_boot.s:99762 (MEM_TEST_ROUTINE, 0xFF89FC) -> 0xFF8020; unidasm 0xFF8A10",
+    "kn5000_subcpu_boot.s:100036 (NOTE_VELOCITY_LOOKUP_CALCULATE, 0xFF8BD2) -> 0xFF804C, 0xFF802A, 0xFF8040, 0xFF802C, 0xFF814C (unidasm 0xFF8BEB, 0xFF8BF7, 0xFF8BFE, 0xFF8C09, 0xFF8C62)",
+    "unidasm 0xFF8CAE `ld XBC,0x00ff824c` and 0xFF8CB6 `ld BC,(0xff824c)` -> the 0xFF824C tail block"
+   ],
+   "subregions": [
+    {
+     "range": "0xFF8000-0xFF801F (file 0x000-0x01F)",
+     "what": "8-entry LE32 command-handler jump table; all targets are `ld HL,0 / ret` stubs at 0xFF8496/849F/84A2/849C/8499/84A5/85AB/85AB"
+    },
+    {
+     "range": "0xFF8020-0xFF8029 (0x020-0x029)",
+     "what": "MEM_TEST config, exactly 1 x 10-byte record: start=0x00050000, size=0x00050000, err_lo=0x01, err_hi=0x02"
+    },
+    {
+     "range": "0xFF802A-0xFF802B (0x02A-0x02B)",
+     "what": "u16 = 0x004D -- velocity bias subtracted from curve1[E]"
+    },
+    {
+     "range": "0xFF802C-0xFF802D (0x02C-0x02D)",
+     "what": "u16 = 0x0080 -- velocity scale divisor"
+    },
+    {
+     "range": "0xFF802E-0xFF804B (0x02E-0x04B)",
+     "what": "30 bytes of what look like 3-byte parameter records (the byte at each +2 runs 0x00,0x10,0x20,...,0x90 -- ten in a row, far beyond chance). Only the record at 0xFF8040 (0x60, 0x98, 0x10) has a proven consumer; the surrounding records appear to be alternate calibration sets for other keybeds/regions. UNRESOLVED -- flag as such rather than guessing."
+    },
+    {
+     "range": "0xFF804C-0xFF814B (0x04C-0x14B)",
+     "what": "Velocity_ResponseCurve: 256-byte monotonically decreasing LUT indexed by the key-scan interval (9 x 0xFF saturation, then 0xFB..0x01)"
+    },
+    {
+     "range": "0xFF814C-0xFF824B (0x14C-0x24B)",
+     "what": "Velocity_OutputCurve: 256-byte monotonically increasing LUT 0x00 -> 0x7F (MIDI velocity range); flat 0x00-0x02 region at the low end then a linear ramp"
+    },
+    {
+     "range": "0xFF824C-0xFF828F (0x24C-0x28F)",
+     "what": "68-byte tail block: u16 0xF000 at 0xFF824C (read directly as a scalar) plus a register-init blob passed as a POINTER (`ld XBC,0x00ff824c`) to 0xFF8D0A. Contents 00 f0 00 00 ff 83 00 00 7c 01 7c 7f 40 00 80 00 ... then mostly zeros. UNRESOLVED -- needs the 0xFF8D0A consumer decoded."
+    }
+   ]
+  },
+  {
+   "blob": "hdae5000/includes/code_29af2d_2fffff.bin",
+   "size": 413907,
+   "rom_address": "0x29AF2D-0x2FFFFF (whole file; blob offset X = ROM 0x29AF2D+X; 0x2FFFFF-0x29AF2D+1 = 413907 exactly)",
+   "content_type": "mixed",
+   "codec": "none (uncompressed raw)",
+   "compressed": false,
+   "evidence": "File is bincluded 4 times from hdae5000/hdae5000_data_tables.s as (offset,length) slices: line 33303 (54637,72972)->ROM 0x2A849A-0x2BA1A5; line 33307 (127609,162524)->0x2BA1A6-0x2E1C81; line 36328 (306849,77824)->0x2E5DCE-0x2F8DCD; line 36601 (386437,27470)->0x2F94B2-0x2FFFFF. Slices sum to 340790 B; 3 gaps (blob offs 0-54636, 290133-306848, 384673-386436 = ROM 0x29AF2D-0x2A8499, 0x2E1C82-0x2E5DCD, 0x2F8DCE-0x2F94B1) are already converted to .s text in the same file. Filename hypothesis 'code' is FALSE for the incbin'd content: the only genuine code in the file's range is ROM 0x29AF2D-~0x29BAFD (~3025 B, blob offs 0x0-~0xBD0, in gap 1, already converted: HDAE5000_CODE_REMAINDER / Display_Buffer_Validate 0x29AF71 / MemCompare_Block 0x29AFBE / MemCopy_Reverse 0x29AFF0 / Multiply 0x29B72D per symbols/hdae5000_symbols_reference.txt). First ASCII name string at ROM 0x29BAFE ('LyricBackColorCheck'); from there to 0x2A8499 it is name-string tables and UI data (UI_Config 0x29BFE0, RECORD_TABLE 0x29C0AA, UI_Descriptors 0x29DC14, Panel_Save_UI 0x29F9B2, Credits 0x2A477C, Demo_Data 0x2A5634, GFX_DATA_1/2 0x2A5D2C/0x2A6984). The four .incbin slices contain ZERO code (see per-slice findings).",
+   "recommended_action": "leave the gap conversions in place EXCEPT the string-table tail ~0x2A7736-0x2A8499 which is mis-decoded as instructions in hdae5000_data_tables.s (~line 33150-33301: runs of 'nop' = the tables' 0x00 pad bytes, plus junk like 'ld xiy,0x5443454c'+'ld xix,0x00325249' = ASCII 'S','ELECT','_DIR2' and 'ld xix,0x4e454d44'+'.byte 0x55' = 'HDDMENU' tail). strings -t x shows a continuous zero-padded table of UI screen/event names (AGAIN_HD_FORMAT_CATCH @0x2A7736 ... SELECT_FILE @0x2A8440, SETUPS_TOOLS @0x2A8454, HARD_DISK_OPT @0x2A8472, HDDMENU @0x2A8492 ending exactly at 0x2A8499); none of these appear as .asciz in the .s. Reconvert that region to .asciz per the String Literals STRICT POLICY.",
+   "difficulty": "moderate",
+   "suggested_module": "keep in hdae5000_data_tables.s; string region label suggestion: HDAE5000_UI_ScreenName_Table",
+   "xrefs": [
+    "hdae5000/hdae5000_data_tables.s:33303",
+    "hdae5000/hdae5000_data_tables.s:33307",
+    "hdae5000/hdae5000_data_tables.s:36328",
+    "hdae5000/hdae5000_data_tables.s:36601",
+    "slice-4 .data image contains 119 LE32 pointers into 0x29BFC0-0x29D980 (name strings/UI_Config/RECORD_TABLE region)"
+   ]
+  },
+  {
+   "blob": "hdae5000/includes/code_29af2d_2fffff.bin",
+   "size": 72972,
+   "rom_address": "0x2A849A-0x2BA1A5 (slice 1: .incbin offset 54637 len 72972, hdae5000_data_tables.s:33303, label HDAE5000_GFX_INIT_PARAMS)",
+   "content_type": "mixed (text + palette + graphics)",
+   "codec": "raw 8bpp indexed + RGBX palette",
+   "compressed": false,
+   "evidence": "Label/comment 'Graphics initialization parameters' is misleading. Actual decomposition: (1) 0x2A849A-0x2A858D (244 B) tail of the UI screen-name string table: 'TT_HDDEXT\\0' then 'FileLoadSwCatch', 'HDDTitleSwCatch', 'CopyToHDDirSelScreen' ... 'HDAETitleFunc\\0' (xxd @file off 0xD56D). (2) 0x2A858E-0x2A898D (1024 B) VGA palette, 256 x 4B RGBX, starts 00 00 00 00 / 80 00 00 00 / 00 80 00 00 (classic VGA colors), every 4th byte == 0x00 for all 256 entries. (3) 0x2A898E-0x2BA1A5 (71704 B) = first 71704 bytes of the 320x240 8bpp Logo image: cmp proves hdae5000/images/HDAE5000_Logo.bin (76800 B) byte-identical to blob @0x2A898E (image crosses into slice 2). NOT code: unidasm @0x2AA000 decodes as an endless run of 'ld W,0x20' (0x20-fill background); entropy 3.2-5.5 with dominant byte 0x20, impossible for real TLCS-900 code.",
+   "recommended_action": "document-as-table + re-split: split at 0x2A858E (palette) and 0x2A898E (pixels); rename to HDAE5000_UI_ScreenName_Tail (or merge with reconverted string table), HDAE5000_Logo_Palette, HDAE5000_Logo. Consider replacing pixel incbin with images/HDAE5000_Logo.bin (verified byte-identical) once the slice-2 half is merged.",
+   "difficulty": "trivial",
+   "suggested_module": "hdae5000_data_tables.s labels HDAE5000_Logo_Palette / HDAE5000_Logo",
+   "xrefs": [
+    "hdae5000/hd-ae5000_v2_06i.s:491 lda_24 xwa,(0x2a849a) \u2014 pushes 0xA bytes = 'TT_HDDEXT\\0' as name param to workspace dispatch +0x0270, handler ID 0x7F",
+    "hdae5000/hd-ae5000_v2_06i.s:529 Alloc_Memory_1 returns A1=0x2A898E, A2=0x140(320), A3=0xF0(240)",
+    "hdae5000/hd-ae5000_v2_06i.s:699,705,711 lda_24 (0x2a898e)/(0x2b1f8e)/(0x2a858e) \u2014 pixels, half-frame (+0x9600=320x120), palette"
+   ]
+  },
+  {
+   "blob": "hdae5000/includes/code_29af2d_2fffff.bin",
+   "size": 162524,
+   "rom_address": "0x2BA1A6-0x2E1C81 (slice 2: .incbin offset 127609 len 162524, hdae5000_data_tables.s:33307, label HDAE5000_Font_Data)",
+   "content_type": "graphics",
+   "codec": "raw 8bpp indexed + RGBX palettes",
+   "compressed": false,
+   "evidence": "Label 'Font bitmap data' is WRONG \u2014 contains no fonts at all. Complete decomposition, gapless: 0x2BA1A6-0x2BB58D last 5096 B of Logo pixels (Logo = 0x2A898E+0x12C00; the slice boundary 0x2BA1A6 cuts the Logo image mid-pixels and has NO xref anywhere in the code .s files \u2014 only its own comment at hd-ae5000_v2_06i.s:112); 0x2BB58E-0x2BB98D Hands palette (1024 B, byte-identical to Logo palette); 0x2BB98E-0x2CE58D Hands 320x240 8bpp (cmp == images/HDAE5000_Hands.bin); 0x2CE58E-0x2CE98D FilePanel palette (1024 B, distinct, gray-heavy 7f7f7f00 entries, RGBX verified); 0x2CE98E-0x2E158D FilePanel 320x240 8bpp (cmp == images/HDAE5000_FilePanel.bin); 0x2E158E-0x2E198D icon palette, Windows-halftone style (cmp == images/HDAE5000_Palette.bin; starts VGA16 then c0dc c0 / a6ca f0); 0x2E198E-0x2E1C81 icon pixels, 756 B = 27 rows x 28 B stride (Alloc_Memory_4 returns dims A2=A3=0x1B=27), ending exactly at the slice end (next byte 0x2E1C82 = 'V' of 'V2.06i'). Note images/HDAE5000_Icon.bin is 784 B (28x28) \u2014 over-extracted by 28 B into the version string. NOT code: image blocks are exactly contiguous [pal|320x240 px] x3 at stride 0x13000 (=1024+76800), dominant fill bytes 0x79/0x21, decodes as repetitive junk.",
+   "recommended_action": "re-split at real boundaries (0x2BB58E, 0x2BB98E, 0x2CE58E, 0x2CE98E, 0x2E158E, 0x2E198E), dissolve the unjustified 0x2BA1A6 boundary by merging with slice 1's pixel run, rename Font_Data label away (fix hd-ae5000_v2_06i.s:112 comment and kn5000-docs/hdae5000.md line 492 'Font bitmap data'), fix Icon extraction to 756 B (27 rows x 28 stride).",
+   "difficulty": "trivial",
+   "suggested_module": "hdae5000_data_tables.s labels HDAE5000_Hands_Palette/HDAE5000_Hands/HDAE5000_FilePanel_Palette/HDAE5000_FilePanel/HDAE5000_Icon_Palette/HDAE5000_Icon",
+   "xrefs": [
+    "hdae5000/hd-ae5000_v2_06i.s:549 Alloc_Memory_2 -> 0x2BB98E, 320x240",
+    "hdae5000/hd-ae5000_v2_06i.s:569 Alloc_Memory_3 -> 0x2CE98E, 320x240",
+    "hdae5000/hd-ae5000_v2_06i.s:589 Alloc_Memory_4 -> 0x2E198E, 27x27",
+    "hdae5000/hd-ae5000_v2_06i.s:773,779,785 (0x2bb98e/0x2c4f8e/0x2bb58e)",
+    "hdae5000/hd-ae5000_v2_06i.s:847,853,859 (0x2ce98e/0x2d7f8e/0x2ce58e)",
+    "hdae5000/hd-ae5000_v2_06i.s:921 MemCopy 0x400 B from 0x2BB58E to RAM 0x69400"
+   ]
+  },
+  {
+   "blob": "hdae5000/includes/code_29af2d_2fffff.bin",
+   "size": 77824,
+   "rom_address": "0x2E5DCE-0x2F8DCD (slice 3: .incbin offset 306849 len 77824 = 0x13000, hdae5000_data_tables.s:36328, label HDAE5000_Palette_Data)",
+   "content_type": "graphics (palette + previously unidentified boot-splash image)",
+   "codec": "raw 8bpp indexed + RGBX palette",
+   "compressed": false,
+   "evidence": "Label claims 'VGA palette data (256 entries)' but only the first 1024 B are palette. Decomposition: 0x2E5DCE-0x2E61CD = 256xRGBX palette (cmp == images/HDAE5000_Palette_0x65dce.bin; loaded by HDAE5000_LOAD_PALETTE 0x28F8E0 per docs); 0x2E61CE-0x2F8DCD = 76800 B = one more 320x240 8bpp image, NOT yet extracted to images/: rendered with its palette it is the HD-AE5000 BOOT SPLASH \u2014 red 'HD-AE5000' logo, 'Version 2', 'Start-up ! Please wait . . .' over a hard-disk-platter photograph (visually confirmed from /tmp/img4_0x2E61CE.png). Photographic content explains the 6.0-6.8 entropy with no dominant byte at blob offs 0x4C000-0x5D000. NOT code: unidasm @0x2EA000 yields incoherent stream with invalid opcodes ('db'), nonsense ops (adc WA,(XWA) runs, ld (0x11),0x8d34), no call/ret structure. Block is exactly palette+pixels: 0x2E5DCE+0x400+0x12C00 = 0x2F8DCE = next label HDAE5000_Display_Params.",
+   "recommended_action": "split at 0x2E61CE; rename to HDAE5000_Main_Palette + HDAE5000_Splash_Screen; extract splash to hdae5000/images/ + add to scripts/build/convert_images.py IMAGE_METADATA + gallery per CLAUDE.md policy; fix docs line 494 ('multiple palettes' is wrong).",
+   "difficulty": "trivial",
+   "suggested_module": "hdae5000_data_tables.s labels HDAE5000_Main_Palette / HDAE5000_Splash_Screen",
+   "xrefs": [
+    "hdae5000/hdae5000_ui_display.s:6969 lda_24 xhl,(0x2e61ce) \u2014 HDAE5000_ALLOC_MEMORY (0x28F543) primary A1 return (comment there mislabels it 'palette data pointer')",
+    "hdae5000/hdae5000_ui_display.s:7071 lda_24 xwa,(0x2e5dce) \u2014 palette load for VGA DAC (ports 0x3C8/0x3C9 via 0x1703C8)",
+    "hdae5000/hdae5000_ui_display.s:6994 comment: boot init loads VGA palette from 0x2E5DCE"
+   ]
+  },
+  {
+   "blob": "hdae5000/includes/code_29af2d_2fffff.bin",
+   "size": 27470,
+   "rom_address": "0x2F94B2-0x2FFFFF (slice 4: .incbin offset 386437 len 27470, hdae5000_data_tables.s:36601, label HDAE5000_Init_Data)",
+   "content_type": "pointer-table + config data + zero padding (initialized .data segment image)",
+   "codec": "none (LE32 pointer tables + raw config)",
+   "compressed": false,
+   "evidence": "Existing label/comment 'Data copied to 0x23952A (0xC82 bytes)' is CORRECT: hdae5000_ui_display.s:7342-7343 'ld xde,0x23952A / ld xhl,0x2F94B2' copies 0xC82=3202 B to RAM (a .data init image). Internal structure: (1) 0x2F94B2-0x2F95C5: 69 x LE32 code pointers 0x282811,0x284298,0x28446D,...,0x28B527,...,0x286065 \u2014 all within HDAE5000 code (0x280000-0x28Bxxx); every sampled target (0x282811,0x284298,0x28446D,0x285802,0x2858B8,0x28B527,0x286065) starts a line in original_ROMs/hd-ae5000_v2_06i.ic4.unidasm (instruction boundary), and 9 consecutive entries 0x285802..0x285DB2 are spaced exactly 0xB6 (equal-size case handlers) => genuine function/handler pointer table; (2) LE32 0x00000000 terminator @0x2F95C6; (3) 0x2F95CA-0x2F97A5: 119 x LE32 pointers 0x29BFC0..0x29D980 into the name-string/UI_Config/RECORD_TABLE region of gap 1 (e.g. 0x29BFC0,0x29BFB0,0x29BF9E... target zero-padded ASCII names like 'SfxMspBitCheck' seen @0x29BEE0); (4) further groups separated by zero-words with 16-bit counts (0x000D, 0x0012) and pointers into 0x29DAxx and 0x28xxxx (bytes @0x2F97A6: 00000000 0d00 2adb2900 1cdb2900 ...); (5) last nonzero byte at 0x2FA134 (file off 0xC82); (6) 0x2FA135-0x2FFFFF = 24267 B of 0x00 fill to the 512KB ROM end (docs' '3,266B config + 24,204B padding' figures are slightly off: measured 3,203 nonzero + 24,267 zero). NOT code: unidasm @0x2F94B2 decodes the pointer bytes as scf/push/nop/db junk.",
+   "recommended_action": "document-as-table: convert the pointer runs to symbolic .long entries (per Symbolic Cross-Referencing policy) so the 69 code targets get labels and the 119 name-string pointers bind to the (to-be-reconverted) string labels; keep remaining config as commented .byte; replace zero tail with .zero 24267 (or .fill) marked as ROM fill.",
+   "difficulty": "moderate",
+   "suggested_module": "hdae5000_data_tables.s labels HDAE5000_InitData_HandlerPtrs / HDAE5000_InitData_NamePtrs / HDAE5000_InitData_Config / HDAE5000_ROM_ZeroFill",
+   "subregions": [
+    {
+     "range": "0x2F94B2-0x2F95C5",
+     "what": "69 x LE32 code pointers into 0x282811-0x28B527, verified on instruction boundaries"
+    },
+    {
+     "range": "0x2F95C6-0x2F95C9",
+     "what": "0x00000000 terminator"
+    },
+    {
+     "range": "0x2F95CA-0x2F97A5",
+     "what": "119 x LE32 pointers into 0x29BFC0-0x29D980 (name strings / UI_Config / RECORD_TABLE)"
+    },
+    {
+     "range": "0x2F97A6-0x2FA134",
+     "what": "further pointer groups (16-bit counts 0x000D/0x0012, targets 0x29DAxx and 0x28xxxx) + config values; end of the 0xC82-byte RAM copy source"
+    },
+    {
+     "range": "0x2FA135-0x2FFFFF",
+     "what": "24267 B zero fill to end of ROM"
+    }
+   ],
+   "xrefs": [
+    "hdae5000/hdae5000_ui_display.s:7313 comment 'Copy 0x0C82 bytes from ROM 0x2F94B2 to RAM 0x23952A'",
+    "hdae5000/hdae5000_ui_display.s:7342-7343 the copy instructions",
+    "hdae5000/hdae5000_ui_display.s:7028 .equ HDAE5000_DATA_COPY_DEST, 0x23952A",
+    "hdae5000/hd-ae5000_v2_06i.s:352 lda_24 xwa,(0x23952a) \u2014 reads the RAM copy"
+   ]
+  },
+  {
+   "blob": "custom_data/includes/section_0.bin",
+   "size": 94208,
+   "rom_address": "0x300000-0x316FFF",
+   "content_type": "mixed (style database: header + record table + rhythm-cell event pool)",
+   "codec": "raw; pattern pool uses the KN5000 rhythm-cell event format (cell header 80 FF FF xx xx 87; 6-byte note events 90,delta,note,vel,dur16; 0x81 lane/bar separator; 0x83 end; 0x87 close). No compression (registration/style data is NOT LZSS).",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "0x000: 'HK' section header 48 00 4B 00 ... 5A5A5A; header fields VERIFIED: +0x1E=0x1680(section size 0x16800/16), +0x20=0x60/0x60 (hdr/record size), +0x24=30 (record slots), +0x26=0x0100 (block size), +0x28=0x0154 (340 blocks), +0x2E=0x0EC0 = first-free-block offset/16 (0xEC00 = block 216; measured last used block = 215). 0x060-0xB9F: 30 records x 0x60: +0x00 id word = slot*5 | (sec+1)<<12 (0x1000,0x1005,0x100A...), +0x04..0x0B four sub-cell ids, +0x0C sig/flags word (0x0307 for 4/4 styles, 0x0306 for waltzes in sec4), +0x10 length-like word, +0x18..0x3F five 8-byte per-part descriptors, +0x40 16-char name ('Bolero puro','GospelRevival','Roaring 20's','AccordionJazz','Rhumba','Mambo','8BtPopBallad D'; 25 named + 5 'Clear'). 0x13C0: empty-cell template (80 FF FF FF FF 87, 8x 0x81 lanes, 83 87). 0x1400-0x167FF: 340 blocks x 0x100: blocks 0-149 = cells (header 80 FF FF FF FF 87, or 80 FF FF 9x 10 87 variant), blocks 150-215 = overflow event data (first byte 0x00 per init loop at 0xF16A25 which writes the template with byte0 zeroed for blocks >=150), blocks 216-339 = free template (00 FF FF FF FF 87 + eight default events 90 00 3n 50 10 00 81, n=0..7, + 83, byte 0xFF of each block = 0x87). Free-block count 124 measured. Fill: 0xFF 3.4% (only trailing 0x16800-0x16FFF sector tail), 0x00 51.3% (mostly intra-block padding). Structured accounting: 58,336 B live data (61.9%), 31,744 B initialized-empty template blocks (33.7%), 2,080 B zero gap 0xBA0-0x13BF, 2,048 B 0xFF tail.",
+   "xrefs": [
+    "v7/maincpu/storage/flash_floppy_handlers.s:730 Flash_InitExtMemAddrs (same routine in v10 ROM at 0xF16A57 = LABEL_F16A57, symbols/maincpu_symbols_reference.txt:13971): loads 0x300000 and stores base+0x19800/0x30000/0x49800/0x60000/0x79800/0x90000/0xB0000 to RAM 0x0C76/0C7A/0C7E/0C82/0C86/0C8A/0C8E/0C92 (disassembly verified via unidasm at 0xF16A57: f2 00 00 30 30 lda xwa,0x300000; f1 76 0c 60 ld (0x0c76),xwa; ...)",
+    "readers of RAM (0x0C76) in v10 ROM (byte-pattern sample): 0xE2092B, 0xE4E3A5, 0xE4E600, 0xEF707C, 0xEF7B03, 0xEF7DE4, 0xEFA309, 0xEFAA30",
+    "v10/maincpu/boot/system_handlers.s:5980 Flash_IdentifyChip (0xEF3724) + Flash_EraseSector_* cluster (0xEF396C/0xEF3A0E/0xEF48FE/0xEF49F7/0xEF4CF8 all contain lda xwa,0x300000) = AM29LV800B program/erase for this chip",
+    "section-pointer init loop 0xF16A0C-0xF16A50 (v7 name NoteEvent_CopySlotData_Loop): initializes 340 blocks of 0x100 from offset 0x1400, template header suppressed (byte0=0) for block index >= 150 (cp DE,0x0096)"
+   ],
+   "subregions": [
+    {
+     "range": "0x0000-0x005F",
+     "what": "section header 'HK', geometry fields + allocation watermark"
+    },
+    {
+     "range": "0x0060-0x0B9F",
+     "what": "30 style records x 0x60 (ids, per-part descriptors, 16-char name)"
+    },
+    {
+     "range": "0x0BA0-0x13BF",
+     "what": "zero fill gap"
+    },
+    {
+     "range": "0x13C0-0x13FF",
+     "what": "empty-cell template"
+    },
+    {
+     "range": "0x1400-0x967FF(rel 0x167FF)",
+     "what": "340 x 0x100 pattern blocks: 150 cells (30 slots x 5 variations), 66 overflow, 124 free-template"
+    },
+    {
+     "range": "0x16800-0x16FFF",
+     "what": "0xFF erased sector tail"
+    }
+   ],
+   "suggested_module": "custom_data/style_section_0.s, label prefix CustomStyle_Sec0_ (Header/Record00..29/CellPool)",
+   "recommended_action": "document-as-table: convert header + 30-record table + per-block pool to structured .s data (names as .ascii per string policy); keep event streams as per-cell .byte tables until the shared rhythm-cell grammar is formally documented. Not code - never disassemble."
+  },
+  {
+   "blob": "custom_data/includes/section_1_2.bin",
+   "size": 188416,
+   "rom_address": "0x319000-0x346FFF (section 1 @0x319800, section 2 @0x330000)",
+   "content_type": "mixed (two style-database sections, identical layout to section_0)",
+   "codec": "raw; same rhythm-cell event format",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "File offsets 0x000-0x7FF and 0x2D800-0x2DFFF are 0xFF (flash sector gaps). Section 1 at file 0x800, section 2 at 0x17000, both 0x16800 long with byte-identical header template (48 00 4B 00 ... 60 00 60 00 1E 00 00 01 54 01). Watermarks verified: sec1 +0x2E=0x0E00 -> first free block 0xE000, measured last used block 203; sec2 +0x2E=0x0F40, last used 221. Each section: 30 records, 150 cells + overflow (sec1: 54, sec2: 72 continuation blocks). Names sec1: 'Simple Swing','Orch. Swing 1/2','Show Band','Ray Conniff','Fox walk','Fox piano','Dance Band','BigBand Slow2','8 Beat Pop','Piano R&Roll' (23 named incl. 6 slots whose stored name is literally 'Clear'); sec2: 'Arthur 1-4','8Bt Standard','More_1','Beat 2005','70's Rock' (14 named, 16 'Clear'). Fill: 0xFF 3.4%, 0x00 50.5%. Structured accounting: 115,136 B live (61.1%), 65,024 B free-template blocks, 4,160 B zero gaps, 4,096 B 0xFF.",
+   "xrefs": [
+    "Flash_InitExtMemAddrs (v10 0xF16A57 / v7/maincpu/storage/flash_floppy_handlers.s:730): section 1 base = 0x300000+0x19800 -> RAM 0x0C7A; section 2 base = +0x30000 -> RAM 0x0C7E",
+    "readers of RAM (0x0C7E) sample: 0xE10C73, 0xEF24AF, 0xEF6EEC, 0xEF7748, 0xEF7C0F, 0xEF81AC, 0xEF9A26, 0xEFA909"
+   ],
+   "subregions": [
+    {
+     "range": "0x00000-0x007FF",
+     "what": "0xFF sector gap (0x319000-0x3197FF)"
+    },
+    {
+     "range": "0x00800-0x16FFF",
+     "what": "Section 1: header + 30 records + 340-block pool (204 used/136 free)"
+    },
+    {
+     "range": "0x17000-0x2D7FF",
+     "what": "Section 2: header + 30 records + 340-block pool (222 used/118 free)"
+    },
+    {
+     "range": "0x2D800-0x2DFFF",
+     "what": "0xFF sector tail"
+    }
+   ],
+   "suggested_module": "custom_data/style_sections_1_2.s, label prefixes CustomStyle_Sec1_ / CustomStyle_Sec2_",
+   "recommended_action": "document-as-table (same generator/macros as section_0; consider splitting the incbin at file 0x17000 = ROM 0x330000 per the Binary Include Splitting policy since the firmware pointer 0x0C7E targets it directly)"
+  },
+  {
+   "blob": "custom_data/includes/section_3_4.bin",
+   "size": 188416,
+   "rom_address": "0x349000-0x376FFF (section 3 @0x349800, section 4 @0x360000)",
+   "content_type": "mixed (two style-database sections, identical layout)",
+   "codec": "raw; same rhythm-cell event format",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "Same skeleton; watermarks verified: sec3 +0x2E=0x0F80 (last used block 227), sec4 +0x2E=0x1180 (last used 259 - fullest section in the image). sec3: 24 named ('Blues R&Roll','Disco 1','Funk','Swingy Funk 1','ShuffleBoogie','Listen to','Twist'), 6 'Clear'; sec4: 30/30 named ('Techno','Mod.Bluegrass','Country Blues','Vienna Dance','Musette Waltz' [sig word 0x0306 vs 0x0307 for 4/4 - candidate time-signature field], 'Jive','Gypsy Dance','Scottish Reel','Tarantella','Dixie Band','60's R&Roll'). Continuation blocks: sec3 78, sec4 110. Fill: 0xFF 3.2%, 0x00 44.7%. Structured accounting: 131,008 B live (69.5%) - the densest of the four style blobs.",
+   "xrefs": [
+    "Flash_InitExtMemAddrs: section 3 = base+0x49800 -> RAM 0x0C82; section 4 = base+0x60000 -> RAM 0x0C86"
+   ],
+   "subregions": [
+    {
+     "range": "0x00000-0x007FF",
+     "what": "0xFF sector gap"
+    },
+    {
+     "range": "0x00800-0x16FFF",
+     "what": "Section 3: 228 used / 112 free blocks"
+    },
+    {
+     "range": "0x17000-0x2D7FF",
+     "what": "Section 4: 260 used / 80 free blocks"
+    },
+    {
+     "range": "0x2D800-0x2DFFF",
+     "what": "0xFF sector tail"
+    }
+   ],
+   "suggested_module": "custom_data/style_sections_3_4.s, label prefixes CustomStyle_Sec3_ / CustomStyle_Sec4_",
+   "recommended_action": "document-as-table (split at file 0x17000 = ROM 0x360000)"
+  },
+  {
+   "blob": "custom_data/includes/section_5_6.bin",
+   "size": 188416,
+   "rom_address": "0x379000-0x3A6FFF (section 5 @0x379800, section 6 @0x390000)",
+   "content_type": "mixed (two style-database sections, identical layout)",
+   "codec": "raw; same rhythm-cell event format",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "Same skeleton; watermarks verified: sec5 +0x2E=0x0EC0 (last used 215), sec6 +0x2E=0x0F40 (last used 222). sec5: 21 named - Brazilian user content: 'Guarania 3','Vaneirao 2','Rancheira','Frevo 2','Baiao 1','Forro 8','XOTE','Marcha Rancho','CaribbeanRock','Oldies' (waltz-type sig 0x0106/0x0306 on Guarania/Rancheira). sec6: 24 named: 'GentleSwing 1','GospelRevival','Roaring 20's','AccordionJazz','Samba cancao','Bossanova 2','Samba 2','Modern Samba' + 10 slots named 'Init'. NOTE: these names prove the dump is from a used instrument (user-saved styles), not pristine factory state; 'Clear'/'Init' are firmware names for emptied slots. Continuation blocks: sec5 66, sec6 73. Fill: 0xFF 3.3%, 0x00 52.5%. Structured accounting: 118,464 B live (62.9%).",
+   "xrefs": [
+    "Flash_InitExtMemAddrs: section 5 = base+0x79800 -> RAM 0x0C8A; section 6 = base+0x90000 -> RAM 0x0C8E"
+   ],
+   "subregions": [
+    {
+     "range": "0x00000-0x007FF",
+     "what": "0xFF sector gap"
+    },
+    {
+     "range": "0x00800-0x16FFF",
+     "what": "Section 5: 216 used / 124 free blocks"
+    },
+    {
+     "range": "0x17000-0x2D7FF",
+     "what": "Section 6: 223 used / 117 free blocks"
+    },
+    {
+     "range": "0x2D800-0x2DFFF",
+     "what": "0xFF sector tail"
+    }
+   ],
+   "suggested_module": "custom_data/style_sections_5_6.s, label prefixes CustomStyle_Sec5_ / CustomStyle_Sec6_",
+   "recommended_action": "document-as-table (split at file 0x17000 = ROM 0x390000)"
+  },
+  {
+   "blob": "custom_data/includes/section_7.bin",
+   "size": 4096,
+   "rom_address": "0x3B0000-0x3B0FFF",
+   "content_type": "header-only (SubCPU performance-data directory; slot area empty)",
+   "codec": "raw",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "Only bytes 0x00-0x5F are non-0xFF: 'HK' header 48 00 4B 00, then +0x08=0x0028 (40), +0x0A=0x0004 (4), +0x0C=0x0010, +0x0E=0x0100; rest zeros; 0x060-0xFFF all 0xFF (97.7% fill). The counts 40 and 4 match the firmware's slot arithmetic EXACTLY: TmFlash_WriteRoutine (v10 ROM 0xFF06A7, defined v10/maincpu/audio/note_voice_mapping.s:28071) computes flash addr = 0x3B0400 + 0x10 + i*0x1D6 for i<0x28 (40 small 470-byte records) or 0x3B0400 + 0x4980 + i*0x2927 for i<4 (4 big 10,535-byte records); 0x10+40*0x1D6 = 0x4980 (consistent), and TmFlash_CopyToExtMem (0xFF068C) transfers exactly BC=0xEE1F bytes at 0x3B0400 (= 0x10+40*0x1D6+4*0x2927 rounded) with alternate RAM base 0x1E0000 when a flag bit is clear. So the slots live at 0x3B0400-0x3BE21F, i.e. inside the '.space 0xF000' erased region after this blob - that region is reserved, not dead space. All slots erased (0xFF) in this dump.",
+   "xrefs": [
+    "v10/maincpu/audio/note_voice_mapping.s:28064 TmFlash_CopyToExtMem (0xFF068C: lda xwa,0x300000; add xwa,0xB0400; ld bc,0xEE1F; ld xde,0xA0000; call 0xEF3457)",
+    "v10/maincpu/audio/note_voice_mapping.s:28071 TmFlash_WriteRoutine (0xFF06A7: slot address computation, bounds cp (XSP+0x12),0x0028 and cp (XSP+0x12),0x0004)",
+    "Flash_InitExtMemAddrs: section 7 base = 0x300000+0xB0000 -> RAM 0x0C92 (36 raw byte-pattern reader hits incl. 0xE01764, 0xEDC6D9, 0xF1739D, 0xF176D0)"
+   ],
+   "subregions": [
+    {
+     "range": "0x000-0x05F",
+     "what": "HK header: 40 small-slot count, 4 big-slot count, 0x10 sub-header size"
+    },
+    {
+     "range": "0x060-0xFFF",
+     "what": "0xFF erased (slot area proper starts at ROM 0x3B0400, beyond this blob)"
+    }
+   ],
+   "suggested_module": "keep inline in kn5000_custom_data.s as CustomData_Section_7 header table (already labeled); optionally rename to CustomData_PerfData_Directory",
+   "recommended_action": "document-as-table: replace incbin with explicit .short fields + .space 0xFA0,0xFF; update the .s comment block for the 0x3B0400 40x0x1D6 + 4x0x2927 slot map (currently undocumented there)"
+  },
+  {
+   "blob": "custom_data/includes/registration.bin",
+   "size": 4096,
+   "rom_address": "0x3D3000-0x3D3FFF",
+   "content_type": "pointer-table / parameter snapshot (registration memory: 3 banks of address+value pairs + config)",
+   "codec": "raw",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "0x000: 'HK ' + 0x00, +0x0E bytes 01 03 (format ver + 3 banks). Banks at +0x010/+0x110/+0x210, 234 bytes each: 36 six-byte entries [target16][0x0000][value16] - first 23 targets stride exactly 0x1A (0xF9C2,0xF9DC,...,0xFBE4 = 26-byte per-part parameter blocks) plus 0xFC18, then 13 single-byte-stride targets 0xFD50-0xFD5C (global settings; values e.g. 0x7F01, 0x0C0C, 0x063F); 18-byte trailer (00 00 00 00 03 03 00 00 00 00 7F 7F/3C ...); banks padded to 0x100 with 0xFF. Banks 1 and 2 differ from bank 0 in ~8 entries (real saved registrations, not copies). 0x300-0x3FF: 0xFF. 0x400-0x44F: 80-byte config block of 16-bit small ints (01 00 01 00 01 00 01 00 06 00 01 00 ...). 0x450-0xFFF: 0xFF. Fill: 80.9% 0xFF, 10.4% zero; meaningful = 798 B (19.5%). Corrects the .s header comment ('2-byte offset + 4-byte data'): actual entry = 2-byte target + 2 zero bytes + 2-byte value.",
+   "xrefs": [
+    "custom_data/kn5000_custom_data.s:137 (CustomData_Registration_Memory label + header comment lines 49-53, bank offsets confirmed but entry layout comment needs the fix above)"
+   ],
+   "subregions": [
+    {
+     "range": "0x000-0x00F",
+     "what": "'HK ' header + version/bank-count"
+    },
+    {
+     "range": "0x010-0x0F9",
+     "what": "Bank 0: 36 entries + trailer"
+    },
+    {
+     "range": "0x110-0x1F9",
+     "what": "Bank 1"
+    },
+    {
+     "range": "0x210-0x2F9",
+     "what": "Bank 2"
+    },
+    {
+     "range": "0x400-0x44F",
+     "what": "config block (80 B)"
+    },
+    {
+     "range": "0x2FA-0x3FF and 0x450-0xFFF",
+     "what": "0xFF erased"
+    }
+   ],
+   "suggested_module": "custom_data/registration_memory.s, label prefix CustomReg_ (Header/Bank0..2/Config)",
+   "recommended_action": "document-as-table: emit as .short target,0,value triples with per-target comments once the 0xF9C2+n*0x1A RAM block and 0xFD50-0xFD5C globals are named from the firmware's registration save/recall routines (candidate next step: trace writers of these RAM addresses)"
+  },
+  {
+   "blob": "table_data/includes/demo_presets/demo_preset_00_compressed.bin .. demo_preset_17_compressed.bin (originals: original_ROMs/demo_preset_NN_compressed.original.bin)",
+   "size": 218235,
+   "content_type": "compressed MIDI-like demo song presets (entries 0-17)",
+   "codec": "SLIDE4K (LZSS, 4K window, 11-byte header 'SLIDE4K\\0' + 24-bit BE size)",
+   "compressed": true,
+   "rom_address": "0x9C4050-0x9F94CB (table_data ROM offsets 0x1C4050,0x1C9018,0x1CE17C,0x1D16F2,0x1D645C,0x1DA016,0x1DE072,0x1E0CE2,0x1E2358,0x1E61C2,0x1E72E8,0x1EA1F2,0x1EDFFC,0x1EEC62,0x1F0E72,0x1F1C70,0x1F3B52,0x1F494E)",
+   "evidence": "18 'SLIDE4K\\0' magics scanned in kn5000_table_data.rom; each original payload == ROM slice at offset+11; all 18 generated *_compressed.bin cmp-identical to originals; rebuilt table_data.llvm.rom == original (verified this session)",
+   "xrefs": [
+    "pointer table 0x9C4000 (19 entries)",
+    "maincpu demo player LABEL_F87189 @0xF87189 (indexes 0x9C4000, dest RAM 0x69800, calls LABEL_EF41E3)",
+    "Makefile lines 708-760",
+    "table_data/kn5000_table_data.s lines 341-..."
+   ],
+   "recommended_action": "leave \u2014 already source-built and round-tripped (.mid+.yaml -> midi_to_preset.py -> compress_lzss.py --strict --reference; enforced by make + compare_roms.py 100% match)",
+   "difficulty": "trivial",
+   "suggested_module": "already in table_data/kn5000_table_data.s (DemoSongPreset00-17 style labels)"
+  },
+  {
+   "blob": "table_data/includes/demo_presets/demo_preset_18_compressed.bin (original: original_ROMs/demo_preset_18_compressed.original.bin)",
+   "size": 27967,
+   "content_type": "compressed demo preset entry 18 (Feature Presentation), decompresses to 38144 bytes",
+   "codec": "SLIDE4K",
+   "compressed": true,
+   "rom_address": "0x8E0000-0x8E6D3F (table_data ROM offset 0xE0000)",
+   "evidence": "header 53 4c 49 44 45 34 4b 00 00 95 00 @0xE0000; payload == original ref == generated file; also the boot firmware-update path decompresses a staged copy of this class of payload from 0x3E0000 (LABEL_EF0696 region: LD XWA,0x3E0000; LD XBC,0x50000; CALL LABEL_EF41E3, gated by (0xFFFEED)==0xFF); staging area in kn5000_custom_data.ic19 @0xE0000 is 0xFF-erased in our dump",
+   "xrefs": [
+    "entry 18 of pointer table 0x9C4000",
+    "SubCPU_Send_Payload / LABEL_EF0696 (ASL maincpu line ~135110)",
+    "table_data/kn5000_table_data.s:193-224 (Compressed_Preset_Data_LZSS / DemoSongPreset18)"
+   ],
+   "recommended_action": "leave \u2014 source-built and round-tripped; the Makefile demo flow explicitly includes ID 18 (DEMO_PRESET_IDS line 11); verified OK",
+   "difficulty": "trivial",
+   "suggested_module": "already in table_data/kn5000_table_data.s (DemoSongPreset18)"
+  },
+  {
+   "blob": "table_data/includes/icons_to_strings.bin (incbin'd raw at table_data/kn5000_table_data.s:338; blocks at file offsets 0x43918, 0x46DC2, 0x4A362, 0x4DC94, 0x51682)",
+   "size": 70459,
+   "content_type": "SLIDE8K-compressed multilingual HELP databases (5 blocks: EN, DE, FR, ES, Malay/Indonesian), each decompresses to exactly 0x9000 bytes (self-referential pointer table + help strings, image based at RAM 0x69800)",
+   "codec": "SLIDE8K (LZSS: 0x2000 window zero-prefilled 0x1FF6, write pos starts 0x1FF6, off=((b2&0xF8)<<5)|b1, len=(b2&7)+3, 11-byte header 'SLIDE8K\\0' + 24-bit BE size)",
+   "compressed": true,
+   "rom_address": "0x988690-0x9999CB (table_data ROM offsets 0x188690, 0x18BB3A, 0x18F0DA, 0x192A0C, 0x1963FA; blocks tile contiguously; +8 unexplained bytes 0x1999CC-0x1999D3 before 0xFF fill)",
+   "evidence": "six 'SLIDE8K\\0 00 90 00' magics in table_data.rom; format read out of the firmware's own decompressor LABEL_EF40C5 (dispatcher LABEL_EF41E3 checks 'SLIDE'+'8', ASL maincpu lines 141343-141466); my reimplementation decodes each block to exactly 36864 bytes with block N's stream ending at block N+1's start (1-byte final-flag slack); decompressed text sampled: 'Choose between the three sub menus'(EN), 'erhalb des Displays'(DE), 'sont repartis en 3 sous-menus'(FR), ES, 'Itu semua terdapat di dalam tiga sub menu'(MS); language pointer table @0x988018 = {0x988690, 0x98BB3A, 0x98F0DA, 0x992A0C, 0x988690(dup), 0x9963FA}; companion uncompressed intro-string table @0x988000",
+   "xrefs": [
+    "maincpu v10 ROM offsets 0x1477AD/0x1477C8 (add XWA,0x988018; ld XBC,0x69800; call 0xEF41E3 \u2014 help language load, near HELPLANGCHKMAIN 0xF47756)",
+    "v7 @0x14779F/0x1477BA, v9 @0x1477AD/0x1477C8 (same table)",
+    "language index RAM 0x0340E4"
+   ],
+   "recommended_action": "decompress-and-roundtrip: split icons_to_strings.bin at the block boundaries, check in decompressed per-language help DBs, write scripts/build/compress_slide8k.py with --reference decision-replay (same technique as compress_lzss.py), emit header+incbin in table_data.s like the demo presets. Also fix the wrong 'Demo Song Index' comment at table_data.s:35/324 \u2014 0x988000/0x988018 are the help language tables",
+   "difficulty": "moderate",
+   "suggested_module": "table_data/help_databases.s, labels HelpDB_English/German/French/Spanish/Malay + HELP_INTRO_TABLE (0x988000) / HELP_DB_TABLE (0x988018)",
+   "subregions": [
+    {
+     "range": "0x988690-0x98BB39",
+     "what": "English help DB, compressed 13482 bytes -> 0x9000"
+    },
+    {
+     "range": "0x98BB3A-0x98F0D9",
+     "what": "German help DB, 13728 -> 0x9000"
+    },
+    {
+     "range": "0x98F0DA-0x992A0B",
+     "what": "French help DB, 14642 -> 0x9000"
+    },
+    {
+     "range": "0x992A0C-0x9963F9",
+     "what": "Spanish help DB, 14830 -> 0x9000"
+    },
+    {
+     "range": "0x9963FA-0x1999CB(+8)",
+     "what": "Malay/Indonesian help DB, ~13785 -> 0x9000"
+    }
+   ]
+  },
+  {
+   "blob": "table_data/includes/icons_to_strings.bin (file offset 0x3EDC2)",
+   "size": 16121,
+   "content_type": "ORPHANED SLIDE8K block \u2014 duplicate German help database (decompresses to 0x9000 bytes, same structure/base 0x69800)",
+   "codec": "SLIDE8K",
+   "compressed": true,
+   "rom_address": "0x983B3A-0x987A32 (table_data ROM offset 0x183B3A)",
+   "evidence": "valid SLIDE8K header + clean decode to 36864 bytes of German help text; exhaustive search for LE32/24-bit pointer 0x983B3A in v7/v9/v10 program ROMs and table_data ROM: zero hits \u2014 not in the 0x988018 language table (which has entry4=dup of English instead)",
+   "xrefs": [],
+   "recommended_action": "decompress-and-roundtrip alongside the other 5 (same tooling) and document as unreferenced/leftover \u2014 likely a superseded revision of the German DB; keep raw bytes byte-exact",
+   "difficulty": "moderate",
+   "suggested_module": "table_data/help_databases.s, label HelpDB_German_Orphaned"
+  },
+  {
+   "blob": "original_ROMs/kn5000_subprogram_v142_compressed.rom",
+   "size": 93203,
+   "content_type": "whole-file SLIDE4K image of the v1.42 subcpu payload (firmware-update 'Program DATA FILE PCK' / File Type 007 format)",
+   "codec": "SLIDE4K (header size field 03 00 00 = 0x030000 BE = 196608 \u2014 proves the 24-bit size is BIG-endian, contradicting Makefile/docs 'LE' claims)",
+   "compressed": true,
+   "rom_address": "standalone file (would be flashed to Custom Data 0x3E0000 by HANDLE_UPDATE_FILE_TYPE_ID_007h @0xEF47FA during updates)",
+   "evidence": "decompresses byte-exactly to original_ROMs/kn5000_subprogram_v142.rom (196608/196608 bytes, verified this session); consumes entire file (93203/93203); zero references in Makefile or compare_roms.py",
+   "xrefs": [
+    "docs ../kn5000-docs/lzss-compression.md 'File Type 007'",
+    "boot decompress path LABEL_EF0696 (0x3E0000 -> 0x50000)"
+   ],
+   "recommended_action": "decompress-and-roundtrip: the decompressed payload is ALREADY source-built (kn5000_subprogram_v142.llvm.rom, 100% match), so add a Makefile rule compressing the built payload with compress_lzss.py --strict --reference against this file, and add it to compare_roms.py \u2014 closes the last v142 artifact not covered by the build",
+   "difficulty": "moderate",
+   "suggested_module": "Makefile target rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom"
+  },
+  {
+   "blob": "original_ROMs/kn5000_subprogram_v141_compressed.rom",
+   "size": 93181,
+   "content_type": "whole-file SLIDE4K image of the v1.41 subcpu payload",
+   "codec": "SLIDE4K",
+   "compressed": true,
+   "rom_address": "standalone file (firmware-update payload)",
+   "evidence": "decompresses byte-exactly to original_ROMs/kn5000_subprogram_v141.rom (196608 bytes, verified); consumes 93181/93181; no Makefile/compare_roms.py coverage; NOTE kn5000_subprogram_v141.rom itself is also not source-built (no v141/ source tree; compare_roms.py covers only v142 payload)",
+   "xrefs": [
+    "git 7a4298e 'Salvage from sound subsystem worktree: ... compressed ROMs'"
+   ],
+   "recommended_action": "document-as-table for now: record that compressed==f(uncompressed) is verified; full round-trip requires first source-building the v141 payload (a v141 subcpu conversion), then the same --reference compress rule as v142",
+   "difficulty": "hard",
+   "suggested_module": "future v141/subcpu tree + Makefile compress rule"
+  },
+  {
+   "blob": "original_ROMs/kn5000_subprogram_v140_compressed.rom",
+   "size": 93124,
+   "content_type": "whole-file SLIDE4K image of the v1.40 subcpu payload \u2014 the ONLY copy of v1.40 in the repo (no uncompressed reference exists)",
+   "codec": "SLIDE4K",
+   "compressed": true,
+   "rom_address": "standalone file (firmware-update payload)",
+   "evidence": "valid SLIDE4K header, decompresses cleanly to exactly 196608 bytes consuming 93124/93124; no kn5000_subprogram_v140.rom anywhere in original_ROMs; not referenced by any build rule",
+   "xrefs": [
+    "git 7a4298e"
+   ],
+   "recommended_action": "decompress-and-roundtrip minimally: emit + commit the decompressed 196608-byte v140 payload as a preservation artifact (it is recoverable only from this file), verify recompression with --reference replay; full source conversion is a separate v140 tree effort",
+   "difficulty": "moderate",
+   "suggested_module": "original_ROMs/kn5000_subprogram_v140.rom (extracted) + Makefile compress rule"
+  },
+  {
+   "blob": "v7/maincpu/includes/generated/v7_transplant_*.bin",
+   "size": 67557,
+   "rom_address": "scattered, 0xE1F9F8-0xFFFFE8 in kn5000_v7_program.rom",
+   "content_type": "mixed",
+   "codec": "none (raw dd-style slice)",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "225 distinct v7_transplant_*.bin referenced from v7/maincpu .s files. NO C or asm source exists: they are extracted at build time from original_ROMs/kn5000_v7_program.rom by scripts/build/extract_v7_bins.py (stage 'Regenerated N transplant bins from manifest', lines 345-363), driven by v7/maincpu/transplant_manifest.txt (bin-name TAB label TAB size); dd offset = llvm-nm address of the label in the two-pass-built v7 ELF minus 0xE00000. All 225 verified byte-identical to the ROM slice at the label address. Makefile comment line 592: 'V7 bins are extracted from the v7 ROM, not compiled from C.'",
+   "recommended_action": "disassemble (code/table regions where v7 diverges from the v9 source it was cloned from; most diverge only in pointer constants, so replacing with v9's symbolic source usually reassembles correctly - the same trick scripts/build/v7_source_migration.py already automates)",
+   "xrefs": [
+    "Makefile:592-614 (v7-extract-bins, two-pass)",
+    "scripts/build/extract_v7_bins.py:345-363",
+    "v7/maincpu/transplant_manifest.txt (9370 entries, only these 225 referenced)",
+    "incbin sites across v7/maincpu/**/*.s e.g. ui_widgets/widget_dispatch.s, midi/midi_dispatch_handlers.s, boot/system_handlers.s"
+   ],
+   "subregions": [
+    {
+     "range": "0xe1f9f8-0xe1fa2e",
+     "what": "FDTest_ConsoleArea1 54B"
+    },
+    {
+     "range": "0xed0008-0xed0038",
+     "what": "ExtData_ChordTypeTable_Top 48B"
+    },
+    {
+     "range": "0xee0310-0xee1574",
+     "what": "Naka_MainDispatch_Table 4708B pointer-table"
+    },
+    {
+     "range": "0xee2f8c-0xee304c",
+     "what": "SeqData_SubDispatch_Table 192B pointer-table"
+    },
+    {
+     "range": "0xee304c-0xee3678",
+     "what": "MidiPkt_EventType_Table 1580B"
+    },
+    {
+     "range": "0xee45ba-0xee4602",
+     "what": "WidgetParam_Entry_002 72B"
+    },
+    {
+     "range": "0xee464a-0xee46aa",
+     "what": "WidgetParam_Entry_006 96B"
+    },
+    {
+     "range": "0xee46c2-0xee46f2",
+     "what": "WidgetParam_Entry_008 48B"
+    },
+    {
+     "range": "0xee46f2-0xee4722",
+     "what": "WidgetParam_Entry_009 48B"
+    },
+    {
+     "range": "0xee473a-0xee4818",
+     "what": "WidgetParam_Entry_011 222B"
+    },
+    {
+     "range": "0xee4860-0xee48a2",
+     "what": "WidgetParam_Entry_014 66B"
+    },
+    {
+     "range": "0xee491a-0xee4a10",
+     "what": "WidgetParam_Entry_018 246B"
+    },
+    {
+     "range": "0xee4a10-0xee4e1c",
+     "what": "ToneKit_FrequencyTable 1036B"
+    },
+    {
+     "range": "0xee7c23-0xee7c2b",
+     "what": "UIState_ConfigA_102 8B"
+    },
+    {
+     "range": "0xee7fa8-0xee7fd4",
+     "what": "UIState_HandlerTable_WithProbe 44B pointer-table"
+    },
+    {
+     "range": "0xee7fd4-0xee7ffc",
+     "what": "UIState_HandlerTable_Standard 40B pointer-table"
+    },
+    {
+     "range": "0xee7ffc-0xee8020",
+     "what": "UIState_HandlerTable_Compact 36B pointer-table"
+    },
+    {
+     "range": "0xee8020-0xee8040",
+     "what": "UIState_HandlerTable_Basic_00 32B pointer-table"
+    },
+    {
+     "range": "0xee8040-0xee8060",
+     "what": "UIState_HandlerTable_Basic_01 32B pointer-table"
+    },
+    {
+     "range": "0xee8060-0xee8080",
+     "what": "UIState_HandlerTable_Basic_02 32B pointer-table"
+    },
+    {
+     "range": "0xee8080-0xee80a0",
+     "what": "UIState_HandlerTable_Basic_03 32B pointer-table"
+    },
+    {
+     "range": "0xee80a0-0xee80c0",
+     "what": "UIState_HandlerTable_Basic_04 32B pointer-table"
+    },
+    {
+     "range": "0xee80c0-0xee80e0",
+     "what": "UIState_HandlerTable_Basic_05 32B pointer-table"
+    },
+    {
+     "range": "0xee80e0-0xee8100",
+     "what": "UIState_HandlerTable_Basic_06 32B pointer-table"
+    },
+    {
+     "range": "0xee8100-0xee8120",
+     "what": "UIState_HandlerTable_Basic_07 32B pointer-table"
+    },
+    {
+     "range": "0xee8120-0xee8140",
+     "what": "UIState_HandlerTable_00 32B pointer-table"
+    },
+    {
+     "range": "0xee8140-0xee8160",
+     "what": "UIState_HandlerTable_01 32B pointer-table"
+    },
+    {
+     "range": "0xee8160-0xee8180",
+     "what": "UIState_HandlerTable_02 32B pointer-table"
+    },
+    {
+     "range": "0xee8180-0xee81a0",
+     "what": "UIState_HandlerTable_03 32B pointer-table"
+    },
+    {
+     "range": "0xee81a0-0xee81c0",
+     "what": "UIState_HandlerTable_04 32B pointer-table"
+    },
+    {
+     "range": "0xee81c0-0xee81dc",
+     "what": "UIState_HandlerTable_05 28B pointer-table"
+    },
+    {
+     "range": "0xee81dc-0xee81f8",
+     "what": "UIState_HandlerTable_06 28B pointer-table"
+    },
+    {
+     "range": "0xee81f8-0xee8214",
+     "what": "UIState_HandlerTable_07 28B pointer-table"
+    },
+    {
+     "range": "0xee8214-0xee8230",
+     "what": "UIState_HandlerTable_08 28B pointer-table"
+    },
+    {
+     "range": "0xee8230-0xee824c",
+     "what": "UIState_HandlerTable_09 28B pointer-table"
+    },
+    {
+     "range": "0xee824c-0xee8268",
+     "what": "UIState_HandlerTable_10 28B pointer-table"
+    },
+    {
+     "range": "0xee8268-0xee8284",
+     "what": "UIState_HandlerTable_11 28B pointer-table"
+    },
+    {
+     "range": "0xee8284-0xee82a0",
+     "what": "UIState_HandlerTable_12 28B pointer-table"
+    },
+    {
+     "range": "0xee82a0-0xee82bc",
+     "what": "UIState_HandlerTable_13 28B pointer-table"
+    },
+    {
+     "range": "0xee82bc-0xee82d8",
+     "what": "UIState_HandlerTable_14 28B pointer-table"
+    },
+    {
+     "range": "0xee82d8-0xee82f4",
+     "what": "UIState_HandlerTable_15 28B pointer-table"
+    },
+    {
+     "range": "0xee82f4-0xee8310",
+     "what": "UIState_HandlerTable_16 28B pointer-table"
+    },
+    {
+     "range": "0xee8310-0xee832c",
+     "what": "UIState_ConfigB_000 28B pointer-table"
+    },
+    {
+     "range": "0xee832c-0xee8348",
+     "what": "UIState_ConfigB_001 28B pointer-table"
+    },
+    {
+     "range": "0xee8348-0xee8364",
+     "what": "UIState_ConfigB_002 28B pointer-table"
+    },
+    {
+     "range": "0xee8364-0xee8380",
+     "what": "UIState_ConfigB_003 28B pointer-table"
+    },
+    {
+     "range": "0xee8410-0xee841c",
+     "what": "UIState_ConfigB_039 12B"
+    },
+    {
+     "range": "0xee8448-0xee8468",
+     "what": "UIState_ConfigB_044 32B pointer-table"
+    },
+    {
+     "range": "0xee8480-0xee8490",
+     "what": "UIState_ConfigB_051 16B pointer-table"
+    },
+    {
+     "range": "0xee8490-0xee84a0",
+     "what": "UIState_ConfigB_052 16B pointer-table"
+    },
+    {
+     "range": "0xee84a0-0xee84ac",
+     "what": "UIState_ConfigB_053 12B"
+    },
+    {
+     "range": "0xee84bc-0xee84c8",
+     "what": "UIState_ConfigB_055 12B"
+    },
+    {
+     "range": "0xee84c8-0xee84d4",
+     "what": "UIState_ConfigB_056 12B"
+    },
+    {
+     "range": "0xee84d4-0xee84e0",
+     "what": "UIState_ConfigB_057 12B"
+    },
+    {
+     "range": "0xee84e0-0xee84ec",
+     "what": "UIState_ConfigB_058 12B"
+    },
+    {
+     "range": "0xee84f8-0xee8504",
+     "what": "UIState_ConfigB_060 12B"
+    },
+    {
+     "range": "0xee8520-0xee8534",
+     "what": "UIState_ConfigB_066 20B pointer-table"
+    },
+    {
+     "range": "0xee8540-0xee854c",
+     "what": "UIState_ConfigB_068 12B"
+    },
+    {
+     "range": "0xee8558-0xee856c",
+     "what": "UIState_SeqInit_Table 20B pointer-table"
+    },
+    {
+     "range": "0xee8570-0xee858c",
+     "what": "UIState_ConfigB_073 28B pointer-table"
+    },
+    {
+     "range": "0xee858c-0xee8590",
+     "what": "UIState_ConfigB_074 4B"
+    },
+    {
+     "range": "0xee8590-0xee85a8",
+     "what": "UIState_EventHandler_Table 24B pointer-table"
+    },
+    {
+     "range": "0xee85a8-0xee85b4",
+     "what": "UIState_ConfigB_075 12B"
+    },
+    {
+     "range": "0xee85b4-0xee85c8",
+     "what": "UIState_ConfigB_076 20B pointer-table"
+    },
+    {
+     "range": "0xee85c8-0xee85f0",
+     "what": "UIState_ConfigB_077 40B pointer-table"
+    },
+    {
+     "range": "0xee8618-0xee8640",
+     "what": "UIState_ConfigB_081 40B pointer-table"
+    },
+    {
+     "range": "0xee8650-0xee8658",
+     "what": "UIState_ConfigB_086 8B"
+    },
+    {
+     "range": "0xee8658-0xee8660",
+     "what": "UIState_ConfigB_087 8B"
+    },
+    {
+     "range": "0xee8660-0xee8668",
+     "what": "UIState_ConfigB_088 8B"
+    },
+    {
+     "range": "0xee8668-0xee8670",
+     "what": "UIState_ConfigB_089 8B"
+    },
+    {
+     "range": "0xee8670-0xee8678",
+     "what": "UIState_ConfigB_090 8B"
+    },
+    {
+     "range": "0xee8678-0xee8680",
+     "what": "UIState_ConfigB_091 8B"
+    },
+    {
+     "range": "0xee8680-0xee8688",
+     "what": "UIState_ConfigB_092 8B"
+    },
+    {
+     "range": "0xee8688-0xee8690",
+     "what": "UIState_ConfigB_093 8B"
+    },
+    {
+     "range": "0xee8690-0xee8698",
+     "what": "UIState_ConfigB_094 8B"
+    },
+    {
+     "range": "0xee8cf8-0xee8eb8",
+     "what": "AudioInit_VoiceDispatch_Table 448B"
+    },
+    {
+     "range": "0xeeae08-0xeec288",
+     "what": "SoundEffect_Dispatch_Table 5248B"
+    },
+    {
+     "range": "0xeec288-0xeec318",
+     "what": "CharMap_Preamble_Table 144B"
+    },
+    {
+     "range": "0xef18cd-0xef191f",
+     "what": "TaskSched_ScreenGroupTable 82B"
+    },
+    {
+     "range": "0xef49cd-0xef4b2a",
+     "what": "HDAE5000_Init_BytecodeBlock 349B"
+    },
+    {
+     "range": "0xef612f-0xef61be",
+     "what": "ScoopDisp_HandlerData2 143B"
+    },
+    {
+     "range": "0xef6265-0xef627d",
+     "what": "ScoopDisp_FlagSetAndDispatch 24B"
+    },
+    {
+     "range": "0xef627d-0xef62fd",
+     "what": "ScoopDisp_DispatchTable_Small 128B pointer-table"
+    },
+    {
+     "range": "0xef6393-0xef63f9",
+     "what": "PerfMode_ParamHandler_Table 102B"
+    },
+    {
+     "range": "0xef64e0-0xef64fe",
+     "what": "PerfMode_Evt03_FlagHandler_A 30B"
+    },
+    {
+     "range": "0xef64fe-0xef651c",
+     "what": "PerfMode_Evt03_FlagHandler_B 30B"
+    },
+    {
+     "range": "0xef6b48-0xef6bbd",
+     "what": "PerfMode_Evt04_VolumeHandler 117B"
+    },
+    {
+     "range": "0xef6bbd-0xef6c26",
+     "what": "PerfMode_VoiceAddressTable 105B"
+    },
+    {
+     "range": "0xef772f-0xef77b5",
+     "what": "ScoopDisp_DispatchTable_Extended 134B"
+    },
+    {
+     "range": "0xef8155-0xef8719",
+     "what": "ToneParam_HandlerTable_BC 1476B"
+    },
+    {
+     "range": "0xef9004-0xef9593",
+     "what": "VoiceSlot_TableSetup 1423B"
+    },
+    {
+     "range": "0xef975b-0xef976d",
+     "what": "VoiceCtrl_CheckAndReset 18B"
+    },
+    {
+     "range": "0xef9f83-0xefa2f4",
+     "what": "ScoopParam_ValueTable 881B"
+    },
+    {
+     "range": "0xefa6d4-0xefa735",
+     "what": "PortConfig_DataTable_A 97B"
+    },
+    {
+     "range": "0xefa78e-0xefa794",
+     "what": "ClockConfig_Handler_1 6B"
+    },
+    {
+     "range": "0xefa794-0xefa9d9",
+     "what": "ClockConfig_Handler_0 581B"
+    },
+    {
+     "range": "0xefabba-0xefad24",
+     "what": "MemoryConfig_Handler_Table 362B"
+    },
+    {
+     "range": "0xefadce-0xefb0a9",
+     "what": "MemConfig_Handler_1 731B"
+    },
+    {
+     "range": "0xefb7b1-0xefb80f",
+     "what": "SystemInit_Handler_Table 94B"
+    },
+    {
+     "range": "0xefb920-0xefbfb2",
+     "what": "SysInit_BytecodeBlock 1682B"
+    },
+    {
+     "range": "0xefc788-0xefd064",
+     "what": "VoiceSlot_StatusRet 2268B"
+    },
+    {
+     "range": "0xefdc19-0xefdc7c",
+     "what": "SubCPU_ToneClearRegion 99B"
+    },
+    {
+     "range": "0xefdc97-0xefe73b",
+     "what": "SubCPU_ToneParamRet 2724B"
+    },
+    {
+     "range": "0xefe73b-0xefe77b",
+     "what": "OscScope_HandlerTable 64B pointer-table"
+    },
+    {
+     "range": "0xefed97-0xefee47",
+     "what": "DisplayStr_RhythmLabel 176B"
+    },
+    {
+     "range": "0xeffe77-0xf0096f",
+     "what": "StringData_APCModeNames 2808B"
+    },
+    {
+     "range": "0xf024d9-0xf02864",
+     "what": "Scoop_EventLoop_36Entry_Data 907B"
+    },
+    {
+     "range": "0xf098a7-0xf098b6",
+     "what": "SeMenu_OrPartConfig_Data 15B"
+    },
+    {
+     "range": "0xf0ecc6-0xf0ed1e",
+     "what": "SeMenu_NameEditor_End 88B"
+    },
+    {
+     "range": "0xf0ef60-0xf0f4b0",
+     "what": "SeMenu_ShowConfirmDialog_Data 1360B"
+    },
+    {
+     "range": "0xf159b6-0xf159ca",
+     "what": "FlashWrite_BlockRef_Type3 20B pointer-table"
+    },
+    {
+     "range": "0xf159f2-0xf15a06",
+     "what": "FlashWrite_BlockRef_Type4 20B pointer-table"
+    },
+    {
+     "range": "0xf2230f-0xf2231e",
+     "what": "DemoStyle_DispatchTable 15B"
+    },
+    {
+     "range": "0xf223da-0xf223e8",
+     "what": "DemoSound_DispatchTable 14B"
+    },
+    {
+     "range": "0xf224a0-0xf224ae",
+     "what": "DemoRhythm_DispatchTable 14B"
+    },
+    {
+     "range": "0xf22564-0xf225f7",
+     "what": "MiddleFuncCall_DispatchData 147B"
+    },
+    {
+     "range": "0xf228d7-0xf22931",
+     "what": "CDlikeSwTtl_DispatchData 90B"
+    },
+    {
+     "range": "0xf36c69-0xf36cda",
+     "what": "BmDrEdit_ByteData_NoteCoordTable 113B"
+    },
+    {
+     "range": "0xf382df-0xf383a1",
+     "what": "BmDrEdit_ByteData_CompoundWidgetUpdate 194B"
+    },
+    {
+     "range": "0xf3e48e-0xf3e4d3",
+     "what": "NotePool_DataBlock 69B"
+    },
+    {
+     "range": "0xf3f7ff-0xf3f846",
+     "what": "SeqPos_DataBlock 71B"
+    },
+    {
+     "range": "0xf3fdc8-0xf3fe3e",
+     "what": "SeqPart_LoadDualPartData 118B"
+    },
+    {
+     "range": "0xf45feb-0xf461bf",
+     "what": "SeqAccomp_SubHandlerB 468B"
+    },
+    {
+     "range": "0xf49e1d-0xf4a100",
+     "what": "SeqPart_ByteBlockA207 739B"
+    },
+    {
+     "range": "0xf4e65b-0xf4e6d3",
+     "what": "SeqStep_ByteBlockEA5F 120B"
+    },
+    {
+     "range": "0xf52e9d-0xf52ead",
+     "what": "SeqByteBlock_DispatchJumpTable 16B pointer-table"
+    },
+    {
+     "range": "0xf533a5-0xf533c6",
+     "what": "AccPedal_BytecodeBlock1 33B"
+    },
+    {
+     "range": "0xf534e8-0xf53526",
+     "what": "AccChannel_BytecodeBlock2 62B"
+    },
+    {
+     "range": "0xf540b9-0xf5412b",
+     "what": "AccVoice_BytecodeBlock3 114B"
+    },
+    {
+     "range": "0xf55688-0xf556cc",
+     "what": "Rhythm_SeqResetTable 68B text"
+    },
+    {
+     "range": "0xf5a7ab-0xf5a7b5",
+     "what": "AccAutoPlay_Configure_Done 10B"
+    },
+    {
+     "range": "0xf5a9f3-0xf5aa18",
+     "what": "AccPlayMode_Dispatch_Table 37B"
+    },
+    {
+     "range": "0xf5bb3e-0xf5bb45",
+     "what": "AccDir_JumpTable 7B"
+    },
+    {
+     "range": "0xf5c960-0xf5c9dd",
+     "what": "AccStyle_SC0ByteSelect 125B"
+    },
+    {
+     "range": "0xf5d4c1-0xf5dac0",
+     "what": "AccTone_InlineBytecodeData 1535B"
+    },
+    {
+     "range": "0xf5daf8-0xf5df8f",
+     "what": "AccVoice_BarCounterBytecodeData 1175B"
+    },
+    {
+     "range": "0xf5dfa2-0xf5e2cb",
+     "what": "AccTuning_ComplexBytecodeData 809B"
+    },
+    {
+     "range": "0xf5e581-0xf5e6ea",
+     "what": "Not_sure_maybe_SOFT_VERSION_related 361B"
+    },
+    {
+     "range": "0xf5eea3-0xf5eed3",
+     "what": "AccPatch_SeqBaseAddrTable 48B"
+    },
+    {
+     "range": "0xf5ef0c-0xf5ef34",
+     "what": "AccPatch_ChannelToParamTable 40B"
+    },
+    {
+     "range": "0xf60856-0xf608e5",
+     "what": "AccPatch_AdvPlayPos_DataBlock 143B text"
+    },
+    {
+     "range": "0xf64a91-0xf64b1b",
+     "what": "RhythmPatInit_KitIndexTable 138B"
+    },
+    {
+     "range": "0xf64b49-0xf64b89",
+     "what": "RhythmFillIn_PatternTable 64B"
+    },
+    {
+     "range": "0xf64ef4-0xf64f31",
+     "what": "DrumVoice_Handler0 61B"
+    },
+    {
+     "range": "0xf64f31-0xf64f6e",
+     "what": "DrumVoice_Handler1 61B"
+    },
+    {
+     "range": "0xf64f6e-0xf64fa0",
+     "what": "DrumVoice_Handler2 50B"
+    },
+    {
+     "range": "0xf64fa0-0xf64fbc",
+     "what": "DrumVoice_Handler3 28B"
+    },
+    {
+     "range": "0xf64fbc-0xf64fe9",
+     "what": "DrumVoice_Handler5 45B"
+    },
+    {
+     "range": "0xf64fe9-0xf6507a",
+     "what": "DrumVoice_Handler4 145B"
+    },
+    {
+     "range": "0xf6507a-0xf650ac",
+     "what": "DrumVoice_Handler6 50B"
+    },
+    {
+     "range": "0xf650ac-0xf654ee",
+     "what": "DrumVoice_Handler7 1090B"
+    },
+    {
+     "range": "0xf6616e-0xf66179",
+     "what": "Tempo_DisplayParamFormat 11B"
+    },
+    {
+     "range": "0xf67b89-0xf67be7",
+     "what": "CmpSetTtl_Dispatch2 94B"
+    },
+    {
+     "range": "0xf68090-0xf680bb",
+     "what": "CmpBkslSTtl_Dispatch 43B"
+    },
+    {
+     "range": "0xf6822f-0xf682bf",
+     "what": "CmpNcpTtl_Dispatch 144B"
+    },
+    {
+     "range": "0xf69c17-0xf69c2f",
+     "what": "AccSeq_DcModeDataBlock 24B"
+    },
+    {
+     "range": "0xf69efb-0xf69f43",
+     "what": "CmpStep_DataBlock 72B"
+    },
+    {
+     "range": "0xf6a52c-0xf6a54d",
+     "what": "AccScreen_BeatDataBlock 33B"
+    },
+    {
+     "range": "0xf6db16-0xf6db3f",
+     "what": "AccompSeq_VRAMHelperData 41B"
+    },
+    {
+     "range": "0xf6e7bc-0xf6e876",
+     "what": "AccompSeq_MidiFilterCodeBlock 186B"
+    },
+    {
+     "range": "0xf7272a-0xf7273e",
+     "what": "AccPlay_ToggleCodeFragment 20B"
+    },
+    {
+     "range": "0xf772b9-0xf77742",
+     "what": "PcgOutGridCheckJumpTable 1161B"
+    },
+    {
+     "range": "0xf7860d-0xf78cfe",
+     "what": "PmemOutLGridCheck_JumpTable 1777B"
+    },
+    {
+     "range": "0xf7a4d0-0xf7a81c",
+     "what": "MidiPartGridCheck_JumpTable 844B"
+    },
+    {
+     "range": "0xf7a945-0xf7a973",
+     "what": "MidiPart_DataBlock 46B"
+    },
+    {
+     "range": "0xf84352-0xf8436a",
+     "what": "FDemoText_ByteData_VoiceProbeB 24B"
+    },
+    {
+     "range": "0xf85325-0xf85a4c",
+     "what": "FDemoText_ByteData_LayoutEngine 1831B"
+    },
+    {
+     "range": "0xf8609c-0xf861f7",
+     "what": "FDemo_DisplayResourceData 347B"
+    },
+    {
+     "range": "0xf9280b-0xf92814",
+     "what": "SmfMedley_RawData 9B"
+    },
+    {
+     "range": "0xf97245-0xf972d7",
+     "what": "FDC_SeekRecalibrate 146B code"
+    },
+    {
+     "range": "0xf9762f-0xf97847",
+     "what": "FDC_MC_EXIT 536B code"
+    },
+    {
+     "range": "0xf97847-0xf9786f",
+     "what": "FDC_STATUS_COPY 40B code"
+    },
+    {
+     "range": "0xf9786f-0xf978bd",
+     "what": "FDC_INTERRUPT_HANDLER 78B code"
+    },
+    {
+     "range": "0xf979e1-0xf97a28",
+     "what": "FDC_ByteTransfer_PIO 71B code"
+    },
+    {
+     "range": "0xf98da4-0xf98e88",
+     "what": "MainPmanCtrl_DispatchTable 228B"
+    },
+    {
+     "range": "0xfa35d9-0xfa3626",
+     "what": "PsTrkSw_TrailingData 77B"
+    },
+    {
+     "range": "0xfb1cec-0xfb20be",
+     "what": "DrawFunc_Init_Variant1 978B code"
+    },
+    {
+     "range": "0xfb3f5f-0xfb3fc8",
+     "what": "BitMapOut_ByteData_PresetCopy 105B"
+    },
+    {
+     "range": "0xfb62a2-0xfb636c",
+     "what": "EffectMode_ByteData_Block2 202B"
+    },
+    {
+     "range": "0xfb6418-0xfb6469",
+     "what": "EffectMode_ByteData_Block4 81B"
+    },
+    {
+     "range": "0xfc50a9-0xfc5d89",
+     "what": "FileIO_BytecodeData 3296B"
+    },
+    {
+     "range": "0xfc5e7f-0xfc5eac",
+     "what": "ExtDev_SndParam_BlockA9_Var02 45B"
+    },
+    {
+     "range": "0xfc85b9-0xfc85c8",
+     "what": "ExtData_Voice_CopyAndJump 15B"
+    },
+    {
+     "range": "0xfc8d89-0xfc8e02",
+     "what": "UIState_RenderBitmapData 121B"
+    },
+    {
+     "range": "0xfc9275-0xfc92ca",
+     "what": "UIWidget_MidiStreamControl 85B"
+    },
+    {
+     "range": "0xfc999b-0xfc99ae",
+     "what": "AudioCtrl_PreserveRegs_PopEpilogue 19B code"
+    },
+    {
+     "range": "0xfc9ecb-0xfc9eed",
+     "what": "MidiSeqBuf_ProcessorTable 34B"
+    },
+    {
+     "range": "0xfca0ed-0xfca12f",
+     "what": "TempoRing_ProcessorTable 66B"
+    },
+    {
+     "range": "0xfca71e-0xfca806",
+     "what": "MidiCtrl_ModeDispatch_Table 232B"
+    },
+    {
+     "range": "0xfca859-0xfca9ee",
+     "what": "VoiceMode3_DispatchTable 405B"
+    },
+    {
+     "range": "0xfcaca4-0xfcacb4",
+     "what": "VoiceParam_ModeDispatch_Table 16B pointer-table"
+    },
+    {
+     "range": "0xfcaf2e-0xfcaf3e",
+     "what": "MidiVoiceNote_Dispatch_Table 16B pointer-table"
+    },
+    {
+     "range": "0xfcb214-0xfcbdb8",
+     "what": "VoiceMode_ParamConfigTables 2980B"
+    },
+    {
+     "range": "0xfcc228-0xfcc259",
+     "what": "MidiStream_SysExData 49B"
+    },
+    {
+     "range": "0xfcf3a9-0xfcf3ca",
+     "what": "MIDI_CHANNEL_HANDLER_JUMP_TABLE 33B"
+    },
+    {
+     "range": "0xfcf5ab-0xfcf5bb",
+     "what": "MIDI_SC0_DISPATCH_TABLE 16B"
+    },
+    {
+     "range": "0xfcf64d-0xfcf66e",
+     "what": "MidiSerial_StatusTable 33B"
+    },
+    {
+     "range": "0xfcf6b0-0xfcf6f0",
+     "what": "MidiSerial_CmdJumpTable 64B"
+    },
+    {
+     "range": "0xfcf718-0xfcf786",
+     "what": "MidiSerial_HandleDefault_Data 110B"
+    },
+    {
+     "range": "0xfcf786-0xfcf7a6",
+     "what": "MidiCC_LowRange_Table 32B"
+    },
+    {
+     "range": "0xfcf7a6-0xfcf7ac",
+     "what": "MidiCC_Handler_SimpleParamStore 6B"
+    },
+    {
+     "range": "0xfcf7fc-0xfcf8bc",
+     "what": "MidiCC_ExtendedRange_Table 192B"
+    },
+    {
+     "range": "0xfcf8bd-0xfcf905",
+     "what": "MidiCC_Handler_BitManipulation 72B"
+    },
+    {
+     "range": "0xfd009b-0xfd00b0",
+     "what": "UIState_ProcessDisplayUpdate 21B"
+    },
+    {
+     "range": "0xfd00b0-0xfd01a7",
+     "what": "UIState_DisplayUpdate_BitmapHandler 247B"
+    },
+    {
+     "range": "0xfd0252-0xfd0292",
+     "what": "PanelEvt_DispatchTable 64B"
+    },
+    {
+     "range": "0xfd1330-0xfd22d8",
+     "what": "PanelEvt_Handler_4_DualValueCheck 4008B code"
+    },
+    {
+     "range": "0xfd58f9-0xfd5944",
+     "what": "MidiStream_PrevBankCheck 75B code"
+    },
+    {
+     "range": "0xfd77b0-0xfd77c8",
+     "what": "MidiPkt_InitSingleField_Data 24B"
+    },
+    {
+     "range": "0xfd816b-0xfd81c3",
+     "what": "SoundMode_SysExConfig_Data 88B"
+    },
+    {
+     "range": "0xfd8815-0xfd8832",
+     "what": "MidiCtrl_ModeSwitch_Data 29B"
+    },
+    {
+     "range": "0xfd8b46-0xfd8b73",
+     "what": "SeqData_FormatOutput_Default 45B"
+    },
+    {
+     "range": "0xfd8b73-0xfd8e0d",
+     "what": "SeqData_FormatOutput_Data 666B"
+    },
+    {
+     "range": "0xfd9655-0xfd98cd",
+     "what": "VoiceParam_AssSwb_MultiBlock_Data 632B"
+    },
+    {
+     "range": "0xfdaed2-0xfdaee4",
+     "what": "SwbtWr_SoundBankParamTable 18B"
+    },
+    {
+     "range": "0xfdb683-0xfdb6a6",
+     "what": "MidiOut_RealtimeDispatch_Data 35B"
+    },
+    {
+     "range": "0xfdf269-0xfdf361",
+     "what": "AudioInit_VoiceRoutingTable 248B"
+    },
+    {
+     "range": "0xfe9457-0xfe9467",
+     "what": "VoiceSlot_StoreParams_Data 16B"
+    },
+    {
+     "range": "0xfea15f-0xfea2d3",
+     "what": "VoiceSlot_CheckAndApply_Data2 372B"
+    },
+    {
+     "range": "0xfebe53-0xfebe5a",
+     "what": "StartFillIn_Data 7B"
+    },
+    {
+     "range": "0xfefc57-0xfefd00",
+     "what": "SendPartDataBlock_Data3 169B"
+    },
+    {
+     "range": "0xff029f-0xff02a3",
+     "what": "TmFlashWrite_Block2 4B"
+    },
+    {
+     "range": "0xff1a12-0xff1a26",
+     "what": "Sprintf_FFixed_DataTable 20B"
+    },
+    {
+     "range": "0xff2527-0xff2547",
+     "what": "Sprintf_DataBlock_28E9 32B"
+    },
+    {
+     "range": "0xffff00-0xffffe8",
+     "what": "InterruptVectorTable 232B pointer-table (v7_transplant_InterruptVectorTable.bin, boot/rom_end_structure.s)"
+    }
+   ]
+  },
+  {
+   "blob": "v7/maincpu/includes/generated/v7_fix_*.bin",
+   "size": 22073,
+   "rom_address": "0xED27E4-0xFF1ACC (24 discontiguous ranges)",
+   "content_type": "tlcs900-code and tables",
+   "codec": "none (raw slice at ELF label address)",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "24 v7_fix_*.bin, all extracted by the hardcoded v7_code_blocks list in scripts/build/extract_v7_bins.py:146-343 (label + byte count, dd at llvm-nm address of the v7 ELF). All 24 verified byte-identical to the v7 ROM slice. Names correspond to routines that exist disassembled in v9/v10 source but were left as raw bytes for v7.",
+   "recommended_action": "disassemble; the v9 sibling routine of the same label is already symbolic, diff against it (big ones: v7_fix_tuningsystem_handler_table 9312B, v7_fix_colorblit2_largecodeblock 4128B, v7_fix_initializetoshi 3381B are hard; the sub-100B ones are trivial)",
+   "xrefs": [
+    "scripts/build/extract_v7_bins.py:146-343",
+    "Makefile:595-614"
+   ],
+   "subregions": [
+    {
+     "range": "0xed27e4-0xed27e8",
+     "what": "v7_fix_extdata_normscreenproc_ptr.bin 4B @ExtData_NormScreenProc_Ptr"
+    },
+    {
+     "range": "0xef080f-0xef0814",
+     "what": "v7_fix_boot_readfdcstatus.bin 5B @Boot_ReadFDCStatus"
+    },
+    {
+     "range": "0xf09a99-0xf0a0e6",
+     "what": "v7_fix_semenu_refreshpartdisplay_data.bin 1613B @SeMenu_RefreshPartDisplay_Data"
+    },
+    {
+     "range": "0xf1341d-0xf1587d",
+     "what": "v7_fix_tuningsystem_handler_table.bin 9312B @TuningSystem_Handler_Table"
+    },
+    {
+     "range": "0xf16105-0xf16505",
+     "what": "v7_fix_drumdetailedit_menu_table.bin 1024B @DrumDetailEdit_Menu_Table"
+    },
+    {
+     "range": "0xf16505-0xf165c1",
+     "what": "v7_fix_effectparam_edit_table.bin 188B @EffectParam_Edit_Table"
+    },
+    {
+     "range": "0xf1edd9-0xf1ede1",
+     "what": "v7_fix_free_x.bin 8B @free_X"
+    },
+    {
+     "range": "0xf5332f-0xf53353",
+     "what": "v7_fix_accstate_readaccompparams.bin 36B @AccState_ReadAccompParams"
+    },
+    {
+     "range": "0xf6d449-0xf6d8a5",
+     "what": "v7_fix_accstyle_tabledataentry.bin 1116B @AccStyle_TableDataEntry"
+    },
+    {
+     "range": "0xf6ed00-0xf6ed15",
+     "what": "v7_fix_voice_initbanktables_slotloop.bin 21B @Voice_InitBankTables_SlotLoop"
+    },
+    {
+     "range": "0xf8b3ce-0xf8b3ea",
+     "what": "v7_fix_numtoascii_onesdigitandfinish.bin 28B @NumToAscii_OnesDigitAndFinish"
+    },
+    {
+     "range": "0xf8e4bc-0xf8e522",
+     "what": "v7_fix_dispseqlist_loopbody.bin 102B @DispSeqList_LoopBody"
+    },
+    {
+     "range": "0xf9162c-0xf9164e",
+     "what": "v7_fix_buildslotlabel_writecontent.bin 34B @BuildSlotLabel_WriteContent"
+    },
+    {
+     "range": "0xfaf73b-0xfb075b",
+     "what": "v7_fix_colorblit2_largecodeblock.bin 4128B @ColorBlit2_LargeCodeBlock"
+    },
+    {
+     "range": "0xfbf092-0xfbf435",
+     "what": "v7_fix_rvari_select_checksamebank.bin 931B @RVari_Select_CheckSameBank"
+    },
+    {
+     "range": "0xfc294f-0xfc3684",
+     "what": "v7_fix_initializetoshi.bin 3381B @InitializeToshi (extensions/extension_init.s)"
+    },
+    {
+     "range": "0xfc3719-0xfc371a",
+     "what": "v7_fix_emptyroutine_03.bin 1B @EmptyRoutine_03"
+    },
+    {
+     "range": "0xfc6489-0xfc6494",
+     "what": "v7_fix_midicc_resetstate.bin 11B @MidiCC_ResetState"
+    },
+    {
+     "range": "0xfc6660-0xfc6677",
+     "what": "v7_fix_encoder_configurerangelimit.bin 23B @Encoder_ConfigureRangeLimit"
+    },
+    {
+     "range": "0xfced57-0xfced64",
+     "what": "v7_fix_sndparam_heapallocok.bin 13B @SndParam_HeapAllocOK"
+    },
+    {
+     "range": "0xfd9911-0xfd994d",
+     "what": "v7_fix_voiceparam_lookupandenqueue.bin 60B @VoiceParam_LookupAndEnqueue"
+    },
+    {
+     "range": "0xfdd762-0xfdd777",
+     "what": "v7_fix_dspcfg_returnvaluetable.bin 21B @DSPCfg_ReturnValueTable"
+    },
+    {
+     "range": "0xff0c7b-0xff0c85",
+     "what": "v7_fix_math_absint16.bin 10B @Math_AbsInt16"
+    },
+    {
+     "range": "0xff1ac9-0xff1acc",
+     "what": "v7_fix_sprintf_esci_afterround_nocase.bin 3B @Sprintf_ESci_AfterRound_NoCase"
+    }
+   ]
+  },
+  {
+   "blob": "v7/maincpu/includes/generated/v7_block_*.bin",
+   "size": 29951,
+   "rom_address": "0xF03D56-0xFF242A (23 discontiguous ranges incl. interrupt trampolines)",
+   "content_type": "tlcs900-code and data blocks",
+   "codec": "none (raw slice at ELF label address)",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "22 v7_block_*.bin from the same hardcoded v7_code_blocks list in scripts/build/extract_v7_bins.py, plus v7_block_interrupt_vector_trampolines.bin extracted at the fixed offset MidiStream_HandleRunningStatus+1444 (script lines 334-341). All 23 verified byte-identical to v7 ROM slices. These are regions where v7 code genuinely differs from v9 (different size or flow), so the v9-source clone could not be reused.",
+   "recommended_action": "disassemble (these are true v7-vs-v9 code divergences - highest documentation value; UIStateEvt_TransposeUpdate 3812B and Scoop_SoundEditorData 9200B are hard)",
+   "xrefs": [
+    "scripts/build/extract_v7_bins.py:146-343",
+    "v7/maincpu/boot/interrupt_vector_trampolines.s:8",
+    "v7/maincpu/display/scoop_editor_data.s:13"
+   ],
+   "subregions": [
+    {
+     "range": "0xf03d56-0xf06146",
+     "what": "v7_block_scoop_soundeditordata.bin 9200B @Scoop_SoundEditorData"
+    },
+    {
+     "range": "0xf10fa4-0xf12f1b",
+     "what": "v7_block_sebitmap_envcurve5.bin 8055B @SeBitmap_EnvCurve5"
+    },
+    {
+     "range": "0xf12f1b-0xf131bb",
+     "what": "v7_block_semenu_comparescreen_datatable.bin 672B @SeMenu_CompareScreen_DataTable"
+    },
+    {
+     "range": "0xf395d7-0xf39724",
+     "what": "v7_block_seqplay_voicechannelcfg.bin 333B @SeqPlay_VoiceChannelCfg"
+    },
+    {
+     "range": "0xf3da86-0xf3db23",
+     "what": "v7_block_seqtimerflags_checksysflag.bin 157B @SeqTimerFlags_CheckSysFlag"
+    },
+    {
+     "range": "0xf3ed8f-0xf3ee30",
+     "what": "v7_block_seqchload_setupandcopy.bin 161B @SeqChLoad_SetupAndCopy"
+    },
+    {
+     "range": "0xf3ee4b-0xf3eeb6",
+     "what": "v7_block_seqch_loaddata_checkbass.bin 107B @SeqCh_LoadData_CheckBass"
+    },
+    {
+     "range": "0xf4839d-0xf483f5",
+     "what": "v7_block_seqload_processepilogue.bin 88B @SeqLoad_ProcessEpilogue"
+    },
+    {
+     "range": "0xf4d680-0xf4d6f8",
+     "what": "v7_block_seqstep_voicereassignexit.bin 120B @SeqStep_VoiceReassignExit"
+    },
+    {
+     "range": "0xf6a5d3-0xf6ae03",
+     "what": "v7_block_accscreen_uidatablock.bin 2096B @AccScreen_UIDataBlock"
+    },
+    {
+     "range": "0xf872c7-0xf8743b",
+     "what": "v7_block_fileio_loadsongregion8.bin 372B @FileIO_LoadSongRegion8"
+    },
+    {
+     "range": "0xfb41b8-0xfb42e7",
+     "what": "v7_block_bitmapout_snapshot_execute.bin 303B @BitMapOut_Snapshot_Execute"
+    },
+    {
+     "range": "0xfb4454-0xfb458f",
+     "what": "v7_block_bitmapout_copyexttable_check.bin 315B @BitMapOut_CopyExtTable_Check"
+    },
+    {
+     "range": "0xfb7867-0xfb7a58",
+     "what": "v7_block_acmststylealp_boundary.bin 497B @AcMstStyleAlp_Boundary"
+    },
+    {
+     "range": "0xfcc2fd-0xfcc699",
+     "what": "v7_block_midistream_cmdpedaldone.bin 924B @MidiStream_CmdPedalDone"
+    },
+    {
+     "range": "0xfcc699-0xfccc3d",
+     "what": "v7_block_midistream_handlerunningstatus.bin 1444B @MidiStream_HandleRunningStatus"
+    },
+    {
+     "range": "0xfccc3d-0xfcce4a",
+     "what": "v7_block_interrupt_vector_trampolines.bin 525B @MidiStream_HandleRunningStatus+1444 (interrupt trampoline stubs)"
+    },
+    {
+     "range": "0xfcce4a-0xfcce9f",
+     "what": "v7_block_soundparam_notifychange.bin 85B @SoundParam_NotifyChange"
+    },
+    {
+     "range": "0xfda56a-0xfda78d",
+     "what": "v7_block_midipkt_sysexbulktransfer_data.bin 547B @MidiPkt_SysExBulkTransfer_Data"
+    },
+    {
+     "range": "0xfdda14-0xfdda36",
+     "what": "v7_block_screengroup_initfinalize.bin 34B @ScreenGroup_InitFinalize"
+    },
+    {
+     "range": "0xfdde93-0xfded77",
+     "what": "v7_block_uistateevt_transposeupdate.bin 3812B @UIStateEvt_TransposeUpdate"
+    },
+    {
+     "range": "0xfdfe43-0xfdfe90",
+     "what": "v7_block_audioinit_initpartsendlevels.bin 77B @AudioInit_InitPartSendLevels"
+    },
+    {
+     "range": "0xff240f-0xff242a",
+     "what": "v7_block_sprintf_decexp_applysign.bin 27B @Sprintf_DecExp_ApplySign"
+    }
+   ]
+  },
+  {
+   "blob": "v7/maincpu/includes/generated/v7_data_*.bin",
+   "size": 17194,
+   "rom_address": "0xE1FD3E-0xEEDD36 (16 explicit ranges)",
+   "content_type": "pointer-tables and string data with v7-specific pointer values",
+   "codec": "none (dd at explicit ROM addresses)",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "16 v7_data_*.bin extracted by the v7_data_extractions list in scripts/build/extract_v7_bins.py:103-131 with EXPLICIT hardcoded ROM start/end addresses (the purest dd-in-disguise in the repo). All verified byte-identical to the ROM slices. Contents are mostly pointer tables and string-pointer regions whose values differ between v7 and v9.",
+   "recommended_action": "document-as-table (convert to .long/.short with symbolic labels; the v7 ELF already resolves the target symbols, so most become pure symbolic tables that assemble correctly for both versions)",
+   "xrefs": [
+    "scripts/build/extract_v7_bins.py:103-131",
+    "v7/maincpu/factory_test/fd_test_data.s:320 (FDTest_String_TestTitleFunc)"
+   ],
+   "subregions": [
+    {
+     "range": "0xe1fd3e-0xe1ffd2",
+     "what": "v7_data_fdtest_string_testtitlefunc.bin 660B text+pointers"
+    },
+    {
+     "range": "0xe2104a-0xe21078",
+     "what": "v7_data_mtname_songnameset.bin 46B"
+    },
+    {
+     "range": "0xe55d94-0xe55df2",
+     "what": "v7_data_msgtype_excsend.bin 94B"
+    },
+    {
+     "range": "0xed0c8c-0xed0f48",
+     "what": "v7_data_str_storetotalsetting_de.bin 700B string data (German)"
+    },
+    {
+     "range": "0xed1c82-0xed1d4a",
+     "what": "v7_data_keyscalenotestr_g.bin 200B pointer-table"
+    },
+    {
+     "range": "0xed2f4a-0xed2fda",
+     "what": "v7_data_methodnamestr_mt_svariini.bin 144B pointer-table"
+    },
+    {
+     "range": "0xed3282-0xed32e6",
+     "what": "v7_data_procnamestr_normscreenproc.bin 100B pointer-table"
+    },
+    {
+     "range": "0xeda160-0xeda616",
+     "what": "v7_data_encoder_region.bin 1206B"
+    },
+    {
+     "range": "0xedb370-0xedbac0",
+     "what": "v7_data_naka_toshiparam_table.bin 1872B"
+    },
+    {
+     "range": "0xee0158-0xee0198",
+     "what": "v7_data_naka_subdispatch_a_table.bin 64B"
+    },
+    {
+     "range": "0xee2d6c-0xee2f26",
+     "what": "v7_data_seqchan_commanddispatch_table.bin 442B"
+    },
+    {
+     "range": "0xee4e1c-0xee4fc6",
+     "what": "v7_data_widgetparam_selfref_table.bin 426B"
+    },
+    {
+     "range": "0xee86b0-0xee86d0",
+     "what": "v7_data_uistate_defaultconfig_b.bin 32B pointer-table"
+    },
+    {
+     "range": "0xee8c7e-0xee8cf8",
+     "what": "v7_data_systemconfig_pointertable.bin 122B"
+    },
+    {
+     "range": "0xee8ed8-0xeeae08",
+     "what": "v7_data_charmap_valuedata_b.bin 7984B"
+    },
+    {
+     "range": "0xeed118-0xeedd36",
+     "what": "v7_data_charmap_fullpermutation.bin 3102B"
+    }
+   ]
+  },
+  {
+   "blob": "v7/maincpu/includes/generated/{23 shared-named bins: naka_*, gui_display_struct_data, tonegen_param_table, sepaout_config, sound_config_lookup, style_ui_screendata_ctlonly, se_name_editor}",
+   "size": 703651,
+   "rom_address": "0xE0CAF7-0xF13295 (label-anchored, see subregions)",
+   "content_type": "mixed (widget/UI struct data, string tables, bitmaps, param tables)",
+   "codec": "none (raw ROM slice silently replacing C-compile output)",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "The most deceptive category: these bins have Makefile rules compiling them from documented C (clang -target tlcs900), but stage 1 of scripts/build/extract_v7_bins.py:42-99 OVERWRITES the compiled output with a raw v7 ROM slice whenever >50% of bytes match. The v7 C sources are byte-identical copies of v9's (verified by cmp for naka_widget_tables_1.c, gui_display_struct_data.c, sepaout_config.c and all 8 non-pattern rule paths), so the 8-1257 divergent bytes per file (v7-specific pointer values; total ~5.7KB across 703KB) are documented NOWHERE - extraction is load-bearing for the 100% byte match. naka_sequencer_channels.bin is even 42B SHORTER in v7 and hardcoded-extracted at 0xEEE078 (script lines 90-99). Remaining 42 of the 65 shared-named bins in v7 compile to bytes already identical to the v7 ROM, so extraction is a no-op for them (genuinely compiled-from-C).",
+   "recommended_action": "decompress-and-roundtrip equivalent for C data: parameterize the C sources per firmware version (v7 pointer/address constants) so compilation alone reproduces the v7 bytes, then delete the stage-1 overwrite; also note the >50%-similarity heuristic is a silent-wrong-data hazard (<50% falls back to writing v9 bytes into a v7 build)",
+   "xrefs": [
+    "scripts/build/extract_v7_bins.py:42-99 (stage 1) and 90-99 (naka_sequencer_channels special case)",
+    "Makefile:86-101 (V7_C_DATA_BINS)",
+    "Makefile:595 (v7-extract-bins depends on V7_C_DATA_BINS, then overwrites them)"
+   ],
+   "subregions": [
+    {
+     "range": "0xe0caf7-0xe0cd1e",
+     "what": "style_ui_screendata_ctlonly.bin 551B (40B diverge)"
+    },
+    {
+     "range": "0xe0cfde-0xe0e407",
+     "what": "gui_display_struct_data.bin 5161B (590B diverge)"
+    },
+    {
+     "range": "0xe0e407-0xe0e974",
+     "what": "tonegen_param_table.bin 1389B (247B diverge)"
+    },
+    {
+     "range": "0xe1ffe6-0xe20320",
+     "what": "sepaout_config.bin 826B (57B diverge)"
+    },
+    {
+     "range": "0xe24056-0xe272a4",
+     "what": "naka_widget_tables_1.bin 12878B (134B diverge)"
+    },
+    {
+     "range": "0xe272a4-0xe27558",
+     "what": "naka_sequencer_exit.bin 692B (14B diverge)"
+    },
+    {
+     "range": "0xe27fa4-0xe30e60",
+     "what": "naka_effects_seq.bin 36540B (46B diverge)"
+    },
+    {
+     "range": "0xe30e60-0xe55bc8",
+     "what": "naka_widget_descriptors.bin 150888B (348B diverge)"
+    },
+    {
+     "range": "0xe55a36-0xe55bc8",
+     "what": "naka_block_007.bin 402B (24B diverge)"
+    },
+    {
+     "range": "0xe5a39e-0xe80fe2",
+     "what": "naka_widget_tables_2.bin 158788B (166B diverge)"
+    },
+    {
+     "range": "0xe80fe2-0xe818ec",
+     "what": "naka_sound_menu_drawbar.bin 2314B (84B diverge)"
+    },
+    {
+     "range": "0xe85f4e-0xea13cc",
+     "what": "naka_technichord_strings.bin 111742B (246B diverge)"
+    },
+    {
+     "range": "0xea13cc-0xea8cac",
+     "what": "naka_disk_menu_file_io.bin 30944B (114B diverge)"
+    },
+    {
+     "range": "0xea8cac-0xeaccda",
+     "what": "naka_disk_warning.bin 16430B (195B diverge)"
+    },
+    {
+     "range": "0xeaccda-0xead470",
+     "what": "naka_block_012.bin 1942B (157B diverge)"
+    },
+    {
+     "range": "0xead470-0xeb2afe",
+     "what": "naka_widget_names_charmap.bin 22158B (702B diverge)"
+    },
+    {
+     "range": "0xeb2afe-0xeb71be",
+     "what": "naka_debug_naming.bin 18112B (26B diverge)"
+    },
+    {
+     "range": "0xeb71be-0xed0008",
+     "what": "naka_style_bitmaps.bin 101962B (119B diverge)"
+    },
+    {
+     "range": "0xed27e8-0xed2b98",
+     "what": "naka_master_style.bin 944B (54B diverge)"
+    },
+    {
+     "range": "0xed67cc-0xeda160",
+     "what": "naka_extension_device.bin 14740B (524B diverge)"
+    },
+    {
+     "range": "0xee1574-0xee2d6c",
+     "what": "sound_config_lookup.bin 6136B (8B diverge)"
+    },
+    {
+     "range": "0xeee078-0xeeff4e",
+     "what": "naka_sequencer_channels.bin 7894B (v9 is 7936B; 1257B diverge; hardcoded extraction at 0xEEE078)"
+    },
+    {
+     "range": "0xf131bb-0xf13295",
+     "what": "se_name_editor.bin 218B (8B diverge; sits at label TuningSys_Param_01 in v7)"
+    }
+   ]
+  },
+  {
+   "blob": "v9/maincpu/includes/generated/*.bin and v10/maincpu/includes/generated/*.bin (76 files each) + 42 clean shared bins in v7",
+   "size": 2900000,
+   "rom_address": "throughout kn5000_v9_program.rom / kn5000_v10_program.rom",
+   "content_type": "C-compiled data structures (widget descriptors, param blocks, sound category data)",
+   "codec": "clang -target tlcs900 -O2 -> ld.lld -> llvm-objcopy .text",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "CLEAN CATEGORY - no action needed. v9 and v10 reference identical name sets (76 distinct each): 12 style_ui_paramblock_* + 4 style_ui_screendata_* + 27 naka_* + 15 sound_data_* + 9 se_* + 3 accomp_* + voice_factory_presets + tonegen_param_table + sepaout_config + gui_display_struct_data + tonekit_param_blocks + sound_config_lookup. Every one has a Makefile compile rule from a committed, documented C source (Makefile lines 104-590, pattern rules per tree); all bins are .gitignored and rebuilt from source; whole-ROM comparison passes at 100.00% for v7/v9/v10 (scripts/build/compare_roms.py run 2026-08-07), which proves the compiled bytes equal the ROM bytes for v9/v10. Zero no-rule-found cases anywhere: all 353 distinct bins referenced by v7 and all 76 by v9/v10 are covered by a Makefile rule or the v7 extractor. Stale Makefile comment at SE_NAMES ('awaiting .incbin integration') is outdated - all 9 se_* are .incbin'd in v9/v10.",
+   "recommended_action": "leave (genuine compiled-from-source provenance; only fix the stale SE_NAMES comment)",
+   "xrefs": [
+    "Makefile:37-101 (name lists), 104-590 (rules)"
+   ]
+  },
+  {
+   "blob": "v7/maincpu/includes/generated/ (directory) + v7/maincpu/transplant_manifest.txt",
+   "size": 41943040,
+   "rom_address": "n/a",
+   "content_type": "stale build-artifact noise",
+   "codec": "none",
+   "compressed": false,
+   "difficulty": "trivial",
+   "evidence": "The generated dir holds 9,625 files (40MB) but only 353 are referenced by any .s file; transplant_manifest.txt has 9,370 entries of which only 225 are referenced. The unreferenced ~9,270 bins are leftovers of earlier bulk label-level transplant passes (scripts/build/v7_incbin_transplant.py created them; scripts/build/v7_source_migration.py later re-converted most transplants back to v9 symbolic source but never pruned the manifest), and extract_v7_bins.py re-extracts ALL manifest entries on every build. Gitignored so no repo pollution, but they mask the real extraction surface and slow the build.",
+   "recommended_action": "document-as-table: prune transplant_manifest.txt to the 225 referenced entries (mechanical: join manifest against the .incbin names in v7/maincpu/**/*.s) - shrinks the audit surface 40x",
+   "xrefs": [
+    "scripts/build/v7_incbin_transplant.py",
+    "scripts/build/v7_source_migration.py",
+    ".gitignore:44"
+   ]
+  },
+  {
+   "blob": "v7/maincpu (tree-level: the v7-vs-v9/v10 .incbin asymmetry)",
+   "size": 136775,
+   "rom_address": "288 ranges in kn5000_v7_program.rom, 0xE1F9F8-0xFFFFE8",
+   "content_type": "mixed",
+   "codec": "none",
+   "compressed": false,
+   "difficulty": "moderate",
+   "evidence": "TRUE COUNTS: v7 has 361 .incbin directives (353 distinct includes/generated + 8 images) vs 84 in each of v9/v10 (76 + 8). The 228-vs-71 figures in the task are undercounts from the same trap I initially hit: GNU grep under a UTF-8 locale classifies many .s files (ISO-8859 bytes, e.g. v7/maincpu/ui_widgets/widget_dispatch.s) as binary and silently skips them - use LC_ALL=C grep -a or python. THE ASYMMETRY: the v7 tree is not an independent disassembly; it was mechanically cloned from the v9 sources (scripts/build/create_v7_source.py), and every label-level region whose v7 bytes differ from what the shared source assembles to was patched with an .incbin of raw v7 ROM bytes rather than disassembled - 288 v7_-prefixed bins (225 transplant + 24 fix + 22 block + 16 data + 1 trampoline), 136,775 bytes total, every single one verified byte-identical to its slice of original_ROMs/kn5000_v7_program.rom. The extraction runs at build time (Makefile 'v7-extract-bins', two-pass with v9-ELF fallback then v7-ELF re-extract), so 'make all' literally requires the original v7 ROM as an input to build the v7 ROM - circular provenance for those regions. v9/v10 carry no such patches because they are the actually-disassembled trees (v7 also skips 11 shared bins - 3 accomp_* + 8 se_* - whose regions are covered by the raw patches instead). Net: v7's '100% byte-match' overstates documentation; ~137KB of code/tables plus ~5.7KB of divergent bytes inside 703KB of shared data bins are raw-extraction-in-disguise.",
+   "recommended_action": "disassemble progressively: (1) resume v7_source_migration.py-style re-conversion of the 225 transplants (most differ from v9 only in pointer constants that symbolic labels resolve automatically), (2) convert the 16 v7_data pointer tables to symbolic .long tables, (3) parameterize the 23 divergent C bins per version; track progress by shrinking the v7-extract-bins output count",
+   "xrefs": [
+    "scripts/build/create_v7_source.py",
+    "scripts/build/extract_v7_bins.py",
+    "scripts/build/v7_incbin_transplant.py",
+    "scripts/build/v7_source_migration.py",
+    "scripts/v7_extract_incbin.py (older generation)",
+    "Makefile:592-614"
+   ]
+  },
+  {
+   "blob": "table_data/images/FTBMP01.BMP (+FTBMP02..06)",
+   "size": 318068,
+   "content_type": "graphics",
+   "rom_address": "0x880418 (77878B), 0x89344E (42678B), 0x89DB04 (39478B), 0x8A753A (39478B), 0x8B0F70 (41078B), 0x8BAFE6 (77878B) in table_data ROM",
+   "codec": "Windows 3.x BMP, BITMAPINFOHEADER, 8bpp indexed, 256-color palette, bits offset 1078",
+   "compressed": false,
+   "evidence": "file(1): 'PC bitmap, Windows 3.x format, 320 x {240,130,120,120,125,240} x 8'; header bytes 42 4d 36 30 01 00 ... 28 00 at offset 0; all six cmp'd byte-identical against original_ROMs/kn5000_table_data.rom at the label addresses (Feature_Bitmap_1..6, table_data/kn5000_table_data.s:122-142). Referenced by FeatureDemo_FileEntry pointer records (filename + address pairs).",
+   "recommended_action": "leave \u2014 fully self-documenting standard format, losslessly re-emitted verbatim via .incbin; already labeled and cross-referenced by the FeatureDemo file table",
+   "difficulty": "trivial",
+   "xrefs": [
+    "table_data/kn5000_table_data.s:122-142",
+    "table_data/kn5000_table_data.s FeatureDemo_FileEntry1 (0x8CE01C)"
+   ]
+  },
+  {
+   "blob": "v10/maincpu/images/Bitmap_1bit_*.bin (8 files)",
+   "size": 4928,
+   "content_type": "graphics",
+   "rom_address": "maincpu 0xE0018E-0xE0148D (v10 program ROM) and duplicated in table_data ROM 0x9FA156-0x9FB495",
+   "codec": "headerless raw 1bpp bitmap, 224x22 (28 bytes/row x 22 rows = 616 bytes each)",
+   "compressed": false,
+   "evidence": "616 bytes each = exactly 224*22/8; dimensions+descriptions recorded in scripts/build/convert_images.py IMAGE_METADATA lines 74-81; cmp verified Bitmap_1bit_Flash_Memory_Update against kn5000_v10_program.rom offset 0x18E and kn5000_table_data.rom offset 0x1FA156 \u2014 both MATCH; labeled in v10/v7/v9 maincpu/boot/boot_data_tables.s and table_data/kn5000_table_data.s:491-512 (table_data reuses the same files via ../v10/ path, so the duplication is single-sourced)",
+   "recommended_action": "leave \u2014 headerless but self-documenting via project metadata + gallery; losslessly re-emitted in both ROMs from one set of files",
+   "difficulty": "trivial",
+   "xrefs": [
+    "v10/maincpu/boot/boot_data_tables.s:79-86",
+    "table_data/kn5000_table_data.s:491-512",
+    "scripts/build/convert_images.py:74-81"
+   ]
+  },
+  {
+   "blob": "clean sweep result: dsp/, extracted_fonts/, localization_strings.asm, mame_driver/, test_ROMs/, hdae5000/*.s (non-data_tables), v142/subcpu payload",
+   "size": 0,
+   "content_type": "unknown",
+   "evidence": "grep -rn incbin|binclude over whole repo excluding archive/ and cruft_please_ignore/ (432 hits total, saved list audited): ZERO hits in dsp/ (analysis docs + .dsm listings + tools only), extracted_fonts/ (BDF/PGM/PNG exports of already-extracted fonts), mame_driver/ (C++ driver copy), test_ROMs/ (generated test ROMs, *.rom gitignored per test_ROMs/.gitignore), hdae5000/{filesystem,hd_driver,ui_display,utilities,main}.s, v142/subcpu/*.s, localization_strings.asm (root-level extracted-strings reference in ASL syntax, NOT referenced by Makefile \u2014 documentation artifact, not build input). All remaining hits live in trees other agents cover (v10/v7/v9 maincpu, custom_data, table_data, hdae5000_data_tables.s) plus the two boot/table_data items reported separately",
+   "recommended_action": "leave \u2014 nothing residual in these trees; note localization_strings.asm duplicates maincpu string data as a non-built reference file",
+   "difficulty": "trivial"
+  },
+  {
+   "blob": "subcpu/boot/subcpu_boot_data_8000.bin",
+   "size": 656,
+   "content_type": "mixed",
+   "rom_address": "0xFF8000-0xFF828F (subcpu boot ROM, file offset 0x18000 in ic30)",
+   "compressed": false,
+   "evidence": "First 32 bytes are 8 little-endian u32 pointers INTO boot ROM code: 0xFF8496, 0xFF849F, 0xFF84A2, 0xFF849C, 0xFF8499, 0xFF84A5, 0xFF85AB, 0xFF85AB \u2014 all targets already disassembled and labeled (OUTPUT_NOP_RET=0xFF8496, STUB_85AB=0xFF85AB in symbols/subcpu_boot_symbols_reference.txt). Then structured params (0x0500 0x0500 0x0102 0x4d...) and from ~offset 0x50 a monotonically descending byte curve (fb f6 f1 ed ea e6 e3 e0 dd db d8 ... 6a) \u2014 envelope/attenuation-style lookup. Referenced at subcpu/boot/kn5000_subcpu_boot.s:98553 under DATA_TABLE_8000 with a TODO comment",
+   "recommended_action": "decompress-and-roundtrip N/A \u2014 SPLIT per Binary Include Splitting policy: emit the 8-entry table as .long symbolic refs (currently hides cross-references inside a binary, violating the Symbolic Cross-Referencing policy), keep the curve region as a labeled data table",
+   "difficulty": "trivial",
+   "suggested_module": "subcpu/boot/boot_dispatch_and_curves.s, labels BootStub_Ptr_Table / Boot_\u0410\u0442ten... use prefix Boot_ (e.g. Boot_StubPtrTable, Boot_AttenCurve)",
+   "xrefs": [
+    "subcpu/boot/kn5000_subcpu_boot.s:98545-98553",
+    "symbols/subcpu_boot_symbols_reference.txt: OUTPUT_NOP_RET 0xFF8496, STUB_85AB 0xFF85AB"
+   ]
+  },
+  {
+   "blob": "subcpu/boot/kn5000_subcpu_boot.s lines 238-98541 (inline, not a binclude)",
+   "size": 98304,
+   "content_type": "unknown",
+   "rom_address": "0xFE0000-0xFF7FFF (erased-flash region of 128KB boot ROM)",
+   "compressed": false,
+   "evidence": "98,304 consecutive single-value '.byte 0xff' lines; awk verified ZERO non-0xff lines in the range; header comment documents 'ROM starts with 96KB of 0xFF (erased flash)'. This is 95% of the file's 1.26MB line count",
+   "recommended_action": "leave (content is known padding) but flag as cleanup: replace with one .fill/.space 0x18000, 1, 0xff \u2014 would shrink the source by ~98K lines with zero byte-level risk; verify with make all + compare_roms.py",
+   "difficulty": "trivial"
+  },
+  {
+   "blob": "v142/subcpu/subcpu_data_tables.s ZONE A (lines ~1976-4870)",
+   "size": 9636,
+   "content_type": "mixed",
+   "rom_address": "0x012195-0x014738 (subcpu payload; = file offset addr-0xEF00 in original_ROMs/kn5000_subprogram_v142.rom, mapping double-calibrated via unique byte patterns at 0x147EF and 0x1E19E)",
+   "compressed": false,
+   "evidence": "Single label (ToneGen_Octave_Pitch_Table, whose documented content is only ~22 bytes) covers 9,636 bytes to next label OFFSETS_14739 (0x014739). Composition: 6,137 .byte bytes + 395 .zero + 1,772 GARBAGE-DECODED instruction lines (push_a, ldwio 5,2560, jr lt,114, .ascii \"1@ly3@X!5\", pushw iy, jp_cc_ri xiz,14) \u2014 converter mis-classified data as code. Entropy 4.97 bits/byte (structured data, not code). Largest pure island: 2,877B at 0x13318 (source lines 4192-4551) = monotonic u32 records, 24-bit magnitude growing ~3.2%/step exponentially (0x389a8a, 0x3a6cb4, 0x3c4dde, 0x3e3e82 ...) with bit31 flag \u2014 pitch/phase-increment-style lookup",
+   "recommended_action": "disassemble-as-data: re-emit whole zone as .byte/.short/.long tables (kill the garbage instruction decodes), split at 0x13318 with a semantic label for the exponential pitch table; moral binclude today",
+   "difficulty": "moderate",
+   "suggested_module": "keep in v142/subcpu/subcpu_data_tables.s; labels ToneGen_* (e.g. ToneGen_PitchIncrement_Table at 0x13318)",
+   "xrefs": [
+    "symbols/subcpu_symbols_reference.txt: ToneGen_Octave_Pitch_Table 0x012195, OFFSETS_14739 0x014739",
+    "issue kn5000-1ru (SubCPU payload memory layout)"
+   ]
+  },
+  {
+   "blob": "v142/subcpu/subcpu_data_tables.s ZONE B (lines 4940-9977)",
+   "size": 39372,
+   "content_type": "pointer-table",
+   "rom_address": "0x0147B3-0x01E17E (subcpu payload)",
+   "compressed": false,
+   "evidence": "38,950 raw .byte bytes + 101 .zero under a SINGLE label (DSP_Bytecode_Global_Config) across ~5,000 source lines, zero instruction lines \u2014 the largest moral-binclude in the subcpu tree. Content matches the ALREADY reverse-engineered format of the labeled DSP_Eff9/EffA tables that immediately follow at 0x1E17F/0x1E40A: descriptor streams (00 05 65 00 02 / 00 04 63 06 / 00 07 74 1d 00 00 00 f0 patterns identical to DSP_Eff9_Param_Descriptors) + value streams (\u20267a 00 06 63 00 00 7a 00 0b 21\u2026) + DSP bytecode upload blocks (f0 31 f4 01 00 54 08 80 13 / 30 d7 01 00 54 00 40 00 08 bc). I.e. per-effect descriptor+value+bytecode blocks for effect selectors 0-8 (only 9 and A got labeled). Entropy 5.49 bits/byte. Pure unlabeled >2KB islands: lines 5515-5902 (~3,099B) and 8606-8920 (~2,520B); .ascii \"fffz\" converter artifacts inside",
+   "recommended_action": "document-as-table: apply the Eff9/EffA record grammar to carve per-effect DSP_EffN_Param_Descriptors / DSP_EffN_Param_Values / DSP_EffN_Bytecode labels; the dispatch code (DSP_WriteParam_EFFCase pushes XHL=descriptor,values pairs per the existing comment at line ~9973) gives the exact split addresses per effect",
+   "difficulty": "moderate",
+   "suggested_module": "keep in v142/subcpu/subcpu_data_tables.s; label prefix DSP_Eff0_..DSP_Eff8_ mirroring DSP_Eff9_*/DSP_EffA_*",
+   "xrefs": [
+    "symbols/subcpu_symbols_reference.txt: DSP_Bytecode_Global_Config 0x0147B3, DSP_Eff9_Param_Descriptors 0x01E17F",
+    "v142/subcpu/subcpu_data_tables.s:9973-9976 comment on DSP_WriteParam_EFFCase pair-push",
+    "issues kn5000-si0, kn5000-1ru"
+   ]
+  },
+  {
+   "blob": "table_data/*.s raw-byte audit result",
+   "size": 60,
+   "content_type": "unknown",
+   "rom_address": "0x9FB496-0x9FB4D1 (largest inline raw block found)",
+   "evidence": "Scanner over table_data/kn5000_table_data.s + shared/*.s (both plain .byte and extended .short/.word/.long modes, label-aware): NO unlabeled raw regions >= 2KB exist. Largest is the 60-byte 'Boot initialization data tables' block at 0x9FB496 which already carries a TODO comment (kn5000_table_data.s:4116-4120). All big table_data payloads are incbins, not inline dumps",
+   "recommended_action": "leave \u2014 table_data source itself is clean for criterion (c); the residual work is the incbin'd bootloader CODE at 0x9FD8A5-0x9FEA9C (bootcode_flash_handlers.bin 4600B split 7 ways, bootcode_utils 1790B, bootcode_serial_handlers 201B, bootcode_serial_state 2148B, bootcode_malloc_and_after 906B, bootcode_hdae_to_lzss 460B) which is ALREADY TRACKED by issue kn5000-m1j \u2014 do not duplicate",
+   "difficulty": "trivial",
+   "xrefs": [
+    "table_data/kn5000_table_data.s:3839-3851,3980-4035,2880",
+    "issue kn5000-m1j"
+   ]
+  },
+  {
+   "blob": "table_data/includes/ ORPHANED bins: bootcode_debug(96B), bootcode_division(207B), bootcode_free2(259B), bootcode_interrupts(5187B), bootcode_post_clearram(18158B), bootcode_pre_clearram(55B), bootcode_pre_lzss(4304B), lzss_routines(872B), preset_data(32910B)",
+   "size": 62148,
+   "content_type": "mixed",
+   "evidence": "git-tracked but referenced by NO .s/.asm/Makefile in the current tree AND not by archive/asl either (grep -rln over both returned nothing). preset_data.bin (32,910B) is the decompressed reference of Compressed_Preset_Data_LZSS (matches the documented ~33KB decompressed size); the bootcode_* orphans are superseded splits of the table_data bootloader (the live build now uses bootcode_flash_handlers/utils/serial_*/malloc_and_after/hdae_to_lzss only)",
+   "recommended_action": "leave for the orchestrator to decide: either delete per Clean Working Directory policy or move to analysis/ as reference artifacts \u2014 but they must not be counted as residual ROM content since they do not participate in the build",
+   "difficulty": "trivial",
+   "xrefs": [
+    "Makefile:722-731 (demo preset bins are the generated+gitignored pipeline; these orphans are not part of it)"
+   ]
+  },
+  {
+   "blob": "table_data/includes/hkst_55.ssf",
+   "size": 1033,
+   "content_type": "text",
+   "rom_address": "0x88000E-0x880417 (Feature_Demo_XML + terminator)",
+   "compressed": false,
+   "evidence": "Plain XML-like script: '<ACTION><ACT NO=1><SHOW OBJ=\"ftdemo01\"></ACT>...' driving the feature-demo slideshow of FTBMP images; referenced by FeatureDemo_FileMetadata record with filename string 'hkst_55.ssf'",
+   "recommended_action": "leave \u2014 self-documenting text format, correctly labeled; widget/OBJ vocabulary is tracked by issue kn5000-x13",
+   "difficulty": "trivial",
+   "xrefs": [
+    "table_data/kn5000_table_data.s:106-118",
+    "issue kn5000-x13"
+   ]
+  },
+  {
+   "blob": ".beads/issues.jsonl \u2014 tracked issues relevant to undocumented regions/bincludes (do NOT duplicate)",
+   "size": 159,
+   "content_type": "text",
+   "evidence": "OPEN and relevant: kn5000-m1j p2 'Disassemble table_data bootloader raw db bytes to proper assembly' (covers table_data bootcode incbins+raw db); kn5000-3ei p2 'LLVM parallel build: Phase 2 - Replace .incbin with converted assembly'; kn5000-1ru p2 'SubCPU: Document payload memory layout' (umbrella for Zone A/B); kn5000-16s p1 'Images: Find embedded image locations in table data ROM'; kn5000-pcq p2 'Images: Extract all images as binary files'; kn5000-4rr p2 'Images: Update assembly sources to include binary images'; kn5000-kc5 p2 'Disassemble TODO routines at F97696-F97D8D'; kn5000-x13 p1 'FeatureDemo: Identify and catalog UI widget types'; kn5000-si0 p2 'Sound: Document effects processing chain'; kn5000-kuu p1 in_progress 'HDAE5000: Disassemble ROM at 0x280000'. STALE (files no longer exist anywhere outside archive \u2014 verified by find): kn5000-9os (e0bb90_e0e974.bin), kn5000-baz (e0b250_e0ba60.bin), kn5000-c9c (e02510_e06baf.bin \u2014 since split into sound_data_* per v10/maincpu/audio/sound_data_piano.s:5 'Source: e02510_e0458f.bin'), kn5000-gqu (e06f30_e0adcf.bin), kn5000-jqa (e0176c_e01f7f.bin)",
+   "recommended_action": "document-as-table for the plan: reuse m1j/1ru/16s/si0 instead of filing new issues; the five e0xxxx 'Document binary include' issues should be audited for closure (their bincludes were already split/converted) per the Issue Closure Requirements policy",
+   "difficulty": "trivial",
+   "xrefs": [
+    ".beads/issues.jsonl",
+    "v10/maincpu/audio/sound_data_piano.s:5"
+   ]
+  },
+  {
+   "blob": "custom_data/includes/section_*.bin + registration.bin (6 blobs)",
+   "size": 671744,
+   "content_type": "mixed",
+   "rom_address": "0x300000-0x3D3FFF (AM29LV800B user flash IC19)",
+   "compressed": false,
+   "evidence": "Caught by the repo-wide grep in (b); custom_data/kn5000_custom_data.s:1-115 already documents chip, layout table, runtime section pointer table (RAM 0x0C76-0x0C92 computed by LABEL_F16A57), 'HK' header format and registration-memory record format. Content is USER DATA (custom accompaniment styles, registration memory, wallpaper), not firmware",
+   "recommended_action": "leave \u2014 blob-level documentation is adequate for user-content flash; deep-parsing style records would be preservation of one unit's user data, not firmware RE",
+   "difficulty": "trivial",
+   "xrefs": [
+    "custom_data/kn5000_custom_data.s:1-115"
+   ]
+  }
+ ],
+ "verdicts": [
+  {
+   "claim": "table_data/includes/bootcode_hdae_to_lzss.bin (ROM 0x9FC6F6-0x9FC8C1, boot 0xFFC6F6-0xFFC8C1) is TLCS-900 code; the incbin boundary splits a 5-byte ld A,(0x160002); all CALL/CALR targets resolve to named symbols; handoff jp to 0xFFFED8 in maincpu",
+   "verdict": "CONFIRMED",
+   "evidence": "Re-extracted 460 bytes at file offset 0x1FC6F6 of original_ROMs/kn5000_table_data.rom: byte-identical to blob (cmp). Boundary split verified: ROM bytes at 0x1FC6F2 = c2 02 00 16 21 decode as one 5-byte `ld A,(0x160002)`; kn5000_table_data.s:2876 emits only `extpfx4 0xC2,0x02,0x00,0x16` and the blob's first byte is 0x21. Aligned decode from 0xFFC6F2 (unidasm tlcs900): 127 instructions, 0 undecodable, 19/19 near-branch targets on instruction boundaries (100%), incl. the loop `6e f4 jr NZ,0xffc6f2` closing onto the port-B poll. All 26 CALL/CALR targets coincide with independently-listed symbols in symbols/table_data_symbols_reference.txt (0xFFBC6A=FLASH_READID_32BIT, 0xFFB888=FLASH_READID_16BIT, 0xFFBD17, 0xFFB968, 0xFFBE85, 0xFFC4FE, 0xFFC50B, 0xFFC54B/0xFFC55A, 0xFFC569, 0xFFC58A, 0xFFC5BC, 0xFFC60E, 0xFFC660 \u2014 26/26 hits, 0 misses). Signature check reproduced: ffc7e2 `ld XWA,(0x2fffc0)`, ffc7e7 `cp XWA,0x5f746b68` (ASCII 'hkt_'). Handoff reproduced: ffc7f4 `ei 7`; ffc7f6 `ld XWA,0x00fffed8`; ffc7fb `ld IX,0x014b`; ffc806 `ld (XIX),0x80`; ffc809 `jp T,XWA`; maincpu ROM file offset 0x1FFED8 = 1b 54 4b ef = `jp 0xef4b54` (valid vector row; 0xFFFEDC = `jp 0xef050f`, and table_data .s lines 662-670 Boot_Init indeed uses 0xFFFEDC). Last blob insn = 1-byte `ret` at 0xFFC8C1, abutting LZSS_ReadByte 0xFFC8C2. Shifted-decode control: base+1 diverges for 4 bogus insns then resyncs at 0xffc6f9 \u2014 on TLCS-900 shifted decodes always resync within a few insns, so criterion 4 cannot refute; discriminating power instead shown by negative control (460 bytes of real table data at ROM 0x840000 decoded as code: 8 undecodable bytes, branch alignment only 42.9% and 6/19 in-range targets aligned, vs 100% here)."
+  },
+  {
+   "claim": "table_data/includes/bootcode_flash_handlers.bin (ROM 0x9FD8A5-0x9FEA9C) is TLCS-900 code and is actually the floppy-disk (FDC) command-layer driver, not 'Flash Update Type Handlers'; slice label Boot_ClearWatchdog at 0x9FDDED is mislabeled FDC status-wait code",
+   "verdict": "CONFIRMED",
+   "evidence": "Re-extracted 4600 bytes at file offset 0x1FD8A5: byte-identical to blob. Linear decode at 0xFFD8A5 (first byte 0x3e = 1-byte `push XIZ`, a genuine function start): exactly 1546 instructions as claimed; 292/292 near-branch targets on instruction boundaries (100%); 132/132 in-range call targets aligned; only 6 'unknown' lines, all `ldc unknown,<reg>` at ffdd30/ffdd7b/ffdd80/ffdd91/ffdd96/ffdd9f \u2014 precisely the undocumented DMA3 control registers the claim itself flags (encodings d9 2e 4c=CR 0x4C, eb 2e 2c=CR 0x2C, c9 2e 4e=CR 0x4E; CR 0x0C prints as DMAS3 at ffdd74/ffdd89). Entry 0xFFE944 verified: push XIZ; ld XIZ,(XSP+0x08); guard `cp (0x0c44),0xa5` / `ld (0x0c44),0xa5` at ffe955/ffe969 with `ld (0x0c44),0x5a` close at ffea49; copies u16s from XIZ+0/2/4/6/8/0x0A and u32 from XIZ+0x0C into 0x0C6E..0x0C7D (plus an uncited shadow copy to 0x0C7E..0x0C8D). Dispatch verified: ffe9e7 `ld WA,(0x0c6e)`; `cp WA,0x000b`; jr UGT->err 0xFF; offset table at 0xFFB4BA; `jp T,XIX+WA` with landing pad exactly 0xFFEA07; the 12 calr targets are exactly the 12 claimed handlers (0xffe2bd, 0xffe2d6, 0xffe31a, 0xffe368, 0xffe4aa, 0xffe5fe, 0xffe89b, 0xffe8c5, 0xffe8ce, 0xffe8d5, 0xffda6a, 0xffe8f6), all decode boundaries at plausible function starts; cmd7 body confirmed `res 3,(0x28)` at ffe8c5. DMA routines at ffdd2c/ffdd85/ffdd9b program DMAS3/DMAD3/DMAC3/DMAM3 between 0x120000 and (0x0c7a), read mode A=0x00 / write mode A=0x08. PIO fallback confirmed: ffea6a `ld C,(0x120000)` byte loop (cmd 3), ffea8a `ld (0x120000),C` (cmd 4), entry ffea56. External callers confirmed: 0xffbf2f and 0xffbfb1 both contain 1d 44 e9 ff = `call 0xffe944`. Mislabel confirmed: .s header comment (kn5000_table_data.s:3818-3837) says 'Flash Update Type Handlers / Type 1..8', contradicted by the FDC evidence; Boot_ClearWatchdog (.s:3844, 0x9FDDED) body is push XIZ; ld IZ,(0x0c00); ld QIZ,0x0080; loop{calr 0xffd7e8 FDC_READSTATUS; `and L,0xe0`; cp 0x80/0xc0; if (0x0c00)-IZ>0x1f4 QIZ=0xffff}; error 2 via calr 0xffe231 \u2014 an FDC RQM/DIO wait with 500-tick timeout, not a watchdog; near-twin at ffdda3 uses `res 0x04,L` and is called from 0xffd92d, both as claimed. Shifted control: +2 (mid-instruction) yields exactly 1 undecodable byte then resyncs; resync-prone ISA means cleanliness alone proves nothing, but the negative-control failure (42.9%) plus 100% alignment and symbol coincidence here are decisive.",
+   "correction": "Two micro-errata in the evidence text: (1) the call site 0xFFBF2F lies inside FDC_RESET (0x9FBF07-0x9FBF37), not FDC_ReadSector \u2014 FDC_READSECTOR starts at 0x9FBF37; 0xFFBFB1 is correctly inside FDC_READSECTORWRAPPER (0x9FBF92). Both callers are still already-named FDC_* context. (2) 'All 7 existing slice labels' \u2014 the .s has 6 named slice labels (Boot_TimerTick 0x9FDD17, Boot_UpdateDisplay 0x9FDD26, Boot_ClearWatchdog 0x9FDDED, FDC_ProcessResults 0x9FDF17, FDC_Error 0x9FE231, Boot_Delay 0x9FE296) across 7 incbin slices; all 6 land on genuine function starts in my decode."
+  },
+  {
+   "claim": "v7/maincpu/includes/generated/v7_fix_*.bin: 24 files, extracted by the hardcoded v7_code_blocks list in scripts/build/extract_v7_bins.py, byte-identical to the v7 ROM at 0xED27E4-0xFF1ACC, containing tlcs900 code and tables that are disassembled in v9/v10 but raw for v7",
+   "verdict": "CONFIRMED",
+   "evidence": "Exactly 24 v7_fix_*.bin on disk = exactly the 24 unique v7_fix entries in v7_code_blocks (list spans extract_v7_bins.py lines 146-322, write loop through ~331; set difference disk-vs-list is empty both ways). Re-verified byte-identity myself: for every entry, llvm-nm address from rebuilt_ROMs/kn5000_v7_program.llvm.elf minus 0xE00000 as file offset into original_ROMs/kn5000_v7_program.rom, slice length = listed size = on-disk file size \u2014 24/24 identical. Address span: min 0xED27E4 (v7_fix_extdata_normscreenproc_ptr.bin), max last byte 0xFF1ACB (v7_fix_sprintf_esci_afterround_nocase.bin) = claimed 0xFF1ACC end-exclusive. All 24 differ from the v9 ROM at the same addresses (genuine v7 variants). Code-ness spot-check (strong criteria): v7_fix_rvari_select_checksamebank.bin (931 bytes, RVari_Select_CheckSameBank @0xFBF092) decodes 284 instructions with 0 undecodable; 17/20 call targets land exactly on named v7 ELF symbols (e.g. 0xf5bc73 AccVoice_DispatchWithChannel, 0xfacb3d DrawStringLeftJustify); v7 source ui/ui_mode_handlers.s:10981 incbins it where v9/maincpu/ui/ui_mode_handlers.s:13965 has the same routine fully disassembled, and v9's first instructions (ld xwa,(xiz+64); ld wa,(xwa); exts xwa; divs wa,4) match my independent decode of the v7 bytes instruction-for-instruction. Table-typed members (e.g. v7_fix_dspcfg_returnvaluetable.bin 21 B, v7_fix_tuningsystem_handler_table.bin 9312 B) are consistent with the stated 'code and tables' content type."
+  },
+  {
+   "claim": "v7/maincpu/includes/generated/v7_block_*.bin: 22 files from the same hardcoded v7_code_blocks list plus v7_block_interrupt_vector_trampolines.bin (23 discontiguous ranges, 0xF03D56-0xFF242A), byte-identical to v7 ROM slices, regions where v7 genuinely differs from v9",
+   "verdict": "CONFIRMED",
+   "evidence": "Core assertions verified, and the byte-identity holds a fortiori: I verified ALL v7_block bins, not just 23. The v7_code_blocks list contains 143 v7_block entries (138 unique; 5 harmless duplicates where the last write wins with identical size) and every one is byte-identical to the v7 ROM slice at its llvm-nm ELF address (162/162 across fix+block). v7_block_interrupt_vector_trampolines.bin confirmed extracted at MidiStream_HandleRunningStatus+1444 = 0xFCCC3D, 525 bytes, script lines 334-341 exactly as cited, byte-identical, decodes as valid code, incbin'd from v7/maincpu/boot/interrupt_vector_trampolines.s:8. 161/162 entries differ from the v9 ROM at the same address, supporting 'v7 genuinely differs from v9'.",
+   "correction": "The enumeration in the evidence is wrong against the current repo state: the glob v7_block_*.bin matches 139 files (138 unique list entries + trampolines), not 23, and their union spans 0xED3448-0xFF242A (min = v7_block_nakainst_mainvariset.bin at 0xED3448), not 0xF03D56-0xFF242A. 0xF03D56 is merely the start of v7_block_scoop_soundeditordata.bin; the 0xFF242A end matches (v7_block_sprintf_decexp_applysign.bin last byte 0xFF2429). Also one exception to 'v7 genuinely differs from v9': v7_block_nakainst_mainvariset.bin (0xED3448, 4746 bytes) is byte-identical between the v7 and v9 ROMs."
+  },
+  {
+   "claim": "demo_preset_00..17_compressed.bin (SLIDE4K blocks at table_data offsets 0x1C4050..0x1F494E) are source-built and round-tripped; leave as-is",
+   "verdict": "CONFIRMED",
+   "evidence": "Independent scan (10,337 files) found exactly 18 SLIDE4K magics at exactly the 18 claimed offsets in original_ROMs/kn5000_table_data.rom. My own decoder: every block decodes to its declared size; each demo_preset_NN_compressed.original.bin is payload-only (no header) and byte-equal to the ROM slice at offset+11 (headers are emitted by table_data/kn5000_table_data.s itself as .asciz \"SLIDE4K\" + 3 size bytes). RAN `make verify-demo-presets`: presets 00-18 all \"OK\". Regenerated preset 07 from scratch into /tmp (midi_to_preset.py + compress_lzss.py --strict --reference) -> cmp-identical to original. `cmp rebuilt_ROMs/kn5000_table_data.llvm.rom original_ROMs/kn5000_table_data.rom` -> identical; RAN scripts/build/compare_roms.py: all 14 sections 100.00%. git ls-files: only midi/*.mid + sidecar/*.yaml + README tracked; both .bin stages gitignored (.gitignore:22 table_data/includes/demo_presets/demo_preset_*.bin). Demo pointer table @ROM 0x1C4000 contains exactly these 18 addresses + 0x8E0000 + null.",
+   "correction": "One mischaracterization inside the claimed range: preset 17's actual LZSS stream ends at ROM 0x1F5676 (consumes 3,357 of its 19,314 payload bytes; declared output 5,888 reached). The remaining ~15.9KB (0x9F5676-0x9F94CB) is high-entropy NON-stream data carried verbatim by compress_lzss.py's reference-tail mechanism (scripts/build/compress_lzss.py ~lines 229-231). Round-trip is still byte-exact, but that tail is unexplained data, not SLIDE4K stream."
+  },
+  {
+   "claim": "demo_preset_18_compressed.bin (table_data offset 0xE0000 / addr 0x8E0000) is source-built, round-tripped, included in the Makefile demo flow; boot update path decompresses this class of payload from 0x3E0000; staging area in custom_data ic19 @0xE0000 is 0xFF-erased",
+   "verdict": "CONFIRMED",
+   "evidence": "Header bytes 53 4c 49 44 45 34 4b 00 00 95 00 verified at ROM offset 0xE0000; original (27,956 B, payload-only) == ROM[0xE000B..0xE6D3E]; Makefile line 11 DEMO_PRESET_IDS ends in 18; `make verify-demo-presets` printed \"preset 18 OK\". ASL maincpu SubCPU_Send_Payload / LABEL_EF0696 region (archive/asl/maincpu/kn5000_v10_program.asm:135111-135141) contains exactly `CP (0FFFEEDh),0ffh / JR NZ,LABEL_EF072A / LD XIZ,00050000h / LD XWA,003e0000h / LD XBC,00050000h / CALL LABEL_EF41E3`. original_ROMs/kn5000_custom_data.ic19 bytes 0xE0000-0xEFFFF are 100% 0xFF (byte set == {255}).",
+   "correction": "Minor nuances: the stream proper ends at ROM 0xE6CF4 (output exactly 38,144 = declared); the file's last 75 bytes (0x8E6CF5-0x8E6D3F) are non-stream trailing bytes preserved verbatim. Also ../kn5000-docs/lzss-compression.md describes this block with a \"14-byte header\" and \"~32,910\" decompressed size \u2014 actual header is 11 bytes and decompressed size is 38,144."
+  },
+  {
+   "claim": "icons_to_strings.bin contains 5 referenced SLIDE8K help-text DBs (file offsets 0x43918/0x46DC2/0x4A362/0x4DC94/0x51682, ROM 0x188690..0x1963FA), format as specified, language table @0x988018, wrong 'Demo Song Index' comments at table_data.s:35/324; recommend decompress-and-roundtrip with new compress_slide8k.py",
+   "verdict": "CONFIRMED",
+   "evidence": "Scan found the 6 SLIDE8K magics (5 referenced + orphan) at exactly the claimed offsets and nowhere else. My independent decoder built purely from the claimed spec (window 0x2000, zero prefill 0x1FF6, write pos 0x1FF6, off=((b2&0xF8)<<5)|b1, len=(b2&7)+3) decoded each block to exactly 36,864 bytes with block N's stream ending 1 byte before block N+1's header (0x18BB39->0x18BB3A etc.); sampled EN/DE/FR/ES/Malay text matching the claimed strings. Language table @ROM 0x188018 = {0x988690,0x98BB3A,0x98F0DA,0x992A0C,0x988690(dup EN),0x9963FA} exactly; companion intro-string table @0x188000 = {0x988030,0x988160,0x988296,0x988404,0x988030,0x98855E}. Firmware corroborates: LABEL_EF40C5 (ASL line 141343) allocates 0x2000, zero-fills 0x1FF6 bytes, sets BC=0x1FF6; dispatcher LABEL_EF41E3 (line 141466) compares \"SLIDE\" then '4'->LABEL_EF3FAB / '8'->LABEL_EF40C5. incbin confirmed at table_data/kn5000_table_data.s:338 (`.incbin \"includes/icons_to_strings.bin\", 0, 0x7F2D8`). \"Demo Song Index\" comments exist at .s lines 35 and 324 (and also line 54, which the claim missed) and are wrong \u2014 the data is the help language tables. No slide8k tooling exists in scripts/ (grep = zero), so the recommended work is genuinely uncovered.",
+   "correction": "Off-by-one in the tail note: the 8 non-FF bytes are `ce 7f d8 7f e2 7f ec 7e` at ROM 0x1999CB-0x1999D2 with 0xFF fill starting 0x1999D3; the claimed window 0x1999CC-0x1999D3 includes a byte that is already 0xFF (defensible only if one extra final flags byte at 0x1999CB is counted as stream)."
+  },
+  {
+   "claim": "Unreferenced SLIDE8K block at icons_to_strings.bin offset 0x3EDC2 (ROM 0x983B3A-0x987A32): valid German decode, zero pointers to it anywhere; likely superseded German DB revision",
+   "verdict": "CONFIRMED",
+   "evidence": "Valid SLIDE8K header at ROM offset 0x183B3A; decodes to exactly 36,864 bytes of German help text; stream end 0x187A33 -> last byte = address 0x987A32 as claimed. Pointer search for 0x983B3A as LE32, LE24 and BE32 across v7/v9/v10 program ROMs, table_data, custom_data ic19, subprogram v142, and hdae5000 (wider than the claim's search set): zero hits. New supporting evidence for the 'superseded revision' hypothesis: its first 0x55E0 decompressed bytes are byte-identical to the referenced German DB (0x18BB3A), after which they diverge (13,602 differing bytes)."
+  },
+  {
+   "claim": "kn5000_subprogram_v142_compressed.rom decompresses byte-exactly to v142.rom consuming 93203/93203; size field is 24-bit BE (contradicting Makefile/docs 'LE'); zero build coverage; recommend --reference compress rule since the payload is already source-built",
+   "verdict": "CONFIRMED",
+   "evidence": "My decompressor run: output 196,608 bytes, cmp-identical to original_ROMs/kn5000_subprogram_v142.rom; entire 93,203-byte file consumed (11 header + 93,192 payload). BE proven twice: size bytes 03 00 00 -> 196,608 only under BE (LE would be 3), AND the firmware's own header parse in LABEL_EF40C5 computes size = byte@hdr+8 <<16 | byte@hdr+9 <<8 | byte@hdr+10. The 'LE' contradiction is real: Makefile:711 and table_data/kn5000_table_data.s:211, 342, 3158 all say little-endian. grep for the _compressed file in Makefile and scripts/build/compare_roms.py: zero references; compare_roms.py output (ran it) has no v14x_compressed section, while the uncompressed payload IS covered ('subcpu payload v142: 100.00%'). HANDLE_UPDATE_FILE_TYPE_ID_007h confirmed at 0xEF47FA (ASL line 142133; symbols/maincpu_symbols_reference.txt:12787), erasing/targeting 0x3E0000 and 0x3F0000."
+  },
+  {
+   "claim": "kn5000_subprogram_v141_compressed.rom: compressed==f(uncompressed) verified (byte-exact to v141.rom, 93181/93181 consumed); no build coverage; v141.rom itself not source-built; document-as-table for now",
+   "verdict": "CONFIRMED",
+   "evidence": "My decompressor run: output 196,608 bytes, cmp-identical to original_ROMs/kn5000_subprogram_v141.rom; entire 93,181-byte file consumed. grep Makefile + compare_roms.py: zero references. No v141 source tree exists (`ls v141` -> No such file or directory; repo has v7/v9/v10/v142 trees only) and compare_roms.py (ran) has no v141 section \u2014 so kn5000_subprogram_v141.rom is indeed not source-built."
+  },
+  {
+   "claim": "kn5000_subprogram_v140_compressed.rom: valid SLIDE4K, decompresses cleanly to exactly 196608 bytes consuming 93124/93124; no decompressed v140 exists anywhere; unreferenced by build; recommend committing the decompressed payload as a preservation artifact",
+   "verdict": "CONFIRMED",
+   "evidence": "My decompressor run: valid SLIDE4K header (53 4c 49 44 45 34 4b 00 03 00 00), output exactly 196,608 bytes, entire 93,124-byte file consumed (11 header + 93,113 payload). No kn5000_subprogram_v140.rom exists in original_ROMs/ or anywhere in the repo (only the _compressed file); grep Makefile + compare_roms.py: zero references. The decompressed v140 payload is currently recoverable only from this file, so the minimal preservation recommendation is sound."
+  },
+  {
+   "claim": "Coverage completeness: nothing compressed was missed by the claim set (independent SLIDE + zlib/DEFLATE/gzip scan)",
+   "verdict": "CONFIRMED",
+   "evidence": "Scanned 10,337 files (all of original_ROMs/ recursively plus every binary in table_data/, subcpu/, hdae5000/, custom_data/, v7/, v9/, v10/, dsp/, test_ROMs/). No SLIDE4K/SLIDE8K block exists beyond the claimed set. All zlib/gzip candidates were dismissed on inspection: (a) v10/v9 program ROM offset 0x198B6E and v7 offset 0x198761 \u2014 bytes 68 05 41 ff ff 00 00 form a coincidental valid zlib header + single stored-final deflate block (LEN=0xFFFF/NLEN=0x0000 complement coincidence); inflate emits 65,529 bytes then fails the adler32 check; 'output' is just the raw following ROM bytes (entropy 6.775, no strings) \u2014 false positive, not compressed data; (b) hdae5000/hd-techmanager5000/HDTMD120.W02 @0x7DEE0 \u2014 gzip FLG byte 0x2C has a reserved bit set, invalid gzip, false positive; (c) 'SLIDE' strings at table_data 0x1FA150 and program-ROM 0x32/0x188 are the dispatcher's magic-compare string constants, correctly excluded. Extra SLIDE4K hits inside table_data/includes/icons_to_strings.bin at file offsets >=0x7F2D8 are unused residue: the file is 742,024 B but only 0x7F2D8 bytes are incbin'd, and its 221,104-byte tail duplicates the ROM demo-preset region.",
+   "correction": "Items the CLAIMS missed (repo hygiene, not compression coverage): (1) original_ROMs/demo_preset_compressed_refs/ \u2014 19 git-tracked files referenced by nothing (grep Makefile/scripts/docs: zero); they are MISFRAMED ROM slices starting at block_start+14 (built on the docs' wrong 14-byte-header model; e.g. refs 00 = ROM slice @0x1C405E, 22,180 B, overrunning 1,770 B into preset 01; refs 18 = @0xE000E, 33,842 B, far past the stream end) \u2014 stale artifacts that should be documented or removed, and must not be confused with the authoritative *_compressed.original.bin refs. (2) The non-stream tails inside claimed ranges: preset 17 tail 0x9F5676-0x9F94CB (~15.9KB, high-entropy, unexplained) and preset 18 tail (75 B) \u2014 preserved byte-exactly but deserving an issue/documentation. (3) Doc errors worth fixing along with the claimed Makefile/.s 'LE' fix: ../kn5000-docs/lzss-compression.md's '14-byte header' and '~32,910 decompressed' for the 0x8E0000 block (actual: 11-byte header, 38,144 bytes)."
+  },
+  {
+   "claim": "gap: v142/subcpu/subcpu_data_tables.s contains a ~10.5 KB raw/garbage-decoded constant pool (0x00F7E6-0x012114, source lines ~612-1915) that lies entirely BEFORE the scan's ZONE A (lines ~1976-4870 = the 0x012176-0x014738 Audio_DSP_StateTable_Packed pool, 9636 B) and is inventoried by neither ZONE A nor ZONE B",
+   "verdict": "REFUTED",
+   "evidence": "Lines 1000-1093 are monotone curve tables mis-decoded as instructions: runs of 'swi 5/swi 6/swi 7', 'jrl nc,0x8180', 'add d,(xhl)', 'adc bc,(xwa)', 'resm 1,(xwa)', interleaved with .byte ramps and .ascii mush (.ascii \"fjmqux|\", .ascii \"!\\\"#$%&'()*+...\"). No label exists between Voice_Portamento_Rate_Table (line ~611) and ToneGen_Voice_Param_Template (line 1916). The region's own banner comment (line 563) admits: '0x00F787-0x012158 NOT one table: a 10 KiB mixed data segment... should eventually be split. Listed in UNCERTAIN.' The scan's ZONE A size (9636 B) and split point (0x13318) match only the 0x012176+ pool.",
+   "correction": "Add a third v142 item: subcpu_data_tables.s ZONE A0, 0x00F7E6-0x012114 (~10,543 B, lines ~612-1915), same treatment as ZONE A (re-emit as tables, kill garbage decodes); sub-block addresses are already enumerated in the banner comment at lines 563-574 (0x00FF00/0x00FF80, 0x00FCE4..0x00FFE4 stride-0x100, 0x010764.. stride-0x200, hot object 0x0118FE with 38 refs)."
+  },
+  {
+   "claim": "gap: the v7/v9/v10 maincpu .s trees were never audited for inline raw .byte content \u2014 no scan item covers or clears them (unlike table_data, which got an explicit 'clean' audit item); they hold 460,745 (v7) / 108,062 (v9) / 108,059 (v10) bytes emitted as .byte",
+   "verdict": "REFUTED",
+   "evidence": "Counted per-tree with a directive parser. Concrete undocumented examples: v7/maincpu/audio/sound_editor_ui.s:1456 'SeMenu_CopyWriteUpdate_Data:' = 12,139 bytes whose content is CODE (starts 0xbf,0xe8,0x37 = the documented lda xsp,(xsp+d) encoding-quirk byte pattern) hidden under a _Data label; v10+v9 ui_widgets/widget_dispatch.s:6102 = 957-line anonymous .byte run (~7,656 B) trailing CharMap_ValueData_B; v7/v9/v10 audio/sound_data_mallet_orch_perc.s header states 'Format: Raw data (structure not yet fully decoded)' (7,296 B per tree). The scan's only maincpu items concern includes/generated/*.bin and images.",
+   "correction": "Add a maincpu-inline category: audit the ~676 KB of .byte-emitted content in v7/v9/v10 .s files, separating (a) labeled-but-undecoded data tables, (b) code-as-bytes under _Data labels (disassemble), (c) v7-only conversion residue. v7 is the dominant tree (4.3x v9/v10)."
+  },
+  {
+   "claim": "gap: original_ROMs/demo_preset_compressed_refs/ \u2014 19 tracked binaries (252,383 B total) that are NOT byte-identical to the demo_preset_NN_compressed.original.bin files (every file differs at offset 0; e.g. preset 00: 22,180 vs 20,412 B; preset 17: 3,497 vs 19,314 B) and are referenced by no Makefile rule, script, or source",
+   "verdict": "REFUTED",
+   "evidence": "filecmp over all 19 pairs: none identical. grep -r 'compressed_refs' over the whole repo (excluding archive/cruft): zero hits. The ref stream begins at original[3:] (original 'fd 5a ee f0 01 01 08...' vs ref 'f0 01 01 08...') then diverges in length \u2014 a different framing/extraction from commit eff49a0 ('Decompress all 19 demo song preset SLIDE4K blocks'). The scan's demo-preset items name only the .original.bin files and claim the flow 'verified OK', silently passing over this directory.",
+   "correction": "Inventory as orphaned extraction artifacts; either delete per Clean Working Directory policy or document why a second, differently-framed copy of each compressed stream is kept."
+  },
+  {
+   "claim": "gap: hdae5000/includes/ holds 5 orphaned tracked binaries \u2014 code_280020_28030d.bin (750 B), code_2803c2_28f542.bin (61,825 B), code_28f90c_2953e1.bin (23,254 B), code_295642_2971a2.bin (7,009 B), code_2971b7_29ae9e.bin (15,592 B), 108,430 B total \u2014 superseded leftovers of the now-disassembled 0x280020-0x29AE9E region, referenced by no .s file",
+   "verdict": "REFUTED",
+   "evidence": "git ls-files shows all 5 tracked; grep over all .s/.py/Makefile/md finds no references (only DISASSEMBLY_PLAN.md mentions two obsolete predecessor names, code_280020_28f575.bin and code_295642_2fffff.bin, which no longer exist). The build's only hdae5000 incbin is code_29af2d_2fffff.bin (4 slices in hdae5000_data_tables.s). The scan inventoried the analogous table_data orphans (bootcode_debug.bin etc.) but missed these.",
+   "correction": "Add to the orphaned-bins item alongside table_data's: delete or move to analysis/; do not count as residual ROM content."
+  },
+  {
+   "claim": "gap: original_ROMs/kn5000_subprogram_v141.rom \u2014 the uncompressed v1.41 subcpu payload (196,608 B) \u2014 has NO source tree (repo has only v142/subcpu) and NO compare_roms.py coverage, and was never inventoried as an artifact (only its compressed sibling got an item)",
+   "verdict": "REFUTED",
+   "evidence": "compare_roms.py ROMS list (lines 12-19) covers v10/v9/v7 maincpu, v142 payload, boot, hdae5000, table data, custom data \u2014 no v141 entry; no v141/ directory exists; grep for 'subprogram_v141' in Makefile and compare_roms.py: zero hits. The scan's v141_compressed item says round-trip 'requires first source-building the v141 payload' but never lists the uncompressed ROM image itself, which is the reference that its 'compressed==f(uncompressed) verified' claim depends on.",
+   "correction": "Add an item: kn5000_subprogram_v141.rom, content_type 'uncompressed subcpu payload v1.41, no source tree, no build coverage'; recommended action: v141 conversion (diff against v142 source, likely small deltas) or at minimum a compare rule documenting it as unbuilt."
+  },
+  {
+   "claim": "gap: v7/maincpu/audio/note_voice_mapping_v9_patch.bin and v9/maincpu/audio/note_voice_mapping_v9_patch.bin (2,900 B each) are tracked but referenced by no .s, script, or Makefile rule \u2014 orphans the scan never listed",
+   "verdict": "REFUTED",
+   "evidence": "Both absent from the 281-path incbin list; grep -r 'v9_patch' over scripts/, Makefile, v7/, v9/ returns nothing. Not mentioned in any scan item.",
+   "correction": "Inventory as orphans; delete or wire into the v7/v9 note_voice_mapping conversion they were presumably made for."
+  },
+  {
+   "claim": "gap: hdae5000/hd-techmanager5000/ contains ~5.5 MB of tracked, un-inventoried PC-side binaries \u2014 HDTMD120.EXE (1,454,080 B), HDTMD120.W02 (1,348,445 B), setup.EXE (1,454,080 B), setup.W02 (1,211,669 B), ppkn50.dll (76,800 B, partially documented by the adjacent ppkn50.disasm) \u2014 the scan never mentions this directory",
+   "verdict": "REFUTED",
+   "evidence": "git ls-files confirms all tracked; no scan item names hd-techmanager5000. These are the HD TechManager 5000 Windows installer volumes and its KN5000 plugin DLL \u2014 reference material for the HDAE5000 protocol, not ROM content, but squarely 'raw binary content in the repo'.",
+   "correction": "Add a leave-with-documentation item: external PC software preserved for HDAE5000 protocol RE; note ppkn50.disasm as its existing documentation."
+  },
+  {
+   "claim": "gap: hdae5000/images/ holds 6 tracked extraction-artifact binaries (HDAE5000_FilePanel/Hands/Logo 76,800 B each, Icon 784 B, Palette/Palette_0x65dce 1,024 B each) that are not build inputs (no incbin references them) and were not inventoried \u2014 only Logo is mentioned in passing as a dedup candidate",
+   "verdict": "REFUTED",
+   "evidence": "None of the 6 appear in the incbin list; the hdae5000 build's pixel data currently comes from code_29af2d_2fffff.bin slices. The scan's own Icon-extraction recommendation ('fix Icon extraction to 756 B') even implies HDAE5000_Icon.bin (784 B) is wrong-sized, yet the file itself is absent from the inventory.",
+   "correction": "List all 6 as gallery/extraction artifacts; fix Icon to 756 B per the scan's own finding; note FilePanel/Hands as candidates for the same verified-byte-identical dedup proposed for Logo."
+  },
+  {
+   "claim": "gap: original_ROMs/table_data_bootcode.bin (19,224 B) + its .unidasm \u2014 a tracked extraction of the table_data bootloader region \u2014 was not inventoried",
+   "verdict": "REFUTED",
+   "evidence": "Tracked in git, listed in no scan item. Its content duplicates the 0x9FB000+ bootcode region whose residual work the scan correctly maps to issue kn5000-m1j, so this is a reference artifact, not new ROM content \u2014 but a completeness inventory should have said so.",
+   "correction": "One-line item: reference extraction for the m1j bootcode work; keep or fold into analysis/."
+  },
+  {
+   "claim": "gap: dsp/analysis/data/typewalk/kn5000_dsp1_upload.bin (38,122 B) is a raw binary in dsp/, contradicting the scan's clean-sweep claim that dsp/ has 'nothing residual'",
+   "verdict": "REFUTED",
+   "evidence": "The file is tracked at dsp/analysis/data/typewalk/ alongside kn5000_dsp1_upload.txt and TYPE_MAP.md, which document it (EFFECT-CHIP-MAP_findings.md uses the .txt as 'the machine's own walk'). It is an emulator-captured DSP1 upload image \u2014 analysis provenance, not ROM content \u2014 but it is raw binary content the sweep asserted did not exist. Minor severity.",
+   "correction": "Amend the clean-sweep item: dsp/ contains one raw capture binary (typewalk upload image), documented by its sibling .txt/TYPE_MAP.md."
+  },
+  {
+   "claim": "inventory complete with respect to address-range coverage: no byte of kn5000_table_data (0x800000-0x9FFFFF), kn5000_custom_data (0x300000-0x3FFFFF), or hdae5000 (0x280000-0x2FFFFF) is covered by neither real source nor a listed blob",
+   "verdict": "CONFIRMED",
+   "evidence": "Ran scripts/build/compare_roms.py: 100.00% similarity for all 8 built ROMs (LLVM and legacy ASL). custom_data/kn5000_custom_data.s accounts every gap byte as documented .space/.zero fills (8 KB sector gaps, 36 KB+60 KB+176 KB erased, 77,824 B zeroed wallpaper area). table_data's 54 incbins + converted source match the scan's blob list exactly (independent grep, 281 unique paths repo-wide); its inline raw content totals just 177 .byte-emitted bytes, consistent with the scan's 60-byte finding plus small documented tables. hdae5000's 4 slice incbins of code_29af2d_2fffff.bin (offsets 54637/127609/306849/386437) tile the file with the converted regions exactly to its 413,907-byte end."
+  },
+  {
+   "claim": "inventory complete with respect to remaining original_ROMs/ artifacts: kn5000_table_data_rom_even.ic3/odd.ic1, part_a.rom/part_b.rom, and the .unidasm files hide nothing new",
+   "verdict": "CONFIRMED",
+   "evidence": "even.ic3/odd.ic1 verified programmatically as the 16-bit word interleave (even-first) of kn5000_table_data.rom \u2014 physical two-chip dumps of an already-sourced ROM (note: NOT byte-interleave; byte-level and half-split reconstructions both fail). part_a.rom (256 B) + part_b.rom (196,352 B) at repo root are gitignored scratch, verified byte-identical to kn5000_subprogram_v142.rom split at 0x100. v7/v9 program ROMs have their source trees; v140/v141/v142_compressed have scan items; demo .original.bin files are compare-covered. The only genuinely unaccounted original_ROMs artifacts are v141.rom and table_data_bootcode.bin, reported as separate gaps above."
+  }
+ ],
+ "scan_agent_failures": 0
+}
