@@ -206,7 +206,7 @@ FeatureDemo_FileEntry6:
 
 Compressed_Preset_Data_LZSS:
 	; LZSS-compressed data (SLIDE4K format)
-	; Decompresses to ~33KB of parameter-like data (MIDI-range values 0-127).
+	; Decompresses to 38,144 bytes of parameter-like data (MIDI-range values 0-127).
 	; This does NOT appear to be the SubCPU executable (~192KB).
 	;
 	; NOTE: The SubCPU executable payload transfer during boot is complex:
@@ -222,7 +222,8 @@ Compressed_Preset_Data_LZSS:
 	;   includes/demo_presets/demo_preset_18.bin            - decompressed source (38,144 bytes)
 	;   includes/demo_presets/demo_preset_18_compressed.bin - LZSS payload (27,956 bytes)
 	;
-	; The header is 11 bytes: 8-byte "SLIDE4K\0" magic + 24-bit LE uncompressed size.
+	; The header is 11 bytes: 8-byte "SLIDE4K\0" magic + 24-bit BIG-ENDIAN uncompressed
+	; size (evidence: the v142 SubCPU update image's size field 03 00 00 = 0x030000 = 196,608).
 	; It used to be written here as 14 literal bytes ending 0x7D, 0x5A, 0xEE -- but those
 	; three bytes are the first flag byte and first two payload bytes of the LZSS stream,
 	; not header fields. Verified against the firmware's own decompressor running in MAME.

@@ -953,7 +953,7 @@ The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. Wh
 
 | ROM | Label | Address Range | Compressed | Decompressed | Content |
 |-----|-------|---------------|------------|--------------|---------|
-| table_data | `Compressed_Preset_Data_LZSS` | `0x08E0000` - `0x08E6D40` | 27,967 bytes | ~32,910 bytes | Parameter-like data |
+| table_data | `Compressed_Preset_Data_LZSS` | `0x08E0000` - `0x08E6D3E` | 27,967 bytes (11B header + 27,956B payload) | 38,144 bytes (0x9500) | Parameter-like data (Feature Demo preset, `DemoSongPreset18`) |
 
 **✅ RESOLVED:** The 0x3E0000 address mystery is now understood:
 - Address `0x3E0000` = **Custom Data Flash** (firmware update staging area)
@@ -963,7 +963,9 @@ The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. Wh
 
 See `../kn5000-docs/lzss-compression.md` for full details.
 
-**Note:** The compressed data at 0x8E0000 decompresses to ~33KB of parameter data, NOT the ~192KB Sub CPU executable. The Sub CPU executable is stored uncompressed at Table Data ROM offset 0x30000 (address 0x830000).
+**Note:** The compressed data at 0x8E0000 decompresses to 38,144 bytes of parameter data (the Feature Demo preset), NOT the ~192KB Sub CPU executable.
+
+**The Sub CPU executable is NOT at 0x830000 either.** The region at Table Data ROM offset 0x30000 (address 0x830000) is the tone database: `SubCPU_Send_Payload` bulk-copies 0x830000-0x87FFFF to Sub-CPU RAM 0x50000-0x9FFFF as five 64KB E1 transfers (`v10/maincpu/kn5000_v10_program.s:326-345`) — that is data space, not the code area at Sub-CPU 0x400+. No byte of the Sub CPU executable (`kn5000_subprogram_v142.rom`) appears anywhere in the table_data or custom_data images we hold (verified by substring search). How the Sub CPU code payload reaches the Sub CPU at runtime is still unresolved; the executable is known only from its own ROM dump and from the compressed update-disc image (which lands at Custom Data Flash 0x3E0000 only after a File Type 007 update).
 
 **Decompression Routines (all in table_data ROM):**
 
@@ -978,7 +980,7 @@ See `../kn5000-docs/lzss-compression.md` for full details.
 **SLIDE4K Format Parameters:**
 - Window size: 4KB (4,096 bytes)
 - Offset bits: 12 (0x000 - 0xFFF)
-- Length bits: 4 (length + 2, so 2-17 bytes)
+- Length bits: 4 (length + 3, so 3-18 bytes)
 - Window pre-fill: First 0xFEE bytes set to 0x00
 
 ### MAME Driver Development

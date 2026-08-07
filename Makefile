@@ -708,8 +708,10 @@ P2BIN=$(ASL_PATH)/p2bin
 # Demo song presets (19 SLIDE4K-compressed blocks)
 # ----------------------------------------------------------------------------
 # Entries 0-17 live at 0x9C4050-0x9F94CB, entry 18 (the Feature Presentation) at
-# 0x8E0000. Each block is an 8-byte "SLIDE4K\0" magic + a 24-bit LE uncompressed
-# size, followed by the LZSS payload.
+# 0x8E0000. Each block is an 8-byte "SLIDE4K\0" magic + a 24-bit BIG-ENDIAN
+# uncompressed size, followed by the LZSS payload. (Endianness evidence: the
+# v142 Sub-CPU update image's size field is 03 00 00 = 0x030000 = 196,608; the
+# in-ROM demo blocks all have endian-symmetric size fields like 00 95 00.)
 #
 # CHECKED-IN SOURCE: midi/*.mid + sidecar/*.yaml
 #   .mid   the musical content -- editable in any DAW
