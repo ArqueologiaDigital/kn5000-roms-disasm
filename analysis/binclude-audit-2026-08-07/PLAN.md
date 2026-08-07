@@ -143,25 +143,121 @@ comments, orphaned includes).
   model tables; help index/strings; TG config; tone-database directory +
   offset table; tone records; preset banks; wallpaper/icon tables; hkst/gap
   trivia.
-- **Wave 3a — DSP-related only** (split out at Felipe's request, 2026-08-07,
-  run first): subcpu ZONE A0 (0x00F7E6-0x012114 constant pool), ZONE A
-  (0x012195-0x014738 incl. the exponential pitch table @0x13318), ZONE B
-  (0x0147B3-0x01E17E — the Eff9/EffA DSP effect-parameter grammar, 2 agents:
-  structural carve, then semantic annotation cross-referenced against the
-  MAME-side DSP findings in ~/compartilhado/kn7000_mame).
-- **Wave 3b — the rest of old Wave 3** (awaits go-ahead): hdae5000
-  string-table re-decode fix; slice re-splits + splash/palette extraction +
-  gallery; init-data pointer symbolization; subcpu boot data split + the
-  `.fill` shrink.
-- **Wave 4 — v7 tree** (~10 agents): v7_data tables; v7_fix small batch;
-  v7_fix hard three (one each); v7_block in size-sorted batches; transplant
-  re-conversion; manifest prune. The 703 KB C-parameterization is scoped in
-  this wave but may spill into a wave of its own.
-- **Wave 5 — sweep**: the maincpu inline-`.byte` audit (460 KB v7 / 108 KB
-  v9), orphan cleanup, issue-closure audit, final completeness re-audit
-  against `findings.json`.
+- **Wave 3a — DSP-related only** — ✅ **DONE 2026-08-07** (commits `c5816ae`,
+  `09a82ec`, `85ecca2`, docs `1bd4690`). Zones A0/A/B carved and annotated.
+  ⚠ Two claims this plan carried were REFUTED by the work: there is no
+  "exponential pitch table @0x13318" (it is `DSP_MixerGain_Curve`), and the
+  0x00FF00/0x00FF80 "two 128-byte tables" banner claim is retracted.
 
-Estimated total: ~40 worker packages across 6 waves. Every wave ends with the
-build green and the tree committable; any package can be dropped or deferred
-without blocking the others (exceptions: Wave 0's dispatch tables gate the
-FDC package; SLIDE8K tooling gates the help-DB package).
+---
+
+# Remaining waves — resumable plan (saved 2026-08-07)
+
+Everything below is **not started**. Waves 0, 1, 2 and 3a are complete; the
+build gate has held at 100.00% × 15 sections (the "×16" in one Wave-2 ledger
+row was a miscount) after every one of the 24 packages landed so far.
+
+**How to restart.** Read `WAVE-STATUS.md` for what landed, then launch one
+wave as a Workflow with the same shape every previous wave used, because it
+has worked 24/24 times:
+
+1. N read-only worker agents draft in parallel into a scratch dir, each with a
+   **mandatory self-check**: assemble the fragment standalone and byte-compare
+   against the original ROM slice, quoting commands and output. A fragment that
+   does not match returns `blocked`/`partial` with the diff — never silently.
+2. One **integration manager** — the only agent allowed to touch the repo —
+   applies packages one at a time, runs `make all` + `compare_roms.py` after
+   each, commits on 100% and surgically reverts (hand edits, never
+   `git checkout/reset/stash`) on anything less.
+3. Manager appends a ledger row to `WAVE-STATUS.md`.
+
+Non-negotiables for every wave: blob files that `archive/asl/` bincludes stay
+byte-identical on disk (slice with `.incbin "file", offset, length` instead);
+symbols reference files are UPPERCASE and address-sorted; disasm commits carry
+the `LLVM: tlcs900_backend @ ...` line the hook enforces; kn5000-docs commits
+need a passing jekyll build and must leave the pre-existing uncommitted
+`flowcharts/` edits alone; nothing is ever pushed.
+
+## Wave 3b — hdae5000 + subcpu boot (~7 packages)
+
+| package | scope |
+|---|---|
+| `hdae-strings` | re-decode the string table ~0x2A7736–0x2A8499, currently **mis-decoded as instructions** in `hdae5000_data_tables.s` (~lines 33150–33301: runs of `nop` are the tables' 0x00 padding, plus junk like `ld xiy,0x5443454c`) |
+| `hdae-slices` | re-split the four `code_29af2d_2fffff.bin` slices at the real boundaries 0x2A858E / 0x2A898E / 0x2BB58E / 0x2BB98E / 0x2CE58E / 0x2CE98E / 0x2E158E / 0x2E198E / 0x2E61CE; retire the false `HDAE5000_Font_Data` label |
+| `hdae-splash` | extract the **previously unidentified 320×240 boot-splash** at 0x2E61CE + its palette; add to `convert_images.py` IMAGE_METADATA and the gallery |
+| `hdae-initdata` | symbolize the init-data slice at 0x2F94B2: 69 code-target pointers + 119 name-string pointers bound to the re-decoded string labels |
+| `subcpu-bootdata` | split `subcpu_boot_data_8000.bin` (656 B) ≥5 ways — code references ≥6 addresses inside it; emit the 8-entry table as symbolic `.long` |
+| `subcpu-fill` | replace 98,304 lines of `.byte 0xFF` in `kn5000_subcpu_boot.s` with one `.fill 0x18000,1,0xff` (≈98 K-line source shrink, zero byte risk) |
+| `hdae-docs` | fold the findings into `hdae5000.md` (the "code_" blob is graphics, not code) |
+
+## Wave 4 — the v7 tree (~10 packages, the largest wave)
+
+`extract_v7_bins.py` dd-slices the v7 ROM at build time; every slice is an
+undocumented binary behind a `generated/` path. Strategy throughout: **diff
+against the v9 symbolic sibling** — most differ only in pointer constants that
+symbolic assembly absorbs for free (`v7_source_migration.py` proved this).
+
+| package | scope |
+|---|---|
+| `v7-data` | 16 `v7_data_*` pointer/string tables, 17 KB — trivial, symbolic labels resolve the deltas |
+| `v7-fix-small` | the 21 small `v7_fix_*` files |
+| `v7-fix-tuning` | `v7_fix_tuningsystem_handler_table` (9.3 KB) — hard, one agent |
+| `v7-fix-colorblit` | `v7_fix_colorblit2_largecodeblock` (4.1 KB) — hard, one agent |
+| `v7-fix-toshi` | `v7_fix_initializetoshi` (3.4 KB) — hard, one agent |
+| `v7-block-*` | **139 files** spanning 0xED3448–0xFF242A, in size-sorted batches (the audit scanner said 23; the verifier corrected it) |
+| `v7-transplant` | resume the `v7_source_migration.py`-style re-conversion of the 225 referenced transplants; prune `transplant_manifest.txt` to those 225 (40× smaller audit surface) |
+| `v7-cdata` | **703 KB of raw ROM slice silently replacing C-compile output** (23 shared-named bins: `naka_*`, `tonegen_param_table`, `sepaout_config`, …). Fix: parameterize the C sources per firmware version so compilation alone reproduces the v7 bytes, then delete the overwrite. ⚠ The >50 %-similarity heuristic in the build is a **silent-corruption risk** — flag it. Largest single item in the plan; may need its own wave |
+
+## Wave 5 — sweep and close-out (~6 packages)
+
+- **maincpu inline-`.byte` audit** — ~676 KB never classified: 460 KB in v7,
+  108 KB in v9, the rest v10. Separate (a) labelled-but-undecoded tables,
+  (b) code-as-bytes under `_Data` labels (disassemble), (c) v7 conversion residue.
+- **maincpu effect/name tables** — the effect-name table at maincpu 0x033568
+  and the parameter-name table at 0x0324D5 are read from ROM by tooling but
+  **not carved in source**; Wave 3a's docs quote them. Carve and label them.
+- **orphan cleanup** — 9 `table_data/includes/bootcode_*` bins (62 KB),
+  5 hdae5000 `code_*` bins, `demo_preset_compressed_refs/` (19 misframed
+  slices), 2 `note_voice_mapping_v9_patch.bin`, `table_data_bootcode.bin`:
+  delete or move to `analysis/`.
+- **`icons_to_strings.bin` dead tail** — bytes beyond file offset 0x7F2D8
+  duplicate the now-source-built preset region.
+- **issue-closure audit** — the five `e0xxxx` "Document binary include" issues;
+  `kn5000-1ru` UNCERTAIN entries for the now-carved subcpu zones.
+- **final completeness re-audit** against `findings.json` — plus the deferred
+  backlog below.
+
+## Deferred backlog (accumulated across waves 0–3a)
+
+Small, verified, independent items. Any wave can absorb a few; none blocks
+anything.
+
+**Renames / symbols**
+- `FDC_STATUS_HANDLER` is really the seek handler (rename + docs).
+- maincpu `EffectMode_*` → Stylist; `Pmem_*` / `Composer_*` per Wave 2's
+  identifications.
+- `maincpu_symbols_reference.txt` is stale (`FDC_InitSequence_*` et al).
+- 8 zone-A0 addresses carry documentation-only aliases from the 2026-07-26
+  naming pass that now duplicate real labels.
+
+**Code**
+- `BootRegLib` v2 factoring + the maincpu 0xEF17F4 copy.
+- Hunt the computed consumer of effect-metadata bases 0x143AD / 0x14411 / 0x145A1.
+- `TOOLCHAIN_VERSION` vs the actual llvm-mc in use.
+
+**Assets / tooling**
+- Run the new `extract_ui_bitmaps.py` / `extract_icons.py` galleries;
+  `BitmapNtedt0k` orientation fix.
+- `extract_fonts.py` upper-code-page rendering; font descriptor +4/+6 naming.
+
+**Hardware questions for Felipe**
+- ★ **SLOW ATTACKER on the real KN5000** (effect 37): it is one of the twelve
+  stub effects — a program byte-identical to NO OPERATION — yet it is the only
+  one carrying live parameter values (THRESHOLD / ATTACK RATE / RELEASE RATE /
+  VOLUME / REV SEND). Prediction: indistinguishable from no effect. If it
+  audibly does something, the algorithm-selection path substitutes a program
+  the algorithm table does not name.
+- The v1.41 subcpu source tree (issue `kn5000-v41`) is unblocked whenever it is
+  wanted: both artifacts verify, only the tree is missing.
+
+Estimated remaining: ~23 worker packages across 3 waves, plus the backlog.
