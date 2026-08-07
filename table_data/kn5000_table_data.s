@@ -43,7 +43,7 @@
 ; 0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17)
 ; 0x9FA000-0x9FA14F  File Identifier Strings (floppy disk format IDs)
 ; 0x9FA150-0x9FB495  Boot Screen Bitmaps (1bpp: "Flash Memory Update", etc.)
-; 0x9FB496-0x9FB4D1  Boot Initialization Data Tables
+; 0x9FB496-0x9FB4D1  FDC Bootloader Dispatch Offset Tables
 ; 0x9FB4D2-0x9FB4E7  Boot Data (bit mask table, init params)
 ; 0x9FB4E8-0x9FFFFF  First-Stage Bootloader Code + IVT
 ;
@@ -511,12 +511,108 @@ Bitmap_1bit_Illegal_Disk:	; 9FAFC6
 Bitmap_1bit_Turn_On_AGAIN:	; 9FB22E
 	.incbin "../v10/maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
-; Boot initialization data tables (0x9FB496 - 0x9FB4D1)
-; TODO: determine purpose of these tables
-	.byte 0x00, 0x00, 0x15, 0x00, 0x2b, 0x00, 0x41, 0x00, 0x57, 0x00, 0x6c, 0x00, 0x00, 0x00, 0x0e, 0x00
-	.byte 0x0e, 0x00, 0x0e, 0x00, 0x0e, 0x00, 0x0e, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x0b, 0x00
-	.byte 0x08, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x05, 0x00, 0x0a, 0x00, 0x0f, 0x00, 0x14, 0x00, 0x19, 0x00
-	.byte 0x1e, 0x00, 0x23, 0x00, 0x28, 0x00, 0x2d, 0x00, 0x32, 0x00, 0x37, 0x00
+; =============================================================================
+; FDC Bootloader Dispatch Offset Tables (0x9FB496 - 0x9FB4D1)
+; Boot-time alias: 0xFFB496 - 0xFFB4D1 (the CPU sees this ROM at
+; 0xE00000-0xFFFFFF while the bootloader runs, so the consuming code
+; references these tables as 0xFFB4xx).
+;
+; Three .short offset tables driving the `JP T, XIX+WA` dispatches of the
+; first-stage bootloader's FDC driver -- a compact port of the maincpu FDC
+; driver (v10/maincpu/storage/fdc_routines.s), which carries byte-identical
+; copies of the first two tables at 0xEA98A6/0xEA98B2 and its own handler
+; table FDC_HANDLER_OFFSETS at 0xEA98CA. Each dispatch site doubles the
+; index, fetches `LD WA, (XIX+WA)` with XIX = table address, then executes
+; `JP T, XIX+WA` with XIX = the code base noted per table. All bases and
+; targets lie in bootloader code still held as .incbin slices
+; (bootcode_flash_handlers.bin and the Boot_Delay slice), so the entries
+; stay numeric; each comment gives the boot-time target address plus a
+; proposed semantic name or the maincpu twin's label.
+;
+; RAM state block of the bootloader FDC driver (referenced below):
+;   0x0C44 busy latch (0xA5 executing, 0x5A done)
+;   0x0C52 current command status         0x0C54 saved previous status
+;   0x0C6E command word (0-11)            0x0C70 drive number
+;   0x0C9A media-format id                0x0C9C media-type code
+; =============================================================================
+
+; -----------------------------------------------------------------------------
+; FDC_DiskTypeStanza_Offsets - media-type configuration stanza offsets
+; Consumed at 0xFFD98F inside the drive-configuration body of command 0
+; (init, 0xFFD8A5..): index = low nibble of the media-type code (0x0C9C),
+; dispatched for values 0-5; values 6-15 skip the table and run a default
+; stanza at 0xFFDA23 (same body as type 0). Offsets are relative to
+; 0xFFD9A2. Each 21/22-byte stanza stores a media-format id to 0x0C9A,
+; loads data-rate/density bits into QIZH and records a byte through
+; FDC_SaveCommand; the shared tail at 0xFFDA36 submits FDC command
+; (QIZH | 0x0B) via the command-submit entry 0xFFDFC3 and, on success,
+; enables the FDC (0xFFE89B) and recalibrates (0xFFE2D6).
+; -----------------------------------------------------------------------------
+FDC_DiskTypeStanza_Offsets:
+	.short 0x0000	; type 0 -> 0xFFD9A2 (FDC_MediaStanza_Type0): fmt id 0, rate bits 0x00
+	.short 0x0015	; type 1 -> 0xFFD9B7 (FDC_MediaStanza_Type1): fmt id 0, rate bits 0xC0
+	.short 0x002B	; type 2 -> 0xFFD9CD (FDC_MediaStanza_Type2): fmt id 2, rate bits 0x40
+	.short 0x0041	; type 3 -> 0xFFD9E3 (FDC_MediaStanza_Type3): fmt id 3, rate bits 0x40
+	.short 0x0057	; type 4 -> 0xFFD9F9 (FDC_MediaStanza_Type4): fmt id 4, rate bits 0x00
+	.short 0x006C	; type 5 -> 0xFFDA0E (FDC_MediaStanza_Type5): fmt id 5, rate bits 0x00
+
+; -----------------------------------------------------------------------------
+; FDC_ValidateCmd_Offsets - per-command parameter-validation offsets
+; Consumed at 0xFFDA97 inside the command validator (entry 0xFFDA86, called
+; by the command executor 0xFFE944 before dispatching; maincpu twin:
+; FDC_COMMAND_DISPATCHER): index = command word (0x0C6E), 0-11; commands
+; > 11 branch straight into the +0x0E path. Offsets are relative to
+; 0xFFDAAB. Returns L = status (0 = command accepted). Only four distinct
+; validators exist (maincpu twin labels in parentheses):
+;   +0x00 = 0xFFDAAB validate + program format parameters via 0xFFDBAD
+;           (FDC_CMD_HANDLER_BASE -> FDC_SetupFormatParams)
+;   +0x08 = 0xFFDAB3 accept unconditionally, L = 0 (FDC_ReturnZero)
+;   +0x0B = 0xFFDAB6 head/drive precheck via 0xFFDCDF, falls into +0x0E
+;           (FDC_ErrorInvalidDrive -> FDC_Validate_Drive_Head)
+;   +0x0E = 0xFFDAB9 drive number <= 1 check, then per-command track/
+;           sector/head checks (FDC_CheckDriveCount / FDC_ValidateTrack)
+; -----------------------------------------------------------------------------
+FDC_ValidateCmd_Offsets:
+	.short 0x0000	; cmd  0 (init)             -> 0xFFDAAB format-parameter validation
+	.short 0x000E	; cmd  1 (recalibrate)      -> 0xFFDAB9 drive check (chain accepts, L=0)
+	.short 0x000E	; cmd  2 (drive select)     -> 0xFFDAB9 drive + track + head checks
+	.short 0x000E	; cmd  3 (read sector)      -> 0xFFDAB9 drive + track + sector checks
+	.short 0x000E	; cmd  4 (sector transfer)  -> 0xFFDAB9 drive + track + sector checks
+	.short 0x000E	; cmd  5 (format)           -> 0xFFDAB9 drive check + epilogue via 0xFFDCDE
+	.short 0x0008	; cmd  6 (FDC enable)       -> 0xFFDAB3 always accepted
+	.short 0x0008	; cmd  7 (FDC disable)      -> 0xFFDAB3 always accepted
+	.short 0x0008	; cmd  8 (status copy)      -> 0xFFDAB3 always accepted
+	.short 0x000B	; cmd  9 (output control)   -> 0xFFDAB6 head/drive precheck
+	.short 0x0008	; cmd 10 (controller check) -> 0xFFDAB3 always accepted
+	.short 0x000E	; cmd 11 (sense interrupt)  -> 0xFFDAB9 drive check (chain accepts, L=0)
+
+; -----------------------------------------------------------------------------
+; FDC_CommandDispatch_Offsets - per-command execution stub offsets
+; Consumed at 0xFFE9F4 in the command executor (entry 0xFFE944 -- the
+; routine the FDC_Reset/FDC_ReadSectorWrapper comments above refer to as
+; "FDC_Init"): the executor copies the caller's 16-byte parameter block to
+; 0x0C6E/0x0C7E, sets the 0x0C44 busy latch, validates the command via
+; FDC_ValidateCmd_Offsets, then dispatches here; commands > 11 report
+; error 0xFF. Offsets are relative to 0xFFEA07: twelve uniform 5-byte
+; stubs `calr <handler>; jr T, 0xFFEA49` (common exit: 0x0C44 <- 0x5A,
+; HL = sign-extended status from 0x0C52).
+; Maincpu twin: FDC_HANDLER_OFFSETS (0xEA98CA) -> FDC_HANDLER_DISPATCH_BASE
+; (offsets differ there because the maincpu stubs vary in length); the
+; maincpu handler name for each command is given in parentheses.
+; -----------------------------------------------------------------------------
+FDC_CommandDispatch_Offsets:
+	.short 0x0000	; cmd  0 stub 0xFFEA07: calr 0xFFE2BD init/reset sequence        (FDC_InitSequence_Full)
+	.short 0x0005	; cmd  1 stub 0xFFEA0C: calr 0xFFE2D6 recalibrate drive          (FDC_SeekRecalibrate)
+	.short 0x000A	; cmd  2 stub 0xFFEA11: calr 0xFFE31A drive select/reselect      (FDC_STATUS_HANDLER)
+	.short 0x000F	; cmd  3 stub 0xFFEA16: calr 0xFFE368 read sector into buffer    (FDC_CMD_EXEC)
+	.short 0x0014	; cmd  4 stub 0xFFEA1B: calr 0xFFE4AA sector transfer            (FDC_SECTOR_XFER)
+	.short 0x0019	; cmd  5 stub 0xFFEA20: calr 0xFFE5FE format-track sequence      (FDC_MODE_CONFIG)
+	.short 0x001E	; cmd  6 stub 0xFFEA25: calr 0xFFE89B enable, set 3,(0x28)       (FDC_CMD_ENABLE)
+	.short 0x0023	; cmd  7 stub 0xFFEA2A: calr 0xFFE8C5 disable, res 3,(0x28)      (FDC_CMD_DISABLE)
+	.short 0x0028	; cmd  8 stub 0xFFEA2F: calr 0xFFE8CE status copy 0x0C54->0x0C52 (FDC_STATUS_COPY)
+	.short 0x002D	; cmd  9 stub 0xFFEA34: calr 0xFFE8D5 output control per 0x0C72  (FDC_OUTPUT_CTRL)
+	.short 0x0032	; cmd 10 stub 0xFFEA39: calr 0xFFDA6A controller presence check  (FDC_CMD_DISPATCH_SUB)
+	.short 0x0037	; cmd 11 stub 0xFFEA3E: calr 0xFFE8F6 sense interrupt/results    (FDC_INTERRUPT_HANDLER)
 
 
 ; =============================================================================
