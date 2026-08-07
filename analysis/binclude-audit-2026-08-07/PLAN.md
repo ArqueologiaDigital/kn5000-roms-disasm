@@ -25,8 +25,19 @@ base+1).
 | 1 | 5 multilingual HELP databases (En, De, Fr, Es, Malay/Indonesian) | inside `icons_to_strings.bin`, ROM 0x988690–0x9999D2 | **SLIDE8K** — a previously undocumented 8 KB-window LZSS variant; firmware-supported (`SLIDE_Parse_Header` dispatches '4'→4K and '8'→8K init) | raw-bincluded; each decompresses to exactly 0x9000 B |
 | 2 | orphaned 6th SLIDE8K block — a superseded **German** help DB revision, referenced by nothing | ROM 0x983B3A–0x987A32 | SLIDE8K | raw-bincluded dead data; round-trip with the other five |
 | 3 | `original_ROMs/kn5000_subprogram_v142_compressed.rom` (93,203 B) | firmware-update "File Type 007" payload (flashed at custom-data 0x3E0000) | SLIDE4K | decompresses byte-exactly to the **already source-built** v142 payload — only a Makefile compress rule + compare coverage is missing |
-| 4 | `..._v141_compressed.rom` (93,181 B) | same | SLIDE4K | verified = f(v141.rom), but **v141.rom itself has no source tree** — blocked on a v141 conversion |
+| 4 | `..._v141_compressed.rom` (93,181 B) | same | SLIDE4K | verified = f(v141.rom), but **v141.rom itself has no source tree** — tracked as kn5000-v41 |
 | 5 | `..._v140_compressed.rom` (93,124 B) | same | SLIDE4K | **the only copy of v1.40 in existence here** — no decompressed reference anywhere. Preservation action: commit the decompressed 196,608 B payload + verify recompression |
+
+**List 1 item 4 — tracked.** The v141 conversion is now issue **kn5000-v41**
+in `.beads/issues.jsonl`: both v1.41 artifacts are verified internally
+consistent (`kn5000_subprogram_v141_compressed.rom` decompresses byte-exactly
+to `kn5000_subprogram_v141.rom`, and `compress_lzss.py --strict --with-header
+--reference` reproduces the image byte-for-byte), so the only missing piece is
+a `v141/subcpu/` source tree. The issue proposes deriving it from the v142
+source by diff — the raw byte diff (124,033 B in 2,875 runs) opens as 5-byte-stride
+address-constant ripple that symbolic assembly absorbs for free, the same
+situation the maincpu v7/v9/v10 trees already handle — after which the v142
+update-image compress rule (items 3/5, landed in wave 1) is cloned verbatim.
 
 Already done (verified, not just claimed): all 19 demo presets (entries 0–17 +
 Feature Presentation at 0x8E0000) round-trip from `.mid + .yaml` via

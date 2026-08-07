@@ -6,7 +6,15 @@ Usage:
     python scripts/compress_lzss.py <input_file> <output_file> [--reference <ref_compressed>]
 
 This produces LZSS compressed data compatible with the KN5000's SLIDE4K format.
-The output does NOT include the header - that should be added separately in assembly.
+By default the output does NOT include the header - that should be added
+separately in assembly.
+
+With --with-header the output is a whole-file SLIDE4K image: an 11-byte header
+("SLIDE4K\\0" magic + 24-bit BIG-endian decompressed size) followed by the
+stream. This is the firmware-update payload framing ("Program DATA FILE PCK" /
+File Type 007, e.g. original_ROMs/kn5000_subprogram_v142_compressed.rom); in
+that mode a --reference file is expected to carry the same 11-byte header,
+which is validated and stripped before decision replay.
 
 If a reference compressed file is provided, the compressor will attempt to match
 the original compression decisions for byte-identical output.
@@ -17,6 +25,11 @@ import os
 import hashlib
 
 STRICT = False
+
+# Whole-file SLIDE4K image header (--with-header mode):
+# 8-byte magic + 24-bit big-endian decompressed size = 11 bytes.
+HEADER_MAGIC = b"SLIDE4K\x00"
+HEADER_LEN = 11
 
 # SLIDE4K parameters
 WINDOW_SIZE = 4096
@@ -240,14 +253,37 @@ def compress_with_reference(data, reference_compressed):
         return compress_slide4k(data)
 
 
+def parse_header(blob, name):
+    """
+    Validate an 11-byte whole-file SLIDE4K header; return the declared
+    (24-bit big-endian) decompressed size.
+    """
+    if len(blob) < HEADER_LEN or not blob.startswith(HEADER_MAGIC):
+        raise SystemExit(f"ERROR: {name} does not start with a SLIDE4K\\0 whole-file header")
+    return (blob[8] << 16) | (blob[9] << 8) | blob[10]
+
+
+def make_header(size):
+    """Build the 11-byte whole-file header for a decompressed size."""
+    if size >= (1 << 24):
+        raise SystemExit(f"ERROR: decompressed size {size:,} does not fit the 24-bit header field")
+    return HEADER_MAGIC + bytes([(size >> 16) & 0xFF, (size >> 8) & 0xFF, size & 0xFF])
+
+
 def main():
     if len(sys.argv) < 3:
-        print(f"Usage: {sys.argv[0]} <input_file> <output_file> [--reference <ref_compressed>]")
+        print(f"Usage: {sys.argv[0]} <input_file> <output_file> [--strict] [--with-header] [--reference <ref_compressed>]")
         print("\nCompresses data using SLIDE4K (LZSS) algorithm.")
         print("Output does not include header - add 'SLIDE4K' header in assembly.")
         print("\nOptions:")
         print("  --reference <file>  Use compression decisions from reference file")
         print("                      for byte-identical output (if input matches)")
+        print("  --strict            Abort instead of falling back to fresh compression")
+        print("                      when the input does not match the reference decisions")
+        print("  --with-header       Emit a whole-file image: 11-byte header (SLIDE4K\\0 +")
+        print("                      24-bit big-endian decompressed size) + stream. The")
+        print("                      --reference file must carry the same header, which is")
+        print("                      validated and stripped before decision replay.")
         sys.exit(1)
 
     input_file = sys.argv[1]
@@ -257,6 +293,11 @@ def main():
     if '--strict' in sys.argv:
         STRICT = True
         sys.argv.remove('--strict')
+
+    with_header = False
+    if '--with-header' in sys.argv:
+        with_header = True
+        sys.argv.remove('--with-header')
 
     # Check for reference file option
     reference_file = None
@@ -275,9 +316,19 @@ def main():
     if reference_file and os.path.exists(reference_file):
         with open(reference_file, 'rb') as f:
             ref_data = f.read()
+        if with_header:
+            declared = parse_header(ref_data, reference_file)
+            if declared != len(data):
+                raise SystemExit(
+                    f"ERROR: reference header declares {declared:,} decompressed bytes\n"
+                    f"       but the input is {len(data):,} bytes - wrong input/reference pairing.")
+            ref_data = ref_data[HEADER_LEN:]
         compressed = compress_with_reference(data, ref_data)
     else:
         compressed = compress_slide4k(data)
+
+    if with_header:
+        compressed = make_header(len(data)) + compressed
 
     print(f"Compressed size: {len(compressed):,} bytes")
     print(f"Compression ratio: {100 * len(compressed) / len(data):.1f}%")

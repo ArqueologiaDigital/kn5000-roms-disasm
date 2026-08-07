@@ -13,6 +13,10 @@ for entry in [
 	("maincpu v9",		"kn5000_v9_program.rom",	"kn5000_v9_program.llvm.rom",		0xE00000),
 	("maincpu v7",		"kn5000_v7_program.rom",	"kn5000_v7_program.llvm.rom",		0xE00000),
 	("subcpu payload v142",	"kn5000_subprogram_v142.rom",	"kn5000_subprogram_v142.llvm.rom",	0x0400),
+	# Whole-file SLIDE4K firmware-update image of the v142 payload (File Type
+	# 007); rebuilt by compressing the built payload with the factory stream's
+	# decisions. Base = Custom Data flash staging address 0x3E0000.
+	("subcpu v142 update image",	"kn5000_subprogram_v142_compressed.rom",	"kn5000_subprogram_v142_compressed.rom",	0x3E0000),
 	("subcpu boot",		"kn5000_subcpu_boot.ic30",	"kn5000_subcpu_boot.llvm.rom",		0xFE0000),
 	("hdae5000",		"hd-ae5000_v2_06i.ic4",		"hd-ae5000_v2_06i.llvm.rom",		0x280000),
 	("table data",		"kn5000_table_data.rom",	"kn5000_table_data.llvm.rom",		0x800000),

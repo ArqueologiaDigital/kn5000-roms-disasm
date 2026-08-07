@@ -26,7 +26,7 @@ all: llvm-all
 	python scripts/build/compare_roms.py
 
 # LLVM build targets (primary)
-llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_v9_program.llvm.rom rebuilt_ROMs/kn5000_v7_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
+llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_v9_program.llvm.rom rebuilt_ROMs/kn5000_v7_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
 
 # ============================================================================
 # C-compiled ScreenData paramblocks
@@ -627,6 +627,23 @@ rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom: rebuilt_ROMs/kn5000_subprogram_v14
 	cat $@.part_a $@.part_b > $@
 	rm -f $@.full $@.part_a $@.part_b
 
+# --- Subcpu payload firmware-update image (whole-file SLIDE4K) ---
+# original_ROMs/kn5000_subprogram_v142_compressed.rom is the v1.42 Sub-CPU
+# payload as shipped on firmware-update disks ("Program DATA FILE PCK" /
+# File Type 007, flashed to Custom Data 0x3E0000 by
+# HANDLE_UPDATE_FILE_TYPE_ID_007h): an 11-byte header ("SLIDE4K\0" magic +
+# 24-bit BIG-endian decompressed size, here 03 00 00 = 196,608) followed by
+# the LZSS stream. The payload is already source-built, so recompressing the
+# build output with the factory stream's decisions must reproduce the update
+# image byte-for-byte. compress_lzss.py --strict aborts the build on any
+# divergence and the cmp seals whole-file byte-identity (same guarantee the
+# demo-preset pipeline provides for the in-ROM SLIDE4K blocks).
+rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom: rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom original_ROMs/kn5000_subprogram_v142_compressed.rom
+	python3 scripts/build/compress_lzss.py $< $@ --strict --with-header \
+		--reference original_ROMs/kn5000_subprogram_v142_compressed.rom
+	cmp $@ original_ROMs/kn5000_subprogram_v142_compressed.rom
+	@echo "  subprogram v142 update image OK (byte-identical)"
+
 # --- Subcpu boot ---
 rebuilt_ROMs/kn5000_subcpu_boot.llvm.o: subcpu/boot/kn5000_subcpu_boot.s
 	mkdir -p rebuilt_ROMs
@@ -841,6 +858,7 @@ clean:
 	rm -f rebuilt_ROMs/kn5000_v7_program.llvm.*
 	rm -rf v7/maincpu/includes/generated/
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.llvm.*
+	rm -f rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom
 	rm -f rebuilt_ROMs/kn5000_subcpu_boot.llvm.*
 	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.llvm.*
 	rm -f rebuilt_ROMs/kn5000_table_data.llvm.*
