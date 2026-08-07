@@ -2382,6 +2382,21 @@ FDC_SEEK 0x9FD894
 BOOTTIMER_INTERRUPTHANDLER 0x9FEA9D
 HANDLER_INT4 0x9FEAB2
 HANDLER_INTA 0x9FF229
+Boot_malloc 0x9FFB56
+Boot_memcmp 0x9FFBDC
+Boot_SDivMod32 0x9FFC0E
+Boot_SMod32 0x9FFC55
+Boot_SDiv32 0x9FFC59
+Boot_UMod32 0x9FFC5D
+Boot_UDivMod32 0x9FFC63
+Boot_free 0x9FFCDD
+Boot_free_DeadTail9998 0x9FFD7D
+Boot_free_DeadTailFragment 0x9FFDE8
+Debug_OutputChar 0x9FFE80
+Debug_OutputHexByte 0x9FFE86
+Debug_OutputString 0x9FFEA1
+Debug_NibbleToHex 0x9FFEB4
+Debug_SendChar 0x9FFEC1
 RESET_HANDLER 0x9FFEE0
 #
 # RESIDENT TONE DATABASE - the wave/sample-selection tables the sub-CPU reads.

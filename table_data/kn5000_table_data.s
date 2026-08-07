@@ -4319,30 +4319,27 @@ Handler_INTA:
 	.incbin "includes/bootcode_serial_state.bin"
 
 ; =============================================================================
-; Memory Allocation, Division, and Debug Routines
-; Address: 0x9FFB56-0x9FFEE0 (906 bytes)
+; Boot C Runtime and Debug Output (formerly includes/bootcode_malloc_and_after.bin)
+; Address: 0x9FFB56-0x9FFEDF (906 bytes; RESET_HANDLER begins at 0x9FFEE0)
 ;
-; MEMORY ALLOCATION (linked-list heap):
-;   0x9FFB56: Boot_malloc - Allocate memory block
-;             - Free list head at 0x0099A0
-;             - Block header: +0x00=next ptr, +0x04=size
-;             - Returns pointer to data area (+0x06)
-;   0x9FFCDD: Boot_free - Free allocated block
-;             - Merges adjacent free blocks
-;   0x9FFD7D: Secondary heap routines (pool at 0x009998)
+; boot_clib.s - compiler-runtime/libc subset used by the bootloader:
+;   Boot_malloc (0x9FFB56)     first-fit heap allocate, list head RAM 0x0099A0
+;   Boot_memcmp (0x9FFBDC)     bounded compare (strncmp-style NUL early-exit)
+;   Boot_SDivMod32 (0x9FFC0E)  signed 32-bit divide/modulo wrapper, mode in D
+;   Boot_SMod32 (0x9FFC55) / Boot_SDiv32 (0x9FFC59)  unreferenced entry stubs
+;   Boot_UMod32 (0x9FFC5D)     unsigned modulo entry
+;   Boot_UDivMod32 (0x9FFC63)  unsigned 32/32 divide core (XHL=q, XDE=r)
+;   Boot_free (0x9FFCDD)       address-ordered coalescing free
+;   Boot_free_DeadTail9998 (0x9FFD7D)  UNREACHABLE orphaned copy of the
+;       Boot_free tail (pool 0x009998) - dead code with no entry point
 ;
-; UTILITY FUNCTIONS:
-;   0x9FFBDC: Boot_memcmp - Compare memory blocks
-;   0x9FFC0E: Division/modulo routines (32-bit and 64-bit)
-;
-; DEBUG OUTPUT:
-;   0x9FFE80: Debug_OutputChar - Output single character
-;   0x9FFE86: Debug_OutputHexByte - Output byte as 2-digit hex
-;   0x9FFEA1: Debug_OutputString - Output null-terminated string
-;   0x9FFEB4: Debug_NibbleToHex - Convert nibble to ASCII hex
-;   0x9FFEC1: Debug_SendChar - Send char to debug port (0xFE00)
+; boot_debug.s - debug character output, DISABLED in shipped firmware:
+;   Debug_OutputChar (0x9FFE80), Debug_OutputHexByte (0x9FFE86),
+;   Debug_OutputString (0x9FFEA1), Debug_NibbleToHex (0x9FFEB4),
+;   Debug_SendChar (0x9FFEC1) - NOP-patched stub, emits nothing
 ; =============================================================================
-	.incbin "includes/bootcode_malloc_and_after.bin"
+	.include "boot_clib.s"
+	.include "boot_debug.s"
 
 	.org 0x9FFEE0 - 0x800000, 0xFF
 RESET_HANDLER:
