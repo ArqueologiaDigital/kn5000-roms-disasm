@@ -744,8 +744,8 @@ FDC_InitSequence_Full:
 	calr	64636
 	calr	62832
 	jrl	-2690
-FDC_SeekRecalibrate:
-	.incbin "includes/generated/v7_transplant_FDC_SeekRecalibrate.bin"
+FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
+	.incbin "includes/generated/v7_transplant_FDC_CmdRecalibrate.bin"
 FDC_CMD_EXEC:
 	.byte 0x2e, 0x1e, 0x16, 0xfe, 0xdb, 0xd8, 0x66, 0x08
 	.byte 0xf1, 0xcc, 0x89, 0x00, 0x01, 0x78, 0x36, 0x01
@@ -895,7 +895,7 @@ FDC_HANDLER_DISPATCH_BASE:
 
 FDC_HANDLER_01:
 	calr FDC_CMD_ENABLE
-	calr FDC_SeekRecalibrate
+	calr FDC_CmdRecalibrate
 	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_02:

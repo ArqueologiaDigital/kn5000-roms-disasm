@@ -414,11 +414,11 @@ EffectMode_ClampAndLookup_Clamped:
 	jr nz, EffectMode_LookupPreset_Bank7000
 
 EffectMode_LookupPreset_BankC2C5:
-	ld xbc, 0x986000
+	ld xbc, 0x986000	; = table_data STYLEREC_PTRTABLE_C2C5 (UI states 0xc2/0xc5); cross-ROM -- table_data assembles separately, constant stays literal
 	jr EffectMode_LookupPreset_Compute
 
 EffectMode_LookupPreset_Bank7000:
-	ld xbc, 0x987000
+	ld xbc, 0x987000	; = table_data STYLEREC_PTRTABLE_DEFAULT (other UI states); cross-ROM -- table_data assembles separately, constant stays literal
 
 EffectMode_LookupPreset_Compute:
 	extz xwa
@@ -464,7 +464,7 @@ EffectMode_DisplayName_LookupC2C5:
 	jr EffectMode_DisplayName_Render
 
 EffectMode_DisplayName_FallbackC2C5:
-	ld xwa, 0x986000
+	ld xwa, 0x986000	; = table_data STYLEREC_PTRTABLE_C2C5 (UI states 0xc2/0xc5); cross-ROM -- table_data assembles separately, constant stays literal
 	jr EffectMode_DisplayName_DefaultLookup
 
 EffectMode_DisplayName_LookupC0:
@@ -479,7 +479,7 @@ EffectMode_DisplayName_LookupC0:
 	jr EffectMode_DisplayName_Render
 
 EffectMode_DisplayName_FallbackC0:
-	ld xwa, 0x987000
+	ld xwa, 0x987000	; = table_data STYLEREC_PTRTABLE_DEFAULT (other UI states); cross-ROM -- table_data assembles separately, constant stays literal
 
 EffectMode_DisplayName_DefaultLookup:
 	ld bc, iz
@@ -10637,7 +10637,7 @@ MssName_EventDispatch:
 	ld	xwa, FadeTimeStr_Off_0x5A
 	jr	37
 	sll	xwa, 2
-	add	xwa, 0x987000
+	add	xwa, 0x987000	; = table_data STYLEREC_PTRTABLE_DEFAULT (other UI states); cross-ROM -- table_data assembles separately, constant stays literal
 	ld	xbc, (xwa)
 	ld	a, (xbc+42)
 	extz	wa

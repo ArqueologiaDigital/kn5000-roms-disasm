@@ -1398,14 +1398,14 @@ FDC_InitSequence_Full:
 	calr FDC_INIT
 	jrl FDC_CONFIG_VERIFY
 
-; --- FDC_SeekRecalibrate: Seek/recalibrate FDC head position ---
-; Saves current head number via prevbank register.
-; Sets head = 5 (recalibrate parameter), sends FDC command,
-; checks result status. If error, retries with seek command.
-; Second section loads command byte 0xc6 (Read ID) for verification.
-; Contains error checking and retry logic with FDC_Set_Status calls.
-; Restores head number from prevbank on exit.
-FDC_SeekRecalibrate:
+; --- FDC_CmdRecalibrate (formerly FDC_SeekRecalibrate): recalibrate to track 0 ---
+; Renamed to match its bootloader twin FDC_CmdRecalibrate (table_data/
+; boot_fdc_driver.s): saves the caller's target track (0x8a36) in QIZH, seeks
+; to track 5 first (head-load settling), then issues RECALIBRATE (0x07) and
+; waits for the result; on failure invalidates the track cache (0x8b04).
+; The raw block below also contains the SEEK command handler at 0xf97696
+; (.set alias FDC_STATUS_HANDLER -- a misnomer; twin: boot FDC_CmdSeek).
+FDC_CmdRecalibrate:
 	.byte 0xd7
 	swi	2
 	.byte 0x04
@@ -2273,7 +2273,7 @@ FDC_HANDLER_DISPATCH_BASE:
 
 FDC_HANDLER_01:
 	calr FDC_CMD_ENABLE
-	calr FDC_SeekRecalibrate
+	calr FDC_CmdRecalibrate
 	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_02:

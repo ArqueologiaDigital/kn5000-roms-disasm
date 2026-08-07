@@ -7,7 +7,20 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 937ad458ed77 (937ad458ed779dea562ab228262acd2784de1a48)
-Date: 2026-03-25 12:31:00 +0000
-Subject: TLCS-900 linker: Remove range check from R_TLCS900_LO16
+Commit: 2a221caa88dd (2a221caa88ddc872bf366c7dd416439d7d6c2ef1)
+Date: 2026-07-27 19:54:52 +0100
+Subject: Decommission the beads issue tracker
 Repository: /home/fsanches/compartilhado/llvm-project
+
+# CORRECTION NOTE (2026-08-07): this file had gone stale. It still recorded
+# tlcs900_backend@937ad458ed77 (2026-03-25, "TLCS-900 linker: Remove range
+# check from R_TLCS900_LO16") while every verified build since disasm commit
+# 819e940 (2026-07-27) has been produced -- and stamped in its commit
+# message -- with tlcs900_backend@2a221caa88dd. The tlcs900_backend branch
+# was rebuilt into a clean upstreamable history between those dates, so
+# 937ad458ed77 is NOT an ancestor of 2a221caa88dd; per the immutability
+# policy the old line of history is preserved unmodified on branch
+# tlcs900_backend_backup_20260418 (and on remote felipesanches/tlcs900_backend).
+# Reconfirmed 2026-08-07: llvm-project HEAD -> tlcs900_backend @ 2a221caa88dd,
+# and a full `make all` with $(LLVM_BIN)=llvm-project/build/bin reproduces
+# 100% byte-match on all ROMs.

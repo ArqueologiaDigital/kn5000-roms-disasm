@@ -1097,7 +1097,7 @@ FDC_ValidateCmd_Offsets:
 ; -----------------------------------------------------------------------------
 FDC_CommandDispatch_Offsets:
 	.short FDC_Dispatch_Initialize - FDC_Dispatch_Initialize	; cmd  0 -> FDC_CmdInitialize      (FDC_InitSequence_Full)
-	.short FDC_Dispatch_Recalibrate - FDC_Dispatch_Initialize	; cmd  1 -> FDC_CmdRecalibrate     (FDC_SeekRecalibrate)
+	.short FDC_Dispatch_Recalibrate - FDC_Dispatch_Initialize	; cmd  1 -> FDC_CmdRecalibrate     (FDC_CmdRecalibrate)
 	.short FDC_Dispatch_Seek - FDC_Dispatch_Initialize	; cmd  2 -> FDC_CmdSeek            (FDC_STATUS_HANDLER)
 	.short FDC_Dispatch_ReadSectors - FDC_Dispatch_Initialize	; cmd  3 -> FDC_CmdReadSectors     (FDC_CMD_EXEC)
 	.short FDC_Dispatch_WriteSectors - FDC_Dispatch_Initialize	; cmd  4 -> FDC_CmdWriteSectors    (FDC_SECTOR_XFER)

@@ -1465,7 +1465,7 @@ FDC_CmdInitialize:
 ; Seeks to track 5 first (head-load settling), then issues RECALIBRATE
 ; (0x07) and waits for the result.  On failure invalidates the track
 ; cache.  Preserves the caller's target track.
-; Twin: maincpu FDC_SeekRecalibrate (fdc_routines.s:1408)
+; Twin: maincpu FDC_CmdRecalibrate (fdc_routines.s:1408)
 ; -----------------------------------------------------------------------------
 FDC_CmdRecalibrate:
 	pushw_erp 0xfa	; push QIZ - cmd 1 entry
