@@ -2969,11 +2969,13 @@ HDAE5000_InitializeParallelPort:
 	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
 	calr Boot_DelayLoop	; CALR Boot_DelayLoop
 	stib_da (0x160004), 0x00; LD (0x160004), 0x00 - LEDs off
-	extpfx4 0xC2, 0x02, 0x00, 0x16	; LD (0x160002), A - Port B (4 bytes)
+	ldb_da a, (0x160002)	; LD A, (0x160002) - poll PPI Port B (code below loops back here until bit 0 clears)
 
-; Gap between HDAE init and LZSS (0x9FC6F6 - 0x9FC8C1)
+; Gap between HDAE init and LZSS (0x9FC6F7 - 0x9FC8C1)
 ; TODO: Disassemble this section
-	.incbin "includes/bootcode_hdae_to_lzss.bin"
+; Blob byte 0 (0x21) is skipped: it is the final sub-opcode byte of the 5-byte
+; LD A, (0x160002) above, which is now emitted whole instead of cut mid-instruction.
+	.incbin "includes/bootcode_hdae_to_lzss.bin", 1, 459	; 0x9FC6F7-0x9FC8C1
 
 
 ; =============================================================================
