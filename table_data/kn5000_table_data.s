@@ -4318,47 +4318,17 @@ Handler_INT4__int4_done:
 	.include "boot_disk_probe.s"	; 0x9FEB2B-0x9FEC6D FDC disk-format probe
 	.include "boot_cpserial.s"	; 0x9FEC6E-0x9FF228 boot-time CP-serial driver
 
-; =============================================================================
-; Serial Port Interrupt Handlers
-; Address: 0x9FF229-0x9FF2F1 (201 bytes)
-;
-; Handler_INTA (0x9FF229): External interrupt A - Serial handshake
-;   - Checks serial state at (0x0F63)
-;   - Initializes receive mode or updates buffer pointer
-;
-; Handler_INTTX1 (0x9FF2AE): Serial TX complete
-;   - Dispatches to state handler via table at 0xFFF282
-;
-; Handler_INTRX1 (0x9FF2D0): Serial RX received
-;   - Dispatches to state handler via same table
-; =============================================================================
 	.org 0x9FF229 - 0x800000, 0xFF
-Handler_INTA:
-	.incbin "includes/bootcode_serial_handlers.bin"
+	.include "boot_cpserial_isr.s"	; 0x9FF229-0x9FF2F1 INTA/INTTX1/INTRX1 ISRs + state dispatch table
+	.include "boot_cpserial_states.s"	; 0x9FF2F2-0x9FFB2E state handlers, packet codecs, shared AudioMix/memory library
 
 ; =============================================================================
-; Serial Communication State Machine
-; Address: 0x9FF2F2-0x9FFB55 (2148 bytes)
+; Boot C Runtime and Debug Output (formerly includes/bootcode_malloc_and_after.bin
+; and the tail of includes/bootcode_serial_state.bin)
+; Address: 0x9FFB2F-0x9FFEDF (RESET_HANDLER begins at 0x9FFEE0)
 ;
-; State machine for handling serial protocol:
-;   - Baud rate configuration
-;   - Packet framing and checksums
-;   - Error recovery
-; =============================================================================
-	; Split into segments to expose CALR target labels
-	.incbin "includes/bootcode_serial_state.bin", 0, 790	; 0x9FF2F2-0x9FF607 state handlers
-BootSerial_PollTX:	; Address: 0x9FF608
-	.incbin "includes/bootcode_serial_state.bin", 790, 231	; 0x9FF608-0x9FF6EE
-BootSerial_RX_SetBusy:	; Address: 0x9FF6EF
-	.incbin "includes/bootcode_serial_state.bin", 1021, 7	; 0x9FF6EF-0x9FF6F5
-BootSerial_RX_ParsePackets:	; Address: 0x9FF6F6
-	.incbin "includes/bootcode_serial_state.bin", 1028, 821	; 0x9FF6F6-0x9FFA2A
-BootSerial_RetStub:	; Address: 0x9FFA2B - stubbed-out routine (bare ret)
-	.incbin "includes/bootcode_serial_state.bin", 1849, 299	; 0x9FFA2B-0x9FFB55
-
-; =============================================================================
-; Boot C Runtime and Debug Output (formerly includes/bootcode_malloc_and_after.bin)
-; Address: 0x9FFB56-0x9FFEDF (906 bytes; RESET_HANDLER begins at 0x9FFEE0)
+; boot_clib.s also opens with Boot_sbrk (0x9FFB2F), the bump allocator
+; backing Boot_malloc.
 ;
 ; boot_clib.s - compiler-runtime/libc subset used by the bootloader:
 ;   Boot_malloc (0x9FFB56)     first-fit heap allocate, list head RAM 0x0099A0

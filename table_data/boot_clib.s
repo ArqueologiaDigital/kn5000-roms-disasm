@@ -1,8 +1,8 @@
 ; =============================================================================
 ; Boot-time C runtime library: heap allocator, memcmp, 32-bit divide/modulo
-; ROM 0x9FFB56-0x9FFE7F (906-byte tail region begins here; this module covers
-; the allocator/compare/divide groups plus the 0xFF pad up to the debug group
-; in boot_debug.s).
+; ROM 0x9FFB2F-0x9FFE7F (this module covers Boot_sbrk - formerly the tail of
+; includes/bootcode_serial_state.bin - plus the allocator/compare/divide
+; groups and the 0xFF pad up to the debug group in boot_debug.s).
 ;
 ; BOOT-TIME ALIAS: this code executes at 0xFFFB56-0xFFFE7F. At reset the
 ; table-data ROM is mapped at 0xE00000-0xFFFFFF; after the CS2 remap it
@@ -20,6 +20,36 @@
 ;   +0x04  u16  size        (usable bytes, always even)
 ;   +0x06  ...  data        (pointer returned to callers)
 ; =============================================================================
+
+; -----------------------------------------------------------------------------
+; Boot_sbrk - bump allocator over the boot heap arena
+; Boot addr 0xFFFB2F.
+;
+; Purpose:  Carve XWA bytes off the arena tracked by RAM (0x009998) current
+;           pointer / (0x00999C) bytes remaining.
+; Inputs:   XWA = byte count; 0 queries the remaining size.
+; Outputs:  XHL = block address (old current pointer), bytes remaining for a
+;           size-0 query, or 0xFFFFFFFF when the arena is exhausted.
+; Callers:  Boot_malloc (grow-heap path below).
+;
+; Boot_free_DeadTail9998 pokes the same (0x009998) block, which is why that
+; orphaned tail was likely written against this allocator.
+; -----------------------------------------------------------------------------
+Boot_sbrk:
+	or	xwa, xwa
+	jr	nz, Boot_sbrk__alloc
+	ldl_da	xhl, (0x00999c)		; size 0: report bytes remaining
+	ret
+Boot_sbrk__alloc:
+	cpdm32_24 (0x00999c), xwa	; enough left?
+	jr	nc, Boot_sbrk__fits
+	ld	xhl, 0xffffffff		; arena exhausted
+	ret
+Boot_sbrk__fits:
+	ldl_da	xhl, (0x009998)		; XHL = current pointer
+	addl_da	(0x009998), xwa
+	subdm32_24 (0x00999c), xwa
+	ret
 
 ; -----------------------------------------------------------------------------
 ; Boot_malloc - first-fit heap allocate
@@ -92,12 +122,8 @@ Boot_malloc__grow_heap:
 	ld wa, iz
 	inc 6, wa
 	extz xwa		; XWA = request + 6-byte header
-	; Boot_sbrk (boot 0xFFFB2F, in bootcode_serial_state.bin): bump
-	; allocator over RAM (0x009998) current / (0x00999C) remaining;
-	; returns XHL = block, or 0xFFFFFFFF when exhausted.
-	; TODO: make symbolic once that blob is disassembled (boot-time
-	; alias keeps this an absolute 0xFFxxxx call).
-	call 0xFFFB2F
+	call Boot_sbrk + 0x600000	; boot-time alias of the bump
+					; allocator defined above
 	ld xwa, xhl
 	cp xwa, 0xffffffff
 	jr nz, Boot_malloc__init_new
