@@ -82,6 +82,7 @@ IMAGE_METADATA = {
 
     # Logos - dimensions from assembly code (a2=width, a3=height)
     # TechnicsLogo: a2=0x138=312, a3=0x2D=45, 312*45=14040 bytes
+    # Also stored in table_data ROM at 0x91D000 (section bank 6)
     "BitmapTechnicsLogo.bin": (312, 45, 8, "Technics brand logo"),
     # KN5000Logo: a2=0xC7=199, a3=0x24=36, stride=200, 200*36=7200 bytes
     "BitmapKN5000Logo.bin": (200, 36, 8, "KN5000 model logo"),
@@ -130,15 +131,18 @@ IMAGE_METADATA = {
     # Accita16: a2=0x78=120, 11400/120=95
     "BitmapAccita16.bin": (120, 95, 8, "Accompaniment graphic (Italian)"),
     # Bmphk: a2=0x64=100, 12000/100=120
-    "BitmapBmphk.bin": (100, 120, 8, "Unknown graphic"),
-    # Dredt0d: a2=0xA8=168, 19992/168=119
-    "BitmapDredt0d.bin": (168, 119, 8, "Unknown graphic"),
-    # Dredt0k: a2=0x58=88, 10472/88=119
-    "BitmapDredt0k.bin": (88, 119, 8, "Unknown graphic"),
-    # Ntedt0d: a2=0xF0=240, 30480/240=127
-    "BitmapNtedt0d.bin": (240, 127, 8, "Note edit graphic"),
-    # Ntedt0k: a2=0x10=16, 2032/16=127
-    "BitmapNtedt0k.bin": (127, 16, 8, "Note edit graphic small"),
+    # Also stored in table_data ROM at 0x9206D8 (section bank 28, see
+    # table_data/ui_bitmaps.s SectionBank28_KN5000Picture)
+    "BitmapBmphk.bin": (100, 120, 8, "KN5000 product picture on teal background"),
+    # Dredt0d: a2=0xA8=168, 19992/168=119; table_data copy at 0x92DDA0
+    "BitmapDredt0d.bin": (168, 119, 8, "Drum-edit screen grid"),
+    # Dredt0k: a2=0x58=88, 10472/88=119; table_data copy at 0x92B4B8
+    "BitmapDredt0k.bin": (88, 119, 8, "Drum-edit screen instrument rows"),
+    # Ntedt0d: a2=0xF0=240, 30480/240=127; table_data copy at 0x923DA8
+    "BitmapNtedt0d.bin": (240, 127, 8, "Note-edit screen dotted grid"),
+    # Ntedt0k: a2=0x10=16, 2032/16=127 -- width is 16, height 127
+    # (was transposed here as 127x16); table_data copy at 0x9235B8
+    "BitmapNtedt0k.bin": (16, 127, 8, "Note-edit screen vertical piano ruler"),
 
     # HDAE5000 Hard Disk Expansion ROM images (8-bit indexed color)
     # Offsets and palettes determined from disassembly analysis:

@@ -161,6 +161,22 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
 
     print(f"Extracted {len(icons)} icons to {output_dir}")
 
+    # One additional 288-byte icon sits right after the last referenced one
+    # (ROM 0x944B88): yellow "E.L.S." lettering, apparently a developer
+    # signature.  No IconTable entry points at it (entry 176 is the null
+    # terminator), so extract it explicitly as Icon_176.png.
+    orphan_offset = icons[-1]['data_offset'] + ICON_SIZE
+    orphan = table_data_rom[orphan_offset:orphan_offset + ICON_SIZE]
+    img = Image.new('RGB', (ICON_WIDTH, ICON_HEIGHT))
+    pixels = img.load()
+    for y in range(ICON_HEIGHT):
+        for x in range(0, ICON_WIDTH, 2):
+            byte_val = orphan[(y * ICON_WIDTH + x) // 2]
+            pixels[x, y] = nibble_to_rgb((byte_val >> 4) & 0x0F)
+            pixels[x + 1, y] = nibble_to_rgb(byte_val & 0x0F)
+    img.save(output_dir / "Icon_176.png")
+    print(f"Extracted unreferenced signature icon to Icon_176.png")
+
     # Generate summary
     print("\nIcon summary:")
     print(f"  Pixel size: {ICON_WIDTH}x{ICON_HEIGHT} (all icons)")
@@ -211,7 +227,7 @@ def create_sprite_sheet(icons, output_dir: Path, icon_width: int, icon_height: i
 
 def main():
     script_dir = Path(__file__).parent
-    project_dir = script_dir.parent
+    project_dir = script_dir.parent.parent  # scripts/analysis/ -> repo root
 
     # ROM file paths
     table_data_path = project_dir / "original_ROMs" / "kn5000_table_data.rom"
