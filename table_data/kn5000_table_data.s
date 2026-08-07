@@ -13,12 +13,11 @@
 ;
 ; ROM LAYOUT:
 ;
-; 0x800000-0x800087  Section Directory Table (33 x 4-byte LE pointers + terminator)
-; 0x800088-0x82FFFF  Preset Data Banks (sound presets, registration, panel memory)
-;                     - 33 sections of varying size (see directory table)
+; 0x800000-0x82FFFF  Section Directory + Preset Data Banks (preset_banks.s)
+;                     - 34-entry pointer directory + 27 in-half sections
 ;                     - Factory defaults: 0xF7 (erased flash), 0x07, 0x00, or 0xFF
-;                     - Entries 12-24: 13 x 3,016-byte slots (zero-filled)
-;                     - Entries 25-27: 3 x 31,968-byte slots (0xFF-filled)
+;                     - Entries 12-24: 13 x 3,016-byte slots (52 x 58-B records)
+;                     - Entries 25-27: 3 x 31,968-byte slots (0xFF-dominant)
 ; 0x830000-0x87FFEF  Tone Database (copied to SubCPU RAM 0x50000 at boot)
 ;                     - 0x830000 directory/program maps/offset table (tone_database_directory.s)
 ;                     - 0x8324D4 579 tone/voice records (tone_database_records.s)
@@ -93,36 +92,15 @@
 .equ REGION_CODE_VAR, 0xC06	; RAM address for region code
 .equ BOOT_ENTRY_POINT, Boot_Init	; Entry point for watchdog reset
 
-; =============================================================================
-; SECTION DIRECTORY TABLE (0x800000)
-; =============================================================================
-; 33 entries of 4-byte little-endian pointers, terminated by 0x00000000.
-; Each entry points to a preset data bank within the ROM.
-; These sections are read/written during floppy disk save/load operations.
-; Factory-default fill patterns indicate uninitialized user data slots:
-;   0xF7 = erased flash, 0x07 = default values, 0x00 = zeroed, 0xFF = empty
-;
-; Entry sizes (consecutive entries):
-;   0-1: 11,400 bytes each    8-11: 1,440-2,850 bytes
-;   2: 1,764 bytes            12-24: 3,016 bytes each (13 identical slots)
-;   3-5: 4,884 bytes each     25-27: 31,968 bytes each (3 identical slots)
-;   6: 14,040 bytes           28-32: variable (10K-861K)
-;   7: 983,646 bytes
-; =============================================================================
-
+	; Section directory + preset data banks (0x800000 - 0x82FFFF): the
+	; 34-entry directory (SectionDirectory_Table) and all 27 in-half preset
+	; data banks are fully source-level in preset_banks.s -- see that
+	; module's header for the directory semantics, per-section record grids
+	; and the fill-pattern legend.  (includes/initial_data.bin is no longer
+	; referenced by the LLVM build; the file stays on disk because the
+	; archived ASL mirror still bincludes it in full.)
 	.org 0x800000 - 0x800000, 0xFF
-SectionDirectory_Table:
-	.byte 0x88	; First byte of section directory (start of 4-byte LE pointer table)
-
-	; Preset data banks and section directory (0x800001 - 0x82FFFF)
-	; Contains the remaining 131 bytes of the directory table (entries 1-32 + terminator),
-	; followed by preset data banks: sound presets, registration memory slots,
-	; panel memory defaults, and waveform/lookup data.
-	; Only bytes [0, 0x2FFFF) of the file are emitted here: the tone database
-	; that occupies ROM 0x830000-0x87FFEF is now fully symbolic in the three
-	; tone_database_*.s modules below (the file is kept whole on disk because
-	; the archived ASL mirror still bincludes it in full).
-	.incbin "includes/initial_data.bin", 0, 0x2FFFF
+	.include "preset_banks.s"
 
 	; Tone database (0x830000 - 0x87FFEF): shipped to SubCPU RAM 0x50000 at
 	; boot via five InterCPU E1 bulk transfers (see maincpu SubCPU_Send_Payload).
