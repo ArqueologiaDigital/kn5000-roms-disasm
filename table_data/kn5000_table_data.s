@@ -26,23 +26,32 @@
 ; 0x87FFF0-0x8CFFFF  Feature Demo Data (SSF file, BMP bitmaps, file entries)
 ; 0x8D0000-0x8DFFFF  Unused (0xFF fill)
 ; 0x8E0000-0x8ECFFF  LZSS Compressed Preset Data (SLIDE4K format, ~28KB)
-; 0x8ED000-0x937FFF  Wallpapers (2 x 320x240 8bpp = 76,800 bytes each) + gap data
+; 0x8ED000-0x912BFF  Wallpapers (2 x 320x240 8bpp = 76,800 bytes each);
+;                     inter-wallpaper gap 0x8FFC00 is zeros plus a 16-entry
+;                     byte-triplet ramp table at 0x8FFF80
+; 0x912C00-0x937FFF  UI Bitmap/Frame Data + preset sections (not wallpapers):
+;                     - 0x913000 bitmap descriptor table (34 x 8 bytes) + pixels
+;                     - 0x91D000 preset section 6; 0x9206D8 sections 28-32
+;                     - 0x934000 frame descriptor table (53 x 8 bytes) + pixels
 ; 0x938000-0x944D77  UI Icons (176 x 24x24 4bpp, 288 bytes each) + icon table
-; 0x944D78-0x945BFF  Miscellaneous data tables
+; 0x944D78-0x945BFF  Unused (0xFF fill)
 ; 0x945C00-0x945CAF  Font Descriptor Table (10 font entries x 16 bytes)
 ; 0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, variable size per font)
-; 0x950000-0x95FFFF  Sound Parameter Data (bitmap-like data + preset records)
-; 0x960000-0x97FFFF  Sound/Voice Name Strings (space-padded, 16 bytes each)
-; 0x980000-0x983B39  Registration/Panel Memory Defaults
+; 0x950000-0x950FFF  Sparse bit-pattern data (unidentified)
+; 0x951000-0x9808F5  Style/Preset Records (~984 x 198 bytes; 8-byte header +
+;                     two 16-char space-padded name fields per record)
+; 0x9808F6-0x983B39  Packed record tail (incl. ascending 16-bit ramp tables)
 ; 0x983B3A-0x985FFF  Stale truncated SLIDE8K help DB (old German revision)
 ; 0x986000-0x986FFF  Effect Preset Pointer Table (model code 0xC2/0xC5)
 ; 0x987000-0x987FFF  Effect Preset Pointer Table (other model codes)
 ; 0x988000-0x98868F  HELP language index (2 x 6 pointers) + intro strings
 ; 0x988690-0x9999CB  SLIDE8K HELP Databases (EN, DE, FR, ES, Indonesian)
-; 0x9999CC-0x99EBFF  Demo Song MIDI/Sequence Data
-; 0x99EC00-0x99FFFF  Demo Category Names ("Tour Of The 5000", "Accordion", etc.)
-; 0x9A0000-0x9BFFFF  Tone Generator Configuration Data
-; 0x9C0000-0x9C3FFF  Tone Generator Parameters
+; 0x9999CC-0x99EBFF  7 residual bytes after the Indonesian help DB + 0xFF fill
+; 0x99EC00-0x99ECFF  Demo Category Names ("Tour Of The 5000", "Accordion", etc.)
+; 0x99ED00-0x9A9FFF  Tone Generator Configuration Records (26-byte stride)
+; 0x9AA000-0x9B4D77  Mostly 0xFF fill with sparse data islands
+; 0x9B4D78-0x9C3FFF  Tone Generator Parameters (MIDI-event-like note streams
+;                     from 0x9C0000)
 ; 0x9C4000-0x9C404F  Demo Song Preset Pointer Table (19 entries x 4 bytes + null)
 ;                     Each 4-byte LE pointer -> SLIDE4K compressed preset block
 ;                     Entry 18 (0x008E0000) = Feature Demo preset
@@ -54,7 +63,7 @@
 ; 0x9FB4E8-0x9FFFFF  First-Stage Bootloader Code + IVT
 ;
 ; KEY TABLES (accessed by Main CPU ROM):
-;   Font Glyph Table @ 0x945C00: 10 fonts, 16 bytes/entry (w,h,desc,asc,glyph_ptr,kern_ptr)
+;   Font Descriptors @ 0x945C00: 10 fonts, 16 bytes/entry (w,h,desc,asc,glyph_ptr,kern_ptr)
 ;   Demo Presets    @ 0x9C4000: 19 entries, 4 bytes/entry (pointers to SLIDE4K blocks)
 ;   Effect Presets   @ 0x986000/0x987000: Selected by model code (0xC2/0xC5 vs others)
 ;   Help Lang Index  @ 0x988000: 12 entries, 4 bytes/entry (6 intro-string ptrs
@@ -120,6 +129,12 @@ SectionDirectory_Table:
 
 	.org 0x87FFF0 - 0x800000, 0xFF
 
+; The filename field below does double duty as a version stamp: the maincpu
+; boot routine Boot_ParseSubCPUTimestamp points ParseInt16 at 0x87FFF5 -- the
+; "55" inside "hkst_55.ssf" -- so the digits embedded in this filename are
+; also the table-data revision number that boot parses.
+; Cross-ref: v10/maincpu/kn5000_v10_program.s (Boot_ParseSubCPUTimestamp),
+; same in v9; v7 predates the check.
 FeatureDemo_FileMetadata:
 	.asciz "hkst_55.ssf"	; Filename for the feature demo SSF file
 	.long 0x0
@@ -130,33 +145,67 @@ FeatureDemo_FileMetadata:
 HKstSSF_Padding:
 	.short 0x0
 
-Feature_Demo_XML:	; 88000E
-	.incbin "includes/hkst_55.ssf"
+; Feature-demo slideshow script in the XML-like SSF "ACTION" format: 27
+; sequential steps, each showing one display object.  The ftdemoNN objects
+; are the slide images (drawn from the Feature_Bitmap_1..6 BMPs below);
+; "Accordion", "Drawbar" and "Sdmixer" bring up live UI widget pages between
+; slides.  Object/widget vocabulary is tracked by issue kn5000-x13.
+; The ROM bytes are one unbroken ASCII run with no line terminators; the
+; .ascii lines below are split per ACT for readability only and emit
+; identical bytes.  includes/hkst_55.ssf stays on disk because the archived
+; ASL mirror still bincludes it.
+Feature_Demo_XML:
+	.ascii "<ACTION>"
+	.ascii "<ACT NO=1><SHOW OBJ=\"ftdemo01\"></ACT>"
+	.ascii "<ACT NO=2><SHOW OBJ=\"ftdemo04\"></ACT>"
+	.ascii "<ACT NO=3><SHOW OBJ=\"ftdemo05\"></ACT>"
+	.ascii "<ACT NO=4><SHOW OBJ=\"ftdemo41\"></ACT>"
+	.ascii "<ACT NO=5><SHOW OBJ=\"ftdemo42\"></ACT>"
+	.ascii "<ACT NO=6><SHOW OBJ=\"ftdemo43\"></ACT>"
+	.ascii "<ACT NO=7><SHOW OBJ=\"ftdemo44\"></ACT>"
+	.ascii "<ACT NO=8><SHOW OBJ=\"ftdemo45\"></ACT>"
+	.ascii "<ACT NO=9><SHOW OBJ=\"ftdemo46\"></ACT>"
+	.ascii "<ACT NO=10><SHOW OBJ=\"ftdemo47\"></ACT>"
+	.ascii "<ACT NO=11><SHOW OBJ=\"ftdemo48\"></ACT>"
+	.ascii "<ACT NO=12><SHOW OBJ=\"ftdemo06\"></ACT>"
+	.ascii "<ACT NO=13><SHOW OBJ=\"ftdemo07\"></ACT>"
+	.ascii "<ACT NO=14><SHOW OBJ=\"ftdemo08\"></ACT>"
+	.ascii "<ACT NO=15><SHOW OBJ=\"ftdemo09\"></ACT>"
+	.ascii "<ACT NO=16><SHOW OBJ=\"Accordion\"></ACT>"
+	.ascii "<ACT NO=17><SHOW OBJ=\"Accordion\"></ACT>"
+	.ascii "<ACT NO=18><SHOW OBJ=\"ftdemo10\"></ACT>"
+	.ascii "<ACT NO=19><SHOW OBJ=\"Drawbar\"></ACT>"
+	.ascii "<ACT NO=20><SHOW OBJ=\"Drawbar\"></ACT>"
+	.ascii "<ACT NO=21><SHOW OBJ=\"ftdemo20\"></ACT>"
+	.ascii "<ACT NO=22><SHOW OBJ=\"ftdemo21\"></ACT>"
+	.ascii "<ACT NO=23><SHOW OBJ=\"ftdemo22\"></ACT>"
+	.ascii "<ACT NO=24><SHOW OBJ=\"ftdemo23\"></ACT>"
+	.ascii "<ACT NO=25><SHOW OBJ=\"Sdmixer\"></ACT>"
+	.ascii "<ACT NO=26><SHOW OBJ=\"ftdemo24\"></ACT>"
+	.ascii "<ACT NO=27><SHOW OBJ=\"ftdemo25\"></ACT>"
+	.ascii "</ACTION>"
 	.byte 0x00
 
+; Feature-demo slide images: standard Windows 3.x BMP files (8bpp indexed,
+; 256-color palette, 320 px wide), stored verbatim; the sizes and addresses
+; are echoed by the FeatureDemo_FileEntry records below.
 	.org 0x880418 - 0x800000, 0xFF
-Feature_Bitmap_1:	; 880418
-	.incbin "images/FTBMP01.BMP"
+Feature_Bitmap_1:	.incbin "images/FTBMP01.BMP"
 
 	.org 0x89344E - 0x800000, 0xFF
-Feature_Bitmap_2:	; 89344E
-	.incbin "images/FTBMP02.BMP"
+Feature_Bitmap_2:	.incbin "images/FTBMP02.BMP"
 
 	.org 0x89DB04 - 0x800000, 0xFF
-Feature_Bitmap_3:	; 89DB04
-	.incbin "images/FTBMP03.BMP"
+Feature_Bitmap_3:	.incbin "images/FTBMP03.BMP"
 
 	.org 0x8A753A - 0x800000, 0xFF
-Feature_Bitmap_4:	; 8A753A
-	.incbin "images/FTBMP04.BMP"
+Feature_Bitmap_4:	.incbin "images/FTBMP04.BMP"
 
 	.org 0x8B0F70 - 0x800000, 0xFF
-Feature_Bitmap_5:	; 8B0F70
-	.incbin "images/FTBMP05.BMP"
+Feature_Bitmap_5:	.incbin "images/FTBMP05.BMP"
 
 	.org 0x8BAFE6 - 0x800000, 0xFF
-Feature_Bitmap_6:	; 8BAFE6
-	.incbin "images/FTBMP06.BMP"
+Feature_Bitmap_6:	.incbin "images/FTBMP06.BMP"
 
 
 	.org 0x8CE01C - 0x800000, 0xFF
@@ -183,7 +232,7 @@ FeatureDemo_FileEntry4:
 	.asciz "FTBMP04.BMP"
 	.long 0x0
 	.long Feature_Bitmap_4
-	.long 39478	; Size from ROM metadata
+	.long 39478	; Actual BMP file size
 
 FeatureDemo_FileEntry5:
 	.asciz "FTBMP05.BMP"
@@ -262,8 +311,15 @@ Wallpaper_0:	; Blue textured pattern
 Wallpaper_1:	; Technics branded texture
 	.incbin "images/Wallpaper_1.bin"
 
-	; Gap between Wallpaper_1 and IconTable (0x912C00 - 0x937FFF)
-	; Contains pattern data, likely for additional wallpapers or samples
+	; Gap between Wallpaper_1 and IconTable (0x912C00 - 0x937FFF).
+	; NOT wallpaper or sample data: holds the UI bitmap descriptor table
+	; at 0x913000 (34 x 8-byte {w16,h16,ptr32} entries, consumed by
+	; DrawBitmap/DrawBitmapFast) with its 8bpp pixel data (0xF7 =
+	; transparent), preset sections 6 and 28-32 of the section directory
+	; (floppy save/load banks, mostly 0xFF-erased), and the frame/sprite
+	; descriptor table at 0x934000 (53 x 8-byte entries, consumed by
+	; DrawFrameSP) with its pixel data.
+	; Cross-ref: v10/maincpu/ui/drawing_primitives.s
 	.incbin "includes/wallpaper1_to_icons.bin"
 
 
@@ -324,18 +380,19 @@ IconPixelData:
 ; This 753KB region contains multiple data structures referenced by the main
 ; CPU ROM. Key sub-regions:
 ;
-;   0x944D78-0x945BFF  Miscellaneous data tables
+;   0x944D78-0x945BFF  Unused (0xFF fill, 3,720 bytes)
 ;   0x945C00-0x945CAF  Font Descriptor Table (10 fonts x 16 bytes)
 ;                       Format: word width, word height, word descent, word ascent,
 ;                               long glyph_data_ptr, long kerning_table_ptr
 ;                       Referenced by DrawString at 0xFA7E7C
 ;   0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, 8 pixels/byte, MSB first)
-;   0x950000-0x95FFFF  Sound Parameter Data (bitmap-like patterns + preset records)
-;                       Records at 0x951000+: 198 bytes each, contain preset names
-;                       ("Easy Listening", "German S...")
-;   0x960000-0x97FFFF  Sound/Voice Name Tables (space-padded ASCII, 16 bytes/entry)
-;                       Mixed with demo song parameters and MIDI sequence data
-;   0x980000-0x983B39  Registration/Panel Memory Default Data
+;   0x950000-0x950FFF  Sparse bit-pattern data (unidentified, bitmap-like)
+;   0x951000-0x9808F5  Style/preset records: ~984 records x 198 bytes, each an
+;                       8-byte header + two 16-char space-padded name fields
+;                       (category + style, e.g. "Easy Listening  " +
+;                       "German Schlager "); addressed as 0x951000 + 198*k
+;                       via the effect-preset pointer tables at 0x986000/0x987000
+;   0x9808F6-0x983B39  Packed record tail incl. ascending 16-bit ramp tables
 ;   0x983B3A-0x9999CB  HELP system + effect-preset pointer tables -- fully
 ;                       split out into help_databases.s (stale truncated
 ;                       SLIDE8K remnant, EffectPreset_PtrTable_C2C5/_Default,
@@ -343,21 +400,24 @@ IconPixelData:
 ;                       0x988000/0x988018, five intro strings, five live
 ;                       SLIDE8K help databases rebuilt from decompressed
 ;                       sources -- see that module's header)
-;   0x9999CC-0x99EBFF  Demo Song MIDI/Sequence Data (compressed binary)
-;   0x99EC00-0x99FFFF  Demo Category Names: "Tour Of The 5000", "Accordion",
+;   0x9999CC-0x99EBFF  7 residual data bytes after the Indonesian help DB
+;                       (7f d8 7f e2 7f ec 7e), then 0xFF fill
+;   0x99EC00-0x99ECFF  Demo Category Names: "Tour Of The 5000", "Accordion",
 ;                       "Piano Styles", "Jazz&Rock Organ", "Church & Theatre",
 ;                       "Light Orchestra", "Split Sounds", "Layer Production",
 ;                       "Special DSP FX", "World", "xPiano Atmosphere"
-;   0x9A0000-0x9BFFFF  Tone Generator Configuration Data
-;   0x9C0000-0x9C3FFF  Tone Generator Parameters
+;   0x99ED00-0x9A9FFF  Tone generator configuration records (26-byte stride)
+;   0x9AA000-0x9B4D77  Mostly 0xFF fill with sparse data islands
+;   0x9B4D78-0x9C3FFF  Tone generator parameter data; MIDI-event-like note
+;                       streams (90 30 24 ...) from 0x9C0000
 ;   0x9C4000-0x9C404F  Demo Song Preset Pointer Table (19 x 4-byte LE pointers + null)
 ;                       Accessed by main CPU: sla wa,2; add xwa,0x9C4000; ld xwa,(xwa)
 ;                       Each pointer -> SLIDE4K compressed preset data
 ;                       Entry 18 points to 0x8E0000 (Feature Demo, same as LZSS preset data)
 ;   0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17, variable size)
 ; =============================================================================
-	; 0x944D78-0x983B39: misc tables, fonts, sound parameter records,
-	; name strings, registration defaults (see region map above)
+	; 0x944D78-0x983B39: 0xFF fill, font tables, style/preset records
+	; and their packed tail (see region map above)
 	.incbin "includes/icons_to_strings.bin", 0, 0x3EDC2	; 0x944D78-0x983B39
 
 	; HELP system data + effect-preset pointer tables (0x983B3A-0x9999CB):
@@ -367,9 +427,9 @@ IconPixelData:
 	; products recompressed from decompressed sources, demo-preset style).
 	.include "help_databases.s"
 
-	; 0x9999CC-0x9C404F: 8 leftover bytes after the Indonesian help DB,
-	; 0xFF fill, demo song sequence data, demo category names, and tone
-	; generator configuration/parameters (see region map above)
+	; 0x9999CC-0x9C404F: 7 residual data bytes after the Indonesian help
+	; DB, 0xFF fill, demo category names, and tone generator
+	; configuration/parameters (see region map above)
 	.incbin "includes/icons_to_strings.bin", 0x54C54, 0x2A684	; 0x9999CC-0x9C404F
 
 ; -----------------------------------------------------------------------------
@@ -522,29 +582,19 @@ FileIdentifierStringsTable:
 BootscreenSlideMarker:
 	.asciz "SLIDE"
 
-Bitmap_1bit_Flash_Memory_Update:	; 9FA156
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
-
-Bitmap_1bit_Now_Erasing:	; 9FA3BE
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Now_Erasing.bin"
-
-Bitmap_1bit_FD_to_Flash_Memory:	; 9FA626
-	.incbin "../v10/maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
-
-Bitmap_1bit_Completed:	; 9FA88E
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Completed.bin"
-
-Bitmap_1bit_Please_Wait:	; 9FAAF6
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Please_Wait.bin"
-
-Bitmap_1bit_Change_FD_2_of_2:	; 9FAD5E
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
-
-Bitmap_1bit_Illegal_Disk:	; 9FAFC6
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
-
-Bitmap_1bit_Turn_On_AGAIN:	; 9FB22E
-	.incbin "../v10/maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
+; Boot/flash-update screen bitmaps (headerless 1bpp, 224x22, 616 bytes
+; each): byte-identical duplicates of the eight bitmaps in the maincpu ROM
+; at 0xE0018E-0xE0148D, re-emitted verbatim from the same image files under
+; v10/maincpu/images/ so the duplication stays single-sourced.
+; Cross-ref: v10/maincpu/boot/boot_data_tables.s
+Bitmap_1bit_Flash_Memory_Update:	.incbin "../v10/maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
+Bitmap_1bit_Now_Erasing:		.incbin "../v10/maincpu/images/Bitmap_1bit_Now_Erasing.bin"
+Bitmap_1bit_FD_to_Flash_Memory:		.incbin "../v10/maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+Bitmap_1bit_Completed:			.incbin "../v10/maincpu/images/Bitmap_1bit_Completed.bin"
+Bitmap_1bit_Please_Wait:		.incbin "../v10/maincpu/images/Bitmap_1bit_Please_Wait.bin"
+Bitmap_1bit_Change_FD_2_of_2:		.incbin "../v10/maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
+Bitmap_1bit_Illegal_Disk:		.incbin "../v10/maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
+Bitmap_1bit_Turn_On_AGAIN:		.incbin "../v10/maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 ; =============================================================================
 ; FDC Bootloader Dispatch Offset Tables (0x9FB496 - 0x9FB4D1)
