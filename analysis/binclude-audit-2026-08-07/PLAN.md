@@ -143,10 +143,16 @@ comments, orphaned includes).
   model tables; help index/strings; TG config; tone-database directory +
   offset table; tone records; preset banks; wallpaper/icon tables; hkst/gap
   trivia.
-- **Wave 3 — hdae5000 + v142 zones** (~7 agents): string-table re-decode fix;
-  slice re-splits + splash/palette extraction + gallery; init-data pointer
-  symbolization; subcpu ZONE A0/A/B (DSP grammar gets 2 agents); subcpu boot
-  data split + the `.fill` shrink.
+- **Wave 3a — DSP-related only** (split out at Felipe's request, 2026-08-07,
+  run first): subcpu ZONE A0 (0x00F7E6-0x012114 constant pool), ZONE A
+  (0x012195-0x014738 incl. the exponential pitch table @0x13318), ZONE B
+  (0x0147B3-0x01E17E — the Eff9/EffA DSP effect-parameter grammar, 2 agents:
+  structural carve, then semantic annotation cross-referenced against the
+  MAME-side DSP findings in ~/compartilhado/kn7000_mame).
+- **Wave 3b — the rest of old Wave 3** (awaits go-ahead): hdae5000
+  string-table re-decode fix; slice re-splits + splash/palette extraction +
+  gallery; init-data pointer symbolization; subcpu boot data split + the
+  `.fill` shrink.
 - **Wave 4 — v7 tree** (~10 agents): v7_data tables; v7_fix small batch;
   v7_fix hard three (one each); v7_block in size-sorted batches; transplant
   re-conversion; manifest prune. The 703 KB C-parameterization is scoped in
