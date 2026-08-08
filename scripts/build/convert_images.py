@@ -158,6 +158,14 @@ IMAGE_METADATA = {
     "HDAE5000_FilePanel.bin": (320, 240, 8, "File selection UI panel"),
     # ROM offset 0x6198e (CPU: 0x2E198E): Small icon (uses halftone palette)
     "HDAE5000_Icon.bin": (28, 28, 8, "Hard disk with magnetic head icon"),
+    # ROM offset 0x661ce (CPU: 0x2E61CE): boot splash shown by HDAE5000_Boot_Init.
+    # Geometry comes from the firmware, not from guessing: the bitmap's resource
+    # descriptor at 0x28F543 returns 0x2E61CE for query A1, 0x140 (320) for A2
+    # and 0xF0 (240) for A3; Boot_Init then copies exactly 2 * 0x9600 = 76,800
+    # bytes of it to VRAM; and 320*240 = 76,800 exactly fills the gap between
+    # HDAE5000_Palette_Data (0x2E5DCE + 0x400) and HDAE5000_Display_Params
+    # (0x2F8DCE).  Uses the main palette, immediately above it in ROM.
+    "HDAE5000_SplashScreen.bin": (320, 240, 8, "Boot splash: 'HD-AE5000 Version 2 / Start-up ! Please wait . . .'"),
 
     # Preset wallpapers from table_data ROM
     # Discovered via SetWallPaper routine referencing table at 0xEAAE62
@@ -293,7 +301,9 @@ def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> boo
 def main():
     # Determine paths
     script_dir = Path(__file__).parent
-    project_dir = script_dir.parent  # Project root containing maincpu/, table_data/, etc.
+    # Repo root: scripts/build/ -> scripts/ -> repo root.  The maincpu images
+    # live under the v10 firmware tree (v10/maincpu/images).
+    project_dir = script_dir.parent.parent
 
     if len(sys.argv) > 1:
         output_dir = Path(sys.argv[1])
@@ -304,7 +314,7 @@ def main():
 
     # Image directories to process
     image_dirs = [
-        ("Main CPU", project_dir / "maincpu" / "images"),
+        ("Main CPU", project_dir / "v10" / "maincpu" / "images"),
         ("Table Data", project_dir / "table_data" / "images"),
         ("HDAE5000", project_dir / "hdae5000" / "images"),
     ]
@@ -312,7 +322,7 @@ def main():
     print(f"Output directory: {output_dir}")
 
     # Load palette for 8-bit indexed color images (from maincpu)
-    maincpu_images = project_dir / "maincpu" / "images"
+    maincpu_images = project_dir / "v10" / "maincpu" / "images"
     palette_path = maincpu_images / PALETTE_FILE
     palette = load_palette(palette_path)
     if palette:

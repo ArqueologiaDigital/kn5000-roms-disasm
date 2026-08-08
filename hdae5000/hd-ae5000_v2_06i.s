@@ -41,8 +41,13 @@
 ;                    "TECHNICS KN5000"
 ;   0x1C9FF-0x1D9FF  UI configuration strings (0x29BFE0-0x29CFF0):
 ;                    "infofont", "reversecolor", "fontcolor", "dial", etc.
-;   0x1D000-0x6FFFF  Additional code, lookup tables, German error messages
-;   0x70000-0x7FFFF  Padding zeros (last 64KB)
+;   0x1D000-0x65DCD  Additional code, lookup tables, German error messages
+;   0x65DCE-0x661CD  HDAE5000_Palette_Data - 256 RGBX VGA entries (1,024 bytes)
+;   0x661CE-0x78DCD  HDAE5000_Bitmap_BootSplash - boot splash bitmap
+;                    (0x2E61CE, 320x240 8bpp indexed, 76,800 bytes)
+;   0x78DCE-0x7A134  HDAE5000_Display_Params + HDAE5000_Init_Data
+;   0x7A135-0x7FFFF  Padding zeros (24,267 bytes; the ROM's last non-zero
+;                    byte is at file offset 0x7A134 = 0x2FA134)
 ;
 ; Key Routine Addresses (within code sections):
 ;
@@ -232,12 +237,18 @@ HDAE5000_ENTRY_4:	; 28001Ch
 ;
 ; Key routines:
 ;   0x280020  Handler_Registration - Register 11 handlers with main CPU workspace
-;   0x28030E  Alloc_Memory_1 - Memory lookup (palette at 0x2A898E)
-;   0x28033B  Alloc_Memory_2 - Memory lookup (palette at 0x2BB98E)
-;   0x280368  Alloc_Memory_3 - Memory lookup (palette at 0x2CE98E)
-;   0x280395  Alloc_Memory_4 - Memory lookup (palette at 0x2E198E, small display)
+;   0x28030E  Alloc_Memory_1 - Bitmap resource descriptor, HDAE5000_Bitmap_TitleLogo
+;                             (A1 = 0x2A898E bitmap data, not a palette)
+;   0x28033B  Alloc_Memory_2 - Bitmap resource descriptor, HDAE5000_Bitmap_DriveMech
+;                             (A1 = 0x2BB98E bitmap data, not a palette)
+;   0x280368  Alloc_Memory_3 - Bitmap resource descriptor, HDAE5000_Bitmap_FilePanel
+;                             (A1 = 0x2CE98E bitmap data, not a palette)
+;   0x280395  Alloc_Memory_4 - Bitmap resource descriptor, HDAE5000_Bitmap_HddIcon
+;                             (A1 = 0x2E198E bitmap data, not a palette)
 ;   0x2803C2  Register_Frame - Register frame handler callback
-;   0x28F543  Alloc_Memory - Primary memory lookup (palette at 0x2E61CE)
+;   0x28F543  Alloc_Memory - Bitmap resource descriptor for the boot splash
+;                             (A1 = 0x2E61CE HDAE5000_Bitmap_BootSplash, A2 = 320,
+;                              A3 = 240 -- bitmap data, not a palette)
 ; ============================================================================
 
 ; ----------------------------------------------------------------------------

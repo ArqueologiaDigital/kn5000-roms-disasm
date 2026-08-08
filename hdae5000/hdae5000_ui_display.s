@@ -6961,13 +6961,21 @@ HDAE5000_Config_Init:	; 0x28F4D1 (114 bytes)
 	ret
 
 HDAE5000_Alloc_Memory:	; 28F543h
-	; Memory/display parameter lookup routine
+	; Bitmap resource descriptor for the boot splash screen.
+	; (Despite the name it allocates nothing: it is a constant lookup, the
+	;  fifth of five identical descriptors -- 0x28030E/0x28033B/0x280368/
+	;  0x280395 describe the Logo, Hands, FilePanel and Icon bitmaps.)
 	; Input: XBC = request type (0x01E000A1, A2, or A3)
 	; Output: XHL = result based on type:
-	;   A1 -> 0x2E61CE (ROM palette data pointer)
-	;   A2 -> 0x140 (320 decimal - display width)
-	;   A3 -> 0xF0 (240 decimal - display height)
+	;   A1 -> 0x2E61CE (HDAE5000_Bitmap_BootSplash bitmap data, NOT a palette)
+	;   A2 -> 0x140 (320 decimal - bitmap width)
+	;   A3 -> 0xF0 (240 decimal - bitmap height)
 	;   else -> 0 (invalid type)
+	; A2/A3 give the splash geometry as 320 x 240; at 8bpp that is 76,800
+	; bytes, which agrees with both the 2 x 0x9600 VRAM copy in Boot_Init
+	; and the exact fill of 0x2E61CE-0x2F8DCD.  (Do not assume A2/A3 are
+	; raster dimensions for every descriptor: 0x280395 answers 0x1B/0x1B
+	; for the 784-byte icon, which actually renders as 28 x 28.)
 	cp xbc, 0x1E000A3	; Check for type A3
 	jr z, HDAE5000_Alloc_Memory__type_A3
 	cp xbc, 0x1E000A2	; Check for type A2
@@ -6977,7 +6985,7 @@ HDAE5000_Alloc_Memory:	; 28F543h
 	lds32 xhl, 0	; Invalid type - return 0
 	ret
 HDAE5000_Alloc_Memory__type_A1:
-	lda_24 xhl, (0x2e61ce); Return palette data pointer
+	lda_24 xhl, (0x2e61ce); Return HDAE5000_Bitmap_BootSplash bitmap address
 	ret
 HDAE5000_Alloc_Memory__type_A2:
 	ld xhl, 0x140	; Return 320 (width)
@@ -7002,8 +7010,9 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 ; This routine:
 ;   1. Clears work buffer (0xF52A bytes at 0x22A000)
 ;   2. Registers handlers with main CPU via callback at 0x280020
-;   3. Loads VGA palette from ROM at 0x2E5DCE
-;   4. Allocates 0x12C00 bytes and copies VRAM data from 0x1A0000
+;   3. Loads the VGA palette HDAE5000_Palette_Data (ROM 0x2E5DCE)
+;   4. Blits HDAE5000_Bitmap_BootSplash (ROM 0x2E61CE, 320x240x8bpp = 0x12C00
+;      bytes) INTO VRAM at 0x1A0000, as two contiguous 0x9600-byte copies
 ;   5. Initializes handler function pointers at 0x230ECC/ED2/ED6
 ;   6. Checks for HD presence via 0x2971A3
 ;   7. Registers frame handler callback via 0x2803C2
@@ -7048,6 +7057,7 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 
 ; ROM data addresses
 	; (EQU→inline label) HDAE5000_Palette_Data = 0x2E5DCE
+	; (EQU→inline label) HDAE5000_Bitmap_BootSplash = 0x2E61CE
 	; (EQU→inline label) HDAE5000_Display_Params = 0x2F8DCE
 
 ; All routine addresses are now exposed as labels in split binary sections
@@ -7079,28 +7089,31 @@ HDAE5000_Boot_Init:	; 28F576h
 
 	call HDAE5000_Handler_Registration	; Register handlers with main CPU
 
-	lda_24 xwa, (0x2e5dce); Load palette data address
+	lda_24 xwa, (0x2e5dce); HDAE5000_Palette_Data
 	calr HDAE5000_Load_Palette	; Load 256-entry VGA palette
 
-	; Allocate memory for VRAM copy
+	; === Blit the boot splash screen into VRAM ===
+	; Fetch the splash bitmap's ROM address from its resource descriptor
 	lds32 xwa, 0
-	ld xbc, 0x1E000A1	; Allocation type A1
+	ld xbc, 0x1E000A1	; Resource query A1 = bitmap data address
 	lds32 xde, 0
-	calr HDAE5000_Alloc_Memory	; Returns address in XHL
-	ld xiz, xhl	; XIZ = allocated buffer
+	calr HDAE5000_Alloc_Memory	; Returns 0x2E61CE in XHL
+	ld xiz, xhl	; XIZ = HDAE5000_Bitmap_BootSplash
 
-	; Copy from allocated buffer to VRAM area 1 (0x1A0000, size 0x9600)
+	; Copy rows 0-119 of the splash to VRAM (0x1A0000, size 0x9600)
 	pushw 0x9600	; push 9600h (16-bit immediate)
 	ld xwa, xiz
-	push xwa	; Source
+	push xwa	; Source = HDAE5000_Bitmap_BootSplash
 	ld xwa, 0x1A0000	; Destination
 	push xwa
 	call HDAE5000_MemCopy
 
-	; Copy from allocated buffer + offset to VRAM area 2 (0x1A9600)
+	; Copy rows 120-239 to the contiguous VRAM continuation (0x1A9600).
+	; Two calls only because MemCopy's length is a 16-bit push and the
+	; bitmap is 0x12C00 bytes; the destinations are adjacent.
 	pushw 0x9600	; push 9600h (16-bit immediate)
 	ld xwa, xiz
-	add xwa, 0x9600	; Source + offset
+	add xwa, 0x9600	; Source + half the bitmap
 	push xwa
 	ld xwa, 0x1A9600	; Destination
 	push xwa

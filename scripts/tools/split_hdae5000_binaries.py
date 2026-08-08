@@ -4,6 +4,15 @@
 Uses .incbin offset/count parameters to expose labels at known routine
 addresses without creating separate files. This makes the code navigable
 by adding symbolic labels at documented routine entry points.
+
+ONE-SHOT TOOL, kept only as the record of where the splits came from.
+hdae5000/hdae5000_data_tables.s has since been hand-annotated with multi-line
+documentation blocks that this generator cannot reproduce, and it refuses to
+re-split an .incbin that already carries offset/count arguments.  SPLIT_POINTS
+below is also NO LONGER a complete map of that file: the 2026-08 graphics
+re-split replaced four slices with eleven (five palette/bitmap pairs plus a
+244-byte name block) and retired HDAE5000_Font_Data.  Keep the entries here in
+step with renames, but do not re-run this over the current sources.
 """
 
 import re
@@ -77,7 +86,8 @@ SPLIT_POINTS = {
     0x2A6984: ('HDAE5000_UiObjectName_PtrTable', 'UI object name pointer table (790 entries)'),
     0x2A75DC: ('HDAE5000_UiObjectName_Pool', 'UI object name string pool'),
     0x2A849A: ('HDAE5000_GFX_INIT_PARAMS', 'Graphics initialization parameters'),
-    0x2E5DCE: ('HDAE5000_Palette_Data', 'VGA palette data (256 entries)'),
+    0x2E5DCE: ('HDAE5000_Palette_Data', 'VGA palette, 256 RGBX entries (1024 bytes)'),
+    0x2E61CE: ('HDAE5000_Bitmap_BootSplash', 'Boot splash bitmap, 320x240 8bpp (76800 bytes)'),
     0x2F8DCE: ('HDAE5000_Display_Params', 'Display configuration parameters'),
     0x2F94B2: ('HDAE5000_Init_Data', 'Data copied to 0x23952A (0xC82 bytes)'),
 }
