@@ -175,6 +175,16 @@ has worked 24/24 times:
    `git checkout/reset/stash`) on anything less.
 3. Manager appends a ledger row to `WAVE-STATUS.md`.
 
+**★★ THE GATE COMMAND MATTERS — a wave-3b manager caught this the hard way.**
+Run `make clean-all && make all && make asl-all && python3
+scripts/build/compare_roms.py`. `make clean-all` deletes the ASL ROMs and
+`make all` does **not** rebuild them, so `compare_roms.py` then silently reports
+**9 sections instead of 15** — and a manager reading "everything says 100.00%"
+passes a gate that never tested the six legacy ASL mirror builds. Always count
+the sections, not just the percentages. (`clean-all` is also what catches stale
+object files: `hd-ae5000_v2_06i.llvm.o` depends only on the top-level `.s`, not
+on the files it `.include`s.)
+
 Non-negotiables for every wave: blob files that `archive/asl/` bincludes stay
 byte-identical on disk (slice with `.incbin "file", offset, length` instead);
 symbols reference files are UPPERCASE and address-sorted; disasm commits carry
