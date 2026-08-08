@@ -32859,9 +32859,7 @@ HDAE5000_Display_Params:	; 0x2F8DCE
 	.asciz "0123456789ABCDEF"
 	.byte 0x00
 
-HDAE5000_Init_Data:	; 0x2F94B2
-	; Data copied to 0x23952A (0xC82 bytes)
-	.incbin "includes/code_29af2d_2fffff.bin", 386437, 27470
+	.include "hdae5000_init_data.s"
 
 ; ============================================================================
 ; END OF ROM (0x300000)

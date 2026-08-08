@@ -740,6 +740,8 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_ErrMsgTimerCatch:
+	; registered as "ErrMsgTimerCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -788,6 +790,8 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_ErrMsgTimerCatchLBN:
+	; registered as "ErrMsgTimerCatchLBN" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -841,6 +845,8 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_BitmapButt01:
+	; registered as "BitmapButt01" in HDAE5000_ObjHandler_Table
 	cp	xbc, 0x01e000a3
 	jr z, .LUIH_b54e                       ; [66 1f] jr Z,0x28b54e
 	cp	xbc, 0x01e000a2
@@ -862,6 +868,8 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	ld	xhl, 0x0000000f
 	ret
 
+HDAE5000_AcLanguageText1Proc:
+	; registered as "AcLanguageText1Proc" in HDAE5000_ClassProc_Table
 	stb_dri l, 0xFD, 0x2A, 0xFF	; lda XSP,XSP+0xff2a
 	push xiz
 	stl_dri xde, 0xFD, 0xCE, 0x00	; ld (XSP+0x00ce),XDE
@@ -3079,6 +3087,8 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	stb_dri l, 0xFD, 0xD6, 0x00	; lda XSP,XSP+0x00d6
 	ret
 
+HDAE5000_LyricBoxProc:
+	; registered as "LyricBoxProc" in HDAE5000_ClassProc_Table
 	lda	xsp, (xsp-16)
 	pushw iz                                ; push IZ
 	ld (xsp + 0x06), xde                    ; ld (XSP+0x06),XDE
@@ -5430,7 +5440,8 @@ HDAE5000_String_Compare:	; 0x28E60E (2397 bytes)
 	ret
 
 	; --- Main dispatch function (2384 bytes) ---
-.Lsc_dispatch:
+HDAE5000_FDFileSelectProc:
+	; registered as "FDFileSelectProc" in HDAE5000_ClassProc_Table
 	stb_dri l, 0xfd, 0x7e, 0xff	; lda XSP, XSP-130 (stack frame)
 	push xiz
 	ld (xsp + 0x7a), xde		; save arg3

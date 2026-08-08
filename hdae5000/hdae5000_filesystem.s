@@ -342,6 +342,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	lda	xsp, (xsp+36)
 	retd 0x0002		; retd 0x0002
 
+HDAE5000_FileLBNNameCheck:
+	; registered as "FileLBNNameCheck" in HDAE5000_ObjHandler_Table
 	dec	4, xsp
 	push xiz
 	ld (xsp + 0x04), xwa                    ; ld (XSP+0x04),XWA
@@ -404,6 +406,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	inc 4, xsp                              ; inc 4,XSP
 	ret
 
+HDAE5000_LBNLswBitCheck:
+	; registered as "LBNLswBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -501,6 +505,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNPmtBitCheck:
+	; registered as "LBNPmtBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -598,6 +604,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNSqtBitCheck:
+	; registered as "LBNSqtBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -695,6 +703,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNCmpBitCheck:
+	; registered as "LBNCmpBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -792,6 +802,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNTmBitCheck:
+	; registered as "LBNTmBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -889,6 +901,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNMspBitCheck:
+	; registered as "LBNMspBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -986,6 +1000,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNRcmBitCheck:
+	; registered as "LBNRcmBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -1083,6 +1099,8 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LBNMdBitCheck:
+	; registered as "LBNMdBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -1391,7 +1409,8 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	;   0x01E0007C: Query tile size → returns 16
 	;   0x01E00084: Acknowledge/no-op → returns 0
 	;   0x01E00086: Copy display tile data + clear dirty flag
-.LFS_RdFSB__handlerA:
+HDAE5000_FlsNamingCheck:
+	; registered as "FlsNamingCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa			; save UI context
 	cp xbc, 0x01c00007
@@ -1496,7 +1515,8 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	; Same event handling as handler A, but operates on the right display column.
 	; Key differences: uses tile ID 0x0163 (right pane), and sub-code 0x0B
 	; calls FS_Write_FSB instead of FS_Read_FSB (save operation).
-.LFS_RdFSB__handlerB:
+HDAE5000_FlsNamingCheck2:
+	; registered as "FlsNamingCheck2" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa			; save UI context
 	cp xbc, 0x01c00007
@@ -1923,6 +1943,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	lda	xsp, (xsp+32)
 	ret
 
+HDAE5000_SelectFlsScreen:
+	; registered as "SelectFlsScreen" in HDAE5000_ScreenProc_Table
 	push xiz
 	ld	xiz, xde
 	cp	xbc, 0x01ea0000
@@ -2045,6 +2067,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsLoadScreen:
+	; registered as "FlsLoadScreen" in HDAE5000_ScreenProc_Table
 	dec	6, xsp
 	push xiz
 	ld	xiz, xde
@@ -2345,6 +2369,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	inc	6, xsp
 	ret
 
+HDAE5000_FlsFileLoadSwCatch:
+	; registered as "FlsFileLoadSwCatch" in HDAE5000_ObjHandler_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
@@ -2410,6 +2436,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_FlsEditScreen:
+	; registered as "FlsEditScreen" in HDAE5000_ScreenProc_Table
 	push xiz
 	ld	xiz, xde
 	cp	xbc, 0x01ea0002
@@ -2630,6 +2658,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsDel1SwCatch:
+	; registered as "FlsDel1SwCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -2709,6 +2739,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsDel2SwCatch:
+	; registered as "FlsDel2SwCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -2788,6 +2820,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsDirSelScreen:
+	; registered as "FlsDirSelScreen" in HDAE5000_ScreenProc_Table
 	push xiz
 	ld	xiz, xde
 	cp	xbc, 0x01ea0000
@@ -2891,6 +2925,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsFileSelScreen:
+	; registered as "FlsFileSelScreen" in HDAE5000_ScreenProc_Table
 	push xiz
 	ld	xiz, xde
 	cp	xbc, 0x01ea0002
@@ -3022,6 +3058,8 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsOverWrSwCatch:
+	; registered as "FlsOverWrSwCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -3214,7 +3252,8 @@ HDAE5000_FS_Buffer_Setup:	; 0x289665 (548 bytes)
 	jp (xhl)				; b3 d8 — tail call
 
 ; --- Event handler sub-function ---
-.Lfbs_evt_handler:				; 0x289781
+HDAE5000_CopyToHDScreen:
+	; registered as "CopyToHDScreen" in HDAE5000_ScreenProc_Table
 	pushw iz                                ; push iz (compact 16-bit)
 	cp xbc, 0x01ea0002			; e9 cf 02 00 ea 01
 	jrl z, .Lfbs_evt_0002			; 76 xx xx
@@ -3708,7 +3747,8 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	ret
 	;
 	; Part 2: Event handler — navigation (0x289D72)
-.LFSD__handlerA:
+HDAE5000_CopyToHDDirSelScreen:
+	; registered as "CopyToHDDirSelScreen" in HDAE5000_ScreenProc_Table
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x01ea0000
@@ -3926,7 +3966,8 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	ret
 	;
 	; Part 3: Event handler — file operations (0x28A07E)
-.LFSD__handlerB:
+HDAE5000_CP_FD_DIRNAMECheck:
+	; registered as "CP_FD_DIRNAMECheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x01c00007
@@ -4028,7 +4069,8 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	ret
 	;
 	; Part 4: Event handler — menu selection (0x28A1A7)
-.LFSD__handlerC:
+HDAE5000_WrConfirmEventCatch:
+	; registered as "WrConfirmEventCatch" in HDAE5000_ObjHandler_Table
 	dec 0, xsp			; alloc 4 bytes
 	push xiz
 	ld (xsp + 0x04), xde
@@ -4242,7 +4284,8 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	jp (xhl)			; tail call (not call)
 	;
 	; Part 2: Event handler (0x28A497) — dispatches on event codes
-.LFS_EL__handler:
+HDAE5000_DelOptSwEventCatch:
+	; registered as "DelOptSwEventCatch" in HDAE5000_ObjHandler_Table
 	dec 0, xsp			; allocate 8 bytes
 	push xiz
 	ld (xsp + 0x04), xde		; save XDE to stack
@@ -4370,7 +4413,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 2: Handler A (0x28A617) — event handler with stack frame
-.LDUO__handlerA:
+HDAE5000_DelOptNameCheck:
+	; registered as "DelOptNameCheck" in HDAE5000_ObjHandler_Table
 	dec 4, xsp			; alloc 16 bytes
 	push xiz
 	ld (xsp + 0x04), xwa
@@ -4430,7 +4474,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 3: Handler B (0x28A69D) — digit callback for slot 0 (0x22ABE8)
-.LDUO__handlerB:
+HDAE5000_DelLswEditCheck:
+	; registered as "DelLswEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4499,7 +4544,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 4: Handler C (0x28A738) — slot 1 (0x22ABE9)
-.LDUO__handlerC:
+HDAE5000_DelPmtEditCheck:
+	; registered as "DelPmtEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4568,7 +4614,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 5: Handler D (0x28A7D3) — slot 2 (0x22ABEA)
-.LDUO__handlerD:
+HDAE5000_DelSqtEditCheck:
+	; registered as "DelSqtEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4637,7 +4684,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 6: Handler E (0x28A86E) — slot 3 (0x22ABEB)
-.LDUO__handlerE:
+HDAE5000_DelCmpEditCheck:
+	; registered as "DelCmpEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4706,7 +4754,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 7: Handler F (0x28A909) — slot 4 (0x22ABEC)
-.LDUO__handlerF:
+HDAE5000_DelTmEditCheck:
+	; registered as "DelTmEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4775,7 +4824,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 8: Handler G (0x28A9A4) — slot 5 (0x22ABED)
-.LDUO__handlerG:
+HDAE5000_DelMspEditCheck:
+	; registered as "DelMspEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4844,7 +4894,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 9: Handler H (0x28AA3F) — slot 6 (0x22ABEE)
-.LDUO__handlerH:
+HDAE5000_DelRcmEditCheck:
+	; registered as "DelRcmEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4913,7 +4964,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 10: Handler I (0x28AADA) — slot 7 (0x22ABEF)
-.LDUO__handlerI:
+HDAE5000_DelMdEditCheck:
+	; registered as "DelMdEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -4982,7 +5034,8 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	ret
 	;
 	; Part 11: Handler J (0x28AB75) — slot 8 (0x22ABF0), variant with jrl
-.LDUO__handlerJ:
+HDAE5000_DelTlxEditCheck:
+	; registered as "DelTlxEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc

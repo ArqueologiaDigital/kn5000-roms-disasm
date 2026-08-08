@@ -215,7 +215,8 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	stb_dri l, 0xFD, 0x0C, 0x01	; lda xsp, (xsp + 0x010c) — dealloc frame
 	ret						; 0e
 	; --- Sub-handler 1: event 0x01C00007 dispatch (0x28310D) ---
-.Lsd_sub1:
+HDAE5000_HDDTitleSwCatch:
+	; registered as "HDDTitleSwCatch" in HDAE5000_ScreenProc_Table
 	cp xbc, 0x01c00007				; e9 cf 07 00 c0 01
 	jr nz, .Lsd_sub1_done			; 6e 63
 	ldl_da xwa, (0x23a1a2); e2 a2 a1 23 20
@@ -254,7 +255,8 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	lds32 xhl, 0					; eb a8
 	ret						; 0e
 	; --- Sub-handler 2: event handler for 0xD9 (0x28317B) ---
-.Lsd_sub2:
+HDAE5000_AttenCpToHDSwCatch:
+	; registered as "AttenCpToHDSwCatch" in HDAE5000_ObjHandler_Table
 	push xiz					; 3e
 	ld xiz, xwa					; e8 8e
 	ld xwa, xbc					; e9 88
@@ -319,7 +321,8 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	pop xiz					; 5e
 	ret						; 0e
 	; --- Sub-handler 3: event handler for 0xD8 (0x283237) ---
-.Lsd_sub3:
+HDAE5000_AttenCpToMarkSwCatch:
+	; registered as "AttenCpToMarkSwCatch" in HDAE5000_ObjHandler_Table
 	push xiz					; 3e
 	ld xiz, xwa					; e8 8e
 	ld xwa, xbc					; e9 88
@@ -555,7 +558,8 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	ret					; 0e
 
 ; --- Event handler sub-function ---
-.Lri_event_handler:				; 0x283498
+HDAE5000_HdTitleEventCatch:
+	; registered as "HdTitleEventCatch" in HDAE5000_ObjHandler_Table
 	dec 0, xsp				; ef 68 — allocate 4 bytes
 	push xiz				; 3e
 	ld (xsp + 0x04), xde			; bf 04 62
@@ -608,7 +612,8 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	ret					; 0e
 
 ; --- Jump table dispatcher sub-function ---
-.Lri_dispatch:					; 0x283518
+HDAE5000_HDAETitleFunc:
+	; registered as "HDAETitleFunc" in HDAE5000_ScreenProc_Table
 	cp xbc, 0x01c00013			; e9 cf 13 00 c0 01
 	jrl nz, .Lri_done			; 7e xx xx
 	ld xwa, xde				; ea 88
@@ -1401,6 +1406,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	lda	xsp, (xsp+26)
 	ret
 
+HDAE5000_FILE_LOAD_Screen:
+	; registered as "FILE_LOAD_Screen" in HDAE5000_ScreenProc_Table
 	push xiz
 	ld	xiz, xde
 	ld	xwa, xbc
@@ -1532,6 +1539,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_AttenDelDirSwCatch:
+	; registered as "AttenDelDirSwCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -1622,6 +1631,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_AttenDelFileSwCatch:
+	; registered as "AttenDelFileSwCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -1718,6 +1729,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FileLoadSwCatch:
+	; registered as "FileLoadSwCatch" in HDAE5000_ScreenProc_Table
 	cp	xbc, 0x01c00007
 	jr nz, .LHRW_4267                      ; [6e 7a] jr NZ,0x284267
 	ld	xwa, (0x23a1a2)
@@ -1755,6 +1768,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	lds32	xhl, 0
 	ret
 
+HDAE5000_FILE_Naming_Screen:
+	; registered as "FILE_Naming_Screen" in HDAE5000_ScreenProc_Table
 	cp	xbc, 0x01c00007
 	jr nz, .LHRW_4295                      ; [6e 23] jr NZ,0x284295
 	ld	xwa, (0x23a1a2)
@@ -1769,6 +1784,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	lds32	xhl, 0
 	ret
 
+HDAE5000_HDDNamingCheck:
+	; registered as "HDDNamingCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	cp	xbc, 0x01c00007
@@ -1916,6 +1933,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_HDD_DIRNAMECheck:
+	; registered as "HDD_DIRNAMECheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	cp	xbc, 0x01c00007
@@ -2013,6 +2032,8 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_HDD_UTIL_PAGE:
+	; registered as "HDD_UTIL_PAGE" in HDAE5000_ObjHandler_Table
 	lda	xsp, (xsp-112)
 	push xiz
 	ld (xsp + 0x6c), xde                    ; ld (XSP+0x6c),XDE
@@ -2821,6 +2842,9 @@ HDAE5000_HD_Error_Check:	; 0x284DE9 (355 bytes)
 	ret
 	; Part 2: Error handler dispatcher (0x284E53)
 	; XWA = original params, XBC = error code, XDE = extra data
+
+HDAE5000_PC_DATA_LINK_PAGE:
+	; registered as "PC_DATA_LINK_PAGE" in HDAE5000_ObjHandler_Table
 	dec 0, xsp
 	push xiz
 	ld (xsp + 4), xde		; save extra data
@@ -3068,7 +3092,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ret
 	;
 	; Part 2: Event handler 1 (0x2850ED) — jump table dispatch
-.LHD_SC__handler1:
+HDAE5000_SeparateOutputModeCheck:
+	; registered as "SeparateOutputModeCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa			; save context in XIZ
 	ld xwa, xbc			; XWA = event code
@@ -3136,7 +3161,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ret
 	;
 	; Part 3: Event handler 2 (0x285192) — same structure, different data
-.LHD_SC__handler2:
+HDAE5000_SeparateDrumPartCheck:
+	; registered as "SeparateDrumPartCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -3204,7 +3230,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ret
 	;
 	; Part 4: Event handler 3 (0x28523B) — same structure, different data
-.LHD_SC__handler3:
+HDAE5000_SeparateBassPartCheck:
+	; registered as "SeparateBassPartCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
@@ -3365,6 +3392,9 @@ HDAE5000_HD_Buffer_Init:	; 0x285340 (220 bytes)
 	; Sub-routine 2: Command dispatcher with computed jump table
 	; Input: XWA = context pointer (saved as XIZ), XBC = command ID
 	; Returns XHL = result
+
+HDAE5000_SaveOptNameCheck:
+	; registered as "SaveOptNameCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld xiz, xwa			; save context
 	ld xwa, xbc			; command → XWA
@@ -3525,6 +3555,9 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f01aa
 	ld	xbc, 0x01c0000f
 	jp	(xhl)
+
+HDAE5000_SaveOptSwEventCatch:
+	; registered as "SaveOptSwEventCatch" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -3661,6 +3694,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FileOptNameCheck:
+	; registered as "FileOptNameCheck" in HDAE5000_ObjHandler_Table
 	dec	4, xsp
 	push xiz
 	ld (xsp + 0x04), xwa                    ; ld (XSP+0x04),XWA
@@ -3712,6 +3747,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	inc 4, xsp                              ; inc 4,XSP
 	ret
 
+HDAE5000_SfxLswBitCheck:
+	; registered as "SfxLswBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -3778,6 +3815,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxPmtBitCheck:
+	; registered as "SfxPmtBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -3844,6 +3883,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxSqtBitCheck:
+	; registered as "SfxSqtBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -3910,6 +3951,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxCmpBitCheck:
+	; registered as "SfxCmpBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -3976,6 +4019,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxTmBitCheck:
+	; registered as "SfxTmBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4042,6 +4087,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxMspBitCheck:
+	; registered as "SfxMspBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4108,6 +4155,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxRcmBitCheck:
+	; registered as "SfxRcmBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4174,6 +4223,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxMdBitCheck:
+	; registered as "SfxMdBitCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4240,6 +4291,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_SfxTlxBitCheck:
+	; registered as "SfxTlxBitCheck" in HDAE5000_ObjHandler_Table
 	dec	4, xsp
 	push xiz
 	ld (xsp + 0x04), xwa                    ; ld (XSP+0x04),XWA
@@ -4322,6 +4375,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	inc 4, xsp                              ; inc 4,XSP
 	ret
 
+HDAE5000_WriteProtectEditCheck:
+	; registered as "WriteProtectEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4373,6 +4428,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LyricJumpEditCheck:
+	; registered as "LyricJumpEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4453,6 +4510,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LyricForeColorCheck:
+	; registered as "LyricForeColorCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4503,6 +4562,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LyricBackColorCheck:
+	; registered as "LyricBackColorCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4553,6 +4614,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_WriteConfirmEditCheck:
+	; registered as "WriteConfirmEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4601,6 +4664,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_QuickLoadModeEditCheck:
+	; registered as "QuickLoadModeEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4645,6 +4710,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_LoadByNumberModeEditCheck:
+	; registered as "LoadByNumberModeEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4689,6 +4756,8 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_JumpAfterLoadModeEditCheck:
+	; registered as "JumpAfterLoadModeEditCheck" in HDAE5000_ObjHandler_Table
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xbc
@@ -4947,7 +5016,8 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	ret
 	;
 	; Part 2: Event handler (0x286502)
-.LHD_PS__handler:
+HDAE5000_SetupP2SwCatch:
+	; registered as "SetupP2SwCatch" in HDAE5000_ScreenProc_Table
 	cp xbc, 0x01c00007
 	jrl nz, .LHD_PS__exit
 	ldl_da xwa, (0x23a1a2)
@@ -5072,7 +5142,8 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	ret
 	;
 	; Part 2: Event handler (0x286666)
-.LCHSC__handler:
+HDAE5000_AttenHDFormatSwCatch:
+	; registered as "AttenHDFormatSwCatch" in HDAE5000_ObjHandler_Table
 	dec 6, xsp			; alloc 24 bytes
 	push xiz
 	ld xiz, xde			; XIZ = param
@@ -5508,7 +5579,8 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	retd 0x0002			; return, dealloc 2 bytes
 	;
 	; Part 2: Event handler A (0x286B72)
-.LHD_SR__handlerA:
+HDAE5000_LBNPage1SwCatch:
+	; registered as "LBNPage1SwCatch" in HDAE5000_ObjHandler_Table
 	dec 0, xsp			; alloc 8 bytes
 	push xiz
 	ld (xsp + 0x04), xde
@@ -5658,7 +5730,8 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ret
 	;
 	; Part 3: Event handler B (0x286CED)
-.LHD_SR__handlerB:
+HDAE5000_LBNLoadSwCatch:
+	; registered as "LBNLoadSwCatch" in HDAE5000_ObjHandler_Table
 	dec 0, xsp
 	push xiz
 	ld (xsp + 0x04), xde

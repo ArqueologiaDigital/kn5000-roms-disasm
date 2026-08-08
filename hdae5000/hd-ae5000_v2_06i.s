@@ -655,6 +655,9 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 .LRF_0436:
 	lds	wa, 1
 	jp HDAE5000_Set_Menu_Visibility                             ; jp 0x28b258
+
+HDAE5000_AcWindowPage1Proc:
+	; registered as "AcWindowPage1Proc" in HDAE5000_ClassProc_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
@@ -682,6 +685,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_TtlScreenRProc:
+	; registered as "TtlScreenRProc" in HDAE5000_ClassProc_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
@@ -756,6 +761,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_TtlScreenR2Proc:
+	; registered as "TtlScreenR2Proc" in HDAE5000_ClassProc_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
@@ -830,6 +837,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_TtlScreenR3Proc:
+	; registered as "TtlScreenR3Proc" in HDAE5000_ClassProc_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
@@ -904,6 +913,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_IvScreenR2Proc:
+	; registered as "IvScreenR2Proc" in HDAE5000_ClassProc_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
@@ -966,6 +977,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_SelectListProc:
+	; registered as "SelectListProc" in HDAE5000_ClassProc_Table
 	lda	xsp, (xsp-104)
 	push xiz
 	ld (xsp + 0x60), xde                    ; ld (XSP+0x60),XDE
@@ -1822,6 +1835,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	lda	xsp, (xsp+104)
 	ret
 
+HDAE5000_DbMemoClProc:
+	; registered as "DbMemoClProc" in HDAE5000_ClassProc_Table
 	lda	xsp, (xsp-106)
 	push xiz
 	ld (xsp + 0x6a), xde                    ; ld (XSP+0x6a),XDE
@@ -1988,6 +2003,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	lda	xsp, (xsp+106)
 	ret
 
+HDAE5000_AcHddNamingWindowProc:
+	; registered as "AcHddNamingWindowProc" in HDAE5000_ClassProc_Table
 	lda	xsp, (xsp-48)
 	push xiz
 	ld (xsp + 0x28), xde                    ; ld (XSP+0x28),XDE
@@ -3399,6 +3416,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	lda	xsp, (xsp+48)
 	ret
 
+HDAE5000_IvHddNamingProc:
+	; registered as "IvHddNamingProc" in HDAE5000_ClassProc_Table
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld	xiz, xde
@@ -3488,6 +3507,8 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_HDTitleMenuProc:
+	; registered as "HDTitleMenuProc" in HDAE5000_ClassProc_Table
 	ld	xhl, xbc
 	cp	xhl, 0x01c0000f
 	jr z, .LRF_27c3                        ; [66 11] jr Z,0x2827c3
@@ -3522,7 +3543,8 @@ HDAE5000_Event_Handler:	; 0x2827F4 (932 bytes)
 	ld xbc, 0x01c00025				; 41 25 00 c0 01
 	jp (xhl)					; b3 d8
 	; Entry point 2: main event handler dispatcher
-.Leh_main:
+HDAE5000_HardTestPage:
+	; registered as "HardTestPage" in HDAE5000_ObjHandler_Table
 	dec 0, xsp					; ef 68 — allocate stack frame
 	push xiz					; 3e
 	ld (xsp + 0x04), xde				; bf 04 62 — save XDE

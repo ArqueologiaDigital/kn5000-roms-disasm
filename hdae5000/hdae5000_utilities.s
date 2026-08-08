@@ -1436,608 +1436,206 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ld	xhl, xwa
 	pop xwa                                 ; pop XWA
 	jr t, .LDIV_baf2                       ; [68 f6] jr T,0x29baf2
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	jrl	ge, 0x6972
-	jr	ule, 0x42
-	jr	lt, 0x63
-	jr ugt, .LDIV_bb4b                     ; [6b 43] jr UGT,0x29bb4b
-	jr	nc, 0x6c
-	jr	nc, 0x72
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	jrl	ge, 0x6972
-	jr	ule, 0x46
-	jr	nc, 0x72
-	jr	mi, 0x43
-	jr	nc, 0x6c
-	jr	nc, 0x72
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	jrl	ge, 0x6972
-	jr	ule, 0x4a
-	jrl	mi, 0x706d
-	ld	xiy, 0x43746964
-	jr t, .LDIV_bb9b                       ; [68 65] jr T,0x29bb9b
-	jr	ule, 0x6b
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xde, 0x616d7469
-	jrl	f, 0x7542
-	jrl	ov, 0x3074
-	ldw	bc, 0x0000
-	popw ix                                 ; pop IX
-	jr lt, .LDIV_bbb9                      ; [61 6e] jr LT,0x29bbb9
-.LDIV_bb4b:
-	jr	c, 0x75
-	jr lt, .LDIV_bbb6                      ; [61 67] jr LT,0x29bbb6
-	jr	mi, 0x54
-	jr	mi, 0x78
-	jrl	ov, 0x6552
-	jrl	ov, 0x7275
-	jr nz, .LDIV_bb5b                      ; [6e 00] jr NZ,0x29bb5b
-.LDIV_bb5b:
-	nop                                     ; nop
-	ld	xiy, 0x734d7272
-	jr	c, 0x54
-	jr	ge, 0x6d
-	jr	mi, 0x72
-	ld	xhl, 0x68637461
-	popw ix                                 ; pop IX
-	ld	xde, 0x7245004e
-	jrl	le, 0x734d
-	jr c, .LDIV_bbcb                       ; [67 54] jr C,0x29bbcb
-	jr	ge, 0x6d
-	jr	mi, 0x72
-	ld	xhl, 0x68637461
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	mi, 0x70
-	jr	lt, 0x72
-	jr	lt, 0x74
-	jr	mi, 0x42
-	jr lt, .LDIV_bc00                      ; [61 73] jr LT,0x29bc00
-	jrl	ule, 0x6150
-	jrl	le, 0x4374
-	jr	t, 0x65
-	jr	ule, 0x6b
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	mi, 0x70
-.LDIV_bb9b:
-	jr lt, .LDIV_bc0f                      ; [61 72] jr LT,0x29bc0f
-	jr	lt, 0x74
-	jr	mi, 0x44
-	jrl	le, 0x6d75
-	.byte 0x50                             ; db
-.LDIV_bba5:
-	jr	lt, 0x72
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_bbae                     ; [6b 00] jr UGT,0x29bbae
-.LDIV_bbae:
-	ld	xiz, 0x764f736c
-	jr	mi, 0x72
-	.byte 0x57                             ; db
-.LDIV_bbb6:
-	jrl	le, 0x7753
-.LDIV_bbb9:
-	ld	xhl, 0x68637461
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x6544736c
-	jr	nov, 0x32
-	.byte 0x53                             ; db
-	jrl	c, 0x6143
-.LDIV_bbcb:
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x6544736c
-	jr	nov, 0x31
-	.byte 0x53                             ; db
-	jrl	c, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x6e657474
-.LDIV_bbe5:
-	ld	xhl, 0x4d6f5470
-	jr	lt, 0x72
-	jr ugt, .LDIV_bc41                     ; [6b 53] jr UGT,0x29bc41
-	jrl	c, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-.LDIV_bbf5:
-	nop                                     ; nop
-	ld	xbc, 0x6e657474
-	ld	xhl, 0x486f5470
-.LDIV_bc00:
-	ld	xix, 0x61437753
-	jrl	ov, 0x6863
-.LDIV_bc08:
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x6e657474
-.LDIV_bc0f:
-	popw wa                                 ; pop WA
-	ld	xix, 0x6d726f46
-	jr lt, .LDIV_bc8b                      ; [61 74] jr LT,0x29bc8b
-	.byte 0x53                             ; db
-	jrl	c, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x6e657474
-	ld	xix, 0x69466c65
-	jr	nov, 0x65
-	.byte 0x53                             ; db
-	jrl	c, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	ld	xbc, 0x6e657474
-	ld	xix, 0x69446c65
-	jrl	le, 0x7753
-.LDIV_bc41:
-	ld	xhl, 0x68637461
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x6946736c
-	jr	nov, 0x65
-	popw ix                                 ; pop IX
-	jr nc, .LDIV_bcb3                      ; [6f 61] jr NC,0x29bcb3
-	jr	ov, 0x53
-	jrl	c, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x42644d4e
-	jr ge, .LDIV_bcd8                      ; [69 74] jr GE,0x29bcd8
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x6d63524e
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bc79                     ; [6b 00] jr UGT,0x29bc79
-.LDIV_bc79:
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x70734d4e
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bc89                     ; [6b 00] jr UGT,0x29bc89
-.LDIV_bc89:
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-.LDIV_bc8b:
-	ld	xde, 0x426d544e
-	jr ge, .LDIV_bd06                      ; [69 74] jr GE,0x29bd06
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x706d434e
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bca7                     ; [6b 00] jr UGT,0x29bca7
-.LDIV_bca7:
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x7471534e
-	ld	xde, 0x68437469
-.LDIV_bcb3:
-	jr	mi, 0x63
-	jr ugt, .LDIV_bcb7                     ; [6b 00] jr UGT,0x29bcb7
-.LDIV_bcb7:
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x746d504e
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bcc7                     ; [6b 00] jr UGT,0x29bcc7
-.LDIV_bcc7:
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x77734c4e
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bcd7                     ; [6b 00] jr UGT,0x29bcd7
-.LDIV_bcd7:
-	nop                                     ; nop
-.LDIV_bcd8:
-	ld	xiz, 0x4c656c69
-	ld	xde, 0x6d614e4e
-	jr	mi, 0x43
-	jr	t, 0x65
-	jr	ule, 0x6b
-	nop                                     ; nop
-	nop                                     ; nop
-.LDIV_bcea:
-	popw ix                                 ; pop IX
-	ld	xde, 0x616f4c4e
-	jr	ov, 0x53
-	jrl	c, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x6761504e
-	jr	mi, 0x31
-	.byte 0x53                             ; db
-	jrl	c, 0x6143
-.LDIV_bd06:
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	ld	xde, 0x616d7469
-	jrl	f, 0x6448
-	jr	ov, 0x5f
-	jr ge, .LDIV_bd79                      ; [69 63] jr GE,0x29bd79
-	jr	nc, 0x6e
-.LDIV_bd18:
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x6c546c65
-	jrl	t, 0x6445
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	ld	xix, 0x644d6c65
-	ld	xiy, 0x43746964
-	jr	t, 0x65
-	jr	ule, 0x6b
-.LDIV_bd38:
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x63526c65
-	jr	pl, 0x45
-	jr	ov, 0x69
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_bd4a                     ; [6b 00] jr UGT,0x29bd4a
-.LDIV_bd4a:
-	ld	xix, 0x734d6c65
-	jrl	f, 0x6445
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	ld	xix, 0x6d546c65
-	ld	xiy, 0x43746964
-	jr	t, 0x65
-	jr ule, .LDIV_bdd3                     ; [63 6b] jr ULE,0x29bdd3
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x6d436c65
-	jrl	f, 0x6445
-	jr ge, .LDIV_bde8                      ; [69 74] jr GE,0x29bde8
-	ld	xhl, 0x6b636568
-.LDIV_bd79:
-	nop                                     ; nop
-	ld	xix, 0x71536c65
-	jrl	ov, 0x6445
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	ld	xix, 0x6d506c65
-	jrl	ov, 0x6445
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	ld	xix, 0x734c6c65
-	jrl	c, 0x6445
-	jr ge, .LDIV_be18                      ; [69 74] jr GE,0x29be18
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	ld	xix, 0x704f6c65
-	jrl	ov, 0x614e
-	jr	pl, 0x65
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	ld	xix, 0x704f6c65
-	jrl	ov, 0x7753
-	ld	xiy, 0x746e6576
-	ld	xhl, 0x68637461
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	lt, 0x76
-	jr	mi, 0x4f
-.LDIV_bdd3:
-	jrl	f, 0x5374
-	jrl	c, 0x7645
-	jr	mi, 0x6e
-	jrl	ov, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	.byte 0x57                             ; db
-	jrl	le, 0x6f43
-	jr nz, .LDIV_be4e                      ; [6e 66] jr NZ,0x29be4e
-.LDIV_bde8:
-	jr	ge, 0x72
-	jr	pl, 0x45
-	jrl	z, 0x6e65
-	jrl	ov, 0x6143
-	jrl	ov, 0x6863
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x414e5249
-	popw iy                                 ; pop IY
-	ld	xiy, 0x63656843
-	jr ugt, .LDIV_be09                     ; [6b 00] jr UGT,0x29be09
-.LDIV_be09:
-	nop                                     ; nop
-	ld	xiz, 0x614e736c
-	jr	pl, 0x69
-	jr nz, .LDIV_be7a                      ; [6e 67] jr NZ,0x29be7a
-	ld	xhl, 0x6b636568
-.LDIV_be18:
-	ldw	de, 0x4600
-	jr	nov, 0x73
-	popw iz                                 ; pop IZ
-	jr	lt, 0x6d
-	jr ge, .LDIV_be90                      ; [69 6e] jr GE,0x29be90
-.LDIV_be22:
-	jr c, .LDIV_be67                       ; [67 43] jr C,0x29be67
-	jr t, .LDIV_be8b                       ; [68 65] jr T,0x29be8b
-	jr	ule, 0x6b
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	ov, 0x54
-	jr	ge, 0x74
-	jr	nov, 0x65
-.LDIV_be31:
-	ld	xiy, 0x746e6576
-	ld	xhl, 0x68637461
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	jrl	mi, 0x706d
-	ld	xbc, 0x72657466
-	popw ix                                 ; pop IX
-	jr nc, .LDIV_bea9                      ; [6f 61] jr NC,0x29bea9
-	jr	ov, 0x4d
-	jr nc, .LDIV_beb0                      ; [6f 64] jr NC,0x29beb0
-	jr	mi, 0x45
-.LDIV_be4e:
-	jr	ov, 0x69
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_be57                     ; [6b 00] jr UGT,0x29be57
-.LDIV_be57:
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	jr nc, .LDIV_bebc                      ; [6f 61] jr NC,0x29bebc
-	jr	ov, 0x42
-	jrl	ge, 0x754e
-	jr	pl, 0x62
-	jr	mi, 0x72
-	popw iy                                 ; pop IY
-	jr	nc, 0x64
-.LDIV_be67:
-	jr	mi, 0x45
-	jr	ov, 0x69
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_be72                     ; [6b 00] jr UGT,0x29be72
-.LDIV_be72:
-	.byte 0x51                             ; db
-	jrl	mi, 0x6369
-	jr	ugt, 0x4c
-	jr	nc, 0x61
-.LDIV_be7a:
-	jr	ov, 0x4d
-	jr	nc, 0x64
-	jr	mi, 0x45
-	jr	ov, 0x69
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_be89                     ; [6b 00] jr UGT,0x29be89
-.LDIV_be89:
-	nop                                     ; nop
-	.byte 0x57                             ; db
-.LDIV_be8b:
-	jrl	le, 0x7469
-	jr	mi, 0x43
-.LDIV_be90:
-	jr	nc, 0x6e
-	jr	z, 0x69
-	jrl	le, 0x456d
-.LDIV_be97:
-	jr	ov, 0x69
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_bea0                     ; [6b 00] jr UGT,0x29bea0
-.LDIV_bea0:
-	.byte 0x57                             ; db
-	jrl	le, 0x7469
-	jr	mi, 0x50
-	jrl	le, 0x746f
-.LDIV_bea9:
-	jr	mi, 0x63
-	jrl	ov, 0x6445
-.LDIV_beae:
-	jr	ge, 0x74
-.LDIV_beb0:
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr z, .LDIV_bf31                       ; [66 78] jr Z,0x29bf31
-.LDIV_beb9:
-	.byte 0x54                             ; db
-	jr	nov, 0x78
-.LDIV_bebc:
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bec5                     ; [6b 00] jr UGT,0x29bec5
-.LDIV_bec5:
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr z, .LDIV_bf41                       ; [66 78] jr Z,0x29bf41
-.LDIV_bec9:
-	popw iy                                 ; pop IY
-	jr	ov, 0x42
-	jr ge, .LDIV_bf42                      ; [69 74] jr GE,0x29bf42
-	ld	xhl, 0x6b636568
-.LDIV_bed3:
-	nop                                     ; nop
-.LDIV_bed4:
-	.byte 0x53                             ; db
-	jr	z, 0x78
-	.byte 0x52                             ; db
-	jr ule, .LDIV_bf47                     ; [63 6d] jr ULE,0x29bf47
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bee3                     ; [6b 00] jr UGT,0x29bee3
-.LDIV_bee3:
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	z, 0x78
-	popw iy                                 ; pop IY
-	jrl	ule, 0x4270
-.LDIV_beeb:
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr z, .LDIV_bf6f                       ; [66 78] jr Z,0x29bf6f
-	.byte 0x54                             ; db
-	jr	pl, 0x42
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-.LDIV_bf01:
-	nop                                     ; nop
-.LDIV_bf02:
-	.byte 0x53                             ; db
-	jr z, .LDIV_bf7d                       ; [66 78] jr Z,0x29bf7d
-	ld	xhl, 0x6942706d
-	jrl	ov, 0x6843
-	jr	mi, 0x63
-	jr ugt, .LDIV_bf11                     ; [6b 00] jr UGT,0x29bf11
-.LDIV_bf11:
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	z, 0x78
-	.byte 0x53                             ; db
-	jrl	lt, 0x4274
-	jr	ge, 0x74
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	z, 0x78
-	.byte 0x50                             ; db
-.LDIV_bf26:
-	jr	pl, 0x74
-	ld	xde, 0x68437469
-	jr	mi, 0x63
-	jr ugt, .LDIV_bf31                     ; [6b 00] jr UGT,0x29bf31
-.LDIV_bf31:
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr z, .LDIV_bfad                       ; [66 78] jr Z,0x29bfad
-	popw ix                                 ; pop IX
-	jrl	ule, 0x4277
-	jr ge, .LDIV_bfaf                      ; [69 74] jr GE,0x29bfaf
-	ld	xhl, 0x6b636568
-	nop                                     ; nop
-.LDIV_bf41:
-	nop                                     ; nop
-.LDIV_bf42:
-	ld	xiz, 0x4f656c69
-.LDIV_bf47:
-	jrl	f, 0x4e74
-	jr	lt, 0x6d
-	jr	mi, 0x43
-	jr	t, 0x65
-	jr	ule, 0x6b
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr lt, .LDIV_bfcd                      ; [61 76] jr LT,0x29bfcd
-	jr	mi, 0x4f
-	jrl	f, 0x4e74
-	jr	lt, 0x6d
-	jr	mi, 0x43
-	jr t, .LDIV_bfc7                       ; [68 65] jr T,0x29bfc7
-	jr ule, .LDIV_bfcf                     ; [63 6b] jr ULE,0x29bfcf
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr	mi, 0x70
-	jr lt, .LDIV_bfdd                      ; [61 72] jr LT,0x29bfdd
-	jr	lt, 0x74
-	jr	mi, 0x4f
-.LDIV_bf6f:
-	jrl	mi, 0x7074
-.LDIV_bf72:
-	jrl	mi, 0x4d74
-	jr	nc, 0x64
-	jr	mi, 0x43
-	jr	t, 0x65
-	jr	ule, 0x6b
-.LDIV_bf7d:
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	ld	xhl, 0x5441445f
-	ld	xbc, 0x4e494c5f
-	popw hl                                 ; pop HL
-	pop xsp                                 ; pop XSP
-	.byte 0x50                             ; db
-	ld	xbc, 0x48004547
-.LDIV_bf91:
-	ld	xix, 0x54555f44
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	pop xsp                                 ; pop XSP
-	.byte 0x50                             ; db
-	ld	xbc, 0x48004547
-	ld	xix, 0x49445f44
-	.byte 0x52                             ; db
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x6843454d
-	jr	mi, 0x63
-.LDIV_bfad:
-	jr ugt, .LDIV_bfaf                     ; [6b 00] jr UGT,0x29bfaf
-.LDIV_bfaf:
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x6d614e44
-	jr	ge, 0x6e
-	jr	c, 0x43
-	jr	t, 0x65
-.LDIV_bfbc:
-	jr	ule, 0x6b
-.LDIV_bfbe:
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	lt, 0x72
-	jr	ov, 0x54
-	jr	mi, 0x73
-.LDIV_bfc7:
-	jrl	ov, 0x6150
-	jr	c, 0x65
-	nop                                     ; nop
-.LDIV_bfcd:
-	nop                                     ; nop
-	nop                                     ; nop
-.LDIV_bfcf:
-	nop                                     ; nop
-	jrl	ule, 0x6c65
-	pop xsp                                 ; pop XSP
-	jrl	ov, 0x7079
-	jr	mi, 0x00
-.LDIV_bfd9:
-	nop                                     ; nop
-	jr	mi, 0x6e
-	pop xsp                                 ; pop XSP
-.LDIV_bfdd:
-	jrl	f, 0x7261
 
-
+; ----------------------------------------------------------------------------
+; Registered-object name pool  (0x29bafc - 0x29bfdf)
+;
+; NUL-terminated ASCII names published to the main-CPU UI framework.  Every
+; string here is the target of a pointer in HDAE5000_ObjName_Table (the .data
+; image at HDAE5000_Init_Data), so the framework can resolve a handler, a
+; bitmap or a screen by name.  The pool is laid out in reverse table order.
+;
+; This region used to be decoded as TLCS-900 instructions (.LDIV_* labels);
+; the "code" was the ASCII of these names.
+;
+; NOTE: the pool continues past the end of this file - the include boundary at
+; 0x29bfe0 falls INSIDE the string "en_paradraw", whose last six characters are
+; the first bytes of HDAE5000_UI_Config in hdae5000_data_tables.s.
+; ----------------------------------------------------------------------------
+HDAE5000_Str_End_ObjNames:
+	.zero 2
+HDAE5000_Str_LyricBackColorCheck:
+	.asciz "LyricBackColorCheck"
+HDAE5000_Str_LyricForeColorCheck:
+	.asciz "LyricForeColorCheck"
+HDAE5000_Str_LyricJumpEditCheck:
+	.asciz "LyricJumpEditCheck"
+	.byte 0x00
+HDAE5000_Str_BitmapButt01:
+	.asciz "BitmapButt01"
+	.byte 0x00
+HDAE5000_Str_LanguageTextReturn:
+	.asciz "LanguageTextReturn"
+	.byte 0x00
+HDAE5000_Str_ErrMsgTimerCatchLBN:
+	.asciz "ErrMsgTimerCatchLBN"
+HDAE5000_Str_ErrMsgTimerCatch:
+	.asciz "ErrMsgTimerCatch"
+	.byte 0x00
+HDAE5000_Str_SeparateBassPartCheck:
+	.asciz "SeparateBassPartCheck"
+HDAE5000_Str_SeparateDrumPartCheck:
+	.asciz "SeparateDrumPartCheck"
+HDAE5000_Str_FlsOverWrSwCatch:
+	.asciz "FlsOverWrSwCatch"
+	.byte 0x00
+HDAE5000_Str_FlsDel2SwCatch:
+	.asciz "FlsDel2SwCatch"
+	.byte 0x00
+HDAE5000_Str_FlsDel1SwCatch:
+	.asciz "FlsDel1SwCatch"
+	.byte 0x00
+HDAE5000_Str_AttenCpToMarkSwCatch:
+	.asciz "AttenCpToMarkSwCatch"
+	.byte 0x00
+HDAE5000_Str_AttenCpToHDSwCatch:
+	.asciz "AttenCpToHDSwCatch"
+	.byte 0x00
+HDAE5000_Str_AttenHDFormatSwCatch:
+	.asciz "AttenHDFormatSwCatch"
+	.byte 0x00
+HDAE5000_Str_AttenDelFileSwCatch:
+	.asciz "AttenDelFileSwCatch"
+HDAE5000_Str_AttenDelDirSwCatch:
+	.asciz "AttenDelDirSwCatch"
+	.byte 0x00
+HDAE5000_Str_FlsFileLoadSwCatch:
+	.asciz "FlsFileLoadSwCatch"
+	.byte 0x00
+HDAE5000_Str_LBNMdBitCheck:
+	.asciz "LBNMdBitCheck"
+HDAE5000_Str_LBNRcmBitCheck:
+	.asciz "LBNRcmBitCheck"
+	.byte 0x00
+HDAE5000_Str_LBNMspBitCheck:
+	.asciz "LBNMspBitCheck"
+	.byte 0x00
+HDAE5000_Str_LBNTmBitCheck:
+	.asciz "LBNTmBitCheck"
+HDAE5000_Str_LBNCmpBitCheck:
+	.asciz "LBNCmpBitCheck"
+	.byte 0x00
+HDAE5000_Str_LBNSqtBitCheck:
+	.asciz "LBNSqtBitCheck"
+	.byte 0x00
+HDAE5000_Str_LBNPmtBitCheck:
+	.asciz "LBNPmtBitCheck"
+	.byte 0x00
+HDAE5000_Str_LBNLswBitCheck:
+	.asciz "LBNLswBitCheck"
+	.byte 0x00
+HDAE5000_Str_FileLBNNameCheck:
+	.asciz "FileLBNNameCheck"
+	.byte 0x00
+HDAE5000_Str_LBNLoadSwCatch:
+	.asciz "LBNLoadSwCatch"
+	.byte 0x00
+HDAE5000_Str_LBNPage1SwCatch:
+	.asciz "LBNPage1SwCatch"
+HDAE5000_Str_BitmapHdd_icon:
+	.asciz "BitmapHdd_icon"
+	.byte 0x00
+HDAE5000_Str_DelTlxEditCheck:
+	.asciz "DelTlxEditCheck"
+HDAE5000_Str_DelMdEditCheck:
+	.asciz "DelMdEditCheck"
+	.byte 0x00
+HDAE5000_Str_DelRcmEditCheck:
+	.asciz "DelRcmEditCheck"
+HDAE5000_Str_DelMspEditCheck:
+	.asciz "DelMspEditCheck"
+HDAE5000_Str_DelTmEditCheck:
+	.asciz "DelTmEditCheck"
+	.byte 0x00
+HDAE5000_Str_DelCmpEditCheck:
+	.asciz "DelCmpEditCheck"
+HDAE5000_Str_DelSqtEditCheck:
+	.asciz "DelSqtEditCheck"
+HDAE5000_Str_DelPmtEditCheck:
+	.asciz "DelPmtEditCheck"
+HDAE5000_Str_DelLswEditCheck:
+	.asciz "DelLswEditCheck"
+HDAE5000_Str_DelOptNameCheck:
+	.asciz "DelOptNameCheck"
+HDAE5000_Str_DelOptSwEventCatch:
+	.asciz "DelOptSwEventCatch"
+	.byte 0x00
+HDAE5000_Str_SaveOptSwEventCatch:
+	.asciz "SaveOptSwEventCatch"
+HDAE5000_Str_WrConfirmEventCatch:
+	.asciz "WrConfirmEventCatch"
+HDAE5000_Str_CP_FD_DIRNAMECheck:
+	.asciz "CP_FD_DIRNAMECheck"
+	.byte 0x00
+HDAE5000_Str_FlsNamingCheck2:
+	.asciz "FlsNamingCheck2"
+HDAE5000_Str_FlsNamingCheck:
+	.asciz "FlsNamingCheck"
+	.byte 0x00
+HDAE5000_Str_HdTitleEventCatch:
+	.asciz "HdTitleEventCatch"
+HDAE5000_Str_JumpAfterLoadModeEditCheck:
+	.asciz "JumpAfterLoadModeEditCheck"
+	.byte 0x00
+HDAE5000_Str_LoadByNumberModeEditCheck:
+	.asciz "LoadByNumberModeEditCheck"
+HDAE5000_Str_QuickLoadModeEditCheck:
+	.asciz "QuickLoadModeEditCheck"
+	.byte 0x00
+HDAE5000_Str_WriteConfirmEditCheck:
+	.asciz "WriteConfirmEditCheck"
+HDAE5000_Str_WriteProtectEditCheck:
+	.asciz "WriteProtectEditCheck"
+HDAE5000_Str_SfxTlxBitCheck:
+	.asciz "SfxTlxBitCheck"
+	.byte 0x00
+HDAE5000_Str_SfxMdBitCheck:
+	.asciz "SfxMdBitCheck"
+HDAE5000_Str_SfxRcmBitCheck:
+	.asciz "SfxRcmBitCheck"
+	.byte 0x00
+HDAE5000_Str_SfxMspBitCheck:
+	.asciz "SfxMspBitCheck"
+	.byte 0x00
+HDAE5000_Str_SfxTmBitCheck:
+	.asciz "SfxTmBitCheck"
+HDAE5000_Str_SfxCmpBitCheck:
+	.asciz "SfxCmpBitCheck"
+	.byte 0x00
+HDAE5000_Str_SfxSqtBitCheck:
+	.asciz "SfxSqtBitCheck"
+	.byte 0x00
+HDAE5000_Str_SfxPmtBitCheck:
+	.asciz "SfxPmtBitCheck"
+	.byte 0x00
+HDAE5000_Str_SfxLswBitCheck:
+	.asciz "SfxLswBitCheck"
+	.byte 0x00
+HDAE5000_Str_FileOptNameCheck:
+	.asciz "FileOptNameCheck"
+	.byte 0x00
+HDAE5000_Str_SaveOptNameCheck:
+	.asciz "SaveOptNameCheck"
+	.byte 0x00
+HDAE5000_Str_SeparateOutputModeCheck:
+	.asciz "SeparateOutputModeCheck"
+HDAE5000_Str_PC_DATA_LINK_PAGE:
+	.asciz "PC_DATA_LINK_PAGE"
+HDAE5000_Str_HDD_UTIL_PAGE:
+	.asciz "HDD_UTIL_PAGE"
+HDAE5000_Str_HDD_DIRNAMECheck:
+	.asciz "HDD_DIRNAMECheck"
+	.byte 0x00
+HDAE5000_Str_HDDNamingCheck:
+	.asciz "HDDNamingCheck"
+	.byte 0x00
+HDAE5000_Str_HardTestPage:
+	.asciz "HardTestPage"
+	.byte 0x00
+HDAE5000_ParamStr_ListBox_End:
+	.zero 2
+HDAE5000_ParamStr_ListBox_sel_type:
+	.asciz "sel_type"
+	.byte 0x00
+HDAE5000_ParamStr_ListBox_en_paradraw:
+	.ascii "en_par"
