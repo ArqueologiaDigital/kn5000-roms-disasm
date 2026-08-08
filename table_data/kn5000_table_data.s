@@ -775,6 +775,51 @@ IconPixels_176_Unreferenced:	.incbin "includes/icon_pixel_data.bin", 50688, 288
 ;                       Entry 18 points to 0x8E0000 (Feature Demo, same as LZSS preset data)
 ;   0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17, variable size)
 ; =============================================================================
+
+; -----------------------------------------------------------------------------
+; BACKING BLOB: includes/icons_to_strings.bin -- what is still live in it
+; -----------------------------------------------------------------------------
+; 742,024 bytes; sha256
+;   0df126455434ccc35a9f40609ec26dc68edc2a170910de602a6fbe814f31379d
+; The file is a verbatim slice of the factory dump covering exactly the region
+; mapped above: file offset 0 = ROM 0x944D78, last byte = ROM 0x9F9FFF.  It
+; predates the source conversion, so most of what it holds is now emitted from
+; real source and only 13 sized .incbin slices (126,674 B, 17% of the file)
+; still read from it:
+;
+;   file 0x00F38-0x078A7  Font0..Font5 glyph banks       fonts.s
+;   file 0x07C28-0x0BCE7  Font6..Font9 glyph banks       fonts.s
+;   file 0x3C7F8-0x3E7DE  StyleRecords_Residue           style_records.s
+;   file 0x3EDCD-0x41287  HelpDB_German_Stale remnant    help_databases.s
+;   file 0x6F288-0x7F287  Composer_FactoryMemoryImage    this file
+;
+; ASL MIRROR: archive/asl/table_data/kn5000_table_data.asm bincludes the file
+; as ONE 0x7F2D8-byte block (ROM 0x944D78-0x9C404F) and then ORGs to 0x9C4050,
+; which is why the file may not be rewritten or re-sliced on disk.  The 80
+; bytes at file 0x7F288-0x7F2D7 (ROM 0x9C4000-0x9C404F) are the only ones the
+; mirror still takes from the blob while this build emits them from source:
+; they are DemoSongPreset_PointerTable's 19 pointers plus its null terminator.
+;
+; DEAD TAIL: file 0x7F2D8-0xB5287 (221,104 B = ROM 0x9C4050-0x9F9FFF) is read
+; by NOTHING -- not this build, not the ASL mirror, not any script.  It is a
+; stale second copy of demo-song presets 0-17: eighteen SLIDE4K blocks laid
+; end to end, one 0xFF alignment byte after preset 00 (ROM 0x9C9017), and
+; 2,869 bytes of 0xFF fill after preset 17's block ends at ROM 0x9F94CA.  Its
+; payloads are byte-identical to the reference slices in original_ROMs/
+; (demo_preset_NN_compressed.original.bin), and the ROM's live copy of those
+; bytes is rebuilt further down this file from includes/demo_presets/midi/
+; *.mid + sidecar/*.yaml.  The bootstrap extraction (`make decompress-demo-
+; presets`) reads original_ROMs/kn5000_table_data.rom, not this blob, so
+; nothing depends on the duplicate.  Deleting the tail would save 221 KB and
+; break neither build, but it would rewrite a checked-in dump artifact whose
+; hash is quoted in analysis/binclude-audit-2026-08-07/ -- so it is
+; documented, not removed.  Note for future scans: sweeping this file for the
+; SLIDE4K magic finds eighteen extra headers past 0x7F2D8; they are this
+; residue, not a newly discovered compressed region.
+;
+; `python3 scripts/analysis/audit_icons_blob_coverage.py -v` re-derives this
+; whole map from the tree and the factory dump and fails if any of it drifts.
+; -----------------------------------------------------------------------------
 	; UI text fonts (0x944D78-0x950FFF): descriptor table + 1bpp glyph
 	; banks + Font5 kern table (see that module's header)
 	.include "fonts.s"
@@ -862,9 +907,17 @@ DemoSongPreset_PointerTable:
 
 ; -----------------------------------------------------------------------------
 ; SLIDE4K-compressed demo song presets, entries 0-17 (entry 18 is at 0x8E0000).
-; Each block: 8-byte "SLIDE4K\0" magic + 24-bit LE uncompressed size, then the
-; LZSS payload, which the Makefile regenerates from the decompressed source in
-; includes/demo_presets/ (byte-identical via compress_lzss.py --reference).
+; Each block: 8-byte "SLIDE4K\0" magic + 24-bit BIG-ENDIAN uncompressed size
+; (see the Makefile's demo-preset section for the endianness evidence), then
+; the LZSS payload, which the Makefile regenerates from the decompressed source
+; in includes/demo_presets/ (byte-identical via compress_lzss.py --reference).
+; The blocks run end to end from 0x9C4050 to 0x9F94CA, with one 0xFF alignment
+; byte at 0x9C9017 and 2,869 bytes of 0xFF fill from 0x9F94CB to 0x9F9FFF.
+;
+; The same bytes also survive verbatim in the dead tail of
+; includes/icons_to_strings.bin (file offsets 0x7F2D8-0xB5287): a pre-conversion
+; duplicate that no build reads -- see the backing-blob note in the region
+; banner above.
 ; -----------------------------------------------------------------------------
 
 	.org 0x9C4050 - 0x800000, 0xFF

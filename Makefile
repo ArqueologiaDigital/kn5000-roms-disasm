@@ -29,6 +29,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
 .PHONY: decompress-help-databases rebuild-help-databases verify-help-databases
+.PHONY: audit-icons-blob
 .PHONY: dsp dsp-verify dsp-flowcharts
 
 # Primary build: LLVM assembly (authoritative source)
@@ -734,7 +735,7 @@ P2BIN=$(ASL_PATH)/p2bin
 # ----------------------------------------------------------------------------
 # Demo song presets (19 SLIDE4K-compressed blocks)
 # ----------------------------------------------------------------------------
-# Entries 0-17 live at 0x9C4050-0x9F94CB, entry 18 (the Feature Presentation) at
+# Entries 0-17 live at 0x9C4050-0x9F94CA, entry 18 (the Feature Presentation) at
 # 0x8E0000. Each block is an 8-byte "SLIDE4K\0" magic + a 24-bit BIG-ENDIAN
 # uncompressed size, followed by the LZSS payload. (Endianness evidence: the
 # v142 Sub-CPU update image's size field is 03 00 00 = 0x030000 = 196,608; the
@@ -831,6 +832,18 @@ decompress-help-databases:
 	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x4A362 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_french.bin
 	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x4DC94 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_spanish.bin
 	python3 scripts/build/decompress_slide8k.py table_data/includes/icons_to_strings.bin --offset 0x51682 --expected-size 0x9000 --output $(HELP_DB_DIR)/help_db_indonesian.bin
+
+# ----------------------------------------------------------------------------
+# Blob coverage audit (table_data/includes/icons_to_strings.bin)
+# ----------------------------------------------------------------------------
+# Re-derives from the tree which bytes of the blob any build still reads, and
+# re-proves that its 221,104-byte tail past file offset 0x7F2D8 is the stale
+# demo-preset duplicate documented in table_data/kn5000_table_data.s.  Fails
+# if the blob stops matching the factory dump, if a new .incbin slice reaches
+# past the extent the ASL mirror bincludes, or if the tail stops being that
+# duplicate.  Not part of `all`.
+audit-icons-blob:
+	python3 scripts/analysis/audit_icons_blob_coverage.py -v
 
 asl-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 
