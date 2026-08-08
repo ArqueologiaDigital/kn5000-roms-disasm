@@ -94,7 +94,11 @@ only in pointer constants, which symbolic assembly absorbs for free
 
 ### E. Hygiene (cheap, zero-risk)
 
-- subcpu boot ROM: **98,304 lines of `.byte 0xFF`** → one `.fill` (98 K-line source shrink, byte-verified)
+- subcpu boot ROM: **98,304 lines of `.byte 0xFF`** → one `.fill` (98 K-line source shrink, byte-verified).
+  ⚠ **CORRECTION 2026-08-08:** the audit called this "erased flash / known padding". It is **not erased — it is
+  UNDUMPED.** `kn5000.cpp` marks IC30 `BAD_DUMP` with ranges 0xFE0800-0xFF7800 and 0xFF9800-0xFFF000 "not dumped
+  yet, assumed 0xFF"; measured, only **4,352 of 131,072 bytes are non-FF (3%)**. The `.fill` collapse stays
+  byte-safe, but the comment must say UNDUMPED, and any "sub-CPU boot ~99% disassembled" figure is meaningless.
 - orphans to delete or move to `analysis/`: 9 table_data `bootcode_*` bins (62 KB), 5 hdae5000 `code_*` bins, `demo_preset_compressed_refs/` (19 misframed slices), 2 `note_voice_mapping_v9_patch.bin`, `table_data_bootcode.bin`
 - `transplant_manifest.txt`: prune to the 225 referenced entries (40× smaller audit surface)
 - docs errata: lzss-compression.md (header size, endianness), hdae5000.md (font/palette labels, "multiple palettes"), CLAUDE.md (0x830000)
@@ -187,7 +191,7 @@ need a passing jekyll build and must leave the pre-existing uncommitted
 | `hdae-splash` | extract the **previously unidentified 320×240 boot-splash** at 0x2E61CE + its palette; add to `convert_images.py` IMAGE_METADATA and the gallery |
 | `hdae-initdata` | symbolize the init-data slice at 0x2F94B2: 69 code-target pointers + 119 name-string pointers bound to the re-decoded string labels |
 | `subcpu-bootdata` | split `subcpu_boot_data_8000.bin` (656 B) ≥5 ways — code references ≥6 addresses inside it; emit the 8-entry table as symbolic `.long` |
-| `subcpu-fill` | replace 98,304 lines of `.byte 0xFF` in `kn5000_subcpu_boot.s` with one `.fill 0x18000,1,0xff` (≈98 K-line source shrink, zero byte risk) |
+| `subcpu-fill` | replace 98,304 lines of `.byte 0xFF` in `kn5000_subcpu_boot.s` with one `.fill 0x18000,1,0xff` (≈98 K-line source shrink, zero byte risk). ⚠ the comment must say **UNDUMPED**, not "erased" — see the correction above |
 | `hdae-docs` | fold the findings into `hdae5000.md` (the "code_" blob is graphics, not code) |
 
 ## Wave 4 — the v7 tree (~10 packages, the largest wave)
@@ -259,5 +263,19 @@ anything.
   the algorithm table does not name.
 - The v1.41 subcpu source tree (issue `kn5000-v41`) is unblocked whenever it is
   wanted: both artifacts verify, only the tree is missing.
+
+**★★ TWO CHIPS NEED RE-DUMPING — this blocks a real preservation question.**
+The sub-CPU payload's source on a stock machine is **unresolved**. Boot code
+(`v10/maincpu/kn5000_v10_program.s:346-360`) picks between table-data 0x800000
+and custom-flash 0x3E0000 via a marker byte in the maincpu flash; the marker is
+0xFF, selecting 0x3E0000 — and **our IC19 dump is 0xFF from 0xE0000 to the end**,
+with no SLIDE4K magic anywhere in the chip. The other candidate holds the preset
+banks, not code. The payload appears in neither dumped image. The emulator only
+works because `kn5000.cpp` ROMX_LOADs the compressed payload *extracted from an
+update floppy* over that blank region — a reconstruction, not a chip image.
+- **Re-dump IC19, especially 0xE0000-0xFFFFF.** Either it confirms the payload
+  lives there, or "the dump is stale" dies and this becomes a real mystery.
+- **Dump IC30 properly** (see the correction above): 97% unread, and the leading
+  alternative hiding place.
 
 Estimated remaining: ~23 worker packages across 3 waves, plus the backlog.
