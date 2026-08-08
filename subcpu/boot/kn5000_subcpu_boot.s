@@ -98541,16 +98541,260 @@
 	.byte 0xff
 
 ; ==============================================================================
-; Data Tables (0xFF8000 - 0xFF828F)
-; These appear to be lookup tables (possibly for audio/DSP)
+; Boot data region (0xFF8000 - 0xFF828F, 656 bytes)
+;
+; The 656 bytes ahead of the boot entry point (BOOT_INIT, 0xFF8290) are eight
+; independent data objects, not one table.  Eight addresses inside the region
+; are loaded by name from code, so while the region was a single .incbin those
+; eight cross-references were invisible to every tool that reads this source:
+;
+;   0xFF8000  command-handler jump table   CMD_Dispatch_Handler   (0xFF88B8)
+;   0xFF8020  RAM-test region descriptor   MEM_TEST_ROUTINE       (0xFF89FC)
+;   0xFF802A  velocity-curve pivot         NOTE_VELOCITY_LOOKUP_CALCULATE
+;   0xFF802C  velocity-curve divisor       NOTE_VELOCITY_LOOKUP_CALCULATE
+;   0xFF8040  touch-mode parameter record  NOTE_VELOCITY_LOOKUP_CALCULATE
+;   0xFF804C  velocity input curve         NOTE_VELOCITY_LOOKUP_CALCULATE
+;   0xFF814C  velocity output curve        NOTE_VELOCITY_LOOKUP_CALCULATE
+;   0xFF824C  tone-generator voice image   HARDWARE_CALIBRATION_SEQUENCE (0xFF8C80)
+;
+; NOTE_VELOCITY_LOOKUP_CALCULATE is at 0xFF8BD2.
+;
+; Cross-ROM evidence: the last six objects (0xFF802A-0xFF828F) also exist,
+; byte-for-byte, inside the v1.42 sub-CPU payload, where they are already
+; carved and named in v142/subcpu/subcpu_data_tables.s:
+;
+;   boot 0xFF802A = payload 0x01F418  ToneGen_VelCurve_Pivot
+;   boot 0xFF802C = payload 0x01F41A  ToneGen_VelCurve_Divisor
+;   boot 0xFF802E = payload 0x01F420  (the 10 x 3 mode-parameter table)
+;   boot 0xFF804C = payload 0x01F43E  ToneGen_Velocity_Input_Curve
+;   boot 0xFF814C = payload 0x01F53E  ToneGen_Velocity_Output_Curve
+;   boot 0xFF824C = payload 0x00F919  ToneGen_ProbeVoice_ParamBlock
+;
+; The payload's 0x01F418 block is preceded by ToneGen_Voice_Bitmap_Ptr
+; (0x01F41C, 4 bytes); the boot ROM omits that pointer, which is the only
+; layout difference.  The names below are kept identical to the payload's so
+; the two copies grep together.
 ; ==============================================================================
 
 	.org 0xFF8000 - 0xFE0000, 0xFF
 
-DATA_TABLE_8000:
-	; TODO: Analyze and document these data tables
-	; For now, include as binary
-	.incbin "subcpu_boot_data_8000.bin"
+; --- 0xFF8000-0xFF801F  CmdHandler_Table -- 8 x u32 code pointers
+; CMD_Dispatch_Handler, state 1: the command byte at 0x51A splits into a
+; low-5-bit payload length and a high-3-bit handler index; the index is scaled
+; by 4 (`sla wa,2`), added to this base (`lda_24 xbc,(0xff8000)`) and the
+; 32-bit entry is called with the payload descriptor on the stack.
+; In THIS ROM all eight targets are `lds hl,0 / ret` stubs: the boot loader
+; accepts and acknowledges every command but implements none -- the working
+; handlers arrive with the downloaded payload.  The stubs are nevertheless six
+; distinct addresses in a shuffled order (0,4,3,1,2,5) with slots 6 and 7
+; sharing one target, so the table is real dispatch data, not padding.
+CmdHandler_Table:
+	.long CmdHandler_Stub_Cmd0	; [0] 0xFF8496
+	.long CmdHandler_Stub_Cmd1	; [1] 0xFF849F
+	.long CmdHandler_Stub_Cmd2	; [2] 0xFF84A2
+	.long CmdHandler_Stub_Cmd3	; [3] 0xFF849C
+	.long CmdHandler_Stub_Cmd4	; [4] 0xFF8499
+	.long CmdHandler_Stub_Cmd5	; [5] 0xFF84A5
+	.long CmdHandler_Stub_Cmd6And7	; [6] 0xFF85AB
+	.long CmdHandler_Stub_Cmd6And7	; [7] 0xFF85AB
+
+; --- 0xFF8020-0xFF8029  MemTest_RegionTable -- 1 x 10-byte region descriptor
+; MEM_TEST_ROUTINE indexes this table with `muls wa,0xA` and terminates after
+; the first entry (`cp (xsp+4),0x1`), so the table has exactly one row:
+;   +0  u32  first address tested
+;   +4  u32  byte count (shifted right by 3 -- the loop covers 8 bytes a pass)
+;   +8  u8   error bit OR-ed into the status byte on a low half-word failure
+;   +9  u8   error bit OR-ed into the status byte on a high half-word failure
+; The row covers sub-CPU DRAM 0x050000-0x09FFFF: 320 KB of the 1 MB at IC28/
+; IC29, i.e. exactly the buffer the main CPU later fills with the tone
+; database.  Each pass writes 0x5A5A5A5A then 0xA5A5A5A5, verifies both halves
+; and restores the original word.  Bits 0x01/0x02 join bit 0x04 from
+; ROM_CHECKSUM in the boot status byte returned by INIT_MEMORY_TEST.
+MemTest_RegionTable:
+	.long 0x50000	; region 0: first address (sub-CPU DRAM)
+	.long 0x50000	; region 0: byte count = 320 KB, last address 0x09FFFF
+	.byte 0x01	; region 0: error bit, low half-word mismatch
+	.byte 0x02	; region 0: error bit, high half-word mismatch
+
+; --- 0xFF802A-0xFF802B  ToneGen_VelCurve_Pivot -- u16 = 0x004D (77)
+; NOTE_VELOCITY_LOOKUP_CALCULATE reads it with `ldw_da xbc,(0xff802a)` and
+; forms (ToneGen_Velocity_Input_Curve[t] - 77): the fixed point the touch
+; response pivots about.  Same constant, same role, as payload 0x01F418.
+ToneGen_VelCurve_Pivot:
+	.short 0x004D
+
+; --- 0xFF802C-0xFF802D  ToneGen_VelCurve_Divisor -- u16 = 0x0080 (128)
+; The `divs xbc,xhl` denominator of the same computation (`ldw_da
+; xhl,(0xff802c)`).  Being 128, the per-mode gain byte below is a Q7 fixed-
+; point multiplier: gain 0x60 = 96/128 = 0.75x.  Payload sibling 0x01F41A.
+ToneGen_VelCurve_Divisor:
+	.short 0x0080
+
+; --- 0xFF802E-0xFF804B  ToneGen_VelCurve_ModeParams -- 10 x 3-byte records
+; One record per touch-sensitivity mode.  Layout, from the three reads in
+; NOTE_VELOCITY_LOOKUP_CALCULATE (`ld c,(xde)`, `ld c,(xde+1)`, `ld c,(xde+2)`):
+;   +0  u8  gain, Q7 (divided by ToneGen_VelCurve_Divisor = 128)
+;   +1  u8  output level at the pivot -- the curve's fixed point
+;   +2  u8  trim subtracted for the five black keys (C#, D#, F#, G#, A#)
+; velocity = gain/128 * (Velocity_Input_Curve[t] - 77) + pivot_out
+;            - (black key ? trim : 0),  clamped to 0..255
+; Mode 0 has gain 0, i.e. touch OFF: every note comes out at level 208.  As the
+; gain rises the pivot output falls and the black-key trim grows with it
+; (trim ~ 0.17 * gain), so the modes fan out about a common point.
+; The boot ROM hard-codes mode 6 (`lda_24 xde,(0xff8040)`); the v1.42 payload
+; indexes the identical table by the selected touch mode
+; (`byte[0x01F420 + 3*mode]`), which is what fixes the record stride at 3 and
+; the row count at 10 -- the run also self-describes, its first byte stepping
+; 0x00,0x10,...,0x90.  The payload's copy of this table is still unlabelled.
+ToneGen_VelCurve_ModeParams:
+	.byte 0x00, 0xd0, 0x00	; mode 0: gain   0/128 (0.000x), pivot out 208, black-key trim  0
+	.byte 0x10, 0xc7, 0x03	; mode 1: gain  16/128 (0.125x), pivot out 199, black-key trim  3
+	.byte 0x20, 0xbd, 0x06	; mode 2: gain  32/128 (0.250x), pivot out 189, black-key trim  6
+	.byte 0x30, 0xb4, 0x08	; mode 3: gain  48/128 (0.375x), pivot out 180, black-key trim  8
+	.byte 0x40, 0xab, 0x0b	; mode 4: gain  64/128 (0.500x), pivot out 171, black-key trim 11
+	.byte 0x50, 0xa1, 0x0e	; mode 5: gain  80/128 (0.625x), pivot out 161, black-key trim 14
+ToneGen_VelCurve_ModeParams_Mode6:	; 0xFF8040 -- the mode the boot ROM uses
+	.byte 0x60, 0x98, 0x10	; mode 6: gain  96/128 (0.750x), pivot out 152, black-key trim 16
+	.byte 0x70, 0x8f, 0x13	; mode 7: gain 112/128 (0.875x), pivot out 143, black-key trim 19
+	.byte 0x80, 0x86, 0x16	; mode 8: gain 128/128 (1.000x), pivot out 134, black-key trim 22
+	.byte 0x90, 0x82, 0x18	; mode 9: gain 144/128 (1.125x), pivot out 130, black-key trim 24
+
+; --- 0xFF804C-0xFF814B  ToneGen_Velocity_Input_Curve -- 256 x u8
+; Indexed by the raw touch reading in the high byte of the inter-CPU note
+; latch (`lda_24 xde,(0xff804c)` + indexed byte load).  Monotonically
+; DECREASING: 0xFF for inputs 0..8, then 0xFB 0xF6 0xF1 ... down to 0x01 by
+; input 0xE0 and 0x00 at 0xFE/0xFF.  The decreasing sense is the physical
+; giveaway that the raw reading is a key-travel TIME -- a fast (loud) strike
+; gives a small number -- and it is also why the tone generator's velocity
+; field behaves as an attenuation.  Byte-identical to payload 0x01F43E
+; (ToneGen_Velocity_Input_Curve).
+ToneGen_Velocity_Input_Curve:
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; 0xFF804C  index   0
+	.byte 0xff, 0xfb, 0xf6, 0xf1, 0xed, 0xea, 0xe6, 0xe3	; 0xFF8054  index   8
+	.byte 0xe0, 0xdd, 0xdb, 0xd8, 0xd6, 0xd3, 0xd1, 0xcf	; 0xFF805C  index  16
+	.byte 0xcd, 0xcb, 0xca, 0xc8, 0xc6, 0xc5, 0xc3, 0xc1	; 0xFF8064  index  24
+	.byte 0xc0, 0xbf, 0xbd, 0xbc, 0xbb, 0xb9, 0xb8, 0xb7	; 0xFF806C  index  32
+	.byte 0xb6, 0xb5, 0xb3, 0xb2, 0xb1, 0xb0, 0xaf, 0xae	; 0xFF8074  index  40
+	.byte 0xad, 0xac, 0xab, 0xaa, 0xaa, 0xa9, 0xa8, 0xa7	; 0xFF807C  index  48
+	.byte 0xa6, 0xa5, 0xa5, 0xa4, 0xa3, 0xa2, 0xa1, 0xa1	; 0xFF8084  index  56
+	.byte 0xa0, 0x9f, 0x9d, 0x9c, 0x9b, 0x99, 0x98, 0x97	; 0xFF808C  index  64
+	.byte 0x96, 0x95, 0x93, 0x92, 0x91, 0x90, 0x8f, 0x8e	; 0xFF8094  index  72
+	.byte 0x8d, 0x8c, 0x8b, 0x8a, 0x8a, 0x89, 0x88, 0x87	; 0xFF809C  index  80
+	.byte 0x86, 0x85, 0x85, 0x84, 0x83, 0x82, 0x81, 0x81	; 0xFF80A4  index  88
+	.byte 0x80, 0x7f, 0x7d, 0x7c, 0x7b, 0x79, 0x78, 0x77	; 0xFF80AC  index  96
+	.byte 0x76, 0x75, 0x73, 0x72, 0x71, 0x70, 0x6f, 0x6e	; 0xFF80B4  index 104
+	.byte 0x6d, 0x6c, 0x6b, 0x6a, 0x6a, 0x69, 0x68, 0x67	; 0xFF80BC  index 112
+	.byte 0x66, 0x65, 0x65, 0x64, 0x63, 0x62, 0x61, 0x61	; 0xFF80C4  index 120
+	.byte 0x60, 0x5f, 0x5d, 0x5c, 0x5b, 0x59, 0x58, 0x57	; 0xFF80CC  index 128
+	.byte 0x56, 0x55, 0x53, 0x52, 0x51, 0x50, 0x4f, 0x4e	; 0xFF80D4  index 136
+	.byte 0x4d, 0x4c, 0x4b, 0x4a, 0x4a, 0x49, 0x48, 0x47	; 0xFF80DC  index 144
+	.byte 0x46, 0x45, 0x45, 0x44, 0x43, 0x42, 0x41, 0x41	; 0xFF80E4  index 152
+	.byte 0x40, 0x3f, 0x3d, 0x3c, 0x3b, 0x39, 0x38, 0x37	; 0xFF80EC  index 160
+	.byte 0x36, 0x35, 0x33, 0x32, 0x31, 0x30, 0x2f, 0x2e	; 0xFF80F4  index 168
+	.byte 0x2d, 0x2c, 0x2b, 0x2a, 0x2a, 0x29, 0x28, 0x27	; 0xFF80FC  index 176
+	.byte 0x26, 0x25, 0x25, 0x24, 0x23, 0x22, 0x21, 0x21	; 0xFF8104  index 184
+	.byte 0x20, 0x1f, 0x1d, 0x1c, 0x1b, 0x19, 0x18, 0x17	; 0xFF810C  index 192
+	.byte 0x16, 0x15, 0x13, 0x12, 0x11, 0x10, 0x0f, 0x0e	; 0xFF8114  index 200
+	.byte 0x0d, 0x0c, 0x0b, 0x0a, 0x0a, 0x09, 0x08, 0x07	; 0xFF811C  index 208
+	.byte 0x06, 0x05, 0x05, 0x04, 0x03, 0x02, 0x01, 0x01	; 0xFF8124  index 216
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01	; 0xFF812C  index 224
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01	; 0xFF8134  index 232
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01	; 0xFF813C  index 240
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00	; 0xFF8144  index 248
+
+; --- 0xFF814C-0xFF824B  ToneGen_Velocity_Output_Curve -- 256 x u8
+; Second half of the touch mapping: the clamped 0..255 intermediate indexes
+; this table (`lda_24 xde,(0xff814c)`) and the result is stored as the voice's
+; velocity byte at (xwa+1).  Starts 0x01 followed by a long run of 0x02 and
+; ends at 0x7F: a compressive response onto a 7-bit velocity.  From index 144
+; upwards it is exactly (index - 128) -- a straight 2:1 divide -- and below
+; that it flattens hard, so the whole soft half of the range is squeezed into
+; velocities 1..16.  Byte-identical to payload 0x01F53E
+; (ToneGen_Velocity_Output_Curve).
+ToneGen_Velocity_Output_Curve:
+	.byte 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF814C  index   0
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF8154  index   8
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF815C  index  16
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF8164  index  24
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF816C  index  32
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF8174  index  40
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF817C  index  48
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF8184  index  56
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF818C  index  64
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF8194  index  72
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF819C  index  80
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 0xFF81A4  index  88
+	.byte 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x05	; 0xFF81AC  index  96
+	.byte 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x07, 0x07	; 0xFF81B4  index 104
+	.byte 0x07, 0x07, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09	; 0xFF81BC  index 112
+	.byte 0x09, 0x0a, 0x0a, 0x0a, 0x0a, 0x0b, 0x0b, 0x0b	; 0xFF81C4  index 120
+	.byte 0x0c, 0x0c, 0x0c, 0x0c, 0x0d, 0x0d, 0x0d, 0x0d	; 0xFF81CC  index 128
+	.byte 0x0e, 0x0e, 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x10	; 0xFF81D4  index 136
+	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17	; 0xFF81DC  index 144
+	.byte 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f	; 0xFF81E4  index 152
+	.byte 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27	; 0xFF81EC  index 160
+	.byte 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f	; 0xFF81F4  index 168
+	.byte 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37	; 0xFF81FC  index 176
+	.byte 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f	; 0xFF8204  index 184
+	.byte 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47	; 0xFF820C  index 192
+	.byte 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f	; 0xFF8214  index 200
+	.byte 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57	; 0xFF821C  index 208
+	.byte 0x58, 0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f	; 0xFF8224  index 216
+	.byte 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67	; 0xFF822C  index 224
+	.byte 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f	; 0xFF8234  index 232
+	.byte 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77	; 0xFF823C  index 240
+	.byte 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f	; 0xFF8244  index 248
+
+; --- 0xFF824C-0xFF828F  ToneGen_ProbeVoice_ParamBlock -- 0x22 (34) x u16
+; A complete tone-generator voice-parameter record, used by the power-on TG
+; liveness probe.  HARDWARE_CALIBRATION_SEQUENCE (0xFF8C80) opens the sequence
+; with two raw register writes (0x0840<-0xFF00, 0x0800<-0xFF80), passes this
+; block to HARDWARE_PARAM_BLOCK_WRITE (`ld xbc,0xFF824C`), then re-reads
+; word 0 (`ldw_da xbc,(0xff824c)`) and writes it to TG register 0 through
+; HARDWARE_VERIFY_WRITE; the probe succeeds when the TG's status word at
+; 0x100004 reads back 0.
+; HARDWARE_PARAM_BLOCK_WRITE transmits words 1..21 to the register offsets
+; noted below (address to 0x100000, data to 0x100002), forcing bit 15 of
+; word 2 on the way out and clearing it again in a final write; words 22..33
+; complete the record shape but are not transmitted by this routine.
+; Byte-identical to payload 0x00F919 (ToneGen_ProbeVoice_ParamBlock), which
+; the v1.42 notes describe as unreachable there -- the boot ROM is where this
+; record is actually live.
+ToneGen_ProbeVoice_ParamBlock:
+	.short 0xF000	; word  0: TG reg 0x000, written last by HARDWARE_CALIBRATION_SEQUENCE
+	.short 0x0000	; word  1: TG reg 0x040
+	.short 0x83FF	; word  2: TG reg 0x080, bit 15 forced set, then cleared in the final write
+	.short 0x0000	; word  3: TG reg 0x0C0
+	.short 0x017C	; word  4: TG reg 0x100
+	.short 0x7F7C	; word  5: TG reg 0x140
+	.short 0x0040	; word  6: TG reg 0x180
+	.short 0x0080	; word  7: TG reg 0x400
+	.short 0x0000	; word  8: TG reg 0x440
+	.short 0x0000	; word  9: TG reg 0x480
+	.short 0x0000	; word 10: TG reg 0x4C0
+	.short 0x0000	; word 11: TG reg 0x500
+	.short 0xA07F	; word 12: TG reg 0x800
+	.short 0xFF7F	; word 13: TG reg 0x840
+	.short 0xFF7F	; word 14: TG reg 0x880
+	.short 0x0000	; word 15: TG reg 0x8C0
+	.short 0x0000	; word 16: TG reg 0x900
+	.short 0x0000	; word 17: TG reg 0x940
+	.short 0x0000	; word 18: TG reg 0x980
+	.short 0x0000	; word 19: TG reg 0x9C0
+	.short 0x0000	; word 20: TG reg 0xA00
+	.short 0x0000	; word 21: TG reg 0xA40
+	.short 0xA080	; word 22: record tail, not transmitted by this routine
+	.short 0xA000	; word 23: record tail, not transmitted by this routine
+	.short 0x0000	; word 24: record tail, not transmitted by this routine
+	.short 0x0000	; word 25: record tail, not transmitted by this routine
+	.short 0x0000	; word 26: record tail, not transmitted by this routine
+	.short 0x0000	; word 27: record tail, not transmitted by this routine
+	.short 0x0000	; word 28: record tail, not transmitted by this routine
+	.short 0x0000	; word 29: record tail, not transmitted by this routine
+	.short 0x0000	; word 30: record tail, not transmitted by this routine
+	.short 0x0000	; word 31: record tail, not transmitted by this routine
+	.short 0x0000	; word 32: record tail, not transmitted by this routine
+	.short 0x0000	; word 33: record tail, not transmitted by this routine
 
 ; ==============================================================================
 ; Boot Entry Point (0xFF8290)
@@ -98797,31 +99041,38 @@ HALT_LOOP__halt:
 	jr HALT_LOOP__halt	; Loop forever if we wake (jump to halt, not start)
 
 ; ==============================================================================
-; Stub routines (0xFF8496) - Return 0 in HL
-; These are placeholder/unused routines
+; Command-handler stubs (0xFF8496 - 0xFF84A7)
+;
+; Six `lds hl,0 / ret` bodies, one per slot 0..5 of CmdHandler_Table (0xFF8000).
+; Slots 6 and 7 point at a seventh identical stub at 0xFF85AB.  Nothing else in
+; the ROM reaches them, and every one of them returns 0 ("no data"): the boot
+; loader answers the main CPU's whole command set with a successful no-op until
+; the downloaded payload takes over the dispatch table.  The names carry the
+; dispatch index, which is the only thing that distinguishes them -- note the
+; table stores them out of address order (0,4,3,1,2,5).
 ; ==============================================================================
 
-OUTPUT_NOP_RET:
+CmdHandler_Stub_Cmd0:
 	lds hl, 0
 	ret
 
-STUB_8499:
+CmdHandler_Stub_Cmd4:
 	lds hl, 0
 	ret
 
-STUB_849C:
+CmdHandler_Stub_Cmd3:
 	lds hl, 0
 	ret
 
-STUB_849F:
+CmdHandler_Stub_Cmd1:
 	lds hl, 0
 	ret
 
-STUB_84A2:
+CmdHandler_Stub_Cmd2:
 	lds hl, 0
 	ret
 
-STUB_84A5:
+CmdHandler_Stub_Cmd5:
 	lds hl, 0
 	ret
 
@@ -98992,10 +99243,11 @@ CHECKSUM_CALC__loop:
 	ret
 
 ; ==============================================================================
-; STUB_85AB (0xFF85AB) - Return 0 in HL
+; CmdHandler_Stub_Cmd6And7 (0xFF85AB) - Return 0 in HL
+; Slots 6 and 7 of CmdHandler_Table (0xFF8000) both point here.
 ; ==============================================================================
 
-STUB_85AB:
+CmdHandler_Stub_Cmd6And7:
 	lds hl, 0
 	ret
 
@@ -99555,8 +99807,9 @@ DMA_Complete_Handler__done:
 ; State 3: Completion - set status flags for main CPU acknowledgment
 ; State 4: Final - clear ready flag, return to idle
 ;
-; The jump table at 0x8000 (DATA_TABLE_8000) contains handler addresses
-; indexed by the high 3 bits of the command byte.
+; The jump table at 0xFF8000 (CmdHandler_Table) contains handler addresses
+; indexed by the high 3 bits of the command byte.  In this ROM all eight
+; entries are no-op stubs (CmdHandler_Stub_Cmd*).
 ; ==============================================================================
 
 	.org 0xFF88B8 - 0xFE0000, 0xFF
@@ -99591,7 +99844,7 @@ CMD_Dispatch_Handler:
 	ld a, c
 	extz wa
 	sla wa, 2	; index * 4
-	lda_24 xbc, (0xff8000); Jump table at ROM start
+	lda_24 xbc, (0xff8000); XBC = CmdHandler_Table
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
@@ -99744,7 +99997,7 @@ LONG_DELAY__inner:
 ; ==============================================================================
 ; MEM_TEST_ROUTINE (0xFF89FC) - RAM Test
 ; Tests memory regions with patterns 0x5A5A5A5A and 0xA5A5A5A5
-; Uses test configuration table at 0xFF8020
+; Uses the region descriptor MemTest_RegionTable (0xFF8020)
 ; Returns: L = error flags
 ; ==============================================================================
 
@@ -99759,7 +100012,7 @@ MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
-	lda_24 xbc, (0xff8020); Test config table
+	lda_24 xbc, (0xff8020); XBC = MemTest_RegionTable
 	stb_dri B, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
@@ -100026,7 +100279,9 @@ INTER_CPU_LATCH_READ_DISPATCH__done:
 ; NOTE_VELOCITY_LOOKUP_CALCULATE (0xFF8BD2) - Note/velocity calculation routine
 ;
 ; Calculates velocity values based on note index and lookup tables.
-; Uses tables at 0xFF804C, 0xFF8040, 0xFF802A, 0xFF802C, 0xFF814C.
+; Uses ToneGen_Velocity_Input_Curve (0xFF804C), ToneGen_VelCurve_ModeParams_Mode6
+; (0xFF8040), ToneGen_VelCurve_Pivot (0xFF802A), ToneGen_VelCurve_Divisor (0xFF802C)
+; and ToneGen_Velocity_Output_Curve (0xFF814C).
 ;
 ; Input: XWA = pointer to output buffer
 ;        C = note index (low byte from latch)
@@ -100047,16 +100302,16 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	; Calculate velocity from tables
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
-	lda_24 xde, (0xff804c); XDE = velocity curve table base
+	lda_24 xde, (0xff804c); XDE = ToneGen_Velocity_Input_Curve
 	lds32 xhl, 0	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
-	ldw_da xbc, (0xff802a); BC = parameter from table
+	ldw_da xbc, (0xff802a); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
-	lda_24 xde, (0xff8040); XDE = another table
+	lda_24 xde, (0xff8040); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
-	ldw_da xhl, (0xff802c); HL = divisor from table
+	ldw_da xhl, (0xff802c); HL = ToneGen_VelCurve_Divisor (128)
 	exts xbc	; Sign-extend XBC
 	divs xbc, xhl	; XBC = XBC / HL (signed)
 	ld hl, bc	; HL = quotient
@@ -100101,7 +100356,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
-	lda_24 xde, (0xff814c); XDE = final velocity curve table
+	lda_24 xde, (0xff814c); XDE = ToneGen_Velocity_Output_Curve
 	ldb_sri C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret
@@ -100158,13 +100413,13 @@ __jrt_nop_FF8CA9:
 	nop
 	nop
 
-	; Call HARDWARE_PARAM_BLOCK_WRITE with parameter block at 0xFF824C
+	; Call HARDWARE_PARAM_BLOCK_WRITE with ToneGen_ProbeVoice_ParamBlock (0xFF824C)
 	lds wa, 0
-	ld xbc, 0xFF824C	; Parameter block address
+	ld xbc, 0xFF824C	; XBC = ToneGen_ProbeVoice_ParamBlock
 	calr HARDWARE_PARAM_BLOCK_WRITE	; Write parameters to hardware
 
 	; Read back and verify
-	ldw_da xbc, (0xff824c); Read first word from param block
+	ldw_da xbc, (0xff824c); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
 	lds wa, 0
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 
