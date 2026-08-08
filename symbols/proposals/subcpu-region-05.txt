@@ -942,4 +942,11 @@
 
 [UNCERTAIN] Voice_AllocateForAny / Voice_AllocateForFull (both outside this region, both called from inside it) do not allocate. They fill a scratch packet at 0x2A5E, call NoteOn_RoutePacket, and return a list of matching slot indices at packet+5. Their names invite exactly the wrong reading when chasing a "voices stop being allocated" bug.
 
-[UNCERTAIN] The four remaining ROM data tables this region reads -- 0x00FEE4 (note pre-map), 0x0119C8 (Detune_ScaleSymmetric curve), 0x010764 (word table, x4, used by Voice_InitVoiceState and Voice_Colour_Write) and 0x011AE8 (flat 0x96 table) -- are all unnamed in the build, buried in the anonymous blob between PitchDetune_OffsetTable (0x00F787) and CALL_TABLE_12159 (0x012159). They are outside this region so I have not proposed names, but that blob is a large documentation gap.
+[RESOLVED 2026-08-08] All four ROM data tables this region reads are named now: the blob between
+PitchDetune_OffsetTable and CALL_TABLE_12159 was carved in commit 09a82ec. 0x00FEE4 is
+Voice_DepthMirror_Table, 0x010764 is Voice_OutputLevel_Table (head of the level/EG/frequency curve
+family, stride 0x200 once then 0x100), 0x0119C8 is Detune_Scale_Curve and 0x011AE8 is
+Voice_VibratoDepth_Table -- all defined in v142/subcpu/subcpu_data_tables.s and listed in
+symbols/subcpu_symbols_reference.txt. Read the current labels from those rather than proposing new
+ones. (The names differ from this note's guesses: 0x00FEE4 is not a "note pre-map" and 0x011AE8 is
+not a "flat 0x96 table".)

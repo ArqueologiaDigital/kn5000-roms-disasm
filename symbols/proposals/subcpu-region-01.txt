@@ -301,7 +301,14 @@
 ;   0x0118FE  38 references -- by far the hottest object in the segment
 ;   0x011963, 0x0119C8, 0x011ACF, 0x011ADF, 0x011D16, 0x011E16  further per-part arrays
 ;   0x012115-0x012158  the tone-generator voice template (own entry below)
-; No single name is honest here; it should eventually be split. Listed in UNCERTAIN.
+; RETIRED 2026-08-08: split completed. The 0x00F7E6-0x012114 span was re-emitted as
+; individually labelled tables in commit 09a82ec (zone A0, 82 symbols); every split point is a
+; code-referenced address and the set tiles the span exactly. Two claims in the list above are
+; WRONG and were retracted by that pass: 0x00FF00 and 0x00FF80 are NOT tables -- the "11
+; references each" are `stiw_da 0x100002,0xff00` / `0xff80`, immediate values written to the TG
+; address latch; and 0x00FFE4 is Voice_Colour_TransferCurves, a 7 x 256 two-dimensional table,
+; not a 256-byte one. See the "NOW SPLIT" banner in v142/subcpu/subcpu_data_tables.s for the
+; current resolution of every sub-block.
 
 [LABEL] 0x00F79A VOICE_PART_TRIM_TABLE_B  confidence=high
 ; 9 x s16 -> DRAM 0x04147A + part*0x11F (subcpu source ~line 17241), same idiom as 0x00F786.
@@ -353,8 +360,20 @@
 ; addresses inside it, densely in 0x0122C4-0x012391 (one per source line, subcpu source
 ; 38700-39400) and in 0x012CD3-0x0131CB (subcpu source 41000-44700). The regular spacing there
 ; (4 and 8 bytes) says these are arrays of 4- and 8-byte parameter records for the DSP/effect
-; setup code, one base per effect parameter. Listed in UNCERTAIN; splitting it needs the
-; DSP-side pass.
+; setup code, one base per effect parameter.
+; RETIRED 2026-08-08: the DSP-side pass happened. Commit c5816ae carved 0x012195-0x014738 into
+; the tone-generator pitch/dispatch tables, the DSP trace strings, the EQ and Q23 coefficient
+; curves, the floating-point constant pool at 0x012CD3, the 128-entry mixer-gain curve at
+; 0x0131CF and the per-effect parameter metadata complex at 0x0133CF (180 symbols). Commit
+; 85ecca2 continued into zone B, 0x0147B3-0x01E17E (202 symbols). Documented at
+; ../kn5000-docs/dsp-effect-data-zone.md. NOTE the head of the range: 0x012171-0x012194 is the
+; 6-byte pitch bias table plus ToneGen_VoiceType_Default_Level and
+; ToneGen_Semitone_Pitch_Table, all named before that pass; the carve proper starts at 0x012195.
+; * REFUTED by the same pass: there is no "exponential pitch table at 0x13318". 0x13318 falls in
+; the MIDDLE of DSP_MixerGain_Curve (0x0131CF, 128 x u32, piecewise-exponential, 53.5 dB span,
+; ending exactly at 0x7fffff00); it is where a 24-bit-masked monotonicity scan locked on, not a
+; table boundary. Read as pitch the middle segment would be 54.82 cents/step, matching no
+; whole-cent law, and the only proven consumer treats the entries as amplitude.
 
 [LABEL] 0x012177 TONEGEN_VOICETYPE_DEFAULT_LEVEL  confidence=high
 ; 6 bytes, same index as 0x012171. Values 7F 7F 7F 7F 00 5F. Read with `cpib_sri ...,0x00`
@@ -541,11 +560,16 @@ are wrong. Recommend re-anchoring all eleven before integrating anything here.
    DSP_BYTECODE_OP61_OFFSETS (0x014745) and VOICE_NOTEON_HANDLER_TABLE (0x012159).
 
 [UNCERTAIN] Not resolved in this pass:
- * The extent and meaning of VOICE_PORTAMENTO_RATE_TABLE (0x00F7E6); only its consumer is known.
+ * RESOLVED 2026-08-08 (was: the extent and meaning of VOICE_PORTAMENTO_RATE_TABLE, and the
+   splitting of the 0x00F787..0x012158 and 0x012171..0x014738 segments). Voice_Portamento_Rate_Table
+   is 101 u16 entries, 0x00F7E6-0x00F8AF, tiled by the referenced default record at 0x00F8B0:
+   entries 0..3 are 0xFFFF (saturated slew for the smallest deltas), then a smooth hyperbolic
+   decay 0xC673..0x0001. Both segments are carved -- commits 09a82ec (zone A0, 0x00F7E6-0x012114),
+   c5816ae (zone A, 0x012195-0x014738) and 85ecca2 (zone B, 0x0147B3-0x01E17E). What is still open
+   is narrower and belongs in a new bullet: the computed consumer of the effect-metadata bases
+   0x143AD / 0x14411 / 0x145A1 has not been found.
  * The consumer of the 10-entry pointer array at 0x01F3F0 (into 0x01E5C8..0x01E630).
  * The exponential-looking 4-byte ramp starting near 0x00F0A0 inside IRAM_FirmwareConfig.
- * The 0x00F787..0x012158 and 0x012171..0x014738 segments need splitting into their real members;
-   I located the boundaries listed above but not the semantics of most of them.
  * Whether the four external-interrupt vectors 11..19 map to INT4..INTB plus one more source.
    INTE45/67/89/AB in shared/sfr_tmp94c241.s account for 8 external interrupts and INT0 for a
    ninth, leaving one of the ten slots unaccounted. All ten trampolines are EMPTY_HANDLER, so
