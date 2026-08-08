@@ -1,10 +1,146 @@
 
-; Widget Descriptor Tables & Grid Data (3 widgets, 150888 bytes)
-; Source: maincpu/ui_widgets/naka_widget_descriptors.c (raw byte array)
+; =============================================================================
+; Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+; Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+; =============================================================================
+; One packed C struct covering the whole blob.  Most of it is NAKA widget
+; descriptor material; the labels below name the parts that other modules
+; reach into.
+;
+; DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+; -----------------------------------------
+; The user-facing naming layer of the effects DSP.  Four tables, all consumed
+; by the effect-editor handlers in sequencer/sequencer_ui.s:
+;
+;   0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+;   0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+;   0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+;   0xE32C7A  DspEffectName_Strings  128 x 18  16 chars + 0x00 + 0xFF filler
+;
+; DspEffectName_PtrTable[n] points at DspEffectName_Strings + 18*(127-n): the
+; string block is stored in DESCENDING effect order, which is why the existing
+; NakaInst_<EFFECT> labels below run from effect 127 (lowest address) down to
+; effect 0 (highest).  Effect numbers 100-127 are "   ----------   " spares.
+;
+; The unit and name tables share one index: the parameter-id byte of the
+; effect's ordered UI parameter list.  Slots 0 and 85 are blank spares.
+;
+; Consumers (sequencer/sequencer_ui.s):
+;   DspItem0_DisplayEffectName  0xF355F3  effect no. (RAM 0x2976) -> ptr table
+;   DspItem0_DisplayParamNames  0xF3561F  param id -> name, Strncpy 17
+;   DspItem0_DisplayParamValues 0xF3566C  param id -> unit, Strncpy 2
+;   EntGridCheck (0xF30326 region)        also reads DspEffectName_PtrTable
+;
+; Both parameter routines take the id from the per-effect ordered id list at
+; RAM 0x29AC, starting at the row index held in the byte at 0x021098, and
+; paint 8 rows per page.
+;
+; The algorithms these names label live in the sub-CPU payload; see
+; v142/subcpu/subcpu_data_tables.s (DSP_EffNN_* / DSP2_EffNN_* blocks) and
+; kn5000-docs/dsp-effect-data-zone.md.
+; =============================================================================
 NakaData_WidgetDescriptors:
 	.incbin "includes/generated/naka_widget_descriptors.bin"
 
 ; External label offsets within the binary blob above.
+; The NakaInst_<EFFECT> run starting at +0x01e1a IS DspEffectName_Strings:
+; NakaInst_FxReservedSlot_00 (+0x01e1a) is effect 127 and
+; NakaInst_NO_OPERATION (+0x02708) is effect 0 -- so the effect number of
+; any label in that run is (0x02708 - offset) / 18.
+
+; --- DSP effect naming zone: table bases ---------------------------------
+	.equ DspParamUnit_Table, NakaData_WidgetDescriptors + 0x015b8	; 0xE32418, 86 x 2
+	.equ DspParamName_Table, NakaData_WidgetDescriptors + 0x01664	; 0xE324C4, 86 x 17
+	.equ DspEffectName_PtrTable, NakaData_WidgetDescriptors + 0x01c1a	; 0xE32A7A, 128 x u32
+	.equ DspEffectName_Strings, NakaData_WidgetDescriptors + 0x01e1a	; 0xE32C7A, 128 x 18
+
+; --- DSP parameter slots: name at +0x11*i, unit at DspParamUnit_Table+2*i -
+	.equ DspParamName_00_Blank, NakaData_WidgetDescriptors + 0x01664	; slot  0 "(spare)"
+	.equ DspParamName_01_VOLUME, NakaData_WidgetDescriptors + 0x01675	; slot  1 "VOLUME"
+	.equ DspParamName_02_VOLUME, NakaData_WidgetDescriptors + 0x01686	; slot  2 "VOLUME"
+	.equ DspParamName_03_REV_SEND, NakaData_WidgetDescriptors + 0x01697	; slot  3 "REV SEND"
+	.equ DspParamName_04_DRIVE, NakaData_WidgetDescriptors + 0x016a8	; slot  4 "DRIVE"
+	.equ DspParamName_05_ADJUST, NakaData_WidgetDescriptors + 0x016b9	; slot  5 "ADJUST"
+	.equ DspParamName_06_EMPHASIS_GAIN, NakaData_WidgetDescriptors + 0x016ca	; slot  6 "EMPHASIS GAIN"
+	.equ DspParamName_07_DEPTH, NakaData_WidgetDescriptors + 0x016db	; slot  7 "DEPTH"
+	.equ DspParamName_08_LFO_SPEED, NakaData_WidgetDescriptors + 0x016ec	; slot  8 "LFO SPEED" [Hz]
+	.equ DspParamName_09_SLOW_LFO_SPEED, NakaData_WidgetDescriptors + 0x016fd	; slot  9 "SLOW LFO SPEED" [Hz]
+	.equ DspParamName_10_FAST_LFO_BALANCE, NakaData_WidgetDescriptors + 0x0170e	; slot 10 "FAST LFO BALANCE"
+	.equ DspParamName_11_RESONANCE, NakaData_WidgetDescriptors + 0x0171f	; slot 11 "RESONANCE"
+	.equ DspParamName_12_MANUAL, NakaData_WidgetDescriptors + 0x01730	; slot 12 "MANUAL"
+	.equ DspParamName_13_SLOW_FAST, NakaData_WidgetDescriptors + 0x01741	; slot 13 "SLOW/FAST"
+	.equ DspParamName_14_TREBLE_FAST, NakaData_WidgetDescriptors + 0x01752	; slot 14 "TREBLE FAST" [Hz]
+	.equ DspParamName_15_SLOW, NakaData_WidgetDescriptors + 0x01763	; slot 15 "SLOW" [Hz]
+	.equ DspParamName_16_WIND_UP, NakaData_WidgetDescriptors + 0x01774	; slot 16 "WIND UP" [s ]
+	.equ DspParamName_17_WIND_DOWN, NakaData_WidgetDescriptors + 0x01785	; slot 17 "WIND DOWN" [s ]
+	.equ DspParamName_18_BASS_FAST, NakaData_WidgetDescriptors + 0x01796	; slot 18 "BASS   FAST" [Hz]
+	.equ DspParamName_19_BASS_SLOW, NakaData_WidgetDescriptors + 0x017a7	; slot 19 "BASS   SLOW" [Hz]
+	.equ DspParamName_20_VOLUME_ADJUST, NakaData_WidgetDescriptors + 0x017b8	; slot 20 "VOLUME ADJUST"
+	.equ DspParamName_21_OSC_SPEED, NakaData_WidgetDescriptors + 0x017c9	; slot 21 "OSC SPEED" [Hz]
+	.equ DspParamName_22_DELAY_L, NakaData_WidgetDescriptors + 0x017da	; slot 22 "DELAY L" [ms]
+	.equ DspParamName_23_DELAY_R, NakaData_WidgetDescriptors + 0x017eb	; slot 23 "DELAY R" [ms]
+	.equ DspParamName_24_FEEDBACK_L, NakaData_WidgetDescriptors + 0x017fc	; slot 24 "FEEDBACK L"
+	.equ DspParamName_25_FEEDBACK_R, NakaData_WidgetDescriptors + 0x0180d	; slot 25 "FEEDBACK R"
+	.equ DspParamName_26_DELAY_DRY_WET, NakaData_WidgetDescriptors + 0x0181e	; slot 26 "DELAY DRY/WET"
+	.equ DspParamName_27_CHORUS_DRY_WET, NakaData_WidgetDescriptors + 0x0182f	; slot 27 "CHORUS DRY/WET"
+	.equ DspParamName_28_FLANGER_DRY_WET, NakaData_WidgetDescriptors + 0x01840	; slot 28 "FLANGER DRY/WET"
+	.equ DspParamName_29_PHASER_DRY_WET, NakaData_WidgetDescriptors + 0x01851	; slot 29 "PHASER DRY/WET"
+	.equ DspParamName_30_LOW_EMPHASIS_FC, NakaData_WidgetDescriptors + 0x01862	; slot 30 "LOW  EMPHASIS FC"
+	.equ DspParamName_31_LOW_EMPHASIS_G, NakaData_WidgetDescriptors + 0x01873	; slot 31 "LOW  EMPHASIS  G"
+	.equ DspParamName_32_HIGH_EMPHASIS_FC, NakaData_WidgetDescriptors + 0x01884	; slot 32 "HIGH EMPHASIS FC" [Hz]
+	.equ DspParamName_33_HIGH_EMPHASIS_G, NakaData_WidgetDescriptors + 0x01895	; slot 33 "HIGH EMPHASIS  G"
+	.equ DspParamName_34_REVERB_TIME, NakaData_WidgetDescriptors + 0x018a6	; slot 34 "REVERB TIME" [s ]
+	.equ DspParamName_35_PRE_DELAY, NakaData_WidgetDescriptors + 0x018b7	; slot 35 "PRE DELAY" [ms]
+	.equ DspParamName_36_HIGH_DAMP_GAIN, NakaData_WidgetDescriptors + 0x018c8	; slot 36 "HIGH DAMP GAIN"
+	.equ DspParamName_37_ERLEVEL, NakaData_WidgetDescriptors + 0x018d9	; slot 37 "ER.LEVEL"
+	.equ DspParamName_38_PITCH_L, NakaData_WidgetDescriptors + 0x018ea	; slot 38 "PITCH L"
+	.equ DspParamName_39_PITCH_R, NakaData_WidgetDescriptors + 0x018fb	; slot 39 "PITCH R"
+	.equ DspParamName_40_THRESHOLD, NakaData_WidgetDescriptors + 0x0190c	; slot 40 "THRESHOLD"
+	.equ DspParamName_41_RATIO, NakaData_WidgetDescriptors + 0x0191d	; slot 41 "RATIO"
+	.equ DspParamName_42_ATTACK_SENS, NakaData_WidgetDescriptors + 0x0192e	; slot 42 "ATTACK SENS." [s ]
+	.equ DspParamName_43_RELEASE_SENS, NakaData_WidgetDescriptors + 0x0193f	; slot 43 "RELEASE SENS." [s ]
+	.equ DspParamName_44_ATTACK_RATE, NakaData_WidgetDescriptors + 0x01950	; slot 44 "ATTACK RATE" [s ]
+	.equ DspParamName_45_RELEASE_RATE, NakaData_WidgetDescriptors + 0x01961	; slot 45 "RELEASE RATE" [s ]
+	.equ DspParamName_46_GATE_TIME, NakaData_WidgetDescriptors + 0x01972	; slot 46 "GATE TIME" [ms]
+	.equ DspParamName_47_MASK_TIME, NakaData_WidgetDescriptors + 0x01983	; slot 47 "MASK TIME" [ms]
+	.equ DspParamName_48_HARS_TIME, NakaData_WidgetDescriptors + 0x01994	; slot 48 "HARS TIME"
+	.equ DspParamName_49_LFO_WAVEFORM, NakaData_WidgetDescriptors + 0x019a5	; slot 49 "LFO WAVEFORM"
+	.equ DspParamName_50_OSC_WAVEFORM, NakaData_WidgetDescriptors + 0x019b6	; slot 50 "OSC WAVEFORM"
+	.equ DspParamName_51_BAND_EMPHASIS_FC, NakaData_WidgetDescriptors + 0x019c7	; slot 51 "BAND EMPHASIS FC" [Hz]
+	.equ DspParamName_52_BAND_EMPHASIS_Q, NakaData_WidgetDescriptors + 0x019d8	; slot 52 "BAND EMPHASIS  Q"
+	.equ DspParamName_53_BAND_EMPHASIS_G, NakaData_WidgetDescriptors + 0x019e9	; slot 53 "BAND EMPHASIS  G"
+	.equ DspParamName_54_LOW_MIX, NakaData_WidgetDescriptors + 0x019fa	; slot 54 "LOW MIX"
+	.equ DspParamName_55_HIGH_MIX, NakaData_WidgetDescriptors + 0x01a0b	; slot 55 "HIGH MIX"
+	.equ DspParamName_56_PHASE, NakaData_WidgetDescriptors + 0x01a1c	; slot 56 "PHASE"
+	.equ DspParamName_57_FEEDBACK, NakaData_WidgetDescriptors + 0x01a2d	; slot 57 "FEEDBACK"
+	.equ DspParamName_58_SWEEP_RANGE, NakaData_WidgetDescriptors + 0x01a3e	; slot 58 "SWEEP RANGE"
+	.equ DspParamName_59_WAH_CENTER_FC, NakaData_WidgetDescriptors + 0x01a4f	; slot 59 "WAH CENTER FC"
+	.equ DspParamName_60_HARS_TIME_L, NakaData_WidgetDescriptors + 0x01a60	; slot 60 "HARS TIME L" [ms]
+	.equ DspParamName_61_HARS_TIME_R, NakaData_WidgetDescriptors + 0x01a71	; slot 61 "HARS TIME R" [ms]
+	.equ DspParamName_62_BALANCE_L, NakaData_WidgetDescriptors + 0x01a82	; slot 62 "BALANCE L"
+	.equ DspParamName_63_BALANCE_R, NakaData_WidgetDescriptors + 0x01a93	; slot 63 "BALANCE R"
+	.equ DspParamName_64_FAST_LFO_SPEED_L, NakaData_WidgetDescriptors + 0x01aa4	; slot 64 "FAST LFO SPEED L" [Hz]
+	.equ DspParamName_65_FAST_LFO_SPEED_R, NakaData_WidgetDescriptors + 0x01ab5	; slot 65 "FAST LFO SPEED R" [Hz]
+	.equ DspParamName_66_MODULATION_DEPTH, NakaData_WidgetDescriptors + 0x01ac6	; slot 66 "MODULATION DEPTH"
+	.equ DspParamName_67_DELAY1_DRY_WET, NakaData_WidgetDescriptors + 0x01ad7	; slot 67 "DELAY1 DRY/WET"
+	.equ DspParamName_68_DELAY2_DRY_WET, NakaData_WidgetDescriptors + 0x01ae8	; slot 68 "DELAY2 DRY/WET"
+	.equ DspParamName_69_VIBRATO_DRY_WET, NakaData_WidgetDescriptors + 0x01af9	; slot 69 "VIBRATO DRY/WET"
+	.equ DspParamName_70_WAH_DRY_WET, NakaData_WidgetDescriptors + 0x01b0a	; slot 70 "WAH DRY/WET"
+	.equ DspParamName_71_FAST_LFO_SPEED, NakaData_WidgetDescriptors + 0x01b1b	; slot 71 "FAST LFO SPEED" [Hz]
+	.equ DspParamName_72_TREBLE_DEPTH, NakaData_WidgetDescriptors + 0x01b2c	; slot 72 "TREBLE DEPTH"
+	.equ DspParamName_73_FAST, NakaData_WidgetDescriptors + 0x01b3d	; slot 73 "FAST" [Hz]
+	.equ DspParamName_74_BASS_DEPTH, NakaData_WidgetDescriptors + 0x01b4e	; slot 74 "BASS DEPTH"
+	.equ DspParamName_75_DELAY_1, NakaData_WidgetDescriptors + 0x01b5f	; slot 75 "DELAY 1" [ms]
+	.equ DspParamName_76_DELAY_2, NakaData_WidgetDescriptors + 0x01b70	; slot 76 "DELAY 2" [ms]
+	.equ DspParamName_77_DELAY_3, NakaData_WidgetDescriptors + 0x01b81	; slot 77 "DELAY 3" [ms]
+	.equ DspParamName_78_DELAY_4, NakaData_WidgetDescriptors + 0x01b92	; slot 78 "DELAY 4" [ms]
+	.equ DspParamName_79_PAN_1, NakaData_WidgetDescriptors + 0x01ba3	; slot 79 "PAN   1"
+	.equ DspParamName_80_PAN_2, NakaData_WidgetDescriptors + 0x01bb4	; slot 80 "PAN   2"
+	.equ DspParamName_81_PAN_3, NakaData_WidgetDescriptors + 0x01bc5	; slot 81 "PAN   3"
+	.equ DspParamName_82_PAN_4, NakaData_WidgetDescriptors + 0x01bd6	; slot 82 "PAN   4"
+	.equ DspParamName_83_INTENSITY, NakaData_WidgetDescriptors + 0x01be7	; slot 83 "INTENSITY"
+	.equ DspParamName_84_EXCITE, NakaData_WidgetDescriptors + 0x01bf8	; slot 84 "EXCITE"
+	.equ DspParamName_85_Blank, NakaData_WidgetDescriptors + 0x01c09	; slot 85 "(spare)"
 	.equ NakaInst_FxReservedSlot_00, NakaData_WidgetDescriptors + 0x01e1a
 	.equ NakaInst_FxReservedSlot_01, NakaData_WidgetDescriptors + 0x01e2c
 	.equ NakaInst_FxReservedSlot_02, NakaData_WidgetDescriptors + 0x01e3e

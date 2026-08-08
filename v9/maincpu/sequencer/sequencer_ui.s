@@ -7570,7 +7570,7 @@ EntertainerGridCheck:
 	ld (xsp + 32), xwa
 	cp xde, 0x1e8000f
 	jrl z, EntGridCheck_Default
-	lda_24 xwa, (NakaData_WidgetDescriptors_0x1C1A)
+	lda_24 xwa, (DspEffectName_PtrTable)
 	ld (xsp + 16), xwa
 	cp xde, 0x1e8000e
 	jrl z, EntGridCheck_Return
@@ -15106,12 +15106,20 @@ DspItem0CngFunc:
 	lda_24 xix, (DspItem0_DisplayEffectName)
 	jp_ind 8, 0x07, 0xf0, 0xf4
 
+; -----------------------------------------------------------------------------
+; DspItem0_DisplayEffectName (0xF355F3) -- effect-editor "type" field painter.
+; Reads the current effect number from RAM word 0x2976, indexes
+; DspEffectName_PtrTable (0xE32A7A, 128 x u32) and Strcpy's the 16-character
+; name it points at into the widget's text buffer (+18).  Entry n of that
+; table points at DspEffectName_Strings + 18*(127-n), so the string block is
+; laid out in descending effect order.  See ui_widgets/widget_descriptors.s.
+; -----------------------------------------------------------------------------
 DspItem0_DisplayEffectName:
 	ld (xsp), xde
 	ldw_d16 xwa, (0x2976)
 	extz xwa
 	sll xwa, 2
-	ld xbc, NakaData_WidgetDescriptors_0x1C1A
+	ld xbc, DspEffectName_PtrTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15124,6 +15132,14 @@ DspItem0_DisplayEffectName:
 	ld (xsp), xde
 	ldw (xsp + 18), 0x0
 
+; -----------------------------------------------------------------------------
+; DspItem0_DisplayParamNames (0xF3561F) -- fills the 8 parameter-name rows.
+; Row r takes its parameter id from the per-effect ordered id list at RAM
+; 0x29AC, offset by the byte at 0x021098 (the first row of the current page).
+; The id scales by 17 (0x11) into DspParamName_Table (0xE324C4, 86 slots x
+; 17 bytes = 16 display chars + ':') and Strncpy copies exactly 17 bytes --
+; these strings are NOT NUL-terminated.
+; -----------------------------------------------------------------------------
 DspItem0_DisplayParamNames:
 	pushw 0x11
 	ldb_da a, (0x021098)
@@ -15135,7 +15151,7 @@ DspItem0_DisplayParamNames:
 	ld a, (xwa)
 	extz wa
 	muls wa, 0x11
-	lda_24 xbc, (NakaData_WidgetDescriptors_0x1664)
+	lda_24 xbc, (DspParamName_Table)
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -15152,6 +15168,13 @@ DspItem0_DisplayParamNames:
 	jr c, DspItem0_DisplayParamNames
 	ldw (xsp + 18), 0x0
 
+; -----------------------------------------------------------------------------
+; DspItem0_DisplayParamValues (0xF3566C) -- fills the 8 parameter-unit cells.
+; Same parameter id as DspItem0_DisplayParamNames, scaled by 2 into
+; DspParamUnit_Table (0xE32418, 86 slots x 2 chars: "  ", "Hz", "s ", "ms"),
+; Strncpy 2 bytes; the numeric value itself is formatted separately by
+; DspItem0_FormatParamValue.
+; -----------------------------------------------------------------------------
 DspItem0_DisplayParamValues:
 	pushw 0x2
 	ldb_da a, (0x021098)
@@ -15163,7 +15186,7 @@ DspItem0_DisplayParamValues:
 	ld a, (xwa)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (NakaData_WidgetDescriptors_0x15B8)
+	lda_24 xbc, (DspParamUnit_Table)
 	exts xwa
 	add xwa, xbc
 	push xwa
