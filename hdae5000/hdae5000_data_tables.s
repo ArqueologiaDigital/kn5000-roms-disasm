@@ -27107,6195 +27107,2458 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xc0, 0x9c  ; "À"
 	.asciz "#"
 
-HDAE5000_GFX_DATA_1:	; 0x2A5D2C
-	; Graphics data block 1
-; LGD1: 0x2A5D2C (3160 bytes)
+; =============================================================================
+; HD-AE5000 UI OBJECT TABLE (0x2A5D2C - 0x2A6983)
+; =============================================================================
+; 789 pointers to UI object descriptors plus a NULL end-of-table marker: 790
+; .long entries, no code.  Registered at boot by HDAE5000_Handler_Registration
+; (hd-ae5000_v2_06i.s, "Handler 10"): object-set ID 0x007F, PPI port 0x01600010,
+; entry count 0x315 = 789, table pointer 0x2A5D2C, handler function from
+; workspace[0x0E0A][0x0280], handed to RegisterObjectTable = workspace[0x0E0A][0x00E4].
+;
+; This block used to be disassembled as instructions under the label
+; HDAE5000_GFX_DATA_1 ("graphics data block 1").  It is not code and it is not
+; graphics: all 3160 bytes group into valid little-endian 32-bit pointers - 769
+; into the UI descriptor pool at 0x29DC12-0x2A5D2B (strictly ascending), 20 into
+; sub-CPU work RAM 0x239CC4-0x239FAE for the objects whose descriptor is built at
+; run time, and one 0x00000000 terminator.
+;
+; The table is INDEX-PARALLEL with HDAE5000_UiObjectName_PtrTable (0x2A6984):
+; entry i here is the descriptor of the object entry i there names.  48 named
+; entries also carry an on-screen title inside the descriptor, and ALL 48 agree
+; with the name - no counter-example - e.g.
+;   [  0] HDDMENU         <-> "HD-AE5000"       [ 19] SETUPS_TOOLS  <-> "SETUP & TOOLS"
+;   [ 69] HARD_TEST       <-> "HARDWARE TEST"   [102] PC_DATA_LINK  <-> "PC DATA LINK"
+;   [143] LOAD_BY_NUM     <-> "LOAD BY NUMBER"  [345] FLS_FILE_SEL  <-> "F.L.S. FILE SELECT"
+;   [210] CP_FD           <-> "COPY TECH TO HD" [556] DBG_MEMO_SCREEN <-> "DEBUG MEMO SCREEN"
+; and, decisively, the two 9-object families that enumerate the KN5000 data
+; types in the same order under two different prefixes:
+;   RAM_EDIT_{LSW,PMT,SQT,CMP,TM,MSP,RCM,MD,TLX} = objects 406-412,426
+;   DEL_EDIT_{LSW,PMT,SQT,CMP,TM,MSP,RCM,MD,TLX} = objects 463-470,489
+;   both spelling out CURRENT PANEL / PANEL MEMORY / SEQUENCER / COMPOSER /
+;   SOUND MEMORY / MSP / RHYTHM CUSTOM / USER MIDI SETTINGS / TECHNICS LYRICS.
+; The 20 RAM-descriptor entries are all soft-key or tab objects
+; (HddNamingABC/abc/Symbol, *_SW_EDIT, CP_FD_HDSW*, *_EXIT, *inLyric).
+;
+; The targets stay absolute for now: the descriptor pool itself is still decoded
+; as instructions, and the labels HDAE5000_UI_Descriptors (0x29DC14) /
+; _UI_Page_Titles / _Panel_Save_UI / _Credits / _Demo_Data cut that one contiguous
+; pool into five arbitrary pieces - none of them a descriptor boundary; the pool
+; really starts at 0x29DC12, two bytes below the first of those labels.
+; Symbolising the targets is a follow-up package, not this one.
+; =============================================================================
 
-	ccf
-	orcf_a_16 ix		; orcf A,IX
-	nop                                     ; nop
-	ld	xiz, 0x8c0029dc
-	orcf_a_16 ix		; orcf A,IX
-	nop                                     ; nop
-	.byte 0xc4, 0xdc, 0x29                 ; db
-	nop                                     ; nop
-.LGD1_5d3c:
-	cps	xiz, 4
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ldb	h, 0xdd
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	orcf_a_16 iy		; orcf A,IY
-	nop                                     ; nop
-	ld_s	(xwa-35), a
-	nop                                     ; nop
-	jp_cc_ri xde, 13		; jp P/PL,XDE
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	cps	xde, 5
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push_a
-.LGD1_5d55:
-	orcf_a_16 iz		; orcf A,IZ
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	orcf_a_16 iz		; orcf A,IZ
-	nop                                     ; nop
-	jr gt, .LGD1_5d3c                      ; [6a de] jr GT,0x2a5d3c
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	xor	(xix), h
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xiz-34), bc
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	orcf_a_16 iz		; orcf A,IZ
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0xdf, 0x29                       ; orcf A,SP
-	nop                                     ; nop
-	pushw de                                ; push DE
-	.byte 0xdf, 0x29                       ; orcf A,SP
-	nop                                     ; nop
-	jr le, .LGD1_5d55                      ; [62 df] jr LE,0x2a5d55
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xwa-33), bc
-	nop                                     ; nop
-	ordm16_24	(0x0029DF), ix
-	.byte 0xdf, 0x29                       ; orcf A,SP
-	nop                                     ; nop
-	ldio	224, 41
-	nop                                     ; nop
-	ldb	d, 0xe0
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	.byte 0xe0, 0x29, 0x00                 ; db
-	jrl	ov, 0x29e0
-	nop                                     ; nop
-	ld_s	(xiz-32), a
-	nop                                     ; nop
-	ld_s	(xde-32), xbc
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	.byte 0xe0, 0x29, 0x00                 ; db
-	or	xwa, xiz
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push_a
-	.byte 0xe1, 0x29, 0x00, 0x2e, 0xe1, 0x29, 0x00, 0x5a
-	.byte 0xe1, 0x29, 0x00, 0x74, 0xe1, 0x29, 0x00, 0x98
-	.byte 0xe1, 0x29, 0x00, 0xd0
-	cpdm32	41, xde
-	.byte 0xe1, 0x29, 0x00, 0x14           ; db
-	or	xde, (0x500029)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	or	b, (xix)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	call_cc_ri xiz, 2		; call LE,XIZ
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	or	xde, xwa
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jp16	10723
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	.byte 0xe3, 0x29, 0x00, 0xc4, 0x9c     ; adc (XDE2+0xc400),XIX
-	ldb	c, 0x00
-	jrl	ov, 0x29e3
-	nop                                     ; nop
-	ld_s	(xde-29), bc
-	nop                                     ; nop
-	call_cc_ri xix, 3		; call ULE,XIX
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xe0, 0xe3, 0x29                 ; db
-	nop                                     ; nop
-	swi	2
-	.byte 0xe3, 0x29, 0x00, 0x3a, 0xe4
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	le, 0x29e4
-	nop                                     ; nop
-	or	ix, (xiz)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xc0, 0xe4, 0x29                 ; db
-	nop                                     ; nop
-	or	xix, xwa
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ldb	w, 0xe5
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld	xix, 0x5e0029e5
-	.byte 0xe5, 0x29, 0x00                 ; db
-	or	e, (xiz)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xc4, 0xe5, 0x29                 ; db
-	nop                                     ; nop
-	swi	4
-	.byte 0xe5, 0x29, 0x00
-	ldb	b, 0xe6
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	.byte 0xe6                             ; db
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	ov, 0x29e6
-	nop                                     ; nop
-	ld_s	(xix-26), xbc
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	.byte 0xe6                             ; db
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	or xiz, xiz                             ; or XIZ,XIZ
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push_f
-	.byte 0xe7, 0x29, 0x00
-	ld	xwa, 0x7c0029e7
-	.byte 0xe7, 0x29, 0x00                 ; db
-	call_cc_ri xix, 7		; call C,XIX
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	or l, h		; or L,H
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	or	xsp, xwa
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push	sr
-	.byte 0xe8, 0x29
-	nop                                     ; nop
-	ldw	ix, 0x29e8
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	.byte 0xe8, 0x29                       ; db
-.LGD1_5e5b:
-	nop                                     ; nop
-	or	(xde), w
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	call	(xde)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xe2, 0xe8, 0x29, 0x00, 0x1c     ; db
-	.byte 0xe9, 0x29                       ; db
-	nop                                     ; nop
-	ldw	iz, 0x29e9
-	nop                                     ; nop
-	jr le, .LGD1_5e5b                      ; [62 e9] jr LE,0x2a5e5b
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	nov, 0x29e9
-	nop                                     ; nop
-	ld_s	(xwa-23), xbc
-	nop                                     ; nop
-	.byte 0xcc, 0xe9, 0x29                 ; rrc 0x29,D
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	.byte 0xe9, 0x29                       ; db
-	nop                                     ; nop
-	ccf
-	.byte 0xea, 0x29
-	nop                                     ; nop
-	ldw	iz, 0x29ea
-	nop                                     ; nop
-	pop xde                                 ; pop XDE
-	.byte 0xea, 0x29                       ; db
-	nop                                     ; nop
-	ld_s	(xwa-22), bc
-	nop                                     ; nop
-	call_cc_ri xde, 10		; call GT,XDE
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xde, 0xea, 0x29                 ; rl 0x29,IZ
-	nop                                     ; nop
-	swi	0
-	.byte 0xea, 0x29
-	nop                                     ; nop
-	ldb	d, 0xeb
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	.byte 0xeb, 0x29                       ; db
-	nop                                     ; nop
-	jr	nov, 0xeb
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xde-21), bc
-	nop                                     ; nop
-	.byte 0xd0, 0xeb, 0x29                 ; db
-	nop                                     ; nop
-	.byte 0xea, 0xeb, 0x29                 ; rr 0x29,XDE
-	nop                                     ; nop
-	max
-	.byte 0xec, 0x29
-	nop                                     ; nop
-	jp16	10732
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	.byte 0xec, 0x29                       ; db
-	nop                                     ; nop
-	ld_s	(xiz-20), a
-	nop                                     ; nop
-	sla	w, 0x29
-	nop                                     ; nop
-	.byte 0xe2, 0xec, 0x29, 0x00, 0x1e     ; db
-	.byte 0xed, 0x29                       ; db
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	.byte 0xed, 0x29                       ; db
-	nop                                     ; nop
-	jrl	f, 0x29ed
-	nop                                     ; nop
-	ld_s	(xde-19), bc
-	nop                                     ; nop
-	.byte 0xc0, 0xed, 0x29                 ; db
-	nop                                     ; nop
-	sra	de, 0x29
-	nop                                     ; nop
-	swi	6
-	.byte 0xed, 0x29
-	nop                                     ; nop
-	ld	xde, 0x5c0029ee
-	.byte 0xee, 0x29                       ; db
-	nop                                     ; nop
-	or	(xiz), h
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ordm8_24	(0x0029EE), d
-	.byte 0xee, 0x29                       ; db
-	nop                                     ; nop
-	ldw	iz, 0x29ef
-	nop                                     ; nop
-	or8_mem_ri xwa, l		; or (XWA),L
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	orcfa_rid8 xix, 0xef		; orcf A,(XIX+0xef)
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	.byte 0xef, 0x29                       ; db
-	nop                                     ; nop
-	ldw	wa, 0x29f0
-	nop                                     ; nop
-	jrl	z, 0x29f0
-	nop                                     ; nop
-	ld_s	(xde-16), bc
-	nop                                     ; nop
-	cpdm16_24	(0x0029F0), ix
-	.byte 0xf0, 0x29, 0x00, 0x40           ; ld (0x29),0x40
-	.byte 0xf1, 0x29, 0x00, 0x5a           ; db
-	.byte 0xf1, 0x29, 0x00, 0xec           ; call PO/NOV,0x0029
-	.byte 0x9c, 0x23, 0x00                 ; db
-	cp	a, (xde)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xix-15), bc
-	nop                                     ; nop
-	.byte 0xd4, 0xf1, 0x29                 ; db
-	nop                                     ; nop
-.LGD1_5f3c:
-	cp	xbc, xiz
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push_f
-	.byte 0xf2, 0x29, 0x00, 0x52, 0xf2
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jr	nov, 0xf2
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	cp	de, (xiz)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xd2, 0xf2, 0x29, 0x00, 0x0e     ; db
-	.byte 0xf3, 0x29, 0x00, 0x4a, 0xf3     ; db
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	ov, 0x29f3
-	nop                                     ; nop
-	ld_s	(xiz-13), bc
-	nop                                     ; nop
-	cp	c, w
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xf2, 0xf3, 0x29, 0x00, 0x2c     ; stcf A,(0x0029f3)
-	.byte 0xf4, 0x29, 0x00, 0x46           ; ld (-XDE2),0x46
-	.byte 0xf4, 0x29, 0x00, 0x62           ; ld (-XDE2),0x62
-	.byte 0xf4, 0x29, 0x00, 0x7e           ; ld (-XDE2),0x7e
-	.byte 0xf4, 0x29, 0x00, 0xa2           ; ld (-XDE2),0xa2
-	.byte 0xf4, 0x29, 0x00, 0xbc           ; ld (-XDE2),0xbc
-	.byte 0xf4, 0x29, 0x00, 0xe0           ; ld (-XDE2),0xe0
-	.byte 0xf4, 0x29, 0x00, 0x0a           ; ld (-XDE2),0x0a
-	stib_dsp 0x29, 0x30		; ld (XDE2+),0x30
-	stib_dsp 0x29, 0x6c		; ld (XDE2+),0x6c
-	stib_dsp 0x29, 0x94		; ld (XDE2+),0x94
-	stib_dsp 0x29, 0xba		; ld (XDE2+),0xba
-	stib_dsp 0x29, 0xe6		; ld (XDE2+),0xe6
-	stib_dsp 0x29, 0x00		; ld (XDE2+),0x00
-	.byte 0xf6                             ; db
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	pushw de                                ; push DE
-	.byte 0xf6                             ; db
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	.byte 0xf6                             ; db
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	gt, 0x29f6
-	nop                                     ; nop
-	cp	xiz, (xde)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	cp	h, b
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xf2, 0xf6, 0x29, 0x00, 0x1a
-	ldx
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld	xde, 0x6a0029f7
-	.byte 0xf7                             ; ldx
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0x92, 0xf7                       ; cp SP,(XDE)
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	orcfa_rid8 xde, 0xf7		; orcf A,(XDE+0xf7)
-	nop                                     ; nop
-	.byte 0xf6
-	ldx
-.LGD1_5fd2:
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ldw	de, 0x29f8
-	nop                                     ; nop
-	jr nz, .LGD1_5fd2                      ; [6e f8] jr NZ,0x2a5fd2
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xde-8), xbc
-	nop                                     ; nop
-	.byte 0xc4, 0xf8, 0x29                 ; db
-	nop                                     ; nop
-	.byte 0xee, 0xf8                       ; rlc A,XIZ
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push_f
-	swi	1
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push xix
-	.byte 0xf9                             ; swi 1
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	t, 0x29f9
-	nop                                     ; nop
-	.byte 0xca, 0xf9                       ; rrc A,B
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	call16	10746
-	nop                                     ; nop
-	ldw	iz, 0x29fa
-	nop                                     ; nop
-	ld_s	(xwa-6), a
-	nop                                     ; nop
-	.byte 0xda, 0xfa                       ; rl A,DE
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	.byte 0xfb                             ; swi 3
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	nz, 0x29fb
-	nop                                     ; nop
-	.byte 0xd0, 0xfb, 0x29                 ; db
-	nop                                     ; nop
-	ldb	b, 0xfc
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push xix
-	.byte 0xfc                             ; swi 4
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0x56
-	swi	4
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	jrl	f, 0x29fc
-	nop                                     ; nop
-	ld_s	(xwa-4), bc
-	nop                                     ; nop
-	.byte 0xc0, 0xfc, 0x29                 ; db
-	nop                                     ; nop
-	slaa	xwa
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	rcf
-	swi	5
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	push xwa
-	.byte 0xfd                             ; swi 5
-	pushw bc                                ; push BC
-.LGD1_6037:
-	nop                                     ; nop
-	jr f, .LGD1_6037                       ; [60 fd] jr F,0x2a6037
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xwa-3), a
-	nop                                     ; nop
-	ret_cc_ri xwa, 13		; ret P/PL
-
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xd4, 0xfd, 0x29                 ; db
-	nop                                     ; nop
-	swi	2
-	swi	5
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	calr	0x29fe
-	nop                                     ; nop
-	ld	xix, 0x6a0029fe
-	.byte 0xfe                             ; swi 6
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xiz-2), a
-	nop                                     ; nop
-	ret_cc_ri xiz, 14		; ret NZ
-
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	slla	ix
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	.byte 0xf6
-	swi	6
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	calr	0x29ff
-	nop                                     ; nop
-	ld	xix, 0x5e0029ff
-	.byte 0xff                             ; swi 7
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ld_s	(xde-1), a
-	nop                                     ; nop
-	.byte 0xc4, 0xff, 0x29                 ; db
-	nop                                     ; nop
-	srla	iz
-	pushw bc                                ; push BC
-	nop                                     ; nop
-	ei 0                                    ; ei 0x00
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	nop                                     ; nop
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x94, 0x00                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xae, 0x00, 0x2a                 ; db
-	nop                                     ; nop
-	ldb	b, 0x9d
-	ldb	c, 0x00
-	.byte 0xc8, 0x00                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	.byte 0x9d, 0x23, 0x00                 ; db
-	.byte 0xee, 0x00                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ex_ff
-	normal
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x52
-	normal
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	le, 0x239d
-	nop                                     ; nop
-	.byte 0x82, 0x01                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+1), xde
-	nop                                     ; nop
-	cp	(0x002a01), xix
-	normal
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	d, 0x02
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	push	sr
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x86, 0x02                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xwa, 0x02		; xorcf A,(XWA+0x02)
-	nop                                     ; nop
-	.byte 0xea, 0x02                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_a
-	pop	sr
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	xiz, 0x78002a03
-	pop	sr
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+3), xde
-	nop                                     ; nop
-	.byte 0xd4, 0x03, 0x2a                 ; db
-	nop                                     ; nop
-	swi	2
-	pop	sr
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_a
-	max
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	max
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	t, 0x04
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+4), de
-	nop                                     ; nop
-	push	d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf6
-	max
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw wa                                ; push WA
-	halt                                    ; halt
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xde                                 ; pop XDE
-	halt                                    ; halt
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+5), b
-	nop                                     ; nop
-	ld	hl, (xde-99)
-	nop                                     ; nop
-	.byte 0xb6, 0x05                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop	ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_f
-	ei 0x2a		; ei 0x2a
-	nop                                     ; nop
-	ldw	de, 0x2a06
-	nop                                     ; nop
-	pop xiz                                 ; pop XIZ
-	ei 0x2a		; ei 0x2a
-	nop                                     ; nop
-	jrl	t, 0x2a06
-	nop                                     ; nop
-	.byte 0xc2, 0x9d, 0x23, 0x00, 0x9c     ; adc (0x00239d),D
-	ei 0x2a		; ei 0x2a
-	nop                                     ; nop
-	cpdm8_24	(0x002A06), h
-	ei 0x2a		; ei 0x2a
-	nop                                     ; nop
-	push xde
-	.byte 0x07                             ; reti
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	z, 0x2a07
-	nop                                     ; nop
-	ld_s	(xiz+7), de
-	nop                                     ; nop
-	neg	w
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf0, 0x07, 0x2a                 ; xorcf A,(0x07)
-	nop                                     ; nop
-	ldwio	8, 42
-	.byte 0xea, 0x9d                       ; ld XDE,XIY
-	ldb	c, 0x00
-	push xde
-	ldio	42, 0
-	pop xiz                                 ; pop XIZ
-	ldio	42, 0
-	ccf
-	.byte 0x9e, 0x23, 0x00, 0x82, 0x08
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa6, 0x08                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	mul	d, 0x2a
-	nop                                     ; nop
-	.byte 0xf0, 0x08, 0x2a                 ; xorcf A,(0x08)
-	nop                                     ; nop
-	ldb	w, 0x09
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xde
-	push 42
-	nop                                     ; nop
-	ld_s	(xix+9), b
-	nop                                     ; nop
-	.byte 0xb4, 0x09                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	muls	wa, 0x002a
-	nop                                     ; nop
-	ldwio	42, 10240
-	ldwio	42, 20480
-	ldwio	42, 30720
-	ldwio	42, 40960
-	ldwio	42, 51200
-	ldwio	42, 61440
-	ldwio	42, 5632
-	pushw 0x002a
-	push xde
-	pushw 0x002a
-	jr	f, 0x0b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x86, 0x0b                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+11), xde
-	nop                                     ; nop
-	cpdm16_24	(0x002A0B), wa
-	pushw 0x002a
-	popw de                                 ; pop DE
-	.byte 0x0c                             ; incf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+12), de
-	nop                                     ; nop
-	link	xiz, 42
-	ld	xwa, 0x92002a0d
-	.byte 0x0d                             ; decf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe4, 0x0d, 0x2a                 ; db
-	nop                                     ; nop
-	swi	6
-	decf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xde
-	ret
-
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+14), b
-	nop                                     ; nop
-	push xde
-	.byte 0x9e, 0x23, 0x00                 ; db
-	.byte 0xa6, 0x0e                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xcc, 0x0e                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a0f
-	nop                                     ; nop
-	push xwa
-	retd 0x002a		; retd 0x002a
-
-	.byte 0x52                             ; db
-	retd 0x002a		; retd 0x002a
-
-	jr	nov, 0x0f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa4, 0x0f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x0f		; xorcf A,(XIZ+0x0f)
-	nop                                     ; nop
-	bs1b16 wa		; bs1b A,WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	max
-.LGD1_620d:
-	rcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldw	wa, 0x2a10
-	nop                                     ; nop
-	.byte 0x54
-	rcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldiw_ri xwa		; ldiw
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+16), xde
-	nop                                     ; nop
-	incdi16_24	2, (0x002A10)
-	.byte 0x9e, 0x23, 0x00
-	swi	0
-	rcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a11
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	scf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	f, 0x2a11
-	nop                                     ; nop
-	ld_s	(xwa+17), de
-	nop                                     ; nop
-	.byte 0xd4, 0x11, 0x2a                 ; db
-	nop                                     ; nop
-	rcf
-	ccf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ccf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	z, 0x2a12
-	nop                                     ; nop
-	.byte 0xa0, 0x12                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	extz	ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf6
-	ccf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rcf
-	zcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw de                                ; push DE
-	zcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54
-	zcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	gt, 0x2a13
-	nop                                     ; nop
-	.byte 0xb6, 0x13                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd0, 0x13, 0x2a                 ; db
-	nop                                     ; nop
-	swi	0
-	zcf
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldw	ix, 0x2a14
-	nop                                     ; nop
-	jr z, .LGD1_628e                       ; [66 14] jr Z,0x2a628e
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+20), de
-	nop                                     ; nop
-	cpda8_24	d, (0x002A14)
-	push_a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	h, 0x15
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xde                                 ; pop XDE
-	pop_a
-.LGD1_628e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	ov, 0x2a15
-	nop                                     ; nop
-	.byte 0xb2, 0x15                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xcc, 0x15                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldio	22, 42
-	nop                                     ; nop
-	ld	xix, 0x6e002a16
-	ex_ff
-	pushw de                                ; push DE
-	nop                                     ; nop
-	cpdw_ri xiz		; cpdw
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x16		; xorcf A,(XIZ+0x16)
-	nop                                     ; nop
-	swi	2
-	ex_ff
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x17
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	ldf	42
-	nop                                     ; nop
-	cpdr_ri xwa		; cpdr
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+23), de
-	nop                                     ; nop
-	.byte 0xc4, 0x17, 0x2a                 ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	push_f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw de                                ; push DE
-	push_f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54
-	push_f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x90, 0x18                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+24), xde
-	nop                                     ; nop
-	.byte 0xc4, 0x18, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xec, 0x18                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_a
-	pop_f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xix
-	pop_f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr le, .LGD1_6307                      ; [62 19] jr LE,0x2a6307
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+25), b
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x19		; xorcf A,(XIX+0x19)
-	nop                                     ; nop
-	.byte 0xee, 0x19                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a1a
-	nop                                     ; nop
-	.byte 0x50
-	jp16	42
-	.byte 0x82, 0x1a
-	pushw de                                ; push DE
-.LGD1_6307:
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x1a		; xorcf A,(XIZ+0x1a)
-	nop                                     ; nop
-	swi	2
-	jp16	42
-	push_a
-	jp 0x2e002a                             ; jp 0x2e002a
-	jp 0x48002a                             ; jp 0x48002a
-	jp 0x86002a                             ; jp 0x86002a
-	jp 0xa0002a                             ; jp 0xa0002a
-	jp 0xba002a                             ; jp 0xba002a
-	jp 0xe6002a                             ; jp 0xe6002a
-	jp 0x12002a                             ; jp 0x12002a
-	call16	42
-	ldw	iz, 0x2a1c
-	nop                                     ; nop
-	pop xde                                 ; pop XDE
-	call16	42
-	.byte 0x90, 0x1c
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+28), xde
-	nop                                     ; nop
-	cpdm16_24	(0x002A1C), de
-	call16	42
-	ldb	b, 0x1d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	call 0x72002a
-	call 0x9a002a
-	call 0xc2002a
-	call 0xea002a
-	call 0x0e002a
-	calr	0x002a
-	ldw	ix, 0x2a1e
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	calr	0x002a
-	jrl	nz, 0x2a1e
-	nop                                     ; nop
-	.byte 0xa4, 0x1e                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc8, 0x1e                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf0, 0x1e, 0x2a                 ; xorcf A,(0x1e)
-	nop                                     ; nop
-	ex_ff
-	.byte 0x1f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	t, 0x1f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa4, 0x1f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	.byte 0x1f                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ldb	w, 0x2a
-	nop                                     ; nop
-	ld_s	(xde+32), de
-	nop                                     ; nop
-	.byte 0xec, 0x20                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xiz
-	ldb	a, 0x2a
-	nop                                     ; nop
-	ld	bc, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	cp	(0x002a21), xix
-	ldb	a, 0x2a
-	nop                                     ; nop
-	ex_ff
-	ldb	b, 0x2a
-	nop                                     ; nop
-	ldw	wa, 0x2a22
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	ldb	b, 0x2a
-	nop                                     ; nop
-	jr	ov, 0x22
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+34), b
-	nop                                     ; nop
-	lda_ri xde, xde		; lda DE,XDE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xda, 0x22, 0x2a                 ; xorcf 0x2a,DE
-	nop                                     ; nop
-	push	sr
-	ldb	c, 0x2a
-	nop                                     ; nop
-	pushw de                                ; push DE
-	ldb	c, 0x2a
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ldb	c, 0x2a
-	nop                                     ; nop
-	jrl	gt, 0x2a23
-	nop                                     ; nop
-	ld xhl, (xde)                           ; ld XHL,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-.LGD1_63d8:
-	.byte 0xf4, 0x23, 0x2a                 ; xorcf A,(-r23L)
-	nop                                     ; nop
-	call16	10788
-	nop                                     ; nop
-	ld	xde, 0x5c002a24
-	ldb	d, 0x2a
-	nop                                     ; nop
-	ld	d, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+36), xde
-	nop                                     ; nop
-	.byte 0xcc, 0x24, 0x2a                 ; stcf 0x2a,D
-	nop                                     ; nop
-	.byte 0xf4, 0x24, 0x2a                 ; xorcf A,(-XBC2)
-	nop                                     ; nop
-	push_f
-	ldb	e, 0x2a
-	nop                                     ; nop
-	ld	xwa, 0x64002a25
-	ldb	e, 0x2a
-	nop                                     ; nop
-	ld_s	(xix+37), b
-	nop                                     ; nop
-	lda_ri xix, xiy		; lda IY,XIX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xdc, 0x25                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	max
-	ldb	h, 0x2a
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	ldb	h, 0x2a
-	nop                                     ; nop
-	ld	c, (xde-98)
-	nop                                     ; nop
-	ldcfm	6, (xiz)
-	ldb	c, 0x00
-	.byte 0xe2, 0x9e, 0x23, 0x00, 0x6e     ; db
-	ldb	h, 0x2a
-	nop                                     ; nop
-	ld	iz, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x26		; xorcf A,(XIZ+0x26)
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	ldb	h, 0x2a
-	nop                                     ; nop
-	ldwio	39, 42
-	ld	xix, 0x5e002a27
-	ldb	l, 0x2a
-	nop                                     ; nop
-	ld8_src_ri xde, l		; ld L,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+39), xde
-	nop                                     ; nop
-	.byte 0xcc, 0x27                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf2, 0x27, 0x2a, 0x00, 0x18     ; db
-	pushw wa                                ; push WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xix
-	pushw wa                                ; push WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x28
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+40), b
-	nop                                     ; nop
-	ld_s	(xix), xwa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x28		; xorcf A,(XIZ+0x28)
-	nop                                     ; nop
-	andcf_a_16 wa		; andcf A,WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	h, 0x29
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	ov, 0x2a29
-	nop                                     ; nop
-	.byte 0xc2, 0x29, 0x2a, 0x00, 0x10     ; db
-	pushw de                                ; push DE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xiz                                 ; pop XIZ
-	pushw de                                ; push DE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+42), xde
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	pushw de                                ; push DE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	pushw hl                                ; push HL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	f, 0x2a2b
-	nop                                     ; nop
-	ld_s	(xwa+43), de
-	nop                                     ; nop
-	.byte 0xc0, 0x2b, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xe8, 0x2b                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rcf
-	pushw ix                                ; push IX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xwa
-	pushw ix                                ; push IX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr f, .LGD1_64d2                       ; [60 2c] jr F,0x2a64d2
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+44), b
-	nop                                     ; nop
-	ld_s	(xde), xix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	stcf_a_8 b		; stcf A,B
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xee, 0x2c                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ex_ff
-	pushw iy                                ; push IY
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xiz
-	pushw iy                                ; push IY
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr z, .LGD1_64ef                       ; [66 2d] jr Z,0x2a64ef
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+45), b
-	nop                                     ; nop
-	.byte 0xca, 0x2d                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf2, 0x2d, 0x2a, 0x00, 0x18     ; db
-	pushw iz                                ; push IZ
-.LGD1_64d2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	z, 0x2e
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa), h
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+46), de
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x2e		; xorcf A,(XIX+0x2e)
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	pushw iz                                ; push IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	pushw iz                                ; push IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	d, 0x2f
-	pushw de                                ; push DE
-.LGD1_64ef:
-	nop                                     ; nop
-	.byte 0x54
-	pushw sp
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nz, 0x2a2f
-	nop                                     ; nop
-	ld_s	(xiz+47), xde
-	nop                                     ; nop
-	.byte 0xd8, 0x2f, 0x2a                 ; ldc WA,unknown
-	nop                                     ; nop
-	.byte 0xf2, 0x2f, 0x2a, 0x00, 0x1c     ; db
-	ldw	wa, 0x002a
-	ld	xiz, 0x70002a30
-	ldw	wa, 0x002a
-	ex16_ri xix, wa		; ex (XIX),WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	ldw	wa, 0x002a
-	ei 0x31		; ei 0x31
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldw	de, 0x2a31
-	nop                                     ; nop
-	jr	le, 0x31
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nov, 0x2a31
-	nop                                     ; nop
-	ld_s	(xix+49), xde
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	ldw	bc, 0x002a
-	nop                                     ; nop
-	ldw	de, 0x002a
-	pushw de                                ; push DE
-	ldw	de, 0x002a
-	.byte 0x54                             ; db
-	ldw	de, 0x002a
-	jrl	nz, 0x2a32
-	nop                                     ; nop
-	ld_s	(xde+50), xde
-	nop                                     ; nop
-	.byte 0xc4, 0x32, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xf4, 0x32, 0x2a                 ; xorcf A,(-XWA3)
-	nop                                     ; nop
-	calr	0x2a33
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	ldw	hl, 0x002a
-	jrl	t, 0x2a33
-	nop                                     ; nop
-	.byte 0xa2, 0x33                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xcc, 0x33, 0x2a                 ; bit 0x2a,D
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	ldw	hl, 0x002a
-	ldb	b, 0x34
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xix
-	ldw	ix, 0x002a
-	jr	nov, 0x34
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ex16_ri xiz, ix		; ex (XIZ),IX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	ldw	ix, 0x002a
-	.byte 0xf0, 0x34, 0x2a                 ; xorcf A,(0x34)
-	nop                                     ; nop
-	jp16	10805
-	nop                                     ; nop
-	ld	xix, 0x6e002a35
-	ldw	iy, 0x002a
-	ld_s	(xwa+53), de
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x35		; xorcf A,(XIX+0x35)
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	ldw	iy, 0x002a
-	rcf
-	ldw	iz, 0x002a
-	popw wa                                 ; pop WA
-	ldw	iz, 0x002a
-	jrl	le, 0x2a36
-	nop                                     ; nop
-	ld_s	(xix+54), de
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	ldw	iz, 0x002a
-	.byte 0xf0, 0x36, 0x2a                 ; xorcf A,(0x36)
-	nop                                     ; nop
-	jp16	10807
-	nop                                     ; nop
-	ldw	ix, 0x2a37
-	nop                                     ; nop
-	jr	gt, 0x37
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ex8_ri xix, l		; ex (XIX),L
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+55), xde
-	nop                                     ; nop
-	cpdm16_24	(0x002A37), ix
-	.byte 0x37, 0x2a, 0x00                 ; ld SP,0x002a
-	ldb	h, 0x38
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	push xwa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	nov, 0x38
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+56), de
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	push xwa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf0, 0x38, 0x2a                 ; xorcf A,(0x38)
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	push xbc
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	xiz, 0x5c002a39
-	push xbc
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+57), b
-	nop                                     ; nop
-	.byte 0xa2, 0x39                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xcc, 0x39                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	push xbc
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x3a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	push xde
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	gt, 0x2a3a
-	nop                                     ; nop
-	.byte 0xa4, 0x3a                       ; db
-.LGD1_660a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd4, 0x3a, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xfe                             ; swi 6
-	push xde
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	push xhl
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	push xhl
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sbc8_imm_ri xix, 0x2a		; sbc (XIX),0x2a
-	nop                                     ; nop
-	ld_s	(xiz+59), de
-	nop                                     ; nop
-	.byte 0xce, 0x3b                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	push xhl
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw wa                                ; push WA
-	push xix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	push xix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nov, 0x2a3c
-	nop                                     ; nop
-	.byte 0xa6, 0x3c                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd0, 0x3c, 0x2a                 ; db
-	nop                                     ; nop
-	ldio	61, 42
-	nop                                     ; nop
-	ldb	b, 0x3d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xix
-	push xiy
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr t, .LGD1_668b                       ; [68 3d] jr T,0x2a668b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xor16_imm_ri xix, 0x2a, 0x00		; xor (XIX),0x002a
-	xorcfa_rid8 xwa, 0x3d		; xorcf A,(XWA+0x3d)
-	nop                                     ; nop
-	.byte 0xe4, 0x3d, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xfe                             ; swi 6
-	push xiy
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	push xiz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	push xiz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	or8_imm_ri xde, 0x2a		; or (XDE),0x2a
-	nop                                     ; nop
-	ld_s	(xix+62), xde
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	push xiz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x3f                             ; push XSP
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	.byte 0x3f                             ; push XSP
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x56
-	push xsp
-	pushw de                                ; push DE
-	nop                                     ; nop
-	cp	(xwa), 0x2a
-	nop                                     ; nop
-	ld_s	(xde+63), xde
-	nop                                     ; nop
-	.byte 0xd4, 0x3f, 0x2a                 ; db
-.LGD1_668b:
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xwa, 0x402a002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	ld	xwa, 0x407e002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+64), xde
-	nop                                     ; nop
-	.byte 0xd4, 0x40, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xfe                             ; swi 6
-	ld	xwa, 0x4128002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ld	xbc, 0x417c002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+65), xde
-	nop                                     ; nop
-	cpdm16_24	(0x002A41), ix
-	ld	xbc, 0x4226002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	ld	xde, 0x427c002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa6, 0x42                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd0, 0x42, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	ld	xde, 0x4324002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	ld	xhl, 0x437a002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa4, 0x43                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	mul8rr c, h		; mul BC,H
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	ld	xhl, 0x4424002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	ld	xix, 0x4478002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa2, 0x44                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	mul8rr d, d		; mul ??,D
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	ld	xix, 0x4522002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4576002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa0, 0x45                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	mul8rr e, d		; mul DE,D
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	ld	xiy, 0x4616002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	xwa, 0x6a002a46
-	ld	xiz, 0x4694002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x46		; xorcf A,(XIZ+0x46)
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	ld	xiz, 0x4710002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xde
-	ld	xsp, 0x475c002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x96, 0x47                       ; mul XSP,(XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd0, 0x47, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	ld	xsp, 0x4824002a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr le, .LGD1_679e                      ; [62 48] jr LE,0x2a679e
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+72), de
-	nop                                     ; nop
-	muls	xwa, xde
-	pushw de                                ; push DE
-	nop                                     ; nop
-	max
-	popw bc                                 ; pop BC
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	popw bc                                 ; pop BC
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	popw bc                                 ; pop BC
-	pushw de                                ; push DE
-	nop                                     ; nop
-	muls8_ri xde, a		; muls WA,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	popw bc                                 ; pop BC
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf0, 0x49, 0x2a                 ; xorcf A,(0x49)
-	nop                                     ; nop
-	ldwio	74, 42
-	ldw	ix, 0x2a4a
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	popw de                                 ; pop DE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	muls8_ri xde, b		; muls ??,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+74), xde
-	nop                                     ; nop
-	ret
-
-	.byte 0x9f, 0x23, 0x00                 ; db
-	muls8rr b, h		; muls ??,H
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe8, 0x4a                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ccf
-	popw hl                                 ; pop HL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xix
-	popw hl                                 ; pop HL
-.LGD1_679e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	z, 0x4b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw wa                                ; push WA
-	.byte 0x9f, 0x23, 0x00                 ; db
-	ld_s	(xwa+75), b
-	nop                                     ; nop
-	.byte 0xa2, 0x4b                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	muls8rr c, d		; muls BC,D
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	popw hl                                 ; pop HL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x4c
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	xde, 0x5c002a4c
-	popw ix                                 ; pop IX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	z, 0x2a4c
-	nop                                     ; nop
-	.byte 0xa0, 0x4c                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	muls8rr d, b		; muls ??,B
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf4, 0x4c, 0x2a                 ; xorcf A,(-r4CL)
-	nop                                     ; nop
-	ex_ff
-	popw iy                                 ; pop IY
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldw	wa, 0x2a4d
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	popw iy                                 ; pop IY
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	ov, 0x2a4d
-	nop                                     ; nop
-	ld_s	(xiz+77), de
-	nop                                     ; nop
-	muls8rr e, w		; muls DE,W
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf2, 0x4d, 0x2a, 0x00, 0x14, 0x4e, 0x2a ; ld (0x002a4d),(0x2a4e)
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	popw iz                                 ; pop IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	popw iz                                 ; pop IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	le, 0x2a4e
-	nop                                     ; nop
-	ld_s	(xix+78), de
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	popw iz                                 ; pop IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf0, 0x4e, 0x2a                 ; xorcf A,(0x4e)
-	nop                                     ; nop
-	ccf
-	.byte 0x4f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	.byte 0x4f                             ; pop SP
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x56
-	popw sp
-	pushw de                                ; push DE
-	nop                                     ; nop
-	muls8_ri xwa, l		; muls HL,(XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+79), xde
-	nop                                     ; nop
-	muls8rr l, d		; muls HL,D
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe6
-	popw sp
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rcf
-	.byte 0x50
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xde
-	.byte 0x50                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x50
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div8_ri xiz, w		; div ??,(XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld (xwa), wa                            ; ld (XWA),WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div	xwa, xde
-	pushw de                                ; push DE
-	nop                                     ; nop
-	swi	4
-	.byte 0x50
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ex_ff
-	.byte 0x51
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldw	wa, 0x2a51
-	nop                                     ; nop
-	pop xde                                 ; pop XDE
-	.byte 0x51                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div8_ri xix, a		; div WA,(XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+81), xde
-	nop                                     ; nop
-	div	xbc, xwa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	swi	2
-	.byte 0x51
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_a
-	.byte 0x52
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	.byte 0x52                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	.byte 0x52                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div8_ri xde, b		; div ??,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix+82), xde
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	.byte 0x52                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push	sr
-	.byte 0x53
-	pushw de                                ; push DE
-	nop                                     ; nop
-	call16	10835
-	nop                                     ; nop
-	push xwa
-	.byte 0x53                             ; db
-.LGD1_6882:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	.byte 0x53                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	nz, 0x53
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div16_ri xde, hl		; div XHL,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld (xiz), hl                            ; ld (XIZ),HL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div	xhl, xiz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldio	84, 42
-	nop                                     ; nop
-	ld	xix, 0x6c002a54
-	.byte 0x54                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div8_ri xiz, d		; div ??,(XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	(xiz), ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div	xix, xiz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldwio	85, 42
-	ldb	d, 0x55
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr f, .LGD1_690f                       ; [60 55] jr F,0x2a690f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+85), de
-	nop                                     ; nop
-	div8rr e, d		; div DE,D
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe2, 0x55, 0x2a, 0x00, 0x0c     ; db
-	.byte 0x56                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	xde, 0x74002a56
-	.byte 0x56                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+86), xde
-	nop                                     ; nop
-	.byte 0xd4, 0x56, 0x2a                 ; db
-	nop                                     ; nop
-	ldwio	87, 42
-	push xix
-	.byte 0x57                             ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr nz, .LGD1_693d                      ; [6e 57] jr NZ,0x2a693d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa4, 0x57                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	div	xsp, xde
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rcf
-	pop xwa                                 ; pop XWA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw de                                ; push DE
-	pop xwa                                 ; pop XWA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	pop xwa                                 ; pop XWA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	t, 0x2a58
-	nop                                     ; nop
-	.byte 0xa2, 0x58                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	pop xwa                                 ; pop XWA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xea, 0x58                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ret
-
-	pop xbc                                 ; pop XBC
-	pushw de                                ; push DE
-.LGD1_690f:
-	nop                                     ; nop
-	ldw	de, 0x2a59
-	nop                                     ; nop
-	.byte 0x56                             ; db
-	pop xbc                                 ; pop XBC
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	gt, 0x2a59
-	nop                                     ; nop
-	ld_s	(xiz+89), de
-	nop                                     ; nop
-	orda8_24	h, 0x002A59
-	pop xbc                                 ; pop XBC
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld	xde, 0x6600239f
-	.byte 0x9f, 0x23, 0x00                 ; db
-	ld	c, (xde-97)
-	nop                                     ; nop
-	ld	xhl, (xiz-97)
-	nop                                     ; nop
-	rcf
-	pop xde                                 ; pop XDE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xiz
-.LGD1_693d:
-	pop xde                                 ; pop XDE
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nov, 0x2a5a
-	nop                                     ; nop
-	divs16_ri xiz, de		; divs XDE,(XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x5a		; xorcf A,(XIX+0x5a)
-	nop                                     ; nop
-	.byte 0xe2, 0x5a, 0x2a, 0x00, 0x02     ; db
-	pop xhl                                 ; pop XHL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	pop xhl                                 ; pop XHL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	pop xhl                                 ; pop XHL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	divs8_ri xde, c		; divs BC,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x5b		; xorcf A,(XIX+0x5b)
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	pop xhl                                 ; pop XHL
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ccf
-	pop xix                                 ; pop XIX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push xix
-	pop xix                                 ; pop XIX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	t, 0x2a5c
-	nop                                     ; nop
-	.byte 0xa2, 0x5c                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	divs	xix, xiz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldio	93, 42
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
+HDAE5000_UiObject_PtrTable:	; 0x2A5D2C
+	.long	0x0029DC12        ; [  0] HDDMENU
+	.long	0x0029DC46        ; [  1] (unnamed)
+	.long	0x0029DC8C        ; [  2] (unnamed)
+	.long	0x0029DCC4        ; [  3] (unnamed)
+	.long	0x0029DCEE        ; [  4] (unnamed)
+	.long	0x0029DD26        ; [  5] (unnamed)
+	.long	0x0029DD50        ; [  6] (unnamed)
+	.long	0x0029DD88        ; [  7] (unnamed)
+	.long	0x0029DDB2        ; [  8] (unnamed)
+	.long	0x0029DDEA        ; [  9] (unnamed)
+	.long	0x0029DE14        ; [ 10] HARD_DISK_OPT
+	.long	0x0029DE50        ; [ 11] (unnamed)
+	.long	0x0029DE6A        ; [ 12] (unnamed)
+	.long	0x0029DE84        ; [ 13] (unnamed)
+	.long	0x0029DE9E        ; [ 14] (unnamed)
+	.long	0x0029DED6        ; [ 15] (unnamed)
+	.long	0x0029DF00        ; [ 16] (unnamed)
+	.long	0x0029DF2A        ; [ 17] (unnamed)
+	.long	0x0029DF62        ; [ 18] (unnamed)
+	.long	0x0029DF98        ; [ 19] SETUPS_TOOLS
+	.long	0x0029DFD2        ; [ 20] (unnamed)
+	.long	0x0029DFEC        ; [ 21] (unnamed)
+	.long	0x0029E008        ; [ 22] (unnamed)
+	.long	0x0029E024        ; [ 23] (unnamed)
+	.long	0x0029E048        ; [ 24] SELECT_FILE
+	.long	0x0029E074        ; [ 25] (unnamed)
+	.long	0x0029E08E        ; [ 26] HD_FILE_LOAD
+	.long	0x0029E0AA        ; [ 27] HD_LOAD_OPTION
+	.long	0x0029E0C6        ; [ 28] (unnamed)
+	.long	0x0029E0EE        ; [ 29] (unnamed)
+	.long	0x0029E114        ; [ 30] (unnamed)
+	.long	0x0029E12E        ; [ 31] (unnamed)
+	.long	0x0029E15A        ; [ 32] (unnamed)
+	.long	0x0029E174        ; [ 33] (unnamed)
+	.long	0x0029E198        ; [ 34] SELECT_DIR
+	.long	0x0029E1D0        ; [ 35] (unnamed)
+	.long	0x0029E1FA        ; [ 36] (unnamed)
+	.long	0x0029E214        ; [ 37] SEL_DIR
+	.long	0x0029E250        ; [ 38] (unnamed)
+	.long	0x0029E284        ; [ 39] (unnamed)
+	.long	0x0029E2B6        ; [ 40] (unnamed)
+	.long	0x0029E2E8        ; [ 41] (unnamed)
+	.long	0x0029E31A        ; [ 42] (unnamed)
+	.long	0x0029E34C        ; [ 43] (unnamed)
+	.long	0x00239CC4        ; [ 44] SELECT_DIR_SW_EDIT  -- RAM descriptor
+	.long	0x0029E374        ; [ 45] (unnamed)
+	.long	0x0029E39A        ; [ 46] (unnamed)
+	.long	0x0029E3B4        ; [ 47] (unnamed)
+	.long	0x0029E3E0        ; [ 48] (unnamed)
+	.long	0x0029E3FA        ; [ 49] SELECT_DIR2
+	.long	0x0029E43A        ; [ 50] (unnamed)
+	.long	0x0029E472        ; [ 51] (unnamed)
+	.long	0x0029E496        ; [ 52] (unnamed)
+	.long	0x0029E4C0        ; [ 53] (unnamed)
+	.long	0x0029E4E8        ; [ 54] (unnamed)
+	.long	0x0029E520        ; [ 55] (unnamed)
+	.long	0x0029E544        ; [ 56] (unnamed)
+	.long	0x0029E55E        ; [ 57] (unnamed)
+	.long	0x0029E586        ; [ 58] FD_FILE_SELECT
+	.long	0x0029E5C4        ; [ 59] (unnamed)
+	.long	0x0029E5FC        ; [ 60] (unnamed)
+	.long	0x0029E622        ; [ 61] (unnamed)
+	.long	0x0029E64C        ; [ 62] (unnamed)
+	.long	0x0029E674        ; [ 63] (unnamed)
+	.long	0x0029E6AC        ; [ 64] (unnamed)
+	.long	0x0029E6C6        ; [ 65] (unnamed)
+	.long	0x0029E6EE        ; [ 66] (unnamed)
+	.long	0x0029E718        ; [ 67] (unnamed)
+	.long	0x0029E740        ; [ 68] (unnamed)
+	.long	0x0029E77C        ; [ 69] HARD_TEST
+	.long	0x0029E7B4        ; [ 70] (unnamed)
+	.long	0x0029E7CE        ; [ 71] (unnamed)
+	.long	0x0029E7E8        ; [ 72] (unnamed)
+	.long	0x0029E802        ; [ 73] RUN_STOP
+	.long	0x0029E834        ; [ 74] (unnamed)
+	.long	0x0029E84E        ; [ 75] PPORT_SW
+	.long	0x0029E882        ; [ 76] FD_SW
+	.long	0x0029E8B2        ; [ 77] HDD_SW
+	.long	0x0029E8E2        ; [ 78] HDD_FILE_NAMING
+	.long	0x0029E91C        ; [ 79] (unnamed)
+	.long	0x0029E936        ; [ 80] (unnamed)
+	.long	0x0029E962        ; [ 81] (unnamed)
+	.long	0x0029E97C        ; [ 82] (unnamed)
+	.long	0x0029E9A8        ; [ 83] (unnamed)
+	.long	0x0029E9CC        ; [ 84] (unnamed)
+	.long	0x0029E9E6        ; [ 85] (unnamed)
+	.long	0x0029EA12        ; [ 86] (unnamed)
+	.long	0x0029EA36        ; [ 87] HD_FILE_NAME
+	.long	0x0029EA5A        ; [ 88] HDD_DIR_NAMING
+	.long	0x0029EA98        ; [ 89] (unnamed)
+	.long	0x0029EAB2        ; [ 90] (unnamed)
+	.long	0x0029EADE        ; [ 91] (unnamed)
+	.long	0x0029EAF8        ; [ 92] (unnamed)
+	.long	0x0029EB24        ; [ 93] (unnamed)
+	.long	0x0029EB48        ; [ 94] HD_PLEASE_WIN
+	.long	0x0029EB6C        ; [ 95] (unnamed)
+	.long	0x0029EB9A        ; [ 96] HD_UTIL
+	.long	0x0029EBD0        ; [ 97] (unnamed)
+	.long	0x0029EBEA        ; [ 98] (unnamed)
+	.long	0x0029EC04        ; [ 99] (unnamed)
+	.long	0x0029EC1A        ; [100] (unnamed)
+	.long	0x0029EC54        ; [101] (unnamed)
+	.long	0x0029EC8E        ; [102] PC_DATA_LINK
+	.long	0x0029ECC8        ; [103] (unnamed)
+	.long	0x0029ECE2        ; [104] PP_STATUS
+	.long	0x0029ED1E        ; [105] (unnamed)
+	.long	0x0029ED48        ; [106] (unnamed)
+	.long	0x0029ED70        ; [107] (unnamed)
+	.long	0x0029ED9A        ; [108] (unnamed)
+	.long	0x0029EDC0        ; [109] (unnamed)
+	.long	0x0029EDDA        ; [110] SETUP_TOOLS_P1
+	.long	0x0029EDFE        ; [111] (unnamed)
+	.long	0x0029EE42        ; [112] (unnamed)
+	.long	0x0029EE5C        ; [113] (unnamed)
+	.long	0x0029EE86        ; [114] (unnamed)
+	.long	0x0029EEC2        ; [115] (unnamed)
+	.long	0x0029EEEC        ; [116] (unnamed)
+	.long	0x0029EF36        ; [117] (unnamed)
+	.long	0x0029EF80        ; [118] (unnamed)
+	.long	0x0029EFBC        ; [119] (unnamed)
+	.long	0x0029EFE6        ; [120] (unnamed)
+	.long	0x0029F030        ; [121] (unnamed)
+	.long	0x0029F076        ; [122] SETUP_TOOLS_P2
+	.long	0x0029F09A        ; [123] (unnamed)
+	.long	0x0029F0D2        ; [124] (unnamed)
+	.long	0x0029F0FC        ; [125] (unnamed)
+	.long	0x0029F140        ; [126] (unnamed)
+	.long	0x0029F15A        ; [127] (unnamed)
+	.long	0x00239CEC        ; [128] SW_HD_FORMAT  -- RAM descriptor
+	.long	0x0029F182        ; [129] (unnamed)
+	.long	0x0029F19C        ; [130] (unnamed)
+	.long	0x0029F1D4        ; [131] (unnamed)
+	.long	0x0029F1EE        ; [132] (unnamed)
+	.long	0x0029F218        ; [133] OUTPUT_SETTING
+	.long	0x0029F252        ; [134] (unnamed)
+	.long	0x0029F26C        ; [135] (unnamed)
+	.long	0x0029F296        ; [136] (unnamed)
+	.long	0x0029F2D2        ; [137] (unnamed)
+	.long	0x0029F30E        ; [138] (unnamed)
+	.long	0x0029F34A        ; [139] (unnamed)
+	.long	0x0029F374        ; [140] (unnamed)
+	.long	0x0029F39E        ; [141] (unnamed)
+	.long	0x0029F3C8        ; [142] (unnamed)
+	.long	0x0029F3F2        ; [143] LOAD_BY_NUM
+	.long	0x0029F42C        ; [144] (unnamed)
+	.long	0x0029F446        ; [145] (unnamed)
+	.long	0x0029F462        ; [146] (unnamed)
+	.long	0x0029F47E        ; [147] (unnamed)
+	.long	0x0029F4A2        ; [148] (unnamed)
+	.long	0x0029F4BC        ; [149] LBN_P1
+	.long	0x0029F4E0        ; [150] (unnamed)
+	.long	0x0029F50A        ; [151] (unnamed)
+	.long	0x0029F530        ; [152] LBN_OPTION
+	.long	0x0029F56C        ; [153] (unnamed)
+	.long	0x0029F594        ; [154] (unnamed)
+	.long	0x0029F5BA        ; [155] (unnamed)
+	.long	0x0029F5E6        ; [156] (unnamed)
+	.long	0x0029F600        ; [157] (unnamed)
+	.long	0x0029F62A        ; [158] (unnamed)
+	.long	0x0029F652        ; [159] (unnamed)
+	.long	0x0029F67A        ; [160] (unnamed)
+	.long	0x0029F6A2        ; [161] (unnamed)
+	.long	0x0029F6CA        ; [162] (unnamed)
+	.long	0x0029F6F2        ; [163] (unnamed)
+	.long	0x0029F71A        ; [164] (unnamed)
+	.long	0x0029F742        ; [165] (unnamed)
+	.long	0x0029F76A        ; [166] (unnamed)
+	.long	0x0029F792        ; [167] (unnamed)
+	.long	0x0029F7BA        ; [168] LBN_DIRNO_BOX
+	.long	0x0029F7F6        ; [169] LBN_DIRNAME_BOX
+	.long	0x0029F832        ; [170] LBN_FILENO_BOX
+	.long	0x0029F86E        ; [171] LBN_FILENAME_BOX
+	.long	0x0029F8AA        ; [172] (unnamed)
+	.long	0x0029F8C4        ; [173] (unnamed)
+	.long	0x0029F8EE        ; [174] (unnamed)
+	.long	0x0029F918        ; [175] LBN_P2
+	.long	0x0029F93C        ; [176] (unnamed)
+	.long	0x0029F978        ; [177] (unnamed)
+	.long	0x0029F9CA        ; [178] (unnamed)
+	.long	0x0029FA1C        ; [179] (unnamed)
+	.long	0x0029FA36        ; [180] (unnamed)
+	.long	0x0029FA88        ; [181] (unnamed)
+	.long	0x0029FADA        ; [182] (unnamed)
+	.long	0x0029FB2C        ; [183] (unnamed)
+	.long	0x0029FB7E        ; [184] (unnamed)
+	.long	0x0029FBD0        ; [185] (unnamed)
+	.long	0x0029FC22        ; [186] (unnamed)
+	.long	0x0029FC3C        ; [187] (unnamed)
+	.long	0x0029FC56        ; [188] (unnamed)
+	.long	0x0029FC70        ; [189] (unnamed)
+	.long	0x0029FC98        ; [190] (unnamed)
+	.long	0x0029FCC0        ; [191] (unnamed)
+	.long	0x0029FCE8        ; [192] (unnamed)
+	.long	0x0029FD10        ; [193] (unnamed)
+	.long	0x0029FD38        ; [194] (unnamed)
+	.long	0x0029FD60        ; [195] (unnamed)
+	.long	0x0029FD88        ; [196] (unnamed)
+	.long	0x0029FDB0        ; [197] (unnamed)
+	.long	0x0029FDD4        ; [198] (unnamed)
+	.long	0x0029FDFA        ; [199] (unnamed)
+	.long	0x0029FE1E        ; [200] (unnamed)
+	.long	0x0029FE44        ; [201] (unnamed)
+	.long	0x0029FE6A        ; [202] (unnamed)
+	.long	0x0029FE8E        ; [203] (unnamed)
+	.long	0x0029FEB6        ; [204] (unnamed)
+	.long	0x0029FEDC        ; [205] (unnamed)
+	.long	0x0029FEF6        ; [206] (unnamed)
+	.long	0x0029FF1E        ; [207] (unnamed)
+	.long	0x0029FF44        ; [208] (unnamed)
+	.long	0x0029FF5E        ; [209] (unnamed)
+	.long	0x0029FF8A        ; [210] CP_FD
+	.long	0x0029FFC4        ; [211] (unnamed)
+	.long	0x0029FFDE        ; [212] (unnamed)
+	.long	0x002A0006        ; [213] (unnamed)
+	.long	0x002A002E        ; [214] (unnamed)
+	.long	0x002A0058        ; [215] CP_FD_LIST
+	.long	0x002A0094        ; [216] CP_FD_LINE2
+	.long	0x002A00AE        ; [217] CP_FD_LINE1
+	.long	0x00239D22        ; [218] CP_FD_HDSWTO  -- RAM descriptor
+	.long	0x002A00C8        ; [219] (unnamed)
+	.long	0x00239D4A        ; [220] CP_FD_HDSWSEL  -- RAM descriptor
+	.long	0x002A00EE        ; [221] (unnamed)
+	.long	0x002A0116        ; [222] CP_FD_VOLLABEL
+	.long	0x002A0152        ; [223] (unnamed)
+	.long	0x00239D72        ; [224] CP_FD_HDALLSEL  -- RAM descriptor
+	.long	0x002A0182        ; [225] (unnamed)
+	.long	0x002A01AA        ; [226] CP_FD_DIRSEL
+	.long	0x002A01E2        ; [227] (unnamed)
+	.long	0x002A01FC        ; [228] (unnamed)
+	.long	0x002A0224        ; [229] (unnamed)
+	.long	0x002A024A        ; [230] CP_FD_DIRBOX
+	.long	0x002A0286        ; [231] (unnamed)
+	.long	0x002A02B8        ; [232] (unnamed)
+	.long	0x002A02EA        ; [233] (unnamed)
+	.long	0x002A0314        ; [234] (unnamed)
+	.long	0x002A0346        ; [235] (unnamed)
+	.long	0x002A0378        ; [236] (unnamed)
+	.long	0x002A03AC        ; [237] (unnamed)
+	.long	0x002A03D4        ; [238] (unnamed)
+	.long	0x002A03FA        ; [239] (unnamed)
+	.long	0x002A0414        ; [240] FLS_SELECT
+	.long	0x002A044E        ; [241] (unnamed)
+	.long	0x002A0468        ; [242] (unnamed)
+	.long	0x002A049A        ; [243] (unnamed)
+	.long	0x002A04CC        ; [244] (unnamed)
+	.long	0x002A04F6        ; [245] (unnamed)
+	.long	0x002A0528        ; [246] (unnamed)
+	.long	0x002A055A        ; [247] (unnamed)
+	.long	0x002A058E        ; [248] FLS_SEL
+	.long	0x00239D9A        ; [249] FLS_SELECT_SW_EDIT  -- RAM descriptor
+	.long	0x002A05B6        ; [250] (unnamed)
+	.long	0x002A05DC        ; [251] SEL_FLS
+	.long	0x002A0618        ; [252] (unnamed)
+	.long	0x002A0632        ; [253] (unnamed)
+	.long	0x002A065E        ; [254] (unnamed)
+	.long	0x002A0678        ; [255] HD_FILE_LOAD_P1
+	.long	0x00239DC2        ; [256] HD_FILE_LOAD_SW_SAVE  -- RAM descriptor
+	.long	0x002A069C        ; [257] (unnamed)
+	.long	0x002A06C2        ; [258] HD_FILE_OPTION
+	.long	0x002A06FE        ; [259] HD_FILE_LIST
+	.long	0x002A073A        ; [260] FILE_LOAD_DIRBOX
+	.long	0x002A0776        ; [261] (unnamed)
+	.long	0x002A079E        ; [262] (unnamed)
+	.long	0x002A07C8        ; [263] (unnamed)
+	.long	0x002A07F0        ; [264] (unnamed)
+	.long	0x002A080A        ; [265] (unnamed)
+	.long	0x00239DEA        ; [266] HD_FILE_LOAD_SW_DEL  -- RAM descriptor
+	.long	0x002A083A        ; [267] (unnamed)
+	.long	0x002A085E        ; [268] (unnamed)
+	.long	0x00239E12        ; [269] HD_FILE_LOAD_SW_DELFILE  -- RAM descriptor
+	.long	0x002A0882        ; [270] (unnamed)
+	.long	0x002A08A6        ; [271] (unnamed)
+	.long	0x002A08CC        ; [272] HD_FILE_LOAD_P2
+	.long	0x002A08F0        ; [273] (unnamed)
+	.long	0x002A0920        ; [274] (unnamed)
+	.long	0x002A093A        ; [275] (unnamed)
+	.long	0x002A098C        ; [276] (unnamed)
+	.long	0x002A09B4        ; [277] (unnamed)
+	.long	0x002A09D8        ; [278] (unnamed)
+	.long	0x002A0A00        ; [279] (unnamed)
+	.long	0x002A0A28        ; [280] (unnamed)
+	.long	0x002A0A50        ; [281] (unnamed)
+	.long	0x002A0A78        ; [282] (unnamed)
+	.long	0x002A0AA0        ; [283] (unnamed)
+	.long	0x002A0AC8        ; [284] (unnamed)
+	.long	0x002A0AF0        ; [285] (unnamed)
+	.long	0x002A0B16        ; [286] (unnamed)
+	.long	0x002A0B3A        ; [287] (unnamed)
+	.long	0x002A0B60        ; [288] (unnamed)
+	.long	0x002A0B86        ; [289] (unnamed)
+	.long	0x002A0BAA        ; [290] (unnamed)
+	.long	0x002A0BD2        ; [291] (unnamed)
+	.long	0x002A0BF8        ; [292] (unnamed)
+	.long	0x002A0C4A        ; [293] (unnamed)
+	.long	0x002A0C9C        ; [294] (unnamed)
+	.long	0x002A0CEE        ; [295] (unnamed)
+	.long	0x002A0D40        ; [296] (unnamed)
+	.long	0x002A0D92        ; [297] (unnamed)
+	.long	0x002A0DE4        ; [298] (unnamed)
+	.long	0x002A0DFE        ; [299] (unnamed)
+	.long	0x002A0E3A        ; [300] (unnamed)
+	.long	0x002A0E8C        ; [301] (unnamed)
+	.long	0x00239E3A        ; [302] (unnamed)  -- RAM descriptor
+	.long	0x002A0EA6        ; [303] (unnamed)
+	.long	0x002A0ECC        ; [304] (unnamed)
+	.long	0x002A0F1E        ; [305] (unnamed)
+	.long	0x002A0F38        ; [306] (unnamed)
+	.long	0x002A0F52        ; [307] (unnamed)
+	.long	0x002A0F6C        ; [308] HDD_FLS_NAMING
+	.long	0x002A0FA4        ; [309] (unnamed)
+	.long	0x002A0FBE        ; [310] (unnamed)
+	.long	0x002A0FD8        ; [311] (unnamed)
+	.long	0x002A1004        ; [312] (unnamed)
+	.long	0x002A1030        ; [313] (unnamed)
+	.long	0x002A1054        ; [314] FLS_FILE_LOAD
+	.long	0x002A1090        ; [315] (unnamed)
+	.long	0x002A10AA        ; [316] (unnamed)
+	.long	0x002A10D2        ; [317] (unnamed)
+	.long	0x00239E62        ; [318] FLS_FILE_LOAD_SW_EDIT  -- RAM descriptor
+	.long	0x002A10F8        ; [319] (unnamed)
+	.long	0x002A111E        ; [320] (unnamed)
+	.long	0x002A1148        ; [321] (unnamed)
+	.long	0x002A1170        ; [322] (unnamed)
+	.long	0x002A1198        ; [323] FLS_OPT_BOX
+	.long	0x002A11D4        ; [324] FLS_LOC_BOX
+	.long	0x002A1210        ; [325] FLS_NAME_BOX
+	.long	0x002A124C        ; [326] (unnamed)
+	.long	0x002A1276        ; [327] (unnamed)
+	.long	0x002A12A0        ; [328] FLS_FILE_BOX
+	.long	0x002A12DC        ; [329] FLS_LOAD_LINE1
+	.long	0x002A12F6        ; [330] FLS_LOAD_LINE2
+	.long	0x002A1310        ; [331] (unnamed)
+	.long	0x002A132A        ; [332] (unnamed)
+	.long	0x002A1354        ; [333] (unnamed)
+	.long	0x002A137A        ; [334] FLS_DIR_SEL
+	.long	0x002A13B6        ; [335] (unnamed)
+	.long	0x002A13D0        ; [336] (unnamed)
+	.long	0x002A13F8        ; [337] FLS_DIR_BOX
+	.long	0x002A1434        ; [338] (unnamed)
+	.long	0x002A1466        ; [339] (unnamed)
+	.long	0x002A1498        ; [340] (unnamed)
+	.long	0x002A14C2        ; [341] (unnamed)
+	.long	0x002A14F4        ; [342] (unnamed)
+	.long	0x002A1526        ; [343] (unnamed)
+	.long	0x002A155A        ; [344] (unnamed)
+	.long	0x002A1574        ; [345] FLS_FILE_SEL
+	.long	0x002A15B2        ; [346] (unnamed)
+	.long	0x002A15CC        ; [347] FLS_FILE_SEL_DIRBOX
+	.long	0x002A1608        ; [348] FLS_FILE_SEL_LISTBOX
+	.long	0x002A1644        ; [349] (unnamed)
+	.long	0x002A166E        ; [350] (unnamed)
+	.long	0x002A1696        ; [351] (unnamed)
+	.long	0x002A16BE        ; [352] FLS_FILE_SEL_OPTBOX
+	.long	0x002A16FA        ; [353] (unnamed)
+	.long	0x002A1722        ; [354] (unnamed)
+	.long	0x002A174A        ; [355] FLS_EDIT
+	.long	0x002A1780        ; [356] (unnamed)
+	.long	0x002A179A        ; [357] (unnamed)
+	.long	0x002A17C4        ; [358] FLS_EDIT_NAME_BOX
+	.long	0x002A1800        ; [359] (unnamed)
+	.long	0x002A182A        ; [360] (unnamed)
+	.long	0x002A1854        ; [361] FLS_EDIT_LIST_BOX
+	.long	0x002A1890        ; [362] FLS_EDIT_LINE2
+	.long	0x002A18AA        ; [363] FLS_EDIT_LINE1
+	.long	0x002A18C4        ; [364] (unnamed)
+	.long	0x002A18EC        ; [365] (unnamed)
+	.long	0x002A1914        ; [366] (unnamed)
+	.long	0x002A193C        ; [367] (unnamed)
+	.long	0x002A1962        ; [368] (unnamed)
+	.long	0x002A198A        ; [369] (unnamed)
+	.long	0x002A19BC        ; [370] (unnamed)
+	.long	0x002A19EE        ; [371] (unnamed)
+	.long	0x002A1A1E        ; [372] (unnamed)
+	.long	0x002A1A50        ; [373] (unnamed)
+	.long	0x002A1A82        ; [374] FLS_EDIT_LOC_BOX
+	.long	0x002A1ABE        ; [375] FLS_EDIT_OPT_BOX
+	.long	0x002A1AFA        ; [376] (unnamed)
+	.long	0x002A1B14        ; [377] (unnamed)
+	.long	0x002A1B2E        ; [378] (unnamed)
+	.long	0x002A1B48        ; [379] CP_FD_DIR_NAMING
+	.long	0x002A1B86        ; [380] (unnamed)
+	.long	0x002A1BA0        ; [381] (unnamed)
+	.long	0x002A1BBA        ; [382] (unnamed)
+	.long	0x002A1BE6        ; [383] (unnamed)
+	.long	0x002A1C12        ; [384] (unnamed)
+	.long	0x002A1C36        ; [385] (unnamed)
+	.long	0x002A1C5A        ; [386] SAVE_OPT_SCREEN
+	.long	0x002A1C90        ; [387] (unnamed)
+	.long	0x002A1CAA        ; [388] (unnamed)
+	.long	0x002A1CD2        ; [389] (unnamed)
+	.long	0x002A1CFA        ; [390] (unnamed)
+	.long	0x002A1D22        ; [391] (unnamed)
+	.long	0x002A1D4A        ; [392] (unnamed)
+	.long	0x002A1D72        ; [393] (unnamed)
+	.long	0x002A1D9A        ; [394] (unnamed)
+	.long	0x002A1DC2        ; [395] (unnamed)
+	.long	0x002A1DEA        ; [396] (unnamed)
+	.long	0x002A1E0E        ; [397] (unnamed)
+	.long	0x002A1E34        ; [398] (unnamed)
+	.long	0x002A1E58        ; [399] (unnamed)
+	.long	0x002A1E7E        ; [400] (unnamed)
+	.long	0x002A1EA4        ; [401] (unnamed)
+	.long	0x002A1EC8        ; [402] (unnamed)
+	.long	0x002A1EF0        ; [403] (unnamed)
+	.long	0x002A1F16        ; [404] RAM_EDIT_CMP
+	.long	0x002A1F68        ; [405] (unnamed)
+	.long	0x002A1FA4        ; [406] RAM_EDIT_LSW
+	.long	0x002A1FF6        ; [407] RAM_EDIT_PMT
+	.long	0x002A2048        ; [408] RAM_EDIT_SQT
+	.long	0x002A209A        ; [409] RAM_EDIT_TM
+	.long	0x002A20EC        ; [410] RAM_EDIT_MSP
+	.long	0x002A213E        ; [411] RAM_EDIT_RCM
+	.long	0x002A2190        ; [412] RAM_EDIT_MD
+	.long	0x002A21E2        ; [413] (unnamed)
+	.long	0x002A21FC        ; [414] (unnamed)
+	.long	0x002A2216        ; [415] (unnamed)
+	.long	0x002A2230        ; [416] (unnamed)
+	.long	0x002A224A        ; [417] (unnamed)
+	.long	0x002A2264        ; [418] (unnamed)
+	.long	0x002A228C        ; [419] (unnamed)
+	.long	0x002A22B2        ; [420] (unnamed)
+	.long	0x002A22DA        ; [421] (unnamed)
+	.long	0x002A2302        ; [422] (unnamed)
+	.long	0x002A232A        ; [423] (unnamed)
+	.long	0x002A2352        ; [424] (unnamed)
+	.long	0x002A237A        ; [425] (unnamed)
+	.long	0x002A23A2        ; [426] RAM_EDIT_TLX
+	.long	0x002A23F4        ; [427] (unnamed)
+	.long	0x002A241C        ; [428] (unnamed)
+	.long	0x002A2442        ; [429] (unnamed)
+	.long	0x002A245C        ; [430] HddNamingWindow
+	.long	0x002A2480        ; [431] (unnamed)
+	.long	0x002A24A8        ; [432] (unnamed)
+	.long	0x002A24CC        ; [433] (unnamed)
+	.long	0x002A24F4        ; [434] (unnamed)
+	.long	0x002A2518        ; [435] (unnamed)
+	.long	0x002A2540        ; [436] (unnamed)
+	.long	0x002A2564        ; [437] (unnamed)
+	.long	0x002A258C        ; [438] (unnamed)
+	.long	0x002A25B4        ; [439] (unnamed)
+	.long	0x002A25DC        ; [440] (unnamed)
+	.long	0x002A2604        ; [441] (unnamed)
+	.long	0x002A262E        ; [442] HddNamingCursorBox
+	.long	0x00239E8A        ; [443] HddNamingABC  -- RAM descriptor
+	.long	0x00239EB6        ; [444] HddNamingabc  -- RAM descriptor
+	.long	0x00239EE2        ; [445] HddNamingSymbol  -- RAM descriptor
+	.long	0x002A266E        ; [446] (unnamed)
+	.long	0x002A2696        ; [447] (unnamed)
+	.long	0x002A26BE        ; [448] (unnamed)
+	.long	0x002A26E6        ; [449] HddNamingLabel
+	.long	0x002A270A        ; [450] FILE_DEL_SCREEN
+	.long	0x002A2744        ; [451] (unnamed)
+	.long	0x002A275E        ; [452] (unnamed)
+	.long	0x002A2782        ; [453] (unnamed)
+	.long	0x002A27A8        ; [454] (unnamed)
+	.long	0x002A27CC        ; [455] (unnamed)
+	.long	0x002A27F2        ; [456] (unnamed)
+	.long	0x002A2818        ; [457] (unnamed)
+	.long	0x002A283C        ; [458] (unnamed)
+	.long	0x002A2864        ; [459] (unnamed)
+	.long	0x002A288A        ; [460] (unnamed)
+	.long	0x002A28A4        ; [461] (unnamed)
+	.long	0x002A28BE        ; [462] (unnamed)
+	.long	0x002A28D8        ; [463] DEL_EDIT_LSW
+	.long	0x002A2926        ; [464] DEL_EDIT_PMT
+	.long	0x002A2974        ; [465] DEL_EDIT_SQT
+	.long	0x002A29C2        ; [466] DEL_EDIT_CMP
+	.long	0x002A2A10        ; [467] DEL_EDIT_TM
+	.long	0x002A2A5E        ; [468] DEL_EDIT_MSP
+	.long	0x002A2AAC        ; [469] DEL_EDIT_RCM
+	.long	0x002A2AFA        ; [470] DEL_EDIT_MD
+	.long	0x002A2B48        ; [471] (unnamed)
+	.long	0x002A2B70        ; [472] (unnamed)
+	.long	0x002A2B98        ; [473] (unnamed)
+	.long	0x002A2BC0        ; [474] (unnamed)
+	.long	0x002A2BE8        ; [475] (unnamed)
+	.long	0x002A2C10        ; [476] (unnamed)
+	.long	0x002A2C38        ; [477] (unnamed)
+	.long	0x002A2C60        ; [478] (unnamed)
+	.long	0x002A2C88        ; [479] (unnamed)
+	.long	0x002A2CA2        ; [480] (unnamed)
+	.long	0x002A2CCA        ; [481] (unnamed)
+	.long	0x002A2CEE        ; [482] (unnamed)
+	.long	0x002A2D16        ; [483] (unnamed)
+	.long	0x002A2D3E        ; [484] (unnamed)
+	.long	0x002A2D66        ; [485] (unnamed)
+	.long	0x002A2D8E        ; [486] (unnamed)
+	.long	0x002A2DCA        ; [487] (unnamed)
+	.long	0x002A2DF2        ; [488] (unnamed)
+	.long	0x002A2E18        ; [489] DEL_EDIT_TLX
+	.long	0x002A2E66        ; [490] (unnamed)
+	.long	0x002A2E80        ; [491] (unnamed)
+	.long	0x002A2E9A        ; [492] HDD_ICON_DISPLAY
+	.long	0x002A2EBC        ; [493] HD_MENU_BMP
+	.long	0x002A2ED6        ; [494] IV_HDDMENU
+	.long	0x002A2EF8        ; [495] ATTEN_DEL_DIR
+	.long	0x002A2F24        ; [496] (unnamed)
+	.long	0x002A2F54        ; [497] (unnamed)
+	.long	0x002A2F7E        ; [498] (unnamed)
+	.long	0x002A2FAE        ; [499] (unnamed)
+	.long	0x002A2FD8        ; [500] (unnamed)
+	.long	0x002A2FF2        ; [501] (unnamed)
+	.long	0x002A301C        ; [502] (unnamed)
+	.long	0x002A3046        ; [503] (unnamed)
+	.long	0x002A3070        ; [504] WAIT_DEL_DIR
+	.long	0x002A3094        ; [505] (unnamed)
+	.long	0x002A30D6        ; [506] (unnamed)
+	.long	0x002A3106        ; [507] ATTEN_DEL_FILE
+	.long	0x002A3132        ; [508] (unnamed)
+	.long	0x002A3162        ; [509] (unnamed)
+	.long	0x002A317C        ; [510] (unnamed)
+	.long	0x002A31AC        ; [511] (unnamed)
+	.long	0x002A31D6        ; [512] (unnamed)
+	.long	0x002A3200        ; [513] (unnamed)
+	.long	0x002A322A        ; [514] (unnamed)
+	.long	0x002A3254        ; [515] (unnamed)
+	.long	0x002A327E        ; [516] ATTEN_OVER_FLS
+	.long	0x002A32AA        ; [517] (unnamed)
+	.long	0x002A32C4        ; [518] (unnamed)
+	.long	0x002A32F4        ; [519] (unnamed)
+	.long	0x002A331E        ; [520] (unnamed)
+	.long	0x002A334E        ; [521] (unnamed)
+	.long	0x002A3378        ; [522] (unnamed)
+	.long	0x002A33A2        ; [523] (unnamed)
+	.long	0x002A33CC        ; [524] (unnamed)
+	.long	0x002A33F6        ; [525] ATTEN_DEL_FLS2
+	.long	0x002A3422        ; [526] (unnamed)
+	.long	0x002A343C        ; [527] (unnamed)
+	.long	0x002A346C        ; [528] (unnamed)
+	.long	0x002A3496        ; [529] (unnamed)
+	.long	0x002A34C6        ; [530] (unnamed)
+	.long	0x002A34F0        ; [531] (unnamed)
+	.long	0x002A351A        ; [532] (unnamed)
+	.long	0x002A3544        ; [533] (unnamed)
+	.long	0x002A356E        ; [534] (unnamed)
+	.long	0x002A3598        ; [535] WAIT_DEL_FILE
+	.long	0x002A35BC        ; [536] (unnamed)
+	.long	0x002A35E6        ; [537] (unnamed)
+	.long	0x002A3610        ; [538] ATTEN_HD_FORMAT
+	.long	0x002A3648        ; [539] (unnamed)
+	.long	0x002A3672        ; [540] (unnamed)
+	.long	0x002A369C        ; [541] (unnamed)
+	.long	0x002A36C6        ; [542] (unnamed)
+	.long	0x002A36F0        ; [543] (unnamed)
+	.long	0x002A371A        ; [544] (unnamed)
+	.long	0x002A3734        ; [545] (unnamed)
+	.long	0x002A376A        ; [546] HD_FORMAT_CATCH
+	.long	0x002A3784        ; [547] WAIT_HD_FORMAT
+	.long	0x002A37A8        ; [548] (unnamed)
+	.long	0x002A37D2        ; [549] (unnamed)
+	.long	0x002A37FC        ; [550] (unnamed)
+	.long	0x002A3826        ; [551] SETUP_HDINFO
+	.long	0x002A3852        ; [552] (unnamed)
+	.long	0x002A386C        ; [553] (unnamed)
+	.long	0x002A389A        ; [554] HD_INFO_LIST
+	.long	0x002A38D6        ; [555] (unnamed)
+	.long	0x002A38F0        ; [556] DBG_MEMO_SCREEN
+	.long	0x002A392C        ; [557] (unnamed)
+	.long	0x002A3946        ; [558] (unnamed)
+	.long	0x002A395C        ; [559] ATTEN_DEL_FLS1
+	.long	0x002A3988        ; [560] (unnamed)
+	.long	0x002A39A2        ; [561] (unnamed)
+	.long	0x002A39CC        ; [562] (unnamed)
+	.long	0x002A39F6        ; [563] (unnamed)
+	.long	0x002A3A20        ; [564] (unnamed)
+	.long	0x002A3A4A        ; [565] (unnamed)
+	.long	0x002A3A7A        ; [566] (unnamed)
+	.long	0x002A3AA4        ; [567] (unnamed)
+	.long	0x002A3AD4        ; [568] (unnamed)
+	.long	0x002A3AFE        ; [569] (unnamed)
+	.long	0x002A3B2E        ; [570] (unnamed)
+	.long	0x002A3B58        ; [571] ATTEN_OVER_FILE
+	.long	0x002A3B84        ; [572] (unnamed)
+	.long	0x002A3B9E        ; [573] (unnamed)
+	.long	0x002A3BCE        ; [574] (unnamed)
+	.long	0x002A3BF8        ; [575] (unnamed)
+	.long	0x002A3C28        ; [576] (unnamed)
+	.long	0x002A3C52        ; [577] (unnamed)
+	.long	0x002A3C7C        ; [578] (unnamed)
+	.long	0x002A3CA6        ; [579] (unnamed)
+	.long	0x002A3CD0        ; [580] HDD_FLS_NAMING2
+	.long	0x002A3D08        ; [581] (unnamed)
+	.long	0x002A3D22        ; [582] (unnamed)
+	.long	0x002A3D3C        ; [583] (unnamed)
+	.long	0x002A3D68        ; [584] (unnamed)
+	.long	0x002A3D94        ; [585] (unnamed)
+	.long	0x002A3DB8        ; [586] ATTEN_CPHD_WR
+	.long	0x002A3DE4        ; [587] (unnamed)
+	.long	0x002A3DFE        ; [588] (unnamed)
+	.long	0x002A3E2E        ; [589] (unnamed)
+	.long	0x002A3E58        ; [590] (unnamed)
+	.long	0x002A3E82        ; [591] (unnamed)
+	.long	0x002A3EAC        ; [592] (unnamed)
+	.long	0x002A3ED6        ; [593] (unnamed)
+	.long	0x002A3F00        ; [594] ERR_HD_NOT_FMT
+	.long	0x002A3F2C        ; [595] (unnamed)
+	.long	0x002A3F56        ; [596] (unnamed)
+	.long	0x002A3F80        ; [597] (unnamed)
+	.long	0x002A3FAA        ; [598] (unnamed)
+	.long	0x002A3FD4        ; [599] ERR_HD_SRAM
+	.long	0x002A4000        ; [600] (unnamed)
+	.long	0x002A402A        ; [601] (unnamed)
+	.long	0x002A4054        ; [602] (unnamed)
+	.long	0x002A407E        ; [603] (unnamed)
+	.long	0x002A40A8        ; [604] ERR_HD_RESET
+	.long	0x002A40D4        ; [605] (unnamed)
+	.long	0x002A40FE        ; [606] (unnamed)
+	.long	0x002A4128        ; [607] (unnamed)
+	.long	0x002A4152        ; [608] (unnamed)
+	.long	0x002A417C        ; [609] ERR_HD_READ
+	.long	0x002A41A8        ; [610] (unnamed)
+	.long	0x002A41D2        ; [611] (unnamed)
+	.long	0x002A41FC        ; [612] (unnamed)
+	.long	0x002A4226        ; [613] (unnamed)
+	.long	0x002A4250        ; [614] ERR_HD_ID_READ
+	.long	0x002A427C        ; [615] (unnamed)
+	.long	0x002A42A6        ; [616] (unnamed)
+	.long	0x002A42D0        ; [617] (unnamed)
+	.long	0x002A42FA        ; [618] (unnamed)
+	.long	0x002A4324        ; [619] ERR_HD_TRACK_0
+	.long	0x002A4350        ; [620] (unnamed)
+	.long	0x002A437A        ; [621] (unnamed)
+	.long	0x002A43A4        ; [622] (unnamed)
+	.long	0x002A43CE        ; [623] (unnamed)
+	.long	0x002A43F8        ; [624] ERR_HD_FAT
+	.long	0x002A4424        ; [625] (unnamed)
+	.long	0x002A444E        ; [626] (unnamed)
+	.long	0x002A4478        ; [627] (unnamed)
+	.long	0x002A44A2        ; [628] (unnamed)
+	.long	0x002A44CC        ; [629] ERR_HD_FSB
+	.long	0x002A44F8        ; [630] (unnamed)
+	.long	0x002A4522        ; [631] (unnamed)
+	.long	0x002A454C        ; [632] (unnamed)
+	.long	0x002A4576        ; [633] (unnamed)
+	.long	0x002A45A0        ; [634] ATTEN_CPFD_MARK
+	.long	0x002A45CC        ; [635] (unnamed)
+	.long	0x002A45E6        ; [636] (unnamed)
+	.long	0x002A4616        ; [637] (unnamed)
+	.long	0x002A4640        ; [638] (unnamed)
+	.long	0x002A466A        ; [639] (unnamed)
+	.long	0x002A4694        ; [640] (unnamed)
+	.long	0x002A46BE        ; [641] ABOUT_HELP
+	.long	0x002A46F6        ; [642] (unnamed)
+	.long	0x002A4710        ; [643] (unnamed)
+	.long	0x002A473A        ; [644] (unnamed)
+	.long	0x002A475C        ; [645] (unnamed)
+	.long	0x002A4796        ; [646] (unnamed)
+	.long	0x002A47D0        ; [647] (unnamed)
+	.long	0x002A47FA        ; [648] (unnamed)
+	.long	0x002A4824        ; [649] (unnamed)
+	.long	0x002A4862        ; [650] (unnamed)
+	.long	0x002A489A        ; [651] (unnamed)
+	.long	0x002A48DA        ; [652] (unnamed)
+	.long	0x002A4904        ; [653] (unnamed)
+	.long	0x002A492E        ; [654] (unnamed)
+	.long	0x002A4958        ; [655] (unnamed)
+	.long	0x002A4982        ; [656] (unnamed)
+	.long	0x002A49C6        ; [657] (unnamed)
+	.long	0x002A49F0        ; [658] (unnamed)
+	.long	0x002A4A0A        ; [659] (unnamed)
+	.long	0x002A4A34        ; [660] WAIT_TR0_RECOVER
+	.long	0x002A4A58        ; [661] (unnamed)
+	.long	0x002A4A82        ; [662] (unnamed)
+	.long	0x002A4AAC        ; [663] ERR_SAVE
+	.long	0x00239F0E        ; [664] ERR_SAVE_EXIT  -- RAM descriptor
+	.long	0x002A4ACE        ; [665] ERR_SAVE_CATCH
+	.long	0x002A4AE8        ; [666] (unnamed)
+	.long	0x002A4B12        ; [667] (unnamed)
+	.long	0x002A4B3C        ; [668] (unnamed)
+	.long	0x002A4B66        ; [669] ERR_LOAD
+	.long	0x00239F28        ; [670] ERR_LOAD_EXIT  -- RAM descriptor
+	.long	0x002A4B88        ; [671] ERR_LOAD_CATCH
+	.long	0x002A4BA2        ; [672] (unnamed)
+	.long	0x002A4BCC        ; [673] (unnamed)
+	.long	0x002A4BF6        ; [674] (unnamed)
+	.long	0x002A4C20        ; [675] ERR_NO_HK_DATA
+	.long	0x002A4C42        ; [676] (unnamed)
+	.long	0x002A4C5C        ; [677] ERR_NO_HK_DATA_CATCH
+	.long	0x002A4C76        ; [678] (unnamed)
+	.long	0x002A4CA0        ; [679] (unnamed)
+	.long	0x002A4CCA        ; [680] (unnamed)
+	.long	0x002A4CF4        ; [681] ATTEN_FULL_DIR
+	.long	0x002A4D16        ; [682] (unnamed)
+	.long	0x002A4D30        ; [683] ATTEN_FULL_DIR_CATCH
+	.long	0x002A4D4A        ; [684] (unnamed)
+	.long	0x002A4D74        ; [685] (unnamed)
+	.long	0x002A4D9E        ; [686] (unnamed)
+	.long	0x002A4DC8        ; [687] (unnamed)
+	.long	0x002A4DF2        ; [688] ATTEN_CP_UNNAMED
+	.long	0x002A4E14        ; [689] (unnamed)
+	.long	0x002A4E2E        ; [690] ATTEN_CP_UNNAMED_CATCH
+	.long	0x002A4E48        ; [691] (unnamed)
+	.long	0x002A4E72        ; [692] (unnamed)
+	.long	0x002A4E9C        ; [693] (unnamed)
+	.long	0x002A4EC6        ; [694] (unnamed)
+	.long	0x002A4EF0        ; [695] DIR_OUT_RANGE
+	.long	0x002A4F12        ; [696] DIR_OUT_RANGE_CATCH
+	.long	0x002A4F2C        ; [697] (unnamed)
+	.long	0x002A4F56        ; [698] (unnamed)
+	.long	0x002A4F80        ; [699] (unnamed)
+	.long	0x002A4FAA        ; [700] FILE_OUT_RANGE
+	.long	0x002A4FCC        ; [701] FILE_OUT_RANGE_CATCH
+	.long	0x002A4FE6        ; [702] (unnamed)
+	.long	0x002A5010        ; [703] (unnamed)
+	.long	0x002A503A        ; [704] (unnamed)
+	.long	0x002A5064        ; [705] HD_PLEASE
+	.long	0x002A5086        ; [706] (unnamed)
+	.long	0x002A50B0        ; [707] (unnamed)
+	.long	0x002A50DA        ; [708] ERR_HD_FORMAT
+	.long	0x002A50FC        ; [709] (unnamed)
+	.long	0x002A5116        ; [710] ERR_HD_FORMAT_CATCH
+	.long	0x002A5130        ; [711] (unnamed)
+	.long	0x002A515A        ; [712] (unnamed)
+	.long	0x002A5184        ; [713] (unnamed)
+	.long	0x002A51AE        ; [714] (unnamed)
+	.long	0x002A51D8        ; [715] AGAIN_HD_FORMAT
+	.long	0x002A51FA        ; [716] (unnamed)
+	.long	0x002A5214        ; [717] AGAIN_HD_FORMAT_CATCH
+	.long	0x002A522E        ; [718] (unnamed)
+	.long	0x002A5258        ; [719] (unnamed)
+	.long	0x002A5282        ; [720] (unnamed)
+	.long	0x002A52AC        ; [721] (unnamed)
+	.long	0x002A52D6        ; [722] SELECT_FILE_A_Z
+	.long	0x002A5302        ; [723] (unnamed)
+	.long	0x002A531C        ; [724] (unnamed)
+	.long	0x002A5338        ; [725] (unnamed)
+	.long	0x002A5354        ; [726] (unnamed)
+	.long	0x002A536E        ; [727] (unnamed)
+	.long	0x002A5392        ; [728] FILE_LOAD_A_Z
+	.long	0x002A53B6        ; [729] (unnamed)
+	.long	0x002A53DE        ; [730] (unnamed)
+	.long	0x002A5408        ; [731] (unnamed)
+	.long	0x002A5444        ; [732] (unnamed)
+	.long	0x002A546C        ; [733] (unnamed)
+	.long	0x002A5486        ; [734] (unnamed)
+	.long	0x002A54B6        ; [735] (unnamed)
+	.long	0x002A54DE        ; [736] (unnamed)
+	.long	0x002A550A        ; [737] (unnamed)
+	.long	0x002A5524        ; [738] (unnamed)
+	.long	0x002A5560        ; [739] (unnamed)
+	.long	0x002A559E        ; [740] (unnamed)
+	.long	0x002A55CC        ; [741] (unnamed)
+	.long	0x002A55E2        ; [742] (unnamed)
+	.long	0x002A560C        ; [743] (unnamed)
+	.long	0x002A5642        ; [744] (unnamed)
+	.long	0x002A5674        ; [745] (unnamed)
+	.long	0x002A56A8        ; [746] (unnamed)
+	.long	0x002A56D4        ; [747] (unnamed)
+	.long	0x002A570A        ; [748] (unnamed)
+	.long	0x002A573C        ; [749] (unnamed)
+	.long	0x002A576E        ; [750] (unnamed)
+	.long	0x002A57A4        ; [751] (unnamed)
+	.long	0x002A57DA        ; [752] Tech_lyrics
+	.long	0x002A5810        ; [753] (unnamed)
+	.long	0x002A582A        ; [754] (unnamed)
+	.long	0x002A5854        ; [755] SongTitle
+	.long	0x002A5878        ; [756] (unnamed)
+	.long	0x002A58A2        ; [757] Conductor
+	.long	0x002A58C6        ; [758] bottom01
+	.long	0x002A58EA        ; [759] bottom02
+	.long	0x002A590E        ; [760] bottom03
+	.long	0x002A5932        ; [761] bottom04
+	.long	0x002A5956        ; [762] bottom05
+	.long	0x002A597A        ; [763] bottom06
+	.long	0x002A599E        ; [764] bottom07
+	.long	0x002A59C2        ; [765] bottom08
+	.long	0x002A59E6        ; [766] (unnamed)
+	.long	0x00239F42        ; [767] ChordinLyric  -- RAM descriptor
+	.long	0x00239F66        ; [768] TempoinLyric  -- RAM descriptor
+	.long	0x00239F8A        ; [769] MeasureinLyric  -- RAM descriptor
+	.long	0x00239FAE        ; [770] TimeSigInLyric  -- RAM descriptor
+	.long	0x002A5A10        ; [771] (unnamed)
+	.long	0x002A5A3E        ; [772] LoadLyricFD
+	.long	0x002A5A7C        ; [773] (unnamed)
+	.long	0x002A5A96        ; [774] (unnamed)
+	.long	0x002A5ABC        ; [775] (unnamed)
+	.long	0x002A5AE2        ; [776] (unnamed)
+	.long	0x002A5B02        ; [777] FD_PLEASE
+	.long	0x002A5B2E        ; [778] (unnamed)
+	.long	0x002A5B58        ; [779] (unnamed)
+	.long	0x002A5B82        ; [780] LyrSettings
+	.long	0x002A5BBC        ; [781] (unnamed)
+	.long	0x002A5BD6        ; [782] (unnamed)
+	.long	0x002A5C12        ; [783] (unnamed)
+	.long	0x002A5C3C        ; [784] (unnamed)
+	.long	0x002A5C78        ; [785] (unnamed)
+	.long	0x002A5CA2        ; [786] (unnamed)
+	.long	0x002A5CDE        ; [787] (unnamed)
+	.long	0x002A5D08        ; [788] WriteIn
+	.long	0x00000000        ; [789] end-of-table marker
 
 
-HDAE5000_GFX_DATA_2:	; 0x2A6984
-	; Graphics data block 2
-; LGD2: 0x2A6984 (6934 bytes)
+; =============================================================================
+; HD-AE5000 UI OBJECT NAME TABLE (0x2A6984 - 0x2A75DB)
+; =============================================================================
+; 790 .long pointers into HDAE5000_UiObjectName_Pool below - the symbolic name
+; of every UI object in HDAE5000_UiObject_PtrTable, same index.  Registered by
+; HDAE5000_Handler_Registration (hd-ae5000_v2_06i.s, "Handler 11"): object-set
+; ID 0x037F, PPI port 0x0160000F, entry count 0x315 = 789, table pointer
+; 0x2A6984, handler function from workspace[0x0E0A][0x0148].
+;
+; 178 of the 789 objects carry a name; the remaining 611 point at an empty
+; string, as does the 790th slot that pairs with the NULL table terminator.
+; The names are the developer's resource identifiers, not user-visible text:
+; screens (HDDMENU, HARD_DISK_OPT, SETUPS_TOOLS, PC_DATA_LINK, HARD_TEST),
+; dialogs (ERR_*, ATTEN_*, WAIT_*, AGAIN_*, *_CATCH, *_EXIT), widgets
+; (FLS_EDIT_NAME_BOX, LBN_DIRNO_BOX, HddNamingCursorBox, bottom01..bottom08)
+; and the Technics-Lyrics objects (SongTitle, Conductor, Tech_lyrics,
+; TempoinLyric, ChordinLyric).  They are the only surviving trace of the
+; original HD-AE5000 UI sources.
+;
+; Was disassembled as instructions under HDAE5000_GFX_DATA_2 ("graphics data
+; block 2"); the pool behind it produced the runs of "nop" (its 0x00 padding)
+; and operands such as "ld xiy,0x5443454c" (ASCII "LECT").
+; =============================================================================
 
-	add	ix, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	ix, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz-124), b
-	nop                                     ; nop
-	ld_s	(xix-124), b
-	nop                                     ; nop
-	ld_s	(xde-124), b
-	nop                                     ; nop
-	ld_s	(xwa-124), b
-	nop                                     ; nop
-	add	d, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	d, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	d, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	d, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	le, 0x2a84
-	nop                                     ; nop
-	jrl	f, 0x2a84
-	nop                                     ; nop
-	jr	nz, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	nov, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	gt, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	t, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	z, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	le, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	ld_s	(xix), b
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ld_s	(xix), b
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	ld_s	(xix), b
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	ld_s	(xix), b
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld_s	(xix), b
-	nop                                     ; nop
-	ld	xwa, 0x3e002a84
-	ld_s	(xix), b
-	nop                                     ; nop
-	ldw	wa, 0x2a84
-	nop                                     ; nop
-	ldb	w, 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a84
-	nop                                     ; nop
-	call16	10884
-	nop                                     ; nop
-	jp16	10884
-	nop                                     ; nop
-	push_f
-	ld_s	(xix), b
-	nop                                     ; nop
-	ex_ff
-	ld_s	(xix), b
-	nop                                     ; nop
-	push_a
-	ld_s	(xix), b
-	nop                                     ; nop
-	ldio	132, 42
-	nop                                     ; nop
-	ei 0x84		; ei 0x84
-	pushw de                                ; push DE
-	nop                                     ; nop
-	max
-	ld_s	(xix), b
-	nop                                     ; nop
-	.byte 0xfc                             ; swi 4
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xf4, 0x83, 0x2a                 ; xorcf A,(-r83L)
-	nop                                     ; nop
-	.byte 0xf2, 0x83, 0x2a, 0x00, 0xf0     ; db
-	ld_s	(xhl), b
-	nop                                     ; nop
-	add	hl, ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	hl, de
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	hl, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xd4, 0x83, 0x2a                 ; db
-	nop                                     ; nop
-	add	c, w
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xc4, 0x83, 0x2a                 ; db
-	nop                                     ; nop
-	andda8_24	w, (0x002A83)
-	ld_s	(xhl), b
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x83		; xorcf A,(XIZ+0x83)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x83		; xorcf A,(XIX+0x83)
-	nop                                     ; nop
-	xorcfa_rid8 xde, 0x83		; xorcf A,(XDE+0x83)
-	nop                                     ; nop
-	xorcfa_rid8 xwa, 0x83		; xorcf A,(XWA+0x83)
-	nop                                     ; nop
-	ld_s	(xwa-125), xde
-	nop                                     ; nop
-	add	xhl, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	xhl, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	xhl, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	xhl, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz-125), de
-	nop                                     ; nop
-	ld_s	(xix-125), de
-	nop                                     ; nop
-	ld_s	(xde-125), de
-	nop                                     ; nop
-	ld_s	(xwa-125), de
-	nop                                     ; nop
-	add	hl, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	hl, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde-125), b
-	nop                                     ; nop
-	ld_s	(xwa-125), b
-	nop                                     ; nop
-	add	c, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	c, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	gt, 0x2a83
-	nop                                     ; nop
-	jrl	t, 0x2a83
-	nop                                     ; nop
-	jr	nz, 0x83
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	t, 0x83
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	f, 0x83
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	ld_s	(xhl), b
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	ld_s	(xhl), b
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld_s	(xhl), b
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	ld_s	(xhl), b
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld_s	(xhl), b
-	nop                                     ; nop
-	ld	xiz, 0x44002a83
-	ld_s	(xhl), b
-	nop                                     ; nop
-	ld	xde, 0x40002a83
-	ld_s	(xhl), b
-	nop                                     ; nop
-	ldw	de, 0x2a83
-	nop                                     ; nop
-	ldb	b, 0x83
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x83
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a83
-	nop                                     ; nop
-	call16	10883
-	nop                                     ; nop
-	jp16	10883
-	nop                                     ; nop
-	push_f
-	ld_s	(xhl), b
-	nop                                     ; nop
-	ldwio	131, 42
-	ldio	131, 42
-	nop                                     ; nop
-	nop                                     ; nop
-	ld_s	(xhl), b
-	nop                                     ; nop
-	.byte 0xfe                             ; swi 6
-	ld_s	(xde), b
-	nop                                     ; nop
-	.byte 0xfc                             ; swi 4
-	ld_s	(xde), b
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	ld_s	(xde), b
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	ld_s	(xde), b
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	ld_s	(xde), b
-	nop                                     ; nop
-.LGD2_6b1c:
-	add	xde, xwa
-	pushw de                                ; push DE
-	nop                                     ; nop
-.LGD2_6b20:
-	.byte 0xe6                             ; db
-	ld_s	(xde), b
-	nop                                     ; nop
-.LGD2_6b24:
-	add	de, ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-.LGD2_6b28:
-	add	de, de
-	pushw de                                ; push DE
-	nop                                     ; nop
-.LGD2_6b2c:
-	add	de, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-.LGD2_6b30:
-	.byte 0xd6                             ; db
-	ld_s	(xde), b
-	nop                                     ; nop
-.LGD2_6b34:
-	.byte 0xd4, 0x82, 0x2a                 ; db
-	nop                                     ; nop
-	andda16_24	de, (0x002A82)
-	ld_s	(xde), b
-	nop                                     ; nop
-	.byte 0xc0, 0x82, 0x2a                 ; db
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x82		; xorcf A,(XIZ+0x82)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x82		; xorcf A,(XIX+0x82)
-	nop                                     ; nop
-	xorcfa_rid8 xde, 0x82		; xorcf A,(XDE+0x82)
-	nop                                     ; nop
-	xorcfa_rid8 xwa, 0x82		; xorcf A,(XWA+0x82)
-	nop                                     ; nop
-	andcfn_ri xiz, 2		; andcf 2,(XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	andcfn_ri xix, 2		; andcf 2,(XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	andcfn_ri xde, 2		; andcf 2,(XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	andcfn_ri xwa, 2		; andcf 2,(XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz-126), xde
-	nop                                     ; nop
-	ld_s	(xix-126), xde
-	nop                                     ; nop
-	ld_s	(xix-126), de
-	nop                                     ; nop
-	ld_s	(xde-126), de
-	nop                                     ; nop
-	ld_s	(xwa-126), de
-	nop                                     ; nop
-	add	de, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	de, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	de, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	b, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	b, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	b, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nz, 0x2a82
-	nop                                     ; nop
-	jrl	nov, 0x2a82
-	nop                                     ; nop
-	jr	nov, 0x82
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr gt, .LGD2_6b20                      ; [6a 82] jr GT,0x2a6b20
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr t, .LGD2_6b24                       ; [68 82] jr T,0x2a6b24
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr z, .LGD2_6b28                       ; [66 82] jr Z,0x2a6b28
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x82
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr le, .LGD2_6b30                      ; [62 82] jr LE,0x2a6b30
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr f, .LGD2_6b34                       ; [60 82] jr F,0x2a6b34
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xiz                                 ; pop XIZ
-	ld_s	(xde), b
-	nop                                     ; nop
-	pop xix                                 ; pop XIX
-	ld_s	(xde), b
-	nop                                     ; nop
-	pop xde                                 ; pop XDE
-	ld_s	(xde), b
-	nop                                     ; nop
-	popw iz                                 ; pop IZ
-	ld_s	(xde), b
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld_s	(xde), b
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	ld_s	(xde), b
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld_s	(xde), b
-	nop                                     ; nop
-	ld	xiz, 0x44002a82
-	ld_s	(xde), b
-	nop                                     ; nop
-	push xix
-	ld_s	(xde), b
-	nop                                     ; nop
-	push xde
-	ld_s	(xde), b
-	nop                                     ; nop
-	push xwa
-	ld_s	(xde), b
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	ld_s	(xde), b
-	nop                                     ; nop
-	pushw de                                ; push DE
-	ld_s	(xde), b
-	nop                                     ; nop
-	pushw wa                                ; push WA
-	ld_s	(xde), b
-	nop                                     ; nop
-	ldb	h, 0x82
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	d, 0x82
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x82
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x82
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a82
-	nop                                     ; nop
-	call16	10882
-	nop                                     ; nop
-	jp16	10882
-	nop                                     ; nop
-	push_f
-	ld_s	(xde), b
-	nop                                     ; nop
-	ex_ff
-	ld_s	(xde), b
-	nop                                     ; nop
-	push_a
-	ld_s	(xde), b
-	nop                                     ; nop
-	ccf
-	ld_s	(xde), b
-	nop                                     ; nop
-	rcf
-	ld_s	(xde), b
-	nop                                     ; nop
-	ret
+HDAE5000_UiObjectName_PtrTable:	; 0x2A6984
+	.long	HdaeUiName_000                    ; [  0] "HDDMENU"
+	.long	HdaeUiName_001                    ; [  1] (unnamed)
+	.long	HdaeUiName_002                    ; [  2] (unnamed)
+	.long	HdaeUiName_003                    ; [  3] (unnamed)
+	.long	HdaeUiName_004                    ; [  4] (unnamed)
+	.long	HdaeUiName_005                    ; [  5] (unnamed)
+	.long	HdaeUiName_006                    ; [  6] (unnamed)
+	.long	HdaeUiName_007                    ; [  7] (unnamed)
+	.long	HdaeUiName_008                    ; [  8] (unnamed)
+	.long	HdaeUiName_009                    ; [  9] (unnamed)
+	.long	HdaeUiName_010                    ; [ 10] "HARD_DISK_OPT"
+	.long	HdaeUiName_011                    ; [ 11] (unnamed)
+	.long	HdaeUiName_012                    ; [ 12] (unnamed)
+	.long	HdaeUiName_013                    ; [ 13] (unnamed)
+	.long	HdaeUiName_014                    ; [ 14] (unnamed)
+	.long	HdaeUiName_015                    ; [ 15] (unnamed)
+	.long	HdaeUiName_016                    ; [ 16] (unnamed)
+	.long	HdaeUiName_017                    ; [ 17] (unnamed)
+	.long	HdaeUiName_018                    ; [ 18] (unnamed)
+	.long	HdaeUiName_019                    ; [ 19] "SETUPS_TOOLS"
+	.long	HdaeUiName_020                    ; [ 20] (unnamed)
+	.long	HdaeUiName_021                    ; [ 21] (unnamed)
+	.long	HdaeUiName_022                    ; [ 22] (unnamed)
+	.long	HdaeUiName_023                    ; [ 23] (unnamed)
+	.long	HdaeUiName_024                    ; [ 24] "SELECT_FILE"
+	.long	HdaeUiName_025                    ; [ 25] (unnamed)
+	.long	HdaeUiName_026                    ; [ 26] "HD_FILE_LOAD"
+	.long	HdaeUiName_027                    ; [ 27] "HD_LOAD_OPTION"
+	.long	HdaeUiName_028                    ; [ 28] (unnamed)
+	.long	HdaeUiName_029                    ; [ 29] (unnamed)
+	.long	HdaeUiName_030                    ; [ 30] (unnamed)
+	.long	HdaeUiName_031                    ; [ 31] (unnamed)
+	.long	HdaeUiName_032                    ; [ 32] (unnamed)
+	.long	HdaeUiName_033                    ; [ 33] (unnamed)
+	.long	HdaeUiName_034                    ; [ 34] "SELECT_DIR"
+	.long	HdaeUiName_035                    ; [ 35] (unnamed)
+	.long	HdaeUiName_036                    ; [ 36] (unnamed)
+	.long	HdaeUiName_037                    ; [ 37] "SEL_DIR"
+	.long	HdaeUiName_038                    ; [ 38] (unnamed)
+	.long	HdaeUiName_039                    ; [ 39] (unnamed)
+	.long	HdaeUiName_040                    ; [ 40] (unnamed)
+	.long	HdaeUiName_041                    ; [ 41] (unnamed)
+	.long	HdaeUiName_042                    ; [ 42] (unnamed)
+	.long	HdaeUiName_043                    ; [ 43] (unnamed)
+	.long	HdaeUiName_044                    ; [ 44] "SELECT_DIR_SW_EDIT"
+	.long	HdaeUiName_045                    ; [ 45] (unnamed)
+	.long	HdaeUiName_046                    ; [ 46] (unnamed)
+	.long	HdaeUiName_047                    ; [ 47] (unnamed)
+	.long	HdaeUiName_048                    ; [ 48] (unnamed)
+	.long	HdaeUiName_049                    ; [ 49] "SELECT_DIR2"
+	.long	HdaeUiName_050                    ; [ 50] (unnamed)
+	.long	HdaeUiName_051                    ; [ 51] (unnamed)
+	.long	HdaeUiName_052                    ; [ 52] (unnamed)
+	.long	HdaeUiName_053                    ; [ 53] (unnamed)
+	.long	HdaeUiName_054                    ; [ 54] (unnamed)
+	.long	HdaeUiName_055                    ; [ 55] (unnamed)
+	.long	HdaeUiName_056                    ; [ 56] (unnamed)
+	.long	HdaeUiName_057                    ; [ 57] (unnamed)
+	.long	HdaeUiName_058                    ; [ 58] "FD_FILE_SELECT"
+	.long	HdaeUiName_059                    ; [ 59] (unnamed)
+	.long	HdaeUiName_060                    ; [ 60] (unnamed)
+	.long	HdaeUiName_061                    ; [ 61] (unnamed)
+	.long	HdaeUiName_062                    ; [ 62] (unnamed)
+	.long	HdaeUiName_063                    ; [ 63] (unnamed)
+	.long	HdaeUiName_064                    ; [ 64] (unnamed)
+	.long	HdaeUiName_065                    ; [ 65] (unnamed)
+	.long	HdaeUiName_066                    ; [ 66] (unnamed)
+	.long	HdaeUiName_067                    ; [ 67] (unnamed)
+	.long	HdaeUiName_068                    ; [ 68] (unnamed)
+	.long	HdaeUiName_069                    ; [ 69] "HARD_TEST"
+	.long	HdaeUiName_070                    ; [ 70] (unnamed)
+	.long	HdaeUiName_071                    ; [ 71] (unnamed)
+	.long	HdaeUiName_072                    ; [ 72] (unnamed)
+	.long	HdaeUiName_073                    ; [ 73] "RUN_STOP"
+	.long	HdaeUiName_074                    ; [ 74] (unnamed)
+	.long	HdaeUiName_075                    ; [ 75] "PPORT_SW"
+	.long	HdaeUiName_076                    ; [ 76] "FD_SW"
+	.long	HdaeUiName_077                    ; [ 77] "HDD_SW"
+	.long	HdaeUiName_078                    ; [ 78] "HDD_FILE_NAMING"
+	.long	HdaeUiName_079                    ; [ 79] (unnamed)
+	.long	HdaeUiName_080                    ; [ 80] (unnamed)
+	.long	HdaeUiName_081                    ; [ 81] (unnamed)
+	.long	HdaeUiName_082                    ; [ 82] (unnamed)
+	.long	HdaeUiName_083                    ; [ 83] (unnamed)
+	.long	HdaeUiName_084                    ; [ 84] (unnamed)
+	.long	HdaeUiName_085                    ; [ 85] (unnamed)
+	.long	HdaeUiName_086                    ; [ 86] (unnamed)
+	.long	HdaeUiName_087                    ; [ 87] "HD_FILE_NAME"
+	.long	HdaeUiName_088                    ; [ 88] "HDD_DIR_NAMING"
+	.long	HdaeUiName_089                    ; [ 89] (unnamed)
+	.long	HdaeUiName_090                    ; [ 90] (unnamed)
+	.long	HdaeUiName_091                    ; [ 91] (unnamed)
+	.long	HdaeUiName_092                    ; [ 92] (unnamed)
+	.long	HdaeUiName_093                    ; [ 93] (unnamed)
+	.long	HdaeUiName_094                    ; [ 94] "HD_PLEASE_WIN"
+	.long	HdaeUiName_095                    ; [ 95] (unnamed)
+	.long	HdaeUiName_096                    ; [ 96] "HD_UTIL"
+	.long	HdaeUiName_097                    ; [ 97] (unnamed)
+	.long	HdaeUiName_098                    ; [ 98] (unnamed)
+	.long	HdaeUiName_099                    ; [ 99] (unnamed)
+	.long	HdaeUiName_100                    ; [100] (unnamed)
+	.long	HdaeUiName_101                    ; [101] (unnamed)
+	.long	HdaeUiName_102                    ; [102] "PC_DATA_LINK"
+	.long	HdaeUiName_103                    ; [103] (unnamed)
+	.long	HdaeUiName_104                    ; [104] "PP_STATUS"
+	.long	HdaeUiName_105                    ; [105] (unnamed)
+	.long	HdaeUiName_106                    ; [106] (unnamed)
+	.long	HdaeUiName_107                    ; [107] (unnamed)
+	.long	HdaeUiName_108                    ; [108] (unnamed)
+	.long	HdaeUiName_109                    ; [109] (unnamed)
+	.long	HdaeUiName_110                    ; [110] "SETUP_TOOLS_P1"
+	.long	HdaeUiName_111                    ; [111] (unnamed)
+	.long	HdaeUiName_112                    ; [112] (unnamed)
+	.long	HdaeUiName_113                    ; [113] (unnamed)
+	.long	HdaeUiName_114                    ; [114] (unnamed)
+	.long	HdaeUiName_115                    ; [115] (unnamed)
+	.long	HdaeUiName_116                    ; [116] (unnamed)
+	.long	HdaeUiName_117                    ; [117] (unnamed)
+	.long	HdaeUiName_118                    ; [118] (unnamed)
+	.long	HdaeUiName_119                    ; [119] (unnamed)
+	.long	HdaeUiName_120                    ; [120] (unnamed)
+	.long	HdaeUiName_121                    ; [121] (unnamed)
+	.long	HdaeUiName_122                    ; [122] "SETUP_TOOLS_P2"
+	.long	HdaeUiName_123                    ; [123] (unnamed)
+	.long	HdaeUiName_124                    ; [124] (unnamed)
+	.long	HdaeUiName_125                    ; [125] (unnamed)
+	.long	HdaeUiName_126                    ; [126] (unnamed)
+	.long	HdaeUiName_127                    ; [127] (unnamed)
+	.long	HdaeUiName_128                    ; [128] "SW_HD_FORMAT"
+	.long	HdaeUiName_129                    ; [129] (unnamed)
+	.long	HdaeUiName_130                    ; [130] (unnamed)
+	.long	HdaeUiName_131                    ; [131] (unnamed)
+	.long	HdaeUiName_132                    ; [132] (unnamed)
+	.long	HdaeUiName_133                    ; [133] "OUTPUT_SETTING"
+	.long	HdaeUiName_134                    ; [134] (unnamed)
+	.long	HdaeUiName_135                    ; [135] (unnamed)
+	.long	HdaeUiName_136                    ; [136] (unnamed)
+	.long	HdaeUiName_137                    ; [137] (unnamed)
+	.long	HdaeUiName_138                    ; [138] (unnamed)
+	.long	HdaeUiName_139                    ; [139] (unnamed)
+	.long	HdaeUiName_140                    ; [140] (unnamed)
+	.long	HdaeUiName_141                    ; [141] (unnamed)
+	.long	HdaeUiName_142                    ; [142] (unnamed)
+	.long	HdaeUiName_143                    ; [143] "LOAD_BY_NUM"
+	.long	HdaeUiName_144                    ; [144] (unnamed)
+	.long	HdaeUiName_145                    ; [145] (unnamed)
+	.long	HdaeUiName_146                    ; [146] (unnamed)
+	.long	HdaeUiName_147                    ; [147] (unnamed)
+	.long	HdaeUiName_148                    ; [148] (unnamed)
+	.long	HdaeUiName_149                    ; [149] "LBN_P1"
+	.long	HdaeUiName_150                    ; [150] (unnamed)
+	.long	HdaeUiName_151                    ; [151] (unnamed)
+	.long	HdaeUiName_152                    ; [152] "LBN_OPTION"
+	.long	HdaeUiName_153                    ; [153] (unnamed)
+	.long	HdaeUiName_154                    ; [154] (unnamed)
+	.long	HdaeUiName_155                    ; [155] (unnamed)
+	.long	HdaeUiName_156                    ; [156] (unnamed)
+	.long	HdaeUiName_157                    ; [157] (unnamed)
+	.long	HdaeUiName_158                    ; [158] (unnamed)
+	.long	HdaeUiName_159                    ; [159] (unnamed)
+	.long	HdaeUiName_160                    ; [160] (unnamed)
+	.long	HdaeUiName_161                    ; [161] (unnamed)
+	.long	HdaeUiName_162                    ; [162] (unnamed)
+	.long	HdaeUiName_163                    ; [163] (unnamed)
+	.long	HdaeUiName_164                    ; [164] (unnamed)
+	.long	HdaeUiName_165                    ; [165] (unnamed)
+	.long	HdaeUiName_166                    ; [166] (unnamed)
+	.long	HdaeUiName_167                    ; [167] (unnamed)
+	.long	HdaeUiName_168                    ; [168] "LBN_DIRNO_BOX"
+	.long	HdaeUiName_169                    ; [169] "LBN_DIRNAME_BOX"
+	.long	HdaeUiName_170                    ; [170] "LBN_FILENO_BOX"
+	.long	HdaeUiName_171                    ; [171] "LBN_FILENAME_BOX"
+	.long	HdaeUiName_172                    ; [172] (unnamed)
+	.long	HdaeUiName_173                    ; [173] (unnamed)
+	.long	HdaeUiName_174                    ; [174] (unnamed)
+	.long	HdaeUiName_175                    ; [175] "LBN_P2"
+	.long	HdaeUiName_176                    ; [176] (unnamed)
+	.long	HdaeUiName_177                    ; [177] (unnamed)
+	.long	HdaeUiName_178                    ; [178] (unnamed)
+	.long	HdaeUiName_179                    ; [179] (unnamed)
+	.long	HdaeUiName_180                    ; [180] (unnamed)
+	.long	HdaeUiName_181                    ; [181] (unnamed)
+	.long	HdaeUiName_182                    ; [182] (unnamed)
+	.long	HdaeUiName_183                    ; [183] (unnamed)
+	.long	HdaeUiName_184                    ; [184] (unnamed)
+	.long	HdaeUiName_185                    ; [185] (unnamed)
+	.long	HdaeUiName_186                    ; [186] (unnamed)
+	.long	HdaeUiName_187                    ; [187] (unnamed)
+	.long	HdaeUiName_188                    ; [188] (unnamed)
+	.long	HdaeUiName_189                    ; [189] (unnamed)
+	.long	HdaeUiName_190                    ; [190] (unnamed)
+	.long	HdaeUiName_191                    ; [191] (unnamed)
+	.long	HdaeUiName_192                    ; [192] (unnamed)
+	.long	HdaeUiName_193                    ; [193] (unnamed)
+	.long	HdaeUiName_194                    ; [194] (unnamed)
+	.long	HdaeUiName_195                    ; [195] (unnamed)
+	.long	HdaeUiName_196                    ; [196] (unnamed)
+	.long	HdaeUiName_197                    ; [197] (unnamed)
+	.long	HdaeUiName_198                    ; [198] (unnamed)
+	.long	HdaeUiName_199                    ; [199] (unnamed)
+	.long	HdaeUiName_200                    ; [200] (unnamed)
+	.long	HdaeUiName_201                    ; [201] (unnamed)
+	.long	HdaeUiName_202                    ; [202] (unnamed)
+	.long	HdaeUiName_203                    ; [203] (unnamed)
+	.long	HdaeUiName_204                    ; [204] (unnamed)
+	.long	HdaeUiName_205                    ; [205] (unnamed)
+	.long	HdaeUiName_206                    ; [206] (unnamed)
+	.long	HdaeUiName_207                    ; [207] (unnamed)
+	.long	HdaeUiName_208                    ; [208] (unnamed)
+	.long	HdaeUiName_209                    ; [209] (unnamed)
+	.long	HdaeUiName_210                    ; [210] "CP_FD"
+	.long	HdaeUiName_211                    ; [211] (unnamed)
+	.long	HdaeUiName_212                    ; [212] (unnamed)
+	.long	HdaeUiName_213                    ; [213] (unnamed)
+	.long	HdaeUiName_214                    ; [214] (unnamed)
+	.long	HdaeUiName_215                    ; [215] "CP_FD_LIST"
+	.long	HdaeUiName_216                    ; [216] "CP_FD_LINE2"
+	.long	HdaeUiName_217                    ; [217] "CP_FD_LINE1"
+	.long	HdaeUiName_218                    ; [218] "CP_FD_HDSWTO"
+	.long	HdaeUiName_219                    ; [219] (unnamed)
+	.long	HdaeUiName_220                    ; [220] "CP_FD_HDSWSEL"
+	.long	HdaeUiName_221                    ; [221] (unnamed)
+	.long	HdaeUiName_222                    ; [222] "CP_FD_VOLLABEL"
+	.long	HdaeUiName_223                    ; [223] (unnamed)
+	.long	HdaeUiName_224                    ; [224] "CP_FD_HDALLSEL"
+	.long	HdaeUiName_225                    ; [225] (unnamed)
+	.long	HdaeUiName_226                    ; [226] "CP_FD_DIRSEL"
+	.long	HdaeUiName_227                    ; [227] (unnamed)
+	.long	HdaeUiName_228                    ; [228] (unnamed)
+	.long	HdaeUiName_229                    ; [229] (unnamed)
+	.long	HdaeUiName_230                    ; [230] "CP_FD_DIRBOX"
+	.long	HdaeUiName_231                    ; [231] (unnamed)
+	.long	HdaeUiName_232                    ; [232] (unnamed)
+	.long	HdaeUiName_233                    ; [233] (unnamed)
+	.long	HdaeUiName_234                    ; [234] (unnamed)
+	.long	HdaeUiName_235                    ; [235] (unnamed)
+	.long	HdaeUiName_236                    ; [236] (unnamed)
+	.long	HdaeUiName_237                    ; [237] (unnamed)
+	.long	HdaeUiName_238                    ; [238] (unnamed)
+	.long	HdaeUiName_239                    ; [239] (unnamed)
+	.long	HdaeUiName_240                    ; [240] "FLS_SELECT"
+	.long	HdaeUiName_241                    ; [241] (unnamed)
+	.long	HdaeUiName_242                    ; [242] (unnamed)
+	.long	HdaeUiName_243                    ; [243] (unnamed)
+	.long	HdaeUiName_244                    ; [244] (unnamed)
+	.long	HdaeUiName_245                    ; [245] (unnamed)
+	.long	HdaeUiName_246                    ; [246] (unnamed)
+	.long	HdaeUiName_247                    ; [247] (unnamed)
+	.long	HdaeUiName_248                    ; [248] "FLS_SEL"
+	.long	HdaeUiName_249                    ; [249] "FLS_SELECT_SW_EDIT"
+	.long	HdaeUiName_250                    ; [250] (unnamed)
+	.long	HdaeUiName_251                    ; [251] "SEL_FLS"
+	.long	HdaeUiName_252                    ; [252] (unnamed)
+	.long	HdaeUiName_253                    ; [253] (unnamed)
+	.long	HdaeUiName_254                    ; [254] (unnamed)
+	.long	HdaeUiName_255                    ; [255] "HD_FILE_LOAD_P1"
+	.long	HdaeUiName_256                    ; [256] "HD_FILE_LOAD_SW_SAVE"
+	.long	HdaeUiName_257                    ; [257] (unnamed)
+	.long	HdaeUiName_258                    ; [258] "HD_FILE_OPTION"
+	.long	HdaeUiName_259                    ; [259] "HD_FILE_LIST"
+	.long	HdaeUiName_260                    ; [260] "FILE_LOAD_DIRBOX"
+	.long	HdaeUiName_261                    ; [261] (unnamed)
+	.long	HdaeUiName_262                    ; [262] (unnamed)
+	.long	HdaeUiName_263                    ; [263] (unnamed)
+	.long	HdaeUiName_264                    ; [264] (unnamed)
+	.long	HdaeUiName_265                    ; [265] (unnamed)
+	.long	HdaeUiName_266                    ; [266] "HD_FILE_LOAD_SW_DEL"
+	.long	HdaeUiName_267                    ; [267] (unnamed)
+	.long	HdaeUiName_268                    ; [268] (unnamed)
+	.long	HdaeUiName_269                    ; [269] "HD_FILE_LOAD_SW_DELFILE"
+	.long	HdaeUiName_270                    ; [270] (unnamed)
+	.long	HdaeUiName_271                    ; [271] (unnamed)
+	.long	HdaeUiName_272                    ; [272] "HD_FILE_LOAD_P2"
+	.long	HdaeUiName_273                    ; [273] (unnamed)
+	.long	HdaeUiName_274                    ; [274] (unnamed)
+	.long	HdaeUiName_275                    ; [275] (unnamed)
+	.long	HdaeUiName_276                    ; [276] (unnamed)
+	.long	HdaeUiName_277                    ; [277] (unnamed)
+	.long	HdaeUiName_278                    ; [278] (unnamed)
+	.long	HdaeUiName_279                    ; [279] (unnamed)
+	.long	HdaeUiName_280                    ; [280] (unnamed)
+	.long	HdaeUiName_281                    ; [281] (unnamed)
+	.long	HdaeUiName_282                    ; [282] (unnamed)
+	.long	HdaeUiName_283                    ; [283] (unnamed)
+	.long	HdaeUiName_284                    ; [284] (unnamed)
+	.long	HdaeUiName_285                    ; [285] (unnamed)
+	.long	HdaeUiName_286                    ; [286] (unnamed)
+	.long	HdaeUiName_287                    ; [287] (unnamed)
+	.long	HdaeUiName_288                    ; [288] (unnamed)
+	.long	HdaeUiName_289                    ; [289] (unnamed)
+	.long	HdaeUiName_290                    ; [290] (unnamed)
+	.long	HdaeUiName_291                    ; [291] (unnamed)
+	.long	HdaeUiName_292                    ; [292] (unnamed)
+	.long	HdaeUiName_293                    ; [293] (unnamed)
+	.long	HdaeUiName_294                    ; [294] (unnamed)
+	.long	HdaeUiName_295                    ; [295] (unnamed)
+	.long	HdaeUiName_296                    ; [296] (unnamed)
+	.long	HdaeUiName_297                    ; [297] (unnamed)
+	.long	HdaeUiName_298                    ; [298] (unnamed)
+	.long	HdaeUiName_299                    ; [299] (unnamed)
+	.long	HdaeUiName_300                    ; [300] (unnamed)
+	.long	HdaeUiName_301                    ; [301] (unnamed)
+	.long	HdaeUiName_302                    ; [302] (unnamed)
+	.long	HdaeUiName_303                    ; [303] (unnamed)
+	.long	HdaeUiName_304                    ; [304] (unnamed)
+	.long	HdaeUiName_305                    ; [305] (unnamed)
+	.long	HdaeUiName_306                    ; [306] (unnamed)
+	.long	HdaeUiName_307                    ; [307] (unnamed)
+	.long	HdaeUiName_308                    ; [308] "HDD_FLS_NAMING"
+	.long	HdaeUiName_309                    ; [309] (unnamed)
+	.long	HdaeUiName_310                    ; [310] (unnamed)
+	.long	HdaeUiName_311                    ; [311] (unnamed)
+	.long	HdaeUiName_312                    ; [312] (unnamed)
+	.long	HdaeUiName_313                    ; [313] (unnamed)
+	.long	HdaeUiName_314                    ; [314] "FLS_FILE_LOAD"
+	.long	HdaeUiName_315                    ; [315] (unnamed)
+	.long	HdaeUiName_316                    ; [316] (unnamed)
+	.long	HdaeUiName_317                    ; [317] (unnamed)
+	.long	HdaeUiName_318                    ; [318] "FLS_FILE_LOAD_SW_EDIT"
+	.long	HdaeUiName_319                    ; [319] (unnamed)
+	.long	HdaeUiName_320                    ; [320] (unnamed)
+	.long	HdaeUiName_321                    ; [321] (unnamed)
+	.long	HdaeUiName_322                    ; [322] (unnamed)
+	.long	HdaeUiName_323                    ; [323] "FLS_OPT_BOX"
+	.long	HdaeUiName_324                    ; [324] "FLS_LOC_BOX"
+	.long	HdaeUiName_325                    ; [325] "FLS_NAME_BOX"
+	.long	HdaeUiName_326                    ; [326] (unnamed)
+	.long	HdaeUiName_327                    ; [327] (unnamed)
+	.long	HdaeUiName_328                    ; [328] "FLS_FILE_BOX"
+	.long	HdaeUiName_329                    ; [329] "FLS_LOAD_LINE1"
+	.long	HdaeUiName_330                    ; [330] "FLS_LOAD_LINE2"
+	.long	HdaeUiName_331                    ; [331] (unnamed)
+	.long	HdaeUiName_332                    ; [332] (unnamed)
+	.long	HdaeUiName_333                    ; [333] (unnamed)
+	.long	HdaeUiName_334                    ; [334] "FLS_DIR_SEL"
+	.long	HdaeUiName_335                    ; [335] (unnamed)
+	.long	HdaeUiName_336                    ; [336] (unnamed)
+	.long	HdaeUiName_337                    ; [337] "FLS_DIR_BOX"
+	.long	HdaeUiName_338                    ; [338] (unnamed)
+	.long	HdaeUiName_339                    ; [339] (unnamed)
+	.long	HdaeUiName_340                    ; [340] (unnamed)
+	.long	HdaeUiName_341                    ; [341] (unnamed)
+	.long	HdaeUiName_342                    ; [342] (unnamed)
+	.long	HdaeUiName_343                    ; [343] (unnamed)
+	.long	HdaeUiName_344                    ; [344] (unnamed)
+	.long	HdaeUiName_345                    ; [345] "FLS_FILE_SEL"
+	.long	HdaeUiName_346                    ; [346] (unnamed)
+	.long	HdaeUiName_347                    ; [347] "FLS_FILE_SEL_DIRBOX"
+	.long	HdaeUiName_348                    ; [348] "FLS_FILE_SEL_LISTBOX"
+	.long	HdaeUiName_349                    ; [349] (unnamed)
+	.long	HdaeUiName_350                    ; [350] (unnamed)
+	.long	HdaeUiName_351                    ; [351] (unnamed)
+	.long	HdaeUiName_352                    ; [352] "FLS_FILE_SEL_OPTBOX"
+	.long	HdaeUiName_353                    ; [353] (unnamed)
+	.long	HdaeUiName_354                    ; [354] (unnamed)
+	.long	HdaeUiName_355                    ; [355] "FLS_EDIT"
+	.long	HdaeUiName_356                    ; [356] (unnamed)
+	.long	HdaeUiName_357                    ; [357] (unnamed)
+	.long	HdaeUiName_358                    ; [358] "FLS_EDIT_NAME_BOX"
+	.long	HdaeUiName_359                    ; [359] (unnamed)
+	.long	HdaeUiName_360                    ; [360] (unnamed)
+	.long	HdaeUiName_361                    ; [361] "FLS_EDIT_LIST_BOX"
+	.long	HdaeUiName_362                    ; [362] "FLS_EDIT_LINE2"
+	.long	HdaeUiName_363                    ; [363] "FLS_EDIT_LINE1"
+	.long	HdaeUiName_364                    ; [364] (unnamed)
+	.long	HdaeUiName_365                    ; [365] (unnamed)
+	.long	HdaeUiName_366                    ; [366] (unnamed)
+	.long	HdaeUiName_367                    ; [367] (unnamed)
+	.long	HdaeUiName_368                    ; [368] (unnamed)
+	.long	HdaeUiName_369                    ; [369] (unnamed)
+	.long	HdaeUiName_370                    ; [370] (unnamed)
+	.long	HdaeUiName_371                    ; [371] (unnamed)
+	.long	HdaeUiName_372                    ; [372] (unnamed)
+	.long	HdaeUiName_373                    ; [373] (unnamed)
+	.long	HdaeUiName_374                    ; [374] "FLS_EDIT_LOC_BOX"
+	.long	HdaeUiName_375                    ; [375] "FLS_EDIT_OPT_BOX"
+	.long	HdaeUiName_376                    ; [376] (unnamed)
+	.long	HdaeUiName_377                    ; [377] (unnamed)
+	.long	HdaeUiName_378                    ; [378] (unnamed)
+	.long	HdaeUiName_379                    ; [379] "CP_FD_DIR_NAMING"
+	.long	HdaeUiName_380                    ; [380] (unnamed)
+	.long	HdaeUiName_381                    ; [381] (unnamed)
+	.long	HdaeUiName_382                    ; [382] (unnamed)
+	.long	HdaeUiName_383                    ; [383] (unnamed)
+	.long	HdaeUiName_384                    ; [384] (unnamed)
+	.long	HdaeUiName_385                    ; [385] (unnamed)
+	.long	HdaeUiName_386                    ; [386] "SAVE_OPT_SCREEN"
+	.long	HdaeUiName_387                    ; [387] (unnamed)
+	.long	HdaeUiName_388                    ; [388] (unnamed)
+	.long	HdaeUiName_389                    ; [389] (unnamed)
+	.long	HdaeUiName_390                    ; [390] (unnamed)
+	.long	HdaeUiName_391                    ; [391] (unnamed)
+	.long	HdaeUiName_392                    ; [392] (unnamed)
+	.long	HdaeUiName_393                    ; [393] (unnamed)
+	.long	HdaeUiName_394                    ; [394] (unnamed)
+	.long	HdaeUiName_395                    ; [395] (unnamed)
+	.long	HdaeUiName_396                    ; [396] (unnamed)
+	.long	HdaeUiName_397                    ; [397] (unnamed)
+	.long	HdaeUiName_398                    ; [398] (unnamed)
+	.long	HdaeUiName_399                    ; [399] (unnamed)
+	.long	HdaeUiName_400                    ; [400] (unnamed)
+	.long	HdaeUiName_401                    ; [401] (unnamed)
+	.long	HdaeUiName_402                    ; [402] (unnamed)
+	.long	HdaeUiName_403                    ; [403] (unnamed)
+	.long	HdaeUiName_404                    ; [404] "RAM_EDIT_CMP"
+	.long	HdaeUiName_405                    ; [405] (unnamed)
+	.long	HdaeUiName_406                    ; [406] "RAM_EDIT_LSW"
+	.long	HdaeUiName_407                    ; [407] "RAM_EDIT_PMT"
+	.long	HdaeUiName_408                    ; [408] "RAM_EDIT_SQT"
+	.long	HdaeUiName_409                    ; [409] "RAM_EDIT_TM"
+	.long	HdaeUiName_410                    ; [410] "RAM_EDIT_MSP"
+	.long	HdaeUiName_411                    ; [411] "RAM_EDIT_RCM"
+	.long	HdaeUiName_412                    ; [412] "RAM_EDIT_MD"
+	.long	HdaeUiName_413                    ; [413] (unnamed)
+	.long	HdaeUiName_414                    ; [414] (unnamed)
+	.long	HdaeUiName_415                    ; [415] (unnamed)
+	.long	HdaeUiName_416                    ; [416] (unnamed)
+	.long	HdaeUiName_417                    ; [417] (unnamed)
+	.long	HdaeUiName_418                    ; [418] (unnamed)
+	.long	HdaeUiName_419                    ; [419] (unnamed)
+	.long	HdaeUiName_420                    ; [420] (unnamed)
+	.long	HdaeUiName_421                    ; [421] (unnamed)
+	.long	HdaeUiName_422                    ; [422] (unnamed)
+	.long	HdaeUiName_423                    ; [423] (unnamed)
+	.long	HdaeUiName_424                    ; [424] (unnamed)
+	.long	HdaeUiName_425                    ; [425] (unnamed)
+	.long	HdaeUiName_426                    ; [426] "RAM_EDIT_TLX"
+	.long	HdaeUiName_427                    ; [427] (unnamed)
+	.long	HdaeUiName_428                    ; [428] (unnamed)
+	.long	HdaeUiName_429                    ; [429] (unnamed)
+	.long	HdaeUiName_430                    ; [430] "HddNamingWindow"
+	.long	HdaeUiName_431                    ; [431] (unnamed)
+	.long	HdaeUiName_432                    ; [432] (unnamed)
+	.long	HdaeUiName_433                    ; [433] (unnamed)
+	.long	HdaeUiName_434                    ; [434] (unnamed)
+	.long	HdaeUiName_435                    ; [435] (unnamed)
+	.long	HdaeUiName_436                    ; [436] (unnamed)
+	.long	HdaeUiName_437                    ; [437] (unnamed)
+	.long	HdaeUiName_438                    ; [438] (unnamed)
+	.long	HdaeUiName_439                    ; [439] (unnamed)
+	.long	HdaeUiName_440                    ; [440] (unnamed)
+	.long	HdaeUiName_441                    ; [441] (unnamed)
+	.long	HdaeUiName_442                    ; [442] "HddNamingCursorBox"
+	.long	HdaeUiName_443                    ; [443] "HddNamingABC"
+	.long	HdaeUiName_444                    ; [444] "HddNamingabc"
+	.long	HdaeUiName_445                    ; [445] "HddNamingSymbol"
+	.long	HdaeUiName_446                    ; [446] (unnamed)
+	.long	HdaeUiName_447                    ; [447] (unnamed)
+	.long	HdaeUiName_448                    ; [448] (unnamed)
+	.long	HdaeUiName_449                    ; [449] "HddNamingLabel"
+	.long	HdaeUiName_450                    ; [450] "FILE_DEL_SCREEN"
+	.long	HdaeUiName_451                    ; [451] (unnamed)
+	.long	HdaeUiName_452                    ; [452] (unnamed)
+	.long	HdaeUiName_453                    ; [453] (unnamed)
+	.long	HdaeUiName_454                    ; [454] (unnamed)
+	.long	HdaeUiName_455                    ; [455] (unnamed)
+	.long	HdaeUiName_456                    ; [456] (unnamed)
+	.long	HdaeUiName_457                    ; [457] (unnamed)
+	.long	HdaeUiName_458                    ; [458] (unnamed)
+	.long	HdaeUiName_459                    ; [459] (unnamed)
+	.long	HdaeUiName_460                    ; [460] (unnamed)
+	.long	HdaeUiName_461                    ; [461] (unnamed)
+	.long	HdaeUiName_462                    ; [462] (unnamed)
+	.long	HdaeUiName_463                    ; [463] "DEL_EDIT_LSW"
+	.long	HdaeUiName_464                    ; [464] "DEL_EDIT_PMT"
+	.long	HdaeUiName_465                    ; [465] "DEL_EDIT_SQT"
+	.long	HdaeUiName_466                    ; [466] "DEL_EDIT_CMP"
+	.long	HdaeUiName_467                    ; [467] "DEL_EDIT_TM"
+	.long	HdaeUiName_468                    ; [468] "DEL_EDIT_MSP"
+	.long	HdaeUiName_469                    ; [469] "DEL_EDIT_RCM"
+	.long	HdaeUiName_470                    ; [470] "DEL_EDIT_MD"
+	.long	HdaeUiName_471                    ; [471] (unnamed)
+	.long	HdaeUiName_472                    ; [472] (unnamed)
+	.long	HdaeUiName_473                    ; [473] (unnamed)
+	.long	HdaeUiName_474                    ; [474] (unnamed)
+	.long	HdaeUiName_475                    ; [475] (unnamed)
+	.long	HdaeUiName_476                    ; [476] (unnamed)
+	.long	HdaeUiName_477                    ; [477] (unnamed)
+	.long	HdaeUiName_478                    ; [478] (unnamed)
+	.long	HdaeUiName_479                    ; [479] (unnamed)
+	.long	HdaeUiName_480                    ; [480] (unnamed)
+	.long	HdaeUiName_481                    ; [481] (unnamed)
+	.long	HdaeUiName_482                    ; [482] (unnamed)
+	.long	HdaeUiName_483                    ; [483] (unnamed)
+	.long	HdaeUiName_484                    ; [484] (unnamed)
+	.long	HdaeUiName_485                    ; [485] (unnamed)
+	.long	HdaeUiName_486                    ; [486] (unnamed)
+	.long	HdaeUiName_487                    ; [487] (unnamed)
+	.long	HdaeUiName_488                    ; [488] (unnamed)
+	.long	HdaeUiName_489                    ; [489] "DEL_EDIT_TLX"
+	.long	HdaeUiName_490                    ; [490] (unnamed)
+	.long	HdaeUiName_491                    ; [491] (unnamed)
+	.long	HdaeUiName_492                    ; [492] "HDD_ICON_DISPLAY"
+	.long	HdaeUiName_493                    ; [493] "HD_MENU_BMP"
+	.long	HdaeUiName_494                    ; [494] "IV_HDDMENU"
+	.long	HdaeUiName_495                    ; [495] "ATTEN_DEL_DIR"
+	.long	HdaeUiName_496                    ; [496] (unnamed)
+	.long	HdaeUiName_497                    ; [497] (unnamed)
+	.long	HdaeUiName_498                    ; [498] (unnamed)
+	.long	HdaeUiName_499                    ; [499] (unnamed)
+	.long	HdaeUiName_500                    ; [500] (unnamed)
+	.long	HdaeUiName_501                    ; [501] (unnamed)
+	.long	HdaeUiName_502                    ; [502] (unnamed)
+	.long	HdaeUiName_503                    ; [503] (unnamed)
+	.long	HdaeUiName_504                    ; [504] "WAIT_DEL_DIR"
+	.long	HdaeUiName_505                    ; [505] (unnamed)
+	.long	HdaeUiName_506                    ; [506] (unnamed)
+	.long	HdaeUiName_507                    ; [507] "ATTEN_DEL_FILE"
+	.long	HdaeUiName_508                    ; [508] (unnamed)
+	.long	HdaeUiName_509                    ; [509] (unnamed)
+	.long	HdaeUiName_510                    ; [510] (unnamed)
+	.long	HdaeUiName_511                    ; [511] (unnamed)
+	.long	HdaeUiName_512                    ; [512] (unnamed)
+	.long	HdaeUiName_513                    ; [513] (unnamed)
+	.long	HdaeUiName_514                    ; [514] (unnamed)
+	.long	HdaeUiName_515                    ; [515] (unnamed)
+	.long	HdaeUiName_516                    ; [516] "ATTEN_OVER_FLS"
+	.long	HdaeUiName_517                    ; [517] (unnamed)
+	.long	HdaeUiName_518                    ; [518] (unnamed)
+	.long	HdaeUiName_519                    ; [519] (unnamed)
+	.long	HdaeUiName_520                    ; [520] (unnamed)
+	.long	HdaeUiName_521                    ; [521] (unnamed)
+	.long	HdaeUiName_522                    ; [522] (unnamed)
+	.long	HdaeUiName_523                    ; [523] (unnamed)
+	.long	HdaeUiName_524                    ; [524] (unnamed)
+	.long	HdaeUiName_525                    ; [525] "ATTEN_DEL_FLS2"
+	.long	HdaeUiName_526                    ; [526] (unnamed)
+	.long	HdaeUiName_527                    ; [527] (unnamed)
+	.long	HdaeUiName_528                    ; [528] (unnamed)
+	.long	HdaeUiName_529                    ; [529] (unnamed)
+	.long	HdaeUiName_530                    ; [530] (unnamed)
+	.long	HdaeUiName_531                    ; [531] (unnamed)
+	.long	HdaeUiName_532                    ; [532] (unnamed)
+	.long	HdaeUiName_533                    ; [533] (unnamed)
+	.long	HdaeUiName_534                    ; [534] (unnamed)
+	.long	HdaeUiName_535                    ; [535] "WAIT_DEL_FILE"
+	.long	HdaeUiName_536                    ; [536] (unnamed)
+	.long	HdaeUiName_537                    ; [537] (unnamed)
+	.long	HdaeUiName_538                    ; [538] "ATTEN_HD_FORMAT"
+	.long	HdaeUiName_539                    ; [539] (unnamed)
+	.long	HdaeUiName_540                    ; [540] (unnamed)
+	.long	HdaeUiName_541                    ; [541] (unnamed)
+	.long	HdaeUiName_542                    ; [542] (unnamed)
+	.long	HdaeUiName_543                    ; [543] (unnamed)
+	.long	HdaeUiName_544                    ; [544] (unnamed)
+	.long	HdaeUiName_545                    ; [545] (unnamed)
+	.long	HdaeUiName_546                    ; [546] "HD_FORMAT_CATCH"
+	.long	HdaeUiName_547                    ; [547] "WAIT_HD_FORMAT"
+	.long	HdaeUiName_548                    ; [548] (unnamed)
+	.long	HdaeUiName_549                    ; [549] (unnamed)
+	.long	HdaeUiName_550                    ; [550] (unnamed)
+	.long	HdaeUiName_551                    ; [551] "SETUP_HDINFO"
+	.long	HdaeUiName_552                    ; [552] (unnamed)
+	.long	HdaeUiName_553                    ; [553] (unnamed)
+	.long	HdaeUiName_554                    ; [554] "HD_INFO_LIST"
+	.long	HdaeUiName_555                    ; [555] (unnamed)
+	.long	HdaeUiName_556                    ; [556] "DBG_MEMO_SCREEN"
+	.long	HdaeUiName_557                    ; [557] (unnamed)
+	.long	HdaeUiName_558                    ; [558] (unnamed)
+	.long	HdaeUiName_559                    ; [559] "ATTEN_DEL_FLS1"
+	.long	HdaeUiName_560                    ; [560] (unnamed)
+	.long	HdaeUiName_561                    ; [561] (unnamed)
+	.long	HdaeUiName_562                    ; [562] (unnamed)
+	.long	HdaeUiName_563                    ; [563] (unnamed)
+	.long	HdaeUiName_564                    ; [564] (unnamed)
+	.long	HdaeUiName_565                    ; [565] (unnamed)
+	.long	HdaeUiName_566                    ; [566] (unnamed)
+	.long	HdaeUiName_567                    ; [567] (unnamed)
+	.long	HdaeUiName_568                    ; [568] (unnamed)
+	.long	HdaeUiName_569                    ; [569] (unnamed)
+	.long	HdaeUiName_570                    ; [570] (unnamed)
+	.long	HdaeUiName_571                    ; [571] "ATTEN_OVER_FILE"
+	.long	HdaeUiName_572                    ; [572] (unnamed)
+	.long	HdaeUiName_573                    ; [573] (unnamed)
+	.long	HdaeUiName_574                    ; [574] (unnamed)
+	.long	HdaeUiName_575                    ; [575] (unnamed)
+	.long	HdaeUiName_576                    ; [576] (unnamed)
+	.long	HdaeUiName_577                    ; [577] (unnamed)
+	.long	HdaeUiName_578                    ; [578] (unnamed)
+	.long	HdaeUiName_579                    ; [579] (unnamed)
+	.long	HdaeUiName_580                    ; [580] "HDD_FLS_NAMING2"
+	.long	HdaeUiName_581                    ; [581] (unnamed)
+	.long	HdaeUiName_582                    ; [582] (unnamed)
+	.long	HdaeUiName_583                    ; [583] (unnamed)
+	.long	HdaeUiName_584                    ; [584] (unnamed)
+	.long	HdaeUiName_585                    ; [585] (unnamed)
+	.long	HdaeUiName_586                    ; [586] "ATTEN_CPHD_WR"
+	.long	HdaeUiName_587                    ; [587] (unnamed)
+	.long	HdaeUiName_588                    ; [588] (unnamed)
+	.long	HdaeUiName_589                    ; [589] (unnamed)
+	.long	HdaeUiName_590                    ; [590] (unnamed)
+	.long	HdaeUiName_591                    ; [591] (unnamed)
+	.long	HdaeUiName_592                    ; [592] (unnamed)
+	.long	HdaeUiName_593                    ; [593] (unnamed)
+	.long	HdaeUiName_594                    ; [594] "ERR_HD_NOT_FMT"
+	.long	HdaeUiName_595                    ; [595] (unnamed)
+	.long	HdaeUiName_596                    ; [596] (unnamed)
+	.long	HdaeUiName_597                    ; [597] (unnamed)
+	.long	HdaeUiName_598                    ; [598] (unnamed)
+	.long	HdaeUiName_599                    ; [599] "ERR_HD_SRAM"
+	.long	HdaeUiName_600                    ; [600] (unnamed)
+	.long	HdaeUiName_601                    ; [601] (unnamed)
+	.long	HdaeUiName_602                    ; [602] (unnamed)
+	.long	HdaeUiName_603                    ; [603] (unnamed)
+	.long	HdaeUiName_604                    ; [604] "ERR_HD_RESET"
+	.long	HdaeUiName_605                    ; [605] (unnamed)
+	.long	HdaeUiName_606                    ; [606] (unnamed)
+	.long	HdaeUiName_607                    ; [607] (unnamed)
+	.long	HdaeUiName_608                    ; [608] (unnamed)
+	.long	HdaeUiName_609                    ; [609] "ERR_HD_READ"
+	.long	HdaeUiName_610                    ; [610] (unnamed)
+	.long	HdaeUiName_611                    ; [611] (unnamed)
+	.long	HdaeUiName_612                    ; [612] (unnamed)
+	.long	HdaeUiName_613                    ; [613] (unnamed)
+	.long	HdaeUiName_614                    ; [614] "ERR_HD_ID_READ"
+	.long	HdaeUiName_615                    ; [615] (unnamed)
+	.long	HdaeUiName_616                    ; [616] (unnamed)
+	.long	HdaeUiName_617                    ; [617] (unnamed)
+	.long	HdaeUiName_618                    ; [618] (unnamed)
+	.long	HdaeUiName_619                    ; [619] "ERR_HD_TRACK_0"
+	.long	HdaeUiName_620                    ; [620] (unnamed)
+	.long	HdaeUiName_621                    ; [621] (unnamed)
+	.long	HdaeUiName_622                    ; [622] (unnamed)
+	.long	HdaeUiName_623                    ; [623] (unnamed)
+	.long	HdaeUiName_624                    ; [624] "ERR_HD_FAT"
+	.long	HdaeUiName_625                    ; [625] (unnamed)
+	.long	HdaeUiName_626                    ; [626] (unnamed)
+	.long	HdaeUiName_627                    ; [627] (unnamed)
+	.long	HdaeUiName_628                    ; [628] (unnamed)
+	.long	HdaeUiName_629                    ; [629] "ERR_HD_FSB"
+	.long	HdaeUiName_630                    ; [630] (unnamed)
+	.long	HdaeUiName_631                    ; [631] (unnamed)
+	.long	HdaeUiName_632                    ; [632] (unnamed)
+	.long	HdaeUiName_633                    ; [633] (unnamed)
+	.long	HdaeUiName_634                    ; [634] "ATTEN_CPFD_MARK"
+	.long	HdaeUiName_635                    ; [635] (unnamed)
+	.long	HdaeUiName_636                    ; [636] (unnamed)
+	.long	HdaeUiName_637                    ; [637] (unnamed)
+	.long	HdaeUiName_638                    ; [638] (unnamed)
+	.long	HdaeUiName_639                    ; [639] (unnamed)
+	.long	HdaeUiName_640                    ; [640] (unnamed)
+	.long	HdaeUiName_641                    ; [641] "ABOUT_HELP"
+	.long	HdaeUiName_642                    ; [642] (unnamed)
+	.long	HdaeUiName_643                    ; [643] (unnamed)
+	.long	HdaeUiName_644                    ; [644] (unnamed)
+	.long	HdaeUiName_645                    ; [645] (unnamed)
+	.long	HdaeUiName_646                    ; [646] (unnamed)
+	.long	HdaeUiName_647                    ; [647] (unnamed)
+	.long	HdaeUiName_648                    ; [648] (unnamed)
+	.long	HdaeUiName_649                    ; [649] (unnamed)
+	.long	HdaeUiName_650                    ; [650] (unnamed)
+	.long	HdaeUiName_651                    ; [651] (unnamed)
+	.long	HdaeUiName_652                    ; [652] (unnamed)
+	.long	HdaeUiName_653                    ; [653] (unnamed)
+	.long	HdaeUiName_654                    ; [654] (unnamed)
+	.long	HdaeUiName_655                    ; [655] (unnamed)
+	.long	HdaeUiName_656                    ; [656] (unnamed)
+	.long	HdaeUiName_657                    ; [657] (unnamed)
+	.long	HdaeUiName_658                    ; [658] (unnamed)
+	.long	HdaeUiName_659                    ; [659] (unnamed)
+	.long	HdaeUiName_660                    ; [660] "WAIT_TR0_RECOVER"
+	.long	HdaeUiName_661                    ; [661] (unnamed)
+	.long	HdaeUiName_662                    ; [662] (unnamed)
+	.long	HdaeUiName_663                    ; [663] "ERR_SAVE"
+	.long	HdaeUiName_664                    ; [664] "ERR_SAVE_EXIT"
+	.long	HdaeUiName_665                    ; [665] "ERR_SAVE_CATCH"
+	.long	HdaeUiName_666                    ; [666] (unnamed)
+	.long	HdaeUiName_667                    ; [667] (unnamed)
+	.long	HdaeUiName_668                    ; [668] (unnamed)
+	.long	HdaeUiName_669                    ; [669] "ERR_LOAD"
+	.long	HdaeUiName_670                    ; [670] "ERR_LOAD_EXIT"
+	.long	HdaeUiName_671                    ; [671] "ERR_LOAD_CATCH"
+	.long	HdaeUiName_672                    ; [672] (unnamed)
+	.long	HdaeUiName_673                    ; [673] (unnamed)
+	.long	HdaeUiName_674                    ; [674] (unnamed)
+	.long	HdaeUiName_675                    ; [675] "ERR_NO_HK_DATA"
+	.long	HdaeUiName_676                    ; [676] (unnamed)
+	.long	HdaeUiName_677                    ; [677] "ERR_NO_HK_DATA_CATCH"
+	.long	HdaeUiName_678                    ; [678] (unnamed)
+	.long	HdaeUiName_679                    ; [679] (unnamed)
+	.long	HdaeUiName_680                    ; [680] (unnamed)
+	.long	HdaeUiName_681                    ; [681] "ATTEN_FULL_DIR"
+	.long	HdaeUiName_682                    ; [682] (unnamed)
+	.long	HdaeUiName_683                    ; [683] "ATTEN_FULL_DIR_CATCH"
+	.long	HdaeUiName_684                    ; [684] (unnamed)
+	.long	HdaeUiName_685                    ; [685] (unnamed)
+	.long	HdaeUiName_686                    ; [686] (unnamed)
+	.long	HdaeUiName_687                    ; [687] (unnamed)
+	.long	HdaeUiName_688                    ; [688] "ATTEN_CP_UNNAMED"
+	.long	HdaeUiName_689                    ; [689] (unnamed)
+	.long	HdaeUiName_690                    ; [690] "ATTEN_CP_UNNAMED_CATCH"
+	.long	HdaeUiName_691                    ; [691] (unnamed)
+	.long	HdaeUiName_692                    ; [692] (unnamed)
+	.long	HdaeUiName_693                    ; [693] (unnamed)
+	.long	HdaeUiName_694                    ; [694] (unnamed)
+	.long	HdaeUiName_695                    ; [695] "DIR_OUT_RANGE"
+	.long	HdaeUiName_696                    ; [696] "DIR_OUT_RANGE_CATCH"
+	.long	HdaeUiName_697                    ; [697] (unnamed)
+	.long	HdaeUiName_698                    ; [698] (unnamed)
+	.long	HdaeUiName_699                    ; [699] (unnamed)
+	.long	HdaeUiName_700                    ; [700] "FILE_OUT_RANGE"
+	.long	HdaeUiName_701                    ; [701] "FILE_OUT_RANGE_CATCH"
+	.long	HdaeUiName_702                    ; [702] (unnamed)
+	.long	HdaeUiName_703                    ; [703] (unnamed)
+	.long	HdaeUiName_704                    ; [704] (unnamed)
+	.long	HdaeUiName_705                    ; [705] "HD_PLEASE"
+	.long	HdaeUiName_706                    ; [706] (unnamed)
+	.long	HdaeUiName_707                    ; [707] (unnamed)
+	.long	HdaeUiName_708                    ; [708] "ERR_HD_FORMAT"
+	.long	HdaeUiName_709                    ; [709] (unnamed)
+	.long	HdaeUiName_710                    ; [710] "ERR_HD_FORMAT_CATCH"
+	.long	HdaeUiName_711                    ; [711] (unnamed)
+	.long	HdaeUiName_712                    ; [712] (unnamed)
+	.long	HdaeUiName_713                    ; [713] (unnamed)
+	.long	HdaeUiName_714                    ; [714] (unnamed)
+	.long	HdaeUiName_715                    ; [715] "AGAIN_HD_FORMAT"
+	.long	HdaeUiName_716                    ; [716] (unnamed)
+	.long	HdaeUiName_717                    ; [717] "AGAIN_HD_FORMAT_CATCH"
+	.long	HdaeUiName_718                    ; [718] (unnamed)
+	.long	HdaeUiName_719                    ; [719] (unnamed)
+	.long	HdaeUiName_720                    ; [720] (unnamed)
+	.long	HdaeUiName_721                    ; [721] (unnamed)
+	.long	HdaeUiName_722                    ; [722] "SELECT_FILE_A_Z"
+	.long	HdaeUiName_723                    ; [723] (unnamed)
+	.long	HdaeUiName_724                    ; [724] (unnamed)
+	.long	HdaeUiName_725                    ; [725] (unnamed)
+	.long	HdaeUiName_726                    ; [726] (unnamed)
+	.long	HdaeUiName_727                    ; [727] (unnamed)
+	.long	HdaeUiName_728                    ; [728] "FILE_LOAD_A_Z"
+	.long	HdaeUiName_729                    ; [729] (unnamed)
+	.long	HdaeUiName_730                    ; [730] (unnamed)
+	.long	HdaeUiName_731                    ; [731] (unnamed)
+	.long	HdaeUiName_732                    ; [732] (unnamed)
+	.long	HdaeUiName_733                    ; [733] (unnamed)
+	.long	HdaeUiName_734                    ; [734] (unnamed)
+	.long	HdaeUiName_735                    ; [735] (unnamed)
+	.long	HdaeUiName_736                    ; [736] (unnamed)
+	.long	HdaeUiName_737                    ; [737] (unnamed)
+	.long	HdaeUiName_738                    ; [738] (unnamed)
+	.long	HdaeUiName_739                    ; [739] (unnamed)
+	.long	HdaeUiName_740                    ; [740] (unnamed)
+	.long	HdaeUiName_741                    ; [741] (unnamed)
+	.long	HdaeUiName_742                    ; [742] (unnamed)
+	.long	HdaeUiName_743                    ; [743] (unnamed)
+	.long	HdaeUiName_744                    ; [744] (unnamed)
+	.long	HdaeUiName_745                    ; [745] (unnamed)
+	.long	HdaeUiName_746                    ; [746] (unnamed)
+	.long	HdaeUiName_747                    ; [747] (unnamed)
+	.long	HdaeUiName_748                    ; [748] (unnamed)
+	.long	HdaeUiName_749                    ; [749] (unnamed)
+	.long	HdaeUiName_750                    ; [750] (unnamed)
+	.long	HdaeUiName_751                    ; [751] (unnamed)
+	.long	HdaeUiName_752                    ; [752] "Tech_lyrics"
+	.long	HdaeUiName_753                    ; [753] (unnamed)
+	.long	HdaeUiName_754                    ; [754] (unnamed)
+	.long	HdaeUiName_755                    ; [755] "SongTitle"
+	.long	HdaeUiName_756                    ; [756] (unnamed)
+	.long	HdaeUiName_757                    ; [757] "Conductor"
+	.long	HdaeUiName_758                    ; [758] "bottom01"
+	.long	HdaeUiName_759                    ; [759] "bottom02"
+	.long	HdaeUiName_760                    ; [760] "bottom03"
+	.long	HdaeUiName_761                    ; [761] "bottom04"
+	.long	HdaeUiName_762                    ; [762] "bottom05"
+	.long	HdaeUiName_763                    ; [763] "bottom06"
+	.long	HdaeUiName_764                    ; [764] "bottom07"
+	.long	HdaeUiName_765                    ; [765] "bottom08"
+	.long	HdaeUiName_766                    ; [766] (unnamed)
+	.long	HdaeUiName_767                    ; [767] "ChordinLyric"
+	.long	HdaeUiName_768                    ; [768] "TempoinLyric"
+	.long	HdaeUiName_769                    ; [769] "MeasureinLyric"
+	.long	HdaeUiName_770                    ; [770] "TimeSigInLyric"
+	.long	HdaeUiName_771                    ; [771] (unnamed)
+	.long	HdaeUiName_772                    ; [772] "LoadLyricFD"
+	.long	HdaeUiName_773                    ; [773] (unnamed)
+	.long	HdaeUiName_774                    ; [774] (unnamed)
+	.long	HdaeUiName_775                    ; [775] (unnamed)
+	.long	HdaeUiName_776                    ; [776] (unnamed)
+	.long	HdaeUiName_777                    ; [777] "FD_PLEASE"
+	.long	HdaeUiName_778                    ; [778] (unnamed)
+	.long	HdaeUiName_779                    ; [779] (unnamed)
+	.long	HdaeUiName_780                    ; [780] "LyrSettings"
+	.long	HdaeUiName_781                    ; [781] (unnamed)
+	.long	HdaeUiName_782                    ; [782] (unnamed)
+	.long	HdaeUiName_783                    ; [783] (unnamed)
+	.long	HdaeUiName_784                    ; [784] (unnamed)
+	.long	HdaeUiName_785                    ; [785] (unnamed)
+	.long	HdaeUiName_786                    ; [786] (unnamed)
+	.long	HdaeUiName_787                    ; [787] (unnamed)
+	.long	HdaeUiName_788                    ; [788] "WriteIn"
+	.long	HdaeUiName_789                    ; [789] (unnamed)
 
-	ld_s	(xde), b
-	nop                                     ; nop
-	nop                                     ; nop
-	ld_s	(xde), b
-	nop                                     ; nop
-	.byte 0xf0, 0x81, 0x2a                 ; xorcf A,(0x81)
-	nop                                     ; nop
-	.byte 0xe0, 0x81, 0x2a                 ; db
-	nop                                     ; nop
-	add	a, h
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	a, d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	a, b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	a, w
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc0, 0x81, 0x2a                 ; db
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x81		; xorcf A,(XIZ+0x81)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x81		; xorcf A,(XIX+0x81)
-	nop                                     ; nop
-	xorcfa_rid8 xde, 0x81		; xorcf A,(XDE+0x81)
-	nop                                     ; nop
-	xorcfa_rid8 xwa, 0x81		; xorcf A,(XWA+0x81)
-	nop                                     ; nop
-	andcfn_ri xiz, 1		; andcf 1,(XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	andcfn_ri xix, 1		; andcf 1,(XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	andcfn_ri xde, 1		; andcf 1,(XDE)
-	pushw de                                ; push DE
-.LGD2_6c5f:
-	nop                                     ; nop
-	andcfn_ri xwa, 1		; andcf 1,(XWA)
-	pushw de                                ; push DE
-.LGD2_6c63:
-	nop                                     ; nop
-	ld_s	(xiz-127), xde
-	nop                                     ; nop
-	ld_s	(xix-127), xde
-	nop                                     ; nop
-	ld_s	(xde-127), xde
-	nop                                     ; nop
-	ld_s	(xwa-127), xde
-	nop                                     ; nop
-	add	xbc, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	xbc, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	xbc, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	xbc, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz-127), de
-	nop                                     ; nop
-	ld_s	(xix-127), de
-	nop                                     ; nop
-	ld_s	(xde-127), de
-	nop                                     ; nop
-	ld_s	(xwa-127), de
-	nop                                     ; nop
-	add	bc, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	bc, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	bc, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	bc, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz-127), b
-	nop                                     ; nop
-	ld_s	(xix-127), b
-	nop                                     ; nop
-	ld_s	(xde-127), b
-	nop                                     ; nop
-	ld_s	(xwa-127), b
-	nop                                     ; nop
-	add	a, (xiz)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	a, (xix)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	a, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	a, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nz, 0x2a81
-	nop                                     ; nop
-	jrl	nov, 0x2a81
-	nop                                     ; nop
-	jrl	z, 0x2a81
-	nop                                     ; nop
-	jrl	ov, 0x2a81
-	nop                                     ; nop
-	jrl	le, 0x2a81
-	nop                                     ; nop
-	jrl	f, 0x2a81
-	nop                                     ; nop
-	jr nz, .LGD2_6c5f                      ; [6e 81] jr NZ,0x2a6c5f
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr le, .LGD2_6c63                      ; [62 81] jr LE,0x2a6c63
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x56                             ; db
-	ld_s	(xbc), b
-	nop                                     ; nop
-	popw de                                 ; pop DE
-	ld_s	(xbc), b
-	nop                                     ; nop
-	push xix
-	ld_s	(xbc), b
-	nop                                     ; nop
-	push xde
-	ld_s	(xbc), b
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	ld_s	(xbc), b
-	nop                                     ; nop
-	pushw de                                ; push DE
-	ld_s	(xbc), b
-	nop                                     ; nop
-	jp16	10881
-	nop                                     ; nop
-	push_f
-	ld_s	(xbc), b
-	nop                                     ; nop
-	ldio	129, 42
-	nop                                     ; nop
-	ei 0x81		; ei 0x81
-.LGD2_6d0a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	ld_s	(xwa), b
-	nop                                     ; nop
-	.byte 0xf6                             ; db
-	ld_s	(xwa), b
-	nop                                     ; nop
-	.byte 0xf4, 0x80, 0x2a                 ; xorcf A,(-r80L)
-	nop                                     ; nop
-	call_24	ov, 0x002A80
-	ld_s	(xwa), b
-	nop                                     ; nop
-	or	xwa, (0x002a80)
-	ld_s	(xwa), b
-	nop                                     ; nop
-	add	wa, iz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	wa, ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	wa, de
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	wa, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	ld_s	(xwa), b
-	nop                                     ; nop
-	.byte 0xd4, 0x80, 0x2a                 ; db
-	nop                                     ; nop
-	andda16_24	iz, (0x002A80)
-	ld_s	(xwa), b
-	nop                                     ; nop
-	.byte 0xc4, 0x80, 0x2a                 ; db
-	nop                                     ; nop
-	andda8_24	w, (0x002A80)
-	ld_s	(xwa), b
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x80		; xorcf A,(XIZ+0x80)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x80		; xorcf A,(XIX+0x80)
-	nop                                     ; nop
-	xorcfa_rid8 xde, 0x80		; xorcf A,(XDE+0x80)
-	nop                                     ; nop
-	xorcfa_rid8 xwa, 0x80		; xorcf A,(XWA+0x80)
-	nop                                     ; nop
-	andcfn_ri xwa, 0		; andcf 0,(XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xix-128), de
-	nop                                     ; nop
-	ld_s	(xde-128), de
-	nop                                     ; nop
-	add	wa, (xde)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	add	wa, (xwa)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz-128), b
-	nop                                     ; nop
-	ld_s	(xix-128), b
-	nop                                     ; nop
-	jrl	nov, 0x2a80
-	nop                                     ; nop
-	jr	z, 0x80
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x80
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	ld_s	(xwa), b
-	nop                                     ; nop
-	ld	xiz, 0x34002a80
-	ld_s	(xwa), b
-	nop                                     ; nop
-	ldw	de, 0x2a80
-	nop                                     ; nop
-	ldw	wa, 0x2a80
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	ld_s	(xwa), b
-	nop                                     ; nop
-	pushw ix                                ; push IX
-	ld_s	(xwa), b
-	nop                                     ; nop
-	pushw de                                ; push DE
-	ld_s	(xwa), b
-	nop                                     ; nop
-	ex_ff
-	ld_s	(xwa), b
-	nop                                     ; nop
-	push_a
-	ld_s	(xwa), b
-	nop                                     ; nop
-	ccf
-	ld_s	(xwa), b
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	jrl	nc, 0x002a
-	.byte 0xf8                             ; swi 0
-	jrl	nc, 0x002a
-	.byte 0xf6                             ; db
-	jrl	nc, 0x002a
-	.byte 0xe6                             ; db
-	jrl	nc, 0x002a
-	.byte 0xe4, 0x7f, 0x2a                 ; db
-	nop                                     ; nop
-	or	xwa, (0x002a7f)
-	jrl nc, .LGD2_6dfe                     ; [7f 2a 00] jrl NC,0x2a6dfe
-	scc16	nc, iz
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nc, ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nc, de
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nc, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	jrl	nc, 0x002a
-	.byte 0xd4, 0x7f, 0x2a                 ; db
-	nop                                     ; nop
-	xorda16_24	wa, (0x002A7F)
-	jrl	nc, 0x002a
-	scc8	nc, h
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	nc, d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	nc, b
-.LGD2_6dfe:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	nc, w
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	jrl nc, .LGD2_6e32                     ; [7f 2a 00] jrl NC,0x2a6e32
-	.byte 0xc4, 0x7f, 0x2a                 ; db
-	nop                                     ; nop
-	andda8_24	w, (0x002A7F)
-	jrl	nc, 0x002a
-	xorcfa_rid8 xiz, 0x7f		; xorcf A,(XIZ+0x7f)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x7f		; xorcf A,(XIX+0x7f)
-	nop                                     ; nop
-	xorcfa_rid8 xde, 0x7f		; xorcf A,(XDE+0x7f)
-	nop                                     ; nop
-	xorcfa_rid8 xwa, 0x7f		; xorcf A,(XWA+0x7f)
-	nop                                     ; nop
-	.byte 0xb6, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xb4, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xb2, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xb0, 0x7f                       ; db
-.LGD2_6e32:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+127), xde
-	nop                                     ; nop
-	ld_s	(xix+127), xde
-	nop                                     ; nop
-	ld_s	(xde+127), xde
-	nop                                     ; nop
-	ld_s	(xwa+127), xde
-	nop                                     ; nop
-	.byte 0xa6, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa4, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa2, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa0, 0x7f                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	srlw_ri xwa		; srlw (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+127), b
-	nop                                     ; nop
-	ld_s	(xix+127), b
-	nop                                     ; nop
-	ld_s	(xde+127), b
-	nop                                     ; nop
-	ld_s	(xwa+127), b
-	nop                                     ; nop
-	srl_ri xiz		; srl (XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	t, 0x2a7f
-	nop                                     ; nop
-	jrl	z, 0x2a7f
-	nop                                     ; nop
-	jrl	ov, 0x2a7f
-	nop                                     ; nop
-	jrl	le, 0x2a7f
-	nop                                     ; nop
-	pop xix                                 ; pop XIX
-	jrl	nc, 0x002a
-	pop xde                                 ; pop XDE
-	jrl	nc, 0x002a
-	pop xwa                                 ; pop XWA
-	jrl	nc, 0x002a
-	.byte 0x56                             ; db
-	jrl	nc, 0x002a
-	.byte 0x54                             ; db
-	jrl	nc, 0x002a
-	popw wa                                 ; pop WA
-	jrl nc, .LGD2_6ebe                     ; [7f 2a 00] jrl NC,0x2a6ebe
-	push xix
-	jrl nc, .LGD2_6ec2                     ; [7f 2a 00] jrl NC,0x2a6ec2
-	pushw iz                                ; push IZ
-	jrl	nc, 0x002a
-	pushw ix                                ; push IX
-	jrl nc, .LGD2_6eca                     ; [7f 2a 00] jrl NC,0x2a6eca
-	pushw de                                ; push DE
-	jrl nc, .LGD2_6ece                     ; [7f 2a 00] jrl NC,0x2a6ece
-	call16	10879
-	nop                                     ; nop
-	.byte 0x0c                             ; incf
-	jrl	nc, 0x002a
-	.byte 0xfc                             ; swi 4
-	jrl	nz, 0x002a
-	.byte 0xfa                             ; swi 2
-	jrl	nz, 0x002a
-	.byte 0xf8                             ; swi 0
-	jrl nz, .LGD2_6ee2                     ; [7e 2a 00] jrl NZ,0x2a6ee2
-	.byte 0xf6                             ; db
-	jrl nz, .LGD2_6ee6                     ; [7e 2a 00] jrl NZ,0x2a6ee6
-	.byte 0xea, 0x7e                       ; db
-.LGD2_6ebe:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe8, 0x7e                       ; db
-.LGD2_6ec2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	jrl	nz, 0x002a
-	scc16	nz, de
-.LGD2_6eca:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nz, wa
-.LGD2_6ece:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	jrl	nz, 0x002a
-	.byte 0xd4, 0x7e, 0x2a                 ; db
-	nop                                     ; nop
-	xorda16_24	wa, (0x002A7E)
-	jrl	nz, 0x002a
-	scc8	nz, h
-.LGD2_6ee2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	nz, d
-.LGD2_6ee6:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x7e		; xorcf A,(XIZ+0x7e)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x7e		; xorcf A,(XIX+0x7e)
-	nop                                     ; nop
-	ld_s	(xwa+126), xde
-	nop                                     ; nop
-	sllw_ri xde		; sllw (XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sllw_ri xwa		; sllw (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+126), b
-	nop                                     ; nop
-	ld_s	(xix+126), b
-	nop                                     ; nop
-	jrl	t, 0x2a7e
-	nop                                     ; nop
-	jrl	z, 0x2a7e
-	nop                                     ; nop
-	jrl	ov, 0x2a7e
-	nop                                     ; nop
-	jr gt, .LGD2_6f90                      ; [6a 7e] jr GT,0x2a6f90
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr t, .LGD2_6f94                       ; [68 7e] jr T,0x2a6f94
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr z, .LGD2_6f98                       ; [66 7e] jr Z,0x2a6f98
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	jrl	nz, 0x002a
-	.byte 0x52                             ; db
-	jrl	nz, 0x002a
-	.byte 0x50                             ; db
-	jrl	nz, 0x002a
-	push xiz
-	jrl	nz, 0x002a
-	pushw iz                                ; push IZ
-	jrl	nz, 0x002a
-	calr	0x2a7e
-	nop                                     ; nop
-	call16	10878
-	nop                                     ; nop
-	jp16	10878
-	nop                                     ; nop
-	push_f
-	jrl	nz, 0x002a
-	ex_ff
-	jrl	nz, 0x002a
-	push_a
-	jrl nz, .LGD2_6f72                     ; [7e 2a 00] jrl NZ,0x2a6f72
-	ccf
-	jrl nz, .LGD2_6f76                     ; [7e 2a 00] jrl NZ,0x2a6f76
-	rcf
-	jrl nz, .LGD2_6f7a                     ; [7e 2a 00] jrl NZ,0x2a6f7a
-	ret
+; =============================================================================
+; HD-AE5000 UI OBJECT NAME POOL (0x2A75DC - 0x2A8499)
+; =============================================================================
+; The strings HDAE5000_UiObjectName_PtrTable points at, NUL-terminated and
+; padded to a 2-byte boundary.  Nothing else in the ROM points into this pool.
+; Listed in ascending address order, which is DESCENDING object index: the
+; original toolchain emitted the literals in reverse order of declaration, so
+; HdaeUiName_789 (the terminator slot) is first and HdaeUiName_000 ("HDDMENU",
+; the top-level HD-AE5000 menu) is last and ends exactly at 0x2A849A.
+; =============================================================================
 
-	jrl nz, .LGD2_6f7e                     ; [7e 2a 00] jrl NZ,0x2a6f7e
-	.byte 0x0c                             ; incf
-	jrl	nz, 0x002a
-	ldwio	126, 42
-	.byte 0xf8                             ; swi 0
-	jrl	pl, 0x002a
-	.byte 0xe6                             ; db
-	jrl	pl, 0x002a
-	.byte 0xe4, 0x7d, 0x2a                 ; db
-	nop                                     ; nop
-	or	xwa, (0x002a7d)
-	jrl	pl, 0x002a
-	scc8	pl, h
-.LGD2_6f72:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	pl, d
-.LGD2_6f76:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	pl, b
-.LGD2_6f7a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	pl, w
-.LGD2_6f7e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	jrl	pl, 0x002a
-	.byte 0xc4, 0x7d, 0x2a                 ; db
-	nop                                     ; nop
-	sbcda8_24	b, 0x002A7D
-	jrl	pl, 0x002a
-.LGD2_6f90:
-	.byte 0xb0, 0x7d                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-.LGD2_6f94:
-	ld_s	(xiz+125), xde
-	nop                                     ; nop
-.LGD2_6f98:
-	ld_s	(xix+125), xde
-	nop                                     ; nop
-	ld_s	(xde+125), xde
-	nop                                     ; nop
-	ld_s	(xwa+125), xde
-	nop                                     ; nop
-	.byte 0xa6, 0x7d                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa4, 0x7d                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa2, 0x7d                       ; db
-.LGD2_6fae:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa0, 0x7d                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+125), de
-	nop                                     ; nop
-	ld_s	(xix+125), de
-	nop                                     ; nop
-	ld_s	(xde+125), de
-	nop                                     ; nop
-	ld_s	(xwa+125), de
-	nop                                     ; nop
-	sraw_ri xiz		; sraw (XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sraw_ri xix		; sraw (XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sraw_ri xde		; sraw (XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sraw_ri xwa		; sraw (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sra_ri xde		; sra (XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	sra_ri xwa		; sra (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	le, 0x2a7d
-	nop                                     ; nop
-	jr	ov, 0x7d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x56                             ; db
-	jrl	pl, 0x002a
-	popw de                                 ; pop DE
-	jrl	pl, 0x002a
-	push xix
-	jrl	pl, 0x002a
-	pushw iz                                ; push IZ
-	jrl	pl, 0x002a
-	ldb	b, 0x7d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x7d
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a7d
-	nop                                     ; nop
-	call16	10877
-	nop                                     ; nop
-	jp16	10877
-	nop                                     ; nop
-	push_f
-	jrl	pl, 0x002a
-	ex_ff
-	jrl	pl, 0x002a
-	push_a
-	jrl	pl, 0x002a
-	ccf
-	jrl	pl, 0x002a
-	rcf
-	jrl	pl, 0x002a
-	ret
-
-	jrl	pl, 0x002a
-	.byte 0x0c                             ; incf
-	jrl	pl, 0x002a
-	ldwio	125, 42
-	ldio	125, 42
-	nop                                     ; nop
-	.byte 0xfa                             ; swi 2
-	jrl	nov, 0x002a
-	.byte 0xf8                             ; swi 0
-	jrl	nov, 0x002a
-	.byte 0xf6                             ; db
-	jrl	nov, 0x002a
-	.byte 0xf4, 0x7c, 0x2a                 ; xorcf A,(-r7CL)
-	nop                                     ; nop
-	.byte 0xe4, 0x7c, 0x2a                 ; db
-	nop                                     ; nop
-	or	xwa, (0x002a7c)
-	jrl	nov, 0x002a
-	scc16	nov, iz
-.LGD2_704a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nov, ix
-.LGD2_704e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nov, de
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	nov, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	jrl	nov, 0x002a
-	.byte 0xd4, 0x7c, 0x2a                 ; db
-.LGD2_705f:
-	nop                                     ; nop
-	xorda16_24	wa, (0x002A7C)
-	jrl	nov, 0x002a
-	scc8	nov, h
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xde, 0x7c		; xorcf A,(XDE+0x7c)
-	nop                                     ; nop
-	ld_s	(xix+124), xde
-	nop                                     ; nop
-	ld_s	(xiz+124), de
-	nop                                     ; nop
-	ld_s	(xiz+124), b
-	nop                                     ; nop
-	ld_s	(xix+124), b
-	nop                                     ; nop
-	ld_s	(xde+124), b
-	nop                                     ; nop
-	ld_s	(xwa+124), b
-	nop                                     ; nop
-	jrl	t, 0x2a7c
-	nop                                     ; nop
-	jr t, .LGD2_710a                       ; [68 7c] jr T,0x2a710a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr z, .LGD2_710e                       ; [66 7c] jr Z,0x2a710e
-.LGD2_7092:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x7c
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr le, .LGD2_7116                      ; [62 7c] jr LE,0x2a7116
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	f, 0x7c
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xiz                                 ; pop XIZ
-	jrl	nov, 0x002a
-	pop xix                                 ; pop XIX
-	jrl	nov, 0x002a
-	pop xde                                 ; pop XDE
-	jrl	nov, 0x002a
-	pop xwa                                 ; pop XWA
-	jrl	nov, 0x002a
-	.byte 0x56                             ; db
-	jrl	nov, 0x002a
-	.byte 0x54                             ; db
-	jrl	nov, 0x002a
-	.byte 0x52                             ; db
-	jrl	nov, 0x002a
-	.byte 0x50                             ; db
-	jrl	nov, 0x002a
-	ld	xde, 0x34002a7c
-	jrl	nov, 0x002a
-	ldb	h, 0x7c
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_f
-	jrl	nov, 0x002a
-	.byte 0x0c                             ; incf
-	jrl	nov, 0x002a
-	.byte 0xfe                             ; swi 6
-	jrl	ugt, 0x002a
-	.byte 0xf0, 0x7b, 0x2a                 ; xorcf A,(0x7b)
-	nop                                     ; nop
-	.byte 0xe4, 0x7b, 0x2a                 ; db
-	nop                                     ; nop
-	or	xwa, (0x002a7b)
-	jrl ugt, .LGD2_7112                    ; [7b 2a 00] jrl UGT,0x2a7112
-	scc16	ugt, iz
-.LGD2_70ea:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	ugt, ix
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	ugt, de
-.LGD2_70f2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	ugt, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	jrl	ugt, 0x002a
-	.byte 0xd4, 0x7b, 0x2a                 ; db
-	nop                                     ; nop
-	xorda16_24	wa, (0x002A7B)
-	jrl	ugt, 0x002a
-	scc8	ugt, h
-.LGD2_710a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	ugt, d
-.LGD2_710e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	ugt, b
-.LGD2_7112:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	ugt, w
-.LGD2_7116:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	jrl	ugt, 0x002a
-	.byte 0xc4, 0x7b, 0x2a                 ; db
-	nop                                     ; nop
-	andda8_24	w, (0x002A7B)
-	jrl ugt, .LGD2_7152                    ; [7b 2a 00] jrl UGT,0x2a7152
-	.byte 0xb2, 0x7b                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xb0, 0x7b                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+123), xde
-	nop                                     ; nop
-	ld_s	(xix+123), de
-	nop                                     ; nop
-	rrw_ri xwa		; rrw (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rr_ri xix		; rr (XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	z, 0x2a7b
-	nop                                     ; nop
-	jrl	ov, 0x2a7b
-	nop                                     ; nop
-	jrl	le, 0x2a7b
-	nop                                     ; nop
-	jrl	f, 0x2a7b
-	nop                                     ; nop
-	jr nz, .LGD2_71cd                      ; [6e 7b] jr NZ,0x2a71cd
-.LGD2_7152:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	nov, 0x7b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr gt, .LGD2_71d5                      ; [6a 7b] jr GT,0x2a71d5
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	t, 0x7b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	z, 0x7b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	jrl	ugt, 0x002a
-	.byte 0x56                             ; db
-	jrl ugt, .LGD2_7196                    ; [7b 2a 00] jrl UGT,0x2a7196
-	.byte 0x54                             ; db
-	jrl ugt, .LGD2_719a                    ; [7b 2a 00] jrl UGT,0x2a719a
-	ld	xix, 0x42002a7b
-	jrl	ugt, 0x002a
-	ld	xwa, 0x3e002a7b
-	jrl	ugt, 0x002a
-	push xix
-	jrl	ugt, 0x002a
-	push xde
-	jrl	ugt, 0x002a
-	push xwa
-	jrl	ugt, 0x002a
-	ldw	iz, 0x2a7b
-	nop                                     ; nop
-	ldw	ix, 0x2a7b
-	nop                                     ; nop
-	ldb	d, 0x7b
-.LGD2_7196:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x7b
-.LGD2_719a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x7b
-	pushw de                                ; push DE
-	nop                                     ; nop
-	calr	0x2a7b
-	nop                                     ; nop
-	call16	10875
-	nop                                     ; nop
-	jp16	10875
-	nop                                     ; nop
-	push_f
-	jrl	ugt, 0x002a
-	ex_ff
-	jrl	ugt, 0x002a
-	push_a
-	jrl	ugt, 0x002a
-	max
-	jrl	ugt, 0x002a
-	push	sr
-	jrl	ugt, 0x002a
-	nop                                     ; nop
-	jrl	ugt, 0x002a
-	.byte 0xfe                             ; swi 6
-	jrl gt, .LGD2_71f2                     ; [7a 2a 00] jrl GT,0x2a71f2
-	.byte 0xfc                             ; swi 4
-	jrl gt, .LGD2_71f6                     ; [7a 2a 00] jrl GT,0x2a71f6
-	.byte 0xfa                             ; swi 2
-.LGD2_71cd:
-	jrl gt, .LGD2_71fa                     ; [7a 2a 00] jrl GT,0x2a71fa
-	.byte 0xf8                             ; swi 0
-.LGD2_71d1:
-	jrl gt, .LGD2_71fe                     ; [7a 2a 00] jrl GT,0x2a71fe
-	.byte 0xf6                             ; db
-.LGD2_71d5:
-	jrl	gt, 0x002a
-	.byte 0xf4, 0x7a, 0x2a                 ; xorcf A,(-r7AL)
-	nop                                     ; nop
-	call_24	ov, 0x002A7A
-	jrl	gt, 0x002a
-	or	xwa, (0x002a7a)
-	jrl gt, .LGD2_7216                     ; [7a 2a 00] jrl GT,0x2a7216
-	.byte 0xd0, 0x7a, 0x2a                 ; db
-	nop                                     ; nop
-	scc8	gt, h
-.LGD2_71f2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	gt, d
-.LGD2_71f6:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	gt, b
-.LGD2_71fa:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8	gt, w
-.LGD2_71fe:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	jrl	gt, 0x002a
-	.byte 0xc4, 0x7a, 0x2a                 ; db
-	nop                                     ; nop
-	sbcda8_24	b, 0x002A7A
-	jrl gt, .LGD2_723a                     ; [7a 2a 00] jrl GT,0x2a723a
-	.byte 0xa2, 0x7a                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xa0, 0x7a                       ; db
-.LGD2_7216:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+122), de
-	nop                                     ; nop
-	ld_s	(xix+122), de
-	nop                                     ; nop
-	ld_s	(xiz+122), b
-	nop                                     ; nop
-	ld_s	(xix+122), b
-	nop                                     ; nop
-	ld_s	(xde+122), b
-	nop                                     ; nop
-	jrl	nov, 0x2a7a
-	nop                                     ; nop
-	jrl	gt, 0x2a7a
-	nop                                     ; nop
-	jr gt, .LGD2_72b0                      ; [6a 7a] jr GT,0x2a72b0
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr t, .LGD2_72b4                       ; [68 7a] jr T,0x2a72b4
-.LGD2_723a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr z, .LGD2_72b8                       ; [66 7a] jr Z,0x2a72b8
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x56                             ; db
-	jrl	gt, 0x002a
-	.byte 0x54                             ; db
-	jrl	gt, 0x002a
-	.byte 0x52                             ; db
-	jrl	gt, 0x002a
-	.byte 0x50                             ; db
-	jrl	gt, 0x002a
-	popw iz                                 ; pop IZ
-	jrl	gt, 0x002a
-	popw ix                                 ; pop IX
-	jrl	gt, 0x002a
-	popw de                                 ; pop DE
-	jrl gt, .LGD2_7286                     ; [7a 2a 00] jrl GT,0x2a7286
-	popw wa                                 ; pop WA
-	jrl gt, .LGD2_728a                     ; [7a 2a 00] jrl GT,0x2a728a
-	ld	xiz, 0x44002a7a
-	jrl gt, .LGD2_7292                     ; [7a 2a 00] jrl GT,0x2a7292
-	ld	xde, 0x40002a7a
-	jrl	gt, 0x002a
-	ldw	wa, 0x2a7a
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	jrl	gt, 0x002a
-	pushw ix                                ; push IX
-	jrl	gt, 0x002a
-	pushw de                                ; push DE
-	jrl gt, .LGD2_72aa                     ; [7a 2a 00] jrl GT,0x2a72aa
-	pushw wa                                ; push WA
-	jrl	gt, 0x002a
-	ldb	h, 0x7a
-.LGD2_7286:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	d, 0x7a
-.LGD2_728a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x7a
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x7a
-.LGD2_7292:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rcf
-	jrl gt, .LGD2_72c2                     ; [7a 2a 00] jrl GT,0x2a72c2
-	ret
-
-	jrl gt, .LGD2_72c6                     ; [7a 2a 00] jrl GT,0x2a72c6
-	.byte 0x0c                             ; incf
-	jrl gt, .LGD2_72ca                     ; [7a 2a 00] jrl GT,0x2a72ca
-	ldwio	122, 42
-	ldio	122, 42
-	nop                                     ; nop
-	ei 0x7a		; ei 0x7a
-.LGD2_72aa:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xf8                             ; swi 0
-	jrl	ge, 0x002a
-.LGD2_72b0:
-	.byte 0xf6                             ; db
-	jrl	ge, 0x002a
-.LGD2_72b4:
-	.byte 0xf4, 0x79, 0x2a                 ; xorcf A,(-r79L)
-	nop                                     ; nop
-.LGD2_72b8:
-	.byte 0xf2, 0x79, 0x2a, 0x00, 0xf0     ; db
-	jrl	ge, 0x002a
-	.byte 0xee, 0x79                       ; db
-.LGD2_72c2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xec, 0x79                       ; db
-.LGD2_72c6:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xea, 0x79                       ; db
-.LGD2_72ca:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	ge, de
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	ge, wa
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd6                             ; db
-	jrl	ge, 0x002a
-	.byte 0xd4, 0x79, 0x2a                 ; db
-	nop                                     ; nop
-	andda16_24	iz, (0x002A79)
-	jrl	ge, 0x002a
-	.byte 0xc4, 0x79, 0x2a                 ; db
-	nop                                     ; nop
-	andda8_24	w, (0x002A79)
-	jrl ge, .LGD2_731a                     ; [79 2a 00] jrl GE,0x2a731a
-	xorcfa_rid8 xiz, 0x79		; xorcf A,(XIZ+0x79)
-	nop                                     ; nop
-	.byte 0xb0, 0x79                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+121), xde
-	nop                                     ; nop
-	ld_s	(xix+121), xde
-	nop                                     ; nop
-	ld_s	(xde+121), xde
-	nop                                     ; nop
-	ld_s	(xwa+121), xde
-	nop                                     ; nop
-	ld_s	(xix+121), de
-	nop                                     ; nop
-	ld_s	(xde+121), de
-	nop                                     ; nop
-	ld_s	(xwa+121), de
-	nop                                     ; nop
-	rrcw_ri xiz		; rrcw (XIZ)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rrcw_ri xix		; rrcw (XIX)
-.LGD2_731a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rrc_ri xix		; rrc (XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rrc_ri xde		; rrc (XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rrc_ri xwa		; rrc (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nz, 0x2a79
-	nop                                     ; nop
-	jrl	nov, 0x2a79
-	nop                                     ; nop
-	jr	nov, 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	gt, 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	t, 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	z, 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xwa                                 ; pop XWA
-	jrl	ge, 0x002a
-	.byte 0x56                             ; db
-	jrl	ge, 0x002a
-	.byte 0x54                             ; db
-	jrl ge, .LGD2_737a                     ; [79 2a 00] jrl GE,0x2a737a
-	.byte 0x52                             ; db
-	jrl ge, .LGD2_737e                     ; [79 2a 00] jrl GE,0x2a737e
-	.byte 0x50                             ; db
-	jrl ge, .LGD2_7382                     ; [79 2a 00] jrl GE,0x2a7382
-	ld	xix, 0x42002a79
-	jrl	ge, 0x002a
-	ld	xwa, 0x3e002a79
-	jrl	ge, 0x002a
-	push xix
-	jrl	ge, 0x002a
-	pushw ix                                ; push IX
-	jrl	ge, 0x002a
-	pushw de                                ; push DE
-	jrl	ge, 0x002a
-	pushw wa                                ; push WA
-	jrl	ge, 0x002a
-	ldb	h, 0x79
-.LGD2_737a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	d, 0x79
-.LGD2_737e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x79
-.LGD2_7382:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	push_a
-	jrl	ge, 0x002a
-	ccf
-	jrl	ge, 0x002a
-	rcf
-	jrl	ge, 0x002a
-	ret
-
-	jrl	ge, 0x002a
-	.byte 0x0c                             ; incf
-	jrl	ge, 0x002a
-	ldwio	121, 42
-	ldio	121, 42
-	nop                                     ; nop
-	ei 0x79		; ei 0x79
-	pushw de                                ; push DE
-	nop                                     ; nop
-	max
-	jrl ge, .LGD2_73d6                     ; [79 2a 00] jrl GE,0x2a73d6
-	push	sr
-	jrl ge, .LGD2_73da                     ; [79 2a 00] jrl GE,0x2a73da
-	nop                                     ; nop
-	jrl ge, .LGD2_73de                     ; [79 2a 00] jrl GE,0x2a73de
-	.byte 0xfe                             ; swi 6
-	jrl	t, 0x002a
-	.byte 0xfc                             ; swi 4
-	jrl	t, 0x002a
-	.byte 0xfa                             ; swi 2
-	jrl	t, 0x002a
-	.byte 0xf8                             ; swi 0
-	jrl t, .LGD2_73ee                      ; [78 2a 00] jrl T,0x2a73ee
-	.byte 0xf6                             ; db
-	jrl	t, 0x002a
-	.byte 0xf4, 0x78, 0x2a                 ; xorcf A,(-r78L)
-	nop                                     ; nop
-	.byte 0xf2, 0x78, 0x2a, 0x00, 0xf0     ; db
-	jrl t, .LGD2_73fe                      ; [78 2a 00] jrl T,0x2a73fe
-	scc16	t, iz
-.LGD2_73d6:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	t, ix
-.LGD2_73da:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16	t, de
-.LGD2_73de:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xd0, 0x78, 0x2a                 ; db
-	nop                                     ; nop
-	sbcda8_24	b, 0x002A78
-	jrl t, .LGD2_7416                      ; [78 2a 00] jrl T,0x2a7416
-	.byte 0xb0, 0x78                       ; db
-.LGD2_73ee:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+120), xde
-	nop                                     ; nop
-	ld_s	(xix+120), xde
-	nop                                     ; nop
-	.byte 0xa2, 0x78                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rlcw_ri xix		; rlcw (XIX)
-.LGD2_73fe:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rlc_ri xix		; rlc (XIX)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rlc_ri xde		; rlc (XDE)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	rlc_ri xwa		; rlc (XWA)
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	nz, 0x2a78
-	nop                                     ; nop
-	jr	nz, 0x78
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	nov, 0x78
-.LGD2_7416:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x56                             ; db
-	jrl	t, 0x002a
-	.byte 0x54                             ; db
-	jrl	t, 0x002a
-	.byte 0x52                             ; db
-	jrl	t, 0x002a
-	.byte 0x50                             ; db
-	jrl	t, 0x002a
-	ld	xwa, 0x3e002a78
-	jrl t, .LGD2_745a                      ; [78 2a 00] jrl T,0x2a745a
-	pushw wa                                ; push WA
-	jrl t, .LGD2_745e                      ; [78 2a 00] jrl T,0x2a745e
-	ldb	h, 0x78
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	d, 0x78
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x78
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	w, 0x78
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ret
-
-	jrl	t, 0x002a
-	.byte 0x0c                             ; incf
-	jrl t, .LGD2_7476                      ; [78 2a 00] jrl T,0x2a7476
-	.byte 0xf4, 0x77, 0x2a                 ; xorcf A,(-r77L)
-	nop                                     ; nop
-	.byte 0xf2, 0x77, 0x2a, 0x00, 0xf0     ; db
-	jrl	c, 0x002a
-	.byte 0xee, 0x77                       ; db
-.LGD2_745a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xec, 0x77                       ; db
-.LGD2_745e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16 c, iz		; scc C,IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8 c, b		; scc C,B
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8 c, w		; scc C,W
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xc6                             ; db
-	jrl	c, 0x002a
-	.byte 0xc4, 0x77, 0x2a                 ; db
-	nop                                     ; nop
-	.byte 0xb4, 0x77                       ; db
-.LGD2_7476:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xiz+119), de
-	nop                                     ; nop
-	ld_s	(xix+119), de
-	nop                                     ; nop
-	ld_s	(xde+119), de
-	nop                                     ; nop
-	ld_s	(xwa+119), de
-	nop                                     ; nop
-	ld_s	(xiz+119), b
-	nop                                     ; nop
-	ld_s	(xix+119), b
-	nop                                     ; nop
-	ld_s	(xde+119), b
-	nop                                     ; nop
-	jrl	nov, 0x2a77
-	nop                                     ; nop
-	jrl	gt, 0x2a77
-	nop                                     ; nop
-	jr	z, 0x77
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	ov, 0x77
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	le, 0x77
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr	f, 0x77
-	pushw de                                ; push DE
-	nop                                     ; nop
-	pop xiz                                 ; pop XIZ
-	jrl	c, 0x002a
-	popw iz                                 ; pop IZ
-	jrl	c, 0x002a
-	popw ix                                 ; pop IX
-	jrl	c, 0x002a
-	ldw	iz, 0x2a77
-	nop                                     ; nop
-	ldw	ix, 0x2a77
-	nop                                     ; nop
-	ldw	de, 0x2a77
-	nop                                     ; nop
-	ldw	wa, 0x2a77
-	nop                                     ; nop
-	pushw iz                                ; push IZ
-	jrl	c, 0x002a
-	calr	0x2a77
-	nop                                     ; nop
-	call16	10871
-	nop                                     ; nop
-	jp16	10871
-	nop                                     ; nop
-	push_f
-	jrl	c, 0x002a
-	ex_ff
-	jrl	c, 0x002a
-	push_a
-	jrl	c, 0x002a
-	ei 0x77		; ei 0x77
-	pushw de                                ; push DE
-	nop                                     ; nop
-	max
-	jrl c, .LGD2_7516                      ; [77 2a 00] jrl C,0x2a7516
-	push	sr
-	jrl c, .LGD2_751a                      ; [77 2a 00] jrl C,0x2a751a
-	nop                                     ; nop
-	jrl c, .LGD2_751e                      ; [77 2a 00] jrl C,0x2a751e
-	.byte 0xfe                             ; swi 6
-	jrl z, .LGD2_7522                      ; [76 2a 00] jrl Z,0x2a7522
-	.byte 0xfc                             ; swi 4
-	jrl	z, 0x002a
-	.byte 0xfa                             ; swi 2
-	jrl	z, 0x002a
-	.byte 0xf8                             ; swi 0
-	jrl	z, 0x002a
-	.byte 0xf6                             ; db
-	jrl	z, 0x002a
-	.byte 0xf4, 0x76, 0x2a                 ; xorcf A,(-r76L)
-	nop                                     ; nop
-	.byte 0xf2, 0x76, 0x2a, 0x00, 0xf0     ; db
-	jrl z, .LGD2_753e                      ; [76 2a 00] jrl Z,0x2a753e
-	.byte 0xee, 0x76                       ; db
-.LGD2_7516:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xec, 0x76                       ; db
-.LGD2_751a:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xea, 0x76                       ; db
-.LGD2_751e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe8, 0x76                       ; db
-.LGD2_7522:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	jrl	z, 0x002a
-	.byte 0xe4, 0x76, 0x2a                 ; db
-	nop                                     ; nop
-	or	xwa, (0x002a76)
-	jrl	z, 0x002a
-	scc16 z, iz		; scc Z,IZ
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16 z, ix		; scc Z,IX
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16 z, de		; scc Z,DE
-.LGD2_753e:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16 z, wa		; scc Z,WA
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8 z, d		; scc Z,D
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8 z, b		; scc Z,B
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc8 z, w		; scc Z,W
-	pushw de                                ; push DE
-	nop                                     ; nop
-	xorcfa_rid8 xiz, 0x76		; xorcf A,(XIZ+0x76)
-	nop                                     ; nop
-	xorcfa_rid8 xix, 0x76		; xorcf A,(XIX+0x76)
-	nop                                     ; nop
-	.byte 0xb2, 0x76                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xwa+118), xde
-	nop                                     ; nop
-	ld_s	(xiz+118), de
-	nop                                     ; nop
-	.byte 0x94, 0x76                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ld_s	(xde+118), b
-	nop                                     ; nop
-	.byte 0x80, 0x76                       ; db
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jrl	z, 0x2a76
-	nop                                     ; nop
-	jr	nov, 0x76
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr le, .LGD2_75f0                      ; [62 76] jr LE,0x2a75f0
-	pushw de                                ; push DE
-	nop                                     ; nop
-	jr f, .LGD2_75f4                       ; [60 76] jr F,0x2a75f4
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	jrl	z, 0x002a
-	ld	xix, 0x34002a76
-	jrl	z, 0x002a
-	ldb	d, 0x76
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ldb	b, 0x76
-	pushw de                                ; push DE
-	nop                                     ; nop
-	ex_ff
-	jrl z, .LGD2_75c2                      ; [76 2a 00] jrl Z,0x2a75c2
-	push_a
-	jrl z, .LGD2_75c6                      ; [76 2a 00] jrl Z,0x2a75c6
-	ccf
-	jrl z, .LGD2_75ca                      ; [76 2a 00] jrl Z,0x2a75ca
-	rcf
-	jrl z, .LGD2_75ce                      ; [76 2a 00] jrl Z,0x2a75ce
-	ret
-
-	jrl	z, 0x002a
-	max
-	jrl z, .LGD2_75d6                      ; [76 2a 00] jrl Z,0x2a75d6
-	push	sr
-	jrl z, .LGD2_75da                      ; [76 2a 00] jrl Z,0x2a75da
-	nop                                     ; nop
-	jrl z, .LGD2_75de                      ; [76 2a 00] jrl Z,0x2a75de
-	.byte 0xf4, 0x75, 0x2a                 ; xorcf A,(-r75L)
-	nop                                     ; nop
-	.byte 0xf2, 0x75, 0x2a, 0x00, 0xf0     ; db
-	jrl	mi, 0x002a
-	.byte 0xee, 0x75                       ; db
-.LGD2_75c2:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xec, 0x75                       ; db
-.LGD2_75c6:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xea, 0x75                       ; db
-.LGD2_75ca:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe8, 0x75                       ; db
-.LGD2_75ce:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	.byte 0xe6                             ; db
-	jrl	mi, 0x002a
-	scc16 mi, iz		; scc M/MI,IZ
-.LGD2_75d6:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	scc16 mi, ix		; scc M/MI,IX
-.LGD2_75da:
-	pushw de                                ; push DE
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_75de:
-	.byte 0x57                             ; db
-	jrl	le, 0x7469
-	jr	mi, 0x49
-	jr nz, .LGD2_75e6                      ; [6e 00] jr NZ,0x2a75e6
-.LGD2_75e6:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_75ea:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_75ec:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_75f0:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_75f4:
-	popw ix                                 ; pop IX
-	jrl	ge, 0x5372
-	jr	mi, 0x74
-	jrl	ov, 0x6e69
-	jr	c, 0x73
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x4c505f44
-	ld	xiy, 0x00455341
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	jr	nc, 0x61
-	jr	ov, 0x4c
-	jrl	ge, 0x6972
-	jr	ule, 0x46
-	ld	xix, 0x54000000
-	jr ge, .LGD2_7694                      ; [69 6d] jr GE,0x2a7694
-	jr	mi, 0x53
-	jr	ge, 0x67
-	popw bc                                 ; pop BC
-	jr	nz, 0x4c
-	jrl	ge, 0x6972
-	jr ule, .LGD2_7633                     ; [63 00] jr ULE,0x2a7633
-.LGD2_7633:
-	nop                                     ; nop
-	popw iy                                 ; pop IY
-	jr	mi, 0x61
-	jrl	ule, 0x7275
-	jr	mi, 0x69
-	jr nz, .LGD2_768a                      ; [6e 4c] jr NZ,0x2a768a
-	jrl	ge, 0x6972
-	jr ule, .LGD2_7643                     ; [63 00] jr ULE,0x2a7643
-.LGD2_7643:
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	jr	mi, 0x6d
-	jrl	f, 0x696f
-	jr	nz, 0x4c
-	jrl	ge, 0x6972
-	jr ule, .LGD2_7651                     ; [63 00] jr ULE,0x2a7651
-.LGD2_7651:
-	nop                                     ; nop
-	ld	xhl, 0x64726f68
-	jr ge, .LGD2_76c7                      ; [69 6e] jr GE,0x2a76c7
-	popw ix                                 ; pop IX
-	jrl	ge, 0x6972
-	jr ule, .LGD2_765f                     ; [63 00] jr ULE,0x2a765f
-.LGD2_765f:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	jr le, .LGD2_76d3                      ; [62 6f] jr LE,0x2a76d3
-	jrl	ov, 0x6f74
-.LGD2_7667:
-	jr	pl, 0x30
-	push xwa
-	nop                                     ; nop
-	nop                                     ; nop
-	jr le, .LGD2_76dd                      ; [62 6f] jr LE,0x2a76dd
-.LGD2_766e:
-	jrl	ov, 0x6f74
-	jr	pl, 0x30
-	.byte 0x37, 0x00, 0x00                 ; ld SP,0x0000
-	jr le, .LGD2_76e7                      ; [62 6f] jr LE,0x2a76e7
-	jrl	ov, 0x6f74
-	jr	pl, 0x30
-	ldw	iz, 0x0000
-	jr le, .LGD2_76f1                      ; [62 6f] jr LE,0x2a76f1
-	jrl	ov, 0x6f74
-	jr	pl, 0x30
-	ldw	iy, 0x0000
-.LGD2_768a:
-	jr le, .LGD2_76fb                      ; [62 6f] jr LE,0x2a76fb
-	jrl	ov, 0x6f74
-	jr	pl, 0x30
-	ldw	ix, 0x0000
-.LGD2_7694:
-	jr le, .LGD2_7705                      ; [62 6f] jr LE,0x2a7705
-	jrl	ov, 0x6f74
-.LGD2_7699:
-	jr	pl, 0x30
-	ldw	hl, 0x0000
-	jr	le, 0x6f
-	jrl	ov, 0x6f74
-.LGD2_76a3:
-	jr	pl, 0x30
-.LGD2_76a5:
-	ldw	de, 0x0000
-	jr le, .LGD2_7719                      ; [62 6f] jr LE,0x2a7719
-	jrl	ov, 0x6f74
-.LGD2_76ad:
-	jr	pl, 0x30
-	ldw	bc, 0x0000
-	ld	xhl, 0x75646e6f
-.LGD2_76b7:
-	jr	ule, 0x74
-	jr	nc, 0x72
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	jr nc, .LGD2_772f                      ; [6f 6e] jr NC,0x2a772f
-.LGD2_76c1:
-	jr c, .LGD2_7717                       ; [67 54] jr C,0x2a7717
-	jr	ge, 0x74
-	jr	nov, 0x65
-.LGD2_76c7:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_76cb:
-	nop                                     ; nop
-	.byte 0x54                             ; db
-	jr	mi, 0x63
-	jr t, .LGD2_7730                       ; [68 5f] jr T,0x2a7730
-	jr	nov, 0x79
-.LGD2_76d3:
-	jrl	le, 0x6369
-	jrl ule, .LGD2_76d9                    ; [73 00 00] jrl ULE,0x2a76d9
-.LGD2_76d9:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_76dd:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_76df:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_76e7:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_76f1:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_76fb:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7705:
-	nop                                     ; nop
-	ld	xiz, 0x5f454c49
-	popw ix                                 ; pop IX
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x5f415f44
-	pop xde                                 ; pop XDE
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7717:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7719:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5443454c
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x5f454c49
-	ld	xbc, 0x00005a5f
-.LGD2_772f:
-	nop                                     ; nop
-.LGD2_7730:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7732:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e494147
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x41435f54
-	.byte 0x54                             ; db
-	ld	xhl, 0x00000048
-	ld	xbc, 0x4e494147
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x00000054
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x41435f54
-	.byte 0x54                             ; db
-	ld	xhl, 0x00000048
-	ld	xiy, 0x485f5252
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x00000054
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x454c505f
-	ld	xbc, 0x00004553
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x5f454c49
-	popw sp
-	.byte 0x55, 0x54
-	pop xsp                                 ; pop XSP
-	.byte 0x52                             ; db
-	ld	xbc, 0x5f45474e
-	ld	xhl, 0x48435441
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x5f454c49
-	popw sp
-	.byte 0x55, 0x54
-	pop xsp                                 ; pop XSP
-	.byte 0x52                             ; db
-	ld	xbc, 0x0045474e
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x4f5f5249
-	.byte 0x55                             ; db
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x52                             ; db
-	ld	xbc, 0x5f45474e
-	ld	xhl, 0x48435441
-	nop                                     ; nop
-	ld	xix, 0x4f5f5249
-	.byte 0x55                             ; db
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x52                             ; db
-	ld	xbc, 0x0045474e
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xhl, 0x4e555f50
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x5f44454d
-	ld	xhl, 0x48435441
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xhl, 0x4e555f50
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x0044454d
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x5f4c4c55
-	ld	xix, 0x435f5249
-	ld	xbc, 0x00484354
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x5f4c4c55
-	ld	xix, 0x00005249
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x4e5f5252
-	.byte 0x4f                             ; pop SP
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	popw hl                                 ; pop HL
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x5f415441
-	ld	xhl, 0x48435441
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x4e5f5252
-	.byte 0x4f                             ; pop SP
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	popw hl                                 ; pop HL
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x00415441
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x4c5f5252
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x41435f44
-	.byte 0x54                             ; db
-	ld	xhl, 0x45000048
-	.byte 0x52                             ; db
-	.byte 0x52                             ; db
-	pop xsp                                 ; pop XSP
-	popw ix                                 ; pop IX
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x58455f44
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	ld	xiy, 0x4c5f5252
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x00000044
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x535f5252
-	ld	xbc, 0x435f4556
-	ld	xbc, 0x00484354
-	nop                                     ; nop
-	ld	xiy, 0x535f5252
-	ld	xbc, 0x455f4556
-	pop xwa                                 ; pop XWA
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	ld	xiy, 0x535f5252
-	ld	xbc, 0x00004556
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x57                             ; db
-	ld	xbc, 0x545f5449
-	.byte 0x52                             ; db
-	ldw	wa, 0x525f
-	ld	xiy, 0x45564f43
-	.byte 0x52                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x54554f42
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xiy, 0x0000504c
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xhl, 0x5f444650
-	popw iy                                 ; pop IY
-	ld	xbc, 0x00004b52
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x4253465f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x5441465f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x4152545f
-	ld	xhl, 0x00305f4b
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x5f44495f
-	.byte 0x52                             ; db
-	ld	xiy, 0x00004441
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x4145525f
-	ld	xix, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x5345525f
-	ld	xiy, 0x00000054
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x4152535f
-	popw iy                                 ; pop IY
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiy, 0x485f5252
-	ld	xix, 0x544f4e5f
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x0000544d
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xhl, 0x5f444850
-	.byte 0x57                             ; db
-	.byte 0x52                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c465f44
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x474e494d
-	ldw	de, 0x0000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	popw sp
-	.byte 0x56
-	ld	xiy, 0x49465f52
-	popw ix                                 ; pop IX
-	ld	xiy, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x465f4c45
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	ldw	bc, 0x0000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x4d5f4742
-	ld	xiy, 0x535f4f4d
-	ld	xhl, 0x4e454552
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x464e495f
-	.byte 0x4f                             ; pop SP
-	pop xsp                                 ; pop XSP
-	popw ix                                 ; pop IX
-	popw bc                                 ; pop BC
-	.byte 0x53                             ; db
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5f505554
-	popw wa                                 ; pop WA
-	ld	xix, 0x4f464e49
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x57                             ; db
-	ld	xbc, 0x485f5449
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x48000054
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x41435f54
-	.byte 0x54                             ; db
-	ld	xhl, 0x00000048
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x00000054
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x57                             ; db
-	ld	xbc, 0x445f5449
-	ld	xiy, 0x49465f4c
-	popw ix                                 ; pop IX
-	ld	xiy, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x465f4c45
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	ldw	de, 0x0000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	popw sp
-	.byte 0x56
-	ld	xiy, 0x4c465f52
-	.byte 0x53                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x465f4c45
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x57                             ; db
-	ld	xbc, 0x445f5449
-	ld	xiy, 0x49445f4c
-	.byte 0x52                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xbc, 0x4e455454
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x445f4c45
-	popw bc                                 ; pop BC
-	.byte 0x52                             ; db
-	nop                                     ; nop
-	popw bc                                 ; pop BC
-	.byte 0x56                             ; db
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x4e454d44
-	.byte 0x55                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4e454d5f
-	.byte 0x55                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x4800504d
-	ld	xix, 0x43495f44
-	.byte 0x4f                             ; pop SP
-	popw iz                                 ; pop IZ
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x4c505349
-	ld	xbc, 0x00000059
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x545f5449
-	popw ix                                 ; pop IX
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x4d5f5449
-	ld	xix, 0x4c454400
-	pop xsp                                 ; pop XSP
-	ld	xiy, 0x5f544944
-	.byte 0x52                             ; db
-	ld	xhl, 0x4400004d
-	ld	xiy, 0x44455f4c
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	popw iy                                 ; pop IY
-	.byte 0x53                             ; db
-	.byte 0x50                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x545f5449
-	popw iy                                 ; pop IY
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x435f5449
-	popw iy                                 ; pop IY
-	.byte 0x50                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x535f5449
-	.byte 0x51                             ; db
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x505f5449
-	popw iy                                 ; pop IY
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xix, 0x455f4c45
-	ld	xix, 0x4c5f5449
-	.byte 0x53                             ; db
-	.byte 0x57                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x5f454c49
-	ld	xix, 0x535f4c45
-	ld	xhl, 0x4e454552
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	ov, 0x64
-	popw iz                                 ; pop IZ
-	jr	lt, 0x6d
-	jr ge, .LGD2_7cee                      ; [69 6e] jr GE,0x2a7cee
-	jr c, .LGD2_7cce                       ; [67 4c] jr C,0x2a7cce
-	jr	lt, 0x62
-	jr	mi, 0x6c
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	ov, 0x64
-	popw iz                                 ; pop IZ
-	jr lt, .LGD2_7d01                      ; [61 6d] jr LT,0x2a7d01
-	jr ge, .LGD2_7d04                      ; [69 6e] jr GE,0x2a7d04
-	jr	c, 0x53
-	jrl	ge, 0x626d
-	jr nc, .LGD2_7d09                      ; [6f 6c] jr NC,0x2a7d09
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	ov, 0x64
-	popw iz                                 ; pop IZ
-	jr lt, .LGD2_7d11                      ; [61 6d] jr LT,0x2a7d11
-	jr ge, .LGD2_7d14                      ; [69 6e] jr GE,0x2a7d14
-	jr c, .LGD2_7d09                       ; [67 61] jr C,0x2a7d09
-	jr le, .LGD2_7d0d                      ; [62 63] jr LE,0x2a7d0d
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	ov, 0x64
-	popw iz                                 ; pop IZ
-	jr lt, .LGD2_7d1f                      ; [61 6d] jr LT,0x2a7d1f
-	jr ge, .LGD2_7d22                      ; [69 6e] jr GE,0x2a7d22
-	jr c, .LGD2_7cf7                       ; [67 41] jr C,0x2a7cf7
-	ld	xde, 0x48000043
-	jr	ov, 0x64
-	popw iz                                 ; pop IZ
-	jr	lt, 0x6d
-	jr	ge, 0x6e
-	jr c, .LGD2_7d07                       ; [67 43] jr C,0x2a7d07
-	jrl	mi, 0x7372
-	jr	nc, 0x72
-	ld	xde, 0x0000786f
-.LGD2_7cce:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7cdf:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	jr	ov, 0x64
-	popw iz                                 ; pop IZ
-	jr lt, .LGD2_7d57                      ; [61 6d] jr LT,0x2a7d57
-	jr	ge, 0x6e
-	jr c, .LGD2_7d45                       ; [67 57] jr C,0x2a7d45
-.LGD2_7cee:
-	jr ge, .LGD2_7d5e                      ; [69 6e] jr GE,0x2a7d5e
-	jr	ov, 0x6f
-.LGD2_7cf2:
-	jrl c, .LGD2_7cf5                      ; [77 00 00] jrl C,0x2a7cf5
-.LGD2_7cf5:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7cf7:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-.LGD2_7d01:
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x54                             ; db
-.LGD2_7d04:
-	popw ix                                 ; pop IX
-.LGD2_7d05:
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-.LGD2_7d07:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7d09:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7d0d:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7d11:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7d13:
-	nop                                     ; nop
-.LGD2_7d14:
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7d1f:
-	nop                                     ; nop
-	nop                                     ; nop
-.LGD2_7d21:
-	nop                                     ; nop
-.LGD2_7d22:
-	.byte 0x52                             ; db
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	popw iy                                 ; pop IY
-	ld	xix, 0x4d415200
-	pop xsp                                 ; pop XSP
-	ld	xiy, 0x5f544944
-	.byte 0x52                             ; db
-	ld	xhl, 0x5200004d
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-.LGD2_7d45:
-	popw iy                                 ; pop IY
-	.byte 0x53                             ; db
-	.byte 0x50                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x52                             ; db
-.LGD2_7d4b:
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x54                             ; db
-	popw iy                                 ; pop IY
-	nop                                     ; nop
-	.byte 0x52                             ; db
-.LGD2_7d57:
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-.LGD2_7d5e:
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	.byte 0x51                             ; db
-.LGD2_7d61:
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x50                             ; db
-	popw iy                                 ; pop IY
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	.byte 0x57                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	ld	xbc, 0x44455f4d
-	popw bc                                 ; pop BC
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xhl, 0x0000504d
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xbc, 0x4f5f4556
-	.byte 0x50                             ; db
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	ld	xhl, 0x4e454552
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x4e5f5249
-	ld	xbc, 0x474e494d
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x455f534c
-	ld	xix, 0x4f5f5449
-	.byte 0x50                             ; db
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x0000584f
-	ld	xiz, 0x455f534c
-	ld	xix, 0x4c5f5449
-	.byte 0x4f                             ; pop SP
-	ld	xhl, 0x584f425f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x455f534c
-	ld	xix, 0x4c5f5449
-	popw bc                                 ; pop BC
-	popw iz                                 ; pop IZ
-	ld	xiy, 0x46000031
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xiy, 0x5f544944
-	popw ix                                 ; pop IX
-	popw bc                                 ; pop BC
-	popw iz                                 ; pop IZ
-	ld	xiy, 0x46000032
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xiy, 0x5f544944
-	popw ix                                 ; pop IX
-	popw bc                                 ; pop BC
-	.byte 0x53                             ; db
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x0000584f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x455f534c
-	ld	xix, 0x4e5f5449
-	ld	xbc, 0x425f454d
-	.byte 0x4f                             ; pop SP
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x455f534c
-	ld	xix, 0x00005449
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x465f534c
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4c45535f
-	pop xsp                                 ; pop XSP
-	popw sp
-	.byte 0x50, 0x54
-	ld	xde, 0x0000584f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x465f534c
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4c45535f
-	pop xsp                                 ; pop XSP
-	popw ix                                 ; pop IX
-	popw bc                                 ; pop BC
-	.byte 0x53                             ; db
-	.byte 0x54                             ; db
-	ld	xde, 0x0000584f
-	ld	xiz, 0x465f534c
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4c45535f
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x4f425249
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x465f534c
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4c45535f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x445f534c
-	popw bc                                 ; pop BC
-	.byte 0x52                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x0000584f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x445f534c
-	popw bc                                 ; pop BC
-	.byte 0x52                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	ld	xiy, 0x0000004c
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x4c5f534c
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x494c5f44
-	popw iz                                 ; pop IZ
-	ld	xiy, 0x46000032
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	popw ix                                 ; pop IX
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x494c5f44
-	popw iz                                 ; pop IZ
-	ld	xiy, 0x46000031
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x5f454c49
-	ld	xde, 0x0000584f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x4e5f534c
-	ld	xbc, 0x425f454d
-	.byte 0x4f                             ; pop SP
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x4c5f534c
-	.byte 0x4f                             ; pop SP
-	ld	xhl, 0x584f425f
-	nop                                     ; nop
-	ld	xiz, 0x4f5f534c
-	.byte 0x50                             ; db
-	.byte 0x54                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x0000584f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x465f534c
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x5f57535f
-	ld	xiy, 0x00544944
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x465f534c
-	popw bc                                 ; pop BC
-	popw ix                                 ; pop IX
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c465f44
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x474e494d
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x0032505f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x5f57535f
-	ld	xix, 0x49464c45
-	popw ix                                 ; pop IX
-	ld	xiy, 0x00000000
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x5f57535f
-	ld	xix, 0x00004c45
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x5f454c49
-	popw ix                                 ; pop IX
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x49445f44
-	.byte 0x52                             ; db
-	ld	xde, 0x0000584f
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x53494c5f
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x54504f5f
-	popw bc                                 ; pop BC
-	.byte 0x4f                             ; pop SP
-	popw iz                                 ; pop IZ
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x5f57535f
-	.byte 0x53                             ; db
-	ld	xbc, 0x00004556
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x0031505f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x4c465f4c
-	.byte 0x53                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x535f534c
-	ld	xiy, 0x5443454c
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	.byte 0x57                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xiy, 0x00544944
-	nop                                     ; nop
-	ld	xiz, 0x535f534c
-	ld	xiy, 0x0000004c
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x535f534c
-	ld	xiy, 0x5443454c
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x4f425249
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x45535249
-	popw ix                                 ; pop IX
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x534c4c41
-	ld	xiy, 0x0000004c
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	.byte 0x56
-	popw sp
-	popw ix                                 ; pop IX
-	popw ix                                 ; pop IX
-	ld	xbc, 0x004c4542
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x45535753
-	popw ix                                 ; pop IX
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x4f545753
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	pop xsp                                 ; pop XSP
-	popw ix                                 ; pop IX
-	popw bc                                 ; pop BC
-	popw iz                                 ; pop IZ
-	ld	xiy, 0x50430031
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x494c5f44
-	popw iz                                 ; pop IZ
-	ld	xiy, 0x50430032
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x494c5f44
-	.byte 0x53                             ; db
-	.byte 0x54                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xhl, 0x44465f50
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x32505f4e
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x49465f4e
-	popw ix                                 ; pop IX
-	ld	xiy, 0x454d414e
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x0000584f
-	popw ix                                 ; pop IX
-	ld	xde, 0x49465f4e
-	popw ix                                 ; pop IX
-	ld	xiy, 0x425f4f4e
-	.byte 0x4f                             ; pop SP
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x49445f4e
-	.byte 0x52                             ; db
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x425f454d
-	.byte 0x4f                             ; pop SP
-	pop xwa                                 ; pop XWA
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x49445f4e
-	.byte 0x52                             ; db
-	popw iz                                 ; pop IZ
-	.byte 0x4f                             ; pop SP
-	pop xsp                                 ; pop XSP
-	ld	xde, 0x0000584f
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x504f5f4e
-	.byte 0x54                             ; db
-	popw bc                                 ; pop BC
-	.byte 0x4f                             ; pop SP
-	popw iz                                 ; pop IZ
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	ld	xde, 0x31505f4e
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw ix                                 ; pop IX
-	.byte 0x4f                             ; pop SP
-	ld	xbc, 0x59425f44
-	pop xsp                                 ; pop XSP
-	popw iz                                 ; pop IZ
-	.byte 0x55                             ; db
-	popw iy                                 ; pop IY
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw sp
-	.byte 0x55, 0x54, 0x50, 0x55, 0x54
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	ld	xiy, 0x4e495454
-	ld	xsp, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	.byte 0x57                             ; db
-	pop xsp                                 ; pop XSP
-	popw wa                                 ; pop WA
-	ld	xix, 0x524f465f
-	popw iy                                 ; pop IY
-	ld	xbc, 0x00000054
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5f505554
-	.byte 0x54
-	popw sp
-	popw sp
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x50                             ; db
-	ldw	de, 0x0000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5f505554
-	.byte 0x54
-	popw sp
-	popw sp
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x50                             ; db
-	ldw	bc, 0x0000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	.byte 0x50                             ; db
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	.byte 0x54                             ; db
-	ld	xbc, 0x00535554
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x50                             ; db
-	ld	xhl, 0x5441445f
-	ld	xbc, 0x4e494c5f
-	popw hl                                 ; pop HL
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4954555f
-	popw ix                                 ; pop IX
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x454c505f
-	ld	xbc, 0x575f4553
-	popw bc                                 ; pop BC
-	popw iz                                 ; pop IZ
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x49445f44
-	.byte 0x52                             ; db
-	pop xsp                                 ; pop XSP
-	popw iz                                 ; pop IZ
-	ld	xbc, 0x474e494d
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x4d414e5f
-	ld	xiy, 0x00000000
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x49465f44
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4d414e5f
-	popw bc                                 ; pop BC
-	popw iz                                 ; pop IZ
-	ld	xsp, 0x44444800
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	.byte 0x57                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x57535f44
-	nop                                     ; nop
-	.byte 0x50, 0x50
-	popw sp
-	.byte 0x52, 0x54
-	pop xsp                                 ; pop XSP
-	.byte 0x53                             ; db
-	.byte 0x57                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x52                             ; db
-	.byte 0x55                             ; db
-	popw iz                                 ; pop IZ
-	pop xsp                                 ; pop XSP
-	.byte 0x53, 0x54
-	popw sp
-	.byte 0x50
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xbc, 0x545f4452
-	ld	xiy, 0x00005453
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	ld	xiz, 0x49465f44
-	popw ix                                 ; pop IX
-	ld	xiy, 0x4c45535f
-	ld	xiy, 0x00005443
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5443454c
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x00325249
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5443454c
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x535f5249
-	.byte 0x57                             ; db
-	pop xsp                                 ; pop XSP
-	ld	xiy, 0x00544944
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x49445f4c
-	.byte 0x52                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x5443454c
-	pop xsp                                 ; pop XSP
-	ld	xix, 0x00005249
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x414f4c5f
-	ld	xix, 0x54504f5f
-	popw bc                                 ; pop BC
-	.byte 0x4f                             ; pop SP
-	popw iz                                 ; pop IZ
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4c49465f
-	ld	xiy, 0x414f4c5f
-	ld	xix, 0x00000000
-	.byte 0x53                             ; db
-	ld	xiy, 0x5443454c
-	pop xsp                                 ; pop XSP
-	ld	xiz, 0x00454c49
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	.byte 0x53                             ; db
-	ld	xiy, 0x53505554
-	pop xsp                                 ; pop XSP
-	.byte 0x54
-	popw sp
-	popw sp
-	popw ix                                 ; pop IX
-	.byte 0x53                             ; db
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xbc, 0x445f4452
-	popw bc                                 ; pop BC
-	.byte 0x53                             ; db
-	popw hl                                 ; pop HL
-	pop xsp                                 ; pop XSP
-	popw sp
-	.byte 0x50, 0x54
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	nop                                     ; nop
-	popw wa                                 ; pop WA
-	ld	xix, 0x4e454d44
-	.byte 0x55                             ; db
-	nop                                     ; nop
+HDAE5000_UiObjectName_Pool:	; 0x2A75DC
+HdaeUiName_789:	.zero	2                               ; 0x2A75DC  [789] (unnamed)
+HdaeUiName_788:	.asciz	"WriteIn"                       ; 0x2A75DE  [788]
+HdaeUiName_787:	.zero	2                               ; 0x2A75E6  [787] (unnamed)
+HdaeUiName_786:	.zero	2                               ; 0x2A75E8  [786] (unnamed)
+HdaeUiName_785:	.zero	2                               ; 0x2A75EA  [785] (unnamed)
+HdaeUiName_784:	.zero	2                               ; 0x2A75EC  [784] (unnamed)
+HdaeUiName_783:	.zero	2                               ; 0x2A75EE  [783] (unnamed)
+HdaeUiName_782:	.zero	2                               ; 0x2A75F0  [782] (unnamed)
+HdaeUiName_781:	.zero	2                               ; 0x2A75F2  [781] (unnamed)
+HdaeUiName_780:	.asciz	"LyrSettings"                   ; 0x2A75F4  [780]
+HdaeUiName_779:	.zero	2                               ; 0x2A7600  [779] (unnamed)
+HdaeUiName_778:	.zero	2                               ; 0x2A7602  [778] (unnamed)
+HdaeUiName_777:	.asciz	"FD_PLEASE"                     ; 0x2A7604  [777]
+HdaeUiName_776:	.zero	2                               ; 0x2A760E  [776] (unnamed)
+HdaeUiName_775:	.zero	2                               ; 0x2A7610  [775] (unnamed)
+HdaeUiName_774:	.zero	2                               ; 0x2A7612  [774] (unnamed)
+HdaeUiName_773:	.zero	2                               ; 0x2A7614  [773] (unnamed)
+HdaeUiName_772:	.asciz	"LoadLyricFD"                   ; 0x2A7616  [772]
+HdaeUiName_771:	.zero	2                               ; 0x2A7622  [771] (unnamed)
+HdaeUiName_770:	.ascii	"TimeSigInLyric\0\0"            ; 0x2A7624  [770]
+HdaeUiName_769:	.ascii	"MeasureinLyric\0\0"            ; 0x2A7634  [769]
+HdaeUiName_768:	.ascii	"TempoinLyric\0\0"              ; 0x2A7644  [768]
+HdaeUiName_767:	.ascii	"ChordinLyric\0\0"              ; 0x2A7652  [767]
+HdaeUiName_766:	.zero	2                               ; 0x2A7660  [766] (unnamed)
+HdaeUiName_765:	.ascii	"bottom08\0\0"                  ; 0x2A7662  [765]
+HdaeUiName_764:	.ascii	"bottom07\0\0"                  ; 0x2A766C  [764]
+HdaeUiName_763:	.ascii	"bottom06\0\0"                  ; 0x2A7676  [763]
+HdaeUiName_762:	.ascii	"bottom05\0\0"                  ; 0x2A7680  [762]
+HdaeUiName_761:	.ascii	"bottom04\0\0"                  ; 0x2A768A  [761]
+HdaeUiName_760:	.ascii	"bottom03\0\0"                  ; 0x2A7694  [760]
+HdaeUiName_759:	.ascii	"bottom02\0\0"                  ; 0x2A769E  [759]
+HdaeUiName_758:	.ascii	"bottom01\0\0"                  ; 0x2A76A8  [758]
+HdaeUiName_757:	.asciz	"Conductor"                     ; 0x2A76B2  [757]
+HdaeUiName_756:	.zero	2                               ; 0x2A76BC  [756] (unnamed)
+HdaeUiName_755:	.asciz	"SongTitle"                     ; 0x2A76BE  [755]
+HdaeUiName_754:	.zero	2                               ; 0x2A76C8  [754] (unnamed)
+HdaeUiName_753:	.zero	2                               ; 0x2A76CA  [753] (unnamed)
+HdaeUiName_752:	.asciz	"Tech_lyrics"                   ; 0x2A76CC  [752]
+HdaeUiName_751:	.zero	2                               ; 0x2A76D8  [751] (unnamed)
+HdaeUiName_750:	.zero	2                               ; 0x2A76DA  [750] (unnamed)
+HdaeUiName_749:	.zero	2                               ; 0x2A76DC  [749] (unnamed)
+HdaeUiName_748:	.zero	2                               ; 0x2A76DE  [748] (unnamed)
+HdaeUiName_747:	.zero	2                               ; 0x2A76E0  [747] (unnamed)
+HdaeUiName_746:	.zero	2                               ; 0x2A76E2  [746] (unnamed)
+HdaeUiName_745:	.zero	2                               ; 0x2A76E4  [745] (unnamed)
+HdaeUiName_744:	.zero	2                               ; 0x2A76E6  [744] (unnamed)
+HdaeUiName_743:	.zero	2                               ; 0x2A76E8  [743] (unnamed)
+HdaeUiName_742:	.zero	2                               ; 0x2A76EA  [742] (unnamed)
+HdaeUiName_741:	.zero	2                               ; 0x2A76EC  [741] (unnamed)
+HdaeUiName_740:	.zero	2                               ; 0x2A76EE  [740] (unnamed)
+HdaeUiName_739:	.zero	2                               ; 0x2A76F0  [739] (unnamed)
+HdaeUiName_738:	.zero	2                               ; 0x2A76F2  [738] (unnamed)
+HdaeUiName_737:	.zero	2                               ; 0x2A76F4  [737] (unnamed)
+HdaeUiName_736:	.zero	2                               ; 0x2A76F6  [736] (unnamed)
+HdaeUiName_735:	.zero	2                               ; 0x2A76F8  [735] (unnamed)
+HdaeUiName_734:	.zero	2                               ; 0x2A76FA  [734] (unnamed)
+HdaeUiName_733:	.zero	2                               ; 0x2A76FC  [733] (unnamed)
+HdaeUiName_732:	.zero	2                               ; 0x2A76FE  [732] (unnamed)
+HdaeUiName_731:	.zero	2                               ; 0x2A7700  [731] (unnamed)
+HdaeUiName_730:	.zero	2                               ; 0x2A7702  [730] (unnamed)
+HdaeUiName_729:	.zero	2                               ; 0x2A7704  [729] (unnamed)
+HdaeUiName_728:	.asciz	"FILE_LOAD_A_Z"                 ; 0x2A7706  [728]
+HdaeUiName_727:	.zero	2                               ; 0x2A7714  [727] (unnamed)
+HdaeUiName_726:	.zero	2                               ; 0x2A7716  [726] (unnamed)
+HdaeUiName_725:	.zero	2                               ; 0x2A7718  [725] (unnamed)
+HdaeUiName_724:	.zero	2                               ; 0x2A771A  [724] (unnamed)
+HdaeUiName_723:	.zero	2                               ; 0x2A771C  [723] (unnamed)
+HdaeUiName_722:	.asciz	"SELECT_FILE_A_Z"               ; 0x2A771E  [722]
+HdaeUiName_721:	.zero	2                               ; 0x2A772E  [721] (unnamed)
+HdaeUiName_720:	.zero	2                               ; 0x2A7730  [720] (unnamed)
+HdaeUiName_719:	.zero	2                               ; 0x2A7732  [719] (unnamed)
+HdaeUiName_718:	.zero	2                               ; 0x2A7734  [718] (unnamed)
+HdaeUiName_717:	.asciz	"AGAIN_HD_FORMAT_CATCH"         ; 0x2A7736  [717]
+HdaeUiName_716:	.zero	2                               ; 0x2A774C  [716] (unnamed)
+HdaeUiName_715:	.asciz	"AGAIN_HD_FORMAT"               ; 0x2A774E  [715]
+HdaeUiName_714:	.zero	2                               ; 0x2A775E  [714] (unnamed)
+HdaeUiName_713:	.zero	2                               ; 0x2A7760  [713] (unnamed)
+HdaeUiName_712:	.zero	2                               ; 0x2A7762  [712] (unnamed)
+HdaeUiName_711:	.zero	2                               ; 0x2A7764  [711] (unnamed)
+HdaeUiName_710:	.asciz	"ERR_HD_FORMAT_CATCH"           ; 0x2A7766  [710]
+HdaeUiName_709:	.zero	2                               ; 0x2A777A  [709] (unnamed)
+HdaeUiName_708:	.asciz	"ERR_HD_FORMAT"                 ; 0x2A777C  [708]
+HdaeUiName_707:	.zero	2                               ; 0x2A778A  [707] (unnamed)
+HdaeUiName_706:	.zero	2                               ; 0x2A778C  [706] (unnamed)
+HdaeUiName_705:	.asciz	"HD_PLEASE"                     ; 0x2A778E  [705]
+HdaeUiName_704:	.zero	2                               ; 0x2A7798  [704] (unnamed)
+HdaeUiName_703:	.zero	2                               ; 0x2A779A  [703] (unnamed)
+HdaeUiName_702:	.zero	2                               ; 0x2A779C  [702] (unnamed)
+HdaeUiName_701:	.ascii	"FILE_OUT_RANGE_CATCH\0\0"      ; 0x2A779E  [701]
+HdaeUiName_700:	.ascii	"FILE_OUT_RANGE\0\0"            ; 0x2A77B4  [700]
+HdaeUiName_699:	.zero	2                               ; 0x2A77C4  [699] (unnamed)
+HdaeUiName_698:	.zero	2                               ; 0x2A77C6  [698] (unnamed)
+HdaeUiName_697:	.zero	2                               ; 0x2A77C8  [697] (unnamed)
+HdaeUiName_696:	.asciz	"DIR_OUT_RANGE_CATCH"           ; 0x2A77CA  [696]
+HdaeUiName_695:	.asciz	"DIR_OUT_RANGE"                 ; 0x2A77DE  [695]
+HdaeUiName_694:	.zero	2                               ; 0x2A77EC  [694] (unnamed)
+HdaeUiName_693:	.zero	2                               ; 0x2A77EE  [693] (unnamed)
+HdaeUiName_692:	.zero	2                               ; 0x2A77F0  [692] (unnamed)
+HdaeUiName_691:	.zero	2                               ; 0x2A77F2  [691] (unnamed)
+HdaeUiName_690:	.ascii	"ATTEN_CP_UNNAMED_CATCH\0\0"    ; 0x2A77F4  [690]
+HdaeUiName_689:	.zero	2                               ; 0x2A780C  [689] (unnamed)
+HdaeUiName_688:	.ascii	"ATTEN_CP_UNNAMED\0\0"          ; 0x2A780E  [688]
+HdaeUiName_687:	.zero	2                               ; 0x2A7820  [687] (unnamed)
+HdaeUiName_686:	.zero	2                               ; 0x2A7822  [686] (unnamed)
+HdaeUiName_685:	.zero	2                               ; 0x2A7824  [685] (unnamed)
+HdaeUiName_684:	.zero	2                               ; 0x2A7826  [684] (unnamed)
+HdaeUiName_683:	.ascii	"ATTEN_FULL_DIR_CATCH\0\0"      ; 0x2A7828  [683]
+HdaeUiName_682:	.zero	2                               ; 0x2A783E  [682] (unnamed)
+HdaeUiName_681:	.ascii	"ATTEN_FULL_DIR\0\0"            ; 0x2A7840  [681]
+HdaeUiName_680:	.zero	2                               ; 0x2A7850  [680] (unnamed)
+HdaeUiName_679:	.zero	2                               ; 0x2A7852  [679] (unnamed)
+HdaeUiName_678:	.zero	2                               ; 0x2A7854  [678] (unnamed)
+HdaeUiName_677:	.ascii	"ERR_NO_HK_DATA_CATCH\0\0"      ; 0x2A7856  [677]
+HdaeUiName_676:	.zero	2                               ; 0x2A786C  [676] (unnamed)
+HdaeUiName_675:	.ascii	"ERR_NO_HK_DATA\0\0"            ; 0x2A786E  [675]
+HdaeUiName_674:	.zero	2                               ; 0x2A787E  [674] (unnamed)
+HdaeUiName_673:	.zero	2                               ; 0x2A7880  [673] (unnamed)
+HdaeUiName_672:	.zero	2                               ; 0x2A7882  [672] (unnamed)
+HdaeUiName_671:	.ascii	"ERR_LOAD_CATCH\0\0"            ; 0x2A7884  [671]
+HdaeUiName_670:	.asciz	"ERR_LOAD_EXIT"                 ; 0x2A7894  [670]
+HdaeUiName_669:	.ascii	"ERR_LOAD\0\0"                  ; 0x2A78A2  [669]
+HdaeUiName_668:	.zero	2                               ; 0x2A78AC  [668] (unnamed)
+HdaeUiName_667:	.zero	2                               ; 0x2A78AE  [667] (unnamed)
+HdaeUiName_666:	.zero	2                               ; 0x2A78B0  [666] (unnamed)
+HdaeUiName_665:	.ascii	"ERR_SAVE_CATCH\0\0"            ; 0x2A78B2  [665]
+HdaeUiName_664:	.asciz	"ERR_SAVE_EXIT"                 ; 0x2A78C2  [664]
+HdaeUiName_663:	.ascii	"ERR_SAVE\0\0"                  ; 0x2A78D0  [663]
+HdaeUiName_662:	.zero	2                               ; 0x2A78DA  [662] (unnamed)
+HdaeUiName_661:	.zero	2                               ; 0x2A78DC  [661] (unnamed)
+HdaeUiName_660:	.ascii	"WAIT_TR0_RECOVER\0\0"          ; 0x2A78DE  [660]
+HdaeUiName_659:	.zero	2                               ; 0x2A78F0  [659] (unnamed)
+HdaeUiName_658:	.zero	2                               ; 0x2A78F2  [658] (unnamed)
+HdaeUiName_657:	.zero	2                               ; 0x2A78F4  [657] (unnamed)
+HdaeUiName_656:	.zero	2                               ; 0x2A78F6  [656] (unnamed)
+HdaeUiName_655:	.zero	2                               ; 0x2A78F8  [655] (unnamed)
+HdaeUiName_654:	.zero	2                               ; 0x2A78FA  [654] (unnamed)
+HdaeUiName_653:	.zero	2                               ; 0x2A78FC  [653] (unnamed)
+HdaeUiName_652:	.zero	2                               ; 0x2A78FE  [652] (unnamed)
+HdaeUiName_651:	.zero	2                               ; 0x2A7900  [651] (unnamed)
+HdaeUiName_650:	.zero	2                               ; 0x2A7902  [650] (unnamed)
+HdaeUiName_649:	.zero	2                               ; 0x2A7904  [649] (unnamed)
+HdaeUiName_648:	.zero	2                               ; 0x2A7906  [648] (unnamed)
+HdaeUiName_647:	.zero	2                               ; 0x2A7908  [647] (unnamed)
+HdaeUiName_646:	.zero	2                               ; 0x2A790A  [646] (unnamed)
+HdaeUiName_645:	.zero	2                               ; 0x2A790C  [645] (unnamed)
+HdaeUiName_644:	.zero	2                               ; 0x2A790E  [644] (unnamed)
+HdaeUiName_643:	.zero	2                               ; 0x2A7910  [643] (unnamed)
+HdaeUiName_642:	.zero	2                               ; 0x2A7912  [642] (unnamed)
+HdaeUiName_641:	.ascii	"ABOUT_HELP\0\0"                ; 0x2A7914  [641]
+HdaeUiName_640:	.zero	2                               ; 0x2A7920  [640] (unnamed)
+HdaeUiName_639:	.zero	2                               ; 0x2A7922  [639] (unnamed)
+HdaeUiName_638:	.zero	2                               ; 0x2A7924  [638] (unnamed)
+HdaeUiName_637:	.zero	2                               ; 0x2A7926  [637] (unnamed)
+HdaeUiName_636:	.zero	2                               ; 0x2A7928  [636] (unnamed)
+HdaeUiName_635:	.zero	2                               ; 0x2A792A  [635] (unnamed)
+HdaeUiName_634:	.asciz	"ATTEN_CPFD_MARK"               ; 0x2A792C  [634]
+HdaeUiName_633:	.zero	2                               ; 0x2A793C  [633] (unnamed)
+HdaeUiName_632:	.zero	2                               ; 0x2A793E  [632] (unnamed)
+HdaeUiName_631:	.zero	2                               ; 0x2A7940  [631] (unnamed)
+HdaeUiName_630:	.zero	2                               ; 0x2A7942  [630] (unnamed)
+HdaeUiName_629:	.ascii	"ERR_HD_FSB\0\0"                ; 0x2A7944  [629]
+HdaeUiName_628:	.zero	2                               ; 0x2A7950  [628] (unnamed)
+HdaeUiName_627:	.zero	2                               ; 0x2A7952  [627] (unnamed)
+HdaeUiName_626:	.zero	2                               ; 0x2A7954  [626] (unnamed)
+HdaeUiName_625:	.zero	2                               ; 0x2A7956  [625] (unnamed)
+HdaeUiName_624:	.ascii	"ERR_HD_FAT\0\0"                ; 0x2A7958  [624]
+HdaeUiName_623:	.zero	2                               ; 0x2A7964  [623] (unnamed)
+HdaeUiName_622:	.zero	2                               ; 0x2A7966  [622] (unnamed)
+HdaeUiName_621:	.zero	2                               ; 0x2A7968  [621] (unnamed)
+HdaeUiName_620:	.zero	2                               ; 0x2A796A  [620] (unnamed)
+HdaeUiName_619:	.ascii	"ERR_HD_TRACK_0\0\0"            ; 0x2A796C  [619]
+HdaeUiName_618:	.zero	2                               ; 0x2A797C  [618] (unnamed)
+HdaeUiName_617:	.zero	2                               ; 0x2A797E  [617] (unnamed)
+HdaeUiName_616:	.zero	2                               ; 0x2A7980  [616] (unnamed)
+HdaeUiName_615:	.zero	2                               ; 0x2A7982  [615] (unnamed)
+HdaeUiName_614:	.ascii	"ERR_HD_ID_READ\0\0"            ; 0x2A7984  [614]
+HdaeUiName_613:	.zero	2                               ; 0x2A7994  [613] (unnamed)
+HdaeUiName_612:	.zero	2                               ; 0x2A7996  [612] (unnamed)
+HdaeUiName_611:	.zero	2                               ; 0x2A7998  [611] (unnamed)
+HdaeUiName_610:	.zero	2                               ; 0x2A799A  [610] (unnamed)
+HdaeUiName_609:	.asciz	"ERR_HD_READ"                   ; 0x2A799C  [609]
+HdaeUiName_608:	.zero	2                               ; 0x2A79A8  [608] (unnamed)
+HdaeUiName_607:	.zero	2                               ; 0x2A79AA  [607] (unnamed)
+HdaeUiName_606:	.zero	2                               ; 0x2A79AC  [606] (unnamed)
+HdaeUiName_605:	.zero	2                               ; 0x2A79AE  [605] (unnamed)
+HdaeUiName_604:	.ascii	"ERR_HD_RESET\0\0"              ; 0x2A79B0  [604]
+HdaeUiName_603:	.zero	2                               ; 0x2A79BE  [603] (unnamed)
+HdaeUiName_602:	.zero	2                               ; 0x2A79C0  [602] (unnamed)
+HdaeUiName_601:	.zero	2                               ; 0x2A79C2  [601] (unnamed)
+HdaeUiName_600:	.zero	2                               ; 0x2A79C4  [600] (unnamed)
+HdaeUiName_599:	.asciz	"ERR_HD_SRAM"                   ; 0x2A79C6  [599]
+HdaeUiName_598:	.zero	2                               ; 0x2A79D2  [598] (unnamed)
+HdaeUiName_597:	.zero	2                               ; 0x2A79D4  [597] (unnamed)
+HdaeUiName_596:	.zero	2                               ; 0x2A79D6  [596] (unnamed)
+HdaeUiName_595:	.zero	2                               ; 0x2A79D8  [595] (unnamed)
+HdaeUiName_594:	.ascii	"ERR_HD_NOT_FMT\0\0"            ; 0x2A79DA  [594]
+HdaeUiName_593:	.zero	2                               ; 0x2A79EA  [593] (unnamed)
+HdaeUiName_592:	.zero	2                               ; 0x2A79EC  [592] (unnamed)
+HdaeUiName_591:	.zero	2                               ; 0x2A79EE  [591] (unnamed)
+HdaeUiName_590:	.zero	2                               ; 0x2A79F0  [590] (unnamed)
+HdaeUiName_589:	.zero	2                               ; 0x2A79F2  [589] (unnamed)
+HdaeUiName_588:	.zero	2                               ; 0x2A79F4  [588] (unnamed)
+HdaeUiName_587:	.zero	2                               ; 0x2A79F6  [587] (unnamed)
+HdaeUiName_586:	.asciz	"ATTEN_CPHD_WR"                 ; 0x2A79F8  [586]
+HdaeUiName_585:	.zero	2                               ; 0x2A7A06  [585] (unnamed)
+HdaeUiName_584:	.zero	2                               ; 0x2A7A08  [584] (unnamed)
+HdaeUiName_583:	.zero	2                               ; 0x2A7A0A  [583] (unnamed)
+HdaeUiName_582:	.zero	2                               ; 0x2A7A0C  [582] (unnamed)
+HdaeUiName_581:	.zero	2                               ; 0x2A7A0E  [581] (unnamed)
+HdaeUiName_580:	.asciz	"HDD_FLS_NAMING2"               ; 0x2A7A10  [580]
+HdaeUiName_579:	.zero	2                               ; 0x2A7A20  [579] (unnamed)
+HdaeUiName_578:	.zero	2                               ; 0x2A7A22  [578] (unnamed)
+HdaeUiName_577:	.zero	2                               ; 0x2A7A24  [577] (unnamed)
+HdaeUiName_576:	.zero	2                               ; 0x2A7A26  [576] (unnamed)
+HdaeUiName_575:	.zero	2                               ; 0x2A7A28  [575] (unnamed)
+HdaeUiName_574:	.zero	2                               ; 0x2A7A2A  [574] (unnamed)
+HdaeUiName_573:	.zero	2                               ; 0x2A7A2C  [573] (unnamed)
+HdaeUiName_572:	.zero	2                               ; 0x2A7A2E  [572] (unnamed)
+HdaeUiName_571:	.asciz	"ATTEN_OVER_FILE"               ; 0x2A7A30  [571]
+HdaeUiName_570:	.zero	2                               ; 0x2A7A40  [570] (unnamed)
+HdaeUiName_569:	.zero	2                               ; 0x2A7A42  [569] (unnamed)
+HdaeUiName_568:	.zero	2                               ; 0x2A7A44  [568] (unnamed)
+HdaeUiName_567:	.zero	2                               ; 0x2A7A46  [567] (unnamed)
+HdaeUiName_566:	.zero	2                               ; 0x2A7A48  [566] (unnamed)
+HdaeUiName_565:	.zero	2                               ; 0x2A7A4A  [565] (unnamed)
+HdaeUiName_564:	.zero	2                               ; 0x2A7A4C  [564] (unnamed)
+HdaeUiName_563:	.zero	2                               ; 0x2A7A4E  [563] (unnamed)
+HdaeUiName_562:	.zero	2                               ; 0x2A7A50  [562] (unnamed)
+HdaeUiName_561:	.zero	2                               ; 0x2A7A52  [561] (unnamed)
+HdaeUiName_560:	.zero	2                               ; 0x2A7A54  [560] (unnamed)
+HdaeUiName_559:	.ascii	"ATTEN_DEL_FLS1\0\0"            ; 0x2A7A56  [559]
+HdaeUiName_558:	.zero	2                               ; 0x2A7A66  [558] (unnamed)
+HdaeUiName_557:	.zero	2                               ; 0x2A7A68  [557] (unnamed)
+HdaeUiName_556:	.asciz	"DBG_MEMO_SCREEN"               ; 0x2A7A6A  [556]
+HdaeUiName_555:	.zero	2                               ; 0x2A7A7A  [555] (unnamed)
+HdaeUiName_554:	.ascii	"HD_INFO_LIST\0\0"              ; 0x2A7A7C  [554]
+HdaeUiName_553:	.zero	2                               ; 0x2A7A8A  [553] (unnamed)
+HdaeUiName_552:	.zero	2                               ; 0x2A7A8C  [552] (unnamed)
+HdaeUiName_551:	.ascii	"SETUP_HDINFO\0\0"              ; 0x2A7A8E  [551]
+HdaeUiName_550:	.zero	2                               ; 0x2A7A9C  [550] (unnamed)
+HdaeUiName_549:	.zero	2                               ; 0x2A7A9E  [549] (unnamed)
+HdaeUiName_548:	.zero	2                               ; 0x2A7AA0  [548] (unnamed)
+HdaeUiName_547:	.ascii	"WAIT_HD_FORMAT\0\0"            ; 0x2A7AA2  [547]
+HdaeUiName_546:	.asciz	"HD_FORMAT_CATCH"               ; 0x2A7AB2  [546]
+HdaeUiName_545:	.zero	2                               ; 0x2A7AC2  [545] (unnamed)
+HdaeUiName_544:	.zero	2                               ; 0x2A7AC4  [544] (unnamed)
+HdaeUiName_543:	.zero	2                               ; 0x2A7AC6  [543] (unnamed)
+HdaeUiName_542:	.zero	2                               ; 0x2A7AC8  [542] (unnamed)
+HdaeUiName_541:	.zero	2                               ; 0x2A7ACA  [541] (unnamed)
+HdaeUiName_540:	.zero	2                               ; 0x2A7ACC  [540] (unnamed)
+HdaeUiName_539:	.zero	2                               ; 0x2A7ACE  [539] (unnamed)
+HdaeUiName_538:	.asciz	"ATTEN_HD_FORMAT"               ; 0x2A7AD0  [538]
+HdaeUiName_537:	.zero	2                               ; 0x2A7AE0  [537] (unnamed)
+HdaeUiName_536:	.zero	2                               ; 0x2A7AE2  [536] (unnamed)
+HdaeUiName_535:	.asciz	"WAIT_DEL_FILE"                 ; 0x2A7AE4  [535]
+HdaeUiName_534:	.zero	2                               ; 0x2A7AF2  [534] (unnamed)
+HdaeUiName_533:	.zero	2                               ; 0x2A7AF4  [533] (unnamed)
+HdaeUiName_532:	.zero	2                               ; 0x2A7AF6  [532] (unnamed)
+HdaeUiName_531:	.zero	2                               ; 0x2A7AF8  [531] (unnamed)
+HdaeUiName_530:	.zero	2                               ; 0x2A7AFA  [530] (unnamed)
+HdaeUiName_529:	.zero	2                               ; 0x2A7AFC  [529] (unnamed)
+HdaeUiName_528:	.zero	2                               ; 0x2A7AFE  [528] (unnamed)
+HdaeUiName_527:	.zero	2                               ; 0x2A7B00  [527] (unnamed)
+HdaeUiName_526:	.zero	2                               ; 0x2A7B02  [526] (unnamed)
+HdaeUiName_525:	.ascii	"ATTEN_DEL_FLS2\0\0"            ; 0x2A7B04  [525]
+HdaeUiName_524:	.zero	2                               ; 0x2A7B14  [524] (unnamed)
+HdaeUiName_523:	.zero	2                               ; 0x2A7B16  [523] (unnamed)
+HdaeUiName_522:	.zero	2                               ; 0x2A7B18  [522] (unnamed)
+HdaeUiName_521:	.zero	2                               ; 0x2A7B1A  [521] (unnamed)
+HdaeUiName_520:	.zero	2                               ; 0x2A7B1C  [520] (unnamed)
+HdaeUiName_519:	.zero	2                               ; 0x2A7B1E  [519] (unnamed)
+HdaeUiName_518:	.zero	2                               ; 0x2A7B20  [518] (unnamed)
+HdaeUiName_517:	.zero	2                               ; 0x2A7B22  [517] (unnamed)
+HdaeUiName_516:	.ascii	"ATTEN_OVER_FLS\0\0"            ; 0x2A7B24  [516]
+HdaeUiName_515:	.zero	2                               ; 0x2A7B34  [515] (unnamed)
+HdaeUiName_514:	.zero	2                               ; 0x2A7B36  [514] (unnamed)
+HdaeUiName_513:	.zero	2                               ; 0x2A7B38  [513] (unnamed)
+HdaeUiName_512:	.zero	2                               ; 0x2A7B3A  [512] (unnamed)
+HdaeUiName_511:	.zero	2                               ; 0x2A7B3C  [511] (unnamed)
+HdaeUiName_510:	.zero	2                               ; 0x2A7B3E  [510] (unnamed)
+HdaeUiName_509:	.zero	2                               ; 0x2A7B40  [509] (unnamed)
+HdaeUiName_508:	.zero	2                               ; 0x2A7B42  [508] (unnamed)
+HdaeUiName_507:	.ascii	"ATTEN_DEL_FILE\0\0"            ; 0x2A7B44  [507]
+HdaeUiName_506:	.zero	2                               ; 0x2A7B54  [506] (unnamed)
+HdaeUiName_505:	.zero	2                               ; 0x2A7B56  [505] (unnamed)
+HdaeUiName_504:	.ascii	"WAIT_DEL_DIR\0\0"              ; 0x2A7B58  [504]
+HdaeUiName_503:	.zero	2                               ; 0x2A7B66  [503] (unnamed)
+HdaeUiName_502:	.zero	2                               ; 0x2A7B68  [502] (unnamed)
+HdaeUiName_501:	.zero	2                               ; 0x2A7B6A  [501] (unnamed)
+HdaeUiName_500:	.zero	2                               ; 0x2A7B6C  [500] (unnamed)
+HdaeUiName_499:	.zero	2                               ; 0x2A7B6E  [499] (unnamed)
+HdaeUiName_498:	.zero	2                               ; 0x2A7B70  [498] (unnamed)
+HdaeUiName_497:	.zero	2                               ; 0x2A7B72  [497] (unnamed)
+HdaeUiName_496:	.zero	2                               ; 0x2A7B74  [496] (unnamed)
+HdaeUiName_495:	.asciz	"ATTEN_DEL_DIR"                 ; 0x2A7B76  [495]
+HdaeUiName_494:	.ascii	"IV_HDDMENU\0\0"                ; 0x2A7B84  [494]
+HdaeUiName_493:	.asciz	"HD_MENU_BMP"                   ; 0x2A7B90  [493]
+HdaeUiName_492:	.ascii	"HDD_ICON_DISPLAY\0\0"          ; 0x2A7B9C  [492]
+HdaeUiName_491:	.zero	2                               ; 0x2A7BAE  [491] (unnamed)
+HdaeUiName_490:	.zero	2                               ; 0x2A7BB0  [490] (unnamed)
+HdaeUiName_489:	.ascii	"DEL_EDIT_TLX\0\0"              ; 0x2A7BB2  [489]
+HdaeUiName_488:	.zero	2                               ; 0x2A7BC0  [488] (unnamed)
+HdaeUiName_487:	.zero	2                               ; 0x2A7BC2  [487] (unnamed)
+HdaeUiName_486:	.zero	2                               ; 0x2A7BC4  [486] (unnamed)
+HdaeUiName_485:	.zero	2                               ; 0x2A7BC6  [485] (unnamed)
+HdaeUiName_484:	.zero	2                               ; 0x2A7BC8  [484] (unnamed)
+HdaeUiName_483:	.zero	2                               ; 0x2A7BCA  [483] (unnamed)
+HdaeUiName_482:	.zero	2                               ; 0x2A7BCC  [482] (unnamed)
+HdaeUiName_481:	.zero	2                               ; 0x2A7BCE  [481] (unnamed)
+HdaeUiName_480:	.zero	2                               ; 0x2A7BD0  [480] (unnamed)
+HdaeUiName_479:	.zero	2                               ; 0x2A7BD2  [479] (unnamed)
+HdaeUiName_478:	.zero	2                               ; 0x2A7BD4  [478] (unnamed)
+HdaeUiName_477:	.zero	2                               ; 0x2A7BD6  [477] (unnamed)
+HdaeUiName_476:	.zero	2                               ; 0x2A7BD8  [476] (unnamed)
+HdaeUiName_475:	.zero	2                               ; 0x2A7BDA  [475] (unnamed)
+HdaeUiName_474:	.zero	2                               ; 0x2A7BDC  [474] (unnamed)
+HdaeUiName_473:	.zero	2                               ; 0x2A7BDE  [473] (unnamed)
+HdaeUiName_472:	.zero	2                               ; 0x2A7BE0  [472] (unnamed)
+HdaeUiName_471:	.zero	2                               ; 0x2A7BE2  [471] (unnamed)
+HdaeUiName_470:	.asciz	"DEL_EDIT_MD"                   ; 0x2A7BE4  [470]
+HdaeUiName_469:	.ascii	"DEL_EDIT_RCM\0\0"              ; 0x2A7BF0  [469]
+HdaeUiName_468:	.ascii	"DEL_EDIT_MSP\0\0"              ; 0x2A7BFE  [468]
+HdaeUiName_467:	.asciz	"DEL_EDIT_TM"                   ; 0x2A7C0C  [467]
+HdaeUiName_466:	.ascii	"DEL_EDIT_CMP\0\0"              ; 0x2A7C18  [466]
+HdaeUiName_465:	.ascii	"DEL_EDIT_SQT\0\0"              ; 0x2A7C26  [465]
+HdaeUiName_464:	.ascii	"DEL_EDIT_PMT\0\0"              ; 0x2A7C34  [464]
+HdaeUiName_463:	.ascii	"DEL_EDIT_LSW\0\0"              ; 0x2A7C42  [463]
+HdaeUiName_462:	.zero	2                               ; 0x2A7C50  [462] (unnamed)
+HdaeUiName_461:	.zero	2                               ; 0x2A7C52  [461] (unnamed)
+HdaeUiName_460:	.zero	2                               ; 0x2A7C54  [460] (unnamed)
+HdaeUiName_459:	.zero	2                               ; 0x2A7C56  [459] (unnamed)
+HdaeUiName_458:	.zero	2                               ; 0x2A7C58  [458] (unnamed)
+HdaeUiName_457:	.zero	2                               ; 0x2A7C5A  [457] (unnamed)
+HdaeUiName_456:	.zero	2                               ; 0x2A7C5C  [456] (unnamed)
+HdaeUiName_455:	.zero	2                               ; 0x2A7C5E  [455] (unnamed)
+HdaeUiName_454:	.zero	2                               ; 0x2A7C60  [454] (unnamed)
+HdaeUiName_453:	.zero	2                               ; 0x2A7C62  [453] (unnamed)
+HdaeUiName_452:	.zero	2                               ; 0x2A7C64  [452] (unnamed)
+HdaeUiName_451:	.zero	2                               ; 0x2A7C66  [451] (unnamed)
+HdaeUiName_450:	.asciz	"FILE_DEL_SCREEN"               ; 0x2A7C68  [450]
+HdaeUiName_449:	.ascii	"HddNamingLabel\0\0"            ; 0x2A7C78  [449]
+HdaeUiName_448:	.zero	2                               ; 0x2A7C88  [448] (unnamed)
+HdaeUiName_447:	.zero	2                               ; 0x2A7C8A  [447] (unnamed)
+HdaeUiName_446:	.zero	2                               ; 0x2A7C8C  [446] (unnamed)
+HdaeUiName_445:	.asciz	"HddNamingSymbol"               ; 0x2A7C8E  [445]
+HdaeUiName_444:	.ascii	"HddNamingabc\0\0"              ; 0x2A7C9E  [444]
+HdaeUiName_443:	.ascii	"HddNamingABC\0\0"              ; 0x2A7CAC  [443]
+HdaeUiName_442:	.ascii	"HddNamingCursorBox\0\0"        ; 0x2A7CBA  [442]
+HdaeUiName_441:	.zero	2                               ; 0x2A7CCE  [441] (unnamed)
+HdaeUiName_440:	.zero	2                               ; 0x2A7CD0  [440] (unnamed)
+HdaeUiName_439:	.zero	2                               ; 0x2A7CD2  [439] (unnamed)
+HdaeUiName_438:	.zero	2                               ; 0x2A7CD4  [438] (unnamed)
+HdaeUiName_437:	.zero	2                               ; 0x2A7CD6  [437] (unnamed)
+HdaeUiName_436:	.zero	2                               ; 0x2A7CD8  [436] (unnamed)
+HdaeUiName_435:	.zero	2                               ; 0x2A7CDA  [435] (unnamed)
+HdaeUiName_434:	.zero	2                               ; 0x2A7CDC  [434] (unnamed)
+HdaeUiName_433:	.zero	2                               ; 0x2A7CDE  [433] (unnamed)
+HdaeUiName_432:	.zero	2                               ; 0x2A7CE0  [432] (unnamed)
+HdaeUiName_431:	.zero	2                               ; 0x2A7CE2  [431] (unnamed)
+HdaeUiName_430:	.asciz	"HddNamingWindow"               ; 0x2A7CE4  [430]
+HdaeUiName_429:	.zero	2                               ; 0x2A7CF4  [429] (unnamed)
+HdaeUiName_428:	.zero	2                               ; 0x2A7CF6  [428] (unnamed)
+HdaeUiName_427:	.zero	2                               ; 0x2A7CF8  [427] (unnamed)
+HdaeUiName_426:	.ascii	"RAM_EDIT_TLX\0\0"              ; 0x2A7CFA  [426]
+HdaeUiName_425:	.zero	2                               ; 0x2A7D08  [425] (unnamed)
+HdaeUiName_424:	.zero	2                               ; 0x2A7D0A  [424] (unnamed)
+HdaeUiName_423:	.zero	2                               ; 0x2A7D0C  [423] (unnamed)
+HdaeUiName_422:	.zero	2                               ; 0x2A7D0E  [422] (unnamed)
+HdaeUiName_421:	.zero	2                               ; 0x2A7D10  [421] (unnamed)
+HdaeUiName_420:	.zero	2                               ; 0x2A7D12  [420] (unnamed)
+HdaeUiName_419:	.zero	2                               ; 0x2A7D14  [419] (unnamed)
+HdaeUiName_418:	.zero	2                               ; 0x2A7D16  [418] (unnamed)
+HdaeUiName_417:	.zero	2                               ; 0x2A7D18  [417] (unnamed)
+HdaeUiName_416:	.zero	2                               ; 0x2A7D1A  [416] (unnamed)
+HdaeUiName_415:	.zero	2                               ; 0x2A7D1C  [415] (unnamed)
+HdaeUiName_414:	.zero	2                               ; 0x2A7D1E  [414] (unnamed)
+HdaeUiName_413:	.zero	2                               ; 0x2A7D20  [413] (unnamed)
+HdaeUiName_412:	.asciz	"RAM_EDIT_MD"                   ; 0x2A7D22  [412]
+HdaeUiName_411:	.ascii	"RAM_EDIT_RCM\0\0"              ; 0x2A7D2E  [411]
+HdaeUiName_410:	.ascii	"RAM_EDIT_MSP\0\0"              ; 0x2A7D3C  [410]
+HdaeUiName_409:	.asciz	"RAM_EDIT_TM"                   ; 0x2A7D4A  [409]
+HdaeUiName_408:	.ascii	"RAM_EDIT_SQT\0\0"              ; 0x2A7D56  [408]
+HdaeUiName_407:	.ascii	"RAM_EDIT_PMT\0\0"              ; 0x2A7D64  [407]
+HdaeUiName_406:	.ascii	"RAM_EDIT_LSW\0\0"              ; 0x2A7D72  [406]
+HdaeUiName_405:	.zero	2                               ; 0x2A7D80  [405] (unnamed)
+HdaeUiName_404:	.ascii	"RAM_EDIT_CMP\0\0"              ; 0x2A7D82  [404]
+HdaeUiName_403:	.zero	2                               ; 0x2A7D90  [403] (unnamed)
+HdaeUiName_402:	.zero	2                               ; 0x2A7D92  [402] (unnamed)
+HdaeUiName_401:	.zero	2                               ; 0x2A7D94  [401] (unnamed)
+HdaeUiName_400:	.zero	2                               ; 0x2A7D96  [400] (unnamed)
+HdaeUiName_399:	.zero	2                               ; 0x2A7D98  [399] (unnamed)
+HdaeUiName_398:	.zero	2                               ; 0x2A7D9A  [398] (unnamed)
+HdaeUiName_397:	.zero	2                               ; 0x2A7D9C  [397] (unnamed)
+HdaeUiName_396:	.zero	2                               ; 0x2A7D9E  [396] (unnamed)
+HdaeUiName_395:	.zero	2                               ; 0x2A7DA0  [395] (unnamed)
+HdaeUiName_394:	.zero	2                               ; 0x2A7DA2  [394] (unnamed)
+HdaeUiName_393:	.zero	2                               ; 0x2A7DA4  [393] (unnamed)
+HdaeUiName_392:	.zero	2                               ; 0x2A7DA6  [392] (unnamed)
+HdaeUiName_391:	.zero	2                               ; 0x2A7DA8  [391] (unnamed)
+HdaeUiName_390:	.zero	2                               ; 0x2A7DAA  [390] (unnamed)
+HdaeUiName_389:	.zero	2                               ; 0x2A7DAC  [389] (unnamed)
+HdaeUiName_388:	.zero	2                               ; 0x2A7DAE  [388] (unnamed)
+HdaeUiName_387:	.zero	2                               ; 0x2A7DB0  [387] (unnamed)
+HdaeUiName_386:	.asciz	"SAVE_OPT_SCREEN"               ; 0x2A7DB2  [386]
+HdaeUiName_385:	.zero	2                               ; 0x2A7DC2  [385] (unnamed)
+HdaeUiName_384:	.zero	2                               ; 0x2A7DC4  [384] (unnamed)
+HdaeUiName_383:	.zero	2                               ; 0x2A7DC6  [383] (unnamed)
+HdaeUiName_382:	.zero	2                               ; 0x2A7DC8  [382] (unnamed)
+HdaeUiName_381:	.zero	2                               ; 0x2A7DCA  [381] (unnamed)
+HdaeUiName_380:	.zero	2                               ; 0x2A7DCC  [380] (unnamed)
+HdaeUiName_379:	.ascii	"CP_FD_DIR_NAMING\0\0"          ; 0x2A7DCE  [379]
+HdaeUiName_378:	.zero	2                               ; 0x2A7DE0  [378] (unnamed)
+HdaeUiName_377:	.zero	2                               ; 0x2A7DE2  [377] (unnamed)
+HdaeUiName_376:	.zero	2                               ; 0x2A7DE4  [376] (unnamed)
+HdaeUiName_375:	.ascii	"FLS_EDIT_OPT_BOX\0\0"          ; 0x2A7DE6  [375]
+HdaeUiName_374:	.ascii	"FLS_EDIT_LOC_BOX\0\0"          ; 0x2A7DF8  [374]
+HdaeUiName_373:	.zero	2                               ; 0x2A7E0A  [373] (unnamed)
+HdaeUiName_372:	.zero	2                               ; 0x2A7E0C  [372] (unnamed)
+HdaeUiName_371:	.zero	2                               ; 0x2A7E0E  [371] (unnamed)
+HdaeUiName_370:	.zero	2                               ; 0x2A7E10  [370] (unnamed)
+HdaeUiName_369:	.zero	2                               ; 0x2A7E12  [369] (unnamed)
+HdaeUiName_368:	.zero	2                               ; 0x2A7E14  [368] (unnamed)
+HdaeUiName_367:	.zero	2                               ; 0x2A7E16  [367] (unnamed)
+HdaeUiName_366:	.zero	2                               ; 0x2A7E18  [366] (unnamed)
+HdaeUiName_365:	.zero	2                               ; 0x2A7E1A  [365] (unnamed)
+HdaeUiName_364:	.zero	2                               ; 0x2A7E1C  [364] (unnamed)
+HdaeUiName_363:	.ascii	"FLS_EDIT_LINE1\0\0"            ; 0x2A7E1E  [363]
+HdaeUiName_362:	.ascii	"FLS_EDIT_LINE2\0\0"            ; 0x2A7E2E  [362]
+HdaeUiName_361:	.asciz	"FLS_EDIT_LIST_BOX"             ; 0x2A7E3E  [361]
+HdaeUiName_360:	.zero	2                               ; 0x2A7E50  [360] (unnamed)
+HdaeUiName_359:	.zero	2                               ; 0x2A7E52  [359] (unnamed)
+HdaeUiName_358:	.asciz	"FLS_EDIT_NAME_BOX"             ; 0x2A7E54  [358]
+HdaeUiName_357:	.zero	2                               ; 0x2A7E66  [357] (unnamed)
+HdaeUiName_356:	.zero	2                               ; 0x2A7E68  [356] (unnamed)
+HdaeUiName_355:	.ascii	"FLS_EDIT\0\0"                  ; 0x2A7E6A  [355]
+HdaeUiName_354:	.zero	2                               ; 0x2A7E74  [354] (unnamed)
+HdaeUiName_353:	.zero	2                               ; 0x2A7E76  [353] (unnamed)
+HdaeUiName_352:	.asciz	"FLS_FILE_SEL_OPTBOX"           ; 0x2A7E78  [352]
+HdaeUiName_351:	.zero	2                               ; 0x2A7E8C  [351] (unnamed)
+HdaeUiName_350:	.zero	2                               ; 0x2A7E8E  [350] (unnamed)
+HdaeUiName_349:	.zero	2                               ; 0x2A7E90  [349] (unnamed)
+HdaeUiName_348:	.ascii	"FLS_FILE_SEL_LISTBOX\0\0"      ; 0x2A7E92  [348]
+HdaeUiName_347:	.asciz	"FLS_FILE_SEL_DIRBOX"           ; 0x2A7EA8  [347]
+HdaeUiName_346:	.zero	2                               ; 0x2A7EBC  [346] (unnamed)
+HdaeUiName_345:	.ascii	"FLS_FILE_SEL\0\0"              ; 0x2A7EBE  [345]
+HdaeUiName_344:	.zero	2                               ; 0x2A7ECC  [344] (unnamed)
+HdaeUiName_343:	.zero	2                               ; 0x2A7ECE  [343] (unnamed)
+HdaeUiName_342:	.zero	2                               ; 0x2A7ED0  [342] (unnamed)
+HdaeUiName_341:	.zero	2                               ; 0x2A7ED2  [341] (unnamed)
+HdaeUiName_340:	.zero	2                               ; 0x2A7ED4  [340] (unnamed)
+HdaeUiName_339:	.zero	2                               ; 0x2A7ED6  [339] (unnamed)
+HdaeUiName_338:	.zero	2                               ; 0x2A7ED8  [338] (unnamed)
+HdaeUiName_337:	.asciz	"FLS_DIR_BOX"                   ; 0x2A7EDA  [337]
+HdaeUiName_336:	.zero	2                               ; 0x2A7EE6  [336] (unnamed)
+HdaeUiName_335:	.zero	2                               ; 0x2A7EE8  [335] (unnamed)
+HdaeUiName_334:	.asciz	"FLS_DIR_SEL"                   ; 0x2A7EEA  [334]
+HdaeUiName_333:	.zero	2                               ; 0x2A7EF6  [333] (unnamed)
+HdaeUiName_332:	.zero	2                               ; 0x2A7EF8  [332] (unnamed)
+HdaeUiName_331:	.zero	2                               ; 0x2A7EFA  [331] (unnamed)
+HdaeUiName_330:	.ascii	"FLS_LOAD_LINE2\0\0"            ; 0x2A7EFC  [330]
+HdaeUiName_329:	.ascii	"FLS_LOAD_LINE1\0\0"            ; 0x2A7F0C  [329]
+HdaeUiName_328:	.ascii	"FLS_FILE_BOX\0\0"              ; 0x2A7F1C  [328]
+HdaeUiName_327:	.zero	2                               ; 0x2A7F2A  [327] (unnamed)
+HdaeUiName_326:	.zero	2                               ; 0x2A7F2C  [326] (unnamed)
+HdaeUiName_325:	.ascii	"FLS_NAME_BOX\0\0"              ; 0x2A7F2E  [325]
+HdaeUiName_324:	.asciz	"FLS_LOC_BOX"                   ; 0x2A7F3C  [324]
+HdaeUiName_323:	.asciz	"FLS_OPT_BOX"                   ; 0x2A7F48  [323]
+HdaeUiName_322:	.zero	2                               ; 0x2A7F54  [322] (unnamed)
+HdaeUiName_321:	.zero	2                               ; 0x2A7F56  [321] (unnamed)
+HdaeUiName_320:	.zero	2                               ; 0x2A7F58  [320] (unnamed)
+HdaeUiName_319:	.zero	2                               ; 0x2A7F5A  [319] (unnamed)
+HdaeUiName_318:	.asciz	"FLS_FILE_LOAD_SW_EDIT"         ; 0x2A7F5C  [318]
+HdaeUiName_317:	.zero	2                               ; 0x2A7F72  [317] (unnamed)
+HdaeUiName_316:	.zero	2                               ; 0x2A7F74  [316] (unnamed)
+HdaeUiName_315:	.zero	2                               ; 0x2A7F76  [315] (unnamed)
+HdaeUiName_314:	.asciz	"FLS_FILE_LOAD"                 ; 0x2A7F78  [314]
+HdaeUiName_313:	.zero	2                               ; 0x2A7F86  [313] (unnamed)
+HdaeUiName_312:	.zero	2                               ; 0x2A7F88  [312] (unnamed)
+HdaeUiName_311:	.zero	2                               ; 0x2A7F8A  [311] (unnamed)
+HdaeUiName_310:	.zero	2                               ; 0x2A7F8C  [310] (unnamed)
+HdaeUiName_309:	.zero	2                               ; 0x2A7F8E  [309] (unnamed)
+HdaeUiName_308:	.ascii	"HDD_FLS_NAMING\0\0"            ; 0x2A7F90  [308]
+HdaeUiName_307:	.zero	2                               ; 0x2A7FA0  [307] (unnamed)
+HdaeUiName_306:	.zero	2                               ; 0x2A7FA2  [306] (unnamed)
+HdaeUiName_305:	.zero	2                               ; 0x2A7FA4  [305] (unnamed)
+HdaeUiName_304:	.zero	2                               ; 0x2A7FA6  [304] (unnamed)
+HdaeUiName_303:	.zero	2                               ; 0x2A7FA8  [303] (unnamed)
+HdaeUiName_302:	.zero	2                               ; 0x2A7FAA  [302] (unnamed)
+HdaeUiName_301:	.zero	2                               ; 0x2A7FAC  [301] (unnamed)
+HdaeUiName_300:	.zero	2                               ; 0x2A7FAE  [300] (unnamed)
+HdaeUiName_299:	.zero	2                               ; 0x2A7FB0  [299] (unnamed)
+HdaeUiName_298:	.zero	2                               ; 0x2A7FB2  [298] (unnamed)
+HdaeUiName_297:	.zero	2                               ; 0x2A7FB4  [297] (unnamed)
+HdaeUiName_296:	.zero	2                               ; 0x2A7FB6  [296] (unnamed)
+HdaeUiName_295:	.zero	2                               ; 0x2A7FB8  [295] (unnamed)
+HdaeUiName_294:	.zero	2                               ; 0x2A7FBA  [294] (unnamed)
+HdaeUiName_293:	.zero	2                               ; 0x2A7FBC  [293] (unnamed)
+HdaeUiName_292:	.zero	2                               ; 0x2A7FBE  [292] (unnamed)
+HdaeUiName_291:	.zero	2                               ; 0x2A7FC0  [291] (unnamed)
+HdaeUiName_290:	.zero	2                               ; 0x2A7FC2  [290] (unnamed)
+HdaeUiName_289:	.zero	2                               ; 0x2A7FC4  [289] (unnamed)
+HdaeUiName_288:	.zero	2                               ; 0x2A7FC6  [288] (unnamed)
+HdaeUiName_287:	.zero	2                               ; 0x2A7FC8  [287] (unnamed)
+HdaeUiName_286:	.zero	2                               ; 0x2A7FCA  [286] (unnamed)
+HdaeUiName_285:	.zero	2                               ; 0x2A7FCC  [285] (unnamed)
+HdaeUiName_284:	.zero	2                               ; 0x2A7FCE  [284] (unnamed)
+HdaeUiName_283:	.zero	2                               ; 0x2A7FD0  [283] (unnamed)
+HdaeUiName_282:	.zero	2                               ; 0x2A7FD2  [282] (unnamed)
+HdaeUiName_281:	.zero	2                               ; 0x2A7FD4  [281] (unnamed)
+HdaeUiName_280:	.zero	2                               ; 0x2A7FD6  [280] (unnamed)
+HdaeUiName_279:	.zero	2                               ; 0x2A7FD8  [279] (unnamed)
+HdaeUiName_278:	.zero	2                               ; 0x2A7FDA  [278] (unnamed)
+HdaeUiName_277:	.zero	2                               ; 0x2A7FDC  [277] (unnamed)
+HdaeUiName_276:	.zero	2                               ; 0x2A7FDE  [276] (unnamed)
+HdaeUiName_275:	.zero	2                               ; 0x2A7FE0  [275] (unnamed)
+HdaeUiName_274:	.zero	2                               ; 0x2A7FE2  [274] (unnamed)
+HdaeUiName_273:	.zero	2                               ; 0x2A7FE4  [273] (unnamed)
+HdaeUiName_272:	.asciz	"HD_FILE_LOAD_P2"               ; 0x2A7FE6  [272]
+HdaeUiName_271:	.zero	2                               ; 0x2A7FF6  [271] (unnamed)
+HdaeUiName_270:	.zero	2                               ; 0x2A7FF8  [270] (unnamed)
+HdaeUiName_269:	.asciz	"HD_FILE_LOAD_SW_DELFILE"       ; 0x2A7FFA  [269]
+HdaeUiName_268:	.zero	2                               ; 0x2A8012  [268] (unnamed)
+HdaeUiName_267:	.zero	2                               ; 0x2A8014  [267] (unnamed)
+HdaeUiName_266:	.asciz	"HD_FILE_LOAD_SW_DEL"           ; 0x2A8016  [266]
+HdaeUiName_265:	.zero	2                               ; 0x2A802A  [265] (unnamed)
+HdaeUiName_264:	.zero	2                               ; 0x2A802C  [264] (unnamed)
+HdaeUiName_263:	.zero	2                               ; 0x2A802E  [263] (unnamed)
+HdaeUiName_262:	.zero	2                               ; 0x2A8030  [262] (unnamed)
+HdaeUiName_261:	.zero	2                               ; 0x2A8032  [261] (unnamed)
+HdaeUiName_260:	.ascii	"FILE_LOAD_DIRBOX\0\0"          ; 0x2A8034  [260]
+HdaeUiName_259:	.ascii	"HD_FILE_LIST\0\0"              ; 0x2A8046  [259]
+HdaeUiName_258:	.ascii	"HD_FILE_OPTION\0\0"            ; 0x2A8054  [258]
+HdaeUiName_257:	.zero	2                               ; 0x2A8064  [257] (unnamed)
+HdaeUiName_256:	.ascii	"HD_FILE_LOAD_SW_SAVE\0\0"      ; 0x2A8066  [256]
+HdaeUiName_255:	.asciz	"HD_FILE_LOAD_P1"               ; 0x2A807C  [255]
+HdaeUiName_254:	.zero	2                               ; 0x2A808C  [254] (unnamed)
+HdaeUiName_253:	.zero	2                               ; 0x2A808E  [253] (unnamed)
+HdaeUiName_252:	.zero	2                               ; 0x2A8090  [252] (unnamed)
+HdaeUiName_251:	.asciz	"SEL_FLS"                       ; 0x2A8092  [251]
+HdaeUiName_250:	.zero	2                               ; 0x2A809A  [250] (unnamed)
+HdaeUiName_249:	.ascii	"FLS_SELECT_SW_EDIT\0\0"        ; 0x2A809C  [249]
+HdaeUiName_248:	.asciz	"FLS_SEL"                       ; 0x2A80B0  [248]
+HdaeUiName_247:	.zero	2                               ; 0x2A80B8  [247] (unnamed)
+HdaeUiName_246:	.zero	2                               ; 0x2A80BA  [246] (unnamed)
+HdaeUiName_245:	.zero	2                               ; 0x2A80BC  [245] (unnamed)
+HdaeUiName_244:	.zero	2                               ; 0x2A80BE  [244] (unnamed)
+HdaeUiName_243:	.zero	2                               ; 0x2A80C0  [243] (unnamed)
+HdaeUiName_242:	.zero	2                               ; 0x2A80C2  [242] (unnamed)
+HdaeUiName_241:	.zero	2                               ; 0x2A80C4  [241] (unnamed)
+HdaeUiName_240:	.ascii	"FLS_SELECT\0\0"                ; 0x2A80C6  [240]
+HdaeUiName_239:	.zero	2                               ; 0x2A80D2  [239] (unnamed)
+HdaeUiName_238:	.zero	2                               ; 0x2A80D4  [238] (unnamed)
+HdaeUiName_237:	.zero	2                               ; 0x2A80D6  [237] (unnamed)
+HdaeUiName_236:	.zero	2                               ; 0x2A80D8  [236] (unnamed)
+HdaeUiName_235:	.zero	2                               ; 0x2A80DA  [235] (unnamed)
+HdaeUiName_234:	.zero	2                               ; 0x2A80DC  [234] (unnamed)
+HdaeUiName_233:	.zero	2                               ; 0x2A80DE  [233] (unnamed)
+HdaeUiName_232:	.zero	2                               ; 0x2A80E0  [232] (unnamed)
+HdaeUiName_231:	.zero	2                               ; 0x2A80E2  [231] (unnamed)
+HdaeUiName_230:	.ascii	"CP_FD_DIRBOX\0\0"              ; 0x2A80E4  [230]
+HdaeUiName_229:	.zero	2                               ; 0x2A80F2  [229] (unnamed)
+HdaeUiName_228:	.zero	2                               ; 0x2A80F4  [228] (unnamed)
+HdaeUiName_227:	.zero	2                               ; 0x2A80F6  [227] (unnamed)
+HdaeUiName_226:	.ascii	"CP_FD_DIRSEL\0\0"              ; 0x2A80F8  [226]
+HdaeUiName_225:	.zero	2                               ; 0x2A8106  [225] (unnamed)
+HdaeUiName_224:	.ascii	"CP_FD_HDALLSEL\0\0"            ; 0x2A8108  [224]
+HdaeUiName_223:	.zero	2                               ; 0x2A8118  [223] (unnamed)
+HdaeUiName_222:	.ascii	"CP_FD_VOLLABEL\0\0"            ; 0x2A811A  [222]
+HdaeUiName_221:	.zero	2                               ; 0x2A812A  [221] (unnamed)
+HdaeUiName_220:	.asciz	"CP_FD_HDSWSEL"                 ; 0x2A812C  [220]
+HdaeUiName_219:	.zero	2                               ; 0x2A813A  [219] (unnamed)
+HdaeUiName_218:	.ascii	"CP_FD_HDSWTO\0\0"              ; 0x2A813C  [218]
+HdaeUiName_217:	.asciz	"CP_FD_LINE1"                   ; 0x2A814A  [217]
+HdaeUiName_216:	.asciz	"CP_FD_LINE2"                   ; 0x2A8156  [216]
+HdaeUiName_215:	.ascii	"CP_FD_LIST\0\0"                ; 0x2A8162  [215]
+HdaeUiName_214:	.zero	2                               ; 0x2A816E  [214] (unnamed)
+HdaeUiName_213:	.zero	2                               ; 0x2A8170  [213] (unnamed)
+HdaeUiName_212:	.zero	2                               ; 0x2A8172  [212] (unnamed)
+HdaeUiName_211:	.zero	2                               ; 0x2A8174  [211] (unnamed)
+HdaeUiName_210:	.asciz	"CP_FD"                         ; 0x2A8176  [210]
+HdaeUiName_209:	.zero	2                               ; 0x2A817C  [209] (unnamed)
+HdaeUiName_208:	.zero	2                               ; 0x2A817E  [208] (unnamed)
+HdaeUiName_207:	.zero	2                               ; 0x2A8180  [207] (unnamed)
+HdaeUiName_206:	.zero	2                               ; 0x2A8182  [206] (unnamed)
+HdaeUiName_205:	.zero	2                               ; 0x2A8184  [205] (unnamed)
+HdaeUiName_204:	.zero	2                               ; 0x2A8186  [204] (unnamed)
+HdaeUiName_203:	.zero	2                               ; 0x2A8188  [203] (unnamed)
+HdaeUiName_202:	.zero	2                               ; 0x2A818A  [202] (unnamed)
+HdaeUiName_201:	.zero	2                               ; 0x2A818C  [201] (unnamed)
+HdaeUiName_200:	.zero	2                               ; 0x2A818E  [200] (unnamed)
+HdaeUiName_199:	.zero	2                               ; 0x2A8190  [199] (unnamed)
+HdaeUiName_198:	.zero	2                               ; 0x2A8192  [198] (unnamed)
+HdaeUiName_197:	.zero	2                               ; 0x2A8194  [197] (unnamed)
+HdaeUiName_196:	.zero	2                               ; 0x2A8196  [196] (unnamed)
+HdaeUiName_195:	.zero	2                               ; 0x2A8198  [195] (unnamed)
+HdaeUiName_194:	.zero	2                               ; 0x2A819A  [194] (unnamed)
+HdaeUiName_193:	.zero	2                               ; 0x2A819C  [193] (unnamed)
+HdaeUiName_192:	.zero	2                               ; 0x2A819E  [192] (unnamed)
+HdaeUiName_191:	.zero	2                               ; 0x2A81A0  [191] (unnamed)
+HdaeUiName_190:	.zero	2                               ; 0x2A81A2  [190] (unnamed)
+HdaeUiName_189:	.zero	2                               ; 0x2A81A4  [189] (unnamed)
+HdaeUiName_188:	.zero	2                               ; 0x2A81A6  [188] (unnamed)
+HdaeUiName_187:	.zero	2                               ; 0x2A81A8  [187] (unnamed)
+HdaeUiName_186:	.zero	2                               ; 0x2A81AA  [186] (unnamed)
+HdaeUiName_185:	.zero	2                               ; 0x2A81AC  [185] (unnamed)
+HdaeUiName_184:	.zero	2                               ; 0x2A81AE  [184] (unnamed)
+HdaeUiName_183:	.zero	2                               ; 0x2A81B0  [183] (unnamed)
+HdaeUiName_182:	.zero	2                               ; 0x2A81B2  [182] (unnamed)
+HdaeUiName_181:	.zero	2                               ; 0x2A81B4  [181] (unnamed)
+HdaeUiName_180:	.zero	2                               ; 0x2A81B6  [180] (unnamed)
+HdaeUiName_179:	.zero	2                               ; 0x2A81B8  [179] (unnamed)
+HdaeUiName_178:	.zero	2                               ; 0x2A81BA  [178] (unnamed)
+HdaeUiName_177:	.zero	2                               ; 0x2A81BC  [177] (unnamed)
+HdaeUiName_176:	.zero	2                               ; 0x2A81BE  [176] (unnamed)
+HdaeUiName_175:	.ascii	"LBN_P2\0\0"                    ; 0x2A81C0  [175]
+HdaeUiName_174:	.zero	2                               ; 0x2A81C8  [174] (unnamed)
+HdaeUiName_173:	.zero	2                               ; 0x2A81CA  [173] (unnamed)
+HdaeUiName_172:	.zero	2                               ; 0x2A81CC  [172] (unnamed)
+HdaeUiName_171:	.ascii	"LBN_FILENAME_BOX\0\0"          ; 0x2A81CE  [171]
+HdaeUiName_170:	.ascii	"LBN_FILENO_BOX\0\0"            ; 0x2A81E0  [170]
+HdaeUiName_169:	.asciz	"LBN_DIRNAME_BOX"               ; 0x2A81F0  [169]
+HdaeUiName_168:	.asciz	"LBN_DIRNO_BOX"                 ; 0x2A8200  [168]
+HdaeUiName_167:	.zero	2                               ; 0x2A820E  [167] (unnamed)
+HdaeUiName_166:	.zero	2                               ; 0x2A8210  [166] (unnamed)
+HdaeUiName_165:	.zero	2                               ; 0x2A8212  [165] (unnamed)
+HdaeUiName_164:	.zero	2                               ; 0x2A8214  [164] (unnamed)
+HdaeUiName_163:	.zero	2                               ; 0x2A8216  [163] (unnamed)
+HdaeUiName_162:	.zero	2                               ; 0x2A8218  [162] (unnamed)
+HdaeUiName_161:	.zero	2                               ; 0x2A821A  [161] (unnamed)
+HdaeUiName_160:	.zero	2                               ; 0x2A821C  [160] (unnamed)
+HdaeUiName_159:	.zero	2                               ; 0x2A821E  [159] (unnamed)
+HdaeUiName_158:	.zero	2                               ; 0x2A8220  [158] (unnamed)
+HdaeUiName_157:	.zero	2                               ; 0x2A8222  [157] (unnamed)
+HdaeUiName_156:	.zero	2                               ; 0x2A8224  [156] (unnamed)
+HdaeUiName_155:	.zero	2                               ; 0x2A8226  [155] (unnamed)
+HdaeUiName_154:	.zero	2                               ; 0x2A8228  [154] (unnamed)
+HdaeUiName_153:	.zero	2                               ; 0x2A822A  [153] (unnamed)
+HdaeUiName_152:	.ascii	"LBN_OPTION\0\0"                ; 0x2A822C  [152]
+HdaeUiName_151:	.zero	2                               ; 0x2A8238  [151] (unnamed)
+HdaeUiName_150:	.zero	2                               ; 0x2A823A  [150] (unnamed)
+HdaeUiName_149:	.ascii	"LBN_P1\0\0"                    ; 0x2A823C  [149]
+HdaeUiName_148:	.zero	2                               ; 0x2A8244  [148] (unnamed)
+HdaeUiName_147:	.zero	2                               ; 0x2A8246  [147] (unnamed)
+HdaeUiName_146:	.zero	2                               ; 0x2A8248  [146] (unnamed)
+HdaeUiName_145:	.zero	2                               ; 0x2A824A  [145] (unnamed)
+HdaeUiName_144:	.zero	2                               ; 0x2A824C  [144] (unnamed)
+HdaeUiName_143:	.asciz	"LOAD_BY_NUM"                   ; 0x2A824E  [143]
+HdaeUiName_142:	.zero	2                               ; 0x2A825A  [142] (unnamed)
+HdaeUiName_141:	.zero	2                               ; 0x2A825C  [141] (unnamed)
+HdaeUiName_140:	.zero	2                               ; 0x2A825E  [140] (unnamed)
+HdaeUiName_139:	.zero	2                               ; 0x2A8260  [139] (unnamed)
+HdaeUiName_138:	.zero	2                               ; 0x2A8262  [138] (unnamed)
+HdaeUiName_137:	.zero	2                               ; 0x2A8264  [137] (unnamed)
+HdaeUiName_136:	.zero	2                               ; 0x2A8266  [136] (unnamed)
+HdaeUiName_135:	.zero	2                               ; 0x2A8268  [135] (unnamed)
+HdaeUiName_134:	.zero	2                               ; 0x2A826A  [134] (unnamed)
+HdaeUiName_133:	.ascii	"OUTPUT_SETTING\0\0"            ; 0x2A826C  [133]
+HdaeUiName_132:	.zero	2                               ; 0x2A827C  [132] (unnamed)
+HdaeUiName_131:	.zero	2                               ; 0x2A827E  [131] (unnamed)
+HdaeUiName_130:	.zero	2                               ; 0x2A8280  [130] (unnamed)
+HdaeUiName_129:	.zero	2                               ; 0x2A8282  [129] (unnamed)
+HdaeUiName_128:	.ascii	"SW_HD_FORMAT\0\0"              ; 0x2A8284  [128]
+HdaeUiName_127:	.zero	2                               ; 0x2A8292  [127] (unnamed)
+HdaeUiName_126:	.zero	2                               ; 0x2A8294  [126] (unnamed)
+HdaeUiName_125:	.zero	2                               ; 0x2A8296  [125] (unnamed)
+HdaeUiName_124:	.zero	2                               ; 0x2A8298  [124] (unnamed)
+HdaeUiName_123:	.zero	2                               ; 0x2A829A  [123] (unnamed)
+HdaeUiName_122:	.ascii	"SETUP_TOOLS_P2\0\0"            ; 0x2A829C  [122]
+HdaeUiName_121:	.zero	2                               ; 0x2A82AC  [121] (unnamed)
+HdaeUiName_120:	.zero	2                               ; 0x2A82AE  [120] (unnamed)
+HdaeUiName_119:	.zero	2                               ; 0x2A82B0  [119] (unnamed)
+HdaeUiName_118:	.zero	2                               ; 0x2A82B2  [118] (unnamed)
+HdaeUiName_117:	.zero	2                               ; 0x2A82B4  [117] (unnamed)
+HdaeUiName_116:	.zero	2                               ; 0x2A82B6  [116] (unnamed)
+HdaeUiName_115:	.zero	2                               ; 0x2A82B8  [115] (unnamed)
+HdaeUiName_114:	.zero	2                               ; 0x2A82BA  [114] (unnamed)
+HdaeUiName_113:	.zero	2                               ; 0x2A82BC  [113] (unnamed)
+HdaeUiName_112:	.zero	2                               ; 0x2A82BE  [112] (unnamed)
+HdaeUiName_111:	.zero	2                               ; 0x2A82C0  [111] (unnamed)
+HdaeUiName_110:	.ascii	"SETUP_TOOLS_P1\0\0"            ; 0x2A82C2  [110]
+HdaeUiName_109:	.zero	2                               ; 0x2A82D2  [109] (unnamed)
+HdaeUiName_108:	.zero	2                               ; 0x2A82D4  [108] (unnamed)
+HdaeUiName_107:	.zero	2                               ; 0x2A82D6  [107] (unnamed)
+HdaeUiName_106:	.zero	2                               ; 0x2A82D8  [106] (unnamed)
+HdaeUiName_105:	.zero	2                               ; 0x2A82DA  [105] (unnamed)
+HdaeUiName_104:	.asciz	"PP_STATUS"                     ; 0x2A82DC  [104]
+HdaeUiName_103:	.zero	2                               ; 0x2A82E6  [103] (unnamed)
+HdaeUiName_102:	.ascii	"PC_DATA_LINK\0\0"              ; 0x2A82E8  [102]
+HdaeUiName_101:	.zero	2                               ; 0x2A82F6  [101] (unnamed)
+HdaeUiName_100:	.zero	2                               ; 0x2A82F8  [100] (unnamed)
+HdaeUiName_099:	.zero	2                               ; 0x2A82FA  [ 99] (unnamed)
+HdaeUiName_098:	.zero	2                               ; 0x2A82FC  [ 98] (unnamed)
+HdaeUiName_097:	.zero	2                               ; 0x2A82FE  [ 97] (unnamed)
+HdaeUiName_096:	.asciz	"HD_UTIL"                       ; 0x2A8300  [ 96]
+HdaeUiName_095:	.zero	2                               ; 0x2A8308  [ 95] (unnamed)
+HdaeUiName_094:	.asciz	"HD_PLEASE_WIN"                 ; 0x2A830A  [ 94]
+HdaeUiName_093:	.zero	2                               ; 0x2A8318  [ 93] (unnamed)
+HdaeUiName_092:	.zero	2                               ; 0x2A831A  [ 92] (unnamed)
+HdaeUiName_091:	.zero	2                               ; 0x2A831C  [ 91] (unnamed)
+HdaeUiName_090:	.zero	2                               ; 0x2A831E  [ 90] (unnamed)
+HdaeUiName_089:	.zero	2                               ; 0x2A8320  [ 89] (unnamed)
+HdaeUiName_088:	.ascii	"HDD_DIR_NAMING\0\0"            ; 0x2A8322  [ 88]
+HdaeUiName_087:	.ascii	"HD_FILE_NAME\0\0"              ; 0x2A8332  [ 87]
+HdaeUiName_086:	.zero	2                               ; 0x2A8340  [ 86] (unnamed)
+HdaeUiName_085:	.zero	2                               ; 0x2A8342  [ 85] (unnamed)
+HdaeUiName_084:	.zero	2                               ; 0x2A8344  [ 84] (unnamed)
+HdaeUiName_083:	.zero	2                               ; 0x2A8346  [ 83] (unnamed)
+HdaeUiName_082:	.zero	2                               ; 0x2A8348  [ 82] (unnamed)
+HdaeUiName_081:	.zero	2                               ; 0x2A834A  [ 81] (unnamed)
+HdaeUiName_080:	.zero	2                               ; 0x2A834C  [ 80] (unnamed)
+HdaeUiName_079:	.zero	2                               ; 0x2A834E  [ 79] (unnamed)
+HdaeUiName_078:	.asciz	"HDD_FILE_NAMING"               ; 0x2A8350  [ 78]
+HdaeUiName_077:	.ascii	"HDD_SW\0\0"                    ; 0x2A8360  [ 77]
+HdaeUiName_076:	.asciz	"FD_SW"                         ; 0x2A8368  [ 76]
+HdaeUiName_075:	.ascii	"PPORT_SW\0\0"                  ; 0x2A836E  [ 75]
+HdaeUiName_074:	.zero	2                               ; 0x2A8378  [ 74] (unnamed)
+HdaeUiName_073:	.ascii	"RUN_STOP\0\0"                  ; 0x2A837A  [ 73]
+HdaeUiName_072:	.zero	2                               ; 0x2A8384  [ 72] (unnamed)
+HdaeUiName_071:	.zero	2                               ; 0x2A8386  [ 71] (unnamed)
+HdaeUiName_070:	.zero	2                               ; 0x2A8388  [ 70] (unnamed)
+HdaeUiName_069:	.asciz	"HARD_TEST"                     ; 0x2A838A  [ 69]
+HdaeUiName_068:	.zero	2                               ; 0x2A8394  [ 68] (unnamed)
+HdaeUiName_067:	.zero	2                               ; 0x2A8396  [ 67] (unnamed)
+HdaeUiName_066:	.zero	2                               ; 0x2A8398  [ 66] (unnamed)
+HdaeUiName_065:	.zero	2                               ; 0x2A839A  [ 65] (unnamed)
+HdaeUiName_064:	.zero	2                               ; 0x2A839C  [ 64] (unnamed)
+HdaeUiName_063:	.zero	2                               ; 0x2A839E  [ 63] (unnamed)
+HdaeUiName_062:	.zero	2                               ; 0x2A83A0  [ 62] (unnamed)
+HdaeUiName_061:	.zero	2                               ; 0x2A83A2  [ 61] (unnamed)
+HdaeUiName_060:	.zero	2                               ; 0x2A83A4  [ 60] (unnamed)
+HdaeUiName_059:	.zero	2                               ; 0x2A83A6  [ 59] (unnamed)
+HdaeUiName_058:	.ascii	"FD_FILE_SELECT\0\0"            ; 0x2A83A8  [ 58]
+HdaeUiName_057:	.zero	2                               ; 0x2A83B8  [ 57] (unnamed)
+HdaeUiName_056:	.zero	2                               ; 0x2A83BA  [ 56] (unnamed)
+HdaeUiName_055:	.zero	2                               ; 0x2A83BC  [ 55] (unnamed)
+HdaeUiName_054:	.zero	2                               ; 0x2A83BE  [ 54] (unnamed)
+HdaeUiName_053:	.zero	2                               ; 0x2A83C0  [ 53] (unnamed)
+HdaeUiName_052:	.zero	2                               ; 0x2A83C2  [ 52] (unnamed)
+HdaeUiName_051:	.zero	2                               ; 0x2A83C4  [ 51] (unnamed)
+HdaeUiName_050:	.zero	2                               ; 0x2A83C6  [ 50] (unnamed)
+HdaeUiName_049:	.asciz	"SELECT_DIR2"                   ; 0x2A83C8  [ 49]
+HdaeUiName_048:	.zero	2                               ; 0x2A83D4  [ 48] (unnamed)
+HdaeUiName_047:	.zero	2                               ; 0x2A83D6  [ 47] (unnamed)
+HdaeUiName_046:	.zero	2                               ; 0x2A83D8  [ 46] (unnamed)
+HdaeUiName_045:	.zero	2                               ; 0x2A83DA  [ 45] (unnamed)
+HdaeUiName_044:	.ascii	"SELECT_DIR_SW_EDIT\0\0"        ; 0x2A83DC  [ 44]
+HdaeUiName_043:	.zero	2                               ; 0x2A83F0  [ 43] (unnamed)
+HdaeUiName_042:	.zero	2                               ; 0x2A83F2  [ 42] (unnamed)
+HdaeUiName_041:	.zero	2                               ; 0x2A83F4  [ 41] (unnamed)
+HdaeUiName_040:	.zero	2                               ; 0x2A83F6  [ 40] (unnamed)
+HdaeUiName_039:	.zero	2                               ; 0x2A83F8  [ 39] (unnamed)
+HdaeUiName_038:	.zero	2                               ; 0x2A83FA  [ 38] (unnamed)
+HdaeUiName_037:	.asciz	"SEL_DIR"                       ; 0x2A83FC  [ 37]
+HdaeUiName_036:	.zero	2                               ; 0x2A8404  [ 36] (unnamed)
+HdaeUiName_035:	.zero	2                               ; 0x2A8406  [ 35] (unnamed)
+HdaeUiName_034:	.ascii	"SELECT_DIR\0\0"                ; 0x2A8408  [ 34]
+HdaeUiName_033:	.zero	2                               ; 0x2A8414  [ 33] (unnamed)
+HdaeUiName_032:	.zero	2                               ; 0x2A8416  [ 32] (unnamed)
+HdaeUiName_031:	.zero	2                               ; 0x2A8418  [ 31] (unnamed)
+HdaeUiName_030:	.zero	2                               ; 0x2A841A  [ 30] (unnamed)
+HdaeUiName_029:	.zero	2                               ; 0x2A841C  [ 29] (unnamed)
+HdaeUiName_028:	.zero	2                               ; 0x2A841E  [ 28] (unnamed)
+HdaeUiName_027:	.ascii	"HD_LOAD_OPTION\0\0"            ; 0x2A8420  [ 27]
+HdaeUiName_026:	.ascii	"HD_FILE_LOAD\0\0"              ; 0x2A8430  [ 26]
+HdaeUiName_025:	.zero	2                               ; 0x2A843E  [ 25] (unnamed)
+HdaeUiName_024:	.asciz	"SELECT_FILE"                   ; 0x2A8440  [ 24]
+HdaeUiName_023:	.zero	2                               ; 0x2A844C  [ 23] (unnamed)
+HdaeUiName_022:	.zero	2                               ; 0x2A844E  [ 22] (unnamed)
+HdaeUiName_021:	.zero	2                               ; 0x2A8450  [ 21] (unnamed)
+HdaeUiName_020:	.zero	2                               ; 0x2A8452  [ 20] (unnamed)
+HdaeUiName_019:	.ascii	"SETUPS_TOOLS\0\0"              ; 0x2A8454  [ 19]
+HdaeUiName_018:	.zero	2                               ; 0x2A8462  [ 18] (unnamed)
+HdaeUiName_017:	.zero	2                               ; 0x2A8464  [ 17] (unnamed)
+HdaeUiName_016:	.zero	2                               ; 0x2A8466  [ 16] (unnamed)
+HdaeUiName_015:	.zero	2                               ; 0x2A8468  [ 15] (unnamed)
+HdaeUiName_014:	.zero	2                               ; 0x2A846A  [ 14] (unnamed)
+HdaeUiName_013:	.zero	2                               ; 0x2A846C  [ 13] (unnamed)
+HdaeUiName_012:	.zero	2                               ; 0x2A846E  [ 12] (unnamed)
+HdaeUiName_011:	.zero	2                               ; 0x2A8470  [ 11] (unnamed)
+HdaeUiName_010:	.asciz	"HARD_DISK_OPT"                 ; 0x2A8472  [ 10]
+HdaeUiName_009:	.zero	2                               ; 0x2A8480  [  9] (unnamed)
+HdaeUiName_008:	.zero	2                               ; 0x2A8482  [  8] (unnamed)
+HdaeUiName_007:	.zero	2                               ; 0x2A8484  [  7] (unnamed)
+HdaeUiName_006:	.zero	2                               ; 0x2A8486  [  6] (unnamed)
+HdaeUiName_005:	.zero	2                               ; 0x2A8488  [  5] (unnamed)
+HdaeUiName_004:	.zero	2                               ; 0x2A848A  [  4] (unnamed)
+HdaeUiName_003:	.zero	2                               ; 0x2A848C  [  3] (unnamed)
+HdaeUiName_002:	.zero	2                               ; 0x2A848E  [  2] (unnamed)
+HdaeUiName_001:	.zero	2                               ; 0x2A8490  [  1] (unnamed)
+HdaeUiName_000:	.asciz	"HDDMENU"                       ; 0x2A8492  [  0]
 
 
 HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A

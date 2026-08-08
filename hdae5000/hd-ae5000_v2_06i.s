@@ -268,8 +268,11 @@ HDAE5000_ENTRY_4:	; 28001Ch
 ;   0x040A 0x01600001  0x0244    0x0D   0x2398AA   RAM data
 ;   0x014A 0x01600003  0x024C    0x0E   0x239FD2   RAM data
 ;   0x044A 0x01600003  0x024C    0x0E   0x23A00E   RAM data
-;   0x007F 0x01600010  0x0280    0x315  0x2A5D2C   ROM graphics data
-;   0x037F 0x0160000F  0x0148    0x315  0x2A6984   ROM graphics data
+;   0x007F 0x01600010  0x0280    0x315  0x2A5D2C   UI object descriptor table
+;   0x037F 0x0160000F  0x0148    0x315  0x2A6984   UI object name table
+;          (for these two the "Size" word is an ENTRY COUNT: 0x315 = 789
+;           objects; both tables hold 790 .long entries, the last a
+;           terminator - see hdae5000_data_tables.s)
 ;   (special call via 0x0270 with 0x2A849A and params 0x7F, 0x014A0000, 0x7F01EE)
 ;
 ; Each registration calls workspace[0x0E0A][0x00E4] with:
@@ -449,15 +452,15 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x44A	; Handler ID
 	call (xhl)
 
-	; === Handler 10: Graphics data primary (ID=0x007F, port=0x01600010) ===
+	; === Handler 10: UI object descriptor table (ID=0x007F, port=0x01600010) ===
 	ld xwa, 0x1600010	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldl_da xwa, (0x23a1a2)
 	ld_sril XWA, (xwa + 0x0e0a)
 	ld_sril XWA, (xwa + 0x0280)             ; Handler function via table offset 0x0280
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
-	ldw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; size = 789 bytes
-	lda_24 xwa, (0x2a5d2c)
+	ldw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; entry count = 789 objects
+	lda_24 xwa, (0x2a5d2c)	; = HDAE5000_UiObject_PtrTable
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
@@ -467,15 +470,15 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x7F	; Handler ID
 	call (xhl)
 
-	; === Handler 11: Graphics data secondary (ID=0x037F, port=0x0160000F) ===
+	; === Handler 11: UI object name table (ID=0x037F, port=0x0160000F) ===
 	ld xwa, 0x160000F	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldl_da xwa, (0x23a1a2)
 	ld_sril XWA, (xwa + 0x0e0a)
 	ld_sril XWA, (xwa + 0x0148)             ; Handler function via table offset 0x0148
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
-	ldw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; size = 789 bytes
-	lda_24 xwa, (0x2a6984)
+	ldw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; entry count = 789 objects
+	lda_24 xwa, (0x2a6984)	; = HDAE5000_UiObjectName_PtrTable
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa

@@ -7031,8 +7031,8 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 .equ HDAE5000_SERIAL_DATA_2, 0x2398AA	; Serial port data (secondary)
 .equ HDAE5000_PARALLEL_DATA_1, 0x239FD2	; Parallel port data (primary)
 .equ HDAE5000_PARALLEL_DATA_2, 0x23A00E	; Parallel port data (secondary)
-	; (EQU→inline label) HDAE5000_GFX_DATA_1 = 0x2A5D2C
-	; (EQU→inline label) HDAE5000_GFX_DATA_2 = 0x2A6984
+	; (EQU→inline label) HDAE5000_UiObject_PtrTable = 0x2A5D2C
+	; (EQU→inline label) HDAE5000_UiObjectName_PtrTable = 0x2A6984
 	; (EQU→inline label) HDAE5000_GFX_INIT_PARAMS = 0x2A849A
 
 ; ROM data addresses

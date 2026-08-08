@@ -439,15 +439,15 @@ HDAE5000_Handler_Registration:		; 280020h
 	ld	WA, 044Ah		; Handler ID
 	call	T, XHL
 
-	; === Handler 10: Graphics data primary (ID=0x007F, port=0x01600010) ===
+	; === Handler 10: UI object descriptor table (ID=0x007F, port=0x01600010) ===
 	ld	XWA, 01600010h		; PPI port address
 	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E0Ah)
 	ld	XWA, (XWA + 0280h)	; Handler function via table offset 0x0280
 	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
-	db	0BFh, 08h, 02h, 15h, 03h	; ld (XSP+0x08), 0315h  ; size = 789 bytes
-	lda	XWA, HDAE5000_GFX_DATA_1
+	db	0BFh, 08h, 02h, 15h, 03h	; ld (XSP+0x08), 0315h  ; entry count = 789 objects
+	lda	XWA, HDAE5000_UiObject_PtrTable
 	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
 	db	0B7h, 30h		; lda XWA, XSP
 	ld	XBC, XWA
@@ -457,15 +457,15 @@ HDAE5000_Handler_Registration:		; 280020h
 	ld	WA, 007Fh		; Handler ID
 	call	T, XHL
 
-	; === Handler 11: Graphics data secondary (ID=0x037F, port=0x0160000F) ===
+	; === Handler 11: UI object name table (ID=0x037F, port=0x0160000F) ===
 	ld	XWA, 0160000Fh		; PPI port address
 	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E0Ah)
 	ld	XWA, (XWA + 0148h)	; Handler function via table offset 0x0148
 	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
-	db	0BFh, 08h, 02h, 15h, 03h	; ld (XSP+0x08), 0315h  ; size = 789 bytes
-	lda	XWA, HDAE5000_GFX_DATA_2
+	db	0BFh, 08h, 02h, 15h, 03h	; ld (XSP+0x08), 0315h  ; entry count = 789 objects
+	lda	XWA, HDAE5000_UiObjectName_PtrTable
 	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
 	db	0B7h, 30h		; lda XWA, XSP
 	ld	XBC, XWA
@@ -719,8 +719,9 @@ HDAE5000_SERIAL_DATA_1	equ	239872h	; Serial port data (primary)
 HDAE5000_SERIAL_DATA_2	equ	2398AAh	; Serial port data (secondary)
 HDAE5000_PARALLEL_DATA_1 equ	239FD2h	; Parallel port data (primary)
 HDAE5000_PARALLEL_DATA_2 equ	23A00Eh	; Parallel port data (secondary)
-HDAE5000_GFX_DATA_1	equ	2A5D2Ch	; ROM graphics data (primary)
-HDAE5000_GFX_DATA_2	equ	2A6984h	; ROM graphics data (secondary)
+HDAE5000_UiObject_PtrTable equ	2A5D2Ch	; UI object descriptor pointer table (790 entries)
+HDAE5000_UiObjectName_PtrTable equ 2A6984h ; UI object name pointer table (790 entries)
+HDAE5000_UiObjectName_Pool equ	2A75DCh	; UI object name string pool
 HDAE5000_GFX_INIT_PARAMS equ	2A849Ah	; Graphics initialization parameters
 
 ; ROM data addresses
