@@ -29561,13 +29561,142 @@ HdaeUiName_001:	.zero	2                               ; 0x2A8490  [  1] (unnamed
 HdaeUiName_000:	.asciz	"HDDMENU"                       ; 0x2A8492  [  0]
 
 
-HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A
-	; Graphics initialization parameters
-	.incbin "includes/code_29af2d_2fffff.bin", 54637, 72972
+; ============================================================================
+; HD-AE5000 GRAPHICS BANK -- 256-colour palettes and 8bpp indexed bitmaps
+; ROM 0x2A849A - 0x2E1C81.  (A fifth palette/bitmap pair, the boot splash,
+; sits further down at 0x2E5DCE - 0x2F8DCD under HDAE5000_Palette_Data.)
+;
+; Layout rule, taken from the copy code inside HDAE5000_Register_Frame and
+; confirmed byte-wise over the whole region: every bitmap is immediately
+; preceded by its own palette, with no padding between the two.
+;   * a palette is 0x400 bytes = 256 RGBX entries.  Byte 3 of every entry is
+;     0x00 in all five palettes of this ROM (checked exhaustively, 5 x 256).
+;   * a full-screen bitmap is 0x12C00 bytes = 320 x 240 at 8 bits per pixel.
+;
+; The firmware never moves a full-screen bitmap in one go.  It issues two
+; 0x9600-byte MemCopy calls (top half -> 0x056800, bottom half -> 0x05FE00)
+; and then a 0x400-byte copy of the palette -> 0x069400.  Those hard-coded
+; source addresses are the primary evidence for the boundaries below:
+;
+;   0x2804BB  lda XWA,0x2A898E   0x9600 -> 0x056800   ] bitmap 1, top half
+;   0x2804CE  lda XWA,0x2B1F8E   0x9600 -> 0x05FE00   ] bitmap 1, bottom half
+;   0x2804E1  lda XWA,0x2A858E   0x0400 -> 0x069400   ] palette 1
+;   0x280599 / 0x2805AC / 0x2805BF   same shape: bitmap 2 halves + palette 2
+;   0x280677 / 0x28068A / 0x28069D   same shape: bitmap 3 halves + palette 3
+;   0x280753  reloads palette 2 on its own (0x400 -> 0x069400)
+;
+; The lookup routines hand the same bases, plus the dimensions, to the main
+; CPU (request type A1 = base address, A2 = width, A3 = height):
+;
+;   0x28032A  HDAE5000_Alloc_Memory_1 -> 0x2A898E, 0x140 (320) x 0xF0 (240)
+;   0x280357  HDAE5000_Alloc_Memory_2 -> 0x2BB98E, 0x140 x 0xF0
+;   0x280384  HDAE5000_Alloc_Memory_3 -> 0x2CE98E, 0x140 x 0xF0
+;   0x2803B1  HDAE5000_Alloc_Memory_4 -> 0x2E198E, 0x1B (27) x 0x1B (27)
+;   0x28F55F  HDAE5000_Alloc_Memory   -> 0x2E61CE, 0x140 x 0xF0 (boot splash)
+;
+; RETIRED LABEL -- HDAE5000_Font_Data, "Font bitmap data (large block)",
+; formerly covering 0x2BA1A6-0x2E1C81.  It was wrong twice over: the region
+; holds no font data at all (it is three palette+bitmap pairs and an icon),
+; and 0x2BA1A6 falls 0x11818 bytes INSIDE bitmap 1, so the old slice cut a
+; picture in half and the following slice began mid-picture.  The old name is
+; kept in this comment only, so that greps for it still land here.
+; ============================================================================
 
-HDAE5000_Font_Data:	; 0x2BA1A6
-	; Font bitmap data (large block)
-	.incbin "includes/code_29af2d_2fffff.bin", 127609, 162524
+HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A
+	; MISNOMER retained for cross-reference (it is the name the ASL mirror
+	; and symbols/hdae5000_symbols_reference.txt already use).  This is not
+	; a graphics parameter block: it is the NUL-terminated name table for
+	; the HD-AE5000 screens and switch-catch handlers.  "TT_HDDEXT" is
+	; passed by the lda at 0x2802E4; the other fourteen names are reached
+	; through the descending 32-bit pointer table at 0x2F9F96..0x2F9FD1,
+	; inside HDAE5000_Init_Data.  Pointer -> string:
+	;   0x2F9F96 -> 0x2A8580   0x2F9F9A -> 0x2A8570   0x2F9F9E -> 0x2A855E
+	;   0x2F9FA2 -> 0x2A854A   0x2F9FA6 -> 0x2A853A   0x2F9FAA -> 0x2A852A
+	;   0x2F9FAE -> 0x2A851C   0x2F9FB2 -> 0x2A850E   0x2F9FB6 -> 0x2A84FE
+	;   0x2F9FBA -> 0x2A84EC   0x2F9FBE -> 0x2A84DC   0x2F9FC2 -> 0x2A84C6
+	;   0x2F9FC6 -> 0x2A84B6   0x2F9FCA -> 0x2A84A6   0x2F9FCE -> 0x2A84A4
+	.asciz "TT_HDDEXT"		; 0x2A849A  (from 0x2802E4)
+	.byte 0x00			; 0x2A84A4  empty name, target of 0x2F9FCE
+	.byte 0x00			; 0x2A84A5  pad
+	.asciz "FileLoadSwCatch"	; 0x2A84A6
+	.asciz "HDDTitleSwCatch"	; 0x2A84B6
+	.asciz "CopyToHDDirSelScreen"	; 0x2A84C6
+	.byte 0x00
+	.asciz "CopyToHDScreen"	; 0x2A84DC
+	.byte 0x00
+	.asciz "FlsFileSelScreen"	; 0x2A84EC
+	.byte 0x00
+	.asciz "FlsDirSelScreen"	; 0x2A84FE
+	.asciz "FlsEditScreen"		; 0x2A850E
+	.asciz "FlsLoadScreen"		; 0x2A851C
+	.asciz "SelectFlsScreen"	; 0x2A852A
+	.asciz "SetupP2SwCatch"	; 0x2A853A
+	.byte 0x00
+	.asciz "FILE_Naming_Screen"	; 0x2A854A
+	.byte 0x00
+	.asciz "FILE_LOAD_Screen"	; 0x2A855E
+	.byte 0x00
+	.asciz "SEL_DIR_Screen"	; 0x2A8570
+	.byte 0x00
+	.asciz "HDAETitleFunc"		; 0x2A8580
+
+HDAE5000_Palette_TitleLogo:	; 0x2A858E
+	; 0x400 B = 256 RGBX entries, 205 distinct colours.  Copied to 0x069400
+	; by the lda at 0x2804E1.  Byte-identical to HDAE5000_Palette_DriveMech
+	; (0x2BB58E) -- the two title frames share one palette.
+	.incbin "includes/code_29af2d_2fffff.bin", 54881, 1024
+
+HDAE5000_Bitmap_TitleLogo:	; 0x2A898E
+	; 320 x 240 @ 8bpp = 0x12C00 B.  The "HD-AE5000" wordmark embossed over
+	; a photograph of a bare hard-disk mechanism.  Moved as two halves,
+	; 0x2A898E -> 0x056800 and 0x2B1F8E -> 0x05FE00.  Already extracted as
+	; hdae5000/images/HDAE5000_Logo.bin (byte-identical to this slice).
+	.incbin "includes/code_29af2d_2fffff.bin", 55905, 76800
+
+HDAE5000_Palette_DriveMech:	; 0x2BB58E
+	; 0x400 B = 256 RGBX entries.  Copied to 0x069400 by 0x2805BF, and again
+	; on its own by 0x280753.  Byte-identical to HDAE5000_Palette_TitleLogo.
+	.incbin "includes/code_29af2d_2fffff.bin", 132705, 1024
+
+HDAE5000_Bitmap_DriveMech:	; 0x2BB98E
+	; 320 x 240 @ 8bpp.  The same drive-mechanism photograph WITHOUT the
+	; wordmark -- the second frame of the title sequence.  Halves at
+	; 0x2BB98E and 0x2C4F8E.  Extracted as images/HDAE5000_Hands.bin, whose
+	; "Hands operating HD-AE5000 unit" caption is wrong: no hands appear in
+	; the picture (see the hdae-docs / gallery follow-up).
+	.incbin "includes/code_29af2d_2fffff.bin", 133729, 76800
+
+HDAE5000_Palette_FilePanel:	; 0x2CE58E
+	; 0x400 B = 256 RGBX entries but only 110 distinct colours: a long grey
+	; ramp plus the blue stone texture used by the panel.  Copied to
+	; 0x069400 by 0x28069D.
+	.incbin "includes/code_29af2d_2fffff.bin", 210529, 1024
+
+HDAE5000_Bitmap_FilePanel:	; 0x2CE98E
+	; 320 x 240 @ 8bpp.  The file-selection panel background: three sunken
+	; list wells over a blue stone fill, with the grey scroll strip along
+	; the bottom.  Halves at 0x2CE98E and 0x2D7F8E.  Already extracted as
+	; images/HDAE5000_FilePanel.bin.
+	.incbin "includes/code_29af2d_2fffff.bin", 211553, 76800
+
+HDAE5000_Palette_HddIcon:	; 0x2E158E
+	; 0x400 B = 256 RGBX entries, all 256 distinct -- the Windows halftone
+	; palette.  It has no lda site of its own in this ROM; it pairs with the
+	; icon that follows by the same "palette immediately before the bitmap"
+	; rule as the four pairs above, and the pairing is visually decisive:
+	; the icon uses only indices 0/1/3/7/248/251/252/255 (the Windows
+	; reserved entries at both ends) and is legible with this palette only.
+	; Extracted as images/HDAE5000_Palette.bin.
+	.incbin "includes/code_29af2d_2fffff.bin", 288353, 1024
+
+HDAE5000_Bitmap_HddIcon:	; 0x2E198E
+	; 27 x 27 @ 8bpp with a 28-byte row stride (one 0x00 pad byte at the end
+	; of every row) = 756 B: the hard-disk-platter-and-head icon.  The
+	; 27 x 27 geometry is HDAE5000_Alloc_Memory_4 (0x2803B1) returning 0x1B
+	; for BOTH the A2 (width) and A3 (height) requests.
+	; NOTE hdae5000/images/HDAE5000_Icon.bin is 784 B: its extraction
+	; assumed 28 x 28 and over-reads 28 bytes into HDAE5000_Config_Strings.
+	.incbin "includes/code_29af2d_2fffff.bin", 289377, 756
 
 HDAE5000_Config_Strings:	; 0x2E1C82
 	; Configuration and version strings
@@ -32587,8 +32716,31 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	.byte 0x00
 
 HDAE5000_Palette_Data:	; 0x2E5DCE
-	; VGA palette data (256 entries)
-	.incbin "includes/code_29af2d_2fffff.bin", 306849, 77824
+	; Boot-splash palette: 0x400 B = 256 RGBX entries (202 distinct colours).
+	; Loaded by HDAE5000_Boot_Init, which does `lda XWA,0x2E5DCE` at 0x28F586
+	; and calls HDAE5000_Load_Palette.  The name is kept as-is because it is
+	; the only one of the five palettes referenced by name from the ASL
+	; mirror (archive/asl/hdae5000/hd-ae5000_v2_06i.asm) and from
+	; hdae5000_ui_display.s.  Extracted as images/HDAE5000_Palette_0x65dce.bin.
+	;
+	; The old slice here claimed "VGA palette data (256 entries)" but ran for
+	; 0x13000 bytes -- 0x400 of palette followed by a whole 320 x 240 bitmap
+	; that had never been identified.  They are now separated.
+	.incbin "includes/code_29af2d_2fffff.bin", 306849, 1024
+
+HDAE5000_Bitmap_BootSplash:	; 0x2E61CE
+	; 320 x 240 @ 8bpp = 0x12C00 B -- the HD-AE5000 start-up screen: a red
+	; "HD-AE5000" wordmark over a photograph of an open disk platter, with
+	; "Version 2" beneath it and "Start-up !  Please wait . . ." below that.
+	; Rendered with HDAE5000_Palette_Data (0x2E5DCE) it is unambiguous.
+	;
+	; HDAE5000_Boot_Init obtains this base from HDAE5000_Alloc_Memory
+	; (request A1, the lda at 0x28F55F, with A2 = 0x140 and A3 = 0xF0) and
+	; copies it into VRAM as two 0x9600-byte halves, to 0x1A0000 and
+	; 0x1A9600.  0x2E61CE + 0x12C00 = 0x2F8DCE = HDAE5000_Display_Params,
+	; so the bitmap tiles the gap exactly.
+	; Not yet extracted to hdae5000/images/ -- see the hdae-splash package.
+	.incbin "includes/code_29af2d_2fffff.bin", 307873, 76800
 
 HDAE5000_Display_Params:	; 0x2F8DCE
 	; Display configuration parameters
