@@ -35,24 +35,38 @@ The names are now typed out in the source, so they are greppable: "Bolero puro",
 
 ## Cells
 
-Style music lives in 256-byte cells, 1050 of them across the four section blobs (150 in
-section_0, 300 in each double section). A cell is:
+Style music lives in 256-byte cells. A cell is recognised by `byte[0] == 0x80 && byte[5] == 0x87`:
 
     +0x00  1 B     0x80        cell-start marker
-    +0x01  2 B     FF FF       constant
-    +0x03  2 B     u16 LE      NEXT CELL, or 0xFFFF to end the chain
+    +0x01  2 B     u16 LE      field A, 0xFFFF in 1050 cells
+    +0x03  2 B     u16 LE      field B, 0xFFFF in 1050 cells
     +0x05  1 B     0x87        end-of-header marker
     +0x06  250 B   payload     event stream
 
-**The header reading is confirmed by an independent signal.** 718 cells carry next = 0xFFFF, and
-exactly 718 cells reach the end-of-stream status 0x83 in their payload. Those two counts come
-from different fields and agree cell for cell in every section (105/206/182/225). The remaining
-332 cells run off the end of their payload mid-stream, which is what a chained format predicts:
-an event may straddle a cell boundary and only the last cell of a chain terminates.
+**1564 cells, 400,384 B** -- 214 in section_0 and 423/488/439 in the double sections.
 
-⚠ An earlier probe searched for the literal `80 FF FF FF FF 87` and reported 725 cells. That
-pattern only matches cells whose next pointer happens to be 0xFFFF -- it was finding chain ends,
-not cells. Matching the header SHAPE finds 1050.
+⚠ TWO EARLIER COUNTS WERE WRONG, each by assuming a constant that is a field:
+  * searching for the literal `80 FF FF FF FF 87` found 725. That matches only cells where BOTH
+    u16 fields are 0xFFFF.
+  * requiring `byte[1..2] == FF FF` found 1050. That treats field A as a constant; it is not.
+
+Both fields are SECTION-TAGGED: the high nibble is the section number plus one, verified by the
+per-section ranges being disjoint and exactly as predicted -- section_0 uses 0x1xxx only, the
+section_1_2 blob 0x2xxx and 0x3xxx, section_3_4 0x4xxx and 0x5xxx, section_5_6 0x6xxx and 0x7xxx.
+The low 12 bits are a 256-byte BLOCK INDEX within that section: for the eight section_0 pointers
+that land inside its cell region, `(value & 0xFFF) * 256` is a real cell every time.
+
+Among the 1050 cells whose field A is 0xFFFF, 718 have field B = 0xFFFF and exactly 718 reach
+end-of-stream 0x83 in their payload, agreeing cell for cell in every section (105/206/182/225).
+Two different fields predicting each other that precisely is why the CELL framing is trusted.
+
+**THE LINKED-LIST READING IS REFUTED, and was mine.** Fields A and B look like prev/next
+pointers, and the demo-preset format does put a next-cell pointer at +0x03. But of 510 pointers
+that resolve to a real cell, the target's field A points back at the source **zero** times. Worse,
+in the run at blocks 0xAA/0xAB/0xAC the two fields simply track the block index at CONSTANT
+offsets -- B = block - 0x13 and A = block - 0x15 throughout -- which is not what a list looks
+like. Whatever these fields are, they are not a doubly-linked chain, and the demo-preset
+`0x800 + (c-1)*256` rule does not apply here.
 
 ## Event grammar
 
@@ -80,11 +94,11 @@ their existence is a check on the chaining rather than a defect.
 
 ## What is still missing
 
-1. **The cell pointer encoding.** Non-terminal pointers are values like 0x1096, 0x109A, 0x109B,
-   0x109D -- a 0x10 high byte with an incrementing low byte. The demo-preset rule, cell `c` at
-   `0x800 + (c-1)*256`, puts 0x1096 far outside the section, so styles address cells differently:
-   bank-relative, or a split bank/index field. **This is the blocker.** A converter cannot follow
-   chains without it, and without following chains the straddling events cannot be decoded.
+1. **What fields A and B mean.** The ENCODING is settled -- section nibble plus 12-bit block
+   index -- but the SEMANTICS are not. They are not chain pointers (refuted above). The constant
+   offsets in the 0xAA-0xAC run suggest a parallel array or a fixed displacement into another
+   region rather than a per-cell link. **This is the blocker**: cells cannot be assembled into
+   playable order without it, and the events that straddle cell boundaries cannot be decoded.
 2. **0x91, 0xD1, 0xD2, 0xD3.** Argument counts are known (7, 2, 2, 2); meanings are not.
 3. **The 96-byte directory record**, beyond the name.
 4. **Which chain belongs to which style**, and how a style's parts/variations map onto chains.
