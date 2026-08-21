@@ -55,6 +55,36 @@ plainly real TLCS-900 code:
 So a substantial part of v7's DATA is undisassembled CODE, and this is a ranked worklist for it.
 `--disasm N` prints the head of the N largest spans so a reviewer can judge rather than trust.
 
+**And the reason it is still data is not neglect.** The tree must assemble byte-exactly with
+llvm-mc, so a byte sequence can only be written as an instruction if the TLCS-900 LLVM backend
+accepts that instruction. Several forms it does not:
+
+| form | llvm-mc |
+|---|---|
+| `and (xix), 0x7f` | error: invalid operand |
+| `bit 7, (xix)` — and `bit (xix), 7` | error, both orders |
+| `ldcf 7, (xhl)` | error: invalid operand |
+| `scc c, a` | error: invalid operand |
+| `res 5, (xhl)` | error: invalid operand |
+| `or (xix), a` | fine, `[0x84,0xe9]` |
+| `sla a, 7` | fine — **not** a gap; unidasm just prints it as `sla 0x07,A` |
+
+Those first forms make up the whole unrolled bit-extraction loop at 0xFD3095, so that block **cannot
+be expressed as instructions today** however obviously it is code.
+
+`llvm_missing_instruction_forms.py <file.s>` measures the blocker per file by decoding with unidasm
+(complete where llvm-mc is not) and re-assembling each instruction. On
+`v7/maincpu/midi/midi_dispatch_handlers.s` alone: **365 blocks, 28,105 bytes blocked**, led by
+`and (mem), imm` (84), `bit imm, (mem)` (49) and `ldcf imm, (mem)` (43).
+
+It tries both operand orders before calling a form missing, because unidasm and llvm-mc disagree on
+order for shifts -- without that, every shift in the ROM reads as a backend gap. Entries beyond the
+hand-confirmed ones above are LEADS: `lda xbc, imm` still reports rejected and is not yet explained.
+
+**So the fix for a large part of L1's remaining gap is not in this repository.** It is instruction
+support in `~/compartilhado/llvm-project`, branch `tlcs900_backend`. That reframes the 158,902 bytes
+from "work nobody did" to "work the toolchain cannot currently accept".
+
 ## L2: what the regeneration fixed, and what it did not
 
 All five symbol reference files were stale, not just the one that admitted it. `table_data` agreed

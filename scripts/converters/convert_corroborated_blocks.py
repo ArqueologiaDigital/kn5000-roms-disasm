@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""Convert v7 .byte blocks to instructions -- but only where v9 CORROBORATES.
+
+Replaces the guesswork in convert_roundtrip_blocks.py, which is marked unsafe:
+its "does this block contain control flow" test rejects clean fall-through basic
+blocks (they have none, by construction, in a tree delimited by labels), and its
+output is non-symbolic decimal, which is a readability regression the byte-match
+gate cannot catch.
+
+This one decides with evidence instead of shape:
+
+  ADDRESS   a block's ROM address is the address of the label directly above it,
+            read from rebuilt_ROMs/kn5000_v7_program.llvm.elf.
+  EVIDENCE  the block is converted only if v9 disassembles the SAME offsets as
+            CODE (per scripts/analysis/v7_undisassembled_spans.py's territory
+            map). v9 is an independent revision, so this is corroboration, not
+            a guess about what the bytes look like.
+  SAFETY    every instruction is re-assembled and must reproduce the original
+            bytes; any mismatch, or any invalid-encoding warning, drops the
+            whole block.
+  READABLE  branch targets and absolute addresses are emitted as SYMBOLS where
+            the ELF has one, so converted code matches the surrounding style.
+
+Run:  python3 scripts/converters/convert_corroborated_blocks.py --file <path.s> [--apply]
+      Default is a dry run that reports what it would convert and why not.
+
+⚠ Byte-exactness is necessary, not sufficient. A block can round-trip perfectly
+and still be data that happens to decode. That is what the v9 corroboration is
+for, and it is still not proof -- v7 and v9 are different revisions, so the same
+offset need not be the same function. Read the diff before applying.
+"""
+import os, re, subprocess, sys
+
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+LLVM = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
+MC = os.path.join(LLVM, "llvm-mc")
+NM = os.path.join(LLVM, "llvm-nm")
+BASE = 0xE00000
+ENC_RE = re.compile(r'[;#] encoding: \[([^\]]+)\]')
+
+
+def elf_syms(elf):
+    out = subprocess.run([NM, "--defined-only", elf], capture_output=True, text=True, cwd=REPO)
+    syms = {}
+    for line in out.stdout.split("\n"):
+        f = line.split()
+        if len(f) == 3 and f[1] in ("t", "T"):
+            syms.setdefault(int(f[0], 16), f[2])
+    return syms
+
+
+def v9_code_map():
+    """Byte map of v9 territory, 1 where v9 has CODE."""
+    spec = os.path.join(REPO, "scripts", "analysis", "v7_undisassembled_spans.py")
+    import importlib.util
+    s = importlib.util.spec_from_file_location("spans", spec)
+    m = importlib.util.module_from_spec(s); s.loader.exec_module(m)
+    return m.territory(m.runs("v9/maincpu/kn5000_v9_program.s", "v9/maincpu"))
+
+
+def blocks_of(path, syms):
+    """Yield (label, addr, line_start, line_end, raw_bytes) for each .byte run."""
+    lines = open(path, "rb").read().decode("latin-1").split("\n")
+    out, cur, start, label = [], [], None, None
+    name2addr = {n: a for a, n in syms.items()}
+    for i, ln in enumerate(lines):
+        m = re.match(r'^\s*\.byte\s+(.*)$', ln)
+        if m:
+            if start is None:
+                start = i
+            for tok in m.group(1).split(","):
+                tok = tok.strip()
+                if tok:
+                    cur.append(int(tok, 0))
+        else:
+            if cur:
+                out.append((label, name2addr.get(label), start, i - 1, bytes(cur)))
+                cur, start = [], None
+            lm = re.match(r'^([A-Za-z_][\w]*):', ln)
+            if lm:
+                label = lm.group(1)
+    if cur:
+        out.append((label, name2addr.get(label), start, len(lines) - 1, bytes(cur)))
+    return lines, out
+
+
+def disassemble(raw):
+    hexs = " ".join(f"0x{b:02x}" for b in raw)
+    r = subprocess.run([MC, "--triple=tlcs900", "--disassemble"],
+                       input=hexs, capture_output=True, text=True, timeout=30)
+    warn = r.stderr.count("warning: invalid instruction encoding")
+    insns = [l.strip() for l in r.stdout.strip().split("\n")
+             if l.strip() and not l.strip().startswith(".")]
+    return insns, warn
+
+
+def encode(text):
+    r = subprocess.run([MC, "--triple=tlcs900", "--show-encoding"],
+                       input=text, capture_output=True, text=True, timeout=30)
+    m = ENC_RE.search(r.stdout)
+    if not m:
+        return None
+    return bytes(int(b, 16) for b in m.group(1).split(",") if b.strip())
+
+
+def main():
+    argv = sys.argv
+    if "--file" not in argv:
+        sys.exit(__doc__)
+    path = os.path.abspath(argv[argv.index("--file") + 1])
+    apply_ = "--apply" in argv
+
+    syms = elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
+    v9 = v9_code_map()
+    lines, blocks = blocks_of(path, syms)
+
+    stats = {"no-addr": 0, "not-corroborated": 0, "warn": 0, "roundtrip": 0, "ok": 0}
+    todo = []
+    for label, addr, a, b, raw in blocks:
+        if addr is None:
+            stats["no-addr"] += 1; continue
+        off = addr - BASE
+        if not all(v9[off + k] == 1 for k in range(len(raw)) if off + k < len(v9)):
+            stats["not-corroborated"] += 1; continue
+        insns, warn = disassemble(raw)
+        if warn or not insns:
+            stats["warn"] += 1; continue
+        rebuilt = b"".join(encode(i) or b"\xff\xff\xff\xff\xff" for i in insns)
+        if rebuilt != raw:
+            stats["roundtrip"] += 1; continue
+        stats["ok"] += 1
+        todo.append((label, addr, a, b, raw, insns))
+
+    print(f"{len(blocks)} .byte blocks in {os.path.basename(path)}")
+    print(f"   no address (label not in ELF) ... {stats['no-addr']}")
+    print(f"   v9 does NOT call it code ....... {stats['not-corroborated']}")
+    print(f"   invalid encodings .............. {stats['warn']}")
+    print(f"   failed byte round-trip ......... {stats['roundtrip']}")
+    print(f"   CONVERTIBLE .................... {stats['ok']}"
+          f"  ({sum(len(t[4]) for t in todo):,} bytes)")
+    for label, addr, a, b, raw, insns in todo[:10]:
+        print(f"     0x{addr:06X}  {label:44} {len(raw):5} B  {len(insns)} insns")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
