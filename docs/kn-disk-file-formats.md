@@ -104,6 +104,11 @@ and appends the extension via `FileIO_BuildFilePath`. Note two extensions carry 
 its own extension, and these disks do not carry a `.PMT` at all. Recorded because that reading is
 the first one anybody will reach for.
 
+What `.LSW` IS has since been settled from the KN7000 UI -- **"CURRENT PANEL"**, the live panel
+setup, as against `.PMT` "PANEL MEMORY", the stored slots. See *What the extensions mean* below.
+That refines this paragraph rather than overturning it: the two really are different things, and
+the 24 blocks still are not memory slots.
+
 ### Every mention of "LSW" in the KN5000 program ROM
 
 There are exactly three, and together they bound what can be learned here:
@@ -173,8 +178,46 @@ at all under either even/odd interleave" and were probably compressed. That is t
 images and false of the tree: a DECOMPRESSED image already exists at the path above, and it is
 plainly readable. Check for a decompressed artefact before concluding a ROM is opaque.
 
-**The handles for whoever continues**: trace `SD_LD2_LBLSW` / `SD_SV2_LBLSW` in the KN7000 image to
-the load and save routines, and the 26 blocks, the TLV records and the 24 slots should follow.
+### What the extensions mean -- recovered from the KN7000 UI
+
+Tracing `SD_LD2_LBLSW` in the KN7000 image does **not** reach the load routine (see below), but it
+does answer a different open question: what each file type is CALLED on screen.
+
+The firmware registers two parallel 840-entry arrays at 0x4854EBAE -- descriptors at 0x48760848,
+debug names at 0x48761568, same index into both. A descriptor carries its label-string pointer at
++0x18. Widget #148 is `SD_LD2_LBLSW`, and its label is **`CURRENT PANEL`**:
+
+| widget | label | | widget | label |
+|---|---|---|---|---|
+| `SD_LD2_LBLSW` | **CURRENT PANEL** | | `SD_LD2_LBPMT` | PANEL MEMORY |
+| `SD_LD2_LBMD` | USER MIDI SETTINGS | | `SD_LD2_LBPAD` | PERFORMANCE PADS |
+| `SD_LD2_LBSQT` | SEQUENCER | | `SD_LD2_LBFAV` | FAVORITES |
+| `SD_LD2_LBCMP` | COMPOSER | | `SD_LD2_LBAST` | ALL CUSTOM STYLE |
+| `SD_LD2_LBTM` | SOUND MEMORY | | `SD_LD2_LBEFC` | EFFECT MEMORY |
+| | | | `SD_LD2_LBHMP` | HOME PAGE |
+
+Reproduce: `tools/widget-map/kn7000_widget_labels.py <decompressed.bin> SD_LD2_` in the KN7000
+repo. It carries a **self-test that can fail**: three abbreviations whose meaning is independently
+obvious (`MD`->MIDI, `SQT`->SEQUENCER, `CMP`->COMPOSER) must appear in their own labels, and the
+script exits non-zero if the +0x18 rule stops holding.
+
+Four further confirmations are external to the firmware entirely -- real files carry exactly these
+types: `01CTMINI.AST` (ALL CUSTOM STYLE), `02UMDINI.MD` (USER MIDI SETTINGS), `03FAVINI.FAV`
+(FAVORITES), `04HPGINI.HMP` (HOME PAGE). And a second, independent widget agrees on LSW: the row of
+LOAD buttons has `SD_LD2_BLSW` -> **`PANEL`**.
+
+⚠ Provenance: these labels come from the **KN7000** firmware. Both models use `.LSW`, and the
+KN5000 header `5A 5A 01 00 "M60"` is stable across all seven disks, but no KN5000 code names the
+type -- so "CURRENT PANEL" is [CROSS-MODEL EVIDENCE], strong but not from the machine whose disks
+were parsed above.
+
+**What the 24 blocks are** is still open. "Current panel" makes a per-part or per-section reading
+plausible, but plausible is where the panel-memory reading started too, and that one was wrong.
+
+**The handles for whoever continues**: the widget-NAME trace is now spent -- `SD_LD2_LBLSW` is a
+static label descriptor (geometry + text) with no code attached, the same shape as its 36 siblings.
+The parser hangs off the LOAD action, not the label: `SD_LD2_R1SW` / `SD_LD2_R1LB` ("LOAD") and the
+`SD_LD2_B*SW` switch widgets are the untried entry points.
 
 **One dead end already eliminated, so nobody repeats it.** The KN7000's file-type table is at
 address **0x48664454** (image base 0x48400000, confirmed by its own pointer values), 14 entries.
