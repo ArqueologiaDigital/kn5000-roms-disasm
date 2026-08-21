@@ -98,7 +98,19 @@ a real event type looks like and what random bytes do not.
 | `0xE8` | 5 | 3 | appears in runs, e.g. `e8 1a 40 3d  e8 1c 00 3f  e8 1c 40 3e` |
 | `0xF4` | 2 | -- | |
 
-**None of these has an established meaning**, and no name is proposed. They are listed so that a
+**A parser that handles some of them exists**: `v10/maincpu/ui/setwall_routines.s:797`
+(`SetWall_ParseStream_MainLoop`) dispatches over this same vocabulary and has EXPLICIT cases for
+`0x80`, `0x85` and `0x86`, alongside `0x81`, `0xD1`, `0xD2`, `0xD3`, `0x9n`, `0xC0` and `0xB0`.
+That is independent confirmation that the three are real event types rather than misparsed data,
+and it is where their handling can be read.
+
+⚠ **It also ends on `0x82`, not `0x83`.** This document says `0x83` is end-of-track and `0x82`
+carries text/CUE data; that parser jumps to its End label on `0x82` and treats `0x81` and `0x80`
+alike. Either it parses a different stream variant, or one of the two end markers is documented
+wrong. UNRESOLVED -- and worth resolving before anyone writes an encoder, since getting the
+terminator wrong corrupts silently.
+
+**None of the eleven has an established meaning**, and no name is proposed. They are listed so that a
 reader knows the vocabulary here is partial: an encoder built from this document would be unable to
 round-trip a real song, and a decoder should reject rather than guess on them.
 
