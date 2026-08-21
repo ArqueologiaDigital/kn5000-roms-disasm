@@ -93,7 +93,7 @@ With `0x82` as the terminator, the genuinely undocumented in-stream statuses are
 
 | status | count | args | firmware |
 |---|---|---|---|
-| `0x80` | 16 | 3 | explicit case in `SetWall_ParseStream_MainLoop` |
+| `0x80` | 16 | 3 | explicit case in `SetWall_ParseStream_MainLoop`; **probably TEMPO, see below** |
 | `0x85` | 10 | 1 | explicit case in the same parser |
 | `0x86` | 10 | 1 | explicit case in the same parser |
 
@@ -103,6 +103,30 @@ MEANINGS are still not established and no names are proposed.
 
 Reproduce: `tests/l5_reimplement_demo_format.py`, which reports 67,132 events and 36 malformed,
 the 36 being these three statuses.
+
+#### `0x80` is very likely the TEMPO event [INFERENCE]
+
+This matters because the docstring of `demo_preset_to_midi.py` lists tempo as NOT DECODED and makes
+the user pass `--bpm`. The structural evidence:
+
+* **Exactly one per song, at the very start of one track** -- 16 events across 19 songs, and in 14
+  of them it is event #0 or #1.
+* **Always the same track per song generation**: track 7 in songs 00-11, track 4 in songs 12-18.
+  A single track carrying a song-global setting is what a conductor track is.
+* **Song 01 has a SECOND one, at event #157.** A song-global value that can change once partway
+  through is a tempo change; very few other quantities behave that way.
+* The three arguments are `[0, lo, hi]` with `hi` only ever 0 or 1, i.e. `pos=0` followed by a
+  14-bit value `lo + 128*hi`. Across the 16 events that value spans **88..228**, which is a
+  musically sane tempo range and not a plausible range for an index or a flag.
+
+    song 00 -> 113   song 01 -> 195, then 120   song 04 -> 148   song 05 -> 131   song 06 -> 107
+    song 08 -> 111   song 10 -> 88    song 11 -> 178   song 12 -> 160   song 13 -> 130
+    song 14 -> 165   song 15 -> 120   song 16 -> 134   song 17 -> 228   song 18 -> 90
+
+**NOT CONFIRMED**, and the confirmation is cheap: song 18 is the Feature Presentation, which plays
+in the emulator, and its value is 90. Time a known number of beats against the wall clock and see
+whether it comes out at 90 BPM. Until someone does that, no code should treat this as the tempo --
+`--bpm` stays.
 
 ### Still inferred
 
