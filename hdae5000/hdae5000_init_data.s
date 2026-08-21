@@ -67,7 +67,10 @@ HDAE5000_Init_Data:
 	.set HDAE5000_ParamStr_FDFileSelect_sel_pos,  HDAE5000_UI_Config + 0xb4
 	.set HDAE5000_ParamStr_FDFileSelect_sel_num,  HDAE5000_UI_Config + 0xbc
 	.set HDAE5000_ParamStr_FDFileSelect_dial,     HDAE5000_UI_Config + 0xc4
-	; HDAE5000_RECORD_COUNT + offset  (0x29d97e-0x29dc13)
+	; HDAE5000_RECORD_COUNT + offset  (0x29d97e-0x29dc13; note that the last
+	; two bytes of that range, 0x29dc12-0x29dc13, are already the first half
+	; of the UI object descriptor pool's record #0 - the block boundary here
+	; follows the HDAE5000_UI_Descriptors label, which is itself mid-record)
 	.set HDAE5000_Str_EV_DrawFDText,         HDAE5000_RECORD_COUNT + 0x2
 	.set HDAE5000_Str_EV_InitFDFileSelect,   HDAE5000_RECORD_COUNT + 0x10
 	.set HDAE5000_Str_EV_Scrollline,         HDAE5000_RECORD_COUNT + 0x24
@@ -129,7 +132,21 @@ HDAE5000_Init_Data:
 	.set HDAE5000_Str_FILE_LOAD_Screen,     HDAE5000_GFX_INIT_PARAMS + 0xc4
 	.set HDAE5000_Str_SEL_DIR_Screen,       HDAE5000_GFX_INIT_PARAMS + 0xd6
 	.set HDAE5000_Str_HDAETitleFunc,        HDAE5000_GFX_INIT_PARAMS + 0xe6
-	; strings cited by the run-time state block
+	; Strings cited by the run-time state block.  All seven resolve INSIDE
+	; records of the UI object descriptor pool (0x29DC12-0x2A5D2B, see the
+	; header at HDAE5000_UI_Descriptors in hdae5000_data_tables.s), so the
+	; two bases below are arbitrary anchors, not the owners of these strings:
+	;   HDAE5000_UI_Page_Titles + 0x11ea = 0x29F174, the tail of object
+	;     #127's record (class 0160:0029, under SETUP_TOOLS_P2).  It is the
+	;     caption of the RAM object #128 SW_HD_FORMAT, which is why nothing
+	;     in record #127 points at it.
+	;   HDAE5000_Panel_Save_UI + 0x2ca4.. = 0x2A2656.., the six 4-byte
+	;     literals at +0x28..+0x3C of object #442 "HddNamingCursorBox"
+	;     (class 0160:004C); they are the two captions each of the RAM
+	;     objects #443/444/445 HddNamingABC / HddNamingabc / HddNamingSymbol.
+	; The .set expressions are left exactly as they are: both bases are
+	; themselves mid-record misnomers, and re-basing them would change no
+	; byte while breaking the ASL mirror and the symbols reference.
 	.set HDAE5000_Str_Alert_HDFormat,   HDAE5000_UI_Page_Titles + 0x11ea	; "! HD FORMAT !"
 	.set HDAE5000_Str_CharSet_Upper_1,  HDAE5000_Panel_Save_UI + 0x2ca4	; "ABC"
 	.set HDAE5000_Str_CharSet_Upper_2,  HDAE5000_Panel_Save_UI + 0x2ca8	; "ABC"
@@ -446,8 +463,13 @@ HDAE5000_ClassName_Table:
 ;     by any code in this ROM and the window they fall in belongs to the main
 ;     CPU rhythm ROM, so reading them as pointers is not supported by
 ;     evidence; they look like opaque handles patched at run time.
-;   * the 0x0160xxxx / 0x00xx geometry words seen from 0x2f9c42 on repeat the
-;     {class id, x, y, w, h} shape of the window descriptors at 0x29dc14.
+;   * from 0x2f9c4c on the block is not state at all: it is 20 UI object
+;     descriptor records in the same format as the pool at 0x29dc12 (see the
+;     header at HDAE5000_UI_Descriptors in hdae5000_data_tables.s), one for
+;     each of the 20 objects whose descriptor lives in RAM.  0x0160 is NOT a
+;     display width: it is the high half of the .long class id, and the words
+;     after it are {parent, first child, next, prev} object indices then
+;     x1,y1,x2,y2.
 ; No code in this ROM reads the block through a named address, so it is kept
 ; as annotated bytes rather than being split into invented variables.
 ; ----------------------------------------------------------------------------
@@ -517,14 +539,45 @@ HDAE5000_WindowState_Init:
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0x0001, 0x0000, 0x0000, 0x0000
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 HDAE5000_WindowGeometry_Init:
-	; window/dialog descriptors.  From 0x2f9ca6 on this is a 40-byte-stride record
-	; array whose second word is 0x0160 (=352, the panel display width) and whose
-	; remaining words are the coordinate magnitudes (0x0137, 0x00f2, 0x00d2) also
-	; used by HDAE5000_UI_Descriptors.  Three 44-byte records near the end carry
-	; the naming-screen character-set selectors ("ABC" / "abc" / "!#$"), each
-	; citing two identical copies of its caption plus a pointer back into the RAM
-	; copy of this image - which is why the block has to be copied, not read in
-	; place: the pointers are already resolved to RAM.
+	; ROM init image for the 20 UI objects whose descriptor lives in sub-CPU
+	; work RAM (0x239CC4-0x239FD1) instead of in the ROM pool.  After four
+	; 0xffff words (eight 0xff bytes) the record array starts at 0x2f9c4c and
+	; runs to 0x2f9f59, in exactly the format documented at
+	; HDAE5000_UI_Descriptors in hdae5000_data_tables.s.  The start address is
+	; pinned independently of that parse: hd-ae5000_v2_06i.s:126 records that
+	; this image is copied to 0x23952a, and 0x2f9c4c - 0x2f94b2 = 0x79a =
+	; 0x239cc4 - 0x23952a, the first RAM descriptor address in
+	; HDAE5000_UiObject_PtrTable.
+	;
+	; RETRACTED: "40-byte-stride" and "0x0160 (=352, the panel display width)".
+	; There is no single stride - the 20 records are 40,54,40,40,40,40,40,40,
+	; 40,40,40,44,44,44,26,26,36,36,36,36 bytes.  The first 19 of those lengths
+	; are the address deltas between the 20 RAM descriptors listed in
+	; HDAE5000_UiObject_PtrTable; the 20th comes from the class instead.  Each
+	; length is also the class-determined body length of the record (classes
+	; 0160:001F, 0041, 004E, 0049, 0012), except for 0160:004E, which has no
+	; instance in the ROM pool and so is pinned only by the delta.  0x0160 is
+	; the high half of the .long class id, the same value 546 of the 769 ROM
+	; pool records carry.
+	;
+	; The records are, in order: #44 SELECT_DIR_SW_EDIT, #128 SW_HD_FORMAT,
+	; #218 CP_FD_HDSWTO, #220 CP_FD_HDSWSEL, #224 CP_FD_HDALLSEL,
+	; #249 FLS_SELECT_SW_EDIT, #256 HD_FILE_LOAD_SW_SAVE, #266
+	; HD_FILE_LOAD_SW_DEL, #269 HD_FILE_LOAD_SW_DELFILE, #302 (unnamed),
+	; #318 FLS_FILE_LOAD_SW_EDIT, #443 HddNamingABC, #444 HddNamingabc,
+	; #445 HddNamingSymbol, #664 ERR_SAVE_EXIT, #670 ERR_LOAD_EXIT,
+	; #767 ChordinLyric, #768 TempoinLyric, #769 MeasureinLyric,
+	; #770 TimeSigInLyric.  VERIFIED: every parent / first-child / next / prev
+	; index they carry agrees with the ROM pool's own tree - 33/33 checkable
+	; links, no exception (analysis/wave7-probes/verify_hdae5000_ui_pool.py).
+	;
+	; The three 44-byte records (#443/444/445, class 0160:004E) are the
+	; naming-screen character-set selectors; like the pool's 0160:0026 toggle
+	; soft keys they carry TWO caption pointers, at +0x1e and +0x1a, and here
+	; both copies are identical ("ABC"/"ABC", "abc"/"abc", "!#$"/"!#$").  Those
+	; six literals are stored inside object #442 "HddNamingCursorBox" in the
+	; ROM pool.  Each record also holds a pointer back into the RAM copy of
+	; this image, which is why the block has to be copied, not read in place.
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0x001f, 0x0160, 0x0022, 0x002d
 	.short 0x002e, 0x002b, 0x0000, 0x0109, 0x00c9, 0x0137, 0x00da, 0x00f2
 	.short 0x00c0, 0x0004, 0x0000, 0x0000, 0x0000, 0x0000, 0x000c, 0x0000

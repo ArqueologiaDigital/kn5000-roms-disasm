@@ -6266,11 +6266,158 @@ HDAE5000_RECORD_COUNT:	; 0x29D97E
 	.byte 0x00
 	.asciz "SelectListProc"
 	.byte 0x00
+
+; =============================================================================
+; HD-AE5000 UI OBJECT DESCRIPTOR POOL  (0x29DC12 - 0x2A5D2B, 33,050 bytes)
+; =============================================================================
+; ONE array of 769 variable-length records.  It is not five tables.  The five
+; labels that cut it up - HDAE5000_UI_Descriptors just below, and
+; _UI_Page_Titles / _Panel_Save_UI / _Credits / _Demo_Data further down - each
+; land 0x02 to 0x3A bytes INSIDE a record, and the last four land on that
+; record's inline caption string.  All five are kept as MISNOMERS for
+; cross-reference (they are the names the ASL mirror,
+; symbols/hdae5000_symbols_reference.txt and seven .set bases in
+; hdae5000_init_data.s already use); see the retraction note at each one.
+;
+; CAUTION: the pool is still partly disassembled AS INSTRUCTIONS - 721
+; instruction lines remain interleaved with the data directives below.  They
+; are data, not code; re-carving them is a follow-up package.
+;
+; BOUNDARIES.  Record i begins at HDAE5000_UiObject_PtrTable[i] (0x2A5D2C) and
+; ends where the next pool pointer begins; the 769th ends at 0x2A5D2C itself,
+; so the pool is exactly the gap between the class-name strings above and that
+; table, and the 769 lengths sum to exactly 33,050 bytes with nothing over.
+; Those 769 addresses are the ONLY legal places for a label inside this pool.
+; The pointer table has 789 entries plus a NULL; the other 20 objects keep
+; their descriptor in sub-CPU work RAM at 0x239CC4-0x239FD1, initialised from
+; HDAE5000_WindowGeometry_Init (ROM 0x2F9C4C) in this same record format.
+;
+; STRIDE.  There is none.  Lengths run 22..82 bytes in 26 distinct values, all
+; even (42 B x178, 26 B x125, 40 B x105, 36 B x58, 60 B x46, 38 B x39,
+; 44 B x38).  A record is a fixed 22-byte header, a class-specific body whose
+; length is constant per class, and an optional inline caption arena:
+;
+;   +0x00  .long   class id.  High half 0x016A = a class defined by THIS ROM,
+;                  low half = index into HDAE5000_ClassName_Table (0x2F9832).
+;                  [INFERENCE] high half 0x0160 = a class of the host KN5000
+;                  widget library - this ROM carries no name table for it, and
+;                  its 29 low halves (up to 0x0069) cannot index the 13-entry
+;                  ClassName_Table.  41 distinct ids: 12 of 0x016A, 29 of 0x0160.
+;   +0x04  .short  parent object index,           or 0xFFFF
+;   +0x06  .short  first-child object index,      or 0xFFFF
+;   +0x08  .short  next-sibling object index,     or 0xFFFF
+;   +0x0A  .short  previous-sibling object index, or 0xFFFF
+;   +0x0C  .short  0x0008 (622 records) / 0x000A (62) / 0x0018 (85), constant
+;                  per class.  NOT decoded; [INFERENCE] an object-kind or
+;                  attribute word - no code path was traced to it.
+;   +0x0E  .short  x1  \
+;   +0x10  .short  y1   |  bounding box, absolute screen pixels; the whole
+;   +0x12  .short  x2   |  pool fits inside 0,0 - 321,239
+;   +0x14  .short  y2  /
+;   +0x16  ...     class-specific body, constant length per class, UNDECODED
+;   tail           inline NUL-terminated captions for the classes that have
+;                  caption slots, word-aligned with at most one 0x00 pad byte
+;
+; F below is the 22-byte header plus the class body, i.e. the record length
+; before the caption arena starts.
+;
+;   class       n    F  captions      class       n    F  captions
+;   0160:0010    1   22  -            0160:0012   11   36  -
+;   0160:001B   50   58  +0x1C        0160:001C    1   42  -
+;   0160:001F   77   40  -            0160:0020   11   44  -
+;   0160:0022   19   42  -            0160:0026    4   40  +0x1E,+0x1A
+;   0160:0028    8   28  -            0160:0029   10   26  -  (see note 1)
+;   0160:002B   97   32  +0x16        0160:002D    3   26  -
+;   0160:002E   37   26  -            0160:0030    6   40  +0x16
+;   0160:0033    1   34  -            0160:0035   13   36  -
+;   0160:0036   43   40  +0x1A        0160:0037   16   38  +0x1A
+;   0160:003D    2   50  +0x2A        0160:003E   25   44  +0x28
+;   0160:003F   16   46  +0x2A        0160:0041   16   54  +0x2A
+;   0160:0046    2   22  -            0160:0049   34   26  -
+;   0160:004B    2   36  -            0160:004C    1   64  -  (see note 2)
+;   0160:004D    4   26  -            0160:0052   27   26  -
+;   0160:0069    9   26  -            016A:0000   31   60  -
+;   016A:0001    1   26  -            016A:0002   24   42  +0x22
+;   016A:0003    1   36  -            016A:0004    1   26  -
+;   016A:0006   25   42  +0x22        016A:0007    1   42  +0x22
+;   016A:0008    4   36  -            016A:0009   11   34  -
+;   016A:000A  122   42  -            016A:000B    1   46  -
+;   016A:000C    1   32  -
+;
+; EVIDENCE.  Every number in this block is printed by the committed probe
+; analysis/wave7-probes/verify_hdae5000_ui_pool.py, run from the repo root; it
+; reads original_ROMs/hd-ae5000_v2_06i.ic4 at load base 0x280000 and nothing
+; else.
+;  * Link fields, over the pairs whose both ends are ROM descriptors: next/prev
+;    symmetric 498/498, and a first child's parent is its owner 173/173, with no
+;    exception.  CONTROL: the same four .shorts read at every other offset from
+;    +0x00 to +0x16 collapse - but not independently, because sliding the
+;    quartet by 4 bytes re-reads the same pair under different names, which is
+;    why +0x08 still scores 498/498 on "child/parent" and +0x00 scores 173/679
+;    on "next/prev".  +0x04 is the only offset where BOTH tests pass on their
+;    full populations.
+;  * 78 records have parent == 0xFFFF.  77 of them are named in
+;    HDAE5000_UiObjectName_PtrTable (HDDMENU, SETUPS_TOOLS, SELECT_FILE,
+;    SELECT_DIR, FD_FILE_SELECT, HARD_TEST, PC_DATA_LINK, LOAD_BY_NUM, ...);
+;    object #385 is not.  Root-ness is not the same as named-ness: 82 named
+;    objects are NOT roots.
+;  * The bounding box satisfies x1<=x2<=321 and y1<=y2<=239 for 769/769 records
+;    at +0x0E and at NO other offset (next best +0x1C with 478 violations, then
+;    +0x0C with 524, then +0x10 with 739).  Record #0 is 0,0-319,239: the full
+;    screen.
+;  * The class id decodes against HDAE5000_ClassName_Table[0..12] (13 pointers,
+;    an empty 14th entry, then 0xFFFFFFFF), with four exact hits and no
+;    counter-example: 016A:0003 is the single object named HddNamingWindow and
+;    [3] is "AcHddNamingWindowProc"; 016A:0009 contains the object named
+;    IV_HDDMENU and [9] is "IvScreenR2Proc"; 016A:000B is a child of
+;    Tech_lyrics and [11] is "LyricBoxProc"; 016A:000C is a child of
+;    LoadLyricFD and [12] is "FDFileSelectProc".  Consistent with that:
+;    016A:0000 = [0] "SelectListProc" holds SEL_DIR / LBN_*_BOX / CP_FD_LIST /
+;    SEL_FLS, and 016A:0002 / 0006 / 0007 = the TtlScreenRProc / R2 / R3
+;    titled screens.  016A:0005 ("HDTitleMenuProc") has no static descriptor.
+;  * 13 of the 41 classes carry a .long caption pointer at a fixed body offset
+;    - 329 slots in 325 records.  All 329 point INSIDE their own record, and
+;    the last caption of a record runs to the record end bar at most one pad
+;    byte.  Classes 0160:0026 (pool) and 0160:004E (RAM image only) carry TWO:
+;    a toggle soft key whose two states each have a caption - object 73
+;    RUN_STOP is +0x1E "RUN" / +0x1A "STOP"; objects 75/76/77 PPORT_SW / FD_SW
+;    / HDD_SW hold two separate copies of the same word.
+;  * Body length is constant per class for 40 of the 41 classes (note 1).
+;    Byte accounting: 30,252 B of header+body + 2,616 B of inline strings +
+;    182 pad bytes = 33,050 B.  That assigns every byte to a record and to a
+;    role; it does NOT decode them.  13,334 B (30,252 - 769 x 22) of
+;    class-specific body remain UNDECODED.
+;  * Independent confirmation of the layout: HDAE5000_WindowGeometry_Init (ROM
+;    0x2F9C4C-0x2F9F59) holds the 20 run-time descriptors in this same format.
+;    Their record lengths equal the RAM address deltas in the pointer table,
+;    and every link field they carry agrees with the ROM tree, 33/33.
+;
+; NOTE 1: object #127 (class 0160:0029, under SETUP_TOOLS_P2) is the only
+; record longer than its class body - it has "! HD FORMAT !" bolted on at
+; +0x1A with no pointer of its own.  That string is the caption of the RAM
+; object #128 SW_HD_FORMAT and is cited from the init image instead; it is
+; HDAE5000_Str_Alert_HDFormat in hdae5000_init_data.s.
+; NOTE 2: object #442 "HddNamingCursorBox" (class 0160:004C) ends with six
+; 4-byte literals "ABC" "ABC" "abc" "abc" "!#$" "!#$" at +0x28..+0x3C.  Those
+; are the captions of the RAM objects #443/444/445 HddNamingABC/abc/Symbol and
+; are HDAE5000_Str_CharSet_* in hdae5000_init_data.s.
+;
+; Symbolising the 769 records is still a follow-up package; the boundaries it
+; must use are the .long values of HDAE5000_UiObject_PtrTable, nothing else.
+; =============================================================================
+
+	; 0x29DC12  POOL START = HDAE5000_UiObject_PtrTable[0] = record #0,
+	;           "HDDMENU", class 016A:0002 TtlScreenRProc, 52 bytes,
+	;           box 0,0-319,239, caption "HD-AE5000" at +0x2A.
 	.byte 0x02
 	.byte 0x00
 
 HDAE5000_UI_Descriptors:	; 0x29DC14
-	; UI page descriptors and config
+	; MISNOMER retained for cross-reference: this is NOT the start of
+	; "UI page descriptors and config", and not a record boundary at all.
+	; 0x29DC14 is byte +0x02 of record #0 above, which splits that
+	; record's .long class id in half.  The pool starts two bytes lower,
+	; at 0x29DC12; see the header block above.
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -6869,7 +7016,14 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x00
 
 HDAE5000_UI_Page_Titles:	; 0x29DF8A
-	; UI page title strings
+	; MISNOMER retained for cross-reference (the ASL mirror, the symbols
+	; reference and a .set base in hdae5000_init_data.s use this name).
+	; RETRACTED: "UI page title strings".  There is no table of page titles
+	; here.  0x29DF8A is byte +0x28 of object #18 (record 0x29DF62-0x29DF97,
+	; 54 bytes, class 0160:0036, a child of HDDMENU) - it is that ONE
+	; object's inline caption, named by the .long at +0x1A of the record.
+	; The nearest record boundary is 0x28 bytes ABOVE this label.  See the
+	; pool header at HDAE5000_UI_Descriptors.
 	.asciz "LYRICS WINDOW"
 	.byte 0x02
 	.byte 0x00
@@ -11190,7 +11344,19 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "#"
 
 HDAE5000_Panel_Save_UI:	; 0x29F9B2
-	; Panel memory save/load UI strings
+	; MISNOMER retained for cross-reference (the ASL mirror, the symbols
+	; reference and six .set bases in hdae5000_init_data.s use this name).
+	; RETRACTED: "Panel memory save/load UI strings".  0x29F9B2 is byte
+	; +0x3A of object #177 (record 0x29F978-0x29F9C9, 82 bytes, class
+	; 0160:001B, a child of object #175 LBN_P2) - it is that ONE object's
+	; inline caption, named by the .long at +0x1C of the record, and the
+	; nearest record boundary is 0x3A bytes ABOVE this label.  LBN_P2 is a
+	; root screen that carries no title of its own; [INFERENCE] "LOAD BY
+	; NUMBER page 2", from the abbreviation and from the separate object
+	; #143 LOAD_BY_NUM titled "LOAD BY NUMBER".  The six
+	; HDAE5000_Str_CharSet_* symbols expressed as offsets from this label
+	; are unrelated to it: they live at +0x28..+0x3C of object #442, 0x2CA4
+	; bytes further on.  See the pool header at HDAE5000_UI_Descriptors.
 	.asciz "CURRENT PANEL          "
 	.byte 0x1b
 	.byte 0x00
@@ -23675,7 +23841,17 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 6
 
 HDAE5000_Credits:	; 0x2A477C
-	; Developer credits (Technosoft/KEY SOFT)
+	; MISNOMER retained for cross-reference: this is not a credits block,
+	; it is one caption.  0x2A477C is byte +0x20 of object #645 (record
+	; 0x2A475C-0x2A4795, 58 bytes, class 0160:002B, under ABOUT_HELP via
+	; object #643) - that ONE object's inline caption, named by the .long at
+	; +0x16 of the record; the nearest record boundary is 0x20 bytes ABOVE
+	; this label.  The credit text is SIX separate objects under ABOUT_HELP,
+	; in three sibling groups: #645 "Technosoft, CH-Samstagern" and #646
+	; "Pointstyle, CH-Buttisholz" under #643; #649 "KEY SOFT SERVICE,
+	; CH-Schenkon", #650 "Fax.  +41-41-922 03 15" and #651
+	; "email:keysoftservice@bluewin.ch" under #648; and #656 "Mr.
+	; T.Hamaguchi and Mr. M.Kitajima" under #655.
 	.asciz "Technosoft, CH-Samstagern"
 	.asciz "+"
 	.ascii "`"
@@ -26044,7 +26220,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 
 HDAE5000_Demo_Data:	; 0x2A5634
-	; Demo song data and rhythm custom UI
+	; MISNOMER retained for cross-reference.  RETRACTED: "Demo song data and
+	; rhythm custom UI".  There is NO demo song data anywhere in this pool -
+	; it is 769 UI object descriptors and nothing else, every byte of it
+	; assigned to a record by the header at HDAE5000_UI_Descriptors.
+	; 0x2A5634 is byte +0x28 of object #743 (record 0x2A560C-0x2A5641, 54
+	; bytes, class 0160:0036, under FILE_LOAD_A_Z via object #742) - that
+	; ONE object's inline caption, named by the .long at +0x1A of the
+	; record.  The nearest record boundary is 0x28 bytes ABOVE this label.
 	.asciz "RHYTHM CUSTOM"
 	.asciz "6"
 	.ascii "`"
@@ -27141,11 +27324,19 @@ HDAE5000_Demo_Data:	; 0x2A5634
 ; (HddNamingABC/abc/Symbol, *_SW_EDIT, CP_FD_HDSW*, *_EXIT, *inLyric).
 ;
 ; The targets stay absolute for now: the descriptor pool itself is still decoded
-; as instructions, and the labels HDAE5000_UI_Descriptors (0x29DC14) /
-; _UI_Page_Titles / _Panel_Save_UI / _Credits / _Demo_Data cut that one contiguous
-; pool into five arbitrary pieces - none of them a descriptor boundary; the pool
-; really starts at 0x29DC12, two bytes below the first of those labels.
-; Symbolising the targets is a follow-up package, not this one.
+; as instructions in places (721 instruction lines remain inside it), and the
+; labels HDAE5000_UI_Descriptors (0x29DC14) / _UI_Page_Titles / _Panel_Save_UI /
+; _Credits / _Demo_Data cut that one contiguous pool into five arbitrary pieces -
+; none of them a descriptor boundary; the pool really starts at 0x29DC12, two
+; bytes below the first of those labels.  The record format, the 769 boundaries
+; and where each of those five labels actually falls are now documented in the
+; header block at HDAE5000_UI_Descriptors: they are +0x02 of record #0 and
+; +0x28 / +0x3A / +0x20 / +0x28 of records #18 / #177 / #645 / #743, the last
+; four sitting on that record's inline caption string.  The names are kept as
+; misnomers because the ASL mirror, the symbols reference and seven .set bases
+; in hdae5000_init_data.s use them.  Symbolising the 769 records is a follow-up
+; package, not this one; its only legal split points are the .long values of
+; this table.
 ; =============================================================================
 
 HDAE5000_UiObject_PtrTable:	; 0x2A5D2C

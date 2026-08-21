@@ -21,13 +21,29 @@ BIN_START = 0x29AF2D
 
 # New split points within existing sections (addr -> (label, comment))
 # These subdivide the huge GFX_INIT_PARAMS section
+#
+# HISTORICAL RECORD - DO NOT RE-RUN THIS TOOL AS-IS.  Its SOURCE_FILE has
+# since been split into hdae5000/hdae5000_*.s, and the five split points in
+# the "RECORD_COUNT section" group below are RETRACTED: every one of them
+# falls inside a record of the UI object descriptor pool 0x29DC12-0x2A5D2B,
+# and four of them land on a record's inline caption string.  The only legal
+# boundaries in that pool are the 769 .long values of
+# HDAE5000_UiObject_PtrTable (0x2A5D2C); see the header comment at
+# HDAE5000_UI_Descriptors in hdae5000/hdae5000_data_tables.s.  The five
+# labels themselves are still in the tree, kept as misnomers because the ASL
+# mirror, symbols/hdae5000_symbols_reference.txt and seven .set bases in
+# hdae5000/hdae5000_init_data.s use those names; each carries a retraction
+# comment at its definition.  0x2BA1A6 HDAE5000_Font_Data is likewise
+# retired (no font data there, and the address falls mid-bitmap) - see the
+# RETIRED LABEL note in hdae5000/hdae5000_data_tables.s.  The addresses are
+# kept here only so the old output can be traced.
 NEW_SPLIT_POINTS = {
-    # Within RECORD_COUNT section
-    0x29DC14: ('HDAE5000_UI_Descriptors', 'UI page descriptors and config'),
-    0x29DF8A: ('HDAE5000_UI_Page_Titles', 'UI page title strings'),
-    0x29F9B2: ('HDAE5000_Panel_Save_UI', 'Panel memory save/load UI strings'),
-    0x2A477C: ('HDAE5000_Credits', 'Developer credits (Technosoft/KEY SOFT)'),
-    0x2A5634: ('HDAE5000_Demo_Data', 'Demo song data and rhythm custom UI'),
+    # Within RECORD_COUNT section -- RETRACTED, see the note above
+    0x29DC14: ('HDAE5000_UI_Descriptors', 'RETRACTED: +0x02 into UI object record #0'),
+    0x29DF8A: ('HDAE5000_UI_Page_Titles', 'RETRACTED: +0x28 into UI object record #18'),
+    0x29F9B2: ('HDAE5000_Panel_Save_UI', 'RETRACTED: +0x3A into UI object record #177'),
+    0x2A477C: ('HDAE5000_Credits', 'RETRACTED: +0x20 into UI object record #645'),
+    0x2A5634: ('HDAE5000_Demo_Data', 'RETRACTED: +0x28 into UI object record #743'),
     # Within GFX_INIT_PARAMS section
     0x2BA1A6: ('HDAE5000_Font_Data', 'Font bitmap data (large block)'),
     0x2E1C82: ('HDAE5000_Config_Strings', 'Configuration and version strings'),
@@ -45,11 +61,13 @@ NEW_SPLIT_POINTS = {
 CONVERT_ADDRS = {
     0x29BFE0,   # UI_Config
     0x29D97E,   # RECORD_COUNT (event handler names)
-    0x29DC14,   # UI_Descriptors
-    0x29DF8A,   # UI_Page_Titles
-    0x29F9B2,   # Panel_Save_UI
-    0x2A477C,   # Credits
-    0x2A5634,   # Demo_Data
+    # RETRACTED, same five addresses as NEW_SPLIT_POINTS: each is mid-record
+    # in the UI object descriptor pool.  See the note above NEW_SPLIT_POINTS.
+    0x29DC14,   # UI_Descriptors  RETRACTED: +0x02 into UI object record #0
+    0x29DF8A,   # UI_Page_Titles  RETRACTED: +0x28 into UI object record #18
+    0x29F9B2,   # Panel_Save_UI   RETRACTED: +0x3A into UI object record #177
+    0x2A477C,   # Credits         RETRACTED: +0x20 into UI object record #645
+    0x2A5634,   # Demo_Data       RETRACTED: +0x28 into UI object record #743
     0x2E1C82,   # Config_Strings
     0x2E21D8,   # Test_Strings
     0x2E2500,   # Dir_Strings
