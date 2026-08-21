@@ -18,7 +18,7 @@
 ;   0x85959D  ToneDB_ToneIndexMapC           1024 x LE16     dir +0x24/+0x9C
 ;   0x859D9D  ToneDB_ToneIndexMapD           1024 x LE16     dir +0x28/+0xA0
 ;   0x85A59D  ToneDB_DrumToneIndexMap        1024 x LE16     dir +0x2C/+0xA4
-;   0x85AD9D  ToneDB_VelocityCurve_0..5      6 x 128 bytes
+;   0x85AD9D  ToneDB_VelocityCurve_0..5      6 x 128 bytes  key->band maps
 ;   0x85B09D  ToneEnv_* data chunks          974 blobs, 32732 bytes
 ;   0x863079  DrumKit_* records              26 x 295 bytes
 ;   0x864E6F  PercInst_* records             610 x 58 bytes  dir +0x78
@@ -688,14 +688,106 @@ ToneDB_MixerDefaultTable:
 	.byte	0x7f, 0x7f, 0x7f, 0x7f, 0x05, 0x7f, 0x05, 0x7f, 0x05, 0x7f, 0x05	; 336
 
 ; -----------------------------------------------------------------------------
-; 487 envelope/modulation descriptor records x 15 bytes (dir +0x30/+0x34/+0x38).
-; Record layout: flags byte, two LE32 ToneDB_Base-relative offsets (A and B),
-; 6 parameter bytes.  The 2x487 offsets are all distinct and exactly tile the
-; ToneEnv data region 0x85B09D-0x863078 (974 chunks).  Flag byte census:
-; 0x00 x318, 0x80 x134, 0x02 x13, 0x08 x10, 0x81 x9, 0x01 x3.
-; NOTE: 487 records here + 142 records in ToneDB_PercMixerDefaultTable's
-; sibling group = 629, the entry count of the tone-record offset table at
-; 0x831B00 (DSP1_ResolveStreamPtr's table), suggesting one descriptor per tone.
+; MULTISAMPLE SET DESCRIPTORS -- 487 records x 15 bytes (dir +0x30/+0x34/+0x38;
+; the stride is the directory word +0xEC / +0xF2, both 15).
+;
+; One record describes one multisample SET: which recordings it is built from,
+; where each one sits on the keyboard, and where the SET sits in pitch.  The
+; subcpu keeps the pointer to it in the voice slot at +0x1F and in the per-part
+; patch cache written by WaveSel_Cache_SetDescPtr (0x0328E2, cache word +0x76).
+;
+; RECORD LAYOUT
+;   +0x00  u8    flags -- see below
+;   +0x01  LE32  ToneDB_Base-relative offset of the SET key map (ToneEnv_*_A)
+;   +0x05  LE32  ToneDB_Base-relative offset of the zone records (ToneEnv_*_B)
+;   +0x09  u8    lowest key of the SET's range  (0..28; it is 12 in 462 of 487)
+;   +0x0A  u8    highest key of the SET's range (65..120; it is 120 in 212)
+;   +0x0B  u8    root key.  It sets the pitch pivot, root*256 + 0x80, on the
+;                flags bit-1-CLEAR arm ONLY -- see FLAGS BIT 1 below.
+;   +0x0C  LE16  base pitch, 8.8 log semitones -- the units of TG reg +0x400.
+;                Also bit-1-CLEAR only in the portamento stage; see below.
+;   +0x0E  u8    0x00 in 473 records, 1..5 in the other 14.  No reader located
+;                in the v1.42 subcpu -- UNIDENTIFIED.
+; +0x09 and +0x0A are the range that Pitch_Fold_Octaves_Into_Range (0x0229EC)
+; and Pitch_Clamp_Into_Range (0x02299D) fold or clamp the computed pitch into.
+;
+; FLAGS BYTE (+0x00).  Census IN THIS TABLE: 0x00 x318, 0x80 x134, 0x02 x13,
+; 0x08 x10, 0x81 x9, 0x01 x3 -- so only bits 0, 1, 3 and 7 are ever set here.
+; The 15-byte format itself allows more: DrawbarPreset_EnvDescTable (dir +0x70)
+; uses the same record with flags 0x92, i.e. bit 4 as well.
+;   bit 7  zone-record stride: set -> 6 bytes (143 records), clear -> 4 bytes
+;          (344 records).  WaveSel_StageB_Build_Reg040 (0x023849) tests bits
+;          6, 7 and 5 and can also select strides 15, 12, 13 and 10, but bit 6
+;          is clear in every record here, so those four forms never occur.
+;   bit 1  PITCH TRAP -- see below.
+;   bit 0  reserve level 0xFF: Voice_Calc_LevelPair_Full_CheckMax (0x025DBE)
+;          and _Mono_CheckMax (0x026083) decrement an output level of exactly
+;          0xFF when it is set.  12 records.
+;   bit 3  set in 10 records; no reader located -- UNIDENTIFIED.
+;
+; HOW A SET IS REACHED (WaveSel_StageA2_FindSetDesc, subcpu 0x032750).  It
+; takes two bytes, passed in C and A.  [INFERENCE] nothing in the ROM names
+; them; C behaves as a family/sub-bank selector and A as a wave index.
+;   family = C & 0xC0, sub = C & 0x0F, wave = A & 0x7F
+;   set = u16[ dir[+0x24 | +0x28 | +0x2C] + 2*((sub << 7) | wave) ]
+;         family 0x00/0xC0 -> +0x24 ToneDB_ToneIndexMapC
+;         family 0x80      -> +0x28 ToneDB_ToneIndexMapD
+;         family 0x40      -> +0x2C ToneDB_DrumToneIndexMap
+;   descriptor = ToneDB_Base + dir[+0x30 | +0x34 | +0x38] + set*15
+; Bit 2 of the global mode word 0x041343 substitutes slots +0x9C/+0xA0/+0xA4
+; for the three index tables; those slots hold the same three offsets in this
+; ROM, so the alternate path is a no-op here.  All three descriptor slots hold
+; the same offset, so the three families share this one block.
+;
+; TWO POPULATIONS, split at record 341, and the index maps confirm the split:
+;   000..340  MELODIC SETs.  ToneIndexMapC/D top out at 338 and 340 and never
+;             reach 341.  223 are multi-zone, 143 use the 6-byte zone record.
+;             All 328 with bit 1 clear carry root 0x42 and base pitch 0x4280,
+;             i.e. base pitch - pivot = 0 exactly, so the note tracks the key.
+;   341..486  PERCUSSION SETs, reached only from DrumToneIndexMap (whose 147
+;             distinct values are exactly 335 and 341..486).  All 146 are
+;             single-zone, 4-byte stride, range 12..120, root 0x42, and all
+;             146 carry a base pitch other than 0x4280 -- so unlike the
+;             melodic SETs they contribute a non-zero (base pitch - pivot)
+;             transposition.  It is not a per-instrument tuning: only 18
+;             distinct values occur, 94 sharing 0x4D44 and 22 sharing 0x4EBC.
+; [INFERENCE] the split reads as an authoring convention.  It is proven as an
+; indexing fact, but no code was found that enforces 341 as a boundary.
+;
+; FLAGS BIT 1 -- THE PITCH TRAP.  Exactly 13 records have it set: 49, 50, 52,
+; 61, 63, 64, 66, 67, 68, 73, 74, 75 and 78.  They are exactly the 13 whose
+; root byte is not the universal 0x42 (it is 0x00, 0x08 or 0x10), and all 13
+; carry the same base pitch 0x417F.  On the bit-1 arm the portamento stage
+; reads NEITHER field: Voice_Pitch_ApplyPortamento (0x023738) works around the
+; literal 0x4280 instead -- Voice_Pitch_Portamento_Active_SubBias (0x023786)
+; subtracts it and _AddBias restores it, and glide mode 7 loads it outright.
+; So these SETs contribute no DESCRIPTOR-DERIVED pitch offset: the centre is
+; 0x4280 whatever +0x0B and +0x0C hold, which is exactly why their contents
+; are unconstrained AS PITCH DATA.  Anything that computes (base pitch -
+; pivot) unconditionally therefore fabricates +48.996, +56.996 or +64.996
+; semitones here, and these 13 SETs are the sole source of 112 of the 1444
+; distinct recording selectors this table produces (7.8%).  That bug shipped
+; in a generated pitch table used by an emulator until 2026-08-19.
+; The bytes are not unread everywhere, though, so do not restate the trap as
+; 'the fields are never read': Voice_Build_Partial_Descriptor (0x02B717) reads
+; the root byte for keys >= 0x78 -- and only when bit 1 is SET, i.e. only for
+; these 13 -- remapping the layer to key - 0x78 + root, while a layer whose
+; SET has bit 1 clear is dropped at that key instead.  Voice_Pitch_CopyBase
+; (0x023809, reached from Voice_Allocate_Typed and Voice_Allocate_Type2) reads
+; the base pitch without testing bit 1 at all.  The trap is about the
+; SUBTRACTION in the portamento stage, not about the bytes being unreachable.
+;
+; RETRACTED: this header used to say `487 records here + 142 records in
+; ToneDB_PercMixerDefaultTable's sibling group = 629 ... suggesting one
+; descriptor per tone`.  SETs are indexed by the 1024-entry maps above, not by
+; the 629-entry tone-record table at 0x831B00; the arithmetic was a
+; coincidence.
+;
+; Every census above is re-derived by analysis/wave7-probes/
+; probe_set_descriptors.py (no arguments; reads original_ROMs).
+;
+; The 2x487 offsets are all distinct and exactly tile the ToneEnv data region
+; 0x85B09D-0x863078 (974 chunks); the chunk header below has their layout.
 ToneDB_EnvDescTable:
 	.byte	0x80	; 0
 	.long	ToneEnv_Rec000_A - ToneDB_Base, ToneEnv_Rec000_B - ToneDB_Base
@@ -2556,10 +2648,29 @@ ToneDB_DrumToneIndexMap:
 	.short	  335,   335,   335,   335,   335,   335,   335,   335	; 1016-1023
 
 ; -----------------------------------------------------------------------------
-; Six 128-entry velocity/scaling curves (input = MIDI velocity 0-127).
-; Curves 0-4 are stepped ramps of increasing depth (final values 10, 20, 27,
-; 34, 34); curve 5 is near-linear reaching 107.  ToneEnv chunks reference
-; these curves by ToneDB_Base-relative offset.
+; SET KEY->BAND TABLES -- six 128-byte tables.  THE LABEL NAME IS A MISNOMER
+; KEPT FOR CONTINUITY: the input is the voice's PITCH, not the velocity.
+; WaveSel_KeyTable_Lookup (subcpu 0x022A32) does `and bc,0x7F00 / sra bc,8` on
+; the voice's pitch word (slot +0x06, i.e. after transpose, bend, glide and
+; fine tune) and indexes one of these with the resulting integer semitone
+; 0..127; the value returned is a band number that the owning SET's A chunk
+; (see the ToneEnv chunk header below) turns into a zone-record index.
+; A byte-by-byte scan of the whole 2 MB table ROM finds 488 LE32 values landing
+; in this 768-byte block: the 487 SET A-chunk heads, every one of them on a
+; table head, and one incidental match pointing 11 bytes into curve 3.  None
+; of the six table addresses appears in any disassembled code either, in the
+; ToneDB-relative form (0x2AD9D..) or in the subcpu view (0x7AD9D..).
+;   curve 0  max  10, 11 bands   used by 274 SETs -- all 146 percussion SETs
+;                                and 128 melodic ones
+;   curve 1  max  20, 21 bands   used by  20 SETs
+;   curve 2  max  27, 28 bands   referenced by no SET
+;   curve 3  max  34, 35 bands   used by  27 SETs
+;   curve 4  max  34, 35 bands   used by  15 SETs
+;   curve 5  max 107, 108 bands  used by 151 SETs
+; Curves 0-4 are stepped ramps of increasing depth; curve 5 is near-linear.
+; Counts re-derived by analysis/wave7-probes/probe_set_descriptors.py.
+; NOT RENAMED: whether these tables are ALSO used as velocity curves elsewhere
+; was not checked, so only the description is corrected here.
 ToneDB_VelocityCurve_0:
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; v0-15
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2	; v16-31
@@ -2616,11 +2727,74 @@ ToneDB_VelocityCurve_5:
 	.byte	 92,  93,  94,  95,  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107	; v112-127
 
 ; -----------------------------------------------------------------------------
-; ToneEnv data region: 974 variable-length blobs, one per LE32 offset in
-; ToneDB_EnvDescTable (chunk N ends where the next referenced offset begins).
-; Chunk size census: 15 x274, 4 x179, 112 x151, 6 x85, 39 x42, 36 x32, ...
-; Larger chunks are built from 6-byte segments of the form 70 00 xx xx xx NN
-; with NN incrementing - envelope segment lists (rate/level pairs).
+; SET KEY MAPS AND ZONE RECORDS -- 974 variable-length chunks, one per LE32
+; offset in ToneDB_EnvDescTable (chunk N ends where the next referenced offset
+; begins).  Every SET descriptor owns exactly two: its key map (ToneEnv_*_A)
+; and its zone-record array (ToneEnv_*_B).  Chunk size census: 15 x274,
+; 4 x179, 112 x151, 6 x85, 39 x42, 36 x32, ...
+;
+; A CHUNK -- the SET's key map, walked by WaveSel_StageB_Build_Reg040
+; (subcpu 0x023849):
+;   +0x00  LE32  ToneDB_Base-relative offset of a 128-byte key->band table.
+;                All 487 point at one of the five in-use tables in the
+;                ToneDB_VelocityCurve_0..5 block above (whose name is a
+;                misnomer -- see its header).
+;   +0x04  u8[]  band -> zone-record index.  Its length is always
+;                max(key table) + 1: 11, 21, 35 or 108 bytes, which is exactly
+;                the four A-chunk sizes 15, 25, 39 and 112.  Its largest value
+;                is always (number of zone records in the B chunk) - 1, in all
+;                487 SETs -- the check that ties A, B and the flags together.
+;   Lookup: band = keytable[(voice pitch >> 8) & 0x7F], by
+;   WaveSel_KeyTable_Lookup (0x022A32); zone index = A[+0x04 + band].
+;
+; B CHUNK -- the zone records.  Stride 6 when descriptor flags bit 7 is set,
+; stride 4 when it is clear; 2134 records in all, 1444 distinct selectors.
+;   +0x00  LE16  recording selector, (class << 12) | entry.  Copied verbatim to
+;                the staging word 0x0451CE = tone-generator register +0x040.
+;                Class census 0..7: 311, 278, 229, 536, 312, 263, 77, 128.
+;                [INFERENCE] what a class MEANS at the chip is not established
+;                here -- the nibble is passed through, not decoded.
+;   +0x02  u8    output-level field select, read by Voice_Build_OutputLevel
+;                (0x0232C7):
+;                  bit 7 SET   -> bits 6..4 are shifted into bits 14..12 of
+;                                 tone-generator register +0x080 VERBATIM
+;                                 (and wa,0x70 / sll wa,8);
+;                  bit 7 CLEAR -> those three bits come from the subcpu table
+;                                 at 0x00FBE4 indexed by the folded note.
+;                Only nine values occur and they are exactly the ones that
+;                encoding permits: 0x00 x1451, then 0x80 | (f << 4) for
+;                f = 0..7 (190, 83, 91, 38, 113, 40, 92, 36).  The low nibble
+;                is zero in all 2134 records, and no value has bit 7 clear
+;                with bits 6..4 set.
+;   +0x03  s8    pitch fine trim, 1/256 semitone per count (~0.39 cent), added
+;                to the pitch accumulator by Voice_ComputePitch_ApplyLFO
+;                (0x02647F) and _Mono_ApplyLFO (0x0265F1), which reach it
+;                through the voice slot pointer at +0x0F.  Range -64..+16,
+;                mean -10.4, negative in 2053 of the 2134 records.
+;   +0x04  LE16  coarse pitch trim, 8.8 semitones -- STRIDE-6 RECORDS ONLY.
+;                WaveSel_Emit_ZoneRecord_S6 (0x022AC5) stages it at 0x293E and
+;                Pitch_Apply_Zone_Trim (0x023A8E) adds it; the stride-4 emitter
+;                (0x022AE7) stores 0 there instead, so 4-byte zones carry no
+;                coarse trim.  518 values, -33.00 .. +41.00 semitones, 80 zero.
+; Both emitters also store the record's address in the voice slot at +0x0F,
+; which is how Voice_Build_OutputLevel and Voice_ComputePitch_*_ApplyLFO reach
+; +0x02 and +0x03 later.
+;
+; A SECOND CONSUMER of the same B chunk: WaveSel_StageB_Build_Reg040_Footage
+; takes the array base from descriptor +0x05 too, but indexes it from a
+; drawbar/footage state rather than the key map, and hard-codes stride 6 (the
+; index is tripled and doubled inline).  Its store, WaveSel_StageB_Store_Reg040
+; (0x02399D), additionally doubles the top nibble of 0x0451CE in place when bit
+; 2 of the global mode word 0x041343 is set.
+;
+; CORRECTED 2026-08-21: this header used to say that larger chunks are built
+; from 6-byte segments of the form 70 00 xx xx xx NN with NN incrementing, and
+; called them envelope segment lists (rate/level pairs).  That framing was off
+; by one byte: the segments are the zone records above, and the incrementing
+; byte is the low half of the selector at +0x00 -- ToneEnv_Rec000_B runs
+; 0x7000, 0x7001, 0x7002, ...  Nothing in these chunks is an envelope.
+; Every census above is re-derived by analysis/wave7-probes/
+; probe_set_descriptors.py (no arguments; reads original_ROMs).
 ToneEnv_Rec000_A:
 	.byte	0x1d, 0xaf, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x02, 0x03
 	.byte	0x04, 0x05, 0x05, 0x06, 0x07, 0x08, 0x08, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e, 0x0e, 0x0f
