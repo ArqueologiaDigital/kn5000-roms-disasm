@@ -68,6 +68,33 @@ fields in order: status, note, velocity, duration-low, duration-high.
 notes -- verified across all 19 songs: 10,330 of 10,330 non-note events have
 `data[0] <= 95`, with zero exceptions.
 
+### The status vocabulary is INCOMPLETE -- eleven more exist
+
+The table above does not cover everything the 19 songs actually use. Reading them with only the
+documented statuses leaves 255 events unparsed, and they are NOT trailing filler: every one occurs
+MID-STREAM, before the track's 0x83, and each status has a CONSISTENT argument count, which is what
+a real event type looks like and what random bytes do not.
+
+| status | count | args | notes |
+|---|---|---|---|
+| `0xFF` | 76 | 0 | 69 of 76 take no arguments |
+| `0xF2` | 46 | 2 | |
+| `0xF3` | 29 | 2 | |
+| `0xE3` | 22 | 3 | |
+| `0xE7` | 20 | 3 | |
+| `0x80` | 16 | 3 | note this is the same byte the IC19 container uses as a cell marker |
+| `0x86` | 15 | 1 | |
+| `0xE4` | 10 | 3 | |
+| `0x85` | 10 | 1 | |
+| `0xE8` | 5 | 3 | appears in runs, e.g. `e8 1a 40 3d  e8 1c 00 3f  e8 1c 40 3e` |
+| `0xF4` | 2 | -- | |
+
+**None of these has an established meaning**, and no name is proposed. They are listed so that a
+reader knows the vocabulary here is partial: an encoder built from this document would be unable to
+round-trip a real song, and a decoder should reject rather than guess on them.
+
+Reproduce with `tests/l5_reimplement_demo_format.py`, which reports them as malformed by design.
+
 ### Still inferred
 
 * `0xCn` looks like a **program change**: `data[2]` is always 0 (one distinct value
