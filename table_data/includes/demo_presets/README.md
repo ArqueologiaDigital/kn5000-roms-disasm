@@ -40,8 +40,11 @@ this section and nothing else, and decompresses all 19 songs byte-exactly.
                         [5..255]=251 payload bytes
 ```
 
-Cell bytes `[0..2]` are not used by the reader and their values vary -- byte 0 is
-**not** a fixed marker (unlike the IC19 accompaniment cells, where it always is; see
+⚠ CORRECTED 2026-08-21: cell bytes `[0..2]` are NOT meaningless. A demo preset is a snapshot of
+the sequencer's RAM cell heap at 0x0B0000 (1240 cells, cell *c* at `0x0B0000 + (c-1)*256`), so it
+carries that heap's allocator state: **byte 0 bit 7 = cell allocated**, and `[1..2]` is the u16 LE
+PREV link with 0x0000 meaning "chain head". See `docs/kn5000-sequencer-and-smf.md`. The original
+observation that byte 0 is **not a fixed marker** (unlike the IC19 accompaniment cells, where it always is; see
 `docs/accompaniment-style-format.md` -- the two containers are similar but NOT the same, and
 they also differ in how a cell pointer is resolved).
 
@@ -65,6 +68,9 @@ this section did not state it until 2026-08-21.
 
 | status | data | meaning |
 |---|---|---|
+| `0x80` | 3 | **TEMPO**: `pos, lo, hi`; BPM = `lo + 128*hi` (decoded 2026-08-21) |
+| `0x85` | 1 | **beat-synchronised START**; the argument is the in-beat tick (decoded 2026-08-21) |
+| `0x86` | 1 | **beat-synchronised STOP**; likewise (decoded 2026-08-21) |
 | `0x81` | 0 | advance one beat |
 | `0x82` | 0 | **end of track** (measured; see below) |
 | `0x83` | -- | **does not occur** -- 0 times in all 19 songs |
@@ -128,7 +134,23 @@ for the constant.
 Reproduce: `tests/l5_reimplement_demo_format.py`, which reports 67,132 events and 36 malformed,
 the 36 being these three statuses.
 
-#### `0x80` is very likely the TEMPO event [INFERENCE]
+#### `0x80` IS the tempo event -- CONFIRMED 2026-08-21, no longer an inference
+
+Proven on the firmware's RECORDING path, which is where a BPM is computed rather than merely
+consumed: `0xF2451D` computes `BPM = 234375 / period` (234375 = 60,000,000 / 256) and
+`0xF2452A`/`0xF24537` clamp it to **0x28..0x12C, i.e. 40..300 BPM**. The stream layout is
+`80 pos lo hi` with `BPM = lo + 128*hi`. The destination is RAM, not a timer register.
+
+`0x85` and `0x86` are a beat-synchronised START/STOP pair, each carrying one argument -- the tick
+within the beat. From `SeqEvent_GetParamLength` (`v10/maincpu/sequencer/sequencer_engine.s:9903`),
+which gives both a total event size of 2 bytes.
+
+**So the three statuses this file listed as undocumented are now decoded**, and the residue that
+`tests/l5_reimplement_demo_format.py` reports is explained rather than unknown.
+
+The original inference, kept for the record:
+
+#### `0x80` was very likely the TEMPO event [INFERENCE]
 
 This matters because the docstring of `demo_preset_to_midi.py` lists tempo as NOT DECODED and makes
 the user pass `--bpm`. The structural evidence:
