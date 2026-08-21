@@ -118,7 +118,7 @@ AlgoJumpTable3 0x00FB96
 AlgoJumpTable4 0x00FBAE
 AlgoJumpTable5 0x00FBC0
 AlgoJumpTable6 0x00FBD2
-Voice_PanPosition_Table 0x00FBE4
+Voice_Reg080_NoteField_Table 0x00FBE4
 Voice_KeyBend_Type41_Table 0x00FCE4
 Voice_KeyBend_Type42_Table 0x00FDE4
 Voice_DepthMirror_Table 0x00FEE4

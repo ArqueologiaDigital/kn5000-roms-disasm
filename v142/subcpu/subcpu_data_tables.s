@@ -853,12 +853,24 @@ AlgoJumpTable6:
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0025, 0x0025, 0x0071, 0x0071
 	.short 0x004a
 
-; --- 0x00FBE4-0x00FCE3  Voice_PanPosition_Table -- 128 u16 pan words
-; Voice_Build_OutputLevel_NoPanOverride: pan word = table[(voice descriptor
-; byte+6 high byte)*2], OR-ed into the level word for TG register 0x0451D0.
-; Values cycle 0x0000..0x7000 in a repeating 12-step pattern (0x1000 steps with
-; dwell points), i.e. a coarse pan-law sweep repeated across the index range.
-Voice_PanPosition_Table:
+; --- 0x00FBE4-0x00FCE3  Voice_Reg080_NoteField_Table -- 128 u16 words
+; RENAMED 2026-08-21 (was Voice_PanPosition_Table). It has nothing to do with pan: pan is
+; tone generator register +0x180, staged at 0x0451D8. This table supplies bits 14..12 of
+; register +0x080, staged at 0x0451D0, on the branch taken when the selected zone record
+; does not override them (Voice_Build_OutputLevel_NoPanOverride, which keeps its old name
+; for now).
+;
+; It is indexed by the played note AFTER octave folding -- (voice descriptor byte+6) >> 8 --
+; and is exactly
+;
+;     T[n] = floor(2 * (n mod 12) / 3) << 12
+;
+; which reproduces all 128 entries with no exceptions. So the "coarse sweep with dwell
+; points" the old comment described is a 12-step staircase: three notes per step for the
+; first two steps of each group, giving eight distinct values across an octave. Being a
+; function of the note alone, it carries no per-recording information -- which is why the
+; OTHER branch, the one that reads the zone record's own bits, is the interesting one.
+Voice_Reg080_NoteField_Table:
 	.short 0x0000, 0x0000, 0x1000, 0x2000, 0x2000, 0x3000, 0x4000, 0x4000
 	.short 0x5000, 0x6000, 0x6000, 0x7000, 0x0000, 0x0000, 0x1000, 0x2000
 	.short 0x2000, 0x3000, 0x4000, 0x4000, 0x5000, 0x6000, 0x6000, 0x7000
