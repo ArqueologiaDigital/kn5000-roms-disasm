@@ -161,9 +161,36 @@ by a mod-12 index, which is exactly why only 57 distinct pairs occur and why the
 across thousands of events. The firmware fixes the event sizes accordingly: 0xF6EECA `cp A,0x90`
 takes six bytes, 0xF6EEE7 `cp A,0x91` takes eight -- 5 and 7 arguments plus the status.
 
-The mod-12 index makes a musical reading available and it is NOT adopted here without more
-evidence: twelve records indexed by something mod 12 is the shape of a per-semitone or per-key
-table. What the two bytes then MEAN is still open.
+### What the table actually contains (2026-08-21)
+
+Dumped from ROM 0xF72368, twelve 4-byte records:
+
+    rec  0  1  2   00 00 00 00        -> plain NOTE
+    rec  3         01 00 11 00        -> NOTE2, extra args (0, 17)
+    rec  4         01 00 11 00        -> NOTE2, extra args (0, 17)
+    rec  5  6      00 00 00 00        -> plain NOTE
+    rec  7         01 03 00 00        -> NOTE2, extra args (3, 0)
+    rec  8  9 10   00 00 00 00        -> plain NOTE
+    rec 11         01 11 11 00        -> NOTE2, extra args (17, 17)
+
+The non-zero rows are **exactly 3, 4, 7 and 11**, and their (b1, b2) pairs are `(0,17)`, `(3,0)`
+and `(17,17)` -- **the three most frequent pairs observed in the corpus**, at 4291, 2518 and 437
+occurrences. So the mechanism is settled: the pair is a per-record constant, and this table is the
+record set.
+
+A musical reading is available and is recorded as an INFERENCE, not adopted: mod 12 makes the index
+a pitch class, and 3, 4, 7, 11 are the minor third, major third, perfect fifth and major seventh --
+the chord-defining intervals, which are exactly the degrees an accompaniment must adjust when the
+chord changes.
+
+**The data supports it strongly but not deterministically.** Of 7538 NOTE2 events, 5990 (79.5%)
+have `note % 12` in {3,4,7,11}, against a base rate of 21.8% among plain NOTEs (5806 of 26633).
+That is a large enrichment, not a rule -- classes 0 and 9 also carry 630 and 731 NOTE2 events.
+
+So the index is probably NOT the raw note's pitch class but something derived from it -- the note
+relative to a chord root or key, which the firmware holds in RAM 0x7F38. Pinning that RAM cell's
+provenance is the remaining step, and it is a small one. The table's role, its contents and the
+identity of the two bytes are no longer in question.
 
 Timing, inherited from the demo-preset work and not re-verified here: 96 ticks per beat, `pos` is
 the tick within the current beat (0..95), duration is `dur_beats * 96 + dur_ticks`. Both `pos` and
