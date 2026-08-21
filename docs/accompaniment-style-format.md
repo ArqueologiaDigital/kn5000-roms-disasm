@@ -204,15 +204,34 @@ Three independent uses show 0x7F38 is the NOTE NUMBER:
 
 So the index IS `note % 12`, a pitch class, and the musical reading stands.
 
-**Then why only 79.5%?** Because the v10 table is one instance, not the format. The corpus contains
-57 distinct (b1,b2) pairs while v10's table offers three, and pairs like (18,0), (1,18), (17,0) and
-(0,20) appear in the styles but in NO row of it. The 210 factory styles were therefore written by
-firmware carrying a DIFFERENT twelve-record table, with more non-zero rows -- which is exactly what
-extra pitch classes 0 and 9 in the NOTE2 distribution look like.
+**Then why only 79.5%? NOT for the reason recorded here fifteen minutes earlier.** That entry said
+the factory styles were written by firmware carrying a different twelve-record table. **Falsified
+the same session, by looking:**
 
-That resolves the discrepancy without weakening the mechanism: table-driven, indexed by pitch
-class, with the table itself a per-firmware constant. Recovering the writing firmware's table is
-the remaining step, and the KN7000/KN6000 program ROMs are where to look.
+* the table is **byte-identical in all three dumped KN5000 revisions** -- v7 at ROM 0xF71F64, v9
+  and v10 at 0xF72368 -- so no KN5000-revision difference can explain anything;
+* the whole main CPU contains **exactly one emitter of status 0x91** (`v10/.../seq_event_playback.s:2479`)
+  and **exactly one reference to the table** (`:2467`), so there is no second producer with a
+  different record set.
+
+Three distinct pairs are producible by this routine. The corpus contains **57**. Therefore
+
+> **the 0x91 events in the 210 factory styles were not produced by the KN5000's own emitter.**
+
+The custom-data flash is programmed from the "initial data disk" at factory setup, so the styles
+were authored on other equipment -- another model, or a factory authoring tool -- whose table had
+more non-zero rows. That is a finding about PROVENANCE, and it is worth more than the wrong
+explanation it replaces.
+
+What this leaves established, and what it does not:
+
+* ESTABLISHED -- the KN5000's emission mechanism: index `note % 12` through the mod-12 table, scale
+  by 4, read a 12-record table, emit 0x91 when b0 is non-zero and append b1, b2. Proven from
+  instructions.
+* NOT ESTABLISHED -- what the corpus's extra bytes MEAN. They were written by something this
+  repository does not contain, so the v10 table cannot decode them, and the chord-tone reading of
+  {3,4,7,11} describes THIS firmware's table rather than the data's semantics. Recovering the
+  authoring tool's table is the open step, and it is not in these ROMs.
 
 ⚠ Two more misnomers met on this path, both curated guesses being used as evidence by their names
 alone: `Display_FontPalette_Table_0x12EA` is the mod-12 lookup, and `AccPlay_FindSlotByChannel`
