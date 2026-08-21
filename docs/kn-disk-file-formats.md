@@ -150,14 +150,62 @@ The `EV_LSWDATA` step was taken. Each of the three mentions leads away from the 
 * **`EV_LSWDATA`** is one of 44 UI widget events; the enumeration is a windowing system, and the
   event is a data-delivery notification, not a parser.
 
-Putting those together:
+Putting those together produced a conclusion that was **WRONG**, kept here because the way it failed
+is worth more than the claim was:
 
-> **The KN5000 firmware never parses `.LSW` contents.** It names the extension, uses `*.LSW` as a
+> ~~**The KN5000 firmware never parses `.LSW` contents.** It names the extension, uses `*.LSW` as a
 > disk-test scratch pattern, and carries a widget event named after it. No code reads or writes the
-> 26 blocks, the TLV records or the 24 slots.
+> 26 blocks, the TLV records or the 24 slots.~~
+>
+> ~~That is a definite answer rather than a failed search, and it has a consequence: **the 24 slot
+> blocks cannot be identified from these ROMs at all.**~~
 
-That is a definite answer rather than a failed search, and it has a consequence: **the 24 slot
-blocks cannot be identified from these ROMs at all.**
+**RETRACTED.** The KN5000 handles `.LSW`, and has a dedicated handler for it in every revision. The
+string search above is complete and correct -- and irrelevant, because **the code never names the
+type. It uses the INDEX 0** into `SeqFileType_CodeTable`. A search for `"LSW"` cannot find code that
+only ever says `0`.
+
+### `.LSW` is file type 0, and type 0 has a handler
+
+`FileIO_SaveAllRegions` walks eight 6-byte records at **0xEA0210**
+(`Resource_Region3_Start_0x10`):
+
+    +0  u16  file-type index into SeqFileType_CodeTable   -- 0 = LSW
+    +2  u32  handler, fetched via Resource_Region3_Start_0x12 and `call (xhl)`
+
+Both offsets come from the code rather than from the shape of the bytes: `_0x10` feeds the type
+index passed to `FileIO_ReadHeader` in `e`, and `_0x12` is loaded into `xhl` and indirectly called
+in `FileDemo_ProcessCallback`. All eight types 0..7 appear exactly once, each with a handler:
+
+| type | 0 LSW | 1 PMT | 2 SQT | 3 CMP | 4 TM | 5 MSP | 6 RCM | 7 MD |
+|---|---|---|---|---|---|---|---|---|
+| v7 | **F876E9** | F8777B | F8789F | F8791F | F87A34 | F87989 | F879F3 | F87833 |
+| v9/v10 | **F87AF6** | F87B88 | F87CAC | F87D2C | F87E41 | F87D96 | F87E00 | F87C40 |
+
+Reproduce: `scripts/analysis/lsw_saveall_table.py`, which exits non-zero if the table stops covering
+types 0..7 with in-range handlers.
+
+**The v7 handler corroborates "CURRENT PANEL" independently.** Its first act is to size the region
+`0xF980..0xFFC0` and add `0x1E7800..0x1E8000` to it:
+
+    f876f0  lda XBC,0xffc0        ; \  0xFFC0 - 0xF980 = 0x640
+    f876f4  lda XWA,0xf980        ; /
+    f876fe  lda XBC,0x1e7800      ; \  + 0x800
+    f87703  lda XIZ,0x1e8000      ; /
+    f87713  cp XHL,XWA            ; need >= 0xE40 bytes free, else error 0xFF9B
+    f87722  ld DE,0               ; file type 0 = LSW
+
+`0xF980..0xFFC0` is the DRAM work area the firmware preserves across power-down -- i.e. the live
+panel state. So the KN5000 handler and the KN7000 UI label agree, by two entirely separate routes.
+
+**What this does NOT settle:** the handler operates on 0x640 + 0x800 bytes, and the on-disk file is
+0x5800. The mapping from those regions to the 26 blocks and the 24 slots is still unread. This
+gives the next pass a *function to disassemble* instead of a search that cannot succeed.
+
+⚠ **The lesson, since it will recur.** "Searched the whole ROM for the name, found nothing, therefore
+the firmware does not do it" is only valid when the code would have to say the name. Table-driven
+code says an index. Before concluding absence from a string search, ask what the code would say if
+the feature existed.
 
 ### Where the answer IS -- checked, not assumed
 
@@ -170,8 +218,8 @@ rather than a scratch name:
   first in both;
 * the SD-card LOAD and SAVE menus carry per-type widgets, `SD_LD2_LBLSW` / `SD_LD2_BLSW` and
   `SD_SV2_LBLSW`, beside the equivalents for PMT, SQT, CMP and TM. So a KN7000 user can save and
-  load `.LSW` files from the SD menu, which means that firmware contains the reader and writer this
-  one does not.
+  load `.LSW` files from the SD menu. (Originally written as "the reader and writer this one does
+  not" -- see the retraction above: the KN5000 has them too.)
 
 ⚠ An earlier investigation reported that the KN7000/KN6000 program ROMs "contain no readable ASCII
 at all under either even/odd interleave" and were probably compressed. That is true of the packed
