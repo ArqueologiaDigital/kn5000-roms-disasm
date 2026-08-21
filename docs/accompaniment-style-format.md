@@ -88,14 +88,61 @@ with bit 7 SET is a status; the bytes after it with bit 7 CLEAR are its argument
 argument count is self-delimiting, the stream can always be framed, whether or not the meaning of
 a given status is known.
 
-    status  args  count    meaning
-    0x90       5  16,654   NOTE: pos, note, velocity, dur_ticks, dur_beats
-    0x81       0  11,339   advance one beat
-    0x91       7   5,453   NOT DECODED
-    0xD2       2     958   NOT DECODED
-    0xD3       2     576   NOT DECODED
-    0xD1       2     100   NOT DECODED
-    0x83       -     718   end of chain
+    status  args   count   meaning
+    0x90       5  26,633   NOTE: pos, note, velocity, dur_ticks, dur_beats
+    0x91       7   7,538   NOTE plus two trailing bytes -- see below, now decoded
+    0x81       0  13,965   advance one beat
+    0xD1       2     112   controller, selector 1 -- NOT decoded
+    0xD2       2   1,227   controller, selector 2 -- PITCH BEND
+    0xD3       2     770   controller, selector 3 -- MIDI CC 0x40, the damper pedal
+    0x83       -   1,050   end of chain (one per chain, hence the chain count)
+
+    non-terminator total 50,245, which is the chain-walk figure quoted above.
+
+⚠ CORRECTED 2026-08-21. An earlier version of this table came from
+`scripts/analysis/style_cell_census.py`, which reads cells in ISOLATION -- only the 1050 whose PREV
+is 0xFFFF, stopping at 0x83 -- so its rows summed to 35,080 while the same document correctly
+reported 50,245 for the chain walk. Every count above is re-derived by following chains.
+
+### The 0xDn low nibble is a CONTROLLER SELECTOR, and two of the three are decoded
+
+The part is NOT in the event data: it comes from RAM 0x7E52 and becomes the low nibble of the
+RUNTIME status 0xD0|part. In the STREAM, the low nibble is a selector instead.
+
+**0xD3 is the damper pedal, and the emit site is now traced.** The IC19-style cell walker at ROM
+0xF6EE35 dispatches 0xD1/D2/D3/D4/D5/D7 to 0xF6EF76, where `and A,0x0f` turns the status into a
+selector; selector 3 reaches a literal MIDI control change **0xB0 with controller number 0x40** and
+a value booleanised to 0 or 0x7F. That closes the inference recorded earlier from three converging
+signals -- the data's 0/127-only argument, the sub-CPU's CC 0x40 handler treating its argument as a
+boolean, and the shared main-CPU handler. It is no longer an inference.
+
+**0xD2 is PITCH BEND and must not be rendered as a control change.** Selector 2's body at 0xFE89C4
+expands the 7-bit argument to 14 bits as `value = (v << 7) | (2v - 128 if v >= 64 else 0)`, and
+`SndPart_SetParam` routes it as bend rather than as a controller. This is why its argument clusters
+at 61..64: that is bend-centre.
+
+**0xD1 remains undecoded.** Its selector is 1; no name is proposed. The contradiction recorded
+earlier -- that the reverb/chorus restore paths emit 0xD1 with 0/0x7F and a small selector, unlike
+the style data's 0..117 range -- is explained by there being TWO serialisations of the same 0xD
+family: the SeqEvtBuf ring at 0x01F271 written as three bytes (status = 0xD0|part), and the style
+stream. They are not the same encoding, so the two argument ranges never had to agree.
+
+### NOTE2 (0x91): the two trailing bytes come from a firmware table
+
+Decoded, from instructions rather than from names. In v9/v10 the routine at ROM 0xF722AB emits
+status **0x91 instead of 0x90 exactly when** a 48-byte table at ROM 0xF72368 -- 12 records of 4
+bytes, indexed by `(value at RAM 0x7F38) % 12` through the 128-entry mod-12 lookup at ROM
+0xE46142 -- has a non-zero byte[0] for that record. When it does, the routine appends **that
+record's byte[1] and byte[2]** as the two extra trailing arguments.
+
+So the pair is not a per-note property computed from the note: it is a per-record constant selected
+by a mod-12 index, which is exactly why only 57 distinct pairs occur and why the same pair repeats
+across thousands of events. The firmware fixes the event sizes accordingly: 0xF6EECA `cp A,0x90`
+takes six bytes, 0xF6EEE7 `cp A,0x91` takes eight -- 5 and 7 arguments plus the status.
+
+The mod-12 index makes a musical reading available and it is NOT adopted here without more
+evidence: twelve records indexed by something mod 12 is the shape of a per-semitone or per-key
+table. What the two bytes then MEAN is still open.
 
 Timing, inherited from the demo-preset work and not re-verified here: 96 ticks per beat, `pos` is
 the tick within the current beat (0..95), duration is `dur_beats * 96 + dur_ticks`. Both `pos` and
