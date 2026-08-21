@@ -84,6 +84,26 @@ inside a block-1 payload at 0x048D and must not be mistaken for one), and **no c
 disassembly has been shown to parse this** -- the only ROM mention of "LSW" is the filename
 extension table at 0xEA038C -- so the framing is [INFERENCE] from data shape, however exact.
 
+### The file-type enumeration (settles what the 24 blocks are NOT)
+
+`SeqFileType_CodeTable` at ROM 0xEA0340 is an array of ten LE32 pointers to the extension strings
+at 0xEA0368..0xEA038C, terminated by `FF FF FF FF`:
+
+    index 0  LSW      index 5  MSP
+    index 1  PMT      index 6  RCM
+    index 2  SQT      index 7  "MD "
+    index 3  CMP      index 8  SQF
+    index 4  "TM "    index 9  SEQ
+
+It is used to build filenames -- `file_demo_proc.s` scales the type index by 4, reads the pointer
+and appends the extension via `FileIO_BuildFilePath`. Note two extensions carry a trailing space,
+`"MD "` and `"TM "`, which a filename builder must reproduce.
+
+**`PMT` and `LSW` are separate file types in the same table.** So the tempting reading of `.LSW`'s
+24 slot blocks as panel memories is not merely unsupported, it is contradicted: panel memory has
+its own extension, and these disks do not carry a `.PMT` at all. Recorded because that reading is
+the first one anybody will reach for.
+
 NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
 user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
 that panel memory is a separate `.PMT` extension these disks do not carry, so the tempting "24
