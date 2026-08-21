@@ -15,7 +15,7 @@ stood for months were wrong, and are corrected in the history rather than quietl
 | **§3** binary includes justified | **PASS** | `audit_incbin_legitimacy.py` -- 873 directives, every one in a justified category, exits non-zero if not. Was 1,371,778 illegitimate bytes. |
 | **L4** assets round-trip | **PASS** | seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT. |
 | **L1** every byte classified | **PASS** | `l1_territory_map.py v7 v9 v10` -- flattens each source tree through llvm-mc and assigns every byte to CODE/DATA/PADDING; all three totals equal their rebuilt ROM to the byte. ASSET is folded into DATA here (llvm-mc expands `.incbin`); its separate justification is the §3 row. |
-| **L2** semantic names | **PARTIAL** | sources are well-symbolised; `symbols/maincpu_symbols_reference.txt` matches the build on 1,332 of 39,449 rows and says so in its own header. |
+| **L2** semantic names | **PARTIAL** | reference files now regenerate FROM the build and match it 100% (`l2_symbol_reference.py`, was 3.4% on maincpu and 0.02% on table_data). Naming itself is **90.8% semantic** on maincpu -- 3,627 positional names remain; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
 | **L3** field meanings | **PARTIAL** | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
 | **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. Panel-side behaviour is not, and cannot be. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
@@ -38,6 +38,19 @@ measurement is, and it says where to look.
 
 That is what a mechanised L1 is for. The previous "no UNKNOWN bytes remain" was true and told nobody
 where the work was thin.
+
+## L2: what the regeneration fixed, and what it did not
+
+All five symbol reference files were stale, not just the one that admitted it. `table_data` agreed
+with its build on **1 row out of 4,689**. They are now generated from the ELFs -- which are
+byte-identical to the original ROMs -- and re-checked at 100%.
+
+What that does NOT do is make the names good. The metric counts a name as positional only when it
+restates an address (`_0xHEX`, a bare hex tail, `LABEL_*`); everything else scores as semantic. So
+90.8% is a **lower bound on naming coverage, not a judgement of aptness**, and no script can supply
+the latter. This session found `FileIO_ReadHeader` actually builds a file path and never reads a
+header -- it counts as semantic either way. Wrong-but-plausible names are invisible to this measure,
+and there is no reason to think that one is the only one.
 
 ## The three things that are not done, and where they live
 
