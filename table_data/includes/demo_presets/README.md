@@ -20,6 +20,15 @@ match = 12-bit offset + 4-bit length nibble where the copy length is
 The decoder stops as soon as the declared uncompressed size is reached; a few
 real (non-`0xFF`) stream bytes can follow that point and are preserved verbatim.
 
+⚠ **The `*_compressed.bin` files in this directory are the PAYLOAD ONLY.** The block format
+above describes what sits in the ROM; the 8-byte magic and the 3-byte size are emitted by
+`table_data/kn5000_table_data.s` (`.asciz "SLIDE4K"` + `.byte`), not stored in the file. An
+implementer following this section alone will look for a magic that is not there. Noted
+2026-08-21 after `tests/l5_reimplement_slide4k.py` did exactly that.
+
+**The codec description itself is sufficient and verified**: that test implements SLIDE4K from
+this section and nothing else, and decompresses all 19 songs byte-exactly.
+
 ## Decompressed song layout
 
 ```

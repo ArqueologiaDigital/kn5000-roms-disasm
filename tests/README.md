@@ -51,6 +51,19 @@ unknown status bytes (0xFF, 0xF2, 0xF3, 0xE3, 0xE7), which are either trailing f
 end or statuses the document does not cover. That residue is an OPEN ITEM, and the test failing
 loudly on it is the point.
 
+## `l5_reimplement_slide4k.py`
+
+    python3 tests/l5_reimplement_slide4k.py
+
+Implements the SLIDE4K codec from `demo_presets/README.md` and nothing else. **19 of 19 songs
+decompress byte-exactly** -- so that subsystem's SPECIFIED grade is now evidence rather than
+judgement, which is the good outcome for a test like this and worth having explicitly.
+
+It still found a gap: the document's block format (magic + size + payload) describes the ROM
+block, while the committed `*_compressed.bin` are payload-only, because the header is emitted by
+the assembler. An implementer following the prose asserts on a missing magic. Recorded in that
+README.
+
 ## Extending this
 
 Every subsystem graded SPECIFIED should get one of these. A grade that no one can run is an
