@@ -84,6 +84,34 @@ def blocks_of(path, syms):
     return lines, out
 
 
+# unidasm and llvm-mc disagree on SYNTAX for some operands. These are not
+# backend gaps -- the same bytes assemble fine once the text is in llvm-mc's
+# form -- so the converter translates rather than giving up:
+#
+#   lda XHL,XDE+0x0a   ->  lda XHL,(XDE+0x0a)     parenthesise reg+disp
+#   sla 0x07,A         ->  sla A, 0x07            shift takes the register first
+#
+# The tree's own sources already write `sla xhl, 8`, so llvm-mc's order is the
+# convention here and unidasm is the outlier. Every translated line is still
+# re-assembled and must reproduce the original bytes, so a bad translation
+# cannot slip through -- it just fails the round-trip.
+SHIFTS = ("sla", "sra", "srl", "sll", "rl", "rr", "rlc", "rrc")
+REGDISP = re.compile(r'(?<![\w(])(X?[A-Za-z]{2,3}\s*[+-]\s*0x[0-9a-fA-F]+)(?![\w)])')
+
+
+def translate(text):
+    """Yield candidate llvm-mc spellings of a unidasm instruction, best first."""
+    yield text
+    t = REGDISP.sub(lambda m: f"({m.group(1)})", text)
+    if t != text:
+        yield t
+    parts = text.split(None, 1)
+    if len(parts) == 2 and parts[1].count(",") == 1:
+        a, b = [x.strip() for x in parts[1].split(",")]
+        if parts[0].lower() in SHIFTS:
+            yield f"{parts[0]} {b}, {a}"
+
+
 def disassemble(raw):
     hexs = " ".join(f"0x{b:02x}" for b in raw)
     r = subprocess.run([MC, "--triple=tlcs900", "--disassemble"],
@@ -125,7 +153,15 @@ def main():
         insns, warn = disassemble(raw)
         if warn or not insns:
             stats["warn"] += 1; continue
-        rebuilt = b"".join(encode(i) or b"\xff\xff\xff\xff\xff" for i in insns)
+        out = []
+        for i in insns:
+            enc = None
+            for cand in translate(i):
+                enc = encode(cand)
+                if enc:
+                    break
+            out.append(enc or b"\xff\xff\xff\xff\xff")
+        rebuilt = b"".join(out)
         if rebuilt != raw:
             stats["roundtrip"] += 1; continue
         stats["ok"] += 1

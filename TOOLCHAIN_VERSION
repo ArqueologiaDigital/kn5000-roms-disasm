@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 970c4a75312e
+Commit: 6c3c6d755ba2
 Date: 2026-08-21
-Subject: [TLCS900] Accept the real mnemonics for memory-operand forms
+Subject: [TLCS900] Accept `scc` for the encodable SCC forms
 Repository: /home/fsanches/compartilhado/llvm-project
 
-# Previous pin, superseded 2026-08-21 (kept: this file's history is additive):
+# Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 970c4a75312e  [TLCS900] Accept the real mnemonics for memory-operand forms
 #   Commit: 2a221caa88dd (2a221caa88ddc872bf366c7dd416439d7d6c2ef1)
 #   Date: 2026-07-27 19:54:52 +0100
 #   Subject: Decommission the beads issue tracker
@@ -45,3 +46,15 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # Verified with a full `make clean-all && make all` on this pin: 9/9 targets at
 # 100.00% -- maincpu v7/v9/v10, subcpu payload v142, subcpu v142 update image,
 # subcpu boot, hdae5000, table data, custom data.
+
+# UPDATE 2 (2026-08-21): 6c3c6d755ba2 adds `scc` for SCC8/SCC16, which answered
+# only to "scc8"/"scc16". With that, the unrolled bit-extraction loop at
+# 0xFD3095 -- 5,030 bytes the v7 sources still carry as .byte -- round-trips
+# 26 of 26 instructions byte-exactly, against 0 of 26 before today.
+#
+# Two of those 26 needed no backend change at all, only syntax translation:
+# unidasm prints `lda XHL,XDE+0x0a` where llvm-mc wants the displacement
+# parenthesised, and `sla 0x07,A` where llvm-mc takes the register first --
+# which is what this tree's own sources already write (`sla xhl, 8`).
+#
+# Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
