@@ -28,11 +28,20 @@ real (non-`0xFF`) stream bytes can follow that point and are preserved verbatim.
 +0xD0   16 x      { u8 flags (bit7 = present), u16 start cell }
 +0x800  cells     cell c at +0x800 + (c-1)*256
                   cell: [0]=0x80 marker, [3..4]=u16 next cell (0xFFFF = end),
-                        [5..255]=250 payload bytes
+                        [5..255]=251 payload bytes
 ```
 
 Cell bytes `[0..2]` are not used by the reader and their values vary -- byte 0 is
-**not** a fixed marker.
+**not** a fixed marker (unlike the IC19 accompaniment cells, where it always is; see
+`docs/accompaniment-style-format.md` -- the two containers are similar but NOT the same, and
+they also differ in how a cell pointer is resolved).
+
+⚠ THE PAYLOAD IS 251 BYTES, corrected 2026-08-21. `[5..255]` inclusive is 251, and this file
+said 250 while `demo_preset_to_midi.py` used 250 -- so byte 255 of every cell was dropped and
+any event straddling a cell boundary was truncated. Measured over the 19 songs: 588 note
+events decode short at 250 and **none** at 251, and at 252 the next cell's byte 0 appears 1009
+times, which pins the boundary from the other side. Found by
+`tests/l5_reimplement_demo_format.py`, a reader written from this file alone.
 
 Event stream: a byte with bit 7 set is a status byte; following bytes with bit 7
 clear are its data.

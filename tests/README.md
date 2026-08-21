@@ -32,6 +32,25 @@ and CTL2 have no established meaning, and the document says so. A test like this
 format description sufficient to READ the data. It cannot prove the description of what the data
 MEANS, because there is nothing to compare that against but the machine.
 
+## `l5_reimplement_demo_format.py`
+
+    python3 tests/l5_reimplement_demo_format.py
+
+A reader of `table_data/includes/demo_presets/README.md` and nothing else, over the 19 committed
+demo songs.
+
+**This one FAILED, and the failure was a real defect.** The document said a cell's payload is
+`[5..255]` = "250 payload bytes". `[5..255]` inclusive is 251. Reading 250 drops byte 255 of every
+cell and truncates any event straddling the boundary; the test measured 588 short note events at
+250 and **none** at 251, and at 252 the next cell's byte 0 appears 1009 times, pinning the boundary
+from the other side. `scripts/build/demo_preset_to_midi.py` had the same 250 and had therefore been
+silently losing events at every cell boundary for as long as it has existed.
+
+Both are corrected. Current state: 168 tracks, 71,665 events, 341 malformed (0.5%) -- all of them
+unknown status bytes (0xFF, 0xF2, 0xF3, 0xE3, 0xE7), which are either trailing filler past a track
+end or statuses the document does not cover. That residue is an OPEN ITEM, and the test failing
+loudly on it is the point.
+
 ## Extending this
 
 Every subsystem graded SPECIFIED should get one of these. A grade that no one can run is an

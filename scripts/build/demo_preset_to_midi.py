@@ -37,7 +37,10 @@ import struct
 import sys
 
 TICKS_PER_BEAT = 96
-CELL_PAYLOAD = 250
+# Bytes [5..255] INCLUSIVE, which is 251, not 250. Reading 250 drops byte 255 of every
+# cell, which truncates any event straddling the boundary: measured over the 19 songs, 588
+# note events came out short at 250 and none at 251.
+CELL_PAYLOAD = 251
 
 
 def cells(song, start):
