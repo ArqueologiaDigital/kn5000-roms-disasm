@@ -24,6 +24,7 @@ that cannot be re-checked is the failure mode this project has been bitten by re
 | `tonedb_descriptor_region_sizes.py` | Zone-record strides and sizes, curve usage, and the class census behind the SET descriptors. |
 | `tonedb_selector_coverage.py` | How many recording selectors are reachable ONLY through flags-bit-1 SETs? (the mis-pitched set) |
 | `symbols_staleness_audit.py` | Which symbols in the reference files no longer exist in the built ELFs? (needs llvm-nm) |
+| `dsp_datazone_rom_probe.py` | The DSP data zone read straight from the ROM: EFF link/disconnect slot overruns, the transpose entries, and where the monotonic run really ends. |
 
 All are read-only and most take no arguments: `python3 <script>`. Paths are hardcoded.
 
