@@ -578,7 +578,7 @@ screendata: $(SCREENDATA_BINS)
 naka: $(NAKA_BINS)
 
 # --- Maincpu ---
-rebuilt_ROMs/kn5000_v10_program.llvm.o: v10/maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS)
+rebuilt_ROMs/kn5000_v10_program.llvm.o: v10/maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS) indexed-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v10/maincpu -o $@ $<
 
@@ -589,7 +589,7 @@ rebuilt_ROMs/kn5000_v10_program.llvm.rom: rebuilt_ROMs/kn5000_v10_program.llvm.e
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- V9 Maincpu ---
-rebuilt_ROMs/kn5000_v9_program.llvm.o: v9/maincpu/kn5000_v9_program.s original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS)
+rebuilt_ROMs/kn5000_v9_program.llvm.o: v9/maincpu/kn5000_v9_program.s original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS) indexed-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v9/maincpu -o $@ $<
 
@@ -606,7 +606,7 @@ rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
 v7-extract-bins: rebuilt_ROMs/kn5000_v9_program.llvm.elf $(V7_C_DATA_BINS)
 	python3 scripts/build/extract_v7_bins.py
 
-rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s original_ROMs/kn5000_v7_program.rom v7-extract-bins
+rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s original_ROMs/kn5000_v7_program.rom v7-extract-bins indexed-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o $@ $<
 
@@ -670,13 +670,15 @@ rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.e
 # The board's graphics are built FROM the committed PNGs and palette text files, not
 # incbin'd out of a ROM slice. scripts/build/hdae5000_images.py verify asserts the round
 # trip is byte-exact, so the readable form is the source rather than a view of a blob.
+indexed-images:
+	python3 scripts/build/indexed_images.py build
+
 hdae5000-images:
 	python3 scripts/build/hdae5000_images.py build
 
 # The wallpapers are built from their committed PNGs the same way; see
 # scripts/build/indexed_images.py, whose `verify` asserts the round trip.
-tabledata-images:
-	python3 scripts/build/indexed_images.py build
+tabledata-images: indexed-images
 	python3 scripts/build/ui_bitmaps_images.py build
 	python3 scripts/build/icon_images.py build
 	python3 scripts/build/font_images.py build

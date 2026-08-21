@@ -33,6 +33,44 @@ PALETTE = REPO / 'v10' / 'maincpu' / 'images' / 'Palette_8bit_RGBA.bin'
 MANIFEST = [
     ('table_data/images/Wallpaper_0.bin', 'table_data/images/Wallpaper_0.png', 320, 240, 320),
     ('table_data/images/Wallpaper_1.bin', 'table_data/images/Wallpaper_1.png', 320, 240, 320),
+    # Every other 8bpp image whose declared geometry matches its file size exactly.
+    # Several are shared: the section-bank UI screens are incbin'd by BOTH
+    # v10/maincpu and table_data/ui_bitmaps.s, so regenerating the .bin in place
+    # serves both consumers without touching either source file.
+    ('v10/maincpu/images/BitmapAccger16.bin', 'v10/maincpu/images/BitmapAccger16.png', 120, 95, 120),
+    ('v10/maincpu/images/BitmapAccita16.bin', 'v10/maincpu/images/BitmapAccita16.png', 120, 95, 120),
+    ('v10/maincpu/images/BitmapBmphk.bin', 'v10/maincpu/images/BitmapBmphk.png', 100, 120, 100),
+    ('v10/maincpu/images/BitmapDrawbarNumberedSlider_1.bin', 'v10/maincpu/images/BitmapDrawbarNumberedSlider_1.png', 22, 222, 22),
+    ('v10/maincpu/images/BitmapDrawbarNumberedSlider_2.bin', 'v10/maincpu/images/BitmapDrawbarNumberedSlider_2.png', 22, 222, 22),
+    ('v10/maincpu/images/BitmapDrawbarNumberedSlider_3.bin', 'v10/maincpu/images/BitmapDrawbarNumberedSlider_3.png', 22, 222, 22),
+    ('v10/maincpu/images/BitmapDredt0d.bin', 'v10/maincpu/images/BitmapDredt0d.png', 168, 119, 168),
+    ('v10/maincpu/images/BitmapDredt0k.bin', 'v10/maincpu/images/BitmapDredt0k.png', 88, 119, 88),
+    ('v10/maincpu/images/BitmapFadeInPicture.bin', 'v10/maincpu/images/BitmapFadeInPicture.png', 112, 25, 112),
+    ('v10/maincpu/images/BitmapFadeInText.bin', 'v10/maincpu/images/BitmapFadeInText.png', 80, 18, 80),
+    ('v10/maincpu/images/BitmapFadeOutPicture.bin', 'v10/maincpu/images/BitmapFadeOutPicture.png', 114, 25, 114),
+    ('v10/maincpu/images/BitmapFadeOutText.bin', 'v10/maincpu/images/BitmapFadeOutText.png', 108, 20, 108),
+    ('v10/maincpu/images/BitmapKN5000Logo.bin', 'v10/maincpu/images/BitmapKN5000Logo.png', 200, 36, 200),
+    ('v10/maincpu/images/BitmapMIDIConnections_1.bin', 'v10/maincpu/images/BitmapMIDIConnections_1.png', 296, 108, 296),
+    ('v10/maincpu/images/BitmapMIDIConnections_2.bin', 'v10/maincpu/images/BitmapMIDIConnections_2.png', 296, 108, 296),
+    ('v10/maincpu/images/BitmapMIDIConnections_3.bin', 'v10/maincpu/images/BitmapMIDIConnections_3.png', 296, 108, 296),
+    ('v10/maincpu/images/BitmapNtedt0d.bin', 'v10/maincpu/images/BitmapNtedt0d.png', 240, 127, 240),
+    ('v10/maincpu/images/BitmapNtedt0k.bin', 'v10/maincpu/images/BitmapNtedt0k.png', 16, 127, 16),
+    ('v10/maincpu/images/BitmapSomeArrows.bin', 'v10/maincpu/images/BitmapSomeArrows.png', 294, 6, 294),
+    ('v10/maincpu/images/BitmapSplitPoint_A.bin', 'v10/maincpu/images/BitmapSplitPoint_A.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_Ab.bin', 'v10/maincpu/images/BitmapSplitPoint_Ab.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_B.bin', 'v10/maincpu/images/BitmapSplitPoint_B.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_Bb.bin', 'v10/maincpu/images/BitmapSplitPoint_Bb.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_C.bin', 'v10/maincpu/images/BitmapSplitPoint_C.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_D.bin', 'v10/maincpu/images/BitmapSplitPoint_D.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_Db.bin', 'v10/maincpu/images/BitmapSplitPoint_Db.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_E.bin', 'v10/maincpu/images/BitmapSplitPoint_E.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_Eb.bin', 'v10/maincpu/images/BitmapSplitPoint_Eb.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_F.bin', 'v10/maincpu/images/BitmapSplitPoint_F.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_G.bin', 'v10/maincpu/images/BitmapSplitPoint_G.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_Gb.bin', 'v10/maincpu/images/BitmapSplitPoint_Gb.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapSplitPoint_no_split.bin', 'v10/maincpu/images/BitmapSplitPoint_no_split.png', 58, 52, 58),
+    ('v10/maincpu/images/BitmapTechnicsLogo.bin', 'v10/maincpu/images/BitmapTechnicsLogo.png', 312, 45, 312),
+    ('v10/maincpu/images/BitmapWormWearingHat.bin', 'v10/maincpu/images/BitmapWormWearingHat.png', 24, 24, 24),
 ]
 
 
