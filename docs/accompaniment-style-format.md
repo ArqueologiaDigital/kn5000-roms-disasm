@@ -187,10 +187,36 @@ chord changes.
 have `note % 12` in {3,4,7,11}, against a base rate of 21.8% among plain NOTEs (5806 of 26633).
 That is a large enrichment, not a rule -- classes 0 and 9 also carry 630 and 731 NOTE2 events.
 
-So the index is probably NOT the raw note's pitch class but something derived from it -- the note
-relative to a chord root or key, which the firmware holds in RAM 0x7F38. Pinning that RAM cell's
-provenance is the remaining step, and it is a small one. The table's role, its contents and the
-identity of the two bytes are no longer in question.
+### RAM 0x7F38 IS the note, and the 79.5% has a different explanation
+
+`AccPlay_NoteAllocAndWrite` (ROM 0xF722AB, `v10/maincpu/sequencer/seq_event_playback.s:2457`) reads
+0x7F38, passes it through the mod-12 table, scales by 4, indexes `AccPlay_NoteParamTable` -- the
+twelve 4-byte records above -- stores b0/b1/b2 to RAM 0x7E54/55/56, and emits **0x90 when b0 is
+zero and 0x91 otherwise**. It then writes the event as `status, (0x7F37), (0x7F38)`.
+
+Three independent uses show 0x7F38 is the NOTE NUMBER:
+
+* it is the event's SECOND argument, and the second argument of a 0x9n event is the note;
+* the same routine stores `(0x7F38) | 0x80` into a voice-slot record, the classic
+  slot-in-use-plus-note idiom;
+* `AccPlay_FindSlotByChannel` scans the slot table at 0x7E7B for it -- **that label is a misnomer,
+  it searches by NOTE**, and the name is a curated guess rather than evidence.
+
+So the index IS `note % 12`, a pitch class, and the musical reading stands.
+
+**Then why only 79.5%?** Because the v10 table is one instance, not the format. The corpus contains
+57 distinct (b1,b2) pairs while v10's table offers three, and pairs like (18,0), (1,18), (17,0) and
+(0,20) appear in the styles but in NO row of it. The 210 factory styles were therefore written by
+firmware carrying a DIFFERENT twelve-record table, with more non-zero rows -- which is exactly what
+extra pitch classes 0 and 9 in the NOTE2 distribution look like.
+
+That resolves the discrepancy without weakening the mechanism: table-driven, indexed by pitch
+class, with the table itself a per-firmware constant. Recovering the writing firmware's table is
+the remaining step, and the KN7000/KN6000 program ROMs are where to look.
+
+⚠ Two more misnomers met on this path, both curated guesses being used as evidence by their names
+alone: `Display_FontPalette_Table_0x12EA` is the mod-12 lookup, and `AccPlay_FindSlotByChannel`
+searches by note. Neither name should be trusted in this area.
 
 Timing, inherited from the demo-preset work and not re-verified here: 96 ticks per beat, `pos` is
 the tick within the current beat (0..95), duration is `dur_beats * 96 + dur_ticks`. Both `pos` and
