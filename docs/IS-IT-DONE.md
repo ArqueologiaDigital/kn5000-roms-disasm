@@ -119,7 +119,22 @@ translates them: `lda` wants its source parenthesised (`lda XWA,(0xf980)`), shif
 first (which is what this tree's own sources already write, `sla xhl, 8`), `T` is the always-true
 condition that llvm-mc omits, and unidasm prints doubled condition codes as `PE/OV`.
 
-**Nothing has been converted yet, deliberately.** Proving 13 blocks round-trip is not the same as
+**Reachability is the approach that scales, and v9-content corroboration is not.**
+`v7_reachable_from_code.py` walks the 3,678 contiguous CODE runs, reads the call targets out of the
+disassembly, and reports those landing in DATA: **808 targets, 69 of them (9%) opening with a
+stack-frame prologue**. Two properties make this the right criterion where content matching was not:
+
+* **it is evidence about this ROM** -- something already disassembled calls the address -- rather
+  than a resemblance to a different firmware revision;
+* **a call target is an instruction boundary by construction**, which matters because a label is
+  not, and a block decoded from the wrong offset produces garbage that still round-trips
+  byte-exactly. The build gate cannot catch that; this criterion cannot make the mistake.
+
+By contrast, v9-content corroboration converted 536 bytes in total and will not go much further: it
+requires a block's exact bytes to appear in another revision at a code location, and most v7 code
+simply differs.
+
+**Nothing further has been converted yet, deliberately.** Proving 13 blocks round-trip is not the same as
 emitting them well: the decoded text carries raw numeric branch targets (`call 0xfd814f`), and
 writing that beside lines reading `call FileIO_BuildFilePath` is the regression that got the older
 converter marked unsafe. The missing piece is symbolisation from the ELF.
