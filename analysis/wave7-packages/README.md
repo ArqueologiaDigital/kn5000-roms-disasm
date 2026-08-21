@@ -24,9 +24,21 @@ of some *other* package, silently and plausibly.
 
 ## Status
 
-Integrated so far: **package 0** (the IC303 +0x000 control register). The rest are pending. Each
-one still needs, in order: apply, byte-match gate (`make clean-all && make all`, 9/9 at 100.00%),
-read the gate output, then commit.
+**ALL 12 PACKAGES INTEGRATED, 2026-08-21.** Every one applied cleanly and passed the byte-match
+gate at 9/9 / 100.00% before its commit. The `pkgN_fixed.json` files record what was actually
+applied after vetting -- not what was originally proposed.
+
+Two anchors went stale *during* integration, because an earlier package rewrote the text a later
+one was anchored to. `apply_package.py` caught both and wrote nothing:
+
+- package 2 edit[3] -- package 1 had replaced the sentence it attached to. Re-anchored to the
+  surviving line, keeping the new content.
+- package 11 edit[16] -- package 6 had already made the same correction, and made it better (it
+  also flagged the stale line numbers). Dropped as redundant. Two independent agents converging
+  on one fix is corroboration, not waste.
+
+That is the whole reason the applier checks anchors instead of trusting them: with seven packages
+touching one 46,000-line file, staleness is the normal case, not the exception.
 
 ## What vetting changed
 
