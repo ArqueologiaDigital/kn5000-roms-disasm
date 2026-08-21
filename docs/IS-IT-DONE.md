@@ -39,6 +39,22 @@ measurement is, and it says where to look.
 That is what a mechanised L1 is for. The previous "no UNKNOWN bytes remain" was true and told nobody
 where the work was thin.
 
+**Where the thin part is, located.** `v7_undisassembled_spans.py` builds a per-byte territory map for
+v7 and for v9 and reports every span of >= 256 B that v7 carries as DATA while v9 carries the same
+offsets as CODE: **258 spans, 158,902 bytes**. Same offset is not the same function across
+revisions, so that is a candidate list -- but four spans were checked by hand and all four are
+plainly real TLCS-900 code:
+
+| span | size | what it is |
+|---|---|---|
+| 0xFD3095 | 5,030 B | an unrolled bit-extraction loop, `ldcf 7,(XHL)` / `scc C,A` / `sla 0x07,A` / mask / `or`, repeating per bit |
+| 0xF2D29A | 4,520 B | function prologue `lda XSP,XSP+0xf2` then a struct set-up |
+| 0xF1960C | 3,317 B | the same prologue shape, a near-twin |
+| 0xFDE939 | 2,816 B | a table lookup, `lda XIX,0xee8ea2` / `ld A,(XIX+WA)` |
+
+So a substantial part of v7's DATA is undisassembled CODE, and this is a ranked worklist for it.
+`--disasm N` prints the head of the N largest spans so a reviewer can judge rather than trust.
+
 ## L2: what the regeneration fixed, and what it did not
 
 All five symbol reference files were stale, not just the one that admitted it. `table_data` agreed
