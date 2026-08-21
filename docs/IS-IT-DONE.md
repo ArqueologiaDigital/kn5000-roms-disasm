@@ -81,9 +81,19 @@ It tries both operand orders before calling a form missing, because unidasm and 
 order for shifts -- without that, every shift in the ROM reads as a backend gap. Entries beyond the
 hand-confirmed ones above are LEADS: `lda xbc, imm` still reports rejected and is not yet explained.
 
-**So the fix for a large part of L1's remaining gap is not in this repository.** It is instruction
-support in `~/compartilhado/llvm-project`, branch `tlcs900_backend`. That reframes the 158,902 bytes
-from "work nobody did" to "work the toolchain cannot currently accept".
+**FIXED 2026-08-21, and the diagnosis above was wrong in its cause.** The backend never lacked these
+instructions -- it lacked their NAMES. `AND8mi`, `BITm`, `RESm`, `SETm`, `LDCFm` and `STCFm` all
+encoded correctly, but were reachable only as `andmi8`, `bitm`, `resm`, `setm`, `ldcfm`, `stcfm`, so
+a source could not write `and (xix), 0x7f` even though the encoder produced `84 3C 7F` for it --
+exactly the ROM bytes at 0xFD30A2. `CP8mi` in the same file already used the real `"cp"`.
+
+`tlcs900_backend@970c4a75312e` renames each to its real mnemonic and keeps the old spelling as an
+`InstAlias`, since this tree uses them in hundreds of files (`bitm` in 53, `incm` in 80) and a bare
+rename would break every one. Both spellings emit identical encodings, and a full
+`make clean-all && make all` on the new toolchain gives **9/9 at 100.00%**.
+
+So the 158,902 bytes were never "work nobody did" nor "work the toolchain cannot accept" -- they
+were work the toolchain could not be ASKED for. They are now writable as instructions.
 
 ## L2: what the regeneration fixed, and what it did not
 

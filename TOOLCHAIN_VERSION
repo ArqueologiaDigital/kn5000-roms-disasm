@@ -7,10 +7,15 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 2a221caa88dd (2a221caa88ddc872bf366c7dd416439d7d6c2ef1)
-Date: 2026-07-27 19:54:52 +0100
-Subject: Decommission the beads issue tracker
+Commit: 970c4a75312e
+Date: 2026-08-21
+Subject: [TLCS900] Accept the real mnemonics for memory-operand forms
 Repository: /home/fsanches/compartilhado/llvm-project
+
+# Previous pin, superseded 2026-08-21 (kept: this file's history is additive):
+#   Commit: 2a221caa88dd (2a221caa88ddc872bf366c7dd416439d7d6c2ef1)
+#   Date: 2026-07-27 19:54:52 +0100
+#   Subject: Decommission the beads issue tracker
 
 # CORRECTION NOTE (2026-08-07): this file had gone stale. It still recorded
 # tlcs900_backend@937ad458ed77 (2026-03-25, "TLCS-900 linker: Remove range
@@ -24,3 +29,19 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # Reconfirmed 2026-08-07: llvm-project HEAD -> tlcs900_backend @ 2a221caa88dd,
 # and a full `make all` with $(LLVM_BIN)=llvm-project/build/bin reproduces
 # 100% byte-match on all ROMs.
+
+# UPDATE (2026-08-21): moved to tlcs900_backend@970c4a75312e, a new commit ON
+# TOP of 2a221caa88dd as the immutability policy requires. That commit makes the
+# memory-operand forms reachable under their real mnemonics -- `and (xix), 0x7f`
+# instead of only `andmi8 (xix), 0x7f` -- and keeps every old spelling as an
+# InstAlias, because this tree uses them in hundreds of files (bitm in 53
+# sources, incm in 80). Both spellings emit identical encodings.
+#
+# Why it matters here: the tree must assemble byte-exactly, so a byte run could
+# only become an instruction if llvm-mc accepted it. It did not accept the forms
+# that make up large stretches of v7 still carried as .byte -- see
+# scripts/analysis/llvm_missing_instruction_forms.py and docs/IS-IT-DONE.md.
+#
+# Verified with a full `make clean-all && make all` on this pin: 9/9 targets at
+# 100.00% -- maincpu v7/v9/v10, subcpu payload v142, subcpu v142 update image,
+# subcpu boot, hdae5000, table data, custom data.
