@@ -1,5 +1,164 @@
 # Symbol Reference File
 # Format: SYMBOL_NAME ADDRESS
+#
+# =============================================================================
+# STALE AS OF 2026-08-21 -- DO NOT TRUST A NAME READ FROM THIS FILE.
+# =============================================================================
+#
+# Measured against rebuilt_ROMs/kn5000_v10_program.llvm.elf. That ELF's
+# .llvm.rom is byte-identical to original_ROMs/kn5000_v10_program.rom (cmp),
+# so it is a valid build of the current tree.
+#
+#   rows in this file ............................. 39,449
+#   .text symbols in the built ELF ................ 39,393
+#   rows agreeing with the ELF on NAME + ADDRESS ... 1,332   (3.4%)
+#
+#   still LABEL_* here ............................ 35,924   (ELF has ZERO)
+#   already-named rows ............................. 3,525
+#      ALL-CAPS, exact match in the ELF ............... 202
+#      ALL-CAPS, ELF has that name in MixedCase ...... 2,062  <- case-mangled
+#      ALL-CAPS, name absent from the ELF entirely ...... 93
+#      MixedCase, exact match in the ELF ............. 1,130
+#      MixedCase, name absent from the ELF entirely ..... 38
+#
+# The ADDRESSES are in far better shape than the NAMES: 33,877 of the 39,235
+# distinct addresses listed here still carry some symbol in the build. 5,358 no
+# longer do, and 5,288 addresses in the build are not listed here at all.
+#
+# To re-derive every count above (about a second on an already-built tree),
+# dump the build's .text symbols and join them against this file on
+# (NAME, ADDRESS):
+#
+#   NM="$HOME/compartilhado/llvm-project/build/bin/llvm-nm"
+#   "$NM" --defined-only rebuilt_ROMs/kn5000_v10_program.llvm.elf \
+#     | awk '$2=="t"{print $3, toupper(substr($1,3))}'
+#
+# This is the only one of the five files in symbols/ carrying any LABEL_* rows,
+# but the LABEL_ count is not the whole picture. On that same NAME+ADDRESS test
+# table_data_symbols_reference.txt scores 1 of its 4,153 rows -- worse than this
+# file -- because it is uniformly ALL-CAPS; subcpu_symbols_reference.txt scores
+# 4,269 of 4,326 (98.7%). Those ratios are one-directional: they count file rows
+# that match the build, not build symbols the file is missing.
+#
+# ------------------------------ HOW IT GOT HERE ------------------------------
+#
+# 1. Generated 2026-02-01 (commit d95188d) from an ASL map file,
+#    maincpu/kn5000_v10_program.map, by what was then
+#    scripts/extract_symbols_from_map.py (today scripts/analysis/). At that
+#    commit this file lived at the repo root, not under symbols/.
+#    [INFERENCE] the ALL-CAPS mangling is attributed to ASL: no CASESENSITIVE
+#    directive exists anywhere under archive/asl/, so ASL's map should be
+#    case-folded. Nobody re-ran ASL to observe that map, so this is inferred,
+#    not measured. What IS measured: 3,394 rows match the ELF on NAME+ADDRESS
+#    case-insensitively but only 1,332 match exactly, i.e. exactly 2,062
+#    same-address case twins. Example: this file says ACACCORDIONTABPROC, while
+#    v10/maincpu/ui/drawbar_panel_ui.s:8964 and the ELF both say
+#    AcAccordionTabProc -- and so does the archived ASL source, at
+#    archive/asl/maincpu/kn5000_v10_program.asm:303254.
+#    The generator's own "# Generated from:" provenance line was dropped on
+#    2026-02-25 by commit 38da364, which added scripts/convert_pointer_tables.py
+#    (today scripts/converters/) and rewrote this file with a two-line header.
+#    Three of the four sibling files still carry that line; this one and
+#    hdae5000_symbols_reference.txt lost it, so the staleness had no marker.
+#
+# 2. Commit 38e7d9f (2026-02-23, "Promote LLVM assembly to authoritative
+#    source, archive ASL") made the LLVM tree authoritative, and commit 3d87c95
+#    (2026-03-23, "Restructure repo for multi-version ROM support") then moved
+#    the sources maincpu/ -> v10/maincpu/. Since 3d87c95, 44 commits have
+#    touched v10/maincpu and only 4 have touched this file.
+#
+# 3. The tooling that used to keep the two in step is dead. 44 scripts under
+#    scripts/ still edit the path "maincpu/kn5000_v10_program.s" -- 11 of them
+#    writing this file as well (e.g. scripts/renaming/rename_batch7_labels.py,
+#    scripts/converters/convert_e16184_table.py). That path has not existed
+#    since 3d87c95, so none of them can run.
+#
+# 4. Later naming passes wrote here but never into any source. All 15 names
+#    introduced by commit 3710b8b -- 14 AccompStyle_* names plus
+#    Composer_InitEmptySong -- are absent from the ELF and from every .s and
+#    .asm in the repo (checked with grep -rla; plain grep -r silently skips
+#    v10/maincpu/ui_widgets/widget_dispatch.s as binary). That commit touched
+#    only this file and docs/accompaniment-style-reader.md. Note the AccompStyle_
+#    prefix is not uniformly fictional: AccompStyle_ConfigDispatch_Table is real
+#    and is defined in that same widget_dispatch.s.
+#
+# The damage is live. kn7000_mame/notes/HANDOFF-kn5000-demo-playback.md quotes
+# 13 bare addresses as the accompaniment chain and says they are "still an
+# unnamed LABEL_*" here -- itself now stale, since 3710b8b named all 13. Of
+# those 13, plus 0xEF2C22 from notes/FINDINGS-sound-name-error.md, the name this
+# file gives disagrees with the build in all 14 cases. Six of them:
+#
+#   0xF55FDE   here AccompStyle_InitLaneBases    ELF AccStyle_SetupPartAddresses
+#   0xF56373   here AccompStyle_SelectSection    ELF Rhythm_UpdateTuningConfig
+#   0xF58FF9   here AccompStyle_ResolveReadBase  ELF AccVoice_SelectByMask
+#   0xF590A9   here AccompStyle_RhythmROMBase    ELF AccVoice_TableLookup
+#   0xF56E71   here AccompStyle_DecodeEvent      ELF AccMidi_Dispatch
+#   0xEF2C22   here SeqAlt3_ReadByte             ELF SeqBuf_VoiceMap_ReadByte
+#
+# ----------------------------- HOW TO REGENERATE -----------------------------
+#
+# Regenerate from the LINKED ELF, which carries the authoritative names in their
+# exact case. Verified 2026-08-21; about a second on an already-built tree:
+#
+#   make rebuilt_ROMs/kn5000_v10_program.llvm.elf
+#   NM="$HOME/compartilhado/llvm-project/build/bin/llvm-nm"
+#   {  echo "# Symbol Reference File"
+#      echo "# Format: SYMBOL_NAME ADDRESS"
+#      "$NM" --defined-only rebuilt_ROMs/kn5000_v10_program.llvm.elf \
+#        | awk '$2=="t"{print $1, $3}'                               \
+#        | LC_ALL=C sort -k1,1 -k2,2                                 \
+#        | awk '{printf "%s 0x%s\n", $2, toupper(substr($1,3))}'
+#   } > symbols/maincpu_symbols_reference.txt
+#
+# That redirect DESTROYS this header block -- it emits only the two original
+# header lines. Re-apply the block by hand afterwards, with its numbers redone.
+#
+# Why each piece, all checked against the current ELF:
+#   * llvm-nm splits the symbol table cleanly into 39,393 't' (.text -- the ROM
+#     symbols) and 1,153 'a' (absolute .equ constants from the LLVM sources:
+#     SFR addresses, VGA and event codes and the like, largest single source
+#     v10/maincpu/shared/sfr_tmp94c241.s). Those are values, not ROM .text
+#     addresses; keeping only 't' is what drops them.
+#   * substr($1,3) strips the leading "00" from llvm-nm's 8-digit address. Every
+#     maincpu .text address lies in 0x00E00000-0x00FFFFFF, so this is lossless
+#     here and yields the 6-digit form already used in this file. It is NOT
+#     universally safe -- see the caveat in CLAUDE.md for subcpu_boot.
+#   * addresses are fixed-width hex, so an LC_ALL=C lexicographic sort IS a
+#     numeric sort. The generated output was checked strictly non-decreasing
+#     across all 39,393 rows, and every row matches ^NAME 0x[0-9A-F]{6}$.
+#   * rebuilt_ROMs/ is .gitignore'd, so the ELF must be built before running it.
+#
+# DO NOT regenerate via an ASL map -- the route documented in CLAUDE.md's
+# "Symbol Reference Files" section. It assembles
+# archive/asl/maincpu/kn5000_v10_program.asm, but that .asm is the deliberately
+# ARCHIVED pre-rename tree: 35,786 of the 37,402 column-0 label definitions in
+# it are still LABEL_*. That recipe would reproduce this file's staleness and
+# re-apply the uppercasing on top of it. Its cleanup line also deletes
+# maincpu/*.map, a directory that has not existed since 3d87c95.
+#
+# [INFERENCE] the "~70 minutes" CLAUDE.md quotes for ASL regeneration is
+# presumed to be assembly time for the 9.7 MB monolith. Not re-timed here.
+#
+# ------------------------------- WHO READS IT --------------------------------
+#
+# Nothing in the build. "symbols/" appears 0 times in the Makefile, there is no
+# `make symbols` target, and extract_symbols_from_map.py is not referenced by
+# the Makefile. Regenerating this file cannot change a single ROM byte.
+#
+# The known consumers are prose, and regeneration WILL invalidate names they
+# quote. Measured 2026-08-21, names each doc shares with this file that the
+# build does NOT define:
+#   docs/accompaniment-style-reader.md .................. 13 (the 12 AccompStyle_
+#     names from 3710b8b that it uses, plus AccompStyle_LookupRecord 0xF53D9A,
+#     which the build calls AccVoice_LookupWithOffset)
+#   kn7000_mame/notes/kn5000-envelope-engine.md ........... 6 (all case twins,
+#     e.g. SEAMPENV1TITLEFUNC -> SeAmpEnv1TitleFunc)
+#   kn7000_mame/notes/FINDINGS-sound-name-error.md ........ 2 (SENDCOMM ->
+#     sendCOMM, same address; SeqAlt3_ReadByte -> SeqBuf_VoiceMap_ReadByte)
+#   kn7000_mame/notes/HANDOFF-kn5000-demo-playback.md ..... 0 names, but it
+#     quotes the 13 chain ADDRESSES above and describes their state here wrongly
+# Correct all four in the same commit as any regeneration.
+# =============================================================================
 LED_PATTERNS_INDICATING_FIRMWARE_VERSION 0xE00000
 LABEL_E00008 0xE00008
 LABEL_E00010 0xE00010

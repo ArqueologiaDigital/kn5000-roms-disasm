@@ -143,11 +143,22 @@ Symbol reference files in `symbols/` provide address-to-name mappings for extern
 
 | File | ROM | Symbols | Address Range |
 |------|-----|---------|---------------|
-| `symbols/maincpu_symbols_reference.txt` | Main CPU | 39,125 | 0xE00000 - 0xFFFFFF |
-| `symbols/subcpu_symbols_reference.txt` | Sub CPU payload | 3,309 | 0x000400 - 0x03EE75 |
-| `symbols/subcpu_boot_symbols_reference.txt` | Sub CPU boot | 53 | 0xFF8000 - 0xFFFFF0 |
-| `symbols/table_data_symbols_reference.txt` | Table data | 113 | 0x800000 - 0x9FFEE0 |
-| `symbols/hdae5000_symbols_reference.txt` | HDAE5000 expansion | 34 | 0x280000 - 0x29AF2D |
+| `symbols/maincpu_symbols_reference.txt` | Main CPU | 39,449 | 0xE00000 - 0xFFFFFF |
+| `symbols/subcpu_symbols_reference.txt` | Sub CPU payload | 4,326 | 0x000400 - 0x04531C |
+| `symbols/subcpu_boot_symbols_reference.txt` | Sub CPU boot | 61 | 0xFF8000 - 0xFFFFF0 |
+| `symbols/table_data_symbols_reference.txt` | Table data | 4,153 | 0x800000 - 0x9FFEE0 |
+| `symbols/hdae5000_symbols_reference.txt` | HDAE5000 expansion | 532 | 0x280000 - 0x2FA134 |
+
+**They are not in sync.** Counts and ranges above are the files at 2026-08-21.
+Rows that match the corresponding `.llvm.elf` on both NAME and ADDRESS, measured
+the same day with the `llvm-nm` dump shown below: maincpu 1,332 / 39,449 (3.4%),
+subcpu 4,269 / 4,326 (98.7%), subcpu_boot 53 / 61 (86.9%), table_data 1 / 4,153
+(0.0%), hdae5000 501 / 532 (94.2%). Those ratios are one-directional - they count
+file rows that match the build, not build symbols the file is missing (the
+maincpu build defines 5,288 addresses that file does not list at all). `maincpu`
+is the only file still holding `LABEL_*` rows, 35,924 of them; see the header
+block inside it for the full breakdown. `table_data` holds no `LABEL_*` rows yet
+scores worse on names, being uniformly ALL-CAPS where the build is MixedCase.
 
 **Format:**
 ```
@@ -156,41 +167,78 @@ Symbol reference files in `symbols/` provide address-to-name mappings for extern
 SYMBOL_NAME 0xADDRESS
 ```
 
-**Update procedure - directly edit the reference files when modifying assembly:**
+**Update procedure - regenerate from the linked ELF:**
 
-Because regenerating from scratch takes ~70 minutes for maincpu, **always edit the symbol reference files directly** instead of regenerating:
+The authoritative names live in the LLVM sources (`v10/maincpu/*.s` and friends,
+see commit `38e7d9f` "Promote LLVM assembly to authoritative source, archive
+ASL") and reach the linked ELF with their exact case. Regenerating from that ELF
+takes about a second on an already-built tree, so there is no reason to hand-edit
+these files:
 
-- **Adding a label:** Insert a new line in the appropriate reference file, maintaining address sort order
-- **Renaming a label:** Find and replace the old name with the new name
-- **Removing a label:** Delete the corresponding line
-
-**Example:** When adding `FDC_INIT_ROUTINE` at address `0xE12345` to maincpu:
-```
-# Find the correct position (after 0xE12344, before 0xE12346) and insert:
-FDC_INIT_ROUTINE 0xE12345
-```
-
-**Full regeneration** (only if files become corrupted or majorly out of sync):
 ```bash
-# Generate map files from archived ASL sources (maincpu takes ~70 minutes, others are fast)
-ASL=../tools/asl/asl
-
-$ASL -w -g map archive/asl/maincpu/kn5000_v10_program.asm -o /tmp/maincpu.p
-$ASL -w -g map archive/asl/subcpu/kn5000_subprogram_v142.asm -o /tmp/subcpu.p
-$ASL -w -g map archive/asl/subcpu/boot/kn5000_subcpu_boot.asm -o /tmp/subcpu_boot.p
-$ASL -w -g map archive/asl/table_data/kn5000_table_data.asm -o /tmp/table_data.p
-$ASL -w -g map archive/asl/hdae5000/hd-ae5000_v2_06i.asm -o /tmp/hdae5000.p
-
-# Extract symbols from map files
-python scripts/analysis/extract_symbols_from_map.py archive/asl/maincpu/kn5000_v10_program.map symbols/maincpu_symbols_reference.txt
-python scripts/analysis/extract_symbols_from_map.py archive/asl/subcpu/kn5000_subprogram_v142.map symbols/subcpu_symbols_reference.txt
-python scripts/analysis/extract_symbols_from_map.py archive/asl/subcpu/boot/kn5000_subcpu_boot.map symbols/subcpu_boot_symbols_reference.txt
-python scripts/analysis/extract_symbols_from_map.py archive/asl/table_data/kn5000_table_data.map symbols/table_data_symbols_reference.txt
-python scripts/analysis/extract_symbols_from_map.py archive/asl/hdae5000/hd-ae5000_v2_06i.map symbols/hdae5000_symbols_reference.txt
-
-# Clean up intermediate files
-rm /tmp/*.p maincpu/*.map subcpu/*.map subcpu/boot/*.map table_data/*.map hdae5000/*.map
+make rebuilt_ROMs/kn5000_v10_program.llvm.elf
+NM="$HOME/compartilhado/llvm-project/build/bin/llvm-nm"
+{  echo "# Symbol Reference File"
+   echo "# Format: SYMBOL_NAME ADDRESS"
+   "$NM" --defined-only rebuilt_ROMs/kn5000_v10_program.llvm.elf \
+     | awk '$2=="t"{print $1, $3}'                               \
+     | LC_ALL=C sort -k1,1 -k2,2                                 \
+     | awk '{printf "%s 0x%s\n", $2, toupper(substr($1,3))}'
+} > symbols/maincpu_symbols_reference.txt
 ```
+
+Verified 2026-08-21 against `rebuilt_ROMs/kn5000_v10_program.llvm.elf`, whose
+`.llvm.rom` is byte-identical to `original_ROMs/kn5000_v10_program.rom`:
+
+- `llvm-nm` splits the table cleanly into 39,393 `t` (`.text`, the ROM symbols)
+  and 1,153 `a` (absolute `.equ` constants defined in the LLVM sources - SFR
+  addresses, VGA and event codes and the like, largest single source
+  `v10/maincpu/shared/sfr_tmp94c241.s`). Those are values, not ROM `.text`
+  addresses, so filtering on `t` is what drops them.
+- `substr($1,3)` strips the leading `00` of llvm-nm's 8-digit address. **This is
+  only safe once you have checked the address range.** Every maincpu `.text`
+  address is in `0x00E00000-0x00FFFFFF`, so it is lossless there; but
+  `kn5000_subcpu_boot.llvm.elf` also defines a linker `end` marker at
+  `0x01000000`, which the same truncation would silently rewrite as `0x000000`.
+  Filter that out before reusing this recipe for subcpu_boot.
+- addresses are fixed-width hex, so `LC_ALL=C` lexicographic sort *is* numeric
+  sort; the output was checked strictly non-decreasing over all 39,393 rows, and
+  every row matches `^NAME 0x[0-9A-F]{6}$`.
+- `rebuilt_ROMs/` is `.gitignore`d, so the ELF must be built first.
+- the redirect **overwrites the whole file**, including the "STALE AS OF" header
+  block now at the top of `symbols/maincpu_symbols_reference.txt`. Re-apply that
+  block by hand after regenerating, or drop it deliberately.
+
+The same shape works for the other four files against their own ELFs
+(`kn5000_subprogram_v142`, `kn5000_subcpu_boot`, `kn5000_table_data`,
+`hd-ae5000_v2_06i`; all eight `.llvm.elf` artifacts are produced by a build),
+subject to the `substr` caveat above.
+
+**Do NOT regenerate from an ASL map.** The old recipe assembled
+`archive/asl/maincpu/kn5000_v10_program.asm` with `-g map` and ran
+`scripts/analysis/extract_symbols_from_map.py`. Two things make that wrong now:
+
+1. That `.asm` is the **archived pre-rename tree**: 35,786 of its 37,402
+   column-0 label definitions are still `LABEL_*` (a floor - that count does not
+   follow the file's 31 `include` directives). Regenerating from it reintroduces
+   the staleness it is meant to cure.
+2. `[INFERENCE]` ASL appears to be case-insensitive here - no `CASESENSITIVE`
+   directive exists anywhere under `archive/asl/` - so its map should uppercase
+   every symbol. Nobody has re-run ASL to confirm that, but the symbols file
+   does carry 2,062 same-address case twins, e.g. `ACACCORDIONTABPROC` where
+   both the LLVM source and the ELF say `AcAccordionTabProc`.
+
+The old recipe's cleanup line also removed `maincpu/*.map`, a directory deleted
+by `3d87c95` (2026-03-23) when the tree moved to `v10/maincpu/`.
+
+**Nothing in the build reads these files** - `symbols/` appears 0 times in the
+Makefile and `extract_symbols_from_map.py` is unreferenced by it - so
+regenerating cannot change a ROM byte. It *will* invalidate names quoted in
+prose: `docs/accompaniment-style-reader.md` (13 such names) and, in the
+`kn7000_mame` repo, `notes/kn5000-envelope-engine.md` (6),
+`notes/FINDINGS-sound-name-error.md` (2) and
+`notes/HANDOFF-kn5000-demo-playback.md` (addresses only). Fix those in the same
+commit.
 
 **This policy exists because** external tools (debuggers, analysis scripts, MAME integration) depend on accurate symbol mappings. Stale symbol files cause confusion and break tooling.
 
