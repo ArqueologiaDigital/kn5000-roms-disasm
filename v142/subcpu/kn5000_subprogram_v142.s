@@ -2406,6 +2406,25 @@ E1_Exit:
 ;        0xE2 = Start E2 command (10 bytes, state 3) - extended data transfer
 ;        0xE3 = Payload ready signal (sets PAYLOAD_LOADED_FLAG bit 6)
 ;        Other = Standard command (1-32 bytes based on bits 4-0, state 1)
+;
+; ASYMMETRY WITH THE MAIN CPU'S INT0_HANDLER (0xEF3525 in the v9/v10 program
+; ROM, 0xEF34FB in v7).  Both ISRs sit on the same kind of latch (IC22 here at
+; 0x120000, IC23 the other way) and both are entered once per byte written by
+; the other side.  The difference is what happens to the PAYLOAD bytes:
+;   this side  - INT0_Start_DMA writes DMA0V (SFR 0x0100) = 10 = the INT0
+;                vector number (subcpu_vectors.s), so once the header has been
+;                parsed the payload bytes are consumed by HARDWARE micro-DMA
+;                and never dispatch this ISR;
+;   main side  - DMA0V is never armed at all; every payload byte re-enters the
+;                main ISR, which pulls it with a SOFTWARE micro-DMA request
+;                (DMAR, SFR 0x0109, bit 0).
+; The main-side ISR therefore carries a re-entrancy hazard on HEADER bytes,
+; documented above its INT0_HANDLER; it has only ever been observed in
+; emulation, under a since-removed /INT0 re-assertion in the CPU model.  Armed
+; DMA0V keeps the payload bytes on this side out of this ISR entirely, so there
+; is no analogue of it here.  The same non-atomic SHAPE is present, though: the
+; MSTAT0 gate is tested before the latch read and SSTAT1 is cleared only at
+; INT0_Ack, at the end.
 ; ----------------------------------------------------------------------------
 INT0_HANDLER:	; 20E86
 	push xwa
@@ -2469,7 +2488,13 @@ INT0_Exit:	; 020EFFh
 ; Manages the DMA state machine for multi-phase transfers:
 ;   - State 2 (two-phase) -> State 1 (waiting for phase 2)
 ;   - State 1 (single xfer) -> State 0 (idle)
-; Stops Timer 8 which triggers the DMA transfers.
+; Stops the 8-bit TIMER 2 that paces the DMA transfers.  (Not "Timer 8": T8RUN
+; is SFR 0x80 (shared/sfr_tmp94c241.s), the RUN register FOR the four 8-bit
+; timers T0..T3, and bit 2 is timer 2's run bit; the old name reads like a
+; misparse of the register name.  A 16-bit Timer 8 does exist on this part, but
+; it runs from T16RUN and is not what is stopped here.  Corroborated by
+; InterCPU_DMA_Send_Chunk, which arms DMA2V = 22 = the INTT2 vector number
+; before setting T8RUN bit 2.)
 ;=============================================================================
 MICRODMA_CH2_HANDLER:	; Channel #2 completion		; 20F01
 	res_dd8 2, 0x80

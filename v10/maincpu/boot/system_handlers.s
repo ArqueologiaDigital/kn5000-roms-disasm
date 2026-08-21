@@ -5600,10 +5600,21 @@ InterCPU_E2_TimeoutLoop:
 ; Audio_DMA_Transfer - Core DMA transfer routine for inter-CPU communication
 ; ===========================================================================
 ; Entry: Data pointer at 0x05da, byte count at 0x05de
-; Exit:  Data transferred to Sub-CPU via DMA
-; Notes: Transfers audio command/data blocks to Sub-CPU
-;        Uses DMA channel configuration set up by Audio_InitDMAChannels
-;        Handles both small transfers and large block transfers
+; Exit:  Data byte-banged into the IC22 latch; one sub-CPU /INT0 per byte
+; Notes: MISNOMER -- despite the name there is NO micro-DMA on this path.  The
+;        body (0xEF341B-0xEF3456) is a software loop: read one byte through the
+;        pointer at 0x05da (post-incrementing it and storing it back), write it
+;        to the latch at 0x140000, spin a 3-iteration delay, repeat until the
+;        counter at 0x05de is exhausted -- a count of 0 means 0x10000 bytes
+;        (`ld XDE,0x00010000').  Each of those writes asserts the sub CPU's
+;        /INT0.
+;        No DMAS/DMAD/DMAC/DMAM register and no timer is touched here, and
+;        "Audio_InitDMAChannels" is not a label in this disassembly: the setup
+;        routine is SubCPU_Init_DMA_Channels, which programs channels 0 and 2
+;        but never arms a start vector.  A byte scan for the `ld (0x0100),imm8'
+;        encoding `f1 00 01 00 <imm>' finds only 0xEF36DE and 0xEF370B in code,
+;        both writing 0, and DMA2V (0x0102) has no in-code write at all.
+;        The label is not renamed here, so this note stands in for it.
 ; ===========================================================================
 Audio_DMA_Transfer:
 	ldw_d16 xwa, (1502)
@@ -5754,10 +5765,121 @@ FlashBufferIO_Exit:
 	popw iz
 	ret
 
+; =============================================================================
+; INT0_HANDLER - inter-CPU latch receive ISR (sub CPU -> main CPU)
+; =============================================================================
+; ** NOT RE-ENTRANT.  Read the hazard note at the end of this block. **
+; (Addresses below are v9/v10 program-ROM addresses; v9 and v10 are byte
+;  identical through this whole block.  v7 carries the same code 0x2A lower
+;  and uses different RAM addresses in the recovery code -- see the v7 file.)
+;
+; TRANSPORT.  The two CPUs pass single bytes through a pair of 8-bit latches:
+; IC22 carries main->sub, IC23 carries sub->main.  The chip numbers and the
+; port table below are quoted from docs/subcpu_boot_protocol.md, which takes
+; them from MAME's kn5000 memory map -- they are NOT derived from these ROMs.
+; The main CPU sees both at 0x140000 -- a READ takes a byte out of IC23, a
+; WRITE puts one into IC22; the sub CPU sees the same pair at 0x120000 with the
+; roles swapped.  Loading a latch asserts the RECEIVER's /INT0, so there is
+; exactly one /INT0 per byte.  INT0 is edge triggered: IIMC (SFR 0xf6) is
+; written once, at 0xEF04FE, with 0x00 (shared/boot_hw_init.s) -- I0LE=0 edge,
+; I0EDGE=0 falling, bit names per
+; .claude/skills/tmp94c241/references/interrupts.md.  A byte scan for the
+; `ld (0xf6),imm8' encoding `08 f6 <imm>' finds no other site in code.
+;
+; HANDSHAKE (bit names from the main CPU's point of view):
+;   MSTAT0  PZ.0 main out -> sub PD.2 in
+;   MSTAT1  PZ.1 main out -> sub PD.4 in   HIGH = main receive channel is idle
+;   SSTAT0  PZ.2 main in  <- sub PD.0 out  LOW  = the byte in IC23 is a HEADER
+;   SSTAT1  PZ.3 main in  <- sub PD.1 out
+; The SSTAT0 polarity is not a guess: InterCPU_DMA_Send_Chunk in the v142 sub
+; payload CLEARS its SSTAT0 output before writing the header and SETS it again
+; before the payload, and the gate here (`bit 2,(PZ) / ret NZ' at 0xEF3536)
+; continues only while SSTAT0 reads LOW.
+;
+; FRAMING (sub -> main).  InterCPU_DMA_Send_Chunk waits for MSTAT1 high, drops
+; SSTAT0, writes ONE header byte, waits for MSTAT1 to go low (the ack this ISR
+; issues at INT0_AckAndReturn), raises SSTAT0 again, and only then streams the
+; payload -- one byte per 8-bit-timer-2 tick, pushed by its own micro-DMA
+; channel 2 (DMA2V = 22 = the INTT2 vector number).  A packet on the wire is
+; therefore one header byte followed by N payload bytes, N implied by the
+; header:
+;   0xE1 -> 6  bytes into 0x060E  (E1 phase-1 block: dest address + count)
+;   0xE2 -> 10 bytes into 0x0614  (E2 parameter block)
+;   else -> (byte & 0x1f)+1 bytes into 0x05E8; bits 7:5 pick one of the eight
+;           entries of SeqRingBuf_WriteDispatch_Table, called later by
+;           INTTC0_HANDLER.
+; The header byte is kept at 0x05E4 and the receive state at 0x05E2.
+;
+; WHY EVERY BYTE COMES THROUGH THIS ISR.  The main CPU never arms a hardware
+; micro-DMA trigger for INT0.  Scanning the program ROM bytes for the
+; `ld (0x0100),imm8' encoding `f1 00 01 00 <imm>' finds exactly two sites in
+; code, 0xEF36DE and 0xEF370B, and both write 0; DMA2V (SFR 0x0102) has no
+; in-code write at all.  So payload bytes enter here too, and this ISR issues
+; ONE software micro-DMA request per byte by writing DMAR (SFR 0x0109 = 265)
+; bit 0.  The sub CPU does the opposite: its INT0_Start_DMA writes DMA0V = 10 =
+; the INT0 vector number (see v142/subcpu/subcpu_vectors.s), so its payload
+; bytes are swallowed by hardware micro-DMA and never reach its ISR at all.
+;   MSTAT1 high on entry -> header byte  -> INT0_ReadLatch parses it
+;   MSTAT1 low  on entry -> payload byte -> DMAR bit 0 moves exactly one byte
+; MSTAT1 is lowered at INT0_AckAndReturn (the END of the header parse) and
+; raised again by INTTC0_HANDLER once DMAC0 reaches 0.
+;
+; ** RE-ENTRANCY HAZARD **
+; The two gates that make the header path mutually exclusive are read long
+; before the latch and are never re-checked:
+;   0xEF3525  bit 1,(PZ)       test MSTAT1  (is a receive already running?)
+;   0xEF3536  bit 2,(PZ)       test SSTAT0  (is this byte a header?)
+;   0xEF353D  ld A,(0x140000)  THE LATCH READ       -- 0x18 after entry
+;   0xEF35C4  res 1,(PZ)       MSTAT1 lowered (ack) -- 0x9F after entry,
+;                                                      0x87 after the read
+; There is no DI in that window; the ISR relies entirely on the CPU's interrupt
+; mask.  What it does change is INT0's PRIORITY: each of the three parse
+; branches ends with a read-modify-write of INTE0AD (SFR 0xF0) at 0xEF3560,
+; 0xEF358A and 0xEF35B7 (`and A,0xf8 / or A,0x06'), which raises INT0 from
+; level 1 to level 6, and then goes straight to the ack.  Level 1 is what
+; SubCPU_Init_DMA_Channels programs; INTTC0_HANDLER puts it back at
+; 0xEF35EF-0xEF35FA (`and A,0xf8 / set 0,A') when the count completes.
+; INT0 therefore runs at 6 for the length of a payload burst and at 1 between
+; bursts.  [INFERENCE] that looks deliberate: the scheduler spends its time at
+; `ei 6' (TaskSched_PostInit, TaskSched_TimerSlot_Skip), so a level-1 INT0 has
+; to wait for an unmasked window while a level-6 one does not.
+; The soft spot is the RTOS tick: at 0xEF1B8D INTT3_EnterScheduler executes
+; `ei 0 / nop / ei 6', a one-instruction window at IFF=0 in which any PENDING
+; interrupt, INT0 included, is admitted whatever its level.
+;
+; [INFERENCE] if a second /INT0 is pending in that window, this ISR is entered
+; again, passes both gates (the outer dispatch has not reached 0xEF35C4 yet),
+; consumes the HEADER and acks.  The outer dispatch then resumes at 0xEF353D,
+; reads a PAYLOAD byte and parses it as a header: DMAC0 is reprogrammed from
+; that byte's low 5 bits, the count can never complete, INTTC0_HANDLER never
+; runs, MSTAT1 is never raised again, and the link stays down.
+; SEEN IN EMULATION ONLY -- kn7000_mame commit 3fd44f3, 2026-08-05, "kn5000:
+; the sub->main wedge is a duplicate INT0 dispatch, not a lost byte".
+; There the second /INT0 came from the emulated TMP94C241 re-asserting /INT0 at
+; acceptance; it changed the outcome exactly twice in 59300 latch bytes, both
+; times that duplicate, and with the re-assertion removed latch writes, INT0
+; dispatches and latch reads are 1:1:1.
+; NOT demonstrated on hardware, and two facts argue against it there: /INT0 is
+; edge triggered, so one latch write is one request, and the sender does not
+; put a second byte into IC23 before the ack.  Read this as a constraint on CPU
+; MODELS -- one that dispatches /INT0 twice for a single latch write breaks the
+; link.  Do NOT "repair" the firmware here.
+;
+; [INFERENCE] the code at 0xEF3689 looks like a recovery watchdog for exactly
+; this state: it samples DMAC0 and, once the poll counter at 0xE360 passes 10
+; with the count unchanged, clears DMA0V, resets the receive state at 0x05E2
+; and forces MSTAT1 high.  UNVERIFIED -- it lies inside the region this file
+; decodes as E1DMA_ISR_BytecodeBlock, and no call/calr anywhere in the ROM
+; targets that address, so whether it ever runs is unknown.
+; =============================================================================
 INT0_HANDLER:
-	bit_dd8 1, 0x68	; MSTAT1 - test own status (check if transfer in progress)
+	bit_dd8 1, 0x68	; MSTAT1 (PZ.1, our own output read back): HIGH = no receive
+			; in progress, so this /INT0 carries a HEADER byte
 	jr nz, INT0_ProcessCommand
-	stdi8 (265), 1
+	stdi8 (265), 1	; MSTAT1 LOW = a receive is running, so this /INT0 carries a
+			; PAYLOAD byte.  265 = 0x0109 = DMAR; bit 0 is one SOFTWARE
+			; micro-DMA request on channel 0 = exactly one byte moved
+			; out of the latch into the buffer, DMAC0 decremented once.
 	reti
 INT0_UnusedBranch:
 	jr	t, 0x03
@@ -5771,8 +5893,12 @@ INT0_ReadLatch:
 	ret nz
 	push xwa
 	push xbc
-	ldb_da a, (0x140000)
-	stb_d8 (1508), a
+	ldb_da a, (0x140000)	; THE LATCH READ (0xEF353D).  0x18 bytes after the
+				; MSTAT1 test at ISR entry and 0x87 bytes before
+				; MSTAT1 is lowered at 0xEF35C4, with neither gate
+				; re-checked and no DI in between -- see the
+				; RE-ENTRANCY HAZARD note above INT0_HANDLER.
+	stb_d8 (1508), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
 	cp a, 0xe1
 	jr nz, INT0_CheckE2Command
 	stdi8 (1506), 2
@@ -5821,7 +5947,16 @@ INT0_HandleDataCommand:
 	ld (xbc), a
 
 INT0_AckAndReturn:
-	res_dd8 1, 0x68	; MSTAT1 - clear to acknowledge command from Sub CPU
+	res_dd8 1, 0x68	; MSTAT1 - clear to acknowledge command from Sub CPU.
+			; This doubles as the RELEASE of the mutual-exclusion flag
+			; tested at the top of INT0_HANDLER, and it happens only
+			; here, at the very end of the parse -- which is what makes
+			; this ISR unsafe to re-enter.  Every parse branch reaches it
+			; straight from the INTE0AD write that raises INT0 to level
+			; 6, so release and priority raise are adjacent.  MSTAT1 is
+			; raised again by INTTC0_HANDLER once DMAC0 reaches 0;
+			; [INFERENCE] if the count was programmed from a mis-framed
+			; header it never will be, and the link stays down.
 	pop xbc
 	pop xwa
 	ret

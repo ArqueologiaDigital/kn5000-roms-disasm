@@ -24,6 +24,25 @@
 ; the state byte (0x0f62).  The state variable is a RAW TABLE OFFSET stepped
 ; in units of 4 (values 0x00, 0x04, ... 0x28), advanced/retreated with
 ; inc/dec 4, so no scaling is needed before the table lookup.
+;
+; NOTE FOR EMULATOR AUTHORS: all THREE epilogues below (Handler_INTA__exit,
+; BootSerial_TxIsrEpilogue, BootSerial_RxIsrEpilogue) write the same three
+; values to INTCLR -- 0x12 = INTA, 0x22 = INTRX1, 0x23 = INTTX1.  Those are
+; interrupt VECTOR NUMBERS, not vector addresses, in the numbering reconstructed
+; from the ROMs in v142/subcpu/subcpu_vectors.s: vector 34 = INTRX1, 35 =
+; INTTX1, and vectors 10..19 are the external interrupts INT0, INT3..INTB,
+; which puts INTA at 18 = 0x12 -- consistent with this handler arming INTEAB.
+; The same numbering gives INT0 = 10, which is what the sub CPU writes into
+; DMA0V.  So whichever of the three handlers runs, it discards the pending
+; requests of the other two as well.
+; INFERENCE: that is deliberate re-synchronisation of the link, but it means a
+; request of the other two kinds raised while a handler is executing is LOST,
+; not deferred -- worth knowing before blaming a driver for a dropped byte.
+;
+; This is the CONTROL-PANEL serial link (SC1 + INTA).  It is unrelated to the
+; main-CPU/sub-CPU inter-CPU LATCH link, which also runs on /INT0 but on the
+; IC22/IC23 latches; that protocol and its re-entrancy hazard are documented at
+; INT0_HANDLER in v10/maincpu/boot/system_handlers.s.
 ; =============================================================================
 
 ; -----------------------------------------------------------------------------
