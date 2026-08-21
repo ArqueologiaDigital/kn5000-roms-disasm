@@ -6887,23 +6887,45 @@ Voice_Clamp_Byte_WA_Return:
 ; ---------------------------------------------------------------------------------------
 ; THE TONE GENERATOR STAGING BLOCK AT 0x0451CE
 ;
-; The words from 0x0451CE upwards are staged copies of IC303's per-voice registers, in
-; the order the chip is given them. Each u16 here is one tone generator register:
+; The words from 0x0451CE upwards are staged copies of IC303's per-voice registers. The
+; firmware fills them from many places and ToneGen_WriteVoiceParams then bursts the block
+; to the chip, so every one of these addresses is a register by another name:
 ;
-;     0x0451CE -> +0x040   recording selector          (class << 12) | entry
-;     0x0451D0 -> +0x080   output level                built below
-;     0x0451D2 -> +0x0C0   coarse level + expression   Level_Build_Reg0C0
-;     0x0451D4 -> +0x100   TVF cutoff                  TVF_Emit_Registers, from voice+66
-;     0x0451D6 -> +0x140   TVF depth / bias            TVF_Emit_Registers, from voice+68
-;     0x0451D8 -> +0x180   pan, 0x0040 = centre        (see the 0x0040 default at Voice_InitVoiceState)
-;     0x0451E0 -> +0x4C0   oscillator config + slot    Voice2_UpdatePitch seeds 0x4400
-;     0x0451E2 -> +0x500   detune / bend pair          Voice_PortaLevel_ScaleAndPack
+;     0x0451CE -> +0x040   recording selector, (class << 12) | entry
+;     0x0451D0 -> +0x080   output level + the 3-bit descriptor field (built below)
+;     0x0451D2 -> +0x0C0   coarse level + expression
+;     0x0451D4 -> +0x100   TVF cutoff
+;     0x0451D6 -> +0x140   TVF depth / bias
+;     0x0451D8 -> +0x180   pan, 0x0040 = centre
+;     0x0451DA -> +0x400   absolute log pitch          (Pitch_Emit_Reg400)
+;     0x0451DC -> +0x440
+;     0x0451DE -> +0x480
+;     0x0451E0 -> +0x4C0   oscillator config + slot
+;     0x0451E2 -> +0x500   detune / bend pair
+;     0x0451E4 -> +0x800   amplitude envelope segment 0
+;     0x0451E6 -> +0x840   amplitude envelope segment 1
+;     0x0451E8 -> +0x880   amplitude envelope segment 2
+;     0x0451EA -> +0x8C0   amplitude envelope segment 3
+;     0x0451EC -> +0x900   second envelope, segment 0
+;     0x0451EE -> +0x940   second envelope, segment 1
+;     0x0451F0 -> +0x980   second envelope, segment 2
+;     0x0451F2 -> +0x9C0   third envelope, segment 0
+;     0x0451F4 -> +0xA00   third envelope, segment 1
+;     0x0451F6 -> +0xA40   third envelope, segment 2
 ;
-; MEASURED on a running machine, 2026-08-20: a capture of every write to the tone
-; generator over 1705 note-ons of the built-in demo agrees with this mapping register by
-; register. See tools/kn5000-rootpitch/ in the KN7000 preservation repository.
-; ---------------------------------------------------------------------------------------
-
+; Assembled from this file's own scattered annotations (the +0x0C0, +0x100/+0x140,
+; +0x180/+0x4C0, +0x400, and the 0x8C0..0xA40 zeroing routine all name their targets) plus
+; a capture of every write the chip receives over 1705 note-ons of the built-in demo, which
+; agrees register by register.
+;
+; THE THREE ENVELOPES share one word format, (target << 8) | rate, and are written with the
+; same shape: segments 0 and 1 take extra writes during a note, segment 2 exactly one per
+; note-on. Segment 3 of the amplitude envelope is used on about 4% of notes, where it
+; decays to zero while segment 2 holds a sustain level; on the rest it is left zero, which
+; means "unused" rather than "fall silent". Rate 0 means "go to the target now", not "hold
+; there" -- an envelope that treats it as a hold parks every note at its attack level and
+; never reaches segments 2 or 3 at all.
+;
 ; BUILD AND STORE THE VOICE OUTPUT-LEVEL WORD (tone generator register +0x080).
 ; In: XWA = voice work record, BC = starting level.
 ;
@@ -7495,6 +7517,28 @@ Voice_Pitch_Inactive_BendType_Chromatic:
 ; portamento descriptor selects the 'active glide' arm; mode 7 means 'jump straight to
 ; the target'; other modes exponentially approach it by right-shifting the difference
 ; by (mode & 0x0F).
+;
+; ⚠ THE TWO ARMS DIFFER IN WHERE THE PITCH CENTRE COMES FROM, and anything that reads
+; these descriptors offline has to honour it.
+;
+;   bit1 CLEAR -> the centre is built from the descriptor's own fields: the root byte at
+;                 +0x0B gives pivot = (root << 8) + 0x80, which is subtracted, and the
+;                 target offset at +0x0C is added back.
+;   bit1 SET   -> the centre is the LITERAL 0x4280, subtracted and added back unchanged
+;                 (Voice_Pitch_Portamento_Active_SubBias / _AddBias below), or loaded
+;                 outright in mode 7. The descriptor's root and basepitch fields are
+;                 NEVER READ on this arm, so their contents are unconstrained.
+;
+; They are, in fact, junk. Of the 487 multisample SET descriptors, 13 have bit1 set; those
+; 13 are exactly the 13 whose root byte is not the universal 0x42, and all 13 carry the
+; same impossible basepitch 0x417F. An extractor that computes (basepitch - pivot)
+; unconditionally therefore fabricates an offset of +49 to +65 semitones for those SETs --
+; 112 of the 1444 selectors the firmware's tables produce, about 7.8%.
+;
+; That bug shipped in a generated pitch table used by an emulator until 2026-08-19. Three
+; independent lines of evidence confirmed the rule: this code path; the junk-field
+; correlation above; and a live capture, where the affected selectors decode correctly
+; only when the term is dropped (19/19, 1/1, 1/1 against 12/19, 0/1, 0/1).
 Voice_Pitch_ApplyPortamento:
 	ld wa, iz
 	calr Pitch_Saturate_15bit
