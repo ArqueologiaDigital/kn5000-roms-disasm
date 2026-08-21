@@ -530,8 +530,11 @@
 
 [LABEL] 0x026FDD VOICE_UPDATEPORTAMENTO_ASCEND_TICK  replaces=LABEL_026FDD  confidence=high
 ; Ascend arm, still ramping. Writes TG bank 0x840 = 0xFF00 directly (address latch
-; 0x100000 = slot + 0x840, data latch 0x100002), with the maskable-interrupt gate around
-; the latch pair (res/set bit 7 of SFR 0x18).
+; 0x100000 = slot + 0x840, data latch 0x100002), with the P6.7 select driven around the
+; latch pair (res/set bit 7 of SFR 0x18).
+; CORRECTION: SFR 0x18 is PORT 6 (`.equ P6, 0x18`), not an interrupt-mask register -- every
+; INTE* register sits at 0xE0..0xF0 -- so this pair masks nothing. [INFERENCE] that the pin
+; is the CPU's A23 line in port mode; see the UNCERTAIN entry in subcpu-region-07.txt.
 ; The terminal value the ramp counts toward is 0xFF00; on reaching it the slot is handed
 ; to VoiceSlot_Release + Voice_Release and the mode bits are cleared.
 

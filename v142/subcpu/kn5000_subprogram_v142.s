@@ -6914,6 +6914,16 @@ Voice_Clamp_Byte_WA_Return:
 ;     0x0451F4 -> +0xA00   third envelope, segment 1
 ;     0x0451F6 -> +0xA40   third envelope, segment 2
 ;
+; RECORD TAIL, 0x0451F8..0x04520E = words 22..33 of the same 34-word (0x44-byte) record.
+; ToneGen_WriteVoiceParams does not transmit them, but at THIS base they are not inert, and
+; that is what sizes the record from this file instead of by analogy with the ROM templates:
+;     0x045204 (+0x38, word 28)  TG register 0x1C0; EGEnv_Compute_B writes it
+;     0x045206 (+0x3A, word 29)  EGEnv_Compute_B_Simple writes it; it reaches the chip
+;                                through the ToneGen_WriteExtParam* writers, not this burst
+;     0x04520E (+0x42, word 33)  the last word of the record; the secondary-pitch path
+;                                writes it and reads it straight back
+;                                (`stw_da 0x04520e, xwa` / `ldw_da xiz, 0x04520e`)
+;
 ; Assembled from this file's own scattered annotations (the +0x0C0, +0x100/+0x140,
 ; +0x180/+0x4C0, +0x400, and the 0x8C0..0xA40 zeroing routine all name their targets) plus
 ; a capture of every write the chip receives over 1705 note-ons of the built-in demo, which
@@ -14353,8 +14363,18 @@ Voice_Step_ExprRamp_DispatchMode:
 	jrl Voice_Step_ExprRamp_StoreDone
 
 ; Ascend arm, still ramping. Writes TG bank 0x840 = 0xFF00 directly (address latch
-; 0x100000 = slot + 0x840, data latch 0x100002), with the maskable-interrupt gate around
-; the latch pair (res/set bit 7 of SFR 0x18).
+; 0x100000 = slot + 0x840, data latch 0x100002), with the P6.7 select driven around the
+; latch pair (res/set bit 7 of SFR 0x18) -- the standard per-word sequence, documented in
+; full at ToneGen_WriteVoiceParams.
+; CORRECTION: SFR 0x18 is PORT 6 (shared/sfr_tmp94c241.s: `.equ P6, 0x18`), not an
+; interrupt-mask register: every INTE* register on this part sits at 0xE0..0xF0. This pair
+; masks nothing; the earlier "maskable-interrupt gate" wording was wrong. RESET programs the
+; bit as a plain output (`ldio 0x1B,0x7F` then `ldio 0x1A,0x80` at 0x01F956/0x01F959), and
+; the ASL-era listing renders the two instructions as RES/SET 7, (P6), unidasm as
+; res/set 7,(0x18).
+; [INFERENCE] that the pin is the CPU's A23 line taken out of bus mode. That reading has no
+; datasheet or schematic behind it and symbols/proposals/subcpu-region-07.txt grades it
+; UNCERTAIN; only the port identity above is established.
 ; The terminal value the ramp counts toward is 0xFF00; on reaching it the slot is handed
 ; to Voice_Clear_HoldBit + Voice_Reload_Levels and the mode bits are cleared.
 Voice_Step_ExprRamp_Ascend_Tick:
@@ -23996,8 +24016,12 @@ ToneGen_WriteVoicePitch_NopCont:
 ; ** MISIDENTIFIED AS DATA (LLVM emits it as ToneGen_PanTable_02D0DC .byte). ** It is a
 ; standard single-register writer: WA = TG channel, XBC = shadow block; writes
 ; 0x0080 + ch <- (shadow +0x04) with bit15 CLEARED. Bit15 of the 0x0080 bank is the "load"
-; strobe: ToneGen_WriteVoiceParams writes +0x04 with bit15 SET at 0x02D136 and re-writes it
-; with bit15 clear at 0x02D3F2. So this routine performs the "clear the strobe" half alone.
+; strobe: ToneGen_WriteVoiceParams forces it SET with `set 0x0f,WA` at 0x02D145 (its write
+; #2) and clears it again with `res 0x0f,WA` at 0x02D40A (its write #23). So this routine
+; performs the "clear the strobe" half alone.
+; (An earlier revision of this header gave 0x02D136 and 0x02D3F2. Both were wrong: 0x02D136
+; is that write's ADDRESS-latch store `ld (0x100000),WA`, and 0x02D3F2 is the
+; `res 7,(0x18)` that opens the final write.)
 ; Unreferenced in v142 (no call and no pointer to it anywhere in the ROM).
 ToneGen_PanTable_02D0DC:
 	.byte 0x3e, 0xe9, 0x8e, 0xf0, 0x18, 0xb7, 0xd8, 0xc8
@@ -24006,28 +24030,193 @@ ToneGen_PanTable_02D0DC:
 	.byte 0x0f, 0xf2, 0x02, 0x00, 0x10, 0x50, 0x68, 0x00
 	.byte 0x00, 0x00, 0x00, 0x5e, 0x0e
 
-; Existing name kept; documentation only. WA = TG channel, XBC = 0x44-byte shadow block.
-; Writes 23 registers in this order (see the offset->register map in the file header):
-;   0x0040,0x0080(bit15 set),0x00C0,0x0100,0x0140,0x0180,0x0400,0x0440,0x0480,0x04C0,0x0500,
-;   0x0800, then register (0x0000+ch) <- 0x8100, then 0x0840,0x0880,0x08C0,0x0900,0x0940,
-;   0x0980,0x09C0,0x0A00,0x0A40, and finally 0x0080 again with bit15 CLEARED.
-; The 0x8100 write to bank 0x0000 in the middle is the key/gate command on the per-voice
-; CONTROL register -- [INFERENCE] most likely the NOTE-ON gate, but that reading rests on
-; position in the burst, not on a decoded field; the bit15 set/clear pair around the whole burst is the load strobe of the
-; SEPARATE 0x0080 register. This is the single biggest consumer of TG bandwidth in the
-; firmware.
-; Two facts about that gate, both from a scan of every bank-0x0000 access in the ROM:
-;   - it is the literal 0x8100 at all three of its sites (here at 0x02D2B4, and in
-;     ToneGen_WriteVoiceParams_Ext 0x02D6CA and _Ext2 0x02D777) -- never computed, and the
-;     low byte is always 0x00;
-;   - this routine does NOT emit the block's own +0x00 word. On the voice-engine call
-;     sites the control word arrives afterwards, from the live slot record +0x2D, through
+; ---------------------------------------------------------------------------------------
+; ToneGen_WriteVoiceParams (0x02D101-0x02D41A, 794 bytes) -- THE IC303 PARAMETER-LATCH BURST
+; Existing name kept; documentation only.
+;
+; In:  WA = tone-generator channel, 0..0x3F. XBC = long pointer to a 0x44-byte (34-word)
+;      staging block. The routine reads 21 words at +0x02..+0x2A and nothing else, with
+;      +0x04 read twice. Neither argument is range-checked -- see HAZARDS.
+; Out: nothing. XBC and IZ come back unchanged; XWA is clobbered.
+;
+; THE BUS. IC303 is a register-indirect device on two word ports plus one hand-driven pin:
+;
+;     write 0x100000  = 16-bit REGISTER-ADDRESS latch
+;     write 0x100002  = 16-bit DATA for the register last latched
+;     read  0x100000  = the chip's status word. ToneGen_Read_Register (0x021023) is the only
+;                       routine in the payload that reads it, and only two latch classes are
+;                       ever read back: 0x0000..0x0003 -> the active-voice bitmap for that
+;                       bank, 0x0180+ch -> that channel's envelope level.
+;     P6.7 (SFR 0x18 bit 7) = an out-of-band select the firmware drives by hand
+;
+; SFR 0x18 is PORT 6 (shared/sfr_tmp94c241.s: `.equ P6, 0x18`); every INTE* register is at
+; 0xE0..0xF0, so nothing about this pair masks an interrupt. RESET (0x01F924) does program
+; the port -- `ldio 0x18,0xFF`, `ldio 0x1B,0x7F`, `ldio 0x1A,0x80`.
+; [INFERENCE] that P6.7 is the CPU's A23 pin taken out of bus mode, i.e. that P6FC 0x7F
+; leaves bits 0..6 as A16..A22 and makes bit 7 a plain port and P6CR 0x80 makes it an output.
+; That is a bit-level reading of TMP94C241 registers for which this repo holds no datasheet
+; and MAME models P6/P6CR/P6FC as SFR names only; symbols/proposals/subcpu-region-07.txt
+; grades the same identification UNCERTAIN.
+; STATIC SCAN of this file (grep over the source text, not a bus trace): every 0x10xxxx /
+; 0x11xxxx access that is spelled as a direct address is preceded by a P6.7 write whose level
+; matches bit 1 of that address -- LOW for 0x100000, HIGH for 0x100002 -- with no
+; counter-example. Counts at the time of writing: 142 writes and 1 read at 0x100000, 140
+; writes at 0x100002, and 4 keybed reads at 0x110000 / 0x110002. The scan has two blind
+; spots, both of which occur in this file. (a) Register-indirect access:
+; ToneGen_ReadPitch_AndScale loads the constant 0x00100002 into XWA and stores through it 36
+; bytes later, across a call, so a text scan sees the port constant but not the bus cycle;
+; (b) The dead routines ToneGen_NoteTable_02D55E and ToneGen_Write_Regs0100_0140 spell
+; the ports in decimal (1048576 / 1048578) and carry their P6.7 toggles as raw `.byte`.
+; [INFERENCE] the chip needs the select valid before /CS, so the firmware presents it one
+; instruction early and holds it across the cycle.
+;
+; ONE REGISTER WRITE. Every write is this shape:
+;
+;     res 7,(0x18)            ; select LOW
+;     ld  wa,iz / add wa,BANK ; WA = register address = bank | channel
+;     ld  (0x100000),WA
+;     nop                     ; setup pad
+;     set 7,(0x18)            ; select HIGH
+;     ld  (0x100002),WA       ; WA = the data word, reloaded from the block via (xsp + 2)
+;     jr  <next instruction>  ; pipeline flush (opcode 68 00, displacement 0)
+;     nop / nop / nop         ; recovery pad
+;
+; Three writes vary from it: #2 and #23 insert `set 0x0f,WA` / `res 0x0f,WA` before the data
+; store, and #13 omits the `add` (bank 0x0000) and stores an immediate. Every bank is a
+; multiple of 0x40 and the channel is <= 0x3F, so the add acts as an OR: bits 5..0 = channel,
+; bits 15..6 = register.
+;
+; NO HANDSHAKE, NO BUSY WAIT. 23 latch writes, 23 data writes, ZERO reads -- the routine
+; never looks at the chip. No status bit is polled, no counter is kept, and there is no
+; `ei`/`di`, no call and no conditional branch anywhere in 0x02D101..0x02D41A: the only flow
+; control is the fixed padding above and the closing `ret` at 0x02D41A.
+;
+; ★ THE BOOT ROM RUNS THE SAME BURST WITH NO P6.7 AT ALL. HARDWARE_PARAM_BLOCK_WRITE
+; (0xFF8D0A, subcpu/boot/kn5000_subcpu_boot.s) emits the same 23 writes, same order, same
+; block offsets, same nop / jr / 3-nop padding -- and the whole boot ROM contains no
+; `ldio 0x18`, no `ldio 0x1A`, no `ldio 0x1B` and no res/set of P6.7. On that path the pin
+; sits at whatever reset leaves it and the transfer still works. Nothing here establishes why
+; the payload toggles it on every word; the toggle may be redundant on real hardware. This is
+; unresolved, and it is a second reason the P6.7 reading above is marked INFERENCE.
+; The boot twin is likewise unconditional, but ITS caller HARDWARE_CALIBRATION_SEQUENCE
+; (0xFF8C80) then polls a status word at 0x100004 up to 1000 times. The v1.42 payload never
+; touches 0x100004 at all; 0x100000 and 0x100002 are its only TG ports.
+;
+; MEASURED IN EMULATION ONLY (harness in kn7000_mame, tools/kn5000_tgbus_trace.lua; organ
+; demo, 65 gates): consecutive writes land ~3 us apart and ~31 us separate the mid-burst gate
+; from the closing strobe. That is emulated TLCS-900 timing, not a hardware measurement, and
+; nothing in this pass measured IC303's real setup/hold requirements or whether the padding
+; has margin.
+;
+; THE BURST, IN ORDER. blk = XBC.
+;
+;    #   register       data                      notes
+;    1   0x040 | ch     blk[+0x02]                recording selector -- BEFORE the strobe
+;    2   0x080 | ch     blk[+0x04] | 0x8000       STROBE UP   (`set 0x0f,WA` @ 0x02D145)
+;    3   0x0C0 | ch     blk[+0x06]
+;    4   0x100 | ch     blk[+0x08]
+;    5   0x140 | ch     blk[+0x0A]
+;    6   0x180 | ch     blk[+0x0C]
+;    7   0x400 | ch     blk[+0x0E]
+;    8   0x440 | ch     blk[+0x10]
+;    9   0x480 | ch     blk[+0x12]
+;   10   0x4C0 | ch     blk[+0x14]
+;   11   0x500 | ch     blk[+0x16]
+;   12   0x800 | ch     blk[+0x18]
+;   13   0x000 | ch     0x8100 IMMEDIATE          the gate command on the per-voice CONTROL
+;                                                 register, mid-frame; never taken from the
+;                                                 block (`ld (0x100002),0x8100` @ 0x02D2B4)
+;   14   0x840 | ch     blk[+0x1A]
+;   15   0x880 | ch     blk[+0x1C]
+;   16   0x8C0 | ch     blk[+0x1E]
+;   17   0x900 | ch     blk[+0x20]
+;   18   0x940 | ch     blk[+0x22]
+;   19   0x980 | ch     blk[+0x24]
+;   20   0x9C0 | ch     blk[+0x26]
+;   21   0xA00 | ch     blk[+0x28]
+;   22   0xA40 | ch     blk[+0x2A]
+;   23   0x080 | ch     blk[+0x04] & 0x7FFF       STROBE DOWN (`res 0x0f,WA` @ 0x02D40A)
+;
+; So: 23 writes to 22 DISTINCT registers. 0x080 is the only register written twice and
+; blk[+0x04] the only word sent twice. blk[+0x00] is not read here (see THE BLOCK).
+;
+; THE MID-BURST 0x8100 lands on the per-voice CONTROL register (0x0000 + ch), the same
+; register that word 0 of the block feeds. [INFERENCE] most likely the NOTE-ON gate, but that
+; reading rests on position in the burst, not on a decoded field. Two facts about it, both
+; from a scan of every bank-0x0000 access in the ROM:
+;   - it is the literal 0x8100 at all three of its bank-0x0000 sites (here at 0x02D2B4, and
+;     in ToneGen_WriteVoiceParams_Ext 0x02D6CA and _Ext2 0x02D777) -- never computed, and the
+;     low byte is always 0x00. (0x8100 is also written five more times in this file, but to
+;     banks 0x0540/0x0580/0x05C0, not to the control register.)
+;   - this routine does NOT emit the block's own +0x00 word. On the voice-engine call sites
+;     the control word arrives afterwards, from the live slot record +0x2D, through
 ;     ToneGen_WriteSingleReg (0x02D41B) -- see Voice_Build_GateCommand (0x025589) for the
-;     command set and the demo capture. _Ext and _Ext2 do both writes themselves.
-;     This routine has eight call sites and the pattern is not uniform: at three of them
+;     command set and the demo capture (harness in kn7000_mame,
+;     tools/rigs/kn5000_demo_capture.lua). _Ext and _Ext2 do both writes themselves.
+;     Across the eight assembled call sites the pattern is not uniform: at three of them
 ;     (ToneGen_Config_Init and the two aux-pool routines at 0x0355xx) the word that follows
 ;     IS the block's own word 0 -- which is the actual proof that +0x00 is the control
 ;     word -- and at two others no control write follows in the same routine at all.
+;
+; THE BIT-15 STROBE. Bit 15 of the 0x080 word is a frame marker, not level data. Five
+; independent places agree: this routine forces it set on write #2 and clear on write #23;
+; the boot ROM's twin performs the same `set 15` / `res 15` on word +0x04 of the same record
+; shape; Voice_Build_OutputLevel forces it set when it STAGES the word; the two ROM default
+; records carry it already set (0x00F8D5 word 2 = 0x8000, 0x00F919 word 2 = 0x83FF); and the
+; dead single-register writer at 0x02D0DC exists only to do the clear half.
+; WHAT THE CHIP DOES BETWEEN THE EDGES IS NOT ESTABLISHED BY THE ROM. [INFERENCE], and the
+; assumption MAME's HLE encodes: the framed writes are staged and commit on the falling edge.
+; The ROM cannot separate that from "every write takes effect as it lands", and any model
+; must respect two facts it does give: the 0x040 selector is written BEFORE the strobe rises,
+; and the 0x8100 gate is written ten writes BEFORE it falls.
+;
+; THE BLOCK. Callers pass a 34-word (0x44-byte) record; only words 1..21 go out here.
+;   word 0 (+0x00) is the value for register 0x000|ch. On the template-driven paths the
+;     CALLER ships it itself right after this routine returns, via ToneGen_WriteSingleReg --
+;     ToneGen_Config_Init (0x02DFCF), ToneGen_SetupPolyVoice (0x0355AD) and
+;     ToneGen_SetupPercussionVoice (0x035656) all do exactly that.
+;   At the main staging block 0x0451CC that word is never stored: all 47 references to
+;     0x0451CC in this file -- and all 76 in original_ROMs/kn5000_subprogram_v142.rom.unidasm
+;     -- are the single form `lda_24 xbc, 0x0451cc`, a pointer load. There is no store of any
+;     addressing form, while every other word of the block, 0x0451CE..0x0451F6, does have
+;     direct-address stores. Each of the 47 sites reaches a TG writer within one instruction
+;     (45 call one immediately; 2 load XDE first, then call ToneGen_WriteVoiceParams_Ext).
+;   words 22..33 (+0x2C..+0x42) complete the record shape and are not transmitted here; at
+;     base 0x0451CC three of them are live -- see the staging-block table's RECORD TAIL note.
+;
+; BLOCK BASES ACTUALLY USED -- 9 call sites in the ROM: 8 assembled as call/calr, plus one
+; that survives only as bytes inside the `.byte` blob ToneGen_ConfigInit_AltData:
+;   0x0451CC  x5   main voice staging block (calls at 0x0273A0, 0x02B56E, 0x02BD7F,
+;                  0x02C123, 0x02C448)
+;   0x003B1C  x2   auxiliary 8-voice pool (0x035640, 0x0356B4)
+;   caller's  x1   0x02E010 -- ToneGen_Config_Init passes (xsp + 2), the DRAM block at
+;                  0x2AA4 that DSP_Config_Init `ldirw`s from the ROM template at 0x00F8D5
+;   0x00F919  x1   0x02E0F7 -- the dormant liveness probe; unreachable in v1.42
+;
+; CROSS-CHECK against the staging-block table documented above Voice_Build_OutputLevel: the
+; 21 transmitted words are exactly that table's 21 rows, in the table's own top-to-bottom
+; order, one word each, 0x0451CE -> +0x040 through 0x0451F6 -> +0xA40. The table IS this
+; burst read out sequentially. The map does not rest on this routine alone: the boot ROM
+; annotates its own copy of the record field by field (ToneGen_ProbeVoice_ParamBlock at
+; 0xFF824C, byte-identical to payload 0x00F919), labelling word 0 "TG reg 0x000" and words
+; 1..21 as 0x040..0xA40 -- the same map, written down independently.
+; A weaker corroboration, worth recording but NOT a test: ToneGen_Config_Init mutes a channel
+; with two raw writes, 0x840|ch <- 0xFF00 and 0x800|ch <- 0xFF80, and then bursts a template
+; whose words 13 and 12 are exactly those two values. It is only a value coincidence -- the
+; same routine RE-MUTES immediately after the burst, so a shifted map would be invisible to
+; the firmware, and 0xFF00 also appears at template words 14 and 23.
+;
+; HAZARDS for anyone implementing or emulating this:
+;   * The channel is never masked here. `add wa,BANK` with a channel >= 0x40 would carry into
+;     the register field. ToneGen_Config_Init gates its own loop with `cp iz,0x40`;
+;     [INFERENCE] the remaining callers likewise pass a legal slot.
+;   * Interrupts stay enabled for the whole burst and no lock is taken. The address latch is
+;     a single shared register, so another TG writer entered from an interrupt between a
+;     0x100000 write and its 0x100002 partner would mis-pair the two. That is the structure;
+;     [INFERENCE] whether the race is reachable at run time was not established.
+;   * `lds wa, 0` at 0x02D109 is dead code -- WA is reloaded from IZ two instructions later.
+;
+; This is the single biggest consumer of TG bandwidth in the firmware.
 ToneGen_WriteVoiceParams:
 	dec 4, xsp
 	pushw iz

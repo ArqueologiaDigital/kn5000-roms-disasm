@@ -49,7 +49,7 @@ IRAM_FirmwareConfig:
 ; and every access goes `ldl_da xbc, 0x01f41c` first.
 ; Writers:  ToneGen_Poll_Set/ClearBit (0x03D27A / 0x03D298) -- OR/AND-NOT of a single bit,
 ;           driven by what ToneGen_Poll_Read (0x03D230) reads back from 0x110002 then 0x110000
-;           with port-1 bit 7 (SFR 0x18) toggled to drive A23;
+;           with PORT 6 bit 7 (SFR 0x18 = P6) toggled -- [INFERENCE] that the pin is A23;
 ;           ToneGen_Clear_Voice_Loop (0x03D203) zeroes all 8 bytes (`cp hl,0x8`).
 ; ★ In the shipped image these 8 bytes are 0xFF FF FF FF FF FF FF FF -- i.e. all 64 voices are
 ;   marked BUSY until something clears them. See FINDINGS.
