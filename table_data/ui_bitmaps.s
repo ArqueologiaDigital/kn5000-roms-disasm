@@ -179,40 +179,40 @@ BitmapDescriptorTable:
 ; Bitmap pixel runs (0x913118): 8bpp slices of the on-disk blob.
 ; Entry 0 is byte-identical to v10/maincpu/images/BitmapWormWearingHat.bin
 ; (the maincpu ROM carries its own copy at 0xea9f20).
-Bitmap_WormWearingHat:			.incbin "includes/wallpaper1_to_icons.bin", 0x518, 576	; 24x24 -- green worm in a straw hat (easter egg; same bytes as maincpu 0xea9f20 copy)
-Bitmap_TechnicsLogoOutline:		.incbin "includes/wallpaper1_to_icons.bin", 0x758, 13860	; 307x45 -- olive "Technics" wordmark with white outline on transparent background
-Bitmap_VerticalFader:			.incbin "includes/wallpaper1_to_icons.bin", 0x3d7c, 1344	; 27x48 -- on-screen fader: dark slot, black cap, tick scale on the right
-Bitmap_RedBarGauge:			.incbin "includes/wallpaper1_to_icons.bin", 0x42bc, 240	; 19x12 -- small bevelled panel with a red level bar (exact use not yet traced)
-Bitmap_RecordDot:			.incbin "includes/wallpaper1_to_icons.bin", 0x43ac, 306	; 17x17 -- dark-red filled circle (transport record symbol)
-Bitmap_TinyCross:			.incbin "includes/wallpaper1_to_icons.bin", 0x44de, 12	; 3x3 -- white 3x3 plus/cross marker
-Bitmap_TransportFastForward:		.incbin "includes/wallpaper1_to_icons.bin", 0x44ea, 504	; 27x18
-Bitmap_TransportRewind:			.incbin "includes/wallpaper1_to_icons.bin", 0x46e2, 504	; 27x18
-Bitmap_TransportPause:			.incbin "includes/wallpaper1_to_icons.bin", 0x48da, 504	; 27x18
-Bitmap_TransportPlayStop:		.incbin "includes/wallpaper1_to_icons.bin", 0x4ad2, 504	; 27x18
-Bitmap_TransportSkipToStart:		.incbin "includes/wallpaper1_to_icons.bin", 0x4cca, 504	; 27x18
-Bitmap_TransportSkipToEnd:		.incbin "includes/wallpaper1_to_icons.bin", 0x4ec2, 504	; 27x18
-Bitmap_SoundIcon_Violin:		.incbin "includes/wallpaper1_to_icons.bin", 0x50ba, 1024	; 32x32 -- violin and bow
-Bitmap_SoundIcon_Trumpet:		.incbin "includes/wallpaper1_to_icons.bin", 0x54ba, 1024	; 32x32
-Bitmap_SoundIcon_DrumKit:		.incbin "includes/wallpaper1_to_icons.bin", 0x58ba, 1024	; 32x32
-Bitmap_SoundIcon_Flutes:		.incbin "includes/wallpaper1_to_icons.bin", 0x5cba, 1024	; 32x32 -- concert flute over pan flute
-Bitmap_SoundIcon_ElectricGuitar:	.incbin "includes/wallpaper1_to_icons.bin", 0x60ba, 1024	; 32x32
-Bitmap_SoundIcon_NoteInCloud:		.incbin "includes/wallpaper1_to_icons.bin", 0x64ba, 1024	; 32x32 -- eighth note inside a sparkling cloud (pad/atmosphere sounds)
-Bitmap_SoundIcon_MalletPercussion:	.incbin "includes/wallpaper1_to_icons.bin", 0x68ba, 1024	; 32x32 -- tubular chimes and timpani with mallets
-Bitmap_PageIconA:			.incbin "includes/wallpaper1_to_icons.bin", 0x6cba, 1024	; 32x32 -- dog-eared page labelled "A"
-Bitmap_PageIconB:			.incbin "includes/wallpaper1_to_icons.bin", 0x70ba, 1024	; 32x32 -- dog-eared page labelled "B"
-Bitmap_SoundIcon_MixerModule:		.incbin "includes/wallpaper1_to_icons.bin", 0x74ba, 1024	; 32x32 -- rack sound module above mixer faders
-Bitmap_SoundIcon_FiddleAndBanjo:	.incbin "includes/wallpaper1_to_icons.bin", 0x78ba, 1024	; 32x32 -- crossed fiddle/bow with banjo head
-Bitmap_SoundIcon_GrandPiano:		.incbin "includes/wallpaper1_to_icons.bin", 0x7cba, 1024	; 32x32
-Bitmap_SoundIcon_SaxAndClarinet:	.incbin "includes/wallpaper1_to_icons.bin", 0x80ba, 1024	; 32x32
-Bitmap_SoundIcon_FiddleAndMandolin:	.incbin "includes/wallpaper1_to_icons.bin", 0x84ba, 1024	; 32x32 -- crossed fiddle/bow with oval mandolin body
-Bitmap_SoundIcon_SynthKeyboard:		.incbin "includes/wallpaper1_to_icons.bin", 0x88ba, 1024	; 32x32 -- digital workstation keyboard
-Bitmap_SoundIcon_Drawbars:		.incbin "includes/wallpaper1_to_icons.bin", 0x8cba, 1024	; 32x32 -- three numbered organ drawbars pulled to different lengths
-Bitmap_SoundIcon_Accordion:		.incbin "includes/wallpaper1_to_icons.bin", 0x90ba, 1024	; 32x32
-Bitmap_GreenLedButtonBright:		.incbin "includes/wallpaper1_to_icons.bin", 0x94ba, 176	; 15x11 -- small green LED button, lit
-Bitmap_GreenLedButtonDim:		.incbin "includes/wallpaper1_to_icons.bin", 0x956a, 176	; 15x11 -- small green LED button, dimmed
-Bitmap_GeneralMidiSpecialLogo:		.incbin "includes/wallpaper1_to_icons.bin", 0x961a, 1024	; 32x32 -- "GENERAL MIDI SPECIAL" text logo
-Bitmap_SoundIcon_Metronome:		.incbin "includes/wallpaper1_to_icons.bin", 0x9a1a, 1024	; 32x32
-Bitmap_SoundIcon_Microphone:		.incbin "includes/wallpaper1_to_icons.bin", 0x9e1a, 1024	; 32x32
+Bitmap_WormWearingHat:			.incbin "includes/generated/Bitmap_WormWearingHat.bin"	; 24x24 -- green worm in a straw hat (easter egg; same bytes as maincpu 0xea9f20 copy)
+Bitmap_TechnicsLogoOutline:		.incbin "includes/generated/Bitmap_TechnicsLogoOutline.bin"	; 307x45 -- olive "Technics" wordmark with white outline on transparent background
+Bitmap_VerticalFader:			.incbin "includes/generated/Bitmap_VerticalFader.bin"	; 27x48 -- on-screen fader: dark slot, black cap, tick scale on the right
+Bitmap_RedBarGauge:			.incbin "includes/generated/Bitmap_RedBarGauge.bin"	; 19x12 -- small bevelled panel with a red level bar (exact use not yet traced)
+Bitmap_RecordDot:			.incbin "includes/generated/Bitmap_RecordDot.bin"	; 17x17 -- dark-red filled circle (transport record symbol)
+Bitmap_TinyCross:			.incbin "includes/generated/Bitmap_TinyCross.bin"	; 3x3 -- white 3x3 plus/cross marker
+Bitmap_TransportFastForward:		.incbin "includes/generated/Bitmap_TransportFastForward.bin"	; 27x18
+Bitmap_TransportRewind:			.incbin "includes/generated/Bitmap_TransportRewind.bin"	; 27x18
+Bitmap_TransportPause:			.incbin "includes/generated/Bitmap_TransportPause.bin"	; 27x18
+Bitmap_TransportPlayStop:		.incbin "includes/generated/Bitmap_TransportPlayStop.bin"	; 27x18
+Bitmap_TransportSkipToStart:		.incbin "includes/generated/Bitmap_TransportSkipToStart.bin"	; 27x18
+Bitmap_TransportSkipToEnd:		.incbin "includes/generated/Bitmap_TransportSkipToEnd.bin"	; 27x18
+Bitmap_SoundIcon_Violin:		.incbin "includes/generated/Bitmap_SoundIcon_Violin.bin"	; 32x32 -- violin and bow
+Bitmap_SoundIcon_Trumpet:		.incbin "includes/generated/Bitmap_SoundIcon_Trumpet.bin"	; 32x32
+Bitmap_SoundIcon_DrumKit:		.incbin "includes/generated/Bitmap_SoundIcon_DrumKit.bin"	; 32x32
+Bitmap_SoundIcon_Flutes:		.incbin "includes/generated/Bitmap_SoundIcon_Flutes.bin"	; 32x32 -- concert flute over pan flute
+Bitmap_SoundIcon_ElectricGuitar:	.incbin "includes/generated/Bitmap_SoundIcon_ElectricGuitar.bin"	; 32x32
+Bitmap_SoundIcon_NoteInCloud:		.incbin "includes/generated/Bitmap_SoundIcon_NoteInCloud.bin"	; 32x32 -- eighth note inside a sparkling cloud (pad/atmosphere sounds)
+Bitmap_SoundIcon_MalletPercussion:	.incbin "includes/generated/Bitmap_SoundIcon_MalletPercussion.bin"	; 32x32 -- tubular chimes and timpani with mallets
+Bitmap_PageIconA:			.incbin "includes/generated/Bitmap_PageIconA.bin"	; 32x32 -- dog-eared page labelled "A"
+Bitmap_PageIconB:			.incbin "includes/generated/Bitmap_PageIconB.bin"	; 32x32 -- dog-eared page labelled "B"
+Bitmap_SoundIcon_MixerModule:		.incbin "includes/generated/Bitmap_SoundIcon_MixerModule.bin"	; 32x32 -- rack sound module above mixer faders
+Bitmap_SoundIcon_FiddleAndBanjo:	.incbin "includes/generated/Bitmap_SoundIcon_FiddleAndBanjo.bin"	; 32x32 -- crossed fiddle/bow with banjo head
+Bitmap_SoundIcon_GrandPiano:		.incbin "includes/generated/Bitmap_SoundIcon_GrandPiano.bin"	; 32x32
+Bitmap_SoundIcon_SaxAndClarinet:	.incbin "includes/generated/Bitmap_SoundIcon_SaxAndClarinet.bin"	; 32x32
+Bitmap_SoundIcon_FiddleAndMandolin:	.incbin "includes/generated/Bitmap_SoundIcon_FiddleAndMandolin.bin"	; 32x32 -- crossed fiddle/bow with oval mandolin body
+Bitmap_SoundIcon_SynthKeyboard:		.incbin "includes/generated/Bitmap_SoundIcon_SynthKeyboard.bin"	; 32x32 -- digital workstation keyboard
+Bitmap_SoundIcon_Drawbars:		.incbin "includes/generated/Bitmap_SoundIcon_Drawbars.bin"	; 32x32 -- three numbered organ drawbars pulled to different lengths
+Bitmap_SoundIcon_Accordion:		.incbin "includes/generated/Bitmap_SoundIcon_Accordion.bin"	; 32x32
+Bitmap_GreenLedButtonBright:		.incbin "includes/generated/Bitmap_GreenLedButtonBright.bin"	; 15x11 -- small green LED button, lit
+Bitmap_GreenLedButtonDim:		.incbin "includes/generated/Bitmap_GreenLedButtonDim.bin"	; 15x11 -- small green LED button, dimmed
+Bitmap_GeneralMidiSpecialLogo:		.incbin "includes/generated/Bitmap_GeneralMidiSpecialLogo.bin"	; 32x32 -- "GENERAL MIDI SPECIAL" text logo
+Bitmap_SoundIcon_Metronome:		.incbin "includes/generated/Bitmap_SoundIcon_Metronome.bin"	; 32x32
+Bitmap_SoundIcon_Microphone:		.incbin "includes/generated/Bitmap_SoundIcon_Microphone.bin"	; 32x32
 
 	.fill 486, 1, 0xff
 
@@ -315,58 +315,58 @@ FrameDescriptorTable:
 	desc_entry	0, 0, 0		; terminator
 
 ; Frame pixel runs (0x9341B0)
-Frame_RoundCorner1_TL:			.incbin "includes/wallpaper1_to_icons.bin", 0x215b0, 2	; 1x1
-Frame_RoundCorner1_TR:			.incbin "includes/wallpaper1_to_icons.bin", 0x215b2, 2	; 1x1
-Frame_RoundCorner1_BR:			.incbin "includes/wallpaper1_to_icons.bin", 0x215b4, 2	; 1x1
-Frame_RoundCorner1_BL:			.incbin "includes/wallpaper1_to_icons.bin", 0x215b6, 2	; 1x1
-Frame_RoundCorner2_TL:			.incbin "includes/wallpaper1_to_icons.bin", 0x215b8, 4	; 2x2
-Frame_RoundCorner2_TR:			.incbin "includes/wallpaper1_to_icons.bin", 0x215bc, 4	; 2x2
-Frame_RoundCorner2_BR:			.incbin "includes/wallpaper1_to_icons.bin", 0x215c0, 4	; 2x2
-Frame_RoundCorner2_BL:			.incbin "includes/wallpaper1_to_icons.bin", 0x215c4, 4	; 2x2
-Frame_RoundCorner5_TL:			.incbin "includes/wallpaper1_to_icons.bin", 0x215c8, 30	; 5x5
-Frame_RoundCorner5_TR:			.incbin "includes/wallpaper1_to_icons.bin", 0x215e6, 30	; 5x5
-Frame_RoundCorner5_BR:			.incbin "includes/wallpaper1_to_icons.bin", 0x21604, 30	; 5x5
-Frame_RoundCorner5_BL:			.incbin "includes/wallpaper1_to_icons.bin", 0x21622, 30	; 5x5
-Frame_RoundCorner9_TL:			.incbin "includes/wallpaper1_to_icons.bin", 0x21640, 90	; 9x9
-Frame_RoundCorner9_TR:			.incbin "includes/wallpaper1_to_icons.bin", 0x2169a, 90	; 9x9
-Frame_RoundCorner9_BR:			.incbin "includes/wallpaper1_to_icons.bin", 0x216f4, 90	; 9x9
-Frame_RoundCorner9_BL:			.incbin "includes/wallpaper1_to_icons.bin", 0x2174e, 90	; 9x9
-Frame_RoundCorner14_TL:			.incbin "includes/wallpaper1_to_icons.bin", 0x217a8, 196	; 14x14
-Frame_RoundCorner14_TR:			.incbin "includes/wallpaper1_to_icons.bin", 0x2186c, 196	; 14x14
-Frame_RoundCorner14_BR:			.incbin "includes/wallpaper1_to_icons.bin", 0x21930, 196	; 14x14
-Frame_RoundCorner14_BL:			.incbin "includes/wallpaper1_to_icons.bin", 0x219f4, 196	; 14x14
-Frame_ChevronRight_5x12:		.incbin "includes/wallpaper1_to_icons.bin", 0x21ab8, 72	; 5x12
-Frame_ChevronRight_6x16:		.incbin "includes/wallpaper1_to_icons.bin", 0x21b00, 96	; 6x16
-Frame_ChevronRight_8x24:		.incbin "includes/wallpaper1_to_icons.bin", 0x21b60, 192	; 8x24
-Frame_ChevronRight_10x32:		.incbin "includes/wallpaper1_to_icons.bin", 0x21c20, 320	; 10x32
-Frame_ChevronRight_15x48:		.incbin "includes/wallpaper1_to_icons.bin", 0x21d60, 768	; 15x48
-Frame_ChevronLeft_5x12:			.incbin "includes/wallpaper1_to_icons.bin", 0x22060, 72	; 5x12
-Frame_ChevronLeft_6x16:			.incbin "includes/wallpaper1_to_icons.bin", 0x220a8, 96	; 6x16
-Frame_ChevronLeft_8x24:			.incbin "includes/wallpaper1_to_icons.bin", 0x22108, 192	; 8x24
-Frame_ChevronLeft_10x32:		.incbin "includes/wallpaper1_to_icons.bin", 0x221c8, 320	; 10x32
-Frame_ChevronLeft_15x48:		.incbin "includes/wallpaper1_to_icons.bin", 0x22308, 768	; 15x48
-Frame_OnOffTabLeft_20x16:		.incbin "includes/wallpaper1_to_icons.bin", 0x22608, 320	; 20x16
-Frame_OnOffTabLeft_24x24:		.incbin "includes/wallpaper1_to_icons.bin", 0x22748, 576	; 24x24
-Frame_OnOffTabLeft_29x32:		.incbin "includes/wallpaper1_to_icons.bin", 0x22988, 960	; 29x32
-Frame_OnOffTabLeft_34x48:		.incbin "includes/wallpaper1_to_icons.bin", 0x22d48, 1632	; 34x48
-Frame_OnOffTabRight_20x16:		.incbin "includes/wallpaper1_to_icons.bin", 0x233a8, 320	; 20x16
-Frame_OnOffTabRight_24x24:		.incbin "includes/wallpaper1_to_icons.bin", 0x234e8, 576	; 24x24
-Frame_OnOffTabRight_29x32:		.incbin "includes/wallpaper1_to_icons.bin", 0x23728, 960	; 29x32
-Frame_OnOffTabRight_34x48:		.incbin "includes/wallpaper1_to_icons.bin", 0x23ae8, 1632	; 34x48
-Frame_RedArrowLeft:			.incbin "includes/wallpaper1_to_icons.bin", 0x24148, 256	; 16x16
-Frame_RedArrowRight:			.incbin "includes/wallpaper1_to_icons.bin", 0x24248, 256	; 16x16
-Frame_BevelCornerRaised_TL:		.incbin "includes/wallpaper1_to_icons.bin", 0x24348, 30	; 5x5
-Frame_BevelCornerRaised_TR:		.incbin "includes/wallpaper1_to_icons.bin", 0x24366, 30	; 5x5
-Frame_BevelCornerRaised_BR:		.incbin "includes/wallpaper1_to_icons.bin", 0x24384, 30	; 5x5
-Frame_BevelCornerRaised_BL:		.incbin "includes/wallpaper1_to_icons.bin", 0x243a2, 30	; 5x5
-Frame_BevelCornerOutlined_TL:		.incbin "includes/wallpaper1_to_icons.bin", 0x243c0, 30	; 5x5
-Frame_BevelCornerOutlined_TR:		.incbin "includes/wallpaper1_to_icons.bin", 0x243de, 30	; 5x5
-Frame_BevelCornerOutlined_BR:		.incbin "includes/wallpaper1_to_icons.bin", 0x243fc, 30	; 5x5
-Frame_BevelCornerOutlined_BL:		.incbin "includes/wallpaper1_to_icons.bin", 0x2441a, 30	; 5x5
-Frame_BevelCornerSunken_TL:		.incbin "includes/wallpaper1_to_icons.bin", 0x24438, 30	; 5x5
-Frame_BevelCornerSunken_TR:		.incbin "includes/wallpaper1_to_icons.bin", 0x24456, 30	; 5x5
-Frame_BevelCornerSunken_BR:		.incbin "includes/wallpaper1_to_icons.bin", 0x24474, 30	; 5x5
-Frame_BevelCornerSunken_BL:		.incbin "includes/wallpaper1_to_icons.bin", 0x24492, 30	; 5x5
-Frame_WideTabBar:			.incbin "includes/wallpaper1_to_icons.bin", 0x244b0, 836	; 76x11
+Frame_RoundCorner1_TL:			.incbin "includes/generated/Frame_RoundCorner1_TL.bin"	; 1x1
+Frame_RoundCorner1_TR:			.incbin "includes/generated/Frame_RoundCorner1_TR.bin"	; 1x1
+Frame_RoundCorner1_BR:			.incbin "includes/generated/Frame_RoundCorner1_BR.bin"	; 1x1
+Frame_RoundCorner1_BL:			.incbin "includes/generated/Frame_RoundCorner1_BL.bin"	; 1x1
+Frame_RoundCorner2_TL:			.incbin "includes/generated/Frame_RoundCorner2_TL.bin"	; 2x2
+Frame_RoundCorner2_TR:			.incbin "includes/generated/Frame_RoundCorner2_TR.bin"	; 2x2
+Frame_RoundCorner2_BR:			.incbin "includes/generated/Frame_RoundCorner2_BR.bin"	; 2x2
+Frame_RoundCorner2_BL:			.incbin "includes/generated/Frame_RoundCorner2_BL.bin"	; 2x2
+Frame_RoundCorner5_TL:			.incbin "includes/generated/Frame_RoundCorner5_TL.bin"	; 5x5
+Frame_RoundCorner5_TR:			.incbin "includes/generated/Frame_RoundCorner5_TR.bin"	; 5x5
+Frame_RoundCorner5_BR:			.incbin "includes/generated/Frame_RoundCorner5_BR.bin"	; 5x5
+Frame_RoundCorner5_BL:			.incbin "includes/generated/Frame_RoundCorner5_BL.bin"	; 5x5
+Frame_RoundCorner9_TL:			.incbin "includes/generated/Frame_RoundCorner9_TL.bin"	; 9x9
+Frame_RoundCorner9_TR:			.incbin "includes/generated/Frame_RoundCorner9_TR.bin"	; 9x9
+Frame_RoundCorner9_BR:			.incbin "includes/generated/Frame_RoundCorner9_BR.bin"	; 9x9
+Frame_RoundCorner9_BL:			.incbin "includes/generated/Frame_RoundCorner9_BL.bin"	; 9x9
+Frame_RoundCorner14_TL:			.incbin "includes/generated/Frame_RoundCorner14_TL.bin"	; 14x14
+Frame_RoundCorner14_TR:			.incbin "includes/generated/Frame_RoundCorner14_TR.bin"	; 14x14
+Frame_RoundCorner14_BR:			.incbin "includes/generated/Frame_RoundCorner14_BR.bin"	; 14x14
+Frame_RoundCorner14_BL:			.incbin "includes/generated/Frame_RoundCorner14_BL.bin"	; 14x14
+Frame_ChevronRight_5x12:		.incbin "includes/generated/Frame_ChevronRight_5x12.bin"	; 5x12
+Frame_ChevronRight_6x16:		.incbin "includes/generated/Frame_ChevronRight_6x16.bin"	; 6x16
+Frame_ChevronRight_8x24:		.incbin "includes/generated/Frame_ChevronRight_8x24.bin"	; 8x24
+Frame_ChevronRight_10x32:		.incbin "includes/generated/Frame_ChevronRight_10x32.bin"	; 10x32
+Frame_ChevronRight_15x48:		.incbin "includes/generated/Frame_ChevronRight_15x48.bin"	; 15x48
+Frame_ChevronLeft_5x12:			.incbin "includes/generated/Frame_ChevronLeft_5x12.bin"	; 5x12
+Frame_ChevronLeft_6x16:			.incbin "includes/generated/Frame_ChevronLeft_6x16.bin"	; 6x16
+Frame_ChevronLeft_8x24:			.incbin "includes/generated/Frame_ChevronLeft_8x24.bin"	; 8x24
+Frame_ChevronLeft_10x32:		.incbin "includes/generated/Frame_ChevronLeft_10x32.bin"	; 10x32
+Frame_ChevronLeft_15x48:		.incbin "includes/generated/Frame_ChevronLeft_15x48.bin"	; 15x48
+Frame_OnOffTabLeft_20x16:		.incbin "includes/generated/Frame_OnOffTabLeft_20x16.bin"	; 20x16
+Frame_OnOffTabLeft_24x24:		.incbin "includes/generated/Frame_OnOffTabLeft_24x24.bin"	; 24x24
+Frame_OnOffTabLeft_29x32:		.incbin "includes/generated/Frame_OnOffTabLeft_29x32.bin"	; 29x32
+Frame_OnOffTabLeft_34x48:		.incbin "includes/generated/Frame_OnOffTabLeft_34x48.bin"	; 34x48
+Frame_OnOffTabRight_20x16:		.incbin "includes/generated/Frame_OnOffTabRight_20x16.bin"	; 20x16
+Frame_OnOffTabRight_24x24:		.incbin "includes/generated/Frame_OnOffTabRight_24x24.bin"	; 24x24
+Frame_OnOffTabRight_29x32:		.incbin "includes/generated/Frame_OnOffTabRight_29x32.bin"	; 29x32
+Frame_OnOffTabRight_34x48:		.incbin "includes/generated/Frame_OnOffTabRight_34x48.bin"	; 34x48
+Frame_RedArrowLeft:			.incbin "includes/generated/Frame_RedArrowLeft.bin"	; 16x16
+Frame_RedArrowRight:			.incbin "includes/generated/Frame_RedArrowRight.bin"	; 16x16
+Frame_BevelCornerRaised_TL:		.incbin "includes/generated/Frame_BevelCornerRaised_TL.bin"	; 5x5
+Frame_BevelCornerRaised_TR:		.incbin "includes/generated/Frame_BevelCornerRaised_TR.bin"	; 5x5
+Frame_BevelCornerRaised_BR:		.incbin "includes/generated/Frame_BevelCornerRaised_BR.bin"	; 5x5
+Frame_BevelCornerRaised_BL:		.incbin "includes/generated/Frame_BevelCornerRaised_BL.bin"	; 5x5
+Frame_BevelCornerOutlined_TL:		.incbin "includes/generated/Frame_BevelCornerOutlined_TL.bin"	; 5x5
+Frame_BevelCornerOutlined_TR:		.incbin "includes/generated/Frame_BevelCornerOutlined_TR.bin"	; 5x5
+Frame_BevelCornerOutlined_BR:		.incbin "includes/generated/Frame_BevelCornerOutlined_BR.bin"	; 5x5
+Frame_BevelCornerOutlined_BL:		.incbin "includes/generated/Frame_BevelCornerOutlined_BL.bin"	; 5x5
+Frame_BevelCornerSunken_TL:		.incbin "includes/generated/Frame_BevelCornerSunken_TL.bin"	; 5x5
+Frame_BevelCornerSunken_TR:		.incbin "includes/generated/Frame_BevelCornerSunken_TR.bin"	; 5x5
+Frame_BevelCornerSunken_BR:		.incbin "includes/generated/Frame_BevelCornerSunken_BR.bin"	; 5x5
+Frame_BevelCornerSunken_BL:		.incbin "includes/generated/Frame_BevelCornerSunken_BL.bin"	; 5x5
+Frame_WideTabBar:			.incbin "includes/generated/Frame_WideTabBar.bin"	; 76x11
 
 	.fill 3084, 1, 0xff

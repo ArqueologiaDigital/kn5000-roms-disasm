@@ -1,0 +1,785 @@
+[
+ {
+  "label": "Bitmap_WormWearingHat",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 1304,
+  "len": 576,
+  "w": 24,
+  "h": 24,
+  "stride": 24
+ },
+ {
+  "label": "Bitmap_TechnicsLogoOutline",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 1880,
+  "len": 13860,
+  "w": 307,
+  "h": 45,
+  "stride": 308
+ },
+ {
+  "label": "Bitmap_VerticalFader",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 15740,
+  "len": 1344,
+  "w": 27,
+  "h": 48,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_RedBarGauge",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 17084,
+  "len": 240,
+  "w": 19,
+  "h": 12,
+  "stride": 20
+ },
+ {
+  "label": "Bitmap_RecordDot",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 17324,
+  "len": 306,
+  "w": 17,
+  "h": 17,
+  "stride": 18
+ },
+ {
+  "label": "Bitmap_TinyCross",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 17630,
+  "len": 12,
+  "w": 3,
+  "h": 3,
+  "stride": 4
+ },
+ {
+  "label": "Bitmap_TransportFastForward",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 17642,
+  "len": 504,
+  "w": 27,
+  "h": 18,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_TransportRewind",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 18146,
+  "len": 504,
+  "w": 27,
+  "h": 18,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_TransportPause",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 18650,
+  "len": 504,
+  "w": 27,
+  "h": 18,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_TransportPlayStop",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 19154,
+  "len": 504,
+  "w": 27,
+  "h": 18,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_TransportSkipToStart",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 19658,
+  "len": 504,
+  "w": 27,
+  "h": 18,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_TransportSkipToEnd",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 20162,
+  "len": 504,
+  "w": 27,
+  "h": 18,
+  "stride": 28
+ },
+ {
+  "label": "Bitmap_SoundIcon_Violin",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 20666,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_Trumpet",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 21690,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_DrumKit",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 22714,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_Flutes",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 23738,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_ElectricGuitar",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 24762,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_NoteInCloud",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 25786,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_MalletPercussion",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 26810,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_PageIconA",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 27834,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_PageIconB",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 28858,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_MixerModule",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 29882,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_FiddleAndBanjo",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 30906,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_GrandPiano",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 31930,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_SaxAndClarinet",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 32954,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_FiddleAndMandolin",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 33978,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_SynthKeyboard",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 35002,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_Drawbars",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 36026,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_Accordion",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 37050,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_GreenLedButtonBright",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 38074,
+  "len": 176,
+  "w": 15,
+  "h": 11,
+  "stride": 16
+ },
+ {
+  "label": "Bitmap_GreenLedButtonDim",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 38250,
+  "len": 176,
+  "w": 15,
+  "h": 11,
+  "stride": 16
+ },
+ {
+  "label": "Bitmap_GeneralMidiSpecialLogo",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 38426,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_Metronome",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 39450,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Bitmap_SoundIcon_Microphone",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 40474,
+  "len": 1024,
+  "w": 32,
+  "h": 32,
+  "stride": 32
+ },
+ {
+  "label": "Frame_RoundCorner1_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136624,
+  "len": 2,
+  "w": 1,
+  "h": 1,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner1_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136626,
+  "len": 2,
+  "w": 1,
+  "h": 1,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner1_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136628,
+  "len": 2,
+  "w": 1,
+  "h": 1,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner1_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136630,
+  "len": 2,
+  "w": 1,
+  "h": 1,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner2_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136632,
+  "len": 4,
+  "w": 2,
+  "h": 2,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner2_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136636,
+  "len": 4,
+  "w": 2,
+  "h": 2,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner2_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136640,
+  "len": 4,
+  "w": 2,
+  "h": 2,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner2_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136644,
+  "len": 4,
+  "w": 2,
+  "h": 2,
+  "stride": 2
+ },
+ {
+  "label": "Frame_RoundCorner5_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136648,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_RoundCorner5_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136678,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_RoundCorner5_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136708,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_RoundCorner5_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136738,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_RoundCorner9_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136768,
+  "len": 90,
+  "w": 9,
+  "h": 9,
+  "stride": 10
+ },
+ {
+  "label": "Frame_RoundCorner9_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136858,
+  "len": 90,
+  "w": 9,
+  "h": 9,
+  "stride": 10
+ },
+ {
+  "label": "Frame_RoundCorner9_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 136948,
+  "len": 90,
+  "w": 9,
+  "h": 9,
+  "stride": 10
+ },
+ {
+  "label": "Frame_RoundCorner9_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137038,
+  "len": 90,
+  "w": 9,
+  "h": 9,
+  "stride": 10
+ },
+ {
+  "label": "Frame_RoundCorner14_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137128,
+  "len": 196,
+  "w": 14,
+  "h": 14,
+  "stride": 14
+ },
+ {
+  "label": "Frame_RoundCorner14_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137324,
+  "len": 196,
+  "w": 14,
+  "h": 14,
+  "stride": 14
+ },
+ {
+  "label": "Frame_RoundCorner14_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137520,
+  "len": 196,
+  "w": 14,
+  "h": 14,
+  "stride": 14
+ },
+ {
+  "label": "Frame_RoundCorner14_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137716,
+  "len": 196,
+  "w": 14,
+  "h": 14,
+  "stride": 14
+ },
+ {
+  "label": "Frame_ChevronRight_5x12",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137912,
+  "len": 72,
+  "w": 5,
+  "h": 12,
+  "stride": 6
+ },
+ {
+  "label": "Frame_ChevronRight_6x16",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 137984,
+  "len": 96,
+  "w": 6,
+  "h": 16,
+  "stride": 6
+ },
+ {
+  "label": "Frame_ChevronRight_8x24",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 138080,
+  "len": 192,
+  "w": 8,
+  "h": 24,
+  "stride": 8
+ },
+ {
+  "label": "Frame_ChevronRight_10x32",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 138272,
+  "len": 320,
+  "w": 10,
+  "h": 32,
+  "stride": 10
+ },
+ {
+  "label": "Frame_ChevronRight_15x48",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 138592,
+  "len": 768,
+  "w": 15,
+  "h": 48,
+  "stride": 16
+ },
+ {
+  "label": "Frame_ChevronLeft_5x12",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 139360,
+  "len": 72,
+  "w": 5,
+  "h": 12,
+  "stride": 6
+ },
+ {
+  "label": "Frame_ChevronLeft_6x16",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 139432,
+  "len": 96,
+  "w": 6,
+  "h": 16,
+  "stride": 6
+ },
+ {
+  "label": "Frame_ChevronLeft_8x24",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 139528,
+  "len": 192,
+  "w": 8,
+  "h": 24,
+  "stride": 8
+ },
+ {
+  "label": "Frame_ChevronLeft_10x32",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 139720,
+  "len": 320,
+  "w": 10,
+  "h": 32,
+  "stride": 10
+ },
+ {
+  "label": "Frame_ChevronLeft_15x48",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 140040,
+  "len": 768,
+  "w": 15,
+  "h": 48,
+  "stride": 16
+ },
+ {
+  "label": "Frame_OnOffTabLeft_20x16",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 140808,
+  "len": 320,
+  "w": 20,
+  "h": 16,
+  "stride": 20
+ },
+ {
+  "label": "Frame_OnOffTabLeft_24x24",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 141128,
+  "len": 576,
+  "w": 24,
+  "h": 24,
+  "stride": 24
+ },
+ {
+  "label": "Frame_OnOffTabLeft_29x32",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 141704,
+  "len": 960,
+  "w": 29,
+  "h": 32,
+  "stride": 30
+ },
+ {
+  "label": "Frame_OnOffTabLeft_34x48",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 142664,
+  "len": 1632,
+  "w": 34,
+  "h": 48,
+  "stride": 34
+ },
+ {
+  "label": "Frame_OnOffTabRight_20x16",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 144296,
+  "len": 320,
+  "w": 20,
+  "h": 16,
+  "stride": 20
+ },
+ {
+  "label": "Frame_OnOffTabRight_24x24",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 144616,
+  "len": 576,
+  "w": 24,
+  "h": 24,
+  "stride": 24
+ },
+ {
+  "label": "Frame_OnOffTabRight_29x32",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 145192,
+  "len": 960,
+  "w": 29,
+  "h": 32,
+  "stride": 30
+ },
+ {
+  "label": "Frame_OnOffTabRight_34x48",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 146152,
+  "len": 1632,
+  "w": 34,
+  "h": 48,
+  "stride": 34
+ },
+ {
+  "label": "Frame_RedArrowLeft",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 147784,
+  "len": 256,
+  "w": 16,
+  "h": 16,
+  "stride": 16
+ },
+ {
+  "label": "Frame_RedArrowRight",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148040,
+  "len": 256,
+  "w": 16,
+  "h": 16,
+  "stride": 16
+ },
+ {
+  "label": "Frame_BevelCornerRaised_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148296,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerRaised_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148326,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerRaised_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148356,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerRaised_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148386,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerOutlined_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148416,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerOutlined_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148446,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerOutlined_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148476,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerOutlined_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148506,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerSunken_TL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148536,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerSunken_TR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148566,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerSunken_BR",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148596,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_BevelCornerSunken_BL",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148626,
+  "len": 30,
+  "w": 5,
+  "h": 5,
+  "stride": 6
+ },
+ {
+  "label": "Frame_WideTabBar",
+  "src": "includes/wallpaper1_to_icons.bin",
+  "off": 148656,
+  "len": 836,
+  "w": 76,
+  "h": 11,
+  "stride": 76
+ }
+]

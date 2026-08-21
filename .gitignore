@@ -47,3 +47,4 @@ cruft_please_ignore/
 mame_driver/build_error.txt
 */maincpu/includes/generated/*.bin
 hdae5000/includes/generated/*.bin
+table_data/includes/generated/*.bin
