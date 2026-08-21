@@ -176,6 +176,27 @@ plainly readable. Check for a decompressed artefact before concluding a ROM is o
 **The handles for whoever continues**: trace `SD_LD2_LBLSW` / `SD_SV2_LBLSW` in the KN7000 image to
 the load and save routines, and the 26 blocks, the TLV records and the 24 slots should follow.
 
+**One dead end already eliminated, so nobody repeats it.** The KN7000's file-type table is at
+address **0x48664454** (image base 0x48400000, confirmed by its own pointer values), 14 entries.
+It has exactly three code references -- 0x4852F89E, 0x485300AB, 0x48532300 -- and the first
+disassembles as a FILENAME BUILDER, not a type dispatch:
+
+    4852F887  mov d0,d2                 ; d2 = file-type index
+    4852F889  call 0x4852F762           ; copy the name
+    4852F88F  mov 0x48664588,a1         ; the constant "." (verified: bytes 2E 00)
+    4852F895  call 0x4852F7AE           ; append
+    4852F89B  asl2 d2                   ; index * 4
+    4852F89C  mov 0x48664454,a0         ; the extension pointer array
+    4852F8A2  mov (d2,a0),a1            ; a1 = extension string
+    4852F8A5  call 0x4852F7AE           ; append
+
+i.e. `name + "." + ext[type]` -- the same role the equivalent table plays in the KN5000
+(`FileIO_BuildFilePath`). So the extension table leads to filename construction in BOTH firmwares
+and will not lead to the parser in either. Start from the SD-menu widget handlers instead.
+
+Disassemble with: `unidasm <slice> -arch mn10300 -basepc <addr>`, where the file offset is
+`addr - 0x48400000`. unidasm does not seek, so `dd` the bytes out first.
+
 NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
 user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
 that panel memory is a separate `.PMT` extension these disks do not carry, so the tempting "24
