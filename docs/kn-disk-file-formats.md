@@ -214,6 +214,32 @@ were parsed above.
 **What the 24 blocks are** is still open. "Current panel" makes a per-part or per-section reading
 plausible, but plausible is where the panel-memory reading started too, and that one was wrong.
 
+### Searched and absent -- the header magic is in NO dumped firmware
+
+A reader that validates `.LSW` would have to compare against the header. It does not exist to
+compare against:
+
+| searched for | KN5000 | KN6000 (`kn6000_program_full.bin`, 4,160,049 B) | KN7000 (decompressed, 4,157,184 B) |
+|---|---|---|---|
+| `"M60"` | absent | absent | absent |
+| `5A 5A 01 00` | absent | absent | absent |
+| `"LKE"` (the 0x4EB0 magic) | absent | 1 FALSE POSITIVE | absent |
+
+So `"M60"` is **not** a model code the way `M60`/KN6000 invites you to read it -- the KN6000 image
+does not contain that string either.
+
+⚠ The single `"LKE"` hit, at KN6000 file offset 0x3BCCF3, is **not** the magic. It straddles two
+entries of a pointer array whose elements all look like `XX 45 27 4C` (LE32 0x4C2745XX), so the
+`4C 4B 45` there is `...L` + `KE...` of two adjacent pointers. A three-character magic is short
+enough to occur by chance in a pointer table -- always dump the context before believing the hit.
+
+Consequence: no dumped firmware validates the `.LSW` header, so **the format cannot be recovered by
+finding its magic check** in any image we hold. Either the loader reads the blocks without checking,
+or the writer of these files is something not dumped. Note the same disks' `.LSW` embeds a byte-exact
+copy of their `.MSP` prefix, and the KN5000 does parse `.MSP` -- so a KN5000-family machine wrote
+them, which the "no KN5000 code parses `.LSW`" result above does not explain. That tension is the
+sharpest remaining thread.
+
 **The handles for whoever continues**: the widget-NAME trace is now spent -- `SD_LD2_LBLSW` is a
 static label descriptor (geometry + text) with no code attached, the same shape as its 36 siblings.
 The parser hangs off the LOAD action, not the label: `SD_LD2_R1SW` / `SD_LD2_R1LB` ("LOAD") and the
