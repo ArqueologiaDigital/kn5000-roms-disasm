@@ -58,8 +58,8 @@ clear are its data.
 | status | data | meaning |
 |---|---|---|
 | `0x81` | 0 | advance one beat |
-| `0x83` | 0 | end of track |
-| `0x82` | n | text / CUE data |
+| `0x82` | 0 | **end of track** (measured; see below) |
+| `0x83` | -- | **does not occur** -- 0 times in all 19 songs |
 | `0x9n` | 5 (repeatable) | note: `pos, note, velocity, dur_ticks, dur_beats` |
 | `0xBn` `0xCn` `0xDn` | 2-5 | not decoded |
 
@@ -77,44 +77,32 @@ fields in order: status, note, velocity, duration-low, duration-high.
 notes -- verified across all 19 songs: 10,330 of 10,330 non-note events have
 `data[0] <= 95`, with zero exceptions.
 
-### The status vocabulary is INCOMPLETE -- eleven more exist
+### CORRECTED 2026-08-21: the terminator is 0x82, and only THREE statuses are undocumented
 
-The table above does not cover everything the 19 songs actually use. Reading them with only the
-documented statuses leaves 255 events unparsed, and they are NOT trailing filler: every one occurs
-MID-STREAM, before the track's 0x83, and each status has a CONSISTENT argument count, which is what
-a real event type looks like and what random bytes do not.
+This file used to say `0x83` ends a track and `0x82` carries text/CUE data. **Measured across all
+19 songs: `0x83` occurs ZERO times and every one of the 168 tracks contains `0x82`.** The firmware
+agrees -- `SetWall_ParseStream_MainLoop` (`v10/maincpu/ui/setwall_routines.s:797`) jumps to its End
+label on `0x82`.
 
-| status | count | args | notes |
+The error mattered. Walking with `0x83` as the terminator never stops, so the walk runs past the
+end of the real stream into trailing bytes and reports them as events. That produced a list of
+*eleven* "undocumented statuses" (0xFF, 0xF2, 0xF3, 0xE3, 0xE7, 0xE4, 0xE8, 0xF4 among them) which
+were **not events at all** -- just data after the terminator, parsed by mistake.
+
+With `0x82` as the terminator, the genuinely undocumented in-stream statuses are exactly three:
+
+| status | count | args | firmware |
 |---|---|---|---|
-| `0xFF` | 76 | 0 | 69 of 76 take no arguments |
-| `0xF2` | 46 | 2 | |
-| `0xF3` | 29 | 2 | |
-| `0xE3` | 22 | 3 | |
-| `0xE7` | 20 | 3 | |
-| `0x80` | 16 | 3 | note this is the same byte the IC19 container uses as a cell marker |
-| `0x86` | 15 | 1 | |
-| `0xE4` | 10 | 3 | |
-| `0x85` | 10 | 1 | |
-| `0xE8` | 5 | 3 | appears in runs, e.g. `e8 1a 40 3d  e8 1c 00 3f  e8 1c 40 3e` |
-| `0xF4` | 2 | -- | |
+| `0x80` | 16 | 3 | explicit case in `SetWall_ParseStream_MainLoop` |
+| `0x85` | 10 | 1 | explicit case in the same parser |
+| `0x86` | 10 | 1 | explicit case in the same parser |
 
-**A parser that handles some of them exists**: `v10/maincpu/ui/setwall_routines.s:797`
-(`SetWall_ParseStream_MainLoop`) dispatches over this same vocabulary and has EXPLICIT cases for
-`0x80`, `0x85` and `0x86`, alongside `0x81`, `0xD1`, `0xD2`, `0xD3`, `0x9n`, `0xC0` and `0xB0`.
-That is independent confirmation that the three are real event types rather than misparsed data,
-and it is where their handling can be read.
+Two independent routes agreeing exactly -- the data says these three are left over, and the
+firmware has a case for each -- is why this list is trusted where the eleven were not. Their
+MEANINGS are still not established and no names are proposed.
 
-⚠ **It also ends on `0x82`, not `0x83`.** This document says `0x83` is end-of-track and `0x82`
-carries text/CUE data; that parser jumps to its End label on `0x82` and treats `0x81` and `0x80`
-alike. Either it parses a different stream variant, or one of the two end markers is documented
-wrong. UNRESOLVED -- and worth resolving before anyone writes an encoder, since getting the
-terminator wrong corrupts silently.
-
-**None of the eleven has an established meaning**, and no name is proposed. They are listed so that a
-reader knows the vocabulary here is partial: an encoder built from this document would be unable to
-round-trip a real song, and a decoder should reject rather than guess on them.
-
-Reproduce with `tests/l5_reimplement_demo_format.py`, which reports them as malformed by design.
+Reproduce: `tests/l5_reimplement_demo_format.py`, which reports 67,132 events and 36 malformed,
+the 36 being these three statuses.
 
 ### Still inferred
 

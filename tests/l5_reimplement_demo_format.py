@@ -26,8 +26,8 @@ for path in sorted(glob.glob('table_data/includes/demo_presets/demo_preset_??.bi
         while i < len(pay):
             st = pay[i]
             if not (st & 0x80): i+=1; continue
-            if st == 0x83: break
-            if st == 0x82:                     # "0x82 | n | text / CUE data"
+            if st == 0x82: break   # measured: 0x83 never occurs; 0x82 terminates
+            if False:
                 j=i+1
                 while j<len(pay) and not (pay[j]&0x80): j+=1
                 tot_ev+=1; i=j; continue
