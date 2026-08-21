@@ -152,9 +152,29 @@ Putting those together:
 > 26 blocks, the TLV records or the 24 slots.
 
 That is a definite answer rather than a failed search, and it has a consequence: **the 24 slot
-blocks cannot be identified from these ROMs at all.** The seven sample floppies are KN7000-era, and
-the format almost certainly belongs to another model in the family. Anyone continuing should work
-from a KN7000/KN6000 program ROM, not this one.
+blocks cannot be identified from these ROMs at all.**
+
+### Where the answer IS -- checked, not assumed
+
+`~/compartilhado/kn7000_scratchpad_snapshot/kn7000_program_decompressed.bin` (4,157,184 B) holds
+seven `LSW` occurrences, and they show the KN7000 treats `.LSW` as a **first-class user file type**
+rather than a scratch name:
+
+* its file-type table at 0x26441C lists fourteen extensions --
+  `LSW PMT SQT CMP TM MSP EFC MD FAV HMP AST SQF SEQ ACT` -- against the KN5000's ten, with `LSW`
+  first in both;
+* the SD-card LOAD and SAVE menus carry per-type widgets, `SD_LD2_LBLSW` / `SD_LD2_BLSW` and
+  `SD_SV2_LBLSW`, beside the equivalents for PMT, SQT, CMP and TM. So a KN7000 user can save and
+  load `.LSW` files from the SD menu, which means that firmware contains the reader and writer this
+  one does not.
+
+⚠ An earlier investigation reported that the KN7000/KN6000 program ROMs "contain no readable ASCII
+at all under either even/odd interleave" and were probably compressed. That is true of the packed
+images and false of the tree: a DECOMPRESSED image already exists at the path above, and it is
+plainly readable. Check for a decompressed artefact before concluding a ROM is opaque.
+
+**The handles for whoever continues**: trace `SD_LD2_LBLSW` / `SD_SV2_LBLSW` in the KN7000 image to
+the load and save routines, and the 26 blocks, the TLV records and the 24 slots should follow.
 
 NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
 user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
