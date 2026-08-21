@@ -24,8 +24,12 @@ stood for months were wrong, and are corrected in the history rather than quietl
 
 1. **`.LSW`'s 24 slot blocks.** NOT in these ROMs -- traced: the KN5000 names the extension, uses
    `A:\HAMA\*.LSW` as a disk-test scratch glob, and carries an `EV_LSWDATA` widget event, but never
-   parses the contents. The KN7000 does: fourteen-entry type table, and SD load/save widgets
-   `SD_LD2_LBLSW` / `SD_SV2_LBLSW`. A KN7000 task, with handles.
+   parses the contents. The KN7000 does: fourteen-entry type table, and SD load/save widgets.
+   *Partly advanced:* the type itself is now identified -- `.LSW` is **"CURRENT PANEL"**, from the
+   KN7000 widget-label table, cross-confirmed twice and by four real files
+   (`tools/widget-map/kn7000_widget_labels.py` in the KN7000 repo, self-testing). The 24 blocks
+   remain open, and the widget-NAME handle is spent: it reaches a static label descriptor, not the
+   parser. The untried entry points are the LOAD action widgets `SD_LD2_R1SW` / `SD_LD2_B*SW`.
 2. **NOTE2's extra bytes in the factory styles.** NOT this machine's doing -- the emitter and its
    twelve-record table are identical in v7/v9/v10 and can produce three distinct pairs; the corpus
    holds 57. The styles were authored on other equipment before being written to the initial data
