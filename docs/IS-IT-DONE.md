@@ -103,9 +103,16 @@ convertible**. That is a smaller number than the headline suggests, and the reas
 
 | still blocking | why |
 |---|---|
-| `QIZH`, `QIZL`, `QIXH` ... (46 uses) | the 8-bit halves of the Q register bank. MAME's `dasm900.cpp` names them; the LLVM backend defines `QWA..QSP` but not their byte halves. A genuine missing-register gap, not a spelling. |
+| ~~`QIZH`, `QIZL`, `QIXH` ... (46 uses)~~ | ~~a genuine missing-register gap~~ **RETRACTED.** They are expressible today. llvm-mc has no register OPERAND for them, but it encodes them through the `_erpb` forms with the register byte as an immediate: `cp_erpb 0xfb, 0x10` gives `[0xc7,0xfb,0xcf,0x10]`, which unidasm reads back as `cp QIZH,0x10`. The converter now translates them, using the register-byte table from MAME's `dasm900.cpp`. `ld`/`inc` still lack a located `_erpb` sub-opcode. |
 | `incw 1,(XSP+0x04)` | unrecognized mnemonic in this form |
 | `ld E,(XWA+)` | post-increment addressing |
+
+⚠ That retraction is the **third** time this session I concluded the backend could not do something
+it could do, and each time the real answer was a spelling I did not know: first "the backend lacks
+these instruction forms" (it lacked their mnemonics), then four syntax differences counted as gaps,
+now the Q registers. The lesson is the same one that runs through this whole document -- **before
+reporting that a tool cannot do something, try to make it do it.** Assembling one line would have
+refuted each claim in seconds.
 
 Four other apparent gaps turned out to be **unidasm-vs-llvm-mc syntax**, and the converter now
 translates them: `lda` wants its source parenthesised (`lda XWA,(0xf980)`), shifts take the register

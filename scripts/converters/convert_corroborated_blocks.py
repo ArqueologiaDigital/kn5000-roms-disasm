@@ -121,6 +121,28 @@ def blocks_of(path, syms):
 # re-assembled and must reproduce the original bytes, so a bad translation
 # cannot slip through -- it just fails the round-trip.
 SHIFTS = ("sla", "sra", "srl", "sll", "rl", "rr", "rlc", "rrc")
+
+# The TLCS-900 "register byte", from MAME's dasm900.cpp s_reg8 table. These name
+# the byte halves of the index registers and the Q (previous-bank) set, which
+# llvm-mc has no register operands for -- but which it CAN encode through the
+# _erpb forms, where the register byte is passed as a plain immediate:
+#
+#     cp_erpb 0xfb, 0x10   ->  [0xc7,0xfb,0xcf,0x10]  =  unidasm's `cp QIZH,0x10`
+#
+# ⚠ Verified by round-trip, after I twice reported these as a missing-register
+# gap in the backend. They are not missing; they are spelled differently. Do not
+# reintroduce that claim without assembling one first.
+REG_BYTE = {}
+for _i, _n in enumerate(
+        "A W QA QW C B QC QB E D QE QD L H QL QH "
+        "IXL IXH QIXL QIXH IYL IYH QIYL QIYH "
+        "IZL IZH QIZL QIZH SPL SPH QSPL QSPH".split()):
+    REG_BYTE[_n] = 0xE0 + _i
+
+# unidasm mnemonic -> the _erpb spelling llvm-mc accepts, where a verified
+# sub-opcode exists. `ld`/`inc` have no _erpb equivalent found yet.
+ERPB_OPS = {"cp": "cp_erpb", "add": "add_erpb", "sub": "sub_erpb",
+            "and": "and_erpb", "xor": "xor_erpb", "or": "or_erpb"}
 REGDISP = re.compile(r'(?<![\w(])(X?[A-Za-z]{2,3}\s*[+-]\s*0x[0-9a-fA-F]+)(?![\w)])')
 
 
@@ -157,6 +179,13 @@ def translate(text):
     # llvm-mc takes either one alone.
     if "/" in parts[1]:
         yield f"{parts[0]} " + re.sub(r'\b(\w+)/\w+', r'\1', parts[1]).lower()
+    # A byte-half or Q-bank register operand goes through the _erpb form with the
+    # register byte as an immediate.
+    if parts[1].count(",") == 1:
+        a, b = [x.strip() for x in parts[1].split(",")]
+        mn = parts[0].lower()
+        if a.upper() in REG_BYTE and mn in ERPB_OPS:
+            yield f"{ERPB_OPS[mn]} 0x{REG_BYTE[a.upper()]:02x}, {b}"
 
 
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
