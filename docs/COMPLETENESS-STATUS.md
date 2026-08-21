@@ -18,7 +18,7 @@ That claim does not survive the project's own coverage tool, whose docstring alr
 | subcpu payload v142 | 196,608 | **100.0%** | 0 | closest to done |
 | subcpu boot (IC30) | 131,072 | **100.0%** | 0 | closest to done |
 | maincpu v10 / v9 | 2,097,152 | **99.77% honest** (tool says 59.0%) | 860,028, of which 855,100 is C recompiled | **L0 CLEAN**, poison-verified |
-| maincpu v7 | 2,097,152 | **93.00% reconstructible / 46.69% COPIED as built** | 995,213 | **L0 CIRCULAR** |
+| maincpu v7 | 2,097,152 | **UNRECONSTRUCTED** (46.69% copied; the rest does not assemble without the copy) | 995,213 | **L0 FAILS** |
 | table data | 2,097,152 | 46.9% claimed / **62.0% honest** | 1,113,121 | L1 done, L4 open |
 | HD-AE5000 | 524,288 | 40.3% | 313,076 | L1 done, L4 entirely open |
 | custom data (IC19) | 1,048,576 | 36.3% claimed / **0.0% honest** | 667,648 | **worst; L0 circular** |
@@ -86,9 +86,22 @@ Two corrections to the coverage tool, in OPPOSITE directions -- both found by th
 - **It understates v9/v10 badly.** Their `source%` column subtracts ALL `.incbin` including the
   855,100 B of legitimate, genuinely-recompiled C. Their real-source share is **99.77%**.
 
-So v7 has two true numbers and they must not be conflated: **46.69% of the shipping build is copied
-from the ROM**, and **93.00% would be reconstructible** if the copy step were deleted and the C kept
-(6.77% has no source at all, 0.23% is committed bitmaps).
+**And it is worse than "partly circular".** Removing the copy step was attempted (see
+`analysis/v7-provenance-audit/README.md`). Every referenced bin was verified byte-identical to what a
+successful build leaves behind -- 353 of 353 -- and the sources changed only in `.incbin` paths.
+Rebuilding still gave **46.33%**, deterministically, with every pointer at ROM 0xE00012 shifted 208
+bytes: a layout shift, not corrupt data.
+
+So the accurate statement is not that 93.00% "would be reconstructible". It is:
+
+> **v7 cannot currently be rebuilt from committed inputs at all.** No set of committed files
+> assembles to the v7 ROM. The 100.00% is manufactured per-run by a two-pass extraction that reads
+> the ROM twice and seeds its addresses from the *v9* ELF, and no fixed point of that process has
+> ever been committed.
+
+The 5,118 bytes where the committed C genuinely fails to reproduce the ROM are mapped by file and
+offset in `analysis/v7-provenance-audit/v7_c_divergence.json` -- a precise work list, and the one
+part of the attempt worth keeping.
 
 `custom data` has the same disease in a purer form: `split_custom_data.py` is a pure ROM slicer and
 all 380,928 non-`.incbin` bytes are `.space 0xFF` filler. There is not one typed or disassembled
