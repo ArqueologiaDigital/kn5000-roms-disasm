@@ -131,6 +131,21 @@ This is the level most often skipped, because the knowledge feels present -- it 
 comments, spread across forty routines. Spread-out knowledge is not a specification. The test is
 the implementer test above, and it is a high bar on purpose.
 
+**MAKE THE TEST EXECUTABLE.** The implementer test reads like something a reviewer judges. It is
+not: write a reader from the document alone, sharing no code with the project's own tooling, and
+check that it agrees with the artefact. Keep the document's sentences in it as comments so anyone
+can verify nothing was smuggled in from the disassembly. `tests/l5_reimplement_style_format.py` is
+the worked example -- it reproduces 1564 cells, 1050 chains and 50,245 events from
+`accompaniment-style-format.md` and nothing else.
+
+A grade nobody can run is an opinion. A grade with a failing test is a bug report. A grade with a
+passing test is evidence, and it stays evidence when the document is edited later.
+
+Note what such a test can and cannot establish. It proves a description sufficient to READ the
+data. It cannot prove the description of what the data MEANS -- there is nothing to check that
+against but the machine -- so L5 needs both the passing test and the semantic content, and a
+format can pass the test while its field meanings remain open.
+
 Codecs deserve an explicit note: identifying a compression format is not the same as documenting
 it. A codec is done when there is a committed DECODER and a committed ENCODER, and the encoder
 reproduces the original compressed bytes.
