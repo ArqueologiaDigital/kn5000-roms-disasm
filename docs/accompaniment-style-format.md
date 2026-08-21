@@ -127,3 +127,56 @@ The grammar is self-delimiting, so any byte run can be reframed as events and wr
 byte-exactly. That would empty the illegitimate-blob column without establishing anything: 200,000
 lines of `90 40 7f 00 00 00` satisfy a byte count and none of L3, which asks for field meanings.
 Converting this data is worth doing after item 1 above is settled, not before.
+
+## What the event arguments look like, measured
+
+Distributions over the full corpus (57,702 events). These are OBSERVATIONS, not decodings: no
+label below is invented, and where a meaning is not established it says so.
+
+### NOTE (0x90) and NOTE2 (0x91) share their first five arguments
+
+Argument ranges are indistinguishable between the two, which is why NOTE2 is read as a note:
+
+    arg0  0..95     tick within the beat
+    arg1  22..114   note number
+    arg2  1..127    velocity
+    arg3  0..95     duration, ticks
+    arg4  0..15     duration, beats
+
+**NOTE2 carries two more, and they are NOT established.** Ranges 0..24 and 0..25, 57 distinct
+pairs of the 256 possible, heavily skewed: (0,17) 4291, (3,0) 2518, (18,0) 600, (17,17) 437.
+
+Two facts constrain what they can be. They are **per-note, not per-part**: of 701 chains
+containing NOTE2, the pair varies within 549 of them, usually across 2 or 3 distinct values. And
+NOTE and NOTE2 **coexist inside one chain** (552 chains use both), so NOTE2 is a different kind of
+note within a part rather than a different part.
+
+### Chains split cleanly into two populations
+
+    NOTE-only chains (388)   notes 22..114, most common 36, 49, 38, 74
+    mixed chains (552)       NOTE notes 24..96 (top 60, 72, 48), NOTE2 28..96 (top 64, 55, 67)
+
+The NOTE-only population's most common values are 36 and 38, and its range is the widest. That is
+what a percussion part looks like under General MIDI, and percussion is exactly the part that would
+need no chord conversion. [INFERENCE] -- consistent with the data, not demonstrated: no code path
+has been traced that treats these chains differently.
+
+### The three controllers
+
+    CTL1 (0xD1)  112 events   arg0 0..94, arg1 0..117, both sparse
+    CTL2 (0xD2)  1227 events  arg0 0..95, arg1 0..75 but clustered at 61..64
+    CTL3 (0xD3)   982 events  arg0 0..95, arg1 is **0 or 127 ONLY** (395 / 375)
+
+arg0 shares the 0..95 domain of every other event's first argument, so it is read as the tick
+within the beat. CTL3's second argument being exactly two values is the strongest single clue in
+this section: 0/127 is the standard switch encoding. **Which switch is not established.**
+
+All three appear THROUGHOUT their chains (median relative position 0.46, 0.47, 0.72), not
+clustered at the start, so they are not part-setup.
+
+### Why no names are proposed
+
+Naming these from the distributions would be the "confident header" anti-pattern the completeness
+spec lists: plausible, unfalsifiable by the next reader, and wrong often enough to matter. What
+would settle them is the firmware side -- the sub-CPU routine that consumes a style chain -- not
+more statistics on the data.
