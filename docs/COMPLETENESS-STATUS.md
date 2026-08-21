@@ -227,14 +227,23 @@ geometry multiplied out to exactly its file size. That is a check, not a conveni
 same check the HD-AE5000 icon failed silently for months, and running it over the whole tree found
 every convertible image without anyone deciding case by case.
 
-## The one thing left
+## ⚠ SUPERSEDED: "the one thing left"
 
-`custom_data`'s 639,296 B of style event data. It is NOT unknown: the cells frame cleanly under the
-documented grammar (725/725), and the 210 style directory records are now typed source with their
-names visible. What is missing is the layer above the framing -- what `0x90`'s five arguments mean,
-how cells chain into lanes -- and until that exists, converting it would produce 200,000 lines of
-reframed bytes that satisfy the byte count while satisfying none of L3. That is the next real
-reverse-engineering task, and it should not be rushed for the metric.
+This section used to say `custom_data`'s 639,296 B could not be converted because "what 0x90's
+five arguments mean" was unknown and cells framed 725/725. **All three claims were wrong or became
+wrong later the same day**, and it is kept only as a marker:
+
+* `0x90`'s five arguments were never unknown -- they are documented in
+  `scripts/build/demo_preset_to_midi.py` as pos, note, velocity, dur_ticks, dur_beats. I wrote
+  that they were unknown without checking.
+* 725/725 was a miscount: the probe searched for `80 FF FF FF FF 87`, which matches only cells
+  whose next pointer is 0xFFFF. There are 1564 cells, and 1050 chains.
+* The data IS converted. `custom_data/styles/*.styles` are the build's source and the four blobs
+  are deleted.
+
+The genuine remainder is smaller and different: NOTE2's two trailing fields, CTL1 (which carries a
+contradiction between the style data and the playback code), CTL2, and CTL3 -- see
+`accompaniment-style-format.md`.
 
 ## custom_data closed, 2026-08-21
 
