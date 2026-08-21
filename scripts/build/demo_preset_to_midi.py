@@ -15,7 +15,7 @@ Event stream: a byte with bit 7 set is a status byte; the bytes after it with bi
 clear are its data.
 
     0x81            advance one beat
-    0x83            end of track
+    0x82            end of track (measured; 0x83 does not occur)
     0x9n + 5 bytes  note: [pos, note, velocity, dur_ticks, dur_beats]
     0x82 + n bytes  text / CUE data (emitted as a MIDI marker when printable)
 
@@ -73,11 +73,13 @@ def split_events_ex(stream):
         b = stream[i]
         if b & 0x80:
             i += 1
-            if b in (0x81, 0x83):
+            if b in (0x81, 0x82):
                 out.append((b, b'', True))
-                if b == 0x83:
-                    return out
-                continue
+                if b == 0x82:
+                    return out          # MEASURED: 0x82 ends a track. 0x83 never
+                continue                # occurs in any of the 19 songs, so the old
+                                        # `return on 0x83` never fired and every
+                                        # track was parsed past its real end.
             running = st = b
             explicit = True
         else:

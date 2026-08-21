@@ -55,6 +55,14 @@ times, which pins the boundary from the other side. Found by
 Event stream: a byte with bit 7 set is a status byte; following bytes with bit 7
 clear are its data.
 
+**RUNNING STATUS.** A data run with no preceding status byte repeats the last
+non-structural status. `0x81` (beat) and `0x82` (end) are STRUCTURAL: they carry no
+data and do NOT clear the running status, so `81 22 4C 6C 0C 00` is a beat marker
+followed by a note that reuses the previous `0x9n`. Note records are 5 bytes, so a
+longer run is split into that many records -- which is what "(repeatable)" means in
+the table below. **A parser without this rule silently loses most of the notes**, and
+this section did not state it until 2026-08-21.
+
 | status | data | meaning |
 |---|---|---|
 | `0x81` | 0 | advance one beat |

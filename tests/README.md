@@ -39,17 +39,27 @@ MEANS, because there is nothing to compare that against but the machine.
 A reader of `table_data/includes/demo_presets/README.md` and nothing else, over the 19 committed
 demo songs.
 
-**This one FAILED, and the failure was a real defect.** The document said a cell's payload is
-`[5..255]` = "250 payload bytes". `[5..255]` inclusive is 251. Reading 250 drops byte 255 of every
-cell and truncates any event straddling the boundary; the test measured 588 short note events at
-250 and **none** at 251, and at 252 the next cell's byte 0 appears 1009 times, pinning the boundary
-from the other side. `scripts/build/demo_preset_to_midi.py` had the same 250 and had therefore been
-silently losing events at every cell boundary for as long as it has existed.
+**This one FAILED, three times, and each failure was a real defect in the document or in the
+shipping converter.**
 
-Both are corrected. Current state: 168 tracks, 71,665 events, 341 malformed (0.5%) -- all of them
-unknown status bytes (0xFF, 0xF2, 0xF3, 0xE3, 0xE7), which are either trailing filler past a track
-end or statuses the document does not cover. That residue is an OPEN ITEM, and the test failing
-loudly on it is the point.
+1. **Payload length.** The document said a cell payload is `[5..255]` = "250 bytes". `[5..255]`
+   inclusive is 251. Pinned from both sides: 588 short notes at 250, zero at 251, and 1009 spurious
+   `0x80`s at 252. `scripts/build/demo_preset_to_midi.py` carried the same 250.
+2. **The terminator was backwards.** The document said `0x83` ends a track and `0x82` carries text.
+   Measured: **`0x83` occurs zero times in all 19 songs and every one of the 168 tracks contains
+   `0x82`**, and the firmware parser ends on `0x82`. The converter's `return on 0x83` therefore
+   never fired, so it parsed every track past its real end. This also manufactured a spurious list
+   of *eleven* undocumented statuses that were simply bytes after the terminator.
+3. **The running-status rule was missing.** The format section marked `0x9n` "(repeatable)" and
+   never said what that meant. A parser without the rule silently loses most of the notes.
+
+All three are fixed. The test now implements the full documented grammar and reports **67,300
+events with 36 malformed** -- the 36 being exactly the three genuinely undocumented statuses
+(`0x80` x16, `0x85` x10, `0x86` x10), each of which has an explicit case in
+`SetWall_ParseStream_MainLoop`. No partial or short runs remain.
+
+That residue is the real open item, and the test failing loudly on precisely it -- and on nothing
+else -- is what a good L5 test looks like.
 
 ## `l5_reimplement_slide4k.py`
 

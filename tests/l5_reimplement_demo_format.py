@@ -22,26 +22,52 @@ for path in sorted(glob.glob('table_data/includes/demo_presets/demo_preset_??.bi
             nxt = d[base+3] | (d[base+4]<<8)  # "[3..4]=u16 next cell"
             pay += d[base+5:base+5+251]       # "[5..255]=250 payload bytes"
             c = nxt
-        i=0
+        # "RUNNING STATUS: a data run with no preceding status byte repeats the last
+        #  non-structural status. 0x81 and 0x82 are STRUCTURAL ... note records are 5 bytes"
+        i = 0
+        running = None
+        while i < len(pay) and not (pay[i] & 0x80):
+            i += 1
         while i < len(pay):
-            st = pay[i]
-            if not (st & 0x80): i+=1; continue
-            if st == 0x82: break   # measured: 0x83 never occurs; 0x82 terminates
-            if False:
-                j=i+1
-                while j<len(pay) and not (pay[j]&0x80): j+=1
-                tot_ev+=1; i=j; continue
+            b = pay[i]
+            if b & 0x80:
+                i += 1
+                if b in (0x81, 0x82):
+                    tot_ev += 1
+                    if b == 0x82:
+                        break
+                    continue
+                running = b
+            elif running is None:
+                i += 1
+                continue
+            st = running
             n = ARGS.get(st)
             if n is None:
-                if st & 0xF0 in (0xB0,0xC0,0xD0):   # "0xBn 0xCn 0xDn | 2-5 | not decoded"
-                    j=i+1
-                    while j<len(pay) and not (pay[j]&0x80): j+=1
-                    tot_ev+=1; i=j; continue
-                mal+=1; malstat[hex(st)]+=1; i+=1; continue
-            run=0; j=i+1
-            while j<len(pay) and not (pay[j]&0x80) and run<n: j+=1; run+=1
-            if run!=n: mal+=1; malstat[('short',hex(st),run)]+=1
-            else: tot_ev+=1
-            i=j
+                if (st & 0xF0) in (0xB0, 0xC0, 0xD0):
+                    j = i
+                    while j < len(pay) and not (pay[j] & 0x80):
+                        j += 1
+                    tot_ev += 1
+                    i = j
+                    continue
+                mal += 1
+                malstat[hex(st)] += 1
+                running = None
+                continue
+            run = 0
+            j = i
+            while j < len(pay) and not (pay[j] & 0x80):
+                j += 1
+                run += 1
+            if n and run >= n:
+                tot_ev += run // n              # "(repeatable)": split the run into records
+                if run % n:
+                    mal += 1
+                    malstat[('partial', hex(st), run % n)] += 1
+            elif run:
+                mal += 1
+                malstat[('short', hex(st), run)] += 1
+            i = j
 print(f"tracks {tot_tracks}  events {tot_ev}  malformed {mal}")
 if malstat: print("  malformed detail:", malstat.most_common(6))
