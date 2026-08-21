@@ -2644,6 +2644,17 @@ Cmd_DMA_Check_Stuck:	; 021001h
 ;        Latch 0x180+ch -> HL = that channel's envelope level.
 ;        This is the single point where the TG active-voice bitmap re-enters
 ;        sub-CPU software (caller: Voice_Manager_PollBank).
+;        It is the only read of the REGISTER window in the whole payload: 139 writes to the
+;        address latch 0x100000, 137 direct-addressing writes to the data port 0x100002
+;        (which is never read at all), and this single `ldw_da`. Qualify the line above
+;        accordingly: the same chip's other window (0x110000 / 0x110002, A23 high) is read
+;        four times, by Keybed_Read_Event and ToneGen_Poll_Read, and ToneGen_Poll_Read
+;        keeps its own per-voice on/off bitmap at 0x01F41C -- so this is the only path for
+;        the bitmap the REGISTER FILE returns, not the only voice-state feedback there is.
+;        No read anywhere returns a wave-ROM byte: IC304-IC307 hang off IC303 and are in no
+;        CPU's address space, which is why the wave directory is [INFERENCE] walked by the
+;        chip and not by this firmware. See "WHAT +0x040 SELECTS" near the 0x0451CC staging
+;        block.
 ; ===========================================================================
 ToneGen_Read_Register:
 	res_dd8 7, 0x18
@@ -5863,6 +5874,14 @@ WaveSel_Emit_ZoneRecord_S6:
 ; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 4 (index shifted left 2 instead of a
 ; multiply). Unlike the other five variants it writes NO type code into (XWA+0x01) and
 ; always zeroes 0x293E. This is the base/default zone format.
+; ALL SIX VARIANTS ABOVE (S15, S12, S13, S10, S6 and this one) copy the zone record's word 0
+; to 0x0451CE unchanged -- `ld wa, (xbc)` then `stw_da 0x0451ce, xwa`, no masking -- and
+; that word IS the wave selector, (class << 12) | entry. [INFERENCE] it is resolved by IC303
+; itself against the wave ROM's own per-page directory; no CPU here can read that ROM.
+; The firmware never range-checks the entry and never dereferences it, but it does modify it
+; downstream: WaveSel_StageB_Store_Reg040 doubles the top nibble when bit 2 of 0x041343 is
+; set, and Voice_Init_Type1 adds (tick & 7) through Voice_Slot_ApplyPitchJitter. See
+; "WHAT +0x040 SELECTS" in the staging-block header for the format and the open questions.
 WaveSel_Emit_ZoneRecord_S4:
 	extz de
 	sla de, 2
@@ -6944,6 +6963,180 @@ Voice_Clamp_Byte_WA_Return:
 ; (0x0255F3) and issued as a separate write after the burst. The auxiliary 8-voice pool is
 ; the exception: its run-time block at 0x3B1C is refilled by `ldirw` from ROM 0x012115 and
 ; its OWN word 0 is sent (ToneGen_SetupPolyVoice, 0x0355AD). The command set and the demo capture are documented at 0x025589.
+;
+; ---------------------------------------------------------------------------------------
+; WHAT +0x040 SELECTS: THE WAVE ROM'S OWN DIRECTORY -- WHICH THIS FIRMWARE NEVER READS
+;
+; NEGATIVE RESULT FIRST, because it is the answer to the obvious question: nothing in this
+; ROM, nor in the sub-CPU boot ROM, nor in the main program, walks the waveform ROMs.
+; IC304-IC307 hang off IC303 and are in no CPU's address space:
+;
+;   * THE SCHEMATICS. kn5000-docs/tone-generator.md:300,321 reads the service manual's Tone
+;     Generator Sections A and B as "Waveform ROMs (IC304-307) --> Tone Generator LSI
+;     (IC303)". The only CPU-facing windows on IC303 are its register file and its keybed
+;     side, and kn5000-docs/kn7000-expansion-and-wave-dump.md states plainly that NONE of
+;     them is a wave-memory read port.
+;
+;   * THIS PAYLOAD'S OWN TRAFFIC, counted over the whole file. Two windows on IC303,
+;     selected by P6.7 driving A23:
+;         0x100000  register-ADDRESS latch  139 writes, 1 read (ToneGen_Read_Register,
+;                                           documented below)
+;         0x100002  register DATA port      137 direct-addressing writes, plus one more
+;                                           through a pointer set up in
+;                                           ToneGen_ReadPitch_Compute; NEVER read
+;         0x110000  keybed / voice DATA     2 reads, no writes
+;         0x110002  keybed / voice STATUS   2 reads, no writes
+;     The five reads live in three routines -- ToneGen_Read_Register (the active-voice
+;     bitmap, or a channel's envelope level), Keybed_Read_Event (one key event) and
+;     ToneGen_Poll_Read (one voice's on/off bit, kept in the bitmap at 0x01F41C). Not one
+;     of them returns a wave byte, and there is no port through which one could.
+;
+;   * THE BOOT ROM. subcpu/boot/kn5000_subcpu_boot.s: 29 writes to 0x100000, 28 to
+;     0x100002, one read at 0x100004; on the other window one write to 0x110002 and one
+;     read each of 0x110002 and 0x110000. Same story, no wave read.
+;
+;   * THE MAIN PROGRAM. In v7, v9 and v10 the value 0x100000 only ever appears as an
+;     IMMEDIATE -- `cp xiz, 0x100000`, `cp xbc, 0x100000`, `add xbc, 0x100000`, i.e. the
+;     1 MB DRAM top bound -- never as a direct-addressing access, and 0x110000 is
+;     FDC_MAP__BASE_ADDR (maincpu/fdc_constants.s:16). The main CPU has no window on IC303.
+;
+;   * THE MACHINE'S OWN WAVE ROM CHECK (service test 6, chord E3+E4) is ACOUSTIC: the ROMs
+;     are made to sound and a technician listens for distortion. See
+;     kn5000-docs/test-modes.md and kn5000-docs/kn7000-expansion-and-wave-dump.md. The
+;     KN7000 does have a CPU-visible wave read port; the KN5000 has no equivalent.
+;
+; [INFERENCE] So the directory walk happens inside IC303. That is a conclusion by
+; elimination -- nobody has watched IC303 do it -- but the firmware's whole contribution to
+; choosing a recording is provably one 16-bit index, and the rest of this block documents
+; the format that index is resolved against, because none of the per-voice work in this
+; file means anything without it.
+;
+; THE SELECTOR. 0x0451CE is shadow+0x02 of the voice-engine staging block, the FIRST word
+; ToneGen_WriteVoiceParams pushes (register 0x0040 + ch). Its layout, validated in
+; kn7000_mame/notes/kn5000-structural-validation.md section 0, is
+;
+;     class = word >> 12       selects one 1 MB PAGE of one 4 MB wave socket
+;     entry = word & 0x0FFF    plain 0-based index into that page's directory, base 0
+;
+; and the firmware treats it as opaque. Every instruction in this ROM that touches 0x0451CE
+; is accounted for: eight stores (the six WaveSel_Emit_ZoneRecord_S* variants and
+; WaveSel_StageB_Store_Reg040, each copying word 0 of a zone record verbatim, plus
+; Voice_InitVoiceState storing 0), the read half of WaveSel_StageB_Store_Reg040's
+; read-modify-write, and the `lda_24 xwa, 0x0451ce` that hands the word to
+; Voice_Slot_ApplyPitchJitter. Nothing splits the word, range-checks the entry against a
+; count, or dereferences anything with it.
+;
+; * BUT IT IS NOT ALWAYS EMITTED AS STORED, AND THAT IS AN OPEN PROBLEM. Two sites change
+; it after the zone record has been copied in:
+;   - WaveSel_StageB_Store_Reg040 DOUBLES the top nibble in place when bit 2 of the global
+;     audio-mode word 0x041343 is set -- class *= 2, i.e. a page/bank re-select;
+;   - Voice_Init_Type1 calls Voice_Slot_ApplyPitchJitter(0x0451CE) immediately after
+;     WaveSel_StageB_Build_Reg040, and that adds (tick & 7) to the WHOLE word.
+; Under entry = bits[11:0] the second one picks a DIFFERENT directory entry on every note
+; that goes through Voice_Init_Type1. On page 0 the consecutive entries of a shared-wave
+; run are different KEY ZONES of one recording (185-190, 191-197), so a +0..7 step there
+; would not be a subtle effect. Either the low bits are not a plain entry index on this
+; path, or the path is not what it looks like. UNRESOLVED -- do not quote the index model
+; as settled without addressing it.
+;
+; A SECOND TENSION, same register from a different block: ToneGen_SetupPolyVoice fills the
+; auxiliary 8-voice block at 0x3B1C, whose +0x02 comes from the octave-indexed table at
+; 0x01217D and is annotated in this file as a pitch/rate constant. Under the decode above
+; that word is instead a wave selector chosen per octave, which is what a multisample looks
+; like. Both readings cannot be right; nobody has checked which.
+;
+; THE PAGE FORMAT, measured on kn5000_waveform_rom.ic307 (SHA1
+; 4b511bff6625f4655cabd96a263bf548d2ef4bf7), the only hardware-rooted wave dump that
+; exists -- the files circulating as IC304/IC305/IC306 are mostly-0xFF reads, and
+; mame_driver/src/mame/matsushita/kn5000.cpp:771-773 declares all three NO_DUMP. Each 1 MB
+; page is independently self-describing:
+;
+;     u16 param_ptr, u16 wave_off      x N     ; the directory, at page offset 0
+;     ... variable-length parameter records ...
+;     ... signed 16-bit little-endian PCM ...
+;
+;     N          = u16[page + 0] / 4           ; entry 0's param_ptr points just past the
+;                                              ; directory, so THE DIRECTORY DECLARES ITS
+;                                              ; OWN LENGTH -- there is no count field
+;     PCM start  = page + wave_off * 16        ; 16-byte (8-sample) granule
+;     PCM end    = page + 16 * (next strictly greater wave_off in the directory)
+;     param rec  = page + param_ptr .. page + (next strictly greater param_ptr)
+;
+; wave_off is a u16 scaled by 16, so it reaches 0x0FFFF0 and no further: the field
+; addresses exactly 1 MB, which is [INFERENCE] why the page is 1 MB, and why a 4-bit class
+; field spans exactly the 16 MB of four 4 MB sockets. IC307's four pages, all four measured
+; (columns as published in kn5000-structural-validation.md section 1):
+;
+;   page  base       N     directory      last param_ptr  first PCM   last wave
+;   0     0x000000   198   0x0000-0x0317  0x1A26          0x001A30    0x0FEF60
+;   1     0x100000   168   0x0000-0x029F  0x182C          0x001840    0x0FEB60
+;   2     0x200000  1072   0x0000-0x10BF  0x2694          0x0026A0    0x0FFEE0
+;   3     0x300000    57   0x0000-0x00E3  0x022C          0x000240    0x0FF5C0
+;
+; 1495 directory slots, 1413 unique wave offsets, in one 4 MB chip. Both columns rise
+; monotonically except three entries on page 1 (79, 82, 85) whose wave_off steps backwards
+; to re-use an earlier recording. The last parameter record of a page starts 10-20 bytes
+; before the first PCM byte, its tail zero-padded up to the granule.
+;
+; IT IS SELF-VALIDATING. The first word of every parameter record repeats that entry's own
+; wave_off: 198/198, 168/168, 1072/1072, 57/57 -- flagcensus.py prints
+; "back-reference OK: 1495 / 1495", no exceptions. That redundancy is the cheapest possible
+; check that a (class, entry) pair landed on a real slot, and it is also what proves the
+; four-page reading is not pattern-matching on noise: mis-framed data cannot satisfy a
+; back-reference 1072 times in a row.
+;
+; WHAT A PARAMETER RECORD CONTAINS. The redundant wave_off word, then zero or more
+; { value:8, flag:8 } pairs (little-endian word = value | flag << 8). flagcensus.py counts
+; 7203 pairs over the 1495 records -- that total includes the all-zero words padding each
+; page's last record -- and waverec.py's size histograms show 964 records with no pairs at
+; all (960 of them on page 2, which holds short one-shot material) and the largest record
+; at 850 bytes.
+;   flag 0x00        KEY-SPLIT BOUNDARY, usually listed high-to-low within a record. The
+;                    unit is NOT MIDI: against the firmware's own zone table the relation
+;                    is key = 1.5 * (value - 0x28), i.e. one unit = 1/8 octave, and
+;                    successive zones of a multisample step by 8 (worked table in
+;                    kn5000-structural-validation.md section 4.2 -- MEASURED relation,
+;                    INFERRED unit interpretation).
+;   flag 0x01-0x2F   PER-ZONE FINE TUNE, values clustered in 0xEA-0xFF, i.e. small negative
+;                    trims. Page-0 records 180 and 181 are 53 and 130 such pairs and
+;                    nothing else: a per-key detune table across the keyboard, exactly what
+;                    a stretched multisample needs. See
+;                    kn7000_mame/notes/kn5000-ic307-content-map.md section 3.2.
+;   flag bit 7       END OF RECORD. flagcensus.py counts 286 pairs with bit 7 set, and its
+;                    per-record last-pair histogram accounts for all 286: bit 7 never
+;                    appears on a pair that is not its record's last. Not every record uses
+;                    it -- the extent is delimited by the next param_ptr regardless.
+;   flag bit 6       A MARKER, 258 occurrences, NOT decoded. content-map section 3.3 groups
+;                    0xC0/0xC5/0x80/0x40 as terminators/markers without settling bit 6.
+; NO ROOT NOTE AND NO LOOP POINTS ARE STORED HERE [INFERENCE]: every field in every record
+; is a single byte, while a loop point into a wave of tens of thousands of samples needs at
+; least 16 bits, and loopprobe.py found none. The pitch origin comes from the firmware side
+; (the tone database's zone records and this file's pitch chain). Note that
+; kn5000-structural-validation.md section 7 leaves open that some of the flag != 0x00 bytes
+; are IC303's own per-wave loop/envelope/tune parameters.
+;
+; MULTISAMPLES SHOW UP AS RUNS OF CONSECUTIVE ENTRIES sharing one wave_off with shifted
+; split lists -- page 0 entries 185-190 (wave 0xFCA6) and 191-197 (wave 0xFEF6), each
+; successive entry's splits shifted by +8 units. The firmware's own key zones for those
+; same entries tile the keyboard contiguously with no overlap (section 4.1): a cross-check
+; between two ROMs written by different tools.
+;
+; PROVENANCE. Format, four-page split and the class decode:
+; kn7000_mame/notes/kn5000-structural-validation.md (2026-07-25) and
+; kn7000_mame/notes/kn5000-ic307-content-map.md; re-runnable probes in
+; kn7000_mame/tools/kn5000-rom-structure/ (waverec.py prints the per-page counts and the
+; record-size histograms, flagcensus.py the back-reference check and the flag census,
+; loopprobe.py is the loop-point negative). The class -> page assignment was PREDICTED from
+; the firmware alone -- max(entry)+1 over the 1444 (class, entry) pairs the table-data ROM's
+; zone records produce -- and then checked against IC307's self-declared counts: class 4
+; needs 198 and page 0 has 198, class 5 needs 168 and page 1 has 168, class 7 needs 57 and
+; page 3 has 57. Three exact hits, zero out-of-range entries; a pitch regression of class 7
+; onto page 3 gives slope 1.003 / R^2 0.998, where every wrong page collapses to slope ~0
+; (section 4.3). [INFERENCE] hence page = class & 3, bank = (class >> 2) & 3, IC307 = bank 1.
+; STILL OPEN: WHICH PHYSICAL SOCKET IS BANK 0. That is a wiring fact, not a decoding one,
+; and it cannot be settled until one of IC304/IC305/IC306 is really dumped; section 7 of
+; the validation note gives the falsifiable prediction that will identify it.
+; ---------------------------------------------------------------------------------------
 ;
 ; THE THREE ENVELOPES share one word format, (target << 8) | rate, and are written with the
 ; same shape: segments 0 and 1 take extra writes during a note, segment 2 exactly one per
@@ -24217,6 +24410,17 @@ ToneGen_PanTable_02D0DC:
 ;   * `lds wa, 0` at 0x02D109 is dead code -- WA is reloaded from IZ two instructions later.
 ;
 ; This is the single biggest consumer of TG bandwidth in the firmware.
+;
+; The FIRST word of the burst -- register 0x0040 + ch -- is taken from shadow+0x02, and for
+; the callers that pass the voice-engine block at 0x0451CC that word is 0x0451CE, the WAVE
+; SELECTOR: (class << 12) | entry. Mind the scoping: this routine is SHARED and is reached
+; with at least three shadow bases -- 0x0451CC (the voice-engine paths), 0x2AA4
+; (ToneGen_Config_Init) and 0x3B1C (ToneGen_SetupPolyVoice, `lda_d16 xbc, 15132`) -- so
+; shadow+0x02 = 0x0451CE holds for the first group only. For those callers that one word is
+; the whole of what the firmware tells IC303 about which recording to play; [INFERENCE]
+; IC303 resolves it itself, since no CPU on this machine can read the wave ROMs. See
+; "WHAT +0x040 SELECTS" in the staging-block header for the directory format, the evidence
+; that the walk is not done here, and the open questions.
 ToneGen_WriteVoiceParams:
 	dec 4, xsp
 	pushw iz
