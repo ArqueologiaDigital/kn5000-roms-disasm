@@ -205,6 +205,21 @@ document does not adopt it as established: what is established is the dispatch s
 Confirming it needs the MIDI controller number the handler ultimately emits, which has not been
 traced to a literal.
 
+### 0x84 is a TEMPO RESET (accompaniment parser)
+
+`v10/maincpu/sequencer/accompseq_routines.s:2004` dispatches status **0x84** to
+`AccompSeq_SeqParse_TempoReset`, which takes NO arguments from the event: it loads a stored value
+from 0x7E65 (or 0x7E69 when the flag at 0x7E52 is set) and writes it to 0x7E44, 0x7E42 and an
+`stw_erp WA, 0xe2` register. So 0x84 means "restore the tempo to the stored value", not "set the
+tempo to this number".
+
+0x84 does not occur in the 210 factory styles -- another member of the vocabulary the shipped data
+does not exercise, alongside 0xD4/0xD5/0xD7.
+
+⚠ This does NOT support the separate guess that the demo songs' `0x80` is a tempo SET (recorded in
+`table_data/includes/demo_presets/README.md`). Different parser, different status, and 0x84 carries
+no value. That guess stays unconfirmed.
+
 ### The 0xD family is larger than these styles use
 
 `v10/maincpu/sequencer/accompseq_routines.s:165` classifies events for the accompaniment engine,
