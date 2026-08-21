@@ -297,3 +297,30 @@ Two lessons, both cheap: never round-trip a disassembly source through text deco
 measurement yields a strong surprising claim, check the apparatus before publishing. Assembling
 directly with the same inputs gave an EXACT match and would have contradicted the claim in one
 command.
+
+## v7's divergence is pointer relocation, not mystery bytes
+
+The 5,118 bytes where the shared C fails to reproduce v7 are now explained rather than recorded.
+**2,365 of them are 32-bit pointers** the C emits with its v9/v10 target where v7's is lower by a
+fixed amount, and the deltas are piecewise over disjoint address ranges:
+
+    0x00F01C29..0x00F35DE9  -0x2A   986 sites   (the known v7 code offset)
+    0x00F8784D..0x00FB3062  -0x40D  715
+    0x00F4E778..0x00F87614  -0x404  333
+    0x00FB8B0B..0x00FC6DEE  -0x7CB  309
+    0x00F42DF8..0x00F477DA  -0x0E    69
+    0x00003991..0x00003A3C  -0x9C    15   (a RAM-space table)
+    0x00F3ECB3              -0x1C     8
+    0x00FCF11B..0x00FCF13C  -0x7D1    4
+
+**Zero of the 2,464 relocation sites were left unexplained** by that map. 1,334 bytes remain raw,
+and two files fall back to a whole-file diff -- one because v7's version is a different LENGTH
+(naka_sequencer_channels: 7,894 B against v9's 7,936).
+
+A blind scan-and-relocate was tried and does NOT work: applying the map to every 32-bit value in
+range corrupts data that merely looks like an address, reproducing 8 of 23 files. So the sites are
+recorded explicitly, each saying "this offset holds a pointer, move it by D" -- which is what makes
+this a specification of the difference rather than a byte blob.
+
+Remaining v7 work is now precisely scoped: make the C v7-aware at those 2,365 sites and the patch
+empties. Total unreconstructed: 0.51% of the ROM.
