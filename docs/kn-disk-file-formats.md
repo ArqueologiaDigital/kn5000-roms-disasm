@@ -69,10 +69,22 @@ Reproduce: `analysis/disk-format-probes/disk_seq_chains.py <dir>`, which ASSERTS
     0x0020..0x4E80  a TLV stream: tag u8, length u8, `length` payload bytes, grouped into
                     26 blocks each ended by FF FF at a record boundary. 955 records, and
                     ZERO residue on all seven disks.
-    0x4E80..0x5800  NOT TLV. Unframed bytes, a `5A 5A 5A "LKE" 80 00` magic at 0x4EB0, a
+    0x4E80..0x5800  NOT TLV. Unframed bytes, a `5A 5A 5A "LKE" 80 00` marker at 0x4EB0, a
                     0x500-byte array of 128 x 10-byte records at 0x4EC0, 12 constant 16-byte
                     records at 0x53C0, and 0x5480..0x5800 which is a **byte-exact copy of the
-                    first 896 bytes of the same disk's .MSP**.
+                    first 896 bytes of the same disk's .MSP** -- re-verified on all seven disks
+                    by `analysis/disk-format-probes/lsw_tail_vs_msp.py`.
+
+`"LKE"` is **not an `.LSW` magic**. It is the `.MSP` format's own signature: an `.MSP` file opens
+`4C 4B 45 ...` (`"LKE"`) with `5A 5A 5A` (`"ZZZ"`) at +0x0B. The bytes at `.LSW` 0x4EB0 are the same
+two tokens in the other order, `5A 5A 5A 4C 4B 45 80 00`. Together with the `.LSW` header's own
+`5A 5A 01 00 "M60" 0A`, `0x5A` reads as a family framing byte across these formats.
+
+⚠ TRAP, hit while measuring this. Searching for `.MSP` windows inside the `.LSW` tail with a
+fixed-size probe reports dozens of extra hits, all resolving to one offset -- runs of `0x00`
+matching other runs of `0x00`. **A probe made of constant bytes matches wherever that constant
+repeats.** The committed script skips single-byte windows, which removes every false hit; 10 of the
+14 windows in the copied region are informative.
 
 Block geometry: block 0 is 37 records ending at 0x03EE; block 1 is 30 records ending at 0x067E;
 blocks 2..25 are 37 records each on a fixed 0x300 grid. The length byte is load-bearing -- the same
