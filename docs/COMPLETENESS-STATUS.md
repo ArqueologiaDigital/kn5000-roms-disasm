@@ -42,12 +42,15 @@ Classifying every blob byte in the three worst ROMs:
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
 | table data | ~~395,150~~ **0 -- DONE 2026-08-21** | 65,536 | 652,435 | **0** |
-| custom data | ~~663,552~~ **639,296** | ~~4,096~~ **0** | 0 | **0** |
+| custom data | ~~663,552~~ **0 -- DONE 2026-08-21** | ~~4,096~~ **0** | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **639,296** | 65,536 | 652,435 | **0** |
+| **total** | **0** | 65,536 | 652,435 | **0** |
 
-**639,296 bytes are blobs that should not be blobs**, and all of it is now ONE item: the
-custom-data style event stream. Every other ROM's column is zero. That is the work queue, and it is the number
+**ZERO bytes are blobs that should not be blobs.** Every ROM's column is zero.
+
+The 652,435 B that remain binary are legitimate under §3: six genuine Windows BMPs stored
+verbatim, and the SLIDE4K/SLIDE8K compressed streams, whose codec has a committed decoder AND
+encoder and rebuilds byte-exactly. That is the work queue, and it is the number
 to report instead of any percentage.
 
 **HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
@@ -232,3 +235,27 @@ names visible. What is missing is the layer above the framing -- what `0x90`'s f
 how cells chain into lanes -- and until that exists, converting it would produce 200,000 lines of
 reframed bytes that satisfy the byte count while satisfying none of L3. That is the next real
 reverse-engineering task, and it should not be rushed for the metric.
+
+## custom_data closed, 2026-08-21
+
+The last 659,456 B. The style banks now build from committed event listings -- `custom_data/styles/
+*.styles`, 1.8 MB of text -- and the four `.bin` blobs are DELETED, with the gate still at 9/9.
+`style_events.py verify` checks the rebuild against `original_ROMs/kn5000_custom_data.ic19`
+directly, so the check does not depend on the artefact it is checking.
+
+A style now reads as music:
+
+    CHAIN 014 cells=5
+      NOTE 0 105 92 19 0
+      NOTE 0 49 100 19 0
+      NOTE 45 105 89 8 0
+      BEAT
+
+What made this possible was solving the container, which took four wrong readings first -- two of
+them mine, in this session. See `docs/accompaniment-style-format.md`.
+
+**What is still NOT claimed**: NOTE2's two trailing bytes and the three controller values are
+NAMED, not understood. Their argument counts are confirmed across all 50,245 events; what they
+select is not established, so they are emitted as numbers and never as invented labels. Under the
+spec that leaves this format at L3-partial: the container is fully specified and round-trips, the
+event semantics are not complete.

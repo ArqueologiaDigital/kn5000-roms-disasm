@@ -670,6 +670,9 @@ rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.e
 # The board's graphics are built FROM the committed PNGs and palette text files, not
 # incbin'd out of a ROM slice. scripts/build/hdae5000_images.py verify asserts the round
 # trip is byte-exact, so the readable form is the source rather than a view of a blob.
+style-events:
+	python3 scripts/build/style_events.py build
+
 indexed-images:
 	python3 scripts/build/indexed_images.py build
 	python3 scripts/build/mono_images.py build
@@ -707,7 +710,7 @@ rebuilt_ROMs/kn5000_table_data.llvm.rom: rebuilt_ROMs/kn5000_table_data.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Custom data ---
-rebuilt_ROMs/kn5000_custom_data.llvm.o: custom_data/kn5000_custom_data.s
+rebuilt_ROMs/kn5000_custom_data.llvm.o: custom_data/kn5000_custom_data.s style-events
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I custom_data -o $@ $<
 
