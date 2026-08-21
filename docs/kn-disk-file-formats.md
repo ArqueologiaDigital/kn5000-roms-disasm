@@ -349,8 +349,31 @@ KN5000 header `5A 5A 01 00 "M60"` is stable across all seven disks, but no KN500
 type -- so "CURRENT PANEL" is [CROSS-MODEL EVIDENCE], strong but not from the machine whose disks
 were parsed above.
 
-**What the 24 blocks are** is still open. "Current panel" makes a per-part or per-section reading
-plausible, but plausible is where the panel-memory reading started too, and that one was wrong.
+**What the 24 blocks are, structurally, is now measured** -- 24 instances of ONE fixed TLV schema,
+identical across all seven disks:
+
+    block 0      37 records, tags 0x00..0x16 + 0x19 at 30 B each   (extended form)
+    block 1      30 records, a DIFFERENT tag set, opening 0x17 0x18 ...
+    blocks 2..25 37 records, tags 0x00..0x16 + 0x19 at 22 B each   (the 24 slots, 692 B each)
+
+    slot schema:  00..16,19 x 22 B  |  44 45 46 48 x 10 B  |  90 x 5  |  60 x 12
+                  61 x 30  |  63 x 30  |  70 x 5  |  72 x 14  |  92 x 14  |  71 x 4  |  80 x 10
+
+Three things make this more than a shape. **The tag space is partitioned**: 0x17 and 0x18 appear only
+in block 1 and never in a slot, whose sequential run stops at 0x16 and resumes at 0x19 -- a split
+that is deliberate, not incidental. **Block 0 carries the same tag sequence with larger payloads**
+(30 B where a slot has 22 B, and four other records longer too), so it reads as an extended form of
+what the slots hold compactly. And **the same 17 of 37 records vary between slots on every disk**,
+the other 20 being constant, so the schema has a stable identity part and a stable payload part.
+Between 15 and 20 of the 24 slots hold distinct content depending on the disk.
+
+Reproduce: `analysis/disk-format-probes/lsw_slot_schema.py <dirs>`, which asserts 26 blocks, one
+shared 37-record 692-byte schema across 24 slots, and one varying-record set across all disks.
+
+What is still open is the **meaning** of the tags -- which byte is a sound number, a volume, a
+split point. "Current panel" makes a per-part reading plausible, but plausible is where the
+panel-memory reading started too, and that one was wrong. Note also that this schema belongs to
+whatever wrote these files, which was NOT KN5000 firmware.
 
 ### Searched and absent -- the header magic is in NO dumped firmware
 
