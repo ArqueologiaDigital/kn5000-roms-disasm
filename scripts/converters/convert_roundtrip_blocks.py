@@ -1,6 +1,29 @@
 #!/usr/bin/env python3
 """Convert .byte blocks that round-trip cleanly to native LLVM instructions.
 
+⚠ NOT SAFE TO RUN ON THE TREE AS IT STANDS (assessed 2026-08-21). Two defects,
+both found by dry-running it against v7/maincpu/midi/midi_dispatch_handlers.s,
+which the v7-vs-v9 territory diff flags as carrying real code as data:
+
+1. THE OUTPUT IS NOT SYMBOLIC. Converted blocks come out with raw decimal
+   operands -- `calr 734`, `jr ugt, 38`, `ld xix, 16586942`, `stda16 (38307), de`
+   -- in a tree whose surrounding lines read `call FileIO_BuildFilePath` and
+   `lda_24 xbc, (SeqFileType_CodeTable)`. The bytes match, so the build gate
+   cannot object, and the sources get materially harder to read. A byte-exact
+   change can still be a regression.
+
+2. THE ACCEPTANCE HEURISTIC IS BACKWARDS FOR A LABELLED TREE. It requires each
+   block to contain control flow, but blocks here are delimited BY labels, so a
+   clean fall-through basic block has none by construction -- the rule rejects
+   precisely the tidiest input. On that file it passed 3 of 335 blocks, and the
+   3 it passed decoded with `nop` and `pop sr` mid-block, which is what a
+   misparse of data looks like.
+
+Before using this again: emit symbols for branch targets and known addresses,
+and replace the control-flow test with corroboration -- e.g. only convert
+offsets that scripts/analysis/v7_undisassembled_spans.py shows v9 disassembles
+as code, which is independent evidence rather than a guess about shape.
+
 For each .byte block:
 1. Extract raw bytes
 2. Disassemble with llvm-mc --triple=tlcs900 --disassemble
@@ -163,10 +186,21 @@ def roundtrip_check(raw_bytes):
 
 def main():
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # --file PATH selects the source to convert. The old hardcoded default,
+    # maincpu/kn5000_v10_program.s, has not existed since the tree grew its
+    # per-revision v7/ v9/ v10/ layout, so this script silently operated on
+    # nothing. Passing a path explicitly is now the supported way to run it.
     src = os.path.join(base, 'maincpu', 'kn5000_v10_program.s')
+    if '--file' in sys.argv:
+        src = os.path.abspath(sys.argv[sys.argv.index('--file') + 1])
+    if not os.path.exists(src):
+        sys.exit(f'source not found: {src}\nPass one with --file <path>')
 
-    min_bytes = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    max_bytes = int(sys.argv[2]) if len(sys.argv) > 2 else 200
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    if '--file' in sys.argv:
+        args = [a for a in args if a != sys.argv[sys.argv.index('--file') + 1]]
+    min_bytes = int(args[0]) if len(args) > 0 else 10
+    max_bytes = int(args[1]) if len(args) > 1 else 200
     dry_run = '--dry-run' in sys.argv
 
     # Read file
