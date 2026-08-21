@@ -7138,13 +7138,96 @@ Voice_Clamp_Byte_WA_Return:
 ; the validation note gives the falsifiable prediction that will identify it.
 ; ---------------------------------------------------------------------------------------
 ;
-; THE THREE ENVELOPES share one word format, (target << 8) | rate, and are written with the
-; same shape: segments 0 and 1 take extra writes during a note, segment 2 exactly one per
-; note-on. Segment 3 of the amplitude envelope is used on about 4% of notes, where it
-; decays to zero while segment 2 holds a sustain level; on the rest it is left zero, which
-; means "unused" rather than "fall silent". Rate 0 means "go to the target now", not "hold
-; there" -- an envelope that treats it as a hold parks every note at its attack level and
-; never reaches segments 2 or 3 at all.
+; THE THREE ENVELOPES share one word format, (target << 8) | rate.
+; MEASURED (demo capture, 1705 note-ons; harness in kn7000_mame,
+; tools/rigs/kn5000_demo_capture.lua): segments 0 and 1 took extra writes during a note,
+; segment 2 exactly one write per note-on, and segment 3 of the amplitude envelope was used
+; on about 4% of notes, decaying to zero while segment 2 held a sustain level; on the rest
+; it was left zero, which means "unused" rather than "fall silent".
+; ★ THE ONCE-PER-NOTE-ON FIGURE IS A PROPERTY OF THAT CAPTURE, NOT OF THE CODE: the writer
+; census below finds three routines besides the note-on burst that can write segment 2, two
+; of which run while a voice is sounding.
+;
+; [INFERENCE] RATE 0 PROBABLY MEANS "GO TO THE TARGET NOW", not "hold there". The argument is
+; entirely firmware-side: Voice_EnvelopeRate_Table (0x011963) has exactly one entry below 4
+; (entry 0 = 0x00), and all four envelope-1 builders floor segment 1's rate at 4, so that
+; floor exists for no purpose other than keeping 0 off that one segment -- while segments 0
+; and 2 are left free to carry it. See Voice_Calc_LevelPair_PatchAtk_ClampDepth.
+; NOT MEASURED: no rate-to-time law and no time constant for IC303 has been captured, so
+; nothing here fixes what any rate value other than 0 does, or which end of 0x00..0x7F is
+; fast. Do not turn the ordering argument above into a number.
+;
+; WHY THE TEN ENVELOPE REGISTERS ARE REFRESHED AT DIFFERENT RATES. Bank = register number *
+; 0x40, so these ten words are IC303 registers 0x20..0x29 (the same conversion is spelled out
+; at ToneGen_WriteVoice_6Words, _Pan_Pair, _EnvLevel and _Reg11). Every routine that talks to
+; the chip latches 0x100000 with `add wa, <bank>` and then writes 0x100002, so counting that
+; one opcode gives the writer list per bank.
+; ★ COUNT IT IN THE ROM IMAGE, NOT IN THIS FILE: a grep for `add wa, 0x8..` here misses the
+; stretches still emitted as `.byte`, and two of them contain real bank writers (see the
+; MISLABELLED-AS-DATA notes at 0x0280FE-0x028838 and 0x028F75-0x029E30). Scanning
+; kn5000_subprogram_v142.rom for the opcode bytes D8 C8 <lo> <hi> gives:
+;
+;   seg 0   +0x800 r0x20 : 24 sites     seg 1   +0x840 r0x21 : 29 sites
+;           +0x900 r0x24 :  3 sites             +0x940 r0x25 :  3 sites
+;           +0x9C0 r0x27 :  3 sites             +0xA00 r0x28 :  3 sites
+;   seg 2   +0x880 r0x22 :  4 sites  -- ToneGen_WriteVoiceParams, ToneGen_WriteEnvSegments,
+;                                      ToneGen_WriteSegRegs_SameLevel, and the .byte-coded
+;                                      ToneGen_WriteVoice_Reg21_Reg22 (0x028170)
+;           +0x980 r0x26 :  1 site   -- ToneGen_WriteVoiceParams
+;           +0xA40 r0x29 :  1 site   -- ToneGen_WriteVoiceParams
+;   +0x8C0  r0x23        :  1 site   -- ToneGen_WriteVoiceParams
+;
+; So segment 2 of envelopes 2 and 3 (r0x26, r0x29) and r0x23 have exactly ONE writer each:
+; whatever ToneGen_WriteVoiceParams leaves in them at note-on is what the chip keeps for the
+; whole note, and a model must not expect them to be refreshed.
+; ★ SEGMENT 2 OF THE AMPLITUDE ENVELOPE (r0x22) IS NOT IN THAT CLASS. Three routines besides
+; the note-on burst write it, and two of them can run while a voice is sounding:
+; ToneGen_WriteSegRegs_SameLevel, called from Voice_AllNotes_SustainRetrigger_BranchB/BranchD
+; (the sustain-pedal walk over live voices) as well as from Voice_Reload_Levels_BranchA/C,
+; and ToneGen_WriteVoice_Reg21_Reg22, called from AudioChannel_AllVoices_Update_PanShift (an
+; audio-channel command handler that walks a part's live voices). The third,
+; ToneGen_WriteEnvSegments, is reached only from Voice_Reload_Levels_BranchD. The capture
+; quoted above saw r0x22 written exactly once per note-on, which says those three branches
+; did not fire in it -- not that they cannot fire.
+;
+; SEGMENTS 0 AND 1 HAVE A SECOND SHADOW. The per-tick path keeps its own copies just above
+; the block and ToneGen_WriteLevelBurst (0x02D436) pushes them to the same six registers:
+;
+;     0x0451F8 -> +0x800   0x0451FA -> +0x840   built by Voice_Calc_LevelPair_EGA 0x026769
+;     0x0451FC -> +0x900   0x0451FE -> +0x940   built by Voice_Calc_LevelPair_EGB 0x026975
+;     0x045200 -> +0x9C0   0x045202 -> +0xA00   built by Voice_Calc_LevelPair_EGC 0x026AAA
+;
+; No register outside that set has a second shadow. The three builders do NOT agree on the
+; low byte: EGA emits (level << 8) with bit 7 forced on the +0x800 word and clear on +0x840,
+; so its rate field is 0; EGB and EGC emit (level << 8) | Detune_ScaleSymmetric(...), a
+; signed -0x7F..+0x7F byte that is usually NOT 0 and often has bit 7 set, and each of them
+; writes the SAME word to both of its two registers.
+;
+; TARGET POLARITY: in the amplitude envelope the high byte is an ATTENUATION and 0xFF is
+; SILENT. (1) Both parameter curves descend from 0xFF -- Voice_LevelPair_AttackCurve
+; (0x011899, 0xFF..0x09) and Voice_EnvelopeLevel_Curve (0x0118FE, 0xFF..0x04). Note neither
+; curve can produce 0x00: a target of 0x00 is off the loud end of the curve, not a value the
+; builders ever emit. (2) The firmware's mute idiom -- 11 sites writing r0x21 <- 0xFF00 and
+; r0x20 <- 0xFF80 -- is called the documented "mute" level word at Voice_SetPitch. (3)
+; Voice_Step_ExprRamp counts toward 0xFF00 on r0x21 and releases the slot on arrival, and
+; Voice_Calc_LevelPair_Full_CheckMax reserves 0xFF as "fully attenuated / voice finished".
+; [INFERENCE] proofs (2) and (3) reach banks +0x800/+0x840 only. Envelopes 2 and 3 share the
+; word format and the same 0x0118FE curve, so the same polarity is carried over to
+; +0x900..+0xA40 by construction; no firmware site writes a mute word to those banks.
+; ★ OPEN CONFLICT: kn5000-docs/tone-generator.md reads +0x0840/+0x0880 as "Pan Left/Right,
+; 0x00 = silent" -- the opposite polarity. That document and this block disagree, and the
+; disagreement is not settled here.
+;
+; THE BUILDERS (all take XWA = voice-slot record; paramA = the u32 at slot+0x17, tonerec =
+; the u32 at slot+0x23):
+;     amplitude  r0x20..0x22   Voice_Calc_LevelPair_PatchAtk / _FixedAtk / _Full / _Mono
+;     second     r0x24..0x26   Voice_Level_ComputeTriplet  0x023AD0
+;     third      r0x27..0x29   Voice_StereoLevel_Compute   0x024664
+;     r0x23                    Voice_PortaLevel_Compute    0x0248D5 -- NOT part of the
+;                              amplitude family: its high byte is Detune_ScaleSymmetric of
+;                              paramA+0x08 and its low byte Detune_ScaleSymmetric of
+;                              paramA+0x3D + paramA+0x3E, i.e. the same parameter family the
+;                              THIRD envelope's rate bytes use, not the +0x27..+0x2C run.
 ;
 ; BUILD AND STORE THE VOICE OUTPUT-LEVEL WORD (tone generator register +0x080).
 ; In: XWA = voice work record, BC = starting level.
@@ -8245,16 +8328,57 @@ Voice_Pitch_Secondary_StoreOutput:
 	stw_da 0x0451da, xhl
 	ret
 
-; COMPUTE THE THREE OUTPUT LEVELS OF A VOICE AND PACK THEM INTO THREE REGISTERS.
-; In: XWA = voice work record; XIZ = (record+0x17) = the patch parameter block.
-; The sign of (patch+0x07) decides whether the three detune amounts (patch+0x0A/0x0C/
-; 0x0E) are used as-is or negated. If (patch+0x11) != 0 an envelope-scaled offset from
-; PitchBend_Scale is added to each of the three level bytes (patch+0x09/0x0B/0x0D)
-; after they are mapped through the byte table at 0x0118FE.
-; Velocity modulation uses Pan_ScaleWithVelocity with limits (patch+0x13)..0x7F and
-; depths (patch+0x14) / (patch+0x15).
-; Output: three packed words - level<<8 | detune - written to the staging words at
-; 0x0451EC, 0x0451EE and 0x0451F0. Callers 0x02B510, 0x02BD03.
+; ENVELOPE 2 -- IC303 registers r0x24 / r0x25 / r0x26 (banks +0x900 / +0x940 / +0x980).
+; In: XWA = voice-slot record; XIZ = paramA = the u32 at slot+0x17 (the patch parameter
+; block -- NOT the tone record, which is the pointer at slot+0x23). The prologue's
+; `ld xwa, (xwa+23)` is DECIMAL 23 = slot+0x17.
+; Out: the three staging words 0x0451EC, 0x0451EE, 0x0451F0. Callers 0x02B510 inside
+; Voice_Build_Register_Set (0x02B4E3, the type-4 note-on rebuild) and 0x02BD03 inside
+; Voice_Release_Type4 (0x02BCD6, the per-tick refresh of a sounding type-4 voice) --
+; type-4 voices ONLY. On the type-1/type-2 path this envelope is never built:
+; Voice_Init_Type1 / _Type2 call Voice_Level_ClearAllOutputRegs, which zeroes all three
+; words instead.
+;
+; Same word format as envelope 1, (target << 8) | rate, one (target,rate) couple per
+; segment, consecutive in the record:
+;   seg 0  target Voice_EnvelopeLevel_Curve[paramA+0x09]   low byte from paramA+0x0A
+;   seg 1  target Voice_EnvelopeLevel_Curve[paramA+0x0B]   low byte from paramA+0x0C
+;   seg 2  target Voice_EnvelopeLevel_Curve[paramA+0x0D]   low byte from paramA+0x0E
+; The three targets share one key-scale term, PitchBend_Scale(paramA+0x11, slot+0x0C,
+; shift 4), added only when paramA+0x11 != 0, and each is clamped 0..0xFF. Velocity
+; modulation is Pan_ScaleWithVelocity(baseline paramA+0x13, limits 0..0x7F, control word
+; slot+0x08) with depth paramA+0x14 on segment 0 and paramA+0x15 shared by segments 1/2.
+; 0xFF is the silent end of the level curve; 0x04 is the loudest byte 0x0118FE can produce.
+;
+; [INFERENCE] CALLING THE LOW BYTE A "RATE" HERE IS AN ANALOGY WITH ENVELOPE 1, NOT A
+; RESULT. Nothing in this routine or in the hardware documentation identifies the field, and
+; two things cut against the reading. (a) The byte is SIGNED here, which collides with the
+; "apply now" meaning bit 7 carries in bank +0x800. (b) Voice_Calc_LevelPair_FixedAtk reads
+; paramA+0x0A and +0x0C -- the very bytes this routine pushes through Detune_ScaleSymmetric
+; -- as UNSIGNED Voice_EnvelopeRate_Table indexes on the type-1/2 path, where this routine
+; never runs. (The two agree on the LEVEL bytes +0x09/+0x0B, which _FixedAtk also sends
+; through 0x0118FE; only the low-byte reading differs.) So either those bytes are
+; voice-type-polymorphic or one of the two readings is wrong.
+;
+; THE LOW BYTES ARE SIGNED HERE -- that is what separates envelopes 2 and 3 from envelope 1.
+; They do NOT pass through Voice_EnvelopeRate_Table; each is (i8)paramA+0x0A / +0x0C / +0x0E
+; pushed through Detune_ScaleSymmetric, which clamps |x| to 0x32, looks up Detune_Scale_Curve
+; (0x0119C8, 0x00..0x7F) and NEGATES the result for negative inputs, so the byte spans
+; -0x7F..+0x7F and has bit 7 SET whenever the parameter is negative. The whole triple is
+; negated up front when (i8)paramA+0x07 < 0. A parameter of 0 still comes out as 0, since
+; Detune_Scale_Curve[0] = 0.
+; [INFERENCE] bit 7 is documented as the "apply now" strobe in bank +0x800. If it means the
+; same in +0x900/+0x9C0, a negative parameter raises that strobe as a side effect; the
+; alternative is that bit 7 is simply a SIGN in these banks. Nothing in the firmware settles
+; it -- no code here ever tests bit 7 of a value it reads back.
+;
+; MIRROR: envelope 3 (Voice_StereoLevel_Compute, 0x024664) reads the same parameter block
+; moved up by exactly 54 bytes. 0x07/0x09/0x0A/0x0B/0x0C/0x0D/0x0E/0x11/0x13/0x14/0x15 map
+; onto 0x3D/0x3F/0x40/0x41/0x42/0x43/0x44/0x47/0x49/0x4A/0x4B, 11 for 11, and the per-tick
+; writers mirror too (EGB reads 0x0F/0x10/0x16 where EGC reads 0x45/0x46/0x4C) -- 14 distinct
+; mirrored offsets in all. The mirror is NOT operation-preserving: at the first pair
+; paramA+0x07 is a SIGN FLAG that negates envelope 2's low bytes, while paramA+0x3D is ADDED
+; to each of envelope 3's, before a +-0x32 clamp that envelope 2 does not apply.
 Voice_Level_ComputeTriplet:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -9601,17 +9725,44 @@ Voice_PanReg_WriteDispatchB_Return:
 	inc 2, xsp
 	ret
 
-; Builds the three-channel level triple emitted as TG registers 0x9C0 / 0xA00 / 0xA40.
-; In: XWA = per-voice record (tone record via +23). Out: 0x0451F2, 0x0451F4, 0x0451F6.
-; Each channel level starts as a byte from the curve table at 0x0118FE indexed by
-; tonerec+63 / +65 / +67. If tonerec+71 is non-zero the key-scaled term from
-; PitchBend_Scale(tonerec+71, voice+12) is added to all three. tonerec+74 / tonerec+75
-; add an LFO/tremolo term via Pan_ScaleWithVelocity. Each result is clamped 0..0xFF and
-; packed as (level << 8) | Detune_ScaleSymmetric(clamp(tonerec+61 + tonerec+64/66/68,
-; -0x32..+0x32)) -- i.e. an 8-bit level in the high byte and a signed spread coefficient in
-; the low byte, the same layout the mute path uses when it writes 0xFF80.
-; Confidence medium only because the *meaning* of the three destination registers is taken
-; from kn5000-docs/tone-generator.md, not proved here.
+; ENVELOPE 3 -- staged into the words that reach TG banks +0x9C0 / +0xA00 / +0xA40, i.e.
+; IC303 registers r0x27 / r0x28 / r0x29.
+; In: XWA = voice-slot record. Out: the staging words 0x0451F2, 0x0451F4, 0x0451F6.
+; Callers: Voice_Build_Register_Set (0x02B4E3) and Voice_Release_Type4 (0x02BCD6) -- type-4
+; voices only; on the type-1/type-2 path Voice_Level_ClearAllOutputRegs zeroes these three
+; words instead and this routine never runs.
+;
+; BASE-RECORD CORRECTION: the record read here is paramA, the u32 at slot+0x17 -- the
+; prologue is `ld xwa, (xwa+23)`, and that 23 is DECIMAL (0x17), not 0x23. It is NOT the tone
+; record: that is the pointer at slot+0x23 = decimal 35, as
+; Voice_Calc_LevelPair_Full_OscTablePath states. Every "tonerec+NN" written in the comments
+; from here to Voice_StereoLevel_PackCh23 means paramA+NN, and those NN are decimal.
+;
+; Word format (target << 8) | rate, one couple per segment:
+;   seg 0  target Voice_EnvelopeLevel_Curve[paramA+0x3F]   low byte from paramA+0x40
+;   seg 1  target Voice_EnvelopeLevel_Curve[paramA+0x41]   low byte from paramA+0x42
+;   seg 2  target Voice_EnvelopeLevel_Curve[paramA+0x43]   low byte from paramA+0x44
+; Each low byte = Detune_ScaleSymmetric(clamp((i8)paramA+0x3D + (i8)offset, -0x32..+0x32)),
+; so it is SIGNED, -0x7F..+0x7F, exactly as in envelope 2 and unlike envelope 1's unsigned
+; Voice_EnvelopeRate_Table lookup. paramA+0x3D is a bias shared by all three segments (and
+; by r0x23, which Voice_PortaLevel_Compute builds from paramA+0x3D + paramA+0x3E).
+; [INFERENCE] naming that byte a "rate" is an analogy with envelope 1's documented word
+; format, not a result -- see the same caveat at Voice_Level_ComputeTriplet.
+; Targets take a shared key scale PitchBend_Scale(paramA+0x47, slot+0x0C, shift 4) when
+; paramA+0x47 != 0, plus Pan_ScaleWithVelocity(baseline paramA+0x49, limits 0..0x7F,
+; control word slot+0x08) with depth paramA+0x4A on segment 0 and paramA+0x4B shared by
+; segments 1/2; each is then clamped 0..0xFF. 0xFF is the silent end of the curve.
+;
+; This parameter block is envelope 2's block moved up 54 bytes (see
+; Voice_Level_ComputeTriplet for the 14-offset correspondence), with one role difference:
+; paramA+0x07 is a sign flag that NEGATES envelope 2's low bytes, while paramA+0x3D is ADDED
+; to envelope 3's before the +-0x32 clamp.
+;
+; CONFIDENCE MEDIUM, UNCHANGED: everything above is the SOURCE side -- which bytes the
+; firmware puts in these words and when. What IC303 does with registers 0x27..0x29 is still
+; not proved here; the register meanings in kn5000-docs/tone-generator.md (which reads
+; +0x09C0/+0x0A00/+0x0A40 as aux/effect send levels, not as an envelope) are that document's
+; reading, and it disagrees with the envelope reading recorded in the staging-block header.
 Voice_StereoLevel_Compute:
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -9982,7 +10133,20 @@ Voice_PortaLevel_ScaleAndPack:
 ; from the per-voice routing byte at 0x04138E + channel*0x11F: value 1 -> voice+43 = 0,
 ; value 2 -> voice+43 = 0x7F, anything else -> voice+43 = tonerec[0]. voice+43 is stored to
 ; 0x0451D8 (TG reg 0x180) and 0x0451E0 (TG reg 0x4C0) is zeroed.
-; This is the "silence everything except the mode word" primitive used on voice teardown.
+; NOT teardown-only, and "silence" is not established. The only two callers are
+; Voice_Init_Type2 (reached from the Voice_SetVelocity_Type0 / _Type80 note-on paths) and
+; Voice_Init_Type1 (reached from Voice_SetPitch and from Voice_NoteOff); there are no
+; indirect references. So this runs on every type-1/type-2 parameter rebuild, note-on
+; included, and its role there is to leave envelope 1 in sole charge of the level -- those
+; voice types never build envelopes 2 and 3 (Voice_Level_ComputeTriplet and
+; Voice_StereoLevel_Compute are called only from the type-4 paths).
+; [INFERENCE] the value written is 0x0000, which is NOT the firmware's mute word: the mute
+; idiom is r0x21 <- 0xFF00 / r0x20 <- 0xFF80, and both level curves put the silent end at
+; 0xFF (see the staging-block header). But that evidence covers banks +0x800/+0x840, and
+; this routine writes none of them -- it clears +0x8C0, +0x500, +0x900, +0x940, +0x980,
+; +0x9C0, +0xA00, +0xA40, +0x440 and +0x480. What 0x0000 means in those banks is unproved:
+; under the envelope reading it is a target below the loud end of the curve, while
+; kn5000-docs/tone-generator.md reads several of them as effect sends, where 0 = no send.
 Voice_Level_ClearAllOutputRegs:
 	ld xhl, (xwa + 23)
 	stiw_da 0x0451ea, 0x0000
@@ -11498,6 +11662,66 @@ Voice_Build_GateCommand_NoPartial_ApplyMode:
 ; _PatchAtk takes its first-pair attack from the patch record, _FixedAtk uses a
 ; fixed one; _Full adds an oscillator-table branch and _Mono drops the base-pair
 ; oscillator trim.
+;
+; WHERE ENVELOPE 1'S SEGMENTS COME FROM. paramA = the u32 at slot+0x17, tonerec = the u32
+; at slot+0x23 (both offsets hex; the code writes them as decimal 23 / 35). Targets index a
+; DESCENDING attenuation curve (0xFF = silent); rates index Voice_EnvelopeRate_Table
+; (0x011963, 0x00..0x7F, so bit 7 is always clear here -- unlike envelopes 2 and 3, whose
+; low bytes are signed Detune_ScaleSymmetric outputs).
+;
+;   TYPE-4 voices -- _PatchAtk (note-on, from Voice_Build_Register_Set 0x02B4E3) and
+;   _Full / _Mono (per-tick refresh, from Voice_Release_Type4 0x02BCD6 and its _BranchA):
+;     seg 0  target Voice_LevelPair_AttackCurve[clamp(paramA+0x27 + (i8)tonerec[0x6B],
+;                   0..0x64)]. _Full's bit-11-clear arm uses (i8)tonerec[0x010C] in place of
+;                   tonerec[0x6B]; _Mono adds no trim byte and skips the clamp; _Full's
+;                   bit-11-set arm substitutes the fixed byte at 0x0118B3.
+;            rate   Voice_EnvelopeRate_Table[paramA+0x28]
+;     seg 1  target Voice_EnvelopeLevel_Curve[paramA+0x29]
+;            rate   max(4, Voice_EnvelopeRate_Table[paramA+0x2A])
+;     seg 2  target Voice_EnvelopeLevel_Curve[paramA+0x2B]
+;            rate   Voice_EnvelopeRate_Table[paramA+0x2C]     -- no floor
+;     Modulation: key scale PitchBend_Scale(paramA+0x2E, slot+0x0C) on segment 0 and
+;     paramA+0x2F on segments 1/2; Pan_ScaleWithVelocity with the control triple
+;     paramA+0x30..0x32 and depths paramA+0x33 (seg 0) / paramA+0x34 (segs 1,2); every sum
+;     re-clamped 0..0xFF.
+;
+;   TYPE-1/TYPE-2 voices -- _FixedAtk (from Voice_Init_Type1 0x02C3CC / _Type2 0x02C0B6):
+;     seg 0  target Voice_LevelPair_AttackCurve[paramA+0x08], key scale paramA+0x0E
+;            rate   the CONSTANT 0x7F -- the "FixedAtk" the name refers to
+;     seg 1  target Voice_EnvelopeLevel_Curve[paramA+0x09]
+;            rate   max(4, Voice_EnvelopeRate_Table[paramA+0x0A])
+;     seg 2  target Voice_EnvelopeLevel_Curve[paramA+0x0B]
+;            rate   Voice_EnvelopeRate_Table[paramA+0x0C], or 0 when bit 5 of
+;                   (*(slot+0x13))[+0x0D] is clear. The bit-5-SET arm additionally caches
+;                   Voice_EnvelopeLevel_Curve[paramA+0x0D] in slot+0x46; the clear arm
+;                   zeroes that byte.
+;     ★ paramA+0x0A and +0x0C are the very bytes Voice_Level_ComputeTriplet pushes through
+;     Detune_ScaleSymmetric as SIGNED values on the type-4 path, while this routine uses them
+;     as UNSIGNED rate-table indexes. (The two agree on the level bytes +0x09/+0x0B, which
+;     both send through 0x0118FE.) There is no run-time conflict, because the type-1/2 chain calls
+;     Voice_Level_ClearAllOutputRegs and never builds envelope 2 or 3, and the two allocation
+;     paths (Voice_Allocate_Typed vs Voice_NoteOn_Type3) bind different record kinds to
+;     slot+0x17. But it does mean the two readings cannot both describe the same field.
+;
+; _PatchAtk and _FixedAtk write only 0x0451E4 directly; segments 1 and 2 are cached in
+; slot+0x3E / slot+0x40 and pushed to 0x0451E6 / 0x0451E8 by Voice_WriteChPanShift 0x02591D
+; / _2 0x025B6F, which may add OR subtract (bit 9 of (*(slot+0x27))[+0x18] selects) the
+; signed byte tonerec[0x20] against the RATE field, gated on bit 8 of the same word, and
+; re-clamps segment 1's rate to [4..0x7F] and segment 2's to [0..0x7F]. _Full and _Mono
+; write all three shadows themselves. The seg-0 word is additionally cached in slot+0x3C.
+;
+; [INFERENCE] RATE 0 IS SPECIAL, AND THE FIRMWARE GUARDS IT. Voice_EnvelopeRate_Table begins
+; {0x00, 0x04, 0x08, 0x0A, ...}: entry 0 is the ONLY entry below 4. So the max(4, ...)
+; applied to segment 1 in all four builders, and the [4..0x7F] clamp Voice_WriteChPanShift
+; applies to the same field, have exactly one effect between them -- they turn a rate of 0
+; into 4 -- while segments 0 and 2 are left free to carry 0. The natural reading is that
+; rate 0 means "arrive immediately", harmless on an attack and on a final target but not on
+; a segment that has to be heard falling. That is an inference from what the firmware
+; AVOIDS, not a measurement: nothing here shows what IC303 does with rate 0, and the
+; supporting mute idiom is weaker than it looks -- it pairs rate 0 with bit 7 SET on r0x20
+; (0xFF80) and CLEAR on r0x21 (0xFF00), which would be redundant if rate 0 already meant
+; "go now". Note also that the per-tick writers do NOT all emit rate 0: only
+; Voice_Calc_LevelPair_EGA does; EGB and EGC emit signed Detune_ScaleSymmetric bytes.
 Voice_Calc_LevelPair_PatchAtk:
 	lda xsp, (xsp - 14)
 	push xiz
@@ -11524,8 +11748,15 @@ Voice_Calc_LevelPair_PatchAtk_SetInvFlag:
 	ld xwa, (xsp + 14)
 	ormi16 (xwa + 1), 0x8000
 
-; Applies the key-tracking term: PitchBend_Scale(tonerec+46, voice+12) added to the level
-; accumulator in IZ, clamped 0..0xFF.
+; Segment 0's TARGET index: (i8)tonerec[0x6B] + paramA+0x27, clamped 0..0x64, then curved
+; through Voice_LevelPair_AttackCurve (0x011899) into IZ. It is a plain signed ADD of the
+; tone record's byte 0x6B -- there is no PitchBend_Scale and no 0..0xFF clamp at this point.
+; The PitchBend_Scale key-scale term (depth paramA+0x2E, note slot+0x0C, shift 4) comes
+; later, after the curve lookup, in this routine's own fall-through tail and in _NoOscLFO's
+; paramA+0x2E-non-zero branch; _NoLFO is the arm that SKIPS it. The 0..0xFF clamp is applied
+; on the fall-through tail, in _NoLFO and in _NoOscLFO's non-zero branch alike.
+; NO RENAME PROPOSED -- _ApplyKeyTrack is a `jr` branch target and is also listed in
+; symbols/subcpu_symbols_reference.txt, so only the comment is corrected here.
 Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack:
 	ld a, (xbc + 107)
 	ld c, a
@@ -11782,7 +12013,14 @@ Voice_Calc_LevelPair_PatchAtk_WriteChans:
 	jr lt, Voice_Calc_LevelPair_PatchAtk_ClampDepth
 	ld wa, hl
 
-; Clamps the modulation depth before it is applied.
+; NOT a modulation depth -- this is segment 1's rate field, floored at 4.
+; Voice_EnvelopeRate_Table has exactly one entry below 4 (entry 0 = 0x00), so the floor's
+; sole effect is to turn a rate of 0 into 4. Segments 0 and 2 are left free to use 0.
+; [INFERENCE] the staging-block header reads that asymmetry as "rate 0 means arrive
+; immediately, and segment 1 is the one segment where an instant jump would be audible";
+; neither the chip behaviour nor the claim that segment 1 is a decay is measured here.
+; NO RENAME PROPOSED -- _ClampDepth is a `jr lt` branch target and is also listed in
+; symbols/subcpu_symbols_reference.txt, so only the comment is corrected here.
 Voice_Calc_LevelPair_PatchAtk_ClampDepth:
 	ld hl, wa
 	ld xwa, (xsp + 4)
@@ -14079,7 +14317,12 @@ Voice_Calc_LevelPair_Silence:
 
 ; Voice_WriteVolume_OrPan(XWA = voice-slot record). If bit 5 of (slot+19)[+13] is set,
 ; stage pair 1 from table_0x0118FE[paramA+13]: 0x0451FA = (v<<8), 0x0451F8 = (v<<8)|0x80.
-; Otherwise stage silence (0x0451F8 = 0x0080, 0x0451FA = 0x0000).
+; Otherwise stage 0x0451F8 = 0x0080 (target 0x00 with the apply-now bit SET) and
+; 0x0451FA = 0x0000 (target 0x00, apply-now bit CLEAR). Under the 0xFF = silent polarity
+; that is the LOUD extreme, not silence: the firmware's silence word is 0xFF80 / 0xFF00
+; (Voice_SetPitch). [INFERENCE] 0x00 is below 0x04, the loudest byte Voice_EnvelopeLevel_
+; Curve can produce, so "fully open" is an extrapolation past the end of the curve rather
+; than a level the builders ever emit.
 ; Sole caller: Voice_AllNotes_SustainRetrigger_BranchF.
 Voice_WriteVolume_OrPan:
 	ld xbc, (xwa + 19)
@@ -14097,7 +14340,11 @@ Voice_WriteVolume_OrPan:
 	stw_da 0x0451f8, xwa
 	ret
 
-; Muted arm: level 0 with the "apply now" bit set.
+; Bit-5-clear arm: target 0x00 with the "apply now" bit set. Under the 0xFF = silent
+; polarity that is the loud extreme, not muted -- [INFERENCE] 0x00 lies past the loud end
+; of the level curve, so this is an extrapolation, not a value the builders emit.
+; NO RENAME PROPOSED -- the label is a `jr z` branch target, so only the comment is
+; corrected here.
 Voice_WriteVolume_OrPan_Muted:
 	stiw_da 0x0451f8, 0x0080
 	stiw_da 0x0451fa, 0x0000
