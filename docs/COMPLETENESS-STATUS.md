@@ -333,3 +333,27 @@ this a specification of the difference rather than a byte blob.
 
 Remaining v7 work is now precisely scoped: make the C v7-aware at those 2,365 sites and the patch
 empties. Total unreconstructed: 0.51% of the ROM.
+
+## The blob claim is self-checking now
+
+`scripts/analysis/audit_incbin_legitimacy.py` classifies every active `.incbin` in the tree against
+§3 and EXITS NONZERO if one is unclassified. Current output: 873 directives, all justified.
+
+    790  generated or committed no-source slice
+     40  rebuilt from a committed PNG or palette text
+     24  compressed, codec has a committed encoder
+     11  style bank rebuilt from committed .styles
+      6  genuine Windows BMP stored verbatim
+      2  SLIDE8K remnant, compressed and documented
+
+Two methodology traps were hit while writing it, and both are in its docstring because either one
+silently corrupts the count:
+
+* `.incbin` appears inside COMMENTS -- this tree keeps `; Was: .incbin ...` lines on purpose --
+  so counting raw matches invents ten hdae5000 includes that do not exist. I reported those ten as
+  unaccounted before checking.
+* a directive usually sits on a LABEL line (`Font0_Glyphs:\t.incbin "..."`), so a regex anchored
+  at line start misses 382 of the 873, which made a first pass report 491.
+
+A headline that nobody can re-check is the thing this project keeps getting caught by. This one
+re-checks itself.
