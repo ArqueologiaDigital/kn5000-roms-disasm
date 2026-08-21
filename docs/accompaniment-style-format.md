@@ -239,6 +239,25 @@ handling to a literal 0x40 being sent to the sub-CPU. Until that exists this sta
 a well-supported one, from three directions that share no assumptions, but an inference. It is
 recorded here rather than baked into a name, so the next reader can finish it or refute it.
 
+### CTL1 (0xD1): a lead, and a tension worth recording
+
+`v10/maincpu/sequencer/seq_event_playback.s:2955-2985` sends status **0xD1** through
+`AccompSeq_SendMidiEvent` from two places, and the surrounding code names them: the REVERB restore
+path and the CHORUS restore path. Both set the value register to **0 or 0x7F** from a flag bit, and
+pass a small selector alongside -- 7 on the reverb path, 3 on the chorus path.
+
+That is a genuine lead: 0xD1 carries an on/off value in an effect-enable role there.
+
+**But it does not match the style data, and the mismatch is the useful part.** In the 210 factory
+styles, 0xD1's first argument spans 0..94 with 60 distinct values and its second 0..117 with 55 --
+neither looks like a two-element selector {3, 7} nor like a 0/127 switch. So either the playback
+path builds a different 0xD1 than the one stored in a style, or 0xD1's arguments are not the
+(selector, value) pair this call site suggests.
+
+Recorded unresolved on purpose. Two readings of one status that do not reconcile is exactly the
+kind of thing that gets quietly averaged into a confident wrong sentence, and the next person
+should see both halves.
+
 ### Where the trail stops, precisely
 
 What is established: the dispatch structure, the shared handler for 0xD1/0xD3, 0xD2's distinct
