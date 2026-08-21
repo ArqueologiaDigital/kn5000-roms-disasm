@@ -107,11 +107,11 @@ FontDescriptor_Table:
 ; Glyph banks 0-5 (1bpp, column-major, chars 0x20-0xFF; offsets are into
 ; includes/icons_to_strings.bin, whose file offset 0 = ROM 0x944D78)
 ; -----------------------------------------------------------------------------
-Font0_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0xF38, 0xE00	; 224 x 16 B (8x16)
-Font1_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x1D38, 0xE00	; 224 x 16 B (8x16)
-Font2_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x2B38, 0x1C00	; 224 x 32 B (16x16)
-Font3_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x4738, 0x700	; 224 x 8 B (6x8)
-Font4_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x4E38, 0x1C00	; 224 x 32 B (11x16)
+Font0_Glyphs:	.incbin	"includes/generated/Font0_Glyphs.bin"	; 224 x 16 B (8x16)
+Font1_Glyphs:	.incbin	"includes/generated/Font1_Glyphs.bin"	; 224 x 16 B (8x16)
+Font2_Glyphs:	.incbin	"includes/generated/Font2_Glyphs.bin"	; 224 x 32 B (16x16)
+Font3_Glyphs:	.incbin	"includes/generated/Font3_Glyphs.bin"	; 224 x 8 B (6x8)
+Font4_Glyphs:	.incbin	"includes/generated/Font4_Glyphs.bin"	; 224 x 32 B (11x16)
 Font5_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x6A38, 0xE70	; 224 variable-size glyphs, tiled per kern table
 
 ; -----------------------------------------------------------------------------
@@ -350,10 +350,10 @@ Font5_KernTable:
 ; Glyph banks 6-9.  Font9's bank crosses 0x950000: chars 0xAD-0xFF occupy
 ; 0x950000-0x950A5F (see module header).
 ; -----------------------------------------------------------------------------
-Font6_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x7C28, 0x8C0	; 224 x 10 B (8x10)
-Font7_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x84E8, 0xE00	; 224 x 16 B (8x16)
-Font8_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x92E8, 0xE00	; 224 x 16 B (8x16)
-Font9_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0xA0E8, 0x1C00	; 224 x 32 B (11x16), ends 0x950A5F
+Font6_Glyphs:	.incbin	"includes/generated/Font6_Glyphs.bin"	; 224 x 10 B (8x10)
+Font7_Glyphs:	.incbin	"includes/generated/Font7_Glyphs.bin"	; 224 x 16 B (8x16)
+Font8_Glyphs:	.incbin	"includes/generated/Font8_Glyphs.bin"	; 224 x 16 B (8x16)
+Font9_Glyphs:	.incbin	"includes/generated/Font9_Glyphs.bin"	; 224 x 32 B (11x16), ends 0x950A5F
 
 	; unused gap up to the style/preset record area at 0x951000
 	.fill 1440, 1, 0xff	; 0x950A60-0x950FFF
