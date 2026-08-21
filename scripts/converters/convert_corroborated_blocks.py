@@ -11,10 +11,11 @@ This one decides with evidence instead of shape:
 
   ADDRESS   a block's ROM address is the address of the label directly above it,
             read from rebuilt_ROMs/kn5000_v7_program.llvm.elf.
-  EVIDENCE  the block is converted only if v9 disassembles the SAME offsets as
-            CODE (per scripts/analysis/v7_undisassembled_spans.py's territory
-            map). v9 is an independent revision, so this is corroboration, not
-            a guess about what the bytes look like.
+  EVIDENCE  the block's exact byte sequence must appear SOMEWHERE in v9 at a
+            place v9 disassembles as code. Matching by ADDRESS was tried first
+            and is wrong -- functions move between revisions, and converting on
+            it rewrote obvious data tables as instructions. Matching by CONTENT
+            says something about these bytes; matching by address does not.
   SAFETY    every instruction is re-assembled and must reproduce the original
             bytes; any mismatch, or any invalid-encoding warning, drops the
             whole block.
@@ -224,6 +225,36 @@ def encode(text):
     return bytes(int(b, 16) for b in m.group(1).split(",") if b.strip())
 
 
+HEXNUM = re.compile(r'0x([0-9a-fA-F]{4,8})')
+
+
+def symbolise(text, addr2name):
+    """Replace numeric addresses with ELF symbol names where one matches exactly.
+
+    Emitting `call 0xfd814f` beside lines that read `call FileIO_BuildFilePath`
+    is a readability regression even when the bytes match -- it is what got
+    convert_roundtrip_blocks.py marked unsafe. Only EXACT symbol addresses are
+    substituted; a near miss is left numeric rather than guessed at.
+
+    Verification order matters: the NUMERIC form is what gets round-tripped, so
+    the decode is proven byte-for-byte. The SYMBOLIC form is what gets written,
+    and llvm-mc emits a fixup for it, so its bytes are only settled at link
+    time -- which the full `make clean-all && make all` byte-match gate checks.
+    """
+    def sub(m):
+        v = int(m.group(1), 16)
+        return addr2name.get(v, m.group(0))
+    return HEXNUM.sub(sub, text)
+
+
+def write_back(path, lines, todo, addr2name):
+    """Replace each converted block's .byte lines with instruction lines."""
+    for label, addr, a, b, raw, insns in sorted(todo, key=lambda t: -t[2]):
+        out = ["\t" + symbolise(i, addr2name) for i in insns]
+        lines[a:b + 1] = out
+    open(path, "wb").write("\n".join(lines).encode("latin-1"))
+
+
 def main():
     argv = sys.argv
     if "--file" not in argv:
@@ -233,17 +264,44 @@ def main():
 
     syms = elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
     v9 = v9_code_map()
+    V9ROM = open(os.path.join(REPO, "original_ROMs", "kn5000_v9_program.rom"), "rb").read()
     lines, blocks = blocks_of(path, syms)
 
-    stats = {"no-addr": 0, "not-corroborated": 0, "warn": 0, "contains-data": 0,
-             "roundtrip": 0, "ok": 0}
+    stats = {"no-addr": 0, "not-corroborated": 0, "too-short": 0, "warn": 0,
+             "contains-data": 0, "roundtrip": 0, "ok": 0}
     todo = []
     for label, addr, a, b, raw in blocks:
         if addr is None:
             stats["no-addr"] += 1; continue
         off = addr - BASE
-        if not all(v9[off + k] == 1 for k in range(len(raw)) if off + k < len(v9)):
+        # CORROBORATION BY CONTENT, not by address. Functions move between
+        # revisions, so "v9 calls this OFFSET code" says nothing about this v7
+        # block -- and acting on it produced demonstrably wrong conversions (a
+        # repeating `fc 00 a2 f4` record became `swi 4 / nop / cp XIX,(XDE)`,
+        # a lone 0x04 under a BitMask_* label became `max`). Instead: find this
+        # exact byte sequence ANYWHERE in v9, and require v9 to disassemble it
+        # as code there. Same bytes + independently classified as code in the
+        # other revision is evidence about the bytes themselves.
+        if len(raw) < 6:
+            stats["too-short"] = stats.get("too-short", 0) + 1; continue
+        where, corroborated = 0, False
+        while True:
+            j = V9ROM.find(raw, where)
+            if j < 0:
+                break
+            if all(v9[j + k] == 1 for k in range(len(raw)) if j + k < len(v9)):
+                corroborated = True; break
+            where = j + 1
+        if not corroborated:
             stats["not-corroborated"] += 1; continue
+        # STRONGER: v9 must also have the SAME BYTES there. "v9 calls this offset
+        # code" alone is far too weak -- v7 and v9 are different revisions, so the
+        # same offset need not hold the same content. Applying on the weak
+        # criterion produced demonstrably wrong output: a repeating `fc 00 a2 f4`
+        # record became `swi 4 / nop / cp XIX,(XDE)` three times, a lone 0x04
+        # under a label named BitMask_* became `max`, and a 3-byte table
+        # (04 40 0a, 04 40 0b, 04 40 0c ...) became instructions. All round-tripped
+        # byte-exactly. Byte-exactness is necessary and nowhere near sufficient.
         insns, warn = disassemble(raw, addr)
         if warn or not insns:
             stats["warn"] += 1; continue
@@ -251,23 +309,33 @@ def main():
         # or partly data, and must not be rewritten as instructions.
         if any(i.split()[0].lower() == "db" for i in insns if i.split()):
             stats["contains-data"] = stats.get("contains-data", 0) + 1; continue
-        out = []
+        out, accepted = [], []
         for i in insns:
-            enc = None
+            enc, used = None, i
             for cand in translate(i):
                 enc = encode(cand)
                 if enc:
+                    used = cand
                     break
             out.append(enc or b"\xff\xff\xff\xff\xff")
+            accepted.append(used)
         rebuilt = b"".join(out)
         if rebuilt != raw:
             stats["roundtrip"] += 1; continue
         stats["ok"] += 1
-        todo.append((label, addr, a, b, raw, insns))
+        # Write the ACCEPTED spelling, not unidasm's. They differ -- unidasm
+        # prints `sla 0x07,A` where llvm-mc needs `sla A, 0x07` -- and writing
+        # the unverified text would emit a file that does not assemble.
+        todo.append((label, addr, a, b, raw, accepted))
 
-    print(f"{len(blocks)} .byte blocks in {os.path.basename(path)}")
+    addr2name = {a: n for a, n in syms.items()}
+    if apply_ and todo:
+        write_back(path, lines, todo, addr2name)
+    print(f"{len(blocks)} .byte blocks in {os.path.basename(path)}"
+          + ("   [WRITTEN]" if apply_ and todo else ""))
     print(f"   no address (label not in ELF) ... {stats['no-addr']}")
     print(f"   v9 does NOT call it code ....... {stats['not-corroborated']}")
+    print(f"   under 6 bytes (too weak) ....... {stats['too-short']}")
     print(f"   invalid encodings .............. {stats['warn']}")
     print(f"   contains db (data, not code) ... {stats['contains-data']}")
     print(f"   failed byte round-trip ......... {stats['roundtrip']}")
