@@ -290,6 +290,27 @@ Naming these from distributions alone would be the "confident header" anti-patte
 spec lists. Naming them from a symbol that is itself an inference is the same mistake one step
 removed.
 
+## THIS DOCUMENT ALSO DESCRIBES THE .CMP DISK FILE FORMAT
+
+When the instrument saves custom accompaniment styles to floppy it writes **the same structure it
+keeps in IC19 flash**. Verified on seven real KN-series disks:
+
+* the 96-byte directory at magic + 0x60, 16-char name at +0x40 -- 184 records across the seven,
+  carrying user content: "DON JUAN", "a-variation1", "Foxtrot 1";
+* the same cell (0x80 at +0, u16 at +1 and +3, 0x87 at +5 and +0xFF);
+* the same pointer rule, section nibble plus a block index relative to the first cell block, which
+  comes out as base 0x014 -- the same as IC19 section 0;
+* 1437 cells, **777 of 777 pointers resolving and 388 of 388 back-links agreeing**;
+* **51,443 events decoding with ZERO malformed** under the grammar above, unchanged.
+
+The headers differ only in magic -- IC19 sections open `48 00 4B 00` ("H.K."), .CMP files open
+`4C 4B 45 00` ("LKE") -- and from offset 3 they are the same shape byte for byte.
+
+So anything that reads an IC19 style reads a .CMP, and this document is the disk format's
+specification as much as the ROM's. Reproduce with
+`scripts/analysis/disk_cmp_is_ic19_format.py <dir>`, which ASSERTS the three properties rather
+than printing them.
+
 ## The container is a FAMILY, and the disk files belong to it
 
 Established 2026-08-21 from seven real KN-series floppies (`KN7000/floppy-archive/*.zip`, six
