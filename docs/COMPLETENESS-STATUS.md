@@ -357,3 +357,37 @@ silently corrupts the count:
 
 A headline that nobody can re-check is the thing this project keeps getting caught by. This one
 re-checks itself.
+
+## ⚠ I overstated what the control-panel link needs hardware for
+
+Repeatedly this session I recorded that the control-panel wire layer "cannot be closed from the
+ROMs at all" and "needs a logic analyser on the real instrument". **That is too broad, and testing
+my own blocking claim is how it should have been checked the first time.**
+
+The boot-time CP-serial driver is fully disassembled and annotated across three files --
+`table_data/boot_cpserial.s` (polling/setup, ROM 0x9FEC6E-0x9FF228), `boot_cpserial_isr.s`
+(the three interrupt handlers, 0x9FF229-0x9FF2F1) and `boot_cpserial_states.s` (state handlers,
+packet codecs, ring helpers, 0x9FF2F2+). The WIRE PARAMETERS are literals in that code:
+
+    SC1MOD = 0x00        serial channel 1 mode          (ldio 0xd6, 0x00)
+    BR1CR  = 0x14        baud rate control              (ldio 0xd7, 0x14)
+    SC1CR  = 0x01        serial control                 (ldio 0xd5, 0x01)
+    baud source = timer A (TAMOD |= 0x10, &= ~0x08)
+    INTA enabled via INTEAB = 0x07; INTES1 = 0xFF (RX+TX, max priority)
+
+and the link opens with a two-byte frame `0x1F 0xDA` followed by a four-frame handshake
+(`BootSerial_FullInit` -> `BootSerial_HandshakeSequence`). The panel pulls INTA both to open a
+receive transfer and to pace one during RX.
+
+So an L5 specification of this protocol IS writable from the disassembly: register programming,
+interrupt roles, the state machine, the handshake and the packet codecs are all present. Whoever
+writes it should decode the three register values against the TMP94C241 datasheet rather than
+trusting a curated comment.
+
+**What genuinely needs the instrument** is narrower than "the protocol": VALIDATING behaviour
+against a real panel. That is where this project's open defect lives -- the data-wheel steady state
+is unresolved and the shipped `kn5000-30` fix for it was falsified -- and no amount of reading the
+ROM settles what the panel actually puts on the wire.
+
+Correcting the scope of a blocker matters as much as closing one: "needs hardware" was being used
+to excuse a document that could have been written from material already in the repository.
