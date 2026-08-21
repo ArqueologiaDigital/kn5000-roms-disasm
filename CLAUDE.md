@@ -1111,14 +1111,40 @@ When encountering disputed interpretations:
 
 ### ROM Components
 
-| Component | Source | Status |
-|-----------|--------|--------|
-| maincpu | `maincpu/kn5000_v10_program.asm` | 100% |
-| subcpu payload | `subcpu/kn5000_subprogram_v142.asm` | 100% |
-| table_data | `table_data/kn5000_table_data.asm` | ~33% |
-| hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% |
+| Component | Authoritative source | Byte-match | Not `.incbin` |
+|---|---|---|---|
+| maincpu v10 | `v10/maincpu/kn5000_v10_program.s` | 100.00% | 59.0% |
+| maincpu v9 | `v9/maincpu/kn5000_v9_program.s` | 100.00% | 59.0% |
+| maincpu v7 | `v7/maincpu/kn5000_v7_program.s` | 100.00% | 52.5% |
+| subcpu payload v142 | `v142/subcpu/kn5000_subprogram_v142.s` | 100.00% | 100.0% |
+| subcpu boot (IC30) | `subcpu/boot/kn5000_subcpu_boot.s` | 100.00% | 100.0% |
+| table_data | `table_data/kn5000_table_data.s` | 100.00% | 46.9% |
+| custom_data (IC19) | `custom_data/kn5000_custom_data.s` | 100.00% | 36.3% |
+| hdae5000 | `hdae5000/hd-ae5000_v2_06i.s` | 100.00% | 40.3% |
 
-Run `python scripts/build/compare_roms.py` for current status. See `../kn5000-docs/rom-reconstruction.md` for detailed breakdown.
+The two columns answer different questions and must not be conflated. **Byte-match** is
+`python scripts/build/compare_roms.py`; measured 2026-08-21 it printed `romset bytematch:
+100.00%` with all nine LLVM sections at 100.00%. (The ninth, `subcpu v142 update image`,
+has no source row of its own. `DISASSEMBLY_PLAN.md`'s standing invariant counts **15**
+sections; the extra six are the legacy ASL mirror builds, which only run when their
+`.rebuilt.rom` artefacts are present in `rebuilt_ROMs/`.)
+
+**Not `.incbin`** is `python3 scripts/analysis/kn5000_source_coverage.py`, measured
+2026-08-21: the share of ROM bytes that do *not* enter the build through an `.incbin`.
+Read it with the script's own `of which C` column, because compiled C counts on the
+`.incbin` side, not the source side: of maincpu v10's 860,028 `.incbin` bytes, 855,100 are
+byte-exact recompiled C and only 4,928 (0.23% of the ROM) are a raw blob. So a low figure
+here does not mean "unexplained". Two further caveats: the v7 row is flattered by
+`scripts/build/extract_v7_bins.py`, which copies 842,796 B of the v7 ROM into its own
+"source" at build time (703,693 B of that is reproduced by no source at all -- the script
+prints this itself); and IC30's 100.0% is over a `BAD_DUMP`, flagged as such in
+`mame_driver/src/mame/matsushita/kn5000.cpp`, of which only 4,352 of 131,072 bytes are
+non-0xFF.
+
+The ASL mirror (`.asm`) sources are archived under `archive/asl/` and are not
+authoritative.
+
+See `../kn5000-docs/rom-reconstruction.md` for the narrative breakdown.
 
 ### Key Files
 

@@ -2689,7 +2689,7 @@ ToneGen_Read_Register:
 
 ; MIDI_Backlog_Publish(WA = the MIDI ring's current byte count) -- was
 ; RingBuf_SetOffsetHi, which is not what it does: it stores the count to the word at
-; 0x27E7, the MIDI BACKLOG GAUGE.  Sole caller: MIDI_Dispatch (0x0374F5).  The value is
+; 0x27E7, the MIDI BACKLOG GAUGE.  Sole caller: MIDI_Dispatch (0x034D93).  The value is
 ; read back only by RingBuf_CheckOffset_ClearFlags (0x02103B), which compares it against
 ; 0x20/0x30 (or 0x40/0x50 when the byte at 0x27E6 is zero) and drops layer slots 1..3 --
 ; i.e. it is a backpressure threshold that thins the polyphony when MIDI falls behind.
@@ -20360,9 +20360,30 @@ Voice_Selector_FindBestSlot_Exit:
 ;   part+0x110 = u16[0x00F7D2 + COUNT*2]
 ;              + u16[0x00F7AC + INDEX*2]
 ;              + u16[0x00F7BE + VALUE*2]
-; The four tables are exactly 10/9/9/10 entries and butt up against each other
+; The FIVE tables are exactly 10/9/9/10/10 entries and butt up against each other
 ; (0x00F786+0x14 = 0x00F79A, 0x00F79A+0x12 = 0x00F7AC, 0x00F7AC+0x12 = 0x00F7BE,
-; 0x00F7BE+0x14 = 0x00F7D2), which is what pins COUNT to 0..9 and INDEX to 0..8.
+; 0x00F7BE+0x14 = 0x00F7D2, 0x00F7D2+0x14 = 0x00F7E6), so the five spans tile
+; 0x00F786-0x00F7E5 exactly and end where Voice_Portamento_Rate_Table begins.  Their
+; labels are Const_Zero_Byte (+PitchDetune_OffsetTable) / Voice_Part_Trim_Table_B /
+; Voice_Part_Trim_Addend_1 / Voice_Part_Trim_Addend_2 / Voice_Part_Trim_Base.
+; ★ CORRECTED: this used to read "The four tables are exactly 10/9/9/10 entries ... which
+; is what pins COUNT to 0..9 and INDEX to 0..8".  The fifth table (0x00F7D2, loaded two
+; instructions below) was missing from the count, and the causality was backwards: a
+; table's size cannot bound its own subscript.  What the code does guarantee:
+;   COUNT is bounded.  Voice_Selector_FindBestSlot (0x02AC54) zeroes the counter
+;     (`ld (xwa),0x0`) and increments it at most once per entry over d = 0..8, so COUNT is
+;     0..9 and the two 10-entry tables (0x00F786, 0x00F7D2) cannot be over-run.
+;   INDEX is NOT bounded.  Both candidates start at 0xFF (`ldb e,0xFF / ldb l,0xFF`) and
+;     there is no post-loop fallback, so an all-zero scratch array leaves INDEX = 0xFF; the
+;     0x00F79A read would then address 0x00F79A + 0x1FE = 0x00F998, inside
+;     AUDIO_CMD_TONEEDIT_JUMPTABLE (0x00F973-0x00F99A), putting a jump-table word into
+;     part+0x112.  [INFERENCE] the mechanism is read off the code; whether the all-zero case
+;     is REACHABLE at run time is unproven -- symbols/proposals/subcpu-region-07.txt reaches
+;     the same limit and declines to call it a defect.
+;   VALUE is a nibble.  Voice_Selector_Unpack3Groups masks each field with 0x0F, so VALUE is
+;     0..15 while Voice_Part_Trim_Addend_2 (0x00F7BE) holds only 10 entries; VALUE >= 10
+;     reads on into Voice_Part_Trim_Base.  [INFERENCE] whether VALUE ever exceeds 9 at run
+;     time is likewise unproven.
 ; Touches no hardware. Only caller: Voice_InitFromSlot (0x02ADC1), i.e. it runs whenever an
 ; articulation parameter changes, never per note.
 Voice_Selector_ComputeMixWeights:
@@ -37995,8 +38016,8 @@ Audio_Process_Init_BranchB:
 ; RingBuf_ReadByte - Read single byte from audio ring buffer
 ; ===========================================================================
 ; Entry: XWA = pointer to buffer control structure:
-;        +0 = read pointer (16-bit)
-;        +2 = write pointer (16-bit)
+;        +0 = write pointer (16-bit)
+;        +2 = read pointer (16-bit)
 ;        +4 = byte count (16-bit)
 ;        +6 = buffer data (4KB)
 ; Exit:  HL = byte read (0x0000-0x00FF) or 0xFFFF if buffer empty
@@ -39468,8 +39489,12 @@ DSP_StoreBufferCount:
 ; ===========================================================================
 ; Entry: None
 ; Exit:  DSP2 state cleared
-; Notes: Clears DSP2 control variables at 0x3B60-0x3B64
+; Notes: Clears the shared DSP command-ring control block at 0x3B60-0x3B64
+;        (0x3B60 write index, 0x3B62 read index, 0x3B64 count)
 ;        Called during Audio_System_Init after primary DSP initialization
+;        ★ CORRECTED: this used to read "Clears DSP2 control variables".  Despite the
+;        routine name the block is not DSP2-specific -- it is the command ring for BOTH
+;        DSPs' traffic, as the prose note below already states.
 ; ===========================================================================
 ; ALREADY NAMED -- doc header only.
 ; Clears the DSP command ring control block: (0x3B64) = 0 (count), (0x3B62) = 0 (read index),
@@ -40771,7 +40796,7 @@ DSP_ApplyAlgoForVoiceType_Data:
 ; Entry: none. Calls DSP_SlotMuteState_ReadAndClear(0) and, on the returned value 3 / 2 / 1,
 ; injects the same canned pseudo-MIDI packet as DSP_WriteAlgoInitPreset (ROM 0x0121F3 /
 ; 0x0121EF / 0x0121EB) through Audio_CmdHandler_00_1F + MIDI_Dispatch. Value 0 does nothing.
-; Called from Audio_Process_Init (0x032197) when the audio-tick phase byte at 0x041342 is 0,
+; Called from Audio_Process_Init (0x034CDB) when the audio-tick phase byte at 0x041342 is 0,
 ; right after Audio_Tick_ServiceVoices_A -- i.e. this is the "re-announce the effect state
 ; after a mode change" path.
 DSP_SlotState_DisplayRestore:

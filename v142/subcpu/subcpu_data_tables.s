@@ -395,7 +395,7 @@ Voice_Pool_Quota_ModeA:
 // 12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
 // The real parameter->envelope-rate table is at 0x011963.
 ; --- 0x00F519-0x00F52A  Voice_Pool_Quota_ModeB -- 18 bytes, per-section polyphony quota, mode B
-; Both read by CmdTable_InitEntry_Loop (subcpu source ~line 3990): it walks i = 0..0x11 (18),
+; Both read by CmdTable_InitEntry_Loop (0x021FB4) / _AltPtr (0x021FDF): it walks i = 0..0x11 (18),
 ; computes i*0x1E and stores table[i] into offset 0 of the 30-byte section record at
 ; DRAM 0x112D + i*30. Which of the two tables is used is selected by a caller flag at (xsp+6).
 ;   mode A: 32 16  4 12  0 0 0 0 0 0 0 0 0 0 0 0   64 64
@@ -443,7 +443,7 @@ Voice_Part_PoolPtr_ModeA:
 
 ; --- 0x00F597-0x00F602  (Voice_Pitch_Table_High) -- 27 x u32 pointers, channel -> section record, mode B
 ; ★ 0x00F597 is NOT a pitch table. Both tables have identical shape and are read by the same
-; code, ChanStruct_Init_Entry / _AltPtr (subcpu source ~line 4066/4080): index = channel*4,
+; code, ChanStruct_Init_Entry (0x02205A) / _AltPtr (0x022088): index = channel*4,
 ; value = a 32-bit pointer stored at offset 0 of the 12-byte channel record at DRAM 0x1349 + ch*12.
 ; Every value is 0x112D + 30*k, i.e. a pointer to one of the 18 section records.
 ;   mode A (0x00F52B) section per channel 0..26:
@@ -521,7 +521,8 @@ Voice_Search_Order_List_3:
 	.byte 0x05, 0x84, 0x83, 0x82, 0x04, 0x03, 0x02, 0xff
 
 ; --- 0x00F633-0x00F692  (Voice_SFX_ModulationTable) -- 16 x 6-byte slot-type descriptors
-; Indexing proved in Voice_Allocate_Nodes (subcpu source ~line 4405): it takes the byte at
+; Indexing proved in Voice_Allocate_Nodes (0x022340; the `lda_24 xbc,0x00f633` is at
+; 0x0223BE, the address the banner below cites): it takes the byte at
 ; (voice_msg + 2 + slot) & 0x0F, does `muls wa,0x6`, adds base 0x00F633.
 ; Record: +0 u32 = pointer to a search-order list (one of 0x00F603 / 0x60B / 0x61A / 0x628)
 ;         +4 u8  = a small class code (0x00, 0x01, 0x02)
@@ -606,16 +607,29 @@ Const_ChannelMax:
 	.byte 0x07
 
 ; --- 0x00F786-0x00F799  10 x s16, part transpose/trim table A -> DRAM 0x041476
-; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` (subcpu source ~line 17230); the
+; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` in Voice_Selector_ComputeMixWeights
+; (0x02AD03); the
 ; destination is 0x041476 + part*0x11F, i.e. one 287-byte record per part.
 ; Values 0, 0, -1, -2, -3, -4, -5, -6, -7, -8.
 ; ★ The ELF symbol Const_Zero_Byte sits here and claims a single byte. It is a 20-byte table.
-; --- 0x00F786-0x00F7E5  VOICE_SELECTOR_MIXWEIGHT_TABLES (outside this region)
-; Four adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights, sized exactly to
-; their index ranges: 0x00F786 (10 entries, indexed by COUNT 0..9) -> part+0x10E;
-; 0x00F79A (9 entries, indexed by INDEX 0..8) -> part+0x112;
-; 0x00F7AC (9 entries, INDEX) and 0x00F7BE (10 entries, VALUE) and 0x00F7D2 (10 entries,
-; COUNT) -> summed into part+0x110.
+; --- 0x00F786-0x00F7E5  the five Voice_Selector mix-weight tables
+; ("VOICE_SELECTOR_MIXWEIGHT_TABLES (outside this region)", which this banner used to
+;  headline, is descriptive text carried over verbatim from the naming proposal
+;  symbols/proposals/subcpu-region-07.txt:771; it is not a label in any build, and the
+;  "region" it was outside of was that proposal's code region, not this file.)
+; FIVE adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights (0x02AD03).  They
+; tile the span exactly and end where Voice_Portamento_Rate_Table begins at 0x00F7E6:
+;   0x00F786  Const_Zero_Byte (+PitchDetune_OffsetTable)  10 entries, COUNT -> part+0x10E
+;   0x00F79A  Voice_Part_Trim_Table_B                      9 entries, INDEX -> part+0x112
+;   0x00F7AC  Voice_Part_Trim_Addend_1                     9 entries, INDEX  ]
+;   0x00F7BE  Voice_Part_Trim_Addend_2                    10 entries, VALUE  }- summed into
+;   0x00F7D2  Voice_Part_Trim_Base                        10 entries, COUNT  ]  part+0x110
+; ★ CORRECTED: the count used to read "Four adjacent u16 tables" while the list that
+; followed enumerated five -- the neighbouring banner below already says "the five part
+; trim tables".  The old "sized exactly to their index ranges" was also a bounds claim the
+; code does not make: COUNT is bounded to 0..9 by the producer loop, but INDEX can come back
+; as 0xFF and VALUE is an unclamped nibble.  The consumer's header in
+; kn5000_subprogram_v142.s spells out all three cases.
 Const_Zero_Byte:
 	.byte 0x00
 
@@ -642,7 +656,8 @@ PitchDetune_OffsetTable:
 	.byte 0x00, 0x00, 0x00, 0xff, 0xff, 0xfe, 0xff, 0xfd, 0xff
 	.byte 0xfc, 0xff, 0xfb, 0xff, 0xfa, 0xff, 0xf9, 0xff
 	.byte 0xf8, 0xff
-; 9 x s16 -> DRAM 0x04147A + part*0x11F (subcpu source ~line 17241), same idiom as 0x00F786.
+; 9 x s16 -> DRAM 0x04147A + part*0x11F (in Voice_Selector_ComputeMixWeights, 0x02AD03),
+; same idiom as 0x00F786.
 ; Values -3072, 0, 1792, 3072, 4864, 6144, 7168, 7936, 9216 = 256 * (-12, 0, +7, +12, +19, +24,
 ; +28, +31, +36) semitones -- an octave/fifth harmonic stack in 1/256-semitone units.
 ; Extent 0x00F79A-0x00F7AB.
@@ -671,7 +686,8 @@ Voice_Part_Trim_Base:
 	.byte 0x04, 0x00, 0x06, 0x00, 0x08, 0x00, 0x0a, 0x00
 	.byte 0x0c, 0x00, 0x0e, 0x00, 0x10, 0x00
 ; u16 table indexed by a clamped delta*2, feeding FP_MulAccum64 and then `srl xwa,10` with a
-; 0xFFF clamp, inside Voice_Slot_ApplyPortamentoDelta (subcpu source ~line 17835). The scaling
+; 0xFFF clamp, inside Voice_Slot_ApplyPortamentoDelta (0x02B301; the table load is in its
+; BranchD arm, Voice_Slot_ApplyPortamentoDelta_BranchD 0x02B386). The scaling
 ; (>>10, 12-bit clamp) is a pitch-slew rate, hence the name.
 Voice_Portamento_Rate_Table:
 ; Extent now established: 101 u16 entries (0x00F7E6-0x00F8AF), tiled by the
@@ -2261,7 +2277,8 @@ ToneGen_Voice_Param_Template:
 
 ; --- 0x012159-0x012170  CALL_TABLE_12159 -- 6 x u32 note-on handler pointers
 ; `sla hl,2 / lda_24 xix,0x012159 / add xhl,xix / ld xhl,(xhl) / call (xhl)` in the poly note-on
-; path (subcpu source ~line 33331). Entries: 0x0355AD, 0x035656, then 0x0355AD four more times.
+; path (Voice_Poly_NoteOn_SlotFound, 0x035749). Entries: 0x0355AD, 0x035656, then 0x0355AD
+; four more times.
 ; So only two distinct handlers; index 1 is the special case.
 CALL_TABLE_12159:
 	.long ToneGen_SetupPolyVoice
@@ -4023,12 +4040,19 @@ EFF_ParamPtrTable_Terminator:
 	.byte 1, 1, 1, 1
 
 ; --- 0x014739-0x014744  OFFSETS_14739 -- 6 x u16 jump offsets, base 0x03C32E
-; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Init takes the
-; high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E (SendCommand) and 0x0D
-; (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 / ldw_sri WA /
-; lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613 bytes of hand
-; TLCS-900 code implementing handlers 0..5, kept as raw bytes because of unsupported addressing.
-; --- 0x014739-0x014744  DSP_Bytecode_HandlerOffsetTable
+; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Loop
+; (0x03C2CB) takes the high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E
+; (SendCommand) and 0x0D (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 /
+; ldw_sri WA / lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613
+; bytes of hand TLCS-900 code implementing handlers 0..5, kept as raw bytes because of
+; unsupported addressing.
+; ★ CORRECTED: this used to attribute the dispatch to DSP_BytecodeInterpreter_Init
+; (0x03C259). _Init performs no dispatch at all -- it copies the descriptor's four words and
+; one long into the stack frame and then `jrl DSP_BytecodeInterpreter_CheckEnd`. The quoted
+; instruction sequence is verbatim at the tail of _Loop.
+; --- 0x014739-0x014744  OFFSETS_14739 ("DSP_Bytecode_HandlerOffsetTable" is descriptive
+;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here
+;     and in symbols/subcpu_symbols_reference.txt is OFFSETS_14739)
 ; 6 signed 16-bit offsets relative to 0x03C32E, indexed by the bytecode opcode's high nibble
 ; (0..5).  Decoded: op0 +0x000 -> 0x03C32E, op1 +0x23A -> 0x03C568, op2 +0x333 -> 0x03C661,
 ; op3 +0x3DA -> 0x03C708, op4 +0x473 -> 0x03C7A1, op5 +0x48D -> 0x03C7BB.
@@ -4046,7 +4070,9 @@ OFFSETS_14739:
 ; reject <0 or >0x18 / add wa,wa / lda_24 xix,0x014745 / ldw_sri WA / lda_24 xix,0x03cb8e /
 ; jp_ind`. 0x18+1 = 25 entries = 50 bytes, matching the extent exactly. Opcodes 0x21, 0x24 and
 ; 0x40 are handled before this table (Interp2Point, MultiStepInterp, PanScale).
-; --- 0x014745-0x014776  DSP_Translator_OpcodeOffsetTable
+; --- 0x014745-0x014776  OFFSETS_14745 ("DSP_Translator_OpcodeOffsetTable" is descriptive
+;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here
+;     and in symbols/subcpu_symbols_reference.txt is OFFSETS_14745)
 ; 25 signed 16-bit offsets relative to 0x03CB8E, indexed by (opcode - 0x61) for opcodes
 ; 0x61..0x79.  Decoded targets, in opcode order:
 ;   0x61->0x03CB8E 0x62->0x03CBDE 0x63->0x03CBFA 0x64->0x03CC33 0x65->0x03CC50 0x66->0x03CC6D
@@ -4091,7 +4117,9 @@ OFFSETS_14745:
 ; DSP_WriteParam_Generic). DSP_WriteGlobalConfig does NOT use it -- it uses 0x0147B3. The old
 ; text named the wrong routines, undercounted the parameter sites, and quoted line numbers
 ; 44822/44863/44883/44912 that no longer resolve. See UNCERTAIN.
-; --- 0x014777-0x0147B2  DSP_EFFBytecode_ProgramTable
+; --- 0x014777-0x0147B2  ToneGen_WorkArea -- the real label, as the NOTE just above says
+;     ("DSP_EFFBytecode_ProgramTable" is descriptive text from
+;      symbols/proposals/subcpu-region-15.txt, not a symbol)
 ; 12-byte descriptors for DSP_BytecodeInterpreter_Init: +0,+2,+4,+6 = four words copied into
 ; the interpreter frame, +8 = long.  Indexed by effect-slot number.  0x0147B3 is the same
 ; shape and is the table used by DSP_WriteGlobalConfig (program 0 only).
