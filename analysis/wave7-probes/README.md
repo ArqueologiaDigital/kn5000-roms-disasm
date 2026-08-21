@@ -16,6 +16,14 @@ that cannot be re-checked is the failure mode this project has been bitten by re
 | `enc.py`, `enc2.py` | Encoding audit of the v142 source: finds non-ASCII bytes and the lines carrying them. |
 | `align_packages.py` | Which critique reviewed which package? Pairs them from the workflow's return value. |
 | `apply_package.py` | Applies one vetted edit list, aborting unless every anchor is unique. |
+| `ic307_directory_backref_and_monotonicity.py` | Does every directory entry's parameter record point back at its own PCM offset, and are the two pointer columns monotonic? |
+| `ic307_directory_record_fields.py` | Where does each page's directory end and its PCM start, and how much zero padding sits between? |
+| `ic307_record_flag0_ordering.py` | Are a record's flag-0 values (the split points) ordered, and which records break the rule? |
+| `tonedb_directory_slots.py` | What do the 64 LE32 slots of the ToneDB directory at ROM 0x830000 point at? |
+| `tonedb_set_descriptor_records.py` | Field census of the 487 15-byte SET descriptors: flags, key range, root, basepitch. |
+| `tonedb_descriptor_region_sizes.py` | Zone-record strides and sizes, curve usage, and the class census behind the SET descriptors. |
+| `tonedb_selector_coverage.py` | How many recording selectors are reachable ONLY through flags-bit-1 SETs? (the mis-pitched set) |
+| `symbols_staleness_audit.py` | Which symbols in the reference files no longer exist in the built ELFs? (needs llvm-nm) |
 
 All are read-only and most take no arguments: `python3 <script>`. Paths are hardcoded.
 
@@ -43,3 +51,25 @@ The integration loop, per package, is:
 anchors to 300 and replacements to 1500 characters: "the anchor is truncated" and "the replacement
 would delete code". Judge those from the package JSON itself. A replacement that rewrites a comment
 block and ends with the anchor's label line is correct and complete.
+
+## Numbers these reproduce
+
+Several of these scripts are the producers of figures already quoted in commit messages and notes,
+which is why they are here rather than in scratch. Re-run them to check the claims:
+
+- `ic307_directory_backref_and_monotonicity.py` prints `back 198/198`, `168/168`, `1072/1072`,
+  `57/57` -- the **1495/1495** self-referential back-references that show IC307 is a clean dump,
+  the evidence that the A19/A21 transposition defect is IC14-only. It also shows page 1 is the one
+  page whose wave-offset column is NOT monotonic (entries 79, 82, 85).
+- `tonedb_selector_coverage.py` prints `exclusive to bit1 SETs: 112` of `distinct total 1444` --
+  the **112 of 1444 selectors** whose root pivot and basepitch are junk because the firmware
+  substitutes a literal for both when flags bit 1 is set. `tonedb_set_descriptor_records.py`
+  corroborates it from the other side: every bit-1 record carries the same basepitch, `0x417f`,
+  which is what a filler constant looks like.
+
+⚠ PATHS ARE HARDCODED AND SOME POINT OUTSIDE THIS REPO. The IC307 probes read
+`~/compartilhado/kn5000_original_roms/kn5000/kn5000_waveform_rom.ic307`, and
+`symbols_staleness_audit.py` needs `llvm-nm` from a local LLVM build
+(`~/compartilhado/llvm-project/build/bin/llvm-nm`) plus built ELFs, so run `make all` first.
+The `table_data` probes use base 0x800000 (file offset = address - 0x800000); the v142 payload is
+NOT a flat image and needs `tools/payload_hexdump.py` instead of a plain offset.
