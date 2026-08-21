@@ -1233,3 +1233,36 @@ Executable code must be represented as native TLCS-900 instructions, not raw `.b
 
 ### 12. All Content Reachable via Website Sidebar (STRICT)
 Every documentation page added to the website (`/home/fsanches/compartilhado/kn5000-docs/`) must have a corresponding entry in `_data/navigation.yml`. No orphan pages.
+
+## ⚠⚠ RECURSIVE `grep` SILENTLY SKIPS 47% OF THIS TREE ⚠⚠
+
+Established 2026-08-21, after it produced a false "I searched everywhere" claim that reached a
+committed document.
+
+In the Claude Code environment `grep` is a shell function wrapping **ugrep** with `-I`
+(skip binary files). ugrep calls a file BINARY if it contains ANY byte above 127 — and 65 of this
+repo's 506 `.s` files do, because `.ascii` directives hold raw non-UTF-8 bytes from the ROM. Those
+65 files are **47% of the disassembly by volume**, and they are the data-heavy ones:
+
+    v142/subcpu/kn5000_subprogram_v142.s   1,426,915 B    306 high bytes
+    table_data/tone_database_aux.s           944,636 B      3
+    hdae5000/hdae5000_data_tables.s          801,311 B  7,532
+    v7/v9/v10 .../accompaniment_engine.s     ~690,000 B    15
+    v9/v10 .../sequencer_engine.s            ~619,000 B    15
+
+THE RULE, measured both ways:
+
+    grep -c PATTERN path/to/file.s      # NAMED file: searched correctly
+    grep -rn PATTERN some/dir/          # RECURSIVE: high-byte files SILENTLY OMITTED
+
+A recursive search reports no error and a plausible number. Searching `v10/maincpu` for
+`0x8[56]` returns 250 matches in 37 files through the wrapper and **598 in 51 files** through
+real grep — the difference includes `sequencer_engine.s` and `scoop_display.s`, which is where the
+answer to a question I had recorded as "searched and eliminated" actually lived.
+
+**ALWAYS USE `command grep` FOR RECURSIVE SEARCHES IN THIS REPO**, or `python3` with `read_bytes()`.
+Never write "I searched all of X" on the strength of a bare recursive `grep`.
+
+This is the same root cause as the other tooling trap recorded here: non-UTF-8 bytes inside
+`.ascii` literals. They also break `Path.read_text()`, which corrupts the file on write-back. Treat
+every `.s` in this tree as binary, for reading, writing and searching alike.

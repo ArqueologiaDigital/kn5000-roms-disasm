@@ -109,7 +109,13 @@ Two independent routes agreeing exactly -- the data says these three are left ov
 firmware has a case for each -- is why this list is trusted where the eleven were not. Their
 MEANINGS are still not established and no names are proposed.
 
-**Searched and eliminated (2026-08-21)**, so nobody repeats it: every `cp`/`cpw`/`cpb` against
+⚠ **THAT SEARCH WAS INCOMPLETE, and the claim below is RETRACTED (2026-08-21).** It was run with
+the environment's wrapped `grep`, which skips any file containing a byte above 127 during a
+RECURSIVE search — 65 of this repo's 506 `.s` files, 47% by volume. `sequencer_engine.s` and
+`scoop_display.s`, both of which contain `0x85`/`0x86` comparisons, were never searched. See the
+warning at the end of CLAUDE.md. Use `command grep` for recursive searches here.
+
+The original, now-known-partial note said: every `cp`/`cpw`/`cpb` against
 0x85 and 0x86 in `v10/maincpu` was examined. The only EVENT-STREAM site is
 `SetWall_ParseStream_MainLoop`, which routes both to its generic `ReadEvent` path and so does not
 distinguish them. The hits in `demo/demo_routines.s` (lines 99, 173) look promising but are
