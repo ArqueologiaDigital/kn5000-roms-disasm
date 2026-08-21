@@ -41,12 +41,12 @@ Classifying every blob byte in the three worst ROMs:
 
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
-| table data | 395,150 (35.5%) | 65,536 | 652,435 | **0** |
+| table data | ~~395,150~~ **241,550** (wallpapers done) | 65,536 | 652,435 | **0** |
 | custom data | 663,552 (99.4%) | 4,096 | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **1,058,702** | 69,632 | 652,435 | **0** |
+| **total** | **905,102** | 69,632 | 652,435 | **0** |
 
-**1,058,702 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
+**905,102 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
 to report instead of any percentage.
 
 **HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
@@ -57,6 +57,11 @@ byte per row is preserved in a sidecar because it is not always zero. `hdae5000_
 asserts all ten rebuild the ROM bytes exactly, and the gate passes 9/9 with the images as the
 build's actual input. That is L4 satisfied for this ROM: readable form committed, round-trip proven,
 blob no longer the source.
+
+The same pattern then closed table_data's two wallpapers (153,600 B) via
+`scripts/build/indexed_images.py`, which is the manifest-driven generalisation: add a row, run
+`export`, run `verify`. If verify fails the geometry is wrong, which is how the HD-AE5000 icon's
+27x27-in-a-28-byte-row would have been caught years earlier.
 
 The good news in that table is the last column. **Nothing is UNKNOWN.** Every blob has been
 identified; none of this is blocked on understanding. It is blocked on conversion.

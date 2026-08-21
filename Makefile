@@ -673,6 +673,11 @@ rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.e
 hdae5000-images:
 	python3 scripts/build/hdae5000_images.py build
 
+# The wallpapers are built from their committed PNGs the same way; see
+# scripts/build/indexed_images.py, whose `verify` asserts the round trip.
+tabledata-images:
+	python3 scripts/build/indexed_images.py build
+
 rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: hdae5000/hd-ae5000_v2_06i.s hdae5000-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I hdae5000 -o $@ $<
@@ -684,7 +689,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s table_data/preset_banks.s table_data/help_databases.s table_data/fonts.s table_data/style_records.s table_data/style_record_ptr_tables.s table_data/panel_memory_presets.s $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED)
+rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s table_data/preset_banks.s table_data/help_databases.s table_data/fonts.s table_data/style_records.s table_data/style_record_ptr_tables.s table_data/panel_memory_presets.s $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) tabledata-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ $<
 
