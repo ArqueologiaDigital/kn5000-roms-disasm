@@ -93,7 +93,29 @@ rename would break every one. Both spellings emit identical encodings, and a ful
 `make clean-all && make all` on the new toolchain gives **9/9 at 100.00%**.
 
 So the 158,902 bytes were never "work nobody did" nor "work the toolchain cannot accept" -- they
-were work the toolchain could not be ASKED for. They are now writable as instructions.
+were work the toolchain could not be ASKED for. The unrolled bit-extraction loop at 0xFD3095 now
+round-trips **26 of 26 instructions byte-exactly, against 0 of 26 this morning**.
+
+**What that unlocked, measured rather than assumed.** On `midi_dispatch_handlers.s`, invalid
+encodings went 487 -> 0. Of its 623 `.byte` blocks: 124 have no v9 corroboration, 203 contain `db`
+(unidasm declines to decode them, so they are data), 283 still fail the round-trip, and **13 are
+convertible**. That is a smaller number than the headline suggests, and the reason is worth stating:
+
+| still blocking | why |
+|---|---|
+| `QIZH`, `QIZL`, `QIXH` ... (46 uses) | the 8-bit halves of the Q register bank. MAME's `dasm900.cpp` names them; the LLVM backend defines `QWA..QSP` but not their byte halves. A genuine missing-register gap, not a spelling. |
+| `incw 1,(XSP+0x04)` | unrecognized mnemonic in this form |
+| `ld E,(XWA+)` | post-increment addressing |
+
+Four other apparent gaps turned out to be **unidasm-vs-llvm-mc syntax**, and the converter now
+translates them: `lda` wants its source parenthesised (`lda XWA,(0xf980)`), shifts take the register
+first (which is what this tree's own sources already write, `sla xhl, 8`), `T` is the always-true
+condition that llvm-mc omits, and unidasm prints doubled condition codes as `PE/OV`.
+
+**Nothing has been converted yet, deliberately.** Proving 13 blocks round-trip is not the same as
+emitting them well: the decoded text carries raw numeric branch targets (`call 0xfd814f`), and
+writing that beside lines reading `call FileIO_BuildFilePath` is the regression that got the older
+converter marked unsafe. The missing piece is symbolisation from the ELF.
 
 ## L2: what the regeneration fixed, and what it did not
 

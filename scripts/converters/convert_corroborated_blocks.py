@@ -24,12 +24,37 @@ This one decides with evidence instead of shape:
 Run:  python3 scripts/converters/convert_corroborated_blocks.py --file <path.s> [--apply]
       Default is a dry run that reports what it would convert and why not.
 
+STANDING RESULT on v7/maincpu/midi/midi_dispatch_handlers.s (2026-08-21), after
+the toolchain learned the real mnemonics (tlcs900_backend@6c3c6d755ba2):
+
+    623 .byte blocks
+        124  v9 does not call these offsets code   -- no corroboration
+        203  contain `db` -- unidasm declines to decode them, so data
+        283  fail the byte round-trip              -- see the gaps below
+         13  CONVERTIBLE, 462 bytes
+      (invalid encodings: 0, down from 487 before the mnemonic fix)
+
+WHAT STILL BLOCKS THE 283 are genuine backend gaps, not syntax:
+
+    QIZH / QIZL / QIXH ...   the 8-bit halves of the Q register bank. MAME's
+                             dasm900.cpp names them; the LLVM backend defines
+                             QWA..QSP but not their byte halves. 46 instances.
+    incw 1,(XSP+0x04)        unrecognized mnemonic in this form
+    ld E,(XWA+)              post-increment addressing
+
+⚠ THIS SCRIPT DOES NOT WRITE ANYTHING YET, deliberately. Verifying that 13
+blocks round-trip is not the same as being able to emit them well: the decoded
+text has raw numeric branch targets (`call 0xfd814f`), and writing that into a
+tree whose neighbouring lines read `call FileIO_BuildFilePath` is the same
+readability regression that got convert_roundtrip_blocks.py marked unsafe. The
+missing piece is symbolisation from the ELF, not more round-trip checking.
+
 ⚠ Byte-exactness is necessary, not sufficient. A block can round-trip perfectly
 and still be data that happens to decode. That is what the v9 corroboration is
 for, and it is still not proof -- v7 and v9 are different revisions, so the same
 offset need not be the same function. Read the diff before applying.
 """
-import os, re, subprocess, sys
+import os, re, subprocess, sys, tempfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LLVM = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
@@ -100,25 +125,64 @@ REGDISP = re.compile(r'(?<![\w(])(X?[A-Za-z]{2,3}\s*[+-]\s*0x[0-9a-fA-F]+)(?![\w
 
 
 def translate(text):
-    """Yield candidate llvm-mc spellings of a unidasm instruction, best first."""
+    """Yield candidate llvm-mc spellings of a unidasm instruction, best first.
+
+    Confirmed rules, each checked by hand against llvm-mc before being added:
+        lda XHL,XDE+0x0a  -> lda XHL,(XDE+0x0a)    parenthesise reg+disp
+        lda XWA,0xf980    -> lda XWA,(0xf980)      parenthesise absolute
+        lda XHL,XDE+XBC   -> lda XHL,(XDE+XBC)     parenthesise reg+reg
+        sla 0x07,A        -> sla A, 0x07           shifts take the register first
+    """
     yield text
     t = REGDISP.sub(lambda m: f"({m.group(1)})", text)
     if t != text:
         yield t
     parts = text.split(None, 1)
-    if len(parts) == 2 and parts[1].count(",") == 1:
+    if len(parts) != 2:
+        return
+    if parts[1].count(",") == 1:
         a, b = [x.strip() for x in parts[1].split(",")]
+        # lda's source operand is always a memory reference; unidasm omits the
+        # parentheses that llvm-mc requires.
+        if parts[0].lower() == "lda" and not b.startswith("("):
+            yield f"{parts[0]} {a}, ({b})"
         if parts[0].lower() in SHIFTS:
             yield f"{parts[0]} {b}, {a}"
+        # `T` is the always-true condition; llvm-mc spells an unconditional
+        # transfer without it, and wants the target as a memory reference.
+        if a.upper() == "T" and parts[0].lower() in ("call", "jp", "jr", "jrl"):
+            yield f"{parts[0]} ({b})"
+            yield f"{parts[0]} {b}"
+    # unidasm prints both names of a doubled condition code, `PE/OV`, `PO/NOV`;
+    # llvm-mc takes either one alone.
+    if "/" in parts[1]:
+        yield f"{parts[0]} " + re.sub(r'\b(\w+)/\w+', r'\1', parts[1]).lower()
 
 
-def disassemble(raw):
-    hexs = " ".join(f"0x{b:02x}" for b in raw)
-    r = subprocess.run([MC, "--triple=tlcs900", "--disassemble"],
-                       input=hexs, capture_output=True, text=True, timeout=30)
-    warn = r.stderr.count("warning: invalid instruction encoding")
-    insns = [l.strip() for l in r.stdout.strip().split("\n")
-             if l.strip() and not l.strip().startswith(".")]
+UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
+_DIS_RE = re.compile(r'^[0-9a-f]+:\s+((?:[0-9a-f]{2} )+)\s*(.+)$')
+
+
+def disassemble(raw, addr):
+    """Decode with unidasm, not llvm-mc.
+
+    llvm-mc's TLCS-900 DISASSEMBLER still cannot read these encodings even
+    after the assembler learned their mnemonics -- `84 3C 7F` comes back as
+    `push xix` plus garbage. The two directions are separate tables. unidasm
+    decodes them correctly, so it is the decoder here and llvm-mc is used only
+    to re-assemble and prove the bytes come back identical.
+    """
+    tmp = os.path.join(tempfile.gettempdir(), "_corrob_block.bin")
+    open(tmp, "wb").write(raw)
+    r = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(addr)],
+                       capture_output=True, text=True, timeout=60)
+    insns, warn = [], 0
+    for line in r.stdout.split("\n"):
+        m = _DIS_RE.match(line)
+        if m:
+            insns.append(m.group(2).strip())
+        elif line.strip() and ":" in line:
+            warn += 1
     return insns, warn
 
 
@@ -142,7 +206,8 @@ def main():
     v9 = v9_code_map()
     lines, blocks = blocks_of(path, syms)
 
-    stats = {"no-addr": 0, "not-corroborated": 0, "warn": 0, "roundtrip": 0, "ok": 0}
+    stats = {"no-addr": 0, "not-corroborated": 0, "warn": 0, "contains-data": 0,
+             "roundtrip": 0, "ok": 0}
     todo = []
     for label, addr, a, b, raw in blocks:
         if addr is None:
@@ -150,9 +215,13 @@ def main():
         off = addr - BASE
         if not all(v9[off + k] == 1 for k in range(len(raw)) if off + k < len(v9)):
             stats["not-corroborated"] += 1; continue
-        insns, warn = disassemble(raw)
+        insns, warn = disassemble(raw, addr)
         if warn or not insns:
             stats["warn"] += 1; continue
+        # `db` is unidasm declining to decode. A block containing one is data,
+        # or partly data, and must not be rewritten as instructions.
+        if any(i.split()[0].lower() == "db" for i in insns if i.split()):
+            stats["contains-data"] = stats.get("contains-data", 0) + 1; continue
         out = []
         for i in insns:
             enc = None
@@ -171,6 +240,7 @@ def main():
     print(f"   no address (label not in ELF) ... {stats['no-addr']}")
     print(f"   v9 does NOT call it code ....... {stats['not-corroborated']}")
     print(f"   invalid encodings .............. {stats['warn']}")
+    print(f"   contains db (data, not code) ... {stats['contains-data']}")
     print(f"   failed byte round-trip ......... {stats['roundtrip']}")
     print(f"   CONVERTIBLE .................... {stats['ok']}"
           f"  ({sum(len(t[4]) for t in todo):,} bytes)")
