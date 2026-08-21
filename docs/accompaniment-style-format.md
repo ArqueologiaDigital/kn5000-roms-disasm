@@ -121,34 +121,32 @@ expands the 7-bit argument to 14 bits as `value = (v << 7) | (2v - 128 if v >= 6
 `SndPart_SetParam` routes it as bend rather than as a controller. This is why its argument clusters
 at 61..64: that is bend-centre.
 
-**0xD1 remains undecoded**, and here is exactly where the trail stops so nobody re-walks it.
+**The whole 0xD selector family is now decoded.** `SeqPerformance_EventDispatch` (ROM 0xFE89A8,
+`v10/maincpu/audio/note_voice_mapping.s`) holds the selector bodies laid out in order, each ending
+in `SndPart_SetParam(part, value, parameter_id)`. The parameter ids, read straight off the
+consecutive bodies:
 
-`AccompSeq_SeqParse_CtrlChg` (`v10/maincpu/sequencer/accompseq_routines.s:2108`) does
-`and a,0xf` into RAM 0x7E55 (the selector), builds a runtime status `0xD0 | part` in 0x7E54 where
-part is 1 or 2 depending on RAM 0x7E52, advances twice, takes the value into 0x7E56, and hands
-(A=status, W=selector) to `AccompSeq_WriteMidiToBuffer`. The parser itself special-cases only
-**selector 5**, storing the value through the pointer at 0x7E74. Selector 1 gets no special
-treatment there, so its meaning lives in the buffer consumer.
+    selector 1  ->  parameter 1     MIDI CC 1   MODULATION
+    selector 2  ->  parameter 432   (not a CC)  PITCH BEND -- the body at 0xFE89C4 is the
+                                                7-to-14-bit expansion described above
+    selector 3  ->  parameter 64    MIDI CC 64  DAMPER PEDAL
+    selector 4  ->  parameter 10    MIDI CC 10  PAN
+    selector 5  ->  parameter 11    MIDI CC 11  EXPRESSION
+    selector 6  ->  parameter 94    MIDI CC 94  effect depth
 
-⚠ **The consumer's low nibble means something DIFFERENT.** In the SeqEvtBuf ring the status is
-`0xD0 | part`, so its low nibble is the PART, not a selector -- `note_voice_mapping.s:13738-13750`
-accepts 0xD0/0xD1/0xD2 and 0xC1/0xC2 on that basis. **This is the resolution of the contradiction
-recorded earlier in this document**: the reverb/chorus paths emit a ring 0xD1 (part 1) while the
-style stream stores a selector-1 event, and the two were never the same encoding, so their
-argument ranges never had to agree. Both readings were right about different things.
+So **0xD1 is modulation**, and the family is an ordinary MIDI controller set with pitch bend given
+an internal id because it is not a control change.
 
-For the 0xC family the consumer maps its low nibble through a 3-entry table at
-`CharMap_ValueData_B + 204` (ROM 0xEE8FA4): index 1 -> 0x17, index 2 -> 0x18, index 0 -> 0xFF
-(unused), and those become the `BC` parameter id of `SndPart_SetParam(part, value, param)`. Note
-the label is a misnomer for this use -- it is being indexed as a parameter table, not a character
-map; the name is a curated guess and not evidence.
+THE ORDERING IS ANCHORED, NOT ASSUMED. Two selectors were traced independently by a different
+route before this table was read: selector 3 reaches a literal `0xB0` control change with
+controller number `0x40` = 64, and selector 2's body is the pitch-bend expansion at 0xFE89C4.
+Both land exactly where this layout predicts, which is what makes reading the remaining bodies
+positionally safe. Selector 5 = expression also explains why the parser special-cases selector 5
+alone, storing its value through the pointer at 0x7E74.
 
-**No equivalent table has been found for the 0xD selectors.** That is the next step: find where a
-0xD-family selector becomes a `SndPart_SetParam` parameter id, as selector 2 does at 0xFE89C4. The contradiction recorded
-earlier -- that the reverb/chorus restore paths emit 0xD1 with 0/0x7F and a small selector, unlike
-the style data's 0..117 range -- is explained by there being TWO serialisations of the same 0xD
-family: the SeqEvtBuf ring at 0x01F271 written as three bytes (status = 0xD0|part), and the style
-stream. They are not the same encoding, so the two argument ranges never had to agree.
+⚠ Only selectors 1, 2 and 3 occur in the 210 factory styles. Selectors 4, 5 and 6 are part of the
+vocabulary the format supports and this data does not exercise -- the same situation as
+0xD4/0xD5/0xD7 and 0x84.
 
 ### NOTE2 (0x91): the two trailing bytes come from a firmware table
 
