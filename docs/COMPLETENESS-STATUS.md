@@ -41,12 +41,13 @@ Classifying every blob byte in the three worst ROMs:
 
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
-| table data | ~~395,150~~ **8,624** (only Font 5 and the 1bpp banners left) | 65,536 | 652,435 | **0** |
+| table data | ~~395,150~~ **0 -- DONE 2026-08-21** | 65,536 | 652,435 | **0** |
 | custom data | ~~663,552~~ **639,296** | ~~4,096~~ **0** | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **647,920** | 65,536 | 652,435 | **0** |
+| **total** | **639,296** | 65,536 | 652,435 | **0** |
 
-**647,920 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
+**639,296 bytes are blobs that should not be blobs**, and all of it is now ONE item: the
+custom-data style event stream. Every other ROM's column is zero. That is the work queue, and it is the number
 to report instead of any percentage.
 
 **HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
@@ -207,3 +208,27 @@ vs LE, two different `CMD_DISPATCH_TABLE` addresses, two different EG laws, "har
     python3 scripts/analysis/extract_fonts.py /tmp/fonts && diff -r /tmp/fonts extracted_fonts
     python3 scripts/analysis/rom_provenance_poison.py all   # which targets read their own ROM
     make clean-all && make all          # 9/9 at 100.00% -- necessary, not sufficient
+
+## What closing table_data took
+
+Font 5 was the last hard one because it is proportional: 224 widths of 3 to 10, each glyph
+`ceil(width/8)*16` bytes at its own offset. Its widths are read from the kern table already typed
+out in `fonts.s` rather than duplicated, and the rebuild asserts glyph by glyph that the offsets
+tile -- they are monotonic, gapless, and sum to exactly 0xE70.
+
+The eight 1bpp banners are the screens shown while the instrument reflashes itself, failure cases
+included: "Now Erasing", "Please Wait", "Turn On AGAIN", "Illegal Disk".
+
+The selection rule for the 34-image batch is worth keeping: an image qualified when its DECLARED
+geometry multiplied out to exactly its file size. That is a check, not a convenience -- it is the
+same check the HD-AE5000 icon failed silently for months, and running it over the whole tree found
+every convertible image without anyone deciding case by case.
+
+## The one thing left
+
+`custom_data`'s 639,296 B of style event data. It is NOT unknown: the cells frame cleanly under the
+documented grammar (725/725), and the 210 style directory records are now typed source with their
+names visible. What is missing is the layer above the framing -- what `0x90`'s five arguments mean,
+how cells chain into lanes -- and until that exists, converting it would produce 200,000 lines of
+reframed bytes that satisfy the byte count while satisfying none of L3. That is the next real
+reverse-engineering task, and it should not be rushed for the metric.
