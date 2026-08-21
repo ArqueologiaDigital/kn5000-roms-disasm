@@ -35,17 +35,77 @@ flash -- and is the same shape from offset 3. Full specification:
 seven files differ in content**, so the names are factory defaults over user-edited parameters.
 Nothing inside a record beyond the name is identified.
 
-## `.SEQ` -- container established, field semantics NOT
+## `.SEQ` -- SOLVED
 
-Built from the same 256-byte cell as the ROM formats: 0x80 marker at +0, two u16 little-endian
-fields at +1 and +3, payload from +5. Over 596 cells in seven files, every one of the 1087 in-range
-pointers lands on a real cell, and each file has exactly one pointer landing outside itself.
+Built from the same 256-byte cell as the ROM formats, and the two u16 fields **ARE a prev/next
+pair**. What hid that is two conventions at once:
 
-⚠ **The two fields are NOT a prev/next pair here** -- 48 of 540 back-links agree, against 514 of
-514 in the IC19 styles. Unlike `.CMP`, this variant uses **0x0000** rather than 0xFFFF for "none",
-and a plain block index rather than a section-relative one. What the field at +1 actually is
-remains open, and is deliberately not guessed: assuming that pair produced three wrong readings of
-the IC19 header on 2026-08-21.
+    +0x01  u16 LE  PREV cell, ONE-BASED: value v addresses block v-1.  "none" = 0x0000
+    +0x03  u16 LE  NEXT cell, ONE-BASED: value v addresses block v-1.  "none" = 0xFFFF
+    +0x05  251 B   payload -- the DEMO-SONG grammar, not the IC19 one
+
+The sentinels are **field-specific and not interchangeable**, and the numbering is one-based. Read
+them zero-based, or assume 0xFFFF serves both ends, and the links appear not to agree -- which is
+the wrong conclusion this document recorded earlier today (48 of 540 back-links).
+
+Read correctly: over 1192 cells in the seven files, 2188 of 2188 pointers resolve and
+**1094 of 1094 forward and backward links are mutual**. Each file partitions into exactly seven
+doubly-linked chains whose heads are blocks 0..6, and four of the seven also carry a trailing
+doubly-linked FREE LIST of unused blocks (byte 0 == 0x00 rather than 0x80). That free list is also
+what the "one pointer landing outside the file" per disk turned out to be -- its tail's `next` is
+the one-past-the-end sentinel, not a dangling reference.
+
+The payload is 251 bytes from +0x05 and follows the DEMO-song grammar, not the IC19 accompaniment
+one: a strict argument-count parse gives 0 malformed over 44,795 events at 251, against
+2342/2156/1846/1199 bad at 250/249/248/252.
+
+Reproduce: `analysis/disk-format-probes/disk_seq_chains.py <dir>`, which ASSERTS both properties.
+
+## `.LSW` -- SOLVED (container), contents partly open
+
+    0x0000..0x001F  header, byte-identical on all seven disks: 5A 5A 01 00 "M60" 0A, then
+                    00 00 00 EE 03 ... -- the u16 LE at +0x0B is 0x03EE, the offset of the
+                    FIRST BLOCK TERMINATOR
+    0x0020..0x4E80  a TLV stream: tag u8, length u8, `length` payload bytes, grouped into
+                    26 blocks each ended by FF FF at a record boundary. 955 records, and
+                    ZERO residue on all seven disks.
+    0x4E80..0x5800  NOT TLV. Unframed bytes, a `5A 5A 5A "LKE" 80 00` magic at 0x4EB0, a
+                    0x500-byte array of 128 x 10-byte records at 0x4EC0, 12 constant 16-byte
+                    records at 0x53C0, and 0x5480..0x5800 which is a **byte-exact copy of the
+                    first 896 bytes of the same disk's .MSP**.
+
+Block geometry: block 0 is 37 records ending at 0x03EE; block 1 is 30 records ending at 0x067E;
+blocks 2..25 are 37 records each on a fixed 0x300 grid. The length byte is load-bearing -- the same
+tag takes different lengths in different blocks (0x48: 14/10, 0x90: 6/5, 0x70: 12/5) -- so this is
+genuinely TLV and not a fixed record array.
+
+Two caveats kept deliberately: `FF FF` terminates only at a RECORD BOUNDARY (four 0xFF bytes occur
+inside a block-1 payload at 0x048D and must not be mistaken for one), and **no code in the
+disassembly has been shown to parse this** -- the only ROM mention of "LSW" is the filename
+extension table at 0xEA038C -- so the framing is [INFERENCE] from data shape, however exact.
+
+NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
+user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
+that panel memory is a separate `.PMT` extension these disks do not carry, so the tempting "24
+panel memories" reading is in tension with the extension table and is NOT adopted.
+
+Reproduce: `analysis/disk-format-probes/disk_lsw_container.py <dir>`.
+
+## `.MSP` -- SOLVED (container), contents open
+
+It uses the IC19 cell container: block 0 is a header, blocks 1..15 are cells with 0x87 at +0x05
+and +0xFF and a 249-byte payload at +0x06. Six cell chains decode under the IC19 event grammar
+with **zero malformed events**.
+
+The IC19 96-byte style directory does NOT apply. Instead the header **self-describes its own
+directory geometry** in the same u16 LE triple `.CMP` uses: at +0x10 it reads offset 0x0020,
+stride 0x0010, count 0x000E -- fourteen 16-byte records at +0x20.
+
+⚠ The file is byte-identical on all seven floppies, so this is **one sample, not seven**. Whether
+it is factory or user content was investigated and the evidence supports BOTH readings; no
+conclusion is drawn.
+
+Reproduce: `analysis/disk-format-probes/disk_msp_container.py <dir>`.
 
 ## `.SQF` -- slot geometry established, contents not
 
