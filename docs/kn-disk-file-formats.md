@@ -104,6 +104,36 @@ and appends the extension via `FileIO_BuildFilePath`. Note two extensions carry 
 its own extension, and these disks do not carry a `.PMT` at all. Recorded because that reading is
 the first one anybody will reach for.
 
+### Every mention of "LSW" in the KN5000 program ROM
+
+There are exactly three, and together they bound what can be learned here:
+
+1. **0xEA038C** -- the extension string in `SeqFileType_CodeTable` (above).
+2. **0xE1FE24** -- the glob **`A:\HAMA\*.LSW`**, in a factory-test string block alongside
+   `TEST Finishd!!`, `init`, `OK`, `NG`. So `.LSW` files are read from a `HAMA` directory during a
+   factory test or initialisation pass. (`scripts/analysis/extract_hama.py` already exists in this
+   repository and is the place to start on that directory.)
+3. **0xEAEA55** -- the event name **`EV_LSWDATA`**, inside a 44-entry UI event enumeration:
+
+       EV_NONE EV_SHOW EV_HIDE EV_INIT EV_MOVE EV_RESIZE EV_ACTION EV_SWIN EV_SWON EV_SWOFF
+       EV_ALLPAINT EV_PAINT EV_REPAINT EV_DRAW EV_SELEDRAW EV_PARADRAW EV_RESET
+       EV_CHANGEPROPERTY EV_TIMER EV_ACTIVATE EV_CHANGE_MODE EV_CHANGE_TITLE
+       EV_INTERRUPT_TITLE EV_INDEXSW_UP EV_INDEXSW_DOWN EV_INDEXSW_UP_AIC
+       EV_INDEXSW_DOWN_AIC EV_INDEXSELECT **EV_LSWDATA** EV_RAMDATA EV_PAGECHANGE EV_DIAL
+       EV_SOUNDNAME EV_RHYTHMNAME EV_PMEMNAME EV_SOUNDSWNO EV_BITDATA EV_MEMODRAW
+       EV_AUTOINC EV_SWIN_AIC EV_RETURN_TITLE EV_IAMSELECTED EV_YOUARESELECTED
+
+   This is a full windowing/widget event set. `SW` means SWITCH throughout it (`EV_SWON`,
+   `EV_SWOFF`, `EV_INDEXSW_DOWN`, `EV_SOUNDSWNO`), and `EV_LSWDATA` sits directly beside
+   `EV_RAMDATA` as the other "...DATA" delivery event.
+
+**No KN5000 code has been shown to read or write `.LSW` CONTENTS** -- only to name the extension,
+glob for it in a test path, and carry an event named after it. What the letters stand for is NOT
+proposed here; the neighbouring names make "switch" likely for the SW and nothing establishes the L.
+
+**The named next step**: trace the `EV_LSWDATA` handler in the widget system. That is where the
+24 blocks' meaning lives if it is anywhere in this ROM.
+
 NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
 user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
 that panel memory is a separate `.PMT` extension these disks do not carry, so the tempting "24
