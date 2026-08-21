@@ -109,6 +109,16 @@ Two independent routes agreeing exactly -- the data says these three are left ov
 firmware has a case for each -- is why this list is trusted where the eleven were not. Their
 MEANINGS are still not established and no names are proposed.
 
+**Searched and eliminated (2026-08-21)**, so nobody repeats it: every `cp`/`cpw`/`cpb` against
+0x85 and 0x86 in `v10/maincpu` was examined. The only EVENT-STREAM site is
+`SetWall_ParseStream_MainLoop`, which routes both to its generic `ReadEvent` path and so does not
+distinguish them. The hits in `demo/demo_routines.s` (lines 99, 173) look promising but are
+**UI input codes** -- button and encoder identifiers compared as `cp xde`, in the same run as 0xF,
+0x87, 0x7, 0x6 -- not statuses. Likewise `ui/ui_playback_modes.s` and `ui/ui_mode_handlers.s`.
+
+Settling these three needs the consumer of `SetWall_ParseStream`'s event queue, not another grep
+for the constant.
+
 Reproduce: `tests/l5_reimplement_demo_format.py`, which reports 67,132 events and 36 malformed,
 the 36 being these three statuses.
 
