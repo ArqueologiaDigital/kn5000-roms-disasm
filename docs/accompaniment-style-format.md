@@ -41,7 +41,8 @@ Style music lives in 256-byte cells. A cell is recognised by `byte[0] == 0x80 &&
     +0x01  2 B     u16 LE      PREV cell, 0xFFFF at a chain head
     +0x03  2 B     u16 LE      NEXT cell, 0xFFFF at a chain end
     +0x05  1 B     0x87        end-of-header marker
-    +0x06  250 B   payload     event stream
+    +0x06  249 B   payload     event stream
+    +0xFF  1 B     0x87        trailing marker, on all 1564 cells
 
 **1564 cells, 400,384 B** -- 214 in section_0 and 423/488/439 in the double sections.
 
@@ -100,16 +101,23 @@ Timing, inherited from the demo-preset work and not re-verified here: 96 ticks p
 the tick within the current beat (0..95), duration is `dur_beats * 96 + dur_ticks`. Both `pos` and
 `dur_ticks` are bounded by 95, which is why this is base-96 rather than a 16-bit value.
 
-The stray 0x90 events with 1-4 arguments (47/43/35/32 of them) are notes cut off at a cell
-boundary. They resolve once chains are followed instead of cells being read in isolation, and
-their existence is a check on the chaining rather than a defect.
+**Following the chains decodes the whole corpus: 50,245 events, ZERO malformed.** Every status
+receives exactly its documented argument count, including the notes that straddle cell boundaries
+-- which were the 1-to-4-argument 0x90s an isolated per-cell read reported. That is the check on
+the chain rule and the payload length at once: get either wrong and the count of malformed events
+is in the hundreds.
+
+The payload is 249 bytes, not 250. Byte 0xFF of every cell is a second 0x87 marker, and reading it
+as payload injects one bogus status per cell.
 
 ## What is still missing
 
 1. ~~The cell pointer encoding~~ **SOLVED 2026-08-21** -- prev/next, section nibble plus a
    12-bit block index relative to the section's first cell block. Chains can now be followed, so
    events straddling cell boundaries can be decoded.
-2. **0x91, 0xD1, 0xD2, 0xD3.** Argument counts are known (7, 2, 2, 2); meanings are not.
+2. **0x91, 0xD1, 0xD2, 0xD3.** Argument counts are known and now confirmed against the whole
+   corpus with no exceptions (7, 2, 2, 2); their MEANINGS are not known. This is the remaining
+   semantic gap, and it no longer blocks reading the data -- only interpreting those events.
 3. **The 96-byte directory record**, beyond the name.
 4. **Which chain belongs to which style**, and how a style's parts/variations map onto chains.
 

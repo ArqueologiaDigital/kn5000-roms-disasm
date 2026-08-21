@@ -10,7 +10,8 @@ ANSWER (2026-08-21). The cells form DOUBLY-LINKED CHAINS.
     +0x01  2 B     u16 LE        PREV cell, 0xFFFF at a chain head
     +0x03  2 B     u16 LE        NEXT cell, 0xFFFF at a chain end
     +0x05  1 B     0x87          end-of-header marker
-    +0x06  250 B                 event-stream payload
+    +0x06  249 B                 event-stream payload
+    +0xFF  1 B     0x87          trailing marker, present on all 1564 cells
 
 A pointer is not a byte offset and not a plain block number:
 
@@ -25,9 +26,15 @@ The relative base is the part that took three wrong attempts. Section 0's cells 
 lands outside the cell region most of the time -- which is exactly what an earlier pass measured
 (8 of 45 resolving) before concluding, wrongly, that these were not chain pointers at all.
 
+THE PAYLOAD IS 249 BYTES, NOT 250. Byte 0xFF of every cell is a second 0x87 marker. Reading it
+as payload injects a bogus status into the stream once per cell -- which is exactly the 514
+"unknown 0x87" events an earlier decode reported, one per continuation.
+
 PROOF, printed by this script: with the relative base every pointer in every section resolves to
 a real cell (1028 of 1028), and every forward link's target points back at its source (514 of
-514). Two independent properties, no exceptions, across seven sections.
+514). Two independent properties, no exceptions, across seven sections. And with the 249-byte
+payload, following all 1050 chains decodes **50,245 events with ZERO malformed** -- every status
+gets exactly its documented argument count, including the events that straddle cell boundaries.
 
     python3 scripts/analysis/style_cell_chains.py
 """
