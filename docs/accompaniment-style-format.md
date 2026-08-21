@@ -219,6 +219,26 @@ three seen here are the whole vocabulary, and a decoder should reject rather tha
 It also explains the 0xD3 -> 0xD5 rewrite noted above: 0xD5 is a real status in the same family,
 not a sentinel invented by the handler.
 
+### CTL3 (0xD3): three signals converge on the damper pedal
+
+Not proved, but no longer merely suggestive. Three independent facts line up:
+
+1. **The data.** 0xD3's second argument takes exactly two values across the whole corpus, 0 and
+   127 (395 and 375 occurrences). Nothing else appears.
+2. **The sub-CPU.** `v142/subcpu/kn5000_subprogram_v142.s:17223` is `Voice_CC_SetSustain`, the
+   handler for **CC 0x40 (64), the MIDI damper pedal**. It treats its argument as a BOOLEAN --
+   `cps c, 0`, set bit 0 of the part flags word if non-zero, clear it if zero -- which is exactly
+   the 0/127 domain the data uses, and exactly why a controller that is logically a switch is
+   transmitted as 0 or 127.
+3. **The main CPU.** 0xD1 and 0xD3 are routed to a single handler that an earlier naming pass
+   called `MidiSeq_ProcessSustainEvent`, and the dispatcher around it also handles plain MIDI
+   0xC0 and 0xB0.
+
+**The missing link is the emit site**: no code path has been traced from the main CPU's 0xD3
+handling to a literal 0x40 being sent to the sub-CPU. Until that exists this stays an inference --
+a well-supported one, from three directions that share no assumptions, but an inference. It is
+recorded here rather than baked into a name, so the next reader can finish it or refute it.
+
 ### Where the trail stops, precisely
 
 What is established: the dispatch structure, the shared handler for 0xD1/0xD3, 0xD2's distinct
