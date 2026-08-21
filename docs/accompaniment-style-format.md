@@ -121,7 +121,30 @@ expands the 7-bit argument to 14 bits as `value = (v << 7) | (2v - 128 if v >= 6
 `SndPart_SetParam` routes it as bend rather than as a controller. This is why its argument clusters
 at 61..64: that is bend-centre.
 
-**0xD1 remains undecoded.** Its selector is 1; no name is proposed. The contradiction recorded
+**0xD1 remains undecoded**, and here is exactly where the trail stops so nobody re-walks it.
+
+`AccompSeq_SeqParse_CtrlChg` (`v10/maincpu/sequencer/accompseq_routines.s:2108`) does
+`and a,0xf` into RAM 0x7E55 (the selector), builds a runtime status `0xD0 | part` in 0x7E54 where
+part is 1 or 2 depending on RAM 0x7E52, advances twice, takes the value into 0x7E56, and hands
+(A=status, W=selector) to `AccompSeq_WriteMidiToBuffer`. The parser itself special-cases only
+**selector 5**, storing the value through the pointer at 0x7E74. Selector 1 gets no special
+treatment there, so its meaning lives in the buffer consumer.
+
+⚠ **The consumer's low nibble means something DIFFERENT.** In the SeqEvtBuf ring the status is
+`0xD0 | part`, so its low nibble is the PART, not a selector -- `note_voice_mapping.s:13738-13750`
+accepts 0xD0/0xD1/0xD2 and 0xC1/0xC2 on that basis. **This is the resolution of the contradiction
+recorded earlier in this document**: the reverb/chorus paths emit a ring 0xD1 (part 1) while the
+style stream stores a selector-1 event, and the two were never the same encoding, so their
+argument ranges never had to agree. Both readings were right about different things.
+
+For the 0xC family the consumer maps its low nibble through a 3-entry table at
+`CharMap_ValueData_B + 204` (ROM 0xEE8FA4): index 1 -> 0x17, index 2 -> 0x18, index 0 -> 0xFF
+(unused), and those become the `BC` parameter id of `SndPart_SetParam(part, value, param)`. Note
+the label is a misnomer for this use -- it is being indexed as a parameter table, not a character
+map; the name is a curated guess and not evidence.
+
+**No equivalent table has been found for the 0xD selectors.** That is the next step: find where a
+0xD-family selector becomes a `SndPart_SetParam` parameter id, as selector 2 does at 0xFE89C4. The contradiction recorded
 earlier -- that the reverb/chorus restore paths emit 0xD1 with 0/0x7F and a small selector, unlike
 the style data's 0..117 range -- is explained by there being TWO serialisations of the same 0xD
 family: the SeqEvtBuf ring at 0x01F271 written as three bytes (status = 0xD0|part), and the style
