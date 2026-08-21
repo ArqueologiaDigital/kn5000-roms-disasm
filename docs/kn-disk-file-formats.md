@@ -131,8 +131,30 @@ There are exactly three, and together they bound what can be learned here:
 glob for it in a test path, and carry an event named after it. What the letters stand for is NOT
 proposed here; the neighbouring names make "switch" likely for the SW and nothing establishes the L.
 
-**The named next step**: trace the `EV_LSWDATA` handler in the widget system. That is where the
-24 blocks' meaning lives if it is anywhere in this ROM.
+### Traced, and the answer is that it is NOT HERE
+
+The `EV_LSWDATA` step was taken. Each of the three mentions leads away from the format:
+
+* **The glob is factory-test scratch.** `A:\HAMA\*.LSW` sits in
+  `FDTest_String_TestTitleFunc_0xDC`, inside the HAMA factory-diagnostics subsystem
+  (`v7/maincpu/factory_test/`). `FDLoadSaveTest` there allocates a 2 KB buffer, fills it with a
+  counting pattern 0..0x3FF, writes it to a file, reads it back and compares byte by byte. So that
+  glob names a SCRATCH FILE the disk test writes and re-reads -- it says nothing about the format
+  of a user's `.LSW`.
+* **The extension-table entry** only lets the file browser build the name `NAME.LSW`.
+* **`EV_LSWDATA`** is one of 44 UI widget events; the enumeration is a windowing system, and the
+  event is a data-delivery notification, not a parser.
+
+Putting those together:
+
+> **The KN5000 firmware never parses `.LSW` contents.** It names the extension, uses `*.LSW` as a
+> disk-test scratch pattern, and carries a widget event named after it. No code reads or writes the
+> 26 blocks, the TLV records or the 24 slots.
+
+That is a definite answer rather than a failed search, and it has a consequence: **the 24 slot
+blocks cannot be identified from these ROMs at all.** The seven sample floppies are KN7000-era, and
+the format almost certainly belongs to another model in the family. Anyone continuing should work
+from a KN7000/KN6000 program ROM, not this one.
 
 NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
 user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
