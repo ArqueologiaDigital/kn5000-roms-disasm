@@ -47,12 +47,28 @@ and a plain block index rather than a section-relative one. What the field at +1
 remains open, and is deliberately not guessed: assuming that pair produced three wrong readings of
 the IC19 header on 2026-08-21.
 
-## `.SQF`, `.LSW`, `.MSP` -- NOT ESTABLISHED
+## `.SQF` -- slot geometry established, contents not
 
-    .SQF   opens 5A 5A 5A 5A, then a song name in ASCII ("07VALSE_"), plus "PERSON"; 30% non-filler
-    .LSW   opens 5A 5A 01 00 "M60"; 49% non-filler; all seven disks DIFFER -> user data
-    .MSP   opens 4C 4B 45 ("LKE") then 5A 5A 5A, the same header shape as .CMP; 4,096 B;
-           **byte-identical on all seven disks** -> a constant, probably a default or empty bank.
+    +0x000  4 B     magic 5A 5A 5A 5A
+    +0x009  8 B     ASCII name -- "07VALSE_" on all seven disks
+    +0x0C1  10 x 0x800 B   slots, 8-char ASCII name at +0 of each
+
+Ten slots of 2,048 bytes. On every one of the seven disks the first slot is named `PERSON` and the
+other nine are `________`, which is what an empty slot looks like -- so these disks carry one
+populated entry and nine free ones. **All seven files differ in content** despite sharing that
+layout and those names.
+
+The header name "07VALSE_" is identical across all seven and follows the two-digit-prefix
+convention seen in style names, so it is probably not per-disk user text. Nothing inside a slot is
+identified.
+
+## `.LSW`, `.MSP` -- NOT ESTABLISHED
+
+    .LSW   opens 5A 5A 01 00 then ASCII "M60"; 49% non-filler, densely packed with no record
+           stride visible in a gap histogram; `ZZZ` recurs at 0x4EB0 and 0x548B; all seven disks
+           DIFFER, so it is user data
+    .MSP   opens 4C 4B 45 ("LKE") then 5A 5A 5A -- the same header shape as .CMP -- 4,096 B, and
+           **byte-identical on all seven disks**, so a constant: a default or empty bank.
            `scripts/analysis/extract_composer_msp.py` already reads part of it.
 
 The `5A 5A 5A` signature recurs across `.SQF`, `.LSW`, `.CMP`, `.MSP` and the IC19 section headers,
