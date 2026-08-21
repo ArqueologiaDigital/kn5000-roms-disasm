@@ -42,6 +42,15 @@ SECTIONS = {'section_0':    (0x00000, 0x17000),
             'section_3_4':  (0x49000, 0x2E000),
             'section_5_6':  (0x79000, 0x2E000)}
 ROM = REPO / 'original_ROMs' / 'kn5000_custom_data.ic19'
+
+# One more bank in the SAME format, living inside table_data rather than IC19:
+# Composer_FactoryMemoryImage, a 64 KB slice of includes/icons_to_strings.bin. It was
+# classified "partially understood -- no field spec, no parser" until the IC19 container was
+# solved; the identical rules decode it with 168/168 pointers, 84/84 back-links and 7,457
+# events, none malformed. Its section nibble is 0 rather than 1.
+EXTRA = {'Composer_FactoryMemoryImage':
+         (REPO / 'table_data' / 'includes' / 'icons_to_strings.bin', 0x6F288, 0x10000,
+          REPO / 'table_data' / 'includes' / 'generated')}
 PAYLOAD = 249
 ARGS = {0x90: 5, 0x91: 7, 0x81: 0, 0xD1: 2, 0xD2: 2, 0xD3: 2}
 NAME = {0x90: 'NOTE', 0x91: 'NOTE2', 0x81: 'BEAT', 0x83: 'END',
@@ -75,10 +84,17 @@ def chains_of(d, cells, base):
     return out
 
 
+def sources():
+    """(name, bytes) for every bank this script owns."""
+    for sec, (off, ln) in SECTIONS.items():
+        yield sec, ROM.read_bytes()[off:off + ln]
+    for name, (src, off, ln, _) in EXTRA.items():
+        yield name, src.read_bytes()[off:off + ln]
+
+
 def export():
     OUT.mkdir(parents=True, exist_ok=True)
-    for sec in SECTIONS:
-        d = (INC / f'{sec}.bin').read_bytes()
+    for sec, d in sources():
         lines = [f'# {sec}: {len(d)} bytes, {len(d) // 256} blocks of 256',
                  '# Produced by scripts/build/style_events.py -- see',
                  '# docs/accompaniment-style-format.md for the format.', '']
@@ -200,15 +216,18 @@ def build():
         d = rebuild(sec)
         (INC / f'{sec}.bin').write_bytes(d)
         tot += len(d)
-    print(f"style_events: rebuilt {len(SECTIONS)} style banks, {tot:,} B from event listings")
+    for name, (_, _, _, outdir) in EXTRA.items():
+        outdir.mkdir(parents=True, exist_ok=True)
+        d = rebuild(name)
+        (outdir / f'{name}.bin').write_bytes(d)
+        tot += len(d)
+    print(f"style_events: rebuilt {len(SECTIONS) + len(EXTRA)} banks, {tot:,} B from event listings")
 
 
 def verify():
     """Compare against the ORIGINAL ROM, not the .bin -- the .bin is a build product now."""
-    rom = ROM.read_bytes()
     bad = 0
-    for sec, (off, ln) in SECTIONS.items():
-        want = rom[off:off + ln]
+    for sec, want in sources():
         got = rebuild(sec)
         if got == want:
             print(f"  ok  {sec:<14} {len(want):>8,} B")

@@ -872,7 +872,11 @@ HelpDB_TrailingResidue:
 ; No code addresses the image interior directly (access goes through the RAM
 ; copy), so the block stays a single labeled include.
 ; -----------------------------------------------------------------------------
-Composer_FactoryMemoryImage:	.incbin	"includes/icons_to_strings.bin", 0x6f288, 0x10000
+Composer_FactoryMemoryImage:	.incbin	"includes/generated/Composer_FactoryMemoryImage.bin"
+	; Built from custom_data/styles/Composer_FactoryMemoryImage.styles. Same cell/chain
+	; container as the IC19 accompaniment styles -- 234 cells, 168/168 pointers resolving,
+	; 84/84 back-links, 7,457 events with none malformed. It was "no field spec, no parser"
+	; until that container was solved.
 
 	.org 0x9C4000 - 0x800000, 0xFF
 

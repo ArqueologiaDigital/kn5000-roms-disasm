@@ -41,10 +41,10 @@ Classifying every blob byte in the three worst ROMs:
 
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
-| table data | ~~395,150~~ **0 -- DONE 2026-08-21** | 65,536 | 652,435 | **0** |
+| table data | ~~395,150~~ **0 -- DONE** | ~~65,536~~ **0** | 652,435 | **0** |
 | custom data | ~~663,552~~ **0 -- DONE 2026-08-21** | ~~4,096~~ **0** | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **0** | 65,536 | 652,435 | **0** |
+| **total** | **0** | **0** | 652,435 | **0** |
 
 **ZERO bytes are blobs that should not be blobs.** Every ROM's column is zero.
 
@@ -259,3 +259,18 @@ NAMED, not understood. Their argument counts are confirmed across all 50,245 eve
 select is not established, so they are emitted as numbers and never as invented labels. Under the
 spec that leaves this format at L3-partial: the container is fully specified and round-trips, the
 event semantics are not complete.
+
+## Composer_FactoryMemoryImage: the last partially-understood blob
+
+64 KB inside `table_data`, recorded until today as "30 slot records with names, 52 cell headers,
+no field spec, no parser". It is the SAME cell/chain container as the IC19 styles, and once that
+was solved the identical rules decode it with no adjustment: 234 cells, **168/168 pointers
+resolving, 84/84 back-links, 7,457 events, none malformed**. Its section nibble is 0 rather than 1;
+nothing else differs.
+
+It now builds from `custom_data/styles/Composer_FactoryMemoryImage.styles` like the rest.
+
+That empties the "partially understood" column too. What remains binary -- 652,435 B -- is
+legitimate under §3: six genuine Windows BMPs stored verbatim by the firmware, and the
+SLIDE4K/SLIDE8K compressed streams, whose codec has a committed decoder AND encoder and rebuilds
+byte-exactly.
