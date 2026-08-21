@@ -370,10 +370,26 @@ Between 15 and 20 of the 24 slots hold distinct content depending on the disk.
 Reproduce: `analysis/disk-format-probes/lsw_slot_schema.py <dirs>`, which asserts 26 blocks, one
 shared 37-record 692-byte schema across 24 slots, and one varying-record set across all disks.
 
-What is still open is the **meaning** of the tags -- which byte is a sound number, a volume, a
-split point. "Current panel" makes a per-part reading plausible, but plausible is where the
-panel-memory reading started too, and that one was wrong. Note also that this schema belongs to
-whatever wrote these files, which was NOT KN5000 firmware.
+Inside the 22-byte records there are **two layouts**, separating exactly where the tag families do
+(`--map` reproduces this; X varies across slots, c constant non-zero, `.` constant zero):
+
+    tags 00..0F     ...cc..cccccccc..c....     trailing bytes carry constants
+    tags 10..16,19  XX.XX..Xcccc.X........     last nine bytes always zero
+
+Tags 04..0E and 16 are byte-identical across all 24 slots. Tags 00, 01, 02, 10, 11, 12 carry the
+most variation, and byte 0 of those spans 0..119 -- consistent with a 0..127 program number, though
+that is [INFERENCE] and not shown.
+
+⚠ **One reading tested and REJECTED.** Byte 13 of the `10..16,19` records spans 192..207 across
+slots, which is exactly MIDI Program Change status `0xC0|channel` -- a very inviting fit. Dumping it
+per slot kills it: the value is `0xC0` in nearly every slot for every one of those records, so it is
+not a per-record channel. An attractive numeric range is not a field identification.
+
+**What is still open is the meaning of the tags**, and it cannot be settled from these files alone.
+"Current panel" makes a per-part reading plausible, but plausible is where the panel-memory reading
+started too, and that one was wrong. Two things would settle it: the firmware of whatever WROTE
+these files (not the KN5000), or an A/B on real hardware -- change one panel setting, re-save, diff
+the slot. The second is cheap for anyone with the instrument in front of them.
 
 ### Searched and absent -- the header magic is in NO dumped firmware
 

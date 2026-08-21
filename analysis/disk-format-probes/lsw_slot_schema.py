@@ -31,8 +31,28 @@ NOT written by KN5000 firmware, which emits 3,648 bytes and not 22,528 (see
 docs/kn-disk-file-formats.md). The schema is real and exactly measured; whose
 schema it is remains open.
 
-Run:  python3 lsw_slot_schema.py <dir>...      (dirs holding extracted disks)
+Run:  python3 lsw_slot_schema.py <dir>...           (dirs holding extracted disks)
+      python3 lsw_slot_schema.py <dir> --map        (adds the byte-variance map)
 Exits non-zero if any disk departs from the schema.
+
+The 24 22-byte records fall into TWO layouts, by variance mask:
+
+    tags 00..0F   ...cc..cccccccc..c....     trailing bytes carry constants
+    tags 10..16,19  XX.XX..Xcccc.X........   last nine bytes always zero
+
+Tags 04..0E and 16 are byte-identical across all 24 slots; 00, 01, 02, 10, 11
+and 12 carry the most variation. Byte 0 of those spans 0..119 across slots,
+which is consistent with a 0..127 program number -- [INFERENCE], not shown.
+
+⚠ REJECTED by measurement: byte 13 of the 10..16,19 records spans 192..207,
+which looks exactly like MIDI Program Change status 0xC0|channel. Dumping it
+per slot kills that reading -- it is 0xC0 in nearly every slot for every one of
+those records, so it is not a per-record channel. An attractive range is not a
+field identification.
+
+Tag MEANINGS cannot be settled from these files alone. Settling them needs the
+firmware of whatever WROTE them (not the KN5000, see the docs) or an A/B against
+real hardware: change one panel setting, re-save, diff the slot.
 """
 import glob, os, sys, collections
 
@@ -71,6 +91,22 @@ def check(path):
     return (sig, tuple(varying)) if ok else None
 
 
+def variance_map(path):
+    """Which BYTE POSITIONS inside each 22-byte record differ between slots?
+
+    Legend: X varies across slots, c constant non-zero, . constant zero.
+    """
+    b = parse(open(path, "rb").read())
+    slots = b[2:2 + N_SLOTS]
+    print(f"\n  byte-position variance, 22-byte records of {os.path.basename(path)}:")
+    for ri in range(24):
+        tag = slots[0][ri][0]
+        cols = [{s[ri][2][k] for s in slots} for k in range(22)]
+        mask = "".join("X" if len(c) > 1 else ("." if next(iter(c)) == 0 else "c")
+                       for c in cols)
+        print(f"    tag {tag:02X}  {mask}")
+
+
 def main():
     files = []
     for d in (sys.argv[1:] or ["."]):
@@ -78,6 +114,8 @@ def main():
     if not files:
         sys.exit("no .LSW files given")
     results = [check(f) for f in files]
+    if "--map" in sys.argv:
+        variance_map(files[0])
     if any(r is None for r in results):
         print("FAIL"); return 1
     schemas = {r[0] for r in results}
