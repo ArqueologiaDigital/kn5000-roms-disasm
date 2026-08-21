@@ -88,11 +88,16 @@
 ; No payload code READS it -- it exists for the boot ROM / for external inspection only.
 
 [DATA] 0x00F000-0x00F41F  IRAM_FirmwareConfig -- mixed config block, and it is WRITABLE
-; First 2 bytes = 0x008E. Then a long run of 8-byte rows that are mostly zero/0xFF, followed
-; from about 0x00F0A0 by a monotonically increasing 4-byte-per-entry curve (0x000088C1,
-; 0x0010B244, 0x001A7691, 0x0029F176, 0x00427A83, 0x00695DC3 ...) -- an exponential-looking
-; ramp, almost certainly an envelope/level or frequency curve. I could not find its consumer,
-; so it is NOT named here.  ★ See the next entry: this block is not read-only config.
+; Not one object. See the banner above IRAM_FirmwareConfig in v142/subcpu/subcpu_data_tables.s
+; for the measured decomposition: u16 payload version 0x008E = 142 at 0x00F000; the 8-byte
+; voice bitmap at 0x00F002-0x00F009; an undescribed 20-byte gap at 0x00F00A-0x00F01D; the
+; 290-byte default DSP effect-configuration image at 0x00F01E-0x00F13F that DSP_Reset copies
+; to DRAM 0x448E; a 128 x u32 gain curve at 0x00F140-0x00F33F; and the double-precision libm
+; constant pool, whose first decodable member is at 0x00F34E.
+; CORRECTED 2026-08-21: the curve does NOT start "about 0x00F0A0" -- 0x00F09D-0x00F0BB is a
+; 31-byte run of zeros and the first word 0x000088C1 is at 0x00F140 -- and it is not a
+; frequency curve: its one proven consumer, DSP_MixerCoeff_Compute (0x03C067), uses the value
+; as a gain.  ★ See the next entry: this block is not read-only config.
 
 [LABEL] 0x00F002 TONEGEN_VOICE_ACTIVE_BITMAP  confidence=high
 ; 8 bytes (0x00F002-0x00F009) = a 64-bit "this voice is sounding" bitmap, one bit per hardware
@@ -282,7 +287,10 @@
 ; Three parallel byte columns at 0x00F77D / 0x00F77E / 0x00F77F, stride 3, all indexed by
 ; `muls hl,0x3` in Voice_Selector_Unpack3Groups (subcpu source ~line 17097/17108/17118).
 ; Rows: {0,1,6}, {3,5,8}, {2,4,7} -- a 3x3 permutation over 9 slots, i.e. three interleaved
-; groups of three. The trailing 0x00 at 0x00F785 is padding, not a 4th row.
+; groups of three. CORRECTED 2026-08-21: nothing here is padding. ROM 0x00F77D-0x00F785 =
+; 00 01 06 03 05 08 02 04 07 -- nine bytes, exactly the three rows above, and 0x00F785 holds
+; 0x07, the last byte of row 3. The 0x00 is at 0x00F786, where it is the first byte of the
+; 20-byte trim table documented in the next entry.
 
 [DATA] 0x00F786-0x00F799  10 x s16, part transpose/trim table A -> DRAM 0x041476
 ; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` (subcpu source ~line 17230); the
@@ -403,10 +411,16 @@
 
 [LABEL] 0x014777 DSP_BYTECODE_BLOB_BASE  confidence=high
 ; NOTE: this address ALREADY carries the ELF name ToneGen_WorkArea -- no rename proposed, this
-; entry documents it. It is the base pointer passed in XBC/XDE to DSP_BytecodeInterpreter_Init
-; and DSP_ParameterWriteEngine at four call sites (DSP_WriteEFFConfig, DSP_WriteGlobalConfig,
-; DSP_WriteParameter x2, subcpu source 44822/44863/44883/44912). It is DSP program+parameter
-; data, not a tone-generator work area. See UNCERTAIN.
+; entry documents it. It is DSP program+parameter data, not a tone-generator work area.
+; CORRECTED 2026-08-21 -- the old call-site list was wrong on the routines and its line numbers
+; no longer resolve, so routine names are used here instead. The base is passed to
+; DSP_BytecodeInterpreter_Init in XDE by DSP_WriteEFFConfig, and to DSP_ParameterWriteEngine in
+; XBC at THREE further sites, all inside DSP_WriteParameter: DSP_WriteParam_EFFCase,
+; DSP_WriteParam_EFFCase0xA and DSP_WriteParam_Generic. DSP_WriteGlobalConfig does NOT use it;
+; it uses 0x0147B3. (Old text: "DSP_WriteEFFConfig, DSP_WriteGlobalConfig, DSP_WriteParameter
+; x2, subcpu source 44822/44863/44883/44912".)
+; The contents are 12-byte descriptors, so the proposed name DSP_BYTECODE_BLOB_BASE is loose.
+; See UNCERTAIN.
 
 [LABEL] 0x0147B3 DSP_BYTECODE_GLOBAL_CONFIG  confidence=high
 ; Bytecode block passed to DSP_BytecodeInterpreter_Init by DSP_WriteGlobalConfig with de = 0
@@ -441,9 +455,17 @@
 
 [DATA] 0x01F3F0-0x01F417  10 x u32 pointers into 0x01E5C8..0x01E630
 ; 0x01E5C8, 0x01E5D3, 0x01E5DE, 0x01E5EA, 0x01E5F6, 0x01E602, 0x01E60D, 0x01E618, 0x01E624,
-; 0x01E630 -- steps of 11-12 bytes, so ten consecutive fixed-size records inside the DSP blob.
-; Ends exactly where TONEGEN_VELCURVE_PIVOT begins. I could not find the code that indexes this
-; array (it is reached through a register), so no name is proposed. Listed in UNCERTAIN.
+; 0x01E630 -- spacings of 11, 11, 12, 12 inside each run, so ten variable-length blocks, NOT
+; fixed-size records. Ends exactly where TONEGEN_VELCURVE_PIVOT begins.
+; RESOLVED 2026-08-21: the indexers are EFF_Disconnect (0x037F4F, base 0x01F3F0) and EFF_Link
+; (0x037FAE, base 0x01F404), five entries each. Both compute *(base + 12*mode + 4*slot) and
+; hand the result to DSP_WriteGlobalConfig, so the ten targets are DSP global-configuration
+; bytecode programs, not records. This is not a new finding: both runs are already carved as
+; separate [DATA] entries in symbols/proposals/subcpu-region-13.txt, which also carries the
+; [UNCERTAIN] on the 12-vs-20 stride defect the consumer exposes. The names the evidence
+; supports are EFF_DISCONNECT_PROGRAM_PTRS (0x01F3F0) and EFF_LINK_PROGRAM_PTRS (0x01F404),
+; but emitting them means splitting an existing data run in subcpu_data_tables.s, so no label
+; is proposed here -- integrator's call.
 
 [LABEL] 0x01F418 TONEGEN_VELCURVE_PIVOT  confidence=high
 ; u16 = 0x004D (77). The pivot the velocity curve is scaled about: the touch computation forms
@@ -545,14 +567,51 @@ are wrong. Recommend re-anchoring all eleven before integrating anything here.
    3x3 selector matrix and 0x00F786 begins a 10-entry s16 trim table.
  * MIDI_NoteFreqTable (nominally 0x00F6F3) holds 8 rhythm-mode register images 0x6080..0x6C80
    written to 0x041360; it is not a note-frequency table.
- * ToneGen_WorkArea (0x014777) is the DSP bytecode/parameter blob, passed as the base pointer to
-   DSP_BytecodeInterpreter_Init and DSP_ParameterWriteEngine. Its declared 44,991-byte extent also
-   swallows the tone-generator touch curves (0x01F418..) and the FP constant pool (0x01F63E..),
-   which belong to two other subsystems entirely.
- * Audio_DSP_StateTable_Packed (0x012171) names a 6-byte per-voice-type pitch bias table; the
-   9,672-byte extent attributed to it is an unrelated constant pool.
- * PitchDetune_OffsetTable (nominally 0x00F77F) names a 10,706-byte mixed data segment with at
-   least 60 independently addressed members. Neither pitch nor detune is established.
+ * ToneGen_WorkArea (0x014777) is a DSP DESCRIPTOR TABLE, not a tone-generator work area. It is
+   the base pointer handed in XDE to DSP_BytecodeInterpreter_Init by DSP_WriteEFFConfig, and in
+   XBC to DSP_ParameterWriteEngine at three further sites, all inside DSP_WriteParameter
+   (DSP_WriteParam_EFFCase, DSP_WriteParam_EFFCase0xA, DSP_WriteParam_Generic).
+   RETIRED 2026-08-21 -- the EXTENT half of this bullet. After the zone-B carve the next symbol
+   is DSP_Bytecode_Global_Config (0x0147B3), so the implied extent is 0x3C = 60 bytes. It no
+   longer swallows anything: the touch curves are ToneGen_VelCurve_Pivot (0x01F418),
+   ToneGen_Velocity_Input_Curve (0x01F43E) and ToneGen_Velocity_Output_Curve (0x01F53E), and the
+   FP pool is separately named (FPConst_Int32_Min_As_Double 0x01F646 ..). Measured with
+   `llvm-nm-19 -n rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf`.
+   The NAME half stands. DSP_BytecodeInterpreter_Init scales its index BC by 12 and reads fields
+   +0/+2/+4/+6 (words) and +8 (long), so 60 bytes is exactly 5 descriptors.
+   [INFERENCE] that the index is the effect slot and that there are five: EFF_LinkLoop and
+   EFF_DisconnectLoop iterate slots 4 down to 0, and the first five bytes of the table at
+   0x01ED6D are per-slot chip ids 00 00 01 01 01 (slots 0-1 on chip 0, slots 2-4 on chip 1).
+   That table does NOT declare its own length -- its byte 5 is 0x1C, not a chip id -- and the
+   [LABEL] 0x01ED6D entry earlier in this file reads it as 15 effect slots, which a 60-byte
+   descriptor table cannot serve. One of the two readings is wrong, and settling that is what
+   is still open here.
+   All 60 bytes are ZERO in the shipped image and the payload runs from DRAM, so the table is
+   writable at run time; [INFERENCE] that it is filled in at run time -- no writer was found,
+   and an all-zero descriptor may simply mean "nothing to do".
+ * Audio_DSP_StateTable_Packed (0x012171) names a 6-byte per-voice-type pitch bias table. It is
+   neither a DSP state table nor packed: the six bytes are 00 00 18 E8 00 00, i.e. +24 and -24
+   as signed bytes. The unit is SEMITONES -- the byte is added to the MIDI note number in
+   ToneGen_SetupPolyVoice -- so +24/-24 are TWO octaves up and two octaves down.
+   RETIRED 2026-08-21 -- the EXTENT half. After the zone-A carve the next symbol is
+   ToneGen_VoiceType_Default_Level (0x012177), so the implied extent is exactly those 6 bytes,
+   and the pool that used to be attributed to this symbol is 181 named symbols beginning at
+   ToneGen_Octave_Pitch_Table (0x012195). Measured with
+   `llvm-nm-19 -n rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf`.
+ * PitchDetune_OffsetTable is misplaced AND misnamed, but it is no longer huge.
+   RETIRED 2026-08-21 -- the EXTENT half. After the zone-A0 carve the next symbol is
+   Voice_Part_Trim_Table_B (0x00F79A), so the implied extent is 19 bytes, not 10,706. Measured
+   with `llvm-nm-19 -n rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf`.
+   CORRECTION to this bullet's own text: the ELF address is 0x00F787, not "nominally 0x00F77F".
+   0x00F77F is the address the CODE indexes (column 3 of the 3x3 selector matrix at 0x00F77D);
+   the symbol is the usual 8 bytes past it, which drops it one byte INSIDE the neighbouring
+   object -- the 20-byte s16 table at 0x00F786-0x00F799, ROM bytes 0000 0000 FFFF FEFF FDFF FCFF
+   FBFF FAFF F9FF F8FF = 0, 0, -1, -2, -3, -4, -5, -6, -7, -8, stored to DRAM 0x041476 +
+   part*0x11F, i.e. offset +0x10E of the 0x11F-byte part record based at 0x041368. (The two
+   descriptions of this table in subcpu_data_tables.s -- one by absolute DRAM address, one by
+   part-record offset -- agree: 0x041368 + 0x10E = 0x041476.)
+   So the object is a per-part transpose/mix-weight trim, and "neither pitch nor detune is
+   established" still stands.
  * OFFSETS_F460, OFFSETS_14739, OFFSETS_14745 and CALL_TABLE_12159 are address-derived names.
    I left them alone because the brief forbids renaming non-LABEL_ names, but if the project
    considers address-derived names placeholders, the evidence supports
@@ -568,8 +627,55 @@ are wrong. Recommend re-anchoring all eleven before integrating anything here.
    c5816ae (zone A, 0x012195-0x014738) and 85ecca2 (zone B, 0x0147B3-0x01E17E). What is still open
    is narrower and belongs in a new bullet: the computed consumer of the effect-metadata bases
    0x143AD / 0x14411 / 0x145A1 has not been found.
- * The consumer of the 10-entry pointer array at 0x01F3F0 (into 0x01E5C8..0x01E630).
- * The exponential-looking 4-byte ramp starting near 0x00F0A0 inside IRAM_FirmwareConfig.
+ * RESOLVED 2026-08-21 (was: the consumer of the 10-entry pointer array at 0x01F3F0). There are
+   TWO consumers, over two contiguous five-entry runs: EFF_Disconnect (0x037F4F, base 0x01F3F0)
+   and EFF_Link (0x037FAE, base 0x01F404). Each computes *(base + 12*mode + 4*slot), takes
+   chip = byte(0x01ED6D + slot) (00 00 01 01 01) and calls DSP_WriteGlobalConfig(chip, program),
+   so the ten targets are ten small DSP global-configuration bytecode programs of 11 or 12 bytes
+   each: 0x01E5C8, 0x01E5D3, 0x01E5DE, 0x01E5EA, 0x01E5F6 (disconnect) and 0x01E602, 0x01E60D,
+   0x01E618, 0x01E624, 0x01E630 (link) -- all ten read straight out of the ROM image. The
+   sibling array at 0x01F3E0 (4 x u32 -> 0x01EA78, 0x01EA87, 0x01EA96, 0x01EAA5) belongs to
+   DSP_Unmute_WithDebug (0x037F1C).
+   NOT NEW, and NOT restated here: symbols/proposals/subcpu-region-13.txt already carves both
+   runs as [DATA] entries and already carries an [UNCERTAIN] on the 12-vs-20 stride defect that
+   is stronger than anything this bullet would add -- it names DSP_Config_ClampLimits as the
+   routine that permits mode == 1 and lays out the "never reached" vs "genuine defect"
+   alternatives. Read it there.
+   One measured correction to that entry's wording: with mode == 1 the misread is THREE slots
+   per routine, not two. A disconnect at slots 2/3/4 fetches 0x01F404/0x01F408/0x01F40C, i.e.
+   link programs 0/1/2. A link at slots 2/3/4 fetches 0x01F418 = 0x0080004D, 0x01F41C =
+   0x0000F002 (ToneGen_Voice_Bitmap_Ptr's value, which IS a payload address) and 0x01F420 =
+   0x1000D000, which is not an address at all. 0x01F420 carries no symbol: it lies in the
+   30-byte unnamed gap between ToneGen_Voice_Bitmap_Ptr (0x01F41C) and
+   ToneGen_Velocity_Input_Curve (0x01F43E).
+   Whether mode == 1 with slot >= 2 is reachable in practice is still not established.
+ * RESOLVED 2026-08-21 (was: the exponential-looking 4-byte ramp "near 0x00F0A0" inside
+   IRAM_FirmwareConfig). Three corrections and a consumer.
+   (a) It does not start near 0x00F0A0. 0x00F09D-0x00F0BB is a 31-byte run of zeros. The first
+       word, 0x000088C1, is at 0x00F140 -- file offset 576 of
+       original_ROMs/kn5000_subprogram_v142.rom.
+   (b) Its left edge is exact and meaningful. DSP_Reset (0x0360A7) copies 0x91 words = 0x122 =
+       290 bytes from 0x00F01E to the live effect-configuration buffer at DRAM 0x448E
+       (`ld xiy,0xF01E / ld xix,0x448E / ldw bc,0x91 / ldirw`), then re-reads offset +8 of that
+       source image as `ldw_d16 xiz, 61478` (= 0x00F026). 0x00F01E + 0x122 = 0x00F140: the ramp
+       begins exactly where the default effect-config image ends.
+   (c) Its right edge is 0x00F33F -- 128 u32 entries, 0x00F140-0x00F33F, ending at exactly
+       0x7FFFFF00, the same entry count and the same terminator as DSP_MixerGain_Curve
+       (0x0131CF). That edge is NOT fixed by the monotonic scan: read as unsigned, the strictly
+       increasing run is 129 entries, because 0x00F340 = 0xEE9AFF00 is above 0x7FFFFF00. What
+       excludes that word is that it is negative as s32 and that 0x00F340-0x00F34D does not
+       continue the curve at all (0xEE9AFF00, 0x10000003, then six zero bytes), with the first
+       decodable double of the libm constant pool at 0x00F34E. By contrast DSP_MixerGain_Curve's
+       own edge IS self-evident: its entry 128 is 0x63000000 and breaks the run.
+   (d) CONSUMER: DSP_MixerCoeff_Compute (0x03C067) reads it at three sites, all
+       `lda_d16 xbc, 61760` (= 0x00F140), scaled 4*WA and 4*DE, and FP_MulAccum64s the two
+       lookups against DSP_MixerGain_Curve[4*BC] before writing the product to DSP2 (MN19413)
+       registers 0xD0 and 0xD3. WA, BC and DE are the three main-CPU mixer parameters held at
+       DRAM 0x45B2 / 0x45B4 / 0x45B6 (CmdHandler2C global sub-commands 0x01 / 0x02 / 0x06 --
+       see symbols/proposals/subcpu-region-12.txt).
+   So it is an AMPLITUDE curve, the twin of DSP_MixerGain_Curve. The old guess "envelope/level
+   or frequency" is half right: the "frequency" half is refuted by the 0x7FFFFF00 terminator and
+   by the only proven consumer treating the value as a gain.
  * Whether the four external-interrupt vectors 11..19 map to INT4..INTB plus one more source.
    INTE45/67/89/AB in shared/sfr_tmp94c241.s account for 8 external interrupts and INT0 for a
    ninth, leaving one of the ten slots unaccounted. All ten trampolines are EMPTY_HANDLER, so

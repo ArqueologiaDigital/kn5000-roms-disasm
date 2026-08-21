@@ -302,9 +302,17 @@
 ;      (no stack args).
 ; Body: g = long[0x000131CF + 4*BC] >> 15;  g = MulAccum64(g, long[0x00F140 + 4*WA] >> 16);
 ;       g = MulAccum64(g, long[0x00F140 + 4*DE] >> 15)  -- FP_MulAccum64 at 0x03D8CA is a
-;       32x32 -> 64 fixed-point multiply-accumulate, so this is Q15/Q16 arithmetic on the
-;       live per-slot volume array in DRAM at 0x00F140.
-;       The same slot is then run through FP_SP_CallWithBuf8 / FP_SP_Decode_ReadSign to get a
+;       32x32 -> 64 fixed-point multiply-accumulate, so this is Q15/Q16 arithmetic.
+;       ⚠ CORRECTED 2026-08-21: 0x00F140 is NOT a "live per-slot volume array". The payload
+;       image supplies a 128-entry u32 GAIN CURVE there (0x00F140-0x00F33F, strictly increasing,
+;       ending at exactly 0x7FFFFF00 -- same length and same terminator as DSP_MixerGain_Curve at
+;       0x0131CF, which this routine multiplies it against).
+;       [INFERENCE] WA and DE are curve INDICES, not slot numbers: this routine applies no bounds
+;       check to either (all three sites are a bare `lda_d16 xbc, 61760 / extz xwa / add xwa, xbc
+;       / ld xwa, (xwa)`), and they are two of the three mixer parameters the main CPU sets
+;       through CmdHandler2C global sub-commands 0x01 and 0x06 (DRAM 0x45B2 and 0x45B6). An index
+;       above 127 reads past the curve into the double-precision constant pool at 0x00F34E.
+;       The same WA index is then run through FP_SP_CallWithBuf8 / FP_SP_Decode_ReadSign to get a
 ;       second, float-derived integer.
 ; Writes, for each of the two results, the sequence
 ;       DSP_DispatchCommand(0x30) ; DispatchData(0x00) ; DispatchData(0xD0 or 0xD3) ;

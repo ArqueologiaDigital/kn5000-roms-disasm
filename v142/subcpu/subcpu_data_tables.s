@@ -36,11 +36,70 @@ SubCPU_Payload_Loaded_Flag:
 
 	.org 0xF000 - 0x400, 0xFF
 ; --- 0x00F000-0x00F41F  IRAM_FirmwareConfig -- mixed config block, and it is WRITABLE
-; First 2 bytes = 0x008E. Then a long run of 8-byte rows that are mostly zero/0xFF, followed
-; from about 0x00F0A0 by a monotonically increasing 4-byte-per-entry curve (0x000088C1,
-; 0x0010B244, 0x001A7691, 0x0029F176, 0x00427A83, 0x00695DC3 ...) -- an exponential-looking
-; ramp, almost certainly an envelope/level or frequency curve. I could not find its consumer,
-; so it is NOT named here.  ★ See the next entry: this block is not read-only config.
+; Not one object. The boundaries below are measured, not guessed, and they tile the range.
+;   0x00F000  u16 PAYLOAD VERSION. 0x008E = 142. Cross-checked against the other two payload
+;             images we hold: v140 -> 8c 00, v141 -> 8d 00, v142 -> 8e 00, all at file offset 256
+;             of original_ROMs/kn5000_subprogram_v14*.rom. INFERENCE: no payload-side reader
+;             exists -- neither the decimal spelling (`grep -w 61440`) nor the hex one
+;             (`grep -iE '0x0*f000\b'`) finds an absolute memory operand for this address in the
+;             v142 sources; every hit is an immediate (`and wa, 0xF000`, `or wa, 0xF000`,
+;             `ldw (xiz + 45), 0xF000`), a `.org`/`.short` directive, or prose. So this is a
+;             stamp for the loader or for external inspection.
+;   0x00F002-0x00F009  ToneGen_Voice_Active_Bitmap, 8 bytes (see the next entry). Its IMPLIED
+;             extent runs to the next symbol at 0x00F420 and is meaningless: everything below
+;             sits inside it.
+;   0x00F00A-0x00F01D  20 bytes, UNDESCRIBED: FF FF FF FF FF FF FF FF 00 00 00 FF 00 FF 00 FF
+;             00 00 00 00. Listed only so the range tiles; no consumer identified.
+;   0x00F01E-0x00F13F  DEFAULT DSP EFFECT-CONFIGURATION IMAGE, 0x122 = 290 bytes. DSP_Reset
+;             (0x0360A7) copies it with `ld xiy,0xF01E / ld xix,0x448E / ldw bc,0x91 / ldirw`
+;             (0x91 words = 290 B) into the live effect-config buffer at DRAM 0x448E, then
+;             re-reads offset +8 of the SOURCE image as `ldw_d16 xiz, 61478` (= 0x00F026) and
+;             feeds that word to DSP_WriteAlgoInitPreset / DSP_ApplyAlgoForVoiceType. 290 is the
+;             same 0x122 size guard the config path uses elsewhere.
+;   0x00F140-0x00F33F  128 x u32 MIXER GAIN CURVE, consumed on DSP2 (MN19413). Strictly
+;             increasing, 0x000088C1 first, ending at exactly 0x7FFFFF00 -- the same length and
+;             the same terminator as DSP_MixerGain_Curve (0x0131CF), so this is an AMPLITUDE
+;             curve.
+;             CONSUMER: DSP_MixerCoeff_Compute (0x03C067) reads it at three sites, all
+;             `lda_d16 xbc, 61760` (= 0x00F140), scaled 4*WA and 4*DE, and FP_MulAccum64s the two
+;             lookups against DSP_MixerGain_Curve[4*BC] before writing the product to DSP2
+;             registers 0xD0 and 0xD3. WA/BC/DE are the three main-CPU mixer parameters at DRAM
+;             0x45B2/0x45B4/0x45B6 (CmdHandler2C global sub-commands 0x01/0x02/0x06).
+;             Its left edge is exact: 0x00F01E + 0x122 = 0x00F140. Its right edge rests on the
+;             terminator and on the pool below, NOT on the scan: read unsigned the increasing
+;             run is 129 entries long (0x00F340 = 0xEE9AFF00), and what excludes entry 128 is
+;             that it is negative as s32.
+;             ⚠ RETRACTED from the previous text: the ramp does NOT start "about 0x00F0A0" --
+;             0x00F09D-0x00F0BB is a 31-byte run of zeros -- and it is not a frequency curve.
+;   0x00F340-0x00F34D  14 bytes that belong to neither neighbour: 0xEE9AFF00, 0x10000003, then
+;             six zero bytes. Undescribed.
+;   0x00F34E-0x00F41F  DOUBLE-PRECISION LIBM CONSTANT POOL: the head of the pool whose tail is
+;             already named FPConst_MaxNorm / FPConst_Zero / FPConst_Ln2 at 0x00F420+. Decoded
+;             from the image and matched one-for-one to the `lda_24` operands in
+;             subcpu_fp_math.s (line numbers in brackets):
+;               0x00F34E 1/3! exact [917, 971]        0x00F356 1/5!  [963]
+;               0x00F35E 1/7!  [955]                  0x00F366 1/9!  [947]
+;               0x00F36E 1/11! [939]                  0x00F376 1/13! [931]
+;                 -- six odd-factorial reciprocals (1/5! onward minimax-trimmed in the last
+;                    bits), read in DESCENDING address order = a Horner sin() series; the
+;                    routine that reads them says so itself ("begin argument reduction,
+;                    a * (1/pi) then modf").
+;               0x00F38E 8.908910206761541e-06 [887]  0x00F39E 3.1416015625 [875]
+;                 -- a Cody-Waite two-part pi: 3.1416015625 - 8.908910206761541e-06 == pi to the
+;                    last bit.
+;               0x00F396 1/pi = 0x3FD45F306DC9C883 [795]   0x00F3A6 2.3283e-10 [907]
+;               0x00F3AE FLT_EPSILON  0x00F3B2 FLT_MAX  0x00F3B6 FLT_MIN  (single precision)
+;               0x00F3BA pi   0x00F3C2 2*pi   0x00F3CA pi/2 (0x3FF921FB54442D18, read by
+;                    VoiceFloat_DispatchMulAdd in kn5000_subprogram_v142.s)
+;               0x00F3D2 ln 2 = 0x3FE62E42FEFA39EF [2851]   0x00F3DA log10 2   0x00F3E2 ln 10
+;               0x00F3EA DBL_EPSILON  0x00F3F2 DBL_MAX  0x00F3FA DBL_MIN  0x00F402 -0.0
+;                    (EPSILON/MAX/MIN appear in the same order in both precisions)
+;             0x00F40A-0x00F41F did not decode as clean doubles at that alignment and is left
+;             undescribed.
+;             ★ 0x00F3D2 is where the REAL ln(2) lives. The symbol NAMED FPConst_Ln2 sits at
+;             0x00F42C and holds sqrt(2) -- see that entry below, and [UNCERTAIN] in
+;             ../../symbols/proposals/subcpu-region-01.txt.
+;   ★ See the next entry: this block is not read-only config.
 IRAM_FirmwareConfig:
 	.byte 0x8e, 0x00
 ; 8 bytes (0x00F002-0x00F009) = a 64-bit "this voice is sounding" bitmap, one bit per hardware
@@ -2214,7 +2273,10 @@ CALL_TABLE_12159:
 
 ; --- 0x012171-0x012176  6 bytes, per-voice-type pitch bias
 ; `lda_24 xbc,0x012171 / ldb_sri A`, added to the note number in ToneGen_SetupPolyVoice.
-; Values 00 00 18 E8 00 00 (0x18 = +24, 0xE8 = -24 as a signed byte -- octave up / octave down).
+; Values 00 00 18 E8 00 00 (0x18 = +24, 0xE8 = -24 as signed bytes). CORRECTED 2026-08-21:
+; the unit is SEMITONES, not octaves -- the byte is added to the MIDI note number, and the same
+; routine indexes the octave table at 0x01217D with (note / 12) * 2. So +24/-24 are TWO octaves
+; up and two octaves down; this line used to say "octave up / octave down".
 ; ★ This is the address the ELF calls Audio_DSP_StateTable_Packed; the "table" is 6 bytes.
 ; --- 0x012171-0x014738  (Audio_DSP_StateTable_Packed) -- an ELF alias, NOT one packed table
 ; The ELF symbol covers everything up to OFFSETS_14739, but only the 6 bytes below belong
@@ -4022,10 +4084,13 @@ OFFSETS_14745:
 	.short 0x88
 
 ; NOTE: this address ALREADY carries the ELF name ToneGen_WorkArea -- no rename proposed, this
-; entry documents it. It is the base pointer passed in XBC/XDE to DSP_BytecodeInterpreter_Init
-; and DSP_ParameterWriteEngine at four call sites (DSP_WriteEFFConfig, DSP_WriteGlobalConfig,
-; DSP_WriteParameter x2, subcpu source 44822/44863/44883/44912). It is DSP program+parameter
-; data, not a tone-generator work area. See UNCERTAIN.
+; entry documents it. It is DSP program+parameter data, not a tone-generator work area.
+; CORRECTED 2026-08-21: it is passed to DSP_BytecodeInterpreter_Init in XDE by
+; DSP_WriteEFFConfig, and to DSP_ParameterWriteEngine in XBC at THREE further sites, all inside
+; DSP_WriteParameter (DSP_WriteParam_EFFCase, DSP_WriteParam_EFFCase0xA and
+; DSP_WriteParam_Generic). DSP_WriteGlobalConfig does NOT use it -- it uses 0x0147B3. The old
+; text named the wrong routines, undercounted the parameter sites, and quoted line numbers
+; 44822/44863/44883/44912 that no longer resolve. See UNCERTAIN.
 ; --- 0x014777-0x0147B2  DSP_EFFBytecode_ProgramTable
 ; 12-byte descriptors for DSP_BytecodeInterpreter_Init: +0,+2,+4,+6 = four words copied into
 ; the interpreter frame, +8 = long.  Indexed by effect-slot number.  0x0147B3 is the same
