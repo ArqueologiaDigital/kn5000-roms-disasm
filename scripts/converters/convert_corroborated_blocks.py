@@ -147,6 +147,32 @@ ERPB_OPS = {"cp": "cp_erpb", "add": "add_erpb", "sub": "sub_erpb",
 REGDISP = re.compile(r'(?<![\w(])(X?[A-Za-z]{2,3}\s*[+-]\s*0x[0-9a-fA-F]+)(?![\w)])')
 
 
+def canonical(text):
+    """Apply the known unidasm->llvm-mc rules deterministically, one result.
+
+    Same rules as translate(), but picking the single spelling rather than
+    yielding candidates, so a whole block can be assembled in one call.
+    """
+    parts = text.split(None, 1)
+    if len(parts) != 2:
+        return text
+    mn, rest = parts[0], parts[1]
+    if "/" in rest:
+        rest = re.sub(r'\b(\w+)/\w+', r'\1', rest).lower()
+    if rest.count(",") == 1:
+        a, b = [x.strip() for x in rest.split(",")]
+        if a.upper() in REG_BYTE and mn.lower() in ERPB_OPS:
+            return f"{ERPB_OPS[mn.lower()]} 0x{REG_BYTE[a.upper()]:02x}, {b}"
+        if mn.lower() == "lda" and not b.startswith("("):
+            return f"{mn} {a}, ({b})"
+        if mn.lower() in SHIFTS:
+            return f"{mn} {b}, {a}"
+        if a.upper() == "T" and mn.lower() in ("call", "jp", "jr", "jrl"):
+            return f"{mn} ({b})"
+    t = REGDISP.sub(lambda m: f"({m.group(1)})", f"{mn} {rest}")
+    return t
+
+
 def translate(text):
     """Yield candidate llvm-mc spellings of a unidasm instruction, best first.
 
@@ -216,6 +242,23 @@ def disassemble(raw, addr):
     return insns, warn
 
 
+def encode_block(texts):
+    """Assemble a whole block in ONE llvm-mc call.
+
+    The per-instruction path costs a process per line, which makes a tree-wide
+    sweep take hours. Here the block goes in as one source and the encodings
+    come back in order. Returns None if any line fails, so the caller can fall
+    back to the slow path that tries alternative spellings line by line.
+    """
+    src = "\n".join(texts) + "\n"
+    r = subprocess.run([MC, "--triple=tlcs900", "--show-encoding"],
+                       input=src, capture_output=True, text=True, timeout=120)
+    encs = ENC_RE.findall(r.stdout) if hasattr(ENC_RE, "findall") else []
+    if len(encs) != len(texts):
+        return None
+    return [bytes(int(b, 16) for b in e.split(",") if b.strip()) for e in encs]
+
+
 def encode(text):
     r = subprocess.run([MC, "--triple=tlcs900", "--show-encoding"],
                        input=text, capture_output=True, text=True, timeout=30)
@@ -255,6 +298,41 @@ def write_back(path, lines, todo, addr2name):
     open(path, "wb").write("\n".join(lines).encode("latin-1"))
 
 
+def aligned(rom, addr, backs=(0x40, 0x80, 0x100)):
+    """Is `addr` a real instruction boundary?
+
+    A LABEL IS NOT NECESSARILY ONE. Converting a block that starts mid-instruction
+    yields garbage that still round-trips byte-exactly, because the assembler
+    reproduces whatever bytes it is given -- the gate cannot catch it. Two real
+    examples caught this way, both reverted:
+
+        ClampAndStoreParam_LoadReg3   6 bytes -> `max` + `ld XSP,0xf8c7c568`,
+                                      loading SP with a constant that is
+                                      literally the bytes that follow
+        VoiceClaimExt2_Slot3_LoopBody2  opened `adc (XBC),L / ei 0x20` because
+                                      the preceding block ends `...0x64, 0xee`
+                                      and `ee 81` is ONE instruction spanning
+                                      the label
+
+    So: decode from several earlier points and require an instruction boundary to
+    land exactly on `addr` from every one of them. A self-synchronising decode
+    that converges from 0x40, 0x80 and 0x100 bytes back is good evidence.
+    """
+    off = addr - BASE
+    for back in backs:
+        if off - back < 0:
+            return False
+        tmp = os.path.join(tempfile.gettempdir(), "_align.bin")
+        open(tmp, "wb").write(rom[off - back: off + 16])
+        out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900",
+                              "-basepc", hex(addr - back)],
+                             capture_output=True, text=True, timeout=60).stdout
+        addrs = {int(m.group(1), 16) for m in re.finditer(r'^([0-9a-f]+):', out, re.M)}
+        if addr not in addrs:
+            return False
+    return True
+
+
 def main():
     argv = sys.argv
     if "--file" not in argv:
@@ -265,10 +343,11 @@ def main():
     syms = elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
     v9 = v9_code_map()
     V9ROM = open(os.path.join(REPO, "original_ROMs", "kn5000_v9_program.rom"), "rb").read()
+    V7ROM = open(os.path.join(REPO, "original_ROMs", "kn5000_v7_program.rom"), "rb").read()
     lines, blocks = blocks_of(path, syms)
 
-    stats = {"no-addr": 0, "not-corroborated": 0, "too-short": 0, "warn": 0,
-             "contains-data": 0, "roundtrip": 0, "ok": 0}
+    stats = {"no-addr": 0, "not-corroborated": 0, "too-short": 0, "misaligned": 0,
+             "warn": 0, "contains-data": 0, "roundtrip": 0, "ok": 0}
     todo = []
     for label, addr, a, b, raw in blocks:
         if addr is None:
@@ -284,6 +363,8 @@ def main():
         # other revision is evidence about the bytes themselves.
         if len(raw) < 6:
             stats["too-short"] = stats.get("too-short", 0) + 1; continue
+        if not aligned(V7ROM, addr):
+            stats["misaligned"] = stats.get("misaligned", 0) + 1; continue
         where, corroborated = 0, False
         while True:
             j = V9ROM.find(raw, where)
@@ -309,6 +390,15 @@ def main():
         # or partly data, and must not be rewritten as instructions.
         if any(i.split()[0].lower() == "db" for i in insns if i.split()):
             stats["contains-data"] = stats.get("contains-data", 0) + 1; continue
+        # Fast path: canonicalise every line with the known rules, then assemble
+        # the whole block in one call. Falls through to the per-line search only
+        # when that does not reproduce the bytes.
+        canon = [next(iter(translate(i))) if False else canonical(i) for i in insns]
+        fast = encode_block(canon)
+        if fast is not None and b"".join(fast) == raw:
+            stats["ok"] += 1
+            todo.append((label, addr, a, b, raw, canon))
+            continue
         out, accepted = [], []
         for i in insns:
             enc, used = None, i
@@ -336,6 +426,7 @@ def main():
     print(f"   no address (label not in ELF) ... {stats['no-addr']}")
     print(f"   v9 does NOT call it code ....... {stats['not-corroborated']}")
     print(f"   under 6 bytes (too weak) ....... {stats['too-short']}")
+    print(f"   label is not an insn boundary .. {stats['misaligned']}")
     print(f"   invalid encodings .............. {stats['warn']}")
     print(f"   contains db (data, not code) ... {stats['contains-data']}")
     print(f"   failed byte round-trip ......... {stats['roundtrip']}")
