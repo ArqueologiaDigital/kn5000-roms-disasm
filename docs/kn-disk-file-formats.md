@@ -198,9 +198,51 @@ types 0..7 with in-range handlers.
 `0xF980..0xFFC0` is the DRAM work area the firmware preserves across power-down -- i.e. the live
 panel state. So the KN5000 handler and the KN7000 UI label agree, by two entirely separate routes.
 
-**What this does NOT settle:** the handler operates on 0x640 + 0x800 bytes, and the on-disk file is
-0x5800. The mapping from those regions to the 26 blocks and the 24 slots is still unread. This
-gives the next pass a *function to disassemble* instead of a search that cannot succeed.
+### The writer, disassembled -- and a size that does not add up
+
+The v7 handler is 0x92 bytes, complete and short. Reproduce with:
+
+    dd if=original_ROMs/kn5000_v7_program.rom of=/tmp/h.bin bs=1 skip=$((0x1876E9)) count=$((0x92))
+    unidasm /tmp/h.bin -arch tlcs900 -basepc 0xF876E9
+
+It is a **writer**, and that is proven rather than assumed at two points: it passes `DE = 0` (the
+extension index for `LSW`) to `0xF88D9E`, whose first six instructions match `FileIO_ReadHeader`
+exactly (`dec 2,XSP / push XIZ / ld (XSP+0x04),E / ld XIZ,XWA / ...`); and it opens with the mode
+string at `0xEA01F0`, which is **`"wb"`**.
+
+    f876f0  size check   (0xFFC0 - 0xF980) + (0x1E8000 - 0x1E7800) = 0x640 + 0x800 = 0xE40
+    f87715  if free < 0xE40 -> error 0xFF9B
+    f87722  ld DE,0            ; extension index 0 = LSW
+    f87724  call 0xF88D9E      ; build "<name>.LSW"
+    f87730  call 0xF887BA      ; fopen, mode "wb" @ 0xEA01F0
+    f8774a  call 0xF88A1B      ; write 0x640 bytes from 0xF980
+    f87755  call 0xF88A1B      ; write 0x800 bytes from 0x1E7800
+    f87759  call 0xF887B5      ; close
+
+So the payload is **0xE40 = 3,648 bytes** from two regions: `0xF980..0xFFC0` (the DRAM work area
+preserved across power-down -- the live panel) and `0x1E7800..0x1E8000` (unidentified).
+
+**And 0xE40 matches neither corpus.** There are two distinct populations of `.LSW` in the tree:
+
+| corpus | count | size |
+|---|---|---|
+| `KN7000/floppy-archive` (the seven disks analysed above) | 7 | **22,528 B (0x5800) uniform** |
+| `kn7000_scratchpad_snapshot/kn6scan/ext` | 8+ | **~2,050 B, variable** (2041, 2049, 2050, 2051, 2074, 2076, 2354) |
+
+Neither is 3,648. The variable-length population is suggestive: `0xF88A1B` branches on a global at
+`0x7EA8` before writing, which is the shape of a **[INFERENCE] optional packing step** -- a packer
+would turn a fixed 0xE40 payload into variable output near 2 KB. That would leave the uniform
+0x5800 files as the odd ones out, and they are the ones the TLV analysis at the top of this file
+describes.
+
+**The consequence is uncomfortable and worth stating plainly: the 26-block TLV structure documented
+above may describe a format this firmware does not produce.** The TLV reading is still exact on its
+own corpus -- 955 records, zero residue on all seven disks -- but "the KN5000 writes `.LSW`" and
+"these seven `.LSW` files came from a KN5000" are now separate claims, and only the first is proven.
+
+**Next, in order:** disassemble `0xF88A1B` to settle whether it packs (that single function decides
+which corpus the firmware produces); then map `0x1E7800..0x1E8000`; then re-test the TLV framing
+against the `kn6scan` population, which nobody has parsed.
 
 ⚠ **The lesson, since it will recur.** "Searched the whole ROM for the name, found nothing, therefore
 the firmware does not do it" is only valid when the code would have to say the name. Table-driven
