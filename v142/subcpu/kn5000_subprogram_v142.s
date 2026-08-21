@@ -6884,14 +6884,55 @@ Voice_Clamp_Byte_WA_Return:
 	ld hl, wa
 	ret
 
-; BUILD AND STORE THE VOICE OUTPUT-LEVEL / PAN WORD.
+; ---------------------------------------------------------------------------------------
+; THE TONE GENERATOR STAGING BLOCK AT 0x0451CE
+;
+; The words from 0x0451CE upwards are staged copies of IC303's per-voice registers, in
+; the order the chip is given them. Each u16 here is one tone generator register:
+;
+;     0x0451CE -> +0x040   recording selector          (class << 12) | entry
+;     0x0451D0 -> +0x080   output level                built below
+;     0x0451D2 -> +0x0C0   coarse level + expression   Level_Build_Reg0C0
+;     0x0451D4 -> +0x100   TVF cutoff                  TVF_Emit_Registers, from voice+66
+;     0x0451D6 -> +0x140   TVF depth / bias            TVF_Emit_Registers, from voice+68
+;     0x0451D8 -> +0x180   pan, 0x0040 = centre        (see the 0x0040 default at Voice_InitVoiceState)
+;     0x0451E0 -> +0x4C0   oscillator config + slot    Voice2_UpdatePitch seeds 0x4400
+;     0x0451E2 -> +0x500   detune / bend pair          Voice_PortaLevel_ScaleAndPack
+;
+; MEASURED on a running machine, 2026-08-20: a capture of every write to the tone
+; generator over 1705 note-ons of the built-in demo agrees with this mapping register by
+; register. See tools/kn5000-rootpitch/ in the KN7000 preservation repository.
+; ---------------------------------------------------------------------------------------
+
+; BUILD AND STORE THE VOICE OUTPUT-LEVEL WORD (tone generator register +0x080).
 ; In: XWA = voice work record, BC = starting level.
-; Adds (record+0x23)->[0x0C] and (record+0x23)->[0x10] and (record+0x33), clamps to
-; 0..0xFF, uses the result*2 to index the u16 table at 0x010764 and doubles that.
-; Pan: if bit7 of (record+0x0F)->[0x02] is set the pan field comes from that byte's
-; bits 4..6 shifted left 8; otherwise from the u16 table at 0x00FBE4 indexed by
-; (record+0x06) >> 8. bit15 is forced and the word is stored in the staging word at
-; 0x0451D0. No caller found by a call/calr scan over the ROM.
+;
+; LEVEL, bits 11..0: adds (record+0x23)->[0x0C] and (record+0x23)->[0x10] and
+; (record+0x33), clamps to 0..0xFF, uses the result*2 to index the u16 table at 0x010764
+; and doubles that. The table is a logarithmic law, 256 counts per octave.
+;
+; BITS 14..12 ARE NOT PAN -- pan is a separate register, +0x180, staged at 0x0451D8.
+; This field is three bits of per-recording data, from one of two sources chosen by bit 7
+; of the SELECTED ZONE RECORD's byte +0x02:
+;
+;     bit 7 SET   -> field = (zone_record[+0x02] >> 4) & 7    the descriptor's own bits
+;     bit 7 CLEAR -> field = T[folded note mod 12]            u16 table at 0x00FBE4,
+;                                                             T[n] = floor(2*(n mod 12)/3)
+;
+; That zone record is the same one whose first word becomes the +0x040 selector and whose
+; word at (stride-2) is the multisample's pitch trim -- so three bits of the multisample
+; descriptor travel to the chip verbatim, which is the only per-recording data that does.
+;
+; MEASURED, 2026-08-20: over a demo capture, the override branch predicts the value the
+; chip is given 196 times out of 196 for selectors reachable from exactly one zone record.
+; The low nibble of byte +0x02 is zero across all 1444 selectors the firmware's tables
+; produce, which is the field structure showing itself in the data.
+;
+; bit15 is forced here, but it is not data: it is the parameter-latch commit strobe that
+; ToneGen_WriteVoiceParams raises on a burst's first word and lowers on its last, so this
+; SET is redundant with the writer's own.
+;
+; No caller found by a call/calr scan over the ROM (reached indirectly).
 Voice_Build_OutputLevel:
 	push xiz
 	ld xiz, xwa
@@ -6918,7 +6959,8 @@ Voice_Build_OutputLevel:
 	sll wa, 8
 	jr Voice_Build_OutputLevel_Store
 
-; No explicit pan override: take the pan word from the 0x00FBE4 table.
+; No descriptor override (bit 7 of zone_record[+0x02] clear): take bits 14..12 from the
+; 0x00FBE4 table, indexed by the folded note.
 Voice_Build_OutputLevel_NoPanOverride:
 	ld wa, (xiz + 6)
 	srl wa, 8
@@ -6928,7 +6970,8 @@ Voice_Build_OutputLevel_NoPanOverride:
 	add xde, xwa
 	ld wa, (xde)
 
-; OR level and pan together, force bit15 and store to 0x0451D0.
+; OR the level and the bits-14..12 field together, force the commit strobe and store to
+; 0x0451D0 (tone generator register +0x080).
 Voice_Build_OutputLevel_Store:
 	or bc, wa
 	set 15, bc
@@ -9668,7 +9711,7 @@ Voice_PortaLevel_ScaleAndPack:
 	lda xsp, (xsp + 12)
 	ret
 
-; Zeroes the whole level/pan half of the staging block: 0x0451EA, 0x0451E2, 0x0451EC,
+; Zeroes the whole level half of the staging block: 0x0451EA, 0x0451E2, 0x0451EC,
 ; 0x0451EE, 0x0451F0, 0x0451F2, 0x0451F4, 0x0451F6, 0x0451DC, 0x0451DE (TG regs 0x8C0,
 ; 0x500, 0x900, 0x940, 0x980, 0x9C0, 0xA00, 0xA40, 0x440, 0x480).
 ; In: XWA = per-voice record, XHL = its tone record. Then it selects the reg-0x180 value
@@ -15418,12 +15461,12 @@ Audio_Tick_ServiceVoices_A_Done:
 ; Audio_Tick_ServiceVoices_A every tick by XORing the byte at 0x041342 with 0xFF.
 ; Prologue: calr Voice_TickNoteDecay (0x027363), calr Pitch_Bend_Ramp_Tick (0x0271BC).
 ; Then reads the global flag word 0x041343 and tests bit 10:
-;   bit 10 SET   -> loop A (0x027AE8): additionally re-writes pitch
-;                   (Pitch_Emit_Reg400, 0x023A4A) and pan
-;                   (ToneGen_WriteVoicePitch, 0x02D0BA) for every voice whose flags word
+;   bit 10 SET   -> loop A (0x027AE8): additionally re-writes the pitch register, twice --
+;                   Pitch_Emit_Reg400 (0x023A4A) and ToneGen_WriteVoicePitch (0x02D0BA),
+;                   both of which write +0x400 -- for every voice whose flags word
 ;                   (voice+0x01) has bit 10 set;
 ;   bit 10 CLEAR -> loop B (0x027BA0): the same retire/portamento bookkeeping WITHOUT any
-;                   pitch or pan register traffic.
+;                   pitch register traffic.
 ; Both loops walk the part's voice-index list obtained from Voice_Query_AllChannels (0x02CD55),
 ; list pointer = XHL+5, terminated by a byte >= 0x40, voice record = 0x04308E + idx*0x47.
 ; Per voice: if [voice+0x23]+0x0A bit 15 is SET the note is still held -> Voice_Step_DelayTimers
@@ -23754,9 +23797,22 @@ Voice_SetPanning_Exit:
 	pop xiz
 	ret
 
-; Existing curated name kept. WA = TG channel, XBC = shadow block. Writes exactly one
-; register: 0x0400 + ch <- shadow +0x0E. Neither the curated name ("pitch") nor the LLVM name
-; ("pan") is provable from the body; see [UNCERTAIN].
+; WA = TG channel, XBC = shadow block. Writes exactly one register: 0x0400 + ch <- shadow
+; +0x0E.
+;
+; RESOLVED 2026-08-20 -- the curated name is right and the LLVM name ("pan") is wrong.
+; Register +0x400 is the voice's ABSOLUTE LOG PITCH, 0x100 units per semitone, carrying
+;
+;     +0x400 = (note << 8) + 0x80 + C(recording) + 2*fine + detune
+;
+; where C is the constant belonging to the selected multisample. Two independent checks:
+; decoding captured note-ons with C recovers an exact integer MIDI note for 83.8% of them
+; on unambiguous selectors, against 22.0% for a C = 0 control (5956 events); and rendering
+; the decoded notes gives a median MIDI note of 48.1 against 48.0 measured from a recording
+; of a real KN5000 playing the same demo.
+;
+; Pan is a DIFFERENT register, +0x180, written from the staging word at 0x0451D8 with
+; 0x0040 as centre.
 ToneGen_WriteVoicePitch:
 	push xiz
 	ld xiz, xbc
