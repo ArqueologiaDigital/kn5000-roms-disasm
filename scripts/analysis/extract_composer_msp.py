@@ -1,5 +1,29 @@
 #!/usr/bin/env python3
 """
+⚠⚠ SPENT ONE-SHOT MIGRATION -- ALREADY RUN, DO NOT REPAIR AND RE-RUN. ⚠⚠
+
+This is not an extractor you can invoke. It is DESTRUCTIVE: it carves a block out of the maincpu
+program source and writes the REMAINDER BACK OVER IT (`open(MAIN_FILE, 'wb')`, below). It was run
+once, the block now lives in sequencer/composer_msp_defaults.s, and running it again on the
+migrated tree would corrupt the source rather than migrate it.
+
+It currently fails on a missing path for two reasons, and BOTH are load-bearing safety:
+  * `REPO` is computed as two levels up from this file, which lands in `scripts/`, not the repo
+    root -- the same bug that stopped `extract_fonts.py` running until 2026-08-21;
+  * it looks for `maincpu/kn5000_v10_program.s`, and the tree moved to `v10/maincpu/` long ago.
+
+Fixing either without reading the rest of this comment would make a destructive script runnable.
+If you need the extraction logic as a reference, read it; do not execute it.
+
+Kept for provenance: it documents HOW composer_msp_defaults.s came to exist.
+
+NOTE ON THE NAME: MSP here is "Music Style Preset" data inside the PROGRAM ROM. It has nothing to
+do with the `.MSP` files on KN-series floppies (see docs/kn-disk-file-formats.md) -- a confusion
+this docstring previously invited, and which one of this project's own documents made on
+2026-08-21 before being corrected.
+
+Original description follows.
+
 Extract MSP_DefaultSettings + Composer_SettingsBlock + callback tables
 from kn5000_v10_program.s into sequencer/composer_msp_defaults.s.
 

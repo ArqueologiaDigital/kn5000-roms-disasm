@@ -69,7 +69,12 @@ identified.
            DIFFER, so it is user data
     .MSP   opens 4C 4B 45 ("LKE") then 5A 5A 5A -- the same header shape as .CMP -- 4,096 B, and
            **byte-identical on all seven disks**, so a constant: a default or empty bank.
-           `scripts/analysis/extract_composer_msp.py` already reads part of it.
+
+⚠ CORRECTED: an earlier version of this file said `scripts/analysis/extract_composer_msp.py`
+"already reads part of" the disk `.MSP`. **It does not.** That script extracts Music Style Preset
+data out of the PROGRAM ROM source, shares nothing with the disk format but three letters, and is
+a spent one-shot migration that rewrites the maincpu source in place -- it must not be repaired and
+re-run. Nothing in this repository reads a disk `.MSP`.
 
 The `5A 5A 5A` signature recurs across `.SQF`, `.LSW`, `.CMP`, `.MSP` and the IC19 section headers,
 so it is a family marker rather than a per-format magic.
