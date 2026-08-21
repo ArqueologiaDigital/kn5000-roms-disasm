@@ -44,7 +44,7 @@ AudioMode_CopyAccentFlags:
 	stb_d8	(12998), a
 	ret
 AccPedal_BytecodeBlock1:
-	.incbin "includes/generated/v7_transplant_AccPedal_BytecodeBlock1.bin"
+	.incbin "includes/romslices/v7_transplant_AccPedal_BytecodeBlock1.bin"
 AccPedal_SetFlag13155:
 	pushw wa
 
@@ -145,7 +145,7 @@ AccChannel_StoreCurrentState:
 	stb_d8	(12876), a
 	ret
 AccChannel_BytecodeBlock2:
-	.incbin "includes/generated/v7_transplant_AccChannel_BytecodeBlock2.bin"
+	.incbin "includes/romslices/v7_transplant_AccChannel_BytecodeBlock2.bin"
 AccChannel_SetDirtyIfActive:
 	.byte 0xd1, 0x47, 0x32, 0x20, 0xc8, 0xcc, 0x07, 0xc8
 	.byte 0xd8, 0x66, 0x05, 0xc1, 0x8a, 0x32, 0x3e, 0x3f
@@ -1158,7 +1158,7 @@ VoiceParams_LoadFiveSequential:
 	ret
 
 AccVoice_BytecodeBlock3:
-	.incbin "includes/generated/v7_transplant_AccVoice_BytecodeBlock3.bin"
+	.incbin "includes/romslices/v7_transplant_AccVoice_BytecodeBlock3.bin"
 RhythmROM_CheckValid:
 	.byte 0x23, 0x00, 0x40, 0xff, 0xff, 0xff, 0xff, 0xe1
 	.byte 0xdb, 0x31, 0xf0, 0x66, 0x02, 0x68, 0x1d

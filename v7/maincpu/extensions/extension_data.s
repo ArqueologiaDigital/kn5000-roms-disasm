@@ -3,7 +3,7 @@
 ; accompaniment parameters, and UI widget descriptors for expansion devices
 
 ExtData_ChordTypeTable_Top:
-	.incbin "includes/generated/v7_transplant_ExtData_ChordTypeTable_Top.bin"
+	.incbin "includes/romslices/v7_transplant_ExtData_ChordTypeTable_Top.bin"
 ExtData_ChordTypeTable_Mid:
 	.byte 0xed
 	nop
@@ -591,7 +591,7 @@ Str_StoreTotalSetting_EN0:	aligned_string "Stores to total setting including Rhy
 Str_StoreTotalSetting_EN1:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 Str_StoreTotalSetting_EN2:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 Str_StoreTotalSetting_EN3:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_DE:	.incbin "includes/generated/v7_data_str_storetotalsetting_de.bin"
+Str_StoreTotalSetting_DE:	.incbin "includes/romslices/v7_data_str_storetotalsetting_de.bin"
 NoteNameStr_Table_4:
 	.long CtrlAssignStr_PMemIncrement
 	.long CtrlAssignStr_PMemDecrement
@@ -1382,7 +1382,7 @@ KeyScaleNoteStr_A:
 	ldb	w, 0
 	swi	7
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
-KeyScaleNoteStr_G:	.incbin "includes/generated/v7_data_keyscalenotestr_g.bin"
+KeyScaleNoteStr_G:	.incbin "includes/romslices/v7_data_keyscalenotestr_g.bin"
 NoteNameStr_Table_5:
 	.long FuncNameStr_PmBkNameFunc
 	.long FuncNameStr_PmBankNamingCheck
@@ -1858,7 +1858,7 @@ ParamStr24_window:	aligned_string "window"
 ParamStr24_page:	aligned_string "page"
 
 ExtData_NormScreenProc_Ptr:
-	.incbin "includes/generated/v7_fix_extdata_normscreenproc_ptr.bin"
+	.incbin "includes/romslices/v7_fix_extdata_normscreenproc_ptr.bin"
 .include "ui_widgets/master_style_grid_screens.s"
 	jr	gt, 0x00
 	aligned_string "AcDispTimeSetGridBox"
@@ -1995,7 +1995,7 @@ MethodNameStr_MT_SOUNDNAME:	aligned_string "MT_SOUNDNAME"
 MethodNameStr_MT_GetSndGrpName:	aligned_string "MT_GetSndGrpName"
 MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
 MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
-MethodNameStr_MT_SvariIni:	.incbin "includes/generated/v7_data_methodnamestr_mt_svariini.bin"
+MethodNameStr_MT_SvariIni:	.incbin "includes/romslices/v7_data_methodnamestr_mt_svariini.bin"
 NoteNameStr_Table_7:
 	.long ProcNameStr_NormScreenProc
 	.long ProcNameStr_VariScreenProc
@@ -2056,7 +2056,7 @@ ProcNameStr_AcFreeSplitBoxProc:	aligned_string "AcFreeSplitBoxProc"
 ProcNameStr_AcTransposeBoxProc:	aligned_string "AcTransposeBoxProc"
 ProcNameStr_RVariScreenProc:	aligned_string "RVariScreenProc"
 ProcNameStr_VariScreenProc:	aligned_string "VariScreenProc"
-ProcNameStr_NormScreenProc:	.incbin "includes/generated/v7_data_procnamestr_normscreenproc.bin"
+ProcNameStr_NormScreenProc:	.incbin "includes/romslices/v7_data_procnamestr_normscreenproc.bin"
 NoteNameStr_Table_8:
 	.long NakaInst_MainVariSet
 	.long NakaInst_MainSvariIni
@@ -3172,7 +3172,7 @@ ErrorDialog_RecoveryLine3:
 	nop
 	aligned_string "this unit needs repairing."
 .include "ui_widgets/extension_device_screens.s"
-	.incbin "includes/generated/v7_data_encoder_region.bin"
+	.incbin "includes/romslices/v7_data_encoder_region.bin"
 Protocol_values_for_LED_rows:
 	; LED row lookup table: maps internal index (0-14) to protocol row value
 	; Used by Set_LEDs (FC71B2) to translate row index to serial protocol value
@@ -4269,7 +4269,7 @@ SoundProgram_DispatchTable:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0x19
 	.byte 0x14, 0x0c, 0x0d, 0x0e, 0xec, 0xa6, 0xed, 0x00
-Naka_ToshiParam_Table:	.incbin "includes/generated/v7_data_naka_toshiparam_table.bin"
+Naka_ToshiParam_Table:	.incbin "includes/romslices/v7_data_naka_toshiparam_table.bin"
 VoiceCtrlR1_Entry_001:
 	pop	sr
 	nop

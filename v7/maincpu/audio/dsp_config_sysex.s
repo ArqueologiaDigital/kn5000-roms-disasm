@@ -404,7 +404,7 @@ SwbtWr_Done:
 SwbtWr_CallProcessAll:
 	.byte 0x41, 0x8f, 0x04, 0x19, 0x9e, 0x8c
 SwbtWr_SoundBankParamTable:
-	.incbin "includes/generated/v7_transplant_SwbtWr_SoundBankParamTable.bin"
+	.incbin "includes/romslices/v7_transplant_SwbtWr_SoundBankParamTable.bin"
 SwbtWr_ProcessAll:
 	.byte 0xaa, 0xfd, 0x1d, 0xc9, 0x14, 0xef, 0x5e, 0x5c
 	.byte 0x5b, 0x5a, 0x0b, 0x00, 0x00, 0x30, 0x48, 0x00
@@ -787,7 +787,7 @@ CompIface_SendActiveSensing_PC2:
 	.byte 0x54, 0xc1, 0xcb, 0x66, 0x33, 0xcb, 0x33, 0x07
 	.byte 0x66, 0x15
 MidiOut_RealtimeDispatch_Data:
-	.incbin "includes/generated/v7_transplant_MidiOut_RealtimeDispatch_Data.bin"
+	.incbin "includes/romslices/v7_transplant_MidiOut_RealtimeDispatch_Data.bin"
 MidiOut_SerializeAndSend:
 	.byte 0xc1, 0xb3, 0x30, 0x4e, 0x00, 0x1d, 0xfc, 0x71
 	.byte 0xfc, 0x68, 0x2f
@@ -2378,7 +2378,7 @@ DSPCfg_EventType51:
 DSPCfg_Epilogue:
 	.byte 0x00, 0x02, 0x1d, 0xb8, 0xa7, 0xf5, 0xd1, 0xfa
 DSPCfg_ReturnValueTable:
-	.incbin "includes/generated/v7_fix_dspcfg_returnvaluetable.bin"
+	.incbin "includes/romslices/v7_fix_dspcfg_returnvaluetable.bin"
 	.include "boot/screen_group_dispatch.s"
 
 AudioInit_ProcessModeChange:
@@ -2578,6 +2578,6 @@ UIStateEvt_DrumAssign_Notify:
 	.byte 0x12, 0xe9, 0x80, 0xb0, 0x00, 0x00, 0xda, 0x61
 	.byte 0xda, 0xcf, 0x1a, 0x00, 0x61
 UIStateEvt_TransposeUpdate:
-	.incbin "includes/generated/v7_block_uistateevt_transposeupdate.bin"
+	.incbin "includes/romslices/v7_block_uistateevt_transposeupdate.bin"
 ; === end v7 block ===
 	.include "audio/audioinit_routines.s"

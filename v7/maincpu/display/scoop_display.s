@@ -831,7 +831,7 @@ SoundEvt_LongPacketHandler:
 	.byte 0x0d, 0x3e, 0x01, 0x1d, 0x04, 0x90, 0xef, 0x1d
 	.byte 0x69, 0x79, 0xef, 0x0e
 ScoopDisp_HandlerData2:
-	.incbin "includes/generated/v7_transplant_ScoopDisp_HandlerData2.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_HandlerData2.bin"
 DefaultHandler_Ret:
 	.byte 0x0e, 0x1d, 0x0d, 0x91, 0xf9, 0xdb, 0xd8, 0x7e
 	.byte 0x20, 0x00, 0xc1, 0x65, 0x0d, 0x25, 0xcd, 0xcc
@@ -855,9 +855,9 @@ DefaultHandler_Ret:
 	.byte 0xcf, 0x0f, 0x00, 0x7e, 0x08, 0x00, 0x1d, 0xfd
 	.byte 0x62, 0xef, 0x1b, 0x64, 0x62, 0xef, 0x0e
 ScoopDisp_FlagSetAndDispatch:
-	.incbin "includes/generated/v7_transplant_ScoopDisp_FlagSetAndDispatch.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_FlagSetAndDispatch.bin"
 ScoopDisp_DispatchTable_Small:
-	.incbin "includes/generated/v7_transplant_ScoopDisp_DispatchTable_Small.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Small.bin"
 ToneParam_Evt0F_BytecodeHandler:
 	bit	7, w
 	jrl	nz, 17
@@ -936,7 +936,7 @@ ToneParam_Evt0F_BytecodeHandler:
 ; -----------------------------------------------------------------------------
 
 PerfMode_ParamHandler_Table:
-	.incbin "includes/generated/v7_transplant_PerfMode_ParamHandler_Table.bin"
+	.incbin "includes/romslices/v7_transplant_PerfMode_ParamHandler_Table.bin"
 PerfMode_JumpTable_Extended:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1004,9 +1004,9 @@ PerfMode_EventTable_0:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 PerfMode_Evt03_FlagHandler_A:
-	.incbin "includes/generated/v7_transplant_PerfMode_Evt03_FlagHandler_A.bin"
+	.incbin "includes/romslices/v7_transplant_PerfMode_Evt03_FlagHandler_A.bin"
 PerfMode_Evt03_FlagHandler_B:
-	.incbin "includes/generated/v7_transplant_PerfMode_Evt03_FlagHandler_B.bin"
+	.incbin "includes/romslices/v7_transplant_PerfMode_Evt03_FlagHandler_B.bin"
 PerfMode_Evt03_ClampAndUpdate:
 	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x7a, 0x36
 	.byte 0x21, 0x27, 0x00, 0x26, 0x03, 0x1d, 0x3a, 0x65
@@ -1441,9 +1441,9 @@ PerfMode_EventTable_9:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 PerfMode_Evt04_VolumeHandler:
-	.incbin "includes/generated/v7_transplant_PerfMode_Evt04_VolumeHandler.bin"
+	.incbin "includes/romslices/v7_transplant_PerfMode_Evt04_VolumeHandler.bin"
 PerfMode_VoiceAddressTable:
-	.incbin "includes/generated/v7_transplant_PerfMode_VoiceAddressTable.bin"
+	.incbin "includes/romslices/v7_transplant_PerfMode_VoiceAddressTable.bin"
 PerfMode_ParamHandler_10:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11
 	.byte 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x41, 0x6c
@@ -2268,7 +2268,7 @@ PerfMode_Handler_EvtB:
 	.byte 0xf1, 0xf9, 0x10, 0xb1, 0xf1, 0xf9, 0x10, 0xb2
 	.byte 0x0e
 ScoopDisp_DispatchTable_Extended:
-	.incbin "includes/generated/v7_transplant_ScoopDisp_DispatchTable_Extended.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended.bin"
 Display_DirtyRegionDispatch:
 	bitda 3, (3411)
 	jrl z, Timer_ModeDispatch_Return
@@ -2639,7 +2639,7 @@ ToneParam_Evt09_BytecodeHandler:
 	.byte 0xef, 0x1b, 0xbb, 0x80, 0xef, 0xef, 0xc8, 0x02
 	.byte 0x00, 0x00, 0x00, 0x1b, 0x40, 0x81, 0xef, 0x0e
 ToneParam_HandlerTable_BC:
-	.incbin "includes/generated/v7_transplant_ToneParam_HandlerTable_BC.bin"
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC.bin"
 ToneEvt_Handler_Mode9:
 	bit	7, w
 	jrl	nz, 8
@@ -3011,7 +3011,7 @@ DMA_StoreFlagAndReturn:
 
 
 VoiceSlot_TableSetup:
-	.incbin "includes/generated/v7_transplant_VoiceSlot_TableSetup.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup.bin"
 AccPedal_CheckBitAndUpdate:
 	bitda 0, (3412)
 	jrl z, AccPedal_ClearFlagAndJump
@@ -3216,7 +3216,7 @@ VoiceCtrl_BytecodeHandler:
 	jp	VoiceCtrl_BytecodeHandler_0x9C
 	ret
 VoiceCtrl_CheckAndReset:
-	.incbin "includes/generated/v7_transplant_VoiceCtrl_CheckAndReset.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceCtrl_CheckAndReset.bin"
 VoiceCtrl_SendNoteOffSequence:
 	push xhl
 	pushw wa
@@ -3514,7 +3514,7 @@ SerialPort_ModeHandler_0:
 	.byte 0x51, 0xf1, 0x91, 0x33, 0x40, 0xf1, 0x92, 0x33
 	.byte 0x41, 0x0e
 ScoopParam_ValueTable:
-	.incbin "includes/generated/v7_transplant_ScoopParam_ValueTable.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopParam_ValueTable.bin"
 Interrupt_ModeGuardCheck:
 	cpdi8 (3567), 18
 	jrl z, Interrupt_NullRet
@@ -3825,7 +3825,7 @@ PortConfig_Handler_0:
 	.byte 0x03, 0xec, 0xe0, 0x21, 0xf1, 0x65, 0x0d, 0x41
 	.byte 0x0e
 PortConfig_DataTable_A:
-	.incbin "includes/generated/v7_transplant_PortConfig_DataTable_A.bin"
+	.incbin "includes/romslices/v7_transplant_PortConfig_DataTable_A.bin"
 PortConfig_DataTable_B:
 	nop
 	push	sr
@@ -3867,9 +3867,9 @@ ClockConfig_Select_Table:
 	.long ClockConfig_Handler_1
 	.long ClockConfig_Handler_0
 ClockConfig_Handler_1:
-	.incbin "includes/generated/v7_transplant_ClockConfig_Handler_1.bin"
+	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_1.bin"
 ClockConfig_Handler_0:
-	.incbin "includes/generated/v7_transplant_ClockConfig_Handler_0.bin"
+	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_0.bin"
 SysEx_PeriodicDispatch:
 	.byte 0x45, 0x69, 0x0d, 0x00, 0x00, 0x85, 0x3f, 0x18
 	.byte 0x7e, 0x20, 0x00, 0xc1, 0x1c, 0xe3, 0x3c, 0x6f
@@ -3982,7 +3982,7 @@ SysEx_BytecodeDispatcher:
 	.byte 0x1d, 0xc2, 0xf4, 0xef, 0x1d, 0xdd, 0x5b, 0xef
 	.byte 0x0e
 MemoryConfig_Handler_Table:
-	.incbin "includes/generated/v7_transplant_MemoryConfig_Handler_Table.bin"
+	.incbin "includes/romslices/v7_transplant_MemoryConfig_Handler_Table.bin"
 MemConfig_VoiceSlotLookup:
 	call VoiceSlot_ComputeIndex
 	push xde
@@ -4030,7 +4030,7 @@ MemConfig_Handler_0:
 	.byte 0xcd, 0xad, 0xef, 0x1d, 0x95, 0xc1, 0xef, 0x1b
 	.byte 0x8e, 0xad, 0xef, 0x0e
 MemConfig_Handler_1:
-	.incbin "includes/generated/v7_transplant_MemConfig_Handler_1.bin"
+	.incbin "includes/romslices/v7_transplant_MemConfig_Handler_1.bin"
 MemConfig_Handler_3:
 	.byte 0x1d, 0xc8, 0xb0, 0xef, 0x1d, 0x55, 0xb1, 0xef
 	.byte 0x1d, 0xeb, 0xb0, 0xef, 0x1d, 0x73, 0xb5, 0xef
@@ -4358,7 +4358,7 @@ SysInit_SendAllNotesAndReset:
 	call	16355414
 	ret
 SystemInit_Handler_Table:
-	.incbin "includes/generated/v7_transplant_SystemInit_Handler_Table.bin"
+	.incbin "includes/romslices/v7_transplant_SystemInit_Handler_Table.bin"
 SystemInit_StepHandler_5:
 	push	xwa
 	push	xhl
@@ -4410,7 +4410,7 @@ SystemInit_StepHandler_0:
 	.byte 0x02, 0x30, 0x01, 0x90, 0x01, 0x00, 0x01, 0x60
 	.byte 0x01, 0x30, 0x00, 0x30, 0x01
 SysInit_BytecodeBlock:
-	.incbin "includes/generated/v7_transplant_SysInit_BytecodeBlock.bin"
+	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock.bin"
 VoiceSlot_InitAndProcess:
 	cps bc, 0
 	jrl nz, VoiceSlot_InitLoop
@@ -5025,7 +5025,7 @@ VoiceSlot_StatusDone:
 	ret
 
 VoiceSlot_StatusRet:
-	.incbin "includes/generated/v7_transplant_VoiceSlot_StatusRet.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_StatusRet.bin"
 VoiceState_SaveAndRestore:
 	.byte 0x1d, 0x84, 0xef, 0xef, 0x1d, 0x15, 0xf0, 0xef
 	.byte 0x0e, 0x4e, 0xf0, 0xef, 0x00, 0x47, 0xee, 0xef
@@ -5559,7 +5559,7 @@ SubCPU_ToneFormatDone:
 	ld	xiy, 4382
 	call	SysInit_BytecodeBlock_0x486
 SubCPU_ToneClearRegion:
-	.incbin "includes/generated/v7_transplant_SubCPU_ToneClearRegion.bin"
+	.incbin "includes/romslices/v7_transplant_SubCPU_ToneClearRegion.bin"
 PerfMode_ParamHandler_11:
 	ld	hl, bc
 	cp	hl, 31
@@ -5574,9 +5574,9 @@ PerfMode_ParamHandler_11:
 	call	(xhl)
 	ret
 SubCPU_ToneParamRet:
-	.incbin "includes/generated/v7_transplant_SubCPU_ToneParamRet.bin"
+	.incbin "includes/romslices/v7_transplant_SubCPU_ToneParamRet.bin"
 OscScope_HandlerTable:
-	.incbin "includes/generated/v7_transplant_OscScope_HandlerTable.bin"
+	.incbin "includes/romslices/v7_transplant_OscScope_HandlerTable.bin"
 SndHandler_DefaultRet:
 	ret
 OscScope_Handler_2:
@@ -5995,7 +5995,7 @@ DisplayStr_BytecodeBlock_B:
 	.byte 0x85, 0x11, 0x1d, 0x28, 0x5c, 0xef, 0x1d, 0x4b
 	.byte 0xed, 0xef, 0x1d, 0xdd, 0x5b, 0xef, 0x0e
 DisplayStr_RhythmLabel:
-	.incbin "includes/generated/v7_transplant_DisplayStr_RhythmLabel.bin"
+	.incbin "includes/romslices/v7_transplant_DisplayStr_RhythmLabel.bin"
 DisplayStr_BytecodeBlock_C:
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D
@@ -6943,7 +6943,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	call	Display_UpdateRegion3
 	ret
 StringData_APCModeNames:
-	.incbin "includes/generated/v7_transplant_StringData_APCModeNames.bin"
+	.incbin "includes/romslices/v7_transplant_StringData_APCModeNames.bin"
 Display_RedrawStatusBar:
 	.byte 0xf1, 0x57, 0x0f, 0xc8, 0x7e, 0xd4, 0x00, 0xc1
 	.byte 0x9c, 0x8c, 0x3f, 0x8a, 0x7e, 0xcc, 0x00, 0xf2
@@ -9600,7 +9600,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	ret
 
 Scoop_EventLoop_36Entry_Data:
-	.incbin "includes/generated/v7_transplant_Scoop_EventLoop_36Entry_Data.bin"
+	.incbin "includes/romslices/v7_transplant_Scoop_EventLoop_36Entry_Data.bin"
 Scoop_EventLoop_12Entry_Alt:
 	lda xsp, (xsp - 54)
 	push xiz

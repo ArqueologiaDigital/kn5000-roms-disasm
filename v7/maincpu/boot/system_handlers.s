@@ -1760,7 +1760,7 @@ Checksum_AccumulateLoop:
 	ret
 
 TaskSched_ScreenGroupTable:
-	.incbin "includes/generated/v7_transplant_TaskSched_ScreenGroupTable.bin"
+	.incbin "includes/romslices/v7_transplant_TaskSched_ScreenGroupTable.bin"
 TaskSched_ScreenGroupTable_End:
 	jr	-2
 
@@ -7876,7 +7876,7 @@ HDAE5000_TableData_WordLoop:
 	ret
 
 HDAE5000_Init_BytecodeBlock:
-	.incbin "includes/generated/v7_transplant_HDAE5000_Init_BytecodeBlock.bin"
+	.incbin "includes/romslices/v7_transplant_HDAE5000_Init_BytecodeBlock.bin"
 HDAE5000_Init_DetectAndVerify:
 	stib_da (0x160004), 0x00
 	call HDAE5000_Detect

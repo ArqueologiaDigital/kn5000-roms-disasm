@@ -42,7 +42,7 @@ FileIO_MainLoop:
 	pop	xiz
 	ret
 FileIO_BytecodeData:
-	.incbin "includes/generated/v7_transplant_FileIO_BytecodeData.bin"
+	.incbin "includes/romslices/v7_transplant_FileIO_BytecodeData.bin"
 ExtDev_SndParam_Block48_Var40:
 	.byte 0xf1, 0x5d, 0x90, 0xb9	; setda	1, 0x90f9 (v7 patched)
 
@@ -188,7 +188,7 @@ ExtDev_SndParam_Block98_Var40:
 	jrl	-3542
 
 ExtDev_SndParam_BlockA9_Var02:
-	.incbin "includes/generated/v7_transplant_ExtDev_SndParam_BlockA9_Var02.bin"
+	.incbin "includes/romslices/v7_transplant_ExtDev_SndParam_BlockA9_Var02.bin"
 ExtDev_SndParam_Block98_Var80:
 	.byte 0xf1, 0x5d, 0x90, 0xb9	; setda	1, 0x90f9 (v7 patched)
 
@@ -689,7 +689,7 @@ MidiCC_SyncForceResync:
 	lda_d16	xhl, (36344)
 	ret
 MidiCC_ResetState:
-	.incbin "includes/generated/v7_fix_midicc_resetstate.bin"
+	.incbin "includes/romslices/v7_fix_midicc_resetstate.bin"
 	.include "midi/midi_encoder_routines.s"
 
 MidiParam_ForceResync:
@@ -2758,7 +2758,7 @@ ExtData_Voice_FullHandler:
 	.byte 0x90, 0xbe, 0x1e, 0xe3, 0x08, 0xd7, 0xfa, 0x05
 	.byte 0x0e
 ExtData_Voice_CopyAndJump:
-	.incbin "includes/generated/v7_transplant_ExtData_Voice_CopyAndJump.bin"
+	.incbin "includes/romslices/v7_transplant_ExtData_Voice_CopyAndJump.bin"
 ExtData_Voice_CompareAndDispatch:
 	.byte 0xc1, 0x93, 0x90, 0x21, 0xc9, 0xd8, 0x66, 0x07
 	.byte 0xc9, 0xd9, 0xb0, 0xfe, 0x78, 0x8c, 0x00, 0x1e
@@ -3208,7 +3208,7 @@ UIState_CheckAndRenderBitmap:
 	.byte 0x00, 0x00, 0x31, 0x7f, 0x00, 0xda, 0xab, 0x1d
 	.byte 0x30, 0xca, 0xfc, 0x4e, 0x0e
 UIState_RenderBitmapData:
-	.incbin "includes/generated/v7_transplant_UIState_RenderBitmapData.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_RenderBitmapData.bin"
 ToshiCmd_DefaultHandler_Ret:
 	ret
 
@@ -3420,7 +3420,7 @@ BankFlush_CheckChannel1:
 	calr	64548
 	ret
 UIWidget_MidiStreamControl:
-	.incbin "includes/generated/v7_transplant_UIWidget_MidiStreamControl.bin"
+	.incbin "includes/romslices/v7_transplant_UIWidget_MidiStreamControl.bin"
 SndParam_ApplyAndFetch:
 	dec	6, xsp
 	lda	xwa, (xsp)
@@ -3983,7 +3983,7 @@ SwbtWr_WriteVoiceParam_PreserveRegs:
 	ret
 
 AudioCtrl_PreserveRegs_PopEpilogue:
-	.incbin "includes/generated/v7_transplant_AudioCtrl_PreserveRegs_PopEpilogue.bin"
+	.incbin "includes/romslices/v7_transplant_AudioCtrl_PreserveRegs_PopEpilogue.bin"
 SwbtWr_WriteParamBlockSafe:
 	push xwa
 	push xbc
@@ -4539,7 +4539,7 @@ MidiSeqBuf_Return:
 	ret
 
 MidiSeqBuf_ProcessorTable:
-	.incbin "includes/generated/v7_transplant_MidiSeqBuf_ProcessorTable.bin"
+	.incbin "includes/romslices/v7_transplant_MidiSeqBuf_ProcessorTable.bin"
 MidiSeqBuf_InitFromTable:
 	stdi8	(37174), 255
 	ld	xiy, 16560660
@@ -4717,7 +4717,7 @@ TempoRing_Return:
 	ret
 
 TempoRing_ProcessorTable:
-	.incbin "includes/generated/v7_transplant_TempoRing_ProcessorTable.bin"
+	.incbin "includes/romslices/v7_transplant_TempoRing_ProcessorTable.bin"
 TempoRing_ValidateState:
 	.byte 0xe1, 0x25, 0x91, 0x24, 0xec, 0xcf, 0xa4, 0xbc
 	.byte 0x00, 0x00, 0x66, 0x1d, 0xd1, 0x21, 0x91, 0x21
@@ -5052,7 +5052,7 @@ MidiCtrl_DispatchHandler:
 	.byte 0xdb, 0xee, 0x02, 0x44, 0x1e, 0xa7, 0xfc, 0x00
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xd8
 MidiCtrl_ModeDispatch_Table:
-	.incbin "includes/generated/v7_transplant_MidiCtrl_ModeDispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_MidiCtrl_ModeDispatch_Table.bin"
 MidiCtrl_NullRet:
 	ret
 
@@ -5091,7 +5091,7 @@ VoiceMode3_Done:
 	ret
 
 VoiceMode3_DispatchTable:
-	.incbin "includes/generated/v7_transplant_VoiceMode3_DispatchTable.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceMode3_DispatchTable.bin"
 MidiPartCC_WriteAndDispatch:
 	.byte 0xdb, 0x12, 0xc1, 0x2c, 0x91, 0x27, 0x44, 0xa0
 	.byte 0xf1, 0x00, 0x00, 0xc3, 0x07, 0xf0, 0xec, 0x27
@@ -5253,7 +5253,7 @@ VoiceParam_DispatchDone:
 	ret
 
 VoiceParam_ModeDispatch_Table:
-	.incbin "includes/generated/v7_transplant_VoiceParam_ModeDispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceParam_ModeDispatch_Table.bin"
 VoiceParam_StoreExpression:
 	extz hl
 
@@ -5413,7 +5413,7 @@ MidiVoiceNote_Dispatch:
 	.byte 0xee, 0x02, 0x44, 0x2e, 0xaf, 0xfc, 0x00, 0xe3
 	.byte 0x03, 0xf0, 0xec, 0x24, 0xb4, 0xd8
 MidiVoiceNote_Dispatch_Table:
-	.incbin "includes/generated/v7_transplant_MidiVoiceNote_Dispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_MidiVoiceNote_Dispatch_Table.bin"
 MidiVoiceNote_LookupMode0:
 	ld	xiy, 16560731
 	ld	xbc, 15
@@ -5594,7 +5594,7 @@ AudioCtrl_RestoreAllRegs:
 	ldda32	xiz, (37043)
 	ret
 VoiceMode_ParamConfigTables:
-	.incbin "includes/generated/v7_transplant_VoiceMode_ParamConfigTables.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceMode_ParamConfigTables.bin"
 MidiStream_ApplyPendingParams:
 	.byte 0xc1, 0x98, 0x8c, 0x3f, 0x0e, 0x66, 0x28, 0xf1
 	.byte 0x5c, 0x90, 0x00, 0xff, 0xcc, 0xcc, 0x07, 0x66
@@ -5834,7 +5834,7 @@ MidiStream_SysExJumpTable:
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	.incbin "includes/generated/v7_transplant_MidiStream_SysExData.bin"
+	.incbin "includes/romslices/v7_transplant_MidiStream_SysExData.bin"
 MidiStream_CtrlJumpTable:
 	.long MidiStream_CtrlNop
 	.long MidiStream_CtrlData
@@ -5895,9 +5895,9 @@ MidiStream_CmdPedalNotify:
 	.byte 0xcd, 0xcc, 0x7f, 0xcd, 0x69, 0x24, 0x7f, 0x1d
 	.byte 0x33, 0x9a, 0xfc
 MidiStream_CmdPedalDone:
-	.incbin "includes/generated/v7_block_midistream_cmdpedaldone.bin"
+	.incbin "includes/romslices/v7_block_midistream_cmdpedaldone.bin"
 ; === end v7 block ===
 ; === v7-specific block: MidiStream_HandleRunningStatus (919 bytes) ===
 MidiStream_HandleRunningStatus:
-	.incbin "includes/generated/v7_block_midistream_handlerunningstatus.bin"
+	.incbin "includes/romslices/v7_block_midistream_handlerunningstatus.bin"
 ; === end v7 block ===

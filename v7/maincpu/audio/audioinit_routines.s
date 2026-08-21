@@ -202,7 +202,7 @@ AudioInit_RefreshToneBank:
 	.byte 0xd1, 0x00, 0xc5, 0x20, 0xd8, 0xcc, 0x02, 0x01
 	.byte 0x66
 AudioInit_VoiceRoutingTable:
-	.incbin "includes/generated/v7_transplant_AudioInit_VoiceRoutingTable.bin"
+	.incbin "includes/romslices/v7_transplant_AudioInit_VoiceRoutingTable.bin"
 AudioInit_ConfigureVoiceRouting:
 	.byte 0xc4, 0x31, 0xd8, 0x8a, 0xea, 0x12, 0xe9, 0x82
 	.byte 0x8f, 0x02, 0x21, 0xb2, 0x41, 0xd1, 0x2e, 0xc4
@@ -754,4 +754,4 @@ AudioInit_Volume_Next:
 AudioInit_Volume_Return:
 	.byte 0xaa, 0x00
 AudioInit_InitPartSendLevels:
-	.incbin "includes/generated/v7_block_audioinit_initpartsendlevels.bin"
+	.incbin "includes/romslices/v7_block_audioinit_initpartsendlevels.bin"

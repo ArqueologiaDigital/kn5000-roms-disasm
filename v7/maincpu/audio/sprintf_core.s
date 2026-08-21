@@ -863,7 +863,7 @@ Sprintf_FFixed_PadRightLoop:
 Sprintf_FFixed_Return:
 	.byte 0x27, 0xdb, 0x12, 0x30
 Sprintf_FFixed_DataTable:
-	.incbin "includes/generated/v7_transplant_Sprintf_FFixed_DataTable.bin"
+	.incbin "includes/romslices/v7_transplant_Sprintf_FFixed_DataTable.bin"
 Sprintf_FormatEScientific:
 	.byte 0xcc, 0xf0, 0xdb, 0x12, 0xdb, 0xed, 0x04, 0xd8
 	.byte 0xac, 0x31, 0x00, 0x04, 0x82, 0x25, 0xcd, 0x30
@@ -898,7 +898,7 @@ Sprintf_ESci_AfterRound:
 	.byte 0xf2, 0x44, 0xc2, 0x03, 0x32, 0xd8, 0x12, 0xf3
 	.byte 0x07, 0xe8, 0xec, 0x50
 Sprintf_ESci_AfterRound_NoCase:
-	.incbin "includes/generated/v7_fix_sprintf_esci_afterround_nocase.bin"
+	.incbin "includes/romslices/v7_fix_sprintf_esci_afterround_nocase.bin"
 Sprintf_ESci_StripTrailZeros:
 	.byte 0xd7, 0xfa, 0xcf, 0x08, 0x00, 0x61, 0xdb, 0xdc
 	.byte 0xd8, 0x66, 0x04, 0x92, 0x3e, 0x10, 0x00, 0x9f
@@ -2058,7 +2058,7 @@ Sprintf_DecExp_CheckRemainder:
 	swi	7
 	swi	7
 Sprintf_DecExp_ApplySign:
-	.incbin "includes/generated/v7_block_sprintf_decexp_applysign.bin"
+	.incbin "includes/romslices/v7_block_sprintf_decexp_applysign.bin"
 ; === end v7 block ===
 Sprintf_CopyBytes8:
 	swi	7
@@ -2329,7 +2329,7 @@ Sprintf_MemChr:
 	swi	7
 	swi	7
 Sprintf_DataBlock_28E9:
-	.incbin "includes/generated/v7_transplant_Sprintf_DataBlock_28E9.bin"
+	.incbin "includes/romslices/v7_transplant_Sprintf_DataBlock_28E9.bin"
 Sprintf_StringLength:
 	swi	7
 	swi	7

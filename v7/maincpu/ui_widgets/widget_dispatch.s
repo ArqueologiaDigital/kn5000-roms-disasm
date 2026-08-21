@@ -112,7 +112,7 @@ NakaInst_Param_IdxA0_01:
 	.byte 0x01, 0xa0, 0x02, 0x00, 0x80, 0x09
 	.byte 0x40, 0x00, 0x01, 0x06, 0x00, 0xff, 0x01, 0x01
 	.byte 0x01, 0x00, 0x00, 0xff, 0xa4, 0xba, 0xed, 0x00
-Naka_SubDispatch_A_Table:	.incbin "includes/generated/v7_data_naka_subdispatch_a_table.bin"
+Naka_SubDispatch_A_Table:	.incbin "includes/romslices/v7_data_naka_subdispatch_a_table.bin"
 Naka_SubDispatch_B_Table:
 	.long WidgetParam_MidiCC_Chorus
 	.long WidgetParam_MidiCC_SysExcl
@@ -211,10 +211,10 @@ Naka_SubDispatch_B_Table:
 
 
 Naka_MainDispatch_Table:
-	.incbin "includes/generated/v7_transplant_Naka_MainDispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_Naka_MainDispatch_Table.bin"
 NakaInst_SoundConfig_LookupTable:
 	.incbin "includes/generated/sound_config_lookup.bin"
-SeqChan_CommandDispatch_Table:	.incbin "includes/generated/v7_data_seqchan_commanddispatch_table.bin"
+SeqChan_CommandDispatch_Table:	.incbin "includes/romslices/v7_data_seqchan_commanddispatch_table.bin"
 SeqFormat_ReferenceData:
 	.byte 0x1f, 0x7d
 	.byte 0xfd, 0x00, 0x21, 0x7d, 0xfd, 0x00, 0x22, 0x7d
@@ -231,9 +231,9 @@ SeqFormat_ReferenceData:
 	.byte 0x15, 0x00, 0x1b, 0x00, 0x21, 0x00, 0x27, 0x00
 	.byte 0x2d, 0x00, 0x33, 0x00
 SeqData_SubDispatch_Table:
-	.incbin "includes/generated/v7_transplant_SeqData_SubDispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_SeqData_SubDispatch_Table.bin"
 MidiPkt_EventType_Table:
-	.incbin "includes/generated/v7_transplant_MidiPkt_EventType_Table.bin"
+	.incbin "includes/romslices/v7_transplant_MidiPkt_EventType_Table.bin"
 DisplayScript_NullNode:
 	.byte 0xff, 0xff, 0x78, 0x36, 0xee, 0x00, 0x12, 0x07
 	.long DisplayScript_NullNode
@@ -1015,7 +1015,7 @@ WidgetParam_Entry_001:
 	.byte 0xff, 0x0c, 0x78, 0x36
 	.byte 0xee, 0x00
 WidgetParam_Entry_002:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_002.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_002.bin"
 WidgetParam_Entry_003:
 	.byte 0x00, 0x00, 0x72, 0x45, 0xee, 0x00
 	.byte 0x01, 0x00, 0x96, 0x45, 0xee, 0x00, 0x0a, 0x00
@@ -1035,7 +1035,7 @@ WidgetParam_Entry_005:
 	.byte 0xff, 0x08, 0x78, 0x36
 	.byte 0xee, 0x00
 WidgetParam_Entry_006:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_006.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_006.bin"
 WidgetParam_Entry_007:
 	.byte 0x00, 0x00, 0x9e, 0x46, 0xee, 0x00
 	.byte 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00, 0x00, 0x00
@@ -1043,9 +1043,9 @@ WidgetParam_Entry_007:
 	.byte 0xff, 0x0c, 0x78, 0x36
 	.byte 0xee, 0x00
 WidgetParam_Entry_008:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_008.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_008.bin"
 WidgetParam_Entry_009:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_009.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_009.bin"
 WidgetParam_Entry_010:
 	.byte 0x00, 0x00, 0x16, 0x47, 0xee, 0x00
 	.byte 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00, 0x00, 0x00
@@ -1053,7 +1053,7 @@ WidgetParam_Entry_010:
 	.byte 0xff, 0x0c, 0x78, 0x36
 	.byte 0xee, 0x00
 WidgetParam_Entry_011:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_011.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_011.bin"
 WidgetParam_Entry_012:
 	.byte 0x02, 0x00, 0x78, 0x36, 0xee, 0x00, 0x41, 0x26
 	.long WidgetParam_Entry_012
@@ -1070,7 +1070,7 @@ WidgetParam_Entry_013:
 	.byte 0xfe, 0x00, 0x48, 0x48
 	.byte 0xee, 0x00, 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00
 WidgetParam_Entry_014:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_014.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_014.bin"
 WidgetParam_Entry_015:
 	.byte 0xfe, 0x26, 0x9c, 0x48, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
@@ -1097,10 +1097,10 @@ WidgetParam_Entry_017:
 	.byte 0xff, 0x0b, 0x78, 0x36
 	.byte 0xee, 0x00
 WidgetParam_Entry_018:
-	.incbin "includes/generated/v7_transplant_WidgetParam_Entry_018.bin"
+	.incbin "includes/romslices/v7_transplant_WidgetParam_Entry_018.bin"
 ToneKit_FrequencyTable:
-	.incbin "includes/generated/v7_transplant_ToneKit_FrequencyTable.bin"
-WidgetParam_SelfRef_Table:	.incbin "includes/generated/v7_data_widgetparam_selfref_table.bin"
+	.incbin "includes/romslices/v7_transplant_ToneKit_FrequencyTable.bin"
+WidgetParam_SelfRef_Table:	.incbin "includes/romslices/v7_data_widgetparam_selfref_table.bin"
 ToneKit_NullParams:
 	.incbin "includes/generated/tonekit_param_blocks.bin"
 	.equ ToneKit_ParamBlock_000, ToneKit_NullParams + 0xc
@@ -2725,7 +2725,7 @@ UIState_ConfigA_101:
 	.fill 1, 1, 0xff
 	.byte 0xff, 0xff, 0xff
 UIState_ConfigA_102:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigA_102.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigA_102.bin"
 UIState_ConfigA_103:
 	.fill 4, 1, 0xff
 UIState_ConfigA_104:
@@ -2995,69 +2995,69 @@ Naka_RenderMode_B_Table:
 
 
 UIState_HandlerTable_WithProbe:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_WithProbe.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_WithProbe.bin"
 UIState_HandlerTable_Standard:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Standard.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Standard.bin"
 UIState_HandlerTable_Compact:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Compact.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Compact.bin"
 UIState_HandlerTable_Basic_00:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_00.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_00.bin"
 UIState_HandlerTable_Basic_01:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_01.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_01.bin"
 UIState_HandlerTable_Basic_02:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_02.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_02.bin"
 UIState_HandlerTable_Basic_03:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_03.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_03.bin"
 UIState_HandlerTable_Basic_04:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_04.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_04.bin"
 UIState_HandlerTable_Basic_05:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_05.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_05.bin"
 UIState_HandlerTable_Basic_06:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_06.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_06.bin"
 UIState_HandlerTable_Basic_07:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_Basic_07.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_07.bin"
 UIState_HandlerTable_00:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_00.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_00.bin"
 UIState_HandlerTable_01:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_01.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_01.bin"
 UIState_HandlerTable_02:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_02.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_02.bin"
 UIState_HandlerTable_03:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_03.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_03.bin"
 UIState_HandlerTable_04:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_04.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_04.bin"
 UIState_HandlerTable_05:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_05.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_05.bin"
 UIState_HandlerTable_06:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_06.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_06.bin"
 UIState_HandlerTable_07:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_07.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_07.bin"
 UIState_HandlerTable_08:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_08.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_08.bin"
 UIState_HandlerTable_09:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_09.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_09.bin"
 UIState_HandlerTable_10:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_10.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_10.bin"
 UIState_HandlerTable_11:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_11.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_11.bin"
 UIState_HandlerTable_12:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_12.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_12.bin"
 UIState_HandlerTable_13:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_13.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_13.bin"
 UIState_HandlerTable_14:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_14.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_14.bin"
 UIState_HandlerTable_15:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_15.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_15.bin"
 UIState_HandlerTable_16:
-	.incbin "includes/generated/v7_transplant_UIState_HandlerTable_16.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_16.bin"
 UIState_ConfigB_000:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_000.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_000.bin"
 UIState_ConfigB_001:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_001.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_001.bin"
 UIState_ConfigB_002:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_002.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_002.bin"
 UIState_ConfigB_003:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_003.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_003.bin"
 UIState_ConfigB_004:
 	.long 0xffffffff
 
@@ -3165,7 +3165,7 @@ UIState_ConfigB_038:
 	.long 0xffffffff
 
 UIState_ConfigB_039:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_039.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_039.bin"
 UIState_ConfigB_040:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
@@ -3183,7 +3183,7 @@ UIState_ConfigB_043:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_044:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_044.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_044.bin"
 UIState_ConfigB_045:
 	.fill 4, 1, 0xff
 UIState_ConfigB_046:
@@ -3197,30 +3197,30 @@ UIState_ConfigB_049:
 UIState_ConfigB_050:
 	.fill 4, 1, 0xff
 UIState_ConfigB_051:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_051.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_051.bin"
 UIState_ConfigB_052:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_052.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_052.bin"
 UIState_ConfigB_053:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_053.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_053.bin"
 UIState_ConfigB_054:
 	.byte 0xf6, 0xa2, 0xfe, 0x00
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_055:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_055.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_055.bin"
 UIState_ConfigB_056:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_056.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_056.bin"
 UIState_ConfigB_057:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_057.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_057.bin"
 UIState_ConfigB_058:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_058.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_058.bin"
 UIState_ConfigB_059:
 	.byte 0x07, 0xa4, 0xfe, 0x00
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_060:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_060.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_060.bin"
 UIState_ConfigB_061:
 	.byte 0x09, 0xa4, 0xfe, 0x00
 	.long UIState_KeyScan_Dispatch
@@ -3234,13 +3234,13 @@ UIState_ConfigB_064:
 UIState_ConfigB_065:
 	.byte 0x22, 0x74, 0xfc, 0x00
 UIState_ConfigB_066:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_066.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_066.bin"
 UIState_ConfigB_067:
 	.byte 0xdc, 0xe1, 0xfd, 0x00
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_068:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_068.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_068.bin"
 UIState_ConfigB_069:
 	.fill 4, 1, 0xff
 UIState_ConfigB_070:
@@ -3248,23 +3248,23 @@ UIState_ConfigB_070:
 UIState_ConfigB_071:
 	.fill 4, 1, 0xff
 UIState_SeqInit_Table:
-	.incbin "includes/generated/v7_transplant_UIState_SeqInit_Table.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_SeqInit_Table.bin"
 UIState_ConfigB_072:
 	.fill 4, 1, 0xff
 
 
 UIState_ConfigB_073:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_073.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_073.bin"
 UIState_ConfigB_074:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_074.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_074.bin"
 UIState_EventHandler_Table:
-	.incbin "includes/generated/v7_transplant_UIState_EventHandler_Table.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_EventHandler_Table.bin"
 UIState_ConfigB_075:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_075.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_075.bin"
 UIState_ConfigB_076:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_076.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_076.bin"
 UIState_ConfigB_077:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_077.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_077.bin"
 UIState_ConfigB_078:
 	.long UIState_KeyScan_Dispatch
 	.long UIState_CheckAndRenderBitmap
@@ -3279,7 +3279,7 @@ UIState_ConfigB_080:
 	.long AccStyle_JumpTable
 	.byte 0x61, 0x75, 0xef, 0x00
 UIState_ConfigB_081:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_081.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_081.bin"
 UIState_ConfigB_082:
 	.fill 4, 1, 0xff
 UIState_ConfigB_083:
@@ -3289,23 +3289,23 @@ UIState_ConfigB_084:
 UIState_ConfigB_085:
 	.fill 4, 1, 0xff
 UIState_ConfigB_086:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_086.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_086.bin"
 UIState_ConfigB_087:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_087.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_087.bin"
 UIState_ConfigB_088:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_088.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_088.bin"
 UIState_ConfigB_089:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_089.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_089.bin"
 UIState_ConfigB_090:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_090.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_090.bin"
 UIState_ConfigB_091:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_091.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_091.bin"
 UIState_ConfigB_092:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_092.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_092.bin"
 UIState_ConfigB_093:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_093.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_093.bin"
 UIState_ConfigB_094:
-	.incbin "includes/generated/v7_transplant_UIState_ConfigB_094.bin"
+	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_094.bin"
 UIState_ConfigB_095:
 	.fill 4, 1, 0xff
 UIState_ConfigB_096:
@@ -3318,7 +3318,7 @@ UIState_ConfigB_099:
 	.fill 4, 1, 0xff
 UIState_ConfigB_100:
 	.fill 4, 1, 0xff
-UIState_DefaultConfig_B:	.incbin "includes/generated/v7_data_uistate_defaultconfig_b.bin"
+UIState_DefaultConfig_B:	.incbin "includes/romslices/v7_data_uistate_defaultconfig_b.bin"
 Naka_EventHandler_Table:
 	.long UIState_ConfigC_000
 	.long UIState_ConfigC_001
@@ -3856,19 +3856,19 @@ UIState_ConfigC_127:
 UIState_DefaultConfig_C:
 	.fill 3, 1, 0xff
 	.fill 6, 1, 0xff
-SystemConfig_PointerTable:	.incbin "includes/generated/v7_data_systemconfig_pointertable.bin"
+SystemConfig_PointerTable:	.incbin "includes/romslices/v7_data_systemconfig_pointertable.bin"
 AudioInit_VoiceDispatch_Table:
-	.incbin "includes/generated/v7_transplant_AudioInit_VoiceDispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_AudioInit_VoiceDispatch_Table.bin"
 CharMap_ValueData_A:
 	.byte 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88
 	.byte 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90
 	.byte 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98
 	.byte 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f, 0xa0
-CharMap_ValueData_B:	.incbin "includes/generated/v7_data_charmap_valuedata_b.bin"
+CharMap_ValueData_B:	.incbin "includes/romslices/v7_data_charmap_valuedata_b.bin"
 SoundEffect_Dispatch_Table:
-	.incbin "includes/generated/v7_transplant_SoundEffect_Dispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_SoundEffect_Dispatch_Table.bin"
 CharMap_Preamble_Table:
-	.incbin "includes/generated/v7_transplant_CharMap_Preamble_Table.bin"
+	.incbin "includes/romslices/v7_transplant_CharMap_Preamble_Table.bin"
 CharMap_DefaultIdentity:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
@@ -4339,7 +4339,7 @@ CharMap_Mode22:
 	.ascii "KLMNOPQRSTUVXYZ[\\]^abcghjlmnopqrstuvwyz{|}~"
 	.byte 0x7f
 ; Character mapping table - full permutation variant L (sequential layout)
-CharMap_FullPermutation:	.incbin "includes/generated/v7_data_charmap_fullpermutation.bin"
+CharMap_FullPermutation:	.incbin "includes/romslices/v7_data_charmap_fullpermutation.bin"
 ScaleNote_Display_Table:
 	.long NumStr_0
 	.long NumStr_1

@@ -2537,7 +2537,7 @@ MainPmanControl:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MainPmanCtrl_DispatchTable:
-	.incbin "includes/generated/v7_transplant_MainPmanCtrl_DispatchTable.bin"
+	.incbin "includes/romslices/v7_transplant_MainPmanCtrl_DispatchTable.bin"
 MainPmanCtrl_HandleA0:
 	.byte 0xbf, 0x06, 0x14, 0x9e, 0x8c, 0xea, 0xcf, 0x10
 	.byte 0x00, 0x00, 0x00, 0x67, 0x10, 0xea, 0xcf, 0x15

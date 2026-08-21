@@ -1742,4 +1742,4 @@ BuildSlotLabel_WriteColon:
 	stib_dsp 0xf8, 0x3a
 
 BuildSlotLabel_WriteContent:
-	.incbin "includes/generated/v7_fix_buildslotlabel_writecontent.bin"
+	.incbin "includes/romslices/v7_fix_buildslotlabel_writecontent.bin"

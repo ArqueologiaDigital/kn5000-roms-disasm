@@ -1067,7 +1067,7 @@ Rhythm_SeqReset_Store:
 	stb_d8	(13363), a
 	ret
 Rhythm_SeqResetTable:
-	.incbin "includes/generated/v7_transplant_Rhythm_SeqResetTable.bin"
+	.incbin "includes/romslices/v7_transplant_Rhythm_SeqResetTable.bin"
 Rhythm_TransposeWithMod:
 	.byte 0xc1, 0x3c, 0x32, 0x3f, 0x00, 0x66, 0x22, 0xc1
 	.byte 0x3d, 0x32, 0x3f, 0x00, 0x66, 0x1b, 0xf1, 0x49

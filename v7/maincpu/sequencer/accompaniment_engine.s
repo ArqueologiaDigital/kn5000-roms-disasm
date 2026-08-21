@@ -5734,7 +5734,7 @@ AccAutoPlay_Configure_Final:
 	.byte 0x33, 0xc8, 0x66, 0x13, 0xf1, 0xd1, 0x33, 0xcf
 	.byte 0x66, 0x03, 0x1e, 0x07, 0x01
 AccAutoPlay_Configure_Done:
-	.incbin "includes/generated/v7_transplant_AccAutoPlay_Configure_Done.bin"
+	.incbin "includes/romslices/v7_transplant_AccAutoPlay_Configure_Done.bin"
 AccAutoPlay_Configure_Return2:
 	ret
 	nop
@@ -5965,7 +5965,7 @@ AccPlayMode_Dispatch_Execute:
 	ret
 
 AccPlayMode_Dispatch_Table:
-	.incbin "includes/generated/v7_transplant_AccPlayMode_Dispatch_Table.bin"
+	.incbin "includes/romslices/v7_transplant_AccPlayMode_Dispatch_Table.bin"
 AccPlayMode_TransitionRouter:
 	cpdi16 0x28a8, 0
 	jr z, AccPlayMode_Router_Process
@@ -7596,7 +7596,7 @@ AccDir_Periodic_Ret:
 	ret
 
 AccDir_JumpTable:
-	.incbin "includes/generated/v7_transplant_AccDir_JumpTable.bin"
+	.incbin "includes/romslices/v7_transplant_AccDir_JumpTable.bin"
 AccProcess_Entry:
 	call AccProcess_TimerCompare
 	ret
@@ -8491,7 +8491,7 @@ AccStyle_InitVRAM:
 	ret
 
 AccStyle_SC0ByteSelect:
-	.incbin "includes/generated/v7_transplant_AccStyle_SC0ByteSelect.bin"
+	.incbin "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin"
 AccHelper_ComputeVoiceOffset:
 	xor	xwa, xwa
 	ldb_d8	l, (64602)
@@ -9189,7 +9189,7 @@ AccTone_LookupDone:
 	ret
 
 AccTone_InlineBytecodeData:
-	.incbin "includes/generated/v7_transplant_AccTone_InlineBytecodeData.bin"
+	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData.bin"
 AccVoice_ClearChannelStates:
 	stdi8	(13135), 0
 	stdi8	(13136), 0
@@ -9204,13 +9204,13 @@ AccVoice_IncrementBarCounter:
 	.byte 0xf1, 0xb0, 0xf3, 0xf1, 0x4e, 0x33, 0x00, 0x00
 	.byte 0x0e
 AccVoice_BarCounterBytecodeData:
-	.incbin "includes/generated/v7_transplant_AccVoice_BarCounterBytecodeData.bin"
+	.incbin "includes/romslices/v7_transplant_AccVoice_BarCounterBytecodeData.bin"
 AccTuning_ReadAndApplyOffset:
 	.byte 0xc1, 0x87, 0x33, 0x21, 0xd8, 0x12, 0xf2, 0xc8
 	.byte 0x9f, 0xe4, 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x19
 	.byte 0x86, 0x33, 0x0e
 AccTuning_ComplexBytecodeData:
-	.incbin "includes/generated/v7_transplant_AccTuning_ComplexBytecodeData.bin"
+	.incbin "includes/romslices/v7_transplant_AccTuning_ComplexBytecodeData.bin"
 AccTone_WriteProgramChange:
 	push	xiz
 	ld	xix, xwa
@@ -9603,7 +9603,7 @@ AccPatch_ClearModeFlag:
 	stdi8	(13625), 0
 	ret
 Not_sure_maybe_SOFT_VERSION_related:
-	.incbin "includes/generated/v7_transplant_Not_sure_maybe_SOFT_VERSION_related.bin"
+	.incbin "includes/romslices/v7_transplant_Not_sure_maybe_SOFT_VERSION_related.bin"
 AccPatch_CheckAndInitDemo:
 	ld xiy, 0x94800
 	add xiy, 0xe
@@ -10368,7 +10368,7 @@ AccPatch_SeqPosition_Store:
 	ld	(xhl), wa
 	ret
 AccPatch_SeqBaseAddrTable:
-	.incbin "includes/generated/v7_transplant_AccPatch_SeqBaseAddrTable.bin"
+	.incbin "includes/romslices/v7_transplant_AccPatch_SeqBaseAddrTable.bin"
 AccPatch_WriteRhythmInit:
 	.byte 0xc1, 0x92, 0x33, 0x27, 0xcf, 0xd8, 0x66, 0x30
 	.byte 0xeb, 0xa8, 0xc1, 0x92, 0x33, 0x27, 0xeb, 0xc8
@@ -10381,7 +10381,7 @@ AccPatch_WriteRhythm_Done:
 	ret
 
 AccPatch_ChannelToParamTable:
-	.incbin "includes/generated/v7_transplant_AccPatch_ChannelToParamTable.bin"
+	.incbin "includes/romslices/v7_transplant_AccPatch_ChannelToParamTable.bin"
 AccPatch_WriteRhythmParams:
 	calr AccPatch_FetchVolumeForChannel
 	push_a
@@ -12432,7 +12432,7 @@ AccPatch_StoreEntryPtr:
 	ret
 
 AccPatch_AdvPlayPos_DataBlock:
-	.incbin "includes/generated/v7_transplant_AccPatch_AdvPlayPos_DataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_AccPatch_AdvPlayPos_DataBlock.bin"
 AccPatch_AdvanceAllSteps:
 	ld	xix, 13694
 AccPatch_AdvAllSteps_Loop:
@@ -17423,7 +17423,7 @@ RhythmPatInit_CopyChannels:
 
 
 RhythmPatInit_KitIndexTable:
-	.incbin "includes/generated/v7_transplant_RhythmPatInit_KitIndexTable.bin"
+	.incbin "includes/romslices/v7_transplant_RhythmPatInit_KitIndexTable.bin"
 RhythmFillIn_Wrapper:
 	push xiz
 	call RhythmFillIn_Select
@@ -17439,7 +17439,7 @@ RhythmFillIn_LookupAndApply:
 	.byte 0x41, 0x1e, 0x1e, 0xfd, 0x1d, 0x1e, 0xd7, 0xfd
 	.byte 0x1d, 0xd6, 0xd7, 0xfd, 0x0e
 RhythmFillIn_PatternTable:
-	.incbin "includes/generated/v7_transplant_RhythmFillIn_PatternTable.bin"
+	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable.bin"
 RhythmMute_Wrapper:
 	push xiz
 	call RhythmMute_Toggle
@@ -17661,21 +17661,21 @@ DrumVoice_DispatchTable:
 DrumVoice_NullHandler:
 	ret
 DrumVoice_Handler0:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler0.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler0.bin"
 DrumVoice_Handler1:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler1.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler1.bin"
 DrumVoice_Handler2:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler2.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler2.bin"
 DrumVoice_Handler3:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler3.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler3.bin"
 DrumVoice_Handler5:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler5.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler5.bin"
 DrumVoice_Handler4:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler4.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler4.bin"
 DrumVoice_Handler6:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler6.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler6.bin"
 DrumVoice_Handler7:
-	.incbin "includes/generated/v7_transplant_DrumVoice_Handler7.bin"
+	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler7.bin"
 DrumVoice_NotifyEE:
 	push xwa
 	push xhl
@@ -18193,7 +18193,7 @@ Tempo_DisplayParamSkipClear:
 	ldw	wa, 238
 	jp	16355504
 Tempo_DisplayParamFormat:
-	.incbin "includes/generated/v7_transplant_Tempo_DisplayParamFormat.bin"
+	.incbin "includes/romslices/v7_transplant_Tempo_DisplayParamFormat.bin"
 Tempo_DisplayParamReturn:
 	.byte 0xd7, 0xfa, 0x04, 0xc7, 0xfb, 0xa8, 0x1e, 0x05
 	.byte 0x05, 0x1e, 0x27, 0x05, 0x1e, 0xed, 0x01, 0xd8
@@ -20417,7 +20417,7 @@ CmpSetTtl_DynamicLookup:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpSetTtlFunc title dispatch 2
 CmpSetTtl_Dispatch2:
-	.incbin "includes/generated/v7_transplant_CmpSetTtl_Dispatch2.bin"
+	.incbin "includes/romslices/v7_transplant_CmpSetTtl_Dispatch2.bin"
 CmpReal_ReturnZero:
 	lds32 xhl, 0
 	ret
@@ -20864,7 +20864,7 @@ CmpBksl_STtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpBksl_STtlFunc title dispatch
 CmpBkslSTtl_Dispatch:
-	.incbin "includes/generated/v7_transplant_CmpBkslSTtl_Dispatch.bin"
+	.incbin "includes/romslices/v7_transplant_CmpBkslSTtl_Dispatch.bin"
 CmpBkslSTtl_DirectMode:
 	ld xwa, xde
 	cp xde, 0x4
@@ -21035,7 +21035,7 @@ CmpNcpTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpNcpTtlFunc title dispatch
 CmpNcpTtl_Dispatch:
-	.incbin "includes/generated/v7_transplant_CmpNcpTtl_Dispatch.bin"
+	.incbin "includes/romslices/v7_transplant_CmpNcpTtl_Dispatch.bin"
 CmpNcpTtl_SpecialMode7:
 	cp xde, 0xb
 	jr ule, CmpNcpTtl_TableDispatch
@@ -22695,7 +22695,7 @@ AccSeq_PostEvent9E_Disable:
 	lds32 xde, 0
 	jp ApPostEvent
 AccSeq_DcModeDataBlock:
-	.incbin "includes/generated/v7_transplant_AccSeq_DcModeDataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_AccSeq_DcModeDataBlock.bin"
 SndArgTtl_SubA:
 SndArgModeFunc:
 	cp xbc, 0x1c00013
@@ -23032,7 +23032,7 @@ CmpStepTitleFunc:
 	ret
 
 CmpStep_DataBlock:
-	.incbin "includes/generated/v7_transplant_CmpStep_DataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_CmpStep_DataBlock.bin"
 AccAudio_LockAcquire:
 	ldw wa, 0x8
 	jp Audio_Lock_Acquire
@@ -23279,7 +23279,7 @@ AccScreen_BeatDisplay_Draw:
 	ret
 
 AccScreen_BeatDataBlock:
-	.incbin "includes/generated/v7_transplant_AccScreen_BeatDataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_AccScreen_BeatDataBlock.bin"
 AccScreen_DrawInit_StackWrap:
 	ld xwa, AccScreen_DrawInit_Body
 	push xwa
@@ -23336,7 +23336,7 @@ AccScreen_DrawMeas_Return:
 	ret
 
 AccScreen_UIDataBlock:
-	.incbin "includes/generated/v7_block_accscreen_uidatablock.bin"
+	.incbin "includes/romslices/v7_block_accscreen_uidatablock.bin"
 AccPatch_InitSlotChain_Wrap:
 	push xiz
 	calr AccPatch_InitSlotChain
@@ -26187,5 +26187,5 @@ TableData_JumpToEntry:
 	ld xhl, 0x80000
 	jp (xhl)
 AccStyle_TableDataEntry:
-	.incbin "includes/generated/v7_fix_accstyle_tabledataentry.bin"
+	.incbin "includes/romslices/v7_fix_accstyle_tabledataentry.bin"
 	.include "sequencer/accompseq_routines.s"

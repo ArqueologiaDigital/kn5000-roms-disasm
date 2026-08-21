@@ -7513,7 +7513,7 @@ PsTrkSw_Epilogue:
 	ret
 
 PsTrkSw_TrailingData:
-	.incbin "includes/generated/v7_transplant_PsTrkSw_TrailingData.bin"
+	.incbin "includes/romslices/v7_transplant_PsTrkSw_TrailingData.bin"
 AcTrackSwitchProc:
 	dec 8, xsp
 	push xiz

@@ -221,7 +221,7 @@ AccompSeq_AdvanceDone:
 	ret
 
 AccompSeq_VRAMHelperData:
-	.incbin "includes/generated/v7_transplant_AccompSeq_VRAMHelperData.bin"
+	.incbin "includes/romslices/v7_transplant_AccompSeq_VRAMHelperData.bin"
 ResolveVRAMAddressForVoice:
 	.byte 0xc1, 0x89, 0x7d, 0x3f, 0x80, 0x67, 0x29, 0xf1
 	.byte 0xd1, 0x7d, 0xc8, 0x6e, 0x23, 0xd1, 0xa6, 0x7d
@@ -1167,7 +1167,7 @@ AccompSeq_SendAllOff_Loop2:
 	ret
 
 AccompSeq_MidiFilterCodeBlock:
-	.incbin "includes/generated/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin"
+	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin"
 AccompSeq_ProcessChordChange:
 	.byte 0xc1, 0xd2, 0x7d, 0x3c, 0xfe, 0xc1, 0xd3, 0x7d
 	.byte 0x3c, 0xfe, 0xc1, 0xc3, 0x7d, 0x3c, 0xfc, 0x2b

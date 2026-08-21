@@ -62,7 +62,7 @@ EffectMode_ByteData_Block1:
 	stdi16	(36028), 65535
 	jrl	648
 EffectMode_ByteData_Block2:
-	.incbin "includes/generated/v7_transplant_EffectMode_ByteData_Block2.bin"
+	.incbin "includes/romslices/v7_transplant_EffectMode_ByteData_Block2.bin"
 EffectMode_ByteData_Block3:
 	.byte 0xc1, 0xe1, 0xbf, 0x21, 0xc9, 0xd8, 0x6e, 0x5f
 	.byte 0xc1, 0xe3, 0xbf, 0x3f, 0x00, 0x66, 0x53, 0xf1
@@ -87,7 +87,7 @@ EffectMode_ByteData_Block3:
 	.byte 0x46, 0xb7, 0xbf, 0x1e, 0x0f, 0x06, 0xc1, 0xb6
 	.byte 0x8c, 0x3c, 0xd7, 0x0e
 EffectMode_ByteData_Block4:
-	.incbin "includes/generated/v7_transplant_EffectMode_ByteData_Block4.bin"
+	.incbin "includes/romslices/v7_transplant_EffectMode_ByteData_Block4.bin"
 EffectMode_ApplyTranspose:
 	.byte 0x1e, 0xe9, 0x00, 0xc1, 0x9a, 0x8c, 0x3f, 0xc0
 	.byte 0x6e, 0x16, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41
@@ -2205,7 +2205,7 @@ MstSugAlpGridCheck:
 	ret
 ; === v7-specific block: AcMstStyleAlp_Boundary (497 bytes) ===
 AcMstStyleAlp_Boundary:
-	.incbin "includes/generated/v7_block_acmststylealp_boundary.bin"
+	.incbin "includes/romslices/v7_block_acmststylealp_boundary.bin"
 ; === end v7 block ===
 MasterSetup_StringSearch_Done:
 	cps iz, 0
@@ -10978,5 +10978,5 @@ RVari_Select:
 	.byte 0xd9, 0xf0, 0x6e, 0x08, 0xbf, 0x0a, 0x00, 0x00
 	.byte 0xbf, 0x0c, 0x00, 0x07
 RVari_Select_CheckSameBank:
-	.incbin "includes/generated/v7_fix_rvari_select_checksamebank.bin"
+	.incbin "includes/romslices/v7_fix_rvari_select_checksamebank.bin"
 	.include "ui/rvari_routines.s"

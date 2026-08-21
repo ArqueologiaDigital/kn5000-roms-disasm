@@ -603,10 +603,18 @@ rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
 # V7 bins are extracted from the v7 ROM, not compiled from C.
 # Two-pass build: first pass uses v9 ELF for address fallback,
 # second pass re-extracts using v7 ELF for correct transplant addresses.
-v7-extract-bins: rebuilt_ROMs/kn5000_v9_program.llvm.elf $(V7_C_DATA_BINS)
-	python3 scripts/build/extract_v7_bins.py
+# THE V7 ROM IS NOT AN INPUT TO ITS OWN RECONSTRUCTION.
+# This used to run extract_v7_bins.py -- twice -- slicing original_ROMs/kn5000_v7_program.rom
+# into the build's own inputs, so the byte-match gate could not fail for 979,096 B (46.69%).
+# Verify with: python3 scripts/analysis/rom_provenance_poison.py v7   (must report 0)
+# The bytes that have no source are COMMITTED now instead of re-sliced every build:
+#   288 pure ROM slices (136,775 B) -> v7/maincpu/includes/romslices/
+#   5,118 bytes where the committed C does not reproduce the ROM
+#                                   -> v7/maincpu/includes/v7_c_divergence.json
+v7-extract-bins: $(V7_C_DATA_BINS)
+	python3 scripts/build/apply_v7_c_divergence.py
 
-rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s original_ROMs/kn5000_v7_program.rom v7-extract-bins indexed-images
+rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s v7-extract-bins indexed-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o $@ $<
 
@@ -615,12 +623,6 @@ rebuilt_ROMs/kn5000_v7_program.llvm.elf: rebuilt_ROMs/kn5000_v7_program.llvm.o v
 
 rebuilt_ROMs/kn5000_v7_program.llvm.rom: rebuilt_ROMs/kn5000_v7_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
-	@# Second pass: re-extract bins using v7 ELF (correct addresses), then rebuild
-	python3 scripts/build/extract_v7_bins.py
-	rm -f rebuilt_ROMs/kn5000_v7_program.llvm.o rebuilt_ROMs/kn5000_v7_program.llvm.elf $@
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o rebuilt_ROMs/kn5000_v7_program.llvm.o v7/maincpu/kn5000_v7_program.s
-	$(LLVM_LLD) -T v7/maincpu/maincpu.ld -o rebuilt_ROMs/kn5000_v7_program.llvm.elf rebuilt_ROMs/kn5000_v7_program.llvm.o
-	$(LLVM_OBJCOPY) -O binary rebuilt_ROMs/kn5000_v7_program.llvm.elf $@
 
 # --- Subcpu payload ---
 rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: v142/subcpu/kn5000_subprogram_v142.s

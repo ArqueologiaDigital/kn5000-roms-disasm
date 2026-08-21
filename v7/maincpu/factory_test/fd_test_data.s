@@ -132,7 +132,7 @@ FDTest_Divider1:
 	.byte 0xff, 0xff, 0x18, 0x00, 0x08, 0x00, 0x08, 0x00
 	.byte 0x27, 0x00, 0x27, 0x00, 0x00, 0x00, 0xfc, 0x00
 FDTest_ConsoleArea1:
-	.incbin "includes/generated/v7_transplant_FDTest_ConsoleArea1.bin"
+	.incbin "includes/romslices/v7_transplant_FDTest_ConsoleArea1.bin"
 FDTest_String_Console1:	aligned_string "CONSOLE"
 FDTest_Label_MemoryDump:
 
@@ -317,4 +317,4 @@ FDTest_CfgName_FDDTest:	aligned_string "FDD_TEST"
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3e, 0xfd, 0xe1, 0x00
 	.long FDTest_TestTitle_Terminator
 FDTest_TestTitle_Terminator:	aligned_string ""
-FDTest_String_TestTitleFunc:	.incbin "includes/generated/v7_data_fdtest_string_testtitlefunc.bin"
+FDTest_String_TestTitleFunc:	.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc.bin"

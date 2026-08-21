@@ -1001,7 +1001,7 @@ PmemOutLGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PmemOutLGridCheck_JumpTable:
-	.incbin "includes/generated/v7_transplant_PmemOutLGridCheck_JumpTable.bin"
+	.incbin "includes/romslices/v7_transplant_PmemOutLGridCheck_JumpTable.bin"
 PmemOutL_GridCheck:
 	.byte 0xeb, 0x88, 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8
 	.byte 0xb1, 0x50, 0xed, 0x8c, 0xb5, 0x53, 0xbf, 0x2c
@@ -2602,7 +2602,7 @@ MidiPartGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MidiPartGridCheck_JumpTable:
-	.incbin "includes/generated/v7_transplant_MidiPartGridCheck_JumpTable.bin"
+	.incbin "includes/romslices/v7_transplant_MidiPartGridCheck_JumpTable.bin"
 MidiSetup_EventHandler:
 	.byte 0xaf, 0x22, 0x20, 0xe8, 0xef, 0x00, 0xd7, 0xe2
 	.byte 0xa8, 0xb5, 0x50, 0xaf, 0x22, 0x20, 0xb1, 0x50
@@ -2673,7 +2673,7 @@ MidiSetup_ReturnZero:
 	ret
 
 MidiPart_DataBlock:
-	.incbin "includes/generated/v7_transplant_MidiPart_DataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_MidiPart_DataBlock.bin"
 InitializeMurai:
 	.byte 0xbf, 0xf2, 0x37, 0xb7, 0x31, 0x40, 0x04, 0x00
 	.byte 0x60, 0x01, 0xb1, 0x60, 0xf2, 0xd5, 0x40, 0xfa

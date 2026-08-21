@@ -2955,7 +2955,7 @@ AccPlay_InitAndStartLoop:
 
 
 AccPlay_ToggleCodeFragment:
-	.incbin "includes/generated/v7_transplant_AccPlay_ToggleCodeFragment.bin"
+	.incbin "includes/romslices/v7_transplant_AccPlay_ToggleCodeFragment.bin"
 AccPlay_CheckAndToggle:
 	.byte 0xf1, 0x6f, 0x7e, 0xc9, 0x66, 0x2b, 0xf1, 0x1f
 	.byte 0x04, 0xca, 0x6e, 0x19, 0x1d, 0xc7, 0x96, 0xf5

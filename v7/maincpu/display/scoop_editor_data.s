@@ -10,4 +10,4 @@
 
 
 Scoop_SoundEditorData:
-	.incbin "includes/generated/v7_block_scoop_soundeditordata.bin"
+	.incbin "includes/romslices/v7_block_scoop_soundeditordata.bin"

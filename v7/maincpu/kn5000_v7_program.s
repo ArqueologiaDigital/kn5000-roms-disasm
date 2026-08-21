@@ -477,7 +477,7 @@ FactoryReset_TrailingByte:
 	ret
 
 Boot_ReadFDCStatus:
-	.incbin "includes/generated/v7_fix_boot_readfdcstatus.bin"
+	.incbin "includes/romslices/v7_fix_boot_readfdcstatus.bin"
 	.include "shared/boot_routines.s"
 
 ; =============================================================================
@@ -931,7 +931,7 @@ malloc_X:
 	inc	2, xsp
 	ret
 free_X:
-	.incbin "includes/generated/v7_fix_free_x.bin"
+	.incbin "includes/romslices/v7_fix_free_x.bin"
 	.include "ui/setwall_routines.s"
 	.include "ui/ui_playback_modes.s"
 	.include "demo/demo_routines.s"
@@ -992,7 +992,7 @@ Voice_InitBankTables_Loop:
 	ldb a, 0x39
 
 Voice_InitBankTables_SlotLoop:
-	.incbin "includes/generated/v7_fix_voice_initbanktables_slotloop.bin"
+	.incbin "includes/romslices/v7_fix_voice_initbanktables_slotloop.bin"
 	.include "audio/voice_bank_defaults.s"
 Voice_InitBankData:
 	calr Voice_InitBankTables
@@ -2215,7 +2215,7 @@ CPanel_KeyProcessing_Wrapper:
 
 
 EmptyRoutine_03:
-	.incbin "includes/generated/v7_fix_emptyroutine_03.bin"
+	.incbin "includes/romslices/v7_fix_emptyroutine_03.bin"
 	.include "ui/cpanel_routines.s"
 
 
@@ -2230,7 +2230,7 @@ EmptyRoutine_03:
 ; Called after preset loads: 0x4002 for reverb, 0x4006 for EQ.
 ; Args: xwa = parameter ID
 SoundParam_NotifyChange:
-	.incbin "includes/generated/v7_block_soundparam_notifychange.bin"
+	.incbin "includes/romslices/v7_block_soundparam_notifychange.bin"
 	.include "audio/sndparam_routines.s"
 
 ; MIDI Serial Communication routines (SC0)

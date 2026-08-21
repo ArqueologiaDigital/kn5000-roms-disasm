@@ -35,7 +35,7 @@ FDemoText_ByteData_VoiceProbeA:
 	.byte 0xfc, 0xe9, 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21
 	.byte 0xc2, 0xf2, 0x47, 0x02, 0xe9, 0x0e
 FDemoText_ByteData_VoiceProbeB:
-	.incbin "includes/generated/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin"
+	.incbin "includes/romslices/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin"
 FDemoText_ByteData_VoiceProbeC:
 	.byte 0xc1, 0xe4, 0xbf, 0x25, 0xcd, 0xca, 0x44, 0xc1
 	.byte 0xe1, 0xbf, 0x21, 0xd8, 0x12, 0xd8, 0x69, 0xd8
@@ -1451,7 +1451,7 @@ FDemoText_TextDispatch_Return:
 	ret
 
 FDemoText_ByteData_LayoutEngine:
-	.incbin "includes/generated/v7_transplant_FDemoText_ByteData_LayoutEngine.bin"
+	.incbin "includes/romslices/v7_transplant_FDemoText_ByteData_LayoutEngine.bin"
 FDemoText_ScaleDownCoords:
 	ld de, (xwa)
 	exts xde

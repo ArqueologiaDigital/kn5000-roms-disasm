@@ -7,7 +7,7 @@
 ; =============================================================================
 
 FDemo_DisplayResourceData:
-	.incbin "includes/generated/v7_transplant_FDemo_DisplayResourceData.bin"
+	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData.bin"
 MainPreControl:
 	sub xbc, 0x1e10003
 	cp xbc, 0x0
@@ -1699,7 +1699,7 @@ LoadRegion2_Return:
 
 ; === v7-specific block: FileIO_LoadSongRegion8 (372 bytes) ===
 FileIO_LoadSongRegion8:
-	.incbin "includes/generated/v7_block_fileio_loadsongregion8.bin"
+	.incbin "includes/romslices/v7_block_fileio_loadsongregion8.bin"
 ; === end v7 block ===
 LoadSong8_Return:
 	popw iz
@@ -7733,5 +7733,5 @@ NumToAscii_PadTens:
 	ld (xbc), 0x20
 
 NumToAscii_OnesDigitAndFinish:
-	.incbin "includes/generated/v7_fix_numtoascii_onesdigitandfinish.bin"
+	.incbin "includes/romslices/v7_fix_numtoascii_onesdigitandfinish.bin"
 	.include "file_io/title_handlers.s"

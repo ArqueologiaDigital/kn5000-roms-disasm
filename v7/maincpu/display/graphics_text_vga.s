@@ -1442,7 +1442,7 @@ DrawFunc_Init_PushFontAndDraw:
 	.byte 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04, 0x1e, 0x8d
 	.byte 0xed, 0x5e, 0xf3, 0xfd, 0x0c, 0x01, 0x37, 0x0e
 DrawFunc_Init_Variant1:
-	.incbin "includes/generated/v7_transplant_DrawFunc_Init_Variant1.bin"
+	.incbin "includes/romslices/v7_transplant_DrawFunc_Init_Variant1.bin"
 ColorBlit_WithPaletteSave:
 	dec 8, xsp
 	pushw_erp 0xfa

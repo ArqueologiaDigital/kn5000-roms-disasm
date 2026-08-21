@@ -203,7 +203,7 @@ BitMapOut_ByteData_TransitionSeq:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x41, 0x06, 0x00, 0xc2
 	.byte 0x01, 0xea, 0xa9, 0x1d, 0x4b, 0x99, 0xfa, 0x0e
 BitMapOut_ByteData_PresetCopy:
-	.incbin "includes/generated/v7_transplant_BitMapOut_ByteData_PresetCopy.bin"
+	.incbin "includes/romslices/v7_transplant_BitMapOut_ByteData_PresetCopy.bin"
 BitMapOut_CopyVoicePreset9:
 	lda xsp, (xsp - 82)
 	push xiz
@@ -425,7 +425,7 @@ BitMapOut_Snapshot_Clamp50:
 
 
 BitMapOut_Snapshot_Execute:
-	.incbin "includes/generated/v7_block_bitmapout_snapshot_execute.bin"
+	.incbin "includes/romslices/v7_block_bitmapout_snapshot_execute.bin"
 ; === end v7 block ===
 BitMapOut_RestoreFull_FieldLoop:
 	inc 1, xiy
@@ -570,7 +570,7 @@ BitMapOut_CopyExtTable_Loop:
 
 
 BitMapOut_CopyExtTable_Check:
-	.incbin "includes/generated/v7_block_bitmapout_copyexttable_check.bin"
+	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin"
 ; === end v7 block ===
 BitMapOut_CopyROMToWorkspace:
 	.byte 0x0b, 0xc0, 0x03, 0xd8, 0x12, 0xd8, 0xec, 0x02

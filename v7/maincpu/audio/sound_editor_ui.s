@@ -3420,7 +3420,7 @@ SeMenu_NameEditor_Redraw_Data:
 
 
 SeMenu_NameEditor_End:
-	.incbin "includes/generated/v7_transplant_SeMenu_NameEditor_End.bin"
+	.incbin "includes/romslices/v7_transplant_SeMenu_NameEditor_End.bin"
 SeMenu_DisplayPartValue:
 	push	xiz
 	ld	xiz, xsp
@@ -3623,7 +3623,7 @@ SeMenu_ShowConfirmDialog:
 	.byte 0xb5, 0xe8, 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0x5d
 	.byte 0x5c, 0x5b, 0x5a, 0x59, 0x58, 0x5e, 0x0e
 SeMenu_ShowConfirmDialog_Data:
-	.incbin "includes/generated/v7_transplant_SeMenu_ShowConfirmDialog_Data.bin"
+	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data.bin"
 SeMenu_WaveformSelect_Init:
 	.long SeBitmap_EnvCurve5
 	.long SeBitmap_EnvCurve4
@@ -5318,9 +5318,9 @@ SeBitmap_EnvCurve4:
 	swi	7
 	swi	7
 SeBitmap_EnvCurve5:
-	.incbin "includes/generated/v7_block_sebitmap_envcurve5.bin"
+	.incbin "includes/romslices/v7_block_sebitmap_envcurve5.bin"
 SeMenu_CompareScreen_DataTable:
-	.incbin "includes/generated/v7_block_semenu_comparescreen_datatable.bin"
+	.incbin "includes/romslices/v7_block_semenu_comparescreen_datatable.bin"
 TuningSys_Param_01:
 ; se_name_editor: 218 bytes (15 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_name_editor.c)
@@ -5420,7 +5420,7 @@ TuningSys_Param_01:
 	.byte 0x7f
 	ldw	de, 241
 TuningSystem_Handler_Table:
-	.incbin "includes/generated/v7_fix_tuningsystem_handler_table.bin"
+	.incbin "includes/romslices/v7_fix_tuningsystem_handler_table.bin"
 	.include "storage/flash_floppy_handlers.s"
 
 S2cShowHideFunc:

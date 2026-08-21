@@ -1355,7 +1355,7 @@ SeqPlay_RestartWithVoiceConfig:
 	.byte 0x04, 0x3f, 0x00, 0x6e, 0x05, 0xc7, 0xfb, 0xa9
 	.byte 0x68, 0x13
 SeqPlay_VoiceChannelCfg:
-	.incbin "includes/generated/v7_block_seqplay_voicechannelcfg.bin"
+	.incbin "includes/romslices/v7_block_seqplay_voicechannelcfg.bin"
 ; === end v7 block ===
 SeqPlay_ProcessCh_SkipToReturn:
 	jr SeqPlay_PopIzSkip6Ret
@@ -8494,7 +8494,7 @@ SeqTimer_SetPlaybackFlags:
 
 ; === v7-specific block: SeqTimerFlags_CheckSysFlag (157 bytes) ===
 SeqTimerFlags_CheckSysFlag:
-	.incbin "includes/generated/v7_block_seqtimerflags_checksysflag.bin"
+	.incbin "includes/romslices/v7_block_seqtimerflags_checksysflag.bin"
 ; === end v7 block ===
 PartVoiceOff_Return:
 	popw_erp 0xfa
@@ -9466,7 +9466,7 @@ NotePool_Return:
 	ret
 
 NotePool_DataBlock:
-	.incbin "includes/generated/v7_transplant_NotePool_DataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_NotePool_DataBlock.bin"
 SeqBuffer_MoveEntryToHead:
 	push	xiz
 	cp	a, 255
@@ -10432,7 +10432,7 @@ SeqCh_LoadChannelConfig:
 
 ; === v7-specific block: SeqChLoad_SetupAndCopy (161 bytes) ===
 SeqChLoad_SetupAndCopy:
-	.incbin "includes/generated/v7_block_seqchload_setupandcopy.bin"
+	.incbin "includes/romslices/v7_block_seqchload_setupandcopy.bin"
 ; === end v7 block ===
 SeqChLoad_FirstBarSetup:
 	ld (xsp + 2), 0x1
@@ -10449,7 +10449,7 @@ SeqCh_LoadData_CheckCh14:
 
 ; === v7-specific block: SeqCh_LoadData_CheckBass (107 bytes) ===
 SeqCh_LoadData_CheckBass:
-	.incbin "includes/generated/v7_block_seqch_loaddata_checkbass.bin"
+	.incbin "includes/romslices/v7_block_seqch_loaddata_checkbass.bin"
 ; === end v7 block ===
 Voice_WriteIndexedData:
 	ld a, (xsp + 16)
@@ -11431,7 +11431,7 @@ SeqPosDec_Return:
 	ret
 
 SeqPos_DataBlock:
-	.incbin "includes/generated/v7_transplant_SeqPos_DataBlock.bin"
+	.incbin "includes/romslices/v7_transplant_SeqPos_DataBlock.bin"
 Seq_ValidatePartTempoAndRange:
 	ldb_d8 a, (0x2877)
 	cp a, 0x11
@@ -12017,7 +12017,7 @@ Part_PopRetFA2:
 	ret
 
 SeqPart_LoadDualPartData:
-	.incbin "includes/generated/v7_transplant_SeqPart_LoadDualPartData.bin"
+	.incbin "includes/romslices/v7_transplant_SeqPart_LoadDualPartData.bin"
 SeqVoice_SeekToBar:
 	push xiz
 	lds iz, 1
@@ -21103,7 +21103,7 @@ SeqAccomp_SubChain:
 
 ; Sequencer accompaniment sub-handler B
 SeqAccomp_SubHandlerB:
-	.incbin "includes/generated/v7_transplant_SeqAccomp_SubHandlerB.bin"
+	.incbin "includes/romslices/v7_transplant_SeqAccomp_SubHandlerB.bin"
 SeqAccomp_StartHandler:
 	.byte 0x1d, 0xfa, 0x99, 0xfa, 0x78, 0xa7, 0x01, 0xc7
 	.byte 0xee, 0xd8, 0x76, 0xa1, 0x01, 0xf1, 0x3a, 0x28
@@ -24142,7 +24142,7 @@ VoiceData_LoopEnd:
 
 ; === v7-specific block: SeqLoad_ProcessEpilogue (88 bytes) ===
 SeqLoad_ProcessEpilogue:
-	.incbin "includes/generated/v7_block_seqload_processepilogue.bin"
+	.incbin "includes/romslices/v7_block_seqload_processepilogue.bin"
 ; === end v7 block ===
 VoiceAlloc_TestBitRead:
 	calr SeqStep_PostEventAndUpdate
@@ -26980,7 +26980,7 @@ SeqPart_AllocReturn:
 	ret
 
 SeqPart_ByteBlockA207:
-	.incbin "includes/generated/v7_transplant_SeqPart_ByteBlockA207.bin"
+	.incbin "includes/romslices/v7_transplant_SeqPart_ByteBlockA207.bin"
 SeqPart_SinglePartLoad:
 	pushw_erp 0xfa
 	call SeqVoice_SetDefaultParams

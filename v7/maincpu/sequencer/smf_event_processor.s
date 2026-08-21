@@ -8061,7 +8061,7 @@ FileIO_ReadDir_Return:
 	ret
 
 SeqByteBlock_DispatchJumpTable:
-	.incbin "includes/generated/v7_transplant_SeqByteBlock_DispatchJumpTable.bin"
+	.incbin "includes/romslices/v7_transplant_SeqByteBlock_DispatchJumpTable.bin"
 SeqDispatch_ReturnNop:
 	ret
 
@@ -8415,4 +8415,4 @@ AccDisplay_RefreshDone:
 	ret
 
 AccState_ReadAccompParams:
-	.incbin "includes/generated/v7_fix_accstate_readaccompparams.bin"
+	.incbin "includes/romslices/v7_fix_accstate_readaccompparams.bin"

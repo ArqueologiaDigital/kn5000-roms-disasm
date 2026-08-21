@@ -47,69 +47,45 @@ a single byte, and `rom_provenance_poison.py v7` should then report 0.
 
 ---
 
-# The de-circularisation attempt, and what it proved (2026-08-21)
+# De-circularisation: FAILED, then SUCCEEDED -- and the failure was my own bug
 
-An attempt was made to remove the ROM from the v7 build, following the recommendation above.
-It FAILED, and the failure is a stronger result than the recommendation was.
+**v7 IS DE-CIRCULARISED as of 2026-08-21.** `rom_provenance_poison.py v7` reports 0 differing
+bytes: the build reads nothing from the v7 ROM, and the gate is 9/9 without the extraction step.
 
-## What was tried
+## How it was done
 
-1. The 288 `.incbin`-referenced bins with no source of any kind (136,775 B) were copied out of
-   `v7/maincpu/includes/generated/` into a committed `includes/romslices/`, and the 51 source files
-   referencing them were repointed. Honest committed blobs instead of build-time ROM slices.
-2. Of the 76 C-compiled bins, 53 already match the ROM exactly and 23 do not. Their divergence is
-   only **5,118 bytes** inside 703,651 B of files, so rather than committing 703 KB of blob and
-   hiding 691 KB of genuinely-reconstructed C behind it, the divergence was captured as a committed
-   patch (`v7_c_divergence.json`) applied by `apply_v7_c_divergence.py` on top of the compiler's
-   output.
-3. `extract_v7_bins.py` and both of its invocations were removed from the Makefile.
+1. The 288 `.incbin`-referenced bins with no source of any kind (136,775 B) are committed in
+   `v7/maincpu/includes/romslices/` and the 51 source files that reference them repointed.
+2. Of the 76 C-compiled bins, 53 match the ROM exactly and 23 diverge -- by only **5,118 bytes**
+   inside 703,651 B of files. Rather than committing 703 KB of blob and hiding 691 KB of
+   genuinely-reconstructed C behind it, the divergence is a committed patch,
+   `v7/maincpu/includes/v7_c_divergence.json`, applied by `scripts/build/apply_v7_c_divergence.py`
+   on top of the compiler's output.
+3. `extract_v7_bins.py` and both of its invocations are gone from the Makefile, along with the ROM
+   as a prerequisite of the v7 object.
 
-Every referenced bin was verified byte-identical to the state a successful build leaves behind:
-**353 of 353 matching.** The sources differed only in `.incbin` paths (335 lines, no other change).
+Honest v7 figure now: **1,955,259 B (93.2%) real source**, and 141,893 B (6.8%) committed blobs
+that are documented as having no source -- 136,775 B of pure ROM slices plus the 5,118 divergent
+bytes. Those are honest under the completeness spec's §3, and they are the remaining work: fixing
+the C until `v7_c_divergence.json` is empty is what would make v7 genuinely reconstructed.
 
-## What happened
+## ⚠ THE EARLIER "PROOF" THAT THIS WAS IMPOSSIBLE WAS MY OWN FILE CORRUPTION
 
-    make clean-all && make all   ->  maincpu v7: Similarity 46.33%  (1,125,642 incorrect bytes)
+An earlier pass concluded, and committed to the status document, that "v7 cannot currently be
+rebuilt from committed inputs at all" -- on the evidence that with all 353 bins verified identical
+to a successful build's output, rebuilding still gave 46.33% with every pointer shifted 208 bytes.
 
-Rebuilding v7 alone from those same verified-correct bins is deterministic and gives the same
-46.33%. The first divergence is at ROM 0xE00012, in a pointer table, where every pointer is
-**0xD0 (208) bytes higher** than the original -- a layout shift, not corrupt data.
+That was not the build. It was the script that repointed the `.incbin` paths. It read each `.s`
+with `Path.read_text(errors='replace')` and wrote it back, which replaces every byte that is not
+valid UTF-8 with U+FFFD -- and these sources contain `.ascii` directives holding raw non-UTF-8
+bytes. Rewriting them changed the assembled length of those literals, which moved everything after
+them. The 208-byte shift was string data I had destroyed, not evidence about the build.
 
-## What that means
+Redone reading and writing BYTES, the identical change gives 9/9 and a clean poison test.
 
-**The v7 build is not idempotent.** Assembling with the exact bins that a *successful* build
-produced does not reproduce the ROM. The build reaches 100.00% only by re-slicing the ROM on every
-run, and its first pass seeds addresses from the **v9** ELF, not the v7 one -- which is why running
-`extract_v7_bins.py` against an already-wrong v7 ELF makes it worse rather than converging
-(measured: 1,125,409 differing after one such pass).
+**The lesson, which is the reason this section exists:** never round-trip a disassembly source
+through text decoding. `.ascii`/`.byte` payloads are binary. And when a measurement says something
+strong and surprising -- "no set of committed files can rebuild this ROM" -- suspect the
+measurement apparatus before publishing the conclusion. A second check was available and cheap:
+assembling directly with the same inputs gave an EXACT match, which contradicted the claim.
 
-So the earlier statement that v7 is "partly circular" is too kind. The accurate statement is:
-
-> **v7 cannot currently be rebuilt from committed inputs at all.** There is no set of committed
-> files from which `llvm-mc` + `ld.lld` produce the v7 ROM. The 100.00% is manufactured at build
-> time by a two-pass extraction that reads the ROM twice, and no fixed point of that process has
-> ever been committed.
-
-The 46.69% figure from `rom_provenance_poison.py` measures how much is copied. This measures
-something worse: even the *other* 53.31% does not assemble to the right addresses without the copy
-step, because the layout depends on bins whose contents the extractor decides.
-
-## What would actually fix it
-
-Find the fixed point and commit it. Iterate `extract -> assemble -> extract` from a clean tree with
-the v9-seeded fallback until the bins stop changing AND the assembled ROM matches, then commit those
-bins and delete the extraction. If no fixed point exists, the transplant approach itself needs
-replacing -- the addresses inside those bins have to become symbolic rather than baked.
-
-Until then, **v7's 100.00% should not be quoted as evidence of anything**, and the honest headline
-for v7 is that it is unreconstructed.
-
-## Artefacts kept here
-
-| file | what it is |
-|---|---|
-| `v7_c_divergence.json` | The 5,118 bytes, by file and offset, where the committed C does not reproduce the v7 ROM. Useful independently of the attempt: it is the precise work list for fixing the C. |
-| `apply_v7_c_divergence.py` | Applies that patch to compiler output. Not wired into the build. |
-
-The 288 pure ROM slices were not committed, because nothing uses them and
-`extract_v7_bins.py` regenerates them on demand.

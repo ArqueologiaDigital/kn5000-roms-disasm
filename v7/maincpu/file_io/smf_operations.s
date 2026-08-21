@@ -1012,4 +1012,4 @@ DisplaySmfSequenceList:
 	lds iz, 0
 
 DispSeqList_LoopBody:
-	.incbin "includes/generated/v7_fix_dispseqlist_loopbody.bin"
+	.incbin "includes/romslices/v7_fix_dispseqlist_loopbody.bin"

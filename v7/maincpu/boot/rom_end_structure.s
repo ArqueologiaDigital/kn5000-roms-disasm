@@ -16,7 +16,7 @@ System_TimestampPointers:
 	.long 0x409
 	.long 0x409
 InterruptVectorTable:
-	.incbin "includes/generated/v7_transplant_InterruptVectorTable.bin"
+	.incbin "includes/romslices/v7_transplant_InterruptVectorTable.bin"
 FIRMWARE_VERSION:
 	.byte FW_VERSION_BYTE
 

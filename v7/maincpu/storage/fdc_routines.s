@@ -745,7 +745,7 @@ FDC_InitSequence_Full:
 	calr	62832
 	jrl	-2690
 FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
-	.incbin "includes/generated/v7_transplant_FDC_CmdRecalibrate.bin"
+	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate.bin"
 FDC_CMD_EXEC:
 	.byte 0x2e, 0x1e, 0x16, 0xfe, 0xdb, 0xd8, 0x66, 0x08
 	.byte 0xf1, 0xcc, 0x89, 0x00, 0x01, 0x78, 0x36, 0x01
@@ -856,11 +856,11 @@ FDC_MODE_CONFIG:
 	.byte 0xf1, 0x76, 0x89, 0x41, 0xc1, 0x9a, 0x89, 0x21
 	.byte 0xd8, 0x12, 0xd1, 0x6c, 0x8a, 0xf0, 0x63, 0xbe
 FDC_MC_EXIT:
-	.incbin "includes/generated/v7_transplant_FDC_MC_EXIT.bin"
+	.incbin "includes/romslices/v7_transplant_FDC_MC_EXIT.bin"
 FDC_STATUS_COPY:
-	.incbin "includes/generated/v7_transplant_FDC_STATUS_COPY.bin"
+	.incbin "includes/romslices/v7_transplant_FDC_STATUS_COPY.bin"
 FDC_INTERRUPT_HANDLER:
-	.incbin "includes/generated/v7_transplant_FDC_INTERRUPT_HANDLER.bin"
+	.incbin "includes/romslices/v7_transplant_FDC_INTERRUPT_HANDLER.bin"
 FDC_CommandEntry:
 	.byte 0x3e, 0xaf, 0x08, 0x26, 0x96, 0x3f, 0x00, 0x00
 	.byte 0x6e, 0x05, 0xf1, 0x7a, 0x89, 0x00, 0x00
@@ -964,7 +964,7 @@ FDC_Handler_Return:
 ; Increments buffer pointer (35406) after each byte.
 ; Falls through to transfer completion handlers.
 FDC_ByteTransfer_PIO:
-	.incbin "includes/generated/v7_transplant_FDC_ByteTransfer_PIO.bin"
+	.incbin "includes/romslices/v7_transplant_FDC_ByteTransfer_PIO.bin"
 INTTC3_HANDLER:
 	push xiz
 	push xiy

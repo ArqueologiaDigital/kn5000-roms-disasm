@@ -6807,7 +6807,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	.byte 0x21, 0x01, 0x68, 0x2c, 0xf2, 0x93, 0xce, 0x00
 	.byte 0x02, 0x00, 0x00, 0xc2, 0x42, 0xce, 0x00, 0x3c
 VoiceSlot_StoreParams_Data:
-	.incbin "includes/generated/v7_transplant_VoiceSlot_StoreParams_Data.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_StoreParams_Data.bin"
 Voice_ComputeNoteBitPosition:
 	.byte 0x00, 0x22, 0x1e, 0x0d, 0x00, 0x1e, 0xfb, 0x00
 	.byte 0x68, 0x06, 0xf2, 0x49, 0xce, 0x00, 0x00, 0x00
@@ -7500,7 +7500,7 @@ VoiceSlot_CheckAndApply_LoadReg:
 	ld	a, (xsp+3)
 	res	7, a
 VoiceSlot_CheckAndApply_Data2:
-	.incbin "includes/generated/v7_transplant_VoiceSlot_CheckAndApply_Data2.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_CheckAndApply_Data2.bin"
 VoiceSlot_CheckAndApply_Prologue:
 	ld	a, (xsp+3)
 	and	a, 255
@@ -8735,7 +8735,7 @@ Acc_StartFillIn:
 	.byte 0x06, 0x33, 0xff, 0xff, 0x78, 0x17, 0x02, 0xd3
 	.byte 0xfd, 0x8e, 0x00, 0x20, 0xe8
 StartFillIn_Data:
-	.incbin "includes/generated/v7_transplant_StartFillIn_Data.bin"
+	.incbin "includes/romslices/v7_transplant_StartFillIn_Data.bin"
 FileIO_ReadMultiByteRecord:
 	.byte 0x81, 0x81, 0xf7, 0x6e, 0x0e, 0xd3, 0xfd, 0x8e
 	.byte 0x00, 0x61, 0xd3, 0xfd, 0x8e, 0x00, 0x3f, 0x03
@@ -12028,7 +12028,7 @@ SendPartDataBlock_Data2:
 	.byte 0xd9, 0xc8, 0xa7, 0x49, 0xf3, 0x07, 0xe0, 0xe4
 	.byte 0x33, 0x8b, 0x01, 0x3c, 0xcf, 0xe9, 0x13
 SendPartDataBlock_Data3:
-	.incbin "includes/generated/v7_transplant_SendPartDataBlock_Data3.bin"
+	.incbin "includes/romslices/v7_transplant_SendPartDataBlock_Data3.bin"
 SendPartDataBlock_Data4:
 	or	(xiz), d
 	swi	6
@@ -12343,7 +12343,7 @@ TmFlashWrite_ValidateParams:
 	.byte 0x83, 0x0e, 0xef, 0x6c, 0x2e, 0xd8, 0xaf, 0x1d
 	.byte 0xc4, 0x1f, 0xef, 0xaf
 TmFlashWrite_Block2:
-	.incbin "includes/generated/v7_transplant_TmFlashWrite_Block2.bin"
+	.incbin "includes/romslices/v7_transplant_TmFlashWrite_Block2.bin"
 TmFlashWrite_Block3:
 	.byte 0xc2, 0x03, 0x60, 0xaf, 0x0a, 0x20, 0xb0, 0x00
 	.byte 0x00, 0xbf, 0x0e, 0x30, 0xe8, 0x64, 0xbf, 0x02
@@ -12934,5 +12934,5 @@ Memset_MaskBits:
 Memset_Block3:
 	.byte 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x00, 0x66
 Math_AbsInt16:
-	.incbin "includes/generated/v7_fix_math_absint16.bin"
+	.incbin "includes/romslices/v7_fix_math_absint16.bin"
 	.include "audio/sprintf_core.s"

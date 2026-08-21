@@ -5,4 +5,4 @@
 ; Unused slots are filled with 0xff or contain SWI 7 (trap handler).
 ; A few slots contain stub code (adc, ld xiy, decf) for specific interrupts.
 
-	.incbin "includes/generated/v7_block_interrupt_vector_trampolines.bin"
+	.incbin "includes/romslices/v7_block_interrupt_vector_trampolines.bin"

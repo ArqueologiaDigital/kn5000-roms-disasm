@@ -1242,7 +1242,7 @@ SeqStep_VoiceReassignReturn:
 
 ; === v7-specific block: SeqStep_VoiceReassignExit (120 bytes) ===
 SeqStep_VoiceReassignExit:
-	.incbin "includes/generated/v7_block_seqstep_voicereassignexit.bin"
+	.incbin "includes/romslices/v7_block_seqstep_voicereassignexit.bin"
 ; === end v7 block ===
 SeqStep_VoiceReassignFinalExit:
 	pop xiz
@@ -2973,7 +2973,7 @@ SeqStep_RebuildReturn:
 	ret
 
 SeqStep_ByteBlockEA5F:
-	.incbin "includes/generated/v7_transplant_SeqStep_ByteBlockEA5F.bin"
+	.incbin "includes/romslices/v7_transplant_SeqStep_ByteBlockEA5F.bin"
 SeqStep_ReinitPartTable:
 	dec 6, xsp
 	push xiz

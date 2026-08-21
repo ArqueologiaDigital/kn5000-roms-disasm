@@ -295,7 +295,7 @@ PcgOutGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PcgOutGridCheckJumpTable:
-	.incbin "includes/generated/v7_transplant_PcgOutGridCheckJumpTable.bin"
+	.incbin "includes/romslices/v7_transplant_PcgOutGridCheckJumpTable.bin"
 PcgOutCheckGridDataStructure:
 	.byte 0xee, 0x88, 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8
 	.byte 0xb3, 0x50, 0xe9, 0x88, 0xde, 0x8c, 0xb1, 0x54

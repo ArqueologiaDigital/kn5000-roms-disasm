@@ -517,4 +517,4 @@ MidiPkt_SysExProcessor_Data:
 	.byte 0x68, 0x37, 0xcb, 0xdf, 0xb0, 0xff, 0x40, 0xd6
 	.byte 0x34
 MidiPkt_SysExBulkTransfer_Data:
-	.incbin "includes/generated/v7_block_midipkt_sysexbulktransfer_data.bin"
+	.incbin "includes/romslices/v7_block_midipkt_sysexbulktransfer_data.bin"

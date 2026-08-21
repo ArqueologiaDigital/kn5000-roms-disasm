@@ -112,4 +112,4 @@ ScreenGroup_InitWordPairsLoop:
 	.byte 0xd1, 0x00, 0xc5, 0x3e, 0x04, 0x00, 0xd1, 0xf8
 	.byte 0xc4, 0x3e, 0x04, 0x00, 0xcd, 0x33
 ScreenGroup_InitFinalize:
-	.incbin "includes/generated/v7_block_screengroup_initfinalize.bin"
+	.incbin "includes/romslices/v7_block_screengroup_initfinalize.bin"

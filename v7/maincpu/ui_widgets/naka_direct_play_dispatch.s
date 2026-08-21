@@ -301,5 +301,5 @@ MtName_TrAsTrackDec:		aligned_string "MT_TrAsTrackDec"
 MtName_TrAsTrackInc:		aligned_string "MT_TrAsTrackInc"
 MtName_SetSelectedFileNum:	aligned_string "MT_SetSelectedFileNum"
 MtName_PsSongSelBoxID:		aligned_string "MT_PsSongSelBoxID"
-MtName_SongNameSet:	.incbin "includes/generated/v7_data_mtname_songnameset.bin"
+MtName_SongNameSet:	.incbin "includes/romslices/v7_data_mtname_songnameset.bin"
 	.long NakaBoxData_PsSongSelBox

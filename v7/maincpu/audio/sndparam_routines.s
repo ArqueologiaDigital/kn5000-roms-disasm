@@ -1297,4 +1297,4 @@ SndParam_HeapAlloc:
 SndParam_HeapAllocFail:
 	.byte 0xf1, 0x20, 0x04
 SndParam_HeapAllocOK:
-	.incbin "includes/generated/v7_fix_sndparam_heapallocok.bin"
+	.incbin "includes/romslices/v7_fix_sndparam_heapallocok.bin"

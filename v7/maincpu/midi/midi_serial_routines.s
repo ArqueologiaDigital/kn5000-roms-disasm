@@ -358,7 +358,7 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	.byte 0x03, 0xf0, 0xec, 0x21, 0xf1, 0xbb, 0x95, 0x41
 	.byte 0xc9, 0xcf, 0xff, 0x66, 0x38
 MIDI_CHANNEL_HANDLER_JUMP_TABLE:
-	.incbin "includes/generated/v7_transplant_MIDI_CHANNEL_HANDLER_JUMP_TABLE.bin"
+	.incbin "includes/romslices/v7_transplant_MIDI_CHANNEL_HANDLER_JUMP_TABLE.bin"
 ChanDisp_NoStatusReturn:
 	.byte 0x66
 MIDI_QUEUE_EVENT_TO_SEQUENCER:
@@ -473,7 +473,7 @@ SC0Init_EnableRegisters:
 SC0Init_PaddingStub:
 	.byte 0xc1
 MIDI_SC0_DISPATCH_TABLE:
-	.incbin "includes/generated/v7_transplant_MIDI_SC0_DISPATCH_TABLE.bin"
+	.incbin "includes/romslices/v7_transplant_MIDI_SC0_DISPATCH_TABLE.bin"
 MIDI_SC0_TX_DISPATCH:
 	.byte 0x05, 0x32, 0x00, 0xfc, 0xc1, 0x9a, 0x95, 0x21
 	.byte 0xc9, 0xcf, 0x0b, 0x6b, 0x16, 0xd8, 0x12, 0xd8

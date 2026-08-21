@@ -1527,7 +1527,7 @@ BmDrEdit_CalcBeatFromGridPos:
 	ret
 
 BmDrEdit_ByteData_NoteCoordTable:
-	.incbin "includes/generated/v7_transplant_BmDrEdit_ByteData_NoteCoordTable.bin"
+	.incbin "includes/romslices/v7_transplant_BmDrEdit_ByteData_NoteCoordTable.bin"
 BmDrEdit_ChordScrollUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ChordScrollUp
@@ -3878,7 +3878,7 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 	ret
 
 BmDrEdit_ByteData_CompoundWidgetUpdate:
-	.incbin "includes/generated/v7_transplant_BmDrEdit_ByteData_CompoundWidgetUpdate.bin"
+	.incbin "includes/romslices/v7_transplant_BmDrEdit_ByteData_CompoundWidgetUpdate.bin"
 ReadSeqData_StoreParams:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition

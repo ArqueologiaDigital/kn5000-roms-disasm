@@ -1365,7 +1365,7 @@ GetPlayState2:
 	ldb_d8	l, (34984)
 	ret
 SmfMedley_RawData:
-	.incbin "includes/generated/v7_transplant_SmfMedley_RawData.bin"
+	.incbin "includes/romslices/v7_transplant_SmfMedley_RawData.bin"
 NavigateSongList_Entry:
 NavigateSongList:
 	dec 2, xsp

@@ -7410,4 +7410,4 @@ ColorBlit2_PopReturn:
 	ret
 
 ColorBlit2_LargeCodeBlock:
-	.incbin "includes/generated/v7_fix_colorblit2_largecodeblock.bin"
+	.incbin "includes/romslices/v7_fix_colorblit2_largecodeblock.bin"

@@ -24,7 +24,7 @@ MiddleFuncCall:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
-	.incbin "includes/generated/v7_transplant_MiddleFuncCall_DispatchData.bin"
+	.incbin "includes/romslices/v7_transplant_MiddleFuncCall_DispatchData.bin"
 SqTrSel_CaseB:
 	call	16696381
 SqTrSel_CaseC:
@@ -329,7 +329,7 @@ SongBank_EventHandler_Return:
 	ret
 
 CDlikeSwTtl_DispatchData:
-	.incbin "includes/generated/v7_transplant_CDlikeSwTtl_DispatchData.bin"
+	.incbin "includes/romslices/v7_transplant_CDlikeSwTtl_DispatchData.bin"
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
 	ld xbc, 0x1e0009c

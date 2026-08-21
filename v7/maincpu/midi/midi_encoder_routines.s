@@ -190,4 +190,4 @@ Encoder_ConfigureVolumeMode:
 	stb_d8	(36416), a
 	ret
 Encoder_ConfigureRangeLimit:
-	.incbin "includes/generated/v7_fix_encoder_configurerangelimit.bin"
+	.incbin "includes/romslices/v7_fix_encoder_configurerangelimit.bin"

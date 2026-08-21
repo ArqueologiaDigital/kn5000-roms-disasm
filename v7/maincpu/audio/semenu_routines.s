@@ -3879,7 +3879,7 @@ SeMenu_OrPartConfig:
 	ret
 
 SeMenu_OrPartConfig_Data:
-	.incbin "includes/generated/v7_transplant_SeMenu_OrPartConfig_Data.bin"
+	.incbin "includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data.bin"
 SeMenu_StoreParamByte:
 	dec 1, a
 	extz wa
@@ -4129,4 +4129,4 @@ SeMenu_RefreshPartDisplay:
 	ret
 
 SeMenu_RefreshPartDisplay_Data:
-	.incbin "includes/generated/v7_fix_semenu_refreshpartdisplay_data.bin"
+	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin"

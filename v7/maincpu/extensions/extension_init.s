@@ -16,4 +16,4 @@
 ; =============================================================================
 
 InitializeToshi:
-	.incbin "includes/generated/v7_fix_initializetoshi.bin"
+	.incbin "includes/romslices/v7_fix_initializetoshi.bin"

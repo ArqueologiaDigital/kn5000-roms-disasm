@@ -145,7 +145,7 @@ FlashWrite_BlockData_Type3:
 	ccf
 	pop	sr
 FlashWrite_BlockRef_Type3:
-	.incbin "includes/generated/v7_transplant_FlashWrite_BlockRef_Type3.bin"
+	.incbin "includes/romslices/v7_transplant_FlashWrite_BlockRef_Type3.bin"
 FlashWrite_BlockData_Type4:
 	nop
 	ldwio	97, 0xff06
@@ -168,7 +168,7 @@ FlashWrite_BlockData_Type4:
 	ccf
 	push	sr
 FlashWrite_BlockRef_Type4:
-	.incbin "includes/generated/v7_transplant_FlashWrite_BlockRef_Type4.bin"
+	.incbin "includes/romslices/v7_transplant_FlashWrite_BlockRef_Type4.bin"
 FlashWrite_BlockData_Type5:
 	nop
 	ldwio	97, 0xff06
@@ -418,9 +418,9 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x1b, 0x0a, 0x0d, 0x00, 0x71, 0x00, 0x18, 0x01
 	.byte 0xa8, 0x00, 0xbc, 0x60, 0xf1, 0x00
 DrumDetailEdit_Menu_Table:
-	.incbin "includes/generated/v7_fix_drumdetailedit_menu_table.bin"
+	.incbin "includes/romslices/v7_fix_drumdetailedit_menu_table.bin"
 EffectParam_Edit_Table:
-	.incbin "includes/generated/v7_fix_effectparam_edit_table.bin"
+	.incbin "includes/romslices/v7_fix_effectparam_edit_table.bin"
 InitializeNaka:
 	.byte 0xbf, 0xf2, 0x37, 0xb7, 0x31, 0x40, 0x04, 0x00
 	.byte 0x60, 0x01, 0xb1, 0x60, 0xf2, 0xd5, 0x40, 0xfa

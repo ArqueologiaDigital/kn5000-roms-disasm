@@ -79,7 +79,7 @@ MsgType_FlashWrite:	aligned_string "MT_FLASHWRITE"
 MsgType_MpstWrite:	aligned_string "MT_MPSTWRITE"
 MsgType_MpstLoad:	aligned_string "MT_MPSTLOAD"
 MsgType_DrawKey:	aligned_string "MT_DRAWKEY"
-MsgType_ExcSend:	.incbin "includes/generated/v7_data_msgtype_excsend.bin"
+MsgType_ExcSend:	.incbin "includes/romslices/v7_data_msgtype_excsend.bin"
 MidiMenu_NakaProcName_Table:
 	.long NakaInst_AcVocalistListBoxProc
 	.long NakaInst_PsHarmOnOffBoxProc
