@@ -103,6 +103,14 @@ def main():
         while end < len(terr) and terr[end] == 2:
             end += 1
         rows.append((t, n, end - off))
+    if "--dump" in sys.argv:
+        import json
+        out_path = sys.argv[sys.argv.index("--dump") + 1]
+        json.dump({"generated_by": "scripts/analysis/v7_reachable_from_code.py --dump",
+                   "targets": sorted(targets)}, open(out_path, "w"), indent=1)
+        print(f"wrote {len(targets)} call targets to {out_path}")
+        return 0
+
     rows.sort(key=lambda r: -r[2])
     total = sum(r[2] for r in rows)
 

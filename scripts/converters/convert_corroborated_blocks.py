@@ -94,7 +94,13 @@ def blocks_of(path, syms):
         if m:
             if start is None:
                 start = i
-            for tok in m.group(1).split(","):
+            # Strip trailing comments. Real lines look like
+            #   .byte 0xff\t; call Malloc (v7 addr)
+            # and int(tok, 0) throws on them -- which crashed this script on
+            # whole files. The tree-wide sweep ran with 2>/dev/null and counted
+            # every crash as "nothing to convert", reporting a clean zero.
+            body = re.split(r'[;#]', m.group(1))[0]
+            for tok in body.split(","):
                 tok = tok.strip()
                 if tok:
                     cur.append(int(tok, 0))
@@ -341,6 +347,10 @@ def main():
     apply_ = "--apply" in argv
 
     syms = elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
+    REACHABLE = None
+    if "--reachable" in argv:
+        import json
+        REACHABLE = set(json.load(open(argv[argv.index("--reachable") + 1]))["targets"])
     v9 = v9_code_map()
     V9ROM = open(os.path.join(REPO, "original_ROMs", "kn5000_v9_program.rom"), "rb").read()
     V7ROM = open(os.path.join(REPO, "original_ROMs", "kn5000_v7_program.rom"), "rb").read()
@@ -353,6 +363,28 @@ def main():
         if addr is None:
             stats["no-addr"] += 1; continue
         off = addr - BASE
+        # REACHABILITY, when a target list is supplied: something already
+        # disassembled calls this address, so it is code, and a call target is an
+        # instruction boundary by construction. Strictly better evidence than
+        # matching bytes against another firmware revision, and it does not need
+        # the alignment probe because alignment is guaranteed.
+        if REACHABLE is not None:
+            if addr not in REACHABLE:
+                stats["not-corroborated"] += 1; continue
+            insns, warn = disassemble(raw, addr)
+            if warn or not insns:
+                stats["warn"] += 1; continue
+            if any(i.split()[0].lower() == "db" for i in insns if i.split()):
+                stats["contains-data"] += 1; continue
+            canon = [canonical(i) for i in insns]
+            fast = encode_block(canon)
+            if fast is not None and b"".join(fast) == raw:
+                stats["ok"] += 1
+                todo.append((label, addr, a, b, raw, canon))
+            else:
+                stats["roundtrip"] += 1
+            continue
+
         # CORROBORATION BY CONTENT, not by address. Functions move between
         # revisions, so "v9 calls this OFFSET code" says nothing about this v7
         # block -- and acting on it produced demonstrably wrong conversions (a
