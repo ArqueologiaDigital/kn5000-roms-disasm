@@ -67,7 +67,12 @@ def load_palette(palette_path: Path) -> list:
     return palette
 
 
-# Image metadata: filename -> (width, height, bit_depth, description)
+# Image metadata: filename -> (width, height, bit_depth, description[, row_stride])
+#
+# row_stride is the number of BYTES per ROM row when that differs from the width.
+# It defaults to the width. HDAE5000_Icon needs it: the icon is 27 px wide but each
+# row occupies 28 bytes, so decoding it as 28x28 slid one byte per line and rendered
+# 28 bytes of HDAE5000_Config_Strings as a final row of pixels.
 # bit_depth: 1 = monochrome, 4 = 16 colors, 8 = 256 colors
 IMAGE_METADATA = {
     # 1-bit status messages (224x22, 28 bytes per row, from disassembly comment)
@@ -157,7 +162,7 @@ IMAGE_METADATA = {
     # ROM offset 0x4e98e (CPU: 0x2CE98E): File selection UI
     "HDAE5000_FilePanel.bin": (320, 240, 8, "File selection UI panel"),
     # ROM offset 0x6198e (CPU: 0x2E198E): Small icon (uses halftone palette)
-    "HDAE5000_Icon.bin": (28, 28, 8, "Hard disk with magnetic head icon"),
+    "HDAE5000_Icon.bin": (27, 27, 8, "Hard disk with magnetic head icon", 28),
     # ROM offset 0x661ce (CPU: 0x2E61CE): boot splash shown by HDAE5000_Boot_Init.
     # Geometry comes from the firmware, not from guessing: the bitmap's resource
     # descriptor at 0x28F543 returns 0x2E61CE for query A1, 0x140 (320) for A2
@@ -198,7 +203,8 @@ def convert_1bit_image(data: bytes, width: int, height: int) -> Image.Image:
     return img
 
 
-def convert_8bit_image(data: bytes, width: int, height: int, palette: list = None) -> Image.Image:
+def convert_8bit_image(data: bytes, width: int, height: int, palette: list = None,
+                       row_stride: int = None) -> Image.Image:
     """Convert 8-bit indexed bitmap to PIL Image.
 
     If palette is provided, creates an indexed color image with the palette.
@@ -210,9 +216,10 @@ def convert_8bit_image(data: bytes, width: int, height: int, palette: list = Non
         img.putpalette(palette)
         pixels = img.load()
 
+        stride = row_stride or width
         for y in range(height):
             for x in range(width):
-                idx = y * width + x
+                idx = y * stride + x
                 if idx < len(data):
                     pixels[x, y] = data[idx]
 
@@ -223,9 +230,10 @@ def convert_8bit_image(data: bytes, width: int, height: int, palette: list = Non
         img = Image.new('L', (width, height), 255)
         pixels = img.load()
 
+        stride = row_stride or width
         for y in range(height):
             for x in range(width):
-                idx = y * width + x
+                idx = y * stride + x
                 if idx < len(data):
                     pixels[x, y] = data[idx]
 
@@ -260,7 +268,9 @@ def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> boo
         print(f"  Warning: Unknown image {filename} - skipping (add to IMAGE_METADATA)")
         return False
 
-    width, height, bit_depth, description = IMAGE_METADATA[filename]
+    meta = IMAGE_METADATA[filename]
+    width, height, bit_depth, description = meta[:4]
+    row_stride = meta[4] if len(meta) > 4 else None
 
     with open(bin_path, 'rb') as f:
         data = f.read()
@@ -271,7 +281,7 @@ def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> boo
     elif bit_depth == 4:
         expected_size = ((width + 1) // 2) * height
     else:
-        expected_size = width * height
+        expected_size = (row_stride or width) * height
 
     if len(data) != expected_size:
         print(f"  Warning: {filename} size mismatch: {len(data)} bytes, expected {expected_size}")
@@ -284,7 +294,7 @@ def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> boo
         elif bit_depth == 4:
             img = convert_4bit_image(data, width, height)
         else:
-            img = convert_8bit_image(data, width, height, palette)
+            img = convert_8bit_image(data, width, height, palette, row_stride)
 
         output_name = bin_path.stem + ".png"
         output_path = output_dir / output_name

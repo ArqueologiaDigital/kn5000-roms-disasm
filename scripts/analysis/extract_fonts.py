@@ -290,7 +290,9 @@ def render_font_to_bdf(font_info, table_rom, main_rom, output_path):
 
 
 def main():
-    script_dir = Path(__file__).parent.parent
+    # The repo root is three levels up from scripts/analysis/<this file>. It was
+    # parent.parent, which resolved to scripts/ and made every ROM path miss.
+    script_dir = Path(__file__).resolve().parent.parent.parent
     rom_dir = script_dir / 'original_ROMs'
     table_rom_path = rom_dir / 'kn5000_table_data.rom'
     main_rom_path = rom_dir / 'kn5000_v10_program.rom'

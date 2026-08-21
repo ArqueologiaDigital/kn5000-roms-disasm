@@ -66,6 +66,15 @@
 ; compressed.original.bin, covering 0x983B45-0x987A33 as the decoder would
 ; walk it) is still round-trip-verified by `make verify-help-databases` to
 ; pin these bytes down.  Do not "fix" any of this.
+;
+; IT IS NOT AN ISOLATED ACCIDENT (established 2026-08-21).  The stale German
+; block is the second half of one object: 0x98156F-0x985FFF is a byte-identical
+; copy of the live help region 0x98956F-0x98DFFF, written exactly 0x8000 lower,
+; differing in a single byte at 0x983B39 (the inter-stream pad).  Its first
+; half, 0x98156F-0x983B38, is the tail of the ENGLISH database, and lives in
+; style_records.s where it was long described as unrelated "residue" of a
+; discarded predecessor.  One factory write placed both.
+; Reproduce: scripts/analysis/verify_stale_band.py original_ROMs/kn5000_table_data.rom
 ; =============================================================================
 
 	.org 0x983B3A - 0x800000, 0xFF
