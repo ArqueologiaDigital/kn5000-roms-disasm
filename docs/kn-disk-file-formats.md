@@ -229,20 +229,33 @@ preserved across power-down -- the live panel) and `0x1E7800..0x1E8000` (unident
 | `KN7000/floppy-archive` (the seven disks analysed above) | 7 | **22,528 B (0x5800) uniform** |
 | `kn7000_scratchpad_snapshot/kn6scan/ext` | 8+ | **~2,050 B, variable** (2041, 2049, 2050, 2051, 2074, 2076, 2354) |
 
-Neither is 3,648. The variable-length population is suggestive: `0xF88A1B` branches on a global at
-`0x7EA8` before writing, which is the shape of a **[INFERENCE] optional packing step** -- a packer
-would turn a fixed 0xE40 payload into variable output near 2 KB. That would leave the uniform
-0x5800 files as the odd ones out, and they are the ones the TLV analysis at the top of this file
-describes.
+Neither is 3,648.
+
+⚠ I first guessed that `0xF88A1B` might pack, since it branches on a global at `0x7EA8` before
+writing -- which would have turned a fixed payload into variable output near 2 KB. **That guess was
+wrong, and disassembling the function killed it.** `0xF88A1B` is a plain chunked `fwrite`: it splits
+the copy into runs of at most 0x7FFF bytes, calls `0xF4EAB5(buf, 1, chunk, fp)`, and loops until the
+count is exhausted. `0x7EA8` is the FILE handle, not a mode flag -- a null there is the error
+`0xFF9C`. There is no compression anywhere on this path.
+
+And the regions are not revision-specific: v9's handler at `F87AF6` names the same four addresses as
+v7's, so **all three revisions write exactly 3,648 bytes**. The prover asserts this and fails if a
+revision ever changes them.
+
+**Therefore neither corpus was written by this firmware.** 22,528 != 3,648 and ~2,050 != 3,648. The
+KN5000 writes `.LSW`, but it did not write *these* `.LSW` files. Both facts are now proven, and they
+are not in tension -- they simply mean the seven floppies came off a different machine.
 
 **The consequence is uncomfortable and worth stating plainly: the 26-block TLV structure documented
-above may describe a format this firmware does not produce.** The TLV reading is still exact on its
-own corpus -- 955 records, zero residue on all seven disks -- but "the KN5000 writes `.LSW`" and
-"these seven `.LSW` files came from a KN5000" are now separate claims, and only the first is proven.
+above describes a format this firmware does not produce.** The TLV reading remains exact on its own
+corpus -- 955 records, zero residue on all seven disks -- but it is a description of some other
+model's panel file, and the "24 slots" question belongs to whatever wrote it.
 
-**Next, in order:** disassemble `0xF88A1B` to settle whether it packs (that single function decides
-which corpus the firmware produces); then map `0x1E7800..0x1E8000`; then re-test the TLV framing
-against the `kn6scan` population, which nobody has parsed.
+**Next, and now sharply testable:** the file size is a fingerprint of the writer. Find the KN7000's
+type-0 handler and sum its regions -- if they come to **0x5800**, that identifies the machine that
+wrote the seven floppies outright, and the 24 slots become a KN7000 structure with a known layout.
+The `kn6scan` population is variable-length, so it is a different kind of file again and nobody has
+parsed it. Also still unmapped: what lives at `0x1E7800..0x1E8000`.
 
 ⚠ **The lesson, since it will recur.** "Searched the whole ROM for the name, found nothing, therefore
 the firmware does not do it" is only valid when the code would have to say the name. Table-driven

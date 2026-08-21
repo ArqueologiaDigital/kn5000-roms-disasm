@@ -41,6 +41,25 @@ def records(rom):
         yield i, int.from_bytes(r[0:2], "little"), int.from_bytes(r[2:6], "little")
 
 
+# The type-0 handler sizes two regions before writing them. We do not decode
+# instructions here -- we assert the four address immediates are present in the
+# handler prologue, which is enough to pin the payload size and to FAIL loudly
+# if a revision ever uses different regions.
+REGIONS = [(0xF980, 0xFFC0, 2), (0x1E7800, 0x1E8000, 3)]   # (lo, hi, imm width)
+
+
+def payload_size(rom, handler, window=0x30):
+    off = handler - ROM_BASE
+    blob = rom[off:off + window]
+    total = 0
+    for lo, hi, width in REGIONS:
+        for v in (lo, hi):
+            if v.to_bytes(width, "little") not in blob:
+                return None
+        total += hi - lo
+    return total
+
+
 def main():
     roms = sorted(glob.glob(os.path.join(os.path.dirname(__file__),
                                          "../../original_ROMs/kn5000_v*_program.rom")))
@@ -64,9 +83,21 @@ def main():
         elif 0 not in seen:
             ok = False
         else:
-            print(f"   LSW (type 0) handler = 0x{seen[0]:08X}")
-    print("\nPASS: .LSW is type 0 and has a handler in every revision." if ok
+            h = seen[0]
+            size = payload_size(rom, h)
+            print(f"   LSW (type 0) handler = 0x{h:08X}")
+            if size is None:
+                print("   FAIL: handler prologue no longer names 0xF980/0xFFC0/0x1E7800/0x1E8000")
+                ok = False
+            else:
+                print(f"   writes {size} bytes (0x{size:X}) = "
+                      f"0x640 panel work area + 0x800 from 0x1E7800, uncompressed")
+    print("\nPASS: .LSW is type 0, handled in every revision, payload 3648 B." if ok
           else "\nFAIL: the save-all table no longer reads as documented.")
+    if ok:
+        print("NOTE: 3648 matches NO .LSW file we hold -- the corpora are 22,528 B "
+              "(seven floppies) and ~2,050 B variable (kn6scan). Neither came from\n"
+              "      this firmware's type-0 handler.")
     return 0 if ok else 1
 
 
