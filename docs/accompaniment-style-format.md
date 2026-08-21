@@ -289,3 +289,34 @@ constant.
 Naming these from distributions alone would be the "confident header" anti-pattern the completeness
 spec lists. Naming them from a symbol that is itself an inference is the same mistake one step
 removed.
+
+## The container is a FAMILY, and the disk files belong to it
+
+Established 2026-08-21 from seven real KN-series floppies (`KN7000/floppy-archive/*.zip`, six
+files each: `.CMP .LSW .MSP .SEQ .SQF .TM`). The `.SEQ` song files are built from the SAME
+256-byte cell: a 0x80 marker at +0, two u16 little-endian fields at +1 and +3, payload after.
+
+Three variants of one container, differing in how a pointer is resolved and where the payload
+starts. Reading one with another's rules produces plausible garbage, which is why this table
+matters more than it looks:
+
+| variant | markers | "none" | pointer means | payload |
+|---|---|---|---|---|
+| IC19 styles | 0x80 at +0, 0x87 at +5 and +0xFF | 0xFFFF | section nibble + block index **relative to the section's first cell block** | +0x06, 249 B |
+| demo songs (ROM) | 0x80 at +0 only | 0xFFFF | cell number; cell *c* at `0x800 + (c-1)*256` | +0x05, 251 B |
+| disk `.SEQ` | 0x80 at +0 only | **0x0000** | plain block index within the file | +0x05 |
+
+Measured over 596 cells in 7 disk files: **every one of the 1087 in-range pointers lands on a
+real cell**, and each file has exactly one pointer that lands outside itself.
+
+⚠ **On disk the two fields are NOT a prev/next pair.** Only 48 of 540 forward links have their
+target pointing back, against 514 of 514 in the IC19 styles. So the field at +1 is something else
+here -- and this is exactly the trap that cost three wrong readings of the IC19 header earlier
+today. It is recorded unresolved rather than guessed.
+
+Reproduce: `scripts/analysis/disk_seq_container.py <dir>`.
+
+The other five file types are untouched: `.SQF` begins `5A 5A 5A 5A` and carries ASCII names,
+`.CMP` and `.MSP` both begin `"LKE"` then `5A 5A 5A` (and `scripts/analysis/extract_composer_msp.py`
+already reads the latter), `.LSW` begins `5A 5A`, and `.TM` begins with the ASCII string
+`"KN1500 SOUND RAM"` -- which is itself a finding, since these are KN7000-era disks.
