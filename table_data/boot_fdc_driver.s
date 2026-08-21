@@ -1493,8 +1493,8 @@ FDC_CmdRecalibrate__restore:
 ; -----------------------------------------------------------------------------
 ; FDC_CmdSeek - command 2: seek to the target track (0x0C64)
 ; No-op when the track cache (0x0D32) already matches.  Issues SEEK (0x0F),
-; waits for the result, then settles for 16 ticks.
-; Twin: maincpu FDC_STATUS_HANDLER (fdc_routines.s dispatch entry 2)
+; waits for the result, then settles with WA=0x10 (Boot_Delay waits WA/2).
+; Twin: maincpu FDC_CmdSeek (fdc_routines.s dispatch entry 2)
 ; -----------------------------------------------------------------------------
 FDC_CmdSeek:
 	ldb_d8 a, (0x0c64)	; ld A,(0x0c64) - cmd 2 entry

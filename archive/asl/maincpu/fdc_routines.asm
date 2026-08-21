@@ -1100,7 +1100,7 @@ LABEL_F97CEF:
 FDC_INIT		equ	0F96BBFh	; Basic FDC initialization
 FDC_CONFIG_VERIFY	equ	0F96BD0h	; Configuration/status verification
 FDC_CMD_DISPATCH_SUB	equ	0F96D95h	; Command handler subroutine
-FDC_STATUS_HANDLER	equ	0F97696h	; Status/interrupt handler
+FDC_CmdSeek		equ	0F97696h	; command 2: issues SEEK (0x0F)
 FDC_CMD_EXEC		equ	0F976E4h	; Command execution handler
 FDC_SECTOR_XFER		equ	0F97835h	; Sector/data transfer handler
 FDC_MODE_CONFIG		equ	0F97984h	; Mode configuration (Handler 5)
@@ -1139,7 +1139,7 @@ FDC_HANDLER_01:
 
 FDC_HANDLER_02:
 	CALR FDC_CMD_ENABLE
-	CALR FDC_STATUS_HANDLER
+	CALR FDC_CmdSeek
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_03:

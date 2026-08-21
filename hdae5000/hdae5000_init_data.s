@@ -203,7 +203,7 @@ HDAE5000_ObjHandler_Table:
 	.long HDAE5000_DelRcmEditCheck
 	.long HDAE5000_DelMdEditCheck
 	.long HDAE5000_DelTlxEditCheck
-	.long HDAE5000_Alloc_Memory_4            	; "BitmapHdd_icon"
+	.long HDAE5000_BitmapHdd_icon            	; registry entry 39
 	.long HDAE5000_LBNPage1SwCatch
 	.long HDAE5000_LBNLoadSwCatch
 	.long HDAE5000_FileLBNNameCheck
@@ -228,7 +228,7 @@ HDAE5000_ObjHandler_Table:
 	.long HDAE5000_SeparateBassPartCheck
 	.long HDAE5000_ErrMsgTimerCatch
 	.long HDAE5000_ErrMsgTimerCatchLBN
-	.long HDAE5000_Dir_Event_Check           	; "LanguageTextReturn"
+	.long HDAE5000_LanguageTextReturn        	; registry entry 64
 	.long HDAE5000_BitmapButt01
 	.long HDAE5000_LyricJumpEditCheck
 	.long HDAE5000_LyricForeColorCheck
@@ -645,7 +645,7 @@ HDAE5000_WindowGeometry_Init:
 ; ----------------------------------------------------------------------------
 HDAE5000_ScreenProc_Table:
 	.long HDAE5000_HDAETitleFunc
-	.long HDAE5000_HD_Format_Dispatch  	; "SEL_DIR_Screen"
+	.long HDAE5000_SEL_DIR_Screen      	; registry entry 1
 	.long HDAE5000_FILE_LOAD_Screen
 	.long HDAE5000_FILE_Naming_Screen
 	.long HDAE5000_SetupP2SwCatch

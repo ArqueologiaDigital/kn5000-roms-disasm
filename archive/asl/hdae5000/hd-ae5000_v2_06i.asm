@@ -225,7 +225,8 @@ HDAE5000_ENTRY_4:			; 28001Ch
 ;   0x28030E  Alloc_Memory_1 - Memory lookup (palette at 0x2A898E)
 ;   0x28033B  Alloc_Memory_2 - Memory lookup (palette at 0x2BB98E)
 ;   0x280368  Alloc_Memory_3 - Memory lookup (palette at 0x2CE98E)
-;   0x280395  Alloc_Memory_4 - Memory lookup (palette at 0x2E198E, small display)
+;   0x280395  BitmapHdd_icon - Bitmap resource descriptor (bitmap, not palette,
+;                              at 0x2E198E; 27 x 27 icon).  Firmware's own name.
 ;   0x2803C2  Register_Frame - Register frame handler callback
 ;   0x28F543  Alloc_Memory - Primary memory lookup (palette at 0x2E61CE)
 ; ============================================================================
@@ -502,7 +503,7 @@ HDAE5000_Handler_Registration:		; 280020h
 ; Output: XHL = result
 ;
 ; Each variant returns different palette data pointer for A1, but same
-; dimensions for A2/A3 (except Alloc_Memory_4 which returns 0x1B for both).
+; dimensions for A2/A3 (except BitmapHdd_icon which returns 0x1B for both).
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Alloc_Memory_1:		; 28030Eh
@@ -565,7 +566,7 @@ HDAE5000_Alloc_Memory_3:		; 280368h
 	ld	XHL, 000000F0h		; 240 (height)
 	ret
 
-HDAE5000_Alloc_Memory_4:		; 280395h
+HDAE5000_BitmapHdd_icon:		; 280395h
 	; Returns 0x2E198E for A1, 0x1B for A2 and A3 (small display mode)
 	cp	XBC, EVT_ALLOC_HEIGHT
 	jr	Z, .type_A3

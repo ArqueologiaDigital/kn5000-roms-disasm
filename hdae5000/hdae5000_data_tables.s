@@ -29782,8 +29782,13 @@ HdaeUiName_000:	.asciz	"HDDMENU"                       ; 0x2A8492  [  0]
 ;   0x28032A  HDAE5000_Alloc_Memory_1 -> 0x2A898E, 0x140 (320) x 0xF0 (240)
 ;   0x280357  HDAE5000_Alloc_Memory_2 -> 0x2BB98E, 0x140 x 0xF0
 ;   0x280384  HDAE5000_Alloc_Memory_3 -> 0x2CE98E, 0x140 x 0xF0
-;   0x2803B1  HDAE5000_Alloc_Memory_4 -> 0x2E198E, 0x1B (27) x 0x1B (27)
+;   0x2803B1  HDAE5000_BitmapHdd_icon -> 0x2E198E, 0x1B (27) x 0x1B (27)
 ;   0x28F55F  HDAE5000_Alloc_Memory   -> 0x2E61CE, 0x140 x 0xF0 (boot splash)
+;
+; Only the fourth of these carries a name from the firmware: it is entry 39 of
+; HDAE5000_ObjHandler_Table and the parallel HDAE5000_ObjName_Table entry reads
+; "BitmapHdd_icon".  The other four appear in no registry table, so they keep
+; the Alloc_Memory_* labels for now -- they allocate nothing either.
 ;
 ; RETIRED LABEL -- HDAE5000_Font_Data, "Font bitmap data (large block)",
 ; formerly covering 0x2BA1A6-0x2E1C81.  It was wrong twice over: the region
@@ -29883,7 +29888,7 @@ HDAE5000_Palette_HddIcon:	; 0x2E158E
 HDAE5000_Bitmap_HddIcon:	; 0x2E198E
 	; 27 x 27 @ 8bpp with a 28-byte row stride (one 0x00 pad byte at the end
 	; of every row) = 756 B: the hard-disk-platter-and-head icon.  The
-	; 27 x 27 geometry is HDAE5000_Alloc_Memory_4 (0x2803B1) returning 0x1B
+	; 27 x 27 geometry is HDAE5000_BitmapHdd_icon (0x2803B1) returning 0x1B
 	; for BOTH the A2 (width) and A3 (height) requests.
 	; NOTE hdae5000/images/HDAE5000_Icon.bin is 784 B: its extraction
 	; assumed 28 x 28 and over-reads 28 bytes into HDAE5000_Config_Strings.

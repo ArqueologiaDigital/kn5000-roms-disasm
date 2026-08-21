@@ -3632,7 +3632,7 @@ ROM_PaddingFF:
 
 	.set FDC_POST_OP, 0xf971d5
 
-	.set FDC_STATUS_HANDLER, 0xf97289
+	.set FDC_CmdSeek, 0xf97289
 
 	.set FDC_CE_DISPATCH, 0xf9741d
 

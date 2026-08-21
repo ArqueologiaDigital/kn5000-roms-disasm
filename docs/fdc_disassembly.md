@@ -40,7 +40,7 @@ corresponding raw byte sections.
 | 0xF96BBF | FDC_INIT | Basic FDC initialization |
 | 0xF96BD0 | FDC_CONFIG_VERIFY | Configuration and status verification |
 | 0xF96D95 | FDC_CMD_DISPATCH_SUB | Command handler subroutine |
-| 0xF97696 | FDC_STATUS_HANDLER | Status/interrupt handler |
+| 0xF97696 | FDC_CmdSeek | Command 2: SEEK (0x0F) -- twin of boot FDC_CmdSeek |
 | 0xF976E4 | FDC_CMD_EXEC | Command execution handler |
 | 0xF97835 | FDC_SECTOR_XFER | Sector/data transfer handler |
 | 0xF97984 | FDC_MODE_CONFIG | Mode configuration (Handler 5) |
@@ -184,12 +184,20 @@ FDC_H10_OK:                 ; F96DAE
     RET
 ```
 
-### FDC_STATUS_HANDLER (0xF97696) - Status/Interrupt Handler
+### FDC_CmdSeek (0xF97696) - Command 2: Seek
 
-Checks and updates FDC status, handles interrupts.
+Seeks to the target track.  No-op when the track cache (0x8B04) already matches
+the requested track (0x8A36); otherwise it delays (WA=2), clears the result
+buffer, issues SEEK (`LD WA, 000Fh` -> 0x0F), waits for the result, sets the
+track cache to 0xFF if the error byte 0x8A24 is non-zero, and settles (WA=0x10;
+the delay routine busy-waits WA/2 ticks).
+Instruction-for-instruction twin of the bootloader's `FDC_CmdSeek`
+(table_data/boot_fdc_driver.s, 0xFFE31A).  It reads and writes no status
+register and handles no interrupt: the old name FDC_STATUS_HANDLER was a
+misnomer.
 
 ```asm
-FDC_STATUS_HANDLER:         ; F97696
+FDC_CmdSeek:                ; F97696
     LD A, (8A36h)
     CP A, (8B04h)
     RET Z
@@ -207,8 +215,8 @@ FDC_SH_L1:                  ; F976C3
     LD WA, 0010h
     JRL T, SOME_DELAY
 
-; Secondary status handler
-FDC_STATUS_HANDLER_2:       ; F976C9
+; Submit MT|MF READ DATA (0xC6) - twin of boot FDC_SubmitReadDataCmd
+FDC_SubmitReadDataCmd:      ; F976C9
     LD (8A28h), 0C6h
     CALR LABEL_F97052
     CALR LABEL_F975DC
@@ -243,7 +251,7 @@ FDC_CE_L2:                  ; F97703
 
 FDC_CE_PROCESS:             ; F9770B
     LD (8A24h), 0
-    CALR FDC_STATUS_HANDLER
+    CALR FDC_CmdSeek
     CP (8A24h), 0
     JR Z, FDC_CE_L3
     LD A, (8A24h)

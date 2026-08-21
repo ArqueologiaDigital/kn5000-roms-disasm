@@ -900,7 +900,7 @@ FDC_HANDLER_01:
 
 FDC_HANDLER_02:
 	calr FDC_CMD_ENABLE
-	calr FDC_STATUS_HANDLER
+	calr FDC_CmdSeek
 	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_03:

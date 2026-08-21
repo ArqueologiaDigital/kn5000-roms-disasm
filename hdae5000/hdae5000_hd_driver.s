@@ -880,9 +880,29 @@ HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	lda xsp, (xsp + 0x1a)		; deallocate 26-byte frame
 	ret
 
-; --- HD Format Event Dispatcher (0x2837F2) ---
-; Handles event codes 0x01EA0000-0x01EA0008, 0x01C00007
-HDAE5000_HD_Format_Dispatch:	; 0x2837F2
+; --- HDAE5000_SEL_DIR_Screen (0x2837F2) -------------------------------------
+; Firmware's own name: HDAE5000_ScreenProc_Table entry 1 is 0x2837F2 and the
+; parallel HDAE5000_ScreenName_Table entry points at 0x2A8570 =
+; "SEL_DIR_Screen".  The old label HD_Format_Dispatch was a misnomer: the
+; routine formats nothing.  It is the directory-selection screen procedure --
+; every arm drives RAM 0x23A08E, which HDAE5000_Browser_State documents as the
+; row-base offset added to every browser row address, over the five row slots
+; 0x0000/0x0018/0x0030/0x0048/0x0060 (5 x 24 bytes).  0x01EA0000 adds 0x18 to
+; that offset and gives up once it has reached the 0x0060 ceiling; 0x01EA0001
+; subtracts 0x18 and gives up below the 0x0018 floor; both then post
+; 0x01EA0003 back to the UI.  [INFERENCE] which of the two moves the list
+; "down" on screen is not proven by this ROM.
+;
+; INFERENCE (not proven by this ROM): the 0x01EA000n codes index
+; HDAE5000_MessageName_Table, giving n=0 MT_OverFlow, n=1 MT_UnderFlow,
+; n=3 MT_SetSelNum, n=6/7 MT_SelectOK/MT_SelectOK2, n=8 MT_SelectSAVE.  The
+; clamp arithmetic matches OverFlow/UnderFlow, but the main CPU assigns the
+; codes and this ROM never spells the mapping out.  The per-arm comments
+; below ("page down", "page up", "seek", "set format params") predate this
+; note and have NOT been re-verified.
+; Dispatches 0x01EA0000, 0x01EA0001, 0x01EA0006, 0x01EA0007, 0x01EA0008 and
+; 0x01C00007; every other code falls straight through to .Lfd_done.
+HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	push xiz
 	ld xiz, xde			; save XDE in XIZ
 

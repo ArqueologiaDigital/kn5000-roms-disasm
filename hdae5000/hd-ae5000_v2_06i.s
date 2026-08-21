@@ -243,8 +243,10 @@ HDAE5000_ENTRY_4:	; 28001Ch
 ;                             (A1 = 0x2BB98E bitmap data, not a palette)
 ;   0x280368  Alloc_Memory_3 - Bitmap resource descriptor, HDAE5000_Bitmap_FilePanel
 ;                             (A1 = 0x2CE98E bitmap data, not a palette)
-;   0x280395  Alloc_Memory_4 - Bitmap resource descriptor, HDAE5000_Bitmap_HddIcon
-;                             (A1 = 0x2E198E bitmap data, not a palette)
+;   0x280395  BitmapHdd_icon - Bitmap resource descriptor, HDAE5000_Bitmap_HddIcon
+;                             (A1 = 0x2E198E bitmap data, not a palette; unlike
+;                              its three neighbours this one carries the
+;                              firmware's own registry name)
 ;   0x2803C2  Register_Frame - Register frame handler callback
 ;   0x28F543  Alloc_Memory - Bitmap resource descriptor for the boot splash
 ;                             (A1 = 0x2E61CE HDAE5000_Bitmap_BootSplash, A2 = 320,
@@ -517,16 +519,21 @@ HDAE5000_Handler_Registration:	; 280020h
 	ret
 
 ; ----------------------------------------------------------------------------
-; Memory Allocation Parameter Lookup Routines (0x28030E - 0x2803C1)
+; Bitmap resource descriptors (0x28030E - 0x2803C1)
 ;
-; Four variants that return display parameters based on request type.
-; Called by main CPU to get palette data pointers and display dimensions.
+; Four constant lookups, one per embedded bitmap.  They allocate nothing, so
+; the "Alloc_Memory" spelling is a misnomer; the first three keep it only
+; because the firmware publishes no name for them.  The fourth one it does
+; publish: HDAE5000_ObjHandler_Table entry 39 is 0x280395 and the parallel
+; HDAE5000_ObjName_Table entry points at 0x29BD0A = "BitmapHdd_icon".
 ;
-; Input: XBC = request type (0x01E000A1, 0x01E000A2, or 0x01E000A3)
-; Output: XHL = result
-;
-; Each variant returns different palette data pointer for A1, but same
-; dimensions for A2/A3 (except Alloc_Memory_4 which returns 0x1B for both).
+; Input:  XBC = request type
+;           0x01E000A1 -> base address of the bitmap DATA, not a palette (the
+;                        same immediates are the MemCopy sources at 0x2804BB,
+;                        0x280599 and 0x280677 -- see hdae5000_data_tables.s)
+;           0x01E000A2 -> width
+;           0x01E000A3 -> height
+; Output: XHL = the answer, or 0 for any other request
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Alloc_Memory_1:	; 28030Eh
@@ -589,24 +596,28 @@ HDAE5000_Alloc_Memory_3__type_A3:
 	ld xhl, 0xF0	; 240 (height)
 	ret
 
-HDAE5000_Alloc_Memory_4:	; 280395h
-	; Returns 0x2E198E for A1, 0x1B for A2 and A3 (small display mode)
+; --- HDAE5000_BitmapHdd_icon (was HDAE5000_Alloc_Memory_4) -------------------
+; The label is the firmware's own name.  HDAE5000_ObjHandler_Table entry 39
+; (ROM 0x2F94B2 + 0x9C) holds 0x280395, and the parallel HDAE5000_ObjName_Table
+; entry (ROM 0x2F95CA + 0x9C) points at 0x29BD0A = "BitmapHdd_icon".
+HDAE5000_BitmapHdd_icon:	; 280395h
+	; Resource descriptor for HDAE5000_Bitmap_HddIcon.  Allocates nothing.
 	cp xbc, 0x1E000A3
-	jr z, HDAE5000_Alloc_Memory_4__type_A3
+	jr z, HDAE5000_BitmapHdd_icon__type_A3
 	cp xbc, 0x1E000A2
-	jr z, HDAE5000_Alloc_Memory_4__type_A2
+	jr z, HDAE5000_BitmapHdd_icon__type_A2
 	cp xbc, 0x1E000A1
-	jr z, HDAE5000_Alloc_Memory_4__type_A1
+	jr z, HDAE5000_BitmapHdd_icon__type_A1
 	lds32 xhl, 0
 	ret
-HDAE5000_Alloc_Memory_4__type_A1:
-	lda_24 xhl, (0x2e198e); Palette data pointer 4
+HDAE5000_BitmapHdd_icon__type_A1:
+	lda_24 xhl, (0x2e198e); HDAE5000_Bitmap_HddIcon data, NOT a palette
 	ret
-HDAE5000_Alloc_Memory_4__type_A2:
-	ld xhl, 0x1B	; 27 (small width)
+HDAE5000_BitmapHdd_icon__type_A2:
+	ld xhl, 0x1B	; 27 (icon width)
 	ret
-HDAE5000_Alloc_Memory_4__type_A3:
-	ld xhl, 0x1B	; 27 (small height)
+HDAE5000_BitmapHdd_icon__type_A3:
+	ld xhl, 0x1B	; 27 (icon height)
 	ret
 
 ; ============================================================================

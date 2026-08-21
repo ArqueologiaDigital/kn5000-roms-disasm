@@ -1403,8 +1403,18 @@ FDC_InitSequence_Full:
 ; boot_fdc_driver.s): saves the caller's target track (0x8a36) in QIZH, seeks
 ; to track 5 first (head-load settling), then issues RECALIBRATE (0x07) and
 ; waits for the result; on failure invalidates the track cache (0x8b04).
-; The raw block below also contains the SEEK command handler at 0xf97696
-; (.set alias FDC_STATUS_HANDLER -- a misnomer; twin: boot FDC_CmdSeek).
+; The raw block below also contains the SEEK command handler at 0xf97696,
+; reached through the .set alias FDC_CmdSeek (renamed from the misnomer
+; FDC_STATUS_HANDLER -- it reads and writes no status register).  Verified
+; instruction-for-instruction against its bootloader twin FDC_CmdSeek in
+; table_data/boot_fdc_driver.s: compare the target track (0x8a36) against
+; the track cache (0x8b04) and return if equal, delay (WA=2), clear the
+; result buffer, LD WA,0x000F (= FDC SEEK opcode 0x0F), issue the command,
+; wait for the result, set the track cache to 0xFF on error, then settle
+; (WA=0x10; the delay routine busy-waits WA/2 ticks).
+; [INFERENCE] The neighbouring .set aliases FDC_TIMING_DELAY (0xf975dc) and
+; FDC_POST_OP (0xf975e2) look like the same class of misnomer; they were
+; not re-checked in this pass.
 FDC_CmdRecalibrate:
 	.byte 0xd7
 	swi	2
@@ -2239,7 +2249,7 @@ FDC_CommandEntry_CopyParams:
 	; (EQU->inline label) FDC_INIT = 0xf96bbf
 	; (EQU->inline label) FDC_CONFIG_VERIFY = 0xf96bd0
 	; (EQU->inline label) FDC_CMD_DISPATCH_SUB = 0xf96d95
-	; (EQU->inline label) FDC_STATUS_HANDLER = 0xf97696
+	; (EQU->inline label) FDC_CmdSeek = 0xf97696	; cmd 2: issues SEEK (0x0F)
 	; (EQU->inline label) FDC_CMD_EXEC = 0xf976e4
 	; (EQU->inline label) FDC_SECTOR_XFER = 0xf97835
 	; (EQU->inline label) FDC_MODE_CONFIG = 0xf97984
@@ -2278,7 +2288,7 @@ FDC_HANDLER_01:
 
 FDC_HANDLER_02:
 	calr FDC_CMD_ENABLE
-	calr FDC_STATUS_HANDLER
+	calr FDC_CmdSeek
 	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_03:

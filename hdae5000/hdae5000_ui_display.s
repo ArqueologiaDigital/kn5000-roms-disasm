@@ -6672,7 +6672,16 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	; ============================================================
 	; Event code matcher — check for 0x01E0009F
 	; ============================================================
-HDAE5000_Dir_Event_Check:	; 0x28F2F7
+	; Firmware's own name: HDAE5000_ObjHandler_Table entry 64 is 0x28F2F7
+	; and the parallel HDAE5000_ObjName_Table entry points at 0x29BB48 =
+	; "LanguageTextReturn".  0x2E5D72 is a table of six 32-bit pointers to
+	; the nine-character language-text names "LANENG001" (0x2E5DBC),
+	; "LANDEU002" (0x2E5DB2), "LANFRA003" (0x2E5DA8), "LANENG004"
+	; (0x2E5D9E), "LANENG005" (0x2E5D94) and "LANENG006" (0x2E5D8A).
+	; [INFERENCE] they read as file stems: ".TTX", ".MID" and "XLT." sit a
+	; few bytes earlier.  Nothing here concerns directories: the old name
+	; Dir_Event_Check was a misnomer.
+HDAE5000_LanguageTextReturn:	; 0x28F2F7
 	cp xbc, 0x01e0009f
 	jr nz, .Ldec_no
 	lda_24 xhl, (0x2e5d72)
@@ -6973,9 +6982,12 @@ HDAE5000_Alloc_Memory:	; 28F543h
 	;   else -> 0 (invalid type)
 	; A2/A3 give the splash geometry as 320 x 240; at 8bpp that is 76,800
 	; bytes, which agrees with both the 2 x 0x9600 VRAM copy in Boot_Init
-	; and the exact fill of 0x2E61CE-0x2F8DCD.  (Do not assume A2/A3 are
-	; raster dimensions for every descriptor: 0x280395 answers 0x1B/0x1B
-	; for the 784-byte icon, which actually renders as 28 x 28.)
+	; and the exact fill of 0x2E61CE-0x2F8DCD.  A2/A3 read as raster
+	; dimensions for the other descriptors too: 0x280395 answers 0x1B/0x1B
+	; and hdae5000_data_tables.s shows HDAE5000_Bitmap_HddIcon is 27 x 27
+	; @ 8bpp with a 28-byte row stride (756 B, the .incbin length there).
+	; The "784-byte icon / 28 x 28" reading recorded here earlier came from
+	; an extraction that over-reads 28 bytes into HDAE5000_Config_Strings.
 	cp xbc, 0x1E000A3	; Check for type A3
 	jr z, HDAE5000_Alloc_Memory__type_A3
 	cp xbc, 0x1E000A2	; Check for type A2
