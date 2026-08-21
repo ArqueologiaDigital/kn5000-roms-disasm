@@ -43,11 +43,20 @@ Classifying every blob byte in the three worst ROMs:
 |---|---|---|---|---|
 | table data | 395,150 (35.5%) | 65,536 | 652,435 | **0** |
 | custom data | 663,552 (99.4%) | 4,096 | 0 | **0** |
-| HD-AE5000 | 313,076 (100%) | 0 | 0 | **0** |
-| **total** | **1,371,778** | 69,632 | 652,435 | **0** |
+| HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
+| **total** | **1,058,702** | 69,632 | 652,435 | **0** |
 
-**1,371,778 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
+**1,058,702 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
 to report instead of any percentage.
+
+**HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
+palettes and the 27x27 icon -- now build FROM committed palette-indexed PNGs and palette text files,
+via `scripts/build/hdae5000_images.py`. The PNGs store palette INDICES, not colours, because these
+palettes contain duplicate colours and an RGB round trip would be ambiguous; the icon's 28th padding
+byte per row is preserved in a sidecar because it is not always zero. `hdae5000_images.py verify`
+asserts all ten rebuild the ROM bytes exactly, and the gate passes 9/9 with the images as the
+build's actual input. That is L4 satisfied for this ROM: readable form committed, round-trip proven,
+blob no longer the source.
 
 The good news in that table is the last column. **Nothing is UNKNOWN.** Every blob has been
 identified; none of this is blocked on understanding. It is blocked on conversion.

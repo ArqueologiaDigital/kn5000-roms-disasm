@@ -667,7 +667,13 @@ rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.e
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- HDAE5000 ---
-rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: hdae5000/hd-ae5000_v2_06i.s
+# The board's graphics are built FROM the committed PNGs and palette text files, not
+# incbin'd out of a ROM slice. scripts/build/hdae5000_images.py verify asserts the round
+# trip is byte-exact, so the readable form is the source rather than a view of a blob.
+hdae5000-images:
+	python3 scripts/build/hdae5000_images.py build
+
+rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: hdae5000/hd-ae5000_v2_06i.s hdae5000-images
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I hdae5000 -o $@ $<
 

@@ -29840,19 +29840,25 @@ HDAE5000_Palette_TitleLogo:	; 0x2A858E
 	; 0x400 B = 256 RGBX entries, 205 distinct colours.  Copied to 0x069400
 	; by the lda at 0x2804E1.  Byte-identical to HDAE5000_Palette_DriveMech
 	; (0x2BB58E) -- the two title frames share one palette.
-	.incbin "includes/code_29af2d_2fffff.bin", 54881, 1024
+	; Built from images/HDAE5000_Palette_Logo.txt by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 54881, 1024
+	.incbin "includes/generated/HDAE5000_Palette_Logo.bin"
 
 HDAE5000_Bitmap_TitleLogo:	; 0x2A898E
 	; 320 x 240 @ 8bpp = 0x12C00 B.  The "HD-AE5000" wordmark embossed over
 	; a photograph of a bare hard-disk mechanism.  Moved as two halves,
 	; 0x2A898E -> 0x056800 and 0x2B1F8E -> 0x05FE00.  Already extracted as
 	; hdae5000/images/HDAE5000_Logo.bin (byte-identical to this slice).
-	.incbin "includes/code_29af2d_2fffff.bin", 55905, 76800
+	; Built from images/HDAE5000_Logo.png by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 55905, 76800
+	.incbin "includes/generated/HDAE5000_Logo.bin"
 
 HDAE5000_Palette_DriveMech:	; 0x2BB58E
 	; 0x400 B = 256 RGBX entries.  Copied to 0x069400 by 0x2805BF, and again
 	; on its own by 0x280753.  Byte-identical to HDAE5000_Palette_TitleLogo.
-	.incbin "includes/code_29af2d_2fffff.bin", 132705, 1024
+	; Built from images/HDAE5000_Palette_Hands.txt by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 132705, 1024
+	.incbin "includes/generated/HDAE5000_Palette_Hands.bin"
 
 HDAE5000_Bitmap_DriveMech:	; 0x2BB98E
 	; 320 x 240 @ 8bpp.  The same drive-mechanism photograph WITHOUT the
@@ -29860,20 +29866,26 @@ HDAE5000_Bitmap_DriveMech:	; 0x2BB98E
 	; 0x2BB98E and 0x2C4F8E.  Extracted as images/HDAE5000_Hands.bin, whose
 	; "Hands operating HD-AE5000 unit" caption is wrong: no hands appear in
 	; the picture (see the hdae-docs / gallery follow-up).
-	.incbin "includes/code_29af2d_2fffff.bin", 133729, 76800
+	; Built from images/HDAE5000_Hands.png by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 133729, 76800
+	.incbin "includes/generated/HDAE5000_Hands.bin"
 
 HDAE5000_Palette_FilePanel:	; 0x2CE58E
 	; 0x400 B = 256 RGBX entries but only 110 distinct colours: a long grey
 	; ramp plus the blue stone texture used by the panel.  Copied to
 	; 0x069400 by 0x28069D.
-	.incbin "includes/code_29af2d_2fffff.bin", 210529, 1024
+	; Built from images/HDAE5000_Palette_FilePanel.txt by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 210529, 1024
+	.incbin "includes/generated/HDAE5000_Palette_FilePanel.bin"
 
 HDAE5000_Bitmap_FilePanel:	; 0x2CE98E
 	; 320 x 240 @ 8bpp.  The file-selection panel background: three sunken
 	; list wells over a blue stone fill, with the grey scroll strip along
 	; the bottom.  Halves at 0x2CE98E and 0x2D7F8E.  Already extracted as
 	; images/HDAE5000_FilePanel.bin.
-	.incbin "includes/code_29af2d_2fffff.bin", 211553, 76800
+	; Built from images/HDAE5000_FilePanel.png by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 211553, 76800
+	.incbin "includes/generated/HDAE5000_FilePanel.bin"
 
 HDAE5000_Palette_HddIcon:	; 0x2E158E
 	; 0x400 B = 256 RGBX entries, all 256 distinct -- the Windows halftone
@@ -29883,7 +29895,9 @@ HDAE5000_Palette_HddIcon:	; 0x2E158E
 	; the icon uses only indices 0/1/3/7/248/251/252/255 (the Windows
 	; reserved entries at both ends) and is legible with this palette only.
 	; Extracted as images/HDAE5000_Palette.bin.
-	.incbin "includes/code_29af2d_2fffff.bin", 288353, 1024
+	; Built from images/HDAE5000_Palette_Icon.txt by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 288353, 1024
+	.incbin "includes/generated/HDAE5000_Palette_Icon.bin"
 
 HDAE5000_Bitmap_HddIcon:	; 0x2E198E
 	; 27 x 27 @ 8bpp with a 28-byte row stride (one 0x00 pad byte at the end
@@ -29892,7 +29906,9 @@ HDAE5000_Bitmap_HddIcon:	; 0x2E198E
 	; for BOTH the A2 (width) and A3 (height) requests.
 	; NOTE hdae5000/images/HDAE5000_Icon.bin is 784 B: its extraction
 	; assumed 28 x 28 and over-reads 28 bytes into HDAE5000_Config_Strings.
-	.incbin "includes/code_29af2d_2fffff.bin", 289377, 756
+	; Built from images/HDAE5000_Icon.png by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 289377, 756
+	.incbin "includes/generated/HDAE5000_Icon.bin"
 
 HDAE5000_Config_Strings:	; 0x2E1C82
 	; Configuration and version strings
@@ -32922,7 +32938,9 @@ HDAE5000_Palette_Data:	; 0x2E5DCE
 	; The old slice here claimed "VGA palette data (256 entries)" but ran for
 	; 0x13000 bytes -- 0x400 of palette followed by a whole 320 x 240 bitmap
 	; that had never been identified.  They are now separated.
-	.incbin "includes/code_29af2d_2fffff.bin", 306849, 1024
+	; Built from images/HDAE5000_Palette_Splash.txt by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 306849, 1024
+	.incbin "includes/generated/HDAE5000_Palette_Splash.bin"
 
 HDAE5000_Bitmap_BootSplash:	; 0x2E61CE
 	; 320 x 240 @ 8bpp = 0x12C00 B -- the HD-AE5000 start-up screen: a red
@@ -32936,7 +32954,9 @@ HDAE5000_Bitmap_BootSplash:	; 0x2E61CE
 	; 0x1A9600.  0x2E61CE + 0x12C00 = 0x2F8DCE = HDAE5000_Display_Params,
 	; so the bitmap tiles the gap exactly.
 	; Not yet extracted to hdae5000/images/ -- see the hdae-splash package.
-	.incbin "includes/code_29af2d_2fffff.bin", 307873, 76800
+	; Built from images/HDAE5000_SplashScreen.png by scripts/build/hdae5000_images.py.
+	; Was: .incbin "includes/code_29af2d_2fffff.bin", 307873, 76800
+	.incbin "includes/generated/HDAE5000_SplashScreen.bin"
 
 HDAE5000_Display_Params:	; 0x2F8DCE
 	; Display configuration parameters
