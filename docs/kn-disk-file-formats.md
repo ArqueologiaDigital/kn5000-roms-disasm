@@ -263,6 +263,29 @@ above describes a format this firmware does not produce.** The TLV reading remai
 corpus -- 955 records, zero residue on all seven disks -- but it is a description of some other
 model's panel file, and the "24 slots" question belongs to whatever wrote it.
 
+### The KN7000 side, as far as it goes
+
+`0x4852F887` is the KN7000's build-`"<name>.<ext>"` routine, type index in `d0`. Its callers divide
+sharply:
+
+* **types 1..13 each have literal constant call sites** -- PMT, SQT, CMP, TM, MSP, EFC, MD, FAV,
+  HMP, AST, SQF, SEQ, ACT;
+* **type 0 (`LSW`) has none**, in an image where every sibling does;
+* **33 sites pass the index dynamically**, which is where a UI-selected type flows -- and the SD
+  menu does offer LSW (`SD_LD2_BLSW` -> `PANEL`).
+
+So the KN7000 reaches `.LSW` only through the dynamic path. That does not identify the writer of the
+22,528-byte files, and it is recorded as a measured asymmetry rather than an explanation.
+
+⚠ Two traps here, both of which produced wrong answers before being caught. The function's **entry
+is 0x4852F887, not its 0x4852F882 prologue** -- searching for calls to the prologue address returns
+zero, as does searching for the address as a constant, which reads as "never called" when it is
+called 62 times. And a backward byte-scan for `mov imm,d0` **misses `clr d0`**, a single `0x00` byte
+and precisely the encoding a zero index would use; that scan also invented types 16, 20, 253, 6237
+and 35533 out of mid-instruction matches and counted TM 16 times instead of 2. Reproduce with
+`tools/callsite-types/kn7000_filetype_callsites.py` in the KN7000 repo, which decodes backwards with
+unidasm and only trusts a window when a decoded instruction starts exactly on the call.
+
 **Next, and now sharply testable:** the file size is a fingerprint of the writer. Find the KN7000's
 type-0 handler and sum its regions -- if they come to **0x5800**, that identifies the machine that
 wrote the seven floppies outright, and the 24 slots become a KN7000 structure with a known layout.
