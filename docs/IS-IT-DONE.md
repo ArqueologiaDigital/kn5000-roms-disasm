@@ -14,11 +14,30 @@ stood for months were wrong, and are corrected in the history rather than quietl
 | **L0** byte-exact AND capable of failing | **PASS** | `rom_provenance_poison.py all` -- v7, v9, v10 report 0 copied bytes. v7 was 979,096 B (46.69%) copied this morning. |
 | **§3** binary includes justified | **PASS** | `audit_incbin_legitimacy.py` -- 873 directives, every one in a justified category, exits non-zero if not. Was 1,371,778 illegitimate bytes. |
 | **L4** assets round-trip | **PASS** | seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT. |
-| **L1** every byte classified | **PARTIAL** | no UNKNOWN bytes remain in the audited ROMs, but the classification is not itself mechanised. |
+| **L1** every byte classified | **PASS** | `l1_territory_map.py v7 v9 v10` -- flattens each source tree through llvm-mc and assigns every byte to CODE/DATA/PADDING; all three totals equal their rebuilt ROM to the byte. ASSET is folded into DATA here (llvm-mc expands `.incbin`); its separate justification is the §3 row. |
 | **L2** semantic names | **PARTIAL** | sources are well-symbolised; `symbols/maincpu_symbols_reference.txt` matches the build on 1,332 of 39,449 rows and says so in its own header. |
 | **L3** field meanings | **PARTIAL** | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
 | **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. Panel-side behaviour is not, and cannot be. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
+
+## What the territory map shows
+
+L1 was mechanised on 2026-08-21, and the first thing it measured was a gap nobody had quantified:
+
+| | CODE | DATA | PADDING |
+|---|---|---|---|
+| **v7** | **542,379 (25.86%)** | 1,488,021 (70.95%) | 66,752 (3.18%) |
+| v9 | 1,003,061 (47.83%) | 1,019,367 (48.61%) | 74,724 (3.56%) |
+| v10 | 1,003,078 (47.83%) | 1,019,364 (48.61%) | 74,710 (3.56%) |
+
+**v7 has ~460 KB less CODE and ~469 KB more DATA than its siblings**, which are nearly identical to
+each other. The 288 committed ROM slices account for 136,775 B of that, so roughly 320 KB is not yet
+explained -- regions that v9/v10 express as instructions and v7 still carries as data. Whether that
+is genuine content difference or simply less-advanced disassembly is NOT established here; the
+measurement is, and it says where to look.
+
+That is what a mechanised L1 is for. The previous "no UNKNOWN bytes remain" was true and told nobody
+where the work was thin.
 
 ## The three things that are not done, and where they live
 
