@@ -1,0 +1,97 @@
+[
+ {
+  "file": "v142/subcpu/kn5000_subprogram_v142.s",
+  "anchor": "; The four tables are exactly 10/9/9/10 entries and butt up against each other\n; (0x00F786+0x14 = 0x00F79A, 0x00F79A+0x12 = 0x00F7AC, 0x00F7AC+0x12 = 0x00F7BE,\n; 0x00F7BE+0x14 = 0x00F7D2), which is what pins COUNT to 0..9 and INDEX to 0..8.",
+  "replacement": "; The FIVE tables are exactly 10/9/9/10/10 entries and butt up against each other\n; (0x00F786+0x14 = 0x00F79A, 0x00F79A+0x12 = 0x00F7AC, 0x00F7AC+0x12 = 0x00F7BE,\n; 0x00F7BE+0x14 = 0x00F7D2, 0x00F7D2+0x14 = 0x00F7E6), so the five spans tile\n; 0x00F786-0x00F7E5 exactly and end where Voice_Portamento_Rate_Table begins.  Their\n; labels are Const_Zero_Byte (+PitchDetune_OffsetTable) / Voice_Part_Trim_Table_B /\n; Voice_Part_Trim_Addend_1 / Voice_Part_Trim_Addend_2 / Voice_Part_Trim_Base.\n; \u2605 CORRECTED: this used to read \"The four tables are exactly 10/9/9/10 entries ... which\n; is what pins COUNT to 0..9 and INDEX to 0..8\".  The fifth table (0x00F7D2, loaded two\n; instructions below) was missing from the count, and the causality was backwards: a\n; table's size cannot bound its own subscript.  What the code does guarantee:\n;   COUNT is bounded.  Voice_Selector_FindBestSlot (0x02AC54) zeroes the counter\n;     (`ld (xwa),0x0`) and increments it at most once per entry over d = 0..8, so COUNT is\n;     0..9 and the two 10-entry tables (0x00F786, 0x00F7D2) cannot be over-run.\n;   INDEX is NOT bounded.  Both candidates start at 0xFF (`ldb e,0xFF / ldb l,0xFF`) and\n;     there is no post-loop fallback, so an all-zero scratch array leaves INDEX = 0xFF; the\n;     0x00F79A read would then address 0x00F79A + 0x1FE = 0x00F998, inside\n;     AUDIO_CMD_TONEEDIT_JUMPTABLE (0x00F973-0x00F99A), putting a jump-table word into\n;     part+0x112.  [INFERENCE] the mechanism is read off the code; whether the all-zero case\n;     is REACHABLE at run time is unproven -- symbols/proposals/subcpu-region-07.txt reaches\n;     the same limit and declines to call it a defect.\n;   VALUE is a nibble.  Voice_Selector_Unpack3Groups masks each field with 0x0F, so VALUE is\n;     0..15 while Voice_Part_Trim_Addend_2 (0x00F7BE) holds only 10 entries; VALUE >= 10\n;     reads on into Voice_Part_Trim_Base.  [INFERENCE] whether VALUE ever exceeds 9 at run\n;     time is likewise unproven."
+ },
+ {
+  "file": "v142/subcpu/kn5000_subprogram_v142.s",
+  "anchor": ";        +0 = read pointer (16-bit)\n;        +2 = write pointer (16-bit)",
+  "replacement": ";        +0 = write pointer (16-bit)\n;        +2 = read pointer (16-bit)"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; --- 0x00F786-0x00F7E5  VOICE_SELECTOR_MIXWEIGHT_TABLES (outside this region)\n; Four adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights, sized exactly to\n; their index ranges: 0x00F786 (10 entries, indexed by COUNT 0..9) -> part+0x10E;\n; 0x00F79A (9 entries, indexed by INDEX 0..8) -> part+0x112;\n; 0x00F7AC (9 entries, INDEX) and 0x00F7BE (10 entries, VALUE) and 0x00F7D2 (10 entries,\n; COUNT) -> summed into part+0x110.",
+  "replacement": "; --- 0x00F786-0x00F7E5  the five Voice_Selector mix-weight tables\n; (\"VOICE_SELECTOR_MIXWEIGHT_TABLES (outside this region)\", which this banner used to\n;  headline, is descriptive text carried over verbatim from the naming proposal\n;  symbols/proposals/subcpu-region-07.txt:771; it is not a label in any build, and the\n;  \"region\" it was outside of was that proposal's code region, not this file.)\n; FIVE adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights (0x02AD03).  They\n; tile the span exactly and end where Voice_Portamento_Rate_Table begins at 0x00F7E6:\n;   0x00F786  Const_Zero_Byte (+PitchDetune_OffsetTable)  10 entries, COUNT -> part+0x10E\n;   0x00F79A  Voice_Part_Trim_Table_B                      9 entries, INDEX -> part+0x112\n;   0x00F7AC  Voice_Part_Trim_Addend_1                     9 entries, INDEX  ]\n;   0x00F7BE  Voice_Part_Trim_Addend_2                    10 entries, VALUE  }- summed into\n;   0x00F7D2  Voice_Part_Trim_Base                        10 entries, COUNT  ]  part+0x110\n; \u2605 CORRECTED: the count used to read \"Four adjacent u16 tables\" while the list that\n; followed enumerated five -- the neighbouring banner below already says \"the five part\n; trim tables\".  The old \"sized exactly to their index ranges\" was also a bounds claim the\n; code does not make: COUNT is bounded to 0..9 by the producer loop, but INDEX can come back\n; as 0xFF and VALUE is an unclamped nibble.  The consumer's header in\n; kn5000_subprogram_v142.s spells out all three cases."
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Init takes the\n; high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E (SendCommand) and 0x0D\n; (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 / ldw_sri WA /\n; lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613 bytes of hand\n; TLCS-900 code implementing handlers 0..5, kept as raw bytes because of unsupported addressing.",
+  "replacement": "; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Loop\n; (0x03C2CB) takes the high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E\n; (SendCommand) and 0x0D (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 /\n; ldw_sri WA / lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613\n; bytes of hand TLCS-900 code implementing handlers 0..5, kept as raw bytes because of\n; unsupported addressing.\n; \u2605 CORRECTED: this used to attribute the dispatch to DSP_BytecodeInterpreter_Init\n; (0x03C259). _Init performs no dispatch at all -- it copies the descriptor's four words and\n; one long into the stack frame and then `jrl DSP_BytecodeInterpreter_CheckEnd`. The quoted\n; instruction sequence is verbatim at the tail of _Loop."
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; --- 0x014739-0x014744  DSP_Bytecode_HandlerOffsetTable",
+  "replacement": "; --- 0x014739-0x014744  OFFSETS_14739 (\"DSP_Bytecode_HandlerOffsetTable\" is descriptive\n;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here\n;     and in symbols/subcpu_symbols_reference.txt is OFFSETS_14739)"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; --- 0x014745-0x014776  DSP_Translator_OpcodeOffsetTable",
+  "replacement": "; --- 0x014745-0x014776  OFFSETS_14745 (\"DSP_Translator_OpcodeOffsetTable\" is descriptive\n;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here\n;     and in symbols/subcpu_symbols_reference.txt is OFFSETS_14745)"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; --- 0x014777-0x0147B2  DSP_EFFBytecode_ProgramTable",
+  "replacement": "; --- 0x014777-0x0147B2  ToneGen_WorkArea -- the real label, as the NOTE just above says\n;     (\"DSP_EFFBytecode_ProgramTable\" is descriptive text from\n;      symbols/proposals/subcpu-region-15.txt, not a symbol)"
+ },
+ {
+  "file": "v142/subcpu/kn5000_subprogram_v142.s",
+  "anchor": "; Called from Audio_Process_Init (0x032197) when the audio-tick phase byte at 0x041342 is 0,",
+  "replacement": "; Called from Audio_Process_Init (0x034CDB) when the audio-tick phase byte at 0x041342 is 0,"
+ },
+ {
+  "file": "v142/subcpu/kn5000_subprogram_v142.s",
+  "anchor": "; 0x27E7, the MIDI BACKLOG GAUGE.  Sole caller: MIDI_Dispatch (0x0374F5).  The value is",
+  "replacement": "; 0x27E7, the MIDI BACKLOG GAUGE.  Sole caller: MIDI_Dispatch (0x034D93).  The value is"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; Both read by CmdTable_InitEntry_Loop (subcpu source ~line 3990): it walks i = 0..0x11 (18),",
+  "replacement": "; Both read by CmdTable_InitEntry_Loop (0x021FB4) / _AltPtr (0x021FDF): it walks\n; i = 0..0x11 (18),"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; code, ChanStruct_Init_Entry / _AltPtr (subcpu source ~line 4066/4080): index = channel*4,",
+  "replacement": "; code, ChanStruct_Init_Entry (0x02205A) / _AltPtr (0x022088): index = channel*4,"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; Indexing proved in Voice_Allocate_Nodes (subcpu source ~line 4405): it takes the byte at",
+  "replacement": "; Indexing proved in Voice_Allocate_Nodes (0x022340; the `lda_24 xbc,0x00f633` is at\n; 0x0223BE, the address the banner below cites): it takes the byte at"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` (subcpu source ~line 17230); the",
+  "replacement": "; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` (in\n; Voice_Selector_ComputeMixWeights, 0x02AD03); the"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; 9 x s16 -> DRAM 0x04147A + part*0x11F (subcpu source ~line 17241), same idiom as 0x00F786.",
+  "replacement": "; 9 x s16 -> DRAM 0x04147A + part*0x11F (in Voice_Selector_ComputeMixWeights, 0x02AD03),\n; same idiom as 0x00F786."
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; 0xFFF clamp, inside Voice_Slot_ApplyPortamentoDelta (subcpu source ~line 17835). The scaling",
+  "replacement": "; 0xFFF clamp, inside Voice_Slot_ApplyPortamentoDelta (0x02B301; the table load is in its\n; BranchD arm, Voice_Slot_ApplyPortamentoDelta_BranchD 0x02B386). The scaling"
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; path (subcpu source ~line 33331). Entries: 0x0355AD, 0x035656, then 0x0355AD four more times.",
+  "replacement": "; path (Voice_Poly_NoteOn_SlotFound, 0x035749). Entries: 0x0355AD, 0x035656, then 0x0355AD\n; four more times."
+ },
+ {
+  "file": "v142/subcpu/subcpu_data_tables.s",
+  "anchor": "; and DSP_ParameterWriteEngine at four call sites (DSP_WriteEFFConfig, DSP_WriteGlobalConfig,\n; DSP_WriteParameter x2, subcpu source 44822/44863/44883/44912). It is DSP program+parameter",
+  "replacement": "; and DSP_ParameterWriteEngine at four call sites: DSP_WriteEFFConfig (0x03C161) passes it\n; as XDE, and the three arms of DSP_WriteParameter (0x03C190) -- _EFFCase, _EFFCase0xA and\n; _Generic -- pass it as XBC.\n; \u2605 CORRECTED: the old text named DSP_WriteGlobalConfig as one of the four and located the\n; sites by source line number.  DSP_WriteGlobalConfig (0x03C181) does `lda_24 xde,0x0147b3`,\n; i.e. it uses the OTHER descriptor table -- as the banner three lines below already says.\n; The same wrong composition is still in symbols/proposals/subcpu-region-01.txt:405-408,\n; which is where this note came from.\n; It is DSP program+parameter"
+ },
+ {
+  "file": "CLAUDE.md",
+  "anchor": "| Component | Source | Status |\n|-----------|--------|--------|\n| maincpu | `maincpu/kn5000_v10_program.asm` | 100% |\n| subcpu payload | `subcpu/kn5000_subprogram_v142.asm` | 100% |\n| table_data | `table_data/kn5000_table_data.asm` | ~33% |\n| hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% |",
+  "replacement": "| Component | Authoritative source | Byte-match | Not `.incbin` |\n|---|---|---|---|\n| maincpu v10 | `v10/maincpu/kn5000_v10_program.s` | 100.00% | 59.0% |\n| maincpu v9 | `v9/maincpu/kn5000_v9_program.s` | 100.00% | 59.0% |\n| maincpu v7 | `v7/maincpu/kn5000_v7_program.s` | 100.00% | 52.5% |\n| subcpu payload v142 | `v142/subcpu/kn5000_subprogram_v142.s` | 100.00% | 100.0% |\n| subcpu boot (IC30) | `subcpu/boot/kn5000_subcpu_boot.s` | 100.00% | 100.0% |\n| table_data | `table_data/kn5000_table_data.s` | 100.00% | 46.9% |\n| custom_data (IC19) | `custom_data/kn5000_custom_data.s` | 100.00% | 36.3% |\n| hdae5000 | `hdae5000/hd-ae5000_v2_06i.s` | 100.00% | 40.3% |\n\nThe two columns answer different questions and must not be conflated. **Byte-match** is\n`python scripts/build/compare_roms.py`; measured 2026-08-21 it printed `romset bytematch:\n100.00%` with all nine LLVM sections at 100.00%. (The ninth, `subcpu v142 update image`,\nhas no source row of its own. `DISASSEMBLY_PLAN.md`'s standing invariant counts **15**\nsections; the extra six are the legacy ASL mirror builds, which only run when their\n`.rebuilt.rom` artefacts are present in `rebuilt_ROMs/`.)\n\n**Not `.incbin`** is `python3 scripts/analysis/kn5000_source_coverage.py`, measured\n2026-08-21: the share of ROM bytes that do *not* enter the build through an `.incbin`.\nRead it with the script's own `of which C` column, because compiled C counts on the\n`.incbin` side, not the source side: of maincpu v10's 860,028 `.incbin` bytes, 855,100 are\nbyte-exact recompiled C and only 4,928 (0.23% of the ROM) are a raw blob. So a low figure\nhere does not mean \"unexplained\". Two further caveats the scripts print themselves:\nthe v7 row is flattered by `scripts/build/extract_v7_bins.py`, which copies 842,796 B of\nthe v7 ROM into its own \"source\" at build time (703,693 B of that is reproduced by no\nsource at all); and IC30's 100.0% is over a `BAD_DUMP` -- `kn5000.cpp` flags it, and only\n4,352 of its 131,072 bytes are non-0xFF.\n\nThe ASL mirror (`.asm`) sources are archived under `archive/asl/` and are not\nauthoritative."
+ },
+ {
+  "file": "v142/subcpu/kn5000_subprogram_v142.s",
+  "anchor": "; Notes: Clears DSP2 control variables at 0x3B60-0x3B64",
+  "replacement": "; Notes: Clears the shared DSP command-ring control block at 0x3B60-0x3B64\n;        (0x3B60 write index, 0x3B62 read index, 0x3B64 count).  Despite the routine\n;        name the block is not DSP2-specific -- see the note below."
+ }
+]

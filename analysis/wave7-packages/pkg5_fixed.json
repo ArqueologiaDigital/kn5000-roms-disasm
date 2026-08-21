@@ -1,0 +1,172 @@
+[
+ {
+  "file": "v7/maincpu/kn5000_v7_program.s",
+  "anchor": "\t.set FDC_STATUS_HANDLER, 0xf97289",
+  "replacement": "\t.set FDC_CmdSeek, 0xf97289"
+ },
+ {
+  "file": "v9/maincpu/kn5000_v9_program.s",
+  "anchor": "\t.set FDC_STATUS_HANDLER, 0xf97696",
+  "replacement": "\t.set FDC_CmdSeek, 0xf97696"
+ },
+ {
+  "file": "v10/maincpu/kn5000_v10_program.s",
+  "anchor": "\t.set FDC_STATUS_HANDLER, 0xf97696",
+  "replacement": "\t.set FDC_CmdSeek, 0xf97696"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "anchor": "\tcalr FDC_STATUS_HANDLER",
+  "replacement": "\tcalr FDC_CmdSeek"
+ },
+ {
+  "file": "v9/maincpu/storage/fdc_routines.s",
+  "anchor": "\tcalr FDC_STATUS_HANDLER",
+  "replacement": "\tcalr FDC_CmdSeek"
+ },
+ {
+  "file": "v10/maincpu/storage/fdc_routines.s",
+  "anchor": "\tcalr FDC_STATUS_HANDLER",
+  "replacement": "\tcalr FDC_CmdSeek"
+ },
+ {
+  "file": "v9/maincpu/storage/fdc_routines.s",
+  "anchor": "; The raw block below also contains the SEEK command handler at 0xf97696\n; (.set alias FDC_STATUS_HANDLER -- a misnomer; twin: boot FDC_CmdSeek).",
+  "replacement": "; The raw block below also contains the SEEK command handler at 0xf97696,\n; reached through the .set alias FDC_CmdSeek (renamed from the misnomer\n; FDC_STATUS_HANDLER -- it reads and writes no status register).  Verified\n; instruction-for-instruction against its bootloader twin FDC_CmdSeek in\n; table_data/boot_fdc_driver.s: compare the target track (0x8a36) against\n; the track cache (0x8b04) and return if equal, delay (WA=2), clear the\n; result buffer, LD WA,0x000F (= FDC SEEK opcode 0x0F), issue the command,\n; wait for the result, set the track cache to 0xFF on error, then settle\n; (WA=0x10; the delay routine busy-waits WA/2 ticks).\n; [INFERENCE] The neighbouring .set aliases FDC_TIMING_DELAY (0xf975dc) and\n; FDC_POST_OP (0xf975e2) look like the same class of misnomer; they were\n; not re-checked in this pass."
+ },
+ {
+  "file": "v10/maincpu/storage/fdc_routines.s",
+  "anchor": "; The raw block below also contains the SEEK command handler at 0xf97696\n; (.set alias FDC_STATUS_HANDLER -- a misnomer; twin: boot FDC_CmdSeek).",
+  "replacement": "; The raw block below also contains the SEEK command handler at 0xf97696,\n; reached through the .set alias FDC_CmdSeek (renamed from the misnomer\n; FDC_STATUS_HANDLER -- it reads and writes no status register).  Verified\n; instruction-for-instruction against its bootloader twin FDC_CmdSeek in\n; table_data/boot_fdc_driver.s: compare the target track (0x8a36) against\n; the track cache (0x8b04) and return if equal, delay (WA=2), clear the\n; result buffer, LD WA,0x000F (= FDC SEEK opcode 0x0F), issue the command,\n; wait for the result, set the track cache to 0xFF on error, then settle\n; (WA=0x10; the delay routine busy-waits WA/2 ticks).\n; [INFERENCE] The neighbouring .set aliases FDC_TIMING_DELAY (0xf975dc) and\n; FDC_POST_OP (0xf975e2) look like the same class of misnomer; they were\n; not re-checked in this pass."
+ },
+ {
+  "file": "v9/maincpu/storage/fdc_routines.s",
+  "anchor": "\t; (EQU->inline label) FDC_STATUS_HANDLER = 0xf97696",
+  "replacement": "\t; (EQU->inline label) FDC_CmdSeek = 0xf97696\t; cmd 2: issues SEEK (0x0F)"
+ },
+ {
+  "file": "v10/maincpu/storage/fdc_routines.s",
+  "anchor": "\t; (EQU->inline label) FDC_STATUS_HANDLER = 0xf97696",
+  "replacement": "\t; (EQU->inline label) FDC_CmdSeek = 0xf97696\t; cmd 2: issues SEEK (0x0F)"
+ },
+ {
+  "file": "table_data/kn5000_table_data.s",
+  "anchor": "\t; cmd  2 -> FDC_CmdSeek            (FDC_STATUS_HANDLER)",
+  "replacement": "\t; cmd  2 -> FDC_CmdSeek            (FDC_CmdSeek)"
+ },
+ {
+  "file": "table_data/boot_fdc_driver.s",
+  "anchor": "; waits for the result, then settles for 16 ticks.\n; Twin: maincpu FDC_STATUS_HANDLER (fdc_routines.s dispatch entry 2)",
+  "replacement": "; waits for the result, then settles with WA=0x10 (Boot_Delay waits WA/2).\n; Twin: maincpu FDC_CmdSeek (fdc_routines.s dispatch entry 2)"
+ },
+ {
+  "file": "archive/asl/maincpu/fdc_routines.asm",
+  "anchor": "FDC_STATUS_HANDLER\tequ\t0F97696h\t; Status/interrupt handler",
+  "replacement": "FDC_CmdSeek\t\tequ\t0F97696h\t; command 2: issues SEEK (0x0F)"
+ },
+ {
+  "file": "archive/asl/maincpu/fdc_routines.asm",
+  "anchor": "\tCALR FDC_STATUS_HANDLER",
+  "replacement": "\tCALR FDC_CmdSeek"
+ },
+ {
+  "file": "docs/fdc_disassembly.md",
+  "anchor": "| 0xF97696 | FDC_STATUS_HANDLER | Status/interrupt handler |",
+  "replacement": "| 0xF97696 | FDC_CmdSeek | Command 2: SEEK (0x0F) -- twin of boot FDC_CmdSeek |"
+ },
+ {
+  "file": "docs/fdc_disassembly.md",
+  "anchor": "### FDC_STATUS_HANDLER (0xF97696) - Status/Interrupt Handler\n\nChecks and updates FDC status, handles interrupts.\n\n```asm\nFDC_STATUS_HANDLER:         ; F97696",
+  "replacement": "### FDC_CmdSeek (0xF97696) - Command 2: Seek\n\nSeeks to the target track.  No-op when the track cache (0x8B04) already matches\nthe requested track (0x8A36); otherwise it delays (WA=2), clears the result\nbuffer, issues SEEK (`LD WA, 000Fh` -> 0x0F), waits for the result, sets the\ntrack cache to 0xFF if the error byte 0x8A24 is non-zero, and settles (WA=0x10;\nthe delay routine busy-waits WA/2 ticks).\nInstruction-for-instruction twin of the bootloader's `FDC_CmdSeek`\n(table_data/boot_fdc_driver.s, 0xFFE31A).  It reads and writes no status\nregister and handles no interrupt: the old name FDC_STATUS_HANDLER was a\nmisnomer.\n\n```asm\nFDC_CmdSeek:                ; F97696"
+ },
+ {
+  "file": "docs/fdc_disassembly.md",
+  "anchor": "; Secondary status handler\nFDC_STATUS_HANDLER_2:       ; F976C9",
+  "replacement": "; Submit MT|MF READ DATA (0xC6) - twin of boot FDC_SubmitReadDataCmd\nFDC_SubmitReadDataCmd:      ; F976C9"
+ },
+ {
+  "file": "docs/fdc_disassembly.md",
+  "anchor": "    CALR FDC_STATUS_HANDLER",
+  "replacement": "    CALR FDC_CmdSeek"
+ },
+ {
+  "file": "scripts/analysis/v7_shift_map.json",
+  "anchor": "\"FDC_STATUS_HANDLER\":1037",
+  "replacement": "\"FDC_CmdSeek\":1037"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "anchor": ";   0x280395  Alloc_Memory_4 - Bitmap resource descriptor, HDAE5000_Bitmap_HddIcon\n;                             (A1 = 0x2E198E bitmap data, not a palette)",
+  "replacement": ";   0x280395  BitmapHdd_icon - Bitmap resource descriptor, HDAE5000_Bitmap_HddIcon\n;                             (A1 = 0x2E198E bitmap data, not a palette; unlike\n;                              its three neighbours this one carries the\n;                              firmware's own registry name)"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "anchor": "; ----------------------------------------------------------------------------\n; Memory Allocation Parameter Lookup Routines (0x28030E - 0x2803C1)\n;\n; Four variants that return display parameters based on request type.\n; Called by main CPU to get palette data pointers and display dimensions.\n;\n; Input: XBC = request type (0x01E000A1, 0x01E000A2, or 0x01E000A3)\n; Output: XHL = result\n;\n; Each variant returns different palette data pointer for A1, but same\n; dimensions for A2/A3 (except Alloc_Memory_4 which returns 0x1B for both).\n; ----------------------------------------------------------------------------",
+  "replacement": "; ----------------------------------------------------------------------------\n; Bitmap resource descriptors (0x28030E - 0x2803C1)\n;\n; Four constant lookups, one per embedded bitmap.  They allocate nothing, so\n; the \"Alloc_Memory\" spelling is a misnomer; the first three keep it only\n; because the firmware publishes no name for them.  The fourth one it does\n; publish: HDAE5000_ObjHandler_Table entry 39 is 0x280395 and the parallel\n; HDAE5000_ObjName_Table entry points at 0x29BD0A = \"BitmapHdd_icon\".\n;\n; Input:  XBC = request type\n;           0x01E000A1 -> base address of the bitmap DATA, not a palette (the\n;                        same immediates are the MemCopy sources at 0x2804BB,\n;                        0x280599 and 0x280677 -- see hdae5000_data_tables.s)\n;           0x01E000A2 -> width\n;           0x01E000A3 -> height\n; Output: XHL = the answer, or 0 for any other request\n; ----------------------------------------------------------------------------"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "anchor": "HDAE5000_Alloc_Memory_4:\t; 280395h\n\t; Returns 0x2E198E for A1, 0x1B for A2 and A3 (small display mode)\n\tcp xbc, 0x1E000A3\n\tjr z, HDAE5000_Alloc_Memory_4__type_A3\n\tcp xbc, 0x1E000A2\n\tjr z, HDAE5000_Alloc_Memory_4__type_A2\n\tcp xbc, 0x1E000A1\n\tjr z, HDAE5000_Alloc_Memory_4__type_A1\n\tlds32 xhl, 0\n\tret\nHDAE5000_Alloc_Memory_4__type_A1:\n\tlda_24 xhl, (0x2e198e); Palette data pointer 4\n\tret\nHDAE5000_Alloc_Memory_4__type_A2:\n\tld xhl, 0x1B\t; 27 (small width)\n\tret\nHDAE5000_Alloc_Memory_4__type_A3:\n\tld xhl, 0x1B\t; 27 (small height)",
+  "replacement": "; --- HDAE5000_BitmapHdd_icon (was HDAE5000_Alloc_Memory_4) -------------------\n; The label is the firmware's own name.  HDAE5000_ObjHandler_Table entry 39\n; (ROM 0x2F94B2 + 0x9C) holds 0x280395, and the parallel HDAE5000_ObjName_Table\n; entry (ROM 0x2F95CA + 0x9C) points at 0x29BD0A = \"BitmapHdd_icon\".\nHDAE5000_BitmapHdd_icon:\t; 280395h\n\t; Resource descriptor for HDAE5000_Bitmap_HddIcon.  Allocates nothing.\n\tcp xbc, 0x1E000A3\n\tjr z, HDAE5000_BitmapHdd_icon__type_A3\n\tcp xbc, 0x1E000A2\n\tjr z, HDAE5000_BitmapHdd_icon__type_A2\n\tcp xbc, 0x1E000A1\n\tjr z, HDAE5000_BitmapHdd_icon__type_A1\n\tlds32 xhl, 0\n\tret\nHDAE5000_BitmapHdd_icon__type_A1:\n\tlda_24 xhl, (0x2e198e); HDAE5000_Bitmap_HddIcon data, NOT a palette\n\tret\nHDAE5000_BitmapHdd_icon__type_A2:\n\tld xhl, 0x1B\t; 27 (icon width)\n\tret\nHDAE5000_BitmapHdd_icon__type_A3:\n\tld xhl, 0x1B\t; 27 (icon height)"
+ },
+ {
+  "file": "hdae5000/hdae5000_init_data.s",
+  "anchor": "\t.long HDAE5000_Alloc_Memory_4            \t; \"BitmapHdd_icon\"",
+  "replacement": "\t.long HDAE5000_BitmapHdd_icon            \t; registry entry 39"
+ },
+ {
+  "file": "hdae5000/hdae5000_data_tables.s",
+  "anchor": ";   0x28032A  HDAE5000_Alloc_Memory_1 -> 0x2A898E, 0x140 (320) x 0xF0 (240)\n;   0x280357  HDAE5000_Alloc_Memory_2 -> 0x2BB98E, 0x140 x 0xF0\n;   0x280384  HDAE5000_Alloc_Memory_3 -> 0x2CE98E, 0x140 x 0xF0\n;   0x2803B1  HDAE5000_Alloc_Memory_4 -> 0x2E198E, 0x1B (27) x 0x1B (27)\n;   0x28F55F  HDAE5000_Alloc_Memory   -> 0x2E61CE, 0x140 x 0xF0 (boot splash)",
+  "replacement": ";   0x28032A  HDAE5000_Alloc_Memory_1 -> 0x2A898E, 0x140 (320) x 0xF0 (240)\n;   0x280357  HDAE5000_Alloc_Memory_2 -> 0x2BB98E, 0x140 x 0xF0\n;   0x280384  HDAE5000_Alloc_Memory_3 -> 0x2CE98E, 0x140 x 0xF0\n;   0x2803B1  HDAE5000_BitmapHdd_icon -> 0x2E198E, 0x1B (27) x 0x1B (27)\n;   0x28F55F  HDAE5000_Alloc_Memory   -> 0x2E61CE, 0x140 x 0xF0 (boot splash)\n;\n; Only the fourth of these carries a name from the firmware: it is entry 39 of\n; HDAE5000_ObjHandler_Table and the parallel HDAE5000_ObjName_Table entry reads\n; \"BitmapHdd_icon\".  The other four appear in no registry table, so they keep\n; the Alloc_Memory_* labels for now -- they allocate nothing either."
+ },
+ {
+  "file": "hdae5000/hdae5000_data_tables.s",
+  "anchor": "\t; 27 x 27 geometry is HDAE5000_Alloc_Memory_4 (0x2803B1) returning 0x1B",
+  "replacement": "\t; 27 x 27 geometry is HDAE5000_BitmapHdd_icon (0x2803B1) returning 0x1B"
+ },
+ {
+  "file": "symbols/hdae5000_symbols_reference.txt",
+  "anchor": "HDAE5000_ALLOC_MEMORY_4 0x280395",
+  "replacement": "HDAE5000_BitmapHdd_icon 0x280395"
+ },
+ {
+  "file": "archive/asl/hdae5000/hd-ae5000_v2_06i.asm",
+  "anchor": "HDAE5000_Alloc_Memory_4:\t\t; 280395h",
+  "replacement": "HDAE5000_BitmapHdd_icon:\t\t; 280395h"
+ },
+ {
+  "file": "archive/asl/hdae5000/hd-ae5000_v2_06i.asm",
+  "anchor": ";   0x280395  Alloc_Memory_4 - Memory lookup (palette at 0x2E198E, small display)",
+  "replacement": ";   0x280395  BitmapHdd_icon - Bitmap resource descriptor (bitmap, not palette,\n;                              at 0x2E198E; 27 x 27 icon).  Firmware's own name."
+ },
+ {
+  "file": "archive/asl/hdae5000/hd-ae5000_v2_06i.asm",
+  "anchor": "; dimensions for A2/A3 (except Alloc_Memory_4 which returns 0x1B for both).",
+  "replacement": "; dimensions for A2/A3 (except BitmapHdd_icon which returns 0x1B for both)."
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "anchor": "HDAE5000_Dir_Event_Check:\t; 0x28F2F7\n\tcp xbc, 0x01e0009f\n\tjr nz, .Ldec_no\n\tlda_24 xhl, (0x2e5d72)\n\tret\n.Ldec_no:\n\tlds32 xhl, 0\n\tret",
+  "replacement": "\t; Firmware's own name: HDAE5000_ObjHandler_Table entry 64 is 0x28F2F7\n\t; and the parallel HDAE5000_ObjName_Table entry points at 0x29BB48 =\n\t; \"LanguageTextReturn\".  0x2E5D72 is a table of six 32-bit pointers to\n\t; the nine-character language-text names \"LANENG001\" (0x2E5DBC),\n\t; \"LANDEU002\" (0x2E5DB2), \"LANFRA003\" (0x2E5DA8), \"LANENG004\"\n\t; (0x2E5D9E), \"LANENG005\" (0x2E5D94) and \"LANENG006\" (0x2E5D8A).\n\t; [INFERENCE] they read as file stems: \".TTX\", \".MID\" and \"XLT.\" sit a\n\t; few bytes earlier.  Nothing here concerns directories: the old name\n\t; Dir_Event_Check was a misnomer.\nHDAE5000_LanguageTextReturn:\t; 0x28F2F7\n\tcp xbc, 0x01e0009f\n\tjr nz, .Ldec_no\n\tlda_24 xhl, (0x2e5d72)\n\tret\n.Ldec_no:\n\tlds32 xhl, 0\n\tret"
+ },
+ {
+  "file": "hdae5000/hdae5000_init_data.s",
+  "anchor": "\t.long HDAE5000_Dir_Event_Check           \t; \"LanguageTextReturn\"",
+  "replacement": "\t.long HDAE5000_LanguageTextReturn        \t; registry entry 64"
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "anchor": "; --- HD Format Event Dispatcher (0x2837F2) ---\n; Handles event codes 0x01EA0000-0x01EA0008, 0x01C00007\nHDAE5000_HD_Format_Dispatch:\t; 0x2837F2",
+  "replacement": "; --- HDAE5000_SEL_DIR_Screen (0x2837F2) -------------------------------------\n; Firmware's own name: HDAE5000_ScreenProc_Table entry 1 is 0x2837F2 and the\n; parallel HDAE5000_ScreenName_Table entry points at 0x2A8570 =\n; \"SEL_DIR_Screen\".  The old label HD_Format_Dispatch was a misnomer: the\n; routine formats nothing.  It is the directory-selection screen procedure --\n; every arm drives RAM 0x23A08E, which HDAE5000_Browser_State documents as the\n; row-base offset added to every browser row address, over the five row slots\n; 0x0000/0x0018/0x0030/0x0048/0x0060 (5 x 24 bytes).  0x01EA0000 adds 0x18 to\n; that offset and gives up once it has reached the 0x0060 ceiling; 0x01EA0001\n; subtracts 0x18 and gives up below the 0x0018 floor; both then post\n; 0x01EA0003 back to the UI.  [INFERENCE] which of the two moves the list\n; \"down\" on screen is not proven by this ROM.\n;\n; INFERENCE (not proven by this ROM): the 0x01EA000n codes index\n; HDAE5000_MessageName_Table, giving n=0 MT_OverFlow, n=1 MT_UnderFlow,\n; n=3 MT_SetSelNum, n=6/7 MT_SelectOK/MT_SelectOK2, n=8 MT_SelectSAVE.  The\n; clamp arithmetic matches OverFlow/UnderFlow, but the main CPU assigns the\n; codes and this ROM never spells the mapping out.  The per-arm comments\n; below (\"page down\", \"page up\", \"seek\", \"set format params\") predate this\n; note and have NOT been re-verified.\n; Dispatches 0x01EA0000, 0x01EA0001, 0x01EA0006, 0x01EA0007, 0x01EA0008 and\n; 0x01C00007; every other code falls straight through to .Lfd_done.\nHDAE5000_SEL_DIR_Screen:\t; 0x2837F2"
+ },
+ {
+  "file": "hdae5000/hdae5000_init_data.s",
+  "anchor": "\t.long HDAE5000_HD_Format_Dispatch  \t; \"SEL_DIR_Screen\"",
+  "replacement": "\t.long HDAE5000_SEL_DIR_Screen      \t; registry entry 1"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "anchor": "\t; and the exact fill of 0x2E61CE-0x2F8DCD.  (Do not assume A2/A3 are\n\t; raster dimensions for every descriptor: 0x280395 answers 0x1B/0x1B\n\t; for the 784-byte icon, which actually renders as 28 x 28.)",
+  "replacement": "\t; and the exact fill of 0x2E61CE-0x2F8DCD.  A2/A3 read as raster\n\t; dimensions for the other descriptors too: 0x280395 answers 0x1B/0x1B\n\t; and hdae5000_data_tables.s shows HDAE5000_Bitmap_HddIcon is 27 x 27\n\t; @ 8bpp with a 28-byte row stride (756 B, the .incbin length there).\n\t; The \"784-byte icon / 28 x 28\" reading recorded here earlier came from\n\t; an extraction that over-reads 28 bytes into HDAE5000_Config_Strings."
+ }
+]
