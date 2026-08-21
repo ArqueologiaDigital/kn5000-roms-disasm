@@ -42,11 +42,11 @@ Classifying every blob byte in the three worst ROMs:
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
 | table data | ~~395,150~~ **97,640** (wallpapers, UI bitmaps, icons, 9 font banks done) | 65,536 | 652,435 | **0** |
-| custom data | ~~663,552~~ **659,456** | ~~4,096~~ **0** | 0 | **0** |
+| custom data | ~~663,552~~ **639,296** | ~~4,096~~ **0** | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **757,096** | 65,536 | 652,435 | **0** |
+| **total** | **736,936** | 65,536 | 652,435 | **0** |
 
-**757,096 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
+**736,936 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
 to report instead of any percentage.
 
 **HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
