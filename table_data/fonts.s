@@ -112,7 +112,7 @@ Font1_Glyphs:	.incbin	"includes/generated/Font1_Glyphs.bin"	; 224 x 16 B (8x16)
 Font2_Glyphs:	.incbin	"includes/generated/Font2_Glyphs.bin"	; 224 x 32 B (16x16)
 Font3_Glyphs:	.incbin	"includes/generated/Font3_Glyphs.bin"	; 224 x 8 B (6x8)
 Font4_Glyphs:	.incbin	"includes/generated/Font4_Glyphs.bin"	; 224 x 32 B (11x16)
-Font5_Glyphs:	.incbin	"includes/icons_to_strings.bin", 0x6A38, 0xE70	; 224 variable-size glyphs, tiled per kern table
+Font5_Glyphs:	.incbin	"includes/generated/Font5_Glyphs.bin"	; 224 variable-size glyphs, tiled per kern table
 
 ; -----------------------------------------------------------------------------
 ; Font 5 kern table: one {word char_width, word glyph_offset} pair per

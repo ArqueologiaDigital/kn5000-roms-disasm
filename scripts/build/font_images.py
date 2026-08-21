@@ -14,8 +14,10 @@ THE SHEET IS RENDERED AT THE FULL BYTE WIDTH, ceil(width/8)*8, not at the glyph 
 6x8 font that means 8 px per cell, two of them beyond the glyph. Those bits are not always
 zero, and rendering only 6 would silently drop them and break the round trip.
 
-Font 5 is NOT here: it is proportional, tiled per Font5_KernTable, and needs the kern table to
-place glyphs. It remains a blob (3,696 B) and is the one remaining font work item.
+Font 5 IS here, and it is proportional: widths 3..10, each glyph ceil(width/8)*16 bytes at its
+own offset, the whole bank tiled exactly by Font5_KernTable (verified: the 224 entries are
+monotonic, gapless, and sum to 0xE70). Its widths are read from the kern table already typed
+out in table_data/fonts.s, so the source of truth stays in one place.
 
     python3 scripts/build/font_images.py export   # blob -> 9 sheets (run once)
     python3 scripts/build/font_images.py build    # sheets -> bins (build step)
@@ -47,6 +49,57 @@ BANKS = [
 ]
 
 
+def font5_widths():
+    """The 224 glyph widths, read from the kern table already typed out in fonts.s."""
+    import re
+    src = (REPO / 'table_data' / 'fonts.s').read_text()
+    seg = src[src.index('Font5_KernTable:'):]
+    pairs = re.findall(r'^\t\.short\t(\d+), (0x[0-9a-fA-F]+)', seg, re.M)[:NGLYPH]
+    assert len(pairs) == NGLYPH, f'kern table: {len(pairs)} entries'
+    return [(int(w), int(o, 0)) for w, o in pairs]
+
+
+F5 = ('Font5_Glyphs', 0x6A38, 0x0E70)
+F5_CELL = 16          # max ceil(width/8)*8 over widths 3..10
+
+
+def font5_export(blob, palette_unused=None):
+    ks = font5_widths()
+    rows = (NGLYPH + COLS - 1) // COLS
+    img = Image.new('1', (COLS * F5_CELL, rows * 16), 0)
+    px = img.load()
+    for g, (w, off) in enumerate(ks):
+        ncol = (w + 7) // 8
+        base = F5[1] + off
+        gx, gy = (g % COLS) * F5_CELL, (g // COLS) * 16
+        for c in range(ncol):
+            for y in range(16):
+                b = blob[base + c * 16 + y]
+                for bit in range(8):
+                    if b & (0x80 >> bit):
+                        px[gx + c * 8 + bit, gy + y] = 1
+    img.save(IMG / 'Font5_Glyphs.png')
+
+
+def font5_rebuild():
+    ks = font5_widths()
+    img = Image.open(IMG / 'Font5_Glyphs.png').convert('1')
+    px = img.load()
+    out = bytearray()
+    for g, (w, off) in enumerate(ks):
+        assert len(out) == off, f'glyph {g}: kern says 0x{off:X}, built 0x{len(out):X}'
+        ncol = (w + 7) // 8
+        gx, gy = (g % COLS) * F5_CELL, (g // COLS) * 16
+        for c in range(ncol):
+            for y in range(16):
+                b = 0
+                for bit in range(8):
+                    if px[gx + c * 8 + bit, gy + y]:
+                        b |= (0x80 >> bit)
+                out.append(b)
+    return bytes(out)
+
+
 def cell(width):
     return ((width + 7) // 8) * 8      # full byte width, so padding bits survive
 
@@ -72,7 +125,8 @@ def export():
                         if b & (0x80 >> bit):
                             px[gx + c * 8 + bit, gy + y] = 1
         img.save(IMG / f'{label}.png')
-    print(f"exported {len(BANKS)} glyph sheets to {IMG.relative_to(REPO)}")
+    font5_export(blob)
+    print(f"exported {len(BANKS) + 1} glyph sheets to {IMG.relative_to(REPO)}")
 
 
 def rebuild(label, w, h):
@@ -101,7 +155,11 @@ def build():
         assert len(d) == ln, f'{label}: {len(d)} != {ln}'
         (GEN / f'{label}.bin').write_bytes(d)
         tot += len(d)
-    print(f"font_images: rebuilt {len(BANKS)} glyph banks, {tot:,} B from PNG sheets")
+    d5 = font5_rebuild()
+    assert len(d5) == F5[2], f'Font5: {len(d5)} != {F5[2]}'
+    (GEN / 'Font5_Glyphs.bin').write_bytes(d5)
+    tot += len(d5)
+    print(f"font_images: rebuilt {len(BANKS) + 1} glyph banks, {tot:,} B from PNG sheets")
 
 
 def verify():
@@ -114,6 +172,12 @@ def verify():
         else:
             bad += 1
             print(f"  *** {label}: MISMATCH")
+    want5 = blob[F5[1]:F5[1] + F5[2]]
+    if font5_rebuild() == want5:
+        print(f"  ok  {F5[0]:<16} {F5[2]:>6,} B  (proportional, widths 3-10)")
+    else:
+        bad += 1
+        print(f"  *** {F5[0]}: MISMATCH")
     if bad:
         sys.exit(f"{bad} bank(s) do not round-trip")
     print("ROUND TRIP EXACT")
