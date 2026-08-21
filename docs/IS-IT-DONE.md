@@ -45,7 +45,21 @@ All five symbol reference files were stale, not just the one that admitted it. `
 with its build on **1 row out of 4,689**. They are now generated from the ELFs -- which are
 byte-identical to the original ROMs -- and re-checked at 100%.
 
-What that does NOT do is make the names good. The metric counts a name as positional only when it
+One class of wrongness is now measurable rather than merely feared.
+`l2_name_vs_fopen_mode.py` reads the mode string each routine passes to `fopen` -- `"wb"` writes,
+`"rb"` reads, and that is not a matter of opinion -- and compares it with the routine's name. Of 57
+sites it flags 3; two are false positives that inspection settled (`StylCnv_*_WriteExtension` write
+an extension into a NAME BUFFER, and sit among `FindDot`/`FindDot2`/`FindDot3`), leaving **one
+genuine oddity: `LoadFileVariant` at 0xF8805B passes `"wb"`**, mode string verified at 0xEA0244. The
+script exits non-zero while that stands.
+
+Two lessons from building it, both now in its docstring. **A verb does not say what it acts on** --
+two thirds of the flags were buffer-writes, so flagged rows get read before they get believed. And
+the first version found only 11 of 57 sites because it required mode strings to be preceded by
+`0x00`, when this ROM separates them with `0xFF`; a quiet under-count looked exactly like a clean
+result.
+
+What none of this does is make the names good. The metric counts a name as positional only when it
 restates an address (`_0xHEX`, a bare hex tail, `LABEL_*`); everything else scores as semantic. So
 90.8% is a **lower bound on naming coverage, not a judgement of aptness**, and no script can supply
 the latter. This session found `FileIO_ReadHeader` actually builds a file path and never reads a
