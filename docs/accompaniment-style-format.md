@@ -205,6 +205,33 @@ document does not adopt it as established: what is established is the dispatch s
 Confirming it needs the MIDI controller number the handler ultimately emits, which has not been
 traced to a literal.
 
+### The 0xD family is larger than these styles use
+
+`v10/maincpu/sequencer/accompseq_routines.s:165` classifies events for the accompaniment engine,
+and it accepts **0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD7 and 0xC0** as one class -- "timed events",
+routed together to `AccompSeq_ProcessTimedEvent`, which computes a delta time and parses.
+
+So the container supports at least seven control statuses; the 210 factory styles in this chip use
+only three of them. That matters for a reader of this document: an ENCODER must not assume the
+three seen here are the whole vocabulary, and a decoder should reject rather than guess on
+0xD4/0xD5/0xD7.
+
+It also explains the 0xD3 -> 0xD5 rewrite noted above: 0xD5 is a real status in the same family,
+not a sentinel invented by the handler.
+
+### Where the trail stops, precisely
+
+What is established: the dispatch structure, the shared handler for 0xD1/0xD3, 0xD2's distinct
+entry size and argument shuffle, the D-family membership, and the MIDI-adjacency implied by 0xC0
+and 0xB0 being handled alongside.
+
+What is NOT established: which controller each status selects. The chain from
+`MidiSeq_ProcessSustainEvent` runs through `MidiSeqBuf_ScanAllEntries` and
+`MidiSeqBuf_ProcessEntries` into a ring buffer walked by `Util_ExtractAndShiftBits`, and no literal
+controller number has been traced to an emit site. **That is the next step**, and it is bounded:
+find where a buffer entry of this class reaches the tone generator or the MIDI output, and read the
+constant.
+
 Naming these from distributions alone would be the "confident header" anti-pattern the completeness
 spec lists. Naming them from a symbol that is itself an inference is the same mistake one step
 removed.
