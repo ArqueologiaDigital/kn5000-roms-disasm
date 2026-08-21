@@ -174,9 +174,37 @@ this section: 0/127 is the standard switch encoding. **Which switch is not estab
 All three appear THROUGHOUT their chains (median relative position 0.46, 0.47, 0.72), not
 clustered at the start, so they are not part-setup.
 
-### Why no names are proposed
+### The consumer side, traced
 
-Naming these from the distributions would be the "confident header" anti-pattern the completeness
-spec lists: plausible, unfalsifiable by the next reader, and wrong often enough to matter. What
-would settle them is the firmware side -- the sub-CPU routine that consumes a style chain -- not
-more statistics on the data.
+`v10/maincpu/sequencer/seq_event_playback.s:2150` is a dispatcher over exactly these statuses, and
+it settles some of the question from the CODE rather than from distributions:
+
+    0x90  -> AccPlay_ProcessNoteEvent
+    0xD2  -> MidiSeq_HandleD2Event            entry size 5
+    0xD1  -> MidiSeq_ProcessSustainEvent      entry size 4
+    0xD3  -> MidiSeq_ProcessSustainEvent      entry size 4   (the SAME handler as 0xD1)
+    0xC0  -> MidiSeq_HandleProgChange         (MIDI program change)
+    0xB0  -> MidiSeq_HandleCtrlChange         (MIDI control change)
+
+Three facts follow, and they are code facts:
+
+1. **0xD1 and 0xD3 are handled identically**, by one routine, with the same 4-byte entry size.
+   Whatever they select, they are the same KIND of thing.
+2. **0xD2 is different**, with a 5-byte entry, and its handler copies the byte at +3 down to +2
+   before processing -- an argument shuffle the sustain path does not do.
+3. The dispatcher also accepts 0xC0 and 0xB0, plain MIDI program-change and control-change
+   statuses. So this event stream is a MIDI-adjacent encoding, which is consistent with 0xD3's
+   argument being exactly 0 or 127.
+4. Inside the shared handler, an 0xD3 in the buffer is REWRITTEN to 0xD5 before processing
+   (`cp a,0xd3` / `ldb a,0xd5`), so the two are distinguished downstream even though they enter
+   the same routine.
+
+⚠ THE NAME "Sustain" IS NOT EVIDENCE. `MidiSeq_ProcessSustainEvent` is a curated symbol from an
+earlier pass, not something the ROM says. It is consistent with 0xD3's 0/127 values, but this
+document does not adopt it as established: what is established is the dispatch structure above.
+Confirming it needs the MIDI controller number the handler ultimately emits, which has not been
+traced to a literal.
+
+Naming these from distributions alone would be the "confident header" anti-pattern the completeness
+spec lists. Naming them from a symbol that is itself an inference is the same mistake one step
+removed.
