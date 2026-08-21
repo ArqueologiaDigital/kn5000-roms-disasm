@@ -41,12 +41,12 @@ Classifying every blob byte in the three worst ROMs:
 
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
-| table data | ~~395,150~~ **241,550** (wallpapers done) | 65,536 | 652,435 | **0** |
+| table data | ~~395,150~~ **188,488** (wallpapers + 87 UI bitmaps done) | 65,536 | 652,435 | **0** |
 | custom data | 663,552 (99.4%) | 4,096 | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **905,102** | 69,632 | 652,435 | **0** |
+| **total** | **852,040** | 69,632 | 652,435 | **0** |
 
-**905,102 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
+**852,040 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
 to report instead of any percentage.
 
 **HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
@@ -62,6 +62,13 @@ The same pattern then closed table_data's two wallpapers (153,600 B) via
 `scripts/build/indexed_images.py`, which is the manifest-driven generalisation: add a row, run
 `export`, run `verify`. If verify fails the geometry is wrong, which is how the HD-AE5000 icon's
 27x27-in-a-28-byte-row would have been caught years earlier.
+
+Then the 87 UI bitmaps (53,062 B): transport buttons, faders, the Technics wordmark, the note and
+drum edit grids -- previously 87 offset/length slices of one opaque blob, with their dimensions
+written only in end-of-line comments that nothing checked against the bytes. Every one turns out to
+have an INTEGRAL row stride (length / height is always whole and never below the width; padding is
+0 or 1 byte, for 44 and 43 of them respectively). That rule is what made them convertible, and it is
+the same rule the HD-AE5000 icon broke unnoticed.
 
 The good news in that table is the last column. **Nothing is UNKNOWN.** Every blob has been
 identified; none of this is blocked on understanding. It is blocked on conversion.
