@@ -6885,12 +6885,13 @@ Voice_Clamp_Byte_WA_Return:
 	ret
 
 ; ---------------------------------------------------------------------------------------
-; THE TONE GENERATOR STAGING BLOCK AT 0x0451CE
+; THE TONE GENERATOR STAGING BLOCK AT 0x0451CC
 ;
 ; The words from 0x0451CE upwards are staged copies of IC303's per-voice registers. The
 ; firmware fills them from many places and ToneGen_WriteVoiceParams then bursts the block
 ; to the chip, so every one of these addresses is a register by another name:
 ;
+;     0x0451CC -> +0x000   CONTROL / gate -- PRESENT IN THE FORMAT, UNUSED HERE. See below.
 ;     0x0451CE -> +0x040   recording selector, (class << 12) | entry
 ;     0x0451D0 -> +0x080   output level + the 3-bit descriptor field (built below)
 ;     0x0451D2 -> +0x0C0   coarse level + expression
@@ -6917,6 +6918,22 @@ Voice_Clamp_Byte_WA_Return:
 ; +0x180/+0x4C0, +0x400, and the 0x8C0..0xA40 zeroing routine all name their targets) plus
 ; a capture of every write the chip receives over 1705 note-ons of the built-in demo, which
 ; agrees register by register.
+;
+; THE +0x000 CONTROL WORD IS PART OF THE BLOCK FORMAT BUT NOT OF THIS BLOCK'S TRAFFIC.
+; ToneGen_Config_Init (0x02DFCF) hands a 68-byte block to ToneGen_WriteVoiceParams and then
+; passes that block's WORD 0 to ToneGen_WriteSingleReg with WA = the bare channel, i.e. to
+; register (0x0000 + ch) -- so offset +0x00 of a 68-byte block is the CONTROL word. The
+; block it is handed is the DRAM copy at (XSP + 2): DSP_Config_Init copies 0x22 words from
+; ROM 0x00F8D5 into DRAM 0x2AA4 first. (ROM 0x00F8D5 starts with 0x1200; the dormant probe
+; at 0x02E0EE is the only site that hands a ROM pointer directly, `lda xwa, 0x00f919`,
+; whose template starts with 0xF000.) The run-time block is different: ToneGen_WriteVoiceParams
+; reads from +0x02 upwards and never touches +0x00, and a grep for 0x0451CC in this file
+; finds only `lda_24 xbc, 0x0451cc` pointer loads -- no store. At run time the control word
+; lives, IN THE VOICE-ENGINE PATHS, in the LIVE SLOT RECORD at 0x0430BB + slot*0x47
+; (record +0x2D) instead, built by Voice_Build_GateCommand (0x025589) / _NoPartial
+; (0x0255F3) and issued as a separate write after the burst. The auxiliary 8-voice pool is
+; the exception: its run-time block at 0x3B1C is refilled by `ldirw` from ROM 0x012115 and
+; its OWN word 0 is sent (ToneGen_SetupPolyVoice, 0x0355AD). The command set and the demo capture are documented at 0x025589.
 ;
 ; THE THREE ENVELOPES share one word format, (target << 8) | rate, and are written with the
 ; same shape: segments 0 and 1 take extra writes during a note, segment 2 exactly one per
@@ -11076,6 +11093,75 @@ Voice_Apply_GateRouting_Done:
 	ld hl, bc
 	ret
 
+; ---------------------------------------------------------------------------------------
+; THE TONE GENERATOR CONTROL REGISTER (bank +0x000), AND THE WORD BUILT FOR IT
+;
+; Register address (0x0000 + slot) on IC303 is the per-voice CONTROL/gate register. This
+; routine and its twin Voice_Build_GateCommand_NoPartial (0x0255F3) build the word that is
+; handed to it and park it in the LIVE slot record at +0x2D (0x0430BB + slot*0x47). They
+; touch no hardware; the writers listed below push it.
+;
+; FROM THE CODE -- the command set. Every bank-0x0000 access in the ROM was enumerated by
+; scanning the binary for the address latch `ld (0x100000),WA` (f2 00 00 10 50) whose
+; preceding instruction is NOT `add WA,imm16`, plus the one immediate-form latch
+; (f2 00 00 10 02 with a value < 0x40). Thirteen sites, no others; one is the read-back:
+;
+;   NOTE-ON GATE   literal 0x8100. Always exactly that value, never computed. Three sites,
+;                  all mid-burst: ToneGen_WriteVoiceParams (data write at 0x02D2B4),
+;                  ToneGen_WriteVoiceParams_Ext (0x02D6CA), _Ext2 (0x02D777).
+;   FREE           literal 0x7E00. Four sites: ToneGen_SilenceChannel (0x02B4D4),
+;                  ToneGen_Config_Init (0x02E085), Voice_Reset_Engine phase B (0x021F94),
+;                  and the dormant probe ToneGen_ConfigInit_AltData (0x02E17D).
+;   HAND-OFF       the word built here, bit 15 SET. Five sites: ToneGen_WriteSingleReg
+;                  (0x02D41B), ToneGen_WriteVoice_Direct (0x027FBB), and the tails of
+;                  ToneGen_WriteVoiceParams_Ext (0x02D731) / _Ext2 (0x02D7B9).
+;                  The SAME word with bit 15 CLEARED is the update-without-re-gate form,
+;                  emitted by ToneGen_ReadPitch_AndScale (`res 15, bc` at 0x02E1E3).
+;   READ-BACK      0x021026, inside ToneGen_Read_Register: bank 0x0000 indices 0..3 read as
+;                  four 16-bit ACTIVE-VOICE BITMAPS (Voice_Manager_PollBank, 0x02219F).
+;
+; HOW THIS ROUTINE BUILDS THE WORD (IN: XWA = live slot record; OUT: record+0x2D):
+;   bits 7..0   0xFF - 4*(P[0] & 0x3F), where P = the u32 pointer at record+0x17 and P[0]
+;               is its first BYTE. Range 0x03..0xFF, and always == 3 (mod 4).
+;   bit 8       SET iff that same byte P[0] is non-zero. Meaning not established.
+;   bits 15..9  0xFE00 when the global mode byte 0x04134C is 0, 5 or 6, else 0xF000; the
+;               selector is skipped and 0xF000 forced when byte +0x12 of the record at
+;               record+0x23 is zero.
+;   then        Voice_Apply_GateRouting (0x02552A) may overwrite bits [14:12] and [11:9]
+;               from the two nibbles of (0x04138D + channel*0x11F). Neither arm can clear
+;               bit 15 -- the masks are 0x8FFF and 0xF1FF -- so the hand-off word always
+;               leaves here with bit 15 set.
+; The twin Voice_Build_GateCommand_NoPartial stores the bare literal 0xFE00 / 0xF000 with no
+; level byte at all, so it is the ONLY producer of a 0x00 low byte.
+;
+; MEASURED (capture of a running machine, 1705 note-ons of the built-in demo): only FOUR
+; hand-off values are ever issued -- F0FF, F000, F1D7, F187 -- and the LOW BYTE is an OUTPUT
+; LEVEL (0xFF full, 0x00 silent), not a mode flag. All four reconcile with the arithmetic
+; above, exactly:
+;   F0FF  this routine, P[0] == 0            -> 0xFF - 0    = 0xFF, bit 8 clear
+;   F1D7  this routine, P[0] & 0x3F == 0x0A  -> 0xFF - 0x28 = 0xD7, bit 8 set
+;   F187  this routine, P[0] & 0x3F == 0x1E  -> 0xFF - 0x78 = 0x87, bit 8 set
+;   F000  the NoPartial twin's literal -- unreachable from here, because the computed low
+;         byte is always == 3 (mod 4) and can never be 0x00.
+; The 0xFExx family is absent from the capture. 0x04134C has exactly one store, at the head
+; of Voice_AllVoices_UpdateVelocity (0x028C39), which masks A to 4 bits. That routine has
+; TWO entries: Voice_ResetAllControllers calls it with A = 1 (not in {0,5,6}), and a
+; parameter-dispatch path tail-jumps into it (`jrl`) with A loaded from a message byte at
+; (xwa + 3). So the mode is 1 after an audio-side reset, and only a later parameter write
+; can select the 0xFE00 arm -- which the demo never does. [INFERENCE: the dispatch-table
+; producers of that message byte were not exhaustively traced.]
+;
+; A voice handed F000 is meant to be INAUDIBLE, and the firmware relies on it: the capture
+; shows one voice left gated and never freed at the end of boot, with its envelope
+; programmed to hold. The code makes that state stable -- Voice_Manager_PollBank_SlotLoop
+; (0x02222A) frees a slot only on a 1 -> 0 edge of the active-voice bitmap it reads back
+; through ToneGen_Read_Register, so a voice whose envelope never decays never produces the
+; edge and never reaches ToneGen_SilenceChannel.
+;
+; INFERENCE: read in the same field layout, the 0x8100 note-on gate is "gate on, both
+; routing fields 0, level 0" -- the burst gates the voice silent and the hand-off word that
+; follows supplies the routing and the level. Not proven; 0x8100 is a literal in the ROM.
+; ---------------------------------------------------------------------------------------
 Voice_Build_GateCommand:
 	push xiz
 	ld xiz, xwa
@@ -11136,6 +11222,26 @@ Voice_Build_GateCommand_ApplyMode:
 	pop xiz
 	ret
 
+; The level-less twin of Voice_Build_GateCommand (0x025589 -- the CONTROL register, bank
+; +0x000, is documented in full there). IN: XWA = live slot record; OUT: record+0x2D.
+;
+; It runs the SAME high-field selector (record+0x23 byte +0x12, then the global mode byte
+; 0x04134C in {0,5,6}) and the SAME Voice_Apply_GateRouting patch, but stores a bare literal
+; -- `ldw (xiz + 45), 0xFE00` / `0xF000` at 0x025613 / 0x02561A / 0x025621 -- with no level
+; byte and no bit 8. Its third instruction, `ld xwa, (xiz + 19)`, loads a pointer that the
+; next load immediately discards; dead code, kept for byte fidelity.
+;
+; ★ THIS IS ONE OF THE TWO SOURCES OF 0xF000. The computed sibling cannot produce a 0x00
+; low byte (its byte is 0xFF - 4*k, always == 3 mod 4), so no computed path reaches F000.
+; The other source is the auxiliary voice template at ROM 0x012115, whose WORD 0 is 0xF000:
+; ToneGen_SetupPolyVoice (0x0355AD) copies it verbatim into staging 0x3B1C with `ldirw` and
+; hands that word to ToneGen_WriteSingleReg. MEASURED (demo capture, 1705 note-ons; harness in kn7000_mame,
+; tools/rigs/kn5000_demo_capture.lua): F000 is one of only four hand-off values
+; ever issued, and its low byte 0x00 means output level zero -- the voice is gated but
+; inaudible.
+; Callers, all of them slot-parameter rebuilds that end in ToneGen_WriteVoiceParams:
+; Voice_Init_Type1 (0x02C3CC), Voice_Init_Type2 (0x02C0B6), and the TypeB arm of
+; Voice_AllVoices_UpdateVelocity (0x028C39).
 Voice_Build_GateCommand_NoPartial:
 	push xiz
 	ld xiz, xwa
@@ -15952,9 +16058,19 @@ ToneGen_WriteVoice_Short_NopGap:
 	pop xiz
 	ret
 
-; latch = WA + 0x0000 (register 0), data = the 16-bit value already in IZ.  The only writer
-; in the region that sends a caller-supplied literal rather than a staged word; used by the
-; sustain-retrigger path with BC = (voice+0x2D).
+; latch = WA + 0x0000, data = the 16-bit value already in IZ.  The only writer in the region
+; that sends a caller-supplied word rather than a staged one.
+;
+; Bank 0x0000 is the per-voice CONTROL/gate register, and BC = (voice+0x2D) is the HAND-OFF
+; word with bit 15 set -- built by Voice_Build_GateCommand (0x025589) / _NoPartial
+; (0x0255F3), which carry the full command set and the measurement. Both call sites are in
+; Voice_AllNotes_SustainRetrigger (0x028E26), branches B and D: each does
+; Voice_Calc_LevelPair_EGA, ToneGen_WriteSegRegs_SameLevel, then this write, then
+; Voice_Clear_HoldBit. So the sustain retrigger re-gates the voice by re-issuing the SAME
+; stored control word -- it does not build a new one.
+; MEASURED (demo capture, 1705 note-ons; harness in kn7000_mame,
+; tools/rigs/kn5000_demo_capture.lua): the values seen on this register are only F0FF,
+; F000, F1D7 and F187; the low byte is an output level, 0xFF full and 0x00 silent.
 ToneGen_WriteVoice_Direct:
 	pushw iz
 	ld iz, bc
@@ -23895,9 +24011,23 @@ ToneGen_PanTable_02D0DC:
 ;   0x0040,0x0080(bit15 set),0x00C0,0x0100,0x0140,0x0180,0x0400,0x0440,0x0480,0x04C0,0x0500,
 ;   0x0800, then register (0x0000+ch) <- 0x8100, then 0x0840,0x0880,0x08C0,0x0900,0x0940,
 ;   0x0980,0x09C0,0x0A00,0x0A40, and finally 0x0080 again with bit15 CLEARED.
-; The 0x8100 write to bank 0x0000 in the middle is a mid-sequence key/gate command; the
-; bit15 set/clear pair around the whole burst is the load strobe. This is the single biggest
-; consumer of TG bandwidth in the firmware.
+; The 0x8100 write to bank 0x0000 in the middle is the key/gate command on the per-voice
+; CONTROL register -- [INFERENCE] most likely the NOTE-ON gate, but that reading rests on
+; position in the burst, not on a decoded field; the bit15 set/clear pair around the whole burst is the load strobe of the
+; SEPARATE 0x0080 register. This is the single biggest consumer of TG bandwidth in the
+; firmware.
+; Two facts about that gate, both from a scan of every bank-0x0000 access in the ROM:
+;   - it is the literal 0x8100 at all three of its sites (here at 0x02D2B4, and in
+;     ToneGen_WriteVoiceParams_Ext 0x02D6CA and _Ext2 0x02D777) -- never computed, and the
+;     low byte is always 0x00;
+;   - this routine does NOT emit the block's own +0x00 word. On the voice-engine call
+;     sites the control word arrives afterwards, from the live slot record +0x2D, through
+;     ToneGen_WriteSingleReg (0x02D41B) -- see Voice_Build_GateCommand (0x025589) for the
+;     command set and the demo capture. _Ext and _Ext2 do both writes themselves.
+;     This routine has eight call sites and the pattern is not uniform: at three of them
+;     (ToneGen_Config_Init and the two aux-pool routines at 0x0355xx) the word that follows
+;     IS the block's own word 0 -- which is the actual proof that +0x00 is the control
+;     word -- and at two others no control write follows in the same routine at all.
 ToneGen_WriteVoiceParams:
 	dec 4, xsp
 	pushw iz
@@ -24276,8 +24406,31 @@ ToneGen_WriteVoiceParams_Exit:
 	ret
 
 ; Existing name kept. WA = full TG register address (NOT offset by a bank base), BC = 16-bit
-; value. The generic primitive; used to write bank 0x0000 (the key-on word) from
-; VOICE_SETVELOCITY, Voice_Reload_Levels and ToneGen_Config_Init.
+; value.
+;
+; DESPITE THE GENERIC NAME IT IS THE CONTROL-REGISTER WRITER, and nothing else. All twelve call
+; sites were read; every one passes WA = the bare physical slot number 0..0x3F, so the
+; register selected is always (0x0000 + slot) -- the per-voice CONTROL/gate register:
+;   Voice_TickNoteDecay (0x027363), Voice_SetPitch (0x02C6CD), Voice_NoteOff (0x02C7D7),
+;   Voice_SetVelocity_Type0/_Type40/_Type80 Loop2Body, Voice_Reload_Levels branches A and C
+;   (0x02CD71), ToneGen_Config_Init (0x02DFCF), and the dormant probe
+;   ToneGen_ConfigInit_AltData (call at 0x02E0FF).
+; Eight of the ten pass BC = the word at 0x0430BB + slot*0x47 (live slot record +0x2D) --
+; the HAND-OFF word, bit 15 SET, built by Voice_Build_GateCommand (0x025589) or its twin
+; _NoPartial (0x0255F3), where the whole command set is documented. ToneGen_Config_Init
+; passes word 0 of its 68-byte template (ROM 0x00F8D5, = 0x1200) and the dormant probe
+; passes the literal 0xF000.
+;
+; ★ That ToneGen_Config_Init call is the proof that word 0 of a 68-byte parameter block IS
+; the +0x000 control word: the block is handed to ToneGen_WriteVoiceParams, which emits
+; +0x02 upwards, and word 0 is then sent here separately. The probe's own template at ROM
+; 0x00F919 likewise starts with 0xF000, matching the literal it loads.
+;
+; MEASURED (demo capture, 1705 note-ons; harness in kn7000_mame,
+; tools/rigs/kn5000_demo_capture.lua): the only hand-off values this register ever
+; receives are F0FF, F000, F1D7 and F187, and their LOW BYTE is an output level (0xFF full,
+; 0x00 silent). See Voice_Build_GateCommand for the value-by-value reconciliation.
+; The bit-15-CLEARED counterpart is emitted by ToneGen_ReadPitch_AndScale (0x02E18D).
 ToneGen_WriteSingleReg:
 	pushw iz
 	ld iz, bc
