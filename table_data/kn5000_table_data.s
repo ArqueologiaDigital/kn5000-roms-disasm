@@ -551,188 +551,187 @@ Icon_175:	desc_entry	28, 28, IconPixels_175
 ; icon; DrawIcons hardcodes the geometry).  Emitted as offset/length slices of
 ; includes/icon_pixel_data.bin so each icon is individually addressable.
 ; Extracted gallery: table_data/images/icons/Icon_NNN.png.
-IconPixels_000:	.incbin "includes/icon_pixel_data.bin", 0, 288
-IconPixels_001:	.incbin "includes/icon_pixel_data.bin", 288, 288
-IconPixels_002:	.incbin "includes/icon_pixel_data.bin", 576, 288
-IconPixels_003:	.incbin "includes/icon_pixel_data.bin", 864, 288
-IconPixels_004:	.incbin "includes/icon_pixel_data.bin", 1152, 288
-IconPixels_005:	.incbin "includes/icon_pixel_data.bin", 1440, 288
-IconPixels_006:	.incbin "includes/icon_pixel_data.bin", 1728, 288
-IconPixels_007:	.incbin "includes/icon_pixel_data.bin", 2016, 288
-IconPixels_008:	.incbin "includes/icon_pixel_data.bin", 2304, 288
-IconPixels_009:	.incbin "includes/icon_pixel_data.bin", 2592, 288
-IconPixels_010:	.incbin "includes/icon_pixel_data.bin", 2880, 288
-IconPixels_011:	.incbin "includes/icon_pixel_data.bin", 3168, 288
-IconPixels_012:	.incbin "includes/icon_pixel_data.bin", 3456, 288
-IconPixels_013:	.incbin "includes/icon_pixel_data.bin", 3744, 288
-IconPixels_014:	.incbin "includes/icon_pixel_data.bin", 4032, 288
-IconPixels_015:	.incbin "includes/icon_pixel_data.bin", 4320, 288
-IconPixels_016:	.incbin "includes/icon_pixel_data.bin", 4608, 288
-IconPixels_017:	.incbin "includes/icon_pixel_data.bin", 4896, 288
-IconPixels_018:	.incbin "includes/icon_pixel_data.bin", 5184, 288
-IconPixels_019:	.incbin "includes/icon_pixel_data.bin", 5472, 288
-IconPixels_020:	.incbin "includes/icon_pixel_data.bin", 5760, 288
-IconPixels_021:	.incbin "includes/icon_pixel_data.bin", 6048, 288
-IconPixels_022:	.incbin "includes/icon_pixel_data.bin", 6336, 288
-IconPixels_023:	.incbin "includes/icon_pixel_data.bin", 6624, 288
-IconPixels_024:	.incbin "includes/icon_pixel_data.bin", 6912, 288
-IconPixels_025:	.incbin "includes/icon_pixel_data.bin", 7200, 288
-IconPixels_026:	.incbin "includes/icon_pixel_data.bin", 7488, 288
-IconPixels_027:	.incbin "includes/icon_pixel_data.bin", 7776, 288
-IconPixels_028:	.incbin "includes/icon_pixel_data.bin", 8064, 288
-IconPixels_029:	.incbin "includes/icon_pixel_data.bin", 8352, 288
-IconPixels_030:	.incbin "includes/icon_pixel_data.bin", 8640, 288
-IconPixels_031:	.incbin "includes/icon_pixel_data.bin", 8928, 288
-IconPixels_032:	.incbin "includes/icon_pixel_data.bin", 9216, 288
-IconPixels_033:	.incbin "includes/icon_pixel_data.bin", 9504, 288
-IconPixels_034:	.incbin "includes/icon_pixel_data.bin", 9792, 288
-IconPixels_035:	.incbin "includes/icon_pixel_data.bin", 10080, 288
-IconPixels_036:	.incbin "includes/icon_pixel_data.bin", 10368, 288
-IconPixels_037:	.incbin "includes/icon_pixel_data.bin", 10656, 288
-IconPixels_038:	.incbin "includes/icon_pixel_data.bin", 10944, 288
-IconPixels_039:	.incbin "includes/icon_pixel_data.bin", 11232, 288
-IconPixels_040:	.incbin "includes/icon_pixel_data.bin", 11520, 288
-IconPixels_041:	.incbin "includes/icon_pixel_data.bin", 11808, 288
-IconPixels_042:	.incbin "includes/icon_pixel_data.bin", 12096, 288
-IconPixels_043:	.incbin "includes/icon_pixel_data.bin", 12384, 288
-IconPixels_044:	.incbin "includes/icon_pixel_data.bin", 12672, 288
-IconPixels_045:	.incbin "includes/icon_pixel_data.bin", 12960, 288
-IconPixels_046:	.incbin "includes/icon_pixel_data.bin", 13248, 288
-IconPixels_047:	.incbin "includes/icon_pixel_data.bin", 13536, 288
-IconPixels_048:	.incbin "includes/icon_pixel_data.bin", 13824, 288
-IconPixels_049:	.incbin "includes/icon_pixel_data.bin", 14112, 288
-IconPixels_050:	.incbin "includes/icon_pixel_data.bin", 14400, 288
-IconPixels_051:	.incbin "includes/icon_pixel_data.bin", 14688, 288
-IconPixels_052:	.incbin "includes/icon_pixel_data.bin", 14976, 288
-IconPixels_053:	.incbin "includes/icon_pixel_data.bin", 15264, 288
-IconPixels_054:	.incbin "includes/icon_pixel_data.bin", 15552, 288
-IconPixels_055:	.incbin "includes/icon_pixel_data.bin", 15840, 288
-IconPixels_056:	.incbin "includes/icon_pixel_data.bin", 16128, 288
-IconPixels_057:	.incbin "includes/icon_pixel_data.bin", 16416, 288
-IconPixels_058:	.incbin "includes/icon_pixel_data.bin", 16704, 288
-IconPixels_059:	.incbin "includes/icon_pixel_data.bin", 16992, 288
-IconPixels_060:	.incbin "includes/icon_pixel_data.bin", 17280, 288
-IconPixels_061:	.incbin "includes/icon_pixel_data.bin", 17568, 288
-IconPixels_062:	.incbin "includes/icon_pixel_data.bin", 17856, 288
-IconPixels_063:	.incbin "includes/icon_pixel_data.bin", 18144, 288
-IconPixels_064:	.incbin "includes/icon_pixel_data.bin", 18432, 288
-IconPixels_065:	.incbin "includes/icon_pixel_data.bin", 18720, 288
-IconPixels_066:	.incbin "includes/icon_pixel_data.bin", 19008, 288
-IconPixels_067:	.incbin "includes/icon_pixel_data.bin", 19296, 288
-IconPixels_068:	.incbin "includes/icon_pixel_data.bin", 19584, 288
-IconPixels_069:	.incbin "includes/icon_pixel_data.bin", 19872, 288
-IconPixels_070:	.incbin "includes/icon_pixel_data.bin", 20160, 288
-IconPixels_071:	.incbin "includes/icon_pixel_data.bin", 20448, 288
-IconPixels_072:	.incbin "includes/icon_pixel_data.bin", 20736, 288
-IconPixels_073:	.incbin "includes/icon_pixel_data.bin", 21024, 288
-IconPixels_074:	.incbin "includes/icon_pixel_data.bin", 21312, 288
-IconPixels_075:	.incbin "includes/icon_pixel_data.bin", 21600, 288
-IconPixels_076:	.incbin "includes/icon_pixel_data.bin", 21888, 288
-IconPixels_077:	.incbin "includes/icon_pixel_data.bin", 22176, 288
-IconPixels_078:	.incbin "includes/icon_pixel_data.bin", 22464, 288
-IconPixels_079:	.incbin "includes/icon_pixel_data.bin", 22752, 288
-IconPixels_080:	.incbin "includes/icon_pixel_data.bin", 23040, 288
-IconPixels_081:	.incbin "includes/icon_pixel_data.bin", 23328, 288
-IconPixels_082:	.incbin "includes/icon_pixel_data.bin", 23616, 288
-IconPixels_083:	.incbin "includes/icon_pixel_data.bin", 23904, 288
-IconPixels_084:	.incbin "includes/icon_pixel_data.bin", 24192, 288
-IconPixels_085:	.incbin "includes/icon_pixel_data.bin", 24480, 288
-IconPixels_086:	.incbin "includes/icon_pixel_data.bin", 24768, 288
-IconPixels_087:	.incbin "includes/icon_pixel_data.bin", 25056, 288
-IconPixels_088:	.incbin "includes/icon_pixel_data.bin", 25344, 288
-IconPixels_089:	.incbin "includes/icon_pixel_data.bin", 25632, 288
-IconPixels_090:	.incbin "includes/icon_pixel_data.bin", 25920, 288
-IconPixels_091:	.incbin "includes/icon_pixel_data.bin", 26208, 288
-IconPixels_092:	.incbin "includes/icon_pixel_data.bin", 26496, 288
-IconPixels_093:	.incbin "includes/icon_pixel_data.bin", 26784, 288
-IconPixels_094:	.incbin "includes/icon_pixel_data.bin", 27072, 288
-IconPixels_095:	.incbin "includes/icon_pixel_data.bin", 27360, 288
-IconPixels_096:	.incbin "includes/icon_pixel_data.bin", 27648, 288
-IconPixels_097:	.incbin "includes/icon_pixel_data.bin", 27936, 288
-IconPixels_098:	.incbin "includes/icon_pixel_data.bin", 28224, 288
-IconPixels_099:	.incbin "includes/icon_pixel_data.bin", 28512, 288
-IconPixels_100:	.incbin "includes/icon_pixel_data.bin", 28800, 288
-IconPixels_101:	.incbin "includes/icon_pixel_data.bin", 29088, 288
-IconPixels_102:	.incbin "includes/icon_pixel_data.bin", 29376, 288
-IconPixels_103:	.incbin "includes/icon_pixel_data.bin", 29664, 288
-IconPixels_104:	.incbin "includes/icon_pixel_data.bin", 29952, 288
-IconPixels_105:	.incbin "includes/icon_pixel_data.bin", 30240, 288
-IconPixels_106:	.incbin "includes/icon_pixel_data.bin", 30528, 288
-IconPixels_107:	.incbin "includes/icon_pixel_data.bin", 30816, 288
-IconPixels_108:	.incbin "includes/icon_pixel_data.bin", 31104, 288
-IconPixels_109:	.incbin "includes/icon_pixel_data.bin", 31392, 288
-IconPixels_110:	.incbin "includes/icon_pixel_data.bin", 31680, 288
-IconPixels_111:	.incbin "includes/icon_pixel_data.bin", 31968, 288
-IconPixels_112:	.incbin "includes/icon_pixel_data.bin", 32256, 288
-IconPixels_113:	.incbin "includes/icon_pixel_data.bin", 32544, 288
-IconPixels_114:	.incbin "includes/icon_pixel_data.bin", 32832, 288
-IconPixels_115:	.incbin "includes/icon_pixel_data.bin", 33120, 288
-IconPixels_116:	.incbin "includes/icon_pixel_data.bin", 33408, 288
-IconPixels_117:	.incbin "includes/icon_pixel_data.bin", 33696, 288
-IconPixels_118:	.incbin "includes/icon_pixel_data.bin", 33984, 288
-IconPixels_119:	.incbin "includes/icon_pixel_data.bin", 34272, 288
-IconPixels_120:	.incbin "includes/icon_pixel_data.bin", 34560, 288
-IconPixels_121:	.incbin "includes/icon_pixel_data.bin", 34848, 288
-IconPixels_122:	.incbin "includes/icon_pixel_data.bin", 35136, 288
-IconPixels_123:	.incbin "includes/icon_pixel_data.bin", 35424, 288
-IconPixels_124:	.incbin "includes/icon_pixel_data.bin", 35712, 288
-IconPixels_125:	.incbin "includes/icon_pixel_data.bin", 36000, 288
-IconPixels_126:	.incbin "includes/icon_pixel_data.bin", 36288, 288
-IconPixels_127:	.incbin "includes/icon_pixel_data.bin", 36576, 288
-IconPixels_128:	.incbin "includes/icon_pixel_data.bin", 36864, 288
-IconPixels_129:	.incbin "includes/icon_pixel_data.bin", 37152, 288
-IconPixels_130:	.incbin "includes/icon_pixel_data.bin", 37440, 288
-IconPixels_131:	.incbin "includes/icon_pixel_data.bin", 37728, 288
-IconPixels_132:	.incbin "includes/icon_pixel_data.bin", 38016, 288
-IconPixels_133:	.incbin "includes/icon_pixel_data.bin", 38304, 288
-IconPixels_134:	.incbin "includes/icon_pixel_data.bin", 38592, 288
-IconPixels_135:	.incbin "includes/icon_pixel_data.bin", 38880, 288
-IconPixels_136:	.incbin "includes/icon_pixel_data.bin", 39168, 288
-IconPixels_137:	.incbin "includes/icon_pixel_data.bin", 39456, 288
-IconPixels_138:	.incbin "includes/icon_pixel_data.bin", 39744, 288
-IconPixels_139:	.incbin "includes/icon_pixel_data.bin", 40032, 288
-IconPixels_140:	.incbin "includes/icon_pixel_data.bin", 40320, 288
-IconPixels_141:	.incbin "includes/icon_pixel_data.bin", 40608, 288
-IconPixels_142:	.incbin "includes/icon_pixel_data.bin", 40896, 288
-IconPixels_143:	.incbin "includes/icon_pixel_data.bin", 41184, 288
-IconPixels_144:	.incbin "includes/icon_pixel_data.bin", 41472, 288
-IconPixels_145:	.incbin "includes/icon_pixel_data.bin", 41760, 288
-IconPixels_146:	.incbin "includes/icon_pixel_data.bin", 42048, 288
-IconPixels_147:	.incbin "includes/icon_pixel_data.bin", 42336, 288
-IconPixels_148:	.incbin "includes/icon_pixel_data.bin", 42624, 288
-IconPixels_149:	.incbin "includes/icon_pixel_data.bin", 42912, 288
-IconPixels_150:	.incbin "includes/icon_pixel_data.bin", 43200, 288
-IconPixels_151:	.incbin "includes/icon_pixel_data.bin", 43488, 288
-IconPixels_152:	.incbin "includes/icon_pixel_data.bin", 43776, 288
-IconPixels_153:	.incbin "includes/icon_pixel_data.bin", 44064, 288
-IconPixels_154:	.incbin "includes/icon_pixel_data.bin", 44352, 288
-IconPixels_155:	.incbin "includes/icon_pixel_data.bin", 44640, 288
-IconPixels_156:	.incbin "includes/icon_pixel_data.bin", 44928, 288
-IconPixels_157:	.incbin "includes/icon_pixel_data.bin", 45216, 288
-IconPixels_158:	.incbin "includes/icon_pixel_data.bin", 45504, 288
-IconPixels_159:	.incbin "includes/icon_pixel_data.bin", 45792, 288
-IconPixels_160:	.incbin "includes/icon_pixel_data.bin", 46080, 288
-IconPixels_161:	.incbin "includes/icon_pixel_data.bin", 46368, 288
-IconPixels_162:	.incbin "includes/icon_pixel_data.bin", 46656, 288
-IconPixels_163:	.incbin "includes/icon_pixel_data.bin", 46944, 288
-IconPixels_164:	.incbin "includes/icon_pixel_data.bin", 47232, 288
-IconPixels_165:	.incbin "includes/icon_pixel_data.bin", 47520, 288
-IconPixels_166:	.incbin "includes/icon_pixel_data.bin", 47808, 288
-IconPixels_167:	.incbin "includes/icon_pixel_data.bin", 48096, 288
-IconPixels_168:	.incbin "includes/icon_pixel_data.bin", 48384, 288
-IconPixels_169:	.incbin "includes/icon_pixel_data.bin", 48672, 288
-IconPixels_170:	.incbin "includes/icon_pixel_data.bin", 48960, 288
-IconPixels_171:	.incbin "includes/icon_pixel_data.bin", 49248, 288
-IconPixels_172:	.incbin "includes/icon_pixel_data.bin", 49536, 288
-IconPixels_173:	.incbin "includes/icon_pixel_data.bin", 49824, 288
-IconPixels_174:	.incbin "includes/icon_pixel_data.bin", 50112, 288
-IconPixels_175:	.incbin "includes/icon_pixel_data.bin", 50400, 288
-
+IconPixels_000:	.incbin "includes/generated/IconPixels_000.bin"
+IconPixels_001:	.incbin "includes/generated/IconPixels_001.bin"
+IconPixels_002:	.incbin "includes/generated/IconPixels_002.bin"
+IconPixels_003:	.incbin "includes/generated/IconPixels_003.bin"
+IconPixels_004:	.incbin "includes/generated/IconPixels_004.bin"
+IconPixels_005:	.incbin "includes/generated/IconPixels_005.bin"
+IconPixels_006:	.incbin "includes/generated/IconPixels_006.bin"
+IconPixels_007:	.incbin "includes/generated/IconPixels_007.bin"
+IconPixels_008:	.incbin "includes/generated/IconPixels_008.bin"
+IconPixels_009:	.incbin "includes/generated/IconPixels_009.bin"
+IconPixels_010:	.incbin "includes/generated/IconPixels_010.bin"
+IconPixels_011:	.incbin "includes/generated/IconPixels_011.bin"
+IconPixels_012:	.incbin "includes/generated/IconPixels_012.bin"
+IconPixels_013:	.incbin "includes/generated/IconPixels_013.bin"
+IconPixels_014:	.incbin "includes/generated/IconPixels_014.bin"
+IconPixels_015:	.incbin "includes/generated/IconPixels_015.bin"
+IconPixels_016:	.incbin "includes/generated/IconPixels_016.bin"
+IconPixels_017:	.incbin "includes/generated/IconPixels_017.bin"
+IconPixels_018:	.incbin "includes/generated/IconPixels_018.bin"
+IconPixels_019:	.incbin "includes/generated/IconPixels_019.bin"
+IconPixels_020:	.incbin "includes/generated/IconPixels_020.bin"
+IconPixels_021:	.incbin "includes/generated/IconPixels_021.bin"
+IconPixels_022:	.incbin "includes/generated/IconPixels_022.bin"
+IconPixels_023:	.incbin "includes/generated/IconPixels_023.bin"
+IconPixels_024:	.incbin "includes/generated/IconPixels_024.bin"
+IconPixels_025:	.incbin "includes/generated/IconPixels_025.bin"
+IconPixels_026:	.incbin "includes/generated/IconPixels_026.bin"
+IconPixels_027:	.incbin "includes/generated/IconPixels_027.bin"
+IconPixels_028:	.incbin "includes/generated/IconPixels_028.bin"
+IconPixels_029:	.incbin "includes/generated/IconPixels_029.bin"
+IconPixels_030:	.incbin "includes/generated/IconPixels_030.bin"
+IconPixels_031:	.incbin "includes/generated/IconPixels_031.bin"
+IconPixels_032:	.incbin "includes/generated/IconPixels_032.bin"
+IconPixels_033:	.incbin "includes/generated/IconPixels_033.bin"
+IconPixels_034:	.incbin "includes/generated/IconPixels_034.bin"
+IconPixels_035:	.incbin "includes/generated/IconPixels_035.bin"
+IconPixels_036:	.incbin "includes/generated/IconPixels_036.bin"
+IconPixels_037:	.incbin "includes/generated/IconPixels_037.bin"
+IconPixels_038:	.incbin "includes/generated/IconPixels_038.bin"
+IconPixels_039:	.incbin "includes/generated/IconPixels_039.bin"
+IconPixels_040:	.incbin "includes/generated/IconPixels_040.bin"
+IconPixels_041:	.incbin "includes/generated/IconPixels_041.bin"
+IconPixels_042:	.incbin "includes/generated/IconPixels_042.bin"
+IconPixels_043:	.incbin "includes/generated/IconPixels_043.bin"
+IconPixels_044:	.incbin "includes/generated/IconPixels_044.bin"
+IconPixels_045:	.incbin "includes/generated/IconPixels_045.bin"
+IconPixels_046:	.incbin "includes/generated/IconPixels_046.bin"
+IconPixels_047:	.incbin "includes/generated/IconPixels_047.bin"
+IconPixels_048:	.incbin "includes/generated/IconPixels_048.bin"
+IconPixels_049:	.incbin "includes/generated/IconPixels_049.bin"
+IconPixels_050:	.incbin "includes/generated/IconPixels_050.bin"
+IconPixels_051:	.incbin "includes/generated/IconPixels_051.bin"
+IconPixels_052:	.incbin "includes/generated/IconPixels_052.bin"
+IconPixels_053:	.incbin "includes/generated/IconPixels_053.bin"
+IconPixels_054:	.incbin "includes/generated/IconPixels_054.bin"
+IconPixels_055:	.incbin "includes/generated/IconPixels_055.bin"
+IconPixels_056:	.incbin "includes/generated/IconPixels_056.bin"
+IconPixels_057:	.incbin "includes/generated/IconPixels_057.bin"
+IconPixels_058:	.incbin "includes/generated/IconPixels_058.bin"
+IconPixels_059:	.incbin "includes/generated/IconPixels_059.bin"
+IconPixels_060:	.incbin "includes/generated/IconPixels_060.bin"
+IconPixels_061:	.incbin "includes/generated/IconPixels_061.bin"
+IconPixels_062:	.incbin "includes/generated/IconPixels_062.bin"
+IconPixels_063:	.incbin "includes/generated/IconPixels_063.bin"
+IconPixels_064:	.incbin "includes/generated/IconPixels_064.bin"
+IconPixels_065:	.incbin "includes/generated/IconPixels_065.bin"
+IconPixels_066:	.incbin "includes/generated/IconPixels_066.bin"
+IconPixels_067:	.incbin "includes/generated/IconPixels_067.bin"
+IconPixels_068:	.incbin "includes/generated/IconPixels_068.bin"
+IconPixels_069:	.incbin "includes/generated/IconPixels_069.bin"
+IconPixels_070:	.incbin "includes/generated/IconPixels_070.bin"
+IconPixels_071:	.incbin "includes/generated/IconPixels_071.bin"
+IconPixels_072:	.incbin "includes/generated/IconPixels_072.bin"
+IconPixels_073:	.incbin "includes/generated/IconPixels_073.bin"
+IconPixels_074:	.incbin "includes/generated/IconPixels_074.bin"
+IconPixels_075:	.incbin "includes/generated/IconPixels_075.bin"
+IconPixels_076:	.incbin "includes/generated/IconPixels_076.bin"
+IconPixels_077:	.incbin "includes/generated/IconPixels_077.bin"
+IconPixels_078:	.incbin "includes/generated/IconPixels_078.bin"
+IconPixels_079:	.incbin "includes/generated/IconPixels_079.bin"
+IconPixels_080:	.incbin "includes/generated/IconPixels_080.bin"
+IconPixels_081:	.incbin "includes/generated/IconPixels_081.bin"
+IconPixels_082:	.incbin "includes/generated/IconPixels_082.bin"
+IconPixels_083:	.incbin "includes/generated/IconPixels_083.bin"
+IconPixels_084:	.incbin "includes/generated/IconPixels_084.bin"
+IconPixels_085:	.incbin "includes/generated/IconPixels_085.bin"
+IconPixels_086:	.incbin "includes/generated/IconPixels_086.bin"
+IconPixels_087:	.incbin "includes/generated/IconPixels_087.bin"
+IconPixels_088:	.incbin "includes/generated/IconPixels_088.bin"
+IconPixels_089:	.incbin "includes/generated/IconPixels_089.bin"
+IconPixels_090:	.incbin "includes/generated/IconPixels_090.bin"
+IconPixels_091:	.incbin "includes/generated/IconPixels_091.bin"
+IconPixels_092:	.incbin "includes/generated/IconPixels_092.bin"
+IconPixels_093:	.incbin "includes/generated/IconPixels_093.bin"
+IconPixels_094:	.incbin "includes/generated/IconPixels_094.bin"
+IconPixels_095:	.incbin "includes/generated/IconPixels_095.bin"
+IconPixels_096:	.incbin "includes/generated/IconPixels_096.bin"
+IconPixels_097:	.incbin "includes/generated/IconPixels_097.bin"
+IconPixels_098:	.incbin "includes/generated/IconPixels_098.bin"
+IconPixels_099:	.incbin "includes/generated/IconPixels_099.bin"
+IconPixels_100:	.incbin "includes/generated/IconPixels_100.bin"
+IconPixels_101:	.incbin "includes/generated/IconPixels_101.bin"
+IconPixels_102:	.incbin "includes/generated/IconPixels_102.bin"
+IconPixels_103:	.incbin "includes/generated/IconPixels_103.bin"
+IconPixels_104:	.incbin "includes/generated/IconPixels_104.bin"
+IconPixels_105:	.incbin "includes/generated/IconPixels_105.bin"
+IconPixels_106:	.incbin "includes/generated/IconPixels_106.bin"
+IconPixels_107:	.incbin "includes/generated/IconPixels_107.bin"
+IconPixels_108:	.incbin "includes/generated/IconPixels_108.bin"
+IconPixels_109:	.incbin "includes/generated/IconPixels_109.bin"
+IconPixels_110:	.incbin "includes/generated/IconPixels_110.bin"
+IconPixels_111:	.incbin "includes/generated/IconPixels_111.bin"
+IconPixels_112:	.incbin "includes/generated/IconPixels_112.bin"
+IconPixels_113:	.incbin "includes/generated/IconPixels_113.bin"
+IconPixels_114:	.incbin "includes/generated/IconPixels_114.bin"
+IconPixels_115:	.incbin "includes/generated/IconPixels_115.bin"
+IconPixels_116:	.incbin "includes/generated/IconPixels_116.bin"
+IconPixels_117:	.incbin "includes/generated/IconPixels_117.bin"
+IconPixels_118:	.incbin "includes/generated/IconPixels_118.bin"
+IconPixels_119:	.incbin "includes/generated/IconPixels_119.bin"
+IconPixels_120:	.incbin "includes/generated/IconPixels_120.bin"
+IconPixels_121:	.incbin "includes/generated/IconPixels_121.bin"
+IconPixels_122:	.incbin "includes/generated/IconPixels_122.bin"
+IconPixels_123:	.incbin "includes/generated/IconPixels_123.bin"
+IconPixels_124:	.incbin "includes/generated/IconPixels_124.bin"
+IconPixels_125:	.incbin "includes/generated/IconPixels_125.bin"
+IconPixels_126:	.incbin "includes/generated/IconPixels_126.bin"
+IconPixels_127:	.incbin "includes/generated/IconPixels_127.bin"
+IconPixels_128:	.incbin "includes/generated/IconPixels_128.bin"
+IconPixels_129:	.incbin "includes/generated/IconPixels_129.bin"
+IconPixels_130:	.incbin "includes/generated/IconPixels_130.bin"
+IconPixels_131:	.incbin "includes/generated/IconPixels_131.bin"
+IconPixels_132:	.incbin "includes/generated/IconPixels_132.bin"
+IconPixels_133:	.incbin "includes/generated/IconPixels_133.bin"
+IconPixels_134:	.incbin "includes/generated/IconPixels_134.bin"
+IconPixels_135:	.incbin "includes/generated/IconPixels_135.bin"
+IconPixels_136:	.incbin "includes/generated/IconPixels_136.bin"
+IconPixels_137:	.incbin "includes/generated/IconPixels_137.bin"
+IconPixels_138:	.incbin "includes/generated/IconPixels_138.bin"
+IconPixels_139:	.incbin "includes/generated/IconPixels_139.bin"
+IconPixels_140:	.incbin "includes/generated/IconPixels_140.bin"
+IconPixels_141:	.incbin "includes/generated/IconPixels_141.bin"
+IconPixels_142:	.incbin "includes/generated/IconPixels_142.bin"
+IconPixels_143:	.incbin "includes/generated/IconPixels_143.bin"
+IconPixels_144:	.incbin "includes/generated/IconPixels_144.bin"
+IconPixels_145:	.incbin "includes/generated/IconPixels_145.bin"
+IconPixels_146:	.incbin "includes/generated/IconPixels_146.bin"
+IconPixels_147:	.incbin "includes/generated/IconPixels_147.bin"
+IconPixels_148:	.incbin "includes/generated/IconPixels_148.bin"
+IconPixels_149:	.incbin "includes/generated/IconPixels_149.bin"
+IconPixels_150:	.incbin "includes/generated/IconPixels_150.bin"
+IconPixels_151:	.incbin "includes/generated/IconPixels_151.bin"
+IconPixels_152:	.incbin "includes/generated/IconPixels_152.bin"
+IconPixels_153:	.incbin "includes/generated/IconPixels_153.bin"
+IconPixels_154:	.incbin "includes/generated/IconPixels_154.bin"
+IconPixels_155:	.incbin "includes/generated/IconPixels_155.bin"
+IconPixels_156:	.incbin "includes/generated/IconPixels_156.bin"
+IconPixels_157:	.incbin "includes/generated/IconPixels_157.bin"
+IconPixels_158:	.incbin "includes/generated/IconPixels_158.bin"
+IconPixels_159:	.incbin "includes/generated/IconPixels_159.bin"
+IconPixels_160:	.incbin "includes/generated/IconPixels_160.bin"
+IconPixels_161:	.incbin "includes/generated/IconPixels_161.bin"
+IconPixels_162:	.incbin "includes/generated/IconPixels_162.bin"
+IconPixels_163:	.incbin "includes/generated/IconPixels_163.bin"
+IconPixels_164:	.incbin "includes/generated/IconPixels_164.bin"
+IconPixels_165:	.incbin "includes/generated/IconPixels_165.bin"
+IconPixels_166:	.incbin "includes/generated/IconPixels_166.bin"
+IconPixels_167:	.incbin "includes/generated/IconPixels_167.bin"
+IconPixels_168:	.incbin "includes/generated/IconPixels_168.bin"
+IconPixels_169:	.incbin "includes/generated/IconPixels_169.bin"
+IconPixels_170:	.incbin "includes/generated/IconPixels_170.bin"
+IconPixels_171:	.incbin "includes/generated/IconPixels_171.bin"
+IconPixels_172:	.incbin "includes/generated/IconPixels_172.bin"
+IconPixels_173:	.incbin "includes/generated/IconPixels_173.bin"
+IconPixels_174:	.incbin "includes/generated/IconPixels_174.bin"
+IconPixels_175:	.incbin "includes/generated/IconPixels_175.bin"
 ; A 177th icon sits after the last referenced icon: yellow "E.L.S." lettering
 ; with small glyphs below -- apparently a developer signature.  No IconTable
 ; entry points at it (entry 176 is the null terminator), so it is unreachable
 ; art.  Extracted to the gallery as Icon_176.png.
-IconPixels_176_Unreferenced:	.incbin "includes/icon_pixel_data.bin", 50688, 288
+IconPixels_176_Unreferenced:	.incbin "includes/generated/IconPixels_176.bin"
 	.fill 208, 1, 0xff	; pad to 0x944D78
 
 ; =============================================================================

@@ -678,6 +678,7 @@ hdae5000-images:
 tabledata-images:
 	python3 scripts/build/indexed_images.py build
 	python3 scripts/build/ui_bitmaps_images.py build
+	python3 scripts/build/icon_images.py build
 
 rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: hdae5000/hd-ae5000_v2_06i.s hdae5000-images
 	mkdir -p rebuilt_ROMs

@@ -41,12 +41,12 @@ Classifying every blob byte in the three worst ROMs:
 
 | ROM | SHOULD NOT BE A BLOB | partially understood | genuinely opaque | unknown |
 |---|---|---|---|---|
-| table data | ~~395,150~~ **188,488** (wallpapers + 87 UI bitmaps done) | 65,536 | 652,435 | **0** |
+| table data | ~~395,150~~ **137,512** (wallpapers, 87 UI bitmaps, 177 icons done) | 65,536 | 652,435 | **0** |
 | custom data | 663,552 (99.4%) | 4,096 | 0 | **0** |
 | HD-AE5000 | ~~313,076~~ **0 -- DONE 2026-08-21** | 0 | 0 | **0** |
-| **total** | **852,040** | 69,632 | 652,435 | **0** |
+| **total** | **801,064** | 69,632 | 652,435 | **0** |
 
-**852,040 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
+**801,064 bytes are blobs that should not be blobs.** That is the work queue, and it is the number
 to report instead of any percentage.
 
 **HD-AE5000 is closed.** Its 313,076 B of graphics -- four 320x240 8bpp screens, five 256-entry
@@ -69,6 +69,10 @@ written only in end-of-line comments that nothing checked against the bytes. Eve
 have an INTEGRAL row stride (length / height is always whole and never below the width; padding is
 0 or 1 byte, for 44 and 43 of them respectively). That rule is what made them convertible, and it is
 the same rule the HD-AE5000 icon broke unnoticed.
+
+Then the 177 UI icons (50,976 B), which are 4 BITS per pixel -- 24x24 in 12-byte rows, high nibble
+first. The PNGs store the nibble as the pixel value, so the palette used for display is irrelevant
+to the round trip.
 
 The good news in that table is the last column. **Nothing is UNKNOWN.** Every blob has been
 identified; none of this is blocked on understanding. It is blocked on conversion.
