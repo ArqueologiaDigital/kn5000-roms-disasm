@@ -11254,12 +11254,15 @@ DSP_Param_Block_Ptrs_B:
 	.byte 0x0d, 0xe6, 0x01, 0x00, 0x18, 0xe6, 0x01, 0x00
 	.byte 0x24, 0xe6, 0x01, 0x00, 0x30, 0xe6, 0x01, 0x00
 ; u16 = 0x004D (77). The pivot the velocity curve is scaled about: the touch computation forms
-; (VELCURVE_IN[v] - 77) before applying the per-mode gain. Read with `ldw_da xbc,0x01f418`
-; in ToneGen_Calc (0x03D17x).
+; (VELCURVE_IN[touch] - 77) before applying the per-mode gain. Read with `ldw_da xbc,0x01f418`
+; in Keybed_Decode_Event (0x03D11F). Byte-identical to boot-ROM ToneGen_VelCurve_Pivot
+; (0xFF802A).
 ToneGen_VelCurve_Pivot:
 	.byte 0x4d, 0x00
 ; u16 = 0x0080 (128). The `divs xbc,xde` denominator of the same computation, i.e. the per-mode
-; gain byte is a Q8 fixed-point multiplier.
+; gain byte is a Q7 fixed-point multiplier: the divisor is 128 = 2^7, so gain 0x60 = 96/128 =
+; 0.75x. Byte-identical to boot-ROM ToneGen_VelCurve_Divisor (0xFF802C), whose comment says
+; Q7; this file said Q8, which would imply a divisor of 256.
 ToneGen_VelCurve_Divisor:
 	.byte 0x80, 0x00
 ; u32 = 0x0000F002 -- the only pointer to ToneGen_Voice_Active_Bitmap. Loaded by
@@ -11267,16 +11270,42 @@ ToneGen_VelCurve_Divisor:
 ; (`addda32_24 xwa,128028`), by ToneGen_Clear_Voice_Loop. 128028 = 0x01F41C.
 ; ★ Because it is a pointer in writable DRAM, corrupting these 4 bytes silently redirects every
 ;   voice-status update. See FINDINGS.
+; ★ LAYOUT: this 4-byte pointer sits BETWEEN ToneGen_VelCurve_Divisor and the TOUCH-MODE
+;   PARAMETER TABLE -- the 30 unlabelled bytes that follow it, 0x01F420-0x01F43D, which are
+;   10 records of 3 bytes read by Keybed_Decode_Event as byte[0x01F420 + 3*curve] = gain,
+;   byte[+1] = output level at the pivot, byte[+2] = trim subtracted for the five black keys,
+;   with `curve` = the byte at 0x004A48 (Keybed_Touch_Mode), initialised to 6 by
+;   ToneGen_Init (0x03D016) and thereafter written only by Audio_CmdHandler_A0_BF:
+;     curve 0: gain   0/128, pivot out 208, black trim  0   <- touch OFF, every note vel 80
+;     curve 1: gain  16/128, pivot out 199, black trim  3
+;     curve 2: gain  32/128, pivot out 189, black trim  6
+;     curve 3: gain  48/128, pivot out 180, black trim  8
+;     curve 4: gain  64/128, pivot out 171, black trim 11
+;     curve 5: gain  80/128, pivot out 161, black trim 14
+;     curve 6: gain  96/128, pivot out 152, black trim 16   <- the default set by ToneGen_Init
+;     curve 7: gain 112/128, pivot out 143, black trim 19
+;     curve 8: gain 128/128, pivot out 134, black trim 22
+;     curve 9: gain 144/128, pivot out 130, black trim 24
+;   The row count of 10 is fixed by Audio_CmdHandler_A0_BF's `cp (xbc + 1), 0x9` / `jr ugt`
+;   range check, and the run self-describes: the first byte of each record steps
+;   0x00,0x10,...,0x90.  The sub-CPU BOOT ROM carries these same six objects byte-for-byte
+;   from 0xFF802A but WITHOUT this pointer -- that missing long is the only layout difference
+;   between the two copies -- and there the table IS labelled, as ToneGen_VelCurve_ModeParams
+;   (0xFF802E).
 ToneGen_Voice_Bitmap_Ptr:
 	.byte 0x02, 0xf0, 0x00, 0x00
 	.byte 0x00, 0xd0, 0x00, 0x10, 0xc7, 0x03, 0x20, 0xbd
 	.byte 0x06, 0x30, 0xb4, 0x08, 0x40, 0xab, 0x0b, 0x50
 	.byte 0xa1, 0x0e, 0x60, 0x98, 0x10, 0x70, 0x8f, 0x13
 	.byte 0x80, 0x86, 0x16, 0x90, 0x82, 0x18
-; 256 bytes (0x01F43E-0x01F53D) mapping raw MIDI velocity 0..255 to the curve domain.
-; Monotonically DECREASING: 0xFF for inputs 0..8, then 0xFB 0xF6 0xF1 ... down to 0x01 by input
-; 0xE0 and 0x00 at 0xFE/0xFF. The decreasing sense means the tone generator's velocity field is
-; an attenuation, not a level.
+; 256 bytes (0x01F43E-0x01F53D) mapping the RAW KEYBED TOUCH READING 0..255 to the curve
+; domain. It is not a MIDI velocity: the index is the high byte of the keybed data word at
+; (0x110000), and MIDI velocity is what comes OUT the far end, from 0x01F53E.
+; Monotonically DECREASING: 0xFF for inputs 0..8, then 0xFB 0xF6 0xF1 ... down to 0x01 at
+; input 0xDE and 0x00 at 0xFE/0xFF. ★ The decreasing sense is a property of the INDEX, not
+; of the output: a small raw reading gives a large strength and therefore a LOUD note, so
+; [INFERENCE] the reading behaves like a key-travel TIME. The delivered MIDI velocity, out
+; of 0x01F53E, RISES with strike strength -- it is a level, not an attenuation.
 ToneGen_Velocity_Input_Curve:
 	.byte 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfb

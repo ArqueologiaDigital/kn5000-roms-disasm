@@ -66,8 +66,10 @@
 .equ PB, 0x2C	; Port B Data (DRAM signals)
 .equ PBFC, 0x2F	; Port B Function Control
 
-; Interrupt Control
-.equ INTTC01, 0x30	; Interrupt control (Timer 0/1)
+; Port C (TMP94C241 SFR 0x30; MAME's tmp94c241 SFR table: 0x30 PC, 0x32 PCCR, 0x33 PCFC)
+.equ INTTC01, 0x30	; MISNAMED: 0x30 is PORT C, not a timer-interrupt register.  Kept
+			; because the symbol has no uses in this file (the code writes 0x30
+			; literally); see SERIAL_INIT and DELAY_ROUTINE.
 
 ; Inter-CPU Status Register (at 0x34, directly addressable)
 ; Used for handshaking between main CPU and sub CPU
@@ -98570,10 +98572,21 @@
 ;   boot 0xFF814C = payload 0x01F53E  ToneGen_Velocity_Output_Curve
 ;   boot 0xFF824C = payload 0x00F919  ToneGen_ProbeVoice_ParamBlock
 ;
-; The payload's 0x01F418 block is preceded by ToneGen_Voice_Bitmap_Ptr
-; (0x01F41C, 4 bytes); the boot ROM omits that pointer, which is the only
-; layout difference.  The names below are kept identical to the payload's so
-; the two copies grep together.
+; The payload interposes a 4-byte ToneGen_Voice_Bitmap_Ptr at 0x01F41C, BETWEEN the divisor
+; and the mode table; the boot ROM omits that pointer, which is the only layout difference.
+; (Verified: boot 0xFF802A..0xFF802D == payload 0x01F418..0x01F41B, boot 0xFF802E..0xFF824B
+; == payload 0x01F420..0x01F63D, and boot 0xFF824C..0xFF828F == payload 0x00F919, all exact.)
+; The names below are kept identical to the payload's so the two copies grep together.
+;
+; These six objects are not decoration in this ROM: they are the data half of a complete,
+; self-contained KEYBED front end that lives only here.  The code half is the chain
+;   INIT_MEMORY_TEST (0xFF8956, gated on the CN12 strap PC.0)
+;     -> SERIAL_INIT (0xFF8B07)                      one factory-test pass
+;       -> CONTROL_PANEL_BIT_SET_CLEAR (0xFF8B37)    drain FIFO into the 0x0558 bitmap
+;         -> INTER_CPU_LATCH_READ_DISPATCH (0xFF8B89)  read (0x110002)/(0x110000)
+;           -> NOTE_VELOCITY_LOOKUP_CALCULATE (0xFF8BD2) note + touch curve
+; every link of which has exactly one calling routine.  All four routine names are
+; misnomers; see the header on each.
 ; ==============================================================================
 
 	.org 0xFF8000 - 0xFE0000, 0xFF
@@ -98636,9 +98649,12 @@ ToneGen_VelCurve_Divisor:
 ;   +0  u8  gain, Q7 (divided by ToneGen_VelCurve_Divisor = 128)
 ;   +1  u8  output level at the pivot -- the curve's fixed point
 ;   +2  u8  trim subtracted for the five black keys (C#, D#, F#, G#, A#)
-; velocity = gain/128 * (Velocity_Input_Curve[t] - 77) + pivot_out
-;            - (black key ? trim : 0),  clamped to 0..255
-; Mode 0 has gain 0, i.e. touch OFF: every note comes out at level 208.  As the
+; intermediate = gain/128 * (Velocity_Input_Curve[t] - 77) + pivot_out
+;               - (black key ? trim : 0),  clamped to 0..255
+; velocity     = Velocity_Output_Curve[intermediate]   (0xFF814C) -- the delivered MIDI
+; velocity is the OUTPUT of that second table, not the intermediate.
+; Mode 0 has gain 0, i.e. touch OFF: the intermediate is always 208, which the output curve
+; maps to MIDI velocity 80 (Velocity_Output_Curve[208] = 0x50) for every key.  As the
 ; gain rises the pivot output falls and the black-key trim grows with it
 ; (trim ~ 0.17 * gain), so the modes fan out about a common point.
 ; The boot ROM hard-codes mode 6 (`lda_24 xde,(0xff8040)`); the v1.42 payload
@@ -98824,7 +98840,8 @@ BOOT_INIT:
 	ldio 0x2C, 0xFF	; Port B data
 	ldio 0x2F, 0x1F	; Port B function
 
-	; Initialize interrupt control
+	; Initialize ports C, D, E and F (SFRs 0x30-0x3F: data, CR and FC registers;
+	; 0x30/0x33/0x32 = PC/PCFC/PCCR, so PC.0 is an input and PC.1 an output)
 	ldio 0x30, 0x03
 	ldio 0x33, 0x00
 	ldio 0x32, 0x02
@@ -99919,11 +99936,15 @@ INIT_MEMORY_TEST__no_error:
 	extz wa
 	calr DELAY_ROUTINE	; 0xFF89A9 (3-byte relative call)
 
-	; Clear serial buffer area
+	; Write 0x0003 to the keybed status port, then clear the 8-byte key-down bitmap at 0x0558.
+	; Not a serial buffer.  The write below is the ONLY write to the keybed port in
+	; either ROM -- the v1.42 payload only ever reads 0x110000/0x110002 -- so the meaning
+	; of 0x0003 is not recoverable from software.  INFERENCE: an enable/reset of the
+	; scanner and its event FIFO, issued once before the endless test loop below.
 	stiw_da (0x110002), 0x0003; 7-byte encoding: f2 02 00 11 02 03 00
 	lda_d16 xbc, (1368)
 	ld xwa, xbc
-	inc 8, xbc	; Increment XBC by 1
+	inc 8, xbc	; XBC = 0x0560, the loop bound: INC #3,r encodes 8 as 0, so this is +8 not +1
 INIT_MEMORY_TEST__clear_loop:
 	stib_dsp 0xE0, 0x00
 	cp xwa, xbc
@@ -99935,7 +99956,15 @@ INIT_MEMORY_TEST__serial_loop:
 
 ; ==============================================================================
 ; DELAY_ROUTINE (0xFF89A9) - Variable delay based on bit pattern in A
-; Uses nested loops with timer register 0x30
+; NOTE: 0x30 is PORT C, not a timer.  This is the CN12 status-code BLINKER: for each of the
+; four low bits of A (l runs 0..3) it drives PC.1 low -- CN12 LED ON -- for a long (0xC000)
+; or short (0x4000) count depending on the bit, then PC.1 high for a fixed 0x4000 count.
+; A is the self-test status byte at 0x0556: bits 0 and 1 are the low- and high-half-word
+; mismatch flags of the 32-bit DRAM test (MemTest_RegionTable +8/+9), bit 2 is a ROM
+; checksum mismatch (ROM_CHECKSUM), and bit 3 is set when HARDWARE_CALIBRATION_SEQUENCE
+; returns 0xFFFF, i.e. the tone-generator status port never read non-zero while it polled.
+; Four flashes, long = fault.  Called once by INIT_MEMORY_TEST, just before the keybed test
+; loop starts.
 ; ==============================================================================
 
 	.org 0xFF89A9 - 0xFE0000, 0xFF
@@ -100131,8 +100160,30 @@ ROM_CHECKSUM__match:
 	ret
 
 ; ==============================================================================
-; SERIAL_INIT (0xFF8B07) - Initialize serial communication
-; Checks status bytes and sets interrupt flag accordingly
+; SERIAL_INIT (0xFF8B07) -- one pass of the FACTORY KEYBED TEST
+;
+; MISNOMER: no serial hardware is touched.  SFR 0x30 is PORT C, not a serial or timer
+; register (see v142/subcpu/shared/sfr_tmp94c241.s: PC = 0x30, PCCR = 0x32, PCFC = 0x33,
+; and BOOT_INIT programs PC = 0x03, PCCR = 0x02, PCFC = 0x00, i.e. PC.0 input and PC.1
+; output).
+;
+; Body:
+;   1. call CONTROL_PANEL_BIT_SET_CLEAR  -- drain the keybed FIFO into the bitmap at 0x0558
+;   2. OR the 8 bitmap bytes 0x0558..0x055F together
+;   3. any bit set (some key is held) -> res_dd8 1, 0x30   (PC.1 low)
+;      no bit set                     -> set_dd8 1, 0x30   (PC.1 high)
+;
+; PC.1 is the CN12 "Sub CPU Checking Device" LED, active LOW: MAME's kn5000.cpp wires
+; m_subcpu->portc_write() to m_checking_device_led_cn12 = (BIT(data,1) == 0).  So the LED
+; lights for exactly as long as any key on the keybed is held down.  That is a keybed
+; continuity test, and it is the only thing the boot ROM ever does with a key event.
+;
+; INIT_MEMORY_TEST calls this in an endless loop, and INIT_MEMORY_TEST returns immediately
+; unless PC.0 is LOW -- PC.0 is the CN12 strap itself (m_subcpu->portc_read().set_ioport
+; ("CN12"); the DIP reads 0x00 for "On", and MAME's default is 0x01).  With the checking
+; device absent the whole chain SERIAL_INIT -> CONTROL_PANEL_BIT_SET_CLEAR ->
+; INTER_CPU_LATCH_READ_DISPATCH -> NOTE_VELOCITY_LOOKUP_CALCULATE is unreachable; nothing
+; else in this ROM calls any of them.
 ; ==============================================================================
 
 	.org 0xFF8B07 - 0xFE0000, 0xFF
@@ -100140,7 +100191,7 @@ ROM_CHECKSUM__match:
 SERIAL_INIT:
 	pushw_erp 0xFA
 	ldib_erp 0xFB, 0	; Error accumulator
-	calr CONTROL_PANEL_BIT_SET_CLEAR	; Initialize serial subsystem
+	calr CONTROL_PANEL_BIT_SET_CLEAR	; Drain the keybed FIFO into the 0x0558 bitmap
 	lda_d16 xwa, (1368)
 	ld xbc, xwa
 	lda xde, (xwa + 8)
@@ -100152,28 +100203,42 @@ SERIAL_INIT__check_loop:
 	jr c, SERIAL_INIT__check_loop
 	cpib_erp 0xFB, 0
 	jr z, SERIAL_INIT__no_error
-	res_dd8 1, 0x30	; Disable timer interrupt on error
+	res_dd8 1, 0x30	; A key is held: PC.1 low = CN12 LED ON
 	jr SERIAL_INIT__done
 SERIAL_INIT__no_error:
-	set_dd8 1, 0x30	; Enable timer interrupt
+	set_dd8 1, 0x30	; No key held: PC.1 high = CN12 LED OFF
 SERIAL_INIT__done:
 	popw_erp 0xFA
 	ret
 
 ; ==============================================================================
-; CONTROL_PANEL_BIT_SET_CLEAR (0xFF8B37) - LED/Output bit manipulation routine
+; CONTROL_PANEL_BIT_SET_CLEAR (0xFF8B37) -- drain the keybed FIFO into the KEY-DOWN BITMAP
 ;
-; This routine sets or clears bits in an output buffer based on input parameters.
-; Parameters are passed on stack:
-;   (SP+0): Button/LED index (0x24-based offset)
-;   (SP+1): Action (0 = clear bit, non-zero = set bit)
+; MISNOMER: no control panel and no LED buffer.  This is the boot ROM's keybed drain loop.
+; The control panel is the main CPU's business and is reached over the CP serial link; this
+; routine's only hardware contact is INTER_CPU_LATCH_READ_DISPATCH, i.e. the keybed ports.
 ;
-; The routine calculates:
-;   - Byte offset = (index - 0x24) >> 3 (which byte in buffer)
-;   - Bit position = (index - 0x24) & 7 (which bit in byte)
-;   - Buffer base = 0x0558
+; No parameters: it allocates its own 2-byte event buffer on the stack, then
+;   1. calls INTER_CPU_LATCH_READ_DISPATCH to fetch one decoded event;
+;   2. while it returns 0 (not 0xFFFF):
+;        key   = buffer[0] - 0x24                      ; back to a 0-based key index
+;        byte  = (key >> 3) & 7,  bit = key & 7        ; 8 bytes; the mask makes any
+;                                                      ; index >= 64 alias, not fail
+;        buffer[1] != 0  ->  bitmap[byte] |=  (1 << bit)     ; key down
+;        buffer[1] == 0  ->  bitmap[byte] &= ~(1 << bit)     ; key up
+;      and fetches the next event, until the FIFO reports empty.
 ;
-; Uses INTER_CPU_LATCH_READ_DISPATCH to send/receive data to hardware.
+; The bitmap is 8 bytes at 0x0558 (`lda_d16 xix, (1368)` here; INIT_MEMORY_TEST zeroes
+; exactly those 8 bytes and SERIAL_INIT ORs exactly those 8 bytes together).  It is the boot
+; ROM's direct-address equivalent of the payload's voice bitmap, which the payload reaches
+; through the pointer ToneGen_Voice_Bitmap_Ptr (0x01F41C -> 0x00F002) and updates with the
+; same (index >> 3) & 7 / index & 7 split in ToneGen_Poll_Read (0x03D230).
+;
+; Boot-ROM RAM map for this subsystem:
+;   0x0556        self-test status byte (bits 0/1 DRAM half-word errors, bit 2 ROM
+;                 checksum, bit 3 tone-generator probe)
+;   0x0558-0x055F key-down bitmap, 64 bits
+;   0x0560        touch mode, written 6 by NOTE_VELOCITY_LOOKUP_CALCULATE, never read
 ; ==============================================================================
 
 	.org 0xFF8B37 - 0xFE0000, 0xFF
@@ -100181,7 +100246,7 @@ SERIAL_INIT__done:
 CONTROL_PANEL_BIT_SET_CLEAR:
 	dec 2, xsp	; Reserve 2 bytes on stack for local vars
 	lda xwa, (xsp)	; XWA = pointer to stack frame
-	calr INTER_CPU_LATCH_READ_DISPATCH	; Call to get/send data
+	calr INTER_CPU_LATCH_READ_DISPATCH	; Fetch the first decoded key event
 	cp hl, 0xFFFF	; Check return value
 	jr z, CONTROL_PANEL_BIT_SET_CLEAR__done	; If -1 (error), skip to done
 
@@ -100213,7 +100278,7 @@ CONTROL_PANEL_BIT_SET_CLEAR__clear_bit:
 	and (xde), l	; Clear bit: buffer[offset] &= ~mask
 CONTROL_PANEL_BIT_SET_CLEAR__next:
 	ld xwa, xbc	; XWA = parameter pointer
-	calr INTER_CPU_LATCH_READ_DISPATCH	; Call to send/get next item
+	calr INTER_CPU_LATCH_READ_DISPATCH	; Fetch the next decoded key event
 	cp hl, 0xFFFF	; Check return value
 	jr nz, CONTROL_PANEL_BIT_SET_CLEAR__loop	; If not -1, continue loop
 
@@ -100222,13 +100287,60 @@ CONTROL_PANEL_BIT_SET_CLEAR__done:
 	ret
 
 ; ==============================================================================
-; INTER_CPU_LATCH_READ_DISPATCH (0xFF8B89) - Inter-CPU communication handler
+; INTER_CPU_LATCH_READ_DISPATCH (0xFF8B89)
+; MISNOMER: nothing inter-CPU happens here.  This is the boot ROM's KEYBED FIFO READER --
+; it pops one key event from the keybed scanner and hands it to the touch curve.
 ;
-; Reads data from inter-CPU communication latches at 0x110000-0x110002.
-; Checks status bits and dispatches to NOTE_VELOCITY_LOOKUP_CALCULATE for processing.
+; The inter-CPU latches are at 0x120000 (IC22/IC23; see INTER_CPU_LATCH at the top of this
+; file and INIT_DMA_SERIAL, which points both DMA channels at 0x120000).  0x110000 and
+; 0x110002 are the keybed DATA and STATUS ports -- the two addresses MAME's kn5000 sub-CPU
+; map documents as the tone-generator keybed data and status registers (kbd_data_r /
+; kbd_status_r).  The tone generator itself is at 0x100000/0x100002 with its status at
+; 0x100004 (AUDIO_HW_WRITE_READ) and is never touched here.
 ;
-; Input: XWA = pointer to parameter buffer
-; Output: HL = 0 on success, 0xFFFF on error/no data
+; Evidence that this is the keybed: the routine has the same shape, instruction for
+; instruction, as Keybed_Read_Event (0x03D0C5) in the v1.42 payload -- same two ports, same
+; status bit 0 and bit 1 tests, same 0xFF touch test, same bit-7 test, two call sites into
+; the decoder, same 0 / 0xFFFF return convention, same redundant "force velocity 0" store on
+; the release arm.  The code BYTES are not identical: the register allocation differs, the
+; payload brackets its reads with P6.7 (see below), and the pointers and branch
+; displacements differ.
+;
+; In:  XWA = pointer to a 2-byte event buffer.
+; Out: HL = 0 when the buffer was filled, 0xFFFF otherwise.
+;      buffer[0] = MIDI note number, buffer[1] = velocity (0 means key up).
+;
+; PORT CONTRACT, exactly as this code exercises it:
+;   (0x110002) STATUS word -- read first, every time.
+;      bit 0 = an event is waiting.  Clear -> return 0xFFFF without touching the data port.
+;      bit 1 = release / second-contact qualifier: when SET the event is routed down the same
+;              arm as a 0xFF touch byte.  Bits 2..15 are never tested by either ROM.
+;   (0x110000) DATA word -- read HERE only when status bit 0 was set.
+;      low  byte: bits 0..6 = key index; bit 7 = key STATE.
+;                 Polarity: bit 7 SET = key DOWN, bit 7 CLEAR = key UP.  Corroborated
+;                 independently by ToneGen_Poll_Read (0x03D230) in the payload, which sets
+;                 the key's bitmap bit when bit 7 is 1 and clears it when bit 7 is 0.
+;      high byte: raw touch reading; 0xFF means "no touch value for this event".
+;      INFERENCE: the read is what advances the scanner -- nothing in either ROM writes
+;      anything back to clear bit 0, but no code here can observe a FIFO advance either.
+;      Note that bit 0 does not gate every consumer: the payload's ToneGen_Poll_Read reads
+;      the DATA word without testing it at all, 16 times during its init.
+;
+; Routing (identical in both ROMs):
+;   touch != 0xFF and status bit 1 clear -> decode and keep the velocity.
+;   otherwise -> key bit 7 CLEAR (key up)   -> decode, then force velocity 0;
+;                key bit 7 SET   (key down) -> DISCARD the event, return 0xFFFF.
+;   That second 0xFFFF is NOT "nothing was queued": the DATA word has already been popped
+;   and is thrown away, and the caller's drain loop ends for this pass all the same.
+;
+; One real difference from the payload, worth recording: Keybed_Read_Event brackets its two
+; reads with `set_dd8 7, 0x18` / `res_dd8 7, 0x18` (P6.7), documented there as driving A23
+; to the tone generator's NAD / EXADL0 pins.  THIS routine never touches P6: the boot ROM
+; writes neither P6, P6CR nor P6FC anywhere (the only 0x18 in this file is the unrelated
+; `ldio 0x47, 0x18` in BOOT_INIT).  INFERENCE: address bit 1 alone distinguishes STATUS from
+; DATA, and the payload's P6.7 toggle is an extra select the boot path does not need.  This
+; is a data point for the open question recorded in symbols/proposals/subcpu-region-01.txt
+; ("One of the two is wrong").
 ; ==============================================================================
 
 	.org 0xFF8B89 - 0xFE0000, 0xFF
@@ -100240,7 +100352,7 @@ INTER_CPU_LATCH_READ_DISPATCH:
 	bit 0, hl	; Check bit 0 (data available?)
 	jr z, INTER_CPU_LATCH_READ_DISPATCH__error	; If not set, return error
 
-	ldw_da xwa, (0x110000); Read data word from latch
+	ldw_da xwa, (0x110000); Read the keybed DATA word
 	ld b, a	; B = low byte
 	and b, 0xFF	; Mask to byte
 	srl wa, 8	; WA >>= 8 (get high byte in A)
@@ -100276,16 +100388,58 @@ INTER_CPU_LATCH_READ_DISPATCH__done:
 	ret
 
 ; ==============================================================================
-; NOTE_VELOCITY_LOOKUP_CALCULATE (0xFF8BD2) - Note/velocity calculation routine
+; NOTE_VELOCITY_LOOKUP_CALCULATE (0xFF8BD2) -- the KN5000 TOUCH CURVE
 ;
-; Calculates velocity values based on note index and lookup tables.
-; Uses ToneGen_Velocity_Input_Curve (0xFF804C), ToneGen_VelCurve_ModeParams_Mode6
-; (0xFF8040), ToneGen_VelCurve_Pivot (0xFF802A), ToneGen_VelCurve_Divisor (0xFF802C)
-; and ToneGen_Velocity_Output_Curve (0xFF814C).
+; Turns one raw keybed event into a MIDI note number and a MIDI velocity.  The same
+; computation, over byte-identical tables, as Keybed_Decode_Event (0x03D11F) in the v1.42
+; payload; the code bytes differ (prologue, mode pointer, branch displacements) and this
+; copy hard-codes touch mode 6 where the payload indexes the mode table with the byte at
+; 0x004A48.
 ;
-; Input: XWA = pointer to output buffer
-;        C = note index (low byte from latch)
-;        E = velocity index (high byte from latch)
+; In:  XWA = 2-byte output buffer, C = raw key byte, E = raw touch byte.
+; Out: (XWA+0) = MIDI note, (XWA+1) = MIDI velocity.
+;
+; NOTE NUMBER
+;   note = (C & 0x7F) + 0x24.  Key index 0 is MIDI note 36 (C2).
+;   INFERENCE: the KN5000's keyboard is 61 keys, so indices 0..60 span MIDI 36..96 (C2-C7).
+;   The key count is external knowledge; neither ROM states it.  What the code shows is only
+;   that the key-down bitmap here and the voice bitmap in the payload are both 8 bytes and
+;   that both mask the index ((key >> 3) & 7, key & 7), so an index >= 64 would ALIAS onto
+;   the same 64 bits rather than be rejected.
+;   If bit 7 of C is CLEAR (key UP) the routine stores velocity 0 and returns immediately.
+;
+; VELOCITY
+;   strength     = ToneGen_Velocity_Input_Curve[raw touch]          ; 0xFF804C, 256 x u8
+;   intermediate = gain/128 * (strength - 77) + pivot_out           ; the 3-byte mode record
+;                  - (note % 12 in {1,3,6,8,10} ? black_trim : 0)   ; C#,D#,F#,G#,A#
+;                  clamped to 0..255
+;   velocity     = ToneGen_Velocity_Output_Curve[intermediate]      ; 0xFF814C
+;   gain / pivot_out / black_trim are bytes +0/+1/+2 of the selected row of
+;   ToneGen_VelCurve_ModeParams; this ROM always uses row 6 (0xFF8040): 96, 152, 16.
+;   The 77 and the 128 are ToneGen_VelCurve_Pivot / ToneGen_VelCurve_Divisor.
+;   The product is formed by MULS and then narrowed to 16 bits by EXTS before DIVS, so
+;   gain*(strength-77) is assumed to fit in int16; with the tables as dumped the extreme
+;   case is 144*178 = 25632, which does.
+;
+; SHAPE OF THE TWO TABLES (read straight off the .byte listings above):
+;   * Input curve: 255 for raw 0..8, monotonically decreasing after that, reaching 1 at raw
+;     222 and 0 at raw 254/255.  A SMALL raw number is a LOUD strike.
+;   * Output curve: 1 at index 0, a flat 2 for indices 1..95, a ramp 3..16 for 96..143, and
+;     exactly (index - 128) from 144 to 255.  The soft half of the intermediate range is
+;     crushed into velocities 1..16; the loud half is a clean 2:1 divide.
+;   * Mode 0 has gain 0, so the intermediate is always 208 and the delivered velocity is
+;     always ToneGen_Velocity_Output_Curve[208] = 80.  That is "touch off".
+;   * Where the intermediate stays >= 144 (the linear part of the output curve) the
+;     black-key trim appears as a flat -(trim) on the delivered velocity: -16 in mode 6.
+;   UNCERTAIN: the rounding rule of `divs` (truncate toward zero vs floor) is not
+;   established here and can move borderline results by one velocity.  Mode 0, having gain
+;   0, is unaffected either way.
+;
+; In THIS ROM the computed velocity is then thrown away: the caller
+; (CONTROL_PANEL_BIT_SET_CLEAR) only tests it against zero, and the output curve's minimum
+; is 1, so a key-down can never read as 0.  The full curve is evaluated purely to reuse the
+; same code as the payload.  The `stdi8 (1376), 6` on entry (1376 = 0x0560) mirrors the
+; payload's touch mode byte at 0x004A48 but is never read back here.
 ; ==============================================================================
 
 	.org 0xFF8BD2 - 0xFE0000, 0xFF

@@ -53937,8 +53937,18 @@ ToneGen_Init:	; 03D016h
 ; ToneGen_Process_Notes - Process incoming note events from tone generator
 ; Entry: Called from main tone gen handler
 ; Exit:  Note events dispatched to appropriate voice slots
-; Notes: Reads notes via Keybed_Read_Event, manages voice allocation
-;        at 0x4A4C-0x4A5C (16 voice slots), sends to DMA at 0x4A42
+; Notes: Reads events via Keybed_Read_Event; there is no voice allocation here.
+;        0x004A4C is a PER-MIDI-NOTE held-key map indexed by the decoded note, not 16 slots:
+;        the code computes 0x004A4C + note and note = (key & 0x7F) + 0x24, so the map starts
+;        at 0x004A70.  [INFERENCE] with a 61-key bed (MIDI 36..96) it occupies
+;        0x004A70..0x004AAC.  Its only job is to suppress a note-off with no matching
+;        note-on.  0x004A42..0x004A44 is the 3-byte MIDI staging area.
+;        ★ Where a key event goes from here: NOT into the tone generator.  This routine
+;        writes no TG register at all -- it formats 0x90 / note / velocity and, only when
+;        (0x004A4A) == 1, hands those 3 bytes to InterCPU_DMA_Send for the MAIN CPU.
+;        [INFERENCE] the voice registers that actually sound the note are written by other
+;        paths (the staging block at 0x0451CC, bursted by ToneGen_WriteVoiceParams); which
+;        of them this MIDI message ends up driving has not been traced.
 ; ----------------------------------------------------------------------------
 ; Already named (reference: TONEGEN_PROCESS_NOTES).  ★ THIS IS THE KEYBED SERVICE that
 ; Audio_Main_Loop calls unconditionally every pass (the brief's "keybed (0x03D01E)").
@@ -54028,14 +54038,44 @@ ToneGen_Note_Done:	; 03D0C2h
 ; Notes: 0x110000 / 0x110002 are the keybed data and status ports (kbd_data_r /
 ;        kbd_status_r in MAME's kn5000.cpp), NOT tone-generator voice state --
 ;        the routine was called ToneGen_Read_Voice_Data, which is wrong.
-;        P6.7 selects between the two halves of the A23 multiplex.
+;        P6.7 is toggled around the two accesses; see the A23 note below.
+;
+; ★ PORT CONTRACT, as the two ROMs exercise it -- the only description of this interface
+; that exists, so an implementation has to satisfy it:
+;   (0x110002) STATUS, read first on every call
+;     bit 0  an event is queued.  Clear -> HL = 0xFFFF and the drain loop stops for this
+;            pass, with the data port left untouched.
+;     bit 1  release / second-contact qualifier: when SET the event takes the same arm as a
+;            0xFF touch byte.  Bits 2..15 are never tested.
+;   (0x110000) DATA, read here only when status bit 0 was set.
+;     low  byte  bits 0..6 = key index; bit 7 = key state, SET = DOWN, CLEAR = UP.  Both
+;                ROMs mask the index ((idx >> 3) & 7, idx & 7) when addressing their 8-byte
+;                bitmaps, so an index >= 64 aliases rather than being rejected -- the
+;                bitmaps bound nothing at the port itself.
+;     high byte  raw touch reading; 0xFF = "no touch value for this event".
+; ⚠ Two things an implementer must not read into the above:
+;   * [INFERENCE] that the DATA read is what advances the scanner.  Nothing in either ROM
+;     writes anything back to clear bit 0, but no code observes a FIFO advance either.
+;   * bit 0 does not gate every consumer: ToneGen_Poll_Read (0x03D230) reads 0x110002 and
+;     then 0x110000 without testing bit 0 at all, 16 times during init.
+; A second HL = 0xFFFF path exists at Keybed_Read_Event_NoteOff: a DATA word that has
+; already been popped is DISCARDED when bit 7 is set, and the drain loop still stops.
+; The boot ROM (subcpu/boot/kn5000_subcpu_boot.s, INTER_CPU_LATCH_READ_DISPATCH at
+; 0xFF8B89) drives the same two ports with the same decode and WITHOUT any P6 access at
+; all -- it never writes P6, P6CR or P6FC.  [INFERENCE] address bit 1 alone separates
+; STATUS from DATA and the P6.7 toggle here is an extra select.  That bears directly on the
+; open item in symbols/proposals/subcpu-region-01.txt.
 ; ----------------------------------------------------------------------------
 ; Reads ONE key event from the keybed port and decodes it.  ★ The A23 multiplex is the interesting hardware detail:
 ;   set bit 7 of SFR 0x18  -> A23 high -> read (0x110002) = STATUS word
 ;   res bit 7 of SFR 0x18  -> A23 low  -> read (0x110000) = DATA word
 ; (each toggle followed by a NOP for setup time).  Status bit 0 = data ready, bit 1 = note-on
-; qualifier.  Data low byte = note (bit 7 = release flag), high byte = velocity; velocity 0xFF
-; also means note-off.
+; qualifier.  Data low byte = key index in bits 0..6; bit 7 is the key STATE and its sense is
+; ★ SET = key DOWN, CLEAR = key UP -- NOT a "release flag".  Independent corroboration:
+; ToneGen_Poll_Read (0x03D230) SETS the key's bitmap bit when bit 7 is 1 and clears it when
+; bit 7 is 0, and Keybed_Decode_Event stores velocity 0 exactly on the bit-7-clear path.
+; High byte = the RAW TOUCH reading, not a velocity: it is a table index, and 0xFF means "no
+; touch value", which routes the event to the note-off arm.
 ; In:  XWA = pointer to a 2-byte result buffer.  Out: HL = 0 on an event, 0xFFFF when the FIFO
 ; is empty; the buffer holds the transposed note and the curve-mapped velocity.
 Keybed_Read_Event:	; 03D0C5h
@@ -54103,7 +54143,22 @@ Keybed_Read_Event_Done:	; 03D11Dh
 ; [UNCERTAIN], the reference name is the accurate one and BOTH are already real names, so
 ; nothing is proposed here beyond documentation.
 ; Maps a raw keybed event to a MIDI note number and a curved velocity.
-; In:  C = raw key byte (bit 7 = release), E = raw velocity, XWA = 2-byte output buffer.
+; In:  C = raw key byte (bit 7 SET = key DOWN, CLEAR = key UP), E = raw TOUCH reading (an
+;      index into 0x01F43E, not a velocity), XWA = 2-byte output buffer.
+; The same computation, over byte-identical tables, as NOTE_VELOCITY_LOOKUP_CALCULATE
+; (0xFF8BD2) in the sub-CPU boot ROM, which hard-codes curve 6 where this copy reads
+; 0x004A48; the code bytes are not identical (prologue, table pointer, displacements).
+; Shape of the two tables, read straight off the .byte listings in subcpu_data_tables.s:
+;   * 0x01F43E is 255 for raw 0..8, monotonically decreasing after that, reaching 1 at raw
+;     222 and 0 at raw 254/255.  A small raw number is a LOUD strike.
+;   * 0x01F53E is 1 at 0, a flat 2 across 1..95, a ramp 3..16 across 96..143, and exactly
+;     (index - 128) from 144 up.  The soft half of the range collapses into velocities 1..16.
+;   * curve 0 (gain 0) always yields intermediate 208, i.e. MIDI velocity 80 -- touch OFF.
+;   * where the intermediate stays >= 144 (the linear part of the output curve) the
+;     black-key trim appears as a flat -(trim) on the delivered velocity: -16 for curve 6.
+;   ⚠ UNCERTAIN: the rounding rule of `divs` (truncate toward zero vs floor) is not
+;     established here and can move borderline results by one velocity; curve 0, having
+;     gain 0, is unaffected either way.
 ; Note number: (C & 0x7F) + 0x24, i.e. the keybed's key 0 is MIDI note 36 (C2).
 ; Velocity: raw -> table 0x01F43E[E]; subtract the word at 0x01F418; multiply by
 ;   byte[0x01F420 + 3*curve]; divide by the word at 0x01F41A; add byte[0x01F421 + 3*curve];
