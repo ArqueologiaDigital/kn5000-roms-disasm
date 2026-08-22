@@ -190,7 +190,7 @@ slot3=0x66 slot4=0x64 -- the order the older note asserted, now with its ROM art
     python3 analysis/disk-format-probes/lsw_leftover_records.py --lsw-dir /tmp/disk
     python3 analysis/disk-format-probes/lsw_leftover_records.py --quiet
 """
-import argparse, glob, os, struct, sys
+import argparse, glob, os, re, struct, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.normpath(os.path.join(HERE, '..', '..'))
@@ -620,11 +620,49 @@ def corpus_gate(paths, v):
     return not (bad[0x61] or bad[0x63]) and tot[0x61] and tot[0x63]
 
 
+def queue_post_census(root, v):
+    """Every AssswbWr / AddswbWr / SwbtWr_QueuePostEvent call site in a source tree, with the
+    literal tag in WA when there is one within ten lines.  Backs the "nothing names 0x9A"
+    half of T7 -- and, just as important, its own limit: a site that loads the tag from a
+    register is invisible to this scan, so it can never prove absence on its own."""
+    calls = re.compile(r'\b(call|calr|jp|jr|jrl)\s+(AssswbWr|AddswbWr|SwbtWr_QueuePostEvent)\b')
+    imm = re.compile(r'^\s*(ldw|ld|lds)\s+wa\s*,\s*(0x[0-9a-fA-F]+|\d+)\s*$')
+    tot = lit = 0
+    tags = set()
+    for path in sorted(glob.glob(os.path.join(root, '**', '*.s'), recursive=True)):
+        lines = open(path, 'rb').read().decode('latin1').splitlines()
+        for i, line in enumerate(lines):
+            if not calls.search(line):
+                continue
+            tot += 1
+            t = None
+            for j in range(max(0, i - 10), i):
+                m = imm.match(lines[j].replace('\t', ' '))
+                if m:
+                    val = int(m.group(2), 0)
+                    if val <= 0xFF:
+                        t = val
+            if t is not None:
+                lit += 1
+                tags.add(t)
+    print('  %d queue-post call sites under %s; %d name a literal tag in WA (%s); '
+          '%d pass it in a register'
+          % (tot, root, lit, ' '.join('%02X' % t for t in sorted(tags)), tot - lit))
+    if 0x9A in tags:
+        print('  FAIL: a site now posts tag 0x9A with a literal')
+        return False
+    print('  0x9A is not among them -- but the %d dynamic sites are outside this scan\'s '
+          'reach, so this does NOT prove nothing posts it.' % (tot - lit))
+    return True
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--quiet', action='store_true')
     ap.add_argument('--lsw-dir', default='/tmp/disk',
                     help='directory searched recursively for *.LSW (T5); skipped if empty')
+    ap.add_argument('--posts', default=os.path.join(REPO, 'v9', 'maincpu'),
+                    help='source tree for the queue-post literal-tag census (T7 backing)')
     args = ap.parse_args()
     v = not args.quiet
     ok = True
@@ -640,7 +678,10 @@ def main():
         ok &= corpus_gate(paths, v)
     else:
         print('######## T5 skipped: no *.LSW under %s ########' % args.lsw_dir)
-    print()
+    if os.path.isdir(args.posts):
+        print('######## T7 backing: queue-post literal-tag census ########')
+        ok &= queue_post_census(args.posts, v)
+        print()
     print('PASS: slot->tag, tag->namespace/slot, the per-slot algorithm ranges, the names, '
           'the slot on/off descriptors and the tag-0x9A split all hold.' if ok else 'FAIL')
     return 0 if ok else 1
