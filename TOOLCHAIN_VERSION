@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 6c3c6d755ba2
-Date: 2026-08-21
-Subject: [TLCS900] Accept `scc` for the encodable SCC forms
+Commit: f7a3cb91e999
+Date: 2026-08-22
+Subject: [TLCS900] Add register-indexed LOAD forms (ldb/ldw/ldl_dri)
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 6c3c6d755ba2  [TLCS900] Accept `scc` for the encodable SCC forms
 #   Commit: 970c4a75312e  [TLCS900] Accept the real mnemonics for memory-operand forms
 #   Commit: 2a221caa88dd (2a221caa88ddc872bf366c7dd416439d7d6c2ef1)
 #   Date: 2026-07-27 19:54:52 +0100
@@ -56,5 +57,18 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # unidasm prints `lda XHL,XDE+0x0a` where llvm-mc wants the displacement
 # parenthesised, and `sla 0x07,A` where llvm-mc takes the register first --
 # which is what this tree's own sources already write (`sla xhl, 8`).
+#
+# Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
+
+# UPDATE 3 (2026-08-22): f7a3cb91e999 ADDS three instructions rather than
+# renaming any -- ldb_dri / ldw_dri / ldl_dri, the register-indexed LOAD forms.
+# The store direction existed at 0xF3 and the load direction had no mnemonic at
+# all, so `ld A,(XIX+HL)` could not be written in any spelling. This is a real
+# gap, unlike three earlier reports in this session that each turned out to be a
+# spelling I did not know; here there is no route to the encoding.
+#
+# Encodings were read off the v7 ROM (c3 07 f0 ec 21, d3 07 f0 ec 20,
+# e3 07 ec f4 25). All three take base opcode 0xC3 and let OpSize choose the
+# prefix; writing 0xD3/0xE3 literally yields 0xE3/0x03.
 #
 # Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
