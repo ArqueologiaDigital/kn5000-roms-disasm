@@ -385,15 +385,11 @@ IntMed_HandleError:
 	call	16355504
 	jrl	759
 IntMed_HandleStop:
-	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0x7a	; cpdi8 (0x8d36), 122 (v7 patched)
-
-	.byte 0x76, 0xef, 0x02	; jrl z, IntMed_Exit (v7 displacement)
-
-	.byte 0x1d, 0x46, 0x0b, 0xf2	; call CDlike_ExitModeAndRestore (v7 addr)
-
-	.byte 0xf1, 0x62, 0x84, 0x00, 0x00	; stdi8 (0x84fe), 0 (v7 patched)
-
-	.byte 0x78, 0xe3, 0x02	; jrl IntMed_Exit (v7 displacement)
+	cpdi8 (0x8c9a), 0x7a
+	jrl z, IntMed_Exit
+	call CDlike_ExitModeAndRestore
+	stdi8 (0x8462), 0x00
+	jrl t, IntMed_Exit
 
 
 
@@ -2197,11 +2193,9 @@ PdName_RefreshPage:
 	jrl PdName_ReturnZero
 
 PdName_SetIndexPlaying:
-	.byte 0xc1, 0x62, 0x84, 0x3f, 0x00	; cpdi8 (0x84fe), 0 (v7 patched)
-
-	.byte 0x76, 0xba, 0xfe	; jrl z, PdName_ReturnZero (v7 displacement)
-
-	.byte 0xf1, 0xa6, 0x83, 0x52	; stda16 (0x8442), xde (v7 patched)
+	cpdi8 (0x8462), 0x00
+	jrl z, PdName_ReturnZero
+	stda16 (0x83a6), de
 
 	ld wa, de
 
@@ -2843,11 +2837,9 @@ DocName_RefreshPage:
 	jrl DocName_ReturnZero
 
 DocName_SetIndexPlaying:
-	.byte 0xc1, 0x62, 0x84, 0x3f, 0x00	; cpdi8 (0x84fe), 0 (v7 patched)
-
-	.byte 0x76, 0xba, 0xfe	; jrl z, DocName_ReturnZero (v7 displacement)
-
-	.byte 0xf1, 0x06, 0x84, 0x52	; stda16 (0x84a2), xde (v7 patched)
+	cpdi8 (0x8462), 0x00
+	jrl z, DocName_ReturnZero
+	stda16 (0x8406), de
 
 	ld wa, de
 

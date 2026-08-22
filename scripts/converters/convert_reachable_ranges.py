@@ -105,8 +105,36 @@ def source_index(syms):
         # exactly that (a label carried across intervening instructions, and a
         # label reused for every .byte run after a blank line). Rather than
         # trust that those were the last two, refuse any block that disagrees.
-        keep = []
+        # FIX A -- give UNLABELLED `.byte` runs an address from a cursor.
+        #
+        # blocks_of() can only address a run that has a label the ELF knows
+        # sitting immediately above it. 5,597 runs / 87,170 bytes have none, and
+        # dropping them made three refusal buckets permanent: a range would
+        # decode and re-assemble byte-exactly, then be refused because the bytes
+        # it needed lived in the very next run, unlabelled -- 23 ranges "extend
+        # past its blocks", 3 "non-.byte line", 1 "do not tile", 1,187 bytes in
+        # all, unmoved across ten closure rounds.
+        #
+        # A run that follows a placed block with nothing but BLANK or COMMENT
+        # lines between them starts exactly where the previous one ended. That
+        # is an inference, so it is not trusted: the ROM check below applies to
+        # these exactly as to labelled blocks, and a wrong cursor cannot survive
+        # it. Anything else (an instruction, an .incbin, an .ascii) resets the
+        # cursor to None, because then the next run's address is unknown.
+        blocks = sorted(blocks, key=lambda b: b[2])
+        cursor, prev_end = None, None
+        placed = []
         for (l, a, st, e, raw) in blocks:
+            if a is None and cursor is not None and prev_end is not None:
+                gap = lines[prev_end + 1:st]
+                if all(not x.strip() or x.lstrip().startswith((';', '#')) for x in gap):
+                    a = cursor
+            placed.append((l, a, st, e, raw))
+            cursor = (a + len(raw)) if a is not None else None
+            prev_end = e
+
+        keep = []
+        for (l, a, st, e, raw) in placed:
             if a is None:
                 continue
             if raw != ROM[a - BASE: a - BASE + len(raw)]:
@@ -269,9 +297,20 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
                 REFUSED["a label falls in the lead/tail region"] = \
                     REFUSED.get("a label falls in the lead/tail region", 0) + 1
                 return None
-        # Every line in the replaced span must be a .byte line or a label we can
-        # re-emit -- nothing else may be silently dropped.
+        # Every line in the replaced span must be a .byte line, a label we can
+        # re-emit, or a line that CONTRIBUTES NO BYTES -- nothing that carries
+        # data may be silently dropped.
+        #
+        # FIX B, and it must ship with Fix A. Fix A lets a range span several
+        # runs, and consecutive runs are separated by exactly the blank lines
+        # this check used to reject. Measured: 36 of the 37 offending lines
+        # across all refused ranges were BLANK. The 37th is an `.incbin`, which
+        # must keep failing -- it is a ROM slice whose bytes would vanish.
+        # Comments are dropped with the span; they describe bytes that are being
+        # replaced by the instructions those bytes decode to.
         for ln in lines[first[2]:last[3] + 1]:
+            if not ln.strip() or ln.lstrip().startswith((';', '#')):
+                continue
             if not re.match(r'^\s*\.byte\s', ln) and not re.match(r'^[A-Za-z_][\w]*:', ln):
                 REFUSED["replaced span holds a non-.byte, non-label line"] = \
                     REFUSED.get("replaced span holds a non-.byte, non-label line", 0) + 1

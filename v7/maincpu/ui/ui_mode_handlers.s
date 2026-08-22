@@ -711,11 +711,9 @@ EffectMode_ReinitSound_CallNotify:
 	call	16566832
 	jp	15668425
 EffectMode_ReinitWithFlag:
-	.byte 0xf1, 0xb6, 0x8c, 0xbd	; setda 5, 0x8d52 (v7 patched)
-
-	.byte 0x1e, 0x05, 0x00	; calr EffectMode_CheckModeAndReinit (v7 displacement)
-
-	.byte 0xf1, 0xb6, 0x8c, 0xb5	; resda 5, 0x8d52 (v7 patched)
+	setda 5, (0x8cb6)
+	calr EffectMode_CheckModeAndReinit
+	resda 5, (0x8cb6)
 
 	ret
 
