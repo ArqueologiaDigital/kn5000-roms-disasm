@@ -99,13 +99,45 @@ def rewrite(idx, t, span, insns, texts, addr2name):
         touched.sort(key=lambda bk: bk[2])
         first, last = touched[0], touched[-1]
         label_at = {bk[1]: bk[0] for bk in touched if bk[0]}
-        out = []
-        # leading bytes of the first block that precede the range
+        # NEVER DROP A LABEL. Any label inside the range must land exactly on a
+        # decoded instruction, or it cannot be re-emitted and its definition
+        # would vanish -- which is how Display_BytecodeBlock_F disappeared and
+        # the link failed with `undefined symbol`. A label that is not an
+        # instruction boundary also means the decode disagrees with the existing
+        # framing, which is reason enough to leave the range alone.
+        insn_addrs = {a for a, _n, _x in insns}
+        for la in label_at:
+            if la != first[1] and not (la < t or la >= t + span) and la not in insn_addrs:
+                return None
+        # Also scan the RAW LINES being replaced for any label definition, not
+        # just the ones the block index knows about. source_index() drops blocks
+        # whose label has no ELF address, but their lines still sit inside the
+        # replaced span and were being spliced away -- that is how
+        # Display_BytecodeBlock_F vanished twice. If a label in the span cannot
+        # be placed on a decoded instruction, refuse the range.
+        known = set(label_at.values())
+        for ln in lines[first[2]:last[3] + 1]:
+            lm = re.match(r'^([A-Za-z_][\w]*):', ln)
+            if lm and lm.group(1) not in known:
+                return None
+        # EXACT FIT ONLY. The lead/tail re-emission path -- keeping the bytes of
+        # a partly-covered first or last block as .byte around the instructions
+        # -- failed in six different ways: duplicated labels, deleted labels,
+        # deleted unindexed blocks, and byte losses that resynchronised a few
+        # bytes later. Each fix revealed another case. So the path is gone: a
+        # range is converted only when it covers its blocks exactly, start and
+        # end. That converts less and cannot silently misplace a byte.
         lead = t - first[1]
-        if lead > 0:
-            raw = first[4][:lead]
-            for i in range(0, len(raw), 8):
-                out.append("\t.byte " + ", ".join(f"0x{b:02x}" for b in raw[i:i + 8]))
+        last_end = last[1] + len(last[4])
+        if lead != 0 or last_end != t + span:
+            return None
+        # Every line in the replaced span must be a .byte line or a label we can
+        # re-emit -- nothing else may be silently dropped.
+        for ln in lines[first[2]:last[3] + 1]:
+            if not re.match(r'^\s*\.byte\s', ln) and not re.match(r'^[A-Za-z_][\w]*:', ln):
+                return None
+        out = []
+
         for (addr, _n, _x), text in zip(insns, texts):
             if addr in label_at and addr != first[1]:
                 out.append(f"{label_at[addr]}:")
@@ -115,16 +147,37 @@ def rewrite(idx, t, span, insns, texts, addr2name):
             # byte-match gate checks. Only exact symbol addresses substitute.
             out.append("\t" + cc.symbolise(text, addr2name))
         # trailing bytes of the last block that follow the range
-        tail_start = t + span
-        last_end = last[1] + len(last[4])
-        if last_end > tail_start:
-            raw = last[4][tail_start - last[1]:]
-            for i in range(0, len(raw), 8):
-                out.append("\t.byte " + ", ".join(f"0x{b:02x}" for b in raw[i:i + 8]))
+
         # NO head label. blocks_of() records the first `.byte` LINE as the block
         # start, so the label sits on the line above and is outside the replaced
         # span -- re-emitting it produced "symbol is already defined" for every
         # converted range and failed the build.
+        # LENGTH-PRESERVING INVARIANT. The replaced lines must emit exactly as
+        # many bytes as they did before, or every symbol after this point moves
+        # and the whole ROM shifts. A conversion that grew a region by 13 bytes
+        # put maincpu v7 at 73.60% with 553,561 wrong bytes -- the byte-match
+        # gate caught it, but only as a huge downstream diff, so the invariant is
+        # asserted here where the cause is visible.
+        # Count `before` from the ACTUAL LINES being replaced, not from the
+        # indexed blocks. source_index() drops blocks whose label has no ELF
+        # address, so their .byte lines sit inside the replaced span, are
+        # invisible to the block sum, and get deleted -- which shrinks the region
+        # and shifts every symbol after it. Summing the blocks put maincpu v7 at
+        # 73.62%; summing the lines is the only measure that sees everything the
+        # splice actually removes.
+        before = 0
+        for ln in lines[first[2]:last[3] + 1]:
+            bm0 = re.match(r'^\s*\.byte\s+(.*)$', ln)
+            if bm0:
+                body0 = re.split(r'[;#]', bm0.group(1))[0]
+                before += len([x for x in body0.split(",") if x.strip()])
+        after = span
+        for ln in out:
+            bm = re.match(r'^\s*\.byte\s+(.*)$', ln)
+            if bm:
+                after += len([x for x in bm.group(1).split(",") if x.strip()])
+        if before != after:
+            return None
         lines[first[2]:last[3] + 1] = out
         open(path, "wb").write("\n".join(lines).encode("latin-1"))
         return path
