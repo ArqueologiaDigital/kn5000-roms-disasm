@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Do the five proposed spellings for the TOP blocking forms reproduce the ROM
-bytes at EVERY site, in every KN5000 ROM -- not just at the sites that happen to
-block the converter today?
+"""Do the proposed spellings for the TOP blocking forms reproduce the ROM bytes
+at EVERY site, in every KN5000 ROM -- not just at the sites that happen to block
+the converter today?
 
 WHY
   scripts/analysis/v7_blocking_forms_census.py ranks what still blocks
@@ -11,15 +11,14 @@ WHY
   the ROM.  "It assembled" is NOT a pass; only equal bytes are.
 
   Four claims of "no spelling exists" were made in this tree and all four were
-  false -- the mnemonic existed under another name.  So each rule below was
-  found by grepping TLCS900InstrInfo.td for the family and assembling it, and
-  this script is the standing check that it keeps holding.
+  false -- the mnemonic existed under another name.  A fifth was made while
+  writing THIS probe and was also false: see the d8 = 0 note below.  So every
+  rule here was found by grepping TLCS900InstrInfo.td (and the code emitter) for
+  the family and assembling it, and this script is the standing check.
 
-THE FIVE RULES
+THE RULES
   A  `<op> (<mem>),<imm8>`      -> `<op>mi8 <mem>, <imm>`     op in
-     add adc sub sbc and or xor.  <mem> is `(Xnn)` or `(Xnn + d)` with the
-     displacement SIGN-EXTENDED: unidasm prints the raw byte, llvm-mc wants
-     `- 0x04` where unidasm printed `+0xfc`.
+     add adc sub sbc and or xor.
   B  `ld (<X..>+<r16>),<src>`   -> `st_rrb <src>, <base>, <idx>` for a BYTE
      source; `stw_dri`/`stl_dri <src>, 0x07, <base_byte>, <idx_byte>` for word
      and long.  ⚠ `st_rrw` and `st_rrl` LOOK right and are not: all three
@@ -37,14 +36,24 @@ THE FIVE RULES
      `cpdm16 0xf1ea, xwa` is the byte-exact way to write `cp (0xf1ea),WA`.
      The 8-bit-address prefixes (c0/d0/e0) have NO mnemonic and are declined.
   E  `pushw (<mem>)`            -> `pushm <mem>`
+  F  `ld (<X..>+<d8>),<src>`    -> `ld (<base> <signed d8>), <src>`
+  G  `inc|dec <n>,(<abs>)`      -> `incdi8`/`decdi8` (prefix c1/c2, byte size),
+     `incdi16`/`decdi16` (prefix d1/d2, word size), each with a `_24` variant
+     for a 24-bit address.  ⚠ `decdd8 1, 0x0de7` looks like the same thing and
+     emits `f1 e7 0d 69`, which unidasm reads back as `db` -- an INVALID
+     encoding, not a synonym.
 
-⚠ THE ZERO-DISPLACEMENT HOLE, found by this probe and reported separately
-  below.  llvm-mc folds `(xsp + 0x00)` into the shorter `(xsp)` encoding, so a
-  ROM instruction that spends a byte on an explicit d8 = 0 -- and this firmware
-  is full of them -- cannot be written with the MEMri operand at all.  Rules A,
-  D and E decline those sites rather than emit the wrong bytes.  They are
-  spellable only as `extpfxN 0x.., 0x.., ..`, a raw-byte escape that assembles
-  the literal bytes but reads no better than `.byte`.
+⚠ TWO DISPLACEMENT TRAPS, both silent, both measured by `--negative`:
+  * unidasm prints the d8 as a RAW BYTE and llvm-mc wants it SIGNED, so
+    `(XSP+0xfc)` must be written `(xsp - 0x04)`.  Unsigned assembles CLEANLY to
+    a longer, different instruction.
+  * d8 = 0x00 needs the SENTINEL `(xsp + 256)`.  Writing `(xsp + 0x00)`
+    assembles to the SHORTER `(xsp)` encoding -- a real instruction one byte
+    short of the ROM's.  The sentinel is deliberate and documented in
+    TLCS900MCCodeEmitter.cpp: "displacement of 256 means force d8 form with
+    displacement 0 ... used by the assembly converter to reproduce exact ROM
+    encoding".  This firmware is full of explicit d8 = 0 encodings, so the
+    sentinel is not a curiosity -- it is most of rule F.
 
 RUN
   python3 tools/spelling-probes/verify_top_blocking_spellings.py
@@ -79,28 +88,41 @@ GR8 = "W A B C D E H L".split()
 GR16 = "WA BC DE HL IX IY IZ SP".split()
 GPR = "XWA XBC XDE XHL XIX XIY XIZ XSP".split()
 R16_TO_R32 = dict(zip(GR16, GPR))
+# ⚠ the backend's GR16 class EXCLUDES SP -- the same gap README-inc_reg.md
+# records for `inc n, sp`. A 16-bit SP source therefore has no register NAME to
+# write, and both rules that emit one decline it. Costs nothing in the three
+# program ROMs (0 sites); 18 sites in the table-data ROM, all linear-scan noise.
+GR16_NAMED = [r for r in GR16 if r != "SP"]
 
 
-def signed_mem(m):
-    """unidasm `(XSP+0xfc)` -> llvm-mc `(xsp - 0x04)`; `(XHL)` -> `(xhl)`.
+def mem_llvm(m, naive=False):
+    """unidasm memory operand -> the llvm-mc spelling of the SAME encoding.
 
-    ⚠ The displacement is printed as a RAW BYTE. Passing it through unsigned
-    assembles CLEANLY to a longer, different instruction -- the same trap
-    documented for `lda XSP,XSP+0xf2` in convert_corroborated_blocks.py.
+    `(XHL)`        -> `(xhl)`
+    `(XSP+0xfc)`   -> `(xsp - 0x04)`      d8 is SIGNED in llvm-mc
+    `(XIY+0x00)`   -> `(xiy + 256)`       the force-d8 SENTINEL
+    `naive=True` returns what a reader of the unidasm text would write, which is
+    what `--negative` measures.
     """
     mm = re.match(r'^\((X[A-Z]{2})\)$', m)
     if mm:
         return f"({mm.group(1).lower()})"
     mm = re.match(r'^\((X[A-Z]{2})\+0x([0-9a-f]{2})\)$', m)
     if mm:
-        d = int(mm.group(2), 16)
-        s = f"- 0x{0x100 - d:02x}" if d >= 0x80 else f"+ 0x{d:02x}"
-        return f"({mm.group(1).lower()} {s})"
+        d, r = int(mm.group(2), 16), mm.group(1).lower()
+        if naive:
+            return f"({r} + 0x{d:02x})"
+        if d == 0:
+            return f"({r} + 256)"
+        return f"({r} " + (f"- 0x{0x100 - d:02x}" if d >= 0x80
+                           else f"+ 0x{d:02x}") + ")"
     mm = re.match(r'^\((X[A-Z]{2})\+0x([0-9a-f]{4})\)$', m)
     if mm:
-        d = int(mm.group(2), 16)
-        s = f"- 0x{0x10000 - d:04x}" if d >= 0x8000 else f"+ 0x{d:04x}"
-        return f"({mm.group(1).lower()} {s})"
+        d, r = int(mm.group(2), 16), mm.group(1).lower()
+        if naive:
+            return f"({r} + 0x{d:04x})"
+        return f"({r} " + (f"- 0x{0x10000 - d:04x}" if d >= 0x8000
+                           else f"+ 0x{d:04x}") + ")"
     return None
 
 
@@ -112,9 +134,8 @@ B_RE = re.compile(r'^ld \((X[A-Z]{2})\+([A-Z]{2})\),([A-Z]{1,3})$')
 C_RE = re.compile(r'^lda (X[A-Z]{2}),(X[A-Z]{2})\+([A-Z]{2})$')
 D_RE = re.compile(r'^cp \((0x[0-9a-f]+)\),([A-Z]{1,3})$')
 E_RE = re.compile(r'^pushw (\(X[A-Z]{2}(?:\+0x[0-9a-f]{2})?\))$')
-
-
-ZERO_DISP = "ZERO_DISP"           # this rule's shape, but d8 == 0: see above
+F_RE = re.compile(r'^ld (\(X[A-Z]{2}\+0x[0-9a-f]{2}\)),([A-Z]{1,3})$')
+G_RE = re.compile(r'^(inc|incw|dec|decw) (\d+),\((0x[0-9a-f]+)\)$')
 
 
 def rule_a(text, raw, neg):
@@ -128,14 +149,8 @@ def rule_a(text, raw, neg):
     # kn5000_table_data.rom, 1 site, by this probe.
     if not 0x80 <= raw[0] <= 0x8F:
         return None
-    if m.group(2).endswith("+0x00)"):
-        return ZERO_DISP
-    if neg:                       # unsigned displacement, the trap
-        return f"{m.group(1)}mi8 {m.group(2).lower().replace('+', ' + ')}, {m.group(3)}"
-    mem = signed_mem(m.group(2))
-    if mem is None:
-        return None
-    return f"{m.group(1)}mi8 {mem}, {m.group(3)}"
+    mem = mem_llvm(m.group(2), naive=neg)
+    return None if mem is None else f"{m.group(1)}mi8 {mem}, {m.group(3)}"
 
 
 def rule_b(text, raw, neg):
@@ -156,7 +171,7 @@ def rule_b(text, raw, neg):
                 if src in GPR else None)
     if src in GR8:
         return f"st_rrb {src.lower()}, {base.lower()}, {idx.lower()}"
-    if src in GR16:
+    if src in GR16_NAMED:
         return f"stw_dri {src.lower()}, 0x07, {bb}"
     if src in GPR:
         return f"stl_dri {src.lower()}, 0x07, {bb}"
@@ -201,9 +216,7 @@ def rule_e(text, raw, neg):
     m = E_RE.match(text)
     if not m or not 0x90 <= raw[0] <= 0x9F:
         return None
-    if m.group(1).endswith("+0x00)"):
-        return ZERO_DISP
-    mem = signed_mem(m.group(1))
+    mem = mem_llvm(m.group(1), naive=neg)
     if mem is None:
         return None
     if neg:                       # what the converter's canonical() produces
@@ -211,11 +224,41 @@ def rule_e(text, raw, neg):
     return f"pushm {mem}"
 
 
+def rule_f(text, raw, neg):
+    m = F_RE.match(text)
+    if not m or not 0xB8 <= raw[0] <= 0xBF:
+        return None
+    mem, src = mem_llvm(m.group(1), naive=neg), m.group(2)
+    if mem is None or not (src in GR8 or src in GR16_NAMED or src in GPR):
+        return None
+    return f"ld {mem}, {src.lower()}"
+
+
+G_PREFIX = {0xC1: ("di8", 8), 0xC2: ("di8_24", 8),
+            0xD1: ("di16", 16), 0xD2: ("di16_24", 16)}
+
+
+def rule_g(text, raw, neg):
+    m = G_RE.match(text)
+    if not m:
+        return None
+    op, n, addr = m.group(1)[:3], m.group(2), m.group(3)
+    fam = G_PREFIX.get(raw[0])
+    if fam is None:
+        return None
+    sfx, width = fam
+    if neg:                       # the other width -- assembles, wrong prefix
+        sfx = sfx.replace("8", "16") if width == 8 else sfx.replace("16", "8")
+    return f"{op}{sfx} {n}, {addr}"
+
+
 RULES = [("A  <op> (mem),imm8   -> <op>mi8", A_RE, rule_a),
          ("B  ld (r32+r16),r    -> st_rrb / stw_dri / stl_dri", B_RE, rule_b),
          ("C  lda r32,r32+r16   -> lda_rr", C_RE, rule_c),
          ("D  cp (abs),r        -> cpdm8 / cpdm16 (GPR name)", D_RE, rule_d),
-         ("E  pushw (mem)       -> pushm", E_RE, rule_e)]
+         ("E  pushw (mem)       -> pushm", E_RE, rule_e),
+         ("F  ld (r32+d8),r     -> ld (base + d), r", F_RE, rule_f),
+         ("G  inc/dec n,(abs)   -> incdi8 / decdi16 ...", G_RE, rule_g)]
 
 
 # --------------------------------------------------------------- assembling
@@ -264,9 +307,9 @@ def sweep(path, base):
 def main():
     neg = "--negative" in sys.argv
     only = (sys.argv[sys.argv.index("--rom") + 1] if "--rom" in sys.argv else None)
-    print("verifying the five proposed spellings for the top blocking forms")
+    print("verifying the proposed spellings for the top blocking forms")
     print(f"mode: {'NEGATIVE CONTROL -- the spellings these rules REPLACE' if neg else 'the proposed rules'}\n")
-    grand = [0, 0, 0, 0]
+    grand = [0, 0, 0]
     for name, path, base in ROMS:
         if only and name != only:
             continue
@@ -280,16 +323,12 @@ def main():
                     if rx.match(text):
                         keep.append((a, raw, text, None))
                     continue
-                if c is not ZERO_DISP:
-                    cand.append(c)
+                cand.append(c)
                 keep.append((a, raw, text, c))
             enc = encode_many(cand)
-            ok = wrong = noform = zerod = 0
+            ok = wrong = noform = 0
             first_wrong = None
             for a, raw, text, c in keep:
-                if c is ZERO_DISP:
-                    zerod += 1
-                    continue
                 if c is None:
                     noform += 1
                     continue
@@ -300,17 +339,15 @@ def main():
                     wrong += 1
                     if first_wrong is None:
                         first_wrong = (a, raw, text, c, e)
-            grand[0] += ok; grand[1] += wrong; grand[2] += noform; grand[3] += zerod
+            grand[0] += ok; grand[1] += wrong; grand[2] += noform
             flag = "   ⚠ WRONG BYTES" if wrong else ""
-            print(f"  {label:46} {ok:6} exact  {wrong:6} wrong  {noform:5} no rule"
-                  f"  {zerod:5} d8=0{flag}")
+            print(f"  {label:50} {ok:6} exact  {wrong:6} wrong  {noform:5} no rule{flag}")
             if first_wrong:
                 a, raw, text, c, e = first_wrong
                 print(f"       e.g. 0x{a:06X}  ROM {raw.hex(' ')}  `{text}`\n"
                       f"            spelled `{c}` -> "
                       f"{e.hex(' ') if e else 'REJECTED by llvm-mc'}")
-    print(f"\nTOTAL {grand[0]:,} byte-exact · {grand[1]:,} wrong · {grand[2]:,} no rule"
-          f" · {grand[3]:,} declined for d8 = 0")
+    print(f"\nTOTAL {grand[0]:,} byte-exact · {grand[1]:,} wrong · {grand[2]:,} no rule")
     if neg:
         print("A negative control that reports 0 wrong would mean this check "
               "cannot fail;\nit reports wrongs, so it can.")
