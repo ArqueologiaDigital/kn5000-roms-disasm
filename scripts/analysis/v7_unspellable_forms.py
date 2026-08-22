@@ -49,6 +49,15 @@ spans = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(spans)
 
 
 def main():
+    # This needs the GENERATED includes as well as the ROMs: v7's root source
+    # pulls in files that `make clean-all` removes, and llvm-mc then fails with a
+    # message that says nothing about the cause. Check first and say so.
+    missing = [p for p in ("rebuilt_ROMs/kn5000_v7_program.llvm.elf",
+                           "analysis/v7-reachability/v7_call_targets.json")
+               if not os.path.exists(p)]
+    if missing:
+        sys.exit("missing build products: " + ", ".join(missing) +
+                 "\nRun `make all` first (a previous `make clean-all` removes them).")
     top = int(sys.argv[sys.argv.index("--top") + 1]) if "--top" in sys.argv else 16
     rom = open("original_ROMs/kn5000_v7_program.rom", "rb").read()
     terr = spans.territory(spans.runs("v7/maincpu/kn5000_v7_program.s", "v7/maincpu"))

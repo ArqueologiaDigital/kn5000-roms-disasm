@@ -43,6 +43,46 @@ _cc = importlib.util.spec_from_file_location(
 cc = importlib.util.module_from_spec(_cc); _cc.loader.exec_module(cc)
 
 TERMINATORS = ("ret", "reti", "retd")
+BRANCHES = ("jr", "jrl", "calr")
+BRANCH_RE = re.compile(r'^(jr|jrl|calr)\s+(?:(\w+),\s*)?0x([0-9a-fA-F]+)$', re.I)
+
+
+def resolve_branches(insns, t, span, addr2name):
+    """Rewrite PC-relative branch targets as SYMBOLS, emitting local labels.
+
+    `jr`/`jrl`/`calr` cannot be written numerically. `jr nz, 0xef1371` assembles
+    cleanly to [0x6e,0x71] -- it takes the LOW BYTE of the address as the
+    displacement, which is wrong and silent. The working sources always name a
+    symbol. So: targets inside the range get a local `.Lc_<addr>` label emitted
+    at the right instruction, targets outside use the ELF symbol if there is one,
+    and a range with an unresolvable target is refused.
+
+    Returns (texts, labels_at) or None.
+
+    ⚠ A symbolic branch encodes as a FIXUP, so its final bytes are decided at
+    link time and cannot be byte-matched here the way every other instruction is.
+    The displacement is the assembler's job; what this must not get wrong is
+    WHICH label, and that comes straight from unidasm's decoded target. The full
+    byte-match gate is the check that closes the loop.
+    """
+    addrs = {a for a, _n, _x in insns}
+    needed, texts = {}, []
+    for a, n, x in insns:
+        m = BRANCH_RE.match(x.strip())
+        if not m:
+            texts.append(None); continue
+        mn, cc_, tgt = m.group(1).lower(), m.group(2), int(m.group(3), 16)
+        if t <= tgt < t + span:
+            if tgt not in addrs:
+                return None                    # target is mid-instruction
+            needed[tgt] = f".Lc_{tgt:06x}"
+            name = needed[tgt]
+        elif tgt in addr2name:
+            name = addr2name[tgt]
+        else:
+            return None                        # no way to name it
+        texts.append(f"{mn} {cc_.lower()}, {name}" if cc_ else f"{mn} {name}")
+    return texts, needed
 
 
 def source_index(syms):
@@ -82,7 +122,11 @@ def decode_range(rom, terr, start, limit=16384):
     return insns
 
 
-def rewrite(idx, t, span, insns, texts, addr2name):
+REFUSED = {}
+
+
+def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
+    branch_labels = branch_labels or {}
     """Replace the source lines covering [t, t+span) with instruction lines.
 
     Labels inside the range are re-emitted at their correct addresses, and bytes
@@ -119,6 +163,8 @@ def rewrite(idx, t, span, insns, texts, addr2name):
         for ln in lines[first[2]:last[3] + 1]:
             lm = re.match(r'^([A-Za-z_][\w]*):', ln)
             if lm and lm.group(1) not in known:
+                REFUSED["a label in the span cannot be placed"] = \
+                    REFUSED.get("a label in the span cannot be placed", 0) + 1
                 return None
         # EXACT FIT ONLY. The lead/tail re-emission path -- keeping the bytes of
         # a partly-covered first or last block as .byte around the instructions
@@ -127,20 +173,41 @@ def rewrite(idx, t, span, insns, texts, addr2name):
         # bytes later. Each fix revealed another case. So the path is gone: a
         # range is converted only when it covers its blocks exactly, start and
         # end. That converts less and cannot silently misplace a byte.
+        # Partial coverage is allowed again, but ONLY behind the three
+        # invariants that caught the six bugs this path had when it was
+        # unguarded: byte-count preservation measured from the replaced LINES,
+        # every label in the span placeable, and no non-.byte line silently
+        # dropped. Exact-fit-only was the safe response before those existed;
+        # with them, refusing partial ranges just leaves work undone -- it
+        # refused all 17 remaining candidates and converted nothing.
         lead = t - first[1]
         last_end = last[1] + len(last[4])
-        if lead != 0 or last_end != t + span:
+        tail = last_end - (t + span)
+        if lead < 0 or tail < 0:
+            REFUSED["range extends past its blocks"] = \
+                REFUSED.get("range extends past its blocks", 0) + 1
             return None
+        # A label inside the lead or tail region cannot be placed between
+        # emitted .byte lines, so refuse rather than move or drop it.
+        for bk in touched:
+            if bk[0] and (bk[1] < t or bk[1] >= t + span) and bk[1] != first[1]:
+                REFUSED["a label falls in the lead/tail region"] = \
+                    REFUSED.get("a label falls in the lead/tail region", 0) + 1
+                return None
         # Every line in the replaced span must be a .byte line or a label we can
         # re-emit -- nothing else may be silently dropped.
         for ln in lines[first[2]:last[3] + 1]:
             if not re.match(r'^\s*\.byte\s', ln) and not re.match(r'^[A-Za-z_][\w]*:', ln):
+                REFUSED["replaced span holds a non-.byte, non-label line"] = \
+                    REFUSED.get("replaced span holds a non-.byte, non-label line", 0) + 1
                 return None
         out = []
 
         for (addr, _n, _x), text in zip(insns, texts):
             if addr in label_at and addr != first[1]:
                 out.append(f"{label_at[addr]}:")
+            if addr in branch_labels:
+                out.append(f"{branch_labels[addr]}:")
             # Emit symbol names for call/branch targets that have one. The
             # NUMERIC form is what was round-tripped, so the decode is proven;
             # the symbolic form's bytes are settled at link time, which the full
@@ -152,6 +219,10 @@ def rewrite(idx, t, span, insns, texts, addr2name):
         # start, so the label sits on the line above and is outside the replaced
         # span -- re-emitting it produced "symbol is already defined" for every
         # converted range and failed the build.
+        if tail:
+            raw = last[4][len(last[4]) - tail:]
+            for i in range(0, len(raw), 8):
+                out.append("\t.byte " + ", ".join(f"0x{b:02x}" for b in raw[i:i + 8]))
         # LENGTH-PRESERVING INVARIANT. The replaced lines must emit exactly as
         # many bytes as they did before, or every symbol after this point moves
         # and the whole ROM shifts. A conversion that grew a region by 13 bytes
@@ -177,6 +248,8 @@ def rewrite(idx, t, span, insns, texts, addr2name):
             if bm:
                 after += len([x for x in bm.group(1).split(",") if x.strip()])
         if before != after:
+            REFUSED["rewrite would change the byte count"] = \
+                REFUSED.get("rewrite would change the byte count", 0) + 1
             return None
         lines[first[2]:last[3] + 1] = out
         open(path, "wb").write("\n".join(lines).encode("latin-1"))
@@ -202,14 +275,17 @@ def main():
     pending = []
     ok = skipped = 0
     total_bytes = 0
+    why = {}
+    def skip(reason, n=1):
+        why[reason] = why.get(reason, 0) + n
     for t in sorted(targets):
         if limit and ok >= limit:
             break
         insns = decode_range(rom, terr, t)
         if len(insns) < 3:
-            skipped += 1; continue
+            skipped += 1; skip("decoded fewer than 3 instructions"); continue
         if insns[-1][2].split()[0].lower() not in TERMINATORS:
-            skipped += 1; continue                    # no clean function end
+            skipped += 1; skip("no `ret` before leaving DATA territory"); continue
         span = sum(n for _, n, _ in insns)
         want = rom[t - BASE: t - BASE + span]
         # Choose each spelling by MATCHING BYTES, never by "it assembled".
@@ -218,9 +294,21 @@ def main():
         # `bf f2 37` in the ROM, and the parenthesised form assembles happily to
         # something else entirely. A candidate that assembles is not a candidate
         # that is correct, and only the byte comparison can tell them apart.
+        br = resolve_branches(insns, t, span, addr2name)
+        if br is None:
+            skipped += 1; skip("a branch target cannot be named"); continue
+        br_texts, br_labels = br
         texts, pos, bad = [], 0, False
-        for _, n, x in insns:
+        for bi, (_, n, x) in enumerate(insns):
             target = want[pos:pos + n]
+            if br_texts[bi] is not None:
+                # A branch: verify only that the symbolic form assembles to the
+                # same LENGTH; the gate settles the displacement bytes.
+                e = cc.encode(br_texts[bi])
+                if e is None or len(e) != n:
+                    bad = True; break
+                texts.append(br_texts[bi]); pos += n
+                continue
             chosen = None
             for cand in list(cc.translate(x)) + [cc.canonical(x)]:
                 e = cc.encode(cand)
@@ -230,20 +318,23 @@ def main():
                 bad = True; break
             texts.append(chosen); pos += n
         if bad:
-            skipped += 1; continue
-        encs = cc.encode_block(texts)
-        if encs is None or b"".join(encs) != want:
-            skipped += 1; continue
+            skipped += 1; skip("an instruction cannot be spelled to match its bytes"); continue
+        if not br_labels:
+            encs = cc.encode_block(texts)
+            if encs is None or b"".join(encs) != want:
+                skipped += 1; skip("block re-assembly did not reproduce the bytes"); continue
         ok += 1
         total_bytes += span
         if apply_:
-            pending.append((t, span, insns, texts))
+            pending.append((t, span, insns, texts, br_labels))
         if ok <= 8:
             nm = addr2name.get(t, "")
             print(f"  0x{t:06X}  {span:5} B  {len(insns):4} insns  {nm}")
     print(f"\n{ok} ranges decode to a clean `ret` and re-assemble exactly, "
           f"{total_bytes:,} bytes")
-    print(f"{skipped} skipped (no terminator, too short, or bytes differ)")
+    print(f"{skipped} skipped:")
+    for r, n in sorted(why.items(), key=lambda kv: -kv[1]):
+        print(f"   {n:5}  {r}")
     if apply_:
         # Apply BOTTOM-UP within each file. Rewriting splices `lines` in place,
         # which shifts every later index, so the block records go stale the
@@ -252,17 +343,25 @@ def main():
         # definitions -- the build then failed with `undefined symbol` for
         # InitializeSuna and seven others.
         placed = []
-        for t, span, insns, texts in pending:
+        for t, span, insns, texts, _bl in pending:
             for path, (lines, blocks) in idx.items():
                 if any(bk[1] <= t < bk[1] + len(bk[4]) for bk in blocks):
-                    placed.append((path, t, span, insns, texts)); break
+                    placed.append((path, t, span, insns, texts, _bl)); break
         for path in {p for p, *_ in placed}:
             mine = [x for x in placed if x[0] == path]
             mine.sort(key=lambda x: -x[1])          # highest address first
-            for _, t, span, insns, texts in mine:
-                rewrite({path: idx[path]}, t, span, insns, texts, addr2name)
-            touched_files.add(path)
+            wrote_here = 0
+            for _, t, span, insns, texts, bl in mine:
+                if rewrite({path: idx[path]}, t, span, insns, texts, addr2name, bl):
+                    wrote_here += 1
+            # Count files ACTUALLY written. This previously counted files a range
+            # was merely assigned to, so it reported "rewrote 8 file(s)" while
+            # every rewrite was refused and nothing changed on disk.
+            if wrote_here:
+                touched_files.add(path)
         print(f"rewrote {len(touched_files)} file(s)")
+        for r, n in sorted(REFUSED.items(), key=lambda kv: -kv[1]):
+            print(f"   refused {n:4}  {r}")
     return 0
 
 
