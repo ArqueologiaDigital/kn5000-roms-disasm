@@ -373,6 +373,38 @@ sequence: **37/37 tags aligned in order on every block of all seven disks, no pe
 lengths differ systematically -- all 24 sound records 24->22, tag 60 4->12, tag 61/63 24->30, tag 71
 2->4, tag 80 14->10 -- which is what a format revision looks like, not a different format.
 
+### The voice selector's 168 options are NAMED (2026-08-22)
+
+`+0` is a flat panel sound number and `+1` is its variation bank. Two ROM tables resolve the pair,
+and the names come out in plain ASCII:
+
+    program ROM   SoundData_CategoryDesc  0xE023A0 ; category names 0xE023F0, stride 16, 18 entries
+    table ROM     bank map 0x830100 -> tone number 0x830180 -> offset table 0x831B00 (629 x LE32)
+                  -> 16-byte space-padded name at 0x830000 + offset
+
+Decoded by hand, walking those tables directly: slot 0 `Piano`, 1 `Bright Piano`, **21
+`Jazz Ac.Guitar`**, 40 `Electric Bass`, 48 `Trumpet`, 96 `Violin`, 127 `Orchestra Hit`. Slot 21 is
+the schema's own `default=21`, which is the kind of agreement that is hard to arrange by accident.
+
+Three checks, `analysis/disk-format-probes/lsw_voice_selector_names.py`, exits non-zero on failure:
+
+* **C1 pins the alignment.** The map's domain ends at exactly index 167 in v7, v9 and v10 alike --
+  the same 167 the field descriptor gives as `max`. An off-by-one would make one of the two 166.
+* **C2** names all 128 bank-0 factory slots (117 distinct tone records).
+* **C3 is the semantic check.** In the seven floppies, tag 0x13 has 175 records and **171 (97.7%)
+  resolve into category BASS**, against a 4.8% null -- 8 of 168 options are BASS.
+
+⚠ Stated limits, not smoothed over. C3 rules out a WRONG TABLE (shifting the index by 8 collapses it
+to 0.0%) but NOT an off-by-one, because the 8 BASS slots are contiguous -- a +1 shift still scores
+97.7%. C1 is what pins it. And **options 128..167 have no name in any ROM**: they are user Sound
+Memories in battery-backed RAM, so no ROM search can produce them, and no floppy in the corpus uses
+a value >= 128 for these tags.
+
+⚠ A CONTRADICTION worth resolving: `README-lsw-panel-schema.md` labels tag 0x14 "Bass" and 0x13
+"Rhythm". The corpus says 0x13 is the bass part (171/175 BASS) and 0x14 carries no `+0` sound
+descriptor at all. The newer evidence is stronger, but the older note has not been retracted here
+because it was written from different reasoning that deserves its own review.
+
 ### Individual FIELDS attributed, from the firmware that writes them
 
 `analysis/disk-format-probes/lsw_field_evidence.py` goes one level further and asks what byte N of
