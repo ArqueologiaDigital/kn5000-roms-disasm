@@ -28,7 +28,29 @@ session was misleading. Broken down by `l2_positional_breakdown.py`:
 Nothing is unnamed. So what remains for L2 is **aptness, not coverage**: is a name RIGHT? No script
 can answer that.
 
-The one candidate this session produced did NOT survive inspection. `LoadFileVariant` opens `"wb"`,
+**RETRACTED: aptness IS mechanically checkable for one class, and it found four real defects.**
+I claimed no script could judge whether a name is right. That was too strong. 512 v10 labels state
+their return value as a NUMBER (`*_ReturnZero`, `*_ReturnOne`, `*_ReturnFFFF` ...), and the return
+register is XHL -- established, not assumed, by 450 of them opening `lds32 xhl, <imm>` into a shared
+`ret` epilogue with callers branching on it. Abstract-interpreting XHL from label to `ret`, and
+declining to judge on any conditional branch or call, measures 488 of the 512 and finds **four
+CONTRADICTED** (`l2_name_vs_return_value.py`, which exits non-zero while one stands):
+
+| symbol | address | name says | code returns |
+|---|---|---|---|
+| `MainGetEvent_ReturnZero` | 00FA9C6A | 0x0 | **0x1** |
+| `MainGetEvent_ReturnZeroAlt` | 00FA9C6F | 0x0 | **0x1** |
+| `NakaWidget_ReturnZero` | 00FA4AFD | 0x0 | **0x1600006** |
+| `PostEvent_ReturnZero` | 00FA9856 | 0x0 | **0x1** |
+
+Verified by hand at 0xFA9C6A: the routine falls through `lds wa, 7` / `call TaskSched_SignalEvent`
+/ **`lds hl, 1`** into its `ret`. It returns 1. The check calibrates against cases where the name is
+right -- 27/27 on `ReturnOne`, 3/3 on `ReturnFFFF` -- so it can fail rather than merely agree.
+
+So L2's remaining gap is smaller AND better defined than "unverifiable": one class is now measured
+and has four defects to fix. Other classes may be measurable too; nobody has looked.
+
+The earlier candidate did NOT survive inspection. `LoadFileVariant` opens `"wb"`,
 which the mode audit flagged as a name/behaviour contradiction -- but it then calls
 `SMF_LoadSoundBankAndPlay`, which genuinely loads a bank and plays it, so the name is apt and the
 write-mode open is an unexplained oddity recorded in a comment at the call site. **Zero confirmed
