@@ -342,7 +342,34 @@ def main():
                 break
             texts.append(chosen); pos += n
         if bad:
-            skipped += 1; skip("an instruction cannot be spelled to match its bytes"); continue
+            # TRUNCATE rather than discard. One unspellable instruction used to
+            # throw away the whole range, but everything decoded BEFORE it is
+            # still verified code -- each of those was byte-matched. Convert the
+            # prefix and leave the rest as .byte, which is exactly what a
+            # partial range already supports.
+            kept = len(texts)
+            if kept < 3:
+                skipped += 1
+                skip("an instruction cannot be spelled to match its bytes")
+                continue
+            insns = insns[:kept]
+            span = sum(n for _, n, _ in insns)
+            want = want[:span]
+            br_texts = br_texts[:kept]
+            # A branch in the kept prefix may target an instruction PAST the
+            # cut, whose .Lc_ label no longer gets emitted -- that would link
+            # as an undefined symbol. Keep only labels still inside the range,
+            # and refuse if any kept branch now names a missing one.
+            end = t + span
+            br_labels = {a: l for a, l in br_labels.items() if t <= a < end}
+            live = set(br_labels.values())
+            if any(bt and ".Lc_" in bt and bt.rsplit(None, 1)[-1] not in live
+                   for bt in br_texts):
+                skipped += 1
+                skip("truncation would orphan a branch label")
+                continue
+            bad = False
+            skip("truncated at an unspellable instruction")
         if not br_labels:
             encs = cc.encode_block(texts)
             if encs is None or b"".join(encs) != want:
