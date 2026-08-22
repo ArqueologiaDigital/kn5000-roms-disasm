@@ -6,15 +6,21 @@ range when any one of its instructions cannot be spelled in a way that
 re-assembles to the original bytes. This census says WHICH forms those are,
 ranked, so the work is targeted rather than guessed at.
 
-MEASURED 2026-08-22, over all 808 reachable call targets: 9,463 instances.
+MEASURED 2026-08-22, over all 808 reachable call targets: 8,875 instances.
 
     2106  jr r,imm        e.g. jr NZ,0xef1371
-    1040  ld r,(imm)      e.g. ld WA,(0x0460)
      793  calr imm        e.g. calr 0xef16c4
+     725  ld r,(imm)      e.g. ld L,(0x0462)
      678  jrl r,imm       e.g. jrl NZ,0xef61e8
-     645  ld (imm),r      e.g. ld (0x045e),WA
-     438  cp (imm),imm    e.g. cp (0xce43),0x00
+     434  cp (imm),imm    e.g. cp (0xce43),0x00
      408  ld (imm),imm    e.g. ld (0xbca0),0xff
+     376  ld (imm),r      e.g. ld (0x045d),L
+
+⚠ This number MOVES as the converter learns spellings -- it measures what the
+translator cannot currently spell, not a property of the ROM. The first run was
+9,463; adding the absolute-operand suffixes (`ldw_d16`, `stda16`) took it to
+8,875 by fixing 315 of the `ld r,(imm)` cases and 269 of the `ld (imm),r` ones.
+Quoting it anywhere means quoting the date and the converter state with it.
 
 Two classes, needing different work:
 
