@@ -521,18 +521,39 @@ def main():
         # with stale indices cut at the wrong offset and deleted label
         # definitions -- the build then failed with `undefined symbol` for
         # InitializeSuna and seven others.
+        # ⚠ EVERY DROP MUST BE COUNTED. This loop used to be a bare `for ... break`
+        # with no `else`: a range whose entry sits in no indexed block simply
+        # vanished, silently. At the 2026-08-22 fixpoint that was 103 ranges /
+        # 8,828 bytes -- with a further 29 ranges / 2,053 bytes lost to rewrite()
+        # returning None without recording a reason. So 10,881 of the 12,068 bytes
+        # the converter accepted were MISSING from the report whose entire purpose
+        # is to explain why a round gained nothing. A refusal bucket that cannot
+        # pass (anti-pattern 12) at least appears; this did not appear at all.
         placed = []
         for t, span, insns, texts, _bl in pending:
             for path, (lines, blocks) in idx.items():
                 if any(bk[1] <= t < bk[1] + len(bk[4]) for bk in blocks):
                     placed.append((path, t, span, insns, texts, _bl)); break
+            else:
+                REFUSED["entry is in no indexed .byte block (often inside an .incbin)"] = REFUSED.get("entry is in no indexed .byte block (often inside an .incbin)", 0) + 1
+                REFUSED_BYTES["entry is in no indexed .byte block (often inside an .incbin)"] = REFUSED_BYTES.get("entry is in no indexed .byte block (often inside an .incbin)", 0) + span
         for path in {p for p, *_ in placed}:
             mine = [x for x in placed if x[0] == path]
             mine.sort(key=lambda x: -x[1])          # highest address first
             wrote_here = 0
             for _, t, span, insns, texts, bl in mine:
+                _before = sum(REFUSED.values())
                 if rewrite({path: idx[path]}, t, span, insns, texts, addr2name, bl):
                     wrote_here += 1
+                elif sum(REFUSED.values()) == _before:
+                    # rewrite() declined without recording a reason. Nearly all of
+                    # these are the "NEVER DROP A LABEL" guard, which is real
+                    # protection -- but 25 of 29 measured cases were blocked by
+                    # labels NOTHING in v7/maincpu/*.s references (transplant-pass
+                    # artefacts such as `Audio_NullRet1:` / `Audio_NullRet1_Data:`
+                    # sitting on the two bytes `ca 8b`, which are one `ld C,B`).
+                    REFUSED["rewrite declined silently (usually a label it will not drop)"] = REFUSED.get("rewrite declined silently (usually a label it will not drop)", 0) + 1
+                    REFUSED_BYTES["rewrite declined silently (usually a label it will not drop)"] = REFUSED_BYTES.get("rewrite declined silently (usually a label it will not drop)", 0) + span
             # Count files ACTUALLY written. This previously counted files a range
             # was merely assigned to, so it reported "rewrote 8 file(s)" while
             # every rewrite was refused and nothing changed on disk.
