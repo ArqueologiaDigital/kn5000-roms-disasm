@@ -224,10 +224,16 @@ result.
 
 What none of this does is make the names good. The metric counts a name as positional only when it
 restates an address (`_0xHEX`, a bare hex tail, `LABEL_*`); everything else scores as semantic. So
-90.8% is a **lower bound on naming coverage, not a judgement of aptness**, and no script can supply
-the latter. This session found `FileIO_ReadHeader` actually builds a file path and never reads a
-header -- it counts as semantic either way. Wrong-but-plausible names are invisible to this measure,
-and there is no reason to think that one is the only one.
+90.8% is a **lower bound on naming coverage, not a judgement of aptness**. ⚠ The sentence that
+stood here -- "and no script can supply the latter" -- is RETRACTED; see the L2 retraction above.
+No script can judge aptness *in general*, but that is not the same claim, and the difference was
+worth four real defects: names that DECLARE a checkable fact (a return value, an `fopen` mode) can
+be tested against the code, and `l2_name_vs_return_value.py` found four wrong ones by doing it.
+What survives is the narrower statement, and it is still sharp: a name that declares nothing
+checkable cannot be tested this way. `FileIO_ReadHeader` actually builds a file path and never
+reads a header -- it counts as semantic either way, and no return-value or mode check would catch
+it. Wrong-but-plausible names of THAT kind remain invisible to every measure here, and there is no
+reason to think it is the only one.
 
 ## L5: "cannot be" was wrong
 
@@ -271,7 +277,7 @@ None of the three is answerable by more analysis of these ROMs. Two are located 
 needs hardware -- which is a different statement from "unknown", and is the main thing that changed
 today.
 
-## Four traps that produced most of this session's wrong answers
+## Five traps that produced most of this session's wrong answers
 
 Written here because they cost more than any single format did, and they will catch the next person.
 
@@ -285,7 +291,15 @@ Written here because they cost more than any single format did, and they will ca
 3. **Curated symbol names are not evidence.** `AccPlay_FindSlotByChannel` searches by NOTE.
    `Display_FontPalette_Table_0x12EA` is a mod-12 lookup. `CharMap_ValueData_B` is a parameter
    table. Cite instructions and addresses.
-4. **An elegant explanation that fits the number is still a guess.** "The styles were written by a
+4. **A tool that shares a scratch file is not safe to parallelise.** Both converters wrote the
+   bytes-to-decode to a FIXED path under the temp dir, then read the disassembly back. Run two at
+   once -- which is exactly what "use more agents" means -- and one overwrites the other's bytes
+   between the write and the read. It produced a census line reading `0xF04E98 inc 1,WA` where the
+   ROM holds `1d 09`, a call. The byte-match gate meant no bad conversion could LAND, but the
+   decode is the input to every census and every priority call that is not gated. Fixed with a
+   per-process `mkdtemp`. The general form: adding parallelism can invalidate a tool that was
+   correct for years, and it fails by producing plausible output, not by crashing.
+5. **An elegant explanation that fits the number is still a guess.** "The styles were written by a
    different firmware revision" fit perfectly and was falsified in ten minutes by dumping three
    ROMs. Check before committing the sentence.
 
