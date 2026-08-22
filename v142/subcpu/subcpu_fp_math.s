@@ -793,7 +793,7 @@ VoiceFloat_BlendAndMerge_InRange:
 	lda xwa, (xsp + 116)
 	push xwa
 	lda_24 xde, 0x00f396
-	stb_dri A, 0xFD, 0x98, 0x00
+	lda_dri XBC, 0xFD, 0x98, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_Add_Outer
 	lda xiy, (xsp + 72)
@@ -830,7 +830,7 @@ VoiceFloat_BlendAndMerge_Phase2:
 
 ; Take |n| and, on the half-quadrant case, subtract 0.5 (0x01F6A6).
 VoiceFloat_BlendAndMerge_Phase3:
-	stb_dri E, 0xFD, 0x8C, 0x00
+	lda_dri XIY, 0xFD, 0x8C, 0x00
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -840,7 +840,7 @@ VoiceFloat_BlendAndMerge_Phase3:
 	call FP_DP_CmpAndCopy
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 92)
-	stb_dri A, 0xFD, 0x94, 0x00
+	lda_dri XBC, 0xFD, 0x94, 0x00
 	lds de, 4
 	call ToneGen_Compare_Voice
 	cps hl, 0
@@ -853,9 +853,9 @@ VoiceFloat_BlendAndMerge_Phase3:
 ; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
 ; (XSP+0x7C); then the |z| <= 2.3283e-10 shortcut test.
 VoiceFloat_BlendAndMerge_Phase4:
-	stb_dri W, 0xFD, 0x8C, 0x00
+	lda_dri XWA, 0xFD, 0x8C, 0x00
 	push xwa
-	stb_dri E, 0xFD, 0x90, 0x00
+	lda_dri XIY, 0xFD, 0x90, 0x00
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -873,10 +873,10 @@ VoiceFloat_BlendAndMerge_Phase4:
 	push xwa
 	call DSP_VoiceBlend
 	lda_24 xde, 0x00f39e
-	stb_dri A, 0xFD, 0x84, 0x00
+	lda_dri XBC, 0xFD, 0x84, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_Add_Outer
-	stb_dri A, 0xFD, 0x9C, 0x00
+	lda_dri XBC, 0xFD, 0x9C, 0x00
 	lda xwa, (xsp + 84)
 	ld xde, xwa
 	call FP_DP_Sub
@@ -889,13 +889,13 @@ VoiceFloat_BlendAndMerge_Phase4:
 	call FP_DP_CopyOrNegate8
 	lda xwa, (xsp + 72)
 	ld xbc, xwa
-	stb_dri B, 0xFD, 0x84, 0x00
+	lda_dri XDE, 0xFD, 0x84, 0x00
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 84)
 	lda xde, (xsp + 72)
-	stb_dri W, 0xFD, 0x8C, 0x00
+	lda_dri XWA, 0xFD, 0x8C, 0x00
 	call FP_DP_Sub
-	stb_dri E, 0xFD, 0x8C, 0x00
+	lda_dri XIY, 0xFD, 0x8C, 0x00
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -1002,7 +1002,7 @@ VoiceFloat_BlendAndMerge_FinalCopy:
 ; Kernel epilogue: pop XIZ, release the 0x80-byte frame.
 VoiceFloat_BlendAndMerge_Epilog:
 	pop xiz
-	stb_dri L, 0xFD, 0x80, 0x00
+	lda_dri XSP, 0xFD, 0x80, 0x00
 	ret
 
 ; Signed 64-bit divide/modulo helper for the C runtime. Inputs XWA:QWA (dividend) and
@@ -3023,7 +3023,7 @@ DSP_VoiceRegUpdate_FillPad:
 
 ; Mask the partial byte at the integer/fraction boundary.
 DSP_VoiceRegUpdate_BackScan:
-	stb_dri B, 0x07, 0xF0, 0xF4
+	lda_dri XDE, 0x07, 0xF0, 0xF4
 	cpw (xsp + 6), 0x0
 	jr z, DSP_VoiceRegUpdate_ZeroLow
 	ldw wa, 0x8

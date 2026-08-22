@@ -5735,7 +5735,7 @@ UIStateEvt_TransposeUpdate:
 	ldb_d8 a, (0xfc6a)
 	and a, 0xff
 	sub a, 0x40
-	lda_dri XBC, 0x07, 0xe8, 0xe4
+	stb_dri A, 0x07, 0xe8, 0xe4
 	jr UIStateEvt_TransposeUpdate_Apply
 
 UIStateEvt_TransposeUpdate_Clear:

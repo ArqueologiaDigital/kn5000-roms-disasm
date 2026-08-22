@@ -254,7 +254,7 @@ LyricsBox_MatchedTitle:
 LyricsBox_ClearBuffers:
 	lda_24 xbc, (0x020cbe)
 	ld xwa, xbc
-	stb_dri A, 0xe5, 0x40, 0x01
+	lda_dri XBC, 0xe5, 0x40, 0x01
 
 LyricsBox_ClearOuterLoop:
 	ld xde, xwa
@@ -462,7 +462,7 @@ LyricsBox_DrawCurrentLine:
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, (0x020cbe)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	pushw 0x2
 	pushw 0xdfe
@@ -530,7 +530,7 @@ LyricsBox_DrawSelLine:
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, (0x020cbe)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	pushw 0x2
 	pushw 0xdfe
@@ -704,7 +704,7 @@ SongEdit_OverflowCheck:
 	sla bc, 6
 	add bc, (xde)
 	lda_24 xwa, (0x020cbe)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 10)
@@ -835,7 +835,7 @@ LyricsTrack_ResetBufferLoop:
 	exts xde
 	add xde, xwa
 	push xde
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -935,7 +935,7 @@ LyricsFile_InsertNormalChar:
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, (0x020cbe)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 14)
@@ -1448,7 +1448,7 @@ MeasureBoxFunc_Epilogue:
 MeasureBoxFunc_End:
 
 AcDiskFileNameBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70001
@@ -1514,12 +1514,12 @@ AcDiskFileName_ReturnZero:
 
 AcDiskFileName_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcDiskFileName_End:
 
 AcSmfFileNameBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70002
@@ -1585,12 +1585,12 @@ AcSmfFileName_ReturnZero:
 
 AcSmfFileName_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcSmfFileName_End:
 
 AcSmfSongNameBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70003
@@ -1656,12 +1656,12 @@ AcSmfSongName_ReturnZero:
 
 AcSmfSongName_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcSmfSongName_End:
 
 AcDocSongNameBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70005
@@ -1727,12 +1727,12 @@ AcDocSongName_ReturnZero:
 
 AcDocSongName_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcDocSongName_End:
 
 AcDocFileNoBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70006
@@ -1798,12 +1798,12 @@ AcDocFileNo_ReturnZero:
 
 AcDocFileNo_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcDocFileNo_End:
 
 AcPDSongNameBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70007
@@ -1869,12 +1869,12 @@ AcPDSongName_ReturnZero:
 
 AcPDSongName_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcPDSongName_End:
 
 AcPDFileNoBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70008
@@ -1940,7 +1940,7 @@ AcPDFileNo_ReturnZero:
 
 AcPDFileNo_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 
 IvNamingExitProc:
@@ -3438,7 +3438,7 @@ AcDemoSong_Epilogue:
 AcDemoSong_End:
 
 AcCurrentSongBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -3487,12 +3487,12 @@ AcCurSong_ReturnZero:
 
 AcCurSong_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcCurSong_End:
 
 AcCurSongNameBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c70000
@@ -3560,7 +3560,7 @@ MuteChSel_TtlSetup:
 ; SmfMuteChSelFunc title default
 MuteChSel_TtlDefault:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 
 DemoSongSelFunc:
@@ -3995,7 +3995,7 @@ SeqNameOK_Epilogue:
 SeqNameOK_End:
 
 AcDemoMedleyDispBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -4050,7 +4050,7 @@ DPPlayDsp_ReturnPath:
 ; DPPauseDspCheck entry
 DPPauseDsp_CheckEntry:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 
 DemoMedDspCheck:
@@ -4643,7 +4643,7 @@ HelpStsP2Check:
 	lds32 xwa, 0
 	ldb_d8 a, (0x296e)
 	sll xwa, 2
-	stb_dri W, 0xe1, 0xc8, 0x00
+	lda_dri XWA, 0xe1, 0xc8, 0x00
 	ld xhl, 0x69800
 	add xhl, xwa
 	sub xhl, xbc
@@ -4662,7 +4662,7 @@ HelpStsP3Check:
 	lds32 xwa, 0
 	ldb_d8 a, (0x296e)
 	sll xwa, 2
-	stb_dri W, 0xe1, 0x90, 0x01
+	lda_dri XWA, 0xe1, 0x90, 0x01
 	ld xhl, 0x69800
 	add xhl, xwa
 	sub xhl, xbc
@@ -4681,7 +4681,7 @@ HelpStsP4Check:
 	lds32 xwa, 0
 	ldb_d8 a, (0x296e)
 	sll xwa, 2
-	stb_dri W, 0xe1, 0x58, 0x02
+	lda_dri XWA, 0xe1, 0x58, 0x02
 	ld xhl, 0x69800
 	add xhl, xwa
 	sub xhl, xbc
@@ -6585,7 +6585,7 @@ NoteEditGrid_LoadCoordinates:
 	extz bc
 	sla bc, 3
 	lda_24 xde, (NakaInst_NO_OPERATION_0x208)
-	stb_dri B, 0x07, 0xe8, 0xe4
+	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld bc, (xde)
 	ld (xwa), bc
 	lda xhl, (xwa + 2)
@@ -9211,7 +9211,7 @@ SqedtVal_Epilogue:
 	ret
 
 SqedtFixProc:
-	stb_dri L, 0xfd, 0x7e, 0xff
+	lda_dri XSP, 0xfd, 0x7e, 0xff
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
@@ -10057,7 +10057,7 @@ SqedtFix_ReturnZero:
 
 SqedtFix_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x82, 0x00
+	lda_dri XSP, 0xfd, 0x82, 0x00
 	ret
 
 SqedtVal3Proc:
@@ -10779,7 +10779,7 @@ SqedtVal2_UpScrollModeA2:
 	extz wa
 	sla wa, 3
 	lda_24 xiy, (ExtDevice_ModeDispatch_Table_0x37A)
-	stb_dri E, 0x07, 0xf4, 0xe0
+	lda_dri XIY, 0x07, 0xf4, 0xe0
 	ld wa, (xiy + 2)
 	ld (xbc), wa
 	ld wa, (xiy)
@@ -10795,7 +10795,7 @@ SqedtVal2_UpScrollDefault:
 	extz wa
 	sla wa, 3
 	lda_24 xiy, (ExtDevice_ModeDispatch_Table_0x362)
-	stb_dri E, 0x07, 0xf4, 0xe0
+	lda_dri XIY, 0x07, 0xf4, 0xe0
 	ld wa, (xiy + 2)
 	ld (xbc), wa
 	ld wa, (xiy)
@@ -10824,7 +10824,7 @@ SqedtVal2_DownScrollModeA2:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda_24 xbc, (ExtDevice_ModeDispatch_Table_0x3A2)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld wa, (xbc + 2)
 	ld (xde), wa
 	ld wa, (xbc)
@@ -10840,7 +10840,7 @@ SqedtVal2_DownScrollDefault:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda_24 xbc, (ExtDevice_ModeDispatch_Table_0x38A)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld wa, (xbc + 2)
 	ld (xde), wa
 	ld wa, (xbc)
@@ -11935,7 +11935,7 @@ AccIll_Epilogue:
 	ret
 
 EffectBoxProc:
-	stb_dri L, 0xfd, 0xaa, 0xfe
+	lda_dri XSP, 0xfd, 0xaa, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x4e, 0x01
 	stl_dri XBC, 0xfd, 0x52, 0x01
@@ -12019,7 +12019,7 @@ EffectBox_HandleInitEvent:
 	call ApFuncCall
 	ld xbc, NakaInst_NO_OPERATION_0x12
 	add xbc, xhl
-	stb_dri W, 0xfd, 0x46, 0x01
+	lda_dri XWA, 0xfd, 0x46, 0x01
 	lda xde, (xwa + 2)
 	ld c, (xbc)
 	extz bc
@@ -12085,7 +12085,7 @@ EffectBox_HandleScrollEvent:
 	ld xwa, (xsp + 4)
 	cp l, (xwa + 36)
 	jrl nz, EffectBoxProc_ReturnZero
-	stb_dri D, 0xfd, 0x3e, 0x01
+	lda_dri XIX, 0xfd, 0x3e, 0x01
 	ldw (xix), 0x64
 	lda xbc, (xix + 2)
 	ldw (xbc), 0x26
@@ -12103,7 +12103,7 @@ EffectBox_HandleScrollEvent:
 	divs wa, 0x2
 	ld ix, (xix)
 	add ix, wa
-	stb_dri B, 0xfd, 0x3a, 0x01
+	lda_dri XDE, 0xfd, 0x3a, 0x01
 	ld (xde), ix
 	ld bc, (xbc)
 	ld wa, (xhl)
@@ -12133,8 +12133,8 @@ EffectBox_FillBufferLoop1:
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e00047
 	call ApFuncCall
-	stb_dri W, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x3a, 0x01
+	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 4
 	push xhl
@@ -12142,7 +12142,7 @@ EffectBox_FillBufferLoop1:
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
-	stb_dri A, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3e, 0x01
 	ldw (xbc), 0x3a
 	ldw wa, 0x3a
 	add wa, 0x8c
@@ -12177,7 +12177,7 @@ EffectBox_FillBufferLoop2:
 	lds iz, 0
 
 EffectBox_PostFillSetup:
-	stb_dri B, 0xfd, 0x3e, 0x01
+	lda_dri XDE, 0xfd, 0x3e, 0x01
 	lda xbc, (xde + 2)
 	ld wa, iz
 	extz xwa
@@ -12204,8 +12204,8 @@ EffectBox_PostFillSetup:
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 10)
-	stb_dri W, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x3a, 0x01
+	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
@@ -12216,7 +12216,7 @@ EffectBox_PostFillSetup:
 	inc 1, iz
 	cp iz, 0x8
 	jr c, EffectBox_PostFillSetup
-	stb_dri A, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3e, 0x01
 	ldw (xbc), 0x100
 	ldw wa, 0x100
 	add wa, 0x14
@@ -12238,7 +12238,7 @@ EffectBox_FillBufferLoop3:
 	lds iz, 0
 
 EffectBox_PostFill3Setup:
-	stb_dri B, 0xfd, 0x3e, 0x01
+	lda_dri XDE, 0xfd, 0x3e, 0x01
 	lda xbc, (xde + 2)
 	ld wa, iz
 	extz xwa
@@ -12259,7 +12259,7 @@ EffectBox_PostFill3Setup:
 	ld wa, iz
 	add wa, wa
 	extz xwa
-	stb_dri W, 0xe1, 0x88, 0x00
+	lda_dri XWA, 0xe1, 0x88, 0x00
 	lda xbc, (xsp + 60)
 	add xbc, xwa
 	push xbc
@@ -12267,8 +12267,8 @@ EffectBox_PostFill3Setup:
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 10)
-	stb_dri W, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x3a, 0x01
+	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
@@ -12279,7 +12279,7 @@ EffectBox_PostFill3Setup:
 	inc 1, iz
 	cp iz, 0x8
 	jr c, EffectBox_PostFill3Setup
-	stb_dri D, 0xfd, 0x3e, 0x01
+	lda_dri XIX, 0xfd, 0x3e, 0x01
 	ldw (xix), 0x2b
 	lda xde, (xix + 4)
 	ld wa, (xix)
@@ -12295,7 +12295,7 @@ EffectBox_PostFill3Setup:
 	divs wa, 0x2
 	ld ix, (xix)
 	add ix, wa
-	stb_dri B, 0xfd, 0x3a, 0x01
+	lda_dri XDE, 0xfd, 0x3a, 0x01
 	ld (xde), ix
 	ld bc, (xbc)
 	ld wa, (xhl)
@@ -12327,8 +12327,8 @@ EffectBox_SetEmptyString1:
 	ld (xwa + 1), 0x0
 
 EffectBox_DrawField1:
-	stb_dri W, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x3a, 0x01
+	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
@@ -12336,7 +12336,7 @@ EffectBox_DrawField1:
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
-	stb_dri A, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3e, 0x01
 	lda xwa, (xbc + 2)
 	ldw (xwa), 0xb6
 	ldw (xbc + 6), 0xc4
@@ -12380,8 +12380,8 @@ EffectBox_SetEmptyString2:
 	ld (xwa + 1), 0x0
 
 EffectBox_DrawField2:
-	stb_dri W, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x3a, 0x01
+	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
@@ -12417,7 +12417,7 @@ EffectBox_HandleSelectEvent:
 	ld xwa, (xsp + 4)
 	cp l, (xwa + 36)
 	jrl nz, EffectBoxProc_ReturnZero
-	stb_dri D, 0xfd, 0x3e, 0x01
+	lda_dri XIX, 0xfd, 0x3e, 0x01
 	ldw (xix), 0xc3
 	lda xde, (xix + 4)
 	ld wa, (xix)
@@ -12438,7 +12438,7 @@ EffectBox_HandleSelectEvent:
 	divs wa, 0x2
 	ld ix, (xix)
 	add ix, wa
-	stb_dri B, 0xfd, 0x3a, 0x01
+	lda_dri XDE, 0xfd, 0x3a, 0x01
 	ld (xde), ix
 	ld bc, (xbc)
 	ld wa, (xhl)
@@ -12520,8 +12520,8 @@ EffectBoxProc_CopyNameAndSetup:
 	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	stb_dri W, 0xfd, 0x3e, 0x01
-	stb_dri A, 0xfd, 0x3a, 0x01
+	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda_dri XBC, 0xfd, 0x3a, 0x01
 	cpl_sri_rm XHL, 0xfd, 0x4e, 0x01
 	jr nz, EffectBox_DrawWithFBColor
 	lda xde, (xsp + 38)
@@ -12885,7 +12885,7 @@ EffectBox_HandleInherited:
 
 EffectBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x56, 0x01
+	lda_dri XSP, 0xfd, 0x56, 0x01
 	ret
 
 EqualizerBoxProc:
@@ -15193,7 +15193,7 @@ DspItem0_DisplayParamValues:
 	ld wa, (xsp + 24)
 	add wa, wa
 	extz xwa
-	stb_dri A, 0xe1, 0x88, 0x00
+	lda_dri XBC, 0xe1, 0x88, 0x00
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 18)
 	add xwa, xbc
@@ -15271,42 +15271,42 @@ DspItem0_TypeDispatch:
 	jrl DspItem0_Epilogue
 	sla bc, 1
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jrl DspItem0_Epilogue
 	sla wa, 1
 	ld bc, wa
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jrl DspItem0_Epilogue
 	ld bc, (xsp + 8)
 	sla bc, 1
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jrl DspItem0_Epilogue
 	ld bc, (xsp + 10)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 12)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 14)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 16)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 18)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	stb_dri C, 0x07, 0xe0, 0xe4
+	lda_dri XHL, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 
 DspItem0_HandleType2:
@@ -15459,7 +15459,7 @@ Equalizer_ParamByIndex:
 	add xde, NakaInst_2d_0x176
 	ld a, (xde)
 	exts wa
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	jrl Equalizer_PopIzRet
 
 Equalizer_ReturnParamAddr:

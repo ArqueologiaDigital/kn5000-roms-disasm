@@ -203,7 +203,7 @@ RhythmEvt_ApplyNoteRange:
 RhythmEvt_PostProcess:
 	calr Rhythm_VelocityCompute
 	popw iy
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -235,7 +235,7 @@ RhythmEvt_Full90_PostRange:
 RhythmEvt_Full90_PostTransp:
 	calr Rhythm_VelocityLookup_A
 	popw iy
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -260,13 +260,13 @@ RhythmEvt_Full91_PostTransp:
 
 	popw iy
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	.byte 0x1d, 0x55, 0x3c, 0xf5	; call RingBuf_AdvanceIndex (v7 addr)
 
 	.byte 0xc1, 0x94, 0x33, 0x21	; ldb_d8 a, (0x3430) (v7 patched)
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	.byte 0x1e, 0x1e, 0x00	; calr Rhythm_AdvancePosition (v7 displacement)
 
@@ -377,7 +377,7 @@ Rhythm_VelLookA_TableLookup:
 	extz hl
 	sla hl, 4
 	ld xiy, Display_FontPalette_Table_0x136A
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
 	calr Rhythm_TransposeNote
@@ -390,7 +390,7 @@ Rhythm_VelLookA_Done:
 Rhythm_InstrBaseLookup:
 	push xiy
 	ld xiy, Display_FontPalette_Table_0x12EA
-	stb_dri E, 0x03, 0xf4, 0xe0
+	lda_dri XIY, 0x03, 0xf4, 0xe0
 	ld a, (xiy)
 	pop xiy
 	ret
@@ -515,7 +515,7 @@ Rhythm_VoiceMap_Inst2Bit3:
 	extz hl
 	sla hl, 4
 	ld xiy, Display_FontPalette_Table_0x136A
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
 	calr Rhythm_TransposeNote
@@ -569,7 +569,7 @@ Rhythm_VelComp_Lookup:
 	extz hl
 	sla hl, 4
 	ld xiy, Display_FontPalette_Table_0x136A
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
 	calr Rhythm_TransposeNote
@@ -1192,7 +1192,7 @@ Rhythm_TranspMod_BaseLookup:
 	extz hl
 	sla hl, 4
 	ld xiy, Display_FontPalette_Table_0x136A
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
 	ret

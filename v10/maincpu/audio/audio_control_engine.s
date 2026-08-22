@@ -1648,7 +1648,7 @@ LEDUpdate_ProcessChannel:
 	extz de
 	ld xwa, (xsp + 6)
 	stb_erp C, 0xfa
-	lda_dri XHL, 0x07, 0xe0, 0xe8
+	stb_dri C, 0x07, 0xe0, 0xe8
 
 LEDUpdate_NextChannel:
 	inc1b_erp 0xfb
@@ -3243,7 +3243,7 @@ VoiceData_InitAndCopyParams:
 	call Math_MultiplyAccumulate
 	add xhl, 0x99eca0
 	add xhl, 0x7c
-	stb_dri W, 0xf9, 0x1e, 0x01
+	lda_dri XWA, 0xf9, 0x1e, 0x01
 	pushw 0x226
 	push xhl
 	push xwa
@@ -3604,7 +3604,7 @@ MidiChannelMsg_WriteOutput:
 	ld a, (xiz + 1)
 	inc 2, a
 	extz wa
-	stb_dri H, 0x07, 0xf8, 0xe0
+	lda_dri XIZ, 0x07, 0xf8, 0xe0
 
 MidiMsg_LoopAndFlush:
 	cp xiz, 0xffbe
@@ -3720,7 +3720,7 @@ BitmapTable_ProcessEntry:
 BitmapTable_RenderLine:
 	ld a, e
 	extz wa
-	stb_dri A, 0x07, 0xf0, 0xe0
+	lda_dri XBC, 0x07, 0xf0, 0xe0
 	ld a, d
 	cpl a
 	and (xbc), a
@@ -5280,7 +5280,7 @@ CtrlPanel_RefreshIndicatorState:
 	ret
 
 CtrlPanel_CompareAndUpdateIndicators:
-	stb_dri L, 0xfd, 0x8e, 0xfe
+	lda_dri XSP, 0xfd, 0x8e, 0xfe
 	push xiz
 	stl_dri XBC, 0xfd, 0x6e, 0x01
 	stl_dri XWA, 0xfd, 0x72, 0x01
@@ -5395,7 +5395,7 @@ CtrlPanelRefresh_CheckMigration:
 
 CtrlPanelRefresh_Done:
 	pop xiz
-	stb_dri L, 0xfd, 0x72, 0x01
+	lda_dri XSP, 0xfd, 0x72, 0x01
 	ret
 
 CtrlPanel_BuildIndicatorBitmask:
@@ -5924,7 +5924,7 @@ SwbtWr_WriteParamBlock_Body:
 	jr z, Voice_Update_Return
 	ldb_d8 a, (0x912f)
 	extz wa
-	stb_dri C, 0x07, 0xec, 0xe0
+	lda_dri XHL, 0x07, 0xec, 0xe0
 	ldb_d8 a, (0x9130)
 	andda8 a, 0x9131
 	xor (xhl), a
@@ -6162,7 +6162,7 @@ ToneGen_ApplyVoiceParams:
 	jr z, ToneGen_DispatchStartVoice
 	ld a, (xsp + 2)
 	extz wa
-	stb_dri C, 0x07, 0xec, 0xe0
+	lda_dri XHL, 0x07, 0xec, 0xe0
 	ld c, (xhl)
 	stb_d8 (0x9132), c
 	ld e, (xsp)
@@ -6591,7 +6591,7 @@ MidiDistribute_LookupAndWrite:
 	jr ugt, MidiDistribute_Fallthrough
 	extz bc
 	ld a, (xsp + 2)
-	lda_dri XBC, 0x07, 0xec, 0xe4
+	stb_dri A, 0x07, 0xec, 0xe4
 
 MidiDistribute_Fallthrough:
 	jr MidiDistribute_Done
@@ -7282,7 +7282,7 @@ MIDI_WriteVoiceParamCC:
 	and a, w
 	and e, d
 	or e, a
-	lda_dri XIY, 0x07, 0xf0, 0xec
+	stb_dri E, 0x07, 0xf0, 0xec
 	stda16 (0x9127), xbc
 	stda16 (0x9129), xde
 
@@ -7319,7 +7319,7 @@ MIDI_WriteVoiceParamDirect:
 	and a, w
 	and e, d
 	or e, a
-	lda_dri XIY, 0x07, 0xf0, 0xec
+	stb_dri E, 0x07, 0xf0, 0xec
 	stda16 (0x9127), xbc
 	stda16 (0x9129), xde
 
@@ -9026,7 +9026,7 @@ VoiceParam_StoreExpression:
 	ld xix, 0x94d2
 	ldb_d8 a, (0x91b7)
 	set 7, a
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	ret
 
 VoiceParam_WriteExpression:
@@ -9071,7 +9071,7 @@ VoiceParam_StoreVolume:
 	ld xix, 0x9452
 	ldb_d8 a, (0x91b7)
 	set 7, a
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	ret
 
 VoiceParam_WriteVolume:
@@ -9170,7 +9170,7 @@ VoiceNote_StoreBankSelect:
 	jr nz, VoiceNote_WriteBankAndCC
 	set 7, e
 	ld xix, 0x9432
-	lda_dri XIY, 0x07, 0xf0, 0xec
+	stb_dri E, 0x07, 0xf0, 0xec
 	ret
 
 VoiceNote_WriteBankAndCC:
@@ -10114,7 +10114,7 @@ MidiStream_LoadVoiceLoop:
 	bit 7, a
 	jr z, MidiStream_LoadVoiceNext
 	res 7, a
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 	stdi8 (0x90f8), 255
 	stb_d8 (0x9127), w
 	stb_d8 (0x9128), l
@@ -10180,7 +10180,7 @@ MidiStream_LoadPedalLoop:
 	bit 7, a
 	jr z, MidiStream_LoadPedalNext
 	res 7, a
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 	stdi8 (0x90f8), 255
 	ld c, l
 	ldb b, 0x3

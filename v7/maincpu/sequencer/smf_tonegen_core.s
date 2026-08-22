@@ -80,7 +80,7 @@ SeqTrack_ScanActiveChannels:
 	xor a, a
 
 SeqTrack_ScanActiveChannels_Loop:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x7
 	cp iy, 0xe0
 	jrl ule, SeqTrack_ScanActiveChannels_Loop
@@ -367,7 +367,7 @@ SeqTrack_AssignChannel_Loop:
 	ld xhl, 0xf250
 	or_srib_im 0x07, 0xec, 0xf4, 0x80
 	push xhl
-	stb_dri C, 0x07, 0xec, 0xf4
+	lda_dri XHL, 0x07, 0xec, 0xf4
 	ldfr_lerp XHL, 0x38
 	pop xhl
 	stw_dri WA, 0x39, 0x01, 0x00
@@ -1087,7 +1087,7 @@ SMF_VoiceSetup_AssignToTrack:
 	ld xhl, 0xf250
 	or_srib_im 0x07, 0xec, 0xf4, 0x80
 	ldfr_lerp XHL, 0x38
-	stb_dri C, 0x07, 0xec, 0xf4
+	lda_dri XHL, 0x07, 0xec, 0xf4
 	ld (xhl + 1), wa
 	ldto_lerp XHL, 0x38
 	ld xhl, 0xc9e
@@ -1951,7 +1951,7 @@ ToneGen_LoadBlockValidate:
 	call ToneGen_ComputeBlockPtr
 	ldda32 xhl, (4349)
 	ldw_d16 xiy, (9830)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 	ret
 
@@ -1959,7 +1959,7 @@ SoundGen_StoreVoiceParamsToTables:
 	push xix
 	ldw_d16 xwa, (9830)
 	ld xix, 0xf218
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	sla hl, 1
 	ldw_d16 xwa, (0x28af)
 	ld xix, 0xf1f8
@@ -2392,7 +2392,7 @@ ToneGen_ReadAndDispatchVoiceBlock:
 	ld xix, 0x17fa
 	ldb_sri A, 0x07, 0xf0, 0xf4
 	ld xix, 0x1073
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	pop xix
 	cp a, 0x82
 	jrl z, ToneGen_ReadVoiceBlock_Done
@@ -2411,7 +2411,7 @@ ToneGen_ReadVoiceBlock_Loop:
 	jrl nz, ToneGen_ReadVoiceBlock_Done
 	push xix
 	ld xix, 0x1073
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	pop xix
 	jrl ToneGen_ReadVoiceBlock_Loop
 
@@ -2507,7 +2507,7 @@ ToneGen_WriteChannelRegs:
 	ldw_d16 xwa, (9830)
 	srl iy, 1
 	ld xix, 0xcbe
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xix
 	ret
 
@@ -2530,7 +2530,7 @@ ToneGen_SyncBitmap_Loop:
 	bit_dri 7, 0x07, 0xf0, 0xec
 	jrl z, ToneGen_UpdateBlocks_NextChannel
 	ld xix, 0xf250
-	stb_dri D, 0x07, 0xf0, 0xec
+	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld wa, (xix + 1)
 	ld iy, bc
 	ld xix, 0xc9e
@@ -2794,7 +2794,7 @@ MidiNoteOff_ScanActiveA_Loop:
 
 Scoop_ApplyMatchedVoiceEntry:
 	ldda32 xhl, (4349)
-	lda_dri XWA, 0x07, 0xec, 0xf0
+	stb_dri W, 0x07, 0xec, 0xf0
 	pop xhl
 	push_sd16w 0xaf, 0x28
 	push_sd16w 0x66, 0x26
@@ -2808,7 +2808,7 @@ Scoop_ApplyMatchedVoiceEntry:
 	ldda32 xix, (4349)
 	ldw_d16 xiy, (9830)
 	and iy, 0xff
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xiy
 	pop xix
 	popw_dd16 0x66, 0x26
@@ -3379,7 +3379,7 @@ MidiNoteOff_ScanActiveB_Loop:
 
 Scoop_ApplyMatchedVoiceEntryAlt:
 	ldda32 xhl, (4349)
-	lda_dri XWA, 0x07, 0xec, 0xf0
+	stb_dri W, 0x07, 0xec, 0xf0
 	pop xhl
 	push_sd16w 0xaf, 0x28
 	push_sd16w 0x66, 0x26
@@ -3390,7 +3390,7 @@ Scoop_ApplyMatchedVoiceEntryAlt:
 	popw wa
 	ldw_d16 xix, (9830)
 	ldda32 xhl, (4349)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	popw_dd16 0x66, 0x26
 	popw_dd16 0xaf, 0x28
 	jrl MidiNoteOff_ReleaseVoiceB_Done
@@ -3818,7 +3818,7 @@ SoundGen_StoreVoiceToTables_Clamped:
 SoundGen_StoreVoice_AfterClamp:
 	ldw_d16 xwa, (9830)
 	ld xix, 0xf218
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	sla hl, 1
 	ldw_d16 xwa, (0x28af)
 	ld xix, 0xf1f8
@@ -3992,13 +3992,13 @@ ToneGen_AdvanceVoiceLoop:
 
 VoiceChannel_FindNextValid:
 	ldda32 xhl, (4349)
-	lda_dri XHL, 0x07, 0xec, 0xf0
+	stb_dri C, 0x07, 0xec, 0xf0
 	bitda 0, (0x27d2)
 	jr nz, VoiceChannel_ValidateAndLoop
 	call VoiceChannel_AdvanceIndex
 	ldda32 xhl, (4349)
 	ldb_d8 a, (0x27dc)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 
 VoiceChannel_ValidateAndLoop:
 	push xix
@@ -4019,7 +4019,7 @@ VoiceChannel_ValidateAndLoop:
 	ld xde, 0x17fa
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	jr VoiceChannel_ValidateAndLoop
 
 VoiceChannel_FindNext_StoreAndUpdate:
@@ -4172,7 +4172,7 @@ VoiceSynth_HandleBankSelect:
 	ldb_d8 a, (4013)
 	push xix
 	ld xix, 0xf82
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xix
 	ret
 
@@ -4213,7 +4213,7 @@ VoiceSynth_DataEntry_CheckSpec:
 	call VoiceChannel_GetCombinedStatus
 	pop xiy
 	pop xhl
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	call VoiceChannel_LookupParams
 
 VoiceSynth_DataEntry_Done:
@@ -4307,7 +4307,7 @@ VoiceChannel_SelectNextParam:
 	ld a, e
 
 VoiceChannel_NextParam_Clamped:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	call VoiceChannel_LookupParams
 
 VoiceChannel_NextParam_Done:
@@ -4338,7 +4338,7 @@ VoiceChannel_SelectPrevParam:
 	dec 1, a
 
 VoiceChannel_PrevParam_AtZero:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	call VoiceChannel_LookupParams
 
 VoiceChannel_PrevParam_Done:
@@ -4379,7 +4379,7 @@ VoiceChannel_NoteOnByChannel:
 	ldb_d8 a, (4013)
 	push xix
 	ld xix, 0x1093
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xix
 	cp a, 0x7f
 	jr z, VoiceChannel_NoteOn_ClearSlot
@@ -4420,9 +4420,9 @@ VoiceChannel_NoteOn_ClearSlot:
 	stib_ind 0x07, 0xf0, 0xf4, 0xff
 	xor c, c
 	ld xix, 0x10c3
-	lda_dri XHL, 0x07, 0xf0, 0xf4
+	stb_dri C, 0x07, 0xf0, 0xf4
 	ld xix, 0x10d3
-	lda_dri XHL, 0x07, 0xf0, 0xf4
+	stb_dri C, 0x07, 0xf0, 0xf4
 	pop xix
 
 VoiceChannel_NoteOn_Done:
@@ -4434,7 +4434,7 @@ VoiceChannel_NoteOffByChannel:
 	ldb_d8 a, (4013)
 	push xix
 	ld xix, 0x10a3
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xix
 	cp a, 0x7f
 	jr z, VoiceChannel_NoteOff_ClearSlot
@@ -4479,9 +4479,9 @@ VoiceChannel_NoteOff_ClearSlot:
 	stib_ind 0x07, 0xf0, 0xf4, 0xff
 	xor c, c
 	ld xix, 0x10c3
-	lda_dri XHL, 0x07, 0xf0, 0xf4
+	stb_dri C, 0x07, 0xf0, 0xf4
 	ld xix, 0x10d3
-	lda_dri XHL, 0x07, 0xf0, 0xf4
+	stb_dri C, 0x07, 0xf0, 0xf4
 	pop xix
 
 VoiceChannel_NoteOff_Done:
@@ -4575,7 +4575,7 @@ SoundGen_WriteVoiceParams:
 	ldw_d16 xwa, (9830)
 	srl xiy, 1
 	ld xde, 0xcbe
-	lda_dri XBC, 0x07, 0xe8, 0xf4
+	stb_dri A, 0x07, 0xe8, 0xf4
 	pop xde
 	ret
 
@@ -4585,7 +4585,7 @@ VoiceParam_HandleBankSelect:
 	ldb_d8 a, (4013)
 	push xde
 	ld xde, 0xf82
-	lda_dri XBC, 0x07, 0xe8, 0xf4
+	stb_dri A, 0x07, 0xe8, 0xf4
 	pop xde
 	ret
 
@@ -4624,7 +4624,7 @@ VoiceParam_DataEntry_CheckSpec:
 	call VoiceChannel_GetCombinedStatus
 	pop xiy
 	pop xhl
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	call VoiceChannel_LookupParams
 
 VoiceParam_DataEntry_Done:
@@ -4679,13 +4679,13 @@ VoiceParam_Chorus_SetParams:
 
 ToneGen_AdvanceAndValidateVoice:
 	ldda32 xhl, (4349)
-	lda_dri XDE, 0x07, 0xec, 0xf0
+	stb_dri B, 0x07, 0xec, 0xf0
 	bitda 1, (0x27d2)
 	jr nz, ToneGen_ValidateVoiceLoop
 	call VoiceChannel_AdvanceIndex
 	ldda32 xhl, (4349)
 	ldb_d8 a, (0x27de)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 
 ToneGen_ValidateVoiceLoop:
 	push xix
@@ -4706,7 +4706,7 @@ ToneGen_ValidateVoiceLoop:
 	ld xix, 0x18fa
 	ldb_sri A, 0x07, 0xf0, 0xf4
 	pop xix
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	jr ToneGen_ValidateVoiceLoop
 
 ToneGen_AdvValidate_StoreAndDone:
@@ -5231,7 +5231,7 @@ Scoop_AssignVoiceAfterMatch:
 	dec 1, hl
 	ld wa, ix
 	ld xiy, 0xf218
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 	sla hl, 1
 	ldw_d16 xwa, (0x289f)
 	ld xiy, 0xf1f8

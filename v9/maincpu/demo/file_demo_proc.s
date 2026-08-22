@@ -1120,7 +1120,7 @@ Demo_GetPresetBase_Default:
 	lda_24 xhl, (0x0ab000)
 
 Demo_GetPresetBase_StoreAndRet:
-	stb_dri C, 0xed, 0x00, 0x08
+	lda_dri XHL, 0xed, 0x00, 0x08
 	ret
 
 Demo_GetPresetBaseForPartAlt:
@@ -1138,7 +1138,7 @@ Demo_GetPresetBaseAlt_Default:
 	lda_24 xhl, (0x0ab000)
 
 Demo_GetPresetBaseAlt_StoreAndRet:
-	stb_dri C, 0xed, 0x00, 0x03
+	lda_dri XHL, 0xed, 0x00, 0x03
 	ret
 
 Demo_GetPresetBaseForPartExt:
@@ -1156,7 +1156,7 @@ Demo_GetPresetBaseExt_Default:
 	lda_24 xwa, (0x0ab000)
 
 Demo_GetPresetBaseExt_StoreAndRet:
-	stb_dri C, 0xe1, 0xd0, 0x00
+	lda_dri XHL, 0xe1, 0xd0, 0x00
 	ret
 
 Voice_GetPresetFieldWord:
@@ -1498,7 +1498,7 @@ FileIO_ReadValidateHdr_Loop:
 
 FileIO_ReadValidateHdr_Store:
 	lda xwa, (xsp + 2)
-	lda_dri XSP, 0x07, 0xe0, 0xf8
+	stb_dri L, 0x07, 0xe0, 0xf8
 	inc 1, iz
 	cps iz, 3
 	jr lt, FileIO_ReadValidateHdr_Loop
@@ -1994,7 +1994,7 @@ LoadSong8_ReadLoop:
 	cps hl, 0
 	jr lt, LoadSong8_ReadDone
 	lda xwa, (xsp + 4)
-	lda_dri XSP, 0x07, 0xe0, 0xf8
+	stb_dri L, 0x07, 0xe0, 0xf8
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, LoadSong8_ReadLoop
@@ -4006,7 +4006,7 @@ GetFirstRecord_GotPage:
 	jp FileIO_OpenDefault
 
 SearchAndOpen:
-	stb_dri L, 0xfd, 0xf2, 0xfe
+	lda_dri XSP, 0xfd, 0xf2, 0xfe
 	pushw iz
 	stl_dri XWA, 0xfd, 0x0c, 0x01
 	call GetFirstPageBase
@@ -4036,7 +4036,7 @@ SearchOpen_AlreadyExists:
 
 SearchOpen_Return:
 	popw iz
-	stb_dri L, 0xfd, 0x0e, 0x01
+	lda_dri XSP, 0xfd, 0x0e, 0x01
 	ret
 
 LoadFromSecondaryPage:
@@ -4123,7 +4123,7 @@ FileIO_OpenMode_Success:
 
 FileIO_OpenMode_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x80, 0x00
+	lda_dri XSP, 0xfd, 0x80, 0x00
 	ret
 
 FileIO_CloseHandle:
@@ -5225,7 +5225,7 @@ GetRecordFlags_Valid:
 	ret
 
 FileIO_CheckFileExists:
-	stb_dri L, 0xfd, 0xf6, 0xfe
+	lda_dri XSP, 0xfd, 0xf6, 0xfe
 	lda xbc, (xsp)
 	call _findfirst
 	ld xwa, xhl
@@ -5239,7 +5239,7 @@ CheckFileExists_NotFound:
 	ldb l, 0x0
 
 CheckFileExists_Done:
-	stb_dri L, 0xfd, 0x0a, 0x01
+	lda_dri XSP, 0xfd, 0x0a, 0x01
 	ret
 
 FileIO_InitRecordTable:
@@ -5249,7 +5249,7 @@ FileIO_InitRecordTable:
 	ldirw
 	lda_24 xbc, (0x025db8)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0xf0, 0x00
+	lda_dri XDE, 0xe5, 0xf0, 0x00
 
 InitRecordTable_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x50
@@ -5261,7 +5261,7 @@ InitRecordTable_CopyLoop:
 	jr c, InitRecordTable_CopyLoop
 	lda_24 xbc, (0x025eb2)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0x38, 0x13
+	lda_dri XDE, 0xe5, 0x38, 0x13
 
 InitRecordTable_ExtLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -5447,9 +5447,9 @@ GetCurrentFileType_Lookup:
 	ret
 
 UpdateFileEntry:
-	stb_dri L, 0xfd, 0xd4, 0xfe
+	lda_dri XSP, 0xfd, 0xd4, 0xfe
 	push xiz
-	lda_dri XHL, 0xfd, 0x2e, 0x01
+	stb_dri C, 0xfd, 0x2e, 0x01
 	ld iz, wa
 	ld xiy, Filename_TemplateArea_0x26
 	lda xix, (xsp + 20)
@@ -5494,7 +5494,7 @@ UpdateFileEntry_Commit:
 
 UpdateFileEntry_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x2c, 0x01
+	lda_dri XSP, 0xfd, 0x2c, 0x01
 	ret
 
 ParseFileExtension:
@@ -5611,7 +5611,7 @@ HandleFilenameChange:
 	ld bc, iz
 	muls bc, 0xc
 	lda_24 xwa, (0x025db8)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	cp (xwa + 2), 0x0
 	jr nz, HandleFilenameChange_ExistingEntry
 	ld wa, iz
@@ -5623,14 +5623,14 @@ HandleFilenameChange:
 	ld bc, iz
 	muls bc, 0xc
 	lda_24 xwa, (0x025dba)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, (xsp + 10)
 	inc 2, xbc
 	lds de, 6
 	calr FileIO_CopyString_WriteNull
 	muls iz, 0xc
 	lda_24 xwa, (0x025db8)
-	stb_dri W, 0x07, 0xe0, 0xf8
+	lda_dri XWA, 0x07, 0xe0, 0xf8
 	ld (xwa + 8), 0x0
 	cpw (xsp + 4), 0x0
 	jr nz, HandleFilenameChange_ReturnOK
@@ -5663,7 +5663,7 @@ HandleFilenameChange_ExistingEntry:
 	jr nz, HandleFilenameChange_ReturnFail
 	lda_24 xbc, (0x025dc2)
 	muls iz, 0xc
-	stb_dri A, 0x07, 0xe4, 0xf8
+	lda_dri XBC, 0x07, 0xe4, 0xf8
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1388
 	jr ule, HandleFilenameChange_SmallFile
@@ -5682,11 +5682,11 @@ HandleFilenameChange_Return:
 	ret
 
 GetEncodedFileSizeData:
-	stb_dri L, 0xfd, 0xee, 0xfe
+	lda_dri XSP, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, (0x025db8)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0xf0, 0x00
+	lda_dri XDE, 0xe5, 0xf0, 0x00
 
 GetEncFileSize_CopyRecordLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x50
@@ -5748,7 +5748,7 @@ GetEncFileSize_ReleaseHandle:
 GetEncFileSize_Return:
 	ld hl, iz
 	popw iz
-	stb_dri L, 0xfd, 0x12, 0x01
+	lda_dri XSP, 0xfd, 0x12, 0x01
 	ret
 
 ; =============================================================================
@@ -5953,11 +5953,11 @@ GetFirstPageBase_Valid:
 	ret
 
 BuildSecondPageRecords:
-	stb_dri L, 0xfd, 0xee, 0xfe
+	lda_dri XSP, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, (0x025eb2)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0x38, 0x13
+	lda_dri XDE, 0xe5, 0x38, 0x13
 
 BuildSecondPage_CopyRecordLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -6029,7 +6029,7 @@ BuildSecondPage_ReleaseHandle:
 BuildSecondPage_Return:
 	ld hl, iz
 	popw iz
-	stb_dri L, 0xfd, 0x12, 0x01
+	lda_dri XSP, 0xfd, 0x12, 0x01
 	ret
 
 NavigateToFileIndex:
@@ -6202,7 +6202,7 @@ ReadField_ShortLoop:
 
 ReadField_StoreByte:
 	ld xwa, (xsp + 4)
-	lda_dri XSP, 0x07, 0xe0, 0xf8
+	stb_dri L, 0x07, 0xe0, 0xf8
 	decm 1, (xsp + 8)
 	inc 1, iz
 	cpw (xsp + 8), 0x0
@@ -6218,7 +6218,7 @@ ReadField_LongLoop:
 	jr lt, ReadField_DiscardExtra
 	ld c, l
 	ld xwa, (xsp + 4)
-	stb_dri W, 0x07, 0xe0, 0xf8
+	lda_dri XWA, 0x07, 0xe0, 0xf8
 	cpw (xsp + 2), 0x0
 	jr z, ReadField_Long_CheckSpace
 	cp hl, 0x20
@@ -6255,7 +6255,7 @@ ReadField_TrimSpace:
 ReadField_TrimLoop:
 	dec 1, iz
 	ld xwa, (xsp + 4)
-	stb_dri W, 0x07, 0xe0, 0xf8
+	lda_dri XWA, 0x07, 0xe0, 0xf8
 	cp (xwa), 0x20
 	jr nz, ReadField_Return
 	cps iz, 0
@@ -7018,11 +7018,11 @@ GetCurrentIndex_Return:
 	ret
 
 BuildPageRecords:
-	stb_dri L, 0xfd, 0xee, 0xfe
+	lda_dri XSP, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, (0x025eb2)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0x38, 0x13
+	lda_dri XDE, 0xe5, 0x38, 0x13
 
 BuildRecords_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -7094,7 +7094,7 @@ BuildRecords_Cleanup:
 BuildRecords_Return:
 	ld hl, iz
 	popw iz
-	stb_dri L, 0xfd, 0x12, 0x01
+	lda_dri XSP, 0xfd, 0x12, 0x01
 	ret
 
 SetCurrentFileIndex:
@@ -7187,7 +7187,7 @@ TrimAndFormatFilename:
 	jr le, TrimFormat_TrimTrailing
 
 TrimFormat_ScanLoop:
-	stb_dri C, 0x07, 0xf8, 0xf0
+	lda_dri XHL, 0x07, 0xf8, 0xf0
 	ld c, (xhl)
 	cp c, 0x20
 	jr nc, TrimFormat_CheckSeparator
@@ -7203,7 +7203,7 @@ TrimFormat_TrimTrailing:
 	jr lt, TrimFormat_CheckLeading
 
 TrimFormat_TrimLoop:
-	stb_dri W, 0x07, 0xf8, 0xf0
+	lda_dri XWA, 0x07, 0xf8, 0xf0
 	cp (xwa), 0x20
 	jr nz, TrimFormat_CheckLeading
 	ld (xwa), 0x0
@@ -7230,7 +7230,7 @@ TrimFormat_SkipSpaces:
 	inc 1, ix
 
 TrimFormat_SkipLoop:
-	stb_dri A, 0x07, 0xe0, 0xf0
+	lda_dri XBC, 0x07, 0xe0, 0xf0
 	cp (xbc), 0x20
 	jr z, TrimFormat_SkipSpaces
 	ld xwa, xiz
@@ -7239,7 +7239,7 @@ TrimFormat_SkipLoop:
 TrimFormat_Done:
 	lds hl, 0
 	pop xiz
-	stb_dri L, 0xfd, 0x80, 0x00
+	lda_dri XSP, 0xfd, 0x80, 0x00
 	ret
 
 DetectFileType:
@@ -7382,7 +7382,7 @@ FileIO_InitDirScan:
 	push xiz
 	lda_24 xbc, (0x025eb2)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0x38, 0x13
+	lda_dri XDE, 0xe5, 0x38, 0x13
 
 InitDirScan_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -7594,7 +7594,7 @@ RefreshNames_FallbackLoop:
 	subda16_24 xwa, (0x271ee)
 	muls wa, 0x52
 	lda_24 xbc, (0x025eb2)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 	inc 1, iz
@@ -7621,7 +7621,7 @@ RefreshNames_ReadLoop:
 	muls wa, 0x52
 	ld bc, wa
 	lda_24 xwa, (0x025ec0)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, 0x30
 	call FileIO_ReadBlock
 	ld wa, iz
@@ -7640,7 +7640,7 @@ RefreshNames_ReadLoop:
 	subda16_24 xwa, (0x271ee)
 	muls wa, 0x52
 	lda_24 xbc, (0x025eb2)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
@@ -7666,7 +7666,7 @@ RefreshNames_AltFallbackLoop:
 	subda16_24 xwa, (0x271ee)
 	muls wa, 0x52
 	lda_24 xbc, (0x025eb2)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 	inc 1, iz
@@ -7690,7 +7690,7 @@ RefreshNames_AltReadLoop:
 	muls wa, 0x52
 	ld bc, wa
 	lda_24 xwa, (0x025ec0)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, 0x10
 	call FileIO_ReadBlock
 	ld wa, iz
@@ -7709,7 +7709,7 @@ RefreshNames_AltReadLoop:
 	subda16_24 xwa, (0x271ee)
 	muls wa, 0x52
 	lda_24 xbc, (0x025eb2)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
@@ -7778,7 +7778,7 @@ CheckMediaWritable_Ok:
 	ret
 
 FileIO_OpenWithBuiltPath:
-	stb_dri L, 0xfd, 0x70, 0xff
+	lda_dri XSP, 0xfd, 0x70, 0xff
 	push xiz
 	stl_dri XBC, 0xfd, 0x90, 0x00
 	ld xiz, xwa
@@ -7795,7 +7795,7 @@ FileIO_OpenWithBuiltPath:
 	ld_sril XBC, (xsp + 0x0090)
 	call FileIO_OpenWithMode
 	pop xiz
-	stb_dri L, 0xfd, 0x90, 0x00
+	lda_dri XSP, 0xfd, 0x90, 0x00
 	ret
 
 FileIO_BuildFileIndex:
@@ -7808,7 +7808,7 @@ FileIO_BuildFileIndex:
 
 BuildIndex_ScanLoop:
 	ld xwa, (xsp + 4)
-	stb_dri W, 0x07, 0xe0, 0xf8
+	lda_dri XWA, 0x07, 0xe0, 0xf8
 	ld xbc, FileOp_StubAndDirNames_0x7E
 	lds de, 3
 	calr FileIO_Search_SkipEntry
@@ -7823,7 +7823,7 @@ BuildIndex_CheckSubEntry:
 	sla bc, 5
 	addw_erp BC, 0xfa
 	lda_24 xhl, (0x027312)
-	lda_dri XIY, 0x07, 0xec, 0xe4
+	stb_dri E, 0x07, 0xec, 0xe4
 	ld xbc, FileOp_StubAndDirNames_0x82
 	lds de, 3
 	calr FileIO_Search_SkipEntry
@@ -7834,7 +7834,7 @@ BuildIndex_CheckSubEntry:
 
 BuildIndex_CheckComma:
 	ld xwa, (xsp + 4)
-	stb_dri W, 0x07, 0xe0, 0xf8
+	lda_dri XWA, 0x07, 0xe0, 0xf8
 	ld e, (xwa)
 	cp e, 0x2c
 	jr z, FileIO_StoreIndexedEntry
@@ -7909,7 +7909,7 @@ CtrlCmd_SetPathAndBuild:
 	ld (xbc), 0x0
 	calr FileIO_FindPathSeparator
 	inc 3, hl
-	stb_dri W, 0x07, 0xf8, 0xec
+	lda_dri XWA, 0x07, 0xf8, 0xec
 
 ControlState_ProcessNext:
 	calr FileIO_BuildFileIndex
@@ -7919,7 +7919,7 @@ CtrlCmd_Return:
 	ret
 
 FileIO_FindFirstMatch:
-	stb_dri L, 0xfd, 0xec, 0xfe
+	lda_dri XSP, 0xfd, 0xec, 0xfe
 	push xiz
 	stl_dri XBC, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -7949,7 +7949,7 @@ FindFirst_BuildPathLoop:
 	ld wa, (xsp + 4)
 	sla wa, 5
 	lda_24 xbc, (0x027312)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, 0x25c6c
 	calr FileIO_BuildFilePath
 	lda xbc, (xsp + 6)
@@ -7995,11 +7995,11 @@ FindFirst_NotFound:
 
 FindFirst_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x14, 0x01
+	lda_dri XSP, 0xfd, 0x14, 0x01
 	ret
 
 FileIO_FindNextMatch:
-	stb_dri L, 0xfd, 0xf2, 0xfe
+	lda_dri XSP, 0xfd, 0xf2, 0xfe
 	push xiz
 	stl_dri XBC, 0xfd, 0x0e, 0x01
 	ld xiz, xwa
@@ -8041,7 +8041,7 @@ FindNext_Ok:
 
 FindNext_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x0e, 0x01
+	lda_dri XSP, 0xfd, 0x0e, 0x01
 	ret
 
 FileIO_SearchStringMatch:
@@ -8093,7 +8093,7 @@ FileIO_ExtractBasename:
 	exts wa
 	sla wa, 5
 	lda_24 xbc, (0x027312)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ldw de, 0xffff
 	lds ix, 0
 	cp (xbc), 0x0
@@ -8101,7 +8101,7 @@ FileIO_ExtractBasename:
 
 ExtractBase_ScanLoop:
 	ldb_sri A, 0x07, 0xe4, 0xf0
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	cp a, 0x5c
 	jr nz, ExtractBase_TrackSep
 	ld de, ix
@@ -8127,7 +8127,7 @@ ExtractBase_Done:
 FileIO_NormalizePath:
 	cp (xwa), 0x5c
 	scc16 z, de
-	stb_dri A, 0x07, 0xe0, 0xe8
+	lda_dri XBC, 0x07, 0xe0, 0xe8
 	ld xwa, 0x272f2
 	calr FileIO_CopyString
 	lds de, 0
@@ -8138,7 +8138,7 @@ NormalizePath_NextChar:
 	inc 1, de
 
 NormalizePath_CheckLoop:
-	stb_dri W, 0x07, 0xe4, 0xe8
+	lda_dri XWA, 0x07, 0xe4, 0xe8
 	cp (xwa), 0x0
 	jr nz, NormalizePath_NextChar
 	cp de, 0x20
@@ -8207,11 +8207,11 @@ GetWallpaper_ReturnIndex:
 	ret
 
 FileIO_ScanDirEntries:
-	stb_dri L, 0xfd, 0xee, 0xfe
+	lda_dri XSP, 0xfd, 0xee, 0xfe
 	pushw iz
 	lda_24 xbc, (0x02723c)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0x8c, 0x00
+	lda_dri XDE, 0xe5, 0x8c, 0x00
 
 ScanDir_CopyEntryLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0xAE
@@ -8283,7 +8283,7 @@ ScanDir_CloseFindHandle:
 ScanDir_Return:
 	ld hl, iz
 	popw iz
-	stb_dri L, 0xfd, 0x12, 0x01
+	lda_dri XSP, 0xfd, 0x12, 0x01
 	ret
 
 FileIO_SelectWallpaperByIndex:
@@ -8729,7 +8729,7 @@ ValidateSigned_NextEntry:
 	inc 4, de
 
 ValidateSigned_ScanLoop:
-	stb_dri C, 0x07, 0xf0, 0xe8
+	lda_dri XHL, 0x07, 0xf0, 0xe8
 	cp wa, (xhl)
 	jr z, ValidateSigned_FoundMatch
 	cpw (xhl), 0x0

@@ -1083,7 +1083,7 @@ WndScroll_Epilogue:
 	ret
 
 ModeEditProc:
-	stb_dri L, 0xfd, 0xec, 0xfe
+	lda_dri XSP, 0xfd, 0xec, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -1115,14 +1115,14 @@ ModeEdit_HandlePaint:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 14)
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x04, 0x01
-	stb_dri A, 0xfd, 0x0c, 0x01
+	lda_dri XWA, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x0c, 0x01
 	calr GetBoxCenter
-	stb_dri W, 0xfd, 0x04, 0x01
-	stb_dri A, 0xfd, 0x0c, 0x01
+	lda_dri XWA, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x0c, 0x01
 	lda xde, (xsp + 4)
 	lds32 xhl, 0
 	push xhl
@@ -1212,11 +1212,11 @@ TitleEdit_ReturnZero:
 
 ModeEdit_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x14, 0x01
+	lda_dri XSP, 0xfd, 0x14, 0x01
 	ret
 
 TitleEditProc:
-	stb_dri L, 0xfd, 0xec, 0xfe
+	lda_dri XSP, 0xfd, 0xec, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -1248,14 +1248,14 @@ TitleEdit_HandlePaint:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 14)
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x04, 0x01
-	stb_dri A, 0xfd, 0x0c, 0x01
+	lda_dri XWA, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x0c, 0x01
 	calr GetBoxCenter
-	stb_dri W, 0xfd, 0x04, 0x01
-	stb_dri A, 0xfd, 0x0c, 0x01
+	lda_dri XWA, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x0c, 0x01
 	lda xde, (xsp + 4)
 	lds32 xhl, 0
 	push xhl
@@ -1345,7 +1345,7 @@ StringBox_ReturnZero:
 
 TitleEdit_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x14, 0x01
+	lda_dri XSP, 0xfd, 0x14, 0x01
 	ret
 
 StringBoxProc:
@@ -2244,7 +2244,7 @@ TextBox_DrawLineLoop:
 	push xiz
 	call StrSearch_Init
 	inc 8, xsp
-	stb_dri W, 0x07, 0xf8, 0xec
+	lda_dri XWA, 0x07, 0xf8, 0xec
 	ld (xsp + 10), xwa
 	ld (xwa), 0x0
 	lda xwa, (xsp + 26)
@@ -2414,7 +2414,7 @@ ViewableProc_Return:
 	ret
 
 PsParaBoxProc:
-	stb_dri L, 0xfd, 0xec, 0xfe
+	lda_dri XSP, 0xfd, 0xec, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -2431,11 +2431,11 @@ PsParaBox_HandleConfirm:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr VwBoxProc
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x08, 0x01
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	calr GetBoxCenter
 	ld_sril XWA, (xsp + 0x0114)
 	call GetViewInstance
@@ -2459,8 +2459,8 @@ PsParaBox_UseEventText:
 	inc 8, xsp
 
 PsParaBox_DrawAligned:
-	stb_dri W, 0xfd, 0x08, 0x01
-	stb_dri C, 0xfd, 0x04, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda_dri XHL, 0xfd, 0x04, 0x01
 	lda xde, (xsp + 4)
 	ld xbc, (xiz + 28)
 	push xbc
@@ -2482,7 +2482,7 @@ PsParaBox_ReturnZero:
 
 PsParaBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x14, 0x01
+	lda_dri XSP, 0xfd, 0x14, 0x01
 	ret
 
 AcLswBoxProc:
@@ -2844,7 +2844,7 @@ AcRamBox_Epilogue:
 	ret
 
 AcTempoBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
@@ -2930,11 +2930,11 @@ PsRadioBox_EventReturn:
 
 AcTempoBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 
 PsRadioBoxProc:
-	stb_dri L, 0xfd, 0xdc, 0xfe
+	lda_dri XSP, 0xfd, 0xdc, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x1c, 0x01
 	stl_dri XBC, 0xfd, 0x20, 0x01
@@ -2967,7 +2967,7 @@ PsRadioBoxProc:
 	ld_sril XWA, (xsp + 0x0124)
 	call GetViewInstance
 	ld (xsp + 12), xhl
-	stb_dri A, 0xfd, 0x10, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 36)
 	calr GetEditSwPoint
@@ -2992,11 +2992,11 @@ PsRadioBox_Confirm:
 	ld_sril XBC, (xsp + 0x0120)
 	ld_sril XDE, (xsp + 0x011c)
 	calr VwBoxProc
-	stb_dri A, 0xfd, 0x14, 0x01
+	lda_dri XBC, 0xfd, 0x14, 0x01
 	ld_sril XWA, (xsp + 0x0124)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x14, 0x01
-	stb_dri A, 0xfd, 0x10, 0x01
+	lda_dri XWA, 0xfd, 0x14, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
 	calr GetBoxCenter
 	ld_sril XWA, (xsp + 0x0124)
 	call GetViewInstance
@@ -3021,8 +3021,8 @@ PsRadioBox_Confirm_CopyText:
 
 PsRadioBox_Confirm_Draw:
 	calr GetDialFocus
-	stb_dri W, 0xfd, 0x14, 0x01
-	stb_dri A, 0xfd, 0x10, 0x01
+	lda_dri XWA, 0xfd, 0x14, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
 	ld (xsp + 12), xbc
 	lda xbc, (xsp + 16)
 	ld (xsp + 8), xbc
@@ -3253,7 +3253,7 @@ PsRadioBox_CallVwBoxProc:
 
 PsRadioBox_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x24, 0x01
+	lda_dri XSP, 0xfd, 0x24, 0x01
 	ret
 
 AcStrRadioBoxProc:
@@ -3279,7 +3279,7 @@ AcStrRadioBox_Epilogue:
 	ret
 
 PsListBoxProc:
-	stb_dri L, 0xfd, 0xd6, 0xfe
+	lda_dri XSP, 0xfd, 0xd6, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x26, 0x01
 	stl_dri XWA, 0xfd, 0x2a, 0x01
@@ -3340,10 +3340,10 @@ PsListBox_Confirm_Layout:
 	call GetViewInstance
 	ld xiz, xhl
 	ld (xsp + 4), xiz
-	stb_dri A, 0xfd, 0x1e, 0x01
+	lda_dri XBC, 0xfd, 0x1e, 0x01
 	ld_sril XWA, (xsp + 0x012a)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x1e, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
 	lda xhl, (xwa + 6)
 	ld de, (xwa + 2)
 	ld wa, (xhl)
@@ -3389,8 +3389,8 @@ PsListBox_Confirm_ScanLoop:
 	jr nz, PsListBox_Confirm_ScanPipe
 
 PsListBox_Confirm_DrawItem:
-	stb_dri W, 0xfd, 0x1e, 0x01
-	stb_dri A, 0xfd, 0x1a, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
+	lda_dri XBC, 0xfd, 0x1a, 0x01
 	calr GetBoxCenter
 	ld xbc, (xsp + 4)
 	ld xwa, (xbc + 38)
@@ -3401,11 +3401,11 @@ PsListBox_Confirm_DrawItem:
 	ld xwa, xbc
 	ld l, (xwa + 34)
 	extz hl
-	stb_dri A, 0xfd, 0x1a, 0x01
+	lda_dri XBC, 0xfd, 0x1a, 0x01
 	lda xix, (xwa + 32)
 	cp de, (xsp + 10)
 	jr nz, PsListBox_Confirm_ItemUnfocused
-	stb_dri H, 0xfd, 0x1e, 0x01
+	lda_dri XIZ, 0xfd, 0x1e, 0x01
 	ld (xsp + 18), xbc
 	ld xwa, (xiy)
 	push xwa
@@ -3423,7 +3423,7 @@ PsListBox_Confirm_DrawItem:
 	jr PsListBox_Confirm_RenderText
 
 PsListBox_Confirm_ItemUnfocused:
-	stb_dri W, 0xfd, 0x1e, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
 	ld xde, (xiy)
 	push xde
 	pushm (xix)
@@ -3435,7 +3435,7 @@ PsListBox_Confirm_ItemUnfocused:
 
 PsListBox_Confirm_RenderText:
 	call DrawStringReverse
-	stb_dri A, 0xfd, 0x1e, 0x01
+	lda_dri XBC, 0xfd, 0x1e, 0x01
 	ld wa, (xsp + 8)
 	add (xbc + 2), wa
 	add (xbc + 6), wa
@@ -3461,10 +3461,10 @@ PsListBox_Select:
 	ld xwa, (xwa)
 	cpw (xwa), 0xffff
 	jrl z, PsListBox_Select_UpdateCurrent
-	stb_dri A, 0xfd, 0x1e, 0x01
+	lda_dri XBC, 0xfd, 0x1e, 0x01
 	ld_sril XWA, (xsp + 0x012a)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x1e, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
 	lda xiy, (xwa + 6)
 	lda xix, (xwa + 2)
 	ld hl, (xix)
@@ -3487,7 +3487,7 @@ PsListBox_Select:
 	add bc, (xsp + 8)
 	inc 1, bc
 	ld (xiy), bc
-	stb_dri A, 0xfd, 0x1a, 0x01
+	lda_dri XBC, 0xfd, 0x1a, 0x01
 	calr GetBoxCenter
 	lda xde, (xsp + 26)
 	ld_sril XWA, (xsp + 0x012a)
@@ -3533,8 +3533,8 @@ PsListBox_Select_CheckDone:
 	ld wa, (xwa)
 	cp (xsp + 10), wa
 	jr ule, PsListBox_Select_ScanItems
-	stb_dri B, 0xfd, 0x1e, 0x01
-	stb_dri A, 0xfd, 0x1a, 0x01
+	lda_dri XDE, 0xfd, 0x1e, 0x01
+	lda_dri XBC, 0xfd, 0x1a, 0x01
 	ld xwa, (xhl + 28)
 	push xwa
 	pushm (xhl + 32)
@@ -3550,7 +3550,7 @@ PsListBox_Select_CheckDone:
 	calr GetDialFocus
 	cpl_sri_rm XHL, 0xfd, 0x2a, 0x01
 	jr z, PsListBox_Select_UpdateCurrent
-	stb_dri W, 0xfd, 0x1e, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
 	ld xbc, (xsp + 4)
 	pushm (xbc + 22)
 	lds bc, 1
@@ -3562,10 +3562,10 @@ PsListBox_Select_UpdateCurrent:
 	ld xbc, (xwa + 38)
 	ld_sril XWA, (xsp + 0x0126)
 	ld (xbc), wa
-	stb_dri A, 0xfd, 0x1e, 0x01
+	lda_dri XBC, 0xfd, 0x1e, 0x01
 	ld_sril XWA, (xsp + 0x012a)
 	calr GetClientBox
-	stb_dri W, 0xfd, 0x1e, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
 	lda xiy, (xwa + 6)
 	lda xix, (xwa + 2)
 	ld hl, (xix)
@@ -3588,7 +3588,7 @@ PsListBox_Select_UpdateCurrent:
 	add bc, (xsp + 8)
 	inc 1, bc
 	ld (xiy), bc
-	stb_dri A, 0xfd, 0x1a, 0x01
+	lda_dri XBC, 0xfd, 0x1a, 0x01
 	calr GetBoxCenter
 	lda xde, (xsp + 26)
 	ld_sril XWA, (xsp + 0x012a)
@@ -3635,10 +3635,10 @@ PsListBox_SelectUpd_CheckDone:
 	cp (xsp + 10), wa
 	jr ule, PsListBox_SelectUpd_ScanItems
 	calr GetDialFocus
-	stb_dri A, 0xfd, 0x1a, 0x01
+	lda_dri XBC, 0xfd, 0x1a, 0x01
 	ld xwa, (xsp + 22)
 	lda xiy, (xwa + 32)
-	stb_dri B, 0xfd, 0x1e, 0x01
+	lda_dri XDE, 0xfd, 0x1e, 0x01
 	lda xiz, (xwa + 28)
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 34)
@@ -3669,7 +3669,7 @@ PsListBox_SelectUpd_DrawUnfocused:
 	ld xwa, xde
 	ld xde, (xsp + 26)
 	call DrawStringReverse
-	stb_dri W, 0xfd, 0x1e, 0x01
+	lda_dri XWA, 0xfd, 0x1e, 0x01
 	pushw 0xf2
 	lds bc, 1
 	lds de, 2
@@ -3736,7 +3736,7 @@ PsListBox_Default:
 
 PsListBox_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x2a, 0x01
+	lda_dri XSP, 0xfd, 0x2a, 0x01
 	ret
 
 AcListBoxProc:
@@ -3887,7 +3887,7 @@ AcListBox_Return:
 	ret
 
 PsGridBoxProc:
-	stb_dri L, 0xfd, 0xb2, 0xfe
+	lda_dri XSP, 0xfd, 0xb2, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x46, 0x01
 	stl_dri XBC, 0xfd, 0x4a, 0x01
@@ -6106,9 +6106,9 @@ Gfx_ClearFrameBuffers:
 	jrl Flash_SaveSplashScreen
 
 Gfx_LoadSplashBMP:
-	stb_dri L, 0xfd, 0xaa, 0xfb
+	lda_dri XSP, 0xfd, 0xaa, 0xfb
 	pushw iz
-	stb_dri W, 0xfd, 0x4a, 0x04
+	lda_dri XWA, 0xfd, 0x4a, 0x04
 	ld xbc, 0xe
 	call FileIO_ReadBlock
 	ld iz, hl
@@ -6117,19 +6117,19 @@ Gfx_LoadSplashBMP:
 	pushw 0x2
 	pushw 0xea
 	pushw 0xae48
-	stb_dri W, 0xfd, 0x50, 0x04
+	lda_dri XWA, 0xfd, 0x50, 0x04
 	push xwa
 	call String_Compare
 	add xsp, 0xa
 	cps hl, 0
 	jr nz, FileIO_ControllerValidationFailed
-	stb_dri W, 0xfd, 0x22, 0x04
+	lda_dri XWA, 0xfd, 0x22, 0x04
 	ld xbc, 0x28
 	call FileIO_ReadBlock
 	ld iz, hl
 	cp iz, 0x28
 	jrl nz, SplashScreen_Return
-	stb_dri A, 0xfd, 0x22, 0x04
+	lda_dri XBC, 0xfd, 0x22, 0x04
 	ld xwa, (xbc)
 	cp xwa, 0x28
 	jr nz, FileIO_ControllerValidationFailed
@@ -6211,7 +6211,7 @@ SplashBMP_DecodePalette:
 	jr c, SplashBMP_DecodePalette
 
 SplashBMP_ReadInfoHeader:
-	stb_dri A, 0xfd, 0x22, 0x04
+	lda_dri XBC, 0xfd, 0x22, 0x04
 	ld xwa, (xbc + 4)
 	ld (xsp + 14), xwa
 	ld xwa, (xbc + 8)
@@ -6415,7 +6415,7 @@ SplashBMP_Finish:
 
 SplashBMP_Return:
 	popw iz
-	stb_dri L, 0xfd, 0x56, 0x04
+	lda_dri XSP, 0xfd, 0x56, 0x04
 	ret
 
 Gfx_ProcessSplashData:
@@ -6581,12 +6581,12 @@ SplashData_Epilogue:
 	ret
 
 Gfx_DecodeImageToBuffer:
-	stb_dri L, 0xfd, 0xd4, 0xfb
+	lda_dri XSP, 0xfd, 0xd4, 0xfb
 	push xiz
-	stb_dri A, 0xfd, 0x30, 0x02
+	lda_dri XBC, 0xfd, 0x30, 0x02
 	ld (xsp + 32), xbc
 	ld xwa, (xsp + 32)
-	stb_dri W, 0xe1, 0x00, 0x02
+	lda_dri XWA, 0xe1, 0x00, 0x02
 	ld (xsp + 40), xwa
 
 ImageDecode_ClearPaletteLoop:
@@ -6611,12 +6611,12 @@ ImageDecode_PixelLoop:
 	inc 1, ix
 	cp ix, 0xf0
 	jr lt, ImageDecode_RowLoop
-	stb_dri W, 0xfd, 0x30, 0x01
+	lda_dri XWA, 0xfd, 0x30, 0x01
 	ld (xsp + 28), xwa
 	ldb c, 0x0
 	ld xde, (xsp + 28)
 	ld xwa, xde
-	stb_dri W, 0xe1, 0x00, 0x01
+	lda_dri XWA, 0xe1, 0x00, 0x01
 	ld (xsp + 44), xwa
 
 ImageDecode_SecondPassSetup:
@@ -6734,7 +6734,7 @@ PaletteReduce_RemapPixels:
 	extz ix
 	ld b, c
 	ld xwa, (xsp + 32)
-	lda_dri XDE, 0x07, 0xe0, 0xf0
+	stb_dri B, 0x07, 0xe0, 0xf0
 	inc 1, c
 	cp xde, xhl
 	jr c, PaletteReduce_RemapPixels
@@ -6815,7 +6815,7 @@ PaletteReduce_UpdateMinDist:
 	ld xwa, (xsp + 16)
 	ld e, a
 	ld xwa, (xsp + 32)
-	lda_dri XIY, 0x07, 0xe0, 0xe4
+	stb_dri E, 0x07, 0xe0, 0xe4
 	lds32 xwa, 1
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
@@ -6871,7 +6871,7 @@ ImageDecode_PixelNext:
 	cp ix, 0xf0
 	jr lt, ImageDecode_ProcessRowsOuter
 	pop xiz
-	stb_dri L, 0xfd, 0x2c, 0x04
+	lda_dri XSP, 0xfd, 0x2c, 0x04
 	ret
 
 Flash_SaveSplashScreen:
@@ -6888,21 +6888,21 @@ Flash_SaveSplashScreen:
 	ret
 
 CaptureLcd:
-	stb_dri L, 0xfd, 0xba, 0xfb
+	lda_dri XSP, 0xfd, 0xba, 0xfb
 	pushw iz
-	stb_dri W, 0xfd, 0x3a, 0x04
+	lda_dri XWA, 0xfd, 0x3a, 0x04
 	pushw 0xea
 	pushw 0xae4c
 	push xwa
 	call Strcpy
-	stb_dri A, 0xfd, 0x42, 0x04
+	lda_dri XBC, 0xfd, 0x42, 0x04
 	ld xwa, 0x13036
 	ld (xbc + 2), xwa
 	ldw (xbc + 6), 0x0
 	ldw (xbc + 8), 0x0
 	ld xwa, 0x436
 	ld (xbc + 10), xwa
-	stb_dri A, 0xfd, 0x1a, 0x04
+	lda_dri XBC, 0xfd, 0x1a, 0x04
 	ld xwa, 0x28
 	ld (xbc), xwa
 	ld xwa, 0x140
@@ -6938,12 +6938,12 @@ CaptureLcd:
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jrl nz, CaptureLcd_WriteFailed
-	stb_dri W, 0xfd, 0x3a, 0x04
+	lda_dri XWA, 0xfd, 0x3a, 0x04
 	ld xbc, 0xe
 	call FileIO_WriteByte_Impl
 	cp xhl, 0xe
 	jrl nz, FileIO_ClosePath
-	stb_dri W, 0xfd, 0x12, 0x04
+	lda_dri XWA, 0xfd, 0x12, 0x04
 	ld xbc, 0x28
 	call FileIO_WriteByte_Impl
 	cp xhl, 0x28
@@ -6962,10 +6962,10 @@ CaptureLcd_WritePaletteOr94:
 	ld xbc, xhl
 	and xbc, 0xff0000	; is this a mask for Red?
 	srl xbc, 0
-	lda_dri XHL, 0x07, 0xe0, 0xe8
+	stb_dri C, 0x07, 0xe0, 0xe8
 	ld bc, iz
 	sla bc, 2
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, xhl
 	and xbc, 0xff00	; is this a mask for Green?
 	srl xbc, 8
@@ -6987,10 +6987,10 @@ CaptureLcd_WritePaletteNoOr94:
 	ld xbc, xhl
 	and xbc, 0xff0000	; is this a mask for Red?
 	srl xbc, 0
-	lda_dri XHL, 0x07, 0xe0, 0xe8
+	stb_dri C, 0x07, 0xe0, 0xe8
 	ld bc, iz
 	sla bc, 2
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, xhl
 	and xbc, 0xff00	; is this a mask for Green?
 	srl xbc, 8
@@ -7039,7 +7039,7 @@ CaptureLcd_NextRow:
 
 CaptureLcd_Epilogue:
 	popw iz
-	stb_dri L, 0xfd, 0x46, 0x04
+	lda_dri XSP, 0xfd, 0x46, 0x04
 	ret
 
 ChangeWall:
@@ -8113,7 +8113,7 @@ ColorBlit2_Mode1_RowLoop:
 	lda_24 xiy, (0x043c00)
 	add xiy, xde
 	ld bc, (xwa)
-	stb_dri E, 0x07, 0xf4, 0xe4
+	lda_dri XIY, 0x07, 0xf4, 0xe4
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
 	cp ix, (xbc)

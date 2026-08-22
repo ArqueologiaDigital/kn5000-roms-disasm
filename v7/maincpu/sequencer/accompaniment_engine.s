@@ -1655,13 +1655,13 @@ AccBuf_WriteNoteEvent:
 	.byte 0x55, 0x3c, 0xf5, 0xc1, 0x95, 0x33, 0x21, 0xc9
 	.byte 0xd8, 0x6e, 0x02, 0x21, 0x01
 AccBuf_WriteNote_VelNonZero:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	.byte 0x1d, 0x55, 0x3c, 0xf5	; call RingBuf_AdvanceIndex (v7 addr)
 
 	.byte 0xc1, 0x96, 0x33, 0x21	; ldb_d8 a, (0x3432) (v7 patched)
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	.byte 0x1d, 0x55, 0x3c, 0xf5	; call RingBuf_AdvanceIndex (v7 addr)
 
@@ -1829,9 +1829,9 @@ AccBuf_NoteEvent_StoreTiming:
 	xor w, w
 	cp de, wa
 	jr ule, AccBuf_NoteEvent_SkipTiming
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	call RingBuf_AdvanceIndex
-	lda_dri XWA, 0x07, 0xec, 0xf4
+	stb_dri W, 0x07, 0xec, 0xf4
 	jr AccBuf_NoteEvent_Return
 
 AccBuf_NoteEvent_SkipTiming:
@@ -7300,10 +7300,10 @@ AccKbdTiming_WriteNoteEvent:
 	or a, 0x8
 	calr AccSeq_WriteByte
 	ld a, w
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb a, 0x0
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb_sri A, 0x07, 0xec, 0xf0
 	inc 1, ix
@@ -7313,7 +7313,7 @@ AccKbdTiming_WriteNoteEvent:
 
 AccKbdTiming_WriteNote_Byte2:
 	calr AccSeq_WriteByte
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb_sri A, 0x07, 0xec, 0xf0
 	inc 1, ix
@@ -7323,7 +7323,7 @@ AccKbdTiming_WriteNote_Byte2:
 
 AccKbdTiming_WriteNote_Byte3:
 	calr AccSeq_WriteByte
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb_sri A, 0x07, 0xec, 0xf0
 	inc 1, ix
@@ -7659,7 +7659,7 @@ AccAccTiming_WriteNoteEvent:
 	.byte 0x9b, 0x02, 0xf4, 0x63, 0x03, 0x9b, 0x00, 0x24
 AccAccTiming_WriteNote_Byte2:
 	calr AccSeq_WriteByte
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb_sri A, 0x07, 0xec, 0xf0
 	inc 1, ix
@@ -7669,7 +7669,7 @@ AccAccTiming_WriteNote_Byte2:
 
 AccAccTiming_WriteNote_Byte3:
 	calr AccSeq_WriteByte
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	pushw wa
 	ldb_sri A, 0x07, 0xec, 0xf0
@@ -7705,7 +7705,7 @@ AccAccTiming_WriteNote_ExtraBytes:
 	ld ix, (xhl + 256)
 
 AccAccTiming_WriteNote_StoreExtra1:
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	cp w, 0x90
 	jr z, AccAccTiming_WriteNote_Done
@@ -7716,7 +7716,7 @@ AccAccTiming_WriteNote_StoreExtra1:
 	ld ix, (xhl + 256)
 
 AccAccTiming_WriteNote_StoreExtra2:
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	cp w, 0x92
 	jr z, AccAccTiming_WriteNote_Done
@@ -7727,7 +7727,7 @@ AccAccTiming_WriteNote_StoreExtra2:
 	ld ix, (xhl + 256)
 
 AccAccTiming_WriteNote_StoreExtra3:
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 
 AccAccTiming_WriteNote_Done:
@@ -12774,7 +12774,7 @@ AccPatch_FetchStepEntry:
 
 	.byte 0xd1, 0x6e, 0x35, 0x23	; ldw_d16 xhl, (0x360a) (v7 patched)
 
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 
 	inc 1, hl
 
@@ -12830,7 +12830,7 @@ AccPatch_UpdateSlotVoiceData:
 
 	or a, 0x80
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	pushw iy
 
@@ -12842,7 +12842,7 @@ AccPatch_UpdateSlotVoiceData:
 
 	inc 1, iy
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	.byte 0xd1, 0x76, 0x35, 0x20	; ldw_d16 xwa, (0x3612) (v7 patched)
 
@@ -12854,7 +12854,7 @@ AccPatch_UpdateSlotVoiceData:
 
 	inc 2, iy
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	popw iy
 
@@ -13934,7 +13934,7 @@ ToneGen_MapNote_OrMask:
 
 	or a, c
 
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 
 	pop xix
 
@@ -17884,11 +17884,11 @@ DrumKit_SendPC_MaskAndSend:
 	add l, 0x80
 	ld xbc, 0xfc5a
 	ldb a, 0x0
-	lda_dri XSP, 0x03, 0xe4, 0xe0
+	stb_dri L, 0x03, 0xe4, 0xe0
 	ldb a, 0x1
 	ldb_sri H, 0x03, 0xe4, 0xe0
 	and h, 0x80
-	lda_dri XIZ, 0x03, 0xe4, 0xe0
+	stb_dri H, 0x03, 0xe4, 0xe0
 	calr DrumKit_PostMidiEvents
 	ret
 
@@ -18003,7 +18003,7 @@ DrumKit_StoreAndSendBank:
 	ldb h, 0x0
 	call PartCtrl_WriteProgramChange
 	ld xix, 0xff92
-	lda_dri XIZ, 0x03, 0xf0, 0xec
+	stb_dri H, 0x03, 0xf0, 0xec
 	call DrumKit_PostMidiEvents
 	ret
 
@@ -19240,7 +19240,7 @@ Tempo_RefreshDisplay5:
 	.byte 0x9f, 0x00, 0x68, 0x0f
 SeqRec_InitState:
 	ld xwa, (xsp + 4)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld c, (xix)
 	extz bc
 	calr SeqRec_OverflowCleanup
@@ -19301,7 +19301,7 @@ SeqRec_StopRecordImpl:
 	ld e, (xsp + 8)
 	extz de
 	ld xwa, (xsp + 4)
-	stb_dri W, 0x07, 0xe0, 0xe8
+	lda_dri XWA, 0x07, 0xe0, 0xe8
 	and c, 0x1
 	sll c, 7
 	ld e, (xhl + 5)
@@ -19682,7 +19682,7 @@ VoiceTable_AdvWrite_ScanLoop:
 	bitm 7, (xde)
 	jr z, VoiceTable_AdvWrite_LinkEntry
 	inc 1, bc
-	stb_dri B, 0xe9, 0x00, 0x01
+	lda_dri XDE, 0xe9, 0x00, 0x01
 	cp bc, 0x153
 	jr ule, VoiceTable_AdvWrite_ScanLoop
 
@@ -24942,7 +24942,7 @@ AccBankData_ProcessWithCopy:
 
 	push xwa
 
-	stb_dri W, 0xe5, 0xa0, 0x00
+	lda_dri XWA, 0xe5, 0xa0, 0x00
 
 	push xwa
 
@@ -26356,7 +26356,7 @@ StylCnv_Type4_CopyChars:
 	cps c, 0
 	jr z, LoopIndex_Reset
 	ld wa, (xsp + 6)
-	lda_dri XHL, 0x07, 0xe8, 0xe0
+	stb_dri C, 0x07, 0xe8, 0xe0
 	incm 1, (xsp + 4)
 	incm 1, (xsp + 6)
 	cpw (xsp + 4), 0x28
@@ -27101,7 +27101,7 @@ StylCnv_Multi_CopyChar:
 	cps iz, 0
 	jr le, LoopCounter_Increment
 	ld wa, (xsp + 6)
-	lda_dri XIY, 0x07, 0xe4, 0xe0
+	stb_dri E, 0x07, 0xe4, 0xe0
 	ld (xhl), 0x0
 	incm 1, (xsp + 6)
 

@@ -1498,7 +1498,7 @@ DrawText_DeferredFreeAndReturn:
 	ret
 
 TextRender_BeginDraw:
-	stb_dri L, 0xfd, 0xc6, 0xfe
+	lda_dri XSP, 0xfd, 0xc6, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x36, 0x01
 	stl_dri XWA, 0xfd, 0x3a, 0x01
@@ -1535,7 +1535,7 @@ TextRender_ClampXRight:
 
 TextRender_SetupColorAndFont:
 	ld xiy, xbc
-	stb_dri D, 0xfd, 0x2a, 0x01
+	lda_dri XIX, 0xfd, 0x2a, 0x01
 	ldiw
 	ldiw
 	ld_sril XIX, (xsp + 0x0146)
@@ -1544,7 +1544,7 @@ TextRender_SetupColorAndFont:
 	dec_sriw 2, 0xfd, 0x2c, 0x01
 
 TextRender_ClampNullXStart:
-	stb_dri C, 0xfd, 0x2a, 0x01
+	lda_dri XHL, 0xfd, 0x2a, 0x01
 	cpw (xhl), 0x0
 	jr ge, TextRender_ClampNullYStart
 	ldw (xhl), 0x0
@@ -1578,7 +1578,7 @@ TextRender_StoreGlyphPos:
 
 TextRender_SetupGlyph:
 	ld (xsp + 12), xiy
-	stb_dri H, 0xfd, 0x2e, 0x01
+	lda_dri XIZ, 0xfd, 0x2e, 0x01
 	lda xiy, (xiz + 2)
 	ld wa, (xbc)
 	ld (xiy), wa
@@ -1658,7 +1658,7 @@ TextRender_MaxWidthReached:
 
 TextRender_AddToDrawPos:
 	add_sriw_mr WA, 0xfd, 0x32, 0x01
-	stb_dri W, 0xfd, 0x2e, 0x01
+	lda_dri XWA, 0xfd, 0x2e, 0x01
 	lda xde, (xwa + 2)
 	ld_sril XBC, (xsp + 0x013a)
 	ld bc, (xbc + 2)
@@ -1773,8 +1773,8 @@ TextRender_BitMask4_DrawPixel:
 	ld xwa, (xsp + 16)
 	cp (xwa), 0x0
 	jrl z, TextRender_BitMask5_ProcessCharacter
-	stb_dri A, 0xfd, 0x26, 0x01
-	stb_dri W, 0xfd, 0x2a, 0x01
+	lda_dri XBC, 0xfd, 0x26, 0x01
+	lda_dri XWA, 0xfd, 0x2a, 0x01
 	ld (xsp + 34), xwa
 	ld hl, (xwa + 2)
 	add hl, (xsp + 28)
@@ -1864,8 +1864,8 @@ TextRender_BitMask5_DrawPixel:
 	ld xwa, (xsp + 16)
 	cp (xwa), 0x0
 	jrl z, TextRender_BitMask5_AdvancePointer
-	stb_dri D, 0xfd, 0x26, 0x01
-	stb_dri B, 0xfd, 0x2a, 0x01
+	lda_dri XIX, 0xfd, 0x26, 0x01
+	lda_dri XDE, 0xfd, 0x2a, 0x01
 	ld hl, (xde + 2)
 	add hl, (xsp + 28)
 	ld bc, hl
@@ -1947,8 +1947,8 @@ TextRender_XorMode_DrawPixel:
 	ld xwa, (xsp + 16)
 	cp (xwa), 0x0
 	jrl z, TextRender_AdvancePointerAndUpdateLine
-	stb_dri D, 0xfd, 0x26, 0x01
-	stb_dri B, 0xfd, 0x2a, 0x01
+	lda_dri XIX, 0xfd, 0x26, 0x01
+	lda_dri XDE, 0xfd, 0x2a, 0x01
 	ld hl, (xde + 2)
 	add hl, (xsp + 28)
 	ld bc, hl
@@ -1981,7 +1981,7 @@ UI_EventHandler_InitReturnZero:
 
 UI_EventHandler_PopAndReturn:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 
 ChordProc_TrailingData:
@@ -1989,7 +1989,7 @@ ChordProc_TrailingData:
 AcChordBoxProc_Entry:
 
 AcChordBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
@@ -2038,7 +2038,7 @@ AcChordBox_ReturnZero:
 
 AcChordBox_PopAndReturn:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 
 MainChordPre:

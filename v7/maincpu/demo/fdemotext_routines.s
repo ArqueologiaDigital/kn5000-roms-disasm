@@ -922,7 +922,7 @@ FDemoText_ScanMIDI_LookupActive:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xde, (0x0247f4)
-	lda_dri XHL, 0x07, 0xe8, 0xe0
+	stb_dri C, 0x07, 0xe8, 0xe0
 
 FDemoText_ScanMIDI_NoMatch:
 	cp_erpb 0xfb, 0xff
@@ -1229,7 +1229,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 	jr	ule, 87
 FDemoText_ProcessMarkup_ParseAttrs:
 	ld xbc, (xsp + 8)
-	stb_dri A, 0x07, 0xe4, 0xec
+	lda_dri XBC, 0x07, 0xe4, 0xec
 	ld e, (xbc)
 	cp e, 0x22
 	jr z, FDemoText_ProcessMarkup_ToggleQuote
@@ -1789,7 +1789,7 @@ Seq_CopyResourcePtrs:
 	lda_24 xde, (0x024fd8)
 	lda_24 xhl, (Presentation_RootEntry_0x6)
 	ld xbc, xde
-	stb_dri B, 0xe9, 0xfc, 0x01
+	lda_dri XDE, 0xe9, 0xfc, 0x01
 
 Seq_CopyPtrLoop:
 	stl_dpi XHL, 0xe6

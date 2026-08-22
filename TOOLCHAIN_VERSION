@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: cb165c5cdc4b
+Commit: 1b9432474daa
 Date: 2026-08-22
-Subject: [TLCS900] Add ERP-byte LD short-immediate and LD register forms
+Subject: [TLCS900] Fix two silently-wrong sub-opcodes in the F3 memory forms
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: cb165c5cdc4b  [TLCS900] Add ERP-byte LD short-immediate and LD register forms
 #   Commit: f7a3cb91e999  [TLCS900] Add register-indexed LOAD forms (ldb/ldw/ldl_dri)
 #   Commit: 6c3c6d755ba2  [TLCS900] Accept `scc` for the encodable SCC forms
 #   Commit: 970c4a75312e  [TLCS900] Accept the real mnemonics for memory-operand forms
@@ -86,5 +87,38 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # (ldb/ldw/ldl_dri, LDS_ERPB, LD_ERPB_RR) against FOUR claims of "the backend
 # cannot do this" that were spellings I had not tried. Try to assemble one line
 # before reporting a gap.
+#
+# Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
+
+# UPDATE 5 (2026-08-22): 1b9432474daa is the first pin that fixes WRONG
+# encodings rather than adding missing ones, and the distinction matters.
+#
+#   * stb_dri / lda_dri had SWAPPED sub-opcodes. The ROM decides: `f3 07 e4 e0
+#     31` is `lda XBC,XBC+WA`, and 0x31 = 0x30|reg, so 0x30 is LDA and 0x40 the
+#     byte store -- as stw_dri=0x50 / stl_dri=0x60 already implied. You had to
+#     write `stb_dri` to get an LDA, so 4,693 sites in this tree named a STORE
+#     where the CPU computes an ADDRESS. Bytes right, meaning wrong.
+#   * st_rrw / st_rrl both carried 0x40 under a comment claiming OpSize picks
+#     the sub-opcode range. TLCS900MCCodeEmitter.cpp only does that for
+#     Opcode < 0xF0, and this prefix is 0xF3 -- so both silently emitted the
+#     BYTE sub-opcode. Now spelled out per size.
+#
+# ⚠ MIGRATION REQUIRED, and it is not just a rename. stb_dri takes an 8-bit
+# register class and lda_dri a 32-bit one, so those 4,693 sites were written
+# with 8-BIT REGISTER NAMES for 32-bit LDA destinations. The mapping was
+# measured, not assumed, by encoding all sixteen names:
+#     W<->XWA(0) A<->XBC(1) B<->XDE(2) C<->XHL(3)
+#     D<->XIX(4) E<->XIY(5) H<->XIZ(6) L<->XSP(7)
+# so `stb_dri A` (0x31) becomes `lda_dri XBC` (0x31) -- same byte, right name.
+# Migrated 5,674 sites across SEVEN trees: v7, v9, v10, table_data, hdae5000,
+# v142 and subcpu. ⚠ The first attempt missed v142 and subcpu, and the failure
+# surfaced as an LZSS "input does not match the reference compression
+# decisions" error on a DIFFERENT ROM, with no assembler error anywhere. Only
+# that step's refusal to fall back kept it from producing a wrong ROM quietly.
+#
+# Session tally, corrected: THREE genuinely missing forms added, FIVE claims of
+# "the backend cannot do this" that were spellings not tried, and TWO silent
+# misencodings. The misencodings are the dangerous class -- a missing form
+# fails loudly at assembly time, a wrong sub-opcode assembles and lies.
 #
 # Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.

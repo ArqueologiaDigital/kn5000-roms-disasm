@@ -466,7 +466,28 @@ def main():
             global TRUNC_LOST
             TRUNC_LOST += full_span - span
             skip("truncated at an unspellable instruction")
-        if not br_labels:
+        # ⚠ THE WHOLE-BLOCK RE-CHECK MUST NOT RUN OVER A FIXUP.
+        #
+        # This used to read `if not br_labels:`. `br_labels` holds only the
+        # LOCAL `.Lc_` labels -- targets inside the range. A branch to an
+        # EXTERNAL symbol adds nothing to it, so a range whose branches all
+        # leave the range looked label-free, fell into the byte comparison, and
+        # was compared against a LINK-TIME PLACEHOLDER: llvm-mc emits
+        # `; encoding: [0x6e,A]` for a symbolic branch, and the `A` reads back
+        # as 0x0A. Those ranges could never pass, however correct they were.
+        #
+        # Cost of the bug, measured by scripts/analysis/v7_blocking_forms_census.py:
+        # 361 ranges / 18,412 bytes -- about SEVEN TIMES the entire remaining
+        # spelling backlog, which is why the census that found it was worth more
+        # than the spellings it was asked to rank.
+        #
+        # The per-instruction loop above already checks each branch the only way
+        # a branch can be checked here (same LENGTH), and the full `make all`
+        # byte-match gate settles the displacements against the real ROM. So the
+        # correct condition is "no branch anywhere in the block", not "no local
+        # label".
+        has_branch = any(x is not None for x in br_texts)
+        if not br_labels and not has_branch:
             encs = cc.encode_block(texts)
             if encs is None or b"".join(encs) != want:
                 skipped += 1; skip("block re-assembly did not reproduce the bytes"); continue

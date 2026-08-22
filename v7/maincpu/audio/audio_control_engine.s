@@ -947,7 +947,7 @@ LEDUpdate_ProcessChannel:
 	extz de
 	ld xwa, (xsp + 6)
 	stb_erp C, 0xfa
-	lda_dri XHL, 0x07, 0xe0, 0xe8
+	stb_dri C, 0x07, 0xe0, 0xe8
 
 LEDUpdate_NextChannel:
 	inc1b_erp 0xfb
@@ -2165,7 +2165,7 @@ MidiChannelMsg_WriteOutput:
 	ld a, (xiz + 1)
 	inc 2, a
 	extz wa
-	stb_dri H, 0x07, 0xf8, 0xe0
+	lda_dri XIZ, 0x07, 0xf8, 0xe0
 
 MidiMsg_LoopAndFlush:
 	cp xiz, 0xffbe
@@ -2276,7 +2276,7 @@ BitmapTable_ProcessEntry:
 BitmapTable_RenderLine:
 	ld a, e
 	extz wa
-	stb_dri A, 0x07, 0xf0, 0xe0
+	lda_dri XBC, 0x07, 0xf0, 0xe0
 	ld a, d
 	cpl a
 	and (xbc), a
@@ -2982,7 +2982,7 @@ CtrlPanel_RefreshIndicatorState:
 
 
 CtrlPanel_CompareAndUpdateIndicators:
-	stb_dri L, 0xfd, 0x8e, 0xfe
+	lda_dri XSP, 0xfd, 0x8e, 0xfe
 	push xiz
 	stl_dri XBC, 0xfd, 0x6e, 0x01
 	stl_dri XWA, 0xfd, 0x72, 0x01
@@ -3055,7 +3055,7 @@ CtrlPanelRefresh_CheckMigration:
 	.byte 0x23, 0xd9, 0x12, 0x1e, 0x3b, 0x02
 CtrlPanelRefresh_Done:
 	pop xiz
-	stb_dri L, 0xfd, 0x72, 0x01
+	lda_dri XSP, 0xfd, 0x72, 0x01
 	ret
 
 CtrlPanel_BuildIndicatorBitmask:
@@ -3735,7 +3735,7 @@ MidiDistribute_LookupAndWrite:
 	jr ugt, MidiDistribute_Fallthrough
 	extz bc
 	ld a, (xsp + 2)
-	lda_dri XBC, 0x07, 0xec, 0xe4
+	stb_dri A, 0x07, 0xec, 0xe4
 
 MidiDistribute_Fallthrough:
 	jr MidiDistribute_Done
@@ -5417,7 +5417,7 @@ VoiceParam_StoreExpression:
 
 	set 7, a
 
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 
 	ret
 
@@ -5454,7 +5454,7 @@ VoiceParam_StoreVolume:
 
 	set 7, a
 
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 
 	ret
 

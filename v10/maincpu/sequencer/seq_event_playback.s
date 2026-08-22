@@ -216,10 +216,10 @@ SeqEvt_WriteVoiceParams:
 	ld xhl, xbc
 	ldda32 xbc, (0x7e13)
 	ld a, w
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	ldb a, 0x0
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
@@ -233,7 +233,7 @@ SeqEvt_WriteVoiceParams:
 	stda32 0x7e13, xhl
 	ld xhl, xbc
 	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
@@ -246,7 +246,7 @@ SeqEvt_WriteVoiceParams:
 	stda32 0x7e13, xhl
 	ld xhl, xbc
 	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
@@ -287,7 +287,7 @@ SeqEvt_WriteRemainingParams:
 	stda32 0x7e13, xhl
 	ld xhl, xbc
 	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
@@ -302,7 +302,7 @@ SeqEvt_WriteRemainingParams:
 	stda32 0x7e13, xhl
 	ld xhl, xbc
 	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
@@ -315,7 +315,7 @@ SeqEvt_WriteRemainingParams:
 	stda32 0x7e13, xhl
 	ld xhl, xbc
 	ldda32 xbc, (0x7e13)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
@@ -386,7 +386,7 @@ SeqEvt_CalcTempoOffset:
 
 SeqEvt_UpdateMinTempo:
 	ldw_d16 xiy, (0x7e11)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	xor wa, wa
 	ldb_d8 a, (0x7e0e)
 	addda16 xwa, 0x7e0f
@@ -2311,7 +2311,7 @@ AccPlay_SetupSoundParams:
 	stdi8 (0x90f7), 23
 	call PartCtrl_WriteProgramChange
 	ld xbc, 0xff7e
-	lda_dri XIZ, 0x03, 0xe4, 0xec
+	stb_dri H, 0x03, 0xe4, 0xec
 
 AccPlay_SetupJumpTarget:
 	jp AccPlay_SyncParamsRet
@@ -2426,7 +2426,7 @@ AccPlay_ExtractVoiceSlot:
 	calr Util_ExtractAndShiftBits
 	ldb a, 0x83
 	ldw_d16 xhl, (0x7f12)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	ret
 
 AccPlay_ProcessNoteEvent:
@@ -3255,7 +3255,7 @@ MidiSeqBuf_ScanAllEntries:
 MidiSeqBuf_ScanLoop:
 	calr TempoRingBuf_ReadLoop
 	ld xhl, 0x7f36
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	dec 1, bc
 	cps bc, 0
@@ -3281,7 +3281,7 @@ MidiSeqBuf_ProcessLoop:
 	ldw_d16 xhl, (0x7f10)
 	calr Util_ExtractAndShiftBits
 	ldw_d16 xhl, (0x7f12)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	calr MidiSeqBuf_AdvancePosition
 	popw de
 	pop xix
@@ -3349,7 +3349,7 @@ MidiSeqBuf_WriteByte:
 	ldw_d16 xhl, (0x7f10)
 	calr Util_ExtractAndShiftBits
 	ldw_d16 xhl, (0x7f12)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	pop xhl
 	pop xix
 	ret

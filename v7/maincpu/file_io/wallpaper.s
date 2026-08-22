@@ -448,7 +448,7 @@ WP_GetNameByOffset:
 	ld xix, xwa
 	mul xhl, xbc	; Calculate offset
 	add xix, xhl
-	stb_dri A, 0xf1, 0xb2, 0x00	; Offset to name field
+	lda_dri XBC, 0xf1, 0xb2, 0x00	; Offset to name field
 	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10

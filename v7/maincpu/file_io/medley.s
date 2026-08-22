@@ -2477,7 +2477,7 @@ DocDisk_CopyCharLoop:
 	ld de, ix
 	inc 1, ix
 	ld a, (xhl)
-	lda_dri XBC, 0x07, 0xe4, 0xe8
+	stb_dri A, 0x07, 0xe4, 0xe8
 
 DocDisk_SkipSpace:
 	inc 1, xhl
@@ -2495,7 +2495,7 @@ DocDisk_ClearTrailing:
 
 DocDisk_TrimLoop:
 	dec 1, ix
-	stb_dri W, 0x07, 0xe8, 0xf0
+	lda_dri XWA, 0x07, 0xe8, 0xf0
 	cp (xwa), 0x20
 	jr nz, DocDisk_PostEvent
 	cps ix, 0

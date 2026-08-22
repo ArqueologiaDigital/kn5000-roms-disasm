@@ -401,9 +401,9 @@ BootSerial_PollTX__inject_free:
 	ldb	a, 0x10
 	ldw_d16	xiy, (0x0fd7)
 	ld	xde, 0x0fd9		; TX serial ring
-	lda_dri	xwa, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
+	stb_dri w, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
 	calr	BootSerial_TxRingAdvanceIY
-	lda_dri	xbc, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
+	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
 	calr	BootSerial_TxRingAdvanceIY
 	stda16	(0x0fd7), iy
 BootSerial_PollTX__inject_done:
@@ -548,12 +548,12 @@ BootSerial_RxPacketDispatchTable:
 BootSerial_RxPkt_TwoByteScrambled:
 	ldb_sri	w, 0x07, 0xe8, 0xf4	; LD W, (XDE+IY) - first byte
 	calr	BootSerial_RxRingAdvanceIY
-	lda_dri	xwa, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W
+	stb_dri w, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W
 	calr	BootSerial_CtrlRingAdvanceIX
 	stb_d8	(0x0f6c), w
 	ldb_sri	a, 0x07, 0xe8, 0xf4	; LD A, (XDE+IY) - second byte
 	calr	BootSerial_RxRingAdvanceIY
-	lda_dri	xbc, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
+	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
 	stb_d8	(0x0f6d), a
 	and	w, 0x4f			; index bits of the first byte
@@ -568,7 +568,7 @@ BootSerial_RxPkt_TwoByteScrambled__no_bias:
 BootSerial_RxPkt_TwoByteScrambled__no_carry:
 	ex8_ri	xhl, a			; swap A into the buffer slot,
 	xor	a, (xhl)		; A = old ^ new
-	lda_dri	xbc, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
+	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
 	stb_d8	(0x0f6e), a
 	ld	(xiz - 4), ix		; commit control-ring head
@@ -588,7 +588,7 @@ BootSerial_RxPkt_TwoByteScrambled__no_carry:
 BootSerial_RxPkt_TwoByteDecode:
 	ldb_sri	w, 0x07, 0xe8, 0xf4	; LD W, (XDE+IY) - first byte
 	calr	BootSerial_RxRingAdvanceIY
-	lda_dri	xwa, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W
+	stb_dri w, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W
 	calr	BootSerial_CtrlRingAdvanceIX
 	stb_d8	(0x0f6c), w
 	ldb_sri	a, 0x07, 0xe8, 0xf4	; LD A, (XDE+IY) - second byte
@@ -602,7 +602,7 @@ BootSerial_RxPkt_TwoByteDecode:
 	stda16	(0x0f75), iy
 	jr	t, BootSerial_RxPkt_TwoByteDecode__exit
 BootSerial_RxPkt_TwoByteDecode__store:
-	lda_dri	xsp, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), L - decoded byte
+	stb_dri l, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), L - decoded byte
 	calr	BootSerial_CtrlRingAdvanceIX
 	stb_d8	(0x0f6e), l
 	stib_ind 0x07, 0xf8, 0xf0, 0xff	; LD (XIZ+IX), 0xff - terminator
@@ -678,7 +678,7 @@ BootSerial_RxPkt_VarLengthRun__no_bias:
 	extz	xhl
 	add	xhl, 0x00001022		; XHL = scramble buffer slot
 BootSerial_RxPkt_VarLengthRun__store:
-	lda_dri	xwa, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W - run tag
+	stb_dri w, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W - run tag
 	calr	BootSerial_CtrlRingAdvanceIX
 	ldb_sri	a, 0x07, 0xe8, 0xf4	; A = payload byte
 	calr	BootSerial_RxRingAdvanceIY
@@ -703,7 +703,7 @@ BootSerial_RxPkt_VarLengthRun__drop_pair:
 BootSerial_RxPkt_VarLengthRun__decoded:
 	ldb_d8	a, (0x0f6e)		; A = decoded byte
 BootSerial_RxPkt_VarLengthRun__scramble:
-	lda_dri	xbc, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
+	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
 	bit	4, w
 	jr	nz, BootSerial_RxPkt_VarLengthRun__raw_done
@@ -720,7 +720,7 @@ BootSerial_RxPkt_VarLengthRun__scramble:
 BootSerial_RxPkt_VarLengthRun__raw_done:
 	ldb	a, 0xff			; decode mode: 0xff terminator
 BootSerial_RxPkt_VarLengthRun__store_mixed:
-	lda_dri	xbc, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
+	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	1, (xiz - 2)
@@ -819,11 +819,11 @@ BootSerial_TxPacketDispatchTable:
 BootSerial_TxPkt_TwoByte:
 	ldb_sri	a, 0x07, 0xf8, 0xf0	; LD A, (XIZ+IX)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
-	lda_dri	xbc, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
+	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
 	calr	BootSerial_TxRingAdvanceIY
 	ldb_sri	w, 0x07, 0xf8, 0xf0	; LD W, (XIZ+IX)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
-	lda_dri	xwa, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
+	stb_dri w, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
 	incm	1, (xiz - 2)		; 2 slots freed
@@ -846,13 +846,13 @@ BootSerial_TxPkt_VarLengthRun:
 	add	a, 2
 	ld	b, a			; B = payload count
 	ld	a, c
-	lda_dri	xbc, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A - emit header
+	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A - emit header
 	calr	BootSerial_TxRingAdvanceIY
 	incm	1, (xiz - 2)
 BootSerial_TxPkt_VarLengthRun__loop:
 	ldb_sri	a, 0x07, 0xf8, 0xf0	; LD A, (XIZ+IX)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
-	lda_dri	xbc, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
+	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
 	incm	1, (xiz - 2)

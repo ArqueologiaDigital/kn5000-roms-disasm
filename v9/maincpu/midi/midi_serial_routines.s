@@ -663,10 +663,10 @@ MIDI_QUEUE_EVENT_PAIR:
 	ei 6
 	ld xix, 0x1e753
 	ld hl, (xix - 4)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	minc1_16 hl, 0x7ff
 	ldb_d8 a, (1051)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	minc1_16 hl, 0x7ff
 	ld (xix - 4), hl
 	decm 2, (xix - 2)
@@ -679,10 +679,10 @@ QueuePair_FifoFullReturn:
 QueuePair_LinearBufWrite:
 	ld xix, 0x477
 	ldw_d16 xhl, (1141)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, hl
 	ldb_d8 a, (1051)
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, hl
 	stda16 (1141), xhl
 	ret

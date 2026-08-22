@@ -1,7 +1,7 @@
 HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	; Configure HD drive parameters; accesses HD config at 0x229D99
 	; Checks disk status, identifies drive, formats partition table, registers events
-	stb_dri l, 0xFD, 0xF4, 0xFE	; lda xsp, (xsp + 0xfef4) — alloc 268-byte frame
+	lda_dri xsp, 0xFD, 0xF4, 0xFE	; lda xsp, (xsp + 0xfef4) — alloc 268-byte frame
 	push xiz					; 3e
 	ldw	(xsp+4), 0x0000
 	; Check disk status via 0x0e88 vtable
@@ -212,7 +212,7 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 .Lsd_epilogue:
 	ld hl, (xsp + 0x04)				; 9f 04 23
 	pop xiz					; 5e
-	stb_dri l, 0xFD, 0x0C, 0x01	; lda xsp, (xsp + 0x010c) — dealloc frame
+	lda_dri xsp, 0xFD, 0x0C, 0x01	; lda xsp, (xsp + 0x010c) — dealloc frame
 	ret						; 0e
 	; --- Sub-handler 1: event 0x01C00007 dispatch (0x28310D) ---
 HDAE5000_HDDTitleSwCatch:
@@ -5117,7 +5117,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	inc 2, bc			; BC = count + 2
 	lda_24 xde, (0x22ad9c); XDE = buffer base
 	ld a, (xsp + 0x02)		; A = digit param
-	lda_dri xbc, 0x07, 0xE8, 0xE4	; ld (XDE+BC), A
+	stb_dri a, 0x07, 0xE8, 0xE4	; ld (XDE+BC), A
 	incdi8_24	1, (0x22AD9C)
 	cpib_da (0x22ad9c), 0x06; count == 6?
 	jr nz, .LCHSC__not_full

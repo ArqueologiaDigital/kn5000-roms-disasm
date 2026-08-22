@@ -190,7 +190,7 @@ RenderSmf_IncIndex:
 RenderSmf_LoopCheck:
 	cp ix, 0x8
 	jr ge, RenderSmf_PadCheck
-	stb_dri B, 0x07, 0xe0, 0xf0
+	lda_dri XDE, 0x07, 0xe0, 0xf0
 	ld c, (xde)
 	cps c, 0
 	jr nz, RenderSmf_CheckSeparator

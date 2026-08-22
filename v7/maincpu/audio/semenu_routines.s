@@ -941,7 +941,7 @@ SeMenu_SetupMenuDisplay_Section2_End:
 	stb_erp C, 0xfb
 	extz bc
 	lda xde, (xsp + 2)
-	stb_dri B, 0x07, 0xe8, 0xe4
+	lda_dri XDE, 0x07, 0xe8, 0xe4
 	pushw 0x7f
 	ldw bc, 0x17
 	calr SeMenu_RegisterElement_Extended
@@ -1446,7 +1446,7 @@ SeMenu_TransferPartValues_AltEntry:
 	ld xwa, 0x2b
 
 SeMenu_TransferPartValues_AltLoop:
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld (xde), a
 	jr SeMenu_TransferPartValues_Data
 	cps a, 1
@@ -1970,7 +1970,7 @@ SeMenu_FillEntryTable_Loop:
 	add ix, bc
 	ld bc, de
 	ldb_sri C, 0x07, 0xec, 0xe4
-	lda_dri XHL, 0x07, 0xe0, 0xf0
+	stb_dri C, 0x07, 0xe0, 0xf0
 	inc1b_erp 0xea
 	inc 1, de
 	stb_erp C, 0xea
@@ -2002,7 +2002,7 @@ SeMenu_SetupPartDisplay:
 
 SeMenu_SetupPartDisplay_Loop:
 	ldb_sri A, 0x07, 0xe4, 0xec
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2020,7 +2020,7 @@ SeMenu_SetupPartDisplay_Alt:
 
 SeMenu_SetupPartDisplay_AltLoop:
 	ldb_sri A, 0x07, 0xe4, 0xec
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2038,7 +2038,7 @@ SeMenu_SetupPartDisplay_Mode2:
 
 SeMenu_SetupPartDisplay_Mode2Loop:
 	ldb_sri A, 0x07, 0xe4, 0xec
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2056,7 +2056,7 @@ SeMenu_SetupPartDisplay_Mode3:
 
 SeMenu_SetupPartDisplay_Mode3Loop:
 	ldb_sri A, 0x07, 0xe4, 0xec
-	lda_dri XBC, 0x07, 0xf0, 0xec
+	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -3398,7 +3398,7 @@ SeMenu_ApplyFilter_SetupDisplay:
 	extz wa
 	add wa, wa
 	lda_d16 xbc, (1698)
-	stb_dri B, 0x07, 0xe4, 0xe0
+	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp + 2)
 	ld c, (xhl + 15)
 	extz bc
@@ -3452,7 +3452,7 @@ SeMenu_ApplySynthParam_Alt:
 	extz wa
 	add wa, wa
 	lda_d16 xbc, (1698)
-	stb_dri B, 0x07, 0xe4, 0xe0
+	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp)
 	ld c, (xhl + 15)
 	extz bc

@@ -100042,7 +100042,7 @@ MEM_TEST_ROUTINE__next_region:
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
 	lda_24 xbc, (0xff8020); XBC = MemTest_RegionTable
-	stb_dri B, 0x07, 0xE4, 0xE0	; Point to current entry
+	lda_dri XDE, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
 	srl xiz, 3	; Convert to iteration count
@@ -100135,7 +100135,7 @@ ROM_CHECKSUM__word_loop:
 	ld c, w
 	extz bc
 	add bc, bc	; Bank offset
-	stb_dri B, 0x07, 0xF0, 0xE4
+	lda_dri XDE, 0x07, 0xF0, 0xE4
 	ld bc, (xde)	; Get current sum
 	ldw_erp BC, 0xE2
 	ld_spiw BC, 0xF5	; Read word from ROM

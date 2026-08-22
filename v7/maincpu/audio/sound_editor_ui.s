@@ -6230,7 +6230,7 @@ CmpClrNoFunc:
 PsCmpCpFGrpBox_Entry:
 
 PsCmpCpFGrpBoxProc:
-	stb_dri L, 0xfd, 0xf0, 0xfe
+	lda_dri XSP, 0xfd, 0xf0, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x0c, 0x01
 	stl_dri XWA, 0xfd, 0x10, 0x01
@@ -6310,12 +6310,12 @@ PsCmpCpFGrpBox_ReturnZero:
 
 PsCmpCpFGrpBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x10, 0x01
+	lda_dri XSP, 0xfd, 0x10, 0x01
 	ret
 PsCmpCpFVariBox_Entry:
 
 PsCmpCpFVariBoxProc:
-	stb_dri L, 0xfd, 0xf0, 0xfe
+	lda_dri XSP, 0xfd, 0xf0, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x0c, 0x01
 	stl_dri XWA, 0xfd, 0x10, 0x01
@@ -6397,12 +6397,12 @@ DesignFrame_Return:
 
 PsCmpCpFVariBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x10, 0x01
+	lda_dri XSP, 0xfd, 0x10, 0x01
 	ret
 PsCmpCpFPtnBox_Entry:
 
 PsCmpCpFPtnBoxProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
+	lda_dri XSP, 0xfd, 0xf4, 0xfe
 	push xiz
 	stl_dri XWA, 0xfd, 0x0c, 0x01
 	cp xbc, 0x1c0000c
@@ -6468,12 +6468,12 @@ PsCmpCpFPtnBox_ReturnZero:
 
 PsCmpCpFPtnBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x0c, 0x01
+	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
 PsCstmCpBnkBox_Entry:
 
 PsCstmCpBnkBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -6516,12 +6516,12 @@ PsCstmCpBnkBox_ReturnZero:
 
 PsCstmCpBnkBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 PsCstmCpSwBox_Entry:
 
 PsCstmCpSwBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -6578,12 +6578,12 @@ PsCstmCpSwBox_ReturnZero:
 
 PsCstmCpSwBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 PsCstmCpNameBox_Entry:
 
 PsCstmCpNameBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x04, 0x01
 	ld xiz, xwa
@@ -6653,12 +6653,12 @@ PsCtmAtt_ReturnZero:
 
 PsCstmCpNameBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 PsCtmAttStrBox_Entry:
 
 PsCtmAttStrBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -6702,12 +6702,12 @@ PsCtmAttStrBox_ReturnZero:
 
 PsCtmAttStrBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 AcMemNoBox_Entry:
 
 AcMemNoBoxProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
+	lda_dri XSP, 0xfd, 0xf4, 0xfe
 	push xiz
 	stl_dri XWA, 0xfd, 0x0c, 0x01
 	cp xbc, 0x1c0000c
@@ -6774,12 +6774,12 @@ AcMemNoBox_ReturnZero:
 
 AcMemNoBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x0c, 0x01
+	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
 AcCmpRecBox_Entry:
 
 AcCmpRecBoxProc:
-	stb_dri L, 0xfd, 0xe8, 0xfe
+	lda_dri XSP, 0xfd, 0xe8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XBC, 0xfd, 0x14, 0x01
@@ -6865,12 +6865,12 @@ AcCmpRecBox_ReturnZero:
 
 AcCmpRecBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x18, 0x01
+	lda_dri XSP, 0xfd, 0x18, 0x01
 	ret
 PsCmpQtzBox_Entry:
 
 PsCmpQtzBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -6909,12 +6909,12 @@ PsCmpQtzBox_ReturnZero:
 
 PsCmpQtzBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 PsCmpMeasBox_Entry:
 
 PsCmpMeasBoxProc:
-	stb_dri L, 0xfd, 0xf8, 0xfe
+	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x04, 0x01
 	ld xiz, xbc
@@ -6977,12 +6977,12 @@ PsCmpMeasBox_ReturnZero:
 
 PsCmpMeasBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x08, 0x01
+	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
 PsCmpMemBox_Entry:
 
 PsCmpMemBoxProc:
-	stb_dri L, 0xfd, 0xf8, 0xfe
+	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x04, 0x01
 	ld xiz, xbc
@@ -7044,12 +7044,12 @@ PsCmpMemBox_ReturnZero:
 
 PsCmpMemBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x08, 0x01
+	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
 AcCmpTempoBox_Entry:
 
 AcCmpTempoBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
@@ -7108,7 +7108,7 @@ CmpFunc_Return:
 
 AcCmpTempoBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 
 CmpNamingCheck:
@@ -7164,7 +7164,7 @@ CmpNameOkFunc_ReturnZero:
 PsNameMemBox_Entry:
 
 PsNameMemBoxProc:
-	stb_dri L, 0xfd, 0xf4, 0xfe
+	lda_dri XSP, 0xfd, 0xf4, 0xfe
 	push xiz
 	stl_dri XWA, 0xfd, 0x0c, 0x01
 	cp xbc, 0x1c0000c
@@ -7234,7 +7234,7 @@ EasyCmp_TtlCase2:
 ; EasyCmp title case 3
 EasyCmp_TtlCase3:
 	pop xiz
-	stb_dri L, 0xfd, 0x0c, 0x01
+	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
 ; EasyCmp title default
 EasyCmp_TtlDefault:
@@ -7697,7 +7697,7 @@ MspNameOkFunc_ReturnZero:
 MspNameOkFunc_End:
 
 PsMspNameBnkProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -7736,12 +7736,12 @@ PsMspNameBnk_SetReturnZero:
 
 PsMspNameBnk_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 PsMspNameBnk_End:
 
 VwVariBoxProc:
-	stb_dri L, 0xfd, 0xe8, 0xfe
+	lda_dri XSP, 0xfd, 0xe8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
@@ -7892,10 +7892,10 @@ VwVariBox_Paint:
 	jr VwVariBox_Paint_DrawLabel
 
 VwVariBox_Paint_Greyed:
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0118)
 	call GetBox
-	stb_dri W, 0xfd, 0x08, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
 	ldw bc, 0xf5
 	call DrawBox
 
@@ -7912,11 +7912,11 @@ VwVariBox_Confirm:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0118)
 	call GetClientBox
-	stb_dri W, 0xfd, 0x08, 0x01
-	stb_dri A, 0xfd, 0x10, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
 	call GetBoxCenter
 	lda xde, (xsp + 8)
 	ld xwa, xde
@@ -7931,8 +7931,8 @@ VwVariBox_Confirm_ClearBuf:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa + 38)
-	stb_dri A, 0xfd, 0x10, 0x01
-	stb_dri B, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
+	lda_dri XDE, 0xfd, 0x08, 0x01
 	lda xiy, (xwa + 28)
 	ld a, (xwa + 34)
 	ldb_erp A, 0xf0
@@ -8077,7 +8077,7 @@ VwVariBox_ForwardToBase:
 
 VwVariBox_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x18, 0x01
+	lda_dri XSP, 0xfd, 0x18, 0x01
 	ret
 
 MspBnkShow:
@@ -8253,7 +8253,7 @@ MspBnkSlBox_Epilogue:
 MspBnkSlBox_End:
 
 PsMspBnkNameBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x04, 0x01
 	ld xiz, xwa
@@ -8392,7 +8392,7 @@ RgpSetBnk_GridCheck_Case2:
 ; RgpSetBnkCheck case 3
 RgpSetBnk_GridCheck_Case3:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 
 MspRGrpSetGridCheck:
@@ -8516,7 +8516,7 @@ RgpSetBnk_GridCheck_Return:
 PsRgpSetBnkBoxProc_Entry:
 
 PsRgpSetBnkBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -8555,7 +8555,7 @@ RgpSetBnkBox_SetReturnZero:
 
 RgpSetBnkBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 
 MspRGrpSetBnkFunc:
@@ -8653,7 +8653,7 @@ MspRgpShow_ReturnZero:
 MspRgpShowHide_End:
 
 PsMspMeasBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -8701,12 +8701,12 @@ MspMeasBox_SetReturnZero:
 
 MspMeasBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 MspMeasBox_End:
 
 PsMspMemBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -8762,12 +8762,12 @@ MspMemBox_SetReturnZero:
 
 MspMemBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 MspMemBox_End:
 
 PsMspRecBnkBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -8815,12 +8815,12 @@ MspRecBnkBox_SetReturnZero:
 
 MspRecBnkBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 MspRecBnkBox_End:
 
 PsMspRecPadBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -8875,7 +8875,7 @@ AcSndArgGrid_BnkCase1:
 ; AcSndArgGridBnk case 2
 AcSndArgGrid_BnkCase2:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 
 MspPlayModeFunc:
@@ -9380,7 +9380,7 @@ ParamList_ReturnZero:
 PsParaListBoxProc_Entry:
 
 PsParaListBoxProc:
-	stb_dri L, 0xfd, 0x62, 0xff
+	lda_dri XSP, 0xfd, 0x62, 0xff
 	push xiz
 	stl_dri XDE, 0xfd, 0x9e, 0x00
 	ld xiz, xwa
@@ -9405,10 +9405,10 @@ ParaListBox_HandleEvtB:
 	ld xwa, (xsp + 10)
 	cpw (xwa + 34), 0x2
 	jrl lt, PsParaListBoxProc_Return
-	stb_dri A, 0xfd, 0x8e, 0x00
+	lda_dri XBC, 0xfd, 0x8e, 0x00
 	ld xwa, xiz
 	call GetClientBox
-	stb_dri B, 0xfd, 0x8e, 0x00
+	lda_dri XDE, 0xfd, 0x8e, 0x00
 	ld bc, (xde + 4)
 	sub bc, (xde)
 	exts xbc
@@ -9430,9 +9430,9 @@ ParaListBox_DrawLineLoop_Body:
 	ldw_sri0 BC, (xsp + 0x008e)
 	add bc, wa
 	dec 1, bc
-	stb_dri W, 0xfd, 0x9a, 0x00
+	lda_dri XWA, 0xfd, 0x9a, 0x00
 	ld (xwa), bc
-	stb_dri A, 0xfd, 0x96, 0x00
+	lda_dri XBC, 0xfd, 0x96, 0x00
 	ld de, (xwa)
 	ld (xbc), de
 	lds de, 7
@@ -9505,7 +9505,7 @@ PsParaListBoxProc_Return:
 ; SndArgGridCheck case 3
 SndArgGrid_CheckCase3:
 	pop xiz
-	stb_dri L, 0xfd, 0x9e, 0x00
+	lda_dri XSP, 0xfd, 0x9e, 0x00
 	ret
 
 StylCnvStorBnkSel:
@@ -9556,7 +9556,7 @@ PsSCTxtBox_EventDispatch:
 PsSCTxtBoxProc_Entry:
 
 PsSCTxtBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xfe
+	lda_dri XSP, 0xfd, 0x00, 0xfe
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -9600,12 +9600,12 @@ SCTxtBox_SetReturnZero:
 
 SCTxtBox_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x02
+	lda_dri XSP, 0xfd, 0x00, 0x02
 	ret
 PsSCTxtBox2Proc_Entry:
 
 PsSCTxtBox2Proc:
-	stb_dri L, 0xfd, 0x00, 0xfe
+	lda_dri XSP, 0xfd, 0x00, 0xfe
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -9654,7 +9654,7 @@ SCTxtBox2_SetReturnZero:
 
 SCTxtBox2_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x02
+	lda_dri XSP, 0xfd, 0x00, 0x02
 	ret
 
 StylCnvStorOkFunc:
@@ -10275,7 +10275,7 @@ SndArrLangCheck_ReturnZero:
 PsStylCnvVerProc_Entry:
 
 PsStylCnvVerProc:
-	stb_dri L, 0xfd, 0x00, 0xfe
+	lda_dri XSP, 0xfd, 0x00, 0xfe
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -10324,7 +10324,7 @@ StylCnvVer_SetReturnZero:
 
 StylCnvVer_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x02
+	lda_dri XSP, 0xfd, 0x00, 0x02
 	ret
 
 

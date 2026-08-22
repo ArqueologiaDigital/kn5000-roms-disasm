@@ -909,7 +909,7 @@ MBytePkt_EncFFMarker:
 
 					; else:
 MBytePkt_CommitAndContinue:
-	lda_dri XBC, 0x07, 0xf8, 0xf0
+	stb_dri A, 0x07, 0xf8, 0xf0
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
 	decm 1, (xiz - 2)
@@ -994,7 +994,7 @@ CPanel_LED_HandlePacket2:
 
 	.byte 0x1e, 0x97, 0x00	; calr ToneGen_IncrementWrap128		; process byte + increment event read ptr (v7 displacement)
 
-	lda_dri XBC, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 
 	.byte 0x1e, 0x6e, 0x00	; calr CPanel_IncLEDPtr		; increment LED write ptr (IY) (v7 displacement)
 
@@ -1002,7 +1002,7 @@ CPanel_LED_HandlePacket2:
 
 	.byte 0x1e, 0x87, 0x00	; calr ToneGen_IncrementWrap128		; process byte + increment event read ptr (v7 displacement)
 
-	lda_dri XWA, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	stb_dri W, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 
 	.byte 0x1e, 0x5e, 0x00	; calr CPanel_IncLEDPtr		; increment LED write ptr (IY) (v7 displacement)
 
@@ -1029,7 +1029,7 @@ CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
 	add a, 2			; A = total byte count (nibble + 2)
 	ld b, a				; B = loop counter
 	ld a, c				; A = restore event byte 1
-	lda_dri XBC, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	incm 1, (xiz - 2)		; increment pending LED byte count
 

@@ -314,7 +314,7 @@ SetWall_SlotSetup_Active:
 	ldb_d8 a, (0x2873)
 	push xde
 	ld xde, 0xf1a0
-	lda_dri XBC, 0x07, 0xe8, 0xf4
+	stb_dri A, 0x07, 0xe8, 0xf4
 	pop xde
 	call CDlikeSwTtl_SendResetEvent
 	call SetWall_UpdateSlotIndex
@@ -416,12 +416,12 @@ SetWall_WriteSingleSlot:
 	dec 1, l
 	sla l, 4
 	ld xde, SetWall_SlotOrderTable
-	stb_dri E, 0x07, 0xe8, 0xec
+	lda_dri XIY, 0x07, 0xe8, 0xec
 	ld xix, 0xab000
 	xor xwa, xwa
 	ldb_d8 a, (3391)
 	sla xwa, 11
-	stb_dri D, 0x07, 0xf0, 0xe0
+	lda_dri XIX, 0x07, 0xf0, 0xe0
 	ld xwa, 0x20
 	add xix, xwa
 	ldw bc, 0x10
@@ -442,7 +442,7 @@ SetWall_WriteSingle_SetMode:
 
 	sla xhl, 11
 
-	stb_dri D, 0x07, 0xf0, 0xec
+	lda_dri XIX, 0x07, 0xf0, 0xec
 
 	ld xde, xix
 
@@ -464,7 +464,7 @@ SetWall_WriteSingle_SetMode:
 
 	sla xwa, 11
 
-	stb_dri D, 0x07, 0xf0, 0xe0
+	lda_dri XIX, 0x07, 0xf0, 0xe0
 
 	ld xwa, 0x110
 
@@ -500,7 +500,7 @@ SetWall_WriteAllSlots:
 	dec 1, l
 	sla l, 4
 	ld xde, SetWall_SlotOrderTable
-	stb_dri E, 0x07, 0xe8, 0xec
+	lda_dri XIY, 0x07, 0xe8, 0xec
 	ldib_erp 0x34, 0
 
 SetWall_WriteAll_Loop:
@@ -511,7 +511,7 @@ SetWall_WriteAll_Loop:
 	add xix, xwa
 	ld xwa, 0x20
 	add xix, xwa
-	stb_dri E, 0x07, 0xe8, 0xec
+	lda_dri XIY, 0x07, 0xe8, 0xec
 	ldw bc, 0x10
 	ldir85
 	ld xix, 0xab000
@@ -565,7 +565,7 @@ SetWall_LocalWriteAll:
 	dec 1, l
 	sla l, 4
 	ld xde, SetWall_SlotOrderTable
-	stb_dri E, 0x07, 0xe8, 0xec
+	lda_dri XIY, 0x07, 0xe8, 0xec
 	ldib_erp 0x34, 0
 
 SetWall_LocalWriteAll_Loop:
@@ -576,7 +576,7 @@ SetWall_LocalWriteAll_Loop:
 	add xix, xwa
 	ld xwa, 0x20
 	add xix, xwa
-	stb_dri E, 0x07, 0xe8, 0xec
+	lda_dri XIY, 0x07, 0xe8, 0xec
 	ldw bc, 0x10
 	ldir85
 	ld xix, 0xab000
@@ -665,7 +665,7 @@ SetWall_CrossTypeChange:
 
 	stb_d8 (0x2873), c
 
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 
 	stb_d8 (3386), a
 
@@ -850,7 +850,7 @@ SetWall_ParseStream_CheckD1D2:
 SetWall_ParseStream_ReadEvent:
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	pop xhl
 	call SetWall_AdvanceWritePos
 	cpdi8 (0x287a), 0
@@ -908,7 +908,7 @@ SetWall_ParseStream_C0_Iter:
 SetWall_ParseStream_C0_Read:
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	pop xhl
 	pushw bc
 	call SetWall_AdvanceWritePos
@@ -1015,7 +1015,7 @@ SetWall_ParseStream_B0_Byte4:
 SetWall_ParseStream_B0_Write:
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	pop xhl
 	pushw bc
 	call SetWall_AdvanceWritePos
@@ -1042,7 +1042,7 @@ SetWall_ParseStream_B0_Write:
 SetWall_ParseStream_End:
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	pop xhl
 	ldw_d16 xwa, (0x2887)
 	stda16 (0x289f), xwa
@@ -1257,7 +1257,7 @@ SetWall_EventOutput:
 	dec 1, hl
 	ld wa, ix
 	ld xde, 0xf218
-	lda_dri XBC, 0x07, 0xe8, 0xec
+	stb_dri A, 0x07, 0xe8, 0xec
 	sla hl, 1
 	ldw_d16 xwa, (0x289f)
 	ld xde, 0xf1f8
@@ -1270,7 +1270,7 @@ SetWall_EventOutput:
 	ld xde, 0x98
 	add xde, xiz
 	ld wa, ix
-	lda_dri XBC, 0x07, 0xe8, 0xec
+	stb_dri A, 0x07, 0xe8, 0xec
 	sla hl, 1
 	ld xde, 0x78
 	add xde, xiz

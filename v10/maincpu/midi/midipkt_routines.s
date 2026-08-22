@@ -1131,7 +1131,7 @@ MidiPkt_CheckGateCondition:
 	extz bc
 	muls bc, 0x6
 	lda_24 xde, (ToneKit_FrequencyTable_0x3E2)
-	stb_dri B, 0x07, 0xe8, 0xe4
+	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld xhl, (xde)
 	ld c, (xde + 4)
 	and c, (xhl)
@@ -1145,7 +1145,7 @@ MidiPkt_CheckGateCondition_Second:
 	extz wa
 	muls wa, 0x6
 	lda_24 xbc, (ToneKit_FrequencyTable_0x3F4)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xde, (xbc)
 	ld a, (xbc + 4)
 	and a, (xde)

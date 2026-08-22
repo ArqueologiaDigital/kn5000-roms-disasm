@@ -523,7 +523,7 @@ LoadFilter_UpdateDisplay:
 	extz wa
 	sla wa, 4
 	lda_d16 xbc, (0x7f86)
-	stb_dri B, 0x07, 0xe4, 0xe0
+	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ldda32 xwa, (0x7f82)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
@@ -745,7 +745,7 @@ SaveFilter_UpdateDisplay:
 	extz wa
 	sla wa, 4
 	lda_d16 xbc, (0x800a)
-	stb_dri B, 0x07, 0xe4, 0xe0
+	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	jrl SaveFilter_DispatchWidget

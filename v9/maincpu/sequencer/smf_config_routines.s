@@ -801,7 +801,7 @@ SMF_ProcessCh_Loop:
 	jr z, SMF_ProcessCh_Next
 	push xix
 	ld xix, 0x11f9
-	stb_dri D, 0x07, 0xf0, 0xec
+	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld wa, (xix + 3)
 	pop xix
 	cpda16 xwa, 4229
@@ -818,12 +818,12 @@ SMF_ProcessCh_Loop:
 SMF_ProcessCh_MoveToOutput:
 	push xde
 	ld xde, 0xfae
-	lda_dri XHL, 0x07, 0xe8, 0xf4
+	stb_dri C, 0x07, 0xe8, 0xf4
 	ld xde, 0x11f9
-	stb_dri B, 0x07, 0xe8, 0xec
+	lda_dri XDE, 0x07, 0xe8, 0xec
 	ld wa, (xde + 3)
 	ld xde, 0xfae
-	stb_dri B, 0x07, 0xe8, 0xf4
+	lda_dri XDE, 0x07, 0xe8, 0xf4
 	ld (xde + 1), wa
 	pop xde
 	add iy, 0x3
@@ -1318,8 +1318,8 @@ SMF_SortOutputQueue:
 SMF_Sort_OuterLoop:
 	ld xiy, 0xfae
 	ld xix, 0xfb1
-	stb_dri E, 0x07, 0xf4, 0xe8
-	stb_dri D, 0x07, 0xf0, 0xe8
+	lda_dri XIY, 0x07, 0xf4, 0xe8
+	lda_dri XIX, 0x07, 0xf0, 0xe8
 	cp (xiy), 0xff
 	jr z, SMF_Sort_Finalize
 	ld wa, (xiy + 1)
@@ -1392,7 +1392,7 @@ SMF_LookupSongBank:
 	sla xhl, 8
 	addda32 xhl, 7514
 	ldw_d16 xiy, (9830)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	ret
 
 SMF_AdvanceMultipleEvents:
@@ -1700,7 +1700,7 @@ SMF_LoadSongBank:
 	cps a, 0
 	jr z, SMF_LoadBank_Return
 	ld xde, 0xab000
-	stb_dri B, 0xe9, 0xc7, 0x00
+	lda_dri XDE, 0xe9, 0xc7, 0x00
 	cpdi8 (4394), 1
 	jr nz, SMF_LoadBank_ReadEntries
 	ld (xde), 0x0
@@ -1893,7 +1893,7 @@ SMF_ConfigSlot_EventLoop:
 SMF_ConfigSlot_DefaultHandler:
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 
 SMF_ConfigSlot_WriteAndContinue:
@@ -1961,7 +1961,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	ldda32 xde, (4349)
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 	cpda16 xhl, 4402
 	jr c, SMF_ConfigSlot_ReadDataLoop
 	popw hl
@@ -2102,7 +2102,7 @@ SMF_Config_WriteOutput:
 	ld a, (xix)
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 
 SMF_Config_WriteLoop:
@@ -2115,7 +2115,7 @@ SMF_Config_WriteLoop:
 	ldb_sri A, 0x07, 0xf0, 0xec
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 	cpda16 xhl, 4402
 	jr c, SMF_Config_WriteLoop
@@ -2176,7 +2176,7 @@ SMF_Config_SaveAndRestore:
 	pop xix
 
 SMF_Config_GetTableEntry:
-	lda_dri XHL, 0x07, 0xe8, 0xec
+	stb_dri C, 0x07, 0xe8, 0xec
 	pop xde
 	cps a, 3
 	jr nz, SMF_Config_CallHandler
@@ -2194,7 +2194,7 @@ SMF_Config_CallHandler:
 	srl hl, 1
 	ld xde, 0xcbe
 	ldb_d8 c, (4414)
-	lda_dri XHL, 0x07, 0xe8, 0xec
+	stb_dri C, 0x07, 0xe8, 0xec
 	pop xde
 	pop xbc
 	pop xhl
@@ -2223,7 +2223,7 @@ SMF_Config_ClearFlags:
 SMF_ConfigSlot_EndOfTrack:
 	push xhl
 	ldda32 xhl, (0x2881)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 	ldw_d16 xwa, (0x2887)
 	stda16 (0x289f), xwa
@@ -3249,7 +3249,7 @@ SMF_SetupRead_Finalize:
 	srl hl, 1
 	ld xde, 0xf218
 	ld bc, iy
-	lda_dri XHL, 0x07, 0xe8, 0xec
+	stb_dri C, 0x07, 0xe8, 0xec
 	pop xde
 	ret
 

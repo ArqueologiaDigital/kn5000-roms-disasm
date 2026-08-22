@@ -118,12 +118,12 @@ SoundBank_InitTrack_Loop:
 SoundBank_InitTrack_ByteFields:
 	ld xix, SoundBank_DefaultTrackData
 	ldb_sri A, 0x07, 0xf0, 0xf4
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	inc 1, iy
 	cps iy, 7
 	jr ule, SoundBank_InitTrack_ByteFields
 	ldb_d8 a, (0x8e6a)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	ld xhl, 0x14
 	add xhl, xde
 	xor iy, iy

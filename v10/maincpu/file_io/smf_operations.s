@@ -220,7 +220,7 @@ RenderSmf_IncIndex:
 RenderSmf_LoopCheck:
 	cp ix, 0x8
 	jr ge, RenderSmf_PadCheck
-	stb_dri B, 0x07, 0xe0, 0xf0
+	lda_dri XDE, 0x07, 0xe0, 0xf0
 	ld c, (xde)
 	cps c, 0
 	jr nz, RenderSmf_CheckSeparator
@@ -755,7 +755,7 @@ SmfFN_Save_WriteSlot:
 	ldb_d8 c, (0x8948)
 	sll xbc, 11
 	add xwa, xbc
-	stb_dri W, 0xe1, 0x00, 0x01
+	lda_dri XWA, 0xe1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -763,7 +763,7 @@ SmfFN_Save_WriteSlot:
 	cpda8 a, 0x8948
 	jr nz, SmfFN_Save_Finish
 	lda_24 xwa, (0x00f180)
-	stb_dri W, 0xe1, 0x00, 0x01
+	lda_dri XWA, 0xe1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull

@@ -1080,7 +1080,7 @@ FDemoText_ScanMIDI_LookupActive:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xde, (0x0247f4)
-	lda_dri XHL, 0x07, 0xe8, 0xe0
+	stb_dri C, 0x07, 0xe8, 0xe0
 
 FDemoText_ScanMIDI_NoMatch:
 	cp_erpb 0xfb, 0xff
@@ -1544,7 +1544,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 
 FDemoText_ProcessMarkup_ParseAttrs:
 	ld xbc, (xsp + 8)
-	stb_dri A, 0x07, 0xe4, 0xec
+	lda_dri XBC, 0x07, 0xe4, 0xec
 	ld e, (xbc)
 	cp e, 0x22
 	jr z, FDemoText_ProcessMarkup_ToggleQuote
@@ -2818,7 +2818,7 @@ FDemoText_Layout_Setup:
 	jr z, FDemoText_Layout_NoWrap
 	ldw (xsp + 14), 0x1
 	ld xwa, (xsp + 16)
-	stb_dri W, 0x07, 0xe0, 0xf8
+	lda_dri XWA, 0x07, 0xe0, 0xf8
 	ld (xsp + 10), xwa
 	lds32 xwa, 1
 	sub (xsp + 10), xwa
@@ -3021,19 +3021,19 @@ Seq_InitVoiceLoop:
 	stw_erp BC, 0xfa
 	muls bc, 0x18
 	lda_24 xwa, (0x0249d8)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	stw_erp WA, 0xfa
 	muls wa, 0x18
 	lda_24 xbc, (0x0249d8)
-	stb_dri B, 0x07, 0xe4, 0xe0
+	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lds32 xwa, 0
 	ld (xde + 16), xwa
 	stw_erp WA, 0xfa
 	muls wa, 0x18
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	lds32 xwa, 0
 	ld (xbc + 20), xwa
 	inc1w_erp 0xfa
@@ -3051,7 +3051,7 @@ Seq_CopyResourcePtrs:
 	lda_24 xde, (0x024fd8)
 	lda_24 xhl, (Presentation_RootEntry_0x6)
 	ld xbc, xde
-	stb_dri B, 0xe9, 0xfc, 0x01
+	lda_dri XDE, 0xe9, 0xfc, 0x01
 
 Seq_CopyPtrLoop:
 	stl_dpi XHL, 0xe6

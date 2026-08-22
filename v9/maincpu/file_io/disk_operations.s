@@ -267,7 +267,7 @@ FRename_PadLoop_Advance:
 FRename_PadLoop_Cond:
 	cps iy, 6
 	jr ge, FRename_PadLoop_Fill
-	stb_dri B, 0x07, 0xec, 0xf4
+	lda_dri XDE, 0x07, 0xec, 0xf4
 	ld c, (xde)
 	cps c, 0
 	jr nz, FRename_PadLoop_CheckChar
@@ -370,7 +370,7 @@ FRenameSmf_PadLoop_Advance:
 FRenameSmf_PadLoop_Cond:
 	cp iy, 0x8
 	jr ge, FRenameSmf_PadLoop_Fill
-	stb_dri B, 0x07, 0xec, 0xf4
+	lda_dri XDE, 0x07, 0xec, 0xf4
 	ld c, (xde)
 	cps c, 0
 	jr nz, FRenameSmf_PadLoop_CheckChar
@@ -929,7 +929,7 @@ DiskName_PadLoop_Advance:
 DiskName_PadLoop_Cond:
 	cp iy, 0xb
 	jr ge, DiskName_PadLoop_Fill
-	stb_dri A, 0x07, 0xec, 0xf4
+	lda_dri XBC, 0x07, 0xec, 0xf4
 	cp (xbc), 0x0
 	jr nz, DiskName_PadLoop_CheckChar
 
@@ -1221,7 +1221,7 @@ SaveFileName_PadLoop_Advance:
 SaveFileName_PadLoop_Cond:
 	cps iy, 6
 	jr ge, SaveFileName_PadLoop_Fill
-	stb_dri A, 0x07, 0xec, 0xf4
+	lda_dri XBC, 0x07, 0xec, 0xf4
 	ld a, (xbc)
 	cps a, 0
 	jr nz, SaveFileName_PadLoop_CheckChar

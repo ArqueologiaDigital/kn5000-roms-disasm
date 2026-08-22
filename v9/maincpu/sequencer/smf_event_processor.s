@@ -75,7 +75,7 @@ VoiceChannel_GetCombinedStatus:
 	jr z, VoiceChannel_GetStatusBank2First
 	push xix
 	ld xix, 0x10d3
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xix
 	ld l, a
 	push xix
@@ -87,7 +87,7 @@ VoiceChannel_GetCombinedStatus:
 VoiceChannel_GetStatusBank2First:
 	push xix
 	ld xix, 0x10c3
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	ld xix, 0x10d3
 	ldb_sri L, 0x07, 0xf0, 0xf4
 	pop xix
@@ -303,7 +303,7 @@ SoundGen_LookupChannelBankParams:
 	jr ugt, ToneGen_StoreBadValue
 	push xix
 	ld xix, 0x10b3
-	lda_dri XWA, 0x07, 0xf0, 0xf4
+	stb_dri W, 0x07, 0xf0, 0xf4
 	pop xix
 	jr SoundGen_LookupReturn
 
@@ -311,7 +311,7 @@ ToneGen_StoreBadValue:
 	ldb a, 0xff
 	push xix
 	ld xix, 0x10b3
-	lda_dri XBC, 0x07, 0xf0, 0xf4
+	stb_dri A, 0x07, 0xf0, 0xf4
 	pop xix
 
 SoundGen_LookupReturn:
@@ -1158,7 +1158,7 @@ SMF_ScanChannel_PopAndWrite:
 	jrl SMF_FinishChannelAndGetNextEvent
 
 SMF_WriteChannelNoteData:
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld c, (xiy + 256)
 	ld d, (xiy + 1)
 	ld b, (xiy + 3)
@@ -1463,7 +1463,7 @@ SMF_WriteVol_PanAndPitch:
 	ld c, l
 	ld xiy, 0xf460
 	ldfr_lerp XIY, 0x38
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 8)
 	ldto_lerp XIY, 0x38
 	ldb w, 0xa
@@ -1540,7 +1540,7 @@ SMF_WriteRPN_FineTune:
 	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 10)
 	ld c, l
 	srl l, 1
@@ -1643,7 +1643,7 @@ SMF_WriteRPN_CoarseTune:
 	pop xix
 	ld xiy, 0xf460
 	ldfr_lerp XIY, 0x38
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 9)
 	ldto_lerp XIY, 0x38
 	ldb w, 0x6
@@ -1739,7 +1739,7 @@ SMF_WriteRPN_Transpose:
 	ldw_sri HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 11)
 	ldb w, 0x6
 	pushw wa
@@ -1832,7 +1832,7 @@ SMF_ProcessEventLoop:
 SMF_EventLoop_ReadDataBytes:
 	push xde
 	ld xde, 0x1073
-	lda_dri XBC, 0x07, 0xe8, 0xec
+	stb_dri A, 0x07, 0xe8, 0xec
 	pop xde
 	push xhl
 	call SMF_AdvancePosition
@@ -2204,7 +2204,7 @@ SMF_NoteOn_WriteEvent_Underflow:
 
 SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11f9
-	stb_dri D, 0x07, 0xf0, 0xec
+	lda_dri XIX, 0x07, 0xf0, 0xec
 	ldb a, 0x80
 	lda_dpi XBC, 0xf0
 	ldb_d8 a, (4211)
@@ -4286,7 +4286,7 @@ SeqStep_FileIoComplete:
 
 SeqStep_FileIoFinal:
 	incm 1, (xsp + 4)
-	stb_dri D, 0xf1, 0x1a, 0x02
+	lda_dri XIX, 0xf1, 0x1a, 0x02
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileIoError
 
@@ -4529,7 +4529,7 @@ SeqStep_FileBufferReturn:
 
 SeqStep_FileBufferError:
 	incm 1, (xsp + 4)
-	stb_dri A, 0xe5, 0x1a, 0x02
+	lda_dri XBC, 0xe5, 0x1a, 0x02
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileBufferReturn
 
@@ -10066,7 +10066,7 @@ FileIO_ParseLoop_CopyChar:
 	lda xbc, (xsp + 4)
 	ld xwa, (xiz)
 	ld a, (xwa)
-	lda_dri XBC, 0x07, 0xe4, 0xe8
+	stb_dri A, 0x07, 0xe4, 0xe8
 	inc 1, de
 	cp de, 0xc
 	jr le, FileIO_ParseLoop_Advance

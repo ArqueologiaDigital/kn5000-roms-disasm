@@ -1564,7 +1564,7 @@ DiskSel_HandleSelect:
 	cpdi8 (0x84fe), 0
 	jr nz, DiskSel_HandleRepeat
 	ld xix, xhl
-	stb_dri A, 0x07, 0xec, 0xe8
+	lda_dri XBC, 0x07, 0xec, 0xe8
 	ld a, (xbc)
 	cp a, 0xfe
 	jr nz, DiskSel_RemoveSelect
@@ -3241,7 +3241,7 @@ DocDisk_CopyCharLoop:
 	ld de, ix
 	inc 1, ix
 	ld a, (xhl)
-	lda_dri XBC, 0x07, 0xe4, 0xe8
+	stb_dri A, 0x07, 0xe4, 0xe8
 
 DocDisk_SkipSpace:
 	inc 1, xhl
@@ -3263,7 +3263,7 @@ DocDisk_ClearTrailing:
 
 DocDisk_TrimLoop:
 	dec 1, ix
-	stb_dri W, 0x07, 0xe8, 0xf0
+	lda_dri XWA, 0x07, 0xe8, 0xf0
 	cp (xwa), 0x20
 	jr nz, DocDisk_PostEvent
 	cps ix, 0

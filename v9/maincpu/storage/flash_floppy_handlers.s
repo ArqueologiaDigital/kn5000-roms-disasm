@@ -1450,10 +1450,10 @@ NAKA_InitDataBlock:
 	jrl	5626
 
 NoteEvent_LoadSoundGenParams:
-	stb_dri L, 0xfd, 0x94, 0xfe
+	lda_dri XSP, 0xfd, 0x94, 0xfe
 	push xiz
 	ld xiy, NAKA_UIObjectTable_0x26D2
-	stb_dri D, 0xfd, 0x10, 0x01
+	lda_dri XIX, 0xfd, 0x10, 0x01
 	ldw bc, 0x30
 	ldirw
 	ld xiy, NAKA_UIObjectTable_0x25D2
@@ -1466,14 +1466,14 @@ NoteEvent_LoadSoundGenParams:
 	ldirw
 	ldda32 xwa, (3186)
 	ld xiy, MSP_Default_VoiceEnable
-	stb_dri D, 0xe1, 0xc0, 0x13
+	lda_dri XIX, 0xe1, 0xc0, 0x13
 	ldw bc, 0x20
 	ldirw
 	ldda32 xbc, (3186)
 	ld xwa, 0xba0
 	add xbc, xwa
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0x80, 0x00
+	lda_dri XDE, 0xe5, 0x80, 0x00
 
 NoteEvent_CopyVoiceParamsLoop:
 	ld xiy, MSP_Default_SoundReserved_0x30
@@ -1484,14 +1484,14 @@ NoteEvent_CopyVoiceParamsLoop:
 	cp xwa, xde
 	jr ule, NoteEvent_CopyVoiceParamsLoop
 	ldda32 xwa, (3186)
-	stb_dri W, 0xe1, 0x40, 0x0c
+	lda_dri XWA, 0xe1, 0x40, 0x0c
 	ld xde, xwa
-	stb_dri W, 0xe1, 0xe0, 0x06
+	lda_dri XWA, 0xe1, 0xe0, 0x06
 	ld (xsp + 12), xwa
 
 NoteEvent_CopyExtParamsOuter:
 	ld xwa, xde
-	stb_dri C, 0xe9, 0x80, 0x00
+	lda_dri XHL, 0xe9, 0x80, 0x00
 
 NoteEvent_CopyExtParamsInner:
 	ld xiy, MSP_Default_SoundReserved_0x50
@@ -1501,10 +1501,10 @@ NoteEvent_CopyExtParamsInner:
 	lda xwa, (xwa + 32)
 	cp xwa, xhl
 	jr ule, NoteEvent_CopyExtParamsInner
-	stb_dri B, 0xe9, 0xa0, 0x00
+	lda_dri XDE, 0xe9, 0xa0, 0x00
 	cp xde, (xsp + 12)
 	jr ule, NoteEvent_CopyExtParamsOuter
-	stb_dri W, 0xfd, 0x10, 0x01
+	lda_dri XWA, 0xfd, 0x10, 0x01
 	ld (xsp + 4), xwa
 	lda xbc, (xwa + 4)
 	ld (xsp + 8), xbc
@@ -1533,7 +1533,7 @@ NoteEvent_WriteRegOffsets_Loop:
 	ld xbc, (xsp + 12)
 	ld (xbc), ix
 	ld (xhl), de
-	stb_dri E, 0xfd, 0x10, 0x01
+	lda_dri XIY, 0xfd, 0x10, 0x01
 	ld xix, xwa
 	ldw bc, 0x30
 	ldirw
@@ -1560,7 +1560,7 @@ NoteEvent_CopySlotData_Body:
 	cp de, 0x153
 	jr ule, NoteEvent_CopySlotData_Loop
 	pop xiz
-	stb_dri L, 0xfd, 0x6c, 0x01
+	lda_dri XSP, 0xfd, 0x6c, 0x01
 	ret
 
 Flash_InitExtMemAddrs:
@@ -2095,7 +2095,7 @@ FrameSetup_SpecialCase4:
 	ld bc, wa
 	add bc, 0x60
 	ld xwa, (xsp)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld l, (xwa + 56)
 	ld a, (xwa + 57)
 
@@ -2393,15 +2393,15 @@ NOTE_EVENT_DISPATCH_2b:
 
 Flash_SectorWriteExecute:
 	ld xwa, (xsp)
-	stb_dri A, 0xe1, 0x00, 0x68
+	lda_dri XBC, 0xe1, 0x00, 0x68
 	ld xwa, (xsp + 4)
-	stb_dri B, 0xe1, 0x00, 0x68
+	lda_dri XDE, 0xe1, 0x00, 0x68
 	lds wa, 1
 	call Flash_EraseSectorAndWrite
 	ld xiy, (xsp + 4)
 	sub xiy, 0x9800
 	ld xwa, (xsp)
-	stb_dri B, 0xe1, 0x00, 0x68
+	lda_dri XDE, 0xe1, 0x00, 0x68
 	ld xix, xde
 	ldw bc, 0x8000
 	ldirw
@@ -2415,7 +2415,7 @@ Flash_CopyMirrorLoop:
 	cp xbc, xde
 	jr c, Flash_CopyMirrorLoop
 	ld xwa, (xsp)
-	stb_dri A, 0xe1, 0x00, 0x68
+	lda_dri XBC, 0xe1, 0x00, 0x68
 	ld xde, (xsp + 4)
 	sub xde, 0x9800
 	lds wa, 1
@@ -2455,7 +2455,7 @@ Flash_WriteSectorWithMirrorCopy:
 	ld xwa, (xsp)
 	add xwa, 0x10000
 	ld xbc, xwa
-	stb_dri B, 0xe1, 0x00, 0x68
+	lda_dri XDE, 0xe1, 0x00, 0x68
 
 Flash_CopyReverseMirrorLoop:
 	ld xhl, xbc
@@ -4122,7 +4122,7 @@ VoiceParam_AddOffset:
 	extz de
 	add hl, de
 	ldda32 xwa, (3222)
-	lda_dri XHL, 0x07, 0xe0, 0xec
+	stb_dri C, 0x07, 0xe0, 0xec
 	ret
 
 DualVoice_ScanAllColumns:
@@ -4493,7 +4493,7 @@ SlotTable_Insert1748_Loop:
 	extz bc
 	add bc, bc
 	inc 2, bc
-	stb_dri B, 0x07, 0xec, 0xe4
+	lda_dri XDE, 0x07, 0xec, 0xe4
 	ld bc, (xde)
 	cp bc, wa
 	ret z
@@ -4517,7 +4517,7 @@ SlotTable_Insert1850_Loop:
 	extz bc
 	add bc, bc
 	inc 2, bc
-	stb_dri B, 0x07, 0xec, 0xe4
+	lda_dri XDE, 0x07, 0xec, 0xe4
 	ld bc, (xde)
 	cp bc, wa
 	ret z
@@ -5336,7 +5336,7 @@ Flash_SlotUpdateOpsBlock:
 
 ; Floppy disk load and store note events via dispatch
 FloppyDisk_LoadNoteEvents:
-	stb_dri L, 0xfd, 0xf8, 0xfb
+	lda_dri XSP, 0xfd, 0xf8, 0xfb
 	pushw iz
 	stl_dri XBC, 0xfd, 0x02, 0x04
 	stl_dri XWA, 0xfd, 0x06, 0x04
@@ -5469,12 +5469,12 @@ Floppy_SetHLFF9A_RetZero:
 
 FloppyCtrl_PopIzStoreHL:
 	popw iz
-	stb_dri L, 0xfd, 0x08, 0x04
+	lda_dri XSP, 0xfd, 0x08, 0x04
 	ret
 
 ; Floppy disk compute tone parameters and validate
 FloppyDisk_ComputeToneParams:
-	stb_dri L, 0xfd, 0xe8, 0xfb
+	lda_dri XSP, 0xfd, 0xe8, 0xfb
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x04
 	stl_dri XBC, 0xfd, 0x14, 0x04
@@ -5729,7 +5729,7 @@ FloppyDisk_CopyNoteBuffers:
 
 FloppyCtrl_PopIzStoreRet:
 	pop xiz
-	stb_dri L, 0xfd, 0x18, 0x04
+	lda_dri XSP, 0xfd, 0x18, 0x04
 	ret
 
 ToneParam_ExtendedOpsBlock:
@@ -6336,13 +6336,13 @@ FileHdr_CheckMKB:
 	ret nz
 
 FileHdr_SignatureMatch:
-	stb_dri W, 0xe1, 0xff, 0x27
+	lda_dri XWA, 0xe1, 0xff, 0x27
 	ld xbc, xwa
-	stb_dri B, 0xe1, 0x01, 0xd9
+	lda_dri XDE, 0xe1, 0x01, 0xd9
 
 FileHdr_CopyDataLoop:
 	ld a, (xbc)
-	lda_dri XBC, 0xe5, 0x00, 0x02
+	stb_dri A, 0xe5, 0x00, 0x02
 	dec 1, xbc
 	cp xbc, xde
 	jr nc, FileHdr_CopyDataLoop
@@ -6356,9 +6356,9 @@ FileHdr_InitBasePointer:
 
 ToneData_SetupCopyPointers:
 	ldda32 xbc, (3226)
-	stb_dri A, 0xe5, 0x00, 0x01
+	lda_dri XBC, 0xe5, 0x00, 0x01
 	ld xwa, xbc
-	stb_dri A, 0xe5, 0x00, 0x02
+	lda_dri XBC, 0xe5, 0x00, 0x02
 
 ToneData_ZeroFillLoop:
 	stib_dsp 0xe0, 0x00
@@ -6389,7 +6389,7 @@ ToneData_CopyBlock2_Loop:
 	lda_24 xhl, (MSP_Default_PartBankMap)
 	ld xbc, xhl
 	ldda32 xwa, (3226)
-	stb_dri B, 0xe1, 0x00, 0x02
+	lda_dri XDE, 0xe1, 0x00, 0x02
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock3_Loop:
@@ -6400,7 +6400,7 @@ ToneData_CopyBlock3_Loop:
 	lda_24 xhl, (Composer_SettingsBlock_0x80)
 	ld xbc, xhl
 	ldda32 xwa, (3226)
-	stb_dri B, 0xe1, 0x40, 0x02
+	lda_dri XDE, 0xe1, 0x40, 0x02
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock4_Loop:
@@ -6411,7 +6411,7 @@ ToneData_CopyBlock4_Loop:
 	lda_24 xhl, (Composer_SettingsBlock_0xC0)
 	ld xbc, xhl
 	ldda32 xwa, (3226)
-	stb_dri B, 0xe1, 0x80, 0x02
+	lda_dri XDE, 0xe1, 0x80, 0x02
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock5_Loop:
@@ -7580,7 +7580,7 @@ AcApcMdBox_PopReturn:
 AcApcMdBox_End:
 
 AcS2cMemNoBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -7629,12 +7629,12 @@ S2cMemNoBox_ReturnZero:
 
 S2cMemNoBox_PopReturn:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 S2cMemNoBox_End:
 
 PsS2cFmeasBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c0000c
@@ -7683,12 +7683,12 @@ PsS2cFmeas_SendUpdateEvents:
 
 PsS2cFmeas_PopReturn:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 PsS2cFmeas_End:
 
 PsS2cLmeasBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c0000c
@@ -7737,12 +7737,12 @@ PsS2cLmeas_SendUpdateEvents:
 
 PsS2cLmeas_PopReturn:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 PsS2cLmeas_End:
 
 PsSeqSongNoBoxProc:
-	stb_dri L, 0xfd, 0x00, 0xff
+	lda_dri XSP, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1c0000c
@@ -7774,12 +7774,12 @@ PsSeqSongNo_HandleScroll:
 
 PsSeqSongNo_PopReturn:
 	pop xiz
-	stb_dri L, 0xfd, 0x00, 0x01
+	lda_dri XSP, 0xfd, 0x00, 0x01
 	ret
 PsSeqSongNo_End:
 
 PsS2cTransBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
+	lda_dri XSP, 0xfd, 0xfc, 0xfe
 	push xiz
 	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c0000c
@@ -7834,7 +7834,7 @@ SndArg_GridBnk_Case1:
 ; SndArgGridBnk case 2
 SndArg_GridBnk_Case2:
 	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
+	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
 ; SndArgGridBnk case 3
 SndArg_GridBnk_Case3:

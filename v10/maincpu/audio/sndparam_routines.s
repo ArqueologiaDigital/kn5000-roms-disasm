@@ -51,7 +51,7 @@ SndParam_DispatchCallback:
 	extz bc
 	sla bc, 2
 	lda_24 xde, (Naka_MainDispatch_Table_0xDDC)
-	stb_dri C, 0x07, 0xe8, 0xe4
+	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld bc, (xsp + 12)
 	ld de, (xsp + 10)
 	ld xhl, (xhl)
@@ -89,7 +89,7 @@ SndParam_DispatchTypeDE5:
 	extz bc
 	sla bc, 2
 	lda_24 xde, (Naka_MainDispatch_Table_0xE38)
-	stb_dri B, 0x07, 0xe8, 0xe4
+	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld bc, (xsp + 12)
 	ld xhl, (xde)
 	call (xhl)
@@ -181,7 +181,7 @@ SndParam_Lkp2_Dispatch:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, (Naka_MainDispatch_Table_0xE00)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	ld bc, (xsp + 12)
 	ld de, (xsp + 10)
@@ -296,7 +296,7 @@ SndParam_RO_Dispatch:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, (Naka_MainDispatch_Table_0xDC0)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	ld xhl, (xbc)
 	call (xhl)
@@ -465,7 +465,7 @@ SndParam_RW_ProcessResult:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, (Naka_MainDispatch_Table_0xE20)
-	stb_dri B, 0x07, 0xe4, 0xe0
+	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, xiz
 	ld bc, (xsp + 4)
 	ld xix, (xde)
@@ -3155,7 +3155,7 @@ SndParam_EncodeAddress:
 SndParam_InitHashTable:
 	lda_24 xbc, (0x034100)
 	ld xwa, xbc
-	stb_dri B, 0xe5, 0xf8, 0x3f
+	lda_dri XDE, 0xe5, 0xf8, 0x3f
 
 SndParam_InitHashFillLoop:
 	ld xiy, Naka_ToshiParam_Table_0x6CC
@@ -3263,7 +3263,7 @@ SndParam_InsertReturn:
 SndParam_ClearHashTable:
 	lda_d16 xwa, (0x97d8)
 	ld xbc, xwa
-	stb_dri B, 0xe1, 0xfc, 0x1f
+	lda_dri XDE, 0xe1, 0xfc, 0x1f
 
 SndParam_ClearLoop:
 	lds32 xwa, 0
@@ -3273,7 +3273,7 @@ SndParam_ClearLoop:
 	lda_24 xde, (0x0380f8)
 	lda xbc, (xde + 2)
 	ld xwa, xbc
-	stb_dri A, 0xe5, 0x00, 0x40
+	lda_dri XBC, 0xe5, 0x00, 0x40
 
 SndParam_ClearHeap:
 	stib_dsp 0xe0, 0x00

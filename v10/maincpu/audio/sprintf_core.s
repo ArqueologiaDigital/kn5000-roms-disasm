@@ -1316,7 +1316,7 @@ Sprintf_FFixed_CheckLongDoubleLimit:
 	ld a, c
 	extz wa
 	lda_24 xde, (CharMap_FullPermutation_0x660)
-	stb_dri B, 0x07, 0xe8, 0xe0
+	lda_dri XDE, 0x07, 0xe8, 0xe0
 	bitm 1, (xde)
 	jr z, Sprintf_FFixed_SpecNoUpperCase
 	ld a, c
@@ -1697,7 +1697,7 @@ Sprintf_ESci_ApplyDefaults:
 	ld a, (xsp + 10)
 	extz wa
 	lda_24 xbc, (CharMap_FullPermutation_0x660)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	bitm 1, (xbc)
 	jr z, Sprintf_ESci_SpecNoUpperCase
 	ld a, (xsp + 10)
@@ -2133,7 +2133,7 @@ Sprintf_GGen_LoadDigits:
 	extz xbc
 	add xbc, (xsp + 24)
 	ld c, (xbc)
-	lda_dri XHL, 0x07, 0xe0, 0xfa
+	stb_dri C, 0x07, 0xe0, 0xfa
 	inc1w_erp 0xfa
 	stw_erp WA, 0xfa
 	cp wa, (xsp + 8)
@@ -2355,7 +2355,7 @@ Sprintf_GGen_ExtractResult:
 	extz xwa
 	div wa, 0xa
 	stw_erp WA, 0xe2
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	incm 1, (xsp + 4)
 	ldiw_erp 0xfa, 1
 	jr Sprintf_GGen_CopyLoop
@@ -2365,7 +2365,7 @@ Sprintf_GGen_CopyDigits:
 	inc 1, de
 	lda_24 xwa, (0x03c224)
 	ldb_sri A, 0x07, 0xe0, 0xfa
-	lda_dri XBC, 0x07, 0xec, 0xe4
+	stb_dri A, 0x07, 0xec, 0xe4
 	inc1w_erp 0xfa
 
 Sprintf_GGen_CopyLoop:
@@ -2376,7 +2376,7 @@ Sprintf_GGen_CopyLoop:
 	jr lt, Sprintf_GGen_CopyDigits
 	ld de, (xsp + 6)
 	inc 1, de
-	stb_dri A, 0x07, 0xec, 0xe8
+	lda_dri XBC, 0x07, 0xec, 0xe8
 	cp (xbc), 0x5
 	jr c, Sprintf_GGen_HandleCarry
 	ld wa, (xsp + 6)
@@ -2398,7 +2398,7 @@ Sprintf_GGen_CarryLoop:
 Sprintf_GGen_CarryCheck:
 	cpiw_erp 0xfa, 0
 	jr z, Sprintf_GGen_ConvertToAscii
-	stb_dri W, 0x07, 0xec, 0xfa
+	lda_dri XWA, 0x07, 0xec, 0xfa
 	cp (xwa), 0x9
 	jr ugt, Sprintf_GGen_CarryLoop
 
@@ -3080,7 +3080,7 @@ Sprintf_StringLength:
 	inc 4, xsp
 	inc 1, hl
 	ld bc, hl
-	stb_dri C, 0x07, 0xf8, 0xe4
+	lda_dri XHL, 0x07, 0xf8, 0xe4
 	cps bc, 0
 	jr z, Sprintf_StrLen_NotFound
 	ld wa, (xsp + 12)

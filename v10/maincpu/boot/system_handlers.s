@@ -990,11 +990,11 @@ TempoRingBuf_WritePair:
 	push xiy
 	lda_24 xiy, (0x01e753)
 	ld hl, (xiy - 4)
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 	decm 1, (xiy - 2)
 	minc1_16 hl, 0x7ff
 	ldb_d8 a, (1051)
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	stb_dri A, 0x07, 0xf4, 0xec
 	minc1_16 hl, 0x7ff
 	decm 1, (xiy - 2)
 	stw_da (0x01e74f), xhl
@@ -1009,10 +1009,10 @@ TempoRingBuf_WritePair_Enqueue:
 	pushw ix
 	lda_d16 xhl, (1143)
 	ldw_d16 xix, (1141)
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	ldb_d8 a, (1051)
 	inc 1, ix
-	lda_dri XBC, 0x07, 0xec, 0xf0
+	stb_dri A, 0x07, 0xec, 0xf0
 	ldb_d8 a, (1051)
 	inc 1, ix
 	stda16 (1141), xix
@@ -1698,7 +1698,7 @@ TempoRingBuf_DequeueOne:
 	and wa, wa
 	jr z, TempoRingBuf_DequeueOne_Done
 	ld hl, (xix - 4)
-	lda_dri XIY, 0x07, 0xf0, 0xec
+	stb_dri E, 0x07, 0xf0, 0xec
 	minc1_16 hl, 0x7ff
 	dec 1, wa
 	ld (xix - 4), hl
@@ -4949,7 +4949,7 @@ RingBuf128_WriteByte_CheckFull:
 
 RingBuf128_WriteByte_Store:
 	ld ix, (xde - 4)
-	lda_dri XBC, 0x07, 0xe8, 0xf0
+	stb_dri A, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x7f
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5016,7 +5016,7 @@ Seq_RingBuf_WriteByte_Small:
 
 Seq_RingBuf_WriteByte_Small_Store:
 	ld ix, (xde - 4)
-	lda_dri XBC, 0x07, 0xe8, 0xf0
+	stb_dri A, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0xff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5085,7 +5085,7 @@ Seq_RingBuf_WriteByte_512:
 
 Seq_RingBuf_WriteByte_512_Store:
 	ld ix, (xde - 4)
-	lda_dri XBC, 0x07, 0xe8, 0xf0
+	stb_dri A, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x1ff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5154,7 +5154,7 @@ Seq_RingBuf_WriteByte:
 
 Seq_RingBuf_WriteByte_1024_Store:
 	ld ix, (xde - 4)
-	lda_dri XBC, 0x07, 0xe8, 0xf0
+	stb_dri A, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x3ff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5223,7 +5223,7 @@ Seq_RingBuf_WriteByte_Check:
 
 Seq_RingBuf_WriteByte_Store:
 	ld ix, (xde - 4)
-	lda_dri XBC, 0x07, 0xe8, 0xf0
+	stb_dri A, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x7ff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -6007,7 +6007,7 @@ INTTC0_HANDLER:
 	extz bc
 	sla bc, 2
 	lda_24 xde, (SeqRingBuf_WriteDispatch_Table)
-	stb_dri B, 0x07, 0xe8, 0xe4
+	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld xbc, 0x5e8
 	ld xhl, (xde)
 	call (xhl)
@@ -6986,7 +6986,7 @@ SLIDE_Decompress_4K_Init:
 	inc 2, xsp
 	stda32 1570, xhl
 	ld xwa, xhl
-	stb_dri A, 0xed, 0xee, 0x0f
+	lda_dri XBC, 0xed, 0xee, 0x0f
 
 SLIDE_Decompress_4K_FillRing:
 	stib_dsp 0xe0, 0x00
@@ -7109,7 +7109,7 @@ SLIDE_Decompress_8K_Init:
 	inc 2, xsp
 	stda32 1570, xhl
 	ld xwa, xhl
-	stb_dri A, 0xed, 0xf6, 0x1f
+	lda_dri XBC, 0xed, 0xf6, 0x1f
 
 SLIDE_Decompress_8K_FillRing:
 	stib_dsp 0xe0, 0x00

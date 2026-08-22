@@ -254,7 +254,7 @@ DrawLine_Impl_HorzCalcNegDir:
 	ld xwa, (xsp + 66)
 	ld bc, (xwa)
 	ld xwa, (xsp + 36)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, (xsp + 24)
 	add xbc, xwa
 	push xbc
@@ -456,7 +456,7 @@ DrawLine_Impl_PatternHorzNegDir:
 	ld xwa, (xsp + 68)
 	ld bc, (xwa)
 	ld xwa, (xsp + 38)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, (xsp + 26)
 	add xbc, xwa
 	push xbc
@@ -501,7 +501,7 @@ DrawLine_Impl_PatternSteepLoop:
 	add xde, xwa
 	sll xde, 6
 	ld wa, (xhl)
-	stb_dri B, 0x07, 0xe8, 0xe0
+	lda_dri XDE, 0x07, 0xe8, 0xe0
 	ld xwa, (xsp + 36)
 	add xwa, xde
 	ld (xsp + 28), xwa
@@ -560,7 +560,7 @@ DrawLine_Impl_PatternShallowLoop:
 	sll xde, 6
 	ld xhl, (xsp + 32)
 	ld wa, (xhl)
-	stb_dri B, 0x07, 0xe8, 0xe0
+	lda_dri XDE, 0x07, 0xe8, 0xe0
 	ld xwa, (xsp + 36)
 	add xwa, xde
 	ld (xsp + 28), xwa
@@ -1110,7 +1110,7 @@ DrawBox_Impl_FillRowLoop:
 	call Memset
 	inc 8, xsp
 	ld xwa, (xsp + 2)
-	stb_dri W, 0xe1, 0x40, 0x01
+	lda_dri XWA, 0xe1, 0x40, 0x01
 	ld (xsp + 2), xwa
 	inc 1, iz
 	ld xwa, (xsp + 14)
@@ -1141,7 +1141,7 @@ DrawBox_Impl_PatternRowLoop:
 	ld xwa, 0x140
 	add (xsp + 6), xwa
 	ld xwa, (xsp + 2)
-	stb_dri W, 0xe1, 0x40, 0x01
+	lda_dri XWA, 0xe1, 0x40, 0x01
 	ld (xsp + 2), xwa
 	inc 1, iz
 	ld xwa, (xsp + 14)
@@ -1272,7 +1272,7 @@ DrawFrame_Impl_ClipYMax:
 	pushm (xsp + 42)
 	ld bc, (xwa)
 	ld xwa, (xsp + 40)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, 0x43c00
 	add xbc, xwa
 	push xbc
@@ -1290,7 +1290,7 @@ DrawFrame_Impl_SolidTwoEdges:
 	pushm (xsp + 42)
 	ld bc, (xwa)
 	ld xwa, (xsp + 40)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, 0x43c00
 	add xbc, xwa
 	push xbc
@@ -1385,7 +1385,7 @@ DrawFrame_Impl_SolidTwoSideLoop:
 	sll xhl, 6
 	ld xwa, (xsp + 44)
 	ld wa, (xwa)
-	stb_dri B, 0x07, 0xec, 0xe0
+	lda_dri XDE, 0x07, 0xec, 0xe0
 	lda_24 xwa, (0x043c00)
 	ld (xsp + 38), xwa
 	add xwa, xde
@@ -1430,7 +1430,7 @@ DrawFrame_Impl_PatternSetup:
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, 0x43c00
 	add xbc, xwa
 	push xbc
@@ -1453,7 +1453,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
-	stb_dri W, 0x07, 0xe0, 0xe4
+	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld xbc, 0x43c00
 	add xbc, xwa
 	push xbc
@@ -1674,7 +1674,7 @@ DrawFrameEx_SingleRowLoop:
 	sll xbc, 2
 	add xbc, xix
 	sll xbc, 6
-	stb_dri A, 0x07, 0xe4, 0xec
+	lda_dri XBC, 0x07, 0xe4, 0xec
 	cpw (xsp + 14), 0x205
 	jr z, DrawFrameEx_SingleRowXorPixel
 	cp iy, 0x201
@@ -1712,7 +1712,7 @@ DrawFrameEx_TopBottomLoop:
 	sll xbc, 2
 	add xbc, xix
 	sll xbc, 6
-	stb_dri A, 0x07, 0xe4, 0xec
+	lda_dri XBC, 0x07, 0xe4, 0xec
 	cpw (xsp + 14), 0x205
 	jr z, DrawFrameEx_TopBottomXorPixel
 	cp iy, 0x201
@@ -1730,7 +1730,7 @@ DrawFrameEx_TopBottomLoop:
 	sll xiy, 2
 	add xiy, xbc
 	sll xiy, 6
-	stb_dri A, 0x07, 0xf4, 0xec
+	lda_dri XBC, 0x07, 0xf4, 0xec
 	add xix, xbc
 	stb_erp C, 0xee
 	ld (xix), c
@@ -1783,7 +1783,7 @@ DrawFrameEx_TopBottomXorPixel:
 	sll xiy, 2
 	add xiy, xbc
 	sll xiy, 6
-	stb_dri A, 0x07, 0xf4, 0xec
+	lda_dri XBC, 0x07, 0xf4, 0xec
 	add xix, xbc
 	stb_erp C, 0xee
 	xor (xix), c
@@ -2464,7 +2464,7 @@ DrawBitmapFast_Impl_RowLoop:
 	add xwa, xwa
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 12)
-	stb_dri W, 0xe1, 0x40, 0x01
+	lda_dri XWA, 0xe1, 0x40, 0x01
 	ld (xsp + 12), xwa
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
@@ -2617,7 +2617,7 @@ DrawIcons_Impl_ColLoop:
 	jr lt, DrawIcons_Impl_ColLoop
 	ld xwa, (xsp + 16)
 	incm 1, (xwa)
-	stb_dri C, 0xed, 0x40, 0x01
+	lda_dri XHL, 0xed, 0x40, 0x01
 	inc 1, de
 	cp de, 0x18
 	jr lt, DrawIcons_Impl_RowLoop
@@ -3137,7 +3137,7 @@ DrawBitmapSPFast_Impl_RowLoop:
 	exts xwa
 	add xwa, xwa
 	add (xsp + 18), xwa
-	stb_dri H, 0xf9, 0x40, 0x01
+	lda_dri XIZ, 0xf9, 0x40, 0x01
 	incm 1, (xsp + 6)
 	incm 1, (xsp + 4)
 	ld wa, (xsp + 30)
@@ -3382,7 +3382,7 @@ DrawBitmapFile_ParamBlock:
 	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
 
 DrawBitmapFile_Impl:
-	stb_dri L, 0xfd, 0xc8, 0xfb
+	lda_dri XSP, 0xfd, 0xc8, 0xfb
 	push xiz
 	stl_dri XBC, 0xfd, 0x34, 0x04
 	stl_dri XWA, 0xfd, 0x38, 0x04
@@ -3650,7 +3650,7 @@ DrawBitmapFile_Impl_FillLoop:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stb_dri H, 0xf9, 0x40, 0x01
+	lda_dri XIZ, 0xf9, 0x40, 0x01
 	ld xwa, 0x140
 	add (xsp + 28), xwa
 	lds32 xwa, 1
@@ -3708,7 +3708,7 @@ DrawBitmapFile_Impl_VRAMRowLoop:
 	lda xsp, (xsp + 10)
 	ld xwa, 0x140
 	add (xsp + 36), xwa
-	stb_dri H, 0xf9, 0x40, 0x01
+	lda_dri XIZ, 0xf9, 0x40, 0x01
 	incm 1, (xsp + 34)
 	incm 1, (xsp + 32)
 	ld wa, (xsp + 42)
@@ -3735,7 +3735,7 @@ DrawBitmapFile_Impl_BuildDirtyRect:
 
 DrawBitmapFile_Impl_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x38, 0x04
+	lda_dri XSP, 0xfd, 0x38, 0x04
 	ret
 
 ; =============================================================================
@@ -3851,7 +3851,7 @@ DrawString_DeferredDispatch:
 	ret
 
 DrawString_Impl:
-	stb_dri L, 0xfd, 0xc4, 0xfe
+	lda_dri XSP, 0xfd, 0xc4, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x38, 0x01
 	stl_dri XWA, 0xfd, 0x3c, 0x01
@@ -3886,10 +3886,10 @@ DrawString_Impl_ClipXMax:
 
 DrawString_Impl_ClipYMax:
 	ld xiy, xbc
-	stb_dri D, 0xfd, 0x2c, 0x01
+	lda_dri XIX, 0xfd, 0x2c, 0x01
 	ldiw
 	ldiw
-	stb_dri D, 0xfd, 0x2c, 0x01
+	lda_dri XIX, 0xfd, 0x2c, 0x01
 	cpw (xix), 0x0
 	jr ge, DrawString_Impl_ClipCursorXMin
 	ldw (xix), 0x0
@@ -3924,7 +3924,7 @@ DrawString_Impl_FixedWidthKerning:
 
 DrawString_Impl_FontSetup:
 	ld (xsp + 12), xiy
-	stb_dri H, 0xfd, 0x30, 0x01
+	lda_dri XIZ, 0xfd, 0x30, 0x01
 	lda xiy, (xiz + 2)
 	ld wa, (xbc)
 	ld (xiy), wa
@@ -3994,7 +3994,7 @@ DrawString_Impl_KerningDone:
 
 DrawString_Impl_ComputeDirtyRect:
 	add_sriw_mr WA, 0xfd, 0x34, 0x01
-	stb_dri W, 0xfd, 0x30, 0x01
+	lda_dri XWA, 0xfd, 0x30, 0x01
 	lda xde, (xwa + 2)
 	ld_sril XBC, (xsp + 0x013c)
 	ld bc, (xbc + 2)
@@ -4086,7 +4086,7 @@ DrawString_Impl_ColumnLoop:
 	ldw bc, 0x8
 
 DrawString_Impl_ColumnSetup:
-	stb_dri W, 0xfd, 0x2c, 0x01
+	lda_dri XWA, 0xfd, 0x2c, 0x01
 	ld (xsp + 32), xwa
 	inc 2, xwa
 	ld (xsp + 36), xwa
@@ -4098,7 +4098,7 @@ DrawString_Impl_ColumnSetup:
 	sll xhl, 6
 	ld xwa, (xsp + 32)
 	ld wa, (xwa)
-	stb_dri C, 0x07, 0xec, 0xe0
+	lda_dri XHL, 0x07, 0xec, 0xe0
 	lda_24 xwa, (0x043c00)
 	add xwa, xhl
 	ld (xsp + 28), xwa
@@ -4108,7 +4108,7 @@ DrawString_Impl_ColumnSetup:
 DrawString_Impl_RowLoop:
 	cp (xde), 0x0
 	jr z, DrawString_Impl_RowAdvance
-	stb_dri C, 0xfd, 0x28, 0x01
+	lda_dri XHL, 0xfd, 0x28, 0x01
 	ld xwa, (xsp + 36)
 	ld wa, (xwa)
 	add wa, (xsp + 22)
@@ -4185,12 +4185,12 @@ DrawString_Impl_CharAdvance:
 	jrl nz, DrawString_Impl_CharLoop
 
 DrawString_Impl_SetChangeRect:
-	stb_dri W, 0xfd, 0x30, 0x01
+	lda_dri XWA, 0xfd, 0x30, 0x01
 	calr SetChangeRect
 
 DrawString_Impl_Return:
 	pop xiz
-	stb_dri L, 0xfd, 0x3c, 0x01
+	lda_dri XSP, 0xfd, 0x3c, 0x01
 	retd 0x8
 
 ; =============================================================================
@@ -4207,7 +4207,7 @@ DrawString_Impl_Return:
 ;   Stack: font_id (word), foreground_color (word), background_color (word)
 ; =============================================================================
 DrawStringCentered:
-	stb_dri L, 0xfd, 0xf2, 0xfe
+	lda_dri XSP, 0xfd, 0xf2, 0xfe
 	pushw iz
 	stl_dri XBC, 0xfd, 0x08, 0x01
 	stl_dri XWA, 0xfd, 0x0c, 0x01
@@ -4225,10 +4225,10 @@ DrawStringCentered:
 	call GetCharDescent
 	ld_sril XWA, (xsp + 0x0108)
 	ld xiy, xwa
-	stb_dri D, 0xfd, 0x04, 0x01
+	lda_dri XIX, 0xfd, 0x04, 0x01
 	ldiw
 	ldiw
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	ld wa, iz
 	exts xwa
 	divs wa, 0x2
@@ -4240,7 +4240,7 @@ DrawStringCentered:
 	sub (xbc + 2), wa
 	ld_sril XWA, (xsp + 0x0118)
 	call GetCenteredDelta
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	add (xbc + 2), hl
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0118)
@@ -4250,7 +4250,7 @@ DrawStringCentered:
 	ld_sril XWA, (xsp + 0x0114)
 	calr DrawString
 	popw iz
-	stb_dri L, 0xfd, 0x0e, 0x01
+	lda_dri XSP, 0xfd, 0x0e, 0x01
 	retd 0x8
 
 ; =============================================================================
@@ -4304,7 +4304,7 @@ DrawStringLeftJustify:
 ; Positions text at x = rect.right - 4 - text_width, vertically centered.
 ; =============================================================================
 DrawStringRightJustify:
-	stb_dri L, 0xfd, 0xf0, 0xfe
+	lda_dri XSP, 0xfd, 0xf0, 0xfe
 	push xiz
 	stl_dri XBC, 0xfd, 0x0c, 0x01
 	stl_dri XWA, 0xfd, 0x10, 0x01
@@ -4323,10 +4323,10 @@ DrawStringRightJustify:
 	call GetCharDescent
 	ld_sril XWA, (xsp + 0x010c)
 	ld xiy, xwa
-	stb_dri D, 0xfd, 0x08, 0x01
+	lda_dri XIX, 0xfd, 0x08, 0x01
 	ldiw
 	ldiw
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0110)
 	ld wa, (xwa + 4)
 	dec 4, wa
@@ -4339,7 +4339,7 @@ DrawStringRightJustify:
 	sub (xbc + 2), wa
 	ld xwa, xiz
 	call GetCenteredDelta
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	add (xbc + 2), hl
 	lda xde, (xsp + 8)
 	push xiz
@@ -4348,7 +4348,7 @@ DrawStringRightJustify:
 	ld_sril XWA, (xsp + 0x0118)
 	calr DrawString
 	pop xiz
-	stb_dri L, 0xfd, 0x10, 0x01
+	lda_dri XSP, 0xfd, 0x10, 0x01
 	retd 0x8
 
 ; =============================================================================

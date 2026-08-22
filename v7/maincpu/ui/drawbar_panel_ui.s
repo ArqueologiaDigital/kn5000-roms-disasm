@@ -7264,7 +7264,7 @@ PleaseWait_BuildScrollStr:
 	jr ge, PleaseWait_OverflowPath
 	sub de, hl
 	pushw de
-	stb_dri W, 0x07, 0xe0, 0xec
+	lda_dri XWA, 0x07, 0xe0, 0xec
 	push xwa
 	push xiy
 	jr PleaseWait_Strncpy
@@ -7275,7 +7275,7 @@ PleaseWait_OverflowPath:
 	pushw bc
 	push xwa
 	ld xwa, (xsp + 10)
-	stb_dri A, 0x07, 0xe0, 0xf0
+	lda_dri XBC, 0x07, 0xe0, 0xf0
 	exts xhl
 	sub xbc, xhl
 	push xbc
@@ -8292,7 +8292,7 @@ LswOrchestra_PopIzRet:
 	ret
 
 PsLabelBoxProc:
-	stb_dri L, 0xfd, 0xec, 0xfe
+	lda_dri XSP, 0xfd, 0xec, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -8323,11 +8323,11 @@ PsLabelBoxProc:
 	jrl PsLabelBox_SendEvent_Continue
 
 PsLabel_Confirm:
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	call GetClientBox
-	stb_dri W, 0xfd, 0x08, 0x01
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	call GetBoxCenter
 	ld_sril XWA, (xsp + 0x0114)
 	call GetViewInstance
@@ -8350,8 +8350,8 @@ PsLabel_CopyDataStr:
 	call	16713584
 	inc	8, xsp
 PsLabel_DrawReverse:
-	stb_dri C, 0xfd, 0x08, 0x01
-	stb_dri A, 0xfd, 0x04, 0x01
+	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x04, 0x01
 	lda xde, (xsp + 4)
 	ld xwa, (xiz + 32)
 	push xwa
@@ -8481,7 +8481,7 @@ PsLabel_ForwardToBase:
 
 PsLabel_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x14, 0x01
+	lda_dri XSP, 0xfd, 0x14, 0x01
 	ret
 
 LswMasterTuning:
@@ -9910,7 +9910,7 @@ PsMixer_ControlHelper:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000d
 	ld xhl, (xhl)
@@ -9921,7 +9921,7 @@ PsMixer_ControlHelper:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ldw_da xwa, (0x024792)
 	cp wa, (xsp + 8)
 	jr nz, PsMixer_EventCallback
@@ -9957,7 +9957,7 @@ PsMixer_GridLoop:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
 	ld xhl, (xhl)
@@ -10136,7 +10136,7 @@ AudioCtrl_DispatchHandler:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000e
 	ld xhl, (xhl)
@@ -10150,7 +10150,7 @@ AudioCtrl_DispatchHandler:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000e
 	ld xhl, (xhl)
@@ -10452,7 +10452,7 @@ PsMixer_ArrayReadHandler:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
 	ld xhl, (xhl)
@@ -10467,7 +10467,7 @@ AudioCtrl_MixerDispatch:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xix, (xhl)
@@ -10485,7 +10485,7 @@ AudioCtrl_MixerDispatch:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
 	ld xhl, (xhl)
@@ -10545,7 +10545,7 @@ AudioCtrl_ArrayReadHandler:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
 	ld xhl, (xhl)
@@ -10559,7 +10559,7 @@ AudioCtrl_DispatchCallback:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xix, (xhl)
@@ -10577,7 +10577,7 @@ AudioCtrl_DispatchCallback:
 	ld wa, (xwa + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
 	ld xhl, (xhl)
@@ -10744,7 +10744,7 @@ PsMixer_EventForwardHelper:
 	ld wa, (xde + 2)
 	sla wa, 2
 	lda_24 xbc, (Bitmap_DigitD_0x11F0)
-	stb_dri C, 0x07, 0xe4, 0xe0
+	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -14280,7 +14280,7 @@ DemoDesc_DataByte:
 	ret
 
 PsVariBoxProc:
-	stb_dri L, 0xfd, 0xe8, 0xfe
+	lda_dri XSP, 0xfd, 0xe8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
@@ -14330,10 +14330,10 @@ PsVari_Paint:
 	jr PsVari_DrawEditSw
 
 PsVari_PaintEmpty:
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0118)
 	call GetBox
-	stb_dri W, 0xfd, 0x08, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
 	ldw bc, 0xf5
 	call DrawBox
 
@@ -14350,11 +14350,11 @@ PsVari_Confirm:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
-	stb_dri A, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0118)
 	call GetClientBox
-	stb_dri W, 0xfd, 0x08, 0x01
-	stb_dri A, 0xfd, 0x10, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
 	call GetBoxCenter
 	lda xde, (xsp + 8)
 	ld_sril XWA, (xsp + 0x0118)
@@ -14362,8 +14362,8 @@ PsVari_Confirm:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa + 38)
-	stb_dri A, 0xfd, 0x10, 0x01
-	stb_dri B, 0xfd, 0x08, 0x01
+	lda_dri XBC, 0xfd, 0x10, 0x01
+	lda_dri XDE, 0xfd, 0x08, 0x01
 	lda xhl, (xsp + 8)
 	lda xiy, (xwa + 28)
 	ld a, (xwa + 34)
@@ -14473,7 +14473,7 @@ PsVari_CallInherited:
 
 PsVari_Epilogue:
 	pop xiz
-	stb_dri L, 0xfd, 0x18, 0x01
+	lda_dri XSP, 0xfd, 0x18, 0x01
 	ret
 
 

@@ -876,16 +876,16 @@ RhythmPart1_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	lda_dri XIY, 0x07, 0xec, 0xf4
+	stb_dri E, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XIX, 0x07, 0xec, 0xf4
+	stb_dri D, 0x07, 0xec, 0xf4
 	ldb w, 0x0
 	calr RingBuf_AdvanceIndex
-	lda_dri XWA, 0x07, 0xec, 0xf4
+	stb_dri W, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XWA, 0x07, 0xec, 0xf4
+	stb_dri W, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XWA, 0x07, 0xec, 0xf4
+	stb_dri W, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3214
@@ -925,7 +925,7 @@ RhythmAccent_StorePosition:
 RhythmAccent_AddAndCompare:
 	ldb_d8 w, (1122)
 	add a, w
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 w, (0x3376)
 	cp a, w
@@ -986,18 +986,18 @@ RhythmPart2_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	lda_dri XIY, 0x07, 0xec, 0xf4
+	stb_dri E, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XIX, 0x07, 0xec, 0xf4
+	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x342f)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3430)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3431)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3219
@@ -1061,18 +1061,18 @@ RhythmPart3_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	lda_dri XIY, 0x07, 0xec, 0xf4
+	stb_dri E, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XIX, 0x07, 0xec, 0xf4
+	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x342f)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3430)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3431)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x321e
@@ -1116,18 +1116,18 @@ RhythmPart4_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	lda_dri XIY, 0x07, 0xec, 0xf4
+	stb_dri E, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XIX, 0x07, 0xec, 0xf4
+	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x342f)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3430)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3431)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3223
@@ -1171,18 +1171,18 @@ RhythmPart5_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	lda_dri XIY, 0x07, 0xec, 0xf4
+	stb_dri E, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	lda_dri XIX, 0x07, 0xec, 0xf4
+	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x342f)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3430)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ldb_d8 a, (0x3431)
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3228
@@ -1199,7 +1199,7 @@ AccompVoice_BulkReadRegisters:
 	xor iy, iy
 
 BulkRead_Loop1_6Byte:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x6
 	cp iy, 0x30
 	jr c, BulkRead_Loop1_6Byte
@@ -1207,7 +1207,7 @@ BulkRead_Loop1_6Byte:
 	xor iy, iy
 
 BulkRead_Loop2_6Byte:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x6
 	cp iy, 0x30
 	jr c, BulkRead_Loop2_6Byte
@@ -1215,7 +1215,7 @@ BulkRead_Loop2_6Byte:
 	xor iy, iy
 
 BulkRead_Loop3_9Byte:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x9
 	cp iy, 0x48
 	jr c, BulkRead_Loop3_9Byte
@@ -1223,7 +1223,7 @@ BulkRead_Loop3_9Byte:
 	xor iy, iy
 
 BulkRead_Loop4_9Byte:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x9
 	cp iy, 0x48
 	jr c, BulkRead_Loop4_9Byte
@@ -1231,7 +1231,7 @@ BulkRead_Loop4_9Byte:
 	xor iy, iy
 
 BulkRead_Loop5_9Byte:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x9
 	cp iy, 0x48
 	jr c, BulkRead_Loop5_9Byte
@@ -1239,7 +1239,7 @@ BulkRead_Loop5_9Byte:
 	xor iy, iy
 
 BulkRead_Loop6_9Byte:
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x9
 	cp iy, 0x48
 	jr c, BulkRead_Loop6_9Byte

@@ -228,7 +228,7 @@ BitMapOut_CopyPreset9_Execute:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, (WidgetStyleDataTable_0x10)
-	stb_dri A, 0x07, 0xe4, 0xe0
+	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xbc)
 	ld xix, (xsp + 56)
 	add xix, xwa
@@ -2362,7 +2362,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	extz ix
 	ld xbc, (xhl)
 	ld a, (xde + 1)
-	lda_dri XBC, 0x07, 0xe4, 0xf0
+	stb_dri A, 0x07, 0xe4, 0xf0
 	inc 1, iz
 	cp iz, 0x17
 	jr c, BitMapOut_DeltaEncode_Type90Final

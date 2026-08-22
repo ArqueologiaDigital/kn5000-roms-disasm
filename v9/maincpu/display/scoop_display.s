@@ -2403,7 +2403,7 @@ Display_TitleString_Mode5:
 	sla w, 1
 	add a, w
 	xor w, w
-	stb_dri E, 0x07, 0xf4, 0xe0
+	lda_dri XIY, 0x07, 0xf4, 0xe0
 	jp String_CopyFromIY
 
 TitleString_MaskAndFormat:
@@ -2442,7 +2442,7 @@ TitleString_BuildFromBank:
 	xor b, b
 	sla bc, 3
 	ld xiy, StringData_StyleSections
-	stb_dri E, 0x07, 0xf4, 0xe4
+	lda_dri XIY, 0x07, 0xf4, 0xe4
 	ldw bc, 0x8
 	jp String_CopyFromIY
 
@@ -9817,7 +9817,7 @@ VoiceSlot_InitLoop:
 	ld xix, 0xc9e
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
-	stb_dri D, 0x07, 0xf0, 0xf8
+	lda_dri XIX, 0x07, 0xf0, 0xf8
 	ld iy, (xix + 32)
 	ldto_lerp XIX, 0x38
 	sla iz, 1
@@ -9828,7 +9828,7 @@ VoiceSlot_InitLoop:
 	jrl ugt, VoiceSlot_ProcessEntry
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
-	stb_dri D, 0x07, 0xf0, 0xf8
+	lda_dri XIX, 0x07, 0xf0, 0xf8
 	ld (xix + 32), c
 	ldto_lerp XIX, 0x38
 	sla iz, 1
@@ -9850,7 +9850,7 @@ VoiceSlot_ProcessEntry:
 	ldw wa, 0x100
 	ldw_sri IY, 0x07, 0xf0, 0xf8
 	srl iz, 1
-	stb_dri D, 0x07, 0xf0, 0xf8
+	lda_dri XIX, 0x07, 0xf0, 0xf8
 	ld ix, (xix + 32)
 	and ix, 0xff
 	sub wa, ix
@@ -9867,7 +9867,7 @@ VoiceSlot_ProcessEntry:
 	sub bc, 0xfb
 	ld xix, 0xc9e
 	ldfr_lerp XIX, 0x38
-	stb_dri D, 0x07, 0xf0, 0xf8
+	lda_dri XIX, 0x07, 0xf0, 0xf8
 	ld (xix + 32), c
 	ldto_lerp XIX, 0x38
 	sla iz, 1
@@ -10080,7 +10080,7 @@ VoiceSlot_CopyBlock:
 	stw_dri IY, 0x07, 0xe8, 0xf8
 	srl iz, 1
 	ld xde, 0xcbe
-	lda_dri XBC, 0x07, 0xe8, 0xf8
+	stb_dri A, 0x07, 0xe8, 0xf8
 	pop xde
 	sla iz, 1
 	xor w, w
@@ -10145,7 +10145,7 @@ VoiceSlot_CallSubroutine:
 	stw_dri IY, 0x07, 0xe8, 0xf8
 	srl iz, 1
 	ld xde, 0xcbe
-	lda_dri XBC, 0x07, 0xe8, 0xf8
+	stb_dri A, 0x07, 0xe8, 0xf8
 	pop xde
 	sla iz, 1
 	xor w, w
@@ -11523,7 +11523,7 @@ VoiceSlot_SaveState:
 	ld (xhl), wa
 	srl iz, 1
 	ldfr_lerp XIY, 0x38
-	stb_dri E, 0x07, 0xf4, 0xf8
+	lda_dri XIY, 0x07, 0xf4, 0xf8
 	ld a, (xiy + 32)
 	ldto_lerp XIY, 0x38
 	ld (xhl + 2), a
@@ -11577,7 +11577,7 @@ VoiceState_RestoreEntry:
 	srl iz, 1
 	ld a, (xhl + 2)
 	ldfr_lerp XIY, 0x38
-	stb_dri E, 0x07, 0xf4, 0xf8
+	lda_dri XIY, 0x07, 0xf4, 0xf8
 	ld (xiy + 32), a
 	ldto_lerp XIY, 0x38
 	ret
@@ -14682,7 +14682,7 @@ DisplayStr_StyleSectionInit:
 	xor wa, wa
 	ldb_d8 a, (0x3728)
 	sla wa, 3
-	stb_dri E, 0x07, 0xf4, 0xe0
+	lda_dri XIY, 0x07, 0xf4, 0xe0
 	ldw wa, 0x2020
 	stw_dpi WA, 0xf1
 	stw_dpi WA, 0xf1
@@ -15090,7 +15090,7 @@ SNS_LoadKeyAndChord:
 	and l, 0xf
 	sla hl, 1
 	ld xiy, StringData_KeyNames
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld wa, (xiy)
 	ld (xix), wa
 	xor hl, hl
@@ -15101,7 +15101,7 @@ SNS_LoadKeyAndChord:
 	ld hl, wa
 	extz xhl
 	ld xiy, StringData_KeyNames_0x20
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld wa, (xiy)
 	ld (xix + 2), wa
 	ld wa, (xiy + 2)
@@ -15119,7 +15119,7 @@ SNS_LoadDurationData:
 	ldb_d8 l, (3425)
 	sla hl, 2
 	ld xiy, StringData_KeyNames_0x160
-	stb_dri E, 0x07, 0xf4, 0xec
+	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld wa, (xiy)
 	ld (xix), wa
 	ld wa, (xiy + 2)
@@ -18401,7 +18401,7 @@ Scoop_CurveUpdate_NextSegment:
 	slla	xhl
 
 Scoop_CurveUpdate_SegmentEnd:
-	stb_dri L, 0xfd, 0xf0, 0xfe
+	lda_dri XSP, 0xfd, 0xf0, 0xfe
 	push xiz
 	ld xbc, xwa
 	ld iz, (xbc + 2)
@@ -18485,9 +18485,9 @@ Scoop_EnvelopeCalc:
 	ldw_sri0 WA, (xsp + 0x010a)
 	add wa, hl
 	stw_dri WA, 0xfd, 0x12, 0x01
-	stb_dri W, 0xfd, 0x0c, 0x01
+	lda_dri XWA, 0xfd, 0x0c, 0x01
 	ld xhl, xwa
-	stb_dri W, 0xfd, 0x08, 0x01
+	lda_dri XWA, 0xfd, 0x08, 0x01
 	ld xbc, xwa
 	lda xwa, (xsp + 8)
 	ld xde, xwa
@@ -18498,7 +18498,7 @@ Scoop_EnvelopeCalc:
 	ld xwa, xhl
 	call DrawString
 	pop xiz
-	stb_dri L, 0xfd, 0x10, 0x01
+	lda_dri XSP, 0xfd, 0x10, 0x01
 	ret
 
 Scoop_EnvelopeCalc_Data:
@@ -18898,7 +18898,7 @@ Scoop_EnvCalc_Handler3:
 	ret
 
 Scoop_GlideParam_Setup:
-	stb_dri L, 0xfd, 0xf4, 0xfe
+	lda_dri XSP, 0xfd, 0xf4, 0xfe
 	pushw iz
 	ld hl, (xwa + 2)
 	ld c, (xwa + 1)
@@ -18962,9 +18962,9 @@ Scoop_GlideParam_End:
 	add wa, hl
 	sub wa, iz
 	stw_dri WA, 0xfd, 0x0c, 0x01
-	stb_dri W, 0xfd, 0x06, 0x01
+	lda_dri XWA, 0xfd, 0x06, 0x01
 	ld xhl, xwa
-	stb_dri W, 0xfd, 0x02, 0x01
+	lda_dri XWA, 0xfd, 0x02, 0x01
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
 	ld xde, xwa
@@ -18975,7 +18975,7 @@ Scoop_GlideParam_End:
 	ld xwa, xhl
 	call DrawString
 	popw iz
-	stb_dri L, 0xfd, 0x0c, 0x01
+	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
 
 Scoop_GlideParam_Data:
@@ -19294,7 +19294,7 @@ Scoop_Dispatch_CallFAB273:
 
 
 Scoop_EventLoop_12Entry:
-	stb_dri L, 0xfd, 0x6a, 0xff
+	lda_dri XSP, 0xfd, 0x6a, 0xff
 	push xiz
 	stl_dri XBC, 0xfd, 0x96, 0x00
 	ld xiz, xwa
@@ -19321,13 +19321,13 @@ Scoop_EventLoop_12Entry_Process:
 	call (xhl)
 	ld a, (xsp + 4)
 	extz wa
-	stb_dri H, 0x07, 0xf8, 0xe0
+	lda_dri XIZ, 0x07, 0xf8, 0xe0
 	cpl_sri_mr XIZ, 0xfd, 0x96, 0x00
 	jr ugt, Scoop_EventLoop_12Entry_Process
 
 Scoop_EventLoop_12Entry_End:
 	pop xiz
-	stb_dri L, 0xfd, 0x96, 0x00
+	lda_dri XSP, 0xfd, 0x96, 0x00
 	ret
 
 Scoop_EnvProcessor_Data:
@@ -19553,11 +19553,11 @@ Scoop_EnvProcessor_Data:
 	ret
 
 Scoop_EventLoop_36Entry:
-	stb_dri L, 0xfd, 0xec, 0xfe
+	lda_dri XSP, 0xfd, 0xec, 0xfe
 	pushw iz
 	stl_dri XWA, 0xfd, 0x12, 0x01
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x1FF
-	stb_dri D, 0xfd, 0x0a, 0x01
+	lda_dri XIX, 0xfd, 0x0a, 0x01
 	lds bc, 4
 	ldirw
 	ld_sril XWA, (xsp + 0x0112)
@@ -19641,9 +19641,9 @@ Scoop_EventLoop_36Entry_Branch3:
 	add wa, hl
 	sub wa, iz
 	stw_dri WA, 0xfd, 0x10, 0x01
-	stb_dri W, 0xfd, 0x0a, 0x01
+	lda_dri XWA, 0xfd, 0x0a, 0x01
 	ld xhl, xwa
-	stb_dri W, 0xfd, 0x06, 0x01
+	lda_dri XWA, 0xfd, 0x06, 0x01
 	ld xbc, xwa
 	lda xwa, (xsp + 6)
 	ld xde, xwa
@@ -19654,7 +19654,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	ld xwa, xhl
 	call DrawString
 	popw iz
-	stb_dri L, 0xfd, 0x14, 0x01
+	lda_dri XSP, 0xfd, 0x14, 0x01
 	ret
 
 Scoop_EventLoop_36Entry_Data:
@@ -20105,7 +20105,7 @@ Scoop_EventLoop_12Entry_Alt_Dispatch:
 	call (xhl)
 	ld a, (xsp + 4)
 	extz wa
-	stb_dri H, 0x07, 0xf8, 0xe0
+	lda_dri XIZ, 0x07, 0xf8, 0xe0
 	cp (xsp + 54), xiz
 	jr ugt, Scoop_EventLoop_12Entry_Alt_Process
 
