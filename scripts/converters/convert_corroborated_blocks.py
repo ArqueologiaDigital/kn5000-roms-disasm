@@ -234,6 +234,27 @@ def translate(text):
             yield f"ldw_da {_a.lower()}, {_b}"
         if _mn == "ld" and re.match(r'^0x[0-9a-fA-F]{3,4}$', _b):
             yield f"ldw {_a}, {_b}"
+    # Absolute memory operands take a SUFFIXED mnemonic in this tree, and which
+    # suffix is right depends on operand width and direction:
+    #   ld WA,(0x0460)   -> ldw_d16 wa, (0x0460)     [0xd1,0x60,0x04,0x20]
+    #   ld (0x045e),WA   -> stda16 (0x045e), wa      [0xf1,0x5e,0x04,0x50]
+    # Rather than encode a table of which applies when, offer every plausible
+    # suffix and let the BYTE MATCH decide -- a wrong candidate simply does not
+    # reproduce the bytes and is discarded. That is safe precisely because
+    # selection never trusts "it assembled".
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a2, _b2 = [x.strip() for x in parts0[1].split(",")]
+        _mn2 = parts0[0].lower()
+        _absmem = re.compile(r'^\(0x[0-9a-fA-F]{2,6}\)$')
+        if _absmem.match(_b2):                      # load from absolute
+            for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16", "b_da", "_24"):
+                yield f"{_mn2}{suf} {_a2.lower()}, {_b2}"
+        if _absmem.match(_a2):                      # store to absolute
+            for pre in ("stda16", "stw_da", "stb_d16", "stda8", "stw_d16"):
+                yield f"{pre} {_a2}, {_b2.lower()}"
+            for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16"):
+                yield f"{_mn2}{suf} {_a2}, {_b2.lower()}"
+
     # `push 0x0004` is `0b 04 00` -- a 16-bit immediate push, which llvm-mc
     # spells `pushw`. Plain `push 0x0004` assembles to `09 04`, a different
     # (byte) instruction, so this must be selected by byte match, not by name.
