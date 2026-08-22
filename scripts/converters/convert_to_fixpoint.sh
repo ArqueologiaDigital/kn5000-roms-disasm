@@ -39,7 +39,7 @@ for round in $(seq 1 "$MAX"); do
 
     before=$(code_bytes)
     python3 scripts/converters/convert_reachable_ranges.py --apply \
-        | grep -E "ranges decode|rewrote|lost to truncation" | sed 's/^/    /'
+        | grep -E "ranges decode|rewrote|refused|lost to truncation" | sed 's/^/    /'
 
     if ! make clean-all >/dev/null 2>&1 || \
        [ "$(make all 2>&1 | grep -c 'Similarity: 100.00%')" != "9" ]; then
@@ -49,6 +49,15 @@ for round in $(seq 1 "$MAX"); do
     fi
     after=$(code_bytes)
     echo "    CODE $before -> $after  (gate 9/9)"
-    [ "$before" = "$after" ] && { echo "    fixpoint reached"; break; }
+    if [ "$before" = "$after" ]; then
+        # NOT necessarily "no work left". The converter can find ranges and
+        # still write nothing, because the rewrite stage refuses them -- which
+        # is exactly what happens now: 52 ranges start mid-block and the lead
+        # path is disabled. Print the refusals so a stall is never mistaken for
+        # completion.
+        echo "    no bytes gained -- refusals above say why, and they are"
+        echo "    not the same thing as having nothing left to convert"
+        break
+    fi
 done
 echo "total CODE $before_all -> $(code_bytes)"

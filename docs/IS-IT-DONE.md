@@ -152,6 +152,23 @@ By contrast, v9-content corroboration converted 536 bytes in total and will not 
 requires a block's exact bytes to appear in another revision at a code location, and most v7 code
 simply differs.
 
+**Where the v7 lane actually stands (2026-08-22).** ~20,864 bytes converted, every one byte-matched
+and every batch gated 9/9. `convert_to_fixpoint.sh` runs regenerate-targets -> convert -> gate until
+nothing more is gained. It now stops immediately, and the reason matters:
+
+| blocker | ranges | note |
+|---|---|---|
+| range starts mid-block, **lead path disabled** | **52** | ~5,571 bytes; the binding constraint |
+| range extends past its blocks | 7 | |
+| replaced span holds a non-`.byte` line | 1 | |
+| unspellable instruction (truncates the range) | -- | **6,754 bytes** lost, the measured ceiling for more spelling work |
+
+The lead path -- re-emitting the bytes of a partly-covered first block around the instructions --
+was tried twice and produced silent corruption both times: content displaced a few bytes with the
+totals intact, so the length invariant saw nothing and the gate reported 103 wrong bytes only after
+a full rebuild. It stays off until someone can explain the ordering rather than patch it. **That is
+now the single biggest lever on this lane**, worth more than every remaining spelling combined.
+
 **Nothing further has been converted yet, deliberately.** Proving 13 blocks round-trip is not the same as
 emitting them well: the decoded text carries raw numeric branch targets (`call 0xfd814f`), and
 writing that beside lines reading `call FileIO_BuildFilePath` is the regression that got the older
