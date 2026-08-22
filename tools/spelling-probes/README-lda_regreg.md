@@ -18,7 +18,38 @@ it equals what unidasm printed. PASS = `llvm-mc -triple=tlcs900 --show-encoding`
 emits exactly those bytes. "Assembled without error" is NOT a pass; see the
 negative controls.
 
+## ⚠ SUPERSEDED 2026-08-22 — the mnemonic changed, and the trap below is GONE
+
+This README described the spelling as `stb_dri GR8[r], …`. That was correct at the
+time and is now wrong. The TLCS-900 backend had `stb_dri` and `lda_dri` **swapped**:
+sub-opcode `0x30` is LDA and `0x40` is the byte store, which the neighbouring
+`stw_dri`=0x50 / `stl_dri`=0x60 already implied. Fixed in tlcs900_backend
+`1b9432474daa`, and 5,674 call sites across seven trees were migrated with the gate
+at 9/9.
+
+**The current rule:**
+
+```
+f3 <m> <base> <index> <sub>        m = 0x07 -> 16-bit index, 0x03 -> 8-bit index
+sub = 0x30|r    ->    lda_dri GPR[r], m, base, index
+GPR = xwa xbc xde xhl xix xiy xiz xsp        r = sub & 7
+```
+
+So `lda XDE,XDE+BC` (v7 `0xEF3600`, bytes `f3 07 e8 e4 32`) is now written
+`lda_dri xde, 0x07, 0xe8, 0xe4` — verified to emit exactly those bytes.
+
+**The trap documented below no longer exists.** It said the GR8 letter names
+"neither printed register", forcing you to write `b` to mean `XDE`. That was a
+symptom of the swap: `stb_dri` took an 8-bit register class because it was
+declared as the byte store. With the mnemonics corrected you write the same
+32-bit register unidasm prints. The old table is kept for anyone reading a
+source or a commit from before the fix.
+
+The rule is implemented in `scripts/converters/convert_corroborated_blocks.py`
+(search `lda_dri`).
+
 ## The spelling — a function of the RAW BYTES, never of the printed text
+### (historical: the pre-fix rule, kept for reading old sources)
 
 ```
 f3 <m> <base> <index> <sub>        m = 0x03 -> 8-bit  index register

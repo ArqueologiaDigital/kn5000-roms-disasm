@@ -427,6 +427,26 @@ def translate(text):
             if _bs is not None and _ix is not None:
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+        # LOAD-ADDRESS, register-indexed: `lda XBC,XBC+WA` -> f3 07 e4 e0 31.
+        #
+        # ⚠ This became spellable ONLY TODAY. The encoding was always reachable,
+        # but sub-opcode 0x30 answered to the mnemonic `stb_dri` -- the backend
+        # had LDA and the byte store swapped (fixed in tlcs900_backend
+        # 1b9432474daa). So the old rule in README-lda_regreg.md says to write
+        # `stb_dri GR8[r]`, with a whole section on the trap that the GR8 letter
+        # names NEITHER printed register. That trap is gone: you now write the
+        # 32-bit register unidasm actually prints, and the mnemonic says lda.
+        #
+        # The three addressing bytes pass through verbatim as immediates; the
+        # register operand exists only to supply the low nibble of the sub-opcode.
+        # Mode 0x07 = 16-bit index, 0x03 = 8-bit index -- both are offered and the
+        # byte comparison picks.
+        if _mn9 == "lda" and re.match(r'^[A-Za-z]{2,3}\+[A-Za-z]{1,3}$', _b9):
+            _rr = re.match(r'^([A-Za-z]{2,3})\+([A-Za-z]{1,3})$', _b9)
+            _bs2, _ix2 = _RIDX.get(_rr.group(1).upper()), _RIDX.get(_rr.group(2).upper())
+            if _bs2 is not None and _ix2 is not None:
+                for _mode in (0x07, 0x03):
+                    yield f"lda_dri {_a9.lower()}, 0x{_mode:02x}, 0x{_bs2:02x}, 0x{_ix2:02x}"
 
     # `inc <n>,<REG>` -- the TOP blocker by range count. Five encodings, and the
     # printed text is ambiguous: `inc 1,WA` is BOTH `d8 61` and `d7 e0 61`.
