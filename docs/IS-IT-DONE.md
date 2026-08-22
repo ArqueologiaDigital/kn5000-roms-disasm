@@ -15,7 +15,7 @@ stood for months were wrong, and are corrected in the history rather than quietl
 | **§3** binary includes justified | ⚠ **DEMOTED from PASS** | `audit_incbin_legitimacy.py` still exits 0 over 873 directives (was 1,371,778 illegitimate bytes), but **790 of them are justified by a PATH PREFIX** -- the target lives under `generated/` or `romslices/`. For those the check CANNOT FAIL. Measuring the blobs instead (`l3_slice_structure_triage.py`, with a byte-shuffle control that kills every other class to zero) leaves **61 files / 8,440 B of pointer tables** carrying real structure and no documented format. The row's own words, "with its format documented", were never being tested. |
 | **L4** assets round-trip | **PASS** | seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT. |
 | **L1** every byte classified | **PASS** | `l1_territory_map.py v7 v9 v10` -- flattens each source tree through llvm-mc and assigns every byte to CODE/DATA/PADDING; all three totals equal their rebuilt ROM to the byte. ASSET is folded into DATA here (llvm-mc expands `.incbin`); its separate justification is the §3 row. |
-| **L2** semantic names | **PARTIAL** (coverage complete, aptness open) | reference files now regenerate FROM the build and match it 100% (`l2_symbol_reference.py`, was 3.4% on maincpu and 0.02% on table_data). Naming COVERAGE is effectively complete, and the "3,627 positional names" figure I quoted all
+| **L2** semantic names | ⚠ **DEMOTED — the reference is v10-ONLY** | `l2_symbol_reference.py` maps `maincpu` to ONE file built from ONE ELF, `kn5000_v10_program.llvm.elf`, and there is no v7 or v9 equivalent. Measured 2026-08-22: the reference agrees with the **v10** ELF 39,393/39,393 = **100.00%**, and with the **v7** ELF 10,181/39,212 = **25.96%**. So the documented "regenerates FROM the build and matches it 100%" is true of v10 and FALSE of the tree this project spent the day converting. Example: `UIState_ProcessDisplayUpdate` is 0xFD0452 in the reference and in v10, and 0xFD009B in v7. Naming coverage and the two aptness classes are unaffected; what is void is any v7/v9 ADDRESS taken from this file. |
 session was misleading. Broken down by `l2_positional_breakdown.py`:
 
 | | count | assessment |
@@ -223,6 +223,31 @@ reconstruct exactly; the fault is in the multi-block case.
 emitting them well: the decoded text carries raw numeric branch targets (`call 0xfd814f`), and
 writing that beside lines reading `call FileIO_BuildFilePath` is the regression that got the older
 converter marked unsafe. The missing piece is symbolisation from the ELF.
+
+## ⚠ L2's reference file describes ONE revision and is consulted for THREE (2026-08-22)
+
+`PAIRS` in `l2_symbol_reference.py` reads `"maincpu": "kn5000_v10_program.llvm.elf"`. The output is
+`symbols/maincpu_symbols_reference.txt` -- one file, no revision in its name, no v7 or v9 sibling.
+Its `--check` compares that file to the v10 ELF and reports 100%, which is a true and useful
+STALENESS check; it says nothing about v7, and nothing in the file or the script warns a reader
+that v7 addresses are not in it.
+
+    reference vs v10 ELF : 39,393 / 39,393   100.00%
+    reference vs v7  ELF : 10,181 / 39,212    25.96%
+
+⚠ This corrupted work earlier in the same day. Looking up `free_X`, `Boot_ReadFDCStatus` and
+`EmptyRoutine_03` for v7 gave addresses whose ROM bytes did not match the blobs at all; the
+symptom was noted, worked around by searching the ROM for the bytes, and NOT diagnosed. The
+addresses were v10's.
+
+⚠ A second, worse consequence, found by the pointer-table pass: **153 v7 names sit on the wrong
+routine**, 152 of them off by exactly 1050 (0x41A), across `SndParam_*`, `MidiPkt_*`, `UIState_*`,
+`SoundFX_Handler_*`, `HdaeRom_*` and `CharMap_*`. Byte agreement decides it 153/153 in favour of
+the pointer table's target (~1.00 vs ~0.01). Anything that renamed v7 routines from this file
+would have moved code silently.
+
+FIX REQUIRED: one reference file per link (`maincpu_v7`, `maincpu_v9`, `maincpu_v10`), or a
+revision column, plus a check that refuses to answer a v7 query from a v10 table.
 
 ## L2: what the regeneration fixed, and what it did not
 

@@ -224,6 +224,12 @@ recognised faster next time.
 5. **Names that are addresses.** `LABEL_EF34FB` satisfies a symbol count and communicates nothing.
 6. **The stale reference.** A symbol file that no longer matches the build, still being consulted.
    Measure agreement with the build; if it is not near 100%, say so where the file is used.
+   ⚠ 2026-08-22 -- there is a SECOND form that a staleness check cannot see: a reference that
+   matches its build perfectly and describes **the wrong revision**. `maincpu_symbols_reference.txt`
+   agrees with the v10 ELF 100.00% and with the v7 ELF 25.96%, has no revision in its name, and is
+   consulted for all three links. "Agrees with its build" and "answers the question being asked"
+   are different properties, and only the first was being measured. A shared name across revisions
+   is the tell.
 7. **Measured-on-the-emulator, reported-as-hardware.** The emulator is a hypothesis about the
    hardware. Numbers taken from it describe the hypothesis.
 8. **Byte-match as the headline.** It belongs in the report, as L0, next to the echoed-bytes count.
