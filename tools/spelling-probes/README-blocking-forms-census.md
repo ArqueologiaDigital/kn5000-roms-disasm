@@ -15,6 +15,7 @@ fix is worth the most bytes** — so the next work is aimed rather than guessed.
 | … `--json out.json` | machine-readable census: every form, its blocked byte-sequences with counts, its v9 verdict | `python3 scripts/analysis/v7_blocking_forms_census.py --json /tmp/c.json` |
 | `tools/spelling-probes/verify_top_blocking_spellings.py` | Do the proposed spellings reproduce the ROM bytes at **every** site of their form, in all four ROMs? | `python3 tools/spelling-probes/verify_top_blocking_spellings.py` |
 | … `--negative` | Can that check fail? Runs the spelling each rule replaces. | `python3 tools/spelling-probes/verify_top_blocking_spellings.py --negative` |
+| `tools/spelling-probes/try_spelling.py` | Spot check: does ONE candidate text assemble to exactly these ROM bytes? Every spelling quoted below was found this way. | `python3 tools/spelling-probes/try_spelling.py 833d60 "xor (xhl), 0x60" "xormi8 (xhl), 0x60"` |
 
 Signal read: raw bytes of `original_ROMs/kn5000_{v7,v9,v10}_program.rom` at load
 base 0xE00000 and `kn5000_table_data.rom` at 0x200000, versus
@@ -245,7 +246,13 @@ The same sentinel unblocks the other `(r32+d8)` forms in the ranked table once
 their own operand rules are written — `ld (r+imm),imm` (543 B, e.g.
 `ld (xiz + 256), 0x90`) and `ld r,(r+imm)` (125 B, e.g. `ld c, (xsp + 256)`)
 both assemble byte-exactly. Those two are not swept by the probe yet, so treat
-them as spot-checked rather than verified.
+them as spot-checked rather than verified — reproduce with
+
+    python3 tools/spelling-probes/try_spelling.py be000090 "ld (xiz + 256), 0x90"
+    python3 tools/spelling-probes/try_spelling.py 8f0023   "ld c, (xsp + 256)"
+
+Likewise `cp (XBC+IZ),0x00` = `c3 07 e4 f8 3f 00` = `cpib_sri 0x07, 0xe4, 0xf8,
+0x00`, quoted below as spellable, is a spot check of the same kind.
 
 ## What is genuinely NOT worth a spelling rule
 
