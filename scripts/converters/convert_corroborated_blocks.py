@@ -247,10 +247,25 @@ def translate(text):
         _mn2 = parts0[0].lower()
         _absmem = re.compile(r'^\(0x[0-9a-fA-F]{2,6}\)$')
         if _absmem.match(_b2):                      # load from absolute
-            for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16", "b_da", "_24"):
+            # ldb_d8/ldb_da carry the BYTE-register forms:
+            #   ld L,(0x0462) -> ldb_d8 l, (0x0462)   [0xc1,0x62,0x04,0x27]
+            for suf in ("b_d8", "b_da", "_d16", "w_d16", "_da", "w_da",
+                        "b_d16", "_24", "_d8", "w_d8"):
                 yield f"{_mn2}{suf} {_a2.lower()}, {_b2}"
+        # An immediate operated on an ABSOLUTE address takes the *di8/*di16
+        # family, which is how this tree writes them (stdi8 appears 1,185 times
+        # in v9, cpdi8 761, anddi8 266):
+        #   cp (0xbca0),0xff  -> cpdi8 (0xbca0), 0xff   [0xc1,0xa0,0xbc,0x3f,0xff]
+        #   ld (0x0ef0),0x01  -> stdi8 (0x0ef0), 0x01
+        if _absmem.match(_a2) and re.match(r'^0x[0-9a-fA-F]+$', _b2):
+            _base = "st" if _mn2 == "ld" else _mn2
+            for suf in ("di8", "di16"):
+                yield f"{_base}{suf} {_a2}, {_b2}"
         if _absmem.match(_a2):                      # store to absolute
-            for pre in ("stda16", "stw_da", "stb_d16", "stda8", "stw_d16"):
+            # stb_d8 carries the byte-register store:
+            #   ld (0x0d57),A -> stb_d8 (0x0d57), a   [0xf1,0x57,0x0d,0x41]
+            for pre in ("stb_d8", "stda16", "stw_da", "stb_d16", "stda8",
+                        "stw_d16", "stb_da", "stw_d8"):
                 yield f"{pre} {_a2}, {_b2.lower()}"
             for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16"):
                 yield f"{_mn2}{suf} {_a2}, {_b2.lower()}"
