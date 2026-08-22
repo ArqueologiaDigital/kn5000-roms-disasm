@@ -426,6 +426,24 @@ What the writers say the fields are -- the ROUTINE is proven, the human reading 
 | +14, +15 | `BitMapOut_ApplyIOChange_Port<N>` | I/O routing |
 | +17 | `BitMapOut_ApplyIOChange_Port<N+3>` | second I/O routing |
 
+**Ten of the record's 24 bytes are dead, and that is a measured claim.** `+10` has no descriptor
+and no code touching it at all; nine more -- `+6 +11 +16 +18 +19 +20 +21 +22 +23` -- are declared by
+a field descriptor and never touched by any code in v7 or v9. `+6` is stepped over explicitly: the
+block copy moves `+5` then `+7`. So a third of the per-part record is reserved or abandoned, which
+is worth knowing before anyone tries to give those bytes a meaning.
+
+That measurement needed a second attribution method. `lsw_field_evidence.py` scans ABSOLUTE operands
+only, and most of the record is never reached that way; `lsw_part_record_fields.py` adds a
+base-pointer + displacement pass and gets **294 attributions against 280 absolute**. It also proves
+the event protocol rather than correlating it: `SwbtWr_QueuePostEvent` at 0xFDB3F1 appends
+`(XHL)=DE, (XHL+2)=WA` to a queue at 0xBF39, so the entry IS `[tag, offset, value, mask]`.
+
+⚠ Two traps it hit, both recorded in that probe: the assembler prints displacement 0 as `+256`
+(`ld a,(xiy+256)` is `[0x8d,0x00,0x21]`), so a naive scan invents an offset 256; and the ±12-line
+cross-check copied from `lsw_field_evidence.py` produced 8 disagreements that were **all the gate's
+fault** -- a line window can pair one clone's pointer with the next clone's event. Routine-scoped,
+15 of 15 agree. The older probe still uses the line window and passes only by luck of layout.
+
 **The strongest structural result is in that port number.** It TRACKS THE TAG: tag 00 writes Port0,
 tag 01 Port1, tag 02 Port2 at +14/+15, and Port3/4/5 at +17. Twenty-four records each owning a port
 pair is what a per-PART table looks like, which settles what the 24 slots are -- not 24 saved

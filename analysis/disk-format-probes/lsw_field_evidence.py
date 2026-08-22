@@ -20,6 +20,17 @@ Two independent sources of evidence, both scanned here:
    e.g. `ldb e,0x48 / ldb d,0x8` sits beside `stda16 (0xFC62), xwa`, and 0xFC62 is
    exactly tag 0x48's payload+8.  Every such call site is decoded here.
 
+⚠ THIS SCRIPT'S CROSS-CHECK GATE IS UNSOUND, and passes by luck of layout.
+It pairs an event site with any absolute access within WINDOW *source lines*.
+That is not a scope: the five AccPatch_UpdateChain_* clones announce a field
+about twenty lines after touching it, so a line window can compare one part's
+pointer against the NEXT clone's event. lsw_part_record_fields.py hit exactly
+that -- 8 disagreements, all of them the gate's fault -- and replaced the line
+window with a ROUTINE-scoped one, where 15 of 15 sites agree.
+
+The findings below stand; the gate that licenses them is weaker than it looks,
+and lsw_part_record_fields.py is the one to trust for new work.
+
 PASS (the falsifiable form of the "e = tag, d = offset" claim):
 wherever a literal (e,d) event site has an absolute access to 0x00F9A0..0x00FFC0 within
 WINDOW source lines of it, that address must resolve to exactly that (tag, offset).
