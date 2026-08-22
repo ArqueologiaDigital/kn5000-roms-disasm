@@ -21,6 +21,9 @@ to the *exact* ROM bytes -- "it assembled" is never accepted as a pass.
                          pass 1 could not spell.  This is the falsifiable half of
                          the "no spelling exists" claim: if any line here emitted
                          e7 34 81, the claim would be wrong.
+    pass 5  boundary     proves the one unspellable site really is a 3-byte
+                         instruction, using a branch target rather than a
+                         disassembler's framing.
 
 Command
 -------
@@ -46,6 +49,8 @@ pass 2  2054 candidate sites, 116 distinct encodings, 115 byte-exact,
 pass 3  12 real v9 ROM sites located, 12/12 byte-exact
 pass 4  702 mnemonics x 41 operand shapes: 0 spellings emit e7 34 81,
         d8 87, df 80 or d7 00 87
+pass 5  v7 0xf2014c `jr Z,0xf2015b` lands exactly after `e7 34 81` at 0xf20158,
+        so those three bytes are one instruction
 """
 import collections, glob, os, re, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
@@ -320,9 +325,39 @@ def pass_brute():
         print(f'  {k:8s} {v:28s} -> {sorted(hit[k]) if hit[k] else "NO SPELLING"}')
 
 
+# --------------------------------------------------------------------------- 5
+def pass_boundary():
+    """Is `e7 34 81` at v7 0xf20158 a real 3-byte instruction, or a linear-decode artefact?
+
+    Falsifiable test that does not depend on any disassembler's framing: an
+    EARLIER branch in the same basic block targets 0xf2015b.  A branch target is
+    an instruction boundary, so f20158..f2015a must be exactly one instruction.
+    If the branch had landed anywhere else, the 3-byte framing would be refuted.
+    """
+    print('=== pass 5: branch-target proof of the E7 instruction boundary ===')
+    rom = open(os.path.join(REPO, 'original_ROMs/kn5000_v7_program.rom'), 'rb').read()
+    lo, hi = 0xf20130, 0xf20175
+    dis = unidasm_blob(rom[lo - BASE: hi - BASE], lo)
+    starts = {a for a, _b, _t in dis}
+    targets = []
+    for a, b, t in dis:
+        m = re.match(r'^(jr|jrl|jp|calr|call)\b.*?0x([0-9a-f]+)$', t)
+        if m: targets.append((a, t, int(m.group(2), 16)))
+        print(f'  {a:06x}: {b.hex(" "):18s} {t}')
+    print('  branch/call targets inside the window:')
+    for a, t, tgt in targets:
+        inside = lo <= tgt < hi
+        print(f'    {a:06x} {t:26s} -> {tgt:06x}   '
+              f'{"is an instruction start: " + str(tgt in starts) if inside else "outside window"}')
+    print(f'  0xf20158 is an instruction start: {0xf20158 in starts}')
+    print(f'  0xf2015b is an instruction start: {0xf2015b in starts}  '
+          f'(and is the target of the jr Z at 0xf2014c)')
+
+
 if __name__ == '__main__':
     which = sys.argv[1] if len(sys.argv) > 1 else 'all'
     if which in ('all', 'exhaustive'): pass_exhaustive()
     if which in ('all', 'rom'):        pass_rom_sites()
     if which in ('all', 'real'):       pass_real_sites()
     if which in ('all', 'brute'):      pass_brute()
+    if which in ('all', 'boundary'):   pass_boundary()

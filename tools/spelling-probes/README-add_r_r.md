@@ -9,6 +9,7 @@ Companion to `README-ld_r_N.md`. One script, four passes:
 | `verify_add_r_r.py rom` | Which `add r,r` sites still sit inside `.byte` blobs in v7/v9/v10, and does the rule spell each one byte-exactly? | `... rom` |
 | `verify_add_r_r.py real` | Do the already-converted `addb_erp`/`addw_erp` lines in the byte-exact v9 sources match the real ROM at their real addresses? | `... real` |
 | `verify_add_r_r.py brute` | Can ANY of the 702 mnemonics the AsmParser knows emit the encodings the rule cannot spell? | `... brute` |
+| `verify_add_r_r.py boundary` | Is the one unspellable site a real 3-byte instruction, or a linear-decode artefact? | `... boundary` |
 
 Signal read: raw bytes of `original_ROMs/kn5000_v{7,9,10}_program.rom`, load base
 `0xE00000`. PASS = llvm-mc encoding equals those bytes. "Assembled without error"
@@ -63,6 +64,8 @@ Pass 3 (real v9 ROM addresses): 12 located, **12/12 byte-exact** — e.g. v9
 not literal-only, so the window search cannot pin them uniquely; that is a limit
 of the locator, not a failure of the spelling.
 
+Pass 5 (instruction-boundary proof): see below.
+
 Pass 4 (falsification): 702 mnemonics × 41 operand shapes = 28782 lines
 (llvm-mc **crashes** on some mnemonic/operand pairs, so the runner bisects around
 crashes — a plain batch silently loses every later line). 967 assembled.
@@ -74,11 +77,31 @@ encodings in the same sweep were all found, so the sweep can detect a hit.
 The `E7` gap is not cosmetic: v9/v10 already contain the instruction and the
 converter could not write it, so it emitted an orphan prefix byte instead —
 `v9/maincpu/ui/setwall_routines.s:2050` is `.byte 0xe7` followed by a bogus
-`ldw ix, 0xda81` / `ld w, 0` re-sync, covering ROM `0xf20182..0xf20188`. A bare
-`0xE7` is a prefix and cannot execute on its own, so that framing is wrong; the
-correct reading is `pop XBC` / `add XBC,XBC3` / `add DE,3` / `cp DE,0x30` /
-`jr C,<loop>`. Bank-3 registers are used as scratch all over this file
-(`ldfr_lerp XIZ, 0x38`, `ldto_lerp XIZ, 0x38`), so `XBC3` is in character.
+`ldw ix, 0xda81` / `ld w, 0` re-sync, covering ROM `0xf20182..0xf20188`.
+
+Pass 5 settles which framing is right without trusting any disassembler. In v7
+the same routine is a 16-iteration loop:
+
+```
+f20140: e9 d1              xor XBC,XBC
+f20142: da d2              xor DE,DE
+f20144: c3 07 f0 e8 21     ld A,(XIX+DE)     <- loop head, target of the jr C below
+f20149: c9 33 07           bit 0x07,A
+f2014c: 66 0d              jr Z,0xf2015b     <- lands EXACTLY after the E7 instruction
+f2014e..f20157             push/call/pop
+f20158: e7 34 81           add XBC,XBC3
+f2015b: da c8 03 00        add DE,0x0003
+f2015f: da cf 30 00        cp DE,0x0030
+f20163: 67 df              jr C,0xf20144
+```
+
+A branch target is an instruction boundary, and `0xf2014c` targets `0xf2015b`,
+so `f20158..f2015a` is exactly one instruction. Under the v9 framing
+(`.byte 0xe7`, then `34 81 da`, then `c8 03 00`) that branch would land in the
+middle of `ldw ix, 0xda81`. The v9 framing is therefore wrong, and
+`e7 34 81 = add XBC,XBC3` is right — it is the loop's accumulator step. Bank-3
+registers are used as scratch all over this file (`ldfr_lerp XIZ, 0x38`,
+`ldto_lerp XIZ, 0x38`), so `XBC3` is in character.
 
 Sibling defs are `ADD_BERP`/`ADD_WERP` in `TLCS900InstrInfo.td` (~line 3640/3668).
 The missing one belongs in the existing `// 32-bit ERP operations with register
