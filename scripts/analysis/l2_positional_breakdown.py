@@ -20,6 +20,9 @@ MEASURED 2026-08-22 on symbols/maincpu_symbols_reference.txt:
     positional names ................. 3,627
       sub-labels of a NAMED parent ... 3,285   (fine as they are)
       genuinely unattached ...........   342
+        padding markers .............    145   (__pad*, correctly labelled)
+        named + address suffix ......    ...   (NakaInst_ON_E12345 etc.)
+        no meaning in the stem ......    ...   <- the only real gap
 
 And the unattached ones are not shapeless either -- most are `Naka_Help_NNN_ADDR`
 help-table entries, indexed by position because position is what identifies them.
@@ -57,7 +60,20 @@ def main():
     print(f"total symbols .................... {len(rows):,}")
     print(f"positional names ................. {len(positional):,}")
     print(f"  sub-labels of a NAMED parent ... {sub:,}   (fine as they are)")
-    print(f"  genuinely unattached ...........   {len(orphan):,}")
+    # Of the unattached ones, most still carry a MEANING in the stem -- the
+    # trailing address only disambiguates repeated entries (`NakaInst_ON_E12345`,
+    # `Str_AllOption_E3...`), or marks padding (`__pad*`). A name that says what
+    # the thing is and where it lives is not a missing name.
+    pad = [n for n in orphan if n.startswith("__pad")]
+    meaningful = [n for n in orphan
+                  if not n.startswith("__pad")
+                  and len(re.sub(r'[^A-Za-z]', '', POSITIONAL.sub("", n))) >= 3]
+    rest = [n for n in orphan if n not in pad and n not in meaningful]
+    print(f"    padding markers ..............   {len(pad):,}")
+    print(f"    named + address disambiguator .   {len(meaningful):,}")
+    print(f"    no meaning in the stem .......    {len(rest):,}   <- the real gap")
+    for n in rest[:10]:
+        print(f"       {n}")
     if "--list" in sys.argv:
         for n in orphan:
             print("   ", n)
