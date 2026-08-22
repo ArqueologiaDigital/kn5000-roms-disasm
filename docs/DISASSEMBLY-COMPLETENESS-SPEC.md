@@ -267,16 +267,41 @@ recognised faster next time.
 
 A ROM image is DONE when all of the following are true, each backed by a committed measurement:
 
-- [ ] **L0** every byte reproduced from real source; echoed-byte count is ZERO
-- [ ] **L1** every byte classified; UNKNOWN bytes ZERO; padding proven
+Status as measured on 2026-08-22 (evidence and the runnable check for each row are in
+`docs/IS-IT-DONE.md`; this list is kept in sync with that scorecard deliberately, because the two
+had drifted apart once already).
+
+- [x] **L0** every byte reproduced from real source; echoed-byte count is ZERO
+      -- `rom_provenance_poison.py all`, 0 copied bytes on v7/v9/v10
+- [x] **L1** every byte classified; UNKNOWN bytes ZERO; padding proven
+      -- `l1_territory_map.py v7 v9 v10`, totals equal the rebuilt ROMs to the byte
 - [ ] **L2** every routine semantically named with a complete header; address-shaped names ZERO;
       symbol references agree with the build
+      -- references regenerate from the build and match 100%; naming coverage effectively
+      complete. NOT MET on APTNESS: two decidable classes are now checked by script
+      (`l2_name_vs_fopen_mode.py`, `l2_name_vs_return_value.py`) and found 5 wrong names, but a
+      name that declares nothing checkable cannot be tested this way -- `FileIO_ReadHeader`
+      builds a file path and never reads a header, and scores as semantic either way.
 - [ ] **L3** every data structure has a field-level spec, a parser, and a round-trip emitter
-- [ ] **L4** every asset exported to its natural form, committed, and round-trippable
+      -- `.LSW` closed to a residue on 2026-08-22 (container, 24 panel-memory slots, drawbar
+      tags 0x44/0x45/0x46, tag 0x71 role). OPEN: why format 2 imports 10 of 24; the 0x30 gap at
+      0x4E80 and the 0xC0 at 0x53C0; what `"M4"`/`"NN"` are; several tags still shape-only.
+- [x] **L4** every asset exported to its natural form, committed, and round-trippable
+      -- seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT
 - [ ] **L5** every protocol, algorithm and format reimplementable from the documentation alone
-- [ ] **L6** every quoted number has a committed producer; unmarked inferences ZERO;
+      -- CP-serial specified from firmware on both sides. NOT MET: four items need a logic
+      analyser on real hardware, and the NOTE2 question lives on other equipment entirely.
+- [x] **L6** every quoted number has a committed producer; unmarked inferences ZERO;
       contradictions ZERO; open questions enumerated in one place
-- [ ] **§3** every remaining `.incbin` is on the LEGITIMATE list, with its format documented
+- [ ] **§3** every remaining `.incbin` is on the LEGITIMATE list, **with its format documented**
+      -- ⚠ DEMOTED 2026-08-22, having been recorded as PASS. `audit_incbin_legitimacy.py`
+      reports 0 illegitimate bytes, but 790 of its 873 directives are justified by ONE rule:
+      the target sits under `generated/` or `romslices/`. That is a PATH-PREFIX test -- for
+      those 790 it cannot fail, which is anti-pattern 12 in the list above, in the project's own
+      completeness audit. Measuring the blobs instead (`l3_slice_structure_triage.py`) leaves
+      **61 files / 8,440 bytes of pointer tables** whose better form is `.long <symbol>` and
+      whose format is NOT documented. The second half of this row -- "with its format
+      documented" -- was never being checked at all.
 
 The PROJECT is done when every ROM image is done. Until then, the honest report is per-ROM levels
 plus the illegitimate-blob byte count -- never a single percentage, and never the gate alone.
