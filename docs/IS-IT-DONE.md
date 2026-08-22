@@ -77,10 +77,21 @@ fixpoint (a round gaining 0 bytes), so what remains is NOT waiting on more round
 
 ⚠ WHAT REMAINS, MEASURED (2026-08-22 end of day). "Fixpoint reached" is not "finished":
 
-    2,053 B  29 ranges  rewrite() will not drop a label -- needs a converter that PRESERVES a
-                        label across a rewrite. NOT a cleanup: 8,203 of the 9,975 v7 labels that
-                        look unreferenced are referenced in v9/v10, so deletion is off the table
-                        (`v7_unreferenced_labels_are_live.py`).
+    2,053 B  29 ranges  a label inside the range is NOT on a decoded instruction boundary.
+                        ⚠ I first wrote that this "needs a converter that preserves a label
+                        across a rewrite". That is wrong, and the guard's own comment says why:
+                        a label off an instruction boundary means THE DECODE AND THE EXISTING
+                        FRAMING DISAGREE, and one of them is incorrect. Preserving the label
+                        would paper over the disagreement rather than settle it. Either the
+                        range is mis-framed (do not convert) or the label is spurious (the
+                        decode is right). Neither the byte gate nor a label check can tell them
+                        apart -- both readings reproduce the ROM, and deleting a label changes
+                        no bytes. `v7_label_vs_decode_conflicts.py` separates the cases: only
+                        17 labels tree-wide fit the "auto-generated suffix on a live base name"
+                        shape (`SeMenu_ReadObjParam_Data`, whose base has 26 v7 references), so
+                        spurious labels do NOT explain all 29. Deletion stays off the table
+                        until the surrounding bytes convert and "referenced by nothing" stops
+                        being a statement about progress (`v7_unreferenced_labels_are_live.py`).
     1,722 B  20 ranges  entry in neither an indexed `.byte` run nor a located `.incbin`
     1,057 B             truncated at instructions with no verified spelling
       115 B   1 range   runs past its slice
