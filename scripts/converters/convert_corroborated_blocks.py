@@ -270,6 +270,24 @@ def translate(text):
             for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16"):
                 yield f"{_mn2}{suf} {_a2}, {_b2.lower()}"
 
+    # SIZE SUFFIXES. This backend spells operand width with a b/w/l suffix, and
+    # the short form is often a different, shorter encoding than the unsuffixed
+    # one -- `ldb W, 0x68` is [0x20,0x68] where `ld W, 0x68` is [0xc8,0x03,0x68].
+    # Both assemble; only one matches the ROM. Offer all three and let the byte
+    # comparison choose, which is safe exactly because selection never trusts
+    # "it assembled".
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a3, _b3 = [x.strip() for x in parts0[1].split(",")]
+        _mn3 = parts0[0].lower()
+        if not _mn3.endswith(("b", "w", "l")) and "_" not in _mn3:
+            for suf in ("b", "w", "l"):
+                yield f"{_mn3}{suf} {_a3}, {_b3}"
+        # 32-bit register loads from an absolute address take ldl_da:
+        #   ld XDE,(0x1d5a) -> ldl_da xde, (0x1d5a)  [0xe2,0x5a,0x1d,0x00,0x22]
+        if re.match(r'^\(0x[0-9a-fA-F]+\)$', _b3):
+            for pre in ("ldl_da", "ldl_d8", "ldw_da", "ldb_da"):
+                yield f"{pre} {_a3.lower()}, {_b3}"
+
     # `push 0x0004` is `0b 04 00` -- a 16-bit immediate push, which llvm-mc
     # spells `pushw`. Plain `push 0x0004` assembles to `09 04`, a different
     # (byte) instruction, so this must be selected by byte match, not by name.
@@ -351,7 +369,24 @@ def encode_block(texts):
     return [bytes(int(b, 16) for b in e.split(",") if b.strip()) for e in encs]
 
 
+_ENCODE_CACHE = {}
+
+
 def encode(text):
+    """Assemble one instruction, memoised.
+
+    Each candidate spelling costs a process, and the candidate list has grown as
+    more addressing forms were learned. The same text recurs constantly across a
+    2 MB image -- `ret`, `push XIZ`, `ld (XBC),XWA` -- so caching turns a
+    quadratic-feeling sweep back into a linear one.
+    """
+    if text in _ENCODE_CACHE:
+        return _ENCODE_CACHE[text]
+    _ENCODE_CACHE[text] = _encode_uncached(text)
+    return _ENCODE_CACHE[text]
+
+
+def _encode_uncached(text):
     r = subprocess.run([MC, "--triple=tlcs900", "--show-encoding"],
                        input=text, capture_output=True, text=True, timeout=30)
     m = ENC_RE.search(r.stdout)
