@@ -60,6 +60,20 @@ and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table
 | **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. ~~Panel-side behaviour is not, and cannot be.~~ **RETRACTED** -- most of it IS derivable, see `docs/kn5000-control-panel-panel-side.md`; four things genuinely need hardware. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
 
+## v7 territory, as of 2026-08-22
+
+    CODE      598,615  28.54%      (was 542,379 / 25.86% at the start of the day)
+    DATA    1,431,785  68.27%
+    PADDING    66,752   3.18%
+    TOTAL   2,097,152  = the ROM, to the byte
+
+56,236 bytes became instructions today, every batch gated at 9/9 byte-exact. 23,232 of those came
+from ONE line: the range converter's whole-block re-check tested "no local labels" where it meant
+"no branches", so every range branching to an external symbol was compared against a link-time
+placeholder and refused. Round 1 after the fix gained 18,446 B against 18,412 B predicted by a
+census written before the fix existed -- which is the kind of agreement that makes a fix credible.
+Call targets still awaiting conversion: 1,118 -> 791.
+
 ## What the territory map shows
 
 L1 was mechanised on 2026-08-21, and the first thing it measured was a gap nobody had quantified:

@@ -227,6 +227,41 @@ recognised faster next time.
 7. **Measured-on-the-emulator, reported-as-hardware.** The emulator is a hypothesis about the
    hardware. Numbers taken from it describe the hypothesis.
 8. **Byte-match as the headline.** It belongs in the report, as L0, next to the echoed-bytes count.
+9. **The unstated search window.** ⚠ THE MOST EXPENSIVE ONE IN THIS PROJECT: eight documented
+   claims were retracted in a single day and every one had the same shape -- a search that could
+   not express what it was looking for returned a clean zero, and the zero was recorded as a fact
+   about the hardware.
+     * `"LSW"` searched in uppercase; the ROM writes `Lsw` (`PreLswLoad`, `0xE1F726`). Conclusion
+       recorded: "no KN5000 code reads or writes `.LSW` contents".
+     * A parameter-id scan limited to `0x4000..0x4FFF`; the ids were at `0x8200/0x8600/0x8A00`.
+       Conclusion recorded: "these tags carry no parameter descriptor".
+     * A path resolver testing `is_file()` and silently skipping misses; 283 of 288 targets
+       vanished and it reported a clean, small, wrong total.
+     * A recursive `grep` (ugrep `-I`) skipping the 65 of 506 sources holding bytes above 127.
+   The damage is never the failed search -- it is that the zero gets REASONED ONWARD. "No
+   descriptor found" became "therefore not UI-editable", about a page whose ROM title is
+   `DRAWBAR SETTING`. **Rule: a negative result must state its window in the same sentence.**
+   "Not found by X over Y" is falsifiable; "does not exist" is not, and only one of them is a
+   measurement.
+10. **The control that could not have failed.** A negative control must be drawn from a
+   distribution capable of exhibiting the defect. A blob classifier here was validated against
+   `os.urandom` and stayed 100% clean while its pointer rule was counting every small integer as
+   an address -- a uniform `u32` lands in the bad range with probability 1/4096, so the control
+   was incapable of failing. Reshuffling the REAL blobs' own bytes (same distribution, no
+   arrangement) exposed it at once. **Before quoting a control, state what result would have
+   falsified it.**
+11. **The check that assembles instead of verifying.** An instruction that assembles cleanly can
+   still be the wrong instruction. Two TLCS-900 backend defects survived for months because both
+   forms were reachable and produced valid bytes under swapped names -- 4,693 sites named a byte
+   STORE where the CPU computes an ADDRESS. A missing form fails loudly at assembly time; a wrong
+   sub-opcode assembles and lies. **Compare the mnemonic against what the ROM does, never against
+   whether it assembled.**
+12. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+   faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
+   so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
+   the same message a genuinely broken range produces. Rejections concentrated in one bucket
+   deserve the same suspicion as acceptances that never fail. **Of every refusal category, ask:
+   could anything in this bucket ever pass?**
 
 ## 6. Definition of done
 
