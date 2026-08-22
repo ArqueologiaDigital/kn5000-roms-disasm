@@ -110,9 +110,21 @@ def locate(recs, a):
     return None
 
 
-def symbols():
+def symbols(ver='v10'):
+    """Reverse address->name table FOR ONE LINK.
+
+    ⚠ This used to read `maincpu_symbols_reference.txt` unconditionally, and was
+    called ONCE outside the loop over v7/v9/v10. That file is the v10 link: it
+    agrees with the v10 ELF 100.00% and with the v7 ELF 25.96%, so every v7 and
+    v9 address printed by this probe was labelled with whatever name sits at
+    that address IN v10. Names here are for reading, not for arithmetic, so no
+    result was computed from them -- but 153 v7 names are known to resolve to
+    the wrong routine, so the labels could be confidently wrong.
+    """
     out = []
-    p = os.path.join(REPO, 'symbols', 'maincpu_symbols_reference.txt')
+    cand = os.path.join(REPO, 'symbols', 'maincpu_%s_symbols_reference.txt' % ver)
+    p = cand if os.path.exists(cand) else os.path.join(
+        REPO, 'symbols', 'maincpu_symbols_reference.txt')
     for line in open(p):
         f = line.split()
         if len(f) == 2 and len(f[1]) == 8:
@@ -338,11 +350,13 @@ def main():
         print('note: %s not found -- the instruction-alignment census will be skipped' % UNIDASM)
         UNIDASM = None
 
-    syms = symbols()
-    addrs = [s[0] for s in syms]
     ok = True
 
     for ver in VERSIONS:
+        # Per-link symbols: see the note in symbols(). Loading these once for
+        # all three revisions is what made the labels wrong.
+        syms = symbols(ver)
+        addrs = [s[0] for s in syms]
         rom = open(rom_path(ver), 'rb').read()
         recs = schema(rom)
         print('######## %s ########' % ver)
