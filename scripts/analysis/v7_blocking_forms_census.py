@@ -411,8 +411,8 @@ def main():
           f"placeholder byte (`encoding: [0x6e,A]`),\n          so the byte "
           f"comparison in that gate CANNOT succeed. Not a spelling problem.")
     print(f"        {landed:,} B in {landed_ranges} ranges actually reach the source "
-          f"tree today -- this\n        reproduces `convert_reachable_ranges.py`'s "
-          f"own headline figure exactly.")
+          f"tree today" + ("." if limit else " -- this\n        reproduces "
+          "`convert_reachable_ranges.py`'s own headline figure exactly."))
 
     # ---- per-form measures
     sites = collections.Counter()
