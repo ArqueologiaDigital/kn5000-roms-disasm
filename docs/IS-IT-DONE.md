@@ -255,7 +255,9 @@ first-byte message space, and the acceptance test behind every command. It also 
 things that genuinely need hardware, which is a sharper statement than the one it replaces.
 `analysis/cpanel-protocol-probes/` reads only the ROMs and its gate exits non-zero.
 
-## The three things that are not done, and where they live
+## What is not done, and where it lives
+
+(Was "the three things". Item 1 is now closed to a residue; the count is kept honest below.)
 
 1. **`.LSW`'s 24 slot blocks.** IN these ROMs after all -- the earlier "not in these ROMs" was a
    RETRACTED string-search artefact (the code says index `0`, never `"LSW"`). Now known: `.LSW` is
@@ -263,8 +265,21 @@ things that genuinely need hardware, which is a sharper statement than the one i
    **file type 0**, and type 0 has a dedicated handler in every revision -- v7 `F876E9`, v9/v10
    `F87AF6` -- which sizes DRAM `0xF980..0xFFC0`, the panel area kept across power-down.
    Provers: `scripts/analysis/lsw_saveall_table.py`, and `tools/widget-map/kn7000_widget_labels.py`
-   in the KN7000 repo. **Still open:** the handler moves 0x640 + 0x800 bytes and the file is 0x5800,
-   so the region-to-block mapping is unread. The next pass has a function to disassemble.
+   in the KN7000 repo. **CLOSED 2026-08-22.** The region-to-block mapping is read. The KN5000
+   WRITES 0xE40 in four parts (0x20 header from `0xF980`; block 0 0x3C0 from `0xF9A0`; block 1
+   0x260 from `0xFD60`; 0x800 from `0x1E7800`), and `FileIO_CheckRegionSignature(0)` demands `"HK"`
+   at file offset 4 -- which the ROM's own default panel image at `0xEDB3DC` (`5A 5A 00 00 48 4B`)
+   satisfies, so the live panel area IS a `.LSW`. The 0x5800 files are `"M60"` headers, classified
+   as format 2 and imported by a converter, which is why a failing `"HK"` does not stop the load.
+   **The 24 slot blocks are PANEL MEMORIES** (0x300 each at 0x0680..0x4E80), read into
+   `0x1ED400 + 960*j` between `PrePmLoad`/`PostPmLoad`.
+   Prover: `analysis/disk-format-probes/lsw_region_to_block_map.py`, which fails when perturbed in
+   three directions. **Residual open questions, smaller than the original:** why format 2 imports
+   only 10 of the 24 (`0x000A` is a literal; format 1 uses `0x0018`, and header byte +7 is 0x0A but
+   the firmware ignores it); the 0x30 gap at 0x4E80 and the 0xC0 at 0x53C0; and what `"M4"`/`"NN"`
+   are. ⚠ Three claims in `kn-disk-file-formats.md` were REFUTED by this and are corrected in place
+   -- the worst of them, "no KN5000 code reads or writes `.LSW` contents", was a case-sensitive
+   search missing the mixed-case `PreLswLoad`/`PostLswSave` names at `0xE1F726`.
 2. **NOTE2's extra bytes in the factory styles.** NOT this machine's doing -- the emitter and its
    twelve-record table are identical in v7/v9/v10 and can produce three distinct pairs; the corpus
    holds 57. The styles were authored on other equipment before being written to the initial data
@@ -273,9 +288,11 @@ things that genuinely need hardware, which is a sharper statement than the one i
    (`kn5000-control-panel-serial.md`). What the PANEL puts on the wire needs a logic analyser on a
    real instrument; the project's data-wheel defect and the falsified `kn5000-30` fix live there.
 
-None of the three is answerable by more analysis of these ROMs. Two are located elsewhere and one
-needs hardware -- which is a different statement from "unknown", and is the main thing that changed
-today.
+Item 1 WAS answerable by more analysis of these ROMs, and the earlier sentence here -- "none of
+the three is answerable by more analysis of these ROMs" -- was wrong about it. It is now read from
+the importer's own immediates. Items 2 and 3 stand: one is located on other equipment, one needs a
+logic analyser. The residue of item 1 needs a format-1 `.LSW`, which is a disk we do not have
+rather than an analysis nobody did.
 
 ## Five traps that produced most of this session's wrong answers
 

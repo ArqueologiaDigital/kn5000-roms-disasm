@@ -111,10 +111,19 @@ It is used to build filenames -- `file_demo_proc.s` scales the type index by 4, 
 and appends the extension via `FileIO_BuildFilePath`. Note two extensions carry a trailing space,
 `"MD "` and `"TM "`, which a filename builder must reproduce.
 
-**`PMT` and `LSW` are separate file types in the same table.** So the tempting reading of `.LSW`'s
-24 slot blocks as panel memories is not merely unsupported, it is contradicted: panel memory has
-its own extension, and these disks do not carry a `.PMT` at all. Recorded because that reading is
-the first one anybody will reach for.
+**`PMT` and `LSW` are separate file types in the same table.**
+
+> ⚠ **RETRACTED (2026-08-22).** This paragraph used to argue that the "24 slot blocks are panel
+> memories" reading was "not merely unsupported, it is contradicted". **It was right.** The slots
+> ARE panel memories: the format-2 importer reads them 0x300 at a time into `0x1ED400 + 960*j`,
+> bracketed by calls named `PrePmLoad`/`PostPmLoad`, and 960 = 0x3C0 = the size of TLV block 0,
+> with `(0x200000-0x1ED400)/960 = 80` exactly. A panel-memory slot is the live panel block minus
+> its 0x20 header -- every stage-2 destination is stage-1's minus 0x20.
+>
+> The inference that misled me was reasonable and still wrong: `.PMT` existing as its own type
+> does NOT mean panel memories cannot appear inside a `.LSW`. A separate extension for saving one
+> slot is compatible with the current-panel file carrying all of them.
+> Prover: `analysis/disk-format-probes/lsw_region_to_block_map.py`.
 
 What `.LSW` IS has since been settled from the KN7000 UI -- **"CURRENT PANEL"**, the live panel
 setup, as against `.PMT` "PANEL MEMORY", the stored slots. See *What the extensions mean* below.
@@ -144,9 +153,20 @@ There are exactly three, and together they bound what can be learned here:
    `EV_SWOFF`, `EV_INDEXSW_DOWN`, `EV_SOUNDSWNO`), and `EV_LSWDATA` sits directly beside
    `EV_RAMDATA` as the other "...DATA" delivery event.
 
-**No KN5000 code has been shown to read or write `.LSW` CONTENTS** -- only to name the extension,
-glob for it in a test path, and carry an event named after it. What the letters stand for is NOT
-proposed here; the neighbouring names make "switch" likely for the SW and nothing establishes the L.
+> ⚠ **RETRACTED (2026-08-22).** This said **"No KN5000 code has been shown to read or write
+> `.LSW` CONTENTS"**. False, and the cause was a case-sensitive search: the ROM carries
+> `PostLswSave`, `PreLswSave`, `PostLswLoad`, `PreLswLoad` -- mixed case `Lsw`, not `LSW` -- in the
+> factory-test table at `0xE1F726..0xE1F755` (verified by direct dump). A search for the uppercase
+> spelling returns a clean zero and reads like a result.
+>
+> The KN5000 both writes and reads these files. It writes 0xE40 in four parts (32-byte header from
+> `0xF980`, TLV block 0 from `0xF9A0`, TLV block 1 from `0xFD60`, and 0x800 from `0x1E7800`), and
+> `FileIO_CheckRegionSignature(0)` requires `"HK"` at file offset 4 (table `0xEA0104`). The ROM's
+> own factory-default panel image at `0xEDB3DC` begins `5A 5A 00 00 48 4B` -- it satisfies the
+> loader's check, i.e. the live panel area IS a `.LSW`.
+>
+> What the letters stand for is still NOT established; the neighbouring names make "switch" likely
+> for the SW and nothing establishes the L.
 
 ### Traced, and the answer is that it is NOT HERE
 
@@ -608,7 +628,14 @@ entries of a pointer array whose elements all look like `XX 45 27 4C` (LE32 0x4C
 `4C 4B 45` there is `...L` + `KE...` of two adjacent pointers. A three-character magic is short
 enough to occur by chance in a pointer table -- always dump the context before believing the hit.
 
-Consequence: no dumped firmware validates the `.LSW` header, so **the format cannot be recovered by
+> ⚠ **RETRACTED (2026-08-22).** "No dumped firmware validates the `.LSW` header" is false --
+> `FileIO_CheckRegionSignature(0)` checks `"HK"` at offset 4 via the table at `0xEA0104`. What
+> follows about `"LKE"` not being a magic still stands; the error was concluding from one absent
+> magic that NO check exists. The seven floppies are `"M60"` headers, which the loader classifies
+> as format 2 (`FileData_AllocLoadAndParse` tests bytes [4],[5] for `'M','4'`/`'M','6'`/`'N','N'`)
+> and imports through a converter -- so a failing `"HK"` does not stop the load.
+
+Superseded text: no dumped firmware validates the `.LSW` header, so **the format cannot be recovered by
 finding its magic check** in any image we hold. Either the loader reads the blocks without checking,
 or the writer of these files is something not dumped. Note the same disks' `.LSW` embeds a byte-exact
 copy of their `.MSP` prefix, and the KN5000 does parse `.MSP` -- so a KN5000-family machine wrote
@@ -641,10 +668,17 @@ and will not lead to the parser in either. Start from the SD-menu widget handler
 Disassemble with: `unidasm <slice> -arch mn10300 -basepc <addr>`, where the file offset is
 `addr - 0x48400000`. unidasm does not seek, so `dd` the bytes out first.
 
-NOT established, and deliberately unnamed: what the 24 slot blocks ARE. Their geometry and their
-user/untouched split are proved, but the firmware evidence says `.LSW` is the CURRENT PANEL and
-that panel memory is a separate `.PMT` extension these disks do not carry, so the tempting "24
-panel memories" reading is in tension with the extension table and is NOT adopted.
+**ESTABLISHED (2026-08-22): the 24 slot blocks are PANEL MEMORIES**, 0x300 each at file
+0x0680..0x4E80. Proven from the format-2 importer, whose 37 hard-coded offsets reproduce the
+measured 24-slot schema to the byte across all seven files, and whose destination stride of 960
+equals TLV block 0's size. See the retraction above for why the earlier "in tension with the
+extension table" reasoning was wrong.
+
+Still open, and stated plainly: **why format 2 imports only 10 of the 24** (`0x000A` is a literal;
+format 1 uses `0x0018`). Header byte +7 is `0x0A` = 10, but the firmware ignores it, so that byte
+is NOT shown to be a count. A format-1 (`"M4"`) file would settle it. Also open: the 0x30 gap at
+0x4E80 and the 0xC0 at 0x53C0 -- the "24 u16 words" reading was TESTED AND NOT SUPPORTED (in
+`02BOSSA_.LSW` slots 15..23 duplicate 5..13 while the words do not).
 
 Reproduce: `analysis/disk-format-probes/disk_lsw_container.py <dir>`.
 
