@@ -123,6 +123,9 @@ def decode_range(rom, terr, start, limit=16384):
 
 
 REFUSED = {}
+import collections
+FORMS = None
+FORM_EX = {}
 
 
 def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
@@ -258,7 +261,10 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
 
 
 def main():
+    global FORMS
     apply_ = "--apply" in sys.argv
+    if "--forms" in sys.argv:
+        FORMS = collections.Counter()
     limit = int(sys.argv[sys.argv.index("--limit") + 1]) if "--limit" in sys.argv else 0
     rom = open(os.path.join(REPO, "original_ROMs", "kn5000_v7_program.rom"), "rb").read()
     spec = importlib.util.spec_from_file_location(
@@ -284,8 +290,18 @@ def main():
         insns = decode_range(rom, terr, t)
         if len(insns) < 3:
             skipped += 1; skip("decoded fewer than 3 instructions"); continue
-        if insns[-1][2].split()[0].lower() not in TERMINATORS:
-            skipped += 1; skip("no `ret` before leaving DATA territory"); continue
+        # A `ret` is one valid end. So is FALLING THROUGH into territory the
+        # sources already express as instructions: the function continues there,
+        # already disassembled, and the DATA part of it ends exactly at that
+        # boundary. Requiring `ret` refused 400 ranges for a reason that was
+        # about where the .byte happens to stop, not about the code.
+        _off = t - BASE
+        _run = 0
+        while _off + _run < len(terr) and terr[_off + _run] == 2:
+            _run += 1
+        ends_at_code = sum(n for _, n, _ in insns) == _run
+        if insns[-1][2].split()[0].lower() not in TERMINATORS and not ends_at_code:
+            skipped += 1; skip("no `ret`, and does not end at a code boundary"); continue
         span = sum(n for _, n, _ in insns)
         want = rom[t - BASE: t - BASE + span]
         # Choose each spelling by MATCHING BYTES, never by "it assembled".
@@ -315,7 +331,15 @@ def main():
                 if e == target:
                     chosen = cand; break
             if chosen is None:
-                bad = True; break
+                bad = True
+                if FORMS is not None:
+                    mn = x.split()[0]
+                    rest = x.split(None, 1)[1] if len(x.split(None, 1)) > 1 else ""
+                    FORMS[mn + " " + re.sub(r'0x[0-9a-fA-F]+', 'imm',
+                                            re.sub(r'\b[A-Z]{1,4}\b', 'r', rest))] += 1
+                    FORM_EX.setdefault(mn + " " + re.sub(r'0x[0-9a-fA-F]+', 'imm',
+                                       re.sub(r'\b[A-Z]{1,4}\b', 'r', rest)), x)
+                break
             texts.append(chosen); pos += n
         if bad:
             skipped += 1; skip("an instruction cannot be spelled to match its bytes"); continue
@@ -332,6 +356,14 @@ def main():
             print(f"  0x{t:06X}  {span:5} B  {len(insns):4} insns  {nm}")
     print(f"\n{ok} ranges decode to a clean `ret` and re-assemble exactly, "
           f"{total_bytes:,} bytes")
+    if FORMS is not None:
+        print(f"\nforms the converter cannot spell ({sum(FORMS.values())} instances),")
+        print("measured with the converter's OWN logic, branch resolution included --")
+        print("unlike v7_unspellable_forms.py, which probes translate()/canonical()")
+        print("only and therefore counts branches it would in fact resolve:")
+        for k, v in FORMS.most_common(14):
+            print(f"  {v:5}  {k:26} e.g. {FORM_EX[k]}")
+        print()
     print(f"{skipped} skipped:")
     for r, n in sorted(why.items(), key=lambda kv: -kv[1]):
         print(f"   {n:5}  {r}")

@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 """Which instruction forms block v7 conversion, and how many instances each?
 
+⚠ SUPERSEDED for that question by
+    python3 scripts/converters/convert_reachable_ranges.py --forms
+This script probes translate()/canonical() ONLY. The converter also resolves
+branches to labels, so every `jr`/`jrl`/`calr` counted here is one it would
+actually handle -- which is why this reports 8,875 instances led by `jr r,imm`
+(2,106) while the converter's own census reports 562 with no branch in the top
+fourteen. Both numbers are correct about what they measure; only the second is
+about what blocks conversion.
+
+Kept because it answers a narrower question honestly -- what the SPELLING layer
+alone cannot express -- which is the right measure when working on translate()
+itself.
+
 The range converter (scripts/converters/convert_reachable_ranges.py) skips a
 range when any one of its instructions cannot be spelled in a way that
 re-assembles to the original bytes. This census says WHICH forms those are,
