@@ -364,6 +364,60 @@ def translate(text):
             if _a7.upper() in REG_BYTE:
                 yield f"lds_erpb 0x{REG_BYTE[_a7.upper()]:02x}, {_b7}"
 
+    # `ld (0xADDR),0xIMM` is EIGHT encodings sharing one printed text, and the
+    # text carries neither the address width nor the data width. Byte 0 fixes
+    # the address width (08/0a standalone 8-bit, f0 8-bit, f1 16-bit, f2 24-bit)
+    # and the sub-opcode after the address fixes the data width. Rather than
+    # branch on bytes here, offer every mnemonic and let the byte comparison
+    # pick -- the operand shapes differ, so both parenthesised and bare forms go
+    # in. Rule from tools/spelling-probes/README-ld_direct_imm.md, verified
+    # there at every site in v7, v9 and v10 with a negative control.
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a8, _b8 = [x.strip() for x in parts0[1].split(",")]
+        _abs8 = re.match(r'^\((0x[0-9a-fA-F]+)\)$', _a8)
+        if parts0[0].lower() == "ld" and _abs8 and re.match(r'^0x[0-9a-fA-F]+$', _b8):
+            _addr = _abs8.group(1)
+            for _m in ("stdi8", "stdi16", "stib_d8", "stiw_d8", "stib_da", "stiw_da"):
+                yield f"{_m} ({_addr}), {_b8}"
+                yield f"{_m} {_addr}, {_b8}"
+            for _m in ("ldio", "ldwio"):
+                yield f"{_m} {_addr}, {_b8}"
+
+    # Wave-2 spelling families, each verified at every site in the ROMs by a
+    # probe under tools/spelling-probes/ with a negative control. Offering the
+    # whole family and letting the byte comparison choose is equivalent to the
+    # probes' byte-discrimination rules and much shorter to state here.
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a9, _b9 = [x.strip() for x in parts0[1].split(",")]
+        _mn9 = parts0[0].lower()
+        _absb = re.match(r'^\((0x[0-9a-fA-F]+)\)$', _b9)
+        _absa = re.match(r'^\((0x[0-9a-fA-F]+)\)$', _a9)
+        # `cp REG,(0xADDR)` -- nine encodings, six spellable (README-cp_reg_direct)
+        if _mn9 == "cp" and _absb:
+            for _m in ("cpda8", "cpda16", "cpda32",
+                       "cpda8_24", "cpda16_24", "cpda32_24"):
+                yield f"{_m} {_a9.lower()}, {_b9}"
+        # `ld (0xADDR),REG` -- nine encodings, eight spellable (README-ld_imm_r)
+        if _mn9 == "ld" and _absa:
+            for _m in ("stb_d8", "stb_da", "stda16", "stda32",
+                       "stl_da", "stw_da", "st_dd8b", "st_dd8w", "st_dd8l"):
+                yield f"{_m} {_a9}, {_b9.lower()}"
+        # ERP register-register arithmetic (README-add_r_r, README-sub_r_r)
+        for _base, _fam in (("add", ("addb_erp", "addw_erp", "addl_erp", "add_erpw_rr")),
+                            ("sub", ("subb_erp", "subw_erp", "subl_erp"))):
+            if _mn9 == _base:
+                for _m in _fam:
+                    yield f"{_m} {_a9.lower()}, {_b9.lower()}"
+                    if _b9.upper() in REG_BYTE:
+                        yield f"{_m} {_a9.lower()}, 0x{REG_BYTE[_b9.upper()]:02x}"
+        # register-indexed STORE (README-ld_regreg_store)
+        if _mn9 == "ld" and re.match(r'^\([A-Za-z]{2,3}\+[A-Za-z]{1,3}\)$', _a9):
+            _rr9 = re.match(r'^\(([A-Za-z]{2,3})\+([A-Za-z]{1,3})\)$', _a9)
+            _bs, _ix = _RIDX.get(_rr9.group(1).upper()), _RIDX.get(_rr9.group(2).upper())
+            if _bs is not None and _ix is not None:
+                for _m in ("stb_dri", "stw_dri", "stl_dri"):
+                    yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+
     # SHORT-IMMEDIATE forms. TLCS-900 encodes small immediates in two bytes and
     # this tree spells those `cps`/`lds` (284 and 176 uses in v9). The long form
     # assembles too -- `cp HL,0` gives a 4-byte [0xdb,0xcf,0x00,0x00] where the
