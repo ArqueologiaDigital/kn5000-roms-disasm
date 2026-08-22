@@ -331,8 +331,28 @@ WHAT THE REPAIR NEEDS, so the next pass does not have to rediscover it:
     it is `v7_label_displacement.py`, which must go to ~0 displaced afterwards;
   * the 4 correctly-placed labels inside the span must NOT be moved -- a blanket shift would
     break them, which is exactly why this is not a `sed`.
-DELIBERATELY NOT ATTEMPTED in this session: a 3,474-label edit that the project's strongest gate
-is blind to should not be done at the end of a long day.
+FEASIBILITY, MEASURED (`scripts/analysis/v7_label_repair_feasibility.py`) -- the repair is far
+more tractable than the raw count suggests:
+
+    displaced labels                        3,474
+      target address free                   3,353
+      target held by an ALSO-DISPLACED label  109   frees in the same simultaneous shift
+      target held by a STATIC label            12   <- the ONLY genuine conflicts
+    => mechanical moves                     3,462 of 3,474
+    correctly placed inside the region          4   must be excluded BY NAME
+
+⚠ The two-level question is what makes this tractable, and asking only the first level misleads:
+"is the target occupied?" answers 121. "Is it occupied by a label that is ITSELF moving?" answers
+12. A repair plan built on the first number would have looked ten times harder than it is.
+
+So the outstanding work is 3,462 mechanical moves, 12 named decisions (`CharMap_ActivePreamb_
+Prologue` vs `DirectReturn_DoDrainQue`, `MidiSeq_SendMultiByte_CompIface` vs `PreLswLoad`, and ten
+more, all listed by the probe), and 4 labels to leave alone.
+
+DELIBERATELY NOT ATTEMPTED in this session: the edit itself. Not because it is unclear -- it is now
+fully specified -- but because the byte-match gate cannot review it, so it needs a pass that
+verifies each move against `v7_label_displacement.py` returning to ~0, rather than one that trusts
+a plan written at the end of a long day.
 
 ⚠ MOVING THEM IS NOT A GATE-SAFE EDIT. Relocating a label changes no bytes, so `make all` will
 report 9/9 either way (spec anti-patterns 12 and 13). Each move needs its own byte evidence, of
