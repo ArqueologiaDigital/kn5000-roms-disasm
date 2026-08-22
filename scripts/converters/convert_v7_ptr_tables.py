@@ -217,7 +217,18 @@ def collect_sites():
             if mm and not line.lstrip().startswith(';'):
                 path = resolve_incbin(s, mm.group(1))
                 if path is not None:
+                    # ⚠ `own_label` = the label is defined ON THIS LINE, e.g.
+                    #     KeyScaleNoteStr_G:\t.incbin "...bin"
+                    # Replacing the line then DESTROYS the definition. The first
+                    # run of this converter did exactly that and the link failed
+                    # with `undefined symbol` for KeyScaleNoteStr_G,
+                    # MethodNameStr_MT_SvariIni, ProcNameStr_NormScreenProc,
+                    # UIState_DefaultConfig_B and FDTest_String_TestTitleFunc.
+                    # A label on an EARLIER line is still defined after the
+                    # replacement and must NOT be re-emitted, or it is defined
+                    # twice -- so the two cases genuinely differ.
                     sites.append(dict(line=i, label=label, target=mm.group(1),
+                                      own_label=(m.group(1) if m else None),
                                       path=path))
         if sites:
             out[s] = (lines, sites)
@@ -329,10 +340,16 @@ def judge(blob, run, ctx, label):
 
 
 # -------------------------------------------------------------------- emission
-def emit(blob, run, ctx, label, target, interior=True, remainder='slice'):
+def emit(blob, run, ctx, label, target, interior=True, remainder='slice',
+         own_label=None):
     start, end = run
     lines, slices = [], {}
     stem = pathlib.PurePosixPath(target)
+    # Reinstate a label that lived on the replaced line. It names the FIRST byte
+    # of the blob, so it goes first -- before the head residue if there is one,
+    # and before the first `.long` otherwise. Both land at the same address.
+    if own_label:
+        lines.append(f'{own_label}:')
 
     def residue(part, suffix):
         if not part:
@@ -443,7 +460,8 @@ def analyse(args, ctx):
             row['addr'] = addr
             row['lines'], row['slices'] = emit(
                 blob, run, ctx, site['label'], site['target'],
-                not args.no_interior, args.remainder)
+                not args.no_interior, args.remainder,
+                own_label=site.get('own_label'))
             rebuilt = assemble(row['lines'], row['slices'], ctx)
             row['ok'] = rebuilt == blob
             row['why'] = '' if row['ok'] else 'BYTE MISMATCH'

@@ -833,7 +833,11 @@ SoundEvt_LongPacketHandler:
 	.byte 0x0d, 0x3e, 0x01, 0x1d, 0x04, 0x90, 0xef, 0x1d
 	.byte 0x69, 0x79, 0xef, 0x0e
 ScoopDisp_HandlerData2:
-	.incbin "includes/romslices/v7_transplant_ScoopDisp_HandlerData2.bin"
+	.long VoiceCtrl_SendNoteOffSequence
+	.long Timer_ParamCompareAlt
+	.long Timer_ParamLoadAndCompare
+	.long DefaultHandler_Ret
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_HandlerData2_tail.bin"
 DefaultHandler_Ret:
 	.byte 0x0e
 	call SeqState_HasModeChanged
@@ -871,7 +875,38 @@ DefaultHandler_Ret:
 ScoopDisp_FlagSetAndDispatch:
 	.incbin "includes/romslices/v7_transplant_ScoopDisp_FlagSetAndDispatch.bin"
 ScoopDisp_DispatchTable_Small:
-	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Small.bin"
+	.long ScoopDisp_FlagSetAndDispatch
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long ScoopDisp_DispatchTable_Extended + 32
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long ToneParam_Evt0F_BytecodeHandler
+	.long DefaultHandler_Ret
+	.long ScoopDisp_FlagSetAndDispatch
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 ToneParam_Evt0F_BytecodeHandler:
 	bit	7, w
 	jrl	nz, 17
@@ -950,7 +985,26 @@ ToneParam_Evt0F_BytecodeHandler:
 ; -----------------------------------------------------------------------------
 
 PerfMode_ParamHandler_Table:
-	.incbin "includes/romslices/v7_transplant_PerfMode_ParamHandler_Table.bin"
+	.long PerfMode_ParamHandler_0
+	.long PerfMode_ParamHandler_1
+	.long PerfMode_ParamHandler_2
+	.long PerfMode_ParamHandler_3
+	.long PerfMode_ParamHandler_4
+	.long PerfMode_ParamHandler_5
+	.long PerfMode_ParamHandler_2
+	.long PerfMode_ParamHandler_7
+	.long PerfMode_ParamHandler_8
+	.long PerfMode_ParamHandler_9
+	.long PerfMode_ParamHandler_10
+	.long PerfMode_ParamHandler_11
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.incbin "includes/romslices/v7_transplant_PerfMode_ParamHandler_Table_tail.bin"
 PerfMode_JumpTable_Extended:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -2282,7 +2336,11 @@ PerfMode_Handler_EvtB:
 	.byte 0xf1, 0xf9, 0x10, 0xb1, 0xf1, 0xf9, 0x10, 0xb2
 	.byte 0x0e
 ScoopDisp_DispatchTable_Extended:
-	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended.bin"
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long VoiceCtrl_CheckAndReset
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail.bin"
 Display_DirtyRegionDispatch:
 	bitda 3, (3411)
 	jrl z, Timer_ModeDispatch_Return
@@ -2653,7 +2711,11 @@ ToneParam_Evt09_BytecodeHandler:
 	.byte 0xef, 0x1b, 0xbb, 0x80, 0xef, 0xef, 0xc8, 0x02
 	.byte 0x00, 0x00, 0x00, 0x1b, 0x40, 0x81, 0xef, 0x0e
 ToneParam_HandlerTable_BC:
-	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC.bin"
+	.long DefaultHandler_Ret
+	.long VoiceSlot_TableSetup
+	.long VoiceSlot_TableSetup
+	.long DefaultHandler_Ret
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail.bin"
 ToneEvt_Handler_Mode9:
 	bit	7, w
 	jrl	nz, 8
@@ -4041,7 +4103,13 @@ SysEx_BytecodeDispatcher:
 	.byte 0x1d, 0xc2, 0xf4, 0xef, 0x1d, 0xdd, 0x5b, 0xef
 	.byte 0x0e
 MemoryConfig_Handler_Table:
-	.incbin "includes/romslices/v7_transplant_MemoryConfig_Handler_Table.bin"
+	.long MemConfig_Handler_0
+	.long MemConfig_Handler_1
+	.long MemoryConfig_Handler_Table_0xB2 + 97
+	.long MemConfig_Handler_3
+	.long MemConfig_Handler_4
+	.long MemConfig_Handler_5
+	.incbin "includes/romslices/v7_transplant_MemoryConfig_Handler_Table_tail.bin"
 MemConfig_VoiceSlotLookup:
 	call VoiceSlot_ComputeIndex
 	push xde
@@ -4463,7 +4531,13 @@ SysInit_SendAllNotesAndReset:
 	call	16355414
 	ret
 SystemInit_Handler_Table:
-	.incbin "includes/romslices/v7_transplant_SystemInit_Handler_Table.bin"
+	.long SystemInit_StepHandler_0
+	.long SystemInit_StepHandler_0
+	.long SystemInit_StepHandler_2
+	.long SystemInit_StepHandler_3
+	.long SystemInit_StepHandler_4
+	.long SystemInit_StepHandler_5
+	.incbin "includes/romslices/v7_transplant_SystemInit_Handler_Table_tail.bin"
 SystemInit_StepHandler_5:
 	push	xwa
 	push	xhl
@@ -5747,9 +5821,56 @@ PerfMode_ParamHandler_11:
 	call	(xhl)
 	ret
 SubCPU_ToneParamRet:
-	.incbin "includes/romslices/v7_transplant_SubCPU_ToneParamRet.bin"
+	.long UIDisp_DefaultInputHandler
+	.long SubCPU_ToneDispatch_0x50 + 4
+	.long DefaultHandler_Ret
+	.long SubCPU_ToneHandler_A
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long SoundEvt_ShortPacketHandler
+	.long SoundEvt_LongPacketHandler
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long SubCPU_ToneFormatDone
+	.long SubCPU_ToneClearRegion
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long ToneParam_Evt0F_BytecodeHandler
+	.long DefaultHandler_Ret
+	.long UIDisp_DefaultInputHandler
+	.long SubCPU_ToneDispatch_0x50 + 4
+	.long DefaultHandler_Ret
+	.long SubCPU_ToneHandler_A
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long SoundEvt_ShortPacketHandler
+	.long SoundEvt_LongPacketHandler
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.incbin "includes/romslices/v7_transplant_SubCPU_ToneParamRet_tail.bin"
 OscScope_HandlerTable:
-	.incbin "includes/romslices/v7_transplant_OscScope_HandlerTable.bin"
+	.long SndHandler_DefaultRet
+	.long SndHandler_DefaultRet
+	.long OscScope_Handler_2
+	.long OscScope_Handler_3
+	.long OscScope_Handler_4
+	.long OscScope_Handler_4
+	.long OscScope_Handler_6
+	.long OscScope_Handler_7
+	.long SndHandler_DefaultRet
+	.long SndHandler_DefaultRet
+	.long OscScope_Handler_2
+	.long SndHandler_DefaultRet
+	.long SndHandler_DefaultRet
+	.long SndHandler_DefaultRet
+	.long SndHandler_DefaultRet
+	.long SndHandler_DefaultRet
 SndHandler_DefaultRet:
 	ret
 OscScope_Handler_2:

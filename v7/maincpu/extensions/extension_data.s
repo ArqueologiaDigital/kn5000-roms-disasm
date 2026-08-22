@@ -1382,7 +1382,52 @@ KeyScaleNoteStr_A:
 	ldb	w, 0
 	swi	7
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
-KeyScaleNoteStr_G:	.incbin "includes/romslices/v7_data_keyscalenotestr_g.bin"
+KeyScaleNoteStr_G:
+	.incbin "includes/romslices/v7_data_keyscalenotestr_g_head.bin"
+KeyScaleNoteStr_G_PtrTable:
+	.long PmBkNameFunc
+	.long PmBankNamingCheck
+	.long PmNamingCheck
+	.long MssNameFunc
+	.long SystemInitOkFunc
+	.long SysIniNoFunc
+	.long SysIniYesFunc
+	.long SysSureShowHideFunc
+	.long AttnLngCheck
+	.long SysSureLngCheck
+	.long SureLngCheck
+	.long TchSensGridCheck
+	.long FSWAssGridCheck
+	.long PmExpFilterGridCheck
+	.long DispTimeSetGridCheck
+	.long MstSugAlpGridCheck
+	.long MstStyleAlpGridCheck
+	.long MstStyle1GridCheck
+	.long MstStyle1SubGridCheck
+	.long MstStyle2GridCheck
+	.long MstSong1GridCheck
+	.long MstSong2GridCheck
+	.long BitmapFinpic
+	.long BitmapFinst
+	.long BitmapFoutpic
+	.long BitmapFoutst
+	.long GmOnOffFunc
+	.long DispTimeSetOKFunc
+	.long SystemInitMDFunc
+	.long WallHomeEditCheck
+	.long WallMenuEditCheck
+	.long WallOthEditCheck
+	.long WallSetOKFunc
+	.long WallUsrIniFunc
+	.long WallUsrIniNoFunc
+	.long WallUsrIniYesFunc
+	.long WallUsrShowHideFunc
+	.long WallSureShowHideFunc
+	.long WallSureLngCheck
+	.long CtlIniLngCheck
+	.long PmemNormLngCheck
+	.long PmemExpLngCheck
+	.long 0x00000000
 NoteNameStr_Table_5:
 	.long FuncNameStr_PmBkNameFunc
 	.long FuncNameStr_PmBankNamingCheck
@@ -1995,7 +2040,38 @@ MethodNameStr_MT_SOUNDNAME:	aligned_string "MT_SOUNDNAME"
 MethodNameStr_MT_GetSndGrpName:	aligned_string "MT_GetSndGrpName"
 MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
 MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
-MethodNameStr_MT_SvariIni:	.incbin "includes/romslices/v7_data_methodnamestr_mt_svariini.bin"
+MethodNameStr_MT_SvariIni:
+	.incbin "includes/romslices/v7_data_methodnamestr_mt_svariini_head.bin"
+MethodNameStr_MT_SvariIni_PtrTable:
+	.long NormScreenProc
+	.long VariScreenProc
+	.long RVariScreenProc
+	.long AcTransposeBoxProc
+	.long MainMssSetUp_End
+	.long AcChordBoxProc
+	.long PmBankScreenProc
+	.long AcPmBkEditBoxProc
+	.long MsaModeScreenProc
+	.long PmemModeBoxProc
+	.long AcBkNoBoxProc
+	.long AcPmBkNoBoxProc
+	.long NormScreen_Boundary
+	.long IvPmemWindow_Boundary
+	.long AcTchSensGridBoxProc
+	.long AcFSWAssGridBoxProc
+	.long PmemPageCtl_Boundary
+	.long AcDispTimeSetGridBoxProc
+	.long PmemExpLng_Boundary
+	.long AcMstStyleAlp_Boundary
+	.long MstSong2Grid_Boundary
+	.long AcMstStyle1GridBoxProc
+	.long AcMstStyle1SubGridBoxProc
+	.long AcMstStyle2GridBoxProc
+	.long MstGrid2_Boundary
+	.long AcMstSong2GridBoxProc
+	.long PmBank_Boundary
+	.long IvPageOverWrProc
+	.long 0x00000000
 NoteNameStr_Table_7:
 	.long ProcNameStr_NormScreenProc
 	.long ProcNameStr_VariScreenProc
@@ -2056,7 +2132,30 @@ ProcNameStr_AcFreeSplitBoxProc:	aligned_string "AcFreeSplitBoxProc"
 ProcNameStr_AcTransposeBoxProc:	aligned_string "AcTransposeBoxProc"
 ProcNameStr_RVariScreenProc:	aligned_string "RVariScreenProc"
 ProcNameStr_VariScreenProc:	aligned_string "VariScreenProc"
-ProcNameStr_NormScreenProc:	.incbin "includes/romslices/v7_data_procnamestr_normscreenproc.bin"
+ProcNameStr_NormScreenProc:
+	.incbin "includes/romslices/v7_data_procnamestr_normscreenproc_head.bin"
+ProcNameStr_NormScreenProc_PtrTable:
+	.long MainVariSet
+	.long MainSvariIni
+	.long MainGetSndName
+	.long MainRvariIni
+	.long MainGetRhyName
+	.long MainGetSndGrpName
+	.long MainGetRhyGrpName
+	.long MainChordPre
+	.long MainPmGet
+	.long OneTchFUNC
+	.long MainSysControl
+	.long CntIniFunc
+	.long FswAsIniFunc
+	.long MainMssSetUp
+	.long MainTimeFlashFunc
+	.long MainWallSetFlashFunc
+	.long TEST2FUNC
+	.long TEST3FUNC
+	.long TEST4FUNC
+	.long TEST6FUNC
+	.long 0x00000000
 NoteNameStr_Table_8:
 	.long NakaInst_MainVariSet
 	.long NakaInst_MainSvariIni

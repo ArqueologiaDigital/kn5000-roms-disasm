@@ -4614,7 +4614,55 @@ SeMenu_ShowConfirmDialog:
 	.byte 0x1c, 0xe3, 0x3e, 0x08, 0x5d, 0x5c, 0x5b, 0x5a
 	.byte 0x59, 0x58, 0x5e, 0x0e
 SeMenu_ShowConfirmDialog_Data:
-	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data.bin"
+	.long SeMenu_PresetManager_Init
+	.long SeMenu_NameEdit_Dispatch
+	.long SeMenu_PatchEdit_Dispatch
+	.long SeMenu_FilterEdit_Dispatch
+	.long SeMenu_FilterEdit_AltDispatch
+	.long SeMenu_FilterEdit_DataBlock3
+	.long SeMenu_BankEdit_Dispatch
+	.long SeMenu_DrumKit_Dispatch
+	.long Data_UnknownBlock_0x6E + 382
+	.long SeMenu_FilterEdit_DataBlock4
+	.long Data_UnknownBlock
+	.long Data_UnknownBlock_0x6E + 52
+	.long Data_UnknownBlock_0x6E + 163
+	.long Data_UnknownBlock_0x6E + 179
+	.long Data_UnknownBlock_0x6E + 234
+	.long Data_UnknownBlock
+	.long Data_UnknownBlock_0x6E + 250
+	.long Data_UnknownBlock_0x6E + 292
+	.long Data_UnknownBlock_0x6E + 334
+	.long Data_UnknownBlock_0x6E + 350
+	.long Data_UnknownBlock_0x6E + 366
+	.long SeMenu_WaveformSelect_End
+	.long Data_UnknownBlock_0x6E + 163
+	.long Data_UnknownBlock_0x6E + 382
+	.long SeMenu_FilterEdit_DataBlock4
+	.long Data_UnknownBlock
+	.long SeMenu_PatchEdit_DataBlock
+	.long SeMenu_EqEdit_Dispatch
+	.long SeMenu_EqEdit_DrawInit
+	.long SeMenu_WaveformSelect_End
+	.long Data_UnknownBlock_0x23D + 317
+	.long Data_UnknownBlock_0x23D + 336
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.long SeMenu_WaveformSelect_End
+	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail.bin"
 SeMenu_WaveformSelect_Init:
 	.long SeBitmap_EnvCurve5
 	.long SeBitmap_EnvCurve4
@@ -6469,7 +6517,22 @@ TuningSys_Param_01:
 	.byte 0x7f
 	ldw	de, 241
 TuningSystem_Handler_Table:
-	.incbin "includes/romslices/v7_fix_tuningsystem_handler_table.bin"
+	.long TuningSys_Param_01
+	.long TuningSys_Param_02
+	.long TuningSys_Param_03
+	.long TuningSys_Param_04
+	.long TuningSys_Param_05
+	.long TuningSys_Param_06
+	.long TuningSys_Param_07
+	.long TuningSys_Param_08
+	.long TuningSys_Param_09
+	.long TuningSys_Param_10
+	.long TuningSys_Param_11
+	.long TuningSys_Param_12
+	.long TuningSys_Param_ModeSelect
+	.long TuningSys_Param_13
+	.long TuningSys_Param_NamesAndCoords
+	.incbin "includes/romslices/v7_fix_tuningsystem_handler_table_tail.bin"
 	.include "storage/flash_floppy_handlers.s"
 
 S2cShowHideFunc:

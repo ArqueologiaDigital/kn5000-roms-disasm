@@ -8130,7 +8130,10 @@ FileIO_ReadDir_Return:
 	ret
 
 SeqByteBlock_DispatchJumpTable:
-	.incbin "includes/romslices/v7_transplant_SeqByteBlock_DispatchJumpTable.bin"
+	.long SeqDispatch_ResetAndValidate
+	.long SeqDispatch_ReturnNop
+	.long SeqDispatch_InitWithPayload
+	.long SeqDispatch_ReturnNop
 SeqDispatch_ReturnNop:
 	ret
 

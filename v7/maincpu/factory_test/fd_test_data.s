@@ -317,4 +317,11 @@ FDTest_CfgName_FDDTest:	aligned_string "FDD_TEST"
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3e, 0xfd, 0xe1, 0x00
 	.long FDTest_TestTitle_Terminator
 FDTest_TestTitle_Terminator:	aligned_string ""
-FDTest_String_TestTitleFunc:	.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc.bin"
+FDTest_String_TestTitleFunc:
+	.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc_head.bin"
+FDTest_String_TestTitleFunc_PtrTable:
+	.long LoadXaprInit_Entry
+	.long HamaStub1_Entry
+	.long HamaStub2_Entry
+	.long HamaStub3_Entry
+	.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc_tail.bin"

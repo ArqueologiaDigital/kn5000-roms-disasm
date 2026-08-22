@@ -5593,7 +5593,10 @@ VoiceParam_DispatchDone:
 	ret
 
 VoiceParam_ModeDispatch_Table:
-	.incbin "includes/romslices/v7_transplant_VoiceParam_ModeDispatch_Table.bin"
+	.long VoiceParam_StoreExpression
+	.long VoiceParam_StoreVolume
+	.long VoiceParam_StorePan
+	.long VoiceNote_StoreBankSelect
 VoiceParam_StoreExpression:
 	extz hl
 
@@ -5753,7 +5756,10 @@ MidiVoiceNote_Dispatch:
 	.byte 0xee, 0x02, 0x44, 0x2e, 0xaf, 0xfc, 0x00, 0xe3
 	.byte 0x03, 0xf0, 0xec, 0x24, 0xb4, 0xd8
 MidiVoiceNote_Dispatch_Table:
-	.incbin "includes/romslices/v7_transplant_MidiVoiceNote_Dispatch_Table.bin"
+	.long MidiVoiceNote_LookupMode0
+	.long MidiVoiceNote_LookupMode1
+	.long MidiVoiceNote_LookupMode2
+	.long MidiVoiceNote_LookupMode3
 MidiVoiceNote_LookupMode0:
 	ld	xiy, 16560731
 	ld	xbc, 15

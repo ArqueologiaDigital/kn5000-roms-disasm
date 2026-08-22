@@ -112,7 +112,18 @@ NakaInst_Param_IdxA0_01:
 	.byte 0x01, 0xa0, 0x02, 0x00, 0x80, 0x09
 	.byte 0x40, 0x00, 0x01, 0x06, 0x00, 0xff, 0x01, 0x01
 	.byte 0x01, 0x00, 0x00, 0xff, 0xa4, 0xba, 0xed, 0x00
-Naka_SubDispatch_A_Table:	.incbin "includes/romslices/v7_data_naka_subdispatch_a_table.bin"
+Naka_SubDispatch_A_Table:
+	.long WidgetParam_MidiCC_Program
+	.long WidgetParam_MidiCC_PitchBend
+	.long WidgetParam_MidiCC_BankSelect
+	.long WidgetParam_MidiCC_Expression
+	.long WidgetParam_MidiCC_Sustain
+	.long WidgetParam_MidiCC_Volume
+	.long WidgetParam_MidiCC_Reverb
+	.long WidgetParam_MidiCC_Pan
+	.long WidgetParam_MidiCC_DspEffect
+	.long WidgetParam_MidiCC_NameEdit
+	.incbin "includes/romslices/v7_data_naka_subdispatch_a_table_tail.bin"
 Naka_SubDispatch_B_Table:
 	.long WidgetParam_MidiCC_Chorus
 	.long WidgetParam_MidiCC_SysExcl
@@ -211,10 +222,1010 @@ Naka_SubDispatch_B_Table:
 
 
 Naka_MainDispatch_Table:
-	.incbin "includes/romslices/v7_transplant_Naka_MainDispatch_Table.bin"
+	.long VoiceCtrlR1_Entry_047
+	.long VoiceCtrlR1_Entry_048
+	.long VoiceCtrlR1_Entry_049
+	.long VoiceCtrlR1_Entry_050
+	.long VoiceCtrlR1_Entry_051
+	.long VoiceCtrlR1_Entry_052
+	.long VoiceCtrlR1_Entry_053
+	.long VoiceCtrlR1_Entry_054
+	.long VoiceCtrlR1_Entry_055
+	.long VoiceCtrlR1_Entry_056
+	.long VoiceCtrlR1_Entry_057
+	.long VoiceCtrlR1_Entry_058
+	.long VoiceCtrlR1_Entry_059
+	.long VoiceCtrlR1_Entry_060
+	.long VoiceCtrlR1_Entry_061
+	.long VoiceCtrlR1_Entry_062
+	.long VoiceCtrlR1_Entry_063
+	.long VoiceCtrlR1_Entry_064
+	.long VoiceCtrlR1_Entry_065
+	.long VoiceCtrlR1_Entry_066
+	.long VoiceCtrlR1_Entry_067
+	.long VoiceCtrlR1_Entry_068
+	.long VoiceCtrlR1_Entry_069
+	.long VoiceCtrlR1_Entry_070
+	.long VoiceCtrlR1_Entry_071
+	.long VoiceCtrlR1_Entry_072
+	.long VoiceCtrlR1_Entry_073
+	.long VoiceCtrlR1_Entry_074
+	.long VoiceCtrlR1_Entry_075
+	.long MidiChParam_Entry_001
+	.long MidiChParam_Entry_002
+	.long MidiChParam_Entry_003
+	.long MidiChParam_Entry_004
+	.long MidiChParam_Entry_005
+	.long MidiChParam_Entry_006
+	.long MidiChParam_Entry_007
+	.long MidiChParam_Entry_008
+	.long MidiChParam_Entry_009
+	.long MidiChParam_Entry_010
+	.long MidiChParam_Entry_011
+	.long MidiChParam_Entry_012
+	.long MidiChParam_Entry_013
+	.long MidiChParam_Entry_014
+	.long MidiChParam_Entry_015
+	.long MidiChParam_Entry_016
+	.long MidiChParam_Entry_017
+	.long MidiChParam_Entry_018
+	.long MidiChParam_Entry_019
+	.long MidiChParam_Entry_020
+	.long MidiChParam_Entry_021
+	.long MidiChParam_Entry_022
+	.long MidiChParam_Entry_023
+	.long MidiChParam_Entry_024
+	.long MidiChParam_Entry_025
+	.long MidiChParam_Entry_026
+	.long MidiChParam_Entry_027
+	.long MidiChParam_Entry_028
+	.long MidiChParam_Entry_029
+	.long MidiChParam_Entry_030
+	.long MidiChParam_Entry_031
+	.long MidiChParam_Entry_032
+	.long MidiChParam_Entry_033
+	.long MidiChParam_Entry_034
+	.long MidiChParam_Entry_035
+	.long MidiChParam_Entry_036
+	.long MidiChParam_Entry_037
+	.long MidiChParam_Entry_038
+	.long MidiChParam_Entry_039
+	.long MidiChParam_Entry_086
+	.long MidiChParam_Entry_087
+	.long MidiChParam_Entry_088
+	.long MidiChParam_Entry_089
+	.long MidiChParam_Entry_090
+	.long MidiChParam_Entry_091
+	.long MidiChParam_Entry_092
+	.long MidiChParam_Entry_093
+	.long MidiChParam_Entry_094
+	.long MidiChParam_Entry_095
+	.long MidiChParam_Entry_096
+	.long MidiChParam_Entry_098
+	.long MidiChParam_Entry_099
+	.long MidiChParam_Entry_100
+	.long MidiChParam_Entry_101
+	.long MidiChParam_Entry_102
+	.long MidiChParam_Entry_097
+	.long MidiChParam_Entry_103
+	.long MidiChParam_Entry_104
+	.long MidiChParam_Entry_105
+	.long MidiChParam_Entry_106
+	.long MidiChParam_Entry_107
+	.long MidiChParam_Entry_108
+	.long MidiChParam_Entry_109
+	.long MidiChParam_Entry_110
+	.long MidiChParam_Entry_111
+	.long MidiChParam_Entry_112
+	.long VoiceParamEx_Entry_001
+	.long VoiceParamEx_Entry_002
+	.long VoiceParamEx_Entry_003
+	.long VoiceParamEx_Entry_004
+	.long VoiceParamEx_Entry_005
+	.long VoiceParamEx_Entry_006
+	.long VoiceParamEx_Entry_007
+	.long VoiceParamEx_Entry_008
+	.long VoiceParamEx_Entry_009
+	.long VoiceParamEx_Entry_010
+	.long VoiceParamEx_Entry_011
+	.long VoiceParamEx_Entry_012
+	.long VoiceParamEx_Entry_013
+	.long VoiceParamEx_Entry_014
+	.long VoiceParamEx_Entry_015
+	.long VoiceParamEx_Entry_016
+	.long VoiceParamEx_Entry_017
+	.long VoiceParamEx_Entry_019
+	.long VoiceParamEx_Entry_020
+	.long VoiceParamEx_Entry_021
+	.long VoiceParamEx_Entry_022
+	.long VoiceParamEx_Entry_023
+	.long VoiceParamEx_Entry_018
+	.long VoiceParamEx_Entry_024
+	.long VoiceParamEx_Entry_025
+	.long VoiceParamEx_Entry_026
+	.long VoiceParamEx_Entry_027
+	.long VoiceParamEx_Entry_028
+	.long VoiceParamEx_Entry_029
+	.long VoiceParamEx_Entry_030
+	.long VoiceParamEx_Entry_031
+	.long VoiceParamEx_Entry_032
+	.long VoiceParamEx_Entry_033
+	.long VoiceParamEx_Entry_034
+	.long VoiceParamEx_Entry_035
+	.long VoiceParamEx_Entry_036
+	.long VoiceParamEx_Entry_037
+	.long VoiceParamEx_Entry_038
+	.long VoiceParamEx_Entry_039
+	.long VoiceParamEx_Entry_040
+	.long VoiceParamEx_Entry_041
+	.long VoiceParamEx_Entry_042
+	.long VoiceParamEx_Entry_043
+	.long VoiceParamEx_Entry_044
+	.long VoiceParamEx_Entry_045
+	.long VoiceParamEx_Entry_046
+	.long VoiceParamEx_Entry_047
+	.long VoiceParamEx_Entry_048
+	.long VoiceParamEx_Entry_049
+	.long VoiceParamEx_Entry_050
+	.long VoiceParamEx_Entry_052
+	.long VoiceParamEx_Entry_053
+	.long VoiceParamEx_Entry_054
+	.long VoiceParamEx_Entry_055
+	.long VoiceParamEx_Entry_056
+	.long VoiceParamEx_Entry_051
+	.long VoiceParamEx_Entry_057
+	.long VoiceParamEx_Entry_058
+	.long VoiceParamEx_Entry_059
+	.long VoiceParamEx_Entry_060
+	.long VoiceParamEx_Entry_061
+	.long VoiceParamEx_Entry_062
+	.long VoiceParamEx_Entry_063
+	.long VoiceParamEx_Entry_064
+	.long VoiceParamEx_Entry_065
+	.long VoiceParamEx_Entry_066
+	.long VoiceParamEx_Entry_067
+	.long VoiceParamEx_Entry_068
+	.long VoiceParamEx_Entry_069
+	.long VoiceParamEx_Entry_070
+	.long VoiceParamEx_Entry_071
+	.long VoiceParamEx_Entry_072
+	.long VoiceParamEx_Entry_073
+	.long VoiceParamEx_Entry_074
+	.long VoiceParamEx_Entry_075
+	.long VoiceParamEx_Entry_076
+	.long VoiceParamEx_Entry_077
+	.long VoiceParamEx_Entry_078
+	.long VoiceParamEx_Entry_079
+	.long VoiceParamEx_Entry_080
+	.long VoiceParamEx_Entry_081
+	.long VoiceParamEx_Entry_082
+	.long VoiceParamEx_Entry_083
+	.long VoiceParamEx_Entry_085
+	.long PartParam_Entry_001
+	.long PartParam_Entry_002
+	.long PartParam_Entry_003
+	.long PartParam_Entry_004
+	.long VoiceParamEx_Entry_084
+	.long PartParam_Entry_005
+	.long PartParam_Entry_006
+	.long PartParam_Entry_007
+	.long PartParam_Entry_008
+	.long PartParam_Entry_009
+	.long PartParam_Entry_010
+	.long PartParam_Entry_011
+	.long PartParam_Entry_012
+	.long PartParam_Entry_013
+	.long PartParam_Entry_014
+	.long PartParam_Entry_015
+	.long PartParam_Entry_017
+	.long PartParam_Entry_018
+	.long PartParam_Entry_019
+	.long PartParam_Entry_020
+	.long PartParam_Entry_021
+	.long PartParam_Entry_016
+	.long PartParam_Entry_022
+	.long PartParam_Entry_023
+	.long PartParam_Entry_024
+	.long PartParam_Entry_025
+	.long PartParam_Entry_026
+	.long PartParam_Entry_027
+	.long PartParam_Entry_028
+	.long PartParam_Entry_029
+	.long PartParam_Entry_030
+	.long PartParam_Entry_031
+	.long PartParam_Entry_032
+	.long PartParam_Entry_034
+	.long PartParam_Entry_035
+	.long PartParam_Entry_036
+	.long PartParam_Entry_037
+	.long PartParam_Entry_038
+	.long PartParam_Entry_033
+	.long PartParam_Entry_039
+	.long PartParam_Entry_040
+	.long PartParam_Entry_041
+	.long PartParam_Entry_042
+	.long PartParam_Entry_043
+	.long PartParam_Entry_044
+	.long PartParam_Entry_045
+	.long PartParam_Entry_046
+	.long PartParam_Entry_047
+	.long PartParam_Entry_048
+	.long PartParam_Entry_049
+	.long PartParam_Entry_051
+	.long PartParam_Entry_052
+	.long PartParam_Entry_053
+	.long PartParam_Entry_054
+	.long PartParam_Entry_055
+	.long PartParam_Entry_050
+	.long PartParam_Entry_056
+	.long PartParam_Entry_057
+	.long PartParam_Entry_058
+	.long PartParam_Entry_059
+	.long PartParam_Entry_060
+	.long PartParam_Entry_061
+	.long PartParam_Entry_062
+	.long PartParam_Entry_063
+	.long PartParam_Entry_064
+	.long PartParam_Entry_065
+	.long PartParam_Entry_066
+	.long PartParam_Entry_068
+	.long PartParam_Entry_069
+	.long PartParam_Entry_070
+	.long PartParam_Entry_071
+	.long PartParam_Entry_072
+	.long PartParam_Entry_067
+	.long PartParam_Entry_073
+	.long PartParam_Entry_074
+	.long PartParam_Entry_075
+	.long PartParam_Entry_076
+	.long PartParam_Entry_077
+	.long PartParam_Entry_078
+	.long PartParam_Entry_079
+	.long PartParam_Entry_080
+	.long PartParam_Entry_081
+	.long PartParam_Entry_082
+	.long PartParam_Entry_083
+	.long PartParam_Entry_085
+	.long PartParam_Entry_086
+	.long PartParam_Entry_087
+	.long PartParam_Entry_088
+	.long PartParam_Entry_089
+	.long PartParam_Entry_084
+	.long PartParam_Entry_090
+	.long PartParam_Entry_091
+	.long PartParam_Entry_092
+	.long PartParam_Entry_093
+	.long PartParam_Entry_094
+	.long PartParam_Entry_095
+	.long PartParam_Entry_096
+	.long PartParam_Entry_097
+	.long PartParam_Entry_098
+	.long PartParam_Entry_099
+	.long PartParam_Entry_100
+	.long PartParam_Entry_102
+	.long PartParam_Entry_103
+	.long PartParam_Entry_104
+	.long PartParam_Entry_105
+	.long PartParam_Entry_106
+	.long PartParam_Entry_101
+	.long PartParam_Entry_107
+	.long PartParam_Entry_108
+	.long PartParam_Entry_109
+	.long PartParam_Entry_110
+	.long PartParam_Entry_111
+	.long PartParam_Entry_112
+	.long PartParam_Entry_113
+	.long PartParam_Entry_114
+	.long PartParam_Entry_115
+	.long PartParam_Entry_116
+	.long PartParam_Entry_117
+	.long PartParam_Entry_119
+	.long PartParam_Entry_120
+	.long PartParam_Entry_121
+	.long PartParam_Entry_122
+	.long PartParam_Entry_123
+	.long PartParam_Entry_118
+	.long PartParam_Entry_124
+	.long PartParam_Entry_125
+	.long PartParam_Entry_126
+	.long PartParam_Entry_127
+	.long PartParam_Entry_128
+	.long PartParam_Entry_129
+	.long PartParam_Entry_130
+	.long PartParam_Entry_131
+	.long PartParam_Entry_132
+	.long PartParam_Entry_133
+	.long PartParam_Entry_134
+	.long PartParam_Entry_136
+	.long PartParam_Entry_137
+	.long PartParam_Entry_138
+	.long PartParam_Entry_139
+	.long PartParam_Entry_140
+	.long PartParam_Entry_135
+	.long PartParam_Entry_141
+	.long PartParam_Entry_142
+	.long PartParam_Entry_143
+	.long PartParam_Entry_144
+	.long PartParam_Entry_145
+	.long PartParam_Entry_146
+	.long PartParam_Entry_147
+	.long PartParam_Entry_148
+	.long PartParam_Entry_149
+	.long PartParam_Entry_150
+	.long PartParam_Entry_151
+	.long PartParam_Entry_153
+	.long PartParam_Entry_154
+	.long PartParam_Entry_155
+	.long PartParam_Entry_156
+	.long PartParam_Entry_157
+	.long PartParam_Entry_152
+	.long PartParam_Entry_158
+	.long PartParam_Entry_159
+	.long PartParam_Entry_160
+	.long PartParam_Entry_161
+	.long PartParam_Entry_162
+	.long PartParam_Entry_163
+	.long PartParam_Entry_164
+	.long PartParam_Entry_165
+	.long PartParam_Entry_166
+	.long PartParam_Entry_167
+	.long PartParam_Entry_168
+	.long PartParam_Entry_170
+	.long PartParam_Entry_171
+	.long PartParam_Entry_172
+	.long PartParam_Entry_173
+	.long PartParam_Entry_174
+	.long PartParam_Entry_169
+	.long PartParam_Entry_175
+	.long PartParam_Entry_176
+	.long PartParam_Entry_177
+	.long PartParam_Entry_178
+	.long PartParam_Entry_179
+	.long PartParam_Entry_180
+	.long PartParam_Entry_181
+	.long PartParam_Entry_182
+	.long PartParam_Entry_183
+	.long PartParam_Entry_184
+	.long PartParam_Entry_185
+	.long PartParam_Entry_187
+	.long PartParam_Entry_188
+	.long PartParam_Entry_189
+	.long PartParam_Entry_190
+	.long PartParam_Entry_191
+	.long PartParam_Entry_186
+	.long PartParam_Entry_192
+	.long PartParam_Entry_193
+	.long PartParam_Entry_194
+	.long PartParam_Entry_195
+	.long PartParam_Entry_196
+	.long PartParam_Entry_197
+	.long PartParam_Entry_198
+	.long PartParam_Entry_199
+	.long PartParam_Entry_200
+	.long PartParam_Entry_201
+	.long PartParam_Entry_202
+	.long PartParam_Entry_204
+	.long PartParam_Entry_205
+	.long PartParam_Entry_206
+	.long PartParam_Entry_207
+	.long PartParam_Entry_208
+	.long PartParam_Entry_203
+	.long PartParam_Entry_209
+	.long PartParam_Entry_210
+	.long PartParam_Entry_211
+	.long PartParam_Entry_212
+	.long PartParam_Entry_213
+	.long PartParam_Entry_214
+	.long PartParam_Entry_215
+	.long PartParam_Entry_216
+	.long PartParam_Entry_217
+	.long PartParam_Entry_218
+	.long PartParam_Entry_219
+	.long PartParam_Entry_221
+	.long PartParam_Entry_222
+	.long PartParam_Entry_223
+	.long PartParam_Entry_224
+	.long PartParam_Entry_225
+	.long PartParam_Entry_220
+	.long PartParam_Entry_226
+	.long PartParam_Entry_227
+	.long ExtPartParam_Entry_228
+	.long ExtPartParam_Entry_229
+	.long ExtPartParam_Entry_230
+	.long ExtPartParam_Entry_231
+	.long ExtPartParam_Entry_232
+	.long ExtPartParam_Entry_233
+	.long ExtPartParam_Entry_234
+	.long ExtPartParam_Entry_235
+	.long ExtPartParam_Entry_236
+	.long ExtPartParam_Entry_238
+	.long ExtPartParam_Entry_239
+	.long ExtPartParam_Entry_240
+	.long ExtPartParam_Entry_241
+	.long ExtPartParam_Entry_242
+	.long ExtPartParam_Entry_237
+	.long ExtPartParam_Entry_243
+	.long ExtPartParam_Entry_244
+	.long ExtPartParam_Entry_245
+	.long ExtPartParam_Entry_246
+	.long ExtPartParam_Entry_247
+	.long ExtPartParam_Entry_248
+	.long ExtPartParam_Entry_249
+	.long ExtPartParam_Entry_250
+	.long ExtPartParam_Entry_251
+	.long ExtPartParam_Entry_252
+	.long ExtPartParam_Entry_253
+	.long ExtPartParam_Entry_255
+	.long ExtPartParam_Entry_256
+	.long ExtPartParam_Entry_257
+	.long ExtPartParam_Entry_258
+	.long ExtPartParam_Entry_259
+	.long ExtPartParam_Entry_254
+	.long ExtPartParam_Entry_260
+	.long ExtPartParam_Entry_261
+	.long ExtPartParam_Entry_262
+	.long ExtPartParam_Entry_263
+	.long ExtPartParam_Entry_264
+	.long ExtPartParam_Entry_265
+	.long ExtPartParam_Entry_266
+	.long ExtPartParam_Entry_267
+	.long ExtPartParam_Entry_268
+	.long ExtPartParam_Entry_269
+	.long ExtPartParam_Entry_270
+	.long ExtPartParam_Entry_272
+	.long ExtPartParam_Entry_273
+	.long ExtPartParam_Entry_274
+	.long ExtPartParam_Entry_275
+	.long ExtPartParam_Entry_276
+	.long ExtPartParam_Entry_271
+	.long ExtPartParam_Entry_277
+	.long ExtPartParam_Entry_278
+	.long ExtPartParam_Entry_279
+	.long ExtPartParam_Entry_280
+	.long ExtPartParam_Entry_281
+	.long ExtPartParam_Entry_282
+	.long ExtPartParam_Entry_283
+	.long ExtPartParam_Entry_284
+	.long ExtPartParam_Entry_285
+	.long ExtPartParam_Entry_286
+	.long ExtPartParam_Entry_287
+	.long ExtPartParam_Entry_289
+	.long ExtPartParam_Entry_290
+	.long ExtPartParam_Entry_291
+	.long ExtPartParam_Entry_292
+	.long ExtPartParam_Entry_293
+	.long ExtPartParam_Entry_288
+	.long ExtPartParam_Entry_294
+	.long ExtPartParam_Entry_295
+	.long ExtPartParam_Entry_296
+	.long ExtPartParam_Entry_297
+	.long ExtPartParam_Entry_298
+	.long ExtPartParam_Entry_299
+	.long ExtPartParam_Entry_300
+	.long ExtPartParam_Entry_301
+	.long ExtPartParam_Entry_302
+	.long ExtPartParam_Entry_303
+	.long ExtPartParam_Entry_304
+	.long ExtPartParam_Entry_306
+	.long ExtPartParam_Entry_307
+	.long ExtPartParam_Entry_308
+	.long ExtPartParam_Entry_309
+	.long ExtPartParam_Entry_310
+	.long ExtPartParam_Entry_305
+	.long ExtPartParam_Entry_311
+	.long ExtPartParam_Entry_312
+	.long ExtPartParam_Entry_313
+	.long ExtPartParam_Entry_314
+	.long ExtPartParam_Entry_315
+	.long ExtPartParam_Entry_316
+	.long ExtPartParam_Entry_317
+	.long ExtPartParam_Entry_318
+	.long ExtPartParam_Entry_319
+	.long ExtPartParam_Entry_320
+	.long ExtPartParam_Entry_321
+	.long ExtPartParam_Entry_323
+	.long ExtPartParam_Entry_324
+	.long ExtPartParam_Entry_325
+	.long ExtPartParam_Entry_326
+	.long ExtPartParam_Entry_327
+	.long ExtPartParam_Entry_322
+	.long ExtPartParam_Entry_328
+	.long ExtPartParam_Entry_329
+	.long ExtPartParam_Entry_330
+	.long ExtPartParam_Entry_331
+	.long ExtPartParam_Entry_332
+	.long ExtPartParam_Entry_333
+	.long ExtPartParam_Entry_334
+	.long ExtPartParam_Entry_335
+	.long ExtPartParam_Entry_336
+	.long ExtPartParam_Entry_337
+	.long ExtPartParam_Entry_338
+	.long ExtPartParam_Entry_340
+	.long ExtPartParam_Entry_341
+	.long ExtPartParam_Entry_342
+	.long ExtPartParam_Entry_343
+	.long ExtPartParam_Entry_344
+	.long ExtPartParam_Entry_339
+	.long ExtPartParam_Entry_345
+	.long ExtPartParam_Entry_346
+	.long ExtPartParam_Entry_347
+	.long ExtPartParam_Entry_348
+	.long ExtPartParam_Entry_349
+	.long ExtPartParam_Entry_350
+	.long ExtPartParam_Entry_351
+	.long ExtPartParam_Entry_352
+	.long ExtPartParam_Entry_353
+	.long ExtPartParam_Entry_354
+	.long ExtPartParam_Entry_355
+	.long ExtPartParam_Entry_357
+	.long ExtPartParam_Entry_358
+	.long ExtPartParam_Entry_359
+	.long ExtPartParam_Entry_360
+	.long ExtPartParam_Entry_361
+	.long ExtPartParam_Entry_356
+	.long ExtPartParam_Entry_362
+	.long ExtPartParam_Entry_363
+	.long ExtPartParam_Entry_364
+	.long ExtPartParam_Entry_365
+	.long ExtPartParam_Entry_366
+	.long ExtPartParam_Entry_367
+	.long ExtPartParam_Entry_368
+	.long ExtPartParam_Entry_369
+	.long ExtPartParam_Entry_370
+	.long ExtPartParam_Entry_371
+	.long ExtPartParam_Entry_372
+	.long ExtPartParam_Entry_373
+	.long ExtPartParam_Entry_374
+	.long ExtPartParam_Entry_375
+	.long ExtPartParam_Entry_376
+	.long ExtPartParam_Entry_377
+	.long ExtPartParam_Entry_378
+	.long ExtPartParam_Entry_379
+	.long ExtPartParam_Entry_380
+	.long ExtPartParam_Entry_381
+	.long ExtPartParam_Entry_382
+	.long ExtPartParam_Entry_383
+	.long ExtPartParam_Entry_384
+	.long ExtPartParam_Entry_385
+	.long ExtPartParam_Entry_386
+	.long ExtPartParam_Entry_387
+	.long ExtPartParam_Entry_388
+	.long ExtPartParam_Entry_389
+	.long ExtPartParam_Entry_390
+	.long ExtPartParam_Entry_391
+	.long ExtPartParam_Entry_392
+	.long ExtPartParam_Entry_393
+	.long ExtPartParam_Entry_394
+	.long ExtPartParam_Entry_395
+	.long ExtPartParam_Entry_396
+	.long ExtPartParam_Entry_397
+	.long ExtPartParam_Entry_398
+	.long ExtPartParam_Entry_399
+	.long ExtPartParam_Entry_400
+	.long ExtPartParam_Entry_401
+	.long ExtPartParam_Entry_402
+	.long ExtPartParam_Entry_403
+	.long ExtPartParam_Entry_404
+	.long ExtPartParam_Entry_405
+	.long ExtPartParam_Entry_406
+	.long ExtPartParam_Entry_407
+	.long ExtPartParam_Entry_408
+	.long ExtPartParam_Entry_409
+	.long ExtPartParam_Entry_410
+	.long ExtPartParam_Entry_411
+	.long ExtPartParam_Entry_412
+	.long ExtPartParam_Entry_413
+	.long ExtPartParam_Entry_414
+	.long ExtPartParam_Entry_415
+	.long ExtPartParam_Entry_416
+	.long ExtPartParam_Entry_417
+	.long ExtPartParam_Entry_418
+	.long ExtPartParam_Entry_419
+	.long ExtPartParam_Entry_420
+	.long ExtPartParam_Entry_421
+	.long ExtPartParam_Entry_422
+	.long ExtPartParam_Entry_423
+	.long ExtPartParam_Entry_424
+	.long ExtPartParam_Entry_425
+	.long ExtPartParam_Entry_426
+	.long ExtPartParam_Entry_427
+	.long ExtPartParam_Entry_428
+	.long ExtPartParam_Entry_429
+	.long ExtPartParam_Entry_430
+	.long ExtPartParam_Entry_431
+	.long ExtPartParam_Entry_432
+	.long ExtPartParam_Entry_433
+	.long ExtPartParam_Entry_434
+	.long ExtPartParam_Entry_435
+	.long ExtPartParam_Entry_436
+	.long ExtPartParam_Entry_437
+	.long ExtPartParam_Entry_438
+	.long ExtPartParam_Entry_439
+	.long ExtPartParam_Entry_440
+	.long ExtPartParam_Entry_441
+	.long ExtPartParam_Entry_442
+	.long ExtPartParam_Entry_443
+	.long ExtPartParam_Entry_444
+	.long ExtPartParam_Entry_445
+	.long ExtPartParam_Entry_446
+	.long ExtPartParam_Entry_447
+	.long ExtPartParam_Entry_448
+	.long ExtPartParam_Entry_449
+	.long ExtPartParam_Entry_450
+	.long ExtPartParam_Entry_451
+	.long ExtPartParam_Entry_452
+	.long ExtPartParam_Entry_453
+	.long ExtPartParam_Entry_454
+	.long SeqMixParam_Entry_001
+	.long SeqMixParam_Entry_002
+	.long SeqMixParam_Entry_003
+	.long SeqMixParam_Entry_004
+	.long SeqMixParam_Entry_005
+	.long SeqMixParam_Entry_006
+	.long SeqMixParam_Entry_007
+	.long SeqMixParam_Entry_008
+	.long SeqMixParam_Entry_009
+	.long SeqMixParam_Entry_010
+	.long SeqMixParam_Entry_011
+	.long SeqMixParam_Entry_012
+	.long SeqMixParam_Entry_013
+	.long SeqMixParam_Entry_014
+	.long SeqMixParam_Entry_015
+	.long SeqMixParam_Entry_016
+	.long SeqMixParam_Entry_017
+	.long SeqMixParam_Entry_018
+	.long SeqMixParam_Entry_019
+	.long SeqMixParam_Entry_020
+	.long SeqMixParam_Entry_021
+	.long SeqMixParam_Entry_022
+	.long SeqMixParam_Entry_023
+	.long SeqMixParam_Entry_024
+	.long SeqMixParam_Entry_025
+	.long SeqMixParam_Entry_026
+	.long SeqMixParam_Entry_027
+	.long SeqMixParam_Entry_028
+	.long SeqMixParam_Entry_029
+	.long SeqMixParam_Entry_030
+	.long SeqMixParam_Entry_031
+	.long SeqMixParam_Entry_032
+	.long SeqMixParam_Entry_033
+	.long SeqMixParam_Entry_034
+	.long SeqMixParam_Entry_035
+	.long SeqMixParam_Entry_036
+	.long SeqMixParam_Entry_037
+	.long SeqMixParam_Entry_038
+	.long SeqMixParam_Entry_039
+	.long SeqMixParam_Entry_040
+	.long SeqMixParam_Entry_041
+	.long SeqMixParam_Entry_042
+	.long SeqMixParam_Entry_043
+	.long SeqMixParam_Entry_044
+	.long SeqMixParam_Entry_045
+	.long SeqMixParam_Entry_046
+	.long SeqMixParam_Entry_047
+	.long SeqMixParam_Entry_048
+	.long SeqMixParam_Entry_049
+	.long SeqMixParam_Entry_050
+	.long SeqMixParam_Entry_051
+	.long SeqMixParam_Entry_052
+	.long SeqMixParam_Entry_053
+	.long SeqMixParam_Entry_054
+	.long SeqMixParam_Entry_055
+	.long SeqMixParam_Entry_056
+	.long SeqMixParam_Entry_057
+	.long SeqMixParam_Entry_058
+	.long SeqMixParam_Entry_059
+	.long SeqMixParam_Entry_060
+	.long SeqMixParam_Entry_061
+	.long SeqMixParam_Entry_062
+	.long SeqMixParam_Entry_063
+	.long SeqMixParam_Entry_064
+	.long SeqMixParam_Entry_065
+	.long SeqMixParam_Entry_066
+	.long SeqMixParam_Entry_067
+	.long SeqMixParam_Entry_068
+	.long SeqMixParam_Entry_069
+	.long SeqMixParam_Entry_070
+	.long SeqMixParam_Entry_071
+	.long SeqMixParam_Entry_072
+	.long SeqMixParam_Entry_073
+	.long SeqMixParam_Entry_074
+	.long SeqMixParam_Entry_075
+	.long SeqMixParam_Entry_076
+	.long SeqMixParam_Entry_077
+	.long SeqMixParam_Entry_078
+	.long SeqMixParam_Entry_079
+	.long SeqMixParam_Entry_080
+	.long SeqMixParam_Entry_081
+	.long SeqMixParam_Entry_082
+	.long SeqMixParam_Entry_083
+	.long SeqMixParam_Entry_084
+	.long SeqMixParam_Entry_085
+	.long SeqMixParam_Entry_086
+	.long SeqMixParam_Entry_087
+	.long SeqMixParam_Entry_088
+	.long SeqMixParam_Entry_089
+	.long SeqMixParam_Entry_090
+	.long SeqMixParam_Entry_091
+	.long SeqMixParam_Entry_092
+	.long SeqMixParam_Entry_093
+	.long SeqMixParam_Entry_094
+	.long SeqMixParam_Entry_095
+	.long SeqMixParam_Entry_096
+	.long SeqMixParam_Entry_097
+	.long SeqMixParam_Entry_098
+	.long SeqMixParam_Entry_099
+	.long SeqMixParam_Entry_100
+	.long SeqMixParam_Entry_101
+	.long SeqMixParam_Entry_102
+	.long SeqMixParam_Entry_103
+	.long SeqMixParam_Entry_104
+	.long SeqMixParam_Entry_105
+	.long SeqMixParam_Entry_106
+	.long SeqMixParam_Entry_107
+	.long SeqMixParam_Entry_108
+	.long SeqMixParam_Entry_109
+	.long SeqMixParam_Entry_110
+	.long SeqMixParam_Entry_111
+	.long SeqMixParam_Entry_112
+	.long SeqMixParam_Entry_113
+	.long SeqMixParam_Entry_114
+	.long SeqMixParam_Entry_115
+	.long SeqMixParam_Entry_116
+	.long SeqMixParam_Entry_117
+	.long SeqMixParam_Entry_118
+	.long SeqMixParam_Entry_119
+	.long SeqMixParam_Entry_120
+	.long SeqMixParam_Entry_121
+	.long SeqMixParam_Entry_122
+	.long SeqMixParam_Entry_123
+	.long SeqMixParam_Entry_124
+	.long SeqMixParam_Entry_125
+	.long SeqMixParam_Entry_126
+	.long SeqMixParam_Entry_127
+	.long SeqMixParam_Entry_128
+	.long SeqMixParam_Entry_129
+	.long SeqMixParam_Entry_130
+	.long SeqMixParam_Entry_131
+	.long SeqMixParam_Entry_132
+	.long SeqMixParam_Entry_133
+	.long SeqMixParam_Entry_134
+	.long SeqMixParam_Entry_135
+	.long SeqMixParam_Entry_136
+	.long SeqMixParam_Entry_137
+	.long SeqMixParam_Entry_138
+	.long SeqMixParam_Entry_139
+	.long SeqMixParam_Entry_140
+	.long SeqMixParam_Entry_141
+	.long SeqMixParam_Entry_142
+	.long SeqMixParam_Entry_143
+	.long SeqMixParam_Entry_144
+	.long SeqMixParam_Entry_145
+	.long SeqMixParam_Entry_146
+	.long SeqMixParam_Entry_147
+	.long SeqMixParam_Entry_148
+	.long SeqMixParam_Entry_149
+	.long SeqMixParam_Entry_150
+	.long SeqMixParam_Entry_151
+	.long SeqMixParam_Entry_152
+	.long SeqMixParam_Entry_153
+	.long SeqMixParam_Entry_154
+	.long SeqMixParam_Entry_155
+	.long SeqMixParam_Entry_156
+	.long SeqMixParam_Entry_157
+	.long SeqMixParam_Entry_158
+	.long SeqMixParam_Entry_159
+	.long SeqMixParam_Entry_160
+	.long SeqMixParam_Entry_161
+	.long SeqMixParam_Entry_162
+	.long SeqMixParam_Entry_163
+	.long SeqMixParam_Entry_164
+	.long SeqMixParam_Entry_165
+	.long SeqMixParam_Entry_166
+	.long SeqMixParam_Entry_167
+	.long SeqMixParam_Entry_168
+	.long SeqMixParam_Entry_169
+	.long SeqMixParam_Entry_170
+	.long SeqMixParam_Entry_171
+	.long SeqMixParam_Entry_172
+	.long SeqMixParam_Entry_173
+	.long SeqMixParam_Entry_174
+	.long SeqMixParam_Entry_175
+	.long SeqMixParam_Entry_176
+	.long SeqMixParam_Entry_177
+	.long SeqMixParam_Entry_178
+	.long SeqMixParam_Entry_179
+	.long SeqMixParam_Entry_180
+	.long SeqMixParam_Entry_181
+	.long SeqMixParam_Entry_182
+	.long SeqMixParam_Entry_183
+	.long SeqMixParam_Entry_184
+	.long SeqMixParam_Entry_185
+	.long SeqMixParam_Entry_186
+	.long SeqMixParam_Entry_187
+	.long SeqMixParam_Entry_188
+	.long SeqMixParam_Entry_189
+	.long SeqMixParam_Entry_190
+	.long SeqMixParam_Entry_191
+	.long SeqMixParam_Entry_192
+	.long SeqMixParam_Entry_193
+	.long SeqMixParam_Entry_194
+	.long SeqMixParam_Entry_195
+	.long SeqMixParam_Entry_196
+	.long SeqMixParam_Entry_197
+	.long SeqMixParam_Entry_198
+	.long SeqMixParam_Entry_199
+	.long SeqMixParam_Entry_200
+	.long SeqMixParam_Entry_201
+	.long SeqMixParam_Entry_202
+	.long SeqMixParam_Entry_203
+	.long SeqMixParam_Entry_204
+	.long SeqMixParam_Entry_205
+	.long SeqMixParam_Entry_206
+	.long SeqMixParam_Entry_207
+	.long SeqMixParam_Entry_208
+	.long SeqMixParam_Entry_209
+	.long SeqMixParam_Entry_210
+	.long SeqMixParam_Entry_211
+	.long SeqMixParam_Entry_212
+	.long SeqMixParam_Entry_213
+	.long SeqMixParam_Entry_214
+	.long SeqMixParam_Entry_215
+	.long SeqMixParam_Entry_216
+	.long SeqMixParam_Entry_217
+	.long SeqMixParam_Entry_218
+	.long SeqMixParam_Entry_219
+	.long SeqMixParam_Entry_220
+	.long SeqMixParam_Entry_221
+	.long SeqMixParam_Entry_222
+	.long SeqMixParam_Entry_223
+	.long SeqMixParam_Entry_224
+	.long SeqMixParam_Entry_225
+	.long SeqMixParam_Entry_226
+	.long SeqMixParam_Entry_227
+	.long SeqMixParam_Entry_228
+	.long NakaInst_Param_Bitmap80
+	.long NakaInst_Param_Field81A
+	.long NakaInst_Param_Idx01
+	.long NakaInst_Param_Field81B
+	.long NakaInst_Param_Field81C
+	.long NakaInst_Param_Field84
+	.long NakaInst_Param_Term00
+	.long NakaInst_Param_Idx01_88
+	.long NakaInst_Param_Idx02_88
+	.long NakaInst_Param_Idx03_88
+	.long NakaInst_Param_Idx04_88
+	.long NakaInst_Param_Idx05_88
+	.long NakaInst_Param_Idx06_88
+	.long NakaInst_Param_Idx07_88
+	.long NakaInst_Param_Idx08_88
+	.long NakaInst_Param_Idx0B_88
+	.long NakaInst_Param_IdxA0_00
+	.long NakaInst_Param_IdxA0_01
+	.long SndParam_ResolveWidget + 164
+	.long SndParam_ResolveWidget + 168
+	.long SndParam_RW_ExactMatch + 1
+	.long SndParam_RW_ChainExactMatch + 2
+	.long SndParam_RW_HandleB1Type + 9
+	.long SndParam_ResolveWidgetEx_Data + 34
+	.long SndParam_ResolveWidgetEx_Data + 123
+	.long SndParam_ResolveWidgetEx_Data + 158
+	.long SndParam_ResolveWidgetEx_Data + 181
+	.long SndParam_DMA_ProbeEntry + 9
+	.long SndParam_ResolveWidgetVariant2_Data + 49
+	.long SndParam_ResolveWidgetVariant2_Data + 131
+	.long SndParam_CompareRegField + 41
+	.long SndParam_ReadRegBitfield + 64
+	.long SndParam_RegisterEntry_Data + 214
+	.long SndParam_RegisterMultiField_Data
+	.long SndParam_RegisterMultiField_Data + 163
+	.long SndParam_RegisterMultiField_Data + 186
+	.long SndParam_RegisterLinked_Data + 37
+	.long SndParam_RegisterLinked2_Data + 7
+	.long SndParam_RegisterLinked2_Data + 313
+	.long SndParam_RegisterSimple_Data + 71
+	.long SndParam_RegisterChained_Data + 216
+	.long SndParam_RegisterChained2_Data + 131
+	.long SndParam_RegisterComplex_Data + 161
+	.long SndParam_RegisterComplex_Data + 208
+	.long SndParam_RegisterComplex_Data + 263
+	.long SndParam_RegisterComplex_Data + 296
+	.long SndParam_NotifyQuick_Data + 37
+	.long SndParam_RegisterDual_Data + 19
+	.long SndParam_RegisterDual_Data + 52
+	.long SndParam_RegisterDual_Data + 56
+	.long SndParam_RegisterDual_Data + 120
+	.long SndParam_RegisterDual_Data + 208
+	.long SndParam_RegisterDual_Data + 252
+	.long SndParam_RegisterDual_Data + 271
+	.incbin "includes/romslices/v7_transplant_Naka_MainDispatch_Table_tail.bin"
 NakaInst_SoundConfig_LookupTable:
 	.incbin "includes/generated/sound_config_lookup.bin"
-SeqChan_CommandDispatch_Table:	.incbin "includes/romslices/v7_data_seqchan_commanddispatch_table.bin"
+SeqChan_CommandDispatch_Table:
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 10
+	.long SeqChan_StepCmd_Field1to2 + 11
+	.long MidiPkt_ArpExtHandler_E_Data + 30
+	.long MidiPkt_ArpExtHandler_H_Data + 27
+	.long SeqChan_StepCmd_Field1to2 + 27
+	.long SeqChan_StepCmd_Field1to2 + 12
+	.long MidiPkt_ArpConfigChain_Data + 64
+	.long MidiPkt_ArpConfigChain_Data + 88
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long MidiPkt_ArpConfigChain_Data + 745
+	.long MidiPkt_ArpConfigChain_Data + 161
+	.long MidiPkt_ArpConfigChain_Data + 213
+	.long MidiPkt_ArpConfigChain_Data + 252
+	.long MidiPkt_ArpConfigChain_Data + 300
+	.long MidiPkt_ArpConfigChain_Data + 339
+	.long MidiPkt_ArpConfigChain_Data + 391
+	.long MidiPkt_ArpConfigChain_Data + 431
+	.long MidiPkt_ArpConfigChain_Data + 611
+	.long MidiPkt_ArpConfigChain_Data + 659
+	.long MidiPkt_ArpConfigChain_Data + 699
+	.long MidiPkt_ArpConfigChain_Data + 743
+	.long MidiPkt_ArpConfigChain_Data + 744
+	.long MidiPkt_ArpConfigChain_Data + 475
+	.long MidiPkt_ArpConfigChain_Data + 527
+	.long MidiPkt_ArpConfigChain_Data + 567
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_StepCmd_Field1to2 + 9
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long MidiPkt_ArpConfigChain_Data + 791
+	.long MidiPkt_ArpConfigChain_Data + 835
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long MidiPkt_ArpConfigChain_Data_0x34C + 35
+	.long MidiPkt_ArpConfigChain_Data_0x34C + 79
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long ArpChord_CheckPlaybackDone + 16
+	.long MidiTable_DispatchHelper + 16
+	.long MidiTable_FlushArpNotes + 4
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long MidiPkt_ArpExtHandler_A + 35
+	.long MidiPkt_ArpExtHandler_C_Data + 1
+	.long MidiPkt_ArpExtHandler_D_Data + 10
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long MidiPkt_ArpExtHandler_E_Data + 28
+	.long MidiPkt_ArpExtHandler_E_Data + 29
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long MidiTable_UseDefaultBuf + 6
+	.long MidiPkt_HandleCmdCode01 + 16
+	.long MidiPkt_SetSlot18 + 2
+	.long MidiPkt_ArpConfigChain_Data + 778
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 25
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_G + 2
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_G + 19
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_G + 36
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_H_Data + 9
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_F_Data + 12
+	.long MidiPkt_ArpExtHandler_H_Data + 10
+	.incbin "includes/romslices/v7_data_seqchan_commanddispatch_table_tail.bin"
 SeqFormat_ReferenceData:
 	.byte 0x1f, 0x7d
 	.byte 0xfd, 0x00, 0x21, 0x7d, 0xfd, 0x00, 0x22, 0x7d
@@ -231,9 +1242,240 @@ SeqFormat_ReferenceData:
 	.byte 0x15, 0x00, 0x1b, 0x00, 0x21, 0x00, 0x27, 0x00
 	.byte 0x2d, 0x00, 0x33, 0x00
 SeqData_SubDispatch_Table:
-	.incbin "includes/romslices/v7_transplant_SeqData_SubDispatch_Table.bin"
+	.long TGReg_WriteCC11_PartMode + 14
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long VoiceData_ZeroFillInner + 3
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long MidiPkt_ArpPassLoop + 28
+	.long SwbtWr_InitAndWrite_CC_B1 + 10
+	.long SwbtWr_WriteLoop_CC_B2 + 8
+	.long SwbtWr_WriteLoop_CC_B1 + 12
+	.long SeqAlt_DescriptorBlock_Data + 697
+	.long MidiPkt_EnqueueControl_335C + 86
+	.long MidiPkt_EnqueueControl_335C_ZeroData
+	.long MidiPkt_EnqueueControl_335C_ZeroData + 7
+	.long MidiPkt_EnqueueControl_335C_ZeroData + 14
+	.long MidiPkt_EnqueueControl_335C_ZeroData + 21
+	.long MidiPkt_EnqueueControl_335C_ZeroData + 28
+	.long MidiPkt_EnqueueControl_3358 + 109
+	.long MidiPkt_EnqueueControl_3358_SplitNibbles + 8
+	.long MidiPkt_EnqueueControl_335E + 25
+	.incbin "includes/romslices/v7_transplant_SeqData_SubDispatch_Table_tail.bin"
 MidiPkt_EventType_Table:
-	.incbin "includes/romslices/v7_transplant_MidiPkt_EventType_Table.bin"
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_MultiBlock_Epilogue_Data + 4
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 585
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_MultiBlock_Epilogue_Data + 56
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long MidiPkt_ExtractAndPack + 33
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_LookupAndEnqueue + 41
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long MidiPkt_ExtractAndPack_StoreShifted + 9
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long MidiPkt_BuildControl + 51
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.incbin "includes/romslices/v7_transplant_MidiPkt_EventType_Table_tail.bin"
 DisplayScript_NullNode:
 	.byte 0xff, 0xff, 0x78, 0x36, 0xee, 0x00, 0x12, 0x07
 	.long DisplayScript_NullNode
@@ -2998,69 +4240,283 @@ Naka_RenderMode_B_Table:
 
 
 UIState_HandlerTable_WithProbe:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_WithProbe.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long SeMenu_NameEditor_End
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long FDemoText_ByteData_VoiceProbeA
+	.long BitmapFinpic_ByteData
+	.long 0xffffffff
 UIState_HandlerTable_Standard:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Standard.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long SeMenu_NameEditor_End
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long FDemoText_ByteData_VoiceProbeA
+	.long 0xffffffff
 UIState_HandlerTable_Compact:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Compact.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long FDemoText_ByteData_VoiceProbeA
+	.long 0xffffffff
 UIState_HandlerTable_Basic_00:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_00.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_01:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_01.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_02:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_02.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_03:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_03.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_04:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_04.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_05:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_05.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_06:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_06.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_Basic_07:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_Basic_07.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_00:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_00.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_01:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_01.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_02:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_02.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_03:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_03.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_04:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_04.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long UIState_RenderBitmapData
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_05:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_05.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_06:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_06.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_07:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_07.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_08:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_08.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_09:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_09.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_10:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_10.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_11:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_11.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_12:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_12.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_13:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_13.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_14:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_14.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_15:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_15.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_HandlerTable_16:
-	.incbin "includes/romslices/v7_transplant_UIState_HandlerTable_16.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_000:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_000.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_001:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_001.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_002:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_002.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_003:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_003.bin"
+	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long UIState_UpdateControlBits
+	.long ScreenGroup_InitVoiceLoop + 79
+	.long MidiCC_VoiceParam_8 + 38
+	.long BitMapOut_ByteData_RenderB
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_004:
 	.long 0xffffffff
 
@@ -3186,7 +4642,14 @@ UIState_ConfigB_043:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_044:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_044.bin"
+	.long UIState_ProcessExtendedMode
+	.long AccWrap_ReplayStop
+	.long Audio_CheckSubsystemReady + 31
+	.long NotePool_DataBlock_8BA
+	.long UIState_KeyScan_Dispatch
+	.long BitMapOut_ByteData_RenderE
+	.long MidiSysEx_ApplyChannel + 4
+	.long 0xffffffff
 UIState_ConfigB_045:
 	.fill 4, 1, 0xff
 UIState_ConfigB_046:
@@ -3200,9 +4663,15 @@ UIState_ConfigB_049:
 UIState_ConfigB_050:
 	.fill 4, 1, 0xff
 UIState_ConfigB_051:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_051.bin"
+	.long VoiceSlot_CheckAndApply_Data2 + 234
+	.long UIState_ProcessSimpleMode
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_052:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_052.bin"
+	.long VoiceSlot_CheckAndApply_Data2 + 338
+	.long UIState_KeyScan_Dispatch
+	.long EffEdit_DSPConfigBlock
+	.long 0xffffffff
 UIState_ConfigB_053:
 	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_053.bin"
 UIState_ConfigB_054:
@@ -3237,7 +4706,11 @@ UIState_ConfigB_064:
 UIState_ConfigB_065:
 	.byte 0x22, 0x74, 0xfc, 0x00
 UIState_ConfigB_066:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_066.bin"
+	.long SndParam_ProcessEntry + 201
+	.long UIStateEvt_TransposeUpdate + 25
+	.long UIState_KeyScan_Dispatch
+	.long MidiSysEx_ApplyChannel + 4
+	.long 0xffffffff
 UIState_ConfigB_067:
 	.byte 0xdc, 0xe1, 0xfd, 0x00
 	.long UIState_KeyScan_Dispatch
@@ -3251,23 +4724,51 @@ UIState_ConfigB_070:
 UIState_ConfigB_071:
 	.fill 4, 1, 0xff
 UIState_SeqInit_Table:
-	.incbin "includes/romslices/v7_transplant_UIState_SeqInit_Table.bin"
+	.long UIState_ProcessKeyEvent_0x3D + 25
+	.long UIStateEvt_ParamEdit_Data + 297
+	.long UIWidget_MidiStreamControl
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_072:
 	.fill 4, 1, 0xff
 
 
 UIState_ConfigB_073:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_073.bin"
+	.long UIState_SwitchOnDisplayMode
+	.long UIStateEvt_PartRouting + 42
+	.long AccStyle_JumpTable2
+	.long UIState_KeyScan_Dispatch
+	.long CtrlPanel_HandleKeyInput
+	.long BitMapOut_ByteData_RenderD
+	.long 0xffffffff
 UIState_ConfigB_074:
 	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_074.bin"
 UIState_EventHandler_Table:
-	.incbin "includes/romslices/v7_transplant_UIState_EventHandler_Table.bin"
+	.long UIState_ProcessKeyEvent_0x3D + 26
+	.long UIStateEvt_VolumeMixer_Data + 83
+	.long UIStateEvt_NullHandler
+	.long UIStateEvt_VoiceParamHandler
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
 UIState_ConfigB_075:
 	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_075.bin"
 UIState_ConfigB_076:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_076.bin"
+	.long UIStateEvt_VolumeMixer_Data + 84
+	.long ReadNextRecord_Block3 + 11
+	.long UIState_KeyScan_Dispatch
+	.long Encoder_ApplySystemModeSettings
+	.long 0xffffffff
 UIState_ConfigB_077:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_077.bin"
+	.long UIState_ProcessAltMode
+	.long UIStateEvt_ParamEdit_Data + 243
+	.long AccWrap_ReplayStopAlt
+	.long SndParam_ProcessEntry + 302
+	.long BitMapOut_ByteData_DisplayUpdate
+	.long BitMapOut_CopyRegion_Done + 29
+	.long UIState_KeyScan_Dispatch
+	.long BitMapOut_ByteData_TransitionSeq
+	.long MidiSysEx_ApplyChannel + 4
+	.long 0xffffffff
 UIState_ConfigB_078:
 	.long UIState_KeyScan_Dispatch
 	.long UIState_CheckAndRenderBitmap
@@ -3282,7 +4783,16 @@ UIState_ConfigB_080:
 	.long AccStyle_JumpTable
 	.byte 0x61, 0x75, 0xef, 0x00
 UIState_ConfigB_081:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_081.bin"
+	.long Demo_SelectEntry_ByteTable
+	.long UIStateEvt_VolumeMixer_Data + 85
+	.long FileIO_ErrorCodeByteBlock
+	.long BitMapOut_ByteData_RenderState
+	.long UIState_KeyScan_Dispatch
+	.long AccGuard_ProgramChangeCheck
+	.long MidiPart_DataBlock
+	.long AccStyle_TableDataEntry
+	.long HelpLang_DispatchDataBlock
+	.long 0xffffffff
 UIState_ConfigB_082:
 	.fill 4, 1, 0xff
 UIState_ConfigB_083:
@@ -3321,7 +4831,15 @@ UIState_ConfigB_099:
 	.fill 4, 1, 0xff
 UIState_ConfigB_100:
 	.fill 4, 1, 0xff
-UIState_DefaultConfig_B:	.incbin "includes/romslices/v7_data_uistate_defaultconfig_b.bin"
+UIState_DefaultConfig_B:
+	.long 0xffffffff
+	.long SendEpilogue_Data + 597
+	.long DSPCfg_EventType50 + 27
+	.long PerfMode_Handler_EvtB_0x78 + 5
+	.long MidiCC_VoiceParam_8 + 59
+	.long BitMapOut_ByteData_RenderC
+	.long FDemoText_ProcessVoiceFlags
+	.long 0xffffffff
 Naka_EventHandler_Table:
 	.long UIState_ConfigC_000
 	.long UIState_ConfigC_001
@@ -3859,9 +5377,61 @@ UIState_ConfigC_127:
 UIState_DefaultConfig_C:
 	.fill 3, 1, 0xff
 	.fill 6, 1, 0xff
-SystemConfig_PointerTable:	.incbin "includes/romslices/v7_data_systemconfig_pointertable.bin"
+SystemConfig_PointerTable:
+	.long Seq_InitFuncTable
+	.long CharMap_FullPermutation_0x408 + 11
+	.long FDTest_String_TestTitleFunc_0x264 + 20
+	.long MIDI_RESET_PLAYBACK_STATE + 45
+	.long SeqFormat_ReferenceData
+	.long NakaInst_SoundConfig_LookupTable
+	.long SoundProgram_DispatchTable_0x800 + 128
+	.long DiskOp_ChannelCfgTable
+	.long WidgetStyleDataTable
+	.long EffectMode_DispatchTable
+	.long SoundParam_EncoderMappingData
+	.long CharMap_FullPermutation_0x2BA + 12
+	.long WidgetData_CharsetMappingTable
+	.long SeqByteBlock_DispatchJumpTable
+	.long TempoScale_1Beat + 8
+	.long AccTone_JumpTableData + 32
+	.long CharMap_FullPermutation_0x454 + 17
+	.long DemoDiskPrompt_English1_0x96 + 14
+	.long CharMap_Preamble_Table
+	.long 0x00000000
+	.incbin "includes/romslices/v7_data_systemconfig_pointertable_tail.bin"
 AudioInit_VoiceDispatch_Table:
-	.incbin "includes/romslices/v7_transplant_AudioInit_VoiceDispatch_Table.bin"
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_EffectSelect_Data + 219
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_PlayModeGuard_Data + 50
+	.long UIStateEvt_ChannelConfig_Data + 132
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 343
+	.long UIStateEvt_VolumeMixer_Data + 343
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 343
+	.long UIStateEvt_VolumeMixer_Data + 343
+	.long UIStateEvt_VolumeMixer_Data + 343
+	.long UIStateEvt_EffectSelect_Data + 56
+	.long UIStateEvt_EffectSelect_Data + 175
+	.long UIStateEvt_EffectSelect_Data + 175
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_EffectSelect_Data + 147
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.long UIStateEvt_VolumeMixer_Data + 128
+	.incbin "includes/romslices/v7_transplant_AudioInit_VoiceDispatch_Table_tail.bin"
 CharMap_ValueData_A:
 	.byte 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88
 	.byte 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90
@@ -3869,9 +5439,67 @@ CharMap_ValueData_A:
 	.byte 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f, 0xa0
 CharMap_ValueData_B:	.incbin "includes/romslices/v7_data_charmap_valuedata_b.bin"
 SoundEffect_Dispatch_Table:
-	.incbin "includes/romslices/v7_transplant_SoundEffect_Dispatch_Table.bin"
+	.long SeqPerformance_EventDispatch + 3
+	.long SeqPerformance_EventDispatch + 23
+	.long SeqPerformance_EventDispatch + 118
+	.long VoiceMap_AllocateSlot + 6
+	.long VoiceMap_AllocateSlo_Block2 + 33
+	.long NoteMap_GetVoiceData_Entry + 28
+	.long UIParam_CallbackReturn + 31
+	.long SearchVoice_BubbleSortInner + 25
+	.long SoundFX_Handler_1_LoadReg + 30
+	.long SoundFX_Handler_4 + 25
+	.long SoundFX_Handler_4 + 60
+	.long SoundFX_Handler_4 + 95
+	.long SeqEvtBuf_NoteDispatch + 74
+	.long UIParam_CallbackReturn + 31
+	.long UIParam_CallbackReturn + 31
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x00000000
+	.incbin "includes/romslices/v7_transplant_SoundEffect_Dispatch_Table_tail.bin"
 CharMap_Preamble_Table:
-	.incbin "includes/romslices/v7_transplant_CharMap_Preamble_Table.bin"
+	.long ReadNextRecord_Block + 1
+	.long ReadNextRecord_Block + 2
+	.long ReadNextRecord_Block + 3
+	.long ReadNextRecord_Block + 4
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
+	.long 0xffffffff
 CharMap_DefaultIdentity:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
