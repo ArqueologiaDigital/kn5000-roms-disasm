@@ -405,6 +405,40 @@ a value >= 128 for these tags.
 descriptor at all. The newer evidence is stronger, but the older note has not been retracted here
 because it was written from different reasoning that deserves its own review.
 
+### The C0..D4 run is one companion block PER PART (2026-08-22)
+
+The 21 consecutive tags `C0..D4`, plus `D7`, are not an array of something new: record `0xC0+T`
+belongs to part record `T`. That is settled by a ROM POINTER TABLE, not by reading routine names.
+`VoiceData_LookupPtrByChannel` (0x00FC9E04) indexes `u32[0x00EDB264 + 4*A]`, and that table reads:
+
+    [00]..[14]  0xFDDA, 0xFDEE, 0xFE02 ...  stride 20, one-to-one with C0..D4
+    [15]        0xFF1A  == entry [10]       part 0x15 SHARES part 0x10's block
+    [16]        0xFF56  == entry [13]       part 0x16 SHARES part 0x13's block
+    [18]        -> D7 ;  [19]..[1F] none ;  [48] -> tag 0x49
+
+Verified here by dumping the table directly. The aliasing is what explains the family's shape:
+**`D5` and `D6` were never needed** because parts 0x15 and 0x16 share their neighbours' blocks, and
+tag `0x49` is the same kind of block for the style record `0x48`.
+
+⚠ It LOOKED dead, and three machine-checked negatives say why -- all three run on v7, v9 and v10:
+`SwbtWr_DispatchLoop` does `cp L,0xbf / jr UGT` before indexing its callback table, so **every event
+tag >= 0xC0 is dropped**; none of the 64 `SwbtWr_QueuePostEvent` sites names a tag >= 0xC0; and a
+whole-ROM direct-address census (653/746/746 candidates, 582/617/617 instruction-aligned, checked
+against unidasm so it does not depend on how much `.byte` has been converted) finds ZERO real
+accesses. All 154 C-family records in the seven floppies are zero. The block is reached only through
+that pointer table, which is exactly the kind of access a name- or event-based search cannot see.
+
+Other identifications, with grades, in `analysis/disk-format-probes/lsw_nonpart_records.py`:
+`0x78` is the 16-character Music Stylist style name (`Strncpy(0xF9A2, StyleRec+43, 0x10)`, blank
+filled with 0x20 -- which is why its descriptor says min=32 max=125 default=32); `0x61 63 65 66 64`
+are five 24-byte DSP/effect slots; `0x48` style+tempo; `0x80` sequencer/MIDI clock; and part-record
+offset **+0x0C is the MIDI channel**, from flash default blobs that set 0..15 for tags 0x00..0x0F
+and 0xC0 ("none") for the drum parts.
+
+**Still unidentified, stated plainly:** `0x9A` is touched by nothing but the generic init walk.
+`0x68 0x43 0x71 0x44 0x45 0x46` have known shapes but no distinguishing routine. Which effect
+`0x61/0x65/0x66` drive is unsettled, and the C-family's index-space meaning is [INFERENCE].
+
 ### Individual FIELDS attributed, from the firmware that writes them
 
 `analysis/disk-format-probes/lsw_field_evidence.py` goes one level further and asks what byte N of
