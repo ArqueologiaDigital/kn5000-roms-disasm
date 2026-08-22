@@ -140,7 +140,9 @@ def encode(lines, tag):
 
 
 def disasm(path, base):
-    lst = path + ".unidasm.txt"
+    # The listing MUST go to scratch: an earlier version wrote it next to the
+    # ROM and littered original_ROMs/ with untracked *.unidasm.txt files.
+    lst = os.path.join(TMP, os.path.basename(path) + ".unidasm.txt")
     with open(lst, "w") as f:
         subprocess.run([UNIDASM, path, "-arch", "tlcs900", "-basepc", hex(base)],
                        stdout=f, check=True)
