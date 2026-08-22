@@ -15,7 +15,11 @@ stood for months were wrong, and are corrected in the history rather than quietl
 | **§3** binary includes justified | **PASS** | `audit_incbin_legitimacy.py` -- 873 directives, every one in a justified category, exits non-zero if not. Was 1,371,778 illegitimate bytes. |
 | **L4** assets round-trip | **PASS** | seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT. |
 | **L1** every byte classified | **PASS** | `l1_territory_map.py v7 v9 v10` -- flattens each source tree through llvm-mc and assigns every byte to CODE/DATA/PADDING; all three totals equal their rebuilt ROM to the byte. ASSET is folded into DATA here (llvm-mc expands `.incbin`); its separate justification is the §3 row. |
-| **L2** semantic names | **PARTIAL** | reference files now regenerate FROM the build and match it 100% (`l2_symbol_reference.py`, was 3.4% on maincpu and 0.02% on table_data). Naming itself is **90.8% semantic** on maincpu -- 3,627 positional names remain; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
+| **L2** semantic names | **PARTIAL** | reference files now regenerate FROM the build and match it 100% (`l2_symbol_reference.py`, was 3.4% on maincpu and 0.02% on table_data). Naming itself is **90.8% semantic** on maincpu. Of the 3,627 positional names, **3,285 are
+sub-labels of a semantically named parent** (`Display_BytecodeBlock_F_0x32D`), which is the right
+way to label an internal branch target -- only **342 are genuinely unattached**, and most of those
+are `Naka_Help_NNN` table entries indexed by position because position identifies them
+(`l2_positional_breakdown.py`). The earlier framing of 3,627 as outstanding work was too harsh; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
 | **L3** field meanings | **PARTIAL** | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
 | **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. Panel-side behaviour is not, and cannot be. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |

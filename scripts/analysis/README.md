@@ -27,6 +27,7 @@ each exits non-zero when it does — a criterion that cannot fail is not a pass.
 | `l2_name_vs_fopen_mode.py` | Does a routine's NAME agree with the file mode it opens? (57 sites, 3 flagged, 2 false positives on inspection, 1 genuine: `LoadFileVariant` passes `"wb"`.) |
 | `v7_undisassembled_spans.py` | Where is v7's disassembly thinner than v9's? (258 spans, 158,902 bytes that v7 carries as data and v9 disassembles as code.) |
 | `llvm_missing_instruction_forms.py` | Why is so much of v7 still `.byte`? (Because llvm-mc rejected the instructions — see below.) |
+| `l2_positional_breakdown.py` | How many positional names are actually a problem? (3,285 of 3,627 are sub-labels of a NAMED parent and are fine; only 342 are unattached.) |
 | `v7_reachable_from_code.py` | Which v7 `.byte` regions are CALLED by code the disassembly already expresses? (808 call targets; 69 open with a stack-frame prologue.) |
 | `v7_unspellable_forms.py` | Which instruction forms block conversion, and how many instances each? (9,463 — led by `jr r,imm` at 2,106, which cannot be spelled numerically at all.) |
 | `lsw_saveall_table.py` | Does the KN5000 firmware handle `.LSW`? (YES. It is file type 0, with a handler in every revision. An earlier doc claim that it never does was a string-search artefact and is retracted.) |
@@ -36,6 +37,7 @@ each exits non-zero when it does — a criterion that cannot fail is not a pass.
     python3 scripts/analysis/l2_name_vs_fopen_mode.py            # add --all to list every site
     python3 scripts/analysis/v7_undisassembled_spans.py --top 15 --disasm 3
     python3 scripts/analysis/llvm_missing_instruction_forms.py v7/maincpu/midi/midi_dispatch_handlers.s
+    python3 scripts/analysis/l2_positional_breakdown.py --list
     python3 scripts/analysis/v7_reachable_from_code.py --top 12
     python3 scripts/analysis/v7_unspellable_forms.py --top 16
     bash    scripts/analysis/v7_conversion_sweep.sh --reachable
