@@ -270,6 +270,19 @@ def translate(text):
             for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16"):
                 yield f"{_mn2}{suf} {_a2}, {_b2.lower()}"
 
+    # `pop IZ` has a ONE-byte form spelled `popw` ([0x4e]) alongside the
+    # two-byte `pop iz` ([0xde,0x05]). Same trap as cps/lds: both assemble,
+    # only one matches.
+    if len(parts0) == 2 and parts0[1].count(",") == 0 and parts0[0].lower() in ("pop", "push"):
+        yield f"{parts0[0].lower()}w {parts0[1].strip().lower()}"
+
+    # A 16-bit address operand to `lda` takes lda_d16 with the address
+    # PARENTHESISED: lda XIY,0x045b -> lda_d16 xiy, (0x045b)  [0xf1,0x5b,0x04,0x35]
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a6, _b6 = [x.strip() for x in parts0[1].split(",")]
+        if parts0[0].lower() == "lda" and re.match(r'^0x[0-9a-fA-F]{3,4}$', _b6):
+            yield f"lda_d16 {_a6.lower()}, ({_b6})"
+
     # REGISTER-INDEXED addressing, `ld A,(XIX+HL)`. The _dri forms take the
     # addressing bytes as plain immediates, so the register names have to be
     # translated: base and index each become their entry in the TLCS-900
