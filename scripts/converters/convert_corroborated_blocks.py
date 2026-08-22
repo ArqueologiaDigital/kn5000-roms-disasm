@@ -427,6 +427,37 @@ def translate(text):
             if _bs is not None and _ix is not None:
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+        # `ld (<XRR>+<disp>),<imm>` -- ONE printed shape, FOUR encodings
+        # (tools/spelling-probes/README-ld_ri_imm.md). The text drops everything
+        # that separates them: byte vs word store, the sign of the displacement,
+        # and whether the displacement is 8- or 16-bit. So all four spellings are
+        # offered and the ROM byte comparison decides -- which is the whole point
+        # of yielding candidates rather than picking one.
+        #
+        #   b6 00 90              ld  (xiz+0x00), 0x90
+        #   b6 02 90 00           ldw (xiz+0x00), 0x90
+        #   f3 e5 fe 00 00 34     ld  (xbc+0xfe), 0x1234   (16-bit disp form)
+        #   f3 e1 ac 00 02 ..     stiw_ind 0xE1, lo, hi, il, ih
+        #
+        # The 32-bit register byte runs XWA=0xE0 in steps of 4, and the `|1`
+        # selects the 16-bit-displacement variant -- `f3 e5` above is XBC(0xE4)|1.
+        if _mn9 == "ld" and re.match(r'^\([A-Za-z]{2,3}\+0x[0-9a-fA-F]+\)$', _a9) \
+                and re.match(r'^0x[0-9a-fA-F]+$', _b9):
+            _m2 = re.match(r'^\(([A-Za-z]{2,3})\+(0x[0-9a-fA-F]+)\)$', _a9)
+            _rn, _dp = _m2.group(1).upper(), int(_m2.group(2), 16)
+            _R32 = {"XWA": 0xE0, "XBC": 0xE4, "XDE": 0xE8, "XHL": 0xEC,
+                    "XIX": 0xF0, "XIY": 0xF4, "XIZ": 0xF8, "XSP": 0xFC}
+            yield f"ld ({_rn.lower()}+{_m2.group(2)}), {_b9}"
+            yield f"ldw ({_rn.lower()}+{_m2.group(2)}), {_b9}"
+            if _rn in _R32:
+                _rb = _R32[_rn] | 1
+                _lo, _hi = _dp & 0xff, (_dp >> 8) & 0xff
+                _iv = int(_b9, 16)
+                yield (f"stib_ind 0x{_rb:02x}, 0x{_lo:02x}, 0x{_hi:02x}, "
+                       f"0x{_iv & 0xff:02x}")
+                yield (f"stiw_ind 0x{_rb:02x}, 0x{_lo:02x}, 0x{_hi:02x}, "
+                       f"0x{_iv & 0xff:02x}, 0x{(_iv >> 8) & 0xff:02x}")
+
         # LOAD-ADDRESS, register-indexed: `lda XBC,XBC+WA` -> f3 07 e4 e0 31.
         #
         # ⚠ This became spellable ONLY TODAY. The encoding was always reachable,
