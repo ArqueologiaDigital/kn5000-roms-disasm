@@ -124,7 +124,7 @@ def decode_range(rom, terr, start, limit=16384):
     end = off
     while end < len(terr) and terr[end] == 2 and end - off < limit:
         end += 1
-    tmp = os.path.join(tempfile.gettempdir(), "_range.bin")
+    tmp = os.path.join(_SCRATCH, "_range.bin")
     open(tmp, "wb").write(rom[off:end])
     out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(start)],
                          capture_output=True, text=True, timeout=120).stdout
@@ -147,6 +147,16 @@ REFUSED_BYTES = {}
 TRUNC_LOST = 0
 DIAG = "--diag" in sys.argv
 import collections
+
+# ⚠ PRIVATE scratch dir, not a fixed path. These decoders used
+# tempfile.gettempdir()/"_<name>.bin", so two processes running the converter at
+# once overwrote each other's bytes between the write and the unidasm read. A
+# parallel agent caught it: its census reported `inc 1,WA` at 0xF04E98 where the
+# ROM holds `1d 09`, a call. The byte-match check would reject such a decode, so
+# no bad conversion could land -- but a silently wrong DECODE is exactly the
+# input this converter must be able to trust.
+_SCRATCH = tempfile.mkdtemp(prefix="kn5000_conv_")
+
 FORMS = None
 FORM_EX = {}
 

@@ -55,7 +55,17 @@ and still be data that happens to decode. That is what the v9 corroboration is
 for, and it is still not proof -- v7 and v9 are different revisions, so the same
 offset need not be the same function. Read the diff before applying.
 """
-import os, re, subprocess, sys, tempfile
+import os, tempfile, re, subprocess, sys, tempfile
+
+# ⚠ PRIVATE scratch dir, not a fixed path. These decoders used
+# tempfile.gettempdir()/"_<name>.bin", so two processes running the converter at
+# once overwrote each other's bytes between the write and the unidasm read. A
+# parallel agent caught it: its census reported `inc 1,WA` at 0xF04E98 where the
+# ROM holds `1d 09`, a call. The byte-match check would reject such a decode, so
+# no bad conversion could land -- but a silently wrong DECODE is exactly the
+# input this converter must be able to trust.
+_SCRATCH = tempfile.mkdtemp(prefix="kn5000_conv_")
+
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LLVM = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
@@ -418,6 +428,40 @@ def translate(text):
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
 
+    # `inc <n>,<REG>` -- the TOP blocker by range count. Five encodings, and the
+    # printed text is ambiguous: `inc 1,WA` is BOTH `d8 61` and `d7 e0 61`.
+    # 352 such texts exist, covering 94% of sites. Verified exhaustively over
+    # the whole encoding space (6,336 encodings: 3,048 exact, 3,288 no-form,
+    # 0 wrong) and swept over four ROMs at 20,360/20,360 byte-exact by
+    # tools/spelling-probes/verify_inc_reg.py.
+    #
+    # ⚠ n is printed LITERALLY and llvm-mc encodes 0x60+(n&7), so the numbers
+    # agree digit for digit -- do NOT apply the "0x60+(n-1)" that the backend's
+    # own comment suggests. The probe's negative control does exactly that and
+    # fails 20,113 of 20,360.
+    # ⚠ `inc 9, xwa` assembles and SILENTLY WRAPS to `inc 1`; so does
+    # `incb_erp 0xfb, 9`. Guard n to 0..7.
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _aI, _bI = [x.strip() for x in parts0[1].split(",")]
+        if parts0[0].lower() == "inc" and re.match(r'^(0x[0-7]|[0-7])$', _aI):
+            yield f"inc {_aI}, {_bI.lower()}"
+            if _bI.upper() in REG_BYTE:
+                _rb = REG_BYTE[_bI.upper()]
+                yield f"incb_erp 0x{_rb:02x}, {_aI}"
+                yield f"inc1b_erp 0x{_rb:02x}"
+                yield f"inc1w_erp 0x{_rb:02x}"
+                yield f"inc4w_erp 0x{_rb:02x}"
+                yield f"inc4_lerp 0x{_rb:02x}"
+    # `res N,(0xADDR)` -> res_dd8 / resda / resda_24, keyed on the prefix byte;
+    # `ldir` -> ldir85 for all six blocking sites. Both from wave-3 probes.
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _aR, _bR = [x.strip() for x in parts0[1].split(",")]
+        if parts0[0].lower() in ("res", "set", "bit") and re.match(r'^\(0x[0-9a-fA-F]+\)$', _bR):
+            for _sfx in ("_dd8", "da", "da_24"):
+                yield f"{parts0[0].lower()}{_sfx} {_aR}, {_bR}"
+    if len(parts0) == 1 and parts0[0].lower() == "ldir":
+        yield "ldir85"
+
     # SHORT-IMMEDIATE forms. TLCS-900 encodes small immediates in two bytes and
     # this tree spells those `cps`/`lds` (284 and 176 uses in v9). The long form
     # assembles too -- `cp HL,0` gives a 4-byte [0xdb,0xcf,0x00,0x00] where the
@@ -526,7 +570,7 @@ def disassemble(raw, addr):
     decodes them correctly, so it is the decoder here and llvm-mc is used only
     to re-assemble and prove the bytes come back identical.
     """
-    tmp = os.path.join(tempfile.gettempdir(), "_corrob_block.bin")
+    tmp = os.path.join(_SCRATCH, "_corrob_block.bin")
     open(tmp, "wb").write(raw)
     r = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(addr)],
                        capture_output=True, text=True, timeout=60)
@@ -637,7 +681,7 @@ def aligned(rom, addr, backs=(0x40, 0x80, 0x100)):
     for back in backs:
         if off - back < 0:
             return False
-        tmp = os.path.join(tempfile.gettempdir(), "_align.bin")
+        tmp = os.path.join(_SCRATCH, "_align.bin")
         open(tmp, "wb").write(rom[off - back: off + 16])
         out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900",
                               "-basepc", hex(addr - back)],
