@@ -30,6 +30,7 @@ MEASURED 2026-08-22, walking 3,678 contiguous CODE runs:
 
     808 call targets land in DATA territory
      69 of them (9%) open with a stack-frame prologue
+   (later extended to jp/jrl targets as well -- see the regex)
 
 ⚠ The 9% is a LOWER bound on real function entries, not a quality ceiling: the
 prologue pattern only matches frame set-up (`lda XSP,XSP+...`, `push XIZ`,
@@ -81,7 +82,12 @@ def main():
             i = j
         else:
             i += 1
-    call_re = re.compile(r'\b(?:call|calr)\s+(?:\w+,\s*)?0x([0-9a-f]+)')
+    # JUMP targets count too. A `jp`/`jrl` target reached from code that is
+    # already disassembled is just as certainly code, and just as certainly an
+    # instruction boundary, as a call target -- the two differ in whether a
+    # return is expected, not in what the bytes are. Restricting to calls found
+    # only function ENTRIES and missed every branch into a .byte region.
+    call_re = re.compile(r'\b(?:call|calr|jp|jrl)\s+(?:\w+,\s*)?0x([0-9a-f]+)')
     targets = {}
     tmp = "/tmp/_reach_run.bin"
     for a, b in runs:
