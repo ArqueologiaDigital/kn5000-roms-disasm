@@ -284,6 +284,22 @@ The measurement stands; what changed is that the evidence now needs a build of a
 re-derive, and a figure whose reproduction takes a 15-minute build should say so rather than look
 like a one-liner.
 
+⚠ THE 153 NAMES ARE A SOURCE DEFECT, NOT A GENERATION DEFECT -- confirmed by bytes 2026-08-23.
+`FileData_AllocLoadAndParse` is the clean test case. The v7 reference (correctly generated from
+the v7 ELF) puts it at 0xFD2305. Comparing 16 bytes against the same routine in v9:
+
+    v9 at its own symbol   ef6c2e0b20001d720effef62bf0263af
+    v7 at 0xFD1EEB         ef6c2e0b20001da306ffef62bf0263af   14/16 match
+    v7 at 0xFD2305 (file)  1e020aaf0e20f3e1cc0230af0421f3e5    0/16 match
+
+The routine is at 0xFD1EEB; the LABEL in the v7 sources sits 0x41A above it. So the per-link
+regeneration is right and the sources are wrong: 153 v7 names are attached to the wrong code,
+152 of them off by exactly 0x41A, and the whole `FileData_*`/`DataBuf_*` block is affected.
+
+⚠ MOVING THEM IS NOT A GATE-SAFE EDIT. Relocating a label changes no bytes, so `make all` will
+report 9/9 either way (spec anti-patterns 12 and 13). Each move needs its own byte evidence, of
+the kind shown above. Deliberately NOT attempted in bulk.
+
 FIXED 2026-08-22: `PAIRS` now maps `maincpu_v7`/`maincpu_v9`/`maincpu_v10` to their own ELFs and
 `--check` measures each against the build it came from (all 100.0%). The un-suffixed `maincpu`
 file is kept so the ~20 existing consumers keep working, is byte-identical to `maincpu_v10`, and
@@ -369,7 +385,33 @@ things that genuinely need hardware, which is a sharper statement than the one i
    three directions. **Residual open questions, smaller than the original:** why format 2 imports
    only 10 of the 24 (`0x000A` is a literal; format 1 uses `0x0018`, and header byte +7 is 0x0A but
    the firmware ignores it); the 0x30 gap at 0x4E80 and the 0xC0 at 0x53C0; and what `"M4"`/`"NN"`
-   are. ⚠ Three claims in `kn-disk-file-formats.md` were REFUTED by this and are corrected in place
+   are.
+
+   ⚠ UPDATE 2026-08-23, three of those four residual questions are now settled or closed:
+   * **Why format 2 imports only 10 of 24 -- SOLVED, and no format-1 disk was needed.** Slot
+     blocks 10..23 are byte-identical across all seven disks and are period-10
+     (`block[i] == block[10 + (i-10) % 10]`) -- they are the DEFAULTS, and `02BOSSA_`'s untouched
+     user slots 5..9 equal blocks 15..19. `0x680 + 10*0x300 = 0x2480` is exactly the first byte of
+     block 10, so the firmware reads every informative byte and stops.
+   * **`"M4"`/`"M6"`/`"NN"` are a DISK GENERATION, not three layouts.** The dispatcher calls the
+     SAME importer pair for formats 1 and 2 (v9 `FD276E`/`FD2938`); the only format-dependent
+     value in it is one immediate, `0x0018` vs `0x000A`. Format 3 has its own importer
+     (`FD4366`/`FD44D5`) and is fully mapped: 23 part records of 12 bytes (not 32), then tags
+     48/90/70/71/72, then a per-part array at 0x19E permuted through ROM 0xEE1584.
+     `DataBuf_CheckSubFormat` gives the `.SQF` the same generation number, which is what fixes the
+     reading. What they are AS PRODUCTS is still not determined -- no string in any of the seven
+     images ties them to a model.
+   * **The 0x30 gap at 0x4E80 and the 0xC0 at 0x53C0 -- CLOSED AS UNANSWERABLE FROM THIS ROM.**
+     The importer never seeks (zero seek calls across all five routines) and
+     `FileIO_CheckRegionSignature` rewinds, so the format-2 cursor stops at 0x2480. **The KN5000
+     never reads those bytes.** Measured anyway: the 0xC0 is one 16-byte pattern x12, identical on
+     all seven disks (zero information); the 0x30 varies. The "24 u16 per slot" reading is now
+     refuted a SECOND way, in both word orders. Settling it needs a differential capture on the
+     machine that WROTE the disks.
+   Provers: `analysis/disk-format-probes/lsw_formats_1_and_3.py` and `lsw_param_namespace_map.py`,
+   both asserting, both with a verified "can it fail?" section.
+
+   ⚠ Three claims in `kn-disk-file-formats.md` were REFUTED by this and are corrected in place
    -- the worst of them, "no KN5000 code reads or writes `.LSW` contents", was a case-sensitive
    search missing the mixed-case `PreLswLoad`/`PostLswSave` names at `0xE1F726`.
 2. **NOTE2's extra bytes in the factory styles.** NOT this machine's doing -- the emitter and its
