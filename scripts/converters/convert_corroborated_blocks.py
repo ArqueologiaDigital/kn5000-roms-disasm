@@ -66,6 +66,17 @@ ENC_RE = re.compile(r'[;#] encoding: \[([^\]]+)\]')
 
 
 def elf_syms(elf):
+    """Read .text symbols from a built ELF. FAILS LOUDLY if there are none.
+
+    `make clean-all` deletes rebuilt_ROMs/, and this returned {} when the ELF was
+    missing. Every block then resolved to "no address", nothing matched, and the
+    converter printed its usual summary and "rewrote 0 file(s)" -- a completely
+    successful-looking run over nothing. That happened twice before this guard
+    existed. A missing input must be an error, not an empty result.
+    """
+    if not os.path.exists(os.path.join(REPO, elf)):
+        sys.exit(f"{elf} does not exist -- run `make all` first.\n"
+                 f"(A previous `make clean-all` removes it.)")
     out = subprocess.run([NM, "--defined-only", elf], capture_output=True, text=True, cwd=REPO)
     syms = {}
     for line in out.stdout.split("\n"):
@@ -102,16 +113,27 @@ def blocks_of(path, syms):
             body = re.split(r'[;#]', m.group(1))[0]
             for tok in body.split(","):
                 tok = tok.strip()
-                if tok:
+                if not tok:
+                    continue
+                try:
                     cur.append(int(tok, 0))
+                except ValueError:
+                    # A symbolic .byte, e.g. `.byte FW_VERSION_BYTE`. Its value
+                    # is not known here, so the block cannot be checked against
+                    # the ROM and must not be converted. Mark it unusable rather
+                    # than crashing -- an exception here previously took out
+                    # whole files, and with stderr suppressed that read as
+                    # "nothing to convert".
+                    cur.append(None)
         else:
             if cur:
-                out.append((label, name2addr.get(label), start, i - 1, bytes(cur)))
+                if None not in cur:
+                    out.append((label, name2addr.get(label), start, i - 1, bytes(cur)))
                 cur, start = [], None
             lm = re.match(r'^([A-Za-z_][\w]*):', ln)
             if lm:
                 label = lm.group(1)
-    if cur:
+    if cur and None not in cur:
         out.append((label, name2addr.get(label), start, len(lines) - 1, bytes(cur)))
     return lines, out
 
@@ -189,6 +211,34 @@ def translate(text):
         sla 0x07,A        -> sla A, 0x07           shifts take the register first
     """
     yield text
+    parts0 = text.split(None, 1)
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a, _b = [x.strip() for x in parts0[1].split(",")]
+        _mn = parts0[0].lower()
+        # unidasm prints a stack/register displacement as a RAW BYTE; llvm-mc
+        # wants it SIGNED. `lda XSP,XSP+0xf2` is `bf f2 37` and spells as
+        # `lda xsp, (xsp - 0x0e)`, because 0xf2 is -14. Parenthesising without
+        # sign-extending gives a 5-byte encoding for a 3-byte instruction --
+        # it assembles cleanly and is a different instruction.
+        _m = re.match(r'^([A-Za-z]+)\+0x([0-9a-fA-F]{2})$', _b)
+        if _m:
+            _d = int(_m.group(2), 16)
+            _sign = f"- 0x{0x100 - _d:02x}" if _d >= 0x80 else f"+ 0x{_d:02x}"
+            yield f"{_mn} {_a.lower()}, ({_m.group(1).lower()} {_sign})"
+        # 24-bit absolute address operands take the _24 / _da forms this tree
+        # already uses (lda_24 appears 1,509 times in v9, ldw_da 477).
+        if re.match(r'^0x[0-9a-fA-F]{5,6}$', _b):
+            yield f"{_mn}_24 {_a.lower()}, ({_b})"
+        _mp = re.match(r'^\(0x[0-9a-fA-F]{5,6}\)$', _b)
+        if _mp and _mn == "ld":
+            yield f"ldw_da {_a.lower()}, {_b}"
+        if _mn == "ld" and re.match(r'^0x[0-9a-fA-F]{3,4}$', _b):
+            yield f"ldw {_a}, {_b}"
+    # `push 0x0004` is `0b 04 00` -- a 16-bit immediate push, which llvm-mc
+    # spells `pushw`. Plain `push 0x0004` assembles to `09 04`, a different
+    # (byte) instruction, so this must be selected by byte match, not by name.
+    if len(parts0) == 2 and parts0[0].lower() == "push":
+        yield f"pushw {parts0[1].strip()}"
     t = REGDISP.sub(lambda m: f"({m.group(1)})", text)
     if t != text:
         yield t
