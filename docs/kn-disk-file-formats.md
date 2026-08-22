@@ -349,6 +349,36 @@ KN5000 header `5A 5A 01 00 "M60"` is stable across all seven disks, but no KN500
 type -- so "CURRENT PANEL" is [CROSS-MODEL EVIDENCE], strong but not from the machine whose disks
 were parsed above.
 
+### The framing is FIRMWARE FACT, and the schema is a ROM table (2026-08-22)
+
+The paragraphs below were written when the TLV framing was `[INFERENCE] from data shape, however
+exact`, and when the seven floppies looked like a foreign format because KN5000 firmware writes
+3,648 bytes and they are 22,528. Both readings are now superseded, and the second was wrong in an
+interesting way: **the files are the same format, at a different revision.**
+
+The KN5000's live panel work area is itself a tag/length/value stream, and its layout is a table in
+ROM. `analysis/disk-format-probes/lsw_panel_schema_from_rom.py` reads it:
+
+    block 0   0xED8FE0   46 entries, base 0x00F9A0
+    block 1   0xED91AC   30 entries, base 0x00FD60
+    entry = { u32 offset_from_base ; u32 -> field descriptors ; u8 tag ; u8 length }
+
+and each descriptor block gives every field a TYPE, OFFSET, MASK, MIN, MAX and DEFAULT. Verified by
+hand: entry[0] is `00 00 00 00 dc 8a ed 00 78 12` (offset 0, descriptors at 0xED8ADC, tag 0x78,
+length 0x12), and the descriptor block at 0xED8B9E opens `03 00 ff 00 a7 15` -- type 3, offset +00,
+mask 0xFF, **min 0, max 167, default 21**.
+
+`lsw_file_vs_firmware_schema.py` then aligns each block of a real `.LSW` against that firmware
+sequence: **37/37 tags aligned in order on every block of all seven disks, no permutation.** The
+lengths differ systematically -- all 24 sound records 24->22, tag 60 4->12, tag 61/63 24->30, tag 71
+2->4, tag 80 14->10 -- which is what a format revision looks like, not a different format.
+
+So: the 24 slots are 24 instances of the panel record set; the container is proven from firmware
+rather than inferred from shape; and per-field TYPES AND RANGES are readable out of the ROM without
+any hardware. What is still open is the human meaning of each field -- a field with min=0 max=167
+default=21 is plainly a selector with 168 options, but which selector it is needs the bench or the
+UI strings.
+
 **What the 24 blocks are, structurally, is now measured** -- 24 instances of ONE fixed TLV schema,
 identical across all seven disks:
 
