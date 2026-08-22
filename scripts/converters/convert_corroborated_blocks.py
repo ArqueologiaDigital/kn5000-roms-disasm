@@ -130,9 +130,26 @@ def blocks_of(path, syms):
                 if None not in cur:
                     out.append((label, name2addr.get(label), start, i - 1, bytes(cur)))
                 cur, start = [], None
+                # A label names ONE contiguous run. Blank lines separate .byte
+                # runs all through this tree, and carrying the label past the
+                # first run gave every later run the same base address -- the
+                # second half of the lead-path corruption.
+                label = None
             lm = re.match(r'^([A-Za-z_][\w]*):', ln)
             if lm:
                 label = lm.group(1)
+            elif ln.strip() and not ln.lstrip().startswith((';', '#')):
+                # ROOT CAUSE of the lead-path corruption. A pending label must
+                # STOP applying once a non-.byte line intervenes: after earlier
+                # rounds convert something, a label can be followed by
+                # instructions and only THEN by .byte lines, and those bytes do
+                # not live at the label's address -- they live after the
+                # instructions. Carrying the label across gave the block a base
+                # address short by the size of that code, so lead/tail
+                # arithmetic wrote the right number of bytes in the wrong
+                # places. It could not appear before any conversion existed,
+                # which is why this path seemed to work and then did not.
+                label = None
     if cur and None not in cur:
         out.append((label, name2addr.get(label), start, len(lines) - 1, bytes(cur)))
     return lines, out

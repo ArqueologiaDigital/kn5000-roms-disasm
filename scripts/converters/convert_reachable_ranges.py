@@ -85,14 +85,34 @@ def resolve_branches(insns, t, span, addr2name):
     return texts, needed
 
 
+DROPPED = []
+
+
 def source_index(syms):
     """file -> list of (label, addr, line_index, bytes) for every .byte block."""
     import glob
+    global ROM
+    ROM = open(os.path.join(REPO, "original_ROMs", "kn5000_v7_program.rom"), "rb").read()
     idx = {}
     for f in sorted(glob.glob(os.path.join(REPO, "v7/maincpu/*/*.s"))
                     + glob.glob(os.path.join(REPO, "v7/maincpu/*.s"))):
         lines, blocks = cc.blocks_of(f, syms)
-        keep = [(l, a, s, e, raw) for (l, a, s, e, raw) in blocks if a is not None]
+        # VERIFY EVERY BLOCK AGAINST THE ROM. A block whose recorded bytes do
+        # not match the ROM at its claimed address has the wrong base address,
+        # and using it writes the right number of bytes in the wrong places --
+        # invisible to the length invariant and to the per-instruction byte
+        # match, caught only by a full rebuild. Two parser defects produced
+        # exactly that (a label carried across intervening instructions, and a
+        # label reused for every .byte run after a blank line). Rather than
+        # trust that those were the last two, refuse any block that disagrees.
+        keep = []
+        for (l, a, st, e, raw) in blocks:
+            if a is None:
+                continue
+            if raw != ROM[a - BASE: a - BASE + len(raw)]:
+                DROPPED.append((os.path.basename(f), l, a))
+                continue
+            keep.append((l, a, st, e, raw))
         if keep:
             idx[f] = (lines, keep)
     return idx
@@ -205,12 +225,18 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
                     REFUSED.get("touched blocks do not tile contiguously", 0) + 1
                 return None
 
-        if lead:
-            REFUSED["range starts mid-block (lead path disabled)"] = \
-                REFUSED.get("range starts mid-block (lead path disabled)", 0) + 1
-            return None
-
-        # LEAD IS REFUSED, deliberately, for the THIRD time.
+        # LEAD RE-ENABLED once the ROOT CAUSE was found. It was never the
+        # lead arithmetic: blocks_of() was giving some blocks the WRONG BASE
+        # ADDRESS, so the emission wrote the right number of bytes in the wrong
+        # places. Two parser defects, both of which could only appear AFTER
+        # earlier rounds had converted something -- which is why this path
+        # seemed to work at first and then did not:
+        #   * a label kept applying across intervening instruction lines, so a
+        #     .byte run got the label's address instead of its own;
+        #   * a label was reused for every .byte run after a blank line.
+        # Both fixed, and source_index() now refuses any block whose bytes
+        # disagree with the ROM rather than assuming those were the last two.
+        # Previous note, kept for the record:
         #
         # Re-emitting the bytes of a first block that PRECEDE the range keeps
         # failing in ways the length invariant cannot see. Restoring it cleared
@@ -326,6 +352,9 @@ def main():
     addr2name = dict(syms)
 
     idx = source_index(syms)
+    if DROPPED:
+        print(f"dropped {len(DROPPED)} block(s) whose bytes disagree with the ROM "
+              f"(wrong base address -- would corrupt silently)")
     touched_files = set()
     pending = []
     ok = skipped = 0
