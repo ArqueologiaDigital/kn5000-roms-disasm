@@ -265,8 +265,24 @@ addresses were v10's.
 ⚠ A second, worse consequence, found by the pointer-table pass: **153 v7 names sit on the wrong
 routine**, 152 of them off by exactly 1050 (0x41A), across `SndParam_*`, `MidiPkt_*`, `UIState_*`,
 `SoundFX_Handler_*`, `HdaeRom_*` and `CharMap_*`. Byte agreement decides it 153/153 in favour of
-the pointer table's target (~1.00 vs ~0.01). Anything that renamed v7 routines from this file
-would have moved code silently.
+the pointer table's target (~1.00 vs ~0.01). Anything that renamed v7 routines from the v10 file
+would have moved code silently -- which is why `convert_v7_ptr_tables.py` refuses v10 as a naming
+source.
+
+⚠ PROVENANCE OF THAT 153, recorded because it is no longer reproducible in place. It was measured
+by `convert_v7_ptr_tables.py --name-conflicts` on the tree BEFORE the pointer tables were
+converted. Run today it reports `0 / 0`: the cross-check reads `.incbin` blobs, and those blobs are
+now `.long <symbol>` lines, so there is nothing left to cross-check. To reproduce:
+
+    git worktree add --detach /tmp/wt 056a9a1^
+    cd /tmp/wt && make clean-all && make llvm-all      # its ELF has DIFFERENT addresses;
+                                                      # borrowing the current one is wrong
+    cp <this repo>/scripts/converters/convert_v7_ptr_tables.py scripts/converters/
+    python3 scripts/converters/convert_v7_ptr_tables.py --name-conflicts
+
+The measurement stands; what changed is that the evidence now needs a build of an older commit to
+re-derive, and a figure whose reproduction takes a 15-minute build should say so rather than look
+like a one-liner.
 
 FIXED 2026-08-22: `PAIRS` now maps `maincpu_v7`/`maincpu_v9`/`maincpu_v10` to their own ELFs and
 `--check` measures each against the build it came from (all 100.0%). The un-suffixed `maincpu`
