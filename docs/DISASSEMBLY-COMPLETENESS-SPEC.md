@@ -299,15 +299,15 @@ had drifted apart once already).
       analyser on real hardware, and the NOTE2 question lives on other equipment entirely.
 - [x] **L6** every quoted number has a committed producer; unmarked inferences ZERO;
       contradictions ZERO; open questions enumerated in one place
-- [ ] **§3** every remaining `.incbin` is on the LEGITIMATE list, **with its format documented**
-      -- ⚠ DEMOTED 2026-08-22, having been recorded as PASS. `audit_incbin_legitimacy.py`
-      reports 0 illegitimate bytes, but 790 of its 873 directives are justified by ONE rule:
-      the target sits under `generated/` or `romslices/`. That is a PATH-PREFIX test -- for
-      those 790 it cannot fail, which is anti-pattern 12 in the list above, in the project's own
-      completeness audit. Measuring the blobs instead (`l3_slice_structure_triage.py`) leaves
-      **61 files / 8,440 bytes of pointer tables** whose better form is `.long <symbol>` and
-      whose format is NOT documented. The second half of this row -- "with its format
-      documented" -- was never being checked at all.
+- [x] **§3** every remaining `.incbin` is on the LEGITIMATE list, **with its format documented**
+      -- ⚠ demoted 2026-08-22 and RESTORED the same day, on a different check. The old test
+      justified 790 of 873 directives by directory name and could not fail; it was blind to
+      61 blobs holding 8,440 B of ROM addresses. Those are now `.long <symbol>` (gate 9/9), and
+      the audit itself runs the structure triage and exits non-zero on any blob still carrying
+      pointer-table structure. Verified to FAIL against the pre-conversion tree, which is the
+      only evidence that makes the PASS mean anything. Three blobs are exempted by name with
+      their reasons -- notably a 16-bit drawbar table whose u16 pairs read as in-range u32s by
+      coincidence.
 
 The PROJECT is done when every ROM image is done. Until then, the honest report is per-ROM levels
 plus the illegitimate-blob byte count -- never a single percentage, and never the gate alone.
