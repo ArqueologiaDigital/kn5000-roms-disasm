@@ -272,7 +272,25 @@ recognised faster next time.
    the byte-match gate would NOT have objected -- dropping an unused label changes no bytes.
    **Any "prune the unused X" step must ask what fraction of X is merely not-yet-reached.**
    (`scripts/analysis/v7_unreferenced_labels_are_live.py`)
-13. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+13. **Byte-identity cannot tell code from data that happens to decode.** ⚠ THE MOST IMPORTANT
+   ENTRY IN THIS LIST, because it limits the project's strongest check. `ToneKit_FrequencyTable`
+   -- a frequency table -- decodes as `nop / swi 7 / max / ei 0x04 / ldwio / normal / halt`: seven
+   valid instructions that re-assemble to the original bytes exactly. It would pass the 9/9 gate,
+   because THE BYTES DO NOT CHANGE. Five such tables were about to be written into the sources as
+   code. What would have been wrong is not the binary but the CLAIM, published with a green test
+   behind it.
+     * The cheap screens do NOT work, and both were tested: reference kind fails
+       (`FileIO_BytecodeData` is also a `jrl` target and is 80 instructions of real code), and
+       rarity fails (`swi` occurs 3,804 times in committed v7 code).
+     * What works is implausibility in context -- CPU-control instructions (`swi`, `normal`,
+       `max`, `halt`, `ldio`, `ldwio`) inside a short would-be routine. It fires on exactly six
+       ranges: the five tables, plus one real routine whose `ei 0x06` is why `ei` is NOT in the
+       set. Calibrate a screen against the case it would get WRONG.
+     * Same family as anti-pattern 12: deleting an unused label also changes no bytes. **A strong
+       gate concentrates risk into exactly what it cannot see.** Byte-identity proves the bytes
+       are unchanged; it never proves the interpretation is right, and a disassembly is nothing
+       but interpretation. (`scripts/analysis/v7_converted_range_screen.py`)
+14. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
    faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
    so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
    the same message a genuinely broken range produces. Rejections concentrated in one bucket

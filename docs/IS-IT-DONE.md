@@ -62,7 +62,7 @@ and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table
 
 ## v7 territory, as of 2026-08-22
 
-    CODE      599,336  28.58%      (was 542,379 / 25.86% at the start of the day)
+    CODE      607,450  28.97%      (was 542,379 / 25.86% at the start of the day)
     DATA    1,431,785  68.27%
     PADDING    66,752   3.18%
     TOTAL   2,097,152  = the ROM, to the byte
@@ -75,12 +75,23 @@ census written before the fix existed -- which is the kind of agreement that mak
 Call targets still awaiting conversion: 1,118 -> 786, and the closure has now reached a true
 fixpoint (a round gaining 0 bytes), so what remains is NOT waiting on more rounds.
 
-⚠ WHAT THE FIXPOINT IS ACTUALLY BLOCKED ON, stated because "converged" reads like "finished":
-**159 ranges / 12,068 bytes decode to a clean `ret` and re-assemble byte-exactly, and are still
-refused** -- by the REWRITE stage, not by decoding. `range extends past its blocks` stayed at
-exactly 23 through every round of both runs, which by anti-pattern 12 is the signature of a
-bucket that may be unable to accept anything. A further 1,057 B are lost to truncation at
-unspellable instructions. Those two numbers, not the round count, are the remaining work.
+⚠ WHAT REMAINS, MEASURED (2026-08-22 end of day). "Fixpoint reached" is not "finished":
+
+    2,053 B  29 ranges  rewrite() will not drop a label -- needs a converter that PRESERVES a
+                        label across a rewrite. NOT a cleanup: 8,203 of the 9,975 v7 labels that
+                        look unreferenced are referenced in v9/v10, so deletion is off the table
+                        (`v7_unreferenced_labels_are_live.py`).
+    1,722 B  20 ranges  entry in neither an indexed `.byte` run nor a located `.incbin`
+    1,057 B             truncated at instructions with no verified spelling
+      115 B   1 range   runs past its slice
+       48 B             inside a `generated/` blob -- compiler output; splitting it would fork
+                        the data from its committed C source
+       16 B   1 range   overlaps another
+
+⚠ AND A LIMIT ON THE GATE ITSELF, found the same day: byte-identity cannot distinguish code from
+DATA THAT HAPPENS TO DECODE. Five tables re-assembled byte-exactly as plausible instructions and
+were only kept out by a plausibility screen. See spec anti-pattern 13. Every conversion figure in
+this document is byte-verified; that is necessary and it is not sufficient.
 
 ## What the territory map shows
 
