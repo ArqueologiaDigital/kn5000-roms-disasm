@@ -405,6 +405,64 @@ a value >= 128 for these tags.
 descriptor at all. The newer evidence is stronger, but the older note has not been retracted here
 because it was written from different reasoning that deserves its own review.
 
+### The five effect slots, and what each one drives (2026-08-22)
+
+`SlotToTag` at **0x00EE636C** is literally `61 63 65 66 64 FF` -- dumped and checked here -- so the
+slot order is an artefact rather than an assertion. `DSPCfg_SlotAcceptsAlgorithm` then validates
+record byte 0 per slot, which is what names them:
+
+| slot | tag | accepts | what it is |
+|---|---|---|---|
+| 0 | 0x61 | all but 16..27 (47) | DSP EFFECT (38) plus the 9 belonging to slots 2/3/4 |
+| 1 | 0x63 | 9, 10, 16..27 (14) | DIGITAL REVERB -- 12 reverbs and 2 delays |
+| 2 | 0x65 | 57..60 | ACOUSTIC ILLUSION (STANDARD / PERCUSSIVE / SYMPHONIC / DEEP SPACE) |
+| 3 | 0x66 | 88..91 | ROOM / KARAOKE / BATH ROOM / STAGE |
+| 4 | 0x64 | 79 | EQUALIZER |
+
+Byte 0 IS the algorithm number, proven rather than inferred: the ROM reverb/EQ preset blobs at
+0xEDB36C/0xEDB394 are copied straight to 0xFC8E/0xFCA8 and carry 16..27 and 79.
+
+Three independent agreements with `docs/effects-dsp.md`, which was derived from the SUB CPU with no
+shared code path: slots 2/3/4 together are exactly the nine IC310 algorithms, slots 0/1 exactly the
+IC311 ones, and 47 - 9 = **38**, its DSP EFFECT page count. Corpus gate: **350 records across the
+seven floppies, 0 violations**, byte-0 value sets disjoint between slots.
+
+⚠ Correction to an earlier note: the "notify ids 0x4002/0x4006" are the slots' ON/OFF BITS, not slot
+identifiers -- 0x4002/0x4004/0x4006 are tag 0x60 payload+1 bits 7/6/5 for slots 1/2/4, and 0x4140 is
+tag 0x43 +0 bit 7 for slot 3.
+
+### Tag 0x9A: "touched by nothing" was half wrong
+
+The earlier pass reported 0x9A as untouched. **Refuted in part**: it has a live subscriber written
+specifically for it, accepting payload offsets **4..19 only**, indexing RAM 0x00F1A0 and classifying
+through a ROM table at 0x00EE8EA2. And the split is exact -- the schema descriptors declare offsets
+**0..3 and 20..25**, precisely the ten bytes the handler refuses. Together they tile all 26 with no
+gap and no overlap, which is not the kind of agreement that happens by chance.
+
+**Confirmed in part**: no instruction names it. The census returns 1/1/1/2/1/0 candidates across the
+six dumped images and every one is explained -- all but one are `.. f1 b0 ff`, the tail of
+`cp XBC,XWA` + `ret NC` seen mid-instruction, and the exception is a table-data interrupt vector
+whose 0x00FFxxxx value is boot ROM in the pre-remap map, not panel DRAM at all.
+
+⚠ The search is shown CAPABLE of finding one: the same scan collects 267-268 candidates for tags
+0x78/0x48/0x80. And its limits are stated -- 75 of 131 queue-post sites pass the tag in a register
+rather than a literal, so "nothing posts 0x9A" is NOT established, and the generic tag->address
+table at 0x00EDAE64 holds 0xFFA4 at index 0x9A, so computed-pointer access is not excluded.
+
+Also identified: **0x43 is the microphone record** -- on/off, a 0..127 level and a second on/off, on
+one 9-cell screen at 0x00E34750 carrying slot 3's algorithm and its four values. The word
+"microphone" is [INFERENCE] from the algorithm names and the `MIC LEVEL & REVERB` page title; the
+screen-to-record binding and the field shapes are proven. **0x68 is declared, saved and ignored** --
+no field descriptors, no parameter id, one bulk copy, and a subscriber whose entire body is four
+`ret`s.
+
+**Still unresolved, and not dressed up:** `0x71` is reached only by `PmemOutLGridCheck` and a
+snapshot routine. `0x44/0x45/0x46` have no parameter ids, identical subscribers, and are constant in
+all seven floppies with 0x44 identical to 0x45; `FDemoText_SyncPreset_DirectCopy` copies tag 0x61's
+algorithm into 0x44 +0, making that byte a shadow of it, but no pairing was found for 0x45/0x46 and
+nothing indexes the three as a group -- so "three of something" gets no ROM artefact and was not
+adopted.
+
 ### The C0..D4 run is one companion block PER PART (2026-08-22)
 
 The 21 consecutive tags `C0..D4`, plus `D7`, are not an array of something new: record `0xC0+T`
