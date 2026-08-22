@@ -8540,4 +8540,13 @@ AccDisplay_RefreshDone:
 	ret
 
 AccState_ReadAccompParams:
-	.incbin "includes/romslices/v7_fix_accstate_readaccompparams.bin"
+	ldb A, 0x00
+	ei 0x06
+	stb_d8 (0x0464), a
+	ldb_d8 a, (0x0416)
+	stb_d8 (0x31e4), a
+	ldb_d8 a, (0x0434)
+	stb_d8 (0x3218), a
+	ldb_d8 a, (0x0435)
+	stb_d8 (0x3217), a
+	ldb_d8 a, (0x0415)

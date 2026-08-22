@@ -329,7 +329,33 @@ SongBank_EventHandler_Return:
 	ret
 
 CDlikeSwTtl_DispatchData:
-	.incbin "includes/romslices/v7_transplant_CDlikeSwTtl_DispatchData.bin"
+	.incbin "includes/romslices/v7_transplant_CDlikeSwTtl_DispatchData_head.bin"
+	bitda 0, (0x0ce0)
+	jr nz, .Lc_f22901
+	ldb_d8 a, (0x0cdf)
+	inc 2,A
+	extz WA
+	ld DE,WA
+	extz XDE
+	add XDE,0x00010000
+	ld XWA,0x008b0004
+	ld XBC,0x01e0008d
+	jr t, .Lc_f2291d
+.Lc_f22901:
+	ldb_d8 a, (0x0cdf)
+	dec 6,A
+	extz WA
+	ld DE,WA
+	extz XDE
+	add XDE,0x00010000
+	ld XWA,0x008b0004
+	ld XBC,0x01e0008d
+.Lc_f2291d:
+	jp ApPostEvent
+	ld XWA,0x008b0003
+	ld XBC,0x01e0009c
+	lds32 xde, 1
+	jp ApPostEvent
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
 	ld xbc, 0x1e0009c

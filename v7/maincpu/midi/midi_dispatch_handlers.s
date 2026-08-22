@@ -5796,7 +5796,11 @@ SeqData_FormatOutput_CaseC:
 	.byte 0xb1, 0x41, 0x8e, 0x07, 0x21, 0xb9, 0x01, 0x41
 	.byte 0x84
 SeqData_FormatOutput_Default:
-	.incbin "includes/romslices/v7_transplant_SeqData_FormatOutput_Default.bin"
+	.incbin "includes/romslices/v7_transplant_SeqData_FormatOutput_Default_head.bin"
+	pop XIZ
+	inc 4,XSP
+	ret
+	.incbin "includes/romslices/v7_transplant_SeqData_FormatOutput_Default_tail.bin"
 SeqData_FormatOutput_Data:
 	.incbin "includes/romslices/v7_transplant_SeqData_FormatOutput_Data.bin"
 SeqAlt_NibbleSearch_Ret:
@@ -6166,7 +6170,44 @@ VoiceParam_LoopExit:
 VoiceParam_MultiMode_StubRet:
 	.byte 0xe8
 VoiceParam_AssSwb_MultiBlock_Data:
-	.incbin "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_head.bin"
+	push XIZ
+	bitda 4, (0xfd50)
+	jr nz, .Lc_fd989b
+	bitda 3, (0xfd56)
+	jr z, .Lc_fd989b
+	bitda 0, (0xb74b)
+	jr nz, .Lc_fd989b
+	lda_d16 xbc, (0xbca0)
+	ldw_d16 wa, (0x9044)
+	ld IZ,WA
+	extz XIZ
+	add XIZ,XBC
+.Lc_fd986a:
+	push XIZ
+	call 0xfd6495
+	inc 4,XSP
+	stda32 (0xbc86), xhl
+	lda_d16 xwa, (0xbc86)
+	cp (XWA),0xff
+	jr z, .Lc_fd989b
+	cp (XWA),0xc0
+	jr nc, .Lc_fd9897
+	ld C,(XWA)
+	extz BC
+	sla BC, 0x02
+	lda_24 xde, (MidiPkt_EventType_Table)
+	exts XBC
+	add XBC,XDE
+	ld XHL,(XBC)
+	call (XHL)
+.Lc_fd9897:
+	inc 4,XIZ
+	jr t, .Lc_fd986a
+.Lc_fd989b:
+	pop XIZ
+	ret
+	.incbin "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_tail.bin"
 VoiceParam_MultiBlock_Ret:
 	.byte 0xe8
 VoiceParam_MultiBlock_Epilogue_Data:

@@ -9718,7 +9718,46 @@ AccStyle_InitVRAM:
 	ret
 
 AccStyle_SC0ByteSelect:
-	.incbin "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin"
+	stdi8 (0xe31a), 0x10
+	ldb_d8 a, (0x32f2)
+	and A,0x1f
+	jr nz, .Lc_f5c973
+	stdi8 (0xe318), 0x10
+.Lc_f5c973:
+	stdi8 (0x32f2), 0x01
+	ret
+	stdi8 (0xe31a), 0x10
+	ldb_d8 a, (0x32f2)
+	and A,0x1f
+	jr nz, .Lc_f5c98c
+	stdi8 (0xe318), 0x10
+.Lc_f5c98c:
+	stdi8 (0x32f2), 0x10
+	ret
+	stdi8 (0xe31a), 0x10
+	ldb_d8 a, (0x32f2)
+	and A,0x1f
+	jr nz, .Lc_f5c9a5
+	stdi8 (0xe318), 0x10
+.Lc_f5c9a5:
+	stdi8 (0x32f2), 0x08
+	ret
+	stdi8 (0xe31a), 0x10
+	ldb_d8 a, (0x32f2)
+	and A,0x1f
+	jr nz, .Lc_f5c9be
+	stdi8 (0xe318), 0x10
+.Lc_f5c9be:
+	stdi8 (0x32f2), 0x04
+	ret
+	stdi8 (0xe31a), 0x10
+	ldb_d8 a, (0x32f2)
+	and A,0x1f
+	jr nz, .Lc_f5c9d7
+	stdi8 (0xe318), 0x10
+.Lc_f5c9d7:
+	stdi8 (0x32f2), 0x02
+	ret
 AccHelper_ComputeVoiceOffset:
 	xor	xwa, xwa
 	ldb_d8	l, (64602)
@@ -10421,7 +10460,17 @@ AccTone_LookupDone:
 	ret
 
 AccTone_InlineBytecodeData:
-	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData.bin"
+	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin"
+	ldda32 xix, (0x338a)
+	ld C,A
+	extz BC
+	lda_24 xde, (0xe4a01a)
+	ldb_dri e, 0x07, 0xe8, 0xe4
+	extz DE
+	ld BC,DE
+	muls BC,0x0007
+	lda_d16 xhl, (0x31aa)
+	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_tail.bin"
 AccVoice_ClearChannelStates:
 	stdi8	(13135), 0
 	stdi8	(13136), 0
@@ -19201,7 +19250,12 @@ RhythmFillIn_LookupAndApply:
 	.byte 0x41, 0x1e, 0x1e, 0xfd, 0x1d, 0x1e, 0xd7, 0xfd
 	.byte 0x1d, 0xd6, 0xd7, 0xfd, 0x0e
 RhythmFillIn_PatternTable:
-	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable.bin"
+	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable_head.bin"
+	push XIZ
+	call 0xf64b58
+	pop XIZ
+	ret
+	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable_tail.bin"
 RhythmMute_Wrapper:
 	push xiz
 	call RhythmMute_Toggle

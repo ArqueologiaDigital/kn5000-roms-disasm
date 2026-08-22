@@ -1511,7 +1511,19 @@ PerfMode_EventTable_9:
 PerfMode_Evt04_VolumeHandler:
 	.incbin "includes/romslices/v7_transplant_PerfMode_Evt04_VolumeHandler.bin"
 PerfMode_VoiceAddressTable:
-	.incbin "includes/romslices/v7_transplant_PerfMode_VoiceAddressTable.bin"
+	.incbin "includes/romslices/v7_transplant_PerfMode_VoiceAddressTable_head.bin"
+	bit 0x07,W
+	jrl nz, .Lc_ef6c1e
+	cp A,H
+	jrl z, .Lc_ef6c25
+	inc 1,A
+	jp 0xef6c25
+.Lc_ef6c1e:
+	cp A,L
+	jrl z, .Lc_ef6c25
+	dec 1,A
+.Lc_ef6c25:
+	ret
 PerfMode_ParamHandler_10:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11
 	.byte 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x41, 0x6c
@@ -2340,7 +2352,23 @@ ScoopDisp_DispatchTable_Extended:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long VoiceCtrl_CheckAndReset
-	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_head.bin"
+	ldb_d8 a, (0x0eee)
+	stb_d8 (0x2877), a
+	call Scoop_SpecialMode_ParamCheckBound
+	resda 7, (0x0d54)
+	stdi8 (0x0d6a), 0x00
+	stdi8 (0x10fa), 0x01
+	call ScoopParam_ValueTable_0x1DD
+	stdi8 (0x10fa), 0x00
+	anddi8 (0xe31c), 0x6f
+	stdi8 (0x7ea6), 0x23
+	xor WA,WA
+	ldb A, 0xee
+	call SoundCtrl_SendCommand
+	ordi8 (0x8cec), 0x01
+	ret
+	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_tail.bin"
 Display_DirtyRegionDispatch:
 	bitda 3, (3411)
 	jrl z, Timer_ModeDispatch_Return
@@ -2715,7 +2743,46 @@ ToneParam_HandlerTable_BC:
 	.long VoiceSlot_TableSetup
 	.long VoiceSlot_TableSetup
 	.long DefaultHandler_Ret
-	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail.bin"
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head.bin"
+	xor A,A
+	call VoiceSlot_SaveState
+	call VoiceSlot_DispatchRet
+	xor A,A
+	call VoiceSlot_RestoreState
+	ldb_d8 w, (0x0dcc)
+	call VoiceSlot_RetZ
+	ret
+	ordi8 (0xe31c), 0x08
+	ldw_d16 hl, (0x0d5a)
+.Lc_ef8653:
+	push XHL
+	call AccPedal_CheckBitAndUpdate
+.Lc_ef8658:
+	call Timer_ParamCompareAlt
+	xor A,A
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_mid1.bin"
+	ordi8 (0xe31c), 0x08
+	call AccPedal_CheckBitAndUpdate
+	cp W,0xff
+	jrl z, .Lc_ef86bb
+	ldb_d8 l, (0x0d5d)
+	subda8 l, (0x0d5c)
+	xor H,H
+	stda16 (0x0dcd), hl
+	stdi8 (0x0dce), 0x00
+	stdi8 (0x7ea6), 0xff
+	call DisplayMode_Handler_3_0x30C
+	resda 2, (0x0d54)
+	stdi8 (0x0d55), 0xff
+.Lc_ef86bb:
+	ret
+	call Display_UpdateRegion0
+	call Display_UpdateRegion1
+	call Display_UpdateRegion4
+	call Display_UpdateRegion3
+	call Display_UpdateRegion2
+	ret
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_tail.bin"
 ToneEvt_Handler_Mode9:
 	bit	7, w
 	jrl	nz, 8
@@ -3106,7 +3173,19 @@ DMA_StoreFlagAndReturn:
 
 
 VoiceSlot_TableSetup:
-	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup.bin"
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head.bin"
+	ordi8 (0xe31c), 0x08
+	call AccPedal_CheckBitAndUpdate
+.Lc_ef9545:
+	call Timer_ParamLoadAndCompare
+	xor A,A
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_mid1.bin"
+	ordi8 (0xe31c), 0x08
+	call AccPedal_CheckBitAndUpdate
+.Lc_ef957a:
+	call Timer_ParamCompareAlt
+	xor A,A
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_tail.bin"
 AccPedal_CheckBitAndUpdate:
 	bitda 0, (3412)
 	jrl z, AccPedal_ClearFlagAndJump
@@ -3979,7 +4058,14 @@ ClockConfig_Select_Table:
 ClockConfig_Handler_1:
 	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_1.bin"
 ClockConfig_Handler_0:
-	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_0.bin"
+	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_0_head.bin"
+	stdi8 (0x3673), 0x00
+	call DisplayStr_StyleSectionNames_0x69
+	stdi8 (0x0d55), 0xff
+	anddi8 (0x0f57), 0xfe
+	stdi8 (0x0d36), 0x00
+	ldb_d8 a, (0x8c9b)
+	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_0_tail.bin"
 SysEx_PeriodicDispatch:
 	ld XIY,0x00000d69
 	cp (XIY),0x18
@@ -4537,7 +4623,17 @@ SystemInit_Handler_Table:
 	.long SystemInit_StepHandler_3
 	.long SystemInit_StepHandler_4
 	.long SystemInit_StepHandler_5
-	.incbin "includes/romslices/v7_transplant_SystemInit_Handler_Table_tail.bin"
+	.incbin "includes/romslices/v7_transplant_SystemInit_Handler_Table_tail_head.bin"
+	call MemoryConfig_Handler_Table_0x18
+	ld A,W
+	exts WA
+	sla WA, 0x02
+	ld IY,WA
+	push XDE
+	ld XDE,SystemInit_Handler_Table
+	ldl_dri xiy, 0x07, 0xe8, 0xf4
+	pop XDE
+	jp (XIY)
 SystemInit_StepHandler_5:
 	push	xwa
 	push	xhl
@@ -4592,7 +4688,29 @@ SystemInit_StepHandler_0:
 	.byte 0x30, 0x01, 0x90, 0x01, 0x00, 0x01, 0x60, 0x01
 	.byte 0x30, 0x00, 0x30, 0x01
 SysInit_BytecodeBlock:
-	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock.bin"
+	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock_head.bin"
+	ldb_d8 b, (0xce55)
+	sla B, 0x01
+	ld C,B
+	add B,B
+	add B,C
+	ld W,B
+	ld XIY,0x00000d8f
+	call SysInit_BytecodeBlock_0x486
+	ret
+	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid1.bin"
+	push XIX
+	pushw hl
+	ld XIX,0x0000be9d
+	ldw_d16 hl, (0x9046)
+	stw_dri wa, 0x07, 0xf0, 0xec
+	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid2.bin"
+	ldb_d8 a, (0x0eee)
+	call SysInit_BytecodeBlock_0x499
+	ordi8 (0x8cec), 0x01
+	ordi8 (0x266a), 0x01
+	ret
+	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock_tail.bin"
 VoiceSlot_InitAndProcess:
 	cps bc, 0
 	jrl nz, VoiceSlot_InitLoop
@@ -6291,7 +6409,17 @@ DisplayStr_BytecodeBlock_B:
 	.byte 0x85, 0x11, 0x1d, 0x28, 0x5c, 0xef, 0x1d, 0x4b
 	.byte 0xed, 0xef, 0x1d, 0xdd, 0x5b, 0xef, 0x0e
 DisplayStr_RhythmLabel:
-	.incbin "includes/romslices/v7_transplant_DisplayStr_RhythmLabel.bin"
+	.incbin "includes/romslices/v7_transplant_DisplayStr_RhythmLabel_head.bin"
+	call DisplayStr_ClearRegion
+	ld XIY,DisplayStr_StyleSectionNames
+	ld XIX,0x00000ed8
+	xor XWA,XWA
+	ldb_d8 a, (0x368c)
+	sla XWA, 0x03
+	add XIY,XWA
+	lds bc, 4
+	ldirw
+	ret
 DisplayStr_BytecodeBlock_C:
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D

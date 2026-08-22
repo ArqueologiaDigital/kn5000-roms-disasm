@@ -24373,7 +24373,41 @@ VoiceData_LoopEnd:
 
 ; === v7-specific block: SeqLoad_ProcessEpilogue (88 bytes) ===
 SeqLoad_ProcessEpilogue:
-	.incbin "includes/romslices/v7_block_seqload_processepilogue.bin"
+	pop XIZ
+	inc 0,XSP
+	ret
+	push QIZ
+	lds_erpb 0xfb, 0
+.Lc_f483a7:
+	ld_erpb_rr a, 0xfb
+	extz WA
+	ldw BC, 0x0112
+	call Part_ReadByteDirect
+	cps l, 1
+	jr z, .Lc_f483e8
+	ld_erpb_rr a, 0xfb
+	extz WA
+	ldw BC, 0x0112
+	lds de, 1
+	call Part_WriteByte
+	ld_erpb_rr a, 0xfb
+	extz WA
+	ldw BC, 0x0110
+	call Part_ReadWord
+	cps hl, 0
+	jr nz, .Lc_f483e8
+	ld_erpb_rr a, 0xfb
+	extz WA
+	ldw BC, 0x0110
+	ldw DE, 0xffff
+	call Part_WriteWord
+	call VoiceChannels_InitPanFromPreset
+.Lc_f483e8:
+	incb_erp 0xfb, 1
+	cp_erpb 0xfb, 0x0a
+	jr ule, .Lc_f483a7
+	pop QIZ
+	ret
 ; === end v7 block ===
 VoiceAlloc_TestBitRead:
 	calr SeqStep_PostEventAndUpdate

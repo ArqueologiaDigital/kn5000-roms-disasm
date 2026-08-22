@@ -3082,7 +3082,13 @@ AccPlay_InitAndStartLoop:
 
 
 AccPlay_ToggleCodeFragment:
-	.incbin "includes/romslices/v7_transplant_AccPlay_ToggleCodeFragment.bin"
+	cpdi8 (0x7e6f), 0x00
+	jr z, .Lc_f7273d
+	stdi8 (0x7e6f), 0x00
+	call TempoRingBuf_ReInitAndRet
+	calr AccPlay_MainUpdateLoop
+.Lc_f7273d:
+	ret
 AccPlay_CheckAndToggle:
 	bitda 1, (0x7e6f)
 	jr z, AccPlay_ToggleRet

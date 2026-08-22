@@ -1,0 +1,645 @@
+{
+ "generated_by": "scripts/converters/convert_reachable_ranges.py --apply",
+ "splits": [
+  {
+   "entry": "0xF5C960",
+   "bytes": 25,
+   "instructions": 7,
+   "slice": "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin",
+   "slice_addr": "0xF5C960",
+   "slice_bytes": 125,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "stdi8 (0xe31a), 0x10 ; ldb_d8 a, (0x32f2) ; and A,0x1f ; jr nz, .Lc_f5c973"
+  },
+  {
+   "entry": "0xF5C979",
+   "bytes": 25,
+   "instructions": 7,
+   "slice": "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin",
+   "slice_addr": "0xF5C960",
+   "slice_bytes": 125,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "stdi8 (0xe31a), 0x10 ; ldb_d8 a, (0x32f2) ; and A,0x1f ; jr nz, .Lc_f5c98c"
+  },
+  {
+   "entry": "0xF5C992",
+   "bytes": 25,
+   "instructions": 7,
+   "slice": "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin",
+   "slice_addr": "0xF5C960",
+   "slice_bytes": 125,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "stdi8 (0xe31a), 0x10 ; ldb_d8 a, (0x32f2) ; and A,0x1f ; jr nz, .Lc_f5c9a5"
+  },
+  {
+   "entry": "0xF5C9AB",
+   "bytes": 25,
+   "instructions": 7,
+   "slice": "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin",
+   "slice_addr": "0xF5C960",
+   "slice_bytes": 125,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "stdi8 (0xe31a), 0x10 ; ldb_d8 a, (0x32f2) ; and A,0x1f ; jr nz, .Lc_f5c9be"
+  },
+  {
+   "entry": "0xF5C9C4",
+   "bytes": 25,
+   "instructions": 7,
+   "slice": "includes/romslices/v7_transplant_AccStyle_SC0ByteSelect.bin",
+   "slice_addr": "0xF5C960",
+   "slice_bytes": 125,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "stdi8 (0xe31a), 0x10 ; ldb_d8 a, (0x32f2) ; and A,0x1f ; jr nz, .Lc_f5c9d7"
+  },
+  {
+   "entry": "0xF5DA65",
+   "bytes": 30,
+   "instructions": 9,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1535,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "ldda32 xix, (0x338a) ; ld C,A ; extz BC ; lda_24 xde, (0xe4a01a)"
+  },
+  {
+   "entry": "0xF64B51",
+   "bytes": 7,
+   "instructions": 4,
+   "slice": "includes/romslices/v7_transplant_RhythmFillIn_PatternTable.bin",
+   "slice_addr": "0xF64B49",
+   "slice_bytes": 64,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "push XIZ ; call 0xf64b58 ; pop XIZ ; ret"
+  },
+  {
+   "entry": "0xF7272A",
+   "bytes": 20,
+   "instructions": 6,
+   "slice": "includes/romslices/v7_transplant_AccPlay_ToggleCodeFragment.bin",
+   "slice_addr": "0xF7272A",
+   "slice_bytes": 20,
+   "source": "v7/maincpu/sequencer/seq_event_playback.s",
+   "first": "cpdi8 (0x7e6f), 0x00 ; jr z, .Lc_f7273d ; stdi8 (0x7e6f), 0x00 ; call 0xf60f7c"
+  },
+  {
+   "entry": "0xF4839D",
+   "bytes": 4,
+   "instructions": 3,
+   "slice": "includes/romslices/v7_block_seqload_processepilogue.bin",
+   "slice_addr": "0xF4839D",
+   "slice_bytes": 88,
+   "source": "v7/maincpu/sequencer/sequencer_engine.s",
+   "first": "pop XIZ ; inc 0,XSP ; ret"
+  },
+  {
+   "entry": "0xF483A1",
+   "bytes": 84,
+   "instructions": 30,
+   "slice": "includes/romslices/v7_block_seqload_processepilogue.bin",
+   "slice_addr": "0xF4839D",
+   "slice_bytes": 88,
+   "source": "v7/maincpu/sequencer/sequencer_engine.s",
+   "first": "push QIZ ; lds_erpb 0xfb, 0 ; ld_erpb_rr a, 0xfb ; extz WA"
+  },
+  {
+   "entry": "0xF5332F",
+   "bytes": 36,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_fix_accstate_readaccompparams.bin",
+   "slice_addr": "0xF5332F",
+   "slice_bytes": 36,
+   "source": "v7/maincpu/sequencer/smf_event_processor.s",
+   "first": "ldb A, 0x00 ; ei 0x06 ; stb_d8 (0x0464), a ; ldb_d8 a, (0x0416)"
+  },
+  {
+   "entry": "0xF97289",
+   "bytes": 10,
+   "instructions": 3,
+   "slice": "includes/romslices/v7_transplant_FDC_CmdRecalibrate.bin",
+   "slice_addr": "0xF97245",
+   "slice_bytes": 146,
+   "source": "v7/maincpu/storage/fdc_routines.s",
+   "first": "ldb_d8 a, (0x899a) ; cpda8 a, (0x8a68) ; ret Z"
+  },
+  {
+   "entry": "0xFC5CB4",
+   "bytes": 107,
+   "instructions": 40,
+   "slice": "includes/romslices/v7_transplant_FileIO_BytecodeData.bin",
+   "slice_addr": "0xFC50A9",
+   "slice_bytes": 3296,
+   "source": "v7/maincpu/audio/audio_control_engine.s",
+   "first": "push XIZ ; ld XIZ,XWA ; ldb_d8 a, (0x8c98) ; cp A,0x10"
+  },
+  {
+   "entry": "0xFC5D1F",
+   "bytes": 106,
+   "instructions": 40,
+   "slice": "includes/romslices/v7_transplant_FileIO_BytecodeData.bin",
+   "slice_addr": "0xFC50A9",
+   "slice_bytes": 3296,
+   "source": "v7/maincpu/audio/audio_control_engine.s",
+   "first": "push XIZ ; ld XIZ,XWA ; ldb_d8 a, (0x8c98) ; cp A,0x10"
+  },
+  {
+   "entry": "0xFC6489",
+   "bytes": 11,
+   "instructions": 3,
+   "slice": "includes/romslices/v7_fix_midicc_resetstate.bin",
+   "slice_addr": "0xFC6489",
+   "slice_bytes": 11,
+   "source": "v7/maincpu/audio/audio_control_engine.s",
+   "first": "stdi8 (0x8df8), 0xff ; stdi8 (0x8e28), 0x00 ; ret"
+  },
+  {
+   "entry": "0xFCC2FE",
+   "bytes": 83,
+   "instructions": 31,
+   "slice": "includes/romslices/v7_block_midistream_cmdpedaldone.bin",
+   "slice_addr": "0xFCC2FD",
+   "slice_bytes": 924,
+   "source": "v7/maincpu/audio/audio_control_engine.s",
+   "first": "cp A,0x48 ; jr z, .Lc_fcc350 ; and W,0x0f ; or W,0x80"
+  },
+  {
+   "entry": "0xF098AD",
+   "bytes": 9,
+   "instructions": 3,
+   "slice": "includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data.bin",
+   "slice_addr": "0xF098A7",
+   "slice_bytes": 15,
+   "source": "v7/maincpu/audio/semenu_routines.s",
+   "first": "ldb_da l, (0x00e31c) ; and L,0x08 ; ret"
+  },
+  {
+   "entry": "0xF09AA6",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin",
+   "slice_addr": "0xF09A99",
+   "slice_bytes": 1613,
+   "source": "v7/maincpu/audio/semenu_routines.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF09AD4",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin",
+   "slice_addr": "0xF09A99",
+   "slice_bytes": 1613,
+   "source": "v7/maincpu/audio/semenu_routines.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF09B02",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin",
+   "slice_addr": "0xF09A99",
+   "slice_bytes": 1613,
+   "source": "v7/maincpu/audio/semenu_routines.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF09B30",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin",
+   "slice_addr": "0xF09A99",
+   "slice_bytes": 1613,
+   "source": "v7/maincpu/audio/semenu_routines.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF09CAA",
+   "bytes": 283,
+   "instructions": 91,
+   "slice": "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin",
+   "slice_addr": "0xF09A99",
+   "slice_bytes": 1613,
+   "source": "v7/maincpu/audio/semenu_routines.s",
+   "first": "nop ; call 0xf06b11 ; cp (XSP+0x10),0x01 ; jrl nz, .Lc_f09d3a"
+  },
+  {
+   "entry": "0xF0F020",
+   "bytes": 74,
+   "instructions": 28,
+   "slice": "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail.bin",
+   "slice_addr": "0xF0F020",
+   "slice_bytes": 1168,
+   "source": "v7/maincpu/audio/sound_editor_ui.s",
+   "first": "push XWA ; push XBC ; push XDE ; push XHL"
+  },
+  {
+   "entry": "0xF0F06A",
+   "bytes": 71,
+   "instructions": 24,
+   "slice": "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail.bin",
+   "slice_addr": "0xF0F020",
+   "slice_bytes": 1168,
+   "source": "v7/maincpu/audio/sound_editor_ui.s",
+   "first": "push XWA ; push XBC ; push XDE ; push XHL"
+  },
+  {
+   "entry": "0xF0F156",
+   "bytes": 315,
+   "instructions": 76,
+   "slice": "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail.bin",
+   "slice_addr": "0xF0F020",
+   "slice_bytes": 1168,
+   "source": "v7/maincpu/audio/sound_editor_ui.s",
+   "first": "stib_da (0x03efa8), 0x00 ; ldb C, 0x07 ; ldw_d16 ix, (0x06c6) ; ldw_d16 iy, (0x06c8)"
+  },
+  {
+   "entry": "0xF228DD",
+   "bytes": 84,
+   "instructions": 24,
+   "slice": "includes/romslices/v7_transplant_CDlikeSwTtl_DispatchData.bin",
+   "slice_addr": "0xF228D7",
+   "slice_bytes": 90,
+   "source": "v7/maincpu/demo/demo_seq_bridge.s",
+   "first": "bitda 0, (0x0ce0) ; jr nz, .Lc_f22901 ; ldb_d8 a, (0x0cdf) ; inc 2,A"
+  },
+  {
+   "entry": "0xF861CC",
+   "bytes": 43,
+   "instructions": 16,
+   "slice": "includes/romslices/v7_transplant_FDemo_DisplayResourceData.bin",
+   "slice_addr": "0xF8609C",
+   "slice_bytes": 347,
+   "source": "v7/maincpu/demo/file_demo_proc.s",
+   "first": "lda_24 xhl, (0x0ab000) ; lda_24 xbc, (0x0fd800) ; sub XBC,XHL ; ld XIX,XBC"
+  },
+  {
+   "entry": "0xF872C7",
+   "bytes": 372,
+   "instructions": 109,
+   "slice": "includes/romslices/v7_block_fileio_loadsongregion8.bin",
+   "slice_addr": "0xF872C7",
+   "slice_bytes": 372,
+   "source": "v7/maincpu/demo/file_demo_proc.s",
+   "first": "lda xsp, (xsp - 0x1c) ; pushw iz ; ld (XSP+0x1a),XWA ; lda xwa, (xsp + 0x0c)"
+  },
+  {
+   "entry": "0xFD8B64",
+   "bytes": 4,
+   "instructions": 3,
+   "slice": "includes/romslices/v7_transplant_SeqData_FormatOutput_Default.bin",
+   "slice_addr": "0xFD8B46",
+   "slice_bytes": 45,
+   "source": "v7/maincpu/midi/midi_dispatch_handlers.s",
+   "first": "pop XIZ ; inc 4,XSP ; ret"
+  },
+  {
+   "entry": "0xFD9849",
+   "bytes": 84,
+   "instructions": 33,
+   "slice": "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data.bin",
+   "slice_addr": "0xFD9655",
+   "slice_bytes": 632,
+   "source": "v7/maincpu/midi/midi_dispatch_handlers.s",
+   "first": "push XIZ ; bitda 4, (0xfd50) ; jr nz, .Lc_fd989b ; bitda 3, (0xfd56)"
+  },
+  {
+   "entry": "0xEF6C0D",
+   "bytes": 25,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_transplant_PerfMode_VoiceAddressTable.bin",
+   "slice_addr": "0xEF6BBD",
+   "slice_bytes": 105,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "bit 0x07,W ; jrl nz, .Lc_ef6c1e ; cp A,H ; jrl z, .Lc_ef6c25"
+  },
+  {
+   "entry": "0xEF776D",
+   "bytes": 59,
+   "instructions": 15,
+   "slice": "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail.bin",
+   "slice_addr": "0xEF773F",
+   "slice_bytes": 118,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb_d8 a, (0x0eee) ; stb_d8 (0x2877), a ; call 0xf01790 ; resda 7, (0x0d54)"
+  },
+  {
+   "entry": "0xEF8631",
+   "bytes": 25,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail.bin",
+   "slice_addr": "0xEF8165",
+   "slice_bytes": 1460,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "xor A,A ; call 0xefd08d ; call 0xefc1bc ; xor A,A"
+  },
+  {
+   "entry": "0xEF864A",
+   "bytes": 20,
+   "instructions": 6,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail.bin",
+   "slice_addr": "0xEF8165",
+   "slice_bytes": 1460,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ordi8 (0xe31c), 0x08 ; ldw_d16 hl, (0x0d5a) ; push XHL ; call 0xef9593"
+  },
+  {
+   "entry": "0xEF8687",
+   "bytes": 53,
+   "instructions": 14,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail.bin",
+   "slice_addr": "0xEF8165",
+   "slice_bytes": 1460,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ordi8 (0xe31c), 0x08 ; call 0xef9593 ; cp W,0xff ; jrl z, .Lc_ef86bb"
+  },
+  {
+   "entry": "0xEF86BC",
+   "bytes": 21,
+   "instructions": 6,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail.bin",
+   "slice_addr": "0xEF8165",
+   "slice_bytes": 1460,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "call 0xef5b61 ; call 0xef5bbf ; call 0xef5c0f ; call 0xef5bdd"
+  },
+  {
+   "entry": "0xEF953C",
+   "bytes": 15,
+   "instructions": 4,
+   "slice": "includes/romslices/v7_transplant_VoiceSlot_TableSetup.bin",
+   "slice_addr": "0xEF9004",
+   "slice_bytes": 1423,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ordi8 (0xe31c), 0x08 ; call 0xef9593 ; call 0xef79f2 ; xor A,A"
+  },
+  {
+   "entry": "0xEF9571",
+   "bytes": 15,
+   "instructions": 4,
+   "slice": "includes/romslices/v7_transplant_VoiceSlot_TableSetup.bin",
+   "slice_addr": "0xEF9004",
+   "slice_bytes": 1423,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ordi8 (0xe31c), 0x08 ; call 0xef9593 ; call 0xef7a37 ; xor A,A"
+  },
+  {
+   "entry": "0xEFA8A4",
+   "bytes": 28,
+   "instructions": 6,
+   "slice": "includes/romslices/v7_transplant_ClockConfig_Handler_0.bin",
+   "slice_addr": "0xEFA794",
+   "slice_bytes": 581,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "stdi8 (0x3673), 0x00 ; call 0xeff0e1 ; stdi8 (0x0d55), 0xff ; anddi8 (0x0f57), 0xfe"
+  },
+  {
+   "entry": "0xEFB7F4",
+   "bytes": 27,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_transplant_SystemInit_Handler_Table_tail.bin",
+   "slice_addr": "0xEFB7C9",
+   "slice_bytes": 70,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "call 0xefabd2 ; ld A,W ; exts WA ; sla WA, 0x02"
+  },
+  {
+   "entry": "0xEFB92C",
+   "bytes": 25,
+   "instructions": 9,
+   "slice": "includes/romslices/v7_transplant_SysInit_BytecodeBlock.bin",
+   "slice_addr": "0xEFB920",
+   "slice_bytes": 1682,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb_d8 b, (0xce55) ; sla B, 0x01 ; ld C,B ; add B,B"
+  },
+  {
+   "entry": "0xEFBCFB",
+   "bytes": 16,
+   "instructions": 5,
+   "slice": "includes/romslices/v7_transplant_SysInit_BytecodeBlock.bin",
+   "slice_addr": "0xEFB920",
+   "slice_bytes": 1682,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "push XIX ; pushw hl ; ld XIX,0x0000be9d ; ldw_d16 hl, (0x9046)"
+  },
+  {
+   "entry": "0xEFBDA6",
+   "bytes": 19,
+   "instructions": 5,
+   "slice": "includes/romslices/v7_transplant_SysInit_BytecodeBlock.bin",
+   "slice_addr": "0xEFB920",
+   "slice_bytes": 1682,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb_d8 a, (0x0eee) ; call 0xefbdb9 ; ordi8 (0x8cec), 0x01 ; ordi8 (0x266a), 0x01"
+  },
+  {
+   "entry": "0xEFEE29",
+   "bytes": 30,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_transplant_DisplayStr_RhythmLabel.bin",
+   "slice_addr": "0xEFED97",
+   "slice_bytes": 176,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "call 0xefeffe ; ld XIY,0x00eff078 ; ld XIX,0x00000ed8 ; xor XWA,XWA"
+  },
+  {
+   "entry": "0xF03D89",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF03DB7",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF03DE5",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF03E13",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF03E41",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04E34",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04E62",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04E90",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04EBE",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04EEC",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04F1A",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04F48",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04F76",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04FA4",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF04FD2",
+   "bytes": 46,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "dec 4,XSP ; lda xde, (xsp + 0x02) ; lda XHL, (XSP) ; push XHL"
+  },
+  {
+   "entry": "0xF053EE",
+   "bytes": 22,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "push XSP ; nop ; jr nz, .Lc_f05401 ; ldw WA, 0x0037"
+  },
+  {
+   "entry": "0xF05422",
+   "bytes": 45,
+   "instructions": 18,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "ldw WA, 0x811d ; cp WA,(XIY) ; cp (XSP+0x02),0x00 ; jr nz, .Lc_f05439"
+  },
+  {
+   "entry": "0xF05500",
+   "bytes": 24,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata.bin",
+   "slice_addr": "0xF03D56",
+   "slice_bytes": 9200,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "cp (XSP),0x00 ; jr nz, .Lc_f0550c ; ldw WA, 0x0020 ; lds bc, 0"
+  },
+  {
+   "entry": "0xF9280B",
+   "bytes": 9,
+   "instructions": 4,
+   "slice": "includes/romslices/v7_transplant_SmfMedley_RawData.bin",
+   "slice_addr": "0xF9280B",
+   "slice_bytes": 9,
+   "source": "v7/maincpu/file_io/medley.s",
+   "first": "cps a, 0 ; scc NZ,WA ; stb_d8 (0x88a8), a ; ret"
+  },
+  {
+   "entry": "0xFC294F",
+   "bytes": 3381,
+   "instructions": 900,
+   "slice": "includes/romslices/v7_fix_initializetoshi.bin",
+   "slice_addr": "0xFC294F",
+   "slice_bytes": 3381,
+   "source": "v7/maincpu/extensions/extension_init.s",
+   "first": "lda xsp, (xsp - 0x0e) ; lda XBC, (XSP) ; ld XWA,0x01600004 ; ld (XBC),XWA"
+  }
+ ]
+}

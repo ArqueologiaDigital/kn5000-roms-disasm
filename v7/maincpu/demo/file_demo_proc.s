@@ -7,7 +7,25 @@
 ; =============================================================================
 
 FDemo_DisplayResourceData:
-	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData.bin"
+	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head.bin"
+	lda_24 xhl, (0x0ab000)
+	lda_24 xbc, (0x0fd800)
+	sub XBC,XHL
+	ld XIX,XBC
+	ldl_da xde, (0x025b7e)
+	ld XBC,XDE
+	sub XBC,XHL
+	add XBC,XWA
+	cp XBC,XIX
+	jr nc, .Lc_f861f4
+	ld XHL,XDE
+	add XDE,XWA
+	stl_da (0x025b7e), xde
+	jr t, .Lc_f861f6
+.Lc_f861f4:
+	lds32 xhl, 0
+.Lc_f861f6:
+	ret
 MainPreControl:
 	sub xbc, 0x1e10003
 	cp xbc, 0x0
@@ -1735,7 +1753,123 @@ LoadRegion2_Return:
 
 ; === v7-specific block: FileIO_LoadSongRegion8 (372 bytes) ===
 FileIO_LoadSongRegion8:
-	.incbin "includes/romslices/v7_block_fileio_loadsongregion8.bin"
+	lda xsp, (xsp - 0x1c)
+	pushw iz
+	ld (XSP+0x1a),XWA
+	lda xwa, (xsp + 0x0c)
+	ld XBC,(XSP+0x1a)
+	ldw DE, 0x0008
+	call FileIO_ReadHeader
+	lda xwa, (xsp + 0x0c)
+	ld XBC,Presentation_TagTableEnd_0x65
+	call FileIO_OpenWithMode
+	cps hl, 0
+	jr ge, .Lc_f872f2
+	call FileIO_ReturnError
+	jrl t, LoadSong8_Return
+.Lc_f872f2:
+	lds iz, 0
+.Lc_f872f4:
+	call FileIO_ReadByte
+	cps hl, 0
+	jr lt, .Lc_f8730c
+	lda xwa, (xsp + 0x04)
+	stb_dri l, 0x07, 0xe0, 0xf8
+	inc 1,IZ
+	cp IZ,0x0008
+	jr lt, .Lc_f872f4
+.Lc_f8730c:
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+	cpw (XSP+0x02), 0x0000
+	jrl lt, .Lc_f87434
+	call FileIO_SeekRead_ExtReturn
+	lda xwa, (xsp + 0x04)
+	call SeqLoad_ValidateFormat
+	cps hl, 0
+	jrl z, .Lc_f873bf
+	cps hl, 1
+	jrl nz, .Lc_f87434
+	call SeqLoad_JmpLoadPre
+	ld XWA,0x000ab000
+	ld XBC,0x00005000
+	call FileIO_ReadBlock
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+	cpw (XSP+0x02), 0x0000
+	jr lt, .Lc_f87394
+	call FileIO_CloseHandle
+	lda xwa, (xsp + 0x0c)
+	ld XBC,(XSP+0x1a)
+	ldw DE, 0x0009
+	call FileIO_ReadHeader
+	lda xwa, (xsp + 0x0c)
+	ld XBC,Presentation_TagTableEnd_0x69
+	call FileIO_OpenWithMode
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+	cpw (XSP+0x02), 0x0000
+	jr lt, .Lc_f87394
+	lda_24 xwa, (0x0b0000)
+	ld XDE,XWA
+	lda_24 xbc, (0x0fd800)
+	sub XBC,XDE
+	call FileIO_ReadBlock
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+.Lc_f87394:
+	lds iz, 0
+.Lc_f87396:
+	ld_erpb_rr a, 0xf8
+	extz WA
+	call 0xfd1f61
+	inc 1,IZ
+	cp IZ,0x000a
+	jr lt, .Lc_f87396
+	call SMF_InitSongPlayback
+	ld WA,(XSP+0x02)
+	call SeqLoad_JmpLoadPost
+	cpw (XSP+0x02), 0x0000
+	jr lt, .Lc_f87434
+	call ResetSlotsIfEmpty
+	jr t, .Lc_f87434
+.Lc_f873bf:
+	call SeqLoad_JmpInitPreset
+	ld XWA,0x000ab000
+	ld XBC,0x00000800
+	call FileIO_ReadBlock
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+	cpw (XSP+0x02), 0x0000
+	jr lt, .Lc_f87423
+	call FileIO_CloseHandle
+	lda xwa, (xsp + 0x0c)
+	ld XBC,(XSP+0x1a)
+	ldw DE, 0x0009
+	call FileIO_ReadHeader
+	lda xwa, (xsp + 0x0c)
+	ld XBC,Presentation_TagTableEnd_0x6D
+	call FileIO_OpenWithMode
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+	cpw (XSP+0x02), 0x0000
+	jr lt, .Lc_f87423
+	lda_24 xwa, (0x0b0000)
+	ld XDE,XWA
+	lda_24 xbc, (0x0fd800)
+	sub XBC,XDE
+	call FileIO_ReadBlock
+	call FileIO_ReturnError
+	ld (XSP+0x02),HL
+.Lc_f87423:
+	lds wa, 0
+	call 0xfd1f61
+	call SMF_InitSongPlayback
+	ld WA,(XSP+0x02)
+	call SeqLoad_JmpAltEntry
+.Lc_f87434:
+	call FileIO_CloseHandle
+	ld HL,(XSP+0x02)
 ; === end v7 block ===
 LoadSong8_Return:
 	popw iz

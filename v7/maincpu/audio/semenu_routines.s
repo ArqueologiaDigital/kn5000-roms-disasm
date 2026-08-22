@@ -3983,7 +3983,10 @@ SeMenu_OrPartConfig:
 	ret
 
 SeMenu_OrPartConfig_Data:
-	.incbin "includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data.bin"
+	.incbin "includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data_head.bin"
+	ldb_da l, (0x00e31c)
+	and L,0x08
+	ret
 SeMenu_StoreParamByte:
 	dec 1, a
 	extz wa
@@ -4233,4 +4236,184 @@ SeMenu_RefreshPartDisplay:
 	ret
 
 SeMenu_RefreshPartDisplay_Data:
-	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data.bin"
+	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data_head.bin"
+	dec 4,XSP
+	lda xde, (xsp + 0x02)
+	lda XHL, (XSP)
+	push XHL
+	call SeMenu_SetupPartDisplay_End_0x90
+	cp HL,0xffff
+	jr z, .Lc_f09ad1
+	ld A,(XSP)
+	extz WA
+	ld C,(XSP+0x02)
+	extz BC
+	sla BC, 0x02
+	lda_24 xde, (GUI_DisplayStructData_0x1222)
+	exts XBC
+	add XBC,XDE
+	ld XHL,(XBC)
+	call (XHL)
+.Lc_f09ad1:
+	inc 4,XSP
+	ret
+	dec 4,XSP
+	lda xde, (xsp + 0x02)
+	lda XHL, (XSP)
+	push XHL
+	call SeMenu_SetupPartDisplay_End_0x90
+	cp HL,0xffff
+	jr z, .Lc_f09aff
+	ld A,(XSP)
+	extz WA
+	ld C,(XSP+0x02)
+	extz BC
+	sla BC, 0x02
+	lda_24 xde, (GUI_DisplayStructData_0x126A)
+	exts XBC
+	add XBC,XDE
+	ld XHL,(XBC)
+	call (XHL)
+.Lc_f09aff:
+	inc 4,XSP
+	ret
+	dec 4,XSP
+	lda xde, (xsp + 0x02)
+	lda XHL, (XSP)
+	push XHL
+	call SeMenu_SetupPartDisplay_End_0x90
+	cp HL,0xffff
+	jr z, .Lc_f09b2d
+	ld A,(XSP)
+	extz WA
+	ld C,(XSP+0x02)
+	extz BC
+	sla BC, 0x02
+	lda_24 xde, (GUI_DisplayStructData_0x12B2)
+	exts XBC
+	add XBC,XDE
+	ld XHL,(XBC)
+	call (XHL)
+.Lc_f09b2d:
+	inc 4,XSP
+	ret
+	dec 4,XSP
+	lda xde, (xsp + 0x02)
+	lda XHL, (XSP)
+	push XHL
+	call SeMenu_SetupPartDisplay_End_0x90
+	cp HL,0xffff
+	jr z, .Lc_f09b5b
+	ld A,(XSP)
+	extz WA
+	ld C,(XSP+0x02)
+	extz BC
+	sla BC, 0x02
+	lda_24 xde, (GUI_DisplayStructData_0x12FA)
+	exts XBC
+	add XBC,XDE
+	ld XHL,(XBC)
+	call (XHL)
+.Lc_f09b5b:
+	inc 4,XSP
+	ret
+	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data_mid1.bin"
+	nop
+	call SeMenu_LoadPartParam
+	cp (XSP+0x10),0x01
+	jrl nz, .Lc_f09d3a
+	lda xbc, (xsp + 0x0e)
+	ldw WA, 0x000e
+	call SeMenu_LoadPartParam
+	and (XSP+0x0e),0x1f
+	lda xbc, (xsp + 0x02)
+	ld A,(XSP+0x0e)
+	extz WA
+	lda_24 xde, (GUI_DisplayStructData_0x1342)
+	ldb_dri a, 0x07, 0xe8, 0xe0
+	ld (XBC),A
+	ld (XBC+0x06),0x1f
+	ld (XBC+0x07),0x00
+	ld (XBC+0x08),0x0c
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x12)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	lda xwa, (xsp + 0x02)
+	call SeMenu_BitShiftMask_End_0x14
+	cps l, 1
+	jr nz, .Lc_f09d35
+	ld A,(XSP+0x05)
+	extz WA
+	lda_24 xbc, (GUI_DisplayStructData_0x1362)
+	ldb_dri c, 0x07, 0xe4, 0xe0
+	ld (XSP+0x0e),C
+	extz BC
+	ldw WA, 0x000e
+	call SeMenu_StorePartParam
+	lda xde, (xsp + 0x0e)
+	pushw 0x001f
+	lds wa, 0
+	ldw BC, 0x0013
+	call SeMenu_RegisterElement_Extended
+	pushw 0x000e
+	pushw 0x0027
+	call SeMenu_ShowConfirmDialog
+	inc 4,XSP
+.Lc_f09d35:
+	lds wa, 6
+	jrl t, .Lc_f09dba
+.Lc_f09d3a:
+	lda xbc, (xsp + 0x02)
+	cp (XSP+0x10),0x02
+	jr nz, .Lc_f09d65
+	ldi_erpb 0xfb, 0x0f
+	ldi_erpb 0xfa, 0x29
+	ldw WA, 0x000f
+	call SeMenu_LoadPartParam
+	lda xwa, (xsp + 0x02)
+	ld (XWA+0x06),0x0f
+	ld (XWA+0x07),0x00
+	ld (XWA+0x08),0x0a
+	ld XBC,XWA
+	jr t, .Lc_f09d90
+.Lc_f09d65:
+	ldi_erpb 0xfb, 0x10
+	ldi_erpb 0xfa, 0x2a
+	ldw WA, 0x0010
+	call SeMenu_LoadPartParam
+	lda xbc, (xsp + 0x02)
+	ld (XBC+0x06),0x0f
+	lda xwa, (xbc + 0x07)
+	cp (XSP+0x10),0x03
+	jr nz, .Lc_f09d89
+	ld (XWA),0x04
+	jr t, .Lc_f09d8c
+.Lc_f09d89:
+	ld (XWA),0x00
+.Lc_f09d8c:
+	ld (XBC+0x08),0x0a
+.Lc_f09d90:
+	ld (XBC+0x09),0x06
+	ld A,(XSP+0x12)
+	extz WA
+	lda xbc, (xsp + 0x0c)
+	call SeMenu_SetupPartDisplay_End_0x219
+	ld_erpb_rr c, 0xfb
+	extz BC
+	ld_erpb_rr a, 0xfa
+	extz WA
+	pushw wa
+	lda xwa, (xsp + 0x04)
+	push XWA
+	ldw WA, 0x0027
+	lds de, 0
+	call SeMenu_TransferPartValues_EndData_0x169
+	lds wa, 6
+.Lc_f09dba:
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	pop QIZ
+	lda xsp, (xsp + 0x12)
+	ret
+	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data_tail.bin"

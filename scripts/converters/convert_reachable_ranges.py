@@ -24,11 +24,14 @@ This one is keyed on addresses instead:
              bytes exactly, or the range is skipped.
 
 Run:  python3 scripts/converters/convert_reachable_ranges.py [--apply] [--limit N]
+      --dry-run          place and check every range, write nothing
+      --no-incbin        do not split `.incbin` ROM slices
+      --no-plausibility  keep decodes that read as table data (see below)
 
 ⚠ A range that starts mid-block leaves the leading bytes of that block as .byte,
 which is correct: those bytes have not been shown to be code.
 """
-import importlib.util, json, os, re, subprocess, sys, tempfile
+import importlib.util, json, os, re, shutil, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
@@ -146,6 +149,245 @@ def source_index(syms):
     return idx
 
 
+# --------------------------------------------------------------- .incbin sites
+#
+# 82 accepted ranges / 7,101 bytes had their ENTRY inside an `.incbin` ROM slice
+# rather than in a `.byte` run, so the apply loop could not place them at all
+# (scripts/analysis/README-rewrite-refusals.md, "the two buckets with no counter").
+# A slice is a committed blob with no source; the bytes inside it are still ROM,
+# and a range proven to be code there is exactly as convertible as one in a
+# `.byte` run -- provided the directive can be SPLIT: head slice, instructions,
+# tail slice.
+#
+# convert_v7_ptr_tables.py already does that split for pointer tables and is the
+# working model for the mechanics (residue slices, `own_label`).
+INCBIN_ANY_RE = re.compile(r'\.incbin\s+"([^"]+)"')
+# A site is only rewritable if its LINE holds nothing but an optional label, the
+# directive, and an optional comment. Anything else on the line would emit bytes
+# that the replacement silently drops.
+INCBIN_SITE_RE = re.compile(
+    r'^(?:([A-Za-z_][\w]*):)?[ \t]*\.incbin\s+"([^"]+)"[ \t]*(?:[;#].*)?$')
+
+
+def incbin_index():
+    """Every `.incbin` site under v7/maincpu, with its EXACT ROM address.
+
+    An `.incbin`'s address cannot be read off the source line, and searching the
+    ROM for its content is ambiguous whenever a blob repeats or is included
+    twice -- probe_rewrite_refusals.py places only 279 of 322 that way. So ASK
+    THE ASSEMBLER: copy the tree, put a unique `__incloc_N:` label immediately
+    above every directive, assemble and link with the real linker script, and
+    read the addresses out with llvm-nm. That is the same address the real build
+    gives, by construction.
+
+    Every site is then checked against the ROM (`blob == ROM[addr:addr+len]`)
+    and dropped on disagreement, so a location this cannot corroborate is not
+    used. Measured 2026-08-22: 312 sites, 311 located, 311/311 ROM-verified.
+
+    ⚠ Read-only with respect to the repo: the labels go into a COPY.
+    """
+    src_root = os.path.join(REPO, "v7", "maincpu")
+    work = tempfile.mkdtemp(prefix="incloc_", dir=_SCRATCH)
+    copy = os.path.join(work, "maincpu")
+    shutil.copytree(src_root, copy, symlinks=True)
+    sites, n = [], 0
+    for root, _dirs, files in os.walk(copy):
+        for fn in sorted(files):
+            if not fn.endswith(".s"):
+                continue
+            cp = os.path.join(root, fn)
+            lines = open(cp, "rb").read().decode("latin-1").split("\n")
+            hit = False
+            for i, ln in enumerate(lines):
+                if ln.lstrip().startswith((";", "#")):
+                    continue                      # `; Was: .incbin ...` is not a directive
+                m = INCBIN_ANY_RE.search(ln)
+                if not m:
+                    continue
+                sites.append(dict(tag=n, line=i, text=ln, target=m.group(1),
+                                  path=os.path.join(src_root, os.path.relpath(cp, copy))))
+                lines[i] = f"__incloc_{n}:\n" + ln
+                n += 1
+                hit = True
+            if hit:
+                open(cp, "wb").write("\n".join(lines).encode("latin-1"))
+    obj, elf = os.path.join(work, "loc.o"), os.path.join(work, "loc.elf")
+    r = subprocess.run([MC, "-triple=tlcs900", "-filetype=obj", "-I", copy,
+                        "-o", obj, os.path.join(copy, "kn5000_v7_program.s")],
+                       capture_output=True, text=True)
+    if r.returncode:
+        print(f"   .incbin index: llvm-mc failed, no sites indexed\n{r.stderr[:300]}")
+        return []
+    r = subprocess.run([os.path.join(LLVM, "ld.lld"), "-T",
+                        os.path.join(src_root, "maincpu.ld"), "-o", elf, obj],
+                       capture_output=True, text=True)
+    if r.returncode:
+        print(f"   .incbin index: ld.lld failed, no sites indexed\n{r.stderr[:300]}")
+        return []
+    addr = {}
+    for line in subprocess.run([os.path.join(LLVM, "llvm-nm"), "--no-sort", elf],
+                               capture_output=True, text=True).stdout.splitlines():
+        parts = line.split()
+        if len(parts) == 3 and parts[2].startswith("__incloc_"):
+            addr[int(parts[2][9:])] = int(parts[0], 16)
+    out, unplaced, disagree = [], 0, 0
+    for site in sites:
+        if site["tag"] not in addr:
+            unplaced += 1
+            continue
+        cands = [os.path.join(os.path.dirname(site["path"]), site["target"]),
+                 os.path.join(src_root, site["target"])]
+        blob_path = next((c for c in cands if os.path.isfile(c)), None)
+        if blob_path is None:
+            unplaced += 1
+            continue
+        blob = open(blob_path, "rb").read()
+        a = addr[site["tag"]]
+        if not blob or ROM[a - BASE: a - BASE + len(blob)] != blob:
+            disagree += 1
+            continue
+        site.update(addr=a, blob=blob, blob_path=blob_path)
+        out.append(site)
+    print(f"   .incbin index: {len(out)} of {len(sites)} site(s) located and "
+          f"ROM-verified ({unplaced} unplaced, {disagree} disagreed with the ROM)")
+    return out
+
+
+def site_of(sites, t):
+    """The .incbin site whose ROM slice contains address `t`, if any."""
+    for s in sites:
+        if s["addr"] <= t < s["addr"] + len(s["blob"]):
+            return s
+    return None
+
+
+def _slice_name(target, suffix, used):
+    """A residue slice path that collides with nothing on disk or in this run."""
+    d, base = os.path.split(target)
+    stem, ext = os.path.splitext(base)
+    for cand in [f"{stem}_{suffix}{ext}"] + [f"{stem}_{suffix}{k}{ext}" for k in range(2, 40)]:
+        rel = f"{d}/{cand}" if d else cand
+        if rel not in used and not os.path.exists(
+                os.path.join(REPO, "v7", "maincpu", rel)):
+            used.add(rel)
+            return rel
+    raise AssertionError(f"no free residue slice name for {target}")
+
+
+def rewrite_incbin(site, rows, addr2name, used, dry=False):
+    """Split an `.incbin` ROM slice around one or more converted ranges.
+
+    Emits, in place of the single directive:
+
+        OwnLabel:                       (only if the label was ON that line)
+                .incbin "..._head.bin"  (the bytes before the first range)
+        <instructions>
+                .incbin "..._mid1.bin"  (bytes between two ranges)
+        <instructions>
+                .incbin "..._tail.bin"  (the bytes after the last range)
+
+    ⚠ BYTE-IDENTITY IS STRUCTURAL HERE, not a hope: the residues are cut from the
+    BLOB ITSELF and the converted spans are checked against the blob at the same
+    offsets, so head + span + ... + tail is asserted equal to the original blob
+    before anything is written. What the `make clean-all && make all` gate still
+    has to settle is the same thing it settles for every other converted range:
+    the link-time bytes of symbolic operands.
+
+    ⚠ A LABEL ON THE DIRECTIVE'S OWN LINE MUST BE RE-EMITTED (it names the first
+    byte of the blob and its definition would otherwise vanish -- `undefined
+    symbol`), and a label on an EARLIER line must NOT be, or it is defined twice.
+    Same rule, and same reason, as convert_v7_ptr_tables.py.
+    """
+    if "romslices/" not in site["target"]:
+        REFUSED[".incbin slice(s) that are generated/, not a committed romslice"] = \
+            REFUSED.get(".incbin slice(s) that are generated/, not a committed romslice", 0) + 1
+        REFUSED_BYTES[".incbin slice(s) that are generated/, not a committed romslice"] = \
+            REFUSED_BYTES.get(".incbin slice(s) that are generated/, not a committed romslice", 0) \
+            + sum(r[1] for r in rows)
+        return None
+    path = site["path"]
+    lines = open(path, "rb").read().decode("latin-1").split("\n")
+    # Locate the directive AFTER the .byte pass has already spliced this file:
+    # its line index moved. The line text is the anchor, and it must be unique.
+    hits = [i for i, ln in enumerate(lines) if ln == site["text"]]
+    if len(hits) != 1:
+        REFUSED[".incbin line is not uniquely findable after the .byte pass"] = \
+            REFUSED.get(".incbin line is not uniquely findable after the .byte pass", 0) + 1
+        return None
+    li = hits[0]
+    m = INCBIN_SITE_RE.match(lines[li])
+    if not m:
+        REFUSED[".incbin line carries something besides label/directive/comment"] = \
+            REFUSED.get(".incbin line carries something besides label/directive/comment", 0) + 1
+        return None
+    own_label = m.group(1)
+    blob, a = site["blob"], site["addr"]
+    rows = sorted(rows)
+    out, slices, pos, kept = [], {}, 0, []
+    if own_label:
+        out.append(f"{own_label}:")
+    cuts = []                        # (kind, payload) in emission order
+    for (t, span, insns, texts, br_labels) in rows:
+        off = t - a
+        if off < pos or off + span > len(blob):
+            # DROP THE ONE RANGE, NOT THE SITE. Two call targets in the same
+            # slice can overlap (one entry falls inside another's decoded span);
+            # refusing the whole directive threw away every other range in it.
+            REFUSED["range overlaps an earlier range in the same .incbin slice"] = \
+                REFUSED.get("range overlaps an earlier range in the same .incbin slice", 0) + 1
+            REFUSED_BYTES["range overlaps an earlier range in the same .incbin slice"] = \
+                REFUSED_BYTES.get("range overlaps an earlier range in the same .incbin slice", 0) + span
+            continue
+        if blob[off:off + span] != ROM[t - BASE: t - BASE + span]:
+            REFUSED[".incbin blob disagrees with the ROM at the range offset"] = \
+                REFUSED.get(".incbin blob disagrees with the ROM at the range offset", 0) + 1
+            return None
+        if off > pos:
+            cuts.append(("res", (pos, off)))
+        cuts.append(("code", (t, span, insns, texts, br_labels)))
+        pos = off + span
+        kept.append((t, span, insns, texts, br_labels))
+    if not kept:
+        return None
+    if pos < len(blob):
+        cuts.append(("res", (pos, len(blob))))
+    nres = 0
+    for kind, payload in cuts:
+        if kind == "res":
+            lo, hi = payload
+            suffix = "head" if lo == 0 else ("tail" if hi == len(blob) else f"mid{nres}")
+            nres += 1
+            rel = _slice_name(site["target"], suffix, used)
+            slices[rel] = blob[lo:hi]
+            out.append(f'\t.incbin "{rel}"')
+        else:
+            t, span, insns, texts, br_labels = payload
+            for (ia, _n, _x), text in zip(insns, texts):
+                if ia in br_labels:
+                    out.append(f"{br_labels[ia]}:")
+                out.append("\t" + cc.symbolise(text, addr2name))
+    # STRUCTURAL BYTE-IDENTITY CHECK: reassemble the emitted plan from the blob's
+    # own bytes and the ROM spans, and require it to equal the blob exactly.
+    check, pos = bytearray(), 0
+    for kind, payload in cuts:
+        if kind == "res":
+            lo, hi = payload
+            check += blob[lo:hi]
+        else:
+            t, span = payload[0], payload[1]
+            check += ROM[t - BASE: t - BASE + span]
+    assert bytes(check) == blob, f"{site['target']}: split would change {len(blob)} bytes"
+    if dry:
+        return kept
+    for rel, data in slices.items():
+        dest = os.path.join(REPO, "v7", "maincpu", rel)
+        assert not os.path.exists(dest), dest
+        open(dest, "wb").write(data)
+    lines[li:li + 1] = out
+    open(path, "wb").write("\n".join(lines).encode("latin-1"))
+    return kept
+
+
 def decode_range(rom, terr, start, limit=16384):
     """Decode from `start` until a terminator or until reaching CODE territory."""
     off = start - BASE
@@ -187,6 +429,58 @@ _SCRATCH = tempfile.mkdtemp(prefix="kn5000_conv_")
 
 FORMS = None
 FORM_EX = {}
+
+
+# ------------------------------------------------- is this decode PLAUSIBLE?
+#
+# ⚠ THE BYTE GATE CANNOT SEE A MIS-FRAMED DECODE. The bytes are reproduced
+# exactly whether the framing is right or wrong, so `make clean-all && make all`
+# reports 100.00% for a table of numbers "decoded" as instructions just as
+# readily as for a real function. The ENTRY criterion is what is supposed to
+# prevent that, and v7_reachable_from_code.py's own docstring says it does not
+# always: "0xED40A7 decodes to `nop ; nop` and 0xED5465 to `swi 7 ; pop SR` --
+# those are calls into data, or calls found inside a CODE run that was itself
+# mis-framed. Read a target before converting it."
+#
+# So read it mechanically. These mnemonics are what ROM TABLE BYTES decode to,
+# not what this firmware's routines contain:
+#
+#   swi           0xF8..0xFF. 0xFF is the commonest filler byte in the ROM, and
+#                 v7_reachable_from_code.py already names `swi 7` as its own tell
+#   normal, max   register-bank / saturation-mode switches -- 5 and 1 occurrences
+#                 across all 210,320 instruction lines v7 already carries
+#   halt, ldio,   CPU-state and I/O-space forms
+#   ldwio
+#   retd > 0xff   a stack unwind larger than any frame in this firmware
+#
+# MEASURED on the 70 `.incbin` ranges of the first --apply run: 6 contain a
+# CPU-control mnemonic at all, and 5 of the 6 are demonstrably data --
+# ToneKit_FrequencyTable (a frequency TABLE, decoded as `nop / swi 7 / max /
+# ei 0x04 / ldwio / normal / popw wa / halt`), WidgetParam_Entry_018,
+# CharMap_ValueData_B (`rcf / incf / retd 0x1009` inside a character map) and
+# SeqStep_ByteBlockEA5F. The 6th, AccState_ReadAccompParams, is real code whose
+# second instruction is `ei 0x06` -- which is exactly why `ei`/`di` are NOT in
+# the set. The other 64 ranges are untouched by the rule.
+#
+# ⚠ This is a screen, not a proof: it can only refuse: it never accepts anything
+# the byte match did not already accept. `--no-plausibility` turns it off.
+IMPLAUSIBLE = ("swi", "normal", "max", "halt", "ldio", "ldwio")
+
+
+def implausible(texts):
+    """The mnemonic marking this decode as table data rather than code, or None."""
+    for t in texts:
+        parts = t.split(None, 1)
+        mn = parts[0].lower()
+        if mn in IMPLAUSIBLE:
+            return mn
+        if mn == "retd" and len(parts) > 1:
+            try:
+                if int(parts[1].strip(), 0) > 0xFF:
+                    return "retd with a frame > 0xff"
+            except ValueError:
+                pass
+    return None
 
 
 def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
@@ -390,6 +684,12 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
 def main():
     global FORMS
     apply_ = "--apply" in sys.argv
+    no_incbin = "--no-incbin" in sys.argv
+    no_plausibility = "--no-plausibility" in sys.argv
+    # --dry-run does everything --apply does EXCEPT write: same placement, same
+    # refusal tally, same structural byte-identity assertion in rewrite_incbin().
+    dry = "--dry-run" in sys.argv
+    apply_ = apply_ or dry
     if "--forms" in sys.argv:
         FORMS = collections.Counter()
     limit = int(sys.argv[sys.argv.index("--limit") + 1]) if "--limit" in sys.argv else 0
@@ -525,6 +825,11 @@ def main():
         # byte-match gate settles the displacements against the real ROM. So the
         # correct condition is "no branch anywhere in the block", not "no local
         # label".
+        bad_mn = None if no_plausibility else implausible(texts)
+        if bad_mn:
+            skipped += 1
+            skip(f"decode contains `{bad_mn}`, so it reads as table data, not code")
+            continue
         has_branch = any(x is not None for x in br_texts)
         if not br_labels and not has_branch:
             encs = cc.encode_block(texts)
@@ -568,23 +873,39 @@ def main():
         # the converter accepted were MISSING from the report whose entire purpose
         # is to explain why a round gained nothing. A refusal bucket that cannot
         # pass (anti-pattern 12) at least appears; this did not appear at all.
+        # A range whose entry is in no `.byte` block may still be placeable: 82
+        # of the 103 (7,101 B) sit inside an `.incbin` ROM slice. Those go to
+        # rewrite_incbin(), which splits the directive around them.
+        sites = [] if no_incbin else incbin_index()
         placed = []
+        byte_path = [0, 0]                     # ranges, bytes converted in .byte runs
+        inc_rows = collections.defaultdict(list)
+        by_tag = {s["tag"]: s for s in sites}
         for t, span, insns, texts, _bl in pending:
             for path, (lines, blocks) in idx.items():
                 if any(bk[1] <= t < bk[1] + len(bk[4]) for bk in blocks):
                     placed.append((path, t, span, insns, texts, _bl)); break
             else:
-                REFUSED["entry is in no indexed .byte block (often inside an .incbin)"] = REFUSED.get("entry is in no indexed .byte block (often inside an .incbin)", 0) + 1
-                REFUSED_BYTES["entry is in no indexed .byte block (often inside an .incbin)"] = REFUSED_BYTES.get("entry is in no indexed .byte block (often inside an .incbin)", 0) + span
+                site = site_of(sites, t)
+                if site is None:
+                    REFUSED["entry is in no indexed .byte block and in no located .incbin"] = REFUSED.get("entry is in no indexed .byte block and in no located .incbin", 0) + 1
+                    REFUSED_BYTES["entry is in no indexed .byte block and in no located .incbin"] = REFUSED_BYTES.get("entry is in no indexed .byte block and in no located .incbin", 0) + span
+                elif t + span > site["addr"] + len(site["blob"]):
+                    REFUSED["range starts in an .incbin slice but runs past its end"] = REFUSED.get("range starts in an .incbin slice but runs past its end", 0) + 1
+                    REFUSED_BYTES["range starts in an .incbin slice but runs past its end"] = REFUSED_BYTES.get("range starts in an .incbin slice but runs past its end", 0) + span
+                else:
+                    inc_rows[site["tag"]].append((t, span, insns, texts, _bl))
         for path in {p for p, *_ in placed}:
             mine = [x for x in placed if x[0] == path]
             mine.sort(key=lambda x: -x[1])          # highest address first
             wrote_here = 0
             for _, t, span, insns, texts, bl in mine:
+                byte_path[0] += 1; byte_path[1] += span
                 _before = sum(REFUSED.values())
-                if rewrite({path: idx[path]}, t, span, insns, texts, addr2name, bl):
+                if dry or rewrite({path: idx[path]}, t, span, insns, texts, addr2name, bl):
                     wrote_here += 1
                 elif sum(REFUSED.values()) == _before:
+                    byte_path[0] -= 1; byte_path[1] -= span
                     # rewrite() declined without recording a reason. Nearly all of
                     # these are the "NEVER DROP A LABEL" guard, which is real
                     # protection -- but 25 of 29 measured cases were blocked by
@@ -593,11 +914,66 @@ def main():
                     # sitting on the two bytes `ca 8b`, which are one `ld C,B`).
                     REFUSED["rewrite declined silently (usually a label it will not drop)"] = REFUSED.get("rewrite declined silently (usually a label it will not drop)", 0) + 1
                     REFUSED_BYTES["rewrite declined silently (usually a label it will not drop)"] = REFUSED_BYTES.get("rewrite declined silently (usually a label it will not drop)", 0) + span
+                else:
+                    byte_path[0] -= 1; byte_path[1] -= span
             # Count files ACTUALLY written. This previously counted files a range
             # was merely assigned to, so it reported "rewrote 8 file(s)" while
             # every rewrite was refused and nothing changed on disk.
             if wrote_here:
                 touched_files.add(path)
+        # ⚠ THE `.incbin` PASS RUNS LAST, and re-reads each file from disk. The
+        # loop above splices `idx[path]`'s line list in place and writes it out,
+        # so every recorded line index for that file is stale the moment it does;
+        # rewrite_incbin() therefore re-finds its directive BY LINE TEXT.
+        inc_ranges = inc_bytes = split_sites = 0
+        used_names, manifest = set(), []
+        for tag, rows in sorted(inc_rows.items()):
+            site = by_tag[tag]
+            # COUNT WHAT WAS CONVERTED, NOT WHAT WAS OFFERED. This counted
+            # `rows`, which includes any range rewrite_incbin() dropped as
+            # overlapping -- so the reported byte total exceeded the CODE gain
+            # l1_territory_map.py measured, by exactly the dropped range.
+            kept = rewrite_incbin(site, rows, addr2name, used_names, dry=dry)
+            if kept:
+                split_sites += 1
+                touched_files.add(site["path"])
+                inc_ranges += len(kept)
+                inc_bytes += sum(r[1] for r in kept)
+                for t, span, insns, texts, _b in kept:
+                    manifest.append({
+                        "entry": f"0x{t:06X}", "bytes": span,
+                        "instructions": len(insns),
+                        "slice": site["target"],
+                        "slice_addr": f"0x{site['addr']:06X}",
+                        "slice_bytes": len(site["blob"]),
+                        "source": os.path.relpath(site["path"], REPO),
+                        "first": " ; ".join(texts[:4])})
+        # EVERY CONVERTED RANGE, NAMED. A split that turns table bytes into
+        # instructions is invisible to the build gate, so the only way anyone can
+        # review this pass is a list of what it did -- which range, in which
+        # slice, opening with what.
+        if manifest and not dry:
+            mp = os.path.join(REPO, "analysis/v7-reachability/v7_incbin_range_splits.json")
+            old_rows = []
+            if os.path.exists(mp):
+                old_rows = json.load(open(mp)).get("splits", [])
+            seen = {r["entry"] for r in old_rows}
+            json.dump({"generated_by": "scripts/converters/convert_reachable_ranges.py --apply",
+                       "splits": old_rows + [r for r in manifest if r["entry"] not in seen]},
+                      open(mp, "w"), indent=1)
+            print(f"   manifest: analysis/v7-reachability/v7_incbin_range_splits.json")
+        if sites:
+            # SITES ACTUALLY SPLIT, not sites a range was offered to: this
+            # printed len(inc_rows), which counts the refused ones too.
+            print(f"split {split_sites} of {len(inc_rows)} .incbin slice(s) offered, "
+                  f"around {inc_ranges} range(s), {inc_bytes:,} bytes")
+        # THE TOTAL THAT MUST MATCH l1_territory_map.py's CODE GAIN. Every byte
+        # below moved from DATA to CODE; if the two numbers disagree, one of them
+        # is counting something it did not convert.
+        print(f"converted {byte_path[0] + inc_ranges} range(s), "
+              f"{byte_path[1] + inc_bytes:,} bytes  "
+              f"(.byte runs {byte_path[0]}/{byte_path[1]:,}, "
+              f".incbin slices {inc_ranges}/{inc_bytes:,})")
         print(f"rewrote {len(touched_files)} file(s)")
         for r, n in sorted(REFUSED.items(), key=lambda kv: -kv[1]):
             print(f"   refused {n:4}  {r}")

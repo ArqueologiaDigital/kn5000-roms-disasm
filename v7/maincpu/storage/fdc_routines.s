@@ -767,7 +767,11 @@ FDC_InitSequence_Full:
 	calr	62832
 	jrl	-2690
 FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
-	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate.bin"
+	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_head.bin"
+	ldb_d8 a, (0x899a)
+	cpda8 a, (0x8a68)
+	ret Z
+	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_tail.bin"
 FDC_CMD_EXEC:
 	.byte 0x2e, 0x1e, 0x16, 0xfe, 0xdb, 0xd8, 0x66, 0x08
 	.byte 0xf1, 0xcc, 0x89, 0x00, 0x01, 0x78, 0x36, 0x01

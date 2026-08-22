@@ -4662,7 +4662,141 @@ SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
-	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail.bin"
+	push XWA
+	push XBC
+	push XDE
+	push XHL
+	push XIX
+	push XIY
+	push XIZ
+	stib_da (0x03efa8), 0x00
+	ld XIY,SeBitmap_EnvCurve5_0x46B
+	ld XIX,SeBitmap_EnvCurve5_0x492
+	call SeMenu_NameEditor_Setup
+	cpdi8 (0x065c), 0x00
+	jr z, .Lc_f0f04e
+	ld XIY,SeBitmap_EnvCurve5_0x492
+	ld XIX,SeBitmap_EnvCurve5_0x49C
+	jr t, .Lc_f0f05e
+.Lc_f0f04e:
+	stib_da (0x03efa8), 0x01
+	ld XIY,SeBitmap_EnvCurve5_0x49C
+	ld XIX,SeBitmap_EnvCurve5_0x4A6
+.Lc_f0f05e:
+	call SeMenu_NameEditor_Setup
+	pop XIZ
+	pop XIY
+	pop XIX
+	pop XHL
+	pop XDE
+	pop XBC
+	pop XWA
+	ret
+	push XWA
+	push XBC
+	push XDE
+	push XHL
+	push XIX
+	push XIY
+	push XIZ
+	cpdi8 (0x06ae), 0x01
+	jr nz, .Lc_f0f090
+	stib_da (0x03efa8), 0x00
+	ld XIY,SeBitmap_EnvCurve5_0x313
+	ld XIX,SeBitmap_EnvCurve5_0x31D
+	call SeMenu_NameEditor_Setup
+	ldb C, 0x02
+	jr t, .Lc_f0f0a6
+.Lc_f0f090:
+	stib_da (0x03efa8), 0x00
+	ld XIY,SeBitmap_EnvCurve5_0x313
+	ld XIX,SeBitmap_EnvCurve5_0x327
+	call SeMenu_NameEditor_Setup
+	ldb C, 0x04
+.Lc_f0f0a6:
+	ldb_d8 w, (0x065e)
+	ld A,C
+	sla A, 0x01
+	dec 1,A
+	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_mid0.bin"
+	stib_da (0x03efa8), 0x00
+	ldb C, 0x07
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+.Lc_f0f166:
+	pushw ix
+	pushw iy
+	push C
+	call SeMenu_ShowConfirmDialog_Data_0x331
+	pop C
+	popw iy
+	popw ix
+	add IX,0x001c
+	dec 1,C
+	jr nz, .Lc_f0f166
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+	stda16 (0x06cc), ix
+	adddi16 (0x06cc), 0x00c4
+	stda16 (0x06d0), ix
+	adddi16 (0x06d0), 0x00c8
+	stda16 (0x06ce), iy
+	stda16 (0x06d2), iy
+	adddi16 (0x06d2), 0x000c
+	call SeMenu_NameEditor_ChangeCase_Data
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+	add IX,0x00c4
+	stda16 (0x06cc), ix
+	stda16 (0x06d0), ix
+	stda16 (0x06ce), iy
+	subdi16 (0x06ce), 0x0005
+	stda16 (0x06d2), iy
+	subdi16 (0x06d2), 0x0001
+	call SeMenu_NameEditor_ChangeCase_Data
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+	stda16 (0x06cc), ix
+	subdi16 (0x06cc), 0x0008
+	stda16 (0x06d0), ix
+	stda16 (0x06ce), iy
+	stda16 (0x06d2), iy
+	adddi16 (0x06d2), 0x000c
+	call SeMenu_NameEditor_ChangeCase_Data
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+	stda16 (0x06cc), ix
+	subdi16 (0x06cc), 0x0005
+	stda16 (0x06d0), ix
+	subdi16 (0x06d0), 0x0003
+	stda16 (0x06ce), iy
+	adddi16 (0x06ce), 0x0001
+	stda16 (0x06d2), iy
+	adddi16 (0x06d2), 0x0007
+	call SeMenu_NameEditor_ChangeCase_Data
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+	sub IX,0x0004
+	stda16 (0x06cc), ix
+	stda16 (0x06d0), ix
+	stda16 (0x06ce), iy
+	adddi16 (0x06ce), 0x0001
+	stda16 (0x06d2), iy
+	adddi16 (0x06d2), 0x000b
+	call SeMenu_NameEditor_InsertChar
+	ldw_d16 ix, (0x06c6)
+	ldw_d16 iy, (0x06c8)
+	stda16 (0x06cc), ix
+	adddi16 (0x06cc), 0x001c
+	stda16 (0x06d0), ix
+	adddi16 (0x06d0), 0x00ab
+	stda16 (0x06ce), iy
+	adddi16 (0x06ce), 0x000d
+	stda16 (0x06d2), iy
+	adddi16 (0x06d2), 0x000e
+	call SeMenu_NameEditor_ChangeCase_Data
+	ret
+	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail.bin"
 SeMenu_WaveformSelect_Init:
 	.long SeBitmap_EnvCurve5
 	.long SeBitmap_EnvCurve4

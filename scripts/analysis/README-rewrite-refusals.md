@@ -134,6 +134,24 @@ Fixes, in order of confidence:
    than `t`, and `cc.elf_syms()` filters on `t`/`T` — check that before relying on it;
 3. the `.incbin` bucket needs its own converter; nothing here fixes it.
 
+## UPDATE 2026-08-22 — the `.incbin` bucket is converted
+
+Point 3 has been done: `convert_reachable_ranges.py` now splits an `.incbin` ROM slice into
+head residue / instructions / tail residue, and **64 ranges / 6,695 bytes** of the 82/7,101 came
+out (`CODE 600,755 -> 607,450`, gate 9/9). See `scripts/converters/README-incbin-range-splits.md`.
+
+Two things measured here needed correcting:
+
+* **"located by unique content match (279 of 322)"** — content search is the wrong instrument.
+  Assembling a copy of the tree with a unique label above every directive places **311 of 312**
+  sites, all 311 ROM-verified, and is unambiguous for blobs that repeat or are included twice.
+* **the entry criterion is weaker than this README assumed.** Every byte in these buckets was
+  called "proven code" on the strength of being a call target. Five of the ranges that then
+  converted were table data — a frequency table decoded as `nop / swi 7 / max / ldwio / normal /
+  halt`, a character map as `rcf / incf / retd 0x1009`. The byte-match gate passed on all of them.
+  `v7_reachable_from_code.py` says as much in its own docstring; this README repeated "proven
+  code" without it. A screen on the decode now refuses that class.
+
 ## Ancillary census
 
 `.byte` runs the block index cannot address at all: **5,597 runs / 87,170 bytes**.

@@ -42,7 +42,97 @@ FileIO_MainLoop:
 	pop	xiz
 	ret
 FileIO_BytecodeData:
-	.incbin "includes/romslices/v7_transplant_FileIO_BytecodeData.bin"
+	.incbin "includes/romslices/v7_transplant_FileIO_BytecodeData_head.bin"
+	push XIZ
+	ld XIZ,XWA
+	ldb_d8 a, (0x8c98)
+	cp A,0x10
+	jr z, .Lc_fc5cd8
+	cp A,0x0f
+	jr z, .Lc_fc5cd8
+	cp A,0x0e
+	jr z, .Lc_fc5cd8
+	cp A,0x11
+	jr z, .Lc_fc5cd8
+	cps a, 3
+	jr z, .Lc_fc5cd8
+	cp A,0x13
+	jr nz, .Lc_fc5cda
+.Lc_fc5cd8:
+	jr t, .Lc_fc5d1d
+.Lc_fc5cda:
+	ld XWA,0x000000c0
+	call 0xfccc66
+	cps hl, 1
+	jr z, .Lc_fc5d1d
+	ld A,(XIZ+0x03)
+	and A,(XIZ+0x02)
+	jr z, .Lc_fc5d1d
+	setda 1, (0x905d)
+	ld (XIZ),0x98
+	ld (XIZ+0x01),0x01
+	ld XWA,0x00000300
+	call 0xfccc66
+	lda xwa, (xiz + 0x02)
+	cp L,0x50
+	jr c, .Lc_fc5d10
+	ld (XWA),0x01
+	jr t, .Lc_fc5d14
+.Lc_fc5d10:
+	inc 1,L
+	ld (XWA),L
+.Lc_fc5d14:
+	ld (XIZ+0x03),0x7f
+	ld XWA,XIZ
+	calr FileIO_BytecodeData
+.Lc_fc5d1d:
+	pop XIZ
+	ret
+	push XIZ
+	ld XIZ,XWA
+	ldb_d8 a, (0x8c98)
+	cp A,0x10
+	jr z, .Lc_fc5d43
+	cp A,0x0f
+	jr z, .Lc_fc5d43
+	cp A,0x0e
+	jr z, .Lc_fc5d43
+	cp A,0x11
+	jr z, .Lc_fc5d43
+	cps a, 3
+	jr z, .Lc_fc5d43
+	cp A,0x13
+	jr nz, .Lc_fc5d45
+.Lc_fc5d43:
+	jr t, .Lc_fc5d87
+.Lc_fc5d45:
+	ld XWA,0x000000c0
+	call 0xfccc66
+	cps hl, 1
+	jr z, .Lc_fc5d87
+	ld A,(XIZ+0x03)
+	and A,(XIZ+0x02)
+	jr z, .Lc_fc5d87
+	setda 1, (0x905d)
+	ld (XIZ),0x98
+	ld (XIZ+0x01),0x01
+	ld XWA,0x00000300
+	call 0xfccc66
+	lda xwa, (xiz + 0x02)
+	cps l, 1
+	jr ugt, .Lc_fc5d7a
+	ld (XWA),0x50
+	jr t, .Lc_fc5d7e
+.Lc_fc5d7a:
+	dec 1,L
+	ld (XWA),L
+.Lc_fc5d7e:
+	ld (XIZ+0x03),0x7f
+	ld XWA,XIZ
+	calr FileIO_BytecodeData
+.Lc_fc5d87:
+	pop XIZ
+	ret
 ExtDev_SndParam_Block48_Var40:
 	.byte 0xf1, 0x5d, 0x90, 0xb9	; setda	1, 0x90f9 (v7 patched)
 
@@ -693,7 +783,9 @@ MidiCC_SyncForceResync:
 	lda_d16	xhl, (36344)
 	ret
 MidiCC_ResetState:
-	.incbin "includes/romslices/v7_fix_midicc_resetstate.bin"
+	stdi8 (0x8df8), 0xff
+	stdi8 (0x8e28), 0x00
+	ret
 	.include "midi/midi_encoder_routines.s"
 
 MidiParam_ForceResync:
@@ -6241,7 +6333,40 @@ MidiStream_CmdPedalNotify:
 	.byte 0xcd, 0xcc, 0x7f, 0xcd, 0x69, 0x24, 0x7f, 0x1d
 	.byte 0x33, 0x9a, 0xfc
 MidiStream_CmdPedalDone:
-	.incbin "includes/romslices/v7_block_midistream_cmdpedaldone.bin"
+	.incbin "includes/romslices/v7_block_midistream_cmdpedaldone_head.bin"
+	cp A,0x48
+	jr z, .Lc_fcc350
+	and W,0x0f
+	or W,0x80
+	pushw wa
+	ld WA,(XSP)
+	stb_d8 (0x9049), w
+	ld C,A
+	ldb B, 0x04
+	ldw DE, 0x0800
+	call MIDI_DispatchCC_Guarded
+	ld WA,(XSP)
+	stb_d8 (0x9049), w
+	ldb C, 0xb1
+	ld B,A
+	ldw DE, 0x4000
+	call MIDI_DispatchCC_Guarded
+	ld WA,(XSP)
+	stb_d8 (0x9049), w
+	ldb C, 0xb2
+	ld B,A
+	ldw DE, 0x7f00
+	call MIDI_DispatchCC_Guarded
+	ld WA,(XSP)
+	stb_d8 (0x9049), w
+	ldb C, 0xb4
+	ld B,A
+	ldw DE, 0x7f00
+	call MIDI_DispatchCC_Guarded
+	inc 2,XSP
+.Lc_fcc350:
+	ret
+	.incbin "includes/romslices/v7_block_midistream_cmdpedaldone_tail.bin"
 ; === end v7 block ===
 ; === v7-specific block: MidiStream_HandleRunningStatus (919 bytes) ===
 MidiStream_HandleRunningStatus:
