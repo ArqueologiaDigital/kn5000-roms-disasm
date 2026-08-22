@@ -262,7 +262,17 @@ recognised faster next time.
    STORE where the CPU computes an ADDRESS. A missing form fails loudly at assembly time; a wrong
    sub-opcode assembles and lies. **Compare the mnemonic against what the ROM does, never against
    whether it assembled.**
-12. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+12. **"Unreferenced" in a partially converted tree does not mean dead.** A refusal audit found
+   that 25 of 29 blocked ranges were held by labels nothing in `v7/maincpu/*.s` references, called
+   them transplant artefacts, and proposed deleting them. Measured before acting: **8,203 of the
+   9,975 v7 labels that nothing in v7 references ARE referenced in v9 or v10** -- `Memset` 47
+   times, `MidiPkt_Nop` 185. They look unreferenced only because the code that jumps to them is
+   still `.byte` data. `Audio_NullRet1` has eight `jr` referrers in v9 and none in v7 for exactly
+   that reason. Deleting them would have removed the targets the next conversion round needs, and
+   the byte-match gate would NOT have objected -- dropping an unused label changes no bytes.
+   **Any "prune the unused X" step must ask what fraction of X is merely not-yet-reached.**
+   (`scripts/analysis/v7_unreferenced_labels_are_live.py`)
+13. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
    faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
    so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
    the same message a genuinely broken range produces. Rejections concentrated in one bucket

@@ -348,7 +348,7 @@ the importer's own immediates. Items 2 and 3 stand: one is located on other equi
 logic analyser. The residue of item 1 needs a format-1 `.LSW`, which is a disk we do not have
 rather than an analysis nobody did.
 
-## Five traps that produced most of this session's wrong answers
+## Traps that produced most of this session's wrong answers
 
 Written here because they cost more than any single format did, and they will catch the next person.
 
