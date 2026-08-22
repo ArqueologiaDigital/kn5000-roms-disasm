@@ -476,12 +476,47 @@ screen-to-record binding and the field shapes are proven. **0x68 is declared, sa
 no field descriptors, no parameter id, one bulk copy, and a subscriber whose entire body is four
 `ret`s.
 
-**Still unresolved, and not dressed up:** `0x71` is reached only by `PmemOutLGridCheck` and a
-snapshot routine. `0x44/0x45/0x46` have no parameter ids, identical subscribers, and are constant in
-all seven floppies with 0x44 identical to 0x45; `FDemoText_SyncPreset_DirectCopy` copies tag 0x61's
-algorithm into 0x44 +0, making that byte a shadow of it, but no pairing was found for 0x45/0x46 and
-nothing indexes the three as a group -- so "three of something" gets no ROM artefact and was not
-adopted.
+**RESOLVED 2026-08-22 -- `0x44/0x45/0x46` are the DRAWBAR (organ) registration, one record per
+keyboard part: `0x44` = RIGHT 1, `0x45` = RIGHT 2, `0x46` = LEFT.**
+
+The paragraph that stood here said they "have no parameter ids". That was an artefact of the
+search, not a property of the data: the scan was restricted to ids `0x4000..0x4FFF`, and these
+records carry **48 ids in `0x8200 / 0x8600 / 0x8A00`** -- one namespace per part, stride exactly
+`0x400`. Widening the window found them immediately.
+
+Evidence (addresses identical in v7, v9 and v10):
+
+| what | where |
+|---|---|
+| 16 identical fields per record, ids differing by `0x0400` | `0xEDC946`, `0xEDCBAE`, `0xEDCE00` |
+| nine fields with **max = 8**, tiling payload `+3..+7` as nibble pairs | ids `0x_280..0x_288` |
+| the DRAWBAR page's item table, the nine max-8 ids first | `0xE9F88C`, read by `MainMemDrawControl` (`cp wa,0x8`) |
+| the strings `DRAWBAR SETTING` and the nine-footage row `16' 5 1/3' 8' 4' 2 2/3' 2' 1 3/5' 1 1/3' 1'` | `0xE841E0`, `0xE84266` (fractions are separate glyphs) |
+| the group index -- `ld A,(XSP+0x0c) / add A,0x44` | v9 `0xF84D42`, v7 `0xF848BB` |
+| part <= 2 is arithmetic, not assumed: `u32[0xEDAE64+4*tag]` = `FC26/FC32/FC3E`, while `0x4A..0x5F` are all `FFFFFFFF` | verified by dump |
+| part 0/1/2 = RIGHT1/RIGHT2/LEFT, from the DESCENDING name table | `0xE9F374` (RIGHT1), `0xE9F36C` (RIGHT2), `0xE9F364` (LEFT) |
+| ROM power-on default, all three `00 00 00 88 80 80 00 00 00 00` = `16'=8 5⅓'=0 8'=8 4'=8 2⅔'=0 2'=8 1⅗'=0 1⅓'=0 1'=0` | `0xEDB3FC..0xEDB7BA` |
+
+⚠ Stated limit: only three distinct byte values (`00 80 88`) occur in the corpus, so the corpus
+check catches a gross misreading, NOT an off-by-one. The nibble order is pinned by the descriptor
+table -- each id carries its own mask and shift -- not by the corpus.
+⚠ Name trap: the handler lives in `demo/fdemotext_routines.s` and everything there is named
+`FDemoText_*`, from an adjacent `Start the internal DEMO` string block. The module has nothing to
+do with the demo.
+
+**`0x71` -- role determined, LABEL still not determined.** No parameter descriptor anywhere names
+it, and its only tag-specific subscriber is a bare `ret`. A whole-image census finds six candidate
+sites in every version -- five real, one a false positive landing mid-instruction -- and **every
+real site touches bit 1 only**: three `PmemOutLGridCheck` arms (set/clear/display, choosing
+`0xE8013E " ON  "` / `0xE80144 " OFF "`) and the `bit 1,(0xFD2C)` gate in
+`BitMapOut_Snapshot_PostProcess`. Since block 0 is `0x3C0` = 960 and `0xFD2C - 0xF9A0 = 0x38C`,
+the grid's `0x1ED400 + index*0x3C0 + 0x38C` **is tag 0x71 payload+0 of panel-memory slot `index`**
+-- so the bit is a **per-panel-memory ON/OFF flag**. Its UI name, and **bit 0** of the `0x03` mask
+(touched by nothing in v7/v9/v10), remain open.
+
+Provers: `analysis/disk-format-probes/lsw_drawbar_records.py` (9 tests on all three ROMs, exits
+non-zero on failure; shifting one namespace or moving one field offset makes it fail) and
+`README-lsw-drawbar-records-ADDENDUM.md`.
 
 ### The C0..D4 run is one companion block PER PART (2026-08-22)
 

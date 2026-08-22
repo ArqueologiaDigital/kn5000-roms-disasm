@@ -157,14 +157,29 @@ the instructions do; **[INFERENCE]** = a reading, with the falsifier stated.
 
 * **`0x9A`** (`0xFFA2`, 26 bytes). Nothing in any of the three ROMs reads or writes it apart
   from `DSPCfg_InitAuxEntries`/`DSPCfg_ResetAuxEntries` walking every block-1 entry. Its only
-  callback is `UIState_KeyScan_Dispatch`, which every tag has. **No identification is
-  possible from the ROM.**
-* **`0x68`, `0x43`, `0x71`** — the touching routines are all generic bitmap/restore helpers,
-  so the name evidence does not narrow anything. Field *shapes* are known, meanings are not.
+  callback is `UIState_KeyScan_Dispatch`, which every tag has.
+  ~~**No identification is possible from the ROM.**~~ ⚠ Softened 2026-08-22: that sentence
+  claims a limit on the ROM when what it had measured was a limit of one search. The
+  neighbouring `0x44/0x45/0x46` entry made exactly this claim and fell the same week, to a
+  wider parameter-id window. Accurate version: **no identification has been FOUND**, by the
+  searches listed above; a scan whose window is stated is falsifiable, an impossibility claim
+  is not.
+* **`0x68`, `0x43`** — the touching routines are all generic bitmap/restore helpers, so the
+  name evidence does not narrow anything. Field *shapes* are known, meanings are not.
+* **`0x71`** — ⚠ **NARROWED 2026-08-22, this entry was too pessimistic.** The routines are
+  generic, but the ADDRESS is not: every real site touches bit 1 of `0xFD2C`, and since block 0
+  is 960 bytes and `0xFD2C - 0xF9A0 = 0x38C`, the panel-memory grid's
+  `0x1ED400 + index*0x3C0 + 0x38C` is this tag's payload+0 for slot `index`. It is a
+  **per-panel-memory ON/OFF flag** (the display arm selects `" ON  "`/`" OFF "`). Its UI label
+  and bit 0 of the `0x03` mask are still open.
 * **`0x61`, `0x65`, `0x66`** — known to be three of the five 24-byte DSP slots, but which
   effect each drives is not settled (only `0x63`/`0x64` have the reverb/EQ send loops).
-* **`0x44` / `0x45` / `0x46`** — three identical records; that they are a *set of three* is
-  the only structural fact. What the set is, is unknown.
+* ~~**`0x44` / `0x45` / `0x46`** — three identical records; that they are a *set of three* is
+  the only structural fact. What the set is, is unknown.~~
+  ⚠ **IDENTIFIED 2026-08-22: the DRAWBAR registration, one record per keyboard part**
+  (`0x44` RIGHT 1, `0x45` RIGHT 2, `0x46` LEFT). The "set of three" WAS the clue -- three
+  parts. They carry 48 parameter ids at `0x8200/0x8600/0x8A00`; the earlier scan only covered
+  `0x4000..0x4FFF`. See `README-lsw-drawbar-records.md`.
 * **`0x92`, `0x93`, `0x98`, `0x99`, `0x90`, `0x91`** — field shapes and touching routines are
   recorded above; the semantic labels beyond that are inference, marked as such.
 * **The C-family's index space.** The mapping tag→block is proved; the meaning of the *index*

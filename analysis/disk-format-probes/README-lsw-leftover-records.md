@@ -155,11 +155,16 @@ an auto-generated one, and a name is not evidence.
 
 **Tags `0x44` / `0x45` / `0x46`** — NOT identified. What *is* established:
 
-* none of the three carries a parameter-id descriptor, so they are not UI-editable;
+* ~~none of the three carries a parameter-id descriptor, so they are not UI-editable;~~
+  ⚠ **REFUTED 2026-08-22.** All three DO carry parameter-id descriptors -- 48 of them, at
+  `0x8200/0x8600/0x8A00`. This scan only looked at `0x4000..0x4FFF`. They are the DRAWBAR
+  registration and they ARE UI-editable, from the `DRAWBAR SETTING` page. The inference
+  "no descriptor found -> not UI-editable" turned a search limit into a property of the data;
 * their event subscriber lists are identical;
 * in all seven floppies all three are constant across every block and every disk, with `0x44`
-  and `0x45` **byte-identical** (`00 00 00 88 80 80 00 00 00 00`) and `0x46` differing in one
-  bit (`00 00 00 80 80 80 00 00 00 00`);
+  and `0x45` **byte-identical** (`00 00 00 88 80 80 00 00 00 00`) and `0x46` differing at
+  **`+3`** -- LEFT's 16' drawbar, 8 -> 0. (Corrected 2026-08-22: this said "one bit" at a later
+  byte. The differing byte is `+3`, and it is the first of the nine footages.);
 * `FDemoText_SyncPreset_DirectCopy` copies the byte at `0xFC74` (tag `0x61` +0, the DSP-EFFECT
   algorithm) into `0xFC26` (tag `0x44` +0), and `FDemoText_UpdateVoiceDisplay` then compares
   the two and re-posts a tag-`0x61` event when they differ. So **`0x44` +0 is a shadow of the
