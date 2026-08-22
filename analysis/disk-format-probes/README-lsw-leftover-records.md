@@ -157,7 +157,7 @@ an auto-generated one, and a name is not evidence.
 
 * ~~none of the three carries a parameter-id descriptor, so they are not UI-editable;~~
   ⚠ **REFUTED 2026-08-22.** All three DO carry parameter-id descriptors -- 48 of them, at
-  `0x8200/0x8600/0x8A00`. This scan only looked at `0x4000..0x4FFF`. They are the DRAWBAR
+  `0x8200/0x8600/0x8A00`. This scan only looked at `0x4000..0x4FFF (⚠ **WINDOW CORRECTED 2026-08-23**: over the WHOLE id space this yields 456 entries over 44 tags, not 39 over 14. The window was the problem, not the method — and contiguity alone is insufficient, uniqueness is needed too)`. They are the DRAWBAR
   registration and they ARE UI-editable, from the `DRAWBAR SETTING` page. The inference
   "no descriptor found -> not UI-editable" turned a search limit into a property of the data;
 * their event subscriber lists are identical;

@@ -26,9 +26,18 @@ flash -- and is the same shape from offset 3. Full specification:
 
 ## `.TM` -- sound RAM, structure established, fields not
 
-    +0x000  16 B    ASCII magic "KN1500 SOUND RAM"   (note: KN1500, on KN7000-era disks)
+    +0x000  16 B    ASCII magic "KN1500 SOUND RAM"   (see below: NOT an anomaly)
     +0x010  40 x 0x121 B   sound records, 16-char ASCII name at +0x00 of each
     +0x2D38 712 B   tail, NOT filler -- varied content, unidentified
+
+⚠ The `KN1500` magic on a KN7000-era disk was recorded here as an oddity. It is not one. The
+KN5000 carries a LIST of accepted magics at `0xEED53B`, verified by dump:
+
+    KN2000 / MKA / MKB / KN3000 SOUND RAM / KN1500 SOUND RAM / KN5000 SOUND RAM
+
+So the instrument imports several predecessors' sound RAM, and a foreign magic on a disk is
+EXPECTED rather than anomalous. Recorded 2026-08-23; the "note:" that stood here invited the
+next reader to hunt for an explanation that the ROM already gives.
 
 40 records of 289 bytes each, consistent on all seven disks. The names are the same everywhere --
 "Crystal E.P.", "Heavenly E.P", "Folk Dreams", " Fancy Folk", "Syn String 3" -- but **six of the
