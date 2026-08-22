@@ -290,7 +290,19 @@ recognised faster next time.
        gate concentrates risk into exactly what it cannot see.** Byte-identity proves the bytes
        are unchanged; it never proves the interpretation is right, and a disassembly is nothing
        but interpretation. (`scripts/analysis/v7_converted_range_screen.py`)
-14. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+14. **The check that stops answering when the tree moves.** A committed producer satisfies L6
+   only while it can still ask its question. Two happened on 2026-08-22, both quiet:
+     * `convert_v7_ptr_tables.py --name-conflicts` measured 153 mis-located v7 names by
+       cross-checking `.incbin` blobs. Converting those blobs to `.long <symbol>` -- a success --
+       destroyed the evidence: it now reports `0 / 0`, which reads like "no problem" rather than
+       "nothing left to examine". Re-deriving it needs a worktree at the older commit AND a full
+       build of it, because that tree links to different addresses.
+     * `no_label_was_dropped.py` compares HEAD with the working tree. Run on a clean tree it
+       reports `0 files, 0 labels lost` -- a no-op that looks exactly like a pass.
+   **A producer must distinguish "measured, and the answer is zero" from "could not measure".**
+   When a fix removes the conditions its own evidence depended on, record the commit and the
+   command needed to re-derive it, next to the number.
+15. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
    faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
    so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
    the same message a genuinely broken range produces. Rejections concentrated in one bucket
