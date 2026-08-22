@@ -62,7 +62,7 @@ and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table
 
 ## v7 territory, as of 2026-08-22
 
-    CODE      598,615  28.54%      (was 542,379 / 25.86% at the start of the day)
+    CODE      599,336  28.58%      (was 542,379 / 25.86% at the start of the day)
     DATA    1,431,785  68.27%
     PADDING    66,752   3.18%
     TOTAL   2,097,152  = the ROM, to the byte
@@ -72,7 +72,15 @@ from ONE line: the range converter's whole-block re-check tested "no local label
 "no branches", so every range branching to an external symbol was compared against a link-time
 placeholder and refused. Round 1 after the fix gained 18,446 B against 18,412 B predicted by a
 census written before the fix existed -- which is the kind of agreement that makes a fix credible.
-Call targets still awaiting conversion: 1,118 -> 791.
+Call targets still awaiting conversion: 1,118 -> 786, and the closure has now reached a true
+fixpoint (a round gaining 0 bytes), so what remains is NOT waiting on more rounds.
+
+⚠ WHAT THE FIXPOINT IS ACTUALLY BLOCKED ON, stated because "converged" reads like "finished":
+**159 ranges / 12,068 bytes decode to a clean `ret` and re-assemble byte-exactly, and are still
+refused** -- by the REWRITE stage, not by decoding. `range extends past its blocks` stayed at
+exactly 23 through every round of both runs, which by anti-pattern 12 is the signature of a
+bucket that may be unable to accept anything. A further 1,057 B are lost to truncation at
+unspellable instructions. Those two numbers, not the round count, are the remaining work.
 
 ## What the territory map shows
 
