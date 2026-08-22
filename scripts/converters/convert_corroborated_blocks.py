@@ -270,6 +270,29 @@ def translate(text):
             for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16"):
                 yield f"{_mn2}{suf} {_a2}, {_b2.lower()}"
 
+    # REGISTER-INDEXED addressing, `ld A,(XIX+HL)`. The _dri forms take the
+    # addressing bytes as plain immediates, so the register names have to be
+    # translated: base and index each become their entry in the TLCS-900
+    # register-byte table, and 0x07 is the sub-mode. Widths from the ROM:
+    #   ld A,(XIX+HL)    -> ldb_dri a,   0x07, 0xf0, 0xec   c3 07 f0 ec 21
+    #   ld WA,(XIX+HL)   -> ldw_dri wa,  0x07, 0xf0, 0xec   d3 07 f0 ec 20
+    #   ld XIY,(XHL+IY)  -> ldl_dri xiy, 0x07, 0xec, 0xf4   e3 07 ec f4 25
+    # The 32-bit base registers use the byte of their LOW half (XIX -> IXL).
+    _RIDX = {"XIX": 0xF0, "XIY": 0xF4, "XIZ": 0xF8, "XSP": 0xFC,
+             "XWA": 0xE0, "XBC": 0xE4, "XDE": 0xE8, "XHL": 0xEC,
+             "IX": 0xF0, "IY": 0xF4, "IZ": 0xF8, "SP": 0xFC,
+             "WA": 0xE0, "BC": 0xE4, "DE": 0xE8, "HL": 0xEC,
+             "A": 0xE0, "C": 0xE4, "E": 0xE8, "L": 0xEC}
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a5, _b5 = [x.strip() for x in parts0[1].split(",")]
+        _rr = re.match(r'^\(([A-Za-z]{2,3})\+([A-Za-z]{1,3})\)$', _b5)
+        if parts0[0].lower() == "ld" and _rr:
+            _base = _RIDX.get(_rr.group(1).upper())
+            _index = _RIDX.get(_rr.group(2).upper())
+            if _base is not None and _index is not None:
+                for pre in ("ldb_dri", "ldw_dri", "ldl_dri"):
+                    yield f"{pre} {_a5.lower()}, 0x07, 0x{_base:02x}, 0x{_index:02x}"
+
     # SHORT-IMMEDIATE forms. TLCS-900 encodes small immediates in two bytes and
     # this tree spells those `cps`/`lds` (284 and 176 uses in v9). The long form
     # assembles too -- `cp HL,0` gives a 4-byte [0xdb,0xcf,0x00,0x00] where the

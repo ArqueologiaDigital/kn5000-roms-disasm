@@ -123,6 +123,7 @@ def decode_range(rom, terr, start, limit=16384):
 
 
 REFUSED = {}
+TRUNC_LOST = 0
 DIAG = "--diag" in sys.argv
 import collections
 FORMS = None
@@ -337,6 +338,7 @@ def main():
             skipped += 1; skip("no `ret`, and does not end at a code boundary"); continue
         span = sum(n for _, n, _ in insns)
         want = rom[t - BASE: t - BASE + span]
+        full_span = span
         # Choose each spelling by MATCHING BYTES, never by "it assembled".
         # canonical() parenthesises lda sources, which is right for
         # `lda XHL,XDE+0x0a` and WRONG for `lda XSP,XSP+0xf2`: the latter is
@@ -402,6 +404,10 @@ def main():
                 skip("truncation would orphan a branch label")
                 continue
             bad = False
+            # Report how much a truncation COSTS, so the value of chasing more
+            # spellings is measurable rather than assumed.
+            global TRUNC_LOST
+            TRUNC_LOST += full_span - span
             skip("truncated at an unspellable instruction")
         if not br_labels:
             encs = cc.encode_block(texts)
@@ -424,6 +430,9 @@ def main():
         for k, v in FORMS.most_common(14):
             print(f"  {v:5}  {k:26} e.g. {FORM_EX[k]}")
         print()
+    if TRUNC_LOST:
+        print(f"bytes lost to truncation (would be gained by more spellings): "
+              f"{TRUNC_LOST:,}")
     print(f"{skipped} skipped:")
     for r, n in sorted(why.items(), key=lambda kv: -kv[1]):
         print(f"   {n:5}  {r}")
