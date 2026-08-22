@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 39,393
-#   semantic names ........... 35,766 (90.8%)
-#   positional names ......... 3,627
+#   semantic names ........... 35,765 (90.8%)
+#   positional names ......... 3,628
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -31062,7 +31062,7 @@ MainFuncCall_DispatchDSP 00FA4A2F
 MainFuncCall 00FA4A63
 DefMainFunction 00FA4A6A
 ModeProc 00FA4A6D
-NakaWidget_ReturnZero 00FA4AFD
+NakaWidget_ReturnConst_0x1600006 00FA4AFD
 NakaWidget_Return 00FA4B05
 ObjectEnum_Init 00FA4B80
 ObjectEnum_Close 00FA4BA7
@@ -31838,7 +31838,7 @@ PostEvent_AllocSlot 00FA97C0
 GetEvent 00FA97D0
 PostEvent_FillSlot 00FA97F8
 PostEvent_LinkSlot 00FA9825
-PostEvent_ReturnZero 00FA9856
+PostEvent_ReturnOne 00FA9856
 PostEvent_Return 00FA985B
 GetEvent_Prologue 00FA9863
 DeleteEvent 00FA9868
@@ -31883,8 +31883,8 @@ MainGetEvent_ScanLoop 00FA9BFC
 MainGetEvent_ScanMatch 00FA9C02
 MainGetEvent 00FA9C06
 MainGetEvent_ScanDone 00FA9C2D
-MainGetEvent_ReturnZero 00FA9C6A
-MainGetEvent_ReturnZeroAlt 00FA9C6F
+MainGetEvent_ReturnOne 00FA9C6A
+MainGetEvent_ReturnOneAlt 00FA9C6F
 MainGetEvent_Return 00FA9C77
 MainDeleteEvent 00FA9C7B
 MainDeleteEvent_Prologue 00FA9C9B

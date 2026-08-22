@@ -9559,7 +9559,7 @@ ModeProc:
 	cp xiz, 0x1e0000f
 	jr z, NakaWidget_Return
 	cp xiz, 0x1e00000
-	jr z, NakaWidget_ReturnZero
+	jr z, NakaWidget_ReturnConst_0x1600006
 	sub xbc, 0x1e0002b
 	cp xbc, 0x0
 	jrl lt, GetMode_DispatchDSP
@@ -9568,10 +9568,10 @@ ModeProc:
 	add xbc, xbc
 	add xbc, Str_No_0x5F2
 	ld bc, (xbc)
-	lda_24 xix, (NakaWidget_ReturnZero)
+	lda_24 xix, (NakaWidget_ReturnConst_0x1600006)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
-NakaWidget_ReturnZero:
+NakaWidget_ReturnConst_0x1600006:
 	ld xhl, 0x1600006
 	jrl GetMode_Epilogue10
 
@@ -17774,11 +17774,11 @@ PostEvent_LinkSlot:
 	ld xbc, (xde + 8)
 	ld (xwa), xbc
 	cpw (xsp + 4), 0x3ff
-	jr nz, PostEvent_ReturnZero
+	jr nz, PostEvent_ReturnOne
 	stiw_da (0x02ec34), 0x0000
 	jr PostEvent_Return
 
-PostEvent_ReturnZero:
+PostEvent_ReturnOne:
 	incdi16_24 1, (0x02ec34)
 
 PostEvent_Return:
@@ -18262,14 +18262,14 @@ MainGetEvent_ScanDone:
 	ld xbc, (xhl + 8)
 	ld (xwa), xbc
 	cp de, 0xff
-	jr nz, MainGetEvent_ReturnZero
+	jr nz, MainGetEvent_ReturnOne
 	stiw_da (0x02f838), 0x0000
-	jr MainGetEvent_ReturnZeroAlt
+	jr MainGetEvent_ReturnOneAlt
 
-MainGetEvent_ReturnZero:
+MainGetEvent_ReturnOne:
 	incdi16_24 1, (0x02f838)
 
-MainGetEvent_ReturnZeroAlt:
+MainGetEvent_ReturnOneAlt:
 	lds wa, 7
 	call TaskSched_SignalEvent
 	lds hl, 1
