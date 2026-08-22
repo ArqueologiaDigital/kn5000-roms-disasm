@@ -242,6 +242,15 @@ def translate(text):
             _d = int(_m.group(2), 16)
             _sign = f"- 0x{0x100 - _d:02x}" if _d >= 0x80 else f"+ 0x{_d:02x}"
             yield f"{_mn} {_a.lower()}, ({_m.group(1).lower()} {_sign})"
+        # Same rule at SIXTEEN bits. unidasm prints `lda XSP,XSP+0xfeec`, and
+        # 0xfeec as a signed 16-bit value is -0x114:
+        #   lda xsp, (xsp - 0x0114)  ->  [0xf3,0xfd,0xec,0xfe,0x37]
+        _m16 = re.match(r'^([A-Za-z]+)\+0x([0-9a-fA-F]{3,4})$', _b)
+        if _m16:
+            _d16 = int(_m16.group(2), 16)
+            _s16 = (f"- 0x{0x10000 - _d16:04x}" if _d16 >= 0x8000
+                    else f"+ 0x{_d16:04x}")
+            yield f"{_mn} {_a.lower()}, ({_m16.group(1).lower()} {_s16})"
         # 24-bit absolute address operands take the _24 / _da forms this tree
         # already uses (lda_24 appears 1,509 times in v9, ldw_da 477).
         if re.match(r'^0x[0-9a-fA-F]{5,6}$', _b):
@@ -390,6 +399,10 @@ def translate(text):
         mn = parts[0].lower()
         if a.upper() in REG_BYTE and mn in ERPB_OPS:
             yield f"{ERPB_OPS[mn]} 0x{REG_BYTE[a.upper()]:02x}, {b}"
+        # `ld <Qreg>, imm` goes through LDI_ERPB, the load-immediate member of
+        # the same family: ld QIZH,0 -> ldi_erpb 0xfb, 0  [0xc7,0xfb,0x03,0x00]
+        if a.upper() in REG_BYTE and mn == "ld":
+            yield f"ldi_erpb 0x{REG_BYTE[a.upper()]:02x}, {b}"
 
 
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
