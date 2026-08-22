@@ -5,7 +5,7 @@ Companion note to `lsw_leftover_records.py`. Run it with
     python3 analysis/disk-format-probes/lsw_leftover_records.py            # T5 needs /tmp/disk
     python3 analysis/disk-format-probes/lsw_leftover_records.py --lsw-dir <dir>
 
-It exits non-zero if any of the seven tests stops holding, on v7, v9 **and** v10.
+It exits non-zero if any of the eight tests stops holding, on v7, v9 **and** v10.
 The floppies for T5 are recreated with the recipe in `README.md`.
 
 `docs/kn-disk-file-formats.md` closed its panel-schema section with three open items. This
@@ -112,7 +112,7 @@ v142 sub-program and the sub-CPU boot ROM the F1/F2 direct-address census return
 `.. f1 b0 ff`, the tail of `cp XBC,XWA` + `ret NC` inside a busy-wait loop, i.e. not an
 instruction start. The exception is table-data interrupt vector #21 (`0x00FFB7F2`), a handler
 address in the pre-remap map where `0x00FFxxxx` is boot ROM and not panel DRAM. No parameter-id
-descriptor names tag `0x9A` either, while 20 other tags do.
+descriptor names tag `0x9A` either, while 14 other tags do.
 
 **The census could have found one.** Same scan, same run: the neighbouring tags `0x78`, `0x48`
 and `0x80` collect 267 (v7) / 268 (v9, v10) candidates.
@@ -138,8 +138,10 @@ search that cannot see a register-borne tag cannot rule one out.
 
 Its field-descriptor list is the bare terminator — no fields at all. No parameter id names it.
 Its only absolute access is the bulk copy in `BitMapOut_CopyAuxTable_Loop`. Its UI subscriber
-at `0x00FEABD5` is four `ret` bytes, `0E 0E 0E 0E`. Ten bytes the firmware saves, restores and
-never interprets.
+(v7 `0x00FEA406`, v9/v10 `0x00FEABD5`) is four `ret` bytes, `0E 0E 0E 0E`. Ten bytes the
+firmware saves, restores and never interprets. T8 asserts all three, and it locates the
+tag→subscriber table from the `0x9A` handler rather than hardcoding it, so it would fail if
+`0x68` ever acquired a real one.
 
 ---
 
@@ -185,7 +187,9 @@ not adopt one.
 * **The parameter-id descriptor table is the general tool this pass found.** An entry is
   `u32 param-id | u8 tag | u8 offset | u16 mask | u8 max | u8 shift | ...`, and scanning the
   whole image for ids in `0x4000..0x4FFF` whose `(tag, offset)` lands inside the panel schema
-  yields 45 ids over 20 tags with no hand-tuning. It converts "which record is this UI cell?"
+  and whose mask is one contiguous run of bits yields 39 ids over 14 tags with no hand-tuning.
+  The contiguity rule earns its place: without it the scan invents `0x4A00 -> tag 0x68 +5
+  mask 0x46`, and `0x46` is not a field. It converts "which record is this UI cell?"
   into a table lookup, and it is how tag `0x43` and the slot switches fell out.
 * **`f1` is a common byte.** Every spurious hit in the `0x9A` census is `f1` sitting inside
   `cp XBC,XWA` (`e8 f1`) or `cp WA,imm` (`d8 f1`). Always print the preceding byte.

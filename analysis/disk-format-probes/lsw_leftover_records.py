@@ -14,7 +14,7 @@ This probe settles the effect slots outright, identifies 0x43, refutes one half 
 0x9A claim and confirms the other half, and reports the rest as still open.  Every test
 below is stated so that it can come out negative, and each is run against v7, v9 and v10.
 
-THE SEVEN TESTS
+THE EIGHT TESTS
 ---------------
 T1  SLOT -> TAG.  A 5-byte ROM table `61 63 65 66 64 FF` (v7/v9/v10: 0x00EE636C) is read by
     `DSPCfg_WriteAllSlots_Direct` as `lda XBC,0xee636c / add XBC,slot / ld A,(XBC)`, and the
@@ -54,7 +54,9 @@ T5  CORPUS GATE (the falsifiable one).  If byte 0 of a slot record really is the
 
 T6  PARAMETER-ID DESCRIPTORS.  A ROM descriptor is `u32 param-id | u8 tag | u8 offset |
     u16 mask | u8 max | u8 shift | ...`.  Scanning the whole image for ids in 0x4000..0x4FFF
-    whose (tag, offset) is inside the schema yields a small, consistent map.  PASS = the six
+    whose (tag, offset) is inside the schema AND whose mask is one contiguous run of bits
+    yields a small, consistent map.  The contiguity rule matters: without it the scan invents
+    a `0x4A00 -> tag 0x68 +5 mask 0x46` entry, and 0x46 is not a field.  PASS = the six
     entries this probe's conclusions rest on are present and unique:
         0x4002 -> tag 0x60 +1 mask 0x80    0x4140 -> tag 0x43 +0 mask 0x80
         0x4004 -> tag 0x60 +1 mask 0x40    0x4141 -> tag 0x43 +1 mask 0x7F
@@ -63,6 +65,14 @@ T6  PARAMETER-ID DESCRIPTORS.  A ROM descriptor is `u32 param-id | u8 tag | u8 o
         4141 - - 4140 4E00 4E10 4E11 4E12 4E13.
 
 T7  TAG 0x9A.  Four separate checks, see the RESULTS section.
+
+T8  TAG 0x68.  PASS = its schema field-descriptor list is empty, no parameter id names
+    it, and the first entry of its subscriber list is the four bytes `0e 0e 0e 0e`
+    (four `ret`s).  The tag -> subscriber-list table is LOCATED from the 0x9A handler
+    of T7 rather than hardcoded: exactly one u32 in the image equals that handler,
+    exactly one equals the address of that slot, and the base follows.  FAIL if either
+    reference stops being unique -- which is also what would happen if 0x68 acquired a
+    real handler.
 
 WHAT THIS PRODUCED (2026-08-22; v7 / v9 / v10 identical unless stated)
 ---------------------------------------------------------------------
@@ -140,7 +150,7 @@ slot3=0x66 slot4=0x64 -- the order the older note asserted, now with its ROM art
   exception is the same four bytes `.. f1 b0 ff` -- the tail of `cp XBC,XWA` plus `ret NC`
   inside a busy-wait loop, i.e. not an instruction start; the exception is a table-data
   interrupt vector, listed in CENSUS_EXCEPTIONS with its reason.  Nor does any parameter-id
-  descriptor name tag 0x9A, while 20 other tags do (45 ids in all).
+  descriptor name tag 0x9A, while 14 other tags do (39 ids in all).
   THE CENSUS COULD HAVE FOUND ONE.  Positive control, same scan, same run: the tags 0x78,
   0x48 and 0x80 collect 267 (v7) / 268 (v9, v10) candidates.  A search returning 268 hits
   for three neighbouring records and 0 for this one is a search that works.
@@ -329,6 +339,9 @@ def param_descriptors(d, recs):
         mask = struct.unpack_from('<H', d, i + 6)[0]
         if tag not in lens or off >= lens[tag] or not 0 < mask <= 0xFF:
             continue
+        # a real field mask is ONE CONTIGUOUS RUN of bits; anything else is a coincidence
+        if (mask >> ((mask & -mask).bit_length() - 1)) & (mask >> ((mask & -mask).bit_length() - 1)) + 1:
+            continue
         out.setdefault(pid, []).append((tag, off, mask, LOAD + i))
     return out
 
@@ -503,7 +516,36 @@ def run_version(ver, v):
         print('  T7 FAIL: a parameter id now names tag 0x9A')
         ok = False
     elif v:
-        print('      no parameter id names tag 0x9A (20 other tags have one)')
+        print('      no parameter id names tag 0x9A (14 other tags have one)')
+
+    # ---- T8 tag 0x68: declared with no fields, and its subscriber is a `ret`
+    # The tag -> subscriber-list table is located FROM the 0x9A handler, not hardcoded:
+    # exactly one u32 in the ROM equals the handler, exactly one equals that slot's address,
+    # and the table base follows from the tag it must sit at.
+    if hits:
+        h = LOAD + hits[0] - 0x16
+        slots = [LOAD + i for i in find_all(d, struct.pack('<I', h))]
+        outer = [LOAD + i for i in find_all(d, struct.pack('<I', slots[0]))] if len(slots) == 1 else []
+        if len(slots) != 1 or len(outer) != 1:
+            print('  T8 FAIL: the 0x9A handler has %d list refs and %d table refs, expected 1/1'
+                  % (len(slots), len(outer)))
+            ok = False
+        else:
+            tbase = outer[0] - 4 * 0x9A
+            lst = struct.unpack_from('<I', d, tbase - LOAD + 4 * 0x68)[0]
+            first = struct.unpack_from('<I', d, lst - LOAD)[0]
+            body = d[first - LOAD:first - LOAD + 4]
+            if fields.get(0x68) != [] or body != b'\x0e\x0e\x0e\x0e':
+                print('  T8 FAIL: tag 0x68 declares fields %s and its subscriber body is %s'
+                      % (fields.get(0x68), body.hex(' ')))
+                ok = False
+            elif v:
+                print('  T8 subscriber table @%06X (found via the 0x9A handler); tag 0x68 '
+                      'declares NO fields and its subscriber %06X is `0e 0e 0e 0e` = ret x4'
+                      % (tbase, first))
+            if 0x68 in {t for e in pd.values() for t, _, _, _ in e}:
+                print('  T8 FAIL: a parameter id now names tag 0x68')
+                ok = False
     return ok
 
 
