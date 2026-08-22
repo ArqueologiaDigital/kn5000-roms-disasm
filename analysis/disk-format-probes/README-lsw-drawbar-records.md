@@ -206,3 +206,23 @@ demo. Cite `0x00F8476E`, not the label.
   16' drawbar of the LEFT part.
 * The same note's "`0x44/0x45/0x46` … carry no parameter-id descriptor, so they are not
   UI-editable" is **wrong**: they carry 48, and they are edited from the DRAWBAR page.
+
+---
+
+## Provenance note (2026-08-22)
+
+`lsw_drawbar_records.py` and this README were committed in **`116f5a2`**, whose message reads
+"Blog draft: the .LSW retraction and the case-sensitive search behind it". That message describes
+a different piece of work. The files are intact and unmodified; only the commit they rode in on is
+wrong.
+
+Cause, recorded because it will recur with concurrent agents: this probe's author staged its files
+with `git add`, and a parallel session then ran `git commit` **without a pathspec**. `git commit`
+commits the whole INDEX, not just the paths the committer happened to add in the same command, so
+the staged-but-unrelated files were swept in.
+
+The fix when it matters is `git commit -- <paths>`, or checking `git diff --cached --name-only`
+before committing. History was NOT rewritten to repair this: an earlier `--amend` in the same
+session clobbered a concurrent commit, and a wrong subject line is much cheaper than that.
+
+The addendum lives in its own commit, `cb07b94`.
