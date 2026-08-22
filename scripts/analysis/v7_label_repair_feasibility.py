@@ -21,6 +21,24 @@ Three outcomes, and only the first is a repair that can be performed mechanicall
     NO SITE    no source line corresponds to A-0x41A (it falls inside a `.byte`
                run or an `.incbin`, where there is no line boundary to attach to)
 
+⚠ CORRECTION 2026-08-23, and it changes the answer. The first version of this
+script reported "3,462 mechanical moves" while only ever testing whether a LABEL
+owned the target address. That is not feasibility -- an unowned address is not a
+placeable one. Measuring the missing half against the converter's own block
+index:
+
+    targets landing INSIDE a `.byte` run (no line to hold a label)   2,834
+    targets in a code region (a line boundary plausibly exists)        640
+
+So the repair is NOT mostly mechanical today. For 2,834 labels the destination
+is in the middle of an undisassembled byte run, and placing a label there means
+SPLITTING the run -- which is conversion work, not a rename.
+
+⚠ THE USEFUL CONSEQUENCE: this repair gets easier as conversion proceeds. Every
+`.byte` run that becomes instructions turns some of those 2,834 into the 640
+case. The two jobs are coupled, and the label repair should FOLLOW the
+conversion rather than race it.
+
 ⚠ THIS MOVES NOTHING, and the reason matters: relocating a label changes no
 bytes, so `make clean-all && make all` reports 9/9 whether every label lands
 right or every one lands wrong (spec anti-patterns 12 and 13). A repair the

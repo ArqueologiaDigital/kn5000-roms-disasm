@@ -338,14 +338,31 @@ more tractable than the raw count suggests:
       target address free                   3,353
       target held by an ALSO-DISPLACED label  109   frees in the same simultaneous shift
       target held by a STATIC label            12   <- the ONLY genuine conflicts
-    => mechanical moves                     3,462 of 3,474
+    => targets not owned by a static label  3,462 of 3,474
+
+⚠ **THAT LINE READ "mechanical moves" AND WAS WRONG — corrected 2026-08-23.** It measured only
+whether a LABEL already owned the target address. An unowned address is not a placeable one, and
+nothing had tested whether a SOURCE LINE exists there. Against the converter's own block index:
+
+    targets landing INSIDE a `.byte` run (nothing to attach a label to)   2,834
+    targets in a code region (a line boundary plausibly exists)             640
+
+So the repair is NOT mostly mechanical today: for 2,834 of them the destination sits mid-way
+through an undisassembled byte run, and putting a label there means SPLITTING the run, which is
+conversion work rather than renaming. The same failure shape as the rest of this document -- I
+asked a question the data could answer and reported it as the question I cared about.
     correctly placed inside the region          4   must be excluded BY NAME
 
 ⚠ The two-level question is what makes this tractable, and asking only the first level misleads:
 "is the target occupied?" answers 121. "Is it occupied by a label that is ITSELF moving?" answers
 12. A repair plan built on the first number would have looked ten times harder than it is.
 
-So the outstanding work is 3,462 mechanical moves, 12 named decisions (`CharMap_ActivePreamb_
+⚠ USEFUL CONSEQUENCE: the label repair gets EASIER as conversion proceeds -- every `.byte` run
+that becomes instructions moves some of those 2,834 into the 640 case. The two jobs are coupled,
+and the repair should FOLLOW the conversion rather than race it.
+
+So the outstanding work is 640 currently-placeable moves, 2,834 blocked behind conversion,
+12 named decisions (`CharMap_ActivePreamb_
 Prologue` vs `DirectReturn_DoDrainQue`, `MidiSeq_SendMultiByte_CompIface` vs `PreLswLoad`, and ten
 more, all listed by the probe), and 4 labels to leave alone.
 
