@@ -427,6 +427,13 @@ def translate(text):
             "IXL", "IXH", "IYL", "IYH", "IZL", "IZH", "SPL", "SPH")
         if mn == "ld" and _isq(b) and b.upper() in REG_BYTE:
             yield f"ld_erpb_rr {a.lower()}, 0x{REG_BYTE[b.upper()]:02x}"
+        # The mirror: a plain register stored INTO the ERP byte (ld IXL,A), and
+        # cp against a 3-bit immediate (cp QIZH,3). The backend kept having one
+        # direction of each pair.
+        if mn == "ld" and _isq(a) and a.upper() in REG_BYTE:
+            yield f"st_erpb_rr {b.lower()}, 0x{REG_BYTE[a.upper()]:02x}"
+        if mn == "cp" and _isq(a) and a.upper() in REG_BYTE:
+            yield f"cps_erpb 0x{REG_BYTE[a.upper()]:02x}, {b}"
 
 
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
