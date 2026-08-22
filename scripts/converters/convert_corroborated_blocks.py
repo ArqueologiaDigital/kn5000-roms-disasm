@@ -272,6 +272,15 @@ def translate(text):
         _a2, _b2 = [x.strip() for x in parts0[1].split(",")]
         _mn2 = parts0[0].lower()
         _absmem = re.compile(r'^\(0x[0-9a-fA-F]{2,6}\)$')
+        # A REGISTER against an ABSOLUTE address takes the *da8/*da16/*da32
+        # family, with _24 variants for 24-bit addresses (cpda8_24 appears 33
+        # times in v9, cpda16_24 23):
+        #   cp A,(0x8c9b)   -> cpda8 a, (0x8c9b)    [0xc1,0x9b,0x8c,0xf1]
+        #   and A,(0x33e3)  -> andda8 a, (0x33e3)   [0xc1,0xe3,0x33,0xc1]
+        if _absmem.match(_b2):
+            for suf in ("da8", "da16", "da32", "da8_24", "da16_24", "da32_24"):
+                yield f"{_mn2}{suf} {_a2.lower()}, {_b2}"
+
         if _absmem.match(_b2):                      # load from absolute
             # ldb_d8/ldb_da carry the BYTE-register forms:
             #   ld L,(0x0462) -> ldb_d8 l, (0x0462)   [0xc1,0x62,0x04,0x27]

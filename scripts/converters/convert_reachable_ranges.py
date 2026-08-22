@@ -143,6 +143,7 @@ def decode_range(rom, terr, start, limit=16384):
 
 
 REFUSED = {}
+REFUSED_BYTES = {}
 TRUNC_LOST = 0
 DIAG = "--diag" in sys.argv
 import collections
@@ -211,6 +212,7 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
         if lead < 0 or tail < 0:
             REFUSED["range extends past its blocks"] = \
                 REFUSED.get("range extends past its blocks", 0) + 1
+            REFUSED_BYTES["extends past blocks"] = REFUSED_BYTES.get("extends past blocks", 0) + span
             return None
         # The touched blocks must TILE the address range with no gap. lead/span/
         # tail arithmetic assumes byte N+1 of one block is byte 0 of the next,
@@ -263,6 +265,7 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
             if not re.match(r'^\s*\.byte\s', ln) and not re.match(r'^[A-Za-z_][\w]*:', ln):
                 REFUSED["replaced span holds a non-.byte, non-label line"] = \
                     REFUSED.get("replaced span holds a non-.byte, non-label line", 0) + 1
+                REFUSED_BYTES["non-.byte line"] = REFUSED_BYTES.get("non-.byte line", 0) + span
                 return None
         out = []
         # Leading bytes of the first block that precede the range. This was
@@ -507,6 +510,8 @@ def main():
         print(f"rewrote {len(touched_files)} file(s)")
         for r, n in sorted(REFUSED.items(), key=lambda kv: -kv[1]):
             print(f"   refused {n:4}  {r}")
+        for r, n in sorted(REFUSED_BYTES.items(), key=lambda kv: -kv[1]):
+            print(f"   ... {n:,} bytes behind: {r}")
     return 0
 
 
