@@ -270,6 +270,20 @@ def translate(text):
             for suf in ("_d16", "w_d16", "_da", "w_da", "b_d16"):
                 yield f"{_mn2}{suf} {_a2}, {_b2.lower()}"
 
+    # SHORT-IMMEDIATE forms. TLCS-900 encodes small immediates in two bytes and
+    # this tree spells those `cps`/`lds` (284 and 176 uses in v9). The long form
+    # assembles too -- `cp HL,0` gives a 4-byte [0xdb,0xcf,0x00,0x00] where the
+    # ROM has the 2-byte [0xdb,0xd8] -- so only the byte match tells them apart.
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a4, _b4 = [x.strip() for x in parts0[1].split(",")]
+        _mn4 = parts0[0].lower()
+        if _mn4 in ("cp", "ld") and re.match(r'^(0x[0-9a-fA-F]+|\d+)$', _b4):
+            yield f"{'cps' if _mn4 == 'cp' else 'lds'} {_a4.lower()}, {_b4}"
+        # `bit N,(abs)` is bitda in this tree (547 uses in v9):
+        #   bit 0,(0x0dd3) -> bitda 0, (0x0dd3)   [0xf1,0xd3,0x0d,0xc8]
+        if _mn4 == "bit" and re.match(r'^\(0x[0-9a-fA-F]+\)$', _b4):
+            yield f"bitda {_a4}, {_b4}"
+
     # SIZE SUFFIXES. This backend spells operand width with a b/w/l suffix, and
     # the short form is often a different, shorter encoding than the unsuffixed
     # one -- `ldb W, 0x68` is [0x20,0x68] where `ld W, 0x68` is [0xc8,0x03,0x68].
