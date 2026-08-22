@@ -44,7 +44,11 @@ import collections, math, os, pathlib, struct, sys
 REPO = pathlib.Path(__file__).resolve().parent.parent.parent
 DIRS = ('romslices', 'generated')
 # Load bases actually used by this project's ROMs.
-ROM_RANGES = ((0xE00000, 0x1000000), (0x200000, 0x300000), (0x000000, 0x100000))
+# ⚠ CODE-POINTER ranges only. The first version also listed (0x000000, 0x100000),
+# which accepts ANY u32 below 1M -- i.e. every small integer, count, offset and flag
+# in the corpus. That inflated PTR_TABLE from 61 files / 8,440 B to 98 files /
+# 174,097 B, a factor of 20, and I quoted the inflated number before checking it.
+ROM_RANGES = ((0xE00000, 0x1000000), (0x200000, 0x300000))
 
 
 def entropy(b):
@@ -148,7 +152,16 @@ def _resolve(src, tgt):
 
 
 def main():
-    if '--control' in sys.argv:
+    if '--control-shuffle' in sys.argv:
+        import random
+        rnd = random.Random(20260822)          # fixed seed: this must be reproducible
+        items = []
+        for f in blobs():
+            b = bytearray(f.read_bytes())
+            rnd.shuffle(b)
+            items.append((f'shuffled:{f.name}', bytes(b)))
+        label = 'NEGATIVE CONTROL (real blobs, bytes shuffled -- same distribution, no structure)'
+    elif '--control' in sys.argv:
         real = [f.stat().st_size for f in blobs()]
         items = [(f'random-{i}', os.urandom(s)) for i, s in enumerate(real)]
         label = 'NEGATIVE CONTROL (os.urandom, same size distribution)'
