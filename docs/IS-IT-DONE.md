@@ -293,8 +293,24 @@ the v7 ELF) puts it at 0xFD2305. Comparing 16 bytes against the same routine in 
     v7 at 0xFD2305 (file)  1e020aaf0e20f3e1cc0230af0421f3e5    0/16 match
 
 The routine is at 0xFD1EEB; the LABEL in the v7 sources sits 0x41A above it. So the per-link
-regeneration is right and the sources are wrong: 153 v7 names are attached to the wrong code,
-152 of them off by exactly 0x41A, and the whole `FileData_*`/`DataBuf_*` block is affected.
+regeneration is right and the sources are wrong.
+
+⚠ **AND IT IS 21x LARGER THAN 153.** That figure came from a pointer-table cross-check, which
+only ever examined the 1,309 names reachable through those tables. Re-derived from first
+principles over ALL 39,212 names defined in both the v7 and v9 links
+(`scripts/analysis/v7_label_displacement.py`, which scores v9's bytes against v7's ROM at the
+label and then searches nearby):
+
+    labels sitting off their routine : 3,481
+    of those, displaced by -0x41A    : 3,254
+
+Robust to window size -- widening from 24 to 32 bytes RAISES the count, so it is not a threshold
+artefact. Spot-checked independently: `AccMidi_DispatchLoop` scores 0/32 at its label and 30/32
+at label-0x41A. ⚠ Entries with |delta| at 0x800 are clipped at the search bound and their true
+displacement may be larger; the -0x41A cluster sits well inside it and is the credible signal.
+
+A single constant across 3,254 labels is a systematic source defect, not scattered mistakes --
+most likely a region whose labels were placed against another link's addresses.
 
 ⚠ MOVING THEM IS NOT A GATE-SAFE EDIT. Relocating a label changes no bytes, so `make all` will
 report 9/9 either way (spec anti-patterns 12 and 13). Each move needs its own byte evidence, of
