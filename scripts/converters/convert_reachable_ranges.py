@@ -123,6 +123,7 @@ def decode_range(rom, terr, start, limit=16384):
 
 
 REFUSED = {}
+DIAG = "--diag" in sys.argv
 import collections
 FORMS = None
 FORM_EX = {}
@@ -190,6 +191,23 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
             REFUSED["range extends past its blocks"] = \
                 REFUSED.get("range extends past its blocks", 0) + 1
             return None
+        # LEAD IS REFUSED, deliberately, for the second time.
+        #
+        # Re-emitting the bytes of a first block that PRECEDE the range keeps
+        # failing in ways the length invariant cannot see. Restoring it cleared
+        # all 44 length refusals and gated at 103 wrong bytes in 4 runs -- the
+        # totals matched, the content was displaced by a few bytes. Tail-only
+        # has gated clean every time.
+        #
+        # Whatever is wrong is in the ORDER of what gets emitted around the
+        # label of a partly-covered first block, and I have not found it. Two
+        # attempts, two subtle corruptions, so the path stays off until someone
+        # can explain it rather than patch it. Ranges that start mid-block are
+        # simply not converted.
+        if lead:
+            REFUSED["range starts mid-block (lead path disabled)"] = \
+                REFUSED.get("range starts mid-block (lead path disabled)", 0) + 1
+            return None
         # A label inside the lead or tail region cannot be placed between
         # emitted .byte lines, so refuse rather than move or drop it.
         for bk in touched:
@@ -205,7 +223,16 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
                     REFUSED.get("replaced span holds a non-.byte, non-label line", 0) + 1
                 return None
         out = []
-
+        # Leading bytes of the first block that precede the range. This was
+        # MISSING: when partial ranges were re-enabled the tail block was
+        # restored and the lead was not, so every partial range silently
+        # dropped its leading bytes. The length invariant refused all 44 of
+        # them with "would change the byte count", which was exactly true --
+        # the guard was reporting a real defect, not being over-strict.
+        if lead:
+            raw = first[4][:lead]
+            for i in range(0, len(raw), 8):
+                out.append("\t.byte " + ", ".join(f"0x{b:02x}" for b in raw[i:i + 8]))
         for (addr, _n, _x), text in zip(insns, texts):
             if addr in label_at and addr != first[1]:
                 out.append(f"{label_at[addr]}:")
@@ -253,6 +280,12 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
         if before != after:
             REFUSED["rewrite would change the byte count"] = \
                 REFUSED.get("rewrite would change the byte count", 0) + 1
+            if DIAG:
+                blocks_bytes = sum(len(bk[4]) for bk in touched)
+                print(f"   len-refuse 0x{t:06X}: lines hold {before} B, "
+                      f"emitting {after} B (span {span} + lead {lead} + tail {tail}); "
+                      f"touched blocks hold {blocks_bytes} B across "
+                      f"{len(touched)} block(s), lines {first[2]}..{last[3]}")
             return None
         lines[first[2]:last[3] + 1] = out
         open(path, "wb").write("\n".join(lines).encode("latin-1"))
