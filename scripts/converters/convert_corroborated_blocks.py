@@ -411,7 +411,22 @@ def translate(text):
         # `ld <Qreg>, imm` goes through LDI_ERPB, the load-immediate member of
         # the same family: ld QIZH,0 -> ldi_erpb 0xfb, 0  [0xc7,0xfb,0x03,0x00]
         if a.upper() in REG_BYTE and mn == "ld":
+            # THREE different encodings hide behind `ld <Qreg>, ...`:
+            #   ldi_erpb   long immediate   c7 fb 03 0f
+            #   lds_erpb   3-bit immediate  c7 fb a9
+            # and a register move the other way round (below). Adding ldi_erpb
+            # alone did not silence the census because the short form is a
+            # different encoding, not a shorter spelling.
             yield f"ldi_erpb 0x{REG_BYTE[a.upper()]:02x}, {b}"
+            yield f"lds_erpb 0x{REG_BYTE[a.upper()]:02x}, {b}"
+        # `ld C,QIZH` -- destination is a plain register, source is the Q byte.
+        # The source must be a Q-bank or index-half register, NOT a plain one.
+        # REG_BYTE also holds A/C/E/L, so testing "is the destination absent
+        # from the table" excluded `ld C,QIZH` -- C is in it.
+        _isq = lambda r: r.upper().startswith("Q") or r.upper() in (
+            "IXL", "IXH", "IYL", "IYH", "IZL", "IZH", "SPL", "SPH")
+        if mn == "ld" and _isq(b) and b.upper() in REG_BYTE:
+            yield f"ld_erpb_rr {a.lower()}, 0x{REG_BYTE[b.upper()]:02x}"
 
 
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")

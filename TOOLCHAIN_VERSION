@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: f7a3cb91e999
+Commit: cb165c5cdc4b
 Date: 2026-08-22
-Subject: [TLCS900] Add register-indexed LOAD forms (ldb/ldw/ldl_dri)
+Subject: [TLCS900] Add ERP-byte LD short-immediate and LD register forms
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: f7a3cb91e999  [TLCS900] Add register-indexed LOAD forms (ldb/ldw/ldl_dri)
 #   Commit: 6c3c6d755ba2  [TLCS900] Accept `scc` for the encodable SCC forms
 #   Commit: 970c4a75312e  [TLCS900] Accept the real mnemonics for memory-operand forms
 #   Commit: 2a221caa88dd (2a221caa88ddc872bf366c7dd416439d7d6c2ef1)
@@ -70,5 +71,20 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # Encodings were read off the v7 ROM (c3 07 f0 ec 21, d3 07 f0 ec 20,
 # e3 07 ec f4 25). All three take base opcode 0xC3 and let OpSize choose the
 # prefix; writing 0xD3/0xE3 literally yields 0xE3/0x03.
+#
+# Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
+
+# UPDATE 4 (2026-08-22): cb165c5cdc4b adds LDS_ERPB and LD_ERPB_RR, the ERP-byte
+# LD short-immediate (c7 fb a9) and LD register (c7 fb 8b) forms. Both appear in
+# the v7 ROM and neither had a mnemonic.
+#
+# ⚠ The 3-bit immediate is a DIFFERENT ENCODING from LDI_ERPB's long immediate
+# (c7 fb 03 0f), not a shorter spelling of it. Adding ldi_erpb first did not
+# silence the census, and the two look interchangeable from the mnemonic alone.
+#
+# Running tally for this session: THREE genuinely missing forms added
+# (ldb/ldw/ldl_dri, LDS_ERPB, LD_ERPB_RR) against FOUR claims of "the backend
+# cannot do this" that were spellings I had not tried. Try to assemble one line
+# before reporting a gap.
 #
 # Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
