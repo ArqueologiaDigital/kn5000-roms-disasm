@@ -101,6 +101,8 @@ USAGE
     python3 analysis/disk-format-probes/lsw_formats_1_and_3.py /tmp/disk/*/
     python3 analysis/disk-format-probes/lsw_formats_1_and_3.py --quiet /tmp/disk/*/
     python3 analysis/disk-format-probes/lsw_formats_1_and_3.py --layout        # print the maps
+    python3 analysis/disk-format-probes/lsw_formats_1_and_3.py --gaps /tmp/disk/*/
+                                        # the measurements quoted for the two unread gaps
 
 Recreate the corpus with:
     mkdir -p /tmp/disk && cd /tmp/disk
@@ -558,7 +560,7 @@ def rom_side(rev, verbose):
 
 
 # ------------------------------------------------------------ the file side --
-def file_side(paths, verbose):
+def file_side(paths, verbose, gaps=False):
     blobs = {}
     for p in paths:
         with open(p, 'rb') as f:
@@ -631,6 +633,20 @@ def file_side(paths, verbose):
     check(bool(hits), 'F5: no user slot in the corpus equals its default counterpart, so '
                       'blocks 10..19 are only known to be CONSTANT, not to be the DEFAULTS')
 
+    if gaps:
+        for label, (a, n) in (('0x30 @ 0x4E80', GAP30), ('0xC0 @ 0x53C0', GAPC0)):
+            blobs_ = [blobs[p][a:a + n] for p in names]
+            const = [i for i in range(n) if len({b[i] for b in blobs_}) == 1]
+            print('  %s: %d distinct blob(s) over %d files; %d/%d byte offsets constant'
+                  % (label, len({bytes(b) for b in blobs_}), len(names), len(const), n))
+            if len(const) <= 32:
+                print('    constant offsets: %s'
+                      % ' '.join('+%02X=%02X' % (i, blobs_[0][i]) for i in const))
+            else:
+                print('    (every byte constant)')
+            for p, b in zip(names, blobs_):
+                print('    %-14s %s' % (os.path.basename(p), b[:24].hex(' ')))
+
     if verbose:
         print('  %d file(s); slot blocks constant across all of them: %s'
               % (len(names), [i for i in range(NSLOTS)
@@ -672,6 +688,7 @@ KN5000 PANEL MEMORY (derived here, not previously written down)
 def main(argv):
     quiet = '--quiet' in argv
     layout = '--layout' in argv
+    gaps = '--gaps' in argv
     args = [a for a in argv if not a.startswith('--')]
     paths = []
     for a in args:
@@ -691,7 +708,7 @@ def main(argv):
     if paths:
         if not quiet:
             print('File side (%d .LSW):' % len(paths))
-        file_side(paths, not quiet)
+        file_side(paths, not quiet, gaps)
     elif not quiet:
         print('File side: no .LSW given, skipped (F1..F8 not run)')
 

@@ -154,7 +154,9 @@ Two facts that constrain the answer and are worth writing down:
   (`FD52D6` / v7 `FD4B05`) classifies a buffer on bytes `[5]`,`[6]`: `1,6`→1, `1,7`→2, `1,3`→3.
   The floppies' `.SQF` opens `5A 5A 5A 5A 01 01 07` → **format 2**, agreeing with their `.LSW`'s
   `"M6"`. So "format 1/2/3" is a *disk generation*, not a per-file-type quirk.
-* the `.TM` on these same disks carries `KN1500 SOUND RAM`, and a raw byte search of
+* the `.TM` on these same disks carries `KN1500 SOUND RAM`, and a raw byte search
+  (`python3 -c 'd=open(F,"rb").read(); print([d.find(x) for x in (b"M60",b"M40",b"LKE",
+  bytes.fromhex("5a5a01004d36300a"),b"HK")])'`) of
   `~/compartilhado/kn7000_scratchpad_snapshot/kn7000_program.rom` and `kn7000_table.rom`
   (4,157,185 and 4,101,332 bytes) finds **no** `"M60"`, `"M40"`, `"LKE"` and no
   `5A 5A 01 00 4D 36 30 0A` — while `"HK"` occurs in both. ⚠ Those two images are the working
@@ -232,7 +234,8 @@ because an all-empty structure looks periodic at every divisor of its length.
 ```
 
 Constant on all seven: `+0x08`=`02`, `+0x0A`,`+0x0B`=`00`, `+0x10`,`+0x11`=`03 80`,
-`+0x14`,`+0x15`=`00`, `+0x23`=`00`. Two of the seven (`07MAME__`, `02BOSSA_`) look empty —
+`+0x14`,`+0x15`=`00`, `+0x23`=`00`. (Reproduce the whole table, both gaps, with
+`lsw_formats_1_and_3.py --gaps /tmp/disk/*/`.) Two of the seven (`07MAME__`, `02BOSSA_`) look empty —
 `FF FF` / `00 00` where the others hold data — which is why the byte alphabet alone does not
 pin a record size.
 
