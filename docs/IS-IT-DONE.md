@@ -164,10 +164,16 @@ nothing more is gained. It now stops immediately, and the reason matters:
 | unspellable instruction (truncates the range) | -- | **6,754 bytes** lost, the measured ceiling for more spelling work |
 
 The lead path -- re-emitting the bytes of a partly-covered first block around the instructions --
-was tried twice and produced silent corruption both times: content displaced a few bytes with the
+was tried THREE times and produced silent corruption every time (103, then 183 wrong bytes): content displaced a few bytes with the
 totals intact, so the length invariant saw nothing and the gate reported 103 wrong bytes only after
-a full rebuild. It stays off until someone can explain the ordering rather than patch it. **That is
-now the single biggest lever on this lane**, worth more than every remaining spelling combined.
+a full rebuild. It stays off. **It is the single biggest lever on this lane**, worth more than every remaining
+spelling combined, and `scripts/analysis/lead_path_repro.py` is the harness for whoever takes it:
+it rebuilds `lead + instructions + tail` in memory and compares against the block's real bytes, so
+a round trip that costs minutes as a build costs seconds. It has already found one real defect --
+the touched blocks are assumed to TILE the address range and 2 of 114 multi-block cases do not,
+because bytes inside the span belong to a block whose label has no ELF address. Fixing that alone
+still leaves 183 wrong bytes, so at least one more defect is in there. Single-block cases
+reconstruct exactly; the fault is in the multi-block case.
 
 **Nothing further has been converted yet, deliberately.** Proving 13 blocks round-trip is not the same as
 emitting them well: the decoded text carries raw numeric branch targets (`call 0xfd814f`), and

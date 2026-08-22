@@ -192,7 +192,25 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
             REFUSED["range extends past its blocks"] = \
                 REFUSED.get("range extends past its blocks", 0) + 1
             return None
-        # LEAD IS REFUSED, deliberately, for the second time.
+        # The touched blocks must TILE the address range with no gap. lead/span/
+        # tail arithmetic assumes byte N+1 of one block is byte 0 of the next,
+        # and that is not always true -- bytes inside the span can belong to a
+        # block source_index() filtered out (its label has no ELF address), so
+        # `lead + span + tail` over-counts what the replaced LINES actually hold.
+        # Measured: 2 of 114 multi-block lead cases, over-counting by 2 and 4
+        # bytes. This is the defect the two earlier attempts kept tripping over.
+        for _i in range(len(touched) - 1):
+            if touched[_i][1] + len(touched[_i][4]) != touched[_i + 1][1]:
+                REFUSED["touched blocks do not tile contiguously"] = \
+                    REFUSED.get("touched blocks do not tile contiguously", 0) + 1
+                return None
+
+        if lead:
+            REFUSED["range starts mid-block (lead path disabled)"] = \
+                REFUSED.get("range starts mid-block (lead path disabled)", 0) + 1
+            return None
+
+        # LEAD IS REFUSED, deliberately, for the THIRD time.
         #
         # Re-emitting the bytes of a first block that PRECEDE the range keeps
         # failing in ways the length invariant cannot see. Restoring it cleared
@@ -205,10 +223,7 @@ def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
         # attempts, two subtle corruptions, so the path stays off until someone
         # can explain it rather than patch it. Ranges that start mid-block are
         # simply not converted.
-        if lead:
-            REFUSED["range starts mid-block (lead path disabled)"] = \
-                REFUSED.get("range starts mid-block (lead path disabled)", 0) + 1
-            return None
+
         # A label inside the lead or tail region cannot be placed between
         # emitted .byte lines, so refuse rather than move or drop it.
         for bk in touched:
