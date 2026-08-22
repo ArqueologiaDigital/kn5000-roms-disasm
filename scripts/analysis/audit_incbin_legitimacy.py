@@ -29,6 +29,7 @@ TWO METHODOLOGY TRAPS, both hit while writing this, both worth keeping:
 
     python3 scripts/analysis/audit_incbin_legitimacy.py
 """
+import os
 import pathlib
 import re
 import sys
@@ -75,6 +76,76 @@ def main():
             print(f"    {f}: {p}")
         sys.exit(1)
     print("\nEvery include falls in a justified category: 0 illegitimate blob bytes.")
+
+    # ------------------------------------------------------------------
+    # ⚠ THE CATEGORY TEST ABOVE CANNOT FAIL FOR MOST INCLUDES, so on its own it
+    # is bookkeeping, not a measurement. `generated/` and `romslices/` justify
+    # 741 of 824 directives by the DIRECTORY THE FILE SITS IN. Nothing about the
+    # bytes is examined, and §3's own second clause -- "with its format
+    # documented" -- was never tested at all.
+    #
+    # That blindness was real and cost real bytes: 61 blobs holding 8,440 B of
+    # ROM ADDRESSES sat inside the passing category until a separate tool went
+    # looking. `.long <symbol>` is strictly the better form for those, and it
+    # exposes the call graph as a side effect.
+    #
+    # So the audit now runs the structure triage and FAILS on any blob still
+    # carrying pointer-table structure. Only PTR_TABLE is enforced, because it
+    # is the only class that survives the byte-shuffle control -- WORD_TABLE,
+    # SPARSE and TEXT are byte-frequency artefacts and would be false alarms.
+    # See scripts/analysis/l3_slice_structure_triage.py.
+    # ------------------------------------------------------------------
+    import importlib.util
+    tri = os.path.join(REPO, "scripts", "analysis", "l3_slice_structure_triage.py")
+    spec = importlib.util.spec_from_file_location("_triage", tri)
+    mod = importlib.util.module_from_spec(spec)
+    saved, sys.argv = sys.argv, [tri]
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        sys.argv = saved
+
+    # These are PROVEN not to be pointer tables and are allowed to keep scoring
+    # as one; each needs its reason, so the exemption cannot be used as a dump.
+    KNOWN_NOT_TABLES = {
+        "sound_data_organ_accordion.bin":
+            "16-bit drawbar table: u16 pairs 0x00f0,0x00f0 read as u32 0x00f000f0, "
+            "which lands in ROM range by coincidence. Also compiler output from a committed .c.",
+        "v7_transplant_FlashWrite_BlockRef_Type3.bin":
+            "5 words, only 2 exact symbol hits -- not significant against symbol density.",
+        "v7_transplant_FlashWrite_BlockRef_Type4.bin":
+            "5 words, only 2 exact symbol hits -- not significant against symbol density.",
+    }
+    offenders = []
+    for f in mod.blobs():
+        k, why = mod.classify(f.read_bytes())
+        if k != "PTR_TABLE":
+            continue
+        if os.path.basename(str(f)) in KNOWN_NOT_TABLES:
+            continue
+        offenders.append((f, why))
+
+    print(f"\nstructure check: {len(offenders)} blob(s) still hold pointer-table structure")
+    if offenders:
+        print("*** these have a BETTER FORM available (`.long <symbol>`) and are NOT justified")
+        print("*** convert with scripts/converters/convert_v7_ptr_tables.py --apply")
+        for f, why in sorted(offenders, key=lambda r: str(r[0])):
+            print(f"    {f}   [{why}]")
+        sys.exit(1)
+    print("and none of them carries a structure a better format would expose.")
+    # PROOF THAT THIS CHECK CAN FAIL (2026-08-22), because a passing check whose
+    # failure has never been observed is worth nothing -- that is the whole
+    # lesson of this file. Run the audit against the tree as it stood BEFORE the
+    # pointer tables were converted:
+    #
+    #     git worktree add --detach /tmp/wt 056a9a1^
+    #     cp scripts/analysis/audit_incbin_legitimacy.py \
+    #        scripts/analysis/l3_slice_structure_triage.py /tmp/wt/scripts/analysis/
+    #     cd /tmp/wt && python3 scripts/analysis/audit_incbin_legitimacy.py; echo $?
+    #
+    # It EXITS 1 and names the offenders (UIState_HandlerTable_*, Naka_*_Table,
+    # VoiceParam_ModeDispatch_Table, ...). The category test above passes on that
+    # same tree, which is exactly the blindness this section was added to remove.
 
 
 if __name__ == '__main__':
