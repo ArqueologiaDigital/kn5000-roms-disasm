@@ -56,7 +56,7 @@ which the mode audit flagged as a name/behaviour contradiction -- but it then ca
 write-mode open is an unexplained oddity recorded in a comment at the call site. **Zero confirmed
 misnomers**, which is not the same as none: an unknown number of plausible-but-wrong names remain
 and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
-| **L3** field meanings | **PARTIAL** (container now firmware-proven; per-field types/ranges readable from ROM) | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
+| **L3** field meanings | **PARTIAL** (container firmware-proven; types/ranges from ROM; five field groups attributed to the routines that write them) | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
 | **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. Panel-side behaviour is not, and cannot be. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
 

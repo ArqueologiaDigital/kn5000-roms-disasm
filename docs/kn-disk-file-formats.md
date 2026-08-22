@@ -373,6 +373,32 @@ sequence: **37/37 tags aligned in order on every block of all seven disks, no pe
 lengths differ systematically -- all 24 sound records 24->22, tag 60 4->12, tag 61/63 24->30, tag 71
 2->4, tag 80 14->10 -- which is what a format revision looks like, not a different format.
 
+### Individual FIELDS attributed, from the firmware that writes them
+
+`analysis/disk-format-probes/lsw_field_evidence.py` goes one level further and asks what byte N of
+the record with tag T means. Two independent sources: every absolute access landing in
+`0x00F9A0..0x00FFC0` mapped through the ROM schema onto (tag, offset) with its enclosing routine,
+and the event protocol `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`.
+
+That addressing rule is stated falsifiably and holds: **20 of 21 cross-checkable sites agree**; the
+one exception is reported rather than smoothed over, and two more are skipped because their
+neighbourhood is still `.byte`.
+
+What the writers say the fields are -- the ROUTINE is proven, the human reading is [INFERENCE]:
+
+| offset | routine that writes it | reading |
+|---|---|---|
+| +0 | `SeMenu_InitTrackInfo`, `EffectMode_CopyVoiceParams`, `BitMapOut_RestoreVoiceChannels` | the voice/tone selector -- and the ROM schema gives this field min=0 max=167 default=21, i.e. a 168-option selector, which agrees |
+| +4 | `EffectMode_UpdateBitFlags` | effect bit flags |
+| +13 | `AccPlay_RestoreMuteStates` | the part's mute byte |
+| +14, +15 | `BitMapOut_ApplyIOChange_Port<N>` | I/O routing |
+| +17 | `BitMapOut_ApplyIOChange_Port<N+3>` | second I/O routing |
+
+**The strongest structural result is in that port number.** It TRACKS THE TAG: tag 00 writes Port0,
+tag 01 Port1, tag 02 Port2 at +14/+15, and Port3/4/5 at +17. Twenty-four records each owning a port
+pair is what a per-PART table looks like, which settles what the 24 slots are -- not 24 saved
+setups, but the 24 parts of one setup.
+
 So: the 24 slots are 24 instances of the panel record set; the container is proven from firmware
 rather than inferred from shape; and per-field TYPES AND RANGES are readable out of the ROM without
 any hardware. What is still open is the human meaning of each field -- a field with min=0 max=167
