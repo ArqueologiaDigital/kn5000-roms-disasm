@@ -57,7 +57,7 @@ write-mode open is an unexplained oddity recorded in a comment at the call site.
 misnomers**, which is not the same as none: an unknown number of plausible-but-wrong names remain
 and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
 | **L3** field meanings | **PARTIAL** (container firmware-proven; types/ranges from ROM; five field groups attributed to the routines that write them) | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
-| **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. Panel-side behaviour is not, and cannot be. |
+| **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. ~~Panel-side behaviour is not, and cannot be.~~ **RETRACTED** -- most of it IS derivable, see `docs/kn5000-control-panel-panel-side.md`; four things genuinely need hardware. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
 
 ## What the territory map shows
@@ -228,6 +228,26 @@ restates an address (`_0xHEX`, a bare hex tail, `LABEL_*`); everything else scor
 the latter. This session found `FileIO_ReadHeader` actually builds a file path and never reads a
 header -- it counts as semantic either way. Wrong-but-plausible names are invisible to this measure,
 and there is no reason to think that one is the only one.
+
+## L5: "cannot be" was wrong
+
+I scored the panel side as unspecifiable without a logic analyser. That was a claim, not a
+measurement, and it did not survive being tested.
+
+The bootloader's CP-serial driver and the runtime CPanel stack are **ONE implementation at two link
+addresses**. Verified here independently of the probe: the status field sits at `base+11` and the
+previous-state field at `base+32` in both, with base 0x8DAE in v7 and 0x8E4A in v9/v10 (0x1022 in
+the bootloader). Same 15 command frames, same dispatch tables.
+
+Two consequences beyond the protocol itself, both name corrections: `Boot_ClassifyDeviceID` is not
+a device probe, it is `CPanel_CheckSpecialCombos`; and the boot driver's "XOR-scramble buffer" is
+the button-state array.
+
+`docs/kn5000-control-panel-panel-side.md` now specifies clock mastership, line arbitration, framing
+-- including a `(first & 0x3f) >= 0x30` guard the older document omits -- the full 256-value
+first-byte message space, and the acceptance test behind every command. It also names the four
+things that genuinely need hardware, which is a sharper statement than the one it replaces.
+`analysis/cpanel-protocol-probes/` reads only the ROMs and its gate exits non-zero.
 
 ## The three things that are not done, and where they live
 
