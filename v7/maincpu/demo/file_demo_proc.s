@@ -2565,6 +2565,13 @@ LoadSMF_Return:
 	inc 8, xsp
 	ret
 
+; WARNING: opens with mode "wb" (Resource_Region3_Start_0x44 -> 0xEA0244,
+; verified), i.e. for WRITING, and then calls SMF_LoadSoundBankAndPlay, which
+; genuinely loads a sound bank and plays it. The name says Load, the mode says
+; write. Flagged by scripts/analysis/l2_name_vs_fopen_mode.py; inspection says
+; the NAME IS APT -- the function's purpose is loading -- and the "wb" open is
+; an unexplained oddity, not proof of a misnomer. What the freshly created file
+; is for is not established. Do not "fix" the name on the strength of the mode.
 LoadFileVariant:
 	dec 8, xsp
 	pushw iz

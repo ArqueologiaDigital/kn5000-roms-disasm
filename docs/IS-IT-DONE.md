@@ -26,9 +26,14 @@ session was misleading. Broken down by `l2_positional_breakdown.py`:
 | **no meaning in the stem** | **0** | -- |
 
 Nothing is unnamed. So what remains for L2 is **aptness, not coverage**: is a name RIGHT? No script
-can answer that, and this session found one that is not -- `LoadFileVariant` opens `"wb"`. The
-honest position is that naming is done as far as it can be mechanically verified, and an unknown
-number of plausible-but-wrong names remain, of which exactly one is confirmed; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
+can answer that.
+
+The one candidate this session produced did NOT survive inspection. `LoadFileVariant` opens `"wb"`,
+which the mode audit flagged as a name/behaviour contradiction -- but it then calls
+`SMF_LoadSoundBankAndPlay`, which genuinely loads a bank and plays it, so the name is apt and the
+write-mode open is an unexplained oddity recorded in a comment at the call site. **Zero confirmed
+misnomers**, which is not the same as none: an unknown number of plausible-but-wrong names remain
+and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
 | **L3** field meanings | **PARTIAL** | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
 | **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. Panel-side behaviour is not, and cannot be. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
