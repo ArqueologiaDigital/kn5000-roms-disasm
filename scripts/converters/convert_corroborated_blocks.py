@@ -341,6 +341,29 @@ def translate(text):
                 for pre in ("ldb_dri", "ldw_dri", "ldl_dri"):
                     yield f"{pre} {_a5.lower()}, 0x07, 0x{_base:02x}, 0x{_index:02x}"
 
+    # `ld <REG>,<N>` with N in 0..7 is the TLCS-900 THREE-BIT short immediate,
+    # and it wears three different mnemonics depending on the prefix byte:
+    #     2 bytes, prefix 0xC8..0xCF -> lds8  <r8>,  N
+    #     2 bytes, prefix 0xD8..0xDF -> lds   <r16>, N
+    #     2 bytes, prefix 0xE8..0xEF -> lds32 <r32>, N
+    #     3 bytes, prefix 0xD7       -> ld    <qreg>, N   (plain `ld` is CORRECT
+    #                                  here, the opposite of the 2-byte cases)
+    #     3 bytes, prefix 0xC7       -> lds_erpb 0x<regbyte>, N
+    # Offering all of them is safe because the byte comparison chooses. Verified
+    # across the whole v7 image by tools/spelling-probes/verify_ld_r_N_full.py:
+    # 12,089 sites, 12,088 byte-exact.
+    #
+    # ⚠ GUARD: N must be 0..7. `lds32 xhl, 8` assembles WITHOUT ERROR and
+    # silently wraps to imm3=0, emitting `ld XHL,0`'s bytes for `ld XHL,8`.
+    if len(parts0) == 2 and parts0[1].count(",") == 1:
+        _a7, _b7 = [x.strip() for x in parts0[1].split(",")]
+        if parts0[0].lower() == "ld" and re.match(r'^(0x[0-7]|[0-7])$', _b7):
+            for _pre in ("lds8", "lds", "lds32"):
+                yield f"{_pre} {_a7.lower()}, {_b7}"
+            yield f"ld {_a7.lower()}, {_b7}"
+            if _a7.upper() in REG_BYTE:
+                yield f"lds_erpb 0x{REG_BYTE[_a7.upper()]:02x}, {_b7}"
+
     # SHORT-IMMEDIATE forms. TLCS-900 encodes small immediates in two bytes and
     # this tree spells those `cps`/`lds` (284 and 176 uses in v9). The long form
     # assembles too -- `cp HL,0` gives a 4-byte [0xdb,0xcf,0x00,0x00] where the
