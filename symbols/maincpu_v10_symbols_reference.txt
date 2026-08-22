@@ -5,22 +5,6 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-# =====================================================
-# ⚠ THIS FILE IS v10 ONLY. It is byte-identical to
-#   maincpu_v10_symbols_reference.txt.
-#
-#   Measured 2026-08-22: it agrees with the v10 ELF at
-#   100.00% and with the v7 ELF at 25.96%. Using it for a
-#   v7 or v9 ADDRESS returns a wrong answer that looks
-#   right -- the bytes at that address do not match the
-#   ROM. 153 v7 names also resolve to the wrong routine,
-#   152 of them off by exactly 0x41A, so RENAMING v7
-#   labels from this file would move code silently.
-#
-#   For v7 use maincpu_v7_symbols_reference.txt
-#   For v9  use maincpu_v9_symbols_reference.txt
-# =====================================================
-#
 #   symbols .................. 39,393
 #   semantic names ........... 35,765 (90.8%)
 #   positional names ......... 3,628

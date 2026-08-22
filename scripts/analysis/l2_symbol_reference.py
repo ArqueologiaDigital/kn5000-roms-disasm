@@ -33,7 +33,27 @@ import os, re, subprocess, sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
 
+# ⚠ "maincpu" IS THREE DIFFERENT LINKS. v7, v9 and v10 are separate programs at
+# separate addresses, and for years this table mapped the single name "maincpu"
+# to the v10 ELF alone. The resulting symbols/maincpu_symbols_reference.txt
+# agrees with the v10 ELF 39,393/39,393 = 100.00% and with the v7 ELF
+# 10,181/39,212 = 25.96% -- and the --check below reported the 100% figure,
+# because it compares each file to the ELF it was generated from. "Agrees with
+# its build" and "answers the question being asked" are different properties.
+#
+# What it cost: v7 address lookups that silently returned v10 addresses (the
+# bytes at them do not match the ROM), and 153 v7 names that resolve to the
+# wrong routine, 152 of them off by exactly 0x41A. Renaming v7 labels from that
+# file would have moved code. See docs/IS-IT-DONE.md, "L2's reference file
+# describes ONE revision and is consulted for THREE".
 PAIRS = {
+    "maincpu_v7":  "kn5000_v7_program.llvm.elf",
+    "maincpu_v9":  "kn5000_v9_program.llvm.elf",
+    "maincpu_v10": "kn5000_v10_program.llvm.elf",
+    # Kept so existing consumers keep working, and so --check keeps measuring it.
+    # It is IDENTICAL to maincpu_v10. Anything asking a v7 or v9 question must
+    # use the per-link file above; this name cannot tell you which link it means,
+    # which is precisely the defect.
     "maincpu":     "kn5000_v10_program.llvm.elf",
     "subcpu":      "kn5000_subprogram_v142.llvm.elf",
     "subcpu_boot": "kn5000_subcpu_boot.llvm.elf",
@@ -72,6 +92,25 @@ def write_ref(tag, syms):
         fh.write(f"# GENERATED from rebuilt_ROMs/{PAIRS[tag]} by\n")
         fh.write("# scripts/analysis/l2_symbol_reference.py --regen\n")
         fh.write("# Do not hand-edit: rename in the sources and regenerate.\n#\n")
+        # The header is where a reader looks, so the revision warning goes HERE
+        # and not only in the generator. The un-suffixed `maincpu` file cannot
+        # say which link it means, and that ambiguity is the whole defect.
+        if tag == "maincpu":
+            fh.write("# =====================================================\n")
+            fh.write("# ⚠ THIS FILE IS v10 ONLY. It is byte-identical to\n")
+            fh.write("#   maincpu_v10_symbols_reference.txt.\n")
+            fh.write("#\n")
+            fh.write("#   Measured 2026-08-22: it agrees with the v10 ELF at\n")
+            fh.write("#   100.00% and with the v7 ELF at 25.96%. Using it for a\n")
+            fh.write("#   v7 or v9 ADDRESS returns a wrong answer that looks\n")
+            fh.write("#   right -- the bytes at that address do not match the\n")
+            fh.write("#   ROM. 153 v7 names also resolve to the wrong routine,\n")
+            fh.write("#   152 of them off by exactly 0x41A, so RENAMING v7\n")
+            fh.write("#   labels from this file would move code silently.\n")
+            fh.write("#\n")
+            fh.write("#   For v7 use maincpu_v7_symbols_reference.txt\n")
+            fh.write("#   For v9  use maincpu_v9_symbols_reference.txt\n")
+            fh.write("# =====================================================\n#\n")
         fh.write(f"#   symbols .................. {len(syms):,}\n")
         fh.write(f"#   semantic names ........... {sem:,} ({100.0*sem/max(len(syms),1):.1f}%)\n")
         fh.write(f"#   positional names ......... {len(syms)-sem:,}\n#\n")

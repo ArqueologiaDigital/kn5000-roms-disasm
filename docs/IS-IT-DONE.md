@@ -15,7 +15,7 @@ stood for months were wrong, and are corrected in the history rather than quietl
 | **§3** binary includes justified | **PASS** (restored on a check that can fail) | `audit_incbin_legitimacy.py` no longer stops at the path-prefix categories. It runs the structure triage and exits non-zero on any blob still holding pointer-table structure, enforcing PTR_TABLE only -- the one class that survives the byte-shuffle control. **Proven able to fail:** against the pre-conversion tree (`056a9a1^`, in a worktree) it exits 1 and names `UIState_HandlerTable_*`, `Naka_*_Table` and the rest, while the old category test passes on that same tree. 8,084 B were converted to `.long <symbol>`; three blobs are exempted BY NAME, each with the reason it scores as a table without being one. |
 | **L4** assets round-trip | **PASS** | seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT. |
 | **L1** every byte classified | **PASS** | `l1_territory_map.py v7 v9 v10` -- flattens each source tree through llvm-mc and assigns every byte to CODE/DATA/PADDING; all three totals equal their rebuilt ROM to the byte. ASSET is folded into DATA here (llvm-mc expands `.incbin`); its separate justification is the §3 row. |
-| **L2** semantic names | ⚠ **DEMOTED — the reference is v10-ONLY** | `l2_symbol_reference.py` maps `maincpu` to ONE file built from ONE ELF, `kn5000_v10_program.llvm.elf`, and there is no v7 or v9 equivalent. Measured 2026-08-22: the reference agrees with the **v10** ELF 39,393/39,393 = **100.00%**, and with the **v7** ELF 10,181/39,212 = **25.96%**. So the documented "regenerates FROM the build and matches it 100%" is true of v10 and FALSE of the tree this project spent the day converting. Example: `UIState_ProcessDisplayUpdate` is 0xFD0452 in the reference and in v10, and 0xFD009B in v7. Naming coverage and the two aptness classes are unaffected; what is void is any v7/v9 ADDRESS taken from this file. |
+| **L2** semantic names | **PARTIAL** — revision defect FIXED, aptness still open | The v10-only reference is repaired: `l2_symbol_reference.py` now emits `maincpu_v7`/`maincpu_v9`/`maincpu_v10` references, each checked against ITS OWN ELF at 100.0%, and the un-suffixed file carries a header saying it is v10 and must not be used for v7/v9 addresses or renames. Verified against the ROM, not just the ELF: `free_X`, `Boot_ReadFDCStatus`, `EmptyRoutine_03` and `Voice_InitBankTables_SlotLoop` all have blobs matching the ROM at the v7 file's addresses and at NONE of the shared file's — and those addresses equal the ones independently found this morning by searching the ROM for the bytes. STILL OPEN: name aptness for names that declare nothing checkable, and the 153 v7 names known to sit on the wrong routine. |
 session was misleading. Broken down by `l2_positional_breakdown.py`:
 
 | | count | assessment |
@@ -246,8 +246,15 @@ routine**, 152 of them off by exactly 1050 (0x41A), across `SndParam_*`, `MidiPk
 the pointer table's target (~1.00 vs ~0.01). Anything that renamed v7 routines from this file
 would have moved code silently.
 
-FIX REQUIRED: one reference file per link (`maincpu_v7`, `maincpu_v9`, `maincpu_v10`), or a
-revision column, plus a check that refuses to answer a v7 query from a v10 table.
+FIXED 2026-08-22: `PAIRS` now maps `maincpu_v7`/`maincpu_v9`/`maincpu_v10` to their own ELFs and
+`--check` measures each against the build it came from (all 100.0%). The un-suffixed `maincpu`
+file is kept so the ~20 existing consumers keep working, is byte-identical to `maincpu_v10`, and
+now opens with a header stating the 100.00%/25.96% split and that renaming v7 labels from it would
+move code.
+
+⚠ STILL TO DO: the consumers themselves. `scripts/renaming/*.py` and several analysis scripts read
+the un-suffixed file by name; each must be pointed at the right link before it is trusted for v7
+or v9. The header warns a human reader; it does not stop a script.
 
 ## L2: what the regeneration fixed, and what it did not
 
