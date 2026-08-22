@@ -309,8 +309,30 @@ artefact. Spot-checked independently: `AccMidi_DispatchLoop` scores 0/32 at its 
 at label-0x41A. ⚠ Entries with |delta| at 0x800 are clipped at the search bound and their true
 displacement may be larger; the -0x41A cluster sits well inside it and is the credible signal.
 
-A single constant across 3,254 labels is a systematic source defect, not scattered mistakes --
-most likely a region whose labels were placed against another link's addresses.
+A single constant across 3,254 labels is a systematic source defect, not scattered mistakes. It
+is also CONTIGUOUS, which narrows it further:
+
+    displaced by -0x41A                       3,474      (32-byte window, thresholds 8/28)
+    span                                      0x00FCCE4A .. 0x00FFFE80   (~208 KB)
+    correctly-placed labels inside that span  4          (one is the 0x800 clipping artefact)
+    displaced labels outside the span         0
+    gaps > 0x400 between consecutive ones     8
+
+So it is ONE region at the top of the ROM in which essentially every label is 0x41A too high,
+and everything below 0xFCCE4A is fine. That is the signature of a region whose labels were placed
+against another link's addresses, not of thousands of independent errors -- and it means the
+repair is plausibly ONE operation rather than 3,474.
+
+WHAT THE REPAIR NEEDS, so the next pass does not have to rediscover it:
+  * for each label in the span, the true site is `label - 0x41A`; the source line carrying that
+    address must be found and the label moved onto it;
+  * ⚠ the byte-match gate CANNOT review this. Moving a label changes no bytes, so `make all`
+    reports 9/9 whether every label lands right or every one lands wrong. The check that CAN see
+    it is `v7_label_displacement.py`, which must go to ~0 displaced afterwards;
+  * the 4 correctly-placed labels inside the span must NOT be moved -- a blanket shift would
+    break them, which is exactly why this is not a `sed`.
+DELIBERATELY NOT ATTEMPTED in this session: a 3,474-label edit that the project's strongest gate
+is blind to should not be done at the end of a long day.
 
 ⚠ MOVING THEM IS NOT A GATE-SAFE EDIT. Relocating a label changes no bytes, so `make all` will
 report 9/9 either way (spec anti-patterns 12 and 13). Each move needs its own byte evidence, of
