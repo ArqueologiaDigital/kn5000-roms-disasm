@@ -1,0 +1,207 @@
+[
+ {
+  "rom": "kn5000_v7_program.rom",
+  "addr": 14732192,
+  "bytes": "dfa4"
+ },
+ {
+  "rom": "kn5000_v7_program.rom",
+  "addr": 15378272,
+  "bytes": "dca7"
+ },
+ {
+  "rom": "kn5000_v7_program.rom",
+  "addr": 15378276,
+  "bytes": "d8a7"
+ },
+ {
+  "rom": "kn5000_v7_program.rom",
+  "addr": 15381050,
+  "bytes": "dfa4"
+ },
+ {
+  "rom": "kn5000_v7_program.rom",
+  "addr": 15578004,
+  "bytes": "dca7"
+ },
+ {
+  "rom": "kn5000_v9_program.rom",
+  "addr": 14732192,
+  "bytes": "dfa4"
+ },
+ {
+  "rom": "kn5000_v9_program.rom",
+  "addr": 15378272,
+  "bytes": "dca7"
+ },
+ {
+  "rom": "kn5000_v9_program.rom",
+  "addr": 15378276,
+  "bytes": "d8a7"
+ },
+ {
+  "rom": "kn5000_v9_program.rom",
+  "addr": 15381050,
+  "bytes": "dfa4"
+ },
+ {
+  "rom": "kn5000_v9_program.rom",
+  "addr": 15578004,
+  "bytes": "dca7"
+ },
+ {
+  "rom": "kn5000_v10_program.rom",
+  "addr": 14732192,
+  "bytes": "dfa4"
+ },
+ {
+  "rom": "kn5000_v10_program.rom",
+  "addr": 15378272,
+  "bytes": "dca7"
+ },
+ {
+  "rom": "kn5000_v10_program.rom",
+  "addr": 15378276,
+  "bytes": "d8a7"
+ },
+ {
+  "rom": "kn5000_v10_program.rom",
+  "addr": 15381050,
+  "bytes": "dfa4"
+ },
+ {
+  "rom": "kn5000_v10_program.rom",
+  "addr": 15578004,
+  "bytes": "dca7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5129186,
+  "bytes": "dfa0"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5137676,
+  "bytes": "dfa2"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508339,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508351,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508363,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508375,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508387,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508399,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508411,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508423,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508435,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5508447,
+  "bytes": "e7e7a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5781221,
+  "bytes": "dfa3"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5789394,
+  "bytes": "d9a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5813989,
+  "bytes": "dfa3"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5822162,
+  "bytes": "d9a7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5827717,
+  "bytes": "dfa2"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5840126,
+  "bytes": "e78ea4"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5841086,
+  "bytes": "dba7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 5861655,
+  "bytes": "daa7"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 6068754,
+  "bytes": "dfa0"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 6070044,
+  "bytes": "dfa0"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 6070230,
+  "bytes": "dfa0"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 6240346,
+  "bytes": "dfa2"
+ },
+ {
+  "rom": "kn5000_table_data.rom",
+  "addr": 6261834,
+  "bytes": "dfa2"
+ },
+ {
+  "rom": "kn5000_subprogram_v142.rom",
+  "addr": 63718,
+  "bytes": "e775a5"
+ }
+]
