@@ -496,6 +496,14 @@ stood here -- "and no script can supply the latter" -- is RETRACTED; see the L2 
 No script can judge aptness *in general*, but that is not the same claim, and the difference was
 worth four real defects: names that DECLARE a checkable fact (a return value, an `fopen` mode) can
 be tested against the code, and `l2_name_vs_return_value.py` found four wrong ones by doing it.
+⚠ A SECOND CONCRETE INSTANCE, found 2026-08-23 while answering a tone-generator question:
+**`ToneGen_ParamTable` (0x00E0E407, 1,389 B) is a JUMP TABLE for the sound editor UI**, not
+tone-generator data. All nine of its references are `lda_24 xde, (…)` / `ld XHL,(XBC)` /
+`call (XHL)` in `sound_editor_ui.s`; no TG register is touched by it. The name is the obvious
+thing to consult when working on the tone generator, and it is wrong. No aptness script catches
+it, for exactly the reason below -- it declares nothing checkable.
+Prover: `scripts/analysis/v7_tonegen_paramtable_is_a_jumptable.py`.
+
 What survives is the narrower statement, and it is still sharp: a name that declares nothing
 checkable cannot be tested this way. `FileIO_ReadHeader` actually builds a file path and never
 reads a header -- it counts as semantic either way, and no return-value or mode check would catch
