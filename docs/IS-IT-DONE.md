@@ -32,6 +32,14 @@ three classes, and only the first is work anyone can do by reading these ROMs ha
 **C. BLOCKED ON A MISSING ARTEFACT — needs a disk or dump nobody here has**
 
 * what `"M4"`/`"M6"`/`"NN"` are as products: no string in any of the seven images ties them to a model
+* ⚠ **UPDATED 2026-08-23 — `0x9A` now has a measured SHAPE, though still no identity.** The `.LSW`
+  record container is `<tag u8><len u8><payload>`, verified on the factory default image: 74 of 77
+  header tags match their table index and the 3 exceptions are aliases whose headers carry one of
+  their own aliases, so the rule holds 100%. Tag `0x9A` declares **`len = 26`**, distinct from the
+  23 per-part records at `len = 24`, and that agrees with the independently-derived 4..19 /
+  0..3+20..25 split. Its factory default is **26 zero bytes** in a populated neighbourhood. Also
+  settled: **tags `0x00`–`0x16` ARE the NAKA widget state blocks**, so widget queries read `.LSW`
+  records by tag. What is still missing is what `0x9A` MEANS, not its size or its container.
 * `.LSW` tag `0x9A`: searched over the WHOLE parameter-id space (not a narrow window) and no
   descriptor exists in any revision. Absence is established, meaning is not.
 * NOTE2's extra bytes in the factory styles: authored on other equipment before the disks were written
