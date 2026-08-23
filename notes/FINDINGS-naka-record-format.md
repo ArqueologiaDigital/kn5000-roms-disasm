@@ -92,6 +92,45 @@ these records — the widget dispatch handlers — and attach names to positions
 
 ---
 
+## ⚠⚠ SCOPE CORRECTION — the sections below describe a DIFFERENT STRUCTURE
+
+Everything from here down documents the **query descriptor** consumed by the
+dispatch at `0x00FCCCF8`. I appended it under this document's heading, which
+implied it describes the `naka_header` records catalogued above. **It does not.**
+
+MEASURED 2026-08-23, the distribution of the byte at `+0x0C` across the
+`naka_header` records, by type:
+
+| type | n | most common `+0x0C` | in the dispatch's 0..6 domain |
+|---|---:|---|---:|
+| 0x59 | 32 | `0x08` (32) | **0%** |
+| 0x2E | 149 | `0x08` (149) | **0%** |
+| 0x1F | 163 | `0x08` (163) | **0%** |
+| 0x22 | 119 | `0x08` (118) | 0% |
+| 0x28 | 42 | `0x18` (42) | **0%** |
+| 0x20 | 77 | `0x08` (76) | 1% |
+
+The dispatch does `ld A,(XWA+0x0c) ; cps a,7 ; jr nc` — anything `>= 7` returns
+without dispatching. A `naka_header` record has `0x08` there, so **every one of
+them would bail out immediately**. They are not this dispatch's input.
+
+Two distinct structures, then:
+
+* the **`naka_header` record** — `XX 00 60 01` header, 2,857 instances, lengths
+  and field layouts as measured in the first half of this document;
+* the **query descriptor** — whose `+0x0C` is a mode in 0..6 and whose fields are
+  documented below.
+
+I flagged twice that nothing related a record's TYPE to the dispatch's MODE and
+that they were different fields. That caution was right, and the measurement now
+says why: they belong to different structures. The field meanings below are NOT
+properties of the `naka_header` records.
+
+⚠ What the query descriptor's own header looks like, and where its instances
+live, is NOT established. Finding its callers is the next step.
+
+---
+
 ## Field MEANINGS, read off the consuming code (2026-08-23)
 
 The section above ends by saying field meanings need the code that consumes these
