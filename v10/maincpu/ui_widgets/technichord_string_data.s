@@ -2,7 +2,73 @@
 ; TechniChord & UI String Data Tables (13 widgets, 111742 bytes)
 ; Source: maincpu/ui_widgets/naka_technichord_strings.c (raw byte array)
 NakaData_TechniChordStrings:
-	.incbin "includes/generated/naka_technichord_strings.bin"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0, 0x1AB00
+EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
+	.long 0x00F90D63
+	.long 0xFF00FF00
+	.long InsertOptionText
+	.long TypePriorityText
+	.long JumpInsertFunc
+	.long FilePriorityFunc
+	.long SetupOkFunc
+	.long SetupExitFunc
+	.long TechnicsFileNaming
+	.long TechnicsFileRename
+	.long SmfFileRename
+	.long SmfFileNaming
+	.long FormatDiskNaming
+	.long WaitingFunc
+	.long DiskMedleyShowHideFunc
+	.long DiskAttention
+	.long DiskSure
+	.long FormatText
+	.long DeleteText
+	.long SaveText
+	.long DeleteYes
+	.long DeleteNo
+	.long SaveYes
+	.long SaveNo
+	.long WakeUpPassword
+	.long PasswordOk
+	.long PasswordNo
+	.long PasswordText
+	.long CheckPasswordText
+	.long CheckPasswordOk
+	.long CheckPasswordNo
+	.long 0x00000000
+	.long Str_InsertOptionText
+	.long Str_TypePriorityText
+	.long Str_JumpInsertFunc
+	.long Str_FilePriorityFunc
+	.long Str_SetupOkFunc
+	.long Str_SetupExitFunc
+	.long Str_TechnicsFileNaming
+	.long Str_TechnicsFileRename
+	.long Str_SmfFileRename
+	.long Str_SmfFileNaming
+	.long Str_FormatDiskNaming
+	.long Str_WaitingFunc
+	.long Str_DiskMedleyShowHideFunc
+	.long Str_DiskAttention
+	.long Str_DiskSure
+	.long Str_FormatText
+	.long Str_DeleteText
+	.long Str_SaveText
+	.long Str_DeleteYes
+	.long Str_DeleteNo
+	.long Str_SaveYes
+	.long Str_SaveNo
+	.long Str_WakeUpPassword
+	.long Str_PasswordOk
+	.long Str_PasswordNo
+	.long Str_PasswordText
+	.long Str_CheckPasswordText
+	.long Str_CheckPasswordOk
+	.long Str_CheckPasswordNo
+	.long Data_PasswordSep_EA0B46
+	.long 0x6843FF00
+	.long 0x506B6365
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AC00, 0x87E
 
 ; External label offsets within the binary blob above.
 	.equ TechniChord_StyleDispatch_Table, NakaData_TechniChordStrings + 0x0028

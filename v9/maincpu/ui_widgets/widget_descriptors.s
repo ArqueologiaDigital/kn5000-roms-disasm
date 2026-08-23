@@ -40,7 +40,73 @@
 ; kn5000-docs/dsp-effect-data-zone.md.
 ; =============================================================================
 NakaData_WidgetDescriptors:
-	.incbin "includes/generated/naka_widget_descriptors.bin"
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0, 0x24400
+EmbeddedPtrTable_v9_naka_widget_descriptors_024400:
+	.long CtlMsgGridCheck
+	.long TtMdPart
+	.long MidiPartGridCheck
+	.long TtMdExc
+	.long ExcSendFunc
+	.long ExcDotFunc
+	.long ExcPmemFunc
+	.long ExcSmemFunc
+	.long ExcCompFunc
+	.long ExcSeqFunc
+	.long ExcMspFunc
+	.long TtMdPreset
+	.long MdPresetOKFunc
+	.long MdPresetWithoutFunc
+	.long MdPresetWithFunc
+	.long BitmapBmphk
+	.long TtMdGm
+	.long GMOKFunc
+	.long StsAttentionCheck
+	.long StsGMOnCheck
+	.long StsGMOffCheck
+	.long StsAreYouSureCheck
+	.long GMYesFunc
+	.long GMNoFunc
+	.long HarmOnOffFunc
+	.long TtVocalistWorkstation
+	.long VocalistGridCheck
+	.long VocalistPage1OKFunc
+	.long VocalistPage2OKFunc
+	.long TtFadeInOut
+	.long FadeSetGridCheck
+	.long TtMdInOut
+	.long InOutGridCheck
+	.long StsSplitCheck
+	.long SplitPointFunc
+	.long RevSelFunc
+	.long EqSelFunc
+	.long EqOnOffFunc
+	.long RevEqSelFunc
+	.long RevEqOnOffFunc
+	.long 0x00000000
+	.long NakaInst_TtMdmenu
+	.long NakaInst_TtMdRealMsg
+	.long NakaInst_MdPcgModeFunc
+	.long NakaInst_MdDrumTypeFunc
+	.long NakaInst_MdSetupLoadFunc
+	.long NakaInst_TtComputerConnection
+	.long NakaInst_MdCmptCnctFunc
+	.long NakaInst_R12OctaveFunc
+	.long NakaInst_TtMdParaLoad
+	.long NakaInst_ParaLoadOptGridCheck
+	.long NakaInst_ParaLoadOptOKFunc
+	.long NakaInst_TtMdPcgOut
+	.long NakaInst_PcgOutGridCheck
+	.long NakaInst_PcgOutSendFunc
+	.long NakaInst_TtComSet
+	.long NakaInst_ComSetGridCheck
+	.long NakaInst_TtMdPmemOut
+	.long NakaInst_PmemOutLGridCheck
+	.long NakaInst_PmemOutRGridCheck
+	.long NakaInst_TtMdCtlMsg
+	.long NakaInst_CtlMsgGridCheck
+	.long NakaInst_TtMdPart
+	.long NakaInst_MidiPartGridCheck
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24500, 0x868
 
 ; External label offsets within the binary blob above.
 ; The NakaInst_<EFFECT> run starting at +0x01e1a IS DspEffectName_Strings:
