@@ -901,3 +901,38 @@ One of the three protocol subsystems graded SKETCHED at the start of 2026-08-21 
 formats". `.CMP` is now fully specified with an asserting probe; `.TM` has its record geometry;
 `.SEQ` has its container with an explicit open question. Three of six file types remain
 unestablished, and this document says so rather than implying coverage it does not have.
+
+### The container format VALIDATED on 19 real panel memories (2026-08-23)
+
+The 19 decompressed demo presets each carry a `.LSW` image at offset `0x2E0`
+(signature `5A 5A 00 00 48 4B`). These are populated panel memories from real
+demo songs, not the factory default — the artefact this document previously said
+was needed.
+
+Walking `<tag><len><payload>` from `0x2E0 + 0x20` (i.e. past the 32-byte header)
+parses cleanly and **independently confirms the container format and the per-part
+records**:
+
+```
+tag 0x78 len 18
+tag 0x00 len 24   tag 0x01 len 24   tag 0x02 len 24  ...  tag 0x16 len 24
+```
+
+Tags `0x00`–`0x16` at `len = 24` are exactly the 23 per-part records derived from
+the factory image and the `0x00EE1160` state-block table. Two independent
+artefacts, same layout.
+
+⚠ **BUT THE WALK DOES NOT COVER THE WHOLE AREA, so it says NOTHING about which
+tags are absent.** It stops after ~55 records at `+0x7C6` of the documented
+`0xE40`, on a `len == 0`, and it had already drifted before that — the last
+record it accepts is `tag 0x00 len 57`, which cannot be right when tag `0x00` is
+a 24-byte per-part record. The bytes where it stops read as sequencer data.
+
+So: `0x9A` does not appear in the ~55 records the walk reaches, and **that is not
+evidence it is absent** — the walk covers 55% of the area and is unreliable over
+part of that. Recorded because the tempting sentence, "tag 0x9A appears in 0 of
+19 real panel memories", would have been a strong claim resting on a parse that
+demonstrably goes wrong.
+
+What would make it evidence: a walk that consumes the full `0xE40` with every
+record's length agreeing with the tag→address table's spacing.
