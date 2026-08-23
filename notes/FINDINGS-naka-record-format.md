@@ -178,3 +178,45 @@ handlers remain unread.
 stacked-field table: that classifier reads a u32 at `+0x0C`, this code reads a
 BYTE there. Both can hold for different record types, and which types reach this
 dispatch is exactly what is not yet established.
+
+### All seven handlers (2026-08-23)
+
+Read from `0x00FCD1EC`–`0x00FCD395`. The record is a **state-query descriptor**
+and `+0x0C` picks the query MODE. Three tables are involved:
+
+| table | contents | used by |
+|---|---|---|
+| `0x00EE1160` | u32 pointers to STATE BLOCKS | modes 1, 3, 4, 5, 6 |
+| `0x00EE0180` | u32 pointers, a different block family | mode 2 |
+| `0x00EE019C` | u32 pointers to 6-entry u16 VALUE LISTS | mode 4 |
+
+| mode | semantics |
+|---:|---|
+| 0 | `return 0xFFFF` — the no-op descriptor |
+| 1 | `((block[+0x05] ^ +0x0A) & +0x06) >> +0x09`; null block → `0xFFFF`; shift 0 → unshifted |
+| 2 | `b = EE0180[+0x0B]`; if `+0x0B == 2`, assemble a 14-bit value from `b[0]` (bit 6 from `b[0]<<6 & 0x40`, plus `(b[0]>>1 & 0x7F)<<7`), clamped: `>= 0x3FC0` → `0x3FFF`; otherwise `b[0] & +0x06` |
+| 3 | identical extraction to mode 1, addressed through `XBC` instead of `XWA` |
+| 4 | `v = u16 at block[+0x05 * 2]`; scan the 6-entry list `EE019C[+0x0B]` for `v`; return its index, else 0 |
+| 5 | if `bit 2 of block[+0x05 + 1]` is set → skip; otherwise the mode-1 extraction |
+| 6 | `u16 at block[+0x08] & 0x01FF` — a 9-bit field; ignores `+0x05/+0x06/+0x09/+0x0A` |
+
+### The field table, complete for this dispatch
+
+| field | width | meaning | used by modes |
+|---|---|---|---|
+| `+0x04` | u8 | state-block selector, index into `0x00EE1160` | 1, 3, 4, 5, 6 |
+| `+0x05` | u8 | offset in that block — BYTE for 1/3/5, WORD (×2) for 4 | 1, 3, 4, 5 |
+| `+0x06` | u8 | AND mask, applied after the XOR | 1, 2, 3, 5 |
+| `+0x09` | u8 | right-shift count, **low nibble only** | 1, 3, 5 |
+| `+0x0A` | u8 | XOR operand, applied before the mask | 1, 3, 5 |
+| `+0x0B` | u8 | secondary selector — into `0x00EE0180` (mode 2) or `0x00EE019C` (mode 4) | 2, 4 |
+| `+0x0C` | u8 | **query mode, 0..6**, bound enforced by `cps a,7` | dispatch |
+
+Modes 1, 3 and 5 share one extraction and differ only in addressing and guard,
+which is why `+0x05/+0x06/+0x09/+0x0A` carry the same meaning across all three.
+Mode 6 ignores them entirely — a descriptor with mode 6 says nothing about those
+bytes, so they are not required to be meaningful in every record.
+
+⚠ STILL NOT ESTABLISHED: what the state blocks at `0x00EE1160` *are*, and how a
+record's TYPE (its `naka_header` byte) relates to its MODE (`+0x0C`). Those are
+different fields and nothing read so far connects them.
