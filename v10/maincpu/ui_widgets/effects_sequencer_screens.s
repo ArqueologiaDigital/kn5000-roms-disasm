@@ -658,6 +658,64 @@ Naka_Help_566_E300E3:
 Naka_Help_567_E300EC:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8148, 0x27
 Naka_Help_569_E30113:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x816F, 0xD4D
+	.incbin "includes/generated/naka_effects_seq.bin", 0x816F, 0x491
+EmbeddedPtrTable_v10_naka_effects_seq_008600:
+	.long SdAccillTitleFunc
+	.long MimeSyori
+	.long SqNoteCycpTitleFunc
+	.long SqDrmCycpTitleFunc
+	.long HelpModeFunc
+	.long HelpTitleFunc
+	.long HelpLangChkMain
+	.long HelpFlashFunc
+	.long EtmenuTitleFunc
+	.long MainPanic
+	.long 0x00000000
+	.long 0x00E30932
+	.long 0x00E30926
+	.long 0x00E3091A
+	.long 0x00E3090E
+	.long 0x00E30902
+	.long 0x00E308F2
+	.long 0x00E308E2
+	.long 0x00E308D2
+	.long 0x00E308C2
+	.long 0x00E308AE
+	.long 0x00E3089E
+	.long 0x00E3088C
+	.long 0x00E3087A
+	.long 0x00E3086A
+	.long 0x00E3085A
+	.long 0x00E3084A
+	.long 0x00E3083A
+	.long 0x00E3082A
+	.long 0x00E3081A
+	.long 0x00E3080A
+	.long 0x00E307FA
+	.long 0x00E307EA
+	.long 0x00E307DA
+	.long 0x00E307C8
+	.long 0x00E307B8
+	.long 0x00E307A8
+	.long 0x00E30796
+	.long 0x00E30784
+	.long 0x00E30770
+	.long 0x00E3075C
+	.long 0x00E30750
+	.long 0x00E30742
+	.long 0x00E30730
+	.long 0x00E3071E
+	.long 0x00E3070C
+	.long 0x00E30702
+	.long 0x00E306EE
+	.long 0x00E306DA
+	.long 0x00E306CC
+	.long 0x00E306BE
+	.long 0x00E306AE
+	.long 0x00E306A0
+	.long 0x00E30690
+	.long 0x00E30686
+	.long 0x00E30684
+	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x7DC
 
 ; External label offsets within the binary blob above.

@@ -1418,7 +1418,64 @@ NakaInst_Modern_Hoedown:
 NakaInst_Bluegrass_Time:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x187DA, 0x12
 StyleGroup_LatinWorld_PairTable:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x187EC, 0x2FE
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x187EC, 0x14
+EmbeddedPtrTable_v7_naka_style_bitmaps_018800:
+	.long 0x00ECD16E
+	.long 0x00ECFC5C
+	.long 0x00ECD214
+	.long 0x00ECFC4A
+	.long 0x00ECD2BA
+	.long 0x00ECFC38
+	.long 0x00ECD360
+	.long 0x00ECFC26
+	.long 0x00ECD406
+	.long 0x00ECFC14
+	.long 0x00ECD4AC
+	.long 0x00ECFC02
+	.long 0x00ECD552
+	.long 0x00ECFBF0
+	.long 0x00ECD5F8
+	.long 0x00ECFBDE
+	.long 0x00ECD69E
+	.long 0x00ECFBCC
+	.long 0x00ECD744
+	.long 0x00ECFBBA
+	.long 0x00ECD7EA
+	.long 0x00ECFBA8
+	.long 0x00ECD890
+	.long 0x00ECFB96
+	.long 0x00ECD936
+	.long 0x00ECFB84
+	.long 0x00ECD9DC
+	.long 0x00ECFB72
+	.long 0x00ECDA82
+	.long 0x00ECFB60
+	.long 0x00ECDB28
+	.long 0x00ECFB4E
+	.long 0x00ECDBCE
+	.long 0x00ECFB3C
+	.long 0x00ECDC74
+	.long 0x00ECFB2A
+	.long 0x00ECDD1A
+	.long 0x00ECFB18
+	.long 0x00ECDDC0
+	.long 0x00ECFB06
+	.long 0x00ECDE66
+	.long 0x00ECFAF4
+	.long 0x00ECDF0C
+	.long 0x00ECFAE2
+	.long 0x00ECDFB2
+	.long 0x00ECFAD0
+	.long 0x00ECE058
+	.long 0x00ECFABE
+	.long 0x00ECE0FE
+	.long 0x00ECFAAC
+	.long 0x00ECE1A4
+	.long 0x00ECFA9A
+	.long 0x00ECE24A
+	.long 0x00000000
+	.long 0x00000000
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x188DC, 0x20E
 StyleGroup_LatinDance_Table:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AEA, 0x4C
 NakaInst_Latin_World:

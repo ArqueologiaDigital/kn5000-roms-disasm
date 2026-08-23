@@ -229,6 +229,24 @@ def main():
             words = [struct.unpack("<I", b[i:i + 4])[0] for i in range(s, e - 3, 4)]
             if not words:
                 continue
+            # ⚠ QUALIFY THE POINTER EXTENT, NOT THE WINDOW. Regions come from a
+            # 256-byte window grid and a table does not respect it, so a window
+            # can hold a table plus whatever follows. naka_effects_seq 0x8600 is
+            # 56 pointers then the ASCII "MainPanic/menuTitleFunc/Help", and
+            # naka_disk_menu_file_io 0x6500 is 63 pointers then a 0xFF00FF00
+            # sentinel. Judging the whole window rejected both.
+            def _belongs(x):
+                return (x == 0 or ROM_LO <= x < ROM_HI
+                        or (x & 0xFFFF0000) == 0xFFFF0000)
+            _idx = [k for k, x in enumerate(words) if _belongs(x)]
+            if _idx:
+                _st, _en = _idx[0], _idx[-1] + 1
+                while _en > _st and not all(_belongs(x) for x in words[_en - 4:_en]):
+                    _en -= 1
+                if _en - _st >= 16 and (_st or _en < len(words)):
+                    s = s + 4 * _st
+                    words = words[_st:_en]
+                    named = sum(1 for w in words if w in syms)
             named = sum(1 for w in words if w in syms)
             p1 = named / len(words) >= MIN_RESOLVE
             sh = struct_hits(words)

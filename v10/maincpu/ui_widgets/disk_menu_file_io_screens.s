@@ -148,7 +148,72 @@ EmbeddedPtrTable_v10_naka_disk_menu_file_io_005F00:
 	.long 0x00EA747E
 	.long 0x00EA747C
 	.long 0x00EA747A
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6000, 0xA34
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6000, 0x500
+EmbeddedPtrTable_v10_naka_disk_menu_file_io_006500:
+	.long 0x00EA7A8E
+	.long 0x00EA7A8C
+	.long 0x00EA7A8A
+	.long 0x00EA7A7E
+	.long 0x00EA7A7C
+	.long 0x00EA7A7A
+	.long 0x00EA7A78
+	.long 0x00EA7A66
+	.long 0x00EA7A64
+	.long 0x00EA7A62
+	.long 0x00EA7A60
+	.long 0x00EA7A4E
+	.long 0x00EA7A4C
+	.long 0x00EA7A4A
+	.long 0x00EA7A48
+	.long 0x00EA7A46
+	.long 0x00EA7A44
+	.long 0x00EA7A32
+	.long 0x00EA7A30
+	.long 0x00EA7A2E
+	.long 0x00EA7A2C
+	.long 0x00EA7A2A
+	.long 0x00EA7A28
+	.long 0x00EA7A26
+	.long 0x00EA7A24
+	.long 0x00EA7A22
+	.long 0x00EA7A20
+	.long 0x00EA7A1E
+	.long 0x00EA7A1C
+	.long 0x00EA7A1A
+	.long 0x00EA7A18
+	.long 0x00EA7A16
+	.long 0x00EA7A14
+	.long 0x00EA7A12
+	.long 0x00EA7A10
+	.long 0x00EA7A0E
+	.long 0x00EA7A0C
+	.long 0x00EA7A0A
+	.long 0x00EA7A08
+	.long 0x00EA7A06
+	.long 0x00EA79F4
+	.long 0x00EA79F2
+	.long 0x00EA79F0
+	.long 0x00EA79EE
+	.long 0x00EA79EC
+	.long 0x00EA79EA
+	.long 0x00EA79E8
+	.long 0x00EA79E6
+	.long 0x00EA79E4
+	.long 0x00EA79E2
+	.long 0x00EA79E0
+	.long 0x00EA79DE
+	.long 0x00EA79DC
+	.long 0x00EA79DA
+	.long 0x00EA79D8
+	.long 0x00EA79D6
+	.long 0x00EA79D4
+	.long 0x00EA79D2
+	.long 0x00EA79D0
+	.long 0x00EA79CE
+	.long 0x00EA79CC
+	.long 0x00EA79CA
+	.long 0x00EA79C8
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x438
 NakaInst_WaitWinCtlSmf:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6A34, 0xEAC
 

@@ -622,7 +622,62 @@ Transpose_String_Minus2:
 Transpose_String_Plus3:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262FA, 0x6
 Transpose_String_Plus2:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26300, 0x446
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26300, 0x100
+EmbeddedPtrTable_v7_naka_widget_tables_2_026400:
+	.long LswDrawRelease
+	.long BitmapDrawsw
+	.long LswSound
+	.long ApPreControl
+	.long BitmapTechnics
+	.long BitmapKn5000
+	.long FDemoText
+	.long 0x00000000
+	.long 0x00E80AC8
+	.long 0x00E80ABC
+	.long 0x00E80AB2
+	.long 0x00E80AAA
+	.long 0x00E80AA0
+	.long 0x00E80A92
+	.long 0x00E80A80
+	.long 0x00E80A74
+	.long 0x00E80A62
+	.long 0x00E80A56
+	.long 0x00E80A4C
+	.long 0x00E80A3E
+	.long 0x00E80A30
+	.long 0x00E80A20
+	.long 0x00E80A12
+	.long 0x00E80A04
+	.long 0x00E809F8
+	.long 0x00E809F0
+	.long 0x00E809E2
+	.long 0x00E809D4
+	.long 0x00E809C6
+	.long 0x00E809BA
+	.long 0x00E809AA
+	.long 0x00E8099A
+	.long 0x00E8098A
+	.long 0x00E8097A
+	.long 0x00E8096A
+	.long 0x00E80958
+	.long 0x00E80948
+	.long 0x00E8093C
+	.long 0x00E8092C
+	.long 0x00E8091C
+	.long 0x00E8090C
+	.long 0x00E808FC
+	.long 0x00E808EE
+	.long 0x00E808E0
+	.long 0x00E808D2
+	.long 0x00E808C2
+	.long 0x00E808B4
+	.long 0x00E808AA
+	.long 0x00E8089C
+	.long 0x00E8088C
+	.long 0x00E8087E
+	.long 0x00E80874
+	.long 0x00E80872
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x264D4, 0x272
 NakaObj_FuncData_Null:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26746, 0x2
 NakaInst_data:
