@@ -448,6 +448,24 @@ recognised faster next time.
    a routine that never touches the table.
 
 
+26. **The search tool that silently excludes part of the corpus.** `grep` classifies a file as
+   BINARY if it contains bytes outside the text range, and then reports nothing for it -- no match,
+   no warning, no error. **40 of this project's 508 `.s` files (7.9%) are in that state**, because
+   they carry `.ascii "… \xff"` directives holding literal high bytes. A plain
+   `grep -rn SYMBOL --include=*.s .` therefore searches 92% of the assembly and looks like it
+   searched all of it.
+     * Found when `grep` reported zero occurrences of `ToneKit_NullParams` while a Python scan of
+       the same file found 160. Two tools disagreeing on one file is what exposed it; either alone
+       would have been believed.
+     * **Use `grep -a`, or read the files in Python.** Every probe in `scripts/` and `tools/` uses
+       Python `glob` + `open()`, so the committed measurements are unaffected -- but interactive
+       greps during investigation are not, and any negative result reached that way is worth
+       re-running before it is written down.
+     * Same family as anti-pattern 9 (the unstated search window) and the `LSW`/`Lsw` case
+       sensitivity retraction: the search silently answered a narrower question than the one asked.
+       Here the narrowing is invisible even to a careful reader of the command.
+
+
 ## 6. Definition of done
 
 A ROM image is DONE when all of the following are true, each backed by a committed measurement:
