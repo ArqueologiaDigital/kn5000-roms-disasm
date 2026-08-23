@@ -750,6 +750,36 @@
    "slice_bytes": 1073,
    "source": "v7/maincpu/display/scoop_display.s",
    "first": "ldb_d8 l, (0x0d60) ; dec 1,L ; ld H,L ; sla L, 0x01"
+  },
+  {
+   "entry": "0xEF8165",
+   "bytes": 143,
+   "instructions": 41,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head.bin",
+   "slice_addr": "0xEF8165",
+   "slice_bytes": 1228,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "cpdi8 (0x0d65), 0x03 ; jrl z, .Lc_ef8173 ; ldb W, 0x00 ; jp 0xef81f3"
+  },
+  {
+   "entry": "0xEF82F7",
+   "bytes": 41,
+   "instructions": 13,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail.bin",
+   "slice_addr": "0xEF81F4",
+   "slice_bytes": 1085,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb A, 0x03 ; call 0xefd08d ; call 0xefc1d0 ; cp W,0xff"
+  },
+  {
+   "entry": "0xEF8429",
+   "bytes": 23,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail.bin",
+   "slice_addr": "0xEF81F4",
+   "slice_bytes": 1085,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb W, 0xff ; pushw de ; xor DE,DE ; cpdm16 0x0d5a, xde"
   }
  ]
 }

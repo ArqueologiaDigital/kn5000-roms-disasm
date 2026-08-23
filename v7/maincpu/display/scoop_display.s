@@ -2810,7 +2810,82 @@ ToneParam_HandlerTable_BC:
 	.long VoiceSlot_TableSetup
 	.long VoiceSlot_TableSetup
 	.long DefaultHandler_Ret
-	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head.bin"
+	cpdi8 (0x0d65), 0x03
+	jrl z, .Lc_ef8173
+.Lc_ef816d:
+	ldb W, 0x00
+	jp ToneParam_HandlerTable_BC_0x9E
+.Lc_ef8173:
+	call ToneParam_HandlerTable_BC_0x269
+	cp W,0xff
+	jrl z, .Lc_ef816d
+	call ToneParam_HandlerTable_BC_0x2D4
+	cps w, 0
+	jrl nz, .Lc_ef8192
+	ldb W, 0x68
+	call MIDI_SendSysExFromW
+	ldb W, 0x01
+	jp ToneParam_HandlerTable_BC_0x9E
+.Lc_ef8192:
+	ldb_d8 a, (0x0e3f)
+	stb_d8 (0x0e41), a
+	call ToneParam_HandlerTable_BC_0x1A2
+	ldb_d8 a, (0x0e3f)
+	stb_d8 (0x0e40), a
+	cpda8 a, (0x0e41)
+	jrl nz, .Lc_ef81b1
+	jp ToneParam_HandlerTable_BC_0x18
+.Lc_ef81b1:
+	ldw_d16 wa, (0x0d5a)
+	cpda16 xwa, 0x0d6b
+	jrl c, .Lc_ef81dd
+	call ToneParam_HandlerTable_BC_0x4DC
+	ldb_d8 a, (0x0e40)
+	cpda8 a, (0x0e41)
+	jrl c, .Lc_ef81d3
+	call ToneParam_HandlerTable_BC_0x2EB
+	jp ToneParam_HandlerTable_BC_0x82
+.Lc_ef81d3:
+	call ToneParam_HandlerTable_BC_0x357
+	ldb W, 0x01
+	jp ToneParam_HandlerTable_BC_0x9E
+.Lc_ef81dd:
+	anddi8 (0xe31c), 0x6f
+	stdi8 (0x7ea6), 0x19
+	xor WA,WA
+	ldb A, 0xee
+	call SoundCtrl_SendCommand
+	jp ToneParam_HandlerTable_BC_0x82
+	ret
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_head.bin"
+	ldb A, 0x03
+	call VoiceSlot_SaveState
+.Lc_ef82fd:
+	call VoiceSlot_CompareAndBranch_0x7
+	cp W,0xff
+	jrl z, .Lc_ef8314
+	call ToneParam_HandlerTable_BC_0x269
+	cps w, 0
+	jrl nz, .Lc_ef82fd
+	jp ToneParam_HandlerTable_BC_0x1C4
+.Lc_ef8314:
+	stdi8 (0x0e3f), 0x04
+	ldb A, 0x03
+	call VoiceSlot_RestoreState
+	ret
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_mid1.bin"
+	ldb W, 0xff
+	pushw de
+	xor DE,DE
+	cpdm16 0x0d5a, xde
+	jrl nz, .Lc_ef843e
+	cpda8 e, (0x0d57)
+	jrl nz, .Lc_ef843e
+	ldb W, 0x00
+.Lc_ef843e:
+	popw de
+	ret
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_tail.bin"
 	xor A,A
 	call VoiceSlot_SaveState
 	call VoiceSlot_DispatchRet
