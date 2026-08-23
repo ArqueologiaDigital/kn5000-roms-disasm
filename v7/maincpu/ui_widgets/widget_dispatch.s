@@ -2344,126 +2344,245 @@ ToneKit_FrequencyTable:
 	.incbin "includes/romslices/v7_transplant_ToneKit_FrequencyTable.bin"
 WidgetParam_SelfRef_Table:	.incbin "includes/romslices/v7_data_widgetparam_selfref_table.bin"
 ToneKit_NullParams:
-	.incbin "includes/generated/tonekit_param_blocks.bin"
-	.equ ToneKit_ParamBlock_000, ToneKit_NullParams + 0xc
-	.equ ToneKit_ParamBlock_001, ToneKit_NullParams + 0x2a
-	.equ ToneKit_ParamBlock_002, ToneKit_NullParams + 0x48
-	.equ ToneKit_ParamBlock_003, ToneKit_NullParams + 0x66
-	.equ ToneKit_ParamBlock_004, ToneKit_NullParams + 0x90
-	.equ ToneKit_ParamBlock_005, ToneKit_NullParams + 0xf6
-	.equ ToneKit_ParamBlock_006, ToneKit_NullParams + 0x114
-	.equ ToneKit_ParamBlock_007, ToneKit_NullParams + 0x13e
-	.equ ToneKit_ParamBlock_008, ToneKit_NullParams + 0x168
-	.equ ToneKit_ParamBlock_009, ToneKit_NullParams + 0x198
-	.equ ToneKit_ParamBlock_010, ToneKit_NullParams + 0x1c8
-	.equ ToneKit_ParamBlock_011, ToneKit_NullParams + 0x228
-	.equ ToneKit_ParamBlock_012, ToneKit_NullParams + 0x24c
-	.equ ToneKit_ParamBlock_013, ToneKit_NullParams + 0x270
-	.equ ToneKit_ParamBlock_014, ToneKit_NullParams + 0x28e
-	.equ ToneKit_ParamBlock_015, ToneKit_NullParams + 0x2ee
-	.equ ToneKit_ParamBlock_016, ToneKit_NullParams + 0x30c
-	.equ ToneKit_ParamBlock_017, ToneKit_NullParams + 0x32a
-	.equ ToneKit_ParamBlock_018, ToneKit_NullParams + 0x34e
-	.equ ToneKit_ParamBlock_019, ToneKit_NullParams + 0x36c
-	.equ ToneKit_ParamBlock_020, ToneKit_NullParams + 0x390
-	.equ ToneKit_ParamBlock_021, ToneKit_NullParams + 0x3c0
-	.equ ToneKit_ParamBlock_022, ToneKit_NullParams + 0x3ea
-	.equ ToneKit_ParamBlock_023, ToneKit_NullParams + 0x432
-	.equ ToneKit_ParamBlock_024, ToneKit_NullParams + 0x474
-	.equ ToneKit_ParamBlock_025, ToneKit_NullParams + 0x4bc
-	.equ ToneKit_ParamBlock_026, ToneKit_NullParams + 0x510
-	.equ ToneKit_ParamBlock_027, ToneKit_NullParams + 0x552
-	.equ ToneKit_ParamBlock_028, ToneKit_NullParams + 0x5a6
-	.equ ToneKit_ParamBlock_029, ToneKit_NullParams + 0x5e2
-	.equ ToneKit_ParamBlock_030, ToneKit_NullParams + 0x600
-	.equ ToneKit_ParamBlock_031, ToneKit_NullParams + 0x61e
-	.equ ToneKit_ParamBlock_032, ToneKit_NullParams + 0x63c
-	.equ ToneKit_ParamBlock_033, ToneKit_NullParams + 0x65a
-	.equ ToneKit_ParamBlock_034, ToneKit_NullParams + 0x678
-	.equ ToneKit_ParamBlock_035, ToneKit_NullParams + 0x696
-	.equ ToneKit_ParamBlock_036, ToneKit_NullParams + 0x6b4
-	.equ ToneKit_ParamBlock_037, ToneKit_NullParams + 0x6d2
-	.equ ToneKit_ParamBlock_038, ToneKit_NullParams + 0x6f0
-	.equ ToneKit_ParamBlock_039, ToneKit_NullParams + 0x70e
-	.equ ToneKit_ParamBlock_040, ToneKit_NullParams + 0x72c
-	.equ ToneKit_ParamBlock_041, ToneKit_NullParams + 0x74a
-	.equ ToneKit_ParamBlock_042, ToneKit_NullParams + 0x780
-	.equ ToneKit_ParamBlock_043, ToneKit_NullParams + 0x7bc
-	.equ ToneKit_ParamBlock_044, ToneKit_NullParams + 0x804
-	.equ ToneKit_ParamBlock_045, ToneKit_NullParams + 0x83a
-	.equ ToneKit_ParamBlock_046, ToneKit_NullParams + 0x870
-	.equ ToneKit_ParamBlock_047, ToneKit_NullParams + 0x8b8
-	.equ ToneKit_ParamBlock_048, ToneKit_NullParams + 0x900
-	.equ ToneKit_ParamBlock_049, ToneKit_NullParams + 0x94e
-	.equ ToneKit_ParamBlock_050, ToneKit_NullParams + 0x99c
-	.equ ToneKit_ParamBlock_051, ToneKit_NullParams + 0x9a8
-	.equ ToneKit_ParamBlock_052, ToneKit_NullParams + 0x9b4
-	.equ ToneKit_ParamBlock_053, ToneKit_NullParams + 0x9c0
-	.equ ToneKit_ParamBlock_054, ToneKit_NullParams + 0x9cc
-	.equ ToneKit_ParamBlock_055, ToneKit_NullParams + 0x9ea
-	.equ ToneKit_ParamBlock_056, ToneKit_NullParams + 0xa08
-	.equ ToneKit_ParamBlock_057, ToneKit_NullParams + 0xa26
-	.equ ToneKit_ParamBlock_058, ToneKit_NullParams + 0xa44
-	.equ ToneKit_DefaultParams, ToneKit_NullParams + 0xa7a
-	.equ NakaInst_PFTK, ToneKit_NullParams + 0xa92
-	.equ ToneKit_ParamBlock_059, ToneKit_NullParams + 0xaaa
-	.equ ToneKit_ParamBlock_060, ToneKit_NullParams + 0xac2
-	.equ ToneKit_ParamBlock_061, ToneKit_NullParams + 0xada
-	.equ ToneKit_ParamBlock_062, ToneKit_NullParams + 0xaf2
-	.equ ToneKit_ParamBlock_063, ToneKit_NullParams + 0xb0a
-	.equ ToneKit_ParamBlock_064, ToneKit_NullParams + 0xb22
-	.equ ToneKit_ParamBlock_065, ToneKit_NullParams + 0xb3a
-	.equ ToneKit_ParamBlock_066, ToneKit_NullParams + 0xb52
-	.equ ToneKit_ParamBlock_067, ToneKit_NullParams + 0xb6a
-	.equ ToneKit_ParamBlock_068, ToneKit_NullParams + 0xb82
-	.equ ToneKit_ParamBlock_069, ToneKit_NullParams + 0xb9a
-	.equ ToneKit_ParamBlock_070, ToneKit_NullParams + 0xbb2
-	.equ ToneKit_ParamBlock_071, ToneKit_NullParams + 0xbca
-	.equ ToneKit_ParamBlock_072, ToneKit_NullParams + 0xbe2
-	.equ ToneKit_ParamBlock_073, ToneKit_NullParams + 0xbfa
-	.equ ToneKit_ParamBlock_074, ToneKit_NullParams + 0xc12
-	.equ ToneKit_ParamBlock_075, ToneKit_NullParams + 0xc2a
-	.equ ToneKit_ParamBlock_076, ToneKit_NullParams + 0xc42
-	.equ ToneKit_ParamBlock_077, ToneKit_NullParams + 0xc5a
-	.equ ToneKit_ParamBlock_078, ToneKit_NullParams + 0xc72
-	.equ ToneKit_ParamBlock_079, ToneKit_NullParams + 0xc8a
-	.equ ToneKit_ParamBlock_080, ToneKit_NullParams + 0xca2
-	.equ ToneKit_ParamBlock_081, ToneKit_NullParams + 0xcba
-	.equ ToneKit_ParamBlock_082, ToneKit_NullParams + 0xcd2
-	.equ ToneKit_ParamBlock_083, ToneKit_NullParams + 0xcea
-	.equ ToneKit_ParamBlock_084, ToneKit_NullParams + 0xd02
-	.equ ToneKit_ParamBlock_085, ToneKit_NullParams + 0xd1a
-	.equ ToneKit_ParamBlock_086, ToneKit_NullParams + 0xd32
-	.equ ToneKit_ParamBlock_087, ToneKit_NullParams + 0xd4a
-	.equ ToneKit_ParamBlock_088, ToneKit_NullParams + 0xd62
-	.equ ToneKit_ParamBlock_089, ToneKit_NullParams + 0xd7a
-	.equ ToneKit_ParamBlock_090, ToneKit_NullParams + 0xd92
-	.equ ToneKit_ParamBlock_091, ToneKit_NullParams + 0xdaa
-	.equ ToneKit_ParamBlock_092, ToneKit_NullParams + 0xdc2
-	.equ ToneKit_ParamBlock_093, ToneKit_NullParams + 0xdda
-	.equ ToneKit_ParamBlock_094, ToneKit_NullParams + 0xdf2
-	.equ ToneKit_ParamBlock_095, ToneKit_NullParams + 0xe0a
-	.equ ToneKit_ParamBlock_096, ToneKit_NullParams + 0xe22
-	.equ ToneKit_ParamBlock_097, ToneKit_NullParams + 0xe3a
-	.equ ToneKit_ParamBlock_098, ToneKit_NullParams + 0xe52
-	.equ ToneKit_ParamBlock_099, ToneKit_NullParams + 0xe6a
-	.equ ToneKit_ParamBlock_100, ToneKit_NullParams + 0xe82
-	.equ ToneKit_ParamBlock_101, ToneKit_NullParams + 0xe9a
-	.equ ToneKit_ParamBlock_102, ToneKit_NullParams + 0xeb2
-	.equ ToneKit_ParamBlock_103, ToneKit_NullParams + 0xeca
-	.equ ToneKit_ParamBlock_104, ToneKit_NullParams + 0xee2
-	.equ ToneKit_ParamBlock_105, ToneKit_NullParams + 0xefa
-	.equ ToneKit_ParamBlock_106, ToneKit_NullParams + 0xf12
-	.equ ToneKit_ParamBlock_107, ToneKit_NullParams + 0xf2a
-	.equ ToneKit_ParamBlock_108, ToneKit_NullParams + 0xf42
-	.equ ToneKit_ParamBlock_109, ToneKit_NullParams + 0xf5a
-	.equ ToneKit_ParamBlock_110, ToneKit_NullParams + 0xf72
-	.equ ToneKit_ParamBlock_111, ToneKit_NullParams + 0xf8a
-	.equ ToneKit_ParamBlock_112, ToneKit_NullParams + 0xfa2
-	.equ ToneKit_ParamBlock_113, ToneKit_NullParams + 0xfba
-	.equ ToneKit_ParamBlock_114, ToneKit_NullParams + 0xfd2
-	.equ ToneKit_ParamBlock_115, ToneKit_NullParams + 0xfea
-	.equ ToneKit_ParamBlock_116, ToneKit_NullParams + 0x1002
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x0, 0xC
+ToneKit_ParamBlock_000:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC, 0x1E
+ToneKit_ParamBlock_001:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x2A, 0x1E
+ToneKit_ParamBlock_002:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x48, 0x1E
+ToneKit_ParamBlock_003:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x66, 0x2A
+ToneKit_ParamBlock_004:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x90, 0x66
+ToneKit_ParamBlock_005:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF6, 0x1E
+ToneKit_ParamBlock_006:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x114, 0x2A
+ToneKit_ParamBlock_007:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x13E, 0x2A
+ToneKit_ParamBlock_008:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x168, 0x30
+ToneKit_ParamBlock_009:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x198, 0x30
+ToneKit_ParamBlock_010:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x1C8, 0x60
+ToneKit_ParamBlock_011:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x228, 0x24
+ToneKit_ParamBlock_012:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x24C, 0x24
+ToneKit_ParamBlock_013:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x270, 0x1E
+ToneKit_ParamBlock_014:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x28E, 0x60
+ToneKit_ParamBlock_015:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x2EE, 0x1E
+ToneKit_ParamBlock_016:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x30C, 0x1E
+ToneKit_ParamBlock_017:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x32A, 0x24
+ToneKit_ParamBlock_018:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x34E, 0x1E
+ToneKit_ParamBlock_019:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x36C, 0x24
+ToneKit_ParamBlock_020:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x390, 0x30
+ToneKit_ParamBlock_021:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x3C0, 0x2A
+ToneKit_ParamBlock_022:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x3EA, 0x48
+ToneKit_ParamBlock_023:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x432, 0x42
+ToneKit_ParamBlock_024:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x474, 0x48
+ToneKit_ParamBlock_025:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x4BC, 0x54
+ToneKit_ParamBlock_026:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x510, 0x42
+ToneKit_ParamBlock_027:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x552, 0x54
+ToneKit_ParamBlock_028:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x5A6, 0x3C
+ToneKit_ParamBlock_029:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x5E2, 0x1E
+ToneKit_ParamBlock_030:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x600, 0x1E
+ToneKit_ParamBlock_031:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x61E, 0x1E
+ToneKit_ParamBlock_032:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x63C, 0x1E
+ToneKit_ParamBlock_033:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x65A, 0x1E
+ToneKit_ParamBlock_034:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x678, 0x1E
+ToneKit_ParamBlock_035:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x696, 0x1E
+ToneKit_ParamBlock_036:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6B4, 0x1E
+ToneKit_ParamBlock_037:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6D2, 0x1E
+ToneKit_ParamBlock_038:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6F0, 0x1E
+ToneKit_ParamBlock_039:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x70E, 0x1E
+ToneKit_ParamBlock_040:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x72C, 0x1E
+ToneKit_ParamBlock_041:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x74A, 0x36
+ToneKit_ParamBlock_042:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x780, 0x3C
+ToneKit_ParamBlock_043:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x7BC, 0x48
+ToneKit_ParamBlock_044:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x804, 0x36
+ToneKit_ParamBlock_045:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x83A, 0x36
+ToneKit_ParamBlock_046:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x870, 0x48
+ToneKit_ParamBlock_047:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x8B8, 0x48
+ToneKit_ParamBlock_048:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x900, 0x4E
+ToneKit_ParamBlock_049:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x94E, 0x4E
+ToneKit_ParamBlock_050:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x99C, 0xC
+ToneKit_ParamBlock_051:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9A8, 0xC
+ToneKit_ParamBlock_052:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9B4, 0xC
+ToneKit_ParamBlock_053:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9C0, 0xC
+ToneKit_ParamBlock_054:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9CC, 0x1E
+ToneKit_ParamBlock_055:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9EA, 0x1E
+ToneKit_ParamBlock_056:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA08, 0x1E
+ToneKit_ParamBlock_057:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA26, 0x1E
+ToneKit_ParamBlock_058:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA44, 0x36
+ToneKit_DefaultParams:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA7A, 0x18
+NakaInst_PFTK:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA92, 0x18
+ToneKit_ParamBlock_059:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAAA, 0x18
+ToneKit_ParamBlock_060:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAC2, 0x18
+ToneKit_ParamBlock_061:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xADA, 0x18
+ToneKit_ParamBlock_062:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAF2, 0x18
+ToneKit_ParamBlock_063:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB0A, 0x18
+ToneKit_ParamBlock_064:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB22, 0x18
+ToneKit_ParamBlock_065:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB3A, 0x18
+ToneKit_ParamBlock_066:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB52, 0x18
+ToneKit_ParamBlock_067:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB6A, 0x18
+ToneKit_ParamBlock_068:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB82, 0x18
+ToneKit_ParamBlock_069:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB9A, 0x18
+ToneKit_ParamBlock_070:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBB2, 0x18
+ToneKit_ParamBlock_071:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBCA, 0x18
+ToneKit_ParamBlock_072:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBE2, 0x18
+ToneKit_ParamBlock_073:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBFA, 0x18
+ToneKit_ParamBlock_074:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC12, 0x18
+ToneKit_ParamBlock_075:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC2A, 0x18
+ToneKit_ParamBlock_076:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC42, 0x18
+ToneKit_ParamBlock_077:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC5A, 0x18
+ToneKit_ParamBlock_078:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC72, 0x18
+ToneKit_ParamBlock_079:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC8A, 0x18
+ToneKit_ParamBlock_080:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCA2, 0x18
+ToneKit_ParamBlock_081:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCBA, 0x18
+ToneKit_ParamBlock_082:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCD2, 0x18
+ToneKit_ParamBlock_083:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCEA, 0x18
+ToneKit_ParamBlock_084:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD02, 0x18
+ToneKit_ParamBlock_085:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD1A, 0x18
+ToneKit_ParamBlock_086:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD32, 0x18
+ToneKit_ParamBlock_087:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD4A, 0x18
+ToneKit_ParamBlock_088:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD62, 0x18
+ToneKit_ParamBlock_089:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD7A, 0x18
+ToneKit_ParamBlock_090:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD92, 0x18
+ToneKit_ParamBlock_091:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDAA, 0x18
+ToneKit_ParamBlock_092:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDC2, 0x18
+ToneKit_ParamBlock_093:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDDA, 0x18
+ToneKit_ParamBlock_094:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDF2, 0x18
+ToneKit_ParamBlock_095:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE0A, 0x18
+ToneKit_ParamBlock_096:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE22, 0x18
+ToneKit_ParamBlock_097:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE3A, 0x18
+ToneKit_ParamBlock_098:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE52, 0x18
+ToneKit_ParamBlock_099:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE6A, 0x18
+ToneKit_ParamBlock_100:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE82, 0x18
+ToneKit_ParamBlock_101:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE9A, 0x18
+ToneKit_ParamBlock_102:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEB2, 0x18
+ToneKit_ParamBlock_103:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xECA, 0x18
+ToneKit_ParamBlock_104:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEE2, 0x18
+ToneKit_ParamBlock_105:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEFA, 0x18
+ToneKit_ParamBlock_106:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF12, 0x18
+ToneKit_ParamBlock_107:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF2A, 0x18
+ToneKit_ParamBlock_108:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF42, 0x18
+ToneKit_ParamBlock_109:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF5A, 0x18
+ToneKit_ParamBlock_110:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF72, 0x18
+ToneKit_ParamBlock_111:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF8A, 0x18
+ToneKit_ParamBlock_112:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFA2, 0x18
+ToneKit_ParamBlock_113:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFBA, 0x18
+ToneKit_ParamBlock_114:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFD2, 0x18
+ToneKit_ParamBlock_115:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFEA, 0x18
+ToneKit_ParamBlock_116:
+	.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x80
 ToneKit_VoiceDispatch_Table:
 	.long ToneKit_ParamBlock_005
 	.long ToneKit_ParamBlock_006
