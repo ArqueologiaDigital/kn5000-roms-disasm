@@ -46,6 +46,19 @@ _cc = importlib.util.spec_from_file_location(
 cc = importlib.util.module_from_spec(_cc); _cc.loader.exec_module(cc)
 
 TERMINATORS = ("ret", "reti", "retd")
+# An UNCONDITIONAL jump ends a routine just as a `ret` does -- it is a tail call
+# or a jump to a continuation, and nothing after it is reached by falling
+# through. Requiring `ret` alone refused 167 ranges for a reason about the
+# instruction's spelling rather than about the control flow.
+#
+# ⚠ CONDITIONAL jumps are NOT terminators: after `jr nz, X` execution continues
+# at the next instruction, so a range ending there is truncated, not finished.
+# unidasm marks the unconditional forms with the `t` (always-true) condition --
+# `jr t, 0x...` and `jrl t, 0x...` -- while a bare `jp <target>` carries no
+# condition at all. Counted in committed v7 code: 326 `jr t,`, 80 `jrl t,`, and
+# 842 bare `jp`, against thousands of conditional `jr z,` / `jr nz,`.
+UNCOND_JUMP = re.compile(r'^(?:jp\s+(?!(?:z|nz|c|nc|t|f|lt|ge|le|gt|ult|uge|ule|ugt|ov|nov|mi|pl)\s*,)'
+                         r'|(?:jr|jrl)\s+t\s*,)', re.I)
 BRANCHES = ("jr", "jrl", "calr")
 BRANCH_RE = re.compile(r'^(jr|jrl|calr)\s+(?:(\w+),\s*)?0x([0-9a-fA-F]+)$', re.I)
 
@@ -730,7 +743,9 @@ def main():
         while _off + _run < len(terr) and terr[_off + _run] == 2:
             _run += 1
         ends_at_code = sum(n for _, n, _ in insns) == _run
-        if insns[-1][2].split()[0].lower() not in TERMINATORS and not ends_at_code:
+        _last = insns[-1][2].strip()
+        if (_last.split()[0].lower() not in TERMINATORS
+                and not UNCOND_JUMP.match(_last) and not ends_at_code):
             skipped += 1; skip("no `ret`, and does not end at a code boundary"); continue
         span = sum(n for _, n, _ in insns)
         want = rom[t - BASE: t - BASE + span]
