@@ -371,6 +371,23 @@ KN5000 never exercises it.**
 
 ### 3.6 The physical identity of most button bits and LED bits
 
+⚠ **CHECKED AGAINST THE SIBLING MODEL, 2026-08-23, and the classification holds.**
+The KN7000 solves exactly this problem in ROM: it carries a service panel-test
+mode with `PanelSwitchClassTable` @ `0x4860C9F4`, a `switch# -> [LED reg, value]`
+map referenced from the panel-test code, which binds every button to its LED
+without pressing anything (`kn7000_mame/notes/service-diagnostic-mode.md`).
+
+**The KN5000 has no equivalent.** Searching the v7 sources for any symbol
+matching `*Test*` alongside panel/switch/LED/button returns 31 distinct names,
+and every one is a floppy-test dialog (`FDTest_Panel_Param`,
+`FDTest_Panel_SubElements`), a ROM-checksum routine (`RomTest_TableData_*`), or a
+UI hit-test (`PsEditSwBox_HitTest`). There is no switch-to-LED table.
+
+So the bit map genuinely could not have come from these ROMs, and the hardware
+provenance recorded in `cpanel_constants.s` is the correct citation rather than a
+placeholder for analysis nobody did.
+
+
 The ROM pins four `(index, mask)` pairs (§2.6). Everything else in the button and LED tables in
 `cpanel_constants.s` came from somewhere other than these ROMs — pressing buttons on the
 instrument, or an LED sweep — and should be cited that way. Even for the four anchored segments,
