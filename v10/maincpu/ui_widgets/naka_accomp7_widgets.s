@@ -6,29 +6,54 @@
 ; ROM address: 0xe1a73e (1050 bytes)
 
 NakaNode_Accomp7_Widget01:
-	.incbin "includes/generated/naka_accomp7_widgets.bin"
-	.equ NakaNode_Accomp7_Widget02, NakaNode_Accomp7_Widget01 + 0x24
-	.equ NakaNode_Accomp7_Widget03, NakaNode_Accomp7_Widget01 + 0x40
-	.equ NakaNode_Accomp7_Widget04, NakaNode_Accomp7_Widget01 + 0x5c
-	.equ NakaNode_Accomp7_Widget05, NakaNode_Accomp7_Widget01 + 0x76
-	.equ NakaNode_Accomp7_Widget06, NakaNode_Accomp7_Widget01 + 0x8e
-	.equ NakaNode_Accomp7_Widget07, NakaNode_Accomp7_Widget01 + 0xb2
-	.equ NakaNode_Accomp7_Widget08, NakaNode_Accomp7_Widget01 + 0xde
-	.equ NakaNode_Accomp7_Widget09, NakaNode_Accomp7_Widget01 + 0x10a
-	.equ NakaNode_Accomp7_Widget10, NakaNode_Accomp7_Widget01 + 0x136
-	.equ NakaNode_Accomp7_Widget11, NakaNode_Accomp7_Widget01 + 0x162
-	.equ NakaNode_Accomp7_Widget12, NakaNode_Accomp7_Widget01 + 0x18e
-	.equ NakaNode_Accomp7_Widget13, NakaNode_Accomp7_Widget01 + 0x1ba
-	.equ NakaNode_Accomp7_Widget14, NakaNode_Accomp7_Widget01 + 0x1e6
-	.equ NakaNode_Accomp7_Widget15, NakaNode_Accomp7_Widget01 + 0x212
-	.equ NakaNode_Accomp7_Widget16, NakaNode_Accomp7_Widget01 + 0x23e
-	.equ NakaNode_Accomp7_Widget17, NakaNode_Accomp7_Widget01 + 0x26a
-	.equ NakaNode_Accomp7_Widget18, NakaNode_Accomp7_Widget01 + 0x28e
-	.equ NakaNode_Accomp7_Widget19, NakaNode_Accomp7_Widget01 + 0x2ba
-	.equ NakaNode_Accomp7_Widget20, NakaNode_Accomp7_Widget01 + 0x2e6
-	.equ NakaNode_Accomp7_Widget21, NakaNode_Accomp7_Widget01 + 0x312
-	.equ NakaNode_Accomp7_Widget22, NakaNode_Accomp7_Widget01 + 0x33e
-	.equ NakaNode_Accomp7_Widget23, NakaNode_Accomp7_Widget01 + 0x36a
-	.equ NakaNode_Accomp7_Widget24, NakaNode_Accomp7_Widget01 + 0x396
-	.equ NakaNode_Accomp7_Widget25, NakaNode_Accomp7_Widget01 + 0x3c2
-	.equ NakaNode_Accomp7_Widget26, NakaNode_Accomp7_Widget01 + 0x3ee
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0, 0x24
+NakaNode_Accomp7_Widget02:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x24, 0x1C
+NakaNode_Accomp7_Widget03:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x40, 0x1C
+NakaNode_Accomp7_Widget04:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x5C, 0x1A
+NakaNode_Accomp7_Widget05:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x76, 0x18
+NakaNode_Accomp7_Widget06:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x8E, 0x24
+NakaNode_Accomp7_Widget07:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0xB2, 0x2C
+NakaNode_Accomp7_Widget08:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0xDE, 0x2C
+NakaNode_Accomp7_Widget09:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x10A, 0x2C
+NakaNode_Accomp7_Widget10:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x136, 0x2C
+NakaNode_Accomp7_Widget11:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x162, 0x2C
+NakaNode_Accomp7_Widget12:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x18E, 0x2C
+NakaNode_Accomp7_Widget13:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x1BA, 0x2C
+NakaNode_Accomp7_Widget14:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x1E6, 0x2C
+NakaNode_Accomp7_Widget15:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x212, 0x2C
+NakaNode_Accomp7_Widget16:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x23E, 0x2C
+NakaNode_Accomp7_Widget17:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x26A, 0x24
+NakaNode_Accomp7_Widget18:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x28E, 0x2C
+NakaNode_Accomp7_Widget19:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x2BA, 0x2C
+NakaNode_Accomp7_Widget20:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x2E6, 0x2C
+NakaNode_Accomp7_Widget21:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x312, 0x2C
+NakaNode_Accomp7_Widget22:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x33E, 0x2C
+NakaNode_Accomp7_Widget23:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x36A, 0x2C
+NakaNode_Accomp7_Widget24:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x396, 0x2C
+NakaNode_Accomp7_Widget25:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x3C2, 0x2C
+NakaNode_Accomp7_Widget26:
+	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x3EE, 0x2C
