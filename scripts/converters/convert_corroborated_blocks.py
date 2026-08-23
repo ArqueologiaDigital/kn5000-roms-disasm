@@ -412,9 +412,24 @@ def translate(text):
         _s1 = parts0[1].strip()
         _mn1 = parts0[0].lower()
         if _mn1 == "push" and re.match(r'^[A-Za-z]{1,3}$', _s1):
+            # ⚠ FIVE spellings, and the ones the ROM actually uses are the ones
+            # a plain `push <r>` does NOT produce. Dumped from the blocking
+            # sites rather than guessed:
+            #     push F   = 18  -> push_f          push SR  = 02  -> push sr
+            #     push WA  = 28  -> pushw wa        push DE  = 2a  -> pushw de
+            #     push XSP = 3f  -> push xsp        (0x38+r, plain form works)
+            # `push wa` emits d8 04 -- TWO bytes -- while the ROM holds the
+            # one-byte short form 0x28+r, which answers to `pushw`. Offering
+            # only `push <r>` therefore missed every 16-bit site.
+            _u1 = _s1.upper()
+            if _u1 == "F":
+                yield "push_f"
+            elif _u1 == "SR":
+                yield "push sr"
             yield f"push {_s1.lower()}"
-            if _s1.upper() in REG_BYTE:
-                yield f"pushw_erp 0x{REG_BYTE[_s1.upper()]:02x}"
+            yield f"pushw {_s1.lower()}"
+            if _u1 in REG_BYTE:
+                yield f"pushw_erp 0x{REG_BYTE[_u1]:02x}"
         if _mn1 in ("pushw", "push") and _s1.startswith("(") and _s1.endswith(")"):
             _in1 = _s1[1:-1]
             _m4 = re.match(r'^([A-Za-z]{2,3})\+(0x[0-9a-fA-F]+)$', _in1)
