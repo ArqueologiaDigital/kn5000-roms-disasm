@@ -35,6 +35,11 @@ discarded. Real `ratio()` scored 0 of 328 unrelated pairs above 0.80 (median 0.0
 - **Not run at archive time.** Unlike `tools/rom-record-review/`, nothing here was
   re-executed before committing.
 
+## Reproducing the sweep
+
+    python3 match_scratch_to_committed.py <scratch-dir>          # the census
+    python3 match_scratch_to_committed.py <scratch-dir> --null   # the calibration
+
 ## Contents
 
 | script | first docstring / comment line |
