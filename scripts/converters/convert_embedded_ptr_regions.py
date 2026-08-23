@@ -31,9 +31,20 @@ TWO INDEPENDENT QUALIFICATION PATHS. A table is accepted if EITHER holds:
 
   P1 SYMBOL  >= 90% of words hit an exact ELF symbol address (null 1.79%).
   P4 RESOLVE-DOMINANT  >=10x the 1.9% symbol-resolution null among non-null
-     words, regardless of the in-range fraction. Landing in ROM range is WEAK
-     evidence (that range is a sixth of the u32 space); hitting a defined symbol
-     is strong. `naka_sequencer_channels` 0x000d00 resolves 95.2% -- 50x the
+     words, regardless of the in-range fraction.
+
+     ⚠ The justification I first wrote for P4 was arithmetically wrong. I said
+     landing in ROM range is weak because "that range is a sixth of the u32
+     space". It is 0x200000 of 2^32 = **0.0488%, one in 2,048** -- off by ~340x.
+     Measured against the right population (shuffled blob words, whose byte
+     histogram is rich in 0x00/0xE0/0xF0) the null is **5.51%**, not 16.7%. P4 is
+     still correct as a path -- a 50x symbol-resolution signal does not need
+     corroboration -- but the reason given for it was not.
+
+  P5 IN-RANGE-DOMINANT  every non-null word in ROM range, over >=32 words. At the
+     measured 5.51% null that is 0.0551^32 or better -- decisive on its own, and
+     it is the ONLY path open to a table whose targets are all blob interiors
+     (no symbols to resolve) and which carries no record signature for P2. `naka_sequencer_channels` 0x000d00 resolves 95.2% -- 50x the
      null -- and was rejected only because its in-range figure was 95.2% against
      a 98% floor, i.e. the weak test was vetoing the strong one.
 
@@ -218,14 +229,17 @@ def main():
             st = nonnull_stats(words, syms)
             p3 = bool(st and st[0] >= MIN_NONNULL and st[1] >= MIN_P3_RESOLVE)
             p4 = bool(st and st[1] >= 0.19)      # 10x the 1.9% null
-            if not (p1 or p2 or p3 or p4):
+            # P5: in-range null measured on shuffled blob words is 5.51%.
+            p5 = bool(st and st[0] >= 0.999 and st[2] >= 32)
+            if not (p1 or p2 or p3 or p4 or p5):
                 skipped += 1
                 continue
             why = ("P1 symbol" if p1 else
                    f"P2 structure {100*sh:.0f}%" if p2 else
                    f"P3 non-null {100*st[0]:.0f}% in range, {100*st[1]:.0f}% resolve, "
                    f"{st[3]} nulls" if p3 else
-                   f"P4 resolve {100*st[1]:.0f}% = {st[1]/0.019:.0f}x null")
+                   f"P4 resolve {100*st[1]:.0f}% = {st[1]/0.019:.0f}x null" if p4 else
+                   f"P5 in-range {st[2]}/{st[2]} non-null, null 5.51%")
             lines = []
             for w in words:
                 lines.append(f"\t.long {syms[w]}" if w in syms
