@@ -30,6 +30,10 @@ because the file is the artefact and only the directive is our description of it
 TWO INDEPENDENT QUALIFICATION PATHS. A table is accepted if EITHER holds:
 
   P1 SYMBOL  >= 90% of words hit an exact ELF symbol address (null 1.79%).
+  P3 NON-NULL   >=98% of the NON-ZERO words land in ROM range, and they resolve
+     far above the 1.9% null. A zero is an EMPTY SLOT, not a failed pointer;
+     counting nulls against the table is how a region the sources themselves
+     call `IconBitmapNamePtrTable` scored 69%.
   P2 STRUCTURE  >= 60% of targets carry a recognised RECORD SIGNATURE in the
      ROM -- currently `XX 00 60 01`, what this tree's own `naka_header` macro
      emits (null 0.165%, measured over random ROM offsets).
@@ -72,6 +76,23 @@ import argparse, glob, importlib.util, os, pathlib, re, struct, sys
 REPO = pathlib.Path("/home/fsanches/compartilhado/kn5000-roms-disasm")
 os.chdir(REPO); sys.path.insert(0, str(REPO))
 MIN_RESOLVE = 0.90          # P1 floor
+ROM_LO, ROM_HI = 0xE00000, 0x1000000
+MIN_NONNULL = 0.98          # P3: share of NON-NULL words that must be in ROM range
+MIN_P3_RESOLVE = 0.20       # P3: and they must resolve far above the 1.9% null
+
+
+def nonnull_stats(words, syms):
+    """P3. A NULL entry is legitimate content in a pointer table -- an empty
+    slot -- but my P1/P2 tests counted every zero as a failure, which is how
+    IconBitmapNamePtrTable (named as a pointer table by the sources) scored 69%
+    'in range' when 177 of 177 NON-NULL words are in range and only the 79 nulls
+    dragged it down. Score the non-null words alone."""
+    nn = [w for w in words if w != 0]
+    if len(nn) < 16:
+        return None
+    inr = sum(1 for w in nn if ROM_LO <= w < ROM_HI) / len(nn)
+    res = sum(1 for w in nn if w in syms) / len(nn)
+    return inr, res, len(nn), len(words) - len(nn)
 MIN_STRUCT = 0.60           # P2 floor
 NAKA_SIG = (0x00, 0x60, 0x01)   # bytes 1..3 of `naka_header <type>`
 ROM = open("original_ROMs/kn5000_v7_program.rom", "rb").read()
@@ -187,10 +208,15 @@ def main():
             p1 = named / len(words) >= MIN_RESOLVE
             sh = struct_hits(words)
             p2 = sh >= MIN_STRUCT
-            if not (p1 or p2):
+            st = nonnull_stats(words, syms)
+            p3 = bool(st and st[0] >= MIN_NONNULL and st[1] >= MIN_P3_RESOLVE)
+            if not (p1 or p2 or p3):
                 skipped += 1
                 continue
-            why = "P1 symbol" if p1 else f"P2 structure {100*sh:.0f}%"
+            why = ("P1 symbol" if p1 else
+                   f"P2 structure {100*sh:.0f}%" if p2 else
+                   f"P3 non-null {100*st[0]:.0f}% in range, {100*st[1]:.0f}% resolve, "
+                   f"{st[3]} nulls")
             lines = []
             for w in words:
                 lines.append(f"\t.long {syms[w]}" if w in syms
