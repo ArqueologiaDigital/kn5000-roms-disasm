@@ -1354,5 +1354,6 @@ Rhythm_TranspMod_WrapDone:
 	ret
 
 Rhythm_TailPadding:
-	.byte 0x1d, 0x33, 0x30, 0xf5, 0x0e
+	call VoiceParam_ClampAndValidate
+	ret
 

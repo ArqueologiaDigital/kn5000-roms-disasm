@@ -854,7 +854,17 @@ def main():
         if limit and ok >= limit:
             break
         insns = decode_range(rom, terr, t)
-        if len(insns) < 3:
+        # A 1-2 instruction routine is a real thing: `FDC_STATUS_COPY` is
+        # `ld (0x8988),(0x898a) ; ret` and `FDC_Send_Command` is
+        # `ld (0x110008),A ; ret`. The `< 3` rule rejected 33 such ranges.
+        #
+        # ⚠ Relaxing it was UNSAFE until the conditional-`ret` defect above was
+        # fixed: 20 ranges stopped at a `ret <cc>` two instructions into a longer
+        # routine, and this rule was the only thing refusing them. It is safe now
+        # because a decode only stops on an UNCONDITIONAL terminator -- so a
+        # short range here really did reach the end of a routine.
+        if len(insns) < 2 or (len(insns) < 3
+                              and not _is_unconditional_terminator(insns[-1][2].strip())):
             skipped += 1; skip("decoded fewer than 3 instructions"); continue
         # A `ret` is one valid end. So is FALLING THROUGH into territory the
         # sources already express as instructions: the function continues there,
