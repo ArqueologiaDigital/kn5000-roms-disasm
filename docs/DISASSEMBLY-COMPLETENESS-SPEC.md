@@ -323,7 +323,27 @@ recognised faster next time.
    pointer table can check, **11 of 11 contradicted the detector**. A name shared across two
    different programs is a hypothesis; a pointer the firmware dereferences is evidence. Check a
    claim about placement against the pointers before acting on it.
-17. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+17. **"The tool cannot express this" has FOUR causes, and the report flattens them.** When a
+   converter says a form is unspellable, that single line covers at least four different faults,
+   each needing a different fix. Counts are from 2026-08-22/23 on the v7 spelling work:
+     * **a spelling not tried** (7 occurrences) -- the form exists under a name you did not guess.
+       `push WA` is the one-byte `0x28+r` short form and answers to `pushw`, not `push`;
+       `cp WA,(imm)` is `cpda16 XWA, ...` because the operand class is GPR and the printed
+       16-bit register name is not the name you write.
+     * **a genuinely missing instruction** (4) -- `cpib_ind` had no mnemonic at all; the store
+       direction existed at 0xF3/0x00 and the compare direction was never written.
+     * **a lookup table too small** (1) -- `ld RL3,A` failed because the converter's REG_BYTE held
+       32 of the 256 register bytes and the banked registers were absent. The backend was fine.
+     * **an existing rule too narrow** (2) -- the register-indexed rule offered only mode `0x07`
+       (16-bit index) so every 8-bit-indexed site failed; the direct-address ALU rule covered only
+       16-bit registers so the 8-bit sites failed.
+   ⚠ **Dump the bytes at the failing site before theorising.** unidasm's output is LOSSY BY
+   CONSTRUCTION -- it drops exactly the bits that select the encoding: the sub-opcode (`00` byte /
+   `02` word), the direction (`f1` vs `f9` for cp), the register width, a 16-bit zero displacement
+   collapsed to `+0x00`. Reasoning from the mnemonic cannot recover them; six bytes settle it in
+   seconds. Across this work the instinct "the backend is missing something" was wrong roughly
+   twice as often as it was right.
+18. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
    faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
    so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
    the same message a genuinely broken range produces. Rejections concentrated in one bucket
