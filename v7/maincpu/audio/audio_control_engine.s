@@ -1140,57 +1140,7 @@ Set_LEDs:
 	.byte 0xa6, 0xed, 0x33, 0xc3, 0x07, 0xec, 0xe8, 0x25
 	.byte 0xb0, 0x45, 0xb8, 0x01, 0x43, 0x1e, 0x01, 0x00
 	.byte 0x0e
-LED_WriteToPanel:
-	push xiz
-	ld xiz, xwa
-	ld a, (xiz)
-	extz wa
-	pushw wa
-	call Seq_TimerEventLoop
-	inc 2, xsp
-	cp hl, 0xffff
-	jr nz, LED_WriteSecondByte
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call CPanel_Poll
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	ld xwa, xiz
-	jr LED_WriteThirdByte
-
-LED_WriteSecondByte:
-	ld a, (xiz + 1)
-	extz wa
-	pushw wa
-	call Seq_TimerEventLoop
-	inc 2, xsp
-	cp hl, 0xffff
-	jr nz, LED_WriteDone
-	push xde
-	push xhl
-	push xix
-	push xiz
-	call CPanel_Poll
-	pop xiz
-	pop xix
-	pop xhl
-	pop xde
-	lda xwa, (xiz + 1)
-
-LED_WriteThirdByte:
-	ld a, (xwa)
-	extz wa
-	pushw wa
-	call Seq_TimerEventLoop
-	inc 2, xsp
-
-LED_WriteDone:
-	pop xiz
-	ret
+	.include "ui/led_panel_write.s"
 
 
 SndParam_SetResBit0_Via028100:

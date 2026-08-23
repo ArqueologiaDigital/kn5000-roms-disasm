@@ -51,11 +51,30 @@ PATCH = REPO / 'v7' / 'maincpu' / 'includes' / 'v7_c_divergence.json'
 def main():
     patch = json.loads(PATCH.read_text())
     nrel = nraw = 0
+    nskip = 0
     for name, ent in sorted(patch.items()):
         target = GEN / name
         if not target.exists():
             sys.exit(f"apply_v7_c_divergence: {target} missing -- build the C bins first")
-        data = bytearray(target.read_bytes())
+        # !! IDEMPOTENCY STAMP. The relocations below are RELATIVE (v += delta),
+        # so running this twice applies delta twice. The .bin is regenerated from
+        # C only when the .c is newer, so on an incremental build make skips the
+        # regeneration and this script patches an ALREADY-PATCHED file. Measured
+        # 2026-08-23: style_ui_screendata_ctlonly.bin drifted -42 per build, and
+        # after seven builds the v7 ROM differed from the original by 136,782
+        # bytes -- entirely from this, not from any source edit.
+        #
+        # It cannot be made absolute: reading the ROM to compute the target value
+        # would make the ROM an input to its own reconstruction, which is exactly
+        # what the poison rule forbids. So instead the script records what it
+        # produced and refuses to patch that same content twice.
+        import hashlib
+        stamp = target.with_suffix(target.suffix + '.patched')
+        cur = target.read_bytes()
+        if stamp.exists() and stamp.read_text().strip() == hashlib.sha256(cur).hexdigest():
+            nskip += 1
+            continue
+        data = bytearray(cur)
         size = ent['size']
         if len(data) < size:
             data.extend(b'\x00' * (size - len(data)))
@@ -68,7 +87,10 @@ def main():
             data[int(off)] = val
             nraw += 1
         target.write_bytes(bytes(data))
-    print(f"apply_v7_c_divergence: {len(patch)} bins, {nrel:,} pointer relocations, "
+        import hashlib as _h
+        stamp.write_text(_h.sha256(bytes(data)).hexdigest() + "\n")
+    print(f"apply_v7_c_divergence: {len(patch)} bins, {nskip} already patched (skipped), "
+          f"{nrel:,} pointer relocations, "
           f"{nraw:,} raw bytes ({(nrel * 4 + nraw) * 100.0 / 2097152:.2f}% of the v7 ROM)")
 
 
