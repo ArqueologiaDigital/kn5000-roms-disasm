@@ -224,3 +224,53 @@ This is the same judgement made earlier for the 30-region set, and it survives
 four rounds of the floors being loosened for good reasons. **What would settle
 them is the `.equ` named offsets bounding each sub-structure, or reading the code
 that indexes them — not a sixth threshold.**
+
+### The four holdouts are CONFIRMED mixed, by the sources' own names
+
+I said what would settle them is "the `.equ` named offsets bounding each
+sub-structure, or reading the code that indexes them — not a sixth threshold."
+Doing that settles them, and it settles them as NOT flat pointer tables.
+
+**`naka_style_bitmaps` around `0x018800`** — the named offsets immediately before
+the region are:
+
+```
++0x01862A  StyleGroup_WorldMusic_Table
++0x0186BA  NakaInst_Country_Hits
++0x0186CC  NakaInst_New_Country_Rock      stride 0x12 = 18
++0x0186DE  NakaInst_Old_Country_Hits
++0x0186F0  NakaInst_EZ_Country_Rock
++0x018702  NakaInst_Modern_Country
+```
+
+A `*_Table` followed by a run of 18-byte named records. The region is a style
+group's pointer table INTERLEAVED with the 18-byte instances it points at.
+
+**`naka_widget_tables_2` around `0x026400`**:
+
+```
++0x0262C2  Transpose_ValueDisplay_Table
++0x0262E2  Transpose_String_Minus1
++0x0262E8  Transpose_String_Minus2        stride 6
++0x0262FA  Transpose_String_Plus3
++0x026300  Transpose_String_Plus2
+```
+
+Again a `*_Table` plus 6-byte string records.
+
+**So the 82–98% in-range / 0–16% resolve signature has an explanation**: these
+regions are a pointer table and the records it addresses, lying adjacent. The
+words in ROM range are the table; the words that are neither null nor in range
+are record CONTENT — string bytes and 16-bit fields read four at a time.
+
+Converting them flat would have emitted `.long` over string data. The bytes would
+have matched, every gate would have passed, and the description would have been
+wrong. **The right conversion is per-named-sub-structure, using the `.equ`
+offsets as boundaries — a different job from this converter's, and one the 3,709
+named offsets make possible.**
+
+⚠ `naka_disk_menu_file_io` and `naka_effects_seq` have no named offsets into
+them (their `.incbin` sits under `NakaInst_IvWaitWinCtlProc` and
+`Naka_ReverbScreen_EmptyStr`, which are not blob-base labels), so this argument
+does not cover those two. They remain unexplained rather than explained-and-
+declined.
