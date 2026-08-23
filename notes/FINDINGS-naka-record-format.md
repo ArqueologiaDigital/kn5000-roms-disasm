@@ -403,5 +403,50 @@ That also makes `0x00FF0435` a reusable library routine worth naming: 32-bit
 modulo, with shortcut paths for divisor 1, divisor 0, dividend <= divisor, and a
 64-bit dividend.
 
-⚠ STILL NOT established: what the KEY is (which quantity is reduced mod 2047),
+### The key derivation — there IS a hash, computed inline
+
+⚠ REFINES THE CORRECTION ABOVE. Saying "there is no hash function in this path"
+was itself too strong. `0x00FF0435` really is only a modulo — but the hash is
+computed INLINE, in the eleven instructions before the call
+(`interrupt_vector_trampolines.s:9-31`):
+
+```asm
+	ld   XIZ,XWA               ; XIZ = the KEY (the function's 32-bit argument)
+	ld   XHL,XIZ
+	and  XHL,0x000000ff        ; b0 = key & 0xFF
+	ld   XWA,XHL
+	sll  XWA, 0x09
+	add  XWA,XHL               ; h = b0 * 513        (x<<9 + x)
+	ld   XHL,XIZ
+	srl  XHL, 0x08
+	and  XHL,0x000000ff        ; b1 = (key >> 8) & 0xFF
+	add  XHL,XWA               ; h += b1
+	ld   XWA,XHL
+	sll  XWA, 0x09
+	add  XWA,XHL               ; h *= 513
+	ld   XHL,XIZ
+	srl  XHL, 0x00             ; (shift by zero -- a no-op)
+	and  XHL,0x0000001f        ; b2 = key & 0x1F
+	add  XHL,XWA               ; h += b2
+	ld   XWA,XHL
+	ld   XBC,0x000007ff
+	call 0xff0435              ; bucket = h mod 2047
+```
+
+So the full key schedule is a **base-513 polynomial hash**:
+
+```
+h = ((key & 0xFF) * 513 + ((key >> 8) & 0xFF)) * 513 + (key & 0x1F)
+bucket = h mod 2047
+```
+
+and the KEY is simply the routine's 32-bit argument, preserved in `XIZ` for the
+later `cp XIZ,XDE` comparison against each entry's `+0x00`.
+
+⚠ Two oddities worth recording rather than smoothing over. `srl XHL,0x00` shifts
+by zero, so the third term re-uses the LOW 5 bits of the key, which the first
+term already consumed — the hash mixes bits 0..4 twice and ignores bits 16..31
+entirely. And 513 = 0x201, chosen because `x*513` is one shift and one add.
+
+⚠ STILL NOT established: what the key VALUE means (which quantity callers pass),
 and who populates the table.
